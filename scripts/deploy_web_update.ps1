@@ -1,6 +1,10 @@
 param(
+  [string]$TicketId = "TASK",
+  [string]$Summary = "update Ashen Oath web build",
+  [string]$Message = "",
   [switch]$Commit,
-  [string]$Message = "Update Ashen Oath web build"
+  [switch]$NoDeploy,
+  [string]$ProductionUrl = ""
 )
 
 $ErrorActionPreference = "Stop"
@@ -30,7 +34,16 @@ if (!(Test-Path $Python)) { throw "Bundled Python runtime not found: $Python" }
 
 Push-Location $RepoRoot
 try {
+  if ($NoDeploy) {
+    Write-Host "DO NOT DEPLOY mode: running verification/export/sync only. No commit or push will be performed."
+  }
+
   Invoke-Checked $Godot "--headless --path `"$ProjectDir`" --script `"res://tools/verify_runtime.gd`"" $RepoRoot
+
+  $AudioVerifier = Join-Path $ProjectDir "tools\verify_audio_runtime.gd"
+  if (Test-Path $AudioVerifier) {
+    Invoke-Checked $Godot "--headless --path `"$ProjectDir`" --script `"res://tools/verify_audio_runtime.gd`"" $RepoRoot
+  }
 
   $VisibleVerifier = Join-Path $ProjectDir "tools\verify_visible_quality.gd"
   if (Test-Path $VisibleVerifier) {
@@ -55,12 +68,31 @@ try {
 
   git status --short
 
-  if ($Commit) {
-    git add .gitignore vercel.json DEPLOYMENT_WORKFLOW.md CODEX_WORKFLOW.md DEPLOY_001_GITHUB_VERCEL_WORKFLOW.md Deploy_Web_Update.bat scripts/deploy_web_update.ps1 web
-    git commit -m $Message
-    git push
+  if (!$NoDeploy) {
+    if ([string]::IsNullOrWhiteSpace($Message)) {
+      $Message = "$TicketId`: $Summary"
+    }
+
+    git add -A
+    $PendingChanges = git status --short
+    if ($PendingChanges) {
+      git commit -m $Message
+    } else {
+      Write-Host "No file changes to commit after verification/export/sync."
+    }
+
+    git push origin main
+    $CommitHash = (git rev-parse --short HEAD).Trim()
+    Write-Host "Production push succeeded."
+    Write-Host "Commit hash: $CommitHash"
+    Write-Host "Vercel auto-deploy: enabled after the GitHub repo is connected to a Vercel project that deploys origin/main from web/."
+    if (![string]::IsNullOrWhiteSpace($ProductionUrl)) {
+      Write-Host "Production URL: $ProductionUrl"
+    } else {
+      Write-Host "Production URL: not configured locally. Add it to the ticket report after Vercel is linked."
+    }
   } else {
-    Write-Host "Commit skipped. Re-run with -Commit -Message `"Your message`" to commit and push."
+    Write-Host "Deploy skipped by explicit DO NOT DEPLOY / -NoDeploy instruction."
   }
 }
 finally {

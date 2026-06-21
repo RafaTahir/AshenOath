@@ -9,7 +9,7 @@
 - Git status before ticket: not a Git repository.
 - Git status after ticket: initialized local Git repo on `main`.
 - Local baseline commit created: `DEPLOY-001: add web deployment workflow` (run `git log --oneline -1` for the current hash).
-- Remote: none configured.
+- Remote: `origin` -> `https://github.com/RafaTahir/AshenOath.git`.
 
 ## Files Created Or Changed
 
@@ -21,6 +21,7 @@
 - `DEPLOYMENT_WORKFLOW.md`
 - `CODEX_WORKFLOW.md`
 - `DEPLOY_001_GITHUB_VERCEL_WORKFLOW.md`
+- `DEPLOYMENT_POLICY.md`
 
 ## Web Folder Size
 
@@ -37,15 +38,14 @@
 
 ## GitHub Status
 
-- GitHub CLI is not installed or unavailable in this environment.
-- No GitHub remote was created.
-- Manual GitHub setup is documented in `DEPLOYMENT_WORKFLOW.md`.
+- GitHub remote is configured as `origin`.
+- `main` has been pushed to `https://github.com/RafaTahir/AshenOath`.
 
 ## Vercel Status
 
 - Vercel CLI is not installed or unavailable in this environment.
-- No Vercel project was linked or deployed.
-- Manual Vercel dashboard setup is documented in `DEPLOYMENT_WORKFLOW.md`.
+- Vercel still requires one-time dashboard linking if it has not already been connected.
+- Once linked to `origin/main` with output directory `web`, future pushes should auto-deploy.
 
 ## Deployment URL
 
@@ -132,16 +132,16 @@ Vercel:
 
 ## Future Update Command
 
-Dry run update without commit:
+Default verify, export, sync, commit, and push:
 
 ```powershell
-.\scripts\deploy_web_update.ps1
+.\scripts\deploy_web_update.ps1 -TicketId "TICKET-ID" -Summary "short task summary"
 ```
 
-Verify, export, sync, commit, and push:
+Only when the user explicitly writes `DO NOT DEPLOY`:
 
 ```powershell
-.\scripts\deploy_web_update.ps1 -Commit -Message "TICKET-ID: update Ashen Oath web build"
+.\scripts\deploy_web_update.ps1 -NoDeploy
 ```
 
 ## Risks
