@@ -1,0 +1,88 @@
+{
+  "packs": [
+    {
+      "name": "quaternius_medieval_village_megakit",
+      "url": "https://opengameart.org/sites/default/files/medieval_village_megakitstandard.zip",
+      "category": "environment/village",
+      "license": "CC0",
+      "source": "OpenGameArt / Quaternius"
+    },
+    {
+      "name": "quaternius_fantasy_props_megakit",
+      "url": "https://opengameart.org/sites/default/files/fantasy_props_megakitstandard.zip",
+      "category": "environment/props",
+      "license": "CC0",
+      "source": "OpenGameArt / Quaternius"
+    },
+    {
+      "name": "quaternius_stylized_nature_megakit",
+      "url": "https://opengameart.org/sites/default/files/stylized_nature_megakitstandard.zip",
+      "category": "environment/forest",
+      "license": "CC0",
+      "source": "OpenGameArt / Quaternius"
+    },
+    {
+      "name": "quaternius_universal_animation_library",
+      "url": "https://opengameart.org/sites/default/files/universal_animation_librarystandard.zip",
+      "category": "animations",
+      "license": "CC0",
+      "source": "OpenGameArt / Quaternius"
+    },
+    {
+      "name": "quaternius_universal_animation_library_2",
+      "url": "https://opengameart.org/sites/default/files/universal_animation_library_2standard.zip",
+      "category": "animations",
+      "license": "CC0",
+      "source": "OpenGameArt / Quaternius"
+    },
+    {
+      "name": "quaternius_lowpoly_rpg_characters",
+      "url": "https://opengameart.org/sites/default/files/rpg_characters_-_nov_2020.zip",
+      "category": "characters",
+      "license": "CC0",
+      "source": "OpenGameArt / Quaternius"
+    },
+    {
+      "name": "quaternius_lowpoly_animated_monsters",
+      "url": "https://opengameart.org/sites/default/files/Animated%20Monster%20Pack%20by%20%40Quaternius.zip",
+      "category": "enemies",
+      "license": "CC0",
+      "source": "OpenGameArt / Quaternius"
+    },
+    {
+      "name": "quaternius_lowpoly_rpg_items",
+      "url": "https://opengameart.org/sites/default/files/ultimate_rpg_items_pack_by_quaternius.zip",
+      "category": "environment/props",
+      "license": "CC0",
+      "source": "OpenGameArt / Quaternius"
+    },
+    {
+      "name": "quaternius_lowpoly_animated_knight",
+      "url": "https://opengameart.org/sites/default/files/Knight%20Character%20by%20%40Quaternius.zip",
+      "category": "characters",
+      "license": "CC0",
+      "source": "OpenGameArt / Quaternius"
+    },
+    {
+      "name": "quaternius_animated_animals_lowpoly",
+      "url": "https://opengameart.org/sites/default/files/Animal%20Pack%20Vol.2%20by%20%40Quaternius.zip",
+      "category": "enemies",
+      "license": "CC0",
+      "source": "OpenGameArt / Quaternius"
+    },
+    {
+      "name": "kenney_ui_pack_adventure",
+      "url": "https://opengameart.org/sites/default/files/kenney_ui-pack-adventure.zip",
+      "category": "ui",
+      "license": "CC0",
+      "source": "OpenGameArt / Kenney"
+    },
+    {
+      "name": "kenney_ui_audio_godot",
+      "url": "https://github.com/Calinou/kenney-ui-audio/archive/refs/heads/master.zip",
+      "category": "audio/ui",
+      "license": "CC0",
+      "source": "GitHub / Kenney / Calinou"
+    }
+  ]
+}

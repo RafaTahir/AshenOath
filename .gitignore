@@ -1,0 +1,60 @@
+# OS/editor junk
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.tmp
+*.temp
+*.swp
+*.bak
+*~
+.vscode/
+.idea/
+work/
+
+# Secrets and local env
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Godot local/import caches
+**/.godot/
+**/*.uid
+**/*.import
+**/export_presets.cfg.bak
+
+# Logs and diagnostics
+*.log
+web_export*.log
+*.trace
+__pycache__/
+*.pyc
+
+# Raw downloads and archives
+**/downloads/
+**/raw_downloads/
+**/raw/
+**/cache/
+**/*.zip
+**/*.7z
+**/*.rar
+**/*.tar
+**/*.tar.gz
+**/*.tgz
+
+# Development-only screenshots/galleries
+**/Development_Gallery/
+**/verification_screenshots/
+**/screenshots/
+**/*screenshot*.png
+**/*Screenshot*.png
+
+# Old/generated web exports outside the deploy folder
+outputs/AshenOath_Web/
+outputs/AshenOath_Web_Slim/
+
+# Keep the deployable static site tracked
+!web/
+!web/**

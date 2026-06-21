@@ -1,0 +1,98 @@
+{
+  "main_road_of_crows": {
+    "title": "Road of Crows",
+    "type": "main",
+    "starts_at": "notice_board",
+    "objectives": [
+      {"id": "speak_anwen", "text": "Speak with Sister Anwen at the shrine."},
+      {"id": "inspect_corpse", "text": "Follow the old road and inspect the blood-dark dead."},
+      {"id": "find_claw_marks", "text": "Read the claw marks beside the broken cart."},
+      {"id": "find_black_feathers", "text": "Gather the black feathers from the mud."},
+      {"id": "fight_ghoulkin", "text": "Survive the thing waiting in the clearing."},
+      {"id": "return_village", "text": "Return to Greyfen with what the road confessed."}
+    ],
+    "rewards": {"coin": 35, "items": {"redroot_potion": 1}},
+    "unlocks": ["main_teeth_in_rain"]
+  },
+  "main_teeth_in_rain": {
+    "title": "Teeth in the Rain",
+    "type": "main",
+    "starts_at": "mira",
+    "objectives": [
+      {"id": "speak_mira", "text": "Ask Mira Fen about spirit-lore."},
+      {"id": "craft_moon_oil", "text": "Craft Moon Oil."},
+      {"id": "enter_deep_wood", "text": "Enter deeper Wychwood."},
+      {"id": "discover_stones", "text": "Discover the ritual stones."},
+      {"id": "fight_bog_wretch", "text": "Defeat the Bog Wretch."},
+      {"id": "find_signet", "text": "Find the Vargan signet ring."}
+    ],
+    "rewards": {"coin": 45, "items": {"ash_bomb": 1}},
+    "unlocks": ["main_blood_under_stone"]
+  },
+  "main_blood_under_stone": {
+    "title": "Blood Under Stone",
+    "type": "main",
+    "starts_at": "edric",
+    "objectives": [
+      {"id": "confront_edric", "text": "Confront Lord Edric."},
+      {"id": "enter_ruins", "text": "Enter Castle Vargan Ruins."},
+      {"id": "search_hall", "text": "Search the collapsed hall."},
+      {"id": "read_inscription", "text": "Read the ritual inscription."},
+      {"id": "fight_knight", "text": "Defeat the Gravebound Knight."}
+    ],
+    "rewards": {"coin": 55, "items": {"rot_oil": 1}},
+    "unlocks": ["main_hart_remembers"]
+  },
+  "main_hart_remembers": {
+    "title": "The Hart Remembers",
+    "type": "main",
+    "starts_at": "white_hart",
+    "objectives": [
+      {"id": "enter_clearing", "text": "Enter the spirit clearing."},
+      {"id": "speak_hart", "text": "Speak to the White Hart."},
+      {"id": "final_choice", "text": "Choose the fate of Greyfen."}
+    ],
+    "rewards": {"coin": 0, "items": {}},
+    "unlocks": []
+  },
+  "side_widows_bell": {
+    "title": "A Widow's Bell",
+    "type": "side",
+    "starts_at": "widow_elna",
+    "objectives": [
+      {"id": "speak_widow", "text": "Speak to Widow Elna near the cemetery."},
+      {"id": "inspect_bell", "text": "Inspect the grave bell."},
+      {"id": "meet_gravebound", "text": "Face the gravebound husband."},
+      {"id": "choose_widow_truth", "text": "Decide what to tell Elna."}
+    ],
+    "rewards": {"coin": 20, "items": {"bitterleaf_tonic": 1}},
+    "unlocks": []
+  },
+  "side_black_dog": {
+    "title": "The Black Dog Contract",
+    "type": "side",
+    "starts_at": "farmer_toma",
+    "objectives": [
+      {"id": "speak_farmer", "text": "Speak to Farmer Toma near the village road."},
+      {"id": "inspect_sheepfold", "text": "Inspect the torn sheepfold."},
+      {"id": "find_bandit_camp", "text": "Find the bandit camp near Wychwood."},
+      {"id": "deal_bandits", "text": "Deal with the bandits."},
+      {"id": "choose_dog_truth", "text": "Decide what to tell the farmers."}
+    ],
+    "rewards": {"coin": 30, "items": {"iron_trap": 1}},
+    "unlocks": []
+  },
+  "side_bitter_roots": {
+    "title": "Bitter Roots",
+    "type": "side",
+    "starts_at": "mira",
+    "objectives": [
+      {"id": "accept_mira_roots", "text": "Accept Mira's request for bitter roots."},
+      {"id": "collect_roots", "text": "Collect roots near the sacrifice stones."},
+      {"id": "learn_mira_past", "text": "Learn why Mira fears the old stones."},
+      {"id": "choose_mira_truth", "text": "Decide whether to hide or expose Mira's past."}
+    ],
+    "rewards": {"coin": 15, "items": {"redroot_potion": 1, "moon_oil": 1}},
+    "unlocks": []
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "redroot_potion": {
+    "name": "Redroot Potion",
+    "type": "potion",
+    "icon": "res://assets/icons/redroot_potion.svg",
+    "description": "A bitter draught that restores health over several breaths.",
+    "recipe": {"redroot": 2, "bitterleaf": 1},
+    "effect": {"heal": 45}
+  },
+  "bitterleaf_tonic": {
+    "name": "Bitterleaf Tonic",
+    "type": "potion",
+    "icon": "res://assets/icons/bitterleaf_tonic.svg",
+    "description": "Sharp tonic that restores stamina.",
+    "recipe": {"bitterleaf": 2},
+    "effect": {"stamina": 45}
+  },
+  "ash_bomb": {
+    "name": "Ash Bomb",
+    "type": "bomb",
+    "icon": "res://assets/icons/ash_bomb.svg",
+    "description": "A clay bomb packed with ash-salt and sparkstone.",
+    "recipe": {"ash_salt": 2, "sparkstone": 1},
+    "effect": {"damage": 45, "tag": "fire"}
+  },
+  "moon_oil": {
+    "name": "Moon Oil",
+    "type": "oil",
+    "icon": "res://assets/icons/moon_oil.svg",
+    "description": "Silver-blue oil that bites deep into spirits.",
+    "recipe": {"mooncap": 2, "redroot": 1},
+    "effect": {"bonus_tag": "spirit", "bonus": 15}
+  },
+  "rot_oil": {
+    "name": "Rot Oil",
+    "type": "oil",
+    "icon": "res://assets/icons/rot_oil.svg",
+    "description": "A rancid oil brewed for grave-things and restless dead.",
+    "recipe": {"grave_moss": 2, "bitterleaf": 1},
+    "effect": {"bonus_tag": "undead", "bonus": 15}
+  },
+  "iron_trap": {
+    "name": "Iron Trap",
+    "type": "trap",
+    "icon": "res://assets/icons/iron_trap.svg",
+    "description": "A sprung jaw that slows beasts long enough to strike.",
+    "recipe": {"scrap_iron": 2, "grave_moss": 1},
+    "effect": {"slow": 4.0}
+  }
+}

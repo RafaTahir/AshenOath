@@ -1,0 +1,68 @@
+{
+  "ghoulkin": {
+    "name": "Ghoulkin",
+    "health": 55,
+    "damage": 12,
+    "speed": 3.2,
+    "attack_range": 1.35,
+    "sense_range": 11.0,
+    "tag": "beast",
+    "weakness": "normal sword",
+    "color": "#6d6f4a"
+  },
+  "bog_wretch": {
+    "name": "Bog Wretch",
+    "health": 95,
+    "damage": 18,
+    "speed": 1.7,
+    "attack_range": 1.8,
+    "sense_range": 12.0,
+    "tag": "beast",
+    "weakness": "ash_bomb",
+    "color": "#425f47"
+  },
+  "gravebound_knight": {
+    "name": "Gravebound Knight",
+    "health": 140,
+    "damage": 25,
+    "speed": 1.35,
+    "attack_range": 1.7,
+    "sense_range": 12.0,
+    "tag": "undead",
+    "weakness": "rot_oil",
+    "color": "#4a4d56"
+  },
+  "wychwood_stalker": {
+    "name": "Wychwood Stalker",
+    "health": 80,
+    "damage": 16,
+    "speed": 3.7,
+    "attack_range": 1.5,
+    "sense_range": 15.0,
+    "tag": "beast",
+    "weakness": "iron_trap",
+    "color": "#2f5738"
+  },
+  "white_hart_avatar": {
+    "name": "White Hart Avatar",
+    "health": 210,
+    "damage": 24,
+    "speed": 2.25,
+    "attack_range": 2.2,
+    "sense_range": 18.0,
+    "tag": "spirit",
+    "weakness": "moon_oil",
+    "color": "#d8d2bd"
+  },
+  "bandit": {
+    "name": "Road Bandit",
+    "health": 70,
+    "damage": 14,
+    "speed": 2.6,
+    "attack_range": 1.45,
+    "sense_range": 12.0,
+    "tag": "human",
+    "weakness": "iron_trap",
+    "color": "#5a4031"
+  }
+}

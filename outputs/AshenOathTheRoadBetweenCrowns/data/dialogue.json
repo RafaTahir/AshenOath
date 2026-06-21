@@ -1,0 +1,118 @@
+{
+  "notice_board": {
+    "name": "Greyfen Notice Board",
+    "greeting": "A crow-picked contract hangs under a rusted nail. Someone has pressed a prayer charm into the wood beside it.",
+    "lines": [
+      "Three men gone on the old road. One cart returned empty. Black feathers in the blood.",
+      "Payment on proof. Sister Anwen holds the names of the dead."
+    ],
+    "actions": [{"label": "Accept Road of Crows", "type": "start_quest", "quest": "main_road_of_crows"}]
+  },
+  "sister_anwen": {
+    "name": "Sister Anwen",
+    "greeting": "Keep your blade low in Greyfen, hunter. Fear already has hands around every throat here.",
+    "lines": [
+      "The old road has taken three men and returned none whole. That is not hunger. Hunger is honest.",
+      "Look for the cart, the clawed mud, and the black feathers. If you find them together, come back before you chase the dark farther.",
+      "Do not ask yet why I know what marks to name. I am not ready to answer, and Greyfen is not ready to hear it."
+    ],
+    "voice": [
+      "voice_sister_anwen_greeting_01",
+      "voice_sister_anwen_road_warning_01",
+      "voice_sister_anwen_wychwood_warning_01"
+    ],
+    "actions": [{"label": "I will inspect the corpse.", "type": "complete_objective", "quest": "main_road_of_crows", "objective": "speak_anwen"}]
+  },
+  "mira": {
+    "name": "Mira Fen",
+    "greeting": "If you came for comfort, try the shrine. If you came for truth, close the door.",
+    "lines": [
+      "Anwen has not slept since the first cart came back empty. She prays like someone bargaining, not mourning.",
+      "Spirits do not bleed like beasts. Brew Moon Oil before you go deeper.",
+      "The old sacrifice stones sit beyond the wet road. Do not touch the lichen with bare hands."
+    ],
+    "actions": [
+      {"label": "Start Teeth in the Rain", "type": "start_quest", "quest": "main_teeth_in_rain"},
+      {"label": "I need Moon Oil.", "type": "give_ingredients", "items": {"mooncap": 2, "redroot": 1}},
+      {"label": "Mark the next step.", "type": "complete_objective", "quest": "main_teeth_in_rain", "objective": "speak_mira"},
+      {"label": "Start Bitter Roots", "type": "start_quest", "quest": "side_bitter_roots"},
+      {"label": "I found the roots.", "type": "complete_objective", "quest": "side_bitter_roots", "objective": "learn_mira_past"},
+      {"label": "Hide Mira's past.", "type": "complete_objective", "quest": "side_bitter_roots", "objective": "choose_mira_truth"},
+      {"label": "Force Mira to confess.", "type": "complete_objective", "quest": "side_bitter_roots", "objective": "choose_mira_truth"}
+    ]
+  },
+  "edric": {
+    "name": "Lord Edric Vargan",
+    "greeting": "My family paid for Greyfen's walls. Remember that before you spit at my boots.",
+    "lines": [
+      "Yes, the signet is Vargan work. No, I did not spill that blood.",
+      "The ruins still keep our records. If guilt has a shape, you will find it under stone."
+    ],
+    "actions": [
+      {"label": "Start Blood Under Stone", "type": "start_quest", "quest": "main_blood_under_stone"},
+      {"label": "Open the way to Castle Vargan.", "type": "complete_objective", "quest": "main_blood_under_stone", "objective": "confront_edric"}
+    ]
+  },
+  "rook": {
+    "name": "Rook",
+    "greeting": "Maps, rumors, and lies. Tonight even the lies are whispering.",
+    "lines": [
+      "The old road bends twice where it should bend once. Follow the crows, not the mud.",
+      "A boy found black feathers under his pillow after the second death. His mother burned the bed."
+    ],
+    "actions": [{"label": "Buy a rumor.", "type": "give_ingredients", "items": {"ash_salt": 1, "sparkstone": 1}}]
+  },
+  "widow_elna": {
+    "name": "Widow Elna",
+    "greeting": "The bell rings at dusk. My Harl is dead, but he still calls.",
+    "lines": [
+      "Find why the cemetery bell rings. Bring me cruelty or kindness, but bring me an answer."
+    ],
+    "actions": [
+      {"label": "Accept A Widow's Bell", "type": "start_quest", "quest": "side_widows_bell"},
+      {"label": "I will find the bell.", "type": "complete_objective", "quest": "side_widows_bell", "objective": "speak_widow"},
+      {"label": "Tell her the truth.", "type": "complete_objective", "quest": "side_widows_bell", "objective": "choose_widow_truth"}
+    ]
+  },
+  "blacksmith_tor": {
+    "name": "Blacksmith Tor",
+    "greeting": "Blades chip. Men chip faster.",
+    "lines": [
+      "Take scrap if you mean to trap something. Better iron breaks than bone.",
+      "I heard bells from the road last night. Cemetery bells, only the cemetery was still."
+    ],
+    "actions": [{"label": "Take scrap iron.", "type": "give_ingredients", "items": {"scrap_iron": 2}}]
+  },
+  "farmer_toma": {
+    "name": "Farmer Toma",
+    "greeting": "It took three sheep and one child screaming before anyone believed me.",
+    "lines": [
+      "Nobody speaks near the shrine after dusk. Not since Anwen washed blood from the altar stones.",
+      "They say a black dog is killing stock. I say no dog opens a latch and leaves boot prints.",
+      "Find what hunts the fold. Bring proof, not village gossip."
+    ],
+    "actions": [
+      {"label": "Accept The Black Dog Contract", "type": "start_quest", "quest": "side_black_dog"},
+      {"label": "I inspected the sheepfold.", "type": "complete_objective", "quest": "side_black_dog", "objective": "speak_farmer"},
+      {"label": "Tell the villagers the dog protected children.", "type": "complete_objective", "quest": "side_black_dog", "objective": "choose_dog_truth"},
+      {"label": "Lie and claim the dog fled.", "type": "complete_objective", "quest": "side_black_dog", "objective": "choose_dog_truth"}
+    ]
+  },
+  "white_hart": {
+    "name": "The White Hart",
+    "greeting": "You walk on promises buried under your kind's roads.",
+    "lines": [
+      "Kill me, and the village breathes while the wood turns to ash.",
+      "Free me, and truth will have teeth.",
+      "Bind me, and you inherit the old sin.",
+      "Expose them, and let human hands answer human crimes."
+    ],
+    "actions": [
+      {"label": "Start The Hart Remembers", "type": "start_quest", "quest": "main_hart_remembers"},
+      {"label": "Kill the White Hart", "type": "ending", "ending": "kill"},
+      {"label": "Free the White Hart", "type": "ending", "ending": "free"},
+      {"label": "Bind the White Hart Again", "type": "ending", "ending": "bind"},
+      {"label": "Expose House Vargan", "type": "ending", "ending": "expose"}
+    ]
+  }
+}

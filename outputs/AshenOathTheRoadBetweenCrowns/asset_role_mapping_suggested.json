@@ -1,0 +1,557 @@
+{
+  "generated_at": "2026-06-11T20:52:44+00:00",
+  "roles": {
+    "characters": {
+      "player_kael": {
+        "status": "manual",
+        "asset_id": "warrior_quaternius_rpg",
+        "path": "res://assets_external/characters/Warrior.obj",
+        "file_name": "Warrior.obj",
+        "source_pack": "Quaternius RPG Characters",
+        "license": "CC0 1.0",
+        "confidence": 95,
+        "notes": "Phase 1G: fantasy protagonist base with texture support; runtime adds cloak, armor panels, boots, hood and sword presentation."
+      },
+      "mira_herbalist": {
+        "status": "manual",
+        "asset_id": "womancasual_polypizza_quaternius_cc0",
+        "path": "res://assets_external/characters/WomanCasual_PolyPizza_Quaternius_CC0.glb",
+        "file_name": "WomanCasual_PolyPizza_Quaternius_CC0.glb",
+        "source_pack": "Poly Pizza / Quaternius",
+        "license": "CC0 1.0",
+        "confidence": 95,
+        "notes": "Manual story-role match from imported CC0 GLB human upgrade."
+      },
+      "sister_anwen": {
+        "status": "manual",
+        "asset_id": "cleric_quaternius_rpg",
+        "path": "res://assets_external/characters/Cleric.obj",
+        "file_name": "Cleric.obj",
+        "source_pack": "Quaternius RPG Characters",
+        "license": "CC0 1.0",
+        "confidence": 95,
+        "notes": "Phase 1G: cleric/priestess base with texture support; runtime adds robe fall, stole, hood, staff and shrine amulet."
+      },
+      "lord_edric": {
+        "status": "manual",
+        "asset_id": "animatedhuman_polypizza_quaternius_cc0",
+        "path": "res://assets_external/characters/AnimatedHuman_PolyPizza_Quaternius_CC0.glb",
+        "file_name": "AnimatedHuman_PolyPizza_Quaternius_CC0.glb",
+        "source_pack": "Poly Pizza / Quaternius",
+        "license": "CC0 1.0",
+        "confidence": 95,
+        "notes": "Manual story-role match from imported CC0 GLB human upgrade."
+      },
+      "rook_smuggler": {
+        "status": "manual",
+        "asset_id": "rogue_quaternius_rpg",
+        "path": "res://assets_external/characters/Rogue.obj",
+        "file_name": "Rogue.obj",
+        "source_pack": "Quaternius RPG Characters",
+        "license": "CC0 1.0",
+        "confidence": 95,
+        "notes": "Phase 1G: rogue base for sharper first-route silhouette; runtime adds dark cloak and dagger read."
+      },
+      "blacksmith_tor": {
+        "status": "manual",
+        "asset_id": "animatedhuman_polypizza_quaternius_cc0",
+        "path": "res://assets_external/characters/AnimatedHuman_PolyPizza_Quaternius_CC0.glb",
+        "file_name": "AnimatedHuman_PolyPizza_Quaternius_CC0.glb",
+        "source_pack": "Poly Pizza / Quaternius",
+        "license": "CC0 1.0",
+        "confidence": 95,
+        "notes": "Manual story-role match from imported CC0 GLB human upgrade."
+      },
+      "widow_elna": {
+        "status": "manual",
+        "asset_id": "monk_quaternius_rpg",
+        "path": "res://assets_external/characters/Monk.obj",
+        "file_name": "Monk.obj",
+        "source_pack": "Quaternius RPG Characters",
+        "license": "CC0 1.0",
+        "confidence": 95,
+        "notes": "Phase 1G: robed base for mourning villager silhouette; runtime adds widow veil."
+      },
+      "generic_villager_01": {
+        "status": "manual",
+        "asset_id": "monk_quaternius_rpg",
+        "path": "res://assets_external/characters/Monk.obj",
+        "file_name": "Monk.obj",
+        "source_pack": "Quaternius RPG Characters",
+        "license": "CC0 1.0",
+        "confidence": 95,
+        "notes": "Phase 1G: robed low-poly base for first-route villagers; runtime varies overlays by role."
+      },
+      "generic_villager_02": {
+        "status": "manual",
+        "asset_id": "womancasual_polypizza_quaternius_cc0",
+        "path": "res://assets_external/characters/WomanCasual_PolyPizza_Quaternius_CC0.glb",
+        "file_name": "WomanCasual_PolyPizza_Quaternius_CC0.glb",
+        "source_pack": "Poly Pizza / Quaternius",
+        "license": "CC0 1.0",
+        "confidence": 95,
+        "notes": "Manual story-role match from imported CC0 GLB human upgrade."
+      }
+    },
+    "enemies": {
+      "ghoulkin": {
+        "status": "manual",
+        "asset_id": "skeleton_8a650dc2f9",
+        "path": "res://assets_external/enemies/Skeleton.obj",
+        "file_name": "Skeleton.obj",
+        "source_pack": "",
+        "license": "",
+        "confidence": 95,
+        "notes": "Manual enemy-role match from available creature/humanoid assets. Runtime uses OBJ fallback loader for this source asset."
+      },
+      "bog_wretch": {
+        "status": "manual",
+        "asset_id": "slime_58a4f84b81",
+        "path": "res://assets_external/enemies/Slime.obj",
+        "file_name": "Slime.obj",
+        "source_pack": "",
+        "license": "",
+        "confidence": 95,
+        "notes": "Manual enemy-role match from available creature/humanoid assets. Runtime uses OBJ fallback loader for this source asset."
+      },
+      "gravebound_knight": {
+        "status": "manual",
+        "asset_id": "skeleton_8a650dc2f9",
+        "path": "res://assets_external/enemies/Skeleton.obj",
+        "file_name": "Skeleton.obj",
+        "source_pack": "",
+        "license": "",
+        "confidence": 95,
+        "notes": "Manual enemy-role match from available creature/humanoid assets. Runtime uses OBJ fallback loader for this source asset."
+      },
+      "wychwood_stalker": {
+        "status": "manual",
+        "asset_id": "wolf_8777193cb9",
+        "path": "res://assets_external/enemies/Wolf.obj",
+        "file_name": "Wolf.obj",
+        "source_pack": "",
+        "license": "",
+        "confidence": 95,
+        "notes": "Manual enemy-role match from available creature/humanoid assets. Runtime uses OBJ fallback loader for this source asset."
+      },
+      "white_hart_avatar": {
+        "status": "manual",
+        "asset_id": "wolf_8777193cb9",
+        "path": "res://assets_external/enemies/Wolf.obj",
+        "file_name": "Wolf.obj",
+        "source_pack": "",
+        "license": "",
+        "confidence": 95,
+        "notes": "Manual enemy-role match from available creature/humanoid assets. Runtime uses OBJ fallback loader for this source asset."
+      },
+      "bandit": {
+        "status": "manual",
+        "asset_id": "rogue_63680bbe05",
+        "path": "res://assets_external/characters/Rogue.obj",
+        "file_name": "Rogue.obj",
+        "source_pack": "",
+        "license": "",
+        "confidence": 95,
+        "notes": "Manual enemy-role match from available creature/humanoid assets. Runtime uses OBJ fallback loader for this source asset."
+      }
+    },
+    "environment": {
+      "greyfen_house": {
+        "status": "manual",
+        "asset_id": "wall_plaster_door_flat_9724b32340",
+        "path": "res://assets_external/environment/village/Wall_Plaster_Door_Flat.obj",
+        "file_name": "Wall_Plaster_Door_Flat.obj",
+        "source_pack": "",
+        "license": "",
+        "confidence": 95,
+        "notes": "Manual world-prop match from available village/forest/prop assets. Runtime uses OBJ fallback loader for this source asset."
+      },
+      "tavern": {
+        "status": "manual",
+        "asset_id": "roof_2x4_roundtile_1e4a3a00d7",
+        "path": "res://assets_external/environment/village/Roof_2x4_RoundTile.obj",
+        "file_name": "Roof_2x4_RoundTile.obj",
+        "source_pack": "",
+        "license": "",
+        "confidence": 95,
+        "notes": "Manual world-prop match from available village/forest/prop assets. Runtime uses OBJ fallback loader for this source asset."
+      },
+      "shrine": {
+        "status": "manual",
+        "asset_id": "balcony_cross_straight_d5727ea164",
+        "path": "res://assets_external/environment/village/Balcony_Cross_Straight.obj",
+        "file_name": "Balcony_Cross_Straight.obj",
+        "source_pack": "",
+        "license": "",
+        "confidence": 95,
+        "notes": "Manual world-prop match from available village/forest/prop assets. Runtime uses OBJ fallback loader for this source asset."
+      },
+      "blacksmith_shop": {
+        "status": "manual",
+        "asset_id": "anvil_2355876e01",
+        "path": "res://assets_external/environment/props/Anvil.obj",
+        "file_name": "Anvil.obj",
+        "source_pack": "",
+        "license": "",
+        "confidence": 95,
+        "notes": "Manual world-prop match from available village/forest/prop assets. Runtime uses OBJ fallback loader for this source asset."
+      },
+      "cemetery_gravestone": {
+        "status": "manual",
+        "asset_id": "wall_unevenbrick_straight_14e0f8afd7",
+        "path": "res://assets_external/environment/village/Wall_UnevenBrick_Straight.obj",
+        "file_name": "Wall_UnevenBrick_Straight.obj",
+        "source_pack": "",
+        "license": "",
+        "confidence": 95,
+        "notes": "Manual world-prop match from available village/forest/prop assets. Runtime uses OBJ fallback loader for this source asset."
+      },
+      "forest_tree": {
+        "status": "manual",
+        "asset_id": "commontree_1_3726d6187f",
+        "path": "res://assets_external/environment/forest/CommonTree_1.obj",
+        "file_name": "CommonTree_1.obj",
+        "source_pack": "",
+        "license": "",
+        "confidence": 95,
+        "notes": "Manual world-prop match from available village/forest/prop assets. Runtime uses OBJ fallback loader for this source asset."
+      },
+      "forest_rock": {
+        "status": "manual",
+        "asset_id": "rock_medium_1_cbe43f373b",
+        "path": "res://assets_external/environment/forest/Rock_Medium_1.obj",
+        "file_name": "Rock_Medium_1.obj",
+        "source_pack": "",
+        "license": "",
+        "confidence": 95,
+        "notes": "Manual world-prop match from available village/forest/prop assets. Runtime uses OBJ fallback loader for this source asset."
+      },
+      "forest_bush": {
+        "status": "manual",
+        "asset_id": "bush_common_1b4f25c676",
+        "path": "res://assets_external/environment/forest/Bush_Common.obj",
+        "file_name": "Bush_Common.obj",
+        "source_pack": "",
+        "license": "",
+        "confidence": 95,
+        "notes": "Manual world-prop match from available village/forest/prop assets. Runtime uses OBJ fallback loader for this source asset."
+      },
+      "ruins_wall": {
+        "status": "manual",
+        "asset_id": "wall_unevenbrick_straight_14e0f8afd7",
+        "path": "res://assets_external/environment/village/Wall_UnevenBrick_Straight.obj",
+        "file_name": "Wall_UnevenBrick_Straight.obj",
+        "source_pack": "",
+        "license": "",
+        "confidence": 95,
+        "notes": "Manual world-prop match from available village/forest/prop assets. Runtime uses OBJ fallback loader for this source asset."
+      },
+      "ruins_pillar": {
+        "status": "manual",
+        "asset_id": "wall_arch_77b165d121",
+        "path": "res://assets_external/environment/village/Wall_Arch.obj",
+        "file_name": "Wall_Arch.obj",
+        "source_pack": "",
+        "license": "",
+        "confidence": 95,
+        "notes": "Manual world-prop match from available village/forest/prop assets. Runtime uses OBJ fallback loader for this source asset."
+      },
+      "barrel": {
+        "status": "manual",
+        "asset_id": "barrel_d665a4e86e",
+        "path": "res://assets_external/environment/props/Barrel.obj",
+        "file_name": "Barrel.obj",
+        "source_pack": "",
+        "license": "",
+        "confidence": 95,
+        "notes": "Manual world-prop match from available village/forest/prop assets. Runtime uses OBJ fallback loader for this source asset."
+      },
+      "crate": {
+        "status": "manual",
+        "asset_id": "crate_metal_596771e8a6",
+        "path": "res://assets_external/environment/props/Crate_Metal.obj",
+        "file_name": "Crate_Metal.obj",
+        "source_pack": "",
+        "license": "",
+        "confidence": 95,
+        "notes": "Manual world-prop match from available village/forest/prop assets. Runtime uses OBJ fallback loader for this source asset."
+      },
+      "cart": {
+        "status": "manual",
+        "asset_id": "stall_cart_empty_be7f187cfd",
+        "path": "res://assets_external/environment/props/Stall_Cart_Empty.obj",
+        "file_name": "Stall_Cart_Empty.obj",
+        "source_pack": "",
+        "license": "",
+        "confidence": 95,
+        "notes": "Manual world-prop match from available village/forest/prop assets. Runtime uses OBJ fallback loader for this source asset."
+      },
+      "fence": {
+        "status": "manual",
+        "asset_id": "prop_woodenfence_single_a919c33f42",
+        "path": "res://assets_external/environment/village/Prop_WoodenFence_Single.obj",
+        "file_name": "Prop_WoodenFence_Single.obj",
+        "source_pack": "",
+        "license": "",
+        "confidence": 95,
+        "notes": "Manual world-prop match from available village/forest/prop assets. Runtime uses OBJ fallback loader for this source asset."
+      },
+      "torch": {
+        "status": "manual",
+        "asset_id": "torch_metal_e65ccad6b4",
+        "path": "res://assets_external/environment/props/Torch_Metal.obj",
+        "file_name": "Torch_Metal.obj",
+        "source_pack": "",
+        "license": "",
+        "confidence": 95,
+        "notes": "Manual world-prop match from available village/forest/prop assets. Runtime uses OBJ fallback loader for this source asset."
+      }
+    },
+    "animations": {
+      "idle": {
+        "status": "suggested",
+        "asset_id": "animationlibrary_godot_standard_cd1e6d89a8",
+        "path": "res://assets_external/animations/AnimationLibrary_Godot_Standard.glb",
+        "file_name": "AnimationLibrary_Godot_Standard.glb",
+        "source_pack": "",
+        "license": "",
+        "confidence": 2,
+        "notes": "Review before final use."
+      },
+      "walk": {
+        "status": "suggested",
+        "asset_id": "animationlibrary_godot_standard_cd1e6d89a8",
+        "path": "res://assets_external/animations/AnimationLibrary_Godot_Standard.glb",
+        "file_name": "AnimationLibrary_Godot_Standard.glb",
+        "source_pack": "",
+        "license": "",
+        "confidence": 2,
+        "notes": "Review before final use."
+      },
+      "run": {
+        "status": "suggested",
+        "asset_id": "animationlibrary_godot_standard_cd1e6d89a8",
+        "path": "res://assets_external/animations/AnimationLibrary_Godot_Standard.glb",
+        "file_name": "AnimationLibrary_Godot_Standard.glb",
+        "source_pack": "",
+        "license": "",
+        "confidence": 2,
+        "notes": "Review before final use."
+      },
+      "sprint": {
+        "status": "suggested",
+        "asset_id": "animationlibrary_godot_standard_cd1e6d89a8",
+        "path": "res://assets_external/animations/AnimationLibrary_Godot_Standard.glb",
+        "file_name": "AnimationLibrary_Godot_Standard.glb",
+        "source_pack": "",
+        "license": "",
+        "confidence": 2,
+        "notes": "Review before final use."
+      },
+      "dodge_roll": {
+        "status": "suggested",
+        "asset_id": "scroll_1_2b46ee5384",
+        "path": "res://assets_external/environment/props/Scroll_1.gltf",
+        "file_name": "Scroll_1.gltf",
+        "source_pack": "",
+        "license": "",
+        "confidence": 5,
+        "notes": "Review before final use."
+      },
+      "light_attack": {
+        "status": "suggested",
+        "asset_id": "animationlibrary_godot_standard_cd1e6d89a8",
+        "path": "res://assets_external/animations/AnimationLibrary_Godot_Standard.glb",
+        "file_name": "AnimationLibrary_Godot_Standard.glb",
+        "source_pack": "",
+        "license": "",
+        "confidence": 2,
+        "notes": "Review before final use."
+      },
+      "heavy_attack": {
+        "status": "suggested",
+        "asset_id": "animationlibrary_godot_standard_cd1e6d89a8",
+        "path": "res://assets_external/animations/AnimationLibrary_Godot_Standard.glb",
+        "file_name": "AnimationLibrary_Godot_Standard.glb",
+        "source_pack": "",
+        "license": "",
+        "confidence": 2,
+        "notes": "Review before final use."
+      },
+      "block": {
+        "status": "suggested",
+        "asset_id": "animationlibrary_godot_standard_cd1e6d89a8",
+        "path": "res://assets_external/animations/AnimationLibrary_Godot_Standard.glb",
+        "file_name": "AnimationLibrary_Godot_Standard.glb",
+        "source_pack": "",
+        "license": "",
+        "confidence": 2,
+        "notes": "Review before final use."
+      },
+      "hit_reaction": {
+        "status": "suggested",
+        "asset_id": "animationlibrary_godot_standard_cd1e6d89a8",
+        "path": "res://assets_external/animations/AnimationLibrary_Godot_Standard.glb",
+        "file_name": "AnimationLibrary_Godot_Standard.glb",
+        "source_pack": "",
+        "license": "",
+        "confidence": 2,
+        "notes": "Review before final use."
+      },
+      "death": {
+        "status": "suggested",
+        "asset_id": "animationlibrary_godot_standard_cd1e6d89a8",
+        "path": "res://assets_external/animations/AnimationLibrary_Godot_Standard.glb",
+        "file_name": "AnimationLibrary_Godot_Standard.glb",
+        "source_pack": "",
+        "license": "",
+        "confidence": 2,
+        "notes": "Review before final use."
+      },
+      "npc_idle": {
+        "status": "suggested",
+        "asset_id": "animationlibrary_godot_standard_cd1e6d89a8",
+        "path": "res://assets_external/animations/AnimationLibrary_Godot_Standard.glb",
+        "file_name": "AnimationLibrary_Godot_Standard.glb",
+        "source_pack": "",
+        "license": "",
+        "confidence": 2,
+        "notes": "Review before final use."
+      }
+    },
+    "audio": {
+      "sword_swing": {
+        "status": "placeholder",
+        "asset_id": "",
+        "path": "",
+        "file_name": "",
+        "source_pack": "",
+        "license": "",
+        "confidence": 0,
+        "notes": "Placeholder required until a real asset is assigned.",
+        "placeholder_type": "silent_audio_required"
+      },
+      "sword_impact": {
+        "status": "placeholder",
+        "asset_id": "",
+        "path": "",
+        "file_name": "",
+        "source_pack": "",
+        "license": "",
+        "confidence": 0,
+        "notes": "Placeholder required until a real asset is assigned.",
+        "placeholder_type": "silent_audio_required"
+      },
+      "footstep_grass": {
+        "status": "placeholder",
+        "asset_id": "",
+        "path": "",
+        "file_name": "",
+        "source_pack": "",
+        "license": "",
+        "confidence": 0,
+        "notes": "Placeholder required until a real asset is assigned.",
+        "placeholder_type": "silent_audio_required"
+      },
+      "footstep_stone": {
+        "status": "placeholder",
+        "asset_id": "",
+        "path": "",
+        "file_name": "",
+        "source_pack": "",
+        "license": "",
+        "confidence": 0,
+        "notes": "Placeholder required until a real asset is assigned.",
+        "placeholder_type": "silent_audio_required"
+      },
+      "monster_growl": {
+        "status": "placeholder",
+        "asset_id": "",
+        "path": "",
+        "file_name": "",
+        "source_pack": "",
+        "license": "",
+        "confidence": 0,
+        "notes": "Placeholder required until a real asset is assigned.",
+        "placeholder_type": "silent_audio_required"
+      },
+      "forest_ambience": {
+        "status": "placeholder",
+        "asset_id": "",
+        "path": "",
+        "file_name": "",
+        "source_pack": "",
+        "license": "",
+        "confidence": 0,
+        "notes": "Placeholder required until a real asset is assigned.",
+        "placeholder_type": "silent_audio_required"
+      },
+      "village_ambience": {
+        "status": "placeholder",
+        "asset_id": "",
+        "path": "",
+        "file_name": "",
+        "source_pack": "",
+        "license": "",
+        "confidence": 0,
+        "notes": "Placeholder required until a real asset is assigned.",
+        "placeholder_type": "silent_audio_required"
+      },
+      "ruins_ambience": {
+        "status": "placeholder",
+        "asset_id": "",
+        "path": "",
+        "file_name": "",
+        "source_pack": "",
+        "license": "",
+        "confidence": 0,
+        "notes": "Placeholder required until a real asset is assigned.",
+        "placeholder_type": "silent_audio_required"
+      },
+      "ui_click": {
+        "status": "manual",
+        "asset_id": "click1_1068b2eca3",
+        "path": "res://assets_external/audio/ui/click1.wav",
+        "file_name": "click1.wav",
+        "source_pack": "",
+        "license": "",
+        "confidence": 95,
+        "notes": "Manual audio match from available Kenney UI audio assets."
+      },
+      "music_loop": {
+        "status": "placeholder",
+        "asset_id": "",
+        "path": "",
+        "file_name": "",
+        "source_pack": "",
+        "license": "",
+        "confidence": 0,
+        "notes": "Placeholder required until a real asset is assigned.",
+        "placeholder_type": "silent_audio_required"
+      }
+    },
+    "ui": {
+      "button": {
+        "status": "manual",
+        "asset_id": "button_brown_5ea549921e",
+        "path": "res://assets_external/ui/button_brown.png",
+        "file_name": "button_brown.png",
+        "source_pack": "",
+        "license": "",
+        "confidence": 95,
+        "notes": "Manual UI texture match from Kenney adventure UI assets."
+      },
+      "panel": {
+        "status": "manual",
+        "asset_id": "panel_brown_e2a66ddf92",
+        "path": "res://assets_external/ui/panel_brown.png",
+        "file_name": "panel_brown.png",
+        "source_pack": "",
+        "license": "",
+        "confidence": 95,
+        "notes": "Manual UI texture match from Kenney adventure UI assets."
+      }
+    }
+  },
+  "placeholders_updated_at": "2026-06-11T20:52:55+00:00"
+}
