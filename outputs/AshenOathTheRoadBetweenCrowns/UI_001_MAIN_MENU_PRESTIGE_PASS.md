@@ -38,12 +38,14 @@
 
 ## Export Result
 
-- Pending final production deploy script.
+- Web export passed and synced into the root `web/` folder.
+- Final web build size after UI-001: `45,353,708` bytes, about `43.3 MB`.
 
 ## Commit Hash
 
-- Pending final production deploy script.
+- `75aac84 UI-001: main menu prestige pass`
 
 ## Deployment Status
 
-- Pending final production deploy script.
+- Pushed to `origin/main`.
+- Vercel auto-deploy trigger expected for `https://ashenoath.vercel.app/`.
