@@ -162,6 +162,8 @@ func _play_next_voice() -> void:
 
 func _build_library() -> void:
 	sounds["ui"] = _tone(660.0, 0.055, 0.20)
+	sounds["menu_hover"] = _tone_mix([392.0, 588.0], 0.060, 0.085, 32.0, 0.006)
+	sounds["menu_click"] = _tone_mix([196.0, 392.0, 587.0], 0.110, 0.105, 24.0, 0.010)
 	sounds["step"] = _footstep(0.045, 0.09, 82.0)
 	sounds["step_road"] = _footstep(0.050, 0.11, 118.0)
 	sounds["step_forest"] = _footstep(0.060, 0.08, 64.0)
@@ -220,6 +222,7 @@ func _build_voice_library() -> void:
 	voices["voice_player_test"] = _voice_stub([92.0, 110.0, 84.0, 104.0], 1.20, 0.090)
 
 func _build_music_library() -> void:
+	music["main_menu"] = _music_loop([55.0, 82.0, 110.0, 165.0], 6.4, 0.050, 0.016)
 	music["greyfen_explore"] = _music_loop([73.0, 110.0, 146.0], 6.0, 0.060, 0.012)
 	music["shrine_anwen"] = _music_loop([88.0, 132.0, 176.0, 264.0], 5.6, 0.052, 0.008)
 	music["wychwood_tension"] = _music_loop([46.0, 69.0, 92.0], 6.2, 0.070, 0.020)
@@ -240,6 +243,10 @@ func _volume_for(event_name: String) -> float:
 		return -19.0
 	if event_name == "ui":
 		return -12.0
+	if event_name == "menu_hover":
+		return -24.0
+	if event_name == "menu_click":
+		return -17.0
 	if event_name == "boss":
 		return -7.0
 	if event_name in ["shrine_hum", "shrine_candle", "cloth_wind", "village_crow", "village_life"]:
@@ -263,6 +270,8 @@ func _music_volume_for(state_id: String) -> float:
 		return -14.0
 	if state_id == "return_report":
 		return -15.0
+	if state_id == "main_menu":
+		return -18.0
 	return -16.0
 
 func _speak_voice_id(voice_id: String) -> bool:

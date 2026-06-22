@@ -53,6 +53,7 @@ func _ready() -> void:
 	_build_global_environment()
 	_setup_managers()
 	hud.show_launch_screen()
+	audio.set_music_state("main_menu")
 	get_tree().paused = true
 
 func _input(event: InputEvent) -> void:
@@ -119,6 +120,8 @@ func _setup_managers() -> void:
 	settings.changed.connect(_apply_runtime_settings)
 	_apply_runtime_settings(settings.settings)
 	hud.launch_accepted.connect(_on_launch_accepted)
+	hud.menu_hovered.connect(func(): audio.play_event("menu_hover", 0.025))
+	hud.menu_clicked.connect(func(): audio.play_event("menu_click", 0.015))
 	hud.new_game_requested.connect(_new_game)
 	hud.continue_requested.connect(func():
 		audio.play_event("ui")

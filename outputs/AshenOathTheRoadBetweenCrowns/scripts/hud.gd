@@ -12,6 +12,13 @@ signal action_selected(action: Dictionary)
 signal craft_requested(item_id: String)
 signal item_use_requested(item_id: String)
 signal dialogue_closed
+signal menu_hovered
+signal menu_clicked
+
+const MENU_BUILD_LABEL = "UI-001 | 2026-06-22 | ashenoath.vercel.app"
+const SAVE_PATH = "user://ashen_oath_save.json"
+const AUTOSAVE_PATH = "user://ashen_oath_autosave.json"
+const CHECKPOINT_PATH = "user://ashen_oath_checkpoint.json"
 
 var health_bar: ProgressBar
 var stamina_bar: ProgressBar
@@ -67,20 +74,21 @@ func show_main_menu() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_clear_menu()
 	menu_layer.visible = true
-	var box = _menu_box("ASHEN OATH\nTHE ROAD BETWEEN CROWNS")
-	_add_menu_text(box, "Vertical Slice Preview\nBest in Chrome, Edge, or Firefox. Windows build remains the fallback.")
+	var box = _menu_box("ASHEN OATH", "The Road Between Crowns", "contracts | curses | consequences")
+	_add_menu_text(box, "Greyfen waits under ash and oath-light.")
 	_add_menu_button(box, "New Game", func(): new_game_requested.emit())
-	_add_menu_button(box, "Continue", func(): continue_requested.emit())
+	_add_menu_button(box, "Continue", func(): continue_requested.emit(), not _has_continue_save())
 	_add_menu_button(box, "Controls", func(): show_controls_menu("main"))
-	_add_menu_button(box, "Credits / Licenses", func(): show_credits_menu())
+	_add_menu_button(box, "Settings", func(): show_settings_menu("main"))
+	_add_menu_button(box, "Credits", func(): show_credits_menu())
 	_add_menu_button(box, "Quit", func(): get_tree().quit())
 
 func show_launch_screen() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_clear_menu()
 	menu_layer.visible = true
-	var box = _menu_box("ASHEN OATH")
-	_add_menu_text(box, "Click once to enable audio and mouse capture.\nBrowser build: use Chrome, Edge, or Firefox first.\nThis is a low-spec dark-fantasy vertical slice.")
+	var box = _menu_box("ASHEN OATH", "The Road Between Crowns", "click to wake the road")
+	_add_menu_text(box, "Click once to enable audio and mouse capture.")
 	_add_menu_button(box, "Enter", func():
 		launch_accepted.emit()
 		show_main_menu()
@@ -90,7 +98,7 @@ func show_pause_menu() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_clear_menu()
 	menu_layer.visible = true
-	var box = _menu_box("Paused")
+	var box = _menu_box("Paused", "", "the road holds its breath")
 	_add_menu_button(box, "Resume", func(): resume_requested.emit())
 	_add_menu_button(box, "Save", func(): save_requested.emit())
 	_add_menu_button(box, "Load", func(): load_requested.emit())
@@ -98,11 +106,12 @@ func show_pause_menu() -> void:
 	_add_menu_button(box, "Controls", func(): show_controls_menu("pause"))
 	_add_menu_button(box, "Main Menu", func(): show_main_menu())
 
-func show_settings_menu() -> void:
+func show_settings_menu(back_target: String = "pause") -> void:
+	controls_back_target = back_target
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_clear_menu()
 	menu_layer.visible = true
-	var box = _menu_box("Settings")
+	var box = _menu_box("Settings", "", "tune the lantern")
 	_add_menu_button(box, "Cycle Render Scale", func(): settings_requested.emit("render_scale"))
 	_add_menu_button(box, "Cycle Shadows", func(): settings_requested.emit("shadows"))
 	_add_menu_button(box, "Mouse Sensitivity", func(): settings_requested.emit("mouse_sensitivity"))
@@ -111,14 +120,14 @@ func show_settings_menu() -> void:
 	_add_menu_button(box, "Toggle VSync", func(): settings_requested.emit("vsync"))
 	_add_menu_button(box, "Toggle Fullscreen", func(): settings_requested.emit("fullscreen"))
 	_add_menu_button(box, "Potato Mode", func(): settings_requested.emit("potato"))
-	_add_menu_button(box, "Back", func(): show_pause_menu())
+	_add_menu_button(box, "Back", _return_from_controls)
 
 func show_controls_menu(back_target: String = "main") -> void:
 	controls_back_target = back_target
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_clear_menu()
 	menu_layer.visible = true
-	var box = _menu_box("Controls")
+	var box = _menu_box("Controls", "", "blade | breath | road")
 	_add_menu_text(box, "WASD move | Mouse look | Shift run | Space dodge\nLeft mouse light attack | Right mouse heavy attack\nQ block/parry | E interact | R potion | F bomb\nTab inventory | Esc pause | Arrow keys camera fallback")
 	_add_menu_button(box, "Back", _return_from_controls)
 
@@ -126,7 +135,7 @@ func show_credits_menu() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_clear_menu()
 	menu_layer.visible = true
-	var box = _menu_box("Credits")
+	var box = _menu_box("Credits", "", "made under an ashen moon")
 	_add_menu_text(box, "Ashen Oath vertical slice.\nExternal art/audio/UI assets are tracked under assets_external/licenses.\nPublish public builds with those license notes included.")
 	_add_menu_button(box, "Back", func(): show_main_menu())
 
@@ -485,41 +494,124 @@ func _clear_menu() -> void:
 	for child in menu_layer.get_children():
 		child.queue_free()
 
-func _menu_box(title: String) -> VBoxContainer:
-	var backdrop = ColorRect.new()
-	backdrop.set_anchors_preset(Control.PRESET_FULL_RECT)
-	backdrop.color = Color(0.015, 0.013, 0.012, 0.82)
-	menu_layer.add_child(backdrop)
-	var omen = Label.new()
-	omen.text = "contracts | curses | consequences"
-	omen.position = Vector2(430, 118)
-	omen.size = Vector2(420, 24)
-	omen.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	omen.add_theme_color_override("font_color", Color(0.62, 0.55, 0.42))
-	menu_layer.add_child(omen)
+func _menu_box(title: String, subtitle: String = "", omen_text: String = "") -> VBoxContainer:
+	_build_menu_background()
+	var margin = MarginContainer.new()
+	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
+	margin.add_theme_constant_override("margin_left", 70)
+	margin.add_theme_constant_override("margin_top", 46)
+	margin.add_theme_constant_override("margin_right", 70)
+	margin.add_theme_constant_override("margin_bottom", 42)
+	menu_layer.add_child(margin)
+	var shell = HBoxContainer.new()
+	shell.add_theme_constant_override("separation", 44)
+	margin.add_child(shell)
+	var title_stack = VBoxContainer.new()
+	title_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_stack.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	title_stack.add_theme_constant_override("separation", 10)
+	shell.add_child(title_stack)
+	var title_spacer = Control.new()
+	title_spacer.custom_minimum_size = Vector2(1, 86)
+	title_stack.add_child(title_spacer)
+	var title_label = Label.new()
+	title_label.text = title
+	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	title_label.add_theme_font_size_override("font_size", 58)
+	title_label.add_theme_color_override("font_color", Color(0.93, 0.78, 0.47))
+	title_label.add_theme_color_override("font_shadow_color", Color(0.0, 0.0, 0.0, 0.92))
+	title_label.add_theme_constant_override("shadow_offset_x", 3)
+	title_label.add_theme_constant_override("shadow_offset_y", 4)
+	title_stack.add_child(title_label)
+	if subtitle != "":
+		var subtitle_label = Label.new()
+		subtitle_label.text = subtitle
+		subtitle_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+		subtitle_label.add_theme_font_size_override("font_size", 24)
+		subtitle_label.add_theme_color_override("font_color", Color(0.78, 0.70, 0.56))
+		title_stack.add_child(subtitle_label)
+	if omen_text != "":
+		var omen = Label.new()
+		omen.text = omen_text.to_upper()
+		omen.add_theme_font_size_override("font_size", 12)
+		omen.add_theme_color_override("font_color", Color(0.56, 0.50, 0.40))
+		title_stack.add_child(omen)
+	var title_fill = Control.new()
+	title_fill.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	title_stack.add_child(title_fill)
+	var build = Label.new()
+	build.text = MENU_BUILD_LABEL
+	build.add_theme_font_size_override("font_size", 12)
+	build.add_theme_color_override("font_color", Color(0.50, 0.46, 0.38))
+	title_stack.add_child(build)
 	var panel = PanelContainer.new()
-	panel.position = Vector2(410, 150)
-	panel.size = Vector2(460, 420)
-	_style_panel(panel, Color(0.06, 0.055, 0.048, 0.95), Color(0.45, 0.37, 0.22, 0.85))
-	menu_layer.add_child(panel)
+	panel.custom_minimum_size = Vector2(420, 520)
+	panel.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	_style_panel(panel, Color(0.030, 0.026, 0.022, 0.88), Color(0.58, 0.42, 0.20, 0.86))
+	shell.add_child(panel)
 	var box = VBoxContainer.new()
-	box.add_theme_constant_override("separation", 12)
+	box.add_theme_constant_override("separation", 10)
 	panel.add_child(box)
-	var label = Label.new()
-	label.text = title
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	label.add_theme_font_size_override("font_size", 27)
-	label.add_theme_color_override("font_color", Color(0.86, 0.78, 0.60))
-	box.add_child(label)
 	return box
 
-func _add_menu_button(box: VBoxContainer, text: String, callback: Callable) -> void:
+func _build_menu_background() -> void:
+	var base = ColorRect.new()
+	base.set_anchors_preset(Control.PRESET_FULL_RECT)
+	base.color = Color(0.006, 0.008, 0.010, 1.0)
+	menu_layer.add_child(base)
+	var moon = ColorRect.new()
+	moon.position = Vector2(0, 0)
+	moon.size = Vector2(1280, 720)
+	moon.color = Color(0.030, 0.045, 0.060, 0.72)
+	menu_layer.add_child(moon)
+	_add_menu_glow(Vector2(228, 478), Vector2(520, 160), Color(0.95, 0.44, 0.16, 0.22))
+	_add_menu_glow(Vector2(760, 168), Vector2(420, 120), Color(0.32, 0.44, 0.58, 0.18))
+	_add_menu_silhouette([Vector2(0, 720), Vector2(0, 476), Vector2(118, 438), Vector2(210, 474), Vector2(318, 420), Vector2(455, 464), Vector2(620, 418), Vector2(820, 472), Vector2(1040, 430), Vector2(1280, 492), Vector2(1280, 720)], Color(0.010, 0.014, 0.014, 0.94))
+	_add_menu_silhouette([Vector2(0, 720), Vector2(0, 586), Vector2(190, 556), Vector2(390, 588), Vector2(642, 540), Vector2(900, 584), Vector2(1280, 548), Vector2(1280, 720)], Color(0.018, 0.020, 0.018, 0.98))
+	for i in range(26):
+		_add_ash_particle(i)
+
+func _add_menu_glow(pos: Vector2, size: Vector2, color: Color) -> void:
+	for i in range(4):
+		var glow = ColorRect.new()
+		glow.position = pos - size * (0.5 + float(i) * 0.16)
+		glow.size = size * (1.0 + float(i) * 0.32)
+		glow.color = Color(color.r, color.g, color.b, color.a / float(i + 1))
+		menu_layer.add_child(glow)
+
+func _add_menu_silhouette(points: PackedVector2Array, color: Color) -> void:
+	var poly = Polygon2D.new()
+	poly.polygon = points
+	poly.color = color
+	menu_layer.add_child(poly)
+
+func _add_ash_particle(index: int) -> void:
+	var ash = ColorRect.new()
+	var x = float((index * 83) % 1240) + 18.0
+	var y = float((index * 47) % 650) + 22.0
+	ash.position = Vector2(x, y)
+	ash.size = Vector2(2.0 + float(index % 3), 2.0 + float((index + 1) % 3))
+	ash.color = Color(0.72, 0.64, 0.48, 0.18)
+	menu_layer.add_child(ash)
+	var tween = create_tween()
+	tween.tween_property(ash, "position", ash.position + Vector2(24.0 + float(index % 5) * 5.0, -34.0), 5.0 + float(index % 7) * 0.45)
+	tween.parallel().tween_property(ash, "modulate:a", 0.28, 2.0)
+	tween.tween_property(ash, "modulate:a", 0.08, 1.4)
+
+func _add_menu_button(box: VBoxContainer, text: String, callback: Callable, disabled: bool = false) -> void:
 	var button = Button.new()
 	button.text = text
-	button.custom_minimum_size = Vector2(390, 42)
+	button.disabled = disabled
+	button.custom_minimum_size = Vector2(360, 44)
 	_style_button(button)
-	button.pressed.connect(callback)
+	button.mouse_entered.connect(func():
+		if not button.disabled:
+			menu_hovered.emit()
+	)
+	button.pressed.connect(func():
+		menu_clicked.emit()
+		callback.call()
+	)
 	box.add_child(button)
 
 func _add_menu_text(box: VBoxContainer, text: String) -> void:
@@ -528,8 +620,11 @@ func _add_menu_text(box: VBoxContainer, text: String) -> void:
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.add_theme_color_override("font_color", Color(0.72, 0.66, 0.54))
-	label.add_theme_font_size_override("font_size", 14)
+	label.add_theme_font_size_override("font_size", 15)
 	box.add_child(label)
+
+func _has_continue_save() -> bool:
+	return FileAccess.file_exists(SAVE_PATH) or FileAccess.file_exists(AUTOSAVE_PATH) or FileAccess.file_exists(CHECKPOINT_PATH)
 
 func _return_from_controls() -> void:
 	if controls_back_target == "pause":
@@ -627,15 +722,51 @@ func _style_panel(panel: PanelContainer, bg_color: Color, border_color: Color) -
 
 func _style_button(button: Button) -> void:
 	var normal = StyleBoxFlat.new()
-	normal.bg_color = Color(0.12, 0.095, 0.065, 0.95)
-	normal.border_color = Color(0.48, 0.35, 0.18)
+	normal.bg_color = Color(0.055, 0.046, 0.037, 0.72)
+	normal.border_color = Color(0.50, 0.37, 0.19, 0.82)
 	normal.set_border_width_all(1)
+	normal.corner_radius_top_left = 3
+	normal.corner_radius_top_right = 3
+	normal.corner_radius_bottom_left = 3
+	normal.corner_radius_bottom_right = 3
+	normal.content_margin_left = 16
+	normal.content_margin_right = 16
 	var hover = StyleBoxFlat.new()
-	hover.bg_color = Color(0.20, 0.15, 0.09, 1.0)
-	hover.border_color = Color(0.78, 0.58, 0.28)
+	hover.bg_color = Color(0.16, 0.105, 0.052, 0.94)
+	hover.border_color = Color(0.95, 0.66, 0.28, 0.96)
 	hover.set_border_width_all(1)
+	hover.set_border_width(SIDE_BOTTOM, 3)
+	hover.corner_radius_top_left = 3
+	hover.corner_radius_top_right = 3
+	hover.corner_radius_bottom_left = 3
+	hover.corner_radius_bottom_right = 3
+	hover.content_margin_left = 16
+	hover.content_margin_right = 16
+	var pressed = StyleBoxFlat.new()
+	pressed.bg_color = Color(0.23, 0.135, 0.058, 1.0)
+	pressed.border_color = Color(1.0, 0.74, 0.32, 1.0)
+	pressed.set_border_width_all(1)
+	pressed.set_border_width(SIDE_BOTTOM, 3)
+	pressed.corner_radius_top_left = 3
+	pressed.corner_radius_top_right = 3
+	pressed.corner_radius_bottom_left = 3
+	pressed.corner_radius_bottom_right = 3
+	var disabled = StyleBoxFlat.new()
+	disabled.bg_color = Color(0.032, 0.030, 0.028, 0.54)
+	disabled.border_color = Color(0.25, 0.23, 0.20, 0.62)
+	disabled.set_border_width_all(1)
+	disabled.corner_radius_top_left = 3
+	disabled.corner_radius_top_right = 3
+	disabled.corner_radius_bottom_left = 3
+	disabled.corner_radius_bottom_right = 3
 	button.add_theme_stylebox_override("normal", normal)
 	button.add_theme_stylebox_override("hover", hover)
-	button.add_theme_stylebox_override("pressed", hover)
+	button.add_theme_stylebox_override("pressed", pressed)
+	button.add_theme_stylebox_override("disabled", disabled)
 	button.add_theme_color_override("font_color", Color(0.86, 0.78, 0.60))
-	button.add_theme_color_override("font_hover_color", Color(1.0, 0.90, 0.64))
+	button.add_theme_color_override("font_hover_color", Color(1.0, 0.88, 0.56))
+	button.add_theme_color_override("font_pressed_color", Color(1.0, 0.74, 0.36))
+	button.add_theme_color_override("font_disabled_color", Color(0.42, 0.39, 0.34))
+	button.add_theme_font_size_override("font_size", 18)
+	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	button.focus_mode = Control.FOCUS_ALL
