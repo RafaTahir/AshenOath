@@ -18,7 +18,7 @@ Required ending steps for every successful task:
 8. Wait for push completion.
 9. Confirm the commit hash and push success.
 10. Confirm Vercel will auto-deploy from `origin/main`.
-11. Report the production URL when configured.
+11. Report the production URL: `https://ashenoath.vercel.app/`.
 
 Use:
 

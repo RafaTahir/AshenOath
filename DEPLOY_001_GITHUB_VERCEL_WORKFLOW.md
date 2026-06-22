@@ -44,12 +44,12 @@
 ## Vercel Status
 
 - Vercel CLI is not installed or unavailable in this environment.
-- Vercel still requires one-time dashboard linking if it has not already been connected.
+- Production URL: `https://ashenoath.vercel.app/`.
 - Once linked to `origin/main` with output directory `web`, future pushes should auto-deploy.
 
 ## Deployment URL
 
-- None created in this environment.
+- `https://ashenoath.vercel.app/`
 
 ## Commands Run
 

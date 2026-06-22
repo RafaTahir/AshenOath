@@ -4,7 +4,7 @@ param(
   [string]$Message = "",
   [switch]$Commit,
   [switch]$NoDeploy,
-  [string]$ProductionUrl = ""
+  [string]$ProductionUrl = "https://ashenoath.vercel.app/"
 )
 
 $ErrorActionPreference = "Stop"

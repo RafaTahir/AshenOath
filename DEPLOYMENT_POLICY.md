@@ -54,5 +54,6 @@ Vercel must be connected once through the Vercel dashboard:
 - Production branch: `main`
 - Output directory: `web`
 - Build command: empty/static
+- Production URL: `https://ashenoath.vercel.app/`
 
 After that, every successful push to `origin/main` should trigger a Vercel production deployment automatically.

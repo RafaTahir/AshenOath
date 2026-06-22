@@ -12,6 +12,7 @@ This pipeline is mandatory after every successful Codex task unless the user exp
 - Generated slim export: `outputs/AshenOath_Web_Slim`
 - Deployable static folder: `web`
 - Vercel config: `vercel.json`
+- Production URL: `https://ashenoath.vercel.app/`
 
 ## One-Time GitHub Setup
 
@@ -46,7 +47,8 @@ Because Vercel CLI is not currently installed/authenticated in this workspace, u
 5. Build command: leave empty unless Vercel requires one.
 6. Output directory: `web`.
 7. Deploy.
-8. Future pushes to `main` update production automatically.
+8. Production URL: `https://ashenoath.vercel.app/`.
+9. Future pushes to `main` update production automatically.
 
 The project includes `vercel.json`, which declares `web` as the output directory and keeps `index.html` from being aggressively cached.
 
@@ -82,7 +84,7 @@ The no-deploy path still verifies, exports, syncs, and verifies the web build, b
 - Use a cache-busting query string, for example:
 
 ```text
-https://YOUR-VERCEL-URL.vercel.app/?v=aud002lockdown
+https://ashenoath.vercel.app/?v=ticket-id
 ```
 
 - For public release notes, include a visible version tag or ticket ID.
