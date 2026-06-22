@@ -18,8 +18,20 @@ Godot Web exports use stable filenames, so browser/CDN caching can keep serving 
 
 ## Verification
 
-- Pending production deploy script.
+- `verify_runtime.gd`: passed.
+- `verify_audio_runtime.gd`: passed.
+- `verify_visible_quality.gd`: passed.
+- `Export_Web_Build.bat`: completed.
+- `verify_web_export.py`: passed, 7 files, 43.3 MB.
+- Production push: succeeded.
 
 ## Live Header Check
 
-After Vercel deploys, `https://ashenoath.vercel.app/index.pck` must report `no-cache` or `must-revalidate`, not `max-age=3600`.
+- `index.html`: `public, must-revalidate, max-age=0`
+- `index.pck`: `must-revalidate, no-cache`
+- `index.js`: `must-revalidate, no-cache`
+- `index.wasm`: `must-revalidate, no-cache`
+- `index.audio.worklet.js`: `must-revalidate, no-cache`
+- `index.audio.position.worklet.js`: `must-revalidate, no-cache`
+
+`https://ashenoath.vercel.app/index.pck` now reports revalidation headers instead of `max-age=3600`.
