@@ -3,16 +3,16 @@
   "cleanUrls": true,
   "headers": [
     {
-      "source": "/index.html",
+      "source": "/(index.html|index.pck|index.js|index.wasm|index.audio.worklet.js|index.audio.position.worklet.js)",
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "no-cache"
+          "value": "no-cache, must-revalidate"
         }
       ]
     },
     {
-      "source": "/(.*).(wasm|pck|js|png)",
+      "source": "/index.png",
       "headers": [
         {
           "key": "Cache-Control",

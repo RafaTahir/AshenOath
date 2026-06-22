@@ -50,7 +50,7 @@ Because Vercel CLI is not currently installed/authenticated in this workspace, u
 8. Production URL: `https://ashenoath.vercel.app/`.
 9. Future pushes to `main` update production automatically.
 
-The project includes `vercel.json`, which declares `web` as the output directory and keeps `index.html` from being aggressively cached.
+The project includes `vercel.json`, which declares `web` as the output directory. Godot Web runtime files use stable names, so `index.html`, `index.pck`, `index.js`, `index.wasm`, and worklet files must always revalidate instead of using long-lived browser cache.
 
 ## Daily Codex Workflow
 
@@ -80,8 +80,16 @@ The no-deploy path still verifies, exports, syncs, and verifies the web build, b
 
 ## Avoiding Stale Browser Cache
 
-- Hard refresh the browser after deployment.
-- Use a cache-busting query string, for example:
+- Runtime files are configured with `Cache-Control: no-cache, must-revalidate`.
+- After deployment, verify the live headers:
+
+```powershell
+Invoke-WebRequest -Uri "https://ashenoath.vercel.app/index.pck?v=cache-check" -Method Head -UseBasicParsing
+```
+
+The `Cache-Control` header must include `no-cache` or `must-revalidate`, not `max-age=3600`.
+
+- A cache-busting query string can still be used while testing:
 
 ```text
 https://ashenoath.vercel.app/?v=ticket-id

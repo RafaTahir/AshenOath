@@ -57,3 +57,7 @@ Vercel must be connected once through the Vercel dashboard:
 - Production URL: `https://ashenoath.vercel.app/`
 
 After that, every successful push to `origin/main` should trigger a Vercel production deployment automatically.
+
+## Cache Policy
+
+Godot Web runtime filenames are stable. Vercel must serve `index.html`, `index.pck`, `index.js`, `index.wasm`, and audio worklet files with `Cache-Control: no-cache, must-revalidate` so the live game reflects new pushes quickly.
