@@ -74,9 +74,10 @@ The no-deploy path still verifies, exports, syncs, and verifies the web build, b
 ## Manual Deploy
 
 1. Run the deploy script with the ticket ID and summary.
-2. Confirm `web/` contains `index.html`, `index.js`, `index.wasm`, `index.pck`, `index.png`, and worklet files.
-3. Confirm the script committed and pushed to GitHub.
-4. Check the Vercel dashboard for the production deployment if a deployment URL is not already configured locally.
+2. The script launches the exported `index.pck` through Godot to catch omitted scripts and preload failures before deployment.
+3. Confirm `web/` contains `index.html`, `index.js`, `index.wasm`, `index.pck`, `index.png`, and worklet files.
+4. Confirm the script committed and pushed to GitHub.
+5. Check the Vercel dashboard for the production deployment if a deployment URL is not already configured locally.
 
 ## Avoiding Stale Browser Cache
 

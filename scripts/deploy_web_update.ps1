@@ -54,6 +54,9 @@ try {
 
   Invoke-Checked $Python "`"$ProjectDir\tools\verify_web_export.py`" `"$ExportDir`"" $RepoRoot
 
+  $ExportPack = Join-Path $ExportDir "index.pck"
+  Invoke-Checked $Godot "--headless --path `"$ExportDir`" --main-pack `"$ExportPack`" --quit-after 5" $RepoRoot
+
   if (Test-Path $WebDir) {
     Get-ChildItem $WebDir -Force | Remove-Item -Recurse -Force
   } else {
