@@ -30,7 +30,7 @@ func _initialize() -> void:
 	await _capture(game, "01_greyfen_spawn", Vector3(0, 1, 7), "greyfen", Vector3(0, 1, 7))
 	await _capture(game, "02_village_center", Vector3(-2, 1, 5), "greyfen", Vector3(-2, 1, 5))
 	await _capture(game, "03_shrine_sister_anwen", Vector3(3.2, 1, -5.0), "greyfen", Vector3(3.2, 1, -5.0))
-	await _capture(game, "04_graveyard_visible_area", Vector3(12.6, 1, 7.4), "greyfen", Vector3(12.6, 1, 7.4))
+	await _capture(game, "04_graveyard_visible_area", Vector3(9.7, 1, 8.0), "greyfen", Vector3(9.7, 1, 8.0), -PI * 0.5)
 	await _capture_dialogue(game, "05_sister_anwen_dialogue", Vector3(3.2, 1, -5.0))
 	await _capture_post_anwen_objective(game, "06_post_anwen_objective")
 	await _capture_gate_guidance(game, "07_wychwood_gate_guidance")
@@ -55,13 +55,13 @@ func _initialize() -> void:
 	await process_frame
 	quit()
 
-func _capture(game, file_name: String, player_pos: Vector3, zone_id: String, spawn_pos: Vector3) -> void:
+func _capture(game, file_name: String, player_pos: Vector3, zone_id: String, spawn_pos: Vector3, camera_yaw: float = 0.0) -> void:
 	game.call("_load_zone", zone_id, spawn_pos)
 	await _settle_frames(3)
 	game.player.global_position = player_pos
 	game.player.velocity = Vector3.ZERO
 	if game.camera_rig != null:
-		game.camera_rig.yaw = 0.0
+		game.camera_rig.yaw = camera_yaw
 		game.camera_rig.pitch = -0.2
 	await _settle_frames(12)
 	_assert_capture_safe(game, player_pos, file_name)

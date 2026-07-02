@@ -26,6 +26,7 @@ func _check_greyfen_visible_quality() -> void:
 	_check_non_white_materials(game.zone_root, "greyfen")
 	_check_house_presence()
 	_check_route_clearance("greyfen")
+	_check_cemetery_shell()
 
 func _check_wychwood_visible_quality() -> void:
 	game.call("_load_zone", "wychwood", Vector3(0, 1, 8))
@@ -65,6 +66,35 @@ func _check_house_presence() -> void:
 			valid_houses += 1
 	if valid_houses < 3:
 		_fail("Greyfen needs at least 3 valid non-white visible houses; found %d" % valid_houses)
+
+func _check_cemetery_shell() -> void:
+	var section = game.zone_root.find_child("GreyfenCemeterySection", true, false)
+	if section == null:
+		_fail("Greyfen cemetery section shell is missing")
+		return
+	for required_name in [
+		"CemeteryEntry", "SisterAnwenCemeteryStage", "CemeteryEncounterStage",
+		"CrowShrineStage", "RuinedCrowChapelBackWall", "RuinedCrowChapelRoof",
+		"OssuarySealedDoor", "CemeteryNorthWall", "CemeterySouthWall", "CemeteryEastWall",
+	]:
+		if game.zone_root.find_child(required_name, true, false) == null:
+			_fail("cemetery shell is missing required node: %s" % required_name)
+	var chapel_wall = game.zone_root.find_child("RuinedCrowChapelBackWall", true, false)
+	if chapel_wall != null and not _has_collision_shape(chapel_wall):
+		_fail("ruined chapel wall has no collision")
+	var entry = game.zone_root.find_child("CemeteryEntry", true, false)
+	if entry is Node3D:
+		var entry_pos = (entry as Node3D).global_position
+		if entry_pos.x > 11.0 or entry_pos.z < 6.0 or entry_pos.z > 10.5:
+			_fail("cemetery entry staging point is outside the accessible Greyfen approach")
+
+func _has_collision_shape(node: Node) -> bool:
+	if node is CollisionShape3D and (node as CollisionShape3D).shape != null:
+		return true
+	for child in node.get_children():
+		if _has_collision_shape(child):
+			return true
+	return false
 
 func _check_route_clearance(zone_id: String) -> void:
 	for node in _collect_route_blockers(game.zone_root):

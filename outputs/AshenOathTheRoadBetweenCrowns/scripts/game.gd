@@ -18,6 +18,7 @@ const VisualDirector = preload("res://scripts/visual_director.gd")
 const NpcAmbient = preload("res://scripts/npc_ambient.gd")
 const CharacterPresentation = preload("res://scripts/character_presentation.gd")
 const CombatFeedback = preload("res://scripts/combat_feedback.gd")
+const CemeterySection = preload("res://scripts/zones/cemetery_section.gd")
 
 var player
 var camera_rig
@@ -298,7 +299,10 @@ func _build_greyfen() -> void:
 	_make_notice_board(Vector3(-2.0, 0, 9.4))
 	_make_shrine_scene(Vector3(6.0, 0, -7.0))
 	_make_blacksmith_scene(Vector3(9.5, 0, 4.6))
-	_make_cemetery_scene(Vector3(14, 0, 8.6))
+	CemeterySection.new().build(zone_root, {
+		"host": self,
+		"origin": Vector3(14, 0, 8.6),
+	})
 	_make_cart(Vector3(-6.2, 0, 5.8))
 	_make_village_dressing()
 	_make_greyfen_first_impression_dressing()
