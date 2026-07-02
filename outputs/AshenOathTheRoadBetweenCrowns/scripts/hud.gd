@@ -128,7 +128,7 @@ func show_controls_menu(back_target: String = "main") -> void:
 	_clear_menu()
 	menu_layer.visible = true
 	var box = _menu_box("Controls", "", "blade | breath | road")
-	_add_menu_text(box, "WASD move | Mouse look | Shift run | Space dodge\nLeft mouse light attack | Right mouse heavy attack\nQ block/parry | E interact | R potion | F bomb\nTab inventory | Esc pause | Arrow keys camera fallback")
+	_add_menu_text(box, "WASD move | Mouse look | Shift run | Space dodge\nLeft mouse light attack | Right mouse heavy attack\nHold C Oathfire Beam | Q block/parry | E interact\nR potion | F bomb | Tab inventory | Esc pause")
 	_add_menu_button(box, "Back", _return_from_controls)
 
 func show_credits_menu() -> void:

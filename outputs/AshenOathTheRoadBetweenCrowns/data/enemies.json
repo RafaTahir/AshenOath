@@ -43,6 +43,28 @@
     "weakness": "iron_trap",
     "color": "#2f5738"
   },
+  "wychwood_raider": {
+    "name": "Wychwood Raider",
+    "health": 75,
+    "damage": 14,
+    "speed": 2.8,
+    "attack_range": 1.5,
+    "sense_range": 9.0,
+    "tag": "beast",
+    "weakness": "normal sword",
+    "color": "#52633f"
+  },
+  "wychwood_brute": {
+    "name": "Wychwood Brute",
+    "health": 110,
+    "damage": 18,
+    "speed": 1.8,
+    "attack_range": 1.75,
+    "sense_range": 8.0,
+    "tag": "beast",
+    "weakness": "ash_bomb",
+    "color": "#3f4932"
+  },
   "white_hart_avatar": {
     "name": "White Hart Avatar",
     "health": 210,

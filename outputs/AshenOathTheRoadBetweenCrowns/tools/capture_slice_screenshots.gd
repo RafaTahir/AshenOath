@@ -50,6 +50,8 @@ func _initialize() -> void:
 	await _capture_combat_state(game, "17_ghoulkin_death_read", "death")
 	await _capture_victory_state(game, "18_ghoulkin_victory_objective")
 	await _capture_victory_state(game, "23_ghoulkin_aftermath_clue")
+	await _capture_oathfire_state(game, "24_oathfire_charge", false)
+	await _capture_oathfire_state(game, "25_oathfire_beam_release", true)
 	print("slice screenshots saved to %s and mirrored to %s" % [output_dir, gallery_dir])
 	game.queue_free()
 	await process_frame
@@ -195,7 +197,7 @@ func _capture_victory_state(game, file_name: String) -> void:
 	for enemy in game.active_enemies:
 		if enemy != null and not enemy.dead:
 			enemy.call("_on_died")
-	game.ghoulkin_kills = 2
+	game.wychwood_pack_kills = 5
 	game.quests.complete_objective("main_road_of_crows", "fight_ghoulkin")
 	game.call("_make_post_ghoulkin_story_clue")
 	game.hud.show_status_cue("Ghoulkin slain", "victory")
@@ -205,6 +207,24 @@ func _capture_victory_state(game, file_name: String) -> void:
 		game.camera_rig.yaw = 0.0
 		game.camera_rig.pitch = -0.18
 	await _settle_frames(12)
+	_save_viewport(file_name)
+
+func _capture_oathfire_state(game, file_name: String, released: bool) -> void:
+	game.call("_load_zone", "wychwood", Vector3(0, 1, -1.5))
+	await _settle_frames(4)
+	game.player.global_position = Vector3(0, 1, -1.5)
+	var direction = game.camera_rig.get_flat_forward() if game.camera_rig != null else Vector3.FORWARD
+	game.player.face_target(game.player.global_position + direction * 4.0)
+	game.player.beam_charging = true
+	game.player.beam_charge_time = 1.1
+	game.player.call("_update_beam_charge_visual")
+	if game.camera_rig != null:
+		game.camera_rig.yaw = 0.0
+		game.camera_rig.pitch = -0.16
+	if released:
+		game.player.cancel_beam_charge()
+		game.call("_on_player_beam", 0.84, direction)
+	await _settle_frames(2 if released else 8)
 	_save_viewport(file_name)
 
 func _save_viewport(file_name: String) -> void:

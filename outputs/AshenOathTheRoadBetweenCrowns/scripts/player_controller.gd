@@ -3,6 +3,7 @@ extends CharacterBody3D
 signal attack_performed(damage: float, radius: float, heavy: bool)
 signal potion_requested
 signal bomb_requested
+signal beam_requested(charge_ratio: float, direction: Vector3)
 signal footstep
 signal parried
 signal blocked(amount: float)
@@ -51,6 +52,10 @@ var hurt_react_time = 0.0
 var parry_window = 0.0
 var block_pose_weight = 0.0
 var grounded_weight = 0.0
+var beam_charging = false
+var beam_charge_time = 0.0
+var beam_cooldown = 0.0
+var beam_charge_visual: MeshInstance3D
 
 func _ready() -> void:
 	add_to_group("player")
@@ -64,6 +69,7 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	attack_cooldown = max(attack_cooldown - delta, 0.0)
+	beam_cooldown = max(beam_cooldown - delta, 0.0)
 	attack_anim_time = max(attack_anim_time - delta, 0.0)
 	hurt_flash_time = max(hurt_flash_time - delta, 0.0)
 	hurt_react_time = max(hurt_react_time - delta, 0.0)
@@ -93,11 +99,13 @@ func _handle_movement(delta: float) -> void:
 	else:
 		var wants_run = Input.is_action_pressed("run") and input_vec.length() > 0.1
 		var speed = run_speed if wants_run and stamina_component.spend(10.0 * delta) else walk_speed
+		if beam_charging:
+			speed *= 0.4
 		velocity.x = move_dir.x * speed
 		velocity.z = move_dir.z * speed
 		if move_dir.length() > 0.1:
 			look_at(global_position + move_dir, Vector3.UP)
-		if Input.is_action_just_pressed("dodge"):
+		if Input.is_action_just_pressed("dodge") and not beam_charging:
 			if stamina_component.spend(28.0):
 				dodge_dir = move_dir if move_dir.length() > 0.1 else -global_transform.basis.z
 				dodge_time = 0.22
@@ -108,6 +116,7 @@ func _handle_movement(delta: float) -> void:
 	_animate_visuals(delta, move_dir, input_vec.length() > 0.1)
 
 func _handle_combat_input() -> void:
+	_handle_beam_input()
 	if attack_cooldown > 0.0:
 		return
 	if Input.is_action_just_pressed("light_attack"):
@@ -129,6 +138,40 @@ func _handle_combat_input() -> void:
 		bomb_requested.emit()
 	if Input.is_action_just_pressed("block"):
 		parry_window = 0.22
+
+func _handle_beam_input() -> void:
+	if Input.is_action_just_pressed("oathfire_beam") and beam_cooldown <= 0.0:
+		beam_charging = true
+		beam_charge_time = 0.0
+	if beam_charging and Input.is_action_pressed("oathfire_beam"):
+		beam_charge_time = min(beam_charge_time + get_physics_process_delta_time(), 1.25)
+		_update_beam_charge_visual()
+	if beam_charging and Input.is_action_just_released("oathfire_beam"):
+		var ratio = clamp((beam_charge_time - 0.35) / 0.90, 0.0, 1.0)
+		if beam_charge_time >= 0.35 and stamina_component.spend(40.0):
+			var direction = -global_transform.basis.z.normalized()
+			if camera_controller != null:
+				direction = camera_controller.get_flat_forward()
+			face_target(global_position + direction * 4.0)
+			beam_requested.emit(ratio, direction)
+			beam_cooldown = 4.0
+			attack_cooldown = 0.75
+		elif beam_charge_time >= 0.35:
+			stamina_exhausted.emit("Oathfire Beam")
+		cancel_beam_charge()
+
+func cancel_beam_charge() -> void:
+	beam_charging = false
+	beam_charge_time = 0.0
+	if beam_charge_visual != null:
+		beam_charge_visual.visible = false
+
+func _update_beam_charge_visual() -> void:
+	if beam_charge_visual == null:
+		return
+	beam_charge_visual.visible = true
+	var ratio = clamp(beam_charge_time / 1.25, 0.0, 1.0)
+	beam_charge_visual.scale = Vector3.ONE * lerp(0.12, 0.42, ratio)
 
 func is_blocking() -> bool:
 	return Input.is_action_pressed("block") and stamina_component.stamina > 8.0
@@ -167,6 +210,7 @@ func _apply_gravity(delta: float) -> void:
 		velocity.y = -0.1
 
 func _on_died() -> void:
+	cancel_beam_charge()
 	can_control = false
 	died.emit()
 
@@ -182,6 +226,7 @@ func _build_body() -> void:
 	add_child(collision)
 	if _try_build_mapped_body():
 		CharacterPresentation.apply_player(self, visual_root)
+		_add_beam_charge_visual()
 		return
 
 	var cloak = MeshInstance3D.new()
@@ -239,6 +284,16 @@ func _build_body() -> void:
 	_add_motion_proxy_parts()
 	_add_weapon_visuals(Vector3(0.43, 0.86, -0.38))
 	CharacterPresentation.apply_player(self, visual_root)
+	_add_beam_charge_visual()
+
+func _add_beam_charge_visual() -> void:
+	beam_charge_visual = MeshInstance3D.new()
+	beam_charge_visual.name = "OathfireChargeSphere"
+	beam_charge_visual.mesh = SphereMesh.new()
+	beam_charge_visual.position = Vector3(0.46, 1.32, -0.78)
+	beam_charge_visual.material_override = _beam_material(Color(0.35, 0.88, 1.0, 0.92))
+	beam_charge_visual.visible = false
+	visual_root.add_child(beam_charge_visual)
 
 func _try_build_mapped_body() -> bool:
 	asset_helper = AssetSpawnHelper.new()
@@ -498,6 +553,12 @@ func _trail_mat(color: Color) -> StandardMaterial3D:
 	material.emission_enabled = true
 	material.emission = Color(1.0, 0.76, 0.42)
 	material.emission_energy_multiplier = 0.9
+	return material
+
+func _beam_material(color: Color) -> StandardMaterial3D:
+	var material = _trail_mat(color)
+	material.emission = Color(0.25, 0.82, 1.0)
+	material.emission_energy_multiplier = 2.2
 	return material
 
 func _apply_visible_material_fallbacks(root: Node, fallback: Material) -> void:

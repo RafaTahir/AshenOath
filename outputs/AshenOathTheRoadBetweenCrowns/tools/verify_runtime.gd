@@ -104,8 +104,19 @@ func _initialize() -> void:
 	_assert(_has_child_named(game.zone_root, "MudRoad"), "Wychwood mud road material anchor is missing")
 	_assert(_grass_state_is_valid(game), "Wychwood batched grass is missing outside performance mode")
 	_assert(_count_name_prefix(game.zone_root, "Wychwood") >= 4, "Wychwood terrain layering is missing")
-	_assert(game.active_enemies.size() >= 2, "First ghoulkin encounter did not spawn")
+	_assert(game.active_enemies.size() == 5, "Wychwood pack should contain exactly five enemies")
 	_assert(_living_enemy_count(game, "ghoulkin") >= 2, "Ghoulkin encounter is incomplete")
+	for enemy_id in ["wychwood_stalker", "wychwood_raider", "wychwood_brute"]:
+		_assert(_living_enemy_count(game, enemy_id) == 1, "%s reinforcement is missing" % enemy_id)
+	for enemy in game.active_enemies:
+		_assert(float(enemy.base_body_scale.y) >= 0.28 and float(enemy.base_body_scale.y) <= 0.40, "%s visual source is not normalized to protagonist-comparable height" % enemy.enemy_id)
+	_assert(game.player.has_signal("beam_requested"), "Player Oathfire Beam signal is missing")
+	_assert(_has_child_named(game.player, "OathfireChargeSphere"), "Oathfire charge visual is missing")
+	_assert(game.combat.has_method("resolve_energy_beam"), "Oathfire beam combat resolver is missing")
+	var legacy_state = {"ghoulkin_kills": 2}
+	game.load_world_state(legacy_state)
+	_assert(int(game.wychwood_pack_kills) == 2, "Legacy Ghoulkin kill count did not migrate")
+	game.wychwood_pack_kills = 0
 	var tracks = _find_child_named(game.zone_root, "tracks")
 	_assert(tracks != null, "Road of Crows tracks clue is missing")
 	var corpse = _find_child_named(game.zone_root, "corpse")
@@ -131,11 +142,13 @@ func _initialize() -> void:
 		_assert(_count_name_contains(game.active_enemies[0], "EnemyWindupWarning") >= 1, "Enemy windup warning marker is missing")
 		_assert(game.hud.enemy_bar.visible, "Enemy health HUD did not appear during first combat")
 		_assert(game.hud.hint_label.visible, "Block/parry contextual hint did not appear during first combat")
-	if game.active_enemies.size() >= 2:
-		game.call("_on_enemy_died", game.active_enemies[0])
-		game.call("_on_enemy_died", game.active_enemies[1])
+	if game.active_enemies.size() == 5:
+		for enemy_index in range(4):
+			game.call("_on_enemy_died", game.active_enemies[enemy_index])
+		_assert(not game.quests.is_objective_done("main_road_of_crows", "fight_ghoulkin"), "Wychwood fight completed before all five enemies died")
+		game.call("_on_enemy_died", game.active_enemies[4])
 		await _settle_frames(1)
-		_assert(game.quests.is_objective_done("main_road_of_crows", "fight_ghoulkin"), "Ghoulkin victory did not complete fight objective")
+		_assert(game.quests.is_objective_done("main_road_of_crows", "fight_ghoulkin"), "Five-enemy victory did not complete fight objective")
 		_assert(game.quests.is_active("main_road_of_crows"), "Road of Crows completed before return/report")
 		_assert(str(game.hud.tracker_label.text).contains("Return to Greyfen"), "Return/report objective is not visible after victory")
 		_assert(str(game.audio.music_state) == "return_report", "Victory did not move audio toward return/report music state")

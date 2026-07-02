@@ -169,14 +169,18 @@ func _on_died() -> void:
 func _windup_duration() -> float:
 	if enemy_id == "white_hart_avatar":
 		return 0.44
-	if enemy_id == "ghoulkin":
+	if enemy_id == "wychwood_brute":
+		return 0.72
+	if enemy_id == "ghoulkin" or enemy_id == "wychwood_stalker" or enemy_id == "wychwood_raider":
 		return 0.46
 	return 0.34
 
 func _attack_cooldown() -> float:
 	if enemy_id == "white_hart_avatar":
 		return 1.55
-	if enemy_id == "ghoulkin":
+	if enemy_id == "wychwood_brute":
+		return 1.65
+	if enemy_id == "ghoulkin" or enemy_id == "wychwood_stalker" or enemy_id == "wychwood_raider":
 		return 1.32
 	return 1.16
 
@@ -184,10 +188,10 @@ func _build_body(color: Color) -> void:
 	add_to_group("enemies")
 	var collision = CollisionShape3D.new()
 	var shape = CapsuleShape3D.new()
-	shape.height = 1.15
-	shape.radius = 0.35
+	shape.height = 1.65 if _is_wychwood_pack() else 1.15
+	shape.radius = 0.32 if _is_wychwood_pack() else 0.35
 	collision.shape = shape
-	collision.position.y = 0.65
+	collision.position.y = 0.9 if _is_wychwood_pack() else 0.65
 	add_child(collision)
 	visual_root = Node3D.new()
 	visual_root.name = "visual_root"
@@ -243,7 +247,8 @@ func _build_body(color: Color) -> void:
 func _try_build_mapped_body() -> bool:
 	asset_helper = AssetSpawnHelper.new()
 	add_child(asset_helper)
-	var mapped = asset_helper.spawn_enemy(enemy_id)
+	var visual_source = "ghoulkin" if _is_wychwood_pack() else enemy_id
+	var mapped = asset_helper.spawn_enemy(visual_source)
 	if mapped == null or mapped.name.ends_with("_placeholder"):
 		if mapped != null:
 			mapped.queue_free()
@@ -257,11 +262,12 @@ func _try_build_mapped_body() -> bool:
 		material.emission = Color(0.78, 0.86, 0.92)
 		material.emission_energy_multiplier = 0.25
 		_apply_material(mapped, material)
-	elif enemy_id == "ghoulkin":
-		_apply_bad_material_fallback(mapped, _mat(Color(0.14, 0.20, 0.13)))
+	elif _is_wychwood_pack():
+		_apply_material(mapped, _mat(base_color))
 	visual_root.add_child(mapped)
 	body_visual = _find_first_mesh(mapped)
 	base_body_scale = mapped.scale
+	_add_variant_silhouette()
 	return true
 
 func _mapped_enemy_scale() -> Vector3:
@@ -270,7 +276,13 @@ func _mapped_enemy_scale() -> Vector3:
 	if enemy_id == "white_hart_avatar":
 		return Vector3(1.35, 1.35, 1.35)
 	if enemy_id == "ghoulkin":
-		return Vector3(0.78, 0.78, 0.78)
+		return Vector3.ONE * 0.34
+	if enemy_id == "wychwood_stalker":
+		return Vector3(0.28, 0.32, 0.29)
+	if enemy_id == "wychwood_raider":
+		return Vector3.ONE * 0.36
+	if enemy_id == "wychwood_brute":
+		return Vector3(0.40, 0.39, 0.39)
 	if enemy_id == "bandit":
 		return Vector3(0.95, 0.95, 0.95)
 	return Vector3.ONE
@@ -280,9 +292,21 @@ func _enemy_shadow_scale() -> Vector3:
 		return Vector3(1.05, 0.014, 0.72)
 	if enemy_id == "white_hart_avatar":
 		return Vector3(1.25, 0.014, 0.85)
-	if enemy_id == "ghoulkin":
-		return Vector3(0.78, 0.014, 0.56)
+	if _is_wychwood_pack():
+		return Vector3(0.88, 0.014, 0.62)
 	return Vector3(0.82, 0.014, 0.58)
+
+func _is_wychwood_pack() -> bool:
+	return enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute"]
+
+func _add_variant_silhouette() -> void:
+	if enemy_id == "wychwood_stalker":
+		_add_part(Vector3(0, 1.58, -0.12), Vector3(0.22, 0.30, 0.18), Color(0.12, 0.30, 0.16), "sphere")
+	elif enemy_id == "wychwood_raider":
+		_add_part(Vector3(-0.46, 1.30, 0), Vector3(0.20, 0.16, 0.30), Color(0.34, 0.40, 0.24), "box")
+		_add_part(Vector3(0.46, 1.30, 0), Vector3(0.20, 0.16, 0.30), Color(0.34, 0.40, 0.24), "box")
+	elif enemy_id == "wychwood_brute":
+		_add_part(Vector3(0, 1.32, 0.08), Vector3(0.82, 0.28, 0.32), Color(0.25, 0.29, 0.20), "box")
 
 func _find_first_mesh(root: Node) -> MeshInstance3D:
 	if root is MeshInstance3D:

@@ -34,6 +34,7 @@ func _check_wychwood_visible_quality() -> void:
 	_check_non_white_materials(game.zone_root, "wychwood")
 	_check_route_clearance("wychwood")
 	_check_ghoulkin_material()
+	_check_oathfire_visuals()
 
 func _check_non_white_materials(root_node: Node, zone_id: String) -> void:
 	for mesh in _collect_meshes(root_node):
@@ -161,11 +162,11 @@ func _check_ghoulkin_material() -> void:
 	if game.active_enemies.is_empty():
 		_fail("no active Ghoulkin enemies in Wychwood")
 		return
-	var found_ghoulkin = false
+	var found_ids: Dictionary = {}
 	for enemy in game.active_enemies:
-		if enemy == null or str(enemy.get("enemy_id")) != "ghoulkin":
+		if enemy == null or str(enemy.get("enemy_id")) not in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute"]:
 			continue
-		found_ghoulkin = true
+		found_ids[str(enemy.get("enemy_id"))] = true
 		var bad = false
 		for mesh in _collect_meshes(enemy):
 			if _mesh_has_bad_material(mesh):
@@ -181,8 +182,27 @@ func _check_ghoulkin_material() -> void:
 		var after = _snapshot_interesting_transforms(enemy)
 		if _transform_delta(before, after) < 0.01:
 			_fail("Ghoulkin appears visually static during windup check")
-	if not found_ghoulkin:
-		_fail("no Ghoulkin found in active enemies")
+	for required_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute"]:
+		if not found_ids.has(required_id):
+			_fail("missing Wychwood pack visual: %s" % required_id)
+
+func _check_oathfire_visuals() -> void:
+	if game.player == null:
+		_fail("player missing for Oathfire visual check")
+		return
+	var charge = game.player.find_child("OathfireChargeSphere", true, false)
+	if charge == null:
+		_fail("Oathfire charge sphere is missing")
+	game.player.global_position = Vector3(0, 1, -1.5)
+	game.call("_on_player_beam", 0.8, Vector3.FORWARD)
+	var effect = game.zone_root.find_child("OathfireBeamEffect", true, false)
+	if effect == null:
+		_fail("Oathfire beam effect is missing")
+		return
+	if effect.find_child("OathfireBeamCore", true, false) == null:
+		_fail("Oathfire beam core is missing")
+	if not bool(game.settings.settings.get("potato_mode", false)) and effect.find_child("OathfireBeamAura", true, false) == null:
+		_fail("Balanced Oathfire beam aura is missing")
 
 func _collect_meshes(root_node: Node) -> Array[MeshInstance3D]:
 	var result: Array[MeshInstance3D] = []

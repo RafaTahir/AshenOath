@@ -52,3 +52,26 @@ func place_trap(player: Node3D, enemies: Array) -> bool:
 			return true
 	message.emit("Trap set, but nothing steps into it.")
 	return false
+
+func resolve_energy_beam(player: Node3D, enemies: Array, direction: Vector3, endpoint: Vector3, width: float, damage: float) -> Array:
+	var hits: Array = []
+	var origin = player.global_position + Vector3(0, 1.05, 0)
+	var beam_length = origin.distance_to(endpoint)
+	var forward = direction.normalized()
+	for enemy in enemies:
+		if enemy == null or enemy.dead:
+			continue
+		var target = enemy.global_position + Vector3(0, 0.9, 0)
+		var offset: Vector3 = target - origin
+		var along = offset.dot(forward)
+		if along <= 0.0 or along > beam_length:
+			continue
+		var nearest = origin + forward * along
+		if target.distance_to(nearest) > width:
+			continue
+		enemy.apply_damage(damage, "oathfire")
+		enemy_hit.emit(enemy.display_name, damage)
+		impact.emit(target, true)
+		hits.append(enemy)
+	message.emit("Oathfire tears through %d foe%s." % [hits.size(), "" if hits.size() == 1 else "s"] if not hits.is_empty() else "Oathfire burns into the mist.")
+	return hits

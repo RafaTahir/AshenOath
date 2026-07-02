@@ -38,7 +38,7 @@ var active_interactable
 var current_zone_id = "greyfen"
 var enemy_defs = {}
 var active_enemies: Array = []
-var ghoulkin_kills = 0
+var wychwood_pack_kills = 0
 var game_started = false
 var paused_by_menu = true
 var pending_ending = ""
@@ -170,7 +170,7 @@ func _setup_managers() -> void:
 func _new_game() -> void:
 	game_started = true
 	paused_by_menu = false
-	ghoulkin_kills = 0
+	wychwood_pack_kills = 0
 	tutorial_flags.clear()
 	current_zone_id = "greyfen"
 	get_tree().paused = false
@@ -219,6 +219,7 @@ func _spawn_player(pos: Vector3) -> void:
 	player.attack_performed.connect(_on_player_attack)
 	player.potion_requested.connect(_use_potion)
 	player.bomb_requested.connect(_throw_bomb)
+	player.beam_requested.connect(_on_player_beam)
 	player.footstep.connect(_on_player_footstep)
 	player.parried.connect(_on_player_parried)
 	player.blocked.connect(_on_player_blocked)
@@ -231,6 +232,8 @@ func _spawn_player(pos: Vector3) -> void:
 	hud.update_stamina(player.stamina_component.stamina, player.stamina_component.max_stamina)
 
 func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
+	if player != null and player.has_method("cancel_beam_charge"):
+		player.cancel_beam_charge()
 	current_zone_id = zone_id
 	if camera_rig != null and camera_rig.has_method("set_zone"):
 		camera_rig.set_zone(zone_id)
@@ -371,6 +374,9 @@ func _build_wychwood() -> void:
 	if quests.is_active("main_road_of_crows") and not quests.is_objective_done("main_road_of_crows", "fight_ghoulkin"):
 		_spawn_enemy("ghoulkin", Vector3(-2.4, 0.8, -8.8))
 		_spawn_enemy("ghoulkin", Vector3(2.7, 0.8, -9.6))
+		_spawn_enemy("wychwood_stalker", Vector3(-4.8, 0.8, -3.8))
+		_spawn_enemy("wychwood_raider", Vector3(4.6, 0.8, -5.3))
+		_spawn_enemy("wychwood_brute", Vector3(0.2, 0.8, -12.4))
 	if quests.is_active("main_teeth_in_rain") and not quests.is_objective_done("main_teeth_in_rain", "fight_bog_wretch"):
 		_spawn_enemy("bog_wretch", Vector3(11, 0.8, -12))
 	if quests.is_active("side_black_dog") and not quests.is_objective_done("side_black_dog", "deal_bandits"):
@@ -564,6 +570,72 @@ func _on_player_attack(damage: float, radius: float, heavy: bool) -> void:
 	audio.play_event("heavy" if heavy else "swing")
 	combat.resolve_player_attack(player, active_enemies, damage, radius, heavy, inventory.active_oil)
 
+func _on_player_beam(charge_ratio: float, direction: Vector3) -> void:
+	if player == null or zone_root == null:
+		return
+	var origin = player.global_position + Vector3(0, 1.12, 0)
+	origin += player.global_transform.basis.x.normalized() * 0.38
+	origin += direction.normalized() * 0.62
+	var endpoint = origin + direction.normalized() * 12.0
+	var query = PhysicsRayQueryParameters3D.create(origin, endpoint)
+	var beam_exclusions: Array[RID] = [player.get_rid()]
+	for enemy in active_enemies:
+		if is_instance_valid(enemy):
+			beam_exclusions.append(enemy.get_rid())
+	query.exclude = beam_exclusions
+	query.collide_with_areas = false
+	var result = get_world_3d().direct_space_state.intersect_ray(query)
+	if not result.is_empty():
+		endpoint = result.position
+	var damage = lerp(35.0, 70.0, charge_ratio)
+	var hits = combat.resolve_energy_beam(player, active_enemies, direction, endpoint, 1.2, damage)
+	audio.play_event("heavy", 0.03)
+	_make_oathfire_beam(origin, endpoint, charge_ratio, not _performance_mode())
+	if camera_rig != null:
+		camera_rig.shake(0.12 + 0.08 * charge_ratio)
+	CombatFeedback.ground_ring(zone_root, player.global_position, Color(0.18, 0.72, 0.95), 0.75, 0.18)
+	for enemy in hits:
+		CombatFeedback.impact_burst(zone_root, enemy.global_position + Vector3(0, 0.9, 0), true, Color(0.30, 0.88, 1.0))
+	hud.show_status_cue("Oathfire Beam", "item")
+
+func _make_oathfire_beam(origin: Vector3, endpoint: Vector3, charge_ratio: float, rich_effect: bool) -> void:
+	var length = origin.distance_to(endpoint)
+	if length <= 0.05:
+		return
+	var root = Node3D.new()
+	root.name = "OathfireBeamEffect"
+	zone_root.add_child(root)
+	root.global_position = origin.lerp(endpoint, 0.5)
+	root.look_at(endpoint, Vector3.UP)
+	var core = MeshInstance3D.new()
+	var core_mesh = BoxMesh.new()
+	core_mesh.size = Vector3(0.44 + charge_ratio * 0.22, 0.44 + charge_ratio * 0.22, length)
+	core.mesh = core_mesh
+	core.name = "OathfireBeamCore"
+	core.material_override = _oathfire_material(Color(0.72, 0.96, 1.0, 0.96), 2.8)
+	root.add_child(core)
+	if rich_effect:
+		var aura = MeshInstance3D.new()
+		var aura_mesh = BoxMesh.new()
+		aura_mesh.size = Vector3(0.90 + charge_ratio * 0.38, 0.90 + charge_ratio * 0.38, length * 0.98)
+		aura.mesh = aura_mesh
+		aura.name = "OathfireBeamAura"
+		aura.material_override = _oathfire_material(Color(0.16, 0.66, 1.0, 0.30), 1.5)
+		root.add_child(aura)
+	var tween = create_tween()
+	tween.tween_property(root, "scale", Vector3(0.04, 0.04, 1.0), 0.42)
+	tween.tween_callback(root.queue_free)
+
+func _oathfire_material(color: Color, energy: float) -> StandardMaterial3D:
+	var material = StandardMaterial3D.new()
+	material.albedo_color = color
+	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	material.emission_enabled = true
+	material.emission = Color(color.r, color.g, color.b)
+	material.emission_energy_multiplier = energy
+	return material
+
 func _on_player_footstep() -> void:
 	if audio == null or player == null:
 		return
@@ -664,16 +736,16 @@ func _on_enemy_died(enemy) -> void:
 		camera_rig.shake(0.09)
 	if zone_root != null and enemy != null:
 		CombatFeedback.ground_ring(zone_root, enemy.global_position, Color(0.12, 0.08, 0.055), 0.9, 0.24)
-	if enemy.enemy_id == "ghoulkin":
-		ghoulkin_kills += 1
-		if ghoulkin_kills >= 2:
+	if enemy.enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute"]:
+		wychwood_pack_kills += 1
+		if wychwood_pack_kills >= 5:
 			quests.complete_objective("main_road_of_crows", "fight_ghoulkin")
 			audio.play_event("victory", 0.03)
 			audio.play_music_cue("victory_return_cue", "return_report")
 			audio.set_music_state("return_report")
 			audio.play_voice("voice_player_ghoulkin_death_01")
 			hud.hide_enemy()
-			hud.show_status_cue("Ghoulkin slain", "victory")
+			hud.show_status_cue("Wychwood pack broken", "victory")
 			hud.set_guidance_hint("Inspect the tracks, then return to Greyfen.", 6.0)
 			hud.toast("The Ghoulkin dies too far from its den. Something drew it to the road. Search the tracks.")
 			_make_post_ghoulkin_story_clue()
@@ -775,13 +847,14 @@ func save_world_state() -> Dictionary:
 	return {
 		"removed_interactions": removed_interactions,
 		"pending_ending": pending_ending,
-		"ghoulkin_kills": ghoulkin_kills
+		"wychwood_pack_kills": wychwood_pack_kills,
+		"ghoulkin_kills": wychwood_pack_kills
 	}
 
 func load_world_state(state: Dictionary) -> void:
 	removed_interactions = state.get("removed_interactions", {})
 	pending_ending = str(state.get("pending_ending", ""))
-	ghoulkin_kills = int(state.get("ghoulkin_kills", ghoulkin_kills))
+	wychwood_pack_kills = int(state.get("wychwood_pack_kills", state.get("ghoulkin_kills", wychwood_pack_kills)))
 
 func _on_player_died() -> void:
 	audio.play_event("hurt")
@@ -2269,6 +2342,7 @@ func _ensure_input_map() -> void:
 	_add_key_action("interact", KEY_E)
 	_add_key_action("use_potion", KEY_R)
 	_add_key_action("throw_bomb", KEY_F)
+	_add_key_action("oathfire_beam", KEY_C)
 	_add_key_action("open_inventory", KEY_TAB)
 	_add_key_action("pause", KEY_ESCAPE)
 	_add_key_action("camera_left", KEY_LEFT)
