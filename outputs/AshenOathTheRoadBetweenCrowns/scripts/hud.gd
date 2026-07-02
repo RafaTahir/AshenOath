@@ -119,7 +119,7 @@ func show_settings_menu(back_target: String = "pause") -> void:
 	_add_menu_button(box, "Master Volume", func(): settings_requested.emit("volume"))
 	_add_menu_button(box, "Toggle VSync", func(): settings_requested.emit("vsync"))
 	_add_menu_button(box, "Toggle Fullscreen", func(): settings_requested.emit("fullscreen"))
-	_add_menu_button(box, "Potato Mode", func(): settings_requested.emit("potato"))
+	_add_menu_button(box, "Cycle Visual Preset", func(): settings_requested.emit("visual_preset"))
 	_add_menu_button(box, "Back", _return_from_controls)
 
 func show_controls_menu(back_target: String = "main") -> void:

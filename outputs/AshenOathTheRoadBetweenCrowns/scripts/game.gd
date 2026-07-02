@@ -812,13 +812,19 @@ func _handle_setting(action: String) -> void:
 		settings.toggle_fullscreen()
 	elif action == "potato":
 		settings.set_potato_mode(not bool(settings.settings["potato_mode"]))
+	elif action == "visual_preset":
+		var preset = settings.cycle_quality_preset()
+		hud.toast("Visual preset: %s" % preset.capitalize())
+		if game_started and player != null:
+			_load_zone(current_zone_id, player.global_position)
 	elif action == "mouse_sensitivity":
 		settings.cycle_mouse_sensitivity()
 	elif action == "invert_y":
 		settings.toggle_invert_y()
 	elif action == "volume":
 		settings.cycle_master_volume()
-	hud.toast("Settings updated.")
+	if action != "visual_preset":
+		hud.toast("Settings updated.")
 
 func _apply_runtime_settings(current_settings: Dictionary) -> void:
 	if audio != null:
@@ -949,6 +955,7 @@ func _make_greyfen_terrain_layers() -> void:
 		Vector3(-3.8, 0, -1.4), Vector3(3.6, 0, 1.8), Vector3(-3.0, 0, 5.6), Vector3(3.7, 0, 7.9),
 		Vector3(5.2, 0, -8.8), Vector3(7.4, 0, -4.9), Vector3(11.9, 0, 7.4), Vector3(14.8, 0, 6.2)
 	], Color(0.070, 0.145, 0.070))
+	_make_balanced_road_surface(true)
 
 func _make_wychwood_terrain_layers() -> void:
 	_make_terrain_patch("WychwoodWetRoad", Vector3(0, 0.028, 4.0), Vector3(5.2, 0.045, 22.0), Color(0.045, 0.055, 0.043))
@@ -963,6 +970,35 @@ func _make_wychwood_terrain_layers() -> void:
 		Vector3(-3.4, 0, 2.0), Vector3(3.5, 0, -0.2), Vector3(-3.7, 0, -4.2), Vector3(3.4, 0, -6.1),
 		Vector3(-5.0, 0, -8.4), Vector3(5.3, 0, -9.0)
 	], Color(0.045, 0.115, 0.065))
+	_make_balanced_road_surface(false)
+
+func _make_balanced_road_surface(paved: bool) -> void:
+	if _performance_mode():
+		return
+	var batch = MultiMeshInstance3D.new()
+	batch.name = "BalancedPavedRoadDetail" if paved else "BalancedWychwoodRoadDetail"
+	var detail_mesh = BoxMesh.new()
+	detail_mesh.size = Vector3(0.72, 0.018, 0.62) if paved else Vector3(1.2, 0.012, 0.48)
+	var multimesh = MultiMesh.new()
+	multimesh.transform_format = MultiMesh.TRANSFORM_3D
+	multimesh.mesh = detail_mesh
+	var rows = 18 if paved else 12
+	var columns = 3 if paved else 1
+	multimesh.instance_count = rows * columns
+	var index = 0
+	for row in range(rows):
+		for column in range(columns):
+			var x = (float(column) - 1.0) * 0.88 if paved else sin(float(row) * 1.7) * 0.55
+			var z = -12.6 + float(row) * (1.48 if paved else 2.05)
+			var yaw = 0.0 if paved else sin(float(row) * 0.8) * 0.16
+			multimesh.set_instance_transform(index, Transform3D(Basis(Vector3.UP, yaw), Vector3(x, 0.059, z)))
+			index += 1
+	batch.multimesh = multimesh
+	var material = StandardMaterial3D.new()
+	material.albedo_color = Color(0.17, 0.155, 0.13) if paved else Color(0.025, 0.034, 0.030)
+	material.roughness = 0.72 if paved else 0.32
+	batch.material_override = material
+	zone_root.add_child(batch)
 
 func _make_greyfen_path_edges() -> void:
 	var marker = Node3D.new()

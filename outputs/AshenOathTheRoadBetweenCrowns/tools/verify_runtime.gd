@@ -15,6 +15,10 @@ func _initialize() -> void:
 	await process_frame
 	game.call("_new_game")
 	await _settle_frames(3)
+	_assert(str(game.settings.settings.get("quality_preset", "")) == "balanced", "Balanced is not the default visual preset")
+	_assert(is_equal_approx(float(game.settings.settings.get("resolution_scale", 0.0)), 0.65), "Balanced render scale is not 0.65")
+	_assert(int(game.settings.settings.get("target_fps", 0)) == 30, "Balanced target is not 30 FPS")
+	_assert(game.settings.has_method("get_performance_snapshot"), "Performance sampler API is missing")
 	_assert(str(game.current_zone_id) == "greyfen", "Greyfen did not load as the new-game zone")
 	_assert(game.quests.is_active("main_road_of_crows"), "Main contract did not start for the vertical slice")
 	_assert(str(game.quests.quest_defs["main_road_of_crows"]["objectives"][1]["text"]).contains("blood-dark"), "Road of Crows narrative objective text is missing")
@@ -41,6 +45,7 @@ func _initialize() -> void:
 	_assert(_has_child_named(game.zone_root, "RoadCrowsGraveyardDisturbedSoil"), "Graveyard omen story beat is missing")
 	_assert(_has_child_named(game.zone_root, "RoadCrowsGateClawedPost"), "Wychwood gate claw-mark threshold beat is missing")
 	_assert(_has_child_named(game.zone_root, "PavedRoad"), "Greyfen paved road material anchor is missing")
+	_assert(_has_child_named(game.zone_root, "BalancedPavedRoadDetail"), "Balanced Greyfen road surface detail is missing")
 	_assert(_grass_state_is_valid(game), "Greyfen batched grass is missing outside performance mode")
 	_assert(_count_name_prefix(game.zone_root, "DressedVillageHouse") >= 4, "Greyfen does not have enough dressed village houses")
 	var rut_count = _count_name_contains(game.zone_root, "RoadWheelRut")
@@ -84,6 +89,7 @@ func _initialize() -> void:
 
 	game.call("_load_zone", "wychwood", Vector3(0, 1, 13))
 	await _settle_frames(3)
+	_assert(_has_child_named(game.zone_root, "BalancedWychwoodRoadDetail"), "Balanced Wychwood road surface detail is missing")
 	_assert(str(game.current_zone_id) == "wychwood", "Wychwood did not load")
 	_assert(str(game.audio.music_state) in ["wychwood_tension", "ghoulkin_combat"], "Wychwood music state did not activate")
 	_assert(_has_child_named(game.zone_root, "WychwoodCorridorComposition"), "Wychwood corridor composition marker is missing")
