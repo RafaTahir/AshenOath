@@ -127,17 +127,17 @@ func _check_sword_animation() -> void:
 	if player == null:
 		_fail("player missing for sword check")
 		return
-	var sword = player.find_child("visible_sword_root", true, false)
-	if sword == null or not (sword is Node3D):
-		_fail("visible_sword_root missing")
+	var sword = player.find_child("Warrior_Sword", true, false)
+	if sword == null:
+		_fail("rigged Warrior sword missing")
 		return
-	if not _attack_changes_sword(player, sword as Node3D, false):
-		_fail("visible sword transform did not change enough during light attack")
-	if not _attack_changes_sword(player, sword as Node3D, true):
-		_fail("visible sword transform did not change enough during heavy attack")
-	var blade = player.find_child("visible_sword_blade", true, false)
-	if blade == null:
-		_fail("visible_sword_blade missing; attack may be using hidden stick")
+	var driver = player.find_child("CharacterAnimationDriver", true, false)
+	if driver == null or not driver.is_valid():
+		_fail("rigged sword has no skeletal animation driver")
+	else:
+		var animation_player = driver.get_animation_player()
+		if not animation_player.has_animation("Sword_Attack") or not animation_player.has_animation("Sword_Attack2"):
+			_fail("rigged sword attack clips are missing")
 	var arc = player.find_child("visible_sword_slash_arc_root", true, false)
 	if arc == null:
 		_fail("visible_sword_slash_arc_root missing")

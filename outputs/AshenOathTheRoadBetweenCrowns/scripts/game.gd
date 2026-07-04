@@ -19,6 +19,7 @@ const NpcAmbient = preload("res://scripts/npc_ambient.gd")
 const CharacterPresentation = preload("res://scripts/character_presentation.gd")
 const CombatFeedback = preload("res://scripts/combat_feedback.gd")
 const CemeterySection = preload("res://scripts/zones/cemetery_section.gd")
+const CharacterAnimationDriver = preload("res://scripts/character_animation_driver.gd")
 
 var player
 var camera_rig
@@ -1728,6 +1729,7 @@ func _make_named_interactable(id: String, type: String, prompt: String, pos: Vec
 	var mapped = _make_role_visual(role, "characters", Vector3(0.9, 0.9, 0.9) * scale_override)
 	if mapped != null:
 		area.add_child(mapped)
+		_configure_npc_animation(mapped, id)
 	elif type == "zone" or type == "blocked_zone":
 		_make_gate_marker(area, color, scale_override)
 	else:
@@ -1756,6 +1758,18 @@ func _make_named_interactable(id: String, type: String, prompt: String, pos: Vec
 		area.add_child(ambient)
 	_connect_interactable(area)
 	return area
+
+func _configure_npc_animation(mapped: Node3D, id: String) -> void:
+	var clips := {"idle": "Idle", "walk": "Walk", "run": "Run", "hit": "RecieveHit", "death": "Death"}
+	if id == "sister_anwen":
+		clips["idle"] = "Idle_Weapon"
+	elif id == "rook":
+		clips["idle"] = "Attacking_Idle"
+		clips["hit"] = "RecieveHit_2"
+	var driver = CharacterAnimationDriver.new()
+	driver.name = "CharacterAnimationDriver"
+	mapped.add_child(driver)
+	driver.configure(mapped, clips)
 
 func _stage_dialogue_moment(area) -> void:
 	if player == null or area == null or not (area is Node3D):
@@ -2214,7 +2228,7 @@ func _make_role_visual(role_name: String, category: String, scale_value: Vector3
 		if visual_role != "" and asset_helper.has_method("spawn_visual_role") and asset_helper.has_method("has_visual_role") and asset_helper.has_visual_role(visual_role):
 			node = asset_helper.spawn_visual_role(visual_role, "characters")
 			if node != null and not node.name.ends_with("_placeholder"):
-				node.scale = scale_value
+				node.scale = scale_value * 0.66
 				return node
 			if node != null:
 				node.queue_free()

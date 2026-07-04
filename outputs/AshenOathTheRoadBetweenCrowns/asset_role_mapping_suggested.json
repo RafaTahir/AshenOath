@@ -96,11 +96,11 @@
     "enemies": {
       "ghoulkin": {
         "status": "manual",
-        "asset_id": "skeleton_8a650dc2f9",
-        "path": "res://assets_external/enemies/Skeleton.obj",
-        "file_name": "Skeleton.obj",
-        "source_pack": "",
-        "license": "",
+        "asset_id": "quaternius_orc_skull_animated_cc0",
+        "path": "res://assets_external/animated/OrcSkull_Animated_CC0.gltf",
+        "file_name": "OrcSkull_Animated_CC0.gltf",
+        "source_pack": "Quaternius Ultimate Monsters",
+        "license": "CC0 1.0",
         "confidence": 95,
         "notes": "Manual enemy-role match from available creature/humanoid assets. Runtime uses OBJ fallback loader for this source asset."
       },

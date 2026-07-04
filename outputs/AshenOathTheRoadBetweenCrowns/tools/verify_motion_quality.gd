@@ -3,120 +3,88 @@ extends SceneTree
 var failures: Array[String] = []
 
 func _initialize() -> void:
-	var scene = load("res://scenes/main.tscn")
-	if scene == null:
-		_fail("main scene failed to load")
-		_finish()
-		return
-	var game = scene.instantiate()
+	var manifest := JSON.parse_string(FileAccess.get_file_as_string("res://visual_upgrade_manifest.json")) as Dictionary
+	for role in ["player_human", "sister_anwen_human", "rook_human", "villager_human"]:
+		var path := str(manifest.get("roles", {}).get("characters", {}).get(role, {}).get("path", ""))
+		_assert(path.ends_with(".gltf") or path.ends_with(".glb"), "%s still maps to a static model" % role)
+
+	var packed = load("res://scenes/main.tscn")
+	_assert(packed != null, "main scene failed to load")
+	if packed == null:
+		_finish(); return
+	var game = packed.instantiate()
 	root.add_child(game)
 	await process_frame
 	game.call("_new_game")
-	await _settle_frames(4)
+	await _frames(4)
 	var player = game.player
 	_assert(player != null, "player failed to instantiate")
 	if player == null:
-		_finish()
-		return
-	_assert(InputMap.has_action("jump"), "jump input action is missing")
-	_assert(player.has_method("_handle_movement"), "movement state handler is missing")
-	_assert(player.has_method("try_jump"), "jump controller method is missing")
-	_assert(player.has_method("_try_step_up"), "small-obstacle step-up hook is missing")
-	_assert(player.has_method("_update_ground_adaptation"), "ground adaptation hook is missing")
-	_assert(float(player.acceleration) < 30.0 and float(player.deceleration) < 30.0, "locomotion response is configured to snap")
-	_assert(float(player.jump_speed) >= 7.0, "jump impulse is missing or too weak")
-	_assert(float(player.floor_snap_length) >= 0.25, "floor snapping is not configured")
-	for i in range(30):
-		if player.is_on_floor():
-			break
-		await physics_frame
-	_assert(player.is_on_floor(), "player did not settle onto the Greyfen floor before jump test")
-	var jump_start = player.global_position
-	var jump_started = bool(player.call("try_jump"))
-	await physics_frame
-	_assert(jump_started and (player.velocity.y > 0.0 or player.global_position.y > jump_start.y + 0.02), "jump controller did not launch the grounded player (started=%s control=%s floor=%s attack=%.2f dodge=%.2f beam=%s)" % [str(jump_started), str(player.can_control), str(player.is_on_floor()), float(player.attack_anim_time), float(player.dodge_time), str(player.beam_charging)])
-	player.global_position = jump_start
-	player.velocity = Vector3.ZERO
-	await physics_frame
+		_finish(); return
+	_assert(player.animation_driver != null and player.animation_driver.is_valid(), "player has no valid skeletal animation driver")
+	_assert(player.left_leg_proxy == null, "player still exposes proxy-box animation")
+	if player.animation_driver != null:
+		_assert(_clip_moves_bones(player.animation_driver, "Run_Weapon"), "player run clip does not move real bones")
+		_assert(_clip_moves_bones(player.animation_driver, "Sword_Attack"), "player sword attack does not move real bones")
+		_assert(_clip_moves_bones(player.animation_driver, "Roll"), "player dodge does not move real bones")
 
-	var visual = player.visual_root
-	var left_leg = player.left_leg_proxy
-	var sword = player.weapon_root
-	_assert(visual != null and left_leg != null, "visible locomotion proxies are missing")
-	_assert(sword != null, "visible sword root is missing")
-	if visual != null and left_leg != null:
-		var idle_leg = left_leg.transform
-		player.velocity = Vector3(0, 0, -5.0)
-		player.movement_state = "run"
-		player.move_phase = 0.4
-		for i in range(8):
-			player.call("_animate_visuals", 0.016, Vector3.FORWARD, true)
-		_assert(_transform_delta(idle_leg, left_leg.transform) > 0.02, "run state does not visibly move the leg proxy")
+	var npc_drivers: Array[Node] = game.find_children("CharacterAnimationDriver", "Node", true, false)
+	var valid_npcs := 0
+	for driver in npc_drivers:
+		if driver != player.animation_driver and driver.has_method("is_valid") and driver.is_valid():
+			valid_npcs += 1
+	_assert(valid_npcs >= 3, "nearby Greyfen NPCs are missing real skeletal animation")
 
-		var run_root = visual.transform
-		player.velocity = Vector3(3.0, 0, 0)
-		player.movement_state = "strafe"
-		for i in range(8):
-			player.call("_animate_visuals", 0.016, Vector3.RIGHT, true)
-		_assert(_transform_delta(run_root, visual.transform) > 0.01, "strafe state does not visibly alter body pose")
-
-		player.jump_pose_weight = 1.0
-		player.movement_state = "jump"
-		player.velocity = Vector3(0, 5.0, -2.0)
-		var ground_pose = visual.transform
-		for i in range(5):
-			player.call("_animate_visuals", 0.016, Vector3.FORWARD, true)
-		_assert(_transform_delta(ground_pose, visual.transform) > 0.01, "jump pose is not visually distinct")
-
-		player.jump_pose_weight = 0.0
-		player.smoothed_ground_normal = Vector3(0.20, 0.96, 0.18).normalized()
-		var flat_pose = visual.rotation
-		for i in range(8):
-			player.call("_animate_visuals", 0.016, Vector3.ZERO, false)
-		_assert(flat_pose.distance_to(visual.rotation) > 0.005, "slope normal does not affect visible body grounding")
-
-	if sword != null:
-		var sword_before = sword.transform
-		player.attack_anim_heavy = true
-		player.attack_anim_time = 0.34
-		for i in range(8):
-			player.attack_anim_time = max(float(player.attack_anim_time) - 0.016, 0.0)
-			player.call("_animate_visuals", 0.016, Vector3.ZERO, false)
-		_assert(_transform_delta(sword_before, sword.transform) > 0.02, "sword attack animation stopped changing the visible sword")
-
-	player.dodge_dir = Vector3.RIGHT
-	player.dodge_time = 0.24
-	player.movement_state = "dodge"
-	var dodge_before = visual.transform
-	for i in range(5):
-		player.call("_animate_visuals", 0.016, Vector3.RIGHT, true)
-	_assert(_transform_delta(dodge_before, visual.transform) > 0.01, "dodge pose is not visually distinct")
+	game.call("_load_zone", "Wychwood", Vector3.ZERO)
+	await _frames(4)
+	if game.active_enemies.is_empty():
+		for entry in [["ghoulkin", Vector3(-2, 0, -4)], ["ghoulkin", Vector3(2, 0, -4)], ["wychwood_stalker", Vector3(-3, 0, -7)], ["wychwood_raider", Vector3(0, 0, -8)], ["wychwood_brute", Vector3(3, 0, -7)]]:
+			game.call("_spawn_enemy", entry[0], entry[1])
+		await _frames(2)
+	_assert(game.active_enemies.size() == 5, "Wychwood must contain five animated encounter enemies")
+	for enemy in game.active_enemies:
+		_assert(enemy.animation_driver != null and enemy.animation_driver.is_valid(), "%s has no valid skeleton/AnimationPlayer" % enemy.enemy_id)
+		if enemy.animation_driver != null:
+			_assert(_clip_moves_bones(enemy.animation_driver, "Run"), "%s run clip does not move real bones" % enemy.enemy_id)
+			_assert(_clip_moves_bones(enemy.animation_driver, "Punch"), "%s attack clip does not move real bones" % enemy.enemy_id)
+			_assert(_clip_moves_bones(enemy.animation_driver, "Death"), "%s death clip does not move real bones" % enemy.enemy_id)
 
 	game.queue_free()
 	await process_frame
 	_finish()
 
+func _clip_moves_bones(driver: Node, clip: StringName) -> bool:
+	var player := driver.get_animation_player() as AnimationPlayer
+	var skeleton := driver.get_skeleton() as Skeleton3D
+	if player == null or skeleton == null or not player.has_animation(clip):
+		return false
+	player.play(clip)
+	player.seek(0.0, true)
+	var before: Array[Transform3D] = []
+	for index in range(skeleton.get_bone_count()):
+		before.append(skeleton.get_bone_pose(index))
+	var animation := player.get_animation(clip)
+	player.seek(min(0.35, animation.length * 0.55), true)
+	for index in range(skeleton.get_bone_count()):
+		if _transform_delta(before[index], skeleton.get_bone_pose(index)) > 0.002:
+			return true
+	return false
+
 func _transform_delta(a: Transform3D, b: Transform3D) -> float:
-	return a.origin.distance_to(b.origin) + a.basis.x.distance_to(b.basis.x) + a.basis.y.distance_to(b.basis.y) + a.basis.z.distance_to(b.basis.z)
+	return a.origin.distance_to(b.origin) + a.basis.x.distance_to(b.basis.x) + a.basis.y.distance_to(b.basis.y)
 
 func _assert(condition: bool, message: String) -> void:
 	if not condition:
-		_fail(message)
+		failures.append(message)
+		push_error(message)
 
-func _fail(message: String) -> void:
-	failures.append(message)
-	push_error(message)
-
-func _settle_frames(count: int) -> void:
-	for i in range(count):
-		await process_frame
+func _frames(count: int) -> void:
+	for _i in range(count): await process_frame
 
 func _finish() -> void:
 	if not failures.is_empty():
 		print("motion quality verification failed:")
-		for failure in failures:
-			print("- %s" % failure)
-		quit(1)
-		return
-	print("motion quality verification complete")
+		for failure in failures: print("- %s" % failure)
+		quit(1); return
+	print("motion quality verification complete: real skeleton transforms changed")
 	quit()

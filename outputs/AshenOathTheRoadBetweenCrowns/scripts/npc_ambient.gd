@@ -12,6 +12,7 @@ var sway_amount = 2.8
 var breathe_amount = 0.006
 var attention_hold = 0.0
 var planted_yaw_offset = 0.0
+var animation_driver
 
 func setup(id: String, target: Node3D = null) -> void:
 	role_id = id
@@ -42,6 +43,9 @@ func _ready() -> void:
 		base_yaw = parent_3d.rotation_degrees.y
 	phase = randf() * TAU
 	planted_yaw_offset = randf_range(-7.0, 7.0)
+	animation_driver = parent_3d.find_child("CharacterAnimationDriver", true, false)
+	if animation_driver != null:
+		animation_driver.set_locomotion(0.0, Vector3.ZERO, true)
 
 func _process(delta: float) -> void:
 	var parent_3d = get_parent() as Node3D

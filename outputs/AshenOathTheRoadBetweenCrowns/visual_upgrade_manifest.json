@@ -26,16 +26,16 @@
     },
     "characters": {
       "player_human": {
-        "status": "phase_1g_fantasy_base_wrapped",
-        "path": "res://assets_external/characters/Warrior.obj",
+        "status": "motion_002_rigged_animated",
+        "path": "res://assets_external/animated/Warrior_Animated_CC0.gltf",
         "source": "Quaternius RPG Characters",
         "source_url": "",
         "license": "CC0 1.0",
         "notes": "Phase 1G uses the existing textured Warrior OBJ as a stronger fantasy protagonist base. Runtime adds cloak, harness, armor plate, boots, hood, contact shadow, and weapon presentation."
       },
       "sister_anwen_human": {
-        "status": "phase_1g_fantasy_base_wrapped",
-        "path": "res://assets_external/characters/Cleric.obj",
+        "status": "motion_002_rigged_animated",
+        "path": "res://assets_external/animated/Cleric_Animated_CC0.gltf",
         "source": "Quaternius RPG Characters",
         "source_url": "",
         "license": "CC0 1.0",
@@ -50,16 +50,16 @@
         "notes": "Temporary casual female base body. Runtime adds face markers, hair, cloak, belt, and herbalist color styling."
       },
       "rook_human": {
-        "status": "phase_1g_fantasy_base_wrapped",
-        "path": "res://assets_external/characters/Rogue.obj",
+        "status": "motion_002_rigged_animated",
+        "path": "res://assets_external/animated/Rogue_Animated_CC0.gltf",
         "source": "Quaternius RPG Characters",
         "source_url": "",
         "license": "CC0 1.0",
         "notes": "Phase 1G uses the existing textured Rogue OBJ for a more distinct smuggler silhouette. Runtime adds dark cloak, dagger, hood, belt, and face markers."
       },
       "villager_human": {
-        "status": "phase_1g_fantasy_base_wrapped",
-        "path": "res://assets_external/characters/Monk.obj",
+        "status": "motion_002_rigged_animated",
+        "path": "res://assets_external/animated/Monk_Animated_CC0.gltf",
         "source": "Quaternius RPG Characters",
         "source_url": "",
         "license": "CC0 1.0",

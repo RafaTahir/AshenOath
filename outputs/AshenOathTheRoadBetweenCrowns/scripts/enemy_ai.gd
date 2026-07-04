@@ -9,6 +9,7 @@ const HealthComponent = preload("res://scripts/health_component.gd")
 const AssetSpawnHelper = preload("res://scripts/asset_spawn_helper.gd")
 const CharacterPresentation = preload("res://scripts/character_presentation.gd")
 const CombatFeedback = preload("res://scripts/combat_feedback.gd")
+const CharacterAnimationDriver = preload("res://scripts/character_animation_driver.gd")
 
 var enemy_id = "ghoulkin"
 var display_name = "Enemy"
@@ -38,6 +39,7 @@ var leash_radius = 14.0
 var windup_marker: MeshInstance3D
 var attack_recovery_time = 0.0
 var death_pose_time = 0.0
+var animation_driver
 
 func setup(id: String, definition: Dictionary, target: Node3D) -> void:
 	enemy_id = id
@@ -109,6 +111,8 @@ func _physics_process(delta: float) -> void:
 			attack_cooldown = _attack_cooldown()
 			windup_time = _windup_duration()
 			pending_attack_time = windup_time
+			if animation_driver != null:
+				animation_driver.trigger_action("attack")
 			_show_windup_marker()
 			windup_started.emit(self)
 	if not is_on_floor():
@@ -116,6 +120,8 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.y = -0.1
 	move_and_slide()
+	if animation_driver != null:
+		animation_driver.set_locomotion(Vector2(velocity.x, velocity.z).length() / max(move_speed, 0.1), velocity, is_on_floor())
 	_animate_visuals(delta)
 
 func apply_damage(amount: float, source_tag: String = "") -> void:
@@ -127,6 +133,8 @@ func apply_damage(amount: float, source_tag: String = "") -> void:
 	health_component.damage(final_damage)
 	hit_flash_time = 0.12
 	stagger_time = max(stagger_time, 0.16)
+	if animation_driver != null:
+		animation_driver.trigger_action("hit")
 
 func slow(seconds: float) -> void:
 	slowed_time = max(slowed_time, seconds)
@@ -135,6 +143,8 @@ func stagger(seconds: float = 0.7) -> void:
 	stagger_time = max(stagger_time, seconds)
 	windup_time = 0.0
 	pending_attack_time = 0.0
+	if animation_driver != null:
+		animation_driver.trigger_action("hit")
 
 func _resolve_attack() -> void:
 	if dead or player == null or not player.has_method("take_damage"):
@@ -153,7 +163,9 @@ func _on_died() -> void:
 	_hide_windup_marker()
 	collision_layer = 0
 	collision_mask = 0
-	if visual_root != null:
+	if animation_driver != null and animation_driver.is_valid():
+		animation_driver.set_dead()
+	elif visual_root != null:
 		visual_root.rotation_degrees.x = 84.0
 		visual_root.rotation_degrees.y += -28.0 if randf() > 0.5 else 28.0
 		visual_root.rotation_degrees.z = -38.0 if randf() > 0.5 else 38.0
@@ -267,6 +279,13 @@ func _try_build_mapped_body() -> bool:
 	visual_root.add_child(mapped)
 	body_visual = _find_first_mesh(mapped)
 	base_body_scale = mapped.scale
+	animation_driver = CharacterAnimationDriver.new()
+	animation_driver.name = "CharacterAnimationDriver"
+	mapped.add_child(animation_driver)
+	animation_driver.configure(mapped, {
+		"idle": "Idle", "walk": "Walk", "run": "Run", "jump": "Jump_Idle",
+		"attack": "Punch", "hit": "HitReact", "death": "Death"
+	})
 	_add_variant_silhouette()
 	return true
 
@@ -276,13 +295,13 @@ func _mapped_enemy_scale() -> Vector3:
 	if enemy_id == "white_hart_avatar":
 		return Vector3(1.35, 1.35, 1.35)
 	if enemy_id == "ghoulkin":
-		return Vector3.ONE * 0.34
+		return Vector3.ONE * 0.58
 	if enemy_id == "wychwood_stalker":
-		return Vector3(0.28, 0.32, 0.29)
+		return Vector3(0.54, 0.56, 0.54)
 	if enemy_id == "wychwood_raider":
-		return Vector3.ONE * 0.36
+		return Vector3.ONE * 0.61
 	if enemy_id == "wychwood_brute":
-		return Vector3(0.40, 0.39, 0.39)
+		return Vector3(0.67, 0.66, 0.67)
 	if enemy_id == "bandit":
 		return Vector3(0.95, 0.95, 0.95)
 	return Vector3.ONE
@@ -376,6 +395,11 @@ func _animate_visuals(delta: float) -> void:
 		return
 	var moving_speed = Vector2(velocity.x, velocity.z).length()
 	var movement_weight = clamp(moving_speed / max(move_speed, 0.1), 0.0, 1.0)
+	if animation_driver != null and animation_driver.is_valid():
+		_update_feedback_material()
+		if windup_marker != null:
+			windup_marker.visible = windup_time > 0.0
+		return
 	var bob = (0.018 + 0.022 * movement_weight) * sin(anim_phase)
 	body_visual.position.y = lerp(body_visual.position.y, 0.62 + bob - 0.04 * movement_weight, 10.0 * delta)
 	var target_scale = base_body_scale
@@ -422,6 +446,17 @@ func _animate_visuals(delta: float) -> void:
 		windup_marker.visible = windup_time > 0.0
 		var pulse = 0.92 + 0.16 * sin(anim_phase * 12.0)
 		windup_marker.scale = windup_marker.scale.lerp(Vector3(0.85 * pulse, 0.012, 0.85 * pulse), 12.0 * delta)
+
+func _update_feedback_material() -> void:
+	var mat = body_visual.material_override as StandardMaterial3D
+	if mat == null:
+		return
+	if windup_time > 0.0:
+		mat.albedo_color = base_color.lerp(Color(0.95, 0.22, 0.10), 0.48)
+	elif stagger_time > 0.0 or hit_flash_time > 0.0:
+		mat.albedo_color = Color(0.95, 0.82, 0.58)
+	else:
+		mat.albedo_color = base_color
 
 func _show_windup_marker() -> void:
 	if windup_marker == null:

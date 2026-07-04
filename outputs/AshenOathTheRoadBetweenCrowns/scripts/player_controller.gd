@@ -15,6 +15,7 @@ const HealthComponent = preload("res://scripts/health_component.gd")
 const StaminaComponent = preload("res://scripts/stamina_component.gd")
 const AssetSpawnHelper = preload("res://scripts/asset_spawn_helper.gd")
 const CharacterPresentation = preload("res://scripts/character_presentation.gd")
+const CharacterAnimationDriver = preload("res://scripts/character_animation_driver.gd")
 
 var walk_speed = 3.4
 var run_speed = 5.3
@@ -48,6 +49,7 @@ var left_leg_proxy: MeshInstance3D
 var right_leg_proxy: MeshInstance3D
 var cloak_motion_proxy: MeshInstance3D
 var asset_helper
+var animation_driver
 var move_phase = 0.0
 var step_phase = 0.0
 var attack_anim_time = 0.0
@@ -161,6 +163,8 @@ func try_jump() -> bool:
 	velocity.y = jump_speed
 	jump_pose_weight = 1.0
 	movement_state = "jump"
+	if animation_driver != null:
+		animation_driver.trigger_action("jump")
 	return true
 
 func _try_step_up(move_dir: Vector3) -> void:
@@ -214,12 +218,16 @@ func _handle_combat_input() -> void:
 		attack_cooldown = 0.38
 		attack_anim_time = 0.34
 		attack_anim_heavy = false
+		if animation_driver != null:
+			animation_driver.trigger_action("attack_light")
 		attack_performed.emit(24.0, 2.0, false)
 	elif Input.is_action_just_pressed("heavy_attack"):
 		if stamina_component.spend(22.0):
 			attack_cooldown = 0.7
 			attack_anim_time = 0.52
 			attack_anim_heavy = true
+			if animation_driver != null:
+				animation_driver.trigger_action("attack_heavy")
 			attack_performed.emit(42.0, 2.25, true)
 		else:
 			stamina_exhausted.emit("heavy attack")
@@ -274,6 +282,8 @@ func take_damage(amount: float) -> bool:
 		parry_window = 0.0
 		hurt_flash_time = 0.08
 		hurt_react_time = 0.14
+		if animation_driver != null:
+			animation_driver.trigger_action("hit")
 		parried.emit()
 		return true
 	if is_blocking() and stamina_component.spend(12.0):
@@ -281,11 +291,15 @@ func take_damage(amount: float) -> bool:
 		health_component.damage(reduced)
 		hurt_flash_time = 0.10
 		hurt_react_time = 0.13
+		if animation_driver != null:
+			animation_driver.trigger_action("hit")
 		blocked.emit(reduced)
 	else:
 		health_component.damage(amount)
 		hurt_flash_time = 0.18
 		hurt_react_time = 0.20
+		if animation_driver != null:
+			animation_driver.trigger_action("hit")
 		hurt.emit(amount)
 	return false
 
@@ -303,6 +317,8 @@ func _apply_gravity(delta: float) -> void:
 func _on_died() -> void:
 	cancel_beam_charge()
 	can_control = false
+	if animation_driver != null:
+		animation_driver.set_dead()
 	died.emit()
 
 func _build_body() -> void:
@@ -401,13 +417,25 @@ func _try_build_mapped_body() -> bool:
 			mapped.queue_free()
 		return false
 	mapped.name = "player_kael_visual"
-	mapped.scale = Vector3(0.95, 0.95, 0.95)
+	mapped.scale = Vector3(0.60, 0.60, 0.60)
 	mapped.rotation_degrees.y = 180
 	visual_root.add_child(mapped)
 	body_visual = _find_first_mesh(mapped)
 	_apply_visible_material_fallbacks(mapped, _mat(Color(0.18, 0.20, 0.18)))
-	_add_motion_proxy_parts()
-	_add_mapped_weapon_visuals()
+	animation_driver = CharacterAnimationDriver.new()
+	animation_driver.name = "CharacterAnimationDriver"
+	mapped.add_child(animation_driver)
+	var animated: bool = bool(animation_driver.configure(mapped, {
+		"idle": "Idle_Weapon", "walk": "Walk", "run": "Run_Weapon",
+		"jump": "Run_Weapon", "attack_light": "Sword_Attack",
+		"attack_heavy": "Sword_Attack2", "dodge": "Roll",
+		"hit": "RecieveHit", "death": "Death"
+	}))
+	if not animated:
+		_add_motion_proxy_parts()
+		_add_mapped_weapon_visuals()
+	else:
+		_add_slash_arc_visuals()
 	return true
 
 func _find_first_mesh(root: Node) -> MeshInstance3D:
@@ -517,6 +545,10 @@ func _animate_visuals(delta: float, move_dir: Vector3, moving: bool) -> void:
 	if visual_root == null:
 		return
 	var running = movement_state == "run" or (Input.is_action_pressed("run") and moving)
+	if animation_driver != null and animation_driver.is_valid():
+		animation_driver.set_locomotion(Vector2(velocity.x, velocity.z).length() / max(run_speed, 0.1), move_dir, is_on_floor())
+		if movement_state == "dodge" and animation_driver.current_state != "dodge":
+			animation_driver.trigger_action("dodge")
 	if moving:
 		move_phase += delta * (8.7 if running else 6.2)
 		step_phase += delta * (3.05 if running else 2.15)
