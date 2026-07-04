@@ -50,6 +50,11 @@ try {
     Invoke-Checked $Godot "--headless --path `"$ProjectDir`" --script `"res://tools/verify_visible_quality.gd`"" $RepoRoot
   }
 
+  $MotionVerifier = Join-Path $ProjectDir "tools\verify_motion_quality.gd"
+  if (Test-Path $MotionVerifier) {
+    Invoke-Checked $Godot "--headless --path `"$ProjectDir`" --script `"res://tools/verify_motion_quality.gd`"" $RepoRoot
+  }
+
   Invoke-Checked (Join-Path $ProjectDir "Export_Web_Build.bat") "" $ProjectDir
 
   Invoke-Checked $Python "`"$ProjectDir\tools\verify_web_export.py`" `"$ExportDir`"" $RepoRoot

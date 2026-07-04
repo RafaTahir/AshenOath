@@ -2338,6 +2338,7 @@ func _ensure_input_map() -> void:
 	_add_key_action("move_right", KEY_D)
 	_add_key_action("run", KEY_SHIFT)
 	_add_key_action("dodge", KEY_SPACE)
+	_add_key_action("jump", KEY_X)
 	_add_key_action("block", KEY_Q)
 	_add_key_action("interact", KEY_E)
 	_add_key_action("use_potion", KEY_R)

@@ -20,6 +20,11 @@ var walk_speed = 3.4
 var run_speed = 5.3
 var dodge_speed = 8.0
 var gravity = 24.0
+var jump_speed = 8.2
+var acceleration = 17.0
+var run_acceleration = 13.0
+var deceleration = 21.0
+var turn_speed = 11.0
 var attack_cooldown = 0.0
 var dodge_time = 0.0
 var dodge_dir = Vector3.ZERO
@@ -56,6 +61,18 @@ var beam_charging = false
 var beam_charge_time = 0.0
 var beam_cooldown = 0.0
 var beam_charge_visual: MeshInstance3D
+var movement_state = "idle"
+var movement_blend = 0.0
+var strafe_blend = 0.0
+var backward_blend = 0.0
+var jump_pose_weight = 0.0
+var landing_compression = 0.0
+var smoothed_ground_normal = Vector3.UP
+var left_foot_ground_offset = 0.0
+var right_foot_ground_offset = 0.0
+var contact_shadow: Node3D
+var was_on_floor = false
+var step_up_cooldown = 0.0
 
 func _ready() -> void:
 	add_to_group("player")
@@ -66,6 +83,12 @@ func _ready() -> void:
 	health_component.configure(125.0)
 	health_component.died.connect(_on_died)
 	_build_body()
+	floor_snap_length = 0.34
+	floor_max_angle = deg_to_rad(48.0)
+	max_slides = 6
+	safe_margin = 0.035
+	contact_shadow = find_child("CharacterContactShadow", true, false) as Node3D
+	was_on_floor = is_on_floor()
 
 func _physics_process(delta: float) -> void:
 	attack_cooldown = max(attack_cooldown - delta, 0.0)
@@ -74,6 +97,7 @@ func _physics_process(delta: float) -> void:
 	hurt_flash_time = max(hurt_flash_time - delta, 0.0)
 	hurt_react_time = max(hurt_react_time - delta, 0.0)
 	parry_window = max(parry_window - delta, 0.0)
+	step_up_cooldown = max(step_up_cooldown - delta, 0.0)
 	if not can_control:
 		velocity.x = move_toward(velocity.x, 0.0, 20.0 * delta)
 		velocity.z = move_toward(velocity.z, 0.0, 20.0 * delta)
@@ -94,26 +118,93 @@ func _handle_movement(delta: float) -> void:
 	var move_dir = (right * input_vec.x + forward * -input_vec.y).normalized()
 	if dodge_time > 0.0:
 		dodge_time -= delta
-		velocity.x = dodge_dir.x * dodge_speed
-		velocity.z = dodge_dir.z * dodge_speed
+		var dodge_ratio = clamp(dodge_time / 0.30, 0.0, 1.0)
+		var dodge_velocity = dodge_speed * (0.62 + 0.38 * sin(dodge_ratio * PI))
+		velocity.x = dodge_dir.x * dodge_velocity
+		velocity.z = dodge_dir.z * dodge_velocity
+		movement_state = "dodge"
 	else:
 		var wants_run = Input.is_action_pressed("run") and input_vec.length() > 0.1
-		var speed = run_speed if wants_run and stamina_component.spend(10.0 * delta) else walk_speed
+		var is_running = wants_run and stamina_component.spend(10.0 * delta)
+		var speed = run_speed if is_running else walk_speed
+		if input_vec.y > 0.15:
+			speed *= 0.68
 		if beam_charging:
 			speed *= 0.4
-		velocity.x = move_dir.x * speed
-		velocity.z = move_dir.z * speed
+		var target_velocity = move_dir * speed
+		var response = run_acceleration if is_running else acceleration
+		if move_dir.length() <= 0.1:
+			response = deceleration
+		velocity.x = move_toward(velocity.x, target_velocity.x, response * delta)
+		velocity.z = move_toward(velocity.z, target_velocity.z, response * delta)
 		if move_dir.length() > 0.1:
-			look_at(global_position + move_dir, Vector3.UP)
+			var target_yaw = atan2(-move_dir.x, -move_dir.z)
+			rotation.y = lerp_angle(rotation.y, target_yaw, 1.0 - exp(-turn_speed * delta))
+		movement_state = "run" if is_running else ("backward" if input_vec.y > 0.15 else ("strafe" if abs(input_vec.x) > 0.55 else ("walk" if move_dir.length() > 0.1 else "idle")))
+		if Input.is_action_just_pressed("jump"):
+			try_jump()
 		if Input.is_action_just_pressed("dodge") and not beam_charging:
 			if stamina_component.spend(28.0):
 				dodge_dir = move_dir if move_dir.length() > 0.1 else -global_transform.basis.z
-				dodge_time = 0.22
+				dodge_time = 0.30
 			else:
 				stamina_exhausted.emit("dodge")
+	_try_step_up(move_dir)
 	_apply_gravity(delta)
 	move_and_slide()
+	_update_ground_adaptation(delta)
 	_animate_visuals(delta, move_dir, input_vec.length() > 0.1)
+
+func try_jump() -> bool:
+	if not can_control or not is_on_floor() or beam_charging or attack_anim_time > 0.0 or dodge_time > 0.0:
+		return false
+	velocity.y = jump_speed
+	jump_pose_weight = 1.0
+	movement_state = "jump"
+	return true
+
+func _try_step_up(move_dir: Vector3) -> void:
+	if step_up_cooldown > 0.0 or move_dir.length() < 0.1 or not is_on_floor() or not is_on_wall():
+		return
+	var probe = global_position + move_dir * 0.46
+	var query = PhysicsRayQueryParameters3D.create(probe + Vector3.UP * 0.42, probe - Vector3.UP * 0.08)
+	query.exclude = [get_rid()]
+	query.collide_with_areas = false
+	var hit = get_world_3d().direct_space_state.intersect_ray(query)
+	if hit.is_empty():
+		return
+	var step_height = float(hit.position.y - global_position.y)
+	if step_height > 0.04 and step_height <= 0.30 and not test_move(global_transform, Vector3.UP * (step_height + 0.035)):
+		global_position.y += step_height + 0.035
+		step_up_cooldown = 0.12
+
+func _update_ground_adaptation(delta: float) -> void:
+	var on_floor = is_on_floor()
+	if on_floor and not was_on_floor:
+		landing_compression = clamp(abs(velocity.y) / 9.0, 0.45, 1.0)
+	jump_pose_weight = move_toward(jump_pose_weight, 0.0 if on_floor else 1.0, delta * (6.0 if on_floor else 3.0))
+	landing_compression = move_toward(landing_compression, 0.0, delta * 5.5)
+	var normal = get_floor_normal() if on_floor else Vector3.UP
+	smoothed_ground_normal = smoothed_ground_normal.lerp(normal, 1.0 - exp(-9.0 * delta)).normalized()
+	left_foot_ground_offset = _sample_foot_offset(-0.18, delta, left_foot_ground_offset) if on_floor else move_toward(left_foot_ground_offset, 0.0, delta * 3.0)
+	right_foot_ground_offset = _sample_foot_offset(0.18, delta, right_foot_ground_offset) if on_floor else move_toward(right_foot_ground_offset, 0.0, delta * 3.0)
+	if contact_shadow != null:
+		contact_shadow.visible = global_position.y > -4.0
+		var shadow_weight = 1.0 - clamp(abs(velocity.y) / 10.0, 0.0, 0.52)
+		contact_shadow.scale = Vector3(0.95 * shadow_weight, 0.014, 0.66 * shadow_weight)
+	was_on_floor = on_floor
+
+func _sample_foot_offset(side: float, delta: float, current: float) -> float:
+	var local_probe = global_transform.basis.x * side + global_transform.basis.z * 0.04
+	var start = global_position + local_probe + Vector3.UP * 0.42
+	var query = PhysicsRayQueryParameters3D.create(start, start - Vector3.UP * 0.72)
+	query.exclude = [get_rid()]
+	query.collide_with_areas = false
+	var hit = get_world_3d().direct_space_state.intersect_ray(query)
+	var target = 0.0
+	if not hit.is_empty():
+		target = clamp(float(hit.position.y - global_position.y), -0.16, 0.16)
+	return lerp(current, target, 1.0 - exp(-12.0 * delta))
 
 func _handle_combat_input() -> void:
 	_handle_beam_input()
@@ -206,7 +297,7 @@ func face_target(target_pos: Vector3) -> void:
 func _apply_gravity(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y -= gravity * delta
-	else:
+	elif velocity.y <= 0.0:
 		velocity.y = -0.1
 
 func _on_died() -> void:
@@ -425,7 +516,7 @@ func _add_proxy_box(node_name: String, local_pos: Vector3, size: Vector3, color:
 func _animate_visuals(delta: float, move_dir: Vector3, moving: bool) -> void:
 	if visual_root == null:
 		return
-	var running = Input.is_action_pressed("run")
+	var running = movement_state == "run" or (Input.is_action_pressed("run") and moving)
 	if moving:
 		move_phase += delta * (8.7 if running else 6.2)
 		step_phase += delta * (3.05 if running else 2.15)
@@ -435,19 +526,27 @@ func _animate_visuals(delta: float, move_dir: Vector3, moving: bool) -> void:
 	else:
 		move_phase += delta * 1.45
 	var speed_factor = clamp(Vector2(velocity.x, velocity.z).length() / max(run_speed, 0.1), 0.0, 1.0)
-	grounded_weight = lerp(grounded_weight, speed_factor, 8.0 * delta)
+	movement_blend = lerp(movement_blend, speed_factor, 1.0 - exp(-10.0 * delta))
+	strafe_blend = lerp(strafe_blend, 1.0 if movement_state == "strafe" else 0.0, 1.0 - exp(-9.0 * delta))
+	backward_blend = lerp(backward_blend, 1.0 if movement_state == "backward" else 0.0, 1.0 - exp(-9.0 * delta))
+	grounded_weight = lerp(grounded_weight, movement_blend, 1.0 - exp(-8.0 * delta))
 	block_pose_weight = lerp(block_pose_weight, 1.0 if is_blocking() else 0.0, 14.0 * delta)
-	var dodge_weight = clamp(dodge_time / 0.22, 0.0, 1.0)
+	var dodge_weight = clamp(dodge_time / 0.30, 0.0, 1.0)
 	var hurt_weight = clamp(hurt_react_time / 0.20, 0.0, 1.0)
 	var combat_swing_weight = 0.0
 	var combat_windup_weight = 0.0
 	var bob = 0.030 * sin(move_phase) * grounded_weight if moving else 0.009 * sin(move_phase)
 	var idle_breath = sin(move_phase * 0.72) * (1.0 - grounded_weight)
-	visual_root.position.y = bob - 0.018 * grounded_weight - 0.030 * hurt_weight
+	var pelvis_offset = (left_foot_ground_offset + right_foot_ground_offset) * 0.22
+	visual_root.position.y = bob + pelvis_offset - 0.018 * grounded_weight - 0.030 * hurt_weight - 0.10 * landing_compression
 	var lateral_lean = clamp(-velocity.x * 0.85, -4.0, 4.0)
-	var forward_lean = -5.2 * grounded_weight if moving else 0.9 * idle_breath
+	var local_normal = global_transform.basis.inverse() * smoothed_ground_normal
+	var slope_pitch = rad_to_deg(atan2(local_normal.z, max(local_normal.y, 0.25)))
+	var slope_roll = -rad_to_deg(atan2(local_normal.x, max(local_normal.y, 0.25)))
+	var forward_lean = (-6.5 if running else -4.2) * grounded_weight if moving else 0.9 * idle_breath
+	forward_lean += slope_pitch * 0.45 + 8.0 * jump_pose_weight - 11.0 * landing_compression
 	forward_lean += -7.0 * dodge_weight + 5.0 * hurt_weight - 3.5 * block_pose_weight
-	var root_z = lateral_lean + 4.5 * sin(move_phase) * grounded_weight + 7.0 * dodge_weight * sign(dodge_dir.x) - 3.0 * block_pose_weight
+	var root_z = lateral_lean + slope_roll * 0.50 + 4.5 * sin(move_phase) * grounded_weight + 9.0 * dodge_weight * sign(dodge_dir.x) - 3.0 * block_pose_weight
 	visual_root.rotation_degrees.z = lerp(visual_root.rotation_degrees.z, root_z, 9.0 * delta)
 	visual_root.rotation_degrees.x = lerp(visual_root.rotation_degrees.x, forward_lean, 9.0 * delta)
 	if attack_anim_time > 0.0:
@@ -484,7 +583,7 @@ func _animate_visuals(delta: float, move_dir: Vector3, moving: bool) -> void:
 			sword_trail_visual.visible = false
 		if slash_arc_root != null:
 			slash_arc_root.visible = false
-	_animate_motion_proxies(delta, moving, speed_factor, dodge_weight, hurt_weight, block_pose_weight, combat_windup_weight, combat_swing_weight)
+	_animate_motion_proxies(delta, moving, movement_blend, dodge_weight, hurt_weight, block_pose_weight, combat_windup_weight, combat_swing_weight)
 	if body_visual != null:
 		var mat = body_visual.material_override as StandardMaterial3D
 		if mat != null:
@@ -495,23 +594,27 @@ func _animate_motion_proxies(delta: float, moving: bool, speed_factor: float, do
 	var stride = clamp(speed_factor * 1.25, 0.0, 1.0)
 	var idle_weight = 1.0 - stride
 	var idle_breath = sin(move_phase * 0.72)
-	var arm_amount = 58.0 * stride
-	var leg_amount = 54.0 * stride
+	var arm_amount = (68.0 if movement_state == "run" else 52.0) * stride
+	var leg_amount = (62.0 if movement_state == "run" else 48.0) * stride
+	var strafe_twist = strafe_blend * sign(velocity.x) * 18.0
+	var backward_sign = lerp(1.0, -0.72, backward_blend)
 	if left_arm_proxy != null:
-		left_arm_proxy.rotation_degrees.x = lerp(left_arm_proxy.rotation_degrees.x, -gait * arm_amount - 12.0 * block_weight + 10.0 * hurt_weight + idle_breath * 4.0 * idle_weight, 12.0 * delta)
+		left_arm_proxy.rotation_degrees.x = lerp(left_arm_proxy.rotation_degrees.x, -gait * arm_amount * backward_sign - 12.0 * block_weight + 10.0 * hurt_weight + idle_breath * 4.0 * idle_weight, 12.0 * delta)
 		left_arm_proxy.rotation_degrees.z = lerp(left_arm_proxy.rotation_degrees.z, -10.0 - 12.0 * block_weight - 14.0 * swing_weight, 12.0 * delta)
 	if right_arm_proxy != null:
-		right_arm_proxy.rotation_degrees.x = lerp(right_arm_proxy.rotation_degrees.x, gait * arm_amount * 0.60 - 34.0 * windup_weight - 54.0 * swing_weight - 20.0 * block_weight, 13.0 * delta)
+		right_arm_proxy.rotation_degrees.x = lerp(right_arm_proxy.rotation_degrees.x, gait * arm_amount * 0.60 * backward_sign - 34.0 * windup_weight - 54.0 * swing_weight - 20.0 * block_weight, 13.0 * delta)
 		right_arm_proxy.rotation_degrees.z = lerp(right_arm_proxy.rotation_degrees.z, 12.0 + 38.0 * swing_weight + 12.0 * block_weight, 13.0 * delta)
 	if left_leg_proxy != null:
-		left_leg_proxy.rotation_degrees.x = lerp(left_leg_proxy.rotation_degrees.x, gait * leg_amount - 18.0 * dodge_weight, 13.0 * delta)
-		left_leg_proxy.position.y = lerp(left_leg_proxy.position.y, 0.52 + max(0.0, -gait) * 0.08 * stride, 14.0 * delta)
+		left_leg_proxy.rotation_degrees.x = lerp(left_leg_proxy.rotation_degrees.x, gait * leg_amount * backward_sign - 24.0 * dodge_weight - 16.0 * jump_pose_weight, 13.0 * delta)
+		left_leg_proxy.rotation_degrees.z = lerp(left_leg_proxy.rotation_degrees.z, strafe_twist, 11.0 * delta)
+		left_leg_proxy.position.y = lerp(left_leg_proxy.position.y, 0.52 + left_foot_ground_offset + max(0.0, -gait) * 0.10 * stride + 0.08 * jump_pose_weight, 14.0 * delta)
 	if right_leg_proxy != null:
-		right_leg_proxy.rotation_degrees.x = lerp(right_leg_proxy.rotation_degrees.x, -gait * leg_amount - 18.0 * dodge_weight, 13.0 * delta)
-		right_leg_proxy.position.y = lerp(right_leg_proxy.position.y, 0.52 + max(0.0, gait) * 0.08 * stride, 14.0 * delta)
+		right_leg_proxy.rotation_degrees.x = lerp(right_leg_proxy.rotation_degrees.x, -gait * leg_amount * backward_sign - 24.0 * dodge_weight + 16.0 * jump_pose_weight, 13.0 * delta)
+		right_leg_proxy.rotation_degrees.z = lerp(right_leg_proxy.rotation_degrees.z, strafe_twist, 11.0 * delta)
+		right_leg_proxy.position.y = lerp(right_leg_proxy.position.y, 0.52 + right_foot_ground_offset + max(0.0, gait) * 0.10 * stride + 0.08 * jump_pose_weight, 14.0 * delta)
 	if cloak_motion_proxy != null:
-		var cloak_sway = (7.0 * gait * stride) + 9.0 * dodge_weight
-		cloak_motion_proxy.rotation_degrees.x = lerp(cloak_motion_proxy.rotation_degrees.x, -5.0 - 6.0 * stride + 11.0 * swing_weight + 2.0 * idle_breath * idle_weight, 9.0 * delta)
+		var cloak_sway = (9.0 * gait * stride) + 15.0 * dodge_weight + strafe_twist * 0.35
+		cloak_motion_proxy.rotation_degrees.x = lerp(cloak_motion_proxy.rotation_degrees.x, -5.0 - 10.0 * stride - 10.0 * jump_pose_weight + 15.0 * dodge_weight + 11.0 * swing_weight + 2.0 * idle_breath * idle_weight, 9.0 * delta)
 		cloak_motion_proxy.rotation_degrees.z = lerp(cloak_motion_proxy.rotation_degrees.z, cloak_sway, 9.0 * delta)
 
 func _animate_slash_arc(strike: float, strike_arc: float, recovery: float, heavy: bool) -> void:

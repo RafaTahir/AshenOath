@@ -43,6 +43,11 @@ func _initialize() -> void:
 	await _capture(game, "22_ghoulkin_clearing_story", Vector3(0, 1, -5.2), "wychwood", Vector3(0, 1, -5.2))
 	await _capture_player_motion_state(game, "11_player_idle_pose", "idle")
 	await _capture_player_motion_state(game, "12_player_walking_pose", "walk")
+	await _capture_player_motion_state(game, "26_player_running_pose", "run")
+	await _capture_player_motion_state(game, "27_player_strafe_turn_pose", "strafe")
+	await _capture_player_motion_state(game, "28_player_jump_pose", "jump")
+	await _capture_player_motion_state(game, "29_player_dodge_pose", "dodge")
+	await _capture_player_motion_state(game, "30_player_slope_grounding", "slope")
 	await _capture_player_motion_state(game, "13_player_light_attack_arc", "light")
 	await _capture_player_motion_state(game, "14_player_heavy_attack_arc", "heavy")
 	await _capture_combat_state(game, "15_ghoulkin_windup_hud", "windup")
@@ -176,10 +181,39 @@ func _capture_player_motion_state(game, file_name: String, state: String) -> voi
 	elif state == "heavy":
 		game.player.attack_anim_time = 0.28
 		game.player.attack_anim_heavy = true
+	elif state == "run":
+		game.player.velocity = Vector3(0, 0, -5.2)
+		game.player.movement_state = "run"
+		game.player.move_phase = 0.72
+	elif state == "strafe":
+		game.player.velocity = Vector3(3.2, 0, -0.8)
+		game.player.movement_state = "strafe"
+		game.player.move_phase = 1.1
+	elif state == "jump":
+		game.player.velocity = Vector3(0, 5.0, -2.0)
+		game.player.movement_state = "jump"
+		game.player.jump_pose_weight = 1.0
+	elif state == "dodge":
+		game.player.velocity = Vector3(5.5, 0, -2.0)
+		game.player.movement_state = "dodge"
+		game.player.dodge_dir = Vector3(0.85, 0, -0.35).normalized()
+		game.player.dodge_time = 0.22
+	elif state == "slope":
+		game.player.movement_state = "idle"
+		game.player.smoothed_ground_normal = Vector3(0.22, 0.95, 0.18).normalized()
+		game.player.left_foot_ground_offset = 0.12
+		game.player.right_foot_ground_offset = -0.08
 	var frame_count = 2 if state == "light" or state == "heavy" else 16
 	for i in range(frame_count):
-		if state == "walk":
+		if state in ["walk", "run", "jump", "dodge"]:
 			game.player.call("_animate_visuals", 0.016, Vector3(0, 0, -1), true)
+		elif state == "strafe":
+			game.player.call("_animate_visuals", 0.016, Vector3.RIGHT, true)
+		elif state == "slope":
+			game.player.smoothed_ground_normal = Vector3(0.22, 0.95, 0.18).normalized()
+			game.player.left_foot_ground_offset = 0.12
+			game.player.right_foot_ground_offset = -0.08
+			game.player.call("_animate_visuals", 0.016, Vector3.ZERO, false)
 		elif state == "idle":
 			game.player.call("_animate_visuals", 0.016, Vector3.ZERO, false)
 		else:
