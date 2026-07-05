@@ -45,6 +45,11 @@ try {
     Invoke-Checked $Godot "--headless --path `"$ProjectDir`" --script `"res://tools/verify_story_campaign.gd`"" $RepoRoot
   }
 
+  $GreyfenVerifier = Join-Path $ProjectDir "tools\verify_greyfen_life.gd"
+  if (Test-Path $GreyfenVerifier) {
+    Invoke-Checked $Godot "--headless --path `"$ProjectDir`" --script `"res://tools/verify_greyfen_life.gd`"" $RepoRoot
+  }
+
   $AudioVerifier = Join-Path $ProjectDir "tools\verify_audio_runtime.gd"
   if (Test-Path $AudioVerifier) {
     Invoke-Checked $Godot "--headless --path `"$ProjectDir`" --script `"res://tools/verify_audio_runtime.gd`"" $RepoRoot

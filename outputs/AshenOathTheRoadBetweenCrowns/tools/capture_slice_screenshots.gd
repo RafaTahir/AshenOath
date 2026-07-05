@@ -52,6 +52,14 @@ func _initialize() -> void:
 	await _capture(game, "39_undercroft", Vector3(0,1,6), "undercroft", Vector3(0,1,6))
 	await _capture(game, "40_greyfen_assembly", Vector3(0,1,6), "assembly", Vector3(0,1,6))
 	await _capture(game, "41_white_hart_glade", Vector3(0,1,6), "hart_glade", Vector3(0,1,6))
+	await _capture(game, "42_greyfen_living_street", Vector3(-2,1,5), "greyfen", Vector3(-2,1,5))
+	await _capture(game, "43_blacksmith_routine", Vector3(7.5,1,5.5), "greyfen", Vector3(7.5,1,5.5), -0.65)
+	await _capture(game, "44_shrine_pilgrim", Vector3(2.0,1,-6.0), "greyfen", Vector3(2.0,1,-6.0), 0.55)
+	await _capture_place_interaction(game, "45_notice_board_interaction", "notice_board", Vector3(-2,1,7.8))
+	await _capture_minigame(game, "46_tic_tac_toe_ui", "tic_tac_toe")
+	await _capture_minigame(game, "47_greyfen_draughts_ui", "draughts")
+	await _capture(game, "48_minigame_tables_world", Vector3(-4.5,1,6.0), "greyfen", Vector3(-4.5,1,6.0), -0.35)
+	await _capture(game, "49_greyfen_life_wide", Vector3(0,1,11), "greyfen", Vector3(0,1,11))
 	await _capture_player_motion_state(game, "11_player_idle_pose", "idle")
 	await _capture_player_motion_state(game, "12_player_walking_pose", "walk")
 	await _capture_player_motion_state(game, "26_player_running_pose", "run")
@@ -115,6 +123,25 @@ func _capture_dialogue(game, file_name: String, player_pos: Vector3) -> void:
 	_save_image(image, file_name)
 	game.get_tree().paused = false
 	game.hud.hide_menus()
+
+func _capture_place_interaction(game, file_name: String, place_id: String, player_pos: Vector3) -> void:
+	game.call("_load_zone","greyfen",player_pos)
+	await _settle_frames(5)
+	var place = _find_child_named(game.zone_root,place_id)
+	if place == null: push_error("capture missing %s" % place_id); quit(1); return
+	game.call("_handle_interaction",place)
+	await _settle_frames(10)
+	_save_viewport(file_name)
+	game.get_tree().paused = false
+	game.hud.hide_menus()
+
+func _capture_minigame(game, file_name: String, game_id: String) -> void:
+	game.call("_load_zone","greyfen",Vector3(-4,1,6))
+	await _settle_frames(5)
+	game.minigames.open_game(game_id)
+	await _settle_frames(8)
+	_save_viewport(file_name)
+	game.minigames.close_game()
 
 func _capture_post_anwen_objective(game, file_name: String) -> void:
 	game.call("_load_zone", "greyfen", Vector3(3.2, 1, -5.0))

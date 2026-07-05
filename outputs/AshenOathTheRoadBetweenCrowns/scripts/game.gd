@@ -25,6 +25,8 @@ const CharacterAnimationDriver = preload("res://scripts/character_animation_driv
 const WorldVisualUpgrade = preload("res://scripts/world_visual_upgrade.gd")
 const WorldMotionController = preload("res://scripts/world_motion_controller.gd")
 const SurfaceFeedbackManager = preload("res://scripts/surface_feedback_manager.gd")
+const GreyfenLifeController = preload("res://scripts/greyfen_life_controller.gd")
+const MinigameManager = preload("res://scripts/minigame_manager.gd")
 
 var player
 var camera_rig
@@ -40,6 +42,7 @@ var settings
 var audio
 var asset_helper
 var visual_director
+var minigames
 var zone_root: Node3D
 var active_interactable
 var current_zone_id = "greyfen"
@@ -73,6 +76,8 @@ func _input(event: InputEvent) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not game_started:
+		return
+	if minigames != null and minigames.is_open():
 		return
 	if event.is_action_pressed("pause"):
 		if get_tree().paused:
@@ -117,7 +122,8 @@ func _setup_managers() -> void:
 	audio = AudioManager.new()
 	asset_helper = AssetSpawnHelper.new()
 	hud = HUD.new()
-	for manager in [story_state, quests, dialogue, inventory, crafting, combat, save_manager, settings, audio, asset_helper, hud]:
+	minigames = MinigameManager.new()
+	for manager in [story_state, quests, dialogue, inventory, crafting, combat, save_manager, settings, audio, asset_helper, hud, minigames]:
 		add_child(manager)
 	hud.process_mode = Node.PROCESS_MODE_ALWAYS
 	quests.load_quests("res://data/quests.json")
@@ -176,6 +182,8 @@ func _setup_managers() -> void:
 		_hitstop(0.045)
 	)
 	combat.impact.connect(_on_combat_impact)
+	minigames.result.connect(_on_minigame_result)
+	minigames.closed.connect(func(): hud.toast("The village carries on."))
 
 func _new_game() -> void:
 	game_started = true
@@ -354,6 +362,11 @@ func _build_greyfen() -> void:
 	_make_named_interactable("crow_shrine_choice", "dialogue", "Touch the Crow Shrine", Vector3(6.5,0,-7.5), Color(0.3,0.38,0.3), Vector3(0.45,0.45,0.45))
 	_make_named_interactable("retain_evidence", "dialogue", "Keep Oren's token", Vector3(1.8,0,8.8), Color(0.38,0.24,0.16), Vector3(0.35,0.35,0.35))
 	_make_named_interactable("village_stories", "dialogue", "Resolve a village story", Vector3(-4.1,0,9.0), Color(0.34,0.23,0.14), Vector3(0.4,0.4,0.4))
+	_make_village_place("village_well", "village_place", "Draw from the village well", Vector3(-8.0,0,-0.5), Vector3(2.2,0.9,2.2), Color(0.19,0.18,0.16))
+	_make_village_place("forge_corner", "village_place", "Inspect Tor's old iron", Vector3(11.0,0,4.5), Vector3(1.5,0.7,1.2), Color(0.28,0.18,0.10))
+	_make_village_place("shrine_prayer", "village_place", "Sit at the shrine bench", Vector3(8.0,0,-6.2), Vector3(2.4,0.55,0.7), Color(0.22,0.15,0.09))
+	_make_village_place("common_table", "minigame", "Play Three Marks with Rook", Vector3(-5.4,0,7.2), Vector3(2.8,0.85,1.8), Color(0.28,0.18,0.10))
+	_make_village_place("barrel_board", "minigame", "Play Greyfen Draughts with Tor", Vector3(7.0,0,6.8), Vector3(2.2,0.85,1.5), Color(0.24,0.15,0.08))
 	_make_clue("grave_bell", "Inspect grave bell", Vector3(15.8, 0, 9.5), "side_widows_bell", "inspect_bell", Color(0.60, 0.55, 0.44))
 	_make_clue("grave_harl", "Inspect Harl's disturbed grave", Vector3(12.2,0,7.2), "main_bell_beneath_greyfen", "grave_harl", Color(0.3,0.28,0.25))
 	_make_clue("grave_child", "Inspect the nameless child's grave", Vector3(14.0,0,10.2), "main_bell_beneath_greyfen", "grave_child", Color(0.3,0.28,0.25))
@@ -369,6 +382,10 @@ func _build_greyfen() -> void:
 	_make_greyfen_road_of_crows_story_beats()
 	_make_collapsed_road(Vector3(18.0, 0, 0))
 	_make_blocked_gate("Road to Castle Vargan", Vector3(17.5, 0, 0), "Castle Vargan is blocked for this vertical slice. The contract trail runs north into Wychwood.")
+	var life = GreyfenLifeController.new()
+	life.name = "GreyfenLifeController"
+	zone_root.add_child(life)
+	life.configure(self, str(settings.settings.get("quality_preset", "balanced")))
 
 func _build_wychwood() -> void:
 	_make_ground(Vector3(0, -0.08, 0), Vector3(44, 0.16, 34), Color(0.065, 0.105, 0.07))
@@ -448,7 +465,11 @@ func _build_ruins() -> void:
 		_make_named_interactable("white_hart", "dialogue", "Speak to the White Hart", Vector3(12, 0, 10), Color(0.86, 0.83, 0.70), Vector3(0.9, 1.6, 0.9))
 
 func _handle_interaction(area) -> void:
-	if area.interaction_type == "dialogue":
+	if area.interaction_type == "minigame":
+		minigames.open_game("tic_tac_toe" if area.interaction_id == "common_table" else "draughts")
+	elif area.interaction_type == "village_place":
+		_handle_village_place(area.interaction_id)
+	elif area.interaction_type == "dialogue":
 		var dialogue_data = dialogue.get_dialogue(area.dialogue_id)
 		var played_report_voice = false
 		if _road_ready_to_report() and area.interaction_id in ["sister_anwen", "notice_board", "retain_evidence"]:
@@ -536,6 +557,33 @@ func _handle_interaction(area) -> void:
 		_load_zone(area.zone_target, area.get_meta("spawn_pos"))
 	elif area.interaction_type == "blocked_zone":
 		hud.toast(str(area.get_meta("message", "That road is barred tonight.")))
+
+func _handle_village_place(id: String) -> void:
+	match id:
+		"village_well":
+			player.stamina_component.restore(5.0)
+			hud.toast("Cold iron in the water. Kael catches his breath.")
+		"forge_corner": hud.toast("Vargan iron, hammered into Greyfen hinges. Tor never mentions the crest marks.")
+		"shrine_prayer": hud.toast("The bench is worn smooth by people asking not to be noticed.")
+		_: hud.toast("Greyfen has made use of everything it could keep.")
+
+func _on_minigame_result(game_id: String, outcome: String) -> void:
+	var played_id := "%s_played" % game_id
+	story_state.set_flag(played_id, int(story_state.get_flag(played_id,0)) + 1)
+	if outcome == "win":
+		var wins_id := "%s_wins" % game_id
+		story_state.set_flag(wins_id, int(story_state.get_flag(wins_id,0)) + 1)
+		var reward_id := "%s_reward_claimed" % game_id
+		if not bool(story_state.get_flag(reward_id,false)):
+			story_state.set_flag(reward_id,true)
+			if game_id == "tic_tac_toe":
+				story_state.set_flag("rook_road_hint",true)
+				hud.toast("Rook: Road wasn't always cursed. Ask who bent it.")
+			else:
+				story_state.set_flag("tor_iron_hint",true)
+				inventory.add_ingredients({"scrap_iron":1})
+				hud.toast("Tor gives up scrap bearing an old Vargan stamp.")
+	save_manager.autosave(self)
 
 func _handle_road_of_crows_clue(area) -> void:
 	if not quests.is_active("main_road_of_crows"):
@@ -1850,6 +1898,40 @@ func _make_named_interactable(id: String, type: String, prompt: String, pos: Vec
 		var ambient = NpcAmbient.new()
 		ambient.setup(id, player)
 		area.add_child(ambient)
+	_connect_interactable(area)
+	return area
+
+func _make_village_place(id: String, type: String, prompt: String, pos: Vector3, size: Vector3, color: Color):
+	var area = Interactable.new()
+	area.setup(id,type,prompt)
+	area.position = pos
+	area.build_collision(1.8)
+	zone_root.add_child(area)
+	var table := MeshInstance3D.new()
+	table.name = "%s_VisibleProp" % id
+	var mesh := BoxMesh.new()
+	mesh.size = size
+	table.mesh = mesh
+	table.position.y = size.y * 0.5
+	table.material_override = _mat(color)
+	area.add_child(table)
+	if type == "minigame":
+		var board := MeshInstance3D.new()
+		board.name = "%s_GameBoard" % id
+		var board_mesh := BoxMesh.new()
+		board_mesh.size = Vector3(size.x * 0.72,0.06,size.z * 0.72)
+		board.mesh = board_mesh
+		board.position.y = size.y + 0.05
+		board.material_override = _mat(Color(0.62,0.50,0.30))
+		area.add_child(board)
+	var label := Label3D.new()
+	label.text = prompt
+	label.position = Vector3(0,size.y+0.7,0)
+	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	label.font_size = 18
+	label.pixel_size = 0.008
+	label.modulate = Color(0.84,0.78,0.62)
+	area.add_child(label)
 	_connect_interactable(area)
 	return area
 
