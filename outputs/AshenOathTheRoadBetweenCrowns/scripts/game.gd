@@ -6,6 +6,7 @@ const EnemyAI = preload("res://scripts/enemy_ai.gd")
 const Interactable = preload("res://scripts/interactable.gd")
 const QuestManager = preload("res://scripts/quest_manager.gd")
 const DialogueManager = preload("res://scripts/dialogue_manager.gd")
+const StoryState = preload("res://scripts/story_state.gd")
 const InventoryManager = preload("res://scripts/inventory_manager.gd")
 const CraftingManager = preload("res://scripts/crafting_manager.gd")
 const CombatManager = preload("res://scripts/combat_manager.gd")
@@ -19,6 +20,7 @@ const NpcAmbient = preload("res://scripts/npc_ambient.gd")
 const CharacterPresentation = preload("res://scripts/character_presentation.gd")
 const CombatFeedback = preload("res://scripts/combat_feedback.gd")
 const CemeterySection = preload("res://scripts/zones/cemetery_section.gd")
+const CampaignSection = preload("res://scripts/zones/campaign_section.gd")
 const CharacterAnimationDriver = preload("res://scripts/character_animation_driver.gd")
 const WorldVisualUpgrade = preload("res://scripts/world_visual_upgrade.gd")
 const WorldMotionController = preload("res://scripts/world_motion_controller.gd")
@@ -29,6 +31,7 @@ var camera_rig
 var hud
 var quests
 var dialogue
+var story_state
 var inventory
 var crafting
 var combat
@@ -104,6 +107,7 @@ func _play_voice_smoke_test(voice_id: String, label: String) -> void:
 func _setup_managers() -> void:
 	quests = QuestManager.new()
 	dialogue = DialogueManager.new()
+	story_state = StoryState.new()
 	inventory = InventoryManager.new()
 	crafting = CraftingManager.new()
 	combat = CombatManager.new()
@@ -113,11 +117,13 @@ func _setup_managers() -> void:
 	audio = AudioManager.new()
 	asset_helper = AssetSpawnHelper.new()
 	hud = HUD.new()
-	for manager in [quests, dialogue, inventory, crafting, combat, save_manager, settings, audio, asset_helper, hud]:
+	for manager in [story_state, quests, dialogue, inventory, crafting, combat, save_manager, settings, audio, asset_helper, hud]:
 		add_child(manager)
 	hud.process_mode = Node.PROCESS_MODE_ALWAYS
 	quests.load_quests("res://data/quests.json")
 	dialogue.load_dialogue("res://data/dialogue.json")
+	dialogue.load_dialogue("res://data/campaign_dialogue.json")
+	dialogue.setup(story_state)
 	inventory.load_items("res://data/items.json")
 	crafting.setup(inventory, quests)
 	enemy_defs = _read_json("res://data/enemies.json")
@@ -196,6 +202,9 @@ func load_save_state(data: Dictionary) -> void:
 		_spawn_player(Vector3(0, 1, 7))
 	inventory.load_state(data.get("inventory", {}))
 	quests.load_state(data.get("quests", {}))
+	story_state.load_state(data.get("story_state", {}))
+	if int(data.get("version", 0)) < 3 and quests.is_completed("main_road_of_crows"):
+		story_state.set_flag("legacy_report_choice_required", true)
 	load_world_state(data.get("world_state", {}))
 	player.health_component.load_state(data.get("player_health", {}))
 	player.stamina_component.load_state(data.get("player_stamina", {}))
@@ -255,6 +264,9 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		_build_wychwood()
 	elif zone_id == "ruins":
 		_build_ruins()
+	elif CampaignSection.SECTIONS.has(zone_id):
+		CampaignSection.new().build(self, zone_id)
+		_apply_campaign_arrival(zone_id)
 	if zone_id in ["greyfen", "wychwood"]:
 		_add_visual_100_layer(zone_id)
 	_apply_first_route_materials(zone_root)
@@ -337,9 +349,21 @@ func _build_greyfen() -> void:
 	_make_named_interactable("widow_elna", "dialogue", "Talk to Widow Elna", Vector3(13.0, 0, 7.0), Color(0.32, 0.30, 0.42), Vector3(0.54, 0.54, 0.54))
 	_make_named_interactable("blacksmith_tor", "dialogue", "Talk to Blacksmith Tor", Vector3(9.5, 0, 3.0), Color(0.43, 0.37, 0.31), Vector3(0.54, 0.54, 0.54))
 	_make_named_interactable("farmer_toma", "dialogue", "Talk to Farmer Toma", Vector3(12, 0, -9), Color(0.39, 0.30, 0.18), Vector3(0.46, 0.46, 0.46))
+	_make_named_interactable("side_contracts", "dialogue", "Read village requests", Vector3(-3.2,0,9.4), Color(0.42,0.27,0.14), Vector3(0.4,0.4,0.4))
+	_make_named_interactable("names_decision", "dialogue", "Decide the fate of the names", Vector3(4.4,0,-5.0), Color(0.36,0.32,0.25), Vector3(0.45,0.45,0.45))
+	_make_named_interactable("crow_shrine_choice", "dialogue", "Touch the Crow Shrine", Vector3(6.5,0,-7.5), Color(0.3,0.38,0.3), Vector3(0.45,0.45,0.45))
+	_make_named_interactable("retain_evidence", "dialogue", "Keep Oren's token", Vector3(1.8,0,8.8), Color(0.38,0.24,0.16), Vector3(0.35,0.35,0.35))
+	_make_named_interactable("village_stories", "dialogue", "Resolve a village story", Vector3(-4.1,0,9.0), Color(0.34,0.23,0.14), Vector3(0.4,0.4,0.4))
 	_make_clue("grave_bell", "Inspect grave bell", Vector3(15.8, 0, 9.5), "side_widows_bell", "inspect_bell", Color(0.60, 0.55, 0.44))
+	_make_clue("grave_harl", "Inspect Harl's disturbed grave", Vector3(12.2,0,7.2), "main_bell_beneath_greyfen", "grave_harl", Color(0.3,0.28,0.25))
+	_make_clue("grave_child", "Inspect the nameless child's grave", Vector3(14.0,0,10.2), "main_bell_beneath_greyfen", "grave_child", Color(0.3,0.28,0.25))
+	_make_clue("grave_soldier", "Inspect the empty soldier's grave", Vector3(16.2,0,7.2), "main_bell_beneath_greyfen", "grave_soldier", Color(0.3,0.28,0.25))
+	_make_clue("chapel_door", "Open the ruined Crow Chapel", Vector3(16.3,0,8.0), "main_bell_beneath_greyfen", "open_chapel", Color(0.24,0.22,0.18))
+	_make_clue("register_anwen", "Take Anwen's hidden register page", Vector3(5.4,0,-6.2), "main_names_they_burned", "fragment_anwen", Color(0.42,0.36,0.22))
+	_make_clue("register_tor", "Take the forge register page", Vector3(9.0,0,4.0), "main_names_they_burned", "fragment_tor", Color(0.42,0.36,0.22))
 	_make_clue("sheepfold", "Inspect sheepfold", Vector3(15, 0, -11), "side_black_dog", "inspect_sheepfold", Color(0.36, 0.24, 0.16))
 	_make_zone_gate("To Wychwood", Vector3(0, 0, -15.2), "wychwood", Vector3(0, 1, 13))
+	_make_zone_gate("The long road", Vector3(-18,0,-10), "deep_wood", Vector3(0,1,12))
 	_make_wychwood_gate_scene(Vector3(0, 0, -14.3))
 	_make_route_markers()
 	_make_greyfen_road_of_crows_story_beats()
@@ -427,9 +451,17 @@ func _handle_interaction(area) -> void:
 	if area.interaction_type == "dialogue":
 		var dialogue_data = dialogue.get_dialogue(area.dialogue_id)
 		var played_report_voice = false
+		if _road_ready_to_report() and area.interaction_id in ["sister_anwen", "notice_board", "retain_evidence"]:
+			var report_method: String = str({"sister_anwen":"private", "notice_board":"public", "retain_evidence":"retained"}[area.interaction_id])
+			story_state.set_flag("evidence_report", report_method)
+			story_state.adjust_value("anwen_trust", 1 if report_method == "private" else (-1 if report_method == "public" else 0))
+			story_state.adjust_value("greyfen_fear", 2 if report_method == "public" else 0)
+			quests.complete_objective("main_road_of_crows", "return_village")
 		if area.interaction_id == "sister_anwen" and not bool(tutorial_flags.get("anwen_talked", false)):
 			tutorial_flags["anwen_talked"] = true
 			quests.complete_objective("main_road_of_crows", "speak_anwen")
+		elif area.interaction_id == "sister_anwen" and quests.is_active("main_bell_beneath_greyfen"):
+			quests.complete_objective("main_bell_beneath_greyfen", "meet_anwen_gate")
 			audio.set_music_state("shrine_anwen")
 			hud.toast("Anwen named the signs before you found them. Follow the old road north.")
 			hud.set_guidance_hint("Follow the lanterns to Wychwood. Find the cart, marks, and feathers.", 6.0)
@@ -446,6 +478,13 @@ func _handle_interaction(area) -> void:
 		hud.show_dialogue(dialogue_data)
 		if dialogue_data.has("voice") and not played_report_voice:
 			audio.play_voice_sequence(dialogue_data.get("voice", []))
+		elif not played_report_voice:
+			var campaign_voice: String = str({
+				"captain_senn":"voice_senn_confession", "halvern":"voice_halvern_witness",
+				"edric_campaign":"voice_edric_ledger", "assembly_choice":"voice_kael_names",
+				"white_hart":"voice_hart_choice"
+			}.get(area.interaction_id, ""))
+			if campaign_voice != "": audio.play_voice(campaign_voice)
 	elif area.interaction_type == "clue":
 		if area.quest_id == "main_road_of_crows":
 			_handle_road_of_crows_clue(area)
@@ -480,6 +519,8 @@ func _handle_interaction(area) -> void:
 			quests.complete_objective("side_bitter_roots", "accept_mira_roots")
 		elif area.interaction_id == "sacrifice_roots":
 			hud.toast("The roots drink from old blood. Mira knew this place.")
+		elif area.interaction_id == "chapel_door":
+			quests.complete_objective("main_bell_beneath_greyfen", "cemetery_ambush")
 		_mark_interaction_removed(area)
 		active_interactable = null
 		hud.set_prompt("")
@@ -501,18 +542,30 @@ func _handle_road_of_crows_clue(area) -> void:
 		return
 	match area.interaction_id:
 		"corpse":
-			quests.complete_objective("main_road_of_crows", "inspect_corpse")
+			quests.complete_evidence("main_road_of_crows", "bram")
 		"claw_marks":
-			quests.complete_objective("main_road_of_crows", "inspect_corpse")
-			quests.complete_objective("main_road_of_crows", "find_claw_marks")
+			quests.complete_evidence("main_road_of_crows", "vargan_wire")
 		"black_feathers":
-			quests.complete_objective("main_road_of_crows", "inspect_corpse")
-			quests.complete_objective("main_road_of_crows", "find_claw_marks")
-			quests.complete_objective("main_road_of_crows", "find_black_feathers")
+			quests.complete_evidence("main_road_of_crows", "sella")
 		"tracks":
-			quests.complete_objective("main_road_of_crows", "inspect_corpse")
-			quests.complete_objective("main_road_of_crows", "find_claw_marks")
-			quests.complete_objective("main_road_of_crows", "find_black_feathers")
+			quests.complete_evidence("main_road_of_crows", "bram")
+			quests.complete_evidence("main_road_of_crows", "sella")
+			quests.complete_evidence("main_road_of_crows", "vargan_wire")
+			quests.complete_evidence("main_road_of_crows", "drag_marks")
+			quests.complete_evidence("main_road_of_crows", "oren")
+
+func _apply_campaign_arrival(zone_id: String) -> void:
+	var arrivals := {
+		"deep_wood":["main_teeth_in_rain","name_the_dead"],
+		"old_mill":["main_ash_at_the_mill","reach_mill"],
+		"bandit_road":["main_soldier_without_banner","reach_bandit_road"],
+		"vargan_approach":["main_blood_under_stone","enter_vargan"],
+		"undercroft":["main_last_witness","reach_undercroft"],
+		"assembly":["main_crowns_without_mercy","greyfen_assembly"],
+		"hart_glade":["main_hart_remembers","enter_glade"]
+	}
+	if arrivals.has(zone_id):
+		quests.complete_objective(arrivals[zone_id][0], arrivals[zone_id][1])
 
 func _road_ready_to_report() -> bool:
 	return quests.is_active("main_road_of_crows") and quests.is_objective_done("main_road_of_crows", "fight_ghoulkin") and not quests.is_objective_done("main_road_of_crows", "return_village")
@@ -533,6 +586,23 @@ func _handle_dialogue_action(action: Dictionary) -> void:
 	elif type == "give_ingredients":
 		inventory.add_ingredients(action.get("items", {}))
 		hud.toast("Supplies added.")
+	elif type == "resolve_side_quest":
+		var side_id := str(action.get("quest", ""))
+		if quests.is_active(side_id):
+			for objective in quests.active[side_id]["objectives"].duplicate(true):
+				quests.complete_objective(side_id, str(objective["id"]))
+			story_state.set_flag("%s_outcome" % side_id, str(action.get("outcome", "resolved")))
+			hud.toast(str(action.get("result", "Greyfen will remember what you chose.")))
+	elif type == "story_choice":
+		for id in action.get("sets_flags", {}):
+			story_state.set_flag(str(id), action["sets_flags"][id])
+		for id in action.get("adjusts_values", {}):
+			story_state.adjust_value(str(id), int(action["adjusts_values"][id]))
+		if action.has("quest") and action.has("objective"):
+			quests.complete_objective(str(action["quest"]), str(action["objective"]))
+		for completion in action.get("completes", []):
+			quests.complete_objective(str(completion.get("quest", "")), str(completion.get("objective", "")))
+		hud.toast(str(action.get("result", "Your choice will be remembered.")))
 	elif type == "ending":
 		_complete_ending(action.get("ending", "expose"))
 		return
@@ -548,7 +618,8 @@ func _on_launch_accepted() -> void:
 
 func _complete_ending(ending: String) -> void:
 	quests.world_flags["ending"] = ending
-	quests.complete_objective("main_hart_remembers", "speak_hart")
+	story_state.set_flag("final_covenant", {"expose":"witness", "free":"mercy", "bind":"duty", "kill":"ash"}.get(ending, ending))
+	quests.complete_objective("main_hart_remembers", "hear_testimony")
 	if ending == "kill" or ending == "bind":
 		pending_ending = ending
 		active_interactable = null
@@ -576,6 +647,11 @@ func _show_ending_consequence(ending: String) -> void:
 		body = "Kael breaks the avatar and binds the White Hart again. Greyfen prospers for now, and his name joins the crime beneath the stones."
 	else:
 		body = "Kael exposes House Vargan. The village turns on Edric, the spirit remains wounded, and truth finally has witnesses."
+	body += "\n\nAnwen: %s. Greyfen: %s. The Hart's debt: %s." % [
+		"trusted Kael" if int(story_state.values.get("anwen_trust",0)) > 0 else "kept her distance",
+		"heard the names" if story_state.get_flag("names_policy","") == "published" else "learned the truth slowly",
+		str(story_state.values.get("hart_debt",0))
+	]
 	get_tree().paused = true
 	hud.show_ending(title, body)
 	save_manager.checkpoint(self)
@@ -770,7 +846,8 @@ func _on_enemy_died(enemy) -> void:
 	elif enemy.enemy_id == "bog_wretch":
 		quests.complete_objective("main_teeth_in_rain", "fight_bog_wretch")
 	elif enemy.enemy_id == "gravebound_knight":
-		quests.complete_objective("main_blood_under_stone", "fight_knight")
+		if current_zone_id == "undercroft":
+			quests.complete_objective("main_last_witness", "break_halvern_guard")
 		if current_zone_id == "ruins" and quests.is_unlocked("main_hart_remembers"):
 			_make_named_interactable("white_hart", "dialogue", "Speak to the White Hart", Vector3(12, 0, 10), Color(0.86, 0.83, 0.70), Vector3(0.9, 1.6, 0.9))
 	elif enemy.enemy_id == "white_hart_avatar":

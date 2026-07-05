@@ -220,6 +220,27 @@ func _build_voice_library() -> void:
 	voices["voice_player_return_report_01"] = _voice_stub([92.0, 108.0, 86.0], 0.96, 0.064)
 	voices["voice_sister_anwen_test"] = _voice_stub([146.0, 172.0, 122.0, 158.0], 1.45, 0.085)
 	voices["voice_player_test"] = _voice_stub([92.0, 110.0, 84.0, 104.0], 1.20, 0.090)
+	var campaign_lines := {
+		"voice_senn_confession":"I barred the road. Halvern refused. They hanged him before dawn.",
+		"voice_halvern_witness":"Do not call me loyal. I obeyed until obedience became murder.",
+		"voice_edric_ledger":"I inherited the proof, then chose every morning not to open it.",
+		"voice_anwen_confession":"The shrine taught Greyfen how to forget. I kept that teaching alive.",
+		"voice_mira_ash":"Medicine made the knowing useful. It did not make it clean.",
+		"voice_rook_road":"Roads do not lie. People redraw them until they do.",
+		"voice_kael_names":"Bram. Sella. Oren. These names are not weapons.",
+		"voice_hart_choice":"Ask which debt you are willing to carry awake.",
+		"voice_kael_witness":"The dead were denied names. Tonight Greyfen will hear them.",
+		"voice_kael_mercy":"Truth without mercy makes another road of bodies.",
+		"voice_kael_duty":"No one else inherits this chain. It ends with me.",
+		"voice_kael_ash":"A witness can die. What it witnessed cannot.",
+		"voice_elna_bell":"My Harl is dead, but the bell still knows his hand.",
+		"voice_tor_iron":"Iron remembers the shape of every fire.",
+		"voice_oren_thread":"The thread is small enough for a child to trust.",
+		"voice_sella_record":"Sella carried flour, needles, and a letter she never sent."
+	}
+	for voice_id in campaign_lines:
+		voice_texts[voice_id] = campaign_lines[voice_id]
+		voices[voice_id] = _voice_stub([102.0, 118.0, 94.0], 1.05, 0.055)
 
 func _build_music_library() -> void:
 	music["main_menu"] = _music_loop([55.0, 82.0, 110.0, 165.0], 6.4, 0.050, 0.016)

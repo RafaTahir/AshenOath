@@ -8,13 +8,14 @@ signal message(text: String)
 
 func save_game(game, path: String = SAVE_PATH, label: String = "Game saved.") -> void:
 	var data = {
-		"version": 2,
+		"version": 3,
 		"zone": game.current_zone_id,
 		"player_position": [game.player.global_position.x, game.player.global_position.y, game.player.global_position.z],
 		"player_health": game.player.health_component.save_state(),
 		"player_stamina": game.player.stamina_component.save_state(),
 		"inventory": game.inventory.save_state(),
 		"quests": game.quests.save_state(),
+		"story_state": game.story_state.save_state(),
 		"world_state": game.save_world_state()
 	}
 	var file = FileAccess.open(path, FileAccess.WRITE)

@@ -7,7 +7,12 @@ signal quest_completed(id: String)
 var quest_defs = {}
 var active = {}
 var completed = {}
-var unlocked = {"main_road_of_crows": true, "side_widows_bell": true}
+var unlocked = {
+	"main_road_of_crows": true, "side_widows_bell": true, "side_iron_remembers": true,
+	"side_bitter_roots": true, "side_black_dog": true, "side_empty_grave": true,
+	"side_childs_charm": true, "side_soldiers_debt": true, "side_millers_measure": true,
+	"side_rooks_map": true, "side_three_candles": true
+}
 var world_flags = {}
 
 func load_quests(path: String) -> void:
@@ -25,7 +30,9 @@ func start_quest(id: String) -> bool:
 		return false
 	var objectives: Array = []
 	for objective in quest_defs[id].get("objectives", []):
-		objectives.append({"id": objective["id"], "text": objective["text"], "done": false})
+		var runtime_objective: Dictionary = objective.duplicate(true)
+		runtime_objective["done"] = false
+		objectives.append(runtime_objective)
 	active[id] = {"objectives": objectives}
 	message.emit("Quest started: %s" % quest_defs[id].get("title", id))
 	changed.emit()
@@ -40,11 +47,34 @@ func complete_objective(quest_id: String, objective_id: String) -> bool:
 			if bool(objective.get("done", false)):
 				return false
 			objective["done"] = true
+			if str(objective.get("completion_flag", "")) != "":
+				world_flags[str(objective["completion_flag"])] = true
 			message.emit("Objective complete: %s" % objective["text"])
+			_update_evidence_groups(quest_id)
 			_try_complete_quest(quest_id)
 			changed.emit()
 			return true
 	return false
+
+func complete_evidence(quest_id: String, evidence_id: String) -> bool:
+	return complete_objective(quest_id, evidence_id)
+
+func _update_evidence_groups(quest_id: String) -> void:
+	if not active.has(quest_id): return
+	var objectives: Array = active[quest_id]["objectives"]
+	var groups: Dictionary = {}
+	for objective in objectives:
+		var group := str(objective.get("group", ""))
+		if group == "": continue
+		if not groups.has(group): groups[group] = {"done": 0, "required": int(objective.get("required_count", 1))}
+		if bool(objective.get("done", false)): groups[group]["done"] += 1
+	for objective in objectives:
+		var group := str(objective.get("group", ""))
+		if group == "" or not groups.has(group): continue
+		if bool(objective.get("optional", false)):
+			objective["optional_satisfied"] = int(groups[group]["done"]) >= int(groups[group]["required"])
+		elif int(objective.get("required_count", 0)) > 0 and int(groups[group]["done"]) >= int(objective["required_count"]):
+			objective["done"] = true
 
 func is_objective_done(quest_id: String, objective_id: String) -> bool:
 	if not active.has(quest_id):
@@ -86,7 +116,7 @@ func get_journal_text() -> String:
 
 func _try_complete_quest(id: String) -> void:
 	for objective in active[id]["objectives"]:
-		if not bool(objective.get("done", false)):
+		if not bool(objective.get("done", false)) and not bool(objective.get("optional", false)):
 			return
 	completed[id] = true
 	active.erase(id)
@@ -94,6 +124,9 @@ func _try_complete_quest(id: String) -> void:
 		unlocked[next_id] = true
 	message.emit("Quest complete: %s" % quest_defs[id].get("title", id))
 	quest_completed.emit(id)
+	if str(quest_defs[id].get("type", "")) == "main":
+		for next_id in quest_defs[id].get("unlocks", []):
+			start_quest(str(next_id))
 
 func save_state() -> Dictionary:
 	return {

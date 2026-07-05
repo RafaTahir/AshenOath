@@ -25,9 +25,11 @@ func apply_zone(zone_id: String) -> void:
 	env.adjustment_enabled = true
 	env.adjustment_contrast = 1.34
 	env.adjustment_saturation = 0.92
-	if zone_id == "wychwood":
+	var forest_zones := ["wychwood","deep_wood","marsh_crossing","burned_farmstead","hart_glade"]
+	var ruin_zones := ["ruins","old_mill","bandit_road","vargan_approach","vargan_court","record_hall","undercroft","assembly"]
+	if zone_id in forest_zones:
 		_configure_wychwood(env)
-	elif zone_id == "ruins":
+	elif zone_id in ruin_zones:
 		_configure_ruins(env)
 	else:
 		_configure_greyfen(env)
@@ -107,13 +109,13 @@ func _position_sky_layer(zone_id: String) -> void:
 	if sky_dome == null:
 		return
 	var origin = Vector3.ZERO
-	if zone_id == "wychwood":
+	if zone_id in ["wychwood","deep_wood","marsh_crossing","burned_farmstead","hart_glade"]:
 		origin = Vector3(0, -10, 0)
 		sun_disc.position = Vector3(-95, 58, -120)
 		sun_disc.rotation_degrees = Vector3(64, -38, 0)
 		cloud_layer.position = Vector3(0, 0, 8)
 		cloud_layer.visible = false
-	elif zone_id == "ruins":
+	elif zone_id in ["ruins","old_mill","bandit_road","vargan_approach","vargan_court","record_hall","undercroft","assembly"]:
 		origin = Vector3(0, -12, 0)
 		sun_disc.position = Vector3(110, 70, -95)
 		sun_disc.rotation_degrees = Vector3(60, 42, 0)
