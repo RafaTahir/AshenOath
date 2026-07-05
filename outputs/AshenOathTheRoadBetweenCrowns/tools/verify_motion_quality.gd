@@ -24,9 +24,9 @@ func _initialize() -> void:
 	_assert(player.animation_driver != null and player.animation_driver.is_valid(), "player has no valid skeletal animation driver")
 	_assert(player.left_leg_proxy == null, "player still exposes proxy-box animation")
 	if player.animation_driver != null:
-		_assert(_clip_moves_bones(player.animation_driver, "Run_Weapon"), "player run clip does not move real bones")
-		_assert(_clip_moves_bones(player.animation_driver, "Sword_Attack"), "player sword attack does not move real bones")
-		_assert(_clip_moves_bones(player.animation_driver, "Roll"), "player dodge does not move real bones")
+		_assert(_state_moves_bones(player.animation_driver, "run"), "player run clip does not move real bones")
+		_assert(_state_moves_bones(player.animation_driver, "attack_light"), "player sword attack does not move real bones")
+		_assert(_state_moves_bones(player.animation_driver, "dodge"), "player dodge does not move real bones")
 
 	var npc_drivers: Array[Node] = game.find_children("CharacterAnimationDriver", "Node", true, false)
 	var valid_npcs := 0
@@ -45,9 +45,9 @@ func _initialize() -> void:
 	for enemy in game.active_enemies:
 		_assert(enemy.animation_driver != null and enemy.animation_driver.is_valid(), "%s has no valid skeleton/AnimationPlayer" % enemy.enemy_id)
 		if enemy.animation_driver != null:
-			_assert(_clip_moves_bones(enemy.animation_driver, "Run"), "%s run clip does not move real bones" % enemy.enemy_id)
-			_assert(_clip_moves_bones(enemy.animation_driver, "Punch"), "%s attack clip does not move real bones" % enemy.enemy_id)
-			_assert(_clip_moves_bones(enemy.animation_driver, "Death"), "%s death clip does not move real bones" % enemy.enemy_id)
+			_assert(_state_moves_bones(enemy.animation_driver, "run"), "%s run clip does not move real bones" % enemy.enemy_id)
+			_assert(_state_moves_bones(enemy.animation_driver, "attack"), "%s attack clip does not move real bones" % enemy.enemy_id)
+			_assert(_state_moves_bones(enemy.animation_driver, "death"), "%s death clip does not move real bones" % enemy.enemy_id)
 
 	game.queue_free()
 	await process_frame
@@ -69,6 +69,12 @@ func _clip_moves_bones(driver: Node, clip: StringName) -> bool:
 		if _transform_delta(before[index], skeleton.get_bone_pose(index)) > 0.002:
 			return true
 	return false
+
+func _state_moves_bones(driver: Node, state: String) -> bool:
+	if not driver.has_method("get_clip_for_state"):
+		return false
+	var clip: StringName = driver.get_clip_for_state(state)
+	return clip != StringName() and _clip_moves_bones(driver, clip)
 
 func _transform_delta(a: Transform3D, b: Transform3D) -> float:
 	return a.origin.distance_to(b.origin) + a.basis.x.distance_to(b.basis.x) + a.basis.y.distance_to(b.basis.y)

@@ -8,7 +8,7 @@ signal message(text: String)
 
 func save_game(game, path: String = SAVE_PATH, label: String = "Game saved.") -> void:
 	var data = {
-		"version": 3,
+		"version": 4,
 		"zone": game.current_zone_id,
 		"player_position": [game.player.global_position.x, game.player.global_position.y, game.player.global_position.z],
 		"player_health": game.player.health_component.save_state(),

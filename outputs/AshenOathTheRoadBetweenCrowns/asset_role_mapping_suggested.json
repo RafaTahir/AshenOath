@@ -102,7 +102,17 @@
         "source_pack": "Quaternius Ultimate Monsters",
         "license": "CC0 1.0",
         "confidence": 95,
-        "notes": "Manual enemy-role match from available creature/humanoid assets. Runtime uses OBJ fallback loader for this source asset."
+        "notes": "Animated Orc Skull base retained for the Brute and Raider silhouettes."
+      },
+      "ghoulkin_skeleton": {
+        "status": "manual",
+        "asset_id": "quaternius_skeleton_animated_cc0",
+        "path": "res://assets_external/animated/Skeleton_Animated_CC0.fbx",
+        "file_name": "Skeleton_Animated_CC0.fbx",
+        "source_pack": "Quaternius Lowpoly Animated Monsters",
+        "license": "CC0 1.0",
+        "confidence": 95,
+        "notes": "Selected rigged skeleton used for the leaner Wychwood cursed-dead variants."
       },
       "bog_wretch": {
         "status": "manual",

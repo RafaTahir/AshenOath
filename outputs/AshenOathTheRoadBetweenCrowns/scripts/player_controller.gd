@@ -70,6 +70,7 @@ var beam_right_hand_glow: MeshInstance3D
 var sheathed_sword_visual: Node3D
 var beam_cast_state := ""
 var beam_state_time := 0.0
+var beam_locked_direction := Vector3.ZERO
 var movement_state = "idle"
 var movement_blend = 0.0
 var strafe_blend = 0.0
@@ -147,7 +148,7 @@ func _handle_movement(delta: float) -> void:
 			response = deceleration
 		velocity.x = move_toward(velocity.x, target_velocity.x, response * delta)
 		velocity.z = move_toward(velocity.z, target_velocity.z, response * delta)
-		if move_dir.length() > 0.1:
+		if move_dir.length() > 0.1 and beam_cast_state == "":
 			var target_yaw = atan2(-move_dir.x, -move_dir.z)
 			rotation.y = lerp_angle(rotation.y, target_yaw, 1.0 - exp(-turn_speed * delta))
 		movement_state = "run" if is_running else ("backward" if input_vec.y > 0.15 else ("strafe" if abs(input_vec.x) > 0.55 else ("walk" if move_dir.length() > 0.1 else "idle")))
@@ -256,6 +257,7 @@ func _handle_beam_input() -> void:
 		beam_state_time = 0.24
 		beam_charging = true
 		beam_charge_time = 0.0
+		_lock_beam_direction()
 		_set_sword_sheathed(true)
 	if beam_cast_state == "charging" and Input.is_action_pressed("oathfire_beam"):
 		beam_charge_time = min(beam_charge_time + get_physics_process_delta_time(), 1.25)
@@ -263,9 +265,9 @@ func _handle_beam_input() -> void:
 	if beam_cast_state == "charging" and Input.is_action_just_released("oathfire_beam"):
 		var ratio = clamp((beam_charge_time - 0.35) / 0.90, 0.0, 1.0)
 		if beam_charge_time >= 0.35 and stamina_component.spend(40.0):
-			var direction = -global_transform.basis.z.normalized()
-			if camera_controller != null:
-				direction = camera_controller.get_flat_forward()
+			var direction = beam_locked_direction
+			if direction.length_squared() < 0.5:
+				direction = -global_transform.basis.z.normalized()
 			face_target(global_position + direction * 4.0)
 			beam_requested.emit(ratio, direction)
 			beam_cooldown = 4.0
@@ -301,6 +303,7 @@ func _update_beam_sequence(delta: float) -> void:
 		beam_cast_state = ""
 		beam_charging = false
 		beam_charge_time = 0.0
+		beam_locked_direction = Vector3.ZERO
 		_set_sword_sheathed(false)
 
 func _begin_beam_redraw() -> void:
@@ -314,8 +317,20 @@ func cancel_beam_charge() -> void:
 	beam_charge_time = 0.0
 	beam_cast_state = ""
 	beam_state_time = 0.0
+	beam_locked_direction = Vector3.ZERO
 	_hide_beam_charge_visuals()
 	_set_sword_sheathed(false)
+
+func _lock_beam_direction() -> Vector3:
+	beam_locked_direction = -global_transform.basis.z
+	beam_locked_direction.y = 0.0
+	if beam_locked_direction.length_squared() < 0.5:
+		beam_locked_direction = Vector3.FORWARD
+	beam_locked_direction = beam_locked_direction.normalized()
+	return beam_locked_direction
+
+func get_beam_locked_direction() -> Vector3:
+	return beam_locked_direction
 
 func _update_beam_charge_visual() -> void:
 	if beam_charge_visual == null:

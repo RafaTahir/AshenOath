@@ -1,0 +1,15 @@
+VISUAL-003 ambientCG PBR materials
+
+License: Creative Commons CC0 1.0
+Source: https://ambientcg.com/
+
+Selected 1K-JPG assets:
+- Ground071
+- Ground029
+- PavingStones150
+- Plaster001
+- Planks037B
+- RoofingTiles014A
+- Bricks008
+
+Only processed runtime albedo, OpenGL normal, and packed AO/roughness maps are distributed with the game.

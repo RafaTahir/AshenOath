@@ -4,8 +4,8 @@ signal changed(settings: Dictionary)
 
 var settings = {
 	"quality_preset": "balanced",
-	"resolution_scale": 0.65,
-	"shadow_quality": 0,
+	"resolution_scale": 1.0,
+	"shadow_quality": 1,
 	"foliage_density": 1,
 	"visual_density": 1,
 	"vsync": true,
@@ -42,6 +42,7 @@ func apply() -> void:
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED if settings["vsync"] else DisplayServer.VSYNC_DISABLED)
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN if settings["fullscreen"] else DisplayServer.WINDOW_MODE_WINDOWED)
 	RenderingServer.viewport_set_scaling_3d_scale(get_viewport().get_viewport_rid(), float(settings["resolution_scale"]))
+	get_viewport().msaa_3d = Viewport.MSAA_2X if str(settings.get("quality_preset", "balanced")) == "quality" else Viewport.MSAA_DISABLED
 	changed.emit(settings)
 
 func set_potato_mode(enabled: bool) -> void:
@@ -55,20 +56,20 @@ func set_quality_preset(preset: String) -> void:
 	settings["potato_mode"] = normalized == "potato"
 	match normalized:
 		"potato":
-			settings["resolution_scale"] = 0.55
+			settings["resolution_scale"] = 0.65
 			settings["shadow_quality"] = 0
 			settings["foliage_density"] = 0
 			settings["visual_density"] = 0
 			settings["target_fps"] = 30
 		"quality":
-			settings["resolution_scale"] = 0.85
+			settings["resolution_scale"] = 1.0
 			settings["shadow_quality"] = 1
 			settings["foliage_density"] = 2
 			settings["visual_density"] = 2
 			settings["target_fps"] = 30
 		_:
-			settings["resolution_scale"] = 0.65
-			settings["shadow_quality"] = 0
+			settings["resolution_scale"] = 1.0
+			settings["shadow_quality"] = 1
 			settings["foliage_density"] = 1
 			settings["visual_density"] = 1
 			settings["target_fps"] = 30
@@ -98,7 +99,7 @@ func get_performance_snapshot() -> Dictionary:
 	}
 
 func cycle_resolution_scale() -> void:
-	var values = [0.55, 0.65, 0.85, 1.0]
+	var values = [0.65, 0.85, 1.0]
 	var idx = values.find(float(settings["resolution_scale"]))
 	settings["resolution_scale"] = values[(idx + 1) % values.size()]
 	apply()

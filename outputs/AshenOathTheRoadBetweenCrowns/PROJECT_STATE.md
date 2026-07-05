@@ -574,16 +574,16 @@ Known verifier note: Godot headless may emit ObjectDB cleanup warnings after pas
 ## Known Bugs And Limitations
 
 - Visual quality is still low-poly/stylized and well below The Witcher 3.
-- Performance mode makes the browser build smoother but reduces scenery density and removes grass.
-- Human models still lack high-fidelity faces, hands, hair, facial rigs, clothing layers, and final silhouettes.
-- Character and enemy animation is mostly procedural; the downloaded animation libraries are not fully retargeted into controllers.
+- Balanced now runs at native 1280x720 and retains textured batched grass; Potato reduces render scale and secondary material effects.
+- Human models are skeletal, textured, lit, and animated but still lack realistic faces, hands, hair, facial rigs, and bespoke clothing.
+- Main-route character and Wychwood enemy skeletons animate; broader animation retargeting and facial performance remain incomplete.
 - Major areas beyond the first route are partial, blocked, or data-only.
 - Castle Vargan/Ruins should not be treated as release-ready.
 - Side quests are represented in data but not all have fully authored gameplay spaces.
 - Audio is generated/procedural feedback, not mastered final game audio.
 - UI is functional and themed but not final AAA-grade presentation.
 - Browser support has focused on Chrome/Edge/Firefox desktop; Safari and mobile are experimental.
-- The Web export remains large because the include filters still package many assets.
+- The slim Web export explicitly packages selected runtime assets and is checked against a 100 MB ceiling.
 - The project is not currently organized as a large studio-grade scene hierarchy; much of the world is built procedurally in `game.gd`.
 - Asset licenses are mostly permissive/CC0, but public release should still include license/credit review from `assets_external/licenses/`.
 - WebGL performance on the Dell 7280 is sensitive to draw calls, imported GLBs, transparency, lights, and resolution scale.
@@ -592,13 +592,10 @@ Known verifier note: Godot headless may emit ObjectDB cleanup warnings after pas
 
 ### Short Term
 
-- Add an on-screen FPS/performance readout for browser testing.
-- Add explicit quality presets instead of using Potato Mode as the default-only path.
-- Reduce Web export size by narrowing runtime asset include filters.
-- Profile load time and runtime frame pacing in Chrome and Edge.
-- Restore some visual density with cheaper batched/procedural geometry instead of many GLB instances.
-- Improve Greyfen/Wychwood composition without reintroducing stutter.
-- Make screenshot regression compare performance and quality presets separately.
+- Add a presented loading state for the approximately 1.1-second cold Wychwood construction.
+- Continue lowering draw calls from 178 toward 140 without removing route silhouettes.
+- Profile the deployed build in Chrome and Edge rather than relying only on the native ANGLE run.
+- Produce bespoke realistic human assets as a separate licensed asset-production milestone.
 
 ### Medium Term
 
@@ -630,14 +627,16 @@ The project currently satisfies:
 - Runtime verifier passes.
 - Screenshot capture passes.
 - Web export verifier passes.
-- First route is playable in a low-spec browser configuration.
+- First route is playable at native 1280x720 Balanced quality.
+- Dell-class Intel HD 620 test holds 30 FPS with a 229 ms warm route transition.
+- PBR terrain/building surfaces, saved day/night time, cleaned skeletal characters, and mixed Wychwood enemy rigs are active.
 
 The project does not yet satisfy:
 
 - AAA visual fidelity.
 - Finished full-game scope.
-- High-fidelity humans.
-- Fully animated combat/NPCs.
+- Photoreal or high-fidelity humans.
+- Full facial animation and studio-quality combat motion capture.
 - Fully authored side quests and later main quests.
 - Small optimized final Web payload.
 - Broad browser/device QA.

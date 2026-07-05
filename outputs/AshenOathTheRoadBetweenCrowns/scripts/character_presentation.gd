@@ -7,6 +7,9 @@ static func apply_player(owner: Node3D, visual_root: Node3D) -> void:
 		return
 	owner.set_meta("character_presentation_applied", true)
 	_add_contact_shadow(owner, Vector3(0.92, 0.018, 0.62), 0.0)
+	if _has_skeleton(visual_root):
+		_tint_skeletal_materials(visual_root, Color(0.90, 0.92, 0.88))
+		return
 	var quality = _quality_details_enabled(owner)
 	_add_cloak_panel(visual_root, "PlayerCloakSilhouette", Vector3(-0.16, 0.96, 0.31), Vector3(0.24, 0.88, 0.080), Color(0.050, 0.058, 0.052), -8.0)
 	_add_cloak_panel(visual_root, "PlayerCloakSilhouette", Vector3(0.16, 0.96, 0.31), Vector3(0.24, 0.88, 0.080), Color(0.060, 0.066, 0.056), -8.0)
@@ -33,6 +36,14 @@ static func apply_npc(owner: Node3D, role_id: String) -> void:
 	owner.set_meta("character_presentation_applied", true)
 	_add_contact_shadow(owner, Vector3(0.72, 0.016, 0.50), 0.0)
 	var role = role_id.to_lower()
+	if _has_skeleton(owner):
+		var tint := Color(0.92, 0.88, 0.82)
+		if role == "sister_anwen": tint = Color(0.88, 0.90, 0.98)
+		elif role == "mira": tint = Color(0.86, 0.96, 0.88)
+		elif role == "rook": tint = Color(0.78, 0.80, 0.82)
+		elif role.contains("blacksmith"): tint = Color(0.90, 0.82, 0.74)
+		_tint_skeletal_materials(owner, tint)
+		return
 	if role == "sister_anwen":
 		_add_cloak_panel(owner, "SisterAnwenRobeFall", Vector3(-0.14, 0.88, 0.20), Vector3(0.22, 0.92, 0.075), Color(0.12, 0.14, 0.22), -4.0)
 		_add_cloak_panel(owner, "SisterAnwenRobeFall", Vector3(0.14, 0.88, 0.20), Vector3(0.22, 0.92, 0.075), Color(0.10, 0.12, 0.19), -4.0)
@@ -69,6 +80,9 @@ static func apply_enemy(owner: Node3D, scale_value: Vector3 = Vector3(0.78, 0.01
 		return
 	owner.set_meta("character_grounding_applied", true)
 	_add_contact_shadow(owner, scale_value, 0.0)
+	if _has_skeleton(owner):
+		_tint_skeletal_materials(owner, Color(0.54, 0.57, 0.49))
+		return
 	var enemy_id = str(owner.get("enemy_id")) if owner.get("enemy_id") != null else ""
 	if enemy_id == "ghoulkin":
 		_add_ghoulkin_details(owner, _quality_details_enabled(owner))
@@ -209,3 +223,22 @@ static func _has_skeleton(root: Node) -> bool:
 		if _has_skeleton(child):
 			return true
 	return false
+
+static func _tint_skeletal_materials(root: Node, tint: Color) -> void:
+	if root is MeshInstance3D:
+		var mesh_instance := root as MeshInstance3D
+		if mesh_instance.mesh != null:
+			for surface_index in range(mesh_instance.mesh.get_surface_count()):
+				var source := mesh_instance.get_surface_override_material(surface_index)
+				if source == null:
+					source = mesh_instance.mesh.surface_get_material(surface_index)
+				if source is StandardMaterial3D:
+					var material := (source as StandardMaterial3D).duplicate() as StandardMaterial3D
+					material.albedo_color *= tint
+					material.roughness = clamp(material.roughness, 0.48, 0.92)
+					material.shading_mode = BaseMaterial3D.SHADING_MODE_PER_PIXEL
+					material.metallic = minf(material.metallic, 0.08)
+					material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+					mesh_instance.set_surface_override_material(surface_index, material)
+	for child in root.get_children():
+		_tint_skeletal_materials(child, tint)

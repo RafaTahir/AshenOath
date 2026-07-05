@@ -65,6 +65,9 @@ func get_skeleton() -> Skeleton3D:
 func get_animation_player() -> AnimationPlayer:
 	return animation_player
 
+func get_clip_for_state(state: String) -> StringName:
+	return _clip_for(state)
+
 func _play_state(state: String, blend: float) -> void:
 	if current_state == state and animation_player.is_playing():
 		return

@@ -11,23 +11,36 @@ func _initialize() -> void:
 	await process_frame
 	game.call("_new_game")
 	await _frames(3)
-	var found: Dictionary = {}
-	_collect_features(game.zone_root, found)
+	_assert(game.zone_root.find_child("AuthoredVisualLayer_Greyfen", true, false) != null, "authored Greyfen visual layer is missing")
+	_assert(not _has_synthetic_feature(game.zone_root), "synthetic Visual100 marker geometry remains in Greyfen")
+	_assert(_has_textured_surface(game.zone_root), "Greyfen has no textured authored surface")
 	game.call("_load_zone", "wychwood", Vector3.ZERO)
 	await _frames(3)
-	_collect_features(game.zone_root, found)
-	for id in range(1, 101):
-		_assert(found.has(id), "Visual100 feature %03d is missing from the playable slice" % id)
+	_assert(game.zone_root.find_child("AuthoredVisualLayer_Wychwood", true, false) != null, "authored Wychwood visual layer is missing")
+	_assert(not _has_synthetic_feature(game.zone_root), "synthetic Visual100 marker geometry remains in Wychwood")
+	_assert(_has_textured_surface(game.zone_root), "Wychwood has no textured authored surface")
 	_assert(game.zone_root.find_child("WorldMotionController", true, false) != null, "shared world motion controller is missing")
 	_assert(game.zone_root.find_child("SurfaceFeedbackManager", true, false) != null, "surface feedback manager is missing")
 	game.queue_free()
 	await process_frame
 	_finish()
 
-func _collect_features(node: Node, found: Dictionary) -> void:
-	if node.has_meta("feature_id"):
-		found[int(node.get_meta("feature_id"))] = true
-	for child in node.get_children(): _collect_features(child, found)
+func _has_synthetic_feature(node: Node) -> bool:
+	if node.has_meta("feature_id") or node.name.begins_with("Visual100Feature"):
+		return true
+	for child in node.get_children():
+		if _has_synthetic_feature(child): return true
+	return false
+
+func _has_textured_surface(node: Node) -> bool:
+	if node is MeshInstance3D:
+		var mesh_node := node as MeshInstance3D
+		var material := mesh_node.material_override as StandardMaterial3D
+		if material != null and material.albedo_texture != null and material.normal_texture != null:
+			return true
+	for child in node.get_children():
+		if _has_textured_surface(child): return true
+	return false
 
 func _frames(count: int) -> void:
 	for _i in range(count): await process_frame
@@ -39,5 +52,5 @@ func _finish() -> void:
 	if not failures.is_empty():
 		print("Visual100 verification failed")
 		quit(1); return
-	print("Visual100 verification complete: all 100 numbered improvements are present")
+	print("Visual100 replacement verification complete: synthetic markers removed; authored systems present")
 	quit()

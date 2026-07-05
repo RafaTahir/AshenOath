@@ -23,7 +23,7 @@ func _initialize() -> void:
 
 	var anwen = game.zone_root.find_child("sister_anwen", true, false)
 	check(anwen != null and _find_type(anwen, "Skeleton3D") != null, "Sister Anwen is not a rigged human")
-	check(anwen != null and anwen.find_child("SisterAnwenGoldStole", true, false) != null, "Anwen role colors/details are missing")
+	check(anwen != null and anwen.find_child("SisterAnwenGoldStole", true, false) == null, "Anwen still has a floating root-mounted stole")
 	if anwen != null:
 		game.player.global_position = anwen.global_position + Vector3(0.8, 0, 1.4)
 		game.call("_stage_dialogue_moment", anwen)
@@ -33,7 +33,10 @@ func _initialize() -> void:
 		check(bool(anwen.get_meta("dialogue_facing_lock", false)), "Anwen dialogue facing lock was not set")
 		check(abs(angle_difference(locked_yaw, anwen.rotation.y)) < 0.01, "Anwen turned away while dialogue facing was locked")
 
-	check(game.player.find_child("PlayerFacePlane", true, false) != null, "Kael face presentation is missing")
+	check(_find_type(game.player, "Skeleton3D") != null, "Kael is not using a skeletal character")
+	check(game.player.find_child("PlayerFacePlane", true, false) == null, "Kael still has a floating face plane")
+	for artifact_name in ["PlayerCloakSilhouette", "PlayerHarness", "PlayerScabbard", "PlayerLeftBoot", "PlayerRightBoot"]:
+		check(game.player.find_child(artifact_name, true, false) == null, "Kael still has root-mounted artifact %s" % artifact_name)
 	check(game.player.find_child("OathfireLeftHand", true, false) != null and game.player.find_child("OathfireRightHand", true, false) != null, "Oathfire hand choreography nodes are missing")
 	check(game.player.find_child("OathfireSheathedSword", true, false) != null, "Oathfire sheathed sword state is missing")
 	check(game.player.find_child("visible_sword_slash_arc_root", true, false) != null, "Sword-aligned slash trail is missing")

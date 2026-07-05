@@ -36,6 +36,7 @@ __pycache__/
 **/downloads/
 **/raw_downloads/
 **/raw/
+**/assets_external/textures/pbr/
 **/cache/
 **/*.zip
 **/*.7z

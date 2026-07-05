@@ -43,6 +43,7 @@ var animation_driver
 var behavior_profile := "direct"
 var flank_sign := 1.0
 var parry_exposed_time := 0.0
+var far_tick_accumulator := 0.0
 
 func setup(id: String, definition: Dictionary, target: Node3D) -> void:
 	enemy_id = id
@@ -71,6 +72,15 @@ func setup(id: String, definition: Dictionary, target: Node3D) -> void:
 func _physics_process(delta: float) -> void:
 	if dead or player == null:
 		return
+	var early_distance: float = player.global_position.distance_to(global_position)
+	if early_distance > sense_range + 5.0 and pending_attack_time <= 0.0 and stagger_time <= 0.0 and is_on_floor():
+		far_tick_accumulator += delta
+		if far_tick_accumulator < 0.20:
+			return
+		delta = far_tick_accumulator
+		far_tick_accumulator = 0.0
+	else:
+		far_tick_accumulator = 0.0
 	attack_cooldown = max(attack_cooldown - delta, 0.0)
 	attack_recovery_time = max(attack_recovery_time - delta, 0.0)
 	slowed_time = max(slowed_time - delta, 0.0)
@@ -284,7 +294,11 @@ func _build_body(color: Color) -> void:
 func _try_build_mapped_body() -> bool:
 	asset_helper = AssetSpawnHelper.new()
 	add_child(asset_helper)
-	var visual_source = "ghoulkin" if _is_wychwood_pack() else enemy_id
+	var visual_source: String = enemy_id
+	if enemy_id in ["ghoulkin", "wychwood_stalker"]:
+		visual_source = "ghoulkin_skeleton"
+	elif enemy_id in ["wychwood_raider", "wychwood_brute"]:
+		visual_source = "ghoulkin"
 	var mapped = asset_helper.spawn_enemy(visual_source)
 	if mapped == null or mapped.name.ends_with("_placeholder"):
 		if mapped != null:
@@ -300,19 +314,41 @@ func _try_build_mapped_body() -> bool:
 		material.emission_energy_multiplier = 0.25
 		_apply_material(mapped, material)
 	elif _is_wychwood_pack():
-		_apply_material(mapped, _mat(base_color))
+		_apply_material(mapped, _horror_material())
 	visual_root.add_child(mapped)
 	body_visual = _find_first_mesh(mapped)
 	base_body_scale = mapped.scale
 	animation_driver = CharacterAnimationDriver.new()
 	animation_driver.name = "CharacterAnimationDriver"
 	mapped.add_child(animation_driver)
-	animation_driver.configure(mapped, {
-		"idle": "Idle", "walk": "Walk", "run": "Run", "jump": "Jump_Idle",
-		"attack": "Punch", "hit": "HitReact", "death": "Death"
-	})
-	_add_variant_silhouette()
+	if visual_source == "ghoulkin_skeleton":
+		animation_driver.configure(mapped, {
+			"idle": "SkeletonArmature|Skeleton_Idle",
+			"walk": "SkeletonArmature|Skeleton_Running",
+			"run": "SkeletonArmature|Skeleton_Running",
+			"attack": "SkeletonArmature|Skeleton_Attack",
+			"hit": "SkeletonArmature|Skeleton_Spawn",
+			"death": "SkeletonArmature|Skeleton_Death"
+		})
+	else:
+		animation_driver.configure(mapped, {
+			"idle": "Idle", "walk": "Walk", "run": "Run", "jump": "Jump_Idle",
+			"attack": "Punch", "hit": "HitReact", "death": "Death"
+		})
 	return true
+
+func _horror_material() -> StandardMaterial3D:
+	var material := StandardMaterial3D.new()
+	var texture_name := "ghoulkin_skin.jpg"
+	if enemy_id == "wychwood_stalker": texture_name = "stalker_skin.jpg"
+	elif enemy_id == "wychwood_brute": texture_name = "brute_skin.jpg"
+	elif enemy_id == "wychwood_raider": texture_name = "ghoulkin_skin.jpg"
+	material.albedo_texture = load("res://assets_external/textures/runtime/" + texture_name) as Texture2D
+	material.albedo_color = Color(0.78, 0.80, 0.72)
+	material.roughness = 0.76
+	material.metallic = 0.0
+	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+	return material
 
 func _mapped_enemy_scale() -> Vector3:
 	if enemy_id == "bog_wretch":
@@ -322,11 +358,11 @@ func _mapped_enemy_scale() -> Vector3:
 	if enemy_id == "ghoulkin":
 		return Vector3.ONE * 0.58
 	if enemy_id == "wychwood_stalker":
-		return Vector3(0.54, 0.56, 0.54)
+		return Vector3(0.50, 0.64, 0.50)
 	if enemy_id == "wychwood_raider":
-		return Vector3.ONE * 0.61
+		return Vector3(0.61, 0.60, 0.61)
 	if enemy_id == "wychwood_brute":
-		return Vector3(0.67, 0.66, 0.67)
+		return Vector3(0.72, 0.64, 0.72)
 	if enemy_id == "bandit":
 		return Vector3(0.95, 0.95, 0.95)
 	return Vector3.ONE

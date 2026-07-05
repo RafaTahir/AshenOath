@@ -83,6 +83,55 @@
       "category": "audio/ui",
       "license": "CC0",
       "source": "GitHub / Kenney / Calinou"
+    },
+    {
+      "name": "ambientcg_ground071_1k",
+      "url": "https://ambientcg.com/get?file=Ground071_1K-JPG.zip",
+      "category": "textures/pbr/forest_ground",
+      "license": "CC0",
+      "source": "ambientCG"
+    },
+    {
+      "name": "ambientcg_ground029_1k",
+      "url": "https://ambientcg.com/get?file=Ground029_1K-JPG.zip",
+      "category": "textures/pbr/wet_mud",
+      "license": "CC0",
+      "source": "ambientCG"
+    },
+    {
+      "name": "ambientcg_pavingstones150_1k",
+      "url": "https://ambientcg.com/get?file=PavingStones150_1K-JPG.zip",
+      "category": "textures/pbr/cobblestone",
+      "license": "CC0",
+      "source": "ambientCG"
+    },
+    {
+      "name": "ambientcg_plaster001_1k",
+      "url": "https://ambientcg.com/get?file=Plaster001_1K-JPG.zip",
+      "category": "textures/pbr/plaster",
+      "license": "CC0",
+      "source": "ambientCG"
+    },
+    {
+      "name": "ambientcg_planks037b_1k",
+      "url": "https://ambientcg.com/get?file=Planks037B_1K-JPG.zip",
+      "category": "textures/pbr/timber",
+      "license": "CC0",
+      "source": "ambientCG"
+    },
+    {
+      "name": "ambientcg_roofingtiles014a_1k",
+      "url": "https://ambientcg.com/get?file=RoofingTiles014A_1K-JPG.zip",
+      "category": "textures/pbr/roof_tiles",
+      "license": "CC0",
+      "source": "ambientCG"
+    },
+    {
+      "name": "ambientcg_bricks008_1k",
+      "url": "https://ambientcg.com/get?file=Bricks008_1K-JPG.zip",
+      "category": "textures/pbr/medieval_brick",
+      "license": "CC0",
+      "source": "ambientCG"
     }
   ]
 }

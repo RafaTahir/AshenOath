@@ -13,6 +13,7 @@ var breathe_amount = 0.006
 var attention_hold = 0.0
 var planted_yaw_offset = 0.0
 var animation_driver
+var far_tick_accumulator := 0.0
 
 func setup(id: String, target: Node3D = null) -> void:
 	role_id = id
@@ -57,6 +58,14 @@ func _process(delta: float) -> void:
 		var players = get_tree().get_nodes_in_group("player")
 		if not players.is_empty() and players[0] is Node3D:
 			focus_target = players[0]
+	if focus_target != null and parent_3d.global_position.distance_to(focus_target.global_position) > 12.0:
+		far_tick_accumulator += delta
+		if far_tick_accumulator < 0.20:
+			return
+		delta = far_tick_accumulator
+		far_tick_accumulator = 0.0
+	else:
+		far_tick_accumulator = 0.0
 	phase += delta * (0.48 if role_id == "sister_anwen" else 0.62)
 	var target_yaw = base_yaw + planted_yaw_offset + sin(phase * 0.38) * sway_amount
 	if focus_target != null:

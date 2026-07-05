@@ -26,6 +26,7 @@ var line_cooldown := 5.0
 var quality := "balanced"
 var rng := RandomNumberGenerator.new()
 var asset_helper
+var far_tick_accumulator := 0.0
 
 func configure(game: Node, quality_preset: String) -> void:
 	host = game
@@ -46,8 +47,18 @@ func routine_ids() -> Array:
 func _process(delta: float) -> void:
 	if host == null or player == null or get_tree().paused: return
 	line_cooldown = max(line_cooldown - delta, 0.0)
+	far_tick_accumulator += delta
+	var update_far := far_tick_accumulator >= 0.20
+	var far_delta := far_tick_accumulator
+	if update_far:
+		far_tick_accumulator = 0.0
 	for entry in actors:
-		_update_actor(entry, delta)
+		var actor_node: Node3D = entry.node
+		if is_instance_valid(actor_node) and actor_node.global_position.distance_to(player.global_position) > 13.0:
+			if update_far:
+				_update_actor(entry, far_delta)
+		else:
+			_update_actor(entry, delta)
 
 func _build_population() -> void:
 	var population := 6 if quality == "potato" else (10 if quality == "quality" else 8)

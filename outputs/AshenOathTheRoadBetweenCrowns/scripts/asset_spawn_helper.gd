@@ -317,8 +317,16 @@ func _prepare_spawned_asset(root: Node3D, path: String) -> void:
 		_normalize_scene_bounds(root, _target_height_for_path(path))
 	_apply_safe_materials(root, path)
 	_finalize_asset_root(root)
-	if "characters" in path.to_lower():
+	if "characters" in path.to_lower() and not _has_skeleton(root):
 		_apply_character_wrapper(root, root.name)
+
+func _has_skeleton(root: Node) -> bool:
+	if root is Skeleton3D:
+		return true
+	for child in root.get_children():
+		if _has_skeleton(child):
+			return true
+	return false
 
 func _apply_safe_materials(root: Node3D, path: String) -> void:
 	var fallback = _fallback_material_for_path(path)

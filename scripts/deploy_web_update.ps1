@@ -11,7 +11,7 @@ $ErrorActionPreference = "Stop"
 
 $RepoRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
 $ProjectDir = Join-Path $RepoRoot "outputs\AshenOathTheRoadBetweenCrowns"
-$ExportDir = Join-Path $RepoRoot "outputs\AshenOath_Web_Slim"
+$ExportDir = Join-Path $RepoRoot "outputs\AshenOath_Web"
 $WebDir = Join-Path $RepoRoot "web"
 $Godot = "C:\Users\User\Downloads\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe"
 $Python = "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe"
@@ -78,6 +78,11 @@ try {
   $Visual100Verifier = Join-Path $ProjectDir "tools\verify_visual_100.gd"
   if (Test-Path $Visual100Verifier) {
     Invoke-Checked $Godot "--headless --path `"$ProjectDir`" --script `"res://tools/verify_visual_100.gd`"" $RepoRoot
+  }
+
+  $Visual003Verifier = Join-Path $ProjectDir "tools\verify_visual_003.gd"
+  if (Test-Path $Visual003Verifier) {
+    Invoke-Checked $Godot "--headless --path `"$ProjectDir`" --script `"res://tools/verify_visual_003.gd`"" $RepoRoot
   }
 
   Invoke-Checked (Join-Path $ProjectDir "Export_Web_Build.bat") "" $ProjectDir
