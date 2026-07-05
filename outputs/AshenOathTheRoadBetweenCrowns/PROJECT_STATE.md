@@ -72,7 +72,7 @@ The broader quest data exists, but the current release target is the first 3-10 
 ### Startup, Menus, And Input Mode
 
 - Browser launch screen asks for one click before showing the main menu.
-- Main menu supports New Game, Continue, Controls, Credits/Licenses, and Quit.
+- Main menu uses a 1920x1080 responsive UI canvas and supports New Game, Continue, Controls, Settings, Credits/Licenses, and browser-safe Exit Game.
 - Pause menu supports resume, save/load, checkpoint load, settings, controls, and main-menu style navigation.
 - Settings expose resolution scale, shadows, fullscreen, VSync, mouse sensitivity, invert Y, master volume, and Potato Mode.
 - Gameplay captures the mouse.
@@ -574,7 +574,7 @@ Known verifier note: Godot headless may emit ObjectDB cleanup warnings after pas
 ## Known Bugs And Limitations
 
 - Visual quality is still low-poly/stylized and well below The Witcher 3.
-- Balanced now runs at native 1280x720 and retains textured batched grass; Potato reduces render scale and secondary material effects.
+- The interface renders on a 1920x1080 canvas. Balanced preserves the established 1280x720 gameplay budget with a 0.667 3D scale; Quality renders 3D at full 1080p and Potato uses 0.45.
 - Human models are skeletal, textured, lit, and animated but still lack realistic faces, hands, hair, facial rigs, and bespoke clothing.
 - Main-route character and Wychwood enemy skeletons animate; broader animation retargeting and facial performance remain incomplete.
 - Major areas beyond the first route are partial, blocked, or data-only.
@@ -627,7 +627,7 @@ The project currently satisfies:
 - Runtime verifier passes.
 - Screenshot capture passes.
 - Web export verifier passes.
-- First route is playable at native 1280x720 Balanced quality.
+- First route is playable with a 1080p interface and a 720p Balanced 3D rendering budget.
 - Dell-class Intel HD 620 test holds 30 FPS with a 229 ms warm route transition.
 - PBR terrain/building surfaces, saved day/night time, cleaned skeletal characters, and mixed Wychwood enemy rigs are active.
 

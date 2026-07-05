@@ -14,7 +14,7 @@ func _initialize() -> void:
 	timestamp = _timestamp_for_file()
 	DirAccess.make_dir_recursive_absolute(output_dir)
 	DirAccess.make_dir_recursive_absolute(gallery_dir)
-	DisplayServer.window_set_size(Vector2i(1280, 720))
+	DisplayServer.window_set_size(Vector2i(1920, 1080))
 	var scene = load("res://scenes/main.tscn")
 	if scene == null:
 		push_error("main scene failed to load")
@@ -31,9 +31,13 @@ func _initialize() -> void:
 		quit(1)
 		return
 	_assert_image_quality(image)
-	var file_name = "ui_001_main_menu_prestige_%s.png" % timestamp
+	if image.get_width() != 1920 or image.get_height() != 1080:
+		push_error("main menu capture is not 1920x1080: %dx%d" % [image.get_width(), image.get_height()])
+		quit(1)
+		return
+	var file_name = "ui_002_main_menu_1080p_%s.png" % timestamp
 	image.save_png("%s/%s" % [output_dir, file_name])
-	image.save_png("%s/UI_001_Main_Menu_Prestige_%s.png" % [gallery_dir, timestamp])
+	image.save_png("%s/UI_002_Main_Menu_1080p_%s.png" % [gallery_dir, timestamp])
 	print("main menu screenshot saved: %s/%s" % [output_dir, file_name])
 	game.queue_free()
 	await process_frame

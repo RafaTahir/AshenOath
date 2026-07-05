@@ -13,10 +13,18 @@ func _initialize() -> void:
 	var game = scene.instantiate()
 	root.add_child(game)
 	await process_frame
+	_assert(ProjectSettings.get_setting("display/window/size/viewport_width", 0) == 1920, "UI viewport width is not 1920")
+	_assert(ProjectSettings.get_setting("display/window/size/viewport_height", 0) == 1080, "UI viewport height is not 1080")
+	game.hud.show_main_menu()
+	await process_frame
+	_assert(_menu_has_actions(game.hud, ["New Game", "Continue", "Controls", "Settings", "Credits", "Exit Game"]), "Main menu actions are incomplete")
+	game.hud.show_settings_menu("main")
+	await process_frame
+	_assert(_menu_has_setting_values(game.hud), "Settings menu does not expose current values")
 	game.call("_new_game")
 	await _settle_frames(3)
 	_assert(str(game.settings.settings.get("quality_preset", "")) == "balanced", "Balanced is not the default visual preset")
-	_assert(is_equal_approx(float(game.settings.settings.get("resolution_scale", 0.0)), 1.0), "Balanced render scale is not native 720p")
+	_assert(is_equal_approx(float(game.settings.settings.get("resolution_scale", 0.0)), 0.667), "Balanced 3D scale does not preserve 720p gameplay under the 1080p UI")
 	_assert(int(game.settings.settings.get("target_fps", 0)) == 30, "Balanced target is not 30 FPS")
 	_assert(game.settings.has_method("get_performance_snapshot"), "Performance sampler API is missing")
 	_assert(str(game.current_zone_id) == "greyfen", "Greyfen did not load as the new-game zone")
@@ -182,6 +190,23 @@ func _initialize() -> void:
 func _settle_frames(count: int) -> void:
 	for i in range(count):
 		await process_frame
+
+func _menu_has_actions(hud: Node, expected: Array[String]) -> bool:
+	var labels: Array[String] = []
+	for node in hud.menu_layer.find_children("*", "Button", true, false):
+		labels.append(str(node.text))
+	for action in expected:
+		if action not in labels:
+			return false
+	return true
+
+func _menu_has_setting_values(hud: Node) -> bool:
+	var labels: Array[String] = []
+	for node in hud.menu_layer.find_children("*", "Button", true, false):
+		labels.append(str(node.text))
+	return labels.any(func(text: String): return text.begins_with("Visual Preset") and text.contains("Balanced")) \
+		and labels.any(func(text: String): return text.begins_with("3D Resolution") and text.contains("67%")) \
+		and labels.any(func(text: String): return text.begins_with("Master Volume") and text.contains("85%"))
 
 func _assert(condition: bool, message: String) -> void:
 	if not condition:

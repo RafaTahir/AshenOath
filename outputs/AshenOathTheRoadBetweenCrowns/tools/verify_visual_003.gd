@@ -47,15 +47,15 @@ func _verify_texture_library() -> void:
 func _verify_native_quality(game: Node) -> void:
 	var settings = game.settings
 	settings.set_quality_preset("balanced")
-	_check(is_equal_approx(float(settings.settings.resolution_scale), 1.0), "Balanced is not native 1.0 render scale")
+	_check(is_equal_approx(float(settings.settings.resolution_scale), 0.667), "Balanced does not preserve a 720p 3D budget beneath the 1080p UI")
 	_check(not bool(settings.settings.potato_mode), "Balanced incorrectly enables Potato Mode")
 	settings.set_quality_preset("quality")
 	_check(is_equal_approx(float(settings.settings.resolution_scale), 1.0), "Quality is not native 1.0 render scale")
 	settings.set_quality_preset("potato")
-	_check(is_equal_approx(float(settings.settings.resolution_scale), 0.65), "Potato is not the explicit 0.65 fallback")
+	_check(is_equal_approx(float(settings.settings.resolution_scale), 0.45), "Potato is not the explicit 0.45 fallback")
 	settings.set_quality_preset("balanced")
-	_check(ProjectSettings.get_setting("display/window/size/viewport_width", 0) == 1280, "viewport width is not 1280")
-	_check(ProjectSettings.get_setting("display/window/size/viewport_height", 0) == 720, "viewport height is not 720")
+	_check(ProjectSettings.get_setting("display/window/size/viewport_width", 0) == 1920, "UI viewport width is not 1920")
+	_check(ProjectSettings.get_setting("display/window/size/viewport_height", 0) == 1080, "UI viewport height is not 1080")
 
 func _verify_day_night(game: Node) -> void:
 	var clock = game.day_night

@@ -1178,6 +1178,7 @@ func _handle_setting(action: String) -> void:
 		settings.cycle_master_volume()
 	if action != "visual_preset":
 		hud.toast("Settings updated.")
+	hud.show_settings_menu(hud.controls_back_target)
 
 func _apply_runtime_settings(current_settings: Dictionary) -> void:
 	if audio != null:
