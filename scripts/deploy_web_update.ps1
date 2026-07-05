@@ -80,7 +80,14 @@ try {
   Invoke-Checked $Python "`"$ProjectDir\tools\verify_web_export.py`" `"$ExportDir`"" $RepoRoot
 
   $ExportPack = Join-Path $ExportDir "index.pck"
-  Invoke-Checked $Godot "--headless --path `"$ExportDir`" --main-pack `"$ExportPack`" --quit-after 5" $RepoRoot
+  $PackedLog = Join-Path $env:TEMP "ashenoath-packed-startup.log"
+  & $Godot --headless --path $ExportDir --main-pack $ExportPack --quit-after 5 2>&1 | Tee-Object -FilePath $PackedLog
+  if ($LASTEXITCODE -ne 0) {
+    throw "Packed startup failed with exit code $LASTEXITCODE."
+  }
+  if (Select-String -Path $PackedLog -Pattern "SCRIPT ERROR|Parse Error|Compile Error|Failed to load script" -Quiet) {
+    throw "Packed startup logged a script load or compilation error."
+  }
 
   if (Test-Path $WebDir) {
     Get-ChildItem $WebDir -Force | Remove-Item -Recurse -Force
