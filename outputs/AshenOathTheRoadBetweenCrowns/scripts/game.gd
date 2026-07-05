@@ -20,6 +20,9 @@ const CharacterPresentation = preload("res://scripts/character_presentation.gd")
 const CombatFeedback = preload("res://scripts/combat_feedback.gd")
 const CemeterySection = preload("res://scripts/zones/cemetery_section.gd")
 const CharacterAnimationDriver = preload("res://scripts/character_animation_driver.gd")
+const WorldVisualUpgrade = preload("res://scripts/world_visual_upgrade.gd")
+const WorldMotionController = preload("res://scripts/world_motion_controller.gd")
+const SurfaceFeedbackManager = preload("res://scripts/surface_feedback_manager.gd")
 
 var player
 var camera_rig
@@ -252,6 +255,8 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		_build_wychwood()
 	elif zone_id == "ruins":
 		_build_ruins()
+	if zone_id in ["greyfen", "wychwood"]:
+		_add_visual_100_layer(zone_id)
 	_apply_first_route_materials(zone_root)
 	if visual_director != null:
 		visual_director.apply_zone(zone_id)
@@ -273,6 +278,18 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		hud.toast("The woods go quiet. Survive the Ghoulkin.")
 		hud.set_guidance_hint("Left click strike | Space dodge | Q block/parry", 6.0)
 		hud.show_status_cue("Survive the clearing", "neutral")
+
+func _add_visual_100_layer(zone_id: String) -> void:
+	var quality := str(settings.settings.get("quality_preset", "balanced")) if settings != null else "balanced"
+	var visual_root := WorldVisualUpgrade.new().build(zone_root, zone_id, quality)
+	var motion = WorldMotionController.new()
+	motion.name = "WorldMotionController"
+	zone_root.add_child(motion)
+	motion.configure(visual_root, quality)
+	var surface = SurfaceFeedbackManager.new()
+	surface.name = "SurfaceFeedbackManager"
+	zone_root.add_child(surface)
+	surface.configure(player, quality)
 
 func _build_greyfen() -> void:
 	_make_ground(Vector3(0, -0.08, 0), Vector3(42, 0.16, 34), Color(0.16, 0.18, 0.13))

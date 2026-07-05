@@ -55,6 +55,11 @@ try {
     Invoke-Checked $Godot "--headless --path `"$ProjectDir`" --script `"res://tools/verify_motion_quality.gd`"" $RepoRoot
   }
 
+  $Visual100Verifier = Join-Path $ProjectDir "tools\verify_visual_100.gd"
+  if (Test-Path $Visual100Verifier) {
+    Invoke-Checked $Godot "--headless --path `"$ProjectDir`" --script `"res://tools/verify_visual_100.gd`"" $RepoRoot
+  }
+
   Invoke-Checked (Join-Path $ProjectDir "Export_Web_Build.bat") "" $ProjectDir
 
   Invoke-Checked $Python "`"$ProjectDir\tools\verify_web_export.py`" `"$ExportDir`"" $RepoRoot
