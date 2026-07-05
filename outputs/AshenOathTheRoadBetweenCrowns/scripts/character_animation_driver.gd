@@ -1,5 +1,8 @@
 extends Node
 
+signal action_started(action_name: String)
+signal action_finished(action_name: String)
+
 var character_root: Node3D
 var animation_player: AnimationPlayer
 var skeleton: Skeleton3D
@@ -44,6 +47,7 @@ func trigger_action(action_name: String) -> bool:
 	action_active = true
 	current_state = action_name
 	animation_player.play(clip, 0.10)
+	action_started.emit(action_name)
 	return true
 
 func set_dead() -> void:
@@ -81,8 +85,10 @@ func _clip_for(state: String) -> StringName:
 func _on_animation_finished(_animation: StringName) -> void:
 	if dead:
 		return
+	var finished_state := current_state
 	action_active = false
 	current_state = ""
+	action_finished.emit(finished_state)
 
 func _find_type(root: Node, type_name: String) -> Node:
 	if root.is_class(type_name):

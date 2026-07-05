@@ -51,6 +51,8 @@ func _process(delta: float) -> void:
 	var parent_3d = get_parent() as Node3D
 	if parent_3d == null:
 		return
+	if role_id == "sister_anwen" and bool(parent_3d.get_meta("dialogue_facing_lock", false)):
+		return
 	if focus_target == null:
 		var players = get_tree().get_nodes_in_group("player")
 		if not players.is_empty() and players[0] is Node3D:
@@ -62,7 +64,7 @@ func _process(delta: float) -> void:
 		to_target.y = 0.0
 		if to_target.length() <= focus_radius and to_target.length() > 0.2:
 			attention_hold = 0.9
-			target_yaw = rad_to_deg(atan2(-to_target.x, -to_target.z))
+			target_yaw = rad_to_deg(atan2(-to_target.x, -to_target.z)) + (180.0 if role_id == "sister_anwen" else 0.0)
 		elif role_id == "sister_anwen":
 			target_yaw = base_yaw + sin(phase * 0.22) * 0.45
 	attention_hold = max(attention_hold - delta, 0.0)

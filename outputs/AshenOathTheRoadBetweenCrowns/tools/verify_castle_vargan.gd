@@ -17,14 +17,15 @@ func _initialize() -> void:
 	for objective in game.quests.quest_defs["main_blood_under_stone"]["objectives"]: ids.append(str(objective["id"]))
 	for id in required: check(id in ids, "Missing Blood Under Stone objective: %s" % id)
 
-	game.quests.unlocked["main_blood_under_stone"] = true
-	game.quests.start_quest("main_blood_under_stone")
 	game.call("_load_zone", "greyfen", Vector3(0, 1, 7))
 	await settle(3)
-	check(game.zone_root.find_child("gate_vargan_approach", true, false) != null, "Unlocked Greyfen castle route is missing")
-
-	game.call("_load_zone", "vargan_approach", Vector3(0, 1, 14))
+	var fresh_gate = game.zone_root.find_child("gate_vargan_approach", true, false)
+	check(fresh_gate != null, "Fresh New Game castle route is missing")
+	if fresh_gate != null: game.call("_handle_interaction", fresh_gate)
 	await settle(3)
+	check(game.current_zone_id == "vargan_approach", "Fresh New Game could not enter Castle Vargan")
+	check(game.quests.is_active("main_blood_under_stone"), "Castle entry did not start Blood Under Stone")
+
 	check(game.zone_root.find_child("CastleVargan_Approach", true, false) != null, "Castle Approach is missing")
 	check(game.zone_root.find_child("VarganGatehouse", true, false) != null, "Outer gatehouse is missing")
 	for id in ["vargan_mile_marker", "vargan_supply_cart"]:

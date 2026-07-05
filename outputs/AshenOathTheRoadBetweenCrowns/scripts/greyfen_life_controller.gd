@@ -1,6 +1,8 @@
 extends Node
 
 const CharacterPresentation = preload("res://scripts/character_presentation.gd")
+const AssetSpawnHelper = preload("res://scripts/asset_spawn_helper.gd")
+const CharacterAnimationDriver = preload("res://scripts/character_animation_driver.gd")
 
 const AMBIENT_LINES := {
 	"greyfen_road_quiet":"Road's quiet today. That's worse.",
@@ -23,12 +25,15 @@ var actors: Array = []
 var line_cooldown := 5.0
 var quality := "balanced"
 var rng := RandomNumberGenerator.new()
+var asset_helper
 
 func configure(game: Node, quality_preset: String) -> void:
 	host = game
 	player = game.player
 	quality = quality_preset
 	rng.seed = 44017
+	asset_helper = AssetSpawnHelper.new()
+	add_child(asset_helper)
 	_build_population()
 	_enroll_named_npcs()
 
@@ -64,8 +69,8 @@ func _build_population() -> void:
 		actor.name = "Routine_%s" % definition.id
 		actor.position = definition.path[0]
 		host.zone_root.add_child(actor)
-		var limbs := _make_lightweight_villager(actor,i,float(definition.get("scale",1.0)))
-		actors.append({"id":definition.id,"node":actor,"path":definition.path,"target":1,"speed":definition.speed,"pause":rng.randf_range(0.4,2.4),"driver":null,"named":false,"limbs":limbs,"phase":rng.randf()*TAU,"base_y":actor.position.y})
+		var driver = _make_skeletal_villager(actor, str(definition.id), i, float(definition.get("scale",1.0)))
+		actors.append({"id":definition.id,"node":actor,"path":definition.path,"target":1,"speed":definition.speed,"pause":rng.randf_range(0.4,2.4),"driver":driver,"named":false,"phase":rng.randf()*TAU,"base_y":actor.position.y})
 
 func _enroll_named_npcs() -> void:
 	var named := {
@@ -114,12 +119,7 @@ func _set_motion(entry: Dictionary, speed: float) -> void:
 	var driver = entry.driver
 	if driver != null and driver.has_method("set_locomotion"):
 		driver.set_locomotion(clampf(speed / 1.3,0.0,1.0),Vector3.ZERO,true)
-	elif entry.has("limbs"):
-		entry.phase = float(entry.phase) + get_process_delta_time() * (1.2 + speed * 3.0)
-		var swing := sin(float(entry.phase)) * (0.48 if speed > 0.05 else 0.04)
-		entry.limbs[0].rotation.x = swing
-		entry.limbs[1].rotation.x = -swing
-		entry.node.position.y = float(entry.base_y) + abs(sin(float(entry.phase)*2.0)) * (0.025 if speed > 0.05 else 0.008)
+	entry.phase = float(entry.phase) + get_process_delta_time() * (0.8 + speed * 1.7)
 
 func _face(node: Node3D, target: Vector3, delta: float) -> void:
 	var offset := target - node.global_position
@@ -128,13 +128,18 @@ func _face(node: Node3D, target: Vector3, delta: float) -> void:
 	var wanted := atan2(-offset.x,-offset.z)
 	node.rotation.y = lerp_angle(node.rotation.y,wanted,min(delta*3.0,1.0))
 
-func _make_lightweight_villager(parent: Node3D, index: int, scale_value: float) -> Array:
-	var cloth_colors := [Color(0.25,0.20,0.15),Color(0.18,0.24,0.20),Color(0.26,0.17,0.16),Color(0.20,0.20,0.27)]
-	var cloth := StandardMaterial3D.new(); cloth.albedo_color = cloth_colors[index % cloth_colors.size()]; cloth.roughness = 0.92
-	var skin := StandardMaterial3D.new(); skin.albedo_color = Color(0.54,0.39,0.29); skin.roughness = 0.9
-	var torso := MeshInstance3D.new(); var torso_mesh := CapsuleMesh.new(); torso_mesh.radius = 0.30; torso_mesh.height = 1.05; torso.mesh = torso_mesh; torso.position.y = 1.15; torso.scale = Vector3.ONE*scale_value; torso.material_override = cloth; parent.add_child(torso)
-	var head := MeshInstance3D.new(); var head_mesh := SphereMesh.new(); head_mesh.radius = 0.23; head_mesh.height = 0.46; head.mesh = head_mesh; head.position.y = 1.88*scale_value; head.scale = Vector3.ONE*scale_value; head.material_override = skin; parent.add_child(head)
-	var limbs: Array = []
-	for side in [-1.0,1.0]:
-		var leg := MeshInstance3D.new(); var leg_mesh := CapsuleMesh.new(); leg_mesh.radius = 0.10; leg_mesh.height = 0.70; leg.mesh = leg_mesh; leg.position = Vector3(side*0.15,0.48,0)*scale_value; leg.scale = Vector3.ONE*scale_value; leg.material_override = cloth; parent.add_child(leg); limbs.append(leg)
-	return limbs
+func _make_skeletal_villager(parent: Node3D, role_id: String, index: int, scale_value: float):
+	var mapped = asset_helper.spawn_visual_role("villager_human", "characters")
+	if mapped == null or mapped.name.ends_with("_placeholder"):
+		push_error("Rigged villager asset unavailable for %s" % role_id)
+		return null
+	mapped.name = "%s_rigged_human" % role_id
+	mapped.scale = Vector3.ONE * (0.56 * scale_value * (0.97 + 0.025 * float(index % 3)))
+	mapped.rotation_degrees.y = 180.0
+	parent.add_child(mapped)
+	CharacterPresentation.apply_npc(parent, role_id)
+	var driver = CharacterAnimationDriver.new()
+	driver.name = "CharacterAnimationDriver"
+	mapped.add_child(driver)
+	driver.configure(mapped, {"idle":"Idle", "walk":"Walk", "run":"Run", "hit":"RecieveHit", "death":"Death"})
+	return driver

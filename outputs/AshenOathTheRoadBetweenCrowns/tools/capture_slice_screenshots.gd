@@ -72,10 +72,18 @@ func _initialize() -> void:
 	await _capture_combat_state(game, "15_ghoulkin_windup_hud", "windup")
 	await _capture_combat_state(game, "16_player_block_cue", "block")
 	await _capture_combat_state(game, "17_ghoulkin_death_read", "death")
+	await _capture_combat_state(game, "63_polish_parry_contact", "block")
+	await _capture(game, "67_polish_enemy_approaches", Vector3(0,1,-1.5), "wychwood", Vector3(0,1,-1.5))
 	await _capture_victory_state(game, "18_ghoulkin_victory_objective")
 	await _capture_victory_state(game, "23_ghoulkin_aftermath_clue")
 	await _capture_oathfire_state(game, "24_oathfire_charge", false)
 	await _capture_oathfire_state(game, "25_oathfire_beam_release", true)
+	await _capture(game, "60_polish_skeletal_villagers", Vector3(-2,1,5), "greyfen", Vector3(-2,1,5), -0.25)
+	await _capture_dialogue(game, "61_polish_anwen_facing", Vector3(3.2, 1, -5.0))
+	await _capture_player_motion_state(game, "62_polish_kael_character", "idle")
+	await _capture_player_motion_state(game, "64_polish_sword_slash_alignment", "light")
+	await _capture_oathfire_stage(game, "65_polish_oathfire_sheathed", "sheathed")
+	await _capture_oathfire_stage(game, "66_polish_oathfire_hand_charge", "charge")
 	game.quests.active.clear()
 	game.quests.unlocked["main_blood_under_stone"] = true
 	game.quests.start_quest("main_blood_under_stone")
@@ -317,16 +325,44 @@ func _capture_oathfire_state(game, file_name: String, released: bool) -> void:
 	var direction = game.camera_rig.get_flat_forward() if game.camera_rig != null else Vector3.FORWARD
 	game.player.face_target(game.player.global_position + direction * 4.0)
 	game.player.beam_charging = true
+	game.player.beam_cast_state = "charging"
 	game.player.beam_charge_time = 1.1
+	game.player.call("_set_sword_sheathed", true)
+	if game.player.animation_driver != null:
+		game.player.animation_driver.trigger_action("beam_cast")
 	game.player.call("_update_beam_charge_visual")
 	if game.camera_rig != null:
 		game.camera_rig.yaw = 0.0
 		game.camera_rig.pitch = -0.16
 	if released:
-		game.player.cancel_beam_charge()
+		game.player.call("_hide_beam_charge_visuals")
+		game.player.beam_cast_state = "releasing"
+		game.player.beam_charging = false
 		game.call("_on_player_beam", 0.84, direction)
 	await _settle_frames(2 if released else 8)
 	_save_viewport(file_name)
+	game.player.cancel_beam_charge()
+
+func _capture_oathfire_stage(game, file_name: String, stage: String) -> void:
+	game.call("_load_zone", "wychwood", Vector3(0, 1, -1.5))
+	await _settle_frames(4)
+	game.player.global_position = Vector3(0, 1, -1.5)
+	var direction = game.camera_rig.get_flat_forward() if game.camera_rig != null else Vector3.FORWARD
+	game.player.face_target(game.player.global_position + direction * 4.0)
+	game.player.call("_set_sword_sheathed", true)
+	game.player.beam_cast_state = "sheathing" if stage == "sheathed" else "charging"
+	game.player.beam_charging = true
+	if stage == "charge":
+		game.player.beam_charge_time = 1.1
+		if game.player.animation_driver != null:
+			game.player.animation_driver.trigger_action("beam_cast")
+		game.player.call("_update_beam_charge_visual")
+	if game.camera_rig != null:
+		game.camera_rig.yaw = 0.0
+		game.camera_rig.pitch = -0.16
+	await _settle_frames(8)
+	_save_viewport(file_name)
+	game.player.cancel_beam_charge()
 
 func _save_viewport(file_name: String) -> void:
 	var image = root.get_viewport().get_texture().get_image()

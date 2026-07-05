@@ -40,6 +40,9 @@ var windup_marker: MeshInstance3D
 var attack_recovery_time = 0.0
 var death_pose_time = 0.0
 var animation_driver
+var behavior_profile := "direct"
+var flank_sign := 1.0
+var parry_exposed_time := 0.0
 
 func setup(id: String, definition: Dictionary, target: Node3D) -> void:
 	enemy_id = id
@@ -58,6 +61,11 @@ func setup(id: String, definition: Dictionary, target: Node3D) -> void:
 	health_component.changed.connect(func(current: float, maximum: float): damaged.emit(self, current, maximum))
 	health_component.died.connect(_on_died)
 	base_color = Color(definition.get("color", "#665544"))
+	behavior_profile = {
+		"wychwood_stalker":"flanker", "wychwood_raider":"feinter",
+		"wychwood_brute":"brute", "ghoulkin":"skirmisher"
+	}.get(enemy_id, "direct")
+	flank_sign = -1.0 if int(get_instance_id()) % 2 == 0 else 1.0
 	_build_body(base_color)
 
 func _physics_process(delta: float) -> void:
@@ -69,6 +77,7 @@ func _physics_process(delta: float) -> void:
 	windup_time = max(windup_time - delta, 0.0)
 	hit_flash_time = max(hit_flash_time - delta, 0.0)
 	stagger_time = max(stagger_time - delta, 0.0)
+	parry_exposed_time = max(parry_exposed_time - delta, 0.0)
 	anim_phase += delta * (3.45 if velocity.length() > 0.15 else 0.95)
 	var to_player: Vector3 = player.global_position - global_position
 	var distance: float = to_player.length()
@@ -96,11 +105,23 @@ func _physics_process(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0.0, 6.0 * delta)
 		velocity.z = move_toward(velocity.z, 0.0, 6.0 * delta)
 	elif attack_recovery_time > 0.0:
-		velocity.x = 0.0
-		velocity.z = 0.0
+		var retreat := -to_player.normalized()
+		var tangent := Vector3(-retreat.z, 0.0, retreat.x) * flank_sign
+		var recovery_dir := tangent if behavior_profile == "flanker" else (retreat if behavior_profile == "skirmisher" else Vector3.ZERO)
+		velocity.x = recovery_dir.x * move_speed * 0.65
+		velocity.z = recovery_dir.z * move_speed * 0.65
 	elif distance > attack_range:
 		var speed_factor = 0.45 if slowed_time > 0.0 else 1.0
-		var dir = to_player.normalized()
+		var dir := to_player.normalized()
+		var lateral := Vector3(-dir.z, 0.0, dir.x)
+		if behavior_profile == "flanker":
+			dir = (dir * 0.62 + lateral * flank_sign * 0.78).normalized()
+		elif behavior_profile == "feinter":
+			dir = (dir + lateral * sin(anim_phase * 0.72) * 0.42).normalized()
+		elif behavior_profile == "skirmisher":
+			dir = (dir + lateral * flank_sign * 0.20).normalized()
+		elif behavior_profile == "brute":
+			speed_factor *= 0.84
 		velocity.x = dir.x * move_speed * speed_factor
 		velocity.z = dir.z * move_speed * speed_factor
 		look_at(Vector3(player.global_position.x, global_position.y, player.global_position.z), Vector3.UP)
@@ -128,6 +149,9 @@ func apply_damage(amount: float, source_tag: String = "") -> void:
 	if dead:
 		return
 	var final_damage = amount
+	if parry_exposed_time > 0.0:
+		final_damage += 8.0
+		parry_exposed_time = 0.0
 	if source_tag == weakness or source_tag == tag:
 		final_damage += 15.0
 	health_component.damage(final_damage)
@@ -155,6 +179,7 @@ func _resolve_attack() -> void:
 	attack_recovery_time = 0.22 if enemy_id == "ghoulkin" else 0.16
 	attack_resolved.emit(self, parried)
 	if parried:
+		parry_exposed_time = 1.15
 		stagger(1.15)
 
 func _on_died() -> void:

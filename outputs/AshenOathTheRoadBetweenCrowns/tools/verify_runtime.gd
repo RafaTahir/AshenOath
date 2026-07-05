@@ -80,14 +80,15 @@ func _initialize() -> void:
 	await _settle_frames(1)
 	if DisplayServer.get_name().to_lower() != "headless":
 		_assert(Input.mouse_mode == Input.MOUSE_MODE_CAPTURED, "Gameplay did not recapture the mouse after closing dialogue")
-	_assert(_has_child_named(game.zone_root, "blocked_ruins"), "Blocked Castle Vargan gate is missing")
-	var blocked = _find_child_named(game.zone_root, "blocked_ruins")
-	if blocked == null:
-		_fail("Blocked Castle Vargan gate lookup failed after presence assertion")
+	_assert(_has_child_named(game.zone_root, "gate_vargan_approach"), "Playable Castle Vargan gate is missing")
+	var castle_gate = _find_child_named(game.zone_root, "gate_vargan_approach")
+	if castle_gate == null:
+		_fail("Castle Vargan gate lookup failed after presence assertion")
 		return
-	game.call("_handle_interaction", blocked)
+	game.call("_handle_interaction", castle_gate)
 	await _settle_frames(1)
-	_assert(str(game.current_zone_id) == "greyfen", "Blocked ruins gate changed zones")
+	_assert(str(game.current_zone_id) == "vargan_approach", "Castle Vargan gate did not open from New Game")
+	_assert(game.quests.is_active("main_blood_under_stone"), "Castle arrival did not start Blood Under Stone")
 
 	game.call("_load_zone", "wychwood", Vector3(0, 1, 13))
 	await _settle_frames(3)

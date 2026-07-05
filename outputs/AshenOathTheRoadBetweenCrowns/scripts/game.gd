@@ -160,7 +160,7 @@ func _setup_managers() -> void:
 	hud.resume_requested.connect(_resume_game)
 	hud.settings_requested.connect(_handle_setting)
 	hud.action_selected.connect(_handle_dialogue_action)
-	hud.dialogue_closed.connect(func(): audio.stop_voice())
+	hud.dialogue_closed.connect(_release_dialogue_facing)
 	hud.craft_requested.connect(func(item_id: String):
 		crafting.craft(item_id)
 		hud.show_inventory(inventory, quests)
@@ -296,7 +296,7 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		audio.play_event("wychwood_tension", 0.01)
 		audio.set_music_state("wychwood_tension")
 		hud.toast("The woods go quiet. Survive the Ghoulkin.")
-		hud.set_guidance_hint("Left click strike | Space dodge | Q block/parry", 6.0)
+		hud.set_guidance_hint("Left click strike | Space dodge | Tap Q parry | Hold Q block", 6.0)
 		hud.show_status_cue("Survive the clearing", "neutral")
 
 func _add_visual_100_layer(zone_id: String) -> void:
@@ -381,10 +381,7 @@ func _build_greyfen() -> void:
 	_make_route_markers()
 	_make_greyfen_road_of_crows_story_beats()
 	_make_collapsed_road(Vector3(18.0, 0, 0))
-	if quests.is_unlocked("main_blood_under_stone") or quests.is_active("main_blood_under_stone") or quests.is_completed("main_blood_under_stone"):
-		_make_zone_gate("Road to Castle Vargan", Vector3(17.5, 0, 0), "vargan_approach", Vector3(0, 1, 14))
-	else:
-		_make_blocked_gate("Road to Castle Vargan", Vector3(17.5, 0, 0), "House Vargan admits no petitioners. Follow the Road of Crows until its old orders surface.")
+	_make_zone_gate("Road to Castle Vargan", Vector3(17.5, 0, 0), "vargan_approach", Vector3(0, 1, 14))
 	var life = GreyfenLifeController.new()
 	life.name = "GreyfenLifeController"
 	zone_root.add_child(life)
@@ -619,7 +616,9 @@ func _handle_road_of_crows_clue(area) -> void:
 func _apply_campaign_arrival(zone_id: String) -> void:
 	if zone_id in ["vargan_approach", "vargan_court", "record_hall"]:
 		story_state.set_flag("castle_discovered", true)
-		if quests.is_unlocked("main_blood_under_stone") and not quests.is_active("main_blood_under_stone") and not quests.is_completed("main_blood_under_stone"):
+		if not quests.is_unlocked("main_blood_under_stone"):
+			quests.unlocked["main_blood_under_stone"] = true
+		if not quests.is_active("main_blood_under_stone") and not quests.is_completed("main_blood_under_stone"):
 			quests.start_quest("main_blood_under_stone")
 	var arrivals := {
 		"deep_wood":["main_teeth_in_rain","name_the_dead"],
@@ -741,7 +740,6 @@ func _on_player_beam(charge_ratio: float, direction: Vector3) -> void:
 	if player == null or zone_root == null:
 		return
 	var origin = player.global_position + Vector3(0, 1.12, 0)
-	origin += player.global_transform.basis.x.normalized() * 0.38
 	origin += direction.normalized() * 0.62
 	var endpoint = origin + direction.normalized() * 12.0
 	var query = PhysicsRayQueryParameters3D.create(origin, endpoint)
@@ -954,7 +952,7 @@ func _on_enemy_windup_started(enemy) -> void:
 	if enemy != null and enemy.health_component != null:
 		hud.show_enemy(enemy.display_name, enemy.health_component.health, enemy.health_component.max_health)
 	if current_zone_id == "wychwood" and not bool(tutorial_flags.get("block_hint_done", false)):
-		hud.set_guidance_hint("Q at the lunge to parry. Hold Q to block.", 4.2)
+		hud.set_guidance_hint("Tap Q at the lunge to parry. Hold Q to block.", 4.2)
 
 func _on_enemy_attack_resolved(enemy, parried: bool) -> void:
 	if parried:
@@ -1124,7 +1122,7 @@ func _update_tutorial_prompts() -> void:
 		audio.set_music_state("ghoulkin_combat")
 		audio.play_event("wychwood_tension", 0.01)
 		hud.toast("Survive the Ghoulkin.")
-		hud.set_guidance_hint("Left click strike | Space dodge | Q block/parry | R potion", 6.0)
+		hud.set_guidance_hint("Left click strike | Space dodge | Tap Q parry | Hold Q block", 6.0)
 
 func _update_compass() -> void:
 	if hud == null or player == null:
@@ -1988,6 +1986,7 @@ func _stage_dialogue_moment(area) -> void:
 	flat_to_player.y = 0.0
 	var distance = flat_to_player.length()
 	if area.interaction_id == "sister_anwen":
+		npc.set_meta("dialogue_facing_lock", true)
 		var desired = npc.global_position + Vector3(-0.95, 0, 1.35)
 		if distance < 1.05 or distance > 2.8:
 			player.global_position = Vector3(desired.x, player.global_position.y, desired.z)
@@ -1997,7 +1996,16 @@ func _stage_dialogue_moment(area) -> void:
 	var to_player = player.global_position - npc.global_position
 	to_player.y = 0.0
 	if to_player.length() > 0.1:
-		npc.rotation_degrees.y = rad_to_deg(atan2(-to_player.x, -to_player.z))
+		var facing_offset := 180.0 if area.interaction_id == "sister_anwen" else 0.0
+		npc.rotation_degrees.y = rad_to_deg(atan2(-to_player.x, -to_player.z)) + facing_offset
+
+func _release_dialogue_facing() -> void:
+	audio.stop_voice()
+	if zone_root == null:
+		return
+	var anwen = zone_root.find_child("sister_anwen", true, false)
+	if anwen != null:
+		anwen.set_meta("dialogue_facing_lock", false)
 
 func _make_gate_marker(parent: Node3D, color: Color, scale_override: Vector3) -> void:
 	var arch = MeshInstance3D.new()

@@ -35,10 +35,12 @@ var health_component
 var stamina_component
 var visual_root: Node3D
 var body_visual: MeshInstance3D
+var body_base_color := Color(0.24, 0.27, 0.25)
 var weapon_root: Node3D
 var sword_visual: MeshInstance3D
 var sword_hilt_visual: MeshInstance3D
 var sword_trail_visual: MeshInstance3D
+var rig_sword_visual: Node3D
 var slash_arc_root: Node3D
 var slash_arc_primary: MeshInstance3D
 var slash_arc_secondary: MeshInstance3D
@@ -63,6 +65,11 @@ var beam_charging = false
 var beam_charge_time = 0.0
 var beam_cooldown = 0.0
 var beam_charge_visual: MeshInstance3D
+var beam_left_hand_glow: MeshInstance3D
+var beam_right_hand_glow: MeshInstance3D
+var sheathed_sword_visual: Node3D
+var beam_cast_state := ""
+var beam_state_time := 0.0
 var movement_state = "idle"
 var movement_blend = 0.0
 var strafe_blend = 0.0
@@ -100,6 +107,7 @@ func _physics_process(delta: float) -> void:
 	hurt_react_time = max(hurt_react_time - delta, 0.0)
 	parry_window = max(parry_window - delta, 0.0)
 	step_up_cooldown = max(step_up_cooldown - delta, 0.0)
+	_update_beam_sequence(delta)
 	if not can_control:
 		velocity.x = move_toward(velocity.x, 0.0, 20.0 * delta)
 		velocity.z = move_toward(velocity.z, 0.0, 20.0 * delta)
@@ -212,6 +220,8 @@ func _sample_foot_offset(side: float, delta: float, current: float) -> float:
 
 func _handle_combat_input() -> void:
 	_handle_beam_input()
+	if beam_cast_state != "":
+		return
 	if attack_cooldown > 0.0:
 		return
 	if Input.is_action_just_pressed("light_attack"):
@@ -236,16 +246,21 @@ func _handle_combat_input() -> void:
 	if Input.is_action_just_pressed("throw_bomb"):
 		bomb_requested.emit()
 	if Input.is_action_just_pressed("block"):
-		parry_window = 0.22
+		parry_window = 0.24
+		if animation_driver != null:
+			animation_driver.trigger_action("parry")
 
 func _handle_beam_input() -> void:
-	if Input.is_action_just_pressed("oathfire_beam") and beam_cooldown <= 0.0:
+	if Input.is_action_just_pressed("oathfire_beam") and beam_cooldown <= 0.0 and beam_cast_state == "" and dodge_time <= 0.0:
+		beam_cast_state = "sheathing"
+		beam_state_time = 0.24
 		beam_charging = true
 		beam_charge_time = 0.0
-	if beam_charging and Input.is_action_pressed("oathfire_beam"):
+		_set_sword_sheathed(true)
+	if beam_cast_state == "charging" and Input.is_action_pressed("oathfire_beam"):
 		beam_charge_time = min(beam_charge_time + get_physics_process_delta_time(), 1.25)
 		_update_beam_charge_visual()
-	if beam_charging and Input.is_action_just_released("oathfire_beam"):
+	if beam_cast_state == "charging" and Input.is_action_just_released("oathfire_beam"):
 		var ratio = clamp((beam_charge_time - 0.35) / 0.90, 0.0, 1.0)
 		if beam_charge_time >= 0.35 and stamina_component.spend(40.0):
 			var direction = -global_transform.basis.z.normalized()
@@ -255,15 +270,52 @@ func _handle_beam_input() -> void:
 			beam_requested.emit(ratio, direction)
 			beam_cooldown = 4.0
 			attack_cooldown = 0.75
+			beam_charging = false
+			beam_cast_state = "releasing"
+			beam_state_time = 0.30
+			_hide_beam_charge_visuals()
 		elif beam_charge_time >= 0.35:
 			stamina_exhausted.emit("Oathfire Beam")
-		cancel_beam_charge()
+			_begin_beam_redraw()
+		else:
+			_begin_beam_redraw()
+	elif beam_cast_state == "sheathing" and Input.is_action_just_released("oathfire_beam"):
+		_begin_beam_redraw()
+
+func _update_beam_sequence(delta: float) -> void:
+	if beam_cast_state == "":
+		return
+	beam_state_time = max(beam_state_time - delta, 0.0)
+	if beam_cast_state == "sheathing" and beam_state_time <= 0.0:
+		if Input.is_action_pressed("oathfire_beam"):
+			beam_cast_state = "charging"
+			beam_state_time = 0.0
+			if animation_driver != null:
+				animation_driver.trigger_action("beam_cast")
+			_update_beam_charge_visual()
+		else:
+			_begin_beam_redraw()
+	elif beam_cast_state == "releasing" and beam_state_time <= 0.0:
+		_begin_beam_redraw()
+	elif beam_cast_state == "redrawing" and beam_state_time <= 0.0:
+		beam_cast_state = ""
+		beam_charging = false
+		beam_charge_time = 0.0
+		_set_sword_sheathed(false)
+
+func _begin_beam_redraw() -> void:
+	beam_charging = false
+	beam_cast_state = "redrawing"
+	beam_state_time = 0.24
+	_hide_beam_charge_visuals()
 
 func cancel_beam_charge() -> void:
 	beam_charging = false
 	beam_charge_time = 0.0
-	if beam_charge_visual != null:
-		beam_charge_visual.visible = false
+	beam_cast_state = ""
+	beam_state_time = 0.0
+	_hide_beam_charge_visuals()
+	_set_sword_sheathed(false)
 
 func _update_beam_charge_visual() -> void:
 	if beam_charge_visual == null:
@@ -271,6 +323,25 @@ func _update_beam_charge_visual() -> void:
 	beam_charge_visual.visible = true
 	var ratio = clamp(beam_charge_time / 1.25, 0.0, 1.0)
 	beam_charge_visual.scale = Vector3.ONE * lerp(0.12, 0.42, ratio)
+	if beam_left_hand_glow != null:
+		beam_left_hand_glow.visible = true
+		beam_left_hand_glow.position = Vector3(lerp(-0.40, -0.16, ratio), lerp(1.16, 1.30, ratio), lerp(-0.34, -0.67, ratio))
+	if beam_right_hand_glow != null:
+		beam_right_hand_glow.visible = true
+		beam_right_hand_glow.position = Vector3(lerp(0.40, 0.16, ratio), lerp(1.16, 1.30, ratio), lerp(-0.34, -0.67, ratio))
+
+func _hide_beam_charge_visuals() -> void:
+	for glow in [beam_charge_visual, beam_left_hand_glow, beam_right_hand_glow]:
+		if glow != null:
+			glow.visible = false
+
+func _set_sword_sheathed(sheathed: bool) -> void:
+	if weapon_root != null:
+		weapon_root.visible = not sheathed
+	if rig_sword_visual != null:
+		rig_sword_visual.visible = not sheathed
+	if sheathed_sword_visual != null:
+		sheathed_sword_visual.visible = sheathed
 
 func is_blocking() -> bool:
 	return Input.is_action_pressed("block") and stamina_component.stamina > 8.0
@@ -397,10 +468,41 @@ func _add_beam_charge_visual() -> void:
 	beam_charge_visual = MeshInstance3D.new()
 	beam_charge_visual.name = "OathfireChargeSphere"
 	beam_charge_visual.mesh = SphereMesh.new()
-	beam_charge_visual.position = Vector3(0.46, 1.32, -0.78)
+	beam_charge_visual.position = Vector3(0, 1.30, -0.72)
 	beam_charge_visual.material_override = _beam_material(Color(0.35, 0.88, 1.0, 0.92))
 	beam_charge_visual.visible = false
 	visual_root.add_child(beam_charge_visual)
+	beam_left_hand_glow = _make_oathfire_hand("OathfireLeftHand", Vector3(-0.40, 1.16, -0.34))
+	beam_right_hand_glow = _make_oathfire_hand("OathfireRightHand", Vector3(0.40, 1.16, -0.34))
+	_build_sheathed_sword()
+
+func _make_oathfire_hand(node_name: String, pos: Vector3) -> MeshInstance3D:
+	var glow := MeshInstance3D.new()
+	glow.name = node_name
+	var mesh := SphereMesh.new()
+	mesh.radius = 0.10
+	mesh.height = 0.20
+	glow.mesh = mesh
+	glow.position = pos
+	glow.material_override = _beam_material(Color(0.38, 0.82, 1.0, 0.58))
+	glow.visible = false
+	visual_root.add_child(glow)
+	return glow
+
+func _build_sheathed_sword() -> void:
+	sheathed_sword_visual = Node3D.new()
+	sheathed_sword_visual.name = "OathfireSheathedSword"
+	sheathed_sword_visual.position = Vector3(-0.34, 1.18, 0.28)
+	sheathed_sword_visual.rotation_degrees = Vector3(20, 0, -28)
+	visual_root.add_child(sheathed_sword_visual)
+	var blade := MeshInstance3D.new()
+	var blade_mesh := BoxMesh.new()
+	blade_mesh.size = Vector3(0.07, 0.07, 1.45)
+	blade.mesh = blade_mesh
+	blade.position.z = -0.52
+	blade.material_override = _metal_mat(Color(0.62, 0.66, 0.68))
+	sheathed_sword_visual.add_child(blade)
+	sheathed_sword_visual.visible = false
 
 func _try_build_mapped_body() -> bool:
 	asset_helper = AssetSpawnHelper.new()
@@ -420,8 +522,11 @@ func _try_build_mapped_body() -> bool:
 	mapped.scale = Vector3(0.60, 0.60, 0.60)
 	mapped.rotation_degrees.y = 180
 	visual_root.add_child(mapped)
+	rig_sword_visual = mapped.find_child("Warrior_Sword", true, false) as Node3D
 	body_visual = _find_first_mesh(mapped)
 	_apply_visible_material_fallbacks(mapped, _mat(Color(0.18, 0.20, 0.18)))
+	if body_visual != null and body_visual.material_override is StandardMaterial3D:
+		body_base_color = (body_visual.material_override as StandardMaterial3D).albedo_color
 	animation_driver = CharacterAnimationDriver.new()
 	animation_driver.name = "CharacterAnimationDriver"
 	mapped.add_child(animation_driver)
@@ -429,7 +534,7 @@ func _try_build_mapped_body() -> bool:
 		"idle": "Idle_Weapon", "walk": "Walk", "run": "Run_Weapon",
 		"jump": "Run_Weapon", "attack_light": "Sword_Attack",
 		"attack_heavy": "Sword_Attack2", "dodge": "Roll",
-		"hit": "RecieveHit", "death": "Death"
+		"parry": "RecieveHit", "beam_cast": "PickUp", "hit": "RecieveHit", "death": "Death"
 	}))
 	if not animated:
 		_add_motion_proxy_parts()
@@ -615,11 +720,17 @@ func _animate_visuals(delta: float, move_dir: Vector3, moving: bool) -> void:
 			sword_trail_visual.visible = false
 		if slash_arc_root != null:
 			slash_arc_root.visible = false
+	if beam_cast_state != "":
+		var cast_weight := 1.0 if beam_cast_state in ["charging", "releasing"] else 0.55
+		visual_root.rotation_degrees.x = lerp(visual_root.rotation_degrees.x, -4.0 * cast_weight, 12.0 * delta)
+		visual_root.rotation_degrees.y = lerp(visual_root.rotation_degrees.y, 0.0, 12.0 * delta)
+		if slash_arc_root != null:
+			slash_arc_root.visible = false
 	_animate_motion_proxies(delta, moving, movement_blend, dodge_weight, hurt_weight, block_pose_weight, combat_windup_weight, combat_swing_weight)
 	if body_visual != null:
 		var mat = body_visual.material_override as StandardMaterial3D
 		if mat != null:
-			mat.albedo_color = Color(0.72, 0.22, 0.12) if hurt_flash_time > 0.0 else Color(0.24, 0.27, 0.25)
+			mat.albedo_color = body_base_color.lerp(Color(0.72, 0.22, 0.12), 0.72) if hurt_flash_time > 0.0 else body_base_color
 
 func _animate_motion_proxies(delta: float, moving: bool, speed_factor: float, dodge_weight: float, hurt_weight: float, block_weight: float, windup_weight: float, swing_weight: float) -> void:
 	var gait = sin(move_phase)
@@ -652,12 +763,17 @@ func _animate_motion_proxies(delta: float, moving: bool, speed_factor: float, do
 func _animate_slash_arc(strike: float, strike_arc: float, recovery: float, heavy: bool) -> void:
 	if slash_arc_root == null:
 		return
-	var visible = strike > 0.02 and recovery < 0.92
+	var visible = strike > 0.08 and strike < 0.94 and recovery < 0.86
 	slash_arc_root.visible = visible
 	if not visible:
 		return
 	var arc_size = 1.0 + strike_arc * (0.55 if heavy else 0.32)
-	slash_arc_root.position = Vector3(0.50 + 0.18 * strike_arc, 1.16 + (0.12 if heavy else 0.05), -0.78 - 0.22 * strike_arc)
+	var blade_origin := Vector3(0.42, 0.94, -0.42)
+	if weapon_root != null:
+		blade_origin = weapon_root.position
+	elif rig_sword_visual != null:
+		blade_origin = visual_root.to_local(rig_sword_visual.global_position)
+	slash_arc_root.position = blade_origin + Vector3(0.08 + 0.20 * strike_arc, 0.30 + (0.14 if heavy else 0.07), -0.40 - 0.30 * strike_arc)
 	slash_arc_root.rotation_degrees = Vector3(-18.0 if heavy else -10.0, lerp(54.0 if heavy else 40.0, -48.0 if heavy else -34.0, strike), lerp(-52.0 if heavy else -34.0, 38.0 if heavy else 28.0, strike))
 	slash_arc_root.scale = Vector3(arc_size, 1.0, arc_size)
 	if slash_arc_primary != null:
