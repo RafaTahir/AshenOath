@@ -249,6 +249,7 @@ func _build_music_library() -> void:
 	music["wychwood_tension"] = _music_loop([46.0, 69.0, 92.0], 6.2, 0.070, 0.020)
 	music["ghoulkin_combat"] = _music_loop([54.0, 81.0, 108.0, 162.0], 3.8, 0.095, 0.018)
 	music["return_report"] = _music_loop([66.0, 99.0, 148.0], 5.2, 0.056, 0.010)
+	music["castle_silence"] = _music_loop([49.0, 73.5, 98.0, 147.0], 6.6, 0.048, 0.009)
 
 func _ambient_stream(zone_id: String) -> AudioStreamWAV:
 	if zone_id == "greyfen":

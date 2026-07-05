@@ -1,5 +1,7 @@
 extends RefCounted
 
+const CastleVarganSection = preload("res://scripts/zones/castle_vargan_section.gd")
+
 const SECTIONS := {
 	"deep_wood":{"back":"wychwood","next":"old_mill","color":Color(0.045,0.075,0.05)},
 	"old_mill":{"back":"deep_wood","next":"burned_farmstead","color":Color(0.12,0.10,0.075)},
@@ -15,6 +17,9 @@ const SECTIONS := {
 }
 
 func build(host: Node, zone_id: String) -> void:
+	if zone_id in CastleVarganSection.CASTLE_ZONES:
+		CastleVarganSection.new().build(host, zone_id)
+		return
 	var d: Dictionary = SECTIONS[zone_id]
 	host.call("_make_ground",Vector3(0,-0.08,0),Vector3(40,0.16,32),d.color)
 	host.call("_make_play_area_bounds",40.0,32.0,d.color.darkened(0.35))

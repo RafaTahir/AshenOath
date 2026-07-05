@@ -76,6 +76,21 @@ func _initialize() -> void:
 	await _capture_victory_state(game, "23_ghoulkin_aftermath_clue")
 	await _capture_oathfire_state(game, "24_oathfire_charge", false)
 	await _capture_oathfire_state(game, "25_oathfire_beam_release", true)
+	game.quests.active.clear()
+	game.quests.unlocked["main_blood_under_stone"] = true
+	game.quests.start_quest("main_blood_under_stone")
+	await _capture(game, "50_castle_distant_approach", Vector3(0,1,12), "vargan_approach", Vector3(0,1,12))
+	await _capture(game, "51_castle_outer_gate", Vector3(0,1,-8), "vargan_approach", Vector3(0,1,-8))
+	await _capture(game, "52_castle_courtyard_wide", Vector3(0,1,9), "vargan_court", Vector3(0,1,9))
+	await _capture_castle_interaction(game, "53_castle_guard_dialogue", "vargan_court", "vargan_gate_guard", Vector3(-2.7,1,9.0))
+	await _capture(game, "54_castle_gatehouse_evidence", Vector3(3.8,1,8.5), "vargan_court", Vector3(3.8,1,8.5), -0.25)
+	await _capture(game, "55_castle_record_hall", Vector3(0,1,9), "record_hall", Vector3(0,1,9))
+	await _capture_castle_interaction(game, "56_castle_ledger_choice", "record_hall", "vargan_ledger_choice", Vector3(0,1,-5.8))
+	game.story_state.set_flag("vargan_ledger_choice_made", true)
+	await _capture(game, "57_castle_record_hall_haunting", Vector3(0,1,7), "record_hall", Vector3(0,1,7))
+	await _capture(game, "58_castle_view_to_old_road", Vector3(0,1,0), "vargan_approach", Vector3(0,1,0), PI)
+	game.settings.set_quality_preset("potato")
+	await _capture(game, "59_castle_potato_mode", Vector3(0,1,9), "vargan_court", Vector3(0,1,9))
 	print("slice screenshots saved to %s and mirrored to %s" % [output_dir, gallery_dir])
 	game.queue_free()
 	await process_frame
@@ -130,6 +145,20 @@ func _capture_place_interaction(game, file_name: String, place_id: String, playe
 	var place = _find_child_named(game.zone_root,place_id)
 	if place == null: push_error("capture missing %s" % place_id); quit(1); return
 	game.call("_handle_interaction",place)
+	await _settle_frames(10)
+	_save_viewport(file_name)
+	game.get_tree().paused = false
+	game.hud.hide_menus()
+
+func _capture_castle_interaction(game, file_name: String, zone_id: String, interaction_id: String, player_pos: Vector3) -> void:
+	game.call("_load_zone", zone_id, player_pos)
+	await _settle_frames(5)
+	var target = _find_child_named(game.zone_root, interaction_id)
+	if target == null:
+		push_error("castle capture missing %s" % interaction_id)
+		quit(1)
+		return
+	game.call("_handle_interaction", target)
 	await _settle_frames(10)
 	_save_viewport(file_name)
 	game.get_tree().paused = false

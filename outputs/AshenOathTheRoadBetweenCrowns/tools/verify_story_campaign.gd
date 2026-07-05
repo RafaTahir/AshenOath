@@ -39,7 +39,11 @@ func _initialize() -> void:
 	await process_frame; game.call("_new_game"); await process_frame
 	for zone in ["deep_wood","old_mill","burned_farmstead","marsh_crossing","bandit_road","vargan_approach","vargan_court","record_hall","undercroft","assembly","hart_glade"]:
 		game.call("_load_zone",zone,Vector3(0,1,12)); await process_frame
-		check(game.current_zone_id == zone and game.zone_root.find_child("CampaignSection_%s" % zone,true,false) != null, "Campaign zone failed: %s" % zone)
+		var marker = game.zone_root.find_child("CampaignSection_%s" % zone,true,false)
+		if zone == "vargan_approach": marker = game.zone_root.find_child("CastleVargan_Approach",true,false)
+		elif zone == "vargan_court": marker = game.zone_root.find_child("CastleVargan_OuterCourtyard",true,false)
+		elif zone == "record_hall": marker = game.zone_root.find_child("CastleVargan_RecordHall",true,false)
+		check(game.current_zone_id == zone and marker != null, "Campaign zone failed: %s" % zone)
 
 	print("STORY CAMPAIGN VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
 	quit(0 if failures == 0 else 1)

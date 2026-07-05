@@ -282,7 +282,7 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		visual_director.apply_zone(zone_id)
 	if audio != null:
 		audio.play_ambient(zone_id)
-		audio.set_music_state("wychwood_tension" if zone_id == "wychwood" else "greyfen_explore")
+		audio.set_music_state("wychwood_tension" if zone_id == "wychwood" else ("castle_silence" if zone_id in ["vargan_approach", "vargan_court", "record_hall"] else "greyfen_explore"))
 		if zone_id == "greyfen":
 			audio.play_event("shrine_hum", 0.01)
 	if player != null:
@@ -381,7 +381,10 @@ func _build_greyfen() -> void:
 	_make_route_markers()
 	_make_greyfen_road_of_crows_story_beats()
 	_make_collapsed_road(Vector3(18.0, 0, 0))
-	_make_blocked_gate("Road to Castle Vargan", Vector3(17.5, 0, 0), "Castle Vargan is blocked for this vertical slice. The contract trail runs north into Wychwood.")
+	if quests.is_unlocked("main_blood_under_stone") or quests.is_active("main_blood_under_stone") or quests.is_completed("main_blood_under_stone"):
+		_make_zone_gate("Road to Castle Vargan", Vector3(17.5, 0, 0), "vargan_approach", Vector3(0, 1, 14))
+	else:
+		_make_blocked_gate("Road to Castle Vargan", Vector3(17.5, 0, 0), "House Vargan admits no petitioners. Follow the Road of Crows until its old orders surface.")
 	var life = GreyfenLifeController.new()
 	life.name = "GreyfenLifeController"
 	zone_root.add_child(life)
@@ -470,6 +473,9 @@ func _handle_interaction(area) -> void:
 	elif area.interaction_type == "village_place":
 		_handle_village_place(area.interaction_id)
 	elif area.interaction_type == "dialogue":
+		if area.interaction_id == "vargan_ledger_choice":
+			quests.complete_evidence("main_blood_under_stone", "evidence_ledger_fragment")
+			quests.complete_objective("main_blood_under_stone", "recover_ledger")
 		var dialogue_data = dialogue.get_dialogue(area.dialogue_id)
 		var played_report_voice = false
 		if _road_ready_to_report() and area.interaction_id in ["sister_anwen", "notice_board", "retain_evidence"]:
@@ -542,6 +548,14 @@ func _handle_interaction(area) -> void:
 			hud.toast("The roots drink from old blood. Mira knew this place.")
 		elif area.interaction_id == "chapel_door":
 			quests.complete_objective("main_bell_beneath_greyfen", "cemetery_ambush")
+		elif area.interaction_id.begins_with("vargan_"):
+			story_state.set_flag(area.interaction_id, true)
+			story_state.set_flag("castle_discovered", true)
+			match area.interaction_id:
+				"vargan_mile_marker": hud.toast("The seal is Vargan. The scrape marks are newer.")
+				"vargan_supply_cart": hud.toast("Army weights and refugee canvas. Soldiers moved this cargo after the road closed.")
+				"vargan_gate_notice": hud.toast("The road was not lost. It was closed by order.")
+				"vargan_iron_binding": hud.toast("Iron wire, blackened at the twist. The same work as Oren's token.")
 		_mark_interaction_removed(area)
 		active_interactable = null
 		hud.set_prompt("")
@@ -603,11 +617,17 @@ func _handle_road_of_crows_clue(area) -> void:
 			quests.complete_evidence("main_road_of_crows", "oren")
 
 func _apply_campaign_arrival(zone_id: String) -> void:
+	if zone_id in ["vargan_approach", "vargan_court", "record_hall"]:
+		story_state.set_flag("castle_discovered", true)
+		if quests.is_unlocked("main_blood_under_stone") and not quests.is_active("main_blood_under_stone") and not quests.is_completed("main_blood_under_stone"):
+			quests.start_quest("main_blood_under_stone")
 	var arrivals := {
 		"deep_wood":["main_teeth_in_rain","name_the_dead"],
 		"old_mill":["main_ash_at_the_mill","reach_mill"],
 		"bandit_road":["main_soldier_without_banner","reach_bandit_road"],
-		"vargan_approach":["main_blood_under_stone","enter_vargan"],
+		"vargan_approach":["main_blood_under_stone","reach_castle"],
+		"vargan_court":["main_blood_under_stone","enter_courtyard"],
+		"record_hall":["main_blood_under_stone","locate_record_hall"],
 		"undercroft":["main_last_witness","reach_undercroft"],
 		"assembly":["main_crowns_without_mercy","greyfen_assembly"],
 		"hart_glade":["main_hart_remembers","enter_glade"]
@@ -651,6 +671,11 @@ func _handle_dialogue_action(action: Dictionary) -> void:
 		for completion in action.get("completes", []):
 			quests.complete_objective(str(completion.get("quest", "")), str(completion.get("objective", "")))
 		hud.toast(str(action.get("result", "Your choice will be remembered.")))
+		if str(action.get("quest", "")) == "main_blood_under_stone" and str(action.get("objective", "")) == "ledger_choice":
+			story_state.set_flag("vargan_ledger_found", true)
+			story_state.set_flag("vargan_ledger_choice_made", true)
+			story_state.set_flag("record_hall_unlocked", true)
+			hud.set_guidance_hint("The record hall is no longer empty. Stand ready.", 5.0)
 	elif type == "ending":
 		_complete_ending(action.get("ending", "expose"))
 		return
@@ -878,7 +903,7 @@ func _on_enemy_died(enemy) -> void:
 		camera_rig.shake(0.09)
 	if zone_root != null and enemy != null:
 		CombatFeedback.ground_ring(zone_root, enemy.global_position, Color(0.12, 0.08, 0.055), 0.9, 0.24)
-	if enemy.enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute"]:
+	if current_zone_id == "wychwood" and enemy.enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute"]:
 		wychwood_pack_kills += 1
 		if wychwood_pack_kills >= 5:
 			quests.complete_objective("main_road_of_crows", "fight_ghoulkin")
@@ -893,6 +918,12 @@ func _on_enemy_died(enemy) -> void:
 			_make_post_ghoulkin_story_clue()
 	elif enemy.enemy_id == "bog_wretch":
 		quests.complete_objective("main_teeth_in_rain", "fight_bog_wretch")
+	elif enemy.enemy_id == "wychwood_stalker" and current_zone_id == "record_hall":
+		story_state.set_flag("castle_haunting_cleared", true)
+		quests.complete_objective("main_blood_under_stone", "survive_haunting")
+		quests.complete_objective("main_blood_under_stone", "last_witness_hook")
+		hud.toast("The erased names settle. A stair beneath the archive unlocks.")
+		hud.set_guidance_hint("Descend beneath Vargan stone. Find the last witness.", 6.0)
 	elif enemy.enemy_id == "gravebound_knight":
 		if current_zone_id == "undercroft":
 			quests.complete_objective("main_last_witness", "break_halvern_guard")
@@ -935,6 +966,8 @@ func _on_enemy_attack_resolved(enemy, parried: bool) -> void:
 		hud.show_enemy(enemy.display_name, enemy.health_component.health, enemy.health_component.max_health)
 
 func _on_quest_completed(id: String) -> void:
+	if id == "main_blood_under_stone":
+		story_state.set_flag("blood_under_stone_completed", true)
 	var reward = quests.quest_defs.get(id, {}).get("rewards", {})
 	if not reward.is_empty():
 		inventory.add_reward(reward)
@@ -1096,7 +1129,7 @@ func _update_tutorial_prompts() -> void:
 func _update_compass() -> void:
 	if hud == null or player == null:
 		return
-	var zone_name = {"greyfen": "Greyfen", "wychwood": "The Wychwood", "ruins": "Castle Vargan"}.get(current_zone_id, current_zone_id)
+	var zone_name = {"greyfen":"Greyfen", "wychwood":"The Wychwood", "ruins":"Castle Vargan", "vargan_approach":"Castle Vargan Approach", "vargan_court":"Castle Vargan Courtyard", "record_hall":"Vargan Record Hall"}.get(current_zone_id, current_zone_id)
 	hud.set_compass("%s | %s" % [zone_name, _nearest_interactable_summary()])
 
 func _nearest_interactable_summary() -> String:
