@@ -25,6 +25,7 @@ const CharacterAnimationDriver = preload("res://scripts/character_animation_driv
 const WorldVisualUpgrade = preload("res://scripts/world_visual_upgrade.gd")
 const WorldMaterialLibrary = preload("res://scripts/world_material_library.gd")
 const DayNightController = preload("res://scripts/day_night_controller.gd")
+const RiverSection = preload("res://scripts/zones/river_section.gd")
 const WorldMotionController = preload("res://scripts/world_motion_controller.gd")
 const SurfaceFeedbackManager = preload("res://scripts/surface_feedback_manager.gd")
 const GreyfenLifeController = preload("res://scripts/greyfen_life_controller.gd")
@@ -244,6 +245,7 @@ func load_save_state(data: Dictionary) -> void:
 	var zone = str(data.get("zone", "greyfen"))
 	var pos_array: Array = data.get("player_position", [0, 1, 7])
 	var pos = Vector3(float(pos_array[0]), float(pos_array[1]), float(pos_array[2]))
+	pos = _safe_loaded_position(zone, pos)
 	_load_zone(zone, pos)
 	_refresh_tracker()
 	_refresh_equipment_readout()
@@ -271,6 +273,12 @@ func _spawn_player(pos: Vector3) -> void:
 	player.blocked.connect(_on_player_blocked)
 	player.hurt.connect(_on_player_hurt)
 	player.stamina_exhausted.connect(_on_player_stamina_exhausted)
+	player.breath_changed.connect(hud.update_stamina)
+	player.water_state_changed.connect(func(state: String):
+		hud.set_swimming_mode(state != "grounded")
+		hud.show_status_cue("Swimming" if state != "grounded" else "Back on solid ground", "neutral")
+	)
+	player.splash_requested.connect(_make_water_splash)
 	player.died.connect(_on_player_died)
 	player.health_component.changed.connect(hud.update_health)
 	player.stamina_component.changed.connect(hud.update_stamina)
@@ -419,11 +427,12 @@ func _add_visual_100_layer(zone_id: String) -> void:
 	surface.configure(player, quality)
 
 func _build_greyfen() -> void:
-	_make_ground(Vector3(0, -0.08, 0), Vector3(42, 0.16, 34), Color(0.16, 0.18, 0.13))
+	_make_split_ground(42.0, 34.0, 4.5, 5.5, Color(0.16, 0.18, 0.13))
+	RiverSection.new().build(zone_root,{"host":self,"center_z":4.5,"width":42.0,"span":5.5})
 	_make_greyfen_terrain_layers()
 	_make_play_area_bounds(42, 34, Color(0.09, 0.12, 0.08))
 	_make_road(Vector3(0, 0.018, 0), Vector3(4.2, 0.04, 30.0), Color(0.16, 0.13, 0.09))
-	_make_road(Vector3(-5, 0.02, 5), Vector3(14.0, 0.04, 3.0), Color(0.15, 0.12, 0.085))
+	_make_road(Vector3(-5, 0.02, 9), Vector3(14.0, 0.04, 3.0), Color(0.15, 0.12, 0.085))
 	_make_greyfen_path_edges()
 	_make_light("Village Warmth", Vector3(-1.5, 5.2, 2), Color(1.0, 0.58, 0.30), 3.0)
 	_make_light("Blue Dusk Fill", Vector3(9, 6, -10), Color(0.34, 0.42, 0.58), 2.8)
@@ -446,12 +455,12 @@ func _build_greyfen() -> void:
 		_make_fence(Vector3(19, 0.35, z), true)
 	_make_notice_board(Vector3(-2.0, 0, 9.4))
 	_make_shrine_scene(Vector3(6.0, 0, -7.0))
-	_make_blacksmith_scene(Vector3(9.5, 0, 4.6))
+	_make_blacksmith_scene(Vector3(10.5, 0, -1.2))
 	CemeterySection.new().build(zone_root, {
 		"host": self,
 		"origin": Vector3(14, 0, 8.6),
 	})
-	_make_cart(Vector3(-6.2, 0, 5.8))
+	_make_cart(Vector3(-6.2, 0, 9.0))
 	_make_village_dressing()
 	_make_greyfen_first_impression_dressing()
 	_make_quality_greyfen_overhaul()
@@ -462,7 +471,7 @@ func _build_greyfen() -> void:
 	_make_named_interactable("mira", "dialogue", "Talk to Mira Fen", Vector3(-6.8, 0, -2.3), Color(0.22, 0.48, 0.32), Vector3(0.62, 0.62, 0.62))
 	_make_named_interactable("rook", "dialogue", "Talk to Rook", Vector3(-7.8, 0, 8.5), Color(0.42, 0.33, 0.23), Vector3(0.62, 0.62, 0.62))
 	_make_named_interactable("widow_elna", "dialogue", "Talk to Widow Elna", Vector3(13.0, 0, 7.0), Color(0.32, 0.30, 0.42), Vector3(0.54, 0.54, 0.54))
-	_make_named_interactable("blacksmith_tor", "dialogue", "Talk to Blacksmith Tor", Vector3(9.5, 0, 3.0), Color(0.43, 0.37, 0.31), Vector3(0.54, 0.54, 0.54))
+	_make_named_interactable("blacksmith_tor", "dialogue", "Talk to Blacksmith Tor", Vector3(9.5, 0, -2.8), Color(0.43, 0.37, 0.31), Vector3(0.54, 0.54, 0.54))
 	_make_named_interactable("farmer_toma", "dialogue", "Talk to Farmer Toma", Vector3(12, 0, -9), Color(0.39, 0.30, 0.18), Vector3(0.46, 0.46, 0.46))
 	_make_named_interactable("side_contracts", "dialogue", "Read village requests", Vector3(-3.2,0,9.4), Color(0.42,0.27,0.14), Vector3(0.4,0.4,0.4))
 	_make_named_interactable("names_decision", "dialogue", "Decide the fate of the names", Vector3(4.4,0,-5.0), Color(0.36,0.32,0.25), Vector3(0.45,0.45,0.45))
@@ -470,7 +479,7 @@ func _build_greyfen() -> void:
 	_make_named_interactable("retain_evidence", "dialogue", "Keep Oren's token", Vector3(1.8,0,8.8), Color(0.38,0.24,0.16), Vector3(0.35,0.35,0.35))
 	_make_named_interactable("village_stories", "dialogue", "Resolve a village story", Vector3(-4.1,0,9.0), Color(0.34,0.23,0.14), Vector3(0.4,0.4,0.4))
 	_make_village_place("village_well", "village_place", "Draw from the village well", Vector3(-8.0,0,-0.5), Vector3(2.2,0.9,2.2), Color(0.19,0.18,0.16))
-	_make_village_place("forge_corner", "village_place", "Inspect Tor's old iron", Vector3(11.0,0,4.5), Vector3(1.5,0.7,1.2), Color(0.28,0.18,0.10))
+	_make_village_place("forge_corner", "village_place", "Inspect Tor's old iron", Vector3(11.0,0,-1.2), Vector3(1.5,0.7,1.2), Color(0.28,0.18,0.10))
 	_make_village_place("shrine_prayer", "village_place", "Sit at the shrine bench", Vector3(8.0,0,-6.2), Vector3(2.4,0.55,0.7), Color(0.22,0.15,0.09))
 	_make_village_place("common_table", "minigame", "Play Three Marks with Rook", Vector3(-5.4,0,7.2), Vector3(2.8,0.85,1.8), Color(0.28,0.18,0.10))
 	_make_village_place("barrel_board", "minigame", "Play Greyfen Draughts with Tor", Vector3(7.0,0,6.8), Vector3(2.2,0.85,1.5), Color(0.24,0.15,0.08))
@@ -480,7 +489,7 @@ func _build_greyfen() -> void:
 	_make_clue("grave_soldier", "Inspect the empty soldier's grave", Vector3(16.2,0,7.2), "main_bell_beneath_greyfen", "grave_soldier", Color(0.3,0.28,0.25))
 	_make_clue("chapel_door", "Open the ruined Crow Chapel", Vector3(16.3,0,8.0), "main_bell_beneath_greyfen", "open_chapel", Color(0.24,0.22,0.18))
 	_make_clue("register_anwen", "Take Anwen's hidden register page", Vector3(5.4,0,-6.2), "main_names_they_burned", "fragment_anwen", Color(0.42,0.36,0.22))
-	_make_clue("register_tor", "Take the forge register page", Vector3(9.0,0,4.0), "main_names_they_burned", "fragment_tor", Color(0.42,0.36,0.22))
+	_make_clue("register_tor", "Take the forge register page", Vector3(9.0,0,-1.0), "main_names_they_burned", "fragment_tor", Color(0.42,0.36,0.22))
 	_make_clue("sheepfold", "Inspect sheepfold", Vector3(15, 0, -11), "side_black_dog", "inspect_sheepfold", Color(0.36, 0.24, 0.16))
 	_make_zone_gate("To Wychwood", Vector3(0, 0, -15.2), "wychwood", Vector3(0, 1, 13))
 	_make_zone_gate("The long road", Vector3(-18,0,-10), "deep_wood", Vector3(0,1,12))
@@ -495,7 +504,8 @@ func _build_greyfen() -> void:
 	life.configure(self, str(settings.settings.get("quality_preset", "balanced")))
 
 func _build_wychwood() -> void:
-	_make_ground(Vector3(0, -0.08, 0), Vector3(44, 0.16, 34), Color(0.065, 0.105, 0.07))
+	_make_split_ground(44.0, 34.0, 0.0, 5.5, Color(0.065, 0.105, 0.07))
+	RiverSection.new().build(zone_root,{"host":self,"center_z":0.0,"width":44.0,"span":5.5})
 	_make_wychwood_terrain_layers()
 	_make_play_area_bounds(44, 34, Color(0.04, 0.075, 0.045))
 	_make_road(Vector3(0, 0.018, 3), Vector3(4.0, 0.04, 27.0), Color(0.065, 0.075, 0.052))
@@ -527,8 +537,8 @@ func _build_wychwood() -> void:
 	_make_zone_gate("Back to Greyfen", Vector3(0, 0, 15), "greyfen", Vector3(0, 1, -13))
 	_make_clue("corpse", "Inspect blood-dark corpse", Vector3(-2, 0, 7.4), "main_road_of_crows", "inspect_corpse", Color(0.32, 0.18, 0.16))
 	_make_clue("claw_marks", "Read strange claw marks", Vector3(2.5, 0, 4.8), "main_road_of_crows", "find_claw_marks", Color(0.18, 0.18, 0.18))
-	_make_clue("black_feathers", "Take black feathers", Vector3(-4, 0, 2), "main_road_of_crows", "find_black_feathers", Color(0.03, 0.03, 0.035))
-	_make_clue("tracks", "Inspect dragged tracks", Vector3(0, 0, -3), "main_road_of_crows", "return_village", Color(0.15, 0.11, 0.08))
+	_make_clue("black_feathers", "Take black feathers", Vector3(-4, 0, 4.0), "main_road_of_crows", "find_black_feathers", Color(0.03, 0.03, 0.035))
+	_make_clue("tracks", "Inspect dragged tracks", Vector3(0, 0, -4.2), "main_road_of_crows", "return_village", Color(0.15, 0.11, 0.08))
 	_make_clue("ritual_stones", "Study ritual stones", Vector3(8, 0, -10), "main_teeth_in_rain", "discover_stones", Color(0.38, 0.38, 0.36))
 	_make_clue("vargan_signet", "Take signet ring", Vector3(11, 0, -12), "main_teeth_in_rain", "find_signet", Color(0.72, 0.56, 0.24))
 	_make_clue("bandit_camp", "Inspect bandit camp", Vector3(-12, 0, -12), "side_black_dog", "find_bandit_camp", Color(0.30, 0.18, 0.10))
@@ -683,6 +693,9 @@ func _handle_village_place(id: String) -> void:
 			hud.toast("Cold iron in the water. Kael catches his breath.")
 		"forge_corner": hud.toast("Vargan iron, hammered into Greyfen hinges. Tor never mentions the crest marks.")
 		"shrine_prayer": hud.toast("The bench is worn smooth by people asking not to be noticed.")
+		"river_water":
+			player.stamina_component.restore(18.0)
+			hud.toast("Cold river water. Clean enough above Greyfen, for now.")
 		_: hud.toast("Greyfen has made use of everything it could keep.")
 
 func _on_minigame_result(game_id: String, outcome: String) -> void:
@@ -1274,13 +1287,27 @@ func _keep_player_in_world() -> void:
 	if player == null:
 		return
 	var half = _zone_half_extents(current_zone_id)
-	if player.global_position.y > -2.0 and abs(player.global_position.x) < half.x - 1.5 and abs(player.global_position.z) < half.y - 1.5:
+	if player.global_position.y > -2.0 and not player.is_swimming() and abs(player.global_position.x) < half.x - 1.5 and abs(player.global_position.z) < half.y - 1.5:
 		last_safe_player_position = player.global_position
 		return
 	if player.global_position.y < -8.0 or abs(player.global_position.x) > half.x + 4.0 or abs(player.global_position.z) > half.y + 4.0:
 		player.global_position = last_safe_player_position + Vector3(0, 1.2, 0)
 		player.velocity = Vector3.ZERO
 		hud.toast("Kael catches himself before the dark takes him.")
+
+func _safe_loaded_position(zone: String, pos: Vector3) -> Vector3:
+	var river_z := 4.5 if zone == "greyfen" else (0.0 if zone == "wychwood" else 999.0)
+	if absf(pos.z - river_z) < 3.2 and pos.y < 0.5:
+		return Vector3(pos.x, 1.0, river_z - 3.6)
+	return pos
+
+func _make_water_splash(pos: Vector3, entering: bool) -> void:
+	var splash := MeshInstance3D.new(); splash.name = "RiverEntrySplash"
+	var ring := TorusMesh.new(); ring.inner_radius = 0.32; ring.outer_radius = 0.42; ring.rings = 12; ring.ring_segments = 8
+	splash.mesh = ring; splash.position = Vector3(pos.x, 0.12, pos.z)
+	var mat := StandardMaterial3D.new(); mat.albedo_color = Color(0.45,0.76,0.90,0.72); mat.emission_enabled=true; mat.emission=Color(0.16,0.44,0.62); mat.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA
+	splash.material_override=mat; zone_root.add_child(splash)
+	var tween:=create_tween(); tween.tween_property(splash,"scale",Vector3.ONE*(2.0 if entering else 1.4),0.35); tween.parallel().tween_property(splash,"transparency",1.0,0.35); tween.tween_callback(splash.queue_free)
 
 func _zone_half_extents(zone_id: String) -> Vector2:
 	if zone_id == "wychwood":
@@ -2295,6 +2322,14 @@ func _make_ground(pos: Vector3, size: Vector3, color: Color) -> void:
 	mesh.mesh = cube
 	mesh.material_override = _terrain_material("CampaignGround", color)
 	body.add_child(mesh)
+
+func _make_split_ground(width: float, depth: float, river_z: float, river_span: float, color: Color) -> void:
+	var south_edge := river_z + river_span * 0.5
+	var north_edge := river_z - river_span * 0.5
+	var north_depth := north_edge + depth * 0.5
+	var south_depth := depth * 0.5 - south_edge
+	_make_ground(Vector3(0,-0.08,-depth*0.5+north_depth*0.5),Vector3(width,0.16,north_depth),color)
+	_make_ground(Vector3(0,-0.08,south_edge+south_depth*0.5),Vector3(width,0.16,south_depth),color)
 
 func _make_hut(pos: Vector3) -> void:
 	_make_prop_box("Hut", pos + Vector3(0, 1, 0), Vector3(3.6, 2, 3.0), Color(0.22, 0.16, 0.12))

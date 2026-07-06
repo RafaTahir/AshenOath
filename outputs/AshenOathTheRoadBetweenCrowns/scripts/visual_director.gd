@@ -6,6 +6,7 @@ var moon: DirectionalLight3D
 var sky_dome: MeshInstance3D
 var sun_disc: MeshInstance3D
 var sun_halo: MeshInstance3D
+var sun_rays: Node3D
 var cloud_layer: Node3D
 var moon_disc: MeshInstance3D
 var moon_halo: MeshInstance3D
@@ -103,11 +104,13 @@ func _update_sky_cycle(daylight: float, twilight: float, night: float, minutes: 
 	var moon_position: Vector3 = sky_origin + sky_forward * 105.0 + sky_right * (-cos(orbit) * 64.0) + Vector3.UP * max(22.0, -sin(orbit) * 54.0)
 	sun_disc.position = sun_position
 	sun_halo.position = sun_position + Vector3(0, 0, 0.4)
+	sun_rays.position = sun_position
 	moon_disc.position = moon_position
 	moon_halo.position = moon_position + Vector3(0, 0, 0.4)
 	var sun_amount := clampf(daylight + twilight * 0.82, 0.0, 1.0)
 	sun_disc.visible = sun_amount > 0.08
 	sun_halo.visible = sun_amount > 0.10
+	sun_rays.visible = sun_amount > 0.14
 	moon_disc.visible = night > 0.14
 	moon_halo.visible = night > 0.18
 	_set_mesh_alpha(sun_disc, 0.92 * sun_amount)
@@ -125,12 +128,14 @@ func _update_sky_cycle(daylight: float, twilight: float, night: float, minutes: 
 	if night > 0.55:
 		cloud_color = Color(0.10, 0.15, 0.24)
 	for i in range(cloud_layer.get_child_count()):
-		var cloud := cloud_layer.get_child(i) as MeshInstance3D
+		var cloud := cloud_layer.get_child(i) as Node3D
 		cloud.visible = i < cloud_count
 		var base_position: Vector3 = cloud.get_meta("base_position", cloud.position)
 		var cloud_drift := 0.0 if _reduced_motion() else fmod(minutes * (0.018 + i * 0.002), 28.0) - 14.0
 		cloud.position = base_position + Vector3(cloud_drift, 0, 0)
-		cloud.material_override = _emissive_billboard_material(cloud_color, 0.10, cloud_alpha)
+		for lobe in cloud.get_children():
+			if lobe is MeshInstance3D:
+				(lobe as MeshInstance3D).material_override = _emissive_billboard_material(cloud_color, 0.10, cloud_alpha)
 
 func _update_zone_night_state(night_amount: float) -> void:
 	if current_zone_root == null:
@@ -207,6 +212,24 @@ func _build_sky_layer() -> void:
 	moon_disc.material_override = _emissive_billboard_material(Color(0.62, 0.76, 1.0), 0.62, 0.86)
 	add_child(moon_disc)
 	sun_halo = _make_celestial_plane("SunHalo", sun_mesh, Vector3(16.0, 16.0, 16.0), Color(1.0, 0.56, 0.20), 0.24, 0.18)
+	sun_rays = Node3D.new()
+	sun_rays.name = "StylizedSunRays"
+	add_child(sun_rays)
+	for ray_index in range(12):
+		var ray := MeshInstance3D.new()
+		ray.name = "SunRay"
+		var ray_mesh := SphereMesh.new()
+		ray_mesh.radius = 0.5
+		ray_mesh.height = 1.0
+		ray_mesh.radial_segments = 8
+		ray_mesh.rings = 4
+		ray.mesh = ray_mesh
+		var ray_angle := float(ray_index) / 12.0 * TAU
+		ray.position = Vector3(cos(ray_angle) * 13.5, sin(ray_angle) * 13.5, 0.6)
+		ray.scale = Vector3(2.0, 5.2, 1.2)
+		ray.rotation.z = ray_angle - PI * 0.5
+		ray.material_override = _emissive_billboard_material(Color(1.0, 0.56, 0.16), 0.72, 0.54)
+		sun_rays.add_child(ray)
 	moon_halo = _make_celestial_plane("MoonHalo", sun_mesh, Vector3(12.0, 12.0, 12.0), Color(0.48, 0.68, 1.0), 0.16, 0.20)
 	_build_star_field()
 
@@ -214,19 +237,23 @@ func _build_sky_layer() -> void:
 	cloud_layer.name = "CloudLayer"
 	add_child(cloud_layer)
 	for i: int in range(7):
-		var cloud = MeshInstance3D.new()
-		cloud.name = "CloudPlane"
-		var cloud_mesh = SphereMesh.new()
-		cloud_mesh.radius = 0.5
-		cloud_mesh.height = 1.0
-		cloud_mesh.radial_segments = 12
-		cloud_mesh.rings = 6
-		cloud.mesh = cloud_mesh
-		cloud.scale = Vector3(28.0 + i * 2.2, 3.5 + (i % 2), 8.0 + (i % 3) * 1.5)
-		cloud.rotation_degrees.y = -10.0 + i * 6.0
+		var cloud := Node3D.new()
+		cloud.name = "CloudCluster"
 		cloud.position = Vector3(-62.0 + i * 22.0, 46.0 + (i % 2) * 6.0, -92.0 + (i % 3) * 18.0)
 		cloud.set_meta("base_position", cloud.position)
-		cloud.material_override = _emissive_billboard_material(Color(0.32, 0.28, 0.24), 0.12, 0.20)
+		for lobe_index in range(4):
+			var lobe := MeshInstance3D.new()
+			lobe.name = "CloudLobe"
+			var cloud_mesh := SphereMesh.new()
+			cloud_mesh.radius = 0.5
+			cloud_mesh.height = 1.0
+			cloud_mesh.radial_segments = 12
+			cloud_mesh.rings = 6
+			lobe.mesh = cloud_mesh
+			lobe.position = Vector3((lobe_index - 1.5) * 13.0, absf(lobe_index - 1.5) * -1.1, float((lobe_index * 7) % 3) * 2.0)
+			lobe.scale = Vector3(17.0 + lobe_index * 2.0, 4.2 + (lobe_index % 2) * 1.5, 8.0 + (i % 3))
+			lobe.material_override = _emissive_billboard_material(Color(0.32, 0.28, 0.24), 0.12, 0.20)
+			cloud.add_child(lobe)
 		cloud_layer.add_child(cloud)
 
 func _position_sky_layer(zone_id: String) -> void:
@@ -309,8 +336,9 @@ func _set_sky_colors(dome_color: Color, sun_color: Color, cloud_color: Color) ->
 		sun_disc.material_override = _emissive_billboard_material(sun_color, 1.45, 0.90)
 	if cloud_layer != null:
 		for child in cloud_layer.get_children():
-			if child is MeshInstance3D:
-				child.material_override = _emissive_billboard_material(cloud_color, 0.10, cloud_color.a)
+			for lobe in child.get_children():
+				if lobe is MeshInstance3D:
+					(lobe as MeshInstance3D).material_override = _emissive_billboard_material(cloud_color, 0.10, cloud_color.a)
 
 func _sky_material(color: Color) -> StandardMaterial3D:
 	var material = StandardMaterial3D.new()

@@ -25,6 +25,7 @@ var health_bar: ProgressBar
 var stamina_bar: ProgressBar
 var health_value_label: Label
 var stamina_value_label: Label
+var stamina_name_label: Label
 var enemy_bar: ProgressBar
 var enemy_label: Label
 var enemy_value_label: Label
@@ -173,6 +174,10 @@ func update_stamina(current: float, maximum: float) -> void:
 	stamina_value_label.text = "%d / %d" % [int(round(current)), int(round(maximum))]
 	if current < previous - 5.0:
 		_flash_bar(stamina_bar, Color(1.0, 0.75, 0.22))
+
+func set_swimming_mode(enabled: bool) -> void:
+	if stamina_name_label != null:
+		stamina_name_label.text = "Breath" if enabled else "Stamina"
 
 func show_enemy(name: String, current: float, maximum: float) -> void:
 	enemy_label.text = "Target: %s" % name
@@ -388,7 +393,9 @@ func _build_hud() -> void:
 	stamina_bar.value = 100
 	stamina_bar.show_percentage = false
 	stamina_value_label = Label.new()
-	bars.add_child(_labeled_bar("Breath", stamina_bar, stamina_value_label))
+	var stamina_row := _labeled_bar("Stamina", stamina_bar, stamina_value_label)
+	stamina_name_label = stamina_row.get_child(0) as Label
+	bars.add_child(stamina_row)
 	equipment_label = Label.new()
 	equipment_label.name = "EquipmentQuickRead"
 	equipment_label.text = "R Redroot x0   F Ash Bomb x0   Oil: No oil"

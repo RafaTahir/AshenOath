@@ -9,6 +9,10 @@ signal parried
 signal blocked(amount: float)
 signal hurt(amount: float)
 signal stamina_exhausted(action: String)
+signal water_state_changed(state: String)
+signal breath_changed(current: float, maximum: float)
+signal splash_requested(position: Vector3, entering: bool)
+signal wetness_changed(amount: float)
 signal died
 
 const HealthComponent = preload("res://scripts/health_component.gd")
@@ -69,6 +73,12 @@ var beam_left_hand_glow: MeshInstance3D
 var beam_right_hand_glow: MeshInstance3D
 var sheathed_sword_visual: Node3D
 var beam_cast_state := ""
+var water_state := "grounded"
+var water_surface_y := 0.0
+var water_current := Vector3.ZERO
+var water_safe_exit := Vector3.ZERO
+var breath := 100.0
+var wetness := 0.0
 var beam_state_time := 0.0
 var beam_locked_direction := Vector3.ZERO
 var movement_state = "idle"
@@ -109,6 +119,7 @@ func _physics_process(delta: float) -> void:
 	parry_window = max(parry_window - delta, 0.0)
 	step_up_cooldown = max(step_up_cooldown - delta, 0.0)
 	_update_beam_sequence(delta)
+	wetness = maxf(wetness - delta * 0.025, 0.0)
 	if not can_control:
 		velocity.x = move_toward(velocity.x, 0.0, 20.0 * delta)
 		velocity.z = move_toward(velocity.z, 0.0, 20.0 * delta)
@@ -120,6 +131,9 @@ func _physics_process(delta: float) -> void:
 	_handle_movement(delta)
 
 func _handle_movement(delta: float) -> void:
+	if is_swimming():
+		_handle_swimming(delta)
+		return
 	var input_vec = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	var forward = Vector3.FORWARD
 	var right = Vector3.RIGHT
@@ -176,6 +190,68 @@ func try_jump() -> bool:
 		animation_driver.trigger_action("jump")
 	return true
 
+func enter_water(profile: Dictionary) -> void:
+	if is_swimming():
+		return
+	cancel_beam_charge()
+	water_surface_y = float(profile.get("surface_y", global_position.y))
+	water_current = profile.get("current", Vector3.ZERO)
+	water_safe_exit = profile.get("safe_exit", global_position)
+	water_state = "surface_swim" if global_position.y > water_surface_y - 0.65 else "submerged"
+	breath = 100.0
+	wetness = 1.0
+	water_state_changed.emit(water_state)
+	wetness_changed.emit(wetness)
+	splash_requested.emit(global_position, true)
+
+func exit_water() -> void:
+	if not is_swimming():
+		return
+	water_state = "grounded"
+	water_current = Vector3.ZERO
+	velocity.y = maxf(velocity.y, 0.0)
+	water_state_changed.emit(water_state)
+	splash_requested.emit(global_position, false)
+
+func is_swimming() -> bool:
+	return water_state in ["surface_swim", "submerged"]
+
+func get_water_state() -> Dictionary:
+	return {"state":water_state,"breath":breath,"wetness":wetness,"surface_y":water_surface_y}
+
+func _handle_swimming(delta: float) -> void:
+	var input_vec := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
+	var camera := get_viewport().get_camera_3d()
+	var forward: Vector3 = -camera.global_basis.z if camera != null else -global_basis.z
+	var right: Vector3 = camera.global_basis.x if camera != null else global_basis.x
+	var move_dir := (right * input_vec.x + forward * -input_vec.y)
+	if move_dir.length() > 0.1:
+		move_dir = move_dir.normalized()
+	var sprinting: bool = Input.is_action_pressed("run") and bool(stamina_component.spend(7.0 * delta))
+	var speed: float = 3.8 if sprinting else 2.5
+	if Input.is_action_pressed("jump"):
+		move_dir.y += 0.85
+	if Input.is_action_just_pressed("dodge"):
+		move_dir += forward * 0.85
+	velocity = velocity.lerp(move_dir.normalized() * speed + water_current, 1.0 - exp(-5.5 * delta)) if move_dir.length() > 0.1 else velocity.lerp(water_current, 1.0 - exp(-4.0 * delta))
+	if global_position.y >= water_surface_y - 0.48 and velocity.y >= -0.15:
+		water_state = "surface_swim"
+		global_position.y = minf(global_position.y, water_surface_y - 0.34)
+		velocity.y = minf(velocity.y + 1.8 * delta, 0.35)
+		breath = minf(breath + 42.0 * delta, 100.0)
+	else:
+		water_state = "submerged"
+		breath = maxf(breath - 11.0 * delta, 0.0)
+		if breath <= 0.0:
+			health_component.damage(7.0 * delta)
+			velocity.y += 1.4 * delta
+	breath_changed.emit(breath, 100.0)
+	movement_state = water_state
+	if move_dir.length() > 0.1:
+		rotation.y = lerp_angle(rotation.y, atan2(-move_dir.x,-move_dir.z), 1.0-exp(-6.0*delta))
+	move_and_slide()
+	_animate_visuals(delta, move_dir, input_vec.length() > 0.1)
+
 func _try_step_up(move_dir: Vector3) -> void:
 	if step_up_cooldown > 0.0 or move_dir.length() < 0.1 or not is_on_floor() or not is_on_wall():
 		return
@@ -220,6 +296,8 @@ func _sample_foot_offset(side: float, delta: float, current: float) -> float:
 	return lerp(current, target, 1.0 - exp(-12.0 * delta))
 
 func _handle_combat_input() -> void:
+	if is_swimming():
+		return
 	_handle_beam_input()
 	if beam_cast_state != "":
 		return
