@@ -5,8 +5,11 @@ var sun: DirectionalLight3D
 var moon: DirectionalLight3D
 var sky_dome: MeshInstance3D
 var sun_disc: MeshInstance3D
+var sun_halo: MeshInstance3D
 var cloud_layer: Node3D
 var moon_disc: MeshInstance3D
+var moon_halo: MeshInstance3D
+var star_field: MultiMeshInstance3D
 var current_environment: Environment
 var current_zone := "greyfen"
 var current_zone_root: Node3D
@@ -61,6 +64,8 @@ func set_time(minutes: float, phase: String, _day_count: int = 0) -> void:
 	if not outdoor:
 		moon.light_energy = 0.0
 		sun.light_energy = 0.18
+		for celestial in [sun_disc, sun_halo, moon_disc, moon_halo, star_field, cloud_layer]:
+			celestial.visible = false
 		_update_zone_night_state(0.75)
 		return
 	var solar: float = sin((minutes - 360.0) / 1440.0 * TAU)
@@ -72,25 +77,59 @@ func set_time(minutes: float, phase: String, _day_count: int = 0) -> void:
 	var day_sky := Color(0.20, 0.32, 0.46) if not forest else Color(0.08, 0.18, 0.19)
 	if ruin: day_sky = Color(0.22, 0.25, 0.30)
 	var dusk_sky := Color(0.34, 0.16, 0.085) if not forest else Color(0.09, 0.13, 0.12)
-	var night_sky := Color(0.008, 0.014, 0.028) if not forest else Color(0.006, 0.020, 0.022)
+	var night_sky := Color(0.018, 0.035, 0.075) if not forest else Color(0.012, 0.040, 0.052)
 	current_environment.background_color = night_sky.lerp(dusk_sky, twilight).lerp(day_sky, daylight)
-	current_environment.ambient_light_color = Color(0.075, 0.105, 0.16).lerp(Color(0.46, 0.40, 0.33), daylight)
-	current_environment.ambient_light_energy = lerp(0.62, 0.88, daylight)
-	current_environment.fog_light_color = Color(0.055, 0.080, 0.13).lerp(Color(0.34, 0.40, 0.46), daylight)
+	current_environment.ambient_light_color = Color(0.20, 0.26, 0.38).lerp(Color(0.46, 0.40, 0.33), daylight)
+	current_environment.ambient_light_energy = lerp(0.92, 0.88, daylight)
+	current_environment.fog_light_color = Color(0.11, 0.17, 0.29).lerp(Color(0.34, 0.40, 0.46), daylight)
 	var base_fog: float = 0.065 if forest else (0.038 if ruin else 0.030)
-	current_environment.fog_density = base_fog * lerpf(1.12, 0.42, daylight)
-	current_environment.adjustment_brightness = lerp(0.96, 1.03, daylight)
+	current_environment.fog_density = base_fog * lerpf(0.88, 0.42, daylight)
+	current_environment.adjustment_brightness = lerp(1.18, 1.03, daylight)
 	sun.rotation_degrees = Vector3(-8.0 - (minutes / 1440.0) * 360.0, -28.0, 0.0)
 	sun.light_color = Color(1.0, 0.48, 0.24).lerp(Color(1.0, 0.91, 0.74), daylight)
 	sun.light_energy = daylight * (0.72 if forest else 1.05) + twilight * 0.28
 	moon.rotation_degrees = Vector3(sun.rotation_degrees.x + 180.0, 22.0, 0.0)
-	moon.light_energy = night * (0.48 if forest else 0.54)
-	sun_disc.visible = daylight + twilight > 0.12
-	moon_disc.visible = night > 0.18
-	var orbit := (minutes / 1440.0) * TAU
-	sun_disc.position = Vector3(cos(orbit) * 120.0, max(18.0, sin(orbit) * 85.0), -115.0)
-	moon_disc.position = Vector3(-cos(orbit) * 105.0, max(22.0, -sin(orbit) * 76.0), -105.0)
+	moon.light_energy = night * (0.80 if forest else 0.88)
+	_update_sky_cycle(daylight, twilight, night, minutes)
 	_update_zone_night_state(night)
+
+func _update_sky_cycle(daylight: float, twilight: float, night: float, minutes: float) -> void:
+	var orbit := ((minutes - 360.0) / 1440.0) * TAU
+	var camera := get_viewport().get_camera_3d()
+	var sky_origin: Vector3 = camera.global_position if camera != null else Vector3.ZERO
+	var sky_forward: Vector3 = -camera.global_basis.z if camera != null else Vector3.FORWARD
+	var sky_right: Vector3 = camera.global_basis.x if camera != null else Vector3.RIGHT
+	var sun_position: Vector3 = sky_origin + sky_forward * 115.0 + sky_right * (cos(orbit) * 72.0) + Vector3.UP * max(18.0, sin(orbit) * 62.0)
+	var moon_position: Vector3 = sky_origin + sky_forward * 105.0 + sky_right * (-cos(orbit) * 64.0) + Vector3.UP * max(22.0, -sin(orbit) * 54.0)
+	sun_disc.position = sun_position
+	sun_halo.position = sun_position + Vector3(0, 0, 0.4)
+	moon_disc.position = moon_position
+	moon_halo.position = moon_position + Vector3(0, 0, 0.4)
+	var sun_amount := clampf(daylight + twilight * 0.82, 0.0, 1.0)
+	sun_disc.visible = sun_amount > 0.08
+	sun_halo.visible = sun_amount > 0.10
+	moon_disc.visible = night > 0.14
+	moon_halo.visible = night > 0.18
+	_set_mesh_alpha(sun_disc, 0.92 * sun_amount)
+	_set_mesh_alpha(sun_halo, 0.18 * sun_amount)
+	_set_mesh_alpha(moon_disc, 0.94 * night)
+	_set_mesh_alpha(moon_halo, 0.20 * night)
+	star_field.visible = night > 0.10
+	_set_mesh_alpha(star_field, clampf((night - 0.10) / 0.70, 0.0, 0.92))
+	var quality := _quality_preset()
+	star_field.multimesh.visible_instance_count = 28 if quality == "potato" else (96 if quality == "quality" else 62)
+	var cloud_count := 2 if quality == "potato" else (7 if quality == "quality" else 4)
+	cloud_layer.visible = true
+	var cloud_alpha := clampf(daylight * 0.28 + twilight * 0.34 + night * 0.07, 0.04, 0.34)
+	var cloud_color := Color(0.54, 0.59, 0.65) if daylight > twilight else Color(0.58, 0.31, 0.20)
+	if night > 0.55:
+		cloud_color = Color(0.10, 0.15, 0.24)
+	for i in range(cloud_layer.get_child_count()):
+		var cloud := cloud_layer.get_child(i) as MeshInstance3D
+		cloud.visible = i < cloud_count
+		var base_position: Vector3 = cloud.get_meta("base_position", cloud.position)
+		cloud.position = base_position + Vector3(fmod(minutes * (0.018 + i * 0.002), 28.0) - 14.0, 0, 0)
+		cloud.material_override = _emissive_billboard_material(cloud_color, 0.10, cloud_alpha)
 
 func _update_zone_night_state(night_amount: float) -> void:
 	if current_zone_root == null:
@@ -151,8 +190,11 @@ func _build_sky_layer() -> void:
 
 	sun_disc = MeshInstance3D.new()
 	sun_disc.name = "SunDisc"
-	var sun_mesh = PlaneMesh.new()
-	sun_mesh.size = Vector2(1.0, 1.0)
+	var sun_mesh = SphereMesh.new()
+	sun_mesh.radius = 0.5
+	sun_mesh.height = 1.0
+	sun_mesh.radial_segments = 24
+	sun_mesh.rings = 12
 	sun_disc.mesh = sun_mesh
 	sun_disc.scale = Vector3(9.5, 9.5, 9.5)
 	sun_disc.material_override = _emissive_billboard_material(Color(1.0, 0.50, 0.20), 1.45, 0.90)
@@ -163,6 +205,9 @@ func _build_sky_layer() -> void:
 	moon_disc.scale = Vector3(6.5, 6.5, 6.5)
 	moon_disc.material_override = _emissive_billboard_material(Color(0.62, 0.76, 1.0), 0.62, 0.86)
 	add_child(moon_disc)
+	sun_halo = _make_celestial_plane("SunHalo", sun_mesh, Vector3(16.0, 16.0, 16.0), Color(1.0, 0.56, 0.20), 0.24, 0.18)
+	moon_halo = _make_celestial_plane("MoonHalo", sun_mesh, Vector3(12.0, 12.0, 12.0), Color(0.48, 0.68, 1.0), 0.16, 0.20)
+	_build_star_field()
 
 	cloud_layer = Node3D.new()
 	cloud_layer.name = "CloudLayer"
@@ -170,13 +215,16 @@ func _build_sky_layer() -> void:
 	for i: int in range(7):
 		var cloud = MeshInstance3D.new()
 		cloud.name = "CloudPlane"
-		var cloud_mesh = PlaneMesh.new()
-		cloud_mesh.size = Vector2(1.0, 1.0)
+		var cloud_mesh = SphereMesh.new()
+		cloud_mesh.radius = 0.5
+		cloud_mesh.height = 1.0
+		cloud_mesh.radial_segments = 12
+		cloud_mesh.rings = 6
 		cloud.mesh = cloud_mesh
-		cloud.scale = Vector3(36.0 + i * 3.4, 1.0, 8.0 + (i % 3) * 2.0)
-		cloud.rotation_degrees.x = -78.0
+		cloud.scale = Vector3(28.0 + i * 2.2, 3.5 + (i % 2), 8.0 + (i % 3) * 1.5)
 		cloud.rotation_degrees.y = -10.0 + i * 6.0
-		cloud.position = Vector3(-62.0 + i * 22.0, 32.0 + (i % 2) * 5.0, -72.0 + (i % 3) * 24.0)
+		cloud.position = Vector3(-62.0 + i * 22.0, 46.0 + (i % 2) * 6.0, -92.0 + (i % 3) * 18.0)
+		cloud.set_meta("base_position", cloud.position)
 		cloud.material_override = _emissive_billboard_material(Color(0.32, 0.28, 0.24), 0.12, 0.20)
 		cloud_layer.add_child(cloud)
 
@@ -189,13 +237,13 @@ func _position_sky_layer(zone_id: String) -> void:
 		sun_disc.position = Vector3(-95, 58, -120)
 		sun_disc.rotation_degrees = Vector3(64, -38, 0)
 		cloud_layer.position = Vector3(0, 0, 8)
-		cloud_layer.visible = false
+		cloud_layer.visible = true
 	elif zone_id in ["ruins","old_mill","bandit_road","vargan_approach","vargan_court","record_hall","undercroft","assembly"]:
 		origin = Vector3(0, -12, 0)
 		sun_disc.position = Vector3(110, 70, -95)
 		sun_disc.rotation_degrees = Vector3(60, 42, 0)
 		cloud_layer.position = Vector3(0, 2, -4)
-		cloud_layer.visible = false
+		cloud_layer.visible = zone_id not in ["record_hall", "undercroft"]
 	else:
 		origin = Vector3(0, -10, 0)
 		sun_disc.position = Vector3(90, 52, -115)
@@ -203,6 +251,51 @@ func _position_sky_layer(zone_id: String) -> void:
 		cloud_layer.position = Vector3(0, 0, 0)
 		cloud_layer.visible = true
 	sky_dome.position = origin
+	star_field.position = origin
+
+func _make_celestial_plane(node_name: String, source_mesh: Mesh, scale_value: Vector3, color: Color, energy: float, alpha: float) -> MeshInstance3D:
+	var plane := MeshInstance3D.new()
+	plane.name = node_name
+	plane.mesh = source_mesh.duplicate()
+	plane.scale = scale_value
+	plane.material_override = _emissive_billboard_material(color, energy, alpha)
+	add_child(plane)
+	return plane
+
+func _build_star_field() -> void:
+	star_field = MultiMeshInstance3D.new()
+	star_field.name = "ProceduralStarField"
+	var star_mesh := SphereMesh.new()
+	star_mesh.radius = 0.42
+	star_mesh.height = 0.84
+	star_mesh.radial_segments = 6
+	star_mesh.rings = 3
+	star_mesh.material = _emissive_billboard_material(Color(0.72, 0.82, 1.0), 0.72, 0.86)
+	var stars := MultiMesh.new()
+	stars.transform_format = MultiMesh.TRANSFORM_3D
+	stars.instance_count = 96
+	stars.mesh = star_mesh
+	for i in range(96):
+		var angle := float((i * 137) % 360) * PI / 180.0
+		var height := 38.0 + float((i * 47) % 58)
+		var radius := 112.0 + float((i * 29) % 34)
+		var transform := Transform3D(Basis.IDENTITY.scaled(Vector3.ONE * (0.55 + float(i % 4) * 0.16)), Vector3(cos(angle) * radius, height, sin(angle) * radius))
+		stars.set_instance_transform(i, transform)
+	star_field.multimesh = stars
+	add_child(star_field)
+
+func _set_mesh_alpha(node: GeometryInstance3D, alpha: float) -> void:
+	if node == null:
+		return
+	var material := node.material_override as StandardMaterial3D
+	if material == null and node is MultiMeshInstance3D and (node as MultiMeshInstance3D).multimesh.mesh != null:
+		material = (node as MultiMeshInstance3D).multimesh.mesh.material as StandardMaterial3D
+	if material != null:
+		material.albedo_color.a = alpha
+
+func _quality_preset() -> String:
+	var settings_node := get_tree().root.find_child("SettingsManager", true, false)
+	return str(settings_node.settings.get("quality_preset", "balanced")) if settings_node != null else "balanced"
 
 func _set_sky_colors(dome_color: Color, sun_color: Color, cloud_color: Color) -> void:
 	if sky_dome != null:
@@ -219,6 +312,7 @@ func _sky_material(color: Color) -> StandardMaterial3D:
 	material.albedo_color = color
 	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	material.cull_mode = BaseMaterial3D.CULL_DISABLED
+	material.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
 	return material
 
 func _emissive_billboard_material(color: Color, energy: float, alpha: float) -> StandardMaterial3D:

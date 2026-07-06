@@ -59,16 +59,26 @@ func _verify_native_quality(game: Node) -> void:
 
 func _verify_day_night(game: Node) -> void:
 	var clock = game.day_night
+	var director = game.visual_director
 	_check(clock != null, "DayNightController is missing")
+	_check(director != null, "VisualDirector is missing")
+	_check(director.star_field != null and director.star_field.multimesh.instance_count == 96, "procedural star batch is missing")
+	_check(director.sun_halo != null and director.moon_halo != null, "sun or moon halo is missing")
 	_check(is_equal_approx(float(clock.CYCLE_SECONDS), 2160.0), "day/night cycle is not 36 real minutes")
 	clock.set_time(360.0, 2)
 	_check(clock.current_phase == "dawn", "dawn phase boundary failed")
 	clock.set_time(720.0, 2)
 	_check(clock.current_phase == "day", "day phase boundary failed")
+	_check(director.sun_disc.visible and not director.star_field.visible, "day sky visibility is incorrect")
+	_check(director.cloud_layer.visible, "day clouds are hidden")
 	clock.set_time(1140.0, 2)
 	_check(clock.current_phase == "dusk", "dusk phase boundary failed")
 	clock.set_time(60.0, 3)
 	_check(clock.current_phase == "night", "night phase boundary failed")
+	_check(director.moon_disc.visible and director.star_field.visible, "moon or stars are hidden at night")
+	_check(director.current_environment.ambient_light_energy >= 0.80, "night ambient energy is below the readability floor")
+	_check(director.moon.light_energy >= 0.60, "moonlight is below the readability floor")
+	_check(director.star_field.multimesh.visible_instance_count == 62, "Balanced star density is incorrect")
 	var saved: Dictionary = clock.save_state()
 	clock.set_time(800.0, 0)
 	clock.load_state(saved)

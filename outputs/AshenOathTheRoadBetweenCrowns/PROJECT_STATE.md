@@ -575,6 +575,7 @@ Known verifier note: Godot headless may emit ObjectDB cleanup warnings after pas
 
 - Visual quality is still low-poly/stylized and well below The Witcher 3.
 - The interface renders on a 1920x1080 canvas. Balanced preserves the established 1280x720 gameplay budget with a 0.667 3D scale; Quality renders 3D at full 1080p and Potato uses 0.45.
+- Outdoor day/night presentation includes readable cool-toned moonlight, procedural batched stars, visible sun and moon bodies, soft celestial halos, and quality-tier drifting cloud volumes.
 - Human models are skeletal, textured, lit, and animated but still lack realistic faces, hands, hair, facial rigs, and bespoke clothing.
 - Main-route character and Wychwood enemy skeletons animate; broader animation retargeting and facial performance remain incomplete.
 - Major areas beyond the first route are partial, blocked, or data-only.
