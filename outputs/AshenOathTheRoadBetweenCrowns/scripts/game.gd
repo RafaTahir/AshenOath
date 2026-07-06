@@ -95,7 +95,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		else:
 			_pause_game()
 	elif event.is_action_pressed("interact") and active_interactable != null and not get_tree().paused:
-		_handle_interaction(active_interactable)
+		if _interaction_target_valid(active_interactable):
+			_handle_interaction(active_interactable)
+		else:
+			hud.set_guidance_hint("Face the object and move into clear view.", 2.0)
 	elif event.is_action_pressed("open_inventory") and not get_tree().paused:
 		get_tree().paused = true
 		hud.show_inventory(inventory, quests)
@@ -2206,7 +2209,7 @@ func _connect_interactable(area) -> void:
 		if body == player:
 			active_interactable = area
 			_set_interactable_label_visible(area, true)
-			hud.set_prompt("E - %s" % area.prompt)
+			hud.set_prompt("E  %s" % area.get_context_prompt())
 	)
 	area.body_exited.connect(func(body: Node):
 		if body == player and active_interactable == area:
@@ -2214,6 +2217,23 @@ func _connect_interactable(area) -> void:
 			_set_interactable_label_visible(area, false)
 			hud.set_prompt("")
 	)
+
+func _interaction_target_valid(area: Area3D) -> bool:
+	if player == null or area == null or not is_instance_valid(area):
+		return false
+	var camera := get_viewport().get_camera_3d()
+	var origin: Vector3 = camera.global_position if camera != null else player.global_position + Vector3.UP
+	var target: Vector3 = area.global_position + Vector3.UP * 0.5
+	var direction := origin.direction_to(target)
+	var forward: Vector3 = -camera.global_basis.z if camera != null else -player.global_basis.z
+	if forward.dot(direction) < 0.22:
+		return false
+	var query := PhysicsRayQueryParameters3D.create(origin, target)
+	query.exclude = [player.get_rid()]
+	query.collide_with_areas = true
+	query.collide_with_bodies = true
+	var hit := get_world_3d().direct_space_state.intersect_ray(query)
+	return hit.is_empty() or hit.get("collider") == area
 
 func _set_interactable_label_visible(area: Node, visible: bool) -> void:
 	var label := area.find_child("InteractionWorldLabel", true, false) as Label3D

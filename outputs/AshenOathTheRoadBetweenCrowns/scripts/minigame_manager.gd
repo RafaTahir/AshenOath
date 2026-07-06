@@ -115,14 +115,17 @@ func _unhandled_input(event: InputEvent) -> void:
 func _build_ui() -> void:
 	overlay = PanelContainer.new()
 	overlay.name = "GreyfenMinigameOverlay"
-	overlay.position = Vector2(300, 70)
-	overlay.size = Vector2(680, 580)
+	overlay.set_anchors_preset(Control.PRESET_CENTER)
+	overlay.position = Vector2(-390, -360)
+	overlay.size = Vector2(780, 720)
 	overlay.visible = false
 	add_child(overlay)
 	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.035,0.03,0.025,0.98)
-	style.border_color = Color(0.48,0.34,0.18)
-	style.set_border_width_all(2)
+	style.bg_color = Color(0.018,0.020,0.022,0.98)
+	style.border_color = Color(0.62,0.43,0.18)
+	style.set_border_width_all(1)
+	style.set_corner_radius_all(6)
+	style.set_content_margin_all(28)
 	overlay.add_theme_stylebox_override("panel", style)
 	var box := VBoxContainer.new()
 	box.add_theme_constant_override("separation", 10)
@@ -131,8 +134,8 @@ func _build_ui() -> void:
 	status_label = Label.new(); status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER; status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; status_label.custom_minimum_size = Vector2(620,48); box.add_child(status_label)
 	board_grid = GridContainer.new(); board_grid.size_flags_horizontal = Control.SIZE_SHRINK_CENTER; board_grid.size_flags_vertical = Control.SIZE_EXPAND_FILL; box.add_child(board_grid)
 	var actions := HBoxContainer.new(); actions.alignment = BoxContainer.ALIGNMENT_CENTER; box.add_child(actions)
-	var restart := Button.new(); restart.text = "Restart (R)"; restart.pressed.connect(_restart); actions.add_child(restart)
-	var exit := Button.new(); exit.text = "Exit (Esc)"; exit.pressed.connect(close_game); actions.add_child(exit)
+	var restart := Button.new(); restart.text = "Restart  [R]"; _style_action_button(restart); restart.pressed.connect(_restart); actions.add_child(restart)
+	var exit := Button.new(); exit.text = "Return to Greyfen  [Esc]"; _style_action_button(exit); exit.pressed.connect(close_game); actions.add_child(exit)
 
 func _restart() -> void:
 	finished = false
@@ -153,6 +156,7 @@ func _render_ttt() -> void:
 		var button := Button.new(); button.custom_minimum_size = Vector2(130,110); button.add_theme_font_size_override("font_size",42)
 		var square := StyleBoxFlat.new(); square.bg_color = Color(0.11,0.095,0.075); square.border_color = Color(0.38,0.28,0.16); square.set_border_width_all(1); button.add_theme_stylebox_override("normal",square)
 		button.add_theme_color_override("font_color",Color(0.92,0.75,0.40))
+		_style_board_button(button, square)
 		button.text = ["","X","O"][ttt_board[index]]; button.disabled = finished or ttt_board[index] != 0
 		button.pressed.connect(func(): play_ttt(index)); board_grid.add_child(button)
 
@@ -198,7 +202,7 @@ func _render_draughts() -> void:
 	for index in range(36):
 		var button := Button.new(); button.custom_minimum_size = Vector2(66,58); button.add_theme_font_size_override("font_size",32)
 		button.text = {0:"",1:"●",2:"♛",-1:"○",-2:"♕"}.get(draughts_board[index],"")
-		var square := StyleBoxFlat.new(); square.bg_color = Color(0.48,0.35,0.21) if ((index/6)+(index%6))%2 == 0 else Color(0.10,0.075,0.055); square.border_color = Color(0.30,0.21,0.12); square.set_border_width_all(1); button.add_theme_stylebox_override("normal",square)
+		var square := StyleBoxFlat.new(); square.bg_color = Color(0.48,0.35,0.21) if ((index/6)+(index%6))%2 == 0 else Color(0.10,0.075,0.055); square.border_color = Color(0.30,0.21,0.12); square.set_border_width_all(1); _style_board_button(button, square)
 		button.add_theme_color_override("font_color",Color(0.94,0.70,0.28) if draughts_board[index] > 0 else Color(0.86,0.86,0.80))
 		button.pressed.connect(func(): _on_draughts_square(index)); board_grid.add_child(button)
 
@@ -209,6 +213,33 @@ func _on_draughts_square(index: int) -> void:
 	else:
 		if not play_draughts(draughts_selected,index): status_label.text = "That piece cannot move there."
 		draughts_selected = -1
+
+func _style_action_button(button: Button) -> void:
+	button.custom_minimum_size = Vector2(240, 52)
+	button.add_theme_font_size_override("font_size", 18)
+	var normal := StyleBoxFlat.new()
+	normal.bg_color = Color(0.055, 0.046, 0.037, 0.92)
+	normal.border_color = Color(0.50, 0.37, 0.19)
+	normal.set_border_width_all(1)
+	var focus := normal.duplicate()
+	focus.bg_color = Color(0.18, 0.11, 0.05, 0.98)
+	focus.border_color = Color(1.0, 0.72, 0.28)
+	button.add_theme_stylebox_override("normal", normal)
+	button.add_theme_stylebox_override("hover", focus)
+	button.add_theme_stylebox_override("focus", focus)
+	button.add_theme_stylebox_override("pressed", focus)
+	button.add_theme_color_override("font_color", Color(0.88, 0.80, 0.64))
+	button.add_theme_color_override("font_hover_color", Color(1.0, 0.88, 0.56))
+
+func _style_board_button(button: Button, normal: StyleBoxFlat) -> void:
+	var focus := normal.duplicate()
+	focus.border_color = Color(1.0, 0.74, 0.28)
+	focus.set_border_width_all(3)
+	button.add_theme_stylebox_override("normal", normal)
+	button.add_theme_stylebox_override("hover", focus)
+	button.add_theme_stylebox_override("focus", focus)
+	button.add_theme_stylebox_override("pressed", focus)
+	button.focus_mode = Control.FOCUS_ALL
 
 func _apply_draughts_move(move: Dictionary) -> void:
 	var piece := draughts_board[int(move.from)]; draughts_board[int(move.from)] = 0; draughts_board[int(move.to)] = piece

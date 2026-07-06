@@ -26,10 +26,13 @@ func _initialize() -> void:
 	transition_start = Time.get_ticks_msec()
 	game.call("_load_zone", "wychwood", Vector3(0, 1, 8))
 	var warm_transition_ms := Time.get_ticks_msec() - transition_start
-	await _frames(90)
-	for _second in range(8):
-		await create_timer(1.0).timeout
-		samples.append(float(Engine.get_frames_per_second()))
+	# Sample only sustained play after transitions. Frame windows are deterministic
+	# under the custom SceneTree runner; wall-clock timers can be discarded on exit.
+	await _frames(120)
+	for frame in range(240):
+		await process_frame
+		if frame % 30 == 29:
+			samples.append(float(Engine.get_frames_per_second()))
 	var average := 0.0
 	var minimum := samples[0] if not samples.is_empty() else 0.0
 	for sample in samples:
