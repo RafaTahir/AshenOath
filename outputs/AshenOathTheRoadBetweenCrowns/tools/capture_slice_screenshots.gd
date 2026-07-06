@@ -31,6 +31,7 @@ func _initialize() -> void:
 	await _capture(game, "02_village_center", Vector3(-2, 1, 5), "greyfen", Vector3(-2, 1, 5))
 	await _capture(game, "70_greyfen_river_bridge", Vector3(0, 1, 7.5), "greyfen", Vector3(0, 1, 7.5))
 	await _capture(game, "71_greyfen_river_bank", Vector3(-6, 1, 7.2), "greyfen", Vector3(-6, 1, 7.2), 0.55)
+	await _capture(game, "73_river_forced_recovery_proof", Vector3(8, -0.5, 4.5), "greyfen", Vector3(8, -0.5, 4.5), 0.35)
 	await _capture(game, "03_shrine_sister_anwen", Vector3(3.2, 1, -5.0), "greyfen", Vector3(3.2, 1, -5.0))
 	await _capture(game, "04_graveyard_visible_area", Vector3(9.7, 1, 8.0), "greyfen", Vector3(9.7, 1, 8.0), -PI * 0.5)
 	await _capture_dialogue(game, "05_sister_anwen_dialogue", Vector3(3.2, 1, -5.0))

@@ -273,12 +273,6 @@ func _spawn_player(pos: Vector3) -> void:
 	player.blocked.connect(_on_player_blocked)
 	player.hurt.connect(_on_player_hurt)
 	player.stamina_exhausted.connect(_on_player_stamina_exhausted)
-	player.breath_changed.connect(hud.update_stamina)
-	player.water_state_changed.connect(func(state: String):
-		hud.set_swimming_mode(state != "grounded")
-		hud.show_status_cue("Swimming" if state != "grounded" else "Back on solid ground", "neutral")
-	)
-	player.splash_requested.connect(_make_water_splash)
 	player.died.connect(_on_player_died)
 	player.health_component.changed.connect(hud.update_health)
 	player.stamina_component.changed.connect(hud.update_stamina)
@@ -427,8 +421,8 @@ func _add_visual_100_layer(zone_id: String) -> void:
 	surface.configure(player, quality)
 
 func _build_greyfen() -> void:
-	_make_split_ground(42.0, 34.0, 4.5, 5.5, Color(0.16, 0.18, 0.13))
-	RiverSection.new().build(zone_root,{"host":self,"center_z":4.5,"width":42.0,"span":5.5})
+	_make_split_ground(42.0, 34.0, 4.5, 3.4, Color(0.16, 0.18, 0.13))
+	RiverSection.new().build(zone_root,{"host":self,"center_z":4.5,"width":42.0,"span":3.4})
 	_make_greyfen_terrain_layers()
 	_make_play_area_bounds(42, 34, Color(0.09, 0.12, 0.08))
 	_make_road(Vector3(0, 0.018, 0), Vector3(4.2, 0.04, 30.0), Color(0.16, 0.13, 0.09))
@@ -504,8 +498,8 @@ func _build_greyfen() -> void:
 	life.configure(self, str(settings.settings.get("quality_preset", "balanced")))
 
 func _build_wychwood() -> void:
-	_make_split_ground(44.0, 34.0, 0.0, 5.5, Color(0.065, 0.105, 0.07))
-	RiverSection.new().build(zone_root,{"host":self,"center_z":0.0,"width":44.0,"span":5.5})
+	_make_split_ground(44.0, 34.0, 0.0, 3.4, Color(0.065, 0.105, 0.07))
+	RiverSection.new().build(zone_root,{"host":self,"center_z":0.0,"width":44.0,"span":3.4})
 	_make_wychwood_terrain_layers()
 	_make_play_area_bounds(44, 34, Color(0.04, 0.075, 0.045))
 	_make_road(Vector3(0, 0.018, 3), Vector3(4.0, 0.04, 27.0), Color(0.065, 0.075, 0.052))
@@ -1286,8 +1280,11 @@ func _nearest_interactable_summary() -> String:
 func _keep_player_in_world() -> void:
 	if player == null:
 		return
+	if _is_river_recovery_position(current_zone_id, player.global_position):
+		_recover_from_river(player, _river_center(current_zone_id), 3.4)
+		return
 	var half = _zone_half_extents(current_zone_id)
-	if player.global_position.y > -2.0 and not player.is_swimming() and abs(player.global_position.x) < half.x - 1.5 and abs(player.global_position.z) < half.y - 1.5:
+	if player.global_position.y > -2.0 and abs(player.global_position.x) < half.x - 1.5 and abs(player.global_position.z) < half.y - 1.5:
 		last_safe_player_position = player.global_position
 		return
 	if player.global_position.y < -8.0 or abs(player.global_position.x) > half.x + 4.0 or abs(player.global_position.z) > half.y + 4.0:
@@ -1296,18 +1293,47 @@ func _keep_player_in_world() -> void:
 		hud.toast("Kael catches himself before the dark takes him.")
 
 func _safe_loaded_position(zone: String, pos: Vector3) -> Vector3:
-	var river_z := 4.5 if zone == "greyfen" else (0.0 if zone == "wychwood" else 999.0)
-	if absf(pos.z - river_z) < 3.2 and pos.y < 0.5:
-		return Vector3(pos.x, 1.0, river_z - 3.6)
+	var river_z := _river_center(zone)
+	if river_z < 900.0 and absf(pos.z - river_z) < 2.15 and (absf(pos.x) > 2.7 or pos.y < 0.18):
+		var side := -1.0 if pos.z <= river_z else 1.0
+		return Vector3(clampf(pos.x,-18.0,18.0), 0.9, river_z + side * 2.85)
 	return pos
 
-func _make_water_splash(pos: Vector3, entering: bool) -> void:
-	var splash := MeshInstance3D.new(); splash.name = "RiverEntrySplash"
-	var ring := TorusMesh.new(); ring.inner_radius = 0.32; ring.outer_radius = 0.42; ring.rings = 12; ring.ring_segments = 8
-	splash.mesh = ring; splash.position = Vector3(pos.x, 0.12, pos.z)
-	var mat := StandardMaterial3D.new(); mat.albedo_color = Color(0.45,0.76,0.90,0.72); mat.emission_enabled=true; mat.emission=Color(0.16,0.44,0.62); mat.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA
-	splash.material_override=mat; zone_root.add_child(splash)
-	var tween:=create_tween(); tween.tween_property(splash,"scale",Vector3.ONE*(2.0 if entering else 1.4),0.35); tween.parallel().tween_property(splash,"transparency",1.0,0.35); tween.tween_callback(splash.queue_free)
+func _recover_from_river(body: Node, river_z: float, span: float) -> void:
+	if not (body is CharacterBody3D):
+		return
+	var actor := body as Node3D
+	var side := -1.0 if actor.global_position.z <= river_z else 1.0
+	actor.global_position = Vector3(clampf(actor.global_position.x,-18.0,18.0),0.9,river_z + side * (span * 0.5 + 1.15))
+	(body as CharacterBody3D).velocity = Vector3.ZERO
+	if body == player:
+		last_safe_player_position = actor.global_position
+		hud.toast("The bank catches Kael before the current can take him.")
+
+func _river_center(zone: String = current_zone_id) -> float:
+	if zone == "greyfen":
+		return 4.5
+	if zone == "wychwood":
+		return 0.0
+	return 999.0
+
+func _is_river_recovery_position(zone: String, pos: Vector3) -> bool:
+	var river_z := _river_center(zone)
+	if river_z > 900.0:
+		return false
+	return absf(pos.z-river_z) < 2.0 and (absf(pos.x) > 2.7 or pos.y < 0.12)
+
+func _is_river_excluded(pos: Vector3, margin: float = 0.0) -> bool:
+	var river_z := _river_center()
+	return river_z < 900.0 and absf(pos.z-river_z) < 2.25 + margin
+
+func river_safe_position(pos: Vector3, margin: float = 0.55) -> Vector3:
+	if not _is_river_excluded(pos, margin):
+		return pos
+	var river_z := _river_center()
+	var side := -1.0 if pos.z <= river_z else 1.0
+	pos.z = river_z + side * (2.25 + margin)
+	return pos
 
 func _zone_half_extents(zone_id: String) -> Vector2:
 	if zone_id == "wychwood":
@@ -1419,6 +1445,22 @@ func _make_wychwood_path_edges() -> void:
 		_make_low_berm(Vector3(4.25, 0, z), Vector3(1.4, 0.48, 2.2), Color(0.030, 0.060, 0.038))
 
 func _make_terrain_patch(name: String, pos: Vector3, size: Vector3, color: Color) -> void:
+	var river_z := _river_center()
+	var river_min := river_z - 2.05
+	var river_max := river_z + 2.05
+	var patch_min := pos.z - size.z * 0.5
+	var patch_max := pos.z + size.z * 0.5
+	if river_z < 900.0 and patch_min < river_max and patch_max > river_min:
+		if patch_min < river_min:
+			var north_size := river_min - patch_min
+			_make_terrain_patch_raw("%s_NorthBank" % name, Vector3(pos.x,pos.y,patch_min+north_size*0.5), Vector3(size.x,size.y,north_size), color)
+		if patch_max > river_max:
+			var south_size := patch_max - river_max
+			_make_terrain_patch_raw("%s_SouthBank" % name, Vector3(pos.x,pos.y,river_max+south_size*0.5), Vector3(size.x,size.y,south_size), color)
+		return
+	_make_terrain_patch_raw(name,pos,size,color)
+
+func _make_terrain_patch_raw(name: String, pos: Vector3, size: Vector3, color: Color) -> void:
 	var mesh = MeshInstance3D.new()
 	mesh.name = name
 	var cube = BoxMesh.new()
@@ -1433,6 +1475,8 @@ func _make_path_stone(pos: Vector3, scale_value: float) -> void:
 	_make_terrain_patch("PathStone", pos + Vector3(0, 0.03, 0), Vector3(scale_value, 0.06, scale_value * 0.75), Color(0.18, 0.17, 0.15))
 
 func _make_low_berm(pos: Vector3, size: Vector3, color: Color) -> void:
+	if _is_river_excluded(pos,size.z*0.5):
+		return
 	var body = StaticBody3D.new()
 	body.name = "LowBerm"
 	body.position = pos + Vector3(0, size.y * 0.5, 0)
@@ -1450,7 +1494,11 @@ func _make_low_berm(pos: Vector3, size: Vector3, color: Color) -> void:
 	body.add_child(mesh)
 
 func _make_grass_tufts(points: Array, color: Color) -> void:
-	if points.is_empty():
+	var safe_points: Array = []
+	for point in points:
+		if not _is_river_excluded(point,0.25):
+			safe_points.append(point)
+	if safe_points.is_empty():
 		return
 	if _performance_mode() and int(settings.settings.get("foliage_density", 0)) <= 0:
 		return
@@ -1461,9 +1509,9 @@ func _make_grass_tufts(points: Array, color: Color) -> void:
 	var multimesh = MultiMesh.new()
 	multimesh.transform_format = MultiMesh.TRANSFORM_3D
 	multimesh.mesh = blade_mesh
-	multimesh.instance_count = points.size() * 3
+	multimesh.instance_count = safe_points.size() * 3
 	var instance_index = 0
-	for raw_pos in points:
+	for raw_pos in safe_points:
 		var pos: Vector3 = raw_pos
 		for i: int in range(3):
 			var height: float = randf_range(0.34, 0.72)
@@ -1676,6 +1724,7 @@ func _make_crow_silhouettes() -> void:
 		_add_visual_box_child(root, "CrowWing", Vector3(0.16, 0, 0), Vector3(0.34, 0.035, 0.08), Color(0.010, 0.010, 0.012))
 
 func _make_visual_box(name: String, pos: Vector3, size: Vector3, color: Color) -> MeshInstance3D:
+	pos = river_safe_position(pos,size.z*0.5+0.18)
 	var mesh_instance = MeshInstance3D.new()
 	mesh_instance.name = name
 	mesh_instance.set_meta("visual_name", name)
@@ -2073,6 +2122,7 @@ func _make_combat_readability_marks(pos: Vector3) -> void:
 func _make_named_interactable(id: String, type: String, prompt: String, pos: Vector3, color: Color, scale_override: Vector3 = Vector3.ONE):
 	if _is_interaction_removed(id):
 		return null
+	pos = river_safe_position(pos,0.8)
 	var area = Interactable.new()
 	area.setup(id, type, prompt)
 	area.position = pos
@@ -2115,6 +2165,7 @@ func _make_named_interactable(id: String, type: String, prompt: String, pos: Vec
 	return area
 
 func _make_village_place(id: String, type: String, prompt: String, pos: Vector3, size: Vector3, color: Color):
+	pos = river_safe_position(pos,maxf(size.z*0.5,0.8))
 	var area = Interactable.new()
 	area.setup(id,type,prompt)
 	area.position = pos
@@ -2280,6 +2331,7 @@ func _set_interactable_label_visible(area: Node, visible: bool) -> void:
 func _spawn_enemy(id: String, pos: Vector3) -> Node:
 	if active_enemies.size() >= 5:
 		return null
+	pos = river_safe_position(pos,1.2)
 	var enemy = EnemyAI.new()
 	zone_root.add_child(enemy)
 	enemy.global_position = pos
@@ -2338,6 +2390,8 @@ func _make_hut(pos: Vector3) -> void:
 	_make_prop_box("Chimney", pos + Vector3(1.1, 2.95, 0.4), Vector3(0.38, 0.9, 0.38), Color(0.12, 0.11, 0.10))
 
 func _make_tree(pos: Vector3) -> void:
+	if _is_river_excluded(pos,1.5):
+		return
 	pos = _route_safe_position(pos, 4.9)
 	if _is_first_route_clearance(pos, 1.55):
 		return
@@ -2368,6 +2422,8 @@ func _make_tree_wall(axis_extent: float, fixed_pos: float, count: int, along_x: 
 		_make_tree(pos + Vector3(randf_range(-0.8, 0.8), 0, randf_range(-0.5, 0.5)))
 
 func _make_deadfall(pos: Vector3) -> void:
+	if _is_river_excluded(pos,1.8):
+		return
 	var rotation := Vector3(deg_to_rad(88.0), deg_to_rad(randf_range(-20.0, 20.0)), deg_to_rad(randf_range(-8.0, 8.0)))
 	deadfall_batch_data.append(Transform3D(Basis.from_euler(rotation), pos + Vector3(0, 0.35, 0)))
 
@@ -2435,6 +2491,7 @@ func _make_gravestone(pos: Vector3) -> void:
 	_make_prop_box("GraveMoss", pos + Vector3(0.08, 0.72, -0.095), Vector3(0.18, 0.20, 0.025), Color(0.09, 0.18, 0.08))
 
 func _make_cart(pos: Vector3) -> void:
+	pos = river_safe_position(pos,1.0)
 	_make_prop_box("BrokenCartBed", pos + Vector3(0, 0.45, 0), Vector3(2.0, 0.28, 1.1), Color(0.17, 0.10, 0.055))
 	for x in [-0.78, 0.78]:
 		var wheel = MeshInstance3D.new()
@@ -2527,6 +2584,8 @@ func _make_fog_sheet(pos: Vector3, scale_value: Vector3, color: Color) -> void:
 	zone_root.add_child(fog)
 
 func _make_prop_box(name: String, pos: Vector3, size: Vector3, color: Color) -> void:
+	if name not in ["NorthBerm","SouthBerm","WestBerm","EastBerm"]:
+		pos = river_safe_position(pos,size.z*0.5+0.15)
 	var body = StaticBody3D.new()
 	body.name = name
 	body.position = pos
