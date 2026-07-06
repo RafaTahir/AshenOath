@@ -27,6 +27,10 @@ func _initialize() -> void:
 	_assert(is_equal_approx(float(game.settings.settings.get("resolution_scale", 0.0)), 0.667), "Balanced 3D scale does not preserve 720p gameplay under the 1080p UI")
 	_assert(int(game.settings.settings.get("target_fps", 0)) == 30, "Balanced target is not 30 FPS")
 	_assert(game.settings.has_method("get_performance_snapshot"), "Performance sampler API is missing")
+	_assert(game.settings.settings.has("subtitle_scale") and game.settings.settings.has("camera_shake") and game.settings.settings.has("reduced_motion"), "Accessibility settings are missing")
+	game.hud.show_inventory(game.inventory, game.quests, game.story_state)
+	_assert(game.hud.inventory_text.text.contains("BESTIARY") and game.hud.inventory_text.text.contains("CONSEQUENCES"), "Inventory journal lacks Bestiary or Consequences")
+	game.hud.inventory_layer.visible = false
 	_assert(str(game.current_zone_id) == "greyfen", "Greyfen did not load as the new-game zone")
 	_assert(game.quests.is_active("main_road_of_crows"), "Main contract did not start for the vertical slice")
 	_assert(game.quests.quest_defs["main_road_of_crows"]["objectives"].size() >= 8, "Road of Crows evidence objectives are missing")

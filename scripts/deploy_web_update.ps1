@@ -85,6 +85,11 @@ try {
     Invoke-Checked $Godot "--headless --path `"$ProjectDir`" --script `"res://tools/verify_visual_003.gd`"" $RepoRoot
   }
 
+  $Master002Verifier = Join-Path $ProjectDir "tools\verify_master_002.gd"
+  if (Test-Path -LiteralPath $Master002Verifier) {
+    Invoke-Checked $Godot "--headless --path `"$ProjectDir`" --script `"res://tools/verify_master_002.gd`"" $RepoRoot
+  }
+
   Invoke-Checked (Join-Path $ProjectDir "Export_Web_Build.bat") "" $ProjectDir
 
   Invoke-Checked $Python "`"$ProjectDir\tools\verify_web_export.py`" `"$ExportDir`"" $RepoRoot

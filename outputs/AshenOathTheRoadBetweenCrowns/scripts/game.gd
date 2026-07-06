@@ -52,6 +52,7 @@ var active_interactable
 var current_zone_id = "greyfen"
 var enemy_defs = {}
 var active_enemies: Array = []
+var active_enemy_attacker: Node
 var wychwood_pack_kills = 0
 var game_started = false
 var paused_by_menu = true
@@ -101,7 +102,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			hud.set_guidance_hint("Face the object and move into clear view.", 2.0)
 	elif event.is_action_pressed("open_inventory") and not get_tree().paused:
 		get_tree().paused = true
-		hud.show_inventory(inventory, quests)
+		hud.show_inventory(inventory, quests, story_state)
 
 func _process(delta: float) -> void:
 	if not game_started or player == null or get_tree().paused:
@@ -184,11 +185,11 @@ func _setup_managers() -> void:
 	hud.dialogue_closed.connect(_release_dialogue_facing)
 	hud.craft_requested.connect(func(item_id: String):
 		crafting.craft(item_id)
-		hud.show_inventory(inventory, quests)
+		hud.show_inventory(inventory, quests, story_state)
 	)
 	hud.item_use_requested.connect(func(item_id: String):
 		_use_inventory_item(item_id)
-		hud.show_inventory(inventory, quests)
+		hud.show_inventory(inventory, quests, story_state)
 	)
 	quests.changed.connect(_refresh_tracker)
 	quests.message.connect(hud.toast)
@@ -1179,6 +1180,12 @@ func _handle_setting(action: String) -> void:
 		settings.toggle_invert_y()
 	elif action == "volume":
 		settings.cycle_master_volume()
+	elif action == "subtitle_scale":
+		settings.cycle_subtitle_scale()
+	elif action == "camera_shake":
+		settings.cycle_camera_shake()
+	elif action == "reduced_motion":
+		settings.toggle_reduced_motion()
 	if action != "visual_preset":
 		hud.toast("Settings updated.")
 	hud.show_settings_menu(hud.controls_back_target)
@@ -1188,6 +1195,9 @@ func _apply_runtime_settings(current_settings: Dictionary) -> void:
 		audio.set_master_volume(float(current_settings.get("master_volume", 0.85)))
 	if camera_rig != null:
 		camera_rig.apply_settings(float(current_settings.get("mouse_sensitivity", 0.003)), bool(current_settings.get("invert_y", false)))
+		camera_rig.shake_decay = 1000.0 if float(current_settings.get("camera_shake", 1.0)) <= 0.0 else 6.0 / maxf(float(current_settings.get("camera_shake", 1.0)), 0.5)
+	if hud != null:
+		hud.apply_accessibility(float(current_settings.get("subtitle_scale", 1.0)))
 	if visual_director != null and visual_director.sun != null:
 		visual_director.sun.shadow_enabled = str(current_settings.get("quality_preset", "balanced")) == "quality"
 		visual_director.sun.directional_shadow_max_distance = 42.0
@@ -2247,6 +2257,7 @@ func _spawn_enemy(id: String, pos: Vector3) -> Node:
 	zone_root.add_child(enemy)
 	enemy.global_position = pos
 	enemy.setup(id, enemy_defs.get(id, {}), player)
+	enemy.attack_gate = _enemy_attack_token
 	if id == "ghoulkin":
 		enemy.rotation_degrees.y = 180.0
 		if audio != null and current_zone_id == "wychwood" and not bool(tutorial_flags.get("ghoulkin_spawn_audio", false)):
@@ -2258,6 +2269,16 @@ func _spawn_enemy(id: String, pos: Vector3) -> Node:
 	enemy.attack_resolved.connect(_on_enemy_attack_resolved)
 	active_enemies.append(enemy)
 	return enemy
+
+func _enemy_attack_token(enemy: Node, claim: bool) -> bool:
+	if claim:
+		if active_enemy_attacker != null and is_instance_valid(active_enemy_attacker) and active_enemy_attacker != enemy:
+			return false
+		active_enemy_attacker = enemy
+		return true
+	if active_enemy_attacker == enemy:
+		active_enemy_attacker = null
+	return true
 
 func _make_ground(pos: Vector3, size: Vector3, color: Color) -> void:
 	var body = StaticBody3D.new()

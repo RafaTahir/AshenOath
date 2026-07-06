@@ -113,6 +113,7 @@ func show_settings_menu(back_target: String = "pause") -> void:
 	_clear_menu()
 	menu_layer.visible = true
 	var box = _menu_box("Settings", "Display & Controls", "tune the lantern")
+	box.set_meta("compact_buttons", true)
 	var s = _current_settings()
 	_add_menu_button(box, "Visual Preset     %s" % str(s.get("quality_preset", "balanced")).capitalize(), func(): settings_requested.emit("visual_preset"))
 	_add_menu_button(box, "3D Resolution     %d%%" % int(round(float(s.get("resolution_scale", 0.667)) * 100.0)), func(): settings_requested.emit("render_scale"))
@@ -122,6 +123,9 @@ func show_settings_menu(back_target: String = "pause") -> void:
 	_add_menu_button(box, "Master Volume     %d%%" % int(round(float(s.get("master_volume", 0.85)) * 100.0)), func(): settings_requested.emit("volume"))
 	_add_menu_button(box, "VSync             %s" % _on_off(bool(s.get("vsync", true))), func(): settings_requested.emit("vsync"))
 	_add_menu_button(box, "Fullscreen        %s" % _on_off(bool(s.get("fullscreen", false))), func(): settings_requested.emit("fullscreen"))
+	_add_menu_button(box, "Subtitle Size     %d%%" % int(round(float(s.get("subtitle_scale", 1.0)) * 100.0)), func(): settings_requested.emit("subtitle_scale"))
+	_add_menu_button(box, "Camera Shake      %d%%" % int(round(float(s.get("camera_shake", 1.0)) * 100.0)), func(): settings_requested.emit("camera_shake"))
+	_add_menu_button(box, "Reduced Motion    %s" % _on_off(bool(s.get("reduced_motion", false))), func(): settings_requested.emit("reduced_motion"))
 	_add_menu_button(box, "Back", _return_from_controls)
 
 func show_controls_menu(back_target: String = "main") -> void:
@@ -275,7 +279,7 @@ func show_dialogue(data: Dictionary) -> void:
 		dialogue_actions.add_child(button)
 	_add_dialogue_close()
 
-func show_inventory(inventory, quests) -> void:
+func show_inventory(inventory, quests, story_state = null) -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	inventory_layer.visible = true
 	var oil_name = "None"
@@ -288,6 +292,20 @@ func show_inventory(inventory, quests) -> void:
 	for id in inventory.ingredients.keys():
 		text += "- %s x%d\n" % [id.capitalize(), int(inventory.ingredients[id])]
 	text += "\n\n%s" % quests.get_journal_text()
+	text += "\n\nBESTIARY\n"
+	text += "Ghoulkin — Fast cursed remains. Parry the lunge; Moon Oil bites deep.\n"
+	if quests.is_completed("main_teeth_in_rain") or quests.is_active("main_teeth_in_rain"):
+		text += "Bog Wretch — Rot-bound memory given flesh. Ash Bombs break its approach.\n"
+	if quests.is_completed("main_blood_under_stone") or quests.is_active("main_blood_under_stone"):
+		text += "Gravebound Knight — A disciplined witness. Read the windup; do not trade blows.\n"
+	if story_state != null:
+		text += "\nCONSEQUENCES\n"
+		var trust := int(story_state.values.get("anwen_trust", 0))
+		var fear := int(story_state.values.get("greyfen_fear", 0))
+		var debt := int(story_state.values.get("hart_debt", 0))
+		text += "Anwen %s.\n" % ("trusts Kael with what the shrine concealed" if trust > 0 else ("guards her words around Kael" if trust < 0 else "has not decided what Kael will do with the truth"))
+		text += "Greyfen %s.\n" % ("is close to panic" if fear >= 4 else ("whispers about the reopened road" if fear > 0 else "still believes its old silence will hold"))
+		text += "The White Hart %s.\n" % ("is owed a reckoning" if debt > 1 else ("has felt Kael disturb the covenant" if debt != 0 else "has not yet named its price"))
 	inventory_text.text = text
 	for child in craft_buttons.get_children():
 		child.queue_free()
@@ -608,7 +626,7 @@ func _add_menu_button(box: VBoxContainer, text: String, callback: Callable, disa
 	var button = Button.new()
 	button.text = text
 	button.disabled = disabled
-	button.custom_minimum_size = Vector2(510, 62)
+	button.custom_minimum_size = Vector2(510, 46 if bool(box.get_meta("compact_buttons", false)) else 62)
 	_style_button(button)
 	button.mouse_entered.connect(func():
 		if not button.disabled:
@@ -696,6 +714,11 @@ func _apply_theme() -> void:
 	status_label.add_theme_font_size_override("font_size", 16)
 	_style_panel(dialogue_layer, Color(0.045, 0.04, 0.035, 0.96), Color(0.44, 0.32, 0.18, 0.92))
 	_style_panel(inventory_layer, Color(0.045, 0.04, 0.035, 0.97), Color(0.44, 0.32, 0.18, 0.92))
+
+func apply_accessibility(subtitle_scale: float) -> void:
+	if dialogue_text != null:
+		dialogue_text.add_theme_font_size_override("normal_font_size", int(round(18.0 * subtitle_scale)))
+		dialogue_text.add_theme_font_size_override("bold_font_size", int(round(20.0 * subtitle_scale)))
 
 func _format_tracker_text(text: String) -> String:
 	if text == "":

@@ -128,7 +128,8 @@ func _update_sky_cycle(daylight: float, twilight: float, night: float, minutes: 
 		var cloud := cloud_layer.get_child(i) as MeshInstance3D
 		cloud.visible = i < cloud_count
 		var base_position: Vector3 = cloud.get_meta("base_position", cloud.position)
-		cloud.position = base_position + Vector3(fmod(minutes * (0.018 + i * 0.002), 28.0) - 14.0, 0, 0)
+		var cloud_drift := 0.0 if _reduced_motion() else fmod(minutes * (0.018 + i * 0.002), 28.0) - 14.0
+		cloud.position = base_position + Vector3(cloud_drift, 0, 0)
 		cloud.material_override = _emissive_billboard_material(cloud_color, 0.10, cloud_alpha)
 
 func _update_zone_night_state(night_amount: float) -> void:
@@ -296,6 +297,10 @@ func _set_mesh_alpha(node: GeometryInstance3D, alpha: float) -> void:
 func _quality_preset() -> String:
 	var settings_node := get_tree().root.find_child("SettingsManager", true, false)
 	return str(settings_node.settings.get("quality_preset", "balanced")) if settings_node != null else "balanced"
+
+func _reduced_motion() -> bool:
+	var settings_node := get_tree().root.find_child("SettingsManager", true, false)
+	return bool(settings_node.settings.get("reduced_motion", false)) if settings_node != null else false
 
 func _set_sky_colors(dome_color: Color, sun_color: Color, cloud_color: Color) -> void:
 	if sky_dome != null:

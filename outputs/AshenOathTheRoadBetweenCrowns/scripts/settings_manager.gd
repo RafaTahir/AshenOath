@@ -14,7 +14,10 @@ var settings = {
 	"target_fps": 30,
 	"mouse_sensitivity": 0.003,
 	"invert_y": false,
-	"master_volume": 0.85
+	"master_volume": 0.85,
+	"subtitle_scale": 1.0,
+	"camera_shake": 1.0,
+	"reduced_motion": false
 }
 
 var _fps_sample_time := 0.0
@@ -135,3 +138,19 @@ func cycle_master_volume() -> void:
 		idx = 3
 	settings["master_volume"] = values[(idx + 1) % values.size()]
 	apply()
+
+func cycle_subtitle_scale() -> void:
+	settings["subtitle_scale"] = _cycle_float(float(settings["subtitle_scale"]), [0.9, 1.0, 1.2])
+	apply()
+
+func cycle_camera_shake() -> void:
+	settings["camera_shake"] = _cycle_float(float(settings["camera_shake"]), [0.0, 0.5, 1.0])
+	apply()
+
+func toggle_reduced_motion() -> void:
+	settings["reduced_motion"] = not bool(settings["reduced_motion"])
+	apply()
+
+func _cycle_float(current: float, values: Array) -> float:
+	var index := values.find(current)
+	return float(values[(index + 1) % values.size()])

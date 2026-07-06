@@ -44,6 +44,8 @@ var behavior_profile := "direct"
 var flank_sign := 1.0
 var parry_exposed_time := 0.0
 var far_tick_accumulator := 0.0
+var attack_gate: Callable
+var owns_attack_token := false
 
 func setup(id: String, definition: Dictionary, target: Node3D) -> void:
 	enemy_id = id
@@ -138,7 +140,7 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.x = 0.0
 		velocity.z = 0.0
-		if attack_cooldown <= 0.0 and player.has_method("take_damage"):
+		if attack_cooldown <= 0.0 and player.has_method("take_damage") and _claim_attack_token():
 			attack_cooldown = _attack_cooldown()
 			windup_time = _windup_duration()
 			pending_attack_time = windup_time
@@ -177,10 +179,12 @@ func stagger(seconds: float = 0.7) -> void:
 	stagger_time = max(stagger_time, seconds)
 	windup_time = 0.0
 	pending_attack_time = 0.0
+	_release_attack_token()
 	if animation_driver != null:
 		animation_driver.trigger_action("hit")
 
 func _resolve_attack() -> void:
+	_release_attack_token()
 	if dead or player == null or not player.has_method("take_damage"):
 		return
 	if player.global_position.distance_to(global_position) > attack_range + 0.75:
@@ -196,6 +200,7 @@ func _on_died() -> void:
 	dead = true
 	death_pose_time = 1.0
 	_hide_windup_marker()
+	_release_attack_token()
 	collision_layer = 0
 	collision_mask = 0
 	if animation_driver != null and animation_driver.is_valid():
@@ -212,6 +217,21 @@ func _on_died() -> void:
 		if material != null:
 			material.albedo_color = material.albedo_color.darkened(0.45)
 	died.emit(self)
+
+func _claim_attack_token() -> bool:
+	if owns_attack_token:
+		return true
+	if attack_gate.is_valid() and not bool(attack_gate.call(self, true)):
+		return false
+	owns_attack_token = true
+	return true
+
+func _release_attack_token() -> void:
+	if not owns_attack_token:
+		return
+	owns_attack_token = false
+	if attack_gate.is_valid():
+		attack_gate.call(self, false)
 
 func _windup_duration() -> float:
 	if enemy_id == "white_hart_avatar":
