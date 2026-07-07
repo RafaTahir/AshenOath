@@ -1,5 +1,7 @@
 extends RefCounted
 
+const CharacterVisualContract = preload("res://scripts/character_visual_contract.gd")
+
 static func apply_player(owner: Node3D, visual_root: Node3D) -> void:
 	if owner == null or visual_root == null:
 		return
@@ -8,6 +10,7 @@ static func apply_player(owner: Node3D, visual_root: Node3D) -> void:
 	owner.set_meta("character_presentation_applied", true)
 	_add_contact_shadow(owner, Vector3(0.92, 0.018, 0.62), 0.0)
 	if _has_skeleton(visual_root):
+		CharacterVisualContract.remove_proxy_anatomy(visual_root)
 		_tint_skeletal_materials(visual_root, Color(0.90, 0.92, 0.88))
 		return
 	var quality = _quality_details_enabled(owner)
@@ -37,6 +40,7 @@ static func apply_npc(owner: Node3D, role_id: String) -> void:
 	_add_contact_shadow(owner, Vector3(0.72, 0.016, 0.50), 0.0)
 	var role = role_id.to_lower()
 	if _has_skeleton(owner):
+		CharacterVisualContract.remove_proxy_anatomy(owner)
 		var tint := Color(0.92, 0.88, 0.82)
 		if role == "sister_anwen": tint = Color(0.88, 0.90, 0.98)
 		elif role == "mira": tint = Color(0.86, 0.96, 0.88)
@@ -81,6 +85,7 @@ static func apply_enemy(owner: Node3D, scale_value: Vector3 = Vector3(0.78, 0.01
 	owner.set_meta("character_grounding_applied", true)
 	_add_contact_shadow(owner, scale_value, 0.0)
 	if _has_skeleton(owner):
+		CharacterVisualContract.remove_proxy_anatomy(owner)
 		_tint_skeletal_materials(owner, Color(0.54, 0.57, 0.49))
 		return
 	var enemy_id = str(owner.get("enemy_id")) if owner.get("enemy_id") != null else ""

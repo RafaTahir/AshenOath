@@ -11,6 +11,7 @@ var cloud_layer: Node3D
 var moon_disc: MeshInstance3D
 var moon_halo: MeshInstance3D
 var star_field: MultiMeshInstance3D
+var cloud_texture: ImageTexture
 var current_environment: Environment
 var current_zone := "greyfen"
 var current_zone_root: Node3D
@@ -70,9 +71,9 @@ func set_time(minutes: float, phase: String, _day_count: int = 0) -> void:
 		_update_zone_night_state(0.75)
 		return
 	var solar: float = sin((minutes - 360.0) / 1440.0 * TAU)
-	var daylight: float = clampf(solar * 1.35, 0.0, 1.0)
-	var twilight: float = clampf(1.0 - absf(solar) * 2.6, 0.0, 1.0) if solar > -0.38 else 0.0
-	var night: float = clampf(1.0 - daylight - twilight * 0.42, 0.0, 1.0)
+	var daylight: float = smoothstep(-0.02,0.16,solar)
+	var night: float = smoothstep(0.04,0.18,-solar)
+	var twilight: float = clampf(1.0-maxf(daylight,night),0.0,1.0)
 	var forest := current_zone in ["wychwood", "deep_wood", "marsh_crossing", "burned_farmstead", "hart_glade"]
 	var ruin := current_zone in ["ruins", "old_mill", "bandit_road", "vargan_approach", "vargan_court", "assembly"]
 	var day_sky := Color(0.20, 0.32, 0.46) if not forest else Color(0.08, 0.18, 0.19)
@@ -86,10 +87,12 @@ func set_time(minutes: float, phase: String, _day_count: int = 0) -> void:
 	var base_fog: float = 0.065 if forest else (0.038 if ruin else 0.030)
 	current_environment.fog_density = base_fog * lerpf(0.88, 0.42, daylight)
 	current_environment.adjustment_brightness = lerp(1.18, 1.03, daylight)
-	sun.rotation_degrees = Vector3(-8.0 - (minutes / 1440.0) * 360.0, -28.0, 0.0)
+	var orbit := ((minutes-360.0)/1440.0)*TAU
+	var sun_direction := Vector3(cos(orbit),solar,-0.42).normalized()
+	sun.global_basis = Basis.looking_at(-sun_direction,Vector3.UP)
 	sun.light_color = Color(1.0, 0.48, 0.24).lerp(Color(1.0, 0.91, 0.74), daylight)
 	sun.light_energy = daylight * (0.72 if forest else 1.05) + twilight * 0.28
-	moon.rotation_degrees = Vector3(sun.rotation_degrees.x + 180.0, 22.0, 0.0)
+	moon.global_basis = Basis.looking_at(sun_direction,Vector3.UP)
 	moon.light_energy = night * (0.80 if forest else 0.88)
 	_update_sky_cycle(daylight, twilight, night, minutes)
 	_update_zone_night_state(night)
@@ -98,35 +101,37 @@ func _update_sky_cycle(daylight: float, twilight: float, night: float, minutes: 
 	var orbit := ((minutes - 360.0) / 1440.0) * TAU
 	var camera := get_viewport().get_camera_3d()
 	var sky_origin: Vector3 = camera.global_position if camera != null else Vector3.ZERO
-	var sky_forward: Vector3 = -camera.global_basis.z if camera != null else Vector3.FORWARD
-	var sky_right: Vector3 = camera.global_basis.x if camera != null else Vector3.RIGHT
-	var sun_position: Vector3 = sky_origin + sky_forward * 115.0 + sky_right * (cos(orbit) * 72.0) + Vector3.UP * max(18.0, sin(orbit) * 62.0)
-	var moon_position: Vector3 = sky_origin + sky_forward * 105.0 + sky_right * (-cos(orbit) * 64.0) + Vector3.UP * max(22.0, -sin(orbit) * 54.0)
+	var sun_direction := Vector3(cos(orbit),sin(orbit),-0.42).normalized()
+	var moon_direction := -sun_direction
+	var sun_position: Vector3 = sky_origin + sun_direction * 145.0
+	var moon_position: Vector3 = sky_origin + moon_direction * 132.0
 	sun_disc.position = sun_position
 	sun_halo.position = sun_position + Vector3(0, 0, 0.4)
 	sun_rays.position = sun_position
 	moon_disc.position = moon_position
 	moon_halo.position = moon_position + Vector3(0, 0, 0.4)
-	var sun_amount := clampf(daylight + twilight * 0.82, 0.0, 1.0)
-	sun_disc.visible = sun_amount > 0.08
-	sun_halo.visible = sun_amount > 0.10
-	sun_rays.visible = sun_amount > 0.14
-	moon_disc.visible = night > 0.14
-	moon_halo.visible = night > 0.18
+	var sun_amount := clampf(daylight+twilight*0.72,0.0,1.0)
+	var sun_above_horizon := sun_direction.y > -0.015
+	var moon_above_horizon := moon_direction.y > 0.035
+	sun_disc.visible = sun_above_horizon and night < 0.08
+	sun_halo.visible = sun_disc.visible
+	sun_rays.visible = sun_disc.visible and sun_amount > 0.14
+	moon_disc.visible = moon_above_horizon and daylight < 0.08
+	moon_halo.visible = moon_disc.visible
 	_set_mesh_alpha(sun_disc, 0.92 * sun_amount)
 	_set_mesh_alpha(sun_halo, 0.18 * sun_amount)
 	_set_mesh_alpha(moon_disc, 0.94 * night)
 	_set_mesh_alpha(moon_halo, 0.20 * night)
-	star_field.visible = night > 0.10
+	star_field.visible = night > 0.22 and not moon_direction.y < -0.05
 	_set_mesh_alpha(star_field, clampf((night - 0.10) / 0.70, 0.0, 0.92))
 	var quality := _quality_preset()
 	star_field.multimesh.visible_instance_count = 28 if quality == "potato" else (96 if quality == "quality" else 62)
 	var cloud_count := 2 if quality == "potato" else (7 if quality == "quality" else 4)
 	cloud_layer.visible = true
-	var cloud_alpha := clampf(daylight * 0.28 + twilight * 0.34 + night * 0.07, 0.04, 0.34)
-	var cloud_color := Color(0.54, 0.59, 0.65) if daylight > twilight else Color(0.58, 0.31, 0.20)
+	var cloud_alpha := clampf(daylight*0.78+twilight*0.68+night*0.28,0.18,0.82)
+	var cloud_color := Color(0.92,0.94,0.96) if daylight > twilight else Color(0.82,0.46,0.30)
 	if night > 0.55:
-		cloud_color = Color(0.10, 0.15, 0.24)
+		cloud_color = Color(0.18,0.23,0.34)
 	for i in range(cloud_layer.get_child_count()):
 		var cloud := cloud_layer.get_child(i) as Node3D
 		cloud.visible = i < cloud_count
@@ -135,7 +140,9 @@ func _update_sky_cycle(daylight: float, twilight: float, night: float, minutes: 
 		cloud.position = base_position + Vector3(cloud_drift, 0, 0)
 		for lobe in cloud.get_children():
 			if lobe is MeshInstance3D:
-				(lobe as MeshInstance3D).material_override = _emissive_billboard_material(cloud_color, 0.10, cloud_alpha)
+				var material := (lobe as MeshInstance3D).material_override as StandardMaterial3D
+				if material != null:
+					material.albedo_color = Color(cloud_color.r,cloud_color.g,cloud_color.b,cloud_alpha)
 
 func _update_zone_night_state(night_amount: float) -> void:
 	if current_zone_root == null:
@@ -236,23 +243,20 @@ func _build_sky_layer() -> void:
 	cloud_layer = Node3D.new()
 	cloud_layer.name = "CloudLayer"
 	add_child(cloud_layer)
+	cloud_texture = _build_cloud_texture()
 	for i: int in range(7):
 		var cloud := Node3D.new()
 		cloud.name = "CloudCluster"
 		cloud.position = Vector3(-62.0 + i * 22.0, 46.0 + (i % 2) * 6.0, -92.0 + (i % 3) * 18.0)
 		cloud.set_meta("base_position", cloud.position)
-		for lobe_index in range(4):
+		for lobe_index in range(3):
 			var lobe := MeshInstance3D.new()
-			lobe.name = "CloudLobe"
-			var cloud_mesh := SphereMesh.new()
-			cloud_mesh.radius = 0.5
-			cloud_mesh.height = 1.0
-			cloud_mesh.radial_segments = 12
-			cloud_mesh.rings = 6
+			lobe.name = "CloudCard"
+			var cloud_mesh := QuadMesh.new()
+			cloud_mesh.size = Vector2(42.0+float(lobe_index)*9.0,15.0+float((i+lobe_index)%2)*4.0)
 			lobe.mesh = cloud_mesh
-			lobe.position = Vector3((lobe_index - 1.5) * 13.0, absf(lobe_index - 1.5) * -1.1, float((lobe_index * 7) % 3) * 2.0)
-			lobe.scale = Vector3(17.0 + lobe_index * 2.0, 4.2 + (lobe_index % 2) * 1.5, 8.0 + (i % 3))
-			lobe.material_override = _emissive_billboard_material(Color(0.32, 0.28, 0.24), 0.12, 0.20)
+			lobe.position = Vector3((lobe_index-1.0)*24.0,float((lobe_index+i)%2)*3.0,float(lobe_index)*4.0)
+			lobe.material_override = _cloud_material(Color(0.92,0.94,0.96,0.72))
 			cloud.add_child(lobe)
 		cloud_layer.add_child(cloud)
 
@@ -338,7 +342,40 @@ func _set_sky_colors(dome_color: Color, sun_color: Color, cloud_color: Color) ->
 		for child in cloud_layer.get_children():
 			for lobe in child.get_children():
 				if lobe is MeshInstance3D:
-					(lobe as MeshInstance3D).material_override = _emissive_billboard_material(cloud_color, 0.10, cloud_color.a)
+					var material := (lobe as MeshInstance3D).material_override as StandardMaterial3D
+					if material != null:
+						material.albedo_color = cloud_color
+
+func _build_cloud_texture() -> ImageTexture:
+	var image := Image.create(128,64,false,Image.FORMAT_RGBA8)
+	var noise := FastNoiseLite.new()
+	noise.seed = 7319
+	noise.noise_type = FastNoiseLite.TYPE_SIMPLEX_SMOOTH
+	noise.frequency = 0.045
+	noise.fractal_octaves = 4
+	noise.fractal_gain = 0.52
+	for y in range(64):
+		for x in range(128):
+			var nx := (float(x)/127.0-0.5)*2.0
+			var ny := (float(y)/63.0-0.5)*2.0
+			var envelope := clampf(1.0-(nx*nx*0.72+ny*ny*1.85),0.0,1.0)
+			var detail := noise.get_noise_2d(float(x),float(y))*0.5+0.5
+			var alpha := smoothstep(0.30,0.67,detail*0.64+envelope*0.58)
+			var shade := lerpf(0.58,1.0,clampf(1.0-float(y)/63.0+detail*0.18,0.0,1.0))
+			image.set_pixel(x,y,Color(shade,shade,shade,alpha))
+	image.generate_mipmaps()
+	return ImageTexture.create_from_image(image)
+
+func _cloud_material(color: Color) -> StandardMaterial3D:
+	var material := StandardMaterial3D.new()
+	material.albedo_texture = cloud_texture
+	material.albedo_color = color
+	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	material.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+	material.cull_mode = BaseMaterial3D.CULL_DISABLED
+	return material
 
 func _sky_material(color: Color) -> StandardMaterial3D:
 	var material = StandardMaterial3D.new()

@@ -134,6 +134,7 @@ func _physics_process(delta: float) -> void:
 			dir = (dir + lateral * flank_sign * 0.20).normalized()
 		elif behavior_profile == "brute":
 			speed_factor *= 0.84
+		dir = (dir+_crowd_separation()*0.72).normalized()
 		velocity.x = dir.x * move_speed * speed_factor
 		velocity.z = dir.z * move_speed * speed_factor
 		look_at(Vector3(player.global_position.x, global_position.y, player.global_position.z), Vector3.UP)
@@ -187,7 +188,7 @@ func _resolve_attack() -> void:
 	_release_attack_token()
 	if dead or player == null or not player.has_method("take_damage"):
 		return
-	if player.global_position.distance_to(global_position) > attack_range + 0.75:
+	if player.global_position.distance_to(global_position) > attack_range+0.75 or not _has_attack_line():
 		return
 	var parried = player.take_damage(damage)
 	attack_recovery_time = 0.22 if enemy_id == "ghoulkin" else 0.16
@@ -195,6 +196,29 @@ func _resolve_attack() -> void:
 	if parried:
 		parry_exposed_time = 1.15
 		stagger(1.15)
+
+func _has_attack_line() -> bool:
+	var origin := global_position+Vector3(0,0.9,0)
+	var target: Vector3 = player.global_position+Vector3(0,0.9,0)
+	var query := PhysicsRayQueryParameters3D.create(origin,target)
+	query.exclude = [get_rid(),player.get_rid()]
+	query.collide_with_areas = false
+	return get_world_3d().direct_space_state.intersect_ray(query).is_empty()
+
+func _crowd_separation() -> Vector3:
+	var separation := Vector3.ZERO
+	for other in get_tree().get_nodes_in_group("enemies"):
+		if other == self or not is_instance_valid(other) or bool(other.get("dead")):
+			continue
+		var offset: Vector3 = global_position-other.global_position
+		offset.y = 0.0
+		var distance := offset.length()
+		if distance > 0.01 and distance < 1.55:
+			separation += offset.normalized()*(1.55-distance)/1.55
+	return separation.normalized() if separation.length_squared() > 0.01 else Vector3.ZERO
+
+func get_behavior_state() -> Dictionary:
+	return {"profile":behavior_profile,"windup":pending_attack_time,"stagger":stagger_time,"recovery":attack_recovery_time,"owns_attack_token":owns_attack_token}
 
 func _on_died() -> void:
 	dead = true
@@ -376,13 +400,13 @@ func _mapped_enemy_scale() -> Vector3:
 	if enemy_id == "white_hart_avatar":
 		return Vector3(1.35, 1.35, 1.35)
 	if enemy_id == "ghoulkin":
-		return Vector3.ONE * 0.58
+		return Vector3.ONE * 0.95
 	if enemy_id == "wychwood_stalker":
-		return Vector3(0.50, 0.64, 0.50)
+		return Vector3(0.92, 0.96, 0.92)
 	if enemy_id == "wychwood_raider":
-		return Vector3(0.61, 0.60, 0.61)
+		return Vector3.ONE
 	if enemy_id == "wychwood_brute":
-		return Vector3(0.72, 0.64, 0.72)
+		return Vector3(1.08, 1.04, 1.08)
 	if enemy_id == "bandit":
 		return Vector3(0.95, 0.95, 0.95)
 	return Vector3.ONE

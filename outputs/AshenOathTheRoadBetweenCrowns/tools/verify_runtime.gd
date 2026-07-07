@@ -124,7 +124,7 @@ func _initialize() -> void:
 	for enemy_id in ["wychwood_stalker", "wychwood_raider", "wychwood_brute"]:
 		_assert(_living_enemy_count(game, enemy_id) == 1, "%s reinforcement is missing" % enemy_id)
 	for enemy in game.active_enemies:
-		_assert(float(enemy.base_body_scale.y) >= 0.50 and float(enemy.base_body_scale.y) <= 0.72, "%s rig is not normalized to protagonist-comparable height" % enemy.enemy_id)
+		_assert(float(enemy.base_body_scale.y) >= 0.88 and float(enemy.base_body_scale.y) <= 1.12, "%s rig is not normalized to protagonist-comparable height" % enemy.enemy_id)
 	_assert(game.player.has_signal("beam_requested"), "Player Oathfire Beam signal is missing")
 	_assert(_has_child_named(game.player, "OathfireChargeSphere"), "Oathfire charge visual is missing")
 	_assert(game.combat.has_method("resolve_energy_beam"), "Oathfire beam combat resolver is missing")

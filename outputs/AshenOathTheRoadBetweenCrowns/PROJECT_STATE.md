@@ -1,10 +1,10 @@
 # Ashen Oath Project State
 
-Last updated: 2026-06-21
+Last updated: 2026-07-07
 
 ## Summary
 
-Ashen Oath: The Road Between Crowns is a Godot 4.6.3 browser-first dark-fantasy action RPG vertical slice. The current build is a playable low-spec Web slice focused on Greyfen village, the Wychwood road, and the first Ghoulkin encounter.
+Ashen Oath: The Road Between Crowns is a Godot 4.6.3 browser-first dark-fantasy action RPG. The current Web build includes the Greyfen and Wychwood opening, campaign sections, Castle Vargan, river-safe bridge routes, day/night presentation, skeletal characters, and the five-enemy Oathfire encounter.
 
 The project uses The Witcher 3 as an inspiration benchmark for atmosphere, quest clarity, dark-fantasy staging, and authored route design. It is not a finished AAA game, and it does not currently have Witcher-grade art, animation, facial fidelity, terrain, audio, or production QA.
 

@@ -4,6 +4,7 @@ signal attack_performed(damage: float, radius: float, heavy: bool)
 signal potion_requested
 signal bomb_requested
 signal beam_requested(charge_ratio: float, direction: Vector3)
+signal beam_phase_changed(phase: String)
 signal footstep
 signal parried
 signal blocked(amount: float)
@@ -56,6 +57,10 @@ var move_phase = 0.0
 var step_phase = 0.0
 var attack_anim_time = 0.0
 var attack_anim_heavy = false
+var pending_attack_time := 0.0
+var pending_attack_damage := 0.0
+var pending_attack_radius := 0.0
+var pending_attack_heavy := false
 var hurt_flash_time = 0.0
 var hurt_react_time = 0.0
 var parry_window = 0.0
@@ -109,6 +114,7 @@ func _physics_process(delta: float) -> void:
 	parry_window = max(parry_window - delta, 0.0)
 	step_up_cooldown = max(step_up_cooldown - delta, 0.0)
 	_update_beam_sequence(delta)
+	_update_pending_attack(delta)
 	if not can_control:
 		velocity.x = move_toward(velocity.x, 0.0, 20.0 * delta)
 		velocity.z = move_toward(velocity.z, 0.0, 20.0 * delta)
@@ -231,7 +237,7 @@ func _handle_combat_input() -> void:
 		attack_anim_heavy = false
 		if animation_driver != null:
 			animation_driver.trigger_action("attack_light")
-		attack_performed.emit(24.0, 2.0, false)
+		_queue_attack_hit(24.0,2.0,false,0.12)
 	elif Input.is_action_just_pressed("heavy_attack"):
 		if stamina_component.spend(22.0):
 			attack_cooldown = 0.7
@@ -239,7 +245,7 @@ func _handle_combat_input() -> void:
 			attack_anim_heavy = true
 			if animation_driver != null:
 				animation_driver.trigger_action("attack_heavy")
-			attack_performed.emit(42.0, 2.25, true)
+			_queue_attack_hit(42.0,2.25,true,0.24)
 		else:
 			stamina_exhausted.emit("heavy attack")
 	if Input.is_action_just_pressed("use_potion"):
@@ -251,9 +257,25 @@ func _handle_combat_input() -> void:
 		if animation_driver != null:
 			animation_driver.trigger_action("parry")
 
+func _queue_attack_hit(damage: float, radius: float, heavy: bool, delay: float) -> void:
+	pending_attack_damage = damage
+	pending_attack_radius = radius
+	pending_attack_heavy = heavy
+	pending_attack_time = delay
+
+func _update_pending_attack(delta: float) -> void:
+	if pending_attack_time <= 0.0:
+		return
+	pending_attack_time -= delta
+	if pending_attack_time <= 0.0 and can_control:
+		attack_performed.emit(pending_attack_damage,pending_attack_radius,pending_attack_heavy)
+		pending_attack_damage = 0.0
+		pending_attack_radius = 0.0
+
 func _handle_beam_input() -> void:
 	if Input.is_action_just_pressed("oathfire_beam") and beam_cooldown <= 0.0 and beam_cast_state == "" and dodge_time <= 0.0:
 		beam_cast_state = "sheathing"
+		beam_phase_changed.emit("sheathing")
 		beam_state_time = 0.24
 		beam_charging = true
 		beam_charge_time = 0.0
@@ -274,6 +296,7 @@ func _handle_beam_input() -> void:
 			attack_cooldown = 0.75
 			beam_charging = false
 			beam_cast_state = "releasing"
+			beam_phase_changed.emit("releasing")
 			beam_state_time = 0.30
 			_hide_beam_charge_visuals()
 		elif beam_charge_time >= 0.35:
@@ -291,6 +314,7 @@ func _update_beam_sequence(delta: float) -> void:
 	if beam_cast_state == "sheathing" and beam_state_time <= 0.0:
 		if Input.is_action_pressed("oathfire_beam"):
 			beam_cast_state = "charging"
+			beam_phase_changed.emit("charging")
 			beam_state_time = 0.0
 			if animation_driver != null:
 				animation_driver.trigger_action("beam_cast")
@@ -309,6 +333,7 @@ func _update_beam_sequence(delta: float) -> void:
 func _begin_beam_redraw() -> void:
 	beam_charging = false
 	beam_cast_state = "redrawing"
+	beam_phase_changed.emit("redrawing")
 	beam_state_time = 0.24
 	_hide_beam_charge_visuals()
 
@@ -316,6 +341,7 @@ func cancel_beam_charge() -> void:
 	beam_charging = false
 	beam_charge_time = 0.0
 	beam_cast_state = ""
+	beam_phase_changed.emit("cancelled")
 	beam_state_time = 0.0
 	beam_locked_direction = Vector3.ZERO
 	_hide_beam_charge_visuals()
@@ -534,7 +560,7 @@ func _try_build_mapped_body() -> bool:
 			mapped.queue_free()
 		return false
 	mapped.name = "player_kael_visual"
-	mapped.scale = Vector3(0.60, 0.60, 0.60)
+	mapped.scale = Vector3.ONE
 	mapped.rotation_degrees.y = 180
 	visual_root.add_child(mapped)
 	rig_sword_visual = mapped.find_child("Warrior_Sword", true, false) as Node3D

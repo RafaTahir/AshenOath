@@ -52,6 +52,9 @@ var hint_tween: Tween
 var status_tween: Tween
 var toast_tween: Tween
 var enemy_hide_tween: Tween
+var dialogue_pages: Array[String] = []
+var dialogue_page_index := 0
+var dialogue_session_data: Dictionary = {}
 
 func _ready() -> void:
 	_build_hud()
@@ -260,15 +263,34 @@ func mark_stamina_exhausted() -> void:
 func show_dialogue(data: Dictionary) -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	dialogue_layer.visible = true
-	dialogue_title.text = data.get("name", "Unknown")
-	var lines: Array = data.get("lines", [])
-	var line_text = ""
-	for line in lines:
-		line_text += str(line) + "\n\n"
-	dialogue_text.text = "[b]%s[/b]\n\n%s" % [data.get("greeting", ""), line_text.strip_edges()]
+	dialogue_session_data = data.duplicate(true)
+	dialogue_pages.clear()
+	var greeting := str(data.get("greeting","")).strip_edges()
+	if greeting != "": dialogue_pages.append(greeting)
+	for line in data.get("lines",[]):
+		var line_text := str(line).strip_edges()
+		if line_text != "": dialogue_pages.append(line_text)
+	if dialogue_pages.is_empty(): dialogue_pages.append("...")
+	dialogue_page_index = 0
+	_render_dialogue_page()
+
+func _render_dialogue_page() -> void:
+	dialogue_title.text = str(dialogue_session_data.get("name","Unknown"))
+	dialogue_text.text = "[b]%s[/b]\n\n%s" % [dialogue_title.text,dialogue_pages[dialogue_page_index]]
 	for child in dialogue_actions.get_children():
 		child.queue_free()
-	for action in data.get("actions", []):
+	if dialogue_page_index < dialogue_pages.size()-1:
+		var advance := Button.new()
+		advance.text = "Continue"
+		_style_button(advance)
+		advance.pressed.connect(func():
+			dialogue_page_index += 1
+			_render_dialogue_page()
+		)
+		dialogue_actions.add_child(advance)
+		return
+	var actions: Array = dialogue_session_data.get("actions",[])
+	for action in actions:
 		var button = Button.new()
 		button.text = action.get("label", "Continue")
 		_style_button(button)
@@ -277,7 +299,8 @@ func show_dialogue(data: Dictionary) -> void:
 			action_selected.emit(action_data)
 		)
 		dialogue_actions.add_child(button)
-	_add_dialogue_close()
+	if actions.is_empty():
+		_add_dialogue_close()
 
 func show_inventory(inventory, quests, story_state = null) -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -686,6 +709,7 @@ func _add_dialogue_close() -> void:
 	close.text = "Close"
 	_style_button(close)
 	close.pressed.connect(func():
+		dialogue_closed.emit()
 		get_tree().paused = false
 		hide_menus()
 	)

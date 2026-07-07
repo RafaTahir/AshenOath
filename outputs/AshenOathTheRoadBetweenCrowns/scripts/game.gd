@@ -50,6 +50,7 @@ var visual_director
 var minigames
 var zone_root: Node3D
 var active_interactable
+var interaction_candidates: Array = []
 var current_zone_id = "greyfen"
 var enemy_defs = {}
 var active_enemies: Array = []
@@ -109,6 +110,7 @@ func _process(delta: float) -> void:
 	if not game_started or player == null or get_tree().paused:
 		return
 	_keep_player_in_world()
+	_update_interaction_focus()
 	_update_tutorial_prompts()
 	autosave_cooldown = max(autosave_cooldown - delta, 0.0)
 	if autosave_cooldown <= 0.0:
@@ -268,6 +270,7 @@ func _spawn_player(pos: Vector3) -> void:
 	player.potion_requested.connect(_use_potion)
 	player.bomb_requested.connect(_throw_bomb)
 	player.beam_requested.connect(_on_player_beam)
+	player.beam_phase_changed.connect(_on_player_beam_phase)
 	player.footstep.connect(_on_player_footstep)
 	player.parried.connect(_on_player_parried)
 	player.blocked.connect(_on_player_blocked)
@@ -304,6 +307,7 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	if camera_rig != null and camera_rig.has_method("set_zone"):
 		camera_rig.set_zone(zone_id)
 	active_interactable = null
+	interaction_candidates.clear()
 	active_enemies.clear()
 	hud.set_prompt("")
 	if reused_zone:
@@ -845,10 +849,15 @@ func _show_ending_consequence(ending: String) -> void:
 func _on_player_attack(damage: float, radius: float, heavy: bool) -> void:
 	var target = _nearest_living_enemy(radius + 1.6)
 	if target != null:
-		player.face_target(target.global_position)
 		hud.show_enemy(target.display_name, target.health_component.health, target.health_component.max_health)
 	audio.play_event("heavy" if heavy else "swing")
 	combat.resolve_player_attack(player, active_enemies, damage, radius, heavy, inventory.active_oil)
+
+func _on_player_beam_phase(phase: String) -> void:
+	match phase:
+		"sheathing": audio.play_event("oathfire_sheathe",0.02)
+		"charging": audio.play_event("oathfire_charge",0.01)
+		"releasing": audio.play_event("oathfire_release",0.015)
 
 func _on_player_beam(charge_ratio: float, direction: Vector3) -> void:
 	if player == null or zone_root == null:
@@ -887,22 +896,33 @@ func _make_oathfire_beam(origin: Vector3, endpoint: Vector3, charge_ratio: float
 	root.global_position = origin.lerp(endpoint, 0.5)
 	root.look_at(endpoint, Vector3.UP)
 	var core = MeshInstance3D.new()
-	var core_mesh = BoxMesh.new()
-	core_mesh.size = Vector3(0.44 + charge_ratio * 0.22, 0.44 + charge_ratio * 0.22, length)
+	var core_mesh = CylinderMesh.new()
+	core_mesh.top_radius = 0.18+charge_ratio*0.10
+	core_mesh.bottom_radius = 0.30+charge_ratio*0.14
+	core_mesh.height = length
+	core_mesh.radial_segments = 12
 	core.mesh = core_mesh
+	core.rotation_degrees.x = 90.0
 	core.name = "OathfireBeamCore"
 	core.material_override = _oathfire_material(Color(0.72, 0.96, 1.0, 0.96), 2.8)
 	root.add_child(core)
 	if rich_effect:
 		var aura = MeshInstance3D.new()
-		var aura_mesh = BoxMesh.new()
-		aura_mesh.size = Vector3(0.90 + charge_ratio * 0.38, 0.90 + charge_ratio * 0.38, length * 0.98)
+		var aura_mesh = CylinderMesh.new()
+		aura_mesh.top_radius = 0.42+charge_ratio*0.16
+		aura_mesh.bottom_radius = 0.58+charge_ratio*0.20
+		aura_mesh.height = length*0.98
+		aura_mesh.radial_segments = 12
 		aura.mesh = aura_mesh
+		aura.rotation_degrees.x = 90.0
 		aura.name = "OathfireBeamAura"
 		aura.material_override = _oathfire_material(Color(0.16, 0.66, 1.0, 0.30), 1.5)
 		root.add_child(aura)
+	root.scale = Vector3(0.04,0.04,0.08)
 	var tween = create_tween()
-	tween.tween_property(root, "scale", Vector3(0.04, 0.04, 1.0), 0.42)
+	tween.tween_property(root,"scale",Vector3.ONE,0.09).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.tween_interval(0.16)
+	tween.tween_property(root,"scale",Vector3(0.08,0.08,1.0),0.18)
 	tween.tween_callback(root.queue_free)
 
 func _oathfire_material(color: Color, energy: float) -> StandardMaterial3D:
@@ -2126,7 +2146,7 @@ func _make_named_interactable(id: String, type: String, prompt: String, pos: Vec
 	var area = Interactable.new()
 	area.setup(id, type, prompt)
 	area.position = pos
-	area.build_collision(1.6)
+	area.build_collision(1.25)
 	zone_root.add_child(area)
 	var role = _role_for_interactable(id)
 	var mapped = _make_role_visual(role, "characters", Vector3(0.9, 0.9, 0.9) * scale_override)
@@ -2169,7 +2189,7 @@ func _make_village_place(id: String, type: String, prompt: String, pos: Vector3,
 	var area = Interactable.new()
 	area.setup(id,type,prompt)
 	area.position = pos
-	area.build_collision(1.8)
+	area.build_collision(1.35)
 	zone_root.add_child(area)
 	var table := MeshInstance3D.new()
 	table.name = "%s_VisibleProp" % id
@@ -2219,20 +2239,14 @@ func _stage_dialogue_moment(area) -> void:
 	var npc = area as Node3D
 	var flat_to_player = player.global_position - npc.global_position
 	flat_to_player.y = 0.0
-	var distance = flat_to_player.length()
 	if area.interaction_id == "sister_anwen":
 		npc.set_meta("dialogue_facing_lock", true)
-		var desired = npc.global_position + Vector3(-0.95, 0, 1.35)
-		if distance < 1.05 or distance > 2.8:
-			player.global_position = Vector3(desired.x, player.global_position.y, desired.z)
-			player.velocity = Vector3.ZERO
 	if player.has_method("face_target"):
 		player.face_target(npc.global_position)
 	var to_player = player.global_position - npc.global_position
 	to_player.y = 0.0
 	if to_player.length() > 0.1:
-		var facing_offset := 180.0 if area.interaction_id == "sister_anwen" else 0.0
-		npc.rotation_degrees.y = rad_to_deg(atan2(-to_player.x, -to_player.z)) + facing_offset
+		npc.rotation_degrees.y = rad_to_deg(atan2(-to_player.x,-to_player.z))
 
 func _release_dialogue_facing() -> void:
 	audio.stop_voice()
@@ -2294,17 +2308,50 @@ func _make_blocked_gate(prompt: String, pos: Vector3, message: String):
 
 func _connect_interactable(area) -> void:
 	area.body_entered.connect(func(body: Node):
-		if body == player:
-			active_interactable = area
-			_set_interactable_label_visible(area, true)
-			hud.set_prompt("E  %s" % area.get_context_prompt())
+		if body == player and area not in interaction_candidates:
+			interaction_candidates.append(area)
 	)
 	area.body_exited.connect(func(body: Node):
-		if body == player and active_interactable == area:
-			active_interactable = null
-			_set_interactable_label_visible(area, false)
-			hud.set_prompt("")
+		if body == player:
+			interaction_candidates.erase(area)
+			_set_interactable_label_visible(area,false)
+			if active_interactable == area:
+				active_interactable = null
 	)
+
+func _update_interaction_focus() -> void:
+	var best = null
+	var best_score := -999.0
+	var camera := get_viewport().get_camera_3d()
+	var forward: Vector3 = -camera.global_basis.z if camera != null else -player.global_basis.z
+	for candidate in interaction_candidates.duplicate():
+		if candidate == null or not is_instance_valid(candidate) or candidate.is_queued_for_deletion():
+			interaction_candidates.erase(candidate)
+			continue
+		var offset: Vector3 = candidate.global_position-player.global_position
+		var distance := offset.length()
+		if distance > 2.65 or distance < 0.01:
+			continue
+		var facing := forward.dot(offset.normalized())
+		if facing < 0.12 or not _interaction_target_valid(candidate):
+			continue
+		var priority := 0.0
+		if candidate.interaction_type == "dialogue": priority += 0.18
+		if candidate.interaction_type == "clue" and quests.is_active(candidate.quest_id): priority += 0.45
+		var score := facing*2.2-distance*0.42+priority
+		if score > best_score:
+			best_score = score
+			best = candidate
+	if active_interactable != best:
+		if active_interactable != null and is_instance_valid(active_interactable):
+			_set_interactable_label_visible(active_interactable,false)
+		active_interactable = best
+		if active_interactable != null:
+			_set_interactable_label_visible(active_interactable,true)
+	if active_interactable != null:
+		hud.set_prompt("E  %s" % active_interactable.get_context_prompt())
+	else:
+		hud.set_prompt("")
 
 func _interaction_target_valid(area: Area3D) -> bool:
 	if player == null or area == null or not is_instance_valid(area):
@@ -2784,7 +2831,7 @@ func _make_role_visual(role_name: String, category: String, scale_value: Vector3
 		if visual_role != "" and asset_helper.has_method("spawn_visual_role") and asset_helper.has_method("has_visual_role") and asset_helper.has_visual_role(visual_role):
 			node = asset_helper.spawn_visual_role(visual_role, "characters")
 			if node != null and not node.name.ends_with("_placeholder"):
-				node.scale = scale_value * 0.66
+				node.scale = scale_value
 				return node
 			if node != null:
 				node.queue_free()

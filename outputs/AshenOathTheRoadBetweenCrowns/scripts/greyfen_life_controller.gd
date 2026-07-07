@@ -149,7 +149,7 @@ func _make_skeletal_villager(parent: Node3D, role_id: String, index: int, scale_
 		push_error("Rigged villager asset unavailable for %s" % role_id)
 		return null
 	mapped.name = "%s_rigged_human" % role_id
-	mapped.scale = Vector3.ONE * (0.56 * scale_value * (0.97 + 0.025 * float(index % 3)))
+	mapped.scale = Vector3.ONE * (0.96 * scale_value * (0.97 + 0.025 * float(index % 3)))
 	mapped.rotation_degrees.y = 180.0
 	parent.add_child(mapped)
 	CharacterPresentation.apply_npc(parent, role_id)

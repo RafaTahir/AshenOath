@@ -1,6 +1,7 @@
 extends Node
 
 const AssetDatabase = preload("res://scripts/asset_database.gd")
+const CharacterVisualContract = preload("res://scripts/character_visual_contract.gd")
 
 var database
 var mesh_cache: Dictionary = {}
@@ -42,12 +43,12 @@ func _spawn_from_entry(entry: Dictionary, role_name: String, fallback_category: 
 		var spawned: Node3D = _instantiate_resource(resource)
 		if spawned != null:
 			spawned.name = role_name
-			_prepare_spawned_asset(spawned, path)
+			_prepare_spawned_asset(spawned,path,role_name,fallback_category)
 			return spawned
 		var fallback: Node3D = _instantiate_source_file(path)
 		if fallback != null:
 			fallback.name = role_name
-			_prepare_spawned_asset(fallback, path)
+			_prepare_spawned_asset(fallback,path,role_name,fallback_category)
 			return fallback
 	push_warning("Using primitive placeholder for asset role: %s" % role_name)
 	return _placeholder(role_name, fallback_category)
@@ -219,10 +220,10 @@ func _resolve_obj_index(raw_value: String, count: int) -> int:
 
 func _target_height_for_path(path: String) -> float:
 	var lowered: String = path.to_lower()
-	if "characters" in lowered:
+	if "characters" in lowered or "warrior_animated" in lowered or "cleric_animated" in lowered or "monk_animated" in lowered or "rogue_animated" in lowered:
 		return 1.78
-	if "skeleton" in lowered:
-		return 1.62
+	if "orcskull" in lowered or "skeleton" in lowered:
+		return 1.72
 	if "slime" in lowered:
 		return 0.92
 	if "wolf" in lowered:
@@ -312,13 +313,19 @@ func _finalize_asset_root(root: Node3D) -> void:
 	for mesh_instance in _collect_meshes(root):
 		mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 
-func _prepare_spawned_asset(root: Node3D, path: String) -> void:
+func _prepare_spawned_asset(root: Node3D, path: String, role_name: String = "", category: String = "") -> void:
 	if path.get_extension().to_lower() != "obj":
 		_normalize_scene_bounds(root, _target_height_for_path(path))
 	_apply_safe_materials(root, path)
 	_finalize_asset_root(root)
 	if "characters" in path.to_lower() and not _has_skeleton(root):
 		_apply_character_wrapper(root, root.name)
+	if category in ["characters","enemies"] and _has_skeleton(root):
+		var report := CharacterVisualContract.validate(root,true)
+		root.set_meta("character_visual_contract",report)
+		root.set_meta("character_visual_role",role_name)
+		if not bool(report.valid):
+			push_error("Incomplete skeletal visual for %s: %s" % [role_name,str(report)])
 
 func _has_skeleton(root: Node) -> bool:
 	if root is Skeleton3D:
