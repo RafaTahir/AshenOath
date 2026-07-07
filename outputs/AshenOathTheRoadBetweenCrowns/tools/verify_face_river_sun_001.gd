@@ -36,12 +36,43 @@ func _initialize() -> void:
 func _verify_character(node: Node, label: String) -> void:
 	check(node != null, "%s is missing" % label)
 	if node == null: return
-	var attachment = node.find_child("FacialIdentity",true,false)
-	check(attachment is BoneAttachment3D, "%s face is not bone-bound" % label)
-	if attachment is BoneAttachment3D:
-		check(str(attachment.bone_name).to_lower().contains("head"), "%s face is not attached to Head" % label)
-		var sprite = attachment.find_child("BoneBoundFaceTexture",true,false)
-		check(sprite is Sprite3D and sprite.texture != null, "%s facial texture is missing" % label)
+	check(node.find_child("FacialIdentity",true,false) == null, "%s still uses a billboard face" % label)
+	check(_has_fragment(node,"head"), "%s modeled head is missing" % label)
+	var skeleton := _find_skeleton(node)
+	check(skeleton != null, "%s skeletal body is missing" % label)
+	if skeleton != null:
+		check(_has_bone(skeleton,"head"), "%s has no animated head bone" % label)
+		check(_has_bone(skeleton,"hand") or _has_cohesive_body(node), "%s has no complete animated hands" % label)
+	check(_has_fragment(node,"eye") or (_has_fragment(node,"head") and _has_cohesive_body(node)), "%s mesh-native face material is missing" % label)
+
+func _has_fragment(node: Node, fragment: String) -> bool:
+	if str(node.name).to_lower().contains(fragment):
+		return true
+	for child in node.get_children():
+		if _has_fragment(child,fragment):
+			return true
+	return false
+
+func _find_skeleton(node: Node) -> Skeleton3D:
+	if node is Skeleton3D: return node
+	for child in node.get_children():
+		var found := _find_skeleton(child)
+		if found != null: return found
+	return null
+
+func _has_bone(skeleton: Skeleton3D, fragment: String) -> bool:
+	for index in range(skeleton.get_bone_count()):
+		if str(skeleton.get_bone_name(index)).to_lower().contains(fragment): return true
+	return false
+
+func _has_cohesive_body(node: Node) -> bool:
+	if node is MeshInstance3D and node.mesh != null:
+		var lower := str(node.name).to_lower()
+		if lower.contains("body") or lower.contains("female") or lower.contains("rogue"):
+			return true
+	for child in node.get_children():
+		if _has_cohesive_body(child): return true
+	return false
 
 func _verify_path(path: Array, river_z: float, label: String) -> void:
 	for i in range(1,path.size()):

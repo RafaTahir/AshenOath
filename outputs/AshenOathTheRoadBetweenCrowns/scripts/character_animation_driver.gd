@@ -83,7 +83,16 @@ func _clip_for(state: String) -> StringName:
 	var wanted := StringName(str(clip_map.get(state, "")))
 	if wanted != StringName() and animation_player.has_animation(wanted):
 		return wanted
+	if wanted != StringName():
+		var wanted_key := _clip_key(str(wanted))
+		for candidate in animation_player.get_animation_list():
+			var candidate_key := _clip_key(str(candidate))
+			if candidate_key.ends_with(wanted_key) or candidate_key.contains(wanted_key):
+				return candidate
 	return StringName()
+
+func _clip_key(value: String) -> String:
+	return value.to_lower().replace("characterarmature", "").replace("humanarmature", "").replace("human armature", "").replace("|", "").replace("_", "").replace("-", "").replace(" ", "")
 
 func _on_animation_finished(_animation: StringName) -> void:
 	if dead:

@@ -135,8 +135,7 @@ func _check_sword_animation() -> void:
 	if driver == null or not driver.is_valid():
 		_fail("rigged sword has no skeletal animation driver")
 	else:
-		var animation_player = driver.get_animation_player()
-		if not animation_player.has_animation("Sword_Attack") or not animation_player.has_animation("Sword_Attack2"):
+		if driver.get_clip_for_state("attack_light") == StringName() or driver.get_clip_for_state("attack_heavy") == StringName():
 			_fail("rigged sword attack clips are missing")
 	var arc = player.find_child("visible_sword_slash_arc_root", true, false)
 	if arc == null:

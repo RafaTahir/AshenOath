@@ -1,0 +1,94 @@
+extends SceneTree
+
+const CharacterVisualContract = preload("res://scripts/character_visual_contract.gd")
+
+const ROLES := {
+	"kael":"res://assets_external/characters/Adventurer_PolyPizza_Quaternius_CC0.glb",
+	"sister_anwen":"res://assets_external/characters/AnimatedWoman_PolyPizza_Quaternius_CC0.glb",
+	"villager_male":"res://assets_external/characters/Adventurer_PolyPizza_Quaternius_CC0.glb",
+	"villager_female":"res://assets_external/characters/WomanCasual_PolyPizza_Quaternius_CC0.glb",
+	"castle_guard":"res://assets_external/characters/HoodedAdventurer_PolyPizza_Quaternius_CC0.glb",
+	"road_ranger":"res://assets_external/characters/CharacterAnimated_PolyPizza_Quaternius_CC0.glb",
+	"ghoul_gaunt":"res://assets_external/characters_real/GhoulGaunt_Real.glb",
+	"ghoul_stalker":"res://assets_external/characters_real/GhoulStalker_Real.glb",
+	"ghoul_brute":"res://assets_external/characters_real/GhoulBrute_Real.glb"
+}
+
+func _initialize() -> void:
+	root.size = Vector2i(1280,720)
+	var stage := Node3D.new()
+	root.add_child(stage)
+	var world := WorldEnvironment.new()
+	var environment := Environment.new()
+	environment.background_mode = Environment.BG_COLOR
+	environment.background_color = Color(0.055,0.065,0.072)
+	environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
+	environment.ambient_light_color = Color(0.55,0.60,0.68)
+	environment.ambient_light_energy = 0.72
+	world.environment = environment
+	stage.add_child(world)
+	var key := DirectionalLight3D.new()
+	key.rotation_degrees = Vector3(-38,-32,0)
+	key.light_color = Color(1.0,0.83,0.68)
+	key.light_energy = 1.35
+	stage.add_child(key)
+	var camera := Camera3D.new()
+	camera.position = Vector3(0,1.18,3.4)
+	camera.look_at_from_position(camera.position,Vector3(0,1.03,0),Vector3.UP)
+	camera.fov = 34.0
+	camera.current = true
+	stage.add_child(camera)
+	var gallery := "res://Development_Gallery/screenshots"
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(gallery))
+	for role in ROLES:
+		var scene = load(ROLES[role])
+		var character = scene.instantiate()
+		character.name = "CHARACTER_REAL_%s" % role
+		stage.add_child(character)
+		await process_frame
+		CharacterVisualContract.remove_proxy_anatomy(character)
+		await process_frame
+		_normalize_character(character)
+		var player = character.find_child("AnimationPlayer",true,false)
+		if player != null and player.has_animation("Idle"):
+			player.play("Idle")
+		await _frames(8)
+		var image := root.get_texture().get_image()
+		var path := "%s/CHARACTER_REAL_001_%s.png" % [gallery,role]
+		image.save_png(path)
+		print("CAPTURED ",path)
+		character.queue_free()
+		await process_frame
+	stage.queue_free()
+	await process_frame
+	quit(0)
+
+func _frames(count: int) -> void:
+	for i in range(count):
+		await process_frame
+
+func _normalize_character(character: Node3D) -> void:
+	var bounds := AABB()
+	var has_bounds := false
+	for mesh in character.find_children("*", "MeshInstance3D", true, false):
+		if not mesh.visible:
+			continue
+		var local_box: AABB = mesh.get_aabb()
+		for corner_index in range(8):
+			var corner := Vector3(
+				local_box.position.x + (local_box.size.x if corner_index & 1 else 0.0),
+				local_box.position.y + (local_box.size.y if corner_index & 2 else 0.0),
+				local_box.position.z + (local_box.size.z if corner_index & 4 else 0.0)
+			)
+			var point := character.to_local(mesh.to_global(corner))
+			if not has_bounds:
+				bounds = AABB(point, Vector3.ZERO)
+				has_bounds = true
+			else:
+				bounds = bounds.expand(point)
+	if not has_bounds or bounds.size.y <= 0.01:
+		return
+	var uniform := 1.82 / bounds.size.y
+	character.scale = Vector3.ONE * uniform
+	var center := bounds.get_center()
+	character.position = Vector3(-center.x * uniform, -bounds.position.y * uniform, -center.z * uniform)

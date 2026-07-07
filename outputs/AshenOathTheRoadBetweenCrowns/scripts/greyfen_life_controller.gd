@@ -142,7 +142,13 @@ func _face(node: Node3D, target: Vector3, delta: float) -> void:
 	node.rotation.y = lerp_angle(node.rotation.y,wanted,min(delta*3.0,1.0))
 
 func _make_skeletal_villager(parent: Node3D, role_id: String, index: int, scale_value: float):
-	var mapped = asset_helper.spawn_visual_role("villager_human", "characters")
+	var mapped = null
+	if index % 2 == 1:
+		var female_scene = load("res://assets_external/characters/WomanCasual_PolyPizza_Quaternius_CC0.glb")
+		if female_scene is PackedScene:
+			mapped = female_scene.instantiate()
+	if mapped == null:
+		mapped = asset_helper.spawn_visual_role("villager_human", "characters")
 	if mapped == null or mapped.name.ends_with("_placeholder"):
 		push_error("Rigged villager asset unavailable for %s" % role_id)
 		return null

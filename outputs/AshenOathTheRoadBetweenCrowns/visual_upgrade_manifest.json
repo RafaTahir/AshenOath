@@ -26,23 +26,23 @@
     },
     "characters": {
       "player_human": {
-        "status": "motion_002_rigged_animated",
-        "path": "res://assets_external/animated/Warrior_Animated_CC0.gltf",
-        "source": "Quaternius RPG Characters",
-        "source_url": "",
+        "status": "character_real_001",
+        "path": "res://assets_external/characters/Adventurer_PolyPizza_Quaternius_CC0.glb",
+        "source": "Poly Pizza / Quaternius",
+        "source_url": "https://poly.pizza/",
         "license": "CC0 1.0",
         "notes": "Phase 1G uses the existing textured Warrior OBJ as a stronger fantasy protagonist base. Runtime adds cloak, harness, armor plate, boots, hood, contact shadow, and weapon presentation."
       },
       "sister_anwen_human": {
-        "status": "motion_002_rigged_animated",
-        "path": "res://assets_external/animated/Cleric_Animated_CC0.gltf",
-        "source": "Quaternius RPG Characters",
-        "source_url": "",
+        "status": "character_real_001",
+        "path": "res://assets_external/characters/AnimatedWoman_PolyPizza_Quaternius_CC0.glb",
+        "source": "Poly Pizza / Quaternius",
+        "source_url": "https://poly.pizza/",
         "license": "CC0 1.0",
         "notes": "Phase 1G uses the existing textured Cleric OBJ as a shrine-priestess base. Runtime adds robe fall, gold stole, prayer cord, hood, staff, amulet, and contact shadow."
       },
       "mira_human": {
-        "status": "temporary_stylized_base_wrapped",
+        "status": "character_real_001",
         "path": "res://assets_external/characters/WomanCasual_PolyPizza_Quaternius_CC0.glb",
         "source": "Poly Pizza / Quaternius",
         "source_url": "https://poly.pizza/m/jpKRgGDxhk",
@@ -50,20 +50,38 @@
         "notes": "Temporary casual female base body. Runtime adds face markers, hair, cloak, belt, and herbalist color styling."
       },
       "rook_human": {
-        "status": "motion_002_rigged_animated",
-        "path": "res://assets_external/animated/Rogue_Animated_CC0.gltf",
+        "status": "character_real_001",
+        "path": "res://assets_external/characters/CharacterAnimated_PolyPizza_Quaternius_CC0.glb",
         "source": "Quaternius RPG Characters",
         "source_url": "",
         "license": "CC0 1.0",
         "notes": "Phase 1G uses the existing textured Rogue OBJ for a more distinct smuggler silhouette. Runtime adds dark cloak, dagger, hood, belt, and face markers."
       },
       "villager_human": {
-        "status": "motion_002_rigged_animated",
-        "path": "res://assets_external/animated/Monk_Animated_CC0.gltf",
+        "status": "character_real_001",
+        "path": "res://assets_external/characters/Adventurer_PolyPizza_Quaternius_CC0.glb",
         "source": "Quaternius RPG Characters",
         "source_url": "",
         "license": "CC0 1.0",
         "notes": "Phase 1G uses the existing textured Monk OBJ for more grounded robed villagers. Runtime adds role-readable clothing overlays, belts, aprons, veils, and face markers."
+      },
+      "villager_female_human": {
+        "status": "character_real_001",
+        "path": "res://assets_external/characters/WomanCasual_PolyPizza_Quaternius_CC0.glb",
+        "source": "Poly Pizza / Quaternius",
+        "license": "CC0 1.0"
+      },
+      "castle_guard_human": {
+        "status": "character_real_001",
+        "path": "res://assets_external/characters/HoodedAdventurer_PolyPizza_Quaternius_CC0.glb",
+        "source": "Poly Pizza / Quaternius",
+        "license": "CC0 1.0"
+      },
+      "road_ranger_human": {
+        "status": "character_real_001",
+        "path": "res://assets_external/characters/CharacterAnimated_PolyPizza_Quaternius_CC0.glb",
+        "source": "Poly Pizza / Quaternius",
+        "license": "CC0 1.0"
       }
     },
     "enemies": {

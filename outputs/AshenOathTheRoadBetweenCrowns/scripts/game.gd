@@ -2819,7 +2819,11 @@ func _role_for_interactable(id: String) -> String:
 		"widow_elna": "widow_elna",
 		"blacksmith_tor": "blacksmith_tor",
 		"farmer_toma": "generic_villager_01",
-		"edric": "lord_edric",
+		"edric": "castle_guard",
+		"vargan_gate_guard": "castle_guard",
+		"vargan_record_keeper": "castle_guard",
+		"captain_senn": "road_ranger",
+		"halvern": "castle_guard",
 		"white_hart": "white_hart_avatar"
 	}
 	return str(roles.get(id, ""))
@@ -2831,7 +2835,12 @@ func _visual_role_for_interactable(id: String) -> String:
 		"rook": "rook_human",
 		"widow_elna": "villager_human",
 		"blacksmith_tor": "villager_human",
-		"farmer_toma": "villager_human"
+		"farmer_toma": "villager_human",
+		"edric": "castle_guard_human",
+		"vargan_gate_guard": "castle_guard_human",
+		"vargan_record_keeper": "castle_guard_human",
+		"captain_senn": "road_ranger_human",
+		"halvern": "castle_guard_human"
 	}
 	return str(roles.get(id, ""))
 
@@ -2879,7 +2888,9 @@ func _visual_role_for_legacy_character(role_name: String) -> String:
 		"widow_elna": "villager_human",
 		"blacksmith_tor": "villager_human",
 		"generic_villager_01": "villager_human",
-		"lord_edric": "villager_human"
+		"lord_edric": "castle_guard_human",
+		"castle_guard": "castle_guard_human",
+		"road_ranger": "road_ranger_human"
 	}
 	return str(roles.get(role_name, ""))
 

@@ -338,12 +338,25 @@ func _build_body(color: Color) -> void:
 func _try_build_mapped_body() -> bool:
 	asset_helper = AssetSpawnHelper.new()
 	add_child(asset_helper)
+	var real_paths := {
+		"ghoulkin":"res://assets_external/characters_real/GhoulGaunt_Real.glb",
+		"wychwood_stalker":"res://assets_external/characters_real/GhoulStalker_Real.glb",
+		"wychwood_raider":"res://assets_external/characters_real/GhoulGaunt_Real.glb",
+		"wychwood_brute":"res://assets_external/characters_real/GhoulBrute_Real.glb"
+	}
+	var mapped = null
+	var uses_real_body := real_paths.has(enemy_id)
+	if uses_real_body:
+		var real_scene = load(str(real_paths[enemy_id]))
+		if real_scene is PackedScene:
+			mapped = real_scene.instantiate()
 	var visual_source: String = enemy_id
 	if enemy_id in ["ghoulkin", "wychwood_stalker"]:
 		visual_source = "ghoulkin_skeleton"
 	elif enemy_id in ["wychwood_raider", "wychwood_brute"]:
 		visual_source = "ghoulkin"
-	var mapped = asset_helper.spawn_enemy(visual_source)
+	if mapped == null:
+		mapped = asset_helper.spawn_enemy(visual_source)
 	if mapped == null or mapped.name.ends_with("_placeholder"):
 		if mapped != null:
 			mapped.queue_free()
@@ -365,7 +378,12 @@ func _try_build_mapped_body() -> bool:
 	animation_driver = CharacterAnimationDriver.new()
 	animation_driver.name = "CharacterAnimationDriver"
 	mapped.add_child(animation_driver)
-	if visual_source == "ghoulkin_skeleton":
+	if uses_real_body:
+		animation_driver.configure(mapped, {
+			"idle":"Idle", "walk":"Walk", "run":"Run", "attack":"Attack",
+			"hit":"RecieveHit", "death":"Death"
+		})
+	elif visual_source == "ghoulkin_skeleton":
 		animation_driver.configure(mapped, {
 			"idle": "SkeletonArmature|Skeleton_Idle",
 			"walk": "SkeletonArmature|Skeleton_Running",

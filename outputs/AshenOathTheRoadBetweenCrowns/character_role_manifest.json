@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "ticket": "CHARACTER-REAL-001",
+  "shared_skeleton": "Quaternius CharacterArmature for humans; AshenHumanoidSkeleton for ghouls",
+  "animation_map": {
+    "idle": "Idle",
+    "walk": "Walk",
+    "run": "Run",
+    "attack": "Attack",
+    "heavy_attack": "HeavyAttack",
+    "hit": "RecieveHit",
+    "dodge": "Dodge",
+    "death": "Death"
+  },
+  "equipment_sockets": {
+    "right_hand": "Hand.R",
+    "left_hand": "Hand.L",
+    "head": "Head"
+  },
+  "roles": {
+    "player_human": "res://assets_external/characters/Adventurer_PolyPizza_Quaternius_CC0.glb",
+    "sister_anwen_human": "res://assets_external/characters/AnimatedWoman_PolyPizza_Quaternius_CC0.glb",
+    "villager_male": "res://assets_external/characters/Adventurer_PolyPizza_Quaternius_CC0.glb",
+    "villager_female": "res://assets_external/characters/WomanCasual_PolyPizza_Quaternius_CC0.glb",
+    "castle_guard": "res://assets_external/characters/HoodedAdventurer_PolyPizza_Quaternius_CC0.glb",
+    "road_ranger": "res://assets_external/characters/CharacterAnimated_PolyPizza_Quaternius_CC0.glb",
+    "ghoul_gaunt": "res://assets_external/characters_real/GhoulGaunt_Real.glb",
+    "ghoul_stalker": "res://assets_external/characters_real/GhoulStalker_Real.glb",
+    "ghoul_brute": "res://assets_external/characters_real/GhoulBrute_Real.glb"
+  },
+  "lod_distance": {"hero_full": 22.0, "crowd_full": 14.0, "animation_far_tick": 20.0}
+}

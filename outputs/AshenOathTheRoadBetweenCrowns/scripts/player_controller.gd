@@ -564,6 +564,8 @@ func _try_build_mapped_body() -> bool:
 	mapped.rotation_degrees.y = 180
 	visual_root.add_child(mapped)
 	rig_sword_visual = mapped.find_child("Warrior_Sword", true, false) as Node3D
+	if rig_sword_visual == null:
+		rig_sword_visual = _attach_rig_sword(mapped)
 	body_visual = _find_first_mesh(mapped)
 	_apply_visible_material_fallbacks(mapped, _mat(Color(0.18, 0.20, 0.18)))
 	if body_visual != null and body_visual.material_override is StandardMaterial3D:
@@ -572,10 +574,10 @@ func _try_build_mapped_body() -> bool:
 	animation_driver.name = "CharacterAnimationDriver"
 	mapped.add_child(animation_driver)
 	var animated: bool = bool(animation_driver.configure(mapped, {
-		"idle": "Idle_Weapon", "walk": "Walk", "run": "Run_Weapon",
-		"jump": "Run_Weapon", "attack_light": "Sword_Attack",
-		"attack_heavy": "Sword_Attack2", "dodge": "Roll",
-		"parry": "RecieveHit", "beam_cast": "PickUp", "hit": "RecieveHit", "death": "Death"
+		"idle": "Idle_Sword", "walk": "Walk", "run": "Run",
+		"jump": "Run", "attack_light": "Sword_Slash",
+		"attack_heavy": "Sword_Slash", "dodge": "Roll",
+		"parry": "HitRecieve", "beam_cast": "Interact", "hit": "HitRecieve", "death": "Death"
 	}))
 	if not animated:
 		_add_motion_proxy_parts()
@@ -583,6 +585,63 @@ func _try_build_mapped_body() -> bool:
 	else:
 		_add_slash_arc_visuals()
 	return true
+
+func _attach_rig_sword(mapped: Node3D) -> Node3D:
+	var skeleton := _find_skeleton(mapped)
+	if skeleton == null:
+		return null
+	var hand_index := skeleton.find_bone("RightHand")
+	if hand_index < 0:
+		hand_index = skeleton.find_bone("Hand.R")
+	if hand_index < 0:
+		for bone_index in range(skeleton.get_bone_count()):
+			var bone_name := str(skeleton.get_bone_name(bone_index)).to_lower()
+			if bone_name.contains("right") and (bone_name.contains("hand") or bone_name.contains("wrist")):
+				hand_index = bone_index
+				break
+	if hand_index < 0:
+		for bone_index in range(skeleton.get_bone_count()):
+			var bone_name := str(skeleton.get_bone_name(bone_index)).to_lower()
+			if bone_name.contains("hand") or bone_name.contains("wrist"):
+				hand_index = bone_index
+				break
+	if hand_index < 0:
+		return null
+	var attachment := BoneAttachment3D.new()
+	attachment.name = "KaelSwordSocket"
+	attachment.bone_idx = hand_index
+	attachment.bone_name = skeleton.get_bone_name(hand_index)
+	skeleton.add_child(attachment)
+	var sword := Node3D.new()
+	sword.name = "Warrior_Sword"
+	sword.position = Vector3(0.0, -0.12, -0.46)
+	sword.rotation_degrees = Vector3(0.0, 0.0, -8.0)
+	attachment.add_child(sword)
+	var blade := MeshInstance3D.new()
+	blade.name = "Warrior_Sword_Blade"
+	var blade_mesh := BoxMesh.new()
+	blade_mesh.size = Vector3(0.055, 0.055, 0.92)
+	blade.mesh = blade_mesh
+	blade.position.z = -0.42
+	blade.material_override = _metal_mat(Color(0.66, 0.70, 0.72))
+	sword.add_child(blade)
+	var hilt := MeshInstance3D.new()
+	hilt.name = "Warrior_Sword_Hilt"
+	var hilt_mesh := BoxMesh.new()
+	hilt_mesh.size = Vector3(0.30, 0.075, 0.075)
+	hilt.mesh = hilt_mesh
+	hilt.material_override = _mat(Color(0.20, 0.11, 0.05))
+	sword.add_child(hilt)
+	return sword
+
+func _find_skeleton(node: Node) -> Skeleton3D:
+	if node is Skeleton3D:
+		return node
+	for child in node.get_children():
+		var found := _find_skeleton(child)
+		if found != null:
+			return found
+	return null
 
 func _find_first_mesh(root: Node) -> MeshInstance3D:
 	if root is MeshInstance3D:
