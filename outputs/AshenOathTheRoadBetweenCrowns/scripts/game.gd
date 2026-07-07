@@ -1355,6 +1355,29 @@ func river_safe_position(pos: Vector3, margin: float = 0.55) -> Vector3:
 	pos.z = river_z + side * (2.25 + margin)
 	return pos
 
+func river_safe_path(points: Array, margin: float = 0.90) -> Array:
+	var sanitized: Array = []
+	if points.is_empty():
+		return sanitized
+	for point in points:
+		var safe_point: Vector3 = river_safe_position(point, margin)
+		if sanitized.is_empty():
+			sanitized.append(safe_point)
+			continue
+		var previous: Vector3 = sanitized.back()
+		var river_z := _river_center()
+		var crosses_banks := river_z < 900.0 and (previous.z-river_z) * (safe_point.z-river_z) < 0.0
+		if crosses_banks:
+			var north_z := river_z - (2.25 + margin)
+			var south_z := river_z + (2.25 + margin)
+			var entry_z := north_z if previous.z < river_z else south_z
+			var exit_z := south_z if previous.z < river_z else north_z
+			sanitized.append(Vector3(0.0, maxf(previous.y,0.55), entry_z))
+			sanitized.append(Vector3(0.0, 0.55, river_z))
+			sanitized.append(Vector3(0.0, maxf(safe_point.y,0.55), exit_z))
+		sanitized.append(safe_point)
+	return sanitized
+
 func _zone_half_extents(zone_id: String) -> Vector2:
 	if zone_id == "wychwood":
 		return Vector2(22, 17)

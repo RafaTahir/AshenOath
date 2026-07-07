@@ -76,8 +76,7 @@ func _build_population() -> void:
 	]
 	for i in range(population):
 		var definition: Dictionary = definitions[i]
-		for path_index in range(definition.path.size()):
-			definition.path[path_index] = host.river_safe_position(definition.path[path_index],0.9)
+		definition.path = host.river_safe_path(definition.path,0.9)
 		var actor := Node3D.new()
 		actor.name = "Routine_%s" % definition.id
 		actor.position = definition.path[0]
@@ -92,8 +91,7 @@ func _enroll_named_npcs() -> void:
 		"rook":{"path":[Vector3(-7.8,0,8.5),Vector3(-6.2,0,6.8),Vector3(-3.8,0,8.6)],"speed":0.62}
 	}
 	for id in named:
-		for path_index in range(named[id].path.size()):
-			named[id].path[path_index] = host.river_safe_position(named[id].path[path_index],0.9)
+		named[id].path = host.river_safe_path(named[id].path,0.9)
 		var node = host.zone_root.find_child(id,true,false)
 		if node == null: continue
 		var ambient = node.find_child("NpcAmbient",true,false)

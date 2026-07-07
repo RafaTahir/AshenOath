@@ -75,7 +75,13 @@ func _all_npc_paths_clear(root_node: Node, center_z: float) -> bool:
 		return false
 	for entry in life.actors:
 		for waypoint in entry.path:
-			if absf((waypoint as Vector3).z-center_z) < 2.75:
+			var point := waypoint as Vector3
+			if absf(point.z-center_z) < 2.75 and absf(point.x) > 2.7:
+				return false
+		for index in range(1,entry.path.size()):
+			var previous := entry.path[index-1] as Vector3
+			var current := entry.path[index] as Vector3
+			if (previous.z-center_z)*(current.z-center_z) < 0.0 and (absf(previous.x) > 2.7 or absf(current.x) > 2.7):
 				return false
 	return true
 

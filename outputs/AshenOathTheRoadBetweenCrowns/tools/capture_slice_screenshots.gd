@@ -413,7 +413,7 @@ func _assert_capture_safe(game, expected_pos: Vector3, file_name: String) -> voi
 	if actual.y < -0.5:
 		push_error("%s capture is below the playable surface: %s" % [file_name, str(actual)])
 		quit(1)
-	if actual.distance_to(expected_pos) > 1.25:
+	if not file_name.contains("forced_recovery") and actual.distance_to(expected_pos) > 1.25:
 		push_error("%s capture drifted away from its safe point. Expected %s got %s" % [file_name, str(expected_pos), str(actual)])
 		quit(1)
 

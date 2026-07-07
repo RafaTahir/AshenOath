@@ -1,0 +1,5 @@
+Asset: dark_fantasy_face_atlas_1k.png
+Created for Ashen Oath during FACE-RIVER-SUN-001 using OpenAI image generation.
+Purpose: shared stylized facial-detail atlas for human and monster Head-bone attachments.
+Post-processing: tile matte removal and oval alpha feathering.
+No third-party source image was used.

@@ -203,41 +203,23 @@ func _build_sky_layer() -> void:
 
 	sun_disc = MeshInstance3D.new()
 	sun_disc.name = "SunDisc"
-	var sun_mesh = SphereMesh.new()
-	sun_mesh.radius = 0.5
-	sun_mesh.height = 1.0
-	sun_mesh.radial_segments = 24
-	sun_mesh.rings = 12
+	var sun_mesh := QuadMesh.new()
+	sun_mesh.size = Vector2.ONE
 	sun_disc.mesh = sun_mesh
-	sun_disc.scale = Vector3(9.5, 9.5, 9.5)
-	sun_disc.material_override = _emissive_billboard_material(Color(1.0, 0.50, 0.20), 1.45, 0.90)
+	sun_disc.scale = Vector3(3.4, 3.4, 3.4)
+	sun_disc.material_override = _emissive_billboard_material(Color(1.0, 0.94, 0.78), 2.15, 0.96)
 	add_child(sun_disc)
 	moon_disc = MeshInstance3D.new()
 	moon_disc.name = "MoonDisc"
 	moon_disc.mesh = sun_mesh.duplicate()
-	moon_disc.scale = Vector3(6.5, 6.5, 6.5)
+	moon_disc.scale = Vector3(3.8, 3.8, 3.8)
 	moon_disc.material_override = _emissive_billboard_material(Color(0.62, 0.76, 1.0), 0.62, 0.86)
 	add_child(moon_disc)
-	sun_halo = _make_celestial_plane("SunHalo", sun_mesh, Vector3(16.0, 16.0, 16.0), Color(1.0, 0.56, 0.20), 0.24, 0.18)
+	sun_halo = _make_celestial_plane("SunHalo", sun_mesh, Vector3(8.5, 8.5, 8.5), Color(1.0, 0.72, 0.32), 0.34, 0.16)
 	sun_rays = Node3D.new()
-	sun_rays.name = "StylizedSunRays"
+	sun_rays.name = "AtmosphericSunLayer"
 	add_child(sun_rays)
-	for ray_index in range(12):
-		var ray := MeshInstance3D.new()
-		ray.name = "SunRay"
-		var ray_mesh := SphereMesh.new()
-		ray_mesh.radius = 0.5
-		ray_mesh.height = 1.0
-		ray_mesh.radial_segments = 8
-		ray_mesh.rings = 4
-		ray.mesh = ray_mesh
-		var ray_angle := float(ray_index) / 12.0 * TAU
-		ray.position = Vector3(cos(ray_angle) * 13.5, sin(ray_angle) * 13.5, 0.6)
-		ray.scale = Vector3(2.0, 5.2, 1.2)
-		ray.rotation.z = ray_angle - PI * 0.5
-		ray.material_override = _emissive_billboard_material(Color(1.0, 0.56, 0.16), 0.72, 0.54)
-		sun_rays.add_child(ray)
-	moon_halo = _make_celestial_plane("MoonHalo", sun_mesh, Vector3(12.0, 12.0, 12.0), Color(0.48, 0.68, 1.0), 0.16, 0.20)
+	moon_halo = _make_celestial_plane("MoonHalo", sun_mesh, Vector3(8.0, 8.0, 8.0), Color(0.48, 0.68, 1.0), 0.16, 0.18)
 	_build_star_field()
 
 	cloud_layer = Node3D.new()
@@ -249,14 +231,14 @@ func _build_sky_layer() -> void:
 		cloud.name = "CloudCluster"
 		cloud.position = Vector3(-62.0 + i * 22.0, 46.0 + (i % 2) * 6.0, -92.0 + (i % 3) * 18.0)
 		cloud.set_meta("base_position", cloud.position)
-		for lobe_index in range(3):
+		for lobe_index in range(4):
 			var lobe := MeshInstance3D.new()
 			lobe.name = "CloudCard"
 			var cloud_mesh := QuadMesh.new()
-			cloud_mesh.size = Vector2(42.0+float(lobe_index)*9.0,15.0+float((i+lobe_index)%2)*4.0)
+			cloud_mesh.size = Vector2(31.0+float((i+lobe_index)%3)*8.0,10.0+float((i+lobe_index)%2)*3.0)
 			lobe.mesh = cloud_mesh
-			lobe.position = Vector3((lobe_index-1.0)*24.0,float((lobe_index+i)%2)*3.0,float(lobe_index)*4.0)
-			lobe.material_override = _cloud_material(Color(0.92,0.94,0.96,0.72))
+			lobe.position = Vector3((lobe_index-1.5)*17.0,float((lobe_index+i)%2)*2.6,float(lobe_index)*5.0)
+			lobe.material_override = _cloud_material(Color(0.92,0.94,0.96,0.60))
 			cloud.add_child(lobe)
 		cloud_layer.add_child(cloud)
 

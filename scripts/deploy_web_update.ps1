@@ -100,6 +100,11 @@ try {
     Invoke-Checked $Godot "--headless --path `"$ProjectDir`" --script `"res://tools/verify_master_003.gd`"" $RepoRoot
   }
 
+  $FaceRiverSunVerifier = Join-Path $ProjectDir "tools\verify_face_river_sun_001.gd"
+  if (Test-Path -LiteralPath $FaceRiverSunVerifier) {
+    Invoke-Checked $Godot "--headless --path `"$ProjectDir`" --script `"res://tools/verify_face_river_sun_001.gd`"" $RepoRoot
+  }
+
   Invoke-Checked (Join-Path $ProjectDir "Export_Web_Build.bat") "" $ProjectDir
 
   Invoke-Checked $Python "`"$ProjectDir\tools\verify_web_export.py`" `"$ExportDir`"" $RepoRoot

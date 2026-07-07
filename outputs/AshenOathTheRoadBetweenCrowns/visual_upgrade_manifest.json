@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "purpose": "Browser-first vertical-slice visual roles. Current humans are temporary stylized bases with authored wrappers, not final high-fidelity character art.",
+  "version": 2,
+  "purpose": "Browser-first visual roles. Skeletal humans and monsters use a shared bone-bound facial identity atlas; models remain optimized stylized assets rather than photoreal character scans.",
   "roles": {
     "environment": {
       "sky_system": {
