@@ -33,7 +33,7 @@ func get_material(surface_id: String, quality: String = "balanced", tint: Color 
 	material.ao_texture_channel = BaseMaterial3D.TEXTURE_CHANNEL_RED
 	material.albedo_color = tint
 	material.roughness = lerp(0.90, 0.42, clamp(wetness, 0.0, 1.0))
-	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC if quality == "quality" else BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	var use_triplanar := triplanar and quality == "quality"
 	material.uv1_triplanar = use_triplanar
 	material.uv1_world_triplanar = use_triplanar
@@ -52,7 +52,7 @@ func get_grass_material(quality: String = "balanced") -> StandardMaterial3D:
 	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR
 	material.alpha_scissor_threshold = 0.38
 	material.cull_mode = BaseMaterial3D.CULL_DISABLED
-	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC if quality == "quality" else BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	material_cache[key] = material
 	return material
 

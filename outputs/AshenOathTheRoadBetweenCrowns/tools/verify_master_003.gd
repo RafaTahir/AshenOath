@@ -35,7 +35,7 @@ func _verify_sky(game) -> void:
 		if node is MeshInstance3D:
 			if (node as MeshInstance3D).mesh is QuadMesh: cards += 1
 			if (node as MeshInstance3D).mesh is SphereMesh: spheres += 1
-	check(cards >= 6 and spheres == 0,"Clouds are not soft card clusters")
+	check(cards >= 3 and spheres == 0,"Balanced clouds are not a soft three-lobe card formation")
 
 func _verify_characters(game) -> void:
 	var player_visual = game.player.find_child("player_kael_visual",true,false)

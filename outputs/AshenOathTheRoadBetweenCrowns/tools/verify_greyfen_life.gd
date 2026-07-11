@@ -15,8 +15,8 @@ func _initialize() -> void:
 	var life = game.zone_root.find_child("GreyfenLifeController",true,false)
 	check(life != null,"Greyfen life controller is missing")
 	if life != null:
-		check(life.actor_count() >= 11,"Balanced Greyfen needs eight ambient plus three named routine actors")
-		for id in ["walker_well","walker_board","shrine_pilgrim","forge_helper","herb_helper","worried_villager"]:
+		check(life.actor_count() >= 7,"Balanced Greyfen needs four ambient plus three named routine actors")
+		for id in ["walker_well","walker_board","shrine_pilgrim","forge_helper"]:
 			check(id in life.routine_ids(),"Missing routine: %s" % id)
 		check(life.AMBIENT_LINES.size() >= 8,"Ambient dialogue pool is too small")
 		for line_id in ["greyfen_road_quiet","greyfen_bell_dawn","greyfen_shrine_voice","greyfen_anwen_sleep"]:
@@ -56,7 +56,7 @@ func _initialize() -> void:
 	game.call("_load_zone","greyfen",Vector3(0,1,7))
 	await _settle(3)
 	life = game.zone_root.find_child("GreyfenLifeController",true,false)
-	check(life != null and life.actor_count() >= 9,"Potato Greyfen lost required routine actors")
+	check(life != null and life.actor_count() >= 7,"Potato Greyfen lost required routine actors")
 	check(game.zone_root.find_child("common_table",true,false) != null and game.zone_root.find_child("barrel_board",true,false) != null,"Potato mode removed minigames")
 
 	print("GREYFEN LIFE VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))

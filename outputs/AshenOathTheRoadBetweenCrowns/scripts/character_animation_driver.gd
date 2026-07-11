@@ -10,6 +10,7 @@ var clip_map: Dictionary = {}
 var current_state := ""
 var action_active := false
 var dead := false
+var distance_suspended := false
 
 func configure(root: Node3D, clips: Dictionary) -> bool:
 	character_root = root
@@ -25,6 +26,15 @@ func configure(root: Node3D, clips: Dictionary) -> bool:
 
 func is_valid() -> bool:
 	return animation_player != null and skeleton != null and skeleton.get_bone_count() > 0
+
+func set_distance_suspended(suspended: bool) -> void:
+	if distance_suspended == suspended:
+		return
+	distance_suspended = suspended
+	if animation_player != null:
+		animation_player.active = not suspended
+	if not suspended and not dead:
+		_play_state(current_state if current_state != "" else "idle", 0.0)
 
 func set_locomotion(speed_ratio: float, _direction: Vector3, grounded: bool) -> void:
 	if not is_valid() or dead or action_active:

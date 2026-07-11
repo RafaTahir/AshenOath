@@ -46,6 +46,7 @@ var parry_exposed_time := 0.0
 var far_tick_accumulator := 0.0
 var attack_gate: Callable
 var owns_attack_token := false
+var encounter_active := true
 
 func setup(id: String, definition: Dictionary, target: Node3D) -> void:
 	enemy_id = id
@@ -159,7 +160,7 @@ func _physics_process(delta: float) -> void:
 	_animate_visuals(delta)
 
 func apply_damage(amount: float, source_tag: String = "") -> void:
-	if dead:
+	if dead or not encounter_active:
 		return
 	var final_damage = amount
 	if parry_exposed_time > 0.0:
@@ -174,7 +175,25 @@ func apply_damage(amount: float, source_tag: String = "") -> void:
 		animation_driver.trigger_action("hit")
 
 func slow(seconds: float) -> void:
+	if not encounter_active:
+		return
 	slowed_time = max(slowed_time, seconds)
+
+func set_encounter_active(value: bool) -> void:
+	encounter_active = value
+	visible = value
+	set_physics_process(value)
+	if visual_root != null:
+		visual_root.process_mode = Node.PROCESS_MODE_INHERIT if value else Node.PROCESS_MODE_DISABLED
+	for collision in find_children("*", "CollisionShape3D", true, false):
+		collision.set_deferred("disabled", not value)
+	if value:
+		velocity = Vector3.ZERO
+		if animation_driver != null:
+			animation_driver.set_locomotion(0.0, Vector3.ZERO, true)
+
+func is_encounter_active() -> bool:
+	return encounter_active
 
 func stagger(seconds: float = 0.7) -> void:
 	stagger_time = max(stagger_time, seconds)
@@ -338,23 +357,11 @@ func _build_body(color: Color) -> void:
 func _try_build_mapped_body() -> bool:
 	asset_helper = AssetSpawnHelper.new()
 	add_child(asset_helper)
-	var real_paths := {
-		"ghoulkin":"res://assets_external/characters_real/GhoulGaunt_Real.glb",
-		"wychwood_stalker":"res://assets_external/characters_real/GhoulStalker_Real.glb",
-		"wychwood_raider":"res://assets_external/characters_real/GhoulGaunt_Real.glb",
-		"wychwood_brute":"res://assets_external/characters_real/GhoulBrute_Real.glb"
-	}
 	var mapped = null
-	var uses_real_body := real_paths.has(enemy_id)
-	if uses_real_body:
-		var real_scene = load(str(real_paths[enemy_id]))
-		if real_scene is PackedScene:
-			mapped = real_scene.instantiate()
+	var uses_real_body := false
 	var visual_source: String = enemy_id
-	if enemy_id in ["ghoulkin", "wychwood_stalker"]:
+	if enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute"]:
 		visual_source = "ghoulkin_skeleton"
-	elif enemy_id in ["wychwood_raider", "wychwood_brute"]:
-		visual_source = "ghoulkin"
 	if mapped == null:
 		mapped = asset_helper.spawn_enemy(visual_source)
 	if mapped == null or mapped.name.ends_with("_placeholder"):
@@ -362,7 +369,7 @@ func _try_build_mapped_body() -> bool:
 			mapped.queue_free()
 		return false
 	mapped.name = "%s_visual" % enemy_id
-	mapped.scale = _mapped_enemy_scale()
+	asset_helper.apply_normalized_scale(mapped, _mapped_enemy_scale().y)
 	if enemy_id == "white_hart_avatar":
 		var material = StandardMaterial3D.new()
 		material.albedo_color = Color(0.86, 0.83, 0.70)
@@ -416,7 +423,7 @@ func _mapped_enemy_scale() -> Vector3:
 	if enemy_id == "bog_wretch":
 		return Vector3(1.25, 1.25, 1.25)
 	if enemy_id == "white_hart_avatar":
-		return Vector3(1.35, 1.35, 1.35)
+		return Vector3(0.16, 0.16, 0.16)
 	if enemy_id == "ghoulkin":
 		return Vector3.ONE * 0.95
 	if enemy_id == "wychwood_stalker":

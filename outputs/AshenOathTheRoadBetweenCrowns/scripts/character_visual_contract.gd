@@ -5,7 +5,11 @@ static func validate(root: Node, require_animation: bool = true) -> Dictionary:
 	var meshes: Array[MeshInstance3D] = []
 	var animation_players: Array = []
 	_collect(root,skeletons,meshes,animation_players)
-	var bounds := _combined_bounds(root,meshes)
+	var skinned_meshes: Array[MeshInstance3D] = []
+	for mesh in meshes:
+		if mesh.skin != null or mesh.skeleton != NodePath(""):
+			skinned_meshes.append(mesh)
+	var bounds := _combined_bounds(root, skinned_meshes if not skinned_meshes.is_empty() else meshes)
 	var complete_bounds := bounds.size.y >= 1.35 and bounds.size.x >= 0.28 and bounds.size.z >= 0.16
 	var has_skin := false
 	for mesh in meshes:
@@ -64,4 +68,6 @@ static func _transform_relative_to(node: Node3D, root: Node) -> Transform3D:
 		if current is Node3D:
 			transform = (current as Node3D).transform * transform
 		current = current.get_parent()
+	if current == root and root is Node3D:
+		transform = (root as Node3D).transform * transform
 	return transform

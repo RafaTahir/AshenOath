@@ -560,7 +560,6 @@ func _try_build_mapped_body() -> bool:
 			mapped.queue_free()
 		return false
 	mapped.name = "player_kael_visual"
-	mapped.scale = Vector3.ONE
 	mapped.rotation_degrees.y = 180
 	visual_root.add_child(mapped)
 	rig_sword_visual = mapped.find_child("Warrior_Sword", true, false) as Node3D
@@ -612,11 +611,19 @@ func _attach_rig_sword(mapped: Node3D) -> Node3D:
 	attachment.bone_idx = hand_index
 	attachment.bone_name = skeleton.get_bone_name(hand_index)
 	skeleton.add_child(attachment)
-	var sword := Node3D.new()
+	var sword: Node3D = null
+	var sword_scene = load("res://assets_external/characters/Warrior_Sword.fbx")
+	if sword_scene is PackedScene:
+		sword = sword_scene.instantiate()
+	if sword == null:
+		sword = Node3D.new()
 	sword.name = "Warrior_Sword"
-	sword.position = Vector3(0.0, -0.12, -0.46)
+	sword.position = Vector3(0.0, -0.08, -0.20)
 	sword.rotation_degrees = Vector3(0.0, 0.0, -8.0)
+	sword.scale *= 0.72
 	attachment.add_child(sword)
+	if sword_scene is PackedScene:
+		return sword
 	var blade := MeshInstance3D.new()
 	blade.name = "Warrior_Sword_Blade"
 	var blade_mesh := BoxMesh.new()

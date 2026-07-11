@@ -244,6 +244,22 @@ func _target_height_for_path(path: String) -> float:
 		return 2.0
 	return 1.2
 
+func _target_height_for_role(role_name: String, path: String) -> float:
+	var role := role_name.to_lower()
+	if role in ["player_human", "player_kael"]:
+		return 1.78
+	if role in ["sister_anwen_human", "sister_anwen"]:
+		return 1.68
+	if role.contains("villager_female") or role in ["mira_human", "mira_herbalist"]:
+		return 1.66
+	if role.contains("villager"):
+		return 1.72
+	if role.contains("castle_guard"):
+		return 1.82
+	if role.contains("road_ranger") or role.contains("rook"):
+		return 1.75
+	return _target_height_for_path(path)
+
 func _obj_material(path: String) -> StandardMaterial3D:
 	if material_cache.has(path):
 		return material_cache[path]
@@ -315,7 +331,7 @@ func _finalize_asset_root(root: Node3D) -> void:
 
 func _prepare_spawned_asset(root: Node3D, path: String, role_name: String = "", category: String = "") -> void:
 	if path.get_extension().to_lower() != "obj":
-		_normalize_scene_bounds(root, _target_height_for_path(path))
+		_normalize_scene_bounds(root, _target_height_for_role(role_name, path))
 	_apply_safe_materials(root, path)
 	_finalize_asset_root(root)
 	if "characters" in path.to_lower() and not _has_skeleton(root):
@@ -338,8 +354,13 @@ func _has_skeleton(root: Node) -> bool:
 func _apply_safe_materials(root: Node3D, path: String) -> void:
 	var fallback = _fallback_material_for_path(path)
 	for mesh_instance in _collect_meshes(root):
+		if mesh_instance.mesh != null:
+			for surface_index in range(mesh_instance.mesh.get_surface_count()):
+				if mesh_instance.mesh.surface_get_material(surface_index) == null:
+					mesh_instance.set_surface_override_material(surface_index, fallback)
 		if _needs_fallback_material(mesh_instance):
 			mesh_instance.material_override = fallback
+		mesh_instance.set_meta("validated_material", true)
 
 func _needs_fallback_material(mesh_instance: MeshInstance3D) -> bool:
 	if mesh_instance.material_override != null:
@@ -433,6 +454,16 @@ func _normalize_scene_bounds(root: Node3D, target_height: float) -> void:
 	var center_xz = Vector3(bounds.position.x + bounds.size.x * 0.5, bounds.position.y, bounds.position.z + bounds.size.z * 0.5)
 	root.scale *= scale_factor
 	root.position -= center_xz * scale_factor
+	root.set_meta("character_normalized", true)
+	root.set_meta("normalized_target_height", target_height)
+	root.set_meta("normalized_scale", root.scale)
+	root.set_meta("normalized_position", root.position)
+
+func apply_normalized_scale(root: Node3D, multiplier: float) -> void:
+	if root == null:
+		return
+	var base_scale: Vector3 = root.get_meta("normalized_scale", root.scale)
+	root.scale = base_scale * multiplier
 
 func _calculate_node_bounds(root: Node3D) -> AABB:
 	var state: Dictionary = {"has_bounds": false, "bounds": AABB()}

@@ -54,14 +54,20 @@ func _process(delta: float) -> void:
 		far_tick_accumulator = 0.0
 	for entry in actors:
 		var actor_node: Node3D = entry.node
-		if is_instance_valid(actor_node) and actor_node.global_position.distance_to(player.global_position) > 13.0:
+		var distant := is_instance_valid(actor_node) and actor_node.global_position.distance_to(player.global_position) > 13.0
+		if is_instance_valid(actor_node):
+			actor_node.visible = not distant
+		var driver = entry.driver
+		if driver != null and driver.has_method("set_distance_suspended"):
+			driver.set_distance_suspended(distant)
+		if distant:
 			if update_far:
 				_update_actor(entry, far_delta)
 		else:
 			_update_actor(entry, delta)
 
 func _build_population() -> void:
-	var population := 6 if quality == "potato" else (10 if quality == "quality" else 8)
+	var population := 4 if quality == "potato" else (10 if quality == "quality" else 4)
 	var definitions := [
 		{"id":"walker_well","path":[Vector3(-12,0,8),Vector3(-5,0,5),Vector3(-8,0,-1)],"speed":1.05},
 		{"id":"walker_board","path":[Vector3(-11,0,-4),Vector3(-4,0,7),Vector3(1,0,8)],"speed":0.92},
@@ -79,7 +85,7 @@ func _build_population() -> void:
 		definition.path = host.river_safe_path(definition.path,0.9)
 		var actor := Node3D.new()
 		actor.name = "Routine_%s" % definition.id
-		actor.position = definition.path[0]
+		actor.position = host.validate_walkable_position(definition.path[0])
 		host.zone_root.add_child(actor)
 		var driver = _make_skeletal_villager(actor, str(definition.id), i, float(definition.get("scale",1.0)))
 		actors.append({"id":definition.id,"node":actor,"path":definition.path,"target":1,"speed":definition.speed,"pause":rng.randf_range(0.4,2.4),"driver":driver,"named":false,"phase":rng.randf()*TAU,"base_y":actor.position.y})
@@ -115,7 +121,7 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 		entry.pause = float(entry.pause) - delta
 		_set_motion(entry,0.0)
 		return
-	var target: Vector3 = entry.path[int(entry.target)]
+	var target: Vector3 = host.validate_walkable_position(entry.path[int(entry.target)])
 	var offset := target - node.position
 	offset.y = 0.0
 	if offset.length() < 0.18:
@@ -142,18 +148,13 @@ func _face(node: Node3D, target: Vector3, delta: float) -> void:
 	node.rotation.y = lerp_angle(node.rotation.y,wanted,min(delta*3.0,1.0))
 
 func _make_skeletal_villager(parent: Node3D, role_id: String, index: int, scale_value: float):
-	var mapped = null
-	if index % 2 == 1:
-		var female_scene = load("res://assets_external/characters/WomanCasual_PolyPizza_Quaternius_CC0.glb")
-		if female_scene is PackedScene:
-			mapped = female_scene.instantiate()
-	if mapped == null:
-		mapped = asset_helper.spawn_visual_role("villager_human", "characters")
+	var role := "villager_female_human" if index % 2 == 1 else "villager_human"
+	var mapped = asset_helper.spawn_visual_role(role, "characters")
 	if mapped == null or mapped.name.ends_with("_placeholder"):
 		push_error("Rigged villager asset unavailable for %s" % role_id)
 		return null
 	mapped.name = "%s_rigged_human" % role_id
-	mapped.scale = Vector3.ONE * (0.96 * scale_value * (0.97 + 0.025 * float(index % 3)))
+	asset_helper.apply_normalized_scale(mapped, 0.96 * scale_value * (0.97 + 0.025 * float(index % 3)))
 	mapped.rotation_degrees.y = 180.0
 	parent.add_child(mapped)
 	CharacterPresentation.apply_npc(parent, role_id)

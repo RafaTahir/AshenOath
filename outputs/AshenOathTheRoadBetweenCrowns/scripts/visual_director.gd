@@ -13,6 +13,8 @@ var moon_halo: MeshInstance3D
 var star_field: MultiMeshInstance3D
 var cloud_texture: ImageTexture
 var current_environment: Environment
+var environment_cache: Dictionary = {}
+var night_node_cache: Dictionary = {}
 var current_zone := "greyfen"
 var current_zone_root: Node3D
 var current_time_minutes := 990.0
@@ -36,22 +38,25 @@ func _ready() -> void:
 func apply_zone(zone_id: String, zone_root: Node3D = null) -> void:
 	current_zone = zone_id
 	current_zone_root = zone_root
-	var env = Environment.new()
-	env.background_mode = Environment.BG_COLOR
-	env.fog_enabled = true
-	env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
-	env.tonemap_mode = Environment.TONE_MAPPER_FILMIC
-	env.adjustment_enabled = true
-	env.adjustment_contrast = 1.34
-	env.adjustment_saturation = 0.92
-	var forest_zones := ["wychwood","deep_wood","marsh_crossing","burned_farmstead","hart_glade"]
-	var ruin_zones := ["ruins","old_mill","bandit_road","vargan_approach","vargan_court","record_hall","undercroft","assembly"]
-	if zone_id in forest_zones:
-		_configure_wychwood(env)
-	elif zone_id in ruin_zones:
-		_configure_ruins(env)
-	else:
-		_configure_greyfen(env)
+	var env: Environment = environment_cache.get(zone_id)
+	if env == null:
+		env = Environment.new()
+		env.background_mode = Environment.BG_COLOR
+		env.fog_enabled = true
+		env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
+		env.tonemap_mode = Environment.TONE_MAPPER_FILMIC
+		env.adjustment_enabled = true
+		env.adjustment_contrast = 1.34
+		env.adjustment_saturation = 0.92
+		var forest_zones := ["wychwood","deep_wood","marsh_crossing","burned_farmstead","hart_glade"]
+		var ruin_zones := ["ruins","old_mill","bandit_road","vargan_approach","vargan_court","record_hall","undercroft","assembly"]
+		if zone_id in forest_zones:
+			_configure_wychwood(env)
+		elif zone_id in ruin_zones:
+			_configure_ruins(env)
+		else:
+			_configure_greyfen(env)
+		environment_cache[zone_id] = env
 	world_environment.environment = env
 	current_environment = env
 	_position_sky_layer(zone_id)
@@ -147,15 +152,24 @@ func _update_sky_cycle(daylight: float, twilight: float, night: float, minutes: 
 func _update_zone_night_state(night_amount: float) -> void:
 	if current_zone_root == null:
 		return
-	for node in current_zone_root.find_children("*", "OmniLight3D", true, false):
-		var light := node as OmniLight3D
-		var lower := light.name.to_lower()
-		if lower.contains("lantern") or lower.contains("shrine") or lower.contains("warm") or lower.contains("window"):
-			light.visible = night_amount > 0.18
-	for node in current_zone_root.find_children("*", "MeshInstance3D", true, false):
-		var lower := node.name.to_lower()
-		if lower.contains("litwindow") or lower.contains("sidewindow") or lower.contains("lanternglow") or lower.contains("lightpool") or lower.contains("lanternpool") or lower.contains("shrineglow") or lower.contains("roadcandle"):
-			(node as MeshInstance3D).visible = night_amount > 0.10
+	var key := current_zone_root.get_instance_id()
+	if not night_node_cache.has(key):
+		var lights: Array = []
+		var meshes: Array = []
+		for node in current_zone_root.find_children("*", "OmniLight3D", true, false):
+			var lower := node.name.to_lower()
+			if lower.contains("lantern") or lower.contains("shrine") or lower.contains("warm") or lower.contains("window"):
+				lights.append(node)
+		for node in current_zone_root.find_children("*", "MeshInstance3D", true, false):
+			var lower := node.name.to_lower()
+			if lower.contains("litwindow") or lower.contains("sidewindow") or lower.contains("lanternglow") or lower.contains("lightpool") or lower.contains("lanternpool") or lower.contains("shrineglow") or lower.contains("roadcandle"):
+				meshes.append(node)
+		night_node_cache[key] = {"lights": lights, "meshes": meshes}
+	var cached: Dictionary = night_node_cache[key]
+	for light in cached.lights:
+		if is_instance_valid(light): light.visible = night_amount > 0.18
+	for mesh in cached.meshes:
+		if is_instance_valid(mesh): mesh.visible = night_amount > 0.10
 
 func _configure_greyfen(env: Environment) -> void:
 	env.background_color = Color(0.040, 0.048, 0.060)
@@ -226,16 +240,18 @@ func _build_sky_layer() -> void:
 	cloud_layer.name = "CloudLayer"
 	add_child(cloud_layer)
 	cloud_texture = _build_cloud_texture()
-	for i: int in range(7):
+	var cloud_count := 7 if _quality_preset() == "quality" else 1
+	var lobes_per_cloud := 4 if _quality_preset() == "quality" else 3
+	for i: int in range(cloud_count):
 		var cloud := Node3D.new()
 		cloud.name = "CloudCluster"
 		cloud.position = Vector3(-62.0 + i * 22.0, 46.0 + (i % 2) * 6.0, -92.0 + (i % 3) * 18.0)
 		cloud.set_meta("base_position", cloud.position)
-		for lobe_index in range(4):
+		for lobe_index in range(lobes_per_cloud):
 			var lobe := MeshInstance3D.new()
 			lobe.name = "CloudCard"
 			var cloud_mesh := QuadMesh.new()
-			cloud_mesh.size = Vector2(31.0+float((i+lobe_index)%3)*8.0,10.0+float((i+lobe_index)%2)*3.0)
+			cloud_mesh.size = Vector2(24.0+float((i+lobe_index)%3)*6.0,8.0+float((i+lobe_index)%2)*2.5)
 			lobe.mesh = cloud_mesh
 			lobe.position = Vector3((lobe_index-1.5)*17.0,float((lobe_index+i)%2)*2.6,float(lobe_index)*5.0)
 			lobe.material_override = _cloud_material(Color(0.92,0.94,0.96,0.60))

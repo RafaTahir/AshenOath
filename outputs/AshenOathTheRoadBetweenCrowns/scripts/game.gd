@@ -30,6 +30,7 @@ const WorldMotionController = preload("res://scripts/world_motion_controller.gd"
 const SurfaceFeedbackManager = preload("res://scripts/surface_feedback_manager.gd")
 const GreyfenLifeController = preload("res://scripts/greyfen_life_controller.gd")
 const MinigameManager = preload("res://scripts/minigame_manager.gd")
+const ZoneSpatialService = preload("res://scripts/zone_spatial_service.gd")
 
 var player
 var camera_rig
@@ -70,9 +71,18 @@ var deadfall_batch_data: Array[Transform3D] = []
 var tree_collision_body: StaticBody3D
 var route_zone_cache: Dictionary = {}
 var route_enemy_cache: Dictionary = {}
+var shared_box_mesh: BoxMesh
+var prop_batch_data: Dictionary = {}
+var visual_box_batch_data: Array[Dictionary] = []
+var terrain_patch_batch_data: Array[Dictionary] = []
+var spatial_service: Node
+var environment_batches_flushed := false
+var prop_collision_body: StaticBody3D
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	shared_box_mesh = BoxMesh.new()
+	shared_box_mesh.size = Vector3.ONE
 	_ensure_input_map()
 	_build_global_environment()
 	_setup_managers()
@@ -286,7 +296,12 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	runtime_light_count = 0
 	tree_batch_data.clear()
 	deadfall_batch_data.clear()
+	prop_batch_data.clear()
+	visual_box_batch_data.clear()
+	terrain_patch_batch_data.clear()
+	environment_batches_flushed = false
 	tree_collision_body = null
+	prop_collision_body = null
 	if player != null and player.has_method("cancel_beam_charge"):
 		player.cancel_beam_charge()
 	var previous_zone_id: String = current_zone_id
@@ -298,16 +313,25 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		elif previous_zone_id in ["greyfen", "wychwood"]:
 			zone_root.visible = false
 			zone_root.process_mode = Node.PROCESS_MODE_DISABLED
-			_set_zone_collision_enabled(zone_root, false)
+			zone_root.position = Vector3(0, -1000, 0)
 			route_zone_cache[previous_zone_id] = zone_root
 			route_enemy_cache[previous_zone_id] = previous_enemies
 		else:
+			zone_root.visible = false
+			zone_root.process_mode = Node.PROCESS_MODE_DISABLED
+			remove_child(zone_root)
 			zone_root.queue_free()
-	current_zone_id = zone_id
-	if camera_rig != null and camera_rig.has_method("set_zone"):
-		camera_rig.set_zone(zone_id)
 	active_interactable = null
 	interaction_candidates.clear()
+	current_zone_id = zone_id
+	if spatial_service != null and is_instance_valid(spatial_service):
+		spatial_service.queue_free()
+	spatial_service = ZoneSpatialService.new()
+	spatial_service.name = "ZoneSpatialService"
+	add_child(spatial_service)
+	spatial_service.configure(zone_id, _river_center(zone_id), _zone_half_extents(zone_id))
+	if camera_rig != null and camera_rig.has_method("set_zone"):
+		camera_rig.set_zone(zone_id)
 	active_enemies.clear()
 	hud.set_prompt("")
 	if reused_zone:
@@ -316,8 +340,8 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		zone_root = route_zone_cache[zone_id]
 		route_zone_cache.erase(zone_id)
 		zone_root.visible = true
+		zone_root.position = Vector3.ZERO
 		zone_root.process_mode = Node.PROCESS_MODE_INHERIT
-		_set_zone_collision_enabled(zone_root, true)
 		active_enemies = _valid_cached_enemies(route_enemy_cache.get(zone_id, []))
 		route_enemy_cache.erase(zone_id)
 		reused_zone = true
@@ -338,6 +362,7 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		if zone_id in ["greyfen", "wychwood"]:
 			_add_visual_100_layer(zone_id)
 		_apply_first_route_materials(zone_root)
+	quests.set_tracked_quest_for_zone(zone_id)
 	if visual_director != null:
 		visual_director.apply_zone(zone_id, zone_root)
 	if audio != null:
@@ -395,17 +420,15 @@ func _clear_route_zone_cache() -> void:
 	zone_root = null
 	for cached_root in route_zone_cache.values():
 		if is_instance_valid(cached_root):
-			if cached_root.is_inside_tree():
-				cached_root.queue_free()
-			else:
-				cached_root.free()
+			if not cached_root.is_inside_tree():
+				add_child(cached_root)
+			cached_root.queue_free()
 	route_zone_cache.clear()
 	route_enemy_cache.clear()
 
 func _exit_tree() -> void:
-	for cached_root in route_zone_cache.values():
-		if is_instance_valid(cached_root) and not cached_root.is_inside_tree():
-			cached_root.free()
+	# Cached zones remain children of the game and are released by normal subtree
+	# destruction. Touching renderer resources during NOTIFICATION_EXIT_TREE is unsafe.
 	route_zone_cache.clear()
 	route_enemy_cache.clear()
 
@@ -425,6 +448,7 @@ func _add_visual_100_layer(zone_id: String) -> void:
 	surface.configure(player, quality)
 
 func _build_greyfen() -> void:
+	seed(41021)
 	_make_split_ground(42.0, 34.0, 4.5, 3.4, Color(0.16, 0.18, 0.13))
 	RiverSection.new().build(zone_root,{"host":self,"center_z":4.5,"width":42.0,"span":3.4})
 	_make_greyfen_terrain_layers()
@@ -502,6 +526,7 @@ func _build_greyfen() -> void:
 	life.configure(self, str(settings.settings.get("quality_preset", "balanced")))
 
 func _build_wychwood() -> void:
+	seed(78233)
 	_make_split_ground(44.0, 34.0, 0.0, 3.4, Color(0.065, 0.105, 0.07))
 	RiverSection.new().build(zone_root,{"host":self,"center_z":0.0,"width":44.0,"span":3.4})
 	_make_wychwood_terrain_layers()
@@ -547,7 +572,9 @@ func _build_wychwood() -> void:
 	_make_herb("grave_moss", Vector3(5, 0, -13), Color(0.24, 0.42, 0.24))
 	if quests.is_active("main_road_of_crows") and not quests.is_objective_done("main_road_of_crows", "fight_ghoulkin"):
 		_spawn_enemy("ghoulkin", Vector3(-2.4, 0.8, -8.8))
-		_spawn_enemy("ghoulkin", Vector3(2.7, 0.8, -9.6))
+		var second_ghoul = _spawn_enemy("ghoulkin", Vector3(2.7, 0.8, -9.6))
+		if second_ghoul != null:
+			second_ghoul.set_encounter_active(false)
 		_spawn_enemy("wychwood_stalker", Vector3(-4.8, 0.8, -3.8))
 		_spawn_enemy("wychwood_raider", Vector3(4.6, 0.8, -5.3))
 		_spawn_enemy("wychwood_brute", Vector3(0.2, 0.8, -12.4))
@@ -577,7 +604,7 @@ func _build_ruins() -> void:
 	if quests.is_active("main_blood_under_stone") and not quests.is_objective_done("main_blood_under_stone", "fight_knight"):
 		_spawn_enemy("gravebound_knight", Vector3(3, 0.8, -3))
 	if quests.is_active("main_hart_remembers") or quests.is_unlocked("main_hart_remembers"):
-		_make_named_interactable("white_hart", "dialogue", "Speak to the White Hart", Vector3(12, 0, 10), Color(0.86, 0.83, 0.70), Vector3(0.9, 1.6, 0.9))
+		_make_named_interactable("white_hart", "dialogue", "Speak to the White Hart", Vector3(12, 0, 10), Color(0.86, 0.83, 0.70), Vector3(0.36, 0.64, 0.36))
 
 func _handle_interaction(area) -> void:
 	if area.interaction_type == "minigame":
@@ -1037,6 +1064,12 @@ func _on_enemy_died(enemy) -> void:
 		CombatFeedback.ground_ring(zone_root, enemy.global_position, Color(0.12, 0.08, 0.055), 0.9, 0.24)
 	if current_zone_id == "wychwood" and enemy.enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute"]:
 		wychwood_pack_kills += 1
+		if wychwood_pack_kills == 1:
+			_activate_wychwood_wave(["ghoulkin"], "A second Ghoulkin answers from the trees.")
+		elif wychwood_pack_kills == 2:
+			_activate_wychwood_wave(["wychwood_stalker", "wychwood_raider"], "Branches snap on both flanks.")
+		elif wychwood_pack_kills == 4:
+			_activate_wychwood_wave(["wychwood_brute"], "The earth heaves. The Brute comes last.")
 		if wychwood_pack_kills >= 5:
 			quests.complete_objective("main_road_of_crows", "fight_ghoulkin")
 			audio.play_event("victory", 0.03)
@@ -1060,7 +1093,7 @@ func _on_enemy_died(enemy) -> void:
 		if current_zone_id == "undercroft":
 			quests.complete_objective("main_last_witness", "break_halvern_guard")
 		if current_zone_id == "ruins" and quests.is_unlocked("main_hart_remembers"):
-			_make_named_interactable("white_hart", "dialogue", "Speak to the White Hart", Vector3(12, 0, 10), Color(0.86, 0.83, 0.70), Vector3(0.9, 1.6, 0.9))
+			_make_named_interactable("white_hart", "dialogue", "Speak to the White Hart", Vector3(12, 0, 10), Color(0.86, 0.83, 0.70), Vector3(0.36, 0.64,0.36))
 	elif enemy.enemy_id == "white_hart_avatar":
 		var ending = pending_ending if pending_ending != "" else "kill"
 		pending_ending = ""
@@ -1277,23 +1310,31 @@ func _update_tutorial_prompts() -> void:
 func _update_compass() -> void:
 	if hud == null or player == null:
 		return
-	var zone_name = {"greyfen":"Greyfen", "wychwood":"The Wychwood", "ruins":"Castle Vargan", "vargan_approach":"Castle Vargan Approach", "vargan_court":"Castle Vargan Courtyard", "record_hall":"Vargan Record Hall"}.get(current_zone_id, current_zone_id)
+	var zone_name = {"greyfen":"Greyfen", "wychwood":"The Wychwood", "ruins":"Castle Vargan", "deep_wood":"Deep Wychwood", "old_mill":"The Ash Mill", "burned_farmstead":"Burned Farmstead", "marsh_crossing":"Marsh Crossing", "bandit_road":"The Long Road", "vargan_approach":"Castle Vargan Approach", "vargan_court":"Castle Vargan Courtyard", "record_hall":"Vargan Record Hall", "undercroft":"Vargan Undercroft", "assembly":"Greyfen Assembly", "hart_glade":"White Hart Glade"}.get(current_zone_id, "The Road Between Crowns")
 	hud.set_compass("%s | %s" % [zone_name, _nearest_interactable_summary()])
 
 func _nearest_interactable_summary() -> String:
 	if zone_root == null:
 		return "No marker"
 	var best_text = "No marker"
-	var best_dist = 9999.0
+	var best_score = 9999.0
 	for child in zone_root.get_children():
 		if not child.has_method("get_overlapping_bodies"):
 			continue
 		var interaction_id = child.get("interaction_id")
 		if interaction_id == null or str(interaction_id) == "":
 			continue
+		if not child.is_inside_tree():
+			continue
 		var dist = child.global_position.distance_to(player.global_position)
-		if dist < best_dist:
-			best_dist = dist
+		var score: float = float(dist)
+		var quest_id = child.get("quest_id")
+		if quest_id != null and str(quest_id) != "" and quests.is_active(str(quest_id)):
+			score -= 24.0
+		if str(child.get("interaction_type")) == "zone":
+			score -= 4.0
+		if score < best_score:
+			best_score = score
 			best_text = "%s %dm" % [child.get("prompt"), int(dist)]
 	return best_text
 
@@ -1319,12 +1360,25 @@ func _safe_loaded_position(zone: String, pos: Vector3) -> Vector3:
 		return Vector3(clampf(pos.x,-18.0,18.0), 0.9, river_z + side * 2.85)
 	return pos
 
+func validate_walkable_position(pos: Vector3) -> Vector3:
+	if spatial_service != null:
+		return spatial_service.validate_position(pos, 0.90)
+	var safe := river_safe_position(pos, 0.90)
+	safe.x = clampf(safe.x, -18.5, 18.5)
+	safe.z = clampf(safe.z, -14.5, 14.5)
+	safe.y = 0.0
+	return safe
+
 func _recover_from_river(body: Node, river_z: float, span: float) -> void:
 	if not (body is CharacterBody3D):
 		return
 	var actor := body as Node3D
 	var side := -1.0 if actor.global_position.z <= river_z else 1.0
-	actor.global_position = Vector3(clampf(actor.global_position.x,-18.0,18.0),0.9,river_z + side * (span * 0.5 + 1.15))
+	var candidate := validate_walkable_position(Vector3(clampf(actor.global_position.x,-16.0,16.0),0.0,river_z + side * (span * 0.5 + 1.35)))
+	# Keep recovery away from building walls and the crowded bridge mouth.
+	if current_zone_id == "greyfen" and absf(candidate.x) > 6.0:
+		candidate.x = signf(candidate.x) * 5.5
+	actor.global_position = candidate + Vector3.UP * 0.9
 	(body as CharacterBody3D).velocity = Vector3.ZERO
 	if body == player:
 		last_safe_player_position = actor.global_position
@@ -1348,6 +1402,8 @@ func _is_river_excluded(pos: Vector3, margin: float = 0.0) -> bool:
 	return river_z < 900.0 and absf(pos.z-river_z) < 2.25 + margin
 
 func river_safe_position(pos: Vector3, margin: float = 0.55) -> Vector3:
+	if spatial_service != null:
+		return spatial_service.validate_position(pos, margin)
 	if not _is_river_excluded(pos, margin):
 		return pos
 	var river_z := _river_center()
@@ -1356,6 +1412,8 @@ func river_safe_position(pos: Vector3, margin: float = 0.55) -> Vector3:
 	return pos
 
 func river_safe_path(points: Array, margin: float = 0.90) -> Array:
+	if spatial_service != null:
+		return spatial_service.validate_path(points, margin)
 	var sanitized: Array = []
 	if points.is_empty():
 		return sanitized
@@ -1506,13 +1564,10 @@ func _make_terrain_patch(name: String, pos: Vector3, size: Vector3, color: Color
 func _make_terrain_patch_raw(name: String, pos: Vector3, size: Vector3, color: Color) -> void:
 	var mesh = MeshInstance3D.new()
 	mesh.name = name
-	var cube = BoxMesh.new()
-	cube.size = size
-	mesh.mesh = cube
 	mesh.position = pos
 	mesh.rotation_degrees.y = randf_range(-2.0, 2.0)
-	mesh.material_override = _terrain_material(name, color)
 	zone_root.add_child(mesh)
+	terrain_patch_batch_data.append({"node":mesh,"size":size,"color":color,"material":_terrain_material(name,color)})
 
 func _make_path_stone(pos: Vector3, scale_value: float) -> void:
 	_make_terrain_patch("PathStone", pos + Vector3(0, 0.03, 0), Vector3(scale_value, 0.06, scale_value * 0.75), Color(0.18, 0.17, 0.15))
@@ -1530,9 +1585,8 @@ func _make_low_berm(pos: Vector3, size: Vector3, color: Color) -> void:
 	shape.shape = box
 	body.add_child(shape)
 	var mesh = MeshInstance3D.new()
-	var cube = BoxMesh.new()
-	cube.size = size
-	mesh.mesh = cube
+	mesh.mesh = shared_box_mesh
+	mesh.scale = size
 	mesh.material_override = world_materials.get_material("forest_ground", str(settings.settings.get("quality_preset", "balanced")), color.lightened(0.30), 0.0, true)
 	body.add_child(mesh)
 
@@ -1771,21 +1825,22 @@ func _make_visual_box(name: String, pos: Vector3, size: Vector3, color: Color) -
 	var mesh_instance = MeshInstance3D.new()
 	mesh_instance.name = name
 	mesh_instance.set_meta("visual_name", name)
-	var cube = BoxMesh.new()
-	cube.size = size
-	mesh_instance.mesh = cube
 	mesh_instance.position = pos
-	mesh_instance.material_override = _mat(color)
 	zone_root.add_child(mesh_instance)
+	if environment_batches_flushed:
+		mesh_instance.mesh = shared_box_mesh
+		mesh_instance.scale = size
+		mesh_instance.material_override = _mat(color)
+	else:
+		visual_box_batch_data.append({"node":mesh_instance,"size":size,"color":color})
 	return mesh_instance
 
 func _add_visual_box_child(parent: Node3D, name: String, local_pos: Vector3, size: Vector3, color: Color) -> MeshInstance3D:
 	var mesh_instance = MeshInstance3D.new()
 	mesh_instance.name = name
 	mesh_instance.set_meta("visual_name", name)
-	var cube = BoxMesh.new()
-	cube.size = size
-	mesh_instance.mesh = cube
+	mesh_instance.mesh = shared_box_mesh
+	mesh_instance.scale = size
 	mesh_instance.position = local_pos
 	mesh_instance.material_override = _mat(color)
 	parent.add_child(mesh_instance)
@@ -2172,7 +2227,7 @@ func _make_named_interactable(id: String, type: String, prompt: String, pos: Vec
 	area.build_collision(1.25)
 	zone_root.add_child(area)
 	var role = _role_for_interactable(id)
-	var mapped = _make_role_visual(role, "characters", Vector3(0.9, 0.9, 0.9) * scale_override)
+	var mapped = _make_role_visual(role, "characters", Vector3.ONE)
 	if mapped != null:
 		area.add_child(mapped)
 		_configure_npc_animation(mapped, id)
@@ -2406,6 +2461,8 @@ func _spawn_enemy(id: String, pos: Vector3) -> Node:
 	zone_root.add_child(enemy)
 	enemy.global_position = pos
 	enemy.setup(id, enemy_defs.get(id, {}), player)
+	if current_zone_id == "wychwood" and id in ["wychwood_stalker", "wychwood_raider", "wychwood_brute"]:
+		enemy.set_encounter_active(false)
 	enemy.attack_gate = _enemy_attack_token
 	if id == "ghoulkin":
 		enemy.rotation_degrees.y = 180.0
@@ -2418,6 +2475,15 @@ func _spawn_enemy(id: String, pos: Vector3) -> Node:
 	enemy.attack_resolved.connect(_on_enemy_attack_resolved)
 	active_enemies.append(enemy)
 	return enemy
+
+func _activate_wychwood_wave(ids: Array, cue: String) -> void:
+	for enemy in active_enemies:
+		if enemy != null and not enemy.dead and enemy.enemy_id in ids:
+			enemy.set_encounter_active(true)
+	if hud != null:
+		hud.toast(cue)
+	if audio != null:
+		audio.play_event("reveal", 0.02)
 
 func _enemy_attack_token(enemy: Node, claim: bool) -> bool:
 	if claim:
@@ -2439,9 +2505,8 @@ func _make_ground(pos: Vector3, size: Vector3, color: Color) -> void:
 	shape.shape = box
 	body.add_child(shape)
 	var mesh = MeshInstance3D.new()
-	var cube = BoxMesh.new()
-	cube.size = size
-	mesh.mesh = cube
+	mesh.mesh = shared_box_mesh
+	mesh.scale = size
 	mesh.material_override = _terrain_material("CampaignGround", color)
 	body.add_child(mesh)
 
@@ -2463,6 +2528,8 @@ func _make_tree(pos: Vector3) -> void:
 	if _is_river_excluded(pos,1.5):
 		return
 	pos = _route_safe_position(pos, 4.9)
+	if spatial_service != null and spatial_service.is_reserved(pos, 1.35):
+		return
 	if _is_first_route_clearance(pos, 1.55):
 		return
 	var radius := randf_range(1.0, 1.35)
@@ -2479,7 +2546,7 @@ func _make_tree(pos: Vector3) -> void:
 		zone_root.add_child(tree_collision_body)
 	var shape := CollisionShape3D.new()
 	var box := BoxShape3D.new()
-	box.size = Vector3(2.6, 4.2, 2.6)
+	box.size = Vector3(0.78, 3.6, 0.78)
 	shape.shape = box
 	shape.position = pos + Vector3(0, 2.1, 0)
 	tree_collision_body.add_child(shape)
@@ -2498,15 +2565,55 @@ func _make_deadfall(pos: Vector3) -> void:
 	deadfall_batch_data.append(Transform3D(Basis.from_euler(rotation), pos + Vector3(0, 0.35, 0)))
 
 func _flush_environment_batches() -> void:
+	var terrain_groups: Dictionary = {}
+	for item in terrain_patch_batch_data:
+		var color: Color = item.color
+		var terrain_key := "%d_%d_%d" % [int(color.r * 3.0), int(color.g * 3.0), int(color.b * 3.0)]
+		if not terrain_groups.has(terrain_key):
+			terrain_groups[terrain_key] = {"material":item.material,"items":[]}
+		terrain_groups[terrain_key].items.append(item)
+	for terrain_key in terrain_groups:
+		var terrain_group: Dictionary = terrain_groups[terrain_key]
+		var terrain_items: Array = terrain_group.items
+		var terrain_batch := _make_multimesh_batch("TerrainPatchBatch_%s" % terrain_key, shared_box_mesh, terrain_items.size(), terrain_group.material)
+		for i in range(terrain_items.size()):
+			var marker: Node3D = terrain_items[i].node
+			var patch_size: Vector3 = terrain_items[i].size
+			terrain_batch.multimesh.set_instance_transform(i, Transform3D(marker.basis.scaled(patch_size), marker.position))
+			marker.queue_free()
+	var visual_groups: Dictionary = {}
+	for item in visual_box_batch_data:
+		var color: Color = item.color
+		var visual_key := "%d_%d_%d" % [int(color.r * 3.0), int(color.g * 3.0), int(color.b * 3.0)]
+		if not visual_groups.has(visual_key):
+			visual_groups[visual_key] = {"material": _mat(color), "items": []}
+		visual_groups[visual_key].items.append(item)
+	for visual_key in visual_groups:
+		var group: Dictionary = visual_groups[visual_key]
+		var items: Array = group.items
+		var detail_batch := _make_multimesh_batch("AuthoredDetailBatch_%s" % visual_key, shared_box_mesh, items.size(), group.material)
+		for i in range(items.size()):
+			var marker: Node3D = items[i].node
+			var detail_size: Vector3 = items[i].size
+			detail_batch.multimesh.set_instance_transform(i, Transform3D(marker.basis.scaled(detail_size), marker.position))
+			marker.queue_free()
+	for batch_key in prop_batch_data:
+		var entry: Dictionary = prop_batch_data[batch_key]
+		var transforms: Array = entry.get("transforms", [])
+		if transforms.is_empty():
+			continue
+		var batch := _make_multimesh_batch("WorldPropBatch_%s" % str(batch_key), shared_box_mesh, transforms.size(), entry.get("material"))
+		for i in range(transforms.size()):
+			batch.multimesh.set_instance_transform(i, transforms[i])
 	if not tree_batch_data.is_empty():
 		var trunk_mesh := BoxMesh.new()
 		trunk_mesh.size = Vector3(0.42, 1.8, 0.42)
 		var trunks := _make_multimesh_batch("TreeTrunkBatch", trunk_mesh, tree_batch_data.size(), world_materials.get_material("timber", str(settings.settings.get("quality_preset", "balanced")), Color(0.42, 0.30, 0.20), 0.0, false))
 		var crown_mesh := CylinderMesh.new()
-		crown_mesh.top_radius = 0.0
+		crown_mesh.top_radius = 0.38
 		crown_mesh.bottom_radius = 1.0
 		crown_mesh.height = 1.0
-		crown_mesh.radial_segments = 6
+		crown_mesh.radial_segments = 7
 		var crown_material := _mat(Color.WHITE)
 		crown_material.vertex_color_use_as_albedo = true
 		var crowns := _make_multimesh_batch("TreeCrownBatch", crown_mesh, tree_batch_data.size(), crown_material, true)
@@ -2523,6 +2630,7 @@ func _flush_environment_batches() -> void:
 		var deadfalls := _make_multimesh_batch("DeadfallBatch", deadfall_mesh, deadfall_batch_data.size(), world_materials.get_material("timber", str(settings.settings.get("quality_preset", "balanced")), Color(0.34, 0.25, 0.17), 0.0, false))
 		for i in range(deadfall_batch_data.size()):
 			deadfalls.multimesh.set_instance_transform(i, deadfall_batch_data[i])
+	environment_batches_flushed = true
 
 func _make_multimesh_batch(node_name: String, mesh: Mesh, count: int, material: Material, use_colors: bool = false) -> MultiMeshInstance3D:
 	var instance := MultiMeshInstance3D.new()
@@ -2614,11 +2722,11 @@ func _make_torch(pos: Vector3) -> void:
 	_make_prop_box("TorchPost", pos + Vector3(0, 0.85, 0), Vector3(0.13, 1.7, 0.13), Color(0.10, 0.06, 0.035))
 	var flame = MeshInstance3D.new()
 	flame.mesh = SphereMesh.new()
-	flame.scale = Vector3(0.22, 0.34, 0.22)
+	flame.scale = Vector3(0.10, 0.18, 0.10)
 	flame.position = pos + Vector3(0, 1.75, 0)
 	flame.material_override = _emissive_mat(Color(1.0, 0.45, 0.14), 1.4)
 	zone_root.add_child(flame)
-	_make_light("TorchLight", pos + Vector3(0, 1.8, 0), Color(1.0, 0.45, 0.16), 2.3)
+	_make_light("TorchLight", pos + Vector3(0, 1.8, 0), Color(1.0, 0.45, 0.16), 1.45)
 
 func _make_hit_spark(pos: Vector3, heavy: bool) -> void:
 	if zone_root == null:
@@ -2656,22 +2764,38 @@ func _make_fog_sheet(pos: Vector3, scale_value: Vector3, color: Color) -> void:
 func _make_prop_box(name: String, pos: Vector3, size: Vector3, color: Color) -> void:
 	if name not in ["NorthBerm","SouthBerm","WestBerm","EastBerm"]:
 		pos = river_safe_position(pos,size.z*0.5+0.15)
-	var body = StaticBody3D.new()
-	body.name = name
-	body.position = pos
-	zone_root.add_child(body)
+	var separate_body := name in ["NorthBerm","SouthBerm","WestBerm","EastBerm"]
+	var body: StaticBody3D
+	if separate_body:
+		body = StaticBody3D.new()
+		body.name = name
+		body.position = pos
+		zone_root.add_child(body)
+	else:
+		if prop_collision_body == null:
+			prop_collision_body = StaticBody3D.new()
+			prop_collision_body.name = "BatchedPropCollisions"
+			zone_root.add_child(prop_collision_body)
+		body = prop_collision_body
 	var shape = CollisionShape3D.new()
+	shape.name = "%sCollision" % name
 	var box = BoxShape3D.new()
 	box.size = size
 	shape.shape = box
+	if not separate_body:
+		shape.position = pos
 	body.add_child(shape)
 	var mesh = MeshInstance3D.new()
-	var cube = BoxMesh.new()
-	cube.size = size
-	mesh.mesh = cube
+	mesh.mesh = shared_box_mesh
+	mesh.scale = size
 	var lower := name.to_lower()
 	if lower.contains("glow") or lower.contains("window") or lower.contains("coal") or lower.contains("candle"):
 		mesh.material_override = _emissive_mat(color, 0.65)
+		if separate_body:
+			body.add_child(mesh)
+		else:
+			mesh.position = pos
+			zone_root.add_child(mesh)
 	else:
 		var surface := "plaster"
 		if lower.contains("roof"):
@@ -2682,8 +2806,10 @@ func _make_prop_box(name: String, pos: Vector3, size: Vector3, color: Color) -> 
 			surface = "medieval_brick"
 		elif lower.contains("berm") or lower.contains("moss"):
 			surface = "forest_ground"
-		mesh.material_override = world_materials.get_material(surface, str(settings.settings.get("quality_preset", "balanced")), color.lightened(0.35), 0.15 if surface == "wet_mud" else 0.0, true)
-	body.add_child(mesh)
+		var material = world_materials.get_material(surface, str(settings.settings.get("quality_preset", "balanced")), Color(0.72, 0.70, 0.66), 0.15 if surface == "wet_mud" else 0.0, true)
+		if not prop_batch_data.has(surface):
+			prop_batch_data[surface] = {"material": material, "transforms": []}
+		prop_batch_data[surface].transforms.append(Transform3D(Basis.IDENTITY.scaled(size), pos))
 
 func _is_first_route_clearance(pos: Vector3, radius: float = 0.0) -> bool:
 	if current_zone_id == "greyfen":
@@ -2863,7 +2989,6 @@ func _make_role_visual(role_name: String, category: String, scale_value: Vector3
 		if visual_role != "" and asset_helper.has_method("spawn_visual_role") and asset_helper.has_method("has_visual_role") and asset_helper.has_visual_role(visual_role):
 			node = asset_helper.spawn_visual_role(visual_role, "characters")
 			if node != null and not node.name.ends_with("_placeholder"):
-				node.scale = scale_value
 				return node
 			if node != null:
 				node.queue_free()
@@ -2876,7 +3001,12 @@ func _make_role_visual(role_name: String, category: String, scale_value: Vector3
 		if node != null:
 			node.queue_free()
 		return null
-	node.scale = scale_value
+	if category == "enemies":
+		asset_helper.apply_normalized_scale(node, scale_value.y)
+	elif category == "characters":
+		pass
+	else:
+		node.scale = scale_value
 	return node
 
 func _visual_role_for_legacy_character(role_name: String) -> String:
@@ -2921,9 +3051,13 @@ func _build_global_environment() -> void:
 	add_child(visual_director)
 
 func _mat(color: Color) -> StandardMaterial3D:
+	var key := "flat:%s" % color.to_html(true)
+	if material_cache.has(key):
+		return material_cache[key]
 	var material = StandardMaterial3D.new()
 	material.albedo_color = color
 	material.roughness = 0.9
+	material_cache[key] = material
 	return material
 
 func _terrain_material(name: String, color: Color) -> StandardMaterial3D:

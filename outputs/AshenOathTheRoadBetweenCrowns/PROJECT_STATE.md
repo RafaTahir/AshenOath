@@ -1,6 +1,16 @@
 # Ashen Oath Project State
 
-Last updated: 2026-07-07
+## BUILD-RECOVERY-001 Update
+
+- Release verification is centralized in `tools/run_release_gate.ps1`; graphical 720p and fresh screenshot gates may not be skipped.
+- Imported character transforms follow one normalized-height contract and are multiplied rather than overwritten.
+- Sister Anwen now turns toward Kael. Greyfen ambient routes are grounded and bridge-safe.
+- The Wychwood five-enemy encounter is staged in three waves and retains five-kill progression. RECOVERY-002 is currently repairing traversal, actor scale, renderer integrity, and performance before the next deployment.
+- Quest tracking persists an explicit tracked quest and selects zone-relevant main objectives.
+- Repeated world boxes/details use shared meshes and MultiMesh batches. RECOVERY-002 measured 37.2 FPS average, 35.6 FPS minimum, and 294 ms warm route transition on Intel HD 620/ANGLE.
+- The world remains intentionally stylized and low-poly; current assets do not support a photoreal/AAA claim.
+
+Last updated: 2026-07-11
 
 ## Summary
 
@@ -301,7 +311,7 @@ The visual benchmark is Witcher-inspired dark fantasy, but current assets and re
 
 Implemented in `scripts/settings_manager.gd`, `scripts/game.gd`, and `scripts/asset_spawn_helper.gd`.
 
-Current default performance settings:
+Current default performance settings (target configuration, not a current performance pass):
 
 - `potato_mode`: true
 - `resolution_scale`: 0.55
@@ -573,13 +583,17 @@ Known verifier note: Godot headless may emit ObjectDB cleanup warnings after pas
 
 ## Known Bugs And Limitations
 
+- RECOVERY-002 passes its local runtime, story, route, character, visual, Castle, and graphical performance gates; export and live deployment are recorded separately.
+- Fresh RECOVERY-002 screenshots are stored in `Development_Gallery/screenshots/`.
+- Godot still emits renderer/resource diagnostics while verifier scenes are destroyed. Active rendered surfaces pass `verify_zone_budgets.gd`; shutdown diagnostics remain technical debt.
+
 - Visual quality is still low-poly/stylized and well below The Witcher 3.
-- The interface renders on a 1920x1080 canvas. Balanced preserves the established 1280x720 gameplay budget with a 0.667 3D scale; Quality renders 3D at full 1080p and Potato uses 0.45.
+- Gameplay renders at native 1280x720 and 1.0 3D scale. This avoids a severe Intel HD 620/ANGLE slowdown caused by Godot's fractional viewport scaler; browser UI remains responsive to the host canvas.
 - Outdoor day/night presentation includes readable cool-toned moonlight, procedural batched stars, visible sun and moon bodies, soft celestial halos, and quality-tier drifting cloud volumes.
 - Human models are skeletal, textured, lit, and animated but still lack realistic faces, hands, hair, facial rigs, and bespoke clothing.
 - Main-route character and Wychwood enemy skeletons animate; broader animation retargeting and facial performance remain incomplete.
 - Major areas beyond the first route are partial, blocked, or data-only.
-- Castle Vargan/Ruins should not be treated as release-ready.
+- Castle Vargan is playable and verified, but its architecture remains visibly blockout-grade.
 - Side quests are represented in data but not all have fully authored gameplay spaces.
 - Audio is generated/procedural feedback, not mastered final game audio.
 - UI is functional and themed but not final AAA-grade presentation.
@@ -629,7 +643,7 @@ The project currently satisfies:
 - Screenshot capture passes.
 - Web export verifier passes.
 - First route is playable with a 1080p interface and a 720p Balanced 3D rendering budget.
-- Dell-class Intel HD 620 test holds 30 FPS with a 229 ms warm route transition.
+- Dell-class Intel HD 620 test measured 37.2 FPS average, 35.6 FPS minimum, and a 294 ms warm route transition.
 - PBR terrain/building surfaces, saved day/night time, cleaned skeletal characters, and mixed Wychwood enemy rigs are active.
 
 The project does not yet satisfy:

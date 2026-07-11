@@ -57,7 +57,7 @@ func _initialize() -> void:
 	await _capture(game, "40_greyfen_assembly", Vector3(0,1,6), "assembly", Vector3(0,1,6))
 	await _capture(game, "41_white_hart_glade", Vector3(0,1,6), "hart_glade", Vector3(0,1,6))
 	await _capture(game, "42_greyfen_living_street", Vector3(-2,1,5), "greyfen", Vector3(-2,1,5))
-	await _capture(game, "43_blacksmith_routine", Vector3(7.5,1,5.5), "greyfen", Vector3(7.5,1,5.5), -0.65)
+	await _capture(game, "43_blacksmith_routine", Vector3(8.0,1,-4.2), "greyfen", Vector3(8.0,1,-4.2), -0.65)
 	await _capture(game, "44_shrine_pilgrim", Vector3(2.0,1,-6.0), "greyfen", Vector3(2.0,1,-6.0), 0.55)
 	await _capture_place_interaction(game, "45_notice_board_interaction", "notice_board", Vector3(-2,1,7.8))
 	await _capture_minigame(game, "46_tic_tac_toe_ui", "tic_tac_toe")
@@ -104,11 +104,23 @@ func _initialize() -> void:
 	game.settings.set_quality_preset("potato")
 	await _capture(game, "59_castle_potato_mode", Vector3(0,1,9), "vargan_court", Vector3(0,1,9))
 	print("slice screenshots saved to %s and mirrored to %s" % [output_dir, gallery_dir])
+	_release_render_resources(game)
 	game.queue_free()
-	await process_frame
+	await _settle_frames(4)
 	quit()
 
+func _release_render_resources(game: Node) -> void:
+	for node in game.find_children("*", "MultiMeshInstance3D", true, false):
+		node.multimesh = null
+		node.material_override = null
+	for node in game.find_children("*", "MeshInstance3D", true, false):
+		node.mesh = null
+		node.material_override = null
+
 func _capture(game, file_name: String, player_pos: Vector3, zone_id: String, spawn_pos: Vector3, camera_yaw: float = 0.0) -> void:
+	if not file_name.contains("forced_recovery") and game.has_method("validate_walkable_position"):
+		player_pos = game.validate_walkable_position(player_pos) + Vector3.UP
+		spawn_pos = player_pos
 	game.call("_load_zone", zone_id, spawn_pos)
 	await _settle_frames(3)
 	game.player.global_position = player_pos
@@ -413,7 +425,8 @@ func _assert_capture_safe(game, expected_pos: Vector3, file_name: String) -> voi
 	if actual.y < -0.5:
 		push_error("%s capture is below the playable surface: %s" % [file_name, str(actual)])
 		quit(1)
-	if not file_name.contains("forced_recovery") and actual.distance_to(expected_pos) > 1.25:
+	var horizontal_drift := Vector2(actual.x, actual.z).distance_to(Vector2(expected_pos.x, expected_pos.z))
+	if not file_name.contains("forced_recovery") and (horizontal_drift > 1.25 or actual.y > expected_pos.y + 1.5):
 		push_error("%s capture drifted away from its safe point. Expected %s got %s" % [file_name, str(expected_pos), str(actual)])
 		quit(1)
 

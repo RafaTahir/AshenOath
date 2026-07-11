@@ -4,7 +4,8 @@ signal changed(settings: Dictionary)
 
 var settings = {
 	"quality_preset": "balanced",
-	"resolution_scale": 0.667,
+	# Native 1280x720 avoids the Intel/ANGLE viewport-scaling performance path.
+	"resolution_scale": 1.0,
 	"shadow_quality": 1,
 	"foliage_density": 1,
 	"visual_density": 1,
@@ -41,7 +42,9 @@ func _process(delta: float) -> void:
 		print("PERF: preset=%s fps_avg=%.1f fps_min=%.1f samples=%d" % [snapshot.preset, snapshot.average_fps, snapshot.minimum_fps, snapshot.samples])
 
 func apply() -> void:
-	Engine.max_fps = int(settings.get("target_fps", 30))
+	# Let VSync pace the browser/ANGLE renderer. A hard 30 FPS sleep cap causes
+	# coarse Windows timer misses and produces an unstable 24-26 FPS cadence.
+	Engine.max_fps = 60
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED if settings["vsync"] else DisplayServer.VSYNC_DISABLED)
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN if settings["fullscreen"] else DisplayServer.WINDOW_MODE_WINDOWED)
 	RenderingServer.viewport_set_scaling_3d_scale(get_viewport().get_viewport_rid(), float(settings["resolution_scale"]))
@@ -59,7 +62,7 @@ func set_quality_preset(preset: String) -> void:
 	settings["potato_mode"] = normalized == "potato"
 	match normalized:
 		"potato":
-			settings["resolution_scale"] = 0.45
+			settings["resolution_scale"] = 1.0
 			settings["shadow_quality"] = 0
 			settings["foliage_density"] = 0
 			settings["visual_density"] = 0
@@ -71,7 +74,7 @@ func set_quality_preset(preset: String) -> void:
 			settings["visual_density"] = 2
 			settings["target_fps"] = 30
 		_:
-			settings["resolution_scale"] = 0.667
+			settings["resolution_scale"] = 1.0
 			settings["shadow_quality"] = 1
 			settings["foliage_density"] = 1
 			settings["visual_density"] = 1
@@ -102,9 +105,7 @@ func get_performance_snapshot() -> Dictionary:
 	}
 
 func cycle_resolution_scale() -> void:
-	var values = [0.45, 0.667, 1.0]
-	var idx = values.find(float(settings["resolution_scale"]))
-	settings["resolution_scale"] = values[(idx + 1) % values.size()]
+	settings["resolution_scale"] = 1.0
 	apply()
 
 func cycle_shadows() -> void:

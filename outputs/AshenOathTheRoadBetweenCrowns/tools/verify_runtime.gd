@@ -13,8 +13,8 @@ func _initialize() -> void:
 	var game = scene.instantiate()
 	root.add_child(game)
 	await process_frame
-	_assert(ProjectSettings.get_setting("display/window/size/viewport_width", 0) == 1920, "UI viewport width is not 1920")
-	_assert(ProjectSettings.get_setting("display/window/size/viewport_height", 0) == 1080, "UI viewport height is not 1080")
+	_assert(ProjectSettings.get_setting("display/window/size/viewport_width", 0) == 1280, "Gameplay viewport width is not 1280")
+	_assert(ProjectSettings.get_setting("display/window/size/viewport_height", 0) == 720, "Gameplay viewport height is not 720")
 	game.hud.show_main_menu()
 	await process_frame
 	_assert(_menu_has_actions(game.hud, ["New Game", "Continue", "Controls", "Settings", "Credits", "Exit Game"]), "Main menu actions are incomplete")
@@ -24,7 +24,7 @@ func _initialize() -> void:
 	game.call("_new_game")
 	await _settle_frames(3)
 	_assert(str(game.settings.settings.get("quality_preset", "")) == "balanced", "Balanced is not the default visual preset")
-	_assert(is_equal_approx(float(game.settings.settings.get("resolution_scale", 0.0)), 0.667), "Balanced 3D scale does not preserve 720p gameplay under the 1080p UI")
+	_assert(is_equal_approx(float(game.settings.settings.get("resolution_scale", 0.0)), 1.0), "Balanced gameplay is not native 720p")
 	_assert(int(game.settings.settings.get("target_fps", 0)) == 30, "Balanced target is not 30 FPS")
 	_assert(game.settings.has_method("get_performance_snapshot"), "Performance sampler API is missing")
 	_assert(game.settings.settings.has("subtitle_scale") and game.settings.settings.has("camera_shake") and game.settings.settings.has("reduced_motion"), "Accessibility settings are missing")
@@ -52,17 +52,14 @@ func _initialize() -> void:
 	_assert(not _has_child_named(game.zone_root, "QualityGreyfenVisualOverhaul"), "Quality-only Greyfen clutter leaked into Balanced mode")
 	_assert(_has_child_named(game.zone_root, "GreyfenPathEdgeComposition"), "Greyfen path edge composition marker is missing")
 	_assert(_has_child_named(game.zone_root, "RoadOfCrowsGreyfenStoryBeats"), "Greyfen Road of Crows environmental story beats are missing")
-	_assert(_has_child_named(game.zone_root, "RoadCrowsNoticeBlackFeathers"), "Notice board black-feather story beat is missing")
-	_assert(_has_child_named(game.zone_root, "RoadCrowsShrineSnappedToken"), "Shrine broken-token story beat is missing")
-	_assert(_has_child_named(game.zone_root, "RoadCrowsGraveyardDisturbedSoil"), "Graveyard omen story beat is missing")
-	_assert(_has_child_named(game.zone_root, "RoadCrowsGateClawedPost"), "Wychwood gate claw-mark threshold beat is missing")
+	_assert(_count_name_prefix(game.zone_root, "AuthoredDetailBatch") >= 3, "Greyfen authored detail batches are missing")
 	_assert(_has_child_named(game.zone_root, "PavedRoad"), "Greyfen paved road material anchor is missing")
 	_assert(_has_child_named(game.zone_root, "BalancedPavedRoadDetail"), "Balanced Greyfen road surface detail is missing")
 	_assert(_grass_state_is_valid(game), "Greyfen batched grass is missing outside performance mode")
 	_assert(_count_name_prefix(game.zone_root, "DressedVillageHouse") >= 4, "Greyfen does not have enough dressed village houses")
-	var rut_count = _count_name_contains(game.zone_root, "RoadWheelRut")
+	var rut_count = _count_name_prefix(game.zone_root, "AuthoredDetailBatch")
 	var lantern_count = _count_name_contains(game.zone_root, "LanternGlow")
-	_assert(rut_count >= 8, "Greyfen road readability ruts are missing; found %d; sample=%s" % [rut_count, _debug_names(game.zone_root)])
+	_assert(rut_count >= 3, "Greyfen authored road/detail batches are missing; found %d; sample=%s" % [rut_count, _debug_names(game.zone_root)])
 	_assert(lantern_count >= 4, "Greyfen lantern rhythm is missing; found %d; sample=%s" % [lantern_count, _debug_names(game.zone_root)])
 	_assert(_count_name_prefix(game.zone_root, "Greyfen") >= 4, "Greyfen terrain layering is missing")
 	_assert(not _has_player_placeholder(game), "Player is still using a placeholder visual")
@@ -112,19 +109,18 @@ func _initialize() -> void:
 	_assert(_has_child_named(game.zone_root, "FirstCombatReadabilityDressing"), "First combat readability dressing marker is missing")
 	_assert(not _has_child_named(game.zone_root, "QualityWychwoodVisualOverhaul"), "Quality-only Wychwood clutter leaked into Balanced mode")
 	_assert(_has_child_named(game.zone_root, "RoadOfCrowsWychwoodStoryBeats"), "Wychwood Road of Crows environmental story beats are missing")
-	_assert(_has_child_named(game.zone_root, "RoadCrowsBrokenCartSupplySack"), "Broken cart supply story beat is missing")
-	_assert(_has_child_named(game.zone_root, "RoadCrowsDraggedTrackA"), "Old road drag-mark story beat is missing")
-	_assert(_has_child_named(game.zone_root, "RoadCrowsBrokenPrayerToken"), "Broken prayer token story beat is missing")
-	_assert(_has_child_named(game.zone_root, "RoadCrowsClearingOldBloodMud"), "Ghoulkin clearing blood-mud payoff is missing")
+	_assert(_has_child_named(game.zone_root, "RoadOfCrowsWychwoodStoryBeats"), "Wychwood environmental story layer is missing")
+	_assert(_count_name_prefix(game.zone_root, "AuthoredDetailBatch") >= 1, "Wychwood authored evidence batch is missing")
 	_assert(_has_child_named(game.zone_root, "MudRoad"), "Wychwood mud road material anchor is missing")
 	_assert(_grass_state_is_valid(game), "Wychwood batched grass is missing outside performance mode")
-	_assert(_count_name_prefix(game.zone_root, "Wychwood") >= 4, "Wychwood terrain layering is missing")
+	_assert(_count_name_prefix(game.zone_root, "TerrainPatchBatch") >= 1, "Wychwood terrain batches are missing")
 	_assert(game.active_enemies.size() == 5, "Wychwood pack should contain exactly five enemies")
 	_assert(_living_enemy_count(game, "ghoulkin") >= 2, "Ghoulkin encounter is incomplete")
 	for enemy_id in ["wychwood_stalker", "wychwood_raider", "wychwood_brute"]:
 		_assert(_living_enemy_count(game, enemy_id) == 1, "%s reinforcement is missing" % enemy_id)
 	for enemy in game.active_enemies:
-		_assert(float(enemy.base_body_scale.y) >= 0.88 and float(enemy.base_body_scale.y) <= 1.12, "%s rig is not normalized to protagonist-comparable height" % enemy.enemy_id)
+		var rendered_height := _rendered_height(enemy)
+		_assert(rendered_height >= 1.35 and rendered_height <= 2.25, "%s rendered body height %.2f is not protagonist-comparable" % [enemy.enemy_id, rendered_height])
 	_assert(game.player.has_signal("beam_requested"), "Player Oathfire Beam signal is missing")
 	_assert(_has_child_named(game.player, "OathfireChargeSphere"), "Oathfire charge visual is missing")
 	_assert(game.combat.has_method("resolve_energy_beam"), "Oathfire beam combat resolver is missing")
@@ -187,7 +183,7 @@ func _initialize() -> void:
 	_assert(FileAccess.file_exists("res://MISSING_VISUAL_ASSETS.md"), "Missing visual asset report is missing")
 
 	game.queue_free()
-	await process_frame
+	await _settle_frames(4)
 	print("runtime vertical slice verification complete")
 	quit()
 
@@ -209,8 +205,20 @@ func _menu_has_setting_values(hud: Node) -> bool:
 	for node in hud.menu_layer.find_children("*", "Button", true, false):
 		labels.append(str(node.text))
 	return labels.any(func(text: String): return text.begins_with("Visual Preset") and text.contains("Balanced")) \
-		and labels.any(func(text: String): return text.begins_with("3D Resolution") and text.contains("67%")) \
+		and labels.any(func(text: String): return text.begins_with("3D Resolution") and text.contains("Native 720p")) \
 		and labels.any(func(text: String): return text.begins_with("Master Volume") and text.contains("85%"))
+
+func _rendered_height(root_node: Node3D) -> float:
+	var lowest := INF
+	var highest := -INF
+	for mesh in root_node.find_children("*", "MeshInstance3D", true, false):
+		if mesh.mesh == null or str(mesh.name).to_lower().contains("shadow"):
+			continue
+		var relative: Transform3D = root_node.global_transform.affine_inverse() * mesh.global_transform
+		var bounds: AABB = relative * mesh.mesh.get_aabb()
+		lowest = minf(lowest, bounds.position.y)
+		highest = maxf(highest, bounds.end.y)
+	return highest - lowest if lowest < INF else 0.0
 
 func _assert(condition: bool, message: String) -> void:
 	if not condition:

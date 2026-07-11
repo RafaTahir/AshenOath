@@ -9,7 +9,7 @@ func resolve_player_attack(player: Node3D, enemies: Array, damage: float, radius
 	var forward = -player.global_transform.basis.z.normalized()
 	var candidates: Array = []
 	for enemy in enemies:
-		if enemy == null or enemy.dead:
+		if enemy == null or enemy.dead or (enemy.has_method("is_encounter_active") and not enemy.is_encounter_active()):
 			continue
 		var offset: Vector3 = enemy.global_position - player.global_position
 		var distance = offset.length()
@@ -41,7 +41,7 @@ func _has_weapon_line(player: Node3D, enemy: Node3D) -> bool:
 func throw_bomb(player: Node3D, enemies: Array, damage: float) -> bool:
 	var hit = false
 	for enemy in enemies:
-		if enemy == null or enemy.dead:
+		if enemy == null or enemy.dead or (enemy.has_method("is_encounter_active") and not enemy.is_encounter_active()):
 			continue
 		if enemy.global_position.distance_to(player.global_position) <= 6.0:
 			enemy.apply_damage(damage, "ash_bomb")
@@ -55,7 +55,7 @@ func throw_bomb(player: Node3D, enemies: Array, damage: float) -> bool:
 
 func place_trap(player: Node3D, enemies: Array) -> bool:
 	for enemy in enemies:
-		if enemy == null or enemy.dead:
+		if enemy == null or enemy.dead or (enemy.has_method("is_encounter_active") and not enemy.is_encounter_active()):
 			continue
 		if enemy.global_position.distance_to(player.global_position) <= 4.0:
 			enemy.slow(4.0)
@@ -70,7 +70,7 @@ func resolve_energy_beam(player: Node3D, enemies: Array, direction: Vector3, end
 	var beam_length = origin.distance_to(endpoint)
 	var forward = direction.normalized()
 	for enemy in enemies:
-		if enemy == null or enemy.dead:
+		if enemy == null or enemy.dead or (enemy.has_method("is_encounter_active") and not enemy.is_encounter_active()):
 			continue
 		var target = enemy.global_position + Vector3(0, 0.9, 0)
 		var offset: Vector3 = target - origin

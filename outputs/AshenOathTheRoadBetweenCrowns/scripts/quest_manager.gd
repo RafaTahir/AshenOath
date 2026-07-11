@@ -14,6 +14,8 @@ var unlocked = {
 	"side_rooks_map": true, "side_three_candles": true
 }
 var world_flags = {}
+var tracked_quest_id := ""
+var tracker_context_zone := ""
 
 func load_quests(path: String) -> void:
 	var parsed = _read_json(path)
@@ -34,6 +36,8 @@ func start_quest(id: String) -> bool:
 		runtime_objective["done"] = false
 		objectives.append(runtime_objective)
 	active[id] = {"objectives": objectives}
+	if tracked_quest_id == "" or str(quest_defs[id].get("type", "")) == "main":
+		tracked_quest_id = id
 	message.emit("Quest started: %s" % quest_defs[id].get("title", id))
 	changed.emit()
 	return true
@@ -96,12 +100,55 @@ func is_unlocked(id: String) -> bool:
 func get_tracker_text() -> String:
 	if active.is_empty():
 		return "No active quest\nFind a contract or speak to villagers."
+	if tracker_context_zone != "" and tracked_quest_id == "":
+		return "No objective in this area\nFollow the road or review the journal."
+	var ordered_ids: Array = []
+	if tracked_quest_id != "" and active.has(tracked_quest_id):
+		ordered_ids.append(tracked_quest_id)
 	for id in active.keys():
+		if id not in ordered_ids:
+			ordered_ids.append(id)
+	for id in ordered_ids:
 		var title = str(quest_defs[id].get("title", id))
 		for objective in active[id]["objectives"]:
 			if not bool(objective.get("done", false)):
 				return "%s\n- %s" % [title, objective["text"]]
 	return "All tracked objectives complete."
+
+func set_tracked_quest(id: String) -> bool:
+	if not active.has(id):
+		return false
+	tracked_quest_id = id
+	changed.emit()
+	return true
+
+func get_tracked_quest() -> String:
+	return tracked_quest_id if active.has(tracked_quest_id) else ""
+
+func set_tracked_quest_for_zone(zone_id: String) -> void:
+	tracker_context_zone = zone_id
+	var preferences := {
+		"greyfen":["main_bell_beneath_greyfen","main_road_of_crows"],
+		"wychwood":["main_road_of_crows","main_teeth_in_rain"],
+		"deep_wood":["main_teeth_in_rain","main_names_they_burned"],
+		"old_mill":["main_ash_at_the_mill"],
+		"burned_farmstead":["main_names_they_burned"],
+		"marsh_crossing":["main_names_they_burned"],
+		"bandit_road":["main_soldier_without_banner"],
+		"vargan_approach":["main_blood_under_stone"],
+		"vargan_court":["main_blood_under_stone"],
+		"record_hall":["main_blood_under_stone"],
+		"undercroft":["main_last_witness"],
+		"assembly":["main_crowns_without_mercy"],
+		"hart_glade":["main_hart_remembers"]
+	}
+	for id in preferences.get(zone_id, []):
+		if active.has(id):
+			tracked_quest_id = id
+			changed.emit()
+			return
+	tracked_quest_id = ""
+	changed.emit()
 
 func get_journal_text() -> String:
 	var text = "ACTIVE QUESTS\n"
@@ -120,6 +167,8 @@ func _try_complete_quest(id: String) -> void:
 			return
 	completed[id] = true
 	active.erase(id)
+	if tracked_quest_id == id:
+		tracked_quest_id = ""
 	for next_id in quest_defs[id].get("unlocks", []):
 		unlocked[next_id] = true
 	message.emit("Quest complete: %s" % quest_defs[id].get("title", id))
@@ -133,7 +182,9 @@ func save_state() -> Dictionary:
 		"active": active,
 		"completed": completed,
 		"unlocked": unlocked,
-		"world_flags": world_flags
+		"world_flags": world_flags,
+		"tracked_quest_id": tracked_quest_id,
+		"tracker_context_zone": tracker_context_zone
 	}
 
 func load_state(state: Dictionary) -> void:
@@ -141,6 +192,8 @@ func load_state(state: Dictionary) -> void:
 	completed = state.get("completed", completed)
 	unlocked = state.get("unlocked", unlocked)
 	world_flags = state.get("world_flags", world_flags)
+	tracked_quest_id = str(state.get("tracked_quest_id", tracked_quest_id))
+	tracker_context_zone = str(state.get("tracker_context_zone", tracker_context_zone))
 	changed.emit()
 
 func _read_json(path: String):

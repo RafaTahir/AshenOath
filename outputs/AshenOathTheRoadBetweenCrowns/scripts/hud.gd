@@ -15,8 +15,9 @@ signal dialogue_closed
 signal menu_hovered
 signal menu_clicked
 
-const MENU_BUILD_LABEL = "UI-002 | 1080P INTERFACE | ASHENOATH.VERCEL.APP"
+const MENU_BUILD_LABEL = "RECOVERY-002 | 1080P UI / NATIVE 720P WORLD | ASHENOATH.VERCEL.APP"
 const MENU_SIZE = Vector2(1920.0, 1080.0)
+const GAMEPLAY_SIZE = Vector2i(1280, 720)
 const SAVE_PATH = "user://ashen_oath_save.json"
 const AUTOSAVE_PATH = "user://ashen_oath_autosave.json"
 const CHECKPOINT_PATH = "user://ashen_oath_checkpoint.json"
@@ -75,6 +76,7 @@ func _process(_delta: float) -> void:
 		health_bar.modulate = Color.WHITE
 
 func show_main_menu() -> void:
+	_set_internal_canvas(Vector2i(MENU_SIZE))
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_clear_menu()
 	menu_layer.visible = true
@@ -88,6 +90,7 @@ func show_main_menu() -> void:
 	_add_menu_button(box, "Exit Game", show_launch_screen)
 
 func show_launch_screen() -> void:
+	_set_internal_canvas(Vector2i(MENU_SIZE))
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_clear_menu()
 	menu_layer.visible = true
@@ -99,6 +102,7 @@ func show_launch_screen() -> void:
 	)
 
 func show_pause_menu() -> void:
+	_set_internal_canvas(Vector2i(MENU_SIZE))
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_clear_menu()
 	menu_layer.visible = true
@@ -111,6 +115,7 @@ func show_pause_menu() -> void:
 	_add_menu_button(box, "Main Menu", func(): show_main_menu())
 
 func show_settings_menu(back_target: String = "pause") -> void:
+	_set_internal_canvas(Vector2i(MENU_SIZE))
 	controls_back_target = back_target
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_clear_menu()
@@ -119,7 +124,7 @@ func show_settings_menu(back_target: String = "pause") -> void:
 	box.set_meta("compact_buttons", true)
 	var s = _current_settings()
 	_add_menu_button(box, "Visual Preset     %s" % str(s.get("quality_preset", "balanced")).capitalize(), func(): settings_requested.emit("visual_preset"))
-	_add_menu_button(box, "3D Resolution     %d%%" % int(round(float(s.get("resolution_scale", 0.667)) * 100.0)), func(): settings_requested.emit("render_scale"))
+	_add_menu_button(box, "3D Resolution     Native 720p", func(): settings_requested.emit("render_scale"))
 	_add_menu_button(box, "Shadows           %s" % _shadow_label(int(s.get("shadow_quality", 1))), func(): settings_requested.emit("shadows"))
 	_add_menu_button(box, "Mouse Sensitivity %s" % _sensitivity_label(float(s.get("mouse_sensitivity", 0.003))), func(): settings_requested.emit("mouse_sensitivity"))
 	_add_menu_button(box, "Invert Y Axis     %s" % _on_off(bool(s.get("invert_y", false))), func(): settings_requested.emit("invert_y"))
@@ -141,6 +146,7 @@ func show_controls_menu(back_target: String = "main") -> void:
 	_add_menu_button(box, "Back", _return_from_controls)
 
 func show_credits_menu() -> void:
+	_set_internal_canvas(Vector2i(MENU_SIZE))
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_clear_menu()
 	menu_layer.visible = true
@@ -149,10 +155,16 @@ func show_credits_menu() -> void:
 	_add_menu_button(box, "Back", func(): show_main_menu())
 
 func hide_menus() -> void:
+	_set_internal_canvas(GAMEPLAY_SIZE)
 	menu_layer.visible = false
 	dialogue_layer.visible = false
 	inventory_layer.visible = false
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+func _set_internal_canvas(size: Vector2i) -> void:
+	var window := get_window()
+	if window != null and window.content_scale_size != size:
+		window.content_scale_size = size
 
 func update_health(current: float, maximum: float) -> void:
 	var previous = last_health
@@ -276,7 +288,7 @@ func show_dialogue(data: Dictionary) -> void:
 
 func _render_dialogue_page() -> void:
 	dialogue_title.text = str(dialogue_session_data.get("name","Unknown"))
-	dialogue_text.text = "[b]%s[/b]\n\n%s" % [dialogue_title.text,dialogue_pages[dialogue_page_index]]
+	dialogue_text.text = dialogue_pages[dialogue_page_index]
 	for child in dialogue_actions.get_children():
 		child.queue_free()
 	if dialogue_page_index < dialogue_pages.size()-1:
@@ -392,12 +404,12 @@ func _build_hud() -> void:
 	root.add_child(shade)
 	var bars_back = ColorRect.new()
 	bars_back.position = Vector2(14, 14)
-	bars_back.size = Vector2(330, 106)
+	bars_back.size = Vector2(286, 100)
 	bars_back.color = Color(0.025, 0.022, 0.019, 0.56)
 	root.add_child(bars_back)
 	var bars = VBoxContainer.new()
 	bars.position = Vector2(24, 22)
-	bars.custom_minimum_size = Vector2(302, 92)
+	bars.custom_minimum_size = Vector2(258, 86)
 	bars.add_theme_constant_override("separation", 5)
 	root.add_child(bars)
 	health_bar = ProgressBar.new()
@@ -444,14 +456,14 @@ func _build_hud() -> void:
 	prompt_label.visible = false
 	root.add_child(prompt_label)
 	var tracker_back = ColorRect.new()
-	tracker_back.position = Vector2(892, 16)
-	tracker_back.size = Vector2(358, 132)
+	tracker_back.position = Vector2(842, 16)
+	tracker_back.size = Vector2(408, 132)
 	tracker_back.color = Color(0.025, 0.022, 0.019, 0.58)
 	root.add_child(tracker_back)
 	tracker_label = Label.new()
 	tracker_label.name = "QuestTrackerObjective"
-	tracker_label.position = Vector2(902, 24)
-	tracker_label.size = Vector2(340, 124)
+	tracker_label.position = Vector2(852, 24)
+	tracker_label.size = Vector2(388, 124)
 	tracker_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	root.add_child(tracker_label)
 	compass_label = Label.new()

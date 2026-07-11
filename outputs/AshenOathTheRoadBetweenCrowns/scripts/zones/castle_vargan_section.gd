@@ -87,6 +87,7 @@ func _build_record_hall(host: Node) -> void:
 	_make_banner(host, Vector3(4.8, 3.0, -13.3), Color(0.27, 0.045, 0.04))
 	for p in [Vector3(-3,0,10), Vector3(3,0,10), Vector3(-3,0,-6), Vector3(3,0,-6)]: host.call("_make_torch", p)
 	host.call("_make_light", "LedgerTableLight", Vector3(0, 3.5, -7), Color(0.62, 0.50, 0.34), 3.0)
+	host.call("_make_light", "RecordHallNavigationFill", Vector3(0, 4.5, 4), Color(0.40, 0.46, 0.58), 2.2)
 	host.call("_make_named_interactable", "vargan_record_keeper", "dialogue", "Speak to the record keeper", Vector3(-4, 0, 9), Color(0.28, 0.24, 0.20))
 	host.call("_make_named_interactable", "edric_castle", "dialogue", "Address Lord Edric", Vector3(0, 0, -11), Color(0.32, 0.24, 0.18))
 	if not bool(host.story_state.get_flag("vargan_ledger_choice_made", false)):
@@ -101,7 +102,12 @@ func _build_record_hall(host: Node) -> void:
 		host.call("_make_zone_gate", "Descend toward the last witness", Vector3(6, 0, -13), "undercroft", Vector3(0, 1, 12))
 
 func _make_gatehouse(host: Node, pos: Vector3) -> void:
-	host.call("_make_prop_box", "VarganGatehouse", pos + Vector3(0, 3.5, 0), Vector3(17, 7, 3), Color(0.145, 0.145, 0.15))
+	var landmark := Node3D.new()
+	landmark.name = "VarganGatehouse"
+	landmark.position = pos
+	landmark.set_meta("authored_bounds", Vector3(17, 7, 3))
+	host.zone_root.add_child(landmark)
+	host.call("_make_prop_box", "VarganGatehouseShell", pos + Vector3(0, 3.5, 0), Vector3(17, 7, 3), Color(0.145, 0.145, 0.15))
 	host.call("_make_prop_box", "GateOpening", pos + Vector3(0, 2.2, 1.6), Vector3(5, 4.4, 0.5), Color(0.035, 0.032, 0.03))
 	for x in [-2.2, -1.1, 0.0, 1.1, 2.2]: host.call("_make_prop_box", "Portcullis", pos + Vector3(x, 2.2, 1.2), Vector3(0.16, 4.4, 0.18), Color(0.10, 0.09, 0.075))
 

@@ -66,7 +66,7 @@ func _add_content(h: Node, id: String) -> void:
 			h.call("_make_clue","witnesses_ready","Gather witnesses and records",Vector3(0,0,-4),"main_crowns_without_mercy","gather_witnesses",Color(0.45,0.4,0.3)); h.call("_make_named_interactable","assembly_choice","dialogue","Address Greyfen",Vector3(0,0,-9),Color(0.55,0.4,0.2))
 		"hart_glade":
 			for p in [Vector3(-7,0,-8),Vector3(7,0,-8),Vector3(-9,0,-3),Vector3(9,0,-3)]: h.call("_make_tree",p)
-			h.call("_make_light","Hart Witness Light",Vector3(0,6,-8),Color(0.58,0.82,0.72),4.0); h.call("_make_named_interactable","white_hart","dialogue","Speak to the White Hart",Vector3(0,0,-8),Color(0.85,0.85,0.72),Vector3(0.9,1.6,0.9))
+			h.call("_make_light","Hart Witness Light",Vector3(0,6,-8),Color(0.58,0.82,0.72),4.0); h.call("_make_named_interactable","white_hart","dialogue","Speak to the White Hart",Vector3(0,0,-8),Color(0.85,0.85,0.72),Vector3(0.36,0.64,0.36))
 
 func _spawn(h: Node, enemy: String, pos: Vector3) -> void:
 	if h.enemy_defs.has(enemy): h.call("_spawn_enemy",enemy,pos)
