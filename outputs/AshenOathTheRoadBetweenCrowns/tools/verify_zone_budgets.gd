@@ -17,6 +17,10 @@ func _initialize() -> void:
 		game.call("_load_zone", zone_id, Vector3(0, 1, 8))
 		await _frames(3)
 		_verify_zone(game, zone_id)
+	game.settings.set_quality_preset("potato")
+	game.call("_load_zone", "vargan_court", Vector3(0, 1, 8))
+	await _frames(3)
+	_verify_zone(game, "vargan_court_potato")
 	print("ZONE BUDGETS: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
 	quit(0 if failures == 0 else 1)
 
@@ -37,6 +41,15 @@ func _verify_zone(game, zone_id: String) -> void:
 			if material == null: material = mesh.get_surface_override_material(surface)
 			if material == null: material = mesh.mesh.surface_get_material(surface)
 			check(material != null, "%s has a null material surface on %s" % [zone_id, mesh.name])
+	for batch in game.find_children("*", "MultiMeshInstance3D", true, false):
+		if batch.multimesh == null or batch.multimesh.mesh == null:
+			continue
+		var batch_mesh: Mesh = batch.multimesh.mesh
+		for surface in range(batch_mesh.get_surface_count()):
+			var material = batch.material_override
+			if material == null:
+				material = batch_mesh.surface_get_material(surface)
+			check(material != null, "%s has a null MultiMesh material on %s" % [zone_id, batch.name])
 
 func _walk(node: Node) -> Array:
 	var result: Array = [node]

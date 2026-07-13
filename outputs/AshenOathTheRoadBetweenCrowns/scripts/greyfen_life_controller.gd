@@ -198,7 +198,8 @@ func _set_agent_target(entry: Dictionary) -> void:
 func _set_motion(entry: Dictionary, speed: float) -> void:
 	var driver = entry.driver
 	if driver != null and driver.has_method("set_locomotion"):
-		driver.set_locomotion(clampf(speed / 1.3,0.0,1.0),Vector3.ZERO,true)
+		# Routine speeds are walking pace; this ratio also controls clip cadence.
+		driver.set_locomotion(clampf(speed / 2.0,0.0,0.70),Vector3.ZERO,true)
 	entry.phase = float(entry.phase) + get_process_delta_time() * (0.8 + speed * 1.7)
 
 func _face(node: Node3D, target: Vector3, delta: float) -> void:

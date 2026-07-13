@@ -346,5 +346,5 @@ func _finish() -> void:
 			print("- %s" % failure)
 		quit(1)
 		return
-	print("visible quality verification complete")
+	print("VISIBLE QUALITY VERIFIER: PASS")
 	quit()

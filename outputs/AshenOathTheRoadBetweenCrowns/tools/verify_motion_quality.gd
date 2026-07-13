@@ -92,5 +92,5 @@ func _finish() -> void:
 		print("motion quality verification failed:")
 		for failure in failures: print("- %s" % failure)
 		quit(1); return
-	print("motion quality verification complete: real skeleton transforms changed")
+	print("MOTION QUALITY VERIFIER: PASS - real skeleton transforms changed")
 	quit()

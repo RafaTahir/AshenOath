@@ -73,7 +73,5 @@ func _frames(count: int) -> void:
 func _release_render_resources(game: Node) -> void:
 	for node in game.find_children("*", "MultiMeshInstance3D", true, false):
 		node.multimesh = null
-		node.material_override = null
 	for node in game.find_children("*", "MeshInstance3D", true, false):
 		node.mesh = null
-		node.material_override = null

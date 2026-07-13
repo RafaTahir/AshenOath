@@ -531,11 +531,29 @@ func _make_oathfire_hand(node_name: String, pos: Vector3) -> MeshInstance3D:
 	return glow
 
 func _build_sheathed_sword() -> void:
-	sheathed_sword_visual = Node3D.new()
+	var socket_parent: Node3D = visual_root
+	var bone_attached := false
+	var skeleton := _find_skeleton(visual_root)
+	if skeleton != null:
+		var back_index := _find_bone_index(skeleton, ["Spine2", "Chest", "Torso", "Spine"])
+		if back_index >= 0:
+			var attachment := BoneAttachment3D.new()
+			attachment.name = "KaelBackSwordSocket"
+			attachment.bone_idx = back_index
+			attachment.bone_name = skeleton.get_bone_name(back_index)
+			skeleton.add_child(attachment)
+			socket_parent = _create_equipment_space(attachment, "KaelBackSwordEquipmentSpace")
+			bone_attached = true
+	var sword_scene = load("res://assets_external/characters/Warrior_Sword.fbx")
+	sheathed_sword_visual = sword_scene.instantiate() if sword_scene is PackedScene else Node3D.new()
 	sheathed_sword_visual.name = "OathfireSheathedSword"
-	sheathed_sword_visual.position = Vector3(-0.34, 1.18, 0.28)
-	sheathed_sword_visual.rotation_degrees = Vector3(20, 0, -28)
-	visual_root.add_child(sheathed_sword_visual)
+	sheathed_sword_visual.position = Vector3(-0.22, 0.08, 0.16) if bone_attached else Vector3(-0.34, 1.18, 0.28)
+	sheathed_sword_visual.rotation_degrees = Vector3(72, 4, -24) if bone_attached else Vector3(20, 0, -28)
+	sheathed_sword_visual.scale *= 0.72
+	socket_parent.add_child(sheathed_sword_visual)
+	if sword_scene is PackedScene:
+		sheathed_sword_visual.visible = false
+		return
 	var blade := MeshInstance3D.new()
 	var blade_mesh := BoxMesh.new()
 	blade_mesh.size = Vector3(0.07, 0.07, 1.45)
@@ -611,6 +629,7 @@ func _attach_rig_sword(mapped: Node3D) -> Node3D:
 	attachment.bone_idx = hand_index
 	attachment.bone_name = skeleton.get_bone_name(hand_index)
 	skeleton.add_child(attachment)
+	var equipment_space := _create_equipment_space(attachment, "KaelSwordEquipmentSpace")
 	var sword: Node3D = null
 	var sword_scene = load("res://assets_external/characters/Warrior_Sword.fbx")
 	if sword_scene is PackedScene:
@@ -621,7 +640,7 @@ func _attach_rig_sword(mapped: Node3D) -> Node3D:
 	sword.position = Vector3(0.0, -0.08, -0.20)
 	sword.rotation_degrees = Vector3(0.0, 0.0, -8.0)
 	sword.scale *= 0.72
-	attachment.add_child(sword)
+	equipment_space.add_child(sword)
 	if sword_scene is PackedScene:
 		return sword
 	var blade := MeshInstance3D.new()
@@ -641,6 +660,18 @@ func _attach_rig_sword(mapped: Node3D) -> Node3D:
 	sword.add_child(hilt)
 	return sword
 
+func _create_equipment_space(attachment: BoneAttachment3D, space_name: String) -> Node3D:
+	var equipment_space := Node3D.new()
+	equipment_space.name = space_name
+	attachment.add_child(equipment_space)
+	var inherited_scale := attachment.global_basis.get_scale()
+	equipment_space.scale = Vector3(
+		1.0 / max(abs(inherited_scale.x), 0.0001),
+		1.0 / max(abs(inherited_scale.y), 0.0001),
+		1.0 / max(abs(inherited_scale.z), 0.0001)
+	)
+	return equipment_space
+
 func _find_skeleton(node: Node) -> Skeleton3D:
 	if node is Skeleton3D:
 		return node
@@ -649,6 +680,19 @@ func _find_skeleton(node: Node) -> Skeleton3D:
 		if found != null:
 			return found
 	return null
+
+func _find_bone_index(skeleton: Skeleton3D, aliases: Array[String]) -> int:
+	for alias in aliases:
+		var exact := skeleton.find_bone(alias)
+		if exact >= 0:
+			return exact
+	for bone_index in range(skeleton.get_bone_count()):
+		var normalized := str(skeleton.get_bone_name(bone_index)).to_lower().replace("_", "").replace(".", "").replace(" ", "")
+		for alias in aliases:
+			var wanted := alias.to_lower().replace("_", "").replace(".", "").replace(" ", "")
+			if normalized.contains(wanted):
+				return bone_index
+	return -1
 
 func _find_first_mesh(root: Node) -> MeshInstance3D:
 	if root is MeshInstance3D:

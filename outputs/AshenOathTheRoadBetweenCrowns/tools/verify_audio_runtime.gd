@@ -37,7 +37,7 @@ func _initialize() -> void:
 	_assert(game_source.contains("victory_return_cue"), "Victory cue hook is missing")
 	audio.queue_free()
 	await process_frame
-	print("audio runtime verification complete")
+	print("AUDIO RUNTIME VERIFIER: PASS")
 	quit()
 
 func _assert(condition: bool, message: String) -> void:

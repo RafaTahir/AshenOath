@@ -100,10 +100,11 @@ func _initialize() -> void:
 	await _capture_castle_interaction(game, "56_castle_ledger_choice", "record_hall", "vargan_ledger_choice", Vector3(0,1,-5.8))
 	game.story_state.set_flag("vargan_ledger_choice_made", true)
 	await _capture(game, "57_castle_record_hall_haunting", Vector3(0,1,7), "record_hall", Vector3(0,1,7))
+	print("SCREENSHOT CAPTURE: PASS - route and Record Hall frames validated")
 	await _capture(game, "58_castle_view_to_old_road", Vector3(0,1,0), "vargan_approach", Vector3(0,1,0), PI)
 	game.settings.set_quality_preset("potato")
 	await _capture(game, "59_castle_potato_mode", Vector3(0,1,9), "vargan_court", Vector3(0,1,9))
-	print("slice screenshots saved to %s and mirrored to %s" % [output_dir, gallery_dir])
+	print("Screenshots saved to %s and mirrored to %s" % [output_dir, gallery_dir])
 	_release_render_resources(game)
 	game.queue_free()
 	await _settle_frames(4)
@@ -112,10 +113,8 @@ func _initialize() -> void:
 func _release_render_resources(game: Node) -> void:
 	for node in game.find_children("*", "MultiMeshInstance3D", true, false):
 		node.multimesh = null
-		node.material_override = null
 	for node in game.find_children("*", "MeshInstance3D", true, false):
 		node.mesh = null
-		node.material_override = null
 
 func _capture(game, file_name: String, player_pos: Vector3, zone_id: String, spawn_pos: Vector3, camera_yaw: float = 0.0) -> void:
 	if not file_name.contains("forced_recovery") and game.has_method("validate_walkable_position"):

@@ -4,7 +4,7 @@
 
 Ashen Oath is a **pre-alpha prototype**. It is not a commercial Alpha, Early Access build, finished campaign, photoreal game, or AAA production. The approved target is a polished 90-minute Web Act One followed by a 4-6 hour grounded-stylized campaign. See `PRODUCT_SCOPE_LOCK.md` and `ASHEN_OATH_MASTER_STUDIO_REVIEW.md`.
 
-The previous 37.2 FPS measurement is provisional evidence, not a release acceptance result, because Castle and screenshot gates failed in the same build lineage. Production now requires an authoritative machine-readable release report and milestone approval.
+ANIM-001 release acceptance passed the complete functional suite, graphical route and animation captures, Web export, and packed startup. On the Dell 7280/Intel HD 620 ANGLE path, the final native-720p sample measured 37.5 FPS average, 35.6 FPS minimum, and a 129 ms warm transition.
 
 ## ART-001 Update
 
@@ -40,6 +40,14 @@ The previous 37.2 FPS measurement is provisional evidence, not a release accepta
 - `verify_char_001.gd` checks skeletons, active clips, identity materials, distinct palettes, rendered height, animated foot grounding, and forbidden proxy anatomy.
 - Graphical portraits and before/after sheets are stored in `Development_Gallery/screenshots/CHAR_001_*`.
 - Dell 7280 graphical verification measured 37.9 FPS average and 35.1 FPS minimum. A development Web preview passed at the unchanged 63.1 MB total / 26.8 MB PCK. Production remains unchanged until ticket 10.
+
+## ANIM-001 Update
+
+- Major route-visible actors now share a semantic animation contract that resolves imported clip-name differences for locomotion, attacks, reactions, dodge/parry, Oathfire, and death.
+- Walk and run playback cadence follows physical movement speed within bounded ranges, reducing routine-NPC foot sliding without changing controller physics.
+- Kael's drawn and sheathed imported swords use bone sockets with inverse rig-scale spaces. This removes the oversized floating equipment caused by inherited source-rig scale while preserving hand/back motion.
+- The graphical ANIM-001 gate captures idle, walk, attack, and Oathfire poses at 1280x720, rejects blank ANGLE readbacks, and creates a four-frame contact sheet.
+- The current bodies remain intentionally low-poly; ANIM-001 improves motion consistency and equipment attachment, not mesh or facial fidelity.
 
 ## BUILD-RECOVERY-001 Update
 

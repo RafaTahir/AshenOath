@@ -52,5 +52,5 @@ func _finish() -> void:
 	if not failures.is_empty():
 		print("Visual100 verification failed")
 		quit(1); return
-	print("Visual100 replacement verification complete: synthetic markers removed; authored systems present")
+	print("VISUAL100 VERIFIER: PASS - synthetic markers removed; authored systems present")
 	quit()
