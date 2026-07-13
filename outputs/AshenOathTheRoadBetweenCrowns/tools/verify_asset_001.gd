@@ -15,7 +15,7 @@ func _initialize() -> void:
 	var groups := {
 		"characters": ["player_kael", "sister_anwen", "mira_herbalist", "rook_smuggler", "generic_villager_01", "castle_guard", "road_ranger"],
 		"enemies": ["ghoulkin_skeleton", "bog_wretch", "gravebound_knight", "white_hart_avatar", "bandit"],
-		"environment": ["greyfen_house", "tavern", "shrine", "blacksmith_shop", "forest_tree", "forest_rock", "forest_bush", "ruins_pillar", "barrel", "crate", "cart", "fence", "torch"]
+		"environment": ["greyfen_house", "greyfen_door_facade", "greyfen_window_facade", "greyfen_roof", "greyfen_chimney", "tavern", "shrine", "blacksmith_shop", "forest_tree", "forest_rock", "forest_bush", "ruins_pillar", "barrel", "crate", "cart", "fence", "torch"]
 	}
 	for group in groups:
 		for role in groups[group]:

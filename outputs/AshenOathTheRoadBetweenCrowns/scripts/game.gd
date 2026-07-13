@@ -19,13 +19,13 @@ const VisualDirector = preload("res://scripts/visual_director.gd")
 const NpcAmbient = preload("res://scripts/npc_ambient.gd")
 const CharacterPresentation = preload("res://scripts/character_presentation.gd")
 const CombatFeedback = preload("res://scripts/combat_feedback.gd")
-const CemeterySection = preload("res://scripts/zones/cemetery_section.gd")
 const CampaignSection = preload("res://scripts/zones/campaign_section.gd")
 const CharacterAnimationDriver = preload("res://scripts/character_animation_driver.gd")
 const WorldVisualUpgrade = preload("res://scripts/world_visual_upgrade.gd")
 const WorldMaterialLibrary = preload("res://scripts/world_material_library.gd")
 const DayNightController = preload("res://scripts/day_night_controller.gd")
 const RiverSection = preload("res://scripts/zones/river_section.gd")
+const GreyfenSection = preload("res://scripts/zones/greyfen_section.gd")
 const WorldMotionController = preload("res://scripts/world_motion_controller.gd")
 const SurfaceFeedbackManager = preload("res://scripts/surface_feedback_manager.gd")
 const GreyfenLifeController = preload("res://scripts/greyfen_life_controller.gd")
@@ -454,45 +454,7 @@ func _add_visual_100_layer(zone_id: String) -> void:
 
 func _build_greyfen() -> void:
 	seed(41021)
-	_make_split_ground(42.0, 34.0, 4.5, 3.4, Color(0.16, 0.18, 0.13))
-	RiverSection.new().build(zone_root,{"host":self,"center_z":4.5,"width":42.0,"span":3.4})
-	_make_greyfen_terrain_layers()
-	_make_play_area_bounds(42, 34, Color(0.09, 0.12, 0.08))
-	_make_road(Vector3(0, 0.018, 0), Vector3(4.2, 0.04, 30.0), Color(0.16, 0.13, 0.09))
-	_make_road(Vector3(-5, 0.02, 9), Vector3(14.0, 0.04, 3.0), Color(0.15, 0.12, 0.085))
-	_make_greyfen_path_edges()
-	_make_light("Village Warmth", Vector3(-1.5, 5.2, 2), Color(1.0, 0.58, 0.30), 3.0)
-	_make_light("Blue Dusk Fill", Vector3(9, 6, -10), Color(0.34, 0.42, 0.58), 2.8)
-	_make_light("Shrine Beacon", Vector3(4.8, 4.8, -5.4), Color(0.70, 0.86, 0.60), 3.0)
-	_make_light("Wychwood Gate Lantern", Vector3(0, 3.2, -14.3), Color(1.0, 0.48, 0.16), 2.2)
-	_make_fog_sheet(Vector3(0, 1.1, -12), Vector3(18, 1, 5), Color(0.18, 0.22, 0.22, 0.12))
-	_make_tree_wall(20.0, 15.2, 7, true)
-	_make_tree_wall(20.0, -15.2, 7, true)
-	_make_village_house_dressed(Vector3(-5,0,-3), 8.0, "DressedVillageHouse_WestLane")
-	_make_village_house_dressed(Vector3(7,0,1), -18.0, "DressedVillageHouse_EastLane")
-	_make_village_house_dressed(Vector3(-10,0,8), 24.0, "DressedVillageHouse_SpawnFrame")
-	_make_village_house_dressed(Vector3(11.8,0,-7.8), -42.0, "DressedVillageHouse_ShrineFrame")
-	for pos in [Vector3(-5.3, 0, 3.4), Vector3(4.8, 0, -5.3), Vector3(-9.3, 0, 11.2)]:
-		_make_torch(pos)
-	for x in [-17, -13, -9, -5, 5, 9, 13, 17]:
-		_make_fence(Vector3(x, 0.35, 14), false)
-		_make_fence(Vector3(x, 0.35, -14), false)
-	for z in [-10, -6, -2, 2, 6, 10]:
-		_make_fence(Vector3(-19, 0.35, z), true)
-		_make_fence(Vector3(19, 0.35, z), true)
-	_make_notice_board(Vector3(-2.0, 0, 9.4))
-	_make_shrine_scene(Vector3(6.0, 0, -7.0))
-	_make_blacksmith_scene(Vector3(10.5, 0, -1.2))
-	CemeterySection.new().build(zone_root, {
-		"host": self,
-		"origin": Vector3(14, 0, 8.6),
-	})
-	_make_cart(Vector3(-6.2, 0, 9.0))
-	_make_village_dressing()
-	_make_greyfen_first_impression_dressing()
-	_make_quality_greyfen_overhaul()
-	_make_spawn_composition()
-	_make_tree_cluster([Vector3(-16,0,-12), Vector3(-14,0,12), Vector3(16,0,-11), Vector3(15,0,13), Vector3(0,0,15)])
+	GreyfenSection.new().build(self)
 	_make_named_interactable("notice_board", "dialogue", "Read notice board", Vector3(-2, 0, 9.4), Color(0.48, 0.28, 0.12), Vector3(0.45, 0.45, 0.45))
 	_make_named_interactable("sister_anwen", "dialogue", "Talk to Sister Anwen", Vector3(3.2, 0, -5.0), Color(0.34, 0.35, 0.48))
 	_make_named_interactable("mira", "dialogue", "Talk to Mira Fen", Vector3(-6.8, 0, -2.3), Color(0.22, 0.48, 0.32), Vector3(0.62, 0.62, 0.62))
@@ -1508,25 +1470,38 @@ func _make_balanced_road_surface(paved: bool) -> void:
 	var batch = MultiMeshInstance3D.new()
 	batch.name = "BalancedPavedRoadDetail" if paved else "BalancedWychwoodRoadDetail"
 	var detail_mesh = BoxMesh.new()
-	detail_mesh.size = Vector3(0.72, 0.018, 0.62) if paved else Vector3(1.2, 0.012, 0.48)
+	detail_mesh.size = Vector3(0.70, 0.040, 0.53) if paved else Vector3(1.2, 0.012, 0.48)
 	var multimesh = MultiMesh.new()
 	multimesh.transform_format = MultiMesh.TRANSFORM_3D
+	multimesh.use_colors = paved
 	multimesh.mesh = detail_mesh
-	var rows = 18 if paved else 12
-	var columns = 3 if paved else 1
+	var rows = 43 if paved else 12
+	var columns = 5 if paved else 1
 	multimesh.instance_count = rows * columns
 	var index = 0
 	for row in range(rows):
 		for column in range(columns):
-			var x = (float(column) - 1.0) * 0.88 if paved else sin(float(row) * 1.7) * 0.55
-			var z = -12.6 + float(row) * (1.48 if paved else 2.05)
-			var yaw = 0.0 if paved else sin(float(row) * 0.8) * 0.16
-			multimesh.set_instance_transform(index, Transform3D(Basis(Vector3.UP, yaw), Vector3(x, 0.059, z)))
+			var row_offset := 0.09 if paved and row % 2 == 1 else 0.0
+			var x = (float(column) - 2.0) * 0.73 + row_offset if paved else sin(float(row) * 1.7) * 0.55
+			var z = -13.0 + float(row) * (0.63 if paved else 2.05)
+			var yaw = sin(float(row * 7 + column * 3)) * 0.035 if paved else sin(float(row) * 0.8) * 0.16
+			var basis := Basis(Vector3.UP, yaw)
+			if paved:
+				basis = basis.scaled(Vector3(0.94 + float((row + column) % 3) * 0.025, 1.0, 0.94 + float((row * 2 + column) % 3) * 0.025))
+			multimesh.set_instance_transform(index, Transform3D(basis, Vector3(x, 0.064, z)))
+			if paved:
+				var shade := 0.82 + float((row + column * 2) % 4) * 0.045
+				multimesh.set_instance_color(index, Color(shade, shade * 0.94, shade * 0.84, 1.0))
 			index += 1
 	batch.multimesh = multimesh
-	var material = StandardMaterial3D.new()
-	material.albedo_color = Color(0.17, 0.155, 0.13) if paved else Color(0.025, 0.034, 0.030)
-	material.roughness = 0.72 if paved else 0.32
+	var material: StandardMaterial3D
+	if paved:
+		material = world_materials.get_material("cobblestone", str(settings.settings.get("quality_preset", "balanced")), Color(0.72, 0.69, 0.62), 0.16, false).duplicate()
+		material.vertex_color_use_as_albedo = true
+	else:
+		material = StandardMaterial3D.new()
+		material.albedo_color = Color(0.025, 0.034, 0.030)
+		material.roughness = 0.32
 	batch.material_override = material
 	zone_root.add_child(batch)
 
@@ -1948,13 +1923,19 @@ func _make_village_house_dressed(pos: Vector3, yaw: float, node_name: String) ->
 	zone_root.add_child(root)
 	_make_house_collision(root)
 	var facade_variant: int = absi(node_name.hash()) % 3
+	var plaster_colors := [Color(0.32, 0.245, 0.17), Color(0.29, 0.265, 0.205), Color(0.33, 0.225, 0.16)]
+	var timber_colors := [Color(0.105, 0.055, 0.028), Color(0.085, 0.050, 0.032), Color(0.12, 0.062, 0.026)]
+	var plaster: Color = plaster_colors[facade_variant]
+	var timber: Color = timber_colors[facade_variant]
 	_add_house_box(root, "StoneFoundation", Vector3(0, 0.18, 0), Vector3(4.55, 0.36, 3.55), Color(0.28, 0.27, 0.24))
-	_add_house_box(root, "PlasteredWall", Vector3(0, 1.05, 0), Vector3(4.3, 2.1, 3.35), Color(0.30, 0.22, 0.15))
-	_add_house_box(root, "LeftRoofSlope", Vector3(-0.9, 2.42, 0), Vector3(2.55, 0.42, 3.95), Color(0.14, 0.055, 0.035), Vector3(0, 0, -13))
-	_add_house_box(root, "RightRoofSlope", Vector3(0.9, 2.42, 0), Vector3(2.55, 0.42, 3.95), Color(0.14, 0.055, 0.035), Vector3(0, 0, 13))
-	_add_house_box(root, "RoofRidge", Vector3(0, 2.72, 0), Vector3(0.28, 0.18, 4.05), Color(0.075, 0.035, 0.025))
-	_add_house_box(root, "LeftEave", Vector3(-2.05, 2.18, 0), Vector3(0.14, 0.16, 4.05), Color(0.08, 0.045, 0.025))
-	_add_house_box(root, "RightEave", Vector3(2.05, 2.18, 0), Vector3(0.14, 0.16, 4.05), Color(0.08, 0.045, 0.025))
+	_add_house_box(root, "PlasteredWall", Vector3(0, 1.05, 0), Vector3(4.3, 2.1, 3.35), plaster)
+	_add_house_gables(root, plaster, timber)
+	if _performance_mode():
+		_add_house_box(root, "LeftRoofSlope", Vector3(-0.9, 2.42, 0), Vector3(2.55, 0.42, 3.95), Color(0.14, 0.055, 0.035), Vector3(0, 0, -13))
+		_add_house_box(root, "RightRoofSlope", Vector3(0.9, 2.42, 0), Vector3(2.55, 0.42, 3.95), Color(0.14, 0.055, 0.035), Vector3(0, 0, 13))
+	else:
+		# OBJ roof pieces normalize by their broad source bounds; uniform scale keeps the eaves near the 4.5 m shell.
+		_add_house_module(root, "greyfen_roof", Vector3(0.55, 0.55, 0.55), Vector3(0, 2.02, 0), 0.0, "ModularTileRoof")
 	var chimney_x: float = -1.38 if facade_variant == 0 else 1.38
 	_add_house_box(root, "StoneChimney", Vector3(chimney_x, 2.63, 0.62), Vector3(0.48, 1.38, 0.48), Color(0.23, 0.22, 0.20))
 	_add_house_box(root, "ChimneyCap", Vector3(chimney_x, 3.31, 0.62), Vector3(0.62, 0.14, 0.62), Color(0.19, 0.18, 0.17))
@@ -1962,19 +1943,28 @@ func _make_village_house_dressed(pos: Vector3, yaw: float, node_name: String) ->
 	_add_house_box(root, "DoorStep", Vector3(0, 0.12, -1.98), Vector3(1.02, 0.22, 0.48), Color(0.28, 0.27, 0.24))
 	_add_house_box(root, "TimberLintel", Vector3(0, 1.53, -1.78), Vector3(1.05, 0.14, 0.12), Color(0.11, 0.065, 0.035))
 	for x in [-1.42, 1.42]:
-		_add_house_box(root, "FrontTimber", Vector3(x, 1.12, -1.78), Vector3(0.13, 1.85, 0.12), Color(0.10, 0.060, 0.035))
+		_add_house_box(root, "FrontTimber", Vector3(x, 1.12, -1.78), Vector3(0.13, 1.85, 0.12), timber)
 		var window_x: float = x * 0.62
 		_add_house_box(root, "LitWindow", Vector3(window_x, 1.42, -1.80), Vector3(0.52, 0.38, 0.045), Color(0.95, 0.52, 0.18))
 		_add_house_box(root, "WindowShutter", Vector3(window_x - 0.37, 1.42, -1.84), Vector3(0.16, 0.48, 0.055), Color(0.12, 0.07, 0.035))
 		_add_house_box(root, "WindowShutter", Vector3(window_x + 0.37, 1.42, -1.84), Vector3(0.16, 0.48, 0.055), Color(0.12, 0.07, 0.035))
+		_add_house_box(root, "RearTimber", Vector3(x, 1.12, 1.78), Vector3(0.13, 1.85, 0.12), timber)
+		_add_house_box(root, "RearLitWindow", Vector3(window_x, 1.42, 1.80), Vector3(0.52, 0.38, 0.045), Color(0.88, 0.46, 0.15))
+		_add_house_box(root, "RearWindowShutter", Vector3(window_x - 0.37, 1.42, 1.84), Vector3(0.16, 0.48, 0.055), timber)
+		_add_house_box(root, "RearWindowShutter", Vector3(window_x + 0.37, 1.42, 1.84), Vector3(0.16, 0.48, 0.055), timber)
 	_add_house_box(root, "SideTimberLeft", Vector3(-2.18, 1.18, 0), Vector3(0.12, 1.75, 2.45), Color(0.11, 0.065, 0.035))
 	_add_house_box(root, "SideTimberRight", Vector3(2.18, 1.18, 0), Vector3(0.12, 1.75, 2.45), Color(0.11, 0.065, 0.035))
 	for side in [-1.0, 1.0]:
 		_add_house_box(root, "SideBeltTimber", Vector3(2.19 * side, 1.12, 0), Vector3(0.13, 0.12, 2.70), Color(0.10, 0.057, 0.03))
 		_add_house_box(root, "SideWindow", Vector3(2.20 * side, 1.42, 0.35), Vector3(0.055, 0.42, 0.58), Color(0.88, 0.48, 0.16))
 	_add_house_box(root, "WeatheredBaseCourse", Vector3(0, 0.42, -1.73), Vector3(4.22, 0.26, 0.08), Color(0.18, 0.18, 0.15))
+	_add_house_box(root, "RearWeatheredBaseCourse", Vector3(0, 0.42, 1.73), Vector3(4.22, 0.26, 0.08), Color(0.16, 0.17, 0.14))
 	_add_house_box(root, "FrontCrossBrace", Vector3(-1.43, 1.16, -1.85), Vector3(0.11, 1.42, 0.10), Color(0.10, 0.055, 0.03), Vector3(0, 0, -36))
 	_add_house_box(root, "FrontCrossBrace", Vector3(1.43, 1.16, -1.85), Vector3(0.11, 1.42, 0.10), Color(0.10, 0.055, 0.03), Vector3(0, 0, 36))
+	if not _performance_mode():
+		_add_house_module(root, "greyfen_door_facade", Vector3(0.90, 0.90, 0.90), Vector3(-0.98, 0.02, -1.82), 0.0, "ModularDoorFacade")
+		_add_house_module(root, "greyfen_window_facade", Vector3(0.90, 0.90, 0.90), Vector3(1.04, 0.02, -1.82), 0.0, "ModularWindowFacade")
+		_add_house_module(root, "greyfen_chimney", Vector3(0.48, 0.58, 0.48), Vector3(chimney_x, 2.20, 0.62), 0.0, "ModularChimney")
 	if facade_variant == 0:
 		_add_house_box(root, "PorchCanopy", Vector3(0, 1.68, -2.05), Vector3(1.65, 0.14, 0.72), Color(0.12, 0.065, 0.032), Vector3(-8, 0, 0))
 		for x in [-0.72, 0.72]:
@@ -1985,6 +1975,45 @@ func _make_village_house_dressed(pos: Vector3, yaw: float, node_name: String) ->
 	else:
 		_add_house_box(root, "SideLeanToRoof", Vector3(-2.48, 1.34, 0.46), Vector3(1.04, 0.16, 2.20), Color(0.13, 0.06, 0.035), Vector3(0, 0, -12))
 		_add_house_box(root, "SideLeanToPost", Vector3(-2.82, 0.62, -0.36), Vector3(0.12, 1.22, 0.12), Color(0.09, 0.05, 0.025))
+
+func _add_house_module(parent: Node3D, role_name: String, scale_value: Vector3, local_pos: Vector3, yaw: float, node_name: String) -> Node3D:
+	var module := _make_role_visual(role_name, "environment", scale_value)
+	if module == null:
+		return null
+	module.name = node_name
+	module.position = local_pos
+	module.rotation_degrees.y = yaw
+	module.set_meta("world_001_module", true)
+	parent.add_child(module)
+	return module
+
+func _add_house_gables(parent: Node3D, plaster: Color, timber: Color) -> void:
+	var vertices := PackedVector3Array([
+		Vector3(-2.08, 2.08, -1.69), Vector3(2.08, 2.08, -1.69), Vector3(0.0, 3.18, -1.69),
+		Vector3(2.08, 2.08, 1.69), Vector3(-2.08, 2.08, 1.69), Vector3(0.0, 3.18, 1.69),
+	])
+	var normals := PackedVector3Array([
+		Vector3.BACK, Vector3.BACK, Vector3.BACK,
+		Vector3.FORWARD, Vector3.FORWARD, Vector3.FORWARD,
+	])
+	var uvs := PackedVector2Array([
+		Vector2(0, 1), Vector2(1, 1), Vector2(0.5, 0),
+		Vector2(0, 1), Vector2(1, 1), Vector2(0.5, 0),
+	])
+	var arrays: Array = []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = vertices
+	arrays[Mesh.ARRAY_NORMAL] = normals
+	arrays[Mesh.ARRAY_TEX_UV] = uvs
+	var gable_mesh := ArrayMesh.new()
+	gable_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	var gables := MeshInstance3D.new()
+	gables.name = "PlasteredGableWalls"
+	gables.mesh = gable_mesh
+	gables.material_override = world_materials.get_material("plaster", str(settings.settings.get("quality_preset", "balanced")), plaster.lightened(0.48), 0.0, false)
+	parent.add_child(gables)
+	for z in [-1.72, 1.72]:
+		_add_house_box(parent, "GableKingPost", Vector3(0, 2.57, z), Vector3(0.13, 1.14, 0.10), timber)
 
 func _add_house_box(parent: Node3D, node_name: String, local_pos: Vector3, size: Vector3, color: Color, local_rot: Vector3 = Vector3.ZERO) -> MeshInstance3D:
 	var mesh_instance = MeshInstance3D.new()

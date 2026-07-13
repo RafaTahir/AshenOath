@@ -26,7 +26,8 @@ EXPECTED_ROLES = {
         "wychwood_stalker", "white_hart_avatar", "bandit",
     },
     "environment": {
-        "greyfen_house", "tavern", "shrine", "blacksmith_shop",
+        "greyfen_house", "greyfen_door_facade", "greyfen_window_facade",
+        "greyfen_roof", "greyfen_chimney", "tavern", "shrine", "blacksmith_shop",
         "cemetery_gravestone", "forest_tree", "forest_rock", "forest_bush",
         "ruins_wall", "ruins_pillar", "barrel", "crate", "cart", "fence", "torch",
     },

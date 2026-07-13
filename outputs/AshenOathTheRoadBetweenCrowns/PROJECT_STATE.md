@@ -6,6 +6,14 @@ Ashen Oath is a **pre-alpha prototype**. It is not a commercial Alpha, Early Acc
 
 ANIM-001 release acceptance passed the complete functional suite, graphical route and animation captures, Web export, and packed startup. On the Dell 7280/Intel HD 620 ANGLE path, the final native-720p sample measured 37.5 FPS average, 35.6 FPS minimum, and a 129 ms warm transition.
 
+## WORLD-001 Update
+
+- Greyfen environment construction is owned by `scripts/zones/greyfen_section.gd`; quests, managers, transitions, and interactions remain under `game.gd`.
+- Four opening-route houses use grounded modular tile roofs, closed plaster gables, deterministic wall/timber palettes, rear-facing windows, facade modules, and chimneys from the curated CC0 village library.
+- The main road uses one 215-instance textured staggered paving batch instead of sparse checkerboard slabs. Selected full-tree meshes strengthen the boundary silhouette while navigation corridors remain reserved.
+- `verify_world_001.gd` enforces structure ownership, modules, paving density, route clearance, retained landmarks, and per-zone budgets. `capture_world_001.gd` produces four mandatory native-720p gallery views.
+- The visual target remains grounded low-poly dark fantasy. Current assets still do not support a photoreal or AAA claim.
+
 ## ART-001 Update
 
 - The grounded-stylized visual bible and identical-camera asset audition are complete.
