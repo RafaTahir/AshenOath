@@ -2308,7 +2308,7 @@ func _make_village_place(id: String, type: String, prompt: String, pos: Vector3,
 func _configure_npc_animation(mapped: Node3D, id: String) -> void:
 	var clips := {"idle": "Idle", "walk": "Walk", "run": "Run", "hit": "RecieveHit", "death": "Death"}
 	if id == "sister_anwen":
-		clips["idle"] = "Idle_Weapon"
+		clips["idle"] = "Idle"
 	elif id == "rook":
 		clips["idle"] = "Attacking_Idle"
 		clips["hit"] = "RecieveHit_2"

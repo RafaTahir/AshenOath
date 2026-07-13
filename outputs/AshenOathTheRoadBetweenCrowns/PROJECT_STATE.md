@@ -31,6 +31,16 @@ The previous 37.2 FPS measurement is provisional evidence, not a release accepta
 - Cached route zones retain their navigation region. The Dell 7280 graphical gate measured 38.2 FPS average, 36.7 FPS minimum, and a 246 ms warm transition.
 - A development Web preview passed startup at the unchanged 63.1 MB total / 26.8 MB PCK. Production remains unchanged until ticket 10.
 
+## CHAR-001 Update
+
+- Kael, Sister Anwen, retained villagers, and the Wychwood pack now receive mesh-native deterministic identity palettes instead of skeletal-body-wide tints or detached face/proxy geometry.
+- Kael uses dark hunter cloth, leather, linen, brass, and weathered skin; Anwen uses an older complexion, grey hair, midnight clerical cloth, ivory, and antique gold. Villager palettes vary deterministically by role.
+- Anwen's invalid `Idle_Weapon` mapping was replaced with the imported body's real `Idle` clip.
+- The skeletal Ghoulkin body is grounded to its animated leg endpoints and Wychwood variants receive distinct connected-body proportions.
+- `verify_char_001.gd` checks skeletons, active clips, identity materials, distinct palettes, rendered height, animated foot grounding, and forbidden proxy anatomy.
+- Graphical portraits and before/after sheets are stored in `Development_Gallery/screenshots/CHAR_001_*`.
+- Dell 7280 graphical verification measured 37.9 FPS average and 35.1 FPS minimum. A development Web preview passed at the unchanged 63.1 MB total / 26.8 MB PCK. Production remains unchanged until ticket 10.
+
 ## BUILD-RECOVERY-001 Update
 
 - Release verification is centralized in `tools/run_release_gate.ps1`; graphical 720p and fresh screenshot gates may not be skipped.
@@ -539,7 +549,7 @@ The raw/download folders should not be treated as polished runtime content.
 - Parses OBJ meshes when needed.
 - Normalizes imported scene bounds.
 - Applies rough fallback category materials.
-- Adds runtime wrappers to character bases: cloak, face markers, hair/hood, belt, shoulder overlays, staff/dagger.
+- Applies mesh-native identity materials to valid skeletal bodies and removes forbidden proxy anatomy.
 - Creates primitive placeholders if mapped assets are missing.
 
 ## Current Visual Asset Status
@@ -548,11 +558,11 @@ Major current human roles use low-poly Poly Pizza / Quaternius CC0 GLB bases:
 
 | Role | Current Source | Status |
 | --- | --- | --- |
-| `player_human` | Adventurer GLB | Temporary stylized base with runtime wrapper |
-| `sister_anwen_human` | Animated Woman GLB | Temporary stylized base with hood/staff/priestess styling |
-| `mira_human` | Woman Casual GLB | Temporary stylized base with herbalist styling |
-| `rook_human` | Hooded Adventurer GLB | Temporary stylized base with rogue/dagger styling |
-| `villager_human` | Animated Human GLB | Temporary generic human base |
+| `player_human` | Adventurer GLB | Temporary stylized base with mesh-native Kael palette |
+| `sister_anwen_human` | Animated Woman GLB | Temporary stylized base with distinct Anwen palette |
+| `mira_human` | Woman Casual GLB | Temporary stylized base with deterministic role palette |
+| `rook_human` | Hooded Adventurer GLB | Temporary stylized base with deterministic role palette |
+| `villager_human` | Animated Human GLB | Temporary base with deterministic crowd variation |
 
 These are legal and browser-friendly, but they are not high-fidelity human characters. They do not have AAA faces, facial expressions, bespoke clothing rigs, or final animation retargeting.
 
@@ -622,6 +632,7 @@ Known verifier note: Godot headless may emit ObjectDB cleanup warnings after pas
 - Gameplay renders at native 1280x720 and 1.0 3D scale. This avoids a severe Intel HD 620/ANGLE slowdown caused by Godot's fractional viewport scaler; browser UI remains responsive to the host canvas.
 - Outdoor day/night presentation includes readable cool-toned moonlight, procedural batched stars, visible sun and moon bodies, soft celestial halos, and quality-tier drifting cloud volumes.
 - Human models are skeletal, textured, lit, and animated but still lack realistic faces, hands, hair, facial rigs, and bespoke clothing.
+- CHAR-001 improves immediate identity and removes proxy anatomy, but the underlying Poly Pizza humans and skeletal Ghoulkin remain low-poly temporary assets rather than final character art.
 - Main-route character and Wychwood enemy skeletons animate; broader animation retargeting and facial performance remain incomplete.
 - Major areas beyond the first route are partial, blocked, or data-only.
 - Castle Vargan is playable and verified, but its architecture remains visibly blockout-grade.

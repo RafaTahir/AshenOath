@@ -434,6 +434,14 @@ func _try_build_mapped_body() -> bool:
 		return false
 	mapped.name = "%s_visual" % enemy_id
 	asset_helper.apply_normalized_scale(mapped, _mapped_enemy_scale().y)
+	if _is_wychwood_pack():
+		var profile_scale: Vector3 = {
+			"ghoulkin": Vector3(0.82, 1.0, 0.86),
+			"wychwood_stalker": Vector3(0.70, 1.0, 0.78),
+			"wychwood_raider": Vector3(0.90, 1.0, 0.88),
+			"wychwood_brute": Vector3(1.12, 1.0, 1.04)
+		}.get(enemy_id, Vector3.ONE)
+		mapped.scale *= profile_scale
 	if enemy_id == "white_hart_avatar":
 		var material = StandardMaterial3D.new()
 		material.albedo_color = Color(0.86, 0.83, 0.70)
@@ -444,6 +452,10 @@ func _try_build_mapped_body() -> bool:
 	elif _is_wychwood_pack():
 		_apply_material(mapped, _horror_material())
 	visual_root.add_child(mapped)
+	_ground_mapped_visual(mapped)
+	if visual_source == "ghoulkin_skeleton":
+		# This source rig's terminal leg bones sit above its mesh bind bounds.
+		mapped.position.y -= 0.50
 	body_visual = _find_first_mesh(mapped)
 	base_body_scale = mapped.scale
 	animation_driver = CharacterAnimationDriver.new()
@@ -469,6 +481,19 @@ func _try_build_mapped_body() -> bool:
 			"attack": "Punch", "hit": "HitReact", "death": "Death"
 		})
 	return true
+
+func _ground_mapped_visual(mapped: Node3D) -> void:
+	var bounds := AABB()
+	var initialized := false
+	for mesh in mapped.find_children("*", "MeshInstance3D", true, false):
+		if mesh.mesh == null or mesh.skin == null:
+			continue
+		var relative: Transform3D = visual_root.global_transform.affine_inverse() * mesh.global_transform
+		var mesh_bounds: AABB = relative * mesh.mesh.get_aabb()
+		bounds = bounds.merge(mesh_bounds) if initialized else mesh_bounds
+		initialized = true
+	if initialized:
+		mapped.position.y -= bounds.position.y
 
 func _horror_material() -> StandardMaterial3D:
 	var material := StandardMaterial3D.new()

@@ -1,6 +1,7 @@
 extends RefCounted
 
 const CharacterVisualContract = preload("res://scripts/character_visual_contract.gd")
+const CharacterIdentityProfile = preload("res://scripts/character_identity_profile.gd")
 
 static func apply_player(owner: Node3D, visual_root: Node3D) -> void:
 	if owner == null or visual_root == null:
@@ -11,7 +12,7 @@ static func apply_player(owner: Node3D, visual_root: Node3D) -> void:
 	_add_contact_shadow(owner, Vector3(0.92, 0.018, 0.62), 0.0)
 	if _has_skeleton(visual_root):
 		CharacterVisualContract.remove_proxy_anatomy(visual_root)
-		_tint_skeletal_materials(visual_root, Color(0.90, 0.92, 0.88))
+		CharacterIdentityProfile.apply(visual_root, "player_kael")
 		return
 	var quality = _quality_details_enabled(owner)
 	_add_cloak_panel(visual_root, "PlayerCloakSilhouette", Vector3(-0.16, 0.96, 0.31), Vector3(0.24, 0.88, 0.080), Color(0.050, 0.058, 0.052), -8.0)
@@ -41,12 +42,7 @@ static func apply_npc(owner: Node3D, role_id: String) -> void:
 	var role = role_id.to_lower()
 	if _has_skeleton(owner):
 		CharacterVisualContract.remove_proxy_anatomy(owner)
-		var tint := Color(0.92, 0.88, 0.82)
-		if role == "sister_anwen": tint = Color(0.88, 0.90, 0.98)
-		elif role == "mira": tint = Color(0.86, 0.96, 0.88)
-		elif role == "rook": tint = Color(0.78, 0.80, 0.82)
-		elif role.contains("blacksmith"): tint = Color(0.90, 0.82, 0.74)
-		_tint_skeletal_materials(owner, tint)
+		CharacterIdentityProfile.apply(owner, role)
 		return
 	if role == "sister_anwen":
 		_add_cloak_panel(owner, "SisterAnwenRobeFall", Vector3(-0.14, 0.88, 0.20), Vector3(0.22, 0.92, 0.075), Color(0.12, 0.14, 0.22), -4.0)
@@ -86,7 +82,8 @@ static func apply_enemy(owner: Node3D, scale_value: Vector3 = Vector3(0.78, 0.01
 	_add_contact_shadow(owner, scale_value, 0.0)
 	if _has_skeleton(owner):
 		CharacterVisualContract.remove_proxy_anatomy(owner)
-		_tint_skeletal_materials(owner, Color(0.54, 0.57, 0.49))
+		var enemy_role = str(owner.get("enemy_id")) if owner.get("enemy_id") != null else "ghoulkin"
+		CharacterIdentityProfile.apply(owner, enemy_role)
 		return
 	var enemy_id = str(owner.get("enemy_id")) if owner.get("enemy_id") != null else ""
 	if enemy_id == "ghoulkin":
