@@ -67,6 +67,12 @@ func _process(delta: float) -> void:
 	var shoulder = -0.55 if combat_focus != null else -0.82
 	var look_ahead = 2.35 if combat_focus != null else 3.45
 	var target_fov = 65.0 if combat_focus != null else 63.0
+	if current_zone_id == "wychwood":
+		if target.global_position.z > 4.5:
+			target_distance = minf(target_distance, 3.2)
+		elif combat_focus != null:
+			target_distance = minf(target_distance, 5.4)
+			shoulder = -0.48
 	if sprinting:
 		target_fov = max(target_fov, 66.5)
 	var target_pos = target.global_position + Vector3(0, target_height, 0)

@@ -130,16 +130,18 @@ func _update_sky_cycle(daylight: float, twilight: float, night: float, minutes: 
 	star_field.visible = night > 0.22 and not moon_direction.y < -0.05
 	_set_mesh_alpha(star_field, clampf((night - 0.10) / 0.70, 0.0, 0.92))
 	var quality := _quality_preset()
-	star_field.multimesh.visible_instance_count = 28 if quality == "potato" else (96 if quality == "quality" else 62)
+	if star_field != null and star_field.multimesh != null:
+		star_field.multimesh.visible_instance_count = 28 if quality == "potato" else (96 if quality == "quality" else 62)
 	var cloud_count := 2 if quality == "potato" else (7 if quality == "quality" else 4)
-	cloud_layer.visible = true
+	# Dense Wychwood canopy owns the upper frame; large billboard cards can cross the third-person camera there.
+	cloud_layer.visible = current_zone != "wychwood"
 	var cloud_alpha := clampf(daylight*0.78+twilight*0.68+night*0.28,0.18,0.82)
 	var cloud_color := Color(0.92,0.94,0.96) if daylight > twilight else Color(0.82,0.46,0.30)
 	if night > 0.55:
 		cloud_color = Color(0.18,0.23,0.34)
 	for i in range(cloud_layer.get_child_count()):
 		var cloud := cloud_layer.get_child(i) as Node3D
-		cloud.visible = i < cloud_count
+		cloud.visible = current_zone != "wychwood" and i < cloud_count
 		var base_position: Vector3 = cloud.get_meta("base_position", cloud.position)
 		var cloud_drift := 0.0 if _reduced_motion() else fmod(minutes * (0.018 + i * 0.002), 28.0) - 14.0
 		cloud.position = base_position + Vector3(cloud_drift, 0, 0)
@@ -266,8 +268,8 @@ func _position_sky_layer(zone_id: String) -> void:
 		origin = Vector3(0, -10, 0)
 		sun_disc.position = Vector3(-95, 58, -120)
 		sun_disc.rotation_degrees = Vector3(64, -38, 0)
-		cloud_layer.position = Vector3(0, 0, 8)
-		cloud_layer.visible = true
+		cloud_layer.position = Vector3(0, -500, 8) if zone_id == "wychwood" else Vector3(0, 0, 8)
+		cloud_layer.visible = zone_id != "wychwood"
 	elif zone_id in ["ruins","old_mill","bandit_road","vargan_approach","vargan_court","record_hall","undercroft","assembly"]:
 		origin = Vector3(0, -12, 0)
 		sun_disc.position = Vector3(110, 70, -95)
@@ -318,8 +320,10 @@ func _set_mesh_alpha(node: GeometryInstance3D, alpha: float) -> void:
 	if node == null:
 		return
 	var material := node.material_override as StandardMaterial3D
-	if material == null and node is MultiMeshInstance3D and (node as MultiMeshInstance3D).multimesh.mesh != null:
-		material = (node as MultiMeshInstance3D).multimesh.mesh.material as StandardMaterial3D
+	if material == null and node is MultiMeshInstance3D:
+		var multimesh := (node as MultiMeshInstance3D).multimesh
+		if multimesh != null and multimesh.mesh != null:
+			material = multimesh.mesh.material as StandardMaterial3D
 	if material != null:
 		material.albedo_color.a = alpha
 

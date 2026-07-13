@@ -33,6 +33,7 @@ ANIM-001 release acceptance passed the complete functional suite, graphical rout
 ## NAV-001 Update
 
 - Greyfen and Wychwood now build deterministic authored `NavigationRegion3D` polygons without runtime baking.
+- WORLD-002 moves Wychwood environment construction into `scripts/zones/wychwood_section.gd`, with an authored gate threshold, river crossing, investigation route, forest frame, and bounded combat clearing.
 - `ZoneSpatialService` owns bridge anchors, gate corridors, exclusions, complete-segment validation, bank identity, occupancy checks, route construction, and same-bank recovery.
 - All seven retained Greyfen routine actors use `NavigationAgent3D`; cross-bank routes are forced through the bridge and invalid routes stop safely.
 - All five Wychwood encounter enemies use navigation-aware pursuit and flanking while preserving leash, staging, attack timing, and combat balance.

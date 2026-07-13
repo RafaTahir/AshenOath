@@ -24,8 +24,8 @@ const CharacterAnimationDriver = preload("res://scripts/character_animation_driv
 const WorldVisualUpgrade = preload("res://scripts/world_visual_upgrade.gd")
 const WorldMaterialLibrary = preload("res://scripts/world_material_library.gd")
 const DayNightController = preload("res://scripts/day_night_controller.gd")
-const RiverSection = preload("res://scripts/zones/river_section.gd")
 const GreyfenSection = preload("res://scripts/zones/greyfen_section.gd")
+const WychwoodSection = preload("res://scripts/zones/wychwood_section.gd")
 const WorldMotionController = preload("res://scripts/world_motion_controller.gd")
 const SurfaceFeedbackManager = preload("res://scripts/surface_feedback_manager.gd")
 const GreyfenLifeController = preload("res://scripts/greyfen_life_controller.gd")
@@ -494,36 +494,7 @@ func _build_greyfen() -> void:
 
 func _build_wychwood() -> void:
 	seed(78233)
-	_make_split_ground(44.0, 34.0, 0.0, 3.4, Color(0.065, 0.105, 0.07))
-	RiverSection.new().build(zone_root,{"host":self,"center_z":0.0,"width":44.0,"span":3.4})
-	_make_wychwood_terrain_layers()
-	_make_play_area_bounds(44, 34, Color(0.04, 0.075, 0.045))
-	_make_road(Vector3(0, 0.018, 3), Vector3(4.0, 0.04, 27.0), Color(0.065, 0.075, 0.052))
-	_make_road(Vector3(6, 0.019, -8), Vector3(10.0, 0.04, 3.0), Color(0.055, 0.065, 0.05))
-	_make_wychwood_path_edges()
-	_make_light("Moon Shaft", Vector3(0, 6.6, -7), Color(0.48, 0.58, 0.78), 4.2)
-	_make_light("Sick Green Bounce", Vector3(9, 3.2, -9), Color(0.25, 0.42, 0.28), 1.7)
-	_make_light("Trail Threat", Vector3(0, 2.4, -2.8), Color(0.42, 0.68, 0.62), 1.4)
-	_make_fog_sheet(Vector3(0, 1.0, -6), Vector3(24, 1, 8), Color(0.24, 0.30, 0.28, 0.20))
-	_make_fog_sheet(Vector3(-10, 0.8, 5), Vector3(14, 1, 5), Color(0.16, 0.24, 0.18, 0.16))
-	_make_tree_wall(21.0, 15.2, 9, true)
-	_make_tree_wall(21.0, -15.2, 9, true)
-	_make_tree_wall(16.0, -20.0, 7, false)
-	_make_tree_wall(16.0, 20.0, 7, false)
-	_make_tree_cluster([
-		Vector3(-18,0,-12), Vector3(-15,0,-6), Vector3(-16,0,7), Vector3(-13,0,13),
-		Vector3(16,0,-12), Vector3(18,0,-5), Vector3(17,0,5), Vector3(14,0,13),
-		Vector3(-8,0,-14), Vector3(8,0,14), Vector3(-4,0,15), Vector3(5,0,-15)
-	])
-	for pos in [Vector3(-8,0,-3), Vector3(6.7,0,-9.2), Vector3(9.8,0,-12.0), Vector3(-5,0,9.8)]:
-		_make_deadfall(pos)
-	_make_wychwood_route_dressing()
-	_make_wychwood_corridor()
-	_make_quality_wychwood_overhaul()
-	for pos in [Vector3(6.8,0,-10.2), Vector3(8.5,0,-11.6), Vector3(10.0,0,-9.8), Vector3(8.5,0,-8.1)]:
-		_make_ritual_stone(pos)
-	_make_monster_clearing(Vector3(0, 0, -6.5))
-	_make_wychwood_road_of_crows_story_beats()
+	WychwoodSection.new().build(self)
 	_make_zone_gate("Back to Greyfen", Vector3(0, 0, 15), "greyfen", Vector3(0, 1, -13))
 	_make_clue("corpse", "Inspect blood-dark corpse", Vector3(-2, 0, 7.4), "main_road_of_crows", "bram", Color(0.32, 0.18, 0.16))
 	_make_clue("claw_marks", "Read strange claw marks", Vector3(2.5, 0, 4.8), "main_road_of_crows", "vargan_wire", Color(0.18, 0.18, 0.18))
