@@ -1,0 +1,44 @@
+﻿{
+    "schema_version":  1,
+    "status":  "partial-pass",
+    "started_at":  "2026-07-13T15:56:34.6813145Z",
+    "finished_at":  "2026-07-13T15:56:45.8764625Z",
+    "source_commit":  "123d9ec1ad73955fbcf91a1b25e8d0a468546f3c",
+    "mode":  "targeted",
+    "requested_gate":  "verify_story_campaign",
+    "project":  "outputs/AshenOathTheRoadBetweenCrowns",
+    "failure":  "",
+    "results":  [
+                    {
+                        "name":  "verify_content_integrity",
+                        "status":  "pass",
+                        "duration_seconds":  0.21,
+                        "log":  "verify_content_integrity.log",
+                        "warnings":  [
+
+                                     ],
+                        "failure":  ""
+                    },
+                    {
+                        "name":  "verify_story_campaign",
+                        "status":  "pass",
+                        "duration_seconds":  10.78,
+                        "log":  "verify_story_campaign.log",
+                        "warnings":  [
+                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Parameter \"material\" is null.",
+                                         "+ CategoryInfo          : NotSpecified: (ERROR: Parameter \"material\" is null.:String) [], RemoteException",
+                                         "ERROR: Parameter \"material\" is null.",
+                                         "ERROR: Parameter \"material\" is null.",
+                                         "ERROR: Parameter \"material\" is null.",
+                                         "ERROR: Parameter \"material\" is null.",
+                                         "ERROR: Parameter \"material\" is null.",
+                                         "ERROR: Parameter \"material\" is null.",
+                                         "ERROR: Parameter \"material\" is null.",
+                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
+                                         "ERROR: 381 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
+                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE"
+                                     ],
+                        "failure":  ""
+                    }
+                ]
+}

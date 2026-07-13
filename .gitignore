@@ -31,6 +31,7 @@ web_export*.log
 *.trace
 __pycache__/
 *.pyc
+**/.release-gate/
 
 # Raw downloads and archives
 **/downloads/

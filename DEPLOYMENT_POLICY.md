@@ -1,30 +1,19 @@
-# Ashen Oath Permanent Deployment Policy
+# Ashen Oath Milestone Deployment Policy
 
-This repository is production-first.
-
-Every future Codex task must end with a full deployment to production unless the user explicitly writes:
-
-```text
-DO NOT DEPLOY
-```
+This repository protects the public build behind milestone acceptance. Development tasks verify and export locally by default. Production deployment requires explicit milestone approval.
 
 ## Required End-Of-Task Flow
 
-After every successful task:
+After every successful implementation task:
 
 1. Run all project verifiers.
 2. Export the latest Godot Web build.
 3. Synchronize the latest export into `web/`.
 4. Verify the web build.
-5. Commit all relevant changes with the current ticket ID and summary.
-6. Push to `origin/main`.
-7. Wait for the push to complete.
-8. Confirm the commit hash.
-9. Confirm the push succeeded.
-10. Confirm Vercel will auto-deploy from `origin/main`.
-11. Report the production URL when configured.
+5. Write an authoritative machine-readable release report.
+6. Keep the work on a development branch until its milestone is approved.
 
-If any step fails, stop immediately and report the failing step. Never claim deployment succeeded unless the push completed.
+If any step fails, stop immediately and report the failing step. A failed gate may not be bypassed by relabeling the build.
 
 ## Standard Command
 
@@ -34,17 +23,17 @@ Use this command at the end of every task:
 .\scripts\deploy_web_update.ps1 -TicketId "TICKET-ID" -Summary "short task summary"
 ```
 
-This command verifies, exports, syncs `web/`, commits, and pushes by default.
+This command verifies, exports, and syncs `web/` locally. It does not push production.
 
-## Explicit No-Deploy Command
+## Production Command
 
-Only use this when the user explicitly writes `DO NOT DEPLOY`:
+Use only after milestone review approval:
 
 ```powershell
-.\scripts\deploy_web_update.ps1 -NoDeploy
+.\scripts\deploy_web_update.ps1 -TicketId "MILESTONE-ID" -Summary "release summary" -Production -ApprovedMilestone
 ```
 
-This still runs verification, export, sync, and web verification, but it does not commit or push.
+The script refuses production unless both production switches are present. It verifies the live PCK hash after Vercel publishes.
 
 ## Vercel Requirement
 

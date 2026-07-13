@@ -19,7 +19,7 @@ if not exist "%PYTHON%" (
 if exist "%OUT_DIR%" rmdir /s /q "%OUT_DIR%"
 mkdir "%OUT_DIR%"
 
-"%GODOT%" --headless --path "%PROJECT_DIR%" --export-release "Web Browser Slim" "%OUT_DIR%\index.html"
+"%GODOT%" --headless --path "%PROJECT_DIR%" --export-release "Web Browser" "%OUT_DIR%\index.html"
 if errorlevel 1 exit /b %errorlevel%
 
 "%PYTHON%" "%PROJECT_DIR%\tools\verify_web_export.py" "%OUT_DIR%"

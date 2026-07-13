@@ -1,24 +1,23 @@
 # Codex Production Workflow
 
-For future Ashen Oath production tickets, the work is not complete until the playable web path is updated, committed, pushed, and handed to Vercel for production deployment.
+Ashen Oath uses milestone-gated production releases. Ordinary implementation tickets verify locally and may create preview builds; they do not replace the public game automatically.
 
-Permanent rule: deploy after every successful task unless the user explicitly writes `DO NOT DEPLOY`.
+Production deploys happen only for an explicitly approved release milestone after the authoritative gate passes.
 
 See `DEPLOYMENT_POLICY.md`.
 
-Required ending steps for every successful task:
+Required ending steps for every implementation task:
 
 1. Run all project verifiers.
 2. Run `tools/verify_visible_quality.gd` when visual/gameplay presentation is relevant.
-3. Export the slim Godot Web build.
-4. Sync `outputs/AshenOath_Web_Slim` into root-level `web/`.
+3. Export the single Godot Web build.
+4. Sync `outputs/AshenOath_Web` into root-level `web/` for local or preview review.
 5. Run `tools/verify_web_export.py`.
-6. Commit all relevant changes with the ticket ID and summary.
-7. Push to `origin/main`.
-8. Wait for push completion.
-9. Confirm the commit hash and push success.
-10. Confirm Vercel will auto-deploy from `origin/main`.
-11. Report the production URL: `https://ashenoath.vercel.app/`.
+6. Record the result in `.release-gate/release_report.json`.
+7. Commit to the active development branch when requested.
+8. Push a preview branch when a browser review is required.
+
+For an approved production milestone, also push `main`, wait for Vercel, and verify the live `index.pck` hash.
 
 Use:
 
@@ -26,10 +25,10 @@ Use:
 .\scripts\deploy_web_update.ps1 -TicketId "TICKET-ID" -Summary "short task summary"
 ```
 
-Only when the user explicitly writes `DO NOT DEPLOY`, use:
+For an approved production milestone only:
 
 ```powershell
-.\scripts\deploy_web_update.ps1 -NoDeploy
+.\scripts\deploy_web_update.ps1 -TicketId "MILESTONE-ID" -Summary "release summary" -Production -ApprovedMilestone
 ```
 
-Do not commit secrets, raw downloads, screenshot galleries, old non-slim exports, or Godot import caches.
+Do not describe the current public build as Alpha or production-ready. It remains a prototype until the Web Act One milestone passes.

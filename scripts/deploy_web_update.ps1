@@ -2,168 +2,77 @@ param(
   [string]$TicketId = "TASK",
   [string]$Summary = "update Ashen Oath web build",
   [string]$Message = "",
-  [switch]$Commit,
-  [switch]$NoDeploy,
+  [switch]$Production,
+  [switch]$ApprovedMilestone,
+  [switch]$SkipScreenshots,
   [string]$ProductionUrl = "https://ashenoath.vercel.app/"
 )
 
 $ErrorActionPreference = "Stop"
-
 $RepoRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
 $ProjectDir = Join-Path $RepoRoot "outputs\AshenOathTheRoadBetweenCrowns"
 $ExportDir = Join-Path $RepoRoot "outputs\AshenOath_Web"
 $WebDir = Join-Path $RepoRoot "web"
-$Godot = "C:\Users\User\Downloads\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe"
-$Python = "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe"
+$Gate = Join-Path $ProjectDir "tools\run_release_gate.ps1"
 
-function Invoke-Checked($Command, $Arguments, $WorkingDirectory) {
-  Write-Host "> $Command $Arguments"
-  if ([string]::IsNullOrWhiteSpace($Arguments)) {
-    $process = Start-Process -FilePath $Command -WorkingDirectory $WorkingDirectory -NoNewWindow -Wait -PassThru
-  } else {
-    $process = Start-Process -FilePath $Command -ArgumentList $Arguments -WorkingDirectory $WorkingDirectory -NoNewWindow -Wait -PassThru
-  }
-  if ($process.ExitCode -ne 0) {
-    throw "Command failed with exit code $($process.ExitCode): $Command $Arguments"
-  }
+if ($Production -and -not $ApprovedMilestone) {
+  throw "Production deployment requires both -Production and -ApprovedMilestone."
 }
-
-if (!(Test-Path $ProjectDir)) { throw "Project folder not found: $ProjectDir" }
-if (!(Test-Path $Godot)) { throw "Godot 4.6.3 console executable not found: $Godot" }
-if (!(Test-Path $Python)) { throw "Bundled Python runtime not found: $Python" }
+if (!(Test-Path -LiteralPath $Gate)) { throw "Release gate not found: $Gate" }
 
 Push-Location $RepoRoot
 try {
-  if ($NoDeploy) {
-    Write-Host "DO NOT DEPLOY mode: running verification/export/sync only. No commit or push will be performed."
-  }
+  $gateArguments = @("-ExecutionPolicy", "Bypass", "-File", $Gate)
+  if ($SkipScreenshots) { $gateArguments += "-SkipScreenshots" }
+  & powershell @gateArguments
+  if ($LASTEXITCODE -ne 0) { throw "Authoritative release gate failed." }
 
-  Invoke-Checked $Godot "--headless --path `"$ProjectDir`" --script `"res://tools/verify_runtime.gd`"" $RepoRoot
-
-  $StoryVerifier = Join-Path $ProjectDir "tools\verify_story_campaign.gd"
-  if (Test-Path $StoryVerifier) {
-    Invoke-Checked $Godot "--headless --path `"$ProjectDir`" --script `"res://tools/verify_story_campaign.gd`"" $RepoRoot
-  }
-
-  $GreyfenVerifier = Join-Path $ProjectDir "tools\verify_greyfen_life.gd"
-  if (Test-Path $GreyfenVerifier) {
-    Invoke-Checked $Godot "--headless --path `"$ProjectDir`" --script `"res://tools/verify_greyfen_life.gd`"" $RepoRoot
-  }
-
-  $CastleVerifier = Join-Path $ProjectDir "tools\verify_castle_vargan.gd"
-  if (Test-Path $CastleVerifier) {
-    Invoke-Checked $Godot "--headless --path `"$ProjectDir`" --script `"res://tools/verify_castle_vargan.gd`"" $RepoRoot
-  }
-
-  $PolishVerifier = Join-Path $ProjectDir "tools\verify_polish_001.gd"
-  if (Test-Path $PolishVerifier) {
-    Invoke-Checked $Godot "--headless --path `"$ProjectDir`" --script `"res://tools/verify_polish_001.gd`"" $RepoRoot
-  }
-
-  $AudioVerifier = Join-Path $ProjectDir "tools\verify_audio_runtime.gd"
-  if (Test-Path $AudioVerifier) {
-    Invoke-Checked $Godot "--headless --path `"$ProjectDir`" --script `"res://tools/verify_audio_runtime.gd`"" $RepoRoot
-  }
-
-  $VisibleVerifier = Join-Path $ProjectDir "tools\verify_visible_quality.gd"
-  if (Test-Path $VisibleVerifier) {
-    Invoke-Checked $Godot "--headless --path `"$ProjectDir`" --script `"res://tools/verify_visible_quality.gd`"" $RepoRoot
-  }
-
-  $MotionVerifier = Join-Path $ProjectDir "tools\verify_motion_quality.gd"
-  if (Test-Path $MotionVerifier) {
-    Invoke-Checked $Godot "--headless --path `"$ProjectDir`" --script `"res://tools/verify_motion_quality.gd`"" $RepoRoot
-  }
-
-  $Visual100Verifier = Join-Path $ProjectDir "tools\verify_visual_100.gd"
-  if (Test-Path $Visual100Verifier) {
-    Invoke-Checked $Godot "--headless --path `"$ProjectDir`" --script `"res://tools/verify_visual_100.gd`"" $RepoRoot
-  }
-
-  $Visual003Verifier = Join-Path $ProjectDir "tools\verify_visual_003.gd"
-  if (Test-Path $Visual003Verifier) {
-    Invoke-Checked $Godot "--headless --path `"$ProjectDir`" --script `"res://tools/verify_visual_003.gd`"" $RepoRoot
-  }
-
-  $Master002Verifier = Join-Path $ProjectDir "tools\verify_master_002.gd"
-  if (Test-Path -LiteralPath $Master002Verifier) {
-    Invoke-Checked $Godot "--headless --path `"$ProjectDir`" --script `"res://tools/verify_master_002.gd`"" $RepoRoot
-  }
-
-  $RiverVerifier = Join-Path $ProjectDir "tools\verify_river_swimming.gd"
-  if (Test-Path -LiteralPath $RiverVerifier) {
-    Invoke-Checked $Godot "--headless --path `"$ProjectDir`" --script `"res://tools/verify_river_swimming.gd`"" $RepoRoot
-  }
-
-  $Master003Verifier = Join-Path $ProjectDir "tools\verify_master_003.gd"
-  if (Test-Path -LiteralPath $Master003Verifier) {
-    Invoke-Checked $Godot "--headless --path `"$ProjectDir`" --script `"res://tools/verify_master_003.gd`"" $RepoRoot
-  }
-
-  $FaceRiverSunVerifier = Join-Path $ProjectDir "tools\verify_face_river_sun_001.gd"
-  if (Test-Path -LiteralPath $FaceRiverSunVerifier) {
-    Invoke-Checked $Godot "--headless --path `"$ProjectDir`" --script `"res://tools/verify_face_river_sun_001.gd`"" $RepoRoot
-  }
-
-  $CharacterRealVerifier = Join-Path $ProjectDir "tools\verify_character_real_001.gd"
-  if (Test-Path -LiteralPath $CharacterRealVerifier) {
-    Invoke-Checked $Godot "--headless --path `"$ProjectDir`" --script `"res://tools/verify_character_real_001.gd`"" $RepoRoot
-  }
-
-  Invoke-Checked (Join-Path $ProjectDir "Export_Web_Build.bat") "" $ProjectDir
-
-  Invoke-Checked $Python "`"$ProjectDir\tools\verify_web_export.py`" `"$ExportDir`"" $RepoRoot
-
-  $ExportPack = Join-Path $ExportDir "index.pck"
-  $PackedLog = Join-Path $env:TEMP "ashenoath-packed-startup.log"
-  & $Godot --headless --path $ExportDir --main-pack $ExportPack --quit-after 5 2>&1 | Tee-Object -FilePath $PackedLog
-  if ($LASTEXITCODE -ne 0) {
-    throw "Packed startup failed with exit code $LASTEXITCODE."
-  }
-  if (Select-String -Path $PackedLog -Pattern "SCRIPT ERROR|Parse Error|Compile Error|Failed to load script" -Quiet) {
-    throw "Packed startup logged a script load or compilation error."
-  }
-
-  if (Test-Path $WebDir) {
-    Get-ChildItem $WebDir -Force | Remove-Item -Recurse -Force
+  if (Test-Path -LiteralPath $WebDir) {
+    Get-ChildItem -LiteralPath $WebDir -Force | Remove-Item -Recurse -Force
   } else {
-    New-Item -ItemType Directory $WebDir | Out-Null
+    New-Item -ItemType Directory -Path $WebDir | Out-Null
   }
   Copy-Item (Join-Path $ExportDir "*") $WebDir -Recurse -Force
+  $webBytes = (Get-ChildItem $WebDir -File -Recurse | Measure-Object Length -Sum).Sum
+  $webMb = [math]::Round($webBytes / 1MB, 1)
+  Write-Host "Verified Web folder synchronized: $webMb MB"
 
-  $WebBytes = (Get-ChildItem $WebDir -File -Recurse | Measure-Object Length -Sum).Sum
-  $WebMb = [math]::Round($WebBytes / 1MB, 1)
-  Write-Host "Web folder ready: $WebDir"
-  Write-Host "Web folder size: $WebBytes bytes ($WebMb MB)"
-
-  git status --short
-
-  if (!$NoDeploy) {
-    if ([string]::IsNullOrWhiteSpace($Message)) {
-      $Message = "$TicketId`: $Summary"
-    }
-
-    git add -A
-    $PendingChanges = git status --short
-    if ($PendingChanges) {
-      git commit -m $Message
-    } else {
-      Write-Host "No file changes to commit after verification/export/sync."
-    }
-
-    git push origin main
-    $CommitHash = (git rev-parse --short HEAD).Trim()
-    Write-Host "Production push succeeded."
-    Write-Host "Commit hash: $CommitHash"
-    Write-Host "Vercel auto-deploy: enabled after the GitHub repo is connected to a Vercel project that deploys origin/main from web/."
-    if (![string]::IsNullOrWhiteSpace($ProductionUrl)) {
-      Write-Host "Production URL: $ProductionUrl"
-    } else {
-      Write-Host "Production URL: not configured locally. Add it to the ticket report after Vercel is linked."
-    }
-  } else {
-    Write-Host "Deploy skipped by explicit DO NOT DEPLOY / -NoDeploy instruction."
+  if (-not $Production) {
+    Write-Host "Local/preview workflow complete. Production was not requested."
+    Write-Host "Use -Production -ApprovedMilestone only after milestone review approval."
+    exit 0
   }
+
+  if ([string]::IsNullOrWhiteSpace($Message)) {
+    $Message = "$TicketId`: $Summary"
+  }
+  git add -A
+  if (git status --short) {
+    git commit -m $Message
+    if ($LASTEXITCODE -ne 0) { throw "Commit failed." }
+  }
+  git push origin main
+  if ($LASTEXITCODE -ne 0) { throw "Push to origin/main failed." }
+
+  $commitHash = (git rev-parse HEAD).Trim()
+  $localPckHash = (Get-FileHash -Algorithm SHA256 (Join-Path $WebDir "index.pck")).Hash
+  $livePck = Join-Path $env:TEMP "ashenoath-live-index.pck"
+  $deadline = (Get-Date).AddMinutes(8)
+  $liveHash = ""
+  while ((Get-Date) -lt $deadline) {
+    try {
+      Invoke-WebRequest -Uri "$ProductionUrl/index.pck?v=$commitHash" -OutFile $livePck -UseBasicParsing
+      $liveHash = (Get-FileHash -Algorithm SHA256 $livePck).Hash
+      if ($liveHash -eq $localPckHash) { break }
+    } catch {}
+    Start-Sleep -Seconds 15
+  }
+  if ($liveHash -ne $localPckHash) {
+    throw "Vercel did not publish the verified index.pck before timeout."
+  }
+  Write-Host "Production push and Vercel PCK verification succeeded."
+  Write-Host "Commit hash: $commitHash"
+  Write-Host "Production URL: $ProductionUrl?v=$TicketId"
 }
 finally {
   Pop-Location

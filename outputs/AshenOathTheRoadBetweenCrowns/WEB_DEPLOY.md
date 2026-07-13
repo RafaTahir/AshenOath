@@ -1,12 +1,12 @@
 # Publishing Ashen Oath Online
 
-The browser build is a normal static Godot Web export. Build it with `Export_Web_Build.bat`, then deploy the contents of `../AshenOath_Web_Slim`.
+The browser build is a normal static Godot Web export. Build it with `Export_Web_Build.bat`, then review the contents of `../AshenOath_Web`.
 
 ## Vercel, Netlify, or Cloudflare Pages
 
 1. Run `Export_Web_Build.bat`.
 2. Create a static site/project.
-3. Upload or point the site root at `AshenOath_Web_Slim`.
+3. For an approved milestone, synchronize `AshenOath_Web` into the repository-level `web/` folder.
 4. Confirm `index.html` is at the deployment root.
 5. Do not rename the generated `.wasm`, `.pck`, `.js`, or `.png` files.
 
@@ -20,7 +20,7 @@ Cross-Origin-Embedder-Policy: require-corp
 ## itch.io
 
 1. Run `Export_Web_Build.bat`.
-2. Zip the contents of `AshenOath_Web_Slim`, not the parent folder.
+2. Zip the contents of `AshenOath_Web`, not the parent folder.
 3. Upload as an HTML game.
 4. Use a 1280x720 viewport or responsive fullscreen embed.
 5. Publish only the Web build for this release.

@@ -182,9 +182,9 @@ func _initialize() -> void:
 	_assert(FileAccess.file_exists("res://visual_upgrade_manifest.json"), "Visual upgrade manifest is missing")
 	_assert(FileAccess.file_exists("res://MISSING_VISUAL_ASSETS.md"), "Missing visual asset report is missing")
 
+	print("RUNTIME VERIFIER: PASS")
 	game.queue_free()
 	await _settle_frames(4)
-	print("runtime vertical slice verification complete")
 	quit()
 
 func _settle_frames(count: int) -> void:

@@ -31,6 +31,7 @@ const SurfaceFeedbackManager = preload("res://scripts/surface_feedback_manager.g
 const GreyfenLifeController = preload("res://scripts/greyfen_life_controller.gd")
 const MinigameManager = preload("res://scripts/minigame_manager.gd")
 const ZoneSpatialService = preload("res://scripts/zone_spatial_service.gd")
+const RuntimeServiceRegistry = preload("res://scripts/runtime_service_registry.gd")
 
 var player
 var camera_rig
@@ -137,25 +138,22 @@ func _play_voice_smoke_test(voice_id: String, label: String) -> void:
 		hud.toast(label)
 
 func _setup_managers() -> void:
-	quests = QuestManager.new()
-	dialogue = DialogueManager.new()
-	story_state = StoryState.new()
-	inventory = InventoryManager.new()
-	crafting = CraftingManager.new()
-	combat = CombatManager.new()
-	save_manager = SaveManager.new()
-	settings = SettingsManager.new()
-	settings.name = "SettingsManager"
-	world_materials = WorldMaterialLibrary.new()
-	world_materials.name = "WorldMaterialLibrary"
-	day_night = DayNightController.new()
-	day_night.name = "DayNightController"
-	audio = AudioManager.new()
-	asset_helper = AssetSpawnHelper.new()
-	hud = HUD.new()
-	minigames = MinigameManager.new()
-	for manager in [story_state, quests, dialogue, inventory, crafting, combat, save_manager, settings, world_materials, day_night, audio, asset_helper, hud, minigames]:
-		add_child(manager)
+	var services := RuntimeServiceRegistry.create(self)
+	assert(RuntimeServiceRegistry.is_complete(services), "Runtime service registry is incomplete")
+	story_state = services["story_state"]
+	quests = services["quests"]
+	dialogue = services["dialogue"]
+	inventory = services["inventory"]
+	crafting = services["crafting"]
+	combat = services["combat"]
+	save_manager = services["save_manager"]
+	settings = services["settings"]
+	world_materials = services["world_materials"]
+	day_night = services["day_night"]
+	audio = services["audio"]
+	asset_helper = services["asset_helper"]
+	hud = services["hud"]
+	minigames = services["minigames"]
 	day_night.time_changed.connect(func(minutes: float, phase: String, count: int):
 		if visual_director != null:
 			visual_director.set_time(minutes, phase, count)
@@ -505,14 +503,14 @@ func _build_greyfen() -> void:
 	_make_village_place("shrine_prayer", "village_place", "Sit at the shrine bench", Vector3(8.0,0,-6.2), Vector3(2.4,0.55,0.7), Color(0.22,0.15,0.09))
 	_make_village_place("common_table", "minigame", "Play Three Marks with Rook", Vector3(-5.4,0,7.2), Vector3(2.8,0.85,1.8), Color(0.28,0.18,0.10))
 	_make_village_place("barrel_board", "minigame", "Play Greyfen Draughts with Tor", Vector3(7.0,0,6.8), Vector3(2.2,0.85,1.5), Color(0.24,0.15,0.08))
-	_make_clue("grave_bell", "Inspect grave bell", Vector3(15.8, 0, 9.5), "side_widows_bell", "inspect_bell", Color(0.60, 0.55, 0.44))
+	_make_clue("grave_bell", "Inspect grave bell", Vector3(15.8, 0, 9.5), "side_widows_bell", "find_bell", Color(0.60, 0.55, 0.44))
 	_make_clue("grave_harl", "Inspect Harl's disturbed grave", Vector3(12.2,0,7.2), "main_bell_beneath_greyfen", "grave_harl", Color(0.3,0.28,0.25))
 	_make_clue("grave_child", "Inspect the nameless child's grave", Vector3(14.0,0,10.2), "main_bell_beneath_greyfen", "grave_child", Color(0.3,0.28,0.25))
 	_make_clue("grave_soldier", "Inspect the empty soldier's grave", Vector3(16.2,0,7.2), "main_bell_beneath_greyfen", "grave_soldier", Color(0.3,0.28,0.25))
 	_make_clue("chapel_door", "Open the ruined Crow Chapel", Vector3(16.3,0,8.0), "main_bell_beneath_greyfen", "open_chapel", Color(0.24,0.22,0.18))
 	_make_clue("register_anwen", "Take Anwen's hidden register page", Vector3(5.4,0,-6.2), "main_names_they_burned", "fragment_anwen", Color(0.42,0.36,0.22))
 	_make_clue("register_tor", "Take the forge register page", Vector3(9.0,0,-1.0), "main_names_they_burned", "fragment_tor", Color(0.42,0.36,0.22))
-	_make_clue("sheepfold", "Inspect sheepfold", Vector3(15, 0, -11), "side_black_dog", "inspect_sheepfold", Color(0.36, 0.24, 0.16))
+	_make_clue("sheepfold", "Inspect sheepfold", Vector3(15, 0, -11), "side_black_dog", "find_dog", Color(0.36, 0.24, 0.16))
 	_make_zone_gate("To Wychwood", Vector3(0, 0, -15.2), "wychwood", Vector3(0, 1, 13))
 	_make_zone_gate("The long road", Vector3(-18,0,-10), "deep_wood", Vector3(0,1,12))
 	_make_wychwood_gate_scene(Vector3(0, 0, -14.3))
@@ -558,15 +556,15 @@ func _build_wychwood() -> void:
 	_make_monster_clearing(Vector3(0, 0, -6.5))
 	_make_wychwood_road_of_crows_story_beats()
 	_make_zone_gate("Back to Greyfen", Vector3(0, 0, 15), "greyfen", Vector3(0, 1, -13))
-	_make_clue("corpse", "Inspect blood-dark corpse", Vector3(-2, 0, 7.4), "main_road_of_crows", "inspect_corpse", Color(0.32, 0.18, 0.16))
-	_make_clue("claw_marks", "Read strange claw marks", Vector3(2.5, 0, 4.8), "main_road_of_crows", "find_claw_marks", Color(0.18, 0.18, 0.18))
-	_make_clue("black_feathers", "Take black feathers", Vector3(-4, 0, 4.0), "main_road_of_crows", "find_black_feathers", Color(0.03, 0.03, 0.035))
+	_make_clue("corpse", "Inspect blood-dark corpse", Vector3(-2, 0, 7.4), "main_road_of_crows", "bram", Color(0.32, 0.18, 0.16))
+	_make_clue("claw_marks", "Read strange claw marks", Vector3(2.5, 0, 4.8), "main_road_of_crows", "vargan_wire", Color(0.18, 0.18, 0.18))
+	_make_clue("black_feathers", "Take black feathers", Vector3(-4, 0, 4.0), "main_road_of_crows", "sella", Color(0.03, 0.03, 0.035))
 	_make_clue("tracks", "Inspect dragged tracks", Vector3(0, 0, -4.2), "main_road_of_crows", "return_village", Color(0.15, 0.11, 0.08))
-	_make_clue("ritual_stones", "Study ritual stones", Vector3(8, 0, -10), "main_teeth_in_rain", "discover_stones", Color(0.38, 0.38, 0.36))
-	_make_clue("vargan_signet", "Take signet ring", Vector3(11, 0, -12), "main_teeth_in_rain", "find_signet", Color(0.72, 0.56, 0.24))
-	_make_clue("bandit_camp", "Inspect bandit camp", Vector3(-12, 0, -12), "side_black_dog", "find_bandit_camp", Color(0.30, 0.18, 0.10))
+	_make_clue("ritual_stones", "Study ritual stones", Vector3(8, 0, -10), "main_teeth_in_rain", "name_the_dead", Color(0.38, 0.38, 0.36))
+	_make_clue("vargan_signet", "Take signet ring", Vector3(11, 0, -12), "main_teeth_in_rain", "name_the_dead", Color(0.72, 0.56, 0.24))
+	_make_clue("bandit_camp", "Inspect bandit camp", Vector3(-12, 0, -12), "side_black_dog", "find_dog", Color(0.30, 0.18, 0.10))
 	_make_clue("bitter_roots", "Collect bitter roots", Vector3(8, 0, -7.8), "side_bitter_roots", "collect_roots", Color(0.46, 0.22, 0.16))
-	_make_clue("sacrifice_roots", "Study sacrifice roots", Vector3(10, 0, -9.2), "side_bitter_roots", "learn_mira_past", Color(0.38, 0.16, 0.13))
+	_make_clue("sacrifice_roots", "Study sacrifice roots", Vector3(10, 0, -9.2), "side_bitter_roots", "mira_choice", Color(0.38, 0.16, 0.13))
 	_make_herb("mooncap", Vector3(-7, 0, -6), Color(0.58, 0.65, 0.86))
 	_make_herb("redroot", Vector3(-10, 0, -2), Color(0.55, 0.12, 0.11))
 	_make_herb("grave_moss", Vector3(5, 0, -13), Color(0.24, 0.42, 0.24))
@@ -580,7 +578,7 @@ func _build_wychwood() -> void:
 		_spawn_enemy("wychwood_brute", Vector3(0.2, 0.8, -12.4))
 	if quests.is_active("main_teeth_in_rain") and not quests.is_objective_done("main_teeth_in_rain", "fight_bog_wretch"):
 		_spawn_enemy("bog_wretch", Vector3(11, 0.8, -12))
-	if quests.is_active("side_black_dog") and not quests.is_objective_done("side_black_dog", "deal_bandits"):
+	if quests.is_active("side_black_dog") and not quests.is_objective_done("side_black_dog", "find_dog"):
 		_spawn_enemy("bandit", Vector3(-14, 0.8, -14))
 		_spawn_enemy("bandit", Vector3(-12, 0.8, -15))
 
@@ -598,10 +596,10 @@ func _build_ruins() -> void:
 		_make_rubble(pos)
 	_make_zone_gate("Back to Greyfen", Vector3(-20, 0, 5), "greyfen", Vector3(17, 1, -2))
 	_make_named_interactable("edric", "dialogue", "Talk to Lord Edric", Vector3(-14, 0, 3), Color(0.44, 0.35, 0.24))
-	_make_clue("old_hall", "Search old hall", Vector3(-2, 0, -4), "main_blood_under_stone", "search_hall", Color(0.28, 0.24, 0.21))
-	_make_clue("ritual_inscription", "Read ritual inscription", Vector3(4, 0, -8), "main_blood_under_stone", "read_inscription", Color(0.43, 0.39, 0.35))
-	_make_clue("spirit_clearing", "Enter spirit clearing", Vector3(10, 0, 8), "main_hart_remembers", "enter_clearing", Color(0.70, 0.72, 0.66))
-	if quests.is_active("main_blood_under_stone") and not quests.is_objective_done("main_blood_under_stone", "fight_knight"):
+	_make_clue("old_hall", "Search old hall", Vector3(-2, 0, -4), "main_blood_under_stone", "locate_record_hall", Color(0.28, 0.24, 0.21))
+	_make_clue("ritual_inscription", "Read ritual inscription", Vector3(4, 0, -8), "main_blood_under_stone", "evidence_iron_binding", Color(0.43, 0.39, 0.35))
+	_make_clue("spirit_clearing", "Enter spirit clearing", Vector3(10, 0, 8), "main_hart_remembers", "enter_glade", Color(0.70, 0.72, 0.66))
+	if quests.is_active("main_blood_under_stone") and not quests.is_objective_done("main_blood_under_stone", "survive_haunting"):
 		_spawn_enemy("gravebound_knight", Vector3(3, 0.8, -3))
 	if quests.is_active("main_hart_remembers") or quests.is_unlocked("main_hart_remembers"):
 		_make_named_interactable("white_hart", "dialogue", "Speak to the White Hart", Vector3(12, 0, 10), Color(0.86, 0.83, 0.70), Vector3(0.36, 0.64, 0.36))
@@ -674,15 +672,15 @@ func _handle_interaction(area) -> void:
 		elif area.interaction_id == "black_feathers":
 			hud.toast("Black feathers, tied with red thread. A warning, or a prayer left too late.")
 		elif area.interaction_id == "ritual_stones":
-			quests.complete_objective("main_teeth_in_rain", "enter_deep_wood")
+			quests.complete_objective("main_teeth_in_rain", "name_the_dead")
 		elif area.interaction_id == "old_hall":
-			quests.complete_objective("main_blood_under_stone", "enter_ruins")
+			quests.complete_objective("main_blood_under_stone", "locate_record_hall")
 		elif area.interaction_id == "grave_bell":
-			quests.complete_objective("side_widows_bell", "meet_gravebound")
+			quests.complete_objective("side_widows_bell", "find_bell")
 		elif area.interaction_id == "bandit_camp":
 			hud.toast("Boot prints. Rope. A child's torn ribbon. Not a dog's work.")
 		elif area.interaction_id == "bitter_roots":
-			quests.complete_objective("side_bitter_roots", "accept_mira_roots")
+			quests.complete_objective("side_bitter_roots", "collect_roots")
 		elif area.interaction_id == "sacrifice_roots":
 			hud.toast("The roots drink from old blood. Mira knew this place.")
 		elif area.interaction_id == "chapel_door":
@@ -1100,7 +1098,7 @@ func _on_enemy_died(enemy) -> void:
 		_show_ending_consequence(ending)
 	elif enemy.enemy_id == "bandit":
 		if not _has_living_enemy("bandit"):
-			quests.complete_objective("side_black_dog", "deal_bandits")
+			quests.complete_objective("side_black_dog", "find_dog")
 	if enemy.health_component != null:
 		hud.show_enemy(enemy.display_name, 0.0, enemy.health_component.max_health)
 	hud.toast("%s slain." % enemy.display_name)

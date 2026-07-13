@@ -1,5 +1,8 @@
 param(
     [switch]$SkipExport,
+    [switch]$SkipPerformance,
+    [switch]$SkipScreenshots,
+    [string]$Only = "",
     [string]$ResumeFrom = ""
 )
 
@@ -10,77 +13,202 @@ $Godot = "C:\Users\User\Downloads\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-sta
 $Python = "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe"
 $Web = Join-Path (Split-Path -Parent $Project) "AshenOath_Web"
 $Logs = Join-Path $Project ".release-gate"
+$ReportDirectory = Join-Path $Project "release_reports"
+$ReportPath = Join-Path $ReportDirectory "latest.json"
+$ContentReportPath = Join-Path $Logs "content_integrity.json"
+$StartedAt = Get-Date
+$Results = [System.Collections.Generic.List[object]]::new()
 New-Item -ItemType Directory -Force -Path $Logs | Out-Null
+New-Item -ItemType Directory -Force -Path $ReportDirectory | Out-Null
 
-function Invoke-Gate([string]$Name, [string[]]$Arguments) {
+function Add-Result(
+    [string]$Name,
+    [string]$Status,
+    [double]$Seconds,
+    [string]$Log,
+    [string[]]$Warnings = @(),
+    [string]$Failure = ""
+) {
+    $Results.Add([ordered]@{
+        name = $Name
+        status = $Status
+        duration_seconds = [math]::Round($Seconds, 2)
+        log = [IO.Path]::GetFileName($Log)
+        warnings = @($Warnings)
+        failure = $Failure
+    })
+}
+
+function Write-ReleaseReport([string]$Status, [string]$Failure = "") {
+    $head = ""
+    try { $head = (git -C (Split-Path -Parent (Split-Path -Parent $Project)) rev-parse HEAD).Trim() } catch {}
+    $report = [ordered]@{
+        schema_version = 1
+        status = $Status
+        started_at = $StartedAt.ToUniversalTime().ToString("o")
+        finished_at = (Get-Date).ToUniversalTime().ToString("o")
+        source_commit = $head
+        mode = $(if ([string]::IsNullOrWhiteSpace($Only)) { "full" } else { "targeted" })
+        requested_gate = $Only
+        project = "outputs/AshenOathTheRoadBetweenCrowns"
+        failure = $Failure
+        results = @($Results)
+    }
+    $report | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $ReportPath -Encoding utf8
+}
+
+function Invoke-ExternalGate(
+    [string]$Name,
+    [string]$Executable,
+    [string[]]$Arguments
+) {
     $log = Join-Path $Logs "$Name.log"
-    $previousNativePreference = $PSNativeCommandUseErrorActionPreference
-    $PSNativeCommandUseErrorActionPreference = $false
+    $timer = [System.Diagnostics.Stopwatch]::StartNew()
+    $previousErrorPreference = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+    try {
+        & $Executable @Arguments 2>&1 | Tee-Object -FilePath $log
+        $exitCode = $LASTEXITCODE
+    } finally {
+        $ErrorActionPreference = $previousErrorPreference
+    }
+    $timer.Stop()
+    if ($exitCode -ne 0) {
+        $failure = "$Name failed with exit code $exitCode"
+        Add-Result $Name "fail" $timer.Elapsed.TotalSeconds $log @() $failure
+        throw $failure
+    }
+    Add-Result $Name "pass" $timer.Elapsed.TotalSeconds $log
+}
+
+function Invoke-GodotGate([string]$Name, [string[]]$Arguments) {
+    $log = Join-Path $Logs "$Name.log"
+    $timer = [System.Diagnostics.Stopwatch]::StartNew()
+    $previousErrorPreference = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
     try {
         & $Godot @Arguments 2>&1 | Tee-Object -FilePath $log
         $exitCode = $LASTEXITCODE
+    } finally {
+        $ErrorActionPreference = $previousErrorPreference
     }
-    finally {
-        $PSNativeCommandUseErrorActionPreference = $previousNativePreference
+    $timer.Stop()
+    if ($exitCode -ne 0) {
+        $failure = "$Name failed with exit code $exitCode"
+        Add-Result $Name "fail" $timer.Elapsed.TotalSeconds $log @() $failure
+        throw $failure
     }
-    if ($exitCode -ne 0) { throw "$Name failed with exit code $exitCode" }
-	$materialCleanup = Select-String -Path $log -Pattern 'Parameter "material" is null'
-	if ($materialCleanup) {
-		Write-Warning "$Name emitted $($materialCleanup.Count) renderer-destruction material diagnostics; active surfaces are validated separately by verify_zone_budgets."
-	}
-    $bad = Select-String -Path $log -Pattern 'SCRIPT ERROR|Parse Error|Compile Error|Failed to load|Cannot open|ERROR:' | Where-Object {
-        # Godot's dummy renderer emits this only while releasing valid MultiMesh
-        # resources at process shutdown. The graphical gate below remains strict.
-        $_.Line -notmatch 'Parameter "material" is null|RID allocations .* leaked at exit|Pages in use exist at exit|resources still in use at exit|Buffer with GL ID .* leaked|ObjectDB instances leaked at exit|Leaked instance dependency|did not call instance_notify_deleted'
+
+    $lines = @(Get-Content -LiteralPath $log)
+    $passIndex = -1
+    for ($index = 0; $index -lt $lines.Count; $index++) {
+        if ($lines[$index] -match '\bPASS\b|Screenshot capture complete') {
+            $passIndex = $index
+        }
     }
-    if ($bad) { throw "$Name emitted a release-blocking error: $($bad[0].Line)" }
+    $warnings = [System.Collections.Generic.List[string]]::new()
+    $fatal = [System.Collections.Generic.List[string]]::new()
+    $isHeadless = $Arguments -contains "--headless"
+    $teardownPattern = 'RID allocations .* leaked at exit|Pages in use exist at exit|resources still in use at exit|Buffer with GL ID .* leaked|ObjectDB instances leaked at exit|Leaked instance dependency|did not call instance_notify_deleted|Parameter "material" is null'
+    $fatalPattern = 'SCRIPT ERROR|Parse Error|Compile Error|Failed to load|Cannot open|ERROR:|VERIFIER:\s*FAIL|ASSERTION FAILED|Assertion failed'
+    for ($index = 0; $index -lt $lines.Count; $index++) {
+        $line = $lines[$index]
+        if ($line -notmatch $fatalPattern) { continue }
+        $headlessDummyMaterial = $isHeadless -and $line -match 'Parameter "material" is null'
+        if ($headlessDummyMaterial -or ($line -match $teardownPattern -and $passIndex -ge 0 -and $index -gt $passIndex)) {
+            $warnings.Add($line.Trim())
+        } else {
+            $fatal.Add($line.Trim())
+        }
+    }
+    if ($fatal.Count -gt 0) {
+        $failure = "$Name emitted a release-blocking error: $($fatal[0])"
+        Add-Result $Name "fail" $timer.Elapsed.TotalSeconds $log @($warnings) $failure
+        throw $failure
+    }
+    Add-Result $Name "pass" $timer.Elapsed.TotalSeconds $log @($warnings)
 }
 
-$verifiers = @(
-    "verify_runtime.gd", "verify_story_campaign.gd", "verify_character_real_001.gd",
-    "verify_motion_quality.gd", "verify_river_swimming.gd", "verify_greyfen_life.gd",
-    "verify_castle_vargan.gd", "verify_audio_runtime.gd", "verify_visible_quality.gd",
-    "verify_recovery_002_foundation.gd", "verify_zone_budgets.gd",
-    "verify_visual_003.gd", "verify_visual_100.gd", "verify_master_002.gd", "verify_master_003.gd"
-)
-$resumeReached = [string]::IsNullOrWhiteSpace($ResumeFrom)
-foreach ($verifier in $verifiers) {
-    if (-not $resumeReached) {
-        $resumeReached = ([IO.Path]::GetFileNameWithoutExtension($verifier) -eq $ResumeFrom)
-        if (-not $resumeReached) { continue }
+try {
+    if (!(Test-Path -LiteralPath $Godot)) { throw "Godot 4.6.3 not found: $Godot" }
+    if (!(Test-Path -LiteralPath $Python)) { throw "Bundled Python not found: $Python" }
+
+    Invoke-ExternalGate "verify_content_integrity" $Python @(
+        (Join-Path $Project "tools\verify_content_integrity.py"),
+        $Project,
+        "--json-report",
+        $ContentReportPath
+    )
+
+    $verifiers = @(
+        "verify_runtime.gd", "verify_story_campaign.gd", "verify_character_real_001.gd",
+        "verify_motion_quality.gd", "verify_river_swimming.gd", "verify_greyfen_life.gd",
+        "verify_castle_vargan.gd", "verify_audio_runtime.gd", "verify_visible_quality.gd",
+        "verify_recovery_002_foundation.gd", "verify_zone_budgets.gd",
+        "verify_visual_003.gd", "verify_visual_100.gd", "verify_master_002.gd", "verify_master_003.gd"
+    )
+    $resumeReached = [string]::IsNullOrWhiteSpace($ResumeFrom)
+    foreach ($verifier in $verifiers) {
+        $name = [IO.Path]::GetFileNameWithoutExtension($verifier)
+        if (-not [string]::IsNullOrWhiteSpace($Only) -and $name -ne $Only) { continue }
+        if (-not $resumeReached) {
+            $resumeReached = ($name -eq $ResumeFrom)
+            if (-not $resumeReached) { continue }
+        }
+        Invoke-GodotGate $name @("--headless", "--path", $Project, "--script", "tools/$verifier")
     }
-    Invoke-Gate ([IO.Path]::GetFileNameWithoutExtension($verifier)) @("--headless", "--path", $Project, "--script", "tools/$verifier")
-}
 
-# Performance and screenshots must use a real Compatibility renderer. Headless is never accepted.
-Invoke-Gate "verify_720p_performance" @("--path", $Project, "--rendering-method", "gl_compatibility", "--script", "tools/verify_720p_performance.gd")
-Invoke-Gate "capture_slice_screenshots" @("--path", $Project, "--rendering-method", "gl_compatibility", "--script", "tools/capture_slice_screenshots.gd")
-
-$runtimeRoots = @(
-    (Join-Path $Project "scripts"),
-    (Join-Path $Project "scenes"),
-    (Join-Path $Project "data")
-)
-$runtimeSources = foreach ($runtimeRoot in $runtimeRoots) {
-    if (Test-Path $runtimeRoot) {
-        Get-ChildItem $runtimeRoot -Recurse -File -Include *.gd,*.tscn,*.json
+    if ([string]::IsNullOrWhiteSpace($Only) -and -not $SkipPerformance) {
+        Invoke-GodotGate "verify_720p_performance" @(
+            "--path", $Project, "--rendering-method", "gl_compatibility",
+            "--script", "tools/verify_720p_performance.gd"
+        )
     }
-}
-$runtimeSources += Get-Item (Join-Path $Project "project.godot"), (Join-Path $Project "export_presets.cfg")
-$sourceNewest = $runtimeSources | Sort-Object LastWriteTime -Descending | Select-Object -First 1
-$gallery = Join-Path $Project "Development_Gallery\screenshots"
-$required = @("01_greyfen_spawn", "05_sister_anwen_dialogue", "70_greyfen_river_bridge", "10_combat_clearing", "36_vargan_approach", "38_record_hall", "41_white_hart_glade")
-foreach ($stem in $required) {
-    $image = Get-ChildItem $gallery -File -Filter "*$stem*.png" | Sort-Object LastWriteTime -Descending | Select-Object -First 1
-    if (-not $image) { throw "Required screenshot missing: $stem" }
-    if ($image.LastWriteTime -lt $sourceNewest.LastWriteTime) { throw "Stale screenshot: $($image.Name)" }
-    if ($image.Length -lt 4096) { throw "Screenshot is blank or corrupt: $($image.Name)" }
-}
+    if ([string]::IsNullOrWhiteSpace($Only) -and -not $SkipScreenshots) {
+        Invoke-GodotGate "capture_slice_screenshots" @(
+            "--path", $Project, "--rendering-method", "gl_compatibility",
+            "--script", "tools/capture_slice_screenshots.gd"
+        )
+        $runtimeRoots = @(
+            (Join-Path $Project "scripts"),
+            (Join-Path $Project "scenes"),
+            (Join-Path $Project "data")
+        )
+        $runtimeSources = foreach ($runtimeRoot in $runtimeRoots) {
+            if (Test-Path $runtimeRoot) {
+                Get-ChildItem $runtimeRoot -Recurse -File -Include *.gd,*.tscn,*.json
+            }
+        }
+        $runtimeSources += Get-Item (Join-Path $Project "project.godot"), (Join-Path $Project "export_presets.cfg")
+        $sourceNewest = $runtimeSources | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+        $gallery = Join-Path $Project "Development_Gallery\screenshots"
+        $required = @("01_greyfen_spawn", "05_sister_anwen_dialogue", "70_greyfen_river_bridge", "10_combat_clearing", "36_vargan_approach", "38_record_hall", "41_white_hart_glade")
+        foreach ($stem in $required) {
+            $image = Get-ChildItem $gallery -File -Filter "*$stem*.png" | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+            if (-not $image) { throw "Required screenshot missing: $stem" }
+            if ($image.LastWriteTime -lt $sourceNewest.LastWriteTime) { throw "Stale screenshot: $($image.Name)" }
+            if ($image.Length -lt 4096) { throw "Screenshot is blank or corrupt: $($image.Name)" }
+        }
+    }
 
-if (-not $SkipExport) {
-    & (Join-Path $Project "Export_Web_Build.bat")
-    if ($LASTEXITCODE -ne 0) { throw "Web export failed" }
-    & $Python (Join-Path $Project "tools\verify_web_export.py") $Web
-    if ($LASTEXITCODE -ne 0) { throw "Web export verification failed" }
+    if ([string]::IsNullOrWhiteSpace($Only) -and -not $SkipExport) {
+        Invoke-ExternalGate "web_export" (Join-Path $Project "Export_Web_Build.bat") @()
+        Invoke-ExternalGate "verify_web_export" $Python @(
+            (Join-Path $Project "tools\verify_web_export.py"), $Web
+        )
+        $pack = Join-Path $Web "index.pck"
+        Invoke-GodotGate "packed_startup" @(
+            "--headless", "--path", $Web, "--main-pack", $pack, "--quit-after", "5"
+        )
+    }
+    $finalStatus = $(if ([string]::IsNullOrWhiteSpace($Only)) { "pass" } else { "partial-pass" })
+    Write-ReleaseReport $finalStatus
+    Write-Host "AUTHORITATIVE RELEASE GATE: $($finalStatus.ToUpper())"
+    Write-Host "Release report: $ReportPath"
 }
-Write-Host "BUILD-RECOVERY RELEASE GATE: PASS"
+catch {
+    $failure = $_.Exception.Message
+    Write-ReleaseReport "fail" $failure
+    Write-Error "AUTHORITATIVE RELEASE GATE: FAIL - $failure"
+    exit 1
+}

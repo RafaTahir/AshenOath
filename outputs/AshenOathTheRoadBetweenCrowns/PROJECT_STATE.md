@@ -1,5 +1,11 @@
 # Ashen Oath Project State
 
+## Current Product Status
+
+Ashen Oath is a **pre-alpha prototype**. It is not a commercial Alpha, Early Access build, finished campaign, photoreal game, or AAA production. The approved target is a polished 90-minute Web Act One followed by a 4-6 hour grounded-stylized campaign. See `PRODUCT_SCOPE_LOCK.md` and `ASHEN_OATH_MASTER_STUDIO_REVIEW.md`.
+
+The previous 37.2 FPS measurement is provisional evidence, not a release acceptance result, because Castle and screenshot gates failed in the same build lineage. Production now requires an authoritative machine-readable release report and milestone approval.
+
 ## BUILD-RECOVERY-001 Update
 
 - Release verification is centralized in `tools/run_release_gate.ps1`; graphical 720p and fresh screenshot gates may not be skipped.

@@ -36,9 +36,9 @@
       {"label": "I need Moon Oil.", "type": "give_ingredients", "items": {"mooncap": 2, "redroot": 1}},
       {"label": "Mark the next step.", "type": "complete_objective", "quest": "main_teeth_in_rain", "objective": "speak_mira"},
       {"label": "Start Bitter Roots", "type": "start_quest", "quest": "side_bitter_roots"},
-      {"label": "I found the roots.", "type": "complete_objective", "quest": "side_bitter_roots", "objective": "learn_mira_past"},
-      {"label": "Hide Mira's past.", "type": "complete_objective", "quest": "side_bitter_roots", "objective": "choose_mira_truth"},
-      {"label": "Force Mira to confess.", "type": "complete_objective", "quest": "side_bitter_roots", "objective": "choose_mira_truth"}
+      {"label": "I found the roots.", "type": "complete_objective", "quest": "side_bitter_roots", "objective": "collect_roots"},
+      {"label": "Keep the truth between us.", "type": "story_choice", "quest": "side_bitter_roots", "objective": "mira_choice", "sets_flags": {"mira_truth": "kept"}, "result": "Mira keeps working, but no longer meets your eyes."},
+      {"label": "Greyfen deserves the truth.", "type": "story_choice", "quest": "side_bitter_roots", "objective": "mira_choice", "sets_flags": {"mira_truth": "confessed"}, "adjusts_values": {"greyfen_fear": 1}, "result": "Mira agrees to name what feeds the roots."}
     ]
   },
   "edric": {
@@ -50,7 +50,7 @@
     ],
     "actions": [
       {"label": "Start Blood Under Stone", "type": "start_quest", "quest": "main_blood_under_stone"},
-      {"label": "Open the way to Castle Vargan.", "type": "complete_objective", "quest": "main_blood_under_stone", "objective": "confront_edric"}
+      {"label": "I have reached your walls.", "type": "complete_objective", "quest": "main_blood_under_stone", "objective": "reach_castle"}
     ]
   },
   "rook": {
@@ -70,8 +70,8 @@
     ],
     "actions": [
       {"label": "Accept A Widow's Bell", "type": "start_quest", "quest": "side_widows_bell"},
-      {"label": "I will find the bell.", "type": "complete_objective", "quest": "side_widows_bell", "objective": "speak_widow"},
-      {"label": "Tell her the truth.", "type": "complete_objective", "quest": "side_widows_bell", "objective": "choose_widow_truth"}
+      {"label": "I found Harl's bell.", "type": "complete_objective", "quest": "side_widows_bell", "objective": "find_bell"},
+      {"label": "He was calling for a witness.", "type": "story_choice", "quest": "side_widows_bell", "objective": "widow_choice", "sets_flags": {"widow_truth": "told"}, "adjusts_values": {"anwen_trust": 1}, "result": "Elna rings the bell once, then cuts its cord."}
     ]
   },
   "blacksmith_tor": {
@@ -93,9 +93,9 @@
     ],
     "actions": [
       {"label": "Accept The Black Dog Contract", "type": "start_quest", "quest": "side_black_dog"},
-      {"label": "I inspected the sheepfold.", "type": "complete_objective", "quest": "side_black_dog", "objective": "speak_farmer"},
-      {"label": "Tell the villagers the dog protected children.", "type": "complete_objective", "quest": "side_black_dog", "objective": "choose_dog_truth"},
-      {"label": "Lie and claim the dog fled.", "type": "complete_objective", "quest": "side_black_dog", "objective": "choose_dog_truth"}
+      {"label": "I followed the sheepfold tracks.", "type": "complete_objective", "quest": "side_black_dog", "objective": "find_dog"},
+      {"label": "The guardian protected the children.", "type": "story_choice", "quest": "side_black_dog", "objective": "dog_choice", "sets_flags": {"black_dog_fate": "spared"}, "adjusts_values": {"anwen_trust": 1}, "result": "Toma looks toward the fold and lowers his knife."},
+      {"label": "Tell them it fled.", "type": "story_choice", "quest": "side_black_dog", "objective": "dog_choice", "sets_flags": {"black_dog_fate": "hidden"}, "result": "Greyfen accepts the easier story."}
     ]
   },
   "white_hart": {
