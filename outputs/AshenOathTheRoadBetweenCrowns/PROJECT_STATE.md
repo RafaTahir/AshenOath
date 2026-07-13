@@ -22,6 +22,15 @@ The previous 37.2 FPS measurement is provisional evidence, not a release accepta
 - Every retained asset records its source pack and local license file. Missing Wolf license coverage was added from the existing Quaternius Animated Animals source record.
 - A preview Web export passed startup at 63.1 MB total / 26.8 MB PCK, down from the current production package's 69.52 MB / 33.23 MB. Production was not replaced or deployed by this development ticket.
 
+## NAV-001 Update
+
+- Greyfen and Wychwood now build deterministic authored `NavigationRegion3D` polygons without runtime baking.
+- `ZoneSpatialService` owns bridge anchors, gate corridors, exclusions, complete-segment validation, bank identity, occupancy checks, route construction, and same-bank recovery.
+- All seven retained Greyfen routine actors use `NavigationAgent3D`; cross-bank routes are forced through the bridge and invalid routes stop safely.
+- All five Wychwood encounter enemies use navigation-aware pursuit and flanking while preserving leash, staging, attack timing, and combat balance.
+- Cached route zones retain their navigation region. The Dell 7280 graphical gate measured 38.2 FPS average, 36.7 FPS minimum, and a 246 ms warm transition.
+- A development Web preview passed startup at the unchanged 63.1 MB total / 26.8 MB PCK. Production remains unchanged until ticket 10.
+
 ## BUILD-RECOVERY-001 Update
 
 - Release verification is centralized in `tools/run_release_gate.ps1`; graphical 720p and fresh screenshot gates may not be skipped.

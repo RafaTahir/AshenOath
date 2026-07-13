@@ -47,6 +47,12 @@ var far_tick_accumulator := 0.0
 var attack_gate: Callable
 var owns_attack_token := false
 var encounter_active := true
+var spatial_service
+var navigation_agent: NavigationAgent3D
+var navigation_route: Array[Vector3] = []
+var navigation_route_index := 0
+var navigation_refresh_time := 0.0
+var navigation_target := Vector3.INF
 
 func setup(id: String, definition: Dictionary, target: Node3D) -> void:
 	enemy_id = id
@@ -72,6 +78,24 @@ func setup(id: String, definition: Dictionary, target: Node3D) -> void:
 	flank_sign = -1.0 if int(get_instance_id()) % 2 == 0 else 1.0
 	_build_body(base_color)
 
+func setup_navigation(service) -> void:
+	spatial_service = service
+	if navigation_agent == null:
+		navigation_agent = NavigationAgent3D.new()
+		navigation_agent.name = "NavigationAgent3D"
+		navigation_agent.path_desired_distance = 0.28
+		navigation_agent.target_desired_distance = 0.28
+		navigation_agent.radius = 0.44
+		navigation_agent.height = 1.75
+		add_child(navigation_agent)
+	var map_rid: RID = spatial_service.get_navigation_map() if spatial_service != null else RID()
+	if map_rid.is_valid():
+		navigation_agent.set_navigation_map(map_rid)
+	navigation_route.clear()
+	navigation_route_index = 0
+	navigation_refresh_time = 0.0
+	navigation_target = Vector3.INF
+
 func _physics_process(delta: float) -> void:
 	if dead or player == null:
 		return
@@ -91,6 +115,7 @@ func _physics_process(delta: float) -> void:
 	hit_flash_time = max(hit_flash_time - delta, 0.0)
 	stagger_time = max(stagger_time - delta, 0.0)
 	parry_exposed_time = max(parry_exposed_time - delta, 0.0)
+	navigation_refresh_time = maxf(navigation_refresh_time - delta, 0.0)
 	anim_phase += delta * (3.45 if velocity.length() > 0.15 else 0.95)
 	var to_player: Vector3 = player.global_position - global_position
 	var distance: float = to_player.length()
@@ -105,12 +130,11 @@ func _physics_process(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0.0, 12.0 * delta)
 		velocity.z = move_toward(velocity.z, 0.0, 12.0 * delta)
 	elif home_distance > leash_radius:
-		var to_home: Vector3 = home_position - global_position
-		if to_home.length() > 0.35:
-			var home_dir: Vector3 = to_home.normalized()
+		var home_dir := _navigation_direction(home_position)
+		if home_distance > 0.35 and home_dir.length_squared() > 0.01:
 			velocity.x = home_dir.x * move_speed
 			velocity.z = home_dir.z * move_speed
-			look_at(Vector3(home_position.x, global_position.y, home_position.z), Vector3.UP)
+			look_at(global_position + home_dir, Vector3.UP)
 		else:
 			velocity.x = move_toward(velocity.x, 0.0, 8.0 * delta)
 			velocity.z = move_toward(velocity.z, 0.0, 8.0 * delta)
@@ -121,11 +145,20 @@ func _physics_process(delta: float) -> void:
 		var retreat := -to_player.normalized()
 		var tangent := Vector3(-retreat.z, 0.0, retreat.x) * flank_sign
 		var recovery_dir := tangent if behavior_profile == "flanker" else (retreat if behavior_profile == "skirmisher" else Vector3.ZERO)
-		velocity.x = recovery_dir.x * move_speed * 0.65
-		velocity.z = recovery_dir.z * move_speed * 0.65
+		var recovery_target := global_position + recovery_dir * 1.2
+		if spatial_service == null or spatial_service.validate_segment(global_position, recovery_target, 0.55):
+			velocity.x = recovery_dir.x * move_speed * 0.65
+			velocity.z = recovery_dir.z * move_speed * 0.65
+		else:
+			velocity.x = 0.0
+			velocity.z = 0.0
 	elif distance > attack_range:
 		var speed_factor = 0.45 if slowed_time > 0.0 else 1.0
-		var dir := to_player.normalized()
+		var dir := _navigation_direction(player.global_position)
+		if dir.length_squared() < 0.01:
+			velocity.x = 0.0
+			velocity.z = 0.0
+			speed_factor = 0.0
 		var lateral := Vector3(-dir.z, 0.0, dir.x)
 		if behavior_profile == "flanker":
 			dir = (dir * 0.62 + lateral * flank_sign * 0.78).normalized()
@@ -136,6 +169,9 @@ func _physics_process(delta: float) -> void:
 		elif behavior_profile == "brute":
 			speed_factor *= 0.84
 		dir = (dir+_crowd_separation()*0.72).normalized()
+		var proposed: Vector3 = global_position + dir * move_speed * speed_factor * delta
+		if spatial_service != null and not spatial_service.validate_segment(global_position, proposed, 0.50):
+			dir = _navigation_direction(player.global_position, true)
 		velocity.x = dir.x * move_speed * speed_factor
 		velocity.z = dir.z * move_speed * speed_factor
 		look_at(Vector3(player.global_position.x, global_position.y, player.global_position.z), Vector3.UP)
@@ -158,6 +194,32 @@ func _physics_process(delta: float) -> void:
 	if animation_driver != null:
 		animation_driver.set_locomotion(Vector2(velocity.x, velocity.z).length() / max(move_speed, 0.1), velocity, is_on_floor())
 	_animate_visuals(delta)
+
+func _navigation_direction(target: Vector3, force_refresh: bool = false) -> Vector3:
+	if spatial_service == null or navigation_agent == null:
+		return Vector3.ZERO
+	var target_changed := navigation_target == Vector3.INF or navigation_target.distance_squared_to(target) > 0.75
+	if force_refresh or target_changed or navigation_refresh_time <= 0.0 or navigation_route.is_empty():
+		navigation_route = spatial_service.build_route(global_position, target, 0.62)
+		navigation_route_index = 1 if navigation_route.size() > 1 else 0
+		navigation_target = target
+		navigation_refresh_time = 0.22
+		if not navigation_route.is_empty():
+			navigation_agent.target_position = navigation_route[navigation_route_index]
+	if navigation_route.is_empty():
+		return Vector3.ZERO
+	var route_target := navigation_route[navigation_route_index]
+	if global_position.distance_to(route_target) < 0.38 and navigation_route_index + 1 < navigation_route.size():
+		navigation_route_index += 1
+		route_target = navigation_route[navigation_route_index]
+		navigation_agent.target_position = route_target
+	var next_position := navigation_agent.get_next_path_position()
+	var direction := next_position - global_position
+	direction.y = 0.0
+	if direction.length_squared() < 0.002:
+		direction = route_target - global_position
+		direction.y = 0.0
+	return direction.normalized() if direction.length_squared() > 0.002 else Vector3.ZERO
 
 func apply_damage(amount: float, source_tag: String = "") -> void:
 	if dead or not encounter_active:
@@ -185,6 +247,8 @@ func set_encounter_active(value: bool) -> void:
 	set_physics_process(value)
 	if visual_root != null:
 		visual_root.process_mode = Node.PROCESS_MODE_INHERIT if value else Node.PROCESS_MODE_DISABLED
+	if navigation_agent != null:
+		navigation_agent.process_mode = Node.PROCESS_MODE_INHERIT if value else Node.PROCESS_MODE_DISABLED
 	for collision in find_children("*", "CollisionShape3D", true, false):
 		collision.set_deferred("disabled", not value)
 	if value:

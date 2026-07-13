@@ -360,6 +360,13 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		if zone_id in ["greyfen", "wychwood"]:
 			_add_visual_100_layer(zone_id)
 		_apply_first_route_materials(zone_root)
+	spatial_service.build_navigation(zone_root)
+	for enemy in active_enemies:
+		if is_instance_valid(enemy) and enemy.has_method("setup_navigation"):
+			enemy.setup_navigation(spatial_service)
+	var life_controller := zone_root.find_child("GreyfenLifeController", true, false)
+	if life_controller != null and life_controller.has_method("set_spatial_service"):
+		life_controller.set_spatial_service(spatial_service)
 	quests.set_tracked_quest_for_zone(zone_id)
 	if visual_director != null:
 		visual_director.apply_zone(zone_id, zone_root)
@@ -369,9 +376,9 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		if zone_id == "greyfen":
 			audio.play_event("shrine_hum", 0.01)
 	if player != null:
-		player.global_position = spawn_pos
+		player.global_position = spatial_service.nearest_safe(spawn_pos, spatial_service.bank_for(spawn_pos))
 		player.velocity = Vector3.ZERO
-		last_safe_player_position = spawn_pos
+		last_safe_player_position = player.global_position
 	if game_started:
 		_schedule_zone_autosave()
 	if zone_id == "wychwood" and quests.is_active("main_road_of_crows") and not quests.is_objective_done("main_road_of_crows", "fight_ghoulkin"):
@@ -1353,10 +1360,14 @@ func _keep_player_in_world() -> void:
 
 func _safe_loaded_position(zone: String, pos: Vector3) -> Vector3:
 	var river_z := _river_center(zone)
-	if river_z < 900.0 and absf(pos.z - river_z) < 2.15 and (absf(pos.x) > 2.7 or pos.y < 0.18):
-		var side := -1.0 if pos.z <= river_z else 1.0
-		return Vector3(clampf(pos.x,-18.0,18.0), 0.9, river_z + side * 2.85)
-	return pos
+	# The bridge deck is valid walkable space even though its collision sits below the capsule.
+	if river_z < 900.0 and absf(pos.x) < 2.0 and absf(pos.z - river_z) <= 2.25 and pos.y >= 0.18:
+		return pos
+	if spatial_service != null and spatial_service.zone_id == zone:
+		return spatial_service.nearest_safe(pos, spatial_service.bank_for(pos))
+	var validator = ZoneSpatialService.new()
+	validator.configure(zone, _river_center(zone), _zone_half_extents(zone))
+	return validator.nearest_safe(pos, validator.bank_for(pos))
 
 func validate_walkable_position(pos: Vector3) -> Vector3:
 	if spatial_service != null:
@@ -1371,11 +1382,8 @@ func _recover_from_river(body: Node, river_z: float, span: float) -> void:
 	if not (body is CharacterBody3D):
 		return
 	var actor := body as Node3D
-	var side := -1.0 if actor.global_position.z <= river_z else 1.0
-	var candidate := validate_walkable_position(Vector3(clampf(actor.global_position.x,-16.0,16.0),0.0,river_z + side * (span * 0.5 + 1.35)))
-	# Keep recovery away from building walls and the crowded bridge mouth.
-	if current_zone_id == "greyfen" and absf(candidate.x) > 6.0:
-		candidate.x = signf(candidate.x) * 5.5
+	var side := -1 if actor.global_position.z <= river_z else 1
+	var candidate: Vector3 = spatial_service.nearest_safe(actor.global_position, side) if spatial_service != null else validate_walkable_position(Vector3(actor.global_position.x, 0.0, river_z + float(side) * (span * 0.5 + 1.35)))
 	actor.global_position = candidate + Vector3.UP * 0.9
 	(body as CharacterBody3D).velocity = Vector3.ZERO
 	if body == player:
@@ -2459,6 +2467,7 @@ func _spawn_enemy(id: String, pos: Vector3) -> Node:
 	zone_root.add_child(enemy)
 	enemy.global_position = pos
 	enemy.setup(id, enemy_defs.get(id, {}), player)
+	enemy.setup_navigation(spatial_service)
 	if current_zone_id == "wychwood" and id in ["wychwood_stalker", "wychwood_raider", "wychwood_brute"]:
 		enemy.set_encounter_active(false)
 	enemy.attack_gate = _enemy_attack_token

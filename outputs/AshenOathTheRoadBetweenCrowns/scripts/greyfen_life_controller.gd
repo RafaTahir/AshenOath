@@ -27,6 +27,7 @@ var quality := "balanced"
 var rng := RandomNumberGenerator.new()
 var asset_helper
 var far_tick_accumulator := 0.0
+var spatial_service
 
 func configure(game: Node, quality_preset: String) -> void:
 	host = game
@@ -35,8 +36,14 @@ func configure(game: Node, quality_preset: String) -> void:
 	rng.seed = 44017
 	asset_helper = AssetSpawnHelper.new()
 	add_child(asset_helper)
+	set_spatial_service(game.spatial_service)
 	_build_population()
 	_enroll_named_npcs()
+
+func set_spatial_service(service) -> void:
+	spatial_service = service
+	for entry in actors:
+		_configure_agent(entry)
 
 func actor_count() -> int:
 	return actors.size()
@@ -88,7 +95,9 @@ func _build_population() -> void:
 		actor.position = host.validate_walkable_position(definition.path[0])
 		host.zone_root.add_child(actor)
 		var driver = _make_skeletal_villager(actor, str(definition.id), i, float(definition.get("scale",1.0)))
-		actors.append({"id":definition.id,"node":actor,"path":definition.path,"target":1,"speed":definition.speed,"pause":rng.randf_range(0.4,2.4),"driver":driver,"named":false,"phase":rng.randf()*TAU,"base_y":actor.position.y})
+		var entry := {"id":definition.id,"node":actor,"path":definition.path,"target":1,"speed":definition.speed,"pause":rng.randf_range(0.4,2.4),"driver":driver,"named":false,"phase":rng.randf()*TAU,"base_y":actor.position.y,"route":[],"route_index":0}
+		actors.append(entry)
+		_configure_agent(entry)
 
 func _enroll_named_npcs() -> void:
 	var named := {
@@ -102,7 +111,9 @@ func _enroll_named_npcs() -> void:
 		if node == null: continue
 		var ambient = node.find_child("NpcAmbient",true,false)
 		if ambient != null: ambient.process_mode = Node.PROCESS_MODE_DISABLED
-		actors.append({"id":id,"node":node,"path":named[id].path,"target":1,"speed":named[id].speed,"pause":rng.randf_range(1.0,3.0),"driver":node.find_child("CharacterAnimationDriver",true,false),"named":true,"phase":rng.randf()*TAU,"base_y":node.position.y})
+		var entry := {"id":id,"node":node,"path":named[id].path,"target":1,"speed":named[id].speed,"pause":rng.randf_range(1.0,3.0),"driver":node.find_child("CharacterAnimationDriver",true,false),"named":true,"phase":rng.randf()*TAU,"base_y":node.position.y,"route":[],"route_index":0}
+		actors.append(entry)
+		_configure_agent(entry)
 
 func _update_actor(entry: Dictionary, delta: float) -> void:
 	var node: Node3D = entry.node
@@ -121,18 +132,68 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 		entry.pause = float(entry.pause) - delta
 		_set_motion(entry,0.0)
 		return
-	var target: Vector3 = host.validate_walkable_position(entry.path[int(entry.target)])
-	var offset := target - node.position
+	if entry.path.is_empty():
+		_set_motion(entry, 0.0)
+		return
+	entry.target = int(entry.target) % entry.path.size()
+	var final_target: Vector3 = host.validate_walkable_position(entry.path[int(entry.target)])
+	if entry.route.is_empty():
+		entry.route = spatial_service.build_route(node.global_position, final_target, 0.72) if spatial_service != null else [final_target]
+		entry.route_index = 1 if entry.route.size() > 1 else 0
+		_set_agent_target(entry)
+	if entry.route.is_empty():
+		_set_motion(entry, 0.0)
+		return
+	var target: Vector3 = entry.route[int(entry.route_index)]
+	var agent: NavigationAgent3D = entry.get("agent")
+	var steering_target := agent.get_next_path_position() if agent != null and not agent.is_navigation_finished() else target
+	var offset := steering_target - node.global_position
 	offset.y = 0.0
-	if offset.length() < 0.18:
+	if node.global_position.distance_to(target) < 0.28:
+		entry.route_index = int(entry.route_index) + 1
+		if int(entry.route_index) < entry.route.size():
+			_set_agent_target(entry)
+			return
+		entry.route = []
 		entry.target = (int(entry.target) + 1) % entry.path.size()
 		entry.pause = rng.randf_range(1.4,3.8) * (1.4 if str(entry.id) == "shrine_pilgrim" else 1.0)
 		_set_motion(entry,0.0)
 		return
 	var direction := offset.normalized()
-	node.position += direction * float(entry.speed) * delta
+	var next_position := node.global_position + direction * minf(float(entry.speed) * delta, offset.length())
+	if spatial_service != null and not spatial_service.validate_segment(node.global_position, next_position, 0.58):
+		entry.route = []
+		entry.pause = 0.5
+		_set_motion(entry, 0.0)
+		return
+	node.global_position = next_position
 	_face(node,node.global_position + direction,delta)
 	_set_motion(entry,float(entry.speed))
+
+func _configure_agent(entry: Dictionary) -> void:
+	var actor: Node3D = entry.node
+	if not is_instance_valid(actor):
+		return
+	var agent: NavigationAgent3D = entry.get("agent")
+	if agent == null:
+		agent = NavigationAgent3D.new()
+		agent.name = "NavigationAgent3D"
+		agent.path_desired_distance = 0.25
+		agent.target_desired_distance = 0.22
+		agent.radius = 0.38
+		agent.height = 1.72
+		actor.add_child(agent)
+		entry.agent = agent
+	var map_rid: RID = spatial_service.get_navigation_map() if spatial_service != null else RID()
+	if map_rid.is_valid():
+		agent.set_navigation_map(map_rid)
+	entry.route = []
+	entry.route_index = 0
+
+func _set_agent_target(entry: Dictionary) -> void:
+	var agent: NavigationAgent3D = entry.get("agent")
+	if agent != null and int(entry.route_index) < entry.route.size():
+		agent.target_position = entry.route[int(entry.route_index)]
 
 func _set_motion(entry: Dictionary, speed: float) -> void:
 	var driver = entry.driver
