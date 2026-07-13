@@ -14,6 +14,14 @@ The previous 37.2 FPS measurement is provisional evidence, not a release accepta
 - Selected village OBJ modules can instantiate through `AssetSpawnHelper`, but the audition street composition was rejected. `ASSET-001` may curate the components; `WORLD-001` must author the actual Greyfen composition.
 - ART-001 is a development milestone and does not change or deploy the production game.
 
+## ASSET-001 Update
+
+- Runtime asset lookup now uses `curated_runtime_assets.json` instead of loading the 1.94 MB full-library manifest and the generated suggestion map.
+- The curated contract contains 36 roles backed by 27 unique, locally verified CC0 files. Character and enemy entries remain explicitly marked temporary where they did not pass ART-001's final visual standard.
+- Failed Warrior, Cleric and OrcSkull auditions plus three unused generated Ghoul GLBs are quarantined from Web export.
+- Every retained asset records its source pack and local license file. Missing Wolf license coverage was added from the existing Quaternius Animated Animals source record.
+- A preview Web export passed startup at 63.1 MB total / 26.8 MB PCK, down from the current production package's 69.52 MB / 33.23 MB. Production was not replaced or deployed by this development ticket.
+
 ## BUILD-RECOVERY-001 Update
 
 - Release verification is centralized in `tools/run_release_gate.ps1`; graphical 720p and fresh screenshot gates may not be skipped.

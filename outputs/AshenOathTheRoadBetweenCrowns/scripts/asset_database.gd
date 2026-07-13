@@ -1,7 +1,6 @@
 extends Node
 
-const MANIFEST_PATH = "res://asset_manifest.json"
-const ROLE_MAPPING_PATH = "res://asset_role_mapping_suggested.json"
+const CURATED_RUNTIME_PATH = "res://curated_runtime_assets.json"
 const VISUAL_UPGRADE_PATH = "res://visual_upgrade_manifest.json"
 
 var manifest = {}
@@ -12,8 +11,8 @@ func _ready() -> void:
 	reload()
 
 func reload() -> void:
-	manifest = _read_json(MANIFEST_PATH)
-	role_mapping = _read_json(ROLE_MAPPING_PATH)
+	manifest = _read_json(CURATED_RUNTIME_PATH)
+	role_mapping = manifest
 	visual_upgrade = _read_json(VISUAL_UPGRADE_PATH)
 
 func get_asset_for_role(role_name: String) -> Dictionary:

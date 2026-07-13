@@ -1,0 +1,5 @@
+Quaternius Animated Animals Pack
+Source archive: https://opengameart.org/sites/default/files/Animal%20Pack%20Vol.2%20by%20%40Quaternius.zip
+License: CC0 1.0 Universal (Public Domain Dedication)
+
+Selected runtime source: Wolf.obj.

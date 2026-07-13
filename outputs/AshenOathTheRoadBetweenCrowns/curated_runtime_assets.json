@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "ticket": "ASSET-001",
+  "policy": "Only legal, loadable, currently referenced prototype assets or ART-001-selected modular components belong in the runtime library. Technical inclusion is not visual approval.",
+  "roles": {
+    "characters": {
+      "player_kael": {"status":"temporary_runtime","path":"res://assets_external/characters/Adventurer_PolyPizza_Quaternius_CC0.glb","source_pack":"Quaternius RPG Characters","license":"CC0 1.0","license_file":"res://assets_external/licenses/Quaternius_RPG_Characters_CC0.txt","notes":"Current animated prototype body; rejected as final Kael identity by ART-001."},
+      "sister_anwen": {"status":"temporary_runtime","path":"res://assets_external/characters/AnimatedWoman_PolyPizza_Quaternius_CC0.glb","source_pack":"Quaternius RPG Characters","license":"CC0 1.0","license_file":"res://assets_external/licenses/Quaternius_RPG_Characters_CC0.txt","notes":"Current animated prototype body; rejected as final Anwen identity by ART-001."},
+      "mira_herbalist": {"status":"temporary_runtime","path":"res://assets_external/characters/WomanCasual_PolyPizza_Quaternius_CC0.glb","source_pack":"Quaternius RPG Characters","license":"CC0 1.0","license_file":"res://assets_external/licenses/Quaternius_RPG_Characters_CC0.txt"},
+      "rook_smuggler": {"status":"temporary_runtime","path":"res://assets_external/characters/CharacterAnimated_PolyPizza_Quaternius_CC0.glb","source_pack":"Quaternius RPG Characters","license":"CC0 1.0","license_file":"res://assets_external/licenses/Quaternius_RPG_Characters_CC0.txt"},
+      "widow_elna": {"status":"temporary_runtime","path":"res://assets_external/characters/Adventurer_PolyPizza_Quaternius_CC0.glb","source_pack":"Quaternius RPG Characters","license":"CC0 1.0","license_file":"res://assets_external/licenses/Quaternius_RPG_Characters_CC0.txt"},
+      "blacksmith_tor": {"status":"temporary_runtime","path":"res://assets_external/characters/Adventurer_PolyPizza_Quaternius_CC0.glb","source_pack":"Quaternius RPG Characters","license":"CC0 1.0","license_file":"res://assets_external/licenses/Quaternius_RPG_Characters_CC0.txt"},
+      "generic_villager_01": {"status":"temporary_runtime","path":"res://assets_external/characters/Adventurer_PolyPizza_Quaternius_CC0.glb","source_pack":"Quaternius RPG Characters","license":"CC0 1.0","license_file":"res://assets_external/licenses/Quaternius_RPG_Characters_CC0.txt"},
+      "generic_villager_02": {"status":"temporary_runtime","path":"res://assets_external/characters/WomanCasual_PolyPizza_Quaternius_CC0.glb","source_pack":"Quaternius RPG Characters","license":"CC0 1.0","license_file":"res://assets_external/licenses/Quaternius_RPG_Characters_CC0.txt"},
+      "lord_edric": {"status":"temporary_runtime","path":"res://assets_external/characters/HoodedAdventurer_PolyPizza_Quaternius_CC0.glb","source_pack":"Quaternius RPG Characters","license":"CC0 1.0","license_file":"res://assets_external/licenses/Quaternius_RPG_Characters_CC0.txt"},
+      "castle_guard": {"status":"temporary_runtime","path":"res://assets_external/characters/HoodedAdventurer_PolyPizza_Quaternius_CC0.glb","source_pack":"Quaternius RPG Characters","license":"CC0 1.0","license_file":"res://assets_external/licenses/Quaternius_RPG_Characters_CC0.txt"},
+      "road_ranger": {"status":"temporary_runtime","path":"res://assets_external/characters/CharacterAnimated_PolyPizza_Quaternius_CC0.glb","source_pack":"Quaternius RPG Characters","license":"CC0 1.0","license_file":"res://assets_external/licenses/Quaternius_RPG_Characters_CC0.txt"}
+    },
+    "enemies": {
+      "ghoulkin": {"status":"temporary_runtime","path":"res://assets_external/animated/Skeleton_Animated_CC0.fbx","source_pack":"Quaternius Animated Monsters","license":"CC0 1.0","license_file":"res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt","notes":"Technically coherent current prototype; visually rejected as final Ghoulkin direction."},
+      "ghoulkin_skeleton": {"status":"temporary_runtime","path":"res://assets_external/animated/Skeleton_Animated_CC0.fbx","source_pack":"Quaternius Animated Monsters","license":"CC0 1.0","license_file":"res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt"},
+      "bog_wretch": {"status":"temporary_runtime","path":"res://assets_external/enemies/Slime.obj","source_pack":"Quaternius Animated Monsters","license":"CC0 1.0","license_file":"res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt"},
+      "gravebound_knight": {"status":"temporary_runtime","path":"res://assets_external/enemies/Skeleton.obj","source_pack":"Quaternius Animated Monsters","license":"CC0 1.0","license_file":"res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt"},
+      "wychwood_stalker": {"status":"temporary_runtime","path":"res://assets_external/animated/Skeleton_Animated_CC0.fbx","source_pack":"Quaternius Animated Monsters","license":"CC0 1.0","license_file":"res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt"},
+      "white_hart_avatar": {"status":"temporary_runtime","path":"res://assets_external/enemies/Wolf.obj","source_pack":"Quaternius Animated Animals","license":"CC0 1.0","license_file":"res://assets_external/licenses/Quaternius_Animated_Animals_CC0.txt","notes":"Temporary placeholder body, not final White Hart art."},
+      "bandit": {"status":"temporary_runtime","path":"res://assets_external/characters/Rogue.obj","source_pack":"Quaternius RPG Characters","license":"CC0 1.0","license_file":"res://assets_external/licenses/Quaternius_RPG_Characters_CC0.txt"}
+    },
+    "environment": {
+      "greyfen_house": {"status":"selected_component","path":"res://assets_external/environment/village/Wall_Plaster_Door_Flat.obj","source_pack":"Quaternius Medieval Village MegaKit","license":"CC0 1.0","license_file":"res://assets_external/licenses/quaternius_medieval_village_megakit/License_Standard.txt"},
+      "tavern": {"status":"selected_component","path":"res://assets_external/environment/village/Roof_2x4_RoundTile.obj","source_pack":"Quaternius Medieval Village MegaKit","license":"CC0 1.0","license_file":"res://assets_external/licenses/quaternius_medieval_village_megakit/License_Standard.txt"},
+      "shrine": {"status":"selected_component","path":"res://assets_external/environment/village/Balcony_Cross_Straight.obj","source_pack":"Quaternius Medieval Village MegaKit","license":"CC0 1.0","license_file":"res://assets_external/licenses/quaternius_medieval_village_megakit/License_Standard.txt"},
+      "blacksmith_shop": {"status":"selected_component","path":"res://assets_external/environment/props/Anvil.obj","source_pack":"Quaternius Fantasy Props MegaKit","license":"CC0 1.0","license_file":"res://assets_external/licenses/quaternius_fantasy_props_megakit/License_Standard.txt"},
+      "cemetery_gravestone": {"status":"selected_component","path":"res://assets_external/environment/village/Wall_UnevenBrick_Straight.obj","source_pack":"Quaternius Medieval Village MegaKit","license":"CC0 1.0","license_file":"res://assets_external/licenses/quaternius_medieval_village_megakit/License_Standard.txt"},
+      "forest_tree": {"status":"selected_component","path":"res://assets_external/environment/forest/CommonTree_1.obj","source_pack":"Quaternius Stylized Nature MegaKit","license":"CC0 1.0","license_file":"res://assets_external/licenses/quaternius_stylized_nature_megakit/License_Standard.txt"},
+      "forest_rock": {"status":"selected_component","path":"res://assets_external/environment/forest/Rock_Medium_1.obj","source_pack":"Quaternius Stylized Nature MegaKit","license":"CC0 1.0","license_file":"res://assets_external/licenses/quaternius_stylized_nature_megakit/License_Standard.txt"},
+      "forest_bush": {"status":"selected_component","path":"res://assets_external/environment/forest/Bush_Common.obj","source_pack":"Quaternius Stylized Nature MegaKit","license":"CC0 1.0","license_file":"res://assets_external/licenses/quaternius_stylized_nature_megakit/License_Standard.txt"},
+      "ruins_wall": {"status":"selected_component","path":"res://assets_external/environment/village/Wall_UnevenBrick_Straight.obj","source_pack":"Quaternius Medieval Village MegaKit","license":"CC0 1.0","license_file":"res://assets_external/licenses/quaternius_medieval_village_megakit/License_Standard.txt"},
+      "ruins_pillar": {"status":"selected_component","path":"res://assets_external/environment/village/Wall_Arch.obj","source_pack":"Quaternius Medieval Village MegaKit","license":"CC0 1.0","license_file":"res://assets_external/licenses/quaternius_medieval_village_megakit/License_Standard.txt"},
+      "barrel": {"status":"selected_component","path":"res://assets_external/environment/props/Barrel.obj","source_pack":"Quaternius Fantasy Props MegaKit","license":"CC0 1.0","license_file":"res://assets_external/licenses/quaternius_fantasy_props_megakit/License_Standard.txt"},
+      "crate": {"status":"selected_component","path":"res://assets_external/environment/props/Crate_Metal.obj","source_pack":"Quaternius Fantasy Props MegaKit","license":"CC0 1.0","license_file":"res://assets_external/licenses/quaternius_fantasy_props_megakit/License_Standard.txt"},
+      "cart": {"status":"selected_component","path":"res://assets_external/environment/props/Stall_Cart_Empty.obj","source_pack":"Quaternius Fantasy Props MegaKit","license":"CC0 1.0","license_file":"res://assets_external/licenses/quaternius_fantasy_props_megakit/License_Standard.txt"},
+      "fence": {"status":"selected_component","path":"res://assets_external/environment/village/Prop_WoodenFence_Single.obj","source_pack":"Quaternius Medieval Village MegaKit","license":"CC0 1.0","license_file":"res://assets_external/licenses/quaternius_medieval_village_megakit/License_Standard.txt"},
+      "torch": {"status":"selected_component","path":"res://assets_external/environment/props/Torch_Metal.obj","source_pack":"Quaternius Fantasy Props MegaKit","license":"CC0 1.0","license_file":"res://assets_external/licenses/quaternius_fantasy_props_megakit/License_Standard.txt"}
+    },
+    "audio": {
+      "ui_click": {"status":"selected_runtime","path":"res://assets_external/audio/ui/click1.wav","source_pack":"Kenney UI Audio","license":"CC0 1.0","license_file":"res://assets_external/licenses/kenney_ui_audio_godot/LICENSE.txt"}
+    },
+    "ui": {
+      "button": {"status":"selected_runtime","path":"res://assets_external/ui/button_brown.png","source_pack":"Kenney UI Pack Adventure","license":"CC0 1.0","license_file":"res://assets_external/licenses/kenney_ui_pack_adventure/License.txt"},
+      "panel": {"status":"selected_runtime","path":"res://assets_external/ui/panel_brown.png","source_pack":"Kenney UI Pack Adventure","license":"CC0 1.0","license_file":"res://assets_external/licenses/kenney_ui_pack_adventure/License.txt"}
+    }
+  },
+  "quarantine": [
+    {"path":"res://assets_external/animated/Warrior_Animated_CC0.gltf","reason":"ART-001 rejected: faceless and role-inappropriate for Kael."},
+    {"path":"res://assets_external/animated/Cleric_Animated_CC0.gltf","reason":"ART-001 rejected: masked combatant silhouette does not read as Anwen."},
+    {"path":"res://assets_external/animated/OrcSkull_Animated_CC0.gltf","reason":"ART-001 rejected: toy-like rather than cursed-human horror."},
+    {"path":"res://assets_external/characters_real/GhoulGaunt_Real.glb","reason":"Generated audition artifact is not wired into runtime and did not pass the visual gate."},
+    {"path":"res://assets_external/characters_real/GhoulStalker_Real.glb","reason":"Generated audition artifact is not wired into runtime and did not pass the visual gate."},
+    {"path":"res://assets_external/characters_real/GhoulBrute_Real.glb","reason":"Generated audition artifact is not wired into runtime and did not pass the visual gate."}
+  ]
+}
