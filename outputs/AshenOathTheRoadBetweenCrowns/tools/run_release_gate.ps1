@@ -141,7 +141,7 @@ try {
     )
 
     $verifiers = @(
-        "verify_runtime.gd", "verify_story_campaign.gd", "verify_character_real_001.gd",
+        "verify_runtime.gd", "verify_story_campaign.gd", "verify_art_001.gd", "verify_character_real_001.gd",
         "verify_motion_quality.gd", "verify_river_swimming.gd", "verify_greyfen_life.gd",
         "verify_castle_vargan.gd", "verify_audio_runtime.gd", "verify_visible_quality.gd",
         "verify_recovery_002_foundation.gd", "verify_zone_budgets.gd",

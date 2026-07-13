@@ -6,6 +6,14 @@ Ashen Oath is a **pre-alpha prototype**. It is not a commercial Alpha, Early Acc
 
 The previous 37.2 FPS measurement is provisional evidence, not a release acceptance result, because Castle and screenshot gates failed in the same build lineage. Production now requires an authoritative machine-readable release report and milestone approval.
 
+## ART-001 Update
+
+- The grounded-stylized visual bible and identical-camera asset audition are complete.
+- The Warrior, Cleric, and OrcSkull candidates were rejected for runtime replacement after graphical review; they do not solve facial identity, role silhouette, or horror credibility.
+- Existing Kael, Anwen, and Ghoulkin mappings remain temporary and explicitly require replacement in `CHAR-001` and `MON-001`.
+- Selected village OBJ modules can instantiate through `AssetSpawnHelper`, but the audition street composition was rejected. `ASSET-001` may curate the components; `WORLD-001` must author the actual Greyfen composition.
+- ART-001 is a development milestone and does not change or deploy the production game.
+
 ## BUILD-RECOVERY-001 Update
 
 - Release verification is centralized in `tools/run_release_gate.ps1`; graphical 720p and fresh screenshot gates may not be skipped.
@@ -16,7 +24,7 @@ The previous 37.2 FPS measurement is provisional evidence, not a release accepta
 - Repeated world boxes/details use shared meshes and MultiMesh batches. RECOVERY-002 measured 37.2 FPS average, 35.6 FPS minimum, and 294 ms warm route transition on Intel HD 620/ANGLE.
 - The world remains intentionally stylized and low-poly; current assets do not support a photoreal/AAA claim.
 
-Last updated: 2026-07-11
+Last updated: 2026-07-14
 
 ## Summary
 
