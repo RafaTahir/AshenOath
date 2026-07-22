@@ -17,6 +17,12 @@ func _initialize() -> void:
 	var player = game.player
 	check(player != null, "Player missing")
 	check(player.has_signal("blade_contact_requested"), "Player lacks authoritative blade-contact signal")
+	check(player.rig_sword_visual != null, "Kael has no drawn sword visual")
+	check(_has_bone_attachment_ancestor(player.rig_sword_visual), "Kael's drawn sword is not attached to a skeleton bone")
+	var sword_bounds := _visible_rendered_bounds(player.rig_sword_visual)
+	check(sword_bounds.size.length_squared() > 0.0001, "Kael's drawn sword has no visible rendered mesh")
+	check(maxf(sword_bounds.size.x, maxf(sword_bounds.size.y, sword_bounds.size.z)) >= 0.75, "Kael's rendered sword is too small to read in gameplay")
+	check(_has_readable_sword_material(player.rig_sword_visual), "Kael's rendered sword is too dark or lacks a readable material")
 	check(player.find_child("BladeContactBase", true, false) != null, "Sword hilt contact marker missing")
 	check(player.find_child("BladeContactTip", true, false) != null, "Sword tip contact marker missing")
 	var segment: Dictionary = player.get_blade_world_segment()
@@ -24,6 +30,14 @@ func _initialize() -> void:
 	var blade_tip: Vector3 = segment.get("tip", Vector3.ZERO)
 	check(blade_base.distance_to(blade_tip) > 0.75, "Measured blade segment is too short")
 	check(blade_tip.distance_to(player.global_position) < 2.5, "Measured blade tip is detached from Kael")
+	var light_clip: StringName = player.animation_driver.get_clip_for_state("attack_light")
+	var heavy_clip: StringName = player.animation_driver.get_clip_for_state("attack_heavy")
+	check(light_clip != StringName() and heavy_clip != StringName(), "Light or heavy attack clip is unresolved")
+	check(light_clip != heavy_clip, "Light and heavy attacks resolve to the same visible animation")
+	var light_motion: float = _sample_blade_motion(player, light_clip)
+	var heavy_motion: float = _sample_blade_motion(player, heavy_clip)
+	check(light_motion >= 0.14, "Light attack does not visibly move the sword")
+	check(heavy_motion >= 0.14, "Heavy attack does not visibly move the sword")
 
 	game.call("_load_zone", "wychwood", Vector3(0, 1, -4))
 	await settle(5)
@@ -89,3 +103,54 @@ func check(condition: bool, message: String) -> void:
 	if not condition:
 		failures += 1
 		push_error(message)
+
+func _has_bone_attachment_ancestor(node: Node) -> bool:
+	var ancestor := node
+	while ancestor != null:
+		if ancestor is BoneAttachment3D:
+			return true
+		ancestor = ancestor.get_parent()
+	return false
+
+func _visible_rendered_bounds(node: Node) -> AABB:
+	var bounds := AABB()
+	var found := false
+	for child in node.find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := child as MeshInstance3D
+		if mesh_instance == null or mesh_instance.mesh == null or not mesh_instance.visible:
+			continue
+		var rendered: AABB = mesh_instance.global_transform * mesh_instance.mesh.get_aabb()
+		bounds = bounds.merge(rendered) if found else rendered
+		found = true
+	return bounds if found else AABB()
+
+func _has_readable_sword_material(node: Node) -> bool:
+	for child in node.find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := child as MeshInstance3D
+		if mesh_instance == null or not mesh_instance.visible:
+			continue
+		var material := mesh_instance.material_override as StandardMaterial3D
+		if material != null and material.albedo_color.get_luminance() >= 0.35:
+			return true
+	return false
+
+func _sample_blade_motion(player, clip: StringName) -> float:
+	var animation_player := player.animation_driver.get_animation_player() as AnimationPlayer
+	var skeleton := player.animation_driver.get_skeleton() as Skeleton3D
+	if animation_player == null or skeleton == null or not animation_player.has_animation(clip):
+		return 0.0
+	var wrist_index := skeleton.find_bone("Wrist.R")
+	if wrist_index < 0:
+		return 0.0
+	var animation := animation_player.get_animation(clip)
+	animation_player.play(clip, 0.0)
+	animation_player.seek(minf(animation.length * 0.10, animation.length), true)
+	skeleton.force_update_all_bone_transforms()
+	var start: Transform3D = skeleton.get_bone_global_pose(wrist_index)
+	animation_player.seek(minf(animation.length * 0.58, animation.length), true)
+	skeleton.force_update_all_bone_transforms()
+	var finish: Transform3D = skeleton.get_bone_global_pose(wrist_index)
+	var motion := start.origin.distance_to(finish.origin)
+	motion += start.basis.x.distance_to(finish.basis.x)
+	motion += start.basis.y.distance_to(finish.basis.y)
+	return motion

@@ -42,6 +42,8 @@ var sword_visual: MeshInstance3D
 var sword_hilt_visual: MeshInstance3D
 var sword_trail_visual: MeshInstance3D
 var rig_sword_visual: Node3D
+var sword_attachment: BoneAttachment3D
+var sword_equipment_pivot: Node3D
 var slash_arc_root: Node3D
 var slash_arc_primary: MeshInstance3D
 var slash_arc_secondary: MeshInstance3D
@@ -64,6 +66,8 @@ var attack_sequence_id := 0
 var attack_contact_emitted := false
 var previous_blade_base := Vector3.ZERO
 var previous_blade_tip := Vector3.ZERO
+var visual_previous_blade_base := Vector3.ZERO
+var visual_previous_blade_tip := Vector3.ZERO
 var blade_base_marker: Node3D
 var blade_tip_marker: Node3D
 var hurt_flash_time = 0.0
@@ -242,7 +246,7 @@ func _handle_combat_input() -> void:
 		attack_anim_time = 0.34
 		attack_anim_heavy = false
 		if animation_driver != null:
-			animation_driver.trigger_action("attack_light")
+			animation_driver.trigger_action("attack_light", 1.22, 0.06)
 		_begin_blade_attack(24.0, 2.0, false)
 	elif Input.is_action_just_pressed("heavy_attack"):
 		if stamina_component.spend(22.0):
@@ -250,7 +254,7 @@ func _handle_combat_input() -> void:
 			attack_anim_time = 0.52
 			attack_anim_heavy = true
 			if animation_driver != null:
-				animation_driver.trigger_action("attack_heavy")
+				animation_driver.trigger_action("attack_heavy", 0.76, 0.08)
 			_begin_blade_attack(42.0, 2.25, true)
 		else:
 			stamina_exhausted.emit("heavy attack")
@@ -676,7 +680,7 @@ func _try_build_mapped_body() -> bool:
 	var animated: bool = bool(animation_driver.configure(mapped, {
 		"idle": "Idle_Sword", "walk": "Walk", "run": "Run",
 		"jump": "Run", "attack_light": "Sword_Slash",
-		"attack_heavy": "Sword_Slash", "dodge": "Roll",
+		"attack_heavy": "Punch_Right", "dodge": "Roll",
 		"parry": "HitRecieve", "beam_cast": "Interact", "hit": "HitRecieve", "death": "Death"
 	}))
 	if not animated:
@@ -712,7 +716,13 @@ func _attach_rig_sword(mapped: Node3D) -> Node3D:
 	attachment.bone_idx = hand_index
 	attachment.bone_name = skeleton.get_bone_name(hand_index)
 	skeleton.add_child(attachment)
+	sword_attachment = attachment
 	var equipment_space := _create_equipment_space(attachment, "KaelSwordEquipmentSpace")
+	sword_equipment_pivot = Node3D.new()
+	sword_equipment_pivot.name = "KaelSwordGripPivot"
+	sword_equipment_pivot.position = Vector3(0.015, -0.015, -0.015)
+	sword_equipment_pivot.rotation_degrees = Vector3(0.0, 0.0, -6.0)
+	equipment_space.add_child(sword_equipment_pivot)
 	var sword: Node3D = null
 	var sword_scene = load("res://assets_external/characters/Warrior_Sword.fbx")
 	if sword_scene is PackedScene:
@@ -720,12 +730,13 @@ func _attach_rig_sword(mapped: Node3D) -> Node3D:
 	if sword == null:
 		sword = Node3D.new()
 	sword.name = "Warrior_Sword"
-	sword.position = Vector3(0.0, -0.08, -0.20)
-	sword.rotation_degrees = Vector3(0.0, 0.0, -8.0)
-	sword.scale *= 0.72
-	equipment_space.add_child(sword)
+	sword.position = Vector3(0.0, -0.05, -0.04)
+	sword.rotation_degrees = Vector3.ZERO
+	sword.scale *= 0.90
+	sword_equipment_pivot.add_child(sword)
 	if sword_scene is PackedScene:
-		return sword
+		sword.visible = false
+		return _build_oathblade_visual(sword_equipment_pivot)
 	var blade := MeshInstance3D.new()
 	blade.name = "Warrior_Sword_Blade"
 	var blade_mesh := BoxMesh.new()
@@ -742,6 +753,96 @@ func _attach_rig_sword(mapped: Node3D) -> Node3D:
 	hilt.material_override = _mat(Color(0.20, 0.11, 0.05))
 	sword.add_child(hilt)
 	return sword
+
+func _build_oathblade_visual(parent: Node3D) -> Node3D:
+	var oathblade := Node3D.new()
+	oathblade.name = "KaelOathblade"
+	parent.add_child(oathblade)
+	var steel := _metal_mat(Color(0.78, 0.84, 0.88))
+	steel.metallic = 0.82
+	steel.roughness = 0.24
+	steel.emission_enabled = true
+	steel.emission = Color(0.11, 0.14, 0.16)
+	steel.emission_energy_multiplier = 0.28
+	var blade := MeshInstance3D.new()
+	blade.name = "OathbladeSteel"
+	blade.mesh = _build_oathblade_mesh()
+	blade.material_override = steel
+	oathblade.add_child(blade)
+	var guard := MeshInstance3D.new()
+	guard.name = "OathbladeGuard"
+	var guard_mesh := BoxMesh.new()
+	guard_mesh.size = Vector3(0.30, 0.055, 0.075)
+	guard.mesh = guard_mesh
+	guard.position = Vector3(0.0, -0.075, 0.0)
+	guard.material_override = _metal_mat(Color(0.52, 0.36, 0.15))
+	oathblade.add_child(guard)
+	var grip := MeshInstance3D.new()
+	grip.name = "OathbladeGrip"
+	var grip_mesh := CylinderMesh.new()
+	grip_mesh.top_radius = 0.033
+	grip_mesh.bottom_radius = 0.038
+	grip_mesh.height = 0.22
+	grip_mesh.radial_segments = 8
+	grip.mesh = grip_mesh
+	grip.position = Vector3(0.0, 0.065, 0.0)
+	grip.material_override = _mat(Color(0.18, 0.07, 0.035))
+	oathblade.add_child(grip)
+	return oathblade
+
+func _build_oathblade_mesh() -> ImmediateMesh:
+	var mesh := ImmediateMesh.new()
+	var vertices := [
+		Vector3(-0.055, -0.10, 0.020), Vector3(0.055, -0.10, 0.020), Vector3(0.0, -1.16, 0.020),
+		Vector3(-0.055, -0.10, -0.020), Vector3(0.055, -0.10, -0.020), Vector3(0.0, -1.16, -0.020)
+	]
+	var faces := [[0, 2, 1], [3, 4, 5], [0, 1, 4], [0, 4, 3], [0, 3, 5], [0, 5, 2], [1, 2, 5], [1, 5, 4]]
+	mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLES)
+	for face in faces:
+		var a: Vector3 = vertices[face[0]]
+		var b: Vector3 = vertices[face[1]]
+		var c: Vector3 = vertices[face[2]]
+		var normal := (b - a).cross(c - a).normalized()
+		mesh.surface_set_normal(normal)
+		mesh.surface_add_vertex(a)
+		mesh.surface_set_normal(normal)
+		mesh.surface_add_vertex(b)
+		mesh.surface_set_normal(normal)
+		mesh.surface_add_vertex(c)
+	mesh.surface_end()
+	return mesh
+
+func _make_sword_readable(sword: Node3D) -> void:
+	var blade_material := _metal_mat(Color(0.72, 0.78, 0.82))
+	blade_material.metallic = 0.72
+	blade_material.roughness = 0.30
+	var found_mesh := false
+	for child in sword.find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := child as MeshInstance3D
+		if mesh_instance == null or mesh_instance.mesh == null:
+			continue
+		found_mesh = true
+		mesh_instance.visible = true
+		mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+		mesh_instance.material_override = blade_material
+	if found_mesh:
+		return
+	var blade := MeshInstance3D.new()
+	blade.name = "KaelReadableSwordBlade"
+	var blade_mesh := BoxMesh.new()
+	blade_mesh.size = Vector3(0.065, 1.02, 0.035)
+	blade.mesh = blade_mesh
+	blade.position = Vector3(0.0, -0.53, 0.0)
+	blade.material_override = blade_material
+	sword.add_child(blade)
+	var guard := MeshInstance3D.new()
+	guard.name = "KaelReadableSwordGuard"
+	var guard_mesh := BoxMesh.new()
+	guard_mesh.size = Vector3(0.28, 0.055, 0.055)
+	guard.mesh = guard_mesh
+	guard.position = Vector3(0.0, -0.02, 0.0)
+	guard.material_override = _metal_mat(Color(0.42, 0.32, 0.18))
+	sword.add_child(guard)
 
 func _create_equipment_space(attachment: BoneAttachment3D, space_name: String) -> Node3D:
 	var equipment_space := Node3D.new()
@@ -855,7 +956,7 @@ func _add_slash_arc_visuals() -> void:
 	slash_arc_root.position = Vector3(0.48, 1.18, -0.78)
 	slash_arc_root.visible = false
 	visual_root.add_child(slash_arc_root)
-	slash_arc_primary = _add_slash_panel("visible_sword_slash_arc_primary", Vector3.ZERO, Vector3(0.09, 0.18, 1.0), Color(1.0, 0.62, 0.24, 0.82))
+	slash_arc_primary = _add_slash_panel("visible_sword_slash_arc_primary", Vector3.ZERO, Vector3(0.09, 0.18, 1.0), Color(1.0, 0.76, 0.42, 0.30))
 	slash_arc_secondary = _add_slash_panel("visible_sword_slash_arc_secondary", Vector3(0.07, -0.04, 0.05), Vector3(0.16, 0.08, 0.90), Color(0.70, 0.32, 0.12, 0.58))
 	slash_arc_spark = _add_slash_panel("visible_sword_slash_impact_edge", Vector3(0.0, 0.0, -0.48), Vector3(0.20, 0.22, 0.16), Color(1.0, 0.80, 0.34, 0.92))
 
@@ -931,11 +1032,11 @@ func _animate_visuals(delta: float, move_dir: Vector3, moving: bool) -> void:
 		combat_swing_weight = strike_arc
 		combat_windup_weight = windup
 		var windup_angle = 34.0 if attack_anim_heavy else 18.0
-		var swing = -172.0 * strike_arc if attack_anim_heavy else -132.0 * strike_arc
+		var swing = -188.0 * strike_arc if attack_anim_heavy else -124.0 * strike_arc
 		var root_y = lerp(windup_angle, -18.0 if attack_anim_heavy else -10.0, strike)
 		root_y = lerp(root_y, 0.0, recovery)
 		visual_root.rotation_degrees.y = root_y
-		visual_root.rotation_degrees.x = lerp(visual_root.rotation_degrees.x, forward_lean - (9.0 if attack_anim_heavy else 5.5) * strike_arc + 3.0 * windup, 12.0 * delta)
+		visual_root.rotation_degrees.x = lerp(visual_root.rotation_degrees.x, forward_lean - (15.0 if attack_anim_heavy else 5.5) * strike_arc + (8.0 if attack_anim_heavy else 3.0) * windup, 12.0 * delta)
 		if weapon_root != null:
 			var weapon_pose = Vector3(38.0 - strike_arc * (68.0 if attack_anim_heavy else 48.0), swing, 20.0 + windup * (68.0 if attack_anim_heavy else 42.0) + strike_arc * (110.0 if attack_anim_heavy else 82.0))
 			weapon_root.rotation_degrees = weapon_pose
@@ -1001,12 +1102,17 @@ func _animate_slash_arc(strike: float, strike_arc: float, recovery: float, heavy
 	var visible = strike > 0.08 and strike < 0.94 and recovery < 0.86
 	slash_arc_root.visible = visible
 	if not visible:
+		visual_previous_blade_base = Vector3.ZERO
+		visual_previous_blade_tip = Vector3.ZERO
 		return
 	var segment: Dictionary = get_blade_world_segment()
 	var blade_base: Vector3 = segment.get("base", global_position + Vector3(0, 1.0, 0))
 	var blade_tip: Vector3 = segment.get("tip", blade_base)
-	var old_base: Vector3 = previous_blade_base if previous_blade_base.length_squared() > 0.01 else blade_base
-	var old_tip: Vector3 = previous_blade_tip if previous_blade_tip.length_squared() > 0.01 else blade_tip
+	var old_base: Vector3 = visual_previous_blade_base if visual_previous_blade_base.length_squared() > 0.01 else blade_base
+	var old_tip: Vector3 = visual_previous_blade_tip if visual_previous_blade_tip.length_squared() > 0.01 else blade_tip
+	if old_tip.distance_to(blade_tip) > 1.10:
+		old_base = blade_base
+		old_tip = blade_tip
 	slash_arc_root.global_transform = Transform3D.IDENTITY
 	if slash_arc_primary != null:
 		slash_arc_primary.visible = true
@@ -1018,6 +1124,8 @@ func _animate_slash_arc(strike: float, strike_arc: float, recovery: float, heavy
 		slash_arc_secondary.visible = false
 	if slash_arc_spark != null:
 		slash_arc_spark.visible = false
+	visual_previous_blade_base = blade_base
+	visual_previous_blade_tip = blade_tip
 
 func _build_blade_ribbon(old_base: Vector3, old_tip: Vector3, blade_base: Vector3, blade_tip: Vector3) -> ImmediateMesh:
 	var ribbon := ImmediateMesh.new()
@@ -1051,7 +1159,7 @@ func _trail_mat(color: Color) -> StandardMaterial3D:
 	material.cull_mode = BaseMaterial3D.CULL_DISABLED
 	material.emission_enabled = true
 	material.emission = Color(1.0, 0.76, 0.42)
-	material.emission_energy_multiplier = 0.9
+	material.emission_energy_multiplier = 0.46
 	return material
 
 func _beam_material(color: Color) -> StandardMaterial3D:

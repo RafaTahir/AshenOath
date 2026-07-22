@@ -93,7 +93,7 @@ func set_locomotion(speed_ratio: float, _direction: Vector3, grounded: bool) -> 
 		target_playback_scale = 1.0
 	_play_state(state, 0.14)
 
-func trigger_action(action_name: String) -> bool:
+func trigger_action(action_name: String, playback_scale: float = 1.0, blend_time: float = 0.10) -> bool:
 	if not is_valid() or dead:
 		return false
 	if action_active and current_state == action_name and animation_player.is_playing():
@@ -103,8 +103,10 @@ func trigger_action(action_name: String) -> bool:
 		return false
 	action_active = true
 	current_state = action_name
-	target_playback_scale = 1.0
-	animation_player.play(clip, 0.10)
+	target_playback_scale = clampf(playback_scale, 0.55, 1.45)
+	current_playback_scale = target_playback_scale
+	animation_player.speed_scale = current_playback_scale
+	animation_player.play(clip, clampf(blend_time, 0.0, 0.25))
 	action_started.emit(action_name)
 	return true
 

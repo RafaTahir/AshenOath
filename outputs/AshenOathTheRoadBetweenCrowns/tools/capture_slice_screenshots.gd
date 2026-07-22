@@ -29,6 +29,8 @@ func _initialize() -> void:
 	game.call("_new_game")
 	await _settle_frames(8)
 	if "--combat-only" in OS.get_cmdline_user_args():
+		await _capture_player_motion_state(game, "13_player_light_attack_arc", "light")
+		await _capture_player_motion_state(game, "14_player_heavy_attack_arc", "heavy")
 		await _capture_blade_contact(game, "73_combat_001_blade_contact")
 		print("COMBAT-001 CAPTURE: PASS")
 		quit(0)
@@ -269,16 +271,15 @@ func _capture_blade_contact(game, file_name: String) -> void:
 	game.player.global_position = Vector3(0, 1, -4.0)
 	game.player.velocity = Vector3.ZERO
 	game.player.set_physics_process(false)
-	game.player.attack_anim_time = 0.22
+	game.player.attack_anim_time = 0.34
 	game.player.attack_anim_heavy = false
-	game.player.call("_begin_blade_attack", 24.0, 2.0, false)
-	var initial_segment: Dictionary = game.player.get_blade_world_segment()
-	var sweep_offset := Vector3(-0.72, 0.18, 0.30)
-	game.player.previous_blade_base = initial_segment.get("base", game.player.global_position + Vector3(0, 1, 0)) + sweep_offset
-	game.player.previous_blade_tip = initial_segment.get("tip", game.player.global_position + Vector3(0, 1, -1)) + sweep_offset
 	if game.player.animation_driver != null:
-		game.player.animation_driver.trigger_action("attack_light")
-	game.player.call("_animate_visuals", 0.016, Vector3.ZERO, false)
+		game.player.animation_driver.trigger_action("attack_light", 1.22, 0.0)
+	game.player.call("_begin_blade_attack", 24.0, 2.0, false)
+	for _frame in range(8):
+		game.player.attack_anim_time = max(float(game.player.attack_anim_time) - 0.016, 0.0)
+		game.player.call("_animate_visuals", 0.016, Vector3.ZERO, false)
+		await process_frame
 	var segment: Dictionary = game.player.get_blade_world_segment()
 	var blade_base: Vector3 = segment.get("base", game.player.global_position + Vector3(0, 1, 0))
 	var blade_tip: Vector3 = segment.get("tip", blade_base)
@@ -303,22 +304,29 @@ func _capture_blade_contact(game, file_name: String) -> void:
 	await _settle_frames(3)
 	_save_viewport(file_name)
 	game.player.set_physics_process(true)
+	if game.camera_rig != null:
+		game.camera_rig.set_process(true)
 
 func _capture_player_motion_state(game, file_name: String, state: String) -> void:
 	game.call("_load_zone", "greyfen", Vector3(0, 1, 5.5))
 	await _settle_frames(4)
 	game.player.global_position = Vector3(0, 1, 5.5)
+	game.player.set_physics_process(false)
 	game.player.velocity = Vector3.ZERO if state == "idle" else Vector3(0, 0, -4.0)
 	game.player.move_phase = PI * 0.5 if state == "walk" else 0.0
 	if game.camera_rig != null:
 		game.camera_rig.yaw = 0.0
 		game.camera_rig.pitch = -0.18
 	if state == "light":
-		game.player.attack_anim_time = 0.25
+		game.player.attack_anim_time = 0.34
 		game.player.attack_anim_heavy = false
+		game.player.animation_driver.trigger_action("attack_light", 1.22, 0.0)
+		game.player.call("_begin_blade_attack", 24.0, 2.0, false)
 	elif state == "heavy":
-		game.player.attack_anim_time = 0.28
+		game.player.attack_anim_time = 0.52
 		game.player.attack_anim_heavy = true
+		game.player.animation_driver.trigger_action("attack_heavy", 0.76, 0.0)
+		game.player.call("_begin_blade_attack", 42.0, 2.25, true)
 	elif state == "run":
 		game.player.velocity = Vector3(0, 0, -5.2)
 		game.player.movement_state = "run"
@@ -341,7 +349,7 @@ func _capture_player_motion_state(game, file_name: String, state: String) -> voi
 		game.player.smoothed_ground_normal = Vector3(0.22, 0.95, 0.18).normalized()
 		game.player.left_foot_ground_offset = 0.12
 		game.player.right_foot_ground_offset = -0.08
-	var frame_count = 2 if state == "light" or state == "heavy" else 16
+	var frame_count = 8 if state == "light" else (16 if state == "heavy" else 16)
 	for i in range(frame_count):
 		if state in ["walk", "run", "jump", "dodge"]:
 			game.player.call("_animate_visuals", 0.016, Vector3(0, 0, -1), true)
@@ -358,7 +366,19 @@ func _capture_player_motion_state(game, file_name: String, state: String) -> voi
 			game.player.attack_anim_time = max(float(game.player.attack_anim_time) - 0.016, 0.0)
 			game.player.call("_animate_visuals", 0.016, Vector3.ZERO, false)
 		await process_frame
+	if state in ["light", "heavy"] and game.camera_rig != null:
+		game.camera_rig.set_process(false)
+		var camera: Camera3D = game.camera_rig.camera
+		camera.look_at_from_position(
+			game.player.global_position + Vector3(2.65, 1.72, 3.05),
+			game.player.global_position + Vector3(0.0, 1.02, -0.38),
+			Vector3.UP
+		)
+		await _settle_frames(2)
 	_save_viewport(file_name)
+	game.player.set_physics_process(true)
+	if game.camera_rig != null:
+		game.camera_rig.set_process(true)
 
 func _capture_victory_state(game, file_name: String) -> void:
 	for objective_id in ["speak_anwen", "inspect_corpse", "find_claw_marks", "find_black_feathers"]:

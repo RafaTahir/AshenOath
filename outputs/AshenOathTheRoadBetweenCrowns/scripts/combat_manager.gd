@@ -20,8 +20,15 @@ func resolve_player_blade_contact(player: Node3D, enemies: Array, contact: Dicti
 		var target: Vector3 = enemy.global_position + Vector3(0, 0.9, 0)
 		if target.distance_to(player.global_position + Vector3(0, 0.9, 0)) > reach + 0.85:
 			continue
-		var closest := _closest_sweep_point(target, previous_base, previous_tip, blade_base, blade_tip)
-		var contact_distance: float = target.distance_to(closest)
+		var closest := blade_tip
+		var contact_distance := INF
+		for height in [0.35, 0.72, 1.08, 1.42]:
+			var body_point: Vector3 = enemy.global_position + Vector3(0, height, 0)
+			var candidate := _closest_sweep_point(body_point, previous_base, previous_tip, blade_base, blade_tip)
+			var candidate_distance: float = body_point.distance_to(candidate)
+			if candidate_distance < contact_distance:
+				contact_distance = candidate_distance
+				closest = candidate
 		if contact_distance <= (0.78 if heavy else 0.66) and _has_contact_line(player, enemy, closest):
 			candidates.append({"enemy": enemy, "point": closest, "score": contact_distance + player.global_position.distance_to(target) * 0.08})
 	candidates.sort_custom(func(a, b): return float(a.score) < float(b.score))
