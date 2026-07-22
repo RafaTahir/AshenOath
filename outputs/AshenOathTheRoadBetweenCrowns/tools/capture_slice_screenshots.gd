@@ -36,6 +36,12 @@ func _initialize() -> void:
 		print("COMBAT-001 CAPTURE: PASS")
 		quit(0)
 		return
+	if "--ai-only" in OS.get_cmdline_user_args():
+		await _capture_ai_formation(game, "74_ai_001_engagement_roles", false)
+		await _capture_ai_formation(game, "75_ai_001_attack_contact", true)
+		print("AI-001 CAPTURE: PASS")
+		quit(0)
+		return
 	await _capture(game, "01_greyfen_spawn", Vector3(0, 1, 7), "greyfen", Vector3(0, 1, 7))
 	await _capture(game, "02_village_center", Vector3(-2, 1, 5), "greyfen", Vector3(-2, 1, 5))
 	await _capture(game, "70_greyfen_river_bridge", Vector3(0, 1, 7.5), "greyfen", Vector3(0, 1, 7.5))
@@ -266,6 +272,42 @@ func _capture_combat_state(game, file_name: String, state: String) -> void:
 		game.hud.show_status_cue("Ghoulkin slain", "victory")
 	await _settle_frames(12)
 	_save_viewport(file_name)
+
+func _capture_ai_formation(game, file_name: String, show_contact: bool) -> void:
+	game.call("_load_zone", "wychwood", Vector3(0, 1, -1.0))
+	await _settle_frames(5)
+	game.player.global_position = Vector3(0, 1, -1.0)
+	game.player.velocity = Vector3.ZERO
+	game.player.set_physics_process(false)
+	var formation := [
+		Vector3(-2.4, 0.8, -4.0), Vector3(2.3, 0.8, -4.2),
+		Vector3(-3.5, 0.8, -2.7), Vector3(3.5, 0.8, -2.8), Vector3(0, 0.8, -5.2)
+	]
+	for index in range(mini(game.active_enemies.size(), formation.size())):
+		var enemy = game.active_enemies[index]
+		enemy.set_encounter_active(true)
+		enemy.set_physics_process(false)
+		enemy.global_position = formation[index]
+		enemy.look_at(Vector3(game.player.global_position.x, enemy.global_position.y, game.player.global_position.z), Vector3.UP)
+	if show_contact and not game.active_enemies.is_empty():
+		var attacker = game.active_enemies[0]
+		attacker.global_position = Vector3(-0.55, 0.8, -2.55)
+		attacker.windup_time = 0.30
+		attacker.pending_attack_time = 0.30
+		attacker.call("_show_windup_marker")
+		CombatFeedback.impact_burst(game.zone_root, game.player.global_position + Vector3(0, 1.0, -0.25), false, Color(0.82, 0.26, 0.10))
+	if game.camera_rig != null:
+		game.camera_rig.set_process(false)
+		game.camera_rig.camera.look_at_from_position(
+			game.player.global_position + Vector3(3.8, 2.55, 4.7),
+			game.player.global_position + Vector3(0, 0.95, -2.5),
+			Vector3.UP
+		)
+	await _settle_frames(8)
+	_save_viewport(file_name)
+	game.player.set_physics_process(true)
+	if game.camera_rig != null:
+		game.camera_rig.set_process(true)
 
 func _capture_blade_contact(game, file_name: String) -> void:
 	game.call("_load_zone", "wychwood", Vector3(0, 1, -4.0))

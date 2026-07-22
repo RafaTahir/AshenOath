@@ -2467,6 +2467,7 @@ func _spawn_enemy(id: String, pos: Vector3) -> Node:
 	zone_root.add_child(enemy)
 	enemy.global_position = pos
 	enemy.setup(id, enemy_defs.get(id, {}), player)
+	enemy.encounter_slot = active_enemies.size()
 	enemy.setup_navigation(spatial_service)
 	if current_zone_id == "wychwood" and id in ["wychwood_stalker", "wychwood_raider", "wychwood_brute"]:
 		enemy.set_encounter_active(false)

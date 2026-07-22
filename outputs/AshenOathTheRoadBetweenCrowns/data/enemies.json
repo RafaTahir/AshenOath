@@ -8,6 +8,9 @@
     "sense_range": 11.0,
     "tag": "beast",
     "weakness": "normal sword",
+    "preferred_distance": 2.4,
+    "approach_angle": 24,
+    "contact_radius": 0.68,
     "color": "#6d6f4a"
   },
   "bog_wretch": {
@@ -41,6 +44,9 @@
     "sense_range": 15.0,
     "tag": "beast",
     "weakness": "iron_trap",
+    "preferred_distance": 2.7,
+    "approach_angle": 68,
+    "contact_radius": 0.64,
     "color": "#2f5738"
   },
   "wychwood_raider": {
@@ -52,6 +58,9 @@
     "sense_range": 9.0,
     "tag": "beast",
     "weakness": "normal sword",
+    "preferred_distance": 2.3,
+    "approach_angle": 34,
+    "contact_radius": 0.68,
     "color": "#52633f"
   },
   "wychwood_brute": {
@@ -63,6 +72,9 @@
     "sense_range": 8.0,
     "tag": "beast",
     "weakness": "ash_bomb",
+    "preferred_distance": 2.05,
+    "approach_angle": 0,
+    "contact_radius": 0.82,
     "color": "#3f4932"
   },
   "white_hart_avatar": {
