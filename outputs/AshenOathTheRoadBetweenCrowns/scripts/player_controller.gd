@@ -665,9 +665,10 @@ func _try_build_mapped_body() -> bool:
 	mapped.name = "player_kael_visual"
 	mapped.rotation_degrees.y = 180
 	visual_root.add_child(mapped)
-	rig_sword_visual = mapped.find_child("Warrior_Sword", true, false) as Node3D
-	if rig_sword_visual == null:
-		rig_sword_visual = _attach_rig_sword(mapped)
+	var imported_sword := mapped.find_child("Warrior_Sword", true, false) as Node3D
+	if imported_sword != null:
+		imported_sword.visible = false
+	rig_sword_visual = _attach_rig_sword(mapped)
 	if rig_sword_visual != null:
 		_configure_blade_markers(rig_sword_visual, Vector3(0, 0, -0.08), Vector3(0, 0, -1.18), true)
 	body_visual = _find_first_mesh(mapped)
@@ -720,9 +721,10 @@ func _attach_rig_sword(mapped: Node3D) -> Node3D:
 	var equipment_space := _create_equipment_space(attachment, "KaelSwordEquipmentSpace")
 	sword_equipment_pivot = Node3D.new()
 	sword_equipment_pivot.name = "KaelSwordGripPivot"
-	sword_equipment_pivot.position = Vector3(0.015, -0.015, -0.015)
-	sword_equipment_pivot.rotation_degrees = Vector3(0.0, 0.0, -6.0)
 	equipment_space.add_child(sword_equipment_pivot)
+	# Follow the hand position, but own the blade orientation so imported wrist axes
+	# cannot turn the weapon into an upright pole.
+	sword_equipment_pivot.top_level = true
 	var sword: Node3D = null
 	var sword_scene = load("res://assets_external/characters/Warrior_Sword.fbx")
 	if sword_scene is PackedScene:
@@ -762,8 +764,9 @@ func _build_oathblade_visual(parent: Node3D) -> Node3D:
 	steel.metallic = 0.82
 	steel.roughness = 0.24
 	steel.emission_enabled = true
-	steel.emission = Color(0.11, 0.14, 0.16)
-	steel.emission_energy_multiplier = 0.28
+	steel.emission = Color(0.22, 0.28, 0.32)
+	steel.emission_energy_multiplier = 0.58
+	steel.cull_mode = BaseMaterial3D.CULL_DISABLED
 	var blade := MeshInstance3D.new()
 	blade.name = "OathbladeSteel"
 	blade.mesh = _build_oathblade_mesh()
@@ -793,8 +796,8 @@ func _build_oathblade_visual(parent: Node3D) -> Node3D:
 func _build_oathblade_mesh() -> ImmediateMesh:
 	var mesh := ImmediateMesh.new()
 	var vertices := [
-		Vector3(-0.055, -0.10, 0.020), Vector3(0.055, -0.10, 0.020), Vector3(0.0, -1.16, 0.020),
-		Vector3(-0.055, -0.10, -0.020), Vector3(0.055, -0.10, -0.020), Vector3(0.0, -1.16, -0.020)
+		Vector3(-0.082, -0.09, 0.024), Vector3(0.082, -0.09, 0.024), Vector3(0.0, -1.02, 0.024),
+		Vector3(-0.082, -0.09, -0.024), Vector3(0.082, -0.09, -0.024), Vector3(0.0, -1.02, -0.024)
 	]
 	var faces := [[0, 2, 1], [3, 4, 5], [0, 1, 4], [0, 4, 3], [0, 3, 5], [0, 5, 2], [1, 2, 5], [1, 5, 4]]
 	mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLES)
@@ -811,6 +814,31 @@ func _build_oathblade_mesh() -> ImmediateMesh:
 		mesh.surface_add_vertex(c)
 	mesh.surface_end()
 	return mesh
+
+func _update_sword_equipment_pose(windup: float, strike: float, recovery: float, heavy: bool, attacking: bool) -> void:
+	if sword_equipment_pivot == null or sword_attachment == null:
+		return
+	var forward := -global_transform.basis.z.normalized()
+	var right := global_transform.basis.x.normalized()
+	var idle_direction := (Vector3.DOWN * 0.86 + right * 0.32 - forward * 0.28).normalized()
+	var blade_direction := idle_direction
+	if attacking:
+		var windup_direction: Vector3
+		var strike_direction: Vector3
+		if heavy:
+			windup_direction = (Vector3.UP * 0.90 - forward * 0.25 + right * 0.34).normalized()
+			strike_direction = (Vector3.DOWN * 0.72 + forward * 0.62 - right * 0.24).normalized()
+		else:
+			windup_direction = (right * 0.86 + Vector3.UP * 0.34 - forward * 0.38).normalized()
+			strike_direction = (-right * 0.74 + Vector3.DOWN * 0.24 + forward * 0.63).normalized()
+		blade_direction = idle_direction.slerp(windup_direction, smoothstep(0.0, 1.0, windup))
+		if strike > 0.0:
+			blade_direction = windup_direction.slerp(strike_direction, smoothstep(0.0, 1.0, strike))
+		if recovery > 0.0:
+			blade_direction = strike_direction.slerp(idle_direction, smoothstep(0.0, 1.0, recovery))
+	var hand_position := sword_attachment.global_position + right * 0.018 + Vector3.UP * 0.012
+	var blade_basis := Basis(Quaternion(Vector3.DOWN, blade_direction)).orthonormalized()
+	sword_equipment_pivot.global_transform = Transform3D(blade_basis, hand_position)
 
 func _make_sword_readable(sword: Node3D) -> void:
 	var blade_material := _metal_mat(Color(0.72, 0.78, 0.82))
@@ -1045,6 +1073,7 @@ func _animate_visuals(delta: float, move_dir: Vector3, moving: bool) -> void:
 				sword_trail_visual.visible = strike > 0.04 and recovery < 0.88
 				sword_trail_visual.rotation_degrees.z = lerp(-58.0 if attack_anim_heavy else -42.0, 24.0, strike)
 				sword_trail_visual.scale = Vector3.ONE * lerp(0.92, 1.42 if attack_anim_heavy else 1.18, strike_arc)
+		_update_sword_equipment_pose(windup, strike, recovery, attack_anim_heavy, true)
 		_animate_slash_arc(strike, strike_arc, recovery, attack_anim_heavy)
 	else:
 		visual_root.rotation_degrees.y = lerp(visual_root.rotation_degrees.y, 0.0, 10.0 * delta)
@@ -1056,6 +1085,7 @@ func _animate_visuals(delta: float, move_dir: Vector3, moving: bool) -> void:
 			sword_trail_visual.visible = false
 		if slash_arc_root != null:
 			slash_arc_root.visible = false
+		_update_sword_equipment_pose(0.0, 0.0, 0.0, false, false)
 	if beam_cast_state != "":
 		var cast_weight := 1.0 if beam_cast_state in ["charging", "releasing"] else 0.55
 		visual_root.rotation_degrees.x = lerp(visual_root.rotation_degrees.x, -4.0 * cast_weight, 12.0 * delta)

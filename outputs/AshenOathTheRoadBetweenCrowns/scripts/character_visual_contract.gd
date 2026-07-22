@@ -42,12 +42,21 @@ static func remove_proxy_anatomy(root: Node) -> void:
 static func _collect(node: Node, skeletons: Array, meshes: Array[MeshInstance3D], animation_players: Array) -> void:
 	if node is Skeleton3D:
 		skeletons.append(node)
-	if node is MeshInstance3D and not str(node.name).to_lower().contains("shadow"):
+	if node is MeshInstance3D and not str(node.name).to_lower().contains("shadow") and not _belongs_to_equipment(node):
 		meshes.append(node)
 	if node is AnimationPlayer:
 		animation_players.append(node)
 	for child in node.get_children():
 		_collect(child,skeletons,meshes,animation_players)
+
+static func _belongs_to_equipment(node: Node) -> bool:
+	var current := node
+	while current != null:
+		var lowered := str(current.name).to_lower()
+		if lowered.contains("sword") or lowered.contains("weapon") or lowered.contains("equipment"):
+			return true
+		current = current.get_parent()
+	return false
 
 static func _combined_bounds(root: Node, meshes: Array[MeshInstance3D]) -> AABB:
 	var result := AABB()

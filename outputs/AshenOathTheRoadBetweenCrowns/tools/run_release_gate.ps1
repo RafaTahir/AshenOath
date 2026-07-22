@@ -201,7 +201,7 @@ try {
         $runtimeSources += Get-Item (Join-Path $Project "project.godot"), (Join-Path $Project "export_presets.cfg")
         $sourceNewest = $runtimeSources | Sort-Object LastWriteTime -Descending | Select-Object -First 1
         $gallery = Join-Path $Project "Development_Gallery\screenshots"
-		$required = @("01_greyfen_spawn", "05_sister_anwen_dialogue", "70_greyfen_river_bridge", "10_combat_clearing", "13_player_light_attack_arc", "14_player_heavy_attack_arc", "73_combat_001_blade_contact", "36_vargan_approach", "38_record_hall", "41_white_hart_glade")
+		$required = @("01_greyfen_spawn", "05_sister_anwen_dialogue", "70_greyfen_river_bridge", "10_combat_clearing", "15_player_sword_ready", "13_player_light_attack_arc", "14_player_heavy_attack_arc", "73_combat_001_blade_contact", "36_vargan_approach", "38_record_hall", "41_white_hart_glade")
         foreach ($stem in $required) {
             $image = Get-ChildItem $gallery -File -Filter "*$stem*.png" | Sort-Object LastWriteTime -Descending | Select-Object -First 1
             if (-not $image) { throw "Required screenshot missing: $stem" }

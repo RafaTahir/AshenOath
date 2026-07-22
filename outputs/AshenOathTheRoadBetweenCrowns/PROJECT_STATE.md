@@ -9,11 +9,11 @@ ANIM-001 release acceptance passed the complete functional suite, graphical rout
 ## COMBAT-001 Update
 
 - Kael's light and heavy attacks resolve from the animated sword's measured hilt-to-tip sweep rather than a delayed radius/facing query.
-- Kael visibly carries a wrist-bound steel Oathblade; light and heavy attacks use distinct clips, playback timing, and body commitment.
+- Kael visibly carries a steel Oathblade whose hilt follows the right-hand bone while its controlled equipment pivot prevents imported wrist axes from producing an upright pole. Light attacks use a lateral sweep; heavy attacks use an overhead cut.
 - Sword damage, oil bonuses, impact position, sparks, audio, camera response, hit-stop, and HUD feedback share one authoritative contact result.
 - The restrained slash trail follows one-frame blade motion while collision retains the full authoritative sweep, preventing screen-filling trail sheets.
 - Enemy strikes report their weapon-space contact position so parry feedback and attacker stagger occur at the same moment and place.
-- `verify_combat_001.gd` rejects invisible/dark swords, non-wrist attachments, identical light/heavy clips, static attack arms, off-target radius hits, duplicate contacts, detached blade markers, and parries without contact/stagger.
+- `verify_combat_001.gd` rejects the old imported weapon path, upward ready poses, undersized lateral/vertical blade travel, invisible/dark swords, non-wrist attachments, identical light/heavy clips, static attack arms, off-target radius hits, duplicate contacts, detached blade markers, and parries without contact/stagger.
 
 ## WORLD-001 Update
 

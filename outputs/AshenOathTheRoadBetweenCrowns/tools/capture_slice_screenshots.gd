@@ -29,6 +29,7 @@ func _initialize() -> void:
 	game.call("_new_game")
 	await _settle_frames(8)
 	if "--combat-only" in OS.get_cmdline_user_args():
+		await _capture_player_motion_state(game, "15_player_sword_ready", "idle")
 		await _capture_player_motion_state(game, "13_player_light_attack_arc", "light")
 		await _capture_player_motion_state(game, "14_player_heavy_attack_arc", "heavy")
 		await _capture_blade_contact(game, "73_combat_001_blade_contact")
@@ -79,6 +80,7 @@ func _initialize() -> void:
 	await _capture_player_motion_state(game, "28_player_jump_pose", "jump")
 	await _capture_player_motion_state(game, "29_player_dodge_pose", "dodge")
 	await _capture_player_motion_state(game, "30_player_slope_grounding", "slope")
+	await _capture_player_motion_state(game, "15_player_sword_ready", "idle")
 	await _capture_player_motion_state(game, "13_player_light_attack_arc", "light")
 	await _capture_player_motion_state(game, "14_player_heavy_attack_arc", "heavy")
 	await _capture_combat_state(game, "15_ghoulkin_windup_hud", "windup")
@@ -349,7 +351,7 @@ func _capture_player_motion_state(game, file_name: String, state: String) -> voi
 		game.player.smoothed_ground_normal = Vector3(0.22, 0.95, 0.18).normalized()
 		game.player.left_foot_ground_offset = 0.12
 		game.player.right_foot_ground_offset = -0.08
-	var frame_count = 8 if state == "light" else (16 if state == "heavy" else 16)
+	var frame_count = 6 if state == "light" else (16 if state == "heavy" else 16)
 	for i in range(frame_count):
 		if state in ["walk", "run", "jump", "dodge"]:
 			game.player.call("_animate_visuals", 0.016, Vector3(0, 0, -1), true)
