@@ -18,6 +18,7 @@ func build(host: Node) -> Dictionary:
 	host.call("_make_play_area_bounds", 42, 34, Color(0.09, 0.12, 0.08))
 	host.call("_make_road", Vector3(0, 0.018, 0), Vector3(4.2, 0.04, 30.0), Color(0.16, 0.13, 0.09))
 	host.call("_make_road", Vector3(-5, 0.02, 9), Vector3(14.0, 0.04, 3.0), Color(0.15, 0.12, 0.085))
+	host.call("_make_road", Vector3(15.2, 0.022, 0), Vector3(8.8, 0.045, 3.4), Color(0.145, 0.115, 0.078))
 	host.call("_make_greyfen_path_edges")
 
 	_build_light_composition(host)
@@ -65,7 +66,8 @@ func _build_boundary_dressing(host: Node) -> void:
 		host.call("_make_fence", Vector3(x, 0.35, -14), false)
 	for z in [-10, -6, -2, 2, 6, 10]:
 		host.call("_make_fence", Vector3(-19, 0.35, z), true)
-		host.call("_make_fence", Vector3(19, 0.35, z), true)
+		if absf(float(z)) > 2.5:
+			host.call("_make_fence", Vector3(19, 0.35, z), true)
 
 func _build_landmarks(host: Node) -> void:
 	host.call("_make_notice_board", Vector3(-2.0, 0, 9.4))
@@ -73,3 +75,16 @@ func _build_landmarks(host: Node) -> void:
 	host.call("_make_blacksmith_scene", Vector3(10.5, 0, -1.2))
 	CemeterySection.new().build(host.zone_root, {"host": host, "origin": Vector3(14, 0, 8.6)})
 	host.call("_make_cart", Vector3(-6.2, 0, 9.0))
+	_build_castle_road(host)
+
+func _build_castle_road(host: Node) -> void:
+	var marker := Node3D.new()
+	marker.name = "GreyfenCastleRoad"
+	marker.position = Vector3(15.2, 0, 0)
+	marker.add_to_group("castle_gateway_corridor")
+	host.zone_root.add_child(marker)
+	for z in [-2.25, 2.25]:
+		host.call("_make_prop_box", "CastleRoadWaystone", Vector3(17.9, 0.72, z), Vector3(0.62, 1.44, 0.62), Color(0.22, 0.22, 0.205))
+		host.call("_make_visual_box", "VarganWaymark", Vector3(17.55, 0.88, z), Vector3(0.035, 0.34, 0.22), Color(0.42, 0.32, 0.16))
+	host.call("_make_visual_box", "CastleRoadRuts", Vector3(15.0, 0.052, -0.72), Vector3(5.8, 0.025, 0.18), Color(0.065, 0.045, 0.030))
+	host.call("_make_visual_box", "CastleRoadRuts", Vector3(15.0, 0.052, 0.72), Vector3(5.8, 0.025, 0.18), Color(0.065, 0.045, 0.030))

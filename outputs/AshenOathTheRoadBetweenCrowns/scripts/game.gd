@@ -485,8 +485,10 @@ func _build_greyfen() -> void:
 	_make_wychwood_gate_scene(Vector3(0, 0, -14.3))
 	_make_route_markers()
 	_make_greyfen_road_of_crows_story_beats()
-	_make_collapsed_road(Vector3(18.0, 0, 0))
-	_make_zone_gate("Road to Castle Vargan", Vector3(17.5, 0, 0), "vargan_approach", Vector3(0, 1, 14))
+	var castle_gate = _make_zone_gate("Road to Castle Vargan", Vector3(17.5, 0, 0), "vargan_approach", Vector3(0, 1, 14))
+	if castle_gate != null:
+		castle_gate.rotation_degrees.y = 90.0
+		castle_gate.set_meta("always_accessible", true)
 	var life = GreyfenLifeController.new()
 	life.name = "GreyfenLifeController"
 	zone_root.add_child(life)
@@ -2157,9 +2159,9 @@ func _make_shrine_scene(pos: Vector3) -> void:
 
 func _make_blacksmith_scene(pos: Vector3) -> void:
 	_make_prop_box("BlacksmithShop", pos + Vector3(0, 0.9, 1.2), Vector3(3.4, 1.8, 2.4), Color(0.20, 0.15, 0.11))
-	_make_prop_box("Forge", pos + Vector3(1.5, 0.55, -0.3), Vector3(1.0, 1.1, 0.75), Color(0.12, 0.11, 0.10))
-	_make_prop_box("ForgeCoal", pos + Vector3(1.5, 1.15, -0.3), Vector3(0.75, 0.12, 0.55), Color(0.95, 0.30, 0.08))
-	_make_light("ForgeLight", pos + Vector3(1.5, 1.5, -0.3), Color(1.0, 0.35, 0.12), 2.5)
+	_make_prop_box("Forge", pos + Vector3(1.5, 0.55, -1.1), Vector3(1.0, 1.1, 0.75), Color(0.12, 0.11, 0.10))
+	_make_prop_box("ForgeCoal", pos + Vector3(1.5, 1.15, -1.1), Vector3(0.75, 0.12, 0.55), Color(0.95, 0.30, 0.08))
+	_make_light("ForgeLight", pos + Vector3(1.5, 1.5, -1.1), Color(1.0, 0.35, 0.12), 2.5)
 	var anvil = _make_role_visual("blacksmith_shop", "environment", Vector3(0.9, 0.9, 0.9))
 	if anvil != null:
 		anvil.position = pos + Vector3(-1.2, 0, -0.35)

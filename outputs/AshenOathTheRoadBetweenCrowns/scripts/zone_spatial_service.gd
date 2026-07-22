@@ -248,6 +248,7 @@ func _register_zone_defaults() -> void:
 		register_bridge("greyfen_bridge", Vector3(0, 0.55, river_center - 3.2), Vector3(0, 0.55, river_center + 3.2), DEFAULT_BRIDGE_HALF_WIDTH)
 		reserve_corridor("spawn_to_wychwood", Vector3(0, 0, 0), Vector2(2.4, 16.0))
 		register_gate("wychwood_gate", Vector3(0, 0, -15.0), Vector3(0, 0.9, -12.5), Vector2(3.2, 2.2))
+		register_gate("castle_gate", Vector3(17.0, 0, 0.0), Vector3(15.5, 0.9, 0.0), Vector2(4.3, 2.35))
 		reserve_corridor("spawn", Vector3(0, 0, 13.0), Vector2(3.2, 2.4))
 		add_safe_spawn(Vector3(0, 0.9, 12.5))
 	elif zone_id == "wychwood":

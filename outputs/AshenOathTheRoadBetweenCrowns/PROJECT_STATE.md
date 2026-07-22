@@ -408,11 +408,11 @@ Implemented elements:
 - Village houses and collision.
 - Shrine scene.
 - Blacksmith area.
-- Cemetery area.
+- Authored Greyfen Cemetery and Ruined Crow Chapel quarter, including its grave court, bell frame, Crow Shrine, sealed ossuary, and existing investigation interactions.
 - Notice board.
 - Sister Anwen, Mira, Rook, Widow Elna, Blacksmith Tor, Farmer Toma.
 - Wychwood gate.
-- Blocked ruins/castle gate.
+- An accessible, navigation-reserved Greyfen road to Castle Vargan; the former collapsed-road obstruction has been removed.
 - Props, torches, fences, lanterns, rubble, carts.
 
 In performance mode, many imported environmental assets are replaced/skipped to reduce draw calls.
