@@ -147,7 +147,7 @@ try {
 		"verify_runtime.gd", "verify_story_campaign.gd", "verify_art_001.gd", "verify_asset_001.gd", "verify_character_real_001.gd",
         "verify_motion_quality.gd", "verify_river_swimming.gd", "verify_greyfen_life.gd",
         "verify_castle_vargan.gd", "verify_audio_runtime.gd", "verify_visible_quality.gd",
-		"verify_recovery_002_foundation.gd", "verify_navigation_001.gd", "verify_char_001.gd", "verify_anim_001.gd", "verify_world_001.gd", "verify_world_002.gd", "verify_world_003.gd", "verify_zone_budgets.gd",
+		"verify_recovery_002_foundation.gd", "verify_navigation_001.gd", "verify_char_001.gd", "verify_anim_001.gd", "verify_combat_001.gd", "verify_world_001.gd", "verify_world_002.gd", "verify_world_003.gd", "verify_zone_budgets.gd",
         "verify_visual_003.gd", "verify_visual_100.gd", "verify_master_002.gd", "verify_master_003.gd"
     )
     $resumeReached = [string]::IsNullOrWhiteSpace($ResumeFrom)
@@ -201,7 +201,7 @@ try {
         $runtimeSources += Get-Item (Join-Path $Project "project.godot"), (Join-Path $Project "export_presets.cfg")
         $sourceNewest = $runtimeSources | Sort-Object LastWriteTime -Descending | Select-Object -First 1
         $gallery = Join-Path $Project "Development_Gallery\screenshots"
-        $required = @("01_greyfen_spawn", "05_sister_anwen_dialogue", "70_greyfen_river_bridge", "10_combat_clearing", "36_vargan_approach", "38_record_hall", "41_white_hart_glade")
+        $required = @("01_greyfen_spawn", "05_sister_anwen_dialogue", "70_greyfen_river_bridge", "10_combat_clearing", "73_combat_001_blade_contact", "36_vargan_approach", "38_record_hall", "41_white_hart_glade")
         foreach ($stem in $required) {
             $image = Get-ChildItem $gallery -File -Filter "*$stem*.png" | Sort-Object LastWriteTime -Descending | Select-Object -First 1
             if (-not $image) { throw "Required screenshot missing: $stem" }

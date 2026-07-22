@@ -274,7 +274,7 @@ func _spawn_player(pos: Vector3) -> void:
 	camera_rig.set_zone(current_zone_id)
 	_apply_runtime_settings(settings.settings)
 	player.camera_controller = camera_rig
-	player.attack_performed.connect(_on_player_attack)
+	player.blade_contact_requested.connect(_on_player_blade_contact)
 	player.potion_requested.connect(_use_potion)
 	player.bomb_requested.connect(_throw_bomb)
 	player.beam_requested.connect(_on_player_beam)
@@ -813,12 +813,14 @@ func _show_ending_consequence(ending: String) -> void:
 	hud.show_ending(title, body)
 	save_manager.checkpoint(self)
 
-func _on_player_attack(damage: float, radius: float, heavy: bool) -> void:
-	var target = _nearest_living_enemy(radius + 1.6)
-	if target != null:
-		hud.show_enemy(target.display_name, target.health_component.health, target.health_component.max_health)
+func _on_player_blade_contact(contact: Dictionary) -> void:
+	var heavy := bool(contact.get("heavy", false))
 	audio.play_event("heavy" if heavy else "swing")
-	combat.resolve_player_attack(player, active_enemies, damage, radius, heavy, inventory.active_oil)
+	var result: Dictionary = combat.resolve_player_blade_contact(player, active_enemies, contact, inventory.active_oil)
+	if bool(result.get("hit", false)):
+		var target = result.get("enemy")
+		if target != null and is_instance_valid(target) and target.health_component != null:
+			hud.show_enemy(target.display_name, target.health_component.health, target.health_component.max_health)
 
 func _on_player_beam_phase(phase: String) -> void:
 	match phase:
@@ -911,19 +913,6 @@ func _on_player_footstep() -> void:
 	audio.play_footstep(current_zone_id, on_road)
 
 func _on_player_parried() -> void:
-	audio.play_event("parry")
-	if camera_rig != null:
-		camera_rig.shake(0.18)
-	if zone_root != null and player != null:
-		CombatFeedback.block_flash(zone_root, player.global_position, true)
-		CombatFeedback.ground_ring(zone_root, player.global_position, Color(0.22, 0.46, 0.72), 0.65, 0.16)
-	var target = _nearest_living_enemy(2.8)
-	if target != null:
-		target.stagger(1.0)
-		CombatFeedback.impact_burst(zone_root, target.global_position + Vector3(0, 1.0, 0), true, Color(0.74, 0.88, 1.0))
-		hud.show_enemy(target.display_name, target.health_component.health, target.health_component.max_health)
-		hud.show_status_cue("Parry", "parry")
-		hud.toast("Parry breaks %s's guard." % target.display_name)
 	tutorial_flags["block_hint_done"] = true
 	hud.set_guidance_hint("")
 
@@ -1061,12 +1050,21 @@ func _on_enemy_windup_started(enemy) -> void:
 	if current_zone_id == "wychwood" and not bool(tutorial_flags.get("block_hint_done", false)):
 		hud.set_guidance_hint("Tap Q at the lunge to parry. Hold Q to block.", 4.2)
 
-func _on_enemy_attack_resolved(enemy, parried: bool) -> void:
+func _on_enemy_attack_resolved(enemy, parried: bool, contact_position: Vector3) -> void:
 	if parried:
-		return
-	audio.play_event("ghoulkin_lunge" if enemy != null and enemy.enemy_id == "ghoulkin" else "hit", 0.04)
-	if zone_root != null and enemy != null:
-		CombatFeedback.impact_burst(zone_root, enemy.global_position + Vector3(0, 0.8, 0), false, Color(0.85, 0.30, 0.12))
+		audio.play_event("parry")
+		if camera_rig != null:
+			camera_rig.shake(0.18)
+		if zone_root != null:
+			CombatFeedback.block_flash(zone_root, player.global_position, true)
+			CombatFeedback.impact_burst(zone_root, contact_position, true, Color(0.74, 0.88, 1.0))
+			CombatFeedback.ground_ring(zone_root, player.global_position, Color(0.22, 0.46, 0.72), 0.65, 0.16)
+		hud.show_status_cue("Parry", "parry")
+		hud.toast("Parry breaks %s's guard." % enemy.display_name)
+	else:
+		audio.play_event("ghoulkin_lunge" if enemy != null and enemy.enemy_id == "ghoulkin" else "hit", 0.04)
+		if zone_root != null and enemy != null:
+			CombatFeedback.impact_burst(zone_root, contact_position, false, Color(0.85, 0.30, 0.12))
 	if enemy != null and enemy.health_component != null:
 		hud.show_enemy(enemy.display_name, enemy.health_component.health, enemy.health_component.max_health)
 
@@ -2743,9 +2741,9 @@ func _make_hit_spark(pos: Vector3, heavy: bool) -> void:
 	var spark = MeshInstance3D.new()
 	spark.mesh = SphereMesh.new()
 	spark.scale = Vector3.ONE * (0.22 if heavy else 0.14)
-	spark.global_position = pos
 	spark.material_override = _emissive_mat(Color(1.0, 0.68, 0.24), 1.8)
 	zone_root.add_child(spark)
+	spark.global_position = pos
 	var tween = create_tween()
 	tween.tween_property(spark, "scale", Vector3.ONE * 0.02, 0.18)
 	tween.parallel().tween_property(spark, "position:y", spark.position.y + 0.45, 0.18)

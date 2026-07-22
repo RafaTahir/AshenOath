@@ -6,6 +6,14 @@ Ashen Oath is a **pre-alpha prototype**. It is not a commercial Alpha, Early Acc
 
 ANIM-001 release acceptance passed the complete functional suite, graphical route and animation captures, Web export, and packed startup. On the Dell 7280/Intel HD 620 ANGLE path, the final native-720p sample measured 37.5 FPS average, 35.6 FPS minimum, and a 129 ms warm transition.
 
+## COMBAT-001 Update
+
+- Kael's light and heavy attacks resolve from the animated sword's measured hilt-to-tip sweep rather than a delayed radius/facing query.
+- Sword damage, oil bonuses, impact position, sparks, audio, camera response, hit-stop, and HUD feedback share one authoritative contact result.
+- The visible slash trail follows the same measured blade movement used by collision.
+- Enemy strikes report their weapon-space contact position so parry feedback and attacker stagger occur at the same moment and place.
+- `verify_combat_001.gd` rejects off-target radius hits, duplicate contacts, detached blade markers, and parries without contact/stagger.
+
 ## WORLD-001 Update
 
 - Greyfen environment construction is owned by `scripts/zones/greyfen_section.gd`; quests, managers, transitions, and interactions remain under `game.gd`.
@@ -68,7 +76,7 @@ ANIM-001 release acceptance passed the complete functional suite, graphical rout
 - Repeated world boxes/details use shared meshes and MultiMesh batches. RECOVERY-002 measured 37.2 FPS average, 35.6 FPS minimum, and 294 ms warm route transition on Intel HD 620/ANGLE.
 - The world remains intentionally stylized and low-poly; current assets do not support a photoreal/AAA claim.
 
-Last updated: 2026-07-14
+Last updated: 2026-07-23
 
 ## Summary
 
@@ -181,15 +189,16 @@ Implemented in `scripts/camera_controller.gd`.
 
 Implemented across `scripts/combat_manager.gd`, `scripts/player_controller.gd`, and `scripts/enemy_ai.gd`.
 
-- Player light/heavy attack resolution.
-- Attack radius and damage values.
+- Player light/heavy attack resolution from measured sword sweeps.
+- One authoritative blade-contact event for damage, VFX, audio, camera response, and HUD feedback.
+- Bone-attached hilt/tip markers and a matching animated slash trail.
 - Oil bonus support by enemy tag.
 - Bomb damage in an area around the nearest living enemy.
 - Iron trap slow effect.
 - Enemy hit feedback, impact signal, and kill signal.
 - Hit-stop on impacts.
 - Camera shake and hit spark effects.
-- Parry/block behavior.
+- Parry/block behavior with weapon-space contact feedback and attacker stagger.
 - Enemy windup, pending attack timing, stagger, hit flash, and death handling.
 
 ### Enemy AI
@@ -605,6 +614,7 @@ The export includes JSON, runtime scripts, selected imported assets, audio, UI, 
 | Tool | Purpose |
 | --- | --- |
 | `tools/verify_runtime.gd` | Headless runtime verifier for web-only release shape, Greyfen/Wychwood load, dialogue mouse release, blocked gate, enemies, placeholders, fall recovery |
+| `tools/verify_combat_001.gd` | Verifies measured blade sweeps, misses, one-contact attacks, parry contact, and attacker stagger |
 | `tools/capture_slice_screenshots.gd` | Captures spawn, village center, forest gate, forest trail, and combat clearing; checks nonblank/collision-safe captures; writes originals to `verification_screenshots/` and mirrors future captures into `Development_Gallery/screenshots/` |
 | `tools/verify_web_export.py` | Checks Web export folder and required Godot output files |
 | `Export_Web_Build.bat` | Runs Godot Web export and web export verification |

@@ -3,7 +3,7 @@ extends CharacterBody3D
 signal died(enemy: Node)
 signal damaged(enemy: Node, current: float, maximum: float)
 signal windup_started(enemy: Node)
-signal attack_resolved(enemy: Node, parried: bool)
+signal attack_resolved(enemy: Node, parried: bool, contact_position: Vector3)
 
 const HealthComponent = preload("res://scripts/health_component.gd")
 const AssetSpawnHelper = preload("res://scripts/asset_spawn_helper.gd")
@@ -275,7 +275,8 @@ func _resolve_attack() -> void:
 		return
 	var parried = player.take_damage(damage)
 	attack_recovery_time = 0.22 if enemy_id == "ghoulkin" else 0.16
-	attack_resolved.emit(self, parried)
+	var contact_position := (global_position + Vector3(0, 1.0, 0)).lerp(player.global_position + Vector3(0, 1.05, 0), 0.58)
+	attack_resolved.emit(self, parried, contact_position)
 	if parried:
 		parry_exposed_time = 1.15
 		stagger(1.15)

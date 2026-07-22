@@ -1,6 +1,6 @@
 extends CharacterBody3D
 
-signal attack_performed(damage: float, radius: float, heavy: bool)
+signal blade_contact_requested(contact: Dictionary)
 signal potion_requested
 signal bomb_requested
 signal beam_requested(charge_ratio: float, direction: Vector3)
@@ -57,10 +57,15 @@ var move_phase = 0.0
 var step_phase = 0.0
 var attack_anim_time = 0.0
 var attack_anim_heavy = false
-var pending_attack_time := 0.0
 var pending_attack_damage := 0.0
 var pending_attack_radius := 0.0
 var pending_attack_heavy := false
+var attack_sequence_id := 0
+var attack_contact_emitted := false
+var previous_blade_base := Vector3.ZERO
+var previous_blade_tip := Vector3.ZERO
+var blade_base_marker: Node3D
+var blade_tip_marker: Node3D
 var hurt_flash_time = 0.0
 var hurt_react_time = 0.0
 var parry_window = 0.0
@@ -114,16 +119,17 @@ func _physics_process(delta: float) -> void:
 	parry_window = max(parry_window - delta, 0.0)
 	step_up_cooldown = max(step_up_cooldown - delta, 0.0)
 	_update_beam_sequence(delta)
-	_update_pending_attack(delta)
 	if not can_control:
 		velocity.x = move_toward(velocity.x, 0.0, 20.0 * delta)
 		velocity.z = move_toward(velocity.z, 0.0, 20.0 * delta)
 		_apply_gravity(delta)
 		move_and_slide()
 		_animate_visuals(delta, Vector3.ZERO, false)
+		_update_blade_contact()
 		return
 	_handle_combat_input()
 	_handle_movement(delta)
+	_update_blade_contact()
 
 func _handle_movement(delta: float) -> void:
 	var input_vec = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
@@ -237,7 +243,7 @@ func _handle_combat_input() -> void:
 		attack_anim_heavy = false
 		if animation_driver != null:
 			animation_driver.trigger_action("attack_light")
-		_queue_attack_hit(24.0,2.0,false,0.12)
+		_begin_blade_attack(24.0, 2.0, false)
 	elif Input.is_action_just_pressed("heavy_attack"):
 		if stamina_component.spend(22.0):
 			attack_cooldown = 0.7
@@ -245,7 +251,7 @@ func _handle_combat_input() -> void:
 			attack_anim_heavy = true
 			if animation_driver != null:
 				animation_driver.trigger_action("attack_heavy")
-			_queue_attack_hit(42.0,2.25,true,0.24)
+			_begin_blade_attack(42.0, 2.25, true)
 		else:
 			stamina_exhausted.emit("heavy attack")
 	if Input.is_action_just_pressed("use_potion"):
@@ -257,20 +263,95 @@ func _handle_combat_input() -> void:
 		if animation_driver != null:
 			animation_driver.trigger_action("parry")
 
-func _queue_attack_hit(damage: float, radius: float, heavy: bool, delay: float) -> void:
+func _begin_blade_attack(damage: float, radius: float, heavy: bool) -> void:
+	attack_sequence_id += 1
+	attack_contact_emitted = false
 	pending_attack_damage = damage
 	pending_attack_radius = radius
 	pending_attack_heavy = heavy
-	pending_attack_time = delay
+	var segment: Dictionary = get_blade_world_segment()
+	previous_blade_base = segment.get("base", global_position + Vector3(0, 1.0, 0))
+	previous_blade_tip = segment.get("tip", previous_blade_base)
 
-func _update_pending_attack(delta: float) -> void:
-	if pending_attack_time <= 0.0:
-		return
-	pending_attack_time -= delta
-	if pending_attack_time <= 0.0 and can_control:
-		attack_performed.emit(pending_attack_damage,pending_attack_radius,pending_attack_heavy)
+func _update_blade_contact() -> void:
+	if not can_control:
 		pending_attack_damage = 0.0
 		pending_attack_radius = 0.0
+		return
+	if attack_anim_time <= 0.0 or pending_attack_damage <= 0.0:
+		return
+	var segment: Dictionary = get_blade_world_segment()
+	var blade_base: Vector3 = segment.get("base", Vector3.ZERO)
+	var blade_tip: Vector3 = segment.get("tip", Vector3.ZERO)
+	var duration: float = 0.52 if pending_attack_heavy else 0.34
+	var progress: float = clampf(1.0 - attack_anim_time / duration, 0.0, 1.0)
+	var contact_phase: float = 0.46 if pending_attack_heavy else 0.35
+	if not attack_contact_emitted and progress >= contact_phase:
+		attack_contact_emitted = true
+		blade_contact_requested.emit({
+			"attack_id": attack_sequence_id,
+			"base": blade_base,
+			"tip": blade_tip,
+			"previous_base": previous_blade_base,
+			"previous_tip": previous_blade_tip,
+			"damage": pending_attack_damage,
+			"reach": pending_attack_radius,
+			"heavy": pending_attack_heavy
+		})
+		pending_attack_damage = 0.0
+		pending_attack_radius = 0.0
+	previous_blade_base = blade_base
+	previous_blade_tip = blade_tip
+
+func get_blade_world_segment() -> Dictionary:
+	if blade_base_marker != null and blade_tip_marker != null and is_instance_valid(blade_base_marker) and is_instance_valid(blade_tip_marker):
+		return {"base": blade_base_marker.global_position, "tip": blade_tip_marker.global_position}
+	var forward := -global_transform.basis.z.normalized()
+	var base := global_position + Vector3(0, 1.05, 0) + forward * 0.35
+	return {"base": base, "tip": base + forward * 1.25}
+
+func _configure_blade_markers(parent: Node3D, base_position: Vector3, tip_position: Vector3, fit_rendered_bounds: bool = false) -> void:
+	if parent == null:
+		return
+	if fit_rendered_bounds:
+		var fitted: Dictionary = _blade_axis_from_rendered_bounds(parent)
+		base_position = fitted.get("base", base_position)
+		tip_position = fitted.get("tip", tip_position)
+	blade_base_marker = Node3D.new()
+	blade_base_marker.name = "BladeContactBase"
+	blade_base_marker.position = base_position
+	parent.add_child(blade_base_marker)
+	blade_tip_marker = Node3D.new()
+	blade_tip_marker.name = "BladeContactTip"
+	blade_tip_marker.position = tip_position
+	parent.add_child(blade_tip_marker)
+
+func _blade_axis_from_rendered_bounds(parent: Node3D) -> Dictionary:
+	var bounds := AABB()
+	var has_bounds := false
+	var inverse_parent := parent.global_transform.affine_inverse()
+	for child in parent.find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := child as MeshInstance3D
+		if mesh_instance == null or mesh_instance.mesh == null:
+			continue
+		var local_transform: Transform3D = inverse_parent * mesh_instance.global_transform
+		var local_bounds: AABB = local_transform * mesh_instance.mesh.get_aabb()
+		bounds = bounds.merge(local_bounds) if has_bounds else local_bounds
+		has_bounds = true
+	if not has_bounds:
+		return {}
+	var axis := 0
+	if bounds.size.y > bounds.size.x and bounds.size.y >= bounds.size.z:
+		axis = 1
+	elif bounds.size.z > bounds.size.x and bounds.size.z > bounds.size.y:
+		axis = 2
+	var first := bounds.get_center()
+	var second := bounds.get_center()
+	first[axis] = bounds.position[axis]
+	second[axis] = bounds.end[axis]
+	var base := first if first.length_squared() <= second.length_squared() else second
+	var tip := second if base == first else first
+	return {"base": base, "tip": tip}
 
 func _handle_beam_input() -> void:
 	if Input.is_action_just_pressed("oathfire_beam") and beam_cooldown <= 0.0 and beam_cast_state == "" and dodge_time <= 0.0:
@@ -583,6 +664,8 @@ func _try_build_mapped_body() -> bool:
 	rig_sword_visual = mapped.find_child("Warrior_Sword", true, false) as Node3D
 	if rig_sword_visual == null:
 		rig_sword_visual = _attach_rig_sword(mapped)
+	if rig_sword_visual != null:
+		_configure_blade_markers(rig_sword_visual, Vector3(0, 0, -0.08), Vector3(0, 0, -1.18), true)
 	body_visual = _find_first_mesh(mapped)
 	_apply_visible_material_fallbacks(mapped, _mat(Color(0.18, 0.20, 0.18)))
 	if body_visual != null and body_visual.material_override is StandardMaterial3D:
@@ -722,6 +805,7 @@ func _add_weapon_visuals(local_pos: Vector3) -> void:
 	sword.material_override = _metal_mat(Color(0.68, 0.70, 0.68))
 	weapon_root.add_child(sword)
 	sword_visual = sword
+	_configure_blade_markers(weapon_root, Vector3(0.0, 0.25, 0.02), Vector3(0.0, 0.28, -1.56))
 
 	var hilt = MeshInstance3D.new()
 	hilt.name = "visible_sword_hilt"
@@ -771,9 +855,9 @@ func _add_slash_arc_visuals() -> void:
 	slash_arc_root.position = Vector3(0.48, 1.18, -0.78)
 	slash_arc_root.visible = false
 	visual_root.add_child(slash_arc_root)
-	slash_arc_primary = _add_slash_panel("visible_sword_slash_arc_primary", Vector3(0.06, 0.0, 0), Vector3(2.25, 0.22, 0.34), Color(1.0, 0.62, 0.24, 0.82))
-	slash_arc_secondary = _add_slash_panel("visible_sword_slash_arc_secondary", Vector3(-0.16, -0.12, 0.08), Vector3(1.70, 0.16, 0.26), Color(0.70, 0.32, 0.12, 0.58))
-	slash_arc_spark = _add_slash_panel("visible_sword_slash_impact_edge", Vector3(0.72, 0.08, -0.03), Vector3(0.62, 0.24, 0.22), Color(1.0, 0.80, 0.34, 0.92))
+	slash_arc_primary = _add_slash_panel("visible_sword_slash_arc_primary", Vector3.ZERO, Vector3(0.09, 0.18, 1.0), Color(1.0, 0.62, 0.24, 0.82))
+	slash_arc_secondary = _add_slash_panel("visible_sword_slash_arc_secondary", Vector3(0.07, -0.04, 0.05), Vector3(0.16, 0.08, 0.90), Color(0.70, 0.32, 0.12, 0.58))
+	slash_arc_spark = _add_slash_panel("visible_sword_slash_impact_edge", Vector3(0.0, 0.0, -0.48), Vector3(0.20, 0.22, 0.16), Color(1.0, 0.80, 0.34, 0.92))
 
 func _add_slash_panel(node_name: String, local_pos: Vector3, size: Vector3, color: Color) -> MeshInstance3D:
 	var panel = MeshInstance3D.new()
@@ -918,22 +1002,34 @@ func _animate_slash_arc(strike: float, strike_arc: float, recovery: float, heavy
 	slash_arc_root.visible = visible
 	if not visible:
 		return
-	var arc_size = 1.0 + strike_arc * (0.55 if heavy else 0.32)
-	var blade_origin := Vector3(0.42, 0.94, -0.42)
-	if weapon_root != null:
-		blade_origin = weapon_root.position
-	elif rig_sword_visual != null:
-		blade_origin = visual_root.to_local(rig_sword_visual.global_position)
-	slash_arc_root.position = blade_origin + Vector3(0.08 + 0.20 * strike_arc, 0.30 + (0.14 if heavy else 0.07), -0.40 - 0.30 * strike_arc)
-	slash_arc_root.rotation_degrees = Vector3(-18.0 if heavy else -10.0, lerp(54.0 if heavy else 40.0, -48.0 if heavy else -34.0, strike), lerp(-52.0 if heavy else -34.0, 38.0 if heavy else 28.0, strike))
-	slash_arc_root.scale = Vector3(arc_size, 1.0, arc_size)
+	var segment: Dictionary = get_blade_world_segment()
+	var blade_base: Vector3 = segment.get("base", global_position + Vector3(0, 1.0, 0))
+	var blade_tip: Vector3 = segment.get("tip", blade_base)
+	var old_base: Vector3 = previous_blade_base if previous_blade_base.length_squared() > 0.01 else blade_base
+	var old_tip: Vector3 = previous_blade_tip if previous_blade_tip.length_squared() > 0.01 else blade_tip
+	slash_arc_root.global_transform = Transform3D.IDENTITY
 	if slash_arc_primary != null:
 		slash_arc_primary.visible = true
-		slash_arc_primary.scale = Vector3(1.28 if heavy else 1.06, 1.0 + strike_arc * 0.18, 1.24 if heavy else 1.08)
+		slash_arc_primary.position = Vector3.ZERO
+		slash_arc_primary.rotation = Vector3.ZERO
+		slash_arc_primary.scale = Vector3.ONE
+		slash_arc_primary.mesh = _build_blade_ribbon(old_base, old_tip, blade_base, blade_tip)
 	if slash_arc_secondary != null:
-		slash_arc_secondary.visible = strike_arc > 0.20
+		slash_arc_secondary.visible = false
 	if slash_arc_spark != null:
-		slash_arc_spark.visible = strike_arc > 0.45
+		slash_arc_spark.visible = false
+
+func _build_blade_ribbon(old_base: Vector3, old_tip: Vector3, blade_base: Vector3, blade_tip: Vector3) -> ImmediateMesh:
+	var ribbon := ImmediateMesh.new()
+	ribbon.surface_begin(Mesh.PRIMITIVE_TRIANGLES)
+	ribbon.surface_add_vertex(old_base)
+	ribbon.surface_add_vertex(old_tip)
+	ribbon.surface_add_vertex(blade_tip)
+	ribbon.surface_add_vertex(old_base)
+	ribbon.surface_add_vertex(blade_tip)
+	ribbon.surface_add_vertex(blade_base)
+	ribbon.surface_end()
+	return ribbon
 
 func _mat(color: Color) -> StandardMaterial3D:
 	var material = StandardMaterial3D.new()
@@ -952,6 +1048,7 @@ func _trail_mat(color: Color) -> StandardMaterial3D:
 	material.albedo_color = color
 	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	material.cull_mode = BaseMaterial3D.CULL_DISABLED
 	material.emission_enabled = true
 	material.emission = Color(1.0, 0.76, 0.42)
 	material.emission_energy_multiplier = 0.9

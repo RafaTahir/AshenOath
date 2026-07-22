@@ -1,6 +1,7 @@
 extends SceneTree
 
 const CombatFeedback = preload("res://scripts/combat_feedback.gd")
+const EnemyAI = preload("res://scripts/enemy_ai.gd")
 
 var output_dir = ""
 var gallery_dir = ""
@@ -27,6 +28,11 @@ func _initialize() -> void:
 	await process_frame
 	game.call("_new_game")
 	await _settle_frames(8)
+	if "--combat-only" in OS.get_cmdline_user_args():
+		await _capture_blade_contact(game, "73_combat_001_blade_contact")
+		print("COMBAT-001 CAPTURE: PASS")
+		quit(0)
+		return
 	await _capture(game, "01_greyfen_spawn", Vector3(0, 1, 7), "greyfen", Vector3(0, 1, 7))
 	await _capture(game, "02_village_center", Vector3(-2, 1, 5), "greyfen", Vector3(-2, 1, 5))
 	await _capture(game, "70_greyfen_river_bridge", Vector3(0, 1, 7.5), "greyfen", Vector3(0, 1, 7.5))
@@ -86,6 +92,7 @@ func _initialize() -> void:
 	await _capture_dialogue(game, "61_polish_anwen_facing", Vector3(3.2, 1, -5.0))
 	await _capture_player_motion_state(game, "62_polish_kael_character", "idle")
 	await _capture_player_motion_state(game, "64_polish_sword_slash_alignment", "light")
+	await _capture_blade_contact(game, "73_combat_001_blade_contact")
 	await _capture_oathfire_stage(game, "65_polish_oathfire_sheathed", "sheathed")
 	await _capture_oathfire_stage(game, "66_polish_oathfire_hand_charge", "charge")
 	game.quests.active.clear()
@@ -255,6 +262,47 @@ func _capture_combat_state(game, file_name: String, state: String) -> void:
 		game.hud.show_status_cue("Ghoulkin slain", "victory")
 	await _settle_frames(12)
 	_save_viewport(file_name)
+
+func _capture_blade_contact(game, file_name: String) -> void:
+	game.call("_load_zone", "wychwood", Vector3(0, 1, -4.0))
+	await _settle_frames(5)
+	game.player.global_position = Vector3(0, 1, -4.0)
+	game.player.velocity = Vector3.ZERO
+	game.player.set_physics_process(false)
+	game.player.attack_anim_time = 0.22
+	game.player.attack_anim_heavy = false
+	game.player.call("_begin_blade_attack", 24.0, 2.0, false)
+	var initial_segment: Dictionary = game.player.get_blade_world_segment()
+	var sweep_offset := Vector3(-0.72, 0.18, 0.30)
+	game.player.previous_blade_base = initial_segment.get("base", game.player.global_position + Vector3(0, 1, 0)) + sweep_offset
+	game.player.previous_blade_tip = initial_segment.get("tip", game.player.global_position + Vector3(0, 1, -1)) + sweep_offset
+	if game.player.animation_driver != null:
+		game.player.animation_driver.trigger_action("attack_light")
+	game.player.call("_animate_visuals", 0.016, Vector3.ZERO, false)
+	var segment: Dictionary = game.player.get_blade_world_segment()
+	var blade_base: Vector3 = segment.get("base", game.player.global_position + Vector3(0, 1, 0))
+	var blade_tip: Vector3 = segment.get("tip", blade_base)
+	var enemy = EnemyAI.new()
+	game.zone_root.add_child(enemy)
+	enemy.global_position = Vector3(0, 1, -5.0)
+	enemy.setup("ghoulkin", game.enemy_defs.get("ghoulkin", {}), game.player)
+	enemy.setup_navigation(game.spatial_service)
+	enemy.set_physics_process(false)
+	game.active_enemies.append(enemy)
+	var target_point := blade_base.lerp(blade_tip, 0.78)
+	enemy.global_position = Vector3(target_point.x, game.player.global_position.y, target_point.z)
+	game.player.call("_update_blade_contact")
+	if game.camera_rig != null:
+		game.camera_rig.set_process(false)
+		var camera: Camera3D = game.camera_rig.camera
+		camera.look_at_from_position(
+			game.player.global_position + Vector3(2.8, 1.75, 3.0),
+			game.player.global_position + Vector3(0.0, 1.05, -0.55),
+			Vector3.UP
+		)
+	await _settle_frames(3)
+	_save_viewport(file_name)
+	game.player.set_physics_process(true)
 
 func _capture_player_motion_state(game, file_name: String, state: String) -> void:
 	game.call("_load_zone", "greyfen", Vector3(0, 1, 5.5))
