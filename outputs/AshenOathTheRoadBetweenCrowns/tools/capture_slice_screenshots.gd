@@ -42,6 +42,13 @@ func _initialize() -> void:
 		print("AI-001 CAPTURE: PASS")
 		quit(0)
 		return
+	if "--oath-only" in OS.get_cmdline_user_args():
+		await _capture_oathfire_stage(game, "76_oath_001_charge_hands", "charge")
+		await _capture_oathfire_state(game, "77_oath_001_release_contact", true)
+		await _capture_oathfire_wall_impact(game, "78_oath_001_wall_impact")
+		print("OATH-001 CAPTURE: PASS")
+		quit(0)
+		return
 	await _capture(game, "01_greyfen_spawn", Vector3(0, 1, 7), "greyfen", Vector3(0, 1, 7))
 	await _capture(game, "02_village_center", Vector3(-2, 1, 5), "greyfen", Vector3(-2, 1, 5))
 	await _capture(game, "70_greyfen_river_bridge", Vector3(0, 1, 7.5), "greyfen", Vector3(0, 1, 7.5))
@@ -105,6 +112,9 @@ func _initialize() -> void:
 	await _capture_blade_contact(game, "73_combat_001_blade_contact")
 	await _capture_oathfire_stage(game, "65_polish_oathfire_sheathed", "sheathed")
 	await _capture_oathfire_stage(game, "66_polish_oathfire_hand_charge", "charge")
+	await _capture_oathfire_stage(game, "76_oath_001_charge_hands", "charge")
+	await _capture_oathfire_state(game, "77_oath_001_release_contact", true)
+	await _capture_oathfire_wall_impact(game, "78_oath_001_wall_impact")
 	game.quests.active.clear()
 	game.quests.unlocked["main_blood_under_stone"] = true
 	game.quests.start_quest("main_blood_under_stone")
@@ -459,7 +469,7 @@ func _capture_oathfire_state(game, file_name: String, released: bool) -> void:
 		game.player.animation_driver.trigger_action("beam_cast")
 	game.player.call("_update_beam_charge_visual")
 	if game.camera_rig != null:
-		game.camera_rig.yaw = 0.0
+		game.camera_rig.yaw = 0.72
 		game.camera_rig.pitch = -0.16
 	if released:
 		game.player.call("_hide_beam_charge_visuals")
@@ -485,9 +495,41 @@ func _capture_oathfire_stage(game, file_name: String, stage: String) -> void:
 			game.player.animation_driver.trigger_action("beam_cast")
 		game.player.call("_update_beam_charge_visual")
 	if game.camera_rig != null:
-		game.camera_rig.yaw = 0.0
+		game.camera_rig.yaw = 0.72
 		game.camera_rig.pitch = -0.16
 	await _settle_frames(8)
+	_save_viewport(file_name)
+	game.player.cancel_beam_charge()
+
+func _capture_oathfire_wall_impact(game, file_name: String) -> void:
+	game.call("_load_zone", "wychwood", Vector3(0, 1, -1.5))
+	await _settle_frames(4)
+	game.player.global_position = Vector3(0, 1, -1.5)
+	game.player.rotation.y = 0.0
+	game.player.call("_lock_beam_direction")
+	game.player.call("_set_sword_sheathed", true)
+	game.player.beam_cast_state = "releasing"
+	game.player.beam_pending_ratio = 1.0
+	var wall := StaticBody3D.new()
+	wall.name = "OathfireCaptureWall"
+	var wall_shape := CollisionShape3D.new()
+	var wall_box := BoxShape3D.new()
+	wall_box.size = Vector3(3.4, 2.8, 0.45)
+	wall_shape.shape = wall_box
+	wall.add_child(wall_shape)
+	var wall_mesh := MeshInstance3D.new()
+	var wall_visual := BoxMesh.new()
+	wall_visual.size = wall_box.size
+	wall_mesh.mesh = wall_visual
+	wall.add_child(wall_mesh)
+	game.zone_root.add_child(wall)
+	wall.global_position = game.player.global_position + Vector3(0, 1.15, -5.2)
+	await physics_frame
+	game.call("_on_player_beam", 1.0, game.player.get_beam_locked_direction())
+	if game.camera_rig != null:
+		game.camera_rig.yaw = 0.72
+		game.camera_rig.pitch = -0.12
+	await _settle_frames(2)
 	_save_viewport(file_name)
 	game.player.cancel_beam_charge()
 

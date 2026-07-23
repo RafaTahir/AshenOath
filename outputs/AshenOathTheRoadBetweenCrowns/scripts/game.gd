@@ -291,6 +291,7 @@ func _spawn_player(pos: Vector3) -> void:
 	hud.update_stamina(player.stamina_component.stamina, player.stamina_component.max_stamina)
 
 func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
+	_clear_oathfire_effects()
 	runtime_light_count = 0
 	tree_batch_data.clear()
 	deadfall_batch_data.clear()
@@ -831,9 +832,10 @@ func _on_player_beam_phase(phase: String) -> void:
 func _on_player_beam(charge_ratio: float, direction: Vector3) -> void:
 	if player == null or zone_root == null:
 		return
-	var origin = player.global_position + Vector3(0, 1.12, 0)
-	origin += direction.normalized() * 0.62
-	var endpoint = origin + direction.normalized() * 12.0
+	_clear_oathfire_effects()
+	var locked_direction: Vector3 = direction.normalized()
+	var origin: Vector3 = player.get_oathfire_origin() if player.has_method("get_oathfire_origin") else player.global_position + Vector3(0, 1.12, 0) + locked_direction * 0.62
+	var endpoint: Vector3 = origin + locked_direction * 12.0
 	var query = PhysicsRayQueryParameters3D.create(origin, endpoint)
 	var beam_exclusions: Array[RID] = [player.get_rid()]
 	for enemy in active_enemies:
@@ -844,13 +846,25 @@ func _on_player_beam(charge_ratio: float, direction: Vector3) -> void:
 	var result = get_world_3d().direct_space_state.intersect_ray(query)
 	if not result.is_empty():
 		endpoint = result.position
-	var damage = lerp(35.0, 70.0, charge_ratio)
-	var hits = combat.resolve_energy_beam(player, active_enemies, direction, endpoint, 1.2, damage)
+	var damage: float = lerpf(35.0, 70.0, charge_ratio)
+	var cast := {
+		"origin": origin,
+		"direction": locked_direction,
+		"endpoint": endpoint,
+		"width": 1.2,
+		"damage": damage,
+		"charge_ratio": charge_ratio
+	}
+	var hits: Array = combat.resolve_oathfire_cast(active_enemies, cast)
+	set_meta("last_oathfire_cast", cast)
+	set_meta("last_oathfire_hit_count", hits.size())
 	audio.play_event("heavy", 0.03)
 	_make_oathfire_beam(origin, endpoint, charge_ratio, not _performance_mode())
 	if camera_rig != null:
 		camera_rig.shake(0.12 + 0.08 * charge_ratio)
 	CombatFeedback.ground_ring(zone_root, player.global_position, Color(0.18, 0.72, 0.95), 0.75, 0.18)
+	CombatFeedback.impact_burst(zone_root, origin, false, Color(0.62, 0.95, 1.0))
+	CombatFeedback.impact_burst(zone_root, endpoint, true, Color(0.26, 0.82, 1.0))
 	for enemy in hits:
 		CombatFeedback.impact_burst(zone_root, enemy.global_position + Vector3(0, 0.9, 0), true, Color(0.30, 0.88, 1.0))
 	hud.show_status_cue("Oathfire Beam", "item")
@@ -861,6 +875,7 @@ func _make_oathfire_beam(origin: Vector3, endpoint: Vector3, charge_ratio: float
 		return
 	var root = Node3D.new()
 	root.name = "OathfireBeamEffect"
+	root.add_to_group("oathfire_runtime_effect")
 	zone_root.add_child(root)
 	root.global_position = origin.lerp(endpoint, 0.5)
 	root.look_at(endpoint, Vector3.UP)
@@ -887,12 +902,28 @@ func _make_oathfire_beam(origin: Vector3, endpoint: Vector3, charge_ratio: float
 		aura.name = "OathfireBeamAura"
 		aura.material_override = _oathfire_material(Color(0.16, 0.66, 1.0, 0.30), 1.5)
 		root.add_child(aura)
+		var inner = MeshInstance3D.new()
+		var inner_mesh = CylinderMesh.new()
+		inner_mesh.top_radius = 0.07 + charge_ratio * 0.04
+		inner_mesh.bottom_radius = 0.10 + charge_ratio * 0.05
+		inner_mesh.height = length * 1.01
+		inner_mesh.radial_segments = 10
+		inner.mesh = inner_mesh
+		inner.rotation_degrees.x = 90.0
+		inner.name = "OathfireBeamHotCore"
+		inner.material_override = _oathfire_material(Color(0.94, 1.0, 1.0, 1.0), 4.2)
+		root.add_child(inner)
 	root.scale = Vector3(0.04,0.04,0.08)
 	var tween = create_tween()
 	tween.tween_property(root,"scale",Vector3.ONE,0.09).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	tween.tween_interval(0.16)
 	tween.tween_property(root,"scale",Vector3(0.08,0.08,1.0),0.18)
 	tween.tween_callback(root.queue_free)
+
+func _clear_oathfire_effects() -> void:
+	for effect in get_tree().get_nodes_in_group("oathfire_runtime_effect"):
+		if is_instance_valid(effect):
+			effect.queue_free()
 
 func _oathfire_material(color: Color, energy: float) -> StandardMaterial3D:
 	var material = StandardMaterial3D.new()

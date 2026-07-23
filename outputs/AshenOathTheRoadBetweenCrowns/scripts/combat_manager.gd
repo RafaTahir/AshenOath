@@ -105,10 +105,26 @@ func place_trap(player: Node3D, enemies: Array) -> bool:
 	return false
 
 func resolve_energy_beam(player: Node3D, enemies: Array, direction: Vector3, endpoint: Vector3, width: float, damage: float) -> Array:
+	var origin: Vector3 = player.global_position + Vector3(0, 1.05, 0)
+	return resolve_oathfire_cast(enemies, {
+		"origin": origin,
+		"direction": direction,
+		"endpoint": endpoint,
+		"width": width,
+		"damage": damage
+	})
+
+func resolve_oathfire_cast(enemies: Array, cast: Dictionary) -> Array:
 	var hits: Array = []
-	var origin = player.global_position + Vector3(0, 1.05, 0)
-	var beam_length = origin.distance_to(endpoint)
-	var forward = direction.normalized()
+	var origin: Vector3 = cast.get("origin", Vector3.ZERO)
+	var endpoint: Vector3 = cast.get("endpoint", origin)
+	var direction: Vector3 = cast.get("direction", endpoint - origin)
+	var width: float = float(cast.get("width", 1.2))
+	var damage: float = float(cast.get("damage", 35.0))
+	var beam_length: float = origin.distance_to(endpoint)
+	var forward: Vector3 = direction.normalized()
+	if beam_length <= 0.05 or forward.length_squared() < 0.5:
+		return hits
 	for enemy in enemies:
 		if enemy == null or enemy.dead or (enemy.has_method("is_encounter_active") and not enemy.is_encounter_active()):
 			continue

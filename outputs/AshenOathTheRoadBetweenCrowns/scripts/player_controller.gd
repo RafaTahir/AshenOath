@@ -81,10 +81,15 @@ var beam_cooldown = 0.0
 var beam_charge_visual: MeshInstance3D
 var beam_left_hand_glow: MeshInstance3D
 var beam_right_hand_glow: MeshInstance3D
+var beam_left_hand_socket: BoneAttachment3D
+var beam_right_hand_socket: BoneAttachment3D
 var sheathed_sword_visual: Node3D
 var beam_cast_state := ""
 var beam_state_time := 0.0
 var beam_locked_direction := Vector3.ZERO
+var beam_pending_ratio := 0.0
+var beam_release_elapsed := 0.0
+var beam_release_emitted := false
 var movement_state = "idle"
 var movement_blend = 0.0
 var strafe_blend = 0.0
@@ -156,7 +161,7 @@ func _handle_movement(delta: float) -> void:
 		var speed = run_speed if is_running else walk_speed
 		if input_vec.y > 0.15:
 			speed *= 0.68
-		if beam_charging:
+		if beam_cast_state != "":
 			speed *= 0.4
 		var target_velocity = move_dir * speed
 		var response = run_acceleration if is_running else acceleration
@@ -359,31 +364,14 @@ func _blade_axis_from_rendered_bounds(parent: Node3D) -> Dictionary:
 
 func _handle_beam_input() -> void:
 	if Input.is_action_just_pressed("oathfire_beam") and beam_cooldown <= 0.0 and beam_cast_state == "" and dodge_time <= 0.0:
-		beam_cast_state = "sheathing"
-		beam_phase_changed.emit("sheathing")
-		beam_state_time = 0.24
-		beam_charging = true
-		beam_charge_time = 0.0
-		_lock_beam_direction()
-		_set_sword_sheathed(true)
+		_begin_oathfire_cast()
 	if beam_cast_state == "charging" and Input.is_action_pressed("oathfire_beam"):
 		beam_charge_time = min(beam_charge_time + get_physics_process_delta_time(), 1.25)
 		_update_beam_charge_visual()
 	if beam_cast_state == "charging" and Input.is_action_just_released("oathfire_beam"):
-		var ratio = clamp((beam_charge_time - 0.35) / 0.90, 0.0, 1.0)
+		var ratio: float = clampf((beam_charge_time - 0.35) / 0.90, 0.0, 1.0)
 		if beam_charge_time >= 0.35 and stamina_component.spend(40.0):
-			var direction = beam_locked_direction
-			if direction.length_squared() < 0.5:
-				direction = -global_transform.basis.z.normalized()
-			face_target(global_position + direction * 4.0)
-			beam_requested.emit(ratio, direction)
-			beam_cooldown = 4.0
-			attack_cooldown = 0.75
-			beam_charging = false
-			beam_cast_state = "releasing"
-			beam_phase_changed.emit("releasing")
-			beam_state_time = 0.30
-			_hide_beam_charge_visuals()
+			_commit_oathfire_release(ratio)
 		elif beam_charge_time >= 0.35:
 			stamina_exhausted.emit("Oathfire Beam")
 			_begin_beam_redraw()
@@ -392,9 +380,35 @@ func _handle_beam_input() -> void:
 	elif beam_cast_state == "sheathing" and Input.is_action_just_released("oathfire_beam"):
 		_begin_beam_redraw()
 
+func _begin_oathfire_cast() -> void:
+	beam_cast_state = "sheathing"
+	beam_phase_changed.emit("sheathing")
+	beam_state_time = 0.24
+	beam_charging = true
+	beam_charge_time = 0.0
+	beam_pending_ratio = 0.0
+	beam_release_elapsed = 0.0
+	beam_release_emitted = false
+	_lock_beam_direction()
+	_set_sword_sheathed(true)
+
+func _commit_oathfire_release(ratio: float) -> void:
+	beam_pending_ratio = clampf(ratio, 0.0, 1.0)
+	beam_release_elapsed = 0.0
+	beam_release_emitted = false
+	beam_cooldown = 4.0
+	attack_cooldown = 0.75
+	beam_charging = false
+	beam_cast_state = "releasing"
+	beam_phase_changed.emit("releasing")
+	beam_state_time = 0.34
+	_update_beam_charge_visual()
+
 func _update_beam_sequence(delta: float) -> void:
 	if beam_cast_state == "":
 		return
+	if beam_locked_direction.length_squared() > 0.5:
+		face_target(global_position + beam_locked_direction * 4.0)
 	beam_state_time = max(beam_state_time - delta, 0.0)
 	if beam_cast_state == "sheathing" and beam_state_time <= 0.0:
 		if Input.is_action_pressed("oathfire_beam"):
@@ -406,13 +420,23 @@ func _update_beam_sequence(delta: float) -> void:
 			_update_beam_charge_visual()
 		else:
 			_begin_beam_redraw()
-	elif beam_cast_state == "releasing" and beam_state_time <= 0.0:
-		_begin_beam_redraw()
+	elif beam_cast_state == "releasing":
+		beam_release_elapsed += delta
+		_update_beam_charge_visual()
+		if not beam_release_emitted and beam_release_elapsed >= 0.11:
+			beam_release_emitted = true
+			beam_requested.emit(beam_pending_ratio, beam_locked_direction)
+			_hide_beam_charge_visuals()
+		if beam_state_time <= 0.0:
+			_begin_beam_redraw()
 	elif beam_cast_state == "redrawing" and beam_state_time <= 0.0:
 		beam_cast_state = ""
 		beam_charging = false
 		beam_charge_time = 0.0
 		beam_locked_direction = Vector3.ZERO
+		beam_pending_ratio = 0.0
+		beam_release_elapsed = 0.0
+		beam_release_emitted = false
 		_set_sword_sheathed(false)
 
 func _begin_beam_redraw() -> void:
@@ -429,6 +453,9 @@ func cancel_beam_charge() -> void:
 	beam_phase_changed.emit("cancelled")
 	beam_state_time = 0.0
 	beam_locked_direction = Vector3.ZERO
+	beam_pending_ratio = 0.0
+	beam_release_elapsed = 0.0
+	beam_release_emitted = false
 	_hide_beam_charge_visuals()
 	_set_sword_sheathed(false)
 
@@ -443,18 +470,26 @@ func _lock_beam_direction() -> Vector3:
 func get_beam_locked_direction() -> Vector3:
 	return beam_locked_direction
 
+func get_oathfire_origin() -> Vector3:
+	var left: Vector3 = beam_left_hand_glow.global_position if beam_left_hand_glow != null else global_position + Vector3(-0.16, 1.28, -0.48)
+	var right: Vector3 = beam_right_hand_glow.global_position if beam_right_hand_glow != null else global_position + Vector3(0.16, 1.28, -0.48)
+	var direction: Vector3 = beam_locked_direction if beam_locked_direction.length_squared() > 0.5 else -global_transform.basis.z.normalized()
+	return left.lerp(right, 0.5) + direction * 0.24
+
 func _update_beam_charge_visual() -> void:
 	if beam_charge_visual == null:
 		return
 	beam_charge_visual.visible = true
-	var ratio = clamp(beam_charge_time / 1.25, 0.0, 1.0)
-	beam_charge_visual.scale = Vector3.ONE * lerp(0.12, 0.42, ratio)
+	var ratio: float = beam_pending_ratio if beam_cast_state == "releasing" else clampf(beam_charge_time / 1.25, 0.0, 1.0)
+	var pulse: float = 1.0 + sin(Time.get_ticks_msec() * 0.018) * 0.07
+	beam_charge_visual.scale = Vector3.ONE * lerpf(0.12, 0.42, ratio) * pulse
+	beam_charge_visual.global_position = get_oathfire_origin()
 	if beam_left_hand_glow != null:
 		beam_left_hand_glow.visible = true
-		beam_left_hand_glow.position = Vector3(lerp(-0.40, -0.16, ratio), lerp(1.16, 1.30, ratio), lerp(-0.34, -0.67, ratio))
+		beam_left_hand_glow.scale = Vector3.ONE * lerpf(0.65, 1.25, ratio)
 	if beam_right_hand_glow != null:
 		beam_right_hand_glow.visible = true
-		beam_right_hand_glow.position = Vector3(lerp(0.40, 0.16, ratio), lerp(1.16, 1.30, ratio), lerp(-0.34, -0.67, ratio))
+		beam_right_hand_glow.scale = Vector3.ONE * lerpf(0.65, 1.25, ratio)
 
 func _hide_beam_charge_visuals() -> void:
 	for glow in [beam_charge_visual, beam_left_hand_glow, beam_right_hand_glow]:
@@ -594,30 +629,58 @@ func _add_beam_charge_visual() -> void:
 	beam_charge_visual = MeshInstance3D.new()
 	beam_charge_visual.name = "OathfireChargeSphere"
 	beam_charge_visual.mesh = SphereMesh.new()
-	beam_charge_visual.position = Vector3(0, 1.30, -0.72)
 	beam_charge_visual.material_override = _beam_material(Color(0.35, 0.88, 1.0, 0.92))
 	beam_charge_visual.visible = false
-	visual_root.add_child(beam_charge_visual)
-	beam_left_hand_glow = _make_oathfire_hand("OathfireLeftHand", Vector3(-0.40, 1.16, -0.34))
-	beam_right_hand_glow = _make_oathfire_hand("OathfireRightHand", Vector3(0.40, 1.16, -0.34))
+	add_child(beam_charge_visual)
+	var skeleton := _find_skeleton(visual_root)
+	beam_left_hand_glow = _make_oathfire_hand("OathfireLeftHand", skeleton, ["LeftHand", "Hand.L", "lefthand", "leftwrist"], Vector3(-0.28, 1.22, -0.42))
+	beam_right_hand_glow = _make_oathfire_hand("OathfireRightHand", skeleton, ["RightHand", "Hand.R", "righthand", "rightwrist"], Vector3(0.28, 1.22, -0.42))
 	_build_sheathed_sword()
 
-func _make_oathfire_hand(node_name: String, pos: Vector3) -> MeshInstance3D:
+func _make_oathfire_hand(node_name: String, skeleton: Skeleton3D, aliases: Array[String], fallback_position: Vector3) -> MeshInstance3D:
 	var glow := MeshInstance3D.new()
 	glow.name = node_name
 	var mesh := SphereMesh.new()
 	mesh.radius = 0.10
 	mesh.height = 0.20
 	glow.mesh = mesh
-	glow.position = pos
 	glow.material_override = _beam_material(Color(0.38, 0.82, 1.0, 0.58))
 	glow.visible = false
-	visual_root.add_child(glow)
+	var socket_parent: Node3D = visual_root
+	if skeleton != null:
+		var hand_index := _find_bone_index(skeleton, aliases)
+		if hand_index < 0:
+			var wants_left := node_name.contains("Left")
+			for bone_index in range(skeleton.get_bone_count()):
+				var bone_name := str(skeleton.get_bone_name(bone_index)).to_lower()
+				var is_hand := bone_name.contains("hand") or bone_name.contains("wrist")
+				var is_side := bone_name.contains("left") or bone_name.contains("_l") or bone_name.ends_with(".l") if wants_left else bone_name.contains("right") or bone_name.contains("_r") or bone_name.ends_with(".r")
+				if is_hand and is_side:
+					hand_index = bone_index
+					break
+		if hand_index >= 0:
+			var attachment := BoneAttachment3D.new()
+			attachment.name = "%sSocket" % node_name
+			attachment.bone_idx = hand_index
+			attachment.bone_name = skeleton.get_bone_name(hand_index)
+			skeleton.add_child(attachment)
+			# Imported rigs carry source-scale transforms on their skeleton. Cancel
+			# that scale before adding the glow so a 20 cm hand effect cannot become
+			# a multi-metre object or corrupt the rendered character bounds.
+			socket_parent = _create_equipment_space(attachment, "%sEquipmentSpace" % node_name)
+			if node_name.contains("Left"):
+				beam_left_hand_socket = attachment
+			else:
+				beam_right_hand_socket = attachment
+	socket_parent.add_child(glow)
+	if socket_parent == visual_root:
+		glow.position = fallback_position
 	return glow
 
 func _build_sheathed_sword() -> void:
+	# The imported sword has an inconsistent source scale. Reuse the authored
+	# Oathblade mesh so the hand and back versions have identical proportions.
 	var socket_parent: Node3D = visual_root
-	var bone_attached := false
 	var skeleton := _find_skeleton(visual_root)
 	if skeleton != null:
 		var back_index := _find_bone_index(skeleton, ["Spine2", "Chest", "Torso", "Spine"])
@@ -628,24 +691,11 @@ func _build_sheathed_sword() -> void:
 			attachment.bone_name = skeleton.get_bone_name(back_index)
 			skeleton.add_child(attachment)
 			socket_parent = _create_equipment_space(attachment, "KaelBackSwordEquipmentSpace")
-			bone_attached = true
-	var sword_scene = load("res://assets_external/characters/Warrior_Sword.fbx")
-	sheathed_sword_visual = sword_scene.instantiate() if sword_scene is PackedScene else Node3D.new()
+	sheathed_sword_visual = _build_oathblade_visual(socket_parent)
 	sheathed_sword_visual.name = "OathfireSheathedSword"
-	sheathed_sword_visual.position = Vector3(-0.22, 0.08, 0.16) if bone_attached else Vector3(-0.34, 1.18, 0.28)
-	sheathed_sword_visual.rotation_degrees = Vector3(72, 4, -24) if bone_attached else Vector3(20, 0, -28)
-	sheathed_sword_visual.scale *= 0.72
-	socket_parent.add_child(sheathed_sword_visual)
-	if sword_scene is PackedScene:
-		sheathed_sword_visual.visible = false
-		return
-	var blade := MeshInstance3D.new()
-	var blade_mesh := BoxMesh.new()
-	blade_mesh.size = Vector3(0.07, 0.07, 1.45)
-	blade.mesh = blade_mesh
-	blade.position.z = -0.52
-	blade.material_override = _metal_mat(Color(0.62, 0.66, 0.68))
-	sheathed_sword_visual.add_child(blade)
+	sheathed_sword_visual.position = Vector3(-0.22, 0.10, 0.15) if socket_parent != visual_root else Vector3(-0.24, 1.46, 0.22)
+	sheathed_sword_visual.rotation_degrees = Vector3(-8, 4, -18)
+	sheathed_sword_visual.scale = Vector3.ONE * 0.92
 	sheathed_sword_visual.visible = false
 
 func _try_build_mapped_body() -> bool:
