@@ -10,11 +10,58 @@
   },
   "sister_anwen": {
     "name": "Sister Anwen",
-    "greeting": "Keep your blade low in Greyfen, hunter. Fear already has hands around every throat here.",
+    "greeting": "You read the road notice.",
     "lines": [
-      "The old road has taken three men and returned none whole. That is not hunger. Hunger is honest.",
-      "Look for the cart, the clawed mud, and the black feathers. If you find them together, come back before you chase the dark farther.",
-      "Do not ask yet why I know what marks to name. I am not ready to answer, and Greyfen is not ready to hear it."
+      "Bram Kett drove the cart. Sella Vey walked beside it. The boy was Oren. Twelve.",
+      "If you find black feathers tied with red thread, do not burn them. The thread belongs to this shrine.",
+      "That is not enough of an answer. I know. Bring back what the road left behind."
+    ],
+    "variants": [
+      {
+        "priority": 30,
+        "conditions": {"bell_gate_met": true},
+        "greeting": "The bell rope was cut last winter. It still rang three times after your report.",
+        "lines": [
+          "Once is burial. Twice is a restored name.",
+          "I do not know what three means. That is the first honest answer I have given you.",
+          "Inspect the disturbed graves. The rope runs beneath them toward the chapel."
+        ],
+        "actions": []
+      },
+      {
+        "priority": 20,
+        "conditions": {"evidence_report": "private"},
+        "greeting": "Anwen knows Oren's token before Kael opens his hand.",
+        "lines": [
+          "Kael: You know it.",
+          "Anwen: I know the carving.",
+          "Kael: That is not what I said.",
+          "Anwen: No. Oren was not the first child given that token."
+        ],
+        "actions": []
+      },
+      {
+        "priority": 20,
+        "conditions": {"evidence_report": "public"},
+        "greeting": "The token is already pinned beneath the contract. Anwen does not look at it.",
+        "lines": [
+          "Anwen: You gave Greyfen the truth before giving it time to choose courage.",
+          "Kael: Courage chosen after warning is only obedience.",
+          "Anwen: Then we will learn what fear chooses."
+        ],
+        "actions": []
+      },
+      {
+        "priority": 20,
+        "conditions": {"evidence_report": "retained"},
+        "greeting": "Anwen watches Kael's closed hand.",
+        "lines": [
+          "Anwen: You found something.",
+          "Kael: I found reasons to keep looking.",
+          "Anwen: Keep them close. Greyfen has practiced taking things from the dead."
+        ],
+        "actions": []
+      }
     ],
     "voice": [
       "voice_sister_anwen_greeting_01",

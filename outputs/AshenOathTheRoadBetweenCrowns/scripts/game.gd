@@ -79,6 +79,7 @@ var terrain_patch_batch_data: Array[Dictionary] = []
 var spatial_service: Node
 var environment_batches_flushed := false
 var prop_collision_body: StaticBody3D
+var pending_anwen_relocation := false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -223,6 +224,7 @@ func _new_game() -> void:
 	game_started = true
 	paused_by_menu = false
 	wychwood_pack_kills = 0
+	pending_anwen_relocation = false
 	tutorial_flags.clear()
 	current_zone_id = "greyfen"
 	day_night.set_time(DayNightController.START_TIME_MINUTES, 0)
@@ -457,7 +459,10 @@ func _build_greyfen() -> void:
 	seed(41021)
 	GreyfenSection.new().build(self)
 	_make_named_interactable("notice_board", "dialogue", "Read notice board", Vector3(-2, 0, 9.4), Color(0.48, 0.28, 0.12), Vector3(0.45, 0.45, 0.45))
-	_make_named_interactable("sister_anwen", "dialogue", "Talk to Sister Anwen", Vector3(3.2, 0, -5.0), Color(0.34, 0.35, 0.48))
+	var anwen_at_cemetery: bool = quests.is_active("main_bell_beneath_greyfen")
+	var anwen_position := Vector3(11.0, 0, 4.8) if anwen_at_cemetery else Vector3(3.2, 0, -5.0)
+	var anwen_prompt := "Meet Sister Anwen at the cemetery gate" if anwen_at_cemetery else "Talk to Sister Anwen"
+	_make_named_interactable("sister_anwen", "dialogue", anwen_prompt, anwen_position, Color(0.34, 0.35, 0.48))
 	_make_named_interactable("mira", "dialogue", "Talk to Mira Fen", Vector3(-6.8, 0, -2.3), Color(0.22, 0.48, 0.32), Vector3(0.62, 0.62, 0.62))
 	_make_named_interactable("rook", "dialogue", "Talk to Rook", Vector3(-7.8, 0, 8.5), Color(0.42, 0.33, 0.23), Vector3(0.62, 0.62, 0.62))
 	_make_named_interactable("widow_elna", "dialogue", "Talk to Widow Elna", Vector3(13.0, 0, 7.0), Color(0.32, 0.30, 0.42), Vector3(0.54, 0.54, 0.54))
@@ -465,7 +470,8 @@ func _build_greyfen() -> void:
 	_make_named_interactable("farmer_toma", "dialogue", "Talk to Farmer Toma", Vector3(12, 0, -9), Color(0.39, 0.30, 0.18), Vector3(0.46, 0.46, 0.46))
 	_make_named_interactable("side_contracts", "dialogue", "Read village requests", Vector3(-3.2,0,9.4), Color(0.42,0.27,0.14), Vector3(0.4,0.4,0.4))
 	_make_named_interactable("names_decision", "dialogue", "Decide the fate of the names", Vector3(4.4,0,-5.0), Color(0.36,0.32,0.25), Vector3(0.45,0.45,0.45))
-	_make_named_interactable("crow_shrine_choice", "dialogue", "Touch the Crow Shrine", Vector3(6.5,0,-7.5), Color(0.3,0.38,0.3), Vector3(0.45,0.45,0.45))
+	if _crow_shrine_choice_ready():
+		_make_named_interactable("crow_shrine_choice", "dialogue", "Choose the Crow Shrine's fate", Vector3(6.5,0,-7.5), Color(0.3,0.38,0.3), Vector3(0.45,0.45,0.45))
 	_make_named_interactable("retain_evidence", "dialogue", "Keep Oren's token", Vector3(1.8,0,8.8), Color(0.38,0.24,0.16), Vector3(0.35,0.35,0.35))
 	_make_named_interactable("village_stories", "dialogue", "Resolve a village story", Vector3(-4.1,0,9.0), Color(0.34,0.23,0.14), Vector3(0.4,0.4,0.4))
 	_make_village_place("village_well", "village_place", "Draw from the village well", Vector3(-8.0,0,-0.5), Vector3(2.2,0.9,2.2), Color(0.19,0.18,0.16))
@@ -499,10 +505,11 @@ func _build_wychwood() -> void:
 	seed(78233)
 	WychwoodSection.new().build(self)
 	_make_zone_gate("Back to Greyfen", Vector3(0, 0, 15), "greyfen", Vector3(0, 1, -13))
-	_make_clue("corpse", "Inspect blood-dark corpse", Vector3(-2, 0, 7.4), "main_road_of_crows", "bram", Color(0.32, 0.18, 0.16))
-	_make_clue("claw_marks", "Read strange claw marks", Vector3(2.5, 0, 4.8), "main_road_of_crows", "vargan_wire", Color(0.18, 0.18, 0.18))
-	_make_clue("black_feathers", "Take black feathers", Vector3(-4, 0, 4.0), "main_road_of_crows", "sella", Color(0.03, 0.03, 0.035))
-	_make_clue("tracks", "Inspect dragged tracks", Vector3(0, 0, -4.2), "main_road_of_crows", "return_village", Color(0.15, 0.11, 0.08))
+	_make_clue("corpse", "Identify Bram by his cart ledger", Vector3(-2, 0, 7.4), "main_road_of_crows", "bram", Color(0.32, 0.18, 0.16))
+	_make_clue("black_feathers", "Identify Sella by the red-thread feathers", Vector3(-4, 0, 4.0), "main_road_of_crows", "sella", Color(0.03, 0.03, 0.035))
+	_make_clue("oren_token", "Recover Oren's scratched shrine token", Vector3(3.8, 0, 2.2), "main_road_of_crows", "oren", Color(0.46, 0.28, 0.12))
+	_make_clue("claw_marks", "Recover the blackened Vargan wire", Vector3(2.5, 0, 4.8), "main_road_of_crows", "vargan_wire", Color(0.18, 0.18, 0.18))
+	_make_clue("tracks", "Read the deliberate drag marks", Vector3(0, 0, -4.2), "main_road_of_crows", "drag_marks", Color(0.15, 0.11, 0.08))
 	_make_clue("ritual_stones", "Study ritual stones", Vector3(8, 0, -10), "main_teeth_in_rain", "name_the_dead", Color(0.38, 0.38, 0.36))
 	_make_clue("vargan_signet", "Take signet ring", Vector3(11, 0, -12), "main_teeth_in_rain", "name_the_dead", Color(0.72, 0.56, 0.24))
 	_make_clue("bandit_camp", "Inspect bandit camp", Vector3(-12, 0, -12), "side_black_dog", "find_dog", Color(0.30, 0.18, 0.10))
@@ -518,9 +525,12 @@ func _build_wychwood() -> void:
 			second_ghoul.set_encounter_active(false)
 		_spawn_enemy("wychwood_stalker", Vector3(-4.8, 0.8, -3.8))
 		_spawn_enemy("wychwood_raider", Vector3(4.6, 0.8, -5.3))
-		_spawn_enemy("wychwood_brute", Vector3(0.2, 0.8, -12.4))
+		var brute_z := -14.2 if quests.is_objective_done("main_road_of_crows", "drag_marks") else -12.4
+		_spawn_enemy("wychwood_brute", Vector3(0.2, 0.8, brute_z))
 	if quests.is_active("main_teeth_in_rain") and not quests.is_objective_done("main_teeth_in_rain", "fight_bog_wretch"):
 		_spawn_enemy("bog_wretch", Vector3(11, 0.8, -12))
+	elif quests.is_active("main_teeth_in_rain") and quests.is_objective_done("main_teeth_in_rain", "fight_bog_wretch") and not quests.is_objective_done("main_teeth_in_rain", "bog_core_choice"):
+		_make_named_interactable("bog_core_choice", "dialogue", "Choose the memory core's fate", Vector3(11, 0, -12), Color(0.35, 0.58, 0.52), Vector3(0.4, 0.4, 0.4))
 	if quests.is_active("side_black_dog") and not quests.is_objective_done("side_black_dog", "find_dog"):
 		_spawn_enemy("bandit", Vector3(-14, 0.8, -14))
 		_spawn_enemy("bandit", Vector3(-12, 0.8, -15))
@@ -558,22 +568,31 @@ func _handle_interaction(area) -> void:
 			quests.complete_objective("main_blood_under_stone", "recover_ledger")
 		var dialogue_data = dialogue.get_dialogue(area.dialogue_id)
 		var played_report_voice = false
+		var report_chosen := false
 		if _road_ready_to_report() and area.interaction_id in ["sister_anwen", "notice_board", "retain_evidence"]:
+			report_chosen = true
 			var report_method: String = str({"sister_anwen":"private", "notice_board":"public", "retain_evidence":"retained"}[area.interaction_id])
 			story_state.set_flag("evidence_report", report_method)
+			story_state.set_flag("cemetery_bell_rung", true)
 			story_state.adjust_value("anwen_trust", 1 if report_method == "private" else (-1 if report_method == "public" else 0))
-			story_state.adjust_value("greyfen_fear", 2 if report_method == "public" else 0)
+			story_state.adjust_value("greyfen_fear", 1 if report_method == "public" else 0)
 			quests.complete_objective("main_road_of_crows", "return_village")
+			dialogue_data = dialogue.get_dialogue(area.dialogue_id)
+			if area.interaction_id == "sister_anwen":
+				pending_anwen_relocation = true
+			else:
+				_relocate_anwen_to_cemetery()
 		if area.interaction_id == "sister_anwen" and not bool(tutorial_flags.get("anwen_talked", false)):
 			tutorial_flags["anwen_talked"] = true
 			quests.complete_objective("main_road_of_crows", "speak_anwen")
-		elif area.interaction_id == "sister_anwen" and quests.is_active("main_bell_beneath_greyfen"):
+		elif area.interaction_id == "sister_anwen" and not report_chosen and quests.is_active("main_bell_beneath_greyfen"):
 			quests.complete_objective("main_bell_beneath_greyfen", "meet_anwen_gate")
+			story_state.set_flag("bell_gate_met", true)
+			dialogue_data = dialogue.get_dialogue(area.dialogue_id)
 			audio.set_music_state("shrine_anwen")
-			hud.toast("Anwen named the signs before you found them. Follow the old road north.")
-			hud.set_guidance_hint("Follow the lanterns to Wychwood. Find the cart, marks, and feathers.", 6.0)
-		elif area.interaction_id == "sister_anwen" and _road_ready_to_report():
-			quests.complete_objective("main_road_of_crows", "return_village")
+			hud.toast("The cut bell rope runs beneath the graves. Anwen waits for proof.")
+			hud.set_guidance_hint("Inspect any two disturbed graves beside the chapel.", 6.0)
+		if report_chosen and area.interaction_id == "sister_anwen":
 			audio.play_event("return_report", 0.02)
 			audio.play_voice("voice_sister_anwen_report_01")
 			played_report_voice = true
@@ -593,6 +612,13 @@ func _handle_interaction(area) -> void:
 			}.get(area.interaction_id, ""))
 			if campaign_voice != "": audio.play_voice(campaign_voice)
 	elif area.interaction_type == "clue":
+		if area.interaction_id == "chapel_door" and not _chapel_can_open():
+			if not quests.is_objective_done("main_bell_beneath_greyfen", "grave_truth"):
+				hud.toast("The chapel seal has no keyhole. The disturbed graves must explain the bell.")
+			else:
+				hud.toast("Something moves beneath the grave soil. The chapel will not open while it remains.")
+			hud.set_guidance_hint("Finish the cemetery investigation before opening the chapel.", 5.0)
+			return
 		if area.quest_id == "main_road_of_crows":
 			_handle_road_of_crows_clue(area)
 		else:
@@ -613,7 +639,9 @@ func _handle_interaction(area) -> void:
 		elif area.interaction_id == "claw_marks":
 			hud.toast("The claw marks are real, but they cut over wagon ruts. The beast came after the cart stopped.")
 		elif area.interaction_id == "black_feathers":
-			hud.toast("Black feathers, tied with red thread. A warning, or a prayer left too late.")
+			hud.toast("Sella's pilgrim bead is tied in shrine-red burial thread. It was prepared before she died.")
+		elif area.interaction_id == "oren_token":
+			hud.toast("Oren's wooden crow has its name panel scratched away. Someone wanted the child forgotten.")
 		elif area.interaction_id == "ritual_stones":
 			quests.complete_objective("main_teeth_in_rain", "name_the_dead")
 		elif area.interaction_id == "old_hall":
@@ -627,7 +655,12 @@ func _handle_interaction(area) -> void:
 		elif area.interaction_id == "sacrifice_roots":
 			hud.toast("The roots drink from old blood. Mira knew this place.")
 		elif area.interaction_id == "chapel_door":
-			quests.complete_objective("main_bell_beneath_greyfen", "cemetery_ambush")
+			story_state.set_flag("crow_chapel_opened", true)
+			hud.toast("The chapel seal yields. The Crow Shrine inside is still bound to the erased names.")
+			hud.set_guidance_hint("Return to the shrine and decide what should happen to the covenant.", 6.0)
+			_spawn_crow_shrine_choice()
+		elif area.interaction_id.begins_with("grave_"):
+			_ensure_cemetery_ambush()
 		elif area.interaction_id.begins_with("vargan_"):
 			story_state.set_flag(area.interaction_id, true)
 			story_state.set_flag("castle_discovered", true)
@@ -688,16 +721,17 @@ func _handle_road_of_crows_clue(area) -> void:
 	match area.interaction_id:
 		"corpse":
 			quests.complete_evidence("main_road_of_crows", "bram")
-		"claw_marks":
-			quests.complete_evidence("main_road_of_crows", "vargan_wire")
 		"black_feathers":
 			quests.complete_evidence("main_road_of_crows", "sella")
-		"tracks":
-			quests.complete_evidence("main_road_of_crows", "bram")
-			quests.complete_evidence("main_road_of_crows", "sella")
-			quests.complete_evidence("main_road_of_crows", "vargan_wire")
-			quests.complete_evidence("main_road_of_crows", "drag_marks")
+		"oren_token":
 			quests.complete_evidence("main_road_of_crows", "oren")
+		"claw_marks":
+			quests.complete_evidence("main_road_of_crows", "vargan_wire")
+		"tracks":
+			quests.complete_evidence("main_road_of_crows", "drag_marks")
+			if quests.is_objective_done("main_road_of_crows", "fight_ghoulkin"):
+				for evidence_id in ["bram", "sella", "oren", "vargan_wire"]:
+					quests.complete_evidence("main_road_of_crows", evidence_id)
 
 func _apply_campaign_arrival(zone_id: String) -> void:
 	if zone_id in ["vargan_approach", "vargan_court", "record_hall"]:
@@ -723,6 +757,50 @@ func _apply_campaign_arrival(zone_id: String) -> void:
 func _road_ready_to_report() -> bool:
 	return quests.is_active("main_road_of_crows") and quests.is_objective_done("main_road_of_crows", "fight_ghoulkin") and not quests.is_objective_done("main_road_of_crows", "return_village")
 
+func _crow_shrine_choice_ready() -> bool:
+	return quests.is_active("main_bell_beneath_greyfen") \
+		and quests.is_objective_done("main_bell_beneath_greyfen", "open_chapel") \
+		and not quests.is_objective_done("main_bell_beneath_greyfen", "crow_shrine_choice")
+
+func _chapel_can_open() -> bool:
+	return quests.is_active("main_bell_beneath_greyfen") \
+		and quests.is_objective_done("main_bell_beneath_greyfen", "grave_truth") \
+		and quests.is_objective_done("main_bell_beneath_greyfen", "cemetery_ambush")
+
+func _ensure_cemetery_ambush() -> void:
+	if not quests.is_active("main_bell_beneath_greyfen"):
+		return
+	if not quests.is_objective_done("main_bell_beneath_greyfen", "grave_truth"):
+		return
+	if quests.is_objective_done("main_bell_beneath_greyfen", "cemetery_ambush"):
+		return
+	for enemy in active_enemies:
+		if is_instance_valid(enemy) and bool(enemy.get_meta("act_one_cemetery_ambush", false)):
+			return
+	var ambusher = _spawn_enemy("ghoulkin", Vector3(14.2, 0.8, 5.4))
+	if ambusher != null:
+		ambusher.set_meta("act_one_cemetery_ambush", true)
+		hud.show_status_cue("The grave soil breaks", "hurt")
+		hud.set_guidance_hint("Defeat the Ghoulkin between the graves and chapel.", 5.0)
+		audio.play_event("reveal", 0.02)
+
+func _spawn_crow_shrine_choice() -> void:
+	if not _crow_shrine_choice_ready() or zone_root == null:
+		return
+	if zone_root.find_child("crow_shrine_choice", true, false) != null:
+		return
+	_make_named_interactable("crow_shrine_choice", "dialogue", "Choose the Crow Shrine's fate", Vector3(6.5,0,-7.5), Color(0.3,0.38,0.3), Vector3(0.45,0.45,0.45))
+
+func _relocate_anwen_to_cemetery() -> void:
+	if zone_root == null:
+		return
+	var anwen = zone_root.find_child("sister_anwen", true, false)
+	if anwen == null:
+		return
+	anwen.global_position = Vector3(11.0, 0, 4.8)
+	anwen.set("prompt", "Meet Sister Anwen at the cemetery gate")
+	anwen.rotation_degrees.y = 95.0
+
 func _handle_dialogue_action(action: Dictionary) -> void:
 	audio.stop_voice()
 	audio.play_event("ui")
@@ -747,6 +825,9 @@ func _handle_dialogue_action(action: Dictionary) -> void:
 			story_state.set_flag("%s_outcome" % side_id, str(action.get("outcome", "resolved")))
 			hud.toast(str(action.get("result", "Greyfen will remember what you chose.")))
 	elif type == "story_choice":
+		if action.get("sets_flags", {}).has("crow_shrine_state") and str(story_state.get_flag("crow_shrine_state", "")) != "":
+			hud.toast("The Crow Shrine has already answered Kael's choice.")
+			return
 		for id in action.get("sets_flags", {}):
 			story_state.set_flag(str(id), action["sets_flags"][id])
 		for id in action.get("adjusts_values", {}):
@@ -756,6 +837,20 @@ func _handle_dialogue_action(action: Dictionary) -> void:
 		for completion in action.get("completes", []):
 			quests.complete_objective(str(completion.get("quest", "")), str(completion.get("objective", "")))
 		hud.toast(str(action.get("result", "Your choice will be remembered.")))
+		if action.get("sets_flags", {}).has("crow_shrine_state"):
+			hud.show_status_cue("The covenant changes", "victory")
+			hud.set_guidance_hint("Speak with Mira. Ask what the dead remember.", 6.0)
+			if active_interactable != null and str(active_interactable.get("interaction_id")) == "crow_shrine_choice":
+				_mark_interaction_removed(active_interactable)
+				active_interactable.queue_free()
+				active_interactable = null
+		elif action.get("sets_flags", {}).has("bog_core_fate"):
+			hud.show_status_cue("Memory given a fate", "victory")
+			hud.set_guidance_hint("Act One complete. The recovered names point deeper into Greyfen.", 6.0)
+			if active_interactable != null and str(active_interactable.get("interaction_id")) == "bog_core_choice":
+				_mark_interaction_removed(active_interactable)
+				active_interactable.queue_free()
+				active_interactable = null
 		if str(action.get("quest", "")) == "main_blood_under_stone" and str(action.get("objective", "")) == "ledger_choice":
 			story_state.set_flag("vargan_ledger_found", true)
 			story_state.set_flag("vargan_ledger_choice_made", true)
@@ -1022,7 +1117,14 @@ func _on_enemy_died(enemy) -> void:
 		camera_rig.shake(0.09)
 	if zone_root != null and enemy != null:
 		CombatFeedback.ground_ring(zone_root, enemy.global_position, Color(0.12, 0.08, 0.055), 0.9, 0.24)
-	if current_zone_id == "wychwood" and enemy.enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute"]:
+	if current_zone_id == "greyfen" and bool(enemy.get_meta("act_one_cemetery_ambush", false)):
+		quests.complete_objective("main_bell_beneath_greyfen", "cemetery_ambush")
+		story_state.set_flag("cemetery_ambush_cleared", true)
+		hud.hide_enemy()
+		hud.show_status_cue("The graves fall still", "victory")
+		hud.set_guidance_hint("Open the ruined Crow Chapel.", 5.0)
+		hud.toast("The Ghoulkin carried grave soil beneath its nails. The chapel seal answers its death.")
+	elif current_zone_id == "wychwood" and enemy.enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute"]:
 		wychwood_pack_kills += 1
 		if wychwood_pack_kills == 1:
 			_activate_wychwood_wave(["ghoulkin"], "A second Ghoulkin answers from the trees.")
@@ -1043,6 +1145,10 @@ func _on_enemy_died(enemy) -> void:
 			_make_post_ghoulkin_story_clue()
 	elif enemy.enemy_id == "bog_wretch":
 		quests.complete_objective("main_teeth_in_rain", "fight_bog_wretch")
+		story_state.set_flag("bog_memory_core_revealed", true)
+		_make_named_interactable("bog_core_choice", "dialogue", "Choose the memory core's fate", enemy.global_position, Color(0.35, 0.58, 0.52), Vector3(0.4, 0.4, 0.4))
+		hud.show_status_cue("A memory remains", "victory")
+		hud.set_guidance_hint("Inspect the Bog Wretch's exposed memory core.", 5.0)
 	elif enemy.enemy_id == "wychwood_stalker" and current_zone_id == "record_hall":
 		story_state.set_flag("castle_haunting_cleared", true)
 		quests.complete_objective("main_blood_under_stone", "survive_haunting")
@@ -2407,6 +2513,9 @@ func _release_dialogue_facing() -> void:
 	var anwen = zone_root.find_child("sister_anwen", true, false)
 	if anwen != null:
 		anwen.set_meta("dialogue_facing_lock", false)
+	if pending_anwen_relocation:
+		pending_anwen_relocation = false
+		_relocate_anwen_to_cemetery()
 
 func _make_gate_marker(parent: Node3D, color: Color, scale_override: Vector3) -> void:
 	var arch = MeshInstance3D.new()

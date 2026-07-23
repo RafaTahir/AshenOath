@@ -111,8 +111,11 @@ func get_tracker_text() -> String:
 	for id in ordered_ids:
 		var title = str(quest_defs[id].get("title", id))
 		for objective in active[id]["objectives"]:
-			if not bool(objective.get("done", false)):
-				return "%s\n- %s" % [title, objective["text"]]
+			if bool(objective.get("done", false)):
+				continue
+			if bool(objective.get("optional", false)) and bool(objective.get("optional_satisfied", false)):
+				continue
+			return "%s\n- %s" % [title, objective["text"]]
 	return "All tracked objectives complete."
 
 func set_tracked_quest(id: String) -> bool:
