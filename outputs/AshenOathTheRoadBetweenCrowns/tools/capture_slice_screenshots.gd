@@ -49,6 +49,13 @@ func _initialize() -> void:
 		print("OATH-001 CAPTURE: PASS")
 		quit(0)
 		return
+	if "--ui-only" in OS.get_cmdline_user_args():
+		await _capture(game, "79_ui_001_hud_hierarchy", Vector3(0, 1, 7), "greyfen", Vector3(0, 1, 7))
+		await _capture_anwen_approach(game, "80_ui_001_anwen_approach")
+		await _capture_dialogue(game, "81_ui_001_dialogue_lower_third", Vector3(3.2, 1, -2.6))
+		print("UI-001 CAPTURE: PASS")
+		quit(0)
+		return
 	await _capture(game, "01_greyfen_spawn", Vector3(0, 1, 7), "greyfen", Vector3(0, 1, 7))
 	await _capture(game, "02_village_center", Vector3(-2, 1, 5), "greyfen", Vector3(-2, 1, 5))
 	await _capture(game, "70_greyfen_river_bridge", Vector3(0, 1, 7.5), "greyfen", Vector3(0, 1, 7.5))
@@ -107,6 +114,9 @@ func _initialize() -> void:
 	await _capture_oathfire_state(game, "25_oathfire_beam_release", true)
 	await _capture(game, "60_polish_skeletal_villagers", Vector3(-2,1,5), "greyfen", Vector3(-2,1,5), -0.25)
 	await _capture_dialogue(game, "61_polish_anwen_facing", Vector3(3.2, 1, -5.0))
+	await _capture(game, "79_ui_001_hud_hierarchy", Vector3(0, 1, 7), "greyfen", Vector3(0, 1, 7))
+	await _capture_anwen_approach(game, "80_ui_001_anwen_approach")
+	await _capture_dialogue(game, "81_ui_001_dialogue_lower_third", Vector3(3.2, 1, -2.6))
 	await _capture_player_motion_state(game, "62_polish_kael_character", "idle")
 	await _capture_player_motion_state(game, "64_polish_sword_slash_alignment", "light")
 	await _capture_blade_contact(game, "73_combat_001_blade_contact")
@@ -188,6 +198,30 @@ func _capture_dialogue(game, file_name: String, player_pos: Vector3) -> void:
 	_save_image(image, file_name)
 	game.get_tree().paused = false
 	game.hud.hide_menus()
+
+func _capture_anwen_approach(game, file_name: String) -> void:
+	game.call("_load_zone", "greyfen", Vector3(3.2, 1, -2.6))
+	await _settle_frames(4)
+	game.player.global_position = Vector3(3.2, 1, -2.6)
+	game.player.velocity = Vector3.ZERO
+	if game.camera_rig != null:
+		game.camera_rig.yaw = 0.0
+		game.camera_rig.pitch = -0.16
+	await _settle_frames(24)
+	var sister = _find_child_named(game.zone_root, "sister_anwen")
+	if sister == null:
+		push_error("Anwen approach capture could not find Sister Anwen")
+		quit(1)
+		return
+	var to_player: Vector3 = game.player.global_position - sister.global_position
+	to_player.y = 0.0
+	var visible_forward: Vector3 = sister.global_basis.z
+	visible_forward.y = 0.0
+	if visible_forward.normalized().dot(to_player.normalized()) < 0.90:
+		push_error("Anwen is not visibly facing Kael in approach capture")
+		quit(1)
+		return
+	_save_viewport(file_name)
 
 func _capture_place_interaction(game, file_name: String, place_id: String, player_pos: Vector3) -> void:
 	game.call("_load_zone","greyfen",player_pos)

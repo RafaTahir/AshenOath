@@ -80,8 +80,11 @@ func _process(delta: float) -> void:
 		var to_target = focus_target.global_position - parent_3d.global_position
 		to_target.y = 0.0
 		if to_target.length() <= focus_radius and to_target.length() > 0.2:
-			attention_hold = 0.9
+			attention_hold = 1.35 if role_id == "sister_anwen" else 0.9
 			target_yaw = rad_to_deg(atan2(-to_target.x, -to_target.z))
+			# Anwen's imported cleric body faces +Z inside its wrapper.
+			if role_id == "sister_anwen":
+				target_yaw += 180.0
 		elif role_id == "sister_anwen":
 			target_yaw = base_yaw + sin(phase * 0.22) * 0.45
 	attention_hold = max(attention_hold - delta, 0.0)

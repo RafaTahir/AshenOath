@@ -1287,6 +1287,9 @@ func _nearest_interactable_summary() -> String:
 		return "No marker"
 	var best_text = "No marker"
 	var best_score = 9999.0
+	var tracked_id: String = quests.get_tracked_quest() if quests.has_method("get_tracked_quest") else ""
+	var tracked_objective := _tracked_objective_id(tracked_id)
+	var found_tracked_target := false
 	for child in zone_root.get_children():
 		if not child.has_method("get_overlapping_bodies"):
 			continue
@@ -1298,14 +1301,45 @@ func _nearest_interactable_summary() -> String:
 		var dist = child.global_position.distance_to(player.global_position)
 		var score: float = float(dist)
 		var quest_id = child.get("quest_id")
-		if quest_id != null and str(quest_id) != "" and quests.is_active(str(quest_id)):
-			score -= 24.0
+		var objective_id = child.get("objective_id")
+		if tracked_id != "" and quest_id != null and str(quest_id) == tracked_id:
+			if tracked_objective != "" and objective_id != null and str(objective_id) == tracked_objective:
+				score -= 120.0
+				found_tracked_target = true
+			else:
+				# Do not let later or optional quest markers contradict the tracked objective.
+				score += 50.0
+		elif quest_id != null and str(quest_id) != "" and quests.is_active(str(quest_id)):
+			score += 80.0
+		elif str(child.get("interaction_type")) == "dialogue":
+			score += 10.0
+		if tracked_id == "main_road_of_crows" and tracked_objective == "speak_anwen" and str(interaction_id) == "sister_anwen":
+			score -= 120.0
+			found_tracked_target = true
 		if str(child.get("interaction_type")) == "zone":
 			score -= 4.0
 		if score < best_score:
 			best_score = score
 			best_text = "%s %dm" % [child.get("prompt"), int(dist)]
+	if tracked_objective != "" and not found_tracked_target:
+		return _tracked_objective_text(tracked_id, tracked_objective)
 	return best_text
+
+func _tracked_objective_id(quest_id: String) -> String:
+	if quest_id == "" or not quests.active.has(quest_id):
+		return ""
+	for objective in quests.active[quest_id].get("objectives", []):
+		if not bool(objective.get("done", false)):
+			return str(objective.get("id", ""))
+	return ""
+
+func _tracked_objective_text(quest_id: String, objective_id: String) -> String:
+	if not quests.active.has(quest_id):
+		return "Follow the road"
+	for objective in quests.active[quest_id].get("objectives", []):
+		if str(objective.get("id", "")) == objective_id:
+			return str(objective.get("text", "Follow the road")).trim_suffix(".")
+	return "Follow the road"
 
 func _keep_player_in_world() -> void:
 	if player == null:
@@ -2361,7 +2395,10 @@ func _stage_dialogue_moment(area) -> void:
 	var to_player = player.global_position - npc.global_position
 	to_player.y = 0.0
 	if to_player.length() > 0.1:
-		npc.rotation_degrees.y = rad_to_deg(atan2(-to_player.x,-to_player.z))
+		var staged_yaw := rad_to_deg(atan2(-to_player.x,-to_player.z))
+		if area.interaction_id == "sister_anwen":
+			staged_yaw += 180.0
+		npc.rotation_degrees.y = staged_yaw
 
 func _release_dialogue_facing() -> void:
 	audio.stop_voice()

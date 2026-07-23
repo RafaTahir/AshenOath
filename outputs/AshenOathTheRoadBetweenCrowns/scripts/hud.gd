@@ -15,7 +15,7 @@ signal dialogue_closed
 signal menu_hovered
 signal menu_clicked
 
-const MENU_BUILD_LABEL = "RECOVERY-002 | 1080P UI / NATIVE 720P WORLD | ASHENOATH.VERCEL.APP"
+const MENU_BUILD_LABEL = "UI-001 | 1080P MENUS / NATIVE 720P WORLD | ASHENOATH.VERCEL.APP"
 const MENU_SIZE = Vector2(1920.0, 1080.0)
 const GAMEPLAY_SIZE = Vector2i(1280, 720)
 const SAVE_PATH = "user://ashen_oath_save.json"
@@ -41,6 +41,7 @@ var dialogue_layer: PanelContainer
 var dialogue_title: Label
 var dialogue_text: RichTextLabel
 var dialogue_actions: VBoxContainer
+var dialogue_page_label: Label
 var inventory_layer: PanelContainer
 var inventory_text: RichTextLabel
 var craft_buttons: VBoxContainer
@@ -211,14 +212,19 @@ func hide_enemy() -> void:
 	enemy_value_label.visible = false
 
 func set_prompt(text: String) -> void:
-	prompt_label.text = text
+	var clean := text.strip_edges()
+	if clean.begins_with("E  "):
+		clean = "[E]  " + clean.trim_prefix("E  ")
+	elif clean.begins_with("E - "):
+		clean = "[E]  " + clean.trim_prefix("E - ")
+	prompt_label.text = clean
 	prompt_label.visible = text != ""
 
 func set_tracker(text: String) -> void:
 	tracker_label.text = _format_tracker_text(text)
 
 func set_compass(text: String) -> void:
-	compass_label.text = text
+	compass_label.text = text.replace(" | ", "   •   ")
 
 func toast(text: String) -> void:
 	toast_label.text = text
@@ -289,6 +295,8 @@ func show_dialogue(data: Dictionary) -> void:
 func _render_dialogue_page() -> void:
 	dialogue_title.text = str(dialogue_session_data.get("name","Unknown"))
 	dialogue_text.text = dialogue_pages[dialogue_page_index]
+	if dialogue_page_label != null:
+		dialogue_page_label.text = "%02d / %02d" % [dialogue_page_index + 1, dialogue_pages.size()]
 	for child in dialogue_actions.get_children():
 		child.queue_free()
 	if dialogue_page_index < dialogue_pages.size()-1:
@@ -403,14 +411,16 @@ func _build_hud() -> void:
 	shade.color = Color(0.02, 0.018, 0.015, 0.08)
 	root.add_child(shade)
 	var bars_back = ColorRect.new()
-	bars_back.position = Vector2(14, 14)
-	bars_back.size = Vector2(286, 100)
-	bars_back.color = Color(0.025, 0.022, 0.019, 0.56)
+	bars_back.name = "VitalsBackdrop"
+	bars_back.position = Vector2(16, 16)
+	bars_back.size = Vector2(260, 90)
+	bars_back.color = Color(0.018, 0.016, 0.014, 0.72)
 	root.add_child(bars_back)
+	_add_hud_accent(bars_back, Vector2.ZERO, Vector2(3, 90))
 	var bars = VBoxContainer.new()
-	bars.position = Vector2(24, 22)
-	bars.custom_minimum_size = Vector2(258, 86)
-	bars.add_theme_constant_override("separation", 5)
+	bars.position = Vector2(26, 23)
+	bars.custom_minimum_size = Vector2(238, 76)
+	bars.add_theme_constant_override("separation", 3)
 	root.add_child(bars)
 	health_bar = ProgressBar.new()
 	health_bar.max_value = 125
@@ -431,7 +441,7 @@ func _build_hud() -> void:
 	bars.add_child(equipment_label)
 	enemy_label = Label.new()
 	enemy_label.name = "EnemyFocusLabel"
-	enemy_label.position = Vector2(474, 48)
+	enemy_label.position = Vector2(474, 44)
 	enemy_label.size = Vector2(334, 22)
 	enemy_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	enemy_label.visible = false
@@ -450,35 +460,45 @@ func _build_hud() -> void:
 	root.add_child(enemy_value_label)
 	prompt_label = Label.new()
 	prompt_label.name = "InteractionPrompt"
-	prompt_label.position = Vector2(440, 626)
-	prompt_label.size = Vector2(360, 34)
+	prompt_label.position = Vector2(420, 650)
+	prompt_label.size = Vector2(440, 32)
 	prompt_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	prompt_label.visible = false
 	root.add_child(prompt_label)
 	var tracker_back = ColorRect.new()
-	tracker_back.position = Vector2(842, 16)
-	tracker_back.size = Vector2(408, 132)
-	tracker_back.color = Color(0.025, 0.022, 0.019, 0.58)
+	tracker_back.name = "QuestTrackerBackdrop"
+	tracker_back.position = Vector2(926, 16)
+	tracker_back.size = Vector2(334, 104)
+	tracker_back.color = Color(0.018, 0.016, 0.014, 0.72)
 	root.add_child(tracker_back)
+	_add_hud_accent(tracker_back, Vector2(331, 0), Vector2(3, 104))
 	tracker_label = Label.new()
 	tracker_label.name = "QuestTrackerObjective"
-	tracker_label.position = Vector2(852, 24)
-	tracker_label.size = Vector2(388, 124)
+	tracker_label.position = Vector2(940, 25)
+	tracker_label.size = Vector2(304, 88)
 	tracker_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	tracker_label.clip_text = true
 	root.add_child(tracker_label)
+	var compass_back = ColorRect.new()
+	compass_back.name = "CompassBackdrop"
+	compass_back.position = Vector2(362, 16)
+	compass_back.size = Vector2(556, 30)
+	compass_back.color = Color(0.018, 0.016, 0.014, 0.58)
+	root.add_child(compass_back)
 	compass_label = Label.new()
-	compass_label.position = Vector2(406, 22)
-	compass_label.size = Vector2(468, 34)
+	compass_label.name = "LocationAndObjectiveCompass"
+	compass_label.position = Vector2(362, 19)
+	compass_label.size = Vector2(556, 30)
 	compass_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	root.add_child(compass_label)
 	toast_label = Label.new()
-	toast_label.position = Vector2(24, 634)
-	toast_label.size = Vector2(620, 48)
+	toast_label.position = Vector2(22, 616)
+	toast_label.size = Vector2(590, 42)
 	toast_label.visible = false
 	root.add_child(toast_label)
 	hint_label = Label.new()
 	hint_label.name = "ContextualCombatHint"
-	hint_label.position = Vector2(415, 104)
+	hint_label.position = Vector2(415, 92)
 	hint_label.size = Vector2(450, 34)
 	hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hint_label.visible = false
@@ -499,20 +519,41 @@ func _build_menu_layer() -> void:
 
 func _build_dialogue() -> void:
 	dialogue_layer = PanelContainer.new()
-	dialogue_layer.position = Vector2(218, 342)
-	dialogue_layer.size = Vector2(844, 326)
+	dialogue_layer.name = "DialogueLowerThird"
+	dialogue_layer.position = Vector2(190, 438)
+	dialogue_layer.size = Vector2(900, 248)
 	dialogue_layer.visible = false
 	add_child(dialogue_layer)
 	var box = VBoxContainer.new()
+	box.add_theme_constant_override("separation", 8)
 	dialogue_layer.add_child(box)
+	var heading := HBoxContainer.new()
+	box.add_child(heading)
 	dialogue_title = Label.new()
+	dialogue_title.name = "DialogueSpeakerName"
 	dialogue_title.add_theme_font_size_override("font_size", 22)
-	box.add_child(dialogue_title)
+	dialogue_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading.add_child(dialogue_title)
+	dialogue_page_label = Label.new()
+	dialogue_page_label.name = "DialoguePageCounter"
+	dialogue_page_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	dialogue_page_label.add_theme_font_size_override("font_size", 12)
+	dialogue_page_label.add_theme_color_override("font_color", Color(0.62, 0.54, 0.40))
+	heading.add_child(dialogue_page_label)
+	var rule := ColorRect.new()
+	rule.name = "DialogueGoldRule"
+	rule.custom_minimum_size = Vector2(0, 2)
+	rule.color = Color(0.58, 0.40, 0.18, 0.82)
+	box.add_child(rule)
 	dialogue_text = RichTextLabel.new()
+	dialogue_text.name = "DialogueSubtitleText"
 	dialogue_text.bbcode_enabled = true
-	dialogue_text.custom_minimum_size = Vector2(790, 156)
+	dialogue_text.fit_content = false
+	dialogue_text.custom_minimum_size = Vector2(844, 98)
 	box.add_child(dialogue_text)
 	dialogue_actions = VBoxContainer.new()
+	dialogue_actions.name = "DialogueChoices"
+	dialogue_actions.add_theme_constant_override("separation", 5)
 	box.add_child(dialogue_actions)
 
 func _build_inventory() -> void:
@@ -534,9 +575,9 @@ func _labeled_bar(label_text: String, bar: ProgressBar, value_label: Label) -> H
 	var row = HBoxContainer.new()
 	var label = Label.new()
 	label.text = label_text
-	label.custom_minimum_size = Vector2(62, 20)
+	label.custom_minimum_size = Vector2(56, 18)
 	row.add_child(label)
-	bar.custom_minimum_size = Vector2(164, 18)
+	bar.custom_minimum_size = Vector2(142, 16)
 	row.add_child(bar)
 	value_label.text = "%d / %d" % [int(bar.value), int(bar.max_value)]
 	value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
@@ -809,6 +850,14 @@ func _style_panel(panel: PanelContainer, bg_color: Color, border_color: Color) -
 	style.content_margin_right = 28
 	style.content_margin_bottom = 28
 	panel.add_theme_stylebox_override("panel", style)
+
+func _add_hud_accent(parent: Control, position: Vector2, size: Vector2) -> void:
+	var accent := ColorRect.new()
+	accent.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	accent.position = position
+	accent.size = size
+	accent.color = Color(0.62, 0.42, 0.18, 0.88)
+	parent.add_child(accent)
 
 func _style_button(button: Button) -> void:
 	var normal = StyleBoxFlat.new()

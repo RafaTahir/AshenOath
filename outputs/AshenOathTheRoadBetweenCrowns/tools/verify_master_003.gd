@@ -67,7 +67,8 @@ func _verify_interactions(game) -> void:
 	if anwen != null:
 		var to_player: Vector3 = game.player.global_position-anwen.global_position
 		to_player.y = 0.0
-		var npc_forward: Vector3 = -anwen.global_basis.z
+		# The imported cleric mesh is normalized with +Z as its visible forward axis.
+		var npc_forward: Vector3 = anwen.global_basis.z
 		npc_forward.y = 0.0
 		check(npc_forward.normalized().dot(to_player.normalized()) > 0.65,"Sister Anwen turns away during dialogue")
 
