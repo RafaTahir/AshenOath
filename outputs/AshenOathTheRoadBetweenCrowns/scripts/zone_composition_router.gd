@@ -8,21 +8,19 @@ static func supports(zone_id: String) -> bool:
 	var canonical_id := zone_id.strip_edges().to_lower()
 	return canonical_id in CORE_ZONES or CampaignSection.SECTIONS.has(canonical_id)
 
-static func build(host: Node, zone_id: String) -> bool:
+static func composition_kind(zone_id: String) -> String:
 	var canonical_id := zone_id.strip_edges().to_lower()
 	if not supports(canonical_id):
 		push_error("No zone composition registered for '%s'." % zone_id)
+		return ""
+	return canonical_id if canonical_id in CORE_ZONES else "campaign"
+
+static func build_campaign(host: Node, zone_id: String) -> bool:
+	var canonical_id := zone_id.strip_edges().to_lower()
+	if not CampaignSection.SECTIONS.has(canonical_id):
+		push_error("No campaign composition registered for '%s'." % zone_id)
 		return false
-	match canonical_id:
-		"greyfen":
-			host.call("_build_greyfen")
-		"wychwood":
-			host.call("_build_wychwood")
-		"ruins":
-			host.call("_build_ruins")
-		_:
-			CampaignSection.new().build(host, canonical_id)
-			host.call("_apply_campaign_arrival", canonical_id)
+	CampaignSection.new().build(host, canonical_id)
 	return true
 
 static func registered_zones() -> Array[String]:

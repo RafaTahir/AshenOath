@@ -73,8 +73,10 @@ func _verify_composition_contract() -> void:
 	var game_source := FileAccess.get_file_as_string("res://scripts/game.gd")
 	check(game_source.contains("RuntimeActorFactory.create_player_camera"),
 		"game.gd does not delegate player-camera construction")
-	check(game_source.contains("ZoneCompositionRouter.build"),
-		"game.gd does not delegate zone routing")
+	check(game_source.contains("ZoneCompositionRouter.composition_kind"),
+		"game.gd does not delegate zone classification")
+	check(game_source.contains("ZoneCompositionRouter.build_campaign"),
+		"game.gd does not delegate campaign construction")
 	check(not game_source.contains("PlayerController.new()"),
 		"game.gd still constructs PlayerController directly")
 	check(not game_source.contains("CameraController.new()"),

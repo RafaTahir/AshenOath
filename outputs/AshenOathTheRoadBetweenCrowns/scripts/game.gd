@@ -274,11 +274,29 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		zone_root = Node3D.new()
 		zone_root.name = zone_id
 		add_child(zone_root)
-		assert(ZoneCompositionRouter.build(self, zone_id), "Zone composition failed: %s" % zone_id)
+		match ZoneCompositionRouter.composition_kind(zone_id):
+			"greyfen":
+				_build_greyfen()
+			"wychwood":
+				_build_wychwood()
+			"ruins":
+				_build_ruins()
+			"campaign":
+				assert(ZoneCompositionRouter.build_campaign(self, zone_id),
+					"Campaign composition failed: %s" % zone_id)
+				_apply_campaign_arrival(zone_id)
+			_:
+				assert(false, "Zone composition failed: %s" % zone_id)
 		_flush_environment_batches()
 		if zone_id in ["greyfen", "wychwood"]:
 			_add_visual_100_layer(zone_id)
 		_apply_first_route_materials(zone_root)
+	print("ZONE_COMPOSITION: id=%s reused=%s visible=%s position=%s nodes=%d meshes=%d collisions=%d" % [
+		zone_id, reused_zone, zone_root.visible, zone_root.global_position,
+		zone_root.find_children("*", "Node", true, false).size(),
+		zone_root.find_children("*", "MeshInstance3D", true, false).size(),
+		zone_root.find_children("*", "CollisionShape3D", true, false).size(),
+	])
 	spatial_service.build_navigation(zone_root)
 	for enemy in active_enemies:
 		if is_instance_valid(enemy) and enemy.has_method("setup_navigation"):

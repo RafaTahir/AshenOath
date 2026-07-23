@@ -402,7 +402,7 @@ This improves browser smoothness on low-end hardware but makes the world visuall
 
 ### `scenes/main.tscn`
 
-The only authored scene file. It instantiates `scripts/game.gd` as the gameplay orchestrator. Runtime services are owned by `RuntimeServiceRegistry`, player/camera construction is owned by `RuntimeActorFactory`, and zone selection is owned by `ZoneCompositionRouter`.
+The only authored scene file. It instantiates `scripts/game.gd` as the gameplay orchestrator. Runtime services are owned by `RuntimeServiceRegistry`, player/camera construction is owned by `RuntimeActorFactory`, and zone validation/classification plus campaign construction is owned by `ZoneCompositionRouter`. Core builder calls remain explicit for Godot Web compatibility.
 
 ### Greyfen
 
