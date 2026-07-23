@@ -1,6 +1,7 @@
 extends Node
 
 var sounds = {}
+var recorded_variants = {}
 var voices = {}
 var voice_texts = {}
 var music = {}
@@ -29,6 +30,7 @@ func _process(delta: float) -> void:
 
 func _ready() -> void:
 	_build_library()
+	_build_recorded_library()
 	_build_voice_library()
 	_build_music_library()
 
@@ -44,17 +46,26 @@ func set_master_volume(linear_volume: float) -> void:
 		AudioServer.set_bus_volume_db(bus_index, linear_to_db(master_volume_linear))
 
 func play_event(event_name: String, pitch_variation: float = 0.06) -> void:
-	if not sounds.has(event_name):
+	if not sounds.has(event_name) and not recorded_variants.has(event_name):
 		return
 	print("AUDIO: event_%s" % event_name)
 	var player = AudioStreamPlayer.new()
 	player.bus = bus_name
-	player.stream = sounds[event_name]
+	player.stream = _event_stream(event_name)
 	player.volume_db = _volume_for(event_name) + randf_range(-1.2, 0.8)
 	player.pitch_scale = 1.0 + randf_range(-pitch_variation, pitch_variation)
 	add_child(player)
 	player.finished.connect(player.queue_free)
 	player.play()
+
+func has_recorded_event(event_name: String) -> bool:
+	return recorded_variants.has(event_name) and not recorded_variants[event_name].is_empty()
+
+func _event_stream(event_name: String) -> AudioStream:
+	if has_recorded_event(event_name):
+		var variants: Array = recorded_variants[event_name]
+		return variants[randi() % variants.size()] as AudioStream
+	return sounds.get(event_name) as AudioStream
 
 func has_voice(voice_id: String) -> bool:
 	return voices.has(voice_id)
@@ -201,6 +212,38 @@ func _build_library() -> void:
 	sounds["cloth_wind"] = _noise(0.32, 0.055)
 	sounds["wychwood_drop"] = _tone_mix([62.0, 48.0], 0.40, 0.10, -36.0, 0.020)
 	sounds["wychwood_tension"] = _tone_mix([62.0, 86.0, 129.0], 0.78, 0.085, -22.0, 0.052)
+
+func _build_recorded_library() -> void:
+	var root_path := "res://assets_external/audio/rpg/"
+	recorded_variants["step_road"] = _load_streams(root_path, ["footstep00.ogg","footstep01.ogg","footstep02.ogg","footstep03.ogg"])
+	recorded_variants["step_forest"] = _load_streams(root_path, ["footstep04.ogg","footstep05.ogg","footstep06.ogg"])
+	recorded_variants["step_mud"] = _load_streams(root_path, ["footstep07.ogg","footstep08.ogg","footstep09.ogg"])
+	recorded_variants["swing"] = _load_streams(root_path, ["knifeSlice.ogg","knifeSlice2.ogg"])
+	recorded_variants["heavy"] = _load_streams(root_path, ["drawKnife2.ogg","drawKnife3.ogg"])
+	recorded_variants["light_hit"] = _load_streams(root_path, ["metalClick.ogg","metalPot2.ogg"])
+	recorded_variants["heavy_hit"] = _load_streams(root_path, ["metalPot1.ogg","metalPot3.ogg"])
+	recorded_variants["block"] = _load_streams(root_path, ["metalClick.ogg","metalLatch.ogg"])
+	recorded_variants["parry"] = _load_streams(root_path, ["metalLatch.ogg","metalPot2.ogg"])
+	recorded_variants["oathfire_sheathe"] = _load_streams(root_path, ["drawKnife1.ogg"])
+	recorded_variants["cloth_wind"] = _load_streams(root_path, ["cloth1.ogg","cloth2.ogg","cloth3.ogg"])
+	recorded_variants["village_life"] = _load_streams(root_path, ["creak1.ogg","creak2.ogg"])
+	var ui_hover := load("res://assets_external/audio/ui/rollover2.wav") as AudioStream
+	var ui_click := load("res://assets_external/audio/ui/click3.wav") as AudioStream
+	if ui_hover != null:
+		recorded_variants["menu_hover"] = [ui_hover]
+	if ui_click != null:
+		recorded_variants["menu_click"] = [ui_click]
+	for event_name in recorded_variants.keys():
+		if recorded_variants[event_name].is_empty():
+			recorded_variants.erase(event_name)
+
+func _load_streams(root_path: String, file_names: Array) -> Array:
+	var streams: Array = []
+	for file_name in file_names:
+		var stream := load(root_path + str(file_name)) as AudioStream
+		if stream != null:
+			streams.append(stream)
+	return streams
 
 func _build_voice_library() -> void:
 	voice_texts["voice_sister_anwen_test"] = "Sister Anwen: The road remembers every oath broken upon it."

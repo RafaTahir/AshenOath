@@ -5,6 +5,9 @@ var yaw = 0.0
 var pitch = -0.19
 var sensitivity = 0.003
 var distance = 6.8
+const MIN_ZOOM_DISTANCE := 3.2
+const MAX_ZOOM_DISTANCE := 9.2
+const ZOOM_STEP := 0.65
 var height = 2.1
 var camera: Camera3D
 var shake_amount = 0.0
@@ -40,6 +43,14 @@ func _input(event: InputEvent) -> void:
 	if target == null or get_tree().paused:
 		return
 	if event is InputEventMouseButton and event.pressed:
+		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+			adjust_zoom(-ZOOM_STEP)
+			get_viewport().set_input_as_handled()
+			return
+		if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+			adjust_zoom(ZOOM_STEP)
+			get_viewport().set_input_as_handled()
+			return
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	elif event is InputEventMouseMotion:
 		if Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
@@ -62,14 +73,14 @@ func _process(delta: float) -> void:
 	var flat_speed = Vector2(velocity.x, velocity.z).length()
 	var sprinting = Input.is_action_pressed("run") and flat_speed > 3.5
 	var combat_focus = _nearest_combat_focus()
-	var target_distance = 7.25 if combat_focus != null else distance
+	var target_distance = maxf(MIN_ZOOM_DISTANCE, distance - 0.75) if combat_focus != null else distance
 	var target_height = 2.25 if combat_focus != null else height
 	var shoulder = -0.55 if combat_focus != null else -0.82
 	var look_ahead = 2.35 if combat_focus != null else 3.45
 	var target_fov = 65.0 if combat_focus != null else 63.0
 	if current_zone_id == "wychwood":
 		if target.global_position.z > 4.5:
-			target_distance = minf(target_distance, 3.2)
+			target_distance = minf(target_distance, 6.4)
 		elif combat_focus != null:
 			target_distance = minf(target_distance, 5.4)
 			shoulder = -0.48
@@ -134,6 +145,15 @@ func _apply_keyboard_camera(delta: float) -> void:
 	if abs(tilt) > 0.01:
 		var y_direction = -1.0 if invert_y else 1.0
 		pitch = clamp(pitch - tilt * keyboard_turn_speed * 0.55 * delta * y_direction, -0.75, 0.45)
+	var zoom_axis := Input.get_axis("camera_zoom_in", "camera_zoom_out")
+	if absf(zoom_axis) > 0.01:
+		adjust_zoom(zoom_axis * 3.4 * delta)
+
+func adjust_zoom(amount: float) -> void:
+	distance = clampf(distance + amount, MIN_ZOOM_DISTANCE, MAX_ZOOM_DISTANCE)
+
+func get_zoom_distance() -> float:
+	return distance
 
 func apply_settings(mouse_sensitivity: float, use_invert_y: bool) -> void:
 	sensitivity = mouse_sensitivity

@@ -54,6 +54,11 @@ func _make_water(root: Node3D, center_z: float, width: float, span: float) -> vo
 func _make_bridge(root: Node3D, z: float, span: float) -> void:
 	var bridge_length := span + 2.6
 	_make_box(root,"RiverBridgeDeck",Vector3(0,0.18,z),Vector3(BRIDGE_WIDTH,0.26,bridge_length),Color(0.22,0.13,0.065),true)
+	var ramp_length := 1.5
+	var ramp_angle := atan(0.21 / ramp_length)
+	var ramp_offset := bridge_length * 0.5 + ramp_length * 0.5 - 0.06
+	_make_bridge_ramp(root, "BridgeApproachRampNorth", Vector3(0,0.135,z-ramp_offset), Vector3(BRIDGE_WIDTH-0.28,0.14,ramp_length), -ramp_angle)
+	_make_bridge_ramp(root, "BridgeApproachRampSouth", Vector3(0,0.135,z+ramp_offset), Vector3(BRIDGE_WIDTH-0.28,0.14,ramp_length), ramp_angle)
 	var plank_count := 9
 	for plank_index in range(plank_count):
 		var local_z := -bridge_length * 0.42 + float(plank_index) * (bridge_length * 0.84 / float(plank_count - 1))
@@ -62,6 +67,30 @@ func _make_bridge(root: Node3D, z: float, span: float) -> void:
 		_make_box(root,"BridgeRail",Vector3(x,0.88,z),Vector3(0.14,1.0,span+0.7),Color(0.14,0.08,0.04),true)
 		for dz in [-span*0.42,0.0,span*0.42]:
 			_make_box(root,"BridgePost",Vector3(x,0.82,z+dz),Vector3(0.24,1.3,0.24),Color(0.12,0.07,0.035),false)
+
+func _make_bridge_ramp(root: Node3D, node_name: String, pos: Vector3, size: Vector3, angle: float) -> void:
+	var mesh := MeshInstance3D.new()
+	mesh.name = node_name
+	var box := BoxMesh.new()
+	box.size = size
+	mesh.mesh = box
+	mesh.position = pos
+	mesh.rotation.x = angle
+	var material := StandardMaterial3D.new()
+	material.albedo_color = Color(0.20,0.12,0.06)
+	material.roughness = 0.86
+	mesh.material_override = material
+	root.add_child(mesh)
+	var body := StaticBody3D.new()
+	body.name = "%sCollision" % node_name
+	body.position = pos
+	body.rotation.x = angle
+	root.add_child(body)
+	var shape := CollisionShape3D.new()
+	var solid := BoxShape3D.new()
+	solid.size = size
+	shape.shape = solid
+	body.add_child(shape)
 
 func _make_bank_barriers(root: Node3D, center_z: float, width: float, span: float) -> void:
 	var side_length := (width - BRIDGE_WIDTH) * 0.5

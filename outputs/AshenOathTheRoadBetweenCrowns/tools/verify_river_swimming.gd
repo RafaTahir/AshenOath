@@ -30,6 +30,8 @@ func _verify_zone(game, zone_id: String, center_z: float) -> void:
 	check(_count_named(game.zone_root,"RiverBankBarrier") == 4, "%s does not have four bank barriers" % zone_id)
 	check(_count_named(game.zone_root,"RiverRecoveryVolume") == 2, "%s does not have two recovery volumes" % zone_id)
 	check(_count_named(game.zone_root,"BridgePlank") >= 9, "%s bridge planks are incomplete" % zone_id)
+	check(_count_named(game.zone_root,"BridgeApproachRamp") == 4, "%s bridge approach ramps are missing visible or collision parts" % zone_id)
+	check(_bridge_floor_is_walkable(game,center_z), "%s bridge approach requires a jump" % zone_id)
 	check(_all_interactions_clear(game.zone_root,center_z), "%s contains an interaction in the river exclusion band" % zone_id)
 	check(_all_enemies_clear(game.active_enemies,center_z), "%s contains an enemy in the river exclusion band" % zone_id)
 	if zone_id == "greyfen":
@@ -92,6 +94,22 @@ func _bridge_corridor_clear(game) -> bool:
 	query.exclude = [game.player.get_rid()]
 	var hit: Dictionary = game.get_world_3d().direct_space_state.intersect_ray(query)
 	return hit.is_empty()
+
+func _bridge_floor_is_walkable(game, center_z: float) -> bool:
+	var previous_height := -999.0
+	for step in range(19):
+		var z := center_z - 4.5 + float(step) * 0.5
+		var query := PhysicsRayQueryParameters3D.create(Vector3(0,2.0,z),Vector3(0,-1.0,z))
+		query.collide_with_areas = false
+		query.exclude = [game.player.get_rid()]
+		var hit: Dictionary = game.get_world_3d().direct_space_state.intersect_ray(query)
+		if hit.is_empty():
+			return false
+		var height := float((hit.position as Vector3).y)
+		if previous_height > -900.0 and absf(height-previous_height) > 0.18:
+			return false
+		previous_height = height
+	return true
 
 func _bank_barrier_blocks(game, center_z: float, side: float) -> bool:
 	var target_z := center_z + side * 1.88

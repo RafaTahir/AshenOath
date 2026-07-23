@@ -3222,6 +3222,8 @@ func _ensure_input_map() -> void:
 	_add_key_action("camera_right", KEY_RIGHT)
 	_add_key_action("camera_up", KEY_UP)
 	_add_key_action("camera_down", KEY_DOWN)
+	_add_key_action("camera_zoom_in", KEY_PAGEUP)
+	_add_key_action("camera_zoom_out", KEY_PAGEDOWN)
 	_add_mouse_action("light_attack", MOUSE_BUTTON_LEFT)
 	_add_mouse_action("heavy_attack", MOUSE_BUTTON_RIGHT)
 
