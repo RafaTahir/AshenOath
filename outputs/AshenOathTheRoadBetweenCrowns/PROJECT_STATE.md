@@ -402,11 +402,11 @@ This improves browser smoothness on low-end hardware but makes the world visuall
 
 ### `scenes/main.tscn`
 
-The only authored scene file. It instantiates `scripts/game.gd`, which creates managers, UI, player, camera, zones, enemies, interactables, and environment elements at runtime.
+The only authored scene file. It instantiates `scripts/game.gd` as the gameplay orchestrator. Runtime services are owned by `RuntimeServiceRegistry`, player/camera construction is owned by `RuntimeActorFactory`, and zone selection is owned by `ZoneCompositionRouter`.
 
 ### Greyfen
 
-Built procedurally in `game.gd` by `_build_greyfen()`.
+Environment construction is owned by `scripts/zones/greyfen_section.gd`, routed through `ZoneCompositionRouter`; `game.gd` retains lifecycle and gameplay orchestration.
 
 Implemented elements:
 
@@ -429,7 +429,7 @@ In performance mode, many imported environmental assets are replaced/skipped to 
 
 ### Wychwood
 
-Built procedurally in `game.gd` by `_build_wychwood()`.
+Environment construction is owned by `scripts/zones/wychwood_section.gd`, routed through `ZoneCompositionRouter`; `game.gd` retains lifecycle and gameplay orchestration.
 
 Implemented elements:
 
@@ -458,7 +458,10 @@ Current state:
 
 | Script | Responsibility |
 | --- | --- |
-| `scripts/game.gd` | Main orchestration, zone building, managers, interaction routing, quest flow, combat hooks, save hooks, runtime environment, input map, fall recovery |
+| `scripts/game.gd` | Main gameplay orchestration, interaction routing, quest flow, combat hooks, save hooks, runtime environment, input map, and fall recovery |
+| `scripts/runtime_service_registry.gd` | Owns and configures the fourteen runtime manager, UI, content, audio, and world services |
+| `scripts/runtime_actor_factory.gd` | Creates and connects the active player and third-person camera pair |
+| `scripts/zone_composition_router.gd` | Validates zone IDs and routes construction to core or campaign section builders |
 | `scripts/player_controller.gd` | Player movement, combat input, health/stamina composition, parry/block, dodge, visuals, procedural animation |
 | `scripts/camera_controller.gd` | Third-person camera, mouse/keyboard look, camera collision, shake, sensitivity/invert settings |
 | `scripts/enemy_ai.gd` | Enemy setup, chase/attack AI, leash, windup, stagger, slow, death, visuals |
@@ -669,7 +672,7 @@ Known verifier note: Godot headless may emit ObjectDB cleanup warnings after pas
 - UI is functional and themed but not final AAA-grade presentation.
 - Browser support has focused on Chrome/Edge/Firefox desktop; Safari and mobile are experimental.
 - The slim Web export explicitly packages selected runtime assets and is checked against a 100 MB ceiling.
-- The project is not currently organized as a large studio-grade scene hierarchy; much of the world is built procedurally in `game.gd`.
+- The project uses runtime-authored zone sections rather than a large studio-grade scene hierarchy. ENGINE-001 establishes explicit ownership boundaries, while some low-level authored helpers remain in `game.gd`.
 - Asset licenses are mostly permissive/CC0, but public release should still include license/credit review from `assets_external/licenses/`.
 - WebGL performance on the Dell 7280 is sensitive to draw calls, imported GLBs, transparency, lights, and resolution scale.
 
@@ -691,7 +694,7 @@ Known verifier note: Godot headless may emit ObjectDB cleanup warnings after pas
 - Improve UI styling, spacing, and icon use.
 - Replace generated audio with licensed/recorded ambience, combat hits, footsteps, UI, and music.
 - Add collision/performance budgets per zone.
-- Split world authoring into smaller scene or resource modules if `game.gd` continues to grow.
+- Continue extracting stable authored helpers from `game.gd` behind the ENGINE-001 composition interfaces as focused tickets.
 
 ### Long Term
 

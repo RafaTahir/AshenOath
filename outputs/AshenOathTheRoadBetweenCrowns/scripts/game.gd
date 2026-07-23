@@ -1,37 +1,22 @@
 extends Node3D
 
-const PlayerController = preload("res://scripts/player_controller.gd")
-const CameraController = preload("res://scripts/camera_controller.gd")
 const EnemyAI = preload("res://scripts/enemy_ai.gd")
 const Interactable = preload("res://scripts/interactable.gd")
-const QuestManager = preload("res://scripts/quest_manager.gd")
-const DialogueManager = preload("res://scripts/dialogue_manager.gd")
-const StoryState = preload("res://scripts/story_state.gd")
-const InventoryManager = preload("res://scripts/inventory_manager.gd")
-const CraftingManager = preload("res://scripts/crafting_manager.gd")
-const CombatManager = preload("res://scripts/combat_manager.gd")
-const SaveManager = preload("res://scripts/save_manager.gd")
-const SettingsManager = preload("res://scripts/settings_manager.gd")
-const AudioManager = preload("res://scripts/audio_manager.gd")
-const HUD = preload("res://scripts/hud.gd")
-const AssetSpawnHelper = preload("res://scripts/asset_spawn_helper.gd")
 const VisualDirector = preload("res://scripts/visual_director.gd")
 const NpcAmbient = preload("res://scripts/npc_ambient.gd")
 const CharacterPresentation = preload("res://scripts/character_presentation.gd")
 const CombatFeedback = preload("res://scripts/combat_feedback.gd")
-const CampaignSection = preload("res://scripts/zones/campaign_section.gd")
 const CharacterAnimationDriver = preload("res://scripts/character_animation_driver.gd")
 const WorldVisualUpgrade = preload("res://scripts/world_visual_upgrade.gd")
-const WorldMaterialLibrary = preload("res://scripts/world_material_library.gd")
-const DayNightController = preload("res://scripts/day_night_controller.gd")
 const GreyfenSection = preload("res://scripts/zones/greyfen_section.gd")
 const WychwoodSection = preload("res://scripts/zones/wychwood_section.gd")
 const WorldMotionController = preload("res://scripts/world_motion_controller.gd")
 const SurfaceFeedbackManager = preload("res://scripts/surface_feedback_manager.gd")
 const GreyfenLifeController = preload("res://scripts/greyfen_life_controller.gd")
-const MinigameManager = preload("res://scripts/minigame_manager.gd")
 const ZoneSpatialService = preload("res://scripts/zone_spatial_service.gd")
 const RuntimeServiceRegistry = preload("res://scripts/runtime_service_registry.gd")
+const RuntimeActorFactory = preload("res://scripts/runtime_actor_factory.gd")
+const ZoneCompositionRouter = preload("res://scripts/zone_composition_router.gd")
 
 var player
 var camera_rig
@@ -80,6 +65,7 @@ var spatial_service: Node
 var environment_batches_flushed := false
 var prop_collision_body: StaticBody3D
 var pending_anwen_relocation := false
+var runtime_services: Node
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -87,7 +73,7 @@ func _ready() -> void:
 	shared_box_mesh.size = Vector3.ONE
 	_ensure_input_map()
 	_build_global_environment()
-	_setup_managers()
+	_setup_runtime()
 	hud.show_launch_screen()
 	audio.set_music_state("main_menu")
 	get_tree().paused = true
@@ -138,9 +124,11 @@ func _play_voice_smoke_test(voice_id: String, label: String) -> void:
 	if hud != null:
 		hud.toast(label)
 
-func _setup_managers() -> void:
-	var services := RuntimeServiceRegistry.create(self)
-	assert(RuntimeServiceRegistry.is_complete(services), "Runtime service registry is incomplete")
+func _setup_runtime() -> void:
+	runtime_services = RuntimeServiceRegistry.new()
+	runtime_services.name = "RuntimeServices"
+	add_child(runtime_services)
+	var services: Dictionary = runtime_services.create_services()
 	story_state = services["story_state"]
 	quests = services["quests"]
 	dialogue = services["dialogue"]
@@ -155,69 +143,8 @@ func _setup_managers() -> void:
 	asset_helper = services["asset_helper"]
 	hud = services["hud"]
 	minigames = services["minigames"]
-	day_night.time_changed.connect(func(minutes: float, phase: String, count: int):
-		if visual_director != null:
-			visual_director.set_time(minutes, phase, count)
-	)
-	hud.process_mode = Node.PROCESS_MODE_ALWAYS
-	quests.load_quests("res://data/quests.json")
-	dialogue.load_dialogue("res://data/dialogue.json")
-	dialogue.load_dialogue("res://data/campaign_dialogue.json")
-	dialogue.setup(story_state)
-	inventory.load_items("res://data/items.json")
-	crafting.setup(inventory, quests, story_state)
+	runtime_services.configure(self)
 	enemy_defs = _read_json("res://data/enemies.json")
-	settings.apply()
-	settings.changed.connect(_apply_runtime_settings)
-	_apply_runtime_settings(settings.settings)
-	hud.launch_accepted.connect(_on_launch_accepted)
-	hud.menu_hovered.connect(func(): audio.play_event("menu_hover", 0.025))
-	hud.menu_clicked.connect(func(): audio.play_event("menu_click", 0.015))
-	hud.new_game_requested.connect(_new_game)
-	hud.continue_requested.connect(func():
-		audio.play_event("ui")
-		if not save_manager.load_game(self):
-			save_manager.load_game(self, SaveManager.AUTOSAVE_PATH)
-	)
-	hud.save_requested.connect(func():
-		audio.play_event("ui")
-		save_manager.save_game(self)
-	)
-	hud.load_requested.connect(func():
-		audio.play_event("ui")
-		save_manager.load_game(self)
-	)
-	hud.load_checkpoint_requested.connect(func():
-		audio.play_event("ui")
-		save_manager.load_checkpoint(self)
-	)
-	hud.resume_requested.connect(_resume_game)
-	hud.settings_requested.connect(_handle_setting)
-	hud.action_selected.connect(_handle_dialogue_action)
-	hud.dialogue_closed.connect(_release_dialogue_facing)
-	hud.craft_requested.connect(func(item_id: String):
-		crafting.craft(item_id)
-		hud.show_inventory(inventory, quests, story_state)
-	)
-	hud.item_use_requested.connect(func(item_id: String):
-		_use_inventory_item(item_id)
-		hud.show_inventory(inventory, quests, story_state)
-	)
-	quests.changed.connect(_refresh_tracker)
-	quests.message.connect(hud.toast)
-	quests.message.connect(func(_text: String): audio.play_event("quest"))
-	quests.quest_completed.connect(_on_quest_completed)
-	inventory.message.connect(hud.toast)
-	inventory.changed.connect(_refresh_equipment_readout)
-	save_manager.message.connect(hud.toast)
-	combat.message.connect(hud.toast)
-	combat.enemy_hit.connect(func(name: String, amount: float):
-		hud.show_status_cue("Hit: %d" % int(amount), "item")
-		_hitstop(0.045)
-	)
-	combat.impact.connect(_on_combat_impact)
-	minigames.result.connect(_on_minigame_result)
-	minigames.closed.connect(func(): hud.toast("The village carries on."))
 
 func _new_game() -> void:
 	_clear_route_zone_cache()
@@ -227,7 +154,7 @@ func _new_game() -> void:
 	pending_anwen_relocation = false
 	tutorial_flags.clear()
 	current_zone_id = "greyfen"
-	day_night.set_time(DayNightController.START_TIME_MINUTES, 0)
+	day_night.set_time(day_night.START_TIME_MINUTES, 0)
 	get_tree().paused = false
 	hud.hide_menus()
 	quests.start_quest("main_road_of_crows")
@@ -267,15 +194,11 @@ func _spawn_player(pos: Vector3) -> void:
 		player.queue_free()
 	if camera_rig != null:
 		camera_rig.queue_free()
-	player = PlayerController.new()
-	add_child(player)
-	player.global_position = pos
-	camera_rig = CameraController.new()
-	add_child(camera_rig)
-	camera_rig.setup(player)
-	camera_rig.set_zone(current_zone_id)
+	var actor_pair: Dictionary = RuntimeActorFactory.create_player_camera(self, pos, current_zone_id)
+	assert(RuntimeActorFactory.is_valid_pair(actor_pair), "Player-camera composition failed")
+	player = actor_pair["player"]
+	camera_rig = actor_pair["camera"]
 	_apply_runtime_settings(settings.settings)
-	player.camera_controller = camera_rig
 	player.blade_contact_requested.connect(_on_player_blade_contact)
 	player.potion_requested.connect(_use_potion)
 	player.bomb_requested.connect(_throw_bomb)
@@ -293,6 +216,7 @@ func _spawn_player(pos: Vector3) -> void:
 	hud.update_stamina(player.stamina_component.stamina, player.stamina_component.max_stamina)
 
 func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
+	zone_id = zone_id.strip_edges().to_lower()
 	_clear_oathfire_effects()
 	runtime_light_count = 0
 	tree_batch_data.clear()
@@ -350,15 +274,7 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		zone_root = Node3D.new()
 		zone_root.name = zone_id
 		add_child(zone_root)
-		if zone_id == "greyfen":
-			_build_greyfen()
-		elif zone_id == "wychwood":
-			_build_wychwood()
-		elif zone_id == "ruins":
-			_build_ruins()
-		elif CampaignSection.SECTIONS.has(zone_id):
-			CampaignSection.new().build(self, zone_id)
-			_apply_campaign_arrival(zone_id)
+		assert(ZoneCompositionRouter.build(self, zone_id), "Zone composition failed: %s" % zone_id)
 		_flush_environment_batches()
 		if zone_id in ["greyfen", "wychwood"]:
 			_add_visual_100_layer(zone_id)
