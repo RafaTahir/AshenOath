@@ -197,7 +197,32 @@ func load_state(state: Dictionary) -> void:
 	world_flags = state.get("world_flags", world_flags)
 	tracked_quest_id = str(state.get("tracked_quest_id", tracked_quest_id))
 	tracker_context_zone = str(state.get("tracker_context_zone", tracker_context_zone))
+	_migrate_teeth_in_rain()
 	changed.emit()
+
+func _migrate_teeth_in_rain() -> void:
+	if not active.has("main_teeth_in_rain") or not quest_defs.has("main_teeth_in_rain"):
+		return
+	var objectives: Array = active["main_teeth_in_rain"].get("objectives", [])
+	for existing in objectives:
+		if str(existing.get("id", "")) == "read_chapel_names":
+			return
+	var migrated: Dictionary = {}
+	for definition in quest_defs["main_teeth_in_rain"].get("objectives", []):
+		if str(definition.get("id", "")) == "read_chapel_names":
+			migrated = definition.duplicate(true)
+			break
+	if migrated.is_empty():
+		return
+	var later_progress := false
+	for existing in objectives:
+		if str(existing.get("id", "")) in ["name_the_dead", "fight_bog_wretch", "bog_core_choice"] and bool(existing.get("done", false)):
+			later_progress = true
+			break
+	migrated["done"] = later_progress
+	var insert_at := mini(1, objectives.size())
+	objectives.insert(insert_at, migrated)
+	active["main_teeth_in_rain"]["objectives"] = objectives
 
 func _read_json(path: String):
 	if not FileAccess.file_exists(path):

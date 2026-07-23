@@ -165,7 +165,7 @@ func _setup_managers() -> void:
 	dialogue.load_dialogue("res://data/campaign_dialogue.json")
 	dialogue.setup(story_state)
 	inventory.load_items("res://data/items.json")
-	crafting.setup(inventory, quests)
+	crafting.setup(inventory, quests, story_state)
 	enemy_defs = _read_json("res://data/enemies.json")
 	settings.apply()
 	settings.changed.connect(_apply_runtime_settings)
@@ -484,6 +484,10 @@ func _build_greyfen() -> void:
 	_make_clue("grave_child", "Inspect the nameless child's grave", Vector3(14.0,0,10.2), "main_bell_beneath_greyfen", "grave_child", Color(0.3,0.28,0.25))
 	_make_clue("grave_soldier", "Inspect the empty soldier's grave", Vector3(16.2,0,7.2), "main_bell_beneath_greyfen", "grave_soldier", Color(0.3,0.28,0.25))
 	_make_clue("chapel_door", "Open the ruined Crow Chapel", Vector3(16.3,0,8.0), "main_bell_beneath_greyfen", "open_chapel", Color(0.24,0.22,0.18))
+	if quests.is_active("main_teeth_in_rain"):
+		story_state.set_flag("teeth_in_rain_available", true)
+		if quests.is_objective_done("main_teeth_in_rain", "speak_mira") and not quests.is_objective_done("main_teeth_in_rain", "read_chapel_names"):
+			_make_clue("chapel_names", "Read the erased names in the chapel", Vector3(15.0,0,8.2), "main_teeth_in_rain", "read_chapel_names", Color(0.44,0.39,0.31))
 	_make_clue("register_anwen", "Take Anwen's hidden register page", Vector3(5.4,0,-6.2), "main_names_they_burned", "fragment_anwen", Color(0.42,0.36,0.22))
 	_make_clue("register_tor", "Take the forge register page", Vector3(9.0,0,-1.0), "main_names_they_burned", "fragment_tor", Color(0.42,0.36,0.22))
 	_make_clue("sheepfold", "Inspect sheepfold", Vector3(15, 0, -11), "side_black_dog", "find_dog", Color(0.36, 0.24, 0.16))
@@ -510,8 +514,11 @@ func _build_wychwood() -> void:
 	_make_clue("oren_token", "Recover Oren's scratched shrine token", Vector3(3.8, 0, 2.2), "main_road_of_crows", "oren", Color(0.46, 0.28, 0.12))
 	_make_clue("claw_marks", "Recover the blackened Vargan wire", Vector3(2.5, 0, 4.8), "main_road_of_crows", "vargan_wire", Color(0.18, 0.18, 0.18))
 	_make_clue("tracks", "Read the deliberate drag marks", Vector3(0, 0, -4.2), "main_road_of_crows", "drag_marks", Color(0.15, 0.11, 0.08))
-	_make_clue("ritual_stones", "Study ritual stones", Vector3(8, 0, -10), "main_teeth_in_rain", "name_the_dead", Color(0.38, 0.38, 0.36))
-	_make_clue("vargan_signet", "Take signet ring", Vector3(11, 0, -12), "main_teeth_in_rain", "name_the_dead", Color(0.72, 0.56, 0.24))
+	if quests.is_active("main_teeth_in_rain") and quests.is_objective_done("main_teeth_in_rain", "read_chapel_names"):
+		if not quests.is_objective_done("main_teeth_in_rain", "name_the_dead"):
+			_make_clue("ritual_stones", "Speak Oren's name at the ritual stones", Vector3(8, 0, -10), "main_teeth_in_rain", "name_the_dead", Color(0.38, 0.38, 0.36))
+		else:
+			_make_zone_gate("Enter deeper Wychwood", Vector3(10.8, 0, -13.2), "deep_wood", Vector3(0, 1, 12))
 	_make_clue("bandit_camp", "Inspect bandit camp", Vector3(-12, 0, -12), "side_black_dog", "find_dog", Color(0.30, 0.18, 0.10))
 	_make_clue("bitter_roots", "Collect bitter roots", Vector3(8, 0, -7.8), "side_bitter_roots", "collect_roots", Color(0.46, 0.22, 0.16))
 	_make_clue("sacrifice_roots", "Study sacrifice roots", Vector3(10, 0, -9.2), "side_bitter_roots", "mira_choice", Color(0.38, 0.16, 0.13))
@@ -527,10 +534,6 @@ func _build_wychwood() -> void:
 		_spawn_enemy("wychwood_raider", Vector3(4.6, 0.8, -5.3))
 		var brute_z := -14.2 if quests.is_objective_done("main_road_of_crows", "drag_marks") else -12.4
 		_spawn_enemy("wychwood_brute", Vector3(0.2, 0.8, brute_z))
-	if quests.is_active("main_teeth_in_rain") and not quests.is_objective_done("main_teeth_in_rain", "fight_bog_wretch"):
-		_spawn_enemy("bog_wretch", Vector3(11, 0.8, -12))
-	elif quests.is_active("main_teeth_in_rain") and quests.is_objective_done("main_teeth_in_rain", "fight_bog_wretch") and not quests.is_objective_done("main_teeth_in_rain", "bog_core_choice"):
-		_make_named_interactable("bog_core_choice", "dialogue", "Choose the memory core's fate", Vector3(11, 0, -12), Color(0.35, 0.58, 0.52), Vector3(0.4, 0.4, 0.4))
 	if quests.is_active("side_black_dog") and not quests.is_objective_done("side_black_dog", "find_dog"):
 		_spawn_enemy("bandit", Vector3(-14, 0.8, -14))
 		_spawn_enemy("bandit", Vector3(-12, 0.8, -15))
@@ -642,8 +645,21 @@ func _handle_interaction(area) -> void:
 			hud.toast("Sella's pilgrim bead is tied in shrine-red burial thread. It was prepared before she died.")
 		elif area.interaction_id == "oren_token":
 			hud.toast("Oren's wooden crow has its name panel scratched away. Someone wanted the child forgotten.")
+		elif area.interaction_id == "chapel_names":
+			story_state.set_flag("chapel_names_read", true)
+			hud.toast("The chapel lists Bram and Sella. Oren's name was cut away, but the red thread still marks his place.")
+			hud.set_guidance_hint("Return to Wychwood. Speak Oren's name at the ritual stones.", 6.0)
+			audio.play_event("reveal", 0.02)
 		elif area.interaction_id == "ritual_stones":
 			quests.complete_objective("main_teeth_in_rain", "name_the_dead")
+			story_state.set_flag("oren_name_spoken", true)
+			hud.toast("Kael speaks Oren's name. Something deeper in Wychwood answers.")
+			hud.set_guidance_hint("The deeper road is open. Find what carried Oren's memory.", 6.0)
+			audio.play_event("reveal", 0.03)
+			if current_zone_id == "wychwood" and not _has_interactable("deep_wood_gate"):
+				var deeper_gate = _make_zone_gate("Enter deeper Wychwood", Vector3(10.8, 0, -13.2), "deep_wood", Vector3(0, 1, 12))
+				if deeper_gate != null:
+					deeper_gate.name = "deep_wood_gate"
 		elif area.interaction_id == "old_hall":
 			quests.complete_objective("main_blood_under_stone", "locate_record_hall")
 		elif area.interaction_id == "grave_bell":
@@ -741,7 +757,6 @@ func _apply_campaign_arrival(zone_id: String) -> void:
 		if not quests.is_active("main_blood_under_stone") and not quests.is_completed("main_blood_under_stone"):
 			quests.start_quest("main_blood_under_stone")
 	var arrivals := {
-		"deep_wood":["main_teeth_in_rain","name_the_dead"],
 		"old_mill":["main_ash_at_the_mill","reach_mill"],
 		"bandit_road":["main_soldier_without_banner","reach_bandit_road"],
 		"vargan_approach":["main_blood_under_stone","reach_castle"],
@@ -811,11 +826,18 @@ func _handle_dialogue_action(action: Dictionary) -> void:
 			audio.play_voice("voice_player_accept_contract_01")
 	elif type == "complete_objective":
 		quests.complete_objective(action.get("quest", ""), action.get("objective", ""))
+		for id in action.get("sets_flags", {}):
+			story_state.set_flag(str(id), action["sets_flags"][id])
+		if str(action.get("quest", "")) == "main_teeth_in_rain" and str(action.get("objective", "")) == "speak_mira" and current_zone_id == "greyfen":
+			if not _has_interactable("chapel_names"):
+				_make_clue("chapel_names", "Read the erased names in the chapel", Vector3(15.0,0,8.2), "main_teeth_in_rain", "read_chapel_names", Color(0.44,0.39,0.31))
 		if action.get("quest", "") == "main_road_of_crows" and action.get("objective", "") == "speak_anwen":
 			hud.show_status_cue("Road of Crows updated", "item")
 			hud.set_guidance_hint("Follow the old road: cart, clawed mud, black feathers.", 6.0)
 	elif type == "give_ingredients":
 		inventory.add_ingredients(action.get("items", {}))
+		for id in action.get("sets_flags", {}):
+			story_state.set_flag(str(id), action["sets_flags"][id])
 		hud.toast("Supplies added.")
 	elif type == "resolve_side_quest":
 		var side_id := str(action.get("quest", ""))
@@ -828,6 +850,9 @@ func _handle_dialogue_action(action: Dictionary) -> void:
 		if action.get("sets_flags", {}).has("crow_shrine_state") and str(story_state.get_flag("crow_shrine_state", "")) != "":
 			hud.toast("The Crow Shrine has already answered Kael's choice.")
 			return
+		if action.get("sets_flags", {}).has("bog_core_fate") and str(story_state.get_flag("bog_core_fate", "")) != "":
+			hud.toast("The memory core has already been given a fate.")
+			return
 		for id in action.get("sets_flags", {}):
 			story_state.set_flag(str(id), action["sets_flags"][id])
 		for id in action.get("adjusts_values", {}):
@@ -836,6 +861,8 @@ func _handle_dialogue_action(action: Dictionary) -> void:
 			quests.complete_objective(str(action["quest"]), str(action["objective"]))
 		for completion in action.get("completes", []):
 			quests.complete_objective(str(completion.get("quest", "")), str(completion.get("objective", "")))
+		for item_id in action.get("gives_items", {}):
+			inventory.add_item(str(item_id), int(action["gives_items"][item_id]))
 		hud.toast(str(action.get("result", "Your choice will be remembered.")))
 		if action.get("sets_flags", {}).has("crow_shrine_state"):
 			hud.show_status_cue("The covenant changes", "victory")
@@ -917,6 +944,11 @@ func _on_player_blade_contact(contact: Dictionary) -> void:
 		var target = result.get("enemy")
 		if target != null and is_instance_valid(target) and target.health_component != null:
 			hud.show_enemy(target.display_name, target.health_component.health, target.health_component.max_health)
+			if target.enemy_id == "bog_wretch":
+				if inventory.active_oil == "moon_oil":
+					_expose_bog_core(target, "Moon Oil")
+				elif heavy:
+					_record_bog_stagger(target, "heavy blows")
 
 func _on_player_beam_phase(phase: String) -> void:
 	match phase:
@@ -1081,6 +1113,9 @@ func _throw_bomb() -> void:
 		if camera_rig != null:
 			camera_rig.shake(0.12)
 		combat.throw_bomb(player, active_enemies, 45.0)
+		for enemy in active_enemies:
+			if is_instance_valid(enemy) and not enemy.dead and enemy.enemy_id == "bog_wretch" and enemy.global_position.distance_to(player.global_position) <= 6.5:
+				_expose_bog_core(enemy, "Ash Bomb")
 		hud.show_status_cue("Ash Bomb thrown", "item")
 		_refresh_equipment_readout()
 	else:
@@ -1146,6 +1181,8 @@ func _on_enemy_died(enemy) -> void:
 	elif enemy.enemy_id == "bog_wretch":
 		quests.complete_objective("main_teeth_in_rain", "fight_bog_wretch")
 		story_state.set_flag("bog_memory_core_revealed", true)
+		if not bool(story_state.get_flag("bog_core_exposed", false)):
+			story_state.set_flag("bog_core_forced_open", true)
 		_make_named_interactable("bog_core_choice", "dialogue", "Choose the memory core's fate", enemy.global_position, Color(0.35, 0.58, 0.52), Vector3(0.4, 0.4, 0.4))
 		hud.show_status_cue("A memory remains", "victory")
 		hud.set_guidance_hint("Inspect the Bog Wretch's exposed memory core.", 5.0)
@@ -1198,6 +1235,8 @@ func _on_enemy_attack_resolved(enemy, parried: bool, contact_position: Vector3) 
 			CombatFeedback.ground_ring(zone_root, player.global_position, Color(0.22, 0.46, 0.72), 0.65, 0.16)
 		hud.show_status_cue("Parry", "parry")
 		hud.toast("Parry breaks %s's guard." % enemy.display_name)
+		if enemy != null and enemy.enemy_id == "bog_wretch":
+			_record_bog_stagger(enemy, "parries")
 	else:
 		audio.play_event("ghoulkin_lunge" if enemy != null and enemy.enemy_id == "ghoulkin" else "hit", 0.04)
 		if zone_root != null and enemy != null:
@@ -1206,6 +1245,11 @@ func _on_enemy_attack_resolved(enemy, parried: bool, contact_position: Vector3) 
 		hud.show_enemy(enemy.display_name, enemy.health_component.health, enemy.health_component.max_health)
 
 func _on_quest_completed(id: String) -> void:
+	if id == "main_bell_beneath_greyfen":
+		story_state.set_flag("teeth_in_rain_available", true)
+	if id == "main_teeth_in_rain":
+		story_state.set_flag("teeth_in_rain_completed", true)
+		story_state.set_flag("deep_wychwood_passage", true)
 	if id == "main_blood_under_stone":
 		story_state.set_flag("blood_under_stone_completed", true)
 	var reward = quests.quest_defs.get(id, {}).get("rewards", {})
@@ -1213,6 +1257,24 @@ func _on_quest_completed(id: String) -> void:
 		inventory.add_reward(reward)
 		hud.toast("Reward received for %s." % quests.quest_defs.get(id, {}).get("title", id))
 	save_manager.checkpoint(self)
+
+func _record_bog_stagger(enemy, source: String) -> void:
+	var count := int(story_state.get_flag("bog_stagger_hits", 0)) + 1
+	story_state.set_flag("bog_stagger_hits", count)
+	if count >= 2:
+		_expose_bog_core(enemy, source)
+
+func _expose_bog_core(enemy, method: String) -> void:
+	if enemy == null or not is_instance_valid(enemy) or enemy.enemy_id != "bog_wretch":
+		return
+	if bool(story_state.get_flag("bog_core_exposed", false)):
+		return
+	story_state.set_flag("bog_core_exposed", true)
+	story_state.set_flag("bog_core_exposure_method", method)
+	enemy.stagger(1.15)
+	hud.show_status_cue("Memory core exposed", "victory")
+	hud.toast("%s tears the dead memory loose from the Wretch's hide." % method)
+	audio.play_event("reveal", 0.035)
 
 func _on_combat_impact(pos: Vector3, heavy: bool) -> void:
 	if audio != null:
@@ -1252,6 +1314,14 @@ func _remove_interactable(id: String) -> void:
 	for child in zone_root.get_children():
 		if child.get("interaction_id") == id:
 			child.queue_free()
+
+func _has_interactable(id: String) -> bool:
+	if zone_root == null:
+		return false
+	for child in zone_root.get_children():
+		if str(child.name) == id or str(child.get("interaction_id")) == id:
+			return true
+	return false
 
 func _mark_interaction_removed(area) -> void:
 	removed_interactions["%s:%s" % [current_zone_id, area.interaction_id]] = true

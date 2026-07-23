@@ -72,16 +72,52 @@
   },
   "mira": {
     "name": "Mira Fen",
-    "greeting": "If you came for comfort, try the shrine. If you came for truth, close the door.",
+    "greeting": "Keep the door open. People trust medicine less when the healer whispers.",
     "lines": [
-      "Anwen has not slept since the first cart came back empty. She prays like someone bargaining, not mourning.",
-      "Spirits do not bleed like beasts. Brew Moon Oil before you go deeper.",
-      "The old sacrifice stones sit beyond the wet road. Do not touch the lichen with bare hands."
+      "I can dress a wound and tell you what poisoned it.",
+      "I cannot make Greyfen honest about either."
+    ],
+    "variants": [
+      {
+        "priority": 40,
+        "conditions": {"bog_core_fate": "preserved"},
+        "greeting": "The core is quieter in grave cloth. Not silent.",
+        "lines": [
+          "Mira: I asked it for a name. It gave me the smell of wet wheat.",
+          "Kael: That was not permission to keep asking.",
+          "Mira: No. It was a reason."
+        ],
+        "actions": []
+      },
+      {
+        "priority": 35,
+        "conditions": {"teeth_supplies_taken": true},
+        "greeting": "The roots turned when I said Oren's name. Not toward me. Toward the old stones.",
+        "lines": [
+          "Mira: I tested names on plants grown in grave soil. I told myself medicine made the knowing useful.",
+          "Kael: Useful is not clean.",
+          "Mira: No. Read the chapel register. Then speak Oren's name where the road turns wet."
+        ],
+        "actions": [
+          {"label": "I will read the chapel register.", "type": "complete_objective", "quest": "main_teeth_in_rain", "objective": "speak_mira", "sets_flags": {"mira_teeth_briefed": true}}
+        ]
+      },
+      {
+        "priority": 30,
+        "conditions": {"teeth_in_rain_available": true},
+        "greeting": "The roots turned when I said Oren's name. Not toward me. Toward the old stones.",
+        "lines": [
+          "Mira: I tested names on plants grown in grave soil. I told myself medicine made the knowing useful.",
+          "Kael: Useful is not clean.",
+          "Mira: No. Read the chapel register. Take Moon Oil if you want the thing beneath those stones to show what it remembers."
+        ],
+        "actions": [
+          {"label": "I will read the chapel register.", "type": "complete_objective", "quest": "main_teeth_in_rain", "objective": "speak_mira", "sets_flags": {"mira_teeth_briefed": true}},
+          {"label": "Give me what Moon Oil needs.", "type": "give_ingredients", "items": {"mooncap": 1}, "sets_flags": {"teeth_supplies_taken": true}}
+        ]
+      }
     ],
     "actions": [
-      {"label": "Start Teeth in the Rain", "type": "start_quest", "quest": "main_teeth_in_rain"},
-      {"label": "I need Moon Oil.", "type": "give_ingredients", "items": {"mooncap": 2, "redroot": 1}},
-      {"label": "Mark the next step.", "type": "complete_objective", "quest": "main_teeth_in_rain", "objective": "speak_mira"},
       {"label": "Start Bitter Roots", "type": "start_quest", "quest": "side_bitter_roots"},
       {"label": "I found the roots.", "type": "complete_objective", "quest": "side_bitter_roots", "objective": "collect_roots"},
       {"label": "Keep the truth between us.", "type": "story_choice", "quest": "side_bitter_roots", "objective": "mira_choice", "sets_flags": {"mira_truth": "kept"}, "result": "Mira keeps working, but no longer meets your eyes."},

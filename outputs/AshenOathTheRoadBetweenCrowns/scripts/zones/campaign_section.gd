@@ -42,8 +42,11 @@ func build(host: Node, zone_id: String) -> void:
 func _add_content(h: Node, id: String) -> void:
 	match id:
 		"deep_wood":
-			h.call("_make_clue","spoken_name","Speak Oren's name",Vector3(-2,0,-4),"main_teeth_in_rain","name_the_dead",Color(0.45,0.55,0.45)); _spawn(h,"bog_wretch",Vector3(0,0.8,-8))
-			h.call("_make_clue","bog_core","Take the memory core",Vector3(3,0,-9),"main_teeth_in_rain","bog_core_choice",Color(0.3,0.65,0.5))
+			if h.quests.is_active("main_teeth_in_rain") and h.quests.is_objective_done("main_teeth_in_rain", "name_the_dead"):
+				if not h.quests.is_objective_done("main_teeth_in_rain", "fight_bog_wretch"):
+					_spawn(h,"bog_wretch",Vector3(0,0.8,-8))
+				elif not h.quests.is_objective_done("main_teeth_in_rain", "bog_core_choice"):
+					h.call("_make_named_interactable","bog_core_choice","dialogue","Choose the memory core's fate",Vector3(0,0,-8),Color(0.35,0.58,0.52),Vector3(0.4,0.4,0.4))
 		"old_mill":
 			for p in [Vector3(-4,1,-6),Vector3(4,1,-6),Vector3(0,3,-8)]: h.call("_make_prop_box","AshMill",p,Vector3(5,2,0.6),Color(0.24,0.18,0.12))
 			h.call("_make_clue","millstones","Inspect ash-caked millstones",Vector3(0,0,-5),"main_ash_at_the_mill","inspect_millstones",Color(0.4,0.35,0.3)); h.call("_make_clue","ash_bound","Clear the ash-bound mill",Vector3(-2,0,-8),"main_ash_at_the_mill","mill_encounter",Color(0.3,0.2,0.15)); h.call("_make_named_interactable","miller_record","dialogue","Read the miller's record",Vector3(2,0,-8),Color(0.5,0.4,0.25))

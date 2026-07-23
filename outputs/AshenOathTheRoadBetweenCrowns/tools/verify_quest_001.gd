@@ -92,6 +92,7 @@ func _initialize() -> void:
 	_check(_objective_is_optional(game, "main_teeth_in_rain", "craft_moon_oil"), "Moon Oil remains a progression blocker")
 
 	game.quests.complete_objective("main_teeth_in_rain", "speak_mira")
+	game.quests.complete_objective("main_teeth_in_rain", "read_chapel_names")
 	game.quests.complete_objective("main_teeth_in_rain", "name_the_dead")
 	game.quests.complete_objective("main_teeth_in_rain", "fight_bog_wretch")
 	var core_dialogue: Dictionary = game.dialogue.get_dialogue("bog_core_choice")
