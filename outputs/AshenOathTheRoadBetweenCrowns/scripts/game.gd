@@ -73,6 +73,10 @@ var pending_spawn_facing := 0.0
 var loading_started_usec := 0
 var last_loading_metrics: Dictionary = {}
 var new_game_start_pending := false
+var zone_load_request_pending := false
+var requested_zone_id := ""
+var requested_zone_spawn := Vector3.ZERO
+var greyfen_prewarm_started := false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -157,13 +161,37 @@ func _setup_runtime() -> void:
 	enemy_defs = _read_json("res://data/enemies.json")
 
 func _new_game() -> void:
-	if zone_transition_pending:
+	if zone_transition_pending or zone_load_request_pending:
 		return
 	new_game_start_pending = true
 	loading_started_usec = Time.get_ticks_usec()
 	hud.show_loading("Preparing Greyfen...")
 	get_tree().paused = false
-	call_deferred("_start_new_game_world")
+	_start_new_game_after_loading_frame()
+
+func _start_new_game_after_loading_frame() -> void:
+	await get_tree().process_frame
+	_start_new_game_world()
+
+func _request_zone_load(zone_id: String, spawn_pos: Vector3) -> void:
+	if zone_transition_pending or zone_load_request_pending:
+		return
+	zone_load_request_pending = true
+	requested_zone_id = zone_id.strip_edges().to_lower()
+	requested_zone_spawn = spawn_pos
+	loading_started_usec = Time.get_ticks_usec()
+	hud.show_loading("Preparing %s..." % _zone_display_name(requested_zone_id))
+	if player != null:
+		player.set_transition_locked(true)
+	_perform_requested_zone_load()
+
+func _perform_requested_zone_load() -> void:
+	await get_tree().process_frame
+	var destination := requested_zone_id
+	var arrival := requested_zone_spawn
+	zone_load_request_pending = false
+	requested_zone_id = ""
+	_load_zone(destination, arrival)
 
 func _start_new_game_world() -> void:
 	# An explicit transition can be requested before the menu's deferred setup
@@ -370,8 +398,11 @@ func _advance_zone_transition() -> void:
 	var grounded: Variant = _grounded_spawn_position(pending_spawn_position)
 	if grounded == null:
 		if zone_transition_frames > 45:
-			push_error("Zone spawn collision was not ready: %s" % current_zone_id)
-		return
+			push_warning("Zone spawn support timed out; using validated recovery: %s" % current_zone_id)
+			grounded = spatial_service.nearest_safe(pending_spawn_position, spatial_service.bank_for(pending_spawn_position))
+			grounded.y = 0.95
+		else:
+			return
 	player.global_position = grounded
 	player.rotation.y = pending_spawn_facing
 	player.velocity = Vector3.ZERO
@@ -710,7 +741,7 @@ func _handle_interaction(area) -> void:
 		_mark_interaction_removed(area)
 		area.queue_free()
 	elif area.interaction_type == "zone":
-		_load_zone(area.zone_target, area.get_meta("spawn_pos"))
+		_request_zone_load(area.zone_target, area.get_meta("spawn_pos"))
 	elif area.interaction_type == "blocked_zone":
 		hud.toast(str(area.get_meta("message", "That road is barred tonight.")))
 
@@ -908,6 +939,43 @@ func _handle_dialogue_action(action: Dictionary) -> void:
 
 func _on_launch_accepted() -> void:
 	audio.play_event("ui", 0.0)
+	if not greyfen_prewarm_started and not game_started:
+		greyfen_prewarm_started = true
+		_prewarm_greyfen_after_menu_frame()
+
+func _prewarm_greyfen_after_menu_frame() -> void:
+	await get_tree().process_frame
+	if game_started or zone_root != null or route_zone_cache.has("greyfen"):
+		return
+	var prewarm_service := ZoneSpatialService.new()
+	prewarm_service.name = "GreyfenPrewarmSpatialService"
+	add_child(prewarm_service)
+	prewarm_service.configure("greyfen", _river_center("greyfen"), _zone_half_extents("greyfen"))
+	spatial_service = prewarm_service
+	zone_root = Node3D.new()
+	zone_root.name = "greyfen"
+	add_child(zone_root)
+	runtime_light_count = 0
+	tree_batch_data.clear()
+	deadfall_batch_data.clear()
+	prop_batch_data.clear()
+	visual_box_batch_data.clear()
+	terrain_patch_batch_data.clear()
+	environment_batches_flushed = false
+	_build_greyfen()
+	_flush_environment_batches()
+	_add_visual_100_layer("greyfen")
+	_apply_first_route_materials(zone_root)
+	prewarm_service.build_navigation(zone_root)
+	zone_root.visible = false
+	zone_root.process_mode = Node.PROCESS_MODE_DISABLED
+	zone_root.position = Vector3(0, -1000, 0)
+	route_zone_cache["greyfen"] = zone_root
+	route_enemy_cache["greyfen"] = []
+	zone_root = null
+	spatial_service = null
+	prewarm_service.queue_free()
+	print("LOADING: Greyfen prewarmed behind main menu")
 
 func _complete_ending(ending: String) -> void:
 	quests.world_flags["ending"] = ending
