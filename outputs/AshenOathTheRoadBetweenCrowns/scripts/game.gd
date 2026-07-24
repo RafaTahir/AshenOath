@@ -199,7 +199,17 @@ func _start_new_game_world() -> void:
 	if game_started or not new_game_start_pending:
 		return
 	new_game_start_pending = false
+	# Keep the menu-prewarmed Greyfen tree while clearing any stale campaign
+	# cache. Rebuilding this scene in Web/ANGLE was the dominant New Game delay.
+	var prewarmed_greyfen = route_zone_cache.get("greyfen")
+	var prewarmed_enemies: Array = route_enemy_cache.get("greyfen", [])
+	if prewarmed_greyfen != null:
+		route_zone_cache.erase("greyfen")
+		route_enemy_cache.erase("greyfen")
 	_clear_route_zone_cache()
+	if prewarmed_greyfen != null and is_instance_valid(prewarmed_greyfen):
+		route_zone_cache["greyfen"] = prewarmed_greyfen
+		route_enemy_cache["greyfen"] = prewarmed_enemies
 	game_started = true
 	paused_by_menu = false
 	wychwood_pack_kills = 0
