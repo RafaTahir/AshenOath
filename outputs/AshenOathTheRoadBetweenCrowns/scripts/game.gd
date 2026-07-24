@@ -332,6 +332,10 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		zone_root.visible = true
 		zone_root.position = Vector3.ZERO
 		zone_root.process_mode = Node.PROCESS_MODE_INHERIT
+		var prewarm_camera := zone_root.find_child("GreyfenPrewarmCamera", true, false) as Camera3D
+		if prewarm_camera != null:
+			prewarm_camera.current = false
+			prewarm_camera.queue_free()
 		active_enemies = _valid_cached_enemies(route_enemy_cache.get(zone_id, []))
 		route_enemy_cache.erase(zone_id)
 		reused_zone = true
@@ -977,9 +981,17 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 	_add_visual_100_layer("greyfen")
 	_apply_first_route_materials(zone_root)
 	prewarm_service.build_navigation(zone_root)
-	zone_root.visible = false
+	# Render one real 3D frame behind the opaque menu so Web/ANGLE compiles the
+	# Greyfen materials before New Game is clicked.
+	var prewarm_camera := Camera3D.new()
+	prewarm_camera.name = "GreyfenPrewarmCamera"
+	prewarm_camera.position = Vector3(0, 5.5, 13.0)
+	prewarm_camera.rotation_degrees = Vector3(-17.0, 0.0, 0.0)
+	prewarm_camera.current = true
+	zone_root.add_child(prewarm_camera)
+	zone_root.visible = true
 	zone_root.process_mode = Node.PROCESS_MODE_DISABLED
-	zone_root.position = Vector3(0, -1000, 0)
+	zone_root.position = Vector3.ZERO
 	route_zone_cache["greyfen"] = zone_root
 	route_enemy_cache["greyfen"] = []
 	zone_root = null
