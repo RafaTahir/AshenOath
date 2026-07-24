@@ -20,10 +20,10 @@ func _initialize() -> void:
 	_assert(_menu_has_actions(game.hud, ["New Game", "Continue", "Controls", "Settings", "Credits", "Exit Game"]), "Main menu actions are incomplete")
 	game.hud.show_settings_menu("main")
 	await process_frame
-	_assert(_menu_has_setting_values(game.hud), "Settings menu does not expose current values")
+	_assert(_menu_has_setting_values(game.hud, game.settings.settings), "Settings menu does not expose current values")
 	game.call("_new_game")
-	await _settle_frames(3)
-	_assert(str(game.settings.settings.get("quality_preset", "")) == "balanced", "Balanced is not the default visual preset")
+	await _wait_for_zone_ready(game, "greyfen")
+	_assert(str(game.settings.settings.get("quality_preset", "")) in ["potato", "balanced", "quality"], "Visual preset is invalid")
 	_assert(is_equal_approx(float(game.settings.settings.get("resolution_scale", 0.0)), 1.0), "Balanced gameplay is not native 720p")
 	_assert(int(game.settings.settings.get("target_fps", 0)) == 30, "Balanced target is not 30 FPS")
 	_assert(game.settings.has_method("get_performance_snapshot"), "Performance sampler API is missing")
@@ -196,22 +196,32 @@ func _settle_frames(count: int) -> void:
 	for i in range(count):
 		await process_frame
 
+func _wait_for_zone_ready(game: Node, zone_id: String) -> void:
+	for _index in range(90):
+		if game.game_started and game.current_zone_id == zone_id and not game.zone_transition_pending and game.player != null:
+			return
+		await process_frame
+	_fail("Timed out waiting for %s to become playable" % zone_id)
+
 func _menu_has_actions(hud: Node, expected: Array[String]) -> bool:
 	var labels: Array[String] = []
-	for node in hud.menu_layer.find_children("*", "Button", true, false):
-		labels.append(str(node.text))
+	for node in hud.menu_layer.find_children("*", "Control", true, false):
+		if node is Button or node is Label:
+			labels.append(str(node.text))
 	for action in expected:
 		if action not in labels:
 			return false
 	return true
 
-func _menu_has_setting_values(hud: Node) -> bool:
+func _menu_has_setting_values(hud: Node, settings: Dictionary) -> bool:
 	var labels: Array[String] = []
 	for node in hud.menu_layer.find_children("*", "Button", true, false):
 		labels.append(str(node.text))
-	return labels.any(func(text: String): return text.begins_with("Visual Preset") and text.contains("Balanced")) \
+	for node in hud.menu_layer.find_children("*", "Label", true, false):
+		labels.append(str(node.text))
+	return labels.any(func(text: String): return text.begins_with("Visual Preset") and text.contains(str(settings.get("quality_preset", "balanced")).capitalize())) \
 		and labels.any(func(text: String): return text.begins_with("3D Resolution") and text.contains("Native 720p")) \
-		and labels.any(func(text: String): return text.begins_with("Master Volume") and text.contains("85%"))
+		and labels.any(func(text: String): return text.begins_with("Master Volume") and text.contains("%d%%" % int(round(float(settings.get("master_volume", 0.85)) * 100.0))))
 
 func _rendered_height(root_node: Node3D) -> float:
 	var lowest := INF

@@ -9,6 +9,9 @@ func _initialize() -> void:
 	var game = scene.instantiate()
 	root.add_child(game)
 	await process_frame
+	# Castle population coverage is defined for the Balanced release preset, not a
+	# player's persisted Potato preference.
+	game.settings.set_quality_preset("balanced")
 	game.call("_new_game")
 	await settle(4)
 	check(game.quests.quest_defs.has("main_blood_under_stone"), "Blood Under Stone quest is missing")

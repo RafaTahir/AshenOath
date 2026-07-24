@@ -66,6 +66,13 @@ var environment_batches_flushed := false
 var prop_collision_body: StaticBody3D
 var pending_anwen_relocation := false
 var runtime_services: Node
+var zone_transition_pending := false
+var zone_transition_frames := 0
+var pending_spawn_position := Vector3.ZERO
+var pending_spawn_facing := 0.0
+var loading_started_usec := 0
+var last_loading_metrics: Dictionary = {}
+var new_game_start_pending := false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -107,6 +114,9 @@ func _unhandled_input(event: InputEvent) -> void:
 func _process(delta: float) -> void:
 	if not game_started or player == null or get_tree().paused:
 		return
+	if zone_transition_pending:
+		_advance_zone_transition()
+		return
 	_keep_player_in_world()
 	_update_interaction_focus()
 	_update_tutorial_prompts()
@@ -147,6 +157,20 @@ func _setup_runtime() -> void:
 	enemy_defs = _read_json("res://data/enemies.json")
 
 func _new_game() -> void:
+	if zone_transition_pending:
+		return
+	new_game_start_pending = true
+	loading_started_usec = Time.get_ticks_usec()
+	hud.show_loading("Preparing Greyfen...")
+	get_tree().paused = false
+	call_deferred("_start_new_game_world")
+
+func _start_new_game_world() -> void:
+	# An explicit transition can be requested before the menu's deferred setup
+	# receives its first frame. Preserve that deliberate destination.
+	if game_started or not new_game_start_pending:
+		return
+	new_game_start_pending = false
 	_clear_route_zone_cache()
 	game_started = true
 	paused_by_menu = false
@@ -155,10 +179,8 @@ func _new_game() -> void:
 	tutorial_flags.clear()
 	current_zone_id = "greyfen"
 	day_night.set_time(day_night.START_TIME_MINUTES, 0)
-	get_tree().paused = false
 	hud.hide_menus()
 	quests.start_quest("main_road_of_crows")
-	_spawn_player(Vector3(0, 1, 7))
 	_load_zone("greyfen", Vector3(0, 1, 7))
 	hud.toast("Greyfen whispers about the old road. Sister Anwen is waiting at the shrine.")
 	hud.set_guidance_hint("E - Speak to Sister Anwen", 5.5)
@@ -171,21 +193,19 @@ func load_save_state(data: Dictionary) -> void:
 	game_started = true
 	get_tree().paused = false
 	hud.hide_menus()
-	if player == null:
-		_spawn_player(Vector3(0, 1, 7))
 	inventory.load_state(data.get("inventory", {}))
 	quests.load_state(data.get("quests", {}))
 	story_state.load_state(data.get("story_state", {}))
 	if int(data.get("version", 0)) < 3 and quests.is_completed("main_road_of_crows"):
 		story_state.set_flag("legacy_report_choice_required", true)
 	load_world_state(data.get("world_state", {}))
-	player.health_component.load_state(data.get("player_health", {}))
-	player.stamina_component.load_state(data.get("player_stamina", {}))
 	var zone = str(data.get("zone", "greyfen"))
 	var pos_array: Array = data.get("player_position", [0, 1, 7])
 	var pos = Vector3(float(pos_array[0]), float(pos_array[1]), float(pos_array[2]))
 	pos = _safe_loaded_position(zone, pos)
 	_load_zone(zone, pos)
+	player.health_component.load_state(data.get("player_health", {}))
+	player.stamina_component.load_state(data.get("player_stamina", {}))
 	_refresh_tracker()
 	_refresh_equipment_readout()
 
@@ -216,7 +236,14 @@ func _spawn_player(pos: Vector3) -> void:
 	hud.update_stamina(player.stamina_component.stamina, player.stamina_component.max_stamina)
 
 func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
+	if new_game_start_pending and not game_started:
+		new_game_start_pending = false
 	zone_id = zone_id.strip_edges().to_lower()
+	loading_started_usec = loading_started_usec if loading_started_usec > 0 else Time.get_ticks_usec()
+	if hud != null:
+		hud.show_loading("Preparing %s..." % _zone_display_name(zone_id))
+	if player != null and player.has_method("set_transition_locked"):
+		player.set_transition_locked(true)
 	_clear_oathfire_effects()
 	runtime_light_count = 0
 	tree_batch_data.clear()
@@ -291,11 +318,10 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		if zone_id in ["greyfen", "wychwood"]:
 			_add_visual_100_layer(zone_id)
 		_apply_first_route_materials(zone_root)
-	print("ZONE_COMPOSITION: id=%s reused=%s visible=%s position=%s nodes=%d meshes=%d collisions=%d" % [
+	# Avoid recursive diagnostic walks during every transition; on Web/ANGLE those
+	# allocations made cached arrivals visibly slower.
+	print("ZONE_COMPOSITION: id=%s reused=%s visible=%s position=%s" % [
 		zone_id, reused_zone, zone_root.visible, zone_root.global_position,
-		zone_root.find_children("*", "Node", true, false).size(),
-		zone_root.find_children("*", "MeshInstance3D", true, false).size(),
-		zone_root.find_children("*", "CollisionShape3D", true, false).size(),
 	])
 	spatial_service.build_navigation(zone_root)
 	for enemy in active_enemies:
@@ -312,10 +338,21 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		audio.set_music_state("wychwood_tension" if zone_id == "wychwood" else ("castle_silence" if zone_id in ["vargan_approach", "vargan_court", "record_hall"] else "greyfen_explore"))
 		if zone_id == "greyfen":
 			audio.play_event("shrine_hum", 0.01)
+	var safe_spawn: Vector3 = spatial_service.nearest_safe(spawn_pos, spatial_service.bank_for(spawn_pos))
+	if player == null:
+		_spawn_player(safe_spawn)
+	# Greyfen's life controller is constructed with the zone. New Game now creates
+	# Kael after collision is ready, so bind the final player instance here.
+	if life_controller != null:
+		life_controller.player = player
 	if player != null:
-		player.global_position = spatial_service.nearest_safe(spawn_pos, spatial_service.bank_for(spawn_pos))
+		pending_spawn_facing = player.rotation.y
+		pending_spawn_position = safe_spawn
+		player.global_position = safe_spawn + Vector3.UP * 0.9
 		player.velocity = Vector3.ZERO
-		last_safe_player_position = player.global_position
+		player.set_transition_locked(true)
+		zone_transition_frames = 0
+		zone_transition_pending = true
 	if game_started:
 		_schedule_zone_autosave()
 	if zone_id == "wychwood" and quests.is_active("main_road_of_crows") and not quests.is_objective_done("main_road_of_crows", "fight_ghoulkin"):
@@ -325,6 +362,48 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		hud.toast("The woods go quiet. Survive the Ghoulkin.")
 		hud.set_guidance_hint("Left click strike | Space dodge | Tap Q parry | Hold Q block", 6.0)
 		hud.show_status_cue("Survive the clearing", "neutral")
+
+func _advance_zone_transition() -> void:
+	zone_transition_frames += 1
+	if player == null or spatial_service == null:
+		return
+	var grounded: Variant = _grounded_spawn_position(pending_spawn_position)
+	if grounded == null:
+		if zone_transition_frames > 45:
+			push_error("Zone spawn collision was not ready: %s" % current_zone_id)
+		return
+	player.global_position = grounded
+	player.rotation.y = pending_spawn_facing
+	player.velocity = Vector3.ZERO
+	if zone_transition_frames < 2:
+		return
+	player.set_transition_locked(false)
+	last_safe_player_position = player.global_position
+	zone_transition_pending = false
+	var elapsed_ms := float(Time.get_ticks_usec() - loading_started_usec) / 1000.0
+	last_loading_metrics = {
+		"zone": current_zone_id,
+		"to_playable_ms": elapsed_ms,
+		"support_ready": true,
+		"velocity_reset": player.velocity.is_zero_approx()
+	}
+	print("LOADING: zone=%s playable_ms=%.1f" % [current_zone_id, elapsed_ms])
+	loading_started_usec = 0
+	hud.hide_loading()
+
+func _grounded_spawn_position(candidate: Vector3) -> Variant:
+	if get_world_3d() == null:
+		return null
+	var query := PhysicsRayQueryParameters3D.create(candidate + Vector3.UP * 6.0, candidate - Vector3.UP * 12.0, 1)
+	if player != null:
+		query.exclude = [player.get_rid()]
+	var hit := get_world_3d().direct_space_state.intersect_ray(query)
+	if hit.is_empty():
+		return null
+	return Vector3(candidate.x, float(hit.position.y) + 0.95, candidate.z)
+
+func _zone_display_name(zone_id: String) -> String:
+	return zone_id.replace("_", " ").capitalize()
 
 func _valid_cached_enemies(entries: Array) -> Array:
 	var result: Array = []
@@ -1338,7 +1417,7 @@ func _apply_runtime_settings(current_settings: Dictionary) -> void:
 	if hud != null:
 		hud.apply_accessibility(float(current_settings.get("subtitle_scale", 1.0)))
 	if visual_director != null and visual_director.sun != null:
-		visual_director.sun.shadow_enabled = str(current_settings.get("quality_preset", "balanced")) == "quality"
+		visual_director.sun.shadow_enabled = int(current_settings.get("shadow_quality", 1)) > 0
 		visual_director.sun.directional_shadow_max_distance = 42.0
 
 func _refresh_tracker() -> void:
@@ -3217,7 +3296,9 @@ func _make_light(name: String, pos: Vector3, color: Color, energy: float) -> voi
 	if _performance_mode() and not _keep_performance_light(name):
 		return
 	var quality := str(settings.settings.get("quality_preset", "balanced")) if settings != null else "balanced"
-	if quality == "balanced" and runtime_light_count >= 6:
+	# Four local pools preserve the route landmarks while keeping the Web
+	# Compatibility renderer inside its transition and frame-time budget.
+	if quality == "balanced" and runtime_light_count >= 4:
 		return
 	var light = OmniLight3D.new()
 	light.name = name

@@ -37,6 +37,7 @@ var hint_label: Label
 var status_label: Label
 var equipment_label: Label
 var menu_layer: Control
+var loading_layer: Control
 var dialogue_layer: PanelContainer
 var dialogue_title: Label
 var dialogue_text: RichTextLabel
@@ -63,6 +64,7 @@ func _ready() -> void:
 	_build_menu_layer()
 	_build_dialogue()
 	_build_inventory()
+	_build_loading_layer()
 	_apply_theme()
 	set_process(true)
 
@@ -125,7 +127,7 @@ func show_settings_menu(back_target: String = "pause") -> void:
 	box.set_meta("compact_buttons", true)
 	var s = _current_settings()
 	_add_menu_button(box, "Visual Preset     %s" % str(s.get("quality_preset", "balanced")).capitalize(), func(): settings_requested.emit("visual_preset"))
-	_add_menu_button(box, "3D Resolution     Native 720p", func(): settings_requested.emit("render_scale"))
+	_add_menu_text(box, "3D Resolution     Native 720p (fixed for Web stability)")
 	_add_menu_button(box, "Shadows           %s" % _shadow_label(int(s.get("shadow_quality", 1))), func(): settings_requested.emit("shadows"))
 	_add_menu_button(box, "Mouse Sensitivity %s" % _sensitivity_label(float(s.get("mouse_sensitivity", 0.003))), func(): settings_requested.emit("mouse_sensitivity"))
 	_add_menu_button(box, "Invert Y Axis     %s" % _on_off(bool(s.get("invert_y", false))), func(): settings_requested.emit("invert_y"))
@@ -161,6 +163,40 @@ func hide_menus() -> void:
 	dialogue_layer.visible = false
 	inventory_layer.visible = false
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+func show_loading(text: String = "Preparing Greyfen...") -> void:
+	if loading_layer == null:
+		return
+	loading_layer.get_node("Message").text = text
+	loading_layer.visible = true
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+func hide_loading() -> void:
+	if loading_layer != null:
+		loading_layer.visible = false
+
+func _build_loading_layer() -> void:
+	loading_layer = Control.new()
+	loading_layer.name = "LoadingLayer"
+	loading_layer.process_mode = Node.PROCESS_MODE_ALWAYS
+	loading_layer.set_anchors_preset(Control.PRESET_FULL_RECT)
+	loading_layer.mouse_filter = Control.MOUSE_FILTER_STOP
+	loading_layer.visible = false
+	add_child(loading_layer)
+	var shade := ColorRect.new()
+	shade.set_anchors_preset(Control.PRESET_FULL_RECT)
+	shade.color = Color(0.008, 0.010, 0.012, 0.94)
+	loading_layer.add_child(shade)
+	var message := Label.new()
+	message.name = "Message"
+	message.set_anchors_preset(Control.PRESET_CENTER)
+	message.position = Vector2(-220, -28)
+	message.size = Vector2(440, 56)
+	message.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	message.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	message.add_theme_font_size_override("font_size", 26)
+	message.add_theme_color_override("font_color", Color(0.88, 0.76, 0.54))
+	loading_layer.add_child(message)
 
 func _set_internal_canvas(size: Vector2i) -> void:
 	var window := get_window()
@@ -513,6 +549,7 @@ func _build_hud() -> void:
 
 func _build_menu_layer() -> void:
 	menu_layer = Control.new()
+	menu_layer.process_mode = Node.PROCESS_MODE_ALWAYS
 	menu_layer.set_anchors_preset(Control.PRESET_FULL_RECT)
 	menu_layer.visible = false
 	add_child(menu_layer)
@@ -702,6 +739,7 @@ func _add_menu_button(box: VBoxContainer, text: String, callback: Callable, disa
 	var button = Button.new()
 	button.text = text
 	button.disabled = disabled
+	button.process_mode = Node.PROCESS_MODE_ALWAYS
 	button.custom_minimum_size = Vector2(510, 46 if bool(box.get_meta("compact_buttons", false)) else 62)
 	_style_button(button)
 	button.mouse_entered.connect(func():
@@ -730,7 +768,7 @@ func _add_menu_text(box: VBoxContainer, text: String) -> void:
 	box.add_child(label)
 
 func _current_settings() -> Dictionary:
-	var settings_node = get_tree().root.find_child("SettingsManager", true, false)
+	var settings_node = get_tree().root.find_child("Settings", true, false)
 	if settings_node != null:
 		return settings_node.settings
 	return {}

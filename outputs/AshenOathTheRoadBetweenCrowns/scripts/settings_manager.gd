@@ -2,7 +2,8 @@ extends Node
 
 signal changed(settings: Dictionary)
 
-var settings = {
+const SETTINGS_PATH := "user://ashen_oath_settings.json"
+const DEFAULT_SETTINGS := {
 	"quality_preset": "balanced",
 	# Native 1280x720 avoids the Intel/ANGLE viewport-scaling performance path.
 	"resolution_scale": 1.0,
@@ -21,12 +22,16 @@ var settings = {
 	"reduced_motion": false
 }
 
+var settings: Dictionary = DEFAULT_SETTINGS.duplicate(true)
+
 var _fps_sample_time := 0.0
 var _fps_report_time := 0.0
 var _fps_samples: Array[float] = []
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	_load_settings()
+	apply()
 
 func _process(delta: float) -> void:
 	_fps_sample_time += delta
@@ -49,7 +54,35 @@ func apply() -> void:
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN if settings["fullscreen"] else DisplayServer.WINDOW_MODE_WINDOWED)
 	RenderingServer.viewport_set_scaling_3d_scale(get_viewport().get_viewport_rid(), float(settings["resolution_scale"]))
 	get_viewport().msaa_3d = Viewport.MSAA_2X if str(settings.get("quality_preset", "balanced")) == "quality" else Viewport.MSAA_DISABLED
+	_save_settings()
 	changed.emit(settings)
+
+func _load_settings() -> void:
+	if not FileAccess.file_exists(SETTINGS_PATH):
+		return
+	var file := FileAccess.open(SETTINGS_PATH, FileAccess.READ)
+	if file == null:
+		return
+	var stored = JSON.parse_string(file.get_as_text())
+	if typeof(stored) != TYPE_DICTIONARY:
+		return
+	for key in DEFAULT_SETTINGS:
+		if stored.has(key) and typeof(stored[key]) == typeof(DEFAULT_SETTINGS[key]):
+			settings[key] = stored[key]
+	settings["quality_preset"] = str(settings.get("quality_preset", "balanced")).to_lower()
+	if settings["quality_preset"] not in ["potato", "balanced", "quality"]:
+		settings["quality_preset"] = "balanced"
+	settings["mouse_sensitivity"] = clampf(float(settings["mouse_sensitivity"]), 0.0018, 0.0048)
+	settings["master_volume"] = clampf(float(settings["master_volume"]), 0.0, 1.0)
+	settings["subtitle_scale"] = clampf(float(settings["subtitle_scale"]), 0.9, 1.2)
+	settings["camera_shake"] = clampf(float(settings["camera_shake"]), 0.0, 1.0)
+	settings["shadow_quality"] = clampi(int(settings["shadow_quality"]), 0, 2)
+	settings["potato_mode"] = settings["quality_preset"] == "potato"
+
+func _save_settings() -> void:
+	var file := FileAccess.open(SETTINGS_PATH, FileAccess.WRITE)
+	if file != null:
+		file.store_string(JSON.stringify(settings))
 
 func set_potato_mode(enabled: bool) -> void:
 	set_quality_preset("potato" if enabled else "balanced")

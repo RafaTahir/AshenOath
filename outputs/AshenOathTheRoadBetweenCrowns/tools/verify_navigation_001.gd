@@ -28,7 +28,14 @@ func _initialize() -> void:
 	if life != null:
 		for entry in life.actors:
 			initial_positions[entry.id] = entry.node.global_position
-	await _settle(150)
+			# Headless process frames can advance with effectively zero elapsed time.
+			# Drive a short fixed-delta routine sample so this check measures routing,
+			# not scheduler wall-clock timing or deliberate ambient pauses.
+			entry.pause = 0.0
+		for sample in range(8):
+			for entry in life.actors:
+				life._update_actor(entry, 0.25)
+			await process_frame
 	if life != null:
 		var moved_count := 0
 		for entry in life.actors:

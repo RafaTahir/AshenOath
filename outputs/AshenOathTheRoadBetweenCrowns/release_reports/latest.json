@@ -1,18 +1,18 @@
 {
   "schema_version": 1,
-  "status": "pass",
-  "started_at": "2026-07-23T08:07:22.4867833Z",
-  "finished_at": "2026-07-23T08:18:47.8287048Z",
-  "source_commit": "1626aa3d0214d43a0ce4987c3eed8aa7199fc0ef",
+  "status": "fail",
+  "started_at": "2026-07-24T18:29:19.6322778Z",
+  "finished_at": "2026-07-24T18:35:20.1229228Z",
+  "source_commit": "c91b1fbf3fde39cf86dd09954c0f31f2205b2fce",
   "mode": "full",
   "requested_gate": "",
   "project": "outputs/AshenOathTheRoadBetweenCrowns",
-  "failure": "",
+  "failure": "verify_720p_performance failed with exit code 1",
   "results": [
     {
       "name": "verify_content_integrity",
       "status": "pass",
-      "duration_seconds": 0.37,
+      "duration_seconds": 0.36,
       "log": "verify_content_integrity.log",
       "warnings": [],
       "failure": ""
@@ -20,7 +20,7 @@
     {
       "name": "verify_asset_001_files",
       "status": "pass",
-      "duration_seconds": 0.5,
+      "duration_seconds": 0.56,
       "log": "verify_asset_001_files.log",
       "warnings": [],
       "failure": ""
@@ -28,7 +28,7 @@
     {
       "name": "verify_runtime",
       "status": "pass",
-      "duration_seconds": 18.66,
+      "duration_seconds": 20.11,
       "log": "verify_runtime.log",
       "warnings": [
         "ERROR: Parameter \"material\" is null.",
@@ -36,7 +36,31 @@
         "ERROR: Parameter \"material\" is null.",
         "ERROR: Parameter \"material\" is null.",
         "ERROR: 1 RID allocations of type 'N13RendererDummy9DummyMeshE' were leaked at exit.",
-        "ERROR: 222 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit.",
+        "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE",
+        "ERROR: 222 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit."
+      ],
+      "failure": ""
+    },
+    {
+      "name": "verify_runtime_regressions",
+      "status": "pass",
+      "duration_seconds": 20.69,
+      "log": "verify_runtime_regressions.log",
+      "warnings": [
+        "ERROR: Parameter \"material\" is null.",
+        "ERROR: Parameter \"material\" is null.",
+        "ERROR: Parameter \"material\" is null.",
+        "ERROR: Parameter \"material\" is null.",
+        "ERROR: Parameter \"material\" is null.",
+        "ERROR: Parameter \"material\" is null.",
+        "ERROR: Parameter \"material\" is null.",
+        "ERROR: Parameter \"material\" is null.",
+        "ERROR: Parameter \"material\" is null.",
+        "ERROR: Parameter \"material\" is null.",
+        "ERROR: Parameter \"material\" is null.",
+        "ERROR: Parameter \"material\" is null.",
+        "ERROR: 1 RID allocations of type 'N13RendererDummy9DummyMeshE' were leaked at exit.",
+        "ERROR: 413 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit.",
         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE"
       ],
       "failure": ""
@@ -44,7 +68,7 @@
     {
       "name": "verify_engine_001",
       "status": "pass",
-      "duration_seconds": 12.07,
+      "duration_seconds": 16.67,
       "log": "verify_engine_001.log",
       "warnings": [
         "ERROR: Parameter \"material\" is null.",
@@ -60,7 +84,7 @@
     {
       "name": "verify_story_campaign",
       "status": "pass",
-      "duration_seconds": 13.69,
+      "duration_seconds": 22.51,
       "log": "verify_story_campaign.log",
       "warnings": [
         "ERROR: Parameter \"material\" is null.",
@@ -80,66 +104,10 @@
     {
       "name": "verify_quest_001",
       "status": "pass",
-      "duration_seconds": 21.75,
+      "duration_seconds": 19.44,
       "log": "verify_quest_001.log",
       "warnings": [
         "ERROR: Parameter \"material\" is null.",
-        "ERROR: Parameter \"material\" is null.",
-        "ERROR: Parameter \"material\" is null.",
-        "ERROR: Parameter \"material\" is null.",
-        "ERROR: Parameter \"material\" is null.",
-        "ERROR: 1 RID allocations of type 'N13RendererDummy9DummyMeshE' were leaked at exit.",
-        "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE",
-        "ERROR: 185 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit."
-      ],
-      "failure": ""
-    },
-    {
-      "name": "verify_quest_002",
-      "status": "pass",
-      "duration_seconds": 16.29,
-      "log": "verify_quest_002.log",
-      "warnings": [
-        "ERROR: Parameter \"material\" is null.",
-        "ERROR: Parameter \"material\" is null.",
-        "ERROR: Parameter \"material\" is null.",
-        "ERROR: Parameter \"material\" is null.",
-        "ERROR: 1 RID allocations of type 'N13RendererDummy9DummyMeshE' were leaked at exit.",
-        "ERROR: 221 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit.",
-        "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE"
-      ],
-      "failure": ""
-    },
-    {
-      "name": "verify_art_001",
-      "status": "pass",
-      "duration_seconds": 3.72,
-      "log": "verify_art_001.log",
-      "warnings": [],
-      "failure": ""
-    },
-    {
-      "name": "verify_asset_001",
-      "status": "pass",
-      "duration_seconds": 3.17,
-      "log": "verify_asset_001.log",
-      "warnings": [],
-      "failure": ""
-    },
-    {
-      "name": "verify_character_real_001",
-      "status": "pass",
-      "duration_seconds": 2.05,
-      "log": "verify_character_real_001.log",
-      "warnings": [],
-      "failure": ""
-    },
-    {
-      "name": "verify_motion_quality",
-      "status": "pass",
-      "duration_seconds": 16.45,
-      "log": "verify_motion_quality.log",
-      "warnings": [
         "ERROR: Parameter \"material\" is null.",
         "ERROR: Parameter \"material\" is null.",
         "ERROR: Parameter \"material\" is null.",
@@ -151,9 +119,65 @@
       "failure": ""
     },
     {
+      "name": "verify_quest_002",
+      "status": "pass",
+      "duration_seconds": 12.09,
+      "log": "verify_quest_002.log",
+      "warnings": [
+        "ERROR: Parameter \"material\" is null.",
+        "ERROR: Parameter \"material\" is null.",
+        "ERROR: Parameter \"material\" is null.",
+        "ERROR: Parameter \"material\" is null.",
+        "ERROR: 1 RID allocations of type 'N13RendererDummy9DummyMeshE' were leaked at exit.",
+        "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE",
+        "ERROR: 221 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit."
+      ],
+      "failure": ""
+    },
+    {
+      "name": "verify_art_001",
+      "status": "pass",
+      "duration_seconds": 1.25,
+      "log": "verify_art_001.log",
+      "warnings": [],
+      "failure": ""
+    },
+    {
+      "name": "verify_asset_001",
+      "status": "pass",
+      "duration_seconds": 0.98,
+      "log": "verify_asset_001.log",
+      "warnings": [],
+      "failure": ""
+    },
+    {
+      "name": "verify_character_real_001",
+      "status": "pass",
+      "duration_seconds": 0.72,
+      "log": "verify_character_real_001.log",
+      "warnings": [],
+      "failure": ""
+    },
+    {
+      "name": "verify_motion_quality",
+      "status": "pass",
+      "duration_seconds": 9.08,
+      "log": "verify_motion_quality.log",
+      "warnings": [
+        "ERROR: Parameter \"material\" is null.",
+        "ERROR: Parameter \"material\" is null.",
+        "ERROR: Parameter \"material\" is null.",
+        "ERROR: Parameter \"material\" is null.",
+        "ERROR: 1 RID allocations of type 'N13RendererDummy9DummyMeshE' were leaked at exit.",
+        "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE",
+        "ERROR: 185 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit."
+      ],
+      "failure": ""
+    },
+    {
       "name": "verify_river_swimming",
       "status": "pass",
-      "duration_seconds": 11.27,
+      "duration_seconds": 10.34,
       "log": "verify_river_swimming.log",
       "warnings": [
         "ERROR: Parameter \"material\" is null.",
@@ -169,7 +193,7 @@
     {
       "name": "verify_greyfen_life",
       "status": "pass",
-      "duration_seconds": 10.06,
+      "duration_seconds": 8.44,
       "log": "verify_greyfen_life.log",
       "warnings": [
         "ERROR: 1 RID allocations of type 'N13RendererDummy9DummyMeshE' were leaked at exit.",
@@ -181,19 +205,19 @@
     {
       "name": "verify_castle_vargan",
       "status": "pass",
-      "duration_seconds": 12.13,
+      "duration_seconds": 9.81,
       "log": "verify_castle_vargan.log",
       "warnings": [
         "ERROR: 1 RID allocations of type 'N13RendererDummy9DummyMeshE' were leaked at exit.",
-        "ERROR: 358 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit.",
-        "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE"
+        "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE",
+        "ERROR: 358 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit."
       ],
       "failure": ""
     },
     {
       "name": "verify_audio_runtime",
       "status": "pass",
-      "duration_seconds": 8.34,
+      "duration_seconds": 5.63,
       "log": "verify_audio_runtime.log",
       "warnings": [],
       "failure": ""
@@ -201,7 +225,7 @@
     {
       "name": "verify_audio_001",
       "status": "pass",
-      "duration_seconds": 11.76,
+      "duration_seconds": 7.39,
       "log": "verify_audio_001.log",
       "warnings": [
         "ERROR: Parameter \"material\" is null.",
@@ -209,15 +233,15 @@
         "ERROR: Parameter \"material\" is null.",
         "ERROR: Parameter \"material\" is null.",
         "ERROR: 1 RID allocations of type 'N13RendererDummy9DummyMeshE' were leaked at exit.",
-        "ERROR: 185 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit.",
-        "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE"
+        "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE",
+        "ERROR: 185 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit."
       ],
       "failure": ""
     },
     {
       "name": "verify_visible_quality",
       "status": "pass",
-      "duration_seconds": 11.26,
+      "duration_seconds": 7.92,
       "log": "verify_visible_quality.log",
       "warnings": [
         "ERROR: Parameter \"material\" is null.",
@@ -233,7 +257,7 @@
     {
       "name": "verify_recovery_002_foundation",
       "status": "pass",
-      "duration_seconds": 13.11,
+      "duration_seconds": 6.99,
       "log": "verify_recovery_002_foundation.log",
       "warnings": [
         "ERROR: Parameter \"material\" is null.",
@@ -249,7 +273,7 @@
     {
       "name": "verify_navigation_001",
       "status": "pass",
-      "duration_seconds": 12.3,
+      "duration_seconds": 7.08,
       "log": "verify_navigation_001.log",
       "warnings": [
         "ERROR: Parameter \"material\" is null.",
@@ -257,15 +281,15 @@
         "ERROR: Parameter \"material\" is null.",
         "ERROR: Parameter \"material\" is null.",
         "ERROR: 1 RID allocations of type 'N13RendererDummy9DummyMeshE' were leaked at exit.",
-        "ERROR: 185 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit.",
-        "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE"
+        "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE",
+        "ERROR: 185 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit."
       ],
       "failure": ""
     },
     {
       "name": "verify_char_001",
       "status": "pass",
-      "duration_seconds": 10.75,
+      "duration_seconds": 8.19,
       "log": "verify_char_001.log",
       "warnings": [
         "ERROR: Parameter \"material\" is null.",
@@ -281,7 +305,7 @@
     {
       "name": "verify_anim_001",
       "status": "pass",
-      "duration_seconds": 9.5,
+      "duration_seconds": 8.38,
       "log": "verify_anim_001.log",
       "warnings": [
         "ERROR: Parameter \"material\" is null.",
@@ -289,15 +313,15 @@
         "ERROR: Parameter \"material\" is null.",
         "ERROR: Parameter \"material\" is null.",
         "ERROR: 1 RID allocations of type 'N13RendererDummy9DummyMeshE' were leaked at exit.",
-        "ERROR: 185 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit.",
-        "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE"
+        "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE",
+        "ERROR: 185 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit."
       ],
       "failure": ""
     },
     {
       "name": "verify_combat_001",
       "status": "pass",
-      "duration_seconds": 11.84,
+      "duration_seconds": 9.82,
       "log": "verify_combat_001.log",
       "warnings": [
         "ERROR: Parameter \"material\" is null.",
@@ -305,16 +329,16 @@
         "ERROR: Parameter \"material\" is null.",
         "ERROR: Parameter \"material\" is null.",
         "ERROR: 1 RID allocations of type 'N13RendererDummy9DummyMeshE' were leaked at exit.",
-        "ERROR: 185 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit.",
         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE",
-        "ERROR: 6 resources still in use at exit (run with --verbose for details)."
+        "ERROR: 185 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit.",
+        "ERROR: 8 resources still in use at exit (run with --verbose for details)."
       ],
       "failure": ""
     },
     {
       "name": "verify_ai_001",
       "status": "pass",
-      "duration_seconds": 11.97,
+      "duration_seconds": 8.99,
       "log": "verify_ai_001.log",
       "warnings": [
         "ERROR: Parameter \"material\" is null.",
@@ -330,7 +354,7 @@
     {
       "name": "verify_oath_001",
       "status": "pass",
-      "duration_seconds": 9.31,
+      "duration_seconds": 7.7,
       "log": "verify_oath_001.log",
       "warnings": [
         "ERROR: 1 RID allocations of type 'N13RendererDummy9DummyMeshE' were leaked at exit.",
@@ -342,7 +366,7 @@
     {
       "name": "verify_ui_001",
       "status": "pass",
-      "duration_seconds": 9.2,
+      "duration_seconds": 8.92,
       "log": "verify_ui_001.log",
       "warnings": [
         "ERROR: 1 RID allocations of type 'N13RendererDummy9DummyMeshE' were leaked at exit.",
@@ -354,7 +378,7 @@
     {
       "name": "verify_world_001",
       "status": "pass",
-      "duration_seconds": 9.74,
+      "duration_seconds": 23.73,
       "log": "verify_world_001.log",
       "warnings": [
         "ERROR: 1 RID allocations of type 'N13RendererDummy9DummyMeshE' were leaked at exit.",
@@ -366,51 +390,47 @@
     {
       "name": "verify_world_002",
       "status": "pass",
-      "duration_seconds": 10.43,
+      "duration_seconds": 14.8,
       "log": "verify_world_002.log",
       "warnings": [
         "ERROR: Parameter \"material\" is null.",
         "ERROR: Parameter \"material\" is null.",
         "ERROR: Parameter \"material\" is null.",
         "ERROR: Parameter \"material\" is null.",
-        "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE",
         "ERROR: 1 RID allocations of type 'N13RendererDummy9DummyMeshE' were leaked at exit.",
-        "ERROR: 185 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit."
+        "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE",
+        "ERROR: 22 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit."
       ],
       "failure": ""
     },
     {
       "name": "verify_world_003",
       "status": "pass",
-      "duration_seconds": 9.36,
+      "duration_seconds": 10.8,
       "log": "verify_world_003.log",
       "warnings": [
         "ERROR: 1 RID allocations of type 'N13RendererDummy9DummyMeshE' were leaked at exit.",
-        "ERROR: 200 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit.",
-        "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE"
+        "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE",
+        "ERROR: 200 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit."
       ],
       "failure": ""
     },
     {
       "name": "verify_zone_budgets",
       "status": "pass",
-      "duration_seconds": 8.66,
+      "duration_seconds": 9.69,
       "log": "verify_zone_budgets.log",
       "warnings": [
-        "ERROR: Parameter \"material\" is null.",
-        "ERROR: Parameter \"material\" is null.",
-        "ERROR: Parameter \"material\" is null.",
-        "ERROR: Parameter \"material\" is null.",
         "ERROR: 1 RID allocations of type 'N13RendererDummy9DummyMeshE' were leaked at exit.",
-        "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE",
-        "ERROR: 359 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit."
+        "ERROR: 359 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit.",
+        "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE"
       ],
       "failure": ""
     },
     {
       "name": "verify_visual_003",
       "status": "pass",
-      "duration_seconds": 7.29,
+      "duration_seconds": 8.78,
       "log": "verify_visual_003.log",
       "warnings": [
         "ERROR: Parameter \"material\" is null.",
@@ -426,7 +446,7 @@
     {
       "name": "verify_visual_100",
       "status": "pass",
-      "duration_seconds": 10.9,
+      "duration_seconds": 9.17,
       "log": "verify_visual_100.log",
       "warnings": [
         "ERROR: Parameter \"material\" is null.",
@@ -434,15 +454,15 @@
         "ERROR: Parameter \"material\" is null.",
         "ERROR: Parameter \"material\" is null.",
         "ERROR: 1 RID allocations of type 'N13RendererDummy9DummyMeshE' were leaked at exit.",
-        "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE",
-        "ERROR: 185 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit."
+        "ERROR: 185 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit.",
+        "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE"
       ],
       "failure": ""
     },
     {
       "name": "verify_master_002",
       "status": "pass",
-      "duration_seconds": 7.37,
+      "duration_seconds": 11.37,
       "log": "verify_master_002.log",
       "warnings": [
         "ERROR: Parameter \"material\" is null.",
@@ -458,7 +478,7 @@
     {
       "name": "verify_master_003",
       "status": "pass",
-      "duration_seconds": 8.12,
+      "duration_seconds": 8.77,
       "log": "verify_master_003.log",
       "warnings": [
         "ERROR: Parameter \"material\" is null.",
@@ -466,142 +486,18 @@
         "ERROR: Parameter \"material\" is null.",
         "ERROR: Parameter \"material\" is null.",
         "ERROR: 1 RID allocations of type 'N13RendererDummy9DummyMeshE' were leaked at exit.",
-        "ERROR: 185 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit.",
-        "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE"
+        "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE",
+        "ERROR: 185 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit."
       ],
       "failure": ""
     },
     {
       "name": "verify_720p_performance",
-      "status": "pass",
-      "duration_seconds": 19.11,
+      "status": "fail",
+      "duration_seconds": 22.08,
       "log": "verify_720p_performance.log",
-      "warnings": [
-        "ERROR: 1 RID allocations of type 'N5GLES34MeshE' were leaked at exit.",
-        "ERROR: 185 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit.",
-        "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneGLES323GeometryInstanceSurfaceE",
-        "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneGLES321GeometryInstanceGLES3E",
-        "ERROR: Buffer with GL ID of 221: leaked 480 bytes.",
-        "ERROR: Buffer with GL ID of 222: leaked 192 bytes.",
-        "ERROR: Buffer with GL ID of 223: leaked 72 bytes."
-      ],
-      "failure": ""
-    },
-    {
-      "name": "capture_slice_screenshots",
-      "status": "pass",
-      "duration_seconds": 137.58,
-      "log": "capture_slice_screenshots.log",
-      "warnings": [
-        "ERROR: Parameter \"material\" is null.",
-        "ERROR: Parameter \"material\" is null.",
-        "ERROR: Parameter \"material\" is null.",
-        "ERROR: Parameter \"material\" is null.",
-        "ERROR: 1 RID allocations of type 'N5GLES34MeshE' were leaked at exit.",
-        "ERROR: 807 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit.",
-        "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneGLES323GeometryInstanceSurfaceE",
-        "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneGLES321GeometryInstanceGLES3E",
-        "ERROR: Buffer with GL ID of 221: leaked 480 bytes.",
-        "ERROR: Buffer with GL ID of 222: leaked 192 bytes.",
-        "ERROR: Buffer with GL ID of 223: leaked 72 bytes."
-      ],
-      "failure": ""
-    },
-    {
-      "name": "capture_anim_001",
-      "status": "pass",
-      "duration_seconds": 13.24,
-      "log": "capture_anim_001.log",
       "warnings": [],
-      "failure": ""
-    },
-    {
-      "name": "capture_world_001",
-      "status": "pass",
-      "duration_seconds": 27.95,
-      "log": "capture_world_001.log",
-      "warnings": [
-        "ERROR: 1 RID allocations of type 'N5GLES34MeshE' were leaked at exit.",
-        "ERROR: 163 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit.",
-        "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneGLES323GeometryInstanceSurfaceE",
-        "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneGLES321GeometryInstanceGLES3E",
-        "ERROR: Buffer with GL ID of 221: leaked 480 bytes.",
-        "ERROR: Buffer with GL ID of 222: leaked 192 bytes.",
-        "ERROR: Buffer with GL ID of 223: leaked 72 bytes."
-      ],
-      "failure": ""
-    },
-    {
-      "name": "capture_world_002",
-      "status": "pass",
-      "duration_seconds": 37.46,
-      "log": "capture_world_002.log",
-      "warnings": [
-        "ERROR: Parameter \"material\" is null.",
-        "ERROR: Parameter \"material\" is null.",
-        "ERROR: Parameter \"material\" is null.",
-        "ERROR: Parameter \"material\" is null.",
-        "ERROR: Parameter \"material\" is null.",
-        "ERROR: Parameter \"material\" is null.",
-        "ERROR: Parameter \"material\" is null.",
-        "ERROR: Parameter \"material\" is null.",
-        "ERROR: Parameter \"material\" is null.",
-        "ERROR: Parameter \"material\" is null.",
-        "ERROR: Parameter \"material\" is null.",
-        "ERROR: Parameter \"material\" is null.",
-        "ERROR: Parameter \"material\" is null.",
-        "ERROR: Parameter \"material\" is null.",
-        "ERROR: Parameter \"material\" is null.",
-        "ERROR: Parameter \"material\" is null.",
-        "ERROR: 1 RID allocations of type 'N5GLES34MeshE' were leaked at exit.",
-        "ERROR: 185 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit.",
-        "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneGLES323GeometryInstanceSurfaceE",
-        "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneGLES321GeometryInstanceGLES3E",
-        "ERROR: Buffer with GL ID of 221: leaked 480 bytes.",
-        "ERROR: Buffer with GL ID of 222: leaked 192 bytes.",
-        "ERROR: Buffer with GL ID of 223: leaked 72 bytes."
-      ],
-      "failure": ""
-    },
-    {
-      "name": "capture_world_003",
-      "status": "pass",
-      "duration_seconds": 28.94,
-      "log": "capture_world_003.log",
-      "warnings": [
-        "ERROR: 1 RID allocations of type 'N5GLES34MeshE' were leaked at exit.",
-        "ERROR: 163 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit.",
-        "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneGLES323GeometryInstanceSurfaceE",
-        "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneGLES321GeometryInstanceGLES3E",
-        "ERROR: Buffer with GL ID of 221: leaked 480 bytes.",
-        "ERROR: Buffer with GL ID of 222: leaked 192 bytes.",
-        "ERROR: Buffer with GL ID of 223: leaked 72 bytes."
-      ],
-      "failure": ""
-    },
-    {
-      "name": "web_export",
-      "status": "pass",
-      "duration_seconds": 71.31,
-      "log": "web_export.log",
-      "warnings": [],
-      "failure": ""
-    },
-    {
-      "name": "verify_web_export",
-      "status": "pass",
-      "duration_seconds": 0.44,
-      "log": "verify_web_export.log",
-      "warnings": [],
-      "failure": ""
-    },
-    {
-      "name": "packed_startup",
-      "status": "pass",
-      "duration_seconds": 12.78,
-      "log": "packed_startup.log",
-      "warnings": [],
-      "failure": ""
+      "failure": "verify_720p_performance failed with exit code 1"
     }
   ]
 }

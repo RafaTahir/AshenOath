@@ -14,6 +14,7 @@ var ambient_accent_time = 0.0
 var music_state = ""
 var _voice_queue: Array = []
 var master_volume_linear = 0.85
+var transient_players: Array[AudioStreamPlayer] = []
 
 func _process(delta: float) -> void:
 	if ambient_player != null and ambient_player.stream != null and not ambient_player.playing:
@@ -55,8 +56,17 @@ func play_event(event_name: String, pitch_variation: float = 0.06) -> void:
 	player.volume_db = _volume_for(event_name) + randf_range(-1.2, 0.8)
 	player.pitch_scale = 1.0 + randf_range(-pitch_variation, pitch_variation)
 	add_child(player)
-	player.finished.connect(player.queue_free)
+	transient_players.append(player)
+	player.finished.connect(func():
+		transient_players.erase(player)
+		player.queue_free()
+	)
 	player.play()
+	while transient_players.size() > 10:
+		var oldest: AudioStreamPlayer = transient_players.pop_front()
+		if is_instance_valid(oldest):
+			oldest.stop()
+			oldest.queue_free()
 
 func has_recorded_event(event_name: String) -> bool:
 	return recorded_variants.has(event_name) and not recorded_variants[event_name].is_empty()
@@ -149,6 +159,7 @@ func play_footstep(zone_id: String, on_road: bool) -> void:
 	play_event(event_name, 0.11)
 
 func play_ambient(zone_id: String) -> void:
+	stop_zone_audio()
 	if ambient_player == null:
 		ambient_player = AudioStreamPlayer.new()
 		ambient_player.bus = bus_name
@@ -160,6 +171,13 @@ func play_ambient(zone_id: String) -> void:
 	ambient_player.stream = stream
 	ambient_player.volume_db = -30.0 if zone_id == "greyfen" else -26.5
 	ambient_player.play()
+
+func stop_zone_audio() -> void:
+	for player in transient_players.duplicate():
+		if is_instance_valid(player):
+			player.stop()
+			player.queue_free()
+	transient_players.clear()
 
 func _play_next_voice() -> void:
 	if _voice_queue.is_empty():
@@ -299,10 +317,10 @@ func _build_music_library() -> void:
 
 func _ambient_stream(zone_id: String) -> AudioStreamWAV:
 	if zone_id == "greyfen":
-		return _ambient_mix([86.0, 146.0, 213.0], 2.6, 0.026, 0.018)
+		return _ambient_mix([86.0, 146.0, 213.0], 2.6, 0.026, 0.0)
 	if zone_id == "wychwood":
-		return _ambient_mix([46.0, 73.0, 111.0], 3.0, 0.030, 0.040)
-	return _ambient_mix([70.0], 2.2, 0.030, 0.030)
+		return _ambient_mix([46.0, 73.0, 111.0], 3.0, 0.030, 0.0)
+	return _ambient_mix([70.0], 2.2, 0.030, 0.0)
 
 func _volume_for(event_name: String) -> float:
 	if event_name == "voice":
@@ -508,7 +526,9 @@ func _ambient_mix(freqs: Array, seconds: float, tone_amp: float, noise_amp: floa
 		var sample_value = 0.0
 		for j in range(freqs.size()):
 			sample_value += sin(TAU * float(freqs[j]) * t) / float(max(freqs.size(), 1))
-		sample_value = sample_value * tone_amp * slow_env + randf_range(-noise_amp, noise_amp)
+		# White-noise samples in this continuous stream were heard as static.
+		var drift = sin(TAU * 0.37 * t) * noise_amp * 0.18
+		sample_value = sample_value * tone_amp * slow_env + drift
 		data.encode_s16(i * 2, int(clamp(sample_value, -1.0, 1.0) * 32767.0))
 	var stream = AudioStreamWAV.new()
 	stream.format = AudioStreamWAV.FORMAT_16_BITS
@@ -551,7 +571,8 @@ func _music_loop(freqs: Array, seconds: float, tone_amp: float, noise_amp: float
 		var sample_value = 0.0
 		for j in range(freqs.size()):
 			sample_value += sin(TAU * float(freqs[j]) * t) / float(max(freqs.size(), 1))
-		sample_value = sample_value * tone_amp * slow * pulse + randf_range(-noise_amp, noise_amp)
+		var drift = sin(TAU * 0.19 * t) * noise_amp * 0.16
+		sample_value = sample_value * tone_amp * slow * pulse + drift
 		data.encode_s16(i * 2, int(clamp(sample_value, -1.0, 1.0) * 32767.0))
 	var stream = AudioStreamWAV.new()
 	stream.format = AudioStreamWAV.FORMAT_16_BITS

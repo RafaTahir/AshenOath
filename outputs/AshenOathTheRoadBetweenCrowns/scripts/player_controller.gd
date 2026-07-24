@@ -31,6 +31,7 @@ var attack_cooldown = 0.0
 var dodge_time = 0.0
 var dodge_dir = Vector3.ZERO
 var can_control = true
+var transition_locked := false
 var camera_controller
 var health_component
 var stamina_component
@@ -128,6 +129,11 @@ func _physics_process(delta: float) -> void:
 	parry_window = max(parry_window - delta, 0.0)
 	step_up_cooldown = max(step_up_cooldown - delta, 0.0)
 	_update_beam_sequence(delta)
+	if transition_locked:
+		velocity = Vector3.ZERO
+		_animate_visuals(delta, Vector3.ZERO, false)
+		_update_blade_contact()
+		return
 	if not can_control:
 		velocity.x = move_toward(velocity.x, 0.0, 20.0 * delta)
 		velocity.z = move_toward(velocity.z, 0.0, 20.0 * delta)
@@ -139,6 +145,14 @@ func _physics_process(delta: float) -> void:
 	_handle_combat_input()
 	_handle_movement(delta)
 	_update_blade_contact()
+
+func set_transition_locked(locked: bool) -> void:
+	transition_locked = locked
+	if locked:
+		can_control = false
+		velocity = Vector3.ZERO
+	elif health_component == null or health_component.health > 0.0:
+		can_control = true
 
 func _handle_movement(delta: float) -> void:
 	var input_vec = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
