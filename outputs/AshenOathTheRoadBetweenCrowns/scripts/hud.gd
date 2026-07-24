@@ -165,11 +165,9 @@ func hide_menus() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func show_loading(text: String = "Preparing Greyfen...") -> void:
-	if loading_layer == null:
-		return
-	loading_layer.get_node("Message").text = text
-	loading_layer.visible = true
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	# Normal world travel retains the last rendered frame; a blocking overlay
+	# made fast Web transitions feel slower and could trap mouse input.
+	hide_loading()
 
 func hide_loading() -> void:
 	if loading_layer != null:
@@ -180,7 +178,7 @@ func _build_loading_layer() -> void:
 	loading_layer.name = "LoadingLayer"
 	loading_layer.process_mode = Node.PROCESS_MODE_ALWAYS
 	loading_layer.set_anchors_preset(Control.PRESET_FULL_RECT)
-	loading_layer.mouse_filter = Control.MOUSE_FILTER_STOP
+	loading_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	loading_layer.visible = false
 	add_child(loading_layer)
 	var shade := ColorRect.new()

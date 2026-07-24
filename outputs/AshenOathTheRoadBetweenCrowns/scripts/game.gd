@@ -57,6 +57,9 @@ var deadfall_batch_data: Array[Transform3D] = []
 var tree_collision_body: StaticBody3D
 var route_zone_cache: Dictionary = {}
 var route_enemy_cache: Dictionary = {}
+var route_zone_signatures: Dictionary = {}
+var retired_zone_roots: Array[Node] = []
+var active_zone_signature := -1
 var shared_box_mesh: BoxMesh
 var prop_batch_data: Dictionary = {}
 var visual_box_batch_data: Array[Dictionary] = []
@@ -77,6 +80,7 @@ var zone_load_request_pending := false
 var requested_zone_id := ""
 var requested_zone_spawn := Vector3.ZERO
 var greyfen_prewarm_started := false
+var greyfen_prewarm_spatial_service: Node
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -165,12 +169,7 @@ func _new_game() -> void:
 		return
 	new_game_start_pending = true
 	loading_started_usec = Time.get_ticks_usec()
-	hud.show_loading("Preparing Greyfen...")
 	get_tree().paused = false
-	_start_new_game_after_loading_frame()
-
-func _start_new_game_after_loading_frame() -> void:
-	await get_tree().process_frame
 	_start_new_game_world()
 
 func _request_zone_load(zone_id: String, spawn_pos: Vector3) -> void:
@@ -180,13 +179,11 @@ func _request_zone_load(zone_id: String, spawn_pos: Vector3) -> void:
 	requested_zone_id = zone_id.strip_edges().to_lower()
 	requested_zone_spawn = spawn_pos
 	loading_started_usec = Time.get_ticks_usec()
-	hud.show_loading("Preparing %s..." % _zone_display_name(requested_zone_id))
 	if player != null:
 		player.set_transition_locked(true)
 	_perform_requested_zone_load()
 
 func _perform_requested_zone_load() -> void:
-	await get_tree().process_frame
 	var destination := requested_zone_id
 	var arrival := requested_zone_spawn
 	zone_load_request_pending = false
@@ -219,6 +216,8 @@ func _start_new_game_world() -> void:
 	day_night.set_time(day_night.START_TIME_MINUTES, 0)
 	hud.hide_menus()
 	quests.start_quest("main_road_of_crows")
+	if route_zone_cache.has("greyfen"):
+		route_zone_signatures["greyfen"] = _zone_state_signature()
 	_load_zone("greyfen", Vector3(0, 1, 7))
 	hud.toast("Greyfen whispers about the old road. Sister Anwen is waiting at the shrine.")
 	hud.set_guidance_hint("E - Speak to Sister Anwen", 5.5)
@@ -278,8 +277,6 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		new_game_start_pending = false
 	zone_id = zone_id.strip_edges().to_lower()
 	loading_started_usec = loading_started_usec if loading_started_usec > 0 else Time.get_ticks_usec()
-	if hud != null:
-		hud.show_loading("Preparing %s..." % _zone_display_name(zone_id))
 	if player != null and player.has_method("set_transition_locked"):
 		player.set_transition_locked(true)
 	_clear_oathfire_effects()
@@ -297,41 +294,57 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	var previous_zone_id: String = current_zone_id
 	var previous_enemies: Array = active_enemies.duplicate()
 	var reused_zone := false
+	var requested_signature := _zone_state_signature()
 	if zone_root != null:
-		if previous_zone_id == zone_id and previous_zone_id in ["greyfen", "wychwood"]:
+		if previous_zone_id == zone_id and active_zone_signature == requested_signature:
 			reused_zone = true
-		elif previous_zone_id in ["greyfen", "wychwood"]:
+		elif previous_zone_id == zone_id:
+			var stale_active := zone_root
+			_retire_zone_root(stale_active)
+			zone_root = null
+		else:
+			_set_zone_collision_enabled(zone_root, false)
 			zone_root.visible = false
 			zone_root.process_mode = Node.PROCESS_MODE_DISABLED
 			zone_root.position = Vector3(0, -1000, 0)
 			route_zone_cache[previous_zone_id] = zone_root
 			route_enemy_cache[previous_zone_id] = previous_enemies
-		else:
-			zone_root.visible = false
-			zone_root.process_mode = Node.PROCESS_MODE_DISABLED
-			remove_child(zone_root)
-			zone_root.queue_free()
+			route_zone_signatures[previous_zone_id] = active_zone_signature
 	active_interactable = null
 	interaction_candidates.clear()
 	current_zone_id = zone_id
-	if spatial_service != null and is_instance_valid(spatial_service):
+	var using_prewarmed_spatial := zone_id == "greyfen" \
+		and greyfen_prewarm_spatial_service != null \
+		and is_instance_valid(greyfen_prewarm_spatial_service)
+	if spatial_service != null and is_instance_valid(spatial_service) and spatial_service != greyfen_prewarm_spatial_service:
+		_set_zone_collision_enabled(spatial_service, false)
 		spatial_service.queue_free()
-	spatial_service = ZoneSpatialService.new()
-	spatial_service.name = "ZoneSpatialService"
-	add_child(spatial_service)
-	spatial_service.configure(zone_id, _river_center(zone_id), _zone_half_extents(zone_id))
+	if using_prewarmed_spatial:
+		spatial_service = greyfen_prewarm_spatial_service
+		greyfen_prewarm_spatial_service = null
+		spatial_service.name = "ZoneSpatialService"
+		spatial_service.process_mode = Node.PROCESS_MODE_INHERIT
+	else:
+		spatial_service = ZoneSpatialService.new()
+		spatial_service.name = "ZoneSpatialService"
+		add_child(spatial_service)
+		spatial_service.configure(zone_id, _river_center(zone_id), _zone_half_extents(zone_id))
 	if camera_rig != null and camera_rig.has_method("set_zone"):
 		camera_rig.set_zone(zone_id)
 	active_enemies.clear()
 	hud.set_prompt("")
 	if reused_zone:
 		active_enemies = _valid_cached_enemies(previous_enemies)
-	elif route_zone_cache.has(zone_id) and is_instance_valid(route_zone_cache[zone_id]):
+	elif route_zone_cache.has(zone_id) and is_instance_valid(route_zone_cache[zone_id]) \
+			and int(route_zone_signatures.get(zone_id, -1)) == requested_signature:
 		zone_root = route_zone_cache[zone_id]
 		route_zone_cache.erase(zone_id)
+		active_zone_signature = int(route_zone_signatures.get(zone_id, requested_signature))
+		route_zone_signatures.erase(zone_id)
 		zone_root.visible = true
 		zone_root.position = Vector3.ZERO
 		zone_root.process_mode = Node.PROCESS_MODE_INHERIT
+		_set_zone_collision_enabled(zone_root, true)
 		var prewarm_camera := zone_root.find_child("GreyfenPrewarmCamera", true, false) as Camera3D
 		if prewarm_camera != null:
 			prewarm_camera.current = false
@@ -340,6 +353,13 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		route_enemy_cache.erase(zone_id)
 		reused_zone = true
 	else:
+		if route_zone_cache.has(zone_id):
+			var stale_root = route_zone_cache.get(zone_id)
+			route_zone_cache.erase(zone_id)
+			route_enemy_cache.erase(zone_id)
+			route_zone_signatures.erase(zone_id)
+			if is_instance_valid(stale_root):
+				_retire_zone_root(stale_root)
 		zone_root = Node3D.new()
 		zone_root.name = zone_id
 		add_child(zone_root)
@@ -351,8 +371,13 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 			"ruins":
 				_build_ruins()
 			"campaign":
-				assert(ZoneCompositionRouter.build_campaign(self, zone_id),
-					"Campaign composition failed: %s" % zone_id)
+				var build_result: Dictionary = ZoneCompositionRouter.build_campaign(self, zone_id)
+				if not bool(build_result.get("ok", false)):
+					push_error("Campaign composition failed for %s: %s" % [
+						zone_id, ", ".join(build_result.get("errors", []))
+					])
+					_recover_failed_zone_load(previous_zone_id)
+					return
 				_apply_campaign_arrival(zone_id)
 			_:
 				assert(false, "Zone composition failed: %s" % zone_id)
@@ -360,12 +385,15 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		if zone_id in ["greyfen", "wychwood"]:
 			_add_visual_100_layer(zone_id)
 		_apply_first_route_materials(zone_root)
+		active_zone_signature = _zone_state_signature()
 	# Avoid recursive diagnostic walks during every transition; on Web/ANGLE those
 	# allocations made cached arrivals visibly slower.
 	print("ZONE_COMPOSITION: id=%s reused=%s visible=%s position=%s" % [
 		zone_id, reused_zone, zone_root.visible, zone_root.global_position,
 	])
-	spatial_service.build_navigation(zone_root)
+	active_zone_signature = _zone_state_signature()
+	if not using_prewarmed_spatial:
+		spatial_service.build_navigation(zone_root)
 	for enemy in active_enemies:
 		if is_instance_valid(enemy) and enemy.has_method("setup_navigation"):
 			enemy.setup_navigation(spatial_service)
@@ -383,6 +411,14 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	var safe_spawn: Vector3 = spatial_service.nearest_safe(spawn_pos, spatial_service.bank_for(spawn_pos))
 	if player == null:
 		_spawn_player(safe_spawn)
+	else:
+		player.visible = true
+		player.process_mode = Node.PROCESS_MODE_INHERIT
+		if camera_rig != null:
+			camera_rig.process_mode = Node.PROCESS_MODE_INHERIT
+			var gameplay_camera := camera_rig.find_child("Camera3D", true, false) as Camera3D
+			if gameplay_camera != null:
+				gameplay_camera.current = true
 	# Greyfen's life controller is constructed with the zone. New Game now creates
 	# Kael after collision is ready, so bind the final player instance here.
 	if life_controller != null:
@@ -392,9 +428,27 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		pending_spawn_position = safe_spawn
 		player.global_position = safe_spawn + Vector3.UP * 0.9
 		player.velocity = Vector3.ZERO
-		player.set_transition_locked(true)
-		zone_transition_frames = 0
-		zone_transition_pending = true
+		if using_prewarmed_spatial and reused_zone:
+			# This scene has already completed collision and navigation setup
+			# behind the menu. Do not wait for another rendered WebGL frame.
+			player.global_position = Vector3(safe_spawn.x, maxf(safe_spawn.y, 0.95), safe_spawn.z)
+			player.set_transition_locked(false)
+			last_safe_player_position = player.global_position
+			zone_transition_pending = false
+			var elapsed_ms := float(Time.get_ticks_usec() - loading_started_usec) / 1000.0
+			last_loading_metrics = {
+				"zone": current_zone_id,
+				"to_playable_ms": elapsed_ms,
+				"support_ready": true,
+				"velocity_reset": true
+			}
+			print("LOADING: zone=%s playable_ms=%.1f" % [current_zone_id, elapsed_ms])
+			loading_started_usec = 0
+			hud.hide_loading()
+		else:
+			player.set_transition_locked(true)
+			zone_transition_frames = 0
+			zone_transition_pending = true
 	if game_started:
 		_schedule_zone_autosave()
 	if zone_id == "wychwood" and quests.is_active("main_road_of_crows") and not quests.is_objective_done("main_road_of_crows", "fight_ghoulkin"):
@@ -411,7 +465,7 @@ func _advance_zone_transition() -> void:
 		return
 	var grounded: Variant = _grounded_spawn_position(pending_spawn_position)
 	if grounded == null:
-		if zone_transition_frames > 45:
+		if zone_transition_frames > 3:
 			push_warning("Zone spawn support timed out; using validated recovery: %s" % current_zone_id)
 			grounded = spatial_service.nearest_safe(pending_spawn_position, spatial_service.bank_for(pending_spawn_position))
 			grounded.y = 0.95
@@ -436,6 +490,31 @@ func _advance_zone_transition() -> void:
 	loading_started_usec = 0
 	hud.hide_loading()
 
+func _recover_failed_zone_load(previous_zone_id: String) -> void:
+	zone_transition_pending = false
+	zone_load_request_pending = false
+	requested_zone_id = ""
+	if zone_root != null:
+		zone_root.queue_free()
+		zone_root = null
+	if route_zone_cache.has(previous_zone_id) and is_instance_valid(route_zone_cache[previous_zone_id]):
+		zone_root = route_zone_cache[previous_zone_id]
+		route_zone_cache.erase(previous_zone_id)
+		zone_root.visible = true
+		zone_root.position = Vector3.ZERO
+		zone_root.process_mode = Node.PROCESS_MODE_INHERIT
+		_set_zone_collision_enabled(zone_root, true)
+		active_enemies = _valid_cached_enemies(route_enemy_cache.get(previous_zone_id, []))
+		route_enemy_cache.erase(previous_zone_id)
+		current_zone_id = previous_zone_id
+	if player != null:
+		player.set_transition_locked(false)
+		player.global_position = last_safe_player_position
+		player.velocity = Vector3.ZERO
+	if hud != null:
+		hud.hide_loading()
+		hud.toast("The road will not open. You remain in %s." % _zone_display_name(previous_zone_id))
+
 func _grounded_spawn_position(candidate: Vector3) -> Variant:
 	if get_world_3d() == null:
 		return null
@@ -457,7 +536,33 @@ func _valid_cached_enemies(entries: Array) -> Array:
 			result.append(enemy)
 	return result
 
+func _zone_state_signature() -> int:
+	return hash([
+		story_state.save_state() if story_state != null else {},
+		quests.save_state() if quests != null else {},
+		removed_interactions,
+	])
+
+func _deferred_free_zone(retired_root: Node) -> void:
+	# RenderingServer may still reference imported surfaces for the frame in
+	# which a zone is detached. Retire after two rendered frames.
+	await get_tree().process_frame
+	await get_tree().process_frame
+	if is_instance_valid(retired_root):
+		retired_root.queue_free()
+
+func _retire_zone_root(retired_root: Node) -> void:
+	if retired_root == null or not is_instance_valid(retired_root):
+		return
+	_set_zone_collision_enabled(retired_root, false)
+	retired_root.visible = false
+	retired_root.process_mode = Node.PROCESS_MODE_DISABLED
+	retired_root.position = Vector3(0, -2000.0 - retired_zone_roots.size() * 100.0, 0)
+	retired_zone_roots.append(retired_root)
+
 func _set_zone_collision_enabled(node: Node, enabled: bool) -> void:
+	if node is NavigationRegion3D:
+		(node as NavigationRegion3D).enabled = enabled
 	if node is CollisionObject3D:
 		var collision_object := node as CollisionObject3D
 		if not collision_object.has_meta("zone_collision_layer"):
@@ -469,7 +574,9 @@ func _set_zone_collision_enabled(node: Node, enabled: bool) -> void:
 		var area := node as Area3D
 		if not area.has_meta("zone_monitoring"):
 			area.set_meta("zone_monitoring", area.monitoring)
+			area.set_meta("zone_monitorable", area.monitorable)
 		area.monitoring = bool(area.get_meta("zone_monitoring", true)) if enabled else false
+		area.monitorable = bool(area.get_meta("zone_monitorable", true)) if enabled else false
 	for child in node.get_children():
 		_set_zone_collision_enabled(child, enabled)
 
@@ -482,21 +589,23 @@ func _schedule_zone_autosave() -> void:
 
 func _clear_route_zone_cache() -> void:
 	if zone_root != null and is_instance_valid(zone_root):
-		zone_root.queue_free()
+		_retire_zone_root(zone_root)
 	zone_root = null
 	for cached_root in route_zone_cache.values():
 		if is_instance_valid(cached_root):
 			if not cached_root.is_inside_tree():
 				add_child(cached_root)
-			cached_root.queue_free()
+			_retire_zone_root(cached_root)
 	route_zone_cache.clear()
 	route_enemy_cache.clear()
+	route_zone_signatures.clear()
 
 func _exit_tree() -> void:
 	# Cached zones remain children of the game and are released by normal subtree
 	# destruction. Touching renderer resources during NOTIFICATION_EXIT_TREE is unsafe.
 	route_zone_cache.clear()
 	route_enemy_cache.clear()
+	route_zone_signatures.clear()
 
 func _add_visual_100_layer(zone_id: String) -> void:
 	var quality := str(settings.settings.get("quality_preset", "balanced")) if settings != null else "balanced"
@@ -981,6 +1090,18 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 	_add_visual_100_layer("greyfen")
 	_apply_first_route_materials(zone_root)
 	prewarm_service.build_navigation(zone_root)
+	greyfen_prewarm_spatial_service = prewarm_service
+	# Kael's rig and camera are also expensive to instantiate in WebGL. Prepare
+	# them while the launch/menu presentation is already covering the viewport.
+	_spawn_player(Vector3(0, 1, 7))
+	# Keep the body renderable behind the opaque menu so WebGL compiles its
+	# skinned materials before New Game instead of on the first gameplay frame.
+	player.visible = true
+	player.process_mode = Node.PROCESS_MODE_DISABLED
+	camera_rig.process_mode = Node.PROCESS_MODE_DISABLED
+	var gameplay_camera := camera_rig.find_child("Camera3D", true, false) as Camera3D
+	if gameplay_camera != null:
+		gameplay_camera.current = false
 	# Render one real 3D frame behind the opaque menu so Web/ANGLE compiles the
 	# Greyfen materials before New Game is clicked.
 	var prewarm_camera := Camera3D.new()
@@ -992,11 +1113,11 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 	zone_root.visible = true
 	zone_root.process_mode = Node.PROCESS_MODE_DISABLED
 	zone_root.position = Vector3.ZERO
+	_set_zone_collision_enabled(zone_root, false)
 	route_zone_cache["greyfen"] = zone_root
 	route_enemy_cache["greyfen"] = []
 	zone_root = null
 	spatial_service = null
-	prewarm_service.queue_free()
 	print("LOADING: Greyfen prewarmed behind main menu")
 
 func _complete_ending(ending: String) -> void:
@@ -2574,7 +2695,7 @@ func _make_named_interactable(id: String, type: String, prompt: String, pos: Vec
 	var area = Interactable.new()
 	area.setup(id, type, prompt)
 	area.position = pos
-	area.build_collision(1.25)
+	area.build_collision(2.8 if type == "zone" else 1.45)
 	zone_root.add_child(area)
 	var role = _role_for_interactable(id)
 	var mapped = _make_role_visual(role, "characters", Vector3.ONE)
@@ -2764,15 +2885,17 @@ func _update_interaction_focus() -> void:
 			continue
 		var offset: Vector3 = candidate.global_position-player.global_position
 		var distance := offset.length()
-		if distance > 2.65 or distance < 0.01:
+		var focus_range := 3.6 if candidate.interaction_type == "zone" else 2.8
+		if distance > focus_range or distance < 0.01:
 			continue
 		var facing := forward.dot(offset.normalized())
-		if facing < 0.12 or not _interaction_target_valid(candidate):
+		if (candidate.interaction_type != "zone" and facing < 0.12) or not _interaction_target_valid(candidate):
 			continue
 		var priority := 0.0
 		if candidate.interaction_type == "dialogue": priority += 0.18
 		if candidate.interaction_type == "clue" and quests.is_active(candidate.quest_id): priority += 0.45
-		var score := facing*2.2-distance*0.42+priority
+		if candidate.interaction_type == "zone": priority += 1.25
+		var score := 100.0 - distance if candidate.interaction_type == "zone" else facing*2.2-distance*0.42+priority
 		if score > best_score:
 			best_score = score
 			best = candidate
@@ -2790,6 +2913,10 @@ func _update_interaction_focus() -> void:
 func _interaction_target_valid(area: Area3D) -> bool:
 	if player == null or area == null or not is_instance_valid(area):
 		return false
+	# Travel volumes sit inside authored gate/berm geometry. Camera rays can hit
+	# that framing even while Kael is correctly standing in the gate trigger.
+	if area.interaction_type == "zone":
+		return player.global_position.distance_to(area.global_position) <= 3.65
 	var camera := get_viewport().get_camera_3d()
 	var origin: Vector3 = camera.global_position if camera != null else player.global_position + Vector3.UP
 	var target: Vector3 = area.global_position + Vector3.UP * 0.5
@@ -2799,10 +2926,10 @@ func _interaction_target_valid(area: Area3D) -> bool:
 		return false
 	var query := PhysicsRayQueryParameters3D.create(origin, target)
 	query.exclude = [player.get_rid()]
-	query.collide_with_areas = true
+	query.collide_with_areas = false
 	query.collide_with_bodies = true
 	var hit := get_world_3d().direct_space_state.intersect_ray(query)
-	return hit.is_empty() or hit.get("collider") == area
+	return hit.is_empty()
 
 func _set_interactable_label_visible(area: Node, visible: bool) -> void:
 	var label := area.find_child("InteractionWorldLabel", true, false) as Label3D
@@ -2814,9 +2941,13 @@ func _spawn_enemy(id: String, pos: Vector3) -> Node:
 		return null
 	pos = river_safe_position(pos,1.2)
 	var enemy = EnemyAI.new()
+	# Keep the actor hidden while imported surfaces are normalized and receive
+	# their validated overrides. Grounding still needs an in-tree transform.
+	enemy.visible = false
 	zone_root.add_child(enemy)
 	enemy.global_position = pos
 	enemy.setup(id, enemy_defs.get(id, {}), player)
+	enemy.visible = true
 	enemy.encounter_slot = active_enemies.size()
 	enemy.setup_navigation(spatial_service)
 	if current_zone_id == "wychwood" and id in ["wychwood_stalker", "wychwood_raider", "wychwood_brute"]:

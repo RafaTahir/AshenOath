@@ -13,6 +13,7 @@ func _initialize() -> void:
 	var game = scene.instantiate()
 	root.add_child(game)
 	await process_frame
+	game.settings.set_quality_preset("balanced")
 	game.call("_new_game")
 	await settle(5)
 	var player = game.player

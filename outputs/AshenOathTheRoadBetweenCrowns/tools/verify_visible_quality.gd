@@ -127,16 +127,21 @@ func _check_sword_animation() -> void:
 	if player == null:
 		_fail("player missing for sword check")
 		return
-	var sword = player.find_child("Warrior_Sword", true, false)
+	var sword = player.find_child("KaelOathblade", true, false)
 	if sword == null:
-		_fail("rigged Warrior sword missing")
+		_fail("Kael Oathblade missing")
 		return
+	if sword.find_child("OathbladeSteel", true, false) == null:
+		_fail("Oathblade has no modeled steel blade")
+	var attachment = player.find_child("KaelSwordSocket", true, false)
+	if attachment == null:
+		_fail("Oathblade is not attached to Kael's hand rig")
 	var driver = player.find_child("CharacterAnimationDriver", true, false)
 	if driver == null or not driver.is_valid():
-		_fail("rigged sword has no skeletal animation driver")
+		_fail("Oathblade has no skeletal animation driver")
 	else:
 		if driver.get_clip_for_state("attack_light") == StringName() or driver.get_clip_for_state("attack_heavy") == StringName():
-			_fail("rigged sword attack clips are missing")
+			_fail("Oathblade attack clips are missing")
 	var arc = player.find_child("visible_sword_slash_arc_root", true, false)
 	if arc == null:
 		_fail("visible_sword_slash_arc_root missing")

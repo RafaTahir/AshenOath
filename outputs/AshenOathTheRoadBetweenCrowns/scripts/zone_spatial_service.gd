@@ -249,6 +249,7 @@ func _register_zone_defaults() -> void:
 		reserve_corridor("spawn_to_wychwood", Vector3(0, 0, 0), Vector2(2.4, 16.0))
 		register_gate("wychwood_gate", Vector3(0, 0, -15.0), Vector3(0, 0.9, -12.5), Vector2(3.2, 2.2))
 		register_gate("castle_gate", Vector3(17.0, 0, 0.0), Vector3(15.5, 0.9, 0.0), Vector2(4.3, 2.35))
+		register_gate("long_road_gate", Vector3(-18.0, 0, -10.0), Vector3(-16.0, 0.9, -9.0), Vector2(3.4, 3.0))
 		reserve_corridor("spawn", Vector3(0, 0, 13.0), Vector2(3.2, 2.4))
 		add_safe_spawn(Vector3(0, 0.9, 12.5))
 	elif zone_id == "wychwood":
@@ -257,3 +258,9 @@ func _register_zone_defaults() -> void:
 		reserve_corridor("main_road", Vector3(0, 0, 1.5), Vector2(2.6, 13.5))
 		reserve_corridor("combat_clearing", Vector3(0, 0, -7.0), Vector2(5.2, 4.2))
 		add_safe_spawn(Vector3(0, 0.9, -2.5))
+	else:
+		register_gate("campaign_return", Vector3(-7, 0, 13.5), Vector3(0, 0.9, 12.0), Vector2(3.2, 2.4))
+		register_gate("campaign_forward", Vector3(7, 0, -13.5), Vector3(0, 0.9, -12.0), Vector2(3.2, 2.4))
+		reserve_corridor("campaign_route", Vector3(0, 0, 0), Vector2(4.0, 15.0))
+		add_safe_spawn(Vector3(0, 0.9, 12.0))
+		add_safe_spawn(Vector3(0, 0.9, -12.0))

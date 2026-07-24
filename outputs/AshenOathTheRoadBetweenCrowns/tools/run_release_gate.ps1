@@ -114,6 +114,12 @@ function Invoke-GodotGate([string]$Name, [string[]]$Arguments) {
     for ($index = 0; $index -lt $lines.Count; $index++) {
         $line = $lines[$index]
         if ($line -notmatch $fatalPattern) { continue }
+        # PowerShell wraps native stderr as an ErrorRecord and abbreviates the
+        # original line inside CategoryInfo. The complete stderr line is also
+        # present in the log and is classified independently below.
+        if ($line -match '^\s*\+\s+CategoryInfo|FullyQualifiedErrorId.*NativeCommandError') {
+            continue
+        }
         $headlessDummyMaterial = $isHeadless -and $line -match 'Parameter "material" is null'
         if ($headlessDummyMaterial -or ($line -match $teardownPattern -and $passIndex -ge 0 -and $index -gt $passIndex)) {
             $warnings.Add($line.Trim())
@@ -144,7 +150,7 @@ try {
 	)
 
     $verifiers = @(
-		"verify_runtime.gd", "verify_runtime_regressions.gd", "verify_gate_transitions.gd", "verify_engine_001.gd", "verify_story_campaign.gd", "verify_quest_001.gd", "verify_quest_002.gd", "verify_art_001.gd", "verify_asset_001.gd", "verify_character_real_001.gd",
+		"verify_runtime.gd", "verify_runtime_regressions.gd", "verify_zone_builder_integrity.gd", "verify_gate_transitions.gd", "verify_engine_001.gd", "verify_story_campaign.gd", "verify_quest_001.gd", "verify_quest_002.gd", "verify_art_001.gd", "verify_asset_001.gd", "verify_character_real_001.gd",
         "verify_motion_quality.gd", "verify_river_swimming.gd", "verify_greyfen_life.gd",
 		"verify_castle_vargan.gd", "verify_audio_runtime.gd", "verify_audio_001.gd", "verify_visible_quality.gd",
 		"verify_recovery_002_foundation.gd", "verify_navigation_001.gd", "verify_char_001.gd", "verify_anim_001.gd", "verify_combat_001.gd", "verify_ai_001.gd", "verify_oath_001.gd", "verify_ui_001.gd", "verify_world_001.gd", "verify_world_002.gd", "verify_world_003.gd", "verify_zone_budgets.gd",

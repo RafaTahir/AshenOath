@@ -1,6 +1,7 @@
 extends RefCounted
 
 const CampaignSection = preload("res://scripts/zones/campaign_section.gd")
+const ZoneBuildContext = preload("res://scripts/zone_build_context.gd")
 
 const CORE_ZONES: Array[String] = ["greyfen", "wychwood", "ruins"]
 
@@ -15,13 +16,14 @@ static func composition_kind(zone_id: String) -> String:
 		return ""
 	return canonical_id if canonical_id in CORE_ZONES else "campaign"
 
-static func build_campaign(host: Node, zone_id: String) -> bool:
+static func build_campaign(host: Node, zone_id: String) -> Dictionary:
 	var canonical_id := zone_id.strip_edges().to_lower()
 	if not CampaignSection.SECTIONS.has(canonical_id):
 		push_error("No campaign composition registered for '%s'." % zone_id)
-		return false
-	CampaignSection.new().build(host, canonical_id)
-	return true
+		return {"ok": false, "zone": canonical_id, "errors": ["unregistered zone"]}
+	var context = ZoneBuildContext.new(host, canonical_id)
+	CampaignSection.new().build(context, canonical_id)
+	return context.validate()
 
 static func registered_zones() -> Array[String]:
 	var result: Array[String] = []

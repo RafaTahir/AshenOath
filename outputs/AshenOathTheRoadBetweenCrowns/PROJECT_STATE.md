@@ -4,6 +4,8 @@
 
 Ashen Oath is a **pre-alpha prototype**. It is not a commercial Alpha, Early Access build, finished campaign, photoreal game, or AAA production. The approved target is a polished 90-minute Web Act One followed by a 4-6 hour grounded-stylized campaign. See `PRODUCT_SCOPE_LOCK.md` and `ASHEN_OATH_MASTER_STUDIO_REVIEW.md`.
 
+RECOVERY-003 replaces reflective campaign-zone construction with a validated `ZoneBuildContext`, removes the blocking travel overlay, and requires player-triggered gate verification. Deep Woods, the Long Road, Castle Approach, Courtyard, and Record Hall are implemented playable sections; later campaign content remains pre-alpha and must not be described as finished until its player-driven route and visual gates pass.
+
 ANIM-001 release acceptance passed the complete functional suite, graphical route and animation captures, Web export, and packed startup. On the Dell 7280/Intel HD 620 ANGLE path, the final native-720p sample measured 37.5 FPS average, 35.6 FPS minimum, and a 129 ms warm transition.
 
 ## COMBAT-001 Update
@@ -461,7 +463,8 @@ Current state:
 | `scripts/game.gd` | Main gameplay orchestration, interaction routing, quest flow, combat hooks, save hooks, runtime environment, input map, and fall recovery |
 | `scripts/runtime_service_registry.gd` | Owns and configures the fourteen runtime manager, UI, content, audio, and world services |
 | `scripts/runtime_actor_factory.gd` | Creates and connects the active player and third-person camera pair |
-| `scripts/zone_composition_router.gd` | Validates zone IDs and routes construction to core or campaign section builders |
+| `scripts/zone_composition_router.gd` | Validates zone IDs and routes construction to directly preloaded core or campaign builders |
+| `scripts/zone_build_context.gd` | Typed public construction boundary and result validation for campaign zones |
 | `scripts/player_controller.gd` | Player movement, combat input, health/stamina composition, parry/block, dodge, visuals, procedural animation |
 | `scripts/camera_controller.gd` | Third-person camera, mouse/keyboard look, camera collision, shake, sensitivity/invert settings |
 | `scripts/enemy_ai.gd` | Enemy setup, chase/attack AI, leash, windup, stagger, slow, death, visuals |

@@ -789,36 +789,9 @@ func _attach_rig_sword(mapped: Node3D) -> Node3D:
 	# Follow the hand position, but own the blade orientation so imported wrist axes
 	# cannot turn the weapon into an upright pole.
 	sword_equipment_pivot.top_level = true
-	var sword: Node3D = null
-	var sword_scene = load("res://assets_external/characters/Warrior_Sword.fbx")
-	if sword_scene is PackedScene:
-		sword = sword_scene.instantiate()
-	if sword == null:
-		sword = Node3D.new()
-	sword.name = "Warrior_Sword"
-	sword.position = Vector3(0.0, -0.05, -0.04)
-	sword.rotation_degrees = Vector3.ZERO
-	sword.scale *= 0.90
-	sword_equipment_pivot.add_child(sword)
-	if sword_scene is PackedScene:
-		sword.visible = false
-		return _build_oathblade_visual(sword_equipment_pivot)
-	var blade := MeshInstance3D.new()
-	blade.name = "Warrior_Sword_Blade"
-	var blade_mesh := BoxMesh.new()
-	blade_mesh.size = Vector3(0.055, 0.055, 0.92)
-	blade.mesh = blade_mesh
-	blade.position.z = -0.42
-	blade.material_override = _metal_mat(Color(0.66, 0.70, 0.72))
-	sword.add_child(blade)
-	var hilt := MeshInstance3D.new()
-	hilt.name = "Warrior_Sword_Hilt"
-	var hilt_mesh := BoxMesh.new()
-	hilt_mesh.size = Vector3(0.30, 0.075, 0.075)
-	hilt.mesh = hilt_mesh
-	hilt.material_override = _mat(Color(0.20, 0.11, 0.05))
-	sword.add_child(hilt)
-	return sword
+	# The imported FBX had null Compatibility surfaces and was hidden
+	# immediately. Use the validated Web-safe weapon directly.
+	return _build_oathblade_visual(sword_equipment_pivot)
 
 func _build_oathblade_visual(parent: Node3D) -> Node3D:
 	var oathblade := Node3D.new()
