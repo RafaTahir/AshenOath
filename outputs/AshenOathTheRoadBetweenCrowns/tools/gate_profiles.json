@@ -294,6 +294,22 @@
         "verify_visible_quality"
       ]
     },
+    "world_004": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/campaign_wilderness_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/campaign_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/export_presets.cfg",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_world_004.gd"
+      ],
+      "gates": [
+        "verify_world_004",
+        "verify_gate_transitions",
+        "verify_zone_budgets",
+        "verify_story_campaign",
+        "web_export"
+      ],
+      "web_required": true
+    },
     "progression": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/data/upgrades.json",
@@ -395,6 +411,7 @@
     "greyfen": "capture_world_001",
     "wychwood": "capture_world_002",
     "campaign": "capture_world_003",
+    "world_004": "capture_world_004",
     "lighting": "capture_light_001",
     "progression": "capture_prog_001"
   }

@@ -1,6 +1,7 @@
 extends RefCounted
 
 const CastleVarganSection = preload("res://scripts/zones/castle_vargan_section.gd")
+const CampaignWildernessSection = preload("res://scripts/zones/campaign_wilderness_section.gd")
 
 const SECTIONS := {
 	"deep_wood":{"back":"wychwood","next":"old_mill","color":Color(0.045,0.075,0.05)},
@@ -18,6 +19,9 @@ const SECTIONS := {
 
 func build(context: ZoneBuildContext) -> void:
 	var zone_id := context.zone_id
+	if zone_id in CampaignWildernessSection.ZONES:
+		CampaignWildernessSection.new().build(context)
+		return
 	if zone_id in CastleVarganSection.CASTLE_ZONES:
 		CastleVarganSection.new().build(context)
 		return

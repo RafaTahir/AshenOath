@@ -56,7 +56,7 @@
     {"id": "WORLD-001", "title": "Greyfen", "area": "world", "milestone": "baseline", "status": "complete"},
     {"id": "WORLD-002", "title": "Wychwood", "area": "world", "milestone": "baseline", "status": "complete"},
     {"id": "WORLD-003", "title": "Cemetery and Crow Chapel", "area": "world", "milestone": "baseline", "status": "complete"},
-    {"id": "WORLD-004", "title": "Deep wood, marsh, mill, and farmstead", "area": "world", "milestone": "C", "status": "planned"},
+    {"id": "WORLD-004", "title": "Deep wood, marsh, mill, and farmstead", "area": "world", "milestone": "C", "status": "complete"},
     {"id": "WORLD-005", "title": "Bandit road and Castle Vargan", "area": "world", "milestone": "C", "status": "planned"},
     {"id": "WORLD-006", "title": "Undercroft and Hart Glade", "area": "world", "milestone": "C", "status": "planned"},
     {"id": "QUEST-001", "title": "Act One consolidation", "area": "narrative", "milestone": "baseline", "status": "complete"},
