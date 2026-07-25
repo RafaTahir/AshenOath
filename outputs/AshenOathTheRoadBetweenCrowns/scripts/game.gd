@@ -11,6 +11,7 @@ const WorldVisualUpgrade = preload("res://scripts/world_visual_upgrade.gd")
 const WorldMotionController = preload("res://scripts/world_motion_controller.gd")
 const SurfaceFeedbackManager = preload("res://scripts/surface_feedback_manager.gd")
 const WorldVFXController = preload("res://scripts/world_vfx_controller.gd")
+const EpilogueResolver = preload("res://scripts/epilogue_resolver.gd")
 const ZoneSpatialService = preload("res://scripts/zone_spatial_service.gd")
 const RuntimeServiceRegistry = preload("res://scripts/runtime_service_registry.gd")
 const RuntimeActorFactory = preload("res://scripts/runtime_actor_factory.gd")
@@ -962,6 +963,13 @@ func _handle_interaction(area) -> void:
 			quests.complete_objective("main_blood_under_stone", "locate_record_hall")
 		elif area.interaction_id == "grave_bell":
 			quests.complete_objective("side_widows_bell", "find_bell")
+		elif area.interaction_id == "massacre_iron":
+			quests.complete_objective("side_iron_remembers", "recover_iron")
+			hud.toast("The iron bears Vargan hammer marks beneath the soot.")
+		elif area.interaction_id == "empty_grave_tracks":
+			quests.complete_objective("side_empty_grave", "follow_empty_grave")
+			hud.toast("Bare footprints leave the grave and stop beside the old road.")
+			hud.set_guidance_hint("A returned soldier waits near Greyfen's eastern lane.", 5.0)
 		elif area.interaction_id == "bandit_camp":
 			hud.toast("Boot prints. Rope. A child's torn ribbon. Not a dog's work.")
 		elif area.interaction_id == "bitter_roots":
@@ -1265,6 +1273,21 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 	print("LOADING: Greyfen prewarmed behind main menu")
 
 func _complete_ending(ending: String) -> void:
+	if not quests.is_active("main_hart_remembers") or str(story_state.get_flag("confession_method", "")) == "":
+		hud.toast("The Hart will not answer until Greyfen has heard the testimony.")
+		get_tree().paused = false
+		hud.hide_menus()
+		return
+	var witnesses: Array[String] = []
+	if str(story_state.get_flag("halvern_fate", "")) == "witness":
+		witnesses.append("halvern")
+	if str(story_state.get_flag("edric_stance", "")) in ["cooperate", "compelled"]:
+		witnesses.append("edric")
+	if int(story_state.values.get("anwen_trust", 0)) >= 0:
+		witnesses.append("anwen")
+	if witnesses.is_empty():
+		witnesses.append("kael")
+	story_state.set_flag("final_witnesses", witnesses)
 	quests.world_flags["ending"] = ending
 	story_state.set_flag("final_covenant", {"expose":"witness", "free":"mercy", "bind":"duty", "kill":"ash"}.get(ending, ending))
 	quests.complete_objective("main_hart_remembers", "hear_testimony")
@@ -1276,7 +1299,10 @@ func _complete_ending(ending: String) -> void:
 		get_tree().paused = false
 		_remove_interactable("white_hart")
 		if not _has_living_enemy("white_hart_avatar"):
-			_spawn_enemy("white_hart_avatar", Vector3(12, 0.8, 6))
+			var hart_boss = _spawn_enemy("white_hart_avatar", Vector3(0, 0.8, -7))
+			if hart_boss != null:
+				hart_boss.name = "WhiteHartFinalEncounter"
+				hart_boss.leash_radius = 10.0
 		audio.play_event("boss", 0.02)
 		hud.toast("The White Hart answers with antler, root, and light.")
 		return
@@ -1286,20 +1312,9 @@ func _show_ending_consequence(ending: String) -> void:
 	quests.world_flags["ending"] = ending
 	quests.complete_objective("main_hart_remembers", "final_choice")
 	var title = "The Road Between Crowns"
-	var body = ""
-	if ending == "kill":
-		body = "Kael kills the White Hart after a brutal clearing fight. Greyfen survives the season, but the Wychwood fades into gray rot."
-	elif ending == "free":
-		body = "Kael frees the White Hart. The curse breaks, House Vargan falls, and frightened villagers abandon the old road."
-	elif ending == "bind":
-		body = "Kael breaks the avatar and binds the White Hart again. Greyfen prospers for now, and his name joins the crime beneath the stones."
-	else:
-		body = "Kael exposes House Vargan. The village turns on Edric, the spirit remains wounded, and truth finally has witnesses."
-	body += "\n\nAnwen: %s. Greyfen: %s. The Hart's debt: %s." % [
-		"trusted Kael" if int(story_state.values.get("anwen_trust",0)) > 0 else "kept her distance",
-		"heard the names" if story_state.get_flag("names_policy","") == "published" else "learned the truth slowly",
-		str(story_state.values.get("hart_debt",0))
-	]
+	var cards: Array[String] = EpilogueResolver.resolve(ending, story_state)
+	story_state.set_flag("epilogue_cards", cards)
+	var body := "\n\n".join(cards)
 	get_tree().paused = true
 	hud.show_ending(title, body)
 	save_manager.checkpoint(self)
@@ -1563,9 +1578,9 @@ func _on_enemy_died(enemy) -> void:
 	elif enemy.enemy_id == "wychwood_stalker" and current_zone_id == "record_hall":
 		story_state.set_flag("castle_haunting_cleared", true)
 		quests.complete_objective("main_blood_under_stone", "survive_haunting")
-		quests.complete_objective("main_blood_under_stone", "last_witness_hook")
-		hud.toast("The erased names settle. A stair beneath the archive unlocks.")
-		hud.set_guidance_hint("Descend beneath Vargan stone. Find the last witness.", 6.0)
+		hud.toast("The erased names settle. Edric waits beneath the Vargan seal.")
+		hud.set_guidance_hint("Demand Lord Edric's answer before descending.", 6.0)
+		_load_zone("record_hall", player.global_position)
 	elif enemy.enemy_id == "gravebound_knight":
 		if current_zone_id == "undercroft":
 			quests.complete_objective("main_last_witness", "break_halvern_guard")
@@ -1576,8 +1591,25 @@ func _on_enemy_died(enemy) -> void:
 		pending_ending = ""
 		_show_ending_consequence(ending)
 	elif enemy.enemy_id == "bandit":
-		if not _has_living_enemy("bandit"):
+		if current_zone_id == "bandit_road" and bool(enemy.get_meta("senn_guard", false)) and not _has_living_enemy("bandit"):
+			quests.complete_objective("main_soldier_without_banner", "senn_confrontation")
+			story_state.set_flag("senn_ready_to_testify", true)
+			hud.show_status_cue("Senn's guard breaks", "victory")
+			hud.set_guidance_hint("Captain Senn has lowered his blade. Hear his testimony.", 5.5)
+		elif not _has_living_enemy("bandit"):
 			quests.complete_objective("side_black_dog", "find_dog")
+	elif current_zone_id == "old_mill" and bool(enemy.get_meta("ash_mill_enemy", false)):
+		var ash_enemy_alive := false
+		for candidate in active_enemies:
+			if is_instance_valid(candidate) and candidate != enemy and not candidate.dead and bool(candidate.get_meta("ash_mill_enemy", false)):
+				ash_enemy_alive = true
+				break
+		if not ash_enemy_alive:
+			quests.complete_objective("main_ash_at_the_mill", "mill_encounter")
+			story_state.set_flag("ash_mill_cleared", true)
+			_make_named_interactable("miller_record", "dialogue", "Read the miller's record", Vector3(-7.0,0,-7), Color(0.5,0.4,0.25))
+			hud.show_status_cue("The mill falls quiet", "victory")
+			hud.set_guidance_hint("Read the miller's ledger beside the broken wall.", 5.5)
 	if enemy.health_component != null:
 		hud.show_enemy(enemy.display_name, 0.0, enemy.health_component.max_health)
 	hud.toast("%s slain." % enemy.display_name)
@@ -3178,8 +3210,20 @@ func _spawn_enemy(id: String, pos: Vector3) -> Node:
 	enemy.damaged.connect(_on_enemy_damaged)
 	enemy.windup_started.connect(_on_enemy_windup_started)
 	enemy.attack_resolved.connect(_on_enemy_attack_resolved)
+	enemy.boss_phase_changed.connect(_on_boss_phase_changed)
 	active_enemies.append(enemy)
 	return enemy
+
+func _on_boss_phase_changed(enemy: Node, phase: int) -> void:
+	if enemy == null or not is_instance_valid(enemy) or enemy.enemy_id != "white_hart_avatar":
+		return
+	var cue := "The Hart tears roots from the old road." if phase == 2 else "The covenant is breaking."
+	hud.show_status_cue("White Hart — Phase %d" % phase, "danger")
+	hud.toast(cue)
+	audio.play_event("reveal" if phase == 2 else "boss", 0.025)
+	if world_vfx != null and is_instance_valid(world_vfx):
+		world_vfx.pulse_interaction(enemy.global_position)
+	CombatFeedback.impact_burst(zone_root, enemy.global_position + Vector3.UP, true, Color(0.58, 0.88, 0.72))
 
 func _activate_wychwood_wave(ids: Array, cue: String) -> void:
 	for enemy in active_enemies:

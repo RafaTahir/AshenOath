@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "quests": [
+    "main_names_they_burned",
+    "main_ash_at_the_mill",
+    "main_soldier_without_banner"
+  ],
+  "register_required": 3,
+  "register_available": 4,
+  "mill_guard_count": 2,
+  "senn_guard_count": 2,
+  "mill_choices": ["preserved", "burned", "exposed"],
+  "senn_choices": ["testimony", "exile", "punished"],
+  "rules": {
+    "register_order_independent": true,
+    "mill_choice_requires_encounter": true,
+    "senn_choice_requires_guard_resolution": true,
+    "all_major_choices_persist": true
+  }
+}

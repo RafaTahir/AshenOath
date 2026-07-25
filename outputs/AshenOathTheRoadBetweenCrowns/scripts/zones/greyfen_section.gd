@@ -107,13 +107,27 @@ func _build_gameplay_content(context: ZoneBuildContext) -> void:
 		context.make_named_interactable("crow_shrine_choice", "dialogue", "Choose the Crow Shrine's fate", Vector3(6.5,0,-7.5), Color(0.3,0.38,0.3), Vector3(0.45,0.45,0.45))
 	if context.road_ready_to_report():
 		context.make_named_interactable("retain_evidence", "dialogue", "Keep Oren's token", Vector3(1.8,0,8.8), Color(0.38,0.24,0.16), Vector3(0.35,0.35,0.35))
-	context.make_named_interactable("village_stories", "dialogue", "Resolve a village story", Vector3(-4.1,0,9.0), Color(0.34,0.23,0.14), Vector3(0.4,0.4,0.4))
 	context.make_village_place("village_well", "village_place", "Draw from the village well", Vector3(-8.0,0,-0.5), Vector3(2.2,0.9,2.2), Color(0.19,0.18,0.16))
 	context.make_village_place("forge_corner", "village_place", "Inspect Tor's old iron", Vector3(11.0,0,-1.2), Vector3(1.5,0.7,1.2), Color(0.28,0.18,0.10))
 	context.make_village_place("shrine_prayer", "village_place", "Sit at the shrine bench", Vector3(8.0,0,-6.2), Vector3(2.4,0.55,0.7), Color(0.22,0.15,0.09))
 	context.make_village_place("common_table", "minigame", "Play Three Marks with Rook", Vector3(-5.4,0,7.2), Vector3(2.8,0.85,1.8), Color(0.28,0.18,0.10))
 	context.make_village_place("barrel_board", "minigame", "Play Greyfen Draughts with Tor", Vector3(7.0,0,6.8), Vector3(2.2,0.85,1.5), Color(0.24,0.15,0.08))
-	context.make_clue("grave_bell", "Inspect grave bell", Vector3(15.8, 0, 9.5), "side_widows_bell", "find_bell", Color(0.60, 0.55, 0.44))
+	if context.is_quest_active("side_widows_bell") and not context.is_objective_done("side_widows_bell", "find_bell"):
+		context.make_clue("grave_bell", "Inspect Harl's grave bell", Vector3(15.8, 0, 9.5), "side_widows_bell", "find_bell", Color(0.60, 0.55, 0.44))
+	if context.is_quest_active("side_iron_remembers") and not context.is_objective_done("side_iron_remembers", "recover_iron"):
+		context.make_clue("massacre_iron", "Recover blackened chapel iron", Vector3(15.4, 0, 8.5), "side_iron_remembers", "recover_iron", Color(0.26, 0.24, 0.20))
+	if context.is_quest_active("side_empty_grave") and not context.is_objective_done("side_empty_grave", "follow_empty_grave"):
+		context.make_clue("empty_grave_tracks", "Follow prints from the empty grave", Vector3(16.0, 0, 6.7), "side_empty_grave", "follow_empty_grave", Color(0.25, 0.24, 0.22))
+	if context.is_quest_active("side_empty_grave") and context.is_objective_done("side_empty_grave", "follow_empty_grave") and not context.is_objective_done("side_empty_grave", "walker_choice"):
+		context.make_named_interactable("returned_soldier", "dialogue", "Speak to the returned soldier", Vector3(10.8, 0, 8.2), Color(0.28, 0.29, 0.31))
+	if str(context.get_story_flag("widow_truth", "")) == "told":
+		context.make_visual_box("HarlBellCutCord", Vector3(15.8, 0.8, 9.5), Vector3(0.05, 0.7, 0.05), Color(0.18, 0.12, 0.07))
+	if str(context.get_story_flag("iron_fate", "")) == "memorial":
+		context.make_visual_box("ForgeNameMemorial", Vector3(10.4, 1.0, -1.2), Vector3(1.6, 1.7, 0.14), Color(0.30, 0.25, 0.18))
+	if str(context.get_story_flag("mira_truth", "")) == "confessed":
+		context.make_visual_box("MiraTruthLabels", Vector3(-6.3, 0.8, -2.0), Vector3(1.4, 0.08, 0.6), Color(0.42, 0.38, 0.25))
+	if str(context.get_story_flag("returned_soldier_fate", "")) == "named":
+		context.make_visual_box("ReturnedSoldierNamedStone", Vector3(16.0, 0.65, 6.7), Vector3(0.55, 1.3, 0.20), Color(0.25, 0.25, 0.24))
 	context.make_clue("grave_harl", "Inspect Harl's disturbed grave", Vector3(12.2,0,7.2), "main_bell_beneath_greyfen", "grave_harl", Color(0.3,0.28,0.25))
 	context.make_clue("grave_child", "Inspect the nameless child's grave", Vector3(14.0,0,10.2), "main_bell_beneath_greyfen", "grave_child", Color(0.3,0.28,0.25))
 	context.make_clue("grave_soldier", "Inspect the empty soldier's grave", Vector3(16.2,0,7.2), "main_bell_beneath_greyfen", "grave_soldier", Color(0.3,0.28,0.25))

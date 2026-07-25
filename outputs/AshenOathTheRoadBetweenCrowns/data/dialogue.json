@@ -155,7 +155,8 @@
     "actions": [
       {"label": "Accept A Widow's Bell", "type": "start_quest", "quest": "side_widows_bell"},
       {"label": "I found Harl's bell.", "type": "complete_objective", "quest": "side_widows_bell", "objective": "find_bell"},
-      {"label": "He was calling for a witness.", "type": "story_choice", "quest": "side_widows_bell", "objective": "widow_choice", "sets_flags": {"widow_truth": "told"}, "adjusts_values": {"anwen_trust": 1}, "result": "Elna rings the bell once, then cuts its cord."}
+      {"label": "He was calling for a witness.", "type": "story_choice", "quest": "side_widows_bell", "objective": "widow_choice", "sets_flags": {"widow_truth": "told"}, "adjusts_values": {"anwen_trust": 1}, "result": "Elna rings the bell once, then cuts its cord."},
+      {"label": "The wind caught an old cord.", "type": "story_choice", "quest": "side_widows_bell", "objective": "widow_choice", "sets_flags": {"widow_truth": "comforted"}, "result": "Elna nods. She knows a kindness when she hears one."}
     ]
   },
   "blacksmith_tor": {
@@ -165,7 +166,13 @@
       "If you mean to trap whatever is out there, take scrap. Better the iron snaps than your leg.",
       "I heard the cemetery bell last night. The rope has been cut since winter."
     ],
-    "actions": [{"label": "Take scrap iron.", "type": "give_ingredients", "conditions": {"tor_scrap_taken": false}, "items": {"scrap_iron": 2}, "sets_flags": {"tor_scrap_taken": true}}]
+    "actions": [
+      {"label": "Take scrap iron.", "type": "give_ingredients", "conditions": {"tor_scrap_taken": false}, "items": {"scrap_iron": 2}, "sets_flags": {"tor_scrap_taken": true}},
+      {"label": "Accept Iron Remembers.", "type": "start_quest", "quest": "side_iron_remembers"},
+      {"label": "I recovered iron from the chapel.", "type": "complete_objective", "quest": "side_iron_remembers", "objective": "recover_iron"},
+      {"label": "Forge the victims' names into a memorial.", "type": "story_choice", "quest": "side_iron_remembers", "objective": "tor_choice", "sets_flags": {"iron_fate": "memorial"}, "adjusts_values": {"anwen_trust": 1}, "result": "Tor stamps each recovered name into warm iron."},
+      {"label": "Forge it into a weapon.", "type": "story_choice", "quest": "side_iron_remembers", "objective": "tor_choice", "sets_flags": {"iron_fate": "weapon"}, "adjusts_values": {"hart_debt": 1}, "result": "Tor folds the witness into an edge."}
+    ]
   },
   "farmer_toma": {
     "name": "Farmer Toma",
@@ -180,6 +187,17 @@
       {"label": "I followed the sheepfold tracks.", "type": "complete_objective", "quest": "side_black_dog", "objective": "find_dog"},
       {"label": "The guardian protected the children.", "type": "story_choice", "quest": "side_black_dog", "objective": "dog_choice", "sets_flags": {"black_dog_fate": "spared"}, "adjusts_values": {"anwen_trust": 1}, "result": "Toma looks toward the fold and lowers his knife."},
       {"label": "Tell them it fled.", "type": "story_choice", "quest": "side_black_dog", "objective": "dog_choice", "sets_flags": {"black_dog_fate": "hidden"}, "result": "Greyfen accepts the easier story."}
+    ]
+  },
+  "returned_soldier": {
+    "name": "The Returned Soldier",
+    "greeting": "The grave is empty because I climbed out before they finished my name.",
+    "lines": [
+      "I remember the road. I do not remember whether the man who walked it deserves to keep breathing."
+    ],
+    "actions": [
+      {"label": "Your name belongs among the witnesses.", "type": "story_choice", "quest": "side_empty_grave", "objective": "walker_choice", "sets_flags": {"returned_soldier_fate": "named"}, "adjusts_values": {"anwen_trust": 1}, "result": "He gives Kael his name and agrees to stand before Greyfen."},
+      {"label": "Keep the name. Leave the grave empty.", "type": "story_choice", "quest": "side_empty_grave", "objective": "walker_choice", "sets_flags": {"returned_soldier_fate": "anonymous"}, "result": "He leaves before dawn, owing Greyfen nothing."}
     ]
   },
   "white_hart": {

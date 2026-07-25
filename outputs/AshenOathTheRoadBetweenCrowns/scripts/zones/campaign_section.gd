@@ -1,6 +1,9 @@
 extends RefCounted
 
 const CastleVarganSection = preload("res://scripts/zones/castle_vargan_section.gd")
+const CampaignWildernessSection = preload("res://scripts/zones/campaign_wilderness_section.gd")
+const BanditRoadSection = preload("res://scripts/zones/bandit_road_section.gd")
+const CampaignFinaleSection = preload("res://scripts/zones/campaign_finale_section.gd")
 
 const SECTIONS := {
 	"deep_wood":{"back":"wychwood","next":"old_mill","color":Color(0.045,0.075,0.05)},
@@ -18,6 +21,15 @@ const SECTIONS := {
 
 func build(context: ZoneBuildContext) -> void:
 	var zone_id := context.zone_id
+	if zone_id in CampaignWildernessSection.ZONES:
+		CampaignWildernessSection.new().build(context)
+		return
+	if zone_id in BanditRoadSection.ZONES:
+		BanditRoadSection.new().build(context)
+		return
+	if zone_id in CampaignFinaleSection.ZONES:
+		CampaignFinaleSection.new().build(context)
+		return
 	if zone_id in CastleVarganSection.CASTLE_ZONES:
 		CastleVarganSection.new().build(context)
 		return
@@ -74,10 +86,12 @@ func _add_content(context: ZoneBuildContext) -> void:
 				context.make_prop_box("MarshBoard",Vector3(0,0.08,z),Vector3(3.2,0.16,1.4),Color(0.22,0.15,0.09))
 			context.make_clue("register_mira","Recover the healer's fragment",Vector3(3,0,-7),"main_names_they_burned","fragment_mira",Color(0.35,0.3,0.2))
 		"bandit_road":
-			context.make_clue("senn_guard","Break Senn's guard",Vector3(0,0,-4),"main_soldier_without_banner","senn_confrontation",Color(0.35,0.22,0.15))
 			context.make_named_interactable("captain_senn","dialogue","Confront Captain Senn",Vector3(0,0,-7),Color(0.4,0.25,0.18))
-			_spawn(context,"bandit",Vector3(-4,0.8,-5))
-			_spawn(context,"bandit",Vector3(4,0.8,-5))
+			if context.is_quest_active("main_soldier_without_banner") and not context.is_objective_done("main_soldier_without_banner", "senn_confrontation"):
+				for position in [Vector3(-4,0.8,-5), Vector3(4,0.8,-5)]:
+					var guard = context.spawn_enemy("bandit", position)
+					if guard != null:
+						guard.set_meta("senn_guard", true)
 		"undercroft":
 			context.make_named_interactable("halvern","dialogue","Speak to Halvern",Vector3(0,0,-9),Color(0.5,0.5,0.55))
 			_spawn(context,"gravebound_knight",Vector3(0,0.8,-7))
@@ -92,6 +106,7 @@ func _add_content(context: ZoneBuildContext) -> void:
 			context.make_light("Hart Witness Light",Vector3(0,6,-8),Color(0.58,0.82,0.72),4.0)
 			context.make_named_interactable("white_hart","dialogue","Speak to the White Hart",Vector3(0,0,-8),Color(0.85,0.85,0.72),Vector3(0.36,0.64,0.36))
 
-func _spawn(context: ZoneBuildContext, enemy: String, pos: Vector3) -> void:
+func _spawn(context: ZoneBuildContext, enemy: String, pos: Vector3):
 	if context.enemy_exists(enemy):
-		context.spawn_enemy(enemy, pos)
+		return context.spawn_enemy(enemy, pos)
+	return null

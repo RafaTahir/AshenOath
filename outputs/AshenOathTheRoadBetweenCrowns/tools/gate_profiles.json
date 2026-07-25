@@ -294,6 +294,179 @@
         "verify_visible_quality"
       ]
     },
+    "world_004": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/campaign_wilderness_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/campaign_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/export_presets.cfg",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_world_004.gd"
+      ],
+      "gates": [
+        "verify_world_004",
+        "verify_gate_transitions",
+        "verify_zone_budgets",
+        "verify_story_campaign",
+        "web_export"
+      ],
+      "web_required": true
+    },
+    "quest_003": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/ash_and_banner_contract.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/quests.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/campaign_dialogue.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/quest_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/campaign_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/campaign_wilderness_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_quest_003.gd"
+      ],
+      "gates": [
+        "verify_quest_003",
+        "verify_story_campaign",
+        "verify_save_001",
+        "verify_combat_001"
+      ]
+    },
+    "world_005": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/bandit_road_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/castle_vargan_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/campaign_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/export_presets.cfg",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_world_005.gd"
+      ],
+      "gates": [
+        "verify_world_005",
+        "verify_castle_vargan",
+        "verify_gate_transitions",
+        "verify_zone_budgets",
+        "verify_story_campaign",
+        "web_export"
+      ],
+      "web_required": true
+    },
+    "quest_004": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/blood_under_stone_contract.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/quests.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/campaign_dialogue.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/castle_vargan_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_quest_004.gd"
+      ],
+      "gates": [
+        "verify_quest_004",
+        "verify_castle_vargan",
+        "verify_story_campaign",
+        "verify_save_001"
+      ]
+    },
+    "world_006": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/campaign_finale_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/campaign_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/export_presets.cfg",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_world_006.gd"
+      ],
+      "gates": [
+        "verify_world_006",
+        "verify_gate_transitions",
+        "verify_zone_budgets",
+        "verify_story_campaign",
+        "web_export"
+      ],
+      "web_required": true
+    },
+    "quest_005": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/hart_remembers_contract.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/quests.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/campaign_dialogue.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/campaign_finale_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_quest_005.gd"
+      ],
+      "gates": [
+        "verify_quest_005",
+        "verify_story_campaign",
+        "verify_save_001",
+        "verify_dialogue_001"
+      ]
+    },
+    "boss_001": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/white_hart_encounter_contract.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/enemies.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/enemy_ai.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_boss_001.gd"
+      ],
+      "gates": [
+        "verify_boss_001",
+        "verify_quest_005",
+        "verify_combat_001",
+        "verify_ai_002",
+        "verify_motion_quality"
+      ]
+    },
+    "side_001": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/side_quest_contract.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/quests.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/dialogue.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/greyfen_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/wychwood_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_side_001.gd"
+      ],
+      "gates": [
+        "verify_side_001",
+        "verify_story_campaign",
+        "verify_save_001",
+        "verify_dialogue_001",
+        "verify_visible_quality"
+      ]
+    },
+    "quest_006": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/epilogue_contract.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/epilogue_resolver.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/story_state.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_quest_006.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/export_presets.cfg"
+      ],
+      "gates": [
+        "verify_quest_006",
+        "verify_quest_005",
+        "verify_save_001",
+        "verify_story_campaign",
+        "web_export"
+      ],
+      "web_required": true
+    },
+    "qa_004": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/qa_004_choice_matrix.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/quests.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/dialogue.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/campaign_dialogue.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/story_state.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/epilogue_resolver.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_004.gd"
+      ],
+      "gates": [
+        "verify_qa_004",
+        "verify_quest_003",
+        "verify_quest_004",
+        "verify_quest_005",
+        "verify_quest_006",
+        "verify_side_001",
+        "verify_save_001",
+        "verify_dialogue_001"
+      ]
+    },
     "progression": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/data/upgrades.json",
@@ -395,6 +568,10 @@
     "greyfen": "capture_world_001",
     "wychwood": "capture_world_002",
     "campaign": "capture_world_003",
+    "world_004": "capture_world_004",
+    "world_005": "capture_world_005",
+    "world_006": "capture_world_006",
+    "boss_001": "capture_boss_001",
     "lighting": "capture_light_001",
     "progression": "capture_prog_001"
   }

@@ -4,6 +4,7 @@ signal died(enemy: Node)
 signal damaged(enemy: Node, current: float, maximum: float)
 signal windup_started(enemy: Node)
 signal attack_resolved(enemy: Node, parried: bool, contact_position: Vector3)
+signal boss_phase_changed(enemy: Node, phase: int)
 
 const HealthComponent = preload("res://scripts/health_component.gd")
 const AssetSpawnHelper = preload("res://scripts/asset_spawn_helper.gd")
@@ -67,12 +68,17 @@ var perception_memory_time := 0.0
 var perception_refresh_time := 0.0
 var can_see_player := false
 var last_known_player_position := Vector3.INF
+var boss_phase := 1
+var base_move_speed := 2.0
+var base_damage := 10.0
 
 func setup(id: String, definition: Dictionary, target: Node3D) -> void:
 	enemy_id = id
 	display_name = definition.get("name", id)
 	damage = float(definition.get("damage", 10.0))
 	move_speed = float(definition.get("speed", 2.0))
+	base_damage = damage
+	base_move_speed = move_speed
 	attack_range = float(definition.get("attack_range", 1.5))
 	sense_range = float(definition.get("sense_range", 10.0))
 	tag = definition.get("tag", "beast")
@@ -82,7 +88,7 @@ func setup(id: String, definition: Dictionary, target: Node3D) -> void:
 	health_component = HealthComponent.new()
 	add_child(health_component)
 	health_component.configure(float(definition.get("health", 60.0)))
-	health_component.changed.connect(func(current: float, maximum: float): damaged.emit(self, current, maximum))
+	health_component.changed.connect(_on_health_changed)
 	health_component.died.connect(_on_died)
 	base_color = Color(definition.get("color", "#665544"))
 	behavior_profile = str(definition.get("behavior_profile", {
@@ -447,21 +453,34 @@ func _windup_duration() -> float:
 
 func _attack_cooldown() -> float:
 	if enemy_id == "white_hart_avatar":
-		return 1.55
+		return [1.55, 1.32, 1.16][boss_phase - 1]
 	if enemy_id == "wychwood_brute":
 		return 1.65
 	if enemy_id == "ghoulkin" or enemy_id == "wychwood_stalker" or enemy_id == "wychwood_raider":
 		return 1.32
 	return 1.16
 
+func _on_health_changed(current: float, maximum: float) -> void:
+	damaged.emit(self, current, maximum)
+	if enemy_id != "white_hart_avatar" or maximum <= 0.0:
+		return
+	var ratio := current / maximum
+	var next_phase := 3 if ratio <= 0.33 else (2 if ratio <= 0.66 else 1)
+	if next_phase == boss_phase:
+		return
+	boss_phase = next_phase
+	move_speed = base_move_speed * [1.0, 1.10, 1.18][boss_phase - 1]
+	damage = base_damage * [1.0, 1.08, 1.15][boss_phase - 1]
+	boss_phase_changed.emit(self, boss_phase)
+
 func _build_body(color: Color) -> void:
 	add_to_group("enemies")
 	var collision = CollisionShape3D.new()
 	var shape = CapsuleShape3D.new()
-	shape.height = 1.65 if _is_wychwood_pack() else 1.15
-	shape.radius = 0.32 if _is_wychwood_pack() else 0.35
+	shape.height = 2.0 if enemy_id == "white_hart_avatar" else (1.65 if _is_wychwood_pack() else 1.15)
+	shape.radius = 0.58 if enemy_id == "white_hart_avatar" else (0.32 if _is_wychwood_pack() else 0.35)
 	collision.shape = shape
-	collision.position.y = 0.9 if _is_wychwood_pack() else 0.65
+	collision.position.y = 1.05 if enemy_id == "white_hart_avatar" else (0.9 if _is_wychwood_pack() else 0.65)
 	add_child(collision)
 	visual_root = Node3D.new()
 	visual_root.name = "visual_root"
@@ -641,7 +660,7 @@ func _mapped_enemy_scale() -> Vector3:
 	if enemy_id == "bog_wretch":
 		return Vector3(1.25, 1.25, 1.25)
 	if enemy_id == "white_hart_avatar":
-		return Vector3(0.16, 0.16, 0.16)
+		return Vector3(0.65, 0.65, 0.65)
 	if enemy_id == "ghoulkin":
 		return Vector3.ONE * 0.95
 	if enemy_id == "wychwood_stalker":

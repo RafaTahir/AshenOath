@@ -67,6 +67,13 @@ func _initialize() -> void:
 		haunting.apply_damage(9999.0, "verifier")
 		await settle(4)
 	check(bool(game.story_state.get_flag("castle_haunting_cleared", false)), "Haunting completion was not saved")
+	check(not game.quests.is_completed("main_blood_under_stone"), "Blood Under Stone skipped Edric's consequence choice")
+	var edric_answer = game.zone_root.find_child("edric_campaign", true, false)
+	check(edric_answer != null, "Edric consequence interaction did not appear")
+	var edric_dialogue = game.dialogue.get_dialogue("edric_campaign")
+	if not edric_dialogue.is_empty():
+		game.call("_handle_dialogue_action", edric_dialogue["actions"][0])
+		await settle(3)
 	check(game.quests.is_completed("main_blood_under_stone"), "Blood Under Stone did not complete")
 	check(game.quests.is_active("main_last_witness") or game.quests.is_completed("main_last_witness"), "The Last Witness did not unlock")
 
