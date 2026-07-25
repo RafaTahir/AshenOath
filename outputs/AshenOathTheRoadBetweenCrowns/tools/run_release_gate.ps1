@@ -225,6 +225,15 @@ try {
     )
     $verifierNames = @($verifiers | ForEach-Object { [IO.Path]::GetFileNameWithoutExtension($_) })
     $resumeFromVerifier = $IsResume -and ($verifierNames -contains $ResumeFrom)
+    $resumeFromPerformance = $IsResume -and $ResumeFrom -eq "verify_perf_001"
+    $screenshotGates = @(
+        "capture_slice_screenshots",
+        "capture_anim_001",
+        "capture_world_001",
+        "capture_world_002",
+        "capture_world_003"
+    )
+    $resumeFromScreenshot = $IsResume -and ($screenshotGates -contains $ResumeFrom)
     if (-not $IsResume -or $resumeFromVerifier) {
         $resumeVerifierReached = -not $IsResume
         foreach ($verifier in $verifiers) {
@@ -238,33 +247,24 @@ try {
         }
     }
 
-    if ((-not $IsResume -or $resumeFromVerifier) -and [string]::IsNullOrWhiteSpace($Only) -and -not $SkipPerformance) {
+    if ((-not $IsResume -or $resumeFromVerifier -or $resumeFromPerformance) -and [string]::IsNullOrWhiteSpace($Only) -and -not $SkipPerformance) {
         Invoke-GodotGate "verify_perf_001" @(
             "--path", $Project, "--rendering-method", "gl_compatibility",
             "--script", "tools/verify_perf_001.gd"
         )
     }
-    if ((-not $IsResume -or $resumeFromVerifier) -and [string]::IsNullOrWhiteSpace($Only) -and -not $SkipScreenshots) {
-        Invoke-GodotGate "capture_slice_screenshots" @(
-            "--path", $Project, "--rendering-method", "gl_compatibility",
-            "--script", "tools/capture_slice_screenshots.gd"
-        )
-		Invoke-GodotGate "capture_anim_001" @(
-			"--path", $Project, "--rendering-method", "gl_compatibility",
-			"--script", "tools/capture_anim_001.gd"
-		)
-		Invoke-GodotGate "capture_world_001" @(
-			"--path", $Project, "--rendering-method", "gl_compatibility",
-			"--script", "tools/capture_world_001.gd"
-		)
-		Invoke-GodotGate "capture_world_002" @(
-			"--path", $Project, "--rendering-method", "gl_compatibility",
-			"--script", "tools/capture_world_002.gd"
-		)
-		Invoke-GodotGate "capture_world_003" @(
-			"--path", $Project, "--rendering-method", "gl_compatibility",
-			"--script", "tools/capture_world_003.gd"
-		)
+    if ((-not $IsResume -or $resumeFromVerifier -or $resumeFromPerformance -or $resumeFromScreenshot) -and [string]::IsNullOrWhiteSpace($Only) -and -not $SkipScreenshots) {
+        $captureReached = -not $resumeFromScreenshot
+        foreach ($captureName in $screenshotGates) {
+            if (-not $captureReached) {
+                if ($captureName -ne $ResumeFrom) { continue }
+                $captureReached = $true
+            }
+            Invoke-GodotGate $captureName @(
+                "--path", $Project, "--rendering-method", "gl_compatibility",
+                "--script", "tools/$captureName.gd"
+            )
+        }
         $runtimeRoots = @(
             (Join-Path $Project "scripts"),
             (Join-Path $Project "scenes"),
