@@ -328,6 +328,24 @@
         "verify_combat_001"
       ]
     },
+    "world_005": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/bandit_road_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/castle_vargan_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/campaign_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/export_presets.cfg",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_world_005.gd"
+      ],
+      "gates": [
+        "verify_world_005",
+        "verify_castle_vargan",
+        "verify_gate_transitions",
+        "verify_zone_budgets",
+        "verify_story_campaign",
+        "web_export"
+      ],
+      "web_required": true
+    },
     "progression": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/data/upgrades.json",
@@ -430,6 +448,7 @@
     "wychwood": "capture_world_002",
     "campaign": "capture_world_003",
     "world_004": "capture_world_004",
+    "world_005": "capture_world_005",
     "lighting": "capture_light_001",
     "progression": "capture_prog_001"
   }
