@@ -16,6 +16,7 @@ func _initialize() -> void:
 
 	var hud = game.hud
 	check(hud != null, "HUD missing")
+	hud.set_input_device("keyboard_mouse")
 	var vitals = hud.find_child("VitalsBackdrop", true, false)
 	var tracker = hud.find_child("QuestTrackerBackdrop", true, false)
 	var compass = hud.find_child("CompassBackdrop", true, false)
