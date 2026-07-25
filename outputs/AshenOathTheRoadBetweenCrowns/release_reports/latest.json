@@ -1,9 +1,9 @@
 ﻿{
     "schema_version":  1,
     "status":  "pass",
-    "started_at":  "2026-07-25T19:31:48.1264834Z",
-    "finished_at":  "2026-07-25T19:35:45.3167116Z",
-    "source_commit":  "97fa00aa3abbeef2c6c9607882f1b12ad49ecaff",
+    "started_at":  "2026-07-25T20:23:25.6294083Z",
+    "finished_at":  "2026-07-25T20:27:29.6282467Z",
+    "source_commit":  "df17361101d43bc74bf894a488733126c6bb9a30",
     "mode":  "full",
     "requested_gate":  "",
     "project":  "outputs/AshenOathTheRoadBetweenCrowns",
@@ -12,8 +12,18 @@
                     {
                         "name":  "verify_content_integrity",
                         "status":  "pass",
-                        "duration_seconds":  0.21,
+                        "duration_seconds":  0.25,
                         "log":  "verify_content_integrity.log",
+                        "warnings":  [
+
+                                     ],
+                        "failure":  ""
+                    },
+                    {
+                        "name":  "verify_asset_001_files",
+                        "status":  "pass",
+                        "duration_seconds":  0.33,
+                        "log":  "verify_asset_001_files.log",
                         "warnings":  [
 
                                      ],
@@ -22,7 +32,7 @@
                     {
                         "name":  "verify_web_001",
                         "status":  "pass",
-                        "duration_seconds":  0.14,
+                        "duration_seconds":  0.22,
                         "log":  "verify_web_001.log",
                         "warnings":  [
 
@@ -32,7 +42,7 @@
                     {
                         "name":  "web_export",
                         "status":  "pass",
-                        "duration_seconds":  18.72,
+                        "duration_seconds":  18.55,
                         "log":  "web_export.log",
                         "warnings":  [
 
@@ -42,7 +52,7 @@
                     {
                         "name":  "verify_web_export",
                         "status":  "pass",
-                        "duration_seconds":  0.55,
+                        "duration_seconds":  0.52,
                         "log":  "verify_web_export.log",
                         "warnings":  [
 
@@ -52,7 +62,7 @@
                     {
                         "name":  "packed_startup",
                         "status":  "pass",
-                        "duration_seconds":  7.87,
+                        "duration_seconds":  8.55,
                         "log":  "packed_startup.log",
                         "warnings":  [
 
@@ -62,7 +72,7 @@
                     {
                         "name":  "verify_web_browser",
                         "status":  "pass",
-                        "duration_seconds":  107.41,
+                        "duration_seconds":  110.04,
                         "log":  "verify_web_browser.log",
                         "warnings":  [
 
@@ -72,7 +82,7 @@
                     {
                         "name":  "verify_mobile_browser",
                         "status":  "pass",
-                        "duration_seconds":  101.94,
+                        "duration_seconds":  105.49,
                         "log":  "verify_mobile_browser.log",
                         "warnings":  [
 
