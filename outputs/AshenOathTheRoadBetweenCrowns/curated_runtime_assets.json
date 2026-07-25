@@ -17,11 +17,11 @@
       "road_ranger": {"status":"temporary_runtime","path":"res://assets_external/characters/CharacterAnimated_PolyPizza_Quaternius_CC0.glb","source_pack":"Quaternius RPG Characters","license":"CC0 1.0","license_file":"res://assets_external/licenses/Quaternius_RPG_Characters_CC0.txt"}
     },
     "enemies": {
-      "ghoulkin": {"status":"temporary_runtime","path":"res://assets_external/characters/CharacterAnimated_PolyPizza_Quaternius_CC0.glb","source_pack":"Quaternius RPG Characters","license":"CC0 1.0","license_file":"res://assets_external/licenses/Quaternius_RPG_Characters_CC0.txt","notes":"Lifecycle-safe temporary rig with horror material and role silhouettes; MON-001 owns final monster identity."},
-      "ghoulkin_skeleton": {"status":"temporary_runtime","path":"res://assets_external/characters/CharacterAnimated_PolyPizza_Quaternius_CC0.glb","source_pack":"Quaternius RPG Characters","license":"CC0 1.0","license_file":"res://assets_external/licenses/Quaternius_RPG_Characters_CC0.txt"},
+      "ghoulkin": {"status":"selected_runtime","path":"res://assets_external/characters_real/GhoulGaunt_Real.glb","source_pack":"Ashen Oath derived CC0 character","license":"CC0 1.0","license_file":"res://assets_external/licenses/Quaternius_RPG_Characters_CC0.txt","notes":"MON-001 gaunt family body."},
+      "ghoulkin_skeleton": {"status":"selected_runtime","path":"res://assets_external/characters_real/GhoulStalker_Real.glb","source_pack":"Ashen Oath derived CC0 character","license":"CC0 1.0","license_file":"res://assets_external/licenses/Quaternius_RPG_Characters_CC0.txt"},
       "bog_wretch": {"status":"temporary_runtime","path":"res://assets_external/enemies/Slime.obj","source_pack":"Quaternius Animated Monsters","license":"CC0 1.0","license_file":"res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt"},
       "gravebound_knight": {"status":"temporary_runtime","path":"res://assets_external/enemies/Skeleton.obj","source_pack":"Quaternius Animated Monsters","license":"CC0 1.0","license_file":"res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt"},
-      "wychwood_stalker": {"status":"temporary_runtime","path":"res://assets_external/characters/CharacterAnimated_PolyPizza_Quaternius_CC0.glb","source_pack":"Quaternius RPG Characters","license":"CC0 1.0","license_file":"res://assets_external/licenses/Quaternius_RPG_Characters_CC0.txt"},
+      "wychwood_stalker": {"status":"selected_runtime","path":"res://assets_external/characters_real/GhoulBrute_Real.glb","source_pack":"Ashen Oath derived CC0 character","license":"CC0 1.0","license_file":"res://assets_external/licenses/Quaternius_RPG_Characters_CC0.txt"},
       "white_hart_avatar": {"status":"temporary_runtime","path":"res://assets_external/enemies/Wolf.obj","source_pack":"Quaternius Animated Animals","license":"CC0 1.0","license_file":"res://assets_external/licenses/Quaternius_Animated_Animals_CC0.txt","notes":"Temporary placeholder body, not final White Hart art."},
       "bandit": {"status":"temporary_runtime","path":"res://assets_external/characters/Rogue.obj","source_pack":"Quaternius RPG Characters","license":"CC0 1.0","license_file":"res://assets_external/licenses/Quaternius_RPG_Characters_CC0.txt"}
     },
@@ -57,9 +57,6 @@
   "quarantine": [
     {"path":"res://assets_external/animated/Warrior_Animated_CC0.gltf","reason":"ART-001 rejected: faceless and role-inappropriate for Kael."},
     {"path":"res://assets_external/animated/Cleric_Animated_CC0.gltf","reason":"ART-001 rejected: masked combatant silhouette does not read as Anwen."},
-    {"path":"res://assets_external/animated/OrcSkull_Animated_CC0.gltf","reason":"Rejected for runtime: toy-like visual direction and unstable skinned-resource disposal in Godot 4.6.3."},
-    {"path":"res://assets_external/characters_real/GhoulGaunt_Real.glb","reason":"Generated audition artifact is not wired into runtime and did not pass the visual gate."},
-    {"path":"res://assets_external/characters_real/GhoulStalker_Real.glb","reason":"Generated audition artifact is not wired into runtime and did not pass the visual gate."},
-    {"path":"res://assets_external/characters_real/GhoulBrute_Real.glb","reason":"Generated audition artifact is not wired into runtime and did not pass the visual gate."}
+    {"path":"res://assets_external/animated/OrcSkull_Animated_CC0.gltf","reason":"Rejected for runtime: toy-like visual direction and unstable skinned-resource disposal in Godot 4.6.3."}
   ]
 }

@@ -40,6 +40,14 @@ def main() -> int:
             fail(f"export does not exclude {excluded}", failures)
     if '"res://scripts/world_vfx_controller.gd"' not in preset:
         fail("export omits the runtime world VFX controller", failures)
+    for runtime_character in (
+        "AnimatedHuman_PolyPizza_Quaternius_CC0.glb",
+        "GhoulGaunt_Real.glb",
+        "GhoulStalker_Real.glb",
+        "GhoulBrute_Real.glb",
+    ):
+        if runtime_character not in preset:
+            fail(f"export omits mapped runtime character: {runtime_character}", failures)
     if 'renderer/rendering_method="gl_compatibility"' not in project_settings:
         fail("project is not using the Compatibility renderer", failures)
     if 'viewport_width=1280' not in project_settings or 'viewport_height=720' not in project_settings:
