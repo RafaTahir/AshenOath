@@ -1,34 +1,44 @@
 # Codex Production Workflow
 
-Ashen Oath uses milestone-gated production releases. Ordinary implementation tickets verify locally and may create preview builds; they do not replace the public game automatically.
+Ashen Oath uses the credit-efficient WORKFLOW-002 pipeline. Read only the
+roadmap context brief, the active ticket, and files directly implicated by that
+ticket. Do not reread phase history or scan the full asset library.
 
-Production deploys happen only for an explicitly approved release milestone after the authoritative gate passes.
+## Tier 1: Development Loop
 
-See `DEPLOYMENT_POLICY.md`.
+- Run parser/static checks first.
+- Run only the active ticket's verifier after meaningful edits.
+- Do not export, capture screenshots, synchronize `web/`, or deploy.
+- Do not rerun a passing gate unless one of its inputs changed.
+- Keep full output in `.release-gate/`; report concise pass/fail summaries.
 
-Required ending steps for every implementation task:
+## Tier 2: Ticket Completion
 
-1. Run all project verifiers.
-2. Run `tools/verify_visible_quality.gd` when visual/gameplay presentation is relevant.
-3. Export the single Godot Web build.
-4. Sync `outputs/AshenOath_Web` into root-level `web/` for local or preview review.
-5. Run `tools/verify_web_export.py`.
-6. Record the result in `.release-gate/release_report.json`.
-7. Commit to the active development branch when requested.
-8. Push a preview branch when a browser review is required.
-
-For an approved production milestone, also push `main`, wait for Vercel, and verify the live `index.pck` hash.
-
-Use:
+Ordinary tickets run on a `codex/roadmap-*` branch:
 
 ```powershell
-.\scripts\deploy_web_update.ps1 -TicketId "TICKET-ID" -Summary "short task summary"
+.\scripts\deploy_web_update.ps1 -TicketId "TICKET-ID" -Summary "short summary"
 ```
 
-For an approved production milestone only:
+The script automatically selects gates from changed files, always includes
+content integrity and a runtime smoke check, commits the checkpoint, and pushes
+the development branch. It does not modify `web/` or production.
+
+Use `-Profiles combat,ui` only to add explicit profiles. Use
+`-ChangedViews greyfen,animation` for changed visual areas. Use `-ForceWeb`
+only for browser/export-specific risk.
+
+## Tier 3: Roadmap Milestone
+
+After the complete roadmap tranche is merged to `main`:
 
 ```powershell
-.\scripts\deploy_web_update.ps1 -TicketId "MILESTONE-ID" -Summary "release summary" -Production -ApprovedMilestone
+.\scripts\deploy_web_update.ps1 -TicketId "MILESTONE-ID" -Summary "release summary" -Production -RoadmapMilestone
 ```
 
-Do not describe the current public build as Alpha or production-ready. It remains a prototype until the Web Act One milestone passes.
+This is the only mode that runs every verifier, full performance and screenshot
+acceptance, Web export, packed startup, `web/` synchronization, `main` push,
+Vercel polling, and live PCK comparison.
+
+Do not describe the public build as Alpha or production-ready. It remains a
+prototype until the Web Act One milestone passes.

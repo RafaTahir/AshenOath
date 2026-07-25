@@ -21,10 +21,17 @@ Every route-visible mesh must have an intentional non-white material. Preserve `
 
 Production path:
 
-`Godot source -> AshenOath_Web_Slim -> web/ -> origin/main -> Vercel`
+`Godot source -> AshenOath_Web -> web/ -> origin/main -> Vercel`
 
-Implementation tickets use the repository deployment script and report `https://ashenoath.vercel.app/`. Planning-only tickets do not deploy.
+Ordinary implementation tickets run targeted gates and push a
+`codex/roadmap-*` checkpoint. Production remains unchanged until the roadmap
+milestone runs the complete release workflow.
 
 ## Credit-Saving Rule
 
-Read only this brief, `PLAN_001_WORLD_EXPANSION_PROPOSAL.md`, and the active ticket. Inspect only likely implementation files. Never reread every phase document, scan all assets, or perform a broad audit. Build one ticket at a time with explicit acceptance criteria; run screenshots only for visible changes.
+Read only this brief, the active roadmap document, and the active ticket.
+Inspect only directly relevant implementation files. Never reread every phase
+document or scan all assets. Use `tools/run_ticket_gate.ps1`; rerun a gate only
+when its inputs change. Capture only changed views. Full verification, complete
+screenshots, export, `web/` sync, and deployment occur once at the roadmap
+milestone.

@@ -2,6 +2,7 @@ param(
     [switch]$SkipExport,
     [switch]$SkipPerformance,
     [switch]$SkipScreenshots,
+    [switch]$VerboseOutput,
     [string]$Only = "",
     [string]$ResumeFrom = ""
 )
@@ -67,7 +68,11 @@ function Invoke-ExternalGate(
     $previousErrorPreference = $ErrorActionPreference
     $ErrorActionPreference = "Continue"
     try {
-        & $Executable @Arguments 2>&1 | Tee-Object -FilePath $log
+        if ($VerboseOutput) {
+            & $Executable @Arguments 2>&1 | Tee-Object -FilePath $log
+        } else {
+            & $Executable @Arguments *> $log
+        }
         $exitCode = $LASTEXITCODE
     } finally {
         $ErrorActionPreference = $previousErrorPreference
@@ -76,9 +81,11 @@ function Invoke-ExternalGate(
     if ($exitCode -ne 0) {
         $failure = "$Name failed with exit code $exitCode"
         Add-Result $Name "fail" $timer.Elapsed.TotalSeconds $log @() $failure
+        if (-not $VerboseOutput) { Get-Content -LiteralPath $log -Tail 40 }
         throw $failure
     }
     Add-Result $Name "pass" $timer.Elapsed.TotalSeconds $log
+    Write-Host ("RELEASE GATE {0}: PASS ({1:n1}s)" -f $Name, $timer.Elapsed.TotalSeconds)
 }
 
 function Invoke-GodotGate([string]$Name, [string[]]$Arguments) {
@@ -87,7 +94,11 @@ function Invoke-GodotGate([string]$Name, [string[]]$Arguments) {
     $previousErrorPreference = $ErrorActionPreference
     $ErrorActionPreference = "Continue"
     try {
-        & $Godot @Arguments 2>&1 | Tee-Object -FilePath $log
+        if ($VerboseOutput) {
+            & $Godot @Arguments 2>&1 | Tee-Object -FilePath $log
+        } else {
+            & $Godot @Arguments *> $log
+        }
         $exitCode = $LASTEXITCODE
     } finally {
         $ErrorActionPreference = $previousErrorPreference
@@ -96,6 +107,7 @@ function Invoke-GodotGate([string]$Name, [string[]]$Arguments) {
     if ($exitCode -ne 0) {
         $failure = "$Name failed with exit code $exitCode"
         Add-Result $Name "fail" $timer.Elapsed.TotalSeconds $log @() $failure
+        if (-not $VerboseOutput) { Get-Content -LiteralPath $log -Tail 40 }
         throw $failure
     }
 
@@ -130,9 +142,11 @@ function Invoke-GodotGate([string]$Name, [string[]]$Arguments) {
     if ($fatal.Count -gt 0) {
         $failure = "$Name emitted a release-blocking error: $($fatal[0])"
         Add-Result $Name "fail" $timer.Elapsed.TotalSeconds $log @($warnings) $failure
+        if (-not $VerboseOutput) { Get-Content -LiteralPath $log -Tail 40 }
         throw $failure
     }
     Add-Result $Name "pass" $timer.Elapsed.TotalSeconds $log @($warnings)
+    Write-Host ("RELEASE GATE {0}: PASS ({1:n1}s)" -f $Name, $timer.Elapsed.TotalSeconds)
 }
 
 try {

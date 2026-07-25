@@ -1,0 +1,118 @@
+{
+  "profiles": {
+    "combat": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/player_controller.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/combat_*.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/enemy_ai.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/enemies.json"
+      ],
+      "gates": [
+        "verify_motion_quality",
+        "verify_combat_001",
+        "verify_ai_001",
+        "verify_oath_001"
+      ]
+    },
+    "world": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/visual_director.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/world_*.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/*.gd"
+      ],
+      "gates": [
+        "verify_visible_quality",
+        "verify_zone_budgets"
+      ]
+    },
+    "navigation": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_*.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/*.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/greyfen_life_controller.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/enemy_ai.gd"
+      ],
+      "gates": [
+        "verify_zone_builder_integrity",
+        "verify_gate_transitions",
+        "verify_navigation_001",
+        "verify_river_swimming"
+      ]
+    },
+    "story": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/data/quests.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/dialogue.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/story_state.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/quest_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/dialogue_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/save_manager.gd"
+      ],
+      "gates": [
+        "verify_story_campaign",
+        "verify_quest_001",
+        "verify_quest_002"
+      ]
+    },
+    "ui": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/hud.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/settings_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/interactable.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/camera_controller.gd"
+      ],
+      "gates": [
+        "verify_runtime_regressions",
+        "verify_ui_001"
+      ]
+    },
+    "audio": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/audio_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/assets_external/audio/*"
+      ],
+      "gates": [
+        "verify_audio_runtime",
+        "verify_audio_001"
+      ]
+    },
+    "assets": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/assets_external/*",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/asset_*.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/curated_runtime_assets.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/visual_upgrade_manifest.json"
+      ],
+      "gates": [
+        "verify_asset_001",
+        "verify_character_real_001",
+        "verify_visible_quality"
+      ]
+    },
+    "web": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/export_presets.cfg",
+        "outputs/AshenOathTheRoadBetweenCrowns/project.godot",
+        "outputs/AshenOathTheRoadBetweenCrowns/Export_Web_Build.bat",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_web_export.py",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/audio_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/hud.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/camera_controller.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/settings_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/assets_external/*",
+        "vercel.json"
+      ],
+      "gates": [
+        "web_export"
+      ]
+    }
+  },
+  "views": {
+    "slice": "capture_slice_screenshots",
+    "animation": "capture_anim_001",
+    "greyfen": "capture_world_001",
+    "wychwood": "capture_world_002",
+    "campaign": "capture_world_003"
+  }
+}

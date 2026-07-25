@@ -6,7 +6,9 @@ Ashen Oath uses this production path:
 
 `Godot source project -> slim Godot Web export -> web/ -> GitHub -> Vercel`
 
-This pipeline is mandatory for approved release milestones. Ordinary tickets stop after verified local export or a preview-branch review.
+This pipeline runs only for approved roadmap milestones. Ordinary tickets use
+targeted verification and a development-branch checkpoint; they do not export
+unless Web-specific risk requires it.
 
 - Editable Godot project: `outputs/AshenOathTheRoadBetweenCrowns`
 - Generated export: `outputs/AshenOath_Web`
@@ -54,22 +56,24 @@ The project includes `vercel.json`, which declares `web` as the output directory
 
 ## Daily Codex Workflow
 
-After implementing a ticket:
+After implementing an ordinary ticket on `codex/roadmap-*`:
 
 ```powershell
 cd "C:\Users\User\Documents\Codex\2026-06-12\we-re-gonna-build-a-video"
 .\scripts\deploy_web_update.ps1 -TicketId "TICKET-ID" -Summary "short task summary"
 ```
 
-The script verifies, exports, and syncs `web/` locally by default.
+The script selects affected gates, uses cached passes when inputs are unchanged,
+and commits/pushes the development branch. It does not modify `web/`.
 
 For an approved production milestone:
 
 ```powershell
-.\scripts\deploy_web_update.ps1 -TicketId "MILESTONE-ID" -Summary "release summary" -Production -ApprovedMilestone
+.\scripts\deploy_web_update.ps1 -TicketId "MILESTONE-ID" -Summary "release summary" -Production -RoadmapMilestone
 ```
 
-The no-deploy path still verifies, exports, syncs, and verifies the web build, but skips commit and push.
+Only milestone mode runs the full suite, complete gallery, export, packed
+startup, `web/` synchronization, `main` push, and Vercel verification.
 
 ## Manual Deploy
 
