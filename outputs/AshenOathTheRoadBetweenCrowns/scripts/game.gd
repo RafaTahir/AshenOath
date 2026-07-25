@@ -11,6 +11,7 @@ const WorldVisualUpgrade = preload("res://scripts/world_visual_upgrade.gd")
 const WorldMotionController = preload("res://scripts/world_motion_controller.gd")
 const SurfaceFeedbackManager = preload("res://scripts/surface_feedback_manager.gd")
 const WorldVFXController = preload("res://scripts/world_vfx_controller.gd")
+const EpilogueResolver = preload("res://scripts/epilogue_resolver.gd")
 const ZoneSpatialService = preload("res://scripts/zone_spatial_service.gd")
 const RuntimeServiceRegistry = preload("res://scripts/runtime_service_registry.gd")
 const RuntimeActorFactory = preload("res://scripts/runtime_actor_factory.gd")
@@ -1311,20 +1312,9 @@ func _show_ending_consequence(ending: String) -> void:
 	quests.world_flags["ending"] = ending
 	quests.complete_objective("main_hart_remembers", "final_choice")
 	var title = "The Road Between Crowns"
-	var body = ""
-	if ending == "kill":
-		body = "Kael kills the White Hart after a brutal clearing fight. Greyfen survives the season, but the Wychwood fades into gray rot."
-	elif ending == "free":
-		body = "Kael frees the White Hart. The curse breaks, House Vargan falls, and frightened villagers abandon the old road."
-	elif ending == "bind":
-		body = "Kael breaks the avatar and binds the White Hart again. Greyfen prospers for now, and his name joins the crime beneath the stones."
-	else:
-		body = "Kael exposes House Vargan. The village turns on Edric, the spirit remains wounded, and truth finally has witnesses."
-	body += "\n\nAnwen: %s. Greyfen: %s. The Hart's debt: %s." % [
-		"trusted Kael" if int(story_state.values.get("anwen_trust",0)) > 0 else "kept her distance",
-		"heard the names" if story_state.get_flag("names_policy","") == "published" else "learned the truth slowly",
-		str(story_state.values.get("hart_debt",0))
-	]
+	var cards: Array[String] = EpilogueResolver.resolve(ending, story_state)
+	story_state.set_flag("epilogue_cards", cards)
+	var body := "\n\n".join(cards)
 	get_tree().paused = true
 	hud.show_ending(title, body)
 	save_manager.checkpoint(self)

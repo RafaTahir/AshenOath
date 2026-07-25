@@ -428,6 +428,24 @@
         "verify_visible_quality"
       ]
     },
+    "quest_006": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/epilogue_contract.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/epilogue_resolver.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/story_state.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_quest_006.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/export_presets.cfg"
+      ],
+      "gates": [
+        "verify_quest_006",
+        "verify_quest_005",
+        "verify_save_001",
+        "verify_story_campaign",
+        "web_export"
+      ],
+      "web_required": true
+    },
     "progression": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/data/upgrades.json",
