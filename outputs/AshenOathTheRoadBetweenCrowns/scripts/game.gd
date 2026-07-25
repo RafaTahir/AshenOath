@@ -1563,9 +1563,9 @@ func _on_enemy_died(enemy) -> void:
 	elif enemy.enemy_id == "wychwood_stalker" and current_zone_id == "record_hall":
 		story_state.set_flag("castle_haunting_cleared", true)
 		quests.complete_objective("main_blood_under_stone", "survive_haunting")
-		quests.complete_objective("main_blood_under_stone", "last_witness_hook")
-		hud.toast("The erased names settle. A stair beneath the archive unlocks.")
-		hud.set_guidance_hint("Descend beneath Vargan stone. Find the last witness.", 6.0)
+		hud.toast("The erased names settle. Edric waits beneath the Vargan seal.")
+		hud.set_guidance_hint("Demand Lord Edric's answer before descending.", 6.0)
+		_load_zone("record_hall", player.global_position)
 	elif enemy.enemy_id == "gravebound_knight":
 		if current_zone_id == "undercroft":
 			quests.complete_objective("main_last_witness", "break_halvern_guard")

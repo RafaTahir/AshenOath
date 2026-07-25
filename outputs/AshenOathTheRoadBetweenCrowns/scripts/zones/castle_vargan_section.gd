@@ -108,6 +108,8 @@ func _build_record_hall(context: ZoneBuildContext) -> void:
 		if enemy != null:
 			enemy.name = "RecordHallHaunting"
 			enemy.leash_radius = 8.0
+	if bool(context.get_story_flag("castle_haunting_cleared", false)) and str(context.get_story_flag("edric_stance", "")) == "":
+		context.make_named_interactable("edric_campaign", "dialogue", "Demand Lord Edric's answer", Vector3(0, 0, -10.5), Color(0.34, 0.23, 0.16))
 	context.make_zone_gate("Return to the outer courtyard", Vector3(-6, 0, 13), "vargan_court", Vector3(0, 1, -11))
 	if bool(context.get_story_flag("castle_haunting_cleared", false)):
 		context.make_zone_gate("Descend toward the last witness", Vector3(6, 0, -13), "undercroft", Vector3(0, 1, 12))

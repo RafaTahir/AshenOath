@@ -346,6 +346,22 @@
       ],
       "web_required": true
     },
+    "quest_004": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/blood_under_stone_contract.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/quests.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/campaign_dialogue.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/castle_vargan_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_quest_004.gd"
+      ],
+      "gates": [
+        "verify_quest_004",
+        "verify_castle_vargan",
+        "verify_story_campaign",
+        "verify_save_001"
+      ]
+    },
     "progression": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/data/upgrades.json",
