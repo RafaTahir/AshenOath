@@ -38,6 +38,8 @@ def main() -> int:
     for excluded in ("tools/*", "Development_Gallery/*", "assets_external/downloads/*"):
         if excluded not in preset:
             fail(f"export does not exclude {excluded}", failures)
+    if '"res://scripts/world_vfx_controller.gd"' not in preset:
+        fail("export omits the runtime world VFX controller", failures)
     if 'renderer/rendering_method="gl_compatibility"' not in project_settings:
         fail("project is not using the Compatibility renderer", failures)
     if 'viewport_width=1280' not in project_settings or 'viewport_height=720' not in project_settings:
