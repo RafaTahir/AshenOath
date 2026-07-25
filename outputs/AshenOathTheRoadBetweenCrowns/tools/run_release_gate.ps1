@@ -34,7 +34,11 @@ if ($IsResume) {
         $changedSinceReport = @(git -C $repoRoot diff --name-only "$($previousReport.source_commit)..$currentHead")
         $unsafeResumeChanges = @($changedSinceReport | Where-Object {
             $_ -notmatch '^outputs/AshenOathTheRoadBetweenCrowns/tools/' -and
-            $_ -notmatch '^outputs/AshenOathTheRoadBetweenCrowns/.*\.md$'
+            $_ -notmatch '^outputs/AshenOathTheRoadBetweenCrowns/.*\.md$' -and
+            -not (
+                $ResumeFrom -in @("verify_web_001", "web_export") -and
+                $_ -eq 'outputs/AshenOathTheRoadBetweenCrowns/export_presets.cfg'
+            )
         })
         if ($unsafeResumeChanges.Count -gt 0) {
             throw "Cannot resume release after runtime/source changes: $($unsafeResumeChanges -join ', ')"
