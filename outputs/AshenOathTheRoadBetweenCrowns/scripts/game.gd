@@ -1576,8 +1576,25 @@ func _on_enemy_died(enemy) -> void:
 		pending_ending = ""
 		_show_ending_consequence(ending)
 	elif enemy.enemy_id == "bandit":
-		if not _has_living_enemy("bandit"):
+		if current_zone_id == "bandit_road" and bool(enemy.get_meta("senn_guard", false)) and not _has_living_enemy("bandit"):
+			quests.complete_objective("main_soldier_without_banner", "senn_confrontation")
+			story_state.set_flag("senn_ready_to_testify", true)
+			hud.show_status_cue("Senn's guard breaks", "victory")
+			hud.set_guidance_hint("Captain Senn has lowered his blade. Hear his testimony.", 5.5)
+		elif not _has_living_enemy("bandit"):
 			quests.complete_objective("side_black_dog", "find_dog")
+	elif current_zone_id == "old_mill" and bool(enemy.get_meta("ash_mill_enemy", false)):
+		var ash_enemy_alive := false
+		for candidate in active_enemies:
+			if is_instance_valid(candidate) and candidate != enemy and not candidate.dead and bool(candidate.get_meta("ash_mill_enemy", false)):
+				ash_enemy_alive = true
+				break
+		if not ash_enemy_alive:
+			quests.complete_objective("main_ash_at_the_mill", "mill_encounter")
+			story_state.set_flag("ash_mill_cleared", true)
+			_make_named_interactable("miller_record", "dialogue", "Read the miller's record", Vector3(-7.0,0,-7), Color(0.5,0.4,0.25))
+			hud.show_status_cue("The mill falls quiet", "victory")
+			hud.set_guidance_hint("Read the miller's ledger beside the broken wall.", 5.5)
 	if enemy.health_component != null:
 		hud.show_enemy(enemy.display_name, 0.0, enemy.health_component.max_health)
 	hud.toast("%s slain." % enemy.display_name)

@@ -73,8 +73,13 @@ func _build_old_mill(context: ZoneBuildContext) -> void:
 	for pos in [Vector3(5.2,0,-5), Vector3(8.0,0,-3), Vector3(7.2,0,5)]:
 		context.make_rubble(pos)
 	context.make_clue("millstones", "Inspect ash-caked millstones", Vector3(-5.0,0,-5), "main_ash_at_the_mill", "inspect_millstones", Color(0.4,0.35,0.3))
-	context.make_clue("ash_bound", "Clear the ash-bound mill", Vector3(-3.0,0,-8), "main_ash_at_the_mill", "mill_encounter", Color(0.3,0.2,0.15))
-	context.make_named_interactable("miller_record", "dialogue", "Read the miller's record", Vector3(-7.0,0,-7), Color(0.5,0.4,0.25))
+	if context.is_quest_active("main_ash_at_the_mill") and not context.is_objective_done("main_ash_at_the_mill", "mill_encounter"):
+		for position in [Vector3(-3.2,0.8,-7.0), Vector3(-7.2,0.8,-6.2)]:
+			var enemy = context.spawn_enemy("ghoulkin", position)
+			if enemy != null:
+				enemy.set_meta("ash_mill_enemy", true)
+	elif context.is_objective_done("main_ash_at_the_mill", "mill_encounter") and not context.is_objective_done("main_ash_at_the_mill", "mill_choice"):
+		context.make_named_interactable("miller_record", "dialogue", "Read the miller's record", Vector3(-7.0,0,-7), Color(0.5,0.4,0.25))
 
 func _build_farmstead(context: ZoneBuildContext) -> void:
 	_base(context, Color(0.115, 0.070, 0.043), Color(0.135, 0.092, 0.058))

@@ -310,6 +310,24 @@
       ],
       "web_required": true
     },
+    "quest_003": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/ash_and_banner_contract.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/quests.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/campaign_dialogue.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/quest_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/campaign_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/campaign_wilderness_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_quest_003.gd"
+      ],
+      "gates": [
+        "verify_quest_003",
+        "verify_story_campaign",
+        "verify_save_001",
+        "verify_combat_001"
+      ]
+    },
     "progression": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/data/upgrades.json",
