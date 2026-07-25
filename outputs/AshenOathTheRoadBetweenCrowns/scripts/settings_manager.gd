@@ -17,6 +17,8 @@ const DEFAULT_SETTINGS := {
 	"mouse_sensitivity": 0.003,
 	"gamepad_look_sensitivity": 1.0,
 	"gamepad_vibration": true,
+	"touch_controls": "auto",
+	"touch_look_sensitivity": 1.0,
 	"invert_y": false,
 	"master_volume": 0.85,
 	"subtitle_scale": 1.0,
@@ -81,6 +83,10 @@ func _load_settings() -> void:
 		settings["quality_preset"] = "balanced"
 	settings["mouse_sensitivity"] = clampf(float(settings["mouse_sensitivity"]), 0.0018, 0.0048)
 	settings["gamepad_look_sensitivity"] = clampf(float(settings["gamepad_look_sensitivity"]), 0.55, 1.55)
+	settings["touch_look_sensitivity"] = clampf(float(settings["touch_look_sensitivity"]), 0.55, 1.55)
+	settings["touch_controls"] = str(settings["touch_controls"]).to_lower()
+	if settings["touch_controls"] not in ["auto", "on", "off"]:
+		settings["touch_controls"] = "auto"
 	settings["master_volume"] = clampf(float(settings["master_volume"]), 0.0, 1.0)
 	settings["subtitle_scale"] = clampf(float(settings["subtitle_scale"]), 0.9, 1.2)
 	settings["camera_shake"] = clampf(float(settings["camera_shake"]), 0.0, 1.0)
@@ -194,6 +200,20 @@ func cycle_gamepad_look_sensitivity() -> void:
 
 func toggle_gamepad_vibration() -> void:
 	settings["gamepad_vibration"] = not bool(settings.get("gamepad_vibration", true))
+	apply()
+
+func cycle_touch_controls() -> void:
+	var values := ["auto", "on", "off"]
+	var current := str(settings.get("touch_controls", "auto"))
+	var index := values.find(current)
+	settings["touch_controls"] = values[(index + 1) % values.size()]
+	apply()
+
+func cycle_touch_look_sensitivity() -> void:
+	var values := [0.65, 1.0, 1.35]
+	var current := float(settings.get("touch_look_sensitivity", 1.0))
+	var index := values.find(current)
+	settings["touch_look_sensitivity"] = values[(index + 1) % values.size()]
 	apply()
 
 func toggle_invert_y() -> void:

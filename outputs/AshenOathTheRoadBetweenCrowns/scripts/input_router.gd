@@ -94,6 +94,23 @@ const GAMEPAD_LABELS := {
 	"camera_zoom_out": "D-Pad Down",
 }
 
+const TOUCH_LABELS := {
+	"interact": "Use",
+	"dodge": "Dodge",
+	"jump": "Jump",
+	"run": "Stick",
+	"block": "Guard",
+	"light_attack": "Strike",
+	"heavy_attack": "Heavy",
+	"oathfire_beam": "Oath",
+	"use_potion": "Potion",
+	"throw_bomb": "Bomb",
+	"open_inventory": "Journal",
+	"pause": "Pause",
+	"camera_zoom_in": "Pinch In",
+	"camera_zoom_out": "Pinch Out",
+}
+
 var active_device := DEVICE_KEYBOARD_MOUSE
 var active_gamepad_id := 0
 var gamepad_look_sensitivity := 1.0
@@ -153,6 +170,8 @@ func look_vector() -> Vector2:
 	return selected * gamepad_look_sensitivity if active_device == DEVICE_GAMEPAD else selected
 
 func is_action_pressed(action: StringName) -> bool:
+	if active_device == DEVICE_TOUCH and action == &"run" and virtual_move.length() > 0.82:
+		return true
 	return Input.is_action_pressed(action)
 
 func is_action_just_pressed(action: StringName) -> bool:
@@ -167,6 +186,8 @@ func action_axis(negative: StringName, positive: StringName) -> float:
 func action_label(action: String) -> String:
 	if active_device == DEVICE_GAMEPAD:
 		return str(GAMEPAD_LABELS.get(action, action.capitalize()))
+	if active_device == DEVICE_TOUCH:
+		return str(TOUCH_LABELS.get(action, action.capitalize()))
 	return str(KEYBOARD_LABELS.get(action, action.capitalize()))
 
 func set_virtual_axes(move_axis: Vector2, look_axis: Vector2) -> void:
@@ -189,6 +210,9 @@ func clear_virtual_input() -> void:
 	for action in _virtual_actions.keys():
 		Input.action_release(action)
 	_virtual_actions.clear()
+
+func activate_touch() -> void:
+	_set_device(DEVICE_TOUCH)
 
 func rumble(weak: float, strong: float, duration: float = 0.12) -> void:
 	if active_device != DEVICE_GAMEPAD or not vibration_enabled:

@@ -89,6 +89,26 @@
         "verify_ui_001"
       ]
     },
+    "mobile": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/input_router.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/mobile_touch_controls.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/hud.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/settings_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/runtime_service_registry.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/project.godot",
+        "outputs/AshenOathTheRoadBetweenCrowns/export_presets.cfg",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_mobile_001.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_web_browser.mjs"
+      ],
+      "gates": [
+        "verify_mobile_001",
+        "verify_input_001",
+        "verify_ui_001",
+        "web_export",
+        "verify_mobile_browser"
+      ]
+    },
     "audio": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/audio_manager.gd",

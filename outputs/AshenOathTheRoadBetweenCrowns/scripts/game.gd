@@ -1668,6 +1668,10 @@ func _handle_setting(action: String) -> void:
 		settings.cycle_gamepad_look_sensitivity()
 	elif action == "gamepad_vibration":
 		settings.toggle_gamepad_vibration()
+	elif action == "touch_controls":
+		settings.cycle_touch_controls()
+	elif action == "touch_sensitivity":
+		settings.cycle_touch_look_sensitivity()
 	elif action == "invert_y":
 		settings.toggle_invert_y()
 	elif action == "volume":

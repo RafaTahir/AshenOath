@@ -80,7 +80,7 @@ function Get-GateInputs([string]$Gate, [string[]]$Files) {
             Add-Unique $selected $normalized
             continue
         }
-        if ($Gate -in @("content_integrity", "runtime_smoke", "verify_web_001", "web_export", "verify_web_export", "verify_web_browser", "packed_startup")) {
+        if ($Gate -in @("content_integrity", "runtime_smoke", "verify_web_001", "web_export", "verify_web_export", "verify_web_browser", "verify_mobile_browser", "packed_startup")) {
             if ($normalized -like "outputs/AshenOathTheRoadBetweenCrowns/scripts/*" -or
                 $normalized -like "outputs/AshenOathTheRoadBetweenCrowns/data/*" -or
                 $normalized -like "outputs/AshenOathTheRoadBetweenCrowns/scenes/*" -or
@@ -257,6 +257,13 @@ foreach ($gate in $gates) {
             (Join-Path $PSScriptRoot "verify_web_browser.mjs"),
             "--export", $Web,
             "--report", (Join-Path $Logs "web_browser.json")
+        ) $gateInputs $cache
+    } elseif ($gate -eq "verify_mobile_browser") {
+        Invoke-Compact $gate "node.exe" @(
+            (Join-Path $PSScriptRoot "verify_web_browser.mjs"),
+            "--export", $Web,
+            "--report", (Join-Path $Logs "mobile_browser.json"),
+            "--mobile", "true"
         ) $gateInputs $cache
     } else {
         $script = Join-Path $PSScriptRoot "$gate.gd"

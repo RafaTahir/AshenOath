@@ -38,10 +38,9 @@ milestone.
 
 ## Roadmap Checkpoint
 
-`INPUT-001` is the latest development checkpoint. It establishes one semantic
-input router for keyboard/mouse, Xbox-style gamepads, and virtual touch hooks;
-device-aware prompts; controller menu focus; sensitivity; and rumble. Its
-64.0 MB candidate passed packed startup and real Chrome/Edge New Game smoke
-tests. One original roadmap ticket remains: `MOBILE-001`.
-Production deploys only after `MOBILE-001` completes the approved seven-ticket
-milestone.
+`MOBILE-001` completes the original roadmap. Keyboard/mouse, Xbox-style
+gamepads, and landscape touch controls now share one semantic router. The
+64.0 MB candidate passed desktop and mobile-emulated Chrome/Edge startup with
+device-aware prompts and no console errors. Native mobile packaging and
+physical-device thermal acceptance remain later work. The approved milestone
+now proceeds through the complete production release workflow.

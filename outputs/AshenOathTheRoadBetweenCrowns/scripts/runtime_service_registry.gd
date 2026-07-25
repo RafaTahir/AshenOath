@@ -16,11 +16,12 @@ const HUD = preload("res://scripts/hud.gd")
 const MinigameManager = preload("res://scripts/minigame_manager.gd")
 const ProgressionManager = preload("res://scripts/progression_manager.gd")
 const InputRouter = preload("res://scripts/input_router.gd")
+const MobileTouchControls = preload("res://scripts/mobile_touch_controls.gd")
 
 const REQUIRED_SERVICES := [
 	"story_state", "quests", "dialogue", "inventory", "crafting", "combat",
 	"save_manager", "settings", "world_materials", "day_night", "audio",
-	"asset_helper", "hud", "minigames", "progression", "input_router"
+	"asset_helper", "hud", "minigames", "progression", "input_router", "mobile_touch"
 ]
 
 var services: Dictionary = {}
@@ -45,6 +46,7 @@ func create_services() -> Dictionary:
 		"minigames": MinigameManager.new(),
 		"progression": ProgressionManager.new(),
 		"input_router": InputRouter.new(),
+		"mobile_touch": MobileTouchControls.new(),
 	}
 	for id in REQUIRED_SERVICES:
 		var service: Node = services[id]
@@ -71,6 +73,7 @@ func configure(owner: Node) -> void:
 	var minigames = services["minigames"]
 	var progression = services["progression"]
 	var input_router = services["input_router"]
+	var mobile_touch = services["mobile_touch"]
 
 	hud.process_mode = Node.PROCESS_MODE_ALWAYS
 	quests.load_quests("res://data/quests.json")
@@ -82,6 +85,7 @@ func configure(owner: Node) -> void:
 	input_router.install_default_actions()
 	input_router.apply_settings(settings.settings)
 	hud.set_input_source(input_router)
+	mobile_touch.setup(input_router, hud, settings.settings)
 	input_router.device_changed.connect(func(_device: String):
 		hud.set_input_device(input_router.active_device)
 		owner.call("_refresh_equipment_readout")
@@ -94,6 +98,7 @@ func configure(owner: Node) -> void:
 	)
 	settings.changed.connect(func(current: Dictionary):
 		input_router.apply_settings(current)
+		mobile_touch.apply_settings(current)
 		owner.call("_apply_runtime_settings", current)
 	)
 	hud.launch_accepted.connect(Callable(owner, "_on_launch_accepted"))

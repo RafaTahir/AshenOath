@@ -16,7 +16,7 @@ signal dialogue_closed
 signal menu_hovered
 signal menu_clicked
 
-const MENU_BUILD_LABEL = "INPUT-001 MULTI-INPUT CANDIDATE | NATIVE 720P | ASHENOATH.VERCEL.APP"
+const MENU_BUILD_LABEL = "MOBILE-001 ROADMAP MILESTONE | NATIVE 720P | ASHENOATH.VERCEL.APP"
 const MENU_SIZE = Vector2(1920.0, 1080.0)
 const GAMEPLAY_SIZE = Vector2i(1280, 720)
 const SAVE_PATH = "user://ashen_oath_save.json"
@@ -145,6 +145,8 @@ func show_settings_menu(back_target: String = "pause") -> void:
 	_add_menu_button(box, "Mouse Sensitivity %s" % _sensitivity_label(float(s.get("mouse_sensitivity", 0.003))), func(): settings_requested.emit("mouse_sensitivity"))
 	_add_menu_button(box, "Controller Look   %s" % _controller_sensitivity_label(float(s.get("gamepad_look_sensitivity", 1.0))), func(): settings_requested.emit("gamepad_sensitivity"))
 	_add_menu_button(box, "Controller Rumble %s" % _on_off(bool(s.get("gamepad_vibration", true))), func(): settings_requested.emit("gamepad_vibration"))
+	_add_menu_button(box, "Touch Controls    %s" % str(s.get("touch_controls", "auto")).capitalize(), func(): settings_requested.emit("touch_controls"))
+	_add_menu_button(box, "Touch Look        %s" % _controller_sensitivity_label(float(s.get("touch_look_sensitivity", 1.0))), func(): settings_requested.emit("touch_sensitivity"))
 	_add_menu_button(box, "Invert Y Axis     %s" % _on_off(bool(s.get("invert_y", false))), func(): settings_requested.emit("invert_y"))
 	_add_menu_button(box, "Master Volume     %d%%" % int(round(float(s.get("master_volume", 0.85)) * 100.0)), func(): settings_requested.emit("volume"))
 	_add_menu_button(box, "VSync             %s" % _on_off(bool(s.get("vsync", true))), func(): settings_requested.emit("vsync"))
@@ -163,6 +165,8 @@ func show_controls_menu(back_target: String = "main") -> void:
 	var box = _menu_box("Controls", "", "blade | breath | road")
 	if input_device == "gamepad":
 		_add_menu_text(box, "Left Stick move | Right Stick look | D-Pad Up/Down zoom\nL3 run | B dodge | Y jump\nRB light attack | RT heavy attack\nHold LT Oathfire Beam | Tap/Hold LB parry or block | A interact\nD-Pad Left potion | D-Pad Right bomb | View journal | Menu pause")
+	elif input_device == "touch":
+		_add_menu_text(box, "Left thumb move | Drag right side to look\nStrike / Heavy attack | Dodge | Jump\nHold Guard to block or parry | Hold Oath to charge Oathfire\nUse interacts | Potion heals | Pause opens the menu\nLandscape orientation is required during gameplay")
 	else:
 		_add_menu_text(box, "WASD move | Mouse look | Wheel zoom | Page Up/Down zoom\nShift run | Space dodge | X jump\nLeft mouse light attack | Right mouse heavy attack\nHold C Oathfire Beam | Tap Q parry | Hold Q block | E interact\nR potion | F bomb | Tab inventory | Esc pause")
 	_add_menu_button(box, "Back", _return_from_controls)
@@ -183,7 +187,7 @@ func hide_menus() -> void:
 	menu_layer.visible = false
 	dialogue_layer.visible = false
 	inventory_layer.visible = false
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if input_device == "touch" else Input.MOUSE_MODE_CAPTURED
 
 func show_loading(text: String = "Preparing Greyfen...") -> void:
 	# Normal world travel retains the last rendered frame; a blocking overlay
@@ -832,6 +836,21 @@ func _action_label(action: String) -> String:
 	return "[%s]" % action.capitalize()
 
 func _format_input_text(text: String) -> String:
+	if input_device == "touch":
+		var touch_text := text
+		touch_text = touch_text.replace("Left click", "[Strike]")
+		touch_text = touch_text.replace("Left mouse", "[Strike]")
+		touch_text = touch_text.replace("Right mouse", "[Heavy]")
+		touch_text = touch_text.replace("Space", "[Dodge]")
+		touch_text = touch_text.replace("Tap Q", "Tap [Guard]")
+		touch_text = touch_text.replace("Hold Q", "Hold [Guard]")
+		touch_text = touch_text.replace("Hold C", "Hold [Oath]")
+		touch_text = touch_text.replace("Press E", "Tap [Use]")
+		if touch_text.begins_with("E - "):
+			touch_text = "[Use]  " + touch_text.trim_prefix("E - ")
+		elif touch_text.begins_with("E  "):
+			touch_text = "[Use]  " + touch_text.trim_prefix("E  ")
+		return touch_text
 	if input_device != "gamepad":
 		return text
 	var formatted := text

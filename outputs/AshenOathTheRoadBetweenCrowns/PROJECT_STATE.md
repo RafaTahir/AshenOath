@@ -26,6 +26,13 @@ again reached Greyfen in Chrome and Edge at 1280x720 WebGL2 with no console
 errors. Physical-controller testing remains required before public controller
 support is considered final. `MOBILE-001` is the only remaining roadmap ticket.
 
+MOBILE-001 completes the original roadmap with a Web-safe landscape touch
+layout, multi-touch combat and exploration controls, touch-specific prompts and
+settings, mobile-safe mouse behavior, and deterministic Chrome/Edge mobile
+emulation. The 64.0 MB candidate reached Greyfen at 960x540 WebGL2 in both
+browsers without console errors. This is mobile Web feasibility, not evidence
+for a native store release or sustained physical-phone performance.
+
 ## COMBAT-001 Update
 
 - Kael's light and heavy attacks resolve from the animated sword's measured hilt-to-tip sweep rather than a delayed radius/facing query.
@@ -179,6 +186,9 @@ The broader quest data exists, but the current release target is the first 3-10 
 - Menus, dialogue choices, inventory, and minigames establish controller focus and support `A` to accept and `B` to cancel.
 - HUD prompts, guidance, equipment shortcuts, and the controls screen update when the active input device changes.
 - Gamepad gameplay uses left stick movement, right stick camera, `A` interact, `B` dodge, `Y` jump, `RB` light attack, `RT` heavy attack, `LB` block/parry, `LT` Oathfire, D-pad items/zoom, View inventory, and Menu pause.
+- Touch gameplay uses left-thumb movement, right-side camera drag, and
+  multi-touch buttons for combat, Oathfire, interaction, items, journal, and
+  pause. It is landscape-only and never requests pointer lock.
 
 ### Player Controller
 
@@ -494,7 +504,8 @@ Current state:
 | --- | --- |
 | `scripts/game.gd` | Main gameplay orchestration, interaction routing, quest flow, combat hooks, save hooks, runtime environment, and fall recovery |
 | `scripts/input_router.gd` | Semantic keyboard/mouse, gamepad, and virtual-input routing; active-device prompts, controller settings, and rumble |
-| `scripts/runtime_service_registry.gd` | Owns and configures the sixteen runtime manager, UI, input, content, audio, and world services |
+| `scripts/runtime_service_registry.gd` | Owns and configures the seventeen runtime manager, UI, input, touch, content, audio, and world services |
+| `scripts/mobile_touch_controls.gd` | Responsive landscape touch overlay, multi-touch action dispatch, camera/movement pads, and portrait guidance |
 | `scripts/runtime_actor_factory.gd` | Creates and connects the active player and third-person camera pair |
 | `scripts/zone_composition_router.gd` | Validates zone IDs and routes construction to directly preloaded core or campaign builders |
 | `scripts/zone_build_context.gd` | Typed public construction boundary and result validation for campaign zones |
@@ -710,7 +721,9 @@ Known verifier note: Godot headless may emit ObjectDB cleanup warnings after pas
 - Side quests are represented in data but not all have fully authored gameplay spaces.
 - Audio is generated/procedural feedback, not mastered final game audio.
 - UI is functional and themed but not final AAA-grade presentation.
-- Browser support has focused on Chrome/Edge/Firefox desktop; Safari and mobile are experimental.
+- Browser support has verified Chrome and Edge desktop plus Chrome/Edge mobile
+  emulation. Firefox, Safari, and real mobile hardware remain incompletely
+  validated.
 - The slim Web export explicitly packages selected runtime assets and is checked against a 100 MB ceiling.
 - The project uses runtime-authored zone sections rather than a large studio-grade scene hierarchy. ENGINE-001 establishes explicit ownership boundaries, while some low-level authored helpers remain in `game.gd`.
 - Asset licenses are mostly permissive/CC0, but public release should still include license/credit review from `assets_external/licenses/`.
@@ -723,9 +736,8 @@ Known verifier note: Godot headless may emit ObjectDB cleanup warnings after pas
 - Preserve the sub-900 ms cold-transition and sub-350 ms warm-transition budgets as later systems change.
 - Preserve WEB-001's Chrome/Edge canvas, console, runtime-heap, and New Game
   checks as browser-facing systems change.
-- Complete `MOBILE-001`: add a bounded touch layout on top of INPUT-001's
-  virtual axes/actions, validate responsive browser sizing, then run the full
-  milestone release and production deployment.
+- Run physical Android phone performance, thermal, battery, safe-area, and
+  multi-touch usability tests before approving native mobile production.
 - Produce bespoke realistic human assets as a separate licensed asset-production milestone.
 
 ### Medium Term

@@ -12,6 +12,9 @@ const reportPath = resolve(args.report || ".release-gate/web_001_browser_report.
 const timeoutMs = Number(args.timeout || 90000);
 const maxMemoryMb = Number(args["max-memory-mb"] || 450);
 const requestedBrowser = String(args.browser || "").toLowerCase();
+const mobileMode = Boolean(args.mobile);
+const viewportWidth = mobileMode ? 960 : 1280;
+const viewportHeight = mobileMode ? 540 : 720;
 const browsers = [
   ["Chrome", "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"],
   ["Edge", "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe"],
@@ -53,6 +56,17 @@ await new Promise((resolveListen) => server.listen(0, "127.0.0.1", resolveListen
 const port = server.address().port;
 
 const sleep = (ms) => new Promise((resolveSleep) => setTimeout(resolveSleep, ms));
+async function availablePort() {
+  const probe = createServer();
+  await new Promise((resolveListen, reject) => {
+    probe.once("error", reject);
+    probe.listen(0, "127.0.0.1", resolveListen);
+  });
+  const selected = probe.address().port;
+  await new Promise((resolveClose) => probe.close(resolveClose));
+  return selected;
+}
+
 async function waitFor(predicate, label, timeout = timeoutMs) {
   const started = Date.now();
   let lastError;
@@ -134,15 +148,15 @@ class Cdp {
 }
 
 async function testBrowser(name, executable) {
-  const debugPort = 9300 + Math.floor(Math.random() * 500);
-  const profile = join(tmpdir(), `ashen-oath-web001-${name.toLowerCase()}-${Date.now()}`);
-  const url = `http://127.0.0.1:${port}/index.html?v=web001-${name.toLowerCase()}`;
+  const debugPort = await availablePort();
+  const profile = join(tmpdir(), `ashen-oath-web001-${mobileMode ? "mobile-" : ""}${name.toLowerCase()}-${Date.now()}`);
+  const url = `http://127.0.0.1:${port}/index.html?v=${mobileMode ? "mobile001" : "web001"}-${name.toLowerCase()}${mobileMode ? "&touch=1" : ""}`;
   const browser = spawn(executable, [
     "--headless=new",
     `--remote-debugging-port=${debugPort}`,
     "--remote-allow-origins=*",
     `--user-data-dir=${profile}`,
-    "--window-size=1280,720",
+    `--window-size=${viewportWidth},${viewportHeight}`,
     "--force-device-scale-factor=1",
     "--no-first-run",
     "--no-default-browser-check",
@@ -171,13 +185,23 @@ async function testBrowser(name, executable) {
       cdp.send("Network.enable"),
     ]);
     await cdp.send("Emulation.setDeviceMetricsOverride", {
-      width: 1280,
-      height: 720,
+      width: viewportWidth,
+      height: viewportHeight,
       deviceScaleFactor: 1,
-      mobile: false,
-      screenWidth: 1280,
-      screenHeight: 720,
+      mobile: mobileMode,
+      screenWidth: viewportWidth,
+      screenHeight: viewportHeight,
     });
+    if (mobileMode) {
+      await cdp.send("Emulation.setTouchEmulationEnabled", {
+        enabled: true,
+        maxTouchPoints: 5,
+      });
+      await cdp.send("Emulation.setUserAgentOverride", {
+        userAgent: "Mozilla/5.0 (Linux; Android 13; Mobile) AppleWebKit/537.36 Chrome/125.0 Mobile Safari/537.36",
+        platform: "Android",
+      });
+    }
     const navigationStarted = Date.now();
     await cdp.send("Page.navigate", { url });
     await waitFor(async () => cdp.evaluate(
@@ -190,7 +214,7 @@ async function testBrowser(name, executable) {
       if (!canvas) return {ready: false, reason: "missing", body: document.body.innerText.slice(0, 200)};
       const gl = canvas.getContext("webgl2") || canvas.getContext("webgl");
       return {
-        ready: Boolean(gl) && canvas.width >= 1280 && canvas.height >= 720,
+        ready: Boolean(gl) && canvas.width >= ${viewportWidth} && canvas.height >= ${viewportHeight},
         reason: gl ? "dimensions" : "webgl",
         width: canvas.width,
         height: canvas.height,
@@ -201,7 +225,7 @@ async function testBrowser(name, executable) {
       };
     })()`);
       return canvasDiagnostic?.ready ? canvasDiagnostic : null;
-    }, `${name} 1280x720 WebGL canvas`).catch((error) => {
+    }, `${name} ${viewportWidth}x${viewportHeight} WebGL canvas`).catch((error) => {
       const eventTail = cdp.events.filter((event) =>
         event.method === "Runtime.exceptionThrown"
         || event.method === "Log.entryAdded"
@@ -231,8 +255,8 @@ async function testBrowser(name, executable) {
       }
       return document.hasFocus();
     })()`);
-    await cdp.send("Input.dispatchMouseEvent", { type: "mousePressed", x: 640, y: 360, button: "left", clickCount: 1 });
-    await cdp.send("Input.dispatchMouseEvent", { type: "mouseReleased", x: 640, y: 360, button: "left", clickCount: 1 });
+    await cdp.send("Input.dispatchMouseEvent", { type: "mousePressed", x: viewportWidth / 2, y: viewportHeight / 2, button: "left", clickCount: 1 });
+    await cdp.send("Input.dispatchMouseEvent", { type: "mouseReleased", x: viewportWidth / 2, y: viewportHeight / 2, button: "left", clickCount: 1 });
     let newGameStarted = 0;
     for (let index = 0; index < 2; index++) {
       if (index === 1) newGameStarted = Date.now();
@@ -246,6 +270,13 @@ async function testBrowser(name, executable) {
       return logs.some((line) => line.includes("LOADING: zone=greyfen playable_ms="));
     }, `${name} New Game startup`);
     const newGameReadyMs = Date.now() - newGameStarted;
+    if (mobileMode) {
+      await waitFor(async () => {
+        const logs = cdp.events.filter((event) => event.method === "Runtime.consoleAPICalled")
+          .flatMap((event) => event.params.args.map((arg) => String(arg.value ?? arg.description ?? "")));
+        return logs.some((line) => line.includes("MOBILE_TOUCH: ready landscape=true"));
+      }, `${name} mobile touch overlay`);
+    }
     await sleep(1500);
     const errors = cdp.events.filter((event) =>
       event.method === "Runtime.exceptionThrown"
@@ -267,6 +298,7 @@ async function testBrowser(name, executable) {
     writeFileSync(screenshotPath, Buffer.from(screenshot.data, "base64"));
     return {
       browser: name,
+      mode: mobileMode ? "mobile-landscape-emulation" : "desktop",
       status: "pass",
       total_startup_ms: Date.now() - started,
       engine_ready_ms: engineReadyMs,
@@ -296,7 +328,7 @@ async function testBrowser(name, executable) {
   }
 }
 
-const report = { schema_version: 1, status: "pass", export_dir: exportDir, browsers: [] };
+const report = { schema_version: 1, status: "pass", mode: mobileMode ? "mobile-landscape-emulation" : "desktop", export_dir: exportDir, browsers: [] };
 try {
   for (const [name, executable] of browsers) {
     const result = await testBrowser(name, executable);

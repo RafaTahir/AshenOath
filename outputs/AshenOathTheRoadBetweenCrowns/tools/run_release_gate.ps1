@@ -167,7 +167,7 @@ try {
 		"verify_runtime.gd", "verify_runtime_regressions.gd", "verify_zone_builder_integrity.gd", "verify_gate_transitions.gd", "verify_engine_001.gd", "verify_story_campaign.gd", "verify_quest_001.gd", "verify_quest_002.gd", "verify_art_001.gd", "verify_asset_001.gd", "verify_character_real_001.gd",
         "verify_motion_quality.gd", "verify_river_swimming.gd", "verify_greyfen_life.gd",
 		"verify_castle_vargan.gd", "verify_audio_runtime.gd", "verify_audio_001.gd", "verify_visible_quality.gd",
-		"verify_recovery_002_foundation.gd", "verify_navigation_001.gd", "verify_char_001.gd", "verify_anim_001.gd", "verify_combat_001.gd", "verify_ai_001.gd", "verify_oath_001.gd", "verify_ui_001.gd", "verify_world_001.gd", "verify_world_002.gd", "verify_world_003.gd", "verify_zone_budgets.gd",
+		"verify_recovery_002_foundation.gd", "verify_navigation_001.gd", "verify_char_001.gd", "verify_anim_001.gd", "verify_combat_001.gd", "verify_ai_001.gd", "verify_oath_001.gd", "verify_ui_001.gd", "verify_input_001.gd", "verify_mobile_001.gd", "verify_world_001.gd", "verify_world_002.gd", "verify_world_003.gd", "verify_zone_budgets.gd",
         "verify_visual_003.gd", "verify_visual_100.gd", "verify_master_002.gd", "verify_master_003.gd"
     )
     $resumeReached = [string]::IsNullOrWhiteSpace($ResumeFrom)
@@ -249,6 +249,12 @@ try {
             (Join-Path $Project "tools\verify_web_browser.mjs"),
             "--export", $Web,
             "--report", (Join-Path $Logs "web_browser.json")
+        )
+        Invoke-ExternalGate "verify_mobile_browser" "node.exe" @(
+            (Join-Path $Project "tools\verify_web_browser.mjs"),
+            "--export", $Web,
+            "--report", (Join-Path $Logs "mobile_browser.json"),
+            "--mobile", "true"
         )
     }
     $finalStatus = $(if ([string]::IsNullOrWhiteSpace($Only)) { "pass" } else { "partial-pass" })
