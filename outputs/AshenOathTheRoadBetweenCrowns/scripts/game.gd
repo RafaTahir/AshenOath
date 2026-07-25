@@ -1291,7 +1291,10 @@ func _complete_ending(ending: String) -> void:
 		get_tree().paused = false
 		_remove_interactable("white_hart")
 		if not _has_living_enemy("white_hart_avatar"):
-			_spawn_enemy("white_hart_avatar", Vector3(12, 0.8, 6))
+			var hart_boss = _spawn_enemy("white_hart_avatar", Vector3(0, 0.8, -7))
+			if hart_boss != null:
+				hart_boss.name = "WhiteHartFinalEncounter"
+				hart_boss.leash_radius = 10.0
 		audio.play_event("boss", 0.02)
 		hud.toast("The White Hart answers with antler, root, and light.")
 		return
@@ -3210,8 +3213,20 @@ func _spawn_enemy(id: String, pos: Vector3) -> Node:
 	enemy.damaged.connect(_on_enemy_damaged)
 	enemy.windup_started.connect(_on_enemy_windup_started)
 	enemy.attack_resolved.connect(_on_enemy_attack_resolved)
+	enemy.boss_phase_changed.connect(_on_boss_phase_changed)
 	active_enemies.append(enemy)
 	return enemy
+
+func _on_boss_phase_changed(enemy: Node, phase: int) -> void:
+	if enemy == null or not is_instance_valid(enemy) or enemy.enemy_id != "white_hart_avatar":
+		return
+	var cue := "The Hart tears roots from the old road." if phase == 2 else "The covenant is breaking."
+	hud.show_status_cue("White Hart — Phase %d" % phase, "danger")
+	hud.toast(cue)
+	audio.play_event("reveal" if phase == 2 else "boss", 0.025)
+	if world_vfx != null and is_instance_valid(world_vfx):
+		world_vfx.pulse_interaction(enemy.global_position)
+	CombatFeedback.impact_burst(zone_root, enemy.global_position + Vector3.UP, true, Color(0.58, 0.88, 0.72))
 
 func _activate_wychwood_wave(ids: Array, cue: String) -> void:
 	for enemy in active_enemies:

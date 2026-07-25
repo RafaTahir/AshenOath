@@ -40,7 +40,7 @@
     {"id": "OATH-001", "title": "Oathfire casting and impact", "area": "combat", "milestone": "baseline", "status": "complete"},
     {"id": "AI-001", "title": "Navigation, spacing, and attack roles", "area": "ai", "milestone": "baseline", "status": "complete"},
     {"id": "AI-002", "title": "Per-family behavior and perception", "area": "ai", "milestone": "B", "status": "complete"},
-    {"id": "BOSS-001", "title": "White Hart encounter and noncombat resolution", "area": "boss", "milestone": "C", "status": "planned"},
+    {"id": "BOSS-001", "title": "White Hart encounter and noncombat resolution", "area": "boss", "milestone": "C", "status": "complete"},
     {"id": "PROG-001", "title": "Nine-upgrade progression", "area": "progression", "milestone": "baseline", "status": "complete"},
     {"id": "INV-001", "title": "Focused preparation and crafting", "area": "gameplay", "milestone": "B", "status": "complete"},
     {"id": "ART-001", "title": "Grounded-stylized visual bible", "area": "art", "milestone": "baseline", "status": "complete"},

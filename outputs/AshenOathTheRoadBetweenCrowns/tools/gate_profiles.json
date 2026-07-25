@@ -394,6 +394,22 @@
         "verify_dialogue_001"
       ]
     },
+    "boss_001": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/white_hart_encounter_contract.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/enemies.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/enemy_ai.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_boss_001.gd"
+      ],
+      "gates": [
+        "verify_boss_001",
+        "verify_quest_005",
+        "verify_combat_001",
+        "verify_ai_002",
+        "verify_motion_quality"
+      ]
+    },
     "progression": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/data/upgrades.json",
@@ -498,6 +514,7 @@
     "world_004": "capture_world_004",
     "world_005": "capture_world_005",
     "world_006": "capture_world_006",
+    "boss_001": "capture_boss_001",
     "lighting": "capture_light_001",
     "progression": "capture_prog_001"
   }
