@@ -26,7 +26,8 @@ func _initialize() -> void:
 		var snapshot: Dictionary = game.zone_lifecycle_snapshot()
 		check(int(snapshot.cached_count) <= 1, "Route cache exceeded one zone in %s" % zone_id)
 		check(int(snapshot.retiring_count) == 0, "Retirement did not settle in %s" % zone_id)
-		check(int(snapshot.resource_anchor_count) <= game.MAX_SKINNED_RESOURCE_ANCHORS, "Skinned anchor cap exceeded")
+		check(int(snapshot.resource_anchor_count) <= game.MAX_SKINNED_RESOURCE_ANCHORS, "Shared skinned-resource anchor cap exceeded")
+		check(int(snapshot.material_anchor_count) <= game.MAX_RETIRED_MATERIAL_ANCHORS, "Retired material anchor cap exceeded")
 		check(int(snapshot.active_navigation_regions) <= 1, "Duplicate active navigation regions in %s" % zone_id)
 	var final_snapshot: Dictionary = game.zone_lifecycle_snapshot()
 	var growth := int(final_snapshot.static_memory_bytes) - baseline_memory

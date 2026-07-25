@@ -73,9 +73,10 @@
       },
       "castle_guard_human": {
         "status": "character_real_001",
-        "path": "res://assets_external/characters/HoodedAdventurer_PolyPizza_Quaternius_CC0.glb",
+        "path": "res://assets_external/characters/CharacterAnimated_PolyPizza_Quaternius_CC0.glb",
         "source": "Poly Pizza / Quaternius",
-        "license": "CC0 1.0"
+        "license": "CC0 1.0",
+        "notes": "Compatibility-safe shared rig; CHAR-002 remains responsible for distinct guard clothing and identity."
       },
       "road_ranger_human": {
         "status": "character_real_001",

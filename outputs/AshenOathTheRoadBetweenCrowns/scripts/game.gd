@@ -62,6 +62,8 @@ var retired_zone_roots: Array[Node] = []
 var pending_zone_retirements := 0
 var retired_skinned_actor_pool: Node3D
 var skinned_resource_anchors: Dictionary = {}
+var retired_material_anchors: Dictionary = {}
+var retirement_material: StandardMaterial3D
 var transition_history: Array[Dictionary] = []
 var active_zone_signature := -1
 var shared_box_mesh: BoxMesh
@@ -89,6 +91,7 @@ var greyfen_prewarm_spatial_service: Node
 const MAX_CACHED_ROUTE_ZONES := 1
 const ZONE_RETIRE_FRAMES := 8
 const MAX_SKINNED_RESOURCE_ANCHORS := 8
+const MAX_RETIRED_MATERIAL_ANCHORS := 64
 const MAX_TRANSITION_HISTORY := 16
 
 func _ready() -> void:
@@ -557,9 +560,13 @@ func _deferred_free_zone(retired_root: Node) -> void:
 	for _frame in range(ZONE_RETIRE_FRAMES):
 		await get_tree().process_frame
 	if is_instance_valid(retired_root):
-		retired_zone_roots.erase(retired_root)
-		retired_root.queue_free()
+		if retired_root.is_inside_tree() and retired_root.get_parent() != null:
+			retired_root.get_parent().remove_child(retired_root)
+		RenderingServer.force_sync()
 		await get_tree().process_frame
+		retired_zone_roots.erase(retired_root)
+		retired_root.free()
+		RenderingServer.force_sync()
 	else:
 		retired_zone_roots.erase(retired_root)
 	pending_zone_retirements = maxi(pending_zone_retirements - 1, 0)
@@ -570,9 +577,11 @@ func _retire_zone_root(retired_root: Node) -> void:
 	if retired_zone_roots.has(retired_root):
 		return
 	_remove_root_from_route_cache(retired_root)
+	_anchor_retired_materials(retired_root)
+	_anchor_shared_skinned_resources(retired_root)
 	_quiesce_zone_runtime(retired_root)
 	_validate_zone_render_resources(retired_root)
-	_park_skinned_actor_branches(retired_root)
+	_bind_retirement_material(retired_root)
 	_set_zone_collision_enabled(retired_root, false)
 	retired_root.visible = false
 	retired_root.process_mode = Node.PROCESS_MODE_DISABLED
@@ -583,10 +592,47 @@ func _retire_zone_root(retired_root: Node) -> void:
 	pending_zone_retirements += 1
 	_deferred_free_zone(retired_root)
 
-func _park_skinned_actor_branches(root: Node) -> void:
+func _bind_retirement_material(root: Node) -> void:
+	if retirement_material == null:
+		retirement_material = StandardMaterial3D.new()
+		retirement_material.albedo_color = Color(0.08, 0.08, 0.08)
+		retirement_material.roughness = 1.0
+	_keep_retired_material(retirement_material)
+	for raw_mesh in root.find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := raw_mesh as MeshInstance3D
+		mesh_instance.material_override = retirement_material
+		if mesh_instance.mesh == null:
+			continue
+		for surface_index in range(mesh_instance.mesh.get_surface_count()):
+			mesh_instance.set_surface_override_material(surface_index, retirement_material)
+	for raw_batch in root.find_children("*", "MultiMeshInstance3D", true, false):
+		(raw_batch as MultiMeshInstance3D).material_override = retirement_material
+
+func _anchor_retired_materials(root: Node) -> void:
+	for raw_mesh in root.find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := raw_mesh as MeshInstance3D
+		if mesh_instance.material_override != null:
+			_keep_retired_material(mesh_instance.material_override)
+		if mesh_instance.mesh == null:
+			continue
+		for surface_index in range(mesh_instance.mesh.get_surface_count()):
+			var material := mesh_instance.get_surface_override_material(surface_index)
+			if material == null:
+				material = mesh_instance.mesh.surface_get_material(surface_index)
+			if material != null:
+				_keep_retired_material(material)
+
+func _keep_retired_material(material: Material) -> void:
+	if retired_material_anchors.size() >= MAX_RETIRED_MATERIAL_ANCHORS:
+		return
+	var key := str(material.get_rid().get_id())
+	if not retired_material_anchors.has(key):
+		retired_material_anchors[key] = material
+
+func _anchor_shared_skinned_resources(root: Node) -> void:
 	if retired_skinned_actor_pool == null or not is_instance_valid(retired_skinned_actor_pool):
 		retired_skinned_actor_pool = Node3D.new()
-		retired_skinned_actor_pool.name = "RetiredSkinnedActorPool"
+		retired_skinned_actor_pool.name = "SharedSkinnedResourceAnchors"
 		retired_skinned_actor_pool.visible = false
 		retired_skinned_actor_pool.process_mode = Node.PROCESS_MODE_DISABLED
 		add_child(retired_skinned_actor_pool)
@@ -598,18 +644,19 @@ func _park_skinned_actor_branches(root: Node) -> void:
 		if branch.get_parent() == root and not branches.has(branch):
 			branches.append(branch)
 	for branch in branches:
-		var fingerprints := _skinned_resource_fingerprints(branch)
-		if fingerprints.is_empty() or retired_skinned_actor_pool.get_child_count() >= MAX_SKINNED_RESOURCE_ANCHORS:
+		var fingerprint := _skinned_resource_fingerprint(branch)
+		if fingerprint.is_empty() or skinned_resource_anchors.has(fingerprint):
 			continue
+		if skinned_resource_anchors.size() >= MAX_SKINNED_RESOURCE_ANCHORS:
+			break
 		branch.reparent(retired_skinned_actor_pool, false)
 		if branch is Node3D:
 			(branch as Node3D).visible = false
 		branch.process_mode = Node.PROCESS_MODE_DISABLED
-		var anchor_id := "%s#%d" % ["|".join(fingerprints), branch.get_instance_id()]
-		skinned_resource_anchors[anchor_id] = branch
+		skinned_resource_anchors[fingerprint] = branch
 
-func _skinned_resource_fingerprints(branch: Node) -> Array[String]:
-	var result: Array[String] = []
+func _skinned_resource_fingerprint(branch: Node) -> String:
+	var fingerprints: Array[String] = []
 	for raw_mesh in branch.find_children("*", "MeshInstance3D", true, false):
 		var mesh_instance := raw_mesh as MeshInstance3D
 		if mesh_instance.skin == null or mesh_instance.mesh == null:
@@ -617,9 +664,10 @@ func _skinned_resource_fingerprints(branch: Node) -> Array[String]:
 		var fingerprint := mesh_instance.mesh.resource_path
 		if fingerprint.is_empty():
 			fingerprint = "mesh_rid:%s" % str(mesh_instance.mesh.get_rid().get_id())
-		if not result.has(fingerprint):
-			result.append(fingerprint)
-	return result
+		if not fingerprints.has(fingerprint):
+			fingerprints.append(fingerprint)
+	fingerprints.sort()
+	return "|".join(fingerprints)
 
 func _record_loading_metrics(metrics: Dictionary) -> void:
 	last_loading_metrics = metrics
@@ -755,6 +803,7 @@ func zone_lifecycle_snapshot() -> Dictionary:
 		"retiring_count": pending_zone_retirements,
 		"resource_anchor_count": skinned_resource_anchors.size(),
 		"resource_anchor_nodes": retired_skinned_actor_pool.get_child_count() if retired_skinned_actor_pool != null and is_instance_valid(retired_skinned_actor_pool) else 0,
+		"material_anchor_count": retired_material_anchors.size(),
 		"active_nodes": _subtree_node_count(zone_root),
 		"active_skeletons": zone_root.find_children("*", "Skeleton3D", true, false).size() if zone_root != null and is_instance_valid(zone_root) else 0,
 		"active_navigation_regions": zone_root.find_children("*", "NavigationRegion3D", true, false).size() if zone_root != null and is_instance_valid(zone_root) else 0,
@@ -783,6 +832,7 @@ func _exit_tree() -> void:
 	retired_zone_roots.clear()
 	pending_zone_retirements = 0
 	skinned_resource_anchors.clear()
+	retired_material_anchors.clear()
 	transition_history.clear()
 
 func _add_visual_100_layer(zone_id: String) -> void:

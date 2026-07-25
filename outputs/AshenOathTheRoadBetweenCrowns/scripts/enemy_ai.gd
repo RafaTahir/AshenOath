@@ -487,7 +487,7 @@ func _try_build_mapped_body() -> bool:
 	var uses_real_body := false
 	var visual_source: String = enemy_id
 	if enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute"]:
-		visual_source = "ghoulkin_skeleton"
+		visual_source = "ghoulkin"
 	if mapped == null:
 		mapped = asset_helper.spawn_enemy(visual_source)
 	if mapped == null or mapped.name.ends_with("_placeholder"):
