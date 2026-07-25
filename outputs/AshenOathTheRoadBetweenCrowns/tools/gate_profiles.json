@@ -362,6 +362,22 @@
         "verify_save_001"
       ]
     },
+    "world_006": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/campaign_finale_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/campaign_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/export_presets.cfg",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_world_006.gd"
+      ],
+      "gates": [
+        "verify_world_006",
+        "verify_gate_transitions",
+        "verify_zone_budgets",
+        "verify_story_campaign",
+        "web_export"
+      ],
+      "web_required": true
+    },
     "progression": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/data/upgrades.json",
@@ -465,6 +481,7 @@
     "campaign": "capture_world_003",
     "world_004": "capture_world_004",
     "world_005": "capture_world_005",
+    "world_006": "capture_world_006",
     "lighting": "capture_light_001",
     "progression": "capture_prog_001"
   }
