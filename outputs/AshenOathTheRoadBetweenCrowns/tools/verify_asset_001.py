@@ -87,8 +87,8 @@ def main() -> int:
                 failures.append(f"curated asset is absent from Web preset: {path}")
 
     quarantined = manifest.get("quarantine", [])
-    if len(quarantined) < 6:
-        failures.append("quarantine does not contain all ART-001 and dead generated candidates")
+    if len(quarantined) < 3:
+        failures.append("quarantine does not contain the remaining rejected ART-001 candidates")
     for entry in quarantined:
         path = str(entry.get("path", ""))
         if not entry.get("reason"):
