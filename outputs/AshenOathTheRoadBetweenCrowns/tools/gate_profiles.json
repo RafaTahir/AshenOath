@@ -92,6 +92,18 @@
         "verify_visible_quality"
       ]
     },
+    "progression": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/data/upgrades.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/progression_manager.gd"
+      ],
+      "gates": [
+        "verify_prog_001",
+        "verify_combat_001",
+        "verify_ui_001",
+        "verify_save_001"
+      ]
+    },
     "web": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/export_presets.cfg",
@@ -116,6 +128,7 @@
     "greyfen": "capture_world_001",
     "wychwood": "capture_world_002",
     "campaign": "capture_world_003",
-    "lighting": "capture_light_001"
+    "lighting": "capture_light_001",
+    "progression": "capture_prog_001"
   }
 }

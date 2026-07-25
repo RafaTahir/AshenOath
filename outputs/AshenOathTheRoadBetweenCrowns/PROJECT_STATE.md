@@ -301,6 +301,15 @@ Craftable/usable items:
 | Rot Oil | Oil | Bonus versus undead-tagged enemies |
 | Iron Trap | Trap | Slows nearby enemy |
 
+### Oath Mark Progression
+
+Implemented in `scripts/progression_manager.gd`, `scripts/player_controller.gd`, and `scripts/hud.gd`, with definitions in `data/upgrades.json`.
+
+- Completing a main quest awards one Oath Mark once; side quests and repeat completion do not award marks.
+- The journal offers three linear branches with three upgrades each: Blade, Survival, and Oathfire.
+- Effects cover blade and heavy damage, parry stamina, maximum health, dodge cost, potion healing, and Oathfire cost, range, and cooldown.
+- Unlocks, remaining marks, and rewarded quest IDs persist in saves. Missing legacy data defaults to neutral progression.
+
 ### Save, Load, Autosave, And Checkpoint
 
 Implemented in `scripts/save_manager.gd`.
@@ -321,6 +330,7 @@ Save payload includes:
 - World state.
 - Player health.
 - Player stamina.
+- Oath Mark progression.
 
 Autosave occurs during play on a cooldown and after zone load. Checkpoint is used for death recovery.
 
@@ -461,7 +471,7 @@ Current state:
 | Script | Responsibility |
 | --- | --- |
 | `scripts/game.gd` | Main gameplay orchestration, interaction routing, quest flow, combat hooks, save hooks, runtime environment, input map, and fall recovery |
-| `scripts/runtime_service_registry.gd` | Owns and configures the fourteen runtime manager, UI, content, audio, and world services |
+| `scripts/runtime_service_registry.gd` | Owns and configures the fifteen runtime manager, UI, content, audio, and world services |
 | `scripts/runtime_actor_factory.gd` | Creates and connects the active player and third-person camera pair |
 | `scripts/zone_composition_router.gd` | Validates zone IDs and routes construction to directly preloaded core or campaign builders |
 | `scripts/zone_build_context.gd` | Typed public construction boundary and result validation for campaign zones |
@@ -473,6 +483,7 @@ Current state:
 | `scripts/stamina_component.gd` | Stamina spend/restore/regeneration, save/load |
 | `scripts/hud.gd` | All HUD, menus, dialogue, inventory, crafting UI, ending/death screens |
 | `scripts/quest_manager.gd` | Quest definitions, active/completed/unlocked state, objective progression, tracker/journal, save/load |
+| `scripts/progression_manager.gd` | Nine-upgrade definitions, main-quest Oath Mark rewards, prerequisites, effects, and save/load |
 | `scripts/dialogue_manager.gd` | Loads dialogue JSON and returns dialogue entries |
 | `scripts/inventory_manager.gd` | Items, ingredients, coin, rewards, crafting/consume helpers, active oil, save/load |
 | `scripts/crafting_manager.gd` | Craft request handling against inventory and item recipes |
@@ -493,6 +504,7 @@ Current state:
 | `data/dialogue.json` | NPC and interactable dialogue text/actions |
 | `data/items.json` | Item definitions, recipes, icons, effects |
 | `data/enemies.json` | Enemy stats, tags, weakness labels, colors |
+| `data/upgrades.json` | Blade, Survival, and Oathfire upgrade definitions and effects |
 | `asset_sources.json` | Asset-pack source URLs/categories/licenses |
 | `asset_manifest.json` | Scanned asset inventory |
 | `asset_role_mapping_suggested.json` | Suggested/current role-to-asset mapping |

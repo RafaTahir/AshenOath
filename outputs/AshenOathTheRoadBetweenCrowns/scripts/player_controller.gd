@@ -103,6 +103,7 @@ var right_foot_ground_offset = 0.0
 var contact_shadow: Node3D
 var was_on_floor = false
 var step_up_cooldown = 0.0
+var progression
 
 func _ready() -> void:
 	add_to_group("player")
@@ -154,6 +155,42 @@ func set_transition_locked(locked: bool) -> void:
 	elif health_component == null or health_component.health > 0.0:
 		can_control = true
 
+func set_progression(manager) -> void:
+	if progression != null and progression.changed.is_connected(_apply_progression_stats):
+		progression.changed.disconnect(_apply_progression_stats)
+	progression = manager
+	if progression != null and not progression.changed.is_connected(_apply_progression_stats):
+		progression.changed.connect(_apply_progression_stats)
+	_apply_progression_stats()
+
+func _apply_progression_stats() -> void:
+	if health_component == null:
+		return
+	var target_max := 125.0 + _progression_value("max_health_bonus", 0.0)
+	var gained := maxf(target_max - health_component.max_health, 0.0)
+	health_component.max_health = target_max
+	health_component.health = clampf(health_component.health + gained, 1.0, target_max)
+	health_component.changed.emit(health_component.health, health_component.max_health)
+
+func _progression_value(effect_id: String, fallback: float) -> float:
+	return progression.effect_value(effect_id, fallback) if progression != null else fallback
+
+func get_dodge_stamina_cost() -> float:
+	return maxf(1.0, 28.0 - _progression_value("dodge_cost_reduction", 0.0))
+
+func get_oathfire_stamina_cost() -> float:
+	return maxf(1.0, 40.0 - _progression_value("beam_cost_reduction", 0.0))
+
+func get_oathfire_cooldown_duration() -> float:
+	return maxf(0.5, 4.0 - _progression_value("beam_cooldown_reduction", 0.0))
+
+func get_blade_attack_damage(heavy: bool = false) -> float:
+	var base_damage := 42.0 if heavy else 24.0
+	var multiplier := _progression_value("blade_damage_multiplier", 1.0)
+	if heavy:
+		multiplier *= _progression_value("heavy_damage_multiplier", 1.0)
+	return base_damage * multiplier
+
 func _handle_movement(delta: float) -> void:
 	var input_vec = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	var forward = Vector3.FORWARD
@@ -190,7 +227,7 @@ func _handle_movement(delta: float) -> void:
 		if Input.is_action_just_pressed("jump"):
 			try_jump()
 		if Input.is_action_just_pressed("dodge") and not beam_charging:
-			if stamina_component.spend(28.0):
+			if stamina_component.spend(get_dodge_stamina_cost()):
 				dodge_dir = move_dir if move_dir.length() > 0.1 else -global_transform.basis.z
 				dodge_time = 0.30
 			else:
@@ -266,7 +303,7 @@ func _handle_combat_input() -> void:
 		attack_anim_heavy = false
 		if animation_driver != null:
 			animation_driver.trigger_action("attack_light", 1.22, 0.06)
-		_begin_blade_attack(24.0, 2.0, false)
+		_begin_blade_attack(get_blade_attack_damage(false), 2.0, false)
 	elif Input.is_action_just_pressed("heavy_attack"):
 		if stamina_component.spend(22.0):
 			attack_cooldown = 0.7
@@ -274,7 +311,7 @@ func _handle_combat_input() -> void:
 			attack_anim_heavy = true
 			if animation_driver != null:
 				animation_driver.trigger_action("attack_heavy", 0.76, 0.08)
-			_begin_blade_attack(42.0, 2.25, true)
+			_begin_blade_attack(get_blade_attack_damage(true), 2.25, true)
 		else:
 			stamina_exhausted.emit("heavy attack")
 	if Input.is_action_just_pressed("use_potion"):
@@ -384,7 +421,7 @@ func _handle_beam_input() -> void:
 		_update_beam_charge_visual()
 	if beam_cast_state == "charging" and Input.is_action_just_released("oathfire_beam"):
 		var ratio: float = clampf((beam_charge_time - 0.35) / 0.90, 0.0, 1.0)
-		if beam_charge_time >= 0.35 and stamina_component.spend(40.0):
+		if beam_charge_time >= 0.35 and stamina_component.spend(get_oathfire_stamina_cost()):
 			_commit_oathfire_release(ratio)
 		elif beam_charge_time >= 0.35:
 			stamina_exhausted.emit("Oathfire Beam")
@@ -410,7 +447,7 @@ func _commit_oathfire_release(ratio: float) -> void:
 	beam_pending_ratio = clampf(ratio, 0.0, 1.0)
 	beam_release_elapsed = 0.0
 	beam_release_emitted = false
-	beam_cooldown = 4.0
+	beam_cooldown = get_oathfire_cooldown_duration()
 	attack_cooldown = 0.75
 	beam_charging = false
 	beam_cast_state = "releasing"

@@ -1,0 +1,71 @@
+{
+  "keen_edge": {
+    "name": "Keen Edge",
+    "branch": "blade",
+    "tier": 1,
+    "description": "Blade attacks deal 10% more damage.",
+    "effects": {"blade_damage_multiplier": 1.10}
+  },
+  "measured_riposte": {
+    "name": "Measured Riposte",
+    "branch": "blade",
+    "tier": 2,
+    "requires": "keen_edge",
+    "description": "A successful parry restores 15 stamina.",
+    "effects": {"parry_stamina_restore": 15.0}
+  },
+  "fell_weight": {
+    "name": "Fell Weight",
+    "branch": "blade",
+    "tier": 3,
+    "requires": "measured_riposte",
+    "description": "Heavy attacks deal a further 20% damage.",
+    "effects": {"heavy_damage_multiplier": 1.20}
+  },
+  "hardened_vow": {
+    "name": "Hardened Vow",
+    "branch": "survival",
+    "tier": 1,
+    "description": "Maximum health increases by 20.",
+    "effects": {"max_health_bonus": 20.0}
+  },
+  "sure_step": {
+    "name": "Sure Step",
+    "branch": "survival",
+    "tier": 2,
+    "requires": "hardened_vow",
+    "description": "Dodging costs 5 less stamina.",
+    "effects": {"dodge_cost_reduction": 5.0}
+  },
+  "redroot_lore": {
+    "name": "Redroot Lore",
+    "branch": "survival",
+    "tier": 3,
+    "requires": "sure_step",
+    "description": "Redroot Potions restore 15 additional health.",
+    "effects": {"potion_heal_bonus": 15.0}
+  },
+  "kindled_core": {
+    "name": "Kindled Core",
+    "branch": "oathfire",
+    "tier": 1,
+    "description": "Oathfire costs 10 less stamina.",
+    "effects": {"beam_cost_reduction": 10.0}
+  },
+  "far_reach": {
+    "name": "Far Reach",
+    "branch": "oathfire",
+    "tier": 2,
+    "requires": "kindled_core",
+    "description": "Oathfire range increases by 2 metres.",
+    "effects": {"beam_range_bonus": 2.0}
+  },
+  "ashen_flow": {
+    "name": "Ashen Flow",
+    "branch": "oathfire",
+    "tier": 3,
+    "requires": "far_reach",
+    "description": "Oathfire cooldown is reduced by 1 second.",
+    "effects": {"beam_cooldown_reduction": 1.0}
+  }
+}

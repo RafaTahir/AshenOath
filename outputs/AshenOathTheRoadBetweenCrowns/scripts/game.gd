@@ -35,6 +35,7 @@ var audio
 var asset_helper
 var visual_director
 var minigames
+var progression
 var zone_root: Node3D
 var active_interactable
 var interaction_candidates: Array = []
@@ -117,7 +118,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			hud.set_guidance_hint("Face the object and move into clear view.", 2.0)
 	elif event.is_action_pressed("open_inventory") and not get_tree().paused:
 		get_tree().paused = true
-		hud.show_inventory(inventory, quests, story_state)
+		hud.show_inventory(inventory, quests, story_state, progression)
 
 func _process(delta: float) -> void:
 	if not game_started or player == null or get_tree().paused:
@@ -161,6 +162,7 @@ func _setup_runtime() -> void:
 	asset_helper = services["asset_helper"]
 	hud = services["hud"]
 	minigames = services["minigames"]
+	progression = services["progression"]
 	runtime_services.configure(self)
 	enemy_defs = _read_json("res://data/enemies.json")
 
@@ -212,6 +214,7 @@ func _start_new_game_world() -> void:
 	wychwood_pack_kills = 0
 	pending_anwen_relocation = false
 	tutorial_flags.clear()
+	progression.load_state({})
 	current_zone_id = "greyfen"
 	day_night.set_time(day_night.START_TIME_MINUTES, 0)
 	hud.hide_menus()
@@ -233,6 +236,8 @@ func load_save_state(data: Dictionary) -> void:
 	inventory.load_state(data.get("inventory", {}))
 	quests.load_state(data.get("quests", {}))
 	story_state.load_state(data.get("story_state", {}))
+	progression.load_state(data.get("progression", {}))
+	progression.reconcile_completed_quests(quests.quest_defs, quests.completed)
 	if int(data.get("version", 0)) < 3 and quests.is_completed("main_road_of_crows"):
 		story_state.set_flag("legacy_report_choice_required", true)
 	load_world_state(data.get("world_state", {}))
@@ -243,6 +248,7 @@ func load_save_state(data: Dictionary) -> void:
 	_load_zone(zone, pos)
 	player.health_component.load_state(data.get("player_health", {}))
 	player.stamina_component.load_state(data.get("player_stamina", {}))
+	_apply_progression_to_player()
 	_refresh_tracker()
 	_refresh_equipment_readout()
 
@@ -255,6 +261,7 @@ func _spawn_player(pos: Vector3) -> void:
 	assert(RuntimeActorFactory.is_valid_pair(actor_pair), "Player-camera composition failed")
 	player = actor_pair["player"]
 	camera_rig = actor_pair["camera"]
+	_apply_progression_to_player()
 	_apply_runtime_settings(settings.settings)
 	player.blade_contact_requested.connect(_on_player_blade_contact)
 	player.potion_requested.connect(_use_potion)
@@ -1186,7 +1193,8 @@ func _on_player_beam(charge_ratio: float, direction: Vector3) -> void:
 	_clear_oathfire_effects()
 	var locked_direction: Vector3 = direction.normalized()
 	var origin: Vector3 = player.get_oathfire_origin() if player.has_method("get_oathfire_origin") else player.global_position + Vector3(0, 1.12, 0) + locked_direction * 0.62
-	var endpoint: Vector3 = origin + locked_direction * 12.0
+	var beam_range: float = 12.0 + progression.effect_value("beam_range_bonus", 0.0)
+	var endpoint: Vector3 = origin + locked_direction * beam_range
 	var query = PhysicsRayQueryParameters3D.create(origin, endpoint)
 	var beam_exclusions: Array[RID] = [player.get_rid()]
 	for enemy in active_enemies:
@@ -1295,6 +1303,8 @@ func _on_player_footstep() -> void:
 	audio.play_footstep(current_zone_id, on_road)
 
 func _on_player_parried() -> void:
+	if progression != null and player != null:
+		player.stamina_component.restore(progression.effect_value("parry_stamina_restore", 0.0))
 	tutorial_flags["block_hint_done"] = true
 	hud.set_guidance_hint("")
 
@@ -1323,7 +1333,7 @@ func _on_player_stamina_exhausted(_action: String) -> void:
 
 func _use_potion() -> void:
 	if inventory.consume("redroot_potion"):
-		player.health_component.heal(45.0)
+		player.health_component.heal(45.0 + progression.effect_value("potion_heal_bonus", 0.0))
 		audio.play_event("potion")
 		hud.show_status_cue("Redroot used", "item")
 		hud.toast("Redroot warms the blood.")
@@ -1477,10 +1487,15 @@ func _on_quest_completed(id: String) -> void:
 	if id == "main_blood_under_stone":
 		story_state.set_flag("blood_under_stone_completed", true)
 	var reward = quests.quest_defs.get(id, {}).get("rewards", {})
+	progression.award_for_quest(id, str(quests.quest_defs.get(id, {}).get("type", "")))
 	if not reward.is_empty():
 		inventory.add_reward(reward)
 		hud.toast("Reward received for %s." % quests.quest_defs.get(id, {}).get("title", id))
 	save_manager.checkpoint(self)
+
+func _apply_progression_to_player() -> void:
+	if player != null and progression != null:
+		player.set_progression(progression)
 
 func _record_bog_stagger(enemy, source: String) -> void:
 	var count := int(story_state.get_flag("bog_stagger_hits", 0)) + 1

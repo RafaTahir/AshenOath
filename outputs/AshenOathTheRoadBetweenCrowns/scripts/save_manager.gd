@@ -66,12 +66,13 @@ func migrate_save_data(raw_data: Dictionary) -> Dictionary:
 	data["version"] = CURRENT_VERSION
 	data["zone"] = _normalize_zone(str(data.get("zone", "greyfen")))
 	data["player_position"] = _normalize_position(data.get("player_position", [0.0, 1.0, 7.0]), data.zone)
-	for key in ["inventory", "quests", "story_state", "world_state", "player_health", "player_stamina"]:
-		if typeof(data.get(key, {})) != TYPE_DICTIONARY:
+	for key in ["inventory", "quests", "story_state", "progression", "world_state", "player_health", "player_stamina"]:
+		if not data.has(key) or typeof(data.get(key)) != TYPE_DICTIONARY:
 			data[key] = {}
 	_sanitize_dictionary_fields(data.inventory, ["items", "ingredients"])
 	_sanitize_dictionary_fields(data.quests, ["active", "completed", "unlocked", "world_flags"])
 	_sanitize_dictionary_fields(data.story_state, ["flags", "values"])
+	_sanitize_dictionary_fields(data.progression, ["unlocked", "rewarded_quests"])
 	_sanitize_dictionary_fields(data.world_state, ["removed_interactions", "day_night"])
 	if source_version < 3 and _legacy_road_complete(data.quests):
 		var story: Dictionary = data.story_state
@@ -109,6 +110,7 @@ func _build_save_data(game) -> Dictionary:
 		"inventory": game.inventory.save_state(),
 		"quests": game.quests.save_state(),
 		"story_state": game.story_state.save_state(),
+		"progression": game.progression.save_state(),
 		"world_state": game.save_world_state()
 	}
 

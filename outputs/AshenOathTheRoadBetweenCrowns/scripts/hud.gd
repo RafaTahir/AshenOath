@@ -11,6 +11,7 @@ signal settings_requested(action: String)
 signal action_selected(action: Dictionary)
 signal craft_requested(item_id: String)
 signal item_use_requested(item_id: String)
+signal upgrade_requested(upgrade_id: String)
 signal dialogue_closed
 signal menu_hovered
 signal menu_clicked
@@ -356,7 +357,7 @@ func _render_dialogue_page() -> void:
 	if actions.is_empty():
 		_add_dialogue_close()
 
-func show_inventory(inventory, quests, story_state = null) -> void:
+func show_inventory(inventory, quests, story_state = null, progression = null) -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	inventory_layer.visible = true
 	var oil_name = "None"
@@ -383,6 +384,8 @@ func show_inventory(inventory, quests, story_state = null) -> void:
 		text += "Anwen %s.\n" % ("trusts Kael with what the shrine concealed" if trust > 0 else ("guards her words around Kael" if trust < 0 else "has not decided what Kael will do with the truth"))
 		text += "Greyfen %s.\n" % ("is close to panic" if fear >= 4 else ("whispers about the reopened road" if fear > 0 else "still believes its old silence will hold"))
 		text += "The White Hart %s.\n" % ("is owed a reckoning" if debt > 1 else ("has felt Kael disturb the covenant" if debt != 0 else "has not yet named its price"))
+	if progression != null:
+		text += "\n\nPROGRESSION\n%s" % progression.get_summary_text()
 	inventory_text.text = text
 	for child in craft_buttons.get_children():
 		child.queue_free()
@@ -401,6 +404,15 @@ func show_inventory(inventory, quests, story_state = null) -> void:
 		_style_button(use_button)
 		use_button.pressed.connect(func(item_id = id): item_use_requested.emit(item_id))
 		craft_buttons.add_child(use_button)
+	if progression != null:
+		for id in progression.ordered_upgrade_ids():
+			if not progression.can_unlock(id):
+				continue
+			var upgrade_button := Button.new()
+			upgrade_button.text = "Learn %s — 1 Mark" % progression.definitions[id].get("name", id)
+			_style_button(upgrade_button)
+			upgrade_button.pressed.connect(func(upgrade_id = id): upgrade_requested.emit(upgrade_id))
+			craft_buttons.add_child(upgrade_button)
 	var close = Button.new()
 	close.text = "Close"
 	_style_button(close)

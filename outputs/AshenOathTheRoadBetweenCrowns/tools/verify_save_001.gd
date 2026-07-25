@@ -28,6 +28,7 @@ class GameStub:
 	var inventory := StateStub.new({"items": {}, "ingredients": {}, "active_oil": "", "coin": 17})
 	var quests := StateStub.new({"active": {}, "completed": {}, "unlocked": {}, "world_flags": {}})
 	var story_state := StateStub.new({"version": 1, "flags": {}, "values": {}})
+	var progression := StateStub.new({"marks": 1, "unlocked": {"keen_edge": true}, "rewarded_quests": {"main_road_of_crows": true}})
 	var world_state := {"ghoulkin_kills": 2, "day_night": {}}
 	var loaded: Dictionary = {}
 	func _init() -> void:
@@ -35,6 +36,7 @@ class GameStub:
 		add_child(inventory)
 		add_child(quests)
 		add_child(story_state)
+		add_child(progression)
 	func save_world_state() -> Dictionary:
 		return world_state.duplicate(true)
 	func load_save_state(data: Dictionary) -> void:
@@ -81,6 +83,7 @@ func _verify_migration(manager: Node) -> void:
 	_check(str(migrated.zone) == "greyfen", "unknown legacy zone did not fall back to Greyfen")
 	_check(migrated.player_position == [0.0, 1.0, 7.0], "invalid legacy position was not reset")
 	_check(bool(migrated.story_state.flags.get("legacy_report_choice_required", false)), "legacy report choice was invented or omitted")
+	_check(typeof(migrated.progression) == TYPE_DICTIONARY and migrated.progression.is_empty(), "legacy save did not receive neutral progression state")
 	_check(int(migrated.world_state.wychwood_pack_kills) == 2, "legacy Ghoulkin count was not migrated")
 	_check(float(migrated.player_health.health) >= 1.0 and not bool(migrated.player_health.dead), "dead/corrupt health was not restored safely")
 	_check(float(migrated.player_stamina.stamina) == 100.0, "stamina was not clamped")

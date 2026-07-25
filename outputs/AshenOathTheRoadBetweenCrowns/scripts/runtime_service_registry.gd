@@ -14,11 +14,12 @@ const AudioManager = preload("res://scripts/audio_manager.gd")
 const AssetSpawnHelper = preload("res://scripts/asset_spawn_helper.gd")
 const HUD = preload("res://scripts/hud.gd")
 const MinigameManager = preload("res://scripts/minigame_manager.gd")
+const ProgressionManager = preload("res://scripts/progression_manager.gd")
 
 const REQUIRED_SERVICES := [
 	"story_state", "quests", "dialogue", "inventory", "crafting", "combat",
 	"save_manager", "settings", "world_materials", "day_night", "audio",
-	"asset_helper", "hud", "minigames"
+	"asset_helper", "hud", "minigames", "progression"
 ]
 
 var services: Dictionary = {}
@@ -41,6 +42,7 @@ func create_services() -> Dictionary:
 		"asset_helper": AssetSpawnHelper.new(),
 		"hud": HUD.new(),
 		"minigames": MinigameManager.new(),
+		"progression": ProgressionManager.new(),
 	}
 	for id in REQUIRED_SERVICES:
 		var service: Node = services[id]
@@ -65,6 +67,7 @@ func configure(owner: Node) -> void:
 	var audio = services["audio"]
 	var hud = services["hud"]
 	var minigames = services["minigames"]
+	var progression = services["progression"]
 
 	hud.process_mode = Node.PROCESS_MODE_ALWAYS
 	quests.load_quests("res://data/quests.json")
@@ -107,11 +110,17 @@ func configure(owner: Node) -> void:
 	hud.dialogue_closed.connect(Callable(owner, "_release_dialogue_facing"))
 	hud.craft_requested.connect(func(item_id: String):
 		crafting.craft(item_id)
-		hud.show_inventory(inventory, quests, story_state)
+		hud.show_inventory(inventory, quests, story_state, progression)
 	)
 	hud.item_use_requested.connect(func(item_id: String):
 		owner.call("_use_inventory_item", item_id)
-		hud.show_inventory(inventory, quests, story_state)
+		hud.show_inventory(inventory, quests, story_state, progression)
+	)
+	hud.upgrade_requested.connect(func(upgrade_id: String):
+		if progression.unlock(upgrade_id):
+			owner.call("_apply_progression_to_player")
+			save_manager.autosave(owner)
+		hud.show_inventory(inventory, quests, story_state, progression)
 	)
 	quests.changed.connect(Callable(owner, "_refresh_tracker"))
 	quests.message.connect(Callable(hud, "toast"))
@@ -120,6 +129,7 @@ func configure(owner: Node) -> void:
 	inventory.message.connect(Callable(hud, "toast"))
 	inventory.changed.connect(Callable(owner, "_refresh_equipment_readout"))
 	save_manager.message.connect(Callable(hud, "toast"))
+	progression.message.connect(Callable(hud, "toast"))
 	combat.message.connect(Callable(hud, "toast"))
 	combat.enemy_hit.connect(func(name: String, amount: float):
 		hud.show_status_cue("Hit: %d" % int(amount), "item")
