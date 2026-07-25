@@ -75,6 +75,8 @@ var blade_tip_marker: Node3D
 var hurt_flash_time = 0.0
 var hurt_react_time = 0.0
 var parry_window = 0.0
+var buffered_attack := ""
+var attack_buffer_time := 0.0
 var block_pose_weight = 0.0
 var grounded_weight = 0.0
 var beam_charging = false
@@ -129,6 +131,9 @@ func _physics_process(delta: float) -> void:
 	hurt_flash_time = max(hurt_flash_time - delta, 0.0)
 	hurt_react_time = max(hurt_react_time - delta, 0.0)
 	parry_window = max(parry_window - delta, 0.0)
+	attack_buffer_time = max(attack_buffer_time - delta, 0.0)
+	if attack_buffer_time <= 0.0:
+		buffered_attack = ""
 	step_up_cooldown = max(step_up_cooldown - delta, 0.0)
 	_update_beam_sequence(delta)
 	if transition_locked:
@@ -316,16 +321,26 @@ func _handle_combat_input() -> void:
 	_handle_beam_input()
 	if beam_cast_state != "":
 		return
+	var light_pressed := _action_just_pressed("light_attack")
+	var heavy_pressed := _action_just_pressed("heavy_attack")
 	if attack_cooldown > 0.0:
+		if light_pressed or heavy_pressed:
+			buffered_attack = "heavy" if heavy_pressed else "light"
+			attack_buffer_time = 0.18
 		return
-	if _action_just_pressed("light_attack"):
+	if buffered_attack != "":
+		light_pressed = buffered_attack == "light"
+		heavy_pressed = buffered_attack == "heavy"
+		buffered_attack = ""
+		attack_buffer_time = 0.0
+	if light_pressed:
 		attack_cooldown = 0.38
 		attack_anim_time = 0.34
 		attack_anim_heavy = false
 		if animation_driver != null:
 			animation_driver.trigger_action("attack_light", 1.22, 0.06)
 		_begin_blade_attack(get_blade_attack_damage(false), 2.0, false)
-	elif _action_just_pressed("heavy_attack"):
+	elif heavy_pressed:
 		if stamina_component.spend(22.0):
 			attack_cooldown = 0.7
 			attack_anim_time = 0.52
@@ -340,7 +355,7 @@ func _handle_combat_input() -> void:
 	if _action_just_pressed("throw_bomb"):
 		bomb_requested.emit()
 	if _action_just_pressed("block"):
-		parry_window = 0.24
+		parry_window = get_parry_window_duration()
 		if animation_driver != null:
 			animation_driver.trigger_action("parry")
 
@@ -359,7 +374,7 @@ func _update_blade_contact() -> void:
 		pending_attack_damage = 0.0
 		pending_attack_radius = 0.0
 		return
-	if attack_anim_time <= 0.0 or pending_attack_damage <= 0.0:
+	if pending_attack_damage <= 0.0:
 		return
 	var segment: Dictionary = get_blade_world_segment()
 	var blade_base: Vector3 = segment.get("base", Vector3.ZERO)
@@ -383,6 +398,12 @@ func _update_blade_contact() -> void:
 		pending_attack_radius = 0.0
 	previous_blade_base = blade_base
 	previous_blade_tip = blade_tip
+
+func get_parry_window_duration() -> float:
+	return 0.30
+
+func get_attack_buffer_duration() -> float:
+	return 0.18
 
 func get_blade_world_segment() -> Dictionary:
 	if blade_base_marker != null and blade_tip_marker != null and is_instance_valid(blade_base_marker) and is_instance_valid(blade_tip_marker):
