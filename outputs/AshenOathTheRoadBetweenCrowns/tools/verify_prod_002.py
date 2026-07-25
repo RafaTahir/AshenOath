@@ -73,8 +73,8 @@ def main() -> int:
         complete = sum(ticket["status"] == "complete" for ticket in tickets)
         planned = sum(ticket["status"] == "planned" for ticket in tickets)
         blocked = sum(ticket["status"] == "blocked_external" for ticket in tickets)
-        require(complete == 27, f"expected 27 complete tickets, found {complete}")
-        require(planned == 34, f"expected 34 planned tickets, found {planned}")
+        require(complete == 38, f"expected 38 complete tickets through Milestone B, found {complete}")
+        require(planned == 23, f"expected 23 planned tickets after Milestone B, found {planned}")
         require(blocked == 2, f"expected 2 externally blocked tickets, found {blocked}")
         require(next(ticket for ticket in tickets if ticket["id"] == "PROD-002")["status"] == "complete", "PROD-002 is not complete")
 
