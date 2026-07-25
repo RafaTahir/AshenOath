@@ -29,7 +29,10 @@ func _initialize() -> void:
 	var game = scene.instantiate()
 	root.add_child(game)
 	await process_frame
+	game.settings.settings["touch_controls"] = "off"
 	game.settings.set_quality_preset("balanced")
+	game.input_router.active_device = game.input_router.DEVICE_KEYBOARD_MOUSE
+	game.hud.set_input_device(game.input_router.DEVICE_KEYBOARD_MOUSE)
 	_check(is_equal_approx(float(game.settings.settings.get("resolution_scale", 0.0)), 1.0), "Balanced is not using native 1.0 render scale")
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
 	game.call("_on_launch_accepted")
