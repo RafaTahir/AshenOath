@@ -1503,10 +1503,8 @@ func _use_inventory_item(item_id: String) -> void:
 	elif item_id == "ash_bomb":
 		_throw_bomb()
 	elif item_id == "moon_oil" or item_id == "rot_oil":
-		if int(inventory.items.get(item_id, 0)) <= 0:
-			hud.toast("No %s left." % inventory.get_item_name(item_id))
+		if not inventory.apply_oil(item_id):
 			return
-		inventory.active_oil = item_id
 		_refresh_equipment_readout()
 		hud.show_status_cue("Oil applied", "item")
 		hud.toast("%s slicks the blade." % inventory.get_item_name(item_id))

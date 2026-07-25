@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "categories": ["potion", "bomb", "oil", "trap"],
+  "items": [
+    "redroot_potion",
+    "bitterleaf_tonic",
+    "ash_bomb",
+    "moon_oil",
+    "rot_oil",
+    "iron_trap"
+  ],
+  "rules": {
+    "recipes_show_owned_and_required": true,
+    "missing_ingredients_disable_crafting": true,
+    "oil_requires_owned_item": true,
+    "legacy_state_is_sanitized": true,
+    "save_preserves_active_oil": true
+  }
+}

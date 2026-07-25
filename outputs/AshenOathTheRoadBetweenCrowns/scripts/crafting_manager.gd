@@ -17,7 +17,7 @@ func craft(item_id: String) -> bool:
 	var ok: bool = inventory.craft(item_id)
 	if ok:
 		crafted.emit(item_id)
-		if item_id == "moon_oil":
+		if item_id == "moon_oil" and quest_manager != null:
 			quest_manager.complete_objective("main_teeth_in_rain", "craft_moon_oil")
 			if story_state != null and bool(story_state.get_flag("moon_oil_mastery", false)):
 				inventory.add_ingredients({"mooncap": 1})

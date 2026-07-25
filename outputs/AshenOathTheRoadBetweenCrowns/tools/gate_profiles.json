@@ -244,6 +244,23 @@
         "verify_combat_001"
       ]
     },
+    "inventory": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/preparation_contract.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/items.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/inventory_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/crafting_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/hud.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_inv_001.gd"
+      ],
+      "gates": [
+        "verify_inv_001",
+        "verify_runtime",
+        "verify_save_001",
+        "verify_quest_002"
+      ]
+    },
     "progression": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/data/upgrades.json",
