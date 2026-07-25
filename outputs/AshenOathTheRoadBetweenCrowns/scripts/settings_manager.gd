@@ -24,6 +24,8 @@ const DEFAULT_SETTINGS := {
 	"subtitle_scale": 1.0,
 	"camera_shake": 1.0,
 	"reduced_motion": false
+	,"high_contrast": false
+	,"control_preset": "standard"
 }
 
 var settings: Dictionary = DEFAULT_SETTINGS.duplicate(true)
@@ -92,6 +94,9 @@ func _load_settings() -> void:
 	settings["camera_shake"] = clampf(float(settings["camera_shake"]), 0.0, 1.0)
 	settings["shadow_quality"] = clampi(int(settings["shadow_quality"]), 0, 2)
 	settings["potato_mode"] = settings["quality_preset"] == "potato"
+	settings["control_preset"] = str(settings.get("control_preset", "standard"))
+	if settings["control_preset"] not in ["standard", "left_handed"]:
+		settings["control_preset"] = "standard"
 
 func _save_settings() -> void:
 	var file := FileAccess.open(SETTINGS_PATH, FileAccess.WRITE)
@@ -238,6 +243,14 @@ func cycle_camera_shake() -> void:
 
 func toggle_reduced_motion() -> void:
 	settings["reduced_motion"] = not bool(settings["reduced_motion"])
+	apply()
+
+func toggle_high_contrast() -> void:
+	settings["high_contrast"] = not bool(settings.get("high_contrast", false))
+	apply()
+
+func cycle_control_preset() -> void:
+	settings["control_preset"] = "left_handed" if str(settings.get("control_preset", "standard")) == "standard" else "standard"
 	apply()
 
 func _cycle_float(current: float, values: Array) -> float:

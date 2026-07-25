@@ -1812,6 +1812,10 @@ func _handle_setting(action: String) -> void:
 		settings.cycle_camera_shake()
 	elif action == "reduced_motion":
 		settings.toggle_reduced_motion()
+	elif action == "high_contrast":
+		settings.toggle_high_contrast()
+	elif action == "control_preset":
+		settings.cycle_control_preset()
 	if action != "visual_preset":
 		hud.toast("Settings updated.")
 	hud.show_settings_menu(hud.controls_back_target)
@@ -1819,6 +1823,8 @@ func _handle_setting(action: String) -> void:
 func _apply_runtime_settings(current_settings: Dictionary) -> void:
 	if audio != null:
 		audio.set_master_volume(float(current_settings.get("master_volume", 0.85)))
+	if hud != null:
+		hud.apply_accessibility(current_settings)
 	if camera_rig != null:
 		camera_rig.apply_settings(
 			float(current_settings.get("mouse_sensitivity", 0.003)),
@@ -1826,8 +1832,6 @@ func _apply_runtime_settings(current_settings: Dictionary) -> void:
 			float(current_settings.get("gamepad_look_sensitivity", 1.0))
 		)
 		camera_rig.shake_decay = 1000.0 if float(current_settings.get("camera_shake", 1.0)) <= 0.0 else 6.0 / maxf(float(current_settings.get("camera_shake", 1.0)), 0.5)
-	if hud != null:
-		hud.apply_accessibility(float(current_settings.get("subtitle_scale", 1.0)))
 	if visual_director != null and visual_director.sun != null:
 		visual_director.apply_settings(current_settings)
 		visual_director.sun.shadow_enabled = int(current_settings.get("shadow_quality", 1)) > 0

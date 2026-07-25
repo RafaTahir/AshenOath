@@ -68,6 +68,8 @@ var raw_hint := ""
 var last_potions := 0
 var last_bombs := 0
 var last_oil_name := ""
+var reduced_motion := false
+var high_contrast := false
 
 func _ready() -> void:
 	_build_hud()
@@ -82,7 +84,7 @@ func _process(_delta: float) -> void:
 	if health_bar == null:
 		return
 	var health_ratio = last_health / max(last_health_max, 1.0)
-	if health_ratio <= 0.28:
+	if health_ratio <= 0.28 and not reduced_motion:
 		var pulse = 0.86 + 0.14 * sin(Time.get_ticks_msec() * 0.008)
 		health_bar.modulate = Color(1.0, pulse, pulse, 1.0)
 	else:
@@ -157,6 +159,8 @@ func show_settings_menu(back_target: String = "pause") -> void:
 	_add_menu_button(box, "Subtitle Size     %d%%" % int(round(float(s.get("subtitle_scale", 1.0)) * 100.0)), func(): settings_requested.emit("subtitle_scale"))
 	_add_menu_button(box, "Camera Shake      %d%%" % int(round(float(s.get("camera_shake", 1.0)) * 100.0)), func(): settings_requested.emit("camera_shake"))
 	_add_menu_button(box, "Reduced Motion    %s" % _on_off(bool(s.get("reduced_motion", false))), func(): settings_requested.emit("reduced_motion"))
+	_add_menu_button(box, "High Contrast     %s" % _on_off(bool(s.get("high_contrast", false))), func(): settings_requested.emit("high_contrast"))
+	_add_menu_button(box, "Control Layout    %s" % str(s.get("control_preset", "standard")).replace("_", " ").capitalize(), func(): settings_requested.emit("control_preset"))
 	_add_menu_button(box, "Back", _return_from_controls)
 
 func show_controls_menu(back_target: String = "main") -> void:
@@ -859,6 +863,19 @@ func set_input_source(source: Node) -> void:
 	if input_source != null:
 		set_input_device(str(input_source.get("active_device")))
 
+func apply_accessibility(current: Dictionary) -> void:
+	reduced_motion = bool(current.get("reduced_motion", false))
+	high_contrast = bool(current.get("high_contrast", false))
+	var subtitle_scale := clampf(float(current.get("subtitle_scale", 1.0)), 0.9, 1.2)
+	if dialogue_text != null:
+		dialogue_text.add_theme_font_size_override("normal_font_size", int(round(24.0 * subtitle_scale)))
+		dialogue_text.add_theme_font_size_override("bold_font_size", int(round(26.0 * subtitle_scale)))
+	for label in [tracker_label, compass_label, prompt_label, hint_label, toast_label]:
+		if label == null:
+			continue
+		label.add_theme_constant_override("outline_size", 5 if high_contrast else 2)
+		label.add_theme_color_override("font_outline_color", Color.BLACK if high_contrast else Color(0.01, 0.01, 0.01, 0.78))
+
 func set_input_device(device: String) -> void:
 	input_device = device if device in ["keyboard_mouse", "gamepad", "touch"] else "keyboard_mouse"
 	if raw_prompt != "":
@@ -1006,11 +1023,6 @@ func _apply_theme() -> void:
 	status_label.add_theme_font_size_override("font_size", 16)
 	_style_panel(dialogue_layer, Color(0.045, 0.04, 0.035, 0.96), Color(0.44, 0.32, 0.18, 0.92))
 	_style_panel(inventory_layer, Color(0.045, 0.04, 0.035, 0.97), Color(0.44, 0.32, 0.18, 0.92))
-
-func apply_accessibility(subtitle_scale: float) -> void:
-	if dialogue_text != null:
-		dialogue_text.add_theme_font_size_override("normal_font_size", int(round(18.0 * subtitle_scale)))
-		dialogue_text.add_theme_font_size_override("bold_font_size", int(round(20.0 * subtitle_scale)))
 
 func _format_tracker_text(text: String) -> String:
 	if text == "":

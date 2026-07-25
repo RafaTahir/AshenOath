@@ -92,6 +92,21 @@
         "verify_ui_001"
       ]
     },
+    "accessibility": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/input_router.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/settings_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/hud.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_access_001.gd"
+      ],
+      "gates": [
+        "verify_access_001",
+        "verify_input_001",
+        "verify_ui_002",
+        "verify_runtime_regressions"
+      ]
+    },
     "mobile": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/input_router.gd",

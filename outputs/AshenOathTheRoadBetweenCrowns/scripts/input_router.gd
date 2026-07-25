@@ -118,6 +118,7 @@ var vibration_enabled := true
 var virtual_move := Vector2.ZERO
 var virtual_look := Vector2.ZERO
 var _virtual_actions: Dictionary = {}
+var keyboard_labels: Dictionary = KEYBOARD_LABELS.duplicate()
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -145,6 +146,7 @@ func install_default_actions() -> void:
 func apply_settings(current: Dictionary) -> void:
 	gamepad_look_sensitivity = clampf(float(current.get("gamepad_look_sensitivity", 1.0)), 0.55, 1.55)
 	vibration_enabled = bool(current.get("gamepad_vibration", true))
+	_apply_keyboard_preset(str(current.get("control_preset", "standard")))
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventJoypadButton and event.pressed:
@@ -188,7 +190,39 @@ func action_label(action: String) -> String:
 		return str(GAMEPAD_LABELS.get(action, action.capitalize()))
 	if active_device == DEVICE_TOUCH:
 		return str(TOUCH_LABELS.get(action, action.capitalize()))
-	return str(KEYBOARD_LABELS.get(action, action.capitalize()))
+	return str(keyboard_labels.get(action, action.capitalize()))
+
+func _apply_keyboard_preset(preset: String) -> void:
+	var bindings: Dictionary = KEYBOARD_BINDINGS.duplicate()
+	var mouse: Dictionary = MOUSE_BINDINGS.duplicate()
+	keyboard_labels = KEYBOARD_LABELS.duplicate()
+	if preset == "left_handed":
+		bindings.merge({
+			"move_forward": KEY_I, "move_back": KEY_K, "move_left": KEY_J, "move_right": KEY_L,
+			"dodge": KEY_N, "jump": KEY_M, "block": KEY_U, "interact": KEY_O,
+			"use_potion": KEY_P, "throw_bomb": KEY_H,
+		}, true)
+		mouse["light_attack"] = MOUSE_BUTTON_RIGHT
+		mouse["heavy_attack"] = MOUSE_BUTTON_LEFT
+		keyboard_labels.merge({
+			"interact": "O", "dodge": "N", "jump": "M", "block": "U",
+			"light_attack": "Right Mouse", "heavy_attack": "Left Mouse",
+			"use_potion": "P", "throw_bomb": "H",
+		}, true)
+	for action in bindings:
+		_replace_physical_event(str(action), InputEventKey, int(bindings[action]))
+	for action in mouse:
+		_replace_physical_event(str(action), InputEventMouseButton, int(mouse[action]))
+
+func _replace_physical_event(action: String, event_type, code: int) -> void:
+	_ensure_action(action)
+	for existing in InputMap.action_get_events(action):
+		if is_instance_of(existing, event_type):
+			InputMap.action_erase_event(action, existing)
+	if event_type == InputEventKey:
+		_add_key(action, code)
+	else:
+		_add_mouse(action, code)
 
 func set_virtual_axes(move_axis: Vector2, look_axis: Vector2) -> void:
 	virtual_move = move_axis.limit_length(1.0)
