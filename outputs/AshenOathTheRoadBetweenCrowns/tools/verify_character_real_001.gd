@@ -6,7 +6,7 @@ const EXPECTED := {
 	"villager_human":"Adventurer_PolyPizza_Quaternius_CC0.glb",
 	"villager_female_human":"WomanCasual_PolyPizza_Quaternius_CC0.glb",
 	"castle_guard_human":"CharacterAnimated_PolyPizza_Quaternius_CC0.glb",
-	"road_ranger_human":"CharacterAnimated_PolyPizza_Quaternius_CC0.glb"
+	"road_ranger_human":"HoodedAdventurer_PolyPizza_Quaternius_CC0.glb"
 }
 var failures := 0
 

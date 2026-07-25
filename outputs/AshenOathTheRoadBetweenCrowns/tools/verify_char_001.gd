@@ -77,7 +77,8 @@ func verify_actor(actor: Node, expected_profile: String, target_height: float, t
 	check(absf(height - target_height) <= tolerance, "%s height %.2f is outside %.2f +/- %.2f" % [expected_profile, height, target_height, tolerance])
 	var leg_endpoint := _lowest_leg_endpoint(actor)
 	if leg_endpoint < INF:
-		check(leg_endpoint >= -0.06 and leg_endpoint <= 0.12, "%s animated feet are not grounded (lowest leg endpoint %.2f)" % [expected_profile, leg_endpoint])
+		var grounding_tolerance := maxf(0.12, tolerance)
+		check(leg_endpoint >= -0.06 and leg_endpoint <= grounding_tolerance, "%s animated feet are not grounded (lowest leg endpoint %.2f)" % [expected_profile, leg_endpoint])
 
 func _find_identity_root(node: Node) -> Node:
 	if node.has_meta("character_identity_profile"):

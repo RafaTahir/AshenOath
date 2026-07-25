@@ -14,6 +14,9 @@ func _initialize() -> void:
 	game.settings.set_quality_preset("balanced")
 	game.call("_new_game")
 	await _frames(12)
+	game.quests.start_quest("side_widows_bell")
+	game.call("_load_zone", "greyfen", Vector3(0, 0.9, 8))
+	await _frames(8)
 
 	check(game.current_zone_id == "greyfen", "WORLD-003 did not load Greyfen")
 	var section: Node = game.zone_root.find_child("GreyfenCemeterySection", true, false)

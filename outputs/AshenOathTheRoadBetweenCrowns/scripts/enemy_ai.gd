@@ -282,6 +282,8 @@ func set_encounter_active(value: bool) -> void:
 		visual_root.process_mode = Node.PROCESS_MODE_INHERIT if value else Node.PROCESS_MODE_DISABLED
 	if navigation_agent != null:
 		navigation_agent.process_mode = Node.PROCESS_MODE_INHERIT if value else Node.PROCESS_MODE_DISABLED
+	if animation_driver != null:
+		animation_driver.set_distance_suspended(not value)
 	for collision in find_children("*", "CollisionShape3D", true, false):
 		collision.set_deferred("disabled", not value)
 	if value:
