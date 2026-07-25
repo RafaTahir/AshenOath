@@ -10,6 +10,7 @@ const CharacterAnimationDriver = preload("res://scripts/character_animation_driv
 const WorldVisualUpgrade = preload("res://scripts/world_visual_upgrade.gd")
 const WorldMotionController = preload("res://scripts/world_motion_controller.gd")
 const SurfaceFeedbackManager = preload("res://scripts/surface_feedback_manager.gd")
+const WorldVFXController = preload("res://scripts/world_vfx_controller.gd")
 const ZoneSpatialService = preload("res://scripts/zone_spatial_service.gd")
 const RuntimeServiceRegistry = preload("res://scripts/runtime_service_registry.gd")
 const RuntimeActorFactory = preload("res://scripts/runtime_actor_factory.gd")
@@ -31,6 +32,7 @@ var day_night
 var audio
 var asset_helper
 var visual_director
+var world_vfx
 var minigames
 var progression
 var input_router
@@ -849,8 +851,14 @@ func _add_visual_100_layer(zone_id: String) -> void:
 	surface.name = "SurfaceFeedbackManager"
 	zone_root.add_child(surface)
 	surface.configure(player, quality)
+	world_vfx = WorldVFXController.new()
+	world_vfx.name = "WorldVFXController"
+	zone_root.add_child(world_vfx)
+	world_vfx.configure(zone_id, quality)
 
 func _handle_interaction(area) -> void:
+	if world_vfx != null and is_instance_valid(world_vfx) and area is Node3D:
+		world_vfx.pulse_interaction((area as Node3D).global_position)
 	if area.interaction_type == "minigame":
 		minigames.open_game("tic_tac_toe" if area.interaction_id == "common_table" else "draughts")
 	elif area.interaction_type == "village_place":

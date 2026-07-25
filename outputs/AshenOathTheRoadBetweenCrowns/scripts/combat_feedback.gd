@@ -67,15 +67,12 @@ static func warning_marker(parent: Node3D, target: Node3D) -> MeshInstance3D:
 	var marker = MeshInstance3D.new()
 	marker.name = "EnemyWindupWarning"
 	marker.set_meta("visual_name", "EnemyWindupWarning")
-	var mesh = CylinderMesh.new()
-	mesh.top_radius = 0.5
-	mesh.bottom_radius = 0.5
-	mesh.height = 0.020
-	mesh.radial_segments = 24
+	var mesh = PrismMesh.new()
+	mesh.size = Vector3(0.26, 0.018, 0.72)
 	marker.mesh = mesh
-	marker.position = Vector3(0, 0.045, 0)
-	marker.scale = Vector3(0.85, 0.012, 0.85)
-	marker.material_override = _mat(Color(0.58, 0.09, 0.045), 0.80)
+	marker.position = Vector3(0, 0.055, -0.58)
+	marker.scale = Vector3(1.0, 1.0, 1.0)
+	marker.material_override = _emissive(Color(0.52, 0.07, 0.035), 0.34)
 	target.add_child(marker)
 	return marker
 

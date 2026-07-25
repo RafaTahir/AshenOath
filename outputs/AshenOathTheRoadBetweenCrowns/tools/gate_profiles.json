@@ -175,6 +175,19 @@
         "verify_combat_001"
       ]
     },
+    "vfx": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/world_vfx_controller.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/combat_feedback.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_vfx_001.gd"
+      ],
+      "gates": [
+        "verify_vfx_001",
+        "verify_combat_001",
+        "verify_visible_quality",
+        "verify_zone_budgets"
+      ]
+    },
     "progression": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/data/upgrades.json",
