@@ -32,6 +32,7 @@ func _initialize() -> void:
 	await _settle_retirement(game)
 	_verify_zone(game, "vargan_court_potato")
 	_write_report()
+	game.settings.set_quality_preset("balanced")
 	game.queue_free()
 	await _frames(4)
 	_finish()

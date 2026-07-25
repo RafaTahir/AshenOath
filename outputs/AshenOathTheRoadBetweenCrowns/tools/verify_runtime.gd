@@ -13,6 +13,7 @@ func _initialize() -> void:
 	var game = scene.instantiate()
 	root.add_child(game)
 	await process_frame
+	game.settings.set_quality_preset("balanced")
 	_assert(ProjectSettings.get_setting("display/window/size/viewport_width", 0) == 1280, "Gameplay viewport width is not 1280")
 	_assert(ProjectSettings.get_setting("display/window/size/viewport_height", 0) == 720, "Gameplay viewport height is not 720")
 	game.hud.show_main_menu()
