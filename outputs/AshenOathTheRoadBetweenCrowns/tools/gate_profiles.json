@@ -53,7 +53,8 @@
       "gates": [
         "verify_story_campaign",
         "verify_quest_001",
-        "verify_quest_002"
+        "verify_quest_002",
+        "verify_save_001"
       ]
     },
     "ui": {

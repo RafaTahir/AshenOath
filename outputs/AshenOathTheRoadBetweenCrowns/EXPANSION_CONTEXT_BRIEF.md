@@ -38,7 +38,7 @@ milestone.
 
 ## Roadmap Checkpoint
 
-`LIGHT-001` is the latest completed development checkpoint. Six original
-roadmap tickets remain: `SAVE-001`, `PROG-001`, `PERF-001`, `WEB-001`,
-`INPUT-001`, and `MOBILE-001`. Production deploys only after `MOBILE-001`
-completes the approved seven-ticket milestone.
+`SAVE-001` is the latest development checkpoint. Five original roadmap tickets
+remain: `PROG-001`, `PERF-001`, `WEB-001`, `INPUT-001`, and `MOBILE-001`.
+Production deploys only after `MOBILE-001` completes the approved seven-ticket
+milestone.
