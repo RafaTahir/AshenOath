@@ -132,6 +132,18 @@
         "verify_visible_quality"
       ]
     },
+    "materials": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/world_material_library.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/*",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_mat_001.gd"
+      ],
+      "gates": [
+        "verify_mat_001",
+        "verify_engine_003",
+        "verify_visible_quality"
+      ]
+    },
     "progression": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/data/upgrades.json",
