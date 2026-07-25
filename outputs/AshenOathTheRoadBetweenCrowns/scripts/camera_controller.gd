@@ -1,6 +1,7 @@
 extends Node3D
 
 var target: Node3D
+var input_source: Node
 var yaw = 0.0
 var pitch = -0.19
 var sensitivity = 0.003
@@ -14,6 +15,7 @@ var shake_amount = 0.0
 var shake_decay = 6.0
 var keyboard_turn_speed = 2.2
 var invert_y = false
+var gamepad_look_sensitivity := 1.0
 var current_zone_id = "greyfen"
 
 var _initialized = false
@@ -26,8 +28,9 @@ var _previous_on_floor = true
 var _fov_kick = 0.0
 var _idle_time = 0.0
 
-func setup(follow_target: Node3D) -> void:
+func setup(follow_target: Node3D, source: Node = null) -> void:
 	target = follow_target
+	input_source = source
 	camera = Camera3D.new()
 	camera.current = true
 	camera.fov = 63.0
@@ -71,7 +74,7 @@ func _process(delta: float) -> void:
 	_update_response_state(delta)
 	var velocity = _target_velocity()
 	var flat_speed = Vector2(velocity.x, velocity.z).length()
-	var sprinting = Input.is_action_pressed("run") and flat_speed > 3.5
+	var sprinting := _action_pressed("run") and flat_speed > 3.5
 	var combat_focus = _nearest_combat_focus()
 	var target_distance = maxf(MIN_ZOOM_DISTANCE, distance - 0.75) if combat_focus != null else distance
 	var target_height = 2.25 if combat_focus != null else height
@@ -138,14 +141,17 @@ func get_flat_right() -> Vector3:
 	return Basis(Vector3.UP, yaw).x.normalized()
 
 func _apply_keyboard_camera(delta: float) -> void:
-	var turn = Input.get_axis("camera_left", "camera_right")
-	var tilt = Input.get_axis("camera_up", "camera_down")
+	var look := _look_input()
+	var turn := look.x
+	var tilt := look.y
 	if abs(turn) > 0.01:
 		yaw -= turn * keyboard_turn_speed * delta
 	if abs(tilt) > 0.01:
 		var y_direction = -1.0 if invert_y else 1.0
 		pitch = clamp(pitch - tilt * keyboard_turn_speed * 0.55 * delta * y_direction, -0.75, 0.45)
-	var zoom_axis := Input.get_axis("camera_zoom_in", "camera_zoom_out")
+	var zoom_axis: float = input_source.action_axis("camera_zoom_in", "camera_zoom_out") \
+		if input_source != null and input_source.has_method("action_axis") \
+		else Input.get_axis("camera_zoom_in", "camera_zoom_out")
 	if absf(zoom_axis) > 0.01:
 		adjust_zoom(zoom_axis * 3.4 * delta)
 
@@ -155,9 +161,23 @@ func adjust_zoom(amount: float) -> void:
 func get_zoom_distance() -> float:
 	return distance
 
-func apply_settings(mouse_sensitivity: float, use_invert_y: bool) -> void:
+func apply_settings(mouse_sensitivity: float, use_invert_y: bool, controller_sensitivity: float = 1.0) -> void:
 	sensitivity = mouse_sensitivity
 	invert_y = use_invert_y
+	gamepad_look_sensitivity = controller_sensitivity
+
+func _look_input() -> Vector2:
+	if input_source != null and input_source.has_method("look_vector"):
+		return input_source.look_vector()
+	return Vector2(
+		Input.get_axis("camera_left", "camera_right"),
+		Input.get_axis("camera_up", "camera_down")
+	) * gamepad_look_sensitivity
+
+func _action_pressed(action: StringName) -> bool:
+	if input_source != null and input_source.has_method("is_action_pressed"):
+		return input_source.is_action_pressed(action)
+	return Input.is_action_pressed(action)
 
 func _smooth_weight(delta: float, speed: float) -> float:
 	return 1.0 - exp(-speed * delta)

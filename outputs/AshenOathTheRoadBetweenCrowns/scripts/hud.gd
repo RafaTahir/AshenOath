@@ -16,7 +16,7 @@ signal dialogue_closed
 signal menu_hovered
 signal menu_clicked
 
-const MENU_BUILD_LABEL = "WEB-001 ACT ONE CANDIDATE | NATIVE 720P | ASHENOATH.VERCEL.APP"
+const MENU_BUILD_LABEL = "INPUT-001 MULTI-INPUT CANDIDATE | NATIVE 720P | ASHENOATH.VERCEL.APP"
 const MENU_SIZE = Vector2(1920.0, 1080.0)
 const GAMEPLAY_SIZE = Vector2i(1280, 720)
 const SAVE_PATH = "user://ashen_oath_save.json"
@@ -59,6 +59,14 @@ var enemy_hide_tween: Tween
 var dialogue_pages: Array[String] = []
 var dialogue_page_index := 0
 var dialogue_session_data: Dictionary = {}
+var input_source: Node
+var input_device := "keyboard_mouse"
+var active_menu := ""
+var raw_prompt := ""
+var raw_hint := ""
+var last_potions := 0
+var last_bombs := 0
+var last_oil_name := ""
 
 func _ready() -> void:
 	_build_hud()
@@ -80,6 +88,7 @@ func _process(_delta: float) -> void:
 		health_bar.modulate = Color.WHITE
 
 func show_main_menu() -> void:
+	active_menu = "main"
 	_set_internal_canvas(Vector2i(MENU_SIZE))
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_clear_menu()
@@ -94,6 +103,7 @@ func show_main_menu() -> void:
 	_add_menu_button(box, "Exit Game", show_launch_screen)
 
 func show_launch_screen() -> void:
+	active_menu = "launch"
 	_set_internal_canvas(Vector2i(MENU_SIZE))
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_clear_menu()
@@ -106,6 +116,7 @@ func show_launch_screen() -> void:
 	)
 
 func show_pause_menu() -> void:
+	active_menu = "pause"
 	_set_internal_canvas(Vector2i(MENU_SIZE))
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_clear_menu()
@@ -119,6 +130,7 @@ func show_pause_menu() -> void:
 	_add_menu_button(box, "Main Menu", func(): show_main_menu())
 
 func show_settings_menu(back_target: String = "pause") -> void:
+	active_menu = "settings"
 	_set_internal_canvas(Vector2i(MENU_SIZE))
 	controls_back_target = back_target
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -131,6 +143,8 @@ func show_settings_menu(back_target: String = "pause") -> void:
 	_add_menu_text(box, "3D Resolution     Native 720p (fixed for Web stability)")
 	_add_menu_button(box, "Shadows           %s" % _shadow_label(int(s.get("shadow_quality", 1))), func(): settings_requested.emit("shadows"))
 	_add_menu_button(box, "Mouse Sensitivity %s" % _sensitivity_label(float(s.get("mouse_sensitivity", 0.003))), func(): settings_requested.emit("mouse_sensitivity"))
+	_add_menu_button(box, "Controller Look   %s" % _controller_sensitivity_label(float(s.get("gamepad_look_sensitivity", 1.0))), func(): settings_requested.emit("gamepad_sensitivity"))
+	_add_menu_button(box, "Controller Rumble %s" % _on_off(bool(s.get("gamepad_vibration", true))), func(): settings_requested.emit("gamepad_vibration"))
 	_add_menu_button(box, "Invert Y Axis     %s" % _on_off(bool(s.get("invert_y", false))), func(): settings_requested.emit("invert_y"))
 	_add_menu_button(box, "Master Volume     %d%%" % int(round(float(s.get("master_volume", 0.85)) * 100.0)), func(): settings_requested.emit("volume"))
 	_add_menu_button(box, "VSync             %s" % _on_off(bool(s.get("vsync", true))), func(): settings_requested.emit("vsync"))
@@ -141,15 +155,20 @@ func show_settings_menu(back_target: String = "pause") -> void:
 	_add_menu_button(box, "Back", _return_from_controls)
 
 func show_controls_menu(back_target: String = "main") -> void:
+	active_menu = "controls"
 	controls_back_target = back_target
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_clear_menu()
 	menu_layer.visible = true
 	var box = _menu_box("Controls", "", "blade | breath | road")
-	_add_menu_text(box, "WASD move | Mouse look | Wheel zoom | Page Up/Down zoom\nShift run | Space dodge | X jump\nLeft mouse light attack | Right mouse heavy attack\nHold C Oathfire Beam | Tap Q parry | Hold Q block | E interact\nR potion | F bomb | Tab inventory | Esc pause")
+	if input_device == "gamepad":
+		_add_menu_text(box, "Left Stick move | Right Stick look | D-Pad Up/Down zoom\nL3 run | B dodge | Y jump\nRB light attack | RT heavy attack\nHold LT Oathfire Beam | Tap/Hold LB parry or block | A interact\nD-Pad Left potion | D-Pad Right bomb | View journal | Menu pause")
+	else:
+		_add_menu_text(box, "WASD move | Mouse look | Wheel zoom | Page Up/Down zoom\nShift run | Space dodge | X jump\nLeft mouse light attack | Right mouse heavy attack\nHold C Oathfire Beam | Tap Q parry | Hold Q block | E interact\nR potion | F bomb | Tab inventory | Esc pause")
 	_add_menu_button(box, "Back", _return_from_controls)
 
 func show_credits_menu() -> void:
+	active_menu = "credits"
 	_set_internal_canvas(Vector2i(MENU_SIZE))
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_clear_menu()
@@ -159,6 +178,7 @@ func show_credits_menu() -> void:
 	_add_menu_button(box, "Back", func(): show_main_menu())
 
 func hide_menus() -> void:
+	active_menu = ""
 	_set_internal_canvas(GAMEPLAY_SIZE)
 	menu_layer.visible = false
 	dialogue_layer.visible = false
@@ -247,13 +267,14 @@ func hide_enemy() -> void:
 	enemy_value_label.visible = false
 
 func set_prompt(text: String) -> void:
-	var clean := text.strip_edges()
+	raw_prompt = text
+	var clean := _format_input_text(text.strip_edges())
 	if clean.begins_with("E  "):
 		clean = "[E]  " + clean.trim_prefix("E  ")
 	elif clean.begins_with("E - "):
 		clean = "[E]  " + clean.trim_prefix("E - ")
 	prompt_label.text = clean
-	prompt_label.visible = text != ""
+	prompt_label.visible = raw_prompt != ""
 
 func set_tracker(text: String) -> void:
 	tracker_label.text = _format_tracker_text(text)
@@ -276,7 +297,8 @@ func toast(text: String) -> void:
 	)
 
 func set_guidance_hint(text: String, seconds: float = 4.5) -> void:
-	hint_label.text = text
+	raw_hint = text
+	hint_label.text = _format_input_text(text)
 	hint_label.visible = text != ""
 	hint_label.modulate = Color(1, 1, 1, 1)
 	if hint_tween != null and hint_tween.is_running():
@@ -306,8 +328,13 @@ func show_status_cue(text: String, kind: String = "neutral") -> void:
 	)
 
 func update_equipment(potions: int, bombs: int, oil_name: String) -> void:
+	last_potions = potions
+	last_bombs = bombs
+	last_oil_name = oil_name
 	var oil_text = oil_name if oil_name != "" else "No oil"
-	equipment_label.text = "R Redroot x%d   F Ash Bomb x%d   Oil: %s" % [potions, bombs, oil_text]
+	equipment_label.text = "%s Redroot x%d   %s Ash Bomb x%d   Oil: %s" % [
+		_action_label("use_potion"), potions, _action_label("throw_bomb"), bombs, oil_text
+	]
 
 func mark_stamina_exhausted() -> void:
 	_flash_bar(stamina_bar, Color(1.0, 0.32, 0.16))
@@ -343,6 +370,7 @@ func _render_dialogue_page() -> void:
 			_render_dialogue_page()
 		)
 		dialogue_actions.add_child(advance)
+		call_deferred("_focus_first_enabled", dialogue_actions)
 		return
 	var actions: Array = dialogue_session_data.get("actions",[])
 	for action in actions:
@@ -356,6 +384,7 @@ func _render_dialogue_page() -> void:
 		dialogue_actions.add_child(button)
 	if actions.is_empty():
 		_add_dialogue_close()
+	call_deferred("_focus_first_enabled", dialogue_actions)
 
 func show_inventory(inventory, quests, story_state = null, progression = null) -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -422,6 +451,7 @@ func show_inventory(inventory, quests, story_state = null, progression = null) -
 		hide_menus()
 	)
 	craft_buttons.add_child(close)
+	call_deferred("_focus_first_enabled", craft_buttons)
 
 func show_ending(title: String, body: String) -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -782,6 +812,78 @@ func _current_settings() -> Dictionary:
 	if settings_node != null:
 		return settings_node.settings
 	return {}
+
+func set_input_source(source: Node) -> void:
+	input_source = source
+	if input_source != null:
+		set_input_device(str(input_source.get("active_device")))
+
+func set_input_device(device: String) -> void:
+	input_device = device if device in ["keyboard_mouse", "gamepad", "touch"] else "keyboard_mouse"
+	if raw_prompt != "":
+		set_prompt(raw_prompt)
+	if raw_hint != "":
+		hint_label.text = _format_input_text(raw_hint)
+	update_equipment(last_potions, last_bombs, last_oil_name)
+
+func _action_label(action: String) -> String:
+	if input_source != null and input_source.has_method("action_label"):
+		return "[%s]" % str(input_source.action_label(action))
+	return "[%s]" % action.capitalize()
+
+func _format_input_text(text: String) -> String:
+	if input_device != "gamepad":
+		return text
+	var formatted := text
+	formatted = formatted.replace("Left click", "[RB]")
+	formatted = formatted.replace("Left mouse", "[RB]")
+	formatted = formatted.replace("Right mouse", "[RT]")
+	formatted = formatted.replace("Space", "[B]")
+	formatted = formatted.replace("Tap Q", "Tap [LB]")
+	formatted = formatted.replace("Hold Q", "Hold [LB]")
+	formatted = formatted.replace("Hold C", "Hold [LT]")
+	formatted = formatted.replace("Press E", "Press [A]")
+	if formatted.begins_with("E - "):
+		formatted = "[A]  " + formatted.trim_prefix("E - ")
+	elif formatted.begins_with("E  "):
+		formatted = "[A]  " + formatted.trim_prefix("E  ")
+	return formatted
+
+func _controller_sensitivity_label(value: float) -> String:
+	if value < 0.8:
+		return "Low"
+	if value > 1.2:
+		return "High"
+	return "Medium"
+
+func _focus_first_enabled(container: Node) -> void:
+	if container == null or not is_instance_valid(container):
+		return
+	for child in container.get_children():
+		if child is Button and not child.disabled:
+			child.grab_focus()
+			return
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not event.is_action_pressed("ui_cancel"):
+		return
+	if dialogue_layer != null and dialogue_layer.visible:
+		dialogue_closed.emit()
+		get_tree().paused = false
+		hide_menus()
+	elif inventory_layer != null and inventory_layer.visible:
+		dialogue_closed.emit()
+		get_tree().paused = false
+		hide_menus()
+	elif active_menu in ["settings", "controls"]:
+		_return_from_controls()
+	elif active_menu == "credits":
+		show_main_menu()
+	elif active_menu == "pause":
+		resume_requested.emit()
+	else:
+		return
+	get_viewport().set_input_as_handled()
 
 func _on_off(value: bool) -> String:
 	return "On" if value else "Off"

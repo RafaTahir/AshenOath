@@ -36,6 +36,7 @@ var asset_helper
 var visual_director
 var minigames
 var progression
+var input_router
 var zone_root: Node3D
 var active_interactable
 var interaction_candidates: Array = []
@@ -89,7 +90,6 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	shared_box_mesh = BoxMesh.new()
 	shared_box_mesh.size = Vector3.ONE
-	_ensure_input_map()
 	_build_global_environment()
 	_setup_runtime()
 	hud.show_launch_screen()
@@ -165,6 +165,7 @@ func _setup_runtime() -> void:
 	hud = services["hud"]
 	minigames = services["minigames"]
 	progression = services["progression"]
+	input_router = services["input_router"]
 	runtime_services.configure(self)
 	enemy_defs = _read_json("res://data/enemies.json")
 
@@ -259,7 +260,7 @@ func _spawn_player(pos: Vector3) -> void:
 		player.queue_free()
 	if camera_rig != null:
 		camera_rig.queue_free()
-	var actor_pair: Dictionary = RuntimeActorFactory.create_player_camera(self, pos, current_zone_id)
+	var actor_pair: Dictionary = RuntimeActorFactory.create_player_camera(self, pos, current_zone_id, input_router)
 	assert(RuntimeActorFactory.is_valid_pair(actor_pair), "Player-camera composition failed")
 	player = actor_pair["player"]
 	camera_rig = actor_pair["camera"]
@@ -1347,6 +1348,8 @@ func _on_player_parried() -> void:
 
 func _on_player_blocked(_amount: float) -> void:
 	audio.play_event("block")
+	if input_router != null:
+		input_router.rumble(0.18, 0.32, 0.08)
 	if camera_rig != null:
 		camera_rig.shake(0.08)
 	if zone_root != null and player != null:
@@ -1358,6 +1361,8 @@ func _on_player_blocked(_amount: float) -> void:
 
 func _on_player_hurt(_amount: float) -> void:
 	audio.play_event("hurt")
+	if input_router != null:
+		input_router.rumble(0.36, 0.58, 0.14)
 	if camera_rig != null:
 		camera_rig.shake(0.14)
 	if zone_root != null and player != null:
@@ -1498,6 +1503,8 @@ func _on_enemy_windup_started(enemy) -> void:
 func _on_enemy_attack_resolved(enemy, parried: bool, contact_position: Vector3) -> void:
 	if parried:
 		audio.play_event("parry")
+		if input_router != null:
+			input_router.rumble(0.24, 0.52, 0.10)
 		if camera_rig != null:
 			camera_rig.shake(0.18)
 		if zone_root != null:
@@ -1657,6 +1664,10 @@ func _handle_setting(action: String) -> void:
 			_load_zone(current_zone_id, player.global_position)
 	elif action == "mouse_sensitivity":
 		settings.cycle_mouse_sensitivity()
+	elif action == "gamepad_sensitivity":
+		settings.cycle_gamepad_look_sensitivity()
+	elif action == "gamepad_vibration":
+		settings.toggle_gamepad_vibration()
 	elif action == "invert_y":
 		settings.toggle_invert_y()
 	elif action == "volume":
@@ -1675,7 +1686,11 @@ func _apply_runtime_settings(current_settings: Dictionary) -> void:
 	if audio != null:
 		audio.set_master_volume(float(current_settings.get("master_volume", 0.85)))
 	if camera_rig != null:
-		camera_rig.apply_settings(float(current_settings.get("mouse_sensitivity", 0.003)), bool(current_settings.get("invert_y", false)))
+		camera_rig.apply_settings(
+			float(current_settings.get("mouse_sensitivity", 0.003)),
+			bool(current_settings.get("invert_y", false)),
+			float(current_settings.get("gamepad_look_sensitivity", 1.0))
+		)
 		camera_rig.shake_decay = 1000.0 if float(current_settings.get("camera_shake", 1.0)) <= 0.0 else 6.0 / maxf(float(current_settings.get("camera_shake", 1.0)), 0.5)
 	if hud != null:
 		hud.apply_accessibility(float(current_settings.get("subtitle_scale", 1.0)))
@@ -3699,43 +3714,3 @@ func _read_json(path: String):
 	var file = FileAccess.open(path, FileAccess.READ)
 	var parsed = JSON.parse_string(file.get_as_text())
 	return parsed if parsed != null else {}
-
-func _ensure_input_map() -> void:
-	_add_key_action("move_forward", KEY_W)
-	_add_key_action("move_back", KEY_S)
-	_add_key_action("move_left", KEY_A)
-	_add_key_action("move_right", KEY_D)
-	_add_key_action("run", KEY_SHIFT)
-	_add_key_action("dodge", KEY_SPACE)
-	_add_key_action("jump", KEY_X)
-	_add_key_action("block", KEY_Q)
-	_add_key_action("interact", KEY_E)
-	_add_key_action("use_potion", KEY_R)
-	_add_key_action("throw_bomb", KEY_F)
-	_add_key_action("oathfire_beam", KEY_C)
-	_add_key_action("open_inventory", KEY_TAB)
-	_add_key_action("pause", KEY_ESCAPE)
-	_add_key_action("camera_left", KEY_LEFT)
-	_add_key_action("camera_right", KEY_RIGHT)
-	_add_key_action("camera_up", KEY_UP)
-	_add_key_action("camera_down", KEY_DOWN)
-	_add_key_action("camera_zoom_in", KEY_PAGEUP)
-	_add_key_action("camera_zoom_out", KEY_PAGEDOWN)
-	_add_mouse_action("light_attack", MOUSE_BUTTON_LEFT)
-	_add_mouse_action("heavy_attack", MOUSE_BUTTON_RIGHT)
-
-func _add_key_action(action: String, keycode: int) -> void:
-	if not InputMap.has_action(action):
-		InputMap.add_action(action)
-	if InputMap.action_get_events(action).is_empty():
-		var event = InputEventKey.new()
-		event.keycode = keycode
-		InputMap.action_add_event(action, event)
-
-func _add_mouse_action(action: String, button: int) -> void:
-	if not InputMap.has_action(action):
-		InputMap.add_action(action)
-	if InputMap.action_get_events(action).is_empty():
-		var event = InputEventMouseButton.new()
-		event.button_index = button
-		InputMap.action_add_event(action, event)

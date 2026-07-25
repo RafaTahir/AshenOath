@@ -15,11 +15,12 @@ const AssetSpawnHelper = preload("res://scripts/asset_spawn_helper.gd")
 const HUD = preload("res://scripts/hud.gd")
 const MinigameManager = preload("res://scripts/minigame_manager.gd")
 const ProgressionManager = preload("res://scripts/progression_manager.gd")
+const InputRouter = preload("res://scripts/input_router.gd")
 
 const REQUIRED_SERVICES := [
 	"story_state", "quests", "dialogue", "inventory", "crafting", "combat",
 	"save_manager", "settings", "world_materials", "day_night", "audio",
-	"asset_helper", "hud", "minigames", "progression"
+	"asset_helper", "hud", "minigames", "progression", "input_router"
 ]
 
 var services: Dictionary = {}
@@ -43,6 +44,7 @@ func create_services() -> Dictionary:
 		"hud": HUD.new(),
 		"minigames": MinigameManager.new(),
 		"progression": ProgressionManager.new(),
+		"input_router": InputRouter.new(),
 	}
 	for id in REQUIRED_SERVICES:
 		var service: Node = services[id]
@@ -68,6 +70,7 @@ func configure(owner: Node) -> void:
 	var hud = services["hud"]
 	var minigames = services["minigames"]
 	var progression = services["progression"]
+	var input_router = services["input_router"]
 
 	hud.process_mode = Node.PROCESS_MODE_ALWAYS
 	quests.load_quests("res://data/quests.json")
@@ -76,13 +79,23 @@ func configure(owner: Node) -> void:
 	dialogue.setup(story_state)
 	inventory.load_items("res://data/items.json")
 	crafting.setup(inventory, quests, story_state)
+	input_router.install_default_actions()
+	input_router.apply_settings(settings.settings)
+	hud.set_input_source(input_router)
+	input_router.device_changed.connect(func(_device: String):
+		hud.set_input_device(input_router.active_device)
+		owner.call("_refresh_equipment_readout")
+	)
 
 	day_night.time_changed.connect(func(minutes: float, phase: String, count: int):
 		var director = owner.get("visual_director")
 		if director != null:
 			director.set_time(minutes, phase, count)
 	)
-	settings.changed.connect(func(current: Dictionary): owner.call("_apply_runtime_settings", current))
+	settings.changed.connect(func(current: Dictionary):
+		input_router.apply_settings(current)
+		owner.call("_apply_runtime_settings", current)
+	)
 	hud.launch_accepted.connect(Callable(owner, "_on_launch_accepted"))
 	hud.menu_hovered.connect(func(): audio.play_event("menu_hover", 0.025))
 	hud.menu_clicked.connect(func(): audio.play_event("menu_click", 0.015))

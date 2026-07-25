@@ -38,8 +38,10 @@ milestone.
 
 ## Roadmap Checkpoint
 
-`WEB-001` is the latest development checkpoint. It establishes strict Web
-artifact/configuration checks and real Chrome/Edge New Game smoke tests. Two
-original roadmap tickets remain: `INPUT-001` and `MOBILE-001`.
+`INPUT-001` is the latest development checkpoint. It establishes one semantic
+input router for keyboard/mouse, Xbox-style gamepads, and virtual touch hooks;
+device-aware prompts; controller menu focus; sensitivity; and rumble. Its
+64.0 MB candidate passed packed startup and real Chrome/Edge New Game smoke
+tests. One original roadmap ticket remains: `MOBILE-001`.
 Production deploys only after `MOBILE-001` completes the approved seven-ticket
 milestone.

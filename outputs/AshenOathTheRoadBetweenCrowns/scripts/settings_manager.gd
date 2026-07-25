@@ -15,6 +15,8 @@ const DEFAULT_SETTINGS := {
 	"potato_mode": false,
 	"target_fps": 30,
 	"mouse_sensitivity": 0.003,
+	"gamepad_look_sensitivity": 1.0,
+	"gamepad_vibration": true,
 	"invert_y": false,
 	"master_volume": 0.85,
 	"subtitle_scale": 1.0,
@@ -78,6 +80,7 @@ func _load_settings() -> void:
 	if settings["quality_preset"] not in ["potato", "balanced", "quality"]:
 		settings["quality_preset"] = "balanced"
 	settings["mouse_sensitivity"] = clampf(float(settings["mouse_sensitivity"]), 0.0018, 0.0048)
+	settings["gamepad_look_sensitivity"] = clampf(float(settings["gamepad_look_sensitivity"]), 0.55, 1.55)
 	settings["master_volume"] = clampf(float(settings["master_volume"]), 0.0, 1.0)
 	settings["subtitle_scale"] = clampf(float(settings["subtitle_scale"]), 0.9, 1.2)
 	settings["camera_shake"] = clampf(float(settings["camera_shake"]), 0.0, 1.0)
@@ -180,6 +183,17 @@ func cycle_mouse_sensitivity() -> void:
 	if idx < 0:
 		idx = 2
 	settings["mouse_sensitivity"] = values[(idx + 1) % values.size()]
+	apply()
+
+func cycle_gamepad_look_sensitivity() -> void:
+	var values := [0.65, 1.0, 1.35]
+	var current := float(settings.get("gamepad_look_sensitivity", 1.0))
+	var idx := values.find(current)
+	settings["gamepad_look_sensitivity"] = values[(idx + 1) % values.size()]
+	apply()
+
+func toggle_gamepad_vibration() -> void:
+	settings["gamepad_vibration"] = not bool(settings.get("gamepad_vibration", true))
 	apply()
 
 func toggle_invert_y() -> void:

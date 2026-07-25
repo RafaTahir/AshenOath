@@ -30,6 +30,7 @@ func open_game(game_id: String) -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	get_tree().paused = true
 	_restart()
+	call_deferred("_focus_first_board_button")
 	opened.emit(game_id)
 
 func close_game() -> void:
@@ -105,7 +106,7 @@ func save_state() -> Dictionary:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not is_open() or not event.pressed: return
-	if event.is_action("pause"):
+	if event.is_action_pressed("pause") or event.is_action_pressed("ui_cancel"):
 		get_viewport().set_input_as_handled()
 		close_game()
 	elif event is InputEventKey and event.keycode == KEY_R:
@@ -159,6 +160,7 @@ func _render_ttt() -> void:
 		_style_board_button(button, square)
 		button.text = ["","X","O"][ttt_board[index]]; button.disabled = finished or ttt_board[index] != 0
 		button.pressed.connect(func(): play_ttt(index)); board_grid.add_child(button)
+	call_deferred("_focus_first_board_button")
 
 func _choose_ttt_move() -> int:
 	for side in [2,1]:
@@ -205,6 +207,15 @@ func _render_draughts() -> void:
 		var square := StyleBoxFlat.new(); square.bg_color = Color(0.48,0.35,0.21) if ((index/6)+(index%6))%2 == 0 else Color(0.10,0.075,0.055); square.border_color = Color(0.30,0.21,0.12); square.set_border_width_all(1); _style_board_button(button, square)
 		button.add_theme_color_override("font_color",Color(0.94,0.70,0.28) if draughts_board[index] > 0 else Color(0.86,0.86,0.80))
 		button.pressed.connect(func(): _on_draughts_square(index)); board_grid.add_child(button)
+	call_deferred("_focus_first_board_button")
+
+func _focus_first_board_button() -> void:
+	if board_grid == null or not is_instance_valid(board_grid):
+		return
+	for child in board_grid.get_children():
+		if child is Button and not child.disabled:
+			child.grab_focus()
+			return
 
 func _on_draughts_square(index: int) -> void:
 	if finished: return

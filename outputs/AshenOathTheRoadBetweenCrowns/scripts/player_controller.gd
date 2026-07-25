@@ -33,6 +33,7 @@ var dodge_dir = Vector3.ZERO
 var can_control = true
 var transition_locked := false
 var camera_controller
+var input_source: Node
 var health_component
 var stamina_component
 var visual_root: Node3D
@@ -191,8 +192,28 @@ func get_blade_attack_damage(heavy: bool = false) -> float:
 		multiplier *= _progression_value("heavy_damage_multiplier", 1.0)
 	return base_damage * multiplier
 
+func _movement_input() -> Vector2:
+	if input_source != null and input_source.has_method("movement_vector"):
+		return input_source.movement_vector()
+	return Input.get_vector("move_left", "move_right", "move_forward", "move_back")
+
+func _action_pressed(action: StringName) -> bool:
+	if input_source != null and input_source.has_method("is_action_pressed"):
+		return input_source.is_action_pressed(action)
+	return Input.is_action_pressed(action)
+
+func _action_just_pressed(action: StringName) -> bool:
+	if input_source != null and input_source.has_method("is_action_just_pressed"):
+		return input_source.is_action_just_pressed(action)
+	return Input.is_action_just_pressed(action)
+
+func _action_just_released(action: StringName) -> bool:
+	if input_source != null and input_source.has_method("is_action_just_released"):
+		return input_source.is_action_just_released(action)
+	return Input.is_action_just_released(action)
+
 func _handle_movement(delta: float) -> void:
-	var input_vec = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
+	var input_vec := _movement_input()
 	var forward = Vector3.FORWARD
 	var right = Vector3.RIGHT
 	if camera_controller != null:
@@ -207,7 +228,7 @@ func _handle_movement(delta: float) -> void:
 		velocity.z = dodge_dir.z * dodge_velocity
 		movement_state = "dodge"
 	else:
-		var wants_run = Input.is_action_pressed("run") and input_vec.length() > 0.1
+		var wants_run := _action_pressed("run") and input_vec.length() > 0.1
 		var is_running = wants_run and stamina_component.spend(10.0 * delta)
 		var speed = run_speed if is_running else walk_speed
 		if input_vec.y > 0.15:
@@ -224,9 +245,9 @@ func _handle_movement(delta: float) -> void:
 			var target_yaw = atan2(-move_dir.x, -move_dir.z)
 			rotation.y = lerp_angle(rotation.y, target_yaw, 1.0 - exp(-turn_speed * delta))
 		movement_state = "run" if is_running else ("backward" if input_vec.y > 0.15 else ("strafe" if abs(input_vec.x) > 0.55 else ("walk" if move_dir.length() > 0.1 else "idle")))
-		if Input.is_action_just_pressed("jump"):
+		if _action_just_pressed("jump"):
 			try_jump()
-		if Input.is_action_just_pressed("dodge") and not beam_charging:
+		if _action_just_pressed("dodge") and not beam_charging:
 			if stamina_component.spend(get_dodge_stamina_cost()):
 				dodge_dir = move_dir if move_dir.length() > 0.1 else -global_transform.basis.z
 				dodge_time = 0.30
@@ -297,14 +318,14 @@ func _handle_combat_input() -> void:
 		return
 	if attack_cooldown > 0.0:
 		return
-	if Input.is_action_just_pressed("light_attack"):
+	if _action_just_pressed("light_attack"):
 		attack_cooldown = 0.38
 		attack_anim_time = 0.34
 		attack_anim_heavy = false
 		if animation_driver != null:
 			animation_driver.trigger_action("attack_light", 1.22, 0.06)
 		_begin_blade_attack(get_blade_attack_damage(false), 2.0, false)
-	elif Input.is_action_just_pressed("heavy_attack"):
+	elif _action_just_pressed("heavy_attack"):
 		if stamina_component.spend(22.0):
 			attack_cooldown = 0.7
 			attack_anim_time = 0.52
@@ -314,11 +335,11 @@ func _handle_combat_input() -> void:
 			_begin_blade_attack(get_blade_attack_damage(true), 2.25, true)
 		else:
 			stamina_exhausted.emit("heavy attack")
-	if Input.is_action_just_pressed("use_potion"):
+	if _action_just_pressed("use_potion"):
 		potion_requested.emit()
-	if Input.is_action_just_pressed("throw_bomb"):
+	if _action_just_pressed("throw_bomb"):
 		bomb_requested.emit()
-	if Input.is_action_just_pressed("block"):
+	if _action_just_pressed("block"):
 		parry_window = 0.24
 		if animation_driver != null:
 			animation_driver.trigger_action("parry")
@@ -414,12 +435,12 @@ func _blade_axis_from_rendered_bounds(parent: Node3D) -> Dictionary:
 	return {"base": base, "tip": tip}
 
 func _handle_beam_input() -> void:
-	if Input.is_action_just_pressed("oathfire_beam") and beam_cooldown <= 0.0 and beam_cast_state == "" and dodge_time <= 0.0:
+	if _action_just_pressed("oathfire_beam") and beam_cooldown <= 0.0 and beam_cast_state == "" and dodge_time <= 0.0:
 		_begin_oathfire_cast()
-	if beam_cast_state == "charging" and Input.is_action_pressed("oathfire_beam"):
+	if beam_cast_state == "charging" and _action_pressed("oathfire_beam"):
 		beam_charge_time = min(beam_charge_time + get_physics_process_delta_time(), 1.25)
 		_update_beam_charge_visual()
-	if beam_cast_state == "charging" and Input.is_action_just_released("oathfire_beam"):
+	if beam_cast_state == "charging" and _action_just_released("oathfire_beam"):
 		var ratio: float = clampf((beam_charge_time - 0.35) / 0.90, 0.0, 1.0)
 		if beam_charge_time >= 0.35 and stamina_component.spend(get_oathfire_stamina_cost()):
 			_commit_oathfire_release(ratio)
@@ -428,7 +449,7 @@ func _handle_beam_input() -> void:
 			_begin_beam_redraw()
 		else:
 			_begin_beam_redraw()
-	elif beam_cast_state == "sheathing" and Input.is_action_just_released("oathfire_beam"):
+	elif beam_cast_state == "sheathing" and _action_just_released("oathfire_beam"):
 		_begin_beam_redraw()
 
 func _begin_oathfire_cast() -> void:
@@ -462,7 +483,7 @@ func _update_beam_sequence(delta: float) -> void:
 		face_target(global_position + beam_locked_direction * 4.0)
 	beam_state_time = max(beam_state_time - delta, 0.0)
 	if beam_cast_state == "sheathing" and beam_state_time <= 0.0:
-		if Input.is_action_pressed("oathfire_beam"):
+		if _action_pressed("oathfire_beam"):
 			beam_cast_state = "charging"
 			beam_phase_changed.emit("charging")
 			beam_state_time = 0.0
@@ -556,7 +577,7 @@ func _set_sword_sheathed(sheathed: bool) -> void:
 		sheathed_sword_visual.visible = sheathed
 
 func is_blocking() -> bool:
-	return Input.is_action_pressed("block") and stamina_component.stamina > 8.0
+	return _action_pressed("block") and stamina_component.stamina > 8.0
 
 func take_damage(amount: float) -> bool:
 	if dodge_time > 0.0:
@@ -1087,7 +1108,7 @@ func _add_proxy_box(node_name: String, local_pos: Vector3, size: Vector3, color:
 func _animate_visuals(delta: float, move_dir: Vector3, moving: bool) -> void:
 	if visual_root == null:
 		return
-	var running = movement_state == "run" or (Input.is_action_pressed("run") and moving)
+	var running = movement_state == "run" or (_action_pressed("run") and moving)
 	if animation_driver != null and animation_driver.is_valid():
 		animation_driver.set_locomotion(Vector2(velocity.x, velocity.z).length() / max(run_speed, 0.1), move_dir, is_on_floor())
 		if movement_state == "dodge" and animation_driver.current_state != "dodge":

@@ -18,6 +18,14 @@ seconds to initialize the engine and another 14-15 seconds to reach Greyfen
 after New Game; this remains known loading-performance debt. Production remains
 unchanged until `MOBILE-001`.
 
+INPUT-001 centralizes gameplay and menu input behind `InputRouter`. Keyboard
+and mouse controls remain intact; Xbox-style gamepad movement, camera, combat,
+interaction, menus, prompts, rumble, sensitivity, and future virtual-input
+hooks now share the same semantic actions. The 64.0 MB development candidate
+again reached Greyfen in Chrome and Edge at 1280x720 WebGL2 with no console
+errors. Physical-controller testing remains required before public controller
+support is considered final. `MOBILE-001` is the only remaining roadmap ticket.
+
 ## COMBAT-001 Update
 
 - Kael's light and heavy attacks resolve from the animated sword's measured hilt-to-tip sweep rather than a delayed radius/facing query.
@@ -163,10 +171,14 @@ The broader quest data exists, but the current release target is the first 3-10 
 - Browser launch screen asks for one click before showing the main menu.
 - Main menu uses a 1920x1080 responsive UI canvas and supports New Game, Continue, Controls, Settings, Credits/Licenses, and browser-safe Exit Game.
 - Pause menu supports resume, save/load, checkpoint load, settings, controls, and main-menu style navigation.
-- Settings expose resolution scale, shadows, fullscreen, VSync, mouse sensitivity, invert Y, master volume, and Potato Mode.
+- Settings expose resolution scale, shadows, fullscreen, VSync, mouse and controller sensitivity, controller vibration, invert Y, master volume, and Potato Mode.
 - Gameplay captures the mouse.
 - Dialogue, inventory, settings, and menus release the mouse pointer so buttons remain clickable.
 - Keyboard camera fallback is available with arrow keys.
+- `InputRouter` owns semantic actions and active-device detection for keyboard/mouse, Xbox-style gamepads, and future virtual touch controls.
+- Menus, dialogue choices, inventory, and minigames establish controller focus and support `A` to accept and `B` to cancel.
+- HUD prompts, guidance, equipment shortcuts, and the controls screen update when the active input device changes.
+- Gamepad gameplay uses left stick movement, right stick camera, `A` interact, `B` dodge, `Y` jump, `RB` light attack, `RT` heavy attack, `LB` block/parry, `LT` Oathfire, D-pad items/zoom, View inventory, and Menu pause.
 
 ### Player Controller
 
@@ -480,8 +492,9 @@ Current state:
 
 | Script | Responsibility |
 | --- | --- |
-| `scripts/game.gd` | Main gameplay orchestration, interaction routing, quest flow, combat hooks, save hooks, runtime environment, input map, and fall recovery |
-| `scripts/runtime_service_registry.gd` | Owns and configures the fifteen runtime manager, UI, content, audio, and world services |
+| `scripts/game.gd` | Main gameplay orchestration, interaction routing, quest flow, combat hooks, save hooks, runtime environment, and fall recovery |
+| `scripts/input_router.gd` | Semantic keyboard/mouse, gamepad, and virtual-input routing; active-device prompts, controller settings, and rumble |
+| `scripts/runtime_service_registry.gd` | Owns and configures the sixteen runtime manager, UI, input, content, audio, and world services |
 | `scripts/runtime_actor_factory.gd` | Creates and connects the active player and third-person camera pair |
 | `scripts/zone_composition_router.gd` | Validates zone IDs and routes construction to directly preloaded core or campaign builders |
 | `scripts/zone_build_context.gd` | Typed public construction boundary and result validation for campaign zones |
@@ -710,6 +723,9 @@ Known verifier note: Godot headless may emit ObjectDB cleanup warnings after pas
 - Preserve the sub-900 ms cold-transition and sub-350 ms warm-transition budgets as later systems change.
 - Preserve WEB-001's Chrome/Edge canvas, console, runtime-heap, and New Game
   checks as browser-facing systems change.
+- Complete `MOBILE-001`: add a bounded touch layout on top of INPUT-001's
+  virtual axes/actions, validate responsive browser sizing, then run the full
+  milestone release and production deployment.
 - Produce bespoke realistic human assets as a separate licensed asset-production milestone.
 
 ### Medium Term

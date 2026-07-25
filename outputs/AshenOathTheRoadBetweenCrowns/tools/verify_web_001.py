@@ -42,8 +42,9 @@ def main() -> int:
         fail("project is not using the Compatibility renderer", failures)
     if 'viewport_width=1280' not in project_settings or 'viewport_height=720' not in project_settings:
         fail("gameplay viewport is not native 1280x720", failures)
-    if "WEB-001 ACT ONE CANDIDATE" not in hud:
-        fail("visible menu build identifier is not WEB-001", failures)
+    build_label = re.search(r'const MENU_BUILD_LABEL = "([^"]+)"', hud)
+    if not build_label or "CANDIDATE" not in build_label.group(1) or "ASHENOATH.VERCEL.APP" not in build_label.group(1):
+        fail("visible menu build identifier is missing candidate and production identity", failures)
 
     vercel = json.loads((root / "vercel.json").read_text(encoding="utf-8"))
     header_rules = vercel.get("headers", [])
