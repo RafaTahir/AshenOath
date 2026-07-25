@@ -230,6 +230,20 @@
         "verify_motion_quality"
       ]
     },
+    "enemy_ai": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/ai_family_contract.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/enemies.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/enemy_ai.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_ai_002.gd"
+      ],
+      "gates": [
+        "verify_ai_002",
+        "verify_ai_001",
+        "verify_navigation_001",
+        "verify_combat_001"
+      ]
+    },
     "progression": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/data/upgrades.json",
