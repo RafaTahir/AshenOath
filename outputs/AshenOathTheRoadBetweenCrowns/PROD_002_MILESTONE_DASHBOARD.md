@@ -12,8 +12,8 @@
 | Measure | Count |
 |---|---:|
 | Roadmap tickets | 63 |
-| Complete | 38 |
-| Remaining planned | 23 |
+| Complete | 48 |
+| Remaining planned | 13 |
 | Blocked by external prerequisite | 2 |
 | Tracked issues | 15 |
 | Open issues | 4 |
@@ -26,7 +26,7 @@
 | `baseline` | Completed roadmap baseline | 26 | 0 | 0 | 100% |
 | `A` | Infrastructure and engine stability | 1 | 5 | 0 | 17% |
 | `B` | Characters, combat, materials, and interaction | 11 | 0 | 0 | 100% |
-| `C` | Campaign content and consequence validation | 0 | 10 | 0 | 0% |
+| `C` | Campaign content and consequence validation | 10 | 0 | 0 | 100% |
 | `D` | Audio, UX, accessibility, and Web candidate | 0 | 6 | 0 | 0% |
 | `E` | Mobile, store, and Version 1.0 | 0 | 4 | 2 | 0% |
 
@@ -88,16 +88,16 @@
 | [x] `complete` | `NARR-001` | narrative | Environmental evidence and aftermath | `B` Characters, combat, materials, and interaction |
 | [x] `complete` | `VFX-001` | vfx | Combat, interaction, weather, and consequence effects | `B` Characters, combat, materials, and interaction |
 | [x] `complete` | `WATER-001` | world | River, banks, bridges, and spatial audio | `B` Characters, combat, materials, and interaction |
-| [ ] `planned` | `BOSS-001` | boss | White Hart encounter and noncombat resolution | `C` Campaign content and consequence validation |
-| [ ] `planned` | `QA-004` | qa | Save/choice permutation matrix | `C` Campaign content and consequence validation |
-| [ ] `planned` | `QUEST-003` | narrative | Ash and Banner | `C` Campaign content and consequence validation |
-| [ ] `planned` | `QUEST-004` | narrative | Blood Under Stone | `C` Campaign content and consequence validation |
-| [ ] `planned` | `QUEST-005` | narrative | The Hart Remembers | `C` Campaign content and consequence validation |
-| [ ] `planned` | `QUEST-006` | narrative | Consequence and epilogue pass | `C` Campaign content and consequence validation |
-| [ ] `planned` | `SIDE-001` | narrative | Five authored side quests | `C` Campaign content and consequence validation |
-| [ ] `planned` | `WORLD-004` | world | Deep wood, marsh, mill, and farmstead | `C` Campaign content and consequence validation |
-| [ ] `planned` | `WORLD-005` | world | Bandit road and Castle Vargan | `C` Campaign content and consequence validation |
-| [ ] `planned` | `WORLD-006` | world | Undercroft and Hart Glade | `C` Campaign content and consequence validation |
+| [x] `complete` | `BOSS-001` | boss | White Hart encounter and noncombat resolution | `C` Campaign content and consequence validation |
+| [x] `complete` | `QA-004` | qa | Save/choice permutation matrix | `C` Campaign content and consequence validation |
+| [x] `complete` | `QUEST-003` | narrative | Ash and Banner | `C` Campaign content and consequence validation |
+| [x] `complete` | `QUEST-004` | narrative | Blood Under Stone | `C` Campaign content and consequence validation |
+| [x] `complete` | `QUEST-005` | narrative | The Hart Remembers | `C` Campaign content and consequence validation |
+| [x] `complete` | `QUEST-006` | narrative | Consequence and epilogue pass | `C` Campaign content and consequence validation |
+| [x] `complete` | `SIDE-001` | narrative | Five authored side quests | `C` Campaign content and consequence validation |
+| [x] `complete` | `WORLD-004` | world | Deep wood, marsh, mill, and farmstead | `C` Campaign content and consequence validation |
+| [x] `complete` | `WORLD-005` | world | Bandit road and Castle Vargan | `C` Campaign content and consequence validation |
+| [x] `complete` | `WORLD-006` | world | Undercroft and Hart Glade | `C` Campaign content and consequence validation |
 | [ ] `planned` | `ACCESS-001` | ux | Subtitles, focus, contrast, remapping, and reduced motion | `D` Audio, UX, accessibility, and Web candidate |
 | [ ] `planned` | `AUDIO-002` | audio | Campaign music and transitions | `D` Audio, UX, accessibility, and Web candidate |
 | [ ] `planned` | `PERF-003` | performance | Mobile budgets and thermal test | `D` Audio, UX, accessibility, and Web candidate |

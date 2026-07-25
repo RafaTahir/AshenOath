@@ -716,9 +716,9 @@ Known verifier note: Godot headless may emit ObjectDB cleanup warnings after pas
 - Human models are skeletal, textured, lit, and animated but still lack realistic faces, hands, hair, facial rigs, and bespoke clothing.
 - CHAR-001 improves immediate identity and removes proxy anatomy, but the underlying Poly Pizza humans and skeletal Ghoulkin remain low-poly temporary assets rather than final character art.
 - Main-route character and Wychwood enemy skeletons animate; broader animation retargeting and facial performance remain incomplete.
-- Major areas beyond the first route are partial, blocked, or data-only.
-- Castle Vargan is playable and verified, but its architecture remains visibly blockout-grade.
-- Side quests are represented in data but not all have fully authored gameplay spaces.
+- The full campaign route is now playable through Deep Wood, mill, farmstead, marsh, bandit road, Castle Vargan, undercroft, assembly, and Hart Glade; visual fidelity remains deliberately stylized and uneven.
+- Castle Vargan is playable and verified with an authored approach, courtyard, and Record Hall, but its modular architecture remains below the final art target.
+- Five side quests have authored world interactions and consequences; the remaining five stay data-backed for a later content pass.
 - Audio is generated/procedural feedback, not mastered final game audio.
 - UI is functional and themed but not final AAA-grade presentation.
 - Browser support has verified Chrome and Edge desktop plus Chrome/Edge mobile
@@ -753,7 +753,7 @@ Known verifier note: Godot headless may emit ObjectDB cleanup warnings after pas
 
 ### Long Term
 
-- Reopen/expand areas one at a time: cemetery micro-quest, deeper Wychwood, then Castle Vargan.
+- Refine already-open campaign areas one at a time rather than adding more geographic breadth.
 - Require each new area to meet the same bar as the vertical slice: bounded play space, clear route, stable collision, no void, no placeholder major actors, and browser performance checks.
 - Build a real production asset list for characters, monsters, animation, terrain, VFX, audio, UI, and narrative scenes.
 - Add real QA passes for browser compatibility, saves, progression, combat balance, input mode switching, and deployment.
@@ -780,6 +780,14 @@ The project does not yet satisfy:
 - Finished full-game scope.
 - Photoreal or high-fidelity humans.
 - Full facial animation and studio-quality combat motion capture.
-- Fully authored side quests and later main quests.
+- All ten side quests at the same authored standard; five currently meet it.
 - Small optimized final Web payload.
 - Broad browser/device QA.
+
+## Milestone C Campaign State
+
+- `WORLD-004` through `WORLD-006` provide dedicated bounded builders for the complete campaign route.
+- `QUEST-003` through `QUEST-006` implement Ash and Banner, Blood Under Stone, The Hart Remembers, and consequence-driven epilogues.
+- `BOSS-001` preserves Witness/Mercy noncombat resolutions and adds a three-phase White Hart encounter for Duty/Ash.
+- `SIDE-001` authors five consequential village stories and removes the instant-completion shortcut.
+- `QA-004` exhaustively validates 17,496 major-choice combinations and save-stable epilogue resolution.

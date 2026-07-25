@@ -221,7 +221,11 @@ try {
         "verify_motion_quality.gd", "verify_river_swimming.gd", "verify_greyfen_life.gd",
 		"verify_castle_vargan.gd", "verify_audio_runtime.gd", "verify_audio_001.gd", "verify_visible_quality.gd",
 		"verify_recovery_002_foundation.gd", "verify_navigation_001.gd", "verify_char_001.gd", "verify_anim_001.gd", "verify_combat_001.gd", "verify_ai_001.gd", "verify_oath_001.gd", "verify_ui_001.gd", "verify_input_001.gd", "verify_mobile_001.gd", "verify_world_001.gd", "verify_world_002.gd", "verify_world_003.gd", "verify_zone_budgets.gd",
-        "verify_visual_003.gd", "verify_visual_100.gd", "verify_master_002.gd", "verify_master_003.gd"
+        "verify_visual_003.gd", "verify_visual_100.gd", "verify_master_002.gd", "verify_master_003.gd",
+        "verify_mat_001.gd", "verify_char_002.gd", "verify_mon_001.gd", "verify_vfx_001.gd", "verify_water_001.gd",
+        "verify_gameplay_001.gd", "verify_combat_002.gd", "verify_ai_002.gd", "verify_inv_001.gd", "verify_dialogue_001.gd", "verify_narr_001.gd",
+        "verify_world_004.gd", "verify_quest_003.gd", "verify_world_005.gd", "verify_quest_004.gd",
+        "verify_world_006.gd", "verify_quest_005.gd", "verify_boss_001.gd", "verify_side_001.gd", "verify_quest_006.gd", "verify_qa_004.gd"
     )
     $verifierNames = @($verifiers | ForEach-Object { [IO.Path]::GetFileNameWithoutExtension($_) })
     $resumeFromVerifier = $IsResume -and ($verifierNames -contains $ResumeFrom)
@@ -231,7 +235,11 @@ try {
         "capture_anim_001",
         "capture_world_001",
         "capture_world_002",
-        "capture_world_003"
+        "capture_world_003",
+        "capture_world_004",
+        "capture_world_005",
+        "capture_world_006",
+        "capture_boss_001"
     )
     $resumeFromScreenshot = $IsResume -and ($screenshotGates -contains $ResumeFrom)
     if (-not $IsResume -or $resumeFromVerifier) {
