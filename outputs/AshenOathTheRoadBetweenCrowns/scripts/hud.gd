@@ -56,7 +56,7 @@ var hint_tween: Tween
 var status_tween: Tween
 var toast_tween: Tween
 var enemy_hide_tween: Tween
-var dialogue_pages: Array[String] = []
+var dialogue_pages: Array = []
 var dialogue_page_index := 0
 var dialogue_session_data: Dictionary = {}
 var input_source: Node
@@ -349,18 +349,22 @@ func show_dialogue(data: Dictionary) -> void:
 	dialogue_layer.visible = true
 	dialogue_session_data = data.duplicate(true)
 	dialogue_pages.clear()
-	var greeting := str(data.get("greeting","")).strip_edges()
-	if greeting != "": dialogue_pages.append(greeting)
-	for line in data.get("lines",[]):
-		var line_text := str(line).strip_edges()
-		if line_text != "": dialogue_pages.append(line_text)
-	if dialogue_pages.is_empty(): dialogue_pages.append("...")
+	for page in data.get("pages", []):
+		if typeof(page) == TYPE_DICTIONARY and str(page.get("text", "")).strip_edges() != "":
+			dialogue_pages.append(page)
+	if dialogue_pages.is_empty():
+		dialogue_pages.append({"speaker": str(data.get("name", "Unknown")), "text": "..."})
 	dialogue_page_index = 0
 	_render_dialogue_page()
 
 func _render_dialogue_page() -> void:
-	dialogue_title.text = str(dialogue_session_data.get("name","Unknown"))
-	dialogue_text.text = dialogue_pages[dialogue_page_index]
+	var page = dialogue_pages[dialogue_page_index]
+	if typeof(page) == TYPE_DICTIONARY:
+		dialogue_title.text = str(page.get("speaker", dialogue_session_data.get("name", "Unknown")))
+		dialogue_text.text = str(page.get("text", "..."))
+	else:
+		dialogue_title.text = str(dialogue_session_data.get("name","Unknown"))
+		dialogue_text.text = str(page)
 	if dialogue_page_label != null:
 		dialogue_page_label.text = "%02d / %02d" % [dialogue_page_index + 1, dialogue_pages.size()]
 	for child in dialogue_actions.get_children():

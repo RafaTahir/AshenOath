@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "speaker_aware_pages": true,
+  "variant_order": "highest_priority_first",
+  "missing_boolean_flags_default_false": true,
+  "subtitle_fallback_required": true,
+  "first_route_profiles": {
+    "sister_anwen": "careful, self-correcting, never cryptic without a reason",
+    "kael": "concrete, brief, skeptical of promises",
+    "mira": "practical language used to contain emotion",
+    "rook": "humor retreats when the dead are discussed",
+    "blacksmith_tor": "plain craft metaphors and direct warnings"
+  }
+}

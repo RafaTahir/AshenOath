@@ -261,6 +261,22 @@
         "verify_quest_002"
       ]
     },
+    "dialogue_rewrite": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/dialogue_contract.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/dialogue.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/dialogue_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/story_state.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/hud.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_dialogue_001.gd"
+      ],
+      "gates": [
+        "verify_dialogue_001",
+        "verify_runtime",
+        "verify_story_campaign",
+        "verify_save_001"
+      ]
+    },
     "progression": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/data/upgrades.json",

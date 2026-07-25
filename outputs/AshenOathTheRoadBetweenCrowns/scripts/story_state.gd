@@ -34,7 +34,7 @@ func matches(conditions: Dictionary) -> bool:
 				if expected.has("min") and actual < int(expected["min"]): return false
 				if expected.has("max") and actual > int(expected["max"]): return false
 			elif actual != int(expected): return false
-		elif flags.get(id, null) != expected:
+		elif flags.get(id, false if expected is bool else null) != expected:
 			return false
 	return true
 
