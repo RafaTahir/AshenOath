@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "ticket": "MON-001",
+  "families": {
+    "ghoulkin": {
+      "visual_role": "ghoul_gaunt_real",
+      "profile": "skirmisher",
+      "height": 1.63,
+      "skin": "ghoulkin_skin.jpg"
+    },
+    "wychwood_stalker": {
+      "visual_role": "ghoul_stalker_real",
+      "profile": "flanker",
+      "height": 1.59,
+      "skin": "stalker_skin.jpg"
+    },
+    "wychwood_raider": {
+      "visual_role": "ghoul_gaunt_real",
+      "profile": "feinter",
+      "height": 1.72,
+      "skin": "ghoulkin_skin.jpg"
+    },
+    "wychwood_brute": {
+      "visual_role": "ghoul_brute_real",
+      "profile": "brute",
+      "height": 1.98,
+      "skin": "brute_skin.jpg"
+    }
+  },
+  "shared_contract": {
+    "required_states": ["idle", "walk", "run", "attack", "hit", "death"],
+    "root_motion": false,
+    "proxy_anatomy": false
+  }
+}

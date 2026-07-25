@@ -247,6 +247,12 @@ func _target_height_for_path(path: String) -> float:
 
 func _target_height_for_role(role_name: String, path: String) -> float:
 	var role := role_name.to_lower()
+	if role.contains("ghoul_stalker"):
+		return 1.66
+	if role.contains("ghoul_brute"):
+		return 1.90
+	if role.contains("ghoul_gaunt") or role.contains("ghoulkin_creature"):
+		return 1.72
 	if role in ["player_human", "player_kael"]:
 		return 1.78
 	if role in ["sister_anwen_human", "sister_anwen"]:

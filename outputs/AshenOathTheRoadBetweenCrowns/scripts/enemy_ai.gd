@@ -487,7 +487,14 @@ func _try_build_mapped_body() -> bool:
 	var uses_real_body := false
 	var visual_source: String = enemy_id
 	if enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute"]:
-		visual_source = "ghoulkin"
+		visual_source = {
+			"ghoulkin": "ghoul_gaunt_real",
+			"wychwood_stalker": "ghoul_stalker_real",
+			"wychwood_raider": "ghoul_gaunt_real",
+			"wychwood_brute": "ghoul_brute_real",
+		}.get(enemy_id, "ghoul_gaunt_real")
+		mapped = asset_helper.spawn_visual_role(visual_source, "enemies")
+		uses_real_body = mapped != null and not mapped.name.ends_with("_placeholder")
 	if mapped == null:
 		mapped = asset_helper.spawn_enemy(visual_source)
 	if mapped == null or mapped.name.ends_with("_placeholder"):
@@ -495,6 +502,8 @@ func _try_build_mapped_body() -> bool:
 			mapped.queue_free()
 		return false
 	mapped.name = "%s_visual" % enemy_id
+	mapped.set_meta("monster_family_role", visual_source)
+	mapped.set_meta("monster_behavior_profile", behavior_profile)
 	asset_helper.apply_normalized_scale(mapped, _mapped_enemy_scale().y)
 	if _is_wychwood_pack():
 		var profile_scale: Vector3 = {
@@ -526,7 +535,7 @@ func _try_build_mapped_body() -> bool:
 	if uses_real_body:
 		animation_driver.configure(mapped, {
 			"idle":"Idle", "walk":"Walk", "run":"Run", "attack":"Attack",
-			"hit":"RecieveHit", "death":"Death"
+			"hit":"Hit", "death":"Death"
 		})
 	elif visual_source == "ghoulkin_skeleton":
 		animation_driver.configure(mapped, {
@@ -562,17 +571,24 @@ func _configure_attack_contact_bone() -> void:
 				return
 
 func _ground_mapped_visual(mapped: Node3D) -> void:
-	var bounds := AABB()
-	var initialized := false
-	for mesh in mapped.find_children("*", "MeshInstance3D", true, false):
-		if mesh.mesh == null or mesh.skin == null:
-			continue
-		var relative: Transform3D = visual_root.global_transform.affine_inverse() * mesh.global_transform
-		var mesh_bounds: AABB = relative * mesh.mesh.get_aabb()
-		bounds = bounds.merge(mesh_bounds) if initialized else mesh_bounds
-		initialized = true
-	if initialized:
+	var state := {"initialized": false, "bounds": AABB()}
+	_accumulate_visual_bounds(mapped, Transform3D.IDENTITY, state)
+	if bool(state.initialized):
+		var bounds: AABB = state.bounds
 		mapped.position.y -= bounds.position.y
+
+func _accumulate_visual_bounds(node: Node, parent_transform: Transform3D, state: Dictionary) -> void:
+	var current_transform := parent_transform
+	if node is Node3D and node != visual_root:
+		current_transform = parent_transform * (node as Node3D).transform
+	if node is MeshInstance3D:
+		var mesh_instance := node as MeshInstance3D
+		if mesh_instance.mesh != null and mesh_instance.skin != null:
+			var mesh_bounds: AABB = current_transform * mesh_instance.mesh.get_aabb()
+			state.bounds = (state.bounds as AABB).merge(mesh_bounds) if bool(state.initialized) else mesh_bounds
+			state.initialized = true
+	for child in node.get_children():
+		_accumulate_visual_bounds(child, current_transform, state)
 
 func _horror_material() -> StandardMaterial3D:
 	var material := StandardMaterial3D.new()

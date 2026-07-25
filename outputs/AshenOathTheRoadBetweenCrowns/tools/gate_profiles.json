@@ -160,6 +160,21 @@
         "verify_greyfen_life"
       ]
     },
+    "monsters": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/monster_family_manifest.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/visual_upgrade_manifest.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/enemy_ai.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/enemies.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_mon_001.gd"
+      ],
+      "gates": [
+        "verify_mon_001",
+        "verify_ai_001",
+        "verify_motion_quality",
+        "verify_combat_001"
+      ]
+    },
     "progression": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/data/upgrades.json",
