@@ -4,6 +4,20 @@ Ashen Oath uses the credit-efficient WORKFLOW-002 pipeline. Read only the
 roadmap context brief, the active ticket, and files directly implicated by that
 ticket. Do not reread phase history or scan the full asset library.
 
+## PROD-002 Registry And Dashboard
+
+`outputs/AshenOathTheRoadBetweenCrowns/PROD_002_ISSUE_REGISTRY.json` is the
+machine-readable source of truth for roadmap ticket status, RECOVERY-003 issue
+status, milestone counts, and release policy. The readable view is generated
+at `outputs/AshenOathTheRoadBetweenCrowns/PROD_002_MILESTONE_DASHBOARD.md`.
+
+- Validate the registry and dashboard with `python tools/verify_prod_002.py`.
+- Regenerate the dashboard with `python tools/generate_prod_002_dashboard.py --write`.
+- Registry/dashboard changes select the targeted `production` and `qa` profiles;
+  they run `verify_prod_002` and do not select Web export or deployment gates.
+- This metadata does not own gameplay, imported assets, `AshenOath_Web`, or the
+  tracked `web/` output.
+
 ## Tier 1: Development Loop
 
 - Run parser/static checks first.

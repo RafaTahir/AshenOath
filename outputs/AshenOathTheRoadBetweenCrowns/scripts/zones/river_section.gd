@@ -6,19 +6,15 @@ const BANK_CLEARANCE := 1.15
 var visual_box_batches: Dictionary = {}
 var stone_transforms: Array[Transform3D] = []
 
-func build(parent: Node3D, context: Dictionary) -> Dictionary:
+func build(context: ZoneBuildContext, center_z: float, width: float, span: float) -> Dictionary:
 	visual_box_batches.clear()
 	stone_transforms.clear()
-	var host = context.get("host")
-	var center_z := float(context.get("center_z", 0.0))
-	var width := float(context.get("width", 44.0))
-	var span := float(context.get("span", 3.4))
 	var root := Node3D.new()
 	root.name = "LivingRiverSection"
 	root.set_meta("river_center_z", center_z)
 	root.set_meta("river_span", span)
 	root.set_meta("bridge_half_width", BRIDGE_WIDTH * 0.5)
-	parent.add_child(root)
+	context.add_node(root)
 
 	_make_box(root, "RiverBed", Vector3(0,-1.72,center_z), Vector3(width,0.20,span), Color(0.055,0.075,0.065), false)
 	_make_box(root, "NorthBank", Vector3(0,0.10,center_z-span*0.68), Vector3(width,0.24,1.05), Color(0.16,0.13,0.085), false)
@@ -26,7 +22,7 @@ func build(parent: Node3D, context: Dictionary) -> Dictionary:
 	_make_water(root, center_z, width, span)
 	_make_bridge(root, center_z, span)
 	_make_bank_barriers(root, center_z, width, span)
-	_make_recovery_volumes(root, host, center_z, width, span)
+	_make_recovery_volumes(root, context, center_z, width, span)
 
 	for x in [-18.0,-14.0,-10.0,-6.0,6.0,10.0,14.0,18.0]:
 		_make_reed(root, Vector3(x,0.34,center_z-span*0.54))
@@ -108,7 +104,7 @@ func _make_bank_barriers(root: Node3D, center_z: float, width: float, span: floa
 		_make_invisible_barrier(root, "RiverBankBarrier_%d" % barrier_index, Vector3(side_offset,0.74,bank_z), Vector3(side_length,1.48,0.34))
 		barrier_index += 1
 
-func _make_recovery_volumes(root: Node3D, host, center_z: float, width: float, span: float) -> void:
+func _make_recovery_volumes(root: Node3D, context: ZoneBuildContext, center_z: float, width: float, span: float) -> void:
 	var side_length := (width - BRIDGE_WIDTH) * 0.5
 	var side_offset := BRIDGE_WIDTH * 0.5 + side_length * 0.5
 	var recovery_index := 0
@@ -124,8 +120,8 @@ func _make_recovery_volumes(root: Node3D, host, center_z: float, width: float, s
 		shape.shape = box
 		volume.add_child(shape)
 		volume.body_entered.connect(func(body):
-			if body is CharacterBody3D and host != null and host.has_method("_recover_from_river"):
-				host.call("_recover_from_river", body, center_z, span)
+			if body is CharacterBody3D:
+				context.recover_from_river(body, center_z, span)
 		)
 
 func _make_invisible_barrier(root: Node3D, node_name: String, pos: Vector3, size: Vector3) -> void:

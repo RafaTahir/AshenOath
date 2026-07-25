@@ -1,5 +1,7 @@
 # RECOVERY-003 Issue Registry
 
+> Historical recovery snapshot. Current status, milestone ownership, and release evidence are maintained in `PROD_002_ISSUE_REGISTRY.json` and `PROD_002_MILESTONE_DASHBOARD.md`.
+
 ## Release Blockers
 
 | ID | Defect | Status | Proof |
@@ -11,8 +13,8 @@
 | R003-05 | Gate verifier bypassed focus and input | Fixed | Physical trigger entry, focus, line of sight, and simulated `E` |
 | R003-06 | Campaign failures could strand player | Fixed | Transactional build result and source-zone recovery |
 | R003-07 | Long Road gate corridor was not reserved | Fixed | Reserved spatial corridor and physical traversal |
-| R003-08 | Release report predates current source | Release gate | Final report regenerated before commit |
-| R003-09 | Screenshot acceptance was skipped | Release gate | Final 1280x720 captures regenerated before commit |
+| R003-08 | Release report predates current source | Fixed | Final report regenerated before the roadmap milestone commit |
+| R003-09 | Screenshot acceptance was skipped | Fixed | Final 1280x720 captures regenerated before the roadmap milestone commit |
 | R003-10 | Null material and renderer warnings are accepted | Fixed in active rendering | Imported weapon removed; retired roots prevent active teardown. Godot shutdown-only RID warnings remain documented. |
 
 ## Regression Gates

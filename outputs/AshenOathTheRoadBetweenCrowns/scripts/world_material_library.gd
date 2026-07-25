@@ -13,6 +13,16 @@ const SURFACES := {
 }
 
 var material_cache: Dictionary = {}
+var fallback_material: StandardMaterial3D
+
+func get_fallback_material() -> StandardMaterial3D:
+	if fallback_material != null:
+		return fallback_material
+	fallback_material = StandardMaterial3D.new()
+	fallback_material.resource_name = "WorldMaterialFallback"
+	fallback_material.albedo_color = Color(0.27, 0.25, 0.22)
+	fallback_material.roughness = 0.92
+	return fallback_material
 
 func get_material(surface_id: String, quality: String = "balanced", tint: Color = Color.WHITE, wetness: float = 0.0, triplanar: bool = true) -> StandardMaterial3D:
 	var normalized := surface_id if SURFACES.has(surface_id) else "forest_ground"
@@ -40,6 +50,12 @@ func get_material(surface_id: String, quality: String = "balanced", tint: Color 
 	material.uv1_scale = Vector3.ONE * _surface_scale(normalized)
 	material_cache[key] = material
 	return material
+
+func cache_stats() -> Dictionary:
+	return {
+		"materials": material_cache.size(),
+		"has_fallback": fallback_material != null,
+	}
 
 func get_grass_material(quality: String = "balanced") -> StandardMaterial3D:
 	var key := "grass:%s" % quality

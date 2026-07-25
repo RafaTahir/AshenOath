@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "capture_source_revision": "e7e00c1a08747ad390c8cde835247427d6a4bb6f",
+  "runtime_source_roots": [
+    "scripts",
+    "scenes",
+    "data",
+    "project.godot"
+  ],
+  "policy": {
+    "ordinary_ticket_allows_pending": true,
+    "milestone_requires_approval": true
+  },
+  "views": [
+    {
+      "id": "greyfen_spawn",
+      "required": true,
+      "current_glob": "Capture_01_greyfen_spawn_*.png",
+      "expected_size": [1280, 720],
+      "status": "pending",
+      "reviewer": "",
+      "note": "Current Roadmap-25 gameplay spawn evidence. Review composition, actor grounding, and readable route.",
+      "heuristics": { "min_mean_luminance": 1.5, "min_channel_variance": 4.0, "max_bright_ratio": 0.985 },
+      "baseline": { "path": "", "status": "not_set", "max_mean_absolute_difference": null }
+    },
+    {
+      "id": "anwen_dialogue",
+      "required": true,
+      "current_glob": "Capture_05_sister_anwen_dialogue_*.png",
+      "expected_size": [1280, 720],
+      "status": "pending",
+      "reviewer": "",
+      "note": "Review dialogue framing, Anwen facing, and HUD readability.",
+      "heuristics": { "min_mean_luminance": 1.5, "min_channel_variance": 4.0, "max_bright_ratio": 0.985 },
+      "baseline": { "path": "", "status": "not_set", "max_mean_absolute_difference": null }
+    },
+    {
+      "id": "greyfen_river_bridge",
+      "required": true,
+      "current_glob": "Capture_70_greyfen_river_bridge_*.png",
+      "expected_size": [1280, 720],
+      "status": "pending",
+      "reviewer": "",
+      "note": "Review bridge clearance, banks, water integration, and route legibility.",
+      "heuristics": { "min_mean_luminance": 1.5, "min_channel_variance": 4.0, "max_bright_ratio": 0.985 },
+      "baseline": { "path": "", "status": "not_set", "max_mean_absolute_difference": null }
+    },
+    {
+      "id": "wychwood_combat",
+      "required": true,
+      "current_glob": "Capture_10_combat_clearing_*.png",
+      "expected_size": [1280, 720],
+      "status": "pending",
+      "reviewer": "",
+      "note": "Review combat readability, enemy spacing, lighting, and route boundaries.",
+      "heuristics": { "min_mean_luminance": 1.5, "min_channel_variance": 4.0, "max_bright_ratio": 0.985 },
+      "baseline": { "path": "", "status": "not_set", "max_mean_absolute_difference": null }
+    },
+    {
+      "id": "sword_ready",
+      "required": true,
+      "current_glob": "Capture_15_player_sword_ready_*.png",
+      "expected_size": [1280, 720],
+      "status": "pending",
+      "reviewer": "",
+      "note": "Review sword attachment and Kael silhouette before attacks.",
+      "heuristics": { "min_mean_luminance": 1.5, "min_channel_variance": 4.0, "max_bright_ratio": 0.985 },
+      "baseline": { "path": "", "status": "not_set", "max_mean_absolute_difference": null }
+    },
+    {
+      "id": "light_attack",
+      "required": true,
+      "current_glob": "Capture_13_player_light_attack_arc_*.png",
+      "expected_size": [1280, 720],
+      "status": "pending",
+      "reviewer": "",
+      "note": "Review weapon path and light-attack visual contact.",
+      "heuristics": { "min_mean_luminance": 1.5, "min_channel_variance": 4.0, "max_bright_ratio": 0.985 },
+      "baseline": { "path": "", "status": "not_set", "max_mean_absolute_difference": null }
+    },
+    {
+      "id": "heavy_attack",
+      "required": true,
+      "current_glob": "Capture_14_player_heavy_attack_arc_*.png",
+      "expected_size": [1280, 720],
+      "status": "pending",
+      "reviewer": "",
+      "note": "Review weapon path and heavy-attack visual contact.",
+      "heuristics": { "min_mean_luminance": 1.5, "min_channel_variance": 4.0, "max_bright_ratio": 0.985 },
+      "baseline": { "path": "", "status": "not_set", "max_mean_absolute_difference": null }
+    },
+    {
+      "id": "blade_contact",
+      "required": true,
+      "current_glob": "Capture_73_combat_001_blade_contact_*.png",
+      "expected_size": [1280, 720],
+      "status": "pending",
+      "reviewer": "",
+      "note": "Review blade contact, trail alignment, and impact feedback.",
+      "heuristics": { "min_mean_luminance": 1.5, "min_channel_variance": 4.0, "max_bright_ratio": 0.985 },
+      "baseline": { "path": "", "status": "not_set", "max_mean_absolute_difference": null }
+    },
+    {
+      "id": "vargan_approach",
+      "required": true,
+      "current_glob": "Capture_36_vargan_approach_*.png",
+      "expected_size": [1280, 720],
+      "status": "pending",
+      "reviewer": "",
+      "note": "Review arrival composition, castle silhouette, scale, and path clarity.",
+      "heuristics": { "min_mean_luminance": 1.5, "min_channel_variance": 4.0, "max_bright_ratio": 0.985 },
+      "baseline": { "path": "", "status": "not_set", "max_mean_absolute_difference": null }
+    },
+    {
+      "id": "record_hall",
+      "required": true,
+      "current_glob": "Capture_38_record_hall_*.png",
+      "expected_size": [1280, 720],
+      "status": "pending",
+      "reviewer": "",
+      "note": "Review interior exposure, materials, path readability, and no visible sky.",
+      "heuristics": { "min_mean_luminance": 1.5, "min_channel_variance": 4.0, "max_bright_ratio": 0.985 },
+      "baseline": { "path": "", "status": "not_set", "max_mean_absolute_difference": null }
+    },
+    {
+      "id": "hart_glade",
+      "required": true,
+      "current_glob": "Capture_41_white_hart_glade_*.png",
+      "expected_size": [1280, 720],
+      "status": "pending",
+      "reviewer": "",
+      "note": "Review finale landmark framing, actor scale, terrain grounding, and horizon treatment.",
+      "heuristics": { "min_mean_luminance": 1.5, "min_channel_variance": 4.0, "max_bright_ratio": 0.985 },
+      "baseline": { "path": "", "status": "not_set", "max_mean_absolute_difference": null }
+    }
+  ]
+}

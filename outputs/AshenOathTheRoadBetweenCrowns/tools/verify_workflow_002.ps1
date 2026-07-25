@@ -32,12 +32,16 @@ $browserAudio = Get-DryRun "outputs/AshenOathTheRoadBetweenCrowns/scripts/audio_
 Require ($browserAudio -match "verify_audio_runtime") "Audio change omitted audio verification."
 Require ($browserAudio -match "web_export") "Browser-audio change did not force Web verification."
 
+$production = Get-DryRun "outputs/AshenOathTheRoadBetweenCrowns/PROD_002_ISSUE_REGISTRY.json"
+Require ($production -match "verify_prod_002") "Production/QA registry changes omitted PROD-002 verification."
+Require ($production -notmatch "web_export|verify_web_browser") "Production/QA registry changes selected unrelated Web gates."
+
 $deploy = Get-Content -LiteralPath (Join-Path $RepoRoot "scripts\deploy_web_update.ps1") -Raw
 Require ($deploy -match "Production.*RoadmapMilestone") "Production milestone guard is missing."
 Require ($deploy -match "branch -eq `"main`"") "Ordinary-ticket main-branch guard is missing."
 
 $release = Get-Content -LiteralPath (Join-Path $PSScriptRoot "run_release_gate.ps1") -Raw
-Require ($release -match "verify_720p_performance") "Milestone performance gate was removed."
+Require ($release -match "verify_perf_001") "Milestone performance gate was removed."
 Require ($release -match "capture_slice_screenshots") "Milestone screenshot gate was removed."
 Require ($release -match "packed_startup") "Milestone packed startup gate was removed."
 

@@ -54,6 +54,12 @@ __pycache__/
 **/*screenshot*.png
 **/*Screenshot*.png
 
+# Track QA-003's approval contract and workflow note, but never gallery captures.
+!outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/
+outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/*
+!outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/README.md
+!outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/qa_003_approval_manifest.json
+
 # Old/generated web exports outside the deploy folder
 outputs/AshenOath_Web/
 outputs/AshenOath_Web_Slim/

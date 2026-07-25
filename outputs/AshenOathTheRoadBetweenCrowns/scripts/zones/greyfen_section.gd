@@ -1,90 +1,141 @@
 extends RefCounted
 
-const RiverSection = preload("res://scripts/zones/river_section.gd")
 const CemeterySection = preload("res://scripts/zones/cemetery_section.gd")
+const GreyfenLifeController = preload("res://scripts/greyfen_life_controller.gd")
+const RiverSection = preload("res://scripts/zones/river_section.gd")
 
-func build(host: Node) -> Dictionary:
+func build(context: ZoneBuildContext) -> void:
+	seed(41021)
 	var root := Node3D.new()
 	root.name = "AuthoredGreyfenSection"
 	root.set_meta("ticket", "WORLD-001")
 	root.set_meta("main_route_half_width", 2.8)
-	host.zone_root.add_child(root)
+	context.add_node(root)
 
-	host.call("_make_split_ground", 42.0, 34.0, 4.5, 3.4, Color(0.16, 0.18, 0.13))
-	var river: Dictionary = RiverSection.new().build(host.zone_root, {
-		"host": host, "center_z": 4.5, "width": 42.0, "span": 3.4,
-	})
-	host.call("_make_greyfen_terrain_layers")
-	host.call("_make_play_area_bounds", 42, 34, Color(0.09, 0.12, 0.08))
-	host.call("_make_road", Vector3(0, 0.018, 0), Vector3(4.2, 0.04, 30.0), Color(0.16, 0.13, 0.09))
-	host.call("_make_road", Vector3(-5, 0.02, 9), Vector3(14.0, 0.04, 3.0), Color(0.15, 0.12, 0.085))
-	host.call("_make_road", Vector3(15.2, 0.022, 0), Vector3(8.8, 0.045, 3.4), Color(0.145, 0.115, 0.078))
-	host.call("_make_greyfen_path_edges")
+	context.make_split_ground(42.0, 34.0, 4.5, 3.4, Color(0.16, 0.18, 0.13))
+	RiverSection.new().build(context, 4.5, 42.0, 3.4)
+	context.make_greyfen_terrain_layers()
+	context.make_play_area_bounds(42, 34, Color(0.09, 0.12, 0.08))
+	context.make_road(Vector3(0, 0.018, 0), Vector3(4.2, 0.04, 30.0), Color(0.16, 0.13, 0.09))
+	context.make_road(Vector3(-5, 0.02, 9), Vector3(14.0, 0.04, 3.0), Color(0.15, 0.12, 0.085))
+	context.make_road(Vector3(15.2, 0.022, 0), Vector3(8.8, 0.045, 3.4), Color(0.145, 0.115, 0.078))
+	context.make_greyfen_path_edges()
 
-	_build_light_composition(host)
-	_build_village_silhouette(host)
-	_build_boundary_dressing(host)
-	_build_landmarks(host)
+	_build_light_composition(context)
+	_build_village_silhouette(context)
+	_build_boundary_dressing(context)
+	_build_landmarks(context)
 
-	host.call("_make_village_dressing")
-	host.call("_make_greyfen_first_impression_dressing")
-	host.call("_make_quality_greyfen_overhaul")
-	host.call("_make_spawn_composition")
-	host.call("_make_tree_cluster", [
+	context.make_village_dressing()
+	context.make_greyfen_first_impression_dressing()
+	context.make_quality_greyfen_overhaul()
+	context.make_spawn_composition()
+	context.make_tree_cluster([
 		Vector3(-16,0,-12), Vector3(-14,0,12), Vector3(16,0,-11),
 		Vector3(15,0,13), Vector3(0,0,15),
 	])
-	return {"root": root, "river": river}
+	_build_gameplay_content(context)
 
-func _build_light_composition(host: Node) -> void:
-	host.call("_make_light", "Village Warmth", Vector3(-1.5, 5.2, 2), Color(1.0, 0.58, 0.30), 3.0)
-	host.call("_make_light", "Blue Dusk Fill", Vector3(9, 6, -10), Color(0.34, 0.42, 0.58), 2.8)
-	host.call("_make_light", "Shrine Beacon", Vector3(4.8, 4.8, -5.4), Color(0.70, 0.86, 0.60), 3.0)
-	host.call("_make_light", "Wychwood Gate Lantern", Vector3(0, 3.2, -14.3), Color(1.0, 0.48, 0.16), 2.2)
-	host.call("_make_fog_sheet", Vector3(0, 1.1, -12), Vector3(18, 1, 5), Color(0.18, 0.22, 0.22, 0.12))
+func _build_light_composition(context: ZoneBuildContext) -> void:
+	context.make_light("Village Warmth", Vector3(-1.5, 5.2, 2), Color(1.0, 0.58, 0.30), 3.0)
+	context.make_light("Blue Dusk Fill", Vector3(9, 6, -10), Color(0.34, 0.42, 0.58), 2.8)
+	context.make_light("Shrine Beacon", Vector3(4.8, 4.8, -5.4), Color(0.70, 0.86, 0.60), 3.0)
+	context.make_light("Wychwood Gate Lantern", Vector3(0, 3.2, -14.3), Color(1.0, 0.48, 0.16), 2.2)
+	context.make_fog_sheet(Vector3(0, 1.1, -12), Vector3(18, 1, 5), Color(0.18, 0.22, 0.22, 0.12))
 
-func _build_village_silhouette(host: Node) -> void:
-	# Each structure frames a different part of the route and uses a deterministic facade variant.
-	host.call("_make_village_house_dressed", Vector3(-5,0,-3), 8.0, "DressedVillageHouse_WestLane")
-	host.call("_make_village_house_dressed", Vector3(7,0,1), -18.0, "DressedVillageHouse_EastLane")
-	host.call("_make_village_house_dressed", Vector3(-10,0,8), 24.0, "DressedVillageHouse_SpawnFrame")
-	host.call("_make_village_house_dressed", Vector3(11.8,0,-7.8), -42.0, "DressedVillageHouse_ShrineFrame")
+func _build_village_silhouette(context: ZoneBuildContext) -> void:
+	context.make_village_house_dressed(Vector3(-5,0,-3), 8.0, "DressedVillageHouse_WestLane")
+	context.make_village_house_dressed(Vector3(7,0,1), -18.0, "DressedVillageHouse_EastLane")
+	context.make_village_house_dressed(Vector3(-10,0,8), 24.0, "DressedVillageHouse_SpawnFrame")
+	context.make_village_house_dressed(Vector3(11.8,0,-7.8), -42.0, "DressedVillageHouse_ShrineFrame")
 
-func _build_boundary_dressing(host: Node) -> void:
-	host.call("_make_tree_wall", 20.0, 15.2, 7, true)
-	host.call("_make_tree_wall", 20.0, -15.2, 7, true)
+func _build_boundary_dressing(context: ZoneBuildContext) -> void:
+	context.make_tree_wall(20.0, 15.2, 7, true)
+	context.make_tree_wall(20.0, -15.2, 7, true)
 	for tree in [
 		[Vector3(-16.2, 0, -10.8), 1.10, -18.0], [Vector3(-14.8, 0, -7.2), 0.92, 21.0],
 		[Vector3(15.8, 0, -10.7), 1.04, 12.0], [Vector3(16.5, 0, -6.4), 0.88, -26.0],
 		[Vector3(-16.0, 0, 11.6), 1.00, 8.0], [Vector3(16.2, 0, 12.0), 0.96, -11.0],
 	]:
-		host.call("_make_loose_role", "forest_tree", tree[0], Vector3.ONE * float(tree[1]), float(tree[2]))
+		context.make_loose_role("forest_tree", tree[0], Vector3.ONE * float(tree[1]), float(tree[2]))
 	for pos in [Vector3(-5.3, 0, 3.4), Vector3(4.8, 0, -5.3), Vector3(-9.3, 0, 11.2)]:
-		host.call("_make_torch", pos)
+		context.make_torch(pos)
 	for x in [-17, -13, -9, -5, 5, 9, 13, 17]:
-		host.call("_make_fence", Vector3(x, 0.35, 14), false)
-		host.call("_make_fence", Vector3(x, 0.35, -14), false)
+		context.make_fence(Vector3(x, 0.35, 14), false)
+		context.make_fence(Vector3(x, 0.35, -14), false)
 	for z in [-10, -6, -2, 2, 6, 10]:
-		host.call("_make_fence", Vector3(-19, 0.35, z), true)
+		context.make_fence(Vector3(-19, 0.35, z), true)
 		if absf(float(z)) > 2.5:
-			host.call("_make_fence", Vector3(19, 0.35, z), true)
+			context.make_fence(Vector3(19, 0.35, z), true)
 
-func _build_landmarks(host: Node) -> void:
-	host.call("_make_notice_board", Vector3(-2.0, 0, 9.4))
-	host.call("_make_shrine_scene", Vector3(6.0, 0, -7.0))
-	host.call("_make_blacksmith_scene", Vector3(10.5, 0, -1.2))
-	CemeterySection.new().build(host.zone_root, {"host": host, "origin": Vector3(14, 0, 8.6)})
-	host.call("_make_cart", Vector3(-6.2, 0, 9.0))
-	_build_castle_road(host)
+func _build_landmarks(context: ZoneBuildContext) -> void:
+	context.make_notice_board(Vector3(-2.0, 0, 9.4))
+	context.make_shrine_scene(Vector3(6.0, 0, -7.0))
+	context.make_blacksmith_scene(Vector3(10.5, 0, -1.2))
+	CemeterySection.new().build(context, Vector3(14, 0, 8.6))
+	context.make_cart(Vector3(-6.2, 0, 9.0))
+	_build_castle_road(context)
 
-func _build_castle_road(host: Node) -> void:
+func _build_castle_road(context: ZoneBuildContext) -> void:
 	var marker := Node3D.new()
 	marker.name = "GreyfenCastleRoad"
 	marker.position = Vector3(15.2, 0, 0)
 	marker.add_to_group("castle_gateway_corridor")
-	host.zone_root.add_child(marker)
+	context.add_node(marker)
 	for z in [-2.25, 2.25]:
-		host.call("_make_prop_box", "CastleRoadWaystone", Vector3(17.9, 0.72, z), Vector3(0.62, 1.44, 0.62), Color(0.22, 0.22, 0.205))
-		host.call("_make_visual_box", "VarganWaymark", Vector3(17.55, 0.88, z), Vector3(0.035, 0.34, 0.22), Color(0.42, 0.32, 0.16))
-	host.call("_make_visual_box", "CastleRoadRuts", Vector3(15.0, 0.052, -0.72), Vector3(5.8, 0.025, 0.18), Color(0.065, 0.045, 0.030))
-	host.call("_make_visual_box", "CastleRoadRuts", Vector3(15.0, 0.052, 0.72), Vector3(5.8, 0.025, 0.18), Color(0.065, 0.045, 0.030))
+		context.make_prop_box("CastleRoadWaystone", Vector3(17.9, 0.72, z), Vector3(0.62, 1.44, 0.62), Color(0.22, 0.22, 0.205))
+		context.make_visual_box("VarganWaymark", Vector3(17.55, 0.88, z), Vector3(0.035, 0.34, 0.22), Color(0.42, 0.32, 0.16))
+	context.make_visual_box("CastleRoadRuts", Vector3(15.0, 0.052, -0.72), Vector3(5.8, 0.025, 0.18), Color(0.065, 0.045, 0.030))
+	context.make_visual_box("CastleRoadRuts", Vector3(15.0, 0.052, 0.72), Vector3(5.8, 0.025, 0.18), Color(0.065, 0.045, 0.030))
+
+func _build_gameplay_content(context: ZoneBuildContext) -> void:
+	context.make_named_interactable("notice_board", "dialogue", "Read notice board", Vector3(-2, 0, 9.4), Color(0.48, 0.28, 0.12), Vector3(0.45, 0.45, 0.45))
+	var anwen_at_cemetery := context.is_quest_active("main_bell_beneath_greyfen")
+	var anwen_position := Vector3(11.0, 0, 4.8) if anwen_at_cemetery else Vector3(3.2, 0, -5.0)
+	var anwen_prompt := "Meet Sister Anwen at the cemetery gate" if anwen_at_cemetery else "Talk to Sister Anwen"
+	context.make_named_interactable("sister_anwen", "dialogue", anwen_prompt, anwen_position, Color(0.34, 0.35, 0.48))
+	context.make_named_interactable("mira", "dialogue", "Talk to Mira Fen", Vector3(-6.8, 0, -2.3), Color(0.22, 0.48, 0.32), Vector3(0.62, 0.62, 0.62))
+	context.make_named_interactable("rook", "dialogue", "Talk to Rook", Vector3(-7.8, 0, 8.5), Color(0.42, 0.33, 0.23), Vector3(0.62, 0.62, 0.62))
+	context.make_named_interactable("widow_elna", "dialogue", "Talk to Widow Elna", Vector3(13.0, 0, 7.0), Color(0.32, 0.30, 0.42), Vector3(0.54, 0.54, 0.54))
+	context.make_named_interactable("blacksmith_tor", "dialogue", "Talk to Blacksmith Tor", Vector3(9.5, 0, -2.8), Color(0.43, 0.37, 0.31), Vector3(0.54, 0.54, 0.54))
+	context.make_named_interactable("farmer_toma", "dialogue", "Talk to Farmer Toma", Vector3(12, 0, -9), Color(0.39, 0.30, 0.18), Vector3(0.46, 0.46, 0.46))
+	context.make_named_interactable("side_contracts", "dialogue", "Read village requests", Vector3(-3.2,0,9.4), Color(0.42,0.27,0.14), Vector3(0.4,0.4,0.4))
+	if context.is_quest_active("main_names_they_burned") and not context.is_objective_done("main_names_they_burned", "names_choice"):
+		context.make_named_interactable("names_decision", "dialogue", "Decide the fate of the names", Vector3(4.4,0,-5.0), Color(0.36,0.32,0.25), Vector3(0.45,0.45,0.45))
+	if context.crow_shrine_choice_ready():
+		context.make_named_interactable("crow_shrine_choice", "dialogue", "Choose the Crow Shrine's fate", Vector3(6.5,0,-7.5), Color(0.3,0.38,0.3), Vector3(0.45,0.45,0.45))
+	if context.road_ready_to_report():
+		context.make_named_interactable("retain_evidence", "dialogue", "Keep Oren's token", Vector3(1.8,0,8.8), Color(0.38,0.24,0.16), Vector3(0.35,0.35,0.35))
+	context.make_named_interactable("village_stories", "dialogue", "Resolve a village story", Vector3(-4.1,0,9.0), Color(0.34,0.23,0.14), Vector3(0.4,0.4,0.4))
+	context.make_village_place("village_well", "village_place", "Draw from the village well", Vector3(-8.0,0,-0.5), Vector3(2.2,0.9,2.2), Color(0.19,0.18,0.16))
+	context.make_village_place("forge_corner", "village_place", "Inspect Tor's old iron", Vector3(11.0,0,-1.2), Vector3(1.5,0.7,1.2), Color(0.28,0.18,0.10))
+	context.make_village_place("shrine_prayer", "village_place", "Sit at the shrine bench", Vector3(8.0,0,-6.2), Vector3(2.4,0.55,0.7), Color(0.22,0.15,0.09))
+	context.make_village_place("common_table", "minigame", "Play Three Marks with Rook", Vector3(-5.4,0,7.2), Vector3(2.8,0.85,1.8), Color(0.28,0.18,0.10))
+	context.make_village_place("barrel_board", "minigame", "Play Greyfen Draughts with Tor", Vector3(7.0,0,6.8), Vector3(2.2,0.85,1.5), Color(0.24,0.15,0.08))
+	context.make_clue("grave_bell", "Inspect grave bell", Vector3(15.8, 0, 9.5), "side_widows_bell", "find_bell", Color(0.60, 0.55, 0.44))
+	context.make_clue("grave_harl", "Inspect Harl's disturbed grave", Vector3(12.2,0,7.2), "main_bell_beneath_greyfen", "grave_harl", Color(0.3,0.28,0.25))
+	context.make_clue("grave_child", "Inspect the nameless child's grave", Vector3(14.0,0,10.2), "main_bell_beneath_greyfen", "grave_child", Color(0.3,0.28,0.25))
+	context.make_clue("grave_soldier", "Inspect the empty soldier's grave", Vector3(16.2,0,7.2), "main_bell_beneath_greyfen", "grave_soldier", Color(0.3,0.28,0.25))
+	context.make_clue("chapel_door", "Open the ruined Crow Chapel", Vector3(16.3,0,8.0), "main_bell_beneath_greyfen", "open_chapel", Color(0.24,0.22,0.18))
+	if context.is_quest_active("main_teeth_in_rain"):
+		context.set_story_flag("teeth_in_rain_available", true)
+		if context.is_objective_done("main_teeth_in_rain", "speak_mira") and not context.is_objective_done("main_teeth_in_rain", "read_chapel_names"):
+			context.make_clue("chapel_names", "Read the erased names in the chapel", Vector3(15.0,0,8.2), "main_teeth_in_rain", "read_chapel_names", Color(0.44,0.39,0.31))
+	if context.is_quest_active("main_names_they_burned"):
+		context.make_clue("register_anwen", "Take Anwen's hidden register page", Vector3(5.4,0,-6.2), "main_names_they_burned", "fragment_anwen", Color(0.42,0.36,0.22))
+		context.make_clue("register_tor", "Take the forge register page", Vector3(9.0,0,-1.0), "main_names_they_burned", "fragment_tor", Color(0.42,0.36,0.22))
+	if context.is_quest_active("side_black_dog"):
+		context.make_clue("sheepfold", "Inspect sheepfold", Vector3(15, 0, -11), "side_black_dog", "find_dog", Color(0.36, 0.24, 0.16))
+	context.make_zone_gate("To Wychwood", Vector3(0, 0, -15.2), "wychwood", Vector3(0, 1, 13))
+	context.make_zone_gate("The long road", Vector3(-18,0,-10), "deep_wood", Vector3(0,1,12))
+	context.make_wychwood_gate_scene(Vector3(0, 0, -14.3))
+	context.make_route_markers()
+	context.make_greyfen_story_beats()
+	var castle_gate = context.make_zone_gate("Road to Castle Vargan", Vector3(17.5, 0, 0), "vargan_approach", Vector3(0, 1, 14))
+	if castle_gate != null:
+		castle_gate.rotation_degrees.y = 90.0
+		castle_gate.set_meta("always_accessible", true)
+	var life = GreyfenLifeController.new()
+	life.name = "GreyfenLifeController"
+	context.add_node(life)
+	context.configure_zone_controller(life)

@@ -80,7 +80,7 @@ function Get-GateInputs([string]$Gate, [string[]]$Files) {
             Add-Unique $selected $normalized
             continue
         }
-        if ($Gate -in @("content_integrity", "runtime_smoke", "verify_web_001", "web_export", "verify_web_export", "verify_web_browser", "verify_mobile_browser", "packed_startup")) {
+        if ($Gate -in @("content_integrity", "runtime_smoke", "verify_web_001", "web_export", "verify_web_export", "verify_web_browser", "verify_mobile_browser", "verify_qa_002_browser", "packed_startup")) {
             if ($normalized -like "outputs/AshenOathTheRoadBetweenCrowns/scripts/*" -or
                 $normalized -like "outputs/AshenOathTheRoadBetweenCrowns/data/*" -or
                 $normalized -like "outputs/AshenOathTheRoadBetweenCrowns/scenes/*" -or
@@ -230,12 +230,18 @@ foreach ($gate in $gates) {
         ) $gateInputs $cache
     } elseif ($gate -eq "runtime_smoke") {
         Invoke-Compact $gate $Godot @("--headless", "--path", $Project, "--quit-after", "3") $gateInputs $cache
-    } elseif ($gate -eq "verify_perf_001") {
+    } elseif ($gate -in @("verify_perf_001", "verify_perf_002")) {
         $script = Join-Path $PSScriptRoot "$gate.gd"
         Invoke-Compact $gate $Godot @(
             "--path", $Project,
             "--rendering-method", "gl_compatibility",
             "--script", $script
+        ) $gateInputs $cache
+    } elseif ($gate -eq "verify_prod_002") {
+        Invoke-Compact $gate $Python @(
+            (Join-Path $PSScriptRoot "verify_prod_002.py"),
+            "--registry", (Join-Path $Project "PROD_002_ISSUE_REGISTRY.json"),
+            "--dashboard", (Join-Path $Project "PROD_002_MILESTONE_DASHBOARD.md")
         ) $gateInputs $cache
     } elseif ($gate -eq "verify_web_001") {
         Invoke-Compact $gate $Python @(
@@ -257,6 +263,13 @@ foreach ($gate in $gates) {
             (Join-Path $PSScriptRoot "verify_web_browser.mjs"),
             "--export", $Web,
             "--report", (Join-Path $Logs "web_browser.json")
+        ) $gateInputs $cache
+    } elseif ($gate -eq "verify_qa_002_browser") {
+        Invoke-Compact $gate "node.exe" @(
+            (Join-Path $PSScriptRoot "verify_qa_002_browser.mjs"),
+            "--export", $Web,
+            "--browser", "chrome",
+            "--report", (Join-Path $Logs "qa_002_browser.json")
         ) $gateInputs $cache
     } elseif ($gate -eq "verify_mobile_browser") {
         Invoke-Compact $gate "node.exe" @(

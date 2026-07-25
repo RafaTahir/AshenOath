@@ -102,7 +102,8 @@ func _load_cached_resource(path: String):
 	if not ResourceLoader.exists(path):
 		return null
 	var resource = ResourceLoader.load(path)
-	resource_cache[path] = resource
+	if resource != null:
+		resource_cache[path] = resource
 	return resource
 
 func _instantiate_obj(path: String) -> Node3D:
@@ -357,13 +358,32 @@ func _has_skeleton(root: Node) -> bool:
 func _apply_safe_materials(root: Node3D, path: String) -> void:
 	var fallback = _fallback_material_for_path(path)
 	for mesh_instance in _collect_meshes(root):
-		if mesh_instance.mesh != null:
+		if mesh_instance.mesh == null:
+			continue
+		if mesh_instance.mesh.get_surface_count() == 0:
+			mesh_instance.material_override = fallback
+		else:
 			for surface_index in range(mesh_instance.mesh.get_surface_count()):
 				if mesh_instance.mesh.surface_get_material(surface_index) == null:
-					mesh_instance.set_surface_override_material(surface_index, fallback)
-		if _needs_fallback_material(mesh_instance):
+					mesh_instance.mesh.surface_set_material(surface_index, fallback)
+				var effective := mesh_instance.get_surface_override_material(surface_index)
+				if effective == null:
+					effective = mesh_instance.mesh.surface_get_material(surface_index)
+				if effective == null or _is_default_white_material(effective):
+					var replacement := mesh_instance.material_override
+					if replacement == null or _is_default_white_material(replacement):
+						replacement = fallback
+					mesh_instance.set_surface_override_material(surface_index, replacement)
+		if mesh_instance.material_override != null and _is_default_white_material(mesh_instance.material_override):
 			mesh_instance.material_override = fallback
 		mesh_instance.set_meta("validated_material", true)
+
+func cache_stats() -> Dictionary:
+	return {
+		"meshes": mesh_cache.size(),
+		"materials": material_cache.size(),
+		"resources": resource_cache.size(),
+	}
 
 func _needs_fallback_material(mesh_instance: MeshInstance3D) -> bool:
 	if mesh_instance.material_override != null:

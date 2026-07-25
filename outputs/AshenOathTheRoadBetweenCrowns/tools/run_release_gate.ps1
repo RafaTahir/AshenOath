@@ -200,6 +200,11 @@ try {
         Invoke-ExternalGate "verify_asset_001_files" $Python @(
             (Join-Path $Project "tools\verify_asset_001.py")
         )
+        Invoke-ExternalGate "verify_prod_002" $Python @(
+            (Join-Path $Project "tools\verify_prod_002.py"),
+            "--registry", (Join-Path $Project "PROD_002_ISSUE_REGISTRY.json"),
+            "--dashboard", (Join-Path $Project "PROD_002_MILESTONE_DASHBOARD.md")
+        )
     }
 
     $verifiers = @(

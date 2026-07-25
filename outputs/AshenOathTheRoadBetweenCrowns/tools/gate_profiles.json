@@ -155,11 +155,54 @@
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/*.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_budget.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_perf_001.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_perf_002.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_zone_budgets.gd"
       ],
       "gates": [
         "verify_zone_budgets",
-        "verify_perf_001"
+        "verify_perf_001",
+        "verify_perf_002"
+      ]
+    },
+    "engine": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_build_context.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_composition_router.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/*.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/asset_spawn_helper.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/world_material_library.gd"
+      ],
+      "gates": [
+        "verify_engine_002",
+        "verify_engine_003"
+      ]
+    },
+    "production": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/PROD_002_ISSUE_REGISTRY.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/PROD_002_MILESTONE_DASHBOARD.md",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/generate_prod_002_dashboard.py",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_prod_002.py",
+        "outputs/AshenOathTheRoadBetweenCrowns/RECOVERY_003_ISSUE_REGISTRY.md",
+        "CODEX_WORKFLOW.md"
+      ],
+      "gates": [
+        "verify_prod_002"
+      ]
+    },
+    "qa": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/qa_browser_telemetry.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_browser.mjs",
+        "outputs/AshenOathTheRoadBetweenCrowns/project.godot",
+        "outputs/AshenOathTheRoadBetweenCrowns/export_presets.cfg"
+      ],
+      "gates": [
+        "verify_qa_002",
+        "web_export",
+        "verify_qa_002_browser"
       ]
     },
     "web": {

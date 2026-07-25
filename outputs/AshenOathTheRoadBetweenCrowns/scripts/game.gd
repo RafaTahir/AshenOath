@@ -8,11 +8,8 @@ const CharacterPresentation = preload("res://scripts/character_presentation.gd")
 const CombatFeedback = preload("res://scripts/combat_feedback.gd")
 const CharacterAnimationDriver = preload("res://scripts/character_animation_driver.gd")
 const WorldVisualUpgrade = preload("res://scripts/world_visual_upgrade.gd")
-const GreyfenSection = preload("res://scripts/zones/greyfen_section.gd")
-const WychwoodSection = preload("res://scripts/zones/wychwood_section.gd")
 const WorldMotionController = preload("res://scripts/world_motion_controller.gd")
 const SurfaceFeedbackManager = preload("res://scripts/surface_feedback_manager.gd")
-const GreyfenLifeController = preload("res://scripts/greyfen_life_controller.gd")
 const ZoneSpatialService = preload("res://scripts/zone_spatial_service.gd")
 const RuntimeServiceRegistry = preload("res://scripts/runtime_service_registry.gd")
 const RuntimeActorFactory = preload("res://scripts/runtime_actor_factory.gd")
@@ -62,6 +59,10 @@ var route_zone_cache: Dictionary = {}
 var route_enemy_cache: Dictionary = {}
 var route_zone_signatures: Dictionary = {}
 var retired_zone_roots: Array[Node] = []
+var pending_zone_retirements := 0
+var retired_skinned_actor_pool: Node3D
+var skinned_resource_anchors: Dictionary = {}
+var transition_history: Array[Dictionary] = []
 var active_zone_signature := -1
 var shared_box_mesh: BoxMesh
 var prop_batch_data: Dictionary = {}
@@ -86,6 +87,9 @@ var requested_zone_spawn := Vector3.ZERO
 var greyfen_prewarm_started := false
 var greyfen_prewarm_spatial_service: Node
 const MAX_CACHED_ROUTE_ZONES := 1
+const ZONE_RETIRE_FRAMES := 8
+const MAX_SKINNED_RESOURCE_ANCHORS := 8
+const MAX_TRANSITION_HISTORY := 16
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -212,8 +216,7 @@ func _start_new_game_world() -> void:
 		route_enemy_cache.erase("greyfen")
 	_clear_route_zone_cache()
 	if prewarmed_greyfen != null and is_instance_valid(prewarmed_greyfen):
-		route_zone_cache["greyfen"] = prewarmed_greyfen
-		route_enemy_cache["greyfen"] = prewarmed_enemies
+		_cache_route_zone("greyfen", prewarmed_greyfen, prewarmed_enemies, _zone_state_signature(), true)
 	game_started = true
 	paused_by_menu = false
 	wychwood_pack_kills = 0
@@ -316,13 +319,7 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 			_retire_zone_root(stale_active)
 			zone_root = null
 		else:
-			_set_zone_collision_enabled(zone_root, false)
-			zone_root.visible = false
-			zone_root.process_mode = Node.PROCESS_MODE_DISABLED
-			zone_root.position = Vector3(0, -1000, 0)
-			route_zone_cache[previous_zone_id] = zone_root
-			route_enemy_cache[previous_zone_id] = previous_enemies
-			route_zone_signatures[previous_zone_id] = active_zone_signature
+			_cache_route_zone(previous_zone_id, zone_root, previous_enemies, active_zone_signature)
 	active_interactable = null
 	interaction_candidates.clear()
 	current_zone_id = zone_id
@@ -350,14 +347,9 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		active_enemies = _valid_cached_enemies(previous_enemies)
 	elif route_zone_cache.has(zone_id) and is_instance_valid(route_zone_cache[zone_id]) \
 			and int(route_zone_signatures.get(zone_id, -1)) == requested_signature:
-		zone_root = route_zone_cache[zone_id]
-		route_zone_cache.erase(zone_id)
+		zone_root = _activate_cached_zone(zone_id)
 		active_zone_signature = int(route_zone_signatures.get(zone_id, requested_signature))
 		route_zone_signatures.erase(zone_id)
-		zone_root.visible = true
-		zone_root.position = Vector3.ZERO
-		zone_root.process_mode = Node.PROCESS_MODE_INHERIT
-		_set_zone_collision_enabled(zone_root, true)
 		var prewarm_camera := zone_root.find_child("GreyfenPrewarmCamera", true, false) as Camera3D
 		if prewarm_camera != null:
 			prewarm_camera.current = false
@@ -376,29 +368,29 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		zone_root = Node3D.new()
 		zone_root.name = zone_id
 		add_child(zone_root)
-		match ZoneCompositionRouter.composition_kind(zone_id):
-			"greyfen":
-				_build_greyfen()
-			"wychwood":
-				_build_wychwood()
-			"ruins":
-				_build_ruins()
-			"campaign":
-				var build_result: Dictionary = ZoneCompositionRouter.build_campaign(self, zone_id)
-				if not bool(build_result.get("ok", false)):
-					push_error("Campaign composition failed for %s: %s" % [
-						zone_id, ", ".join(build_result.get("errors", []))
-					])
-					_recover_failed_zone_load(previous_zone_id)
-					return
-				_apply_campaign_arrival(zone_id)
-			_:
-				assert(false, "Zone composition failed: %s" % zone_id)
+		var composition_kind := ZoneCompositionRouter.composition_kind(zone_id)
+		var build_result: Dictionary
+		if composition_kind == "campaign":
+			build_result = ZoneCompositionRouter.build_campaign(self, zone_id)
+		else:
+			build_result = ZoneCompositionRouter.build_core(self, zone_id)
+		if not bool(build_result.get("ok", false)):
+			push_error("Zone composition failed for %s: %s" % [
+				zone_id, ", ".join(build_result.get("errors", []))
+			])
+			_recover_failed_zone_load(previous_zone_id)
+			return
+		if composition_kind == "campaign":
+			_apply_campaign_arrival(zone_id)
 		_flush_environment_batches()
 		if zone_id in ["greyfen", "wychwood"]:
 			_add_visual_100_layer(zone_id)
 		_apply_first_route_materials(zone_root)
+		_validate_zone_render_resources(zone_root)
 		active_zone_signature = _zone_state_signature()
+	if zone_root != null:
+		zone_root.set_meta("zone_resource_owner", "active")
+		zone_root.set_meta("zone_resource_id", zone_id)
 	_trim_route_zone_cache([previous_zone_id] if previous_zone_id != zone_id else [])
 	# Avoid recursive diagnostic walks during every transition; on Web/ANGLE those
 	# allocations made cached arrivals visibly slower.
@@ -450,12 +442,12 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 			last_safe_player_position = player.global_position
 			zone_transition_pending = false
 			var elapsed_ms := float(Time.get_ticks_usec() - loading_started_usec) / 1000.0
-			last_loading_metrics = {
+			_record_loading_metrics({
 				"zone": current_zone_id,
 				"to_playable_ms": elapsed_ms,
 				"support_ready": true,
 				"velocity_reset": true
-			}
+			})
 			print("LOADING: zone=%s playable_ms=%.1f" % [current_zone_id, elapsed_ms])
 			loading_started_usec = 0
 			hud.hide_loading()
@@ -494,12 +486,12 @@ func _advance_zone_transition() -> void:
 	last_safe_player_position = player.global_position
 	zone_transition_pending = false
 	var elapsed_ms := float(Time.get_ticks_usec() - loading_started_usec) / 1000.0
-	last_loading_metrics = {
+	_record_loading_metrics({
 		"zone": current_zone_id,
 		"to_playable_ms": elapsed_ms,
 		"support_ready": true,
 		"velocity_reset": player.velocity.is_zero_approx()
-	}
+	})
 	print("LOADING: zone=%s playable_ms=%.1f" % [current_zone_id, elapsed_ms])
 	loading_started_usec = 0
 	hud.hide_loading()
@@ -509,17 +501,14 @@ func _recover_failed_zone_load(previous_zone_id: String) -> void:
 	zone_load_request_pending = false
 	requested_zone_id = ""
 	if zone_root != null:
-		zone_root.queue_free()
+		_retire_zone_root(zone_root)
 		zone_root = null
 	if route_zone_cache.has(previous_zone_id) and is_instance_valid(route_zone_cache[previous_zone_id]):
-		zone_root = route_zone_cache[previous_zone_id]
-		route_zone_cache.erase(previous_zone_id)
-		zone_root.visible = true
-		zone_root.position = Vector3.ZERO
-		zone_root.process_mode = Node.PROCESS_MODE_INHERIT
-		_set_zone_collision_enabled(zone_root, true)
+		zone_root = _activate_cached_zone(previous_zone_id)
 		active_enemies = _valid_cached_enemies(route_enemy_cache.get(previous_zone_id, []))
 		route_enemy_cache.erase(previous_zone_id)
+		active_zone_signature = int(route_zone_signatures.get(previous_zone_id, -1))
+		route_zone_signatures.erase(previous_zone_id)
 		current_zone_id = previous_zone_id
 	if player != null:
 		player.set_transition_locked(false)
@@ -551,39 +540,139 @@ func _valid_cached_enemies(entries: Array) -> Array:
 	return result
 
 func _zone_state_signature() -> int:
+	var quest_world_state: Dictionary = quests.save_state().duplicate(true) if quests != null else {}
+	# HUD tracking changes by zone and must not invalidate otherwise identical
+	# cached world geometry.
+	quest_world_state.erase("tracked_quest_id")
+	quest_world_state.erase("tracker_context_zone")
 	return hash([
 		story_state.save_state() if story_state != null else {},
-		quests.save_state() if quests != null else {},
+		quest_world_state,
 		removed_interactions,
 	])
 
 func _deferred_free_zone(retired_root: Node) -> void:
-	# RenderingServer may still reference imported surfaces for the frame in
-	# which a zone is detached. Retire after two rendered frames.
-	await get_tree().process_frame
-	await get_tree().process_frame
-	retired_zone_roots.erase(retired_root)
+	# Keep the complete render hierarchy intact until the scene tree disposes it.
+	# Manually detaching skins or surfaces races RenderingServer teardown.
+	for _frame in range(ZONE_RETIRE_FRAMES):
+		await get_tree().process_frame
 	if is_instance_valid(retired_root):
-		_release_zone_render_resources(retired_root)
+		retired_zone_roots.erase(retired_root)
 		retired_root.queue_free()
-
-func _release_zone_render_resources(root: Node) -> void:
-	for batch in root.find_children("*", "MultiMeshInstance3D", true, false):
-		(batch as MultiMeshInstance3D).multimesh = null
-	for mesh_instance in root.find_children("*", "MeshInstance3D", true, false):
-		(mesh_instance as MeshInstance3D).mesh = null
+		await get_tree().process_frame
+	else:
+		retired_zone_roots.erase(retired_root)
+	pending_zone_retirements = maxi(pending_zone_retirements - 1, 0)
 
 func _retire_zone_root(retired_root: Node) -> void:
 	if retired_root == null or not is_instance_valid(retired_root):
 		return
 	if retired_zone_roots.has(retired_root):
 		return
+	_remove_root_from_route_cache(retired_root)
+	_quiesce_zone_runtime(retired_root)
+	_validate_zone_render_resources(retired_root)
+	_park_skinned_actor_branches(retired_root)
 	_set_zone_collision_enabled(retired_root, false)
 	retired_root.visible = false
 	retired_root.process_mode = Node.PROCESS_MODE_DISABLED
 	retired_root.position = Vector3(0, -2000.0 - retired_zone_roots.size() * 100.0, 0)
+	retired_root.name = "__retiring_%s_%d" % [str(retired_root.name), pending_zone_retirements]
+	retired_root.set_meta("zone_resource_owner", "retiring")
 	retired_zone_roots.append(retired_root)
+	pending_zone_retirements += 1
 	_deferred_free_zone(retired_root)
+
+func _park_skinned_actor_branches(root: Node) -> void:
+	if retired_skinned_actor_pool == null or not is_instance_valid(retired_skinned_actor_pool):
+		retired_skinned_actor_pool = Node3D.new()
+		retired_skinned_actor_pool.name = "RetiredSkinnedActorPool"
+		retired_skinned_actor_pool.visible = false
+		retired_skinned_actor_pool.process_mode = Node.PROCESS_MODE_DISABLED
+		add_child(retired_skinned_actor_pool)
+	var branches: Array[Node] = []
+	for raw_skeleton in root.find_children("*", "Skeleton3D", true, false):
+		var branch := raw_skeleton as Node
+		while branch.get_parent() != null and branch.get_parent() != root:
+			branch = branch.get_parent()
+		if branch.get_parent() == root and not branches.has(branch):
+			branches.append(branch)
+	for branch in branches:
+		var fingerprints := _skinned_resource_fingerprints(branch)
+		if fingerprints.is_empty() or retired_skinned_actor_pool.get_child_count() >= MAX_SKINNED_RESOURCE_ANCHORS:
+			continue
+		branch.reparent(retired_skinned_actor_pool, false)
+		if branch is Node3D:
+			(branch as Node3D).visible = false
+		branch.process_mode = Node.PROCESS_MODE_DISABLED
+		var anchor_id := "%s#%d" % ["|".join(fingerprints), branch.get_instance_id()]
+		skinned_resource_anchors[anchor_id] = branch
+
+func _skinned_resource_fingerprints(branch: Node) -> Array[String]:
+	var result: Array[String] = []
+	for raw_mesh in branch.find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := raw_mesh as MeshInstance3D
+		if mesh_instance.skin == null or mesh_instance.mesh == null:
+			continue
+		var fingerprint := mesh_instance.mesh.resource_path
+		if fingerprint.is_empty():
+			fingerprint = "mesh_rid:%s" % str(mesh_instance.mesh.get_rid().get_id())
+		if not result.has(fingerprint):
+			result.append(fingerprint)
+	return result
+
+func _record_loading_metrics(metrics: Dictionary) -> void:
+	last_loading_metrics = metrics
+	transition_history.append(metrics.duplicate(true))
+	while transition_history.size() > MAX_TRANSITION_HISTORY:
+		transition_history.pop_front()
+
+func _quiesce_zone_runtime(root: Node) -> void:
+	for raw_player in root.find_children("*", "AnimationPlayer", true, false):
+		var animation_player := raw_player as AnimationPlayer
+		animation_player.stop(true)
+		animation_player.active = false
+	for raw_tree in root.find_children("*", "AnimationTree", true, false):
+		(raw_tree as AnimationTree).active = false
+	for raw_audio in root.find_children("*", "AudioStreamPlayer3D", true, false):
+		(raw_audio as AudioStreamPlayer3D).stop()
+
+func _cache_route_zone(zone_id: String, root: Node3D, enemies: Array, signature: int, keep_visible: bool = false) -> void:
+	if root == null or not is_instance_valid(root):
+		return
+	var existing = route_zone_cache.get(zone_id)
+	if existing != null and existing != root and is_instance_valid(existing):
+		_retire_zone_root(existing)
+	_remove_root_from_route_cache(root)
+	_set_zone_collision_enabled(root, false)
+	root.visible = keep_visible
+	root.process_mode = Node.PROCESS_MODE_DISABLED
+	root.position = Vector3.ZERO if keep_visible else Vector3(0, -1000, 0)
+	root.set_meta("zone_resource_owner", "cached")
+	root.set_meta("zone_resource_id", zone_id)
+	route_zone_cache[zone_id] = root
+	route_enemy_cache[zone_id] = _valid_cached_enemies(enemies)
+	route_zone_signatures[zone_id] = signature
+
+func _activate_cached_zone(zone_id: String) -> Node3D:
+	var cached_root = route_zone_cache.get(zone_id)
+	if cached_root == null or not is_instance_valid(cached_root):
+		return null
+	route_zone_cache.erase(zone_id)
+	cached_root.visible = true
+	cached_root.position = Vector3.ZERO
+	cached_root.process_mode = Node.PROCESS_MODE_INHERIT
+	cached_root.set_meta("zone_resource_owner", "active")
+	_set_zone_collision_enabled(cached_root, true)
+	return cached_root as Node3D
+
+func _remove_root_from_route_cache(root: Node) -> void:
+	for raw_id in route_zone_cache.keys().duplicate():
+		var id := str(raw_id)
+		if route_zone_cache.get(id) == root:
+			route_zone_cache.erase(id)
+			route_enemy_cache.erase(id)
+			route_zone_signatures.erase(id)
 
 func _trim_route_zone_cache(preferred_ids: Array) -> void:
 	var retained: Array[String] = []
@@ -642,12 +731,59 @@ func _clear_route_zone_cache() -> void:
 	route_enemy_cache.clear()
 	route_zone_signatures.clear()
 
+func prepare_resource_shutdown() -> void:
+	if zone_root != null and is_instance_valid(zone_root):
+		_retire_zone_root(zone_root)
+	zone_root = null
+	for cached_root in route_zone_cache.values().duplicate():
+		if cached_root != null and is_instance_valid(cached_root):
+			_retire_zone_root(cached_root)
+	route_zone_cache.clear()
+	route_enemy_cache.clear()
+	route_zone_signatures.clear()
+
+func zone_lifecycle_snapshot() -> Dictionary:
+	var cached_ids: Array[String] = []
+	for raw_id in route_zone_cache.keys():
+		cached_ids.append(str(raw_id))
+	cached_ids.sort()
+	return {
+		"active_zone": current_zone_id if zone_root != null and is_instance_valid(zone_root) else "",
+		"active_owner": str(zone_root.get_meta("zone_resource_owner", "")) if zone_root != null and is_instance_valid(zone_root) else "",
+		"cached_ids": cached_ids,
+		"cached_count": cached_ids.size(),
+		"retiring_count": pending_zone_retirements,
+		"resource_anchor_count": skinned_resource_anchors.size(),
+		"resource_anchor_nodes": retired_skinned_actor_pool.get_child_count() if retired_skinned_actor_pool != null and is_instance_valid(retired_skinned_actor_pool) else 0,
+		"active_nodes": _subtree_node_count(zone_root),
+		"active_skeletons": zone_root.find_children("*", "Skeleton3D", true, false).size() if zone_root != null and is_instance_valid(zone_root) else 0,
+		"active_navigation_regions": zone_root.find_children("*", "NavigationRegion3D", true, false).size() if zone_root != null and is_instance_valid(zone_root) else 0,
+		"static_memory_bytes": int(Performance.get_monitor(Performance.MEMORY_STATIC)),
+		"transition_history": transition_history.duplicate(true),
+		"material_cache_count": material_cache.size(),
+	}
+
+func _subtree_node_count(root: Node) -> int:
+	if root == null or not is_instance_valid(root):
+		return 0
+	var count := 1
+	for child in root.get_children():
+		count += _subtree_node_count(child)
+	return count
+
 func _exit_tree() -> void:
 	# Cached zones remain children of the game and are released by normal subtree
 	# destruction. Touching renderer resources during NOTIFICATION_EXIT_TREE is unsafe.
 	route_zone_cache.clear()
 	route_enemy_cache.clear()
 	route_zone_signatures.clear()
+	for retired_root in retired_zone_roots.duplicate():
+		if retired_root != null and is_instance_valid(retired_root) and not retired_root.is_inside_tree():
+			retired_root.free()
+	retired_zone_roots.clear()
+	pending_zone_retirements = 0
+	skinned_resource_anchors.clear()
+	transition_history.clear()
 
 func _add_visual_100_layer(zone_id: String) -> void:
 	var quality := str(settings.settings.get("quality_preset", "balanced")) if settings != null else "balanced"
@@ -663,115 +799,6 @@ func _add_visual_100_layer(zone_id: String) -> void:
 	surface.name = "SurfaceFeedbackManager"
 	zone_root.add_child(surface)
 	surface.configure(player, quality)
-
-func _build_greyfen() -> void:
-	seed(41021)
-	GreyfenSection.new().build(self)
-	_make_named_interactable("notice_board", "dialogue", "Read notice board", Vector3(-2, 0, 9.4), Color(0.48, 0.28, 0.12), Vector3(0.45, 0.45, 0.45))
-	var anwen_at_cemetery: bool = quests.is_active("main_bell_beneath_greyfen")
-	var anwen_position := Vector3(11.0, 0, 4.8) if anwen_at_cemetery else Vector3(3.2, 0, -5.0)
-	var anwen_prompt := "Meet Sister Anwen at the cemetery gate" if anwen_at_cemetery else "Talk to Sister Anwen"
-	_make_named_interactable("sister_anwen", "dialogue", anwen_prompt, anwen_position, Color(0.34, 0.35, 0.48))
-	_make_named_interactable("mira", "dialogue", "Talk to Mira Fen", Vector3(-6.8, 0, -2.3), Color(0.22, 0.48, 0.32), Vector3(0.62, 0.62, 0.62))
-	_make_named_interactable("rook", "dialogue", "Talk to Rook", Vector3(-7.8, 0, 8.5), Color(0.42, 0.33, 0.23), Vector3(0.62, 0.62, 0.62))
-	_make_named_interactable("widow_elna", "dialogue", "Talk to Widow Elna", Vector3(13.0, 0, 7.0), Color(0.32, 0.30, 0.42), Vector3(0.54, 0.54, 0.54))
-	_make_named_interactable("blacksmith_tor", "dialogue", "Talk to Blacksmith Tor", Vector3(9.5, 0, -2.8), Color(0.43, 0.37, 0.31), Vector3(0.54, 0.54, 0.54))
-	_make_named_interactable("farmer_toma", "dialogue", "Talk to Farmer Toma", Vector3(12, 0, -9), Color(0.39, 0.30, 0.18), Vector3(0.46, 0.46, 0.46))
-	_make_named_interactable("side_contracts", "dialogue", "Read village requests", Vector3(-3.2,0,9.4), Color(0.42,0.27,0.14), Vector3(0.4,0.4,0.4))
-	if quests.is_active("main_names_they_burned") and not quests.is_objective_done("main_names_they_burned", "names_choice"):
-		_make_named_interactable("names_decision", "dialogue", "Decide the fate of the names", Vector3(4.4,0,-5.0), Color(0.36,0.32,0.25), Vector3(0.45,0.45,0.45))
-	if _crow_shrine_choice_ready():
-		_make_named_interactable("crow_shrine_choice", "dialogue", "Choose the Crow Shrine's fate", Vector3(6.5,0,-7.5), Color(0.3,0.38,0.3), Vector3(0.45,0.45,0.45))
-	if _road_ready_to_report():
-		_make_named_interactable("retain_evidence", "dialogue", "Keep Oren's token", Vector3(1.8,0,8.8), Color(0.38,0.24,0.16), Vector3(0.35,0.35,0.35))
-	_make_named_interactable("village_stories", "dialogue", "Resolve a village story", Vector3(-4.1,0,9.0), Color(0.34,0.23,0.14), Vector3(0.4,0.4,0.4))
-	_make_village_place("village_well", "village_place", "Draw from the village well", Vector3(-8.0,0,-0.5), Vector3(2.2,0.9,2.2), Color(0.19,0.18,0.16))
-	_make_village_place("forge_corner", "village_place", "Inspect Tor's old iron", Vector3(11.0,0,-1.2), Vector3(1.5,0.7,1.2), Color(0.28,0.18,0.10))
-	_make_village_place("shrine_prayer", "village_place", "Sit at the shrine bench", Vector3(8.0,0,-6.2), Vector3(2.4,0.55,0.7), Color(0.22,0.15,0.09))
-	_make_village_place("common_table", "minigame", "Play Three Marks with Rook", Vector3(-5.4,0,7.2), Vector3(2.8,0.85,1.8), Color(0.28,0.18,0.10))
-	_make_village_place("barrel_board", "minigame", "Play Greyfen Draughts with Tor", Vector3(7.0,0,6.8), Vector3(2.2,0.85,1.5), Color(0.24,0.15,0.08))
-	_make_clue("grave_bell", "Inspect grave bell", Vector3(15.8, 0, 9.5), "side_widows_bell", "find_bell", Color(0.60, 0.55, 0.44))
-	_make_clue("grave_harl", "Inspect Harl's disturbed grave", Vector3(12.2,0,7.2), "main_bell_beneath_greyfen", "grave_harl", Color(0.3,0.28,0.25))
-	_make_clue("grave_child", "Inspect the nameless child's grave", Vector3(14.0,0,10.2), "main_bell_beneath_greyfen", "grave_child", Color(0.3,0.28,0.25))
-	_make_clue("grave_soldier", "Inspect the empty soldier's grave", Vector3(16.2,0,7.2), "main_bell_beneath_greyfen", "grave_soldier", Color(0.3,0.28,0.25))
-	_make_clue("chapel_door", "Open the ruined Crow Chapel", Vector3(16.3,0,8.0), "main_bell_beneath_greyfen", "open_chapel", Color(0.24,0.22,0.18))
-	if quests.is_active("main_teeth_in_rain"):
-		story_state.set_flag("teeth_in_rain_available", true)
-		if quests.is_objective_done("main_teeth_in_rain", "speak_mira") and not quests.is_objective_done("main_teeth_in_rain", "read_chapel_names"):
-			_make_clue("chapel_names", "Read the erased names in the chapel", Vector3(15.0,0,8.2), "main_teeth_in_rain", "read_chapel_names", Color(0.44,0.39,0.31))
-	if quests.is_active("main_names_they_burned"):
-		_make_clue("register_anwen", "Take Anwen's hidden register page", Vector3(5.4,0,-6.2), "main_names_they_burned", "fragment_anwen", Color(0.42,0.36,0.22))
-		_make_clue("register_tor", "Take the forge register page", Vector3(9.0,0,-1.0), "main_names_they_burned", "fragment_tor", Color(0.42,0.36,0.22))
-	if quests.is_active("side_black_dog"):
-		_make_clue("sheepfold", "Inspect sheepfold", Vector3(15, 0, -11), "side_black_dog", "find_dog", Color(0.36, 0.24, 0.16))
-	_make_zone_gate("To Wychwood", Vector3(0, 0, -15.2), "wychwood", Vector3(0, 1, 13))
-	_make_zone_gate("The long road", Vector3(-18,0,-10), "deep_wood", Vector3(0,1,12))
-	_make_wychwood_gate_scene(Vector3(0, 0, -14.3))
-	_make_route_markers()
-	_make_greyfen_road_of_crows_story_beats()
-	var castle_gate = _make_zone_gate("Road to Castle Vargan", Vector3(17.5, 0, 0), "vargan_approach", Vector3(0, 1, 14))
-	if castle_gate != null:
-		castle_gate.rotation_degrees.y = 90.0
-		castle_gate.set_meta("always_accessible", true)
-	var life = GreyfenLifeController.new()
-	life.name = "GreyfenLifeController"
-	zone_root.add_child(life)
-	life.configure(self, str(settings.settings.get("quality_preset", "balanced")))
-
-func _build_wychwood() -> void:
-	seed(78233)
-	WychwoodSection.new().build(self)
-	_make_zone_gate("Back to Greyfen", Vector3(0, 0, 15), "greyfen", Vector3(0, 1, -13))
-	_make_clue("corpse", "Identify Bram by his cart ledger", Vector3(-2, 0, 7.4), "main_road_of_crows", "bram", Color(0.32, 0.18, 0.16))
-	_make_clue("black_feathers", "Identify Sella by the red-thread feathers", Vector3(-4, 0, 4.0), "main_road_of_crows", "sella", Color(0.03, 0.03, 0.035))
-	_make_clue("oren_token", "Recover Oren's scratched shrine token", Vector3(3.8, 0, 2.2), "main_road_of_crows", "oren", Color(0.46, 0.28, 0.12))
-	_make_clue("claw_marks", "Recover the blackened Vargan wire", Vector3(2.5, 0, 4.8), "main_road_of_crows", "vargan_wire", Color(0.18, 0.18, 0.18))
-	_make_clue("tracks", "Read the deliberate drag marks", Vector3(0, 0, -4.2), "main_road_of_crows", "drag_marks", Color(0.15, 0.11, 0.08))
-	if quests.is_active("main_teeth_in_rain") and quests.is_objective_done("main_teeth_in_rain", "read_chapel_names"):
-		if not quests.is_objective_done("main_teeth_in_rain", "name_the_dead"):
-			_make_clue("ritual_stones", "Speak Oren's name at the ritual stones", Vector3(8, 0, -10), "main_teeth_in_rain", "name_the_dead", Color(0.38, 0.38, 0.36))
-		else:
-			_make_zone_gate("Enter deeper Wychwood", Vector3(10.8, 0, -13.2), "deep_wood", Vector3(0, 1, 12))
-	_make_clue("bandit_camp", "Inspect bandit camp", Vector3(-12, 0, -12), "side_black_dog", "find_dog", Color(0.30, 0.18, 0.10))
-	_make_clue("bitter_roots", "Collect bitter roots", Vector3(8, 0, -7.8), "side_bitter_roots", "collect_roots", Color(0.46, 0.22, 0.16))
-	_make_clue("sacrifice_roots", "Study sacrifice roots", Vector3(10, 0, -9.2), "side_bitter_roots", "mira_choice", Color(0.38, 0.16, 0.13))
-	_make_herb("mooncap", Vector3(-7, 0, -6), Color(0.58, 0.65, 0.86))
-	_make_herb("redroot", Vector3(-10, 0, -2), Color(0.55, 0.12, 0.11))
-	_make_herb("grave_moss", Vector3(5, 0, -13), Color(0.24, 0.42, 0.24))
-	if quests.is_active("main_road_of_crows") and not quests.is_objective_done("main_road_of_crows", "fight_ghoulkin"):
-		_spawn_enemy("ghoulkin", Vector3(-2.4, 0.8, -8.8))
-		var second_ghoul = _spawn_enemy("ghoulkin", Vector3(2.7, 0.8, -9.6))
-		if second_ghoul != null:
-			second_ghoul.set_encounter_active(false)
-		_spawn_enemy("wychwood_stalker", Vector3(-4.8, 0.8, -3.8))
-		_spawn_enemy("wychwood_raider", Vector3(4.6, 0.8, -5.3))
-		var brute_z := -14.2 if quests.is_objective_done("main_road_of_crows", "drag_marks") else -12.4
-		_spawn_enemy("wychwood_brute", Vector3(0.2, 0.8, brute_z))
-	if quests.is_active("side_black_dog") and not quests.is_objective_done("side_black_dog", "find_dog"):
-		_spawn_enemy("bandit", Vector3(-14, 0.8, -14))
-		_spawn_enemy("bandit", Vector3(-12, 0.8, -15))
-
-func _build_ruins() -> void:
-	_make_ground(Vector3(0, -0.08, 0), Vector3(48, 0.16, 42), Color(0.13, 0.13, 0.13))
-	_make_road(Vector3(-5, 0.018, 3), Vector3(24.0, 0.04, 4.0), Color(0.09, 0.08, 0.075))
-	_make_light("Ruin Fire", Vector3(-4, 4, -5), Color(0.9, 0.42, 0.22), 4.0)
-	_make_torch(Vector3(-6.5, 0, -4.5))
-	_make_torch(Vector3(6.5, 0, -4.0))
-	for pos in [Vector3(-8,0,-5), Vector3(0,0,-8), Vector3(8,0,-4), Vector3(0,0,8)]:
-		_make_prop_box("BrokenWall", pos + Vector3(0,1,0), Vector3(5,2,0.7), Color(0.24,0.24,0.23))
-	for pos in [Vector3(-10,0,-10), Vector3(-5,0,-11), Vector3(5,0,-11), Vector3(10,0,-10), Vector3(-10,0,7), Vector3(10,0,7)]:
-		_make_pillar(pos)
-	for pos in [Vector3(-1,0,-6.5), Vector3(1,0,-6.2), Vector3(3,0,-6.8)]:
-		_make_rubble(pos)
-	_make_zone_gate("Back to Greyfen", Vector3(-20, 0, 5), "greyfen", Vector3(17, 1, -2))
-	_make_named_interactable("edric", "dialogue", "Talk to Lord Edric", Vector3(-14, 0, 3), Color(0.44, 0.35, 0.24))
-	_make_clue("old_hall", "Search old hall", Vector3(-2, 0, -4), "main_blood_under_stone", "locate_record_hall", Color(0.28, 0.24, 0.21))
-	_make_clue("ritual_inscription", "Read ritual inscription", Vector3(4, 0, -8), "main_blood_under_stone", "evidence_iron_binding", Color(0.43, 0.39, 0.35))
-	_make_clue("spirit_clearing", "Enter spirit clearing", Vector3(10, 0, 8), "main_hart_remembers", "enter_glade", Color(0.70, 0.72, 0.66))
-	if quests.is_active("main_blood_under_stone") and not quests.is_objective_done("main_blood_under_stone", "survive_haunting"):
-		_spawn_enemy("gravebound_knight", Vector3(3, 0.8, -3))
-	if quests.is_active("main_hart_remembers") or quests.is_unlocked("main_hart_remembers"):
-		_make_named_interactable("white_hart", "dialogue", "Speak to the White Hart", Vector3(12, 0, 10), Color(0.86, 0.83, 0.70), Vector3(0.36, 0.64, 0.36))
 
 func _handle_interaction(area) -> void:
 	if area.interaction_type == "minigame":
@@ -1132,10 +1159,18 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 	terrain_patch_batch_data.clear()
 	house_batch_data.clear()
 	environment_batches_flushed = false
-	_build_greyfen()
+	var prewarm_build := ZoneCompositionRouter.build_core(self, "greyfen")
+	if not bool(prewarm_build.get("ok", false)):
+		push_error("Greyfen prewarm composition failed: %s" % ", ".join(prewarm_build.get("errors", [])))
+		_retire_zone_root(zone_root)
+		zone_root = null
+		prewarm_service.queue_free()
+		spatial_service = null
+		return
 	_flush_environment_batches()
 	_add_visual_100_layer("greyfen")
 	_apply_first_route_materials(zone_root)
+	_validate_zone_render_resources(zone_root)
 	prewarm_service.build_navigation(zone_root)
 	greyfen_prewarm_spatial_service = prewarm_service
 	# Kael's rig and camera are also expensive to instantiate in WebGL. Prepare
@@ -1161,8 +1196,7 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 	zone_root.process_mode = Node.PROCESS_MODE_DISABLED
 	zone_root.position = Vector3.ZERO
 	_set_zone_collision_enabled(zone_root, false)
-	route_zone_cache["greyfen"] = zone_root
-	route_enemy_cache["greyfen"] = []
+	_cache_route_zone("greyfen", zone_root, [], _zone_state_signature(), true)
 	zone_root = null
 	spatial_service = null
 	print("LOADING: Greyfen prewarmed behind main menu")
@@ -3230,13 +3264,80 @@ func _make_multimesh_batch(node_name: String, mesh: Mesh, count: int, material: 
 	var batch := MultiMesh.new()
 	batch.transform_format = MultiMesh.TRANSFORM_3D
 	batch.use_colors = use_colors
-	batch.mesh = mesh
+	var base_mesh := mesh if mesh != null else shared_box_mesh
+	_ensure_mesh_surface_materials(base_mesh, _valid_material_or_fallback(null))
+	batch.mesh = base_mesh
 	batch.instance_count = count
 	instance.multimesh = batch
-	instance.material_override = material
+	instance.material_override = _valid_material_or_fallback(material)
 	instance.visibility_range_end = 58.0
 	zone_root.add_child(instance)
 	return instance
+
+func _valid_material_or_fallback(material: Material) -> Material:
+	if material != null:
+		return material
+	if world_materials != null and world_materials.has_method("get_fallback_material"):
+		return world_materials.get_fallback_material()
+	return _first_route_material("ground")
+
+func _ensure_mesh_surface_materials(mesh: Mesh, fallback: Material) -> int:
+	if mesh == null or fallback == null:
+		return 0
+	var applied := 0
+	for surface_index in range(mesh.get_surface_count()):
+		if mesh.surface_get_material(surface_index) == null:
+			mesh.surface_set_material(surface_index, fallback)
+			applied += 1
+	return applied
+
+func _validate_zone_render_resources(root: Node) -> Dictionary:
+	var report := {
+		"mesh_instances": 0,
+		"multimesh_instances": 0,
+		"fallbacks_applied": 0,
+		"invalid_geometry": 0,
+		"invalid_geometry_names": [],
+	}
+	if root == null:
+		return report
+	var fallback := _valid_material_or_fallback(null)
+	for mesh_node in root.find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := mesh_node as MeshInstance3D
+		report.mesh_instances += 1
+		if mesh_instance.mesh == null:
+			if not mesh_instance.is_queued_for_deletion():
+				report.invalid_geometry += 1
+				report.invalid_geometry_names.append(str(mesh_instance.name))
+			continue
+		if mesh_instance.mesh.get_surface_count() == 0:
+			mesh_instance.material_override = fallback
+			report.fallbacks_applied += 1
+			continue
+		# RenderingServer consults the mesh's base surface material while releasing
+		# skinned instances, even when an instance override is present.
+		report.fallbacks_applied += _ensure_mesh_surface_materials(mesh_instance.mesh, fallback)
+		for surface_index in range(mesh_instance.mesh.get_surface_count()):
+			var effective := mesh_instance.get_surface_override_material(surface_index)
+			if effective == null:
+				effective = mesh_instance.mesh.surface_get_material(surface_index)
+			if effective == null:
+				var replacement := mesh_instance.material_override if mesh_instance.material_override != null else fallback
+				mesh_instance.set_surface_override_material(surface_index, replacement)
+				report.fallbacks_applied += 1
+	for batch_node in root.find_children("*", "MultiMeshInstance3D", true, false):
+		var batch_instance := batch_node as MultiMeshInstance3D
+		report.multimesh_instances += 1
+		if batch_instance.multimesh == null or batch_instance.multimesh.mesh == null:
+			report.invalid_geometry += 1
+			report.invalid_geometry_names.append(str(batch_instance.name))
+			continue
+		report.fallbacks_applied += _ensure_mesh_surface_materials(batch_instance.multimesh.mesh, fallback)
+		if batch_instance.material_override == null:
+			batch_instance.material_override = fallback
+			report.fallbacks_applied += 1
+	root.set_meta("zone_render_resource_report", report)
+	return report
 
 func _make_road(pos: Vector3, size: Vector3, color: Color) -> void:
 	var mesh = MeshInstance3D.new()
