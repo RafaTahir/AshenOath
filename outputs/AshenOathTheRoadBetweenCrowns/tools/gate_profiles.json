@@ -410,6 +410,24 @@
         "verify_motion_quality"
       ]
     },
+    "side_001": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/side_quest_contract.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/quests.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/dialogue.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/greyfen_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/wychwood_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_side_001.gd"
+      ],
+      "gates": [
+        "verify_side_001",
+        "verify_story_campaign",
+        "verify_save_001",
+        "verify_dialogue_001",
+        "verify_visible_quality"
+      ]
+    },
     "progression": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/data/upgrades.json",

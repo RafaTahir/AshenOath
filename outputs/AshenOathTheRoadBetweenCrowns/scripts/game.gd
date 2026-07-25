@@ -962,6 +962,13 @@ func _handle_interaction(area) -> void:
 			quests.complete_objective("main_blood_under_stone", "locate_record_hall")
 		elif area.interaction_id == "grave_bell":
 			quests.complete_objective("side_widows_bell", "find_bell")
+		elif area.interaction_id == "massacre_iron":
+			quests.complete_objective("side_iron_remembers", "recover_iron")
+			hud.toast("The iron bears Vargan hammer marks beneath the soot.")
+		elif area.interaction_id == "empty_grave_tracks":
+			quests.complete_objective("side_empty_grave", "follow_empty_grave")
+			hud.toast("Bare footprints leave the grave and stop beside the old road.")
+			hud.set_guidance_hint("A returned soldier waits near Greyfen's eastern lane.", 5.0)
 		elif area.interaction_id == "bandit_camp":
 			hud.toast("Boot prints. Rope. A child's torn ribbon. Not a dog's work.")
 		elif area.interaction_id == "bitter_roots":
