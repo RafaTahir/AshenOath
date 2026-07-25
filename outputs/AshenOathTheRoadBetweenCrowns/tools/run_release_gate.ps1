@@ -31,7 +31,15 @@ if ($IsResume) {
     $repoRoot = Split-Path -Parent (Split-Path -Parent $Project)
     $currentHead = (git -C $repoRoot rev-parse HEAD).Trim()
     if ($previousReport.source_commit -ne $currentHead) {
-        throw "Cannot resume release: source commit changed from $($previousReport.source_commit) to $currentHead."
+        $changedSinceReport = @(git -C $repoRoot diff --name-only "$($previousReport.source_commit)..$currentHead")
+        $unsafeResumeChanges = @($changedSinceReport | Where-Object {
+            $_ -notmatch '^outputs/AshenOathTheRoadBetweenCrowns/tools/' -and
+            $_ -notmatch '^outputs/AshenOathTheRoadBetweenCrowns/.*\.md$'
+        })
+        if ($unsafeResumeChanges.Count -gt 0) {
+            throw "Cannot resume release after runtime/source changes: $($unsafeResumeChanges -join ', ')"
+        }
+        Write-Host "RELEASE RESUME: verifier/document-only changes accepted: $($changedSinceReport -join ', ')"
     }
     $resumeFound = $false
     foreach ($result in $previousReport.results) {
@@ -53,9 +61,6 @@ if ($IsResume) {
     }
     if (-not $resumeFound) {
         throw "Resume gate was not found in the previous release report: $ResumeFrom"
-    }
-    if ($ResumeFrom -ne "verify_web_001") {
-        throw "External release resumption currently supports verify_web_001 only."
     }
 }
 

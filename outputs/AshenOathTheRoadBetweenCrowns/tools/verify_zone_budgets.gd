@@ -22,14 +22,14 @@ func _initialize() -> void:
 	for zone_id in zones:
 		game.call("_load_zone", zone_id, Vector3(0, 1, 8))
 		await _settle_transition(game)
-		await _frames(3)
+		await _settle_retirement(game)
 		_verify_zone(game, zone_id)
 		_check(game.route_zone_cache.size() <= game.MAX_CACHED_ROUTE_ZONES, "%s retained too many cached zones" % zone_id)
 		_check(game.retired_zone_roots.is_empty(), "%s retained retired zone roots after the render-safe release window" % zone_id)
 	game.settings.set_quality_preset("potato")
 	game.call("_load_zone", "vargan_court", Vector3(0, 1, 8))
 	await _settle_transition(game)
-	await _frames(3)
+	await _settle_retirement(game)
 	_verify_zone(game, "vargan_court_potato")
 	_write_report()
 	game.queue_free()
@@ -50,6 +50,13 @@ func _settle_transition(game: Node) -> void:
 		if not bool(game.zone_transition_pending):
 			return
 	_fail("%s transition did not settle for budget capture" % str(game.current_zone_id))
+
+func _settle_retirement(game: Node) -> void:
+	for _index in range(game.ZONE_RETIRE_FRAMES + 6):
+		await process_frame
+		if game.retired_zone_roots.is_empty():
+			return
+	_fail("%s retirement did not settle for budget capture" % str(game.current_zone_id))
 
 func _write_report() -> void:
 	var directory := ProjectSettings.globalize_path("res://.release-gate")
