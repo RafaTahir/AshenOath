@@ -10,6 +10,14 @@ ANIM-001 release acceptance passed the complete functional suite, graphical rout
 
 PERF-001 establishes enforced per-zone budgets and a graphical native-720p gate. The final compact Dell 7280/Intel HD 620 gate measured Greyfen at 34.6 FPS average / 26.3 FPS 1% low, with all representative zones above the 28/24 FPS thresholds. Balanced now uses shadowless authored lighting, generated mesh LODs, bounded NPC presentation distance, batched cottage/river geometry, and at most one inactive cached route zone.
 
+WEB-001 establishes the public Act One candidate gate. The development export
+is 64.0 MB total with a 27.7 MB PCK, uses a native 1280x720 WebGL2 canvas, and
+reaches Greyfen through real launch/menu input in both Chrome and Edge without
+browser console errors. Cold headless software-WebGL runs require about 17
+seconds to initialize the engine and another 14-15 seconds to reach Greyfen
+after New Game; this remains known loading-performance debt. Production remains
+unchanged until `MOBILE-001`.
+
 ## COMBAT-001 Update
 
 - Kael's light and heavy attacks resolve from the animated sword's measured hilt-to-tip sweep rather than a delayed radius/facing query.
@@ -637,7 +645,9 @@ The export includes JSON, runtime scripts, selected imported assets, audio, UI, 
 | `tools/verify_runtime.gd` | Headless runtime verifier for web-only release shape, Greyfen/Wychwood load, dialogue mouse release, blocked gate, enemies, placeholders, fall recovery |
 | `tools/verify_combat_001.gd` | Verifies measured blade sweeps, misses, one-contact attacks, parry contact, and attacker stagger |
 | `tools/capture_slice_screenshots.gd` | Captures spawn, village center, forest gate, forest trail, and combat clearing; checks nonblank/collision-safe captures; writes originals to `verification_screenshots/` and mirrors future captures into `Development_Gallery/screenshots/` |
-| `tools/verify_web_export.py` | Checks Web export folder and required Godot output files |
+| `tools/verify_web_export.py` | Enforces the exact runtime file shape, hashes, and 100 MB payload ceiling |
+| `tools/verify_web_001.py` | Audits the Web preset, renderer, export filters, build ID, and hosting headers |
+| `tools/verify_web_browser.mjs` | Drives Chrome and Edge through launch, menu, and New Game via DevTools |
 | `Export_Web_Build.bat` | Runs Godot Web export and web export verification |
 | `Serve_Web_Build.bat` | Serves the web build locally for browser smoke testing |
 
@@ -698,8 +708,8 @@ Known verifier note: Godot headless may emit ObjectDB cleanup warnings after pas
 ### Short Term
 
 - Preserve the sub-900 ms cold-transition and sub-350 ms warm-transition budgets as later systems change.
-- Profile the exported Web build’s browser memory and JavaScript console under `WEB-001`.
-- Profile the deployed build in Chrome and Edge rather than relying only on the native ANGLE run.
+- Preserve WEB-001's Chrome/Edge canvas, console, runtime-heap, and New Game
+  checks as browser-facing systems change.
 - Produce bespoke realistic human assets as a separate licensed asset-production milestone.
 
 ### Medium Term

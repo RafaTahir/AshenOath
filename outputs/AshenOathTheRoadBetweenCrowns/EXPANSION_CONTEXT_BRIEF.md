@@ -38,7 +38,8 @@ milestone.
 
 ## Roadmap Checkpoint
 
-`PERF-001` is the latest development checkpoint. Three original roadmap tickets
-remain: `WEB-001`, `INPUT-001`, and `MOBILE-001`.
+`WEB-001` is the latest development checkpoint. It establishes strict Web
+artifact/configuration checks and real Chrome/Edge New Game smoke tests. Two
+original roadmap tickets remain: `INPUT-001` and `MOBILE-001`.
 Production deploys only after `MOBILE-001` completes the approved seven-ticket
 milestone.

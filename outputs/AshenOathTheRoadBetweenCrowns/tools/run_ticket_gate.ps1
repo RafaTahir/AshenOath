@@ -71,7 +71,8 @@ function Get-GateInputs([string]$Gate, [string[]]$Files) {
     $selected = [System.Collections.Generic.List[string]]::new()
     $scriptNames = @(
         "outputs/AshenOathTheRoadBetweenCrowns/tools/$Gate.gd",
-        "outputs/AshenOathTheRoadBetweenCrowns/tools/$Gate.py"
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/$Gate.py",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/$Gate.mjs"
     )
     foreach ($file in $Files) {
         $normalized = Normalize-Path $file
@@ -79,7 +80,7 @@ function Get-GateInputs([string]$Gate, [string[]]$Files) {
             Add-Unique $selected $normalized
             continue
         }
-        if ($Gate -in @("content_integrity", "runtime_smoke", "web_export", "verify_web_export", "packed_startup")) {
+        if ($Gate -in @("content_integrity", "runtime_smoke", "verify_web_001", "web_export", "verify_web_export", "verify_web_browser", "packed_startup")) {
             if ($normalized -like "outputs/AshenOathTheRoadBetweenCrowns/scripts/*" -or
                 $normalized -like "outputs/AshenOathTheRoadBetweenCrowns/data/*" -or
                 $normalized -like "outputs/AshenOathTheRoadBetweenCrowns/scenes/*" -or
@@ -236,15 +237,26 @@ foreach ($gate in $gates) {
             "--rendering-method", "gl_compatibility",
             "--script", $script
         ) $gateInputs $cache
+    } elseif ($gate -eq "verify_web_001") {
+        Invoke-Compact $gate $Python @(
+            (Join-Path $PSScriptRoot "verify_web_001.py"), $Project, $RepoRoot
+        ) $gateInputs $cache
     } elseif ($gate -eq "web_export") {
         Invoke-Compact "web_export" (Join-Path $Project "Export_Web_Build.bat") @() $gateInputs $cache
         Invoke-Compact "verify_web_export" $Python @(
-            (Join-Path $PSScriptRoot "verify_web_export.py"), $Web
+            (Join-Path $PSScriptRoot "verify_web_export.py"), $Web,
+            "--json-report", (Join-Path $Logs "web_export.json")
         ) $gateInputs $cache
         Invoke-Compact "packed_startup" $Godot @(
             "--headless", "--path", $Web,
             "--main-pack", (Join-Path $Web "index.pck"),
             "--quit-after", "5"
+        ) $gateInputs $cache
+    } elseif ($gate -eq "verify_web_browser") {
+        Invoke-Compact $gate "node.exe" @(
+            (Join-Path $PSScriptRoot "verify_web_browser.mjs"),
+            "--export", $Web,
+            "--report", (Join-Path $Logs "web_browser.json")
         ) $gateInputs $cache
     } else {
         $script = Join-Path $PSScriptRoot "$gate.gd"

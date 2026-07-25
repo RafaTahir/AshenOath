@@ -231,13 +231,24 @@ try {
     }
 
     if ([string]::IsNullOrWhiteSpace($Only) -and -not $SkipExport) {
+        Invoke-ExternalGate "verify_web_001" $Python @(
+            (Join-Path $Project "tools\verify_web_001.py"),
+            $Project,
+            (Resolve-Path (Join-Path $Project "..\.."))
+        )
         Invoke-ExternalGate "web_export" (Join-Path $Project "Export_Web_Build.bat") @()
         Invoke-ExternalGate "verify_web_export" $Python @(
-            (Join-Path $Project "tools\verify_web_export.py"), $Web
+            (Join-Path $Project "tools\verify_web_export.py"), $Web,
+            "--json-report", (Join-Path $Logs "web_export.json")
         )
         $pack = Join-Path $Web "index.pck"
         Invoke-GodotGate "packed_startup" @(
             "--headless", "--path", $Web, "--main-pack", $pack, "--quit-after", "5"
+        )
+        Invoke-ExternalGate "verify_web_browser" "node.exe" @(
+            (Join-Path $Project "tools\verify_web_browser.mjs"),
+            "--export", $Web,
+            "--report", (Join-Path $Logs "web_browser.json")
         )
     }
     $finalStatus = $(if ([string]::IsNullOrWhiteSpace($Only)) { "pass" } else { "partial-pass" })
