@@ -63,7 +63,7 @@
     {"id": "QUEST-002", "title": "Names in the Rain", "area": "narrative", "milestone": "baseline", "status": "complete"},
     {"id": "QUEST-003", "title": "Ash and Banner", "area": "narrative", "milestone": "C", "status": "complete"},
     {"id": "QUEST-004", "title": "Blood Under Stone", "area": "narrative", "milestone": "C", "status": "complete"},
-    {"id": "QUEST-005", "title": "The Hart Remembers", "area": "narrative", "milestone": "C", "status": "planned"},
+    {"id": "QUEST-005", "title": "The Hart Remembers", "area": "narrative", "milestone": "C", "status": "complete"},
     {"id": "QUEST-006", "title": "Consequence and epilogue pass", "area": "narrative", "milestone": "C", "status": "planned"},
     {"id": "SIDE-001", "title": "Five authored side quests", "area": "narrative", "milestone": "C", "status": "planned"},
     {"id": "DIALOGUE-001", "title": "Conditional conversational rewrite", "area": "narrative", "milestone": "B", "status": "complete"},

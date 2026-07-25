@@ -378,6 +378,22 @@
       ],
       "web_required": true
     },
+    "quest_005": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/hart_remembers_contract.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/quests.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/campaign_dialogue.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/campaign_finale_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_quest_005.gd"
+      ],
+      "gates": [
+        "verify_quest_005",
+        "verify_story_campaign",
+        "verify_save_001",
+        "verify_dialogue_001"
+      ]
+    },
     "progression": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/data/upgrades.json",

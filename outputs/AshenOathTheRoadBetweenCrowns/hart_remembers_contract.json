@@ -1,0 +1,18 @@
+{
+  "ticket": "QUEST-005",
+  "quest": "main_hart_remembers",
+  "prerequisites": [
+    "main_last_witness",
+    "main_crowns_without_mercy",
+    "confession_method"
+  ],
+  "endings": {
+    "expose": "witness",
+    "free": "mercy",
+    "bind": "duty",
+    "kill": "ash"
+  },
+  "peaceful": ["expose", "free"],
+  "combat_handoff": ["bind", "kill"],
+  "witness_fallback": "kael"
+}

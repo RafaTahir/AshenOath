@@ -1265,6 +1265,21 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 	print("LOADING: Greyfen prewarmed behind main menu")
 
 func _complete_ending(ending: String) -> void:
+	if not quests.is_active("main_hart_remembers") or str(story_state.get_flag("confession_method", "")) == "":
+		hud.toast("The Hart will not answer until Greyfen has heard the testimony.")
+		get_tree().paused = false
+		hud.hide_menus()
+		return
+	var witnesses: Array[String] = []
+	if str(story_state.get_flag("halvern_fate", "")) == "witness":
+		witnesses.append("halvern")
+	if str(story_state.get_flag("edric_stance", "")) in ["cooperate", "compelled"]:
+		witnesses.append("edric")
+	if int(story_state.values.get("anwen_trust", 0)) >= 0:
+		witnesses.append("anwen")
+	if witnesses.is_empty():
+		witnesses.append("kael")
+	story_state.set_flag("final_witnesses", witnesses)
 	quests.world_flags["ending"] = ending
 	story_state.set_flag("final_covenant", {"expose":"witness", "free":"mercy", "bind":"duty", "kill":"ash"}.get(ending, ending))
 	quests.complete_objective("main_hart_remembers", "hear_testimony")
