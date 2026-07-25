@@ -1628,6 +1628,7 @@ func _apply_runtime_settings(current_settings: Dictionary) -> void:
 	if hud != null:
 		hud.apply_accessibility(float(current_settings.get("subtitle_scale", 1.0)))
 	if visual_director != null and visual_director.sun != null:
+		visual_director.apply_settings(current_settings)
 		visual_director.sun.shadow_enabled = int(current_settings.get("shadow_quality", 1)) > 0
 		visual_director.sun.directional_shadow_max_distance = 42.0
 

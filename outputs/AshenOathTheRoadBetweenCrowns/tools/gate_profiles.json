@@ -23,7 +23,8 @@
       ],
       "gates": [
         "verify_visible_quality",
-        "verify_zone_budgets"
+        "verify_zone_budgets",
+        "verify_light_001"
       ]
     },
     "navigation": {
@@ -113,6 +114,7 @@
     "animation": "capture_anim_001",
     "greyfen": "capture_world_001",
     "wychwood": "capture_world_002",
-    "campaign": "capture_world_003"
+    "campaign": "capture_world_003",
+    "lighting": "capture_light_001"
   }
 }

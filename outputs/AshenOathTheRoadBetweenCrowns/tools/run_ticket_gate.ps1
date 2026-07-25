@@ -48,7 +48,6 @@ function Add-Unique([System.Collections.Generic.List[string]]$List, [string]$Val
 function Get-GateHash([string]$Gate, [string[]]$Files) {
     $builder = [Text.StringBuilder]::new()
     [void]$builder.AppendLine($Gate)
-    [void]$builder.AppendLine((git -C $RepoRoot rev-parse HEAD).Trim())
     foreach ($relative in ($Files | Sort-Object -Unique)) {
         $absolute = Join-Path $RepoRoot $relative
         [void]$builder.AppendLine($relative)
@@ -66,6 +65,56 @@ function Get-GateHash([string]$Gate, [string[]]$Files) {
     $sha = [Security.Cryptography.SHA256]::Create()
     try { return ([BitConverter]::ToString($sha.ComputeHash($bytes))).Replace("-", "") }
     finally { $sha.Dispose() }
+}
+
+function Get-GateInputs([string]$Gate, [string[]]$Files) {
+    $selected = [System.Collections.Generic.List[string]]::new()
+    $scriptNames = @(
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/$Gate.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/$Gate.py"
+    )
+    foreach ($file in $Files) {
+        $normalized = Normalize-Path $file
+        if ($scriptNames -contains $normalized) {
+            Add-Unique $selected $normalized
+            continue
+        }
+        if ($Gate -in @("content_integrity", "runtime_smoke", "web_export", "verify_web_export", "packed_startup")) {
+            if ($normalized -like "outputs/AshenOathTheRoadBetweenCrowns/scripts/*" -or
+                $normalized -like "outputs/AshenOathTheRoadBetweenCrowns/data/*" -or
+                $normalized -like "outputs/AshenOathTheRoadBetweenCrowns/scenes/*" -or
+                $normalized -like "outputs/AshenOathTheRoadBetweenCrowns/assets_external/*" -or
+                $normalized -in @(
+                    "outputs/AshenOathTheRoadBetweenCrowns/project.godot",
+                    "outputs/AshenOathTheRoadBetweenCrowns/export_presets.cfg",
+                    "vercel.json"
+                )) {
+                Add-Unique $selected $normalized
+            }
+            continue
+        }
+        foreach ($property in $Configuration.profiles.PSObject.Properties) {
+            if ($property.Value.gates -contains $Gate) {
+                foreach ($pattern in $property.Value.patterns) {
+                    if (Matches-Pattern $normalized $pattern) {
+                        Add-Unique $selected $normalized
+                        break
+                    }
+                }
+            }
+        }
+        if ($Gate.StartsWith("capture_")) {
+            foreach ($property in $Configuration.profiles.PSObject.Properties) {
+                foreach ($pattern in $property.Value.patterns) {
+                    if (Matches-Pattern $normalized $pattern) {
+                        Add-Unique $selected $normalized
+                        break
+                    }
+                }
+            }
+        }
+    }
+    return @($selected)
 }
 
 function Read-Cache {
@@ -170,38 +219,40 @@ if (!(Test-Path -LiteralPath $Python)) { throw "Bundled Python not found: $Pytho
 $cache = Read-Cache
 
 foreach ($gate in $gates) {
+    $gateInputs = @(Get-GateInputs $gate $files)
     if ($gate -eq "content_integrity") {
         Invoke-Compact $gate $Python @(
             (Join-Path $PSScriptRoot "verify_content_integrity.py"),
             $Project,
             "--json-report",
             (Join-Path $Logs "content_integrity.json")
-        ) $files $cache
+        ) $gateInputs $cache
     } elseif ($gate -eq "runtime_smoke") {
-        Invoke-Compact $gate $Godot @("--headless", "--path", $Project, "--quit-after", "3") $files $cache
+        Invoke-Compact $gate $Godot @("--headless", "--path", $Project, "--quit-after", "3") $gateInputs $cache
     } elseif ($gate -eq "web_export") {
-        Invoke-Compact "web_export" (Join-Path $Project "Export_Web_Build.bat") @() $files $cache
+        Invoke-Compact "web_export" (Join-Path $Project "Export_Web_Build.bat") @() $gateInputs $cache
         Invoke-Compact "verify_web_export" $Python @(
             (Join-Path $PSScriptRoot "verify_web_export.py"), $Web
-        ) $files $cache
+        ) $gateInputs $cache
         Invoke-Compact "packed_startup" $Godot @(
             "--headless", "--path", $Web,
             "--main-pack", (Join-Path $Web "index.pck"),
             "--quit-after", "5"
-        ) $files $cache
+        ) $gateInputs $cache
     } else {
         $script = Join-Path $PSScriptRoot "$gate.gd"
         if (!(Test-Path -LiteralPath $script)) { throw "Verifier missing: $script" }
-        Invoke-Compact $gate $Godot @("--headless", "--path", $Project, "--script", $script) $files $cache
+        Invoke-Compact $gate $Godot @("--headless", "--path", $Project, "--script", $script) $gateInputs $cache
     }
 }
 
 foreach ($capture in $captureGates) {
     $script = Join-Path $PSScriptRoot "$capture.gd"
     if (!(Test-Path -LiteralPath $script)) { throw "Capture helper missing: $script" }
+    $captureInputs = @(Get-GateInputs $capture $files)
     Invoke-Compact $capture $Godot @(
         "--path", $Project, "--rendering-method", "gl_compatibility", "--script", $script
-    ) $files $cache
+    ) $captureInputs $cache
 }
 
 Write-Host "TICKET GATE: PASS"

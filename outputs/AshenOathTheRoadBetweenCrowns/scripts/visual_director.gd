@@ -19,6 +19,12 @@ var current_zone := "greyfen"
 var current_zone_root: Node3D
 var current_time_minutes := 990.0
 var current_phase := "dusk"
+var current_quality_preset := "balanced"
+var reduced_motion := false
+
+const INTERIOR_ZONES := ["record_hall", "undercroft"]
+const FOREST_ZONES := ["wychwood", "deep_wood", "marsh_crossing", "burned_farmstead", "hart_glade"]
+const CASTLE_ZONES := ["vargan_approach", "vargan_court", "assembly"]
 
 func _ready() -> void:
 	world_environment = WorldEnvironment.new()
@@ -38,6 +44,7 @@ func _ready() -> void:
 func apply_zone(zone_id: String, zone_root: Node3D = null) -> void:
 	current_zone = zone_id
 	current_zone_root = zone_root
+	_invalidate_night_cache()
 	var env: Environment = environment_cache.get(zone_id)
 	if env == null:
 		env = Environment.new()
@@ -46,67 +53,66 @@ func apply_zone(zone_id: String, zone_root: Node3D = null) -> void:
 		env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
 		env.tonemap_mode = Environment.TONE_MAPPER_FILMIC
 		env.adjustment_enabled = true
-		env.adjustment_contrast = 1.34
-		env.adjustment_saturation = 0.92
-		var forest_zones := ["wychwood","deep_wood","marsh_crossing","burned_farmstead","hart_glade"]
-		var ruin_zones := ["ruins","old_mill","bandit_road","vargan_approach","vargan_court","record_hall","undercroft","assembly"]
-		if zone_id in forest_zones:
-			_configure_wychwood(env)
-		elif zone_id in ruin_zones:
-			_configure_ruins(env)
-		else:
-			_configure_greyfen(env)
+		_initialize_environment(env, _lighting_profile(zone_id))
 		environment_cache[zone_id] = env
 	world_environment.environment = env
 	current_environment = env
 	_position_sky_layer(zone_id)
 	set_time(current_time_minutes, current_phase, 0)
 
+func apply_settings(settings: Dictionary) -> void:
+	current_quality_preset = str(settings.get("quality_preset", "balanced"))
+	reduced_motion = bool(settings.get("reduced_motion", false))
+	if current_environment != null:
+		set_time(current_time_minutes, current_phase, 0)
+
 func set_time(minutes: float, phase: String, _day_count: int = 0) -> void:
 	current_time_minutes = minutes
 	current_phase = phase
 	if current_environment == null:
 		return
-	var outdoor := current_zone not in ["record_hall", "undercroft"]
-	if not outdoor:
+	var profile := _lighting_profile(current_zone)
+	var weights := _phase_weights(minutes)
+	var daylight: float = weights.daylight
+	var night: float = weights.night
+	var twilight: float = weights.twilight
+	if not bool(profile.outdoor):
 		moon.light_energy = 0.0
-		sun.light_energy = 0.18
+		sun.light_energy = float(profile.interior_directional)
 		for celestial in [sun_disc, sun_halo, moon_disc, moon_halo, star_field, cloud_layer]:
 			celestial.visible = false
-		_update_zone_night_state(0.75)
+		current_environment.background_color = profile.night_sky
+		current_environment.ambient_light_color = profile.ambient_night.lerp(profile.ambient_day, daylight)
+		current_environment.ambient_light_energy = lerpf(float(profile.ambient_night_energy), float(profile.ambient_day_energy), daylight)
+		current_environment.adjustment_brightness = lerpf(float(profile.night_brightness), float(profile.day_brightness), daylight)
+		current_environment.adjustment_saturation = float(profile.saturation)
+		current_environment.fog_density = float(profile.fog_night)
+		_update_zone_night_state(night)
 		return
-	var solar: float = sin((minutes - 360.0) / 1440.0 * TAU)
-	var daylight: float = smoothstep(-0.02,0.16,solar)
-	var night: float = smoothstep(0.04,0.18,-solar)
-	var twilight: float = clampf(1.0-maxf(daylight,night),0.0,1.0)
-	var forest := current_zone in ["wychwood", "deep_wood", "marsh_crossing", "burned_farmstead", "hart_glade"]
-	var ruin := current_zone in ["ruins", "old_mill", "bandit_road", "vargan_approach", "vargan_court", "assembly"]
-	var day_sky := Color(0.20, 0.32, 0.46) if not forest else Color(0.08, 0.18, 0.19)
-	if ruin: day_sky = Color(0.22, 0.25, 0.30)
-	var dusk_sky := Color(0.34, 0.16, 0.085) if not forest else Color(0.09, 0.13, 0.12)
-	var night_sky := Color(0.018, 0.035, 0.075) if not forest else Color(0.012, 0.040, 0.052)
-	current_environment.background_color = night_sky.lerp(dusk_sky, twilight).lerp(day_sky, daylight)
-	current_environment.ambient_light_color = Color(0.20, 0.26, 0.38).lerp(Color(0.46, 0.40, 0.33), daylight)
-	current_environment.ambient_light_energy = lerp(0.92, 0.88, daylight)
-	current_environment.fog_light_color = Color(0.11, 0.17, 0.29).lerp(Color(0.34, 0.40, 0.46), daylight)
-	var base_fog: float = 0.065 if forest else (0.038 if ruin else 0.030)
-	current_environment.fog_density = base_fog * lerpf(0.88, 0.42, daylight)
-	current_environment.adjustment_brightness = lerp(1.18, 1.03, daylight)
-	var orbit := ((minutes-360.0)/1440.0)*TAU
-	var sun_direction := Vector3(cos(orbit),solar,-0.42).normalized()
+	var twilight_sky: Color = profile.dawn_sky if minutes < 720.0 else profile.dusk_sky
+	current_environment.background_color = profile.night_sky.lerp(twilight_sky, twilight).lerp(profile.day_sky, daylight)
+	current_environment.ambient_light_color = profile.ambient_night.lerp(profile.ambient_day, daylight)
+	current_environment.ambient_light_energy = lerpf(float(profile.ambient_night_energy), float(profile.ambient_day_energy), daylight)
+	current_environment.fog_light_color = profile.fog_night_color.lerp(profile.fog_day_color, daylight)
+	current_environment.fog_density = lerpf(float(profile.fog_night), float(profile.fog_day), daylight)
+	current_environment.adjustment_brightness = lerpf(float(profile.night_brightness), float(profile.day_brightness), daylight)
+	current_environment.adjustment_contrast = float(profile.contrast)
+	current_environment.adjustment_saturation = float(profile.saturation)
+	var sun_direction := _solar_direction(minutes)
 	sun.global_basis = Basis.looking_at(-sun_direction,Vector3.UP)
-	sun.light_color = Color(1.0, 0.48, 0.24).lerp(Color(1.0, 0.91, 0.74), daylight)
-	sun.light_energy = daylight * (0.72 if forest else 1.05) + twilight * 0.28
+	var twilight_sun: Color = profile.dawn_sun if minutes < 720.0 else profile.dusk_sun
+	sun.light_color = twilight_sun.lerp(profile.day_sun, daylight)
+	sun.light_energy = daylight * float(profile.sun_energy) + twilight * float(profile.twilight_energy)
 	moon.global_basis = Basis.looking_at(sun_direction,Vector3.UP)
-	moon.light_energy = night * (0.80 if forest else 0.88)
-	_update_sky_cycle(daylight, twilight, night, minutes)
-	_update_zone_night_state(night)
+	moon.light_color = profile.moon_color
+	moon.light_energy = night * float(profile.moon_energy)
+	_update_sky_cycle(daylight, twilight, night, minutes, profile)
+	_update_zone_night_state(smoothstep(float(profile.night_light_threshold), 1.0, night))
 
-func _update_sky_cycle(daylight: float, twilight: float, night: float, minutes: float) -> void:
-	var orbit := ((minutes - 360.0) / 1440.0) * TAU
+func _update_sky_cycle(daylight: float, twilight: float, night: float, minutes: float, profile: Dictionary) -> void:
 	var camera := get_viewport().get_camera_3d()
 	var sky_origin: Vector3 = camera.global_position if camera != null else Vector3.ZERO
-	var sun_direction := Vector3(cos(orbit),sin(orbit),-0.42).normalized()
+	var sun_direction := _solar_direction(minutes)
 	var moon_direction := -sun_direction
 	var sun_position: Vector3 = sky_origin + sun_direction * 145.0
 	var moon_position: Vector3 = sky_origin + moon_direction * 132.0
@@ -115,33 +121,34 @@ func _update_sky_cycle(daylight: float, twilight: float, night: float, minutes: 
 	sun_rays.position = sun_position
 	moon_disc.position = moon_position
 	moon_halo.position = moon_position + Vector3(0, 0, 0.4)
+	star_field.position = sky_origin
+	cloud_layer.position = sky_origin
 	var sun_amount := clampf(daylight+twilight*0.72,0.0,1.0)
 	var sun_above_horizon := sun_direction.y > -0.015
 	var moon_above_horizon := moon_direction.y > 0.035
-	sun_disc.visible = sun_above_horizon and night < 0.08
+	sun_disc.visible = sun_above_horizon and (daylight + twilight) > 0.05
 	sun_halo.visible = sun_disc.visible
 	sun_rays.visible = sun_disc.visible and sun_amount > 0.14
-	moon_disc.visible = moon_above_horizon and daylight < 0.08
+	moon_disc.visible = not sun_disc.visible and moon_above_horizon and night > 0.05
 	moon_halo.visible = moon_disc.visible
 	_set_mesh_alpha(sun_disc, 0.92 * sun_amount)
 	_set_mesh_alpha(sun_halo, 0.18 * sun_amount)
 	_set_mesh_alpha(moon_disc, 0.94 * night)
 	_set_mesh_alpha(moon_halo, 0.20 * night)
-	star_field.visible = night > 0.22 and not moon_direction.y < -0.05
+	star_field.visible = night > 0.22
 	_set_mesh_alpha(star_field, clampf((night - 0.10) / 0.70, 0.0, 0.92))
 	var quality := _quality_preset()
 	if star_field != null and star_field.multimesh != null:
 		star_field.multimesh.visible_instance_count = 28 if quality == "potato" else (96 if quality == "quality" else 62)
 	var cloud_count := 2 if quality == "potato" else (7 if quality == "quality" else 4)
-	# Dense Wychwood canopy owns the upper frame; large billboard cards can cross the third-person camera there.
-	cloud_layer.visible = current_zone != "wychwood"
+	cloud_layer.visible = bool(profile.clouds)
 	var cloud_alpha := clampf(daylight*0.78+twilight*0.68+night*0.28,0.18,0.82)
 	var cloud_color := Color(0.92,0.94,0.96) if daylight > twilight else Color(0.82,0.46,0.30)
 	if night > 0.55:
 		cloud_color = Color(0.18,0.23,0.34)
 	for i in range(cloud_layer.get_child_count()):
 		var cloud := cloud_layer.get_child(i) as Node3D
-		cloud.visible = current_zone != "wychwood" and i < cloud_count
+		cloud.visible = bool(profile.clouds) and i < cloud_count
 		var base_position: Vector3 = cloud.get_meta("base_position", cloud.position)
 		var cloud_drift := 0.0 if _reduced_motion() else fmod(minutes * (0.018 + i * 0.002), 28.0) - 14.0
 		cloud.position = base_position + Vector3(cloud_drift, 0, 0)
@@ -150,6 +157,47 @@ func _update_sky_cycle(daylight: float, twilight: float, night: float, minutes: 
 				var material := (lobe as MeshInstance3D).material_override as StandardMaterial3D
 				if material != null:
 					material.albedo_color = Color(cloud_color.r,cloud_color.g,cloud_color.b,cloud_alpha)
+
+func _phase_weights(minutes: float) -> Dictionary:
+	minutes = fposmod(minutes, 1440.0)
+	if minutes >= 330.0 and minutes < 420.0:
+		var dawn_t := smoothstep(0.0, 1.0, (minutes - 330.0) / 90.0)
+		return {"daylight": dawn_t, "twilight": sin(dawn_t * PI), "night": 1.0 - dawn_t}
+	if minutes >= 420.0 and minutes < 1110.0:
+		return {"daylight": 1.0, "twilight": 0.0, "night": 0.0}
+	if minutes >= 1110.0 and minutes < 1200.0:
+		var dusk_t := smoothstep(0.0, 1.0, (minutes - 1110.0) / 90.0)
+		return {"daylight": 1.0 - dusk_t, "twilight": sin(dusk_t * PI), "night": dusk_t}
+	return {"daylight": 0.0, "twilight": 0.0, "night": 1.0}
+
+func _solar_direction(minutes: float) -> Vector3:
+	minutes = fposmod(minutes, 1440.0)
+	var elevation := -0.24
+	if minutes >= 330.0 and minutes < 420.0:
+		elevation = lerpf(-0.06, 0.28, (minutes - 330.0) / 90.0)
+	elif minutes >= 420.0 and minutes < 1110.0:
+		var day_t := (minutes - 420.0) / 690.0
+		elevation = 0.28 + sin(day_t * PI) * 0.68
+	elif minutes >= 1110.0 and minutes < 1200.0:
+		elevation = lerpf(0.28, -0.06, (minutes - 1110.0) / 90.0)
+	else:
+		var night_t := fposmod(minutes - 1200.0, 570.0) / 570.0
+		elevation = -0.12 - sin(night_t * PI) * 0.48
+	var azimuth := (minutes / 1440.0) * TAU - PI * 0.5
+	return Vector3(cos(azimuth), elevation, sin(azimuth) * 0.72).normalized()
+
+func _invalidate_night_cache() -> void:
+	for key in night_node_cache.keys():
+		var cached: Dictionary = night_node_cache[key]
+		var valid_entry := false
+		for light in cached.get("lights", []):
+			if is_instance_valid(light):
+				valid_entry = true
+				break
+		if not valid_entry:
+			night_node_cache.erase(key)
+	if current_zone_root != null:
+		night_node_cache.erase(current_zone_root.get_instance_id())
 
 func _update_zone_night_state(night_amount: float) -> void:
 	if current_zone_root == null:
@@ -173,35 +221,86 @@ func _update_zone_night_state(night_amount: float) -> void:
 	for mesh in cached.meshes:
 		if is_instance_valid(mesh): mesh.visible = night_amount > 0.10
 
-func _configure_greyfen(env: Environment) -> void:
-	env.background_color = Color(0.040, 0.048, 0.060)
-	env.fog_light_color = Color(0.38, 0.31, 0.24)
-	env.fog_density = 0.028
-	env.ambient_light_color = Color(0.17, 0.15, 0.13)
-	sun.rotation_degrees = Vector3(-52, 24, 0)
-	sun.light_color = Color(1.00, 0.55, 0.28)
-	sun.light_energy = 0.72
-	_set_sky_colors(Color(0.040, 0.048, 0.064), Color(1.0, 0.46, 0.18), Color(0.36, 0.30, 0.24, 0.24))
+func _initialize_environment(env: Environment, profile: Dictionary) -> void:
+	env.background_color = profile.night_sky
+	env.fog_light_color = profile.fog_night_color
+	env.fog_density = float(profile.fog_night)
+	env.ambient_light_color = profile.ambient_night
+	env.ambient_light_energy = float(profile.ambient_night_energy)
+	env.adjustment_brightness = float(profile.night_brightness)
+	env.adjustment_contrast = float(profile.contrast)
+	env.adjustment_saturation = float(profile.saturation)
 
-func _configure_wychwood(env: Environment) -> void:
-	env.background_color = Color(0.018, 0.034, 0.034)
-	env.fog_light_color = Color(0.13, 0.25, 0.22)
-	env.fog_density = 0.070
-	env.ambient_light_color = Color(0.09, 0.13, 0.13)
-	sun.rotation_degrees = Vector3(-62, -22, 0)
-	sun.light_color = Color(0.34, 0.55, 0.72)
-	sun.light_energy = 0.55
-	_set_sky_colors(Color(0.018, 0.034, 0.036), Color(0.62, 0.82, 0.92), Color(0.11, 0.18, 0.17, 0.34))
-
-func _configure_ruins(env: Environment) -> void:
-	env.background_color = Color(0.035, 0.035, 0.038)
-	env.fog_light_color = Color(0.20, 0.18, 0.16)
-	env.fog_density = 0.044
-	env.ambient_light_color = Color(0.16, 0.15, 0.14)
-	sun.rotation_degrees = Vector3(-50, 45, 0)
-	sun.light_color = Color(0.72, 0.62, 0.50)
-	sun.light_energy = 0.42
-	_set_sky_colors(Color(0.040, 0.040, 0.046), Color(0.78, 0.66, 0.48), Color(0.22, 0.20, 0.18, 0.32))
+func _lighting_profile(zone_id: String) -> Dictionary:
+	var profile := {
+		"id": "greyfen",
+		"outdoor": true,
+		"clouds": true,
+		"day_sky": Color(0.24, 0.39, 0.56),
+		"dawn_sky": Color(0.42, 0.25, 0.20),
+		"dusk_sky": Color(0.38, 0.18, 0.10),
+		"night_sky": Color(0.020, 0.045, 0.090),
+		"ambient_day": Color(0.48, 0.44, 0.38),
+		"ambient_night": Color(0.22, 0.29, 0.43),
+		"ambient_day_energy": 0.88,
+		"ambient_night_energy": 0.88,
+		"fog_day_color": Color(0.38, 0.43, 0.49),
+		"fog_night_color": Color(0.12, 0.19, 0.31),
+		"fog_day": 0.014,
+		"fog_night": 0.027,
+		"day_brightness": 1.03,
+		"night_brightness": 1.16,
+		"contrast": 1.28,
+		"saturation": 0.94,
+		"day_sun": Color(1.0, 0.94, 0.82),
+		"dawn_sun": Color(1.0, 0.54, 0.30),
+		"dusk_sun": Color(1.0, 0.42, 0.20),
+		"sun_energy": 1.02,
+		"twilight_energy": 0.30,
+		"moon_color": Color(0.48, 0.62, 0.88),
+		"moon_energy": 0.82,
+		"night_light_threshold": 0.14,
+		"interior_directional": 0.16,
+	}
+	if zone_id == "cemetery":
+		profile.merge({
+			"id": "cemetery", "day_sky": Color(0.20, 0.31, 0.40),
+			"dawn_sky": Color(0.31, 0.24, 0.22), "dusk_sky": Color(0.27, 0.16, 0.13),
+			"night_sky": Color(0.014, 0.034, 0.070), "ambient_day": Color(0.38, 0.39, 0.38),
+			"fog_day": 0.025, "fog_night": 0.046, "moon_energy": 0.90,
+		}, true)
+	elif zone_id in FOREST_ZONES:
+		profile.merge({
+			"id": "hart" if zone_id == "hart_glade" else "forest",
+			"day_sky": Color(0.10, 0.23, 0.25), "dawn_sky": Color(0.19, 0.25, 0.22),
+			"dusk_sky": Color(0.10, 0.16, 0.15), "night_sky": Color(0.010, 0.038, 0.060),
+			"ambient_day": Color(0.29, 0.38, 0.34), "ambient_night": Color(0.18, 0.31, 0.38),
+			"fog_day_color": Color(0.16, 0.29, 0.27), "fog_night_color": Color(0.08, 0.19, 0.24),
+			"fog_day": 0.035, "fog_night": 0.058, "day_brightness": 1.07,
+			"night_brightness": 1.20, "sun_energy": 0.72, "moon_energy": 0.92,
+			"saturation": 0.89,
+		}, true)
+		if zone_id == "hart_glade":
+			profile.merge({"fog_day": 0.022, "fog_night": 0.034, "moon_energy": 1.02}, true)
+	elif zone_id in CASTLE_ZONES or zone_id in ["ruins", "old_mill", "bandit_road"]:
+		profile.merge({
+			"id": "castle", "day_sky": Color(0.25, 0.29, 0.35),
+			"dawn_sky": Color(0.38, 0.29, 0.25), "dusk_sky": Color(0.30, 0.20, 0.17),
+			"night_sky": Color(0.020, 0.032, 0.060), "ambient_day": Color(0.42, 0.40, 0.38),
+			"ambient_night": Color(0.24, 0.28, 0.38), "fog_day": 0.020,
+			"fog_night": 0.038, "sun_energy": 0.86, "moon_energy": 0.86,
+			"contrast": 1.32, "saturation": 0.88,
+		}, true)
+	elif zone_id in INTERIOR_ZONES:
+		profile.merge({
+			"id": zone_id, "outdoor": false, "clouds": false,
+			"night_sky": Color(0.014, 0.012, 0.012),
+			"ambient_day": Color(0.31, 0.25, 0.20), "ambient_night": Color(0.21, 0.22, 0.28),
+			"ambient_day_energy": 0.78, "ambient_night_energy": 0.72,
+			"fog_night": 0.012, "day_brightness": 1.06, "night_brightness": 1.10,
+			"contrast": 1.30, "saturation": 0.82, "interior_directional": 0.20,
+		}, true)
+	return profile
 
 func _build_sky_layer() -> void:
 	sky_dome = MeshInstance3D.new()
@@ -242,8 +341,8 @@ func _build_sky_layer() -> void:
 	cloud_layer.name = "CloudLayer"
 	add_child(cloud_layer)
 	cloud_texture = _build_cloud_texture()
-	var cloud_count := 7 if _quality_preset() == "quality" else 1
-	var lobes_per_cloud := 4 if _quality_preset() == "quality" else 3
+	var cloud_count := 7
+	var lobes_per_cloud := 4
 	for i: int in range(cloud_count):
 		var cloud := Node3D.new()
 		cloud.name = "CloudCluster"
@@ -328,12 +427,10 @@ func _set_mesh_alpha(node: GeometryInstance3D, alpha: float) -> void:
 		material.albedo_color.a = alpha
 
 func _quality_preset() -> String:
-	var settings_node := get_tree().root.find_child("SettingsManager", true, false)
-	return str(settings_node.settings.get("quality_preset", "balanced")) if settings_node != null else "balanced"
+	return current_quality_preset
 
 func _reduced_motion() -> bool:
-	var settings_node := get_tree().root.find_child("SettingsManager", true, false)
-	return bool(settings_node.settings.get("reduced_motion", false)) if settings_node != null else false
+	return reduced_motion
 
 func _set_sky_colors(dome_color: Color, sun_color: Color, cloud_color: Color) -> void:
 	if sky_dome != null:
@@ -396,4 +493,5 @@ func _emissive_billboard_material(color: Color, energy: float, alpha: float) -> 
 	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	material.cull_mode = BaseMaterial3D.CULL_DISABLED
+	material.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
 	return material

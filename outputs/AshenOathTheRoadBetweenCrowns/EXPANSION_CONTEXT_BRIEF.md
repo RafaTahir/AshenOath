@@ -35,3 +35,10 @@ document or scan all assets. Use `tools/run_ticket_gate.ps1`; rerun a gate only
 when its inputs change. Capture only changed views. Full verification, complete
 screenshots, export, `web/` sync, and deployment occur once at the roadmap
 milestone.
+
+## Roadmap Checkpoint
+
+`LIGHT-001` is the latest completed development checkpoint. Six original
+roadmap tickets remain: `SAVE-001`, `PROG-001`, `PERF-001`, `WEB-001`,
+`INPUT-001`, and `MOBILE-001`. Production deploys only after `MOBILE-001`
+completes the approved seven-ticket milestone.
