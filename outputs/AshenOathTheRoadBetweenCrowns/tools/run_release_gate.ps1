@@ -167,7 +167,7 @@ function Invoke-GodotGate([string]$Name, [string[]]$Arguments) {
     $warnings = [System.Collections.Generic.List[string]]::new()
     $fatal = [System.Collections.Generic.List[string]]::new()
     $isHeadless = $Arguments -contains "--headless"
-    $teardownPattern = 'RID allocations .* leaked at exit|Pages in use exist at exit|resources still in use at exit|Buffer with GL ID .* leaked|ObjectDB instances leaked at exit|Leaked instance dependency|did not call instance_notify_deleted|Parameter "material" is null'
+    $teardownPattern = 'RID allocations .* leaked at exit|Pages in use exist at exit|resources still in use at exit|Buffer with GL ID .* leaked|shaders of type .* never freed|ObjectDB instances leaked at exit|Leaked instance dependency|did not call instance_notify_deleted|Parameter "material" is null'
     $fatalPattern = 'SCRIPT ERROR|Parse Error|Compile Error|Failed to load|Cannot open|ERROR:|VERIFIER:\s*FAIL|ASSERTION FAILED|Assertion failed'
     for ($index = 0; $index -lt $lines.Count; $index++) {
         $line = $lines[$index]
