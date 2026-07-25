@@ -6,6 +6,7 @@ signal save_requested
 signal load_requested
 signal load_checkpoint_requested
 signal resume_requested
+signal journal_requested
 signal launch_accepted
 signal settings_requested(action: String)
 signal action_selected(action: Dictionary)
@@ -16,7 +17,7 @@ signal dialogue_closed
 signal menu_hovered
 signal menu_clicked
 
-const MENU_BUILD_LABEL = "MOBILE-001 ROADMAP MILESTONE | NATIVE 720P | ASHENOATH.VERCEL.APP"
+const MENU_BUILD_LABEL = "UI-002 MILESTONE D | NATIVE 720P | ASHENOATH.VERCEL.APP"
 const MENU_SIZE = Vector2(1920.0, 1080.0)
 const GAMEPLAY_SIZE = Vector2i(1280, 720)
 const SAVE_PATH = "user://ashen_oath_save.json"
@@ -97,6 +98,7 @@ func show_main_menu() -> void:
 	_add_menu_text(box, "Greyfen waits under ash and oath-light.")
 	_add_menu_button(box, "New Game", func(): new_game_requested.emit())
 	_add_menu_button(box, "Continue", func(): continue_requested.emit(), not _has_continue_save())
+	_add_menu_text(box, _save_status_text())
 	_add_menu_button(box, "Controls", func(): show_controls_menu("main"))
 	_add_menu_button(box, "Settings", func(): show_settings_menu("main"))
 	_add_menu_button(box, "Credits", func(): show_credits_menu())
@@ -125,6 +127,7 @@ func show_pause_menu() -> void:
 	_add_menu_button(box, "Resume", func(): resume_requested.emit())
 	_add_menu_button(box, "Save", func(): save_requested.emit())
 	_add_menu_button(box, "Load", func(): load_requested.emit())
+	_add_menu_button(box, "Journal & Preparation", func(): journal_requested.emit())
 	_add_menu_button(box, "Settings", func(): show_settings_menu())
 	_add_menu_button(box, "Controls", func(): show_controls_menu("pause"))
 	_add_menu_button(box, "Main Menu", func(): show_main_menu())
@@ -953,6 +956,15 @@ func _sensitivity_label(value: float) -> String:
 
 func _has_continue_save() -> bool:
 	return FileAccess.file_exists(SAVE_PATH) or FileAccess.file_exists(AUTOSAVE_PATH) or FileAccess.file_exists(CHECKPOINT_PATH)
+
+func _save_status_text() -> String:
+	if FileAccess.file_exists(SAVE_PATH):
+		return "Continue source: manual save"
+	if FileAccess.file_exists(AUTOSAVE_PATH):
+		return "Continue source: latest autosave"
+	if FileAccess.file_exists(CHECKPOINT_PATH):
+		return "Continue source: safe checkpoint"
+	return "No journey has been saved on this device."
 
 func _return_from_controls() -> void:
 	if controls_back_target == "pause":

@@ -122,6 +122,10 @@ func configure(owner: Node) -> void:
 		audio.play_event("ui")
 		save_manager.load_checkpoint(owner)
 	)
+	hud.journal_requested.connect(func():
+		audio.play_event("ui")
+		hud.show_inventory(inventory, quests, story_state, progression)
+	)
 	hud.resume_requested.connect(Callable(owner, "_resume_game"))
 	hud.settings_requested.connect(Callable(owner, "_handle_setting"))
 	hud.action_selected.connect(Callable(owner, "_handle_dialogue_action"))

@@ -63,11 +63,14 @@
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/minigame_manager.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/settings_manager.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/interactable.gd",
-        "outputs/AshenOathTheRoadBetweenCrowns/scripts/camera_controller.gd"
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/camera_controller.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/runtime_service_registry.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_ui_002.gd"
       ],
       "gates": [
         "verify_runtime_regressions",
-        "verify_ui_001"
+        "verify_ui_001",
+        "verify_ui_002"
       ]
     },
     "input": {

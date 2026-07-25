@@ -72,7 +72,7 @@
     {"id": "AUDIO-002", "title": "Campaign music and transitions", "area": "audio", "milestone": "D", "status": "complete"},
     {"id": "VOICE-001", "title": "Key-scene and bark production", "area": "audio", "milestone": "D", "status": "complete"},
     {"id": "UI-001", "title": "HUD, interaction, tracker, and dialogue", "area": "ux", "milestone": "baseline", "status": "complete"},
-    {"id": "UI-002", "title": "Menus, journal, settings, and loading", "area": "ux", "milestone": "D", "status": "planned"},
+    {"id": "UI-002", "title": "Menus, journal, settings, and loading", "area": "ux", "milestone": "D", "status": "complete"},
     {"id": "ACCESS-001", "title": "Subtitles, focus, contrast, remapping, and reduced motion", "area": "ux", "milestone": "D", "status": "planned"},
     {"id": "PERF-001", "title": "Web budgets and profiling", "area": "performance", "milestone": "baseline", "status": "complete"},
     {"id": "PERF-002", "title": "Zone lifecycle and memory", "area": "performance", "milestone": "A", "status": "planned"},
