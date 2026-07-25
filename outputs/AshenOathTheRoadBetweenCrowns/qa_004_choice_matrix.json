@@ -1,0 +1,22 @@
+{
+  "ticket": "QA-004",
+  "axes": {
+    "evidence_report": ["private", "public", "retained"],
+    "crow_shrine_state": ["cleansed", "disturbed", "bound"],
+    "names_policy": ["published", "withheld"],
+    "senn_fate": ["testimony", "punished", "exiled"],
+    "vargan_ledger_choice": ["openly", "hidden", "copied"],
+    "edric_stance": ["cooperate", "exposed", "compelled"],
+    "halvern_fate": ["witness", "released", "destroyed"],
+    "confession_method": ["witnesses", "kael", "edric"],
+    "ending": ["expose", "free", "bind", "kill"]
+  },
+  "expected_permutations": 17496,
+  "required_invariants": [
+    "every ending resolves",
+    "every epilogue has four core cards",
+    "story flags round-trip without mutation",
+    "bounded values remain clamped",
+    "missing optional outcomes use deterministic fallbacks"
+  ]
+}

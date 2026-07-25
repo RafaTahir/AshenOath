@@ -446,6 +446,27 @@
       ],
       "web_required": true
     },
+    "qa_004": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/qa_004_choice_matrix.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/quests.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/dialogue.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/campaign_dialogue.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/story_state.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/epilogue_resolver.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_004.gd"
+      ],
+      "gates": [
+        "verify_qa_004",
+        "verify_quest_003",
+        "verify_quest_004",
+        "verify_quest_005",
+        "verify_quest_006",
+        "verify_side_001",
+        "verify_save_001",
+        "verify_dialogue_001"
+      ]
+    },
     "progression": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/data/upgrades.json",

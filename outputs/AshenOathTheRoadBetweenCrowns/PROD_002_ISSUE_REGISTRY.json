@@ -27,7 +27,7 @@
     {"id": "QA-001", "title": "Authoritative release gate", "area": "qa", "milestone": "baseline", "status": "complete"},
     {"id": "QA-002", "title": "Real-route browser automation and console capture", "area": "qa", "milestone": "A", "status": "planned"},
     {"id": "QA-003", "title": "Screenshot comparison and manual visual approval", "area": "qa", "milestone": "A", "status": "planned"},
-    {"id": "QA-004", "title": "Save/choice permutation matrix", "area": "qa", "milestone": "C", "status": "planned"},
+    {"id": "QA-004", "title": "Save/choice permutation matrix", "area": "qa", "milestone": "C", "status": "complete"},
     {"id": "DATA-001", "title": "Quest/dialogue/runtime reference integrity", "area": "data", "milestone": "baseline", "status": "complete"},
     {"id": "ENGINE-001", "title": "Runtime composition boundary", "area": "engine", "milestone": "baseline", "status": "complete"},
     {"id": "ENGINE-002", "title": "Zone-builder extraction", "area": "engine", "milestone": "A", "status": "planned"},
