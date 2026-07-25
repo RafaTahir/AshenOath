@@ -223,21 +223,28 @@ try {
 		"verify_recovery_002_foundation.gd", "verify_navigation_001.gd", "verify_char_001.gd", "verify_anim_001.gd", "verify_combat_001.gd", "verify_ai_001.gd", "verify_oath_001.gd", "verify_ui_001.gd", "verify_input_001.gd", "verify_mobile_001.gd", "verify_world_001.gd", "verify_world_002.gd", "verify_world_003.gd", "verify_zone_budgets.gd",
         "verify_visual_003.gd", "verify_visual_100.gd", "verify_master_002.gd", "verify_master_003.gd"
     )
-    if (-not $IsResume) {
+    $verifierNames = @($verifiers | ForEach-Object { [IO.Path]::GetFileNameWithoutExtension($_) })
+    $resumeFromVerifier = $IsResume -and ($verifierNames -contains $ResumeFrom)
+    if (-not $IsResume -or $resumeFromVerifier) {
+        $resumeVerifierReached = -not $IsResume
         foreach ($verifier in $verifiers) {
             $name = [IO.Path]::GetFileNameWithoutExtension($verifier)
+            if (-not $resumeVerifierReached) {
+                if ($name -ne $ResumeFrom) { continue }
+                $resumeVerifierReached = $true
+            }
             if (-not [string]::IsNullOrWhiteSpace($Only) -and $name -ne $Only) { continue }
             Invoke-GodotGate $name @("--headless", "--path", $Project, "--script", "tools/$verifier")
         }
     }
 
-    if (-not $IsResume -and [string]::IsNullOrWhiteSpace($Only) -and -not $SkipPerformance) {
+    if ((-not $IsResume -or $resumeFromVerifier) -and [string]::IsNullOrWhiteSpace($Only) -and -not $SkipPerformance) {
         Invoke-GodotGate "verify_perf_001" @(
             "--path", $Project, "--rendering-method", "gl_compatibility",
             "--script", "tools/verify_perf_001.gd"
         )
     }
-    if (-not $IsResume -and [string]::IsNullOrWhiteSpace($Only) -and -not $SkipScreenshots) {
+    if ((-not $IsResume -or $resumeFromVerifier) -and [string]::IsNullOrWhiteSpace($Only) -and -not $SkipScreenshots) {
         Invoke-GodotGate "capture_slice_screenshots" @(
             "--path", $Project, "--rendering-method", "gl_compatibility",
             "--script", "tools/capture_slice_screenshots.gd"
