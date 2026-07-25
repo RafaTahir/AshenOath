@@ -115,8 +115,42 @@ func get_tracker_text() -> String:
 				continue
 			if bool(objective.get("optional", false)) and bool(objective.get("optional_satisfied", false)):
 				continue
+			var group := str(objective.get("group", ""))
+			if group != "":
+				var progress := _group_progress(id, group)
+				var summary := _group_summary_objective(id, group)
+				if not summary.is_empty() and int(progress.done) < int(progress.required):
+					return "%s\n- %s (%d/%d)" % [
+						title,
+						str(summary.get("tracker_text", summary.get("text", "Investigate"))),
+						int(progress.done),
+						int(progress.required),
+					]
+				if bool(objective.get("optional", false)):
+					continue
 			return "%s\n- %s" % [title, objective["text"]]
 	return "All tracked objectives complete."
+
+func _group_progress(quest_id: String, group_id: String) -> Dictionary:
+	var done := 0
+	var required := 1
+	if not active.has(quest_id):
+		return {"done": done, "required": required}
+	for objective in active[quest_id]["objectives"]:
+		if str(objective.get("group", "")) != group_id:
+			continue
+		required = maxi(required, int(objective.get("required_count", 1)))
+		if bool(objective.get("optional", false)) and bool(objective.get("done", false)):
+			done += 1
+	return {"done": done, "required": required}
+
+func _group_summary_objective(quest_id: String, group_id: String) -> Dictionary:
+	if not active.has(quest_id):
+		return {}
+	for objective in active[quest_id]["objectives"]:
+		if str(objective.get("group", "")) == group_id and not bool(objective.get("optional", false)):
+			return objective
+	return {}
 
 func set_tracked_quest(id: String) -> bool:
 	if not active.has(id):

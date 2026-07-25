@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "ticket": "GAMEPLAY-001",
+  "route": ["speak_anwen", "road_evidence_3_of_5", "fight_ghoulkin_5", "post_victory_tracks", "report_choice", "meet_anwen_gate", "grave_evidence_2_of_3", "cemetery_ambush", "open_chapel", "crow_shrine_choice"],
+  "pacing_targets_minutes": {"anwen": 5, "road_evidence": 18, "pack_victory": 32, "report": 40, "chapel_hook": 60},
+  "fail_safes": {
+    "road_evidence_required": 3,
+    "road_evidence_available": 5,
+    "grave_evidence_required": 2,
+    "grave_evidence_available": 3,
+    "pack_kills_required": 5,
+    "report_methods": ["private", "public", "retained"]
+  }
+}

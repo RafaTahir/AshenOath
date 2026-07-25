@@ -200,6 +200,20 @@
         "verify_zone_budgets"
       ]
     },
+    "gameplay": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/first_hour_flow_contract.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/quests.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/quest_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_gameplay_001.gd"
+      ],
+      "gates": [
+        "verify_gameplay_001",
+        "verify_quest_001",
+        "verify_story_campaign",
+        "verify_save_001"
+      ]
+    },
     "progression": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/data/upgrades.json",
