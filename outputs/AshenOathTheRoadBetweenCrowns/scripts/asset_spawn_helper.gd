@@ -253,6 +253,10 @@ func _target_height_for_role(role_name: String, path: String) -> float:
 		return 1.68
 	if role.contains("villager_female") or role in ["mira_human", "mira_herbalist"]:
 		return 1.66
+	if role.contains("villager_hooded"):
+		return 1.69
+	if role.contains("villager_worker"):
+		return 1.74
 	if role.contains("villager"):
 		return 1.72
 	if role.contains("castle_guard"):

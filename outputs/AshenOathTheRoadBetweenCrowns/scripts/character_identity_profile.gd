@@ -40,6 +40,16 @@ static func _profile_for(role: String) -> Dictionary:
 		return KAEL
 	if role in ["sister_anwen", "sister_anwen_human", "anwen"]:
 		return ANWEN
+	if role.contains("blacksmith") or role.contains("forge"):
+		return _occupation_profile(role, Color("2f2925"), Color("5b3522"), Color("a88a6c"))
+	if role.contains("widow") or role.contains("mourner"):
+		return _occupation_profile(role, Color("272634"), Color("3b394d"), Color("a47a66"))
+	if role.contains("pilgrim") or role.contains("shrine"):
+		return _occupation_profile(role, Color("343b32"), Color("5a5540"), Color("99705b"))
+	if role.contains("guard") or role.contains("vargan") or role.contains("edric"):
+		return _occupation_profile(role, Color("30363d"), Color("4d2424"), Color("a2765e"))
+	if role.contains("ranger") or role.contains("senn") or role.contains("rook"):
+		return _occupation_profile(role, Color("26342d"), Color("44372a"), Color("8f664f"))
 	var seed := absi(role.hash())
 	var skins := [Color("8d604c"), Color("a97559"), Color("bc876b"), Color("76503f")]
 	var hairs := [Color("241a15"), Color("4a3020"), Color("71604e"), Color("302523")]
@@ -48,6 +58,15 @@ static func _profile_for(role: String) -> Dictionary:
 		"skin": skins[seed % skins.size()], "hair": hairs[int(seed / 3) % hairs.size()], "eyes": Color("1b1816"),
 		"primary": cloth[int(seed / 5) % cloth.size()], "secondary": cloth[(int(seed / 7) + 1) % cloth.size()].lightened(0.08),
 		"linen": Color("b5aa91"), "leather": Color("4b3020"), "boots": Color("2d211a"), "metal": Color("786742")
+	}
+
+static func _occupation_profile(role: String, primary: Color, secondary: Color, skin: Color) -> Dictionary:
+	var seed := absi(role.hash())
+	var hair_options := [Color("241a15"), Color("4a3020"), Color("71604e"), Color("302523")]
+	return {
+		"skin": skin, "hair": hair_options[seed % hair_options.size()], "eyes": Color("1b1816"),
+		"primary": primary, "secondary": secondary, "linen": Color("b5aa91"),
+		"leather": Color("4b3020"), "boots": Color("2d211a"), "metal": Color("786742")
 	}
 
 static func _color_for(token: String, role: String, profile: Dictionary) -> Color:

@@ -211,13 +211,22 @@ func _face(node: Node3D, target: Vector3, delta: float) -> void:
 	node.rotation.y = lerp_angle(node.rotation.y,wanted,min(delta*3.0,1.0))
 
 func _make_skeletal_villager(parent: Node3D, role_id: String, index: int, scale_value: float):
-	var role := "villager_female_human" if index % 2 == 1 else "villager_human"
+	var role_cycle := [
+		"villager_human",
+		"villager_female_human",
+		"villager_worker_human",
+		"villager_hooded_human",
+	]
+	var role := str(role_cycle[index % role_cycle.size()])
 	var mapped = asset_helper.spawn_visual_role(role, "characters")
 	if mapped == null or mapped.name.ends_with("_placeholder"):
 		push_error("Rigged villager asset unavailable for %s" % role_id)
 		return null
 	mapped.name = "%s_rigged_human" % role_id
-	asset_helper.apply_normalized_scale(mapped, 0.96 * scale_value * (0.97 + 0.025 * float(index % 3)))
+	var target_scale := 0.96 * scale_value * (0.98 + 0.015 * float(index % 3))
+	asset_helper.apply_normalized_scale(mapped, target_scale)
+	mapped.set_meta("char_002_body_role", role)
+	mapped.set_meta("char_002_identity", role_id)
 	mapped.rotation_degrees.y = 180.0
 	parent.add_child(mapped)
 	CharacterPresentation.apply_npc(parent, role_id)

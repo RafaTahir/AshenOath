@@ -144,6 +144,22 @@
         "verify_visible_quality"
       ]
     },
+    "characters": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/character_role_manifest.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/visual_upgrade_manifest.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/asset_spawn_helper.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_identity_profile.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/greyfen_life_controller.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_char_002.gd"
+      ],
+      "gates": [
+        "verify_char_002",
+        "verify_char_001",
+        "verify_motion_quality",
+        "verify_greyfen_life"
+      ]
+    },
     "progression": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/data/upgrades.json",
