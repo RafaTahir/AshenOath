@@ -190,6 +190,9 @@ func make_wychwood_corridor() -> void:
 func make_wychwood_story_beats() -> void:
 	_host._make_wychwood_road_of_crows_story_beats()
 
+func make_narrative_aftermath() -> void:
+	_host._make_narrative_aftermath(zone_id)
+
 func make_deadfall(pos: Vector3) -> void:
 	_host._make_deadfall(pos)
 

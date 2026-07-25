@@ -36,4 +36,23 @@ func get_dialogue(id: String) -> Dictionary:
 		if story_state == null or story_state.matches(action.get("conditions", {})):
 			visible_actions.append(action)
 	base["actions"] = visible_actions
+	base["pages"] = _build_pages(base)
 	return base
+
+func _build_pages(data: Dictionary) -> Array:
+	var pages: Array = []
+	var default_speaker := str(data.get("name", "Unknown"))
+	var greeting := str(data.get("greeting", "")).strip_edges()
+	if greeting != "":
+		pages.append({"speaker": default_speaker, "text": greeting})
+	for raw_line in data.get("lines", []):
+		var line := str(raw_line).strip_edges()
+		if line == "":
+			continue
+		var speaker := default_speaker
+		var separator := line.find(": ")
+		if separator > 0 and separator < 32:
+			speaker = line.left(separator).strip_edges()
+			line = line.substr(separator + 2).strip_edges()
+		pages.append({"speaker": speaker, "text": line})
+	return pages

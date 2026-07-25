@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "evidence_flags": [
+    "road_evidence_bram",
+    "road_evidence_sella",
+    "road_evidence_oren",
+    "road_evidence_vargan_wire",
+    "road_evidence_drag_marks"
+  ],
+  "persistent_states": [
+    "wychwood_pack_cleared",
+    "evidence_report",
+    "cemetery_ambush_cleared"
+  ],
+  "world_reactions": {
+    "examined_evidence": "small grounded state marker remains after interaction",
+    "pack_victory": "tracks, ash residue, and broken binding return on zone rebuild",
+    "greyfen_report": "notice board and shrine dressing reflect the chosen report",
+    "cemetery_victory": "settled earth and a vigil lantern remain"
+  }
+}

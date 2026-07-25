@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "ticket": "COMBAT-002",
+  "player": {
+    "light_damage": 24,
+    "heavy_damage": 42,
+    "heavy_stamina": 22,
+    "parry_window_seconds": 0.30,
+    "attack_buffer_seconds": 0.18,
+    "block_damage_multiplier": 0.25
+  },
+  "enemy": {
+    "maximum_simultaneous_attackers": 1,
+    "standard_windup_seconds": 0.46,
+    "brute_windup_seconds": 0.72,
+    "parry_exposure_seconds": 1.15
+  },
+  "low_fps_contract": {
+    "blade_contact_uses_threshold_crossing": true,
+    "enemy_contact_uses_swept_segment": true,
+    "timers_use_seconds": true
+  }
+}

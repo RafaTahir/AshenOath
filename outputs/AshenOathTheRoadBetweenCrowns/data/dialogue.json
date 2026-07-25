@@ -1,20 +1,21 @@
 {
   "notice_board": {
     "name": "Greyfen Notice Board",
-    "greeting": "A crow-picked contract hangs under a rusted nail. Someone has pressed a prayer charm into the wood beside it.",
+    "greeting": "A rain-stiff contract hangs beneath a rusted nail. A prayer charm has been pressed into the wood beside it.",
     "lines": [
-      "Three men gone on the old road. One cart returned empty. Black feathers in the blood.",
-      "Payment on proof. Sister Anwen holds the names of the dead."
+      "Missing: Bram Kett, Sella Vey, and Oren Vey. Their cart returned empty from the old road.",
+      "Black feathers were found in the blood. Sister Anwen keeps the names and pays for proof."
     ],
     "actions": [{"label": "Accept Road of Crows", "type": "start_quest", "quest": "main_road_of_crows"}]
   },
   "sister_anwen": {
     "name": "Sister Anwen",
-    "greeting": "You read the road notice.",
+    "greeting": "You came about the road notice.",
     "lines": [
-      "Bram Kett drove the cart. Sella Vey walked beside it. The boy was Oren. Twelve.",
-      "If you find black feathers tied with red thread, do not burn them. The thread belongs to this shrine.",
-      "That is not enough of an answer. I know. Bring back what the road left behind."
+      "Bram drove. Sella walked beside him. Oren was her son. He was twelve.",
+      "If you find black feathers tied in red thread, leave them intact. The thread came from this shrine.",
+      "Kael: You knew that before the contract was posted.",
+      "Sister Anwen: Yes. Bring me what the road left, and I will tell you why."
     ],
     "variants": [
       {
@@ -22,9 +23,9 @@
         "conditions": {"bell_gate_met": true},
         "greeting": "The bell rope was cut last winter. It still rang three times after your report.",
         "lines": [
-          "Once is burial. Twice is a restored name.",
-          "I do not know what three means. That is the first honest answer I have given you.",
-          "Inspect the disturbed graves. The rope runs beneath them toward the chapel."
+          "Sister Anwen: Once means burial. Twice means a name restored.",
+          "Kael: And three?",
+          "Sister Anwen: I do not know. That is the first clean answer I have given you. Check the disturbed graves."
         ],
         "actions": []
       },
@@ -138,12 +139,12 @@
   },
   "rook": {
     "name": "Rook",
-    "greeting": "Maps, rumors, and lies. Tonight even the lies are whispering.",
+    "greeting": "You want the old road? Watch the crows, not the mud.",
     "lines": [
-      "The old road bends twice where it should bend once. Follow the crows, not the mud.",
-      "A boy found black feathers under his pillow after the second death. His mother burned the bed."
+      "It bends twice where it should run straight. I checked. Then I decided I preferred being alive.",
+      "A boy found black feathers under his pillow after the second death. His mother burned the whole bed."
     ],
-    "actions": [{"label": "Buy a rumor.", "type": "give_ingredients", "items": {"ash_salt": 1, "sparkstone": 1}}]
+    "actions": [{"label": "Ask what he carried.", "type": "give_ingredients", "conditions": {"rook_supplies_taken": false}, "items": {"ash_salt": 1, "sparkstone": 1}, "sets_flags": {"rook_supplies_taken": true}}]
   },
   "widow_elna": {
     "name": "Widow Elna",
@@ -159,12 +160,12 @@
   },
   "blacksmith_tor": {
     "name": "Blacksmith Tor",
-    "greeting": "Blades chip. Men chip faster.",
+    "greeting": "Let me see the blade. No, keep hold of it. I trust the steel.",
     "lines": [
-      "Take scrap if you mean to trap something. Better iron breaks than bone.",
-      "I heard bells from the road last night. Cemetery bells, only the cemetery was still."
+      "If you mean to trap whatever is out there, take scrap. Better the iron snaps than your leg.",
+      "I heard the cemetery bell last night. The rope has been cut since winter."
     ],
-    "actions": [{"label": "Take scrap iron.", "type": "give_ingredients", "items": {"scrap_iron": 2}}]
+    "actions": [{"label": "Take scrap iron.", "type": "give_ingredients", "conditions": {"tor_scrap_taken": false}, "items": {"scrap_iron": 2}, "sets_flags": {"tor_scrap_taken": true}}]
   },
   "farmer_toma": {
     "name": "Farmer Toma",

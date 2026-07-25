@@ -56,7 +56,7 @@ var hint_tween: Tween
 var status_tween: Tween
 var toast_tween: Tween
 var enemy_hide_tween: Tween
-var dialogue_pages: Array[String] = []
+var dialogue_pages: Array = []
 var dialogue_page_index := 0
 var dialogue_session_data: Dictionary = {}
 var input_source: Node
@@ -349,18 +349,22 @@ func show_dialogue(data: Dictionary) -> void:
 	dialogue_layer.visible = true
 	dialogue_session_data = data.duplicate(true)
 	dialogue_pages.clear()
-	var greeting := str(data.get("greeting","")).strip_edges()
-	if greeting != "": dialogue_pages.append(greeting)
-	for line in data.get("lines",[]):
-		var line_text := str(line).strip_edges()
-		if line_text != "": dialogue_pages.append(line_text)
-	if dialogue_pages.is_empty(): dialogue_pages.append("...")
+	for page in data.get("pages", []):
+		if typeof(page) == TYPE_DICTIONARY and str(page.get("text", "")).strip_edges() != "":
+			dialogue_pages.append(page)
+	if dialogue_pages.is_empty():
+		dialogue_pages.append({"speaker": str(data.get("name", "Unknown")), "text": "..."})
 	dialogue_page_index = 0
 	_render_dialogue_page()
 
 func _render_dialogue_page() -> void:
-	dialogue_title.text = str(dialogue_session_data.get("name","Unknown"))
-	dialogue_text.text = dialogue_pages[dialogue_page_index]
+	var page = dialogue_pages[dialogue_page_index]
+	if typeof(page) == TYPE_DICTIONARY:
+		dialogue_title.text = str(page.get("speaker", dialogue_session_data.get("name", "Unknown")))
+		dialogue_text.text = str(page.get("text", "..."))
+	else:
+		dialogue_title.text = str(dialogue_session_data.get("name","Unknown"))
+		dialogue_text.text = str(page)
 	if dialogue_page_label != null:
 		dialogue_page_label.text = "%02d / %02d" % [dialogue_page_index + 1, dialogue_pages.size()]
 	for child in dialogue_actions.get_children():
@@ -396,12 +400,37 @@ func show_inventory(inventory, quests, story_state = null, progression = null) -
 	var oil_name = "None"
 	if inventory.active_oil != "":
 		oil_name = inventory.get_item_name(inventory.active_oil)
-	var text = "INVENTORY\nCoin: %d\nBlade Oil: %s\n\nItems\n" % [inventory.coin, oil_name]
-	for id in inventory.items.keys():
-		text += "- %s x%d\n" % [inventory.get_item_name(id), int(inventory.items[id])]
+	var summary: Dictionary = inventory.get_preparation_summary()
+	var text = "PREPARATION\nCoin: %d\nBlade Oil: %s\nPotions: %d  Bombs: %d  Traps: %d\n\nPACK\n" % [
+		inventory.coin, oil_name, summary.potions, summary.bombs, summary.traps
+	]
+	for id in inventory.ordered_item_ids():
+		var definition: Dictionary = inventory.item_defs.get(id, {})
+		text += "- %s x%d — %s\n" % [
+			inventory.get_item_name(id),
+			int(inventory.items.get(id, 0)),
+			str(definition.get("description", ""))
+		]
 	text += "\nIngredients\n"
-	for id in inventory.ingredients.keys():
+	var ingredient_ids: Array = inventory.ingredients.keys()
+	ingredient_ids.sort()
+	for id in ingredient_ids:
 		text += "- %s x%d\n" % [id.capitalize(), int(inventory.ingredients[id])]
+	text += "\nRECIPES\n"
+	for id in inventory.ordered_item_ids():
+		var status: Dictionary = inventory.recipe_status(id)
+		var parts: Array[String] = []
+		for ingredient in status.required.keys():
+			parts.append("%s %d/%d" % [
+				str(ingredient).capitalize(),
+				int(inventory.ingredients.get(ingredient, 0)),
+				int(status.required[ingredient])
+			])
+		text += "- %s: %s%s\n" % [
+			inventory.get_item_name(id),
+			", ".join(parts),
+			" [READY]" if bool(status.craftable) else ""
+		]
 	text += "\n\n%s" % quests.get_journal_text()
 	text += "\n\nBESTIARY\n"
 	text += "Ghoulkin — Fast cursed remains. Parry the lunge; Moon Oil bites deep.\n"
@@ -422,18 +451,23 @@ func show_inventory(inventory, quests, story_state = null, progression = null) -
 	inventory_text.text = text
 	for child in craft_buttons.get_children():
 		child.queue_free()
-	for id in inventory.item_defs.keys():
+	for id in inventory.ordered_item_ids():
 		var button = Button.new()
-		button.text = "Craft %s" % inventory.get_item_name(id)
+		var recipe: Dictionary = inventory.recipe_status(id)
+		button.text = "Craft %s%s" % [
+			inventory.get_item_name(id),
+			"" if bool(recipe.craftable) else " — ingredients needed"
+		]
 		button.disabled = not inventory.can_craft(id)
 		_style_button(button)
 		button.pressed.connect(func(item_id = id): craft_requested.emit(item_id))
 		craft_buttons.add_child(button)
-	for id in inventory.items.keys():
+	for id in inventory.ordered_item_ids():
 		if int(inventory.items[id]) <= 0:
 			continue
 		var use_button = Button.new()
-		use_button.text = "Use %s" % inventory.get_item_name(id)
+		var verb := "Apply" if inventory.get_item_type(id) == "oil" else ("Set" if inventory.get_item_type(id) == "trap" else "Use")
+		use_button.text = "%s %s" % [verb, inventory.get_item_name(id)]
 		_style_button(use_button)
 		use_button.pressed.connect(func(item_id = id): item_use_requested.emit(item_id))
 		craft_buttons.add_child(use_button)

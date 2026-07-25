@@ -71,6 +71,20 @@
         "source": "Poly Pizza / Quaternius",
         "license": "CC0 1.0"
       },
+      "villager_worker_human": {
+        "status": "char_002",
+        "path": "res://assets_external/characters/AnimatedHuman_PolyPizza_Quaternius_CC0.glb",
+        "source": "Poly Pizza / Quaternius",
+        "license": "CC0 1.0",
+        "notes": "Shared worker base with deterministic occupation identity."
+      },
+      "villager_hooded_human": {
+        "status": "char_002",
+        "path": "res://assets_external/characters/HoodedAdventurer_PolyPizza_Quaternius_CC0.glb",
+        "source": "Poly Pizza / Quaternius",
+        "license": "CC0 1.0",
+        "notes": "Shared pilgrim, widow, and traveler base."
+      },
       "castle_guard_human": {
         "status": "character_real_001",
         "path": "res://assets_external/characters/CharacterAnimated_PolyPizza_Quaternius_CC0.glb",
@@ -80,17 +94,38 @@
       },
       "road_ranger_human": {
         "status": "character_real_001",
-        "path": "res://assets_external/characters/CharacterAnimated_PolyPizza_Quaternius_CC0.glb",
+        "path": "res://assets_external/characters/HoodedAdventurer_PolyPizza_Quaternius_CC0.glb",
         "source": "Poly Pizza / Quaternius",
         "license": "CC0 1.0"
       }
     },
     "enemies": {
+      "ghoul_gaunt_real": {
+        "status": "mon_001",
+        "path": "res://assets_external/characters_real/GhoulGaunt_Real.glb",
+        "source": "Ashen Oath derived CC0 production mesh",
+        "license": "CC0 1.0",
+        "notes": "Connected gaunt cursed-human body for Ghoulkin and Raider profiles."
+      },
+      "ghoul_stalker_real": {
+        "status": "mon_001",
+        "path": "res://assets_external/characters_real/GhoulStalker_Real.glb",
+        "source": "Ashen Oath derived CC0 production mesh",
+        "license": "CC0 1.0",
+        "notes": "Forward-leaning long-limbed Wychwood flanker."
+      },
+      "ghoul_brute_real": {
+        "status": "mon_001",
+        "path": "res://assets_external/characters_real/GhoulBrute_Real.glb",
+        "source": "Ashen Oath derived CC0 production mesh",
+        "license": "CC0 1.0",
+        "notes": "Broad Wychwood heavy body with connected face, hands, and feet."
+      },
       "ghoulkin_creature": {
-        "status": "current_asset_available",
-        "path": "",
-        "fallback_role": "ghoulkin",
-        "notes": "Uses existing mapped creature until a higher-fidelity ghoul model is supplied."
+        "status": "mon_001",
+        "path": "res://assets_external/characters_real/GhoulGaunt_Real.glb",
+        "license": "CC0 1.0",
+        "notes": "Primary released Ghoulkin family body."
       },
       "bog_wretch_creature": {
         "status": "current_asset_available",

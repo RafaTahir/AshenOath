@@ -132,6 +132,168 @@
         "verify_visible_quality"
       ]
     },
+    "materials": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/world_material_library.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/*",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_mat_001.gd"
+      ],
+      "gates": [
+        "verify_mat_001",
+        "verify_engine_003",
+        "verify_visible_quality"
+      ]
+    },
+    "characters": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/character_role_manifest.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/visual_upgrade_manifest.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/asset_spawn_helper.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_identity_profile.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/greyfen_life_controller.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_char_002.gd"
+      ],
+      "gates": [
+        "verify_char_002",
+        "verify_char_001",
+        "verify_motion_quality",
+        "verify_greyfen_life"
+      ]
+    },
+    "monsters": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/monster_family_manifest.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/visual_upgrade_manifest.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/enemy_ai.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/enemies.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_mon_001.gd"
+      ],
+      "gates": [
+        "verify_mon_001",
+        "verify_ai_001",
+        "verify_motion_quality",
+        "verify_combat_001"
+      ]
+    },
+    "vfx": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/world_vfx_controller.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/combat_feedback.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_vfx_001.gd"
+      ],
+      "gates": [
+        "verify_vfx_001",
+        "verify_combat_001",
+        "verify_visible_quality",
+        "verify_zone_budgets"
+      ]
+    },
+    "water": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/river_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_water_001.gd"
+      ],
+      "gates": [
+        "verify_water_001",
+        "verify_river_swimming",
+        "verify_navigation_001",
+        "verify_zone_budgets"
+      ]
+    },
+    "gameplay": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/first_hour_flow_contract.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/quests.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/quest_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_gameplay_001.gd"
+      ],
+      "gates": [
+        "verify_gameplay_001",
+        "verify_quest_001",
+        "verify_story_campaign",
+        "verify_save_001"
+      ]
+    },
+    "combat_balance": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/combat_tuning.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/player_controller.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/combat_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/enemy_ai.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_combat_002.gd"
+      ],
+      "gates": [
+        "verify_combat_002",
+        "verify_combat_001",
+        "verify_ai_001",
+        "verify_oath_001",
+        "verify_motion_quality"
+      ]
+    },
+    "enemy_ai": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/ai_family_contract.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/enemies.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/enemy_ai.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_ai_002.gd"
+      ],
+      "gates": [
+        "verify_ai_002",
+        "verify_ai_001",
+        "verify_navigation_001",
+        "verify_combat_001"
+      ]
+    },
+    "inventory": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/preparation_contract.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/items.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/inventory_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/crafting_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/hud.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_inv_001.gd"
+      ],
+      "gates": [
+        "verify_inv_001",
+        "verify_runtime",
+        "verify_save_001",
+        "verify_quest_002"
+      ]
+    },
+    "dialogue_rewrite": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/dialogue_contract.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/dialogue.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/dialogue_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/story_state.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/hud.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_dialogue_001.gd"
+      ],
+      "gates": [
+        "verify_dialogue_001",
+        "verify_runtime",
+        "verify_story_campaign",
+        "verify_save_001"
+      ]
+    },
+    "narrative_aftermath": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/narrative_aftermath_contract.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_build_context.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/greyfen_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/wychwood_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_narr_001.gd"
+      ],
+      "gates": [
+        "verify_narr_001",
+        "verify_gameplay_001",
+        "verify_story_campaign",
+        "verify_save_001",
+        "verify_visible_quality"
+      ]
+    },
     "progression": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/data/upgrades.json",

@@ -62,6 +62,11 @@ var attack_trace_start := Vector3.ZERO
 var attack_trace_end := Vector3.ZERO
 var last_attack_contact := Vector3.ZERO
 var attack_trace_uses_skeleton := false
+var perception_memory_duration := 2.5
+var perception_memory_time := 0.0
+var perception_refresh_time := 0.0
+var can_see_player := false
+var last_known_player_position := Vector3.INF
 
 func setup(id: String, definition: Dictionary, target: Node3D) -> void:
 	enemy_id = id
@@ -80,10 +85,11 @@ func setup(id: String, definition: Dictionary, target: Node3D) -> void:
 	health_component.changed.connect(func(current: float, maximum: float): damaged.emit(self, current, maximum))
 	health_component.died.connect(_on_died)
 	base_color = Color(definition.get("color", "#665544"))
-	behavior_profile = {
+	behavior_profile = str(definition.get("behavior_profile", {
 		"wychwood_stalker":"flanker", "wychwood_raider":"feinter",
 		"wychwood_brute":"brute", "ghoulkin":"skirmisher"
-	}.get(enemy_id, "direct")
+	}.get(enemy_id, "direct")))
+	perception_memory_duration = float(definition.get("perception_memory", 2.5))
 	preferred_distance = float(definition.get("preferred_distance", {
 		"flanker":2.65, "feinter":2.30, "brute":2.05, "skirmisher":2.40
 	}.get(behavior_profile, 2.15)))
@@ -135,6 +141,9 @@ func _physics_process(delta: float) -> void:
 	anim_phase += delta * (3.45 if velocity.length() > 0.15 else 0.95)
 	var to_player: Vector3 = player.global_position - global_position
 	var distance: float = to_player.length()
+	_update_perception(delta, distance)
+	var pursuit_position: Vector3 = player.global_position if can_see_player else last_known_player_position
+	var pursuit_distance := global_position.distance_to(pursuit_position) if pursuit_position != Vector3.INF else INF
 	var home_distance: float = global_position.distance_to(home_position)
 	if pending_attack_time > 0.0:
 		pending_attack_time -= delta
@@ -155,7 +164,7 @@ func _physics_process(delta: float) -> void:
 		else:
 			velocity.x = move_toward(velocity.x, 0.0, 8.0 * delta)
 			velocity.z = move_toward(velocity.z, 0.0, 8.0 * delta)
-	elif distance > sense_range:
+	elif perception_memory_time <= 0.0 and not can_see_player:
 		velocity.x = move_toward(velocity.x, 0.0, 6.0 * delta)
 		velocity.z = move_toward(velocity.z, 0.0, 6.0 * delta)
 	elif attack_recovery_time > 0.0:
@@ -169,19 +178,21 @@ func _physics_process(delta: float) -> void:
 		else:
 			velocity.x = 0.0
 			velocity.z = 0.0
-	elif distance > attack_range:
+	elif pursuit_distance > attack_range or not can_see_player:
 		var speed_factor = 0.45 if slowed_time > 0.0 else 1.0
-		var engagement_target := _engagement_target()
+		var engagement_target := _engagement_target(pursuit_position)
 		var dir := _navigation_direction(engagement_target)
 		if dir.length_squared() < 0.01:
 			velocity.x = 0.0
 			velocity.z = 0.0
 			speed_factor = 0.0
 		var lateral := Vector3(-dir.z, 0.0, dir.x)
-		if behavior_profile == "feinter":
+		if behavior_profile in ["feinter", "duelist"]:
 			dir = (dir + lateral * sin(anim_phase * 0.72) * 0.42).normalized()
 		elif behavior_profile == "brute":
 			speed_factor *= 0.84
+		elif behavior_profile == "lurker" and pursuit_distance > 5.0:
+			speed_factor *= 0.62
 		dir = (dir+_crowd_separation()*0.72).normalized()
 		var proposed: Vector3 = global_position + dir * move_speed * speed_factor * delta
 		if spatial_service != null and not spatial_service.validate_segment(global_position, proposed, 0.50):
@@ -192,7 +203,7 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.x = 0.0
 		velocity.z = 0.0
-		if attack_cooldown <= 0.0 and player.has_method("take_damage") and _attack_lane_clear() and _claim_attack_token():
+		if can_see_player and attack_cooldown <= 0.0 and player.has_method("take_damage") and _attack_lane_clear() and _claim_attack_token():
 			attack_cooldown = _attack_cooldown()
 			windup_time = _windup_duration()
 			pending_attack_time = windup_time
@@ -326,8 +337,9 @@ func _crowd_separation() -> Vector3:
 			separation += offset.normalized()*(1.55-distance)/1.55
 	return separation.normalized() if separation.length_squared() > 0.01 else Vector3.ZERO
 
-func _engagement_target() -> Vector3:
-	var radial: Vector3 = global_position - player.global_position
+func _engagement_target(target_position: Vector3 = Vector3.INF) -> Vector3:
+	var focus: Vector3 = player.global_position if target_position == Vector3.INF else target_position
+	var radial: Vector3 = global_position - focus
 	radial.y = 0.0
 	if radial.length_squared() < 0.01:
 		radial = Vector3.FORWARD
@@ -336,7 +348,29 @@ func _engagement_target() -> Vector3:
 		side = -1.0 if encounter_slot % 2 == 0 else 1.0
 	var angle := deg_to_rad(approach_angle_degrees * side)
 	var desired: Vector3 = radial.normalized().rotated(Vector3.UP, angle)
-	return player.global_position + desired * preferred_distance
+	return focus + desired * preferred_distance
+
+func _update_perception(delta: float, player_distance: float) -> void:
+	perception_refresh_time = maxf(perception_refresh_time - delta, 0.0)
+	perception_memory_time = maxf(perception_memory_time - delta, 0.0)
+	if perception_refresh_time > 0.0:
+		return
+	perception_refresh_time = 0.18
+	can_see_player = player_distance <= sense_range and _has_perception_line()
+	if can_see_player:
+		last_known_player_position = player.global_position
+		perception_memory_time = perception_memory_duration
+
+func _has_perception_line() -> bool:
+	if not is_inside_tree() or player == null or not player.is_inside_tree():
+		return false
+	var origin := global_position + Vector3(0, 1.20, 0)
+	var target: Vector3 = player.global_position + Vector3(0, 1.05, 0)
+	var query := PhysicsRayQueryParameters3D.create(origin, target)
+	query.exclude = [get_rid()]
+	query.collide_with_areas = false
+	var hit := get_world_3d().direct_space_state.intersect_ray(query)
+	return hit.is_empty() or hit.get("collider") == player
 
 func _attack_lane_clear() -> bool:
 	var start := global_position
@@ -363,7 +397,7 @@ func get_attack_trace() -> Dictionary:
 	return {"start":attack_trace_start, "end":attack_trace_end, "contact":last_attack_contact, "uses_skeleton":attack_trace_uses_skeleton}
 
 func get_behavior_state() -> Dictionary:
-	return {"profile":behavior_profile,"windup":pending_attack_time,"stagger":stagger_time,"recovery":attack_recovery_time,"owns_attack_token":owns_attack_token}
+	return {"profile":behavior_profile,"windup":pending_attack_time,"stagger":stagger_time,"recovery":attack_recovery_time,"owns_attack_token":owns_attack_token,"can_see_player":can_see_player,"memory":perception_memory_time,"last_known":last_known_player_position}
 
 func _on_died() -> void:
 	dead = true
@@ -487,7 +521,14 @@ func _try_build_mapped_body() -> bool:
 	var uses_real_body := false
 	var visual_source: String = enemy_id
 	if enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute"]:
-		visual_source = "ghoulkin"
+		visual_source = {
+			"ghoulkin": "ghoul_gaunt_real",
+			"wychwood_stalker": "ghoul_stalker_real",
+			"wychwood_raider": "ghoul_gaunt_real",
+			"wychwood_brute": "ghoul_brute_real",
+		}.get(enemy_id, "ghoul_gaunt_real")
+		mapped = asset_helper.spawn_visual_role(visual_source, "enemies")
+		uses_real_body = mapped != null and not mapped.name.ends_with("_placeholder")
 	if mapped == null:
 		mapped = asset_helper.spawn_enemy(visual_source)
 	if mapped == null or mapped.name.ends_with("_placeholder"):
@@ -495,6 +536,8 @@ func _try_build_mapped_body() -> bool:
 			mapped.queue_free()
 		return false
 	mapped.name = "%s_visual" % enemy_id
+	mapped.set_meta("monster_family_role", visual_source)
+	mapped.set_meta("monster_behavior_profile", behavior_profile)
 	asset_helper.apply_normalized_scale(mapped, _mapped_enemy_scale().y)
 	if _is_wychwood_pack():
 		var profile_scale: Vector3 = {
@@ -526,7 +569,7 @@ func _try_build_mapped_body() -> bool:
 	if uses_real_body:
 		animation_driver.configure(mapped, {
 			"idle":"Idle", "walk":"Walk", "run":"Run", "attack":"Attack",
-			"hit":"RecieveHit", "death":"Death"
+			"hit":"Hit", "death":"Death"
 		})
 	elif visual_source == "ghoulkin_skeleton":
 		animation_driver.configure(mapped, {
@@ -562,17 +605,24 @@ func _configure_attack_contact_bone() -> void:
 				return
 
 func _ground_mapped_visual(mapped: Node3D) -> void:
-	var bounds := AABB()
-	var initialized := false
-	for mesh in mapped.find_children("*", "MeshInstance3D", true, false):
-		if mesh.mesh == null or mesh.skin == null:
-			continue
-		var relative: Transform3D = visual_root.global_transform.affine_inverse() * mesh.global_transform
-		var mesh_bounds: AABB = relative * mesh.mesh.get_aabb()
-		bounds = bounds.merge(mesh_bounds) if initialized else mesh_bounds
-		initialized = true
-	if initialized:
+	var state := {"initialized": false, "bounds": AABB()}
+	_accumulate_visual_bounds(mapped, Transform3D.IDENTITY, state)
+	if bool(state.initialized):
+		var bounds: AABB = state.bounds
 		mapped.position.y -= bounds.position.y
+
+func _accumulate_visual_bounds(node: Node, parent_transform: Transform3D, state: Dictionary) -> void:
+	var current_transform := parent_transform
+	if node is Node3D and node != visual_root:
+		current_transform = parent_transform * (node as Node3D).transform
+	if node is MeshInstance3D:
+		var mesh_instance := node as MeshInstance3D
+		if mesh_instance.mesh != null and mesh_instance.skin != null:
+			var mesh_bounds: AABB = current_transform * mesh_instance.mesh.get_aabb()
+			state.bounds = (state.bounds as AABB).merge(mesh_bounds) if bool(state.initialized) else mesh_bounds
+			state.initialized = true
+	for child in node.get_children():
+		_accumulate_visual_bounds(child, current_transform, state)
 
 func _horror_material() -> StandardMaterial3D:
 	var material := StandardMaterial3D.new()

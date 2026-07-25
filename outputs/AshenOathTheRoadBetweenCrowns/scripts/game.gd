@@ -10,6 +10,7 @@ const CharacterAnimationDriver = preload("res://scripts/character_animation_driv
 const WorldVisualUpgrade = preload("res://scripts/world_visual_upgrade.gd")
 const WorldMotionController = preload("res://scripts/world_motion_controller.gd")
 const SurfaceFeedbackManager = preload("res://scripts/surface_feedback_manager.gd")
+const WorldVFXController = preload("res://scripts/world_vfx_controller.gd")
 const ZoneSpatialService = preload("res://scripts/zone_spatial_service.gd")
 const RuntimeServiceRegistry = preload("res://scripts/runtime_service_registry.gd")
 const RuntimeActorFactory = preload("res://scripts/runtime_actor_factory.gd")
@@ -31,6 +32,7 @@ var day_night
 var audio
 var asset_helper
 var visual_director
+var world_vfx
 var minigames
 var progression
 var input_router
@@ -849,8 +851,14 @@ func _add_visual_100_layer(zone_id: String) -> void:
 	surface.name = "SurfaceFeedbackManager"
 	zone_root.add_child(surface)
 	surface.configure(player, quality)
+	world_vfx = WorldVFXController.new()
+	world_vfx.name = "WorldVFXController"
+	zone_root.add_child(world_vfx)
+	world_vfx.configure(zone_id, quality)
 
 func _handle_interaction(area) -> void:
+	if world_vfx != null and is_instance_valid(world_vfx) and area is Node3D:
+		world_vfx.pulse_interaction((area as Node3D).global_position)
 	if area.interaction_type == "minigame":
 		minigames.open_game("tic_tac_toe" if area.interaction_id == "common_table" else "draughts")
 	elif area.interaction_type == "village_place":
@@ -1027,14 +1035,19 @@ func _handle_road_of_crows_clue(area) -> void:
 	match area.interaction_id:
 		"corpse":
 			quests.complete_evidence("main_road_of_crows", "bram")
+			story_state.set_flag("road_evidence_bram", true)
 		"black_feathers":
 			quests.complete_evidence("main_road_of_crows", "sella")
+			story_state.set_flag("road_evidence_sella", true)
 		"oren_token":
 			quests.complete_evidence("main_road_of_crows", "oren")
+			story_state.set_flag("road_evidence_oren", true)
 		"claw_marks":
 			quests.complete_evidence("main_road_of_crows", "vargan_wire")
+			story_state.set_flag("road_evidence_vargan_wire", true)
 		"tracks":
 			quests.complete_evidence("main_road_of_crows", "drag_marks")
+			story_state.set_flag("road_evidence_drag_marks", true)
 			if quests.is_objective_done("main_road_of_crows", "fight_ghoulkin"):
 				for evidence_id in ["bram", "sella", "oren", "vargan_wire"]:
 					quests.complete_evidence("main_road_of_crows", evidence_id)
@@ -1495,10 +1508,8 @@ func _use_inventory_item(item_id: String) -> void:
 	elif item_id == "ash_bomb":
 		_throw_bomb()
 	elif item_id == "moon_oil" or item_id == "rot_oil":
-		if int(inventory.items.get(item_id, 0)) <= 0:
-			hud.toast("No %s left." % inventory.get_item_name(item_id))
+		if not inventory.apply_oil(item_id):
 			return
-		inventory.active_oil = item_id
 		_refresh_equipment_readout()
 		hud.show_status_cue("Oil applied", "item")
 		hud.toast("%s slicks the blade." % inventory.get_item_name(item_id))
@@ -1531,6 +1542,7 @@ func _on_enemy_died(enemy) -> void:
 			_activate_wychwood_wave(["wychwood_brute"], "The earth heaves. The Brute comes last.")
 		if wychwood_pack_kills >= 5:
 			quests.complete_objective("main_road_of_crows", "fight_ghoulkin")
+			story_state.set_flag("wychwood_pack_cleared", true)
 			audio.play_event("victory", 0.03)
 			audio.play_music_cue("victory_return_cue", "return_report")
 			audio.set_music_state("return_report")
@@ -2461,6 +2473,38 @@ func _make_post_ghoulkin_story_clue() -> void:
 	_make_dark_track("RoadCrowsPostVictoryClawTracks", Vector3(1.45, 0.088, -4.75), Vector3(0.34, 0.025, 1.55), Color(0.060, 0.022, 0.016))
 	_make_visual_box("RoadCrowsPostVictoryCutThread", Vector3(0.55, 0.13, -3.72), Vector3(0.70, 0.030, 0.06), Color(0.36, 0.035, 0.030))
 	_make_black_feather_scatter("RoadCrowsPostVictoryFeathers", Vector3(0.35, 0.11, -3.95), 4, 0.55)
+
+func _make_narrative_aftermath(zone_id: String) -> void:
+	if zone_root == null:
+		return
+	if zone_id == "wychwood":
+		if quests.is_objective_done("main_road_of_crows", "fight_ghoulkin") or bool(story_state.get_flag("wychwood_pack_cleared", false)):
+			_make_post_ghoulkin_story_clue()
+			_make_visual_box("WychwoodPackAshResidue", Vector3(0.0, 0.078, -7.0), Vector3(1.7, 0.018, 1.25), Color(0.045, 0.035, 0.032))
+			_make_visual_box("WychwoodPackBrokenBinding", Vector3(1.2, 0.115, -6.4), Vector3(0.55, 0.025, 0.08), Color(0.22, 0.16, 0.10))
+		for evidence in [
+			["bram", Vector3(-2.0, 0.10, 7.4), Color(0.30, 0.18, 0.12)],
+			["sella", Vector3(-4.0, 0.10, 4.0), Color(0.24, 0.035, 0.03)],
+			["oren", Vector3(3.8, 0.10, 2.2), Color(0.48, 0.36, 0.18)],
+			["vargan_wire", Vector3(2.5, 0.10, 4.8), Color(0.14, 0.14, 0.13)],
+			["drag_marks", Vector3(0.0, 0.09, -4.2), Color(0.09, 0.055, 0.035)]
+		]:
+			if quests.is_objective_done("main_road_of_crows", str(evidence[0])) or bool(story_state.get_flag("road_evidence_%s" % evidence[0], false)):
+				var marker := _make_visual_box("ExaminedEvidence_%s" % evidence[0], evidence[1], Vector3(0.34, 0.025, 0.34), evidence[2])
+				marker.set_meta("narrative_state", "examined")
+	elif zone_id == "greyfen":
+		var report_method := str(story_state.get_flag("evidence_report", ""))
+		if report_method != "":
+			var report_colors := {
+				"private": Color(0.58, 0.50, 0.34),
+				"public": Color(0.62, 0.18, 0.12),
+				"retained": Color(0.25, 0.22, 0.18)
+			}
+			_make_visual_box("GreyfenReportedNotice", Vector3(-1.98, 1.18, 9.34), Vector3(0.46, 0.58, 0.025), report_colors.get(report_method, Color(0.5, 0.45, 0.34)))
+			_make_visual_box("GreyfenWitnessCandle", Vector3(5.65, 0.18, -6.72), Vector3(0.08, 0.22, 0.08), Color(0.65, 0.46, 0.22))
+		if bool(story_state.get_flag("cemetery_ambush_cleared", false)):
+			_make_visual_box("CemeterySettledEarth", Vector3(14.0, 0.072, 8.8), Vector3(2.1, 0.025, 1.25), Color(0.085, 0.070, 0.052))
+			_make_visual_box("CemeteryAftermathLantern", Vector3(15.7, 0.42, 8.1), Vector3(0.16, 0.40, 0.16), Color(0.52, 0.40, 0.21))
 
 func _make_black_feather_scatter(base_name: String, center: Vector3, count: int, spread: float) -> void:
 	for i in range(count):
@@ -3702,8 +3746,8 @@ func _visual_role_for_interactable(id: String) -> String:
 		"sister_anwen": "sister_anwen_human",
 		"mira": "mira_human",
 		"rook": "rook_human",
-		"widow_elna": "villager_human",
-		"blacksmith_tor": "villager_human",
+		"widow_elna": "villager_hooded_human",
+		"blacksmith_tor": "villager_worker_human",
 		"farmer_toma": "villager_human",
 		"edric": "castle_guard_human",
 		"vargan_gate_guard": "castle_guard_human",
@@ -3758,8 +3802,8 @@ func _visual_role_for_legacy_character(role_name: String) -> String:
 		"sister_anwen": "sister_anwen_human",
 		"mira_herbalist": "mira_human",
 		"rook_smuggler": "rook_human",
-		"widow_elna": "villager_human",
-		"blacksmith_tor": "villager_human",
+		"widow_elna": "villager_hooded_human",
+		"blacksmith_tor": "villager_worker_human",
 		"generic_villager_01": "villager_human",
 		"lord_edric": "castle_guard_human",
 		"castle_guard": "castle_guard_human",
