@@ -417,7 +417,7 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		visual_director.apply_zone(zone_id, zone_root)
 	if audio != null:
 		audio.play_ambient(zone_id)
-		audio.set_music_state("wychwood_tension" if zone_id == "wychwood" else ("castle_silence" if zone_id in ["vargan_approach", "vargan_court", "record_hall"] else "greyfen_explore"))
+		audio.set_music_state(audio.music_state_for_zone(zone_id))
 		if zone_id == "greyfen":
 			audio.play_event("shrine_hum", 0.01)
 	var safe_spawn: Vector3 = spatial_service.nearest_safe(spawn_pos, spatial_service.bank_for(spawn_pos))

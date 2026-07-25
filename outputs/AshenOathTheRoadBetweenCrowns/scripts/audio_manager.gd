@@ -15,6 +15,7 @@ var music_state = ""
 var _voice_queue: Array = []
 var master_volume_linear = 0.85
 var transient_players: Array[AudioStreamPlayer] = []
+var music_transition_generation := 0
 
 func _process(delta: float) -> void:
 	if ambient_player != null and ambient_player.stream != null and not ambient_player.playing:
@@ -133,16 +134,44 @@ func set_music_state(state_id: String) -> void:
 		return
 	print("AUDIO: music_state_%s" % state_id)
 	music_state = state_id
-	if music_player == null:
-		music_player = AudioStreamPlayer.new()
-		music_player.bus = bus_name
-		add_child(music_player)
-	music_player.stop()
-	music_player.stream = music[state_id]
-	music_player.volume_db = -52.0
-	music_player.play()
-	var tween = create_tween()
-	tween.tween_property(music_player, "volume_db", _music_volume_for(state_id), 0.65)
+	music_transition_generation += 1
+	var previous := music_player
+	var incoming := AudioStreamPlayer.new()
+	incoming.name = "CampaignMusic_%s" % state_id
+	incoming.bus = bus_name
+	incoming.stream = music[state_id]
+	incoming.volume_db = -52.0
+	add_child(incoming)
+	incoming.play()
+	music_player = incoming
+	var tween := create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(incoming, "volume_db", _music_volume_for(state_id), 0.85)
+	if previous != null and is_instance_valid(previous):
+		tween.tween_property(previous, "volume_db", -52.0, 0.72)
+		tween.chain().tween_callback(func():
+			if is_instance_valid(previous) and previous != music_player:
+				previous.stop()
+				previous.queue_free()
+		)
+
+func music_state_for_zone(zone_id: String) -> String:
+	var states := {
+		"greyfen": "greyfen_explore",
+		"wychwood": "wychwood_tension",
+		"deep_wood": "deep_wood",
+		"old_mill": "ash_mill",
+		"burned_farmstead": "ash_mill",
+		"marsh_crossing": "marsh_crossing",
+		"bandit_road": "bandit_road",
+		"vargan_approach": "castle_silence",
+		"vargan_court": "castle_silence",
+		"record_hall": "record_hall",
+		"undercroft": "undercroft",
+		"assembly": "assembly",
+		"hart_glade": "hart_glade",
+	}
+	return str(states.get(zone_id, "greyfen_explore"))
 
 func play_music_cue(cue_id: String, next_state: String = "") -> void:
 	print("AUDIO: music_cue_%s" % cue_id)
@@ -314,12 +343,26 @@ func _build_music_library() -> void:
 	music["ghoulkin_combat"] = _music_loop([54.0, 81.0, 108.0, 162.0], 3.8, 0.095, 0.018)
 	music["return_report"] = _music_loop([66.0, 99.0, 148.0], 5.2, 0.056, 0.010)
 	music["castle_silence"] = _music_loop([49.0, 73.5, 98.0, 147.0], 6.6, 0.048, 0.009)
+	music["deep_wood"] = _music_loop([41.0, 61.5, 82.0, 123.0], 6.8, 0.052, 0.014)
+	music["ash_mill"] = _music_loop([58.0, 87.0, 116.0], 6.4, 0.050, 0.011)
+	music["marsh_crossing"] = _music_loop([43.0, 64.5, 96.0], 7.0, 0.046, 0.018)
+	music["bandit_road"] = _music_loop([62.0, 93.0, 124.0, 186.0], 5.8, 0.056, 0.012)
+	music["record_hall"] = _music_loop([52.0, 78.0, 104.0, 156.0], 7.2, 0.043, 0.008)
+	music["undercroft"] = _music_loop([38.0, 57.0, 76.0], 7.4, 0.050, 0.016)
+	music["assembly"] = _music_loop([69.0, 103.5, 138.0, 207.0], 6.6, 0.048, 0.007)
+	music["hart_glade"] = _music_loop([77.0, 115.5, 154.0, 231.0], 7.2, 0.052, 0.010)
 
 func _ambient_stream(zone_id: String) -> AudioStreamWAV:
 	if zone_id == "greyfen":
 		return _ambient_mix([86.0, 146.0, 213.0], 2.6, 0.026, 0.0)
 	if zone_id == "wychwood":
 		return _ambient_mix([46.0, 73.0, 111.0], 3.0, 0.030, 0.0)
+	if zone_id in ["deep_wood", "marsh_crossing"]:
+		return _ambient_mix([38.0, 57.0, 91.0], 3.2, 0.026, 0.008)
+	if zone_id in ["vargan_approach", "vargan_court", "record_hall", "undercroft"]:
+		return _ambient_mix([44.0, 66.0, 99.0], 3.0, 0.022, 0.004)
+	if zone_id == "hart_glade":
+		return _ambient_mix([52.0, 78.0, 117.0], 3.4, 0.024, 0.003)
 	return _ambient_mix([70.0], 2.2, 0.030, 0.0)
 
 func _volume_for(event_name: String) -> float:
@@ -358,6 +401,10 @@ func _music_volume_for(state_id: String) -> float:
 		return -15.0
 	if state_id == "main_menu":
 		return -18.0
+	if state_id in ["record_hall", "undercroft"]:
+		return -18.0
+	if state_id in ["assembly", "hart_glade"]:
+		return -15.5
 	return -16.0
 
 func _speak_voice_id(voice_id: String) -> bool:

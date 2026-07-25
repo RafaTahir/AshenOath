@@ -116,7 +116,8 @@
       ],
       "gates": [
         "verify_audio_runtime",
-        "verify_audio_001"
+        "verify_audio_001",
+        "verify_audio_002"
       ]
     },
     "assets": {
