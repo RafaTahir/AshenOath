@@ -9,6 +9,7 @@ param(
   [Alias("ApprovedMilestone")]
   [switch]$RoadmapMilestone,
   [switch]$SkipScreenshots,
+  [string]$ResumeFrom = "",
   [string]$ProductionUrl = "https://ashenoath.vercel.app/"
 )
 
@@ -60,6 +61,9 @@ try {
   }
   $gateArguments = @("-ExecutionPolicy", "Bypass", "-File", $Gate)
   if ($SkipScreenshots) { $gateArguments += "-SkipScreenshots" }
+  if (-not [string]::IsNullOrWhiteSpace($ResumeFrom)) {
+    $gateArguments += @("-ResumeFrom", $ResumeFrom)
+  }
   & powershell @gateArguments
   if ($LASTEXITCODE -ne 0) { throw "Authoritative release gate failed." }
 

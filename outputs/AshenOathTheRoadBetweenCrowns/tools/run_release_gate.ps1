@@ -21,6 +21,43 @@ $StartedAt = Get-Date
 $Results = [System.Collections.Generic.List[object]]::new()
 New-Item -ItemType Directory -Force -Path $Logs | Out-Null
 New-Item -ItemType Directory -Force -Path $ReportDirectory | Out-Null
+$IsResume = -not [string]::IsNullOrWhiteSpace($ResumeFrom)
+
+if ($IsResume) {
+    if (-not (Test-Path -LiteralPath $ReportPath)) {
+        throw "Cannot resume without an existing release report: $ReportPath"
+    }
+    $previousReport = Get-Content -LiteralPath $ReportPath -Raw | ConvertFrom-Json
+    $repoRoot = Split-Path -Parent (Split-Path -Parent $Project)
+    $currentHead = (git -C $repoRoot rev-parse HEAD).Trim()
+    if ($previousReport.source_commit -ne $currentHead) {
+        throw "Cannot resume release: source commit changed from $($previousReport.source_commit) to $currentHead."
+    }
+    $resumeFound = $false
+    foreach ($result in $previousReport.results) {
+        if ($result.name -eq $ResumeFrom) {
+            $resumeFound = $true
+            break
+        }
+        if ($result.status -ne "pass") {
+            throw "Cannot preserve non-passing gate before resume point: $($result.name)"
+        }
+        $Results.Add([ordered]@{
+            name = [string]$result.name
+            status = "pass"
+            duration_seconds = [double]$result.duration_seconds
+            log = [string]$result.log
+            warnings = @($result.warnings)
+            failure = ""
+        })
+    }
+    if (-not $resumeFound) {
+        throw "Resume gate was not found in the previous release report: $ResumeFrom"
+    }
+    if ($ResumeFrom -ne "verify_web_001") {
+        throw "External release resumption currently supports verify_web_001 only."
+    }
+}
 
 function Add-Result(
     [string]$Name,
@@ -153,15 +190,17 @@ try {
     if (!(Test-Path -LiteralPath $Godot)) { throw "Godot 4.6.3 not found: $Godot" }
     if (!(Test-Path -LiteralPath $Python)) { throw "Bundled Python not found: $Python" }
 
-    Invoke-ExternalGate "verify_content_integrity" $Python @(
-        (Join-Path $Project "tools\verify_content_integrity.py"),
-        $Project,
-        "--json-report",
-        $ContentReportPath
-    )
-	Invoke-ExternalGate "verify_asset_001_files" $Python @(
-		(Join-Path $Project "tools\verify_asset_001.py")
-	)
+    if (-not $IsResume) {
+        Invoke-ExternalGate "verify_content_integrity" $Python @(
+            (Join-Path $Project "tools\verify_content_integrity.py"),
+            $Project,
+            "--json-report",
+            $ContentReportPath
+        )
+        Invoke-ExternalGate "verify_asset_001_files" $Python @(
+            (Join-Path $Project "tools\verify_asset_001.py")
+        )
+    }
 
     $verifiers = @(
 		"verify_runtime.gd", "verify_runtime_regressions.gd", "verify_zone_builder_integrity.gd", "verify_gate_transitions.gd", "verify_engine_001.gd", "verify_story_campaign.gd", "verify_quest_001.gd", "verify_quest_002.gd", "verify_art_001.gd", "verify_asset_001.gd", "verify_character_real_001.gd",
@@ -170,24 +209,21 @@ try {
 		"verify_recovery_002_foundation.gd", "verify_navigation_001.gd", "verify_char_001.gd", "verify_anim_001.gd", "verify_combat_001.gd", "verify_ai_001.gd", "verify_oath_001.gd", "verify_ui_001.gd", "verify_input_001.gd", "verify_mobile_001.gd", "verify_world_001.gd", "verify_world_002.gd", "verify_world_003.gd", "verify_zone_budgets.gd",
         "verify_visual_003.gd", "verify_visual_100.gd", "verify_master_002.gd", "verify_master_003.gd"
     )
-    $resumeReached = [string]::IsNullOrWhiteSpace($ResumeFrom)
-    foreach ($verifier in $verifiers) {
-        $name = [IO.Path]::GetFileNameWithoutExtension($verifier)
-        if (-not [string]::IsNullOrWhiteSpace($Only) -and $name -ne $Only) { continue }
-        if (-not $resumeReached) {
-            $resumeReached = ($name -eq $ResumeFrom)
-            if (-not $resumeReached) { continue }
+    if (-not $IsResume) {
+        foreach ($verifier in $verifiers) {
+            $name = [IO.Path]::GetFileNameWithoutExtension($verifier)
+            if (-not [string]::IsNullOrWhiteSpace($Only) -and $name -ne $Only) { continue }
+            Invoke-GodotGate $name @("--headless", "--path", $Project, "--script", "tools/$verifier")
         }
-        Invoke-GodotGate $name @("--headless", "--path", $Project, "--script", "tools/$verifier")
     }
 
-    if ([string]::IsNullOrWhiteSpace($Only) -and -not $SkipPerformance) {
+    if (-not $IsResume -and [string]::IsNullOrWhiteSpace($Only) -and -not $SkipPerformance) {
         Invoke-GodotGate "verify_perf_001" @(
             "--path", $Project, "--rendering-method", "gl_compatibility",
             "--script", "tools/verify_perf_001.gd"
         )
     }
-    if ([string]::IsNullOrWhiteSpace($Only) -and -not $SkipScreenshots) {
+    if (-not $IsResume -and [string]::IsNullOrWhiteSpace($Only) -and -not $SkipScreenshots) {
         Invoke-GodotGate "capture_slice_screenshots" @(
             "--path", $Project, "--rendering-method", "gl_compatibility",
             "--script", "tools/capture_slice_screenshots.gd"

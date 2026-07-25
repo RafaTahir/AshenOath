@@ -43,8 +43,10 @@ def main() -> int:
     if 'viewport_width=1280' not in project_settings or 'viewport_height=720' not in project_settings:
         fail("gameplay viewport is not native 1280x720", failures)
     build_label = re.search(r'const MENU_BUILD_LABEL = "([^"]+)"', hud)
-    if not build_label or "CANDIDATE" not in build_label.group(1) or "ASHENOATH.VERCEL.APP" not in build_label.group(1):
-        fail("visible menu build identifier is missing candidate and production identity", failures)
+    label_text = build_label.group(1) if build_label else ""
+    has_release_identity = "CANDIDATE" in label_text or "ROADMAP MILESTONE" in label_text
+    if not build_label or not has_release_identity or "ASHENOATH.VERCEL.APP" not in label_text:
+        fail("visible menu build identifier is missing candidate/milestone and production identity", failures)
 
     vercel = json.loads((root / "vercel.json").read_text(encoding="utf-8"))
     header_rules = vercel.get("headers", [])

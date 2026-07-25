@@ -37,6 +37,7 @@ var visual_director
 var minigames
 var progression
 var input_router
+var mobile_touch
 var zone_root: Node3D
 var active_interactable
 var interaction_candidates: Array = []
@@ -166,6 +167,7 @@ func _setup_runtime() -> void:
 	minigames = services["minigames"]
 	progression = services["progression"]
 	input_router = services["input_router"]
+	mobile_touch = services["mobile_touch"]
 	runtime_services.configure(self)
 	enemy_defs = _read_json("res://data/enemies.json")
 

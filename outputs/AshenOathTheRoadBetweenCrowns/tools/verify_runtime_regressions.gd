@@ -49,7 +49,10 @@ func _initialize() -> void:
 	game.hud.show_settings_menu("main")
 	await process_frame
 	_check(_settings_menu_matches(game.hud, game.settings.settings), "Settings UI does not match active runtime settings")
-	_check(game.runtime_services.get_child_count() == 14, "Runtime service registry duplicated managers")
+	_check(
+		game.runtime_services.get_child_count() == game.runtime_services.REQUIRED_SERVICES.size(),
+		"Runtime service registry duplicated or omitted managers"
+	)
 	_check(not game.zone_transition_pending, "Loading completion path is still pending")
 	print("DEBUG-001 RUNTIME REGRESSIONS: PASS")
 	quit(0)
