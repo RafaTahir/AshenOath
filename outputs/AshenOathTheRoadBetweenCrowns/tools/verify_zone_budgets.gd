@@ -1,65 +1,81 @@
 extends SceneTree
 
-var failures := 0
-const ZONES := ["greyfen", "wychwood", "vargan_approach", "vargan_court", "record_hall", "hart_glade"]
+const ZoneBudget = preload("res://scripts/zone_budget.gd")
+const ZoneCompositionRouter = preload("res://scripts/zone_composition_router.gd")
+
+var failures: Array[String] = []
+var report: Dictionary = {"limits": ZoneBudget.LIMITS, "zones": {}}
 
 func _initialize() -> void:
 	var scene := load("res://scenes/main.tscn") as PackedScene
 	if scene == null:
-		push_error("Main scene unavailable")
-		quit(1)
+		_fail("Main scene unavailable")
+		_finish()
 		return
 	var game = scene.instantiate()
 	root.add_child(game)
 	await process_frame
+	game.settings.set_quality_preset("balanced")
 	game.call("_new_game")
-	for zone_id in ZONES:
+	await _settle_transition(game)
+	var zones := ZoneCompositionRouter.registered_zones()
+	for zone_id in zones:
 		game.call("_load_zone", zone_id, Vector3(0, 1, 8))
+		await _settle_transition(game)
 		await _frames(3)
 		_verify_zone(game, zone_id)
+		_check(game.route_zone_cache.size() <= game.MAX_CACHED_ROUTE_ZONES, "%s retained too many cached zones" % zone_id)
+		_check(game.retired_zone_roots.is_empty(), "%s retained retired zone roots after the render-safe release window" % zone_id)
 	game.settings.set_quality_preset("potato")
 	game.call("_load_zone", "vargan_court", Vector3(0, 1, 8))
+	await _settle_transition(game)
 	await _frames(3)
 	_verify_zone(game, "vargan_court_potato")
-	print("ZONE BUDGETS: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
-	quit(0 if failures == 0 else 1)
+	_write_report()
+	game.queue_free()
+	await _frames(4)
+	_finish()
 
 func _verify_zone(game, zone_id: String) -> void:
-	var nodes: int = _walk(game.zone_root).size()
-	var meshes: int = game.zone_root.find_children("*", "MeshInstance3D", true, false).size()
-	var skeletons: int = game.zone_root.find_children("*", "Skeleton3D", true, false).size()
-	var lights: int = game.zone_root.find_children("*", "Light3D", true, false).size()
-	print("ZONE_BUDGET %s nodes=%d meshes=%d skeletons=%d lights=%d" % [zone_id, nodes, meshes, skeletons, lights])
-	check(nodes <= 1350, "%s exceeds 1350 active nodes" % zone_id)
-	check(meshes <= 420, "%s exceeds 420 MeshInstance nodes" % zone_id)
-	check(skeletons <= 10, "%s exceeds 10 active skeletons" % zone_id)
-	check(lights <= 8, "%s exceeds 8 local lights" % zone_id)
-	for mesh in game.zone_root.find_children("*", "MeshInstance3D", true, false):
-		if mesh.mesh == null: continue
-		for surface in range(mesh.mesh.get_surface_count()):
-			var material = mesh.material_override
-			if material == null: material = mesh.get_surface_override_material(surface)
-			if material == null: material = mesh.mesh.surface_get_material(surface)
-			check(material != null, "%s has a null material surface on %s" % [zone_id, mesh.name])
-	for batch in game.find_children("*", "MultiMeshInstance3D", true, false):
-		if batch.multimesh == null or batch.multimesh.mesh == null:
-			continue
-		var batch_mesh: Mesh = batch.multimesh.mesh
-		for surface in range(batch_mesh.get_surface_count()):
-			var material = batch.material_override
-			if material == null:
-				material = batch_mesh.surface_get_material(surface)
-			check(material != null, "%s has a null MultiMesh material on %s" % [zone_id, batch.name])
+	var snapshot := ZoneBudget.capture(game.zone_root)
+	report.zones[zone_id] = snapshot
+	print("ZONE_BUDGET %s %s" % [zone_id, JSON.stringify(snapshot)])
+	for violation in ZoneBudget.violations(snapshot):
+		_fail("%s: %s" % [zone_id, violation])
 
-func _walk(node: Node) -> Array:
-	var result: Array = [node]
-	for child in node.get_children(): result.append_array(_walk(child))
-	return result
+func _settle_transition(game: Node) -> void:
+	for _index in range(12):
+		await process_frame
+		await physics_frame
+		if not bool(game.zone_transition_pending):
+			return
+	_fail("%s transition did not settle for budget capture" % str(game.current_zone_id))
+
+func _write_report() -> void:
+	var directory := ProjectSettings.globalize_path("res://.release-gate")
+	DirAccess.make_dir_recursive_absolute(directory)
+	var file := FileAccess.open(directory.path_join("perf_001_zone_budgets.json"), FileAccess.WRITE)
+	if file != null:
+		report["generated_at_utc"] = Time.get_datetime_string_from_system(true)
+		report["status"] = "pass" if failures.is_empty() else "fail"
+		file.store_string(JSON.stringify(report, "\t"))
 
 func _frames(count: int) -> void:
-	for _i in range(count): await process_frame
+	for _index in range(count):
+		await process_frame
 
-func check(condition: bool, message: String) -> void:
+func _check(condition: bool, message: String) -> void:
 	if not condition:
-		failures += 1
-		push_error(message)
+		_fail(message)
+
+func _fail(message: String) -> void:
+	failures.append(message)
+	push_error(message)
+
+func _finish() -> void:
+	if failures.is_empty():
+		print("ZONE BUDGETS: PASS (%d released configurations)" % report.zones.size())
+		quit()
+		return
+	print("ZONE BUDGETS: FAIL (%d)" % failures.size())
+	quit(1)

@@ -21,9 +21,9 @@ func _initialize() -> void:
 	check(game.zone_root.find_child("DeterministicNavigationRegion", true, false) is NavigationRegion3D, "Greyfen navigation region was lost")
 	check(_group_count(game.zone_root, "greyfen_house") == 4, "Greyfen must contain four authored route houses")
 	check(_named_count(game.zone_root, "ModularTileRoof") == 4, "Modular tile roofs are missing")
-	check(_named_count(game.zone_root, "ModularDoorFacade") == 4, "Modular door facades are missing")
-	check(_named_count(game.zone_root, "ModularWindowFacade") == 4, "Modular window facades are missing")
-	check(_named_count(game.zone_root, "ModularChimney") == 4, "Modular chimneys are missing")
+	check(_named_count(game.zone_root, "FrontDoor") == 4, "Batched door facades are missing")
+	check(_named_count(game.zone_root, "LitWindow") == 4, "Batched window facades are missing")
+	check(_named_count(game.zone_root, "StoneChimney") == 4, "Batched chimneys are missing")
 
 	var paving := game.zone_root.find_child("BalancedPavedRoadDetail", true, false) as MultiMeshInstance3D
 	check(paving != null and paving.multimesh != null and paving.multimesh.instance_count >= 140, "Greyfen paving is not a dense staggered surface")

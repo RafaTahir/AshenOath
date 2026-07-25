@@ -324,16 +324,19 @@ func _category_color(path: String) -> Color:
 		return Color(0.38, 0.29, 0.20)
 	return Color(0.50, 0.48, 0.43)
 
-func _finalize_asset_root(root: Node3D) -> void:
+func _finalize_asset_root(root: Node3D, role_name: String = "") -> void:
 	root.rotation_degrees.y = 180.0 if root.name.to_lower().contains("character") else root.rotation_degrees.y
+	var hero_role := role_name in ["player_human", "player_kael", "sister_anwen_human", "sister_anwen"]
+	var lod_bias := 0.50 if hero_role else 0.40
 	for mesh_instance in _collect_meshes(root):
 		mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		mesh_instance.lod_bias = lod_bias
 
 func _prepare_spawned_asset(root: Node3D, path: String, role_name: String = "", category: String = "") -> void:
 	if path.get_extension().to_lower() != "obj":
 		_normalize_scene_bounds(root, _target_height_for_role(role_name, path))
 	_apply_safe_materials(root, path)
-	_finalize_asset_root(root)
+	_finalize_asset_root(root, role_name)
 	if "characters" in path.to_lower() and not _has_skeleton(root):
 		_apply_character_wrapper(root, root.name)
 	if category in ["characters","enemies"] and _has_skeleton(root):

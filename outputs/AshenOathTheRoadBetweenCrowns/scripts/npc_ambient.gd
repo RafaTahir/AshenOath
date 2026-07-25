@@ -59,9 +59,10 @@ func _process(delta: float) -> void:
 		var players = get_tree().get_nodes_in_group("player")
 		if not players.is_empty() and players[0] is Node3D:
 			focus_target = players[0]
-	if focus_target != null and parent_3d.global_position.distance_to(focus_target.global_position) > 12.0:
+	var render_distance := _render_distance()
+	if focus_target != null and parent_3d.global_position.distance_to(focus_target.global_position) > render_distance * 0.72:
 		var distance: float = parent_3d.global_position.distance_to(focus_target.global_position)
-		_set_distance_visible(parent_3d, distance <= 17.0)
+		_set_distance_visible(parent_3d, distance <= render_distance)
 		if animation_driver != null and animation_driver.has_method("set_distance_suspended"):
 			animation_driver.set_distance_suspended(true)
 		far_tick_accumulator += delta
@@ -91,6 +92,13 @@ func _process(delta: float) -> void:
 	var turn_weight = turn_speed * (1.2 if attention_hold > 0.0 else 0.65)
 	parent_3d.rotation_degrees.y = lerp_angle(deg_to_rad(parent_3d.rotation_degrees.y), deg_to_rad(target_yaw), turn_weight * delta) * 180.0 / PI
 	parent_3d.position.y = base_y + sin(phase) * bob_amount + sin(phase * 0.37) * breathe_amount
+
+func _render_distance() -> float:
+	if role_id == "sister_anwen":
+		return 18.0
+	if role_id == "rook":
+		return 7.5
+	return 10.0
 
 func _set_distance_visible(parent_3d: Node3D, value: bool) -> void:
 	if distance_hidden == not value:

@@ -182,9 +182,9 @@ try {
     }
 
     if ([string]::IsNullOrWhiteSpace($Only) -and -not $SkipPerformance) {
-        Invoke-GodotGate "verify_720p_performance" @(
+        Invoke-GodotGate "verify_perf_001" @(
             "--path", $Project, "--rendering-method", "gl_compatibility",
-            "--script", "tools/verify_720p_performance.gd"
+            "--script", "tools/verify_perf_001.gd"
         )
     }
     if ([string]::IsNullOrWhiteSpace($Only) -and -not $SkipScreenshots) {

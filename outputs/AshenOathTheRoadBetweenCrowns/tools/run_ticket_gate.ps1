@@ -229,6 +229,13 @@ foreach ($gate in $gates) {
         ) $gateInputs $cache
     } elseif ($gate -eq "runtime_smoke") {
         Invoke-Compact $gate $Godot @("--headless", "--path", $Project, "--quit-after", "3") $gateInputs $cache
+    } elseif ($gate -eq "verify_perf_001") {
+        $script = Join-Path $PSScriptRoot "$gate.gd"
+        Invoke-Compact $gate $Godot @(
+            "--path", $Project,
+            "--rendering-method", "gl_compatibility",
+            "--script", $script
+        ) $gateInputs $cache
     } elseif ($gate -eq "web_export") {
         Invoke-Compact "web_export" (Join-Path $Project "Export_Web_Build.bat") @() $gateInputs $cache
         Invoke-Compact "verify_web_export" $Python @(

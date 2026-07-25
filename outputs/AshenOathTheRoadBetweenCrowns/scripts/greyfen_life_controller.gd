@@ -61,7 +61,8 @@ func _process(delta: float) -> void:
 		far_tick_accumulator = 0.0
 	for entry in actors:
 		var actor_node: Node3D = entry.node
-		var distant := is_instance_valid(actor_node) and actor_node.global_position.distance_to(player.global_position) > 13.0
+		var render_distance := 6.0 if quality == "potato" else (16.0 if quality == "quality" else 6.5)
+		var distant := is_instance_valid(actor_node) and actor_node.global_position.distance_to(player.global_position) > render_distance
 		if is_instance_valid(actor_node):
 			actor_node.visible = not distant
 		var driver = entry.driver

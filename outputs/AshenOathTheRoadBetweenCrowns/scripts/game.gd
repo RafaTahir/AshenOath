@@ -65,6 +65,7 @@ var shared_box_mesh: BoxMesh
 var prop_batch_data: Dictionary = {}
 var visual_box_batch_data: Array[Dictionary] = []
 var terrain_patch_batch_data: Array[Dictionary] = []
+var house_batch_data: Dictionary = {}
 var spatial_service: Node
 var environment_batches_flushed := false
 var prop_collision_body: StaticBody3D
@@ -82,6 +83,7 @@ var requested_zone_id := ""
 var requested_zone_spawn := Vector3.ZERO
 var greyfen_prewarm_started := false
 var greyfen_prewarm_spatial_service: Node
+const MAX_CACHED_ROUTE_ZONES := 1
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -293,6 +295,7 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	prop_batch_data.clear()
 	visual_box_batch_data.clear()
 	terrain_patch_batch_data.clear()
+	house_batch_data.clear()
 	environment_batches_flushed = false
 	tree_collision_body = null
 	prop_collision_body = null
@@ -393,6 +396,7 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 			_add_visual_100_layer(zone_id)
 		_apply_first_route_materials(zone_root)
 		active_zone_signature = _zone_state_signature()
+	_trim_route_zone_cache([previous_zone_id] if previous_zone_id != zone_id else [])
 	# Avoid recursive diagnostic walks during every transition; on Web/ANGLE those
 	# allocations made cached arrivals visibly slower.
 	print("ZONE_COMPOSITION: id=%s reused=%s visible=%s position=%s" % [
@@ -555,17 +559,45 @@ func _deferred_free_zone(retired_root: Node) -> void:
 	# which a zone is detached. Retire after two rendered frames.
 	await get_tree().process_frame
 	await get_tree().process_frame
+	retired_zone_roots.erase(retired_root)
 	if is_instance_valid(retired_root):
+		_release_zone_render_resources(retired_root)
 		retired_root.queue_free()
+
+func _release_zone_render_resources(root: Node) -> void:
+	for batch in root.find_children("*", "MultiMeshInstance3D", true, false):
+		(batch as MultiMeshInstance3D).multimesh = null
+	for mesh_instance in root.find_children("*", "MeshInstance3D", true, false):
+		(mesh_instance as MeshInstance3D).mesh = null
 
 func _retire_zone_root(retired_root: Node) -> void:
 	if retired_root == null or not is_instance_valid(retired_root):
+		return
+	if retired_zone_roots.has(retired_root):
 		return
 	_set_zone_collision_enabled(retired_root, false)
 	retired_root.visible = false
 	retired_root.process_mode = Node.PROCESS_MODE_DISABLED
 	retired_root.position = Vector3(0, -2000.0 - retired_zone_roots.size() * 100.0, 0)
 	retired_zone_roots.append(retired_root)
+	_deferred_free_zone(retired_root)
+
+func _trim_route_zone_cache(preferred_ids: Array) -> void:
+	var retained: Array[String] = []
+	for raw_id in preferred_ids:
+		var id := str(raw_id)
+		if route_zone_cache.has(id) and not retained.has(id) and retained.size() < MAX_CACHED_ROUTE_ZONES:
+			retained.append(id)
+	for raw_id in route_zone_cache.keys().duplicate():
+		var id := str(raw_id)
+		if retained.has(id):
+			continue
+		var cached_root = route_zone_cache.get(id)
+		route_zone_cache.erase(id)
+		route_enemy_cache.erase(id)
+		route_zone_signatures.erase(id)
+		if is_instance_valid(cached_root):
+			_retire_zone_root(cached_root)
 
 func _set_zone_collision_enabled(node: Node, enabled: bool) -> void:
 	if node is NavigationRegion3D:
@@ -643,10 +675,12 @@ func _build_greyfen() -> void:
 	_make_named_interactable("blacksmith_tor", "dialogue", "Talk to Blacksmith Tor", Vector3(9.5, 0, -2.8), Color(0.43, 0.37, 0.31), Vector3(0.54, 0.54, 0.54))
 	_make_named_interactable("farmer_toma", "dialogue", "Talk to Farmer Toma", Vector3(12, 0, -9), Color(0.39, 0.30, 0.18), Vector3(0.46, 0.46, 0.46))
 	_make_named_interactable("side_contracts", "dialogue", "Read village requests", Vector3(-3.2,0,9.4), Color(0.42,0.27,0.14), Vector3(0.4,0.4,0.4))
-	_make_named_interactable("names_decision", "dialogue", "Decide the fate of the names", Vector3(4.4,0,-5.0), Color(0.36,0.32,0.25), Vector3(0.45,0.45,0.45))
+	if quests.is_active("main_names_they_burned") and not quests.is_objective_done("main_names_they_burned", "names_choice"):
+		_make_named_interactable("names_decision", "dialogue", "Decide the fate of the names", Vector3(4.4,0,-5.0), Color(0.36,0.32,0.25), Vector3(0.45,0.45,0.45))
 	if _crow_shrine_choice_ready():
 		_make_named_interactable("crow_shrine_choice", "dialogue", "Choose the Crow Shrine's fate", Vector3(6.5,0,-7.5), Color(0.3,0.38,0.3), Vector3(0.45,0.45,0.45))
-	_make_named_interactable("retain_evidence", "dialogue", "Keep Oren's token", Vector3(1.8,0,8.8), Color(0.38,0.24,0.16), Vector3(0.35,0.35,0.35))
+	if _road_ready_to_report():
+		_make_named_interactable("retain_evidence", "dialogue", "Keep Oren's token", Vector3(1.8,0,8.8), Color(0.38,0.24,0.16), Vector3(0.35,0.35,0.35))
 	_make_named_interactable("village_stories", "dialogue", "Resolve a village story", Vector3(-4.1,0,9.0), Color(0.34,0.23,0.14), Vector3(0.4,0.4,0.4))
 	_make_village_place("village_well", "village_place", "Draw from the village well", Vector3(-8.0,0,-0.5), Vector3(2.2,0.9,2.2), Color(0.19,0.18,0.16))
 	_make_village_place("forge_corner", "village_place", "Inspect Tor's old iron", Vector3(11.0,0,-1.2), Vector3(1.5,0.7,1.2), Color(0.28,0.18,0.10))
@@ -662,9 +696,11 @@ func _build_greyfen() -> void:
 		story_state.set_flag("teeth_in_rain_available", true)
 		if quests.is_objective_done("main_teeth_in_rain", "speak_mira") and not quests.is_objective_done("main_teeth_in_rain", "read_chapel_names"):
 			_make_clue("chapel_names", "Read the erased names in the chapel", Vector3(15.0,0,8.2), "main_teeth_in_rain", "read_chapel_names", Color(0.44,0.39,0.31))
-	_make_clue("register_anwen", "Take Anwen's hidden register page", Vector3(5.4,0,-6.2), "main_names_they_burned", "fragment_anwen", Color(0.42,0.36,0.22))
-	_make_clue("register_tor", "Take the forge register page", Vector3(9.0,0,-1.0), "main_names_they_burned", "fragment_tor", Color(0.42,0.36,0.22))
-	_make_clue("sheepfold", "Inspect sheepfold", Vector3(15, 0, -11), "side_black_dog", "find_dog", Color(0.36, 0.24, 0.16))
+	if quests.is_active("main_names_they_burned"):
+		_make_clue("register_anwen", "Take Anwen's hidden register page", Vector3(5.4,0,-6.2), "main_names_they_burned", "fragment_anwen", Color(0.42,0.36,0.22))
+		_make_clue("register_tor", "Take the forge register page", Vector3(9.0,0,-1.0), "main_names_they_burned", "fragment_tor", Color(0.42,0.36,0.22))
+	if quests.is_active("side_black_dog"):
+		_make_clue("sheepfold", "Inspect sheepfold", Vector3(15, 0, -11), "side_black_dog", "find_dog", Color(0.36, 0.24, 0.16))
 	_make_zone_gate("To Wychwood", Vector3(0, 0, -15.2), "wychwood", Vector3(0, 1, 13))
 	_make_zone_gate("The long road", Vector3(-18,0,-10), "deep_wood", Vector3(0,1,12))
 	_make_wychwood_gate_scene(Vector3(0, 0, -14.3))
@@ -1091,6 +1127,7 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 	prop_batch_data.clear()
 	visual_box_batch_data.clear()
 	terrain_patch_batch_data.clear()
+	house_batch_data.clear()
 	environment_batches_flushed = false
 	_build_greyfen()
 	_flush_environment_batches()
@@ -2413,7 +2450,7 @@ func _make_village_house_dressed(pos: Vector3, yaw: float, node_name: String) ->
 	_add_house_box(root, "RearWeatheredBaseCourse", Vector3(0, 0.42, 1.73), Vector3(4.22, 0.26, 0.08), Color(0.16, 0.17, 0.14))
 	_add_house_box(root, "FrontCrossBrace", Vector3(-1.43, 1.16, -1.85), Vector3(0.11, 1.42, 0.10), Color(0.10, 0.055, 0.03), Vector3(0, 0, -36))
 	_add_house_box(root, "FrontCrossBrace", Vector3(1.43, 1.16, -1.85), Vector3(0.11, 1.42, 0.10), Color(0.10, 0.055, 0.03), Vector3(0, 0, 36))
-	if not _performance_mode():
+	if str(settings.settings.get("quality_preset", "balanced")) == "quality":
 		_add_house_module(root, "greyfen_door_facade", Vector3(0.90, 0.90, 0.90), Vector3(-0.98, 0.02, -1.82), 0.0, "ModularDoorFacade")
 		_add_house_module(root, "greyfen_window_facade", Vector3(0.90, 0.90, 0.90), Vector3(1.04, 0.02, -1.82), 0.0, "ModularWindowFacade")
 		_add_house_module(root, "greyfen_chimney", Vector3(0.48, 0.58, 0.48), Vector3(chimney_x, 2.20, 0.62), 0.0, "ModularChimney")
@@ -2467,25 +2504,38 @@ func _add_house_gables(parent: Node3D, plaster: Color, timber: Color) -> void:
 	for z in [-1.72, 1.72]:
 		_add_house_box(parent, "GableKingPost", Vector3(0, 2.57, z), Vector3(0.13, 1.14, 0.10), timber)
 
-func _add_house_box(parent: Node3D, node_name: String, local_pos: Vector3, size: Vector3, color: Color, local_rot: Vector3 = Vector3.ZERO) -> MeshInstance3D:
-	var mesh_instance = MeshInstance3D.new()
-	mesh_instance.name = node_name
-	var cube = BoxMesh.new()
-	cube.size = size
-	mesh_instance.mesh = cube
-	mesh_instance.position = local_pos
-	mesh_instance.rotation_degrees = local_rot
-	if node_name.to_lower().contains("window"):
-		mesh_instance.material_override = _emissive_mat(color, 0.7)
-	else:
-		var lower := node_name.to_lower()
-		var surface := "plaster"
-		if lower.contains("roof"): surface = "roof_tiles"
-		elif lower.contains("timber") or lower.contains("door") or lower.contains("shutter"): surface = "timber"
-		elif lower.contains("foundation") or lower.contains("stone"): surface = "medieval_brick"
-		mesh_instance.material_override = world_materials.get_material(surface, str(settings.settings.get("quality_preset", "balanced")), color.lightened(0.55), 0.0, true)
-	parent.add_child(mesh_instance)
-	return mesh_instance
+func _add_house_box(parent: Node3D, node_name: String, local_pos: Vector3, size: Vector3, color: Color, local_rot: Vector3 = Vector3.ZERO) -> Node3D:
+	# Keep named authored details while rendering repeated pieces in material batches.
+	var marker := Node3D.new()
+	marker.name = node_name
+	marker.position = local_pos
+	marker.rotation_degrees = local_rot
+	parent.add_child(marker)
+	var lower := node_name.to_lower()
+	var surface := "plaster"
+	if lower.contains("window"):
+		surface = "emissive_window"
+	elif lower.contains("roof") or lower.contains("awning") or lower.contains("canopy"):
+		surface = "roof_tiles"
+	elif lower.contains("timber") or lower.contains("door") or lower.contains("shutter") or lower.contains("post") or lower.contains("shelf"):
+		surface = "timber"
+	elif lower.contains("foundation") or lower.contains("stone") or lower.contains("step"):
+		surface = "medieval_brick"
+	var batch_key := surface if surface != "emissive_window" else "%s:%s" % [surface, color.to_html(false)]
+	if not house_batch_data.has(batch_key):
+		var material: Material
+		if surface == "emissive_window":
+			material = _emissive_mat(color, 0.7)
+		else:
+			material = world_materials.get_material(surface, str(settings.settings.get("quality_preset", "balanced")), Color.WHITE, 0.0, true).duplicate()
+			(material as StandardMaterial3D).vertex_color_use_as_albedo = true
+		house_batch_data[batch_key] = {"material": material, "transforms": [], "colors": []}
+	var rotation_radians := Vector3(deg_to_rad(local_rot.x), deg_to_rad(local_rot.y), deg_to_rad(local_rot.z))
+	var basis := Basis.from_euler(rotation_radians).scaled(size)
+	var zone_transform: Transform3D = parent.transform * Transform3D(basis, local_pos)
+	house_batch_data[batch_key].transforms.append(zone_transform)
+	house_batch_data[batch_key].colors.append(Color.WHITE if surface == "emissive_window" else color.lightened(0.55))
+	return marker
 
 func _make_house_collision(parent: Node3D) -> void:
 	var body = StaticBody3D.new()
@@ -2727,7 +2777,8 @@ func _make_named_interactable(id: String, type: String, prompt: String, pos: Vec
 		mesh.position.y = 0.85 * scale_override.y
 		mesh.material_override = _mat(color)
 		area.add_child(mesh)
-	if type == "dialogue" and id != "notice_board":
+	var has_character_role: bool = str(role) != ""
+	if type == "dialogue" and id != "notice_board" and has_character_role:
 		CharacterPresentation.apply_npc(area, id)
 	if type != "clue" and type != "herb" and id != "notice_board":
 		var label = Label3D.new()
@@ -2742,7 +2793,7 @@ func _make_named_interactable(id: String, type: String, prompt: String, pos: Vec
 		label.outline_modulate = Color(0.02, 0.018, 0.015)
 		label.visible = false
 		area.add_child(label)
-	if type == "dialogue" and id != "notice_board":
+	if type == "dialogue" and id != "notice_board" and has_character_role:
 		var ambient = NpcAmbient.new()
 		ambient.setup(id, player)
 		area.add_child(ambient)
@@ -3102,6 +3153,21 @@ func _flush_environment_batches() -> void:
 			var detail_size: Vector3 = items[i].size
 			detail_batch.multimesh.set_instance_transform(i, Transform3D(marker.basis.scaled(detail_size), marker.position))
 			marker.queue_free()
+	for house_key in house_batch_data:
+		var house_group: Dictionary = house_batch_data[house_key]
+		var house_transforms: Array = house_group.transforms
+		if house_transforms.is_empty():
+			continue
+		var house_batch := _make_multimesh_batch(
+			"HouseBatch_%s" % str(house_key).replace(":", "_"),
+			shared_box_mesh,
+			house_transforms.size(),
+			house_group.material,
+			true
+		)
+		for transform_index in range(house_transforms.size()):
+			house_batch.multimesh.set_instance_transform(transform_index, house_transforms[transform_index])
+			house_batch.multimesh.set_instance_color(transform_index, house_group.colors[transform_index])
 	for batch_key in prop_batch_data:
 		var entry: Dictionary = prop_batch_data[batch_key]
 		var transforms: Array = entry.get("transforms", [])

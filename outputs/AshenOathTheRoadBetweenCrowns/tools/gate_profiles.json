@@ -104,6 +104,24 @@
         "verify_save_001"
       ]
     },
+    "performance": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/settings_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/asset_spawn_helper.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/greyfen_life_controller.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/npc_ambient.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/visual_director.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/*.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_budget.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_perf_001.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_zone_budgets.gd"
+      ],
+      "gates": [
+        "verify_zone_budgets",
+        "verify_perf_001"
+      ]
+    },
     "web": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/export_presets.cfg",

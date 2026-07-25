@@ -342,21 +342,20 @@ func _build_sky_layer() -> void:
 	add_child(cloud_layer)
 	cloud_texture = _build_cloud_texture()
 	var cloud_count := 7
-	var lobes_per_cloud := 4
 	for i: int in range(cloud_count):
 		var cloud := Node3D.new()
 		cloud.name = "CloudCluster"
 		cloud.position = Vector3(-62.0 + i * 22.0, 46.0 + (i % 2) * 6.0, -92.0 + (i % 3) * 18.0)
 		cloud.set_meta("base_position", cloud.position)
-		for lobe_index in range(lobes_per_cloud):
-			var lobe := MeshInstance3D.new()
-			lobe.name = "CloudCard"
-			var cloud_mesh := QuadMesh.new()
-			cloud_mesh.size = Vector2(24.0+float((i+lobe_index)%3)*6.0,8.0+float((i+lobe_index)%2)*2.5)
-			lobe.mesh = cloud_mesh
-			lobe.position = Vector3((lobe_index-1.5)*17.0,float((lobe_index+i)%2)*2.6,float(lobe_index)*5.0)
-			lobe.material_override = _cloud_material(Color(0.92,0.94,0.96,0.60))
-			cloud.add_child(lobe)
+		# The generated texture already contains an irregular multi-lobed cloud.
+		# One card per cluster avoids four layers of transparent overdraw.
+		var lobe := MeshInstance3D.new()
+		lobe.name = "CloudCard"
+		var cloud_mesh := QuadMesh.new()
+		cloud_mesh.size = Vector2(52.0+float(i%3)*6.0,13.0+float(i%2)*2.0)
+		lobe.mesh = cloud_mesh
+		lobe.material_override = _cloud_material(Color(0.92,0.94,0.96,0.60))
+		cloud.add_child(lobe)
 		cloud_layer.add_child(cloud)
 
 func _position_sky_layer(zone_id: String) -> void:

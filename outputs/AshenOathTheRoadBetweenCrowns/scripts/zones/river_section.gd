@@ -3,7 +3,12 @@ extends RefCounted
 const BRIDGE_WIDTH := 5.4
 const BANK_CLEARANCE := 1.15
 
+var visual_box_batches: Dictionary = {}
+var stone_transforms: Array[Transform3D] = []
+
 func build(parent: Node3D, context: Dictionary) -> Dictionary:
+	visual_box_batches.clear()
+	stone_transforms.clear()
 	var host = context.get("host")
 	var center_z := float(context.get("center_z", 0.0))
 	var width := float(context.get("width", 44.0))
@@ -29,6 +34,7 @@ func build(parent: Node3D, context: Dictionary) -> Dictionary:
 	for x in [-16.0,-11.0,-7.0,7.5,12.0,16.5]:
 		_make_bank_stone(root, Vector3(x,0.18,center_z-span*0.59), 0.48 + absf(x) * 0.012)
 		_make_bank_stone(root, Vector3(x+1.4,0.18,center_z+span*0.59), 0.44 + absf(x) * 0.010)
+	_flush_visual_batches(root)
 	return {
 		"root":root,
 		"center_z":center_z,
@@ -137,34 +143,25 @@ func _make_reed(root: Node3D, pos: Vector3) -> void:
 	_make_box(root,"RiverReed",pos,Vector3(0.05,0.68,0.05),Color(0.22,0.34,0.12),false)
 
 func _make_bank_stone(root: Node3D, pos: Vector3, radius: float) -> void:
-	var stone := MeshInstance3D.new()
-	stone.name = "RiverBankStone_%d_%d" % [int(pos.x * 10.0), int(pos.z * 10.0)]
-	var mesh := SphereMesh.new()
-	mesh.radius = radius
-	mesh.height = radius * 1.2
-	mesh.radial_segments = 8
-	mesh.rings = 4
-	stone.mesh = mesh
-	stone.position = pos
-	stone.scale = Vector3(1.3,0.62,0.88)
-	var material := StandardMaterial3D.new()
-	material.albedo_color = Color(0.14,0.17,0.15)
-	material.roughness = 0.92
-	stone.material_override = material
-	root.add_child(stone)
+	var marker := Node3D.new()
+	marker.name = "RiverBankStone_%d_%d" % [int(pos.x * 10.0), int(pos.z * 10.0)]
+	marker.position = pos
+	root.add_child(marker)
+	var scale_value := Vector3(radius * 2.6, radius * 0.744, radius * 1.76)
+	stone_transforms.append(Transform3D(Basis.IDENTITY.scaled(scale_value), pos))
 
 func _make_box(root: Node3D, node_name: String, pos: Vector3, size: Vector3, color: Color, collision: bool) -> void:
-	var mesh := MeshInstance3D.new()
-	mesh.name = node_name
-	var box := BoxMesh.new()
-	box.size = size
-	mesh.mesh = box
-	mesh.position = pos
-	var material := StandardMaterial3D.new()
-	material.albedo_color = color
-	material.roughness = 0.82
-	mesh.material_override = material
-	root.add_child(mesh)
+	var marker := Node3D.new()
+	marker.name = node_name
+	marker.position = pos
+	root.add_child(marker)
+	var batch_key := color.to_html(true)
+	if not visual_box_batches.has(batch_key):
+		var material := StandardMaterial3D.new()
+		material.albedo_color = color
+		material.roughness = 0.82
+		visual_box_batches[batch_key] = {"material": material, "transforms": []}
+	visual_box_batches[batch_key].transforms.append(Transform3D(Basis.IDENTITY.scaled(size), pos))
 	if collision:
 		var body := StaticBody3D.new()
 		body.name = "%sCollision" % node_name
@@ -175,3 +172,46 @@ func _make_box(root: Node3D, node_name: String, pos: Vector3, size: Vector3, col
 		solid.size = size
 		shape.shape = solid
 		body.add_child(shape)
+
+func _flush_visual_batches(root: Node3D) -> void:
+	var box_mesh := BoxMesh.new()
+	box_mesh.size = Vector3.ONE
+	for batch_key in visual_box_batches:
+		var entry: Dictionary = visual_box_batches[batch_key]
+		var transforms: Array = entry.transforms
+		if transforms.is_empty():
+			continue
+		var batch := MultiMeshInstance3D.new()
+		batch.name = "RiverBoxBatch_%s" % str(batch_key)
+		var multimesh := MultiMesh.new()
+		multimesh.transform_format = MultiMesh.TRANSFORM_3D
+		multimesh.mesh = box_mesh
+		multimesh.instance_count = transforms.size()
+		for index in range(transforms.size()):
+			multimesh.set_instance_transform(index, transforms[index])
+		batch.multimesh = multimesh
+		batch.material_override = entry.material
+		batch.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		root.add_child(batch)
+	if stone_transforms.is_empty():
+		return
+	var stone_mesh := SphereMesh.new()
+	stone_mesh.radius = 0.5
+	stone_mesh.height = 1.0
+	stone_mesh.radial_segments = 8
+	stone_mesh.rings = 4
+	var stones := MultiMeshInstance3D.new()
+	stones.name = "RiverBankStoneBatch"
+	var stone_multimesh := MultiMesh.new()
+	stone_multimesh.transform_format = MultiMesh.TRANSFORM_3D
+	stone_multimesh.mesh = stone_mesh
+	stone_multimesh.instance_count = stone_transforms.size()
+	for index in range(stone_transforms.size()):
+		stone_multimesh.set_instance_transform(index, stone_transforms[index])
+	stones.multimesh = stone_multimesh
+	var stone_material := StandardMaterial3D.new()
+	stone_material.albedo_color = Color(0.14,0.17,0.15)
+	stone_material.roughness = 0.92
+	stones.material_override = stone_material
+	stones.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	root.add_child(stones)

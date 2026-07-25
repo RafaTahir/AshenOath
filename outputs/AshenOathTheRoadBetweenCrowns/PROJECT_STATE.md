@@ -8,6 +8,8 @@ RECOVERY-003 replaces reflective campaign-zone construction with a validated `Zo
 
 ANIM-001 release acceptance passed the complete functional suite, graphical route and animation captures, Web export, and packed startup. On the Dell 7280/Intel HD 620 ANGLE path, the final native-720p sample measured 37.5 FPS average, 35.6 FPS minimum, and a 129 ms warm transition.
 
+PERF-001 establishes enforced per-zone budgets and a graphical native-720p gate. The final compact Dell 7280/Intel HD 620 gate measured Greyfen at 34.6 FPS average / 26.3 FPS 1% low, with all representative zones above the 28/24 FPS thresholds. Balanced now uses shadowless authored lighting, generated mesh LODs, bounded NPC presentation distance, batched cottage/river geometry, and at most one inactive cached route zone.
+
 ## COMBAT-001 Update
 
 - Kael's light and heavy attacks resolve from the animated sword's measured hilt-to-tip sweep rather than a delayed radius/facing query.
@@ -20,7 +22,7 @@ ANIM-001 release acceptance passed the complete functional suite, graphical rout
 ## WORLD-001 Update
 
 - Greyfen environment construction is owned by `scripts/zones/greyfen_section.gd`; quests, managers, transitions, and interactions remain under `game.gd`.
-- Four opening-route houses use grounded modular tile roofs, closed plaster gables, deterministic wall/timber palettes, rear-facing windows, facade modules, and chimneys from the curated CC0 village library.
+- Four opening-route houses use grounded modular tile roofs, closed plaster gables, deterministic wall/timber palettes, rear-facing windows, and zone-batched facade/chimney geometry. Quality mode retains the additional imported facade modules.
 - The main road uses one 215-instance textured staggered paving batch instead of sparse checkerboard slabs. Selected full-tree meshes strengthen the boundary silhouette while navigation corridors remain reserved.
 - `verify_world_001.gd` enforces structure ownership, modules, paving density, route clearance, retained landmarks, and per-zone budgets. `capture_world_001.gd` produces four mandatory native-720p gallery views.
 - The visual target remains grounded low-poly dark fantasy. Current assets still do not support a photoreal or AAA claim.
@@ -79,7 +81,7 @@ ANIM-001 release acceptance passed the complete functional suite, graphical rout
 - Repeated world boxes/details use shared meshes and MultiMesh batches. RECOVERY-002 measured 37.2 FPS average, 35.6 FPS minimum, and 294 ms warm route transition on Intel HD 620/ANGLE.
 - The world remains intentionally stylized and low-poly; current assets do not support a photoreal/AAA claim.
 
-Last updated: 2026-07-23
+Last updated: 2026-07-25
 
 ## Summary
 
@@ -387,28 +389,28 @@ Implemented in `scripts/visual_director.gd` and `scripts/game.gd`.
 
 The visual benchmark is Witcher-inspired dark fantasy, but current assets and rendering remain low-poly/stylized.
 
-### Web Performance Mode
+### Web Performance Tiers
 
 Implemented in `scripts/settings_manager.gd`, `scripts/game.gd`, and `scripts/asset_spawn_helper.gd`.
 
-Current default performance settings (target configuration, not a current performance pass):
+Current Balanced defaults:
 
-- `potato_mode`: true
-- `resolution_scale`: 0.55
+- `potato_mode`: false
+- `resolution_scale`: 1.0
 - `target_fps`: 30
 - `shadow_quality`: 0
-- `foliage_density`: 0
+- `foliage_density`: 1
 
-Performance mode also:
+Balanced also:
 
-- Disables dynamic shadows.
-- Disables grass batches.
-- Skips many imported environment GLB/OBJ role visuals.
-- Reduces fog-sheet spawning.
-- Keeps only selected lights.
-- Turns imported mesh shadow casting off.
+- Keeps native 1280x720 rendering while reserving directional shadows for Quality.
+- Uses generated mesh LODs and bounded presentation distance for skinned actors.
+- Batches repeated cottage, river, terrain, road, tree, and prop geometry.
+- Retains authored clouds as one irregular textured card per cluster to limit transparent overdraw.
+- Keeps at most one inactive route zone cached and retires older render resources.
+- Enforces node, mesh, surface, skeleton, light, transparency, memory, transition, and FPS budgets.
 
-This improves browser smoothness on low-end hardware but makes the world visually sparser.
+Potato remains an explicit fallback with reduced foliage and visual density. Gameplay objects, routes, interactions, and navigation remain unchanged.
 
 ## Scenes And Zones
 
@@ -670,7 +672,7 @@ Known verifier note: Godot headless may emit ObjectDB cleanup warnings after pas
 
 ## Known Bugs And Limitations
 
-- RECOVERY-002 passes its local runtime, story, route, character, visual, Castle, and graphical performance gates; export and live deployment are recorded separately.
+- PERF-001 passes its targeted runtime, world, river, zone-budget, and graphical native-720p gates; its development Web preview is recorded in `PERF_001_ENFORCED_WEB_BUDGETS.md`.
 - Fresh RECOVERY-002 screenshots are stored in `Development_Gallery/screenshots/`.
 - Godot still emits renderer/resource diagnostics while verifier scenes are destroyed. Active rendered surfaces pass `verify_zone_budgets.gd`; shutdown diagnostics remain technical debt.
 
@@ -695,8 +697,8 @@ Known verifier note: Godot headless may emit ObjectDB cleanup warnings after pas
 
 ### Short Term
 
-- Add a presented loading state for the approximately 1.1-second cold Wychwood construction.
-- Continue lowering draw calls from 178 toward 140 without removing route silhouettes.
+- Preserve the sub-900 ms cold-transition and sub-350 ms warm-transition budgets as later systems change.
+- Profile the exported Web build’s browser memory and JavaScript console under `WEB-001`.
 - Profile the deployed build in Chrome and Edge rather than relying only on the native ANGLE run.
 - Produce bespoke realistic human assets as a separate licensed asset-production milestone.
 
@@ -708,7 +710,7 @@ Known verifier note: Godot headless may emit ObjectDB cleanup warnings after pas
 - Author terrain materials for road, mud, grass, stone, wood, and plaster.
 - Improve UI styling, spacing, and icon use.
 - Replace generated audio with licensed/recorded ambience, combat hits, footsteps, UI, and music.
-- Add collision/performance budgets per zone.
+- Extend the enforced zone budgets when newly released areas are authored.
 - Continue extracting stable authored helpers from `game.gd` behind the ENGINE-001 composition interfaces as focused tickets.
 
 ### Long Term
@@ -731,7 +733,7 @@ The project currently satisfies:
 - Screenshot capture passes.
 - Web export verifier passes.
 - First route is playable with a 1080p interface and a 720p Balanced 3D rendering budget.
-- Dell-class Intel HD 620 test measured 37.2 FPS average, 35.6 FPS minimum, and a 294 ms warm route transition.
+- PERF-001’s final Dell-class native-720p gate measured Greyfen at 34.6 FPS average / 26.3 FPS 1% low. Wychwood, Castle Courtyard, Record Hall, and Hart Glade all passed the 28 FPS average / 24 FPS 1% low thresholds; warm return measured 168 ms and the local Web preview remained 64.0 MB.
 - PBR terrain/building surfaces, saved day/night time, cleaned skeletal characters, and mixed Wychwood enemy rigs are active.
 
 The project does not yet satisfy:

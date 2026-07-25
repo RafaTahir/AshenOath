@@ -7,7 +7,7 @@ const DEFAULT_SETTINGS := {
 	"quality_preset": "balanced",
 	# Native 1280x720 avoids the Intel/ANGLE viewport-scaling performance path.
 	"resolution_scale": 1.0,
-	"shadow_quality": 1,
+	"shadow_quality": 0,
 	"foliage_density": 1,
 	"visual_density": 1,
 	"vsync": true,
@@ -27,6 +27,7 @@ var settings: Dictionary = DEFAULT_SETTINGS.duplicate(true)
 var _fps_sample_time := 0.0
 var _fps_report_time := 0.0
 var _fps_samples: Array[float] = []
+var _frame_times_ms: Array[float] = []
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -34,6 +35,10 @@ func _ready() -> void:
 	apply()
 
 func _process(delta: float) -> void:
+	if delta > 0.0 and delta < 0.25:
+		_frame_times_ms.append(delta * 1000.0)
+		if _frame_times_ms.size() > 600:
+			_frame_times_ms.pop_front()
 	_fps_sample_time += delta
 	_fps_report_time += delta
 	if _fps_sample_time >= 1.0:
@@ -108,7 +113,9 @@ func set_quality_preset(preset: String) -> void:
 			settings["target_fps"] = 30
 		_:
 			settings["resolution_scale"] = 1.0
-			settings["shadow_quality"] = 1
+			# Balanced keeps native 720p and authored contact grounding without
+			# redrawing the dense village in a directional shadow pass.
+			settings["shadow_quality"] = 0
 			settings["foliage_density"] = 1
 			settings["visual_density"] = 1
 			settings["target_fps"] = 30
@@ -124,17 +131,31 @@ func cycle_quality_preset() -> String:
 func get_performance_snapshot() -> Dictionary:
 	var average := 0.0
 	var minimum := 0.0
+	var one_percent_low := 0.0
 	if not _fps_samples.is_empty():
 		minimum = _fps_samples[0]
 		for sample in _fps_samples:
 			average += sample
 			minimum = min(minimum, sample)
 		average /= float(_fps_samples.size())
+	if not _frame_times_ms.is_empty():
+		var sorted_times := _frame_times_ms.duplicate()
+		sorted_times.sort()
+		var slow_count := maxi(1, ceili(float(sorted_times.size()) * 0.01))
+		var slow_total := 0.0
+		for index in range(sorted_times.size() - slow_count, sorted_times.size()):
+			slow_total += float(sorted_times[index])
+		one_percent_low = 1000.0 / maxf(slow_total / float(slow_count), 0.001)
 	return {
 		"preset": str(settings.get("quality_preset", "balanced")),
 		"average_fps": average,
 		"minimum_fps": minimum,
+		"one_percent_low_fps": one_percent_low,
 		"samples": _fps_samples.size(),
+		"frame_samples": _frame_times_ms.size(),
+		"draw_calls": int(Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME)),
+		"primitives": int(Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME)),
+		"static_memory_bytes": int(Performance.get_monitor(Performance.MEMORY_STATIC)),
 	}
 
 func cycle_resolution_scale() -> void:
