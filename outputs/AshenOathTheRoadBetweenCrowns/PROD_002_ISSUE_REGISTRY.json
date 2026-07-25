@@ -70,7 +70,7 @@
     {"id": "NARR-001", "title": "Environmental evidence and aftermath", "area": "narrative", "milestone": "B", "status": "complete"},
     {"id": "AUDIO-001", "title": "First-slice ambience and combat", "area": "audio", "milestone": "baseline", "status": "complete"},
     {"id": "AUDIO-002", "title": "Campaign music and transitions", "area": "audio", "milestone": "D", "status": "complete"},
-    {"id": "VOICE-001", "title": "Key-scene and bark production", "area": "audio", "milestone": "D", "status": "planned"},
+    {"id": "VOICE-001", "title": "Key-scene and bark production", "area": "audio", "milestone": "D", "status": "complete"},
     {"id": "UI-001", "title": "HUD, interaction, tracker, and dialogue", "area": "ux", "milestone": "baseline", "status": "complete"},
     {"id": "UI-002", "title": "Menus, journal, settings, and loading", "area": "ux", "milestone": "D", "status": "planned"},
     {"id": "ACCESS-001", "title": "Subtitles, focus, contrast, remapping, and reduced motion", "area": "ux", "milestone": "D", "status": "planned"},

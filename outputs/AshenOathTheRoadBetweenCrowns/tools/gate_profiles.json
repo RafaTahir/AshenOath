@@ -112,12 +112,15 @@
     "audio": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/audio_manager.gd",
-        "outputs/AshenOathTheRoadBetweenCrowns/assets_external/audio/*"
+        "outputs/AshenOathTheRoadBetweenCrowns/assets_external/audio/*",
+        "outputs/AshenOathTheRoadBetweenCrowns/voice_production_manifest.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_voice_001.gd"
       ],
       "gates": [
         "verify_audio_runtime",
         "verify_audio_001",
-        "verify_audio_002"
+        "verify_audio_002",
+        "verify_voice_001"
       ]
     },
     "assets": {

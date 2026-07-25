@@ -334,6 +334,17 @@ func _build_voice_library() -> void:
 	for voice_id in campaign_lines:
 		voice_texts[voice_id] = campaign_lines[voice_id]
 		voices[voice_id] = _voice_stub([102.0, 118.0, 94.0], 1.05, 0.055)
+	_load_scratch_voice_library()
+
+func _load_scratch_voice_library() -> void:
+	var root_path := "res://assets_external/audio/voices/scratch/"
+	for voice_id in voice_texts.keys():
+		var path := root_path + str(voice_id) + ".wav"
+		if ResourceLoader.exists(path):
+			var stream := load(path) as AudioStream
+			if stream != null:
+				stream.set_meta("scratch_voice_path", path)
+				voices[voice_id] = stream
 
 func _build_music_library() -> void:
 	music["main_menu"] = _music_loop([55.0, 82.0, 110.0, 165.0], 6.4, 0.050, 0.016)

@@ -1,0 +1,31 @@
+{
+  "ticket": "VOICE-001",
+  "status": "scratch",
+  "authoritative_delivery": "subtitles",
+  "license": "locally synthesized development dialogue; replace before final acting lock",
+  "maximum_payload_bytes": 15728640,
+  "roles": {
+    "anwen": {"voice": "Microsoft Hazel Desktop", "direction": "restrained, solemn, avoids absolution"},
+    "kael": {"voice": "Microsoft George", "direction": "plain, concrete, no theatrical growl"},
+    "senn": {"voice": "Microsoft George", "direction": "controlled until admission"},
+    "halvern": {"voice": "Microsoft George", "direction": "old exhaustion, not spectral menace"},
+    "edric": {"voice": "Microsoft George", "direction": "controlled authority giving way to plain speech"},
+    "hart": {"voice": "Microsoft Hazel Desktop", "direction": "quiet witness, not a roaring deity"}
+  },
+  "required_lines": [
+    "voice_sister_anwen_greeting_01",
+    "voice_sister_anwen_road_warning_01",
+    "voice_sister_anwen_wychwood_warning_01",
+    "voice_sister_anwen_report_01",
+    "voice_player_accept_contract_01",
+    "voice_player_clue_observation_01",
+    "voice_player_ghoulkin_death_01",
+    "voice_player_return_report_01",
+    "voice_senn_confession",
+    "voice_halvern_witness",
+    "voice_edric_ledger",
+    "voice_anwen_confession",
+    "voice_kael_names",
+    "voice_hart_choice"
+  ]
+}
