@@ -35,6 +35,7 @@ func build(context: ZoneBuildContext) -> void:
 		Vector3(15,0,13), Vector3(0,0,15),
 	])
 	_build_gameplay_content(context)
+	context.make_narrative_aftermath()
 
 func _build_light_composition(context: ZoneBuildContext) -> void:
 	context.make_light("Village Warmth", Vector3(-1.5, 5.2, 2), Color(1.0, 0.58, 0.30), 3.0)

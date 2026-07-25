@@ -25,6 +25,7 @@ func build(context: ZoneBuildContext) -> void:
 	_build_combat_clearing(context)
 	context.make_quality_wychwood_overhaul()
 	_build_gameplay_content(context)
+	context.make_narrative_aftermath()
 
 func _build_light_composition(context: ZoneBuildContext) -> void:
 	context.make_light("Moon Shaft", Vector3(0, 6.6, -7), Color(0.48, 0.58, 0.78), 4.2)
