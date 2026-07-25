@@ -188,6 +188,18 @@
         "verify_zone_budgets"
       ]
     },
+    "water": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/river_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_water_001.gd"
+      ],
+      "gates": [
+        "verify_water_001",
+        "verify_river_swimming",
+        "verify_navigation_001",
+        "verify_zone_budgets"
+      ]
+    },
     "progression": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/data/upgrades.json",
