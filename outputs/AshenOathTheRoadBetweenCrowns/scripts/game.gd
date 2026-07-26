@@ -93,6 +93,7 @@ var greyfen_prewarm_started := false
 var greyfen_prewarm_spatial_service: Node
 var interaction_focus_cooldown := 0.0
 var compass_refresh_cooldown := 0.0
+var tutorial_refresh_cooldown := 0.0
 const MAX_CACHED_ROUTE_ZONES := 1
 const ZONE_RETIRE_FRAMES := 8
 const MAX_SKINNED_RESOURCE_ANCHORS := 4
@@ -146,7 +147,10 @@ func _process(delta: float) -> void:
 	if interaction_focus_cooldown <= 0.0:
 		interaction_focus_cooldown = 0.10
 		_update_interaction_focus()
-	_update_tutorial_prompts()
+	tutorial_refresh_cooldown -= delta
+	if tutorial_refresh_cooldown <= 0.0:
+		tutorial_refresh_cooldown = 0.10
+		_update_tutorial_prompts()
 	autosave_cooldown = max(autosave_cooldown - delta, 0.0)
 	if autosave_cooldown <= 0.0:
 		autosave_cooldown = 180.0
@@ -718,11 +722,11 @@ func _activate_cached_zone(zone_id: String) -> Node3D:
 	if cached_root == null or not is_instance_valid(cached_root):
 		return null
 	route_zone_cache.erase(zone_id)
-	cached_root.visible = true
-	cached_root.position = Vector3.ZERO
-	cached_root.process_mode = Node.PROCESS_MODE_INHERIT
 	cached_root.set_meta("zone_resource_owner", "active")
+	cached_root.process_mode = Node.PROCESS_MODE_INHERIT
+	cached_root.position = Vector3.ZERO
 	_set_zone_collision_enabled(cached_root, true)
+	cached_root.visible = true
 	return cached_root as Node3D
 
 func _remove_root_from_route_cache(root: Node) -> void:
@@ -2484,6 +2488,7 @@ func _make_visual_box(name: String, pos: Vector3, size: Vector3, color: Color) -
 	mesh_instance.name = name
 	mesh_instance.set_meta("visual_name", name)
 	mesh_instance.position = pos
+	mesh_instance.visibility_range_end = 32.0
 	zone_root.add_child(mesh_instance)
 	if environment_batches_flushed:
 		mesh_instance.mesh = shared_box_mesh
@@ -2501,6 +2506,7 @@ func _add_visual_box_child(parent: Node3D, name: String, local_pos: Vector3, siz
 	mesh_instance.scale = size
 	mesh_instance.position = local_pos
 	mesh_instance.material_override = _mat(color)
+	mesh_instance.visibility_range_end = 32.0
 	parent.add_child(mesh_instance)
 	return mesh_instance
 

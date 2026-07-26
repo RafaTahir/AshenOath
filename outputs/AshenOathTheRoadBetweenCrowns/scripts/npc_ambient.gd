@@ -50,6 +50,11 @@ func _ready() -> void:
 		animation_driver.set_locomotion(0.0, Vector3.ZERO, true)
 
 func _process(delta: float) -> void:
+	far_tick_accumulator += delta
+	if far_tick_accumulator < 0.05:
+		return
+	delta = far_tick_accumulator
+	far_tick_accumulator = 0.0
 	var parent_3d = get_parent() as Node3D
 	if parent_3d == null:
 		return

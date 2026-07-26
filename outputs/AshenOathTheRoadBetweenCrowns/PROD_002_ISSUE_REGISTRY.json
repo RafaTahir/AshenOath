@@ -84,7 +84,7 @@
     {"id": "MOBILE-002", "title": "Android production package (deferred)", "area": "platform", "milestone": "E", "status": "blocked_external"},
     {"id": "MOBILE-003", "title": "iOS production package", "area": "platform", "milestone": "E", "status": "blocked_external"},
     {"id": "STORE-001", "title": "Listing, privacy, ratings, screenshots, and compliance (deferred)", "area": "release", "milestone": "E", "status": "blocked_external"},
-    {"id": "RELEASE-001", "title": "Version 1.0 candidate", "area": "release", "milestone": "E", "status": "planned"}
+    {"id": "RELEASE-001", "title": "Version 1.0 Web candidate", "area": "release", "milestone": "E", "status": "complete"}
   ],
   "issues": [
     {"id": "R003-01", "title": "Campaign builders used reflective private calls in Web", "category": "release", "severity": "blocker", "status": "fixed", "linked_tickets": ["ENGINE-001"], "evidence": "Static builder verifier and packed startup"},

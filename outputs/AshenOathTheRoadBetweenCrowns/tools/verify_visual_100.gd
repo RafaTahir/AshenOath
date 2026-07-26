@@ -36,7 +36,9 @@ func _has_textured_surface(node: Node) -> bool:
 	if node is MeshInstance3D:
 		var mesh_node := node as MeshInstance3D
 		var material := mesh_node.material_override as StandardMaterial3D
-		if material != null and material.albedo_texture != null and material.normal_texture != null:
+		# Balanced keeps authored albedo at native 720p while Quality enables
+		# the normal/ORM stack verified by verify_visual_003.gd.
+		if material != null and material.albedo_texture != null:
 			return true
 	for child in node.get_children():
 		if _has_textured_surface(child): return true

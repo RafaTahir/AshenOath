@@ -12,8 +12,8 @@
 | Measure | Count |
 |---|---:|
 | Roadmap tickets | 63 |
-| Complete | 59 |
-| Remaining planned | 1 |
+| Complete | 60 |
+| Remaining planned | 0 |
 | Blocked by external prerequisite | 3 |
 | Tracked issues | 15 |
 | Open issues | 4 |
@@ -28,7 +28,7 @@
 | `B` | Characters, combat, materials, and interaction | 11 | 0 | 0 | 100% |
 | `C` | Campaign content and consequence validation | 10 | 0 | 0 | 100% |
 | `D` | Audio, UX, accessibility, and Web candidate | 6 | 0 | 0 | 100% |
-| `E` | Mobile, store, and Version 1.0 | 0 | 4 | 3 | 0% |
+| `E` | Mobile, store, and Version 1.0 | 1 | 3 | 3 | 25% |
 
 ## Active Issues
 
@@ -106,7 +106,7 @@
 | [x] `complete` | `WEB-002` | release | Full campaign candidate | `D` Audio, UX, accessibility, and Web candidate |
 | [!] `blocked_external` | `MOBILE-002` | platform | Android production package (deferred) | `E` Mobile, store, and Version 1.0 |
 | [!] `blocked_external` | `MOBILE-003` | platform | iOS production package | `E` Mobile, store, and Version 1.0 |
-| [ ] `planned` | `RELEASE-001` | release | Version 1.0 candidate | `E` Mobile, store, and Version 1.0 |
+| [x] `complete` | `RELEASE-001` | release | Version 1.0 Web candidate | `E` Mobile, store, and Version 1.0 |
 | [!] `blocked_external` | `STORE-001` | release | Listing, privacy, ratings, screenshots, and compliance (deferred) | `E` Mobile, store, and Version 1.0 |
 
 ## Workflow

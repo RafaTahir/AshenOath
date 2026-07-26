@@ -16,9 +16,14 @@ func _initialize() -> void:
 		var quality: StandardMaterial3D = library.get_material(surface_id, "quality")
 		check(potato.albedo_texture != null, "%s Potato material lacks albedo" % surface_id)
 		check(not potato.normal_enabled and potato.roughness_texture == null, "%s Potato material exceeds its texture budget" % surface_id)
-		check(balanced.normal_enabled and balanced.normal_texture != null, "%s Balanced material lacks normal detail" % surface_id)
-		check(balanced.roughness_texture != null, "%s Balanced material lacks roughness detail" % surface_id)
-		check(balanced.uv1_triplanar, "%s Balanced material lacks world triplanar projection" % surface_id)
+		check(balanced.albedo_texture != null, "%s Balanced material lacks authored albedo" % surface_id)
+		check(
+			not balanced.normal_enabled and balanced.roughness_texture == null and not balanced.uv1_triplanar,
+			"%s Balanced material exceeds the native-720p ANGLE texture budget" % surface_id
+		)
+		check(quality.normal_enabled and quality.normal_texture != null, "%s Quality material lacks normal detail" % surface_id)
+		check(quality.roughness_texture != null, "%s Quality material lacks roughness detail" % surface_id)
+		check(quality.uv1_triplanar, "%s Quality material lacks world triplanar projection" % surface_id)
 		check(quality.ao_enabled and quality.ao_texture != null, "%s Quality material lacks AO detail" % surface_id)
 		check(quality == library.get_material(surface_id, "quality"), "%s cache returned a duplicate material" % surface_id)
 	var wet := library.get_material("wet_mud", "balanced", Color.WHITE, 1.0)

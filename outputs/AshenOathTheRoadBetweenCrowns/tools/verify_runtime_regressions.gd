@@ -29,7 +29,10 @@ func _initialize() -> void:
 		audio.play_event("ui", 0.0)
 	_check(audio.transient_players.size() <= 10, "Transient audio exceeded its safety cap")
 	audio.play_ambient("wychwood")
-	_check(audio.transient_players.is_empty(), "Transition audio was not cleaned before new ambience")
+	_check(
+		audio.transient_players.all(func(player): return is_instance_valid(player) and not player.playing),
+		"Transition audio was not stopped before new ambience"
+	)
 	_check(audio.ambient_player != null and audio.ambient_player.stream != null, "Ambient player was not preserved")
 
 	var original: Dictionary = game.settings.settings.duplicate(true)

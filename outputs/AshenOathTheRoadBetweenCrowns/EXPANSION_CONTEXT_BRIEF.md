@@ -46,4 +46,4 @@ physical-device thermal acceptance remain later work. The approved milestone
 now proceeds through the complete production release workflow.
 # Current Release Context
 
-PERF-003 and WEB-002 are complete on `codex/roadmap-milestone-d`. The verified candidate is a seven-file, 65.6 MB Web artifact with full physical gate traversal through all released campaign zones in Chrome and Edge. RELEASE-001 is the only remaining Web milestone ticket. Android production, iOS production, and store distribution are deferred.
+PERF-003, WEB-002, and RELEASE-001 are complete. The verified Web Version 1.0 candidate is a seven-file, 65.59 MB artifact with full physical gate traversal through all released campaign zones in Chrome and Edge. Native-720p Balanced profiling passed the 32 FPS average and 30 FPS 1% low contract in every required zone. Android production, iOS production, and store distribution are deferred.

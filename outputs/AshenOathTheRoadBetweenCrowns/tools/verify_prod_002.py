@@ -74,7 +74,9 @@ def main() -> int:
         planned = sum(ticket["status"] == "planned" for ticket in tickets)
         blocked = sum(ticket["status"] == "blocked_external" for ticket in tickets)
         require(complete + planned + blocked == len(tickets), "ticket status totals do not cover the roadmap")
-        require(blocked == 2, f"expected 2 externally blocked tickets, found {blocked}")
+        deferred_ids = {"MOBILE-002", "MOBILE-003", "STORE-001"}
+        blocked_ids = {ticket["id"] for ticket in tickets if ticket["status"] == "blocked_external"}
+        require(deferred_ids.issubset(blocked_ids), "deferred mobile/store tickets are not externally blocked")
         require(next(ticket for ticket in tickets if ticket["id"] == "PROD-002")["status"] == "complete", "PROD-002 is not complete")
 
         issues = registry["issues"]

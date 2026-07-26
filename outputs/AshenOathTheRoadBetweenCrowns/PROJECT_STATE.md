@@ -791,6 +791,6 @@ The project does not yet satisfy:
 - `BOSS-001` preserves Witness/Mercy noncombat resolutions and adds a three-phase White Hart encounter for Duty/Ash.
 - `SIDE-001` authors five consequential village stories and removes the instant-completion shortcut.
 - `QA-004` exhaustively validates 17,496 major-choice combinations and save-stable epilogue resolution.
-# WEB-002 Candidate Update
+# RELEASE-001 Web Version 1.0 Candidate
 
-The current source has a verified full-campaign Web candidate. Its seven-file export is 65.6 MB with a 29.3 MB PCK. Chrome and Edge both completed the released route from Greyfen to Hart Glade without browser console or network errors. Desktop settled samples passed the 32 FPS average and 30 FPS 1% low contract. Production remains unchanged until RELEASE-001.
+The complete current Web campaign passed the authoritative release suite. Its seven-file export is 65.59 MB with a 29.30 MB PCK. Chrome and Edge completed the released route from Greyfen to Hart Glade without browser console or network errors. Native-720p Balanced profiling measured approximately 60 FPS average in every required zone; the lowest 1% low was 47.17 FPS during Wychwood combat. Android, iOS, and store distribution remain deferred.

@@ -209,13 +209,15 @@ func _make_box(root: Node3D, node_name: String, pos: Vector3, size: Vector3, col
 	marker.name = node_name
 	marker.position = pos
 	root.add_child(marker)
-	var batch_key := color.to_html(true)
+	var batch_key := "river_boxes"
 	if not visual_box_batches.has(batch_key):
 		var material := StandardMaterial3D.new()
-		material.albedo_color = color
+		material.albedo_color = Color.WHITE
 		material.roughness = 0.82
-		visual_box_batches[batch_key] = {"material": material, "transforms": []}
+		material.vertex_color_use_as_albedo = true
+		visual_box_batches[batch_key] = {"material": material, "transforms": [], "colors": []}
 	visual_box_batches[batch_key].transforms.append(Transform3D(Basis.IDENTITY.scaled(size), pos))
+	visual_box_batches[batch_key].colors.append(color)
 	if collision:
 		var body := StaticBody3D.new()
 		body.name = "%sCollision" % node_name
@@ -233,16 +235,19 @@ func _flush_visual_batches(root: Node3D) -> void:
 	for batch_key in visual_box_batches:
 		var entry: Dictionary = visual_box_batches[batch_key]
 		var transforms: Array = entry.transforms
+		var colors: Array = entry.colors
 		if transforms.is_empty():
 			continue
 		var batch := MultiMeshInstance3D.new()
 		batch.name = "RiverBoxBatch_%s" % str(batch_key)
 		var multimesh := MultiMesh.new()
 		multimesh.transform_format = MultiMesh.TRANSFORM_3D
+		multimesh.use_colors = true
 		multimesh.mesh = box_mesh
 		multimesh.instance_count = transforms.size()
 		for index in range(transforms.size()):
 			multimesh.set_instance_transform(index, transforms[index])
+			multimesh.set_instance_color(index, colors[index])
 		batch.multimesh = multimesh
 		batch.material_override = entry.material
 		batch.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF

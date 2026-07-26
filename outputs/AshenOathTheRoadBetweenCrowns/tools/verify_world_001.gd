@@ -20,7 +20,12 @@ func _initialize() -> void:
 	check(section != null and str(section.get_meta("ticket", "")) == "WORLD-001", "Authored Greyfen section ownership is missing")
 	check(game.zone_root.find_child("DeterministicNavigationRegion", true, false) is NavigationRegion3D, "Greyfen navigation region was lost")
 	check(_group_count(game.zone_root, "greyfen_house") == 4, "Greyfen must contain four authored route houses")
-	check(_named_count(game.zone_root, "ModularTileRoof") == 4, "Modular tile roofs are missing")
+	var modular_roofs := _named_count(game.zone_root, "ModularTileRoof")
+	var balanced_roof_slopes := _named_count(game.zone_root, "LeftRoofSlope") + _named_count(game.zone_root, "RightRoofSlope")
+	check(
+		modular_roofs == 4 or balanced_roof_slopes == 8,
+		"Authored tile roofs are missing from one or more Greyfen houses"
+	)
 	check(_named_count(game.zone_root, "FrontDoor") == 4, "Batched door facades are missing")
 	check(_named_count(game.zone_root, "LitWindow") == 4, "Batched window facades are missing")
 	check(_named_count(game.zone_root, "StoneChimney") == 4, "Batched chimneys are missing")

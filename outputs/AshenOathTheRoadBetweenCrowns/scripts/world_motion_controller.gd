@@ -3,6 +3,8 @@ extends Node
 var wind_time := 0.0
 var wind_strength := 1.0
 var tracked: Array[Node3D] = []
+var update_accumulator := 0.0
+const UPDATE_INTERVAL := 1.0 / 30.0
 
 func configure(root: Node3D, quality: String) -> void:
 	tracked.clear()
@@ -10,6 +12,11 @@ func configure(root: Node3D, quality: String) -> void:
 	_collect(root)
 
 func _process(delta: float) -> void:
+	update_accumulator += delta
+	if update_accumulator < UPDATE_INTERVAL:
+		return
+	delta = update_accumulator
+	update_accumulator = 0.0
 	wind_time += delta
 	for node in tracked:
 		if not is_instance_valid(node):

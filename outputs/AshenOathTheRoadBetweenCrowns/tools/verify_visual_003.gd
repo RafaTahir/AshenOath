@@ -1,5 +1,6 @@
 extends SceneTree
 
+const WorldMaterialLibrary = preload("res://scripts/world_material_library.gd")
 const REQUIRED_SURFACES := [
 	"forest_ground", "wet_mud", "cobblestone", "plaster",
 	"timber", "roof_tiles", "medieval_brick"
@@ -36,10 +37,17 @@ func _initialize() -> void:
 	_finish()
 
 func _verify_texture_library() -> void:
+	var material_library := WorldMaterialLibrary.new()
+	root.add_child(material_library)
 	for surface in REQUIRED_SURFACES:
 		for suffix in ["albedo", "normal", "orm"]:
 			var path := "res://assets_external/textures/runtime/%s_%s.jpg" % [surface, suffix]
 			_check(ResourceLoader.exists(path), "missing runtime PBR map: %s" % path)
+		var quality_material: StandardMaterial3D = material_library.get_material(surface, "quality")
+		_check(
+			quality_material.albedo_texture != null and quality_material.normal_enabled and quality_material.normal_texture != null,
+			"Quality material does not enable the complete authored PBR stack: %s" % surface
+		)
 	_check(ResourceLoader.exists("res://assets_external/textures/runtime/grass_tuft.png"), "grass atlas is missing")
 	for skin in ["ghoulkin_skin.jpg", "stalker_skin.jpg", "brute_skin.jpg"]:
 		_check(ResourceLoader.exists("res://assets_external/textures/runtime/" + skin), "monster skin is missing: %s" % skin)
@@ -99,7 +107,7 @@ func _verify_greyfen(game: Node) -> void:
 	if grass != null:
 		var material := grass.material_override as StandardMaterial3D
 		_check(material != null and material.albedo_texture != null, "grass batch has no alpha texture")
-	_check(_has_pbr_mesh(game.zone_root), "Greyfen contains no albedo+normal mapped surface")
+	_check(_has_authored_surface(game.zone_root, false), "Greyfen contains no authored textured surface in Balanced mode")
 
 func _verify_player_and_beam(game: Node) -> void:
 	var player = game.player
@@ -124,7 +132,7 @@ func _verify_wychwood(game: Node) -> void:
 		_check(_find_type(enemy, "Skeleton3D") != null, "%s is not skeletal" % enemy.enemy_id)
 		_check(enemy.find_child("EnemyVariantSilhouette", true, false) == null, "%s still has box silhouette anatomy" % enemy.enemy_id)
 		_check(_has_textured_mesh(enemy), "%s has no textured horror material" % enemy.enemy_id)
-	_check(_has_pbr_mesh(game.zone_root), "Wychwood contains no albedo+normal mapped surface")
+	_check(_has_authored_surface(game.zone_root, false), "Wychwood contains no authored textured surface in Balanced mode")
 	_check(not _has_feature_marker(game.zone_root), "released Wychwood still contains Visual100 marker geometry")
 
 func _has_feature_marker(node: Node) -> bool:
@@ -134,13 +142,13 @@ func _has_feature_marker(node: Node) -> bool:
 		if _has_feature_marker(child): return true
 	return false
 
-func _has_pbr_mesh(node: Node) -> bool:
+func _has_authored_surface(node: Node, require_normal: bool) -> bool:
 	if node is MeshInstance3D:
 		var material := (node as MeshInstance3D).material_override as StandardMaterial3D
-		if material != null and material.albedo_texture != null and material.normal_texture != null:
+		if material != null and material.albedo_texture != null and (not require_normal or material.normal_texture != null):
 			return true
 	for child in node.get_children():
-		if _has_pbr_mesh(child): return true
+		if _has_authored_surface(child, require_normal): return true
 	return false
 
 func _has_textured_mesh(node: Node) -> bool:

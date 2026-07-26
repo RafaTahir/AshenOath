@@ -42,13 +42,47 @@ func _verify_scene(path: String, label: String) -> void:
 	check(_find_type(node,"Skeleton3D") != null,"%s has no skeleton" % label)
 	check(_find_type(node,"AnimationPlayer") != null,"%s has no animations" % label)
 	if path.contains("characters_real"):
-		for fragment in ["head","eye","nose","hand","foot"]:
-			check(_has_fragment(node,fragment),"%s lacks modeled %s geometry" % [label,fragment])
+		_verify_consolidated_anatomy(node, label)
 	else:
 		check(_has_fragment(node,"head") or _has_fragment(node,"female") or _has_fragment(node,"rogue"),"%s lacks modeled facial geometry" % label)
 		check(_has_fragment(node,"body") or _has_fragment(node,"female") or _has_fragment(node,"rogue"),"%s lacks a cohesive body mesh" % label)
 	check(not _has_fragment(node,"faceplane") and not _has_fragment(node,"facialidentity"),"%s contains proxy/billboard anatomy" % label)
 	node.queue_free()
+
+func _verify_consolidated_anatomy(node: Node, label: String) -> void:
+	var skinned_mesh: MeshInstance3D
+	for candidate in node.find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := candidate as MeshInstance3D
+		if mesh_instance.skin != null:
+			skinned_mesh = mesh_instance
+			break
+	check(skinned_mesh != null, "%s has no skinned body mesh" % label)
+	if skinned_mesh == null or skinned_mesh.mesh == null:
+		return
+	var surface_bounds := {}
+	for surface_index in range(skinned_mesh.mesh.get_surface_count()):
+		var material := skinned_mesh.mesh.surface_get_material(surface_index)
+		var material_name := str(material.resource_name if material != null else "").to_lower()
+		var arrays := skinned_mesh.mesh.surface_get_arrays(surface_index)
+		var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
+		if vertices.is_empty():
+			continue
+		var bounds := AABB(vertices[0], Vector3.ZERO)
+		for vertex in vertices:
+			bounds = bounds.expand(vertex)
+		surface_bounds[material_name.get_slice(".", 0)] = bounds
+	for required_material in ["skin", "eyewhite", "eyes", "lips", "leather"]:
+		check(surface_bounds.has(required_material), "%s lacks %s anatomy material" % [label, required_material])
+	if not surface_bounds.has("skin") or not surface_bounds.has("leather"):
+		return
+	var skin: AABB = surface_bounds.skin
+	var leather: AABB = surface_bounds.leather
+	check(skin.end.y >= 1.75 and skin.end.z >= 0.15, "%s lacks modeled head and nose depth" % label)
+	check(skin.size.x >= 1.4, "%s lacks complete modeled hands" % label)
+	check(leather.position.y <= 0.06 and leather.end.z >= 0.24, "%s lacks grounded modeled feet" % label)
+	if surface_bounds.has("eyes"):
+		var eyes: AABB = surface_bounds.eyes
+		check(eyes.end.y >= 1.68 and eyes.size.x >= 0.10, "%s eye geometry is not positioned on the face" % label)
 
 func _find_type(node: Node, type_name: String) -> Node:
 	if node.get_class() == type_name: return node

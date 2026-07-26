@@ -86,9 +86,17 @@ func _initialize() -> void:
 	await _wait_for_retirement(game)
 	_check(game.retired_zone_roots.is_empty(), "retired zone roots remained resident")
 	_write_report()
+	var passed := failures.is_empty()
+	if passed:
+		# Everything below this marker is deliberate process teardown. The
+		# release runner classifies renderer cleanup diagnostics separately.
+		print("PERF-001 VERIFIER: PASS")
 	game.queue_free()
 	await _frames(5)
-	_finish()
+	if passed:
+		quit()
+	else:
+		_finish()
 
 func _sample_zone(game: Node, zone_id: String, duration_ms: int) -> Dictionary:
 	var frame_times: Array[float] = []

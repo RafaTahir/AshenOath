@@ -66,12 +66,15 @@ func _process(delta: float) -> void:
 		var actor_node: Node3D = entry.node
 		var render_distance := 6.0 if quality == "potato" else (16.0 if quality == "quality" else 6.5)
 		var over_budget := not bool(entry.named) and not visible_ambient.has(str(entry.id))
-		var distant := is_instance_valid(actor_node) and (actor_node.global_position.distance_to(player.global_position) > render_distance or over_budget)
-		if is_instance_valid(actor_node):
+		var was_distant := bool(entry.get("distance_suspended", false))
+		var distance_limit := render_distance - 0.8 if was_distant else render_distance + 0.8
+		var distant := is_instance_valid(actor_node) and (actor_node.global_position.distance_to(player.global_position) > distance_limit or over_budget)
+		if is_instance_valid(actor_node) and distant != was_distant:
 			actor_node.visible = not distant
-		var driver = entry.driver
-		if driver != null and driver.has_method("set_distance_suspended"):
-			driver.set_distance_suspended(distant)
+			var driver = entry.driver
+			if driver != null and driver.has_method("set_distance_suspended"):
+				driver.set_distance_suspended(distant)
+			entry.distance_suspended = distant
 		if not distant:
 			_update_actor(entry, delta)
 
