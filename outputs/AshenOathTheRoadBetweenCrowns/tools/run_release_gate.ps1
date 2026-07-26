@@ -225,7 +225,8 @@ try {
         "verify_mat_001.gd", "verify_char_002.gd", "verify_mon_001.gd", "verify_vfx_001.gd", "verify_water_001.gd",
         "verify_gameplay_001.gd", "verify_combat_002.gd", "verify_ai_002.gd", "verify_inv_001.gd", "verify_dialogue_001.gd", "verify_narr_001.gd",
         "verify_world_004.gd", "verify_quest_003.gd", "verify_world_005.gd", "verify_quest_004.gd",
-        "verify_world_006.gd", "verify_quest_005.gd", "verify_boss_001.gd", "verify_side_001.gd", "verify_quest_006.gd", "verify_qa_004.gd"
+        "verify_world_006.gd", "verify_quest_005.gd", "verify_boss_001.gd", "verify_side_001.gd", "verify_quest_006.gd", "verify_qa_004.gd",
+        "verify_perf_003.gd"
     )
     $verifierNames = @($verifiers | ForEach-Object { [IO.Path]::GetFileNameWithoutExtension($_) })
     $resumeFromVerifier = $IsResume -and ($verifierNames -contains $ResumeFrom)
@@ -301,6 +302,10 @@ try {
             $Project,
             (Resolve-Path (Join-Path $Project "..\.."))
         )
+        Invoke-ExternalGate "verify_web_002" $Python @(
+            (Join-Path $Project "tools\verify_web_002.py"),
+            $Project
+        )
         Invoke-ExternalGate "web_export" (Join-Path $Project "Export_Web_Build.bat") @()
         Invoke-ExternalGate "verify_web_export" $Python @(
             (Join-Path $Project "tools\verify_web_export.py"), $Web,
@@ -320,6 +325,21 @@ try {
             "--export", $Web,
             "--report", (Join-Path $Logs "mobile_browser.json"),
             "--mobile", "true"
+        )
+        Invoke-ExternalGate "verify_web_002_browser" "node.exe" @(
+            (Join-Path $Project "tools\verify_qa_002_browser.mjs"),
+            "--export", $Web,
+            "--browser", "all",
+            "--full-campaign", "true",
+            "--report", (Join-Path $Logs "web_002_browser.json")
+        )
+        Invoke-ExternalGate "verify_web_002_mobile" "node.exe" @(
+            (Join-Path $Project "tools\verify_qa_002_browser.mjs"),
+            "--export", $Web,
+            "--browser", "all",
+            "--full-campaign", "true",
+            "--mobile", "true",
+            "--report", (Join-Path $Logs "web_002_mobile.json")
         )
     }
     $finalStatus = $(if ([string]::IsNullOrWhiteSpace($Only)) { "pass" } else { "partial-pass" })

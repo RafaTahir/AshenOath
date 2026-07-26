@@ -81,9 +81,9 @@
     {"id": "WEB-001", "title": "Act One candidate", "area": "release", "milestone": "baseline", "status": "complete"},
     {"id": "WEB-002", "title": "Full campaign candidate", "area": "release", "milestone": "D", "status": "complete"},
     {"id": "MOBILE-001", "title": "Android feasibility build", "area": "platform", "milestone": "baseline", "status": "complete"},
-    {"id": "MOBILE-002", "title": "Android production package", "area": "platform", "milestone": "E", "status": "planned"},
+    {"id": "MOBILE-002", "title": "Android production package (deferred)", "area": "platform", "milestone": "E", "status": "blocked_external"},
     {"id": "MOBILE-003", "title": "iOS production package", "area": "platform", "milestone": "E", "status": "blocked_external"},
-    {"id": "STORE-001", "title": "Listing, privacy, ratings, screenshots, and compliance", "area": "release", "milestone": "E", "status": "blocked_external"},
+    {"id": "STORE-001", "title": "Listing, privacy, ratings, screenshots, and compliance (deferred)", "area": "release", "milestone": "E", "status": "blocked_external"},
     {"id": "RELEASE-001", "title": "Version 1.0 candidate", "area": "release", "milestone": "E", "status": "planned"}
   ],
   "issues": [
