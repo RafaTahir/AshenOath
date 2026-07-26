@@ -1,8 +1,10 @@
 extends SceneTree
 
-const ROUTE: Array[String] = [
-	"greyfen", "wychwood", "greyfen", "vargan_approach", "greyfen",
-	"wychwood", "greyfen",
+const WARMUP_ROUTE: Array[String] = [
+	"wychwood", "greyfen", "vargan_approach", "greyfen",
+]
+const REPEAT_ROUTE: Array[String] = [
+	"wychwood", "greyfen", "vargan_approach", "greyfen",
 ]
 
 var failures := 0
@@ -18,17 +20,11 @@ func _initialize() -> void:
 	await _frames(3)
 	game.call("_new_game")
 	await _wait_for_zone(game, "greyfen")
+	for zone_id in WARMUP_ROUTE:
+		await _visit_zone(game, zone_id)
 	var baseline_memory := int(Performance.get_monitor(Performance.MEMORY_STATIC))
-	for zone_id in ROUTE.slice(1):
-		game.call("_load_zone", zone_id, Vector3(0, 1, 7))
-		await _wait_for_zone(game, zone_id)
-		await _wait_for_retirement(game)
-		var snapshot: Dictionary = game.zone_lifecycle_snapshot()
-		check(int(snapshot.cached_count) <= 1, "Route cache exceeded one zone in %s" % zone_id)
-		check(int(snapshot.retiring_count) == 0, "Retirement did not settle in %s" % zone_id)
-		check(int(snapshot.resource_anchor_count) <= game.MAX_SKINNED_RESOURCE_ANCHORS, "Shared skinned-resource anchor cap exceeded")
-		check(int(snapshot.material_anchor_count) <= game.MAX_RETIRED_MATERIAL_ANCHORS, "Retired material anchor cap exceeded")
-		check(int(snapshot.active_navigation_regions) <= 1, "Duplicate active navigation regions in %s" % zone_id)
+	for zone_id in REPEAT_ROUTE:
+		await _visit_zone(game, zone_id)
 	var final_snapshot: Dictionary = game.zone_lifecycle_snapshot()
 	var growth := int(final_snapshot.static_memory_bytes) - baseline_memory
 	check(growth <= 16 * 1024 * 1024, "Repeated route memory grew by more than 16 MB: %d" % growth)
@@ -50,6 +46,17 @@ func _initialize() -> void:
 	game.queue_free()
 	await _frames(5)
 	_finish()
+
+func _visit_zone(game, zone_id: String) -> void:
+	game.call("_load_zone", zone_id, Vector3(0, 1, 7))
+	await _wait_for_zone(game, zone_id)
+	await _wait_for_retirement(game)
+	var snapshot: Dictionary = game.zone_lifecycle_snapshot()
+	check(int(snapshot.cached_count) <= 1, "Route cache exceeded one zone in %s" % zone_id)
+	check(int(snapshot.retiring_count) == 0, "Retirement did not settle in %s" % zone_id)
+	check(int(snapshot.resource_anchor_count) <= game.MAX_SKINNED_RESOURCE_ANCHORS, "Shared skinned-resource anchor cap exceeded")
+	check(int(snapshot.material_anchor_count) <= game.MAX_RETIRED_MATERIAL_ANCHORS, "Retired material anchor cap exceeded")
+	check(int(snapshot.active_navigation_regions) <= 1, "Duplicate active navigation regions in %s" % zone_id)
 
 func _wait_for_zone(game, zone_id: String) -> void:
 	for _index in range(180):

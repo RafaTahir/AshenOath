@@ -58,16 +58,24 @@ func _clip_moves_bones(driver: Node, clip: StringName) -> bool:
 	var skeleton := driver.get_skeleton() as Skeleton3D
 	if player == null or skeleton == null or not player.has_animation(clip):
 		return false
+	var was_active := player.active
+	player.active = true
 	player.play(clip)
 	player.seek(0.0, true)
+	if player.callback_mode_process == AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL:
+		player.advance(0.0)
 	var before: Array[Transform3D] = []
 	for index in range(skeleton.get_bone_count()):
 		before.append(skeleton.get_bone_pose(index))
 	var animation := player.get_animation(clip)
 	player.seek(min(0.35, animation.length * 0.55), true)
+	if player.callback_mode_process == AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL:
+		player.advance(0.0)
 	for index in range(skeleton.get_bone_count()):
 		if _transform_delta(before[index], skeleton.get_bone_pose(index)) > 0.002:
+			player.active = was_active
 			return true
+	player.active = was_active
 	return false
 
 func _state_moves_bones(driver: Node, state: String) -> bool:

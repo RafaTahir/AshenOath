@@ -27,6 +27,7 @@ var quality := "balanced"
 var rng := RandomNumberGenerator.new()
 var asset_helper
 var far_tick_accumulator := 0.0
+var simulation_tick_accumulator := 0.0
 var spatial_service
 
 func configure(game: Node, quality_preset: String) -> void:
@@ -44,6 +45,7 @@ func set_spatial_service(service) -> void:
 	spatial_service = service
 	for entry in actors:
 		_configure_agent(entry)
+		_precompute_routes(entry)
 
 func actor_count() -> int:
 	return actors.size()
@@ -53,25 +55,24 @@ func routine_ids() -> Array:
 
 func _process(delta: float) -> void:
 	if host == null or player == null or get_tree().paused: return
+	simulation_tick_accumulator += delta
+	if simulation_tick_accumulator < 1.0 / 15.0:
+		return
+	delta = simulation_tick_accumulator
+	simulation_tick_accumulator = 0.0
 	line_cooldown = max(line_cooldown - delta, 0.0)
-	far_tick_accumulator += delta
-	var update_far := far_tick_accumulator >= 0.20
-	var far_delta := far_tick_accumulator
-	if update_far:
-		far_tick_accumulator = 0.0
+	var visible_ambient := _visible_ambient_ids()
 	for entry in actors:
 		var actor_node: Node3D = entry.node
 		var render_distance := 6.0 if quality == "potato" else (16.0 if quality == "quality" else 6.5)
-		var distant := is_instance_valid(actor_node) and actor_node.global_position.distance_to(player.global_position) > render_distance
+		var over_budget := not bool(entry.named) and not visible_ambient.has(str(entry.id))
+		var distant := is_instance_valid(actor_node) and (actor_node.global_position.distance_to(player.global_position) > render_distance or over_budget)
 		if is_instance_valid(actor_node):
 			actor_node.visible = not distant
 		var driver = entry.driver
 		if driver != null and driver.has_method("set_distance_suspended"):
 			driver.set_distance_suspended(distant)
-		if distant:
-			if update_far:
-				_update_actor(entry, far_delta)
-		else:
+		if not distant:
 			_update_actor(entry, delta)
 
 func _build_population() -> void:
@@ -96,7 +97,7 @@ func _build_population() -> void:
 		actor.position = host.validate_walkable_position(definition.path[0])
 		host.zone_root.add_child(actor)
 		var driver = _make_skeletal_villager(actor, str(definition.id), i, float(definition.get("scale",1.0)))
-		var entry := {"id":definition.id,"node":actor,"path":definition.path,"target":1,"speed":definition.speed,"pause":rng.randf_range(0.4,2.4),"driver":driver,"named":false,"phase":rng.randf()*TAU,"base_y":actor.position.y,"route":[],"route_index":0}
+		var entry := {"id":definition.id,"node":actor,"path":definition.path,"target":1,"speed":definition.speed,"pause":rng.randf_range(0.0,0.25),"driver":driver,"named":false,"phase":rng.randf()*TAU,"base_y":actor.position.y,"route":[],"route_index":0}
 		actors.append(entry)
 		_configure_agent(entry)
 
@@ -112,7 +113,7 @@ func _enroll_named_npcs() -> void:
 		if node == null: continue
 		var ambient = node.find_child("NpcAmbient",true,false)
 		if ambient != null: ambient.process_mode = Node.PROCESS_MODE_DISABLED
-		var entry := {"id":id,"node":node,"path":named[id].path,"target":1,"speed":named[id].speed,"pause":rng.randf_range(1.0,3.0),"driver":node.find_child("CharacterAnimationDriver",true,false),"named":true,"phase":rng.randf()*TAU,"base_y":node.position.y,"route":[],"route_index":0}
+		var entry := {"id":id,"node":node,"path":named[id].path,"target":1,"speed":named[id].speed,"pause":rng.randf_range(0.0,0.25),"driver":node.find_child("CharacterAnimationDriver",true,false),"named":true,"phase":rng.randf()*TAU,"base_y":node.position.y,"route":[],"route_index":0}
 		actors.append(entry)
 		_configure_agent(entry)
 
@@ -139,16 +140,16 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 	entry.target = int(entry.target) % entry.path.size()
 	var final_target: Vector3 = host.validate_walkable_position(entry.path[int(entry.target)])
 	if entry.route.is_empty():
-		entry.route = spatial_service.build_route(node.global_position, final_target, 0.72) if spatial_service != null else [final_target]
+		var route_key := int(entry.target)
+		var cached_routes: Dictionary = entry.get("routes", {})
+		entry.route = cached_routes.get(route_key, [final_target]).duplicate()
 		entry.route_index = 1 if entry.route.size() > 1 else 0
 		_set_agent_target(entry)
 	if entry.route.is_empty():
 		_set_motion(entry, 0.0)
 		return
 	var target: Vector3 = entry.route[int(entry.route_index)]
-	var agent: NavigationAgent3D = entry.get("agent")
-	var steering_target := agent.get_next_path_position() if agent != null and not agent.is_navigation_finished() else target
-	var offset := steering_target - node.global_position
+	var offset := target - node.global_position
 	offset.y = 0.0
 	if node.global_position.distance_to(target) < 0.28:
 		entry.route_index = int(entry.route_index) + 1
@@ -185,16 +186,38 @@ func _configure_agent(entry: Dictionary) -> void:
 		agent.height = 1.72
 		actor.add_child(agent)
 		entry.agent = agent
+	# ZoneSpatialService has already produced a deterministic, bridge-safe route.
+	# Retain the agent contract for inspection without running a second solver.
+	agent.process_mode = Node.PROCESS_MODE_DISABLED
 	var map_rid: RID = spatial_service.get_navigation_map() if spatial_service != null else RID()
 	if map_rid.is_valid():
 		agent.set_navigation_map(map_rid)
 	entry.route = []
 	entry.route_index = 0
 
+func _precompute_routes(entry: Dictionary) -> void:
+	if spatial_service == null or entry.path.is_empty():
+		return
+	var routes: Dictionary = {}
+	for destination_index in range(entry.path.size()):
+		var source_index := wrapi(destination_index - 1, 0, entry.path.size())
+		var source: Vector3 = host.validate_walkable_position(entry.path[source_index])
+		var destination: Vector3 = host.validate_walkable_position(entry.path[destination_index])
+		routes[destination_index] = spatial_service.build_route(source, destination, 0.72)
+	entry.routes = routes
+
+func _visible_ambient_ids() -> Dictionary:
+	var visible := {}
+	var retained := [] if quality == "potato" else (
+		["walker_well", "walker_board", "shrine_pilgrim", "forge_helper"] if quality == "quality"
+		else []
+	)
+	for id in retained:
+		visible[id] = true
+	return visible
+
 func _set_agent_target(entry: Dictionary) -> void:
-	var agent: NavigationAgent3D = entry.get("agent")
-	if agent != null and int(entry.route_index) < entry.route.size():
-		agent.target_position = entry.route[int(entry.route_index)]
+	pass
 
 func _set_motion(entry: Dictionary, speed: float) -> void:
 	var driver = entry.driver
@@ -234,4 +257,5 @@ func _make_skeletal_villager(parent: Node3D, role_id: String, index: int, scale_
 	driver.name = "CharacterAnimationDriver"
 	mapped.add_child(driver)
 	driver.configure(mapped, {"idle":"Idle", "walk":"Walk", "run":"Run", "hit":"RecieveHit", "death":"Death"})
+	driver.set_update_rate_hz(20.0)
 	return driver

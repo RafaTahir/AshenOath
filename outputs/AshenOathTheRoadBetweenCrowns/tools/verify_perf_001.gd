@@ -7,14 +7,16 @@ const PROFILE_ZONES := [
 	["record_hall", Vector3(0, 1, 8)],
 	["hart_glade", Vector3(0, 1, 8)],
 ]
-const MIN_AVERAGE_FPS := 28.0
-const MIN_ONE_PERCENT_LOW_FPS := 20.0
+const MIN_AVERAGE_FPS := 32.0
+const MIN_ONE_PERCENT_LOW_FPS := 30.0
 const MAX_STATIC_MEMORY_BYTES := 450 * 1024 * 1024
 const MAX_COLD_TRANSITION_MS := 900.0
 const MAX_WARM_TRANSITION_MS := 350.0
+const SAMPLE_DURATION_MS := 8000
 
 var failures: Array[String] = []
 var report: Dictionary = {"zones": {}, "transitions": {}}
+var profile_preset := "balanced"
 
 func _initialize() -> void:
 	if DisplayServer.get_name().to_lower() == "headless":
@@ -29,11 +31,14 @@ func _initialize() -> void:
 	var game = scene.instantiate()
 	root.add_child(game)
 	await process_frame
+	var requested_preset := OS.get_environment("ASHEN_PERF_PRESET").to_lower()
+	if requested_preset in ["potato", "balanced", "quality"]:
+		profile_preset = requested_preset
 	game.settings.settings["touch_controls"] = "off"
-	game.settings.set_quality_preset("balanced")
+	game.settings.set_quality_preset(profile_preset)
 	game.input_router.active_device = game.input_router.DEVICE_KEYBOARD_MOUSE
 	game.hud.set_input_device(game.input_router.DEVICE_KEYBOARD_MOUSE)
-	_check(is_equal_approx(float(game.settings.settings.get("resolution_scale", 0.0)), 1.0), "Balanced is not using native 1.0 render scale")
+	_check(is_equal_approx(float(game.settings.settings.get("resolution_scale", 0.0)), 1.0), "%s is not using native 1.0 render scale" % profile_preset.capitalize())
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
 	game.call("_on_launch_accepted")
 	for _index in range(180):
@@ -55,8 +60,17 @@ func _initialize() -> void:
 		var transition_ms := _elapsed_ms(transition_start)
 		report.transitions["%s_cold_ms" % zone_id] = transition_ms
 		_check(transition_ms <= MAX_COLD_TRANSITION_MS, "%s cold transition exceeded %.0f ms" % [zone_id, MAX_COLD_TRANSITION_MS])
-		await _frames(90)
-		report.zones[zone_id] = await _sample_zone(game, zone_id, 4000)
+		# Transition timing is measured above. Sustained gameplay sampling starts
+		# only after the previous zone has completed its bounded retirement.
+		await _wait_for_retirement(game)
+		# Transition latency is measured before this point. Give shaders, audio,
+		# animation clips, and scheduled NPC routines three seconds to settle so
+		# the following sample represents sustained play rather than cold startup.
+		await _frames(180)
+		report.zones[zone_id] = await _sample_zone(game, zone_id, SAMPLE_DURATION_MS)
+		if zone_id == "wychwood":
+			await _prepare_combat_profile(game)
+			report.zones["wychwood_combat"] = await _sample_zone(game, "wychwood_combat", SAMPLE_DURATION_MS)
 	game.call("_load_zone", "greyfen", Vector3(0, 1, -13))
 	await _wait_for_playable(game)
 	# A warm-cache measurement must not include disposal work from the preceding
@@ -78,6 +92,7 @@ func _initialize() -> void:
 
 func _sample_zone(game: Node, zone_id: String, duration_ms: int) -> Dictionary:
 	var frame_times: Array[float] = []
+	var slow_frame_indices: Array[int] = []
 	var started := Time.get_ticks_msec()
 	var previous := Time.get_ticks_usec()
 	while Time.get_ticks_msec() - started < duration_ms:
@@ -87,6 +102,8 @@ func _sample_zone(game: Node, zone_id: String, duration_ms: int) -> Dictionary:
 		previous = now
 		if frame_ms > 0.0 and frame_ms < 250.0:
 			frame_times.append(frame_ms)
+			if frame_ms > 33.333:
+				slow_frame_indices.append(frame_times.size() - 1)
 	var average_ms := 0.0
 	for frame_ms in frame_times:
 		average_ms += frame_ms
@@ -104,6 +121,8 @@ func _sample_zone(game: Node, zone_id: String, duration_ms: int) -> Dictionary:
 		"average_fps": average_fps,
 		"one_percent_low_fps": one_percent_low,
 		"frames": frame_times.size(),
+		"slow_frame_count": slow_frame_indices.size(),
+		"slow_frame_indices": slow_frame_indices.slice(0, mini(12, slow_frame_indices.size())),
 		"draw_calls": int(Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME)),
 		"primitives": int(Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME)),
 		"nodes": int(Performance.get_monitor(Performance.OBJECT_NODE_COUNT)),
@@ -125,6 +144,25 @@ func _wait_for_playable(game: Node) -> void:
 			return
 	_fail("%s did not become playable" % str(game.current_zone_id))
 
+func _prepare_combat_profile(game: Node) -> void:
+	game.player.global_position = Vector3(0.0, 1.0, -3.5)
+	game.player.health_component.health = game.player.health_component.max_health * 100.0
+	var active_count := 0
+	var dormant_count := 0
+	for enemy in game.active_enemies:
+		if not is_instance_valid(enemy):
+			continue
+		var should_activate: bool = enemy.enemy_id == "wychwood_stalker"
+		if enemy.has_method("set_encounter_active"):
+			enemy.set_encounter_active(should_activate)
+		if enemy.has_method("is_encounter_active") and enemy.is_encounter_active():
+			active_count += 1
+		else:
+			dormant_count += 1
+	_check(active_count == 1, "Wychwood wave pacing must keep exactly one enemy active")
+	_check(dormant_count == 4, "four staged Wychwood reinforcements must remain fully dormant")
+	await _frames(120)
+
 func _wait_for_retirement(game: Node) -> void:
 	for _index in range(game.ZONE_RETIRE_FRAMES + 6):
 		await process_frame
@@ -142,6 +180,7 @@ func _write_report() -> void:
 	if file != null:
 		report["generated_at_utc"] = Time.get_datetime_string_from_system(true)
 		report["limits"] = {
+			"profile_preset": profile_preset,
 			"minimum_average_fps": MIN_AVERAGE_FPS,
 			"minimum_one_percent_low_fps": MIN_ONE_PERCENT_LOW_FPS,
 			"maximum_static_memory_bytes": MAX_STATIC_MEMORY_BYTES,

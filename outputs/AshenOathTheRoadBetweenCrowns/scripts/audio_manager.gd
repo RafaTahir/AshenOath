@@ -15,7 +15,10 @@ var music_state = ""
 var _voice_queue: Array = []
 var master_volume_linear = 0.85
 var transient_players: Array[AudioStreamPlayer] = []
+var transient_pool_cursor := 0
 var music_transition_generation := 0
+var ambient_accents_enabled := true
+const TRANSIENT_POOL_SIZE := 8
 
 func _process(delta: float) -> void:
 	if ambient_player != null and ambient_player.stream != null and not ambient_player.playing:
@@ -24,7 +27,7 @@ func _process(delta: float) -> void:
 		music_player.play()
 	if voice_player != null and not voice_player.playing and not _voice_queue.is_empty():
 		_play_next_voice()
-	if current_ambient_zone == "":
+	if current_ambient_zone == "" or not ambient_accents_enabled:
 		return
 	ambient_accent_time -= delta
 	if ambient_accent_time <= 0.0:
@@ -35,6 +38,28 @@ func _ready() -> void:
 	_build_recorded_library()
 	_build_voice_library()
 	_build_music_library()
+	for index in range(TRANSIENT_POOL_SIZE):
+		var pooled := AudioStreamPlayer.new()
+		pooled.name = "TransientCue%02d" % index
+		pooled.bus = bus_name
+		add_child(pooled)
+		transient_players.append(pooled)
+	_prewarm_common_cues()
+
+func _prewarm_common_cues() -> void:
+	var cue_ids := ["cloth_wind", "village_life", "village_crow", "ghoulkin_idle"]
+	var warmers: Array[AudioStreamPlayer] = []
+	for index in range(cue_ids.size()):
+		var player: AudioStreamPlayer = transient_players[index]
+		player.stream = _event_stream(cue_ids[index])
+		player.volume_db = -80.0
+		player.play()
+		warmers.append(player)
+	get_tree().create_timer(0.12, true, false, true).timeout.connect(func():
+		for player in warmers:
+			if is_instance_valid(player):
+				player.stop()
+	, CONNECT_ONE_SHOT)
 
 func set_master_volume(linear_volume: float) -> void:
 	master_volume_linear = clamp(linear_volume, 0.0, 1.0)
@@ -47,27 +72,27 @@ func set_master_volume(linear_volume: float) -> void:
 		AudioServer.set_bus_mute(bus_index, false)
 		AudioServer.set_bus_volume_db(bus_index, linear_to_db(master_volume_linear))
 
+func set_ambient_accents_enabled(enabled: bool) -> void:
+	ambient_accents_enabled = enabled
+
 func play_event(event_name: String, pitch_variation: float = 0.06) -> void:
 	if not sounds.has(event_name) and not recorded_variants.has(event_name):
 		return
 	print("AUDIO: event_%s" % event_name)
-	var player = AudioStreamPlayer.new()
-	player.bus = bus_name
+	var player := _available_transient_player()
 	player.stream = _event_stream(event_name)
 	player.volume_db = _volume_for(event_name) + randf_range(-1.2, 0.8)
 	player.pitch_scale = 1.0 + randf_range(-pitch_variation, pitch_variation)
-	add_child(player)
-	transient_players.append(player)
-	player.finished.connect(func():
-		transient_players.erase(player)
-		player.queue_free()
-	)
 	player.play()
-	while transient_players.size() > 10:
-		var oldest: AudioStreamPlayer = transient_players.pop_front()
-		if is_instance_valid(oldest):
-			oldest.stop()
-			oldest.queue_free()
+
+func _available_transient_player() -> AudioStreamPlayer:
+	for player in transient_players:
+		if not player.playing:
+			return player
+	var player: AudioStreamPlayer = transient_players[transient_pool_cursor % transient_players.size()]
+	transient_pool_cursor = (transient_pool_cursor + 1) % transient_players.size()
+	player.stop()
+	return player
 
 func has_recorded_event(event_name: String) -> bool:
 	return recorded_variants.has(event_name) and not recorded_variants[event_name].is_empty()
@@ -202,11 +227,9 @@ func play_ambient(zone_id: String) -> void:
 	ambient_player.play()
 
 func stop_zone_audio() -> void:
-	for player in transient_players.duplicate():
+	for player in transient_players:
 		if is_instance_valid(player):
 			player.stop()
-			player.queue_free()
-	transient_players.clear()
 
 func _play_next_voice() -> void:
 	if _voice_queue.is_empty():

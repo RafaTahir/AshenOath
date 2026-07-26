@@ -23,9 +23,9 @@ const DEFAULT_SETTINGS := {
 	"master_volume": 0.85,
 	"subtitle_scale": 1.0,
 	"camera_shake": 1.0,
-	"reduced_motion": false
-	,"high_contrast": false
-	,"control_preset": "standard"
+	"reduced_motion": false,
+	"high_contrast": false,
+	"control_preset": "standard",
 }
 
 var settings: Dictionary = DEFAULT_SETTINGS.duplicate(true)
@@ -34,6 +34,11 @@ var _fps_sample_time := 0.0
 var _fps_report_time := 0.0
 var _fps_samples: Array[float] = []
 var _frame_times_ms: Array[float] = []
+var _frame_time_cursor := 0
+var _frame_time_count := 0
+var loaded_user_settings := false
+var performance_logging_enabled := OS.get_environment("ASHEN_PERF_LOG") == "1"
+const FRAME_TIME_CAPACITY := 600
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -42,9 +47,13 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if delta > 0.0 and delta < 0.25:
-		_frame_times_ms.append(delta * 1000.0)
-		if _frame_times_ms.size() > 600:
-			_frame_times_ms.pop_front()
+		var frame_ms := delta * 1000.0
+		if _frame_time_count < FRAME_TIME_CAPACITY:
+			_frame_times_ms.append(frame_ms)
+			_frame_time_count += 1
+		else:
+			_frame_times_ms[_frame_time_cursor] = frame_ms
+		_frame_time_cursor = (_frame_time_cursor + 1) % FRAME_TIME_CAPACITY
 	_fps_sample_time += delta
 	_fps_report_time += delta
 	if _fps_sample_time >= 1.0:
@@ -52,14 +61,14 @@ func _process(delta: float) -> void:
 		_fps_samples.append(float(Engine.get_frames_per_second()))
 		if _fps_samples.size() > 30:
 			_fps_samples.pop_front()
-	if _fps_report_time >= 10.0 and not _fps_samples.is_empty():
+	if performance_logging_enabled and _fps_report_time >= 10.0 and not _fps_samples.is_empty():
 		_fps_report_time = 0.0
 		var snapshot = get_performance_snapshot()
 		print("PERF: preset=%s fps_avg=%.1f fps_min=%.1f samples=%d" % [snapshot.preset, snapshot.average_fps, snapshot.minimum_fps, snapshot.samples])
 
 func apply() -> void:
-	# Let VSync pace the browser/ANGLE renderer. A hard 30 FPS sleep cap causes
-	# coarse Windows timer misses and produces an unstable 24-26 FPS cadence.
+	# Let VSync pace the browser/ANGLE renderer. Lower sleep-based caps amplify
+	# coarse Windows timer misses on the Dell and can halve the delivered rate.
 	Engine.max_fps = 60
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED if settings["vsync"] else DisplayServer.VSYNC_DISABLED)
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN if settings["fullscreen"] else DisplayServer.WINDOW_MODE_WINDOWED)
@@ -77,6 +86,7 @@ func _load_settings() -> void:
 	var stored = JSON.parse_string(file.get_as_text())
 	if typeof(stored) != TYPE_DICTIONARY:
 		return
+	loaded_user_settings = true
 	for key in DEFAULT_SETTINGS:
 		if stored.has(key) and typeof(stored[key]) == typeof(DEFAULT_SETTINGS[key]):
 			settings[key] = stored[key]
@@ -105,6 +115,10 @@ func _save_settings() -> void:
 
 func set_potato_mode(enabled: bool) -> void:
 	set_quality_preset("potato" if enabled else "balanced")
+
+func apply_platform_defaults(touch_capable: bool) -> void:
+	if touch_capable and not loaded_user_settings:
+		set_quality_preset("potato")
 
 func set_quality_preset(preset: String) -> void:
 	var normalized = preset.to_lower()
@@ -153,7 +167,7 @@ func get_performance_snapshot() -> Dictionary:
 			minimum = min(minimum, sample)
 		average /= float(_fps_samples.size())
 	if not _frame_times_ms.is_empty():
-		var sorted_times := _frame_times_ms.duplicate()
+		var sorted_times := _frame_times_ms.slice(0, _frame_time_count)
 		sorted_times.sort()
 		var slow_count := maxi(1, ceili(float(sorted_times.size()) * 0.01))
 		var slow_total := 0.0

@@ -38,11 +38,14 @@ func get_material(surface_id: String, quality: String = "balanced", tint: Color 
 	var material := StandardMaterial3D.new()
 	material.resource_name = "World_%s_%s" % [normalized, normalized_quality]
 	material.albedo_texture = _texture(stem, "albedo")
-	material.normal_enabled = normalized_quality != "potato"
+	# Intel/ANGLE pays a disproportionate fragment cost for triplanar normal and
+	# packed ORM sampling. Balanced keeps the authored albedo at native 720p;
+	# Quality retains the full PBR stack for stronger hardware.
+	material.normal_enabled = normalized_quality == "quality"
 	material.normal_texture = _texture(stem, "normal") if material.normal_enabled else null
 	material.normal_scale = 0.78 if normalized_quality == "quality" else 0.55
 	var orm := _texture(stem, "orm")
-	material.roughness_texture = orm if normalized_quality != "potato" else null
+	material.roughness_texture = orm if normalized_quality == "quality" else null
 	material.roughness_texture_channel = BaseMaterial3D.TEXTURE_CHANNEL_GREEN
 	material.ao_enabled = normalized_quality == "quality"
 	material.ao_texture = orm if material.ao_enabled else null
@@ -50,7 +53,7 @@ func get_material(surface_id: String, quality: String = "balanced", tint: Color 
 	material.albedo_color = tint
 	material.roughness = lerp(float(profile.roughness), 0.40, normalized_wetness)
 	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC if normalized_quality != "potato" else BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
-	var use_triplanar := triplanar and normalized_quality != "potato"
+	var use_triplanar := triplanar and normalized_quality == "quality"
 	material.uv1_triplanar = use_triplanar
 	material.uv1_world_triplanar = use_triplanar
 	material.uv1_scale = Vector3.ONE * float(profile.scale)

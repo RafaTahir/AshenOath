@@ -31,7 +31,14 @@ func _initialize() -> void:
 		var route: Array = game.spatial_service.build_route(enemy.global_position, enemy.call("_engagement_target"), 0.55)
 		check(not route.is_empty(), "%s cannot route to its engagement lane" % enemy.display_name)
 	check(profiles.has("skirmisher") and profiles.has("flanker") and profiles.has("feinter") and profiles.has("brute"), "Wychwood roles are not visibly distinct")
-	check(active_count == 1, "Wychwood opening must activate one enemy, not a five-enemy pileup")
+	check(active_count == 0, "Wychwood enemies activate before Kael reaches the authored reveal")
+	game.player.global_position = Vector3(0, 0.9, 0.0)
+	game.call("_update_tutorial_prompts")
+	await settle(2)
+	active_count = 0
+	for enemy in game.active_enemies:
+		active_count += 1 if enemy.encounter_active else 0
+	check(active_count == 1, "Wychwood reveal must activate one enemy, not a five-enemy pileup")
 	for enemy in game.active_enemies:
 		enemy.set_encounter_active(true)
 	var smallest_spacing := INF

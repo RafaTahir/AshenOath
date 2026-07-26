@@ -65,11 +65,7 @@ func _process(delta: float) -> void:
 		_set_distance_visible(parent_3d, distance <= render_distance)
 		if animation_driver != null and animation_driver.has_method("set_distance_suspended"):
 			animation_driver.set_distance_suspended(true)
-		far_tick_accumulator += delta
-		if far_tick_accumulator < 0.20:
-			return
-		delta = far_tick_accumulator
-		far_tick_accumulator = 0.0
+		return
 	else:
 		_set_distance_visible(parent_3d, true)
 		if animation_driver != null and animation_driver.has_method("set_distance_suspended"):
@@ -97,8 +93,8 @@ func _render_distance() -> float:
 	if role_id == "sister_anwen":
 		return 18.0
 	if role_id == "rook":
-		return 7.5
-	return 10.0
+		return 6.5
+	return 7.0
 
 func _set_distance_visible(parent_3d: Node3D, value: bool) -> void:
 	if distance_hidden == not value:

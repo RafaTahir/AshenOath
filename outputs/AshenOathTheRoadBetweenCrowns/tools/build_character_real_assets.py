@@ -40,7 +40,7 @@ def armature():
         if p: b.parent=data.edit_bones[p]
     bpy.ops.object.mode_set(mode='OBJECT'); return obj
 
-def primitive(name, loc, scale, material, bone, rig, kind="sphere", verts=16):
+def primitive(name, loc, scale, material, bone, rig, kind="sphere", verts=12):
     if kind=="sphere": bpy.ops.mesh.primitive_uv_sphere_add(segments=verts, ring_count=max(8,verts//2), location=loc)
     elif kind=="cube": bpy.ops.mesh.primitive_cube_add(location=loc)
     else: bpy.ops.mesh.primitive_cylinder_add(vertices=verts, radius=1, depth=2, location=loc)
@@ -51,6 +51,32 @@ def primitive(name, loc, scale, material, bone, rig, kind="sphere", verts=16):
     vg.add(list(range(len(o.data.vertices))),1.0,'REPLACE')
     o.parent=rig
     return o
+
+def consolidate_skinned_meshes(rig):
+    meshes=[o for o in bpy.context.scene.objects if o.type=="MESH" and o.parent==rig]
+    if not meshes:
+        return
+    bpy.ops.object.select_all(action='DESELECT')
+    for mesh in meshes:
+        mesh.select_set(True)
+    bpy.context.view_layer.objects.active=meshes[0]
+    bpy.ops.object.join()
+    joined=bpy.context.object
+    joined.name="CharacterBody"
+
+    polygon_materials=[]
+    for polygon in joined.data.polygons:
+        slot_index=min(polygon.material_index,max(len(joined.material_slots)-1,0))
+        polygon_materials.append(joined.material_slots[slot_index].material if joined.material_slots else None)
+    unique=[]
+    for material in polygon_materials:
+        if material is not None and material not in unique:
+            unique.append(material)
+    joined.data.materials.clear()
+    for material in unique:
+        joined.data.materials.append(material)
+    for polygon,material in zip(joined.data.polygons,polygon_materials):
+        polygon.material_index=unique.index(material) if material in unique else 0
 
 def build(role,cfg):
     clear(); rig=armature()
@@ -63,9 +89,9 @@ def build(role,cfg):
     primitive("Torso",(0,0,1.25),(.29*brute,.18,.31),cloth,"Chest",rig)
     primitive("Abdomen",(0,0,1.04),(.235*brute,.155,.19),cloth,"Spine",rig)
     primitive("Waist",(0,0,.92),(.22*brute,.15,.14),accent,"Hips",rig)
-    primitive("Neck",(0,0,1.52),(.074*brute,.068,.105),skin,"Neck",rig,kind="cylinder",verts=20)
+    primitive("Neck",(0,0,1.52),(.074*brute,.068,.105),skin,"Neck",rig,kind="cylinder",verts=12)
     primitive("ShoulderLine",(0,0,1.43),(.36*brute,.16,.105),cloth,"Chest",rig)
-    primitive("Head",(0,-.005,1.68),(.145*brute,.125,.18),skin,"Head",rig,verts=24)
+    primitive("Head",(0,-.005,1.68),(.145*brute,.125,.18),skin,"Head",rig,verts=16)
     primitive("Nose",(0,-.132,1.68),(.032,.045,.060),skin,"Head",rig,verts=16)
     primitive("EarL",(.145*brute,0,1.68),(.025,.018,.048),skin,"Head",rig,verts=12)
     primitive("EarR",(-.145*brute,0,1.68),(.025,.018,.048),skin,"Head",rig,verts=12)
@@ -99,7 +125,7 @@ def build(role,cfg):
         primitive("ShoulderL",(.29,0,1.43),(.13,.17,.08),metal,"UpperArm.L",rig)
         primitive("ShoulderR",(-.29,0,1.43),(.13,.17,.08),metal,"UpperArm.R",rig)
     if cfg.get("hood"):
-        primitive("Hood",(0,.025,1.72),(.18,.16,.22),cloth,"Head",rig,verts=20)
+        primitive("Hood",(0,.025,1.72),(.18,.16,.22),cloth,"Head",rig,verts=14)
     if role=="SisterAnwen_Real":
         primitive("Robe",(0,.015,.80),(.32,.20,.42),cloth,"Hips",rig)
         primitive("StoleL",(.075,-.185,1.22),(.045,.025,.36),accent,"Chest",rig,kind="cube")
@@ -107,6 +133,7 @@ def build(role,cfg):
     if role=="Kael_Real":
         primitive("HunterCloak",(0,.16,1.18),(.31,.045,.43),cloth,"Chest",rig,kind="cube")
         primitive("Scar",(.038,-.151,1.69),(.009,.006,.07),accent,"Head",rig,kind="cube")
+    consolidate_skinned_meshes(rig)
     animate(rig)
     bpy.context.view_layer.objects.active=rig; rig.select_set(True)
     out=os.path.join(OUT,role+".glb")
@@ -118,7 +145,10 @@ def animate(rig):
     for name,frames in {"Idle":(1,40),"Walk":(1,24),"Run":(1,16),"Attack":(1,20),"HeavyAttack":(1,28),"RecieveHit":(1,14),"Dodge":(1,18),"Death":(1,32)}.items():
         act=bpy.data.actions.new(name); rig.animation_data_create(); rig.animation_data.action=act
         for f in frames:
-            for b in rig.pose.bones: b.rotation_mode='XYZ'
+            for b in rig.pose.bones:
+                b.rotation_mode='XYZ'
+                b.rotation_euler=(0,0,0)
+                b.location=(0,0,0)
             phase=0 if f==frames[0] else math.pi
             if name in ("Walk","Run"):
                 rig.pose.bones["Thigh.L"].rotation_euler.x=.45*math.cos(phase)

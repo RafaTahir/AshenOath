@@ -12,8 +12,8 @@
 | Measure | Count |
 |---|---:|
 | Roadmap tickets | 63 |
-| Complete | 48 |
-| Remaining planned | 13 |
+| Complete | 58 |
+| Remaining planned | 3 |
 | Blocked by external prerequisite | 2 |
 | Tracked issues | 15 |
 | Open issues | 4 |
@@ -24,10 +24,10 @@
 | Milestone | Outcome | Complete | Remaining | Blocked | Progress |
 |---|---|---:|---:|---:|---:|
 | `baseline` | Completed roadmap baseline | 26 | 0 | 0 | 100% |
-| `A` | Infrastructure and engine stability | 1 | 5 | 0 | 17% |
+| `A` | Infrastructure and engine stability | 6 | 0 | 0 | 100% |
 | `B` | Characters, combat, materials, and interaction | 11 | 0 | 0 | 100% |
 | `C` | Campaign content and consequence validation | 10 | 0 | 0 | 100% |
-| `D` | Audio, UX, accessibility, and Web candidate | 0 | 6 | 0 | 0% |
+| `D` | Audio, UX, accessibility, and Web candidate | 5 | 1 | 0 | 83% |
 | `E` | Mobile, store, and Version 1.0 | 0 | 4 | 2 | 0% |
 
 ## Active Issues
@@ -71,12 +71,12 @@
 | [x] `complete` | `WORLD-001` | world | Greyfen | `baseline` Completed roadmap baseline |
 | [x] `complete` | `WORLD-002` | world | Wychwood | `baseline` Completed roadmap baseline |
 | [x] `complete` | `WORLD-003` | world | Cemetery and Crow Chapel | `baseline` Completed roadmap baseline |
-| [ ] `planned` | `ENGINE-002` | engine | Zone-builder extraction | `A` Infrastructure and engine stability |
-| [ ] `planned` | `ENGINE-003` | engine | Resource lifecycle and cache policy | `A` Infrastructure and engine stability |
-| [ ] `planned` | `PERF-002` | performance | Zone lifecycle and memory | `A` Infrastructure and engine stability |
+| [x] `complete` | `ENGINE-002` | engine | Zone-builder extraction | `A` Infrastructure and engine stability |
+| [x] `complete` | `ENGINE-003` | engine | Resource lifecycle and cache policy | `A` Infrastructure and engine stability |
+| [x] `complete` | `PERF-002` | performance | Zone lifecycle and memory | `A` Infrastructure and engine stability |
 | [x] `complete` | `PROD-002` | production | Issue registry and milestone dashboard | `A` Infrastructure and engine stability |
-| [ ] `planned` | `QA-002` | qa | Real-route browser automation and console capture | `A` Infrastructure and engine stability |
-| [ ] `planned` | `QA-003` | qa | Screenshot comparison and manual visual approval | `A` Infrastructure and engine stability |
+| [x] `complete` | `QA-002` | qa | Real-route browser automation and console capture | `A` Infrastructure and engine stability |
+| [x] `complete` | `QA-003` | qa | Screenshot comparison and manual visual approval | `A` Infrastructure and engine stability |
 | [x] `complete` | `AI-002` | ai | Per-family behavior and perception | `B` Characters, combat, materials, and interaction |
 | [x] `complete` | `CHAR-002` | characters | Villagers, guards, and travelers | `B` Characters, combat, materials, and interaction |
 | [x] `complete` | `COMBAT-002` | combat | Damage, stamina, difficulty, and low-FPS balance | `B` Characters, combat, materials, and interaction |
@@ -98,11 +98,11 @@
 | [x] `complete` | `WORLD-004` | world | Deep wood, marsh, mill, and farmstead | `C` Campaign content and consequence validation |
 | [x] `complete` | `WORLD-005` | world | Bandit road and Castle Vargan | `C` Campaign content and consequence validation |
 | [x] `complete` | `WORLD-006` | world | Undercroft and Hart Glade | `C` Campaign content and consequence validation |
-| [ ] `planned` | `ACCESS-001` | ux | Subtitles, focus, contrast, remapping, and reduced motion | `D` Audio, UX, accessibility, and Web candidate |
-| [ ] `planned` | `AUDIO-002` | audio | Campaign music and transitions | `D` Audio, UX, accessibility, and Web candidate |
-| [ ] `planned` | `PERF-003` | performance | Mobile budgets and thermal test | `D` Audio, UX, accessibility, and Web candidate |
-| [ ] `planned` | `UI-002` | ux | Menus, journal, settings, and loading | `D` Audio, UX, accessibility, and Web candidate |
-| [ ] `planned` | `VOICE-001` | audio | Key-scene and bark production | `D` Audio, UX, accessibility, and Web candidate |
+| [x] `complete` | `ACCESS-001` | ux | Subtitles, focus, contrast, remapping, and reduced motion | `D` Audio, UX, accessibility, and Web candidate |
+| [x] `complete` | `AUDIO-002` | audio | Campaign music and transitions | `D` Audio, UX, accessibility, and Web candidate |
+| [x] `complete` | `PERF-003` | performance | Mobile budgets and thermal test | `D` Audio, UX, accessibility, and Web candidate |
+| [x] `complete` | `UI-002` | ux | Menus, journal, settings, and loading | `D` Audio, UX, accessibility, and Web candidate |
+| [x] `complete` | `VOICE-001` | audio | Key-scene and bark production | `D` Audio, UX, accessibility, and Web candidate |
 | [ ] `planned` | `WEB-002` | release | Full campaign candidate | `D` Audio, UX, accessibility, and Web candidate |
 | [ ] `planned` | `MOBILE-002` | platform | Android production package | `E` Mobile, store, and Version 1.0 |
 | [!] `blocked_external` | `MOBILE-003` | platform | iOS production package | `E` Mobile, store, and Version 1.0 |

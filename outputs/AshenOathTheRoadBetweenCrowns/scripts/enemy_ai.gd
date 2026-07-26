@@ -116,6 +116,7 @@ func setup_navigation(service) -> void:
 		navigation_agent.radius = 0.44
 		navigation_agent.height = 1.75
 		add_child(navigation_agent)
+	navigation_agent.process_mode = Node.PROCESS_MODE_DISABLED
 	var map_rid: RID = spatial_service.get_navigation_map() if spatial_service != null else RID()
 	if map_rid.is_valid():
 		navigation_agent.set_navigation_map(map_rid)
@@ -128,7 +129,7 @@ func _physics_process(delta: float) -> void:
 	if dead or player == null:
 		return
 	var early_distance: float = player.global_position.distance_to(global_position)
-	if early_distance > sense_range + 5.0 and pending_attack_time <= 0.0 and stagger_time <= 0.0 and is_on_floor():
+	if early_distance > sense_range + 1.0 and pending_attack_time <= 0.0 and stagger_time <= 0.0 and is_on_floor():
 		far_tick_accumulator += delta
 		if far_tick_accumulator < 0.20:
 			return
@@ -231,23 +232,19 @@ func _physics_process(delta: float) -> void:
 func _navigation_direction(target: Vector3, force_refresh: bool = false) -> Vector3:
 	if spatial_service == null or navigation_agent == null:
 		return Vector3.ZERO
-	var target_changed := navigation_target == Vector3.INF or navigation_target.distance_squared_to(target) > 0.75
+	var target_changed := navigation_target == Vector3.INF or navigation_target.distance_squared_to(target) > 1.56
 	if force_refresh or target_changed or navigation_refresh_time <= 0.0 or navigation_route.is_empty():
 		navigation_route = spatial_service.build_route(global_position, target, 0.62)
 		navigation_route_index = 1 if navigation_route.size() > 1 else 0
 		navigation_target = target
-		navigation_refresh_time = 0.22
-		if not navigation_route.is_empty():
-			navigation_agent.target_position = navigation_route[navigation_route_index]
+		navigation_refresh_time = 0.35
 	if navigation_route.is_empty():
 		return Vector3.ZERO
 	var route_target := navigation_route[navigation_route_index]
 	if global_position.distance_to(route_target) < 0.38 and navigation_route_index + 1 < navigation_route.size():
 		navigation_route_index += 1
 		route_target = navigation_route[navigation_route_index]
-		navigation_agent.target_position = route_target
-	var next_position := navigation_agent.get_next_path_position()
-	var direction := next_position - global_position
+	var direction := route_target - global_position
 	direction.y = 0.0
 	if direction.length_squared() < 0.002:
 		direction = route_target - global_position
@@ -480,7 +477,7 @@ func _build_body(color: Color) -> void:
 	var collision = CollisionShape3D.new()
 	var shape = CapsuleShape3D.new()
 	shape.height = 2.0 if enemy_id == "white_hart_avatar" else (1.65 if _is_wychwood_pack() else 1.15)
-	shape.radius = 0.58 if enemy_id == "white_hart_avatar" else (0.32 if _is_wychwood_pack() else 0.35)
+	shape.radius = 0.58 if enemy_id == "white_hart_avatar" else (0.38 if _is_wychwood_pack() else 0.35)
 	collision.shape = shape
 	collision.position.y = 1.05 if enemy_id == "white_hart_avatar" else (0.9 if _is_wychwood_pack() else 0.65)
 	add_child(collision)
@@ -606,6 +603,8 @@ func _try_build_mapped_body() -> bool:
 			"idle": "Idle", "walk": "Walk", "run": "Run", "jump": "Jump_Idle",
 			"attack": "Punch", "hit": "HitReact", "death": "Death"
 		})
+	if animation_driver.is_valid():
+		animation_driver.set_update_rate_hz(20.0)
 	_configure_attack_contact_bone()
 	return true
 

@@ -140,7 +140,7 @@ func _update_sky_cycle(daylight: float, twilight: float, night: float, minutes: 
 	var quality := _quality_preset()
 	if star_field != null and star_field.multimesh != null:
 		star_field.multimesh.visible_instance_count = 28 if quality == "potato" else (96 if quality == "quality" else 62)
-	var cloud_count := 2 if quality == "potato" else (7 if quality == "quality" else 4)
+	var cloud_count := 1 if quality == "potato" else (7 if quality == "quality" else 2)
 	cloud_layer.visible = bool(profile.clouds)
 	var cloud_alpha := clampf(daylight*0.78+twilight*0.68+night*0.28,0.18,0.82)
 	var cloud_color := Color(0.92,0.94,0.96) if daylight > twilight else Color(0.82,0.46,0.30)

@@ -27,11 +27,16 @@ var _landing_response = 0.0
 var _previous_on_floor = true
 var _fov_kick = 0.0
 var _idle_time = 0.0
+var _combat_focus_refresh := 0.0
+var _cached_combat_focus: Node3D
+var _collision_refresh := 0.0
+var _cached_collision_position := Vector3.ZERO
 
 func setup(follow_target: Node3D, source: Node = null) -> void:
 	target = follow_target
 	input_source = source
 	camera = Camera3D.new()
+	camera.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 	camera.current = true
 	camera.fov = 63.0
 	add_child(camera)
@@ -75,7 +80,11 @@ func _process(delta: float) -> void:
 	var velocity = _target_velocity()
 	var flat_speed = Vector2(velocity.x, velocity.z).length()
 	var sprinting := _action_pressed("run") and flat_speed > 3.5
-	var combat_focus = _nearest_combat_focus()
+	_combat_focus_refresh -= delta
+	if _combat_focus_refresh <= 0.0 or not is_instance_valid(_cached_combat_focus):
+		_combat_focus_refresh = 0.10
+		_cached_combat_focus = _nearest_combat_focus()
+	var combat_focus = _cached_combat_focus
 	var target_distance = maxf(MIN_ZOOM_DISTANCE, distance - 0.75) if combat_focus != null else distance
 	var target_height = 2.25 if combat_focus != null else height
 	var shoulder = -0.55 if combat_focus != null else -0.82
@@ -92,7 +101,11 @@ func _process(delta: float) -> void:
 	var target_pos = target.global_position + Vector3(0, target_height, 0)
 	var orbit = Basis(Vector3.UP, yaw) * Basis(Vector3.RIGHT, pitch)
 	var desired = target_pos + orbit * Vector3(shoulder + _dodge_response * 0.12, _landing_response * 0.08, target_distance)
-	desired = _collide_camera(target_pos, desired)
+	_collision_refresh -= delta
+	if _collision_refresh <= 0.0:
+		_collision_refresh = 1.0 / 30.0
+		_cached_collision_position = _collide_camera(target_pos, desired)
+	desired = _cached_collision_position
 	var natural_look = target_pos + Basis(Vector3.UP, yaw) * Vector3(0.55, -0.08, -look_ahead)
 	var focus = _environment_focus(combat_focus)
 	if focus.weight > 0.0:

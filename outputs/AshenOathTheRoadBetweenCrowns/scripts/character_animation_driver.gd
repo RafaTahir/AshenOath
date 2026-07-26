@@ -31,6 +31,8 @@ var dead := false
 var distance_suspended := false
 var target_playback_scale := 1.0
 var current_playback_scale := 1.0
+var manual_update_interval := 0.0
+var manual_update_accumulator := 0.0
 
 func configure(root: Node3D, clips: Dictionary) -> bool:
 	character_root = root
@@ -60,8 +62,25 @@ func configure(root: Node3D, clips: Dictionary) -> bool:
 func _process(delta: float) -> void:
 	if animation_player == null or distance_suspended:
 		return
+	if manual_update_interval > 0.0:
+		manual_update_accumulator += delta
+		if manual_update_accumulator < manual_update_interval:
+			return
+		delta = manual_update_accumulator
+		manual_update_accumulator = 0.0
+		animation_player.advance(delta)
 	current_playback_scale = lerpf(current_playback_scale, target_playback_scale, 1.0 - exp(-10.0 * delta))
 	animation_player.speed_scale = current_playback_scale
+
+func set_update_rate_hz(rate_hz: float) -> void:
+	manual_update_interval = 0.0 if rate_hz <= 0.0 else 1.0 / maxf(rate_hz, 1.0)
+	manual_update_accumulator = 0.0
+	if animation_player != null:
+		animation_player.callback_mode_process = (
+			AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_IDLE
+			if manual_update_interval <= 0.0
+			else AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
+		)
 
 func is_valid() -> bool:
 	return animation_player != null and skeleton != null and skeleton.get_bone_count() > 0

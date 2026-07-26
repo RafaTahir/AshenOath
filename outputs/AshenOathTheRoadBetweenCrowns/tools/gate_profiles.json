@@ -501,6 +501,23 @@
         "verify_save_001"
       ]
     },
+    "perf_003": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/PERF_003_MOBILE_PERFORMANCE_THERMAL_BUDGETS.md",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/settings_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/runtime_service_registry.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/visual_director.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/build_character_real_assets.py",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_perf_003.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_real/*.glb"
+      ],
+      "gates": [
+        "verify_perf_003",
+        "verify_zone_budgets",
+        "verify_perf_002"
+      ]
+    },
     "performance": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",

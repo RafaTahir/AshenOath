@@ -50,7 +50,7 @@ var game_started = false
 var paused_by_menu = true
 var pending_ending = ""
 var removed_interactions = {}
-var autosave_cooldown = 0.0
+var autosave_cooldown = 180.0
 var last_safe_player_position = Vector3(0, 1, 7)
 var tutorial_flags = {}
 var material_cache: Dictionary = {}
@@ -91,9 +91,11 @@ var requested_zone_id := ""
 var requested_zone_spawn := Vector3.ZERO
 var greyfen_prewarm_started := false
 var greyfen_prewarm_spatial_service: Node
+var interaction_focus_cooldown := 0.0
+var compass_refresh_cooldown := 0.0
 const MAX_CACHED_ROUTE_ZONES := 1
 const ZONE_RETIRE_FRAMES := 8
-const MAX_SKINNED_RESOURCE_ANCHORS := 8
+const MAX_SKINNED_RESOURCE_ANCHORS := 4
 const MAX_RETIRED_MATERIAL_ANCHORS := 64
 const MAX_TRANSITION_HISTORY := 16
 
@@ -140,13 +142,19 @@ func _process(delta: float) -> void:
 		_advance_zone_transition()
 		return
 	_keep_player_in_world()
-	_update_interaction_focus()
+	interaction_focus_cooldown -= delta
+	if interaction_focus_cooldown <= 0.0:
+		interaction_focus_cooldown = 0.10
+		_update_interaction_focus()
 	_update_tutorial_prompts()
 	autosave_cooldown = max(autosave_cooldown - delta, 0.0)
 	if autosave_cooldown <= 0.0:
-		autosave_cooldown = 45.0
+		autosave_cooldown = 180.0
 		save_manager.autosave(self)
-	_update_compass()
+	compass_refresh_cooldown -= delta
+	if compass_refresh_cooldown <= 0.0:
+		compass_refresh_cooldown = 0.25
+		_update_compass()
 
 func _play_voice_smoke_test(voice_id: String, label: String) -> void:
 	if audio == null:
@@ -743,6 +751,27 @@ func _trim_route_zone_cache(preferred_ids: Array) -> void:
 			_retire_zone_root(cached_root)
 
 func _set_zone_collision_enabled(node: Node, enabled: bool) -> void:
+	var targets: Array = node.get_meta("zone_collision_targets", [])
+	if targets.is_empty():
+		targets = _collect_zone_collision_targets(node)
+		node.set_meta("zone_collision_targets", targets)
+	for target in targets:
+		if target == null or not is_instance_valid(target):
+			continue
+		_set_single_zone_collision_enabled(target, enabled)
+
+func _collect_zone_collision_targets(root: Node) -> Array:
+	var targets: Array = []
+	var pending: Array[Node] = [root]
+	while not pending.is_empty():
+		var current: Node = pending.pop_back()
+		if current is NavigationRegion3D or current is CollisionObject3D:
+			targets.append(current)
+		for child in current.get_children():
+			pending.append(child)
+	return targets
+
+func _set_single_zone_collision_enabled(node: Node, enabled: bool) -> void:
 	if node is NavigationRegion3D:
 		(node as NavigationRegion3D).enabled = enabled
 	if node is CollisionObject3D:
@@ -759,8 +788,6 @@ func _set_zone_collision_enabled(node: Node, enabled: bool) -> void:
 			area.set_meta("zone_monitorable", area.monitorable)
 		area.monitoring = bool(area.get_meta("zone_monitoring", true)) if enabled else false
 		area.monitorable = bool(area.get_meta("zone_monitorable", true)) if enabled else false
-	for child in node.get_children():
-		_set_zone_collision_enabled(child, enabled)
 
 func _schedule_zone_autosave() -> void:
 	var expected_zone: String = current_zone_id
@@ -1552,7 +1579,9 @@ func _on_enemy_died(enemy) -> void:
 		if wychwood_pack_kills == 1:
 			_activate_wychwood_wave(["ghoulkin"], "A second Ghoulkin answers from the trees.")
 		elif wychwood_pack_kills == 2:
-			_activate_wychwood_wave(["wychwood_stalker", "wychwood_raider"], "Branches snap on both flanks.")
+			_activate_wychwood_wave(["wychwood_stalker"], "Branches snap along the left flank.")
+		elif wychwood_pack_kills == 3:
+			_activate_wychwood_wave(["wychwood_raider"], "A raider cuts across the clearing.")
 		elif wychwood_pack_kills == 4:
 			_activate_wychwood_wave(["wychwood_brute"], "The earth heaves. The Brute comes last.")
 		if wychwood_pack_kills >= 5:
@@ -1823,6 +1852,7 @@ func _handle_setting(action: String) -> void:
 func _apply_runtime_settings(current_settings: Dictionary) -> void:
 	if audio != null:
 		audio.set_master_volume(float(current_settings.get("master_volume", 0.85)))
+		audio.set_ambient_accents_enabled(str(current_settings.get("quality_preset", "balanced")) == "quality")
 	if hud != null:
 		hud.apply_accessibility(current_settings)
 	if camera_rig != null:
@@ -1872,10 +1902,12 @@ func _update_tutorial_prompts() -> void:
 		audio.set_music_state("wychwood_tension")
 		audio.play_event("wychwood_drop", 0.01)
 		audio.play_event("wychwood_tension", 0.02)
+		if wychwood_pack_kills == 0:
+			_activate_wychwood_wave(["ghoulkin"], "A Ghoulkin unfolds beside the old road.")
 	if current_zone_id == "wychwood" and not bool(tutorial_flags.get("near_clearing_audio", false)) and player.global_position.z < -4.0:
 		tutorial_flags["near_clearing_audio"] = true
 		audio.play_event("ghoulkin_idle", 0.03)
-	if current_zone_id == "wychwood" and active_enemies.size() > 0 and not bool(tutorial_flags.get("combat", false)):
+	if current_zone_id == "wychwood" and _has_active_encounter_enemy() and not bool(tutorial_flags.get("combat", false)):
 		tutorial_flags["combat"] = true
 		audio.set_music_state("ghoulkin_combat")
 		audio.play_event("wychwood_tension", 0.01)
@@ -2604,7 +2636,7 @@ func _make_village_house_dressed(pos: Vector3, yaw: float, node_name: String) ->
 	_add_house_box(root, "StoneFoundation", Vector3(0, 0.18, 0), Vector3(4.55, 0.36, 3.55), Color(0.28, 0.27, 0.24))
 	_add_house_box(root, "PlasteredWall", Vector3(0, 1.05, 0), Vector3(4.3, 2.1, 3.35), plaster)
 	_add_house_gables(root, plaster, timber)
-	if _performance_mode():
+	if _compatibility_budget_mode():
 		_add_house_box(root, "LeftRoofSlope", Vector3(-0.9, 2.42, 0), Vector3(2.55, 0.42, 3.95), Color(0.14, 0.055, 0.035), Vector3(0, 0, -13))
 		_add_house_box(root, "RightRoofSlope", Vector3(0.9, 2.42, 0), Vector3(2.55, 0.42, 3.95), Color(0.14, 0.055, 0.035), Vector3(0, 0, 13))
 	else:
@@ -3033,6 +3065,7 @@ func _configure_npc_animation(mapped: Node3D, id: String) -> void:
 	driver.name = "CharacterAnimationDriver"
 	mapped.add_child(driver)
 	driver.configure(mapped, clips)
+	driver.set_update_rate_hz(20.0)
 
 func _stage_dialogue_moment(area) -> void:
 	if player == null or area == null or not (area is Node3D):
@@ -3202,7 +3235,7 @@ func _spawn_enemy(id: String, pos: Vector3) -> Node:
 	enemy.visible = true
 	enemy.encounter_slot = active_enemies.size()
 	enemy.setup_navigation(spatial_service)
-	if current_zone_id == "wychwood" and id in ["wychwood_stalker", "wychwood_raider", "wychwood_brute"]:
+	if current_zone_id == "wychwood" and id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute"]:
 		enemy.set_encounter_active(false)
 	enemy.attack_gate = _enemy_attack_token
 	if id == "ghoulkin":
@@ -3231,12 +3264,19 @@ func _on_boss_phase_changed(enemy: Node, phase: int) -> void:
 
 func _activate_wychwood_wave(ids: Array, cue: String) -> void:
 	for enemy in active_enemies:
-		if enemy != null and not enemy.dead and enemy.enemy_id in ids:
+		if enemy != null and not enemy.dead and not enemy.is_encounter_active() and enemy.enemy_id in ids:
 			enemy.set_encounter_active(true)
+			break
 	if hud != null:
 		hud.toast(cue)
 	if audio != null:
 		audio.play_event("reveal", 0.02)
+
+func _has_active_encounter_enemy() -> bool:
+	for enemy in active_enemies:
+		if enemy != null and is_instance_valid(enemy) and not enemy.dead and enemy.is_encounter_active():
+			return true
+	return false
 
 func _enemy_attack_token(enemy: Node, claim: bool) -> bool:
 	if claim:
@@ -3816,7 +3856,7 @@ func _role_for_prop(name: String) -> String:
 func _make_role_visual(role_name: String, category: String, scale_value: Vector3) -> Node3D:
 	if role_name == "" or asset_helper == null:
 		return null
-	if _performance_mode() and category == "environment":
+	if _compatibility_budget_mode() and category == "environment":
 		return null
 	var node: Node3D
 	if category == "characters":
@@ -3860,12 +3900,12 @@ func _visual_role_for_legacy_character(role_name: String) -> String:
 	return str(roles.get(role_name, ""))
 
 func _make_light(name: String, pos: Vector3, color: Color, energy: float) -> void:
-	if _performance_mode() and not _keep_performance_light(name):
+	if _compatibility_budget_mode() and not _keep_performance_light(name):
 		return
 	var quality := str(settings.settings.get("quality_preset", "balanced")) if settings != null else "balanced"
-	# Four local pools preserve the route landmarks while keeping the Web
-	# Compatibility renderer inside its transition and frame-time budget.
-	if quality == "balanced" and runtime_light_count >= 4:
+	# Two authored local pools preserve route landmarks without multiplying
+	# Compatibility-renderer lighting work across the entire outdoor frame.
+	if quality == "balanced" and runtime_light_count >= 2:
 		return
 	var light = OmniLight3D.new()
 	light.name = name
@@ -3879,6 +3919,9 @@ func _make_light(name: String, pos: Vector3, color: Color, energy: float) -> voi
 
 func _performance_mode() -> bool:
 	return settings != null and bool(settings.settings.get("potato_mode", true))
+
+func _compatibility_budget_mode() -> bool:
+	return settings == null or str(settings.settings.get("quality_preset", "balanced")) != "quality"
 
 func _keep_performance_light(name: String) -> bool:
 	return name in ["Village Warmth", "Shrine Beacon", "Wychwood Gate Lantern", "Moon Shaft", "Trail Threat", "ClearingColdSpot", "SpawnWarmRead"]

@@ -831,6 +831,7 @@ func _try_build_mapped_body() -> bool:
 		_add_motion_proxy_parts()
 		_add_mapped_weapon_visuals()
 	else:
+		animation_driver.set_update_rate_hz(30.0)
 		_add_slash_arc_visuals()
 	return true
 

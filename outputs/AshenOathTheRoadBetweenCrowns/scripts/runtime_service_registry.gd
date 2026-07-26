@@ -86,6 +86,7 @@ func configure(owner: Node) -> void:
 	input_router.apply_settings(settings.settings)
 	hud.set_input_source(input_router)
 	mobile_touch.setup(input_router, hud, settings.settings)
+	settings.apply_platform_defaults(mobile_touch.touch_capable)
 	input_router.device_changed.connect(func(_device: String):
 		hud.set_input_device(input_router.active_device)
 		owner.call("_refresh_equipment_readout")
