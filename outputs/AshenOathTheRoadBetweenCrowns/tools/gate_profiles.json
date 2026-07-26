@@ -599,6 +599,23 @@
         "web_export",
         "verify_web_browser"
       ]
+    },
+    "web_002": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/WEB_002_FULL_CAMPAIGN_CANDIDATE.md",
+        "outputs/AshenOathTheRoadBetweenCrowns/export_presets.cfg",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/qa_browser_telemetry.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/hud.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/*.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_web_002.py",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_browser.mjs"
+      ],
+      "gates": [
+        "verify_web_002",
+        "web_export",
+        "verify_web_002_browser",
+        "verify_web_002_mobile"
+      ]
     }
   },
   "views": {

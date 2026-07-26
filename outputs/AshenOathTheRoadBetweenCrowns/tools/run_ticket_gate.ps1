@@ -230,7 +230,7 @@ foreach ($gate in $gates) {
         ) $gateInputs $cache
     } elseif ($gate -eq "runtime_smoke") {
         Invoke-Compact $gate $Godot @("--headless", "--path", $Project, "--quit-after", "3") $gateInputs $cache
-    } elseif ($gate -in @("verify_perf_001", "verify_perf_002")) {
+    } elseif ($gate -in @("verify_perf_001", "verify_perf_002", "verify_perf_003")) {
         $script = Join-Path $PSScriptRoot "$gate.gd"
         Invoke-Compact $gate $Godot @(
             "--path", $Project,
@@ -246,6 +246,10 @@ foreach ($gate in $gates) {
     } elseif ($gate -eq "verify_web_001") {
         Invoke-Compact $gate $Python @(
             (Join-Path $PSScriptRoot "verify_web_001.py"), $Project, $RepoRoot
+        ) $gateInputs $cache
+    } elseif ($gate -eq "verify_web_002") {
+        Invoke-Compact $gate $Python @(
+            (Join-Path $PSScriptRoot "verify_web_002.py"), $Project
         ) $gateInputs $cache
     } elseif ($gate -eq "web_export") {
         Invoke-Compact "web_export" (Join-Path $Project "Export_Web_Build.bat") @() $gateInputs $cache
@@ -270,6 +274,23 @@ foreach ($gate in $gates) {
             "--export", $Web,
             "--browser", "chrome",
             "--report", (Join-Path $Logs "qa_002_browser.json")
+        ) $gateInputs $cache
+    } elseif ($gate -eq "verify_web_002_browser") {
+        Invoke-Compact $gate "node.exe" @(
+            (Join-Path $PSScriptRoot "verify_qa_002_browser.mjs"),
+            "--export", $Web,
+            "--browser", "all",
+            "--full-campaign", "true",
+            "--report", (Join-Path $Logs "web_002_browser.json")
+        ) $gateInputs $cache
+    } elseif ($gate -eq "verify_web_002_mobile") {
+        Invoke-Compact $gate "node.exe" @(
+            (Join-Path $PSScriptRoot "verify_qa_002_browser.mjs"),
+            "--export", $Web,
+            "--browser", "all",
+            "--full-campaign", "true",
+            "--mobile", "true",
+            "--report", (Join-Path $Logs "web_002_mobile.json")
         ) $gateInputs $cache
     } elseif ($gate -eq "verify_mobile_browser") {
         Invoke-Compact $gate "node.exe" @(

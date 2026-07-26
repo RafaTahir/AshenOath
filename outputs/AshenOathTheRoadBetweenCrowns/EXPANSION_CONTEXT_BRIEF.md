@@ -44,3 +44,6 @@ gamepads, and landscape touch controls now share one semantic router. The
 device-aware prompts and no console errors. Native mobile packaging and
 physical-device thermal acceptance remain later work. The approved milestone
 now proceeds through the complete production release workflow.
+# Current Release Context
+
+PERF-003 and WEB-002 are complete on `codex/roadmap-milestone-d`. The verified candidate is a seven-file, 65.6 MB Web artifact with full physical gate traversal through all released campaign zones in Chrome and Edge. RELEASE-001 is the only remaining Web milestone ticket. Android production, iOS production, and store distribution are deferred.

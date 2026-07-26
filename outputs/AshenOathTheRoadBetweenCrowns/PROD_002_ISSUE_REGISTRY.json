@@ -79,7 +79,7 @@
     {"id": "PERF-003", "title": "Mobile budgets and thermal test", "area": "performance", "milestone": "D", "status": "complete"},
     {"id": "INPUT-001", "title": "Keyboard/mouse and gamepad abstraction", "area": "input", "milestone": "baseline", "status": "complete"},
     {"id": "WEB-001", "title": "Act One candidate", "area": "release", "milestone": "baseline", "status": "complete"},
-    {"id": "WEB-002", "title": "Full campaign candidate", "area": "release", "milestone": "D", "status": "planned"},
+    {"id": "WEB-002", "title": "Full campaign candidate", "area": "release", "milestone": "D", "status": "complete"},
     {"id": "MOBILE-001", "title": "Android feasibility build", "area": "platform", "milestone": "baseline", "status": "complete"},
     {"id": "MOBILE-002", "title": "Android production package", "area": "platform", "milestone": "E", "status": "planned"},
     {"id": "MOBILE-003", "title": "iOS production package", "area": "platform", "milestone": "E", "status": "blocked_external"},

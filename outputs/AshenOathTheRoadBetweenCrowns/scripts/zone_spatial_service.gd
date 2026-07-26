@@ -12,6 +12,12 @@ var safe_spawns: Array[Vector3] = []
 var bridges: Dictionary = {}
 var gates: Dictionary = {}
 var navigation_region: NavigationRegion3D
+var navigation_map: RID
+
+func _exit_tree() -> void:
+	if navigation_map.is_valid():
+		NavigationServer3D.free_rid(navigation_map)
+		navigation_map = RID()
 
 func configure(id: String, river_z: float, extents: Vector2) -> void:
 	zone_id = id
@@ -48,10 +54,16 @@ func build_navigation(parent: Node3D) -> NavigationRegion3D:
 	var previous := parent.find_child("DeterministicNavigationRegion", false, false)
 	if previous is NavigationRegion3D and previous.navigation_mesh != null:
 		navigation_region = previous
+		if not navigation_map.is_valid():
+			navigation_map = NavigationServer3D.map_create()
+			NavigationServer3D.map_set_active(navigation_map, true)
+		navigation_region.set_navigation_map(navigation_map)
 		return navigation_region
 	navigation_region = NavigationRegion3D.new()
 	navigation_region.name = "DeterministicNavigationRegion"
-	navigation_region.use_edge_connections = true
+	# Each zone owns one contiguous authored polygon; cross-zone travel uses gates.
+	# Edge connection rasterization is unnecessary and produced Web warnings.
+	navigation_region.use_edge_connections = false
 	var nav_mesh := NavigationMesh.new()
 	nav_mesh.agent_radius = 0.38
 	nav_mesh.agent_height = 1.75
@@ -59,29 +71,22 @@ func build_navigation(parent: Node3D) -> NavigationRegion3D:
 	nav_mesh.agent_max_slope = 46.0
 	var vertices := PackedVector3Array()
 	var polygons: Array[PackedInt32Array] = []
-	if river_center < 900.0 and not bridges.is_empty():
-		var bridge: Dictionary = bridges.values()[0]
-		var width: float = float(bridge.half_width)
-		_add_rect(vertices, polygons, -half_extents.x, -half_extents.y, -width, river_center - RIVER_HALF_SPAN)
-		_add_rect(vertices, polygons, -width, -half_extents.y, width, river_center - RIVER_HALF_SPAN)
-		_add_rect(vertices, polygons, width, -half_extents.y, half_extents.x, river_center - RIVER_HALF_SPAN)
-		_add_rect(vertices, polygons, -half_extents.x, river_center + RIVER_HALF_SPAN, -width, half_extents.y)
-		_add_rect(vertices, polygons, -width, river_center + RIVER_HALF_SPAN, width, half_extents.y)
-		_add_rect(vertices, polygons, width, river_center + RIVER_HALF_SPAN, half_extents.x, half_extents.y)
-		_add_rect(vertices, polygons, -width, river_center - RIVER_HALF_SPAN, width, river_center + RIVER_HALF_SPAN)
-	else:
-		_add_rect(vertices, polygons, -half_extents.x, -half_extents.y, half_extents.x, half_extents.y)
+	# Route segments remain authoritative for river and bridge safety. A single
+	# deterministic navigation polygon avoids overlapping raster edges in Web.
+	_add_rect(vertices, polygons, -half_extents.x, -half_extents.y, half_extents.x, half_extents.y)
 	nav_mesh.vertices = vertices
 	for polygon in polygons:
 		nav_mesh.add_polygon(polygon)
 	navigation_region.navigation_mesh = nav_mesh
 	parent.add_child(navigation_region)
+	if not navigation_map.is_valid():
+		navigation_map = NavigationServer3D.map_create()
+		NavigationServer3D.map_set_active(navigation_map, true)
+	navigation_region.set_navigation_map(navigation_map)
 	return navigation_region
 
 func get_navigation_map() -> RID:
-	if navigation_region != null and is_instance_valid(navigation_region):
-		return navigation_region.get_navigation_map()
-	return RID()
+	return navigation_map
 
 func is_reserved(position: Vector3, margin: float = 0.0) -> bool:
 	return _inside_entries(position, reserved_corridors, margin)

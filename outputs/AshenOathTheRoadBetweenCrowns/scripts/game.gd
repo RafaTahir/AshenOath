@@ -1907,7 +1907,10 @@ func _update_tutorial_prompts() -> void:
 	if current_zone_id == "wychwood" and not bool(tutorial_flags.get("near_clearing_audio", false)) and player.global_position.z < -4.0:
 		tutorial_flags["near_clearing_audio"] = true
 		audio.play_event("ghoulkin_idle", 0.03)
-	if current_zone_id == "wychwood" and _has_active_encounter_enemy() and not bool(tutorial_flags.get("combat", false)):
+	if current_zone_id == "wychwood" \
+			and not bool(story_state.get_flag("wychwood_pack_cleared", false)) \
+			and _has_active_encounter_enemy() \
+			and not bool(tutorial_flags.get("combat", false)):
 		tutorial_flags["combat"] = true
 		audio.set_music_state("ghoulkin_combat")
 		audio.play_event("wychwood_tension", 0.01)

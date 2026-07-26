@@ -73,13 +73,12 @@ func _build_hart_glade(context: ZoneBuildContext) -> void:
 	context.make_road(Vector3(0, 0.02, 2), Vector3(5.2, 0.05, 34), Color(0.12, 0.13, 0.10))
 	_marker(context, "hart_glade", "AuthoredWhiteHartGlade")
 	for position in [
-		Vector3(-16, 0, -13), Vector3(-13, 0, -7), Vector3(-16, 0, 0), Vector3(-13, 0, 8), Vector3(-16, 0, 14),
-		Vector3(16, 0, -13), Vector3(13, 0, -7), Vector3(16, 0, 0), Vector3(13, 0, 8), Vector3(16, 0, 14)
+		Vector3(-16, 0, -13), Vector3(-14, 0, -5), Vector3(-15, 0, 10),
+		Vector3(16, 0, -13), Vector3(14, 0, -5), Vector3(15, 0, 10)
 	]:
 		context.make_tree(position)
 	for position in [Vector3(-7, 0, -7), Vector3(7, 0, -7), Vector3(-9, 0, -2), Vector3(9, 0, -2)]:
 		context.make_ritual_stone(position)
-	context.make_fog_sheet(Vector3(0, 0.6, -6), Vector3(25, 1.2, 13), Color(0.18, 0.30, 0.24, 0.16))
 	context.make_light("HartWitnessLight", Vector3(0, 6, -9), Color(0.62, 0.86, 0.75), 4.2)
 	context.make_named_interactable("white_hart", "dialogue", "Stand before the White Hart", Vector3(0, 0, -9), Color(0.78, 0.80, 0.68), Vector3(0.42, 0.72, 0.42))
 	context.make_zone_gate("Return to Greyfen's assembly", Vector3(-7, 0, 16), "assembly", Vector3(0, 1, -12))

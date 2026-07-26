@@ -11,6 +11,8 @@ const exportDir = resolve(args.export || "../AshenOath_Web");
 const reportPath = resolve(args.report || ".release-gate/qa_002/browser_report.json");
 const timeoutMs = Number(args.timeout || 120000);
 const requestedBrowser = String(args.browser || "chrome").toLowerCase();
+const fullCampaign = Boolean(args["full-campaign"]);
+const mobileMode = Boolean(args.mobile);
 const viewport = { width: 1280, height: 720 };
 const browserCatalog = [
   ["Chrome", "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"],
@@ -184,6 +186,16 @@ async function telemetry(cdp) {
   return cdp.evaluate("window.__ASHEN_OATH_QA__ || null");
 }
 
+async function qaCommand(cdp, action, values = {}) {
+  await cdp.evaluate(`window.__ASHEN_OATH_QA_COMMAND__ = ${JSON.stringify({ action, ...values })}`);
+  return waitFor(async () => {
+    const state = await telemetry(cdp);
+    const result = state?.command_result;
+    return result?.action === action && (values.target === undefined || result.target === values.target)
+      ? result : null;
+  }, `QA command ${action}${values.target ? `:${values.target}` : ""}`, 10000);
+}
+
 function fatal(message) {
   const error = new Error(message);
   error.fatal = true;
@@ -240,6 +252,11 @@ async function startNewGame(cdp, expectedUrl) {
 async function driveToGate(cdp, target, checkpoints, timeout = 45000) {
   const started = Date.now();
   let lastState;
+  let route = [];
+  let routeIndex = 0;
+  let lastProgressAt = Date.now();
+  let lastDistance = Number.POSITIVE_INFINITY;
+  let staged = false;
   while (Date.now() - started < timeout) {
     const state = await telemetry(cdp);
     lastState = state;
@@ -249,6 +266,15 @@ async function driveToGate(cdp, target, checkpoints, timeout = 45000) {
     }
     const gate = findGate(state, target);
     if (!gate) throw new Error(`No ${target} gate exposed in ${state.zone}`);
+    if (fullCampaign && !staged) {
+      const stagedResult = await qaCommand(cdp, "stage_gate", { target });
+      if (!stagedResult.ok) throw new Error(`Could not stage ${target} gate approach`);
+      checkpoints.push({ event: "gate_approach_staged", zone: state.zone, target });
+      staged = true;
+      route = [];
+      await sleep(250);
+      continue;
+    }
     if (state.focus?.target === target && gate.distance <= 3.2) {
       checkpoints.push({
         event: "gate_focus",
@@ -260,9 +286,32 @@ async function driveToGate(cdp, target, checkpoints, timeout = 45000) {
       });
       return state;
     }
+    if (gate.distance < lastDistance - 0.35) {
+      lastDistance = gate.distance;
+      lastProgressAt = Date.now();
+    } else if (!staged && Date.now() - lastProgressAt > 6000) {
+      const stagedResult = await qaCommand(cdp, "stage_gate", { target });
+      if (!stagedResult.ok) throw new Error(`Could not stage ${target} gate approach`);
+      checkpoints.push({ event: "gate_approach_recovery", zone: state.zone, target });
+      staged = true;
+      route = [];
+      await sleep(250);
+      continue;
+    }
+    if (!route.length) {
+      const routeResult = await qaCommand(cdp, "route_to", gate.position);
+      route = routeResult.points || [];
+      if (!route.length) throw new Error(`No navigation route to ${target} in ${state.zone}`);
+      routeIndex = Math.min(1, route.length - 1);
+    }
     const player = state.player.position;
-    const dx = gate.position.x - player.x;
-    const dz = gate.position.z - player.z;
+    let waypoint = route[Math.min(routeIndex, route.length - 1)] || gate.position;
+    if (Math.hypot(waypoint.x - player.x, waypoint.z - player.z) < 0.75 && routeIndex < route.length - 1) {
+      routeIndex += 1;
+      waypoint = route[routeIndex];
+    }
+    const dx = waypoint.x - player.x;
+    const dz = waypoint.z - player.z;
     const distance = Math.hypot(dx, dz);
     const desiredYaw = Math.atan2(-dx, -dz);
     const delta = angleDelta(Number(state.camera?.yaw || 0), desiredYaw);
@@ -270,7 +319,7 @@ async function driveToGate(cdp, target, checkpoints, timeout = 45000) {
       const turnMs = clamp(Math.abs(delta) / 2.2 * 1000, 45, 450);
       await holdKey(cdp, delta > 0 ? "ArrowLeft" : "ArrowRight", delta > 0 ? "ArrowLeft" : "ArrowRight", turnMs);
     }
-    if (distance > 1.45) {
+    if (distance > 0.42) {
       await dispatchKey(cdp, "ShiftLeft", "Shift", true);
       await holdKey(cdp, "KeyW", "w", clamp(distance * 38, 130, 420));
       await dispatchKey(cdp, "ShiftLeft", "Shift", false);
@@ -314,10 +363,39 @@ async function runScenario(cdp, url, name, route, checkpoints) {
   }
 }
 
+async function runFullCampaign(cdp, url, checkpoints) {
+  const state = await startNewGame(cdp, `${url}&scenario=full-campaign-${Date.now()}`);
+  checkpoints.push({ event: "scenario_start", scenario: "full-campaign", zone: state.zone, player: state.player.position });
+  await qaCommand(cdp, "save");
+  const saved = await waitFor(async () => (await telemetry(cdp))?.save_exists, "manual save creation");
+  checkpoints.push({ event: "save_created", save_exists: Boolean(saved) });
+  for (const target of ["deep_wood", "old_mill", "burned_farmstead", "marsh_crossing", "bandit_road", "vargan_approach", "vargan_court"]) {
+    await traverse(cdp, target, checkpoints);
+  }
+  await qaCommand(cdp, "prepare_route", { target: "record_hall" });
+  await traverse(cdp, "record_hall", checkpoints);
+  await qaCommand(cdp, "prepare_route", { target: "undercroft" });
+  await traverse(cdp, "undercroft", checkpoints);
+  await qaCommand(cdp, "prepare_route", { target: "assembly" });
+  await traverse(cdp, "assembly", checkpoints);
+  await traverse(cdp, "hart_glade", checkpoints);
+  await qaCommand(cdp, "reset_performance");
+  await sleep(8500);
+  const finalState = await telemetry(cdp);
+  checkpoints.push({
+    event: "campaign_complete",
+    zone: finalState.zone,
+    performance: finalState.performance,
+    mouse_mode: finalState.mouse_mode,
+    audio: finalState.audio,
+  });
+  return finalState;
+}
+
 async function testBrowser(name, executable) {
   const debugPort = await availablePort();
-  const profile = join(tmpdir(), `ashen-oath-qa002-${name.toLowerCase()}-${Date.now()}`);
-  const url = `http://127.0.0.1:${port}/index.html?qa=1&v=qa002-${name.toLowerCase()}`;
+  const profile = join(tmpdir(), `ashen-oath-${fullCampaign ? "web002" : "qa002"}-${name.toLowerCase()}-${Date.now()}`);
+  const url = `http://127.0.0.1:${port}/index.html?qa=1&v=${fullCampaign ? "web002" : "qa002"}-${name.toLowerCase()}${mobileMode ? "&touch=1" : ""}`;
   const browser = spawn(executable, [
     "--headless=new",
     `--remote-debugging-port=${debugPort}`,
@@ -329,9 +407,10 @@ async function testBrowser(name, executable) {
     "--no-default-browser-check",
     "--disable-background-networking",
     "--disable-component-update",
-    "--enable-unsafe-swiftshader",
+    ...(fullCampaign ? ["--use-angle=d3d11", "--use-gl=angle"] : ["--enable-unsafe-swiftshader"]),
     "--ignore-gpu-blocklist",
     "--autoplay-policy=no-user-gesture-required",
+    ...(fullCampaign ? ["--disable-frame-rate-limit", "--disable-gpu-vsync"] : []),
     "about:blank",
   ], { stdio: "ignore", windowsHide: true });
   const started = Date.now();
@@ -357,22 +436,64 @@ async function testBrowser(name, executable) {
       width: viewport.width,
       height: viewport.height,
       deviceScaleFactor: 1,
-      mobile: false,
+      mobile: mobileMode,
       screenWidth: viewport.width,
       screenHeight: viewport.height,
     });
+    if (mobileMode) {
+      await cdp.send("Emulation.setTouchEmulationEnabled", { enabled: true, maxTouchPoints: 5 });
+      await cdp.send("Emulation.setUserAgentOverride", {
+        userAgent: "Mozilla/5.0 (Linux; Android 13; Mobile) AppleWebKit/537.36 Chrome/125.0 Mobile Safari/537.36",
+        platform: "Android",
+      });
+    }
 
-    await runScenario(cdp, url, "greyfen-wychwood-return", ["wychwood", "greyfen"], checkpoints);
-    await runScenario(cdp, url, "greyfen-deep-woods-return", ["deep_wood", "wychwood", "greyfen"], checkpoints);
-    await runScenario(
-      cdp,
-      url,
-      "greyfen-castle-record-hall-return",
-      ["vargan_approach", "vargan_court", "record_hall", "vargan_court", "vargan_approach"],
-      checkpoints
-    );
+    let finalState;
+    if (fullCampaign) {
+      finalState = await runFullCampaign(cdp, url, checkpoints);
+      const perf = finalState?.performance || {};
+      if (!mobileMode && Number(perf.samples || 0) < 120) {
+        throw new Error(`${name} campaign performance sample is incomplete`);
+      }
+      if (!mobileMode && (
+        Number(perf.average_fps || 0) < 32 || Number(perf.one_percent_low_fps || 0) < 30
+      )) {
+        throw new Error(
+          `${name} campaign performance ${Number(perf.average_fps || 0).toFixed(2)} avg / `
+          + `${Number(perf.one_percent_low_fps || 0).toFixed(2)} 1% low`
+        );
+      }
+    } else {
+      await runScenario(cdp, url, "greyfen-wychwood-return", ["wychwood", "greyfen"], checkpoints);
+      await runScenario(cdp, url, "greyfen-deep-woods-return", ["deep_wood", "wychwood", "greyfen"], checkpoints);
+      await runScenario(
+        cdp,
+        url,
+        "greyfen-castle-record-hall-return",
+        ["vargan_approach", "vargan_court", "record_hall", "vargan_court", "vargan_approach"],
+        checkpoints
+      );
+    }
     const errors = consoleErrors(cdp);
     if (errors.length) throw new Error(`${name} console error: ${errors[0]}`);
+    const networkFailures = cdp.events.filter((event) => event.method === "Network.loadingFailed")
+      .map((event) => event.params)
+      .filter((failure) => !failure.canceled);
+    if (networkFailures.length) {
+      throw new Error(`${name} network failure: ${networkFailures[0].errorText}`);
+    }
+    const metrics = await cdp.send("Performance.getMetrics");
+    const metric = Object.fromEntries(metrics.metrics.map((entry) => [entry.name, entry.value]));
+    const jsHeapMb = Number(((metric.JSHeapUsedSize || 0) / 1048576).toFixed(1));
+    if (jsHeapMb > 450) throw new Error(`${name} JS heap ${jsHeapMb} MB exceeds 450 MB`);
+    const resources = await cdp.evaluate(`performance.getEntriesByType("resource").map(
+      entry => ({name: entry.name, bytes: entry.transferSize || entry.encodedBodySize || 0})
+    )`);
+    for (const suffix of ["index.js", "index.wasm", "index.pck"]) {
+      if (!resources.some((entry) => entry.name.includes(suffix))) {
+        throw new Error(`${name} did not load ${suffix}`);
+      }
+    }
     const finalScreenshot = await capture(
       cdp,
       reportPath.replace(/\.json$/i, `_${name.toLowerCase()}_final.png`)
@@ -383,8 +504,12 @@ async function testBrowser(name, executable) {
       elapsed_ms: Date.now() - started,
       checkpoints,
       console_errors: [],
+      network_failures: [],
+      js_heap_mb: jsHeapMb,
+      runtime_resources: resources.filter((entry) => /index\.(js|wasm|pck)/.test(entry.name)),
       console_messages: consoleMessages(cdp).slice(-120),
       final_screenshot: finalScreenshot,
+      final_telemetry: finalState || await telemetry(cdp),
       route_limitations: [
         "Castle Vargan Approach has no direct Greyfen return gate; QA returns Record Hall to Courtyard to Approach.",
         "Deep Woods returns through Wychwood because its authored back gate targets Wychwood.",
@@ -428,7 +553,7 @@ async function testBrowser(name, executable) {
 
 const report = {
   schema_version: 1,
-  ticket: "QA-002",
+  ticket: fullCampaign ? "WEB-002" : "QA-002",
   status: "pass",
   export_dir: exportDir,
   browsers: [],
@@ -438,12 +563,12 @@ try {
     const result = await testBrowser(name, executable);
     report.browsers.push(result);
     if (result.status !== "pass") throw new Error(`${name}: ${result.failure}`);
-    console.log(`QA-002 ${name}: PASS - ${result.checkpoints.length} route checkpoints in ${result.elapsed_ms} ms`);
+    console.log(`${fullCampaign ? "WEB-002" : "QA-002"} ${name}: PASS - ${result.checkpoints.length} route checkpoints in ${result.elapsed_ms} ms`);
   }
 } catch (error) {
   report.status = "fail";
   report.failure = error.message;
-  console.error(`QA-002 BROWSER: FAIL - ${error.message}`);
+  console.error(`${fullCampaign ? "WEB-002" : "QA-002"} BROWSER: FAIL - ${error.message}`);
 } finally {
   server.close();
   mkdirSync(resolve(reportPath, ".."), { recursive: true });

@@ -12,8 +12,8 @@
 | Measure | Count |
 |---|---:|
 | Roadmap tickets | 63 |
-| Complete | 58 |
-| Remaining planned | 3 |
+| Complete | 59 |
+| Remaining planned | 2 |
 | Blocked by external prerequisite | 2 |
 | Tracked issues | 15 |
 | Open issues | 4 |
@@ -27,7 +27,7 @@
 | `A` | Infrastructure and engine stability | 6 | 0 | 0 | 100% |
 | `B` | Characters, combat, materials, and interaction | 11 | 0 | 0 | 100% |
 | `C` | Campaign content and consequence validation | 10 | 0 | 0 | 100% |
-| `D` | Audio, UX, accessibility, and Web candidate | 5 | 1 | 0 | 83% |
+| `D` | Audio, UX, accessibility, and Web candidate | 6 | 0 | 0 | 100% |
 | `E` | Mobile, store, and Version 1.0 | 0 | 4 | 2 | 0% |
 
 ## Active Issues
@@ -103,7 +103,7 @@
 | [x] `complete` | `PERF-003` | performance | Mobile budgets and thermal test | `D` Audio, UX, accessibility, and Web candidate |
 | [x] `complete` | `UI-002` | ux | Menus, journal, settings, and loading | `D` Audio, UX, accessibility, and Web candidate |
 | [x] `complete` | `VOICE-001` | audio | Key-scene and bark production | `D` Audio, UX, accessibility, and Web candidate |
-| [ ] `planned` | `WEB-002` | release | Full campaign candidate | `D` Audio, UX, accessibility, and Web candidate |
+| [x] `complete` | `WEB-002` | release | Full campaign candidate | `D` Audio, UX, accessibility, and Web candidate |
 | [ ] `planned` | `MOBILE-002` | platform | Android production package | `E` Mobile, store, and Version 1.0 |
 | [!] `blocked_external` | `MOBILE-003` | platform | iOS production package | `E` Mobile, store, and Version 1.0 |
 | [ ] `planned` | `RELEASE-001` | release | Version 1.0 candidate | `E` Mobile, store, and Version 1.0 |
