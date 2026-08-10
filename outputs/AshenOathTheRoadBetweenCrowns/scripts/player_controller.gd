@@ -814,6 +814,10 @@ func _try_build_mapped_body() -> bool:
 	rig_sword_visual = _attach_rig_sword(mapped)
 	if rig_sword_visual != null:
 		_configure_blade_markers(rig_sword_visual, Vector3(0, 0, -0.08), Vector3(0, 0, -1.18), true)
+		# Establish the authored ready pose before the first physics tick. Capture
+		# tools and dialogue staging can sample the rig before _animate_visuals runs;
+		# leaving the imported hand axis untouched makes the sword read as a pole.
+		_update_sword_equipment_pose(0.0, 0.0, 0.0, false, false)
 	body_visual = _find_first_mesh(mapped)
 	_apply_visible_material_fallbacks(mapped, _mat(Color(0.18, 0.20, 0.18)))
 	if body_visual != null and body_visual.material_override is StandardMaterial3D:
@@ -876,6 +880,9 @@ func _attach_rig_sword(mapped: Node3D) -> Node3D:
 func _build_oathblade_visual(parent: Node3D) -> Node3D:
 	var oathblade := Node3D.new()
 	oathblade.name = "KaelOathblade"
+	# Keep the blade readable at gameplay distance without turning it into a
+	# pole that reaches from Kael's hand to the ground.
+	oathblade.scale = Vector3.ONE * 0.86
 	parent.add_child(oathblade)
 	var steel := _metal_mat(Color(0.78, 0.84, 0.88))
 	steel.metallic = 0.82
@@ -946,8 +953,8 @@ func _update_sword_equipment_pose(windup: float, strike: float, recovery: float,
 			windup_direction = (Vector3.UP * 0.90 - forward * 0.25 + right * 0.34).normalized()
 			strike_direction = (Vector3.DOWN * 0.72 + forward * 0.62 - right * 0.24).normalized()
 		else:
-			windup_direction = (right * 0.86 + Vector3.UP * 0.34 - forward * 0.38).normalized()
-			strike_direction = (-right * 0.74 + Vector3.DOWN * 0.24 + forward * 0.63).normalized()
+			windup_direction = (right * 0.82 + Vector3.UP * 0.40 - forward * 0.24).normalized()
+			strike_direction = (-right * 0.62 + Vector3.DOWN * 0.12 + forward * 0.90).normalized()
 		blade_direction = idle_direction.slerp(windup_direction, smoothstep(0.0, 1.0, windup))
 		if strike > 0.0:
 			blade_direction = windup_direction.slerp(strike_direction, smoothstep(0.0, 1.0, strike))
@@ -1101,7 +1108,7 @@ func _add_slash_arc_visuals() -> void:
 	slash_arc_root.position = Vector3(0.48, 1.18, -0.78)
 	slash_arc_root.visible = false
 	visual_root.add_child(slash_arc_root)
-	slash_arc_primary = _add_slash_panel("visible_sword_slash_arc_primary", Vector3.ZERO, Vector3(0.09, 0.18, 1.0), Color(1.0, 0.76, 0.42, 0.30))
+	slash_arc_primary = _add_slash_panel("visible_sword_slash_arc_primary", Vector3.ZERO, Vector3(0.09, 0.18, 1.0), Color(1.0, 0.76, 0.42, 0.58))
 	slash_arc_secondary = _add_slash_panel("visible_sword_slash_arc_secondary", Vector3(0.07, -0.04, 0.05), Vector3(0.16, 0.08, 0.90), Color(0.70, 0.32, 0.12, 0.58))
 	slash_arc_spark = _add_slash_panel("visible_sword_slash_impact_edge", Vector3(0.0, 0.0, -0.48), Vector3(0.20, 0.22, 0.16), Color(1.0, 0.80, 0.34, 0.92))
 
@@ -1276,13 +1283,23 @@ func _animate_slash_arc(strike: float, strike_arc: float, recovery: float, heavy
 
 func _build_blade_ribbon(old_base: Vector3, old_tip: Vector3, blade_base: Vector3, blade_tip: Vector3) -> ImmediateMesh:
 	var ribbon := ImmediateMesh.new()
+	var width_axis := Vector3.RIGHT
+	var camera := get_viewport().get_camera_3d()
+	if camera != null:
+		width_axis = camera.global_transform.basis.x.normalized()
+	var width := width_axis * 0.065
 	ribbon.surface_begin(Mesh.PRIMITIVE_TRIANGLES)
-	ribbon.surface_add_vertex(old_base)
-	ribbon.surface_add_vertex(old_tip)
-	ribbon.surface_add_vertex(blade_tip)
-	ribbon.surface_add_vertex(old_base)
-	ribbon.surface_add_vertex(blade_tip)
-	ribbon.surface_add_vertex(blade_base)
+	# Build two thin screen-facing strips around the measured blade sweep. This
+	# keeps the slash readable when the real sword moves almost edge-on to the
+	# camera, while preserving the actual blade base/tip path.
+	for side in [-1.0, 1.0]:
+		var offset: Vector3 = width * side
+		ribbon.surface_add_vertex(old_base + offset)
+		ribbon.surface_add_vertex(old_tip + offset)
+		ribbon.surface_add_vertex(blade_tip + offset)
+		ribbon.surface_add_vertex(old_base + offset)
+		ribbon.surface_add_vertex(blade_tip + offset)
+		ribbon.surface_add_vertex(blade_base + offset)
 	ribbon.surface_end()
 	return ribbon
 
