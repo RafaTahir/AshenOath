@@ -79,18 +79,26 @@ func set_time(minutes: float, phase: String, _day_count: int = 0) -> void:
 	if not bool(profile.outdoor):
 		moon.light_energy = 0.0
 		sun.light_energy = float(profile.interior_directional)
+		sky_dome.visible = false
 		for celestial in [sun_disc, sun_halo, moon_disc, moon_halo, star_field, cloud_layer]:
 			celestial.visible = false
-		current_environment.background_color = profile.night_sky
+		current_environment.background_mode = Environment.BG_COLOR
+		current_environment.background_color = profile.interior_background
+		# Keep the renderer clear color in lockstep with the authored interior
+		# profile. This is the fallback behind an interior ceiling when ANGLE
+		# briefly renders before the WorldEnvironment has propagated.
+		RenderingServer.set_default_clear_color(profile.interior_background)
 		current_environment.ambient_light_color = profile.ambient_night.lerp(profile.ambient_day, daylight)
 		current_environment.ambient_light_energy = lerpf(float(profile.ambient_night_energy), float(profile.ambient_day_energy), daylight)
 		current_environment.adjustment_brightness = lerpf(float(profile.night_brightness), float(profile.day_brightness), daylight)
 		current_environment.adjustment_saturation = float(profile.saturation)
-		current_environment.fog_density = float(profile.fog_night)
+		current_environment.fog_light_color = profile.interior_fog_color
+		current_environment.fog_density = lerpf(float(profile.interior_fog_night), float(profile.interior_fog_day), daylight)
 		_update_zone_night_state(night)
 		return
 	var twilight_sky: Color = profile.dawn_sky if minutes < 720.0 else profile.dusk_sky
 	current_environment.background_color = profile.night_sky.lerp(twilight_sky, twilight).lerp(profile.day_sky, daylight)
+	RenderingServer.set_default_clear_color(current_environment.background_color)
 	current_environment.ambient_light_color = profile.ambient_night.lerp(profile.ambient_day, daylight)
 	current_environment.ambient_light_energy = lerpf(float(profile.ambient_night_energy), float(profile.ambient_day_energy), daylight)
 	current_environment.fog_light_color = profile.fog_night_color.lerp(profile.fog_day_color, daylight)
@@ -150,6 +158,7 @@ func _update_sky_cycle(daylight: float, twilight: float, night: float, minutes: 
 	_set_mesh_alpha(moon_disc, 0.94 * night)
 	_set_mesh_alpha(moon_halo, 0.20 * night)
 	star_field.visible = night > 0.22
+	sky_dome.visible = false
 	_set_mesh_alpha(star_field, clampf((night - 0.10) / 0.70, 0.0, 0.92))
 	var quality := _quality_preset()
 	if star_field != null and star_field.multimesh != null:
@@ -257,6 +266,10 @@ func _lighting_profile(zone_id: String) -> Dictionary:
 		"dawn_sky": Color(0.42, 0.25, 0.20),
 		"dusk_sky": Color(0.38, 0.18, 0.10),
 		"night_sky": Color(0.020, 0.045, 0.090),
+		"interior_background": Color(0.018, 0.015, 0.014),
+		"interior_fog_color": Color(0.018, 0.015, 0.014),
+		"interior_fog_day": 0.004,
+		"interior_fog_night": 0.007,
 		"ambient_day": Color(0.48, 0.44, 0.38),
 		"ambient_night": Color(0.22, 0.29, 0.43),
 		"ambient_day_energy": 0.88,
@@ -284,6 +297,7 @@ func _lighting_profile(zone_id: String) -> Dictionary:
 			"id": "cemetery", "day_sky": Color(0.20, 0.31, 0.40),
 			"dawn_sky": Color(0.31, 0.24, 0.22), "dusk_sky": Color(0.27, 0.16, 0.13),
 			"night_sky": Color(0.014, 0.034, 0.070), "ambient_day": Color(0.38, 0.39, 0.38),
+			"interior_background": Color(0.016, 0.015, 0.016),
 			"fog_day": 0.025, "fog_night": 0.046, "moon_energy": 0.90,
 		}, true)
 	elif zone_id in FOREST_ZONES:
@@ -304,6 +318,7 @@ func _lighting_profile(zone_id: String) -> Dictionary:
 			"id": "castle", "day_sky": Color(0.25, 0.29, 0.35),
 			"dawn_sky": Color(0.38, 0.29, 0.25), "dusk_sky": Color(0.30, 0.20, 0.17),
 			"night_sky": Color(0.020, 0.032, 0.060), "ambient_day": Color(0.42, 0.40, 0.38),
+			"interior_background": Color(0.018, 0.016, 0.014),
 			"ambient_night": Color(0.24, 0.28, 0.38), "fog_day": 0.020,
 			"fog_night": 0.038, "sun_energy": 0.86, "moon_energy": 0.86,
 			"contrast": 1.32, "saturation": 0.88,
@@ -311,11 +326,12 @@ func _lighting_profile(zone_id: String) -> Dictionary:
 	elif zone_id in INTERIOR_ZONES:
 		profile.merge({
 			"id": zone_id, "outdoor": false, "clouds": false,
-			"night_sky": Color(0.014, 0.012, 0.012),
+			"night_sky": Color(0.014, 0.012, 0.012), "interior_background": Color(0.024, 0.019, 0.016),
+			"interior_fog_color": Color(0.028, 0.022, 0.018), "interior_fog_day": 0.004, "interior_fog_night": 0.007,
 			"ambient_day": Color(0.31, 0.25, 0.20), "ambient_night": Color(0.21, 0.22, 0.28),
-			"ambient_day_energy": 0.78, "ambient_night_energy": 0.72,
-			"fog_night": 0.012, "day_brightness": 1.06, "night_brightness": 1.10,
-			"contrast": 1.30, "saturation": 0.82, "interior_directional": 0.20,
+			"ambient_day_energy": 0.90, "ambient_night_energy": 0.84,
+			"fog_night": 0.012, "day_brightness": 1.10, "night_brightness": 1.14,
+			"contrast": 1.22, "saturation": 0.84, "interior_directional": 0.24,
 		}, true)
 	return profile
 

@@ -39,6 +39,8 @@ func _verify_static_contract() -> void:
 		"func _activate_cached_zone(",
 		"func _retire_zone_root(",
 		"func _validate_zone_render_resources(",
+		"_validate_zone_render_resources(visual_director)",
+		"_validate_zone_render_resources(player)",
 		"func prepare_resource_shutdown(",
 		"func zone_lifecycle_snapshot(",
 	]:
@@ -81,6 +83,12 @@ func _verify_lifecycle(game) -> void:
 		check(int(render_report.get("invalid_geometry", 0)) == 0, "%s retained invalid geometry resources: %s" % [
 			zone_id, render_report.get("invalid_geometry_names", [])
 		])
+		if game.visual_director != null and is_instance_valid(game.visual_director):
+			var sky_report: Dictionary = game.call("_validate_zone_render_resources", game.visual_director)
+			check(int(sky_report.get("invalid_geometry", 0)) == 0, "%s sky layer retained invalid geometry" % zone_id)
+		if game.player != null and is_instance_valid(game.player):
+			var player_report: Dictionary = game.call("_validate_zone_render_resources", game.player)
+			check(int(player_report.get("invalid_geometry", 0)) == 0, "%s player retained invalid geometry" % zone_id)
 
 	var probe := MeshInstance3D.new()
 	probe.name = "LifecycleMaterialProbe"

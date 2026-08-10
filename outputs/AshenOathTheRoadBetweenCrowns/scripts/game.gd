@@ -340,6 +340,9 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 			_cache_route_zone(previous_zone_id, zone_root, previous_enemies, active_zone_signature)
 	active_interactable = null
 	interaction_candidates.clear()
+	# Guidance belongs to the previous route. Clear it before the new zone
+	# refreshes its own contextual hint so stale prompts cannot survive a gate.
+	hud.set_guidance_hint("")
 	current_zone_id = zone_id
 	var using_prewarmed_spatial := zone_id == "greyfen" \
 		and greyfen_prewarm_spatial_service != null \
@@ -448,6 +451,14 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	# Kael after collision is ready, so bind the final player instance here.
 	if life_controller != null:
 		life_controller.player = player
+	# Sky and player equipment are created after the zone builder's first
+	# validation pass. Validate these late render roots before the first visible
+	# frame so procedural meshes cannot reach the renderer with empty surfaces.
+	_validate_zone_render_resources(zone_root)
+	if visual_director != null:
+		_validate_zone_render_resources(visual_director)
+	if player != null:
+		_validate_zone_render_resources(player)
 	if player != null:
 		pending_spawn_facing = player.rotation.y
 		pending_spawn_position = safe_spawn
@@ -1333,6 +1344,10 @@ func _complete_ending(ending: String) -> void:
 		hud.hide_menus()
 		get_tree().paused = false
 		_remove_interactable("white_hart")
+		if zone_root != null and is_instance_valid(zone_root):
+			var witness_display := zone_root.find_child("WhiteHartWitnessDisplay", true, false)
+			if witness_display != null:
+				witness_display.queue_free()
 		if not _has_living_enemy("white_hart_avatar"):
 			var hart_boss = _spawn_enemy("white_hart_avatar", Vector3(0, 0.8, -7))
 			if hart_boss != null:
@@ -3978,7 +3993,7 @@ func _compatibility_budget_mode() -> bool:
 	return settings == null or str(settings.settings.get("quality_preset", "balanced")) != "quality"
 
 func _keep_performance_light(name: String) -> bool:
-	return name in ["Village Warmth", "Shrine Beacon", "Wychwood Gate Lantern", "Moon Shaft", "Trail Threat", "ClearingColdSpot", "SpawnWarmRead"]
+	return name in ["Village Warmth", "Shrine Beacon", "Wychwood Gate Lantern", "Moon Shaft", "Trail Threat", "ClearingColdSpot", "SpawnWarmRead", "LedgerTableLight", "RecordHallNavigationFill", "HartWitnessLight"]
 
 func _build_global_environment() -> void:
 	visual_director = VisualDirector.new()
