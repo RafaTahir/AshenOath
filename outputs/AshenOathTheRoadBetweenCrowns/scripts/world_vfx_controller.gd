@@ -16,7 +16,7 @@ func configure(active_zone: String, quality_preset: String) -> void:
 	quality = quality_preset if quality_preset in ["potato", "balanced", "quality"] else "balanced"
 	_build_ambient_motes()
 
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	update_accumulator += delta
 	if update_accumulator < UPDATE_INTERVAL:
 		return

@@ -28,6 +28,17 @@ func _initialize() -> void:
 	await process_frame
 	game.call("_new_game")
 	await _settle_frames(8)
+	if "--river-only" in OS.get_cmdline_user_args():
+		await _capture(game, "73_river_forced_recovery_proof", Vector3(8, -0.5, 4.5), "greyfen", Vector3(8, -0.5, 4.5), 0.35)
+		print("RIVER-ONLY CAPTURE: PASS")
+		_release_render_resources(game)
+		if game.is_inside_tree():
+			root.remove_child(game)
+		game.free()
+		RenderingServer.force_sync()
+		await _settle_frames(8)
+		quit(0)
+		return
 	if "--combat-only" in OS.get_cmdline_user_args():
 		await _capture_player_motion_state(game, "15_player_sword_ready", "idle")
 		await _capture_player_motion_state(game, "13_player_light_attack_arc", "light")
@@ -57,7 +68,7 @@ func _initialize() -> void:
 		quit(0)
 		return
 	await _capture(game, "01_greyfen_spawn", Vector3(0, 1, 7), "greyfen", Vector3(0, 1, 7))
-	await _capture(game, "02_village_center", Vector3(-2, 1, 5), "greyfen", Vector3(-2, 1, 5))
+	await _capture(game, "02_village_center", Vector3(-2, 1, 8), "greyfen", Vector3(-2, 1, 8))
 	await _capture(game, "70_greyfen_river_bridge", Vector3(0, 1, 7.5), "greyfen", Vector3(0, 1, 7.5))
 	await _capture(game, "71_greyfen_river_bank", Vector3(-6, 1, 7.2), "greyfen", Vector3(-6, 1, 7.2), 0.55)
 	await _capture(game, "73_river_forced_recovery_proof", Vector3(8, -0.5, 4.5), "greyfen", Vector3(8, -0.5, 4.5), 0.35)
@@ -85,13 +96,13 @@ func _initialize() -> void:
 	await _capture(game, "39_undercroft", Vector3(0,1,6), "undercroft", Vector3(0,1,6))
 	await _capture(game, "40_greyfen_assembly", Vector3(0,1,6), "assembly", Vector3(0,1,6))
 	await _capture(game, "41_white_hart_glade", Vector3(0,1,6), "hart_glade", Vector3(0,1,6))
-	await _capture(game, "42_greyfen_living_street", Vector3(-2,1,5), "greyfen", Vector3(-2,1,5))
+	await _capture(game, "42_greyfen_living_street", Vector3(-2,1,8), "greyfen", Vector3(-2,1,8))
 	await _capture(game, "43_blacksmith_routine", Vector3(8.0,1,-4.2), "greyfen", Vector3(8.0,1,-4.2), -0.65)
 	await _capture(game, "44_shrine_pilgrim", Vector3(2.0,1,-6.0), "greyfen", Vector3(2.0,1,-6.0), 0.55)
 	await _capture_place_interaction(game, "45_notice_board_interaction", "notice_board", Vector3(-2,1,7.8))
 	await _capture_minigame(game, "46_tic_tac_toe_ui", "tic_tac_toe")
 	await _capture_minigame(game, "47_greyfen_draughts_ui", "draughts")
-	await _capture(game, "48_minigame_tables_world", Vector3(-4.5,1,6.0), "greyfen", Vector3(-4.5,1,6.0), -0.35)
+	await _capture(game, "48_minigame_tables_world", Vector3(-4.5,1,8.0), "greyfen", Vector3(-4.5,1,8.0), -0.35)
 	await _capture(game, "49_greyfen_life_wide", Vector3(0,1,11), "greyfen", Vector3(0,1,11))
 	await _capture_player_motion_state(game, "11_player_idle_pose", "idle")
 	await _capture_player_motion_state(game, "12_player_walking_pose", "walk")
@@ -112,7 +123,7 @@ func _initialize() -> void:
 	await _capture_victory_state(game, "23_ghoulkin_aftermath_clue")
 	await _capture_oathfire_state(game, "24_oathfire_charge", false)
 	await _capture_oathfire_state(game, "25_oathfire_beam_release", true)
-	await _capture(game, "60_polish_skeletal_villagers", Vector3(-2,1,5), "greyfen", Vector3(-2,1,5), -0.25)
+	await _capture(game, "60_polish_skeletal_villagers", Vector3(-2,1,8), "greyfen", Vector3(-2,1,8), -0.25)
 	await _capture_dialogue(game, "61_polish_anwen_facing", Vector3(3.2, 1, -5.0))
 	await _capture(game, "79_ui_001_hud_hierarchy", Vector3(0, 1, 7), "greyfen", Vector3(0, 1, 7))
 	await _capture_anwen_approach(game, "80_ui_001_anwen_approach")
@@ -143,15 +154,19 @@ func _initialize() -> void:
 	await _capture(game, "59_castle_potato_mode", Vector3(0,1,9), "vargan_court", Vector3(0,1,9))
 	print("Screenshots saved to %s and mirrored to %s" % [output_dir, gallery_dir])
 	_release_render_resources(game)
-	game.queue_free()
-	await _settle_frames(4)
+	if game.is_inside_tree():
+		root.remove_child(game)
+	game.free()
+	RenderingServer.force_sync()
+	await _settle_frames(8)
 	quit()
 
 func _release_render_resources(game: Node) -> void:
-	for node in game.find_children("*", "MultiMeshInstance3D", true, false):
-		node.multimesh = null
-	for node in game.find_children("*", "MeshInstance3D", true, false):
-		node.mesh = null
+	# Let the scene tree own renderer teardown. Detaching meshes while their
+	# instances are still registered produces the null-material errors this
+	# capture is meant to detect and can race RenderingServer cleanup.
+	if game != null and is_instance_valid(game):
+		game.process_mode = Node.PROCESS_MODE_DISABLED
 
 func _capture(game, file_name: String, player_pos: Vector3, zone_id: String, spawn_pos: Vector3, camera_yaw: float = 0.0) -> void:
 	if not file_name.contains("forced_recovery") and game.has_method("validate_walkable_position"):
@@ -165,6 +180,8 @@ func _capture(game, file_name: String, player_pos: Vector3, zone_id: String, spa
 		game.camera_rig.yaw = camera_yaw
 		game.camera_rig.pitch = -0.2
 	await _settle_frames(12)
+	if file_name == "73_river_forced_recovery_proof":
+		print("RIVER-ONLY POSITION: %s" % str(game.player.global_position))
 	_assert_capture_safe(game, player_pos, file_name)
 	var image = root.get_viewport().get_texture().get_image()
 	if image == null:

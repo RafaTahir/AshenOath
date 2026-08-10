@@ -9,6 +9,7 @@ var half_extents := Vector2(20.0, 16.0)
 var reserved_corridors: Array[Dictionary] = []
 var exclusions: Array[Dictionary] = []
 var safe_spawns: Array[Vector3] = []
+var recovery_anchors: Array[Vector3] = []
 var bridges: Dictionary = {}
 var gates: Dictionary = {}
 var navigation_region: NavigationRegion3D
@@ -26,6 +27,7 @@ func configure(id: String, river_z: float, extents: Vector2) -> void:
 	reserved_corridors.clear()
 	exclusions.clear()
 	safe_spawns.clear()
+	recovery_anchors.clear()
 	bridges.clear()
 	gates.clear()
 	_register_zone_defaults()
@@ -49,6 +51,12 @@ func add_safe_spawn(position: Vector3) -> void:
 	if is_river_excluded(safe, 0.8):
 		safe.z = river_center + float(bank_for(position)) * (RIVER_HALF_SPAN + 0.8)
 	safe_spawns.append(safe)
+
+func add_recovery_anchor(position: Vector3) -> void:
+	var anchor := _clamp_to_bounds(position, 0.9)
+	if is_river_excluded(anchor, 0.9):
+		anchor.z = river_center + float(bank_for(position)) * (RIVER_HALF_SPAN + 0.9)
+	recovery_anchors.append(anchor)
 
 func build_navigation(parent: Node3D) -> NavigationRegion3D:
 	var previous := parent.find_child("DeterministicNavigationRegion", false, false)
@@ -161,6 +169,20 @@ func validate_path(points: Array, clearance: float = 0.9) -> Array:
 
 func nearest_safe(position: Vector3, preferred_bank: int = 0) -> Vector3:
 	var wanted_bank := preferred_bank if preferred_bank != 0 else bank_for(position)
+	# Recovery must prefer authored road anchors. Searching around the failed
+	# coordinate can select a roof, yard, or prop when the failure occurred
+	# beside a building or scenery wall.
+	var ordered_anchors := recovery_anchors.duplicate()
+	ordered_anchors.sort_custom(func(a: Vector3, b: Vector3) -> bool:
+		return a.distance_squared_to(position) < b.distance_squared_to(position)
+	)
+	for anchor in ordered_anchors:
+		if wanted_bank != 0 and bank_for(anchor) != wanted_bank:
+			continue
+		if is_river_excluded(anchor, 0.8) or _inside_entries(anchor, exclusions, 0.6):
+			continue
+		if not is_position_occupied(anchor, 0.42, 1.65):
+			return anchor
 	var base := _clamp_to_bounds(position, 1.0)
 	if wanted_bank != 0 and river_center < 900.0:
 		base.z = river_center + float(wanted_bank) * maxf(absf(base.z - river_center), RIVER_HALF_SPAN + 1.0)
@@ -176,6 +198,10 @@ func nearest_safe(position: Vector3, preferred_bank: int = 0) -> Vector3:
 			continue
 		if not is_position_occupied(candidate, 0.42, 1.65):
 			return candidate
+	if wanted_bank != 0 and not recovery_anchors.is_empty():
+		for anchor in recovery_anchors:
+			if bank_for(anchor) == wanted_bank and not is_river_excluded(anchor, 0.8):
+				return anchor
 	return _nearest_spawn(position, wanted_bank)
 
 func is_position_occupied(position: Vector3, radius: float, height: float) -> bool:
@@ -257,12 +283,18 @@ func _register_zone_defaults() -> void:
 		register_gate("long_road_gate", Vector3(-18.0, 0, -10.0), Vector3(-16.0, 0.9, -9.0), Vector2(3.4, 3.0))
 		reserve_corridor("spawn", Vector3(0, 0, 13.0), Vector2(3.2, 2.4))
 		add_safe_spawn(Vector3(0, 0.9, 12.5))
+		# Keep recovery on authored road approaches rather than the dense river-side
+		# dressing. These anchors are also valid camera staging points.
+		add_recovery_anchor(Vector3(0, 0.0, -12.5))
+		add_recovery_anchor(Vector3(0, 0.0, 12.5))
 	elif zone_id == "wychwood":
 		register_bridge("wychwood_bridge", Vector3(0, 0.55, river_center - 3.2), Vector3(0, 0.55, river_center + 3.2), DEFAULT_BRIDGE_HALF_WIDTH)
 		register_gate("greyfen_gate", Vector3(0, 0, 15.0), Vector3(0, 0.9, 12.5), Vector2(3.4, 2.3))
 		reserve_corridor("main_road", Vector3(0, 0, 1.5), Vector2(2.6, 13.5))
 		reserve_corridor("combat_clearing", Vector3(0, 0, -7.0), Vector2(5.2, 4.2))
 		add_safe_spawn(Vector3(0, 0.9, -2.5))
+		add_recovery_anchor(Vector3(0, 0.0, -12.5))
+		add_recovery_anchor(Vector3(0, 0.0, 12.5))
 	else:
 		register_gate("campaign_return", Vector3(-7, 0, 13.5), Vector3(0, 0.9, 12.0), Vector2(3.2, 2.4))
 		register_gate("campaign_forward", Vector3(7, 0, -13.5), Vector3(0, 0.9, -12.0), Vector2(3.2, 2.4))
