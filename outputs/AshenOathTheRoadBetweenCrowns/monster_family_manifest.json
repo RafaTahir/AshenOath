@@ -1,9 +1,9 @@
 {
-  "version": 1,
-  "ticket": "MON-001",
+  "version": 2,
+  "ticket": "CHAR-REPAIR-001",
   "families": {
     "ghoulkin": {
-      "visual_role": "ghoul_gaunt_real",
+      "visual_role": "orc_skull_real",
       "profile": "skirmisher",
       "height": 1.63,
       "skin": "ghoulkin_skin.jpg"
@@ -15,7 +15,7 @@
       "skin": "stalker_skin.jpg"
     },
     "wychwood_raider": {
-      "visual_role": "ghoul_gaunt_real",
+      "visual_role": "orc_skull_real",
       "profile": "feinter",
       "height": 1.72,
       "skin": "ghoulkin_skin.jpg"

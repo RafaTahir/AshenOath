@@ -33,6 +33,8 @@ static func apply(root: Node, role_id: String) -> Dictionary:
 	root.set_meta("character_identity_profile", role)
 	root.set_meta("character_identity_surfaces", surfaces)
 	root.set_meta("character_face_surfaces", face_surfaces)
+	if role in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute", "ghoulkin_skeleton"] and root.find_child("Orc_Skull", true, false) != null:
+		_add_monster_eye_details(root, role)
 	return {"role": role, "surfaces": surfaces, "face_surfaces": face_surfaces}
 
 static func _profile_for(role: String) -> Dictionary:
@@ -71,10 +73,19 @@ static func _occupation_profile(role: String, primary: Color, secondary: Color, 
 
 static func _color_for(token: String, role: String, profile: Dictionary) -> Color:
 	if role in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute", "ghoulkin_skeleton"]:
-		return {
-			"wychwood_stalker": Color("596451"), "wychwood_raider": Color("665b4e"),
-			"wychwood_brute": Color("4b5145"), "ghoulkin": Color("626052")
+		var monster_skin: Color = {
+			"wychwood_stalker": Color("667462"), "wychwood_raider": Color("716957"),
+			"wychwood_brute": Color("5b6255"), "ghoulkin": Color("7b765f")
 		}.get(role, Color("626052"))
+		if token.contains("eye"):
+			return Color("d98a37") if role != "wychwood_brute" else Color("b94d32")
+		if token.contains("teeth") or token.contains("mouth") or token.contains("lip"):
+			return Color("b6a27c") if role != "wychwood_stalker" else Color("8f8065")
+		if token.contains("bone") or token.contains("rib") or token.contains("horn"):
+			return Color("9b9272")
+		if token.contains("leather") or token.contains("cloth") or token.contains("shirt"):
+			return monster_skin.darkened(0.28)
+		return monster_skin
 	if token.contains("skin"):
 		return profile.skin
 	if token.contains("hair"):
@@ -109,3 +120,55 @@ static func _identity_material(source, color: Color) -> StandardMaterial3D:
 	material.shading_mode = BaseMaterial3D.SHADING_MODE_PER_PIXEL
 	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
 	return material
+
+static func _add_monster_eye_details(root: Node, role: String) -> void:
+	if root.has_meta("monster_eye_details_applied"):
+		return
+	var skeleton := _find_skeleton(root)
+	if skeleton == null:
+		return
+	var head_index := -1
+	for index in range(skeleton.get_bone_count()):
+		var bone_key := skeleton.get_bone_name(index).to_lower().replace(" ", "").replace("_", "").replace("-", "").replace(".", "")
+		if bone_key == "head" or bone_key.ends_with("head"):
+			head_index = index
+			break
+	if head_index < 0:
+		return
+	var attachment := BoneAttachment3D.new()
+	attachment.name = "MonsterFaceDetails"
+	attachment.bone_idx = head_index
+	attachment.position = Vector3.ZERO
+	skeleton.add_child(attachment)
+	var iris_color := Color("d58a30")
+	if role == "wychwood_stalker":
+		iris_color = Color("b9c65a")
+	elif role == "wychwood_brute":
+		iris_color = Color("b94432")
+	for side in [-1.0, 1.0]:
+		var eye := MeshInstance3D.new()
+		eye.name = "MonsterEyeDetail_%s" % ("L" if side < 0.0 else "R")
+		var sphere := SphereMesh.new()
+		sphere.radius = 0.035
+		sphere.height = 0.07
+		eye.mesh = sphere
+		eye.position = Vector3(0.145 * side, 0.02, -0.25)
+		eye.scale = Vector3(0.78, 0.82, 0.42)
+		var material := StandardMaterial3D.new()
+		material.albedo_color = iris_color
+		material.emission_enabled = true
+		material.emission = iris_color
+		material.emission_energy_multiplier = 0.42
+		material.roughness = 0.34
+		eye.material_override = material
+		attachment.add_child(eye)
+	root.set_meta("monster_eye_details_applied", true)
+
+static func _find_skeleton(root: Node) -> Skeleton3D:
+	if root is Skeleton3D:
+		return root as Skeleton3D
+	for child in root.get_children():
+		var found := _find_skeleton(child)
+		if found != null:
+			return found
+	return null

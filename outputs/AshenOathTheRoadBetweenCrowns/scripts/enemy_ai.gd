@@ -540,9 +540,9 @@ func _try_build_mapped_body() -> bool:
 	var visual_source: String = enemy_id
 	if enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute"]:
 		visual_source = {
-			"ghoulkin": "ghoul_gaunt_real",
+			"ghoulkin": "orc_skull_real",
 			"wychwood_stalker": "ghoul_stalker_real",
-			"wychwood_raider": "ghoul_gaunt_real",
+			"wychwood_raider": "orc_skull_real",
 			"wychwood_brute": "ghoul_brute_real",
 		}.get(enemy_id, "ghoul_gaunt_real")
 		mapped = asset_helper.spawn_visual_role(visual_source, "enemies")

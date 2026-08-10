@@ -101,12 +101,19 @@
     },
     "enemies": {
       "ghoul_gaunt_real": {
-        "status": "mon_001",
-        "path": "res://assets_external/characters_real/GhoulGaunt_Real.glb",
+		"status": "mon_001",
+		"path": "res://assets_external/characters_real/GhoulGaunt_Real.glb",
         "source": "Ashen Oath derived CC0 production mesh",
         "license": "CC0 1.0",
-        "notes": "Connected gaunt cursed-human body for Ghoulkin and Raider profiles."
-      },
+		"notes": "Connected gaunt cursed-human body for Ghoulkin and Raider profiles."
+	  },
+	  "orc_skull_real": {
+		"status": "char_repair_001",
+		"path": "res://assets_external/animated/OrcSkull_Animated_CC0.gltf",
+		"source": "Quaternius Ultimate Monsters",
+		"license": "CC0 1.0",
+		"notes": "Existing textured, rigged monster body used for the primary Ghoulkin and Raider silhouettes; no new external asset added."
+	  },
       "ghoul_stalker_real": {
         "status": "mon_001",
         "path": "res://assets_external/characters_real/GhoulStalker_Real.glb",

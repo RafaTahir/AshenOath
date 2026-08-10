@@ -1,6 +1,7 @@
 extends SceneTree
 
 const CharacterVisualContract = preload("res://scripts/character_visual_contract.gd")
+const CharacterIdentityProfile = preload("res://scripts/character_identity_profile.gd")
 
 const ROLES := {
 	"kael":"res://assets_external/characters/Adventurer_PolyPizza_Quaternius_CC0.glb",
@@ -9,7 +10,7 @@ const ROLES := {
 	"villager_female":"res://assets_external/characters/WomanCasual_PolyPizza_Quaternius_CC0.glb",
 	"castle_guard":"res://assets_external/characters/CharacterAnimated_PolyPizza_Quaternius_CC0.glb",
 	"road_ranger":"res://assets_external/characters/CharacterAnimated_PolyPizza_Quaternius_CC0.glb",
-	"ghoul_gaunt":"res://assets_external/characters_real/GhoulGaunt_Real.glb",
+	"ghoul_gaunt":"res://assets_external/animated/OrcSkull_Animated_CC0.gltf",
 	"ghoul_stalker":"res://assets_external/characters_real/GhoulStalker_Real.glb",
 	"ghoul_brute":"res://assets_external/characters_real/GhoulBrute_Real.glb"
 }
@@ -47,11 +48,10 @@ func _initialize() -> void:
 		stage.add_child(character)
 		await process_frame
 		CharacterVisualContract.remove_proxy_anatomy(character)
+		CharacterIdentityProfile.apply(character, _identity_role(role))
 		await process_frame
 		_normalize_character(character)
-		var player = character.find_child("AnimationPlayer",true,false)
-		if player != null and player.has_animation("Idle"):
-			player.play("Idle")
+		_play_idle(character)
 		await _frames(8)
 		var image := root.get_texture().get_image()
 		var path := "%s/CHARACTER_REAL_001_%s.png" % [gallery,role]
@@ -62,6 +62,36 @@ func _initialize() -> void:
 	stage.queue_free()
 	await process_frame
 	quit(0)
+
+func _identity_role(capture_role: String) -> String:
+	return {
+		"kael": "player_kael",
+		"sister_anwen": "sister_anwen",
+		"villager_male": "villager_male",
+		"villager_female": "villager_female",
+		"castle_guard": "castle_guard",
+		"road_ranger": "road_ranger",
+		"ghoul_gaunt": "ghoulkin",
+		"ghoul_stalker": "wychwood_stalker",
+		"ghoul_brute": "wychwood_brute"
+	}.get(capture_role, capture_role)
+
+func _play_idle(character: Node) -> void:
+	var player := character.find_child("AnimationPlayer", true, false) as AnimationPlayer
+	if player == null:
+		return
+	var candidates := ["idle", "standing", "rest", "skeletonidle"]
+	var selected := StringName()
+	for animation_name in player.get_animation_list():
+		var key := str(animation_name).to_lower().replace(" ", "").replace("_", "").replace("-", "").replace("|", "")
+		for candidate in candidates:
+			if key.contains(candidate):
+				selected = animation_name
+				break
+		if selected != StringName():
+			break
+	if selected != StringName():
+		player.play(selected)
 
 func _frames(count: int) -> void:
 	for i in range(count):

@@ -26,9 +26,10 @@
     "villager_hooded": "res://assets_external/characters/HoodedAdventurer_PolyPizza_Quaternius_CC0.glb",
     "castle_guard": "res://assets_external/characters/CharacterAnimated_PolyPizza_Quaternius_CC0.glb",
     "road_ranger": "res://assets_external/characters/HoodedAdventurer_PolyPizza_Quaternius_CC0.glb",
-    "ghoul_gaunt": "res://assets_external/characters_real/GhoulGaunt_Real.glb",
+    "ghoul_gaunt": "res://assets_external/animated/OrcSkull_Animated_CC0.gltf",
     "ghoul_stalker": "res://assets_external/characters_real/GhoulStalker_Real.glb",
-    "ghoul_brute": "res://assets_external/characters_real/GhoulBrute_Real.glb"
+    "ghoul_brute": "res://assets_external/characters_real/GhoulBrute_Real.glb",
+    "orc_skull_real": "res://assets_external/animated/OrcSkull_Animated_CC0.gltf"
   },
   "role_specs": {
     "kael": {"height": 1.78, "lod": 22.0, "occupation": "hunter"},
