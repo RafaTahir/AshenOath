@@ -89,6 +89,7 @@ func _build_ambient_motes() -> void:
 	shared_mote_material.emission_energy_multiplier = 0.12
 	mote_batch = MultiMeshInstance3D.new()
 	mote_batch.name = "SharedWeatherMoteBatch"
+	mote_batch.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 	var multimesh := MultiMesh.new()
 	multimesh.transform_format = MultiMesh.TRANSFORM_3D
 	multimesh.mesh = shared_mote_mesh

@@ -2086,6 +2086,10 @@ func _is_river_recovery_position(zone: String, pos: Vector3) -> bool:
 	var river_z := _river_center(zone)
 	if river_z > 900.0:
 		return false
+	# The bridge deck occupies the river exclusion band by design. Let the
+	# player capsule settle onto its collision before considering recovery.
+	if spatial_service != null and spatial_service.zone_id == zone and not spatial_service.is_river_excluded(pos, 0.0):
+		return false
 	return absf(pos.z-river_z) < 2.0 and (absf(pos.x) > 2.7 or pos.y < 0.12)
 
 func _is_river_excluded(pos: Vector3, margin: float = 0.0) -> bool:
@@ -3530,6 +3534,10 @@ func _flush_environment_batches() -> void:
 func _make_multimesh_batch(node_name: String, mesh: Mesh, count: int, material: Material, use_colors: bool = false) -> MultiMeshInstance3D:
 	var instance := MultiMeshInstance3D.new()
 	instance.name = node_name
+	# These batches are authored static geometry. Disable transform
+	# interpolation so their build-time instance transforms do not trigger
+	# physics-interpolation writes outside the physics tick.
+	instance.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 	var batch := MultiMesh.new()
 	batch.transform_format = MultiMesh.TRANSFORM_3D
 	batch.use_colors = use_colors

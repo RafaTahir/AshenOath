@@ -169,11 +169,13 @@ func _release_render_resources(game: Node) -> void:
 		game.process_mode = Node.PROCESS_MODE_DISABLED
 
 func _capture(game, file_name: String, player_pos: Vector3, zone_id: String, spawn_pos: Vector3, camera_yaw: float = 0.0) -> void:
+	game.call("_load_zone", zone_id, spawn_pos)
+	await _wait_for_zone_ready(game)
+	# Validate after the destination zone is active. Validating before the load
+	# uses the previous zone's river and exclusion rules and makes safe captures
+	# look like drift or recovery failures.
 	if not file_name.contains("forced_recovery") and game.has_method("validate_walkable_position"):
 		player_pos = game.validate_walkable_position(player_pos) + Vector3.UP
-		spawn_pos = player_pos
-	game.call("_load_zone", zone_id, spawn_pos)
-	await _settle_frames(3)
 	game.player.global_position = player_pos
 	game.player.velocity = Vector3.ZERO
 	if game.camera_rig != null:
@@ -193,7 +195,7 @@ func _capture(game, file_name: String, player_pos: Vector3, zone_id: String, spa
 
 func _capture_dialogue(game, file_name: String, player_pos: Vector3) -> void:
 	game.call("_load_zone", "greyfen", player_pos)
-	await _settle_frames(3)
+	await _wait_for_zone_ready(game)
 	game.player.global_position = player_pos
 	game.player.velocity = Vector3.ZERO
 	var sister = _find_child_named(game.zone_root, "sister_anwen")
@@ -218,7 +220,7 @@ func _capture_dialogue(game, file_name: String, player_pos: Vector3) -> void:
 
 func _capture_anwen_approach(game, file_name: String) -> void:
 	game.call("_load_zone", "greyfen", Vector3(3.2, 1, -2.6))
-	await _settle_frames(4)
+	await _wait_for_zone_ready(game)
 	game.player.global_position = Vector3(3.2, 1, -2.6)
 	game.player.velocity = Vector3.ZERO
 	if game.camera_rig != null:
@@ -242,7 +244,7 @@ func _capture_anwen_approach(game, file_name: String) -> void:
 
 func _capture_place_interaction(game, file_name: String, place_id: String, player_pos: Vector3) -> void:
 	game.call("_load_zone","greyfen",player_pos)
-	await _settle_frames(5)
+	await _wait_for_zone_ready(game)
 	var place = _find_child_named(game.zone_root,place_id)
 	if place == null: push_error("capture missing %s" % place_id); quit(1); return
 	game.call("_handle_interaction",place)
@@ -253,7 +255,7 @@ func _capture_place_interaction(game, file_name: String, place_id: String, playe
 
 func _capture_castle_interaction(game, file_name: String, zone_id: String, interaction_id: String, player_pos: Vector3) -> void:
 	game.call("_load_zone", zone_id, player_pos)
-	await _settle_frames(5)
+	await _wait_for_zone_ready(game)
 	var target = _find_child_named(game.zone_root, interaction_id)
 	if target == null:
 		push_error("castle capture missing %s" % interaction_id)
@@ -267,7 +269,7 @@ func _capture_castle_interaction(game, file_name: String, zone_id: String, inter
 
 func _capture_minigame(game, file_name: String, game_id: String) -> void:
 	game.call("_load_zone","greyfen",Vector3(-4,1,6))
-	await _settle_frames(5)
+	await _wait_for_zone_ready(game)
 	game.minigames.open_game(game_id)
 	await _settle_frames(8)
 	_save_viewport(file_name)
@@ -275,7 +277,7 @@ func _capture_minigame(game, file_name: String, game_id: String) -> void:
 
 func _capture_post_anwen_objective(game, file_name: String) -> void:
 	game.call("_load_zone", "greyfen", Vector3(3.2, 1, -5.0))
-	await _settle_frames(3)
+	await _wait_for_zone_ready(game)
 	game.player.global_position = Vector3(3.2, 1, -5.0)
 	var sister = _find_child_named(game.zone_root, "sister_anwen")
 	if sister == null:
@@ -291,7 +293,7 @@ func _capture_post_anwen_objective(game, file_name: String) -> void:
 
 func _capture_gate_guidance(game, file_name: String) -> void:
 	game.call("_load_zone", "greyfen", Vector3(0, 1, -11.8))
-	await _settle_frames(3)
+	await _wait_for_zone_ready(game)
 	game.player.global_position = Vector3(0, 1, -11.8)
 	game.hud.set_guidance_hint("Wychwood gate ahead. Stay on the lit road.", 5.0)
 	if game.camera_rig != null:
@@ -302,7 +304,7 @@ func _capture_gate_guidance(game, file_name: String) -> void:
 
 func _capture_combat_state(game, file_name: String, state: String) -> void:
 	game.call("_load_zone", "wychwood", Vector3(0, 1, 8))
-	await _settle_frames(4)
+	await _wait_for_zone_ready(game)
 	game.player.global_position = Vector3(0, 1, -4.0)
 	game.player.velocity = Vector3.ZERO
 	if game.camera_rig != null:
@@ -336,7 +338,7 @@ func _capture_combat_state(game, file_name: String, state: String) -> void:
 
 func _capture_ai_formation(game, file_name: String, show_contact: bool) -> void:
 	game.call("_load_zone", "wychwood", Vector3(0, 1, -1.0))
-	await _settle_frames(5)
+	await _wait_for_zone_ready(game)
 	game.player.global_position = Vector3(0, 1, -1.0)
 	game.player.velocity = Vector3.ZERO
 	game.player.set_physics_process(false)
@@ -372,7 +374,7 @@ func _capture_ai_formation(game, file_name: String, show_contact: bool) -> void:
 
 func _capture_blade_contact(game, file_name: String) -> void:
 	game.call("_load_zone", "wychwood", Vector3(0, 1, -4.0))
-	await _settle_frames(5)
+	await _wait_for_zone_ready(game)
 	game.player.global_position = Vector3(0, 1, -4.0)
 	game.player.velocity = Vector3.ZERO
 	game.player.set_physics_process(false)
@@ -414,7 +416,7 @@ func _capture_blade_contact(game, file_name: String) -> void:
 
 func _capture_player_motion_state(game, file_name: String, state: String) -> void:
 	game.call("_load_zone", "greyfen", Vector3(0, 1, 5.5))
-	await _settle_frames(4)
+	await _wait_for_zone_ready(game)
 	game.player.global_position = Vector3(0, 1, 5.5)
 	game.player.set_physics_process(false)
 	game.player.velocity = Vector3.ZERO if state == "idle" else Vector3(0, 0, -4.0)
@@ -489,7 +491,7 @@ func _capture_victory_state(game, file_name: String) -> void:
 	for objective_id in ["speak_anwen", "inspect_corpse", "find_claw_marks", "find_black_feathers"]:
 		game.quests.complete_objective("main_road_of_crows", objective_id)
 	game.call("_load_zone", "wychwood", Vector3(0, 1, -4.0))
-	await _settle_frames(4)
+	await _wait_for_zone_ready(game)
 	game.player.global_position = Vector3(0, 1, -4.0)
 	for enemy in game.active_enemies:
 		if enemy != null and not enemy.dead:
@@ -508,7 +510,7 @@ func _capture_victory_state(game, file_name: String) -> void:
 
 func _capture_oathfire_state(game, file_name: String, released: bool) -> void:
 	game.call("_load_zone", "wychwood", Vector3(0, 1, -1.5))
-	await _settle_frames(4)
+	await _wait_for_zone_ready(game)
 	game.player.global_position = Vector3(0, 1, -1.5)
 	var direction = game.camera_rig.get_flat_forward() if game.camera_rig != null else Vector3.FORWARD
 	game.player.face_target(game.player.global_position + direction * 4.0)
@@ -533,7 +535,7 @@ func _capture_oathfire_state(game, file_name: String, released: bool) -> void:
 
 func _capture_oathfire_stage(game, file_name: String, stage: String) -> void:
 	game.call("_load_zone", "wychwood", Vector3(0, 1, -1.5))
-	await _settle_frames(4)
+	await _wait_for_zone_ready(game)
 	game.player.global_position = Vector3(0, 1, -1.5)
 	var direction = game.camera_rig.get_flat_forward() if game.camera_rig != null else Vector3.FORWARD
 	game.player.face_target(game.player.global_position + direction * 4.0)
@@ -554,7 +556,7 @@ func _capture_oathfire_stage(game, file_name: String, stage: String) -> void:
 
 func _capture_oathfire_wall_impact(game, file_name: String) -> void:
 	game.call("_load_zone", "wychwood", Vector3(0, 1, -1.5))
-	await _settle_frames(4)
+	await _wait_for_zone_ready(game)
 	game.player.global_position = Vector3(0, 1, -1.5)
 	game.player.rotation.y = 0.0
 	game.player.call("_lock_beam_direction")
@@ -619,6 +621,19 @@ func _find_child_named(root_node: Node, node_name: String) -> Node:
 		if found != null:
 			return found
 	return null
+
+func _wait_for_zone_ready(game: Node, max_frames: int = 90) -> void:
+	await _settle_frames(3)
+	for _frame in range(max_frames):
+		var pending := bool(game.get("zone_transition_pending"))
+		var request_pending := bool(game.get("zone_load_request_pending"))
+		var active_player = game.get("player")
+		var locked := active_player != null and bool(active_player.get("transition_locked"))
+		if not pending and not request_pending and not locked:
+			return
+		await process_frame
+	push_error("capture zone did not become playable within %d frames" % max_frames)
+	quit(1)
 
 func _settle_frames(count: int) -> void:
 	for i in range(count):
