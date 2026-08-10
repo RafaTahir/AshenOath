@@ -118,7 +118,7 @@ func _initialize() -> void:
 	await _capture_combat_state(game, "16_player_block_cue", "block")
 	await _capture_combat_state(game, "17_ghoulkin_death_read", "death")
 	await _capture_combat_state(game, "63_polish_parry_contact", "block")
-	await _capture(game, "67_polish_enemy_approaches", Vector3(0,1,-1.5), "wychwood", Vector3(0,1,-1.5))
+	await _capture(game, "67_polish_enemy_approaches", Vector3(0,1,-5.0), "wychwood", Vector3(0,1,-5.0))
 	await _capture_victory_state(game, "18_ghoulkin_victory_objective")
 	await _capture_victory_state(game, "23_ghoulkin_aftermath_clue")
 	await _capture_oathfire_state(game, "24_oathfire_charge", false)

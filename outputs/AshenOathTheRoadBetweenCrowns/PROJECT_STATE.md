@@ -108,7 +108,7 @@ for a native store release or sustained physical-phone performance.
 
 ## QA-REPAIR-001 Update
 
-- The complete 1280x720 route capture was regenerated on 2026-08-11 at source revision `0f3114f`. It covers Greyfen, both bridge/recovery proofs, Wychwood combat, Castle Vargan, Record Hall, and Hart Glade.
+- The complete 1280x720 route capture was regenerated on 2026-08-11 at source revision `801d890` (capture timestamp `2026-08-11_004817`). It covers Greyfen, both bridge/recovery proofs, Wychwood combat, Castle Vargan, Record Hall, and Hart Glade.
 - `verify_screenshot_qa_003.py --mode ticket` passes all 11 required views, and the five-test regression suite passes. The manifest remains `pending` because automated image checks cannot approve facial identity, composition, grounding, or art quality without human review.
 - River recovery now prefers authored same-bank road anchors, and the bridge deck is excluded from emergency river recovery when its spatial service validates the bridge corridor. The full capture completes without the earlier false bridge/roof failures.
 - Active gameplay no longer emits the previous null-material errors during capture. Godot still reports renderer/RID/ObjectDB cleanup diagnostics while the multi-zone capture process exits; these remain lifecycle debt and are not being marked as a clean release result.

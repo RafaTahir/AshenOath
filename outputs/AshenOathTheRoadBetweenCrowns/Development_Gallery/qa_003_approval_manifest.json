@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "capture_source_revision": "0f3114f",
+  "capture_source_revision": "801d890",
   "runtime_source_roots": [
     "scripts",
     "scenes",

@@ -9,9 +9,9 @@ The recovery screenshot pass is complete, but this is not a final visual approva
 - Updated `scripts/game.gd` bridge recovery handling and static batch interpolation settings.
 - Updated `scripts/world_vfx_controller.gd` to update weather motes on the physics tick with interpolation disabled for static-like particles.
 - Updated `scripts/zone_spatial_service.gd` with authored same-bank recovery anchors.
-- Updated `tools/capture_slice_screenshots.gd` with destination-zone readiness checks, river-only recovery proof, safe teardown, and corrected river-safe capture points.
-- Updated `Development_Gallery/qa_003_approval_manifest.json` to source the fresh capture revision `0f3114f`.
-- Fresh evidence is in `Development_Gallery/screenshots/` with timestamp `2026-08-11_001909`.
+- Updated `tools/capture_slice_screenshots.gd` with destination-zone readiness checks, river-only recovery proof, safe teardown, and corrected river-safe capture points, including the enemy-approach point moved out of the Wychwood channel.
+- Updated `Development_Gallery/qa_003_approval_manifest.json` to source the fresh capture revision `801d890`.
+- Fresh evidence is in `Development_Gallery/screenshots/` with timestamp `2026-08-11_004817`.
 
 Required machine-reviewed views:
 
@@ -29,7 +29,7 @@ Required machine-reviewed views:
 
 Results:
 
-- Full route capture: PASS.
+- Full route capture: PASS, including the corrected enemy-approach frame and the relocated Anwen staging.
 - Screenshot dimensions/nonblank/exposure/freshness: PASS for all 11 required views.
 - QA-003 regression tests: PASS, 5 tests.
 - River recovery proof: PASS; forced recovery lands on a clear same-bank road anchor and the bridge remains a walkable route.
