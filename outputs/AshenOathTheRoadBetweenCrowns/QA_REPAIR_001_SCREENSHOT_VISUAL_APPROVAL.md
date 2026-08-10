@@ -10,6 +10,7 @@ The recovery screenshot pass is complete, but this is not a final visual approva
 - Updated `scripts/world_vfx_controller.gd` to update weather motes on the physics tick with interpolation disabled for static-like particles.
 - Updated `scripts/zone_spatial_service.gd` with authored same-bank recovery anchors.
 - Updated `tools/capture_slice_screenshots.gd` with destination-zone readiness checks, river-only recovery proof, safe teardown, and corrected river-safe capture points, including the enemy-approach point moved out of the Wychwood channel.
+- The capture shutdown now calls `prepare_resource_shutdown()` and waits through staged zone retirement before freeing the game root. This removes active capture-time null-material errors, but Godot still reports renderer/RID/ObjectDB leaks at final ANGLE teardown.
 - Updated `Development_Gallery/qa_003_approval_manifest.json` to source the fresh capture revision `801d890`.
 - Fresh evidence is in `Development_Gallery/screenshots/` with timestamp `2026-08-11_004817`.
 
@@ -39,7 +40,7 @@ Results:
 
 Pending/rejected for release. The current images still show low-poly temporary humans and scenery, non-portrait dialogue staging for Anwen, blockout-grade Castle and Record Hall architecture, and an underdeveloped procedural White Hart. These are visible quality failures, not verifier failures.
 
-The latest capture also leaves Godot renderer/RID/ObjectDB cleanup diagnostics during process teardown. No active null-material error appeared during gameplay after the safe teardown change, but the lifecycle warning class is still open.
+The latest capture leaves Godot renderer/RID/ObjectDB cleanup diagnostics during process teardown. No active null-material error appeared during the successful gameplay route after the staged shutdown change, but the lifecycle warning class is still open.
 
 ## Running Steps
 

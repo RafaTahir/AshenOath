@@ -31,12 +31,7 @@ func _initialize() -> void:
 	if "--river-only" in OS.get_cmdline_user_args():
 		await _capture(game, "73_river_forced_recovery_proof", Vector3(8, -0.5, 4.5), "greyfen", Vector3(8, -0.5, 4.5), 0.35)
 		print("RIVER-ONLY CAPTURE: PASS")
-		_release_render_resources(game)
-		if game.is_inside_tree():
-			root.remove_child(game)
-		game.free()
-		RenderingServer.force_sync()
-		await _settle_frames(8)
+		await _shutdown_capture_game(game)
 		quit(0)
 		return
 	if "--combat-only" in OS.get_cmdline_user_args():
@@ -153,12 +148,7 @@ func _initialize() -> void:
 	game.settings.set_quality_preset("potato")
 	await _capture(game, "59_castle_potato_mode", Vector3(0,1,9), "vargan_court", Vector3(0,1,9))
 	print("Screenshots saved to %s and mirrored to %s" % [output_dir, gallery_dir])
-	_release_render_resources(game)
-	if game.is_inside_tree():
-		root.remove_child(game)
-	game.free()
-	RenderingServer.force_sync()
-	await _settle_frames(8)
+	await _shutdown_capture_game(game)
 	quit()
 
 func _release_render_resources(game: Node) -> void:
@@ -167,6 +157,20 @@ func _release_render_resources(game: Node) -> void:
 	# capture is meant to detect and can race RenderingServer cleanup.
 	if game != null and is_instance_valid(game):
 		game.process_mode = Node.PROCESS_MODE_DISABLED
+
+func _shutdown_capture_game(game: Node) -> void:
+	_release_render_resources(game)
+	if game != null and is_instance_valid(game) and game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+	# Retired zone roots own meshes, skeletons, navigation, and audio nodes. Let
+	# their staged disposal complete while the game is still tree-owned.
+	await _settle_frames(20)
+	if game != null and is_instance_valid(game) and game.is_inside_tree():
+		root.remove_child(game)
+	if game != null and is_instance_valid(game):
+		game.free()
+	RenderingServer.force_sync()
+	await _settle_frames(8)
 
 func _capture(game, file_name: String, player_pos: Vector3, zone_id: String, spawn_pos: Vector3, camera_yaw: float = 0.0) -> void:
 	game.call("_load_zone", zone_id, spawn_pos)
