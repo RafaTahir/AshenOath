@@ -63,6 +63,7 @@ var dialogue_session_data: Dictionary = {}
 var input_source: Node
 var input_device := "keyboard_mouse"
 var active_menu := ""
+var settings_page := 0
 var raw_prompt := ""
 var raw_hint := ""
 var last_potions := 0
@@ -104,7 +105,7 @@ func show_main_menu() -> void:
 	_add_menu_button(box, "Controls", func(): show_controls_menu("main"))
 	_add_menu_button(box, "Settings", func(): show_settings_menu("main"))
 	_add_menu_button(box, "Credits", func(): show_credits_menu())
-	_add_menu_button(box, "Exit Game", show_launch_screen)
+	_add_menu_button(box, "Return to Launch Screen", show_launch_screen)
 
 func show_launch_screen() -> void:
 	active_menu = "launch"
@@ -134,34 +135,56 @@ func show_pause_menu() -> void:
 	_add_menu_button(box, "Controls", func(): show_controls_menu("pause"))
 	_add_menu_button(box, "Main Menu", func(): show_main_menu())
 
-func show_settings_menu(back_target: String = "pause") -> void:
+func show_settings_menu(back_target: String = "pause", requested_page: int = -1) -> void:
 	active_menu = "settings"
 	_set_internal_canvas(Vector2i(MENU_SIZE))
 	controls_back_target = back_target
+	if requested_page >= 0:
+		settings_page = requested_page
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_clear_menu()
 	menu_layer.visible = true
 	var box = _menu_box("Settings", "Display & Controls", "tune the lantern")
 	box.set_meta("compact_buttons", true)
 	var s = _current_settings()
-	_add_menu_button(box, "Visual Preset     %s" % str(s.get("quality_preset", "balanced")).capitalize(), func(): settings_requested.emit("visual_preset"))
-	_add_menu_text(box, "3D Resolution     Native 720p (fixed for Web stability)")
-	_add_menu_button(box, "Shadows           %s" % _shadow_label(int(s.get("shadow_quality", 1))), func(): settings_requested.emit("shadows"))
-	_add_menu_button(box, "Mouse Sensitivity %s" % _sensitivity_label(float(s.get("mouse_sensitivity", 0.003))), func(): settings_requested.emit("mouse_sensitivity"))
-	_add_menu_button(box, "Controller Look   %s" % _controller_sensitivity_label(float(s.get("gamepad_look_sensitivity", 1.0))), func(): settings_requested.emit("gamepad_sensitivity"))
-	_add_menu_button(box, "Controller Rumble %s" % _on_off(bool(s.get("gamepad_vibration", true))), func(): settings_requested.emit("gamepad_vibration"))
-	_add_menu_button(box, "Touch Controls    %s" % str(s.get("touch_controls", "auto")).capitalize(), func(): settings_requested.emit("touch_controls"))
-	_add_menu_button(box, "Touch Look        %s" % _controller_sensitivity_label(float(s.get("touch_look_sensitivity", 1.0))), func(): settings_requested.emit("touch_sensitivity"))
-	_add_menu_button(box, "Invert Y Axis     %s" % _on_off(bool(s.get("invert_y", false))), func(): settings_requested.emit("invert_y"))
-	_add_menu_button(box, "Master Volume     %d%%" % int(round(float(s.get("master_volume", 0.85)) * 100.0)), func(): settings_requested.emit("volume"))
-	_add_menu_button(box, "VSync             %s" % _on_off(bool(s.get("vsync", true))), func(): settings_requested.emit("vsync"))
-	_add_menu_button(box, "Fullscreen        %s" % _on_off(bool(s.get("fullscreen", false))), func(): settings_requested.emit("fullscreen"))
-	_add_menu_button(box, "Subtitle Size     %d%%" % int(round(float(s.get("subtitle_scale", 1.0)) * 100.0)), func(): settings_requested.emit("subtitle_scale"))
-	_add_menu_button(box, "Camera Shake      %d%%" % int(round(float(s.get("camera_shake", 1.0)) * 100.0)), func(): settings_requested.emit("camera_shake"))
-	_add_menu_button(box, "Reduced Motion    %s" % _on_off(bool(s.get("reduced_motion", false))), func(): settings_requested.emit("reduced_motion"))
-	_add_menu_button(box, "High Contrast     %s" % _on_off(bool(s.get("high_contrast", false))), func(): settings_requested.emit("high_contrast"))
-	_add_menu_button(box, "Control Layout    %s" % str(s.get("control_preset", "standard")).replace("_", " ").capitalize(), func(): settings_requested.emit("control_preset"))
+	var entries := _settings_entries(s)
+	var page_count := maxi(1, ceili(float(entries.size()) / 6.0))
+	settings_page = clampi(settings_page, 0, page_count - 1)
+	_add_menu_text(box, "Page %d of %d  |  Select an option to cycle it" % [settings_page + 1, page_count])
+	var first_entry := settings_page * 6
+	var last_entry := mini(first_entry + 6, entries.size())
+	for index in range(first_entry, last_entry):
+		var entry: Dictionary = entries[index]
+		var action := str(entry.get("action", ""))
+		if action == "":
+			_add_menu_text(box, str(entry.get("label", "")))
+		else:
+			_add_menu_button(box, str(entry.get("label", "")), func(setting_action = action): settings_requested.emit(setting_action))
+	if page_count > 1:
+		_add_menu_button(box, "Previous Page", func(): show_settings_menu(controls_back_target, settings_page - 1), settings_page <= 0)
+		_add_menu_button(box, "Next Page", func(): show_settings_menu(controls_back_target, settings_page + 1), settings_page >= page_count - 1)
 	_add_menu_button(box, "Back", _return_from_controls)
+
+func _settings_entries(s: Dictionary) -> Array:
+	return [
+		{"label": "Visual Preset     %s" % str(s.get("quality_preset", "balanced")).capitalize(), "action": "visual_preset"},
+		{"label": "3D Resolution     Native 720p (fixed for Web stability)", "action": ""},
+		{"label": "Shadows           %s" % _shadow_label(int(s.get("shadow_quality", 1))), "action": "shadows"},
+		{"label": "Mouse Sensitivity %s" % _sensitivity_label(float(s.get("mouse_sensitivity", 0.003))), "action": "mouse_sensitivity"},
+		{"label": "Controller Look   %s" % _controller_sensitivity_label(float(s.get("gamepad_look_sensitivity", 1.0))), "action": "gamepad_sensitivity"},
+		{"label": "Controller Rumble %s" % _on_off(bool(s.get("gamepad_vibration", true))), "action": "gamepad_vibration"},
+		{"label": "Touch Controls    %s" % str(s.get("touch_controls", "auto")).capitalize(), "action": "touch_controls"},
+		{"label": "Touch Look        %s" % _controller_sensitivity_label(float(s.get("touch_look_sensitivity", 1.0))), "action": "touch_sensitivity"},
+		{"label": "Invert Y Axis     %s" % _on_off(bool(s.get("invert_y", false))), "action": "invert_y"},
+		{"label": "Master Volume     %d%%" % int(round(float(s.get("master_volume", 0.85)) * 100.0)), "action": "volume"},
+		{"label": "VSync             %s" % _on_off(bool(s.get("vsync", true))), "action": "vsync"},
+		{"label": "Fullscreen        %s" % _on_off(bool(s.get("fullscreen", false))), "action": "fullscreen"},
+		{"label": "Subtitle Size     %d%%" % int(round(float(s.get("subtitle_scale", 1.0)) * 100.0)), "action": "subtitle_scale"},
+		{"label": "Camera Shake      %d%%" % int(round(float(s.get("camera_shake", 1.0)) * 100.0)), "action": "camera_shake"},
+		{"label": "Reduced Motion    %s" % _on_off(bool(s.get("reduced_motion", false))), "action": "reduced_motion"},
+		{"label": "High Contrast     %s" % _on_off(bool(s.get("high_contrast", false))), "action": "high_contrast"},
+		{"label": "Control Layout    %s" % str(s.get("control_preset", "standard")).replace("_", " ").capitalize(), "action": "control_preset"}
+	]
 
 func show_controls_menu(back_target: String = "main") -> void:
 	active_menu = "controls"
@@ -508,7 +531,7 @@ func show_ending(title: String, body: String) -> void:
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	box.add_child(label)
 	_add_menu_button(box, "Return to Main Menu", func(): show_main_menu())
-	_add_menu_button(box, "Exit Game", show_launch_screen)
+	_add_menu_button(box, "Return to Launch Screen", show_launch_screen)
 
 func show_death_screen(body: String) -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -825,6 +848,10 @@ func _add_menu_button(box: VBoxContainer, text: String, callback: Callable, disa
 	button.text = text
 	button.disabled = disabled
 	button.process_mode = Node.PROCESS_MODE_ALWAYS
+	button.focus_mode = Control.FOCUS_ALL
+	button.mouse_filter = Control.MOUSE_FILTER_STOP
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.action_mode = BaseButton.ACTION_MODE_BUTTON_PRESS
 	button.custom_minimum_size = Vector2(510, 46 if bool(box.get_meta("compact_buttons", false)) else 62)
 	_style_button(button)
 	button.mouse_entered.connect(func():

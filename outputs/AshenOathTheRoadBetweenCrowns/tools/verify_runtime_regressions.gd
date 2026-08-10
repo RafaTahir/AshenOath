@@ -49,25 +49,39 @@ func _initialize() -> void:
 	reload_settings.queue_free()
 	game.settings.settings = original
 	game.settings.apply()
-	game.hud.show_settings_menu("main")
+	game.hud.show_settings_menu("main", 0)
 	await process_frame
-	_check(_settings_menu_matches(game.hud, game.settings.settings), "Settings UI does not match active runtime settings")
+	_check(await _settings_menu_matches(game.hud, game.settings.settings), "Settings UI does not match active runtime settings")
 	_check(
 		game.runtime_services.get_child_count() == game.runtime_services.REQUIRED_SERVICES.size(),
 		"Runtime service registry duplicated or omitted managers"
 	)
 	_check(not game.zone_transition_pending, "Loading completion path is still pending")
 	print("DEBUG-001 RUNTIME REGRESSIONS: PASS")
+	if game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+	await _frames(game.ZONE_RETIRE_FRAMES + 4)
+	game.free()
+	await _frames(8)
 	quit(0)
 
 func _settings_menu_matches(hud: Node, settings: Dictionary) -> bool:
-	var labels: Array[String] = []
-	for control in hud.menu_layer.find_children("*", "Control", true, false):
-		if control is Button or control is Label:
-			labels.append(str(control.text))
-	return labels.any(func(text): return text.begins_with("Visual Preset") and text.contains(str(settings.quality_preset).capitalize())) \
-		and labels.any(func(text): return text.begins_with("Master Volume") and text.contains("%d%%" % int(round(float(settings.master_volume) * 100.0)))) \
-		and labels.any(func(text): return text.begins_with("Invert Y Axis") and text.contains("On" if bool(settings.invert_y) else "Off"))
+	var required := [
+		"Visual Preset" + str(settings.quality_preset).capitalize(),
+		"Master Volume" + "%d%%" % int(round(float(settings.master_volume) * 100.0)),
+		"Invert Y Axis" + ("On" if bool(settings.invert_y) else "Off")
+	]
+	for page in range(3):
+		hud.show_settings_menu(hud.controls_back_target, page)
+		await hud.get_tree().process_frame
+		var labels: Array[String] = []
+		for control in hud.menu_layer.find_children("*", "Control", true, false):
+			if control is Button or control is Label:
+				labels.append(str(control.text).replace(" ", ""))
+		for index in range(required.size()):
+			if labels.any(func(text): return text.contains(required[index].replace(" ", ""))):
+				required[index] = ""
+	return required.all(func(text): return text == "")
 
 func _frames(count: int) -> void:
 	for index in range(count):

@@ -12,17 +12,25 @@ func _initialize() -> void:
 	await process_frame
 	check(hud.active_menu == "main", "Main menu state is not authoritative")
 	check(hud.get_window().content_scale_size == Vector2i(1920, 1080), "Menu canvas is not native 1080p")
-	for label in ["New Game", "Continue", "Controls", "Settings", "Credits", "Exit Game"]:
+	for label in ["New Game", "Continue", "Controls", "Settings", "Credits", "Return to Launch Screen"]:
 		check(_button(hud.menu_layer, label) != null, "Main menu action is missing: %s" % label)
 	check(_contains_label(hud.menu_layer, "Continue source:") or _contains_label(hud.menu_layer, "No journey has been saved"), "Continue state has no readable save status")
 	hud.show_pause_menu()
 	await process_frame
 	for label in ["Resume", "Save", "Load", "Journal & Preparation", "Settings", "Controls", "Main Menu"]:
 		check(_button(hud.menu_layer, label) != null, "Pause action is missing: %s" % label)
-	hud.show_settings_menu("pause")
-	await process_frame
-	for label_prefix in ["Visual Preset", "Mouse Sensitivity", "Master Volume", "Subtitle Size", "Reduced Motion", "Back"]:
-		check(_button_prefix(hud.menu_layer, label_prefix) != null, "Functional setting is missing: %s" % label_prefix)
+	for page in range(3):
+		hud.show_settings_menu("pause", page)
+		await process_frame
+		for label_prefix in ["Visual Preset", "Mouse Sensitivity", "Master Volume", "Subtitle Size", "Reduced Motion", "Back"]:
+			if page == 0 and label_prefix in ["Visual Preset", "Mouse Sensitivity"]:
+				check(_button_prefix(hud.menu_layer, label_prefix) != null, "Functional setting is missing: %s" % label_prefix)
+			if page == 1 and label_prefix == "Master Volume":
+				check(_button_prefix(hud.menu_layer, label_prefix) != null, "Functional setting is missing: %s" % label_prefix)
+			if page == 2 and label_prefix in ["Subtitle Size", "Reduced Motion"]:
+				check(_button_prefix(hud.menu_layer, label_prefix) != null, "Functional setting is missing: %s" % label_prefix)
+		check(_button_prefix(hud.menu_layer, "Back") != null, "Settings Back control is missing")
+		check(_button_prefix(hud.menu_layer, "Page") == null, "Settings page marker must remain text, not a fake action")
 	hud.show_loading("This must not block")
 	check(not hud.loading_layer.visible and hud.loading_layer.mouse_filter == Control.MOUSE_FILTER_IGNORE, "Ordinary loading overlay can still block the game")
 	print("UI-002 VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
