@@ -61,6 +61,7 @@ var tree_collision_body: StaticBody3D
 var route_zone_cache: Dictionary = {}
 var route_enemy_cache: Dictionary = {}
 var route_zone_signatures: Dictionary = {}
+var route_spatial_cache: Dictionary = {}
 var retired_zone_roots: Array[Node] = []
 var pending_zone_retirements := 0
 var retired_skinned_actor_pool: Node3D
@@ -332,6 +333,7 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		player.cancel_beam_charge()
 	var previous_zone_id: String = current_zone_id
 	var previous_enemies: Array = active_enemies.duplicate()
+	var previous_spatial_service: Node = spatial_service
 	var reused_zone := false
 	var requested_signature := _zone_state_signature()
 	if zone_root != null:
@@ -343,6 +345,7 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 			zone_root = null
 		else:
 			_cache_route_zone(previous_zone_id, zone_root, previous_enemies, active_zone_signature)
+			_cache_route_spatial_service(previous_zone_id, previous_spatial_service)
 	active_interactable = null
 	interaction_candidates.clear()
 	# Guidance belongs to the previous route. Clear it before the new zone
@@ -352,12 +355,20 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	var using_prewarmed_spatial := zone_id == "greyfen" \
 		and greyfen_prewarm_spatial_service != null \
 		and is_instance_valid(greyfen_prewarm_spatial_service)
-	if spatial_service != null and is_instance_valid(spatial_service) and spatial_service != greyfen_prewarm_spatial_service:
-		_set_zone_collision_enabled(spatial_service, false)
-		spatial_service.queue_free()
+	var cached_spatial_service: Node = route_spatial_cache.get(zone_id)
+	var using_cached_spatial := cached_spatial_service != null \
+		and is_instance_valid(cached_spatial_service) \
+		and route_zone_cache.has(zone_id) \
+		and int(route_zone_signatures.get(zone_id, -1)) == requested_signature
+	_release_active_spatial_service()
 	if using_prewarmed_spatial:
 		spatial_service = greyfen_prewarm_spatial_service
 		greyfen_prewarm_spatial_service = null
+		spatial_service.name = "ZoneSpatialService"
+		spatial_service.process_mode = Node.PROCESS_MODE_INHERIT
+	elif using_cached_spatial:
+		spatial_service = cached_spatial_service
+		route_spatial_cache.erase(zone_id)
 		spatial_service.name = "ZoneSpatialService"
 		spatial_service.process_mode = Node.PROCESS_MODE_INHERIT
 	else:
@@ -424,7 +435,7 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		zone_id, reused_zone, zone_root.visible, zone_root.global_position,
 	])
 	active_zone_signature = _zone_state_signature()
-	if not using_prewarmed_spatial:
+	if not using_prewarmed_spatial and not using_cached_spatial:
 		spatial_service.build_navigation(zone_root)
 	for enemy in active_enemies:
 		if is_instance_valid(enemy) and enemy.has_method("setup_navigation"):
@@ -538,8 +549,14 @@ func _recover_failed_zone_load(previous_zone_id: String) -> void:
 	if zone_root != null:
 		_retire_zone_root(zone_root)
 		zone_root = null
+	_release_active_spatial_service()
 	if route_zone_cache.has(previous_zone_id) and is_instance_valid(route_zone_cache[previous_zone_id]):
 		zone_root = _activate_cached_zone(previous_zone_id)
+		var cached_spatial_service: Node = route_spatial_cache.get(previous_zone_id)
+		if cached_spatial_service != null and is_instance_valid(cached_spatial_service):
+			route_spatial_cache.erase(previous_zone_id)
+			spatial_service = cached_spatial_service
+			spatial_service.process_mode = Node.PROCESS_MODE_INHERIT
 		active_enemies = _valid_cached_enemies(route_enemy_cache.get(previous_zone_id, []))
 		route_enemy_cache.erase(previous_zone_id)
 		active_zone_signature = int(route_zone_signatures.get(previous_zone_id, -1))
@@ -722,17 +739,59 @@ func _cache_route_zone(zone_id: String, root: Node3D, enemies: Array, signature:
 		return
 	var existing = route_zone_cache.get(zone_id)
 	if existing != null and existing != root and is_instance_valid(existing):
+		_release_route_spatial_service(zone_id)
 		_retire_zone_root(existing)
 	_remove_root_from_route_cache(root)
-	_set_zone_collision_enabled(root, false)
 	root.visible = keep_visible
 	root.process_mode = Node.PROCESS_MODE_DISABLED
 	root.position = Vector3.ZERO if keep_visible else Vector3(0, -1000, 0)
 	root.set_meta("zone_resource_owner", "cached")
 	root.set_meta("zone_resource_id", zone_id)
+	if keep_visible:
+		_set_zone_collision_enabled(root, false)
+	else:
+		# Moving the inactive zone away first removes route interference. Its
+		# collision sweep is deferred so warm arrivals do not pay for every
+		# outgoing prop before the destination becomes playable.
+		_defer_cached_zone_collision_disable(zone_id)
 	route_zone_cache[zone_id] = root
 	route_enemy_cache[zone_id] = _valid_cached_enemies(enemies)
 	route_zone_signatures[zone_id] = signature
+
+func _cache_route_spatial_service(zone_id: String, service: Node) -> void:
+	if service == null or not is_instance_valid(service):
+		return
+	var existing: Node = route_spatial_cache.get(zone_id)
+	if existing != null and existing != service and is_instance_valid(existing):
+		existing.queue_free()
+	service.process_mode = Node.PROCESS_MODE_DISABLED
+	route_spatial_cache[zone_id] = service
+
+func _release_route_spatial_service(zone_id: String) -> void:
+	var cached: Node = route_spatial_cache.get(zone_id)
+	route_spatial_cache.erase(zone_id)
+	if cached == null or not is_instance_valid(cached):
+		return
+	if cached == spatial_service or cached == greyfen_prewarm_spatial_service:
+		return
+	cached.queue_free()
+
+func _release_active_spatial_service() -> void:
+	var current: Node = spatial_service
+	spatial_service = null
+	if current == null or not is_instance_valid(current):
+		return
+	if current == greyfen_prewarm_spatial_service or route_spatial_cache.values().has(current):
+		return
+	current.queue_free()
+
+
+func _defer_cached_zone_collision_disable(zone_id: String) -> void:
+	get_tree().create_timer(0.45, true, false, true).timeout.connect(func():
+		var cached_root: Node3D = route_zone_cache.get(zone_id)
+		if cached_root != null and is_instance_valid(cached_root) and str(cached_root.get_meta("zone_resource_owner", "")) == "cached":
+			_set_zone_collision_enabled(cached_root, false)
+	, CONNECT_ONE_SHOT)
 
 func _activate_cached_zone(zone_id: String) -> Node3D:
 	var cached_root = route_zone_cache.get(zone_id)
@@ -768,6 +827,7 @@ func _trim_route_zone_cache(preferred_ids: Array) -> void:
 		route_zone_cache.erase(id)
 		route_enemy_cache.erase(id)
 		route_zone_signatures.erase(id)
+		_release_route_spatial_service(id)
 		if is_instance_valid(cached_root):
 			_retire_zone_root(cached_root)
 
@@ -829,6 +889,8 @@ func _clear_route_zone_cache() -> void:
 	route_zone_cache.clear()
 	route_enemy_cache.clear()
 	route_zone_signatures.clear()
+	for raw_id in route_spatial_cache.keys().duplicate():
+		_release_route_spatial_service(str(raw_id))
 
 func prepare_resource_shutdown() -> void:
 	if zone_root != null and is_instance_valid(zone_root):
@@ -840,6 +902,8 @@ func prepare_resource_shutdown() -> void:
 	route_zone_cache.clear()
 	route_enemy_cache.clear()
 	route_zone_signatures.clear()
+	for raw_id in route_spatial_cache.keys().duplicate():
+		_release_route_spatial_service(str(raw_id))
 
 func zone_lifecycle_snapshot() -> Dictionary:
 	var cached_ids: Array[String] = []
@@ -877,6 +941,7 @@ func _exit_tree() -> void:
 	route_zone_cache.clear()
 	route_enemy_cache.clear()
 	route_zone_signatures.clear()
+	route_spatial_cache.clear()
 	for retired_root in retired_zone_roots.duplicate():
 		if retired_root != null and is_instance_valid(retired_root) and not retired_root.is_inside_tree():
 			retired_root.free()

@@ -63,6 +63,32 @@ func _ready() -> void:
 	set_master_volume(master_volume_linear)
 	_prewarm_common_cues()
 
+func _exit_tree() -> void:
+	# Release generated streams before Godot tears down the audio server. This
+	# keeps short headless/Web startup checks from retaining the menu stream.
+	for player in transient_players:
+		_release_player(player)
+	_release_player(ambient_player)
+	_release_player(music_player)
+	_release_player(voice_player)
+	transient_players.clear()
+	ambient_player = null
+	music_player = null
+	voice_player = null
+	_voice_queue.clear()
+	sounds.clear()
+	recorded_variants.clear()
+	voices.clear()
+	voice_texts.clear()
+	music.clear()
+
+func _release_player(player: AudioStreamPlayer) -> void:
+	if player == null or not is_instance_valid(player):
+		return
+	player.stop()
+	player.stream_paused = false
+	player.stream = null
+
 func _prewarm_common_cues() -> void:
 	var cue_ids := ["cloth_wind", "village_life", "village_crow", "ghoulkin_idle"]
 	var warmers: Array[AudioStreamPlayer] = []
