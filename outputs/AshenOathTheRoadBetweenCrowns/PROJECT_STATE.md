@@ -400,8 +400,11 @@ Implemented in `scripts/audio_manager.gd`.
 - Event names include UI, quest, hit, step, reveal, and similar feedback cues.
 - Ambient loop generation per zone.
 - Master volume setting.
+- Recorded SFX variants are preferred when present; transient combat and footstep cues use a small cooldown to avoid stacking.
+- Surface-aware footsteps cover road, forest, mud, stone, and wood callers; cemetery, Castle, record hall, undercroft, and Hart ambience have local accents.
+- Dialogue, inventory, pause, and death states pause world ambience/music while preserving subtitle-authoritative voice playback.
 
-Current audio is functional feedback, not final mastered game audio.
+Current audio is functional feedback with scratch voice performances, not final mastered game audio.
 
 ### Visual Direction
 

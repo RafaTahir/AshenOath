@@ -133,6 +133,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		else:
 			hud.set_guidance_hint("Face the object and move into clear view.", 2.0)
 	elif event.is_action_pressed("open_inventory") and not get_tree().paused:
+		audio.set_game_paused(true)
 		get_tree().paused = true
 		hud.show_inventory(inventory, quests, story_state, progression)
 
@@ -198,6 +199,8 @@ func _new_game() -> void:
 		return
 	new_game_start_pending = true
 	loading_started_usec = Time.get_ticks_usec()
+	if audio != null:
+		audio.set_game_paused(false)
 	get_tree().paused = false
 	_start_new_game_world()
 
@@ -257,6 +260,8 @@ func _start_new_game_world() -> void:
 func load_save_state(data: Dictionary) -> void:
 	_clear_route_zone_cache()
 	game_started = true
+	if audio != null:
+		audio.set_game_paused(false)
 	get_tree().paused = false
 	hud.hide_menus()
 	inventory.load_state(data.get("inventory", {}))
@@ -945,6 +950,7 @@ func _handle_interaction(area) -> void:
 			hud.show_status_cue("Anwen knows the sign", "victory")
 			hud.toast("Anwen goes still at the feathers. 'Then it was called here,' she says, and will say no more.")
 		_stage_dialogue_moment(area)
+		audio.set_game_paused(true)
 		get_tree().paused = true
 		hud.show_dialogue(dialogue_data)
 		if dialogue_data.has("voice") and not played_report_voice:
@@ -1243,6 +1249,8 @@ func _handle_dialogue_action(action: Dictionary) -> void:
 	elif type == "ending":
 		_complete_ending(action.get("ending", "expose"))
 		return
+	if audio != null:
+		audio.set_game_paused(false)
 	get_tree().paused = false
 	hud.hide_menus()
 	_refresh_tracker()
@@ -1365,6 +1373,7 @@ func _show_ending_consequence(ending: String) -> void:
 	var cards: Array[String] = EpilogueResolver.resolve(ending, story_state)
 	story_state.set_flag("epilogue_cards", cards)
 	var body := "\n\n".join(cards)
+	audio.set_game_paused(true)
 	get_tree().paused = true
 	hud.show_ending(title, body)
 	save_manager.checkpoint(self)
@@ -1374,6 +1383,7 @@ func _on_player_blade_contact(contact: Dictionary) -> void:
 	audio.play_event("heavy" if heavy else "swing")
 	var result: Dictionary = combat.resolve_player_blade_contact(player, active_enemies, contact, inventory.active_oil)
 	if bool(result.get("hit", false)):
+		audio.play_event_limited("heavy_hit" if heavy else "light_hit", 0.045, 0.04)
 		var target = result.get("enemy")
 		if target != null and is_instance_valid(target) and target.health_component != null:
 			hud.show_enemy(target.display_name, target.health_component.health, target.health_component.max_health)
@@ -1502,7 +1512,14 @@ func _on_player_footstep() -> void:
 	var on_road = abs(player.global_position.x) < 2.25
 	if current_zone_id == "wychwood":
 		on_road = abs(player.global_position.x) < 2.5 and player.global_position.z > -12.5
-	audio.play_footstep(current_zone_id, on_road)
+	var surface := "road" if on_road else "forest"
+	if current_zone_id in ["vargan_court", "record_hall", "undercroft", "assembly"]:
+		surface = "stone"
+	elif current_zone_id in ["marsh_crossing", "old_mill", "burned_farmstead"]:
+		surface = "mud"
+	elif current_zone_id == "hart_glade":
+		surface = "forest"
+	audio.play_footstep(current_zone_id, on_road, surface)
 
 func _on_player_parried() -> void:
 	if progression != null and player != null:
@@ -1670,11 +1687,10 @@ func _on_enemy_died(enemy) -> void:
 func _on_enemy_damaged(enemy, current: float, maximum: float) -> void:
 	hud.show_enemy(enemy.display_name, current, maximum)
 	hud.show_status_cue("Enemy hit", "item")
-	if enemy != null and enemy.enemy_id == "ghoulkin":
-		audio.play_event("stagger", 0.06)
+	audio.play_event_limited("stagger", 0.065, 0.06)
 
 func _on_enemy_windup_started(enemy) -> void:
-	audio.play_event("enemy_windup", 0.02)
+	audio.play_event_limited("enemy_windup", 0.28, 0.02)
 	if zone_root != null and enemy != null:
 		CombatFeedback.ground_ring(zone_root, enemy.global_position, Color(0.46, 0.05, 0.025), 0.62, 0.18)
 	if enemy != null and enemy.health_component != null:
@@ -1684,7 +1700,7 @@ func _on_enemy_windup_started(enemy) -> void:
 
 func _on_enemy_attack_resolved(enemy, parried: bool, contact_position: Vector3) -> void:
 	if parried:
-		audio.play_event("parry")
+		audio.play_event_limited("parry", 0.10, 0.03)
 		if input_router != null:
 			input_router.rumble(0.24, 0.52, 0.10)
 		if camera_rig != null:
@@ -1698,7 +1714,7 @@ func _on_enemy_attack_resolved(enemy, parried: bool, contact_position: Vector3) 
 		if enemy != null and enemy.enemy_id == "bog_wretch":
 			_record_bog_stagger(enemy, "parries")
 	else:
-		audio.play_event("ghoulkin_lunge" if enemy != null and enemy.enemy_id == "ghoulkin" else "hit", 0.04)
+		audio.play_event_limited("ghoulkin_lunge" if enemy != null and enemy.enemy_id == "ghoulkin" else "hit", 0.08, 0.04)
 		if zone_root != null and enemy != null:
 			CombatFeedback.impact_burst(zone_root, contact_position, false, Color(0.85, 0.30, 0.12))
 	if enemy != null and enemy.health_component != null:
@@ -1812,16 +1828,23 @@ func load_world_state(state: Dictionary) -> void:
 
 func _on_player_died() -> void:
 	audio.play_event("hurt")
+	audio.set_game_paused(true)
 	get_tree().paused = true
 	hud.show_death_screen("The road keeps its dead.\n\nLoad Last Checkpoint returns Kael to the last safe contract marker with quest progress preserved.")
 
+func _on_dialogue_closed_audio() -> void:
+	if audio != null:
+		audio.set_game_paused(false)
+
 func _pause_game() -> void:
+	audio.set_game_paused(true)
 	get_tree().paused = true
 	paused_by_menu = true
 	audio.play_event("ui")
 	hud.show_pause_menu()
 
 func _resume_game() -> void:
+	audio.set_game_paused(false)
 	get_tree().paused = false
 	paused_by_menu = false
 	audio.play_event("ui")

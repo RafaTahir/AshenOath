@@ -18,22 +18,38 @@ var transient_players: Array[AudioStreamPlayer] = []
 var transient_pool_cursor := 0
 var music_transition_generation := 0
 var ambient_accents_enabled := true
+var game_paused := false
+var event_cooldowns: Dictionary = {}
 const TRANSIENT_POOL_SIZE := 8
+const WORLD_AUDIO_EVENTS := [
+	"step", "step_road", "step_forest", "step_mud", "step_stone", "step_wood",
+	"swing", "heavy", "hit", "light_hit", "heavy_hit", "hurt", "enemy_windup",
+	"ghoulkin_idle", "ghoulkin_lunge", "block", "parry", "stagger", "death",
+	"bomb", "potion", "boss", "reveal", "victory", "victory_return_cue",
+	"return_report", "tracks_found", "shrine_hum", "shrine_candle", "shrine_bell",
+	"oathfire_sheathe", "oathfire_charge", "oathfire_release", "village_life",
+	"village_crow", "cloth_wind", "wychwood_drop", "wychwood_tension"
+]
 
 func _process(delta: float) -> void:
+	for event_name in event_cooldowns.keys():
+		event_cooldowns[event_name] = maxf(float(event_cooldowns[event_name]) - delta, 0.0)
 	if ambient_player != null and ambient_player.stream != null and not ambient_player.playing:
-		ambient_player.play()
+		if not game_paused:
+			ambient_player.play()
 	if music_player != null and music_player.stream != null and not music_player.playing:
-		music_player.play()
+		if not game_paused:
+			music_player.play()
 	if voice_player != null and not voice_player.playing and not _voice_queue.is_empty():
 		_play_next_voice()
-	if current_ambient_zone == "" or not ambient_accents_enabled:
+	if game_paused or current_ambient_zone == "" or not ambient_accents_enabled:
 		return
 	ambient_accent_time -= delta
 	if ambient_accent_time <= 0.0:
 		_play_ambient_accent()
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	_build_library()
 	_build_recorded_library()
 	_build_voice_library()
@@ -44,6 +60,7 @@ func _ready() -> void:
 		pooled.bus = bus_name
 		add_child(pooled)
 		transient_players.append(pooled)
+	set_master_volume(master_volume_linear)
 	_prewarm_common_cues()
 
 func _prewarm_common_cues() -> void:
@@ -75,15 +92,32 @@ func set_master_volume(linear_volume: float) -> void:
 func set_ambient_accents_enabled(enabled: bool) -> void:
 	ambient_accents_enabled = enabled
 
+func set_game_paused(paused: bool) -> void:
+	game_paused = paused
+	if ambient_player != null:
+		ambient_player.stream_paused = paused
+	if music_player != null:
+		music_player.stream_paused = paused
+
 func play_event(event_name: String, pitch_variation: float = 0.06) -> void:
 	if not sounds.has(event_name) and not recorded_variants.has(event_name):
 		return
-	print("AUDIO: event_%s" % event_name)
+	if game_paused and event_name in WORLD_AUDIO_EVENTS:
+		return
 	var player := _available_transient_player()
 	player.stream = _event_stream(event_name)
+	if player.stream == null:
+		return
 	player.volume_db = _volume_for(event_name) + randf_range(-1.2, 0.8)
 	player.pitch_scale = 1.0 + randf_range(-pitch_variation, pitch_variation)
 	player.play()
+
+func play_event_limited(event_name: String, cooldown_seconds: float, pitch_variation: float = 0.06) -> void:
+	var remaining := float(event_cooldowns.get(event_name, 0.0))
+	if remaining > 0.0:
+		return
+	event_cooldowns[event_name] = maxf(cooldown_seconds, 0.0)
+	play_event(event_name, pitch_variation)
 
 func _available_transient_player() -> AudioStreamPlayer:
 	for player in transient_players:
@@ -206,14 +240,22 @@ func play_music_cue(cue_id: String, next_state: String = "") -> void:
 		var timer = get_tree().create_timer(0.7)
 		timer.timeout.connect(func(): set_music_state(next_state))
 
-func play_footstep(zone_id: String, on_road: bool) -> void:
-	var event_name = "step_road" if on_road else "step_forest"
-	if zone_id == "wychwood":
-		event_name = "step_forest" if not on_road else "step_mud"
-	play_event(event_name, 0.11)
+func play_footstep(zone_id: String, on_road: bool, surface: String = "") -> void:
+	var event_name := "step_road" if on_road else "step_forest"
+	match surface:
+		"mud": event_name = "step_mud"
+		"stone": event_name = "step_stone"
+		"wood": event_name = "step_wood"
+		"forest": event_name = "step_forest"
+		"road": event_name = "step_road"
+		_:
+			if zone_id == "wychwood":
+				event_name = "step_forest" if not on_road else "step_mud"
+	play_event_limited(event_name, 0.055, 0.11)
 
 func play_ambient(zone_id: String) -> void:
 	stop_zone_audio()
+	stop_voice()
 	if ambient_player == null:
 		ambient_player = AudioStreamPlayer.new()
 		ambient_player.bus = bus_name
@@ -230,6 +272,9 @@ func stop_zone_audio() -> void:
 	for player in transient_players:
 		if is_instance_valid(player):
 			player.stop()
+	if ambient_player != null:
+		ambient_player.stop()
+	event_cooldowns.clear()
 
 func _play_next_voice() -> void:
 	if _voice_queue.is_empty():
@@ -249,6 +294,8 @@ func _build_library() -> void:
 	sounds["step_road"] = _footstep(0.050, 0.11, 118.0)
 	sounds["step_forest"] = _footstep(0.060, 0.08, 64.0)
 	sounds["step_mud"] = _footstep(0.070, 0.10, 54.0)
+	sounds["step_stone"] = _footstep(0.045, 0.095, 146.0)
+	sounds["step_wood"] = _footstep(0.052, 0.085, 94.0)
 	sounds["swing"] = _tone_mix([180.0, 238.0], 0.105, 0.17, 74.0, 0.05)
 	sounds["heavy"] = _tone_mix([105.0, 154.0], 0.18, 0.24, 42.0, 0.07)
 	sounds["hit"] = _impact(0.095, 0.30, 150.0)
@@ -393,6 +440,8 @@ func _ambient_stream(zone_id: String) -> AudioStreamWAV:
 		return _ambient_mix([46.0, 73.0, 111.0], 3.0, 0.030, 0.0)
 	if zone_id in ["deep_wood", "marsh_crossing"]:
 		return _ambient_mix([38.0, 57.0, 91.0], 3.2, 0.026, 0.008)
+	if zone_id in ["cemetery", "chapel"]:
+		return _ambient_mix([42.0, 63.0, 94.0], 3.5, 0.023, 0.004)
 	if zone_id in ["vargan_approach", "vargan_court", "record_hall", "undercroft"]:
 		return _ambient_mix([44.0, 66.0, 99.0], 3.0, 0.022, 0.004)
 	if zone_id == "hart_glade":
@@ -498,8 +547,23 @@ func _play_ambient_accent() -> void:
 			play_event("cloth_wind", 0.04)
 		ambient_accent_time = randf_range(6.5, 12.5)
 	elif current_ambient_zone == "wychwood":
-		play_event("ghoulkin_idle" if randf() > 0.62 else "cloth_wind", 0.05)
+		play_event_limited("ghoulkin_idle" if randf() > 0.62 else "cloth_wind", 0.35, 0.05)
 		ambient_accent_time = randf_range(5.0, 9.0)
+	elif current_ambient_zone in ["cemetery", "chapel"]:
+		if randf() > 0.78:
+			play_event_limited("shrine_bell", 0.45, 0.04)
+		else:
+			play_event_limited("shrine_candle" if randf() > 0.45 else "cloth_wind", 0.25, 0.04)
+		ambient_accent_time = randf_range(6.5, 12.0)
+	elif current_ambient_zone in ["record_hall", "undercroft"]:
+		play_event_limited("wychwood_drop" if randf() > 0.58 else "cloth_wind", 0.30, 0.04)
+		ambient_accent_time = randf_range(7.0, 13.0)
+	elif current_ambient_zone in ["vargan_approach", "vargan_court", "assembly"]:
+		play_event_limited("cloth_wind", 0.25, 0.04)
+		ambient_accent_time = randf_range(8.0, 14.0)
+	elif current_ambient_zone == "hart_glade":
+		play_event_limited("shrine_hum" if randf() > 0.64 else "cloth_wind", 0.30, 0.03)
+		ambient_accent_time = randf_range(8.0, 15.0)
 	else:
 		ambient_accent_time = randf_range(8.0, 14.0)
 

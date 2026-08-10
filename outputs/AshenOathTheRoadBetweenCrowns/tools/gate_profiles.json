@@ -138,6 +138,7 @@
         "verify_audio_runtime",
         "verify_audio_001",
         "verify_audio_002",
+        "verify_audio_repair_001",
         "verify_voice_001"
       ]
     },
