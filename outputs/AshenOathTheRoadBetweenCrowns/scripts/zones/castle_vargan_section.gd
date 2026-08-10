@@ -28,7 +28,7 @@ func _build_approach(context: ZoneBuildContext) -> void:
 	_make_gatehouse(context, Vector3(0, 0, -14))
 	_make_tower(context, Vector3(-8.5, 0, -13.5), 7.5)
 	_make_tower(context, Vector3(8.5, 0, -13.5), 7.5)
-	context.make_prop_box("CastleDistantKeep", Vector3(0, 8, -19), Vector3(15, 16, 5), Color(0.115, 0.115, 0.12))
+	_make_distant_keep(context, Vector3(0, 0, -19))
 	context.make_loose_role("cart", Vector3(7, 0, 1), Vector3.ONE * 0.72, -18.0)
 	context.make_prop_box("BattlefieldRemnant", Vector3(-7, 0.4, 3), Vector3(3.5, 0.8, 1.2), Color(0.16, 0.11, 0.075))
 	_make_banner(context, Vector3(-5.5, 3.2, -13.0), Color(0.30, 0.055, 0.045))
@@ -87,6 +87,14 @@ func _build_record_hall(context: ZoneBuildContext) -> void:
 		context.make_prop_box("RecordHallWall", Vector3(x, 3, 0), Vector3(1, 6, 30), Color(0.13, 0.125, 0.12))
 	for z in [-14.0, 14.0]:
 		context.make_prop_box("RecordHallWall", Vector3(0, 3, z), Vector3(28, 6, 1), Color(0.13, 0.125, 0.12))
+	# The archive is enclosed rather than opening onto the outdoor sky. Rafters,
+	# a dark ceiling, and a warm ledger pool make the room read as architecture.
+	context.make_visual_box("RecordHallCeiling", Vector3(0, 6.35, 0), Vector3(28, 0.28, 30), Color(0.035, 0.032, 0.030))
+	for x in [-10.5, -3.5, 3.5, 10.5]:
+		context.make_visual_box("RecordHallRafter", Vector3(x, 6.05, 0), Vector3(0.24, 0.34, 28), Color(0.16, 0.10, 0.055))
+	for z in [-11.0, 11.0]:
+		for x in [-9.0, 0.0, 9.0]:
+			context.make_visual_box("RecordHallWallBand", Vector3(x, 4.8, z), Vector3(4.6, 0.16, 0.10), Color(0.28, 0.22, 0.15))
 	for x in [-9.0, -5.5, 5.5, 9.0]:
 		for z in [-7.0, -2.0, 3.0, 8.0]:
 			context.make_prop_box("LedgerShelf", Vector3(x, 1.5, z), Vector3(1.0, 3.0, 3.6), Color(0.18, 0.115, 0.065))
@@ -130,9 +138,39 @@ func _make_gatehouse(context: ZoneBuildContext, pos: Vector3) -> void:
 		context.make_visual_box("RaisedPortcullis", pos + Vector3(x, 5.0, 1.2), Vector3(0.16, 2.0, 0.18), Color(0.10, 0.09, 0.075))
 
 func _make_tower(context: ZoneBuildContext, pos: Vector3, height: float) -> void:
-	context.make_prop_box("CrackedVarganTower", pos + Vector3(0, height * 0.5, 0), Vector3(5, height, 5), Color(0.14, 0.14, 0.145))
+	var stone := Color(0.14, 0.14, 0.145)
+	context.make_prop_box("CrackedVarganTower", pos + Vector3(0, height * 0.5, 0), Vector3(5, height, 5), stone)
+	_make_visual_cylinder(context, "RoundVarganTower", pos + Vector3(0, height * 0.5, 0), 3.25, height * 0.96, stone.lightened(0.035))
+	_make_visual_cylinder(context, "TowerStoneBand", pos + Vector3(0, height * 0.72, 0), 3.30, 0.18, Color(0.20, 0.19, 0.18))
+	_make_visual_cylinder(context, "TowerCrown", pos + Vector3(0, height + 0.08, 0), 3.45, 0.18, Color(0.105, 0.105, 0.11))
 	for x in [-1.8, 0.0, 1.8]:
-		context.make_prop_box("TowerMerlon", pos + Vector3(x, height + 0.6, 0), Vector3(1.0, 1.2, 5), Color(0.13, 0.13, 0.135))
+		context.make_visual_box("TowerMerlon", pos + Vector3(x, height + 0.6, 0), Vector3(0.82, 1.1, 0.78), Color(0.13, 0.13, 0.135))
+	for z in [-2.58, 2.58]:
+		context.make_visual_box("TowerArrowSlit", pos + Vector3(0, height * 0.56, z), Vector3(0.30, 1.18, 0.06), Color(0.025, 0.022, 0.020))
+
+func _make_distant_keep(context: ZoneBuildContext, pos: Vector3) -> void:
+	var stone := Color(0.115, 0.115, 0.12)
+	context.make_prop_box("CastleKeepCore", pos + Vector3(0, 4.4, 0), Vector3(11.0, 8.8, 4.0), stone)
+	_make_visual_cylinder(context, "CastleKeepLeftTower", pos + Vector3(-5.6, 3.6, 0), 2.35, 7.2, stone.lightened(0.025))
+	_make_visual_cylinder(context, "CastleKeepRightTower", pos + Vector3(5.6, 3.6, 0), 2.35, 7.2, stone.lightened(0.025))
+	context.make_visual_box("CastleKeepRoofline", pos + Vector3(0, 8.9, 0), Vector3(12.4, 0.35, 4.5), Color(0.075, 0.068, 0.065))
+	for x in [-4.4, -2.2, 0.0, 2.2, 4.4]:
+		context.make_visual_box("KeepMerlon", pos + Vector3(x, 9.7, 0), Vector3(0.78, 1.0, 0.82), Color(0.095, 0.092, 0.09))
+	context.make_visual_box("KeepGateShadow", pos + Vector3(0, 2.2, -2.04), Vector3(2.1, 4.0, 0.06), Color(0.025, 0.022, 0.020))
+
+func _make_visual_cylinder(context: ZoneBuildContext, node_name: String, pos: Vector3, radius: float, height: float, color: Color) -> void:
+	var node := MeshInstance3D.new()
+	node.name = node_name
+	var mesh := CylinderMesh.new()
+	mesh.top_radius = radius * 0.94
+	mesh.bottom_radius = radius
+	mesh.height = height
+	mesh.radial_segments = 10
+	mesh.rings = 2
+	node.mesh = mesh
+	node.position = pos
+	node.material_override = context.make_material(color)
+	context.add_node(node)
 
 func _make_curtain_walls(context: ZoneBuildContext) -> void:
 	context.make_prop_box("VarganNorthWall", Vector3(0, 3, -16), Vector3(44, 6, 1.4), Color(0.135, 0.135, 0.14))

@@ -24,6 +24,9 @@ func _build_undercroft(context: ZoneBuildContext) -> void:
 	context.make_ground(Vector3(0, -0.08, 0), Vector3(36, 0.16, 34), stone)
 	context.make_play_area_bounds(36.0, 34.0, stone.darkened(0.42))
 	context.make_road(Vector3(0, 0.02, 0), Vector3(6.5, 0.05, 29), Color(0.11, 0.105, 0.10))
+	context.make_visual_box("UndercroftCeiling", Vector3(0, 6.3, 0), Vector3(36, 0.30, 34), Color(0.028, 0.028, 0.032))
+	for x in [-12.0, -4.0, 4.0, 12.0]:
+		context.make_visual_box("UndercroftBeam", Vector3(x, 5.95, 0), Vector3(0.26, 0.34, 31), Color(0.12, 0.095, 0.075))
 	_marker(context, "undercroft", "AuthoredVarganUndercroft")
 	for x in [-14.5, 14.5]:
 		context.make_prop_box("UndercroftWall", Vector3(x, 2.8, 0), Vector3(1.2, 5.6, 31), Color(0.12, 0.12, 0.125))
@@ -79,6 +82,68 @@ func _build_hart_glade(context: ZoneBuildContext) -> void:
 		context.make_tree(position)
 	for position in [Vector3(-7, 0, -7), Vector3(7, 0, -7), Vector3(-9, 0, -2), Vector3(9, 0, -2)]:
 		context.make_ritual_stone(position)
+	_make_hart_grove(context)
+	_make_hart_witness(context)
 	context.make_light("HartWitnessLight", Vector3(0, 6, -9), Color(0.62, 0.86, 0.75), 4.2)
 	context.make_named_interactable("white_hart", "dialogue", "Stand before the White Hart", Vector3(0, 0, -9), Color(0.78, 0.80, 0.68), Vector3(0.42, 0.72, 0.42))
 	context.make_zone_gate("Return to Greyfen's assembly", Vector3(-7, 0, 16), "assembly", Vector3(0, 1, -12))
+
+func _make_hart_grove(context: ZoneBuildContext) -> void:
+	var plinth := MeshInstance3D.new()
+	plinth.name = "WhiteHartMemoryPlinth"
+	var plinth_mesh := CylinderMesh.new()
+	plinth_mesh.top_radius = 2.25
+	plinth_mesh.bottom_radius = 2.55
+	plinth_mesh.height = 0.24
+	plinth_mesh.radial_segments = 16
+	plinth.mesh = plinth_mesh
+	plinth.position = Vector3(0, 0.12, -9)
+	plinth.material_override = context.make_material(Color(0.20, 0.26, 0.22))
+	context.add_node(plinth)
+	for index in range(8):
+		var angle := TAU * float(index) / 8.0
+		var stone := MeshInstance3D.new()
+		stone.name = "HartGroveMarker_%02d" % index
+		var stone_mesh := CylinderMesh.new()
+		stone_mesh.top_radius = 0.24
+		stone_mesh.bottom_radius = 0.34
+		stone_mesh.height = 1.2 + float(index % 2) * 0.18
+		stone_mesh.radial_segments = 7
+		stone.mesh = stone_mesh
+		stone.position = Vector3(cos(angle) * 4.3, stone_mesh.height * 0.5, -9 + sin(angle) * 4.3)
+		stone.rotation.y = angle
+		stone.material_override = context.make_material(Color(0.18, 0.23, 0.20))
+		context.add_node(stone)
+
+func _make_hart_witness(context: ZoneBuildContext) -> void:
+	# Display-only focal actor for the glade. The ending resolver still owns
+	# combat spawning, so this does not change the encounter state machine.
+	var root := Node3D.new()
+	root.name = "WhiteHartWitnessDisplay"
+	root.position = Vector3(0, 0, -9)
+	context.add_node(root)
+	var body_material := context.make_material(Color(0.68, 0.72, 0.66))
+	var shadow_material := context.make_material(Color(0.18, 0.22, 0.19))
+	var antler_material := context.make_material(Color(0.26, 0.18, 0.10))
+	_add_hart_part(root, "HartBody", CapsuleMesh.new(), Vector3(0, 1.22, 0.12), Vector3(1.28, 1.0, 1.52), body_material)
+	_add_hart_part(root, "HartNeck", CapsuleMesh.new(), Vector3(0, 1.93, -0.42), Vector3(0.70, 1.10, 0.76), body_material, Vector3(-24, 0, 0))
+	_add_hart_part(root, "HartHead", SphereMesh.new(), Vector3(0, 2.46, -0.86), Vector3(0.58, 0.48, 0.76), body_material)
+	_add_hart_part(root, "HartMuzzle", SphereMesh.new(), Vector3(0, 2.32, -1.18), Vector3(0.34, 0.25, 0.42), body_material)
+	_add_hart_part(root, "HartMane", SphereMesh.new(), Vector3(0, 2.02, -0.30), Vector3(0.46, 0.78, 0.34), shadow_material)
+	for side in [-1.0, 1.0]:
+		for z in [-0.34, 0.34]:
+			_add_hart_part(root, "HartLeg", CylinderMesh.new(), Vector3(side * 0.38, 0.52, z), Vector3(0.22, 0.92, 0.22), shadow_material)
+		_add_hart_part(root, "HartAntlerMain", CylinderMesh.new(), Vector3(side * 0.25, 2.92, -0.76), Vector3(0.13, 0.92, 0.13), antler_material, Vector3(0, 0, side * -18.0))
+		_add_hart_part(root, "HartAntlerBranch", CylinderMesh.new(), Vector3(side * 0.48, 3.26, -0.76), Vector3(0.09, 0.54, 0.09), antler_material, Vector3(0, 0, side * 34.0))
+		_add_hart_part(root, "HartEye", SphereMesh.new(), Vector3(side * 0.17, 2.52, -1.22), Vector3(0.06, 0.06, 0.06), context.make_material(Color(0.48, 0.92, 0.72)))
+	_add_hart_part(root, "HartSigilLight", SphereMesh.new(), Vector3(0, 1.42, -0.54), Vector3(0.10, 0.10, 0.10), context.make_material(Color(0.52, 0.90, 0.74)))
+
+func _add_hart_part(parent: Node3D, node_name: String, mesh: Mesh, position: Vector3, scale_value: Vector3, material: Material, rotation_degrees := Vector3.ZERO) -> void:
+	var node := MeshInstance3D.new()
+	node.name = node_name
+	node.mesh = mesh
+	node.position = position
+	node.scale = scale_value
+	node.rotation_degrees = rotation_degrees
+	node.material_override = material
+	parent.add_child(node)
