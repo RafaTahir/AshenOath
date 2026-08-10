@@ -112,10 +112,24 @@ func set_time(minutes: float, phase: String, _day_count: int = 0) -> void:
 func _update_sky_cycle(daylight: float, twilight: float, night: float, minutes: float, profile: Dictionary) -> void:
 	var camera := get_viewport().get_camera_3d()
 	var sky_origin: Vector3 = camera.global_position if camera != null else Vector3.ZERO
+	var view_forward: Vector3 = Vector3(0, 0, -1)
+	var view_right: Vector3 = Vector3.RIGHT
+	var view_up: Vector3 = Vector3.UP
+	if camera != null:
+		view_forward = -camera.global_transform.basis.z.normalized()
+		view_right = camera.global_transform.basis.x.normalized()
+		view_up = camera.global_transform.basis.y.normalized()
 	var sun_direction := _solar_direction(minutes)
 	var moon_direction := -sun_direction
-	var sun_position: Vector3 = sky_origin + sun_direction * 145.0
-	var moon_position: Vector3 = sky_origin + moon_direction * 132.0
+	# Keep the procedural celestial bodies on a believable, camera-readable arc.
+	# The directional lights still use the physical solar vector above; this only
+	# prevents a valid sun or moon from disappearing outside the normal gameplay
+	# composition on low-FOV laptop cameras.
+	var arc_t := clampf((fposmod(minutes, 1440.0) - 330.0) / 870.0, 0.0, 1.0)
+	var sun_screen_x := lerpf(-34.0, 34.0, arc_t)
+	var sun_screen_y := 10.0 + sin(clampf((fposmod(minutes, 1440.0) - 420.0) / 690.0, 0.0, 1.0) * PI) * 12.0
+	var sun_position: Vector3 = sky_origin + view_forward * 88.0 + view_right * sun_screen_x + view_up * sun_screen_y
+	var moon_position: Vector3 = sky_origin + view_forward * 86.0 - view_right * sun_screen_x + view_up * (14.0 - sin(clampf((fposmod(minutes, 1440.0) - 420.0) / 690.0, 0.0, 1.0) * PI) * 5.0)
 	sun_disc.position = sun_position
 	sun_halo.position = sun_position + Vector3(0, 0, 0.4)
 	sun_rays.position = sun_position
@@ -140,7 +154,10 @@ func _update_sky_cycle(daylight: float, twilight: float, night: float, minutes: 
 	var quality := _quality_preset()
 	if star_field != null and star_field.multimesh != null:
 		star_field.multimesh.visible_instance_count = 28 if quality == "potato" else (96 if quality == "quality" else 62)
-	var cloud_count := 1 if quality == "potato" else (7 if quality == "quality" else 2)
+	# Keep the authored seven-cluster pool resident, then expose a deterministic
+	# tier budget. Balanced needs enough depth to read as a sky, while Potato
+	# retains two low-overdraw formations instead of collapsing to one card.
+	var cloud_count := 2 if quality == "potato" else (7 if quality == "quality" else 4)
 	cloud_layer.visible = bool(profile.clouds)
 	var cloud_alpha := clampf(daylight*0.78+twilight*0.68+night*0.28,0.18,0.82)
 	var cloud_color := Color(0.92,0.94,0.96) if daylight > twilight else Color(0.82,0.46,0.30)
@@ -149,9 +166,9 @@ func _update_sky_cycle(daylight: float, twilight: float, night: float, minutes: 
 	for i in range(cloud_layer.get_child_count()):
 		var cloud := cloud_layer.get_child(i) as Node3D
 		cloud.visible = bool(profile.clouds) and i < cloud_count
-		var base_position: Vector3 = cloud.get_meta("base_position", cloud.position)
 		var cloud_drift := 0.0 if _reduced_motion() else fmod(minutes * (0.018 + i * 0.002), 28.0) - 14.0
-		cloud.position = base_position + Vector3(cloud_drift, 0, 0)
+		var cloud_anchor := Vector3(-52.0 + i * 17.0, 15.0 + float(i % 3) * 5.0, 96.0 + float(i % 3) * 14.0)
+		cloud.position = view_right * (cloud_anchor.x + cloud_drift) + view_up * cloud_anchor.y + view_forward * cloud_anchor.z
 		for lobe in cloud.get_children():
 			if lobe is MeshInstance3D:
 				var material := (lobe as MeshInstance3D).material_override as StandardMaterial3D
@@ -318,23 +335,28 @@ func _build_sky_layer() -> void:
 
 	sun_disc = MeshInstance3D.new()
 	sun_disc.name = "SunDisc"
-	var sun_mesh := QuadMesh.new()
-	sun_mesh.size = Vector2.ONE
+	var sun_mesh := SphereMesh.new()
+	sun_mesh.radius = 1.0
+	sun_mesh.height = 2.0
+	sun_mesh.radial_segments = 24
+	sun_mesh.rings = 12
 	sun_disc.mesh = sun_mesh
-	sun_disc.scale = Vector3(3.4, 3.4, 3.4)
+	sun_disc.scale = Vector3(5.6, 5.6, 5.6)
 	sun_disc.material_override = _emissive_billboard_material(Color(1.0, 0.94, 0.78), 2.15, 0.96)
 	add_child(sun_disc)
 	moon_disc = MeshInstance3D.new()
 	moon_disc.name = "MoonDisc"
 	moon_disc.mesh = sun_mesh.duplicate()
-	moon_disc.scale = Vector3(3.8, 3.8, 3.8)
+	moon_disc.scale = Vector3(5.0, 5.0, 5.0)
 	moon_disc.material_override = _emissive_billboard_material(Color(0.62, 0.76, 1.0), 0.62, 0.86)
 	add_child(moon_disc)
-	sun_halo = _make_celestial_plane("SunHalo", sun_mesh, Vector3(8.5, 8.5, 8.5), Color(1.0, 0.72, 0.32), 0.34, 0.16)
+	var halo_mesh := QuadMesh.new()
+	halo_mesh.size = Vector2.ONE
+	sun_halo = _make_celestial_plane("SunHalo", halo_mesh, Vector3(9.0, 9.0, 9.0), Color(1.0, 0.72, 0.32), 0.34, 0.16)
 	sun_rays = Node3D.new()
 	sun_rays.name = "AtmosphericSunLayer"
 	add_child(sun_rays)
-	moon_halo = _make_celestial_plane("MoonHalo", sun_mesh, Vector3(8.0, 8.0, 8.0), Color(0.48, 0.68, 1.0), 0.16, 0.18)
+	moon_halo = _make_celestial_plane("MoonHalo", halo_mesh, Vector3(8.0, 8.0, 8.0), Color(0.48, 0.68, 1.0), 0.16, 0.18)
 	_build_star_field()
 
 	cloud_layer = Node3D.new()
@@ -366,8 +388,8 @@ func _position_sky_layer(zone_id: String) -> void:
 		origin = Vector3(0, -10, 0)
 		sun_disc.position = Vector3(-95, 58, -120)
 		sun_disc.rotation_degrees = Vector3(64, -38, 0)
-		cloud_layer.position = Vector3(0, -500, 8) if zone_id == "wychwood" else Vector3(0, 0, 8)
-		cloud_layer.visible = zone_id != "wychwood"
+		cloud_layer.position = Vector3(0, 0, 8)
+		cloud_layer.visible = true
 	elif zone_id in ["ruins","old_mill","bandit_road","vargan_approach","vargan_court","record_hall","undercroft","assembly"]:
 		origin = Vector3(0, -12, 0)
 		sun_disc.position = Vector3(110, 70, -95)
@@ -493,4 +515,5 @@ func _emissive_billboard_material(color: Color, energy: float, alpha: float) -> 
 	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	material.cull_mode = BaseMaterial3D.CULL_DISABLED
 	material.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
+	material.no_depth_test = true
 	return material
