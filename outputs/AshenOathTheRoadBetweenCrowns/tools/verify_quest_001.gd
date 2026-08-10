@@ -53,7 +53,8 @@ func _initialize() -> void:
 	_check(not game.quests.is_objective_done("main_bell_beneath_greyfen", "meet_anwen_gate"), "Reporting incorrectly skipped the cemetery meeting")
 
 	sister = _find_named(game.zone_root, "sister_anwen")
-	_check(sister != null and (sister as Node3D).global_position.distance_to(Vector3(11.0, 0, 4.8)) < 0.25, "Anwen did not relocate to the cemetery gate")
+	var expected_cemetery_gate: Vector3 = game.call("river_safe_position", Vector3(11.0, 0, 4.8), 0.8)
+	_check(sister != null and (sister as Node3D).global_position.distance_to(expected_cemetery_gate) < 0.25 and not game.spatial_service.is_river_excluded((sister as Node3D).global_position, 0.6), "Anwen did not relocate to the safe cemetery gate")
 	if sister != null:
 		game.call("_handle_interaction", sister)
 		await _close_dialogue(game)

@@ -1174,8 +1174,10 @@ func _relocate_anwen_to_cemetery() -> void:
 		return
 	var requested_position := Vector3(11.0, 0.0, 4.8)
 	var safe_position: Vector3 = Vector3(spatial_service.validate_position(requested_position, 0.85, spatial_service.bank_for(requested_position)))
-	var grounded_position: Vector3 = Vector3(_grounded_spawn_position(safe_position))
-	anwen.global_position = grounded_position + Vector3.UP * 0.02
+	# This is an authored flat cemetery stage. A generic downward ray can hit
+	# the nearby wall/roof collision and float Anwen above the graves.
+	safe_position.y = 0.0
+	anwen.global_position = safe_position + Vector3.UP * 0.02
 	anwen.set("prompt", "Meet Sister Anwen at the cemetery gate")
 	_face_npc_toward_player(anwen)
 
@@ -2088,7 +2090,7 @@ func _is_river_recovery_position(zone: String, pos: Vector3) -> bool:
 		return false
 	# The bridge deck occupies the river exclusion band by design. Let the
 	# player capsule settle onto its collision before considering recovery.
-	if spatial_service != null and spatial_service.zone_id == zone and not spatial_service.is_river_excluded(pos, 0.0):
+	if spatial_service != null and spatial_service.zone_id == zone and not spatial_service.is_river_excluded(pos, 0.0) and pos.y >= 0.18:
 		return false
 	return absf(pos.z-river_z) < 2.0 and (absf(pos.x) > 2.7 or pos.y < 0.12)
 
