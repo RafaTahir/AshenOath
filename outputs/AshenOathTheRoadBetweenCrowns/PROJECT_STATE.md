@@ -16,7 +16,8 @@ reaches Greyfen through real launch/menu input in both Chrome and Edge without
 browser console errors. Cold headless software-WebGL runs require about 17
 seconds to initialize the engine and another 14-15 seconds to reach Greyfen
 after New Game; this remains known loading-performance debt. Production remains
-unchanged until `MOBILE-001`.
+unchanged during RECOVERY-003; the original roadmap candidate is not being
+treated as recovery-approved.
 
 INPUT-001 centralizes gameplay and menu input behind `InputRouter`. Keyboard
 and mouse controls remain intact; Xbox-style gamepad movement, camera, combat,
@@ -24,7 +25,8 @@ interaction, menus, prompts, rumble, sensitivity, and future virtual-input
 hooks now share the same semantic actions. The 64.0 MB development candidate
 again reached Greyfen in Chrome and Edge at 1280x720 WebGL2 with no console
 errors. Physical-controller testing remains required before public controller
-support is considered final. `MOBILE-001` is the only remaining roadmap ticket.
+support is considered final. The original roadmap is complete; RECOVERY-003
+remains a separate repair milestone and has not been deployed.
 
 MOBILE-001 completes the original roadmap with a Web-safe landscape touch
 layout, multi-touch combat and exploration controls, touch-specific prompts and
@@ -104,7 +106,22 @@ for a native store release or sustained physical-phone performance.
 - Repeated world boxes/details use shared meshes and MultiMesh batches. RECOVERY-002 measured 37.2 FPS average, 35.6 FPS minimum, and 294 ms warm route transition on Intel HD 620/ANGLE.
 - The world remains intentionally stylized and low-poly; current assets do not support a photoreal/AAA claim.
 
-Last updated: 2026-08-10
+## QA-REPAIR-001 Update
+
+- The complete 1280x720 route capture was regenerated on 2026-08-11 at source revision `0f3114f`. It covers Greyfen, both bridge/recovery proofs, Wychwood combat, Castle Vargan, Record Hall, and Hart Glade.
+- `verify_screenshot_qa_003.py --mode ticket` passes all 11 required views, and the five-test regression suite passes. The manifest remains `pending` because automated image checks cannot approve facial identity, composition, grounding, or art quality without human review.
+- River recovery now prefers authored same-bank road anchors, and the bridge deck is excluded from emergency river recovery when its spatial service validates the bridge corridor. The full capture completes without the earlier false bridge/roof failures.
+- Active gameplay no longer emits the previous null-material errors during capture. Godot still reports renderer/RID/ObjectDB cleanup diagnostics while the multi-zone capture process exits; these remain lifecycle debt and are not being marked as a clean release result.
+- Current visual blockers remain honest: route-visible characters and buildings are low-poly/temporary, Anwen is not framed at portrait distance, Castle/Record Hall are blockout-grade, and the White Hart remains an underdeveloped procedural presentation. Production stays unchanged until those blockers receive an approved visual pass.
+
+## QA-REPAIR-001 Verification Evidence
+
+- Fresh gallery source: `Development_Gallery/screenshots/*2026-08-11_001909.png`
+- Machine screenshot report: `.release-gate/qa_003_ticket_report.json`
+- Performance report: `.release-gate/perf_001_report.json`
+- Full route capture command and targeted gate commands are recorded in `QA_REPAIR_001_SCREENSHOT_VISUAL_APPROVAL.md`.
+
+Last updated: 2026-08-11
 
 ## Summary
 
