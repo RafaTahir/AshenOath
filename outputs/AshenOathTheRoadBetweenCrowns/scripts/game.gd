@@ -2161,18 +2161,18 @@ func _make_balanced_road_surface(paved: bool) -> void:
 	multimesh.use_colors = paved
 	multimesh.mesh = detail_mesh
 	var rows = 43 if paved else 12
-	var columns = 5 if paved else 1
+	var columns = 6 if paved else 1
 	multimesh.instance_count = rows * columns
 	var index = 0
 	for row in range(rows):
 		for column in range(columns):
 			var row_offset := 0.09 if paved and row % 2 == 1 else 0.0
-			var x = (float(column) - 2.0) * 0.73 + row_offset if paved else sin(float(row) * 1.7) * 0.55
+			var x = (float(column) - 2.5) * 0.62 + row_offset if paved else sin(float(row) * 1.7) * 0.55
 			var z = -13.0 + float(row) * (0.63 if paved else 2.05)
 			var yaw = sin(float(row * 7 + column * 3)) * 0.035 if paved else sin(float(row) * 0.8) * 0.16
 			var basis := Basis(Vector3.UP, yaw)
 			if paved:
-				basis = basis.scaled(Vector3(0.94 + float((row + column) % 3) * 0.025, 1.0, 0.94 + float((row * 2 + column) % 3) * 0.025))
+				basis = basis.scaled(Vector3(0.82 + float((row + column) % 3) * 0.025, 1.0, 0.82 + float((row * 2 + column) % 3) * 0.025))
 			multimesh.set_instance_transform(index, Transform3D(basis, Vector3(x, 0.064, z)))
 			if paved:
 				var shade := 0.82 + float((row + column * 2) % 4) * 0.045
@@ -3016,10 +3016,10 @@ func _make_named_interactable(id: String, type: String, prompt: String, pos: Vec
 		label.text = _label_for_interactable(id, prompt)
 		label.position = Vector3(0, 2.15 * max(scale_override.y, 0.75), 0)
 		label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-		label.font_size = 22
-		label.pixel_size = 0.009
+		label.font_size = 14 if type == "zone" else 16
+		label.pixel_size = 0.0038 if type == "zone" else 0.0048
 		label.modulate = Color(0.84, 0.78, 0.62)
-		label.outline_size = 5
+		label.outline_size = 3
 		label.outline_modulate = Color(0.02, 0.018, 0.015)
 		label.visible = false
 		area.add_child(label)
@@ -3057,10 +3057,10 @@ func _make_village_place(id: String, type: String, prompt: String, pos: Vector3,
 	var label := Label3D.new()
 	label.name = "InteractionWorldLabel"
 	label.text = prompt
-	label.position = Vector3(0,size.y+0.7,0)
+	label.position = Vector3(0,size.y+0.62,0)
 	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-	label.font_size = 18
-	label.pixel_size = 0.008
+	label.font_size = 14
+	label.pixel_size = 0.0048
 	label.modulate = Color(0.84,0.78,0.62)
 	label.visible = false
 	area.add_child(label)
@@ -3112,20 +3112,23 @@ func _release_dialogue_facing() -> void:
 		_relocate_anwen_to_cemetery()
 
 func _make_gate_marker(parent: Node3D, color: Color, scale_override: Vector3) -> void:
-	var arch = MeshInstance3D.new()
-	var arch_mesh = BoxMesh.new()
-	arch_mesh.size = Vector3(1.2, 1.6, 0.18)
-	arch.mesh = arch_mesh
-	arch.position.y = 0.8
-	arch.scale = scale_override
-	arch.material_override = _mat(color)
-	parent.add_child(arch)
-	var lintel = MeshInstance3D.new()
-	var lintel_mesh = BoxMesh.new()
-	lintel_mesh.size = Vector3(1.75, 0.22, 0.26)
+	var pillar_material := _mat(color.lightened(0.10))
+	for side in [-1.0, 1.0]:
+		var pillar := MeshInstance3D.new()
+		var pillar_mesh := BoxMesh.new()
+		pillar_mesh.size = Vector3(0.30, 1.72, 0.26)
+		pillar.mesh = pillar_mesh
+		pillar.position = Vector3(side * 0.86 * scale_override.x, 0.86 * scale_override.y, 0)
+		pillar.scale = Vector3(scale_override.x, scale_override.y, scale_override.z)
+		pillar.material_override = pillar_material
+		parent.add_child(pillar)
+	var lintel := MeshInstance3D.new()
+	var lintel_mesh := BoxMesh.new()
+	lintel_mesh.size = Vector3(2.05, 0.24, 0.28)
 	lintel.mesh = lintel_mesh
-	lintel.position.y = 1.65 * scale_override.y
-	lintel.material_override = _mat(color.lightened(0.12))
+	lintel.position.y = 1.72 * scale_override.y
+	lintel.scale = Vector3(scale_override.x, scale_override.y, scale_override.z)
+	lintel.material_override = _mat(color.lightened(0.18))
 	parent.add_child(lintel)
 
 func _label_for_interactable(id: String, prompt: String) -> String:
@@ -3383,7 +3386,7 @@ func _make_tree(pos: Vector3) -> void:
 		zone_root.add_child(tree_collision_body)
 	var shape := CollisionShape3D.new()
 	var box := BoxShape3D.new()
-	box.size = Vector3(0.78, 3.6, 0.78)
+	box.size = Vector3(0.58, 3.6, 0.58)
 	shape.shape = box
 	shape.position = pos + Vector3(0, 2.1, 0)
 	tree_collision_body.add_child(shape)
@@ -3461,17 +3464,19 @@ func _flush_environment_batches() -> void:
 		var trunk_mesh := BoxMesh.new()
 		trunk_mesh.size = Vector3(0.42, 1.8, 0.42)
 		var trunks := _make_multimesh_batch("TreeTrunkBatch", trunk_mesh, tree_batch_data.size(), world_materials.get_material("timber", str(settings.settings.get("quality_preset", "balanced")), Color(0.42, 0.30, 0.20), 0.0, false))
-		var crown_mesh := CylinderMesh.new()
-		crown_mesh.top_radius = 0.38
-		crown_mesh.bottom_radius = 1.0
-		crown_mesh.height = 1.0
-		crown_mesh.radial_segments = 7
+		var crown_mesh := SphereMesh.new()
+		crown_mesh.radius = 0.72
+		crown_mesh.height = 1.62
+		crown_mesh.radial_segments = 8
+		crown_mesh.rings = 4
 		var crown_material := _mat(Color.WHITE)
 		crown_material.vertex_color_use_as_albedo = true
 		var crowns := _make_multimesh_batch("TreeCrownBatch", crown_mesh, tree_batch_data.size(), crown_material, true)
 		for i in range(tree_batch_data.size()):
 			trunks.multimesh.set_instance_transform(i, tree_batch_data[i].trunk)
-			crowns.multimesh.set_instance_transform(i, tree_batch_data[i].crown)
+			var crown_transform: Transform3D = tree_batch_data[i].crown
+			crown_transform.basis = crown_transform.basis.scaled(Vector3(1.10, 0.72, 1.10))
+			crowns.multimesh.set_instance_transform(i, crown_transform)
 			crowns.multimesh.set_instance_color(i, tree_batch_data[i].color)
 	if not deadfall_batch_data.is_empty():
 		var deadfall_mesh := CylinderMesh.new()

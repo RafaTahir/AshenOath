@@ -22,6 +22,7 @@ func build(context: ZoneBuildContext, center_z: float, width: float, span: float
 	_make_bank_slope(root, "NorthBankSlope", Vector3(0,-0.05,center_z-span*0.51), width, -8.0)
 	_make_bank_slope(root, "SouthBankSlope", Vector3(0,-0.05,center_z+span*0.51), width, 8.0)
 	_make_water(root, center_z, width, span)
+	_make_shore_foam(root, center_z, width, span)
 	_make_river_audio(root, center_z)
 	_make_bridge(root, center_z, span)
 	_make_bank_barriers(root, center_z, width, span)
@@ -56,14 +57,31 @@ func _make_water(root: Node3D, center_z: float, width: float, span: float) -> vo
 	water.material_override = material
 	root.add_child(water)
 
+func _make_shore_foam(root: Node3D, center_z: float, width: float, span: float) -> void:
+	var material := StandardMaterial3D.new()
+	material.albedo_color = Color(0.32, 0.48, 0.43, 0.62)
+	material.emission_enabled = true
+	material.emission = Color(0.10, 0.18, 0.16)
+	material.emission_energy_multiplier = 0.22
+	material.roughness = 0.28
+	for side in [-1.0, 1.0]:
+		var foam := MeshInstance3D.new()
+		foam.name = "RiverShoreFoam_%s" % ("North" if side < 0.0 else "South")
+		var mesh := BoxMesh.new()
+		mesh.size = Vector3(width - BRIDGE_WIDTH - 0.20, 0.025, 0.16)
+		foam.mesh = mesh
+		foam.position = Vector3(0, -0.195, center_z + side * (span * 0.5 - 0.10))
+		foam.material_override = material
+		root.add_child(foam)
+
 func _make_bridge(root: Node3D, z: float, span: float) -> void:
 	var bridge_length := span + 2.6
-	_make_box(root,"RiverBridgeDeck",Vector3(0,0.18,z),Vector3(BRIDGE_WIDTH,0.26,bridge_length),Color(0.22,0.13,0.065),true)
-	var ramp_length := 1.5
-	var ramp_angle := atan(0.21 / ramp_length)
+	_make_box(root,"RiverBridgeDeck",Vector3(0,0.09,z),Vector3(BRIDGE_WIDTH,0.18,bridge_length),Color(0.22,0.13,0.065),true)
+	var ramp_length := 1.8
+	var ramp_angle := atan(0.10 / ramp_length)
 	var ramp_offset := bridge_length * 0.5 + ramp_length * 0.5 - 0.06
-	_make_bridge_ramp(root, "BridgeApproachRampNorth", Vector3(0,0.135,z-ramp_offset), Vector3(BRIDGE_WIDTH-0.28,0.14,ramp_length), -ramp_angle)
-	_make_bridge_ramp(root, "BridgeApproachRampSouth", Vector3(0,0.135,z+ramp_offset), Vector3(BRIDGE_WIDTH-0.28,0.14,ramp_length), ramp_angle)
+	_make_bridge_ramp(root, "BridgeApproachRampNorth", Vector3(0,0.09,z-ramp_offset), Vector3(BRIDGE_WIDTH-0.28,0.18,ramp_length), -ramp_angle)
+	_make_bridge_ramp(root, "BridgeApproachRampSouth", Vector3(0,0.09,z+ramp_offset), Vector3(BRIDGE_WIDTH-0.28,0.18,ramp_length), ramp_angle)
 	var plank_count := 9
 	for plank_index in range(plank_count):
 		var local_z := -bridge_length * 0.42 + float(plank_index) * (bridge_length * 0.84 / float(plank_count - 1))
