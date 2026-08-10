@@ -266,6 +266,15 @@ func _register_zone_defaults() -> void:
 	else:
 		register_gate("campaign_return", Vector3(-7, 0, 13.5), Vector3(0, 0.9, 12.0), Vector2(3.2, 2.4))
 		register_gate("campaign_forward", Vector3(7, 0, -13.5), Vector3(0, 0.9, -12.0), Vector2(3.2, 2.4))
+		if zone_id == "vargan_approach":
+			register_gate("castle_approach_return", Vector3(-7, 0, 16), Vector3(0, 0.9, -12), Vector2(3.6, 2.5))
+			register_gate("castle_approach_forward", Vector3(0, 0, -12.2), Vector3(0, 0.9, 12), Vector2(3.8, 2.8))
+		elif zone_id == "vargan_court":
+			register_gate("castle_court_return", Vector3(-7, 0, 16), Vector3(0, 0.9, -11), Vector2(3.6, 2.5))
+			register_gate("castle_court_forward", Vector3(0, 0, -14), Vector3(0, 0.9, 12), Vector2(4.0, 2.8))
+		elif zone_id == "record_hall":
+			register_gate("record_hall_return", Vector3(-6, 0, 13), Vector3(0, 0.9, -11), Vector2(3.6, 2.5))
+			register_gate("record_hall_forward", Vector3(6, 0, -13), Vector3(0, 0.9, 12), Vector2(3.8, 2.6))
 		reserve_corridor("campaign_route", Vector3(0, 0, 0), Vector2(4.0, 15.0))
 		add_safe_spawn(Vector3(0, 0.9, 12.0))
 		add_safe_spawn(Vector3(0, 0.9, -12.0))

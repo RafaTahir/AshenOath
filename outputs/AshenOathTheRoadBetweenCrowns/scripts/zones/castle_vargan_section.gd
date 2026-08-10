@@ -120,10 +120,14 @@ func _make_gatehouse(context: ZoneBuildContext, pos: Vector3) -> void:
 	landmark.position = pos
 	landmark.set_meta("authored_bounds", Vector3(17, 7, 3))
 	context.add_node(landmark)
-	context.make_prop_box("VarganGatehouseShell", pos + Vector3(0, 3.5, 0), Vector3(17, 7, 3), Color(0.145, 0.145, 0.15))
-	context.make_prop_box("GateOpening", pos + Vector3(0, 2.2, 1.6), Vector3(5, 4.4, 0.5), Color(0.035, 0.032, 0.03))
+	# Keep the central passage physically open. A single shell plus a black
+	# opening used to create a convincing-looking wall that blocked the player.
+	context.make_prop_box("VarganGatehouseLeft", pos + Vector3(-5.8, 3.5, 0), Vector3(5.4, 7, 3), Color(0.145, 0.145, 0.15))
+	context.make_prop_box("VarganGatehouseRight", pos + Vector3(5.8, 3.5, 0), Vector3(5.4, 7, 3), Color(0.145, 0.145, 0.15))
+	context.make_prop_box("VarganGatehouseLintel", pos + Vector3(0, 6.0, 0), Vector3(5.8, 2.0, 3), Color(0.145, 0.145, 0.15))
 	for x in [-2.2, -1.1, 0.0, 1.1, 2.2]:
-		context.make_prop_box("Portcullis", pos + Vector3(x, 2.2, 1.2), Vector3(0.16, 4.4, 0.18), Color(0.10, 0.09, 0.075))
+		# Raised bars are presentation only; the gate Area3D owns travel.
+		context.make_visual_box("RaisedPortcullis", pos + Vector3(x, 5.0, 1.2), Vector3(0.16, 2.0, 0.18), Color(0.10, 0.09, 0.075))
 
 func _make_tower(context: ZoneBuildContext, pos: Vector3, height: float) -> void:
 	context.make_prop_box("CrackedVarganTower", pos + Vector3(0, height * 0.5, 0), Vector3(5, height, 5), Color(0.14, 0.14, 0.145))

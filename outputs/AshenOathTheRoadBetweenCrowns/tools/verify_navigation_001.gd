@@ -64,6 +64,11 @@ func _initialize() -> void:
 	check(game.spatial_service.bank_for(migrated) == 1, "Saved-position migration changed the original bank")
 
 	print("NAV-001 VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
+	if game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+	await _settle(game.ZONE_RETIRE_FRAMES + 4)
+	game.free()
+	await _settle(8)
 	quit(0 if failures == 0 else 1)
 
 func _verify_zone(game, expected_zone: String, bank_a: Vector3, bank_b: Vector3) -> void:

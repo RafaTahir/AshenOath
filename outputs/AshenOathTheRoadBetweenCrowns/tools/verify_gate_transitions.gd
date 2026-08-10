@@ -43,6 +43,11 @@ func _initialize() -> void:
 	check(not game.zone_transition_pending, "Final gate left the loading state active")
 	check(game.player != null and game.player.can_control, "Final gate did not restore player control")
 	print("GATE TRANSITION VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
+	if game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+	await _frames(game.ZONE_RETIRE_FRAMES + 4)
+	game.free()
+	await _frames(8)
 	quit(0 if failures == 0 else 1)
 
 func use_gate(game, target: String) -> void:
@@ -55,6 +60,7 @@ func use_gate(game, target: String) -> void:
 		outward = Vector3.FORWARD
 	var far_position: Vector3 = gate.global_position - outward * 4.5 + Vector3.UP * 0.95
 	var near_position: Vector3 = gate.global_position - outward * 1.7 + Vector3.UP * 0.95
+	check(_corridor_clear(game, far_position, near_position), "%s gate approach has a player-sized collision blocker" % target)
 	game.player.global_position = far_position
 	game.player.velocity = Vector3.ZERO
 	for step in range(1, 15):
@@ -86,6 +92,25 @@ func use_gate(game, target: String) -> void:
 	game.call("_unhandled_input", event)
 	await wait_for_zone(game, target)
 
+func _corridor_clear(game: Node, start: Vector3, destination: Vector3) -> bool:
+	var shape := CapsuleShape3D.new()
+	shape.radius = 0.52
+	shape.height = 1.78
+	var distance := start.distance_to(destination)
+	var samples := maxi(3, ceili(distance / 0.35))
+	for index in range(samples + 1):
+		var point := start.lerp(destination, float(index) / float(samples))
+		var query := PhysicsShapeQueryParameters3D.new()
+		query.shape = shape
+		query.transform = Transform3D(Basis.IDENTITY, point)
+		query.collision_mask = 1
+		query.collide_with_areas = false
+		query.collide_with_bodies = true
+		query.exclude = [game.player.get_rid()]
+		if not game.get_world_3d().direct_space_state.intersect_shape(query, 16).is_empty():
+			return false
+	return true
+
 func find_gate(scope: Node, target: String):
 	for node in scope.find_children("*", "Area3D", true, false):
 		if str(node.get("interaction_type")) == "zone" and str(node.get("zone_target")) == target:
@@ -101,6 +126,10 @@ func wait_for_zone(game, target: String) -> void:
 			return
 		await process_frame
 	check(false, "%s did not become playable within 90 frames" % target)
+
+func _frames(count: int) -> void:
+	for _index in range(count):
+		await process_frame
 
 func check(condition: bool, message: String) -> void:
 	if not condition:
