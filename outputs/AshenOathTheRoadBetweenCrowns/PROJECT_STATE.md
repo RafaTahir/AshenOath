@@ -8,7 +8,7 @@ RECOVERY-003 replaces reflective campaign-zone construction with a validated `Zo
 
 ANIM-001 release acceptance passed the complete functional suite, graphical route and animation captures, Web export, and packed startup. On the Dell 7280/Intel HD 620 ANGLE path, the final native-720p sample measured 37.5 FPS average, 35.6 FPS minimum, and a 129 ms warm transition.
 
-PERF-001 establishes enforced per-zone budgets and a graphical native-720p gate. The final compact Dell 7280/Intel HD 620 gate measured Greyfen at 34.6 FPS average / 26.3 FPS 1% low, with all representative zones above the 28/24 FPS thresholds. Balanced now uses shadowless authored lighting, generated mesh LODs, bounded NPC presentation distance, batched cottage/river geometry, and at most one inactive cached route zone.
+PERF-REPAIR-001 supersedes the earlier provisional performance result with an enforced native-720p graphical gate. The repaired Dell 7280/Intel HD 620/ANGLE sample measured Greyfen at 46.73 FPS average / 30.25 FPS 1% low; every other required zone passed above the 32/30 FPS thresholds. Warm return measured 318.7 ms and all cold transitions stayed below 458 ms. Balanced now uses bounded routine ticking, distance-suspended animation, shadowless authored lighting, generated mesh LODs, bounded NPC presentation distance, batched cottage/river geometry, and at most one inactive cached route zone.
 
 WEB-001 establishes the public Act One candidate gate. The development export
 is 64.0 MB total with a 27.7 MB PCK, uses a native 1280x720 WebGL2 canvas, and
@@ -104,7 +104,7 @@ for a native store release or sustained physical-phone performance.
 - Repeated world boxes/details use shared meshes and MultiMesh batches. RECOVERY-002 measured 37.2 FPS average, 35.6 FPS minimum, and 294 ms warm route transition on Intel HD 620/ANGLE.
 - The world remains intentionally stylized and low-poly; current assets do not support a photoreal/AAA claim.
 
-Last updated: 2026-07-25
+Last updated: 2026-08-10
 
 ## Summary
 
@@ -774,7 +774,7 @@ The project currently satisfies:
 - Screenshot capture passes.
 - Web export verifier passes.
 - First route is playable with a 1080p interface and a 720p Balanced 3D rendering budget.
-- PERF-001’s final Dell-class native-720p gate measured Greyfen at 34.6 FPS average / 26.3 FPS 1% low. Wychwood, Castle Courtyard, Record Hall, and Hart Glade all passed the 28 FPS average / 24 FPS 1% low thresholds; warm return measured 168 ms and the local Web preview remained 64.0 MB.
+- PERF-REPAIR-001’s strict Dell-class native-720p gate measured Greyfen at 46.73 FPS average / 30.25 FPS 1% low, Wychwood at 60.00 / 47.08, Wychwood combat at 57.83 / 38.27, Castle Courtyard at 60.00 / 56.05, Record Hall at 59.99 / 52.61, and Hart Glade at 60.01 / 54.22. Warm return measured 318.7 ms; all cold transitions remained below 458 ms. The full report is `.release-gate/perf_001_report.json`.
 - PBR terrain/building surfaces, saved day/night time, cleaned skeletal characters, and mixed Wychwood enemy rigs are active.
 
 The project does not yet satisfy:

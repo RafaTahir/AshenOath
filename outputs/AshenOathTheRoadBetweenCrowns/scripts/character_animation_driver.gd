@@ -89,6 +89,7 @@ func set_distance_suspended(suspended: bool) -> void:
 	if distance_suspended == suspended:
 		return
 	distance_suspended = suspended
+	process_mode = Node.PROCESS_MODE_DISABLED if suspended else Node.PROCESS_MODE_INHERIT
 	if animation_player != null:
 		animation_player.active = not suspended
 	if not suspended and not dead:

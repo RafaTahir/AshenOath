@@ -30,6 +30,9 @@ var far_tick_accumulator := 0.0
 var simulation_tick_accumulator := 0.0
 var spatial_service
 
+func _simulation_hz() -> float:
+	return 15.0 if quality == "quality" else 10.0
+
 func configure(game: Node, quality_preset: String) -> void:
 	host = game
 	player = game.player
@@ -56,7 +59,7 @@ func routine_ids() -> Array:
 func _process(delta: float) -> void:
 	if host == null or player == null or get_tree().paused: return
 	simulation_tick_accumulator += delta
-	if simulation_tick_accumulator < 1.0 / 15.0:
+	if simulation_tick_accumulator < 1.0 / _simulation_hz():
 		return
 	delta = simulation_tick_accumulator
 	simulation_tick_accumulator = 0.0
@@ -119,6 +122,8 @@ func _enroll_named_npcs() -> void:
 		var entry := {"id":id,"node":node,"path":named[id].path,"target":1,"speed":named[id].speed,"pause":rng.randf_range(0.0,0.25),"driver":node.find_child("CharacterAnimationDriver",true,false),"named":true,"phase":rng.randf()*TAU,"base_y":node.position.y,"route":[],"route_index":0}
 		actors.append(entry)
 		_configure_agent(entry)
+		if entry.driver != null and entry.driver.has_method("set_update_rate_hz"):
+			entry.driver.set_update_rate_hz(20.0 if quality == "quality" else 12.0)
 
 func _update_actor(entry: Dictionary, delta: float) -> void:
 	var node: Node3D = entry.node
@@ -260,5 +265,5 @@ func _make_skeletal_villager(parent: Node3D, role_id: String, index: int, scale_
 	driver.name = "CharacterAnimationDriver"
 	mapped.add_child(driver)
 	driver.configure(mapped, {"idle":"Idle", "walk":"Walk", "run":"Run", "hit":"RecieveHit", "death":"Death"})
-	driver.set_update_rate_hz(20.0)
+	driver.set_update_rate_hz(20.0 if quality == "quality" else 12.0)
 	return driver
