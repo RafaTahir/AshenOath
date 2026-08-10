@@ -4,6 +4,13 @@ const AssetDatabase = preload("res://scripts/asset_database.gd")
 const AssetSpawnHelper = preload("res://scripts/asset_spawn_helper.gd")
 
 func _initialize() -> void:
+	var timeout := Timer.new()
+	timeout.name = "RuntimeVerifierTimeout"
+	timeout.wait_time = 45.0
+	timeout.one_shot = true
+	timeout.autostart = true
+	timeout.timeout.connect(func(): _fail("Runtime verifier exceeded its 45 second deadline"))
+	root.add_child(timeout)
 	_assert(_release_shape_is_web_only(), "Release shape is not web-only")
 	_assert(_visual_roles_are_imported(), "One or more major visual roles are not imported ResourceLoader assets")
 	var scene = load("res://scenes/main.tscn")
@@ -18,10 +25,10 @@ func _initialize() -> void:
 	_assert(ProjectSettings.get_setting("display/window/size/viewport_height", 0) == 720, "Gameplay viewport height is not 720")
 	game.hud.show_main_menu()
 	await process_frame
-	_assert(_menu_has_actions(game.hud, ["New Game", "Continue", "Controls", "Settings", "Credits", "Exit Game"]), "Main menu actions are incomplete")
+	_assert(_menu_has_actions(game.hud, ["New Game", "Continue", "Controls", "Settings", "Credits", "Return to Launch Screen"]), "Main menu actions are incomplete")
 	game.hud.show_settings_menu("main")
 	await process_frame
-	_assert(_menu_has_setting_values(game.hud, game.settings.settings), "Settings menu does not expose current values")
+	_assert(await _menu_has_setting_values(game.hud, game.settings.settings), "Settings menu does not expose current values")
 	game.call("_new_game")
 	await _wait_for_zone_ready(game, "greyfen")
 	_assert(str(game.settings.settings.get("quality_preset", "")) in ["potato", "balanced", "quality"], "Visual preset is invalid")
@@ -82,7 +89,7 @@ func _initialize() -> void:
 	_assert(_count_name_contains(sister, "CharacterContactShadow") >= 1, "Sister Anwen contact shadow is missing")
 	var sister_animation_driver: Node = sister.find_child("CharacterAnimationDriver", true, false)
 	_assert(sister_animation_driver != null and sister_animation_driver.is_valid(), "Sister Anwen visible skeleton/animation driver is missing")
-	game.call("_handle_interaction", sister)
+	_assert(await _activate_focused_interaction(game, sister), "Sister Anwen could not be activated through normal focus and E input")
 	await _settle_frames(1)
 	_assert(paused, "Dialogue did not pause the game")
 	_assert(Input.mouse_mode == Input.MOUSE_MODE_VISIBLE, "Dialogue did not release the mouse pointer")
@@ -97,7 +104,7 @@ func _initialize() -> void:
 	if castle_gate == null:
 		_fail("Castle Vargan gate lookup failed after presence assertion")
 		return
-	game.call("_handle_interaction", castle_gate)
+	_assert(await _activate_focused_interaction(game, castle_gate), "Castle Vargan gate could not be activated through normal focus and E input")
 	await _settle_frames(1)
 	_assert(str(game.current_zone_id) == "vargan_approach", "Castle Vargan gate did not open from New Game")
 	_assert(game.quests.is_active("main_blood_under_stone"), "Castle arrival did not start Blood Under Stone")
@@ -113,6 +120,9 @@ func _initialize() -> void:
 	_assert(not _has_child_named(game.zone_root, "QualityWychwoodVisualOverhaul"), "Quality-only Wychwood clutter leaked into Balanced mode")
 	_assert(_has_child_named(game.zone_root, "RoadOfCrowsWychwoodStoryBeats"), "Wychwood Road of Crows environmental story beats are missing")
 	_assert(_has_child_named(game.zone_root, "RoadOfCrowsWychwoodStoryBeats"), "Wychwood environmental story layer is missing")
+	var wychwood_tracker_text := str(game.hud.tracker_label.text).to_lower()
+	_assert(not wychwood_tracker_text.contains("speak with sister anwen") and not wychwood_tracker_text.contains("at the shrine"), "Wychwood retained the Greyfen Anwen objective")
+	_assert(wychwood_tracker_text.contains("wychwood") or wychwood_tracker_text.contains("road"), "Wychwood tracker does not describe the active route")
 	_assert(_count_name_prefix(game.zone_root, "AuthoredDetailBatch") >= 1, "Wychwood authored evidence batch is missing")
 	_assert(_has_child_named(game.zone_root, "MudRoad"), "Wychwood mud road material anchor is missing")
 	_assert(_grass_state_is_valid(game), "Wychwood batched grass is missing outside performance mode")
@@ -137,8 +147,11 @@ func _initialize() -> void:
 	var feathers = _find_child_named(game.zone_root, "black_feathers")
 	_assert(corpse != null and str(corpse.prompt).contains("Bram"), "Bram's cart-ledger clue prompt is missing")
 	_assert(feathers != null and str(feathers.prompt).contains("Sella"), "Sella's red-thread clue prompt is missing")
-	for route_clue in [tracks, corpse, feathers]:
-		game.call("_handle_interaction", route_clue)
+	for clue_id in ["tracks", "corpse", "black_feathers"]:
+		var route_clue = _find_child_named(game.zone_root, clue_id)
+		_assert(route_clue != null, "Route clue disappeared before normal interaction: %s" % clue_id)
+		if route_clue != null:
+			_assert(await _activate_focused_interaction(game, route_clue), "Route clue could not be activated through normal focus: %s" % clue_id)
 		await _settle_frames(1)
 	_assert(game.quests.is_objective_done("main_road_of_crows", "drag_marks"), "Tracks did not register the drag-mark evidence")
 	_assert(game.quests.is_objective_done("main_road_of_crows", "bram"), "Cart ledger did not identify Bram")
@@ -177,7 +190,7 @@ func _initialize() -> void:
 	await _settle_frames(2)
 	var report_sister = _find_child_named(game.zone_root, "sister_anwen")
 	_assert(report_sister != null, "Sister Anwen report target is missing")
-	game.call("_handle_interaction", report_sister)
+	_assert(await _activate_focused_interaction(game, report_sister), "Report to Sister Anwen could not be activated through normal focus and E input")
 	await _settle_frames(1)
 	_assert(game.quests.is_completed("main_road_of_crows"), "Reporting to Sister Anwen did not complete Road of Crows")
 	paused = false
@@ -189,13 +202,55 @@ func _initialize() -> void:
 	_assert(FileAccess.file_exists("res://MISSING_VISUAL_ASSETS.md"), "Missing visual asset report is missing")
 
 	print("RUNTIME VERIFIER: PASS")
-	game.queue_free()
-	await _settle_frames(4)
+	if game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+	await _settle_frames(game.ZONE_RETIRE_FRAMES + 4)
+	game.free()
+	await _settle_frames(8)
 	quit()
 
 func _settle_frames(count: int) -> void:
 	for i in range(count):
 		await process_frame
+
+func _activate_focused_interaction(game: Node, area: Node3D) -> bool:
+	if game == null or area == null or game.player == null:
+		return false
+	var to_area: Vector3 = area.global_position - game.player.global_position
+	to_area.y = 0.0
+	if to_area.length_squared() <= 0.01:
+		to_area = Vector3.FORWARD
+	var requested := area.global_position - to_area.normalized() * 1.8
+	requested.y = 0.95
+	var safe_position: Vector3 = Vector3(game.spatial_service.validate_position(requested, 0.72, game.spatial_service.bank_for(requested)))
+	var start_position: Vector3 = game.player.global_position
+	for step in range(1, 15):
+		game.player.global_position = start_position.lerp(safe_position, float(step) / 14.0)
+		game.player.velocity = Vector3.ZERO
+		await physics_frame
+		await process_frame
+	var toward_area: Vector3 = area.global_position - game.player.global_position
+	toward_area.y = 0.0
+	if game.camera_rig != null and toward_area.length_squared() > 0.01:
+		game.camera_rig.yaw = atan2(-toward_area.normalized().x, -toward_area.normalized().z)
+	for _frame in range(5):
+		await physics_frame
+		await process_frame
+		var focus_camera := game.get_viewport().get_camera_3d()
+		if focus_camera != null:
+			focus_camera.look_at(area.global_position + Vector3.UP * 0.75, Vector3.UP)
+		game.call("_update_interaction_focus")
+	if area not in game.interaction_candidates:
+		return false
+	if game.active_interactable != area:
+		return false
+	if not bool(game.call("_interaction_target_valid", area)):
+		return false
+	var event := InputEventAction.new()
+	event.action = "interact"
+	event.pressed = true
+	game.call("_unhandled_input", event)
+	return true
 
 func _wait_for_zone_ready(game: Node, zone_id: String) -> void:
 	for _index in range(90):
@@ -215,14 +270,27 @@ func _menu_has_actions(hud: Node, expected: Array[String]) -> bool:
 	return true
 
 func _menu_has_setting_values(hud: Node, settings: Dictionary) -> bool:
-	var labels: Array[String] = []
-	for node in hud.menu_layer.find_children("*", "Button", true, false):
-		labels.append(str(node.text))
-	for node in hud.menu_layer.find_children("*", "Label", true, false):
-		labels.append(str(node.text))
-	return labels.any(func(text: String): return text.begins_with("Visual Preset") and text.contains(str(settings.get("quality_preset", "balanced")).capitalize())) \
-		and labels.any(func(text: String): return text.begins_with("3D Resolution") and text.contains("Native 720p")) \
-		and labels.any(func(text: String): return text.begins_with("Master Volume") and text.contains("%d%%" % int(round(float(settings.get("master_volume", 0.85)) * 100.0))))
+	var required := [
+		"VisualPreset%s" % str(settings.get("quality_preset", "balanced")).capitalize(),
+		"3D ResolutionNative720p",
+		"MasterVolume%d%%" % int(round(float(settings.get("master_volume", 0.85)) * 100.0)),
+	]
+	required[1] = required[1].replace(" ", "")
+	for page in range(3):
+		hud.show_settings_menu("main", page)
+		await process_frame
+		var labels: Array[String] = []
+		for node in hud.menu_layer.find_children("*", "Control", true, false):
+			if node is Button or node is Label:
+				labels.append(str(node.text).replace(" ", ""))
+		for text in labels:
+			if required[0] != "" and text.contains(required[0]):
+				required[0] = ""
+			if required[1] != "" and text.contains(required[1]):
+				required[1] = ""
+			if required[2] != "" and text.contains(required[2]):
+				required[2] = ""
+	return required.all(func(text: String): return text == "")
 
 func _rendered_height(root_node: Node3D) -> float:
 	var lowest := INF

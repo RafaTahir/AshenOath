@@ -425,6 +425,7 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	if life_controller != null and life_controller.has_method("set_spatial_service"):
 		life_controller.set_spatial_service(spatial_service)
 	quests.set_tracked_quest_for_zone(zone_id)
+	_refresh_tracker()
 	if visual_director != null:
 		visual_director.apply_zone(zone_id, zone_root)
 	if audio != null:
@@ -1154,9 +1155,12 @@ func _relocate_anwen_to_cemetery() -> void:
 	var anwen = zone_root.find_child("sister_anwen", true, false)
 	if anwen == null:
 		return
-	anwen.global_position = Vector3(11.0, 0, 4.8)
+	var requested_position := Vector3(11.0, 0.0, 4.8)
+	var safe_position: Vector3 = Vector3(spatial_service.validate_position(requested_position, 0.85, spatial_service.bank_for(requested_position)))
+	var grounded_position: Vector3 = Vector3(_grounded_spawn_position(safe_position))
+	anwen.global_position = grounded_position + Vector3.UP * 0.02
 	anwen.set("prompt", "Meet Sister Anwen at the cemetery gate")
-	anwen.rotation_degrees.y = 95.0
+	_face_npc_toward_player(anwen)
 
 func _handle_dialogue_action(action: Dictionary) -> void:
 	audio.stop_voice()
@@ -3080,19 +3084,21 @@ func _stage_dialogue_moment(area) -> void:
 	if player == null or area == null or not (area is Node3D):
 		return
 	var npc = area as Node3D
-	var flat_to_player = player.global_position - npc.global_position
-	flat_to_player.y = 0.0
 	if area.interaction_id == "sister_anwen":
 		npc.set_meta("dialogue_facing_lock", true)
 	if player.has_method("face_target"):
 		player.face_target(npc.global_position)
-	var to_player = player.global_position - npc.global_position
+	_face_npc_toward_player(npc)
+
+func _face_npc_toward_player(npc: Node3D) -> void:
+	if npc == null or player == null:
+		return
+	var to_player: Vector3 = player.global_position - npc.global_position
 	to_player.y = 0.0
-	if to_player.length() > 0.1:
-		var staged_yaw := rad_to_deg(atan2(-to_player.x,-to_player.z))
-		if area.interaction_id == "sister_anwen":
-			staged_yaw += 180.0
-		npc.rotation_degrees.y = staged_yaw
+	if to_player.length_squared() <= 0.01:
+		return
+	# Route-visible character wrappers use +Z as their authored forward axis.
+	npc.rotation.y = atan2(to_player.x, to_player.z)
 
 func _release_dialogue_facing() -> void:
 	audio.stop_voice()
@@ -3169,12 +3175,13 @@ func _connect_interactable(area) -> void:
 	)
 
 func _update_interaction_focus() -> void:
+	_refresh_interaction_candidates()
 	var best = null
 	var best_score := -999.0
 	var camera := get_viewport().get_camera_3d()
 	var forward: Vector3 = -camera.global_basis.z if camera != null else -player.global_basis.z
 	for candidate in interaction_candidates.duplicate():
-		if candidate == null or not is_instance_valid(candidate) or candidate.is_queued_for_deletion():
+		if candidate == null or not is_instance_valid(candidate) or not candidate.is_inside_tree() or candidate.is_queued_for_deletion():
 			interaction_candidates.erase(candidate)
 			continue
 		var offset: Vector3 = candidate.global_position-player.global_position
@@ -3204,6 +3211,23 @@ func _update_interaction_focus() -> void:
 	else:
 		hud.set_prompt("")
 
+func _refresh_interaction_candidates() -> void:
+	if zone_root == null or player == null:
+		return
+	# Area signals are authoritative during ordinary movement, but can be missed
+	# when a save, spawn, or zone arrival places Kael inside a trigger between
+	# physics ticks. A small bounded scan keeps prompts deterministic without
+	# walking the entire world or inventing a second focus system.
+	for raw_candidate in zone_root.find_children("*", "Area3D", true, false):
+		var candidate := raw_candidate as Area3D
+		if candidate == null or candidate.is_queued_for_deletion() or not candidate.has_method("get_context_prompt"):
+			continue
+		if candidate in interaction_candidates:
+			continue
+		var range_limit := 3.6 if str(candidate.get("interaction_type")) == "zone" else 2.8
+		if candidate.global_position.distance_to(player.global_position) <= range_limit:
+			interaction_candidates.append(candidate)
+
 func _interaction_target_valid(area: Area3D) -> bool:
 	if player == null or area == null or not is_instance_valid(area):
 		return false
@@ -3213,11 +3237,17 @@ func _interaction_target_valid(area: Area3D) -> bool:
 		return player.global_position.distance_to(area.global_position) <= 3.65
 	var camera := get_viewport().get_camera_3d()
 	var origin: Vector3 = camera.global_position if camera != null else player.global_position + Vector3.UP
-	var target: Vector3 = area.global_position + Vector3.UP * 0.5
+	var target_height := 0.92 if area.interaction_type in ["clue", "herb", "village_place"] else 0.5
+	var target: Vector3 = area.global_position + Vector3.UP * target_height
 	var direction := origin.direction_to(target)
 	var forward: Vector3 = -camera.global_basis.z if camera != null else -player.global_basis.z
 	if forward.dot(direction) < 0.22:
 		return false
+	# Ground clues are intentionally readable through low road dressing and
+	# foliage. Their proximity/facing check remains strict; only the camera ray
+	# is skipped because the target is below the normal eye-line.
+	if area.interaction_type in ["clue", "herb", "village_place"]:
+		return true
 	var query := PhysicsRayQueryParameters3D.create(origin, target)
 	query.exclude = [player.get_rid()]
 	query.collide_with_areas = false
@@ -3327,6 +3357,11 @@ func _make_hut(pos: Vector3) -> void:
 	_make_prop_box("Chimney", pos + Vector3(1.1, 2.95, 0.4), Vector3(0.38, 0.9, 0.38), Color(0.12, 0.11, 0.10))
 
 func _make_tree(pos: Vector3) -> void:
+	# Gate and bridge corridors are reserved before scenery is authored. Keep the
+	# original request out of those volumes instead of nudging it back into the
+	# player route with _route_safe_position().
+	if spatial_service != null and spatial_service.is_reserved(pos, 1.35):
+		return
 	if _is_river_excluded(pos,1.5):
 		return
 	pos = _route_safe_position(pos, 4.9)
@@ -3648,6 +3683,11 @@ func _make_fog_sheet(pos: Vector3, scale_value: Vector3, color: Color) -> void:
 func _make_prop_box(name: String, pos: Vector3, size: Vector3, color: Color) -> void:
 	if name not in ["NorthBerm","SouthBerm","WestBerm","EastBerm"]:
 		pos = river_safe_position(pos,size.z*0.5+0.15)
+	# Solid scenery must yield to registered route and gate clearances. This is
+	# deliberately applied before the shared collision batch receives a shape.
+	# Decorative gate landmarks can be rebuilt around the opening by their caller.
+	if spatial_service != null and spatial_service.is_reserved(pos, maxf(size.x, size.z) * 0.5 + 0.35):
+		return
 	var separate_body := name in ["NorthBerm","SouthBerm","WestBerm","EastBerm"]
 	var body: StaticBody3D
 	if separate_body:
