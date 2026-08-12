@@ -51,9 +51,10 @@ This is the current recovery checkpoint for the Complete Recovery and Improvemen
 - `tools/verify_prod_003.py`: PASS.
 - Godot 4.6.3 editor import scan: completed without parser/resource failure.
 - Disposable QA Web export: refreshed in `.release-gate/AshenOath_QA/`; seven files, 87.7 MB total, 51.4 MB PCK. It is not a production artifact.
-- Production Web export: seven files, 65.76 MB total, 29.47 MB PCK; local PCK SHA-256 is `60010FD1D6CD3DDA4BABD695D88EE2133E30DED2FD05ED0A312FCBB69A925A47A`.
+- Production Web export: seven files, 65.76 MB total, 29.47 MB PCK; local PCK SHA-256 is `96fdc44acaf897d03042966f6f0a701f3789a2d520fe9c12154c977eeebc81e4`. The production package excludes the QA telemetry resource; its feature-gated path remains available only in the disposable QA preset.
 - Full authoritative release runner: PASS; 101 gates/results recorded in `release_reports/latest.json`. Chrome and Edge desktop plus mobile emulation completed the 36-checkpoint campaign route without console errors.
 - `git diff --check`: PASS; line-ending normalization warnings are expected on this Windows checkout.
+- Final exported-package smoke: PASS in Chrome and Edge at 1280x720 WebGL2; New Game reached Greyfen in 2045 ms and 2323 ms respectively, with no browser console errors.
 
 The runtime verifier still prints Godot shutdown cleanup diagnostics for the headless dummy renderer. They are not suppressed; they remain a tracked ENGINE-004/QA-005 issue until the resource lifecycle is clean.
 
@@ -85,6 +86,5 @@ Do not sync `.release-gate/AshenOath_QA` into `web/`; it is not the production b
 
 ## Next Work Order
 
-1. Sync the verified production export into `web/`, commit the recovery checkpoint, push `main`, and verify the live PCK hash.
-2. Keep the renderer/RID/ObjectDB shutdown diagnostics tracked as ENGINE-004/QA-005 debt; they do not invalidate the passing release gate but should be eliminated in the next engineering pass.
-3. Continue visual reconstruction of Greyfen, Wychwood, Castle/Record Hall, and the Hart only as a new scoped ticket; the current release remains deliberately stylized and honest.
+1. Keep the renderer/RID/ObjectDB shutdown diagnostics tracked as ENGINE-004/QA-005 debt; they do not invalidate the passing release gate but should be eliminated in the next engineering pass.
+2. Continue visual reconstruction of Greyfen, Wychwood, Castle/Record Hall, and the Hart only as a new scoped ticket; the current release remains deliberately stylized and honest.
