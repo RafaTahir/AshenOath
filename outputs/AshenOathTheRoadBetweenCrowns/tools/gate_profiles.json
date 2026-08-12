@@ -192,6 +192,22 @@
       ],
       "web_required": true
     },
+    "streaming": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/zone_streaming_topology.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_streaming_service.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_stream_001.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/export_presets.cfg"
+      ],
+      "gates": [
+        "verify_stream_001",
+        "verify_scene_001",
+        "verify_zone_builder_integrity",
+        "web_export"
+      ],
+      "web_required": true
+    },
     "materials": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/world_material_library.gd",

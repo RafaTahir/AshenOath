@@ -493,6 +493,8 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	_refresh_tracker()
 	if visual_director != null:
 		visual_director.apply_zone(zone_id, zone_root)
+	if zone_streaming != null and zone_streaming.has_method("prewarm_neighbors"):
+		zone_streaming.prewarm_neighbors(zone_id)
 	if audio != null:
 		audio.play_ambient(zone_id)
 		audio.set_music_state(audio.music_state_for_zone(zone_id))
@@ -1380,6 +1382,8 @@ func _handle_dialogue_action(action: Dictionary) -> void:
 
 func _on_launch_accepted() -> void:
 	audio.play_event("ui", 0.0)
+	if zone_streaming != null and zone_streaming.has_method("prewarm_neighbors"):
+		zone_streaming.prewarm_neighbors("greyfen")
 	if not greyfen_prewarm_started and not game_started:
 		greyfen_prewarm_started = true
 		_prewarm_greyfen_after_menu_frame()
