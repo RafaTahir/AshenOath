@@ -222,6 +222,25 @@
         "verify_stream_001"
       ]
     },
+    "loading": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/web_boot_shell.html",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/hud.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_streaming_service.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_manifest.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_load_qa_001.py",
+        "outputs/AshenOathTheRoadBetweenCrowns/export_presets.cfg"
+      ],
+      "gates": [
+        "verify_load_qa_001",
+        "verify_runtime_regressions",
+        "verify_stream_001",
+        "verify_portal_001",
+        "web_export"
+      ],
+      "web_required": true
+    },
     "materials": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/world_material_library.gd",

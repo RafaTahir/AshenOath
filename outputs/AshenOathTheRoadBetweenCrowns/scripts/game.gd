@@ -222,6 +222,8 @@ func _new_game() -> void:
 	loading_started_usec = Time.get_ticks_usec()
 	if audio != null:
 		audio.set_game_paused(false)
+	if hud != null and hud.has_method("arm_loading"):
+		hud.arm_loading("Opening Greyfen...")
 	get_tree().paused = false
 	_start_new_game_world()
 
@@ -232,6 +234,8 @@ func _request_zone_load(zone_id: String, spawn_pos: Vector3) -> void:
 	requested_zone_id = zone_id.strip_edges().to_lower()
 	requested_zone_spawn = spawn_pos
 	loading_started_usec = Time.get_ticks_usec()
+	if hud != null and hud.has_method("arm_loading"):
+		hud.arm_loading("Crossing the Oath Gate...")
 	if player != null:
 		player.set_transition_locked(true)
 	_perform_requested_zone_load()

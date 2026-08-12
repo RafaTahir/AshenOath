@@ -88,6 +88,14 @@
       window.addEventListener('keydown', (event) => { if (['ArrowLeft','a','A'].includes(event.key)) moveCrow(-18); if (['ArrowRight','d','D'].includes(event.key)) moveCrow(18); if (event.key === 'Enter' && !started) begin(); });
       road.addEventListener('pointermove', (event) => { if (!started) return; const rect = road.getBoundingClientRect(); crowX = ((event.clientX - rect.left) / rect.width) * road.width; });
       function tick() {
+        if (started && navigator.getGamepads) {
+          const pad = Array.from(navigator.getGamepads()).find(Boolean);
+          if (pad) {
+            const axis = Number(pad.axes?.[0] || 0);
+            if (Math.abs(axis) > .22) moveCrow(axis * 9);
+            if (pad.buttons?.[0]?.pressed && !running) begin();
+          }
+        }
         if (started && !reduce) { drift += 1; emberX -= 1.2; if (emberX < -10) emberX = road.width + 10; if (Math.abs(crowX - emberX) < 22) { score++; emberX = road.width + 10; status.textContent = `The road remembers. Ember ${score} gathered.`; } }
         drawRoad(); requestAnimationFrame(tick);
       }

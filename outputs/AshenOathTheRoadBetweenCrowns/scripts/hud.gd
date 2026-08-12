@@ -40,6 +40,9 @@ var status_label: Label
 var equipment_label: Label
 var menu_layer: Control
 var loading_layer: Control
+var loading_message: Label
+var loading_elapsed := 0.0
+var loading_armed := false
 var dialogue_layer: PanelContainer
 var dialogue_title: Label
 var dialogue_text: RichTextLabel
@@ -81,9 +84,13 @@ func _ready() -> void:
 	_apply_theme()
 	set_process(true)
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if health_bar == null:
 		return
+	if loading_armed and loading_layer != null and not loading_layer.visible:
+		loading_elapsed += delta
+		if loading_elapsed >= 0.75:
+			loading_layer.visible = true
 	var health_ratio = last_health / max(last_health_max, 1.0)
 	if health_ratio <= 0.28 and not reduced_motion:
 		var pulse = 0.86 + 0.14 * sin(Time.get_ticks_msec() * 0.008)
@@ -220,11 +227,20 @@ func hide_menus() -> void:
 	_set_gameplay_pointer()
 
 func show_loading(text: String = "Preparing Greyfen...") -> void:
-	# Normal world travel retains the last rendered frame; a blocking overlay
-	# made fast Web transitions feel slower and could trap mouse input.
-	hide_loading()
+	arm_loading(text)
+
+func arm_loading(text: String = "Following the road...") -> void:
+	if loading_layer == null:
+		return
+	loading_armed = true
+	loading_elapsed = 0.0
+	if loading_message != null:
+		loading_message.text = text
+	loading_layer.visible = false
 
 func hide_loading() -> void:
+	loading_armed = false
+	loading_elapsed = 0.0
 	if loading_layer != null:
 		loading_layer.visible = false
 
@@ -238,18 +254,23 @@ func _build_loading_layer() -> void:
 	add_child(loading_layer)
 	var shade := ColorRect.new()
 	shade.set_anchors_preset(Control.PRESET_FULL_RECT)
-	shade.color = Color(0.008, 0.010, 0.012, 0.94)
+	shade.color = Color(0.008, 0.010, 0.012, 0.28)
 	loading_layer.add_child(shade)
-	var message := Label.new()
-	message.name = "Message"
-	message.set_anchors_preset(Control.PRESET_CENTER)
-	message.position = Vector2(-220, -28)
-	message.size = Vector2(440, 56)
-	message.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	message.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	message.add_theme_font_size_override("font_size", 26)
-	message.add_theme_color_override("font_color", Color(0.88, 0.76, 0.54))
-	loading_layer.add_child(message)
+	var card := PanelContainer.new()
+	card.name = "RoadCard"
+	card.set_anchors_preset(Control.PRESET_CENTER_TOP)
+	card.position = Vector2(-210, 34)
+	card.size = Vector2(420, 62)
+	card.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	loading_layer.add_child(card)
+	loading_message = Label.new()
+	loading_message.name = "Message"
+	loading_message.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	loading_message.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	loading_message.add_theme_font_size_override("font_size", 18)
+	loading_message.add_theme_color_override("font_color", Color(0.88, 0.76, 0.54))
+	loading_message.text = "Following the road..."
+	card.add_child(loading_message)
 
 func _set_internal_canvas(size: Vector2i) -> void:
 	var window := get_window()
