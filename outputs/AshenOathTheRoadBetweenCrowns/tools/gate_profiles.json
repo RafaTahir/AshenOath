@@ -76,18 +76,22 @@
     "input": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/input_router.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/gamepad_profile.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/player_controller.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/camera_controller.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/hud.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/minigame_manager.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/settings_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/save_manager.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/runtime_actor_factory.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/runtime_service_registry.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/project.godot",
-        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_input_001.gd"
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_input_001.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_input_003.gd"
       ],
       "gates": [
         "verify_input_001",
+        "verify_input_003",
         "verify_runtime_regressions",
         "verify_ui_001"
       ]

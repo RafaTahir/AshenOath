@@ -1,5 +1,7 @@
 extends Node
 
+const GamepadProfile = preload("res://scripts/gamepad_profile.gd")
+
 signal device_changed(device: String)
 signal pointer_mode_changed(mode: int)
 signal gamepad_profile_changed(profile: Dictionary)
@@ -117,8 +119,14 @@ var active_device := DEVICE_KEYBOARD_MOUSE
 var active_gamepad_id := 0
 var active_gamepad_name := ""
 var active_gamepad_family := "generic"
+var gamepad_profile: Dictionary = {}
 var gamepad_look_sensitivity := 1.0
+var gamepad_deadzone := 0.16
+var gamepad_invert_x := false
+var gamepad_invert_y := false
 var vibration_enabled := true
+var rumble_strength := 1.0
+var gamepad_calibration: Dictionary = {}
 var virtual_move := Vector2.ZERO
 var virtual_look := Vector2.ZERO
 var _virtual_actions: Dictionary = {}
@@ -132,6 +140,8 @@ func _ready() -> void:
 	var connected := Input.get_connected_joypads()
 	if not connected.is_empty():
 		_set_gamepad(int(connected[0]))
+	else:
+		_refresh_gamepad_profile()
 
 func install_default_actions() -> void:
 	for action in KEYBOARD_BINDINGS:
@@ -154,15 +164,20 @@ func install_default_actions() -> void:
 
 func apply_settings(current: Dictionary) -> void:
 	gamepad_look_sensitivity = clampf(float(current.get("gamepad_look_sensitivity", 1.0)), 0.55, 1.55)
+	gamepad_deadzone = clampf(float(current.get("gamepad_deadzone", 0.16)), 0.05, 0.35)
+	gamepad_invert_x = bool(current.get("gamepad_invert_x", false))
+	gamepad_invert_y = bool(current.get("gamepad_invert_y", current.get("invert_y", false)))
 	vibration_enabled = bool(current.get("gamepad_vibration", true))
+	rumble_strength = clampf(float(current.get("gamepad_rumble_strength", 1.0)), 0.0, 1.0)
 	_apply_keyboard_preset(str(current.get("control_preset", "standard")))
+	_refresh_gamepad_profile()
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventJoypadButton and event.pressed:
 		active_gamepad_id = maxi(event.device, 0)
 		_set_gamepad(active_gamepad_id)
 		_set_device(DEVICE_GAMEPAD)
-	elif event is InputEventJoypadMotion and absf(event.axis_value) > 0.32:
+	elif event is InputEventJoypadMotion and absf(event.axis_value) > maxf(gamepad_deadzone * 0.5, 0.06):
 		active_gamepad_id = maxi(event.device, 0)
 		_set_gamepad(active_gamepad_id)
 		_set_device(DEVICE_GAMEPAD)
@@ -175,12 +190,36 @@ func _input(event: InputEvent) -> void:
 
 func movement_vector() -> Vector2:
 	var physical := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
+	if active_device == DEVICE_GAMEPAD:
+		physical = _shape_stick(physical, gamepad_deadzone, false)
 	return physical if physical.length_squared() >= virtual_move.length_squared() else virtual_move
 
 func look_vector() -> Vector2:
 	var physical := Input.get_vector("camera_left", "camera_right", "camera_up", "camera_down")
+	if active_device == DEVICE_GAMEPAD:
+		physical = _shape_stick(physical, gamepad_deadzone, true)
 	var selected := physical if physical.length_squared() >= virtual_look.length_squared() else virtual_look
 	return selected * gamepad_look_sensitivity if active_device == DEVICE_GAMEPAD else selected
+
+func _shape_stick(value: Vector2, deadzone: float, apply_inversion: bool) -> Vector2:
+	var calibrated: Vector2 = value
+	var calibration: Variant = gamepad_calibration.get(str(active_gamepad_id), {})
+	if typeof(calibration) == TYPE_DICTIONARY:
+		var center_key := "look_center" if apply_inversion else "move_center"
+		var center: Variant = calibration.get(center_key, Vector2.ZERO)
+		if center is Vector2:
+			calibrated -= center
+	var magnitude := calibrated.length()
+	if magnitude <= deadzone:
+		return Vector2.ZERO
+	var remapped := clampf((magnitude - deadzone) / maxf(1.0 - deadzone, 0.001), 0.0, 1.0)
+	var result := calibrated.normalized() * remapped
+	if apply_inversion:
+		if gamepad_invert_x:
+			result.x = -result.x
+		if gamepad_invert_y:
+			result.y = -result.y
+	return result
 
 func is_action_pressed(action: StringName) -> bool:
 	if active_device == DEVICE_TOUCH and action == &"run" and virtual_move.length() > 0.82:
@@ -220,13 +259,19 @@ func gamepad_action_label(action: String) -> String:
 	return generic
 
 func get_gamepad_profile() -> Dictionary:
-	return {
-		"id": active_gamepad_id,
-		"name": active_gamepad_name,
-		"family": active_gamepad_family,
-		"connected": active_gamepad_id in Input.get_connected_joypads(),
-		"vibration": vibration_enabled,
+	_refresh_gamepad_profile()
+	return gamepad_profile.duplicate(true)
+
+func get_gamepad_calibration() -> Dictionary:
+	return gamepad_calibration.duplicate(true)
+
+func set_gamepad_calibration(move_center: Vector2, look_center: Vector2, device_id: int = -1) -> void:
+	var selected_id := active_gamepad_id if device_id < 0 else device_id
+	gamepad_calibration[str(selected_id)] = {
+		"move_center": move_center.clamp(Vector2(-0.35, -0.35), Vector2(0.35, 0.35)),
+		"look_center": look_center.clamp(Vector2(-0.35, -0.35), Vector2(0.35, 0.35)),
 	}
+	_refresh_gamepad_profile()
 
 func _apply_keyboard_preset(preset: String) -> void:
 	var bindings: Dictionary = KEYBOARD_BINDINGS.duplicate()
@@ -308,7 +353,10 @@ func is_pointer_captured() -> bool:
 func rumble(weak: float, strong: float, duration: float = 0.12) -> void:
 	if active_device != DEVICE_GAMEPAD or not vibration_enabled:
 		return
-	Input.start_joy_vibration(active_gamepad_id, clampf(weak, 0.0, 1.0), clampf(strong, 0.0, 1.0), maxf(duration, 0.0))
+	if active_gamepad_id not in Input.get_connected_joypads() or not bool(gamepad_profile.get("vibration_capability", false)):
+		return
+	var cap := clampf(rumble_strength, 0.0, 1.0)
+	Input.start_joy_vibration(active_gamepad_id, clampf(weak, 0.0, 1.0) * cap, clampf(strong, 0.0, 1.0) * cap, clampf(duration, 0.0, 0.5))
 
 func _on_joy_connection_changed(device: int, connected: bool) -> void:
 	if connected:
@@ -319,26 +367,33 @@ func _on_joy_connection_changed(device: int, connected: bool) -> void:
 		return
 	var remaining := Input.get_connected_joypads()
 	if remaining.is_empty():
+		clear_virtual_input()
 		active_gamepad_name = ""
 		active_gamepad_family = "generic"
 		_set_device(DEVICE_KEYBOARD_MOUSE)
-		gamepad_profile_changed.emit(get_gamepad_profile())
+		_refresh_gamepad_profile()
 	else:
 		_set_gamepad(int(remaining[0]))
 
 func _set_gamepad(device: int) -> void:
 	active_gamepad_id = maxi(device, 0)
 	active_gamepad_name = Input.get_joy_name(active_gamepad_id)
-	var lowered := active_gamepad_name.to_lower()
-	if lowered.contains("dualshock") or lowered.contains("dualsense") or lowered.contains("playstation") or lowered.contains("wireless controller"):
-		active_gamepad_family = "playstation"
-	elif lowered.contains("nintendo") or lowered.contains("switch") or lowered.contains("pro controller"):
-		active_gamepad_family = "nintendo"
-	elif lowered.contains("xbox") or lowered.contains("xinput"):
-		active_gamepad_family = "xbox"
-	else:
-		active_gamepad_family = "generic"
-	gamepad_profile_changed.emit(get_gamepad_profile())
+	active_gamepad_family = GamepadProfile.family_for_name(active_gamepad_name)
+	_refresh_gamepad_profile()
+
+func _refresh_gamepad_profile() -> void:
+	var connected := active_gamepad_id in Input.get_connected_joypads()
+	gamepad_profile = GamepadProfile.from_device(active_gamepad_id, active_gamepad_name, connected, {
+		"gamepad_deadzone": gamepad_deadzone,
+		"gamepad_invert_x": gamepad_invert_x,
+		"gamepad_invert_y": gamepad_invert_y,
+		"invert_y": gamepad_invert_y,
+		"gamepad_look_sensitivity": gamepad_look_sensitivity,
+		"gamepad_rumble_strength": rumble_strength,
+	})
+	gamepad_profile["family"] = active_gamepad_family
+	gamepad_profile["vibration"] = vibration_enabled
+	gamepad_profile_changed.emit(gamepad_profile.duplicate(true))
 
 func _set_device(device: String) -> void:
 	if active_device == device:

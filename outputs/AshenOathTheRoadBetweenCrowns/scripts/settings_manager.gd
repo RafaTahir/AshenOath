@@ -16,7 +16,11 @@ const DEFAULT_SETTINGS := {
 	"target_fps": 30,
 	"mouse_sensitivity": 0.003,
 	"gamepad_look_sensitivity": 1.0,
+	"gamepad_deadzone": 0.16,
+	"gamepad_invert_x": false,
+	"gamepad_invert_y": false,
 	"gamepad_vibration": true,
+	"gamepad_rumble_strength": 1.0,
 	"touch_controls": "auto",
 	"touch_look_sensitivity": 1.0,
 	"invert_y": false,
@@ -104,6 +108,10 @@ func _load_settings() -> void:
 		settings["quality_preset"] = "balanced"
 	settings["mouse_sensitivity"] = clampf(float(settings["mouse_sensitivity"]), 0.0018, 0.0048)
 	settings["gamepad_look_sensitivity"] = clampf(float(settings["gamepad_look_sensitivity"]), 0.55, 1.55)
+	settings["gamepad_deadzone"] = clampf(float(settings.get("gamepad_deadzone", 0.16)), 0.05, 0.35)
+	settings["gamepad_invert_x"] = bool(settings.get("gamepad_invert_x", false))
+	settings["gamepad_invert_y"] = bool(settings.get("gamepad_invert_y", false))
+	settings["gamepad_rumble_strength"] = clampf(float(settings.get("gamepad_rumble_strength", 1.0)), 0.0, 1.0)
 	settings["touch_look_sensitivity"] = clampf(float(settings["touch_look_sensitivity"]), 0.55, 1.55)
 	settings["touch_controls"] = str(settings["touch_controls"]).to_lower()
 	if settings["touch_controls"] not in ["auto", "on", "off"]:
@@ -228,6 +236,22 @@ func cycle_gamepad_look_sensitivity() -> void:
 
 func toggle_gamepad_vibration() -> void:
 	settings["gamepad_vibration"] = not bool(settings.get("gamepad_vibration", true))
+	apply()
+
+func cycle_gamepad_deadzone() -> void:
+	settings["gamepad_deadzone"] = _cycle_float(float(settings.get("gamepad_deadzone", 0.16)), [0.08, 0.12, 0.16, 0.22, 0.30])
+	apply()
+
+func toggle_gamepad_invert_x() -> void:
+	settings["gamepad_invert_x"] = not bool(settings.get("gamepad_invert_x", false))
+	apply()
+
+func toggle_gamepad_invert_y() -> void:
+	settings["gamepad_invert_y"] = not bool(settings.get("gamepad_invert_y", false))
+	apply()
+
+func cycle_gamepad_rumble_strength() -> void:
+	settings["gamepad_rumble_strength"] = _cycle_float(float(settings.get("gamepad_rumble_strength", 1.0)), [0.0, 0.35, 0.65, 1.0])
 	apply()
 
 func cycle_touch_controls() -> void:
