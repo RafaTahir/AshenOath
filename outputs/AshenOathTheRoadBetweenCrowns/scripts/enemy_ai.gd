@@ -9,6 +9,7 @@ signal boss_phase_changed(enemy: Node, phase: int)
 const HealthComponent = preload("res://scripts/health_component.gd")
 const AssetSpawnHelper = preload("res://scripts/asset_spawn_helper.gd")
 const CharacterPresentation = preload("res://scripts/character_presentation.gd")
+const CharacterRoleSpec = preload("res://scripts/character_role_spec.gd")
 const CombatFeedback = preload("res://scripts/combat_feedback.gd")
 const CharacterAnimationDriver = preload("res://scripts/character_animation_driver.gd")
 
@@ -476,10 +477,11 @@ func _build_body(color: Color) -> void:
 	add_to_group("enemies")
 	var collision = CollisionShape3D.new()
 	var shape = CapsuleShape3D.new()
-	shape.height = 2.0 if enemy_id == "white_hart_avatar" else (1.65 if _is_wychwood_pack() else 1.15)
-	shape.radius = 0.58 if enemy_id == "white_hart_avatar" else (0.38 if _is_wychwood_pack() else 0.35)
+	var role_spec := CharacterRoleSpec.for_role(enemy_id)
+	shape.height = 2.0 if enemy_id == "white_hart_avatar" else float(role_spec.get("collision_height", 1.15))
+	shape.radius = 0.58 if enemy_id == "white_hart_avatar" else float(role_spec.get("collision_radius", 0.35))
 	collision.shape = shape
-	collision.position.y = 1.05 if enemy_id == "white_hart_avatar" else (0.9 if _is_wychwood_pack() else 0.65)
+	collision.position.y = 1.05 if enemy_id == "white_hart_avatar" else shape.height * 0.5 + shape.radius * 0.18
 	add_child(collision)
 	visual_root = Node3D.new()
 	visual_root.name = "visual_root"

@@ -46,4 +46,8 @@ physical-device thermal acceptance remain later work. The approved milestone
 now proceeds through the complete production release workflow.
 # Current Release Context
 
-PERF-003, WEB-002, and RELEASE-001 are complete. The verified Web Version 1.0 candidate is a seven-file, 65.59 MB artifact with full physical gate traversal through all released campaign zones in Chrome and Edge. Native-720p Balanced profiling passed the 32 FPS average and 30 FPS 1% low contract in every required zone. Android production, iOS production, and store distribution are deferred.
+PERF-003, WEB-002, and RELEASE-001 are historical baseline claims. The current recovery program supersedes them for release decisions. The verified Web Version 1.0 candidate was a seven-file, 65.59 MB artifact with full physical gate traversal through all released campaign zones in Chrome and Edge. Native-720p Balanced profiling passed the 32 FPS average and 30 FPS 1% low contract in every required zone. Android production, iOS production, and store distribution are deferred.
+
+## RECOVERY-004 Context
+
+The recovery program is active and supersedes historical completion labels for current work. Production QA telemetry is isolated behind the disposable `Web QA Browser` preset and the `ashenoath_qa` feature flag. Use `RECOVERY_004_ISSUE_REGISTRY.json` for outcome-based status and `RECOVERY_004_IMPLEMENTATION_STATUS.md` for the current checkpoint. Do not deploy while visual approvals are pending or while active renderer/lifecycle errors remain.

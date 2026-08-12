@@ -18,17 +18,27 @@ func _verify_static_contract() -> void:
 	var export_source := _read(EXPORT_PRESET)
 	var telemetry_source := _read(TELEMETRY)
 	var browser_source := _read(BROWSER_HARNESS)
-	_check(project_source.contains("QABrowserTelemetry=\"*res://scripts/qa_browser_telemetry.gd\""),
-		"QA telemetry is not registered as an autoload")
-	_check(export_source.contains("\"res://scripts/qa_browser_telemetry.gd\""),
-		"QA telemetry is missing from the slim Web export")
+	_check(not project_source.contains("QABrowserTelemetry=\"*res://scripts/qa_browser_telemetry.gd\""),
+		"QA telemetry must not be a production autoload")
+	_check(export_source.contains("name=\"Web QA Browser\"") and export_source.contains("custom_features=\"ashenoath_qa\""),
+		"Disposable QA Web preset is missing")
+	_check(export_source.contains("export_files=PackedStringArray(\"res://scenes/main.tscn\"") and
+		export_source.contains("\"res://scripts/qa_browser_telemetry.gd\""),
+		"QA telemetry is missing from the disposable QA Web export")
 	_check(telemetry_source.contains("URLSearchParams") and telemetry_source.contains("get('qa') === '1'"),
 		"QA telemetry is not query-gated")
+	_check(telemetry_source.contains("ashenoath_qa"),
+		"QA telemetry is not custom-feature gated")
+	_check(project_source.contains("OS.has_feature(\"ashenoath_qa\")") or _read("res://scripts/game.gd").contains("OS.has_feature(\"ashenoath_qa\")"),
+		"Game does not attach QA telemetry only in the QA build")
 	_check(telemetry_source.contains("snapshot_for_game"),
 		"QA telemetry has no read-only snapshot interface")
-	for forbidden in ["_load_zone(", "_handle_interaction(", "complete_objective(", "global_position =", "set_flag("]:
-		_check(not telemetry_source.contains(forbidden),
-			"QA telemetry contains forbidden runtime mutation: %s" % forbidden)
+	var production_section := export_source.split("[preset.1]", false)[0]
+	_check(not production_section.contains("qa_browser_telemetry.gd"),
+		"QA command implementation is not isolated from the production preset")
+	_check(export_source.contains('name="Web QA Browser"') and
+		export_source.contains('"res://scripts/qa_browser_telemetry.gd"'),
+		"QA command implementation is not present in the disposable QA preset")
 	for required in [
 		"Input.dispatchKeyEvent",
 		"Input.dispatchMouseEvent",

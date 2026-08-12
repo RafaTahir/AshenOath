@@ -1,5 +1,7 @@
 extends SceneTree
 
+const CharacterVisualContract = preload("res://scripts/character_visual_contract.gd")
+
 var failures := 0
 
 func _initialize() -> void:
@@ -24,14 +26,14 @@ func _initialize() -> void:
 	await _frames(4)
 	for enemy in main.active_enemies:
 		_verify_character(enemy, str(enemy.enemy_id))
-	main.queue_free()
-	await process_frame
-	if failures == 0:
+	var passed := failures == 0
+	if passed:
 		print("FACE-RIVER-SUN-001 VERIFIER: PASS")
-		quit(0)
 	else:
 		push_error("FACE-RIVER-SUN-001 VERIFIER: %d failure(s)" % failures)
-		quit(1)
+	main.queue_free()
+	await process_frame
+	quit(0 if passed else 1)
 
 func _verify_character(node: Node, label: String) -> void:
 	check(node != null, "%s is missing" % label)
@@ -40,10 +42,11 @@ func _verify_character(node: Node, label: String) -> void:
 	check(_has_fragment(node,"head"), "%s modeled head is missing" % label)
 	var skeleton := _find_skeleton(node)
 	check(skeleton != null, "%s skeletal body is missing" % label)
+	var contract := CharacterVisualContract.validate(node, true)
+	check(bool(contract.get("valid", false)), "%s has no complete skinned animated body contract" % label)
 	if skeleton != null:
 		check(_has_bone(skeleton,"head"), "%s has no animated head bone" % label)
-		check(_has_bone(skeleton,"hand") or _has_cohesive_body(node), "%s has no complete animated hands" % label)
-	check(_has_fragment(node,"eye") or (_has_fragment(node,"head") and _has_cohesive_body(node)), "%s mesh-native face material is missing" % label)
+	check(str(node.get_meta("character_face_features", "")) == "bone_attached" or _has_fragment(node,"eye") or (_has_fragment(node,"head") and bool(contract.get("valid", false))), "%s mesh-native face material is missing" % label)
 
 func _has_fragment(node: Node, fragment: String) -> bool:
 	if str(node.name).to_lower().contains(fragment):
@@ -65,15 +68,6 @@ func _has_bone(skeleton: Skeleton3D, fragment: String) -> bool:
 		if str(skeleton.get_bone_name(index)).to_lower().contains(fragment): return true
 	return false
 
-func _has_cohesive_body(node: Node) -> bool:
-	if node is MeshInstance3D and node.mesh != null:
-		var lower := str(node.name).to_lower()
-		if lower.contains("body") or lower.contains("female") or lower.contains("rogue"):
-			return true
-	for child in node.get_children():
-		if _has_cohesive_body(child): return true
-	return false
-
 func _verify_path(path: Array, river_z: float, label: String) -> void:
 	for i in range(1,path.size()):
 		var a: Vector3 = path[i-1]
@@ -85,7 +79,7 @@ func _verify_sun(director: Node) -> void:
 	check(director.sun_disc.mesh is QuadMesh, "Sun is not a camera-facing disc")
 	check(director.sun_disc.scale.x <= 4.0, "Sun apparent size is still oversized")
 	check(director.sun_rays.get_child_count() == 0, "Cartoon sun rays still exist")
-	director.call("_update_sky_cycle",1.0,0.0,0.0,720.0)
+	director.call("set_time",720.0,"day",0)
 	check(director.sun_disc.visible and not director.moon_disc.visible, "Noon sun/moon visibility is invalid")
 
 func check(condition: bool, message: String) -> void:

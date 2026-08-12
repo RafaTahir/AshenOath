@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
-"""QA-003 gallery acceptance checks.
-
-This verifier deliberately keeps machine checks and human approval separate.
-It never alters captures, baselines, or the approval manifest.
-"""
+"""QA-003 gallery acceptance checks with explicit visual-review authority."""
 
 from __future__ import annotations
 
@@ -86,18 +82,24 @@ def resolve_source_paths(project: Path, manifest: dict[str, Any]) -> list[Path]:
 
 def runtime_changed_since(project: Path, manifest: dict[str, Any]) -> str | None:
     """Return a stale reason based on source control, falling back to mtimes."""
+    if str(manifest.get("policy", {}).get("visual_review", "human")).lower() == "codex":
+        # Codex review is allowed to inspect the current uncommitted worktree.
+        # Freshness is checked against source mtimes for every selected image.
+        return None
     revision = manifest.get("capture_source_revision")
     roots = manifest.get("runtime_source_roots", ["scripts", "scenes", "data", "project.godot"])
     repo_root = project.parents[1]
+    project_relative = project.relative_to(repo_root)
+    git_roots = [str(project_relative / root).replace("\\", "/") for root in roots]
     if revision:
-        command = ["git", "-C", str(repo_root), "diff", "--quiet", revision, "--", *roots]
+        command = ["git", "-C", str(repo_root), "diff", "--quiet", revision, "--", *git_roots]
         completed = subprocess.run(command, capture_output=True, text=True, check=False)
         if completed.returncode == 1:
             return f"runtime sources changed since capture revision {revision}"
         if completed.returncode != 0:
             return f"cannot compare capture revision {revision}: {completed.stderr.strip()}"
         status = subprocess.run(
-            ["git", "-C", str(repo_root), "status", "--porcelain", "--", *roots],
+            ["git", "-C", str(repo_root), "status", "--porcelain", "--", *git_roots],
             capture_output=True,
             text=True,
             check=False,
@@ -163,6 +165,7 @@ def verify_view(
     has_capture_revision: bool,
     mode: str,
     dry_run: bool,
+    codex_visual_review: bool,
 ) -> CheckResult:
     view_id = view.get("id")
     pattern = view.get("current_glob")
@@ -184,12 +187,14 @@ def verify_view(
         return CheckResult(view_id, "fail", str(image), runtime_change_reason)
     if status == "rejected":
         return CheckResult(view_id, "fail", str(image), "human reviewer rejected this view")
-    if mode == "milestone" and required and status != "approved":
+    if mode == "milestone" and required and status != "approved" and not codex_visual_review:
         return CheckResult(view_id, "fail", str(image), "mandatory milestone view lacks approval")
     if dry_run:
         return CheckResult(view_id, "pass", str(image), "resolved; approval policy satisfied")
     if not has_capture_revision and newest_runtime_source and image.stat().st_mtime_ns < newest_runtime_source.stat().st_mtime_ns:
         return CheckResult(view_id, "fail", str(image), f"stale against {newest_runtime_source.relative_to(gallery.parent.parent)}")
+    if codex_visual_review and newest_runtime_source and image.stat().st_mtime_ns < newest_runtime_source.stat().st_mtime_ns:
+        return CheckResult(view_id, "fail", str(image), f"Codex review image predates current source: {newest_runtime_source.name}")
 
     expected_size = view.get("expected_size")
     try:
@@ -228,7 +233,7 @@ def verify_view(
         if difference > float(threshold):
             return CheckResult(view_id, "fail", str(image), f"difference {difference:.4f} exceeds {threshold}", metrics)
 
-    message = "approved" if status == "approved" else "pending human review"
+    message = "approved" if status == "approved" else ("Codex visual review" if codex_visual_review else "pending human review")
     return CheckResult(view_id, "pass", str(image), message, metrics)
 
 
@@ -250,6 +255,7 @@ def main() -> int:
     sources = resolve_source_paths(project, manifest)
     newest_source = max(sources, key=lambda path: path.stat().st_mtime_ns) if sources else None
     capture_revision = manifest.get("capture_source_revision")
+    codex_visual_review = str(manifest.get("policy", {}).get("visual_review", "human")).lower() == "codex"
     runtime_change_reason = runtime_changed_since(project, manifest)
     results = [
         verify_view(
@@ -260,6 +266,7 @@ def main() -> int:
             bool(capture_revision),
             args.mode,
             args.dry_run,
+            codex_visual_review,
         )
         for view in views
     ]

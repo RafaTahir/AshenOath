@@ -16,6 +16,7 @@ const HealthComponent = preload("res://scripts/health_component.gd")
 const StaminaComponent = preload("res://scripts/stamina_component.gd")
 const AssetSpawnHelper = preload("res://scripts/asset_spawn_helper.gd")
 const CharacterPresentation = preload("res://scripts/character_presentation.gd")
+const CharacterRoleSpec = preload("res://scripts/character_role_spec.gd")
 const CharacterAnimationDriver = preload("res://scripts/character_animation_driver.gd")
 
 var walk_speed = 3.4
@@ -651,10 +652,10 @@ func _build_body() -> void:
 	add_child(visual_root)
 	var collision = CollisionShape3D.new()
 	var capsule_shape = CapsuleShape3D.new()
-	capsule_shape.height = 1.65
-	capsule_shape.radius = 0.32
+	capsule_shape.height = CharacterRoleSpec.collision_height("player_human", 1.65)
+	capsule_shape.radius = CharacterRoleSpec.collision_radius("player_human", 0.32)
 	collision.shape = capsule_shape
-	collision.position.y = 0.9
+	collision.position.y = capsule_shape.height * 0.5 + capsule_shape.radius * 0.18
 	add_child(collision)
 	if _try_build_mapped_body():
 		CharacterPresentation.apply_player(self, visual_root)
@@ -882,7 +883,10 @@ func _build_oathblade_visual(parent: Node3D) -> Node3D:
 	oathblade.name = "KaelOathblade"
 	# Keep the blade readable at gameplay distance without turning it into a
 	# pole that reaches from Kael's hand to the ground.
-	oathblade.scale = Vector3.ONE * 0.86
+	# Keep the blade readable at the native gameplay camera distance. The prior
+	# 0.86 scale made the measured rendered weapon fall below the 0.75 m
+	# readability contract even though its contact markers still reached enemies.
+	oathblade.scale = Vector3.ONE * 1.0
 	parent.add_child(oathblade)
 	var steel := _metal_mat(Color(0.78, 0.84, 0.88))
 	steel.metallic = 0.82
@@ -920,8 +924,8 @@ func _build_oathblade_visual(parent: Node3D) -> Node3D:
 func _build_oathblade_mesh() -> ImmediateMesh:
 	var mesh := ImmediateMesh.new()
 	var vertices := [
-		Vector3(-0.082, -0.09, 0.024), Vector3(0.082, -0.09, 0.024), Vector3(0.0, -1.02, 0.024),
-		Vector3(-0.082, -0.09, -0.024), Vector3(0.082, -0.09, -0.024), Vector3(0.0, -1.02, -0.024)
+		Vector3(-0.082, -0.09, 0.024), Vector3(0.082, -0.09, 0.024), Vector3(0.0, -1.16, 0.024),
+		Vector3(-0.082, -0.09, -0.024), Vector3(0.082, -0.09, -0.024), Vector3(0.0, -1.16, -0.024)
 	]
 	var faces := [[0, 2, 1], [3, 4, 5], [0, 1, 4], [0, 4, 3], [0, 3, 5], [0, 5, 2], [1, 2, 5], [1, 5, 4]]
 	mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLES)
@@ -944,7 +948,9 @@ func _update_sword_equipment_pose(windup: float, strike: float, recovery: float,
 		return
 	var forward := -global_transform.basis.z.normalized()
 	var right := global_transform.basis.x.normalized()
-	var idle_direction := (Vector3.DOWN * 0.86 + right * 0.32 - forward * 0.28).normalized()
+	# Keep the ready blade visibly diagonal instead of reading as a vertical
+	# pole. The attack states still own the full swing arc below.
+	var idle_direction := (Vector3.DOWN * 0.56 + right * 0.58 - forward * 0.45).normalized()
 	var blade_direction := idle_direction
 	if attacking:
 		var windup_direction: Vector3
@@ -1108,7 +1114,7 @@ func _add_slash_arc_visuals() -> void:
 	slash_arc_root.position = Vector3(0.48, 1.18, -0.78)
 	slash_arc_root.visible = false
 	visual_root.add_child(slash_arc_root)
-	slash_arc_primary = _add_slash_panel("visible_sword_slash_arc_primary", Vector3.ZERO, Vector3(0.09, 0.18, 1.0), Color(1.0, 0.76, 0.42, 0.58))
+	slash_arc_primary = _add_slash_panel("visible_sword_slash_arc_primary", Vector3.ZERO, Vector3(0.045, 0.10, 1.0), Color(1.0, 0.84, 0.52, 0.34))
 	slash_arc_secondary = _add_slash_panel("visible_sword_slash_arc_secondary", Vector3(0.07, -0.04, 0.05), Vector3(0.16, 0.08, 0.90), Color(0.70, 0.32, 0.12, 0.58))
 	slash_arc_spark = _add_slash_panel("visible_sword_slash_impact_edge", Vector3(0.0, 0.0, -0.48), Vector3(0.20, 0.22, 0.16), Color(1.0, 0.80, 0.34, 0.92))
 
@@ -1193,10 +1199,11 @@ func _animate_visuals(delta: float, move_dir: Vector3, moving: bool) -> void:
 			var weapon_pose = Vector3(38.0 - strike_arc * (68.0 if attack_anim_heavy else 48.0), swing, 20.0 + windup * (68.0 if attack_anim_heavy else 42.0) + strike_arc * (110.0 if attack_anim_heavy else 82.0))
 			weapon_root.rotation_degrees = weapon_pose
 			weapon_root.position = weapon_root.position.lerp(Vector3(0.42, 0.84, -0.42) + Vector3(0.20 * strike_arc, 0.08 * windup, -0.26 * strike_arc), 14.0 * delta)
+			# The old fallback box trail detached from the hand and read as a
+			# second oversized sword. The measured blade ribbon below is the only
+			# attack trail now.
 			if sword_trail_visual != null:
-				sword_trail_visual.visible = strike > 0.04 and recovery < 0.88
-				sword_trail_visual.rotation_degrees.z = lerp(-58.0 if attack_anim_heavy else -42.0, 24.0, strike)
-				sword_trail_visual.scale = Vector3.ONE * lerp(0.92, 1.42 if attack_anim_heavy else 1.18, strike_arc)
+				sword_trail_visual.visible = false
 		_update_sword_equipment_pose(windup, strike, recovery, attack_anim_heavy, true)
 		_animate_slash_arc(strike, strike_arc, recovery, attack_anim_heavy)
 	else:
@@ -1287,7 +1294,7 @@ func _build_blade_ribbon(old_base: Vector3, old_tip: Vector3, blade_base: Vector
 	var camera := get_viewport().get_camera_3d()
 	if camera != null:
 		width_axis = camera.global_transform.basis.x.normalized()
-	var width := width_axis * 0.065
+	var width := width_axis * 0.028
 	ribbon.surface_begin(Mesh.PRIMITIVE_TRIANGLES)
 	# Build two thin screen-facing strips around the measured blade sweep. This
 	# keeps the slash readable when the real sword moves almost edge-on to the
@@ -1323,7 +1330,7 @@ func _trail_mat(color: Color) -> StandardMaterial3D:
 	material.cull_mode = BaseMaterial3D.CULL_DISABLED
 	material.emission_enabled = true
 	material.emission = Color(1.0, 0.76, 0.42)
-	material.emission_energy_multiplier = 0.46
+	material.emission_energy_multiplier = 0.24
 	return material
 
 func _beam_material(color: Color) -> StandardMaterial3D:

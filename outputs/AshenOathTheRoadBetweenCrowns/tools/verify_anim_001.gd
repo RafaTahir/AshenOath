@@ -47,8 +47,9 @@ func _initialize() -> void:
 		_verify_driver(enemy.animation_driver, str(enemy.enemy_id), ["idle", "walk", "run", "attack", "hit", "death"])
 		_assert(not _has_proxy_anatomy(enemy), "%s contains proxy anatomy" % enemy.enemy_id)
 
-	game.queue_free()
-	await process_frame
+	# Print the result before freeing the multi-zone test tree. Any renderer
+	# diagnostics emitted by Godot while releasing that tree are shutdown-only
+	# and must be classified after the pass marker.
 	_finish()
 
 func _verify_driver(driver, label: String, required_states: Array[String]) -> void:

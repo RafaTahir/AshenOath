@@ -17,7 +17,7 @@ signal dialogue_closed
 signal menu_hovered
 signal menu_clicked
 
-const MENU_BUILD_LABEL = "RELEASE-001 WEB VERSION 1.0 | NATIVE 720P | ASHENOATH.VERCEL.APP"
+const MENU_BUILD_LABEL = "RECOVERY-004 FOUNDATION | WEB-002 CANDIDATE | NATIVE 720P | ASHENOATH.VERCEL.APP"
 const MENU_SIZE = Vector2(1920.0, 1080.0)
 const GAMEPLAY_SIZE = Vector2i(1280, 720)
 const SAVE_PATH = "user://ashen_oath_save.json"
@@ -94,7 +94,7 @@ func _process(_delta: float) -> void:
 func show_main_menu() -> void:
 	active_menu = "main"
 	_set_internal_canvas(Vector2i(MENU_SIZE))
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	_set_ui_pointer()
 	_clear_menu()
 	menu_layer.visible = true
 	var box = _menu_box("ASHEN OATH", "The Road Between Crowns", "contracts | curses | consequences")
@@ -110,7 +110,7 @@ func show_main_menu() -> void:
 func show_launch_screen() -> void:
 	active_menu = "launch"
 	_set_internal_canvas(Vector2i(MENU_SIZE))
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	_set_ui_pointer()
 	_clear_menu()
 	menu_layer.visible = true
 	var box = _menu_box("ASHEN OATH", "The Road Between Crowns", "click to wake the road")
@@ -123,7 +123,7 @@ func show_launch_screen() -> void:
 func show_pause_menu() -> void:
 	active_menu = "pause"
 	_set_internal_canvas(Vector2i(MENU_SIZE))
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	_set_ui_pointer()
 	_clear_menu()
 	menu_layer.visible = true
 	var box = _menu_box("Paused", "", "the road holds its breath")
@@ -141,7 +141,7 @@ func show_settings_menu(back_target: String = "pause", requested_page: int = -1)
 	controls_back_target = back_target
 	if requested_page >= 0:
 		settings_page = requested_page
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	_set_ui_pointer()
 	_clear_menu()
 	menu_layer.visible = true
 	var box = _menu_box("Settings", "Display & Controls", "tune the lantern")
@@ -189,7 +189,7 @@ func _settings_entries(s: Dictionary) -> Array:
 func show_controls_menu(back_target: String = "main") -> void:
 	active_menu = "controls"
 	controls_back_target = back_target
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	_set_ui_pointer()
 	_clear_menu()
 	menu_layer.visible = true
 	var box = _menu_box("Controls", "", "blade | breath | road")
@@ -204,7 +204,7 @@ func show_controls_menu(back_target: String = "main") -> void:
 func show_credits_menu() -> void:
 	active_menu = "credits"
 	_set_internal_canvas(Vector2i(MENU_SIZE))
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	_set_ui_pointer()
 	_clear_menu()
 	menu_layer.visible = true
 	var box = _menu_box("Credits", "", "made under an ashen moon")
@@ -217,7 +217,7 @@ func hide_menus() -> void:
 	menu_layer.visible = false
 	dialogue_layer.visible = false
 	inventory_layer.visible = false
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if input_device == "touch" else Input.MOUSE_MODE_CAPTURED
+	_set_gameplay_pointer()
 
 func show_loading(text: String = "Preparing Greyfen...") -> void:
 	# Normal world travel retains the last rendered frame; a blocking overlay
@@ -375,7 +375,7 @@ func mark_stamina_exhausted() -> void:
 	show_status_cue("Stamina spent", "stamina")
 
 func show_dialogue(data: Dictionary) -> void:
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	_set_ui_pointer()
 	dialogue_layer.visible = true
 	dialogue_session_data = data.duplicate(true)
 	dialogue_pages.clear()
@@ -425,7 +425,7 @@ func _render_dialogue_page() -> void:
 	call_deferred("_focus_first_enabled", dialogue_actions)
 
 func show_inventory(inventory, quests, story_state = null, progression = null) -> void:
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	_set_ui_pointer()
 	inventory_layer.visible = true
 	var oil_name = "None"
 	if inventory.active_oil != "":
@@ -522,7 +522,7 @@ func show_inventory(inventory, quests, story_state = null, progression = null) -
 	call_deferred("_focus_first_enabled", craft_buttons)
 
 func show_ending(title: String, body: String) -> void:
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	_set_ui_pointer()
 	_clear_menu()
 	menu_layer.visible = true
 	var box = _menu_box(title)
@@ -534,7 +534,7 @@ func show_ending(title: String, body: String) -> void:
 	_add_menu_button(box, "Return to Launch Screen", show_launch_screen)
 
 func show_death_screen(body: String) -> void:
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	_set_ui_pointer()
 	_clear_menu()
 	menu_layer.visible = true
 	var box = _menu_box("Kael Falls")
@@ -557,13 +557,13 @@ func _build_hud() -> void:
 	var bars_back = ColorRect.new()
 	bars_back.name = "VitalsBackdrop"
 	bars_back.position = Vector2(16, 16)
-	bars_back.size = Vector2(260, 90)
-	bars_back.color = Color(0.018, 0.016, 0.014, 0.72)
+	bars_back.size = Vector2(246, 80)
+	bars_back.color = Color(0.018, 0.016, 0.014, 0.62)
 	root.add_child(bars_back)
-	_add_hud_accent(bars_back, Vector2.ZERO, Vector2(3, 90))
+	_add_hud_accent(bars_back, Vector2.ZERO, Vector2(3, 80))
 	var bars = VBoxContainer.new()
-	bars.position = Vector2(26, 23)
-	bars.custom_minimum_size = Vector2(238, 76)
+	bars.position = Vector2(24, 21)
+	bars.custom_minimum_size = Vector2(226, 66)
 	bars.add_theme_constant_override("separation", 3)
 	root.add_child(bars)
 	health_bar = ProgressBar.new()
@@ -604,53 +604,53 @@ func _build_hud() -> void:
 	root.add_child(enemy_value_label)
 	prompt_label = Label.new()
 	prompt_label.name = "InteractionPrompt"
-	prompt_label.position = Vector2(420, 650)
-	prompt_label.size = Vector2(440, 32)
+	prompt_label.position = Vector2(390, 660)
+	prompt_label.size = Vector2(500, 30)
 	prompt_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	prompt_label.visible = false
 	root.add_child(prompt_label)
 	var tracker_back = ColorRect.new()
 	tracker_back.name = "QuestTrackerBackdrop"
-	tracker_back.position = Vector2(926, 16)
-	tracker_back.size = Vector2(334, 104)
-	tracker_back.color = Color(0.018, 0.016, 0.014, 0.72)
+	tracker_back.position = Vector2(964, 14)
+	tracker_back.size = Vector2(300, 84)
+	tracker_back.color = Color(0.018, 0.016, 0.014, 0.62)
 	root.add_child(tracker_back)
-	_add_hud_accent(tracker_back, Vector2(331, 0), Vector2(3, 104))
+	_add_hud_accent(tracker_back, Vector2(297, 0), Vector2(3, 84))
 	tracker_label = Label.new()
 	tracker_label.name = "QuestTrackerObjective"
-	tracker_label.position = Vector2(940, 25)
-	tracker_label.size = Vector2(304, 88)
+	tracker_label.position = Vector2(976, 21)
+	tracker_label.size = Vector2(272, 68)
 	tracker_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	tracker_label.clip_text = true
 	root.add_child(tracker_label)
 	var compass_back = ColorRect.new()
 	compass_back.name = "CompassBackdrop"
-	compass_back.position = Vector2(362, 16)
-	compass_back.size = Vector2(556, 30)
-	compass_back.color = Color(0.018, 0.016, 0.014, 0.58)
+	compass_back.position = Vector2(380, 14)
+	compass_back.size = Vector2(520, 28)
+	compass_back.color = Color(0.018, 0.016, 0.014, 0.46)
 	root.add_child(compass_back)
 	compass_label = Label.new()
 	compass_label.name = "LocationAndObjectiveCompass"
-	compass_label.position = Vector2(362, 19)
-	compass_label.size = Vector2(556, 30)
+	compass_label.position = Vector2(380, 16)
+	compass_label.size = Vector2(520, 26)
 	compass_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	root.add_child(compass_label)
 	toast_label = Label.new()
-	toast_label.position = Vector2(22, 616)
-	toast_label.size = Vector2(590, 42)
+	toast_label.position = Vector2(22, 626)
+	toast_label.size = Vector2(520, 34)
 	toast_label.visible = false
 	root.add_child(toast_label)
 	hint_label = Label.new()
 	hint_label.name = "ContextualCombatHint"
-	hint_label.position = Vector2(415, 92)
-	hint_label.size = Vector2(450, 34)
+	hint_label.position = Vector2(430, 82)
+	hint_label.size = Vector2(420, 30)
 	hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hint_label.visible = false
 	root.add_child(hint_label)
 	status_label = Label.new()
 	status_label.name = "CombatStatusCue"
-	status_label.position = Vector2(472, 584)
-	status_label.size = Vector2(340, 28)
+	status_label.position = Vector2(470, 602)
+	status_label.size = Vector2(340, 26)
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	status_label.visible = false
 	root.add_child(status_label)
@@ -665,8 +665,8 @@ func _build_menu_layer() -> void:
 func _build_dialogue() -> void:
 	dialogue_layer = PanelContainer.new()
 	dialogue_layer.name = "DialogueLowerThird"
-	dialogue_layer.position = Vector2(190, 438)
-	dialogue_layer.size = Vector2(900, 248)
+	dialogue_layer.position = Vector2(220, 474)
+	dialogue_layer.size = Vector2(840, 212)
 	dialogue_layer.visible = false
 	add_child(dialogue_layer)
 	var box = VBoxContainer.new()
@@ -694,7 +694,7 @@ func _build_dialogue() -> void:
 	dialogue_text.name = "DialogueSubtitleText"
 	dialogue_text.bbcode_enabled = true
 	dialogue_text.fit_content = false
-	dialogue_text.custom_minimum_size = Vector2(844, 98)
+	dialogue_text.custom_minimum_size = Vector2(784, 78)
 	box.add_child(dialogue_text)
 	dialogue_actions = VBoxContainer.new()
 	dialogue_actions.name = "DialogueChoices"
@@ -889,6 +889,18 @@ func set_input_source(source: Node) -> void:
 	input_source = source
 	if input_source != null:
 		set_input_device(str(input_source.get("active_device")))
+
+func _set_ui_pointer() -> void:
+	if input_source != null and input_source.has_method("release_pointer"):
+		input_source.release_pointer()
+	else:
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+func _set_gameplay_pointer() -> void:
+	if input_source != null and input_source.has_method("restore_gameplay_pointer"):
+		input_source.restore_gameplay_pointer()
+	else:
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if input_device == "touch" else Input.MOUSE_MODE_CAPTURED
 
 func apply_accessibility(current: Dictionary) -> void:
 	reduced_motion = bool(current.get("reduced_motion", false))

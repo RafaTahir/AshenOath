@@ -16,11 +16,13 @@ const ZoneSpatialService = preload("res://scripts/zone_spatial_service.gd")
 const RuntimeServiceRegistry = preload("res://scripts/runtime_service_registry.gd")
 const RuntimeActorFactory = preload("res://scripts/runtime_actor_factory.gd")
 const ZoneCompositionRouter = preload("res://scripts/zone_composition_router.gd")
+const ZoneRuntimeCoordinator = preload("res://scripts/zone_runtime_coordinator.gd")
 
 var player
 var camera_rig
 var hud
 var quests
+var quest_presentation
 var dialogue
 var story_state
 var inventory
@@ -37,7 +39,9 @@ var world_vfx
 var minigames
 var progression
 var input_router
+var interaction_focus
 var mobile_touch
+var qa_adapter
 var zone_root: Node3D
 var active_interactable
 var interaction_candidates: Array = []
@@ -76,6 +80,7 @@ var visual_box_batch_data: Array[Dictionary] = []
 var terrain_patch_batch_data: Array[Dictionary] = []
 var house_batch_data: Dictionary = {}
 var spatial_service: Node
+var zone_runtime_coordinator: ZoneRuntimeCoordinator
 var environment_batches_flushed := false
 var prop_collision_body: StaticBody3D
 var pending_anwen_relocation := false
@@ -177,6 +182,7 @@ func _setup_runtime() -> void:
 	var services: Dictionary = runtime_services.create_services()
 	story_state = services["story_state"]
 	quests = services["quests"]
+	quest_presentation = services["quest_presentation"]
 	dialogue = services["dialogue"]
 	inventory = services["inventory"]
 	crafting = services["crafting"]
@@ -191,8 +197,16 @@ func _setup_runtime() -> void:
 	minigames = services["minigames"]
 	progression = services["progression"]
 	input_router = services["input_router"]
+	interaction_focus = services["interaction_focus"]
 	mobile_touch = services["mobile_touch"]
 	runtime_services.configure(self)
+	zone_runtime_coordinator = ZoneRuntimeCoordinator.new(self)
+	if OS.has_feature("ashenoath_qa"):
+		var qa_script = load("res://scripts/qa_browser_telemetry.gd")
+		if qa_script != null:
+			qa_adapter = qa_script.new()
+			qa_adapter.name = "QABrowserTelemetry"
+			add_child(qa_adapter)
 	enemy_defs = _read_json("res://data/enemies.json")
 
 func _new_game() -> void:
@@ -267,6 +281,13 @@ func load_save_state(data: Dictionary) -> void:
 	hud.hide_menus()
 	inventory.load_state(data.get("inventory", {}))
 	quests.load_state(data.get("quests", {}))
+	if quest_presentation != null:
+		quest_presentation.load_state(data.get("quest_presentation", {}))
+	if settings != null and typeof(data.get("settings", {})) == TYPE_DICTIONARY and not data.get("settings", {}).is_empty():
+		for key in data.settings:
+			if settings.settings.has(key) and typeof(settings.settings[key]) == typeof(data.settings[key]):
+				settings.settings[key] = data.settings[key]
+		settings.apply()
 	story_state.load_state(data.get("story_state", {}))
 	progression.load_state(data.get("progression", {}))
 	progression.reconcile_completed_quests(quests.quest_defs, quests.completed)
@@ -333,6 +354,8 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		player.cancel_beam_charge()
 	var previous_zone_id: String = current_zone_id
 	var previous_enemies: Array = active_enemies.duplicate()
+	if zone_runtime_coordinator != null:
+		zone_runtime_coordinator.begin_transition(zone_id, previous_zone_id, spawn_pos)
 	var previous_spatial_service: Node = spatial_service
 	var reused_zone := false
 	var requested_signature := _zone_state_signature()
@@ -380,6 +403,10 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		camera_rig.set_zone(zone_id)
 	active_enemies.clear()
 	hud.set_prompt("")
+	# Target health belongs to the active encounter. Clear it before the new
+	# zone starts so Castle, finale, and dialogue views cannot inherit a dead
+	# Wychwood target from the previous route.
+	hud.hide_enemy()
 	if reused_zone:
 		active_enemies = _valid_cached_enemies(previous_enemies)
 	elif route_zone_cache.has(zone_id) and is_instance_valid(route_zone_cache[zone_id]) \
@@ -411,10 +438,13 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 			build_result = ZoneCompositionRouter.build_campaign(self, zone_id)
 		else:
 			build_result = ZoneCompositionRouter.build_core(self, zone_id)
-		if not bool(build_result.get("ok", false)):
+		var build_validation := zone_runtime_coordinator.validate_build(zone_id, build_result, zone_root) if zone_runtime_coordinator != null else build_result
+		if not bool(build_validation.get("ok", false)):
 			push_error("Zone composition failed for %s: %s" % [
-				zone_id, ", ".join(build_result.get("errors", []))
+				zone_id, ", ".join(build_validation.get("errors", []))
 			])
+			if zone_runtime_coordinator != null:
+				zone_runtime_coordinator.rollback(zone_id, previous_zone_id, build_validation.get("errors", []))
 			_recover_failed_zone_load(previous_zone_id)
 			return
 		if composition_kind == "campaign":
@@ -428,6 +458,8 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	if zone_root != null:
 		zone_root.set_meta("zone_resource_owner", "active")
 		zone_root.set_meta("zone_resource_id", zone_id)
+		if zone_runtime_coordinator != null:
+			zone_runtime_coordinator.activate(zone_id, zone_root, reused_zone)
 	_trim_route_zone_cache([previous_zone_id] if previous_zone_id != zone_id else [])
 	# Avoid recursive diagnostic walks during every transition; on Web/ANGLE those
 	# allocations made cached arrivals visibly slower.
@@ -443,7 +475,10 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	var life_controller := zone_root.find_child("GreyfenLifeController", true, false)
 	if life_controller != null and life_controller.has_method("set_spatial_service"):
 		life_controller.set_spatial_service(spatial_service)
-	quests.set_tracked_quest_for_zone(zone_id)
+	if quest_presentation != null:
+		quest_presentation.set_zone(zone_id)
+	else:
+		quests.set_tracked_quest_for_zone(zone_id)
 	_refresh_tracker()
 	if visual_director != null:
 		visual_director.apply_zone(zone_id, zone_root)
@@ -747,13 +782,16 @@ func _cache_route_zone(zone_id: String, root: Node3D, enemies: Array, signature:
 	root.position = Vector3.ZERO if keep_visible else Vector3(0, -1000, 0)
 	root.set_meta("zone_resource_owner", "cached")
 	root.set_meta("zone_resource_id", zone_id)
+	var cached_collision_disabled := false
 	if keep_visible:
 		_set_zone_collision_enabled(root, false)
+		cached_collision_disabled = true
 	else:
-		# Moving the inactive zone away first removes route interference. Its
-		# collision sweep is deferred so warm arrivals do not pay for every
-		# outgoing prop before the destination becomes playable.
-		_defer_cached_zone_collision_disable(zone_id)
+		# Moving the inactive zone away removes route interference while keeping
+		# its collision state intact. Re-enabling hundreds of cached colliders on
+		# the next arrival made warm transitions miss the browser budget.
+		cached_collision_disabled = false
+	root.set_meta("cached_collision_disabled", cached_collision_disabled)
 	route_zone_cache[zone_id] = root
 	route_enemy_cache[zone_id] = _valid_cached_enemies(enemies)
 	route_zone_signatures[zone_id] = signature
@@ -801,7 +839,9 @@ func _activate_cached_zone(zone_id: String) -> Node3D:
 	cached_root.set_meta("zone_resource_owner", "active")
 	cached_root.process_mode = Node.PROCESS_MODE_INHERIT
 	cached_root.position = Vector3.ZERO
-	_set_zone_collision_enabled(cached_root, true)
+	if bool(cached_root.get_meta("cached_collision_disabled", false)):
+		_set_zone_collision_enabled(cached_root, true)
+	cached_root.set_meta("cached_collision_disabled", false)
 	cached_root.visible = true
 	return cached_root as Node3D
 
@@ -925,6 +965,7 @@ func zone_lifecycle_snapshot() -> Dictionary:
 		"static_memory_bytes": int(Performance.get_monitor(Performance.MEMORY_STATIC)),
 		"transition_history": transition_history.duplicate(true),
 		"material_cache_count": material_cache.size(),
+		"zone_runtime": zone_runtime_coordinator.snapshot() if zone_runtime_coordinator != null else {},
 	}
 
 func _subtree_node_count(root: Node) -> int:
@@ -1014,6 +1055,7 @@ func _handle_interaction(area) -> void:
 			audio.set_music_state("return_report")
 			hud.show_status_cue("Anwen knows the sign", "victory")
 			hud.toast("Anwen goes still at the feathers. 'Then it was called here,' she says, and will say no more.")
+		_set_interactable_label_visible(area, false)
 		_stage_dialogue_moment(area)
 		audio.set_game_paused(true)
 		get_tree().paused = true
@@ -1981,7 +2023,7 @@ func _apply_runtime_settings(current_settings: Dictionary) -> void:
 		visual_director.sun.directional_shadow_max_distance = 42.0
 
 func _refresh_tracker() -> void:
-	hud.set_tracker(quests.get_tracker_text())
+	hud.set_tracker(quest_presentation.get_tracker_text() if quest_presentation != null else quests.get_tracker_text())
 	_update_compass()
 
 func _refresh_equipment_readout() -> void:
@@ -2033,7 +2075,7 @@ func _update_tutorial_prompts() -> void:
 func _update_compass() -> void:
 	if hud == null or player == null:
 		return
-	var zone_name = {"greyfen":"Greyfen", "wychwood":"The Wychwood", "ruins":"Castle Vargan", "deep_wood":"Deep Wychwood", "old_mill":"The Ash Mill", "burned_farmstead":"Burned Farmstead", "marsh_crossing":"Marsh Crossing", "bandit_road":"The Long Road", "vargan_approach":"Castle Vargan Approach", "vargan_court":"Castle Vargan Courtyard", "record_hall":"Vargan Record Hall", "undercroft":"Vargan Undercroft", "assembly":"Greyfen Assembly", "hart_glade":"White Hart Glade"}.get(current_zone_id, "The Road Between Crowns")
+	var zone_name: String = str(quest_presentation.get_zone_display_name(current_zone_id)) if quest_presentation != null else _zone_display_name(current_zone_id)
 	hud.set_compass("%s | %s" % [zone_name, _nearest_interactable_summary()])
 
 func _nearest_interactable_summary() -> String:
@@ -2041,8 +2083,8 @@ func _nearest_interactable_summary() -> String:
 		return "No marker"
 	var best_text = "No marker"
 	var best_score = 9999.0
-	var tracked_id: String = quests.get_tracked_quest() if quests.has_method("get_tracked_quest") else ""
-	var tracked_objective := _tracked_objective_id(tracked_id)
+	var tracked_id: String = quest_presentation.get_tracked_quest() if quest_presentation != null else (quests.get_tracked_quest() if quests.has_method("get_tracked_quest") else "")
+	var tracked_objective: String = str(quest_presentation.get_active_objective_id(tracked_id)) if quest_presentation != null else _tracked_objective_id(tracked_id)
 	var found_tracked_target := false
 	for child in zone_root.get_children():
 		if not child.has_method("get_overlapping_bodies"):
@@ -2076,7 +2118,7 @@ func _nearest_interactable_summary() -> String:
 			best_score = score
 			best_text = "%s %dm" % [child.get("prompt"), int(dist)]
 	if tracked_objective != "" and not found_tracked_target:
-		return _tracked_objective_text(tracked_id, tracked_objective)
+		return quest_presentation.get_active_objective_text(tracked_id, tracked_objective) if quest_presentation != null else _tracked_objective_text(tracked_id, tracked_objective)
 	return best_text
 
 func _tracked_objective_id(quest_id: String) -> String:
@@ -3198,6 +3240,21 @@ func _stage_dialogue_moment(area) -> void:
 	if player.has_method("face_target"):
 		player.face_target(npc.global_position)
 	_face_npc_toward_player(npc)
+	# Prevent close-range interaction from placing both bodies in the same
+	# screen position. A short, validated conversational step gives the camera
+	# two readable silhouettes without changing quest or interaction range.
+	var separation: float = player.global_position.distance_to(npc.global_position)
+	if separation < 1.35:
+		var staged_position: Vector3 = npc.global_position + npc.global_basis.z.normalized() * 1.75
+		if has_method("validate_walkable_position"):
+			staged_position = validate_walkable_position(staged_position)
+		player.global_position = staged_position + Vector3.UP
+		player.velocity = Vector3.ZERO
+		if player.has_method("face_target"):
+			player.face_target(npc.global_position)
+		_face_npc_toward_player(npc)
+	if camera_rig != null and camera_rig.has_method("frame_dialogue_target"):
+		camera_rig.frame_dialogue_target(npc)
 
 func _face_npc_toward_player(npc: Node3D) -> void:
 	if npc == null or player == null:
@@ -3288,30 +3345,8 @@ func _connect_interactable(area) -> void:
 
 func _update_interaction_focus() -> void:
 	_refresh_interaction_candidates()
-	var best = null
-	var best_score := -999.0
-	var camera := get_viewport().get_camera_3d()
-	var forward: Vector3 = -camera.global_basis.z if camera != null else -player.global_basis.z
-	for candidate in interaction_candidates.duplicate():
-		if candidate == null or not is_instance_valid(candidate) or not candidate.is_inside_tree() or candidate.is_queued_for_deletion():
-			interaction_candidates.erase(candidate)
-			continue
-		var offset: Vector3 = candidate.global_position-player.global_position
-		var distance := offset.length()
-		var focus_range := 3.6 if candidate.interaction_type == "zone" else 2.8
-		if distance > focus_range or distance < 0.01:
-			continue
-		var facing := forward.dot(offset.normalized())
-		if (candidate.interaction_type != "zone" and facing < 0.12) or not _interaction_target_valid(candidate):
-			continue
-		var priority := 0.0
-		if candidate.interaction_type == "dialogue": priority += 0.18
-		if candidate.interaction_type == "clue" and quests.is_active(candidate.quest_id): priority += 0.45
-		if candidate.interaction_type == "zone": priority += 1.25
-		var score := 100.0 - distance if candidate.interaction_type == "zone" else facing*2.2-distance*0.42+priority
-		if score > best_score:
-			best_score = score
-			best = candidate
+	var camera: Camera3D = get_viewport().get_camera_3d()
+	var best = interaction_focus.choose(interaction_candidates, player, camera, Callable(self, "_interaction_target_valid")) if interaction_focus != null else null
 	if active_interactable != best:
 		if active_interactable != null and is_instance_valid(active_interactable):
 			_set_interactable_label_visible(active_interactable,false)
@@ -4072,7 +4107,7 @@ func _make_light(name: String, pos: Vector3, color: Color, energy: float) -> voi
 	var quality := str(settings.settings.get("quality_preset", "balanced")) if settings != null else "balanced"
 	# Two authored local pools preserve route landmarks without multiplying
 	# Compatibility-renderer lighting work across the entire outdoor frame.
-	if quality == "balanced" and runtime_light_count >= 2:
+	if quality == "balanced" and runtime_light_count >= 4:
 		return
 	var light = OmniLight3D.new()
 	light.name = name
@@ -4091,19 +4126,27 @@ func _compatibility_budget_mode() -> bool:
 	return settings == null or str(settings.settings.get("quality_preset", "balanced")) != "quality"
 
 func _keep_performance_light(name: String) -> bool:
-	return name in ["Village Warmth", "Shrine Beacon", "Wychwood Gate Lantern", "Moon Shaft", "Trail Threat", "ClearingColdSpot", "SpawnWarmRead", "LedgerTableLight", "RecordHallNavigationFill", "HartWitnessLight"]
+	return name in ["Village Warmth", "Shrine Beacon", "Wychwood Gate Lantern", "Moon Shaft", "Trail Threat", "ClearingColdSpot", "SpawnWarmRead", "LedgerTableLight", "RecordHallNavigationFill", "RecordHallEntryFill", "RecordHallArchiveFill", "HartWitnessLight"]
 
 func _build_global_environment() -> void:
 	visual_director = VisualDirector.new()
 	add_child(visual_director)
 
 func _mat(color: Color) -> StandardMaterial3D:
-	var key := "flat:%s" % color.to_html(true)
+	var record_hall_lift: bool = current_zone_id == "record_hall"
+	var key := "flat:%s:%s" % [color.to_html(true), "record" if record_hall_lift else "world"]
 	if material_cache.has(key):
 		return material_cache[key]
 	var material = StandardMaterial3D.new()
 	material.albedo_color = color
 	material.roughness = 0.9
+	if record_hall_lift:
+		# Compatibility can leave upward-facing procedural archive surfaces
+		# unlit. A restrained self-lit lift preserves their authored color without
+		# turning the room into a flat white box.
+		material.emission_enabled = true
+		material.emission = color.lightened(0.12)
+		material.emission_energy_multiplier = 0.28
 	material_cache[key] = material
 	return material
 

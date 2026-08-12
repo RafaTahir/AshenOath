@@ -29,9 +29,14 @@ func _initialize() -> void:
 	_check(game.camera_rig != null and game.camera_rig.input_source == router, "camera does not use the input router")
 	_check(router.has_method("set_virtual_axes") and router.has_method("set_virtual_action"), "future touch interface is incomplete")
 	router.clear_virtual_input()
+	var passed := failures.is_empty()
+	if passed:
+		print("INPUT-001 VERIFIER: PASS (keyboard, gamepad, focus, prompts, settings, virtual input)")
+	else:
+		print("INPUT-001 VERIFIER: FAIL (%d)" % failures.size())
 	game.queue_free()
 	await _settle(2)
-	_finish()
+	quit(0 if passed else 1)
 
 func _verify_bindings() -> void:
 	var required := [

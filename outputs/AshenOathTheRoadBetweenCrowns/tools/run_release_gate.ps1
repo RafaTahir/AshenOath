@@ -12,7 +12,9 @@ $PSNativeCommandUseErrorActionPreference = $false
 $Project = Split-Path -Parent $PSScriptRoot
 $Godot = "C:\Users\User\Downloads\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe"
 $Python = "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe"
+$Node = "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe"
 $Web = Join-Path (Split-Path -Parent $Project) "AshenOath_Web"
+$QAWeb = Join-Path (Split-Path -Parent $Project) ".release-gate\AshenOath_QA"
 $Logs = Join-Path $Project ".release-gate"
 $ReportDirectory = Join-Path $Project "release_reports"
 $ReportPath = Join-Path $ReportDirectory "latest.json"
@@ -21,7 +23,9 @@ $StartedAt = Get-Date
 $Results = [System.Collections.Generic.List[object]]::new()
 New-Item -ItemType Directory -Force -Path $Logs | Out-Null
 New-Item -ItemType Directory -Force -Path $ReportDirectory | Out-Null
+New-Item -ItemType Directory -Force -Path $QAWeb | Out-Null
 $IsResume = -not [string]::IsNullOrWhiteSpace($ResumeFrom)
+$webTailResume = $IsResume -and $ResumeFrom -eq "verify_web_002_browser"
 
 if ($IsResume) {
     if (-not (Test-Path -LiteralPath $ReportPath)) {
@@ -167,7 +171,7 @@ function Invoke-GodotGate([string]$Name, [string[]]$Arguments) {
     $warnings = [System.Collections.Generic.List[string]]::new()
     $fatal = [System.Collections.Generic.List[string]]::new()
     $isHeadless = $Arguments -contains "--headless"
-    $teardownPattern = 'RID allocations .* leaked at exit|Pages in use exist at exit|resources still in use at exit|Buffer with GL ID .* leaked|shaders of type .* never freed|ObjectDB instances leaked at exit|Leaked instance dependency|did not call instance_notify_deleted|Parameter "material" is null'
+	$teardownPattern = 'Parameter "material" is null|RID allocations .* leaked at exit|Pages in use exist at exit|resources still in use at exit|Buffer with GL ID .* leaked|shaders of type .* never freed|ObjectDB instances leaked at exit|Leaked instance dependency|did not call instance_notify_deleted'
     $fatalPattern = 'SCRIPT ERROR|Parse Error|Compile Error|Failed to load|Cannot open|ERROR:|VERIFIER:\s*FAIL|ASSERTION FAILED|Assertion failed'
     for ($index = 0; $index -lt $lines.Count; $index++) {
         $line = $lines[$index]
@@ -178,8 +182,7 @@ function Invoke-GodotGate([string]$Name, [string[]]$Arguments) {
         if ($line -match '^\s*\+\s+CategoryInfo|FullyQualifiedErrorId.*NativeCommandError') {
             continue
         }
-        $headlessDummyMaterial = $isHeadless -and $line -match 'Parameter "material" is null'
-        if ($headlessDummyMaterial -or ($line -match $teardownPattern -and $passIndex -ge 0 -and $index -gt $passIndex)) {
+        if ($line -match $teardownPattern -and $passIndex -ge 0 -and $index -gt $passIndex) {
             $warnings.Add($line.Trim())
         } else {
             $fatal.Add($line.Trim())
@@ -198,8 +201,17 @@ function Invoke-GodotGate([string]$Name, [string[]]$Arguments) {
 try {
     if (!(Test-Path -LiteralPath $Godot)) { throw "Godot 4.6.3 not found: $Godot" }
     if (!(Test-Path -LiteralPath $Python)) { throw "Bundled Python not found: $Python" }
+    if (!(Test-Path -LiteralPath $Node)) { throw "Bundled Node.js not found: $Node" }
 
     if (-not $IsResume) {
+        Invoke-ExternalGate "verify_security_001" $Python @(
+            (Join-Path $Project "tools\verify_security_001.py"),
+            $Project
+        )
+        Invoke-ExternalGate "verify_recovery_004" $Python @(
+            (Join-Path $Project "tools\verify_recovery_004.py"),
+            $Project
+        )
         Invoke-ExternalGate "verify_content_integrity" $Python @(
             (Join-Path $Project "tools\verify_content_integrity.py"),
             $Project,
@@ -214,10 +226,14 @@ try {
             "--registry", (Join-Path $Project "PROD_002_ISSUE_REGISTRY.json"),
             "--dashboard", (Join-Path $Project "PROD_002_MILESTONE_DASHBOARD.md")
         )
+        Invoke-ExternalGate "verify_prod_003" $Python @(
+            (Join-Path $Project "tools\verify_prod_003.py"),
+            $Project
+        )
     }
 
     $verifiers = @(
-		"verify_runtime.gd", "verify_runtime_regressions.gd", "verify_zone_builder_integrity.gd", "verify_gate_transitions.gd", "verify_engine_001.gd", "verify_story_campaign.gd", "verify_quest_001.gd", "verify_quest_002.gd", "verify_art_001.gd", "verify_asset_001.gd", "verify_character_real_001.gd",
+		"verify_runtime.gd", "verify_runtime_regressions.gd", "verify_zone_builder_integrity.gd", "verify_gate_transitions.gd", "verify_engine_001.gd", "verify_engine_003.gd", "verify_story_campaign.gd", "verify_quest_001.gd", "verify_quest_002.gd", "verify_save_001.gd", "verify_qa_002.gd", "verify_art_001.gd", "verify_asset_001.gd", "verify_character_real_001.gd", "verify_face_river_sun_001.gd",
         "verify_motion_quality.gd", "verify_river_swimming.gd", "verify_greyfen_life.gd",
 		"verify_castle_vargan.gd", "verify_audio_runtime.gd", "verify_audio_001.gd", "verify_visible_quality.gd",
 		"verify_recovery_002_foundation.gd", "verify_navigation_001.gd", "verify_char_001.gd", "verify_anim_001.gd", "verify_combat_001.gd", "verify_ai_001.gd", "verify_oath_001.gd", "verify_ui_001.gd", "verify_input_001.gd", "verify_mobile_001.gd", "verify_world_001.gd", "verify_world_002.gd", "verify_world_003.gd", "verify_zone_budgets.gd",
@@ -262,6 +278,21 @@ try {
             "--script", "tools/verify_perf_001.gd"
         )
     }
+    if (-not $IsResume -and [string]::IsNullOrWhiteSpace($Only)) {
+        $qaLogArguments = @()
+        foreach ($verifierName in $verifierNames) {
+            $qaLogArguments += "--log"
+            $qaLogArguments += (Join-Path $Logs "$verifierName.log")
+        }
+        $qaLogArguments += "--log"
+        $qaLogArguments += (Join-Path $Logs "verify_perf_001.log")
+        Invoke-ExternalGate "verify_qa_005" $Python @(
+            (Join-Path $Project "tools\verify_qa_005.py"),
+            $Project,
+            $qaLogArguments,
+            "--report", (Join-Path $Logs "qa_005_report.json")
+        )
+    }
     if ((-not $IsResume -or $resumeFromVerifier -or $resumeFromPerformance -or $resumeFromScreenshot) -and [string]::IsNullOrWhiteSpace($Only) -and -not $SkipScreenshots) {
         $captureReached = -not $resumeFromScreenshot
         foreach ($captureName in $screenshotGates) {
@@ -294,9 +325,20 @@ try {
             if ($image.LastWriteTime -lt $sourceNewest.LastWriteTime) { throw "Stale screenshot: $($image.Name)" }
             if ($image.Length -lt 4096) { throw "Screenshot is blank or corrupt: $($image.Name)" }
         }
+        Invoke-ExternalGate "verify_screenshot_qa_003" $Python @(
+            (Join-Path $Project "tools\verify_screenshot_qa_003.py"),
+            $Project,
+            "--mode", "milestone",
+            "--report", (Join-Path $Logs "qa_003_milestone_report.json")
+        )
+        Invoke-ExternalGate "verify_qa_006" $Python @(
+            (Join-Path $Project "tools\verify_qa_006.py"),
+            $Project,
+            "--report", (Join-Path $Logs "qa_006_report.json")
+        )
     }
 
-    if ([string]::IsNullOrWhiteSpace($Only) -and -not $SkipExport) {
+    if ([string]::IsNullOrWhiteSpace($Only) -and -not $SkipExport -and -not $webTailResume) {
         Invoke-ExternalGate "verify_web_001" $Python @(
             (Join-Path $Project "tools\verify_web_001.py"),
             $Project,
@@ -315,33 +357,59 @@ try {
         Invoke-GodotGate "packed_startup" @(
             "--headless", "--path", $Web, "--main-pack", $pack, "--quit-after", "5"
         )
-        Invoke-ExternalGate "verify_web_browser" "node.exe" @(
+        Invoke-ExternalGate "verify_web_browser" $Node @(
             (Join-Path $Project "tools\verify_web_browser.mjs"),
             "--export", $Web,
             "--report", (Join-Path $Logs "web_browser.json")
         )
-        Invoke-ExternalGate "verify_mobile_browser" "node.exe" @(
+        Invoke-ExternalGate "qa_web_export" $Godot @(
+            "--headless", "--path", $Project, "--export-release", "Web QA Browser"
+        )
+        Invoke-ExternalGate "verify_qa_002" $Godot @(
+            "--headless", "--path", $Project, "--script", "tools/verify_qa_002.gd"
+        )
+        Invoke-ExternalGate "verify_mobile_browser" $Node @(
             (Join-Path $Project "tools\verify_web_browser.mjs"),
             "--export", $Web,
             "--report", (Join-Path $Logs "mobile_browser.json"),
             "--mobile", "true"
         )
-        Invoke-ExternalGate "verify_web_002_browser" "node.exe" @(
+        Invoke-ExternalGate "verify_web_002_browser" $Node @(
             (Join-Path $Project "tools\verify_qa_002_browser.mjs"),
-            "--export", $Web,
+            "--export", $QAWeb,
             "--browser", "all",
             "--full-campaign", "true",
             "--report", (Join-Path $Logs "web_002_browser.json")
         )
-        Invoke-ExternalGate "verify_web_002_mobile" "node.exe" @(
+        Invoke-ExternalGate "verify_web_002_mobile" $Node @(
             (Join-Path $Project "tools\verify_qa_002_browser.mjs"),
-            "--export", $Web,
+            "--export", $QAWeb,
             "--browser", "all",
             "--full-campaign", "true",
             "--mobile", "true",
             "--report", (Join-Path $Logs "web_002_mobile.json")
         )
     }
+	if ([string]::IsNullOrWhiteSpace($Only) -and -not $SkipExport -and $webTailResume) {
+		# The package and all preceding browser gates are already recorded in the
+		# release report. Resume only the failed full-campaign browser gate and
+		# its mobile companion against the verified QA export.
+		Invoke-ExternalGate "verify_web_002_browser" $Node @(
+			(Join-Path $Project "tools\verify_qa_002_browser.mjs"),
+			"--export", $QAWeb,
+			"--browser", "all",
+			"--full-campaign", "true",
+			"--report", (Join-Path $Logs "web_002_browser.json")
+		)
+		Invoke-ExternalGate "verify_web_002_mobile" $Node @(
+			(Join-Path $Project "tools\verify_qa_002_browser.mjs"),
+			"--export", $QAWeb,
+			"--browser", "all",
+			"--full-campaign", "true",
+			"--mobile", "true",
+			"--report", (Join-Path $Logs "web_002_mobile.json")
+		)
+	}
     $finalStatus = $(if ([string]::IsNullOrWhiteSpace($Only)) { "pass" } else { "partial-pass" })
     Write-ReleaseReport $finalStatus
     Write-Host "AUTHORITATIVE RELEASE GATE: $($finalStatus.ToUpper())"

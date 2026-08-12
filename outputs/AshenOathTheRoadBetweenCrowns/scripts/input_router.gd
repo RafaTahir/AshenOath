@@ -1,6 +1,7 @@
 extends Node
 
 signal device_changed(device: String)
+signal pointer_mode_changed(mode: int)
 
 const DEVICE_KEYBOARD_MOUSE := "keyboard_mouse"
 const DEVICE_GAMEPAD := "gamepad"
@@ -248,6 +249,27 @@ func clear_virtual_input() -> void:
 func activate_touch() -> void:
 	_set_device(DEVICE_TOUCH)
 
+func show_pointer() -> void:
+	_set_pointer_mode(Input.MOUSE_MODE_VISIBLE)
+
+func capture_pointer() -> void:
+	if active_device == DEVICE_TOUCH:
+		show_pointer()
+		return
+	_set_pointer_mode(Input.MOUSE_MODE_CAPTURED)
+
+func release_pointer() -> void:
+	show_pointer()
+
+func restore_gameplay_pointer() -> void:
+	if active_device == DEVICE_TOUCH:
+		show_pointer()
+	else:
+		capture_pointer()
+
+func is_pointer_captured() -> bool:
+	return Input.mouse_mode == Input.MOUSE_MODE_CAPTURED
+
 func rumble(weak: float, strong: float, duration: float = 0.12) -> void:
 	if active_device != DEVICE_GAMEPAD or not vibration_enabled:
 		return
@@ -258,6 +280,12 @@ func _set_device(device: String) -> void:
 		return
 	active_device = device
 	device_changed.emit(active_device)
+
+func _set_pointer_mode(mode: int) -> void:
+	if Input.mouse_mode == mode:
+		return
+	Input.mouse_mode = mode
+	pointer_mode_changed.emit(mode)
 
 func _ensure_action(action: String) -> void:
 	if not InputMap.has_action(action):

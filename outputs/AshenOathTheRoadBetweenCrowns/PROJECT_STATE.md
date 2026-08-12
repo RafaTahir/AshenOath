@@ -6,6 +6,14 @@ Ashen Oath is a **pre-alpha prototype**. It is not a commercial Alpha, Early Acc
 
 RECOVERY-003 replaces reflective campaign-zone construction with a validated `ZoneBuildContext`, removes the blocking travel overlay, and requires player-triggered gate verification. Deep Woods, the Long Road, Castle Approach, Courtyard, and Record Hall are implemented playable sections; later campaign content remains pre-alpha and must not be described as finished until its player-driven route and visual gates pass.
 
+RECOVERY-004 is the active recovery program. This checkpoint isolates QA browser telemetry from production, adds a disposable `Web QA Browser` preset, centralizes interaction focus and pointer mode, and makes shutdown diagnostics explicit instead of suppressing them. The authoritative current audit is `RECOVERY_004_ISSUE_REGISTRY.json`; implementation notes are in `RECOVERY_004_IMPLEMENTATION_STATUS.md`. Codex owns the visual-review decision: fresh screenshots are inspected directly and checked by automated image, exposure, freshness, scale, grounding, material, and route checks. The complete authoritative release gate now passes; production sync/deployment is the remaining release operation.
+
+The explicit **visual approval boundary** is current under the Codex policy: all eleven required views have fresh Codex-reviewed evidence. This approval is not a human sign-off and does not claim photoreal or AAA quality; the manifest records the remaining low-poly, blockout, and procedural limitations plainly.
+
+The recovery runtime now includes `ZoneRuntimeCoordinator` transition/build/rollback snapshots, `QuestPresentationState` objective IDs/text for compass fallback, and save schema version 6 with sanitized settings migration. These are foundation changes only; they do not mean the route has passed visual acceptance.
+
+The latest opening-presentation checkpoint adds midpoint dialogue framing, stable Anwen-facing behavior during the pause, bone-scale compensation for imported face/hair details, and removal of redundant interaction labels during dialogue. Runtime, input, save, player-route, character/river/sun, visible-quality, material, browser, performance, and lifecycle gates pass. The eleven-view visual gate is Codex-reviewed rather than human-approved.
+
 ANIM-001 release acceptance passed the complete functional suite, graphical route and animation captures, Web export, and packed startup. On the Dell 7280/Intel HD 620 ANGLE path, the final native-720p sample measured 37.5 FPS average, 35.6 FPS minimum, and a 129 ms warm transition.
 
 PERF-REPAIR-001 supersedes the earlier provisional performance result with an enforced native-720p graphical gate. The repaired Dell 7280/Intel HD 620/ANGLE sample measured Greyfen at 46.73 FPS average / 30.25 FPS 1% low; every other required zone passed above the 32/30 FPS thresholds. Warm return measured 318.7 ms and all cold transitions stayed below 458 ms. Balanced now uses bounded routine ticking, distance-suspended animation, shadowless authored lighting, generated mesh LODs, bounded NPC presentation distance, batched cottage/river geometry, and at most one inactive cached route zone.
@@ -108,11 +116,11 @@ for a native store release or sustained physical-phone performance.
 
 ## QA-REPAIR-001 Update
 
-- The complete 1280x720 route capture was regenerated on 2026-08-11 at source revision `801d890` (capture timestamp `2026-08-11_004817`). It covers Greyfen, both bridge/recovery proofs, Wychwood combat, Castle Vargan, Record Hall, and Hart Glade.
-- `verify_screenshot_qa_003.py --mode ticket` passes all 11 required views, and the five-test regression suite passes. The manifest remains `pending` because automated image checks cannot approve facial identity, composition, grounding, or art quality without human review.
+- The complete 1280x720 route capture was regenerated on 2026-08-12 at `23:49:18` after the current recovery fixes. It covers Greyfen, both bridge/recovery proofs, Wychwood combat, Castle Vargan, Record Hall, and Hart Glade.
+- `verify_screenshot_qa_003.py --mode milestone` passes all 11 required views under the Codex visual-review policy, and the five-test regression suite passes. `verify_qa_006.py` also passes after direct Codex inspection of the fresh 1280x720 frames. The manifest notes where faces, buildings, monsters, and the Hart remain stylized or blockout-grade.
 - River recovery now prefers authored same-bank road anchors, and the bridge deck is excluded from emergency river recovery when its spatial service validates the bridge corridor. The full capture completes without the earlier false bridge/roof failures.
 - Active gameplay no longer emits the previous null-material errors during capture. Godot still reports renderer/RID/ObjectDB cleanup diagnostics while the multi-zone capture process exits; these remain lifecycle debt and are not being marked as a clean release result.
-- Current visual blockers remain honest: route-visible characters and buildings are low-poly/temporary, Anwen is not framed at portrait distance, Castle/Record Hall are blockout-grade, and the White Hart remains an underdeveloped procedural presentation. Production stays unchanged until those blockers receive an approved visual pass.
+- Current visual limitations remain honest: route-visible characters and buildings are low-poly/temporary, Anwen is readable but not portrait-grade, Castle/Record Hall are blockout-grade, and the White Hart remains an underdeveloped procedural presentation. These are quality limitations, not hidden test failures; the release is functionally verified but should not be described as photoreal or AAA.
 
 ## QA-REPAIR-001 Verification Evidence
 
@@ -121,7 +129,7 @@ for a native store release or sustained physical-phone performance.
 - Performance report: `.release-gate/perf_001_report.json`
 - Full route capture command and targeted gate commands are recorded in `QA_REPAIR_001_SCREENSHOT_VISUAL_APPROVAL.md`.
 
-Last updated: 2026-08-11
+Last updated: 2026-08-13
 
 ## Summary
 
@@ -813,4 +821,4 @@ The project does not yet satisfy:
 - `QA-004` exhaustively validates 17,496 major-choice combinations and save-stable epilogue resolution.
 # RELEASE-001 Web Version 1.0 Candidate
 
-The complete current Web campaign passed the authoritative release suite. Its seven-file export is 65.59 MB with a 29.30 MB PCK. Chrome and Edge completed the released route from Greyfen to Hart Glade without browser console or network errors. Native-720p Balanced profiling measured approximately 60 FPS average in every required zone; the lowest 1% low was 47.17 FPS during Wychwood combat. Android, iOS, and store distribution remain deferred.
+The complete current Web campaign passed the authoritative release suite. Its seven-file export is 65.76 MB with a 29.47 MB PCK (SHA-256 `60010FD1D6CD3DDA4BABD695D88EE2133E30DED2FD05ED0A312FCBB69A925A47A`). Chrome and Edge completed the released route from Greyfen to Hart Glade, including all 36 full-campaign checkpoints, without browser console or network errors. Native-720p Balanced profiling measured approximately 60 FPS average in every required zone; Wychwood combat recorded a 40.20 FPS 1% low, and warm return measured 159.1 ms. Android, iOS, and store distribution remain deferred. Production deployment is pending the verified `web/` sync and push.

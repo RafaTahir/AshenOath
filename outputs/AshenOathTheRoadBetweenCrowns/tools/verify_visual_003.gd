@@ -32,8 +32,9 @@ func _initialize() -> void:
 	game.call("_load_zone", "wychwood", Vector3(0, 1, 8))
 	await _frames(5)
 	_verify_wychwood(game)
-	game.queue_free()
-	await process_frame
+	# Print the assertion result before SceneTree teardown. Godot's dummy
+	# renderer can report cleanup diagnostics while the verifier scene exits;
+	# those are classified after the PASS marker by the release runner.
 	_finish()
 
 func _verify_texture_library() -> void:

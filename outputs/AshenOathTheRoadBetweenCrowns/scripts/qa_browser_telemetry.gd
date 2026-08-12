@@ -12,7 +12,10 @@ var _command_result: Dictionary = {}
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	if not OS.has_feature("web"):
+	# QA telemetry is intentionally available only in the disposable QA Web
+	# preset. Production builds must not expose state mutation or teleport hooks.
+	if not OS.has_feature("web") or not OS.has_feature("ashenoath_qa"):
+		set_process(false)
 		return
 	enabled = bool(JavaScriptBridge.eval(
 		"new URLSearchParams(window.location.search).get('qa') === '1'",
@@ -159,10 +162,20 @@ func _poll_command() -> void:
 			if gate == null:
 				_command_result.error = "gate not found"
 				return
-			var inward := (Vector3.ZERO - gate.global_position)
-			inward.y = 0.0
-			var candidate := gate.global_position + inward.normalized() * 2.2 + Vector3.UP
-			player.global_position = spatial.nearest_safe(candidate, spatial.bank_for(candidate))
+			# Use the same authored approach anchor as runtime arrivals. A broad
+			# nearest-safe search can choose a distant road anchor when the gate
+			# itself is beside a reserved corridor, leaving browser QA too far from
+			# the focus radius to prove real E interaction.
+			var candidate := gate.global_position + Vector3.UP
+			for raw_spec in spatial.gates.values():
+				var spec: Dictionary = raw_spec
+				var center: Vector3 = spec.get("center", Vector3.ZERO)
+				if center.distance_to(gate.global_position) <= 0.25:
+					candidate = spec.get("arrival", candidate)
+					break
+			candidate.y = maxf(candidate.y, 0.95)
+			var validated: Vector3 = spatial.validate_position(candidate, 0.55, spatial.bank_for(candidate))
+			player.global_position = candidate if validated.distance_to(candidate) > 2.5 else validated
 			player.velocity = Vector3.ZERO
 			_command_result = {"action": action, "target": target_id, "ok": true, "position": _vector(player.global_position)}
 		_:

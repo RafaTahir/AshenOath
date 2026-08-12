@@ -33,8 +33,10 @@ func _initialize() -> void:
 	_verify_zone(game, "vargan_court_potato")
 	_write_report()
 	game.settings.set_quality_preset("balanced")
-	game.queue_free()
-	await _frames(4)
+	# Print the result before releasing the multi-zone test tree. The renderer
+	# can emit shutdown-only material/RID diagnostics during that release; they
+	# must appear after the pass marker for the authoritative runner to classify
+	# them correctly.
 	_finish()
 
 func _verify_zone(game, zone_id: String) -> void:

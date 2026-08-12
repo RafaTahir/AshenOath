@@ -18,6 +18,16 @@ at `outputs/AshenOathTheRoadBetweenCrowns/PROD_002_MILESTONE_DASHBOARD.md`.
 - This metadata does not own gameplay, imported assets, `AshenOath_Web`, or the
   tracked `web/` output.
 
+## RECOVERY-004 Truth Boundary
+
+`outputs/AshenOathTheRoadBetweenCrowns/RECOVERY_004_ISSUE_REGISTRY.json` is the
+current recovery status overlay. It records outcome states such as
+`verified`, `functional_but_incomplete`, `visually_rejected`, `blocked`, and
+`deferred`; historical PROD-002 completion labels must not be treated as visual
+approval. Production QA telemetry is available only in the disposable `Web QA
+Browser` preset with the `ashenoath_qa` feature flag. The production `Web
+Browser` preset must not contain `qa_browser_telemetry.gd`.
+
 ## Tier 1: Development Loop
 
 - Run parser/static checks first.

@@ -122,21 +122,28 @@ func _make_hart_witness(context: ZoneBuildContext) -> void:
 	root.name = "WhiteHartWitnessDisplay"
 	root.position = Vector3(0, 0, -9)
 	context.add_node(root)
-	var body_material := context.make_material(Color(0.68, 0.72, 0.66))
-	var shadow_material := context.make_material(Color(0.18, 0.22, 0.19))
+	var body_material := context.make_material(Color(0.22, 0.30, 0.25))
+	var shadow_material := context.make_material(Color(0.075, 0.105, 0.090))
 	var antler_material := context.make_material(Color(0.26, 0.18, 0.10))
-	_add_hart_part(root, "HartBody", CapsuleMesh.new(), Vector3(0, 1.22, 0.12), Vector3(1.28, 1.0, 1.52), body_material)
-	_add_hart_part(root, "HartNeck", CapsuleMesh.new(), Vector3(0, 1.93, -0.42), Vector3(0.70, 1.10, 0.76), body_material, Vector3(-24, 0, 0))
-	_add_hart_part(root, "HartHead", SphereMesh.new(), Vector3(0, 2.46, -0.86), Vector3(0.58, 0.48, 0.76), body_material)
-	_add_hart_part(root, "HartMuzzle", SphereMesh.new(), Vector3(0, 2.32, -1.18), Vector3(0.34, 0.25, 0.42), body_material)
+	_add_hart_part(root, "HartBody", SphereMesh.new(), Vector3(0, 1.18, 0.12), Vector3(1.30, 0.72, 1.56), body_material)
+	_add_hart_part(root, "HartNeck", CapsuleMesh.new(), Vector3(0, 1.94, -0.42), Vector3(0.66, 1.02, 0.72), body_material, Vector3(-24, 0, 0))
+	_add_hart_part(root, "HartHead", SphereMesh.new(), Vector3(0, 2.48, -0.86), Vector3(0.58, 0.50, 0.78), body_material)
+	_add_hart_part(root, "HartMuzzle", SphereMesh.new(), Vector3(0, 2.32, -1.18), Vector3(0.34, 0.25, 0.42), shadow_material)
 	_add_hart_part(root, "HartMane", SphereMesh.new(), Vector3(0, 2.02, -0.30), Vector3(0.46, 0.78, 0.34), shadow_material)
+	_add_hart_part(root, "HartEar", SphereMesh.new(), Vector3(-0.32, 2.68, -0.72), Vector3(0.20, 0.10, 0.30), shadow_material, Vector3(0, 0, -18))
+	_add_hart_part(root, "HartEar", SphereMesh.new(), Vector3(0.32, 2.68, -0.72), Vector3(0.20, 0.10, 0.30), shadow_material, Vector3(0, 0, 18))
 	for side in [-1.0, 1.0]:
 		for z in [-0.34, 0.34]:
 			_add_hart_part(root, "HartLeg", CylinderMesh.new(), Vector3(side * 0.38, 0.52, z), Vector3(0.22, 0.92, 0.22), shadow_material)
 		_add_hart_part(root, "HartAntlerMain", CylinderMesh.new(), Vector3(side * 0.25, 2.92, -0.76), Vector3(0.13, 0.92, 0.13), antler_material, Vector3(0, 0, side * -18.0))
 		_add_hart_part(root, "HartAntlerBranch", CylinderMesh.new(), Vector3(side * 0.48, 3.26, -0.76), Vector3(0.09, 0.54, 0.09), antler_material, Vector3(0, 0, side * 34.0))
-		_add_hart_part(root, "HartEye", SphereMesh.new(), Vector3(side * 0.17, 2.52, -1.22), Vector3(0.06, 0.06, 0.06), context.make_material(Color(0.48, 0.92, 0.72)))
-	_add_hart_part(root, "HartSigilLight", SphereMesh.new(), Vector3(0, 1.42, -0.54), Vector3(0.10, 0.10, 0.10), context.make_material(Color(0.52, 0.90, 0.74)))
+	var eye_material := context.make_material(Color(0.48, 0.92, 0.72))
+	eye_material.emission_enabled = true
+	eye_material.emission = Color(0.18, 0.72, 0.46)
+	eye_material.emission_energy_multiplier = 1.8
+	for side in [-1.0, 1.0]:
+		_add_hart_part(root, "HartEye", SphereMesh.new(), Vector3(side * 0.17, 2.52, -1.22), Vector3(0.075, 0.075, 0.075), eye_material)
+	_add_hart_part(root, "HartSigilLight", SphereMesh.new(), Vector3(0, 1.42, -0.54), Vector3(0.13, 0.13, 0.13), eye_material)
 
 func _add_hart_part(parent: Node3D, node_name: String, mesh: Mesh, position: Vector3, scale_value: Vector3, material: Material, rotation_degrees := Vector3.ZERO) -> void:
 	var node := MeshInstance3D.new()

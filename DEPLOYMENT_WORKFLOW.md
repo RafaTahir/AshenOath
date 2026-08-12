@@ -16,6 +16,15 @@ unless Web-specific risk requires it.
 - Vercel config: `vercel.json`
 - Production URL: `https://ashenoath.vercel.app/`
 
+## QA Build Boundary
+
+The repository contains two Web presets by design: `Web Browser` is the
+production candidate and `Web QA Browser` is a disposable local test build.
+Only the QA preset carries the `ashenoath_qa` feature flag and browser telemetry
+commands. Never upload `.release-gate/AshenOath_QA` or expose `?qa=1` on the
+production candidate. `tools/verify_security_001.py` is the static boundary
+check used before a milestone release.
+
 ## One-Time GitHub Setup
 
 If GitHub CLI is installed and authenticated later:

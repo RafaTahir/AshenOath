@@ -14,6 +14,7 @@ var draughts_board: Array[int] = []
 var draughts_selected := -1
 var finished := false
 var world_control_locked := false
+var input_source: Node
 var rng := RandomNumberGenerator.new()
 
 func _ready() -> void:
@@ -21,13 +22,16 @@ func _ready() -> void:
 	rng.seed = 73191
 	_build_ui()
 
+func setup(router: Node) -> void:
+	input_source = router
+
 func open_game(game_id: String) -> void:
 	active_game = game_id
 	finished = false
 	draughts_selected = -1
 	overlay.visible = true
 	world_control_locked = true
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	_set_ui_pointer()
 	get_tree().paused = true
 	_restart()
 	call_deferred("_focus_first_board_button")
@@ -38,8 +42,20 @@ func close_game() -> void:
 	overlay.visible = false
 	world_control_locked = false
 	get_tree().paused = false
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	_set_gameplay_pointer()
 	closed.emit()
+
+func _set_ui_pointer() -> void:
+	if input_source != null and input_source.has_method("release_pointer"):
+		input_source.release_pointer()
+	else:
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+func _set_gameplay_pointer() -> void:
+	if input_source != null and input_source.has_method("restore_gameplay_pointer"):
+		input_source.restore_gameplay_pointer()
+	else:
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func is_open() -> bool:
 	return overlay != null and overlay.visible

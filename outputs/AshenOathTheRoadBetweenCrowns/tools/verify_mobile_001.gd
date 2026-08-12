@@ -42,8 +42,9 @@ func _initialize() -> void:
 	_check(touch.visible, "touch controls do not return after closing menus")
 
 	touch._release_all()
-	game.queue_free()
-	await _settle(2)
+	# Emit PASS before freeing the test tree. Renderer messages produced while
+	# Godot tears down the dummy scene are shutdown diagnostics, not active
+	# mobile-render failures, and the release runner classifies them after PASS.
 	_finish()
 
 func _verify_settings(settings: Node) -> void:

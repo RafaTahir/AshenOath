@@ -22,8 +22,9 @@ def main() -> int:
     project_settings = (project / "project.godot").read_text(encoding="utf-8")
     hud = (project / "scripts" / "hud.gd").read_text(encoding="utf-8")
 
-    if len(re.findall(r"^\[preset\.\d+\]$", preset, re.MULTILINE)) != 1:
-        fail("exactly one Web export preset is required", failures)
+    preset_count = len(re.findall(r"^\[preset\.\d+\]$", preset, re.MULTILINE))
+    if preset_count != 2 or 'name="Web Browser"' not in preset or 'name="Web QA Browser"' not in preset:
+        fail("one production Web preset and one disposable QA Web preset are required", failures)
     required_preset = {
         'name="Web Browser"': "production preset name",
         'platform="Web"': "Web platform",

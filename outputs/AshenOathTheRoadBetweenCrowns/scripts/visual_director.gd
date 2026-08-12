@@ -168,7 +168,9 @@ func _update_sky_cycle(daylight: float, twilight: float, night: float, minutes: 
 	# retains two low-overdraw formations instead of collapsing to one card.
 	var cloud_count := 2 if quality == "potato" else (7 if quality == "quality" else 4)
 	cloud_layer.visible = bool(profile.clouds)
-	var cloud_alpha := clampf(daylight*0.78+twilight*0.68+night*0.28,0.18,0.82)
+	# Keep cloud formations atmospheric rather than allowing one alpha card to
+	# cover the whole gameplay composition, especially on low-FOV laptops.
+	var cloud_alpha := clampf(daylight*0.44+twilight*0.38+night*0.16,0.10,0.48)
 	var cloud_color := Color(0.92,0.94,0.96) if daylight > twilight else Color(0.82,0.46,0.30)
 	if night > 0.55:
 		cloud_color = Color(0.18,0.23,0.34)
@@ -176,7 +178,7 @@ func _update_sky_cycle(daylight: float, twilight: float, night: float, minutes: 
 		var cloud := cloud_layer.get_child(i) as Node3D
 		cloud.visible = bool(profile.clouds) and i < cloud_count
 		var cloud_drift := 0.0 if _reduced_motion() else fmod(minutes * (0.018 + i * 0.002), 28.0) - 14.0
-		var cloud_anchor := Vector3(-52.0 + i * 17.0, 15.0 + float(i % 3) * 5.0, 96.0 + float(i % 3) * 14.0)
+		var cloud_anchor := Vector3(-58.0 + i * 19.0, 23.0 + float(i % 3) * 5.0, 132.0 + float(i % 3) * 16.0)
 		cloud.position = view_right * (cloud_anchor.x + cloud_drift) + view_up * cloud_anchor.y + view_forward * cloud_anchor.z
 		for lobe in cloud.get_children():
 			if lobe is MeshInstance3D:
@@ -333,6 +335,14 @@ func _lighting_profile(zone_id: String) -> Dictionary:
 			"fog_night": 0.012, "day_brightness": 1.10, "night_brightness": 1.14,
 			"contrast": 1.22, "saturation": 0.84, "interior_directional": 0.24,
 		}, true)
+		if zone_id == "record_hall":
+			profile.merge({
+				"interior_background": Color(0.034, 0.027, 0.022),
+				"interior_fog_color": Color(0.040, 0.031, 0.024),
+				"ambient_day_energy": 1.08, "ambient_night_energy": 1.00,
+				"day_brightness": 1.24, "night_brightness": 1.26,
+				"contrast": 1.16, "saturation": 0.90, "interior_directional": 0.34,
+			}, true)
 	return profile
 
 func _build_sky_layer() -> void:
@@ -351,19 +361,18 @@ func _build_sky_layer() -> void:
 
 	sun_disc = MeshInstance3D.new()
 	sun_disc.name = "SunDisc"
-	var sun_mesh := SphereMesh.new()
-	sun_mesh.radius = 1.0
-	sun_mesh.height = 2.0
-	sun_mesh.radial_segments = 24
-	sun_mesh.rings = 12
+	# A camera-facing disc reads as a distant sun. The former sphere was large
+	# enough to look like a glowing prop hanging over the village.
+	var sun_mesh := QuadMesh.new()
+	sun_mesh.size = Vector2(2.3, 2.3)
 	sun_disc.mesh = sun_mesh
-	sun_disc.scale = Vector3(5.6, 5.6, 5.6)
+	sun_disc.scale = Vector3.ONE
 	sun_disc.material_override = _emissive_billboard_material(Color(1.0, 0.94, 0.78), 2.15, 0.96)
 	add_child(sun_disc)
 	moon_disc = MeshInstance3D.new()
 	moon_disc.name = "MoonDisc"
 	moon_disc.mesh = sun_mesh.duplicate()
-	moon_disc.scale = Vector3(5.0, 5.0, 5.0)
+	moon_disc.scale = Vector3(0.92, 0.92, 0.92)
 	moon_disc.material_override = _emissive_billboard_material(Color(0.62, 0.76, 1.0), 0.62, 0.86)
 	add_child(moon_disc)
 	var halo_mesh := QuadMesh.new()
@@ -385,15 +394,24 @@ func _build_sky_layer() -> void:
 		cloud.name = "CloudCluster"
 		cloud.position = Vector3(-62.0 + i * 22.0, 46.0 + (i % 2) * 6.0, -92.0 + (i % 3) * 18.0)
 		cloud.set_meta("base_position", cloud.position)
-		# The generated texture already contains an irregular multi-lobed cloud.
-		# One card per cluster avoids four layers of transparent overdraw.
-		var lobe := MeshInstance3D.new()
-		lobe.name = "CloudCard"
-		var cloud_mesh := QuadMesh.new()
-		cloud_mesh.size = Vector2(52.0+float(i%3)*6.0,13.0+float(i%2)*2.0)
-		lobe.mesh = cloud_mesh
-		lobe.material_override = _cloud_material(Color(0.92,0.94,0.96,0.60))
-		cloud.add_child(lobe)
+		# Build each cloud from a few offset, irregular cards. The individual
+		# cards share one generated alpha texture, but their overlap breaks the
+		# old single-rectangle silhouette without adding an asset or shader.
+		var lobe_specs := [
+			{"name": "CloudBody", "size": Vector2(24.0 + float(i % 3) * 3.0, 7.8), "position": Vector3(0, 0, 0), "rotation": 0.0, "alpha": 0.52},
+			{"name": "CloudLeft", "size": Vector2(17.0, 6.2), "position": Vector3(-8.5, -0.8, 0.5), "rotation": -0.035, "alpha": 0.42},
+			{"name": "CloudRight", "size": Vector2(18.5, 6.5), "position": Vector3(9.0, -0.5, 0.8), "rotation": 0.028, "alpha": 0.44},
+		]
+		for spec in lobe_specs:
+			var lobe := MeshInstance3D.new()
+			lobe.name = str(spec.name)
+			var cloud_mesh := QuadMesh.new()
+			cloud_mesh.size = spec.size
+			lobe.mesh = cloud_mesh
+			lobe.position = spec.position
+			lobe.rotation.z = float(spec.rotation)
+			lobe.material_override = _cloud_material(Color(0.92, 0.94, 0.96, float(spec.alpha)))
+			cloud.add_child(lobe)
 		cloud_layer.add_child(cloud)
 
 func _position_sky_layer(zone_id: String) -> void:
@@ -490,14 +508,22 @@ func _build_cloud_texture() -> ImageTexture:
 	noise.frequency = 0.045
 	noise.fractal_octaves = 4
 	noise.fractal_gain = 0.52
+	var detail_noise := FastNoiseLite.new()
+	detail_noise.seed = 1483
+	detail_noise.noise_type = FastNoiseLite.TYPE_SIMPLEX_SMOOTH
+	detail_noise.frequency = 0.095
+	detail_noise.fractal_octaves = 2
 	for y in range(64):
 		for x in range(128):
 			var nx := (float(x)/127.0-0.5)*2.0
 			var ny := (float(y)/63.0-0.5)*2.0
 			var envelope := clampf(1.0-(nx*nx*0.72+ny*ny*1.85),0.0,1.0)
 			var detail := noise.get_noise_2d(float(x),float(y))*0.5+0.5
-			var alpha := smoothstep(0.30,0.67,detail*0.64+envelope*0.58)
-			var shade := lerpf(0.58,1.0,clampf(1.0-float(y)/63.0+detail*0.18,0.0,1.0))
+			var fine := detail_noise.get_noise_2d(float(x),float(y))*0.5+0.5
+			var shape := clampf(detail*0.58 + fine*0.16 + envelope*0.54, 0.0, 1.0)
+			var edge := smoothstep(0.02, 0.22, envelope)
+			var alpha := smoothstep(0.46, 0.71, shape) * edge
+			var shade := lerpf(0.56, 1.0, clampf(1.0-float(y)/63.0+detail*0.16,0.0,1.0))
 			image.set_pixel(x,y,Color(shade,shade,shade,alpha))
 	image.generate_mipmaps()
 	return ImageTexture.create_from_image(image)

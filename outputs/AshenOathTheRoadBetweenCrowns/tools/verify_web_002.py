@@ -31,8 +31,8 @@ def main() -> int:
     hud = (project / "scripts" / "hud.gd").read_text(encoding="utf-8")
     failures: list[str] = []
 
-    if len(re.findall(r"^\[preset\.\d+\]$", preset, re.MULTILINE)) != 1:
-        failures.append("exactly one Web export preset is required")
+    if len(re.findall(r"^\[preset\.\d+\]$", preset, re.MULTILINE)) != 2:
+        failures.append("one production Web preset and one disposable QA Web preset are required")
     for zone, relative in REQUIRED_ZONES.items():
         resource = f'res://{relative}'
         if f'"{resource}"' not in preset:

@@ -41,7 +41,7 @@ func setup(follow_target: Node3D, source: Node = null) -> void:
 	camera.fov = 63.0
 	add_child(camera)
 	_initialized = false
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	_capture_pointer()
 
 func set_zone(zone_id: String) -> void:
 	current_zone_id = zone_id
@@ -59,10 +59,10 @@ func _input(event: InputEvent) -> void:
 			adjust_zoom(ZOOM_STEP)
 			get_viewport().set_input_as_handled()
 			return
-		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		_capture_pointer()
 	elif event is InputEventMouseMotion:
 		if Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
-			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+			_capture_pointer()
 		_apply_mouse_motion(event.relative)
 
 func _apply_mouse_motion(relative: Vector2) -> void:
@@ -132,6 +132,33 @@ func _process(delta: float) -> void:
 	camera.fov = lerp(camera.fov, target_fov + _fov_kick, _smooth_weight(delta, 5.0))
 	_fov_kick = max(_fov_kick - delta * 5.0, 0.0)
 
+func frame_dialogue_target(dialogue_target: Node3D) -> void:
+	if target == null or camera == null or dialogue_target == null or not is_instance_valid(dialogue_target):
+		return
+	var flat_to_target := dialogue_target.global_position - target.global_position
+	flat_to_target.y = 0.0
+	if flat_to_target.length_squared() < 0.04:
+		return
+	flat_to_target = flat_to_target.normalized()
+	# Place the camera behind Kael relative to the speaker, then aim at the
+	# shared chest/face line so the dialogue panel does not hide both actors.
+	yaw = atan2(-flat_to_target.x, -flat_to_target.z)
+	pitch = -0.12
+	var midpoint := (target.global_position + dialogue_target.global_position) * 0.5
+	midpoint.y += 1.05
+	var anchor := midpoint + Vector3(0.0, 1.35, 0.0)
+	var orbit := Basis(Vector3.UP, yaw) * Basis(Vector3.RIGHT, pitch)
+	var desired := anchor + orbit * Vector3(-0.30, 0.0, 3.15)
+	desired = _collide_camera(anchor, desired)
+	_smoothed_anchor = anchor
+	_smoothed_look = midpoint
+	_cached_collision_position = desired
+	global_position = anchor
+	camera.global_position = desired
+	camera.look_at(midpoint, Vector3.UP)
+	camera.fov = 58.0
+	_initialized = true
+
 func _collide_camera(from_pos: Vector3, desired: Vector3) -> Vector3:
 	var space_state: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
 	var query := PhysicsRayQueryParameters3D.create(from_pos, desired)
@@ -141,6 +168,13 @@ func _collide_camera(from_pos: Vector3, desired: Vector3) -> Vector3:
 		return desired
 	var hit_pos: Vector3 = hit.get("position", desired)
 	var normal: Vector3 = hit.get("normal", Vector3.UP)
+	# The follow camera must not treat the walkable ground, road, bridge deck,
+	# or other upward-facing terrain as an occluder. On the bounded campaign
+	# sections the orbit ray can end slightly below the support plane; clamping
+	# to that hit puts the camera inside the road and fills the frame with blur.
+	# Vertical walls and props still shorten the orbit normally.
+	if normal.y > 0.65:
+		return desired
 	return hit_pos + normal * 0.25
 
 func shake(amount: float) -> void:
@@ -173,6 +207,12 @@ func adjust_zoom(amount: float) -> void:
 
 func get_zoom_distance() -> float:
 	return distance
+
+func _capture_pointer() -> void:
+	if input_source != null and input_source.has_method("capture_pointer"):
+		input_source.capture_pointer()
+	else:
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func apply_settings(mouse_sensitivity: float, use_invert_y: bool, controller_sensitivity: float = 1.0) -> void:
 	sensitivity = mouse_sensitivity

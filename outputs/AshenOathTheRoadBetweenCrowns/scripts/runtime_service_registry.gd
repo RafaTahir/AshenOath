@@ -1,6 +1,7 @@
 extends Node
 
 const QuestManager = preload("res://scripts/quest_manager.gd")
+const QuestPresentationState = preload("res://scripts/quest_presentation_state.gd")
 const DialogueManager = preload("res://scripts/dialogue_manager.gd")
 const StoryState = preload("res://scripts/story_state.gd")
 const InventoryManager = preload("res://scripts/inventory_manager.gd")
@@ -16,12 +17,13 @@ const HUD = preload("res://scripts/hud.gd")
 const MinigameManager = preload("res://scripts/minigame_manager.gd")
 const ProgressionManager = preload("res://scripts/progression_manager.gd")
 const InputRouter = preload("res://scripts/input_router.gd")
+const InteractionFocusService = preload("res://scripts/interaction_focus_service.gd")
 const MobileTouchControls = preload("res://scripts/mobile_touch_controls.gd")
 
 const REQUIRED_SERVICES := [
-	"story_state", "quests", "dialogue", "inventory", "crafting", "combat",
+	"story_state", "quests", "quest_presentation", "dialogue", "inventory", "crafting", "combat",
 	"save_manager", "settings", "world_materials", "day_night", "audio",
-	"asset_helper", "hud", "minigames", "progression", "input_router", "mobile_touch"
+	"asset_helper", "hud", "minigames", "progression", "input_router", "interaction_focus", "mobile_touch"
 ]
 
 var services: Dictionary = {}
@@ -32,6 +34,7 @@ func create_services() -> Dictionary:
 	services = {
 		"story_state": StoryState.new(),
 		"quests": QuestManager.new(),
+		"quest_presentation": QuestPresentationState.new(),
 		"dialogue": DialogueManager.new(),
 		"inventory": InventoryManager.new(),
 		"crafting": CraftingManager.new(),
@@ -46,6 +49,7 @@ func create_services() -> Dictionary:
 		"minigames": MinigameManager.new(),
 		"progression": ProgressionManager.new(),
 		"input_router": InputRouter.new(),
+		"interaction_focus": InteractionFocusService.new(),
 		"mobile_touch": MobileTouchControls.new(),
 	}
 	for id in REQUIRED_SERVICES:
@@ -61,6 +65,7 @@ func configure(owner: Node) -> void:
 	configured = true
 	var story_state = services["story_state"]
 	var quests = services["quests"]
+	var quest_presentation = services["quest_presentation"]
 	var dialogue = services["dialogue"]
 	var inventory = services["inventory"]
 	var crafting = services["crafting"]
@@ -73,10 +78,12 @@ func configure(owner: Node) -> void:
 	var minigames = services["minigames"]
 	var progression = services["progression"]
 	var input_router = services["input_router"]
+	var interaction_focus = services["interaction_focus"]
 	var mobile_touch = services["mobile_touch"]
 
 	hud.process_mode = Node.PROCESS_MODE_ALWAYS
 	quests.load_quests("res://data/quests.json")
+	quest_presentation.setup(quests)
 	dialogue.load_dialogue("res://data/dialogue.json")
 	dialogue.load_dialogue("res://data/campaign_dialogue.json")
 	dialogue.setup(story_state)
@@ -84,7 +91,9 @@ func configure(owner: Node) -> void:
 	crafting.setup(inventory, quests, story_state)
 	input_router.install_default_actions()
 	input_router.apply_settings(settings.settings)
+	interaction_focus.setup(quests)
 	hud.set_input_source(input_router)
+	minigames.setup(input_router)
 	mobile_touch.setup(input_router, hud, settings.settings)
 	settings.apply_platform_defaults(mobile_touch.touch_capable)
 	input_router.device_changed.connect(func(_device: String):

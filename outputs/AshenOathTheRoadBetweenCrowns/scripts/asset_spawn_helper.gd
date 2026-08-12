@@ -2,6 +2,7 @@ extends Node
 
 const AssetDatabase = preload("res://scripts/asset_database.gd")
 const CharacterVisualContract = preload("res://scripts/character_visual_contract.gd")
+const CharacterRoleSpec = preload("res://scripts/character_role_spec.gd")
 
 var database
 var mesh_cache: Dictionary = {}
@@ -247,6 +248,10 @@ func _target_height_for_path(path: String) -> float:
 
 func _target_height_for_role(role_name: String, path: String) -> float:
 	var role := role_name.to_lower()
+	if role != "":
+		var known_height := CharacterRoleSpec.target_height(role, -1.0)
+		if known_height > 0.0:
+			return known_height
 	if role.contains("ghoul_stalker"):
 		return 1.66
 	if role.contains("ghoul_brute"):
@@ -336,12 +341,18 @@ func _category_color(path: String) -> Color:
 	return Color(0.50, 0.48, 0.43)
 
 func _finalize_asset_root(root: Node3D, role_name: String = "") -> void:
-	root.rotation_degrees.y = 180.0 if root.name.to_lower().contains("character") else root.rotation_degrees.y
+	if role_name != "":
+		root.rotation_degrees.y = CharacterRoleSpec.facing_degrees(role_name)
+	else:
+		root.rotation_degrees.y = 180.0 if root.name.to_lower().contains("character") else root.rotation_degrees.y
 	var hero_role := role_name in ["player_human", "player_kael", "sister_anwen_human", "sister_anwen"]
+	var lod_distance := CharacterRoleSpec.lod_distance(role_name, 14.0)
 	var lod_bias := 0.50 if hero_role else 0.40
 	for mesh_instance in _collect_meshes(root):
 		mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		mesh_instance.lod_bias = lod_bias
+		mesh_instance.visibility_range_end = lod_distance
+	root.set_meta("character_role_spec", CharacterRoleSpec.for_role(role_name))
 
 func _prepare_spawned_asset(root: Node3D, path: String, role_name: String = "", category: String = "") -> void:
 	if path.get_extension().to_lower() != "obj":

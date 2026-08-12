@@ -1,6 +1,6 @@
 extends Node
 
-const CURRENT_VERSION := 5
+const CURRENT_VERSION := 6
 const SAVE_PATH := "user://ashen_oath_save.json"
 const AUTOSAVE_PATH := "user://ashen_oath_autosave.json"
 const CHECKPOINT_PATH := "user://ashen_oath_checkpoint.json"
@@ -74,6 +74,10 @@ func migrate_save_data(raw_data: Dictionary) -> Dictionary:
 	_sanitize_dictionary_fields(data.story_state, ["flags", "values"])
 	_sanitize_dictionary_fields(data.progression, ["unlocked", "rewarded_quests"])
 	_sanitize_dictionary_fields(data.world_state, ["removed_interactions", "day_night"])
+	if not data.has("quest_presentation") or typeof(data.get("quest_presentation")) != TYPE_DICTIONARY:
+		data["quest_presentation"] = {}
+	if not data.has("settings") or typeof(data.get("settings")) != TYPE_DICTIONARY:
+		data["settings"] = {}
 	if source_version < 3 and _legacy_road_complete(data.quests):
 		var story: Dictionary = data.story_state
 		var flags: Dictionary = story.get("flags", {}) if typeof(story.get("flags", {})) == TYPE_DICTIONARY else {}
@@ -88,6 +92,7 @@ func migrate_save_data(raw_data: Dictionary) -> Dictionary:
 	data["world_state"] = world
 	data["player_health"] = _normalize_health(data.player_health)
 	data["player_stamina"] = _normalize_stamina(data.player_stamina)
+	data["settings"] = _sanitize_settings(data.settings)
 	data["saved_at_utc"] = str(data.get("saved_at_utc", Time.get_datetime_string_from_system(true)))
 	data["migrated_from_version"] = source_version
 	return data
@@ -109,8 +114,10 @@ func _build_save_data(game) -> Dictionary:
 		"player_stamina": game.player.stamina_component.save_state(),
 		"inventory": game.inventory.save_state(),
 		"quests": game.quests.save_state(),
+		"quest_presentation": game.quest_presentation.save_state() if game.get("quest_presentation") != null else {},
 		"story_state": game.story_state.save_state(),
 		"progression": game.progression.save_state(),
+		"settings": game.settings.settings.duplicate(true) if game.get("settings") != null else {},
 		"world_state": game.save_world_state()
 	}
 
@@ -194,6 +201,20 @@ func _normalize_stamina(state: Dictionary) -> Dictionary:
 	var maximum := clampf(_finite_number(state.get("max_stamina", 100.0), 100.0), 1.0, 999.0)
 	var current := clampf(_finite_number(state.get("stamina", maximum), maximum), 0.0, maximum)
 	return {"stamina": current, "max_stamina": maximum}
+
+func _sanitize_settings(state: Dictionary) -> Dictionary:
+	var allowed := [
+		"quality_preset", "resolution_scale", "shadow_quality", "foliage_density", "visual_density",
+		"vsync", "fullscreen", "potato_mode", "target_fps", "mouse_sensitivity",
+		"gamepad_look_sensitivity", "gamepad_vibration", "touch_controls", "touch_look_sensitivity",
+		"invert_y", "master_volume", "subtitle_scale", "camera_shake", "reduced_motion",
+		"high_contrast", "control_preset",
+	]
+	var result := {}
+	for key in allowed:
+		if state.has(key):
+			result[key] = state[key]
+	return result
 
 func _legacy_road_complete(quests: Dictionary) -> bool:
 	var completed = quests.get("completed", {})

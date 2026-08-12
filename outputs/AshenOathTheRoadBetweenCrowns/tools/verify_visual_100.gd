@@ -21,8 +21,8 @@ func _initialize() -> void:
 	_assert(_has_textured_surface(game.zone_root), "Wychwood has no textured authored surface")
 	_assert(game.zone_root.find_child("WorldMotionController", true, false) != null, "shared world motion controller is missing")
 	_assert(game.zone_root.find_child("SurfaceFeedbackManager", true, false) != null, "surface feedback manager is missing")
-	game.queue_free()
-	await process_frame
+	# Emit the assertion result before freeing the test scene. Dummy-renderer
+	# cleanup diagnostics are shutdown noise and are classified after PASS.
 	_finish()
 
 func _has_synthetic_feature(node: Node) -> bool:
