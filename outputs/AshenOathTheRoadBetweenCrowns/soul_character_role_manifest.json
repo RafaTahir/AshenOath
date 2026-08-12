@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "program": "SOUL-REBUILD",
+  "shared_human_skeleton": "QuaterniusHumanoid",
+  "shared_monster_skeleton": "QuaterniusMonster",
+  "roles": {
+    "kael": {
+      "family": "human",
+      "source_pack": "quaternius_universal_base_characters",
+      "outfit_pack": "quaternius_modular_character_outfits_fantasy",
+      "target_height": 1.78,
+      "triangle_budget": 20000,
+      "texture_budget": 1024,
+      "required_clips": ["Idle", "Walk", "Run", "Attack", "HeavyAttack", "Dodge", "RecieveHit", "Death"],
+      "equipment_sockets": ["Hand.R", "Hand.L", "Head"],
+      "status": "pending_source_download",
+      "approved": false,
+      "current_fallback": "res://assets_external/characters/Adventurer_PolyPizza_Quaternius_CC0.glb"
+    },
+    "sister_anwen": {
+      "family": "human",
+      "source_pack": "quaternius_universal_base_characters",
+      "outfit_pack": "quaternius_modular_character_outfits_fantasy",
+      "target_height": 1.68,
+      "triangle_budget": 20000,
+      "texture_budget": 1024,
+      "required_clips": ["Idle", "Walk", "Dialogue", "RecieveHit", "Death"],
+      "equipment_sockets": ["Hand.R", "Head"],
+      "status": "pending_source_download",
+      "approved": false,
+      "current_fallback": "res://assets_external/characters/AnimatedWoman_PolyPizza_Quaternius_CC0.glb"
+    },
+    "villager": {
+      "family": "human",
+      "source_pack": "quaternius_universal_base_characters",
+      "outfit_pack": "quaternius_modular_character_outfits_fantasy",
+      "target_height_range": [1.55, 1.90],
+      "triangle_budget": 14000,
+      "texture_budget": 1024,
+      "required_clips": ["Idle", "Walk", "Work"],
+      "equipment_sockets": ["Head", "Hand.R"],
+      "status": "pending_source_download",
+      "approved": false,
+      "current_fallback": "res://assets_external/characters/Adventurer_PolyPizza_Quaternius_CC0.glb"
+    },
+    "guard": {
+      "family": "human",
+      "source_pack": "quaternius_universal_base_characters",
+      "outfit_pack": "quaternius_modular_character_outfits_fantasy",
+      "target_height_range": [1.65, 1.90],
+      "triangle_budget": 16000,
+      "texture_budget": 1024,
+      "required_clips": ["Idle", "Walk", "Attack", "RecieveHit", "Death"],
+      "equipment_sockets": ["Head", "Hand.R", "Hand.L"],
+      "status": "pending_source_download",
+      "approved": false,
+      "current_fallback": "res://assets_external/characters/CharacterAnimated_PolyPizza_Quaternius_CC0.glb"
+    },
+    "ghoulkin": {
+      "family": "monster",
+      "source_pack": "quaternius_ultimate_monsters",
+      "target_height_range": [1.60, 2.00],
+      "triangle_budget": 18000,
+      "texture_budget": 1024,
+      "required_clips": ["Idle", "Walk", "Attack", "RecieveHit", "Death"],
+      "equipment_sockets": [],
+      "status": "pending_source_download",
+      "approved": false,
+      "current_fallback": "res://assets_external/characters_real/GhoulGaunt_Real.glb"
+    },
+    "white_hart": {
+      "family": "animal",
+      "source_pack": "quaternius_ultimate_animated_animals",
+      "target_height": 2.55,
+      "triangle_budget": 24000,
+      "texture_budget": 1024,
+      "required_clips": ["Idle", "Walk", "Gallop", "Attack", "Death"],
+      "equipment_sockets": ["Head"],
+      "status": "pending_source_download",
+      "approved": false,
+      "current_fallback": "res://assets_external/enemies/Wolf.obj"
+    }
+  }
+}

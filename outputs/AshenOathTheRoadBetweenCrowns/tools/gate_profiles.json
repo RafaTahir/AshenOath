@@ -147,10 +147,15 @@
         "outputs/AshenOathTheRoadBetweenCrowns/assets_external/*",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/asset_*.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/curated_runtime_assets.json",
-        "outputs/AshenOathTheRoadBetweenCrowns/visual_upgrade_manifest.json"
+        "outputs/AshenOathTheRoadBetweenCrowns/visual_upgrade_manifest.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/soul_asset_pack_manifest.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/soul_character_role_manifest.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_asset_acceptance.py",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/register_soul_asset.py"
       ],
       "gates": [
         "verify_asset_001",
+        "verify_asset_acceptance",
         "verify_character_real_001",
         "verify_visible_quality"
       ]
@@ -170,6 +175,7 @@
     "characters": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/character_role_manifest.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/soul_character_role_manifest.json",
         "outputs/AshenOathTheRoadBetweenCrowns/visual_upgrade_manifest.json",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/asset_spawn_helper.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_identity_profile.gd",

@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "program": "SOUL-REBUILD",
+  "policy": "free_cc0_only",
+  "packs": [
+    {
+      "id": "quaternius_universal_base_characters",
+      "version": "2025-08",
+      "url": "https://quaternius.com/packs/universalbasecharacters.html",
+      "download_page": "https://quaternius.itch.io/universal-base-characters",
+      "sha256": null,
+      "bytes": null,
+      "entry_scene": null,
+      "dependencies": [],
+      "preload_priority": 10,
+      "license": "CC0 1.0",
+      "status": "source_locked_manual_download"
+    },
+    {
+      "id": "quaternius_modular_character_outfits_fantasy",
+      "version": "2025-11",
+      "url": "https://quaternius.com/packs/modularcharacteroutfitsfantasy.html",
+      "download_page": "https://quaternius.itch.io/modular-character-outfits-fantasy",
+      "sha256": null,
+      "bytes": null,
+      "entry_scene": null,
+      "dependencies": ["quaternius_universal_base_characters"],
+      "preload_priority": 20,
+      "license": "CC0 1.0",
+      "status": "source_locked_manual_download"
+    },
+    {
+      "id": "quaternius_universal_animation_library_2",
+      "version": "2025-10",
+      "url": "https://quaternius.com/packs/universalanimationlibrary2.html",
+      "download_page": "https://quaternius.com/packs/universalanimationlibrary2.html",
+      "sha256": null,
+      "bytes": null,
+      "entry_scene": null,
+      "dependencies": ["quaternius_universal_base_characters"],
+      "preload_priority": 30,
+      "license": "CC0 1.0",
+      "status": "source_locked_manual_download"
+    },
+    {
+      "id": "quaternius_ultimate_monsters",
+      "version": "2022-10",
+      "url": "https://quaternius.com/packs/ultimatemonsters.html",
+      "download_page": "https://quaternius.com/packs/ultimatemonsters.html",
+      "sha256": null,
+      "bytes": null,
+      "entry_scene": null,
+      "dependencies": [],
+      "preload_priority": 40,
+      "license": "CC0 1.0",
+      "status": "source_locked_manual_download"
+    },
+    {
+      "id": "quaternius_ultimate_animated_animals",
+      "version": "2021-07",
+      "url": "https://quaternius.com/packs/ultimateanimatedanimals.html",
+      "download_page": "https://quaternius.com/packs/ultimateanimatedanimals.html",
+      "sha256": null,
+      "bytes": null,
+      "entry_scene": null,
+      "dependencies": [],
+      "preload_priority": 50,
+      "license": "CC0 1.0",
+      "status": "source_locked_manual_download"
+    }
+  ],
+  "runtime_rules": {
+    "allowed_runtime_formats": [".glb", ".gltf", ".ogg", ".wav", ".png", ".jpg", ".webp"],
+    "excluded_source_directories": ["assets_external/downloads", "assets_external/raw", "assets_external/animations"],
+    "forbidden_role_tokens": ["faceplane", "eye_box", "proxy", "fake_neck", "root_mounted", "placeholder"],
+    "max_named_human_triangles": 20000,
+    "max_crowd_human_triangles": 14000,
+    "max_named_texture_dimension": 1024
+  }
+}

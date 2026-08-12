@@ -243,6 +243,13 @@ foreach ($gate in $gates) {
             "--registry", (Join-Path $Project "PROD_002_ISSUE_REGISTRY.json"),
             "--dashboard", (Join-Path $Project "PROD_002_MILESTONE_DASHBOARD.md")
         ) $gateInputs $cache
+    } elseif ($gate -eq "verify_asset_acceptance") {
+        Invoke-Compact $gate $Python @(
+            (Join-Path $PSScriptRoot "verify_asset_acceptance.py"),
+            $Project,
+            "--json-report",
+            (Join-Path $Logs "asset_acceptance.json")
+        ) $gateInputs $cache
     } elseif ($gate -eq "verify_web_001") {
         Invoke-Compact $gate $Python @(
             (Join-Path $PSScriptRoot "verify_web_001.py"), $Project, $RepoRoot

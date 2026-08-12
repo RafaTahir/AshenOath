@@ -16,6 +16,8 @@ The 62-ticket soul-rebuild program has started with a truthful foundation slice.
 
 The local Web candidate produced by this checkpoint is 65.8 MB total with a 29.5 MB PCK. Runtime, input, character, motion, animation, and export gates pass. Godot headless shutdown still reports renderer RID/ObjectDB cleanup warnings, and browser first-paint/engine-ready timing has not yet received its dedicated Chrome/Edge gate. Production `web/`, `main`, and Vercel remain unchanged.
 
+`ASSET-004` and `PIPE-003` now define a reproducible source/role contract in `soul_asset_pack_manifest.json` and `soul_character_role_manifest.json`. Five selected CC0 source families are recorded with dependencies and preload priorities. Six route-visible roles remain explicitly pending local pack acquisition and visual review; zero are falsely marked approved. `verify_asset_acceptance.py` passes and rejects raw/download runtime paths, missing licenses, missing fallback files, forbidden proxy tokens, and unverified approved hashes.
+
 The recovery runtime now includes `ZoneRuntimeCoordinator` transition/build/rollback snapshots, `QuestPresentationState` objective IDs/text for compass fallback, and save schema version 6 with sanitized settings migration. These are foundation changes only; they do not mean the route has passed visual acceptance.
 
 The latest opening-presentation checkpoint adds midpoint dialogue framing, stable Anwen-facing behavior during the pause, bone-scale compensation for imported face/hair details, and removal of redundant interaction labels during dialogue. Runtime, input, save, player-route, character/river/sun, visible-quality, material, browser, performance, and lifecycle gates pass. The eleven-view visual gate is Codex-reviewed rather than human-approved.
