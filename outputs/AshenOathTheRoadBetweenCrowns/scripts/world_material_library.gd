@@ -10,7 +10,18 @@ const SURFACES := {
 	"timber": {"stem": "timber", "scale": 0.55, "roughness": 0.86},
 	"roof_tiles": {"stem": "roof_tiles", "scale": 0.62, "roughness": 0.82},
 	"medieval_brick": {"stem": "medieval_brick", "scale": 0.48, "roughness": 0.89},
+	# These roles reuse the compact PBR set where it is useful and otherwise
+	# intentionally use authored procedural surface materials. They must never
+	# silently resolve to a ground surface.
+	"water": {"stem": "wet_mud", "scale": 0.18, "roughness": 0.38, "kind": "water", "wetness": 1.0},
+	"foliage": {"stem": "forest_ground", "scale": 0.42, "roughness": 0.86, "kind": "foliage"},
+	"metal": {"stem": "", "scale": 1.0, "roughness": 0.34, "kind": "procedural"},
+	"blood": {"stem": "", "scale": 1.0, "roughness": 0.48, "kind": "procedural"},
+	"ash": {"stem": "forest_ground", "scale": 0.32, "roughness": 0.95, "kind": "ash"},
+	"emissive_window": {"stem": "", "scale": 1.0, "roughness": 0.30, "kind": "emissive"},
 }
+
+const PBR_SURFACE_IDS := ["forest_ground", "wet_mud", "cobblestone", "plaster", "timber", "roof_tiles", "medieval_brick"]
 
 var material_cache: Dictionary = {}
 var texture_cache: Dictionary = {}
@@ -35,16 +46,17 @@ func get_material(surface_id: String, quality: String = "balanced", tint: Color 
 		return material_cache[key]
 	var profile: Dictionary = SURFACES[normalized]
 	var stem := str(profile.stem)
+	var kind := str(profile.get("kind", "pbr"))
 	var material := StandardMaterial3D.new()
 	material.resource_name = "World_%s_%s" % [normalized, normalized_quality]
-	material.albedo_texture = _texture(stem, "albedo")
+	material.albedo_texture = _texture(stem, "albedo") if stem != "" else null
 	# Intel/ANGLE pays a disproportionate fragment cost for triplanar normal and
 	# packed ORM sampling. Balanced keeps the authored albedo at native 720p;
 	# Quality retains the full PBR stack for stronger hardware.
-	material.normal_enabled = normalized_quality == "quality"
+	material.normal_enabled = normalized_quality == "quality" and stem != ""
 	material.normal_texture = _texture(stem, "normal") if material.normal_enabled else null
 	material.normal_scale = 0.78 if normalized_quality == "quality" else 0.55
-	var orm := _texture(stem, "orm")
+	var orm := _texture(stem, "orm") if stem != "" else null
 	material.roughness_texture = orm if normalized_quality == "quality" else null
 	material.roughness_texture_channel = BaseMaterial3D.TEXTURE_CHANNEL_GREEN
 	material.ao_enabled = normalized_quality == "quality"
@@ -54,9 +66,10 @@ func get_material(surface_id: String, quality: String = "balanced", tint: Color 
 	material.roughness = lerp(float(profile.roughness), 0.40, normalized_wetness)
 	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC if normalized_quality != "potato" else BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	var use_triplanar := triplanar and normalized_quality == "quality"
-	material.uv1_triplanar = use_triplanar
-	material.uv1_world_triplanar = use_triplanar
+	material.uv1_triplanar = use_triplanar and kind != "procedural" and kind != "emissive"
+	material.uv1_world_triplanar = material.uv1_triplanar
 	material.uv1_scale = Vector3.ONE * float(profile.scale)
+	_apply_surface_flags(material, kind, normalized, normalized_quality)
 	material_cache[key] = material
 	return material
 
@@ -91,10 +104,43 @@ func surface_ids() -> Array[String]:
 	result.sort()
 	return result
 
+func pbr_surface_ids() -> Array[String]:
+	var result: Array[String] = []
+	for surface_id in PBR_SURFACE_IDS:
+		result.append(str(surface_id))
+	return result
+
+func surface_profile(surface_id: String) -> Dictionary:
+	var normalized := surface_id if SURFACES.has(surface_id) else "forest_ground"
+	return SURFACES[normalized].duplicate(true)
+
+func has_surface(surface_id: String) -> bool:
+	return SURFACES.has(surface_id)
+
+func is_procedural_surface(surface_id: String) -> bool:
+	return str(surface_profile(surface_id).get("kind", "pbr")) in ["procedural", "emissive"]
+
+func material_contract(surface_id: String, quality: String = "balanced") -> Dictionary:
+	var normalized := surface_id if SURFACES.has(surface_id) else "forest_ground"
+	var profile := surface_profile(normalized)
+	var stem := str(profile.get("stem", ""))
+	return {
+		"id": normalized,
+		"kind": str(profile.get("kind", "pbr")),
+		"source_stem": stem,
+		"quality": _normalize_quality(quality),
+		"has_albedo": stem != "" and _texture(stem, "albedo") != null,
+		"has_normal": stem != "" and _texture(stem, "normal") != null,
+		"has_orm": stem != "" and _texture(stem, "orm") != null,
+		"cache_key_count": _count_material_keys(normalized),
+	}
+
 func has_complete_texture_set(surface_id: String) -> bool:
 	if not SURFACES.has(surface_id):
 		return false
-	var stem := str(SURFACES[surface_id].stem)
+	var stem := str(SURFACES[surface_id].get("stem", ""))
+	if stem == "":
+		return false
 	return _texture(stem, "albedo") != null and _texture(stem, "normal") != null and _texture(stem, "orm") != null
 
 func clear_cache() -> void:
@@ -116,3 +162,42 @@ func _texture_file(file_name: String) -> Texture2D:
 	var texture := load(path) as Texture2D if ResourceLoader.exists(path) else null
 	texture_cache[file_name] = texture
 	return texture
+
+func _apply_surface_flags(material: StandardMaterial3D, kind: String, surface_id: String, quality: String) -> void:
+	if kind == "water":
+		material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+		_set_alpha(material, 0.82 if quality != "potato" else 0.90)
+		material.cull_mode = BaseMaterial3D.CULL_DISABLED
+		material.shading_mode = BaseMaterial3D.SHADING_MODE_PER_PIXEL
+	elif kind == "foliage":
+		material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR
+		material.alpha_scissor_threshold = 0.38
+		material.cull_mode = BaseMaterial3D.CULL_DISABLED
+	elif kind == "procedural":
+		var procedural_colors := {
+			"metal": Color("6c736d"),
+			"blood": Color("5a1717"),
+		}
+		material.albedo_color = procedural_colors.get(surface_id, Color("504a43"))
+		material.metallic = 0.72 if surface_id == "metal" else 0.0
+		material.shading_mode = BaseMaterial3D.SHADING_MODE_PER_PIXEL
+	elif kind == "emissive":
+		material.albedo_color = Color("f0ad58")
+		material.emission_enabled = true
+		material.emission = Color("ff9e3b")
+		material.emission_energy_multiplier = 0.85
+		material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+		_set_alpha(material, 0.94)
+
+func _count_material_keys(surface_id: String) -> int:
+	var count := 0
+	for key in material_cache:
+		if str(key).begins_with(surface_id + ":"):
+			count += 1
+	return count
+
+func _set_alpha(material: StandardMaterial3D, alpha: float) -> void:
+	var color := material.albedo_color
+	color.a = alpha
+	material.albedo_color = color

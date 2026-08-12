@@ -8,8 +8,8 @@ func _initialize() -> void:
 	var library = MaterialLibrary.new()
 	root.add_child(library)
 	var ids: Array[String] = library.surface_ids()
-	check(ids.size() == 7, "Expected seven authored world surfaces")
-	for surface_id in ids:
+	check(library.pbr_surface_ids().size() == 7, "Expected seven authored PBR world surfaces")
+	for surface_id in library.pbr_surface_ids():
 		check(library.has_complete_texture_set(surface_id), "%s lacks albedo, normal, or ORM texture" % surface_id)
 		var potato: StandardMaterial3D = library.get_material(surface_id, "potato")
 		var balanced: StandardMaterial3D = library.get_material(surface_id, "balanced")

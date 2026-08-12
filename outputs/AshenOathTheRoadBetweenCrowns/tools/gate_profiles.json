@@ -247,17 +247,19 @@
       ],
       "web_required": true
     },
-    "materials": {
-      "patterns": [
-        "outputs/AshenOathTheRoadBetweenCrowns/scripts/world_material_library.gd",
-        "outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/*",
-        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_mat_001.gd"
-      ],
-      "gates": [
-        "verify_mat_001",
-        "verify_engine_003",
-        "verify_visible_quality"
-      ]
+	"materials": {
+		"patterns": [
+			"outputs/AshenOathTheRoadBetweenCrowns/scripts/world_material_library.gd",
+			"outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/*",
+			"outputs/AshenOathTheRoadBetweenCrowns/tools/verify_mat_001.gd",
+			"outputs/AshenOathTheRoadBetweenCrowns/tools/verify_mat_003.gd",
+			"outputs/AshenOathTheRoadBetweenCrowns/tools/capture_mat_003.gd"
+		],
+		"gates": [
+			"verify_mat_001",
+			"verify_mat_003",
+			"verify_visible_quality"
+		]
     },
     "characters": {
       "patterns": [
@@ -753,6 +755,7 @@
     "world_006": "capture_world_006",
     "boss_001": "capture_boss_001",
     "lighting": "capture_light_001",
-    "progression": "capture_prog_001"
-  }
+	"progression": "capture_prog_001",
+	"materials": "capture_mat_003"
+}
 }
