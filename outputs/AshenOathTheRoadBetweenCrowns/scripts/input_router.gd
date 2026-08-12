@@ -5,6 +5,7 @@ const GamepadProfile = preload("res://scripts/gamepad_profile.gd")
 signal device_changed(device: String)
 signal pointer_mode_changed(mode: int)
 signal gamepad_profile_changed(profile: Dictionary)
+signal bindings_changed(bindings: Dictionary)
 
 const DEVICE_KEYBOARD_MOUSE := "keyboard_mouse"
 const DEVICE_GAMEPAD := "gamepad"
@@ -127,6 +128,10 @@ var gamepad_invert_y := false
 var vibration_enabled := true
 var rumble_strength := 1.0
 var gamepad_calibration: Dictionary = {}
+var settings_manager: Node
+var settings_ref: Dictionary = {}
+var default_bindings: Dictionary = {}
+var gamepad_profiles: Dictionary = {}
 var virtual_move := Vector2.ZERO
 var virtual_look := Vector2.ZERO
 var _virtual_actions: Dictionary = {}
@@ -161,16 +166,76 @@ func install_default_actions() -> void:
 	_add_joy_button("ui_down", JOY_BUTTON_DPAD_DOWN)
 	_add_joy_button("ui_left", JOY_BUTTON_DPAD_LEFT)
 	_add_joy_button("ui_right", JOY_BUTTON_DPAD_RIGHT)
+	if default_bindings.is_empty():
+		_capture_default_bindings()
 
 func apply_settings(current: Dictionary) -> void:
+	settings_ref = current
+	gamepad_profiles = current.get("gamepad_profiles", {}).duplicate(true) if typeof(current.get("gamepad_profiles", {})) == TYPE_DICTIONARY else {}
 	gamepad_look_sensitivity = clampf(float(current.get("gamepad_look_sensitivity", 1.0)), 0.55, 1.55)
 	gamepad_deadzone = clampf(float(current.get("gamepad_deadzone", 0.16)), 0.05, 0.35)
 	gamepad_invert_x = bool(current.get("gamepad_invert_x", false))
 	gamepad_invert_y = bool(current.get("gamepad_invert_y", current.get("invert_y", false)))
 	vibration_enabled = bool(current.get("gamepad_vibration", true))
 	rumble_strength = clampf(float(current.get("gamepad_rumble_strength", 1.0)), 0.0, 1.0)
+	_restore_default_bindings()
 	_apply_keyboard_preset(str(current.get("control_preset", "standard")))
+	_apply_saved_global_bindings(current.get("custom_bindings", {}))
+	_apply_active_gamepad_profile()
 	_refresh_gamepad_profile()
+
+func set_settings_manager(manager: Node) -> void:
+	settings_manager = manager
+	if manager != null and manager.get("settings") != null:
+		settings_ref = manager.get("settings")
+
+func get_action_bindings(action: String) -> Array[InputEvent]:
+	if not InputMap.has_action(action):
+		return []
+	return InputMap.action_get_events(action)
+
+func remap_action(action: String, event: InputEvent) -> Dictionary:
+	if not InputMap.has_action(action) or event == null:
+		return {"ok": false, "reason": "unknown_action"}
+	if not (event is InputEventKey or event is InputEventMouseButton or event is InputEventJoypadButton or event is InputEventJoypadMotion):
+		return {"ok": false, "reason": "unsupported_event"}
+	var event_type := _binding_type(event)
+	if event_type == "":
+		return {"ok": false, "reason": "unsupported_event"}
+	var conflict_action := _find_binding_conflict(action, event)
+	var displaced: InputEvent = _first_binding_of_type(action, event_type)
+	if conflict_action != "":
+		_erase_bindings_of_type(conflict_action, event_type)
+		if displaced != null:
+			_add_event_once(conflict_action, displaced)
+	_erase_bindings_of_type(action, event_type)
+	_add_event_once(action, event.duplicate())
+	_persist_binding_change(event_type)
+	bindings_changed.emit({"action": action, "event": _serialize_event(event), "conflict": conflict_action})
+	return {"ok": true, "conflict": conflict_action}
+
+func reset_bindings() -> void:
+	if default_bindings.is_empty():
+		_capture_default_bindings()
+	_restore_default_bindings()
+	_apply_keyboard_preset(str(settings_ref.get("control_preset", "standard")))
+	if settings_ref != null:
+		settings_ref["custom_bindings"] = {}
+		settings_ref["gamepad_profiles"] = {}
+	gamepad_profiles = {}
+	_persist_settings()
+	bindings_changed.emit({"reset": true})
+
+func format_binding(event: InputEvent) -> String:
+	if event is InputEventKey:
+		return OS.get_keycode_string((event as InputEventKey).keycode)
+	if event is InputEventMouseButton:
+		return "Left Mouse" if event.button_index == MOUSE_BUTTON_LEFT else ("Right Mouse" if event.button_index == MOUSE_BUTTON_RIGHT else "Mouse %d" % event.button_index)
+	if event is InputEventJoypadButton:
+		return _joy_button_label((event as InputEventJoypadButton).button_index)
+	if event is InputEventJoypadMotion:
+		return _joy_axis_label((event as InputEventJoypadMotion).axis, (event as InputEventJoypadMotion).axis_value)
+	return "Unbound"
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventJoypadButton and event.pressed:
@@ -240,9 +305,18 @@ func action_label(action: String) -> String:
 		return gamepad_action_label(action)
 	if active_device == DEVICE_TOUCH:
 		return str(TOUCH_LABELS.get(action, action.capitalize()))
+	var keyboard_binding := _first_binding_of_type(action, "key")
+	if keyboard_binding != null:
+		return format_binding(keyboard_binding)
+	var mouse_binding := _first_binding_of_type(action, "mouse")
+	if mouse_binding != null:
+		return format_binding(mouse_binding)
 	return str(keyboard_labels.get(action, action.capitalize()))
 
 func gamepad_action_label(action: String) -> String:
+	var current := _first_gamepad_binding(action)
+	if current != null:
+		return format_binding(current)
 	var generic := str(GAMEPAD_LABELS.get(action, action.capitalize()))
 	if active_gamepad_family == "playstation":
 		return {
@@ -379,7 +453,252 @@ func _set_gamepad(device: int) -> void:
 	active_gamepad_id = maxi(device, 0)
 	active_gamepad_name = Input.get_joy_name(active_gamepad_id)
 	active_gamepad_family = GamepadProfile.family_for_name(active_gamepad_name)
+	_apply_active_gamepad_profile()
 	_refresh_gamepad_profile()
+
+func _capture_default_bindings() -> void:
+	default_bindings.clear()
+	for action in InputMap.get_actions():
+		var action_name := str(action)
+		var serialized: Array = []
+		for event in InputMap.action_get_events(action_name):
+			var record := _serialize_event(event)
+			if not record.is_empty():
+				serialized.append(record)
+		default_bindings[action_name] = serialized
+
+func _restore_default_bindings() -> void:
+	if default_bindings.is_empty():
+		return
+	for action in default_bindings:
+		_erase_all_bindings(str(action))
+		for record in default_bindings[action]:
+			var event := _deserialize_event(record)
+			if event != null:
+				_add_event_once(str(action), event)
+
+func _apply_saved_global_bindings(saved: Variant) -> void:
+	if typeof(saved) != TYPE_DICTIONARY:
+		return
+	for action in saved:
+		var records = saved[action]
+		if typeof(records) != TYPE_ARRAY or not InputMap.has_action(str(action)):
+			continue
+		for record in records:
+			var event := _deserialize_event(record)
+			if event == null or event is InputEventJoypadButton or event is InputEventJoypadMotion:
+				continue
+			_erase_bindings_of_type(str(action), _binding_type(event))
+			_add_event_once(str(action), event)
+
+func _apply_active_gamepad_profile() -> void:
+	_restore_default_gamepad_bindings()
+	var profile: Variant = gamepad_profiles.get(_profile_key(), {})
+	if typeof(profile) != TYPE_DICTIONARY:
+		return
+	gamepad_deadzone = clampf(float(profile.get("deadzone", gamepad_deadzone)), 0.05, 0.35)
+	gamepad_invert_x = bool(profile.get("invert_x", gamepad_invert_x))
+	gamepad_invert_y = bool(profile.get("invert_y", gamepad_invert_y))
+	gamepad_look_sensitivity = clampf(float(profile.get("look_sensitivity", gamepad_look_sensitivity)), 0.55, 1.55)
+	var bindings: Variant = profile.get("bindings", {})
+	if typeof(bindings) != TYPE_DICTIONARY:
+		return
+	for action in bindings:
+		if not InputMap.has_action(str(action)) or typeof(bindings[action]) != TYPE_ARRAY:
+			continue
+		_erase_bindings_of_type(str(action), "joy_button")
+		_erase_bindings_of_type(str(action), "joy_motion")
+		for record in bindings[action]:
+			var event := _deserialize_event(record)
+			if event is InputEventJoypadButton or event is InputEventJoypadMotion:
+				_add_event_once(str(action), event)
+
+func _restore_default_gamepad_bindings() -> void:
+	for action in default_bindings:
+		_erase_bindings_of_type(str(action), "joy_button")
+		_erase_bindings_of_type(str(action), "joy_motion")
+		for record in default_bindings[action]:
+			var event := _deserialize_event(record)
+			if event is InputEventJoypadButton or event is InputEventJoypadMotion:
+				_add_event_once(str(action), event)
+
+func _persist_binding_change(event_type: String) -> void:
+	if settings_ref == null:
+		return
+	if event_type == "joy_button" or event_type == "joy_motion":
+		var profiles: Dictionary = settings_ref.get("gamepad_profiles", {}).duplicate(true) if typeof(settings_ref.get("gamepad_profiles", {})) == TYPE_DICTIONARY else {}
+		var profile: Dictionary = profiles.get(_profile_key(), {}) if typeof(profiles.get(_profile_key(), {})) == TYPE_DICTIONARY else {}
+		profile["deadzone"] = gamepad_deadzone
+		profile["invert_x"] = gamepad_invert_x
+		profile["invert_y"] = gamepad_invert_y
+		profile["look_sensitivity"] = gamepad_look_sensitivity
+		profile["bindings"] = _serialize_current_gamepad_bindings()
+		profiles[_profile_key()] = profile
+		settings_ref["gamepad_profiles"] = profiles
+	else:
+		var custom: Dictionary = settings_ref.get("custom_bindings", {}).duplicate(true) if typeof(settings_ref.get("custom_bindings", {})) == TYPE_DICTIONARY else {}
+		custom = _serialize_current_global_bindings(custom)
+		settings_ref["custom_bindings"] = custom
+	_persist_settings()
+
+func _serialize_current_gamepad_bindings() -> Dictionary:
+	var result := {}
+	for action in InputMap.get_actions():
+		var records: Array = []
+		for event in InputMap.action_get_events(str(action)):
+			if event is InputEventJoypadButton or event is InputEventJoypadMotion:
+				var record := _serialize_event(event)
+				if not record.is_empty():
+					records.append(record)
+		if not records.is_empty():
+			result[str(action)] = records
+	return result
+
+func _serialize_current_global_bindings(existing: Dictionary) -> Dictionary:
+	var result := existing.duplicate(true)
+	for action in InputMap.get_actions():
+		var records: Array = []
+		for event in InputMap.action_get_events(str(action)):
+			if event is InputEventKey or event is InputEventMouseButton:
+				var record := _serialize_event(event)
+				if not record.is_empty():
+					records.append(record)
+		if not records.is_empty():
+			result[str(action)] = records
+	return result
+
+func _persist_settings() -> void:
+	if settings_manager != null and settings_manager.has_method("save_now"):
+		settings_manager.save_now()
+
+func _profile_key() -> String:
+	var raw := active_gamepad_name.strip_edges().to_lower()
+	return raw if raw != "" else active_gamepad_family
+
+func _binding_type(event: InputEvent) -> String:
+	if event is InputEventKey:
+		return "key"
+	if event is InputEventMouseButton:
+		return "mouse"
+	if event is InputEventJoypadButton:
+		return "joy_button"
+	if event is InputEventJoypadMotion:
+		return "joy_motion"
+	return ""
+
+func _find_binding_conflict(action: String, event: InputEvent) -> String:
+	var event_type := _binding_type(event)
+	for candidate in InputMap.get_actions():
+		var candidate_name := str(candidate)
+		if candidate_name == action or candidate_name.begins_with("ui_"):
+			continue
+		for existing in InputMap.action_get_events(candidate_name):
+			if _binding_type(existing) == event_type and existing.is_match(event):
+				return candidate_name
+	return ""
+
+func _first_binding_of_type(action: String, event_type: String) -> InputEvent:
+	for existing in InputMap.action_get_events(action):
+		if _binding_type(existing) == event_type:
+			return existing.duplicate()
+	return null
+
+func _first_gamepad_binding(action: String) -> InputEvent:
+	for existing in InputMap.action_get_events(action):
+		if existing is InputEventJoypadButton or existing is InputEventJoypadMotion:
+			return existing
+	return null
+
+func _erase_bindings_of_type(action: String, event_type: String) -> void:
+	if not InputMap.has_action(action):
+		return
+	for existing in InputMap.action_get_events(action).duplicate():
+		if _binding_type(existing) == event_type:
+			InputMap.action_erase_event(action, existing)
+
+func _erase_all_bindings(action: String) -> void:
+	if not InputMap.has_action(action):
+		return
+	for existing in InputMap.action_get_events(action).duplicate():
+		InputMap.action_erase_event(action, existing)
+
+func _serialize_event(event: InputEvent) -> Dictionary:
+	if event is InputEventKey:
+		return {"type": "key", "keycode": (event as InputEventKey).keycode}
+	if event is InputEventMouseButton:
+		return {"type": "mouse", "button": (event as InputEventMouseButton).button_index}
+	if event is InputEventJoypadButton:
+		return {"type": "joy_button", "button": (event as InputEventJoypadButton).button_index}
+	if event is InputEventJoypadMotion:
+		return {"type": "joy_motion", "axis": (event as InputEventJoypadMotion).axis, "value": (event as InputEventJoypadMotion).axis_value}
+	return {}
+
+func _deserialize_event(record: Variant) -> InputEvent:
+	if typeof(record) != TYPE_DICTIONARY:
+		return null
+	var type := str(record.get("type", ""))
+	match type:
+		"key":
+			var key := InputEventKey.new()
+			key.keycode = int(record.get("keycode", 0))
+			return key
+		"mouse":
+			var mouse := InputEventMouseButton.new()
+			mouse.button_index = int(record.get("button", 0))
+			return mouse
+		"joy_button":
+			var button := InputEventJoypadButton.new()
+			button.button_index = int(record.get("button", -1))
+			return button
+		"joy_motion":
+			var motion := InputEventJoypadMotion.new()
+			motion.axis = int(record.get("axis", -1))
+			motion.axis_value = float(record.get("value", 0.0))
+			return motion
+	return null
+
+func _joy_button_label(button: int) -> String:
+	var family := active_gamepad_family
+	var face := {
+		"xbox": {JOY_BUTTON_A: "A", JOY_BUTTON_B: "B", JOY_BUTTON_X: "X", JOY_BUTTON_Y: "Y"},
+		"generic": {JOY_BUTTON_A: "A", JOY_BUTTON_B: "B", JOY_BUTTON_X: "X", JOY_BUTTON_Y: "Y"},
+		"playstation": {JOY_BUTTON_A: "Cross", JOY_BUTTON_B: "Circle", JOY_BUTTON_X: "Square", JOY_BUTTON_Y: "Triangle"},
+		"nintendo": {JOY_BUTTON_A: "B", JOY_BUTTON_B: "A", JOY_BUTTON_X: "Y", JOY_BUTTON_Y: "X"},
+	}
+	if face.has(family) and face[family].has(button):
+		return str(face[family][button])
+	if button == JOY_BUTTON_LEFT_SHOULDER:
+		return "LB" if family == "xbox" else ("L1" if family == "playstation" else "L")
+	if button == JOY_BUTTON_RIGHT_SHOULDER:
+		return "RB" if family == "xbox" else ("R1" if family == "playstation" else "R")
+	if button == JOY_BUTTON_LEFT_STICK:
+		return "L3"
+	if button == JOY_BUTTON_RIGHT_STICK:
+		return "R3"
+	if button == JOY_BUTTON_BACK:
+		return "View" if family == "xbox" else ("Touchpad" if family == "playstation" else "-")
+	if button == JOY_BUTTON_START:
+		return "Menu" if family == "xbox" else ("Options" if family == "playstation" else "+")
+	if button == JOY_BUTTON_DPAD_LEFT:
+		return "D-Pad Left"
+	if button == JOY_BUTTON_DPAD_RIGHT:
+		return "D-Pad Right"
+	if button == JOY_BUTTON_DPAD_UP:
+		return "D-Pad Up"
+	if button == JOY_BUTTON_DPAD_DOWN:
+		return "D-Pad Down"
+	return "Button %d" % button
+
+func _joy_axis_label(axis: int, value: float) -> String:
+	var suffix := "+" if value >= 0.0 else "-"
+	match axis:
+		JOY_AXIS_LEFT_X: return "Left Stick X%s" % suffix
+		JOY_AXIS_LEFT_Y: return "Left Stick Y%s" % suffix
+		JOY_AXIS_RIGHT_X: return "Right Stick X%s" % suffix
+		JOY_AXIS_RIGHT_Y: return "Right Stick Y%s" % suffix
+		JOY_AXIS_TRIGGER_LEFT: return "LT/L2/ZL"
+		JOY_AXIS_TRIGGER_RIGHT: return "RT/R2/ZR"
+	return "Axis %d%s" % [axis, suffix]
 
 func _refresh_gamepad_profile() -> void:
 	var connected := active_gamepad_id in Input.get_connected_joypads()

@@ -207,7 +207,8 @@ func _sanitize_settings(state: Dictionary) -> Dictionary:
 		"quality_preset", "resolution_scale", "shadow_quality", "foliage_density", "visual_density",
 		"vsync", "fullscreen", "potato_mode", "target_fps", "mouse_sensitivity",
 		"gamepad_look_sensitivity", "gamepad_deadzone", "gamepad_invert_x", "gamepad_invert_y",
-		"gamepad_vibration", "gamepad_rumble_strength", "touch_controls", "touch_look_sensitivity",
+		"gamepad_vibration", "gamepad_rumble_strength", "gamepad_profiles", "custom_bindings",
+		"touch_controls", "touch_look_sensitivity",
 		"invert_y", "master_volume", "subtitle_scale", "camera_shake", "reduced_motion",
 		"high_contrast", "control_preset",
 	]

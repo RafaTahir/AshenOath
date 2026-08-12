@@ -96,6 +96,7 @@ func configure(owner: Node) -> void:
 	inventory.load_items("res://data/items.json")
 	crafting.setup(inventory, quests, story_state)
 	input_router.install_default_actions()
+	input_router.set_settings_manager(settings)
 	input_router.apply_settings(settings.settings)
 	interaction_focus.setup(quests)
 	hud.set_input_source(input_router)

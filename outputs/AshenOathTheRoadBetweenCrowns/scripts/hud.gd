@@ -67,6 +67,10 @@ var input_source: Node
 var input_device := "keyboard_mouse"
 var active_menu := ""
 var settings_page := 0
+var remap_page := 0
+var remap_action_id := ""
+var remap_back_target := "main"
+var remap_waiting := false
 var raw_prompt := ""
 var raw_hint := ""
 var last_potions := 0
@@ -206,7 +210,66 @@ func show_controls_menu(back_target: String = "main") -> void:
 		_add_menu_text(box, "Left thumb move | Drag right side to look\nStrike / Heavy attack | Dodge | Jump\nHold Guard to block or parry | Hold Oath to charge Oathfire\nUse interacts | Potion heals | Pause opens the menu\nLandscape orientation is required during gameplay")
 	else:
 		_add_menu_text(box, "WASD move | Mouse look | Wheel zoom | Page Up/Down zoom\nShift run | Space dodge | X jump\nLeft mouse light attack | Right mouse heavy attack\nHold C Oathfire Beam | Tap Q parry | Hold Q block | E interact\nR potion | F bomb | Tab inventory | Esc pause")
+	_add_menu_button(box, "Customize Controls", func(): show_remap_menu(back_target))
 	_add_menu_button(box, "Back", _return_from_controls)
+
+func show_remap_menu(back_target: String = "main", requested_page: int = -1) -> void:
+	active_menu = "remap"
+	remap_back_target = back_target
+	remap_waiting = false
+	if requested_page >= 0:
+		remap_page = requested_page
+	_set_ui_pointer()
+	_clear_menu()
+	menu_layer.visible = true
+	var box := _menu_box("Customize Controls", "Bindings", "choose an action, then press a key or button")
+	box.set_meta("compact_buttons", true)
+	var detected := "Keyboard and mouse"
+	if input_source != null and str(input_source.get("active_device")) == "gamepad":
+		var profile: Dictionary = input_source.get_gamepad_profile() if input_source.has_method("get_gamepad_profile") else {}
+		detected = "Detected: %s (%s)" % [str(profile.get("name", "Controller")), str(profile.get("glyph_theme", "generic")).capitalize()]
+	_add_menu_text(box, detected)
+	var actions := ["interact", "dodge", "jump", "run", "block", "light_attack", "heavy_attack", "oathfire_beam", "use_potion", "throw_bomb", "open_inventory", "pause"]
+	var page_count := maxi(1, ceili(float(actions.size()) / 6.0))
+	remap_page = clampi(remap_page, 0, page_count - 1)
+	_add_menu_text(box, "Page %d of %d" % [remap_page + 1, page_count])
+	var first_entry := remap_page * 6
+	var last_entry := mini(first_entry + 6, actions.size())
+	for index in range(first_entry, last_entry):
+		var action := str(actions[index])
+		var label := action.replace("_", " ").capitalize()
+		var binding := _binding_display(action)
+		_add_menu_button(box, "%s     %s" % [label, binding], func(selected = action): _begin_remap(selected))
+	if page_count > 1:
+		_add_menu_button(box, "Previous Page", func(): show_remap_menu(remap_back_target, remap_page - 1), remap_page <= 0)
+		_add_menu_button(box, "Next Page", func(): show_remap_menu(remap_back_target, remap_page + 1), remap_page >= page_count - 1)
+	_add_menu_button(box, "Reset Defaults", func(): _reset_bindings())
+	_add_menu_button(box, "Back", _return_from_remap)
+
+func _begin_remap(action: String) -> void:
+	remap_action_id = action
+	remap_waiting = true
+	toast("Press a key, mouse button, or controller input for %s. Escape cancels." % action.replace("_", " "))
+
+func _reset_bindings() -> void:
+	if input_source != null and input_source.has_method("reset_bindings"):
+		input_source.reset_bindings()
+	toast("Controls restored to defaults.")
+	show_remap_menu(remap_back_target, remap_page)
+
+func _binding_display(action: String) -> String:
+	if input_source == null:
+		return "Unbound"
+	if input_source.has_method("action_label"):
+		return str(input_source.action_label(action))
+	return action.capitalize()
+
+func _return_from_remap() -> void:
+	remap_waiting = false
+	if remap_back_target == "pause":
+		show_pause_menu()
+	else:
+		show_controls_menu(remap_back_target)
 
 func show_credits_menu() -> void:
 	active_menu = "credits"
@@ -998,6 +1061,33 @@ func _focus_first_enabled(container: Node) -> void:
 			return
 
 func _unhandled_input(event: InputEvent) -> void:
+	if active_menu == "remap" and remap_waiting:
+		if event.is_action_pressed("ui_cancel"):
+			remap_waiting = false
+			toast("Binding cancelled.")
+			get_viewport().set_input_as_handled()
+			return
+		var is_binding_event := event is InputEventKey or event is InputEventMouseButton or event is InputEventJoypadButton or event is InputEventJoypadMotion
+		var pressed := true
+		if event is InputEventKey:
+			pressed = (event as InputEventKey).pressed and not (event as InputEventKey).echo
+		elif event is InputEventMouseButton:
+			pressed = (event as InputEventMouseButton).pressed
+		elif event is InputEventJoypadButton:
+			pressed = (event as InputEventJoypadButton).pressed
+		elif event is InputEventJoypadMotion:
+			pressed = absf((event as InputEventJoypadMotion).axis_value) > 0.45
+		if is_binding_event and pressed and input_source != null and input_source.has_method("remap_action"):
+			var result: Dictionary = input_source.remap_action(remap_action_id, event)
+			remap_waiting = false
+			if bool(result.get("ok", false)):
+				var conflict := str(result.get("conflict", ""))
+				toast("Binding saved%s." % ("; swapped %s" % conflict if conflict != "" else ""))
+			else:
+				toast("That input cannot be assigned.")
+			show_remap_menu(remap_back_target, remap_page)
+			get_viewport().set_input_as_handled()
+			return
 	if not event.is_action_pressed("ui_cancel"):
 		return
 	if dialogue_layer != null and dialogue_layer.visible:
@@ -1010,6 +1100,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		hide_menus()
 	elif active_menu in ["settings", "controls"]:
 		_return_from_controls()
+	elif active_menu == "remap":
+		_return_from_remap()
 	elif active_menu == "credits":
 		show_main_menu()
 	elif active_menu == "pause":

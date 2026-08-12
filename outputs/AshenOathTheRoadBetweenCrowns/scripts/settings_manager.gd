@@ -21,6 +21,8 @@ const DEFAULT_SETTINGS := {
 	"gamepad_invert_y": false,
 	"gamepad_vibration": true,
 	"gamepad_rumble_strength": 1.0,
+	"gamepad_profiles": {},
+	"custom_bindings": {},
 	"touch_controls": "auto",
 	"touch_look_sensitivity": 1.0,
 	"invert_y": false,
@@ -129,6 +131,9 @@ func _save_settings() -> void:
 	var file := FileAccess.open(SETTINGS_PATH, FileAccess.WRITE)
 	if file != null:
 		file.store_string(JSON.stringify(settings))
+
+func save_now() -> void:
+	_save_settings()
 
 func set_potato_mode(enabled: bool) -> void:
 	set_quality_preset("potato" if enabled else "balanced")
