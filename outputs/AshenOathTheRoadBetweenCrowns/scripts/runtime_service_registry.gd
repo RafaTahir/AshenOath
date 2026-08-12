@@ -20,11 +20,12 @@ const InputRouter = preload("res://scripts/input_router.gd")
 const InteractionFocusService = preload("res://scripts/interaction_focus_service.gd")
 const MobileTouchControls = preload("res://scripts/mobile_touch_controls.gd")
 const ZoneStreamingService = preload("res://scripts/zone_streaming_service.gd")
+const RuntimePackManager = preload("res://scripts/runtime_pack_manager.gd")
 
 const REQUIRED_SERVICES := [
 	"story_state", "quests", "quest_presentation", "dialogue", "inventory", "crafting", "combat",
 	"save_manager", "settings", "world_materials", "day_night", "audio",
-	"asset_helper", "hud", "minigames", "progression", "input_router", "interaction_focus", "mobile_touch", "zone_streaming"
+	"asset_helper", "hud", "minigames", "progression", "input_router", "interaction_focus", "mobile_touch", "zone_streaming", "runtime_packs"
 ]
 
 var services: Dictionary = {}
@@ -53,6 +54,7 @@ func create_services() -> Dictionary:
 		"interaction_focus": InteractionFocusService.new(),
 		"mobile_touch": MobileTouchControls.new(),
 		"zone_streaming": ZoneStreamingService.new(),
+		"runtime_packs": RuntimePackManager.new(),
 	}
 	for id in REQUIRED_SERVICES:
 		var service: Node = services[id]
@@ -83,6 +85,7 @@ func configure(owner: Node) -> void:
 	var interaction_focus = services["interaction_focus"]
 	var mobile_touch = services["mobile_touch"]
 	var zone_streaming = services["zone_streaming"]
+	var runtime_packs = services["runtime_packs"]
 
 	hud.process_mode = Node.PROCESS_MODE_ALWAYS
 	quests.load_quests("res://data/quests.json")
@@ -99,6 +102,10 @@ func configure(owner: Node) -> void:
 	minigames.setup(input_router)
 	mobile_touch.setup(input_router, hud, settings.settings)
 	zone_streaming.setup(owner)
+	# Pack manager is intentionally dormant until a verified split artifact is
+	# present. The embedded PCK remains the current playable source.
+	if runtime_packs.has_method("request_pack"):
+		runtime_packs.request_pack("base")
 	settings.apply_platform_defaults(mobile_touch.touch_capable)
 	input_router.device_changed.connect(func(_device: String):
 		hud.set_input_device(input_router.active_device)

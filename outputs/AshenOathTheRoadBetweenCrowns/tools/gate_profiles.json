@@ -156,9 +156,25 @@
       "gates": [
         "verify_asset_001",
         "verify_asset_acceptance",
+        "verify_runtime_packs",
         "verify_character_real_001",
         "verify_visible_quality"
       ]
+    },
+    "packs": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_manifest.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/runtime_pack_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_streaming_service.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_runtime_packs.py",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/build_web_runtime_manifest.py",
+        "outputs/AshenOathTheRoadBetweenCrowns/export_presets.cfg"
+      ],
+      "gates": [
+        "verify_runtime_packs",
+        "web_export"
+      ],
+      "web_required": true
     },
     "materials": {
       "patterns": [
@@ -595,6 +611,9 @@
         "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_web_export.py",
         "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_web_001.py",
         "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_web_browser.mjs",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/build_web_runtime_manifest.py",
+        "outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_manifest.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/runtime_pack_manager.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/audio_manager.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/hud.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/camera_controller.gd",
@@ -604,6 +623,7 @@
       ],
       "gates": [
         "verify_web_001",
+        "verify_runtime_packs",
         "web_export",
         "verify_web_browser"
       ]

@@ -43,6 +43,7 @@ var input_router
 var interaction_focus
 var mobile_touch
 var zone_streaming
+var runtime_packs
 var qa_adapter
 var zone_root: Node3D
 var active_interactable
@@ -202,6 +203,7 @@ func _setup_runtime() -> void:
 	interaction_focus = services["interaction_focus"]
 	mobile_touch = services["mobile_touch"]
 	zone_streaming = services["zone_streaming"]
+	runtime_packs = services["runtime_packs"]
 	runtime_services.configure(self)
 	zone_runtime_coordinator = ZoneRuntimeCoordinator.new(self)
 	if OS.has_feature("ashenoath_qa"):

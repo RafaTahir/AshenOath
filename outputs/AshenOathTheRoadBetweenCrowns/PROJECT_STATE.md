@@ -809,6 +809,7 @@ The project currently satisfies:
 - First route is playable with a 1080p interface and a 720p Balanced 3D rendering budget.
 - PERF-REPAIR-001’s strict Dell-class native-720p gate measured Greyfen at 46.73 FPS average / 30.25 FPS 1% low, Wychwood at 60.00 / 47.08, Wychwood combat at 57.83 / 38.27, Castle Courtyard at 60.00 / 56.05, Record Hall at 59.99 / 52.61, and Hart Glade at 60.01 / 54.22. Warm return measured 318.7 ms; all cold transitions remained below 458 ms. The full report is `.release-gate/perf_001_report.json`.
 - PBR terrain/building surfaces, saved day/night time, cleaned skeletal characters, and mixed Wychwood enemy rigs are active.
+- SOUL-REBUILD loading foundation is active: `ZoneStreamingService` exposes non-blocking resource requests, `RuntimePackManager` validates optional pack records while preserving the embedded PCK fallback, and `build_web_runtime_manifest.py` records export hashes. No split pack is marked production-ready yet.
 
 The project does not yet satisfy:
 

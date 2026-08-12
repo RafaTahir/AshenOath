@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "program": "SOUL-REBUILD",
+  "artifact_policy": "runtime_packs_are_optional_until_verified",
+  "max_deployment_bytes": 104857600,
+  "packs": {
+    "base": {
+      "version": "dev",
+      "url": "",
+      "sha256": "",
+      "bytes": 0,
+      "entry_scene": "res://scenes/main.tscn",
+      "dependencies": [],
+      "preload_priority": 0,
+      "status": "embedded_current_pck",
+      "contents": ["menu", "managers", "player", "greyfen_critical"]
+    },
+    "opening": {
+      "version": "dev",
+      "url": "",
+      "sha256": "",
+      "bytes": 0,
+      "entry_scene": "",
+      "dependencies": ["base"],
+      "preload_priority": 10,
+      "status": "manifest_only",
+      "contents": ["greyfen", "wychwood", "cemetery", "opening_actors"]
+    },
+    "campaign": {
+      "version": "dev",
+      "url": "",
+      "sha256": "",
+      "bytes": 0,
+      "entry_scene": "",
+      "dependencies": ["base", "opening"],
+      "preload_priority": 20,
+      "status": "manifest_only",
+      "contents": ["deep_woods", "long_road", "castle", "finale"]
+    },
+    "characters": {
+      "version": "pending",
+      "url": "",
+      "sha256": "",
+      "bytes": 0,
+      "entry_scene": "",
+      "dependencies": ["base"],
+      "preload_priority": 30,
+      "status": "manifest_only",
+      "contents": ["shared_humans", "outfits", "animation_library"]
+    },
+    "monsters": {
+      "version": "pending",
+      "url": "",
+      "sha256": "",
+      "bytes": 0,
+      "entry_scene": "",
+      "dependencies": ["base"],
+      "preload_priority": 40,
+      "status": "manifest_only",
+      "contents": ["monster_families", "bosses", "animals"]
+    },
+    "audio": {
+      "version": "dev",
+      "url": "",
+      "sha256": "",
+      "bytes": 0,
+      "entry_scene": "",
+      "dependencies": ["base"],
+      "preload_priority": 50,
+      "status": "embedded_current_pck",
+      "contents": ["ambience", "combat_cues", "voice_fallbacks"]
+    }
+  }
+}
