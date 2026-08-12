@@ -176,6 +176,22 @@
       ],
       "web_required": true
     },
+    "scene": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/zone_scene_manifest.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scenes/zones/*.tscn",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_scene_catalog.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_scene_001.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/export_presets.cfg"
+      ],
+      "gates": [
+        "verify_scene_001",
+        "verify_zone_builder_integrity",
+        "web_export"
+      ],
+      "web_required": true
+    },
     "materials": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/world_material_library.gd",

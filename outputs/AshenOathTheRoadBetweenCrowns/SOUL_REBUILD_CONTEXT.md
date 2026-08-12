@@ -40,6 +40,6 @@ Read this file, `PROJECT_STATE.md`, and the active ticket only. Ordinary tickets
 
 ## Current Foundation Checkpoint
 
-The first soul-rebuild implementation slice removes generated anatomy overlays, adds the custom Web boot shell and Crow's Crossing loading activity, identifies gamepad families/hotplug state, replaces plain route markers with animated Oath Gate visuals, and registers a threaded zone-resource request service. The next loading checkpoint adds a validated runtime-pack manifest, embedded-PCK fallback manager, and Web artifact hash generator. The remaining character, world, combat, boss, story, and performance tickets must build on this contract rather than reintroducing procedural overlays.
+The first soul-rebuild implementation slice removes generated anatomy overlays, adds the custom Web boot shell and Crow's Crossing loading activity, identifies gamepad families/hotplug state, replaces plain route markers with animated Oath Gate visuals, and registers a threaded zone-resource request service. The loading checkpoints add a validated runtime-pack manifest, embedded-PCK fallback manager, Web artifact hash generator, and opening PackedScene layer catalog with safe procedural fallback. The remaining character, world, combat, boss, story, and performance tickets must build on this contract rather than reintroducing procedural overlays.
 
 This checkpoint is local/development state only. It has not been synchronized into `web/`, pushed to `main`, or deployed to Vercel.

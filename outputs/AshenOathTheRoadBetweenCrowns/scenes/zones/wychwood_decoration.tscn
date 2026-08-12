@@ -1,0 +1,9 @@
+[gd_scene format=3]
+
+[node name="WychwoodDecorationLayer" type="Node3D"]
+
+[node name="CanopyComposition" type="Node3D" parent="."]
+
+[node name="ForestFloorComposition" type="Node3D" parent="."]
+
+[node name="ClearingComposition" type="Node3D" parent="."]

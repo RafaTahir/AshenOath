@@ -17,6 +17,7 @@ const RuntimeServiceRegistry = preload("res://scripts/runtime_service_registry.g
 const RuntimeActorFactory = preload("res://scripts/runtime_actor_factory.gd")
 const ZoneCompositionRouter = preload("res://scripts/zone_composition_router.gd")
 const ZoneRuntimeCoordinator = preload("res://scripts/zone_runtime_coordinator.gd")
+const ZoneSceneCatalog = preload("res://scripts/zone_scene_catalog.gd")
 const OathGatePortal = preload("res://scripts/oath_gate_portal.gd")
 
 var player
@@ -437,6 +438,11 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		zone_root = Node3D.new()
 		zone_root.name = zone_id
 		add_child(zone_root)
+		var authored_layers := ZoneSceneCatalog.attach(zone_id, zone_root)
+		if not bool(authored_layers.get("ok", true)):
+			push_error("Authored zone layers failed for %s: %s" % [
+				zone_id, ", ".join(authored_layers.get("errors", []))
+			])
 		var composition_kind := ZoneCompositionRouter.composition_kind(zone_id)
 		var build_result: Dictionary
 		if composition_kind == "campaign":
