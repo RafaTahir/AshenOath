@@ -79,6 +79,17 @@ func request_zone(zone_id: String, resource_path: String = "") -> void:
 	requests[id] = {"state": "loading", "progress": 0.0, "resource": null, "path": resource_path}
 	zone_progress.emit(id, 0.0)
 
+func request_zone_for_portal(zone_id: String) -> bool:
+	var id := zone_id.strip_edges().to_lower()
+	request_zone(id, str(AUTHORED_LAYER_PATHS.get(id, "")))
+	return str(requests.get(id, {}).get("state", "")) in ["loading", "ready"]
+
+func is_embedded_destination(zone_id: String) -> bool:
+	return not AUTHORED_LAYER_PATHS.has(zone_id.strip_edges().to_lower())
+
+func get_state(zone_id: String) -> String:
+	return str(requests.get(zone_id.strip_edges().to_lower(), {}).get("state", ""))
+
 func get_progress(zone_id: String) -> float:
 	return clampf(float(requests.get(zone_id.strip_edges().to_lower(), {}).get("progress", 0.0)), 0.0, 1.0)
 

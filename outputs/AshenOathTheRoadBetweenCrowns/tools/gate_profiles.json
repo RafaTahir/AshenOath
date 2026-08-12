@@ -202,11 +202,25 @@
       ],
       "gates": [
         "verify_stream_001",
+        "verify_portal_001",
         "verify_scene_001",
         "verify_zone_builder_integrity",
         "web_export"
       ],
       "web_required": true
+    },
+    "portal": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/oath_gate_portal.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_streaming_service.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_portal_001.gd"
+      ],
+      "gates": [
+        "verify_portal_001",
+        "verify_gate_transitions",
+        "verify_stream_001"
+      ]
     },
     "materials": {
       "patterns": [

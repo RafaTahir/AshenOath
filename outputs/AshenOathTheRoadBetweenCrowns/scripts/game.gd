@@ -1172,6 +1172,12 @@ func _handle_interaction(area) -> void:
 		_mark_interaction_removed(area)
 		area.queue_free()
 	elif area.interaction_type == "zone":
+		var portal := area.find_child("OathGatePortal", true, false) as OathGatePortal
+		if portal != null and portal.state != OathGatePortal.PortalState.READY:
+			hud.toast("The Oath Gate is still gathering the road beyond.")
+			return
+		if portal != null:
+			portal.mark_traveling()
 		_request_zone_load(area.zone_target, area.get_meta("spawn_pos"))
 	elif area.interaction_type == "blocked_zone":
 		hud.toast(str(area.get_meta("message", "That road is barred tonight.")))
@@ -3342,8 +3348,13 @@ func _make_zone_gate(prompt: String, pos: Vector3, zone_target: String, spawn_po
 	var portal := OathGatePortal.new()
 	portal.name = "OathGatePortal"
 	portal.configure(zone_target, "gate_%s" % zone_target)
-	portal.set_state(OathGatePortal.PortalState.READY)
 	area.add_child(portal)
+	if zone_streaming != null and portal.has_method("bind_streaming"):
+		portal.bind_streaming(zone_streaming)
+		if zone_streaming.has_method("is_embedded_destination") and zone_streaming.is_embedded_destination(zone_target):
+			portal.set_ready()
+	else:
+		portal.set_state(OathGatePortal.PortalState.READY)
 	area.zone_target = zone_target
 	area.set_meta("spawn_pos", spawn_pos)
 	return area
@@ -3394,10 +3405,14 @@ func _refresh_interaction_candidates() -> void:
 		var candidate := raw_candidate as Area3D
 		if candidate == null or candidate.is_queued_for_deletion() or not candidate.has_method("get_context_prompt"):
 			continue
-		if candidate in interaction_candidates:
-			continue
 		var range_limit := 3.6 if str(candidate.get("interaction_type")) == "zone" else 2.8
 		if candidate.global_position.distance_to(player.global_position) <= range_limit:
+			if str(candidate.get("interaction_type")) == "zone":
+				var portal := candidate.find_child("OathGatePortal", true, false) as OathGatePortal
+				if portal != null and portal.state == OathGatePortal.PortalState.DORMANT:
+					portal.begin_preload()
+			if candidate in interaction_candidates:
+				continue
 			interaction_candidates.append(candidate)
 
 func _interaction_target_valid(area: Area3D) -> bool:

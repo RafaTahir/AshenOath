@@ -11,6 +11,7 @@ var portal_id := ""
 var destination := ""
 var state: PortalState = PortalState.DORMANT
 var progress := 0.0
+var streaming_service: Node
 var _time := 0.0
 var _panel: MeshInstance3D
 var _ring: MeshInstance3D
@@ -32,6 +33,35 @@ func configure(destination_id: String, id: String = "") -> void:
 	portal_id = id if id != "" else "oath_gate_%s" % destination_id
 	set_meta("destination", destination)
 	set_meta("portal_id", portal_id)
+
+func bind_streaming(service: Node) -> void:
+	streaming_service = service
+	if streaming_service == null:
+		return
+	if streaming_service.has_signal("zone_progress") and not streaming_service.zone_progress.is_connected(_on_zone_progress):
+		streaming_service.zone_progress.connect(_on_zone_progress)
+	if streaming_service.has_signal("zone_ready") and not streaming_service.zone_ready.is_connected(_on_zone_ready):
+		streaming_service.zone_ready.connect(_on_zone_ready)
+	if streaming_service.has_signal("zone_failed") and not streaming_service.zone_failed.is_connected(_on_zone_failed):
+		streaming_service.zone_failed.connect(_on_zone_failed)
+
+func begin_preload() -> void:
+	if state == PortalState.LOCKED or destination == "":
+		return
+	set_state(PortalState.AWAKENING)
+	if streaming_service == null or not streaming_service.has_method("request_zone_for_portal"):
+		set_ready()
+		return
+	set_state(PortalState.PRELOADING)
+	if not streaming_service.request_zone_for_portal(destination):
+		set_state(PortalState.ERROR)
+		return
+	if streaming_service.has_method("is_ready") and streaming_service.is_ready(destination):
+		set_ready()
+
+func mark_traveling() -> void:
+	if state == PortalState.READY:
+		set_state(PortalState.TRAVELING)
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_INHERIT
@@ -81,6 +111,11 @@ func _process(delta: float) -> void:
 		mote.position.y = 0.45 + fposmod(_time * (0.12 + index * 0.012) + base, 1.9)
 		mote.position.x = sin(_time * 0.8 + base) * (0.84 + index * 0.025)
 		mote.position.z = cos(_time * 0.65 + base) * 0.08
+	if state == PortalState.PRELOADING and streaming_service != null:
+		if streaming_service.has_method("get_progress"):
+			set_progress(streaming_service.get_progress(destination))
+		if streaming_service.has_method("get_state") and streaming_service.get_state(destination) == "failed":
+			set_state(PortalState.ERROR)
 
 func _build_visuals() -> void:
 	if _panel != null:
@@ -188,3 +223,15 @@ func _apply_state() -> void:
 
 func _state_name() -> String:
 	return PortalState.keys()[int(state)]
+
+func _on_zone_progress(zone_id: String, value: float) -> void:
+	if zone_id == destination and state == PortalState.PRELOADING:
+		set_progress(value)
+
+func _on_zone_ready(zone_id: String, _resource: Resource) -> void:
+	if zone_id == destination and state in [PortalState.AWAKENING, PortalState.PRELOADING]:
+		set_ready()
+
+func _on_zone_failed(zone_id: String, _reason: String) -> void:
+	if zone_id == destination:
+		set_state(PortalState.ERROR)
