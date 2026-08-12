@@ -30,6 +30,11 @@ var far_tick_accumulator := 0.0
 var simulation_tick_accumulator := 0.0
 var spatial_service
 
+const CROWD_IDENTITIES := [
+	"generic_villager_01", "generic_villager_02", "farmer_toma", "widow_elna",
+	"mira_herbalist", "rook_smuggler", "blacksmith_tor", "generic_villager_03"
+]
+
 func _simulation_hz() -> float:
 	return 15.0 if quality == "quality" else 10.0
 
@@ -254,13 +259,17 @@ func _make_skeletal_villager(parent: Node3D, role_id: String, index: int, scale_
 		push_error("Rigged villager asset unavailable for %s" % role_id)
 		return null
 	mapped.name = "%s_rigged_human" % role_id
-	var target_scale := 0.96 * scale_value * (0.98 + 0.015 * float(index % 3))
+	# The imported role is already normalized to its CharacterRoleSpec height.
+	# Apply only a bounded adult variation; the old 0.82 young scale produced
+	# visibly tiny actors and multiplied normalization a second time.
+	var target_scale := clampf(scale_value, 0.96, 1.04) * (0.99 + 0.01 * float(index % 2))
 	asset_helper.apply_normalized_scale(mapped, target_scale)
 	mapped.set_meta("char_002_body_role", role)
 	mapped.set_meta("char_002_identity", role_id)
-	mapped.rotation_degrees.y = 180.0
+	mapped.set_meta("char_009_identity", CROWD_IDENTITIES[index % CROWD_IDENTITIES.size()])
+	mapped.set_meta("char_009_variant_index", index)
 	parent.add_child(mapped)
-	CharacterPresentation.apply_npc(parent, role_id)
+	CharacterPresentation.apply_npc(parent, str(mapped.get_meta("char_009_identity", role_id)))
 	var driver = CharacterAnimationDriver.new()
 	driver.name = "CharacterAnimationDriver"
 	mapped.add_child(driver)

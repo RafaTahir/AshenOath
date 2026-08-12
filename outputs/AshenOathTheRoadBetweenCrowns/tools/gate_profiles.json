@@ -267,6 +267,7 @@
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/npc_ambient.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_identity_profile.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/greyfen_life_controller.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_char_009.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_char_002.gd"
       ],
       "gates": [
@@ -274,6 +275,7 @@
         "verify_char_006",
         "verify_char_007",
         "verify_char_008",
+        "verify_char_009",
         "verify_char_002",
         "verify_char_001",
         "verify_motion_quality",
@@ -727,6 +729,7 @@
     "character": "capture_char_006",
     "character_anwen": "capture_char_007",
     "character_named": "capture_char_008",
+    "crowd": "capture_char_009",
     "greyfen": "capture_world_001",
     "wychwood": "capture_world_002",
     "campaign": "capture_world_003",
