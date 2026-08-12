@@ -20,10 +20,10 @@ func setup(id: String, target: Node3D = null) -> void:
 	role_id = id
 	focus_target = target
 	if role_id == "sister_anwen":
-		focus_radius = 6.4
-		turn_speed = 2.4
+		focus_radius = 8.0
+		turn_speed = 3.2
 		bob_amount = 0.004
-		sway_amount = 0.75
+		sway_amount = 0.28
 		breathe_amount = 0.004
 	elif role_id == "rook":
 		focus_radius = 4.3
@@ -82,7 +82,7 @@ func _process(delta: float) -> void:
 		var to_target = focus_target.global_position - parent_3d.global_position
 		to_target.y = 0.0
 		if to_target.length() <= focus_radius and to_target.length() > 0.2:
-			attention_hold = 1.35 if role_id == "sister_anwen" else 0.9
+			attention_hold = 2.25 if role_id == "sister_anwen" else 0.9
 			# Named cleric wrappers face +Z. Keep Anwen's attention stable instead
 			# of applying the old 180-degree correction twice.
 			if role_id == "sister_anwen":

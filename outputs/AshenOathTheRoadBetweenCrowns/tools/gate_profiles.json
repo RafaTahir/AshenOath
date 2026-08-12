@@ -264,6 +264,7 @@
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/asset_spawn_helper.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_animation_fusion.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/player_controller.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/npc_ambient.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_identity_profile.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/greyfen_life_controller.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_char_002.gd"
@@ -271,6 +272,7 @@
       "gates": [
         "verify_char_005",
         "verify_char_006",
+        "verify_char_007",
         "verify_char_002",
         "verify_char_001",
         "verify_motion_quality",
@@ -722,6 +724,7 @@
     "slice": "capture_slice_screenshots",
     "animation": "capture_anim_001",
     "character": "capture_char_006",
+    "character_anwen": "capture_char_007",
     "greyfen": "capture_world_001",
     "wychwood": "capture_world_002",
     "campaign": "capture_world_003",

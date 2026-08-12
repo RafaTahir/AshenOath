@@ -59,19 +59,24 @@ func _spawn_from_entry(entry: Dictionary, role_name: String, fallback_category: 
 	return _placeholder(role_name, fallback_category)
 
 func _compose_player_body(outfit_root: Node3D, outfit_path: String, role_name: String) -> Node3D:
-	if role_name != "player_human" or not outfit_path.to_lower().ends_with("male_peasant.gltf"):
+	var normalized_path := outfit_path.replace("\\", "/").to_lower()
+	var is_kael := role_name in ["player_human", "player_kael"] and normalized_path.ends_with("male_peasant.gltf")
+	var is_anwen := role_name in ["sister_anwen_human", "sister_anwen"] and normalized_path.ends_with("female_peasant.gltf")
+	if not is_kael and not is_anwen:
 		return outfit_root
-	var base_path := "res://assets_external/characters_universal/Superhero_Male_FullBody.gltf"
+	var base_path := "res://assets_external/characters_universal/Superhero_Male_FullBody.gltf" if is_kael else "res://assets_external/characters_universal/Superhero_Female_FullBody.gltf"
 	var base := _instantiate_resource(_load_cached_resource(base_path))
 	if base == null:
 		return outfit_root
 	var composite := Node3D.new()
-	composite.name = "KaelSharedHumanoidComposite"
-	base.name = "KaelNativeFaceBody"
-	outfit_root.name = "KaelPeasantOutfit"
+	var label := "Kael" if is_kael else "Anwen"
+	composite.name = "%sSharedHumanoidComposite" % label
+	base.name = "%sNativeFaceBody" % label
+	outfit_root.name = "%sPeasantOutfit" % label
 	composite.add_child(base)
 	composite.add_child(outfit_root)
 	composite.set_meta("character_composite", true)
+	composite.set_meta("character_identity", "kael" if is_kael else "anwen")
 	composite.set_meta("character_base_path", base_path)
 	composite.set_meta("character_outfit_path", outfit_path)
 	return composite
