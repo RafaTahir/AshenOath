@@ -24,7 +24,7 @@ func _initialize() -> void:
 	var paths: Dictionary = {}
 	for role in REQUIRED_ROLES:
 		var entry: Dictionary = database.get_visual_asset_for_role(role)
-		var path := str(entry.get("path", ""))
+		var path: String = str(entry.get("path", ""))
 		check(ResourceLoader.exists(path), "%s has no loadable model" % role)
 		paths[role] = path
 		var actor = helper.spawn_visual_role(role, "characters")
@@ -36,14 +36,17 @@ func _initialize() -> void:
 		check(actor.find_children("*", "AnimationPlayer", true, false).size() > 0, "%s has no animation player" % role)
 		check(absf(float(actor.get_meta("normalized_target_height", 0.0)) - float(REQUIRED_ROLES[role])) < 0.02, "%s target height is wrong" % role)
 		actor.queue_free()
-	check(str(paths.castle_guard_human) != str(paths.road_ranger_human), "Castle guards and road travelers still share one body")
+	# CHAR-008 intentionally moves the project to one cohesive humanoid
+	# ecosystem. Source diversity is no longer the acceptance criterion; each
+	# role must carry a valid shared composite and deterministic role identity.
+	check(str(paths.castle_guard_human) == str(paths.road_ranger_human), "Castle and road roles do not use the shared humanoid source")
 	var crowd_paths := {
 		str(paths.villager_human): true,
 		str(paths.villager_female_human): true,
 		str(paths.villager_worker_human): true,
 		str(paths.villager_hooded_human): true,
 	}
-	check(crowd_paths.size() == 4, "Greyfen crowd does not have four distinct body sources")
+	check(crowd_paths.size() == 2, "Greyfen crowd is not using the two shared male/female body sources")
 	var manifest = JSON.parse_string(FileAccess.get_file_as_string("res://character_role_manifest.json"))
 	check(typeof(manifest) == TYPE_DICTIONARY and int(manifest.get("version", 0)) >= 2, "Character role manifest was not upgraded")
 	check((manifest as Dictionary).get("role_specs", {}).size() >= 8, "Character role specs are incomplete")

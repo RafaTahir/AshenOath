@@ -42,60 +42,65 @@
         "notes": "CHAR-007 uses the native-face female base with the matching skinned female peasant outfit and shared UAL2 clips. Shrine identity remains in the existing staff, prayer cord, dialogue staging, and authored color profile."
       },
       "mira_human": {
-        "status": "character_real_001",
-        "path": "res://assets_external/characters/WomanCasual_PolyPizza_Quaternius_CC0.glb",
-        "source": "Poly Pizza / Quaternius",
-        "source_url": "https://poly.pizza/m/jpKRgGDxhk",
+        "status": "char_008_shared_female_named_identity",
+        "path": "res://assets_external/characters_universal/Female_Peasant.gltf",
+        "source": "Quaternius Universal Base Characters + Modular Character Outfits: Fantasy",
+        "source_url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
         "license": "CC0 1.0",
-        "notes": "Temporary casual female base body. Runtime adds face markers, hair, cloak, belt, and herbalist color styling."
+        "notes": "Shared female native-face body with deterministic herbalist palette; future occupation outfit slots remain compatible."
       },
       "rook_human": {
-        "status": "character_real_001",
-        "path": "res://assets_external/characters/CharacterAnimated_PolyPizza_Quaternius_CC0.glb",
-        "source": "Quaternius RPG Characters",
-        "source_url": "",
+        "status": "char_008_shared_male_named_identity",
+        "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
+        "source": "Quaternius Universal Base Characters + Modular Character Outfits: Fantasy",
+        "source_url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
         "license": "CC0 1.0",
-        "notes": "Phase 1G uses the existing textured Rogue OBJ for a more distinct smuggler silhouette. Runtime adds dark cloak, dagger, hood, belt, and face markers."
+        "notes": "Shared male native-face body with deterministic ranger/smuggler palette and existing dagger interaction contract."
       },
       "villager_human": {
-        "status": "character_real_001",
-        "path": "res://assets_external/characters/Adventurer_PolyPizza_Quaternius_CC0.glb",
-        "source": "Quaternius RPG Characters",
-        "source_url": "",
+        "status": "char_008_shared_male_crowd_identity",
+        "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
+        "source": "Quaternius Universal Base Characters + Modular Character Outfits: Fantasy",
+        "source_url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
         "license": "CC0 1.0",
-        "notes": "Phase 1G uses the existing textured Monk OBJ for more grounded robed villagers. Runtime adds role-readable clothing overlays, belts, aprons, veils, and face markers."
+        "notes": "Shared male body with deterministic crowd palette; no procedural face or costume overlays."
       },
       "villager_female_human": {
-        "status": "character_real_001",
-        "path": "res://assets_external/characters/WomanCasual_PolyPizza_Quaternius_CC0.glb",
-        "source": "Poly Pizza / Quaternius",
+        "status": "char_008_shared_female_crowd_identity",
+        "path": "res://assets_external/characters_universal/Female_Peasant.gltf",
+        "source": "Quaternius Universal Base Characters + Modular Character Outfits: Fantasy",
+        "source_url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
         "license": "CC0 1.0"
       },
       "villager_worker_human": {
-        "status": "char_002",
-        "path": "res://assets_external/characters/AnimatedHuman_PolyPizza_Quaternius_CC0.glb",
-        "source": "Poly Pizza / Quaternius",
+        "status": "char_008_shared_male_worker_identity",
+        "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
+        "source": "Quaternius Universal Base Characters + Modular Character Outfits: Fantasy",
+        "source_url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
         "license": "CC0 1.0",
-        "notes": "Shared worker base with deterministic occupation identity."
+        "notes": "Shared male body with deterministic forge/work palette."
       },
       "villager_hooded_human": {
-        "status": "char_002",
-        "path": "res://assets_external/characters/HoodedAdventurer_PolyPizza_Quaternius_CC0.glb",
-        "source": "Poly Pizza / Quaternius",
+        "status": "char_008_shared_female_traveler_identity",
+        "path": "res://assets_external/characters_universal/Female_Peasant.gltf",
+        "source": "Quaternius Universal Base Characters + Modular Character Outfits: Fantasy",
+        "source_url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
         "license": "CC0 1.0",
-        "notes": "Shared pilgrim, widow, and traveler base."
+        "notes": "Shared female body with restrained mourner/traveler palette; hooded outfit remains deferred to a later outfit ticket."
       },
       "castle_guard_human": {
-        "status": "character_real_001",
-        "path": "res://assets_external/characters/CharacterAnimated_PolyPizza_Quaternius_CC0.glb",
-        "source": "Poly Pizza / Quaternius",
+        "status": "char_008_shared_male_guard_identity",
+        "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
+        "source": "Quaternius Universal Base Characters + Modular Character Outfits: Fantasy",
+        "source_url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
         "license": "CC0 1.0",
-        "notes": "Compatibility-safe shared rig; CHAR-002 remains responsible for distinct guard clothing and identity."
+        "notes": "Shared male body with deterministic Vargan guard palette; armor outfit slot remains compatible with later named wardrobe work."
       },
       "road_ranger_human": {
-        "status": "character_real_001",
-        "path": "res://assets_external/characters/HoodedAdventurer_PolyPizza_Quaternius_CC0.glb",
-        "source": "Poly Pizza / Quaternius",
+        "status": "char_008_shared_male_traveler_identity",
+        "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
+        "source": "Quaternius Universal Base Characters + Modular Character Outfits: Fantasy",
+        "source_url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
         "license": "CC0 1.0"
       }
     },

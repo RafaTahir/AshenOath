@@ -159,7 +159,12 @@ static func _identity_material(source, color: Color) -> StandardMaterial3D:
 		material = source.duplicate() as StandardMaterial3D
 	else:
 		material = StandardMaterial3D.new()
-	material.albedo_color = color
+	# Preserve the imported face/clothing atlas. Role identity is a restrained
+	# palette wash over the source texture, not a replacement solid color.
+	if material.albedo_texture != null:
+		material.albedo_color = Color.WHITE.lerp(color, 0.10)
+	else:
+		material.albedo_color = color
 	material.roughness = 0.78
 	material.metallic = 0.04 if color.get_luminance() > 0.42 else 0.0
 	material.shading_mode = BaseMaterial3D.SHADING_MODE_PER_PIXEL
