@@ -1,5 +1,7 @@
 extends RefCounted
 
+const CharacterFaceDriver = preload("res://scripts/character_face_driver.gd")
+
 class FeatureScaleNormalizer extends Node:
 	func _process(_delta: float) -> void:
 		var attachment := get_parent() as BoneAttachment3D
@@ -61,7 +63,7 @@ static func apply(root: Node, role_id: String) -> Dictionary:
 			var token := "%s %s %s" % [str(mesh.name).to_lower(), surface_name, material_name]
 			mesh.set_surface_override_material(index, _identity_material(source, _color_for(token, role, profile)))
 			surfaces += 1
-			if token.contains("head") or token.contains("skin") or token.contains("eyes") or token.contains("hair"):
+			if token.contains("head") or token.contains("skin") or token.contains("eyes") or token.contains("hair") or token.contains("skull") or token.contains("jaw") or token.contains("mouth") or token.contains("teeth"):
 				face_surfaces += 1
 	root.set_meta("character_identity_profile", role)
 	root.set_meta("character_identity_surfaces", surfaces)
@@ -72,6 +74,14 @@ static func apply(root: Node, role_id: String) -> Dictionary:
 	# animation. Keep the contract data-only until a role has native face meshes.
 	var native_face := _has_native_face_material(root)
 	root.set_meta("character_face_features", "native_mesh" if native_face else "missing_native_face")
+	if _find_skeleton(root) != null and native_face:
+		var face_driver := root.find_child("CharacterFaceDriver", true, false)
+		if face_driver == null:
+			face_driver = CharacterFaceDriver.new()
+			face_driver.name = "CharacterFaceDriver"
+			root.add_child(face_driver)
+		face_driver.configure(root as Node3D, role)
+		root.set_meta("character_face_contract", face_driver.get_contract_report())
 	return {"role": role, "surfaces": surfaces, "face_surfaces": face_surfaces}
 
 static func _has_native_face_material(root: Node) -> bool:
@@ -80,7 +90,12 @@ static func _has_native_face_material(root: Node) -> bool:
 		var token := str(mesh.name).to_lower()
 		if token.contains("head") or token.contains("face") or token.contains("eye") or token.contains("hair") or token.contains("skin"):
 			matches += 1
+		elif role_is_monster(root) and (mesh.skin != null or mesh.skeleton != NodePath("")) and mesh.mesh != null and mesh.mesh.get_surface_count() > 0:
+			matches += 1
 	return matches >= 1
+
+static func role_is_monster(root: Node) -> bool:
+	return str(root.get_meta("character_identity_profile", "")) in MONSTER_ROLES
 
 static func _profile_for(role: String) -> Dictionary:
 	if role in ["player", "player_kael", "player_human", "kael"]:

@@ -36,7 +36,9 @@ static func remove_proxy_anatomy(root: Node) -> void:
 		"qualityglove", "qualityarmorplate", "playercloak", "villagerlayeredcloth", "robe fall",
 		"headfeaturesocket", "monsterheadfeatures", "featurescalenormalizer", "headfeaturejaw",
 		"monsterjaw", "monsterteeth", "monstermouth", "ghoulkineye", "sisteranwengoldstole",
-		"sisteranwenprayercord", "sisteranwenstaffread", "sisteranwenstaffcap"
+		"sisteranwenprayercord", "sisteranwenstaffread", "sisteranwenstaffcap",
+		"eyewhite", "iris l", "iris r", "brow l", "brow r", "nosebridge", "mouthline", "hairline",
+		"monstereyedetail", "monsterteeth", "monstermouth"
 	]
 	for child in root.get_children():
 		remove_proxy_anatomy(child)

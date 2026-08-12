@@ -264,12 +264,16 @@
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/asset_spawn_helper.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_animation_fusion.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_animation_driver.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_face_driver.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_visual_contract.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_identity_profile.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/player_controller.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/npc_ambient.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_identity_profile.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/greyfen_life_controller.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_char_009.gd",
-        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_char_002.gd"
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_char_002.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_face_003.gd"
       ],
       "gates": [
         "verify_char_005",
@@ -281,6 +285,7 @@
         "verify_char_001",
         "verify_motion_quality",
         "verify_anim_003",
+        "verify_face_003",
         "verify_greyfen_life"
       ]
     },
@@ -729,6 +734,7 @@
     "slice": "capture_slice_screenshots",
     "animation": "capture_anim_001",
     "animation_shared": "capture_anim_003",
+    "face": "capture_face_003",
     "character": "capture_char_006",
     "character_anwen": "capture_char_007",
     "character_named": "capture_char_008",
