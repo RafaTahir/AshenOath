@@ -59,7 +59,11 @@ func _process(delta: float) -> void:
 	if parent_3d == null:
 		return
 	if role_id == "sister_anwen" and bool(parent_3d.get_meta("dialogue_facing_lock", false)):
+		if animation_driver != null and animation_driver.has_method("set_dialogue_pose"):
+			animation_driver.set_dialogue_pose(true)
 		return
+	if animation_driver != null and animation_driver.has_method("set_dialogue_pose"):
+		animation_driver.set_dialogue_pose(false)
 	if focus_target == null:
 		var players = get_tree().get_nodes_in_group("player")
 		if not players.is_empty() and players[0] is Node3D:

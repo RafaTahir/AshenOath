@@ -216,7 +216,7 @@ func _physics_process(delta: float) -> void:
 			windup_time = _windup_duration()
 			pending_attack_time = windup_time
 			if animation_driver != null:
-				animation_driver.trigger_action("attack")
+				animation_driver.trigger_action("windup")
 			attack_trace_start = _attack_contact_point()
 			attack_trace_end = attack_trace_start
 			_show_windup_marker()
@@ -625,12 +625,14 @@ func _try_build_mapped_body() -> bool:
 	mapped.add_child(animation_driver)
 	if uses_real_body:
 		animation_driver.configure(mapped, {
-			"idle":"Idle", "walk":"Walk", "run":"Run", "attack":"Attack",
+			"idle":"Idle", "walk":"Walk", "walk_back":"Walk_Back", "strafe":"Walk",
+			"run":"Run", "windup":"Attack", "attack":"Attack",
 			"hit":"Hit", "death":"Death"
 		})
 	elif visual_source == "ghoulkin_skeleton":
 		animation_driver.configure(mapped, {
 			"idle": "SkeletonArmature|Skeleton_Idle",
+			"windup": "SkeletonArmature|Skeleton_Attack",
 			"walk": "SkeletonArmature|Skeleton_Running",
 			"run": "SkeletonArmature|Skeleton_Running",
 			"attack": "SkeletonArmature|Skeleton_Attack",
@@ -640,6 +642,7 @@ func _try_build_mapped_body() -> bool:
 	else:
 		animation_driver.configure(mapped, {
 			"idle": "Idle", "walk": "Walk", "run": "Run", "jump": "Jump_Idle",
+			"windup": "Punch",
 			"attack": "Punch", "hit": "HitReact", "death": "Death"
 		})
 	if animation_driver.is_valid():

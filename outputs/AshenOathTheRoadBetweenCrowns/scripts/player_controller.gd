@@ -539,6 +539,8 @@ func _begin_beam_redraw() -> void:
 	beam_phase_changed.emit("redrawing")
 	beam_state_time = 0.24
 	_hide_beam_charge_visuals()
+	if animation_driver != null and animation_driver.has_method("stop_action"):
+		animation_driver.stop_action("idle", 0.12)
 
 func cancel_beam_charge() -> void:
 	beam_charging = false
@@ -551,6 +553,8 @@ func cancel_beam_charge() -> void:
 	beam_release_elapsed = 0.0
 	beam_release_emitted = false
 	_hide_beam_charge_visuals()
+	if animation_driver != null and animation_driver.has_method("stop_action"):
+		animation_driver.stop_action("idle", 0.12)
 	_set_sword_sheathed(false)
 
 func _lock_beam_direction() -> Vector3:
@@ -820,7 +824,8 @@ func _try_build_mapped_body() -> bool:
 	animation_driver.name = "CharacterAnimationDriver"
 	mapped.add_child(animation_driver)
 	var animated: bool = bool(animation_driver.configure(mapped, {
-		"idle": "Idle_No", "walk": "Zombie_Walk_Fwd", "run": "Walk_Carry",
+		"idle": "Idle_No", "walk": "Zombie_Walk_Fwd", "walk_back": "Zombie_Walk_Back",
+		"strafe": "Walk_Carry", "run": "Walk_Carry",
 		"jump": "NinjaJump_Start", "attack_light": "Sword_Regular_A",
 		"attack_heavy": "Sword_Regular_B", "dodge": "Slide",
 		"parry": "Sword_Block", "beam_cast": "Idle_Shield", "hit": "Hit_Knockback", "death": "Hit_Knockback"

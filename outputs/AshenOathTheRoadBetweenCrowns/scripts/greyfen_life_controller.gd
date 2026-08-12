@@ -183,7 +183,7 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 		return
 	node.global_position = next_position
 	_face(node,node.global_position + direction,delta)
-	_set_motion(entry,float(entry.speed))
+	_set_motion(entry,float(entry.speed),direction)
 
 func _configure_agent(entry: Dictionary) -> void:
 	var actor: Node3D = entry.node
@@ -232,11 +232,16 @@ func _visible_ambient_ids() -> Dictionary:
 func _set_agent_target(entry: Dictionary) -> void:
 	pass
 
-func _set_motion(entry: Dictionary, speed: float) -> void:
+func _set_motion(entry: Dictionary, speed: float, direction: Vector3 = Vector3.ZERO) -> void:
 	var driver = entry.driver
 	if driver != null and driver.has_method("set_locomotion"):
 		# Routine speeds are walking pace; this ratio also controls clip cadence.
-		driver.set_locomotion(clampf(speed / 2.0,0.0,0.70),Vector3.ZERO,true)
+		if speed <= 0.01 and str(entry.id) == "forge_helper" and driver.has_method("set_working"):
+			driver.set_working(true)
+		else:
+			if driver.has_method("set_working"):
+				driver.set_working(false)
+			driver.set_locomotion(clampf(speed / 2.0,0.0,0.70),direction,true)
 	entry.phase = float(entry.phase) + get_process_delta_time() * (0.8 + speed * 1.7)
 
 func _face(node: Node3D, target: Vector3, delta: float) -> void:

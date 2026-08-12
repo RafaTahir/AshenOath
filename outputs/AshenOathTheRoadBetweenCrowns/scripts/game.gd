@@ -3244,9 +3244,13 @@ func _make_village_place(id: String, type: String, prompt: String, pos: Vector3,
 	return area
 
 func _configure_npc_animation(mapped: Node3D, id: String) -> void:
-	var clips := {"idle": "Idle", "walk": "Walk", "run": "Run", "hit": "RecieveHit", "death": "Death"}
+	var clips := {
+		"idle": "Idle_No", "walk": "Zombie_Walk_Fwd", "walk_back": "Zombie_Walk_Back",
+		"strafe": "Walk_Carry", "run": "Walk_Carry", "work": "Interact",
+		"dialogue": "Idle_No", "hit": "RecieveHit", "death": "Death"
+	}
 	if id == "sister_anwen":
-		clips["idle"] = "Idle"
+		clips["idle"] = "Idle_No"
 	elif id == "rook":
 		clips["idle"] = "Attacking_Idle"
 		clips["hit"] = "RecieveHit_2"
@@ -3262,6 +3266,9 @@ func _stage_dialogue_moment(area) -> void:
 	var npc = area as Node3D
 	if area.interaction_id == "sister_anwen":
 		npc.set_meta("dialogue_facing_lock", true)
+		var anwen_driver = npc.find_child("CharacterAnimationDriver", true, false)
+		if anwen_driver != null and anwen_driver.has_method("set_dialogue_pose"):
+			anwen_driver.set_dialogue_pose(true)
 	if player.has_method("face_target"):
 		player.face_target(npc.global_position)
 	_face_npc_toward_player(npc)
@@ -3298,6 +3305,9 @@ func _release_dialogue_facing() -> void:
 	var anwen = zone_root.find_child("sister_anwen", true, false)
 	if anwen != null:
 		anwen.set_meta("dialogue_facing_lock", false)
+		var anwen_driver = anwen.find_child("CharacterAnimationDriver", true, false)
+		if anwen_driver != null and anwen_driver.has_method("set_dialogue_pose"):
+			anwen_driver.set_dialogue_pose(false)
 	if pending_anwen_relocation:
 		pending_anwen_relocation = false
 		_relocate_anwen_to_cemetery()

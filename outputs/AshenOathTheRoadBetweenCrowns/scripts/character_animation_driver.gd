@@ -7,8 +7,13 @@ signal contract_failed(reason: String)
 const STATE_ALIASES := {
 	"idle": ["idle", "idlesword", "idleweapon", "attackingidle"],
 	"walk": ["walk", "walking"],
+	"walk_back": ["walkback", "backwalk", "walk", "walking"],
+	"strafe": ["strafe", "walk", "walking"],
 	"run": ["run", "running", "sprint"],
 	"jump": ["jump", "jumpidle", "run"],
+	"work": ["work", "interact", "idle", "idlesword"],
+	"dialogue": ["dialogue", "talk", "interact", "idle", "idlesword"],
+	"windup": ["windup", "attack", "punch"],
 	"attack": ["attack", "swordslash", "punch"],
 	"attack_light": ["swordslash", "attack", "punch"],
 	"attack_heavy": ["swordslash", "attack", "punch"],
@@ -18,6 +23,21 @@ const STATE_ALIASES := {
 	"hit": ["hitreceive", "hitrecieve", "receivehit", "recievehit", "hitreact", "spawn"],
 	"death": ["death", "die"]
 }
+
+const ACTION_PRIORITY := {
+	"jump": 1,
+	"dialogue": 1,
+	"work": 1,
+	"dodge": 2,
+	"attack": 3,
+	"attack_light": 3,
+	"attack_heavy": 3,
+	"beam_cast": 3,
+	"parry": 4,
+	"hit": 5,
+	"death": 100,
+}
+const LOOPING_ACTIONS := {"beam_cast": true}
 
 var character_root: Node3D
 var animation_player: AnimationPlayer
@@ -34,6 +54,16 @@ var target_playback_scale := 1.0
 var current_playback_scale := 1.0
 var manual_update_interval := 0.0
 var manual_update_accumulator := 0.0
+var current_direction := Vector3.ZERO
+var current_local_direction := Vector3.ZERO
+var requested_speed_ratio := 0.0
+var grounded := true
+var locomotion_state := "idle"
+var presentation_state := ""
+var action_elapsed := 0.0
+var action_looping := false
+var active_action_clip := StringName()
+var root_motion_disabled := true
 
 func configure(root: Node3D, clips: Dictionary) -> bool:
 	character_root = root
@@ -41,6 +71,18 @@ func configure(root: Node3D, clips: Dictionary) -> bool:
 	resolved_clip_map.clear()
 	contract_errors.clear()
 	animation_players.clear()
+	current_state = ""
+	action_active = false
+	dead = false
+	presentation_state = ""
+	current_direction = Vector3.ZERO
+	current_local_direction = Vector3.ZERO
+	requested_speed_ratio = 0.0
+	grounded = true
+	locomotion_state = "idle"
+	action_elapsed = 0.0
+	action_looping = false
+	active_action_clip = StringName()
 	_collect_animation_players(root)
 	animation_player = animation_players[0] if not animation_players.is_empty() else null
 	skeleton = _find_type(root, "Skeleton3D") as Skeleton3D
@@ -73,6 +115,8 @@ func _process(delta: float) -> void:
 		manual_update_accumulator = 0.0
 		for player in animation_players:
 			player.advance(delta)
+	if action_active:
+		action_elapsed += delta
 	current_playback_scale = lerpf(current_playback_scale, target_playback_scale, 1.0 - exp(-10.0 * delta))
 	for player in animation_players:
 		player.speed_scale = current_playback_scale
@@ -101,7 +145,14 @@ func set_distance_suspended(suspended: bool) -> void:
 		_play_state(current_state if current_state != "" else "idle", 0.0)
 
 func set_locomotion(speed_ratio: float, _direction: Vector3, grounded: bool) -> void:
-	if not is_valid() or dead or action_active:
+	requested_speed_ratio = clampf(speed_ratio, 0.0, 1.35)
+	current_direction = _direction
+	self.grounded = grounded
+	if character_root != null and _direction.length_squared() > 0.002:
+		current_local_direction = character_root.global_transform.basis.inverse() * _direction
+	else:
+		current_local_direction = Vector3.ZERO
+	if not is_valid() or dead or action_active or presentation_state != "":
 		return
 	var state := "idle"
 	if not grounded:
@@ -109,7 +160,13 @@ func set_locomotion(speed_ratio: float, _direction: Vector3, grounded: bool) -> 
 	elif speed_ratio > 0.72:
 		state = "run"
 	elif speed_ratio > 0.05:
-		state = "walk"
+		if absf(current_local_direction.x) > absf(current_local_direction.z) * 1.15:
+			state = "strafe"
+		elif current_local_direction.z > 0.35:
+			state = "walk_back"
+		else:
+			state = "walk"
+	locomotion_state = state
 	if state == "walk":
 		target_playback_scale = clampf(speed_ratio / 0.58, 0.68, 1.22)
 	elif state == "run":
@@ -118,16 +175,25 @@ func set_locomotion(speed_ratio: float, _direction: Vector3, grounded: bool) -> 
 		target_playback_scale = 1.0
 	_play_state(state, 0.14)
 
-func trigger_action(action_name: String, playback_scale: float = 1.0, blend_time: float = 0.10) -> bool:
+func trigger_action(action_name: String, playback_scale: float = 1.0, blend_time: float = 0.10, force: bool = false) -> bool:
 	if not is_valid() or dead:
 		return false
-	if action_active and current_state == action_name and animation_player.is_playing():
-		return false
+	if action_active:
+		var active_priority: int = int(ACTION_PRIORITY.get(current_state, 0))
+		var requested_priority: int = int(ACTION_PRIORITY.get(action_name, 0))
+		if not force and requested_priority < active_priority:
+			return false
+		if not force and current_state == action_name and animation_player.is_playing():
+			return false
 	var clip := _clip_for(action_name)
 	if clip == StringName():
 		return false
+	presentation_state = ""
 	action_active = true
 	current_state = action_name
+	action_elapsed = 0.0
+	action_looping = bool(LOOPING_ACTIONS.get(action_name, false))
+	active_action_clip = clip
 	target_playback_scale = clampf(playback_scale, 0.55, 1.45)
 	current_playback_scale = target_playback_scale
 	for player in animation_players:
@@ -136,11 +202,60 @@ func trigger_action(action_name: String, playback_scale: float = 1.0, blend_time
 	action_started.emit(action_name)
 	return true
 
+func stop_action(recover_state: String = "idle", blend_time: float = 0.10) -> void:
+	if not action_active and presentation_state == "":
+		return
+	action_active = false
+	action_looping = false
+	active_action_clip = StringName()
+	action_elapsed = 0.0
+	if dead:
+		return
+	current_state = ""
+	_play_state(recover_state, clampf(blend_time, 0.0, 0.25))
+
+func set_dialogue_pose(active: bool) -> void:
+	if dead or not is_valid():
+		return
+	if active:
+		if presentation_state == "dialogue":
+			return
+		action_active = false
+		presentation_state = "dialogue"
+		current_state = ""
+		target_playback_scale = 1.0
+		_play_state("dialogue", 0.14)
+	else:
+		if presentation_state == "dialogue":
+			presentation_state = ""
+			current_state = ""
+			_play_state("idle", 0.12)
+
+func set_working(active: bool) -> void:
+	if dead or not is_valid():
+		return
+	if active:
+		if presentation_state == "work":
+			return
+		action_active = false
+		presentation_state = "work"
+		current_state = ""
+		target_playback_scale = 1.0
+		_play_state("work", 0.14)
+	else:
+		if presentation_state == "work":
+			presentation_state = ""
+			current_state = ""
+			_play_state("idle", 0.12)
+
 func set_dead() -> void:
 	if dead:
 		return
 	dead = true
 	action_active = true
+	presentation_state = ""
+	action_looping = false
+	action_elapsed = 0.0
 	var clip := _clip_for("death")
 	if clip != StringName():
 		_play_clip_all(clip, 0.08)
@@ -160,8 +275,31 @@ func get_contract_report() -> Dictionary:
 		"states": resolved_clip_map.duplicate(),
 		"errors": contract_errors.duplicate(),
 		"current_state": current_state,
-		"playback_scale": current_playback_scale
+		"playback_scale": current_playback_scale,
+		"locomotion_state": locomotion_state,
+		"presentation_state": presentation_state,
+		"requested_speed_ratio": requested_speed_ratio,
+		"grounded": grounded,
+		"current_direction": current_direction,
+		"current_local_direction": current_local_direction,
+		"action_active": action_active,
+		"action_elapsed": action_elapsed,
+		"root_motion_disabled": root_motion_disabled
 	}
+
+func get_locomotion_state() -> String:
+	return locomotion_state
+
+func has_active_action() -> bool:
+	return action_active
+
+func get_action_progress() -> float:
+	if not action_active or active_action_clip == StringName() or animation_player == null:
+		return 0.0
+	var animation := animation_player.get_animation(active_action_clip)
+	if animation == null or animation.length <= 0.0:
+		return 0.0
+	return clampf(animation_player.current_animation_position / animation.length, 0.0, 1.0)
 
 func _play_state(state: String, blend: float) -> void:
 	if current_state == state and animation_player.is_playing():
@@ -203,8 +341,21 @@ func _clip_key(value: String) -> String:
 func _on_animation_finished(_animation: StringName) -> void:
 	if dead:
 		return
+	if action_active and action_looping:
+		return
+	if not action_active:
+		# Locomotion and presentation clips are allowed to be authored as either
+		# looping or one-shot clips. Re-enter the same state when a one-shot ends
+		# so a short imported clip cannot leave a character frozen.
+		var sustained_state := current_state
+		if sustained_state != "":
+			_play_state(sustained_state, 0.06)
+		return
 	var finished_state := current_state
 	action_active = false
+	action_looping = false
+	active_action_clip = StringName()
+	action_elapsed = 0.0
 	current_state = ""
 	action_finished.emit(finished_state)
 	_play_state("idle", 0.10)
