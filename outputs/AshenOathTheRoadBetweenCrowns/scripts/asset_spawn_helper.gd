@@ -3,6 +3,7 @@ extends Node
 const AssetDatabase = preload("res://scripts/asset_database.gd")
 const CharacterVisualContract = preload("res://scripts/character_visual_contract.gd")
 const CharacterRoleSpec = preload("res://scripts/character_role_spec.gd")
+const CharacterRoleContract = preload("res://scripts/character_role_contract.gd")
 
 var database
 var mesh_cache: Dictionary = {}
@@ -365,6 +366,7 @@ func _prepare_spawned_asset(root: Node3D, path: String, role_name: String = "", 
 		var report := CharacterVisualContract.validate(root,true)
 		root.set_meta("character_visual_contract",report)
 		root.set_meta("character_visual_role",role_name)
+		root.set_meta("character_role_contract", CharacterRoleContract.inspect(root, role_name))
 		if not bool(report.valid):
 			push_error("Incomplete skeletal visual for %s: %s" % [role_name,str(report)])
 
@@ -502,6 +504,7 @@ func _normalize_scene_bounds(root: Node3D, target_height: float) -> void:
 	root.set_meta("normalized_target_height", target_height)
 	root.set_meta("normalized_scale", root.scale)
 	root.set_meta("normalized_position", root.position)
+	CharacterRoleContract.mark_normalized(root, bounds, target_height, scale_factor)
 
 func apply_normalized_scale(root: Node3D, multiplier: float) -> void:
 	if root == null:

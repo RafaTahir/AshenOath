@@ -92,6 +92,10 @@ class AssetDownloader:
         if github:
             return github
 
+        itch = self.resolve_itch_download(original_url, pack_name)
+        if itch:
+            return itch
+
         direct = self.resolve_direct(original_url, pack_name)
         if direct:
             return direct
@@ -102,6 +106,83 @@ class AssetDownloader:
 
         self.log(f"ERROR could not resolve downloadable asset for {pack_name}: {original_url}")
         return None
+
+    def resolve_itch_download(self, url: str, pack_name: str) -> ResolvedURL | None:
+        """Resolve itch.io's free name-your-price download without a browser.
+
+        Itch intentionally generates a short-lived download URL through a
+        cookie-backed POST. Treat the page as a source page, keep the cookie
+        jar in this downloader instance, and never persist the generated URL.
+        """
+        parsed = urllib.parse.urlparse(url)
+        if not parsed.netloc.endswith("itch.io"):
+            return None
+        parts = [part for part in parsed.path.strip("/").split("/") if part]
+        if not parts:
+            return None
+        slug = parts[0]
+        purchase_url = urllib.parse.urlunparse((parsed.scheme, parsed.netloc, f"/{slug}/purchase", "", "", ""))
+        self.debug(f"Resolving itch.io free download for {pack_name}: {purchase_url}")
+        try:
+            with self.request(purchase_url, headers={"Accept": "text/html,application/xhtml+xml"}) as response:
+                page_url = response.geturl()
+                body = response.read(2_500_000).decode("utf-8", errors="replace")
+            token_match = re.search(r'<meta\s+name=["\']csrf_token["\']\s+value=["\']([^"\']+)', body, flags=re.I)
+            if not token_match:
+                self.debug("itch.io page did not expose a CSRF token")
+                return None
+            endpoint = urllib.parse.urlunparse((parsed.scheme, parsed.netloc, f"/{slug}/download_url", "", "", ""))
+            form = urllib.parse.urlencode({"csrf_token": token_match.group(1), "reward_id": ""}).encode("utf-8")
+            request = urllib.request.Request(
+                endpoint,
+                data=form,
+                headers={
+                    "Accept": "application/json",
+                    "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+                    "Referer": page_url,
+                    "X-Requested-With": "XMLHttpRequest",
+                },
+                method="POST",
+            )
+            with self.opener.open(request, timeout=self.timeout) as response:
+                payload = json.loads(response.read().decode("utf-8", errors="replace"))
+            generated = str(payload.get("url", "")).strip()
+            if not generated:
+                self.debug(f"itch.io download endpoint returned no URL: {payload}")
+                return None
+            # The first response is a short-lived download page. It exposes an
+            # upload id; the second request returns the actual binary URL.
+            with self.request(generated, headers={"Accept": "text/html,application/xhtml+xml"}) as response:
+                download_page = response.geturl()
+                download_body = response.read(2_500_000).decode("utf-8", errors="replace")
+            upload_match = re.search(r'data-upload_id=["\'](\d+)', download_body, flags=re.I)
+            page_token_match = re.search(r'<meta\s+name=["\']csrf_token["\']\s+value=["\']([^"\']+)', download_body, flags=re.I)
+            if not upload_match or not page_token_match:
+                self.debug("itch.io download page did not expose an upload id and CSRF token")
+                return None
+            file_endpoint = urllib.parse.urlunparse((parsed.scheme, parsed.netloc, f"/{slug}/file/{upload_match.group(1)}", "", "source=view_game&as_props=1", ""))
+            file_form = urllib.parse.urlencode({"csrf_token": page_token_match.group(1)}).encode("utf-8")
+            file_request = urllib.request.Request(
+                file_endpoint,
+                data=file_form,
+                headers={
+                    "Accept": "application/json",
+                    "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+                    "Referer": download_page,
+                    "X-Requested-With": "XMLHttpRequest",
+                },
+                method="POST",
+            )
+            with self.opener.open(file_request, timeout=self.timeout) as response:
+                file_payload = json.loads(response.read().decode("utf-8", errors="replace"))
+            binary_url = str(file_payload.get("url", "")).strip()
+            if not binary_url:
+                self.debug(f"itch.io upload endpoint returned no binary URL: {file_payload}")
+                return None
+            return ResolvedURL(binary_url, f"{safe_name(pack_name)}.zip", "itch-free-download", "application/zip")
+        except (OSError, urllib.error.URLError, json.JSONDecodeError) as exc:
+            self.debug(f"itch.io download resolution failed: {exc}")
+            return None
 
     def resolve_direct(self, url: str, pack_name: str) -> ResolvedURL | None:
         self.debug(f"Testing direct URL: {url}")
@@ -379,6 +460,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--dry-run", action="store_true", help="Resolve and test URLs without downloading files.")
     parser.add_argument("--verbose", "-v", action="store_true", help="Print detailed URL resolution logs.")
     parser.add_argument("--timeout", type=int, default=DEFAULT_TIMEOUT, help="Network timeout in seconds.")
+    parser.add_argument("--only", action="append", default=[], help="Only process the named pack; may be repeated.")
     return parser.parse_args()
 
 
@@ -399,6 +481,8 @@ def main() -> int:
     failures = 0
     for pack in packs:
         pack_name = safe_name(pack.get("name", "asset_pack"))
+        if args.only and pack_name not in {safe_name(item) for item in args.only}:
+            continue
         url = str(pack.get("url", "")).strip()
         category = str(pack.get("category", "raw")).strip() or "raw"
         if not url or PLACEHOLDER in url:
@@ -419,10 +503,19 @@ def main() -> int:
 
         download_path = downloads_dir / resolved.file_name
         if download_path.exists():
-            log(f"Using existing download for {pack_name}: {download_path.relative_to(PROJECT_ROOT)}")
+            if download_path.suffix.lower() == ".zip" and not zipfile.is_zipfile(download_path):
+                log(f"Discarding invalid archive for {pack_name}: {download_path.relative_to(PROJECT_ROOT)}")
+                download_path.unlink()
+            else:
+                log(f"Using existing download for {pack_name}: {download_path.relative_to(PROJECT_ROOT)}")
         elif not downloader.download_file(resolved, download_path):
             failures += 1
             continue
+
+        if not download_path.exists():
+            if not downloader.download_file(resolved, download_path):
+                failures += 1
+                continue
 
         raw_dir = raw_root / pack_name
         if download_path.suffix.lower() == ".zip":

@@ -30,10 +30,24 @@
     },
     {
       "name": "quaternius_universal_animation_library_2",
-      "url": "https://opengameart.org/sites/default/files/universal_animation_library_2standard.zip",
+      "url": "https://quaternius.itch.io/universal-animation-library-2",
       "category": "animations",
       "license": "CC0",
-      "source": "OpenGameArt / Quaternius"
+      "source": "Quaternius / itch.io"
+    },
+    {
+      "name": "quaternius_universal_base_characters",
+      "url": "https://quaternius.itch.io/universal-base-characters",
+      "category": "characters/universal_base",
+      "license": "CC0",
+      "source": "Quaternius / itch.io"
+    },
+    {
+      "name": "quaternius_modular_character_outfits_fantasy",
+      "url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
+      "category": "characters/universal_outfits",
+      "license": "CC0",
+      "source": "Quaternius / itch.io"
     },
     {
       "name": "quaternius_lowpoly_rpg_characters",

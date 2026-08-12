@@ -1,6 +1,7 @@
 extends SceneTree
 
 var failures: Array[String] = []
+var tested_game: Node = null
 
 func _initialize() -> void:
 	var manifest := JSON.parse_string(FileAccess.get_file_as_string("res://visual_upgrade_manifest.json")) as Dictionary
@@ -13,6 +14,7 @@ func _initialize() -> void:
 	if packed == null:
 		_finish(); return
 	var game = packed.instantiate()
+	tested_game = game
 	root.add_child(game)
 	await process_frame
 	game.call("_new_game")
@@ -98,9 +100,14 @@ func _frames(count: int) -> void:
 	for _i in range(count): await process_frame
 
 func _finish() -> void:
+	# The motion gate creates a complete multi-zone game tree. Free it before
+	# quitting so renderer RIDs, timers, and actor callbacks cannot keep the
+	# headless process alive after the pass marker.
+	if is_instance_valid(tested_game):
+		tested_game.free()
 	if not failures.is_empty():
 		print("motion quality verification failed:")
 		for failure in failures: print("- %s" % failure)
 		quit(1); return
 	print("MOTION QUALITY VERIFIER: PASS - real skeleton transforms changed")
-	quit()
+	quit(0)

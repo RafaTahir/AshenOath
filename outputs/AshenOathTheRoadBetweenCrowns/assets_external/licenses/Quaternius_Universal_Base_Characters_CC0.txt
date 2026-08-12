@@ -1,0 +1,6 @@
+Quaternius Universal Base Characters
+Source: https://quaternius.itch.io/universal-base-characters
+License: Creative Commons Zero v1.0 Universal (CC0)
+Downloaded as the free Standard archive on 2026-08-13.
+Selected runtime files are copied into assets_external/characters_universal/.
+The raw archive and source files remain outside the repository and Web export.

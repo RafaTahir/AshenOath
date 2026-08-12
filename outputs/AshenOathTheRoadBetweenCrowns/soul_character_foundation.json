@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "ticket": "CHAR-005",
+  "status": "foundation_imported_runtime_integration_pending",
+  "ecosystem": "Quaternius Universal Base Characters",
+  "license": "CC0 1.0 Universal",
+  "shared_skeleton_profile": "QuaterniusUniversalHumanoid",
+  "shared_animation_source": "res://assets_external/animations/soul_universal_animation_library_2.glb",
+  "source_pack": {
+    "id": "quaternius_universal_base_characters",
+    "download_page": "https://quaternius.itch.io/universal-base-characters",
+    "archive": "external cache only",
+    "selected_runtime_models": [
+      "res://assets_external/characters_universal/Superhero_Male_FullBody.gltf",
+      "res://assets_external/characters_universal/Superhero_Female_FullBody.gltf"
+    ]
+  },
+  "shared_contract": {
+    "skeleton_bones": ["Head", "neck_01", "hand_r", "hand_l", "foot_r", "foot_l"],
+    "material_channels": ["skin", "eyes", "hair", "cloth", "roughness", "normal"],
+    "equipment_sockets": ["hand_r", "hand_l", "head"],
+    "root_motion": false,
+    "target_height_range": [1.55, 1.90],
+    "max_texture_dimension": 1024,
+    "max_triangles_named": 20000,
+    "max_triangles_crowd": 14000
+  },
+  "roles": {
+    "player_human": {"model": "res://assets_external/characters_universal/Superhero_Male_FullBody.gltf", "target_height": 1.78, "outfit_slot": "hunter", "face_profile": "kael"},
+    "sister_anwen_human": {"model": "res://assets_external/characters_universal/Superhero_Female_FullBody.gltf", "target_height": 1.68, "outfit_slot": "cleric", "face_profile": "anwen"},
+    "villager_male": {"model": "res://assets_external/characters_universal/Superhero_Male_FullBody.gltf", "target_height": 1.72, "outfit_slot": "peasant_male", "face_profile": "crowd_male"},
+    "villager_female": {"model": "res://assets_external/characters_universal/Superhero_Female_FullBody.gltf", "target_height": 1.66, "outfit_slot": "peasant_female", "face_profile": "crowd_female"},
+    "castle_guard": {"model": "res://assets_external/characters_universal/Superhero_Male_FullBody.gltf", "target_height": 1.82, "outfit_slot": "guard", "face_profile": "castle_guard"},
+    "road_ranger": {"model": "res://assets_external/characters_universal/Superhero_Male_FullBody.gltf", "target_height": 1.75, "outfit_slot": "ranger", "face_profile": "traveler"}
+  },
+  "runtime_policy": {
+    "use_until_animation_fusion": "existing verified skeletal fallback",
+    "never_add_proxy_anatomy": true,
+    "never_export_raw_archives": true,
+    "do_not_mark_visual_roles_approved_until_fused": true
+  }
+}
