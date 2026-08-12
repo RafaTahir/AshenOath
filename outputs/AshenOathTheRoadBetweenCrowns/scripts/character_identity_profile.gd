@@ -66,11 +66,21 @@ static func apply(root: Node, role_id: String) -> Dictionary:
 	root.set_meta("character_identity_profile", role)
 	root.set_meta("character_identity_surfaces", surfaces)
 	root.set_meta("character_face_surfaces", face_surfaces)
-	if role in MONSTER_ROLES:
-		_add_monster_eye_details(root, role)
-	elif role in HUMAN_ROLES:
-		_add_human_face_details(root, role, profile)
+	# Identity is now carried by the imported mesh materials. Earlier passes
+	# attached jaw, hair, eye and clothing primitives to the skeleton; those
+	# features were the source of the visible neck hump and could drift during
+	# animation. Keep the contract data-only until a role has native face meshes.
+	var native_face := _has_native_face_material(root)
+	root.set_meta("character_face_features", "native_mesh" if native_face else "missing_native_face")
 	return {"role": role, "surfaces": surfaces, "face_surfaces": face_surfaces}
+
+static func _has_native_face_material(root: Node) -> bool:
+	var matches := 0
+	for mesh in root.find_children("*", "MeshInstance3D", true, false):
+		var token := str(mesh.name).to_lower()
+		if token.contains("head") or token.contains("face") or token.contains("eye") or token.contains("hair") or token.contains("skin"):
+			matches += 1
+	return matches >= 1
 
 static func _profile_for(role: String) -> Dictionary:
 	if role in ["player", "player_kael", "player_human", "kael"]:

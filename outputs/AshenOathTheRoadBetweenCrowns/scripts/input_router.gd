@@ -2,6 +2,7 @@ extends Node
 
 signal device_changed(device: String)
 signal pointer_mode_changed(mode: int)
+signal gamepad_profile_changed(profile: Dictionary)
 
 const DEVICE_KEYBOARD_MOUSE := "keyboard_mouse"
 const DEVICE_GAMEPAD := "gamepad"
@@ -114,6 +115,8 @@ const TOUCH_LABELS := {
 
 var active_device := DEVICE_KEYBOARD_MOUSE
 var active_gamepad_id := 0
+var active_gamepad_name := ""
+var active_gamepad_family := "generic"
 var gamepad_look_sensitivity := 1.0
 var vibration_enabled := true
 var virtual_move := Vector2.ZERO
@@ -123,7 +126,12 @@ var keyboard_labels: Dictionary = KEYBOARD_LABELS.duplicate()
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	if not Input.joy_connection_changed.is_connected(_on_joy_connection_changed):
+		Input.joy_connection_changed.connect(_on_joy_connection_changed)
 	install_default_actions()
+	var connected := Input.get_connected_joypads()
+	if not connected.is_empty():
+		_set_gamepad(int(connected[0]))
 
 func install_default_actions() -> void:
 	for action in KEYBOARD_BINDINGS:
@@ -152,9 +160,11 @@ func apply_settings(current: Dictionary) -> void:
 func _input(event: InputEvent) -> void:
 	if event is InputEventJoypadButton and event.pressed:
 		active_gamepad_id = maxi(event.device, 0)
+		_set_gamepad(active_gamepad_id)
 		_set_device(DEVICE_GAMEPAD)
 	elif event is InputEventJoypadMotion and absf(event.axis_value) > 0.32:
 		active_gamepad_id = maxi(event.device, 0)
+		_set_gamepad(active_gamepad_id)
 		_set_device(DEVICE_GAMEPAD)
 	elif event is InputEventKey and event.pressed and not event.echo:
 		_set_device(DEVICE_KEYBOARD_MOUSE)
@@ -188,10 +198,35 @@ func action_axis(negative: StringName, positive: StringName) -> float:
 
 func action_label(action: String) -> String:
 	if active_device == DEVICE_GAMEPAD:
-		return str(GAMEPAD_LABELS.get(action, action.capitalize()))
+		return gamepad_action_label(action)
 	if active_device == DEVICE_TOUCH:
 		return str(TOUCH_LABELS.get(action, action.capitalize()))
 	return str(keyboard_labels.get(action, action.capitalize()))
+
+func gamepad_action_label(action: String) -> String:
+	var generic := str(GAMEPAD_LABELS.get(action, action.capitalize()))
+	if active_gamepad_family == "playstation":
+		return {
+			"interact": "Cross", "dodge": "Circle", "jump": "Triangle",
+			"run": "L3", "block": "L1", "light_attack": "R1", "heavy_attack": "R2",
+			"oathfire_beam": "L2", "open_inventory": "Touchpad", "pause": "Options"
+		}.get(action, generic)
+	if active_gamepad_family == "nintendo":
+		return {
+			"interact": "B", "dodge": "A", "jump": "X", "run": "L3",
+			"block": "L", "light_attack": "R", "heavy_attack": "ZR",
+			"oathfire_beam": "ZL", "open_inventory": "-", "pause": "+"
+		}.get(action, generic)
+	return generic
+
+func get_gamepad_profile() -> Dictionary:
+	return {
+		"id": active_gamepad_id,
+		"name": active_gamepad_name,
+		"family": active_gamepad_family,
+		"connected": active_gamepad_id in Input.get_connected_joypads(),
+		"vibration": vibration_enabled,
+	}
 
 func _apply_keyboard_preset(preset: String) -> void:
 	var bindings: Dictionary = KEYBOARD_BINDINGS.duplicate()
@@ -274,6 +309,36 @@ func rumble(weak: float, strong: float, duration: float = 0.12) -> void:
 	if active_device != DEVICE_GAMEPAD or not vibration_enabled:
 		return
 	Input.start_joy_vibration(active_gamepad_id, clampf(weak, 0.0, 1.0), clampf(strong, 0.0, 1.0), maxf(duration, 0.0))
+
+func _on_joy_connection_changed(device: int, connected: bool) -> void:
+	if connected:
+		_set_gamepad(device)
+		_set_device(DEVICE_GAMEPAD)
+		return
+	if device != active_gamepad_id:
+		return
+	var remaining := Input.get_connected_joypads()
+	if remaining.is_empty():
+		active_gamepad_name = ""
+		active_gamepad_family = "generic"
+		_set_device(DEVICE_KEYBOARD_MOUSE)
+		gamepad_profile_changed.emit(get_gamepad_profile())
+	else:
+		_set_gamepad(int(remaining[0]))
+
+func _set_gamepad(device: int) -> void:
+	active_gamepad_id = maxi(device, 0)
+	active_gamepad_name = Input.get_joy_name(active_gamepad_id)
+	var lowered := active_gamepad_name.to_lower()
+	if lowered.contains("dualshock") or lowered.contains("dualsense") or lowered.contains("playstation") or lowered.contains("wireless controller"):
+		active_gamepad_family = "playstation"
+	elif lowered.contains("nintendo") or lowered.contains("switch") or lowered.contains("pro controller"):
+		active_gamepad_family = "nintendo"
+	elif lowered.contains("xbox") or lowered.contains("xinput"):
+		active_gamepad_family = "xbox"
+	else:
+		active_gamepad_family = "generic"
+	gamepad_profile_changed.emit(get_gamepad_profile())
 
 func _set_device(device: String) -> void:
 	if active_device == device:

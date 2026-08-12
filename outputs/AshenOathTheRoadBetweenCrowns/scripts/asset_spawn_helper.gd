@@ -533,16 +533,10 @@ func _accumulate_node_bounds(node: Node, parent_transform: Transform3D, state: D
 		_accumulate_node_bounds(child, current_transform, state)
 
 func _apply_character_wrapper(root: Node3D, role_name: String) -> void:
-	var profile: Dictionary = _character_profile(role_name)
-	_add_character_cloak(root, profile)
-	_add_character_face(root, profile)
-	_add_character_hair(root, profile)
-	_add_character_belt(root, profile)
-	_add_character_shoulders(root, profile)
-	if bool(profile.get("staff", false)):
-		_add_staff(root, profile)
-	if bool(profile.get("dagger", false)):
-		_add_dagger(root, profile)
+	# Legacy OBJ wrappers created detached faces, shoulders, hair and weapons.
+	# They are intentionally disabled: incomplete roles must be replaced by a
+	# shared rig, never cosmetically disguised with root-mounted geometry.
+	root.set_meta("character_overlay_contract", "disabled")
 
 func _character_profile(role_name: String) -> Dictionary:
 	var key = role_name.to_lower()

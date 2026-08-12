@@ -19,11 +19,12 @@ const ProgressionManager = preload("res://scripts/progression_manager.gd")
 const InputRouter = preload("res://scripts/input_router.gd")
 const InteractionFocusService = preload("res://scripts/interaction_focus_service.gd")
 const MobileTouchControls = preload("res://scripts/mobile_touch_controls.gd")
+const ZoneStreamingService = preload("res://scripts/zone_streaming_service.gd")
 
 const REQUIRED_SERVICES := [
 	"story_state", "quests", "quest_presentation", "dialogue", "inventory", "crafting", "combat",
 	"save_manager", "settings", "world_materials", "day_night", "audio",
-	"asset_helper", "hud", "minigames", "progression", "input_router", "interaction_focus", "mobile_touch"
+	"asset_helper", "hud", "minigames", "progression", "input_router", "interaction_focus", "mobile_touch", "zone_streaming"
 ]
 
 var services: Dictionary = {}
@@ -51,6 +52,7 @@ func create_services() -> Dictionary:
 		"input_router": InputRouter.new(),
 		"interaction_focus": InteractionFocusService.new(),
 		"mobile_touch": MobileTouchControls.new(),
+		"zone_streaming": ZoneStreamingService.new(),
 	}
 	for id in REQUIRED_SERVICES:
 		var service: Node = services[id]
@@ -80,6 +82,7 @@ func configure(owner: Node) -> void:
 	var input_router = services["input_router"]
 	var interaction_focus = services["interaction_focus"]
 	var mobile_touch = services["mobile_touch"]
+	var zone_streaming = services["zone_streaming"]
 
 	hud.process_mode = Node.PROCESS_MODE_ALWAYS
 	quests.load_quests("res://data/quests.json")
@@ -95,9 +98,16 @@ func configure(owner: Node) -> void:
 	hud.set_input_source(input_router)
 	minigames.setup(input_router)
 	mobile_touch.setup(input_router, hud, settings.settings)
+	zone_streaming.setup(owner)
 	settings.apply_platform_defaults(mobile_touch.touch_capable)
 	input_router.device_changed.connect(func(_device: String):
 		hud.set_input_device(input_router.active_device)
+		owner.call("_refresh_equipment_readout")
+	)
+	input_router.gamepad_profile_changed.connect(func(profile: Dictionary):
+		hud.set_input_device(input_router.active_device)
+		if hud.has_method("set_gamepad_profile"):
+			hud.set_gamepad_profile(profile)
 		owner.call("_refresh_equipment_readout")
 	)
 

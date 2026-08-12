@@ -83,7 +83,16 @@ func _load_settings() -> void:
 	var file := FileAccess.open(SETTINGS_PATH, FileAccess.READ)
 	if file == null:
 		return
-	var stored = JSON.parse_string(file.get_as_text())
+	var raw_settings := file.get_as_text()
+	if raw_settings.strip_edges().is_empty():
+		# A previously interrupted Web/local write can leave an empty file. Treat
+		# it as a first launch and let the next apply() write valid defaults.
+		return
+	var parser := JSON.new()
+	if parser.parse(raw_settings) != OK:
+		push_warning("Ignoring invalid Ashen Oath settings; defaults will be restored.")
+		return
+	var stored = parser.data
 	if typeof(stored) != TYPE_DICTIONARY:
 		return
 	loaded_user_settings = true

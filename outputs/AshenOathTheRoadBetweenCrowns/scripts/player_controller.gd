@@ -689,15 +689,6 @@ func _build_body() -> void:
 	chest.material_override = _mat(Color(0.17, 0.18, 0.17))
 	visual_root.add_child(chest)
 
-	for side in [-1, 1]:
-		var shoulder = MeshInstance3D.new()
-		var shoulder_mesh = BoxMesh.new()
-		shoulder_mesh.size = Vector3(0.22, 0.18, 0.28)
-		shoulder.mesh = shoulder_mesh
-		shoulder.position = Vector3(0.42 * side, 1.42, 0)
-		shoulder.material_override = _mat(Color(0.42, 0.40, 0.34))
-		visual_root.add_child(shoulder)
-
 	var head = MeshInstance3D.new()
 	head.mesh = SphereMesh.new()
 	head.scale = Vector3(0.34, 0.28, 0.34)
@@ -714,7 +705,6 @@ func _build_body() -> void:
 	scar.material_override = _mat(Color(0.45, 0.09, 0.07))
 	visual_root.add_child(scar)
 
-	_add_motion_proxy_parts()
 	_add_weapon_visuals(Vector3(0.43, 0.86, -0.38))
 	CharacterPresentation.apply_player(self, visual_root)
 	_add_beam_charge_visual()
@@ -833,7 +823,6 @@ func _try_build_mapped_body() -> bool:
 		"parry": "HitRecieve", "beam_cast": "Interact", "hit": "HitRecieve", "death": "Death"
 	}))
 	if not animated:
-		_add_motion_proxy_parts()
 		_add_mapped_weapon_visuals()
 	else:
 		animation_driver.set_update_rate_hz(30.0)

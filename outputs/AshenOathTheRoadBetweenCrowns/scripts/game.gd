@@ -17,6 +17,7 @@ const RuntimeServiceRegistry = preload("res://scripts/runtime_service_registry.g
 const RuntimeActorFactory = preload("res://scripts/runtime_actor_factory.gd")
 const ZoneCompositionRouter = preload("res://scripts/zone_composition_router.gd")
 const ZoneRuntimeCoordinator = preload("res://scripts/zone_runtime_coordinator.gd")
+const OathGatePortal = preload("res://scripts/oath_gate_portal.gd")
 
 var player
 var camera_rig
@@ -41,6 +42,7 @@ var progression
 var input_router
 var interaction_focus
 var mobile_touch
+var zone_streaming
 var qa_adapter
 var zone_root: Node3D
 var active_interactable
@@ -199,6 +201,7 @@ func _setup_runtime() -> void:
 	input_router = services["input_router"]
 	interaction_focus = services["interaction_focus"]
 	mobile_touch = services["mobile_touch"]
+	zone_streaming = services["zone_streaming"]
 	runtime_services.configure(self)
 	zone_runtime_coordinator = ZoneRuntimeCoordinator.new(self)
 	if OS.has_feature("ashenoath_qa"):
@@ -3319,6 +3322,16 @@ func _make_zone_gate(prompt: String, pos: Vector3, zone_target: String, spawn_po
 	var area = _make_named_interactable("gate_%s" % zone_target, "zone", prompt, pos, Color(0.18, 0.22, 0.28), Vector3(1.0, 1.2, 1.0))
 	if area == null:
 		return null
+	# The trigger remains owned by Interactable; only its old marker geometry is
+	# replaced so route logic and save compatibility stay unchanged.
+	for child in area.get_children():
+		if child is MeshInstance3D:
+			child.visible = false
+	var portal := OathGatePortal.new()
+	portal.name = "OathGatePortal"
+	portal.configure(zone_target, "gate_%s" % zone_target)
+	portal.set_state(OathGatePortal.PortalState.READY)
+	area.add_child(portal)
 	area.zone_target = zone_target
 	area.set_meta("spawn_pos", spawn_pos)
 	return area

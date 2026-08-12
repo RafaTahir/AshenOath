@@ -10,6 +10,12 @@ RECOVERY-004 is the active recovery program. This checkpoint isolates QA browser
 
 The explicit **visual approval boundary** is current under the Codex policy: all eleven required views have fresh Codex-reviewed evidence. This approval is not a human sign-off and does not claim photoreal or AAA quality; the manifest records the remaining low-poly, blockout, and procedural limitations plainly.
 
+## SOUL-REBUILD Checkpoint
+
+The 62-ticket soul-rebuild program has started with a truthful foundation slice. Generated root-mounted character overlays are disabled for released runtime actors; the Web preset now uses an Ashen Oath HTML boot shell with an interactive Crow's Crossing wait activity; controller family/hotplug state is exposed through `InputRouter`; route markers now have animated Oath Gate visual state; and `ZoneStreamingService` provides threaded resource request/progress/cancel/activate/retire APIs for the upcoming packed-scene work. This is a development checkpoint, not a claim that the character, monster, world, boss, or campaign rebuild is complete.
+
+The local Web candidate produced by this checkpoint is 65.8 MB total with a 29.5 MB PCK. Runtime, input, character, motion, animation, and export gates pass. Godot headless shutdown still reports renderer RID/ObjectDB cleanup warnings, and browser first-paint/engine-ready timing has not yet received its dedicated Chrome/Edge gate. Production `web/`, `main`, and Vercel remain unchanged.
+
 The recovery runtime now includes `ZoneRuntimeCoordinator` transition/build/rollback snapshots, `QuestPresentationState` objective IDs/text for compass fallback, and save schema version 6 with sanitized settings migration. These are foundation changes only; they do not mean the route has passed visual acceptance.
 
 The latest opening-presentation checkpoint adds midpoint dialogue framing, stable Anwen-facing behavior during the pause, bone-scale compensation for imported face/hair details, and removal of redundant interaction labels during dialogue. Runtime, input, save, player-route, character/river/sun, visible-quality, material, browser, performance, and lifecycle gates pass. The eleven-view visual gate is Codex-reviewed rather than human-approved.

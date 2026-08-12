@@ -1,5 +1,11 @@
 # Ashen Oath Expansion Context Brief
 
+## Soul-Rebuild Handoff
+
+The active long-range program is defined in `SOUL_REBUILD_CONTEXT.md`. It is a 62-ticket opening-first rebuild. The current development checkpoint has added the custom Web boot shell, Crow's Crossing wait activity, controller-family detection, animated Oath Gate visuals, and a threaded zone-resource request API. Do not treat these foundation changes as completed character replacement, packed streaming, boss, or campaign work.
+
+Ordinary soul-rebuild work remains on `codex/soul-rebuild` with targeted gates and changed-view evidence. Production deployment waits for milestone acceptance; do not synchronize `web/` or push `main` for an ordinary ticket.
+
 ## Current World
 
 - Browser-first Godot 4.6.3 vertical slice.

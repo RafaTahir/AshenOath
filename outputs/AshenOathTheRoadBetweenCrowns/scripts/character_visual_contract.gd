@@ -30,7 +30,14 @@ static func validate(root: Node, require_animation: bool = true) -> Dictionary:
 	}
 
 static func remove_proxy_anatomy(root: Node) -> void:
-	var forbidden := ["faceplane","motion_arm","motion_leg","weapon_arm","longarm","clawleft","clawright","chestread","bootread","hair silhouette"]
+	var forbidden := [
+		"faceplane", "motion_arm", "motion_leg", "weapon_arm", "longarm", "clawleft", "clawright",
+		"chestread", "bootread", "hair silhouette", "hunchedbackread", "qualityfurcollar",
+		"qualityglove", "qualityarmorplate", "playercloak", "villagerlayeredcloth", "robe fall",
+		"headfeaturesocket", "monsterheadfeatures", "featurescalenormalizer", "headfeaturejaw",
+		"monsterjaw", "monsterteeth", "monstermouth", "ghoulkineye", "sisteranwengoldstole",
+		"sisteranwenprayercord", "sisteranwenstaffread", "sisteranwenstaffcap"
+	]
 	for child in root.get_children():
 		remove_proxy_anatomy(child)
 		var lowered := str(child.name).to_lower().replace("_"," ")

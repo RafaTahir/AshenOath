@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "program": "SOUL-REBUILD",
+  "policy": "free_cc0_only",
+  "source_packs": [
+    {
+      "id": "quaternius_universal_base_characters",
+      "url": "https://quaternius.com/packs/universalbasecharacters.html",
+      "license": "CC0",
+      "status": "source_locked_pending_selected_download",
+      "runtime_roles": ["kael", "anwen", "villager", "guard", "traveler"]
+    },
+    {
+      "id": "quaternius_modular_character_outfits_fantasy",
+      "url": "https://quaternius.com/packs/modularcharacteroutfitsfantasy.html",
+      "license": "CC0",
+      "status": "source_locked_pending_selected_download",
+      "runtime_roles": ["hunter", "cleric", "guard", "servant", "ranger"]
+    },
+    {
+      "id": "quaternius_ultimate_monsters",
+      "url": "https://quaternius.com/packs/ultimatemonsters.html",
+      "license": "CC0",
+      "status": "source_locked_pending_selected_download",
+      "runtime_roles": ["ghoulkin", "bell_eater", "rootbound_colossus", "ashwing", "gravebound_knight"]
+    },
+    {
+      "id": "quaternius_ultimate_animated_animals",
+      "url": "https://quaternius.com/packs/ultimateanimatedanimals.html",
+      "license": "CC0",
+      "status": "source_locked_pending_selected_download",
+      "runtime_roles": ["white_hart", "ambient_deer"]
+    }
+  ],
+  "rejected_runtime_patterns": [
+    "root_mounted_face",
+    "detached_eye_box",
+    "proxy_limb",
+    "primitive_neck_overlay",
+    "mixed_human_source_family"
+  ],
+  "current_runtime_roles": {
+    "player_human": {"status": "temporary_shared_quaternius", "approved": false},
+    "sister_anwen_human": {"status": "temporary_shared_quaternius", "approved": false},
+    "villagers": {"status": "temporary_shared_quaternius", "approved": false},
+    "ghoulkin": {"status": "temporary_derived_rig", "approved": false},
+    "white_hart_avatar": {"status": "temporary_wolf_placeholder", "approved": false}
+  }
+}
