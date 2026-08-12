@@ -797,7 +797,10 @@ func _try_build_mapped_body() -> bool:
 			mapped.queue_free()
 		return false
 	mapped.name = "player_kael_visual"
-	mapped.rotation_degrees.y = 180
+	# Universal Base Characters face the camera-facing +Z convention used by
+	# the authored third-person composition. Legacy fallbacks keep their old
+	# half-turn until their own role replacement ticket lands.
+	mapped.rotation_degrees.y = 0.0 if bool(mapped.get_meta("shared_animation_library", false)) else 180.0
 	visual_root.add_child(mapped)
 	var imported_sword := mapped.find_child("Warrior_Sword", true, false) as Node3D
 	if imported_sword != null:
@@ -817,10 +820,10 @@ func _try_build_mapped_body() -> bool:
 	animation_driver.name = "CharacterAnimationDriver"
 	mapped.add_child(animation_driver)
 	var animated: bool = bool(animation_driver.configure(mapped, {
-		"idle": "Idle_Sword", "walk": "Walk", "run": "Run",
-		"jump": "Run", "attack_light": "Sword_Slash",
-		"attack_heavy": "Punch_Right", "dodge": "Roll",
-		"parry": "HitRecieve", "beam_cast": "Interact", "hit": "HitRecieve", "death": "Death"
+		"idle": "Idle_No", "walk": "Zombie_Walk_Fwd", "run": "Walk_Carry",
+		"jump": "NinjaJump_Start", "attack_light": "Sword_Regular_A",
+		"attack_heavy": "Sword_Regular_B", "dodge": "Slide",
+		"parry": "Sword_Block", "beam_cast": "Idle_Shield", "hit": "Hit_Knockback", "death": "Hit_Knockback"
 	}))
 	if not animated:
 		_add_mapped_weapon_visuals()
@@ -836,6 +839,8 @@ func _attach_rig_sword(mapped: Node3D) -> Node3D:
 	var hand_index := skeleton.find_bone("RightHand")
 	if hand_index < 0:
 		hand_index = skeleton.find_bone("Hand.R")
+	if hand_index < 0:
+		hand_index = skeleton.find_bone("hand_r")
 	if hand_index < 0:
 		for bone_index in range(skeleton.get_bone_count()):
 			var bone_name := str(skeleton.get_bone_name(bone_index)).to_lower()

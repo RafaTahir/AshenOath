@@ -26,12 +26,12 @@
     },
     "characters": {
       "player_human": {
-        "status": "character_real_001",
-        "path": "res://assets_external/characters/Adventurer_PolyPizza_Quaternius_CC0.glb",
-        "source": "Poly Pizza / Quaternius",
-        "source_url": "https://poly.pizza/",
+        "status": "char_006_shared_body_fused_animation",
+        "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
+        "source": "Quaternius Universal Base Characters + Modular Character Outfits: Fantasy",
+        "source_url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
         "license": "CC0 1.0",
-        "notes": "Phase 1G uses the existing textured Warrior OBJ as a stronger fantasy protagonist base. Runtime adds cloak, harness, armor plate, boots, hood, contact shadow, and weapon presentation."
+        "notes": "CHAR-006 first runtime hero replacement: complete skinned male peasant-base body with native eyes/brows, shared UAL2 animation library, bone-bound sword, and existing Oathblade presentation. Hunter identity is carried by the sword and later equipment slot ticket."
       },
       "sister_anwen_human": {
         "status": "character_real_001",

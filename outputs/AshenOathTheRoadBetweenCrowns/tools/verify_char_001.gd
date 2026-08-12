@@ -75,10 +75,14 @@ func verify_actor(actor: Node, expected_profile: String, target_height: float, t
 	var rendered_bounds := _rendered_bounds(actor)
 	var height := rendered_bounds.size.y
 	check(absf(height - target_height) <= tolerance, "%s height %.2f is outside %.2f +/- %.2f" % [expected_profile, height, target_height, tolerance])
+	# Imported humanoid rigs place the foot-bone origin at the ankle/instep,
+	# not at the rendered sole. Grounding must therefore be judged from the
+	# visible skinned bounds; keep the bone endpoint as diagnostic telemetry.
+	var rendered_bottom := rendered_bounds.position.y
+	check(rendered_bottom >= -0.06 and rendered_bottom <= maxf(0.12, tolerance), "%s rendered feet are not grounded (mesh bottom %.2f)" % [expected_profile, rendered_bottom])
 	var leg_endpoint := _lowest_leg_endpoint(actor)
 	if leg_endpoint < INF:
-		var grounding_tolerance := maxf(0.12, tolerance)
-		check(leg_endpoint >= -0.06 and leg_endpoint <= grounding_tolerance, "%s animated feet are not grounded (lowest leg endpoint %.2f)" % [expected_profile, leg_endpoint])
+		print("CHAR-001 grounding telemetry: %s mesh_bottom=%.2f foot_bone=%.2f" % [expected_profile, rendered_bottom, leg_endpoint])
 
 func _find_identity_root(node: Node) -> Node:
 	if node.has_meta("character_identity_profile"):

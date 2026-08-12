@@ -98,10 +98,14 @@ func create_stage() -> Node3D:
 
 func play_idle(node: Node) -> void:
 	for player in node.find_children("*", "AnimationPlayer", true, false):
-		for animation in player.get_animation_list():
-			if str(animation).to_lower().contains("idle"):
-				player.play(animation)
-				return
+		var selected := StringName("Idle_No") if player.has_animation("Idle_No") else StringName()
+		if selected == StringName():
+			for animation in player.get_animation_list():
+				if str(animation).to_lower().contains("idle"):
+					selected = animation
+					break
+		if selected != StringName():
+			player.play(selected)
 
 func save_image(file_name: String) -> void:
 	var image := root.get_texture().get_image()

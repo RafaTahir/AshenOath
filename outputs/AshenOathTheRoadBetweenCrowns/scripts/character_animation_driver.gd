@@ -21,6 +21,7 @@ const STATE_ALIASES := {
 
 var character_root: Node3D
 var animation_player: AnimationPlayer
+var animation_players: Array[AnimationPlayer] = []
 var skeleton: Skeleton3D
 var clip_map: Dictionary = {}
 var resolved_clip_map: Dictionary = {}
@@ -39,7 +40,9 @@ func configure(root: Node3D, clips: Dictionary) -> bool:
 	clip_map = clips.duplicate()
 	resolved_clip_map.clear()
 	contract_errors.clear()
-	animation_player = _find_type(root, "AnimationPlayer") as AnimationPlayer
+	animation_players.clear()
+	_collect_animation_players(root)
+	animation_player = animation_players[0] if not animation_players.is_empty() else null
 	skeleton = _find_type(root, "Skeleton3D") as Skeleton3D
 	if animation_player == null or skeleton == null or skeleton.get_bone_count() == 0:
 		contract_errors.append("missing AnimationPlayer or Skeleton3D")
@@ -68,15 +71,17 @@ func _process(delta: float) -> void:
 			return
 		delta = manual_update_accumulator
 		manual_update_accumulator = 0.0
-		animation_player.advance(delta)
+		for player in animation_players:
+			player.advance(delta)
 	current_playback_scale = lerpf(current_playback_scale, target_playback_scale, 1.0 - exp(-10.0 * delta))
-	animation_player.speed_scale = current_playback_scale
+	for player in animation_players:
+		player.speed_scale = current_playback_scale
 
 func set_update_rate_hz(rate_hz: float) -> void:
 	manual_update_interval = 0.0 if rate_hz <= 0.0 else 1.0 / maxf(rate_hz, 1.0)
 	manual_update_accumulator = 0.0
-	if animation_player != null:
-		animation_player.callback_mode_process = (
+	for player in animation_players:
+		player.callback_mode_process = (
 			AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_IDLE
 			if manual_update_interval <= 0.0
 			else AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
@@ -90,8 +95,8 @@ func set_distance_suspended(suspended: bool) -> void:
 		return
 	distance_suspended = suspended
 	process_mode = Node.PROCESS_MODE_DISABLED if suspended else Node.PROCESS_MODE_INHERIT
-	if animation_player != null:
-		animation_player.active = not suspended
+	for player in animation_players:
+		player.active = not suspended
 	if not suspended and not dead:
 		_play_state(current_state if current_state != "" else "idle", 0.0)
 
@@ -125,8 +130,9 @@ func trigger_action(action_name: String, playback_scale: float = 1.0, blend_time
 	current_state = action_name
 	target_playback_scale = clampf(playback_scale, 0.55, 1.45)
 	current_playback_scale = target_playback_scale
-	animation_player.speed_scale = current_playback_scale
-	animation_player.play(clip, clampf(blend_time, 0.0, 0.25))
+	for player in animation_players:
+		player.speed_scale = current_playback_scale
+	_play_clip_all(clip, clampf(blend_time, 0.0, 0.25))
 	action_started.emit(action_name)
 	return true
 
@@ -137,7 +143,7 @@ func set_dead() -> void:
 	action_active = true
 	var clip := _clip_for("death")
 	if clip != StringName():
-		animation_player.play(clip, 0.08)
+		_play_clip_all(clip, 0.08)
 
 func get_skeleton() -> Skeleton3D:
 	return skeleton
@@ -166,7 +172,7 @@ func _play_state(state: String, blend: float) -> void:
 	if clip == StringName():
 		return
 	current_state = state
-	animation_player.play(clip, blend)
+	_play_clip_all(clip, blend)
 
 func _clip_for(state: String) -> StringName:
 	if resolved_clip_map.has(state):
@@ -211,3 +217,14 @@ func _find_type(root: Node, type_name: String) -> Node:
 		if found != null:
 			return found
 	return null
+
+func _collect_animation_players(root: Node) -> void:
+	if root is AnimationPlayer:
+		animation_players.append(root as AnimationPlayer)
+	for child in root.get_children():
+		_collect_animation_players(child)
+
+func _play_clip_all(clip: StringName, blend: float) -> void:
+	for player in animation_players:
+		if player.has_animation(clip):
+			player.play(clip, blend)

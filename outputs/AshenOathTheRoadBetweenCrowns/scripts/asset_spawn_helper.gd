@@ -4,6 +4,7 @@ const AssetDatabase = preload("res://scripts/asset_database.gd")
 const CharacterVisualContract = preload("res://scripts/character_visual_contract.gd")
 const CharacterRoleSpec = preload("res://scripts/character_role_spec.gd")
 const CharacterRoleContract = preload("res://scripts/character_role_contract.gd")
+const CharacterAnimationFusion = preload("res://scripts/character_animation_fusion.gd")
 
 var database
 var mesh_cache: Dictionary = {}
@@ -44,16 +45,36 @@ func _spawn_from_entry(entry: Dictionary, role_name: String, fallback_category: 
 		var resource = _load_cached_resource(path)
 		var spawned: Node3D = _instantiate_resource(resource)
 		if spawned != null:
+			spawned = _compose_player_body(spawned, path, role_name)
 			spawned.name = role_name
 			_prepare_spawned_asset(spawned,path,role_name,fallback_category)
 			return spawned
 		var fallback: Node3D = _instantiate_source_file(path)
 		if fallback != null:
+			fallback = _compose_player_body(fallback, path, role_name)
 			fallback.name = role_name
 			_prepare_spawned_asset(fallback,path,role_name,fallback_category)
 			return fallback
 	push_warning("Using primitive placeholder for asset role: %s" % role_name)
 	return _placeholder(role_name, fallback_category)
+
+func _compose_player_body(outfit_root: Node3D, outfit_path: String, role_name: String) -> Node3D:
+	if role_name != "player_human" or not outfit_path.to_lower().ends_with("male_peasant.gltf"):
+		return outfit_root
+	var base_path := "res://assets_external/characters_universal/Superhero_Male_FullBody.gltf"
+	var base := _instantiate_resource(_load_cached_resource(base_path))
+	if base == null:
+		return outfit_root
+	var composite := Node3D.new()
+	composite.name = "KaelSharedHumanoidComposite"
+	base.name = "KaelNativeFaceBody"
+	outfit_root.name = "KaelPeasantOutfit"
+	composite.add_child(base)
+	composite.add_child(outfit_root)
+	composite.set_meta("character_composite", true)
+	composite.set_meta("character_base_path", base_path)
+	composite.set_meta("character_outfit_path", outfit_path)
+	return composite
 
 func spawn_character(role_name: String) -> Node3D:
 	return spawn_for_role(role_name, "characters")
@@ -360,6 +381,9 @@ func _prepare_spawned_asset(root: Node3D, path: String, role_name: String = "", 
 		_normalize_scene_bounds(root, _target_height_for_role(role_name, path))
 	_apply_safe_materials(root, path)
 	_finalize_asset_root(root, role_name)
+	if CharacterAnimationFusion.is_shared_body(path):
+		var fused_player := CharacterAnimationFusion.attach_shared_library(root)
+		root.set_meta("shared_animation_library", fused_player != null and fused_player.get_animation_list().size() > 0)
 	if "characters" in path.to_lower() and not _has_skeleton(root):
 		_apply_character_wrapper(root, root.name)
 	if category in ["characters","enemies"] and _has_skeleton(root):

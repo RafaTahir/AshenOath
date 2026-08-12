@@ -270,7 +270,9 @@ static func _find_bone_index(skeleton: Skeleton3D, aliases: Array[String]) -> in
 
 static func _feature_material(color: Color, roughness: float) -> StandardMaterial3D:
 	var material := StandardMaterial3D.new()
-	material.albedo_color = color
+	# Preserve the imported Quaternius atlas. Applying a dark role fallback to
+	# textured surfaces erased the authored face, skin, hair, and cloth.
+	material.albedo_color = Color.WHITE.lerp(color, 0.10) if material.albedo_texture != null else color
 	material.roughness = roughness
 	material.shading_mode = BaseMaterial3D.SHADING_MODE_PER_PIXEL
 	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS

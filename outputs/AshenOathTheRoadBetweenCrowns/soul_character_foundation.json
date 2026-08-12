@@ -26,7 +26,7 @@
     "max_triangles_crowd": 14000
   },
   "roles": {
-    "player_human": {"model": "res://assets_external/characters_universal/Superhero_Male_FullBody.gltf", "target_height": 1.78, "outfit_slot": "hunter", "face_profile": "kael"},
+      "player_human": {"model": "res://assets_external/characters_universal/Male_Peasant.gltf", "target_height": 1.78, "outfit_slot": "hunter_peasant_base", "face_profile": "kael"},
     "sister_anwen_human": {"model": "res://assets_external/characters_universal/Superhero_Female_FullBody.gltf", "target_height": 1.68, "outfit_slot": "cleric", "face_profile": "anwen"},
     "villager_male": {"model": "res://assets_external/characters_universal/Superhero_Male_FullBody.gltf", "target_height": 1.72, "outfit_slot": "peasant_male", "face_profile": "crowd_male"},
     "villager_female": {"model": "res://assets_external/characters_universal/Superhero_Female_FullBody.gltf", "target_height": 1.66, "outfit_slot": "peasant_female", "face_profile": "crowd_female"},
