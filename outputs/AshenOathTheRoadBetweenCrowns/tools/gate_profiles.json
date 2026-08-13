@@ -257,6 +257,18 @@
       ],
       "views": ["opening_soundscape"]
     },
+    "qa_soul_001": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/QA_SOUL_001_TRUTHFUL_BASELINE.md",
+        "outputs/AshenOathTheRoadBetweenCrowns/QA-SOUL-001_RESULT.md",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/capture_qa_soul_001.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_soul_001.py"
+      ],
+      "gates": [
+        "verify_qa_soul_001"
+      ],
+      "views": ["soul_baseline"]
+    },
     "packs": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_manifest.json",
@@ -872,6 +884,7 @@
 	"wychwood_authored": "capture_world_013",
 	"cemetery_chapel": "capture_world_014",
 	"sky_living": "capture_sky_003",
-	"opening_soundscape": "capture_audio_006"
+	"opening_soundscape": "capture_audio_006",
+	"soul_baseline": "capture_qa_soul_001"
 }
 }
