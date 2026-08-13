@@ -399,6 +399,30 @@
         "verify_greyfen_life"
       ]
     },
+    "char_qa_001": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/soul_character_role_manifest.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/CHAR_QA_001_CONTROLLER_MATRIX.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/*",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/asset_spawn_helper.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/build_universal_head_shells.py",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_char_qa_001.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_input_003.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_input_004.gd"
+      ],
+      "gates": [
+        "verify_char_005",
+        "verify_char_006",
+        "verify_char_007",
+        "verify_char_008",
+        "verify_char_009",
+        "verify_anim_003",
+        "verify_face_003",
+        "verify_input_003",
+        "verify_input_004",
+        "verify_char_qa_001"
+      ]
+    },
     "life": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/greyfen_life_controller.gd",

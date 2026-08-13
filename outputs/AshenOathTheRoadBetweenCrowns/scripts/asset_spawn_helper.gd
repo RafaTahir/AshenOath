@@ -66,22 +66,36 @@ func _compose_player_body(outfit_root: Node3D, outfit_path: String, role_name: S
 	var is_shared_female := normalized_path.ends_with("female_peasant.gltf")
 	if not is_kael and not is_anwen and not is_shared_male and not is_shared_female:
 		return outfit_root
-	var base_path := "res://assets_external/characters_universal/Superhero_Male_FullBody.gltf" if (is_kael or is_shared_male) else "res://assets_external/characters_universal/Superhero_Female_FullBody.gltf"
+	var base_path := "res://assets_external/characters_universal/Male_Head.gltf" if (is_kael or is_shared_male) else "res://assets_external/characters_universal/Female_Head.gltf"
 	var base := _instantiate_resource(_load_cached_resource(base_path))
 	if base == null:
 		return outfit_root
+	var hair_path := _hair_path_for_role(role_name, is_shared_male)
+	var hair := _instantiate_resource(_load_cached_resource(hair_path))
 	var composite := Node3D.new()
 	var label := "Kael" if is_kael else ("Anwen" if is_anwen else role_name.capitalize())
 	composite.name = "%sSharedHumanoidComposite" % label
-	base.name = "%sNativeFaceBody" % label
+	base.name = "%sNativeHead" % label
 	outfit_root.name = "%sPeasantOutfit" % label
 	composite.add_child(base)
 	composite.add_child(outfit_root)
+	if hair != null:
+		hair.name = "%sNativeHair" % label
+		composite.add_child(hair)
 	composite.set_meta("character_composite", true)
 	composite.set_meta("character_identity", "kael" if is_kael else "anwen")
 	composite.set_meta("character_base_path", base_path)
 	composite.set_meta("character_outfit_path", outfit_path)
+	composite.set_meta("character_hair_path", hair_path)
 	return composite
+
+func _hair_path_for_role(role_name: String, male: bool) -> String:
+	var role := role_name.to_lower()
+	if role in ["sister_anwen_human", "sister_anwen"] or not male:
+		return "res://assets_external/characters_universal/Hair_Buns.gltf"
+	if role.contains("hooded") or role.contains("ranger"):
+		return "res://assets_external/characters_universal/Hair_Buzzed.gltf"
+	return "res://assets_external/characters_universal/Hair_SimpleParted.gltf"
 
 func spawn_character(role_name: String) -> Node3D:
 	return spawn_for_role(role_name, "characters")

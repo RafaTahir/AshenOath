@@ -1,0 +1,27 @@
+{
+  "ticket": "CHAR-QA-001",
+  "date": "2026-08-13",
+  "software_contract": {
+    "xbox_xinput": "verified",
+    "dualshock_4": "verified_mapping_only",
+    "dualsense": "verified_mapping_only",
+    "switch_pro": "verified_mapping_only",
+    "generic_recognized_gamepad": "verified_fallback"
+  },
+  "behaviors": {
+    "hotplug_event_handling": "verified_simulated",
+    "disconnect_focus_recovery": "verified_simulated",
+    "glyph_switching": "verified",
+    "binding_conflict_resolution": "verified",
+    "saved_remapping": "verified",
+    "guarded_rumble": "verified_no_device"
+  },
+  "physical_hardware": {
+    "xbox_xinput": "untested_no_hardware",
+    "dualshock_4": "untested_no_hardware",
+    "dualsense": "untested_no_hardware",
+    "switch_pro": "untested_no_hardware",
+    "generic_gamepad": "untested_no_hardware"
+  },
+  "note": "Software mappings and recovery paths pass. No physical controller was connected to this workstation during this ticket, so physical families are not claimed as certified."
+}
