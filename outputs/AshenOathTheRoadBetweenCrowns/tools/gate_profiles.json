@@ -347,10 +347,14 @@
     "water": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/river_section.gd",
-        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_water_001.gd"
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/river_motion_controller.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_water_001.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_water_002.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/capture_water_002.gd"
       ],
       "gates": [
         "verify_water_001",
+        "verify_water_002",
         "verify_river_swimming",
         "verify_navigation_001",
         "verify_zone_budgets"
@@ -777,6 +781,7 @@
 	"progression": "capture_prog_001",
 	"materials": "capture_mat_003",
 	"greyfen_authored": "capture_world_012",
-	"greyfen_life": "capture_life_001"
+	"greyfen_life": "capture_life_001",
+	"river_life": "capture_water_002"
 }
 }

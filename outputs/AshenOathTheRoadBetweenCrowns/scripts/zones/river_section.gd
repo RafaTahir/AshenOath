@@ -1,5 +1,7 @@
 extends RefCounted
 
+const RiverMotionController = preload("res://scripts/river_motion_controller.gd")
+
 const BRIDGE_WIDTH := 5.4
 const BANK_CLEARANCE := 1.15
 
@@ -23,6 +25,12 @@ func build(context: ZoneBuildContext, center_z: float, width: float, span: float
 	_make_bank_slope(root, "SouthBankSlope", Vector3(0,-0.05,center_z+span*0.51), width, 8.0)
 	_make_water(root, center_z, width, span)
 	_make_shore_foam(root, center_z, width, span)
+	_make_shore_wetness(root, center_z, width, span)
+	var motion := RiverMotionController.new()
+	motion.name = "RiverMotionController"
+	motion.set_meta("ticket", "WATER-002")
+	motion.configure(center_z, width, span)
+	root.add_child(motion)
 	_make_river_audio(root, center_z)
 	_make_bridge(root, center_z, span)
 	_make_bank_barriers(root, center_z, width, span)
@@ -52,9 +60,11 @@ func _make_water(root: Node3D, center_z: float, width: float, span: float) -> vo
 	water.position = Vector3(0,-0.24,center_z)
 	var material := ShaderMaterial.new()
 	var shader := Shader.new()
-	shader.code = "shader_type spatial; render_mode blend_mix,depth_draw_opaque,cull_back; uniform vec4 deep_color:source_color=vec4(0.025,0.13,0.19,0.92); uniform vec4 shallow_color:source_color=vec4(0.11,0.34,0.39,0.88); uniform vec4 foam_color:source_color=vec4(0.70,0.78,0.72,0.72); void vertex(){ VERTEX.y += sin(VERTEX.x*1.7+TIME*1.55)*0.022 + sin(VERTEX.z*3.1-TIME*1.05)*0.013; } void fragment(){ float current=sin(UV.x*60.0-TIME*2.1+sin(UV.y*20.0))*0.5+0.5; float shore=1.0-smoothstep(0.0,0.16,min(UV.y,1.0-UV.y)); float foam=shore*smoothstep(0.56,0.86,current); vec3 water=mix(deep_color.rgb,shallow_color.rgb,shore*0.70+current*0.12); ALBEDO=mix(water,foam_color.rgb,foam*0.72); ROUGHNESS=mix(0.16,0.42,shore); METALLIC=0.02; ALPHA=mix(deep_color.a,foam_color.a,foam); }"
+	shader.code = "shader_type spatial; render_mode blend_mix,depth_draw_opaque,cull_back; uniform vec4 deep_color:source_color=vec4(0.018,0.095,0.16,0.94); uniform vec4 shallow_color:source_color=vec4(0.08,0.31,0.38,0.90); uniform vec4 foam_color:source_color=vec4(0.62,0.84,0.78,0.76); uniform float flow_speed=1.0; void vertex(){ float wave_a=sin(VERTEX.x*1.7+TIME*1.55*flow_speed); float wave_b=sin(VERTEX.z*3.1-TIME*1.05*flow_speed); VERTEX.y += wave_a*0.022+wave_b*0.013; } void fragment(){ vec2 flow_uv=UV+vec2(TIME*0.035*flow_speed,-TIME*0.12*flow_speed); float current_a=sin(flow_uv.y*42.0+sin(flow_uv.x*18.0)*1.8)*0.5+0.5; float current_b=sin(flow_uv.y*93.0-TIME*1.6+flow_uv.x*11.0)*0.5+0.5; float current=mix(current_a,current_b,0.34); float shore=1.0-smoothstep(0.0,0.18,min(UV.y,1.0-UV.y)); float depth= smoothstep(0.0,1.0,abs(UV.y-0.5)*2.0); float foam=shore*smoothstep(0.52,0.88,current); float ripple= smoothstep(0.70,0.94,sin(flow_uv.y*140.0+flow_uv.x*24.0-TIME*2.5)*0.5+0.5); vec3 water=mix(shallow_color.rgb,deep_color.rgb,depth*0.82); water += current*vec3(0.025,0.085,0.080); water += ripple*vec3(0.035,0.095,0.080); ALBEDO=mix(water,foam_color.rgb,foam*0.68); ROUGHNESS=mix(0.13,0.48,depth); METALLIC=0.03; ALPHA=mix(deep_color.a,foam_color.a,foam*0.35); NORMAL=normalize(vec3((current_a-0.5)*0.22,1.0,(current_b-0.5)*0.18)); }"
 	material.shader = shader
+	material.set_shader_parameter("flow_speed", 1.0)
 	water.material_override = material
+	water.set_meta("water_role", "WATER-002")
 	root.add_child(water)
 
 func _make_shore_foam(root: Node3D, center_z: float, width: float, span: float) -> void:
@@ -73,6 +83,20 @@ func _make_shore_foam(root: Node3D, center_z: float, width: float, span: float) 
 		foam.position = Vector3(0, -0.195, center_z + side * (span * 0.5 - 0.10))
 		foam.material_override = material
 		root.add_child(foam)
+
+func _make_shore_wetness(root: Node3D, center_z: float, width: float, span: float) -> void:
+	var material := StandardMaterial3D.new()
+	material.albedo_color = Color(0.075, 0.12, 0.095)
+	material.roughness = 0.98
+	for side in [-1.0, 1.0]:
+		var wet := MeshInstance3D.new()
+		wet.name = "RiverBankWetness_%s" % ("North" if side < 0.0 else "South")
+		var mesh := BoxMesh.new()
+		mesh.size = Vector3(width - BRIDGE_WIDTH - 0.26, 0.035, 0.36)
+		wet.mesh = mesh
+		wet.position = Vector3(0, -0.06, center_z + side * (span * 0.5 - 0.34))
+		wet.material_override = material
+		root.add_child(wet)
 
 func _make_bridge(root: Node3D, z: float, span: float) -> void:
 	var bridge_length := span + 2.6
