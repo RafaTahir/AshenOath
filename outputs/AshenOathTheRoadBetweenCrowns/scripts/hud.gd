@@ -78,6 +78,7 @@ var last_bombs := 0
 var last_oil_name := ""
 var reduced_motion := false
 var high_contrast := false
+var new_game_ready := true
 
 func _ready() -> void:
 	_build_hud()
@@ -110,13 +111,20 @@ func show_main_menu() -> void:
 	menu_layer.visible = true
 	var box = _menu_box("ASHEN OATH", "The Road Between Crowns", "contracts | curses | consequences")
 	_add_menu_text(box, "Greyfen waits under ash and oath-light.")
-	_add_menu_button(box, "New Game", func(): new_game_requested.emit())
+	_add_menu_button(box, "New Game" if new_game_ready else "Preparing Greyfen...", func(): new_game_requested.emit(), not new_game_ready)
 	_add_menu_button(box, "Continue", func(): continue_requested.emit(), not _has_continue_save())
 	_add_menu_text(box, _save_status_text())
 	_add_menu_button(box, "Controls", func(): show_controls_menu("main"))
 	_add_menu_button(box, "Settings", func(): show_settings_menu("main"))
 	_add_menu_button(box, "Credits", func(): show_credits_menu())
 	_add_menu_button(box, "Return to Launch Screen", show_launch_screen)
+
+func set_new_game_ready(value: bool) -> void:
+	if new_game_ready == value:
+		return
+	new_game_ready = value
+	if active_menu == "main":
+		show_main_menu()
 
 func show_launch_screen() -> void:
 	active_menu = "launch"
@@ -284,6 +292,9 @@ func show_credits_menu() -> void:
 func hide_menus() -> void:
 	active_menu = ""
 	_set_internal_canvas(GAMEPLAY_SIZE)
+	var focus_owner := get_viewport().gui_get_focus_owner()
+	if focus_owner != null and is_instance_valid(focus_owner):
+		focus_owner.release_focus()
 	menu_layer.visible = false
 	dialogue_layer.visible = false
 	inventory_layer.visible = false

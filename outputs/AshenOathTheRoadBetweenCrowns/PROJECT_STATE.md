@@ -831,3 +831,9 @@ The project does not yet satisfy:
 # RELEASE-001 Web Version 1.0 Candidate
 
 The complete current Web campaign passed the authoritative release suite. Its seven-file export is 65.76 MB with a 29.47 MB PCK (SHA-256 `96fdc44acaf897d03042966f6f0a701f3789a2d520fe9c12154c977eeebc81e4`). Chrome and Edge completed the released route from Greyfen to Hart Glade, including all 36 full-campaign checkpoints, without browser console or network errors. Native-720p Balanced profiling measured approximately 60 FPS average in every required zone; Wychwood combat recorded a 40.20 FPS 1% low, and warm return measured 159.1 ms. The production package excludes QA telemetry, and the live Vercel PCK matches this local hash. Android, iOS, and store distribution remain deferred.
+
+## OPENING-QA-001 Milestone D Update
+
+The cumulative Soul Rebuild opening is prepared for production. A fresh Chrome WebGL2 run at native 1280x720 completed 17 player-driven checkpoints: New Game, Sister Anwen, Wychwood travel, three clues, the five-enemy fight, bridge return, and report. It averaged 33.0 FPS and produced no browser console errors. The seven-file candidate measured 88.73 MB.
+
+This was an explicitly abbreviated acceptance. The 13.6 FPS measured 1% low, slow browser transition samples, Edge/Firefox coverage, complete verifier suite, and refreshed full screenshot gallery are deferred rather than claimed as passing. See `OPENING_QA_001_RESULT.md`.

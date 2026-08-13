@@ -1,218 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
-		<title>Ashen Oath: The Road Between Crowns</title>
-		<style>
-html, body, #canvas {
-	margin: 0;
-	padding: 0;
-	border: 0;
-}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Ashen Oath: The Road Between Crowns</title>
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #080d10; }
+    body { color: #e7e0d0; font-family: Georgia, 'Times New Roman', serif; }
+    #canvas { width: 100vw; height: 100vh; display: block; background: #080d10; outline: none; }
+    #boot { position: fixed; inset: 0; display: grid; place-items: center; overflow: hidden; background:
+      radial-gradient(circle at 68% 37%, rgba(218, 163, 82, .20), transparent 18%),
+      linear-gradient(160deg, #18262b 0%, #0b1418 48%, #05080a 100%); }
+    #boot::before { content: ''; position: absolute; inset: 0; opacity: .42; background:
+      linear-gradient(118deg, transparent 0 50%, rgba(90, 120, 112, .24) 50.2% 50.8%, transparent 51%),
+      linear-gradient(70deg, transparent 0 63%, rgba(42, 66, 70, .30) 63.2% 63.7%, transparent 64%); }
+    #boot-card { position: relative; width: min(620px, 90vw); padding: 42px 44px 36px; text-align: center; }
+    #crest { width: 88px; height: 88px; margin: 0 auto 20px; border: 1px solid rgba(214, 172, 99, .76); transform: rotate(45deg); display: grid; place-items: center; box-shadow: 0 0 40px rgba(212, 158, 75, .20); }
+    #crest::before { content: '✦'; color: #e1b567; font-size: 34px; transform: rotate(-45deg); }
+    h1 { margin: 0; letter-spacing: .22em; font-size: clamp(28px, 5vw, 58px); font-weight: 500; }
+    #subtitle { margin-top: 10px; color: #c6a877; letter-spacing: .16em; font-size: clamp(12px, 1.7vw, 18px); text-transform: uppercase; }
+    #tagline { margin: 26px auto 22px; max-width: 420px; color: #9da9a5; font-size: 17px; line-height: 1.55; }
+    #road { position: relative; width: 100%; height: 112px; margin: 6px 0 18px; border: 1px solid rgba(200, 170, 112, .20); background: rgba(4, 8, 10, .28); overflow: hidden; }
+    #road-canvas { width: 100%; height: 100%; display: block; }
+    #progress-track { height: 4px; margin: 16px auto 0; max-width: 420px; background: rgba(220, 208, 174, .16); }
+    #progress { width: 0%; height: 100%; background: linear-gradient(90deg, #7b6b4a, #e1b567); transition: width .18s ease; }
+    #status { min-height: 24px; margin-top: 12px; color: #a9b3ad; font: 13px/1.4 system-ui, sans-serif; }
+    #start { margin-top: 18px; border: 1px solid #c8a767; background: #1c2a2b; color: #f3e6c7; padding: 13px 28px; font: 600 14px system-ui, sans-serif; letter-spacing: .12em; text-transform: uppercase; cursor: pointer; }
+    #start:hover, #start:focus-visible { background: #2b4140; box-shadow: 0 0 22px rgba(225, 181, 103, .22); outline: none; }
+    #hint { margin-top: 14px; color: #72817e; font: 12px system-ui, sans-serif; }
+    .hidden { display: none !important; }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; } }
+  </style>
+  
+</head>
+<body>
+  <canvas id="canvas" tabindex="0" aria-label="Ashen Oath game"></canvas>
+  <section id="boot" aria-label="Ashen Oath loading screen">
+    <div id="boot-card">
+      <div id="crest" aria-hidden="true"></div>
+      <h1>ASHEN OATH</h1>
+      <div id="subtitle">The Road Between Crowns</div>
+      <div id="tagline">Every road keeps a witness. Every oath leaves a mark.</div>
+      <div id="road"><canvas id="road-canvas" width="620" height="112" aria-label="The Crow's Crossing loading game"></canvas></div>
+      <div id="progress-track" aria-hidden="true"><div id="progress"></div></div>
+      <div id="status" role="status" aria-live="polite">Click Enter the Road to begin.</div>
+      <button id="start" type="button">Enter the Road</button>
+      <div id="hint">Guide the crow with A/D, the arrow keys, or a connected gamepad.</div>
+    </div>
+  </section>
+  <script src="index.js"></script>
+  <script>
+    (() => {
+      const boot = document.getElementById('boot');
+      const start = document.getElementById('start');
+      const status = document.getElementById('status');
+      const progress = document.getElementById('progress');
+      const road = document.getElementById('road-canvas');
+      const ctx = road.getContext('2d');
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let running = false;
+      let started = false;
+      let crowX = road.width * .18;
+      let emberX = road.width * .74;
+      let drift = 0;
+      let score = 0;
+      let engine;
 
-body {
-	color: white;
-	background-color: black;
-	overflow: hidden;
-	touch-action: none;
-}
+      function drawRoad() {
+        const w = road.width, h = road.height;
+        ctx.clearRect(0, 0, w, h);
+        ctx.fillStyle = '#0a1519'; ctx.fillRect(0, 0, w, h);
+        ctx.strokeStyle = 'rgba(181, 154, 98, .22)'; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(0, h * .72); ctx.bezierCurveTo(w * .25, h * .44, w * .62, h * .86, w, h * .48); ctx.stroke();
+        ctx.fillStyle = 'rgba(120, 148, 135, .20)';
+        for (let i = 0; i < 9; i++) { const x = (i * 89 + drift * (i % 2 ? .3 : -.2)) % (w + 40) - 20; ctx.beginPath(); ctx.moveTo(x, h * .76); ctx.lineTo(x + 18, h * .22); ctx.lineTo(x + 28, h * .76); ctx.fill(); }
+        ctx.fillStyle = '#d8b56d'; ctx.shadowColor = '#d8b56d'; ctx.shadowBlur = 14;
+        ctx.beginPath(); ctx.arc(emberX, h * .48, 5, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0;
+        ctx.fillStyle = '#080b0e'; ctx.strokeStyle = '#b7c2b9'; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.ellipse(crowX, h * .48, 13, 8, -.14, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(crowX + 11, h * .47); ctx.lineTo(crowX + 24, h * .42); ctx.lineTo(crowX + 12, h * .53); ctx.fill();
+        ctx.fillStyle = '#f1d796'; ctx.beginPath(); ctx.arc(crowX + 9, h * .44, 1.5, 0, Math.PI * 2); ctx.fill();
+      }
 
-#canvas {
-	display: block;
-}
+      function moveCrow(amount) { if (!started) return; crowX = Math.max(22, Math.min(road.width - 22, crowX + amount)); }
+      window.addEventListener('keydown', (event) => { if (['ArrowLeft','a','A'].includes(event.key)) moveCrow(-18); if (['ArrowRight','d','D'].includes(event.key)) moveCrow(18); if (event.key === 'Enter' && !started) begin(); });
+      road.addEventListener('pointermove', (event) => { if (!started) return; const rect = road.getBoundingClientRect(); crowX = ((event.clientX - rect.left) / rect.width) * road.width; });
+      function tick() {
+        if (started && navigator.getGamepads) {
+          const pad = Array.from(navigator.getGamepads()).find(Boolean);
+          if (pad) {
+            const axis = Number(pad.axes?.[0] || 0);
+            if (Math.abs(axis) > .22) moveCrow(axis * 9);
+            if (pad.buttons?.[0]?.pressed && !running) begin();
+          }
+        }
+        if (started && !reduce) { drift += 1; emberX -= 1.2; if (emberX < -10) emberX = road.width + 10; if (Math.abs(crowX - emberX) < 22) { score++; emberX = road.width + 10; status.textContent = `The road remembers. Ember ${score} gathered.`; } }
+        drawRoad(); requestAnimationFrame(tick);
+      }
 
-#canvas:focus {
-	outline: none;
-}
-
-#status, #status-splash, #status-progress {
-	position: absolute;
-	left: 0;
-	right: 0;
-}
-
-#status, #status-splash {
-	top: 0;
-	bottom: 0;
-}
-
-#status {
-	background-color: #242424;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	visibility: hidden;
-}
-
-#status-splash {
-	max-height: 100%;
-	max-width: 100%;
-	margin: auto;
-}
-
-#status-splash.show-image--false {
-	display: none;
-}
-
-#status-splash.fullsize--true {
-	height: 100%;
-	width: 100%;
-	object-fit: contain;
-}
-
-#status-splash.use-filter--false {
-	image-rendering: pixelated;
-}
-
-#status-progress, #status-notice {
-	display: none;
-}
-
-#status-progress {
-	bottom: 10%;
-	width: 50%;
-	margin: 0 auto;
-}
-
-#status-notice {
-	background-color: #5b3943;
-	border-radius: 0.5rem;
-	border: 1px solid #9b3943;
-	color: #e0e0e0;
-	font-family: 'Noto Sans', 'Droid Sans', Arial, sans-serif;
-	line-height: 1.3;
-	margin: 0 2rem;
-	overflow: hidden;
-	padding: 1rem;
-	text-align: center;
-	z-index: 1;
-}
-		</style>
-		
-	</head>
-	<body>
-		<canvas id="canvas">
-			Your browser does not support the canvas tag.
-		</canvas>
-
-		<noscript>
-			Your browser does not support JavaScript.
-		</noscript>
-
-		<div id="status">
-			<img id="status-splash" class="show-image--true fullsize--true use-filter--true" src="index.png" alt="">
-			<progress id="status-progress"></progress>
-			<div id="status-notice"></div>
-		</div>
-
-		<script src="index.js"></script>
-		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":30896968,"index.wasm":37700666},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
-const GODOT_THREADS_ENABLED = false;
-const engine = new Engine(GODOT_CONFIG);
-
-(function () {
-	const statusOverlay = document.getElementById('status');
-	const statusProgress = document.getElementById('status-progress');
-	const statusNotice = document.getElementById('status-notice');
-
-	let initializing = true;
-	let statusMode = '';
-
-	function setStatusMode(mode) {
-		if (statusMode === mode || !initializing) {
-			return;
-		}
-		if (mode === 'hidden') {
-			statusOverlay.remove();
-			initializing = false;
-			return;
-		}
-		statusOverlay.style.visibility = 'visible';
-		statusProgress.style.display = mode === 'progress' ? 'block' : 'none';
-		statusNotice.style.display = mode === 'notice' ? 'block' : 'none';
-		statusMode = mode;
-	}
-
-	function setStatusNotice(text) {
-		while (statusNotice.lastChild) {
-			statusNotice.removeChild(statusNotice.lastChild);
-		}
-		const lines = text.split('\n');
-		lines.forEach((line) => {
-			statusNotice.appendChild(document.createTextNode(line));
-			statusNotice.appendChild(document.createElement('br'));
-		});
-	}
-
-	function displayFailureNotice(err) {
-		console.error(err);
-		if (err instanceof Error) {
-			setStatusNotice(err.message);
-		} else if (typeof err === 'string') {
-			setStatusNotice(err);
-		} else {
-			setStatusNotice('An unknown error occurred.');
-		}
-		setStatusMode('notice');
-		initializing = false;
-	}
-
-	const missing = Engine.getMissingFeatures({
-		threads: GODOT_THREADS_ENABLED,
-	});
-
-	if (missing.length !== 0) {
-		if (GODOT_CONFIG['serviceWorker'] && GODOT_CONFIG['ensureCrossOriginIsolationHeaders'] && 'serviceWorker' in navigator) {
-			let serviceWorkerRegistrationPromise;
-			try {
-				serviceWorkerRegistrationPromise = navigator.serviceWorker.getRegistration();
-			} catch (err) {
-				serviceWorkerRegistrationPromise = Promise.reject(new Error('Service worker registration failed.'));
-			}
-			// There's a chance that installing the service worker would fix the issue
-			Promise.race([
-				serviceWorkerRegistrationPromise.then((registration) => {
-					if (registration != null) {
-						return Promise.reject(new Error('Service worker already exists.'));
-					}
-					return registration;
-				}).then(() => engine.installServiceWorker()),
-				// For some reason, `getRegistration()` can stall
-				new Promise((resolve) => {
-					setTimeout(() => resolve(), 2000);
-				}),
-			]).then(() => {
-				// Reload if there was no error.
-				window.location.reload();
-			}).catch((err) => {
-				console.error('Error while registering service worker:', err);
-			});
-		} else {
-			// Display the message as usual
-			const missingMsg = 'Error\nThe following features required to run Godot projects on the Web are missing:\n';
-			displayFailureNotice(missingMsg + missing.join('\n'));
-		}
-	} else {
-		setStatusMode('progress');
-		engine.startGame({
-			'onProgress': function (current, total) {
-				if (current > 0 && total > 0) {
-					statusProgress.value = current;
-					statusProgress.max = total;
-				} else {
-					statusProgress.removeAttribute('value');
-					statusProgress.removeAttribute('max');
-				}
-			},
-		}).then(() => {
-			setStatusMode('hidden');
-		}, displayFailureNotice);
-	}
-}());
-		</script>
-	</body>
+      function begin() {
+        if (started) return;
+        started = true; running = true; start.disabled = true; start.textContent = 'Opening Greyfen...'; status.textContent = 'The crows are carrying your oath.';
+        try { engine = new Engine({"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":57397272,"index.wasm":37700666},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4}); } catch (error) { status.textContent = 'The road could not be opened. Reload to try again.'; console.error(error); return; }
+        const missing = Engine.getMissingFeatures({ threads: false });
+        if (missing.length) { status.textContent = 'This browser is missing WebGL 2.0: ' + missing.join(', '); console.error(status.textContent); return; }
+        engine.startGame({ onProgress: (current, total) => { const ratio = current > 0 && total > 0 ? current / total : 0; progress.style.width = `${Math.round(ratio * 100)}%`; status.textContent = ratio > 0 ? `Opening the road... ${Math.round(ratio * 100)}%` : 'Opening the road...'; } }).then(() => { running = false; boot.classList.add('hidden'); document.getElementById('canvas').focus(); }, (error) => { running = false; status.textContent = 'The road could not be opened. Reload to try again.'; console.error(error); start.disabled = false; start.textContent = 'Retry'; });
+      }
+      start.addEventListener('click', begin);
+      tick();
+    })();
+  </script>
+</body>
 </html>
 

@@ -27,8 +27,10 @@ func _initialize() -> void:
 	var driver := anwen.find_child("CharacterAnimationDriver", true, false)
 	_check(driver != null and driver.has_method("is_valid") and driver.is_valid(), "Anwen has no valid fused animation driver")
 	if driver != null:
-		_check(driver.get("animation_players").size() >= 2, "Anwen outfit layer is not sharing the animation library")
+		_check(driver.get("animation_players").size() == 1, "Anwen must use one consolidated animation rig")
 		_check(driver.get_animation_player().has_animation("Idle_No"), "UAL2 idle is not attached to Anwen")
+	var composite := _find_composite(visual)
+	_check(composite != null and int(composite.get_meta("character_rig_layer_count", 0)) == 1, "Anwen rig layers were not consolidated")
 	var skeleton := _find_skeleton(visual)
 	_check(skeleton != null, "Anwen lacks Skeleton3D")
 	if skeleton != null:
@@ -57,6 +59,15 @@ func _find_skeleton(node: Node) -> Skeleton3D:
 		return node as Skeleton3D
 	for child in node.get_children():
 		var found := _find_skeleton(child)
+		if found != null:
+			return found
+	return null
+
+func _find_composite(node: Node) -> Node:
+	if bool(node.get_meta("character_composite", false)):
+		return node
+	for child in node.get_children():
+		var found := _find_composite(child)
 		if found != null:
 			return found
 	return null

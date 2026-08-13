@@ -159,7 +159,9 @@ func _sample_blade_motion(player, clip: StringName) -> float:
 	var skeleton := player.animation_driver.get_skeleton() as Skeleton3D
 	if animation_player == null or skeleton == null or not animation_player.has_animation(clip):
 		return 0.0
-	var wrist_index := skeleton.find_bone("Wrist.R")
+	var wrist_index := skeleton.find_bone("hand_r")
+	if wrist_index < 0:
+		wrist_index = skeleton.find_bone("Wrist.R")
 	if wrist_index < 0:
 		return 0.0
 	var animation := animation_player.get_animation(clip)

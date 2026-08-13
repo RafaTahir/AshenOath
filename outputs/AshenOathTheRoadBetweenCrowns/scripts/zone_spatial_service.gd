@@ -141,12 +141,21 @@ func build_route(start: Vector3, destination: Vector3, clearance: float = 0.9) -
 			return []
 		var source_anchor: Vector3 = bridge.bank_a if bank_for(bridge.bank_a) == bank_for(source) else bridge.bank_b
 		var target_anchor: Vector3 = bridge.bank_b if source_anchor == bridge.bank_a else bridge.bank_a
-		if not validate_segment(source, source_anchor, clearance):
+		# Join the authored bridge lane before approaching its bank anchor. A
+		# diagonal shortcut can satisfy river math while cutting through roadside
+		# clues, deadfalls, or bridge furniture that are not exclusion volumes.
+		var source_lane := Vector3(source_anchor.x, source.y, source.z)
+		var target_lane := Vector3(target_anchor.x, target.y, target.z)
+		if not validate_segment(source, source_lane, clearance) or not validate_segment(source_lane, source_anchor, clearance):
 			return []
+		if source.distance_squared_to(source_lane) > 0.16:
+			result.append(source_lane)
 		result.append(source_anchor)
 		result.append(Vector3((source_anchor.x + target_anchor.x) * 0.5, maxf(source.y, target.y), river_center))
 		result.append(target_anchor)
-		if not validate_segment(target_anchor, target, clearance):
+		if target_anchor.distance_squared_to(target_lane) > 0.16:
+			result.append(target_lane)
+		if not validate_segment(target_anchor, target_lane, clearance) or not validate_segment(target_lane, target, clearance):
 			return []
 	elif not validate_segment(source, target, clearance):
 		return []

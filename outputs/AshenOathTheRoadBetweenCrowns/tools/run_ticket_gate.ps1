@@ -230,7 +230,7 @@ foreach ($gate in $gates) {
         ) $gateInputs $cache
     } elseif ($gate -eq "runtime_smoke") {
         Invoke-Compact $gate $Godot @("--headless", "--path", $Project, "--quit-after", "3") $gateInputs $cache
-    } elseif ($gate -in @("verify_perf_001", "verify_perf_002", "verify_perf_003")) {
+    } elseif ($gate -in @("verify_perf_001", "verify_perf_002", "verify_perf_003", "verify_opening_qa_001")) {
         $script = Join-Path $PSScriptRoot "$gate.gd"
         Invoke-Compact $gate $Godot @(
             "--path", $Project,
@@ -297,6 +297,14 @@ foreach ($gate in $gates) {
             "--export", $Web,
             "--browser", "chrome",
             "--report", (Join-Path $Logs "qa_002_browser.json")
+        ) $gateInputs $cache
+    } elseif ($gate -eq "verify_opening_qa_001_browser") {
+        Invoke-Compact $gate "node.exe" @(
+            (Join-Path $PSScriptRoot "verify_qa_002_browser.mjs"),
+            "--export", $Web,
+            "--browser", "all",
+            "--opening-only", "true",
+            "--report", (Join-Path $Logs "opening_qa_001_browser.json")
         ) $gateInputs $cache
     } elseif ($gate -eq "verify_web_002_browser") {
         Invoke-Compact $gate "node.exe" @(

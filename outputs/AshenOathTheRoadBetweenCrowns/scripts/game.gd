@@ -115,14 +115,22 @@ const MAX_RETIRED_MATERIAL_ANCHORS := 64
 const MAX_TRANSITION_HISTORY := 16
 
 func _ready() -> void:
+	var ready_started := Time.get_ticks_msec()
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	shared_box_mesh = BoxMesh.new()
 	shared_box_mesh.size = Vector3.ONE
+	var phase_started := Time.get_ticks_msec()
 	_build_global_environment()
+	var environment_ms := Time.get_ticks_msec() - phase_started
+	phase_started = Time.get_ticks_msec()
 	_setup_runtime()
+	var services_ms := Time.get_ticks_msec() - phase_started
 	hud.show_launch_screen()
 	audio.set_music_state("main_menu")
 	get_tree().paused = true
+	print("LOADING: runtime ready total=%dms environment=%dms services=%dms" % [
+		Time.get_ticks_msec() - ready_started, environment_ms, services_ms,
+	])
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
@@ -257,6 +265,8 @@ func _start_new_game_world() -> void:
 	if game_started or not new_game_start_pending:
 		return
 	new_game_start_pending = false
+	if hud != null and hud.has_method("set_new_game_ready"):
+		hud.set_new_game_ready(true)
 	# Keep the menu-prewarmed Greyfen tree while clearing any stale campaign
 	# cache. Rebuilding this scene in Web/ANGLE was the dominant New Game delay.
 	var prewarmed_greyfen = route_zone_cache.get("greyfen")
@@ -272,6 +282,7 @@ func _start_new_game_world() -> void:
 	wychwood_pack_kills = 0
 	pending_anwen_relocation = false
 	tutorial_flags.clear()
+	inventory.reset_starting_loadout()
 	progression.load_state({})
 	current_zone_id = "greyfen"
 	day_night.set_time(day_night.START_TIME_MINUTES, 0)
@@ -1428,6 +1439,8 @@ func _handle_dialogue_action(action: Dictionary) -> void:
 
 func _on_launch_accepted() -> void:
 	audio.play_event("ui", 0.0)
+	if hud != null and hud.has_method("set_new_game_ready") and not route_zone_cache.has("greyfen"):
+		hud.set_new_game_ready(false)
 	if zone_streaming != null and zone_streaming.has_method("prewarm_neighbors"):
 		zone_streaming.prewarm_neighbors("greyfen")
 	if not greyfen_prewarm_started and not game_started:
@@ -1438,6 +1451,8 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 	await get_tree().process_frame
 	if game_started or zone_root != null or route_zone_cache.has("greyfen"):
 		return
+	var prewarm_started := Time.get_ticks_msec()
+	var phase_started := prewarm_started
 	var prewarm_service := ZoneSpatialService.new()
 	prewarm_service.name = "GreyfenPrewarmSpatialService"
 	add_child(prewarm_service)
@@ -1455,22 +1470,29 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 	house_batch_data.clear()
 	environment_batches_flushed = false
 	var prewarm_build := ZoneCompositionRouter.build_core(self, "greyfen")
+	var build_ms := Time.get_ticks_msec() - phase_started
 	if not bool(prewarm_build.get("ok", false)):
 		push_error("Greyfen prewarm composition failed: %s" % ", ".join(prewarm_build.get("errors", [])))
 		_retire_zone_root(zone_root)
 		zone_root = null
 		prewarm_service.queue_free()
 		spatial_service = null
+		if hud != null and hud.has_method("set_new_game_ready"):
+			hud.set_new_game_ready(true)
 		return
+	phase_started = Time.get_ticks_msec()
 	_flush_environment_batches()
 	_add_visual_100_layer("greyfen")
 	_apply_first_route_materials(zone_root)
 	_validate_zone_render_resources(zone_root)
 	prewarm_service.build_navigation(zone_root)
+	var world_finalize_ms := Time.get_ticks_msec() - phase_started
 	greyfen_prewarm_spatial_service = prewarm_service
 	# Kael's rig and camera are also expensive to instantiate in WebGL. Prepare
 	# them while the launch/menu presentation is already covering the viewport.
+	phase_started = Time.get_ticks_msec()
 	_spawn_player(Vector3(0, 1, 7))
+	var player_ms := Time.get_ticks_msec() - phase_started
 	# Keep the body renderable behind the opaque menu so WebGL compiles its
 	# skinned materials before New Game instead of on the first gameplay frame.
 	player.visible = true
@@ -1491,10 +1513,21 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 	zone_root.process_mode = Node.PROCESS_MODE_DISABLED
 	zone_root.position = Vector3.ZERO
 	_set_zone_collision_enabled(zone_root, false)
+	# Readiness means the opening is rendered, not merely constructed. Give ANGLE
+	# a bounded warmup behind the opaque menu so first-use shader compilation does
+	# not spill into the opening gameplay sample.
+	for _warmup_frame in range(90):
+		await get_tree().process_frame
 	_cache_route_zone("greyfen", zone_root, [], _zone_state_signature(), true)
 	zone_root = null
 	spatial_service = null
-	print("LOADING: Greyfen prewarmed behind main menu")
+	if audio != null and audio.has_method("prewarm_opening_audio"):
+		audio.prewarm_opening_audio()
+	if hud != null and hud.has_method("set_new_game_ready"):
+		hud.set_new_game_ready(true)
+	print("LOADING: Greyfen prewarmed total=%dms build=%dms world=%dms player=%dms" % [
+		Time.get_ticks_msec() - prewarm_started, build_ms, world_finalize_ms, player_ms,
+	])
 
 func _complete_ending(ending: String) -> void:
 	if not quests.is_active("main_hart_remembers") or str(story_state.get_flag("confession_method", "")) == "":
@@ -4255,7 +4288,7 @@ func _make_light(name: String, pos: Vector3, color: Color, energy: float) -> voi
 	var quality := str(settings.settings.get("quality_preset", "balanced")) if settings != null else "balanced"
 	# Two authored local pools preserve route landmarks without multiplying
 	# Compatibility-renderer lighting work across the entire outdoor frame.
-	if quality == "balanced" and runtime_light_count >= 4:
+	if quality == "balanced" and runtime_light_count >= 2:
 		return
 	var light = OmniLight3D.new()
 	light.name = name

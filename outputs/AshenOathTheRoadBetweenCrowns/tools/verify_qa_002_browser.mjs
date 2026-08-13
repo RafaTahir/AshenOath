@@ -12,6 +12,7 @@ const reportPath = resolve(args.report || ".release-gate/qa_002/browser_report.j
 const timeoutMs = Number(args.timeout || 120000);
 const requestedBrowser = String(args.browser || "chrome").toLowerCase();
 const fullCampaign = Boolean(args["full-campaign"]);
+const openingOnly = Boolean(args["opening-only"]);
 const mobileMode = Boolean(args.mobile);
 const viewport = { width: 1280, height: 720 };
 const browserCatalog = [
@@ -161,8 +162,16 @@ async function dispatchKey(cdp, code, key, down) {
     key,
     code,
     windowsVirtualKeyCode: code === "KeyW" ? 87
+      : code === "KeyA" ? 65
+      : code === "KeyS" ? 83
+      : code === "KeyD" ? 68
       : code === "KeyE" ? 69
+      : code === "KeyC" ? 67
+      : code === "KeyR" ? 82
+      : code === "KeyF" ? 70
+      : code === "KeyQ" ? 81
       : code === "ShiftLeft" ? 16
+      : code === "Space" ? 32
       : code === "ArrowLeft" ? 37
       : code === "ArrowRight" ? 39
       : code === "Enter" ? 13 : 0,
@@ -180,6 +189,43 @@ async function holdKey(cdp, code, key, duration) {
   await dispatchKey(cdp, code, key, true);
   await sleep(duration);
   await dispatchKey(cdp, code, key, false);
+}
+
+async function moveCameraRelative(cdp, yaw, dx, dz, duration = 180) {
+  const forward = dx * -Math.sin(yaw) + dz * -Math.cos(yaw);
+  const right = dx * Math.cos(yaw) + dz * -Math.sin(yaw);
+  const movementKeys = [["KeyW", "w"], ["KeyA", "a"], ["KeyS", "s"], ["KeyD", "d"]];
+  for (const [code, key] of movementKeys) await dispatchKey(cdp, code, key, false);
+  const selected = Math.abs(forward) >= Math.abs(right)
+    ? (forward > 0 ? ["KeyW", "w"] : ["KeyS", "s"])
+    : (right > 0 ? ["KeyD", "d"] : ["KeyA", "a"]);
+  await dispatchKey(cdp, selected[0], selected[1], true);
+  await sleep(duration);
+  await dispatchKey(cdp, selected[0], selected[1], false);
+  for (const [code, key] of movementKeys) await dispatchKey(cdp, code, key, false);
+}
+
+async function clickAttack(cdp, heavy = false) {
+  await cdp.send("Input.dispatchMouseEvent", {
+    type: "mousePressed", x: 640, y: 360, button: heavy ? "right" : "left", clickCount: 1,
+  });
+  await sleep(65);
+  await cdp.send("Input.dispatchMouseEvent", {
+    type: "mouseReleased", x: 640, y: 360, button: heavy ? "right" : "left", clickCount: 1,
+  });
+}
+
+async function clickDialogueAction(cdp) {
+  await cdp.send("Input.dispatchMouseEvent", {
+    type: "mouseMoved", x: 640, y: 654, button: "none",
+  });
+  await cdp.send("Input.dispatchMouseEvent", {
+    type: "mousePressed", x: 640, y: 654, button: "left", clickCount: 1,
+  });
+  await sleep(70);
+  await cdp.send("Input.dispatchMouseEvent", {
+    type: "mouseReleased", x: 640, y: 654, button: "left", clickCount: 1,
+  });
 }
 
 async function telemetry(cdp) {
@@ -206,6 +252,10 @@ function findGate(state, target) {
   return state?.gates?.find((gate) => gate.target === target);
 }
 
+function findInteraction(state, id) {
+  return state?.interactions?.find((interaction) => interaction.id === id);
+}
+
 async function capture(cdp, path) {
   const screenshot = await cdp.send("Page.captureScreenshot", { format: "png", fromSurface: true });
   if (!screenshot.data || screenshot.data.length < 4096) return "";
@@ -219,6 +269,15 @@ async function startNewGame(cdp, expectedUrl) {
   await waitFor(async () => cdp.evaluate(
     `location.href.startsWith(${JSON.stringify(expectedUrl.split("?")[0])}) && document.readyState === "complete"`
   ), "QA page load");
+  const hasBootStart = await cdp.evaluate(`Boolean(document.getElementById("start"))`);
+  if (hasBootStart) {
+    await cdp.evaluate(`(() => {
+      const start = document.getElementById("start");
+      if (!start || start.disabled) return false;
+      start.click();
+      return true;
+    })()`);
+  }
   await waitFor(async () => cdp.evaluate(`(() => {
     const canvas = document.querySelector("canvas");
     if (!canvas) return false;
@@ -232,15 +291,16 @@ async function startNewGame(cdp, expectedUrl) {
     const canvas = document.querySelector("canvas");
     if (canvas) { canvas.tabIndex = 0; canvas.focus(); }
   })()`);
-  await cdp.send("Input.dispatchMouseEvent", {
-    type: "mousePressed", x: 640, y: 360, button: "left", clickCount: 1,
-  });
-  await cdp.send("Input.dispatchMouseEvent", {
-    type: "mouseReleased", x: 640, y: 360, button: "left", clickCount: 1,
-  });
+  // Keep startup keyboard-driven. A center-canvas click reaches the camera
+  // before the launch button consumes it and requests pointer lock while the
+  // game is still in UI mode, which headless browsers correctly reject.
   await tapKey(cdp, "Enter", "Enter");
-  await sleep(900);
-  await tapKey(cdp, "Enter", "Enter");
+  await waitFor(async () => (await telemetry(cdp))?.new_game_ready, "Greyfen menu prewarm", 15000);
+  await sleep(420);
+  await cdp.send("Input.dispatchMouseEvent", { type: "mouseMoved", x: 1015, y: 227, button: "none" });
+  await cdp.send("Input.dispatchMouseEvent", { type: "mousePressed", x: 1015, y: 227, button: "left", clickCount: 1 });
+  await sleep(70);
+  await cdp.send("Input.dispatchMouseEvent", { type: "mouseReleased", x: 1015, y: 227, button: "left", clickCount: 1 });
   return waitFor(async () => {
     const errors = consoleErrors(cdp);
     if (errors.length) throw fatal(`startup console error: ${errors[0]}`);
@@ -289,24 +349,19 @@ async function driveToGate(cdp, target, checkpoints, timeout = 45000) {
     if (gate.distance < lastDistance - 0.35) {
       lastDistance = gate.distance;
       lastProgressAt = Date.now();
-    } else if (!staged && Date.now() - lastProgressAt > 6000) {
-      const stagedResult = await qaCommand(cdp, "stage_gate", { target });
-      if (!stagedResult.ok) throw new Error(`Could not stage ${target} gate approach`);
-      checkpoints.push({ event: "gate_approach_recovery", zone: state.zone, target });
-      staged = true;
-      route = [];
-      await sleep(250);
-      continue;
     }
     if (!route.length) {
       const routeResult = await qaCommand(cdp, "route_to", gate.position);
       route = routeResult.points || [];
       if (!route.length) throw new Error(`No navigation route to ${target} in ${state.zone}`);
-      routeIndex = Math.min(1, route.length - 1);
+      routeIndex = route.length > 1 ? 1 : 0;
     }
     const player = state.player.position;
     let waypoint = route[Math.min(routeIndex, route.length - 1)] || gate.position;
-    if (Math.hypot(waypoint.x - player.x, waypoint.z - player.z) < 0.75 && routeIndex < route.length - 1) {
+    const previous = route[Math.max(0, routeIndex - 1)] || player;
+    const passedWaypoint = routeIndex > 0
+      && ((player.x - waypoint.x) * (waypoint.x - previous.x) + (player.z - waypoint.z) * (waypoint.z - previous.z)) >= 0;
+    if ((Math.hypot(waypoint.x - player.x, waypoint.z - player.z) < 0.75 || passedWaypoint) && routeIndex < route.length - 1) {
       routeIndex += 1;
       waypoint = route[routeIndex];
     }
@@ -316,8 +371,8 @@ async function driveToGate(cdp, target, checkpoints, timeout = 45000) {
     const desiredYaw = Math.atan2(-dx, -dz);
     const delta = angleDelta(Number(state.camera?.yaw || 0), desiredYaw);
     if (Math.abs(delta) > 0.10) {
-      const turnMs = clamp(Math.abs(delta) / 2.2 * 1000, 45, 450);
-      await holdKey(cdp, delta > 0 ? "ArrowLeft" : "ArrowRight", delta > 0 ? "ArrowLeft" : "ArrowRight", turnMs);
+      await qaCommand(cdp, "orient_camera", { yaw: desiredYaw });
+      await sleep(60);
     }
     if (distance > 0.42) {
       await dispatchKey(cdp, "ShiftLeft", "Shift", true);
@@ -347,12 +402,180 @@ async function useGate(cdp, expectedZone, checkpoints) {
     transition_ms: Date.now() - started,
     player: arrival.player.position,
   });
+  await clickAttack(cdp, false);
+  await sleep(180);
   return arrival;
 }
 
 async function traverse(cdp, target, checkpoints) {
   await driveToGate(cdp, target, checkpoints);
   return useGate(cdp, target, checkpoints);
+}
+
+async function driveToInteraction(cdp, id, checkpoints, timeout = 45000) {
+  const started = Date.now();
+  let route = [];
+  let routeIndex = 0;
+  while (Date.now() - started < timeout) {
+    const state = await telemetry(cdp);
+    if (!state?.ready || state.transition_pending || state.paused) {
+      await sleep(120);
+      continue;
+    }
+    if (state.player && !state.player.can_control) throw new Error(`Player lost control while routing to ${id}`);
+    const interaction = findInteraction(state, id);
+    if (!interaction) throw new Error(`No ${id} interaction exposed in ${state.zone}`);
+    if (state.focus?.id === id && interaction.distance <= 3.0) {
+      checkpoints.push({ event: "interaction_focus", id, zone: state.zone, distance: interaction.distance });
+      return state;
+    }
+    if (!route.length) {
+      const routeResult = await qaCommand(cdp, "route_to", interaction.position);
+      route = routeResult.points || [];
+      if (!route.length) throw new Error(`No navigation route to ${id} in ${state.zone}`);
+      routeIndex = route.length > 1 ? 1 : 0;
+    }
+    const player = state.player.position;
+    let waypoint = route[Math.min(routeIndex, route.length - 1)] || interaction.position;
+    const previous = route[Math.max(0, routeIndex - 1)] || player;
+    const passedWaypoint = routeIndex > 0
+      && ((player.x - waypoint.x) * (waypoint.x - previous.x) + (player.z - waypoint.z) * (waypoint.z - previous.z)) >= 0;
+    if ((Math.hypot(waypoint.x - player.x, waypoint.z - player.z) < 0.72 || passedWaypoint) && routeIndex < route.length - 1) {
+      routeIndex += 1;
+      waypoint = route[routeIndex];
+    }
+    const dx = waypoint.x - player.x;
+    const dz = waypoint.z - player.z;
+    const distance = Math.hypot(dx, dz);
+    const desiredYaw = Math.atan2(-dx, -dz);
+    const delta = angleDelta(Number(state.camera?.yaw || 0), desiredYaw);
+    if (Math.abs(delta) > 0.10) {
+      await qaCommand(cdp, "orient_camera", { yaw: desiredYaw });
+      await sleep(60);
+    }
+    if (interaction.distance <= 2.55) {
+      await sleep(140);
+      continue;
+    }
+    if (distance > 0.38) await holdKey(cdp, "KeyW", "w", clamp(distance * 32, 80, 240));
+    else await sleep(120);
+  }
+  throw new Error(`Could not focus interaction ${id}`);
+}
+
+async function useInteraction(cdp, id, checkpoints, expectsDialogue = false) {
+  await driveToInteraction(cdp, id, checkpoints);
+  await tapKey(cdp, "KeyE", "e", 80);
+  await sleep(220);
+  if (expectsDialogue) {
+    for (let page = 0; page < 12; page += 1) {
+      const state = await telemetry(cdp);
+      if (!state?.paused) break;
+      // Dialogue rebuilds its action button after every page. Click the rendered
+      // control so the packed-browser gate exercises Godot's real pointer path.
+      await sleep(260);
+      await clickDialogueAction(cdp);
+      await sleep(220);
+    }
+    if ((await telemetry(cdp))?.paused) throw new Error(`${id} dialogue did not close through real input`);
+    // Reacquire pointer lock with a direct gameplay gesture. Browsers reject
+    // deferred lock requests made by the dialogue callback itself.
+    await clickAttack(cdp, false);
+    await sleep(180);
+  }
+  checkpoints.push({ event: "interaction_used", id, zone: (await telemetry(cdp))?.zone });
+}
+
+async function fightWychwoodPack(cdp, checkpoints, timeout = 150000) {
+  const started = Date.now();
+  let lastBeam = 0;
+  let lastPotion = Date.now();
+  let lastDodge = 0;
+  let bombUsed = false;
+  while (Date.now() - started < timeout) {
+    const state = await telemetry(cdp);
+    if (state?.quests?.fight_complete) {
+      checkpoints.push({ event: "wychwood_pack_defeated", elapsed_ms: Date.now() - started });
+      return;
+    }
+    const living = (state?.enemies || []).filter((enemy) => enemy.health > 0.01);
+    const target = living.find((enemy) => enemy.active) || living[0];
+    if (!target) {
+      await holdKey(cdp, "KeyW", "w", 300);
+      await sleep(150);
+      continue;
+    }
+    const player = state.player.position;
+    if (player.dead || Number(player.health) <= 0) throw new Error("Kael died during the Wychwood pack");
+    const dx = target.position.x - player.x;
+    const dz = target.position.z - player.z;
+    const distance = Math.hypot(dx, dz);
+    const desiredYaw = Math.atan2(-dx, -dz);
+    const delta = angleDelta(Number(state.camera?.yaw || 0), desiredYaw);
+    if (Math.abs(delta) > 2.65 && distance > 0.78) {
+      await holdKey(cdp, "KeyS", "s", clamp(distance * 32, 90, 220));
+      continue;
+    }
+    if (Math.abs(delta) > 0.10) {
+      await holdKey(cdp, delta > 0 ? "ArrowLeft" : "ArrowRight", delta > 0 ? "ArrowLeft" : "ArrowRight", clamp(Math.abs(delta) / 2.2 * 1000, 45, 350));
+      if (Math.abs(delta) > 0.24) continue;
+    }
+    if (!bombUsed && distance <= 6.0) {
+      await tapKey(cdp, "KeyF", "f", 70);
+      bombUsed = true;
+      await sleep(300);
+      continue;
+    }
+    if (distance <= 11.5 && Date.now() - lastBeam > 5200) {
+      await holdKey(cdp, "KeyC", "c", 1350);
+      lastBeam = Date.now();
+      await sleep(240);
+      continue;
+    }
+    if (distance > 1.65) {
+      await holdKey(cdp, "KeyW", "w", clamp((distance - 1.35) * 45, 110, 320));
+      continue;
+    }
+    await holdKey(cdp, "KeyW", "w", 75);
+    {
+      if (Date.now() - lastDodge > 1400) {
+        await tapKey(cdp, "Space", " ", 70);
+        lastDodge = Date.now();
+        await sleep(180);
+      }
+      {
+        await dispatchKey(cdp, "KeyQ", "q", true);
+        await clickAttack(cdp, target.health > 45);
+        await dispatchKey(cdp, "KeyQ", "q", false);
+        await sleep(420);
+      }
+    }
+    if (Date.now() - lastPotion > 5000) {
+      await tapKey(cdp, "KeyR", "r", 60);
+      lastPotion = Date.now();
+    }
+  }
+  throw new Error(`Wychwood pack did not resolve through real combat input`);
+}
+
+async function runOpeningCampaign(cdp, url, checkpoints) {
+  const state = await startNewGame(cdp, `${url}&scenario=opening-campaign-${Date.now()}`);
+  checkpoints.push({ event: "scenario_start", scenario: "opening-campaign", zone: state.zone });
+  await useInteraction(cdp, "sister_anwen", checkpoints, true);
+  await traverse(cdp, "wychwood", checkpoints);
+  for (const clue of ["corpse", "black_feathers", "claw_marks"]) {
+    await useInteraction(cdp, clue, checkpoints, false);
+  }
+  if (!(await telemetry(cdp))?.quests?.evidence_ready) throw new Error("Three real clue interactions did not resolve evidence threshold");
+  await fightWychwoodPack(cdp, checkpoints);
+  await traverse(cdp, "greyfen", checkpoints);
+  await useInteraction(cdp, "sister_anwen", checkpoints, true);
+  const finalState = await telemetry(cdp);
+  if (!finalState?.quests?.road_complete || !finalState?.quests?.bell_active) {
+    throw new Error(`Real report did not complete Road of Crows and open Bell Beneath Greyfen`);
+  }
+  checkpoints.push({ event: "opening_complete", zone: finalState.zone, quests: finalState.quests });
+  return finalState;
 }
 
 async function runScenario(cdp, url, name, route, checkpoints) {
@@ -464,15 +687,22 @@ async function testBrowser(name, executable) {
         );
       }
     } else {
-      await runScenario(cdp, url, "greyfen-wychwood-return", ["wychwood", "greyfen"], checkpoints);
-      await runScenario(cdp, url, "greyfen-deep-woods-return", ["deep_wood", "wychwood", "greyfen"], checkpoints);
-      await runScenario(
-        cdp,
-        url,
-        "greyfen-castle-record-hall-return",
-        ["vargan_approach", "vargan_court", "record_hall", "vargan_court", "vargan_approach"],
-        checkpoints
-      );
+      if (openingOnly) {
+        finalState = await runOpeningCampaign(cdp, url, checkpoints);
+      } else {
+        await runScenario(cdp, url, "greyfen-wychwood-return", ["wychwood", "greyfen"], checkpoints);
+        await runScenario(cdp, url, "greyfen-deep-woods-return", ["deep_wood", "wychwood", "greyfen"], checkpoints);
+        await runScenario(
+          cdp,
+          url,
+          "greyfen-castle-record-hall-return",
+          ["vargan_approach", "vargan_court", "record_hall", "vargan_court", "vargan_approach"],
+          checkpoints
+        );
+      }
+    }
+    if (openingOnly && checkpoints.some((checkpoint) => checkpoint.event === "gate_approach_recovery")) {
+      throw new Error(`${name} opening route required QA position recovery`);
     }
     const errors = consoleErrors(cdp);
     if (errors.length) throw new Error(`${name} console error: ${errors[0]}`);

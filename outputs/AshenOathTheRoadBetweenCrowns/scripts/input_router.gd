@@ -11,6 +11,8 @@ const DEVICE_KEYBOARD_MOUSE := "keyboard_mouse"
 const DEVICE_GAMEPAD := "gamepad"
 const DEVICE_TOUCH := "touch"
 
+var _web_pointer_capture_block_until := 0
+
 const KEYBOARD_BINDINGS := {
 	"move_forward": KEY_W,
 	"move_back": KEY_S,
@@ -404,11 +406,15 @@ func activate_touch() -> void:
 	_set_device(DEVICE_TOUCH)
 
 func show_pointer() -> void:
+	if OS.has_feature("web"):
+		_web_pointer_capture_block_until = Time.get_ticks_msec() + 120
 	_set_pointer_mode(Input.MOUSE_MODE_VISIBLE)
 
 func capture_pointer() -> void:
 	if active_device == DEVICE_TOUCH:
 		show_pointer()
+		return
+	if OS.has_feature("web") and Time.get_ticks_msec() < _web_pointer_capture_block_until:
 		return
 	_set_pointer_mode(Input.MOUSE_MODE_CAPTURED)
 
@@ -417,6 +423,11 @@ func release_pointer() -> void:
 
 func restore_gameplay_pointer() -> void:
 	if active_device == DEVICE_TOUCH:
+		show_pointer()
+	elif OS.has_feature("web"):
+		# Browsers only grant pointer lock inside a direct user gesture. Dialogue
+		# and menu callbacks may finish after that event has propagated, so leave
+		# the pointer visible until CameraController receives the next real click.
 		show_pointer()
 	else:
 		capture_pointer()

@@ -12,6 +12,7 @@ var day_count := 0
 var time_locked := false
 var current_phase := "dusk"
 var _tick_accumulator := 0.0
+const VISUAL_UPDATE_INTERVAL := 0.2
 
 func _ready() -> void:
 	current_phase = _phase_for_time(world_time_minutes)
@@ -20,7 +21,7 @@ func _process(delta: float) -> void:
 	if time_locked or get_tree().paused:
 		return
 	_tick_accumulator += delta
-	if _tick_accumulator < 0.2:
+	if _tick_accumulator < VISUAL_UPDATE_INTERVAL:
 		return
 	var elapsed := _tick_accumulator
 	_tick_accumulator = 0.0

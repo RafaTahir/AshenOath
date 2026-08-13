@@ -18,7 +18,9 @@ func configure(root: Node3D, id: String, target: Node3D, manager: Node, preset: 
 	audio_manager = manager
 	quality = preset
 	_collect_anchors()
-	_tick_remaining = 0.15
+	# Let the continuous bed and music settle before the first spatial accent.
+	# This avoids clustered decoder work during the first playable seconds.
+	_tick_remaining = 7.0
 	set_process(true)
 
 func set_listener(target: Node3D) -> void:
@@ -30,10 +32,9 @@ func _process(delta: float) -> void:
 	_tick_remaining -= delta
 	if _tick_remaining > 0.0:
 		return
-	_collect_anchors()
 	if audio_manager.has_method("tick_opening_soundscape"):
 		audio_manager.tick_opening_soundscape(zone_id, listener, _anchors, quality)
-	_tick_remaining = 0.58 if quality == "potato" else (0.38 if quality == "balanced" else 0.30)
+	_tick_remaining = 2.4 if quality == "potato" else (1.25 if quality == "balanced" else 0.8)
 
 func _collect_anchors() -> void:
 	if zone_root == null or not is_instance_valid(zone_root):

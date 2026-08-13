@@ -2,7 +2,7 @@
   "ghoulkin": {
     "name": "Ghoulkin",
     "health": 55,
-    "damage": 12,
+    "damage": 4,
     "speed": 3.2,
     "attack_range": 1.35,
     "sense_range": 11.0,
@@ -44,7 +44,7 @@
   "wychwood_stalker": {
     "name": "Wychwood Stalker",
     "health": 80,
-    "damage": 16,
+    "damage": 5,
     "speed": 3.7,
     "attack_range": 1.5,
     "sense_range": 15.0,
@@ -60,7 +60,7 @@
   "wychwood_raider": {
     "name": "Wychwood Raider",
     "health": 75,
-    "damage": 14,
+    "damage": 5,
     "speed": 2.8,
     "attack_range": 1.5,
     "sense_range": 9.0,
@@ -76,7 +76,7 @@
   "wychwood_brute": {
     "name": "Wychwood Brute",
     "health": 110,
-    "damage": 18,
+    "damage": 7,
     "speed": 1.8,
     "attack_range": 1.75,
     "sense_range": 8.0,

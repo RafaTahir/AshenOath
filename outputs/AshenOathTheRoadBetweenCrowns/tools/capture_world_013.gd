@@ -22,13 +22,17 @@ func _initialize() -> void:
 	game.settings.set_quality_preset("balanced")
 	game.call("_new_game")
 	game.quests.start_quest("main_road_of_crows")
+	game.quests.complete_objective("main_road_of_crows", "speak_anwen")
 	game.call("_load_zone", "wychwood", Vector3(0, 1, 12.5))
 	await _frames(18)
-	await _capture(game, "WORLD-013_01_Wychwood_Gate_Arch", Vector3(0, 1, 12.0), 0.0)
+	# Face back toward the return gate from inside Wychwood. The previous yaw
+	# framed the bridge rail behind Kael and falsely read as a blocked gateway.
+	await _capture(game, "WORLD-013_01_Wychwood_Gate_Arch", Vector3(0, 1, 10.5), PI)
 	await _capture(game, "WORLD-013_02_Wychwood_Clue_Route", Vector3(-1.2, 1, 7.0), 0.05)
 	await _capture(game, "WORLD-013_03_Wychwood_Bridge_Canopy", Vector3(0, 1, 4.3), 0.0)
-	await _capture(game, "WORLD-013_04_Wychwood_Combat_Clearing", Vector3(0, 1, -6.0), 0.0)
+	await _capture(game, "WORLD-013_04_Wychwood_Combat_Clearing", Vector3(0, 1, -9.2), 0.0)
 	print("WORLD-013 SCREENSHOTS: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
+	await _release_game(game)
 	quit(0 if failures == 0 else 1)
 
 func _capture(game, stem: String, position: Vector3, yaw: float) -> void:
@@ -64,3 +68,12 @@ func _capture(game, stem: String, position: Vector3, yaw: float) -> void:
 func _frames(count: int) -> void:
 	for _index in range(count):
 		await process_frame
+
+func _release_game(game: Node) -> void:
+	if game != null and is_instance_valid(game):
+		if game.has_method("prepare_resource_shutdown"):
+			game.prepare_resource_shutdown()
+			await _frames(int(game.ZONE_RETIRE_FRAMES) + 4)
+		game.queue_free()
+	await _frames(8)
+	RenderingServer.force_sync()

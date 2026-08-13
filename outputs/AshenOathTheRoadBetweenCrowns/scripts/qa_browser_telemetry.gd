@@ -48,9 +48,11 @@ func snapshot_for_game(game: Node) -> Dictionary:
 	var camera_rig: Node = game.get("camera_rig") as Node
 	var focus: Node = game.get("active_interactable") as Node
 	var zone_root: Node = game.get("zone_root") as Node
+	var hud: Node = game.get("hud") as Node
 	var state := {
 		"enabled": true,
 		"ready": bool(game.get("game_started")) and player != null,
+		"new_game_ready": bool(hud.get("new_game_ready")) if hud != null else false,
 		"zone": str(game.get("current_zone_id")),
 		"transition_pending": bool(game.get("zone_transition_pending")),
 		"paused": get_tree().paused,
@@ -58,6 +60,9 @@ func snapshot_for_game(game: Node) -> Dictionary:
 		"camera": {},
 		"focus": {},
 		"gates": [],
+		"interactions": [],
+		"enemies": [],
+		"quests": {},
 		"performance": _performance_state(),
 		"mouse_mode": Input.mouse_mode,
 		"audio": _audio_state(),
@@ -65,10 +70,13 @@ func snapshot_for_game(game: Node) -> Dictionary:
 		"command_result": _command_result,
 	}
 	if player != null:
+		var player_health = player.get("health_component")
 		state.player = {
 			"position": _vector(player.global_position),
 			"facing_yaw": player.global_rotation.y,
 			"can_control": bool(player.get("can_control")),
+			"health": float(player_health.get("health")) if player_health != null else 0.0,
+			"dead": player_health != null and float(player_health.get("health")) <= 0.0,
 			"on_floor": player.is_on_floor() if player is CharacterBody3D else true,
 		}
 	if camera_rig != null:
@@ -80,14 +88,44 @@ func snapshot_for_game(game: Node) -> Dictionary:
 		state.focus = _interaction_state(focus, player)
 	if zone_root != null and is_instance_valid(zone_root):
 		var gates: Array = []
+		var interactions: Array = []
 		for node in zone_root.find_children("*", "Area3D", true, false):
-			if str(node.get("interaction_type")) != "zone":
-				continue
-			gates.append(_interaction_state(node, player))
+			var interaction := _interaction_state(node, player)
+			if str(node.get("interaction_type")) == "zone":
+				gates.append(interaction)
+			else:
+				interactions.append(interaction)
 		gates.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
 			return str(a.get("target", "")) < str(b.get("target", ""))
 		)
+		interactions.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+			return str(a.get("id", "")) < str(b.get("id", ""))
+		)
 		state.gates = gates
+		state.interactions = interactions
+	var enemies: Array = []
+	for enemy in game.get("active_enemies"):
+		if enemy == null or not is_instance_valid(enemy):
+			continue
+		var health = enemy.get("health_component")
+		enemies.append({
+			"id": str(enemy.get("enemy_id")),
+			"position": _vector(enemy.global_position),
+			"active": bool(enemy.get("encounter_active")),
+			"health": float(health.get("health")) if health != null else 0.0,
+		})
+	state.enemies = enemies
+	var quests = game.get("quests")
+	if quests != null:
+		state.quests = {
+			"tracked": str(quests.get_tracked_quest()),
+			"road_active": bool(quests.is_active("main_road_of_crows")),
+			"road_complete": bool(quests.is_completed("main_road_of_crows")),
+			"evidence_ready": bool(quests.is_objective_done("main_road_of_crows", "evidence_ready")),
+			"fight_complete": bool(quests.is_objective_done("main_road_of_crows", "fight_ghoulkin")),
+			"bell_active": bool(quests.is_active("main_bell_beneath_greyfen")),
+			"grave_truth": bool(quests.is_objective_done("main_bell_beneath_greyfen", "grave_truth")),
+		}
 	return state
 
 func _poll_command() -> void:
@@ -146,6 +184,13 @@ func _poll_command() -> void:
 			for point in points:
 				encoded.append(_vector(point))
 			_command_result = {"action": action, "ok": not encoded.is_empty(), "points": encoded}
+		"orient_camera":
+			var camera_controller = _game.get("camera_rig")
+			if camera_controller == null:
+				_command_result.error = "camera controller unavailable"
+				return
+			camera_controller.set("yaw", float(command.get("yaw", 0.0)))
+			_command_result = {"action": action, "ok": true, "yaw": float(camera_controller.get("yaw"))}
 		"stage_gate":
 			var target_id := str(command.get("target", ""))
 			var player: CharacterBody3D = _game.get("player") as CharacterBody3D

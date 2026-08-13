@@ -28,7 +28,9 @@ func _initialize() -> void:
 	_check(driver != null and driver.has_method("is_valid") and driver.is_valid(), "Kael has no valid fused animation driver")
 	if driver != null:
 		print("CHAR-006 animation players: %d" % driver.get("animation_players").size())
-		_check(driver.get("animation_players").size() >= 2, "Kael outfit layer is not sharing the animation library")
+		_check(driver.get("animation_players").size() == 1, "Kael must use one consolidated animation rig")
+	var composite := _find_composite(visual_root)
+	_check(composite != null and int(composite.get_meta("character_rig_layer_count", 0)) == 1, "Kael rig layers were not consolidated")
 	if driver != null and driver.has_method("is_valid") and driver.is_valid():
 		_check(driver.get_animation_player().has_animation("Sword_Regular_A"), "UAL2 sword attack is not attached to Kael")
 		_check(driver.get_animation_player().has_animation("Idle_No"), "UAL2 idle is not attached to Kael")
@@ -54,6 +56,15 @@ func _find_skeleton(node: Node) -> Skeleton3D:
 		return node as Skeleton3D
 	for child in node.get_children():
 		var found := _find_skeleton(child)
+		if found != null:
+			return found
+	return null
+
+func _find_composite(node: Node) -> Node:
+	if bool(node.get_meta("character_composite", false)):
+		return node
+	for child in node.get_children():
+		var found := _find_composite(child)
 		if found != null:
 			return found
 	return null

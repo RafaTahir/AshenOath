@@ -14,6 +14,7 @@ var moon_disc: MeshInstance3D
 var moon_halo: MeshInstance3D
 var star_field: MultiMeshInstance3D
 var cloud_texture: ImageTexture
+var cloud_materials: Array[StandardMaterial3D] = []
 var celestial_disc_texture: ImageTexture
 var sky_canvas: CanvasLayer
 var sky_backdrop: Control
@@ -167,13 +168,14 @@ func _update_sky_cycle(daylight: float, twilight: float, night: float, minutes: 
 	star_field.global_transform = Transform3D(Basis(view_right, view_up, view_forward), sky_origin)
 	cloud_layer.position = sky_origin
 	var sun_amount := clampf(daylight+twilight*0.72,0.0,1.0)
+	var quality := _quality_preset()
 	var sun_above_horizon := sun_direction.y > -0.015
 	var moon_above_horizon := moon_direction.y > 0.035
 	sun_disc.visible = sun_above_horizon and (daylight + twilight) > 0.05
-	sun_halo.visible = sun_disc.visible
+	sun_halo.visible = sun_disc.visible and quality == "quality"
 	sun_rays.visible = sun_disc.visible and sun_amount > 0.14
 	moon_disc.visible = not sun_disc.visible and moon_above_horizon and night > 0.05
-	moon_halo.visible = moon_disc.visible
+	moon_halo.visible = moon_disc.visible and quality == "quality"
 	_set_mesh_alpha(sun_disc, 0.92 * sun_amount)
 	_set_mesh_alpha(sun_halo, 0.18 * sun_amount)
 	_set_mesh_alpha(moon_disc, 0.94 * night)
@@ -181,13 +183,12 @@ func _update_sky_cycle(daylight: float, twilight: float, night: float, minutes: 
 	star_field.visible = night > 0.22
 	sky_dome.visible = false
 	_set_mesh_alpha(star_field, clampf((night - 0.10) / 0.70, 0.0, 0.92))
-	var quality := _quality_preset()
 	if star_field != null and star_field.multimesh != null:
 		star_field.multimesh.visible_instance_count = 28 if quality == "potato" else (96 if quality == "quality" else 62)
 	# Keep the authored seven-cluster pool resident, then expose a deterministic
 	# tier budget. Balanced needs enough depth to read as a sky, while Potato
 	# retains two low-overdraw formations instead of collapsing to one card.
-	var cloud_count := 2 if quality == "potato" else (7 if quality == "quality" else 4)
+	var cloud_count := 7 if quality == "quality" else 2
 	cloud_layer.visible = bool(profile.clouds)
 	# Keep cloud formations atmospheric rather than allowing one alpha card to
 	# cover the whole gameplay composition, especially on low-FOV laptops.
@@ -195,17 +196,14 @@ func _update_sky_cycle(daylight: float, twilight: float, night: float, minutes: 
 	var cloud_color := Color(0.92,0.94,0.96) if daylight > twilight else Color(0.82,0.46,0.30)
 	if night > 0.55:
 		cloud_color = Color(0.18,0.23,0.34)
+	for material in cloud_materials:
+		material.albedo_color = Color(cloud_color.r, cloud_color.g, cloud_color.b, cloud_alpha)
 	for i in range(cloud_layer.get_child_count()):
 		var cloud := cloud_layer.get_child(i) as Node3D
 		cloud.visible = bool(profile.clouds) and i < cloud_count
 		var cloud_drift := 0.0 if _reduced_motion() else fmod(minutes * (0.018 + i * 0.002), 28.0) - 14.0
 		var cloud_anchor := Vector3(-58.0 + i * 19.0, 23.0 + float(i % 3) * 5.0, 132.0 + float(i % 3) * 16.0)
 		cloud.position = view_right * (cloud_anchor.x + cloud_drift) + view_up * cloud_anchor.y + view_forward * cloud_anchor.z
-		for lobe in cloud.get_children():
-			if lobe is MeshInstance3D:
-				var material := (lobe as MeshInstance3D).material_override as StandardMaterial3D
-				if material != null:
-					material.albedo_color = Color(cloud_color.r,cloud_color.g,cloud_color.b,cloud_alpha)
 
 func _sky_backdrop_palette(profile: Dictionary) -> Dictionary:
 	var day: Color = profile.get("day_sky", Color(0.24, 0.39, 0.56))
@@ -442,6 +440,11 @@ func _build_sky_layer() -> void:
 	cloud_layer.name = "CloudLayer"
 	add_child(cloud_layer)
 	cloud_texture = _build_cloud_texture()
+	cloud_materials = [
+		_cloud_material(Color(0.92, 0.94, 0.96, 0.52)),
+		_cloud_material(Color(0.92, 0.94, 0.96, 0.42)),
+		_cloud_material(Color(0.92, 0.94, 0.96, 0.44)),
+	]
 	var cloud_count := 7
 	for i: int in range(cloud_count):
 		var cloud := Node3D.new()
@@ -456,7 +459,8 @@ func _build_sky_layer() -> void:
 			{"name": "CloudLeft", "size": Vector2(17.0, 6.2), "position": Vector3(-8.5, -0.8, 0.5), "rotation": -0.035, "alpha": 0.42},
 			{"name": "CloudRight", "size": Vector2(18.5, 6.5), "position": Vector3(9.0, -0.5, 0.8), "rotation": 0.028, "alpha": 0.44},
 		]
-		for spec in lobe_specs:
+		for lobe_index in range(lobe_specs.size()):
+			var spec: Dictionary = lobe_specs[lobe_index]
 			var lobe := MeshInstance3D.new()
 			lobe.name = str(spec.name)
 			var cloud_mesh := QuadMesh.new()
@@ -464,7 +468,7 @@ func _build_sky_layer() -> void:
 			lobe.mesh = cloud_mesh
 			lobe.position = spec.position
 			lobe.rotation.z = float(spec.rotation)
-			lobe.material_override = _cloud_material(Color(0.92, 0.94, 0.96, float(spec.alpha)))
+			lobe.material_override = cloud_materials[lobe_index]
 			cloud.add_child(lobe)
 		cloud_layer.add_child(cloud)
 
@@ -478,7 +482,9 @@ func _build_sky_backdrop() -> void:
 	sky_canvas = CanvasLayer.new()
 	sky_canvas.name = "SkyBackdropLayer"
 	sky_canvas.layer = 1
-	sky_canvas.visible = false
+	# The backdrop is overlay-only in production: it contributes the reliable
+	# night star pass while the 3D world and authored sky remain unobscured.
+	sky_canvas.visible = true
 	add_child(sky_canvas)
 	sky_backdrop = SkyBackdrop.new()
 	sky_backdrop.name = "AuthoredSkyBackdrop"
@@ -568,12 +574,8 @@ func _set_sky_colors(dome_color: Color, sun_color: Color, cloud_color: Color) ->
 	if sun_disc != null:
 		sun_disc.material_override = _emissive_billboard_material(sun_color, 1.45, 0.90)
 	if cloud_layer != null:
-		for child in cloud_layer.get_children():
-			for lobe in child.get_children():
-				if lobe is MeshInstance3D:
-					var material := (lobe as MeshInstance3D).material_override as StandardMaterial3D
-					if material != null:
-						material.albedo_color = cloud_color
+		for material in cloud_materials:
+			material.albedo_color = cloud_color
 
 func _build_cloud_texture() -> ImageTexture:
 	var image := Image.create(128,64,false,Image.FORMAT_RGBA8)

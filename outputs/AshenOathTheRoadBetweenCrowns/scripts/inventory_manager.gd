@@ -5,7 +5,7 @@ signal message(text: String)
 
 var item_defs = {}
 var items = {
-	"redroot_potion": 1,
+	"redroot_potion": 3,
 	"bitterleaf_tonic": 1,
 	"ash_bomb": 1,
 	"moon_oil": 0,
@@ -157,3 +157,9 @@ func _read_json(path: String):
 	var file = FileAccess.open(path, FileAccess.READ)
 	var parsed = JSON.parse_string(file.get_as_text())
 	return parsed if parsed != null else {}
+func reset_starting_loadout() -> void:
+	items = {"redroot_potion": 3, "bitterleaf_tonic": 1, "ash_bomb": 1, "moon_oil": 0, "rot_oil": 0, "iron_trap": 0}
+	ingredients = {"redroot": 2, "bitterleaf": 2, "mooncap": 1, "ash_salt": 2, "sparkstone": 1, "grave_moss": 1, "scrap_iron": 1}
+	active_oil = ""
+	coin = 15
+	changed.emit()

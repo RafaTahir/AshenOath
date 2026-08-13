@@ -4,7 +4,7 @@ var wind_time := 0.0
 var wind_strength := 1.0
 var tracked: Array[Node3D] = []
 var update_accumulator := 0.0
-const UPDATE_INTERVAL := 1.0 / 30.0
+const UPDATE_INTERVAL := 1.0 / 12.0
 
 func configure(root: Node3D, quality: String) -> void:
 	tracked.clear()

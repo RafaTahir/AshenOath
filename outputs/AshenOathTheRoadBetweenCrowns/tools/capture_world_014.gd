@@ -22,11 +22,23 @@ func _initialize() -> void:
 	game.settings.set_quality_preset("balanced")
 	game.call("_new_game")
 	await _frames(50)
+	# Stage the cemetery in its real Act I quest context so the objective and
+	# prompts in the proof images cannot contradict the location.
+	for objective_id in ["speak_anwen", "bram", "sella", "oren", "fight_ghoulkin", "return_village"]:
+		game.quests.complete_objective("main_road_of_crows", objective_id)
+	if not game.quests.is_active("main_bell_beneath_greyfen"):
+		game.quests.start_quest("main_bell_beneath_greyfen")
+	game.quests.complete_objective("main_bell_beneath_greyfen", "meet_anwen_gate")
+	game.call("_refresh_tracker")
+	game.hud.set_guidance_hint("")
 	await _capture(game, "WORLD-014_01_Cemetery_Approach", Vector3(10.2, 1, 8.0), -1.35)
 	await _capture(game, "WORLD-014_02_Grave_Court_Crows", Vector3(12.4, 1, 9.4), -1.15)
-	await _capture(game, "WORLD-014_03_Ruined_Crow_Chapel", Vector3(14.3, 1, 8.1), -1.45)
+	# The chapel entrance is read from its western path. The old angle placed a
+	# cemetery-edge tree between the camera and the entire landmark.
+	await _capture(game, "WORLD-014_03_Ruined_Crow_Chapel", Vector3(12.0, 1, 7.45), -PI * 0.5)
 	await _capture(game, "WORLD-014_04_Bell_and_Shrine", Vector3(16.5, 1, 11.8), 0.34)
 	print("WORLD-014 SCREENSHOTS: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
+	await _release_game(game)
 	quit(0 if failures == 0 else 1)
 
 func _capture(game, stem: String, position: Vector3, yaw: float) -> void:
@@ -62,3 +74,12 @@ func _capture(game, stem: String, position: Vector3, yaw: float) -> void:
 func _frames(count: int) -> void:
 	for _index in range(count):
 		await process_frame
+
+func _release_game(game: Node) -> void:
+	if game != null and is_instance_valid(game):
+		if game.has_method("prepare_resource_shutdown"):
+			game.prepare_resource_shutdown()
+			await _frames(int(game.ZONE_RETIRE_FRAMES) + 4)
+		game.queue_free()
+	await _frames(8)
+	RenderingServer.force_sync()

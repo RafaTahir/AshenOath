@@ -5,6 +5,7 @@ var recorded_variants = {}
 var voices = {}
 var voice_texts = {}
 var music = {}
+var ambient_streams = {}
 var bus_name = "Master"
 var ambient_player: AudioStreamPlayer
 var music_player: AudioStreamPlayer
@@ -59,7 +60,6 @@ func _ready() -> void:
 	_build_library()
 	_build_recorded_library()
 	_build_voice_library()
-	_build_music_library()
 	for index in range(TRANSIENT_POOL_SIZE):
 		var pooled := AudioStreamPlayer.new()
 		pooled.name = "TransientCue%02d" % index
@@ -87,6 +87,7 @@ func _exit_tree() -> void:
 	voices.clear()
 	voice_texts.clear()
 	music.clear()
+	ambient_streams.clear()
 
 func _release_player(player: AudioStreamPlayer) -> void:
 	if player == null or not is_instance_valid(player):
@@ -130,6 +131,14 @@ func set_game_paused(paused: bool) -> void:
 		ambient_player.stream_paused = paused
 	if music_player != null:
 		music_player.stream_paused = paused
+
+func prewarm_opening_audio() -> void:
+	for state_id in ["greyfen_explore", "wychwood_tension"]:
+		if not music.has(state_id):
+			_build_music_state(state_id)
+	for zone_id in ["greyfen", "wychwood"]:
+		if not ambient_streams.has(zone_id):
+			ambient_streams[zone_id] = _build_ambient_stream(zone_id)
 
 func play_event(event_name: String, pitch_variation: float = 0.06) -> void:
 	_play_event_internal(event_name, pitch_variation, 1.0)
@@ -318,7 +327,11 @@ func stop_voice() -> void:
 		voice_player = null
 
 func set_music_state(state_id: String) -> void:
-	if state_id == music_state or not music.has(state_id):
+	if state_id == music_state:
+		return
+	if not music.has(state_id):
+		_build_music_state(state_id)
+	if not music.has(state_id):
 		return
 	print("AUDIO: music_state_%s" % state_id)
 	music_state = state_id
@@ -554,23 +567,33 @@ func _load_scratch_voice_library() -> void:
 				voices[voice_id] = stream
 
 func _build_music_library() -> void:
-	music["main_menu"] = _music_loop([55.0, 82.0, 110.0, 165.0], 6.4, 0.050, 0.016)
-	music["greyfen_explore"] = _music_loop([73.0, 110.0, 146.0], 6.0, 0.060, 0.012)
-	music["shrine_anwen"] = _music_loop([88.0, 132.0, 176.0, 264.0], 5.6, 0.052, 0.008)
-	music["wychwood_tension"] = _music_loop([46.0, 69.0, 92.0], 6.2, 0.070, 0.020)
-	music["ghoulkin_combat"] = _music_loop([54.0, 81.0, 108.0, 162.0], 3.8, 0.095, 0.018)
-	music["return_report"] = _music_loop([66.0, 99.0, 148.0], 5.2, 0.056, 0.010)
-	music["castle_silence"] = _music_loop([49.0, 73.5, 98.0, 147.0], 6.6, 0.048, 0.009)
-	music["deep_wood"] = _music_loop([41.0, 61.5, 82.0, 123.0], 6.8, 0.052, 0.014)
-	music["ash_mill"] = _music_loop([58.0, 87.0, 116.0], 6.4, 0.050, 0.011)
-	music["marsh_crossing"] = _music_loop([43.0, 64.5, 96.0], 7.0, 0.046, 0.018)
-	music["bandit_road"] = _music_loop([62.0, 93.0, 124.0, 186.0], 5.8, 0.056, 0.012)
-	music["record_hall"] = _music_loop([52.0, 78.0, 104.0, 156.0], 7.2, 0.043, 0.008)
-	music["undercroft"] = _music_loop([38.0, 57.0, 76.0], 7.4, 0.050, 0.016)
-	music["assembly"] = _music_loop([69.0, 103.5, 138.0, 207.0], 6.6, 0.048, 0.007)
-	music["hart_glade"] = _music_loop([77.0, 115.5, 154.0, 231.0], 7.2, 0.052, 0.010)
+	for state_id in ["main_menu", "greyfen_explore", "shrine_anwen", "wychwood_tension", "ghoulkin_combat", "return_report", "castle_silence", "deep_wood", "ash_mill", "marsh_crossing", "bandit_road", "record_hall", "undercroft", "assembly", "hart_glade"]:
+		_build_music_state(state_id)
+
+func _build_music_state(state_id: String) -> void:
+	match state_id:
+		"main_menu": music[state_id] = _music_loop([55.0, 82.0, 110.0, 165.0], 6.4, 0.050, 0.016)
+		"greyfen_explore": music[state_id] = _music_loop([73.0, 110.0, 146.0], 6.0, 0.060, 0.012)
+		"shrine_anwen": music[state_id] = _music_loop([88.0, 132.0, 176.0, 264.0], 5.6, 0.052, 0.008)
+		"wychwood_tension": music[state_id] = _music_loop([46.0, 69.0, 92.0], 6.2, 0.070, 0.020)
+		"ghoulkin_combat": music[state_id] = _music_loop([54.0, 81.0, 108.0, 162.0], 3.8, 0.095, 0.018)
+		"return_report": music[state_id] = _music_loop([66.0, 99.0, 148.0], 5.2, 0.056, 0.010)
+		"castle_silence": music[state_id] = _music_loop([49.0, 73.5, 98.0, 147.0], 6.6, 0.048, 0.009)
+		"deep_wood": music[state_id] = _music_loop([41.0, 61.5, 82.0, 123.0], 6.8, 0.052, 0.014)
+		"ash_mill": music[state_id] = _music_loop([58.0, 87.0, 116.0], 6.4, 0.050, 0.011)
+		"marsh_crossing": music[state_id] = _music_loop([43.0, 64.5, 96.0], 7.0, 0.046, 0.018)
+		"bandit_road": music[state_id] = _music_loop([62.0, 93.0, 124.0, 186.0], 5.8, 0.056, 0.012)
+		"record_hall": music[state_id] = _music_loop([52.0, 78.0, 104.0, 156.0], 7.2, 0.043, 0.008)
+		"undercroft": music[state_id] = _music_loop([38.0, 57.0, 76.0], 7.4, 0.050, 0.016)
+		"assembly": music[state_id] = _music_loop([69.0, 103.5, 138.0, 207.0], 6.6, 0.048, 0.007)
+		"hart_glade": music[state_id] = _music_loop([77.0, 115.5, 154.0, 231.0], 7.2, 0.052, 0.010)
 
 func _ambient_stream(zone_id: String) -> AudioStreamWAV:
+	if not ambient_streams.has(zone_id):
+		ambient_streams[zone_id] = _build_ambient_stream(zone_id)
+	return ambient_streams[zone_id] as AudioStreamWAV
+
+func _build_ambient_stream(zone_id: String) -> AudioStreamWAV:
 	if zone_id == "greyfen":
 		return _ambient_mix([86.0, 146.0, 213.0], 2.6, 0.026, 0.0)
 	if zone_id == "wychwood":
@@ -709,7 +732,7 @@ func _play_ambient_accent() -> void:
 		ambient_accent_time = randf_range(8.0, 14.0)
 
 func _tone(freq: float, seconds: float, amp: float, sweep: float = 0.0) -> AudioStreamWAV:
-	var mix_rate = 22050
+	var mix_rate = 11025
 	var frames = int(seconds * mix_rate)
 	var data = PackedByteArray()
 	data.resize(frames * 2)
@@ -727,7 +750,7 @@ func _tone(freq: float, seconds: float, amp: float, sweep: float = 0.0) -> Audio
 	return stream
 
 func _noise(seconds: float, amp: float) -> AudioStreamWAV:
-	var mix_rate = 22050
+	var mix_rate = 11025
 	var frames = int(seconds * mix_rate)
 	var data = PackedByteArray()
 	data.resize(frames * 2)
@@ -743,7 +766,7 @@ func _noise(seconds: float, amp: float) -> AudioStreamWAV:
 	return stream
 
 func _tone_mix(freqs: Array, seconds: float, amp: float, sweep: float = 0.0, noise_amp: float = 0.0) -> AudioStreamWAV:
-	var mix_rate = 22050
+	var mix_rate = 11025
 	var frames = int(seconds * mix_rate)
 	var data = PackedByteArray()
 	data.resize(frames * 2)
@@ -766,7 +789,7 @@ func _tone_mix(freqs: Array, seconds: float, amp: float, sweep: float = 0.0, noi
 	return stream
 
 func _footstep(seconds: float, amp: float, thud_freq: float) -> AudioStreamWAV:
-	var mix_rate = 22050
+	var mix_rate = 11025
 	var frames = int(seconds * mix_rate)
 	var data = PackedByteArray()
 	data.resize(frames * 2)
@@ -784,7 +807,7 @@ func _footstep(seconds: float, amp: float, thud_freq: float) -> AudioStreamWAV:
 	return stream
 
 func _impact(seconds: float, amp: float, thud_freq: float) -> AudioStreamWAV:
-	var mix_rate = 22050
+	var mix_rate = 11025
 	var frames = int(seconds * mix_rate)
 	var data = PackedByteArray()
 	data.resize(frames * 2)
@@ -802,7 +825,7 @@ func _impact(seconds: float, amp: float, thud_freq: float) -> AudioStreamWAV:
 	return stream
 
 func _ambient_mix(freqs: Array, seconds: float, tone_amp: float, noise_amp: float) -> AudioStreamWAV:
-	var mix_rate = 22050
+	var mix_rate = 11025
 	var frames = int(seconds * mix_rate)
 	var data = PackedByteArray()
 	data.resize(frames * 2)
@@ -824,20 +847,10 @@ func _ambient_mix(freqs: Array, seconds: float, tone_amp: float, noise_amp: floa
 	return stream
 
 func _voice_stub(freqs: Array, seconds: float, amp: float) -> AudioStreamWAV:
-	var mix_rate = 22050
-	var frames = int(seconds * mix_rate)
-	var data = PackedByteArray()
-	data.resize(frames * 2)
-	for i in range(frames):
-		var t = float(i) / float(mix_rate)
-		var syllable = 0.45 + 0.55 * max(0.0, sin(TAU * 4.1 * t))
-		var env = min(1.0, t * 7.0) * pow(max(0.0, 1.0 - t / max(seconds, 0.001)), 0.65)
-		var sample_value = 0.0
-		for j in range(freqs.size()):
-			var current = float(freqs[j]) * (1.0 + 0.018 * sin(TAU * (5.0 + j) * t))
-			sample_value += sin(TAU * current * t) / float(max(freqs.size(), 1))
-		sample_value = sample_value * amp * syllable * env + randf_range(-0.006, 0.006) * env
-		data.encode_s16(i * 2, int(clamp(sample_value, -1.0, 1.0) * 32767.0))
+	# Subtitles and browser speech are authoritative. Keep a tiny silent fallback
+	# instead of synthesizing seconds of placeholder speech during startup.
+	var mix_rate = 11025
+	var data = PackedByteArray([0, 0])
 	var stream = AudioStreamWAV.new()
 	stream.format = AudioStreamWAV.FORMAT_16_BITS
 	stream.mix_rate = mix_rate
@@ -846,7 +859,7 @@ func _voice_stub(freqs: Array, seconds: float, amp: float) -> AudioStreamWAV:
 	return stream
 
 func _music_loop(freqs: Array, seconds: float, tone_amp: float, noise_amp: float) -> AudioStreamWAV:
-	var mix_rate = 22050
+	var mix_rate = 11025
 	var frames = int(seconds * mix_rate)
 	var data = PackedByteArray()
 	data.resize(frames * 2)

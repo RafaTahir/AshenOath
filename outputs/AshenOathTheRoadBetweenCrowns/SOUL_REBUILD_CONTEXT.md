@@ -42,4 +42,8 @@ Read this file, `PROJECT_STATE.md`, and the active ticket only. Ordinary tickets
 
 The first soul-rebuild implementation slice removes generated anatomy overlays, adds the custom Web boot shell and Crow's Crossing loading activity, identifies gamepad families/hotplug state, replaces plain route markers with animated Oath Gate visuals, and registers a threaded zone-resource request service. The loading checkpoints add a validated runtime-pack manifest, embedded-PCK fallback manager, Web artifact hash generator, opening PackedScene layer catalog, adjacent-zone prewarming, gate-owned preload/travel/error states, and a delayed nonblocking in-game transition vignette with safe procedural fallback. The remaining character, world, combat, boss, story, and performance tickets must build on this contract rather than reintroducing procedural overlays.
 
-This checkpoint is local/development state only. It has not been synchronized into `web/`, pushed to `main`, or deployed to Vercel.
+## Milestone D Acceptance
+
+`OPENING-QA-001` accepts the cumulative opening rebuild under an abbreviated, user-selected browser gate: Chrome must complete the real-input opening route without console errors and average at least 30 FPS at native 1280x720 Balanced. The accepted run completed 17 checkpoints at 33.0 FPS average and returned to Greyfen after reporting to Anwen.
+
+The 30 FPS 1% low, transition-time targets, Edge/Firefox coverage, full verifier suite, and complete screenshot refresh remain deferred. Future tickets must not interpret this milestone deployment as evidence that those stricter contracts passed.

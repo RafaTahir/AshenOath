@@ -32,6 +32,7 @@ func _initialize() -> void:
 	]:
 		await _capture(game, str(view[0]), view[1], float(view[2]), str(view[3]))
 	print("SKY-003 SCREENSHOTS: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
+	await _release_game(game)
 	quit(0 if failures == 0 else 1)
 
 func _capture(game: Node, zone: String, position: Vector3, minutes: float, stem: String) -> void:
@@ -42,7 +43,7 @@ func _capture(game: Node, zone: String, position: Vector3, minutes: float, stem:
 	game.player.velocity = Vector3.ZERO
 	if game.camera_rig != null:
 		game.camera_rig.yaw = 0.0
-		game.camera_rig.pitch = 0.08
+		game.camera_rig.pitch = 0.32
 	await _frames(12)
 	await RenderingServer.frame_post_draw
 	var image: Image = root.get_viewport().get_texture().get_image()
@@ -79,3 +80,12 @@ func _wait_ready(game: Node, expected_zone: String) -> void:
 func _frames(count: int) -> void:
 	for _index in range(count):
 		await process_frame
+
+func _release_game(game: Node) -> void:
+	if game != null and is_instance_valid(game):
+		if game.has_method("prepare_resource_shutdown"):
+			game.prepare_resource_shutdown()
+			await _frames(int(game.ZONE_RETIRE_FRAMES) + 4)
+		game.queue_free()
+	await _frames(8)
+	RenderingServer.force_sync()

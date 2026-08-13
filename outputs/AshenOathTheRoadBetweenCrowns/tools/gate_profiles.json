@@ -423,6 +423,41 @@
         "verify_char_qa_001"
       ]
     },
+    "opening_qa_001": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/hud.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/river_motion_controller.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/asset_spawn_helper.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/qa_browser_telemetry.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/greyfen_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/wychwood_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/quests.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/dialogue.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_opening_qa_001.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_browser.mjs"
+      ],
+      "gates": [
+        "verify_runtime",
+        "verify_quest_001",
+        "verify_world_012",
+        "verify_world_013",
+        "verify_world_014",
+        "verify_navigation_001",
+        "verify_river_swimming",
+        "verify_life_001",
+        "verify_char_qa_001",
+        "verify_anim_003",
+        "verify_combat_001",
+        "verify_portal_001",
+        "verify_audio_006",
+        "verify_input_001",
+        "verify_input_003",
+        "verify_input_004",
+        "verify_save_001",
+        "verify_opening_qa_001"
+      ]
+    },
     "life": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/greyfen_life_controller.gd",

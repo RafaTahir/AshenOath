@@ -46,12 +46,12 @@ func _initialize() -> void:
 	await _sample_zone(game, "greyfen", 1800)
 	await _world_view(game, "QA-SOUL-001_04_Greyfen", Vector3(0, 0.95, 7.0), Vector3(0, 1.0, 1.5))
 	await _world_view(game, "QA-SOUL-001_05_River", Vector3(-0.2, 0.95, 3.0), Vector3(0, 0.3, 4.5))
-	await _actor_view(game, "QA-SOUL-001_02_Kael", game.player, Vector3(1.7, 1.45, 2.7), Vector3(0, 1.05, 0))
+	await _actor_view(game, "QA-SOUL-001_02_Kael", game.player)
 	var anwen := _find_named(game.zone_root, "sister_anwen") as Node3D
 	if anwen == null:
 		_fail("Sister Anwen is missing from Greyfen")
 	else:
-		await _actor_view(game, "QA-SOUL-001_03_Anwen", anwen, anwen.global_position + Vector3(1.7, 1.45, 2.7), anwen.global_position + Vector3(0, 1.05, 0))
+		await _actor_view(game, "QA-SOUL-001_03_Anwen", anwen)
 	await _transition(game, "wychwood", Vector3(0, 1, 8))
 	await _sample_zone(game, "wychwood", 1800)
 	await _world_view(game, "QA-SOUL-001_06_Wychwood", Vector3(0, 0.95, 8), Vector3(0, 1.0, 2.5))
@@ -123,12 +123,20 @@ func _world_view(game: Node, id: String, player_position: Vector3, focus: Vector
 	await _set_camera(game, player_position + Vector3(3.8, 2.5, 4.8), focus)
 	await _capture(id)
 
-func _actor_view(game: Node, id: String, actor: Node3D, camera_position: Vector3, focus: Vector3) -> void:
+func _actor_view(game: Node, id: String, actor: Node3D) -> void:
 	if actor == null:
 		_fail("%s actor is missing" % id)
 		return
+	var face_side := actor.global_transform.basis.z.normalized()
+	var camera_position := actor.global_position + face_side * 3.0 + actor.global_transform.basis.x.normalized() * 0.55 + Vector3.UP * 1.34
+	var focus := actor.global_position + Vector3.UP * 1.08
+	var previous_fov: float = game.camera_rig.camera.fov
+	game.camera_rig.camera.fov = 35.0
+	game.hud.visible = false
 	await _set_camera(game, camera_position, focus)
 	await _capture(id)
+	game.hud.visible = true
+	game.camera_rig.camera.fov = previous_fov
 
 func _combat_view(game: Node) -> void:
 	if game.active_enemies.is_empty():

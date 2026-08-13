@@ -12,7 +12,7 @@ var audio: Node
 var entries: Array[Dictionary] = []
 var _elapsed := 0.0
 var _accumulator := 0.0
-const TICK_INTERVAL := 1.0 / 24.0
+const TICK_INTERVAL := 1.0 / 10.0
 
 func configure(root: Node3D, id: String, quality_preset: String, state_owner: Node, audio_manager: Node = null) -> void:
 	zone_root = root

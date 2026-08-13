@@ -82,12 +82,54 @@ func _compose_player_body(outfit_root: Node3D, outfit_path: String, role_name: S
 	if hair != null:
 		hair.name = "%sNativeHair" % label
 		composite.add_child(hair)
+	var merged_layers := _merge_shared_rig_layers(outfit_root, [base, hair])
 	composite.set_meta("character_composite", true)
+	composite.set_meta("character_rig_layer_count", 1 if merged_layers else 3)
 	composite.set_meta("character_identity", "kael" if is_kael else "anwen")
 	composite.set_meta("character_base_path", base_path)
 	composite.set_meta("character_outfit_path", outfit_path)
 	composite.set_meta("character_hair_path", hair_path)
 	return composite
+
+func _merge_shared_rig_layers(outfit_root: Node3D, layers: Array) -> bool:
+	var shared_skeleton := _find_skeleton(outfit_root)
+	if shared_skeleton == null:
+		return false
+	for layer in layers:
+		if layer == null:
+			continue
+		var layer_skeleton := _find_skeleton(layer)
+		if layer_skeleton == null or not _skeletons_match(shared_skeleton, layer_skeleton):
+			return false
+	for layer in layers:
+		if layer == null:
+			continue
+		var layer_node := layer as Node
+		var meshes: Array[Node] = layer_node.find_children("*", "MeshInstance3D", true, false)
+		for raw_mesh in meshes:
+			var mesh := raw_mesh as MeshInstance3D
+			mesh.owner = null
+			mesh.reparent(shared_skeleton, false)
+			mesh.skeleton = NodePath("..")
+		layer_node.free()
+	return true
+
+func _find_skeleton(node: Node) -> Skeleton3D:
+	if node is Skeleton3D:
+		return node as Skeleton3D
+	for child in node.get_children():
+		var found := _find_skeleton(child)
+		if found != null:
+			return found
+	return null
+
+func _skeletons_match(first: Skeleton3D, second: Skeleton3D) -> bool:
+	if first.get_bone_count() != second.get_bone_count():
+		return false
+	for index in range(first.get_bone_count()):
+		if first.get_bone_name(index) != second.get_bone_name(index):
+			return false
+	return true
 
 func _hair_path_for_role(role_name: String, male: bool) -> String:
 	var role := role_name.to_lower()

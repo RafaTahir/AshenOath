@@ -11,6 +11,8 @@ var leaves: MultiMeshInstance3D
 var ripples: Array[Node3D] = []
 var leaf_origins: Array[Vector3] = []
 var ripple_origins: Array[Vector3] = []
+var update_accumulator := 0.0
+const UPDATE_INTERVAL := 1.0 / 12.0
 
 func configure(center: float, river_width: float, river_span: float) -> void:
 	center_z = center
@@ -18,7 +20,12 @@ func configure(center: float, river_width: float, river_span: float) -> void:
 	span = river_span
 	_build_dressing()
 
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
+	update_accumulator += delta
+	if update_accumulator < UPDATE_INTERVAL:
+		return
+	delta = update_accumulator
+	update_accumulator = 0.0
 	flow_time += delta
 	if leaves != null and leaves.multimesh != null:
 		for index in range(leaf_origins.size()):

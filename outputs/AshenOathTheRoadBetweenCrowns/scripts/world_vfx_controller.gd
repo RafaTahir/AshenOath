@@ -9,7 +9,7 @@ var elapsed := 0.0
 var update_accumulator := 0.0
 var shared_mote_mesh: SphereMesh
 var shared_mote_material: StandardMaterial3D
-const UPDATE_INTERVAL := 1.0 / 20.0
+const UPDATE_INTERVAL := 1.0 / 10.0
 
 func configure(active_zone: String, quality_preset: String) -> void:
 	zone_id = active_zone

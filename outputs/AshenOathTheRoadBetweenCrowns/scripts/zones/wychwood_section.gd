@@ -307,10 +307,10 @@ func _build_combat_clearing(context: ZoneBuildContext) -> void:
 
 func _build_gameplay_content(context: ZoneBuildContext) -> void:
 	context.make_zone_gate("Back to Greyfen", Vector3(0, 0, 15), "greyfen", Vector3(0, 1, -13))
-	context.make_clue("corpse", "Identify Bram by his cart ledger", Vector3(-2, 0, 7.4), "main_road_of_crows", "bram", Color(0.32, 0.18, 0.16))
-	context.make_clue("black_feathers", "Identify Sella by the red-thread feathers", Vector3(-4, 0, 4.0), "main_road_of_crows", "sella", Color(0.03, 0.03, 0.035))
+	context.make_clue("corpse", "Identify Bram by his cart ledger", Vector3(-0.9, 0, 9.0), "main_road_of_crows", "bram", Color(0.32, 0.18, 0.16))
+	context.make_clue("black_feathers", "Identify Sella by the red-thread feathers", Vector3(0.9, 0, 7.3), "main_road_of_crows", "sella", Color(0.03, 0.03, 0.035))
 	context.make_clue("oren_token", "Recover Oren's scratched shrine token", Vector3(3.8, 0, 2.2), "main_road_of_crows", "oren", Color(0.46, 0.28, 0.12))
-	context.make_clue("claw_marks", "Recover the blackened Vargan wire", Vector3(2.5, 0, 4.8), "main_road_of_crows", "vargan_wire", Color(0.18, 0.18, 0.18))
+	context.make_clue("claw_marks", "Recover the blackened Vargan wire", Vector3(-0.8, 0, 5.6), "main_road_of_crows", "vargan_wire", Color(0.18, 0.18, 0.18))
 	context.make_clue("tracks", "Read the deliberate drag marks", Vector3(0, 0, -4.2), "main_road_of_crows", "drag_marks", Color(0.15, 0.11, 0.08))
 	if context.is_quest_active("main_teeth_in_rain") and context.is_objective_done("main_teeth_in_rain", "read_chapel_names"):
 		if not context.is_objective_done("main_teeth_in_rain", "name_the_dead"):
