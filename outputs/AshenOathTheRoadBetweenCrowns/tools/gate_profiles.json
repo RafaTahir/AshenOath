@@ -218,6 +218,25 @@
         "verify_visible_quality"
       ]
     },
+    "props_003": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/interactive_world_prop.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/world_prop_controller.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/cemetery_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_prop_003.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/capture_prop_003.gd"
+      ],
+      "gates": [
+        "verify_prop_003",
+        "verify_life_001",
+        "verify_water_002",
+        "verify_audio_runtime",
+        "verify_zone_budgets",
+        "verify_visible_quality"
+      ],
+      "views": ["functional_props"]
+    },
     "packs": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_manifest.json",

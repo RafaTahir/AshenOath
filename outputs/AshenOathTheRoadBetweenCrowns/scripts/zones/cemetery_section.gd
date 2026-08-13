@@ -272,6 +272,9 @@ func _build_bell_and_shrine(context: ZoneBuildContext, origin: Vector3) -> void:
 	bell.mesh = bell_mesh
 	bell.position = origin + Vector3(1.75, 1.75, 1.08)
 	bell.material_override = context.make_material(Color(0.30, 0.235, 0.13))
+	bell.set_meta("world_prop_kind", "bell")
+	bell.set_meta("world_prop_id", "cemetery_bell")
+	bell.set_meta("world_prop_state_key", "cemetery_bell_rung")
 	context.add_node(bell)
 	# The shrine is readable from the entrance but stays clear of the grave clues.
 	context.make_prop_box("CemeteryCrowShrine", origin + Vector3(2.05, 0.72, -2.92), Vector3(0.58, 1.44, 0.38), Color(0.23, 0.235, 0.215))

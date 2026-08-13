@@ -9,6 +9,8 @@ const CombatFeedback = preload("res://scripts/combat_feedback.gd")
 const CharacterAnimationDriver = preload("res://scripts/character_animation_driver.gd")
 const WorldVisualUpgrade = preload("res://scripts/world_visual_upgrade.gd")
 const WorldMotionController = preload("res://scripts/world_motion_controller.gd")
+const WorldPropController = preload("res://scripts/world_prop_controller.gd")
+const InteractiveWorldProp = preload("res://scripts/interactive_world_prop.gd")
 const SurfaceFeedbackManager = preload("res://scripts/surface_feedback_manager.gd")
 const WorldVFXController = preload("res://scripts/world_vfx_controller.gd")
 const EpilogueResolver = preload("res://scripts/epilogue_resolver.gd")
@@ -38,6 +40,7 @@ var audio
 var asset_helper
 var visual_director
 var world_vfx
+var world_props: WorldPropController
 var minigames
 var progression
 var input_router
@@ -465,6 +468,7 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		if composition_kind == "campaign":
 			_apply_campaign_arrival(zone_id)
 		_flush_environment_batches()
+		_install_world_prop_controller(zone_id)
 		if zone_id in ["greyfen", "wychwood"]:
 			_add_visual_100_layer(zone_id)
 		_apply_first_route_materials(zone_root)
@@ -473,6 +477,7 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	if zone_root != null:
 		zone_root.set_meta("zone_resource_owner", "active")
 		zone_root.set_meta("zone_resource_id", zone_id)
+		_install_world_prop_controller(zone_id)
 		if zone_runtime_coordinator != null:
 			zone_runtime_coordinator.activate(zone_id, zone_root, reused_zone)
 	_trim_route_zone_cache([previous_zone_id] if previous_zone_id != zone_id else [])
@@ -1028,7 +1033,25 @@ func _add_visual_100_layer(zone_id: String) -> void:
 	zone_root.add_child(world_vfx)
 	world_vfx.configure(zone_id, quality)
 
+func _install_world_prop_controller(zone_id: String) -> void:
+	if zone_root == null or not is_instance_valid(zone_root):
+		world_props = null
+		return
+	var existing := zone_root.find_child("WorldPropController", true, false) as WorldPropController
+	if existing != null:
+		world_props = existing
+		return
+	world_props = WorldPropController.new()
+	world_props.name = "WorldPropController"
+	zone_root.add_child(world_props)
+	world_props.configure(zone_root, zone_id, str(settings.settings.get("quality_preset", "balanced")), story_state, audio)
+
 func _handle_interaction(area) -> void:
+	if world_props != null and area != null and area.has_meta("world_prop_id"):
+		world_props.activate_prop(str(area.get_meta("world_prop_id", "")))
+	var world_prop_component := area.find_child("InteractiveWorldProp", true, false) as InteractiveWorldProp if area != null else null
+	if world_prop_component != null:
+		world_prop_component.activate()
 	if world_vfx != null and is_instance_valid(world_vfx) and area is Node3D:
 		world_vfx.pulse_interaction((area as Node3D).global_position)
 	if area.interaction_type == "minigame":
@@ -2571,6 +2594,8 @@ func _make_lantern_post(pos: Vector3, shrine_style: bool, casts_light: bool) -> 
 	glow.scale = Vector3(0.16, 0.22, 0.16)
 	glow.position = pos + Vector3(0.56, 1.17, 0)
 	glow.material_override = _emissive_mat(glow_color, 1.25)
+	glow.set_meta("world_prop_kind", "lantern")
+	glow.set_meta("world_prop_id", "lantern_glow")
 	zone_root.add_child(glow)
 	if casts_light:
 		_make_light("SpawnWarmRead" if not shrine_style else "Shrine Beacon", pos + Vector3(0.45, 1.45, 0), glow_color, 0.9)
@@ -3071,6 +3096,7 @@ func _make_notice_board(pos: Vector3) -> void:
 	_make_prop_box("NoticePost", pos + Vector3(-0.55, 0.7, 0), Vector3(0.16, 1.4, 0.16), Color(0.14, 0.08, 0.045))
 	_make_prop_box("NoticePost", pos + Vector3(0.55, 0.7, 0), Vector3(0.16, 1.4, 0.16), Color(0.14, 0.08, 0.045))
 	_make_prop_box("NoticeBoard", pos + Vector3(0, 1.25, 0), Vector3(1.55, 0.9, 0.12), Color(0.28, 0.16, 0.08))
+	_make_world_prop_anchor("notice_board", "notice_board", pos, "evidence_report")
 
 func _make_route_markers() -> void:
 	for pos in [Vector3(-0.9, 0, -4.5), Vector3(0.95, 0, -8.2), Vector3(-0.7, 0, -11.4)]:
@@ -3080,6 +3106,8 @@ func _make_route_markers() -> void:
 		flame.scale = Vector3(0.12, 0.18, 0.12)
 		flame.position = pos + Vector3(0, 0.48, 0)
 		flame.material_override = _emissive_mat(Color(1.0, 0.48, 0.16), 1.1)
+		flame.set_meta("world_prop_kind", "candle")
+		flame.set_meta("world_prop_id", "road_candle")
 		zone_root.add_child(flame)
 		_make_light("RoadCandleGlow", pos + Vector3(0, 0.72, 0), Color(1.0, 0.45, 0.16), 0.8)
 
@@ -3093,6 +3121,7 @@ func _make_shrine_scene(pos: Vector3) -> void:
 	_make_loose_role("crate", pos + Vector3(-1.15, 0, -0.65), Vector3.ONE * 0.48, -12.0)
 	_make_loose_role("barrel", pos + Vector3(1.2, 0, -0.55), Vector3.ONE * 0.42, 16.0)
 	_make_light("ShrineGlow", pos + Vector3(0, 1.7, -0.3), Color(0.56, 0.78, 0.62), 1.6)
+	_make_world_prop_anchor("shrine", "shrine", pos, "crow_shrine_state")
 
 func _make_blacksmith_scene(pos: Vector3) -> void:
 	_make_prop_box("BlacksmithShop", pos + Vector3(0, 0.9, 1.2), Vector3(3.4, 1.8, 2.4), Color(0.20, 0.15, 0.11))
@@ -3106,6 +3135,7 @@ func _make_blacksmith_scene(pos: Vector3) -> void:
 	_make_loose_role("crate", pos + Vector3(-2.2, 0, 0.35), Vector3.ONE * 0.62, 9.0)
 	_make_loose_role("barrel", pos + Vector3(2.15, 0, 0.95), Vector3.ONE * 0.55, -20.0)
 	_make_torch(pos + Vector3(-1.8, 0, -1.2))
+	_make_world_prop_anchor("forge", "forge", pos + Vector3(1.5, 0.55, -1.1), "iron_fate")
 
 func _make_cemetery_scene(pos: Vector3) -> void:
 	_make_prop_box("CemeteryWall", pos + Vector3(0, 0.35, 1.9), Vector3(7.0, 0.7, 0.45), Color(0.18, 0.18, 0.17))
@@ -3171,6 +3201,13 @@ func _make_named_interactable(id: String, type: String, prompt: String, pos: Vec
 	area.position = pos
 	area.build_collision(2.8 if type == "zone" else 1.45)
 	zone_root.add_child(area)
+	var prop_spec := _world_prop_spec(id)
+	if not prop_spec.is_empty():
+		area.set_meta("world_prop_id", id)
+		var prop_component := InteractiveWorldProp.new()
+		prop_component.name = "InteractiveWorldProp"
+		area.add_child(prop_component)
+		prop_component.configure(id, str(prop_spec.get("kind", "generic")), str(prop_spec.get("state_key", "")), "idle", story_state)
 	var role = _role_for_interactable(id)
 	var mapped = _make_role_visual(role, "characters", Vector3.ONE)
 	if mapped != null:
@@ -3215,6 +3252,13 @@ func _make_village_place(id: String, type: String, prompt: String, pos: Vector3,
 	area.position = pos
 	area.build_collision(1.35)
 	zone_root.add_child(area)
+	var prop_spec := _world_prop_spec(id)
+	if not prop_spec.is_empty():
+		area.set_meta("world_prop_id", id)
+		var prop_component := InteractiveWorldProp.new()
+		prop_component.name = "InteractiveWorldProp"
+		area.add_child(prop_component)
+		prop_component.configure(id, str(prop_spec.get("kind", "generic")), str(prop_spec.get("state_key", "")), "idle", story_state)
 	var table := MeshInstance3D.new()
 	table.name = "%s_VisibleProp" % id
 	var mesh := BoxMesh.new()
@@ -3244,6 +3288,16 @@ func _make_village_place(id: String, type: String, prompt: String, pos: Vector3,
 	area.add_child(label)
 	_connect_interactable(area)
 	return area
+
+func _world_prop_spec(id: String) -> Dictionary:
+	return {
+		"notice_board": {"kind": "notice_board", "state_key": "evidence_report"},
+		"village_well": {"kind": "well", "state_key": "greyfen_well_state"},
+		"forge_corner": {"kind": "forge", "state_key": "iron_fate"},
+		"shrine_prayer": {"kind": "shrine", "state_key": "shrine_prayer_state"},
+		"common_table": {"kind": "table", "state_key": "common_table_state"},
+		"barrel_board": {"kind": "table", "state_key": "barrel_board_state"},
+	}.get(id, {})
 
 func _configure_npc_animation(mapped: Node3D, id: String) -> void:
 	var clips := {
@@ -3809,7 +3863,20 @@ func _make_cart(pos: Vector3) -> void:
 		wheel.position = pos + Vector3(x, 0.35, -0.62)
 		wheel.rotation_degrees.z = 90
 		wheel.material_override = _mat(Color(0.07, 0.05, 0.035))
+		wheel.set_meta("world_prop_kind", "wheel")
+		wheel.set_meta("world_prop_id", "greyfen_cart_wheel")
 		zone_root.add_child(wheel)
+	_make_world_prop_anchor("cart", "cart", pos)
+
+func _make_world_prop_anchor(id: String, kind: String, pos: Vector3, state_key: String = "") -> Node3D:
+	var anchor := Node3D.new()
+	anchor.name = "WorldPropAnchor_%s" % id.capitalize()
+	anchor.position = river_safe_position(pos, 0.42)
+	anchor.set_meta("world_prop_id", id)
+	anchor.set_meta("world_prop_kind", kind)
+	anchor.set_meta("world_prop_state_key", state_key)
+	zone_root.add_child(anchor)
+	return anchor
 
 func _make_ritual_stone(pos: Vector3) -> void:
 	_make_prop_box("RitualStone", pos + Vector3(0, 0.8, 0), Vector3(0.6, 1.6, 0.35), Color(0.32, 0.34, 0.32))
@@ -3853,6 +3920,8 @@ func _make_torch(pos: Vector3) -> void:
 	flame.scale = Vector3(0.10, 0.18, 0.10)
 	flame.position = pos + Vector3(0, 1.75, 0)
 	flame.material_override = _emissive_mat(Color(1.0, 0.45, 0.14), 1.4)
+	flame.set_meta("world_prop_kind", "flame")
+	flame.set_meta("world_prop_id", "torch_flame")
 	zone_root.add_child(flame)
 	_make_light("TorchLight", pos + Vector3(0, 1.8, 0), Color(1.0, 0.45, 0.16), 1.45)
 
