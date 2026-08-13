@@ -19,12 +19,16 @@
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/visual_director.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/world_*.gd",
-        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/*.gd"
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/*.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_world_012.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/capture_world_012.gd"
       ],
       "gates": [
         "verify_visible_quality",
         "verify_zone_budgets",
-        "verify_light_001"
+        "verify_light_001",
+        "verify_world_001",
+        "verify_world_012"
       ]
     },
     "navigation": {
@@ -756,6 +760,7 @@
     "boss_001": "capture_boss_001",
     "lighting": "capture_light_001",
 	"progression": "capture_prog_001",
-	"materials": "capture_mat_003"
+	"materials": "capture_mat_003",
+	"greyfen_authored": "capture_world_012"
 }
 }

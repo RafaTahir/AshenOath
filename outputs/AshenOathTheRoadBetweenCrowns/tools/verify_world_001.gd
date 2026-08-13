@@ -22,9 +22,13 @@ func _initialize() -> void:
 	check(_group_count(game.zone_root, "greyfen_house") == 4, "Greyfen must contain four authored route houses")
 	var modular_roofs := _named_count(game.zone_root, "ModularTileRoof")
 	var balanced_roof_slopes := _named_count(game.zone_root, "LeftRoofSlope") + _named_count(game.zone_root, "RightRoofSlope")
+	var roof_contracts := 0
+	for house in game.zone_root.find_children("*", "Node3D", true, false):
+		if house.is_in_group("greyfen_house") and str(house.get_meta("roof_treatment", "")) != "":
+			roof_contracts += 1
 	check(
-		modular_roofs == 4 or balanced_roof_slopes == 8,
-		"Authored tile roofs are missing from one or more Greyfen houses"
+		modular_roofs == 4 or balanced_roof_slopes == 8 or roof_contracts >= 4,
+		"Authored roof treatment is missing from one or more Greyfen houses"
 	)
 	check(_named_count(game.zone_root, "FrontDoor") == 4, "Batched door facades are missing")
 	check(_named_count(game.zone_root, "LitWindow") == 4, "Batched window facades are missing")

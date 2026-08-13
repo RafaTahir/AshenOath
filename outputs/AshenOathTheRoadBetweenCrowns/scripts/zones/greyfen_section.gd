@@ -25,6 +25,7 @@ func build(context: ZoneBuildContext) -> void:
 	_build_village_silhouette(context)
 	_build_boundary_dressing(context)
 	_build_landmarks(context)
+	_build_authored_greyfen_details(context)
 
 	context.make_village_dressing()
 	context.make_greyfen_first_impression_dressing()
@@ -76,6 +77,58 @@ func _build_landmarks(context: ZoneBuildContext) -> void:
 	CemeterySection.new().build(context, Vector3(14, 0, 8.6))
 	context.make_cart(Vector3(-6.2, 0, 9.0))
 	_build_castle_road(context)
+
+func _build_authored_greyfen_details(context: ZoneBuildContext) -> void:
+	var layer := Node3D.new()
+	layer.name = "GreyfenAuthoredDetailLayer"
+	layer.set_meta("ticket", "WORLD-012")
+	context.add_node(layer)
+
+	# Structural details give each quarter a function without narrowing the
+	# reserved player lanes or adding new gameplay interactions.
+	for detail in [
+		["GreyfenWestDrainStone", Vector3(-5.0, 0.09, -4.90), Vector3(3.0, 0.18, 0.22), Color(0.31, 0.30, 0.27)],
+		["GreyfenEastDrainStone", Vector3(7.0, 0.09, 2.95), Vector3(2.8, 0.18, 0.22), Color(0.29, 0.29, 0.27)],
+		["GreyfenSpawnDrain", Vector3(-10.0, 0.09, 9.85), Vector3(2.8, 0.18, 0.22), Color(0.32, 0.30, 0.26)],
+		["GreyfenShrineStep", Vector3(6.0, 0.10, -8.25), Vector3(2.55, 0.20, 0.46), Color(0.34, 0.33, 0.29)],
+		["GreyfenForgeStep", Vector3(10.5, 0.10, -2.65), Vector3(2.3, 0.20, 0.42), Color(0.29, 0.28, 0.25)],
+	]:
+		context.make_prop_box(str(detail[0]), detail[1], detail[2], detail[3])
+		_mark_detail(layer, str(detail[0]))
+
+	# The shrine receives a readable arch and the forge receives a working yard
+	# silhouette. Both sit outside the main road corridor.
+	for x in [4.35, 7.65]:
+		context.make_prop_box("GreyfenShrineArchStone", Vector3(x, 1.28, -7.75), Vector3(0.34, 2.56, 0.34), Color(0.34, 0.35, 0.32))
+	context.make_prop_box("GreyfenShrineArchLintel", Vector3(6.0, 2.42, -7.75), Vector3(3.55, 0.30, 0.34), Color(0.14, 0.075, 0.038))
+	_mark_detail(layer, "GreyfenShrineArchLintel")
+	context.make_prop_box("GreyfenForgeCanopy", Vector3(10.5, 2.03, -1.30), Vector3(3.75, 0.18, 2.35), Color(0.14, 0.070, 0.035))
+	_mark_detail(layer, "GreyfenForgeCanopy")
+	context.make_prop_box("GreyfenForgeChimney", Vector3(11.75, 2.55, -0.25), Vector3(0.44, 1.55, 0.44), Color(0.25, 0.24, 0.22))
+	context.make_prop_box("GreyfenForgeRack", Vector3(8.7, 0.78, -1.35), Vector3(0.16, 1.40, 1.45), Color(0.29, 0.29, 0.26))
+	_mark_detail(layer, "GreyfenForgeRack")
+
+	# River stones frame the water while leaving the bridge centre and both
+	# bridge approaches clear for the spatial service.
+	for detail in [
+		["GreyfenRiverShoreStone", Vector3(-7.4, 0.18, 2.62), Vector3(0.72, 0.36, 0.50)],
+		["GreyfenRiverShoreStone", Vector3(7.5, 0.18, 2.70), Vector3(0.62, 0.32, 0.44)],
+		["GreyfenRiverShoreStone", Vector3(-7.0, 0.18, 6.28), Vector3(0.65, 0.34, 0.46)],
+		["GreyfenRiverShoreStone", Vector3(7.2, 0.18, 6.36), Vector3(0.75, 0.38, 0.52)],
+	]:
+		context.make_prop_box(str(detail[0]), detail[1], detail[2], Color(0.27, 0.29, 0.27))
+
+	# A small market rhythm makes the spawn street read as inhabited without
+	# introducing new schedules or interaction ownership.
+	context.make_prop_box("GreyfenMarketAwning", Vector3(-6.3, 1.82, 8.85), Vector3(2.85, 0.16, 1.35), Color(0.24, 0.12, 0.065))
+	_mark_detail(layer, "GreyfenMarketAwning")
+	context.make_prop_box("GreyfenMarketCounter", Vector3(-6.3, 0.62, 8.18), Vector3(2.35, 0.88, 0.48), Color(0.16, 0.085, 0.040))
+	context.make_prop_box("GreyfenMarketSign", Vector3(-6.3, 2.22, 8.05), Vector3(1.10, 0.46, 0.10), Color(0.44, 0.25, 0.11))
+
+func _mark_detail(layer: Node3D, detail_id: String) -> void:
+	var marker := Node3D.new()
+	marker.name = detail_id
+	layer.add_child(marker)
 
 func _build_castle_road(context: ZoneBuildContext) -> void:
 	var marker := Node3D.new()

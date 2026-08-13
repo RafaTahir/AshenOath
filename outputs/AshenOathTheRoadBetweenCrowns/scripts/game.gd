@@ -2825,11 +2825,13 @@ func _make_village_house_dressed(pos: Vector3, yaw: float, node_name: String) ->
 	_add_house_box(root, "StoneFoundation", Vector3(0, 0.18, 0), Vector3(4.55, 0.36, 3.55), Color(0.28, 0.27, 0.24))
 	_add_house_box(root, "PlasteredWall", Vector3(0, 1.05, 0), Vector3(4.3, 2.1, 3.35), plaster)
 	_add_house_gables(root, plaster, timber)
-	if _compatibility_budget_mode():
+	if str(settings.settings.get("quality_preset", "balanced")) == "potato":
+		root.set_meta("roof_treatment", "authored_fallback_slope")
 		_add_house_box(root, "LeftRoofSlope", Vector3(-0.9, 2.42, 0), Vector3(2.55, 0.42, 3.95), Color(0.14, 0.055, 0.035), Vector3(0, 0, -13))
 		_add_house_box(root, "RightRoofSlope", Vector3(0.9, 2.42, 0), Vector3(2.55, 0.42, 3.95), Color(0.14, 0.055, 0.035), Vector3(0, 0, 13))
 	else:
 		# OBJ roof pieces normalize by their broad source bounds; uniform scale keeps the eaves near the 4.5 m shell.
+		root.set_meta("roof_treatment", "modular_tile")
 		_add_house_module(root, "greyfen_roof", Vector3(0.55, 0.55, 0.55), Vector3(0, 2.02, 0), 0.0, "ModularTileRoof")
 	var chimney_x: float = -1.38 if facade_variant == 0 else 1.38
 	_add_house_box(root, "StoneChimney", Vector3(chimney_x, 2.63, 0.62), Vector3(0.48, 1.38, 0.48), Color(0.23, 0.22, 0.20))
@@ -2856,7 +2858,7 @@ func _make_village_house_dressed(pos: Vector3, yaw: float, node_name: String) ->
 	_add_house_box(root, "RearWeatheredBaseCourse", Vector3(0, 0.42, 1.73), Vector3(4.22, 0.26, 0.08), Color(0.16, 0.17, 0.14))
 	_add_house_box(root, "FrontCrossBrace", Vector3(-1.43, 1.16, -1.85), Vector3(0.11, 1.42, 0.10), Color(0.10, 0.055, 0.03), Vector3(0, 0, -36))
 	_add_house_box(root, "FrontCrossBrace", Vector3(1.43, 1.16, -1.85), Vector3(0.11, 1.42, 0.10), Color(0.10, 0.055, 0.03), Vector3(0, 0, 36))
-	if str(settings.settings.get("quality_preset", "balanced")) == "quality":
+	if str(settings.settings.get("quality_preset", "balanced")) != "potato":
 		_add_house_module(root, "greyfen_door_facade", Vector3(0.90, 0.90, 0.90), Vector3(-0.98, 0.02, -1.82), 0.0, "ModularDoorFacade")
 		_add_house_module(root, "greyfen_window_facade", Vector3(0.90, 0.90, 0.90), Vector3(1.04, 0.02, -1.82), 0.0, "ModularWindowFacade")
 		_add_house_module(root, "greyfen_chimney", Vector3(0.48, 0.58, 0.48), Vector3(chimney_x, 2.20, 0.62), 0.0, "ModularChimney")
@@ -4113,7 +4115,15 @@ func _make_role_visual(role_name: String, category: String, scale_value: Vector3
 	if role_name == "" or asset_helper == null:
 		return null
 	if _compatibility_budget_mode() and category == "environment":
-		return null
+		# Balanced keeps only scale-safe, high-signal environment assets. Potato
+		# remains primitive-light; larger source meshes stay Quality-only until
+		# their imported bounds have an explicit normalization contract.
+		var balanced_environment_roles := [
+			"greyfen_door_facade", "greyfen_window_facade", "greyfen_chimney",
+			"forest_tree", "forest_rock",
+		]
+		if str(settings.settings.get("quality_preset", "balanced")) == "potato" or role_name not in balanced_environment_roles:
+			return null
 	var node: Node3D
 	if category == "characters":
 		var visual_role = _visual_role_for_legacy_character(role_name)

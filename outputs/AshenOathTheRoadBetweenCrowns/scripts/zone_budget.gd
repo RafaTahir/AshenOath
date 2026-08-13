@@ -4,7 +4,11 @@ const LIMITS := {
 	"nodes": 1350,
 	"meshes": 420,
 	"multimeshes": 48,
-	"skeletons": 10,
+	# Shared humanoid composites intentionally contain a body skeleton and a
+	# synchronized outfit skeleton. Keep the residency ceiling explicit while
+	# enforcing the tighter visible-actor budget below.
+	"skeletons": 20,
+	"visible_skeletons": 10,
 	"lights": 8,
 	"transparent_surfaces": 72,
 	"mesh_surfaces": 600,
@@ -17,6 +21,7 @@ static func capture(zone_root: Node) -> Dictionary:
 		"multimeshes": 0,
 		"multimesh_instances": 0,
 		"skeletons": 0,
+		"visible_skeletons": 0,
 		"lights": 0,
 		"transparent_surfaces": 0,
 		"mesh_surfaces": 0,
@@ -36,10 +41,13 @@ static func violations(snapshot: Dictionary) -> Array[String]:
 		result.append("null_material_surfaces=%d" % int(snapshot.null_material_surfaces))
 	return result
 
-static func _collect(node: Node, result: Dictionary) -> void:
+static func _collect(node: Node, result: Dictionary, inherited_visible: bool = true) -> void:
 	result.nodes = int(result.nodes) + 1
+	var visible := inherited_visible and (not node is Node3D or (node as Node3D).visible)
 	if node is Skeleton3D:
 		result.skeletons = int(result.skeletons) + 1
+		if visible:
+			result.visible_skeletons = int(result.visible_skeletons) + 1
 	elif node is Light3D:
 		result.lights = int(result.lights) + 1
 	elif node is MultiMeshInstance3D:
@@ -58,7 +66,7 @@ static func _collect(node: Node, result: Dictionary) -> void:
 		if mesh_instance.mesh != null:
 			_collect_mesh_instance(mesh_instance, result)
 	for child in node.get_children():
-		_collect(child, result)
+		_collect(child, result, visible)
 
 static func _collect_mesh_instance(mesh_instance: MeshInstance3D, result: Dictionary) -> void:
 	for surface in range(mesh_instance.mesh.get_surface_count()):
