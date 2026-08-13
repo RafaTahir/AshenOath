@@ -301,6 +301,21 @@
         "verify_greyfen_life"
       ]
     },
+    "life": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/greyfen_life_controller.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/npc_ambient.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_animation_driver.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_life_001.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/capture_life_001.gd"
+      ],
+      "gates": [
+        "verify_greyfen_life",
+        "verify_life_001",
+        "verify_navigation_001",
+        "verify_river_swimming"
+      ]
+    },
     "monsters": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/monster_family_manifest.json",
@@ -761,6 +776,7 @@
     "lighting": "capture_light_001",
 	"progression": "capture_prog_001",
 	"materials": "capture_mat_003",
-	"greyfen_authored": "capture_world_012"
+	"greyfen_authored": "capture_world_012",
+	"greyfen_life": "capture_life_001"
 }
 }

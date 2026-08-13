@@ -19,6 +19,28 @@ const AMBIENT_LINES := {
 	"greyfen_keep_working":"We keep working. What else is there?"
 }
 
+const POST_REPORT_LINES := {
+	"private": ["Anwen took the evidence inside. The village is pretending not to listen.", "Nobody asks what Kael told her. They watch the cemetery road instead."],
+	"public": ["The notice board has new names on it. People read them and keep their hands busy.", "The bell changed the way Greyfen walks. No one crosses the square alone."],
+	"retained": ["Someone kept a piece of the road's story. The crows know which piece.", "The evidence is not all in Anwen's hands. That makes every quiet conversation sharper."]
+}
+
+const ROUTINE_PROFILES := {
+	"walker_well": {"occupation": "well keeper", "activity": "well", "activity_seconds": 2.8, "line": "greyfen_well_iron"},
+	"walker_board": {"occupation": "notice reader", "activity": "notice_board", "activity_seconds": 2.4, "line": "greyfen_road_quiet"},
+	"shrine_pilgrim": {"occupation": "shrine pilgrim", "activity": "shrine", "activity_seconds": 3.4, "line": "greyfen_shrine_voice"},
+	"forge_helper": {"occupation": "forge helper", "activity": "forge", "activity_seconds": 3.1, "line": "greyfen_forge_night"},
+	"herb_helper": {"occupation": "herb gatherer", "activity": "herb_stall", "activity_seconds": 2.6, "line": "greyfen_roots_bitter"},
+	"worried_villager": {"occupation": "road lookout", "activity": "lookout", "activity_seconds": 2.0, "line": "greyfen_north_smoke"},
+	"young_villager": {"occupation": "market runner", "activity": "market", "activity_seconds": 1.8, "line": "greyfen_cart_light"},
+	"water_carrier": {"occupation": "water carrier", "activity": "well", "activity_seconds": 2.4, "line": "greyfen_well_iron"},
+	"quality_sweeper": {"occupation": "street sweeper", "activity": "market", "activity_seconds": 2.2, "line": "greyfen_keep_working"},
+	"quality_mourner": {"occupation": "mourner", "activity": "shrine", "activity_seconds": 3.0, "line": "greyfen_anwen_sleep"},
+	"blacksmith_tor": {"occupation": "blacksmith", "activity": "forge", "activity_seconds": 3.6, "line": "greyfen_forge_night"},
+	"mira": {"occupation": "herbalist", "activity": "herb_stall", "activity_seconds": 3.0, "line": "greyfen_roots_bitter"},
+	"rook": {"occupation": "road watcher", "activity": "notice_board", "activity_seconds": 2.2, "line": "greyfen_crows_fat"}
+}
+
 var host: Node
 var player: Node3D
 var actors: Array = []
@@ -29,6 +51,8 @@ var asset_helper
 var far_tick_accumulator := 0.0
 var simulation_tick_accumulator := 0.0
 var spatial_service
+var story_signature := ""
+var last_story_line := ""
 
 const CROWD_IDENTITIES := [
 	"generic_villager_01", "generic_villager_02", "farmer_toma", "widow_elna",
@@ -48,6 +72,7 @@ func configure(game: Node, quality_preset: String) -> void:
 	set_spatial_service(game.spatial_service)
 	_build_population()
 	_enroll_named_npcs()
+	_sync_story_state(true)
 
 func set_spatial_service(service) -> void:
 	spatial_service = service
@@ -69,6 +94,7 @@ func _process(delta: float) -> void:
 	delta = simulation_tick_accumulator
 	simulation_tick_accumulator = 0.0
 	line_cooldown = max(line_cooldown - delta, 0.0)
+	_sync_story_state(false)
 	var visible_ambient := _visible_ambient_ids()
 	for entry in actors:
 		var actor_node: Node3D = entry.node
@@ -108,7 +134,7 @@ func _build_population() -> void:
 		actor.position = host.validate_walkable_position(definition.path[0])
 		host.zone_root.add_child(actor)
 		var driver = _make_skeletal_villager(actor, str(definition.id), i, float(definition.get("scale",1.0)))
-		var entry := {"id":definition.id,"node":actor,"path":definition.path,"target":1,"speed":definition.speed,"pause":rng.randf_range(0.0,0.25),"driver":driver,"named":false,"phase":rng.randf()*TAU,"base_y":actor.position.y,"route":[],"route_index":0}
+		var entry := _make_entry(definition.id, actor, definition.path, definition.speed, driver, false)
 		actors.append(entry)
 		_configure_agent(entry)
 
@@ -124,7 +150,7 @@ func _enroll_named_npcs() -> void:
 		if node == null: continue
 		var ambient = node.find_child("NpcAmbient",true,false)
 		if ambient != null: ambient.process_mode = Node.PROCESS_MODE_DISABLED
-		var entry := {"id":id,"node":node,"path":named[id].path,"target":1,"speed":named[id].speed,"pause":rng.randf_range(0.0,0.25),"driver":node.find_child("CharacterAnimationDriver",true,false),"named":true,"phase":rng.randf()*TAU,"base_y":node.position.y,"route":[],"route_index":0}
+		var entry := _make_entry(id, node, named[id].path, named[id].speed, node.find_child("CharacterAnimationDriver",true,false), true)
 		actors.append(entry)
 		_configure_agent(entry)
 		if entry.driver != null and entry.driver.has_method("set_update_rate_hz"):
@@ -133,6 +159,9 @@ func _enroll_named_npcs() -> void:
 func _update_actor(entry: Dictionary, delta: float) -> void:
 	var node: Node3D = entry.node
 	if not is_instance_valid(node): return
+	if bool(entry.get("activity_active", false)):
+		_update_activity(entry, delta)
+		return
 	var distance_to_player := node.global_position.distance_to(player.global_position)
 	if distance_to_player < 2.1:
 		entry.pause = max(float(entry.pause), 1.2)
@@ -171,8 +200,7 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 			return
 		entry.route = []
 		entry.target = (int(entry.target) + 1) % entry.path.size()
-		entry.pause = rng.randf_range(1.4,3.8) * (1.4 if str(entry.id) == "shrine_pilgrim" else 1.0)
-		_set_motion(entry,0.0)
+		_begin_activity(entry)
 		return
 	var direction := offset.normalized()
 	var next_position := node.global_position + direction * minf(float(entry.speed) * delta, offset.length())
@@ -184,6 +212,118 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 	node.global_position = next_position
 	_face(node,node.global_position + direction,delta)
 	_set_motion(entry,float(entry.speed),direction)
+
+func _make_entry(id: String, node: Node3D, path: Array, speed: float, driver: Node, named: bool) -> Dictionary:
+	var profile: Dictionary = ROUTINE_PROFILES.get(id, {"occupation": "villager", "activity": "idle", "activity_seconds": 2.0, "line": "greyfen_keep_working"})
+	var entry := {
+		"id": id, "node": node, "path": path, "target": 1, "speed": speed,
+		"pause": rng.randf_range(0.0, 0.25), "driver": driver, "named": named,
+		"phase": rng.randf() * TAU, "base_y": node.position.y, "route": [],
+		"route_index": 0, "profile": profile.duplicate(true), "activity_active": false,
+		"activity_elapsed": 0.0, "activity_cycles": 0, "life_state": "walking",
+		"story_reaction": "baseline"
+	}
+	node.set_meta("life_ticket", "LIFE-001")
+	node.set_meta("life_routine", id)
+	node.set_meta("life_occupation", str(profile.get("occupation", "villager")))
+	node.set_meta("life_state", "walking")
+	node.set_meta("life_story_reaction", "baseline")
+	return entry
+
+func _begin_activity(entry: Dictionary) -> void:
+	var node: Node3D = entry.node
+	var profile: Dictionary = entry.profile
+	entry.activity_active = true
+	entry.activity_elapsed = 0.0
+	entry.activity_cycles = int(entry.activity_cycles) + 1
+	entry.life_state = "working:%s" % str(profile.get("activity", "idle"))
+	node.set_meta("life_state", entry.life_state)
+	_set_activity_pose(entry, true)
+
+func _update_activity(entry: Dictionary, delta: float) -> void:
+	var node: Node3D = entry.node
+	var profile: Dictionary = entry.profile
+	entry.activity_elapsed = float(entry.activity_elapsed) + delta
+	var anchor := _activity_anchor(entry)
+	if anchor != Vector3.ZERO:
+		_face(node, anchor, delta)
+	_set_activity_pose(entry, true)
+	if float(entry.activity_elapsed) >= float(profile.get("activity_seconds", 2.0)):
+		_end_activity(entry)
+		entry.pause = rng.randf_range(0.65, 1.55)
+
+func _end_activity(entry: Dictionary) -> void:
+	entry.activity_active = false
+	entry.life_state = "walking"
+	entry.route = []
+	entry.route_index = 0
+	entry.node.set_meta("life_state", "walking")
+	_set_activity_pose(entry, false)
+
+func _set_activity_pose(entry: Dictionary, active: bool) -> void:
+	var driver = entry.driver
+	if driver == null:
+		return
+	var activity := str(entry.profile.get("activity", "idle"))
+	if active:
+		if activity == "notice_board" or activity == "lookout":
+			if driver.has_method("set_dialogue_pose"):
+				driver.set_dialogue_pose(true)
+		else:
+			if driver.has_method("set_working"):
+				driver.set_working(true)
+	else:
+		if driver.has_method("set_working"):
+			driver.set_working(false)
+		if driver.has_method("set_dialogue_pose"):
+			driver.set_dialogue_pose(false)
+
+func _activity_anchor(entry: Dictionary) -> Vector3:
+	var activity := str(entry.profile.get("activity", ""))
+	var anchors := {
+		"well": Vector3(-8.0, 0.0, -1.0),
+		"notice_board": Vector3(-3.0, 0.0, 9.0),
+		"shrine": Vector3(5.8, 0.0, -7.0),
+		"forge": Vector3(9.0, 0.0, -1.0),
+		"herb_stall": Vector3(-7.0, 0.0, -2.0),
+		"lookout": Vector3(1.5, 0.0, 5.0),
+		"market": Vector3(-6.3, 0.0, 8.5)
+	}
+	return anchors.get(activity, Vector3.ZERO)
+
+func _sync_story_state(force: bool) -> void:
+	if host == null:
+		return
+	var state = host.get("story_state")
+	var report := str(state.get_flag("evidence_report", "")) if state != null and state.has_method("get_flag") else ""
+	var bell := bool(state.get_flag("cemetery_bell_rung", false)) if state != null and state.has_method("get_flag") else false
+	var signature := "%s|%s" % [report, str(bell)]
+	if not force and signature == story_signature:
+		return
+	story_signature = signature
+	var reaction := "baseline"
+	if report != "":
+		reaction = "reported_%s" % report
+	if bell:
+		reaction += "_bell_rung"
+	for entry in actors:
+		entry.story_reaction = reaction
+		var node: Node3D = entry.node
+		if is_instance_valid(node):
+			node.set_meta("life_story_reaction", reaction)
+
+func get_routine_snapshot() -> Array:
+	var snapshot: Array = []
+	for entry in actors:
+		snapshot.append({
+			"id": str(entry.id), "named": bool(entry.named),
+			"occupation": str(entry.profile.get("occupation", "")),
+			"activity": str(entry.profile.get("activity", "")),
+			"state": str(entry.life_state), "story_reaction": str(entry.story_reaction),
+			"activity_cycles": int(entry.activity_cycles),
+			"position": entry.node.global_position if is_instance_valid(entry.node) else Vector3.ZERO
+		})
+	return snapshot
 
 func _configure_agent(entry: Dictionary) -> void:
 	var actor: Node3D = entry.node
@@ -235,6 +375,10 @@ func _set_agent_target(entry: Dictionary) -> void:
 func _set_motion(entry: Dictionary, speed: float, direction: Vector3 = Vector3.ZERO) -> void:
 	var driver = entry.driver
 	if driver != null and driver.has_method("set_locomotion"):
+		if driver.has_method("set_working"):
+			driver.set_working(false)
+		if driver.has_method("set_dialogue_pose"):
+			driver.set_dialogue_pose(false)
 		# Routine speeds are walking pace; this ratio also controls clip cadence.
 		if speed <= 0.01 and str(entry.id) == "forge_helper" and driver.has_method("set_working"):
 			driver.set_working(true)
