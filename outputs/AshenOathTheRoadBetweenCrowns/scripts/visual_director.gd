@@ -1,5 +1,7 @@
 extends Node
 
+const SkyBackdrop = preload("res://scripts/sky_backdrop.gd")
+
 var world_environment: WorldEnvironment
 var sun: DirectionalLight3D
 var moon: DirectionalLight3D
@@ -12,6 +14,11 @@ var moon_disc: MeshInstance3D
 var moon_halo: MeshInstance3D
 var star_field: MultiMeshInstance3D
 var cloud_texture: ImageTexture
+var celestial_disc_texture: ImageTexture
+var sky_canvas: CanvasLayer
+var sky_backdrop: Control
+var authored_sky: Sky
+var authored_sky_material: ProceduralSkyMaterial
 var current_environment: Environment
 var environment_cache: Dictionary = {}
 var night_node_cache: Dictionary = {}
@@ -38,6 +45,7 @@ func _ready() -> void:
 	moon.shadow_enabled = false
 	moon.light_color = Color(0.38, 0.52, 0.72)
 	add_child(moon)
+	_build_sky_backdrop()
 	_build_sky_layer()
 	apply_zone("greyfen")
 
@@ -82,7 +90,11 @@ func set_time(minutes: float, phase: String, _day_count: int = 0) -> void:
 		sky_dome.visible = false
 		for celestial in [sun_disc, sun_halo, moon_disc, moon_halo, star_field, cloud_layer]:
 			celestial.visible = false
+		if sky_backdrop != null:
+			sky_backdrop.call("set_state", daylight, twilight, night, minutes, _quality_preset(), current_zone, _reduced_motion(), _sky_backdrop_palette(profile), false)
+			sky_backdrop.visible = false
 		current_environment.background_mode = Environment.BG_COLOR
+		current_environment.sky = null
 		current_environment.background_color = profile.interior_background
 		# Keep the renderer clear color in lockstep with the authored interior
 		# profile. This is the fallback behind an interior ceiling when ANGLE
@@ -97,6 +109,8 @@ func set_time(minutes: float, phase: String, _day_count: int = 0) -> void:
 		_update_zone_night_state(night)
 		return
 	var twilight_sky: Color = profile.dawn_sky if minutes < 720.0 else profile.dusk_sky
+	current_environment.background_mode = Environment.BG_SKY
+	current_environment.sky = authored_sky
 	current_environment.background_color = profile.night_sky.lerp(twilight_sky, twilight).lerp(profile.day_sky, daylight)
 	RenderingServer.set_default_clear_color(current_environment.background_color)
 	current_environment.ambient_light_color = profile.ambient_night.lerp(profile.ambient_day, daylight)
@@ -106,6 +120,7 @@ func set_time(minutes: float, phase: String, _day_count: int = 0) -> void:
 	current_environment.adjustment_brightness = lerpf(float(profile.night_brightness), float(profile.day_brightness), daylight)
 	current_environment.adjustment_contrast = float(profile.contrast)
 	current_environment.adjustment_saturation = float(profile.saturation)
+	_update_authored_sky_material(profile, daylight, twilight, night)
 	var sun_direction := _solar_direction(minutes)
 	sun.global_basis = Basis.looking_at(-sun_direction,Vector3.UP)
 	var twilight_sun: Color = profile.dawn_sun if minutes < 720.0 else profile.dusk_sun
@@ -115,6 +130,11 @@ func set_time(minutes: float, phase: String, _day_count: int = 0) -> void:
 	moon.light_color = profile.moon_color
 	moon.light_energy = night * float(profile.moon_energy)
 	_update_sky_cycle(daylight, twilight, night, minutes, profile)
+	if sky_backdrop != null:
+		sky_backdrop.call("set_state", daylight, twilight, night, minutes, _quality_preset(), current_zone, _reduced_motion(), _sky_backdrop_palette(profile), true)
+		# Only the star pass is drawn in this CanvasLayer. It is additive and
+		# restricted to the upper sky, so it cannot cover gameplay geometry.
+		sky_backdrop.visible = night > 0.20 and daylight + twilight <= 0.08
 	_update_zone_night_state(smoothstep(float(profile.night_light_threshold), 1.0, night))
 
 func _update_sky_cycle(daylight: float, twilight: float, night: float, minutes: float, profile: Dictionary) -> void:
@@ -144,6 +164,7 @@ func _update_sky_cycle(daylight: float, twilight: float, night: float, minutes: 
 	moon_disc.position = moon_position
 	moon_halo.position = moon_position + Vector3(0, 0, 0.4)
 	star_field.position = sky_origin
+	star_field.global_transform = Transform3D(Basis(view_right, view_up, view_forward), sky_origin)
 	cloud_layer.position = sky_origin
 	var sun_amount := clampf(daylight+twilight*0.72,0.0,1.0)
 	var sun_above_horizon := sun_direction.y > -0.015
@@ -185,6 +206,32 @@ func _update_sky_cycle(daylight: float, twilight: float, night: float, minutes: 
 				var material := (lobe as MeshInstance3D).material_override as StandardMaterial3D
 				if material != null:
 					material.albedo_color = Color(cloud_color.r,cloud_color.g,cloud_color.b,cloud_alpha)
+
+func _sky_backdrop_palette(profile: Dictionary) -> Dictionary:
+	var day: Color = profile.get("day_sky", Color(0.24, 0.39, 0.56))
+	var dawn: Color = profile.get("dawn_sky", Color(0.42, 0.25, 0.20))
+	var dusk: Color = profile.get("dusk_sky", Color(0.38, 0.18, 0.10))
+	var night_color: Color = profile.get("night_sky", Color(0.020, 0.045, 0.090))
+	return {
+		"day_top": day.darkened(0.42),
+		"day_horizon": day.lightened(0.30),
+		"dusk_top": dusk.darkened(0.40),
+		"dusk_horizon": dawn.lightened(0.16),
+		"night_top": night_color.darkened(0.48),
+		"night_horizon": night_color.lightened(0.62),
+		"cloud_day": Color(0.90, 0.92, 0.94),
+		"cloud_dusk": Color(0.78, 0.40, 0.28),
+	}
+
+func _update_authored_sky_material(profile: Dictionary, daylight: float, twilight: float, night: float) -> void:
+	if authored_sky_material == null:
+		return
+	var colors := _sky_backdrop_palette(profile)
+	authored_sky_material.sky_top_color = colors.night_top.lerp(colors.dusk_top, twilight).lerp(colors.day_top, daylight)
+	authored_sky_material.sky_horizon_color = colors.night_horizon.lerp(colors.dusk_horizon, twilight).lerp(colors.day_horizon, daylight)
+	authored_sky_material.ground_horizon_color = authored_sky_material.sky_horizon_color.darkened(0.12)
+	authored_sky_material.ground_bottom_color = authored_sky_material.sky_top_color.darkened(0.38)
+	authored_sky_material.energy_multiplier = lerpf(0.76, 0.92, daylight) + twilight * 0.04
 
 func _phase_weights(minutes: float) -> Dictionary:
 	minutes = fposmod(minutes, 1440.0)
@@ -250,6 +297,8 @@ func _update_zone_night_state(night_amount: float) -> void:
 		if is_instance_valid(mesh): mesh.visible = night_amount > 0.10
 
 func _initialize_environment(env: Environment, profile: Dictionary) -> void:
+	env.background_mode = Environment.BG_SKY if bool(profile.outdoor) else Environment.BG_COLOR
+	env.sky = authored_sky if bool(profile.outdoor) else null
 	env.background_color = profile.night_sky
 	env.fog_light_color = profile.fog_night_color
 	env.fog_density = float(profile.fog_night)
@@ -363,17 +412,22 @@ func _build_sky_layer() -> void:
 	sun_disc.name = "SunDisc"
 	# A camera-facing disc reads as a distant sun. The former sphere was large
 	# enough to look like a glowing prop hanging over the village.
+	celestial_disc_texture = _build_celestial_disc_texture()
 	var sun_mesh := QuadMesh.new()
 	sun_mesh.size = Vector2(2.3, 2.3)
 	sun_disc.mesh = sun_mesh
 	sun_disc.scale = Vector3.ONE
-	sun_disc.material_override = _emissive_billboard_material(Color(1.0, 0.94, 0.78), 2.15, 0.96)
+	var sun_material := _emissive_billboard_material(Color(1.0, 0.94, 0.78), 2.15, 0.96)
+	sun_material.albedo_texture = celestial_disc_texture
+	sun_disc.material_override = sun_material
 	add_child(sun_disc)
 	moon_disc = MeshInstance3D.new()
 	moon_disc.name = "MoonDisc"
 	moon_disc.mesh = sun_mesh.duplicate()
 	moon_disc.scale = Vector3(0.92, 0.92, 0.92)
-	moon_disc.material_override = _emissive_billboard_material(Color(0.62, 0.76, 1.0), 0.62, 0.86)
+	var moon_material := _emissive_billboard_material(Color(0.62, 0.76, 1.0), 0.62, 0.86)
+	moon_material.albedo_texture = celestial_disc_texture
+	moon_disc.material_override = moon_material
 	add_child(moon_disc)
 	var halo_mesh := QuadMesh.new()
 	halo_mesh.size = Vector2.ONE
@@ -414,6 +468,25 @@ func _build_sky_layer() -> void:
 			cloud.add_child(lobe)
 		cloud_layer.add_child(cloud)
 
+func _build_sky_backdrop() -> void:
+	authored_sky_material = ProceduralSkyMaterial.new()
+	authored_sky_material.sun_angle_max = 0.0
+	authored_sky_material.sun_curve = 0.05
+	authored_sky_material.energy_multiplier = 0.82
+	authored_sky = Sky.new()
+	authored_sky.sky_material = authored_sky_material
+	sky_canvas = CanvasLayer.new()
+	sky_canvas.name = "SkyBackdropLayer"
+	sky_canvas.layer = 1
+	sky_canvas.visible = false
+	add_child(sky_canvas)
+	sky_backdrop = SkyBackdrop.new()
+	sky_backdrop.name = "AuthoredSkyBackdrop"
+	sky_backdrop.set_meta("ticket", "SKY-003")
+	sky_backdrop.set_meta("render_role", "gradient_stars_sun_moon_clouds")
+	sky_backdrop.call("set_overlay_only", true)
+	sky_canvas.add_child(sky_backdrop)
+
 func _position_sky_layer(zone_id: String) -> void:
 	if sky_dome == null:
 		return
@@ -451,21 +524,23 @@ func _make_celestial_plane(node_name: String, source_mesh: Mesh, scale_value: Ve
 func _build_star_field() -> void:
 	star_field = MultiMeshInstance3D.new()
 	star_field.name = "ProceduralStarField"
-	var star_mesh := SphereMesh.new()
-	star_mesh.radius = 0.42
-	star_mesh.height = 0.84
-	star_mesh.radial_segments = 6
-	star_mesh.rings = 3
-	star_mesh.material = _emissive_billboard_material(Color(0.72, 0.82, 1.0), 0.72, 0.86)
+	var star_mesh := QuadMesh.new()
+	star_mesh.size = Vector2(0.95, 0.95)
+	var star_material := _emissive_billboard_material(Color(0.72, 0.82, 1.0), 0.72, 0.86)
+	star_material.no_depth_test = true
+	star_material.albedo_texture = celestial_disc_texture
+	star_mesh.material = star_material
 	var stars := MultiMesh.new()
 	stars.transform_format = MultiMesh.TRANSFORM_3D
 	stars.instance_count = 96
 	stars.mesh = star_mesh
 	for i in range(96):
-		var angle := float((i * 137) % 360) * PI / 180.0
-		var height := 38.0 + float((i * 47) % 58)
-		var radius := 112.0 + float((i * 29) % 34)
-		var transform := Transform3D(Basis.IDENTITY.scaled(Vector3.ONE * (0.55 + float(i % 4) * 0.16)), Vector3(cos(angle) * radius, height, sin(angle) * radius))
+		# Keep the batch inside the ordinary third-person camera frustum on
+		# 1280x720 laptop viewports rather than scattering stars outside frame.
+		var screen_x := -22.0 + float((i * 47) % 44)
+		var height := 4.0 + float((i * 47) % 18)
+		var depth := 46.0 + float((i * 29) % 12)
+		var transform := Transform3D(Basis.IDENTITY.scaled(Vector3.ONE * (0.55 + float(i % 4) * 0.16)), Vector3(screen_x, height, depth))
 		stars.set_instance_transform(i, transform)
 	star_field.multimesh = stars
 	add_child(star_field)
@@ -525,6 +600,17 @@ func _build_cloud_texture() -> ImageTexture:
 			var alpha := smoothstep(0.46, 0.71, shape) * edge
 			var shade := lerpf(0.56, 1.0, clampf(1.0-float(y)/63.0+detail*0.16,0.0,1.0))
 			image.set_pixel(x,y,Color(shade,shade,shade,alpha))
+	image.generate_mipmaps()
+	return ImageTexture.create_from_image(image)
+
+func _build_celestial_disc_texture() -> ImageTexture:
+	var image := Image.create(64, 64, false, Image.FORMAT_RGBA8)
+	for y in range(64):
+		for x in range(64):
+			var offset := Vector2(float(x) - 31.5, float(y) - 31.5) / 31.5
+			var radius := offset.length()
+			var alpha := 1.0 - smoothstep(0.72, 1.0, radius)
+			image.set_pixel(x, y, Color(1.0, 1.0, 1.0, alpha))
 	image.generate_mipmaps()
 	return ImageTexture.create_from_image(image)
 

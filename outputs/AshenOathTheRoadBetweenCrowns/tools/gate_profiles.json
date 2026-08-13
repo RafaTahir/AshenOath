@@ -202,6 +202,22 @@
         "verify_visible_quality"
       ]
     },
+    "sky_003": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/visual_director.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/sky_backdrop.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_sky_003.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/capture_sky_003.gd"
+      ],
+      "gates": [
+        "verify_sky_003",
+        "verify_light_001",
+        "verify_visual_003",
+        "verify_master_003",
+        "verify_zone_budgets",
+        "verify_visible_quality"
+      ]
+    },
     "packs": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_manifest.json",
@@ -815,6 +831,7 @@
 	"greyfen_life": "capture_life_001",
 	"river_life": "capture_water_002",
 	"wychwood_authored": "capture_world_013",
-	"cemetery_chapel": "capture_world_014"
+	"cemetery_chapel": "capture_world_014",
+	"sky_living": "capture_sky_003"
 }
 }
