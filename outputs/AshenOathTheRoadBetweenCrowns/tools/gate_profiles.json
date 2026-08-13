@@ -171,6 +171,21 @@
         "verify_visible_quality"
       ]
     },
+    "world_013": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/wychwood_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_world_013.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/capture_world_013.gd"
+      ],
+      "gates": [
+        "verify_world_002",
+        "verify_world_013",
+        "verify_river_swimming",
+        "verify_navigation_001",
+        "verify_zone_budgets",
+        "verify_visible_quality"
+      ]
+    },
     "packs": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_manifest.json",
@@ -782,6 +797,7 @@
 	"materials": "capture_mat_003",
 	"greyfen_authored": "capture_world_012",
 	"greyfen_life": "capture_life_001",
-	"river_life": "capture_water_002"
+	"river_life": "capture_water_002",
+	"wychwood_authored": "capture_world_013"
 }
 }
