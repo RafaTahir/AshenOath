@@ -12,6 +12,7 @@ var destination := ""
 var state: PortalState = PortalState.DORMANT
 var progress := 0.0
 var streaming_service: Node
+var audio_manager: Node
 var _time := 0.0
 var _panel: MeshInstance3D
 var _ring: MeshInstance3D
@@ -45,6 +46,9 @@ func bind_streaming(service: Node) -> void:
 	if streaming_service.has_signal("zone_failed") and not streaming_service.zone_failed.is_connected(_on_zone_failed):
 		streaming_service.zone_failed.connect(_on_zone_failed)
 
+func bind_audio(manager: Node) -> void:
+	audio_manager = manager
+
 func begin_preload() -> void:
 	if state == PortalState.LOCKED or destination == "":
 		return
@@ -73,7 +77,24 @@ func set_state(next_state: PortalState) -> void:
 		return
 	state = next_state
 	_apply_state()
+	_play_state_audio(next_state)
 	state_changed.emit(_state_name())
+
+func _play_state_audio(next_state: PortalState) -> void:
+	if audio_manager == null or not is_instance_valid(audio_manager):
+		return
+	var cue := ""
+	match next_state:
+		PortalState.AWAKENING, PortalState.PRELOADING:
+			cue = "portal_ash"
+		PortalState.READY:
+			cue = "portal_ready"
+		PortalState.TRAVELING:
+			cue = "portal_travel"
+		PortalState.ERROR:
+			cue = "portal_error"
+	if cue != "" and audio_manager.has_method("play_event_limited"):
+		audio_manager.play_event_limited(cue, 0.25, 0.035)
 
 func set_state_name(next_state: String) -> void:
 	var normalized := next_state.strip_edges().to_upper()

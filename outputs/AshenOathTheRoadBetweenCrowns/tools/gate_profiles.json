@@ -237,6 +237,26 @@
       ],
       "views": ["functional_props"]
     },
+    "audio_006": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/audio_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/opening_soundscape.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/oath_gate_portal.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_audio_006.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/capture_audio_006.gd"
+      ],
+      "gates": [
+        "verify_audio_006",
+        "verify_audio_runtime",
+        "verify_audio_002",
+        "verify_runtime_regressions",
+        "verify_prop_003",
+        "verify_zone_budgets",
+        "verify_visible_quality"
+      ],
+      "views": ["opening_soundscape"]
+    },
     "packs": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_manifest.json",
@@ -851,6 +871,7 @@
 	"river_life": "capture_water_002",
 	"wychwood_authored": "capture_world_013",
 	"cemetery_chapel": "capture_world_014",
-	"sky_living": "capture_sky_003"
+	"sky_living": "capture_sky_003",
+	"opening_soundscape": "capture_audio_006"
 }
 }

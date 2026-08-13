@@ -28,8 +28,14 @@ const WORLD_AUDIO_EVENTS := [
 	"bomb", "potion", "boss", "reveal", "victory", "victory_return_cue",
 	"return_report", "tracks_found", "shrine_hum", "shrine_candle", "shrine_bell",
 	"oathfire_sheathe", "oathfire_charge", "oathfire_release", "village_life",
-	"village_crow", "cloth_wind", "wychwood_drop", "wychwood_tension"
+	"village_crow", "cloth_wind", "wychwood_drop", "wychwood_tension",
+	"river_current", "forge_hammer", "forest_breath", "stone_room",
+	"portal_ash", "portal_ready", "portal_travel", "portal_error"
 ]
+var opening_soundscape_zone := ""
+var opening_soundscape_listener: Node3D
+var opening_soundscape_anchors: Dictionary = {}
+var opening_soundscape_quality := "balanced"
 
 func _process(delta: float) -> void:
 	for event_name in event_cooldowns.keys():
@@ -126,6 +132,9 @@ func set_game_paused(paused: bool) -> void:
 		music_player.stream_paused = paused
 
 func play_event(event_name: String, pitch_variation: float = 0.06) -> void:
+	_play_event_internal(event_name, pitch_variation, 1.0)
+
+func _play_event_internal(event_name: String, pitch_variation: float, volume_scale: float) -> void:
 	if not sounds.has(event_name) and not recorded_variants.has(event_name):
 		return
 	if game_paused and event_name in WORLD_AUDIO_EVENTS:
@@ -134,7 +143,7 @@ func play_event(event_name: String, pitch_variation: float = 0.06) -> void:
 	player.stream = _event_stream(event_name)
 	if player.stream == null:
 		return
-	player.volume_db = _volume_for(event_name) + randf_range(-1.2, 0.8)
+	player.volume_db = _volume_for(event_name) + linear_to_db(clampf(volume_scale, 0.05, 1.0)) + randf_range(-1.2, 0.8)
 	player.pitch_scale = 1.0 + randf_range(-pitch_variation, pitch_variation)
 	player.play()
 
@@ -144,6 +153,100 @@ func play_event_limited(event_name: String, cooldown_seconds: float, pitch_varia
 		return
 	event_cooldowns[event_name] = maxf(cooldown_seconds, 0.0)
 	play_event(event_name, pitch_variation)
+
+func play_spatial_event(event_name: String, source_position: Vector3, listener_position: Vector3, max_distance: float = 16.0, cooldown_seconds: float = 5.0, pitch_variation: float = 0.05) -> void:
+	if max_distance <= 0.0:
+		return
+	var distance := source_position.distance_to(listener_position)
+	if distance > max_distance:
+		return
+	var remaining := float(event_cooldowns.get(event_name, 0.0))
+	if remaining > 0.0:
+		return
+	event_cooldowns[event_name] = maxf(cooldown_seconds, 0.0)
+	var attenuation := clampf(1.0 - distance / max_distance, 0.14, 1.0)
+	_play_event_internal(event_name, pitch_variation, attenuation)
+
+func has_opening_soundscape(zone_id: String) -> bool:
+	return not _opening_soundscape_profile(zone_id).is_empty()
+
+func get_opening_soundscape_profile(zone_id: String) -> Array:
+	return _opening_soundscape_profile(zone_id)
+
+func configure_opening_soundscape(zone_id: String, listener: Node3D, anchors: Dictionary, quality: String = "balanced") -> void:
+	opening_soundscape_zone = zone_id
+	opening_soundscape_listener = listener
+	opening_soundscape_anchors = anchors.duplicate()
+	opening_soundscape_quality = quality
+
+func tick_opening_soundscape(zone_id: String, listener: Node3D, anchors: Dictionary, quality: String = "balanced") -> void:
+	if game_paused or listener == null or not is_instance_valid(listener) or not listener.is_inside_tree():
+		return
+	configure_opening_soundscape(zone_id, listener, anchors, quality)
+	var candidates: Array[Dictionary] = []
+	for entry in _opening_soundscape_profile(zone_id):
+		var source_key := str(entry.get("source", "listener"))
+		var source_value: Variant = anchors.get(source_key, listener.global_position)
+		if not source_value is Vector3:
+			source_value = listener.global_position
+		var source_position: Vector3 = source_value
+		var max_distance := float(entry.get("range", 14.0))
+		if source_position.distance_to(listener.global_position) <= max_distance:
+			candidates.append({"entry": entry, "source": source_position})
+	if candidates.is_empty():
+		return
+	# One short accent per tick keeps the opening soundscape legible and cheap.
+	var selected: Dictionary = candidates[randi() % candidates.size()]
+	var selected_entry: Dictionary = selected.get("entry", {})
+	play_spatial_event(
+		str(selected_entry.get("event", "cloth_wind")),
+		selected.get("source", listener.global_position),
+		listener.global_position,
+		float(selected_entry.get("range", 14.0)),
+		float(selected_entry.get("cooldown", 5.0)),
+		float(selected_entry.get("pitch", 0.05))
+	)
+
+func _opening_soundscape_profile(zone_id: String) -> Array:
+	match zone_id:
+		"greyfen":
+			return [
+				{"event":"village_life", "source":"village", "range":16.0, "cooldown":7.0, "pitch":0.05},
+				{"event":"village_crow", "source":"village", "range":18.0, "cooldown":9.0, "pitch":0.08},
+				{"event":"shrine_candle", "source":"shrine", "range":9.0, "cooldown":6.0, "pitch":0.04},
+				{"event":"forge_hammer", "source":"forge", "range":11.0, "cooldown":4.5, "pitch":0.035},
+				{"event":"river_current", "source":"river", "range":18.0, "cooldown":6.0, "pitch":0.04},
+				{"event":"cloth_wind", "source":"listener", "range":12.0, "cooldown":8.0, "pitch":0.04}
+			]
+		"wychwood":
+			return [
+				{"event":"forest_breath", "source":"forest", "range":16.0, "cooldown":6.5, "pitch":0.045},
+				{"event":"wychwood_tension", "source":"forest", "range":14.0, "cooldown":8.0, "pitch":0.025},
+				{"event":"river_current", "source":"river", "range":16.0, "cooldown":7.0, "pitch":0.04},
+				{"event":"cloth_wind", "source":"listener", "range":12.0, "cooldown":9.0, "pitch":0.035}
+			]
+		"cemetery", "chapel":
+			return [
+				{"event":"shrine_hum", "source":"shrine", "range":13.0, "cooldown":7.0, "pitch":0.025},
+				{"event":"shrine_bell", "source":"bell", "range":18.0, "cooldown":13.0, "pitch":0.035},
+				{"event":"forest_breath", "source":"listener", "range":11.0, "cooldown":9.0, "pitch":0.04}
+			]
+		"vargan_approach", "vargan_court", "assembly":
+			return [
+				{"event":"stone_room", "source":"listener", "range":12.0, "cooldown":8.0, "pitch":0.03},
+				{"event":"cloth_wind", "source":"listener", "range":12.0, "cooldown":10.0, "pitch":0.03}
+			]
+		"record_hall", "undercroft":
+			return [
+				{"event":"stone_room", "source":"listener", "range":12.0, "cooldown":9.0, "pitch":0.025},
+				{"event":"forest_breath", "source":"listener", "range":10.0, "cooldown":11.0, "pitch":0.025}
+			]
+		"hart_glade":
+			return [
+				{"event":"shrine_hum", "source":"shrine", "range":16.0, "cooldown":8.0, "pitch":0.02},
+				{"event":"forest_breath", "source":"forest", "range":16.0, "cooldown":9.0, "pitch":0.03}
+			]
+	return []
 
 func _available_transient_player() -> AudioStreamPlayer:
 	for player in transient_players:
@@ -355,6 +458,14 @@ func _build_library() -> void:
 	sounds["cloth_wind"] = _noise(0.32, 0.055)
 	sounds["wychwood_drop"] = _tone_mix([62.0, 48.0], 0.40, 0.10, -36.0, 0.020)
 	sounds["wychwood_tension"] = _tone_mix([62.0, 86.0, 129.0], 0.78, 0.085, -22.0, 0.052)
+	sounds["river_current"] = _tone_mix([42.0, 63.0, 94.0], 0.52, 0.105, 3.0, 0.028)
+	sounds["forge_hammer"] = _impact(0.095, 0.18, 182.0)
+	sounds["forest_breath"] = _tone_mix([38.0, 57.0, 76.0], 0.46, 0.060, -8.0, 0.020)
+	sounds["stone_room"] = _tone_mix([44.0, 66.0, 99.0], 0.42, 0.050, -4.0, 0.012)
+	sounds["portal_ash"] = _noise(0.28, 0.045)
+	sounds["portal_ready"] = _tone_mix([196.0, 294.0, 441.0], 0.32, 0.11, 54.0, 0.008)
+	sounds["portal_travel"] = _tone_mix([92.0, 184.0, 368.0], 0.38, 0.16, 96.0, 0.014)
+	sounds["portal_error"] = _tone_mix([72.0, 54.0], 0.24, 0.10, -28.0, 0.012)
 
 func _build_recorded_library() -> void:
 	var root_path := "res://assets_external/audio/rpg/"
@@ -487,10 +598,14 @@ func _volume_for(event_name: String) -> float:
 		return -17.0
 	if event_name == "boss":
 		return -7.0
-	if event_name in ["shrine_hum", "shrine_candle", "cloth_wind", "village_crow", "village_life"]:
+	if event_name in ["shrine_hum", "shrine_candle", "cloth_wind", "village_crow", "village_life", "forest_breath", "stone_room"]:
 		return -21.0
+	if event_name in ["river_current", "forge_hammer", "portal_ash"]:
+		return -19.5
 	if event_name == "shrine_bell":
 		return -18.0
+	if event_name in ["portal_ready", "portal_travel", "portal_error"]:
+		return -15.5
 	if event_name in ["wychwood_tension", "wychwood_drop", "tracks_found", "return_report", "victory_return_cue"]:
 		return -13.0
 	if event_name == "ghoulkin_idle":

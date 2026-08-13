@@ -11,6 +11,7 @@ const WorldVisualUpgrade = preload("res://scripts/world_visual_upgrade.gd")
 const WorldMotionController = preload("res://scripts/world_motion_controller.gd")
 const WorldPropController = preload("res://scripts/world_prop_controller.gd")
 const InteractiveWorldProp = preload("res://scripts/interactive_world_prop.gd")
+const OpeningSoundscape = preload("res://scripts/opening_soundscape.gd")
 const SurfaceFeedbackManager = preload("res://scripts/surface_feedback_manager.gd")
 const WorldVFXController = preload("res://scripts/world_vfx_controller.gd")
 const EpilogueResolver = preload("res://scripts/epilogue_resolver.gd")
@@ -524,6 +525,7 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	# Kael after collision is ready, so bind the final player instance here.
 	if life_controller != null:
 		life_controller.player = player
+	_install_opening_soundscape(zone_id)
 	# Sky and player equipment are created after the zone builder's first
 	# validation pass. Validate these late render roots before the first visible
 	# frame so procedural meshes cannot reach the renderer with empty surfaces.
@@ -1045,6 +1047,17 @@ func _install_world_prop_controller(zone_id: String) -> void:
 	world_props.name = "WorldPropController"
 	zone_root.add_child(world_props)
 	world_props.configure(zone_root, zone_id, str(settings.settings.get("quality_preset", "balanced")), story_state, audio)
+
+func _install_opening_soundscape(zone_id: String) -> void:
+	if zone_root == null or not is_instance_valid(zone_root) or audio == null:
+		return
+	var soundscape := zone_root.find_child("OpeningSoundscape", true, false) as OpeningSoundscape
+	if soundscape == null:
+		soundscape = OpeningSoundscape.new()
+		soundscape.name = "OpeningSoundscape"
+		zone_root.add_child(soundscape)
+	var quality := str(settings.settings.get("quality_preset", "balanced")) if settings != null else "balanced"
+	soundscape.configure(zone_root, zone_id, player, audio, quality)
 
 func _handle_interaction(area) -> void:
 	if world_props != null and area != null and area.has_meta("world_prop_id"):
@@ -3418,6 +3431,8 @@ func _make_zone_gate(prompt: String, pos: Vector3, zone_target: String, spawn_po
 	var portal := OathGatePortal.new()
 	portal.name = "OathGatePortal"
 	portal.configure(zone_target, "gate_%s" % zone_target)
+	if portal.has_method("bind_audio"):
+		portal.bind_audio(audio)
 	area.add_child(portal)
 	if zone_streaming != null and portal.has_method("bind_streaming"):
 		portal.bind_streaming(zone_streaming)
