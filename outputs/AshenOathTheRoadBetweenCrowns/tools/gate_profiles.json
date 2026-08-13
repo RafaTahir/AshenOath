@@ -186,6 +186,22 @@
         "verify_visible_quality"
       ]
     },
+    "world_014": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/cemetery_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_world_014.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/capture_world_014.gd"
+      ],
+      "gates": [
+        "verify_world_003",
+        "verify_world_014",
+        "verify_narr_001",
+        "verify_river_swimming",
+        "verify_navigation_001",
+        "verify_zone_budgets",
+        "verify_visible_quality"
+      ]
+    },
     "packs": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_manifest.json",
@@ -798,6 +814,7 @@
 	"greyfen_authored": "capture_world_012",
 	"greyfen_life": "capture_life_001",
 	"river_life": "capture_water_002",
-	"wychwood_authored": "capture_world_013"
+	"wychwood_authored": "capture_world_013",
+	"cemetery_chapel": "capture_world_014"
 }
 }
