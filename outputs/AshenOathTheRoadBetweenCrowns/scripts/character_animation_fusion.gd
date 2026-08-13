@@ -47,7 +47,7 @@ static func attach_shared_library(root: Node3D) -> AnimationPlayer:
 
 static func is_shared_body(path: String) -> bool:
 	var normalized := path.replace("\\", "/").to_lower()
-	return normalized.contains("assets_external/characters_universal/") and normalized.ends_with(".gltf")
+	return (normalized.contains("assets_external/characters_universal/") or normalized.contains("assets_external/characters_ranger/")) and normalized.ends_with(".gltf")
 
 static func _instantiate_scene(path: String) -> Node3D:
 	var packed := ResourceLoader.load(path) as PackedScene

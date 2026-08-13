@@ -837,3 +837,9 @@ The complete current Web campaign passed the authoritative release suite. Its se
 The cumulative Soul Rebuild opening is prepared for production. A fresh Chrome WebGL2 run at native 1280x720 completed 17 player-driven checkpoints: New Game, Sister Anwen, Wychwood travel, three clues, the five-enemy fight, bridge return, and report. It averaged 33.0 FPS and produced no browser console errors. The seven-file candidate measured 88.73 MB.
 
 This was an explicitly abbreviated acceptance. The 13.6 FPS measured 1% low, slow browser transition samples, Edge/Firefox coverage, complete verifier suite, and refreshed full screenshot gallery are deferred rather than claimed as passing. See `OPENING_QA_001_RESULT.md`.
+
+## CHAR-FACING-RANGER-001 Update
+
+The route-visible Universal human and Ranger sources now share one explicit visual-facing contract. Humans are calibrated 180 degrees so forward movement toward Godot `-Z` presents the chest/front rather than a backwards walk. Kael no longer uses the old shared-animation rotation override; intentional backpedaling remains separate from forward/strafe facing. Anwen uses the same NPC yaw calculation in approach and dialogue staging.
+
+Captain Senn and `road_ranger_human` now use the optimized 65-bone `Male_Ranger_Runtime.gltf` with 1K Ranger maps and the shared non-root-motion UAL2 library. The Ranger runtime manifest records source, CC0 license, checksums, and byte sizes. Fresh Codex-reviewed 1280x720 captures cover Kael, Anwen, villagers, Ghoulkin, sword attack, and Senn portrait/walk/gameplay views. The targeted character, motion, runtime, content, and capture gates pass. See `CHAR_FACING_RANGER_001_RESULT.md`.

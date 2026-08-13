@@ -97,11 +97,19 @@
         "notes": "Shared male body with deterministic Vargan guard palette; armor outfit slot remains compatible with later named wardrobe work."
       },
       "road_ranger_human": {
-        "status": "char_008_shared_male_traveler_identity",
-        "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
-        "source": "Quaternius Universal Base Characters + Modular Character Outfits: Fantasy",
+        "status": "char_facing_ranger_001_runtime_accepted",
+        "path": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf",
+        "source": "Quaternius Modular Character Outfits: Fantasy, optimized runtime export",
         "source_url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
-        "license": "CC0 1.0"
+        "license": "CC0 1.0",
+        "runtime_textures": [
+          "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png",
+          "res://assets_external/characters_ranger/T_Ranger_Normal_1K.png",
+          "res://assets_external/characters_ranger/T_Ranger_ORM_1K.png"
+        ],
+        "animation_source": "res://assets_external/animations/soul_universal_animation_library_2.glb",
+        "target_height": 1.75,
+        "notes": "Complete 65-bone skinned Ranger outfit with native hood/body pieces, shared non-root-motion UAL2 clips, and 1K runtime maps. Used by Captain Senn and road ranger roles."
       }
     },
     "enemies": {

@@ -207,6 +207,20 @@ async function testBrowser(name, executable) {
     await waitFor(async () => cdp.evaluate(
       `location.href.startsWith(${JSON.stringify(url.split("?")[0])}) && document.readyState === "complete"`
     ), `${name} page navigation`);
+    // The production Web preset uses the authored HTML boot shell. Its main
+    // Godot canvas intentionally remains 300x150 until the player activates
+    // the visible "Enter the Road" control. Activate that control through
+    // browser input before asserting engine-canvas dimensions.
+    const bootButton = await waitFor(async () => cdp.evaluate(`(() => {
+      const button = document.querySelector("#start");
+      if (!button || button.disabled) return null;
+      const rect = button.getBoundingClientRect();
+      return {x: rect.left + rect.width / 2, y: rect.top + rect.height / 2};
+    })()`), `${name} boot-shell start control`);
+    if (bootButton) {
+      await cdp.send("Input.dispatchMouseEvent", { type: "mousePressed", x: bootButton.x, y: bootButton.y, button: "left", clickCount: 1 });
+      await cdp.send("Input.dispatchMouseEvent", { type: "mouseReleased", x: bootButton.x, y: bootButton.y, button: "left", clickCount: 1 });
+    }
     let canvasDiagnostic = null;
     const canvas = await waitFor(async () => {
       canvasDiagnostic = await cdp.evaluate(`(() => {
@@ -255,19 +269,30 @@ async function testBrowser(name, executable) {
       }
       return document.hasFocus();
     })()`);
-    await cdp.send("Input.dispatchMouseEvent", { type: "mousePressed", x: viewportWidth / 2, y: viewportHeight / 2, button: "left", clickCount: 1 });
-    await cdp.send("Input.dispatchMouseEvent", { type: "mouseReleased", x: viewportWidth / 2, y: viewportHeight / 2, button: "left", clickCount: 1 });
-    let newGameStarted = 0;
-    for (let index = 0; index < 2; index++) {
-      if (index === 1) newGameStarted = Date.now();
-      await cdp.send("Input.dispatchKeyEvent", { type: "keyDown", key: "Enter", code: "Enter", windowsVirtualKeyCode: 13 });
-      await cdp.send("Input.dispatchKeyEvent", { type: "keyUp", key: "Enter", code: "Enter", windowsVirtualKeyCode: 13 });
-      await sleep(index === 0 ? 1200 : 300);
-    }
+    // Canvas dimensions arrive before the Godot scene has finished creating
+    // its launch/main menu. Wait for the runtime-ready marker so the first
+    // Enter key is delivered to an actual menu instead of disappearing during
+    // engine startup.
     await waitFor(async () => {
       const logs = cdp.events.filter((event) => event.method === "Runtime.consoleAPICalled")
         .flatMap((event) => event.params.args.map((arg) => String(arg.value ?? arg.description ?? "")));
-      return logs.some((line) => line.includes("LOADING: zone=greyfen playable_ms="));
+      return logs.some((line) => line.includes("LOADING: runtime ready total="));
+    }, `${name} Godot runtime readiness`);
+    await cdp.send("Input.dispatchMouseEvent", { type: "mousePressed", x: viewportWidth / 2, y: viewportHeight / 2, button: "left", clickCount: 1 });
+    await cdp.send("Input.dispatchMouseEvent", { type: "mouseReleased", x: viewportWidth / 2, y: viewportHeight / 2, button: "left", clickCount: 1 });
+    const consoleLines = () => cdp.events.filter((event) => event.method === "Runtime.consoleAPICalled")
+      .flatMap((event) => event.params.args.map((arg) => String(arg.value ?? arg.description ?? "")));
+    // The launch-screen accept action starts Greyfen prewarming and disables
+    // New Game until the cached arrival is ready. Do not race that state with
+    // another synthetic Enter key.
+    await cdp.send("Input.dispatchKeyEvent", { type: "keyDown", key: "Enter", code: "Enter", windowsVirtualKeyCode: 13 });
+    await cdp.send("Input.dispatchKeyEvent", { type: "keyUp", key: "Enter", code: "Enter", windowsVirtualKeyCode: 13 });
+    await waitFor(async () => consoleLines().some((line) => line.includes("LOADING: Greyfen prewarmed total=")), `${name} Greyfen prewarm`);
+    const newGameStarted = Date.now();
+    await cdp.send("Input.dispatchKeyEvent", { type: "keyDown", key: "Enter", code: "Enter", windowsVirtualKeyCode: 13 });
+    await cdp.send("Input.dispatchKeyEvent", { type: "keyUp", key: "Enter", code: "Enter", windowsVirtualKeyCode: 13 });
+    await waitFor(async () => {
+      return consoleLines().some((line) => line.includes("LOADING: zone=greyfen playable_ms="));
     }, `${name} New Game startup`);
     const newGameReadyMs = Date.now() - newGameStarted;
     if (mobileMode) {

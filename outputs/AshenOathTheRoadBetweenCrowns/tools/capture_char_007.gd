@@ -63,7 +63,7 @@ func _create_stage() -> Node3D:
 	ground.material_override = ground_material
 	result.add_child(ground)
 	var camera := Camera3D.new()
-	camera.position = Vector3(0, 1.22, 3.35)
+	camera.position = Vector3(0, 1.22, -3.35)
 	camera.look_at_from_position(camera.position, Vector3(0, 1.02, 0), Vector3.UP)
 	camera.fov = 34.0
 	camera.current = true

@@ -162,10 +162,13 @@ func set_locomotion(speed_ratio: float, _direction: Vector3, grounded: bool) -> 
 	elif speed_ratio > 0.05:
 		if absf(current_local_direction.x) > absf(current_local_direction.z) * 1.15:
 			state = "strafe"
-		elif current_local_direction.z > 0.35:
-			state = "walk_back"
 		else:
-			state = "walk"
+			var source_forward_positive_z := character_root != null and bool(character_root.get_meta("source_forward_positive_z", false))
+			var moving_backwards := current_local_direction.z > 0.35 if not source_forward_positive_z else current_local_direction.z < -0.35
+			if moving_backwards:
+				state = "walk_back"
+			else:
+				state = "walk"
 	locomotion_state = state
 	if state == "walk":
 		target_playback_scale = clampf(speed_ratio / 0.58, 0.68, 1.22)

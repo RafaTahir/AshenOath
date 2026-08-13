@@ -32,7 +32,7 @@ func _initialize() -> void:
 	quit(0 if failures == 0 else 1)
 
 func capture_human(visual_role: String, identity_role: String, file_name: String) -> void:
-	var stage := create_stage()
+	var stage := create_stage(-3.35)
 	var actor := Node3D.new()
 	stage.add_child(actor)
 	var visual = helper.spawn_visual_role(visual_role, "characters")
@@ -49,7 +49,7 @@ func capture_human(visual_role: String, identity_role: String, file_name: String
 	await _frames(4)
 
 func capture_ghoul(file_name: String) -> void:
-	var stage := create_stage()
+	var stage := create_stage(3.35)
 	var target := Node3D.new()
 	target.position = Vector3(0, 0, 10)
 	stage.add_child(target)
@@ -62,7 +62,7 @@ func capture_ghoul(file_name: String) -> void:
 	stage.queue_free()
 	await _frames(4)
 
-func create_stage() -> Node3D:
+func create_stage(camera_z: float) -> Node3D:
 	var stage := Node3D.new()
 	root.add_child(stage)
 	var environment_node := WorldEnvironment.new()
@@ -89,7 +89,7 @@ func create_stage() -> Node3D:
 	ground.material_override = ground_material
 	stage.add_child(ground)
 	var camera := Camera3D.new()
-	camera.position = Vector3(0, 1.20, 3.35)
+	camera.position = Vector3(0, 1.20, camera_z)
 	camera.look_at_from_position(camera.position, Vector3(0, 1.02, 0), Vector3.UP)
 	camera.fov = 34.0
 	camera.current = true

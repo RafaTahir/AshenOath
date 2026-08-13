@@ -31,7 +31,7 @@
     "villager_male": {"model": "res://assets_external/characters_universal/Superhero_Male_FullBody.gltf", "target_height": 1.72, "outfit_slot": "peasant_male", "face_profile": "crowd_male"},
     "villager_female": {"model": "res://assets_external/characters_universal/Superhero_Female_FullBody.gltf", "target_height": 1.66, "outfit_slot": "peasant_female", "face_profile": "crowd_female"},
     "castle_guard": {"model": "res://assets_external/characters_universal/Superhero_Male_FullBody.gltf", "target_height": 1.82, "outfit_slot": "guard", "face_profile": "castle_guard"},
-    "road_ranger": {"model": "res://assets_external/characters_universal/Superhero_Male_FullBody.gltf", "target_height": 1.75, "outfit_slot": "ranger", "face_profile": "traveler"}
+    "road_ranger": {"model": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf", "target_height": 1.75, "outfit_slot": "ranger", "face_profile": "traveler", "animation_library": "res://assets_external/animations/soul_universal_animation_library_2.glb"}
   },
   "runtime_policy": {
     "use_until_animation_fusion": "existing verified skeletal fallback",

@@ -3379,7 +3379,7 @@ func _stage_dialogue_moment(area) -> void:
 	# two readable silhouettes without changing quest or interaction range.
 	var separation: float = player.global_position.distance_to(npc.global_position)
 	if separation < 1.35:
-		var staged_position: Vector3 = npc.global_position + npc.global_basis.z.normalized() * 1.75
+		var staged_position: Vector3 = npc.global_position - npc.global_basis.z.normalized() * 1.75
 		if has_method("validate_walkable_position"):
 			staged_position = validate_walkable_position(staged_position)
 		player.global_position = staged_position + Vector3.UP
@@ -3397,8 +3397,8 @@ func _face_npc_toward_player(npc: Node3D) -> void:
 	to_player.y = 0.0
 	if to_player.length_squared() <= 0.01:
 		return
-	# Route-visible character wrappers use +Z as their authored forward axis.
-	npc.rotation.y = atan2(to_player.x, to_player.z)
+	# All route-visible humanoids share the actor-facing -Z contract.
+	npc.rotation.y = atan2(-to_player.x, -to_player.z)
 
 func _release_dialogue_facing() -> void:
 	audio.stop_voice()

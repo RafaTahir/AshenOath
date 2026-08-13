@@ -1,1 +1,7 @@
-Quaternius Modular Character Outfits: Fantasy\nSource: https://quaternius.itch.io/modular-character-outfits-fantasy\nLicense: CC0 1.0 Universal (creator pack license)\nSelected runtime role: Male_Ranger outfit\nRaw archive remains outside Web export.\n
+Quaternius Modular Character Outfits: Fantasy
+Source: https://quaternius.itch.io/modular-character-outfits-fantasy
+License: CC0 1.0 Universal (creator pack license)
+Selected runtime role: Male_Ranger outfit
+Runtime export: res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf
+Runtime maps: res://assets_external/characters_ranger/*_1K.png
+The raw source GLTF, binary, and full-resolution maps remain outside Web export.

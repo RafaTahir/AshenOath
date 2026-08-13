@@ -41,6 +41,20 @@ func _verify_role(role: String, identity: String, minimum_height: float, maximum
 	else:
 		CharacterPresentation.apply_npc(owner, identity)
 	await process_frame
+	if role == "road_ranger_human":
+		# Captain Senn is a complete standalone 65-bone Ranger outfit rather
+		# than the Universal head/outfit composite used by the crowd roles.
+		_check(bool(visual.get_meta("source_forward_positive_z", false)), "%s is missing the calibrated source-facing contract" % role)
+		_check(_count_type(visual, "Skeleton3D") == 1, "%s must use one Ranger skeleton" % role)
+		_check(_count_type(visual, "AnimationPlayer") == 1, "%s must use one shared animation player" % role)
+		_check(not _has_proxy_anatomy(visual), "%s contains forbidden proxy anatomy" % role)
+		var ranger_report: Dictionary = visual.get_meta("character_visual_contract", {})
+		_check(bool(ranger_report.get("valid", false)), "%s failed the rendered character contract" % role)
+		var ranger_bounds: AABB = ranger_report.get("bounds", AABB())
+		_check(ranger_bounds.size.y >= minimum_height and ranger_bounds.size.y <= maximum_height,
+			"%s rendered height %.2f is outside %.2f-%.2f m" % [role, ranger_bounds.size.y, minimum_height, maximum_height])
+		owner.free()
+		return
 	_check(bool(visual.get_meta("character_composite", false)), "%s is not a shared humanoid composite" % role)
 	_check(_has_named_layer(visual, "superhero") or _has_named_layer(visual, "eyebrows"), "%s lacks its native modeled head" % role)
 	_check(_has_named_layer(visual, "peasant"), "%s lacks its complete outfit body" % role)

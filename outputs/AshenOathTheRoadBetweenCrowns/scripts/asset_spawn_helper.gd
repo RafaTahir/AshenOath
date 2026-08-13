@@ -427,7 +427,7 @@ func _category_color(path: String) -> Color:
 
 func _finalize_asset_root(root: Node3D, role_name: String = "") -> void:
 	if role_name != "":
-		root.rotation_degrees.y = CharacterRoleSpec.facing_degrees(role_name)
+		root.rotation_degrees.y = CharacterRoleSpec.visual_forward_degrees(role_name)
 	else:
 		root.rotation_degrees.y = 180.0 if root.name.to_lower().contains("character") else root.rotation_degrees.y
 	var hero_role := role_name in ["player_human", "player_kael", "sister_anwen_human", "sister_anwen"]
@@ -438,6 +438,12 @@ func _finalize_asset_root(root: Node3D, role_name: String = "") -> void:
 		mesh_instance.lod_bias = lod_bias
 		mesh_instance.visibility_range_end = lod_distance
 	root.set_meta("character_role_spec", CharacterRoleSpec.for_role(role_name))
+	root.set_meta("source_forward_positive_z", role_name in [
+		"player_human", "player_kael", "sister_anwen", "sister_anwen_human",
+		"mira_human", "rook_human", "villager_human", "villager_female_human",
+		"villager_worker_human", "villager_hooded_human", "castle_guard_human",
+		"road_ranger_human"
+	])
 
 func _prepare_spawned_asset(root: Node3D, path: String, role_name: String = "", category: String = "") -> void:
 	if path.get_extension().to_lower() != "obj":

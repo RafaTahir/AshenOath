@@ -87,12 +87,8 @@ func _process(delta: float) -> void:
 		to_target.y = 0.0
 		if to_target.length() <= focus_radius and to_target.length() > 0.2:
 			attention_hold = 2.25 if role_id == "sister_anwen" else 0.9
-			# Named cleric wrappers face +Z. Keep Anwen's attention stable instead
-			# of applying the old 180-degree correction twice.
-			if role_id == "sister_anwen":
-				target_yaw = rad_to_deg(atan2(to_target.x, to_target.z))
-			else:
-				target_yaw = rad_to_deg(atan2(-to_target.x, -to_target.z))
+			# All route-visible humanoids share the actor-facing -Z contract.
+			target_yaw = rad_to_deg(atan2(-to_target.x, -to_target.z))
 		elif role_id == "sister_anwen":
 			target_yaw = base_yaw + sin(phase * 0.22) * 0.45
 	attention_hold = max(attention_hold - delta, 0.0)

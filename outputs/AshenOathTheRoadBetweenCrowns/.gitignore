@@ -1,0 +1,9 @@
+# Development-only animation source duplicates. The optimized shared library
+# is the only UAL2 animation asset used by the Web runtime.
+/assets_external/animations/UAL2_Standard_RM.*
+/assets_external/animations/quaternius_universal_animation_library_2__*
+
+# Source Ranger outfit and full-resolution maps. The processed runtime lives
+# under assets_external/characters_ranger/.
+/assets_external/characters_universal/Male_Ranger.*
+/assets_external/characters_universal/T_Ranger_*

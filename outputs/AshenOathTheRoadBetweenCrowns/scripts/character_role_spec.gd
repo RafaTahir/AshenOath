@@ -9,22 +9,22 @@ const DEFAULT_SPEC := {
 	"collision_height": 1.65,
 	"collision_radius": 0.32,
 	"lod": 14.0,
-	"facing_degrees": 0.0,
+	"visual_forward_degrees": 0.0,
 }
 
 const SPECS := {
-	"player_human": {"height": 1.78, "collision_height": 1.65, "collision_radius": 0.32, "lod": 22.0, "facing_degrees": 0.0},
-	"player_kael": {"height": 1.78, "collision_height": 1.65, "collision_radius": 0.32, "lod": 22.0, "facing_degrees": 0.0},
-	"sister_anwen": {"height": 1.68, "collision_height": 1.58, "collision_radius": 0.30, "lod": 22.0, "facing_degrees": 0.0},
-	"sister_anwen_human": {"height": 1.68, "collision_height": 1.58, "collision_radius": 0.30, "lod": 22.0, "facing_degrees": 0.0},
-	"mira_human": {"height": 1.66, "collision_height": 1.56, "collision_radius": 0.30, "lod": 14.0, "facing_degrees": 0.0},
-	"rook_human": {"height": 1.75, "collision_height": 1.64, "collision_radius": 0.31, "lod": 14.0, "facing_degrees": 0.0},
-	"villager_human": {"height": 1.72, "collision_height": 1.62, "collision_radius": 0.31, "lod": 14.0, "facing_degrees": 0.0},
-	"villager_female_human": {"height": 1.66, "collision_height": 1.56, "collision_radius": 0.30, "lod": 14.0, "facing_degrees": 0.0},
-	"villager_worker_human": {"height": 1.74, "collision_height": 1.64, "collision_radius": 0.31, "lod": 14.0, "facing_degrees": 0.0},
-	"villager_hooded_human": {"height": 1.69, "collision_height": 1.59, "collision_radius": 0.30, "lod": 14.0, "facing_degrees": 0.0},
-	"castle_guard_human": {"height": 1.82, "collision_height": 1.72, "collision_radius": 0.33, "lod": 16.0, "facing_degrees": 0.0},
-	"road_ranger_human": {"height": 1.75, "collision_height": 1.64, "collision_radius": 0.31, "lod": 16.0, "facing_degrees": 0.0},
+	"player_human": {"height": 1.78, "collision_height": 1.65, "collision_radius": 0.32, "lod": 22.0, "visual_forward_degrees": 180.0},
+	"player_kael": {"height": 1.78, "collision_height": 1.65, "collision_radius": 0.32, "lod": 22.0, "visual_forward_degrees": 180.0},
+	"sister_anwen": {"height": 1.68, "collision_height": 1.58, "collision_radius": 0.30, "lod": 22.0, "visual_forward_degrees": 180.0},
+	"sister_anwen_human": {"height": 1.68, "collision_height": 1.58, "collision_radius": 0.30, "lod": 22.0, "visual_forward_degrees": 180.0},
+	"mira_human": {"height": 1.66, "collision_height": 1.56, "collision_radius": 0.30, "lod": 14.0, "visual_forward_degrees": 180.0},
+	"rook_human": {"height": 1.75, "collision_height": 1.64, "collision_radius": 0.31, "lod": 14.0, "visual_forward_degrees": 180.0},
+	"villager_human": {"height": 1.72, "collision_height": 1.62, "collision_radius": 0.31, "lod": 14.0, "visual_forward_degrees": 180.0},
+	"villager_female_human": {"height": 1.66, "collision_height": 1.56, "collision_radius": 0.30, "lod": 14.0, "visual_forward_degrees": 180.0},
+	"villager_worker_human": {"height": 1.74, "collision_height": 1.64, "collision_radius": 0.31, "lod": 14.0, "visual_forward_degrees": 180.0},
+	"villager_hooded_human": {"height": 1.69, "collision_height": 1.59, "lod": 14.0, "visual_forward_degrees": 180.0},
+	"castle_guard_human": {"height": 1.82, "collision_height": 1.72, "collision_radius": 0.33, "lod": 16.0, "visual_forward_degrees": 180.0},
+	"road_ranger_human": {"height": 1.75, "collision_height": 1.64, "collision_radius": 0.31, "lod": 16.0, "visual_forward_degrees": 180.0},
 	"ghoulkin": {"height": 1.72, "collision_height": 1.65, "collision_radius": 0.34, "lod": 18.0, "facing_degrees": 0.0},
 	"wychwood_stalker": {"height": 1.66, "collision_height": 1.60, "collision_radius": 0.32, "lod": 18.0, "facing_degrees": 0.0},
 	"wychwood_raider": {"height": 1.72, "collision_height": 1.65, "collision_radius": 0.34, "lod": 18.0, "facing_degrees": 0.0},
@@ -60,4 +60,10 @@ static func lod_distance(role_id: String, fallback: float = 14.0) -> float:
 	return float(spec.get("lod", fallback)) if bool(spec.get("known", false)) else fallback
 
 static func facing_degrees(role_id: String) -> float:
-	return float(for_role(role_id).get("facing_degrees", 0.0))
+	return visual_forward_degrees(role_id)
+
+static func visual_forward_degrees(role_id: String) -> float:
+	var spec := for_role(role_id)
+	# Keep the legacy accessor above while making the source-facing contract
+	# explicit for every new runtime role.
+	return float(spec.get("visual_forward_degrees", spec.get("facing_degrees", 0.0)))

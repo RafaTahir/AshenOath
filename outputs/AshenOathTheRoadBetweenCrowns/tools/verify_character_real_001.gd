@@ -1,23 +1,28 @@
 extends SceneTree
 
+const CharacterRoleSpec = preload("res://scripts/character_role_spec.gd")
+const AssetSpawnHelper = preload("res://scripts/asset_spawn_helper.gd")
 const EXPECTED := {
-	"player_human":"Adventurer_PolyPizza_Quaternius_CC0.glb",
-	"sister_anwen_human":"AnimatedWoman_PolyPizza_Quaternius_CC0.glb",
-	"villager_human":"Adventurer_PolyPizza_Quaternius_CC0.glb",
-	"villager_female_human":"WomanCasual_PolyPizza_Quaternius_CC0.glb",
-	"castle_guard_human":"CharacterAnimated_PolyPizza_Quaternius_CC0.glb",
-	"road_ranger_human":"HoodedAdventurer_PolyPizza_Quaternius_CC0.glb"
+	"player_human":"res://assets_external/characters_universal/Male_Peasant.gltf",
+	"sister_anwen_human":"res://assets_external/characters_universal/Female_Peasant.gltf",
+	"villager_human":"res://assets_external/characters_universal/Male_Peasant.gltf",
+	"villager_female_human":"res://assets_external/characters_universal/Female_Peasant.gltf",
+	"castle_guard_human":"res://assets_external/characters_universal/Male_Peasant.gltf",
+	"road_ranger_human":"res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf"
 }
 var failures := 0
 
 func _initialize() -> void:
 	var database = load("res://scripts/asset_database.gd").new()
 	root.add_child(database)
+	var helper := AssetSpawnHelper.new()
+	root.add_child(helper)
 	await process_frame
 	for role in EXPECTED:
 		var entry: Dictionary = database.get_visual_asset_for_role(role)
-		check(str(entry.path).ends_with(EXPECTED[role]),"%s does not use its replacement GLB" % role)
-		_verify_scene(str(entry.path),role)
+		check(str(entry.get("path", "")) == EXPECTED[role], "%s does not use its calibrated runtime model" % role)
+		await _verify_runtime_role(helper, role)
+		check(is_equal_approx(CharacterRoleSpec.visual_forward_degrees(role), 180.0), "%s is missing the +Z-to--Z facing calibration" % role)
 	for path in [
 		"res://assets_external/characters_real/GhoulGaunt_Real.glb",
 		"res://assets_external/characters_real/GhoulStalker_Real.glb",
@@ -41,13 +46,51 @@ func _verify_scene(path: String, label: String) -> void:
 	root.add_child(node)
 	check(_find_type(node,"Skeleton3D") != null,"%s has no skeleton" % label)
 	check(_find_type(node,"AnimationPlayer") != null,"%s has no animations" % label)
-	if path.contains("characters_real"):
-		_verify_consolidated_anatomy(node, label)
-	else:
-		check(_has_fragment(node,"head") or _has_fragment(node,"female") or _has_fragment(node,"rogue"),"%s lacks modeled facial geometry" % label)
-		check(_has_fragment(node,"body") or _has_fragment(node,"female") or _has_fragment(node,"rogue"),"%s lacks a cohesive body mesh" % label)
+	_verify_skinned_identity(node, label)
 	check(not _has_fragment(node,"faceplane") and not _has_fragment(node,"facialidentity"),"%s contains proxy/billboard anatomy" % label)
 	node.queue_free()
+
+func _verify_runtime_role(helper: Node, role: String) -> void:
+	var path: String = EXPECTED[role]
+	check(FileAccess.file_exists(path) or ResourceLoader.exists(path), "%s runtime source is missing" % role)
+	var visual: Node3D = helper.spawn_visual_role(role, "characters")
+	check(visual != null, "%s did not instantiate through AssetSpawnHelper" % role)
+	if visual == null:
+		return
+	root.add_child(visual)
+	await process_frame
+	_verify_skinned_identity(visual, role)
+	check(_find_type(visual, "AnimationPlayer") != null, "%s shared animation library was not attached" % role)
+	check(not _has_fragment(visual, "faceplane") and not _has_fragment(visual, "facialidentity"), "%s contains proxy/billboard anatomy" % role)
+	visual.queue_free()
+
+func _verify_skinned_identity(node: Node, label: String) -> void:
+	var skeleton := _find_type(node, "Skeleton3D")
+	check(skeleton != null, "%s has no Skeleton3D" % label)
+	var player := _find_type(node, "AnimationPlayer")
+	check(player != null, "%s has no AnimationPlayer" % label)
+	var skinned_count := 0
+	var material_count := 0
+	var combined := AABB()
+	var has_bounds := false
+	for candidate in node.find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := candidate as MeshInstance3D
+		if mesh_instance.mesh == null:
+			continue
+		if mesh_instance.skin != null:
+			skinned_count += 1
+		for surface_index in range(mesh_instance.mesh.get_surface_count()):
+			if mesh_instance.mesh.surface_get_material(surface_index) != null or mesh_instance.get_surface_override_material(surface_index) != null:
+				material_count += 1
+		var bounds := mesh_instance.mesh.get_aabb()
+		if not has_bounds:
+			combined = bounds
+			has_bounds = true
+		else:
+			combined = combined.merge(bounds)
+	check(skinned_count > 0, "%s has no skinned body mesh" % label)
+	check(material_count > 0, "%s has no imported surface materials" % label)
+	check(has_bounds and combined.size.y > 0.9, "%s does not have a complete grounded body bound" % label)
 
 func _verify_consolidated_anatomy(node: Node, label: String) -> void:
 	var skinned_mesh: MeshInstance3D

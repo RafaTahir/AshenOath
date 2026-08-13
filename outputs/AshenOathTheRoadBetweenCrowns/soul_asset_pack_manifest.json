@@ -27,7 +27,8 @@
       "dependencies": ["quaternius_universal_base_characters"],
       "preload_priority": 20,
       "license": "CC0 1.0",
-      "status": "source_locked_manual_download"
+      "status": "source_locked_with_selected_ranger_runtime",
+      "selected_runtime": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf"
     },
     {
       "id": "quaternius_universal_animation_library_2",

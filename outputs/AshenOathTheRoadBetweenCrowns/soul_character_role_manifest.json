@@ -15,6 +15,8 @@
       "equipment_sockets": ["Hand.R", "Hand.L", "Head"],
       "status": "runtime_accepted",
       "approved": true,
+      "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
+      "sha256": "8F5A6CF6C1CF96E0A0F8E1A861B4245D42B7F88D44E5076DA3D48F3FC52F4E76",
       "model": "res://assets_external/characters_universal/Male_Head.gltf",
       "outfit": "res://assets_external/characters_universal/Male_Peasant.gltf",
       "hair": "res://assets_external/characters_universal/Hair_SimpleParted.gltf"
@@ -30,6 +32,8 @@
       "equipment_sockets": ["Hand.R", "Head"],
       "status": "runtime_accepted",
       "approved": true,
+      "path": "res://assets_external/characters_universal/Female_Peasant.gltf",
+      "sha256": "43BA98058B933CAE9ACBDE0F3EF8C3DDA4BA9F69F338606F9D87666D9EFFFB31",
       "model": "res://assets_external/characters_universal/Female_Head.gltf",
       "outfit": "res://assets_external/characters_universal/Female_Peasant.gltf",
       "hair": "res://assets_external/characters_universal/Hair_Buns.gltf"
@@ -45,6 +49,8 @@
       "equipment_sockets": ["Head", "Hand.R"],
       "status": "runtime_accepted",
       "approved": true,
+      "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
+      "sha256": "8F5A6CF6C1CF96E0A0F8E1A861B4245D42B7F88D44E5076DA3D48F3FC52F4E76",
       "model_family": "res://assets_external/characters_universal/*_Head.gltf",
       "outfit_family": "res://assets_external/characters_universal/*_Peasant.gltf"
     },
@@ -59,8 +65,25 @@
       "equipment_sockets": ["Head", "Hand.R", "Hand.L"],
       "status": "runtime_accepted",
       "approved": true,
+      "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
+      "sha256": "8F5A6CF6C1CF96E0A0F8E1A861B4245D42B7F88D44E5076DA3D48F3FC52F4E76",
       "model_family": "res://assets_external/characters_universal/*_Head.gltf",
       "outfit_family": "res://assets_external/characters_universal/*_Peasant.gltf"
+    },
+    "ranger": {
+      "family": "human",
+      "source_pack": "quaternius_modular_character_outfits_fantasy",
+      "target_height": 1.75,
+      "triangle_budget": 20000,
+      "texture_budget": 1024,
+      "required_clips": ["Idle", "Walk", "Run", "RecieveHit", "Death"],
+      "equipment_sockets": ["Head", "Hand.R", "Hand.L"],
+      "status": "runtime_accepted",
+      "approved": true,
+      "path": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf",
+      "sha256": "DF67E16CC2E94D8C58E8831D25835036564EB9F2A7A53E31B6F1CB7F7FE1FC78",
+      "model": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf",
+      "animation_library": "res://assets_external/animations/soul_universal_animation_library_2.glb"
     },
     "ghoulkin": {
       "family": "monster",

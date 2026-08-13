@@ -247,7 +247,8 @@ func _handle_movement(delta: float) -> void:
 			response = deceleration
 		velocity.x = move_toward(velocity.x, target_velocity.x, response * delta)
 		velocity.z = move_toward(velocity.z, target_velocity.z, response * delta)
-		if move_dir.length() > 0.1 and beam_cast_state == "":
+		var intentional_backpedal := input_vec.y > 0.15
+		if move_dir.length() > 0.1 and beam_cast_state == "" and not intentional_backpedal:
 			var target_yaw = atan2(-move_dir.x, -move_dir.z)
 			rotation.y = lerp_angle(rotation.y, target_yaw, 1.0 - exp(-turn_speed * delta))
 		movement_state = "run" if is_running else ("backward" if input_vec.y > 0.15 else ("strafe" if abs(input_vec.x) > 0.55 else ("walk" if move_dir.length() > 0.1 else "idle")))
@@ -801,10 +802,6 @@ func _try_build_mapped_body() -> bool:
 			mapped.queue_free()
 		return false
 	mapped.name = "player_kael_visual"
-	# Universal Base Characters face the camera-facing +Z convention used by
-	# the authored third-person composition. Legacy fallbacks keep their old
-	# half-turn until their own role replacement ticket lands.
-	mapped.rotation_degrees.y = 0.0 if bool(mapped.get_meta("shared_animation_library", false)) else 180.0
 	visual_root.add_child(mapped)
 	var imported_sword := mapped.find_child("Warrior_Sword", true, false) as Node3D
 	if imported_sword != null:

@@ -370,6 +370,7 @@
         "outputs/AshenOathTheRoadBetweenCrowns/visual_upgrade_manifest.json",
         "outputs/AshenOathTheRoadBetweenCrowns/soul_character_foundation.json",
         "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/*",
+        "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_ranger/*",
         "outputs/AshenOathTheRoadBetweenCrowns/assets_external/animations/soul_universal_animation_library_2.glb",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/asset_spawn_helper.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_animation_fusion.gd",
@@ -397,6 +398,28 @@
         "verify_anim_003",
         "verify_face_003",
         "verify_greyfen_life"
+      ]
+    },
+    "char_facing_ranger_001": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_role_spec.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/asset_spawn_helper.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_animation_driver.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_animation_fusion.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/player_controller.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/npc_ambient.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/character_role_manifest.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/visual_upgrade_manifest.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_ranger/*",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_character_real_001.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/capture_char_facing_ranger_001.gd"
+      ],
+      "gates": [
+        "verify_character_real_001",
+        "verify_char_qa_001",
+        "verify_motion_quality",
+        "verify_runtime"
       ]
     },
     "char_qa_001": {
@@ -925,8 +948,9 @@
     "face": "capture_face_003",
     "character": "capture_char_006",
     "character_anwen": "capture_char_007",
-    "character_named": "capture_char_008",
-    "crowd": "capture_char_009",
+	"character_named": "capture_char_008",
+	"character_facing_ranger": "capture_char_facing_ranger_001",
+	"crowd": "capture_char_009",
     "greyfen": "capture_world_001",
     "wychwood": "capture_world_002",
     "campaign": "capture_world_003",

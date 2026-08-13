@@ -1,0 +1,19 @@
+{
+  "role": "road_ranger_human",
+  "character": "Captain Senn",
+  "source_pack": "Quaternius Modular Character Outfits: Fantasy",
+  "source_url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
+  "license": "CC0 1.0",
+  "skeleton_bones": 65,
+  "target_height_m": 1.75,
+  "texture_size": 1024,
+  "runtime_files": [
+    {"path": "Male_Ranger_Runtime.gltf", "bytes": 54070, "sha256": "DF67E16CC2E94D8C58E8831D25835036564EB9F2A7A53E31B6F1CB7F7FE1FC78"},
+    {"path": "Male_Ranger_Runtime.bin", "bytes": 1746884, "sha256": "5BBB0D42CB324C6C27CE00417E68A876D92978F07D161F83590F0D7C0570EFF6"},
+    {"path": "T_Ranger_BaseColor_1K.png", "bytes": 840454, "sha256": "220DD4FABBFECCE9847E876E2E2B02327315C08AAC096D4648B62D5C53716C90"},
+    {"path": "T_Ranger_Normal_1K.png", "bytes": 940081, "sha256": "A4DAA2410B007AD9FE7E15AC7ECC1E579AB08AAFA3725BA3F158C5A24C68B540"},
+    {"path": "T_Ranger_ORM_1K.png", "bytes": 786403, "sha256": "76CFBA43D6748A79A7EA26184415E4810731F6E4B207C3C84A6B1A084B49BD9F"}
+  ],
+  "animation_source": "res://assets_external/animations/soul_universal_animation_library_2.glb",
+  "raw_source_policy": "Raw Ranger source remains outside the runtime folder and is excluded from Web export."
+}

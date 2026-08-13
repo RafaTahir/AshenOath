@@ -44,6 +44,7 @@
     "sister_anwen_human": {"status": "temporary_shared_quaternius", "approved": false},
     "villagers": {"status": "temporary_shared_quaternius", "approved": false},
     "ghoulkin": {"status": "temporary_derived_rig", "approved": false},
+    "road_ranger_human": {"status": "runtime_accepted_optimized_cc0", "approved": true, "model": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf", "license_file": "res://assets_external/licenses/Quaternius_Modular_Character_Outfits_Fantasy_CC0.txt"},
     "white_hart_avatar": {"status": "temporary_wolf_placeholder", "approved": false}
   }
 }
