@@ -41,7 +41,16 @@ func build(context: ZoneBuildContext) -> void:
 func _build_light_composition(context: ZoneBuildContext) -> void:
 	context.make_light("Village Warmth", Vector3(-1.5, 5.2, 2), Color(1.0, 0.58, 0.30), 3.0)
 	context.make_light("Blue Dusk Fill", Vector3(9, 6, -10), Color(0.34, 0.42, 0.58), 2.8)
-	context.make_light("Shrine Beacon", Vector3(4.8, 4.8, -5.4), Color(0.70, 0.86, 0.60), 3.0)
+	var shrine_state := str(context.get_story_flag("crow_shrine_state", ""))
+	var shrine_color := Color(0.70, 0.86, 0.60)
+	var shrine_energy := 3.0
+	if shrine_state == "disturbed":
+		shrine_color = Color(0.72, 0.40, 0.28)
+		shrine_energy = 2.4
+	elif shrine_state == "bound":
+		shrine_color = Color(0.34, 0.38, 0.42)
+		shrine_energy = 1.55
+	context.make_light("Shrine Beacon", Vector3(4.8, 4.8, -5.4), shrine_color, shrine_energy)
 	context.make_light("Wychwood Gate Lantern", Vector3(0, 3.2, -14.3), Color(1.0, 0.48, 0.16), 2.2)
 	context.make_fog_sheet(Vector3(0, 1.1, -12), Vector3(18, 1, 5), Color(0.18, 0.22, 0.22, 0.12))
 

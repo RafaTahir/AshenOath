@@ -62,8 +62,18 @@ func _anwen_faces_player(anwen: Node3D, player: Node3D) -> bool:
 	to_player.y = 0.0
 	if to_player.length() < 0.1:
 		return false
-	# Anwen's cleric source faces +Z inside its normalized wrapper.
-	var visible_forward := anwen.global_basis.z
+	# The interactable is only the gameplay wrapper. The imported humanoid is
+	# rotated inside it by the character-role normalization contract, so measure
+	# the rendered actor rather than the wrapper's forward axis.
+	var visible_actor: Node3D = null
+	for candidate in anwen.find_children("*", "Node3D", true, false):
+		var node := candidate as Node3D
+		if node != null and bool(node.get_meta("source_forward_positive_z", false)):
+			visible_actor = node
+			break
+	if visible_actor == null:
+		visible_actor = anwen
+	var visible_forward := visible_actor.global_basis.z
 	visible_forward.y = 0.0
 	return visible_forward.normalized().dot(to_player.normalized()) > 0.90
 

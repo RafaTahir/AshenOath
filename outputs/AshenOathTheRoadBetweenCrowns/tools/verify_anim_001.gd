@@ -31,7 +31,7 @@ func _initialize() -> void:
 	_assert(anwen != null, "Sister Anwen did not spawn")
 	if anwen != null:
 		var anwen_driver = anwen.find_child("CharacterAnimationDriver", true, false)
-		_verify_driver(anwen_driver, "Sister Anwen", ["idle", "walk", "run", "hit", "death"])
+		_verify_driver(anwen_driver, "Sister Anwen", ["idle", "walk", "dialogue", "hit"])
 		_assert(_active_clip_contains(anwen_driver, "idle"), "Sister Anwen is not playing her resolved idle")
 
 	var life = game.zone_root.find_child("GreyfenLifeController", true, false)

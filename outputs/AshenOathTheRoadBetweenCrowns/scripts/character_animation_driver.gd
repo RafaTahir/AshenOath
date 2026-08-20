@@ -123,7 +123,15 @@ func _process(delta: float) -> void:
 
 func set_update_rate_hz(rate_hz: float) -> void:
 	manual_update_interval = 0.0 if rate_hz <= 0.0 else 1.0 / maxf(rate_hz, 1.0)
-	manual_update_accumulator = 0.0
+	# Do not advance every nearby NPC on the same manual-animation frame. That
+	# creates a small but repeatable Compatibility-renderer CPU burst in Greyfen
+	# when the crowd is visible. A stable per-instance phase keeps the same
+	# update rate while distributing the work over the interval.
+	if manual_update_interval > 0.0 and character_root != null:
+		var phase_slot := int(character_root.get_instance_id() % 17)
+		manual_update_accumulator = manual_update_interval * float(phase_slot) / 17.0
+	else:
+		manual_update_accumulator = 0.0
 	for player in animation_players:
 		player.callback_mode_process = (
 			AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_IDLE

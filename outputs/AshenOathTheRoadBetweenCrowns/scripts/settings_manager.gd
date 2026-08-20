@@ -43,6 +43,7 @@ var _frame_times_ms: Array[float] = []
 var _frame_time_cursor := 0
 var _frame_time_count := 0
 var loaded_user_settings := false
+var persistence_available := true
 var performance_logging_enabled := OS.get_environment("ASHEN_PERF_LOG") == "1"
 const FRAME_TIME_CAPACITY := 600
 
@@ -90,6 +91,7 @@ func _load_settings() -> void:
 	if file == null:
 		return
 	var raw_settings := file.get_as_text()
+	file.close()
 	if raw_settings.strip_edges().is_empty():
 		# A previously interrupted Web/local write can leave an empty file. Treat
 		# it as a first launch and let the next apply() write valid defaults.
@@ -131,6 +133,14 @@ func _save_settings() -> void:
 	var file := FileAccess.open(SETTINGS_PATH, FileAccess.WRITE)
 	if file != null:
 		file.store_string(JSON.stringify(settings))
+		file.flush()
+		file.close()
+	else:
+		persistence_available = false
+		push_warning("Settings persistence unavailable in this runtime: %s" % FileAccess.get_open_error())
+
+func can_persist_settings() -> bool:
+	return persistence_available
 
 func save_now() -> void:
 	_save_settings()

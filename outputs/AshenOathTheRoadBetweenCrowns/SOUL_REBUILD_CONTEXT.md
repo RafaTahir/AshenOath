@@ -1,5 +1,21 @@
 # Ashen Oath Soul-Rebuild Context
 
+## Current Release Checkpoint - 2026-08-21
+
+The cumulative Soul Rebuild implementation is locally release-verified on
+`codex/soul-rebuild`. Runtime, content, story, save, character, animation,
+combat, AI, Oathfire, river, navigation, Greyfen, Castle, audio, visual,
+lifecycle, material, budget, export, packed startup, Chrome, Edge, and mobile
+emulation gates pass. The full browser route reaches Hart Glade through 37
+checkpoints without console or network errors.
+
+The verified seven-file artifact is `97,898,609` bytes and its local PCK hash is
+`98AA203BA4EC02991DCDD75FEE8BE5A7F34DE5D4E706F53F96264C4F565FFC6C`. Production
+sync, commit, `main` push, Vercel deployment, and live hash comparison are the
+remaining release actions. Headless SwiftShader FPS is diagnostic only; native
+performance acceptance comes from the graphical Compatibility gate. Shutdown
+allocator warnings are classified, not active-frame failures.
+
 This is the compact handoff document for the 62-ticket soul-rebuild program. It is intentionally shorter than the historical phase archive.
 
 ## Product Truth
@@ -47,3 +63,13 @@ The first soul-rebuild implementation slice removes generated anatomy overlays, 
 `OPENING-QA-001` accepts the cumulative opening rebuild under an abbreviated, user-selected browser gate: Chrome must complete the real-input opening route without console errors and average at least 30 FPS at native 1280x720 Balanced. The accepted run completed 17 checkpoints at 33.0 FPS average and returned to Greyfen after reporting to Anwen.
 
 The 30 FPS 1% low, transition-time targets, Edge/Firefox coverage, full verifier suite, and complete screenshot refresh remain deferred. Future tickets must not interpret this milestone deployment as evidence that those stricter contracts passed.
+
+## Current continuation checkpoint
+
+The current Milestone E/F product slice is present in the working tree: contact-driven sword evidence, optional target lock-on, Oathfire endpoint feedback, data-driven boss definitions/checkpoints/save restoration, role-specific boss telegraphs, encounter-specific procedural music, QuestBeatDirector tracker decoration, campaign consequence dressing, responsive HUD anchoring, accessibility/gamepad acceptance, deterministic performance contracts, and released-zone lifecycle coverage.
+
+Godot gates run with an explicit log-file because the sandbox cannot create the default user logs path. The targeted accumulated gates pass with that isolated logging path. The sandbox can read but not write its Godot user profile, so settings and atomic-save checks report a bounded environment warning; those disk assertions remain active in a normal writable browser profile.
+
+The current continuation is an uncommitted recovery checkpoint. Fresh graphical character evidence, a native Compatibility visible-quality run, runtime contracts, asset checks, product captures, and opening timing have been rerun. The older Web artifact and browser results in `RELEASE-003_RESULT.md` are historical evidence only; a new export, packed startup, live hash comparison, and deployment are still required after the current source changes. Web Greyfen prewarm is now enabled behind the visible launch/menu state with a bounded 30-frame warmup; the opening gate records 10.982 seconds engine-ready and 51 ms New Game activation.
+
+The current visual gate is intentionally honest: Kael and Anwen pass the native-face/connected-body portrait check, while Ghoulkin remains a grounded low-poly interim family and Ashwing remains an interim animated Dragon mapping. The latest Greyfen and Hart captures are fresh, but still show stylized/procedural architecture and finale dressing below the locked visual bar. Later campaign architecture, river/bridge composition, and complete route evidence still require the visual acceptance pass before production deployment.

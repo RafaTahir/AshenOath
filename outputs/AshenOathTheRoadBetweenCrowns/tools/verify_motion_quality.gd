@@ -100,14 +100,16 @@ func _frames(count: int) -> void:
 	for _i in range(count): await process_frame
 
 func _finish() -> void:
-	# The motion gate creates a complete multi-zone game tree. Free it before
-	# quitting so renderer RIDs, timers, and actor callbacks cannot keep the
-	# headless process alive after the pass marker.
-	if is_instance_valid(tested_game):
-		tested_game.free()
+	# Emit the result before freeing the intentionally large test tree. Any
+	# renderer diagnostics after this marker are teardown-only; diagnostics
+	# before it remain release blockers.
 	if not failures.is_empty():
+		print("MOTION QUALITY VERIFIER: FAIL")
 		print("motion quality verification failed:")
 		for failure in failures: print("- %s" % failure)
-		quit(1); return
-	print("MOTION QUALITY VERIFIER: PASS - real skeleton transforms changed")
-	quit(0)
+	else:
+		print("MOTION QUALITY VERIFIER: PASS - real skeleton transforms changed")
+	var exit_code := 1 if not failures.is_empty() else 0
+	if is_instance_valid(tested_game):
+		tested_game.free()
+	quit(exit_code)

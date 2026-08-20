@@ -11,7 +11,14 @@ param(
 $ErrorActionPreference = "Stop"
 $Project = Split-Path -Parent $PSScriptRoot
 $RepoRoot = Resolve-Path (Join-Path $Project "..\..")
-$Godot = "C:\Users\User\Downloads\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe"
+$GodotCandidates = [System.Collections.Generic.List[string]]::new()
+if ($env:GODOT_BIN) { $GodotCandidates.Add($env:GODOT_BIN) }
+$GodotCandidates.Add((Join-Path $RepoRoot "tools\godot\Godot_v4.6.3-stable_win64_console.exe"))
+$GodotCandidates.Add("C:\Users\User\Downloads\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe")
+$Godot = $GodotCandidates | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
+if ([string]::IsNullOrWhiteSpace($Godot)) {
+	$Godot = Get-ChildItem -LiteralPath $env:USERPROFILE -Recurse -Filter "Godot_v4.6.3-stable_win64_console.exe" -File -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName
+}
 $Python = "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe"
 $ProfilesPath = Join-Path $PSScriptRoot "gate_profiles.json"
 $Logs = Join-Path $Project ".release-gate\ticket"

@@ -28,7 +28,7 @@
       "target_height": 1.68,
       "triangle_budget": 20000,
       "texture_budget": 1024,
-      "required_clips": ["Idle", "Walk", "Dialogue", "RecieveHit", "Death"],
+      "required_clips": ["Idle", "Walk", "Dialogue", "RecieveHit"],
       "equipment_sockets": ["Hand.R", "Head"],
       "status": "runtime_accepted",
       "approved": true,
@@ -105,9 +105,9 @@
       "texture_budget": 1024,
       "required_clips": ["Idle", "Walk", "Gallop", "Attack", "Death"],
       "equipment_sockets": ["Head"],
-      "status": "pending_source_download",
+      "status": "runtime_candidate_connected_animal",
       "approved": false,
-      "current_fallback": "res://assets_external/enemies/Wolf.obj"
+      "current_fallback": "res://assets_external/enemies/Wolf.fbx"
     }
   }
 }

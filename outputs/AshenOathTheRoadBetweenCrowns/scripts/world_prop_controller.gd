@@ -94,7 +94,10 @@ func _decorate_anchor(anchor: Node3D, kind: String, id: String) -> void:
 		for index in range(count):
 			var spark := MeshInstance3D.new()
 			spark.name = "ForgeSpark_%02d" % index
-			spark.mesh = SphereMesh.new()
+			var spark_mesh := SphereMesh.new()
+			spark_mesh.radial_segments = 5
+			spark_mesh.rings = 3
+			spark.mesh = spark_mesh
 			spark.scale = Vector3.ONE * 0.045
 			spark.position = Vector3(-0.22 + float(index) * 0.20, 0.72 + float(index % 2) * 0.16, 0.0)
 			spark.material_override = _emissive_material(Color(1.0, 0.42, 0.10), 1.25)
@@ -104,7 +107,10 @@ func _decorate_anchor(anchor: Node3D, kind: String, id: String) -> void:
 	elif kind == "shrine":
 		var ember := MeshInstance3D.new()
 		ember.name = "ShrineEmber"
-		ember.mesh = SphereMesh.new()
+		var ember_mesh := SphereMesh.new()
+		ember_mesh.radial_segments = 5
+		ember_mesh.rings = 3
+		ember.mesh = ember_mesh
 		ember.scale = Vector3(0.06, 0.11, 0.06)
 		ember.position = Vector3(0.0, 1.46, -0.24)
 		ember.material_override = _emissive_material(Color(0.64, 0.86, 0.60), 0.75)

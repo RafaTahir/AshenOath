@@ -1,6 +1,10 @@
 @echo off
 setlocal
-set "GODOT=C:\Users\User\Downloads\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe"
+if defined GODOT_BIN (
+  set "GODOT=%GODOT_BIN%"
+) else (
+  set "GODOT=C:\Users\User\Downloads\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe"
+)
 set "PYTHON=C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe"
 set "PROJECT_DIR=%~dp0."
 set "OUT_DIR=%~dp0..\AshenOath_Web"

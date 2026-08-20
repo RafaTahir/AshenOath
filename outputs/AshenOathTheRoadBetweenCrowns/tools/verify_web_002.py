@@ -63,10 +63,10 @@ def main() -> int:
     release_identity = label.group(1) if label else ""
     if (
         not label
-        or not any(ticket in release_identity for ticket in ("WEB-002", "RELEASE-001"))
+        or not any(ticket in release_identity for ticket in ("WEB-002", "RELEASE-001", "RELEASE-003"))
         or "ASHENOATH.VERCEL.APP" not in release_identity
     ):
-        failures.append("visible WEB-002/RELEASE-001 identity is missing")
+        failures.append("visible WEB-002/RELEASE-001/RELEASE-003 identity is missing")
 
     if failures:
         for failure in failures:

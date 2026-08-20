@@ -39,14 +39,15 @@ func _verify_character(node: Node, label: String) -> void:
 	check(node != null, "%s is missing" % label)
 	if node == null: return
 	check(node.find_child("FacialIdentity",true,false) == null, "%s still uses a billboard face" % label)
-	check(_has_fragment(node,"head"), "%s modeled head is missing" % label)
 	var skeleton := _find_skeleton(node)
 	check(skeleton != null, "%s skeletal body is missing" % label)
 	var contract := CharacterVisualContract.validate(node, true)
 	check(bool(contract.get("valid", false)), "%s has no complete skinned animated body contract" % label)
 	if skeleton != null:
 		check(_has_bone(skeleton,"head"), "%s has no animated head bone" % label)
-	check(str(node.get_meta("character_face_features", "")) == "bone_attached" or _has_fragment(node,"eye") or (_has_fragment(node,"head") and bool(contract.get("valid", false))), "%s mesh-native face material is missing" % label)
+	var face_surface_count := int(_find_meta(node, "character_face_surfaces", 0))
+	var face_features := str(_find_meta(node, "character_face_features", ""))
+	check(face_surface_count >= 2 and face_features in ["native_mesh", "bone_attached"], "%s mesh-native face material is missing" % label)
 
 func _has_fragment(node: Node, fragment: String) -> bool:
 	if str(node.name).to_lower().contains(fragment):
@@ -67,6 +68,15 @@ func _has_bone(skeleton: Skeleton3D, fragment: String) -> bool:
 	for index in range(skeleton.get_bone_count()):
 		if str(skeleton.get_bone_name(index)).to_lower().contains(fragment): return true
 	return false
+
+func _find_meta(node: Node, key: String, fallback: Variant) -> Variant:
+	if node.has_meta(key):
+		return node.get_meta(key)
+	for child in node.get_children():
+		var value: Variant = _find_meta(child, key, fallback)
+		if value != fallback:
+			return value
+	return fallback
 
 func _verify_path(path: Array, river_z: float, label: String) -> void:
 	for i in range(1,path.size()):

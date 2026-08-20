@@ -31,8 +31,27 @@ FATAL = re.compile(
 PASS = re.compile(r"\bPASS\b|Screenshot capture complete", re.IGNORECASE)
 
 
+def read_log_lines(path: Path) -> list[str]:
+    """Read PowerShell-captured logs without losing their pass markers.
+
+    PowerShell may write redirected native-process output as UTF-16LE with a
+    BOM.  Decoding those bytes as UTF-8 leaves NUL characters between every
+    visible character, which makes the regular-expression checks silently
+    miss valid verifier results.  Prefer BOM-aware decoding and keep UTF-8 as
+    the normal path for logs written directly by Python or Godot tooling.
+    """
+    raw = path.read_bytes()
+    if raw.startswith(b"\xff\xfe") or raw.startswith(b"\xfe\xff"):
+        text = raw.decode("utf-16", errors="replace")
+    elif raw.startswith(b"\xef\xbb\xbf"):
+        text = raw.decode("utf-8-sig", errors="replace")
+    else:
+        text = raw.decode("utf-8", errors="replace")
+    return text.splitlines()
+
+
 def classify(path: Path) -> dict[str, object]:
-    lines = path.read_text(encoding="utf-8", errors="replace").splitlines()
+    lines = read_log_lines(path)
     pass_index = max((index for index, line in enumerate(lines) if PASS.search(line)), default=-1)
     warnings: list[str] = []
     failures: list[str] = []

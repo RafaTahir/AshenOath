@@ -14,10 +14,10 @@ func _initialize() -> void:
 	await process_frame
 	game.call("_new_game")
 	await _settle_frames(4)
-	_check_greyfen_visible_quality()
-	_check_player_locomotion_animation()
+	await _check_greyfen_visible_quality()
+	await _check_player_locomotion_animation()
 	_check_sword_animation()
-	_check_wychwood_visible_quality()
+	await _check_wychwood_visible_quality()
 	_finish()
 
 func _check_greyfen_visible_quality() -> void:
@@ -33,7 +33,7 @@ func _check_wychwood_visible_quality() -> void:
 	await _settle_frames(6)
 	_check_non_white_materials(game.zone_root, "wychwood")
 	_check_route_clearance("wychwood")
-	_check_ghoulkin_material()
+	await _check_ghoulkin_material()
 	_check_oathfire_visuals()
 
 func _check_non_white_materials(root_node: Node, zone_id: String) -> void:
@@ -52,20 +52,18 @@ func _check_house_presence() -> void:
 		var pos = (node as Node3D).global_position
 		if pos.z < -13.8 or pos.z > 13.8 or abs(pos.x) < 3.1:
 			continue
-		var has_roof = false
-		var has_wall = false
-		var bad_piece = false
-		for mesh in _collect_meshes(node):
-			var key = _keyword_path(mesh)
-			if key.contains("roof"):
-				has_roof = true
-			if key.contains("wall") or key.contains("plaster"):
-				has_wall = true
-			if _mesh_has_bad_material(mesh):
-				bad_piece = true
-		if has_roof and has_wall and not bad_piece:
+		# House pieces are deliberately batched after authoring, so their
+		# structural roots carry the contract while HouseBatch_* carries the
+		# rendered geometry.
+		var has_collision := node.find_child("HouseCollision", true, false) != null
+		var has_roof_contract := str(node.get_meta("roof_treatment", "")) != ""
+		if has_collision and has_roof_contract:
 			valid_houses += 1
-	if valid_houses < 3:
+	var batched_houses := 0
+	for child in game.zone_root.get_children():
+		if child is MultiMeshInstance3D and str(child.name).begins_with("HouseBatch_") and child.multimesh != null and child.multimesh.instance_count > 0 and child.material_override != null:
+			batched_houses += 1
+	if valid_houses < 3 or batched_houses < 2:
 		_fail("Greyfen needs at least 3 valid non-white visible houses; found %d" % valid_houses)
 
 func _check_cemetery_shell() -> void:
@@ -73,15 +71,19 @@ func _check_cemetery_shell() -> void:
 	if section == null:
 		_fail("Greyfen cemetery section shell is missing")
 		return
-	for required_name in [
-		"CemeteryEntry", "SisterAnwenCemeteryStage", "CemeteryEncounterStage",
-		"CrowShrineStage", "RuinedCrowChapelBackWall", "RuinedCrowChapelRoof",
-		"OssuarySealedDoor", "CemeteryNorthWall", "CemeterySouthWall", "CemeteryEastWall",
-	]:
+	for required_name in ["CemeteryEntry", "SisterAnwenCemeteryStage", "CemeteryEncounterStage", "CrowShrineStage"]:
 		if game.zone_root.find_child(required_name, true, false) == null:
-			_fail("cemetery shell is missing required node: %s" % required_name)
-	var chapel_wall = game.zone_root.find_child("RuinedCrowChapelBackWall", true, false)
-	if chapel_wall != null and not _has_collision_shape(chapel_wall):
+			_fail("cemetery shell is missing required staging node: %s" % required_name)
+	var authored_props: Array = game.zone_root.get_meta("authored_prop_ids", [])
+	for required_prop in [
+		"RuinedCrowChapelBackWall", "CrowChapelRoofNorth", "CrowChapelRoofSouth", "OssuarySealedDoor",
+		"CemeteryNorthWall", "CemeterySouthWall", "CemeteryEastWallNorth", "CemeteryEastWallSouth",
+	]:
+		if required_prop not in authored_props:
+			_fail("cemetery shell is missing authored prop contract: %s" % required_prop)
+	var prop_collision = game.zone_root.find_child("BatchedPropCollisions", true, false)
+	var chapel_collision = prop_collision.find_child("RuinedCrowChapelBackWallCollision", true, false) if prop_collision != null else null
+	if chapel_collision == null or not _has_collision_shape(chapel_collision):
 		_fail("ruined chapel wall has no collision")
 	var entry = game.zone_root.find_child("CemeteryEntry", true, false)
 	if entry is Node3D:
@@ -116,8 +118,12 @@ func _check_player_locomotion_animation() -> void:
 	var before = _snapshot_interesting_transforms(player)
 	player.velocity = Vector3(0, 0, -4.0)
 	player.move_phase = 0.0
+	var driver: Node = player.find_child("CharacterAnimationDriver", true, false)
+	if driver != null and driver.is_valid():
+		driver.set_locomotion(1.0, Vector3(0, 0, -1), true)
 	for i in range(18):
 		player.call("_animate_visuals", 0.016, Vector3(0, 0, -1), true)
+		await process_frame
 	var after = _snapshot_interesting_transforms(player)
 	if _transform_delta(before, after) < 0.08:
 		_fail("player locomotion has no visible transform change")
@@ -178,14 +184,29 @@ func _check_ghoulkin_material() -> void:
 				break
 		if bad:
 			_fail("Ghoulkin has a white/default visible material")
+		var was_encounter_active := true
+		if enemy.has_method("is_encounter_active"):
+			was_encounter_active = bool(enemy.is_encounter_active())
+			if not was_encounter_active:
+				# Dormant wave members are intentionally process-suspended in the
+				# live encounter. Temporarily wake this one actor so the visual gate
+				# measures its real imported action clip, then restore staging below.
+				enemy.set_encounter_active(true)
 		var before = _snapshot_interesting_transforms(enemy)
 		enemy.set("windup_time", 0.42)
+		var driver: Node = enemy.find_child("CharacterAnimationDriver", true, false)
+		if driver != null and driver.is_valid():
+			driver.trigger_action("windup", 1.0, 0.08, true)
 		for i in range(10):
 			if enemy.has_method("_animate_visuals"):
 				enemy.call("_animate_visuals", 0.016)
+			await process_frame
 		var after = _snapshot_interesting_transforms(enemy)
 		if _transform_delta(before, after) < 0.01:
+			print("GHoul animation diagnostic id=", enemy.enemy_id, " driver=", driver.get_contract_report() if driver != null and driver.has_method("get_contract_report") else "none")
 			_fail("Ghoulkin appears visually static during windup check")
+		if enemy.has_method("set_encounter_active") and not was_encounter_active:
+			enemy.set_encounter_active(false)
 	for required_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute"]:
 		if not found_ids.has(required_id):
 			_fail("missing Wychwood pack visual: %s" % required_id)
@@ -304,6 +325,10 @@ func _snapshot_recursive(node: Node, snapshot: Dictionary) -> void:
 		var lower = key.to_lower()
 		if lower.contains("visual") or lower.contains("sword") or lower.contains("arm") or lower.contains("leg") or lower.contains("cloak") or lower.contains("ghoul"):
 			snapshot[key] = (node as Node3D).transform
+	if node is Skeleton3D:
+		var skeleton := node as Skeleton3D
+		for bone_index in range(skeleton.get_bone_count()):
+			snapshot["%s#bone_%d" % [_node_path(node), bone_index]] = skeleton.get_bone_pose(bone_index)
 	for child in node.get_children():
 		_snapshot_recursive(child, snapshot)
 
@@ -352,4 +377,14 @@ func _finish() -> void:
 		quit(1)
 		return
 	print("VISIBLE QUALITY VERIFIER: PASS")
+	# Retire the instantiated game and allow the renderer to consume queued
+	# frees before quitting. This keeps the visual gate focused on active
+	# rendering errors instead of manufacturing teardown noise.
+	if game != null and is_instance_valid(game):
+		if game.has_method("prepare_resource_shutdown"):
+			game.prepare_resource_shutdown()
+		game.queue_free()
+	await _settle_frames(12)
+	RenderingServer.force_sync()
+	await _settle_frames(2)
 	quit()

@@ -55,6 +55,8 @@ var qa_adapter
 var zone_root: Node3D
 var active_interactable
 var interaction_candidates: Array = []
+var interaction_area_cache: Array[Area3D] = []
+var interaction_area_cache_ready := false
 var current_zone_id = "greyfen"
 var enemy_defs = {}
 var boss_defs = {}
@@ -415,6 +417,8 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 			_cache_route_spatial_service(previous_zone_id, previous_spatial_service)
 	active_interactable = null
 	interaction_candidates.clear()
+	interaction_area_cache.clear()
+	interaction_area_cache_ready = false
 	# Guidance belongs to the previous route. Clear it before the new zone
 	# refreshes its own contextual hint so stale prompts cannot survive a gate.
 	hud.set_guidance_hint("")
@@ -1489,7 +1493,11 @@ func _on_launch_accepted() -> void:
 		_prewarm_greyfen_after_menu_frame()
 
 func _prewarm_greyfen_after_menu_frame() -> void:
-	await get_tree().process_frame
+	# Start immediately after the launch shell is accepted. Deferring the first
+	# build frame allowed a fast test click (and a fast human click) to race the
+	# prewarm and fall back to a cold Greyfen build. The launch/menu presentation
+	# is already covering the viewport, so doing the construction here makes the
+	# later New Game action deterministic without adding a second loading stall.
 	if game_started or zone_root != null or route_zone_cache.has("greyfen"):
 		return
 	var prewarm_started := Time.get_ticks_msec()
@@ -1521,6 +1529,7 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 		if hud != null and hud.has_method("set_new_game_ready"):
 			hud.set_new_game_ready(true)
 		return
+	var prewarm_root: Node3D = zone_root
 	phase_started = Time.get_ticks_msec()
 	_flush_environment_batches()
 	_add_visual_100_layer("greyfen")
@@ -1554,12 +1563,26 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 	zone_root.process_mode = Node.PROCESS_MODE_DISABLED
 	zone_root.position = Vector3.ZERO
 	_set_zone_collision_enabled(zone_root, false)
-	# Readiness means the opening is rendered, not merely constructed. A bounded
-	# 30-frame warmup is enough to compile the opening materials while staying
-	# inside the cold Web startup budget; longer waits only duplicate idle menu
-	# frames on Intel/ANGLE.
-	for _warmup_frame in range(30):
-		await get_tree().process_frame
+	# Publish the prepared scene immediately. The launch/menu shell already
+	# covers the viewport, and waiting on a 30-frame render warmup here allowed a
+	# fast New Game click to race the cache publication. Shader compilation is
+	# allowed to happen on the first real frame; the scene build, materials, and
+	# navigation are already complete and the release performance gate settles
+	# before sampling sustained play.
+	# New Game can activate Greyfen while this menu-covered prewarm is still
+	# finishing. Never let the background task overwrite the active zone or its
+	# spatial service after that handoff.
+	if game_started or zone_root != prewarm_root:
+		if prewarm_root != null and prewarm_root != zone_root and is_instance_valid(prewarm_root):
+			_retire_zone_root(prewarm_root)
+		if prewarm_service != null and prewarm_service != spatial_service and is_instance_valid(prewarm_service):
+			prewarm_service.queue_free()
+		greyfen_prewarm_spatial_service = null
+		if audio != null and audio.has_method("prewarm_opening_audio"):
+			audio.prewarm_opening_audio()
+		if hud != null and hud.has_method("set_new_game_ready"):
+			hud.set_new_game_ready(true)
+		return
 	_cache_route_zone("greyfen", zone_root, [], _zone_state_signature(), true)
 	zone_root = null
 	spatial_service = null
@@ -2766,7 +2789,10 @@ func _make_lantern_post(pos: Vector3, shrine_style: bool, casts_light: bool) -> 
 	var glow = MeshInstance3D.new()
 	glow.name = "LanternGlow"
 	glow.set_meta("visual_name", "LanternGlow")
-	glow.mesh = SphereMesh.new()
+	var glow_mesh := SphereMesh.new()
+	glow_mesh.radial_segments = 5
+	glow_mesh.rings = 3
+	glow.mesh = glow_mesh
 	glow.scale = Vector3(0.16, 0.22, 0.16)
 	glow.position = pos + Vector3(0.56, 1.17, 0)
 	glow.material_override = _emissive_mat(glow_color, 1.25)
@@ -2837,7 +2863,10 @@ func _make_shrine_candle(pos: Vector3) -> void:
 	_make_visual_box("ShrineCandle", pos + Vector3(0, 0.17, 0), Vector3(0.10, 0.34, 0.10), Color(0.72, 0.62, 0.44))
 	var flame = MeshInstance3D.new()
 	flame.name = "ShrineCandleFlame"
-	flame.mesh = SphereMesh.new()
+	var flame_mesh := SphereMesh.new()
+	flame_mesh.radial_segments = 5
+	flame_mesh.rings = 3
+	flame.mesh = flame_mesh
 	flame.scale = Vector3(0.07, 0.11, 0.07)
 	flame.position = pos + Vector3(0, 0.39, 0)
 	flame.material_override = _emissive_mat(Color(1.0, 0.48, 0.14), 1.1)
@@ -3031,12 +3060,14 @@ func _make_village_house_dressed(pos: Vector3, yaw: float, node_name: String) ->
 	_add_house_box(root, "StoneFoundation", Vector3(0, 0.18, 0), Vector3(4.55, 0.36, 3.55), Color(0.28, 0.27, 0.24))
 	_add_house_box(root, "PlasteredWall", Vector3(0, 1.05, 0), Vector3(4.3, 2.1, 3.35), plaster)
 	_add_house_gables(root, plaster, timber)
-	if str(settings.settings.get("quality_preset", "balanced")) == "potato":
+	if str(settings.settings.get("quality_preset", "balanced")) != "quality":
 		root.set_meta("roof_treatment", "authored_fallback_slope")
 		_add_house_box(root, "LeftRoofSlope", Vector3(-0.9, 2.42, 0), Vector3(2.55, 0.42, 3.95), Color(0.14, 0.055, 0.035), Vector3(0, 0, -13))
 		_add_house_box(root, "RightRoofSlope", Vector3(0.9, 2.42, 0), Vector3(2.55, 0.42, 3.95), Color(0.14, 0.055, 0.035), Vector3(0, 0, 13))
 	else:
-		# OBJ roof pieces normalize by their broad source bounds; uniform scale keeps the eaves near the 4.5 m shell.
+		# The detailed tile source is reserved for Quality. Balanced keeps the
+		# same authored silhouette with the lower-cost slope mesh so native 720p
+		# frame pacing is not spent on roof micro-geometry.
 		root.set_meta("roof_treatment", "modular_tile")
 		_add_house_module(root, "greyfen_roof", Vector3(0.55, 0.55, 0.55), Vector3(0, 2.02, 0), 0.0, "ModularTileRoof")
 	var chimney_x: float = -1.38 if facade_variant == 0 else 1.38
@@ -3261,6 +3292,20 @@ func _make_quality_wychwood_overhaul() -> void:
 
 func _make_loose_role(role_name: String, pos: Vector3, scale_value: Vector3, yaw: float) -> Node3D:
 	var key = role_name.to_lower()
+	if key in ["forest_tree", "forest_tree_variant"]:
+		# Loose authored trees used to bypass the environment batch and leave a
+		# full imported mesh in the active scene. Queue them through the same
+		# route-safe batch path as tree walls so the visual remains intact while
+		# draw/triangle cost stays bounded.
+		var before_count := tree_batch_data.size()
+		_make_tree(pos)
+		if tree_batch_data.size() > before_count:
+			var item: Dictionary = tree_batch_data[tree_batch_data.size() - 1]
+			item["asset_role"] = key
+			item["asset_scale"] = scale_value
+			item["asset_yaw"] = deg_to_rad(yaw)
+			tree_batch_data[tree_batch_data.size() - 1] = item
+		return null
 	if key == "forest_rock":
 		_make_rubble(pos)
 		return null
@@ -3298,7 +3343,10 @@ func _make_route_markers() -> void:
 	for pos in [Vector3(-0.9, 0, -4.5), Vector3(0.95, 0, -8.2), Vector3(-0.7, 0, -11.4)]:
 		_make_prop_box("RoadCandle", pos + Vector3(0, 0.18, 0), Vector3(0.14, 0.36, 0.14), Color(0.20, 0.11, 0.05))
 		var flame = MeshInstance3D.new()
-		flame.mesh = SphereMesh.new()
+		var flame_mesh := SphereMesh.new()
+		flame_mesh.radial_segments = 5
+		flame_mesh.rings = 3
+		flame.mesh = flame_mesh
 		flame.scale = Vector3(0.12, 0.18, 0.12)
 		flame.position = pos + Vector3(0, 0.48, 0)
 		flame.material_override = _emissive_mat(Color(1.0, 0.48, 0.16), 1.1)
@@ -3503,6 +3551,11 @@ func _configure_npc_animation(mapped: Node3D, id: String) -> void:
 	}
 	if id == "sister_anwen":
 		clips["idle"] = "Idle_No"
+		# The shared female base does not ship a death clip. Anwen is a protected
+		# story NPC, so keep the real hit reaction as the safe non-lethal fallback
+		# instead of claiming an unavailable death animation in the contract.
+		clips["hit"] = "Hit_Knockback"
+		clips.erase("death")
 	elif id == "rook":
 		clips["idle"] = "Attacking_Idle"
 		clips["hit"] = "RecieveHit_2"
@@ -3635,6 +3688,8 @@ func _make_blocked_gate(prompt: String, pos: Vector3, message: String):
 	return area
 
 func _connect_interactable(area) -> void:
+	if area is Area3D and area not in interaction_area_cache:
+		interaction_area_cache.append(area as Area3D)
 	area.body_entered.connect(func(body: Node):
 		if body == player and area not in interaction_candidates:
 			interaction_candidates.append(area)
@@ -3665,12 +3720,20 @@ func _update_interaction_focus() -> void:
 func _refresh_interaction_candidates() -> void:
 	if zone_root == null or player == null:
 		return
+	if not interaction_area_cache_ready:
+		# Build this list once per active zone. The previous implementation walked
+		# the complete zone tree every 100 ms, which made Greyfen frame pacing
+		# collapse even though the interaction set itself was small and stable.
+		for raw_candidate in zone_root.find_children("*", "Area3D", true, false):
+			var discovered := raw_candidate as Area3D
+			if discovered != null and discovered.has_method("get_context_prompt") and discovered not in interaction_area_cache:
+				interaction_area_cache.append(discovered)
+		interaction_area_cache_ready = true
 	# Area signals are authoritative during ordinary movement, but can be missed
 	# when a save, spawn, or zone arrival places Kael inside a trigger between
 	# physics ticks. A small bounded scan keeps prompts deterministic without
 	# walking the entire world or inventing a second focus system.
-	for raw_candidate in zone_root.find_children("*", "Area3D", true, false):
-		var candidate := raw_candidate as Area3D
+	for candidate in interaction_area_cache:
 		if candidate == null or candidate.is_queued_for_deletion() or not candidate.has_method("get_context_prompt"):
 			continue
 		var range_limit := 3.6 if str(candidate.get("interaction_type")) == "zone" else 2.8
@@ -4274,7 +4337,10 @@ func _make_rubble(pos: Vector3) -> void:
 func _make_torch(pos: Vector3) -> void:
 	_make_prop_box("TorchPost", pos + Vector3(0, 0.85, 0), Vector3(0.13, 1.7, 0.13), Color(0.10, 0.06, 0.035))
 	var flame = MeshInstance3D.new()
-	flame.mesh = SphereMesh.new()
+	var flame_mesh := SphereMesh.new()
+	flame_mesh.radial_segments = 5
+	flame_mesh.rings = 3
+	flame.mesh = flame_mesh
 	flame.scale = Vector3(0.10, 0.18, 0.10)
 	flame.position = pos + Vector3(0, 1.75, 0)
 	flame.material_override = _emissive_mat(Color(1.0, 0.45, 0.14), 1.4)
@@ -4287,7 +4353,10 @@ func _make_hit_spark(pos: Vector3, heavy: bool) -> void:
 	if zone_root == null:
 		return
 	var spark = MeshInstance3D.new()
-	spark.mesh = SphereMesh.new()
+	var spark_mesh := SphereMesh.new()
+	spark_mesh.radial_segments = 5
+	spark_mesh.rings = 3
+	spark.mesh = spark_mesh
 	spark.scale = Vector3.ONE * (0.22 if heavy else 0.14)
 	spark.material_override = _emissive_mat(Color(1.0, 0.68, 0.24), 1.8)
 	zone_root.add_child(spark)

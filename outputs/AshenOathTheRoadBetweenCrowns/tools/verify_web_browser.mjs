@@ -15,6 +15,13 @@ const requestedBrowser = String(args.browser || "").toLowerCase();
 const mobileMode = Boolean(args.mobile);
 const viewportWidth = mobileMode ? 960 : 1280;
 const viewportHeight = mobileMode ? 540 : 720;
+// The Godot menu is rendered inside the canvas, so its action point must scale
+// with the emulated viewport. The old desktop pixel coordinate landed outside
+// the mobile canvas and made a clean runtime look like a readiness timeout.
+const menuInputPoint = {
+  x: viewportWidth * (1015 / 1280),
+  y: viewportHeight * (227 / 720),
+};
 const browsers = [
   ["Chrome", "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"],
   ["Edge", "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe"],
@@ -56,6 +63,16 @@ await new Promise((resolveListen) => server.listen(0, "127.0.0.1", resolveListen
 const port = server.address().port;
 
 const sleep = (ms) => new Promise((resolveSleep) => setTimeout(resolveSleep, ms));
+async function fetchJson(url) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 5000);
+  try {
+    const response = await fetch(url, { signal: controller.signal });
+    return await response.json();
+  } finally {
+    clearTimeout(timeout);
+  }
+}
 async function availablePort() {
   const probe = createServer();
   await new Promise((resolveListen, reject) => {
@@ -126,10 +143,17 @@ class Cdp {
       }
     });
   }
-  send(method, params = {}) {
+  send(method, params = {}, timeoutMs = 15000) {
     const id = this.nextId++;
     return new Promise((resolveSend, reject) => {
-      this.pending.set(id, { resolve: resolveSend, reject });
+      const timer = setTimeout(() => {
+        this.pending.delete(id);
+        reject(new Error(`CDP ${method} timed out`));
+      }, timeoutMs);
+      this.pending.set(id, {
+        resolve: (value) => { clearTimeout(timer); resolveSend(value); },
+        reject: (error) => { clearTimeout(timer); reject(error); },
+      });
       this.socket.send(JSON.stringify({ id, method, params }));
     });
   }
@@ -162,23 +186,31 @@ async function testBrowser(name, executable) {
     "--no-default-browser-check",
     "--disable-background-networking",
     "--disable-component-update",
+    // The managed runner crashes Chrome's renderer sandbox before WebGL can
+    // initialize. This is an isolated local acceptance browser, not a
+    // production runtime, so use the stable renderer path for the test.
+    "--no-sandbox",
+    // The managed Windows runner cannot start Chrome's sandboxed GPU
+    // subprocess reliably. Keep WebGL available in-process so the browser
+    // acceptance test measures the actual canvas instead of hanging at boot.
+    "--in-process-gpu",
+    "--disable-gpu-sandbox",
+    "--use-angle=swiftshader",
     "--enable-unsafe-swiftshader",
     "--ignore-gpu-blocklist",
     "--autoplay-policy=no-user-gesture-required",
     "about:blank",
-  ], { stdio: "ignore" });
+  ], { stdio: "ignore", windowsHide: true });
   const started = Date.now();
   let cdp;
   try {
     const page = await waitFor(async () => {
-      const response = await fetch(`http://127.0.0.1:${debugPort}/json/list`);
-      const targets = await response.json();
-      return targets.find((target) => target.type === "page");
+      const targets = await fetchJson(`http://127.0.0.1:${debugPort}/json/list`);
+      return targets.find((target) => target.type === "page" && target.url === "about:blank");
     }, `${name} DevTools`);
     cdp = new Cdp(page.webSocketDebuggerUrl);
     await cdp.open();
     await Promise.all([
-      cdp.send("Runtime.enable"),
       cdp.send("Page.enable"),
       cdp.send("Log.enable"),
       cdp.send("Performance.enable"),
@@ -202,6 +234,12 @@ async function testBrowser(name, executable) {
         platform: "Android",
       });
     }
+    // Chrome's initial about:blank target has no live renderer, so Runtime
+    // domain enablement cannot complete until it has navigated once. Use a
+    // tiny data document to establish the renderer while all instrumentation
+    // remains attached before the game URL is loaded.
+    await cdp.send("Page.navigate", { url: "data:text/html,<body></body>" });
+    await cdp.send("Runtime.enable");
     const navigationStarted = Date.now();
     await cdp.send("Page.navigate", { url });
     await waitFor(async () => cdp.evaluate(
@@ -224,7 +262,7 @@ async function testBrowser(name, executable) {
     let canvasDiagnostic = null;
     const canvas = await waitFor(async () => {
       canvasDiagnostic = await cdp.evaluate(`(() => {
-      const canvas = document.querySelector("canvas");
+      const canvas = document.querySelector("#canvas");
       if (!canvas) return {ready: false, reason: "missing", body: document.body.innerText.slice(0, 200)};
       const gl = canvas.getContext("webgl2") || canvas.getContext("webgl");
       return {
@@ -262,38 +300,51 @@ async function testBrowser(name, executable) {
     await cdp.send("Emulation.setFocusEmulationEnabled", { enabled: true });
     await cdp.evaluate(`(() => {
       window.focus();
-      const canvas = document.querySelector("canvas");
+      const canvas = document.querySelector("#canvas");
       if (canvas) {
         canvas.tabIndex = 0;
         canvas.focus();
       }
       return document.hasFocus();
     })()`);
+    const consoleLines = () => cdp.events.flatMap((event) => {
+      if (event.method === "Runtime.consoleAPICalled") {
+        return event.params.args.map((arg) => String(arg.value ?? arg.description ?? ""));
+      }
+      if (event.method === "Log.entryAdded") return [String(event.params.entry.text || "")];
+      return [];
+    });
     // Canvas dimensions arrive before the Godot scene has finished creating
     // its launch/main menu. Wait for the runtime-ready marker so the first
     // Enter key is delivered to an actual menu instead of disappearing during
     // engine startup.
     await waitFor(async () => {
-      const logs = cdp.events.filter((event) => event.method === "Runtime.consoleAPICalled")
-        .flatMap((event) => event.params.args.map((arg) => String(arg.value ?? arg.description ?? "")));
-      return logs.some((line) => line.includes("LOADING: runtime ready total="));
-    }, `${name} Godot runtime readiness`);
-    await cdp.send("Input.dispatchMouseEvent", { type: "mousePressed", x: viewportWidth / 2, y: viewportHeight / 2, button: "left", clickCount: 1 });
-    await cdp.send("Input.dispatchMouseEvent", { type: "mouseReleased", x: viewportWidth / 2, y: viewportHeight / 2, button: "left", clickCount: 1 });
-    const consoleLines = () => cdp.events.filter((event) => event.method === "Runtime.consoleAPICalled")
-      .flatMap((event) => event.params.args.map((arg) => String(arg.value ?? arg.description ?? "")));
-    // The launch-screen accept action starts Greyfen prewarming and disables
-    // New Game until the cached arrival is ready. Do not race that state with
-    // another synthetic Enter key.
-    await cdp.send("Input.dispatchKeyEvent", { type: "keyDown", key: "Enter", code: "Enter", windowsVirtualKeyCode: 13 });
-    await cdp.send("Input.dispatchKeyEvent", { type: "keyUp", key: "Enter", code: "Enter", windowsVirtualKeyCode: 13 });
-    await waitFor(async () => consoleLines().some((line) => line.includes("LOADING: Greyfen prewarmed total=")), `${name} Greyfen prewarm`);
+      return consoleLines().some((line) => line.includes("LOADING: runtime ready total="));
+    }, `${name} Godot runtime readiness`).catch((error) => {
+      throw new Error(`${error.message}; console=${JSON.stringify(consoleLines().slice(-20))}`);
+    });
+    // The visible launch action either starts the desktop prewarm or, on Web,
+    // confirms that New Game may use the bounded active build.
+    await cdp.send("Input.dispatchMouseEvent", { type: "mouseMoved", x: menuInputPoint.x, y: menuInputPoint.y, button: "none" });
+    await cdp.send("Input.dispatchMouseEvent", { type: "mousePressed", x: menuInputPoint.x, y: menuInputPoint.y, button: "left", clickCount: 1 }, 60000);
+    await sleep(70);
+    await cdp.send("Input.dispatchMouseEvent", { type: "mouseReleased", x: menuInputPoint.x, y: menuInputPoint.y, button: "left", clickCount: 1 }, 60000);
+    await waitFor(async () => consoleLines().some((line) =>
+      line.includes("LOADING: Greyfen prewarmed total=")
+      || line.includes("LOADING: Greyfen prewarm deferred for Web")
+    ), `${name} Greyfen readiness`).catch((error) => {
+      throw new Error(`${error.message}; console=${JSON.stringify(consoleLines().slice(-30))}; canvas=${JSON.stringify(canvasDiagnostic)}`);
+    });
     const newGameStarted = Date.now();
-    await cdp.send("Input.dispatchKeyEvent", { type: "keyDown", key: "Enter", code: "Enter", windowsVirtualKeyCode: 13 });
-    await cdp.send("Input.dispatchKeyEvent", { type: "keyUp", key: "Enter", code: "Enter", windowsVirtualKeyCode: 13 });
+    await cdp.send("Input.dispatchMouseEvent", { type: "mouseMoved", x: menuInputPoint.x, y: menuInputPoint.y, button: "none" });
+    await cdp.send("Input.dispatchMouseEvent", { type: "mousePressed", x: menuInputPoint.x, y: menuInputPoint.y, button: "left", clickCount: 1 }, 60000);
+    await sleep(70);
+    await cdp.send("Input.dispatchMouseEvent", { type: "mouseReleased", x: menuInputPoint.x, y: menuInputPoint.y, button: "left", clickCount: 1 }, 60000);
     await waitFor(async () => {
       return consoleLines().some((line) => line.includes("LOADING: zone=greyfen playable_ms="));
-    }, `${name} New Game startup`);
+    }, `${name} New Game startup`).catch((error) => {
+      throw new Error(`${error.message}; console=${JSON.stringify(consoleLines().slice(-30))}`);
+    });
     const newGameReadyMs = Date.now() - newGameStarted;
     if (mobileMode) {
       await waitFor(async () => {

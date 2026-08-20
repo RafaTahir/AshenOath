@@ -61,7 +61,7 @@ static func apply(root: Node, role_id: String) -> Dictionary:
 			var surface_name := str(mesh.mesh.surface_get_name(index)).to_lower() if mesh.mesh is ArrayMesh else ""
 			var material_name := str(source.resource_name).to_lower() if source != null else ""
 			var token := "%s %s %s" % [str(mesh.name).to_lower(), surface_name, material_name]
-			mesh.set_surface_override_material(index, _identity_material(source, _color_for(token, role, profile)))
+			mesh.set_surface_override_material(index, _identity_material(source, _color_for(token, role, profile), role_is_monster_role(role)))
 			surfaces += 1
 			if token.contains("head") or token.contains("skin") or token.contains("eyes") or token.contains("hair") or token.contains("skull") or token.contains("jaw") or token.contains("mouth") or token.contains("teeth"):
 				face_surfaces += 1
@@ -168,7 +168,7 @@ static func _color_for(token: String, role: String, profile: Dictionary) -> Colo
 		return profile.secondary
 	return profile.primary
 
-static func _identity_material(source, color: Color) -> StandardMaterial3D:
+static func _identity_material(source, color: Color, monster := false) -> StandardMaterial3D:
 	var material: StandardMaterial3D
 	if source is StandardMaterial3D:
 		material = source.duplicate() as StandardMaterial3D
@@ -177,7 +177,11 @@ static func _identity_material(source, color: Color) -> StandardMaterial3D:
 	# Preserve the imported face/clothing atlas. Role identity is a restrained
 	# palette wash over the source texture, not a replacement solid color.
 	if material.albedo_texture != null:
-		material.albedo_color = Color.WHITE.lerp(color, 0.10)
+		# The imported Ghoul meshes share a deliberately restrained atlas. A
+		# stronger role wash keeps stalker/raider/brute readable at gameplay
+		# distance while preserving the source texture detail.
+		var wash := 0.42 if monster else 0.10
+		material.albedo_color = Color.WHITE.lerp(color, wash)
 	else:
 		material.albedo_color = color
 	material.roughness = 0.78
@@ -297,6 +301,9 @@ static func _feature_material(color: Color, roughness: float) -> StandardMateria
 	material.shading_mode = BaseMaterial3D.SHADING_MODE_PER_PIXEL
 	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	return material
+
+static func role_is_monster_role(role: String) -> bool:
+	return role in MONSTER_ROLES
 
 static func _add_feature_sphere(parent: Node3D, node_name: String, position: Vector3, scale_value: Vector3, material: Material) -> MeshInstance3D:
 	var node := MeshInstance3D.new()

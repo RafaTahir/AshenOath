@@ -121,11 +121,11 @@
 		"notes": "Connected gaunt cursed-human body for Ghoulkin and Raider profiles."
 	  },
 	  "orc_skull_real": {
-		"status": "char_repair_001",
+		"status": "quarantined_rejected_visual",
 		"path": "res://assets_external/animated/OrcSkull_Animated_CC0.gltf",
 		"source": "Quaternius Ultimate Monsters",
 		"license": "CC0 1.0",
-		"notes": "Existing textured, rigged monster body used for the primary Ghoulkin and Raider silhouettes; no new external asset added."
+		"notes": "Rejected for released Ghoulkin presentation after identical-camera review: oversized cartoon proportions and weak horror identity. Retained only as a quarantined source reference."
 	  },
       "ghoul_stalker_real": {
         "status": "mon_001",
@@ -146,6 +146,20 @@
         "path": "res://assets_external/characters_real/GhoulGaunt_Real.glb",
         "license": "CC0 1.0",
         "notes": "Primary released Ghoulkin family body."
+      },
+      "white_hart_avatar": {
+        "status": "mon_002_connected_animal_runtime",
+        "path": "res://assets_external/enemies/Wolf.fbx",
+        "source": "Quaternius Ultimate Animated Animals",
+        "license": "CC0 1.0",
+        "notes": "Connected animated animal base; spectral antlers are attached to the imported head bone at runtime."
+      },
+      "ashwing_creature": {
+        "status": "mon_002_interim_dragon_mesh",
+        "path": "res://assets_external/enemies/Dragon.fbx",
+        "source": "Quaternius Animated Monsters",
+        "license": "CC0 1.0",
+        "notes": "Interim dragon silhouette for Ashwing. It replaces the incorrect OrcSkull mapping while a skinned flying-drake source is prepared; flight presentation remains controller-driven until that source is available."
       },
       "bog_wretch_creature": {
         "status": "current_asset_available",

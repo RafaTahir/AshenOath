@@ -10,7 +10,15 @@ param(
 $ErrorActionPreference = "Stop"
 $PSNativeCommandUseErrorActionPreference = $false
 $Project = Split-Path -Parent $PSScriptRoot
-$Godot = "C:\Users\User\Downloads\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe"
+$RepoRoot = Resolve-Path (Join-Path $Project "..\..")
+$GodotCandidates = [System.Collections.Generic.List[string]]::new()
+if ($env:GODOT_BIN) { $GodotCandidates.Add($env:GODOT_BIN) }
+$GodotCandidates.Add((Join-Path $RepoRoot "tools\godot\Godot_v4.6.3-stable_win64_console.exe"))
+$GodotCandidates.Add("C:\Users\User\Downloads\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe")
+$Godot = $GodotCandidates | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
+if ([string]::IsNullOrWhiteSpace($Godot)) {
+	$Godot = Get-ChildItem -LiteralPath $env:USERPROFILE -Recurse -Filter "Godot_v4.6.3-stable_win64_console.exe" -File -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName
+}
 $Python = "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe"
 $Node = "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe"
 $Web = Join-Path (Split-Path -Parent $Project) "AshenOath_Web"
@@ -26,14 +34,14 @@ New-Item -ItemType Directory -Force -Path $ReportDirectory | Out-Null
 New-Item -ItemType Directory -Force -Path $QAWeb | Out-Null
 $IsResume = -not [string]::IsNullOrWhiteSpace($ResumeFrom)
 $webTailResume = $IsResume -and $ResumeFrom -eq "verify_web_002_browser"
+$mobileTailResume = $IsResume -and $ResumeFrom -eq "verify_mobile_browser"
 
 if ($IsResume) {
     if (-not (Test-Path -LiteralPath $ReportPath)) {
         throw "Cannot resume without an existing release report: $ReportPath"
     }
     $previousReport = Get-Content -LiteralPath $ReportPath -Raw | ConvertFrom-Json
-    $repoRoot = Split-Path -Parent (Split-Path -Parent $Project)
-    $currentHead = (git -C $repoRoot rev-parse HEAD).Trim()
+	$currentHead = (git -C $RepoRoot rev-parse HEAD).Trim()
     if ($previousReport.source_commit -ne $currentHead) {
         $changedSinceReport = @(git -C $repoRoot diff --name-only "$($previousReport.source_commit)..$currentHead")
         $unsafeResumeChanges = @($changedSinceReport | Where-Object {
@@ -92,7 +100,7 @@ function Add-Result(
 
 function Write-ReleaseReport([string]$Status, [string]$Failure = "") {
     $head = ""
-    try { $head = (git -C (Split-Path -Parent (Split-Path -Parent $Project)) rev-parse HEAD).Trim() } catch {}
+	try { $head = (git -C $RepoRoot rev-parse HEAD).Trim() } catch {}
     $report = [ordered]@{
         schema_version = 1
         status = $Status
@@ -286,12 +294,16 @@ try {
         }
         $qaLogArguments += "--log"
         $qaLogArguments += (Join-Path $Logs "verify_perf_001.log")
-        Invoke-ExternalGate "verify_qa_005" $Python @(
+        # Flatten the log switches into the argument array. Passing the
+        # collection as one nested element makes argparse see the entire list
+        # as a single malformed --log value and masks the real QA result.
+        $qaArguments = @(
             (Join-Path $Project "tools\verify_qa_005.py"),
-            $Project,
-            $qaLogArguments,
+            $Project
+        ) + $qaLogArguments + @(
             "--report", (Join-Path $Logs "qa_005_report.json")
         )
+        Invoke-ExternalGate "verify_qa_005" $Python $qaArguments
     }
     if ((-not $IsResume -or $resumeFromVerifier -or $resumeFromPerformance -or $resumeFromScreenshot) -and [string]::IsNullOrWhiteSpace($Only) -and -not $SkipScreenshots) {
         $captureReached = -not $resumeFromScreenshot
@@ -338,7 +350,7 @@ try {
         )
     }
 
-    if ([string]::IsNullOrWhiteSpace($Only) -and -not $SkipExport -and -not $webTailResume) {
+    if ([string]::IsNullOrWhiteSpace($Only) -and -not $SkipExport -and -not $webTailResume -and -not $mobileTailResume) {
         Invoke-ExternalGate "verify_web_001" $Python @(
             (Join-Path $Project "tools\verify_web_001.py"),
             $Project,
@@ -355,7 +367,11 @@ try {
         )
         $pack = Join-Path $Web "index.pck"
         Invoke-GodotGate "packed_startup" @(
-            "--headless", "--path", $Web, "--main-pack", $pack, "--quit-after", "5"
+            # The exported folder is an artifact, not a Godot project. Start the
+            # packed game with the source project context so remapped resources
+            # and the PCK are resolved consistently in CI and locally.
+            "--headless", "--path", $Project, "--main-pack", $pack,
+            "--script", "tools/verify_packed_startup.gd"
         )
         Invoke-ExternalGate "verify_web_browser" $Node @(
             (Join-Path $Project "tools\verify_web_browser.mjs"),
@@ -394,6 +410,32 @@ try {
 		# The package and all preceding browser gates are already recorded in the
 		# release report. Resume only the failed full-campaign browser gate and
 		# its mobile companion against the verified QA export.
+		Invoke-ExternalGate "verify_web_002_browser" $Node @(
+			(Join-Path $Project "tools\verify_qa_002_browser.mjs"),
+			"--export", $QAWeb,
+			"--browser", "all",
+			"--full-campaign", "true",
+			"--report", (Join-Path $Logs "web_002_browser.json")
+		)
+		Invoke-ExternalGate "verify_web_002_mobile" $Node @(
+			(Join-Path $Project "tools\verify_qa_002_browser.mjs"),
+			"--export", $QAWeb,
+			"--browser", "all",
+			"--full-campaign", "true",
+			"--mobile", "true",
+			"--report", (Join-Path $Logs "web_002_mobile.json")
+		)
+	}
+	if ([string]::IsNullOrWhiteSpace($Only) -and -not $SkipExport -and $mobileTailResume) {
+		# Desktop Web and export gates already passed in the prior report. Resume
+		# at the corrected mobile smoke gate, then continue through the campaign
+		# browser checks against the existing verified QA export.
+		Invoke-ExternalGate "verify_mobile_browser" $Node @(
+			(Join-Path $Project "tools\verify_web_browser.mjs"),
+			"--export", $Web,
+			"--report", (Join-Path $Logs "mobile_browser.json"),
+			"--mobile", "true"
+		)
 		Invoke-ExternalGate "verify_web_002_browser" $Node @(
 			(Join-Path $Project "tools\verify_qa_002_browser.mjs"),
 			"--export", $QAWeb,

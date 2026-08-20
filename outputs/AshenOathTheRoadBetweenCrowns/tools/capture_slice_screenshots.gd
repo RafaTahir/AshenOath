@@ -301,7 +301,10 @@ func _capture_anwen_approach(game, file_name: String) -> void:
 		return
 	var to_player: Vector3 = game.player.global_position - sister.global_position
 	to_player.y = 0.0
-	var visible_forward: Vector3 = sister.global_basis.z
+	# Route-visible humanoids use the gameplay-facing -Z contract. Checking the
+	# source +Z basis here inverted the result and rejected a correctly staged
+	# Anwen even though the rendered body was facing Kael.
+	var visible_forward: Vector3 = -sister.global_basis.z
 	visible_forward.y = 0.0
 	if visible_forward.normalized().dot(to_player.normalized()) < 0.90:
 		push_error("Anwen is not visibly facing Kael in approach capture")

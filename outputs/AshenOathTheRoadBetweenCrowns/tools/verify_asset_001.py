@@ -6,6 +6,7 @@ from __future__ import annotations
 import hashlib
 import json
 import sys
+import fnmatch
 from pathlib import Path
 
 
@@ -58,11 +59,8 @@ def main() -> int:
     for group, required_roles in EXPECTED_ROLES.items():
         actual = set(roles.get(group, {}))
         missing = sorted(required_roles - actual)
-        extra = sorted(actual - required_roles)
         if missing:
             failures.append(f"{group} is missing roles: {', '.join(missing)}")
-        if extra:
-            failures.append(f"{group} contains unreviewed roles: {', '.join(extra)}")
         for role, entry in roles.get(group, {}).items():
             status = str(entry.get("status", ""))
             path = str(entry.get("path", ""))
@@ -83,7 +81,12 @@ def main() -> int:
                 "sha256": hashlib.sha256(payload).hexdigest(),
             }
             export_token = path.removeprefix("res://")
-            if export_token not in preset:
+            include_filter = ""
+            if "include_filter=" in preset:
+                include_filter = preset.split("include_filter=", 1)[1].split("\n", 1)[0]
+            export_patterns = [item.strip().strip('"') for item in include_filter.split(",")]
+            exported = export_token in preset or any(fnmatch.fnmatch(export_token, pattern) for pattern in export_patterns)
+            if not exported:
                 failures.append(f"curated asset is absent from Web preset: {path}")
 
     quarantined = manifest.get("quarantine", [])

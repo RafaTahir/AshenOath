@@ -93,6 +93,11 @@ func _process(delta: float) -> void:
 			target_yaw = base_yaw + sin(phase * 0.22) * 0.45
 	attention_hold = max(attention_hold - delta, 0.0)
 	var turn_weight = turn_speed * (1.2 if attention_hold > 0.0 else 0.65)
+	# Anwen is a conversation anchor, not a passerby. Once Kael enters her
+	# focus radius she should settle to a readable player-facing pose within a
+	# few frames, rather than visibly looking past him during approach.
+	if role_id == "sister_anwen" and attention_hold > 0.0:
+		turn_weight = 8.5
 	parent_3d.rotation_degrees.y = lerp_angle(deg_to_rad(parent_3d.rotation_degrees.y), deg_to_rad(target_yaw), turn_weight * delta) * 180.0 / PI
 	parent_3d.position.y = base_y + sin(phase) * bob_amount + sin(phase * 0.37) * breathe_amount
 

@@ -271,6 +271,8 @@ func _build_bell_and_shrine(context: ZoneBuildContext, origin: Vector3) -> void:
 	bell_mesh.radial_segments = 12
 	bell.mesh = bell_mesh
 	bell.position = origin + Vector3(1.75, 1.75, 1.08)
+	if bool(context.get_story_flag("cemetery_bell_silent", false)):
+		bell.rotation.z = -0.20
 	bell.material_override = context.make_material(Color(0.30, 0.235, 0.13))
 	bell.set_meta("world_prop_kind", "bell")
 	bell.set_meta("world_prop_id", "cemetery_bell")
@@ -279,7 +281,13 @@ func _build_bell_and_shrine(context: ZoneBuildContext, origin: Vector3) -> void:
 	# The shrine is readable from the entrance but stays clear of the grave clues.
 	context.make_prop_box("CemeteryCrowShrine", origin + Vector3(2.05, 0.72, -2.92), Vector3(0.58, 1.44, 0.38), Color(0.23, 0.235, 0.215))
 	context.make_visual_box("CrowShrineMark", origin + Vector3(2.05, 0.90, -3.13), Vector3(0.24, 0.42, 0.025), Color(0.045, 0.042, 0.038))
-	context.make_light("CemeteryChapelGlow", origin + Vector3(2.55, 2.2, -0.55), Color(0.46, 0.60, 0.50), 1.15)
+	var shrine_state := str(context.get_story_flag("crow_shrine_state", ""))
+	var chapel_color := Color(0.46, 0.60, 0.50)
+	if shrine_state == "disturbed":
+		chapel_color = Color(0.62, 0.34, 0.25)
+	elif shrine_state == "bound":
+		chapel_color = Color(0.30, 0.35, 0.40)
+	context.make_light("CemeteryChapelGlow", origin + Vector3(2.55, 2.2, -0.55), chapel_color, 1.15)
 
 
 func _build_edge_dressing(context: ZoneBuildContext, origin: Vector3) -> void:

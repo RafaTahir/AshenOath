@@ -18,6 +18,7 @@ var _panel: MeshInstance3D
 var _ring: MeshInstance3D
 var _arch_parts: Array[MeshInstance3D] = []
 var _motes: Array[MeshInstance3D] = []
+var _veil_layers: Array[MeshInstance3D] = []
 var _panel_material: StandardMaterial3D
 var _ring_material: StandardMaterial3D
 var _mote_material: StandardMaterial3D
@@ -126,6 +127,10 @@ func _process(delta: float) -> void:
 	if _panel != null:
 		_panel.position.z = sin(_time * 0.9) * 0.018
 		_panel.scale.y = 1.0 + sin(_time * 1.4) * 0.012
+	for index in _veil_layers.size():
+		var veil := _veil_layers[index]
+		veil.position.x = sin(_time * (0.45 + index * 0.12)) * 0.035
+		veil.scale.x = 1.0 + sin(_time * (0.72 + index * 0.16) + index) * 0.035
 	for index in _motes.size():
 		var mote := _motes[index]
 		var base := float(index) * 1.73
@@ -161,6 +166,20 @@ func _build_visuals() -> void:
 		arch.material_override = stone
 		add_child(arch)
 		_arch_parts.append(arch)
+	# Short stone voussoirs turn the flat lintel into a readable, walk-through
+	# arch. They are visual only; the Interactable owns the travel collision.
+	for index in range(7):
+		var arch_angle := deg_to_rad(180.0 - float(index) * 30.0)
+		var voussoir := MeshInstance3D.new()
+		voussoir.name = "OathGateVoussoir_%02d" % index
+		var voussoir_mesh := BoxMesh.new()
+		voussoir_mesh.size = Vector3(0.40, 0.34, 0.42)
+		voussoir.mesh = voussoir_mesh
+		voussoir.position = Vector3(cos(arch_angle) * 0.92, 1.28 + sin(arch_angle) * 1.02, 0.0)
+		voussoir.rotation.z = -arch_angle + PI * 0.5
+		voussoir.material_override = edge
+		add_child(voussoir)
+		_arch_parts.append(voussoir)
 
 	_panel = MeshInstance3D.new()
 	_panel.name = "OathGateBlackGlass"
@@ -175,6 +194,24 @@ func _build_visuals() -> void:
 	_panel_material.roughness = 0.25
 	_panel.material_override = _panel_material
 	add_child(_panel)
+	for layer_index in range(2):
+		var veil := MeshInstance3D.new()
+		veil.name = "OathGateVeil_%02d" % layer_index
+		var veil_mesh := QuadMesh.new()
+		veil_mesh.size = Vector2(1.48 - layer_index * 0.16, 1.82 - layer_index * 0.16)
+		veil.mesh = veil_mesh
+		veil.position = Vector3(0.0, 1.12, -0.012 - layer_index * 0.012)
+		var veil_material := StandardMaterial3D.new()
+		veil_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+		veil_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		veil_material.cull_mode = BaseMaterial3D.CULL_DISABLED
+		veil_material.albedo_color = Color(0.04, 0.10, 0.12, 0.14 - layer_index * 0.035)
+		veil_material.emission_enabled = true
+		veil_material.emission = Color(0.08, 0.24, 0.25)
+		veil_material.emission_energy_multiplier = 0.34
+		veil.material_override = veil_material
+		add_child(veil)
+		_veil_layers.append(veil)
 
 	_ring = MeshInstance3D.new()
 	_ring.name = "OathGateRunicEdge"
@@ -190,6 +227,14 @@ func _build_visuals() -> void:
 	_ring_material.emission_energy_multiplier = 1.3
 	_ring.material_override = _ring_material
 	add_child(_ring)
+	var threshold := MeshInstance3D.new()
+	threshold.name = "OathGateThresholdStone"
+	var threshold_mesh := BoxMesh.new()
+	threshold_mesh.size = Vector3(2.05, 0.10, 0.52)
+	threshold.mesh = threshold_mesh
+	threshold.position = Vector3(0.0, 0.05, 0.15)
+	threshold.material_override = edge
+	add_child(threshold)
 
 	_mote_material = StandardMaterial3D.new()
 	_mote_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
@@ -198,6 +243,8 @@ func _build_visuals() -> void:
 	var mote_mesh := SphereMesh.new()
 	mote_mesh.radius = 0.035
 	mote_mesh.height = 0.07
+	mote_mesh.radial_segments = 5
+	mote_mesh.rings = 3
 	for index in 7:
 		var mote := MeshInstance3D.new()
 		mote.name = "OathGateAshMote_%02d" % index

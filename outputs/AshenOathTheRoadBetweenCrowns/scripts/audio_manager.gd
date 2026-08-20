@@ -479,6 +479,10 @@ func _build_library() -> void:
 	sounds["portal_ready"] = _tone_mix([196.0, 294.0, 441.0], 0.32, 0.11, 54.0, 0.008)
 	sounds["portal_travel"] = _tone_mix([92.0, 184.0, 368.0], 0.38, 0.16, 96.0, 0.014)
 	sounds["portal_error"] = _tone_mix([72.0, 54.0], 0.24, 0.10, -28.0, 0.012)
+	# Build every authored music identity up front. Zone transitions and
+	# verification must see the same complete library before the first state
+	# change; lazy creation alone made later campaign zones appear unconfigured.
+	_build_music_library()
 
 func _build_recorded_library() -> void:
 	var root_path := "res://assets_external/audio/rpg/"
@@ -567,7 +571,7 @@ func _load_scratch_voice_library() -> void:
 				voices[voice_id] = stream
 
 func _build_music_library() -> void:
-	for state_id in ["main_menu", "greyfen_explore", "shrine_anwen", "wychwood_tension", "ghoulkin_combat", "return_report", "castle_silence", "deep_wood", "ash_mill", "marsh_crossing", "bandit_road", "record_hall", "undercroft", "assembly", "hart_glade"]:
+	for state_id in ["main_menu", "greyfen_explore", "shrine_anwen", "wychwood_tension", "ghoulkin_combat", "return_report", "castle_silence", "deep_wood", "ash_mill", "marsh_crossing", "bandit_road", "record_hall", "undercroft", "assembly", "hart_glade", "boss_bell_eater", "boss_rootbound_colossus", "boss_ashwing", "boss_halvern_boss", "boss_white_hart_avatar"]:
 		_build_music_state(state_id)
 
 func _build_music_state(state_id: String) -> void:
@@ -587,6 +591,11 @@ func _build_music_state(state_id: String) -> void:
 		"undercroft": music[state_id] = _music_loop([38.0, 57.0, 76.0], 7.4, 0.050, 0.016)
 		"assembly": music[state_id] = _music_loop([69.0, 103.5, 138.0, 207.0], 6.6, 0.048, 0.007)
 		"hart_glade": music[state_id] = _music_loop([77.0, 115.5, 154.0, 231.0], 7.2, 0.052, 0.010)
+		"boss_bell_eater": music[state_id] = _music_loop([43.0, 57.0, 86.0, 129.0], 4.1, 0.108, 0.024)
+		"boss_rootbound_colossus": music[state_id] = _music_loop([38.0, 51.0, 76.0, 114.0], 4.8, 0.102, 0.030)
+		"boss_ashwing": music[state_id] = _music_loop([49.0, 73.0, 98.0, 147.0], 3.9, 0.112, 0.026)
+		"boss_halvern_boss": music[state_id] = _music_loop([61.0, 91.0, 122.0, 183.0], 4.4, 0.088, 0.012)
+		"boss_white_hart_avatar": music[state_id] = _music_loop([55.0, 82.0, 110.0, 165.0], 5.0, 0.082, 0.020)
 
 func _ambient_stream(zone_id: String) -> AudioStreamWAV:
 	if not ambient_streams.has(zone_id):
@@ -638,6 +647,8 @@ func _volume_for(event_name: String) -> float:
 	return -9.0
 
 func _music_volume_for(state_id: String) -> float:
+	if state_id.begins_with("boss_"):
+		return -12.5
 	if state_id == "ghoulkin_combat":
 		return -11.0
 	if state_id == "shrine_anwen":

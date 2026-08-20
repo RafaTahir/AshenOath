@@ -42,7 +42,7 @@ func _build_undercroft(context: ZoneBuildContext) -> void:
 	context.make_light("UndercroftWitnessLight", Vector3(0, 4.5, -7), Color(0.38, 0.45, 0.58), 2.6)
 	context.make_named_interactable("halvern", "dialogue", "Speak to Sir Halvern", Vector3(0, 0, -9), Color(0.42, 0.43, 0.48))
 	if context.is_quest_active("main_last_witness") and not context.is_objective_done("main_last_witness", "break_halvern_guard"):
-		var guardian = context.spawn_enemy("gravebound_knight", Vector3(0, 0.8, -5.5))
+		var guardian = context.spawn_enemy("halvern_boss", Vector3(0, 0.8, -5.5))
 		if guardian != null:
 			guardian.name = "HalvernGuard"
 			guardian.leash_radius = 8.0
@@ -100,6 +100,21 @@ func _make_hart_grove(context: ZoneBuildContext) -> void:
 	plinth.position = Vector3(0, 0.12, -9)
 	plinth.material_override = context.make_material(Color(0.20, 0.26, 0.22))
 	context.add_node(plinth)
+	var halo := MeshInstance3D.new()
+	halo.name = "WhiteHartMemoryHalo"
+	var halo_mesh := TorusMesh.new()
+	halo_mesh.inner_radius = 2.55
+	halo_mesh.outer_radius = 2.70
+	halo_mesh.rings = 32
+	halo_mesh.ring_segments = 8
+	halo.mesh = halo_mesh
+	halo.position = Vector3(0, 0.28, -9)
+	var halo_material := context.make_material(Color(0.28, 0.72, 0.54))
+	halo_material.emission_enabled = true
+	halo_material.emission = Color(0.12, 0.52, 0.34)
+	halo_material.emission_energy_multiplier = 0.70
+	halo.material_override = halo_material
+	context.add_node(halo)
 	for index in range(8):
 		var angle := TAU * float(index) / 8.0
 		var stone := MeshInstance3D.new()
@@ -116,34 +131,86 @@ func _make_hart_grove(context: ZoneBuildContext) -> void:
 		context.add_node(stone)
 
 func _make_hart_witness(context: ZoneBuildContext) -> void:
-	# Display-only focal actor for the glade. The ending resolver still owns
-	# combat spawning, so this does not change the encounter state machine.
-	var root := Node3D.new()
+	# The finale landmark uses the same connected animated animal source as the
+	# encounter body. The antler crown is attached to the imported head bone so
+	# it follows the idle/walk skeleton instead of floating beside the creature.
+	var root: Node3D = context.make_visual_role("white_hart_avatar", "enemies", Vector3(0, 0, -9), Vector3.ONE * 1.48, 180.0) as Node3D
+	if root == null:
+		return
 	root.name = "WhiteHartWitnessDisplay"
-	root.position = Vector3(0, 0, -9)
-	context.add_node(root)
-	var body_material := context.make_material(Color(0.22, 0.30, 0.25))
-	var shadow_material := context.make_material(Color(0.075, 0.105, 0.090))
-	var antler_material := context.make_material(Color(0.26, 0.18, 0.10))
-	_add_hart_part(root, "HartBody", SphereMesh.new(), Vector3(0, 1.18, 0.12), Vector3(1.30, 0.72, 1.56), body_material)
-	_add_hart_part(root, "HartNeck", CapsuleMesh.new(), Vector3(0, 1.94, -0.42), Vector3(0.66, 1.02, 0.72), body_material, Vector3(-24, 0, 0))
-	_add_hart_part(root, "HartHead", SphereMesh.new(), Vector3(0, 2.48, -0.86), Vector3(0.58, 0.50, 0.78), body_material)
-	_add_hart_part(root, "HartMuzzle", SphereMesh.new(), Vector3(0, 2.32, -1.18), Vector3(0.34, 0.25, 0.42), shadow_material)
-	_add_hart_part(root, "HartMane", SphereMesh.new(), Vector3(0, 2.02, -0.30), Vector3(0.46, 0.78, 0.34), shadow_material)
-	_add_hart_part(root, "HartEar", SphereMesh.new(), Vector3(-0.32, 2.68, -0.72), Vector3(0.20, 0.10, 0.30), shadow_material, Vector3(0, 0, -18))
-	_add_hart_part(root, "HartEar", SphereMesh.new(), Vector3(0.32, 2.68, -0.72), Vector3(0.20, 0.10, 0.30), shadow_material, Vector3(0, 0, 18))
+	_add_hart_antler_crown(root, context)
+
+func _add_hart_antler_crown(root: Node3D, context: ZoneBuildContext) -> void:
+	var skeleton := _find_skeleton(root)
+	var parent: Node3D = root
+	if skeleton != null:
+		var attachment := BoneAttachment3D.new()
+		attachment.name = "WhiteHartWitnessAntlerAttachment"
+		attachment.bone_name = "Bone.003"
+		skeleton.add_child(attachment)
+		parent = attachment
+		# Match the imported animal body without inheriting its oversized head
+		# bone scale. The crown remains bone-attached and follows the head.
+		var root_scale := root.global_transform.basis.get_scale()
+		var attachment_scale := attachment.global_transform.basis.get_scale()
+		var crown_root := Node3D.new()
+		crown_root.name = "WhiteHartWitnessAntlerScaleCompensation"
+		crown_root.scale = Vector3(
+			_safe_inverse_scale(_safe_scale_ratio(attachment_scale.x, root_scale.x)),
+			_safe_inverse_scale(_safe_scale_ratio(attachment_scale.y, root_scale.y)),
+			_safe_inverse_scale(_safe_scale_ratio(attachment_scale.z, root_scale.z))
+		)
+		parent.add_child(crown_root)
+		parent = crown_root
+	var antler_material := context.make_material(Color(0.58, 0.48, 0.30))
+	antler_material.emission_enabled = true
+	antler_material.emission = Color(0.20, 0.48, 0.34)
+	antler_material.emission_energy_multiplier = 0.42
 	for side in [-1.0, 1.0]:
-		for z in [-0.34, 0.34]:
-			_add_hart_part(root, "HartLeg", CylinderMesh.new(), Vector3(side * 0.38, 0.52, z), Vector3(0.22, 0.92, 0.22), shadow_material)
-		_add_hart_part(root, "HartAntlerMain", CylinderMesh.new(), Vector3(side * 0.25, 2.92, -0.76), Vector3(0.13, 0.92, 0.13), antler_material, Vector3(0, 0, side * -18.0))
-		_add_hart_part(root, "HartAntlerBranch", CylinderMesh.new(), Vector3(side * 0.48, 3.26, -0.76), Vector3(0.09, 0.54, 0.09), antler_material, Vector3(0, 0, side * 34.0))
-	var eye_material := context.make_material(Color(0.48, 0.92, 0.72))
-	eye_material.emission_enabled = true
-	eye_material.emission = Color(0.18, 0.72, 0.46)
-	eye_material.emission_energy_multiplier = 1.8
-	for side in [-1.0, 1.0]:
-		_add_hart_part(root, "HartEye", SphereMesh.new(), Vector3(side * 0.17, 2.52, -1.22), Vector3(0.075, 0.075, 0.075), eye_material)
-	_add_hart_part(root, "HartSigilLight", SphereMesh.new(), Vector3(0, 1.42, -0.54), Vector3(0.13, 0.13, 0.13), eye_material)
+		var main := MeshInstance3D.new()
+		main.name = "HartWitnessAntlerMain"
+		var main_mesh := CylinderMesh.new()
+		main_mesh.top_radius = 0.025
+		main_mesh.bottom_radius = 0.055
+		main_mesh.height = 0.58
+		main_mesh.radial_segments = 8
+		main.mesh = main_mesh
+		main.position = Vector3(side * 0.14, 0.20, 0.01)
+		main.rotation_degrees.z = side * -20.0
+		main.material_override = antler_material
+		parent.add_child(main)
+		for branch_index in range(2):
+			var branch := MeshInstance3D.new()
+			branch.name = "HartWitnessAntlerBranch"
+			var branch_mesh := CylinderMesh.new()
+			branch_mesh.top_radius = 0.014
+			branch_mesh.bottom_radius = 0.035
+			branch_mesh.height = 0.26 if branch_index == 0 else 0.20
+			branch_mesh.radial_segments = 8
+			branch.mesh = branch_mesh
+			branch.position = Vector3(side * (0.25 + branch_index * 0.045), 0.34 + branch_index * 0.13, 0.01)
+			branch.rotation_degrees.z = side * (42.0 if branch_index == 0 else -36.0)
+			branch.material_override = antler_material
+			parent.add_child(branch)
+
+func _find_skeleton(root: Node) -> Skeleton3D:
+	if root is Skeleton3D:
+		return root as Skeleton3D
+	for child in root.get_children():
+		var found := _find_skeleton(child)
+		if found != null:
+			return found
+	return null
+
+func _safe_scale_ratio(value: float, divisor: float) -> float:
+	if absf(divisor) < 0.0001:
+		return 1.0
+	return value / divisor
+
+func _safe_inverse_scale(value: float) -> float:
+	if absf(value) < 0.0001:
+		return 1.0
+	return 1.0 / value
 
 func _add_hart_part(parent: Node3D, node_name: String, mesh: Mesh, position: Vector3, scale_value: Vector3, material: Material, rotation_degrees := Vector3.ZERO) -> void:
 	var node := MeshInstance3D.new()

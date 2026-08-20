@@ -2,17 +2,19 @@ extends SceneTree
 
 const CharacterVisualContract = preload("res://scripts/character_visual_contract.gd")
 const CharacterIdentityProfile = preload("res://scripts/character_identity_profile.gd")
+const AssetSpawnHelper = preload("res://scripts/asset_spawn_helper.gd")
 
 const ROLES := {
-	"kael":"res://assets_external/characters/Adventurer_PolyPizza_Quaternius_CC0.glb",
-	"sister_anwen":"res://assets_external/characters/AnimatedWoman_PolyPizza_Quaternius_CC0.glb",
-	"villager_male":"res://assets_external/characters/Adventurer_PolyPizza_Quaternius_CC0.glb",
-	"villager_female":"res://assets_external/characters/WomanCasual_PolyPizza_Quaternius_CC0.glb",
-	"castle_guard":"res://assets_external/characters/CharacterAnimated_PolyPizza_Quaternius_CC0.glb",
-	"road_ranger":"res://assets_external/characters/CharacterAnimated_PolyPizza_Quaternius_CC0.glb",
-	"ghoul_gaunt":"res://assets_external/animated/OrcSkull_Animated_CC0.gltf",
-	"ghoul_stalker":"res://assets_external/characters_real/GhoulStalker_Real.glb",
-	"ghoul_brute":"res://assets_external/characters_real/GhoulBrute_Real.glb"
+	"kael":"player_human",
+	"sister_anwen":"sister_anwen_human",
+	"villager_male":"villager_human",
+	"villager_female":"villager_female_human",
+	"castle_guard":"castle_guard_human",
+	"road_ranger":"road_ranger_human",
+	"ghoul_gaunt":"ghoulkin_creature",
+	"ghoul_stalker":"ghoul_stalker_real",
+	"ghoul_brute":"ghoul_brute_real",
+	"ashwing":"ashwing_creature"
 }
 
 func _initialize() -> void:
@@ -41,19 +43,47 @@ func _initialize() -> void:
 	stage.add_child(camera)
 	var gallery := "res://Development_Gallery/screenshots"
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(gallery))
+	var helper := AssetSpawnHelper.new()
+	helper.name = "PortraitAssetSpawnHelper"
+	stage.add_child(helper)
+	await process_frame
 	for role in ROLES:
-		var scene = load(ROLES[role])
-		var character = scene.instantiate()
+		var visual_role: String = str(ROLES[role])
+		var category := "enemies" if visual_role in ["ghoulkin_creature", "ghoul_stalker_real", "ghoul_brute_real", "ashwing_creature"] else "characters"
+		var character := helper.spawn_visual_role(visual_role, category)
+		if character == null:
+			push_error("Unable to spawn runtime portrait role: %s" % visual_role)
+			continue
 		character.name = "CHARACTER_REAL_%s" % role
 		stage.add_child(character)
 		await process_frame
+		if category == "characters":
+			# Runtime third-person characters face gameplay -Z; the portrait camera
+			# looks from +Z, so rotate the composed actor for a front-facing proof.
+			character.rotate_y(PI)
+		if role == "ashwing":
+			camera.position = Vector3(0.0, 1.80, 8.0)
+			camera.look_at_from_position(camera.position, Vector3(0.0, 1.55, 0.0), Vector3.UP)
+		else:
+			camera.position = Vector3(0.0, 1.18, 3.4)
+			camera.look_at_from_position(camera.position, Vector3(0.0, 1.03, 0.0), Vector3.UP)
 		CharacterVisualContract.remove_proxy_anatomy(character)
 		CharacterIdentityProfile.apply(character, _identity_role(role))
 		await process_frame
 		_normalize_character(character)
+		var skeleton := character.find_child("Skeleton3D", true, false) as Skeleton3D
+		var animation_players := character.find_children("*", "AnimationPlayer", true, false)
+		print("PORTRAIT_ROLE ", role, " skeleton_bones=", skeleton.get_bone_count() if skeleton != null else 0, " animation_players=", animation_players.size())
+		for animation_player in animation_players:
+			print("PORTRAIT_ANIMATIONS ", role, " ", (animation_player as AnimationPlayer).get_animation_list())
 		_play_idle(character)
 		await _frames(8)
-		var image := root.get_texture().get_image()
+		var viewport_texture := root.get_texture()
+		if viewport_texture == null:
+			push_error("Character portrait capture requires a graphical renderer; no viewport texture is available in headless mode.")
+			quit(2)
+			return
+		var image := viewport_texture.get_image()
 		var path := "%s/CHARACTER_REAL_001_%s.png" % [gallery,role]
 		image.save_png(path)
 		print("CAPTURED ",path)
@@ -80,7 +110,10 @@ func _play_idle(character: Node) -> void:
 	var player := character.find_child("AnimationPlayer", true, false) as AnimationPlayer
 	if player == null:
 		return
-	var candidates := ["idle", "standing", "rest", "skeletonidle"]
+	# The Ghoul family has a second authored idle on the Stalker and Brute
+	# rigs; prefer it so portrait evidence does not freeze every variant in the
+	# same arms-out presentation. Human and dragon roles fall through cleanly.
+	var candidates := ["idle2", "idle", "flying", "standing", "rest", "skeletonidle"]
 	var selected := StringName()
 	for animation_name in player.get_animation_list():
 		var key := str(animation_name).to_lower().replace(" ", "").replace("_", "").replace("-", "").replace("|", "")
@@ -92,6 +125,8 @@ func _play_idle(character: Node) -> void:
 			break
 	if selected != StringName():
 		player.play(selected)
+	else:
+		push_warning("No idle-compatible clip for portrait role; animation list=%s" % [player.get_animation_list()])
 
 func _frames(count: int) -> void:
 	for i in range(count):

@@ -17,7 +17,7 @@ signal dialogue_closed
 signal menu_hovered
 signal menu_clicked
 
-const MENU_BUILD_LABEL = "RECOVERY-004 FOUNDATION | WEB-002 CANDIDATE | NATIVE 720P | ASHENOATH.VERCEL.APP"
+const MENU_BUILD_LABEL = "SOUL REBUILD | RELEASE-003 | NATIVE 720P | ASHENOATH.VERCEL.APP"
 const MENU_SIZE = Vector2(1920.0, 1080.0)
 const GAMEPLAY_SIZE = Vector2i(1280, 720)
 const SAVE_PATH = "user://ashen_oath_save.json"
@@ -77,9 +77,13 @@ var raw_hint := ""
 var last_potions := 0
 var last_bombs := 0
 var last_oil_name := ""
+var toasts_suppressed := false
 var reduced_motion := false
 var high_contrast := false
 var new_game_ready := true
+var hud_root: Control
+var tracker_back: Control
+var compass_back: Control
 
 func _ready() -> void:
 	_build_hud()
@@ -88,6 +92,9 @@ func _ready() -> void:
 	_build_inventory()
 	_build_loading_layer()
 	_apply_theme()
+	if not get_viewport().size_changed.is_connected(_on_viewport_resized):
+		get_viewport().size_changed.connect(_on_viewport_resized)
+	_apply_hud_layout()
 	set_process(true)
 
 func _process(delta: float) -> void:
@@ -423,6 +430,8 @@ func set_compass(text: String) -> void:
 	compass_label.text = text.replace(" | ", "   •   ")
 
 func toast(text: String) -> void:
+	if toasts_suppressed:
+		return
 	toast_label.text = text
 	toast_label.visible = true
 	if toast_tween != null and toast_tween.is_running():
@@ -435,6 +444,15 @@ func toast(text: String) -> void:
 		toast_label.visible = false
 		toast_label.modulate = Color(1, 1, 1, 1)
 	)
+
+func set_toasts_suppressed(suppressed: bool) -> void:
+	toasts_suppressed = suppressed
+	if not suppressed or toast_label == null:
+		return
+	if toast_tween != null and toast_tween.is_running():
+		toast_tween.kill()
+	toast_label.visible = false
+	toast_label.modulate = Color(1, 1, 1, 1)
 
 func set_guidance_hint(text: String, seconds: float = 4.5) -> void:
 	raw_hint = text
@@ -653,7 +671,8 @@ func show_death_screen(body: String) -> void:
 	_add_menu_button(box, "Return to Main Menu", func(): show_main_menu())
 
 func _build_hud() -> void:
-	var root = Control.new()
+	hud_root = Control.new()
+	var root := hud_root
 	root.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(root)
 	var shade = ColorRect.new()
@@ -722,7 +741,7 @@ func _build_hud() -> void:
 	prompt_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	prompt_label.visible = false
 	root.add_child(prompt_label)
-	var tracker_back = ColorRect.new()
+	tracker_back = ColorRect.new()
 	tracker_back.name = "QuestTrackerBackdrop"
 	tracker_back.position = Vector2(964, 14)
 	tracker_back.size = Vector2(300, 84)
@@ -736,7 +755,7 @@ func _build_hud() -> void:
 	tracker_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	tracker_label.clip_text = true
 	root.add_child(tracker_label)
-	var compass_back = ColorRect.new()
+	compass_back = ColorRect.new()
 	compass_back.name = "CompassBackdrop"
 	compass_back.position = Vector2(380, 14)
 	compass_back.size = Vector2(520, 28)
@@ -767,6 +786,45 @@ func _build_hud() -> void:
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	status_label.visible = false
 	root.add_child(status_label)
+
+func _on_viewport_resized() -> void:
+	call_deferred("_apply_hud_layout")
+
+func _apply_hud_layout() -> void:
+	if hud_root == null or get_viewport() == null:
+		return
+	var viewport_size := get_viewport().get_visible_rect().size
+	if viewport_size.x < 320.0 or viewport_size.y < 240.0:
+		return
+	var center_x := viewport_size.x * 0.5
+	if tracker_back != null:
+		tracker_back.position = Vector2(maxf(viewport_size.x - 316.0, 12.0), 14.0)
+	if tracker_label != null:
+		tracker_label.position = Vector2(maxf(viewport_size.x - 304.0, 24.0), 21.0)
+	if compass_back != null:
+		compass_back.position = Vector2(center_x - 260.0, 14.0)
+	if compass_label != null:
+		compass_label.position = Vector2(center_x - 260.0, 16.0)
+	if enemy_label != null:
+		enemy_label.position = Vector2(center_x - 166.0, 44.0)
+	if enemy_bar != null:
+		enemy_bar.position = Vector2(center_x - 140.0, 75.0)
+	if enemy_value_label != null:
+		enemy_value_label.position = Vector2(center_x + 172.0, 71.0)
+	if target_status_label != null:
+		target_status_label.position = Vector2(center_x - 166.0, 98.0)
+	if prompt_label != null:
+		prompt_label.position = Vector2(center_x - 250.0, maxf(viewport_size.y - 60.0, 170.0))
+	if hint_label != null:
+		hint_label.position = Vector2(center_x - 210.0, 82.0)
+	if status_label != null:
+		status_label.position = Vector2(center_x - 170.0, maxf(viewport_size.y - 118.0, 220.0))
+	if toast_label != null:
+		toast_label.position = Vector2(22.0, maxf(viewport_size.y - 94.0, 170.0))
+	if dialogue_layer != null:
+		dialogue_layer.position = Vector2(maxf((viewport_size.x - 840.0) * 0.5, 20.0), maxf(viewport_size.y - 246.0, 110.0))
+	if inventory_layer != null:
+		inventory_layer.position = Vector2(maxf((viewport_size.x - 996.0) * 0.5, 20.0), maxf((viewport_size.y - 584.0) * 0.5, 20.0))
 
 func _build_menu_layer() -> void:
 	menu_layer = Control.new()

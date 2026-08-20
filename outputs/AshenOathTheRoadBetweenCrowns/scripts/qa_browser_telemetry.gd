@@ -207,17 +207,18 @@ func _poll_command() -> void:
 			if gate == null:
 				_command_result.error = "gate not found"
 				return
-			# Use the same authored approach anchor as runtime arrivals. A broad
-			# nearest-safe search can choose a distant road anchor when the gate
-			# itself is beside a reserved corridor, leaving browser QA too far from
-			# the focus radius to prove real E interaction.
-			var candidate := gate.global_position + Vector3.UP
-			for raw_spec in spatial.gates.values():
-				var spec: Dictionary = raw_spec
-				var center: Vector3 = spec.get("center", Vector3.ZERO)
-				if center.distance_to(gate.global_position) <= 0.25:
-					candidate = spec.get("arrival", candidate)
-					break
+			# Stage on the playable side of the visible gate. The spatial service's
+			# registered arrival is the destination spawn for the next zone, not an
+			# approach point for the current gate; using it here put QA several
+			# metres away from the interaction focus and made a valid gate look
+			# unreachable in the browser route.
+			var gate_position := gate.global_position
+			var inward := Vector3.ZERO
+			if absf(gate_position.x) > absf(gate_position.z):
+				inward.x = -1.0 if gate_position.x > 0.0 else 1.0
+			else:
+				inward.z = -1.0 if gate_position.z > 0.0 else 1.0
+			var candidate := gate_position + inward * 1.45 + Vector3.UP
 			candidate.y = maxf(candidate.y, 0.95)
 			var validated: Vector3 = spatial.validate_position(candidate, 0.55, spatial.bank_for(candidate))
 			player.global_position = candidate if validated.distance_to(candidate) > 2.5 else validated

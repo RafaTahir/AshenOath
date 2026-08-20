@@ -49,6 +49,10 @@ func _build_deep_wood(context: ZoneBuildContext) -> void:
 			context.spawn_enemy("bog_wretch", Vector3(0, 0.8, -8))
 		elif not context.is_objective_done("main_teeth_in_rain", "bog_core_choice"):
 			context.make_named_interactable("bog_core_choice", "dialogue", "Choose the memory core's fate", Vector3(0,0,-8), Color(0.35,0.58,0.52), Vector3(0.4,0.4,0.4))
+	if context.is_quest_active("main_names_they_burned") and context.is_objective_done("main_names_they_burned", "reconstruct_register") and not bool(context.get_story_flag("rootbound_colossus_defeated", false)):
+		if not context.get_story_flag("rootbound_colossus_spawned", false):
+			context.set_story_flag("rootbound_colossus_spawned", true)
+			context.spawn_enemy("rootbound_colossus", Vector3(0, 0.8, -10.5))
 
 func _build_old_mill(context: ZoneBuildContext) -> void:
 	_base(context, Color(0.115, 0.094, 0.066), Color(0.125, 0.105, 0.075))
@@ -78,6 +82,10 @@ func _build_old_mill(context: ZoneBuildContext) -> void:
 			var enemy = context.spawn_enemy("ghoulkin", position)
 			if enemy != null:
 				enemy.set_meta("ash_mill_enemy", true)
+	elif context.is_objective_done("main_ash_at_the_mill", "mill_encounter") and not bool(context.get_story_flag("ashwing_defeated", false)):
+		if not context.get_story_flag("ashwing_spawned", false):
+			context.set_story_flag("ashwing_spawned", true)
+			context.spawn_enemy("ashwing", Vector3(0, 1.0, -9.0))
 	elif context.is_objective_done("main_ash_at_the_mill", "mill_encounter") and not context.is_objective_done("main_ash_at_the_mill", "mill_choice"):
 		context.make_named_interactable("miller_record", "dialogue", "Read the miller's record", Vector3(-7.0,0,-7), Color(0.5,0.4,0.25))
 

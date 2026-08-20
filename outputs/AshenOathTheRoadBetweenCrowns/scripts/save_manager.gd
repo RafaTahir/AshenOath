@@ -76,6 +76,8 @@ func migrate_save_data(raw_data: Dictionary) -> Dictionary:
 	_sanitize_dictionary_fields(data.world_state, ["removed_interactions", "day_night"])
 	if not data.has("quest_presentation") or typeof(data.get("quest_presentation")) != TYPE_DICTIONARY:
 		data["quest_presentation"] = {}
+	if not data.has("quest_beats") or typeof(data.get("quest_beats")) != TYPE_DICTIONARY:
+		data["quest_beats"] = {}
 	if not data.has("settings") or typeof(data.get("settings")) != TYPE_DICTIONARY:
 		data["settings"] = {}
 	if source_version < 3 and _legacy_road_complete(data.quests):
@@ -115,6 +117,7 @@ func _build_save_data(game) -> Dictionary:
 		"inventory": game.inventory.save_state(),
 		"quests": game.quests.save_state(),
 		"quest_presentation": game.quest_presentation.save_state() if game.get("quest_presentation") != null else {},
+		"quest_beats": game.quest_beats.save_state() if game.get("quest_beats") != null else {},
 		"story_state": game.story_state.save_state(),
 		"progression": game.progression.save_state(),
 		"settings": game.settings.settings.duplicate(true) if game.get("settings") != null else {},

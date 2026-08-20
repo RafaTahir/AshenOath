@@ -311,6 +311,8 @@ func _target_height_for_path(path: String) -> float:
 		return 1.78
 	if "orcskull" in lowered or "skeleton" in lowered:
 		return 1.72
+	if "dragon" in lowered:
+		return 3.80
 	if "slime" in lowered:
 		return 0.92
 	if "wolf" in lowered:

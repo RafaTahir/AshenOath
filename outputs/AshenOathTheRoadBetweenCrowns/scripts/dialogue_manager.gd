@@ -31,6 +31,10 @@ func get_dialogue(id: String) -> Dictionary:
 					base[key] = variant[key]
 			break
 	base.erase("variants")
+	# Subtitles remain authoritative when a voice clip is absent, muted, or
+	# blocked by browser audio policy. Keep the fallback in the resolved entry.
+	base["fallback_text"] = str(base.get("fallback_text", base.get("greeting", "...")))
+	base["subtitle_fallback"] = true
 	var visible_actions: Array = []
 	for action in base.get("actions", []):
 		if story_state == null or story_state.matches(action.get("conditions", {})):

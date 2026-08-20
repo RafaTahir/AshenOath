@@ -1,5 +1,22 @@
 # Ashen Oath Project State
 
+## Current Release Checkpoint - 2026-08-21
+
+The cumulative Soul Rebuild work has passed the authoritative local release
+suite on `codex/soul-rebuild`. The graphical Compatibility gate passes native
+1280x720 Balanced performance in every required zone and combat sample. Chrome
+and Edge desktop plus mobile-emulation full-campaign routes reach Hart Glade
+through 37 checkpoints without browser console or network errors. The verified
+seven-file Web artifact is `97,898,609` bytes with PCK SHA-256
+`98AA203BA4EC02991DCDD75FEE8BE5A7F34DE5D4E706F53F96264C4F565FFC6C`.
+
+The production `web/` folder, `main`, and Vercel are still awaiting the final
+commit/push/hash comparison. Shutdown-only Godot allocator diagnostics remain
+classified warnings; no active-frame renderer error blocked the passing gates.
+The game remains grounded stylized dark fantasy, not photoreal or AAA. Firefox,
+physical-controller certification, and native mobile/store packages remain
+deferred.
+
 ## Current Product Status
 
 Ashen Oath is a **pre-alpha prototype**. It is not a commercial Alpha, Early Access build, finished campaign, photoreal game, or AAA production. The approved target is a polished 90-minute Web Act One followed by a 4-6 hour grounded-stylized campaign. See `PRODUCT_SCOPE_LOCK.md` and `ASHEN_OATH_MASTER_STUDIO_REVIEW.md`.
@@ -9,6 +26,7 @@ RECOVERY-003 replaces reflective campaign-zone construction with a validated `Zo
 RECOVERY-004 remains the historical recovery baseline. The current Soul Rebuild continuation is still an uncommitted working-tree checkpoint; it must not be described as a production release. The project has a disposable `Web QA Browser` preset, isolated QA telemetry, centralized interaction focus, and explicit shutdown diagnostics. Codex owns the visual-review decision, but fresh full-route approval and a final production hash comparison have not been re-established for the current source.
 
 The current visual work has fresh character portraits, fresh Greyfen/Hart product captures, and a passing graphical visible-quality verifier. It does not yet constitute approval of all eleven release views: Ghoulkin remains a grounded but visibly low-poly interim family, Ashwing is an interim Dragon fallback, and later-zone architecture/Hart presentation remain below the locked visual bar.
+The current visual approval boundary is explicit: passing runtime checks do not equal visual approval. Codex visual approval requires fresh 1280x720 captures that are inspected for grounding, scale, faces, materials, route clearance, composition, and absence of placeholder geometry.
 
 ## Soul Rebuild Current Checkpoint - 2026-08-17
 

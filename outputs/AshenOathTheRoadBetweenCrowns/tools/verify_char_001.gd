@@ -40,6 +40,14 @@ func _initialize() -> void:
 		check(not _has_forbidden_proxy(ghoul), "Ghoulkin contains proxy anatomy")
 
 	print("CHAR-001 VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
+	# Release the runtime scene before quitting so renderer diagnostics are
+	# attributable to active gameplay rather than an abandoned test tree.
+	if game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+	await _frames(12)
+	if is_instance_valid(game):
+		game.free()
+	await _frames(8)
 	quit(0 if failures == 0 else 1)
 
 func _wake_actor(actor: Node) -> void:

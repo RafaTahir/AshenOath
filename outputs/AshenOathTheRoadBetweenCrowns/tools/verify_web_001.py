@@ -56,10 +56,10 @@ def main() -> int:
     build_label = re.search(r'const MENU_BUILD_LABEL = "([^"]+)"', hud)
     label_text = build_label.group(1) if build_label else ""
     has_release_identity = any(
-        marker in label_text for marker in ("CANDIDATE", "ROADMAP MILESTONE", "RELEASE-001")
+        marker in label_text for marker in ("CANDIDATE", "ROADMAP MILESTONE", "RELEASE-001", "RELEASE-003")
     )
     if not build_label or not has_release_identity or "ASHENOATH.VERCEL.APP" not in label_text:
-        fail("visible menu build identifier is missing candidate/milestone and production identity", failures)
+        fail("visible menu build identifier is missing candidate/milestone/release identity and production identity", failures)
 
     vercel = json.loads((root / "vercel.json").read_text(encoding="utf-8"))
     header_rules = vercel.get("headers", [])

@@ -188,7 +188,7 @@ func _update_sky_cycle(daylight: float, twilight: float, night: float, minutes: 
 	# Keep the authored seven-cluster pool resident, then expose a deterministic
 	# tier budget. Balanced needs enough depth to read as a sky, while Potato
 	# retains two low-overdraw formations instead of collapsing to one card.
-	var cloud_count := 7 if quality == "quality" else 2
+	var cloud_count := 7 if quality == "quality" else (4 if quality == "balanced" else 2)
 	cloud_layer.visible = bool(profile.clouds)
 	# Keep cloud formations atmospheric rather than allowing one alpha card to
 	# cover the whole gameplay composition, especially on low-FOV laptops.

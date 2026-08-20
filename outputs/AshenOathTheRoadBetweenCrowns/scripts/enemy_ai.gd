@@ -4,6 +4,7 @@ signal died(enemy: Node)
 signal damaged(enemy: Node, current: float, maximum: float)
 signal windup_started(enemy: Node)
 signal attack_resolved(enemy: Node, parried: bool, contact_position: Vector3)
+signal special_attack_resolved(enemy: Node, attack_id: String, contact_position: Vector3, radius: float, damage: float, parried: bool)
 signal boss_phase_changed(enemy: Node, phase: int)
 
 const HealthComponent = preload("res://scripts/health_component.gd")
@@ -12,6 +13,9 @@ const CharacterPresentation = preload("res://scripts/character_presentation.gd")
 const CharacterRoleSpec = preload("res://scripts/character_role_spec.gd")
 const CombatFeedback = preload("res://scripts/combat_feedback.gd")
 const CharacterAnimationDriver = preload("res://scripts/character_animation_driver.gd")
+# Keep the current Ashwing runtime source reachable to Godot's dependency
+# scanner; the role manifest still owns which source is selected at runtime.
+const ASHWING_RUNTIME_SOURCE = preload("res://assets_external/enemies/Dragon.fbx")
 
 var enemy_id = "ghoulkin"
 var display_name = "Enemy"
@@ -70,6 +74,7 @@ var perception_refresh_time := 0.0
 var can_see_player := false
 var last_known_player_position := Vector3.INF
 var boss_phase := 1
+var is_boss := false
 var base_move_speed := 2.0
 var base_damage := 10.0
 
@@ -84,6 +89,7 @@ func setup(id: String, definition: Dictionary, target: Node3D) -> void:
 	sense_range = float(definition.get("sense_range", 10.0))
 	tag = definition.get("tag", "beast")
 	weakness = definition.get("weakness", "")
+	is_boss = bool(definition.get("boss", false))
 	player = target
 	home_position = global_position
 	health_component = HealthComponent.new()
@@ -313,15 +319,49 @@ func _resolve_attack() -> void:
 		forward.y = 0.0
 		sweep_end += forward.normalized() * attack_range
 	last_attack_contact = Geometry3D.get_closest_point_to_segment(player_contact, sweep_start, sweep_end)
-	if player_contact.distance_to(last_attack_contact) > contact_radius or not _has_attack_line():
+	var boss_attack := _boss_attack_id()
+	var special_radius := _boss_attack_radius(boss_attack)
+	var special_contact := is_boss and boss_attack != "" and player_contact.distance_to(global_position) <= special_radius and _has_attack_line()
+	var melee_contact := player_contact.distance_to(last_attack_contact) <= contact_radius and _has_attack_line()
+	if not melee_contact and not special_contact:
 		return
-	var parried = player.take_damage(damage)
+	var applied_damage: float = damage * (0.72 if special_contact and not melee_contact else 1.0)
+	var parried: bool = bool(player.take_damage(applied_damage))
 	attack_recovery_time = 0.22 if enemy_id == "ghoulkin" else 0.16
 	var contact_position := last_attack_contact
 	attack_resolved.emit(self, parried, contact_position)
+	if is_boss and boss_attack != "":
+		special_attack_resolved.emit(self, boss_attack, contact_position, special_radius, applied_damage, parried)
 	if parried:
 		parry_exposed_time = 1.15
 		stagger(1.15)
+
+func _boss_attack_id() -> String:
+	if not is_boss:
+		return ""
+	var controller := get_node_or_null("BossEncounterController")
+	if controller != null and controller.has_method("phase_definition"):
+		var phase_data: Dictionary = controller.phase_definition()
+		return str(phase_data.get("telegraph", ""))
+	return ""
+
+func _boss_attack_radius(attack_id: String) -> float:
+	return {
+		"bell_shockwave": 4.8,
+		"grave_slam": 3.7,
+		"ghoulkin_call": 3.2,
+		"root_lanes": 4.0,
+		"ground_rupture": 4.1,
+		"heart_stagger": 2.9,
+		"wing_blast": 4.6,
+		"ash_breath": 5.6,
+		"swoop": 3.6,
+		"parry_test": 2.3,
+		"counter_lunge": 2.6,
+		"memory_echo": 4.4,
+		"antler_sweep": 3.8,
+		"road_reopening": 4.0,
+	}.get(attack_id, attack_range + 0.8)
 
 func _has_attack_line() -> bool:
 	var origin := global_position+Vector3(0,0.9,0)
@@ -443,8 +483,8 @@ func _release_attack_token() -> void:
 		attack_gate.call(self, false)
 
 func _windup_duration() -> float:
-	if enemy_id == "white_hart_avatar":
-		return 0.44
+	if is_boss:
+		return {"white_hart_avatar":0.44, "bell_eater":0.78, "rootbound_colossus":0.92, "ashwing":0.64, "halvern_boss":0.48}.get(enemy_id, 0.60)
 	if enemy_id == "wychwood_brute":
 		return 0.72
 	if enemy_id == "ghoulkin" or enemy_id == "wychwood_stalker" or enemy_id == "wychwood_raider":
@@ -452,8 +492,8 @@ func _windup_duration() -> float:
 	return 0.34
 
 func _attack_cooldown() -> float:
-	if enemy_id == "white_hart_avatar":
-		return [1.55, 1.32, 1.16][boss_phase - 1]
+	if is_boss:
+		return {"white_hart_avatar":[1.55, 1.32, 1.16], "bell_eater":[1.80,1.48,1.18], "rootbound_colossus":[2.10,1.72,1.35], "ashwing":[1.65,1.28,1.00], "halvern_boss":[1.38,1.05,0.90]}.get(enemy_id, [1.70,1.35,1.10])[boss_phase - 1]
 	if enemy_id == "wychwood_brute":
 		return 1.65
 	if enemy_id == "ghoulkin" or enemy_id == "wychwood_stalker" or enemy_id == "wychwood_raider":
@@ -462,7 +502,7 @@ func _attack_cooldown() -> float:
 
 func _on_health_changed(current: float, maximum: float) -> void:
 	damaged.emit(self, current, maximum)
-	if enemy_id != "white_hart_avatar" or maximum <= 0.0:
+	if not is_boss or maximum <= 0.0:
 		return
 	var ratio := current / maximum
 	var next_phase := 3 if ratio <= 0.33 else (2 if ratio <= 0.66 else 1)
@@ -486,6 +526,9 @@ func _build_body(color: Color) -> void:
 	visual_root = Node3D.new()
 	visual_root.name = "visual_root"
 	add_child(visual_root)
+	if enemy_id == "white_hart_avatar" and _try_build_mapped_body():
+		CharacterPresentation.apply_enemy(self, _enemy_shadow_scale())
+		return
 	if enemy_id == "white_hart_avatar":
 		_build_hart_body()
 		CharacterPresentation.apply_enemy(self, _enemy_shadow_scale())
@@ -539,26 +582,37 @@ func _build_body(color: Color) -> void:
 	visual_root.add_child(marker)
 
 func _build_hart_body() -> void:
-	var body_material := _mat(Color(0.68, 0.72, 0.66))
-	var shadow_material := _mat(Color(0.18, 0.22, 0.19))
-	var antler_material := _mat(Color(0.26, 0.18, 0.10))
-	body_visual = _hart_mesh("HartBody", CapsuleMesh.new(), Vector3(0, 1.22, 0.12), Vector3(1.28, 1.0, 1.52), body_material)
-	_hart_mesh("HartNeck", CapsuleMesh.new(), Vector3(0, 1.93, -0.42), Vector3(0.70, 1.10, 0.76), body_material, Vector3(-24, 0, 0))
-	_hart_mesh("HartHead", SphereMesh.new(), Vector3(0, 2.46, -0.86), Vector3(0.58, 0.48, 0.76), body_material)
-	_hart_mesh("HartMuzzle", SphereMesh.new(), Vector3(0, 2.32, -1.18), Vector3(0.34, 0.25, 0.42), body_material)
-	_hart_mesh("HartMane", SphereMesh.new(), Vector3(0, 2.02, -0.30), Vector3(0.46, 0.78, 0.34), shadow_material)
+	var body_material := _mat(Color(0.52, 0.72, 0.62))
+	body_material.emission_enabled = true
+	body_material.emission = Color(0.10, 0.30, 0.22)
+	body_material.emission_energy_multiplier = 0.42
+	var shadow_material := _mat(Color(0.10, 0.16, 0.15))
+	var antler_material := _mat(Color(0.58, 0.48, 0.30))
+	# Keep the witness animal-shaped. The earlier upright chest/neck read as a
+	# humanoid mannequin from the approach road even though it had antlers.
+	body_visual = _hart_mesh("HartBody", CapsuleMesh.new(), Vector3(0, 1.28, 0.08), Vector3(0.88, 1.48, 0.72), body_material, Vector3(90, 0, 0))
+	_hart_mesh("HartRump", SphereMesh.new(), Vector3(0, 1.34, 0.66), Vector3(0.72, 0.58, 0.62), body_material)
+	_hart_mesh("HartChest", SphereMesh.new(), Vector3(0, 1.42, -0.66), Vector3(0.68, 0.66, 0.56), body_material)
+	_hart_mesh("HartNeck", CapsuleMesh.new(), Vector3(0, 1.78, -0.88), Vector3(0.40, 0.60, 0.40), body_material, Vector3(-48, 0, 0))
+	_hart_mesh("HartHead", SphereMesh.new(), Vector3(0, 2.08, -1.34), Vector3(0.50, 0.40, 0.60), body_material)
+	_hart_mesh("HartMuzzle", SphereMesh.new(), Vector3(0, 1.99, -1.74), Vector3(0.30, 0.18, 0.40), body_material)
+	_hart_mesh("HartMane", SphereMesh.new(), Vector3(0, 1.78, -0.70), Vector3(0.38, 0.54, 0.32), shadow_material)
+	_hart_mesh("HartEar", SphereMesh.new(), Vector3(-0.30, 2.28, -1.16), Vector3(0.20, 0.10, 0.28), shadow_material, Vector3(0, 0, -18))
+	_hart_mesh("HartEar", SphereMesh.new(), Vector3(0.30, 2.28, -1.16), Vector3(0.20, 0.10, 0.28), shadow_material, Vector3(0, 0, 18))
+	_hart_mesh("HartTail", CapsuleMesh.new(), Vector3(0, 1.56, 1.10), Vector3(0.16, 0.42, 0.16), shadow_material, Vector3(-34, 0, 0))
 	for side in [-1.0, 1.0]:
-		for z in [-0.34, 0.34]:
-			_hart_mesh("HartLeg", CylinderMesh.new(), Vector3(side * 0.38, 0.52, z), Vector3(0.22, 0.92, 0.22), shadow_material)
-		_hart_mesh("HartAntlerMain", CylinderMesh.new(), Vector3(side * 0.25, 2.92, -0.76), Vector3(0.13, 0.92, 0.13), antler_material, Vector3(0, 0, side * -18.0))
-		_hart_mesh("HartAntlerBranch", CylinderMesh.new(), Vector3(side * 0.48, 3.26, -0.76), Vector3(0.09, 0.54, 0.09), antler_material, Vector3(0, 0, side * 34.0))
-		var eye := _hart_mesh("HartEye", SphereMesh.new(), Vector3(side * 0.17, 2.52, -1.22), Vector3(0.06, 0.06, 0.06), _mat(Color(0.48, 0.92, 0.72)))
+		for z in [-0.46, 0.52]:
+			_hart_mesh("HartLeg", CapsuleMesh.new(), Vector3(side * 0.44, 0.60, z), Vector3(0.15, 0.68, 0.15), shadow_material)
+			_hart_mesh("HartHoof", BoxMesh.new(), Vector3(side * 0.44, 0.12, z - 0.08), Vector3(0.22, 0.14, 0.30), antler_material)
+		_hart_mesh("HartAntlerMain", CylinderMesh.new(), Vector3(side * 0.25, 2.58, -1.30), Vector3(0.10, 0.74, 0.10), antler_material, Vector3(0, 0, side * -18.0))
+		_hart_mesh("HartAntlerBranch", CylinderMesh.new(), Vector3(side * 0.48, 2.88, -1.30), Vector3(0.065, 0.42, 0.065), antler_material, Vector3(0, 0, side * 34.0))
+		var eye := _hart_mesh("HartEye", SphereMesh.new(), Vector3(side * 0.18, 2.14, -1.70), Vector3(0.070, 0.070, 0.070), _mat(Color(0.52, 1.0, 0.78)))
 		var eye_material := eye.material_override as StandardMaterial3D
 		if eye_material != null:
 			eye_material.emission_enabled = true
-			eye_material.emission = Color(0.48, 0.92, 0.72)
-			eye_material.emission_energy_multiplier = 1.5
-	_hart_mesh("HartSigilLight", SphereMesh.new(), Vector3(0, 1.42, -0.54), Vector3(0.10, 0.10, 0.10), _mat(Color(0.52, 0.90, 0.74)))
+			eye_material.emission = Color(0.52, 1.0, 0.78)
+			eye_material.emission_energy_multiplier = 2.0
+	_hart_mesh("HartSigilLight", SphereMesh.new(), Vector3(0, 1.42, -0.70), Vector3(0.13, 0.13, 0.13), _mat(Color(0.52, 1.0, 0.78)))
 
 func _hart_mesh(node_name: String, mesh: Mesh, position: Vector3, scale_value: Vector3, material: Material, rotation_degrees := Vector3.ZERO) -> MeshInstance3D:
 	var node := MeshInstance3D.new()
@@ -577,12 +631,17 @@ func _try_build_mapped_body() -> bool:
 	var mapped = null
 	var uses_real_body := false
 	var visual_source: String = enemy_id
-	if enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute"]:
+	if enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute", "bell_eater", "rootbound_colossus", "ashwing", "halvern_boss", "white_hart_avatar"]:
 		visual_source = {
-			"ghoulkin": "orc_skull_real",
+			"ghoulkin": "ghoulkin_creature",
 			"wychwood_stalker": "ghoul_stalker_real",
-			"wychwood_raider": "orc_skull_real",
+			"wychwood_raider": "ghoulkin_creature",
 			"wychwood_brute": "ghoul_brute_real",
+			"bell_eater": "ghoul_brute_real",
+			"rootbound_colossus": "ghoul_brute_real",
+			"ashwing": "ashwing_creature",
+			"halvern_boss": "gravebound_knight",
+			"white_hart_avatar": "white_hart_avatar",
 		}.get(enemy_id, "ghoul_gaunt_real")
 		mapped = asset_helper.spawn_visual_role(visual_source, "enemies")
 		uses_real_body = mapped != null and not mapped.name.ends_with("_placeholder")
@@ -613,8 +672,16 @@ func _try_build_mapped_body() -> bool:
 		_apply_material(mapped, material)
 	elif _is_wychwood_pack():
 		_apply_material(mapped, _horror_material())
+	if is_boss:
+		_apply_boss_material(mapped)
 	visual_root.add_child(mapped)
+	if _is_wychwood_pack():
+		_add_variant_silhouette()
 	_ground_mapped_visual(mapped)
+	if is_boss:
+		_add_boss_silhouette()
+	if enemy_id == "white_hart_avatar":
+		_add_spectral_antler_crown(mapped)
 	if visual_source == "ghoulkin_skeleton":
 		# This source rig's terminal leg bones sit above its mesh bind bounds.
 		mapped.position.y -= 0.50
@@ -624,11 +691,29 @@ func _try_build_mapped_body() -> bool:
 	animation_driver.name = "CharacterAnimationDriver"
 	mapped.add_child(animation_driver)
 	if uses_real_body:
-		animation_driver.configure(mapped, {
-			"idle":"Idle", "walk":"Walk", "walk_back":"Walk_Back", "strafe":"Walk",
-			"run":"Run", "windup":"Attack", "attack":"Attack",
-			"hit":"Hit", "death":"Death"
-		})
+		if visual_source == "ashwing_creature":
+			animation_driver.configure(mapped, {
+				"idle":"DragonArmature|Dragon_Flying", "walk":"DragonArmature|Dragon_Flying",
+				"walk_back":"DragonArmature|Dragon_Flying", "strafe":"DragonArmature|Dragon_Flying",
+				"run":"DragonArmature|Dragon_Flying", "windup":"DragonArmature|Dragon_Attack",
+				"attack":"DragonArmature|Dragon_Attack2", "hit":"DragonArmature|Dragon_Hit",
+				"death":"DragonArmature|Dragon_Death"
+			})
+		elif visual_source == "white_hart_avatar":
+			animation_driver.configure(mapped, {
+				"idle": "|WolfArmature|Idle", "walk": "|WolfArmature|Walking",
+				"walk_back": "|WolfArmature|Walking", "strafe": "|WolfArmature|Walking",
+				"run": "|WolfArmature|Walking", "windup": "|WolfArmature|Walking",
+				"attack": "|WolfArmature|Walking", "hit": "|WolfArmature|Walking",
+				"death": "|WolfArmature|Walking"
+			})
+		else:
+			animation_driver.configure(mapped, {
+				"idle": "Idle2" if visual_source in ["ghoul_stalker_real", "ghoul_brute_real"] else "Idle",
+				"walk":"Walk", "walk_back":"Walk_Back", "strafe":"Walk",
+				"run":"Run", "windup":"Attack", "attack":"Attack",
+				"hit":"Hit", "death":"Death"
+			})
 	elif visual_source == "ghoulkin_skeleton":
 		animation_driver.configure(mapped, {
 			"idle": "SkeletonArmature|Skeleton_Idle",
@@ -649,6 +734,94 @@ func _try_build_mapped_body() -> bool:
 		animation_driver.set_update_rate_hz(20.0)
 	_configure_attack_contact_bone()
 	return true
+
+func _add_spectral_antler_crown(mapped: Node3D) -> void:
+	var skeleton := _find_type(mapped, "Skeleton3D") as Skeleton3D
+	var parent: Node3D = mapped
+	if skeleton != null:
+		var attachment := BoneAttachment3D.new()
+		attachment.name = "WhiteHartAntlerHeadAttachment"
+		attachment.bone_name = "Bone.003"
+		skeleton.add_child(attachment)
+		parent = attachment
+		# The imported Wolf FBX carries a large head-bone scale. Compensate only
+		# that scale so the antlers remain attached without becoming world-sized.
+		var mapped_scale := mapped.global_transform.basis.get_scale() if mapped.is_inside_tree() else Vector3.ONE
+		var attachment_scale := attachment.global_transform.basis.get_scale() if attachment.is_inside_tree() else Vector3(19.36, 19.36, 19.36)
+		var bone_scale := Vector3(
+			_safe_scale_ratio(attachment_scale.x, mapped_scale.x),
+			_safe_scale_ratio(attachment_scale.y, mapped_scale.y),
+			_safe_scale_ratio(attachment_scale.z, mapped_scale.z)
+		)
+		var crown_root := Node3D.new()
+		crown_root.name = "WhiteHartAntlerScaleCompensation"
+		crown_root.scale = Vector3(
+			_safe_inverse_scale(bone_scale.x),
+			_safe_inverse_scale(bone_scale.y),
+			_safe_inverse_scale(bone_scale.z)
+		)
+		parent.add_child(crown_root)
+		parent = crown_root
+	var antler_material := _mat(Color(0.58, 0.48, 0.30))
+	antler_material.emission_enabled = true
+	antler_material.emission = Color(0.20, 0.48, 0.34)
+	antler_material.emission_energy_multiplier = 0.42
+	for side in [-1.0, 1.0]:
+		var main := MeshInstance3D.new()
+		main.name = "SpectralAntlerMain"
+		var main_mesh := CylinderMesh.new()
+		main_mesh.top_radius = 0.025
+		main_mesh.bottom_radius = 0.055
+		main_mesh.height = 0.58
+		main_mesh.radial_segments = 8
+		main.mesh = main_mesh
+		main.position = Vector3(side * 0.14, 0.20, 0.01)
+		main.rotation_degrees.z = side * -20.0
+		main.material_override = antler_material
+		parent.add_child(main)
+		for branch_index in range(2):
+			var branch := MeshInstance3D.new()
+			branch.name = "SpectralAntlerBranch"
+			var branch_mesh := CylinderMesh.new()
+			branch_mesh.top_radius = 0.014
+			branch_mesh.bottom_radius = 0.035
+			branch_mesh.height = 0.26 if branch_index == 0 else 0.20
+			branch_mesh.radial_segments = 8
+			branch.mesh = branch_mesh
+			branch.position = Vector3(side * (0.25 + branch_index * 0.045), 0.34 + branch_index * 0.13, 0.01)
+			branch.rotation_degrees.z = side * (42.0 if branch_index == 0 else -36.0)
+			branch.material_override = antler_material
+			parent.add_child(branch)
+	var sigil := MeshInstance3D.new()
+	sigil.name = "WhiteHartCrownGlow"
+	sigil.mesh = SphereMesh.new()
+	sigil.scale = Vector3(0.08, 0.08, 0.08)
+	sigil.position = Vector3(0, 0.06, -0.12)
+	var sigil_material := _mat(Color(0.50, 0.96, 0.72))
+	sigil_material.emission_enabled = true
+	sigil_material.emission = Color(0.50, 0.96, 0.72)
+	sigil_material.emission_energy_multiplier = 1.4
+	sigil.material_override = sigil_material
+	parent.add_child(sigil)
+
+func _find_type(root: Node, type_name: String) -> Node:
+	if root.is_class(type_name):
+		return root
+	for child in root.get_children():
+		var found := _find_type(child, type_name)
+		if found != null:
+			return found
+	return null
+
+func _safe_scale_ratio(value: float, divisor: float) -> float:
+	if absf(divisor) < 0.0001:
+		return 1.0
+	return value / divisor
+
+func _safe_inverse_scale(value: float) -> float:
+	if absf(value) < 0.0001:
+		return 1.0
+	return 1.0 / value
 
 func _configure_attack_contact_bone() -> void:
 	attack_contact_bone = -1
@@ -699,11 +872,41 @@ func _horror_material() -> StandardMaterial3D:
 	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
 	return material
 
+func _apply_boss_material(mapped: Node3D) -> void:
+	var material := StandardMaterial3D.new()
+	material.albedo_color = {
+		"bell_eater": Color(0.28, 0.22, 0.18),
+		"rootbound_colossus": Color(0.22, 0.33, 0.20),
+		"ashwing": Color(0.30, 0.18, 0.14),
+		"halvern_boss": Color(0.24, 0.26, 0.30),
+	}.get(enemy_id, base_color)
+	material.roughness = 0.82
+	_apply_material(mapped, material)
+
+func _add_boss_silhouette() -> void:
+	if enemy_id == "bell_eater":
+		_add_part(Vector3(0, 1.32, -0.02), Vector3(0.90, 0.18, 0.42), Color(0.31, 0.20, 0.12), "box")
+		_add_part(Vector3(0, 1.05, 0.28), Vector3(0.24, 0.44, 0.10), Color(0.12, 0.10, 0.08), "box")
+	elif enemy_id == "rootbound_colossus":
+		_add_part(Vector3(-0.58, 1.34, 0.0), Vector3(0.30, 0.72, 0.52), Color(0.17, 0.26, 0.14), "box")
+		_add_part(Vector3(0.58, 1.34, 0.0), Vector3(0.30, 0.72, 0.52), Color(0.17, 0.26, 0.14), "box")
+	elif enemy_id == "ashwing":
+		_add_part(Vector3(-0.74, 1.24, 0.12), Vector3(0.78, 0.12, 0.42), Color(0.26, 0.16, 0.12), "box")
+		_add_part(Vector3(0.74, 1.24, 0.12), Vector3(0.78, 0.12, 0.42), Color(0.26, 0.16, 0.12), "box")
+
 func _mapped_enemy_scale() -> Vector3:
 	if enemy_id == "bog_wretch":
 		return Vector3(1.25, 1.25, 1.25)
 	if enemy_id == "white_hart_avatar":
 		return Vector3(0.65, 0.65, 0.65)
+	if enemy_id == "bell_eater":
+		return Vector3(1.25, 1.25, 1.25)
+	if enemy_id == "rootbound_colossus":
+		return Vector3(1.48, 1.42, 1.48)
+	if enemy_id == "ashwing":
+		return Vector3(1.30, 1.26, 1.30)
+	if enemy_id == "halvern_boss":
+		return Vector3(1.04, 1.04, 1.04)
 	if enemy_id == "ghoulkin":
 		return Vector3.ONE * 0.95
 	if enemy_id == "wychwood_stalker":
@@ -721,6 +924,12 @@ func _enemy_shadow_scale() -> Vector3:
 		return Vector3(1.05, 0.014, 0.72)
 	if enemy_id == "white_hart_avatar":
 		return Vector3(1.25, 0.014, 0.85)
+	if enemy_id == "rootbound_colossus":
+		return Vector3(1.42, 0.014, 0.98)
+	if enemy_id in ["bell_eater", "ashwing"]:
+		return Vector3(1.18, 0.014, 0.88)
+	if enemy_id == "halvern_boss":
+		return Vector3(0.90, 0.014, 0.62)
 	if _is_wychwood_pack():
 		return Vector3(0.88, 0.014, 0.62)
 	return Vector3(0.82, 0.014, 0.58)
@@ -729,13 +938,22 @@ func _is_wychwood_pack() -> bool:
 	return enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute"]
 
 func _add_variant_silhouette() -> void:
-	if enemy_id == "wychwood_stalker":
-		_add_part(Vector3(0, 1.58, -0.12), Vector3(0.22, 0.30, 0.18), Color(0.12, 0.30, 0.16), "sphere")
+	if enemy_id == "ghoulkin":
+		_add_part(Vector3(0.0, 0.84, -0.42), Vector3(0.34, 0.11, 0.20), Color(0.18, 0.10, 0.08), "box")
+		_add_part(Vector3(-0.28, 1.02, -0.22), Vector3(0.08, 0.24, 0.10), Color(0.45, 0.36, 0.23), "capsule")
+		_add_part(Vector3(0.28, 1.02, -0.22), Vector3(0.08, 0.24, 0.10), Color(0.45, 0.36, 0.23), "capsule")
+	elif enemy_id == "wychwood_stalker":
+		_add_part(Vector3(0, 1.45, -0.16), Vector3(0.20, 0.26, 0.16), Color(0.08, 0.19, 0.12), "sphere")
+		_add_part(Vector3(-0.26, 1.12, -0.50), Vector3(0.07, 0.30, 0.07), Color(0.42, 0.34, 0.22), "cone")
+		_add_part(Vector3(0.26, 1.12, -0.50), Vector3(0.07, 0.30, 0.07), Color(0.42, 0.34, 0.22), "cone")
 	elif enemy_id == "wychwood_raider":
+		_add_part(Vector3(0, 1.18, -0.44), Vector3(0.42, 0.12, 0.08), Color(0.26, 0.28, 0.17), "box")
 		_add_part(Vector3(-0.46, 1.30, 0), Vector3(0.20, 0.16, 0.30), Color(0.34, 0.40, 0.24), "box")
 		_add_part(Vector3(0.46, 1.30, 0), Vector3(0.20, 0.16, 0.30), Color(0.34, 0.40, 0.24), "box")
 	elif enemy_id == "wychwood_brute":
-		_add_part(Vector3(0, 1.32, 0.08), Vector3(0.82, 0.28, 0.32), Color(0.25, 0.29, 0.20), "box")
+		_add_part(Vector3(0, 1.34, 0.08), Vector3(0.86, 0.30, 0.34), Color(0.25, 0.29, 0.20), "box")
+		_add_part(Vector3(-0.58, 1.42, -0.04), Vector3(0.22, 0.24, 0.28), Color(0.38, 0.31, 0.20), "sphere")
+		_add_part(Vector3(0.58, 1.42, -0.04), Vector3(0.22, 0.24, 0.28), Color(0.38, 0.31, 0.20), "sphere")
 
 func _find_first_mesh(root: Node) -> MeshInstance3D:
 	if root is MeshInstance3D:
@@ -788,6 +1006,15 @@ func _add_part(pos: Vector3, scale_value: Vector3, color: Color, shape_name: Str
 	var part = MeshInstance3D.new()
 	if shape_name == "sphere":
 		part.mesh = SphereMesh.new()
+	elif shape_name == "capsule":
+		part.mesh = CapsuleMesh.new()
+	elif shape_name == "cone":
+		var cone := CylinderMesh.new()
+		cone.top_radius = 0.0
+		cone.bottom_radius = 0.5
+		cone.height = 1.0
+		cone.radial_segments = 6
+		part.mesh = cone
 	else:
 		var mesh = BoxMesh.new()
 		mesh.size = Vector3.ONE

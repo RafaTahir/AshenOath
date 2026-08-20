@@ -103,6 +103,15 @@ func make_visual_box(id: String, pos: Vector3, size: Vector3, color: Color):
 func make_loose_role(role: String, pos: Vector3, scale_value: Vector3, rotation_y: float):
 	return _host._make_loose_role(role, pos, scale_value, rotation_y)
 
+func make_visual_role(role: String, category: String, pos: Vector3, scale_value: Vector3, rotation_y: float = 0.0):
+	var node = _host._make_role_visual(role, category, scale_value)
+	if node == null:
+		return null
+	node.position = pos
+	node.rotation_degrees.y = rotation_y
+	add_node(node)
+	return node
+
 func make_clue(id: String, prompt: String, pos: Vector3, quest_id: String, objective_id: String, color: Color):
 	return _host._make_clue(id, prompt, pos, quest_id, objective_id, color)
 

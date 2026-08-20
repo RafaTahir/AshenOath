@@ -60,7 +60,11 @@ const CROWD_IDENTITIES := [
 ]
 
 func _simulation_hz() -> float:
-	return 15.0 if quality == "quality" else 10.0
+	# Background villagers remain visible and keep their authored routines, but
+	# an 8 Hz simulation avoids stacking seven navigation/animation updates on a
+	# single Compatibility-renderer frame. Named dialogue actors still receive
+	# the higher presentation rate below.
+	return 15.0 if quality == "quality" else 8.0
 
 func configure(game: Node, quality_preset: String) -> void:
 	host = game
@@ -154,7 +158,7 @@ func _enroll_named_npcs() -> void:
 		actors.append(entry)
 		_configure_agent(entry)
 		if entry.driver != null and entry.driver.has_method("set_update_rate_hz"):
-			entry.driver.set_update_rate_hz(20.0 if quality == "quality" else 12.0)
+			entry.driver.set_update_rate_hz(20.0 if quality == "quality" else 10.0)
 
 func _update_actor(entry: Dictionary, delta: float) -> void:
 	var node: Node3D = entry.node
@@ -423,5 +427,5 @@ func _make_skeletal_villager(parent: Node3D, role_id: String, index: int, scale_
 	driver.name = "CharacterAnimationDriver"
 	mapped.add_child(driver)
 	driver.configure(mapped, {"idle":"Idle", "walk":"Walk", "run":"Run", "hit":"RecieveHit", "death":"Death"})
-	driver.set_update_rate_hz(20.0 if quality == "quality" else 12.0)
+	driver.set_update_rate_hz(20.0 if quality == "quality" else 10.0)
 	return driver

@@ -32,6 +32,10 @@ const SPECS := {
 	"bog_wretch": {"height": 1.60, "collision_height": 1.52, "collision_radius": 0.38, "lod": 16.0, "facing_degrees": 0.0},
 	"gravebound_knight": {"height": 1.88, "collision_height": 1.78, "collision_radius": 0.38, "lod": 18.0, "facing_degrees": 0.0},
 	"white_hart_avatar": {"height": 2.55, "collision_height": 2.25, "collision_radius": 0.58, "lod": 24.0, "facing_degrees": 0.0},
+	"bell_eater": {"height": 2.35, "collision_height": 2.10, "collision_radius": 0.50, "lod": 22.0, "facing_degrees": 0.0},
+	"rootbound_colossus": {"height": 2.75, "collision_height": 2.45, "collision_radius": 0.62, "lod": 24.0, "facing_degrees": 0.0},
+	"ashwing": {"height": 2.40, "collision_height": 2.10, "collision_radius": 0.56, "lod": 24.0, "facing_degrees": 0.0},
+	"halvern_boss": {"height": 1.88, "collision_height": 1.78, "collision_radius": 0.38, "lod": 20.0, "facing_degrees": 0.0},
 }
 
 static func for_role(role_id: String) -> Dictionary:

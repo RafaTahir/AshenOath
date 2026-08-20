@@ -36,10 +36,11 @@ func _initialize() -> void:
 		check(actor.find_children("*", "AnimationPlayer", true, false).size() > 0, "%s has no animation player" % role)
 		check(absf(float(actor.get_meta("normalized_target_height", 0.0)) - float(REQUIRED_ROLES[role])) < 0.02, "%s target height is wrong" % role)
 		actor.queue_free()
-	# CHAR-008 intentionally moves the project to one cohesive humanoid
-	# ecosystem. Source diversity is no longer the acceptance criterion; each
-	# role must carry a valid shared composite and deterministic role identity.
-	check(str(paths.castle_guard_human) == str(paths.road_ranger_human), "Castle and road roles do not use the shared humanoid source")
+	# CHAR-008 keeps castle guards on the shared male humanoid source. The
+	# production Ranger hotfix intentionally gives road roles Captain Senn's
+	# dedicated Ranger outfit while retaining the same skeleton/animation family.
+	check(str(paths.castle_guard_human) == str(paths.villager_human), "Castle guards do not use the shared male humanoid source")
+	check(str(paths.road_ranger_human).contains("characters_ranger/Male_Ranger_Runtime.gltf"), "Road Ranger does not use the approved Ranger runtime source")
 	var crowd_paths := {
 		str(paths.villager_human): true,
 		str(paths.villager_female_human): true,

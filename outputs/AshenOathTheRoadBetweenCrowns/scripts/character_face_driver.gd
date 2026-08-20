@@ -48,7 +48,7 @@ func _process(delta: float) -> void:
 	if not valid or character_root == null:
 		return
 	update_accumulator += delta
-	if update_accumulator < 0.08:
+	if update_accumulator < (0.10 if role_id in ["sister_anwen", "mira", "rook"] else 0.12):
 		return
 	var step := update_accumulator
 	update_accumulator = 0.0

@@ -22,7 +22,10 @@ func _initialize() -> void:
 	await process_frame
 	game.call("_new_game")
 	game.settings.set_quality_preset("balanced")
+	if game.hud != null and game.hud.has_method("set_toasts_suppressed"):
+		game.hud.set_toasts_suppressed(true)
 	await _frames(6)
+	_clear_capture_toast(game)
 	for view in [
 		["greyfen", Vector3(0, 1, 6), 720.0, "01_greyfen_day"],
 		["greyfen", Vector3(0, 1, 6), 60.0, "02_greyfen_night"],
@@ -46,12 +49,13 @@ func _initialize() -> void:
 func _capture(game: Node, zone: String, position: Vector3, minutes: float, file_name: String) -> void:
 	game.call("_load_zone", zone, position)
 	game.day_night.set_time(minutes)
-	game.player.global_position = position
-	game.player.velocity = Vector3.ZERO
+	await _settle_player(game, position)
+	_clear_capture_toast(game)
 	if game.camera_rig != null:
 		game.camera_rig.yaw = 0.0
 		game.camera_rig.pitch = -0.19
 	await _frames(12)
+	_clear_capture_toast(game)
 	var image := root.get_viewport().get_texture().get_image()
 	if image == null or image.get_width() != 1280 or image.get_height() != 720:
 		_fail("%s did not capture at native 1280x720" % file_name)
@@ -65,6 +69,32 @@ func _capture(game: Node, zone: String, position: Vector3, minutes: float, file_
 		return
 	image.save_png("%s/%s.png" % [output_dir, file_name])
 	image.save_png("%s/LIGHT_001_%s_%s.png" % [gallery_dir, file_name, timestamp])
+
+func _settle_player(game: Node, requested_position: Vector3) -> void:
+	var player: Node = game.get("player")
+	var safe_position := requested_position
+	var spatial = game.get("spatial_service")
+	if spatial != null and spatial.has_method("nearest_safe"):
+		safe_position = spatial.nearest_safe(requested_position, 0)
+	player.global_position = safe_position
+	player.velocity = Vector3.ZERO
+	if "floor_snap_length" in player:
+		player.floor_snap_length = 0.65
+	for _i in range(24):
+		await physics_frame
+		await process_frame
+		if player.is_on_floor():
+			break
+	player.velocity = Vector3.ZERO
+
+func _clear_capture_toast(game: Node) -> void:
+	var hud: Node = game.get("hud")
+	if hud == null:
+		return
+	if hud.has_method("set_toasts_suppressed"):
+		hud.set_toasts_suppressed(true)
+	if hud.get("toast_label") != null:
+		hud.toast_label.visible = false
 
 func _mean_luminance(image: Image) -> float:
 	var total := 0.0
