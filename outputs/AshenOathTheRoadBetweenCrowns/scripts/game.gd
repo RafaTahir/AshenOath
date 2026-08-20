@@ -112,6 +112,7 @@ var greyfen_prewarm_spatial_service: Node
 var interaction_focus_cooldown := 0.0
 var compass_refresh_cooldown := 0.0
 var tutorial_refresh_cooldown := 0.0
+var target_status_refresh_cooldown := 0.0
 const MAX_CACHED_ROUTE_ZONES := 1
 const ZONE_RETIRE_FRAMES := 8
 const MAX_SKINNED_RESOURCE_ANCHORS := 4
@@ -178,6 +179,10 @@ func _process(delta: float) -> void:
 	if tutorial_refresh_cooldown <= 0.0:
 		tutorial_refresh_cooldown = 0.10
 		_update_tutorial_prompts()
+	target_status_refresh_cooldown -= delta
+	if target_status_refresh_cooldown <= 0.0:
+		target_status_refresh_cooldown = 0.10
+		_update_target_lock_hud()
 	autosave_cooldown = max(autosave_cooldown - delta, 0.0)
 	if autosave_cooldown <= 0.0:
 		autosave_cooldown = 180.0
@@ -347,6 +352,8 @@ func _spawn_player(pos: Vector3) -> void:
 	assert(RuntimeActorFactory.is_valid_pair(actor_pair), "Player-camera composition failed")
 	player = actor_pair["player"]
 	camera_rig = actor_pair["camera"]
+	if camera_rig != null and camera_rig.has_signal("target_lock_changed") and not camera_rig.target_lock_changed.is_connected(_on_target_lock_changed):
+		camera_rig.target_lock_changed.connect(_on_target_lock_changed)
 	_apply_progression_to_player()
 	_apply_runtime_settings(settings.settings)
 	player.blade_contact_requested.connect(_on_player_blade_contact)
@@ -372,6 +379,10 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	loading_started_usec = loading_started_usec if loading_started_usec > 0 else Time.get_ticks_usec()
 	if player != null and player.has_method("set_transition_locked"):
 		player.set_transition_locked(true)
+	if camera_rig != null and camera_rig.has_method("clear_target_lock"):
+		camera_rig.clear_target_lock()
+	if hud != null and hud.has_method("clear_target_lock_status"):
+		hud.clear_target_lock_status()
 	_clear_oathfire_effects()
 	runtime_light_count = 0
 	tree_batch_data.clear()
@@ -2038,6 +2049,25 @@ func _expose_bog_core(enemy, method: String) -> void:
 	hud.toast("%s tears the dead memory loose from the Wretch's hide." % method)
 	audio.play_event("reveal", 0.035)
 
+func _on_target_lock_changed(target_actor: Node3D, locked: bool) -> void:
+	if hud == null:
+		return
+	if not locked or target_actor == null or not is_instance_valid(target_actor):
+		hud.clear_target_lock_status()
+		return
+	var display_name := str(target_actor.get("display_name"))
+	hud.set_target_lock_status(display_name if display_name != "" else "Enemy", player.global_position.distance_to(target_actor.global_position))
+
+func _update_target_lock_hud() -> void:
+	if hud == null or camera_rig == null or not camera_rig.has_method("get_locked_combat_target"):
+		return
+	var target_actor: Node3D = camera_rig.get_locked_combat_target()
+	if target_actor == null or not is_instance_valid(target_actor):
+		hud.clear_target_lock_status()
+		return
+	var display_name := str(target_actor.get("display_name"))
+	hud.set_target_lock_status(display_name if display_name != "" else "Enemy", player.global_position.distance_to(target_actor.global_position))
+
 func _on_combat_impact(pos: Vector3, heavy: bool) -> void:
 	if audio != null:
 		audio.play_event("heavy_hit" if heavy else "light_hit", 0.04)
@@ -2117,6 +2147,10 @@ func load_world_state(state: Dictionary) -> void:
 		day_night.load_state(state.get("day_night", {}))
 
 func _on_player_died() -> void:
+	if camera_rig != null and camera_rig.has_method("clear_target_lock"):
+		camera_rig.clear_target_lock()
+	if hud != null and hud.has_method("clear_target_lock_status"):
+		hud.clear_target_lock_status()
 	audio.play_event("hurt")
 	audio.set_game_paused(true)
 	get_tree().paused = true
@@ -2127,6 +2161,10 @@ func _on_dialogue_closed_audio() -> void:
 		audio.set_game_paused(false)
 
 func _pause_game() -> void:
+	if camera_rig != null and camera_rig.has_method("clear_target_lock"):
+		camera_rig.clear_target_lock()
+	if hud != null and hud.has_method("clear_target_lock_status"):
+		hud.clear_target_lock_status()
 	audio.set_game_paused(true)
 	get_tree().paused = true
 	paused_by_menu = true

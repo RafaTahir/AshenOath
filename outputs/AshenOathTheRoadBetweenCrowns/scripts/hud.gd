@@ -31,6 +31,7 @@ var stamina_value_label: Label
 var enemy_bar: ProgressBar
 var enemy_label: Label
 var enemy_value_label: Label
+var target_status_label: Label
 var prompt_label: Label
 var tracker_label: Label
 var compass_label: Label
@@ -395,6 +396,16 @@ func hide_enemy() -> void:
 	enemy_label.visible = false
 	enemy_value_label.visible = false
 
+func set_target_lock_status(enemy_name: String, distance: float) -> void:
+	if target_status_label == null:
+		return
+	target_status_label.text = "LOCKED | %s | %.1fm" % [enemy_name, distance]
+	target_status_label.visible = true
+
+func clear_target_lock_status() -> void:
+	if target_status_label != null:
+		target_status_label.visible = false
+
 func set_prompt(text: String) -> void:
 	raw_prompt = text
 	var clean := _format_input_text(text.strip_edges())
@@ -697,6 +708,13 @@ func _build_hud() -> void:
 	enemy_value_label.size = Vector2(90, 24)
 	enemy_value_label.visible = false
 	root.add_child(enemy_value_label)
+	target_status_label = Label.new()
+	target_status_label.name = "TargetLockStatus"
+	target_status_label.position = Vector2(474, 98)
+	target_status_label.size = Vector2(334, 20)
+	target_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	target_status_label.visible = false
+	root.add_child(target_status_label)
 	prompt_label = Label.new()
 	prompt_label.name = "InteractionPrompt"
 	prompt_label.position = Vector2(390, 660)
@@ -1173,13 +1191,14 @@ func _apply_theme() -> void:
 		fill.bg_color = Color(0.52, 0.11, 0.08) if bar == health_bar or bar == enemy_bar else Color(0.72, 0.54, 0.18)
 		bar.add_theme_stylebox_override("background", bg)
 		bar.add_theme_stylebox_override("fill", fill)
-	for label in [enemy_label, enemy_value_label, prompt_label, tracker_label, compass_label, toast_label, hint_label, status_label, equipment_label, health_value_label, stamina_value_label]:
+	for label in [enemy_label, enemy_value_label, target_status_label, prompt_label, tracker_label, compass_label, toast_label, hint_label, status_label, equipment_label, health_value_label, stamina_value_label]:
 		label.add_theme_color_override("font_color", Color(0.86, 0.81, 0.69))
 		label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.85))
 		label.add_theme_constant_override("shadow_offset_x", 2)
 		label.add_theme_constant_override("shadow_offset_y", 2)
 	tracker_label.add_theme_font_size_override("font_size", 15)
 	compass_label.add_theme_font_size_override("font_size", 16)
+	target_status_label.add_theme_font_size_override("font_size", 13)
 	toast_label.add_theme_font_size_override("font_size", 17)
 	prompt_label.add_theme_font_size_override("font_size", 18)
 	hint_label.add_theme_font_size_override("font_size", 15)

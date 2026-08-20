@@ -9,6 +9,8 @@ var distance = 6.8
 const MIN_ZOOM_DISTANCE := 3.2
 const MAX_ZOOM_DISTANCE := 9.2
 const ZOOM_STEP := 0.65
+const TARGET_MAX_DISTANCE := 12.0
+const TARGET_OBSTRUCTION_GRACE := 0.42
 var height = 2.1
 var camera: Camera3D
 var shake_amount = 0.0
@@ -29,8 +31,15 @@ var _fov_kick = 0.0
 var _idle_time = 0.0
 var _combat_focus_refresh := 0.0
 var _cached_combat_focus: Node3D
+var _locked_combat_target: Node3D
+var _target_lock_marker: MeshInstance3D
+var _target_switch_cooldown := 0.0
+var _target_switch_axis_latched := false
+var _target_obscured_time := 0.0
 var _collision_refresh := 0.0
 var _cached_collision_position := Vector3.ZERO
+
+signal target_lock_changed(target: Node3D, locked: bool)
 
 func setup(follow_target: Node3D, source: Node = null) -> void:
 	target = follow_target
@@ -51,6 +60,14 @@ func _input(event: InputEvent) -> void:
 	if target == null or get_tree().paused:
 		return
 	if event is InputEventMouseButton and event.pressed:
+		if event.button_index == MOUSE_BUTTON_WHEEL_UP and _locked_combat_target != null:
+			_cycle_combat_target(1)
+			get_viewport().set_input_as_handled()
+			return
+		if event.button_index == MOUSE_BUTTON_WHEEL_DOWN and _locked_combat_target != null:
+			_cycle_combat_target(-1)
+			get_viewport().set_input_as_handled()
+			return
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
 			adjust_zoom(-ZOOM_STEP)
 			get_viewport().set_input_as_handled()
@@ -77,6 +94,7 @@ func _process(delta: float) -> void:
 		return
 	_apply_keyboard_camera(delta)
 	_update_response_state(delta)
+	_update_target_lock(delta)
 	var velocity = _target_velocity()
 	var flat_speed = Vector2(velocity.x, velocity.z).length()
 	var sprinting := _action_pressed("run") and flat_speed > 3.5
@@ -84,7 +102,7 @@ func _process(delta: float) -> void:
 	if _combat_focus_refresh <= 0.0 or not is_instance_valid(_cached_combat_focus):
 		_combat_focus_refresh = 0.10
 		_cached_combat_focus = _nearest_combat_focus()
-	var combat_focus = _cached_combat_focus
+	var combat_focus: Node3D = _locked_combat_target if _is_valid_combat_target(_locked_combat_target) else _cached_combat_focus
 	var target_distance = maxf(MIN_ZOOM_DISTANCE, distance - 0.75) if combat_focus != null else distance
 	var target_height = 2.25 if combat_focus != null else height
 	var shoulder = -0.55 if combat_focus != null else -0.82
@@ -188,10 +206,23 @@ func get_flat_right() -> Vector3:
 	return Basis(Vector3.UP, yaw).x.normalized()
 
 func _apply_keyboard_camera(delta: float) -> void:
+	if _action_just_pressed("target_lock"):
+		if _locked_combat_target == null:
+			_set_locked_combat_target(_cached_combat_focus if _is_valid_combat_target(_cached_combat_focus) else _nearest_combat_focus())
+		else:
+			_clear_locked_combat_target()
+	if _locked_combat_target != null:
+		if _action_just_pressed("target_next"):
+			_cycle_combat_target(1)
+		elif _action_just_pressed("target_previous"):
+			_cycle_combat_target(-1)
 	var look := _look_input()
 	var turn := look.x
 	var tilt := look.y
-	if abs(turn) > 0.01:
+	# A hard horizontal stick deflection is a target-cycle gesture while
+	# locked. Smaller corrections still retain the free camera fallback.
+	var cycling_target := _locked_combat_target != null and absf(turn) >= 0.78
+	if abs(turn) > 0.01 and not cycling_target:
 		yaw -= turn * keyboard_turn_speed * delta
 	if abs(tilt) > 0.01:
 		var y_direction = -1.0 if invert_y else 1.0
@@ -226,6 +257,164 @@ func _look_input() -> Vector2:
 		Input.get_axis("camera_left", "camera_right"),
 		Input.get_axis("camera_up", "camera_down")
 	) * gamepad_look_sensitivity
+
+func _action_just_pressed(action: StringName) -> bool:
+	if input_source != null and input_source.has_method("is_action_just_pressed"):
+		return input_source.is_action_just_pressed(action)
+	return Input.is_action_just_pressed(action)
+
+func _update_target_lock(delta: float) -> void:
+	_target_switch_cooldown = maxf(_target_switch_cooldown - delta, 0.0)
+	if _locked_combat_target != null:
+		if not _is_target_alive_in_range(_locked_combat_target):
+			_clear_locked_combat_target()
+		elif _target_is_visible(_locked_combat_target):
+			_target_obscured_time = 0.0
+			_set_target_marker_visible(true)
+			_soft_frame_locked_target(_locked_combat_target, delta)
+		else:
+			# Keep the target through a brief tree/actor occlusion. A sustained
+			# obstruction returns control to the normal free camera.
+			_target_obscured_time += delta
+			_set_target_marker_visible(false)
+			if _target_obscured_time > TARGET_OBSTRUCTION_GRACE:
+				_clear_locked_combat_target()
+	if _locked_combat_target == null:
+		return
+	var look := _look_input()
+	var horizontal := look.x
+	if absf(horizontal) < 0.78:
+		_target_switch_axis_latched = false
+	elif not _target_switch_axis_latched and _target_switch_cooldown <= 0.0:
+		_cycle_combat_target(1 if horizontal > 0.0 else -1)
+		_target_switch_axis_latched = true
+		_target_switch_cooldown = 0.30
+
+func _is_valid_combat_target(candidate: Node3D) -> bool:
+	return _is_target_alive_in_range(candidate) and _target_is_visible(candidate)
+
+func _is_target_alive_in_range(candidate: Node3D) -> bool:
+	if candidate == null or not is_instance_valid(candidate):
+		return false
+	if bool(candidate.get("dead")):
+		return false
+	if candidate.has_method("is_encounter_active") and not bool(candidate.is_encounter_active()):
+		return false
+	if target == null or target.global_position.distance_to(candidate.global_position) > TARGET_MAX_DISTANCE:
+		return false
+	return true
+
+func _target_is_visible(candidate: Node3D) -> bool:
+	if candidate == null or get_world_3d() == null:
+		return false
+	var origins := [target.global_position + Vector3.UP * 1.05, target.global_position + Vector3.UP * 1.48]
+	var endpoints := [candidate.global_position + Vector3.UP * 0.88, candidate.global_position + Vector3.UP * 1.42]
+	for index in range(origins.size()):
+		var query := PhysicsRayQueryParameters3D.create(origins[index], endpoints[index])
+		query.exclude = _target_query_exclusions(candidate)
+		query.collide_with_areas = false
+		if get_world_3d().direct_space_state.intersect_ray(query).is_empty():
+			return true
+	return false
+
+func _target_query_exclusions(candidate: Node3D) -> Array[RID]:
+	var exclusions: Array[RID] = []
+	if target is CollisionObject3D:
+		exclusions.append((target as CollisionObject3D).get_rid())
+	if candidate is CollisionObject3D:
+		exclusions.append((candidate as CollisionObject3D).get_rid())
+	return exclusions
+
+func _available_combat_targets() -> Array[Node3D]:
+	var result: Array[Node3D] = []
+	for node in get_tree().get_nodes_in_group("enemies"):
+		if node is Node3D and _is_valid_combat_target(node as Node3D):
+			result.append(node as Node3D)
+	result.sort_custom(func(a: Node3D, b: Node3D):
+			var forward := get_flat_forward()
+			var right := get_flat_right()
+			var a_offset := a.global_position - target.global_position
+			var b_offset := b.global_position - target.global_position
+			a_offset.y = 0.0
+			b_offset.y = 0.0
+			var a_angle := atan2(right.dot(a_offset.normalized()), forward.dot(a_offset.normalized()))
+			var b_angle := atan2(right.dot(b_offset.normalized()), forward.dot(b_offset.normalized()))
+			if not is_equal_approx(a_angle, b_angle):
+				return a_angle < b_angle
+			return target.global_position.distance_squared_to(a.global_position) < target.global_position.distance_squared_to(b.global_position))
+	return result
+
+func _cycle_combat_target(direction: int) -> void:
+	var candidates := _available_combat_targets()
+	if candidates.is_empty():
+		_clear_locked_combat_target()
+		return
+	var index := candidates.find(_locked_combat_target)
+	if index < 0:
+		index = 0 if direction >= 0 else candidates.size() - 1
+	else:
+		index = posmod(index + direction, candidates.size())
+	_set_locked_combat_target(candidates[index])
+	_target_switch_cooldown = 0.30
+	_target_switch_axis_latched = true
+
+func _set_locked_combat_target(value: Node3D) -> void:
+	if not _is_valid_combat_target(value):
+		_clear_locked_combat_target()
+		return
+	_locked_combat_target = value
+	_cached_combat_focus = value
+	_target_obscured_time = 0.0
+	if _target_lock_marker != null and is_instance_valid(_target_lock_marker):
+		_target_lock_marker.queue_free()
+	_target_lock_marker = MeshInstance3D.new()
+	_target_lock_marker.name = "SoftLockMarker"
+	var mesh := TorusMesh.new()
+	mesh.inner_radius = 0.16
+	mesh.outer_radius = 0.22
+	mesh.rings = 8
+	mesh.ring_segments = 16
+	_target_lock_marker.mesh = mesh
+	_target_lock_marker.position = Vector3(0, 1.72, 0)
+	var material := StandardMaterial3D.new()
+	material.albedo_color = Color(0.92, 0.67, 0.28, 0.86)
+	material.emission_enabled = true
+	material.emission = Color(0.72, 0.28, 0.08)
+	material.emission_energy_multiplier = 1.2
+	_target_lock_marker.material_override = material
+	_target_lock_marker.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	value.add_child(_target_lock_marker)
+	target_lock_changed.emit(value, true)
+
+func _clear_locked_combat_target() -> void:
+	if _target_lock_marker != null and is_instance_valid(_target_lock_marker):
+		_target_lock_marker.queue_free()
+	_target_lock_marker = null
+	if _locked_combat_target != null:
+		target_lock_changed.emit(_locked_combat_target, false)
+	_locked_combat_target = null
+	_target_obscured_time = 0.0
+	_target_switch_axis_latched = false
+
+func _set_target_marker_visible(value: bool) -> void:
+	if _target_lock_marker != null and is_instance_valid(_target_lock_marker):
+		_target_lock_marker.visible = value
+
+func _soft_frame_locked_target(combat_target: Node3D, delta: float) -> void:
+	if target == null or combat_target == null or not is_instance_valid(combat_target):
+		return
+	var flat_to_target := combat_target.global_position - target.global_position
+	flat_to_target.y = 0.0
+	if flat_to_target.length_squared() < 0.04:
+		return
+	var desired_yaw := atan2(-flat_to_target.x, -flat_to_target.z)
+	yaw = lerp_angle(yaw, desired_yaw, _smooth_weight(delta, 3.8))
+
+func get_locked_combat_target() -> Node3D:
+	return _locked_combat_target if _is_target_alive_in_range(_locked_combat_target) else null
+
+func clear_target_lock() -> void:
+	_clear_locked_combat_target()
 
 func _action_pressed(action: StringName) -> bool:
 	if input_source != null and input_source.has_method("is_action_pressed"):
@@ -262,15 +451,11 @@ func _update_response_state(delta: float) -> void:
 
 func _nearest_combat_focus() -> Node3D:
 	var nearest: Node3D = null
-	var nearest_dist = 10.0
-	for node in get_tree().get_nodes_in_group("enemies"):
-		if not (node is Node3D):
-			continue
-		if bool(node.get("dead")):
-			continue
-		var dist = target.global_position.distance_to(node.global_position)
+	var nearest_dist := TARGET_MAX_DISTANCE
+	for candidate in _available_combat_targets():
+		var dist := target.global_position.distance_to(candidate.global_position)
 		if dist < nearest_dist:
-			nearest = node
+			nearest = candidate
 			nearest_dist = dist
 	return nearest
 

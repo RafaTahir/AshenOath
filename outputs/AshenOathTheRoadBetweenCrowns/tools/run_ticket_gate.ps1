@@ -363,6 +363,9 @@ foreach ($capture in $captureGates) {
     if ($capture -eq "capture_slice_screenshots" -and $ChangedViews -contains "combat") {
         $captureArguments += @("--", "--combat-only")
     }
+	if ($capture -eq "capture_slice_screenshots" -and $ChangedViews -contains "targeting") {
+		$captureArguments += @("--", "--target-only")
+	}
     Invoke-Compact $capture $Godot $captureArguments $captureInputs $cache
 }
 

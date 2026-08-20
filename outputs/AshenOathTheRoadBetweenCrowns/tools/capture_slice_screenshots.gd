@@ -45,6 +45,12 @@ func _initialize() -> void:
 		await _shutdown_capture_game(game)
 		quit(0)
 		return
+	if "--target-only" in OS.get_cmdline_user_args():
+		await _capture_target_lock(game, "74_target_001_soft_lock")
+		print("TARGET-001 CAPTURE: PASS")
+		await _shutdown_capture_game(game)
+		quit(0)
+		return
 	if "--ai-only" in OS.get_cmdline_user_args():
 		await _capture_ai_formation(game, "74_ai_001_engagement_roles", false)
 		await _capture_ai_formation(game, "75_ai_001_attack_contact", true)
@@ -564,6 +570,37 @@ func _capture_player_motion_state(game, file_name: String, state: String) -> voi
 	game.player.set_physics_process(true)
 	if game.camera_rig != null:
 		game.camera_rig.set_process(true)
+
+func _capture_target_lock(game, file_name: String) -> void:
+	game.call("_load_zone", "wychwood", Vector3(0, 1, -1.0))
+	await _wait_for_zone_ready(game)
+	game.player.global_position = Vector3(0, 0.95, -1.0)
+	game.player.velocity = Vector3.ZERO
+	for index in range(game.active_enemies.size()):
+		var enemy = game.active_enemies[index]
+		if enemy == null or not is_instance_valid(enemy):
+			continue
+		enemy.set_physics_process(false)
+		if index == 0:
+			enemy.set_encounter_active(true)
+			enemy.global_position = Vector3(0.9, 0.8, -4.35)
+			enemy.look_at(Vector3(game.player.global_position.x, enemy.global_position.y, game.player.global_position.z), Vector3.UP)
+		else:
+			enemy.set_encounter_active(false)
+	if game.camera_rig != null:
+		game.camera_rig.yaw = 0.0
+		game.camera_rig.pitch = -0.18
+	await _settle_frames(4)
+	Input.action_press("target_lock")
+	await _settle_frames(2)
+	Input.action_release("target_lock")
+	await _settle_frames(10)
+	var locked = game.camera_rig.get_locked_combat_target() if game.camera_rig != null else null
+	if locked == null:
+		push_error("%s target lock did not acquire the staged enemy" % file_name)
+		quit(1)
+		return
+	_save_viewport(file_name)
 
 func _reset_combat_capture_pose(captured_player: Node) -> void:
 	if captured_player == null:

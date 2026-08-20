@@ -34,6 +34,9 @@ const KEYBOARD_BINDINGS := {
 	"camera_down": KEY_DOWN,
 	"camera_zoom_in": KEY_PAGEUP,
 	"camera_zoom_out": KEY_PAGEDOWN,
+	"target_lock": KEY_T,
+	"target_next": KEY_Y,
+	"target_previous": KEY_U,
 }
 
 const MOUSE_BINDINGS := {
@@ -52,6 +55,7 @@ const GAMEPAD_BUTTON_BINDINGS := {
 	"throw_bomb": JOY_BUTTON_DPAD_RIGHT,
 	"open_inventory": JOY_BUTTON_BACK,
 	"pause": JOY_BUTTON_START,
+	"target_lock": JOY_BUTTON_RIGHT_STICK,
 }
 
 const GAMEPAD_AXIS_BINDINGS := {
@@ -65,6 +69,11 @@ const GAMEPAD_AXIS_BINDINGS := {
 	"camera_down": [JOY_AXIS_RIGHT_Y, 1.0],
 	"oathfire_beam": [JOY_AXIS_TRIGGER_LEFT, 1.0],
 	"heavy_attack": [JOY_AXIS_TRIGGER_RIGHT, 1.0],
+	# These semantic actions share the right stick with camera look. The
+	# camera consumes them only while a target is locked, so free look remains
+	# unchanged and target switching is still discoverable/remappable.
+	"target_previous": [JOY_AXIS_RIGHT_X, -1.0],
+	"target_next": [JOY_AXIS_RIGHT_X, 1.0],
 }
 
 const KEYBOARD_LABELS := {
@@ -82,6 +91,9 @@ const KEYBOARD_LABELS := {
 	"pause": "Esc",
 	"camera_zoom_in": "Page Up",
 	"camera_zoom_out": "Page Down",
+	"target_lock": "T",
+	"target_next": "Y",
+	"target_previous": "U",
 }
 
 const GAMEPAD_LABELS := {
@@ -99,6 +111,9 @@ const GAMEPAD_LABELS := {
 	"pause": "Menu",
 	"camera_zoom_in": "D-Pad Up",
 	"camera_zoom_out": "D-Pad Down",
+	"target_lock": "R3",
+	"target_next": "Right Stick Left/Right",
+	"target_previous": "Right Stick Left/Right",
 }
 
 const TOUCH_LABELS := {
