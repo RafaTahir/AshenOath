@@ -2,6 +2,7 @@ extends Node
 
 const QuestManager = preload("res://scripts/quest_manager.gd")
 const QuestPresentationState = preload("res://scripts/quest_presentation_state.gd")
+const QuestBeatDirector = preload("res://scripts/quest_beat_director.gd")
 const DialogueManager = preload("res://scripts/dialogue_manager.gd")
 const StoryState = preload("res://scripts/story_state.gd")
 const InventoryManager = preload("res://scripts/inventory_manager.gd")
@@ -23,7 +24,7 @@ const ZoneStreamingService = preload("res://scripts/zone_streaming_service.gd")
 const RuntimePackManager = preload("res://scripts/runtime_pack_manager.gd")
 
 const REQUIRED_SERVICES := [
-	"story_state", "quests", "quest_presentation", "dialogue", "inventory", "crafting", "combat",
+	"story_state", "quests", "quest_presentation", "quest_beats", "dialogue", "inventory", "crafting", "combat",
 	"save_manager", "settings", "world_materials", "day_night", "audio",
 	"asset_helper", "hud", "minigames", "progression", "input_router", "interaction_focus", "mobile_touch", "zone_streaming", "runtime_packs"
 ]
@@ -37,6 +38,7 @@ func create_services() -> Dictionary:
 		"story_state": StoryState.new(),
 		"quests": QuestManager.new(),
 		"quest_presentation": QuestPresentationState.new(),
+		"quest_beats": QuestBeatDirector.new(),
 		"dialogue": DialogueManager.new(),
 		"inventory": InventoryManager.new(),
 		"crafting": CraftingManager.new(),
@@ -70,6 +72,7 @@ func configure(owner: Node) -> void:
 	var story_state = services["story_state"]
 	var quests = services["quests"]
 	var quest_presentation = services["quest_presentation"]
+	var quest_beats = services["quest_beats"]
 	var dialogue = services["dialogue"]
 	var inventory = services["inventory"]
 	var crafting = services["crafting"]
@@ -90,6 +93,7 @@ func configure(owner: Node) -> void:
 	hud.process_mode = Node.PROCESS_MODE_ALWAYS
 	quests.load_quests("res://data/quests.json")
 	quest_presentation.setup(quests)
+	quest_beats.setup(quests, story_state)
 	dialogue.load_dialogue("res://data/dialogue.json")
 	dialogue.load_dialogue("res://data/campaign_dialogue.json")
 	dialogue.setup(story_state)
