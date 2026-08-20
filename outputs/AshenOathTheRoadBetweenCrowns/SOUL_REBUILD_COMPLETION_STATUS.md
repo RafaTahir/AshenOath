@@ -4,10 +4,11 @@ Date: 2026-08-21
 
 ## Current Truth
 
-The cumulative Soul Rebuild work is locally release-verified on
-`codex/soul-rebuild`. It has not been published to production yet in this
-checkpoint. The authoritative release runner completed with `PASS` after the
-full browser tail was rerun against the corrected QA export.
+The cumulative Soul Rebuild work is release-verified and deployed. The
+authoritative release runner completed with `PASS` after the full browser tail
+was rerun against the corrected QA export. Release commit
+`bf51a5db39fb4fd15a643ac3ccd9aaf9de14511b` is pushed to `main`, and Vercel is
+serving the matching Web artifact.
 
 ## Completed
 
@@ -32,14 +33,13 @@ full browser tail was rerun against the corrected QA export.
 - Local PCK SHA-256:
   `98AA203BA4EC02991DCDD75FEE8BE5A7F34DE5D4E706F53F96264C4F565FFC6C`.
 
-## Remaining Release Actions
+## Deployment
 
-1. Stage the verified source, documentation, screenshots, export configuration,
-   and synchronized `web/` artifact while excluding development-only raw files.
-2. Commit and push `codex/soul-rebuild`.
-3. Fast-forward and push `main`.
-4. Wait for Vercel, compare the live `index.pck` hash, and smoke-test the
-   cache-busted production URL.
+- Commit: `bf51a5db39fb4fd15a643ac3ccd9aaf9de14511b`.
+- Branch and `main` pushes: `PASS`.
+- Local/live PCK hash comparison: `PASS`.
+- Live PCK SHA-256: `98aa203ba4ec02991dcdd75fee8be5a7f34de5d4e706f53f96264c4f565ffc6c`.
+- Production URL: `https://ashenoath.vercel.app/?v=soul-rebuild`.
 
 ## Known Limitations
 

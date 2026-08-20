@@ -10,11 +10,13 @@ emulation gates pass. The full browser route reaches Hart Glade through 37
 checkpoints without console or network errors.
 
 The verified seven-file artifact is `97,898,609` bytes and its local PCK hash is
-`98AA203BA4EC02991DCDD75FEE8BE5A7F34DE5D4E706F53F96264C4F565FFC6C`. Production
-sync, commit, `main` push, Vercel deployment, and live hash comparison are the
-remaining release actions. Headless SwiftShader FPS is diagnostic only; native
-performance acceptance comes from the graphical Compatibility gate. Shutdown
-allocator warnings are classified, not active-frame failures.
+`98AA203BA4EC02991DCDD75FEE8BE5A7F34DE5D4E706F53F96264C4F565FFC6C`. Release
+commit `bf51a5db39fb4fd15a643ac3ccd9aaf9de14511b` is pushed to `main`, and the
+live Vercel `index.pck` matches this hash byte-for-byte at
+`https://ashenoath.vercel.app/?v=soul-rebuild`. Headless SwiftShader FPS is
+diagnostic only; native performance acceptance comes from the graphical
+Compatibility gate. Shutdown allocator warnings are classified, not
+active-frame failures.
 
 This is the compact handoff document for the 62-ticket soul-rebuild program. It is intentionally shorter than the historical phase archive.
 

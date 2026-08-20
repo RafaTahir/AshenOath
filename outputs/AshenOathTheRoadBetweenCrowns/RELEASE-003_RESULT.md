@@ -2,9 +2,9 @@
 
 ## Status
 
-Local release suite passed on 2026-08-21. Production deployment is the remaining
-step in this checkpoint; no live deployment is claimed until the commit, push,
-Vercel response, and live PCK comparison succeed.
+Local release suite and production deployment passed on 2026-08-21. The
+verified commit is pushed to `main`; Vercel served the matching PCK and the
+cache-busted production endpoint returned HTTP 200.
 
 ## Verification
 
@@ -53,9 +53,12 @@ Vercel response, and live PCK comparison succeed.
 ## Git and Deployment
 
 - Development branch: `codex/soul-rebuild`.
-- Final release commit and push are performed after this document and the
-  synchronized Web folder are staged.
-- Production target: `https://ashenoath.vercel.app/?v=soul-rebuild`.
+- Release commit: `bf51a5db39fb4fd15a643ac3ccd9aaf9de14511b`.
+- Development branch and `main` push: `PASS`.
+- Live Vercel PCK SHA-256: `98aa203ba4ec02991dcdd75fee8be5a7f34de5d4e706f53f96264c4f565ffc6c`.
+- Local/live PCK comparison: `PASS`.
+- Production smoke endpoint: HTTP 200.
+- Production URL: `https://ashenoath.vercel.app/?v=soul-rebuild`.
 
 ## Exact Local Running Steps
 

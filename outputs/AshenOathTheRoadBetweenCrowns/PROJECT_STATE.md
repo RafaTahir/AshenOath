@@ -10,9 +10,11 @@ through 37 checkpoints without browser console or network errors. The verified
 seven-file Web artifact is `97,898,609` bytes with PCK SHA-256
 `98AA203BA4EC02991DCDD75FEE8BE5A7F34DE5D4E706F53F96264C4F565FFC6C`.
 
-The production `web/` folder, `main`, and Vercel are still awaiting the final
-commit/push/hash comparison. Shutdown-only Godot allocator diagnostics remain
-classified warnings; no active-frame renderer error blocked the passing gates.
+The release is committed as `bf51a5db39fb4fd15a643ac3ccd9aaf9de14511b`, pushed
+to `codex/soul-rebuild` and `main`, and deployed by Vercel. The live
+`index.pck` matches the verified local PCK hash byte-for-byte. Shutdown-only
+Godot allocator diagnostics remain classified warnings; no active-frame
+renderer error blocked the passing gates.
 The game remains grounded stylized dark fantasy, not photoreal or AAA. Firefox,
 physical-controller certification, and native mobile/store packages remain
 deferred.

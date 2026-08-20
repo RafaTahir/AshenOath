@@ -3,7 +3,7 @@
     "status":  "pass",
     "started_at":  "2026-08-20T21:48:25.0067344Z",
     "finished_at":  "2026-08-20T22:03:30.6794808Z",
-    "source_commit":  "eea7fad5fbf22e14b8e7554fc0b011b02b236fb8",
+    "source_commit":  "bf51a5db39fb4fd15a643ac3ccd9aaf9de14511b",
     "mode":  "full",
     "requested_gate":  "",
     "project":  "outputs/AshenOathTheRoadBetweenCrowns",
