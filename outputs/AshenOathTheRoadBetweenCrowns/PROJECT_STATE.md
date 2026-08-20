@@ -6,9 +6,18 @@ Ashen Oath is a **pre-alpha prototype**. It is not a commercial Alpha, Early Acc
 
 RECOVERY-003 replaces reflective campaign-zone construction with a validated `ZoneBuildContext`, removes the blocking travel overlay, and requires player-triggered gate verification. Deep Woods, the Long Road, Castle Approach, Courtyard, and Record Hall are implemented playable sections; later campaign content remains pre-alpha and must not be described as finished until its player-driven route and visual gates pass.
 
-RECOVERY-004 is the active recovery program. This checkpoint isolates QA browser telemetry from production, adds a disposable `Web QA Browser` preset, centralizes interaction focus and pointer mode, and makes shutdown diagnostics explicit instead of suppressing them. The authoritative current audit is `RECOVERY_004_ISSUE_REGISTRY.json`; implementation notes are in `RECOVERY_004_IMPLEMENTATION_STATUS.md`. Codex owns the visual-review decision: fresh screenshots are inspected directly and checked by automated image, exposure, freshness, scale, grounding, material, and route checks. The complete authoritative release gate passes, the verified production export is synced to `web/`, and the live Vercel PCK matches the local export.
+RECOVERY-004 remains the historical recovery baseline. The current Soul Rebuild continuation is still an uncommitted working-tree checkpoint; it must not be described as a production release. The project has a disposable `Web QA Browser` preset, isolated QA telemetry, centralized interaction focus, and explicit shutdown diagnostics. Codex owns the visual-review decision, but fresh full-route approval and a final production hash comparison have not been re-established for the current source.
 
-The explicit **visual approval boundary** is current under the Codex policy: all eleven required views have fresh Codex-reviewed evidence. This approval is not a human sign-off and does not claim photoreal or AAA quality; the manifest records the remaining low-poly, blockout, and procedural limitations plainly.
+The current visual work has fresh character portraits, fresh Greyfen/Hart product captures, and a passing graphical visible-quality verifier. It does not yet constitute approval of all eleven release views: Ghoulkin remains a grounded but visibly low-poly interim family, Ashwing is an interim Dragon fallback, and later-zone architecture/Hart presentation remain below the locked visual bar.
+
+## Soul Rebuild Current Checkpoint - 2026-08-17
+
+- Real repository HEAD remains the deployed baseline `27119384b688ce9e0232d9bf79abd0adeca8b038`; current Soul Rebuild edits are uncommitted and have not been pushed or deployed.
+- `verify_runtime.gd`, `verify_char_001.gd`, `verify_mon_002.gd`, `verify_boss_002.gd`, and `verify_asset_acceptance.py` pass with isolated log files. `verify_visible_quality.gd` passes on the graphical Compatibility renderer after its asynchronous checks were made truthful.
+- Kael and Sister Anwen now have fresh front-facing native-face portrait evidence. Connected Ghoul family mappings replaced the rejected OrcSkull mapping; Ashwing uses the available animated Dragon FBX as an explicitly interim fallback.
+- The Web export has not yet been rebuilt after the Dragon dependency correction. Do not use the older 95.7 MB / 59.4 MB artifact as proof for this checkpoint until export and packed startup are rerun.
+- Known blockers before any release claim: low-poly/interim monster and later-world visual quality, Godot shutdown RID/ObjectDB warnings, cold browser startup targets, full-route evidence, and real GitHub/Vercel connectivity.
+- Latest opening timing evidence: graphical Compatibility engine-ready `10.982 s`, New Game `51 ms`, cold route `349 ms`, warm route `34 ms`, approximately `97.4 MB` memory, and Greyfen/Wychwood samples at `60 FPS`. The older Web artifact remains stale after current source edits.
 
 ## SOUL-REBUILD Checkpoint
 
@@ -118,6 +127,16 @@ for a native store release or sustained physical-phone performance.
 - Imported character transforms follow one normalized-height contract and are multiplied rather than overwritten.
 - Sister Anwen now turns toward Kael. Greyfen ambient routes are grounded and bridge-safe.
 - The Wychwood five-enemy encounter is staged in three waves and retains five-kill progression. RECOVERY-002 is currently repairing traversal, actor scale, renderer integrity, and performance before the next deployment.
+
+## SOUL-REBUILD Milestone E Continuation Update
+
+- COMBAT-005 now exposes an authoritative blade-contact result containing measured previous/current blade transforms, contact phase, sweep length, blade direction, contact distance, attack id, damage, and source tag. Contact feedback is generated from that same measured segment, including a short blade-travel ribbon; parry flashes can anchor at the actual weapon contact point. Kael uses the neutral UAL2 `Idle_Loop` for the ready stance. The targeted runtime, motion, combat, AI, Oathfire, content, and fresh 1280x720 combat capture gates pass. See `COMBAT-005_RESULT.md`.
+- TARGET-001 adds optional, non-forced soft lock-on with obstruction checks, target cycling, a lightweight target marker, keyboard `T/Y/U`, mouse-wheel cycling while locked, and R3/right-stick gamepad support.
+- OATH-002 retains the existing initial-facing/sheathe/hand-charge state machine and adds endpoint-specific impact feedback using the collision-clipped cast endpoint.
+- MON-002 and BOSS-002 add five data-driven boss definitions, the `BossEncounter` phase/checkpoint/peaceful-resolution contract, and role-specific boss telegraphs. Current boss bodies reuse the existing optimized CC0 runtime sources; dedicated high-fidelity family replacements remain open.
+- AI-003 receives boss cadence and telegraph support while preserving navigation, leash, attack reservations, parry, and low-cost far ticking.
+- A `QuestBeatDirector` now supplies one current staging/next-action beat from the authoritative QuestManager without duplicating progression or save authority.
+- Targeted source contracts and JSON parsing pass. Godot graphical/script gates are currently blocked by the local runtime failing to create `user://logs/` and crashing before verifier execution. No screenshot, Web export, commit, push, or deployment is claimed for this continuation.
 - Quest tracking persists an explicit tracked quest and selects zone-relevant main objectives.
 - Repeated world boxes/details use shared meshes and MultiMesh batches. RECOVERY-002 measured 37.2 FPS average, 35.6 FPS minimum, and 294 ms warm route transition on Intel HD 620/ANGLE.
 - The world remains intentionally stylized and low-poly; current assets do not support a photoreal/AAA claim.
@@ -843,3 +862,28 @@ This was an explicitly abbreviated acceptance. The 13.6 FPS measured 1% low, slo
 The route-visible Universal human and Ranger sources now share one explicit visual-facing contract. Humans are calibrated 180 degrees so forward movement toward Godot `-Z` presents the chest/front rather than a backwards walk. Kael no longer uses the old shared-animation rotation override; intentional backpedaling remains separate from forward/strafe facing. Anwen uses the same NPC yaw calculation in approach and dialogue staging.
 
 Captain Senn and `road_ranger_human` now use the optimized 65-bone `Male_Ranger_Runtime.gltf` with 1K Ranger maps and the shared non-root-motion UAL2 library. The Ranger runtime manifest records source, CC0 license, checksums, and byte sizes. Fresh Codex-reviewed 1280x720 captures cover Kael, Anwen, villagers, Ghoulkin, sword attack, and Senn portrait/walk/gameplay views. The targeted character, motion, runtime, content, and capture gates pass. See `CHAR_FACING_RANGER_001_RESULT.md`.
+
+## Soul Rebuild Completion Roadmap Checkpoint
+
+The current working tree contains the Milestone E/F implementation slice:
+
+- Contact-driven sword contact data, blade-tip/base feedback, target lock-on, Oathfire endpoint feedback, boss definitions, boss phases/checkpoints, peaceful-resolution hooks, boss save-state restoration, and encounter-specific music states.
+- QuestBeatDirector tracker decoration, campaign dialogue fallback metadata, authored consequence dressing for the shrine/cemetery, and bounded campaign lifecycle coverage through Hart Glade.
+- Responsive gameplay HUD anchoring, product accessibility/gamepad checks, deterministic visual-budget checks, and a full released-zone lifecycle verifier.
+- The ticket runner now separates Godot engine logs from compact gate summaries, preventing the runner from causing a native crash when both wrote to the same file.
+
+Targeted accumulated gates pass with an explicit log-file:
+
+- Combat, target, monster, AI, boss, story, quest, save, narrative, side-quest, cinematic, visible-quality, zone-budget, lighting, HUD, audio, accessibility, performance-contract, and released-zone lifecycle checks.
+- The sandbox test profile cannot write Godot user data and reports that as an explicit warning; writable browser profiles retain the real disk-persistence assertions.
+
+The continuation source is now verified locally for the release candidate. The release commit is recorded in `RELEASE-003_RESULT.md`; the GitHub push and Vercel deployment are currently blocked by outbound network access in this runtime.
+
+## Soul Rebuild Release Candidate (current)
+
+- Fresh graphical opening verification passed with native 1280x720 Compatibility rendering: Greyfen 52.6 FPS average / 36.4 FPS 1% low, Wychwood 60.1 / 46.5, 94.5 MB memory, 46 ms New Game, and 58 ms warm return.
+- The rebuilt seven-file Web artifact is 95.7 MB with a 59.4 MB PCK. Current local PCK SHA-256: `4540df11906867be3ea453cc8cda8e8412562e0c61fc07e8c3245adbe1deb36e`.
+- Packed startup passed. Chrome and Edge passed the rebuilt export at 1280x720 WebGL2 with no browser console/resource errors. Engine readiness/New Game timings were Chrome 13.8 s/18.8 s and Edge 12.1 s/17.5 s; browser heap was 12.1/11.7 MB.
+- Web-specific Greyfen prewarming is deferred so New Game cannot hang behind a hidden full-zone build; desktop prewarming remains enabled. The active Web build is bounded and browser-tested.
+- Known environment diagnostics: the sandbox cannot persist Godot user settings and Godot reports renderer resource leaks during process teardown. These occurred after passing runtime assertions, not during active gameplay.
+- The project remains a functional stylized pre-alpha, not AAA/photoreal: several route-visible environments and character assets are still low-poly/blockout quality, and broad Firefox/physical-controller certification remains deferred.

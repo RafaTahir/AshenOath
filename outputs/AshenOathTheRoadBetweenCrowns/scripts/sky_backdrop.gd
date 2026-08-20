@@ -83,8 +83,13 @@ func _draw() -> void:
 	if size.x < 2.0 or size.y < 2.0 or not outdoor:
 		return
 	if overlay_only:
+		var overlay_colors := _sky_colors()
 		if night > 0.20 and daylight + twilight <= 0.08:
 			_draw_stars()
+			_draw_moon()
+		else:
+			_draw_sun()
+			_draw_clouds(overlay_colors.cloud, overlay_colors.cloud_shadow, overlay_colors.cloud_alpha)
 		return
 	var colors := _sky_colors()
 	var band_count := 28
@@ -148,11 +153,13 @@ func _draw_sun() -> void:
 	var sun_height := sin(clampf((world_minutes - 420.0) / 690.0, 0.0, 1.0) * PI)
 	var position := Vector2(lerpf(size.x * 0.12, size.x * 0.88, arc), size.y * (0.62 - sun_height * 0.34))
 	var alpha := clampf(daylight + twilight * 0.72, 0.0, 1.0)
-	for radius in [42.0, 31.0, 23.0]:
-		var ring_alpha := alpha * (0.035 if radius > 31.0 else (0.055 if radius > 23.0 else 0.10))
+	# Keep the solar disc distant and restrained. The layered halo supplies
+	# atmospheric presence without turning the sun into a foreground sphere.
+	for radius in [56.0, 43.0, 31.0, 22.0]:
+		var ring_alpha := alpha * (0.018 if radius > 43.0 else (0.028 if radius > 31.0 else (0.050 if radius > 22.0 else 0.085)))
 		draw_circle(position, radius, Color(1.0, 0.60, 0.28, ring_alpha))
-	draw_circle(position, 12.0, Color(1.0, 0.92, 0.72, 0.96 * alpha))
-	draw_circle(position + Vector2(-2.0, -2.0), 7.5, Color(1.0, 0.98, 0.88, 0.96 * alpha))
+	draw_circle(position, 13.0, Color(1.0, 0.92, 0.72, 0.96 * alpha))
+	draw_circle(position + Vector2(-2.0, -2.0), 8.0, Color(1.0, 0.98, 0.88, 0.96 * alpha))
 
 func _draw_moon() -> void:
 	var night_t := fposmod(world_minutes + 330.0, 1440.0) / 1440.0
@@ -171,20 +178,28 @@ func _draw_clouds(color: Color, shadow: Color, alpha: float) -> void:
 	var count := get_visible_cloud_count()
 	for index in range(count):
 		var travel := 0.0 if reduced_motion else fmod(world_minutes * 0.13 + float(index) * 224.0, size.x + 260.0) - 130.0
-		var centre := Vector2(travel, size.y * (0.16 + float(index % 3) * 0.085))
-		var scale := 0.82 + float(index % 4) * 0.12
-		var shadow_alpha := alpha * (0.20 if night < 0.4 else 0.12)
-		draw_colored_polygon(_ellipse(centre + Vector2(10.0, 11.0), Vector2(92.0, 18.0) * scale, 0.0), Color(shadow.r, shadow.g, shadow.b, shadow_alpha))
+		var height_band: float = [0.13, 0.27, 0.18, 0.35, 0.22, 0.11][index % 6]
+		var centre := Vector2(travel, size.y * height_band)
+		var scale := 0.68 + float(index % 4) * 0.13
+		var shadow_alpha := alpha * (0.24 if night < 0.4 else 0.14)
+		# Each formation is a broken cumulus group: a dark underside, a broad
+		# body, and offset lobes with different heights. This avoids the old
+		# single horizontal card silhouette while keeping the draw cost tiny.
+		draw_colored_polygon(_ellipse(centre + Vector2(8.0, 20.0) * scale, Vector2(118.0, 25.0) * scale, 0.0), Color(shadow.r, shadow.g, shadow.b, shadow_alpha * 0.78))
 		var lobes := [
-			[Vector2(-56.0, 3.0), Vector2(42.0, 14.0)],
-			[Vector2(-20.0, -7.0), Vector2(53.0, 23.0)],
-			[Vector2(24.0, -2.0), Vector2(64.0, 18.0)],
-			[Vector2(66.0, 7.0), Vector2(34.0, 12.0)],
+			[Vector2(-88.0, 10.0), Vector2(35.0, 15.0)],
+			[Vector2(-61.0, -4.0), Vector2(48.0, 23.0)],
+			[Vector2(-25.0, -17.0), Vector2(53.0, 31.0)],
+			[Vector2(18.0, -8.0), Vector2(69.0, 27.0)],
+			[Vector2(62.0, -1.0), Vector2(51.0, 23.0)],
+			[Vector2(97.0, 11.0), Vector2(31.0, 14.0)],
 		]
 		for lobe in lobes:
 			var centre_offset: Vector2 = lobe[0]
 			var radii: Vector2 = lobe[1]
-			draw_colored_polygon(_ellipse(centre + centre_offset * scale, radii * scale, 0.0), Color(color.r, color.g, color.b, alpha * 0.72))
+			draw_colored_polygon(_ellipse(centre + centre_offset * scale, radii * scale, 0.0), Color(color.r, color.g, color.b, alpha * 0.64))
+		var highlight := Color(color.r + 0.04, color.g + 0.04, color.b + 0.04, alpha * 0.20)
+		draw_colored_polygon(_ellipse(centre + Vector2(-28.0, -19.0) * scale, Vector2(74.0, 10.0) * scale, 0.0), highlight)
 
 func _ellipse(centre: Vector2, radii: Vector2, rotation: float) -> PackedVector2Array:
 	var points := PackedVector2Array()

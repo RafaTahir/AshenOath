@@ -14,6 +14,30 @@
         "verify_oath_001"
       ]
     },
+    "spectacle": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/combat_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/combat_feedback.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/camera_controller.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/input_router.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/enemy_ai.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/boss_encounter.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/enemies.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/bosses.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_combat_005.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_target_001.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_mon_002.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_ai_003.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_boss_002.gd"
+      ],
+      "gates": [
+        "verify_combat_005",
+        "verify_target_001",
+        "verify_mon_002",
+        "verify_ai_003",
+        "verify_boss_002"
+      ]
+    },
     "world": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
@@ -21,14 +45,18 @@
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/world_*.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/*.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_world_012.gd",
-        "outputs/AshenOathTheRoadBetweenCrowns/tools/capture_world_012.gd"
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/capture_world_012.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_world_015.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_world_016.gd"
       ],
       "gates": [
         "verify_visible_quality",
         "verify_zone_budgets",
         "verify_light_001",
         "verify_world_001",
-        "verify_world_012"
+        "verify_world_012",
+        "verify_world_015",
+        "verify_world_016"
       ]
     },
     "navigation": {
@@ -52,13 +80,24 @@
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/story_state.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/quest_manager.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/dialogue_manager.gd",
-        "outputs/AshenOathTheRoadBetweenCrowns/scripts/save_manager.gd"
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/save_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/quest_beat_director.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/quest_presentation_state.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/campaign_dialogue.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_narr_005.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_campaign_quests_008_012.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_side_003.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_cin_002.gd"
       ],
       "gates": [
         "verify_story_campaign",
         "verify_quest_001",
         "verify_quest_002",
-        "verify_save_001"
+        "verify_save_001",
+        "verify_narr_005",
+        "verify_campaign_quests_008_012",
+        "verify_side_003",
+        "verify_cin_002"
       ]
     },
     "ui": {
@@ -74,7 +113,8 @@
       "gates": [
         "verify_runtime_regressions",
         "verify_ui_001",
-        "verify_ui_002"
+        "verify_ui_002",
+        "verify_hud_005"
       ]
     },
     "input": {
@@ -114,7 +154,8 @@
         "verify_access_001",
         "verify_input_001",
         "verify_ui_002",
-        "verify_runtime_regressions"
+        "verify_runtime_regressions",
+        "verify_access_003"
       ]
     },
     "mobile": {
@@ -149,7 +190,8 @@
         "verify_audio_001",
         "verify_audio_002",
         "verify_audio_repair_001",
-        "verify_voice_001"
+        "verify_voice_001",
+        "verify_audio_007"
       ]
     },
     "assets": {
@@ -854,7 +896,8 @@
       "gates": [
         "verify_zone_budgets",
         "verify_perf_001",
-        "verify_perf_002"
+        "verify_perf_002",
+        "verify_perf_008"
       ]
     },
     "engine": {
@@ -869,6 +912,27 @@
       "gates": [
         "verify_engine_002",
         "verify_engine_003"
+      ]
+    },
+    "product": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/hud.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/audio_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/input_router.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/settings_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_hud_005.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_audio_007.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_access_003.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_perf_008.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_012.gd"
+      ],
+      "gates": [
+        "verify_hud_005",
+        "verify_audio_007",
+        "verify_access_003",
+        "verify_perf_008",
+        "verify_qa_012"
       ]
     },
     "production": {
@@ -967,7 +1031,9 @@
 	"wychwood_authored": "capture_world_013",
 	"cemetery_chapel": "capture_world_014",
 	"sky_living": "capture_sky_003",
-	"opening_soundscape": "capture_audio_006",
-	"soul_baseline": "capture_qa_soul_001"
+    "opening_soundscape": "capture_audio_006",
+	"soul_baseline": "capture_qa_soul_001",
+	"product": "capture_product_001",
+	"combat": "capture_slice_screenshots"
 }
 }

@@ -7,6 +7,7 @@ var output_dir = ""
 var gallery_dir = ""
 var gallery_timestamp = ""
 var gallery_phase = "Capture"
+var capture_game: Node
 
 func _initialize() -> void:
 	if DisplayServer.get_name().to_lower() == "headless":
@@ -24,6 +25,7 @@ func _initialize() -> void:
 		quit(1)
 		return
 	var game = scene.instantiate()
+	capture_game = game
 	root.add_child(game)
 	await process_frame
 	game.call("_new_game")
@@ -230,6 +232,7 @@ func _capture(game, file_name: String, player_pos: Vector3, zone_id: String, spa
 		game.camera_rig.yaw = camera_yaw
 		game.camera_rig.pitch = -0.2
 	await _settle_frames(12)
+	_clear_transient_overlays(game)
 	print("CAPTURE_STATE: %s zone=%s player=%s visible=%s camera=%s" % [file_name, str(game.current_zone_id), str(game.player.global_position), str(game.player.visible), str(game.camera_rig.camera.global_position if game.camera_rig != null and game.camera_rig.camera != null else Vector3.ZERO)])
 	if file_name == "73_river_forced_recovery_proof":
 		print("RIVER-ONLY POSITION: %s" % str(game.player.global_position))
@@ -241,6 +244,15 @@ func _capture(game, file_name: String, player_pos: Vector3, zone_id: String, spa
 		return
 	_assert_image_quality(image, file_name)
 	_save_image(image, file_name)
+
+func _clear_transient_overlays(game) -> void:
+	var hud: Node = game.get("hud") as Node
+	if hud == null:
+		return
+	for field_name in ["toast_label", "status_label", "hint_label"]:
+		var overlay: CanvasItem = hud.get(field_name) as CanvasItem
+		if overlay != null:
+			overlay.visible = false
 
 func _capture_dialogue(game, file_name: String, player_pos: Vector3) -> void:
 	game.call("_load_zone", "greyfen", player_pos)
@@ -426,6 +438,11 @@ func _capture_blade_contact(game, file_name: String) -> void:
 	await _wait_for_zone_ready(game)
 	game.player.global_position = Vector3(0, 1, -4.0)
 	game.player.velocity = Vector3.ZERO
+	game.player.set_physics_process(true)
+	await _settle_frames(3)
+	game.player.set_physics_process(false)
+	_reset_combat_capture_pose(game.player)
+	_clear_transient_overlays(game)
 	game.player.set_physics_process(false)
 	game.player.attack_anim_time = 0.34
 	game.player.attack_anim_heavy = false
@@ -469,8 +486,12 @@ func _capture_player_motion_state(game, file_name: String, state: String) -> voi
 	game.call("_load_zone", "greyfen", Vector3(0, 1, 8.0))
 	await _wait_for_zone_ready(game)
 	game.player.global_position = Vector3(0, 1, 8.0)
-	game.player.set_physics_process(false)
 	game.player.velocity = Vector3.ZERO if state == "idle" else Vector3(0, 0, -4.0)
+	game.player.set_physics_process(true)
+	await _settle_frames(3)
+	game.player.set_physics_process(false)
+	_reset_combat_capture_pose(game.player)
+	_clear_transient_overlays(game)
 	game.player.move_phase = PI * 0.5 if state == "walk" else 0.0
 	if game.camera_rig != null:
 		game.camera_rig.yaw = 0.0
@@ -524,6 +545,12 @@ func _capture_player_motion_state(game, file_name: String, state: String) -> voi
 			game.player.attack_anim_time = max(float(game.player.attack_anim_time) - 0.016, 0.0)
 			game.player.call("_animate_visuals", 0.016, Vector3.ZERO, false)
 		await process_frame
+	if state == "idle" and game.player.animation_driver != null:
+		# The capture player is intentionally paused after staging. Reassert a
+		# grounded locomotion state so the proof frame cannot inherit a jump clip
+		# from the initial spawn while the runtime controller is disabled.
+		game.player.animation_driver.set_locomotion(0.0, Vector3.ZERO, true)
+		await _settle_frames(3)
 	if state in ["light", "heavy"] and game.camera_rig != null:
 		game.camera_rig.set_process(false)
 		var camera: Camera3D = game.camera_rig.camera
@@ -537,6 +564,16 @@ func _capture_player_motion_state(game, file_name: String, state: String) -> voi
 	game.player.set_physics_process(true)
 	if game.camera_rig != null:
 		game.camera_rig.set_process(true)
+
+func _reset_combat_capture_pose(captured_player: Node) -> void:
+	if captured_player == null:
+		return
+	captured_player.jump_pose_weight = 0.0
+	captured_player.landing_compression = 0.0
+	captured_player.dodge_time = 0.0
+	captured_player.hurt_react_time = 0.0
+	captured_player.hurt_flash_time = 0.0
+	captured_player.was_on_floor = true
 
 func _capture_victory_state(game, file_name: String) -> void:
 	for objective_id in ["speak_anwen", "inspect_corpse", "find_claw_marks", "find_black_feathers"]:
@@ -638,6 +675,7 @@ func _capture_oathfire_wall_impact(game, file_name: String) -> void:
 	game.player.cancel_beam_charge()
 
 func _save_viewport(file_name: String) -> void:
+	_clear_transient_overlays(capture_game)
 	var image = root.get_viewport().get_texture().get_image()
 	if image == null:
 		push_error("%s viewport screenshot capture returned no image" % file_name)

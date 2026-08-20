@@ -4,6 +4,8 @@ signal enemy_hit(name: String, amount: float)
 signal impact(position: Vector3, heavy: bool)
 signal enemy_killed(name: String)
 signal message(text: String)
+signal contact_resolved(result: Dictionary)
+signal contact_missed(result: Dictionary)
 
 func resolve_player_blade_contact(player: Node3D, enemies: Array, contact: Dictionary, active_oil: String) -> Dictionary:
 	var blade_base: Vector3 = contact.get("base", Vector3.ZERO)
@@ -13,6 +15,9 @@ func resolve_player_blade_contact(player: Node3D, enemies: Array, contact: Dicti
 	var reach := float(contact.get("reach", 2.0))
 	var heavy := bool(contact.get("heavy", false))
 	var damage := float(contact.get("damage", 0.0))
+	var contact_phase := float(contact.get("contact_phase", 0.0))
+	var sweep_length := maxf(previous_tip.distance_to(blade_tip), previous_base.distance_to(blade_base))
+	var blade_direction := (blade_tip - blade_base).normalized() if blade_tip.distance_to(blade_base) > 0.001 else Vector3.ZERO
 	var candidates: Array = []
 	for enemy in enemies:
 		if enemy == null or enemy.dead or (enemy.has_method("is_encounter_active") and not enemy.is_encounter_active()):
@@ -34,7 +39,26 @@ func resolve_player_blade_contact(player: Node3D, enemies: Array, contact: Dicti
 	candidates.sort_custom(func(a, b): return float(a.score) < float(b.score))
 	if candidates.is_empty():
 		message.emit("Your blade cuts only mist.")
-		return {"hit": false, "point": blade_tip}
+		var miss := {
+			"hit": false,
+			"point": blade_tip,
+			"contact_point": blade_tip,
+			"blade_base": blade_base,
+			"blade_tip": blade_tip,
+			"previous_base": previous_base,
+			"previous_tip": previous_tip,
+			"heavy": heavy,
+			"damage": damage,
+			"attack_id": str(contact.get("attack_id", "")),
+			"source_tag": active_oil,
+			"contact_distance": INF,
+			"blade_contact_distance": INF,
+			"contact_phase": contact_phase,
+			"sweep_length": sweep_length,
+			"blade_direction": blade_direction,
+		}
+		contact_missed.emit(miss)
+		return miss
 	var resolved: Dictionary = candidates[0]
 	var struck_enemy: Node = resolved.enemy
 	var source_tag := ""
@@ -45,7 +69,27 @@ func resolve_player_blade_contact(player: Node3D, enemies: Array, contact: Dicti
 	struck_enemy.apply_damage(damage, source_tag)
 	enemy_hit.emit(struck_enemy.display_name, damage)
 	impact.emit(resolved.point, heavy)
-	return {"hit": true, "enemy": struck_enemy, "point": resolved.point, "heavy": heavy}
+	var hit_result := {
+		"hit": true,
+		"enemy": struck_enemy,
+		"point": resolved.point,
+		"contact_point": resolved.point,
+		"blade_base": blade_base,
+		"blade_tip": blade_tip,
+		"previous_base": previous_base,
+		"previous_tip": previous_tip,
+		"heavy": heavy,
+		"damage": damage,
+		"attack_id": str(contact.get("attack_id", "")),
+		"source_tag": source_tag,
+		"contact_distance": float(resolved.score),
+		"blade_contact_distance": float(resolved.get("contact_distance", INF)),
+		"contact_phase": contact_phase,
+		"sweep_length": sweep_length,
+		"blade_direction": blade_direction,
+	}
+	contact_resolved.emit(hit_result)
+	return hit_result
 
 func _closest_sweep_point(point: Vector3, previous_base: Vector3, previous_tip: Vector3, blade_base: Vector3, blade_tip: Vector3) -> Vector3:
 	var segments := [

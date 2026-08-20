@@ -394,7 +394,10 @@ func _update_blade_contact() -> void:
 			"previous_tip": previous_blade_tip,
 			"damage": pending_attack_damage,
 			"reach": pending_attack_radius,
-			"heavy": pending_attack_heavy
+			"heavy": pending_attack_heavy,
+			"contact_phase": progress,
+			"sweep_length": maxf(previous_blade_tip.distance_to(blade_tip), previous_blade_base.distance_to(blade_base)),
+			"blade_direction": (blade_tip - blade_base).normalized() if blade_tip.distance_to(blade_base) > 0.001 else Vector3.ZERO
 		})
 		pending_attack_damage = 0.0
 		pending_attack_radius = 0.0
@@ -821,7 +824,7 @@ func _try_build_mapped_body() -> bool:
 	animation_driver.name = "CharacterAnimationDriver"
 	mapped.add_child(animation_driver)
 	var animated: bool = bool(animation_driver.configure(mapped, {
-		"idle": "Idle_No", "walk": "Zombie_Walk_Fwd", "walk_back": "Zombie_Walk_Back",
+		"idle": "Idle_Loop", "walk": "Zombie_Walk_Fwd", "walk_back": "Zombie_Walk_Back",
 		"strafe": "Walk_Carry", "run": "Walk_Carry",
 		"jump": "NinjaJump_Start", "attack_light": "Sword_Regular_A",
 		"attack_heavy": "Sword_Regular_B", "dodge": "Slide",
@@ -884,12 +887,10 @@ func _build_oathblade_visual(parent: Node3D) -> Node3D:
 	# readability contract even though its contact markers still reached enemies.
 	oathblade.scale = Vector3.ONE * 1.0
 	parent.add_child(oathblade)
-	var steel := _metal_mat(Color(0.78, 0.84, 0.88))
+	var steel := _metal_mat(Color(0.68, 0.72, 0.75))
 	steel.metallic = 0.82
 	steel.roughness = 0.24
-	steel.emission_enabled = true
-	steel.emission = Color(0.22, 0.28, 0.32)
-	steel.emission_energy_multiplier = 0.58
+	steel.emission_enabled = false
 	steel.cull_mode = BaseMaterial3D.CULL_DISABLED
 	var blade := MeshInstance3D.new()
 	blade.name = "OathbladeSteel"
@@ -915,13 +916,22 @@ func _build_oathblade_visual(parent: Node3D) -> Node3D:
 	grip.position = Vector3(0.0, 0.065, 0.0)
 	grip.material_override = _mat(Color(0.18, 0.07, 0.035))
 	oathblade.add_child(grip)
+	var pommel := MeshInstance3D.new()
+	pommel.name = "OathbladePommel"
+	var pommel_mesh := SphereMesh.new()
+	pommel_mesh.radius = 0.055
+	pommel_mesh.height = 0.11
+	pommel.mesh = pommel_mesh
+	pommel.position = Vector3(0.0, 0.18, 0.0)
+	pommel.material_override = _metal_mat(Color(0.52, 0.34, 0.15))
+	oathblade.add_child(pommel)
 	return oathblade
 
 func _build_oathblade_mesh() -> ImmediateMesh:
 	var mesh := ImmediateMesh.new()
 	var vertices := [
-		Vector3(-0.082, -0.09, 0.024), Vector3(0.082, -0.09, 0.024), Vector3(0.0, -1.16, 0.024),
-		Vector3(-0.082, -0.09, -0.024), Vector3(0.082, -0.09, -0.024), Vector3(0.0, -1.16, -0.024)
+		Vector3(-0.090, -0.09, 0.026), Vector3(0.090, -0.09, 0.026), Vector3(0.0, -0.98, 0.020),
+		Vector3(-0.090, -0.09, -0.026), Vector3(0.090, -0.09, -0.026), Vector3(0.0, -0.98, -0.020)
 	]
 	var faces := [[0, 2, 1], [3, 4, 5], [0, 1, 4], [0, 4, 3], [0, 3, 5], [0, 5, 2], [1, 2, 5], [1, 5, 4]]
 	mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLES)

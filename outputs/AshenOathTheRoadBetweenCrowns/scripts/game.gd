@@ -22,12 +22,14 @@ const ZoneCompositionRouter = preload("res://scripts/zone_composition_router.gd"
 const ZoneRuntimeCoordinator = preload("res://scripts/zone_runtime_coordinator.gd")
 const ZoneSceneCatalog = preload("res://scripts/zone_scene_catalog.gd")
 const OathGatePortal = preload("res://scripts/oath_gate_portal.gd")
+const BossEncounterScript = preload("res://scripts/boss_encounter.gd")
 
 var player
 var camera_rig
 var hud
 var quests
 var quest_presentation
+var quest_beats
 var dialogue
 var story_state
 var inventory
@@ -55,8 +57,10 @@ var active_interactable
 var interaction_candidates: Array = []
 var current_zone_id = "greyfen"
 var enemy_defs = {}
+var boss_defs = {}
 var active_enemies: Array = []
 var active_enemy_attacker: Node
+var boss_saved_states: Dictionary = {}
 var wychwood_pack_kills = 0
 var game_started = false
 var paused_by_menu = true
@@ -199,6 +203,7 @@ func _setup_runtime() -> void:
 	story_state = services["story_state"]
 	quests = services["quests"]
 	quest_presentation = services["quest_presentation"]
+	quest_beats = services["quest_beats"]
 	dialogue = services["dialogue"]
 	inventory = services["inventory"]
 	crafting = services["crafting"]
@@ -226,6 +231,7 @@ func _setup_runtime() -> void:
 			qa_adapter.name = "QABrowserTelemetry"
 			add_child(qa_adapter)
 	enemy_defs = _read_json("res://data/enemies.json")
+	boss_defs = _read_json("res://data/bosses.json")
 
 func _new_game() -> void:
 	if zone_transition_pending or zone_load_request_pending:
@@ -308,6 +314,8 @@ func load_save_state(data: Dictionary) -> void:
 	quests.load_state(data.get("quests", {}))
 	if quest_presentation != null:
 		quest_presentation.load_state(data.get("quest_presentation", {}))
+	if quest_beats != null:
+		quest_beats.load_state(data.get("quest_beats", {}))
 	if settings != null and typeof(data.get("settings", {})) == TYPE_DICTIONARY and not data.get("settings", {}).is_empty():
 		for key in data.settings:
 			if settings.settings.has(key) and typeof(settings.settings[key]) == typeof(data.settings[key]):
@@ -509,6 +517,8 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		life_controller.set_spatial_service(spatial_service)
 	if quest_presentation != null:
 		quest_presentation.set_zone(zone_id)
+	if quest_beats != null:
+		quest_beats.set_zone(zone_id)
 	else:
 		quests.set_tracked_quest_for_zone(zone_id)
 	_refresh_tracker()
@@ -545,6 +555,9 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		_validate_zone_render_resources(visual_director)
 	if player != null:
 		_validate_zone_render_resources(player)
+	for enemy in active_enemies:
+		if is_instance_valid(enemy):
+			_validate_zone_render_resources(enemy)
 	if player != null:
 		pending_spawn_facing = player.rotation.y
 		pending_spawn_position = safe_spawn
@@ -768,6 +781,10 @@ func _anchor_shared_skinned_resources(root: Node) -> void:
 			continue
 		if skinned_resource_anchors.size() >= MAX_SKINNED_RESOURCE_ANCHORS:
 			break
+		# A skinned branch is detached from the zone before the normal zone
+		# validation pass. Validate it in place so imported meshes with empty
+		# surfaces cannot reach the renderer during retirement.
+		_validate_zone_render_resources(branch)
 		branch.reparent(retired_skinned_actor_pool, false)
 		if branch is Node3D:
 			(branch as Node3D).visible = false
@@ -1201,6 +1218,7 @@ func _handle_interaction(area) -> void:
 			hud.toast("The chapel seal yields. The Crow Shrine inside is still bound to the erased names.")
 			hud.set_guidance_hint("Return to the shrine and decide what should happen to the covenant.", 6.0)
 			_spawn_crow_shrine_choice()
+			_ensure_bell_eater()
 		elif area.interaction_id.begins_with("grave_"):
 			_ensure_cemetery_ambush()
 		elif area.interaction_id.begins_with("vargan_"):
@@ -1420,6 +1438,15 @@ func _handle_dialogue_action(action: Dictionary) -> void:
 				_mark_interaction_removed(active_interactable)
 				active_interactable.queue_free()
 				active_interactable = null
+		if action.get("sets_flags", {}).has("halvern_fate"):
+			var halvern_outcome := str(action["sets_flags"]["halvern_fate"])
+			for boss in active_enemies:
+				if not is_instance_valid(boss) or boss.enemy_id != "halvern_boss":
+					continue
+				var controller: Node = boss.get_node_or_null("BossEncounterController")
+				if controller != null and controller.has_method("resolve_peaceful"):
+					controller.resolve_peaceful(halvern_outcome)
+				break
 		if str(action.get("quest", "")) == "main_blood_under_stone" and str(action.get("objective", "")) == "ledger_choice":
 			story_state.set_flag("vargan_ledger_found", true)
 			story_state.set_flag("vargan_ledger_choice_made", true)
@@ -1439,6 +1466,9 @@ func _handle_dialogue_action(action: Dictionary) -> void:
 
 func _on_launch_accepted() -> void:
 	audio.play_event("ui", 0.0)
+	# Keep the same menu-covered prewarm on Web and desktop. The HTML shell is
+	# already visible, so moving Greyfen construction before the New Game click
+	# removes the long post-click stall without introducing a black loading frame.
 	if hud != null and hud.has_method("set_new_game_ready") and not route_zone_cache.has("greyfen"):
 		hud.set_new_game_ready(false)
 	if zone_streaming != null and zone_streaming.has_method("prewarm_neighbors"):
@@ -1513,10 +1543,11 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 	zone_root.process_mode = Node.PROCESS_MODE_DISABLED
 	zone_root.position = Vector3.ZERO
 	_set_zone_collision_enabled(zone_root, false)
-	# Readiness means the opening is rendered, not merely constructed. Give ANGLE
-	# a bounded warmup behind the opaque menu so first-use shader compilation does
-	# not spill into the opening gameplay sample.
-	for _warmup_frame in range(90):
+	# Readiness means the opening is rendered, not merely constructed. A bounded
+	# 30-frame warmup is enough to compile the opening materials while staying
+	# inside the cold Web startup budget; longer waits only duplicate idle menu
+	# frames on Intel/ANGLE.
+	for _warmup_frame in range(30):
 		await get_tree().process_frame
 	_cache_route_zone("greyfen", zone_root, [], _zone_state_signature(), true)
 	zone_root = null
@@ -1586,7 +1617,23 @@ func _on_player_blade_contact(contact: Dictionary) -> void:
 	audio.play_event("heavy" if heavy else "swing")
 	var result: Dictionary = combat.resolve_player_blade_contact(player, active_enemies, contact, inventory.active_oil)
 	if bool(result.get("hit", false)):
+		var contact_source := str(result.get("source_tag", "")).to_lower()
+		var contact_color := Color(0.98, 0.78, 0.34) if contact_source != "moon_oil" else Color(0.66, 0.88, 1.0)
+		CombatFeedback.weapon_contact(
+			zone_root,
+			result.get("blade_base", player.global_position),
+			result.get("blade_tip", player.global_position),
+			result.get("contact_point", result.get("point", player.global_position)),
+			heavy,
+			contact_color,
+			result.get("previous_base", Vector3.ZERO),
+			result.get("previous_tip", Vector3.ZERO)
+		)
 		audio.play_event_limited("heavy_hit" if heavy else "light_hit", 0.045, 0.04)
+		if input_router != null:
+			input_router.rumble(0.16 if heavy else 0.09, 0.30 if heavy else 0.20, 0.07)
+		if camera_rig != null:
+			camera_rig.shake(0.09 if heavy else 0.045)
 		var target = result.get("enemy")
 		if target != null and is_instance_valid(target) and target.health_component != null:
 			hud.show_enemy(target.display_name, target.health_component.health, target.health_component.max_health)
@@ -1634,6 +1681,7 @@ func _on_player_beam(charge_ratio: float, direction: Vector3) -> void:
 	set_meta("last_oathfire_hit_count", hits.size())
 	audio.play_event("heavy", 0.03)
 	_make_oathfire_beam(origin, endpoint, charge_ratio, not _performance_mode())
+	CombatFeedback.beam_endpoint(zone_root, endpoint, locked_direction, not _performance_mode())
 	if camera_rig != null:
 		camera_rig.shake(0.12 + 0.08 * charge_ratio)
 	CombatFeedback.ground_ring(zone_root, player.global_position, Color(0.18, 0.72, 0.95), 0.75, 0.18)
@@ -1810,7 +1858,31 @@ func _on_enemy_died(enemy) -> void:
 		camera_rig.shake(0.09)
 	if zone_root != null and enemy != null:
 		CombatFeedback.ground_ring(zone_root, enemy.global_position, Color(0.12, 0.08, 0.055), 0.9, 0.24)
-	if current_zone_id == "greyfen" and bool(enemy.get_meta("act_one_cemetery_ambush", false)):
+	if bool(enemy.get("is_boss")):
+		if enemy.enemy_id == "bell_eater":
+			story_state.set_flag("bell_eater_defeated", true)
+			story_state.set_flag("cemetery_bell_silent", true)
+			hud.show_status_cue("The Bell-Eater is silent", "victory")
+			hud.toast("The chapel bell stops. Beneath the silence, the Crow Shrine waits for your answer.")
+			hud.set_guidance_hint("Choose what the Crow Shrine should remember.", 6.0)
+		elif enemy.enemy_id == "rootbound_colossus":
+			story_state.set_flag("rootbound_colossus_defeated", true)
+			hud.show_status_cue("The roots release Greyfen", "victory")
+			hud.toast("The clearing opens around a heart of oathwood. The road remembers a new name.")
+		elif enemy.enemy_id == "ashwing":
+			story_state.set_flag("ashwing_defeated", true)
+			hud.show_status_cue("Ashwing falls", "victory")
+			hud.toast("The mill roof catches the last ember, then goes dark. Something useful survived in the ash.")
+		elif enemy.enemy_id == "halvern_boss":
+			story_state.set_flag("halvern_fate", "defeated")
+			quests.complete_objective("main_last_witness", "break_halvern_guard")
+			hud.show_status_cue("The Gravebound Knight yields", "victory")
+			hud.set_guidance_hint("Decide whether Halvern's testimony should live.", 6.0)
+		elif enemy.enemy_id == "white_hart_avatar":
+			var ending = pending_ending if pending_ending != "" else "kill"
+			pending_ending = ""
+			_show_ending_consequence(ending)
+	elif current_zone_id == "greyfen" and bool(enemy.get_meta("act_one_cemetery_ambush", false)):
 		quests.complete_objective("main_bell_beneath_greyfen", "cemetery_ambush")
 		story_state.set_flag("cemetery_ambush_cleared", true)
 		hud.hide_enemy()
@@ -1858,10 +1930,6 @@ func _on_enemy_died(enemy) -> void:
 			quests.complete_objective("main_last_witness", "break_halvern_guard")
 		if current_zone_id == "ruins" and quests.is_unlocked("main_hart_remembers"):
 			_make_named_interactable("white_hart", "dialogue", "Speak to the White Hart", Vector3(12, 0, 10), Color(0.86, 0.83, 0.70), Vector3(0.36, 0.64,0.36))
-	elif enemy.enemy_id == "white_hart_avatar":
-		var ending = pending_ending if pending_ending != "" else "kill"
-		pending_ending = ""
-		_show_ending_consequence(ending)
 	elif enemy.enemy_id == "bandit":
 		if current_zone_id == "bandit_road" and bool(enemy.get_meta("senn_guard", false)) and not _has_living_enemy("bandit"):
 			quests.complete_objective("main_soldier_without_banner", "senn_confrontation")
@@ -1879,6 +1947,13 @@ func _on_enemy_died(enemy) -> void:
 		if not ash_enemy_alive:
 			quests.complete_objective("main_ash_at_the_mill", "mill_encounter")
 			story_state.set_flag("ash_mill_cleared", true)
+			if not bool(story_state.get_flag("ashwing_spawned", false)) and enemy_defs.has("ashwing"):
+				story_state.set_flag("ashwing_spawned", true)
+				var ashwing := _spawn_enemy("ashwing", Vector3(0, 1.0, -9.0))
+				if ashwing != null:
+					ashwing.name = "AshwingCarrionDrake"
+					ashwing.leash_radius = 10.0
+					hud.toast("The mill roof groans. Ashwing drops through the smoke.")
 			_make_named_interactable("miller_record", "dialogue", "Read the miller's record", Vector3(-7.0,0,-7), Color(0.5,0.4,0.25))
 			hud.show_status_cue("The mill falls quiet", "victory")
 			hud.set_guidance_hint("Read the miller's ledger beside the broken wall.", 5.5)
@@ -1895,7 +1970,10 @@ func _on_enemy_damaged(enemy, current: float, maximum: float) -> void:
 func _on_enemy_windup_started(enemy) -> void:
 	audio.play_event_limited("enemy_windup", 0.28, 0.02)
 	if zone_root != null and enemy != null:
-		CombatFeedback.ground_ring(zone_root, enemy.global_position, Color(0.46, 0.05, 0.025), 0.62, 0.18)
+		if bool(enemy.get("is_boss")):
+			CombatFeedback.boss_telegraph(zone_root, enemy.global_position, enemy.enemy_id)
+		else:
+			CombatFeedback.ground_ring(zone_root, enemy.global_position, Color(0.46, 0.05, 0.025), 0.62, 0.18)
 	if enemy != null and enemy.health_component != null:
 		hud.show_enemy(enemy.display_name, enemy.health_component.health, enemy.health_component.max_health)
 	if current_zone_id == "wychwood" and not bool(tutorial_flags.get("block_hint_done", false)):
@@ -1909,7 +1987,7 @@ func _on_enemy_attack_resolved(enemy, parried: bool, contact_position: Vector3) 
 		if camera_rig != null:
 			camera_rig.shake(0.18)
 		if zone_root != null:
-			CombatFeedback.block_flash(zone_root, player.global_position, true)
+			CombatFeedback.block_flash(zone_root, player.global_position, true, contact_position)
 			CombatFeedback.impact_burst(zone_root, contact_position, true, Color(0.74, 0.88, 1.0))
 			CombatFeedback.ground_ring(zone_root, player.global_position, Color(0.22, 0.46, 0.72), 0.65, 0.16)
 		hud.show_status_cue("Parry", "parry")
@@ -2014,11 +2092,19 @@ func _is_interaction_removed(id: String) -> bool:
 	return bool(removed_interactions.get("%s:%s" % [current_zone_id, id], false))
 
 func save_world_state() -> Dictionary:
+	var boss_states: Dictionary = boss_saved_states.duplicate(true)
+	for enemy in active_enemies:
+		if not is_instance_valid(enemy) or not bool(enemy.get("is_boss")):
+			continue
+		var controller: Node = enemy.get_node_or_null("BossEncounterController")
+		if controller != null and controller.has_method("save_state"):
+			boss_states[enemy.enemy_id] = controller.save_state()
 	return {
 		"removed_interactions": removed_interactions,
 		"pending_ending": pending_ending,
 		"wychwood_pack_kills": wychwood_pack_kills,
 		"ghoulkin_kills": wychwood_pack_kills,
+		"boss_states": boss_states,
 		"day_night": day_night.save_state() if day_night != null else {}
 	}
 
@@ -2026,6 +2112,7 @@ func load_world_state(state: Dictionary) -> void:
 	removed_interactions = state.get("removed_interactions", {})
 	pending_ending = str(state.get("pending_ending", ""))
 	wychwood_pack_kills = int(state.get("wychwood_pack_kills", state.get("ghoulkin_kills", wychwood_pack_kills)))
+	boss_saved_states = state.get("boss_states", {}) if typeof(state.get("boss_states", {})) == TYPE_DICTIONARY else {}
 	if day_night != null:
 		day_night.load_state(state.get("day_night", {}))
 
@@ -2117,7 +2204,12 @@ func _apply_runtime_settings(current_settings: Dictionary) -> void:
 		visual_director.sun.directional_shadow_max_distance = 42.0
 
 func _refresh_tracker() -> void:
-	hud.set_tracker(quest_presentation.get_tracker_text() if quest_presentation != null else quests.get_tracker_text())
+	if quest_beats != null:
+		quest_beats.refresh()
+	var tracker_text: String = str(quest_presentation.get_tracker_text() if quest_presentation != null else quests.get_tracker_text())
+	if quest_beats != null and quest_beats.has_method("decorate_tracker"):
+		tracker_text = quest_beats.decorate_tracker(tracker_text)
+	hud.set_tracker(tracker_text)
 	_update_compass()
 
 func _refresh_equipment_readout() -> void:
@@ -2740,9 +2832,14 @@ func _make_visual_box(name: String, pos: Vector3, size: Vector3, color: Color) -
 	mesh_instance.set_meta("visual_name", name)
 	mesh_instance.position = pos
 	mesh_instance.visibility_range_end = 32.0
+	# Batched markers are removed during environment finalization, but they
+	# still spend at least one frame in the scene tree. Give them a valid
+	# fallback surface immediately so renderer cleanup cannot observe a null
+	# mesh/material while a zone is being assembled.
+	mesh_instance.mesh = shared_box_mesh
+	mesh_instance.material_override = _valid_material_or_fallback(null)
 	zone_root.add_child(mesh_instance)
 	if environment_batches_flushed:
-		mesh_instance.mesh = shared_box_mesh
 		mesh_instance.scale = size
 		mesh_instance.material_override = _mat(color)
 	else:
@@ -2929,6 +3026,21 @@ func _make_village_house_dressed(pos: Vector3, yaw: float, node_name: String) ->
 	_add_house_box(root, "RearWeatheredBaseCourse", Vector3(0, 0.42, 1.73), Vector3(4.22, 0.26, 0.08), Color(0.16, 0.17, 0.14))
 	_add_house_box(root, "FrontCrossBrace", Vector3(-1.43, 1.16, -1.85), Vector3(0.11, 1.42, 0.10), Color(0.10, 0.055, 0.03), Vector3(0, 0, -36))
 	_add_house_box(root, "FrontCrossBrace", Vector3(1.43, 1.16, -1.85), Vector3(0.11, 1.42, 0.10), Color(0.10, 0.055, 0.03), Vector3(0, 0, 36))
+	# Small structural details give the facade readable construction at the
+	# actual gameplay camera distance while remaining part of the static batch.
+	var roof_color := Color(0.16, 0.072, 0.045) if facade_variant != 2 else Color(0.12, 0.082, 0.060)
+	_add_house_box(root, "RoofEaveFront", Vector3(0, 2.12, -1.86), Vector3(4.62, 0.16, 0.18), roof_color)
+	_add_house_box(root, "RoofEaveRear", Vector3(0, 2.12, 1.86), Vector3(4.62, 0.16, 0.18), roof_color)
+	_add_house_box(root, "RoofRidgeCap", Vector3(0, 3.05, 0), Vector3(0.26, 0.16, 3.72), roof_color)
+	_add_house_box(root, "UpperGableWindow", Vector3(0, 2.62, -1.80), Vector3(0.42, 0.28, 0.055), Color(0.92, 0.50, 0.17))
+	_add_house_box(root, "UpperGableWindowFrame", Vector3(0, 2.62, -1.84), Vector3(0.08, 0.30, 0.07), timber)
+	_add_house_box(root, "DoorFrameLeft", Vector3(-0.48, 0.79, -1.80), Vector3(0.10, 1.42, 0.14), timber)
+	_add_house_box(root, "DoorFrameRight", Vector3(0.48, 0.79, -1.80), Vector3(0.10, 1.42, 0.14), timber)
+	_add_house_box(root, "DoorLatch", Vector3(0.24, 0.80, -1.88), Vector3(0.08, 0.10, 0.035), Color(0.48, 0.38, 0.20))
+	for x in [-1.42, 1.42]:
+		var mullion_x: float = x * 0.62
+		_add_house_box(root, "WindowMullionVertical", Vector3(mullion_x, 1.42, -1.85), Vector3(0.045, 0.40, 0.07), timber)
+		_add_house_box(root, "WindowMullionHorizontal", Vector3(mullion_x, 1.42, -1.85), Vector3(0.54, 0.045, 0.07), timber)
 	if str(settings.settings.get("quality_preset", "balanced")) != "potato":
 		_add_house_module(root, "greyfen_door_facade", Vector3(0.90, 0.90, 0.90), Vector3(-0.98, 0.02, -1.82), 0.0, "ModularDoorFacade")
 		_add_house_module(root, "greyfen_window_facade", Vector3(0.90, 0.90, 0.90), Vector3(1.04, 0.02, -1.82), 0.0, "ModularWindowFacade")
@@ -3591,20 +3703,117 @@ func _spawn_enemy(id: String, pos: Vector3) -> Node:
 	enemy.damaged.connect(_on_enemy_damaged)
 	enemy.windup_started.connect(_on_enemy_windup_started)
 	enemy.attack_resolved.connect(_on_enemy_attack_resolved)
+	if enemy.has_signal("special_attack_resolved"):
+		enemy.special_attack_resolved.connect(_on_boss_special_attack)
 	enemy.boss_phase_changed.connect(_on_boss_phase_changed)
+	if bool(enemy_defs.get(id, {}).get("boss", false)):
+		var boss_controller: Node = Node.new()
+		boss_controller.set_script(BossEncounterScript)
+		boss_controller.name = "BossEncounterController"
+		enemy.add_child(boss_controller)
+		var boss_definition: Dictionary = enemy_defs.get(id, {}).duplicate(true)
+		if boss_defs.has(id) and typeof(boss_defs[id]) == TYPE_DICTIONARY:
+			boss_definition.merge(boss_defs[id], true)
+		boss_controller.call("configure", id, boss_definition, enemy, self)
+		if boss_saved_states.has(id) and typeof(boss_saved_states[id]) == TYPE_DICTIONARY:
+			boss_controller.call("load_state", boss_saved_states[id])
+		if boss_controller.has_signal("phase_changed"):
+			boss_controller.connect("phase_changed", Callable(self, "_on_boss_controller_phase_changed"))
 	active_enemies.append(enemy)
 	return enemy
 
-func _on_boss_phase_changed(enemy: Node, phase: int) -> void:
-	if enemy == null or not is_instance_valid(enemy) or enemy.enemy_id != "white_hart_avatar":
+func _ensure_bell_eater() -> void:
+	if current_zone_id != "greyfen" or bool(story_state.get_flag("bell_eater_defeated", false)):
 		return
-	var cue := "The Hart tears roots from the old road." if phase == 2 else "The covenant is breaking."
-	hud.show_status_cue("White Hart — Phase %d" % phase, "danger")
+	for enemy in active_enemies:
+		if is_instance_valid(enemy) and str(enemy.get_meta("boss_id", "")) == "bell_eater" and not enemy.dead:
+			return
+	var boss := _spawn_enemy("bell_eater", Vector3(15.4, 0.8, 8.8))
+	if boss != null:
+		boss.name = "BellEaterEncounter"
+		boss.leash_radius = 9.0
+		boss.set_meta("boss_arena", "cemetery")
+		hud.show_status_cue("The Bell-Eater wakes", "danger")
+		hud.toast("The bell rings once beneath the chapel. Something large pulls against the graves.")
+		hud.set_guidance_hint("Defeat the Bell-Eater beneath the Crow Chapel.", 6.0)
+		audio.play_event("boss", 0.02)
+
+func _on_boss_controller_phase_changed(boss_id: String, phase: int) -> void:
+	story_state.set_flag("boss_%s_phase" % boss_id, phase)
+	if audio != null:
+		audio.set_music_state("boss_%s" % boss_id)
+
+func _on_boss_checkpoint(controller: Node) -> void:
+	if controller == null:
+		return
+	story_state.set_flag("boss_%s_checkpoint" % str(controller.get("boss_id")), int(controller.get("checkpoint")))
+
+func _on_boss_peaceful_resolution(boss_id: String, outcome: String, enemy: Node) -> void:
+	story_state.set_flag("boss_%s_outcome" % boss_id, outcome)
+	if boss_id == "halvern_boss":
+		story_state.set_flag("halvern_fate", "witness" if outcome in ["testimony", "release", "witness"] else outcome)
+		if current_zone_id == "undercroft":
+			quests.complete_objective("main_last_witness", "break_halvern_guard")
+			hud.show_status_cue("Halvern lowers his blade", "victory")
+			hud.toast("The knight will speak. The undercroft no longer needs a gravekeeper.")
+			if enemy != null:
+				enemy.set_encounter_active(false)
+
+
+func _on_boss_phase_changed(enemy: Node, phase: int) -> void:
+	if enemy == null or not is_instance_valid(enemy) or not bool(enemy.get("is_boss")):
+		return
+	var cue := "The arena shifts beneath the witness."
+	if enemy.enemy_id == "white_hart_avatar":
+		cue = "The Hart tears roots from the old road." if phase == 2 else "The covenant is breaking."
+	elif enemy.enemy_id == "bell_eater":
+		cue = "The bell harness splits. The dead answer from below."
+	elif enemy.enemy_id == "rootbound_colossus":
+		cue = "The roots tear open around its heart."
+	elif enemy.enemy_id == "ashwing":
+		cue = "Ashwing breaks from the mill roof."
+	elif enemy.enemy_id == "halvern_boss":
+		cue = "Halvern stops defending the old command."
+	hud.show_status_cue("%s — Phase %d" % [enemy.display_name, phase], "danger")
 	hud.toast(cue)
+	audio.set_music_state("boss_%s" % str(enemy.enemy_id))
 	audio.play_event("reveal" if phase == 2 else "boss", 0.025)
 	if world_vfx != null and is_instance_valid(world_vfx):
 		world_vfx.pulse_interaction(enemy.global_position)
-	CombatFeedback.impact_burst(zone_root, enemy.global_position + Vector3.UP, true, Color(0.58, 0.88, 0.72))
+		CombatFeedback.impact_burst(zone_root, enemy.global_position + Vector3.UP, true, Color(0.58, 0.88, 0.72))
+
+func _on_boss_special_attack(enemy: Node, attack_id: String, contact_position: Vector3, radius: float, damage: float, parried: bool) -> void:
+	if enemy == null or not is_instance_valid(enemy) or not bool(enemy.get("is_boss")):
+		return
+	if zone_root != null:
+		var attack_direction: Vector3 = -enemy.global_transform.basis.z
+		CombatFeedback.boss_attack_release(zone_root, contact_position, attack_direction, attack_id, radius, parried)
+	var cue: String = str({
+		"bell_shockwave": "Bell shockwave",
+		"grave_slam": "Grave slam",
+		"ghoulkin_call": "The graves answer",
+		"root_lanes": "Root lanes split the clearing",
+		"ground_rupture": "The ground remembers the rupture",
+		"heart_stagger": "The oathwood heart is exposed",
+		"wing_blast": "Ashwing's wings break the air",
+		"ash_breath": "Ash breath fills the mill",
+		"swoop": "Ashwing drops from the smoke",
+		"parry_test": "Halvern tests the guard",
+		"counter_lunge": "Halvern answers the opening",
+		"memory_echo": "The Hart returns a memory",
+		"antler_sweep": "The Hart sweeps the old road",
+		"road_reopening": "The road opens beneath the witness",
+	}.get(attack_id, "The arena answers"))
+	hud.show_status_cue(cue, "danger" if not parried else "parry")
+	audio.play_event_limited("parry" if parried else "boss", 0.18, 0.025)
+	if attack_id == "ghoulkin_call" and not bool(enemy.get_meta("called_ghoulkin", false)):
+		enemy.set_meta("called_ghoulkin", true)
+		var call_position: Vector3 = enemy.global_position + Vector3(2.2, 0.8, 1.4)
+		var called := _spawn_enemy("ghoulkin", call_position)
+		if called != null:
+			called.set_meta("bell_called_ghoulkin", true)
+			called.leash_radius = 8.0
+			hud.toast("A Ghoulkin claws up through the bell's shadow.")
 
 func _activate_wychwood_wave(ids: Array, cue: String) -> void:
 	for enemy in active_enemies:
@@ -3677,9 +3886,20 @@ func _make_tree(pos: Vector3) -> void:
 	var radius := randf_range(1.0, 1.35)
 	var height := randf_range(2.0, 2.7)
 	var yaw := randf_range(0.0, TAU)
+	var tree_role := "forest_tree"
+	# Keep most trees on the primary source, but reserve a small deterministic
+	# share for a second silhouette so the forest reads as varied rather than
+	# as one repeated wall. Both roles use the same licensed nature pack.
+	var variant_selector := int(absf(pos.x * 17.0 + pos.z * 31.0))
+	if variant_selector % 4 == 0:
+		tree_role = "forest_tree_variant"
 	tree_batch_data.append({
 		"trunk": Transform3D(Basis.IDENTITY, pos + Vector3(0, 0.9, 0)),
 		"crown": Transform3D(Basis.from_euler(Vector3(0, yaw, 0)).scaled(Vector3(radius, height, radius)), pos + Vector3(0, 2.35, 0)),
+		"asset_position": pos,
+		"asset_scale": Vector3(radius * 0.88, height * 0.38, radius * 0.88),
+		"asset_yaw": yaw,
+		"asset_role": tree_role,
 		"color": Color(0.055, 0.18, 0.085).lerp(Color(0.13, 0.24, 0.11), randf())
 	})
 	if tree_collision_body == null:
@@ -3762,7 +3982,7 @@ func _flush_environment_batches() -> void:
 		var batch := _make_multimesh_batch("WorldPropBatch_%s" % str(batch_key), shared_box_mesh, transforms.size(), entry.get("material"))
 		for i in range(transforms.size()):
 			batch.multimesh.set_instance_transform(i, transforms[i])
-	if not tree_batch_data.is_empty():
+	if not tree_batch_data.is_empty() and not _flush_authored_tree_assets():
 		var trunk_mesh := BoxMesh.new()
 		trunk_mesh.size = Vector3(0.42, 1.8, 0.42)
 		var trunks := _make_multimesh_batch("TreeTrunkBatch", trunk_mesh, tree_batch_data.size(), world_materials.get_material("timber", str(settings.settings.get("quality_preset", "balanced")), Color(0.42, 0.30, 0.20), 0.0, false))
@@ -3790,6 +4010,58 @@ func _flush_environment_batches() -> void:
 		for i in range(deadfall_batch_data.size()):
 			deadfalls.multimesh.set_instance_transform(i, deadfall_batch_data[i])
 	environment_batches_flushed = true
+
+func _flush_authored_tree_assets() -> bool:
+	# Use the selected Quaternius tree mesh for Balanced/Quality. The old
+	# primitive trunk+sphere fallback remains available for Potato and for
+	# import failures, so the visual upgrade never removes the route.
+	if asset_helper == null or settings == null:
+		return false
+	if str(settings.settings.get("quality_preset", "balanced")) == "potato":
+		return false
+	var grouped_items: Dictionary = {}
+	for item in tree_batch_data:
+		var role := str(item.get("asset_role", "forest_tree"))
+		if not grouped_items.has(role):
+			grouped_items[role] = []
+		grouped_items[role].append(item)
+	if grouped_items.is_empty():
+		return false
+	var created_batch := false
+	for role in grouped_items.keys():
+		var role_items: Array = grouped_items[role]
+		if role_items.is_empty():
+			continue
+		var preview := _make_role_visual(str(role), "environment", Vector3.ONE)
+		if preview == null:
+			return false
+		var mesh_nodes := preview.find_children("*", "MeshInstance3D", true, false)
+		var source_mesh: Mesh = null
+		var source_material: Material = null
+		for raw_node in mesh_nodes:
+			var source := raw_node as MeshInstance3D
+			if source == null or source.mesh == null:
+				continue
+			source_mesh = source.mesh
+			source_material = source.material_override
+			if source_material == null and source_mesh.get_surface_count() > 0:
+				source_material = source_mesh.surface_get_material(0)
+			break
+		preview.free()
+		if source_mesh == null:
+			return false
+		if source_material == null:
+			source_material = world_materials.get_material("forest_ground", str(settings.settings.get("quality_preset", "balanced")), Color(0.08, 0.18, 0.09), 0.0, false)
+		var trees := _make_multimesh_batch("AuthoredTreeBatch_%s" % str(role).replace(":", "_"), source_mesh, role_items.size(), source_material)
+		for index in range(role_items.size()):
+			var item: Dictionary = role_items[index]
+			var tree_position: Vector3 = item.get("asset_position", Vector3.ZERO)
+			var tree_scale: Vector3 = item.get("asset_scale", Vector3.ONE)
+			var tree_yaw: float = float(item.get("asset_yaw", 0.0))
+			var basis := Basis.from_euler(Vector3(0.0, tree_yaw, 0.0)).scaled(tree_scale)
+			trees.multimesh.set_instance_transform(index, Transform3D(basis, tree_position))
+		created_batch = true
+	return created_batch
 
 func _make_multimesh_batch(node_name: String, mesh: Mesh, count: int, material: Material, use_colors: bool = false) -> MultiMeshInstance3D:
 	var instance := MultiMeshInstance3D.new()
@@ -4007,6 +4279,10 @@ func _make_fog_sheet(pos: Vector3, scale_value: Vector3, color: Color) -> void:
 	zone_root.add_child(fog)
 
 func _make_prop_box(name: String, pos: Vector3, size: Vector3, color: Color) -> void:
+	var authored_prop_ids: Array = zone_root.get_meta("authored_prop_ids", [])
+	if name not in authored_prop_ids:
+		authored_prop_ids.append(name)
+		zone_root.set_meta("authored_prop_ids", authored_prop_ids)
 	if name not in ["NorthBerm","SouthBerm","WestBerm","EastBerm"]:
 		pos = river_safe_position(pos,size.z*0.5+0.15)
 	# Solid scenery must yield to registered route and gate clearances. This is
@@ -4237,7 +4513,8 @@ func _make_role_visual(role_name: String, category: String, scale_value: Vector3
 		# their imported bounds have an explicit normalization contract.
 		var balanced_environment_roles := [
 			"greyfen_door_facade", "greyfen_window_facade", "greyfen_chimney",
-			"forest_tree", "forest_rock",
+			"greyfen_roof",
+			"forest_tree", "forest_tree_variant", "forest_rock",
 		]
 		if str(settings.settings.get("quality_preset", "balanced")) == "potato" or role_name not in balanced_environment_roles:
 			return null

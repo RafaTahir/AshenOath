@@ -149,18 +149,34 @@ function Invoke-Compact(
     $previousPreference = $ErrorActionPreference
     $ErrorActionPreference = "Continue"
     try {
-        & $Executable @Arguments *> $log
+        $invocationArguments = @($Arguments)
+        if ($Executable -match "Godot.*console") {
+            # Godot can crash before script execution when its default user log
+            # path is unavailable. Give every gate an isolated deterministic log.
+            # Keep it separate from PowerShell's redirected summary stream.
+            $invocationArguments = @("--log-file", "$log.godot.log") + $invocationArguments
+        }
+        & $Executable @invocationArguments *> $log
         $exitCode = $LASTEXITCODE
     } finally {
         $ErrorActionPreference = $previousPreference
     }
     $timer.Stop()
-    $lines = @(Get-Content -LiteralPath $log -ErrorAction SilentlyContinue)
-    $parseFailure = $lines | Where-Object { $_ -match "SCRIPT ERROR|Parse Error|Compile Error|Cannot open resource pack|Failed to load" } | Select-Object -First 1
-    $verifierFailure = $lines | Where-Object { $_ -match "VERIFIER:\s*FAIL|ASSERTION FAILED|Assertion failed" } | Select-Object -First 1
-    if ($exitCode -ne 0 -or $parseFailure -or $verifierFailure) {
-        Write-Host ("TICKET GATE {0}: FAIL" -f $Name) -ForegroundColor Red
-        Get-Content -LiteralPath $log -Tail 40
+	$lines = @(Get-Content -LiteralPath $log -ErrorAction SilentlyContinue)
+	$engineLogPath = "$log.godot.log"
+	$engineLines = @()
+	if (Test-Path -LiteralPath $engineLogPath) {
+		$engineLines = @(Get-Content -LiteralPath $engineLogPath -ErrorAction SilentlyContinue)
+	}
+	$diagnosticLines = @($lines + $engineLines)
+	$parseFailure = $diagnosticLines | Where-Object { $_ -match "SCRIPT ERROR|Parse Error|Compile Error|Cannot open resource pack|Cannot open resource|Failed to load|Resource not found" } | Select-Object -First 1
+	$verifierFailure = $diagnosticLines | Where-Object { $_ -match "VERIFIER:\s*FAIL|ASSERTION FAILED|Assertion failed" } | Select-Object -First 1
+	if ($exitCode -ne 0 -or $parseFailure -or $verifierFailure) {
+		Write-Host ("TICKET GATE {0}: FAIL" -f $Name) -ForegroundColor Red
+		Get-Content -LiteralPath $log -Tail 40
+		if (Test-Path -LiteralPath $engineLogPath) {
+			Get-Content -LiteralPath $engineLogPath -Tail 40
+		}
         throw "$Name failed. Full log: $log"
     }
     $Cache[$Name] = @{
@@ -341,9 +357,13 @@ foreach ($capture in $captureGates) {
     $script = Join-Path $PSScriptRoot "$capture.gd"
     if (!(Test-Path -LiteralPath $script)) { throw "Capture helper missing: $script" }
     $captureInputs = @(Get-GateInputs $capture $files)
-    Invoke-Compact $capture $Godot @(
+    $captureArguments = @(
         "--path", $Project, "--rendering-method", "gl_compatibility", "--script", $script
-    ) $captureInputs $cache
+    )
+    if ($capture -eq "capture_slice_screenshots" -and $ChangedViews -contains "combat") {
+        $captureArguments += @("--", "--combat-only")
+    }
+    Invoke-Compact $capture $Godot $captureArguments $captureInputs $cache
 }
 
 Write-Host "TICKET GATE: PASS"
