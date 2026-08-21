@@ -1115,7 +1115,11 @@ Known verifier note: Godot headless may emit ObjectDB cleanup warnings after pas
 - `verify_quest_009.gd` passes the dialogue contract, runtime action, one-shot
   guard, cemetery visual state branches, and bell aftermath coverage.
 - Full real-input cemetery/Bell-Eater play and final before/after visual
-  approval remain open for the Milestone F gate.
+  approval remain open for the Milestone F gate. The continuation also repairs
+  the shared dialogue action path: shrine choices now close the overlay,
+  restore gameplay focus, and unpause before applying their saved consequence.
+  Fresh WORLD-014 cemetery captures pass the graphical nonblank gate; one
+  tree-heavy frame remains explicit visual debt.
 
 ## QUEST-010 Teeth, Names, and Ash Checkpoint - 2026-08-21
 

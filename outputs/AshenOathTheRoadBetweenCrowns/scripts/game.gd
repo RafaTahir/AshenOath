@@ -1494,6 +1494,14 @@ func _relocate_anwen_to_cemetery() -> void:
 	_face_npc_toward_player(anwen)
 
 func _handle_dialogue_action(action: Dictionary) -> void:
+	# Dialogue action buttons emit their choice before the game receives it. The
+	# close button already restores these states, so action buttons must do the
+	# same before applying quest/story mutations or the world stays paused.
+	get_tree().paused = false
+	if hud != null:
+		hud.hide_menus()
+	if audio != null:
+		audio.set_game_paused(false)
 	audio.stop_voice()
 	audio.play_event("ui")
 	var type = str(action.get("type", ""))

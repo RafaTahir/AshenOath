@@ -18,6 +18,7 @@ func _initialize() -> void:
 	_check(states.size() == 3, "Crow Shrine states are not distinct")
 	_check('"crow_shrine_state"' in game_source and "already answered" in game_source, "Crow Shrine one-shot guard is missing")
 	_check("crow_shrine_choice" in game_source and "complete_objective" in game_source, "Shrine choice does not complete its objective")
+	_check("get_tree().paused = false" in game_source and "hud.hide_menus()" in game_source, "Dialogue actions do not restore gameplay after a choice")
 	for state in ["cleansed", "disturbed", "bound"]:
 		_check(('shrine_state == "%s"' % state) in cemetery_source or ('shrine_state == "%s"' % state) in game_source, "No visual branch for shrine state: %s" % state)
 	_check("cemetery_bell_silent" in cemetery_source or "cemetery_bell_silent" in game_source, "Bell aftermath state is not dressed")

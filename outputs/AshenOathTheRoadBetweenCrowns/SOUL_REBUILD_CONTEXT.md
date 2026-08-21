@@ -215,6 +215,13 @@ action, and legacy completed saves receive a neutral report-choice handoff.
 The inserted chapel-name objective also migrates from later Teeth in the Rain
 progress, with the full story profile passing after the repair.
 
+The QUEST-009 continuation closes a player-facing choice bug shared by the
+shrine and later campaign decisions: selecting a dialogue action now restores
+the gameplay pointer, unpauses the world, and hides the dialogue layer before
+the consequence is applied. The full story profile and fresh WORLD-014
+cemetery captures pass. The cemetery remains stylized development art, with a
+tree-heavy framing called out for later world reconstruction.
+
 The latest continuation slice adds Anwen's bone-attached upright staff, shared
 Balanced roof treatment, visible animated river-current ribbons, stronger
 Oathblade presentation, capsule/cylinder boss silhouette dressing, and
