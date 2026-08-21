@@ -5,13 +5,9 @@ const CharacterIdentityProfile = preload("res://scripts/character_identity_profi
 
 class WorldOrientedEquipment extends Node3D:
 	var actor: Node3D
-
-	func _process(_delta: float) -> void:
-		if actor == null or not is_instance_valid(actor):
-			queue_free()
-			return
-		var position_before := global_position
-		global_transform = Transform3D(actor.global_transform.basis.orthonormalized(), position_before)
+	# Intentionally has no process callback. This node is a child of a
+	# BoneAttachment3D, so the skeleton is authoritative for staff orientation.
+	# Reapplying the actor root basis every frame detached the prop from the hand.
 
 static func apply_player(owner: Node3D, visual_root: Node3D) -> void:
 	if owner == null or visual_root == null:

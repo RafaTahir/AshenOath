@@ -22,6 +22,9 @@ var authored_sky: Sky
 var authored_sky_material: ProceduralSkyMaterial
 var current_environment: Environment
 var environment_cache: Dictionary = {}
+var last_applied_time_minutes := -1.0
+var last_applied_phase := ""
+var force_time_update := true
 var night_node_cache: Dictionary = {}
 var current_zone := "greyfen"
 var current_zone_root: Node3D
@@ -33,6 +36,7 @@ var reduced_motion := false
 const INTERIOR_ZONES := ["record_hall", "undercroft"]
 const FOREST_ZONES := ["wychwood", "deep_wood", "marsh_crossing", "burned_farmstead", "hart_glade"]
 const CASTLE_ZONES := ["vargan_approach", "vargan_court", "assembly"]
+const MIN_VISUAL_TIME_DELTA_MINUTES := 3.5
 
 func clear_runtime_caches() -> void:
 	# Detach the active environment before dropping cached Environment objects.
@@ -67,6 +71,7 @@ func _ready() -> void:
 func apply_zone(zone_id: String, zone_root: Node3D = null) -> void:
 	current_zone = zone_id
 	current_zone_root = zone_root
+	force_time_update = true
 	_invalidate_night_cache()
 	var env: Environment = environment_cache.get(zone_id)
 	if env == null:
@@ -87,13 +92,27 @@ func apply_settings(settings: Dictionary) -> void:
 	current_quality_preset = str(settings.get("quality_preset", "balanced"))
 	reduced_motion = bool(settings.get("reduced_motion", false))
 	if current_environment != null:
+		force_time_update = true
 		set_time(current_time_minutes, current_phase, 0)
 
 func set_time(minutes: float, phase: String, _day_count: int = 0) -> void:
+	var previous_minutes := last_applied_time_minutes
+	var previous_phase := last_applied_phase
 	current_time_minutes = minutes
 	current_phase = phase
 	if current_environment == null:
 		return
+	# The day/night service emits at 5 Hz so save state and phase changes stay
+	# responsive. Rebuilding the complete sky, environment, and night-light
+	# presentation at that same rate creates a recurring Compatibility-renderer
+	# hitch. Lighting only changes perceptibly over a larger interval, so keep the
+	# service cadence while applying the expensive visual pass at a bounded rate.
+	var wrapped_delta := absf(fposmod(minutes - previous_minutes + 720.0, 1440.0) - 720.0)
+	if not force_time_update and previous_minutes >= 0.0 and phase == previous_phase and wrapped_delta < MIN_VISUAL_TIME_DELTA_MINUTES:
+		return
+	last_applied_time_minutes = minutes
+	last_applied_phase = phase
+	force_time_update = false
 	var profile := _lighting_profile(current_zone)
 	var weights := _phase_weights(minutes)
 	var daylight: float = weights.daylight
@@ -108,8 +127,9 @@ func set_time(minutes: float, phase: String, _day_count: int = 0) -> void:
 		if sky_backdrop != null:
 			sky_backdrop.call("set_state", daylight, twilight, night, minutes, _quality_preset(), current_zone, _reduced_motion(), _sky_backdrop_palette(profile), false)
 			sky_backdrop.visible = false
-		current_environment.background_mode = Environment.BG_COLOR
-		current_environment.sky = null
+		if current_environment.background_mode != Environment.BG_COLOR:
+			current_environment.background_mode = Environment.BG_COLOR
+			current_environment.sky = null
 		current_environment.background_color = profile.interior_background
 		# Keep the renderer clear color in lockstep with the authored interior
 		# profile. This is the fallback behind an interior ceiling when ANGLE
@@ -124,10 +144,9 @@ func set_time(minutes: float, phase: String, _day_count: int = 0) -> void:
 		_update_zone_night_state(night)
 		return
 	var twilight_sky: Color = profile.dawn_sky if minutes < 720.0 else profile.dusk_sky
-	current_environment.background_mode = Environment.BG_SKY
-	current_environment.sky = authored_sky
-	current_environment.background_color = profile.night_sky.lerp(twilight_sky, twilight).lerp(profile.day_sky, daylight)
-	RenderingServer.set_default_clear_color(current_environment.background_color)
+	if current_environment.background_mode != Environment.BG_SKY:
+		current_environment.background_mode = Environment.BG_SKY
+		current_environment.sky = authored_sky
 	current_environment.ambient_light_color = profile.ambient_night.lerp(profile.ambient_day, daylight)
 	current_environment.ambient_light_energy = lerpf(float(profile.ambient_night_energy), float(profile.ambient_day_energy), daylight)
 	current_environment.fog_light_color = profile.fog_night_color.lerp(profile.fog_day_color, daylight)

@@ -413,3 +413,28 @@ artifact hashes, and registers converted outputs as pending visual review.
 `verify_pipe_003.py` is wired into the assets profile and passes. Blender and
 gltfpack are intentionally external prerequisites; the current generated Ghoul
 files remain fallbacks, not approved final monsters.
+
+### PERF-008 runtime performance checkpoint
+
+PerformanceBudgetMonitor is now a concrete runtime contract bound to zone
+activation, transition timing, lifecycle snapshots, quality presets, and
+explicit budget refreshes. Compass interaction summaries reuse the indexed
+area cache; ambient prop animation is centralized and distance-bounded;
+interactive state components no longer run duplicate per-prop process loops;
+enemy encounter peers and camera enemy candidates are cached; stale freed
+actors are ignored; and player foot-height probes are limited to 30 Hz while
+movement and combat remain full-rate. The graphical verifier no longer
+contains temporary process-disabling or timing probes.
+
+The final clean native-720p Compatibility run passed every sampled zone and
+combat profile: Greyfen 59.9 / 34.0, Wychwood 59.9 / 33.5, Wychwood combat
+55.3 / 30.1, Vargan courtyard 60.0 / 40.5, Record Hall 60.0 / 52.1, and
+Hart Glade 60.0 / 46.7 FPS average/1% low. Static memory stayed below
+106 MB, cold transitions below 264 ms, and warm return was 60 ms. The
+performance-contract and zone-budget gates pass.
+
+Known Compatibility renderer/RID/ObjectDB messages occur only during isolated
+verifier teardown and remain ENGINE-004 lifecycle debt. They are reported
+explicitly, not suppressed. This checkpoint remains development-only: final
+visual asset approval, full real-input campaign coverage, Web export, and
+production deployment remain open.

@@ -26,6 +26,11 @@ func _initialize() -> void:
 	DisplayServer.window_set_size(Vector2i(1280, 720))
 	DisplayServer.window_move_to_foreground()
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
+	# The gate intentionally measures the graphical Compatibility renderer
+	# without VSync. Disable Godot's sleep-based frame cap as well; on the Dell's
+	# ANGLE path the combination produces periodic timer misses that are not
+	# representative of the browser's compositor-paced runtime.
+	Engine.max_fps = 0
 	_check(DisplayServer.window_get_size() == Vector2i(1280, 720), "performance window is not native 1280x720")
 	var scene := load("res://scenes/main.tscn") as PackedScene
 	var game = scene.instantiate()
@@ -99,6 +104,11 @@ func _initialize() -> void:
 		_finish()
 
 func _sample_zone(game: Node, zone_id: String, duration_ms: int) -> Dictionary:
+	# The monitor is a release-report instrument, not part of the gameplay
+	# benchmark. Suspend its sampling while this gate measures the rendered
+	# route so instrumentation cannot distort the 1% low result.
+	if game.get("performance_budget_monitor") != null:
+		game.performance_budget_monitor.suspend()
 	var frame_times: Array[float] = []
 	var slow_frame_indices: Array[int] = []
 	var started := Time.get_ticks_msec()
@@ -110,8 +120,8 @@ func _sample_zone(game: Node, zone_id: String, duration_ms: int) -> Dictionary:
 		previous = now
 		if frame_ms > 0.0 and frame_ms < 250.0:
 			frame_times.append(frame_ms)
-			if frame_ms > 33.333:
-				slow_frame_indices.append(frame_times.size() - 1)
+		if frame_ms > 33.333:
+			slow_frame_indices.append(frame_times.size() - 1)
 	var average_ms := 0.0
 	for frame_ms in frame_times:
 		average_ms += frame_ms

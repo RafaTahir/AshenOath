@@ -31,6 +31,8 @@ var _fov_kick = 0.0
 var _idle_time = 0.0
 var _combat_focus_refresh := 0.0
 var _cached_combat_focus: Node3D
+var _enemy_cache: Array[Node3D] = []
+var _enemy_cache_refresh := 0.0
 var _locked_combat_target: Node3D
 var _target_lock_marker: MeshInstance3D
 var _target_switch_cooldown := 0.0
@@ -95,6 +97,10 @@ func _process(delta: float) -> void:
 	_apply_keyboard_camera(delta)
 	_update_response_state(delta)
 	_update_target_lock(delta)
+	_enemy_cache_refresh -= delta
+	if _enemy_cache_refresh <= 0.0:
+		_enemy_cache_refresh = 0.25
+		_refresh_enemy_cache()
 	var velocity = _target_velocity()
 	var flat_speed = Vector2(velocity.x, velocity.z).length()
 	var sprinting := _action_pressed("run") and flat_speed > 3.5
@@ -325,9 +331,11 @@ func _target_query_exclusions(candidate: Node3D) -> Array[RID]:
 
 func _available_combat_targets() -> Array[Node3D]:
 	var result: Array[Node3D] = []
-	for node in get_tree().get_nodes_in_group("enemies"):
-		if node is Node3D and _is_valid_combat_target(node as Node3D):
-			result.append(node as Node3D)
+	for node in _enemy_cache:
+		if not is_instance_valid(node):
+			continue
+		if _is_valid_combat_target(node):
+			result.append(node)
 	result.sort_custom(func(a: Node3D, b: Node3D):
 			var forward := get_flat_forward()
 			var right := get_flat_right()
@@ -448,14 +456,25 @@ func _update_response_state(delta: float) -> void:
 	_landing_response = max(_landing_response - delta * 6.0, 0.0)
 
 func _nearest_combat_focus() -> Node3D:
-	var nearest: Node3D = null
-	var nearest_dist := TARGET_MAX_DISTANCE
-	for candidate in _available_combat_targets():
-		var dist := target.global_position.distance_to(candidate.global_position)
-		if dist < nearest_dist:
-			nearest = candidate
-			nearest_dist = dist
-	return nearest
+	var candidates: Array[Node3D] = []
+	for candidate in _enemy_cache:
+		if not is_instance_valid(candidate):
+			continue
+		if _is_target_alive_in_range(candidate):
+			candidates.append(candidate)
+	candidates.sort_custom(func(a: Node3D, b: Node3D) -> bool:
+		return target.global_position.distance_squared_to(a.global_position) < target.global_position.distance_squared_to(b.global_position)
+	)
+	for candidate in candidates:
+		if _target_is_visible(candidate):
+			return candidate
+	return null
+
+func _refresh_enemy_cache() -> void:
+	_enemy_cache.clear()
+	for node in get_tree().get_nodes_in_group("enemies"):
+		if is_instance_valid(node) and node is Node3D:
+			_enemy_cache.append(node as Node3D)
 
 func _environment_focus(combat_focus: Node3D) -> Dictionary:
 	if combat_focus != null:

@@ -1,6 +1,7 @@
 extends SceneTree
 
 const SettingsManager = preload("res://scripts/settings_manager.gd")
+const PerformanceBudgetMonitor = preload("res://scripts/performance_budget_monitor.gd")
 
 var failures := 0
 
@@ -19,6 +20,15 @@ func _initialize() -> void:
 	settings.set_quality_preset("potato")
 	check(int(settings.settings.foliage_density) == 0, "Potato foliage budget is not reduced")
 	check(int(settings.settings.shadow_quality) == 0, "Potato shadow budget is not reduced")
+	var monitor := PerformanceBudgetMonitor.new()
+	root.add_child(monitor)
+	monitor.configure(null)
+	check(monitor.has_method("set_active_zone"), "Performance monitor has no zone binding contract")
+	check(monitor.has_method("record_transition"), "Performance monitor has no transition timing contract")
+	check(monitor.has_method("get_snapshot"), "Performance monitor has no report snapshot")
+	var snapshot := monitor.get_snapshot()
+	check(snapshot.has("sample_count") and snapshot.has("budget_violations"), "Performance monitor snapshot is incomplete")
+	monitor.queue_free()
 	print("PERF-008 VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
 	quit(0 if failures == 0 else 1)
 

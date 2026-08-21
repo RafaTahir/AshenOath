@@ -23,6 +23,7 @@ const ZoneRuntimeCoordinator = preload("res://scripts/zone_runtime_coordinator.g
 const ZoneSceneCatalog = preload("res://scripts/zone_scene_catalog.gd")
 const OathGatePortal = preload("res://scripts/oath_gate_portal.gd")
 const BossEncounterScript = preload("res://scripts/boss_encounter.gd")
+const PerformanceBudgetMonitor = preload("res://scripts/performance_budget_monitor.gd")
 
 var player
 var camera_rig
@@ -101,6 +102,7 @@ var environment_batches_flushed := false
 var prop_collision_body: StaticBody3D
 var pending_anwen_relocation := false
 var runtime_services: Node
+var performance_budget_monitor: PerformanceBudgetMonitor
 var zone_transition_pending := false
 var zone_transition_frames := 0
 var pending_spawn_position := Vector3.ZERO
@@ -139,6 +141,10 @@ func _ready() -> void:
 	var environment_ms := Time.get_ticks_msec() - phase_started
 	phase_started = Time.get_ticks_msec()
 	_setup_runtime()
+	performance_budget_monitor = PerformanceBudgetMonitor.new()
+	performance_budget_monitor.name = "PerformanceBudgetMonitor"
+	add_child(performance_budget_monitor)
+	performance_budget_monitor.configure(self)
 	var services_ms := Time.get_ticks_msec() - phase_started
 	hud.show_launch_screen()
 	audio.set_music_state("main_menu")
@@ -407,6 +413,8 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	if new_game_start_pending and not game_started:
 		new_game_start_pending = false
 	zone_id = zone_id.strip_edges().to_lower()
+	if performance_budget_monitor != null:
+		performance_budget_monitor.suspend()
 	loading_started_usec = loading_started_usec if loading_started_usec > 0 else Time.get_ticks_usec()
 	if player != null and player.has_method("set_transition_locked"):
 		player.set_transition_locked(true)
@@ -598,6 +606,9 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	for enemy in active_enemies:
 		if is_instance_valid(enemy):
 			_validate_zone_render_resources(enemy)
+	if performance_budget_monitor != null:
+		var quality_preset := str(settings.settings.get("quality_preset", "balanced")) if settings != null else "balanced"
+		performance_budget_monitor.set_active_zone(current_zone_id, zone_root, player, quality_preset)
 	if player != null:
 		pending_spawn_facing = player.rotation.y
 		pending_spawn_position = safe_spawn
@@ -663,6 +674,8 @@ func _advance_zone_transition() -> void:
 		"support_ready": true,
 		"velocity_reset": player.velocity.is_zero_approx()
 	})
+	if performance_budget_monitor != null:
+		performance_budget_monitor.record_transition(elapsed_ms)
 	if zone_runtime_coordinator != null:
 		zone_runtime_coordinator.record_playable_transition(current_zone_id, elapsed_ms, true)
 	print("LOADING: zone=%s playable_ms=%.1f" % [current_zone_id, elapsed_ms])
@@ -693,6 +706,9 @@ func _recover_failed_zone_load(previous_zone_id: String) -> void:
 		player.set_transition_locked(false)
 		player.global_position = last_safe_player_position
 		player.velocity = Vector3.ZERO
+	if performance_budget_monitor != null:
+		var quality_preset := str(settings.settings.get("quality_preset", "balanced")) if settings != null else "balanced"
+		performance_budget_monitor.set_active_zone(previous_zone_id, zone_root, player, quality_preset)
 	if hud != null:
 		hud.hide_loading()
 		hud.toast("The road will not open. You remain in %s." % _zone_display_name(previous_zone_id))
@@ -1034,6 +1050,8 @@ func prepare_resource_shutdown() -> void:
 	if resource_shutdown_prepared:
 		return
 	resource_shutdown_prepared = true
+	if performance_budget_monitor != null:
+		performance_budget_monitor.suspend()
 	if zone_root != null and is_instance_valid(zone_root):
 		_retire_zone_root(zone_root)
 	zone_root = null
@@ -1113,6 +1131,8 @@ func zone_lifecycle_snapshot() -> Dictionary:
 	for raw_id in route_zone_cache.keys():
 		cached_ids.append(str(raw_id))
 	cached_ids.sort()
+	if performance_budget_monitor != null:
+		performance_budget_monitor.refresh_budget_snapshot()
 	return {
 		"active_zone": current_zone_id if zone_root != null and is_instance_valid(zone_root) else "",
 		"active_owner": str(zone_root.get_meta("zone_resource_owner", "")) if zone_root != null and is_instance_valid(zone_root) else "",
@@ -1129,6 +1149,7 @@ func zone_lifecycle_snapshot() -> Dictionary:
 		"transition_history": transition_history.duplicate(true),
 		"material_cache_count": material_cache.size(),
 		"zone_runtime": zone_runtime_coordinator.snapshot() if zone_runtime_coordinator != null else {},
+		"performance": performance_budget_monitor.get_snapshot() if performance_budget_monitor != null else {},
 	}
 
 func _subtree_node_count(root: Node) -> int:
@@ -1154,6 +1175,8 @@ func _exit_tree() -> void:
 	skinned_resource_anchors.clear()
 	retired_material_anchors.clear()
 	transition_history.clear()
+	if performance_budget_monitor != null:
+		performance_budget_monitor.suspend()
 
 func _add_visual_100_layer(zone_id: String) -> void:
 	var quality := str(settings.settings.get("quality_preset", "balanced")) if settings != null else "balanced"
@@ -2478,6 +2501,8 @@ func _handle_setting(action: String) -> void:
 	hud.show_settings_menu(hud.controls_back_target)
 
 func _apply_runtime_settings(current_settings: Dictionary) -> void:
+	if performance_budget_monitor != null:
+		performance_budget_monitor.quality = str(current_settings.get("quality_preset", "balanced"))
 	if audio != null:
 		audio.set_master_volume(float(current_settings.get("master_volume", 0.85)))
 		audio.set_ambient_accents_enabled(str(current_settings.get("quality_preset", "balanced")) == "quality")
@@ -2562,14 +2587,20 @@ func _update_compass() -> void:
 	hud.set_compass("%s | %s" % [zone_name, _nearest_interactable_summary()])
 
 func _nearest_interactable_summary() -> String:
-	if zone_root == null:
+	if zone_root == null or player == null:
 		return "No marker"
 	var best_text = "No marker"
 	var best_score = 9999.0
 	var tracked_id: String = quest_presentation.get_tracked_quest() if quest_presentation != null else (quests.get_tracked_quest() if quests.has_method("get_tracked_quest") else "")
 	var tracked_objective: String = str(quest_presentation.get_active_objective_id(tracked_id)) if quest_presentation != null else _tracked_objective_id(tracked_id)
 	var found_tracked_target := false
-	for child in zone_root.get_children():
+	# Interaction areas are indexed once on zone activation. Scanning every
+	# direct child of the complete procedural zone from the compass timer caused
+	# periodic frame spikes and could miss nested gate/clue areas. Use the same
+	# authoritative cache as focus resolution instead.
+	for child in interaction_area_cache:
+		if child == null or not is_instance_valid(child) or not child.is_inside_tree():
+			continue
 		if not child.has_method("get_overlapping_bodies"):
 			continue
 		var interaction_id = child.get("interaction_id")
@@ -4170,6 +4201,9 @@ func _spawn_enemy(id: String, pos: Vector3) -> Node:
 		if boss_controller.has_signal("resolved"):
 			boss_controller.connect("resolved", Callable(self, "_on_boss_resolved"))
 	active_enemies.append(enemy)
+	for peer in active_enemies:
+		if is_instance_valid(peer) and peer.has_method("set_encounter_peers"):
+			peer.set_encounter_peers(active_enemies)
 	return enemy
 
 func _boss_is_resolved(id: String) -> bool:

@@ -83,6 +83,7 @@ var base_move_speed := 2.0
 var base_damage := 10.0
 var boss_visual_time := 0.0
 var boss_identity_base_scale := Vector3.ONE
+var encounter_peers: Array = []
 
 func setup(id: String, definition: Dictionary, target: Node3D) -> void:
 	enemy_id = id
@@ -137,6 +138,9 @@ func setup_navigation(service) -> void:
 	navigation_route_index = 0
 	navigation_refresh_time = 0.0
 	navigation_target = Vector3.INF
+
+func set_encounter_peers(peers: Array) -> void:
+	encounter_peers = peers
 
 func _physics_process(delta: float) -> void:
 	if dead or player == null:
@@ -414,7 +418,8 @@ func _has_attack_line() -> bool:
 
 func _crowd_separation() -> Vector3:
 	var separation := Vector3.ZERO
-	for other in get_tree().get_nodes_in_group("enemies"):
+	var peers := encounter_peers if not encounter_peers.is_empty() else get_tree().get_nodes_in_group("enemies")
+	for other in peers:
 		if other == self or not is_instance_valid(other) or bool(other.get("dead")):
 			continue
 		var offset: Vector3 = global_position-other.global_position
@@ -462,7 +467,8 @@ func _has_perception_line() -> bool:
 func _attack_lane_clear() -> bool:
 	var start := global_position
 	var finish: Vector3 = player.global_position
-	for other in get_tree().get_nodes_in_group("enemies"):
+	var peers := encounter_peers if not encounter_peers.is_empty() else get_tree().get_nodes_in_group("enemies")
+	for other in peers:
 		if other == self or not is_instance_valid(other) or bool(other.get("dead")) or not bool(other.get("encounter_active")):
 			continue
 		var other_pos: Vector3 = other.global_position

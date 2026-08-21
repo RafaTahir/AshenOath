@@ -113,6 +113,8 @@ var landing_compression = 0.0
 var smoothed_ground_normal = Vector3.UP
 var left_foot_ground_offset = 0.0
 var right_foot_ground_offset = 0.0
+var ground_adaptation_accumulator := 0.0
+const GROUND_ADAPTATION_INTERVAL := 1.0 / 30.0
 var contact_shadow: Node3D
 var was_on_floor = false
 var step_up_cooldown = 0.0
@@ -304,14 +306,22 @@ func _try_step_up(move_dir: Vector3) -> void:
 
 func _update_ground_adaptation(delta: float) -> void:
 	var on_floor = is_on_floor()
+	ground_adaptation_accumulator += delta
 	if on_floor and not was_on_floor:
 		landing_compression = clamp(abs(velocity.y) / 9.0, 0.45, 1.0)
 	jump_pose_weight = move_toward(jump_pose_weight, 0.0 if on_floor else 1.0, delta * (6.0 if on_floor else 3.0))
 	landing_compression = move_toward(landing_compression, 0.0, delta * 5.5)
 	var normal = get_floor_normal() if on_floor else Vector3.UP
 	smoothed_ground_normal = smoothed_ground_normal.lerp(normal, 1.0 - exp(-9.0 * delta)).normalized()
-	left_foot_ground_offset = _sample_foot_offset(-0.18, delta, left_foot_ground_offset) if on_floor else move_toward(left_foot_ground_offset, 0.0, delta * 3.0)
-	right_foot_ground_offset = _sample_foot_offset(0.18, delta, right_foot_ground_offset) if on_floor else move_toward(right_foot_ground_offset, 0.0, delta * 3.0)
+	if on_floor and ground_adaptation_accumulator >= GROUND_ADAPTATION_INTERVAL:
+		var probe_delta := ground_adaptation_accumulator
+		ground_adaptation_accumulator = 0.0
+		left_foot_ground_offset = _sample_foot_offset(-0.18, probe_delta, left_foot_ground_offset)
+		right_foot_ground_offset = _sample_foot_offset(0.18, probe_delta, right_foot_ground_offset)
+	elif not on_floor:
+		ground_adaptation_accumulator = 0.0
+		left_foot_ground_offset = move_toward(left_foot_ground_offset, 0.0, delta * 3.0)
+		right_foot_ground_offset = move_toward(right_foot_ground_offset, 0.0, delta * 3.0)
 	if contact_shadow != null:
 		contact_shadow.visible = global_position.y > -4.0
 		var shadow_weight = 1.0 - clamp(abs(velocity.y) / 10.0, 0.0, 0.52)

@@ -1291,3 +1291,26 @@ The continuation source is now verified locally for the release candidate. The r
 - This checkpoint is pushed to `codex/soul-rebuild`; production `main`, the
   tracked Web export, and Vercel remain unchanged until the full visual,
   campaign, export, and live-browser gates pass.
+
+## PERF-008 Runtime Performance Checkpoint - 2026-08-21
+
+- PerformanceBudgetMonitor now records active-zone budgets, transition time,
+  frame samples, memory, and lifecycle state without walking the zone every
+  frame.
+- Ambient prop motion is centralized and distance-bounded. Interactive prop
+  state remains functional, but its duplicate per-component process loop is
+  disabled. Compass, camera target, enemy peer, and cosmetic foot-probe work
+  are bounded or cached.
+- The final clean graphical Compatibility run passed native 1280x720
+  Balanced: Greyfen 59.9 / 34.0, Wychwood 59.9 / 33.5, Wychwood combat
+  55.3 / 30.1, Vargan courtyard 60.0 / 40.5, Record Hall 60.0 / 52.1,
+  and Hart Glade 60.0 / 46.7 FPS average/1% low. Static memory stayed
+  below 106 MB; cold transitions stayed below 264 ms and warm return was
+  60 ms.
+- verify_perf_008.gd, verify_zone_budgets.gd, and graphical
+  verify_perf_001.gd pass. Shutdown-only Compatibility renderer/RID/ObjectDB
+  diagnostics remain assigned to ENGINE-004; no active gameplay camera,
+  parser, resource, or material errors were observed.
+- This is a development checkpoint on codex/soul-rebuild. Production main,
+  tracked web/, and Vercel remain unchanged. Final visual assets, complete
+  campaign route proof, Web export, and release deployment remain open.

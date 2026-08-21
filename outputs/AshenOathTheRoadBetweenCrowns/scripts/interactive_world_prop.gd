@@ -17,7 +17,9 @@ var _elapsed := 0.0
 
 func _ready() -> void:
 	add_to_group("interactive_world_prop")
-	set_process(true)
+	# WorldPropController owns ambient motion centrally. Keeping one process loop
+	# on every interactive component created a redundant per-prop scene scan.
+	set_process(false)
 	_cache_visual_nodes.call_deferred()
 
 func configure(id: String, prop_kind: String, persistent_key: String = "", initial_state: String = "idle", state_owner: Node = null) -> void:
@@ -81,21 +83,6 @@ func _cache_visual_nodes() -> void:
 			continue
 		_visual_nodes.append(child as Node3D)
 	_apply_state()
-
-func _process(delta: float) -> void:
-	if get_tree().paused:
-		return
-	_elapsed += delta
-	if _visual_nodes.is_empty():
-		_cache_visual_nodes()
-	var pulse := sin(_elapsed * 2.4 + float(prop_id.hash() % 17))
-	for node in _visual_nodes:
-		if not is_instance_valid(node):
-			continue
-		if kind in ["forge", "shrine", "well"]:
-			node.scale.y = 1.0 + pulse * 0.012
-		elif kind == "table" or kind == "notice_board":
-			node.rotation.z = pulse * 0.006
 
 func _apply_state() -> void:
 	var inactive := current_state == "extinguished" or current_state == "closed"

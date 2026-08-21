@@ -10,9 +10,14 @@ var quality := "balanced"
 var story_state: Node
 var audio: Node
 var entries: Array[Dictionary] = []
+var player: Node3D
+var active_entries: Array[Dictionary] = []
 var _elapsed := 0.0
 var _accumulator := 0.0
+var _last_player_position := Vector3.INF
 const TICK_INTERVAL := 1.0 / 10.0
+const ACTIVE_RADIUS := 24.0
+const ACTIVE_CAPS := {"potato": 14, "balanced": 28, "quality": 48}
 
 func configure(root: Node3D, id: String, quality_preset: String, state_owner: Node, audio_manager: Node = null) -> void:
 	zone_root = root
@@ -20,10 +25,12 @@ func configure(root: Node3D, id: String, quality_preset: String, state_owner: No
 	quality = quality_preset
 	story_state = state_owner
 	audio = audio_manager
+	player = get_tree().get_first_node_in_group("player") as Node3D
 	add_to_group("world_prop_controller")
 	_scan(zone_root)
 	_bind_components()
 	_sync_story_states()
+	_rebuild_active_entries()
 
 func _process(delta: float) -> void:
 	_accumulator += delta
@@ -32,17 +39,57 @@ func _process(delta: float) -> void:
 	var step := _accumulator
 	_accumulator = 0.0
 	_elapsed += step
-	for entry in entries:
+	if player == null or not is_instance_valid(player):
+		player = get_tree().get_first_node_in_group("player") as Node3D
+	if player != null and is_instance_valid(player) and (_last_player_position == Vector3.INF or player.global_position.distance_squared_to(_last_player_position) > 4.0):
+		_rebuild_active_entries()
+	for entry in active_entries:
 		var node := entry.get("node") as Node3D
 		if node == null or not is_instance_valid(node):
 			continue
 		_update_entry(entry, step)
 
 func _scan(node: Node) -> void:
-	if node is Node3D and node.has_meta("world_prop_kind"):
+	# InteractiveWorldProp is a state component, not a visible animated prop.
+	# Registering it here doubled the controller's work for every interactable.
+	if node is Node3D and node.has_meta("world_prop_kind") and not node is InteractiveWorldProp:
 		_register(node as Node3D, str(node.get_meta("world_prop_id", node.name)), str(node.get_meta("world_prop_kind", "generic")), str(node.get_meta("world_prop_state_key", "")))
 	for child in node.get_children():
 		_scan(child)
+
+func _rebuild_active_entries() -> void:
+	if player == null or not is_instance_valid(player):
+		player = get_tree().get_first_node_in_group("player") as Node3D
+	if player != null and is_instance_valid(player):
+		_last_player_position = player.global_position
+	var cap := int(ACTIVE_CAPS.get(quality, ACTIVE_CAPS.balanced))
+	var candidates: Array[Dictionary] = []
+	for entry in entries:
+		var node := entry.get("node") as Node3D
+		if node == null or not is_instance_valid(node) or not node.visible:
+			continue
+		var distance := 0.0
+		if player != null and is_instance_valid(player):
+			distance = node.global_position.distance_to(player.global_position)
+			if distance > ACTIVE_RADIUS and not _is_priority_kind(str(entry.get("kind", ""))):
+				continue
+		candidates.append({"entry": entry, "distance": distance})
+	candidates.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		return float(a.get("distance", 0.0)) < float(b.get("distance", 0.0))
+	)
+	active_entries.clear()
+	for candidate in candidates:
+		if active_entries.size() >= cap:
+			break
+		active_entries.append(candidate.get("entry", {}))
+	if active_entries.is_empty() and not entries.is_empty():
+		# Keep the controller useful during the one frame before the player is
+		# registered, without returning to a scene-wide animation loop.
+		for entry in entries.slice(0, mini(cap, entries.size())):
+			active_entries.append(entry)
+
+func _is_priority_kind(kind: String) -> bool:
+	return kind in ["flame", "forge", "lantern", "candle", "bell", "shrine", "notice_board", "door", "gate"]
 
 func _bind_components() -> void:
 	if zone_root == null:
