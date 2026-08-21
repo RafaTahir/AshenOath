@@ -914,6 +914,24 @@ Known verifier note: Godot headless may emit ObjectDB cleanup warnings after pas
 - Undercroft lighting remains too dark for final visual approval and is an open
   LIGHT/SKY quality task. The current monster/armor source is still interim.
 
+## BOSS-007 White Hart Checkpoint - 2026-08-21
+
+- The White Hart now has a three-phase, checkpointed encounter definition for
+  Witness, Mercy, and Debt, with a ten-metre leash and the existing Duty/Ash
+  combat-ending handoff.
+- The connected Wolf-derived body retains the bone-attached antler crown and
+  now receives a memory halo, chest oath mark, phase-reactive rings, and
+  restrained identity motion under one boss layer.
+- `verify_boss_007.gd` passes identity, animation, phase transitions, phase
+  checkpoint restore, Mercy covenant resolution, final-choice completion, and
+  no-respawn after Hart Glade reload. `capture_boss_007.gd` produces fresh
+  nonblank Compatibility frames for Witness, Mercy, and Debt.
+- The mapped Wolf body and Hart Glade remain interim visual material. MON-002
+  still owns the final supernatural stag replacement and the broader final
+  visual acceptance gate. Known shutdown-only renderer/RID/ObjectDB cleanup
+  diagnostics remain lifecycle debt; no production export or deployment was
+  performed for this checkpoint.
+
 The project currently satisfies:
 
 - Web build launches past Godot splash.

@@ -944,6 +944,8 @@ func _add_boss_silhouette() -> void:
 		_make_ashwing_identity()
 	elif enemy_id == "halvern_boss":
 		_make_halvern_identity()
+	elif enemy_id == "white_hart_avatar":
+		_make_white_hart_identity()
 
 func _make_bell_eater_identity() -> void:
 	var harness := MeshInstance3D.new()
@@ -1184,6 +1186,49 @@ func _make_halvern_identity() -> void:
 	banner.material_override = _mat(Color(0.24, 0.10, 0.09))
 	boss_visual_root.add_child(banner)
 
+func _make_white_hart_identity() -> void:
+	# The Wolf source and bone-attached antlers supply the body. These pieces
+	# establish the Hart's memory-covenant identity without duplicating anatomy:
+	# a ground halo, chest oath mark, and restrained spectral rings.
+	var halo := MeshInstance3D.new()
+	halo.name = "WhiteHartMemoryHalo"
+	var halo_mesh := TorusMesh.new()
+	halo_mesh.inner_radius = 0.92
+	halo_mesh.outer_radius = 1.04
+	halo_mesh.rings = 16
+	halo_mesh.ring_segments = 24
+	halo.mesh = halo_mesh
+	halo.position = Vector3(0, 0.12, 0.0)
+	halo.rotation.x = PI * 0.5
+	halo.material_override = _emissive_boss_material(Color(0.22, 0.68, 0.48), 0.62)
+	boss_visual_root.add_child(halo)
+
+	var oath_mark := MeshInstance3D.new()
+	oath_mark.name = "WhiteHartOathMark"
+	var mark_mesh := SphereMesh.new()
+	mark_mesh.radius = 0.16
+	mark_mesh.height = 0.32
+	oath_mark.mesh = mark_mesh
+	oath_mark.position = Vector3(0, 1.08, -0.42)
+	oath_mark.scale = Vector3(0.72, 1.18, 0.58)
+	oath_mark.material_override = _emissive_boss_material(Color(0.46, 0.82, 0.68), 0.86)
+	boss_visual_root.add_child(oath_mark)
+	boss_phase_sigil = oath_mark
+
+	for side in [-1.0, 1.0]:
+		var ring := MeshInstance3D.new()
+		ring.name = "WhiteHartMemoryRingLeft" if side < 0.0 else "WhiteHartMemoryRingRight"
+		var ring_mesh := TorusMesh.new()
+		ring_mesh.inner_radius = 0.24
+		ring_mesh.outer_radius = 0.29
+		ring_mesh.rings = 10
+		ring_mesh.ring_segments = 16
+		ring.mesh = ring_mesh
+		ring.position = Vector3(side * 0.42, 0.72, -0.08)
+		ring.rotation_degrees = Vector3(16.0, 0, side * 28.0)
+		ring.material_override = _emissive_boss_material(Color(0.32, 0.56, 0.70), 0.42)
+		boss_visual_root.add_child(ring)
+
 func _emissive_boss_material(color: Color, energy: float) -> StandardMaterial3D:
 	var material := _mat(color)
 	material.emission_enabled = true
@@ -1412,6 +1457,12 @@ func _animate_boss_identity(delta: float) -> void:
 		boss_visual_root.scale = boss_visual_root.scale.lerp(Vector3.ONE * (1.0 + sin(boss_visual_time * 2.2) * 0.025), minf(delta * 5.0, 1.0))
 	elif enemy_id == "ashwing":
 		boss_visual_root.rotation.z = sin(boss_visual_time * 2.2) * 0.06
+	elif enemy_id == "halvern_boss":
+		boss_visual_root.rotation.y = sin(boss_visual_time * 0.8) * 0.025
+		boss_visual_root.scale = boss_visual_root.scale.lerp(Vector3.ONE * (1.0 + sin(boss_visual_time * 2.0) * 0.012), minf(delta * 5.0, 1.0))
+	elif enemy_id == "white_hart_avatar":
+		boss_visual_root.rotation.y = sin(boss_visual_time * 0.92) * 0.035
+		boss_visual_root.scale = boss_visual_root.scale.lerp(Vector3.ONE * (1.0 + sin(boss_visual_time * 2.6) * 0.022), minf(delta * 5.0, 1.0))
 
 func apply_boss_phase_visual(next_phase: int) -> void:
 	if not is_boss:
@@ -1433,6 +1484,12 @@ func apply_boss_phase_visual(next_phase: int) -> void:
 			2: Color(0.62, 0.86, 0.26),
 			3: Color(0.88, 0.98, 0.54),
 		}.get(next_phase, Color(0.50, 0.88, 0.32)) as Color
+	if enemy_id == "white_hart_avatar":
+		color = {
+			1: Color(0.38, 0.78, 0.62),
+			2: Color(0.42, 0.72, 0.92),
+			3: Color(0.82, 0.92, 0.66),
+		}.get(next_phase, Color(0.52, 0.84, 0.72)) as Color
 	material.albedo_color = color
 	material.emission = color
 	material.emission_energy_multiplier = 0.72 + float(next_phase) * 0.28

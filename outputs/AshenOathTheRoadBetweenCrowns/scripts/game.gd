@@ -3997,6 +3997,16 @@ func _on_boss_peaceful_resolution(boss_id: String, outcome: String, enemy: Node)
 			hud.toast("The knight will speak. The undercroft no longer needs a gravekeeper.")
 			if enemy != null:
 				enemy.set_encounter_active(false)
+	elif boss_id == "white_hart_avatar":
+		var covenant := str({"witness":"witness", "mercy":"mercy", "release":"mercy", "duty":"duty", "ash":"ash"}.get(outcome, outcome))
+		story_state.set_flag("final_covenant", covenant)
+		story_state.set_flag("final_choice_completed", true)
+		quests.complete_objective("main_hart_remembers", "final_choice")
+		if current_zone_id == "hart_glade":
+			hud.show_status_cue("The Hart accepts the oath", "victory")
+			hud.toast("The road remembers %s." % covenant.capitalize())
+			if enemy != null:
+				enemy.set_encounter_active(false)
 
 
 func _on_boss_phase_changed(enemy: Node, phase: int) -> void:

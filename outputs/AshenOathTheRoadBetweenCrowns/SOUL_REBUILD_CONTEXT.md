@@ -2,6 +2,21 @@
 
 ## Current Working Checkpoint - 2026-08-21
 
+### BOSS-007 continuation checkpoint
+
+The White Hart now has a data-driven three-phase encounter slice in the
+reopened Hart Glade. Duty/Ash combat endings spawn the boss with a ten-metre
+leash, Mercy/Witness resolutions normalize to the final covenant, and the
+existing save/checkpoint path preserves phase health and no-respawn aftermath.
+The mapped animated Wolf body receives a restrained memory halo, oath mark,
+phase-reactive rings, and the existing bone-attached antler crown. The targeted
+verifier passes identity, animation, phases, checkpoint restore, Mercy
+resolution, objective completion, and reload safety. Fresh native-720p frames
+exist for Witness, Mercy, and Debt. The body and Hart Glade remain interim
+visuals; MON-002 and the later visual gate still require a final supernatural
+stag treatment. No production export or deployment has occurred for this
+checkpoint.
+
 ### BOSS-005 continuation checkpoint
 
 Ashwing now has a reload-safe Old Mill encounter slice. Its authored phases,
