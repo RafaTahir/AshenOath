@@ -2084,6 +2084,17 @@ func _on_enemy_attack_resolved(enemy, parried: bool, contact_position: Vector3) 
 	if enemy != null and enemy.health_component != null:
 		hud.show_enemy(enemy.display_name, enemy.health_component.health, enemy.health_component.max_health)
 
+func _on_enemy_parry_window_opened(enemy: Node, duration: float) -> void:
+	if enemy == null or not is_instance_valid(enemy) or not bool(enemy.get("is_boss")):
+		return
+	if enemy.enemy_id == "halvern_boss":
+		story_state.set_flag("halvern_guard_broken", true)
+		if quests.is_active("main_last_witness"):
+			quests.complete_objective("main_last_witness", "break_halvern_guard")
+		hud.show_status_cue("Halvern's guard breaks", "parry")
+		hud.set_guidance_hint("Speak to Halvern before the testimony window closes.", maxf(duration, 2.5))
+		audio.play_event_limited("parry", 0.16, 0.02)
+
 func _on_quest_completed(id: String) -> void:
 	if id == "main_bell_beneath_greyfen":
 		story_state.set_flag("teeth_in_rain_available", true)
@@ -3892,6 +3903,8 @@ func _spawn_enemy(id: String, pos: Vector3) -> Node:
 	enemy.attack_resolved.connect(_on_enemy_attack_resolved)
 	if enemy.has_signal("special_attack_resolved"):
 		enemy.special_attack_resolved.connect(_on_boss_special_attack)
+	if enemy.has_signal("parry_window_opened"):
+		enemy.parry_window_opened.connect(_on_enemy_parry_window_opened)
 	enemy.boss_phase_changed.connect(_on_boss_phase_changed)
 	if bool(enemy_defs.get(id, {}).get("boss", false)):
 		var boss_controller: Node = Node.new()

@@ -13,6 +13,18 @@ is still an interim low-poly mapping; MON-002 remains responsible for the
 final cohesive monster-family replacement. No production export or deployment
 has occurred for this checkpoint.
 
+### BOSS-006 continuation checkpoint
+
+Halvern now uses the connected Gravebound runtime source rather than the
+missing legacy alias. His Vargan cuirass, grave seal, asymmetric shoulders,
+and broken banner sit under the boss identity layer. A genuine player parry
+opens a testimony window, sets `halvern_guard_broken`, completes the guard
+break objective, and preserves the existing parry feedback. Phase checkpoint,
+health restore, testimony resolution, and reload safety pass. Fresh frames
+exist, but the undercroft is too dark for final visual approval and the armor
+source remains interim low-poly. No production export or deployment has
+occurred for this checkpoint.
+
 The deployed production baseline is the earlier `bd24495` release. The current
 Soul Rebuild continuation is uncommitted on `codex/soul-rebuild`, and its Web
 artifact has not been rebuilt or deployed. Historical hashes and browser runs

@@ -6,6 +6,7 @@ signal windup_started(enemy: Node)
 signal attack_resolved(enemy: Node, parried: bool, contact_position: Vector3)
 signal special_attack_resolved(enemy: Node, attack_id: String, contact_position: Vector3, radius: float, damage: float, parried: bool)
 signal special_attack_interrupted(enemy: Node, attack_id: String, reason: String)
+signal parry_window_opened(enemy: Node, duration: float)
 signal boss_phase_changed(enemy: Node, phase: int)
 
 const HealthComponent = preload("res://scripts/health_component.gd")
@@ -339,6 +340,9 @@ func _resolve_attack() -> void:
 	if parried:
 		parry_exposed_time = 1.15
 		stagger(1.15)
+		if is_boss:
+			set_meta("last_parried", true)
+			parry_window_opened.emit(self, 1.15)
 
 func _boss_attack_id() -> String:
 	if not is_boss:
@@ -673,7 +677,7 @@ func _try_build_mapped_body() -> bool:
 			"bell_eater": "ghoul_brute_real",
 			"rootbound_colossus": "ghoul_brute_real",
 			"ashwing": "ashwing_creature",
-			"halvern_boss": "gravebound_knight",
+			"halvern_boss": "gravebound_knight_creature",
 			"white_hart_avatar": "white_hart_avatar",
 		}.get(enemy_id, "ghoul_gaunt_real")
 		mapped = asset_helper.spawn_visual_role(visual_source, "enemies")
@@ -938,6 +942,8 @@ func _add_boss_silhouette() -> void:
 		_add_part(Vector3(0.74, 1.24, 0.12), Vector3(0.82, 0.16, 0.46), Color(0.26, 0.16, 0.12), "capsule", Vector3(0, 0, 8))
 		_add_part(Vector3(0, 1.28, 0.34), Vector3(0.22, 0.20, 0.46), Color(0.44, 0.20, 0.10), "cylinder", Vector3(90, 0, 0))
 		_make_ashwing_identity()
+	elif enemy_id == "halvern_boss":
+		_make_halvern_identity()
 
 func _make_bell_eater_identity() -> void:
 	var harness := MeshInstance3D.new()
@@ -1128,6 +1134,55 @@ func _make_ashwing_identity() -> void:
 		scorch.rotation_degrees = Vector3(0, 0, side * 12.0)
 		scorch.material_override = _mat(Color(0.38, 0.12, 0.055))
 		boss_visual_root.add_child(scorch)
+
+func _make_halvern_identity() -> void:
+	# Halvern's mapped body is the connected Gravebound family. This layer
+	# supplies a readable Vargan cuirass, broken oath seal, and asymmetric
+	# shoulder silhouette without introducing a second root-mounted body.
+	var cuirass := MeshInstance3D.new()
+	cuirass.name = "HalvernVarganCuirass"
+	var cuirass_mesh := BoxMesh.new()
+	cuirass_mesh.size = Vector3(0.78, 0.72, 0.34)
+	cuirass.mesh = cuirass_mesh
+	cuirass.position = Vector3(0, 1.30, -0.18)
+	cuirass.scale = Vector3(1.0, 1.0, 0.82)
+	cuirass.material_override = _mat(Color(0.16, 0.18, 0.22))
+	boss_visual_root.add_child(cuirass)
+
+	var seal := MeshInstance3D.new()
+	seal.name = "HalvernGraveSeal"
+	var seal_mesh := TorusMesh.new()
+	seal_mesh.inner_radius = 0.12
+	seal_mesh.outer_radius = 0.17
+	seal_mesh.rings = 8
+	seal_mesh.ring_segments = 14
+	seal.mesh = seal_mesh
+	seal.position = Vector3(0, 1.37, -0.40)
+	seal.rotation.x = PI * 0.5
+	seal.material_override = _emissive_boss_material(Color(0.36, 0.48, 0.72), 0.78)
+	boss_visual_root.add_child(seal)
+	boss_phase_sigil = seal
+
+	for side in [-1.0, 1.0]:
+		var shoulder := MeshInstance3D.new()
+		shoulder.name = "HalvernShoulderLeft" if side < 0.0 else "HalvernShoulderRight"
+		var shoulder_mesh := CapsuleMesh.new()
+		shoulder.mesh = shoulder_mesh
+		shoulder.position = Vector3(side * 0.52, 1.55, -0.04)
+		shoulder.scale = Vector3(0.28, 0.32, 0.42 if side < 0.0 else 0.30)
+		shoulder.rotation_degrees = Vector3(0, 0, side * 16.0)
+		shoulder.material_override = _mat(Color(0.22, 0.24, 0.29))
+		boss_visual_root.add_child(shoulder)
+
+	var banner := MeshInstance3D.new()
+	banner.name = "HalvernBrokenBanner"
+	var banner_mesh := BoxMesh.new()
+	banner_mesh.size = Vector3(0.08, 0.92, 0.05)
+	banner.mesh = banner_mesh
+	banner.position = Vector3(-0.42, 1.25, 0.26)
+	banner.rotation_degrees = Vector3(0, 0, -12.0)
+	banner.material_override = _mat(Color(0.24, 0.10, 0.09))
+	boss_visual_root.add_child(banner)
 
 func _emissive_boss_material(color: Color, energy: float) -> StandardMaterial3D:
 	var material := _mat(color)

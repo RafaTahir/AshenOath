@@ -900,6 +900,20 @@ Known verifier note: Godot headless may emit ObjectDB cleanup warnings after pas
   replacement and the final BOSS-005 acceptance gate remain open. Known
   shutdown-only renderer cleanup diagnostics remain classified debt.
 
+## BOSS-006 Halvern Checkpoint - 2026-08-21
+
+- Halvern now uses the connected `gravebound_knight_creature` runtime source,
+  with Vargan cuirass, grave seal, shoulder armor, and broken-banner identity
+  dressing under one boss layer.
+- A real player parry opens a Halvern testimony window, records
+  `halvern_guard_broken`, and completes `break_halvern_guard` without direct
+  interaction mutation.
+- Phase-two checkpoint and health restore, testimony resolution, and no-respawn
+  reload pass in `verify_boss_006.gd`; fresh Compatibility captures are stored
+  in `Development_Gallery/screenshots/`.
+- Undercroft lighting remains too dark for final visual approval and is an open
+  LIGHT/SKY quality task. The current monster/armor source is still interim.
+
 The project currently satisfies:
 
 - Web build launches past Godot splash.
