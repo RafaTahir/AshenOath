@@ -1099,7 +1099,13 @@ Known verifier note: Godot headless may emit ObjectDB cleanup warnings after pas
   evidence clues. The three-clue progression threshold remains order
   independent and the remaining optional clues can still be collected.
 - The functional route remains accepted while final browser pacing, complete
-  real-input campaign evidence, and final visual quality remain open.
+  real-input campaign evidence, and final visual quality remain open. The
+  continuation now gives the report-ready state explicit private/public
+  prompts, removes the stale notice-board quest action after reporting, and
+  restores a neutral report-choice handoff for migrated completed saves.
+- The inserted Teeth in the Rain chapel-name objective now migrates from saved
+  later progress; the full story profile passes after this repair. Fresh
+  WORLD-001 and WORLD-002 Compatibility captures document the opening route.
 
 ## QUEST-009 Bell Beneath Greyfen Checkpoint - 2026-08-21
 

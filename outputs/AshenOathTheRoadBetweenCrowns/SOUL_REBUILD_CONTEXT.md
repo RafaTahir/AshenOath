@@ -209,7 +209,11 @@ private Anwen, public notice-board, and retained-evidence outcomes. Its new
 permutation gate exercises all 120 clue orders and proves the three-clue
 threshold remains order-independent without losing the report targets. The
 route is functionally covered; final browser pacing and visual evidence remain
-Milestone F work.
+Milestone F work. Report-ready prompts now name the actual private/public
+choice, post-report notice-board dialogue no longer exposes the old contract
+action, and legacy completed saves receive a neutral report-choice handoff.
+The inserted chapel-name objective also migrates from later Teeth in the Rain
+progress, with the full story profile passing after the repair.
 
 The latest continuation slice adds Anwen's bone-attached upright staff, shared
 Balanced roof treatment, visible animated river-current ribbons, stronger

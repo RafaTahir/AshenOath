@@ -6,6 +6,32 @@
       "Missing: Bram Kett, Sella Vey, and Oren Vey. Their cart returned empty from the old road.",
       "Black feathers were found in the blood. Sister Anwen keeps the names and pays for proof."
     ],
+    "variants": [
+      {
+        "priority": 40,
+        "conditions": {"evidence_report": "public"},
+        "greeting": "The contract is pinned beneath a strip of black cloth. Someone has written the three names in a steadier hand.",
+        "lines": [
+          "The village has read the evidence. No one has taken the notice down.",
+          "A fresh mark beneath the names points east, toward the cemetery."
+        ],
+        "actions": []
+      },
+      {
+        "priority": 35,
+        "conditions": {"evidence_report": "private"},
+        "greeting": "The board still carries the old contract, but the public report was never posted.",
+        "lines": ["Anwen kept the evidence close. The road's next bell will not be a village announcement."],
+        "actions": []
+      },
+      {
+        "priority": 35,
+        "conditions": {"evidence_report": "retained"},
+        "greeting": "The contract remains unchanged. Only the nail beside it is new.",
+        "lines": ["Kael kept the token. The board offers no comfort and no answer."],
+        "actions": []
+      }
+    ],
     "actions": [{"label": "Accept Road of Crows", "type": "start_quest", "quest": "main_road_of_crows"}]
   },
   "sister_anwen": {

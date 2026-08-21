@@ -1213,11 +1213,19 @@ func _handle_interaction(area) -> void:
 		if _road_ready_to_report() and area.interaction_id in ["sister_anwen", "notice_board", "retain_evidence"]:
 			report_chosen = true
 			var report_method: String = str({"sister_anwen":"private", "notice_board":"public", "retain_evidence":"retained"}[area.interaction_id])
+			var legacy_report := _legacy_report_choice_required()
 			story_state.set_flag("evidence_report", report_method)
+			if legacy_report:
+				# A migrated completed Road of Crows save must choose its report method
+				# before the cemetery handoff is restored; never infer the old choice.
+				story_state.set_flag("legacy_report_choice_required", false)
 			story_state.set_flag("cemetery_bell_rung", true)
 			story_state.adjust_value("anwen_trust", 1 if report_method == "private" else (-1 if report_method == "public" else 0))
 			story_state.adjust_value("greyfen_fear", 1 if report_method == "public" else 0)
 			quests.complete_objective("main_road_of_crows", "return_village")
+			if legacy_report and not quests.is_active("main_bell_beneath_greyfen") and not quests.is_completed("main_bell_beneath_greyfen"):
+				quests.unlocked["main_bell_beneath_greyfen"] = true
+				quests.start_quest("main_bell_beneath_greyfen")
 			dialogue_data = dialogue.get_dialogue(area.dialogue_id)
 			if area.interaction_id == "sister_anwen":
 				pending_anwen_relocation = true
@@ -1429,7 +1437,12 @@ func _apply_campaign_arrival(zone_id: String) -> void:
 		quests.complete_objective(arrivals[zone_id][0], arrivals[zone_id][1])
 
 func _road_ready_to_report() -> bool:
-	return quests.is_active("main_road_of_crows") and quests.is_objective_done("main_road_of_crows", "fight_ghoulkin") and not quests.is_objective_done("main_road_of_crows", "return_village")
+	var legacy_choice: bool = _legacy_report_choice_required()
+	var active_route: bool = quests.is_active("main_road_of_crows") and quests.is_objective_done("main_road_of_crows", "fight_ghoulkin") and not quests.is_objective_done("main_road_of_crows", "return_village")
+	return active_route or legacy_choice
+
+func _legacy_report_choice_required() -> bool:
+	return bool(story_state.get_flag("legacy_report_choice_required", false)) and str(story_state.get_flag("evidence_report", "")) == ""
 
 func _crow_shrine_choice_ready() -> bool:
 	return quests.is_active("main_bell_beneath_greyfen") \
@@ -2425,7 +2438,16 @@ func _apply_runtime_settings(current_settings: Dictionary) -> void:
 		visual_director.sun.directional_shadow_max_distance = 42.0
 
 func _refresh_tracker() -> void:
-	var tracker_text := zone_runtime_coordinator.refresh_presentation() if zone_runtime_coordinator != null else str(quest_presentation.get_tracker_text() if quest_presentation != null else quests.get_tracker_text())
+	var tracker_text: String
+	if quest_beats != null and quest_beats.has_method("refresh"):
+		quest_beats.refresh()
+		tracker_text = str(quest_presentation.get_tracker_text() if quest_presentation != null else quests.get_tracker_text())
+		if quest_beats.has_method("decorate_tracker"):
+			tracker_text = quest_beats.decorate_tracker(tracker_text)
+	elif zone_runtime_coordinator != null:
+		tracker_text = zone_runtime_coordinator.refresh_presentation()
+	else:
+		tracker_text = str(quest_presentation.get_tracker_text() if quest_presentation != null else quests.get_tracker_text())
 	hud.set_tracker(tracker_text)
 	_update_compass()
 

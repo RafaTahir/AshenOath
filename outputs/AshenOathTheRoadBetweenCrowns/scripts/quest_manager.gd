@@ -280,10 +280,22 @@ func _sanitize_active(raw: Variant) -> Dictionary:
 				if typeof(raw_objective) == TYPE_DICTIONARY:
 					saved_objectives[str(raw_objective.get("id", ""))] = raw_objective
 		var objectives: Array = []
+		var legacy_chapel_missing := id == "main_teeth_in_rain" and not saved_objectives.has("read_chapel_names")
+		var legacy_chapel_progress := false
+		if legacy_chapel_missing:
+			for progress_id in ["name_the_dead", "fight_bog_wretch", "bog_core_choice"]:
+				if bool(saved_objectives.get(progress_id, {}).get("done", false)):
+					legacy_chapel_progress = true
+					break
 		for definition in quest_defs[id].get("objectives", []):
 			var runtime_objective: Dictionary = definition.duplicate(true)
-			var saved_objective: Dictionary = saved_objectives.get(str(definition.get("id", "")), {})
+			var definition_id := str(definition.get("id", ""))
+			var saved_objective: Dictionary = saved_objectives.get(definition_id, {})
 			runtime_objective["done"] = bool(saved_objective.get("done", false))
+			if legacy_chapel_missing and definition_id == "read_chapel_names":
+				# The objective was added after older saves were written. Preserve
+				# already-earned later progress without inventing a new choice.
+				runtime_objective["done"] = legacy_chapel_progress
 			if saved_objective.has("optional_satisfied"):
 				runtime_objective["optional_satisfied"] = bool(saved_objective.optional_satisfied)
 			objectives.append(runtime_objective)

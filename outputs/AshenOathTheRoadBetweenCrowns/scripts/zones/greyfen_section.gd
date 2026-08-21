@@ -202,10 +202,12 @@ func _build_castle_road(context: ZoneBuildContext) -> void:
 	context.make_visual_box("CastleRoadRuts", Vector3(15.0, 0.052, 0.72), Vector3(5.8, 0.025, 0.18), Color(0.065, 0.045, 0.030))
 
 func _build_gameplay_content(context: ZoneBuildContext) -> void:
-	context.make_named_interactable("notice_board", "dialogue", "Read notice board", Vector3(-2, 0, 9.4), Color(0.48, 0.28, 0.12), Vector3(0.45, 0.45, 0.45))
+	var road_ready := context.road_ready_to_report()
+	var board_prompt := "Post the road evidence publicly" if road_ready else "Read notice board"
+	context.make_named_interactable("notice_board", "dialogue", board_prompt, Vector3(-2, 0, 9.4), Color(0.48, 0.28, 0.12), Vector3(0.45, 0.45, 0.45))
 	var anwen_at_cemetery := context.is_quest_active("main_bell_beneath_greyfen")
 	var anwen_position := Vector3(11.0, 0, 4.8) if anwen_at_cemetery else Vector3(3.2, 0, -5.0)
-	var anwen_prompt := "Meet Sister Anwen at the cemetery gate" if anwen_at_cemetery else "Talk to Sister Anwen"
+	var anwen_prompt := "Meet Sister Anwen at the cemetery gate" if anwen_at_cemetery else ("Report the road evidence privately" if road_ready else "Talk to Sister Anwen")
 	context.make_named_interactable("sister_anwen", "dialogue", anwen_prompt, anwen_position, Color(0.34, 0.35, 0.48))
 	context.make_named_interactable("mira", "dialogue", "Talk to Mira Fen", Vector3(-6.8, 0, -2.3), Color(0.22, 0.48, 0.32), Vector3(0.62, 0.62, 0.62))
 	context.make_named_interactable("rook", "dialogue", "Talk to Rook", Vector3(-7.8, 0, 8.5), Color(0.42, 0.33, 0.23), Vector3(0.62, 0.62, 0.62))

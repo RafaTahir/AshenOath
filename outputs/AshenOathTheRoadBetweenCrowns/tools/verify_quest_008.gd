@@ -7,18 +7,30 @@ var evidence_ids := ["bram", "sella", "oren", "vargan_wire", "drag_marks"]
 func _initialize() -> void:
 	var quests = JSON.parse_string(FileAccess.get_file_as_string("res://data/quests.json"))
 	var contract = JSON.parse_string(FileAccess.get_file_as_string("res://narrative_aftermath_contract.json"))
+	var dialogue = JSON.parse_string(FileAccess.get_file_as_string("res://data/dialogue.json"))
 	_check(typeof(quests) == TYPE_DICTIONARY and quests.has("main_road_of_crows"), "Road of Crows quest data is missing")
 	_check(typeof(contract) == TYPE_DICTIONARY and contract.has("report_methods"), "Report method contract is missing")
+	_check(typeof(dialogue) == TYPE_DICTIONARY and dialogue.has("notice_board"), "Greyfen notice-board dialogue is missing")
 	if typeof(contract) == TYPE_DICTIONARY:
 		for method_id in ["private", "public", "retained"]:
 			_check(contract.report_methods.has(method_id), "Missing report method: %s" % method_id)
 		_check(str(contract.report_methods.private.interaction) == "sister_anwen", "Private report target changed")
 		_check(str(contract.report_methods.public.interaction) == "notice_board", "Public report target changed")
 		_check(str(contract.report_methods.retained.interaction) == "retain_evidence", "Retained report target changed")
+	if typeof(dialogue) == TYPE_DICTIONARY and dialogue.has("notice_board"):
+		var report_variants: Array = dialogue.notice_board.get("variants", [])
+		for report_method in ["public", "private", "retained"]:
+			var found := false
+			for variant in report_variants:
+				if str(variant.get("conditions", {}).get("evidence_report", "")) == report_method:
+					found = true
+					_check(variant.get("actions", []).is_empty(), "Notice-board %s report still exposes a stale quest action" % report_method)
+			_check(found, "Notice-board report variant is missing: %s" % report_method)
 
 	var game_source := FileAccess.get_file_as_string("res://scripts/game.gd")
 	_check('area.interaction_id in ["sister_anwen", "notice_board", "retain_evidence"]' in game_source, "Runtime does not expose all report targets")
 	_check('"evidence_report"' in game_source and '"cemetery_bell_rung"' in game_source, "Report consequences are not persisted")
+	_check("legacy_report_choice_required" in game_source and "_legacy_report_choice_required" in game_source, "Legacy Road of Crows saves do not receive a report-choice handoff")
 
 	var permutations: Array = []
 	_build_permutations(evidence_ids, [], permutations)
