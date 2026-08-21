@@ -14,6 +14,7 @@ signal craft_requested(item_id: String)
 signal item_use_requested(item_id: String)
 signal upgrade_requested(upgrade_id: String)
 signal dialogue_closed
+signal dialogue_page_changed(speaker: String, speaker_id: String, page_index: int, total_pages: int)
 signal menu_hovered
 signal menu_clicked
 
@@ -516,14 +517,19 @@ func show_dialogue(data: Dictionary) -> void:
 
 func _render_dialogue_page() -> void:
 	var page = dialogue_pages[dialogue_page_index]
+	var page_speaker := str(dialogue_session_data.get("name", "Unknown"))
+	var page_speaker_id := ""
 	if typeof(page) == TYPE_DICTIONARY:
-		dialogue_title.text = str(page.get("speaker", dialogue_session_data.get("name", "Unknown")))
+		page_speaker = str(page.get("speaker", dialogue_session_data.get("name", "Unknown")))
+		page_speaker_id = str(page.get("speaker_id", ""))
+		dialogue_title.text = page_speaker
 		dialogue_text.text = str(page.get("text", "..."))
 	else:
-		dialogue_title.text = str(dialogue_session_data.get("name","Unknown"))
+		dialogue_title.text = page_speaker
 		dialogue_text.text = str(page)
 	if dialogue_page_label != null:
 		dialogue_page_label.text = "%02d / %02d" % [dialogue_page_index + 1, dialogue_pages.size()]
+	dialogue_page_changed.emit(page_speaker, page_speaker_id, dialogue_page_index, dialogue_pages.size())
 	for child in dialogue_actions.get_children():
 		child.queue_free()
 	if dialogue_page_index < dialogue_pages.size()-1:

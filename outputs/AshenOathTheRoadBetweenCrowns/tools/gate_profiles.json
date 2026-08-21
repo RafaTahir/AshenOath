@@ -1174,6 +1174,7 @@
     "opening_soundscape": "capture_audio_006",
 	"soul_baseline": "capture_qa_soul_001",
 	"product": "capture_product_001",
+	"cinematic": "capture_cin_002",
     "combat": "capture_slice_screenshots",
     "targeting": "capture_slice_screenshots"
 }

@@ -2,6 +2,18 @@
 
 ## Current Working Checkpoint - 2026-08-21
 
+### CIN-002 human dialogue presentation checkpoint
+
+Dialogue resolution now produces stable speaker IDs and presentation metadata
+for framing, focus, subtitle pacing, reaction pauses, and fallback behavior.
+The HUD reports each rendered turn and the game reapplies face-to-face camera
+and actor orientation while dialogue is paused. `verify_cin_002`, the targeted
+story profile, and the targeted UI profile pass. Fresh 1280x720 dialogue frames
+are in `Development_Gallery/screenshots/CIN_002_01_AnwenGreeting_20260821_152545.png`
+through `CIN_002_04_DialogueTurn_20260821_152547.png` and were visually
+inspected. Human-recorded acting and final character art remain open release
+work; production `main`, tracked `web/`, and Vercel remain unchanged.
+
 ### SIDE-003 consequential side-quest flow checkpoint
 
 The five selected side quests now gate their contact dialogue against the

@@ -54,6 +54,7 @@ var runtime_packs
 var qa_adapter
 var zone_root: Node3D
 var active_interactable
+var dialogue_focus_actor: Node3D
 var interaction_candidates: Array = []
 var interaction_area_cache: Array[Area3D] = []
 var interaction_area_cache_ready := false
@@ -3891,6 +3892,7 @@ func _stage_dialogue_moment(area) -> void:
 	if player == null or area == null or not (area is Node3D):
 		return
 	var npc = area as Node3D
+	dialogue_focus_actor = npc
 	if area.interaction_id == "sister_anwen":
 		npc.set_meta("dialogue_facing_lock", true)
 		var anwen_driver = npc.find_child("CharacterAnimationDriver", true, false)
@@ -3915,6 +3917,18 @@ func _stage_dialogue_moment(area) -> void:
 	if camera_rig != null and camera_rig.has_method("frame_dialogue_target"):
 		camera_rig.frame_dialogue_target(npc)
 
+func _on_dialogue_page_changed(_speaker: String, _speaker_id: String, _page_index: int, _total_pages: int) -> void:
+	# Dialogue is paused, so regular actor/camera processing is suspended. Reapply
+	# the same face-to-face contract whenever a new speaker turn is rendered so
+	# a multi-speaker exchange cannot drift after a page change or UI focus event.
+	if player == null or dialogue_focus_actor == null or not is_instance_valid(dialogue_focus_actor):
+		return
+	_face_npc_toward_player(dialogue_focus_actor)
+	if player.has_method("face_target"):
+		player.face_target(dialogue_focus_actor.global_position)
+	if camera_rig != null and camera_rig.has_method("frame_dialogue_target"):
+		camera_rig.frame_dialogue_target(dialogue_focus_actor)
+
 func _face_npc_toward_player(npc: Node3D) -> void:
 	if npc == null or player == null:
 		return
@@ -3927,6 +3941,7 @@ func _face_npc_toward_player(npc: Node3D) -> void:
 
 func _release_dialogue_facing() -> void:
 	audio.stop_voice()
+	dialogue_focus_actor = null
 	if zone_root == null:
 		return
 	var anwen = zone_root.find_child("sister_anwen", true, false)

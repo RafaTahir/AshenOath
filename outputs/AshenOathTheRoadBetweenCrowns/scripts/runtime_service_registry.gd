@@ -163,6 +163,7 @@ func configure(owner: Node) -> void:
 	hud.action_selected.connect(Callable(owner, "_handle_dialogue_action"))
 	hud.dialogue_closed.connect(Callable(owner, "_release_dialogue_facing"))
 	hud.dialogue_closed.connect(Callable(owner, "_on_dialogue_closed_audio"))
+	hud.dialogue_page_changed.connect(Callable(owner, "_on_dialogue_page_changed"))
 	hud.craft_requested.connect(func(item_id: String):
 		crafting.craft(item_id)
 		hud.show_inventory(inventory, quests, story_state, progression)

@@ -2,6 +2,16 @@
 
 ## Current Working Checkpoint - 2026-08-21
 
+### CIN-002 human dialogue presentation checkpoint
+
+Resolved dialogue pages now carry stable speaker IDs and a normalized
+presentation contract. The HUD emits turn changes, and the paused game refreshes
+actor facing and the camera's two-shot framing for every page. The CIN-002
+verifier, story profile, and UI profile pass. Fresh 1280x720 Anwen/Kael dialogue
+captures are current and visually inspected. Acting-quality voice production
+and final character visual replacement remain separate release gates; this
+checkpoint does not modify production `main`, tracked `web`, or Vercel.
+
 ### SIDE-003 consequential side-quest flow checkpoint
 
 The five selected side quests now expose contact handoffs and consequential
