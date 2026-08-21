@@ -27,6 +27,14 @@ runtime bodies with role-specific swamp or iron material profiles and explicit
 pending fallbacks in the asset manifest. This improves runtime coherence while
 leaving final bespoke creature and armor approval open.
 
+`WORLD-016` is the next completed development slice. Castle approach,
+courtyard, Record Hall, undercroft, assembly, and Hart Glade now have bounded
+structural dressing, authored material tint variants, route-safe staging, and
+fresh 1280x720 captures. The White Hart is visible at the gameplay camera
+distance and the generated Ghoul family is re-exported within the six-surface
+Compatibility budget. This remains development evidence, not final visual
+approval.
+
 The full 62-ticket Soul Rebuild acceptance is still open: interim monster and
 boss assets, later-zone visual reconstruction, full real-input campaign proof,
 fresh export/packed startup, and post-edit live PCK comparison remain. Do not

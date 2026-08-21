@@ -83,9 +83,14 @@ def build(role,cfg):
     skin=mat("Skin",cfg["skin"],.68); hair=mat("Hair",cfg["hair"],.84)
     cloth=mat("Cloth",cfg["cloth"],.86); accent=mat("Leather",cfg["accent"],.78)
     eye=mat("Eyes",(0.035,0.09,0.10,1) if not cfg.get("monster") else (0.90,0.16,0.025,1),.3)
-    socket=mat("EyeSockets",(0.025,0.018,0.015,1),.92)
-    mouth=mat("MouthCavity",(0.012,0.006,0.005,1),.96)
-    white=mat("EyeWhite",(0.72,0.70,0.64,1),.55); lip=mat("Lips",(0.30,0.09,0.075,1),.72)
+    # Monster bodies are deliberately consolidated to six runtime surfaces:
+    # skin, cloth, accent, eyes, dark facial cavities, and teeth. Reusing the
+    # dark facial material for the socket, mouth, and torn lip keeps the same
+    # readable horror contrast without breaking the Compatibility budget.
+    socket=mat("MonsterDark",(0.025,0.018,0.015,1),.92)
+    mouth=socket if cfg.get("monster") else mat("MouthCavity",(0.012,0.006,0.005,1),.96)
+    white=mat("EyeWhite",(0.72,0.70,0.64,1),.55)
+    lip=socket if cfg.get("monster") else mat("Lips",(0.30,0.09,0.075,1),.72)
     metal=mat("Metal",(0.20,0.22,0.24,1),.32,.65)
     brute=1.16 if cfg.get("brute") else 1.0; lean=.80 if cfg.get("lean") else 1.0
     primitive("Torso",(0,0,1.25),(.29*brute,.18,.31),cloth,"Chest",rig)

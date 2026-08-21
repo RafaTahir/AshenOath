@@ -20,6 +20,7 @@ func _base(context: ZoneBuildContext, zone_id: String, ground_color: Color, size
 func _build_approach(context: ZoneBuildContext) -> void:
 	_base(context, "Approach", Color(0.105, 0.105, 0.10), Vector2(46, 38))
 	context.make_road(Vector3(0, 0.02, 1), Vector3(5.2, 0.05, 34), Color(0.16, 0.15, 0.14))
+	_make_approach_dressing(context)
 	for z in [-12.0, -5.0, 3.0, 10.0]:
 		context.make_prop_box("RoadEdge", Vector3(-3.0, 0.12, z), Vector3(0.7, 0.24, 5.5), Color(0.09, 0.085, 0.08))
 		context.make_prop_box("RoadEdge", Vector3(3.0, 0.12, z), Vector3(0.7, 0.24, 5.5), Color(0.09, 0.085, 0.08))
@@ -44,6 +45,7 @@ func _build_approach(context: ZoneBuildContext) -> void:
 func _build_courtyard(context: ZoneBuildContext) -> void:
 	_base(context, "OuterCourtyard", Color(0.085, 0.082, 0.078), Vector2(46, 38))
 	context.make_road(Vector3(0, 0.02, 0), Vector3(8, 0.05, 32), Color(0.14, 0.135, 0.125))
+	_make_courtyard_dressing(context)
 	_make_curtain_walls(context)
 	_make_gatehouse(context, Vector3(0, 0, 14))
 	for p in [Vector3(-9, 0, -10), Vector3(9, 0, -10), Vector3(-9, 0, 10), Vector3(9, 0, 10)]:
@@ -83,13 +85,14 @@ func _build_courtyard(context: ZoneBuildContext) -> void:
 func _build_record_hall(context: ZoneBuildContext) -> void:
 	_base(context, "RecordHall", Color(0.090, 0.077, 0.064), Vector2(34, 30))
 	context.make_road(Vector3(0, 0.02, 0), Vector3(7, 0.05, 26), Color(0.12, 0.105, 0.09))
+	_make_record_hall_dressing(context)
 	for x in [-14.0, 14.0]:
 		context.make_prop_box("RecordHallWall", Vector3(x, 3, 0), Vector3(1, 6, 30), Color(0.18, 0.165, 0.145))
 	for z in [-14.0, 14.0]:
 		context.make_prop_box("RecordHallWall", Vector3(0, 3, z), Vector3(28, 6, 1), Color(0.18, 0.165, 0.145))
 	# The archive is enclosed rather than opening onto the outdoor sky. Rafters,
 	# a dark ceiling, and a warm ledger pool make the room read as architecture.
-	context.make_visual_box("RecordHallCeiling", Vector3(0, 6.45, 0), Vector3(40, 0.28, 40), Color(0.18, 0.135, 0.092))
+	context.make_visual_box("RecordHallCeiling", Vector3(0, 6.45, 0), Vector3(40, 0.28, 40), Color(0.24, 0.18, 0.12))
 	# The large wall collision is intentionally allowed to yield to reserved
 	# navigation volumes, so keep a separate non-blocking interior backplate to
 	# prevent the archive from exposing a black void through the route frame.
@@ -146,6 +149,8 @@ func _make_gatehouse(context: ZoneBuildContext, pos: Vector3) -> void:
 	for x in [-2.2, -1.1, 0.0, 1.1, 2.2]:
 		# Raised bars are presentation only; the gate Area3D owns travel.
 		context.make_visual_box("RaisedPortcullis", pos + Vector3(x, 5.0, 1.2), Vector3(0.16, 2.0, 0.18), Color(0.10, 0.09, 0.075))
+	context.make_visual_box("GatehouseKeystone", pos + Vector3(0, 6.2, -1.58), Vector3(1.1, 0.72, 0.16), Color(0.24, 0.21, 0.17))
+	context.make_visual_box("GatehouseThreshold", pos + Vector3(0, 0.08, 1.58), Vector3(6.0, 0.16, 0.22), Color(0.12, 0.10, 0.08))
 
 func _make_tower(context: ZoneBuildContext, pos: Vector3, height: float) -> void:
 	var stone := Color(0.14, 0.14, 0.145)
@@ -190,3 +195,40 @@ func _make_curtain_walls(context: ZoneBuildContext) -> void:
 func _make_banner(context: ZoneBuildContext, pos: Vector3, color: Color) -> void:
 	context.make_prop_box("WornVarganBanner", pos, Vector3(1.6, 3.2, 0.08), color)
 	context.make_prop_box("BannerIronBar", pos + Vector3(0, 1.8, 0), Vector3(2.1, 0.10, 0.12), Color(0.08, 0.075, 0.065))
+
+func _make_approach_dressing(context: ZoneBuildContext) -> void:
+	# The approach is a military road, not an isolated green slab. Low visual
+	# bands and waystones add edge rhythm without entering the reserved gate lane.
+	for z in [-10.0, -3.0, 4.0, 11.0]:
+		context.make_terrain_patch("CastleApproachMudLeft", Vector3(-5.1, 0.006, z), Vector3(2.4, 0.025, 4.2), Color(0.13, 0.105, 0.08))
+		context.make_terrain_patch("CastleApproachMudRight", Vector3(5.1, 0.007, z + 0.35), Vector3(2.4, 0.025, 4.2), Color(0.15, 0.12, 0.09))
+	for z in [-9.0, -2.0, 5.0, 12.0]:
+		context.make_path_stone(Vector3(-4.2, 0.04, z), 0.72)
+		context.make_path_stone(Vector3(4.2, 0.04, z + 0.45), 0.62)
+	context.make_visual_box("ApproachGatehouseBand", Vector3(0, 5.35, -14.0), Vector3(13.0, 0.22, 3.15), Color(0.19, 0.18, 0.17))
+	context.make_visual_box("ApproachKeepEntry", Vector3(0, 1.55, -18.88), Vector3(3.4, 2.5, 0.14), Color(0.035, 0.028, 0.024))
+	context.make_visual_box("ApproachKeepBannerRail", Vector3(0, 5.9, -18.95), Vector3(5.2, 0.12, 0.12), Color(0.12, 0.09, 0.06))
+
+func _make_courtyard_dressing(context: ZoneBuildContext) -> void:
+	for z in [-11.0, -5.5, 0.0, 5.5, 11.0]:
+		context.make_terrain_patch("CourtyardCobbledEdgeLeft", Vector3(-8.8, 0.008, z), Vector3(3.0, 0.025, 3.4), Color(0.12, 0.115, 0.105))
+		context.make_terrain_patch("CourtyardCobbledEdgeRight", Vector3(8.8, 0.009, z + 0.25), Vector3(3.0, 0.025, 3.4), Color(0.14, 0.13, 0.115))
+	for x in [-6.8, -3.4, 3.4, 6.8]:
+		context.make_path_stone(Vector3(x, 0.05, -8.2), 0.70)
+		context.make_path_stone(Vector3(x, 0.05, 8.2), 0.64)
+	context.make_visual_box("CourtyardStableBeam", Vector3(-13.0, 3.1, 1.0), Vector3(7.2, 0.26, 10.2), Color(0.11, 0.065, 0.035))
+	context.make_visual_box("CourtyardCisternRim", Vector3(8.0, 1.18, 3.0), Vector3(4.4, 0.18, 4.4), Color(0.24, 0.23, 0.21))
+	context.make_visual_box("CourtyardGateCrest", Vector3(0, 5.4, 14.0), Vector3(11.0, 0.22, 3.0), Color(0.18, 0.17, 0.16))
+	context.make_visual_box("CourtyardTrainingLine", Vector3(7.7, 0.08, -4.8), Vector3(7.4, 0.08, 0.14), Color(0.25, 0.18, 0.10))
+
+func _make_record_hall_dressing(context: ZoneBuildContext) -> void:
+	# Warm wood, iron, and parchment accents break up the archive’s stone shell.
+	for z in [-11.8, -6.0, 0.0, 6.0, 11.8]:
+		context.make_terrain_patch("RecordHallFloorInset", Vector3(0, 0.008, z), Vector3(5.8, 0.025, 0.82), Color(0.16, 0.115, 0.075))
+	for x in [-12.8, 12.8]:
+		context.make_visual_box("RecordHallWallPilaster", Vector3(x, 2.9, 0), Vector3(0.38, 5.7, 29.0), Color(0.24, 0.19, 0.14))
+	for z in [-12.8, 12.8]:
+		context.make_visual_box("RecordHallDoorArch", Vector3(0, 3.9, z), Vector3(5.4, 0.28, 0.18), Color(0.29, 0.22, 0.15))
+	for x in [-8.8, 8.8]:
+		context.make_visual_box("RecordHallLanternGlow", Vector3(x, 3.6, 9.6), Vector3(0.28, 0.52, 0.18), Color(0.70, 0.40, 0.16))
+	context.make_visual_box("RecordHallLedgerRunner", Vector3(0, 0.09, -7.0), Vector3(4.8, 0.05, 0.22), Color(0.28, 0.17, 0.08))

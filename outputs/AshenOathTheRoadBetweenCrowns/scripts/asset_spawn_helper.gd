@@ -347,6 +347,14 @@ func _target_height_for_role(role_name: String, path: String) -> float:
 		var known_height := CharacterRoleSpec.target_height(role, -1.0)
 		if known_height > 0.0:
 			return known_height
+	# Large authored focal creatures are normalized to a human-scale source
+	# first, then receive their encounter-specific multiplier in the zone
+	# builder. This keeps the Wolf source grounded while giving the Hart the
+	# intended supernatural height.
+	if role == "white_hart_avatar":
+		return 1.72
+	if role == "ashwing_creature":
+		return 3.80
 	if role.contains("ghoul_stalker"):
 		return 1.66
 	if role.contains("ghoul_brute"):
@@ -441,7 +449,8 @@ func _finalize_asset_root(root: Node3D, role_name: String = "") -> void:
 	else:
 		root.rotation_degrees.y = 180.0 if root.name.to_lower().contains("character") else root.rotation_degrees.y
 	var hero_role := role_name in ["player_human", "player_kael", "sister_anwen_human", "sister_anwen"]
-	var lod_distance := CharacterRoleSpec.lod_distance(role_name, 14.0)
+	var focal_creature := role_name in ["white_hart_avatar", "ashwing_creature", "bell_eater_boss", "rootbound_colossus"]
+	var lod_distance := 48.0 if focal_creature else CharacterRoleSpec.lod_distance(role_name, 14.0)
 	var lod_bias := 0.50 if hero_role else 0.40
 	for mesh_instance in _collect_meshes(root):
 		mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF

@@ -23,8 +23,9 @@ func _build_undercroft(context: ZoneBuildContext) -> void:
 	var stone := Color(0.068, 0.068, 0.072)
 	context.make_ground(Vector3(0, -0.08, 0), Vector3(36, 0.16, 34), stone)
 	context.make_play_area_bounds(36.0, 34.0, stone.darkened(0.42))
-	context.make_road(Vector3(0, 0.02, 0), Vector3(6.5, 0.05, 29), Color(0.11, 0.105, 0.10))
-	context.make_visual_box("UndercroftCeiling", Vector3(0, 6.3, 0), Vector3(36, 0.30, 34), Color(0.028, 0.028, 0.032))
+	context.make_road(Vector3(0, 0.02, 0), Vector3(6.5, 0.05, 29), Color(0.17, 0.16, 0.15))
+	_make_undercroft_dressing(context)
+	context.make_visual_box("UndercroftCeiling", Vector3(0, 6.3, 0), Vector3(36, 0.30, 34), Color(0.115, 0.105, 0.095))
 	for x in [-12.0, -4.0, 4.0, 12.0]:
 		context.make_visual_box("UndercroftBeam", Vector3(x, 5.95, 0), Vector3(0.26, 0.34, 31), Color(0.12, 0.095, 0.075))
 	_marker(context, "undercroft", "AuthoredVarganUndercroft")
@@ -37,9 +38,13 @@ func _build_undercroft(context: ZoneBuildContext) -> void:
 			context.make_pillar(Vector3(x, 0, z))
 	for position in [Vector3(-10, 0.8, -7), Vector3(10, 0.8, -7), Vector3(-10, 0.8, 5), Vector3(10, 0.8, 5)]:
 		context.make_prop_box("StoneCoffin", position, Vector3(4.2, 1.6, 2.1), Color(0.15, 0.145, 0.14))
+	# Reserve the two Balanced local-light slots for the witness route before
+	# adding torch decoration. The previous order let torch lights consume both
+	# slots, leaving the undercroft nearly black and the boss threshold unreadable.
+	context.make_light("UndercroftWitnessLight", Vector3(0, 4.5, -7), Color(0.38, 0.45, 0.58), 3.6)
+	context.make_light("UndercroftNavigationFill", Vector3(0, 3.0, 4), Color(0.34, 0.38, 0.48), 2.8)
 	for position in [Vector3(-4, 0, 9), Vector3(4, 0, 9), Vector3(-4, 0, -8), Vector3(4, 0, -8)]:
 		context.make_torch(position)
-	context.make_light("UndercroftWitnessLight", Vector3(0, 4.5, -7), Color(0.38, 0.45, 0.58), 2.6)
 	context.make_named_interactable("halvern", "dialogue", "Speak to Sir Halvern", Vector3(0, 0, -9), Color(0.42, 0.43, 0.48))
 	if context.is_quest_active("main_last_witness") and not context.is_objective_done("main_last_witness", "break_halvern_guard"):
 		var guardian = context.spawn_enemy("halvern_boss", Vector3(0, 0.8, -5.5))
@@ -55,6 +60,7 @@ func _build_assembly(context: ZoneBuildContext) -> void:
 	context.make_ground(Vector3(0, -0.08, 0), Vector3(42, 0.16, 34), earth)
 	context.make_play_area_bounds(42.0, 34.0, earth.darkened(0.36))
 	context.make_road(Vector3(0, 0.02, 1), Vector3(8, 0.05, 30), Color(0.17, 0.145, 0.105))
+	_make_assembly_dressing(context)
 	_marker(context, "assembly", "AuthoredGreyfenAssembly")
 	context.make_prop_box("AssemblyDais", Vector3(0, 0.35, -8.5), Vector3(10, 0.7, 5), Color(0.20, 0.145, 0.09))
 	context.make_prop_box("WitnessTable", Vector3(0, 0.85, -6.5), Vector3(5.0, 1.7, 1.6), Color(0.20, 0.125, 0.065))
@@ -74,6 +80,7 @@ func _build_hart_glade(context: ZoneBuildContext) -> void:
 	context.make_ground(Vector3(0, -0.08, 0), Vector3(44, 0.16, 38), moss)
 	context.make_play_area_bounds(44.0, 38.0, moss.darkened(0.36))
 	context.make_road(Vector3(0, 0.02, 2), Vector3(5.2, 0.05, 34), Color(0.12, 0.13, 0.10))
+	_make_hart_glade_dressing(context)
 	_marker(context, "hart_glade", "AuthoredWhiteHartGlade")
 	for position in [
 		Vector3(-16, 0, -13), Vector3(-14, 0, -5), Vector3(-15, 0, 10),
@@ -138,6 +145,16 @@ func _make_hart_witness(context: ZoneBuildContext) -> void:
 	if root == null:
 		return
 	root.name = "WhiteHartWitnessDisplay"
+	root.set_meta("focal_creature", true)
+	var spectral_material := context.make_material(Color(0.34, 0.52, 0.43))
+	spectral_material.roughness = 0.62
+	spectral_material.emission_enabled = true
+	spectral_material.emission = Color(0.10, 0.28, 0.18)
+	spectral_material.emission_energy_multiplier = 0.28
+	for raw_mesh in root.find_children("*", "MeshInstance3D", true, false):
+		var hart_mesh := raw_mesh as MeshInstance3D
+		if hart_mesh != null:
+			hart_mesh.material_override = spectral_material
 	_add_hart_antler_crown(root, context)
 
 func _add_hart_antler_crown(root: Node3D, context: ZoneBuildContext) -> void:
@@ -221,3 +238,53 @@ func _add_hart_part(parent: Node3D, node_name: String, mesh: Mesh, position: Vec
 	node.rotation_degrees = rotation_degrees
 	node.material_override = material
 	parent.add_child(node)
+
+func _make_undercroft_dressing(context: ZoneBuildContext) -> void:
+	# Interiors inherit a very low outdoor ambient value. These two restrained,
+	# unshaded architectural inlays keep the route readable without turning the
+	# undercroft into a bright outdoor room or adding more dynamic lights.
+	_make_flat_light_box(context, "UndercroftRouteInlay", Vector3(0, 0.085, 0), Vector3(6.0, 0.018, 28.0), Color(0.15, 0.13, 0.11))
+	_make_flat_light_box(context, "UndercroftCeilingInlayA", Vector3(0, 6.08, -8.5), Vector3(8.0, 0.018, 4.2), Color(0.08, 0.07, 0.06))
+	_make_flat_light_box(context, "UndercroftCeilingInlayB", Vector3(0, 6.08, 7.5), Vector3(8.0, 0.018, 4.2), Color(0.07, 0.075, 0.09))
+	for z in [-12.0, -6.0, 0.0, 6.0, 12.0]:
+		context.make_terrain_patch("UndercroftFloorInset", Vector3(0, 0.008, z), Vector3(5.4, 0.026, 0.76), Color(0.14, 0.13, 0.12))
+	for x in [-12.5, 12.5]:
+		context.make_visual_box("UndercroftWallBand", Vector3(x, 4.8, 0), Vector3(0.18, 0.24, 28.0), Color(0.24, 0.21, 0.18))
+	for z in [-13.6, 13.6]:
+		context.make_visual_box("UndercroftArchBand", Vector3(0, 4.95, z), Vector3(27.0, 0.24, 0.18), Color(0.22, 0.19, 0.16))
+	context.make_visual_box("UndercroftWitnessThreshold", Vector3(0, 0.10, -10.4), Vector3(7.2, 0.08, 0.18), Color(0.28, 0.22, 0.14))
+
+func _make_assembly_dressing(context: ZoneBuildContext) -> void:
+	for z in [-11.5, -6.0, 0.0, 6.0, 11.5]:
+		context.make_terrain_patch("AssemblyRoadWear", Vector3(0, 0.008, z), Vector3(6.8, 0.024, 0.78), Color(0.20, 0.16, 0.11))
+	for x in [-12.0, 12.0]:
+		context.make_visual_box("AssemblyWitnessBannerPole", Vector3(x, 2.5, -7.5), Vector3(0.16, 5.0, 0.16), Color(0.16, 0.095, 0.045))
+		context.make_visual_box("AssemblyWitnessBanner", Vector3(x, 3.6, -7.5), Vector3(1.1, 1.7, 0.06), Color(0.25, 0.055, 0.035))
+	context.make_visual_box("AssemblyDaisFront", Vector3(0, 0.74, -10.9), Vector3(10.6, 0.16, 0.20), Color(0.35, 0.21, 0.10))
+	context.make_visual_box("AssemblyFireBowl", Vector3(0, 1.15, 4.2), Vector3(0.72, 0.24, 0.72), Color(0.26, 0.18, 0.09))
+	context.make_visual_box("AssemblyFire", Vector3(0, 1.38, 4.2), Vector3(0.22, 0.44, 0.22), Color(0.76, 0.34, 0.10))
+
+func _make_hart_glade_dressing(context: ZoneBuildContext) -> void:
+	# The grove is framed as a deliberate clearing, with a readable approach and
+	# an open witness space around the Hart rather than an empty field.
+	for z in [-12.0, -6.0, 0.0, 7.0, 13.0]:
+		context.make_terrain_patch("HartGladeMossBand", Vector3(-7.0, 0.008, z), Vector3(3.8, 0.024, 1.15), Color(0.09, 0.16, 0.11))
+		context.make_terrain_patch("HartGladeMossBand", Vector3(7.0, 0.009, z + 0.3), Vector3(3.8, 0.024, 1.15), Color(0.075, 0.14, 0.095))
+	for position in [Vector3(-4.8, 0.04, -11.5), Vector3(4.8, 0.04, -11.5), Vector3(-5.1, 0.04, 11.5), Vector3(5.1, 0.04, 11.5)]:
+		context.make_path_stone(position, 0.68)
+	context.make_visual_box("HartGladeWitnessThreshold", Vector3(0, 0.10, -5.8), Vector3(4.0, 0.08, 0.18), Color(0.18, 0.34, 0.22))
+	context.make_visual_box("HartGladeMoonlitMarker", Vector3(0, 2.1, -9.0), Vector3(0.18, 3.4, 0.18), Color(0.19, 0.45, 0.29))
+
+func _make_flat_light_box(context: ZoneBuildContext, node_name: String, pos: Vector3, size: Vector3, color: Color) -> void:
+	var node := MeshInstance3D.new()
+	node.name = node_name
+	var mesh := BoxMesh.new()
+	mesh.size = size
+	node.mesh = mesh
+	node.position = pos
+	var material := StandardMaterial3D.new()
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	material.albedo_color = color
+	material.roughness = 1.0
+	node.material_override = material
+	context.add_node(node)

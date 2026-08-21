@@ -32,6 +32,16 @@ Fresh 1280x720 captures exist for Deep Woods, Old Mill, Burned Farmstead, and
 Marsh Crossing. The later zones remain deliberately stylized and below the
 final visual bar; this is a development checkpoint, not production approval.
 
+The current `WORLD-016` slice extends that presentation method through Castle
+Vargan, the Record Hall, undercroft, Greyfen assembly, and Hart Glade. Castle
+materials now retain authored tint variants, the archive has readable interior
+bands and warm ledger staging, the undercroft reserves its light budget for the
+witness route, and the White Hart is visible at gameplay distance through its
+mapped animated animal source and spectral material treatment. Fresh WORLD-005
+and WORLD-006 captures exist. The regenerated Ghoul family is consolidated to
+the six-surface Compatibility budget and its performance gate passes after
+reimport.
+
 Bog Wretch and Gravebound Knight now instantiate connected skinned Ghoul-family
 runtime bodies instead of the previous Slime/Skeleton primitives. Their
 monster verifier checks live skeletons, animation drivers, visual roots, and

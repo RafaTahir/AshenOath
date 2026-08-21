@@ -4565,10 +4565,19 @@ func _make_prop_box(name: String, pos: Vector3, size: Vector3, color: Color) -> 
 			surface = "medieval_brick"
 		elif lower.contains("berm") or lower.contains("moss"):
 			surface = "forest_ground"
-		var material = world_materials.get_material(surface, str(settings.settings.get("quality_preset", "balanced")), Color(0.72, 0.70, 0.66), 0.15 if surface == "wet_mud" else 0.0, true)
-		if not prop_batch_data.has(surface):
-			prop_batch_data[surface] = {"material": material, "transforms": []}
-		prop_batch_data[surface].transforms.append(Transform3D(Basis.IDENTITY.scaled(size), pos))
+		# Preserve authored colour language when props are batched. The old
+		# surface-only key reused one pale material for every wall, roof, and
+		# timber piece, making Castle interiors read as blank white blocks. Keep
+		# the shared surface textures, but quantize the tint into a small number of
+		# cache-friendly variants so repeated geometry still batches efficiently.
+		var surface_base := Color(0.72, 0.70, 0.66)
+		var surface_tint := surface_base.lerp(color, 0.58)
+		var tint_key := "%d_%d_%d" % [int(surface_tint.r * 8.0), int(surface_tint.g * 8.0), int(surface_tint.b * 8.0)]
+		var batch_key := "%s_%s" % [surface, tint_key]
+		var material = world_materials.get_material(surface, str(settings.settings.get("quality_preset", "balanced")), surface_tint, 0.15 if surface == "wet_mud" else 0.0, true)
+		if not prop_batch_data.has(batch_key):
+			prop_batch_data[batch_key] = {"material": material, "transforms": []}
+		prop_batch_data[batch_key].transforms.append(Transform3D(Basis.IDENTITY.scaled(size), pos))
 
 func _is_first_route_clearance(pos: Vector3, radius: float = 0.0) -> bool:
 	if current_zone_id == "greyfen":
@@ -4762,7 +4771,13 @@ func _make_role_visual(role_name: String, category: String, scale_value: Vector3
 				node.queue_free()
 		node = asset_helper.spawn_character(role_name)
 	elif category == "enemies":
-		node = asset_helper.spawn_enemy(role_name)
+		# Boss and creature display roles have richer visual mappings than the
+		# legacy enemy-definitions table. Prefer those when available, while
+		# retaining the combat mapping as a compatibility fallback.
+		if asset_helper.has_method("spawn_visual_role") and asset_helper.has_method("has_visual_role") and asset_helper.has_visual_role(role_name):
+			node = asset_helper.spawn_visual_role(role_name, "enemies")
+		else:
+			node = asset_helper.spawn_enemy(role_name)
 	else:
 		node = asset_helper.spawn_environment(role_name)
 	if node == null or node.name.ends_with("_placeholder"):
