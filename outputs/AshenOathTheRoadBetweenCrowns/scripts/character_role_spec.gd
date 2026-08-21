@@ -36,6 +36,7 @@ const SPECS := {
 	"castle_guard_human": {"height": 1.82, "collision_height": 1.72, "collision_radius": 0.33, "lod": 16.0, "visual_forward_degrees": 180.0},
 	"road_ranger_human": {"height": 1.75, "collision_height": 1.64, "collision_radius": 0.31, "lod": 16.0, "visual_forward_degrees": 180.0},
 	"ghoulkin": {"height": 1.72, "collision_height": 1.65, "collision_radius": 0.34, "lod": 18.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
+	"ghoulkin_skeleton": {"height": 1.72, "collision_height": 1.65, "collision_radius": 0.34, "lod": 18.0, "skeleton_profile": "QuaterniusAnimatedMonster", "animation_profile": "AnimatedMonster_shared", "required_sockets": [], "visual_forward_degrees": 180.0},
 	"wychwood_stalker": {"height": 1.66, "collision_height": 1.60, "collision_radius": 0.32, "lod": 18.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
 	"wychwood_raider": {"height": 1.72, "collision_height": 1.65, "collision_radius": 0.34, "lod": 18.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
 	"wychwood_brute": {"height": 1.90, "collision_height": 1.80, "collision_radius": 0.40, "lod": 20.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},

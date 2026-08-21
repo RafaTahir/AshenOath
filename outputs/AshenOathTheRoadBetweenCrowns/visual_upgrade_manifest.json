@@ -141,6 +141,15 @@
         "license": "CC0 1.0",
         "notes": "Broad Wychwood heavy body with connected face, hands, and feet."
       },
+      "ghoulkin_skeleton": {
+        "status": "mon_002_verified_runtime",
+        "path": "res://assets_external/enemies/Skeleton.fbx",
+        "source": "Animated Monsters by Quaternius",
+        "source_url": "https://opengameart.org/sites/default/files/Animated%20Monster%20Pack%20by%20%40Quaternius.zip",
+        "license": "CC0 1.0",
+        "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
+        "notes": "Complete articulated skeleton family source used for Wychwood cursed-remains roles. Variant identity comes from scale, posture, material profile, and attack spacing; no proxy anatomy is added."
+      },
       "ghoulkin_creature": {
         "status": "mon_001",
         "path": "res://assets_external/characters_real/GhoulGaunt_Real.glb",

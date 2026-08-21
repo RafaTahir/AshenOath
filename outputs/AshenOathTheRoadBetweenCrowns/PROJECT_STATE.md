@@ -2,6 +2,19 @@
 
 ## Current Working Checkpoint - 2026-08-21
 
+### MON-002 monster-family checkpoint
+
+The Wychwood Ghoulkin, Stalker, Raider, and Brute now use the complete
+animated Quaternius `Skeleton.fbx` source instead of the rejected generated
+Ghoul mannequins. The imported body supplies skull, ribs, hands, feet, and
+Skeleton Idle/Running/Attack/Spawn/Death clips. Detached Wychwood silhouette
+boxes were removed; role scale, tint, locomotion, attack spacing, and quest
+behavior remain authoritative. `verify_mon_002`, `verify_face_003`, runtime
+smoke, and fresh graphical AI captures pass. Ultimate Monsters, bespoke boss
+families, and final visual approval remain pending because the Drive source is
+currently quota-blocked. Production `main`, tracked `web/`, and Vercel remain
+unchanged.
+
 ### Character contract checkpoint - current continuation
 
 The character foundation contract is now enforced at runtime rather than by

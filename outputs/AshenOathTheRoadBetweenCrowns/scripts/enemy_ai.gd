@@ -668,10 +668,10 @@ func _try_build_mapped_body() -> bool:
 	var visual_source: String = enemy_id
 	if enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute", "bog_wretch", "gravebound_knight", "bell_eater", "rootbound_colossus", "ashwing", "halvern_boss", "white_hart_avatar"]:
 		visual_source = {
-			"ghoulkin": "ghoulkin_creature",
-			"wychwood_stalker": "ghoul_stalker_real",
-			"wychwood_raider": "ghoulkin_creature",
-			"wychwood_brute": "ghoul_brute_real",
+			"ghoulkin": "ghoulkin_skeleton",
+			"wychwood_stalker": "ghoulkin_skeleton",
+			"wychwood_raider": "ghoulkin_skeleton",
+			"wychwood_brute": "ghoulkin_skeleton",
 			"bog_wretch": "bog_wretch_creature",
 			"gravebound_knight": "gravebound_knight_creature",
 			"bell_eater": "ghoul_brute_real",
@@ -713,15 +713,15 @@ func _try_build_mapped_body() -> bool:
 		_apply_boss_material(mapped)
 	visual_root.add_child(mapped)
 	if _is_wychwood_pack():
-		_add_variant_silhouette()
+		# Variant identity is carried by the imported skeleton, role material,
+		# scale, locomotion profile, and attack spacing. Do not add detached
+		# root-mounted anatomy on top of a valid animated body.
+		mapped.set_meta("monster_variant_profile", enemy_id)
 	_ground_mapped_visual(mapped)
 	if is_boss:
 		_add_boss_silhouette()
 	if enemy_id == "white_hart_avatar":
 		_add_spectral_antler_crown(mapped)
-	if visual_source == "ghoulkin_skeleton":
-		# This source rig's terminal leg bones sit above its mesh bind bounds.
-		mapped.position.y -= 0.50
 	body_visual = _find_first_mesh(mapped)
 	base_body_scale = mapped.scale
 	animation_driver = CharacterAnimationDriver.new()
@@ -889,7 +889,7 @@ func _accumulate_visual_bounds(node: Node, parent_transform: Transform3D, state:
 		current_transform = parent_transform * (node as Node3D).transform
 	if node is MeshInstance3D:
 		var mesh_instance := node as MeshInstance3D
-		if mesh_instance.mesh != null and mesh_instance.skin != null:
+		if mesh_instance.mesh != null and (mesh_instance.skin != null or mesh_instance.skeleton != NodePath("")):
 			var mesh_bounds: AABB = current_transform * mesh_instance.mesh.get_aabb()
 			state.bounds = (state.bounds as AABB).merge(mesh_bounds) if bool(state.initialized) else mesh_bounds
 			state.initialized = true
@@ -1278,24 +1278,6 @@ func _enemy_shadow_scale() -> Vector3:
 
 func _is_wychwood_pack() -> bool:
 	return enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute"]
-
-func _add_variant_silhouette() -> void:
-	if enemy_id == "ghoulkin":
-		_add_part(Vector3(0.0, 0.84, -0.42), Vector3(0.34, 0.11, 0.20), Color(0.18, 0.10, 0.08), "box")
-		_add_part(Vector3(-0.28, 1.02, -0.22), Vector3(0.08, 0.24, 0.10), Color(0.45, 0.36, 0.23), "capsule")
-		_add_part(Vector3(0.28, 1.02, -0.22), Vector3(0.08, 0.24, 0.10), Color(0.45, 0.36, 0.23), "capsule")
-	elif enemy_id == "wychwood_stalker":
-		_add_part(Vector3(0, 1.45, -0.16), Vector3(0.20, 0.26, 0.16), Color(0.08, 0.19, 0.12), "sphere")
-		_add_part(Vector3(-0.26, 1.12, -0.50), Vector3(0.07, 0.30, 0.07), Color(0.42, 0.34, 0.22), "cone")
-		_add_part(Vector3(0.26, 1.12, -0.50), Vector3(0.07, 0.30, 0.07), Color(0.42, 0.34, 0.22), "cone")
-	elif enemy_id == "wychwood_raider":
-		_add_part(Vector3(0, 1.18, -0.44), Vector3(0.42, 0.12, 0.08), Color(0.26, 0.28, 0.17), "box")
-		_add_part(Vector3(-0.46, 1.30, 0), Vector3(0.20, 0.16, 0.30), Color(0.34, 0.40, 0.24), "box")
-		_add_part(Vector3(0.46, 1.30, 0), Vector3(0.20, 0.16, 0.30), Color(0.34, 0.40, 0.24), "box")
-	elif enemy_id == "wychwood_brute":
-		_add_part(Vector3(0, 1.34, 0.08), Vector3(0.86, 0.30, 0.34), Color(0.25, 0.29, 0.20), "box")
-		_add_part(Vector3(-0.58, 1.42, -0.04), Vector3(0.22, 0.24, 0.28), Color(0.38, 0.31, 0.20), "sphere")
-		_add_part(Vector3(0.58, 1.42, -0.04), Vector3(0.22, 0.24, 0.28), Color(0.38, 0.31, 0.20), "sphere")
 
 func _find_first_mesh(root: Node) -> MeshInstance3D:
 	if root is MeshInstance3D:

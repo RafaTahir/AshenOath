@@ -2,6 +2,16 @@
 
 ## Current Working Checkpoint - 2026-08-21
 
+### MON-002 monster-family checkpoint
+
+Wychwood's four enemy roles now share a real imported animated skeleton source
+with complete skull/rib/hand/foot anatomy and five usable clips. The old
+generated Ghoul mannequin mapping and detached variant silhouette geometry were
+removed from the Wychwood path. The runtime and face contracts pass, and fresh
+1280x720 formation/contact captures are current. The Ultimate Monsters source
+and bespoke boss family replacements remain explicitly pending; no final visual
+approval is claimed. Production remains unchanged.
+
 ### Character contract checkpoint - current continuation
 
 The character foundation contract is enforced at runtime. An inspected role

@@ -27,6 +27,7 @@ func _run() -> void:
 		if not enemy_ai.contains(needle):
 			failures += 1
 			push_error("enemy presentation missing %s" % needle)
+	_verify_wychwood_family_source()
 	await _verify_white_hart_runtime(parsed if typeof(parsed) == TYPE_DICTIONARY else {})
 	await _verify_connected_family_runtime("bog_wretch", parsed if typeof(parsed) == TYPE_DICTIONARY else {})
 	await _verify_connected_family_runtime("gravebound_knight", parsed if typeof(parsed) == TYPE_DICTIONARY else {})
@@ -36,6 +37,18 @@ func _run() -> void:
 	else:
 		push_error("MON-002: %d failure(s)" % failures)
 		quit(1)
+
+func _verify_wychwood_family_source() -> void:
+	var upgrade_text := FileAccess.get_file_as_string("res://visual_upgrade_manifest.json")
+	var upgrade_data = JSON.parse_string(upgrade_text)
+	check(typeof(upgrade_data) == TYPE_DICTIONARY, "visual upgrade manifest is not valid JSON")
+	if typeof(upgrade_data) != TYPE_DICTIONARY:
+		return
+	var enemy_roles: Dictionary = upgrade_data.get("roles", {}).get("enemies", {})
+	var family_entry: Dictionary = enemy_roles.get("ghoulkin_skeleton", {})
+	check(not family_entry.is_empty(), "Wychwood family has no explicit articulated source role")
+	check(str(family_entry.get("path", "")) == "res://assets_external/enemies/Skeleton.fbx", "Wychwood family is not mapped to the verified skeleton source")
+	check(ResourceLoader.exists("res://assets_external/enemies/Skeleton.fbx"), "verified skeleton source is not loadable")
 
 func _verify_white_hart_runtime(enemy_definitions: Dictionary) -> void:
 	var definition: Dictionary = enemy_definitions.get("white_hart_avatar", {})

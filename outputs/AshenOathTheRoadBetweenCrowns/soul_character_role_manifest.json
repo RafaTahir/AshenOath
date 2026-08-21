@@ -121,6 +121,25 @@
       "blocked_reason": "Ultimate Monsters source is not locally acquired; the derived Ghoul family remains a temporary combat fallback.",
       "current_fallback": "res://assets_external/characters_real/GhoulGaunt_Real.glb"
     },
+    "ghoulkin_skeleton": {
+      "family": "monster",
+      "source_pack": "quaternius_lowpoly_animated_monsters",
+      "target_height": 1.72,
+      "triangle_budget": 12000,
+      "texture_budget": 1024,
+      "required_clips": ["SkeletonArmature|Skeleton_Idle", "SkeletonArmature|Skeleton_Running", "SkeletonArmature|Skeleton_Attack", "SkeletonArmature|Skeleton_Spawn", "SkeletonArmature|Skeleton_Death"],
+      "equipment_sockets": [],
+      "status": "mon_002_verified_runtime",
+      "approved": false,
+      "export_eligible": false,
+      "path": "res://assets_external/enemies/Skeleton.fbx",
+      "source_url": "https://opengameart.org/sites/default/files/Animated%20Monster%20Pack%20by%20%40Quaternius.zip",
+      "license": "CC0 1.0",
+      "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
+      "current_fallback": "res://assets_external/enemies/Skeleton.fbx",
+      "blocked_reason": "The selected animated skeleton is a verified runtime family source, but final bespoke horror-family visual approval remains blocked until the Ultimate Monsters source is downloadable and audited.",
+      "notes": "Complete articulated skeleton source replaces the rejected generated Ghoul mannequin for Wychwood family runtime audition. Final horror-family visual approval remains open."
+    },
     "bog_wretch": {
       "family": "monster",
       "source_pack": "quaternius_ultimate_monsters",

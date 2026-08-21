@@ -38,7 +38,7 @@ func configure(root: Node3D, role: String) -> bool:
 				material = mesh.mesh.surface_get_material(surface_index)
 			material_token += " %s" % str(material.resource_name).to_lower() if material != null else ""
 		var face_token := "%s %s" % [token, material_token]
-		if face_token.contains("head") or face_token.contains("face") or face_token.contains("skin") or face_token.contains("body") or face_token.contains("skull") or face_token.contains("jaw") or face_token.contains("mouth") or face_token.contains("teeth") or face_token.contains("eye") or face_token.contains("brow"):
+		if face_token.contains("head") or face_token.contains("face") or face_token.contains("skin") or face_token.contains("body") or face_token.contains("skull") or face_token.contains("jaw") or face_token.contains("mouth") or face_token.contains("teeth") or face_token.contains("eye") or face_token.contains("brow") or (role_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute", "ghoulkin_skeleton"] and face_token.contains("skeleton")):
 			native_face_surface_count += surface_count
 		if token.contains("eye") and not token.contains("brow"):
 			eye_meshes.append(mesh)

@@ -1139,9 +1139,9 @@ func _exit_tree() -> void:
 	route_enemy_cache.clear()
 	route_zone_signatures.clear()
 	route_spatial_cache.clear()
-	for retired_root in retired_zone_roots.duplicate():
-		if retired_root != null and is_instance_valid(retired_root) and not retired_root.is_inside_tree():
-			retired_root.free()
+	# Do not free retired roots from NOTIFICATION_EXIT_TREE. Their parent scene
+	# owns destruction, and touching detached renderer resources during shutdown
+	# produces misleading null-material/RID diagnostics in Compatibility mode.
 	retired_zone_roots.clear()
 	pending_zone_retirements = 0
 	skinned_resource_anchors.clear()

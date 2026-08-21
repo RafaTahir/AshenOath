@@ -1,35 +1,44 @@
 {
   "version": 2,
-  "ticket": "CHAR-REPAIR-001",
+  "ticket": "MON-002",
   "families": {
     "ghoulkin": {
       "visual_role": "ghoulkin_creature",
       "profile": "skirmisher",
       "height": 1.63,
-      "skin": "ghoulkin_skin.jpg"
+      "skin": "ghoulkin_skin.jpg",
+      "runtime_source_role": "ghoulkin_skeleton",
+      "source_path": "res://assets_external/enemies/Skeleton.fbx"
     },
     "wychwood_stalker": {
-      "visual_role": "ghoul_stalker_real",
+      "visual_role": "ghoulkin_skeleton",
       "profile": "flanker",
       "height": 1.59,
-      "skin": "stalker_skin.jpg"
+      "skin": "stalker_skin.jpg",
+      "runtime_source_role": "ghoulkin_skeleton",
+      "source_path": "res://assets_external/enemies/Skeleton.fbx"
     },
     "wychwood_raider": {
-      "visual_role": "ghoulkin_creature",
+      "visual_role": "ghoulkin_skeleton",
       "profile": "feinter",
       "height": 1.72,
-      "skin": "ghoulkin_skin.jpg"
+      "skin": "ghoulkin_skin.jpg",
+      "runtime_source_role": "ghoulkin_skeleton",
+      "source_path": "res://assets_external/enemies/Skeleton.fbx"
     },
     "wychwood_brute": {
-      "visual_role": "ghoul_brute_real",
+      "visual_role": "ghoulkin_skeleton",
       "profile": "brute",
       "height": 1.98,
-      "skin": "brute_skin.jpg"
+      "skin": "brute_skin.jpg",
+      "runtime_source_role": "ghoulkin_skeleton",
+      "source_path": "res://assets_external/enemies/Skeleton.fbx"
     }
   },
   "shared_contract": {
     "required_states": ["idle", "walk", "run", "attack", "hit", "death"],
     "root_motion": false,
-    "proxy_anatomy": false
+    "proxy_anatomy": false,
+    "source_policy": "all_wychwood_roles_use_complete_imported_skeleton"
   }
 }

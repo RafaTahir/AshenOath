@@ -73,6 +73,24 @@
       "export_policy": "blocked_until_selected_runtime_artifacts_pass_visual_review"
     },
     {
+      "id": "quaternius_lowpoly_animated_monsters",
+      "version": "2020-05",
+      "url": "https://opengameart.org/sites/default/files/Animated%20Monster%20Pack%20by%20%40Quaternius.zip",
+      "download_page": "https://opengameart.org/sites/default/files/Animated%20Monster%20Pack%20by%20%40Quaternius.zip",
+      "sha256": null,
+      "bytes": null,
+      "entry_scene": "res://assets_external/enemies/Skeleton.fbx",
+      "runtime_artifacts": [
+        {"path": "res://assets_external/enemies/Skeleton.fbx", "bytes": 433820, "sha256": "be0a5992b677e563c6c9601e76fdcb9d50e91c195aebb1eb70604fbfe8fb26d5"}
+      ],
+      "dependencies": [],
+      "preload_priority": 45,
+      "license": "CC0 1.0",
+      "status": "selected_runtime_skeleton_family",
+      "selected_runtime": "res://assets_external/enemies/Skeleton.fbx",
+      "export_policy": "selected_runtime_artifacts_only"
+    },
+    {
       "id": "quaternius_ultimate_animated_animals",
       "version": "2021-07",
       "url": "https://quaternius.com/packs/ultimateanimatedanimals.html",
