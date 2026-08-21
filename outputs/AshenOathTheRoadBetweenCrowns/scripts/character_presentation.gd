@@ -26,13 +26,14 @@ static func apply_player(owner: Node3D, visual_root: Node3D) -> void:
 	# complete rigged role is available.
 	owner.set_meta("character_overlay_contract", "disabled")
 
-static func apply_npc(owner: Node3D, role_id: String) -> void:
+static func apply_npc(owner: Node3D, role_id: String, include_ground_shadow: bool = true) -> void:
 	if owner == null:
 		return
 	if owner.has_meta("character_presentation_applied"):
 		return
 	owner.set_meta("character_presentation_applied", true)
-	_add_contact_shadow(owner, Vector3(0.72, 0.016, 0.50), 0.0)
+	if include_ground_shadow:
+		_add_contact_shadow(owner, Vector3(0.72, 0.016, 0.50), 0.0)
 	var role = role_id.to_lower()
 	if _has_skeleton(owner):
 		CharacterVisualContract.remove_proxy_anatomy(owner)

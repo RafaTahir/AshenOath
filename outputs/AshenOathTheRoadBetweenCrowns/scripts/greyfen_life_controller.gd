@@ -428,7 +428,7 @@ func _make_skeletal_villager(parent: Node3D, role_id: String, index: int, scale_
 	mapped.set_meta("char_009_identity", CROWD_IDENTITIES[index % CROWD_IDENTITIES.size()])
 	mapped.set_meta("char_009_variant_index", index)
 	parent.add_child(mapped)
-	CharacterPresentation.apply_npc(parent, str(mapped.get_meta("char_009_identity", role_id)))
+	CharacterPresentation.apply_npc(parent, str(mapped.get_meta("char_009_identity", role_id)), false)
 	var driver = CharacterAnimationDriver.new()
 	driver.name = "CharacterAnimationDriver"
 	mapped.add_child(driver)

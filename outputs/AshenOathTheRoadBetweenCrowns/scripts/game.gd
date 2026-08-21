@@ -2903,12 +2903,9 @@ func _make_greyfen_path_edges() -> void:
 	var marker = Node3D.new()
 	marker.name = "GreyfenPathEdgeComposition"
 	zone_root.add_child(marker)
-	for z in [-12, -9, -6, -3, 0, 3, 6, 9, 12]:
+	for z in [-12, -4, 4, 12]:
 		_make_path_stone(Vector3(-2.35 + randf_range(-0.12, 0.12), 0, z + randf_range(-0.35, 0.35)), 0.35)
 		_make_path_stone(Vector3(2.35 + randf_range(-0.12, 0.12), 0, z + randf_range(-0.35, 0.35)), 0.32)
-	for z in [-11.8, -7.8, -3.8, 0.2, 4.2, 8.2]:
-		_make_low_berm(Vector3(-4.7, 0, z), Vector3(1.2, 0.38, 2.2), Color(0.085, 0.105, 0.070))
-		_make_low_berm(Vector3(4.7, 0, z), Vector3(1.2, 0.38, 2.2), Color(0.085, 0.105, 0.070))
 
 func _make_wychwood_path_edges() -> void:
 	var marker = Node3D.new()
@@ -3057,7 +3054,7 @@ func _make_road_ruts() -> void:
 	for z in [-11.5, -8.6, -5.7, -2.8, 0.1, 3.0, 5.9, 8.8]:
 		_make_visual_box("RoadWheelRut", Vector3(-0.82, 0.044, z), Vector3(0.18, 0.018, 2.0), Color(0.075, 0.058, 0.040))
 		_make_visual_box("RoadWheelRut", Vector3(0.82, 0.044, z + 0.18), Vector3(0.18, 0.018, 2.0), Color(0.075, 0.058, 0.040))
-	for z in [-10.0, -6.0, -2.0, 2.0, 6.0, 10.0]:
+	for z in [-10.0, 2.0, 10.0]:
 		_make_visual_box("RoadCenterMud", Vector3(0, 0.046, z), Vector3(0.42, 0.016, 1.25), Color(0.090, 0.066, 0.043))
 
 func _make_lantern_rhythm() -> void:
@@ -3195,7 +3192,6 @@ func _make_crow_silhouettes() -> void:
 	var index := 0
 	for item in [
 		[Vector3(-8.5, 5.8, -11.5), -14.0],
-		[Vector3(-7.8, 6.15, -12.2), 8.0],
 		[Vector3(10.2, 5.5, -10.6), 18.0]
 	]:
 		var root := Node3D.new()
