@@ -460,3 +460,13 @@ Compatibility renderer/RID/ObjectDB shutdown messages remain classified
 ENGINE-004 debt after the verifier pass. QA-012 is a development checkpoint;
 the final visual gallery, full release runner, Web export, `main` push, and
 Vercel deployment remain RELEASE-003 work.
+
+### ENGINE-004 anchor retention correction
+
+The deferred zone retirement path now drops retained material anchors only
+after the final staged root has completed its queued free. This preserves the
+renderer-safe retirement window and fixes the pre-finalization anchor failure.
+The fresh graphical ENGINE-004 run and full `engine` ticket profile pass with
+no active null-material errors. Compatibility RID/ObjectDB diagnostics still
+appear after the verifier pass during isolated process teardown and remain
+explicit shutdown debt rather than an active gameplay failure.

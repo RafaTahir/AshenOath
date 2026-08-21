@@ -32,6 +32,15 @@ Targeted lifecycle cleanup is complete on `codex/soul-rebuild`. Production
 - Fresh lifecycle logs contain no active `Parameter "material" is null`
   messages.
 
+### Follow-up lifecycle correction
+
+- Retired material anchors are now released when the last staged zone root
+  completes its deferred free. This keeps the renderer-safe retirement window
+  intact while preventing stale material ownership from surviving into the
+  finalization check.
+- A fresh graphical Compatibility run after this correction passes
+  `verify_engine_004` with zero retained material anchors before finalization.
+
 ## Known limitation
 
 Godot's isolated Compatibility/headless process still reports renderer

@@ -1340,3 +1340,14 @@ The continuation source is now verified locally for the release candidate. The r
   explicit ENGINE-004 lifecycle debt. QA-012 is complete as a route candidate,
   but it does not claim final visual asset approval or a production release.
   Production `main`, tracked `web/`, and Vercel remain unchanged.
+
+## ENGINE-004 Anchor Retention Correction - 2026-08-21
+
+- The deferred retirement path now clears retained material anchors only after
+  the final staged zone root has completed its queued free. This removes the
+  stale-anchor failure from the pre-finalization lifecycle check without
+  dropping materials while a retired root is still in the renderer window.
+- A fresh graphical Compatibility `verify_engine_004` run and the complete
+  `engine` ticket profile pass. Active null-material errors are absent. The
+  remaining RID/ObjectDB messages are emitted only after the verifier pass
+  during isolated process teardown and remain classified as shutdown debt.

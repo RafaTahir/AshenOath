@@ -764,6 +764,13 @@ func _deferred_free_zone(retired_root: Node) -> void:
 	else:
 		retired_zone_roots.erase(retired_root)
 	pending_zone_retirements = maxi(pending_zone_retirements - 1, 0)
+	# Material anchors only bridge the renderer-safe retirement window. Once the
+	# final staged root has been queued and released, no retired scene owns those
+	# materials anymore; dropping the anchors here prevents shutdown retention
+	# while keeping shared materials alive for any active zone that still uses
+	# them.
+	if pending_zone_retirements == 0:
+		retired_material_anchors.clear()
 
 func _retire_zone_root(retired_root: Node) -> void:
 	if retired_root == null or not is_instance_valid(retired_root):
