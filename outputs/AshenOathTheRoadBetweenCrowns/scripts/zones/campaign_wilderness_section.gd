@@ -27,7 +27,22 @@ func _base(context: ZoneBuildContext, color: Color, road_color: Color) -> void:
 	context.add_node(compatibility_marker)
 	context.make_ground(Vector3(0, -0.08, 0), Vector3(40, 0.16, 32), color)
 	context.make_play_area_bounds(40.0, 32.0, color.darkened(0.38))
-	context.make_road(Vector3(0, 0.02, 0), Vector3(4.4, 0.04, 28), road_color)
+	context.make_road(Vector3(0, 0.018, 0), Vector3(3.35, 0.035, 28), road_color)
+	# The route is a compact, readable ribbon rather than a raised-looking slab.
+	# Terrain patches and edge stones carry the transition into the surrounding
+	# ground while keeping all dressing non-blocking.
+	context.make_terrain_patch("WildernessRouteShoulderLeft", Vector3(-2.12, 0.012, 0), Vector3(0.72, 0.028, 27.5), color.lightened(0.10))
+	context.make_terrain_patch("WildernessRouteShoulderRight", Vector3(2.12, 0.013, 0), Vector3(0.72, 0.030, 27.5), color.lightened(0.06))
+	for z in [-12.0, -8.0, -4.0, 0.0, 4.0, 8.0, 12.0]:
+		context.make_path_stone(Vector3(-2.02 + sin(z * 0.33) * 0.10, 0, z), 0.34)
+		context.make_path_stone(Vector3(2.02 + cos(z * 0.29) * 0.10, 0, z + 0.18), 0.30)
+	context.make_grass_tufts([
+		Vector3(-5.8, 0, -12.0), Vector3(5.7, 0, -10.0),
+		Vector3(-6.2, 0, -5.2), Vector3(6.0, 0, -2.5),
+		Vector3(-5.5, 0, 2.8), Vector3(5.8, 0, 6.2),
+		Vector3(-6.5, 0, 10.2), Vector3(6.4, 0, 12.0)
+	], color.lightened(0.15))
+	_make_waystones(context, color)
 
 func _build_deep_wood(context: ZoneBuildContext) -> void:
 	_base(context, Color(0.040, 0.072, 0.047), Color(0.070, 0.083, 0.058))
@@ -36,9 +51,12 @@ func _build_deep_wood(context: ZoneBuildContext) -> void:
 	marker.set_meta("route_width", 3.0)
 	context.add_node(marker)
 	context.make_fog_sheet(Vector3(0, 0.9, -4), Vector3(28, 1, 13), Color(0.12, 0.19, 0.15, 0.20))
-	for x in [-16.0, -12.5, -9.0, 9.0, 12.5, 16.0]:
-		for z in [-12.0, -6.0, 1.0, 8.0, 13.0]:
+	for x in [-17.0, -13.5, -10.0, 10.0, 13.5, 17.0]:
+		for z in [-13.0, -7.0, 0.0, 7.0, 13.0]:
 			context.make_tree(Vector3(x, 0, z + sin(x + z) * 0.7))
+	for rock in [Vector3(-6.6, 0, -10.0), Vector3(6.8, 0, -7.2), Vector3(-7.4, 0, 2.2), Vector3(7.3, 0, 9.0)]:
+		context.make_loose_role("forest_rock", rock, Vector3.ONE * 0.75, sin(rock.z) * 18.0)
+	_make_memory_altar(context, Vector3(0, 0, -9.6), Color(0.28, 0.54, 0.46))
 	for pos in [Vector3(-7,0,6), Vector3(7,0,1), Vector3(-7,0,-5), Vector3(7,0,-10)]:
 		context.make_deadfall(pos)
 	for pos in [Vector3(-5.8,0,-7.5), Vector3(5.9,0,-8.4), Vector3(0,0,-10.5)]:
@@ -61,18 +79,12 @@ func _build_old_mill(context: ZoneBuildContext) -> void:
 	marker.set_meta("wheel_clearance", 3.2)
 	context.add_node(marker)
 	context.make_road(Vector3(-5.2, 0.025, -5.5), Vector3(8.0, 0.04, 3.0), Color(0.105, 0.083, 0.058))
-	for segment in [
-		[Vector3(-5.2,1.5,-7.5), Vector3(8.0,3.0,0.55)],
-		[Vector3(-9.0,1.5,-4.5), Vector3(0.55,3.0,6.5)],
-		[Vector3(-1.4,1.5,-4.5), Vector3(0.55,3.0,6.5)]
-	]:
-		context.make_prop_box("AshMillStoneWall", segment[0], segment[1], Color(0.22, 0.19, 0.15))
-	for beam in [
-		[Vector3(-5.2,3.25,-7.1), Vector3(8.8,0.32,0.32)],
-		[Vector3(-8.6,3.15,-4.0), Vector3(0.32,0.32,7.0)],
-		[Vector3(-1.8,3.15,-4.0), Vector3(0.32,0.32,7.0)]
-	]:
-		context.make_visual_box("AshMillCharredBeam", beam[0], beam[1], Color(0.105, 0.067, 0.038))
+	_make_mill_shell(context)
+	context.make_world_wheel("AshMillWaterWheel", Vector3(-9.25, 1.55, -5.25), 1.55, 0.28, Color(0.16, 0.09, 0.045), Vector3(90, 0, 0))
+	var mill_roof_left = context.make_visual_box("AshMillRoofTiles", Vector3(-7.25, 3.12, -5.4), Vector3(4.5, 0.20, 5.9), Color(0.12, 0.062, 0.040))
+	var mill_roof_right = context.make_visual_box("AshMillRoofTiles", Vector3(-3.15, 3.12, -5.4), Vector3(4.5, 0.20, 5.9), Color(0.12, 0.062, 0.040))
+	mill_roof_left.rotation_degrees.z = -12.0
+	mill_roof_right.rotation_degrees.z = 12.0
 	context.make_loose_role("cart", Vector3(6.6, 0, 2.8), Vector3.ONE * 0.72, -22.0)
 	for pos in [Vector3(5.2,0,-5), Vector3(8.0,0,-3), Vector3(7.2,0,5)]:
 		context.make_rubble(pos)
@@ -94,11 +106,8 @@ func _build_farmstead(context: ZoneBuildContext) -> void:
 	var marker := Node3D.new()
 	marker.name = "AuthoredBurnedFarmstead"
 	context.add_node(marker)
-	for home in [
-		[Vector3(-8,1.2,-5), Vector3(6.5,2.4,5.2)],
-		[Vector3(7,1.0,2), Vector3(5.8,2.0,4.8)]
-	]:
-		context.make_prop_box("FarmsteadStoneFoundation", home[0], home[1], Color(0.16, 0.105, 0.070))
+	_make_burned_home(context, Vector3(-8, 0, -5), "West")
+	_make_burned_home(context, Vector3(7, 0, 2), "East")
 	for pos in [Vector3(-10,0,-8), Vector3(9,0,-4), Vector3(-8,0,7)]:
 		context.make_loose_role("cart", pos, Vector3.ONE * 0.62, 18.0)
 	for pos in [Vector3(-4,0,-3), Vector3(4,0,5), Vector3(10,0,7), Vector3(-11,0,2)]:
@@ -106,6 +115,7 @@ func _build_farmstead(context: ZoneBuildContext) -> void:
 	for x in [-12.0, -8.0, 6.0, 10.0]:
 		context.make_fence(Vector3(x, 0.35, 10.5), false)
 	context.make_fog_sheet(Vector3(0, 0.7, -2), Vector3(22, 1, 9), Color(0.24, 0.12, 0.07, 0.14))
+	_make_burned_yard(context, Vector3(0, 0, 6.5))
 	context.make_clue("register_rook", "Recover charred names", Vector3(-7,0,-5), "main_names_they_burned", "fragment_rook", Color(0.45,0.25,0.12))
 
 func _build_marsh(context: ZoneBuildContext) -> void:
@@ -119,13 +129,54 @@ func _build_marsh(context: ZoneBuildContext) -> void:
 		[Vector3(8,0.00,2), Vector3(9.0,0.025,8.0)],
 		[Vector3(-9,0.00,9), Vector3(7.0,0.025,5.0)]
 	]:
-		context.make_visual_box("MarshStillWater", pool[0], pool[1], Color(0.055, 0.12, 0.115, 0.82))
+		context.make_water_patch("MarshStillWater", pool[0], pool[1], Color(0.035, 0.16, 0.16, 0.92))
 	for z in range(-12, 13, 2):
 		context.make_prop_box("MarshBoardwalk", Vector3(0,0.12,float(z)), Vector3(3.4,0.20,1.55), Color(0.20,0.14,0.085))
 	for pos in [Vector3(-5,0,-9), Vector3(6,0,-6), Vector3(-7,0,1), Vector3(7,0,8), Vector3(-5,0,11)]:
 		context.make_visual_box("MarshReedClump", pos + Vector3(0,0.45,0), Vector3(0.45,0.9,0.45), Color(0.16,0.24,0.12))
+	for pos in [Vector3(-5.2, 0, -3.5), Vector3(5.7, 0, 3.7), Vector3(-6.3, 0, 8.7), Vector3(6.8, 0, 10.7)]:
+		context.make_loose_role("forest_rock", pos, Vector3.ONE * 0.58, 0.0)
 	context.make_fog_sheet(Vector3(0,0.55,0), Vector3(30,1,14), Color(0.17,0.24,0.21,0.22))
 	context.make_clue("register_mira", "Recover the healer's fragment", Vector3(3,0,-7), "main_names_they_burned", "fragment_mira", Color(0.35,0.3,0.2))
+
+func _make_waystones(context: ZoneBuildContext, color: Color) -> void:
+	for pos in [Vector3(-4.8, 0, -11.0), Vector3(4.8, 0, 10.8)]:
+		context.make_prop_box("WildernessWaystone", pos + Vector3(0, 0.55, 0), Vector3(0.62, 1.10, 0.34), color.lightened(0.55))
+		context.make_visual_box("WildernessWaystoneRune", pos + Vector3(0, 0.72, -0.19), Vector3(0.06, 0.34, 0.025), color.lightened(0.78))
+
+func _make_memory_altar(context: ZoneBuildContext, pos: Vector3, glow: Color) -> void:
+	context.make_prop_box("MemoryAltarBase", pos + Vector3(0, 0.16, 0), Vector3(1.8, 0.32, 1.25), Color(0.16, 0.20, 0.16))
+	context.make_prop_box("MemoryAltarStone", pos + Vector3(0, 0.78, 0), Vector3(0.44, 1.22, 0.30), Color(0.25, 0.31, 0.28))
+	context.make_visual_box("MemoryAltarRune", pos + Vector3(0, 0.82, -0.17), Vector3(0.07, 0.46, 0.025), glow.lightened(0.42))
+	context.make_light("MemoryAltarLight", pos + Vector3(0, 1.65, 0), glow, 1.3)
+
+func _make_mill_shell(context: ZoneBuildContext) -> void:
+	context.make_prop_box("AshMillFoundation", Vector3(-5.2, 0.24, -5.4), Vector3(8.8, 0.48, 5.6), Color(0.22, 0.19, 0.15))
+	context.make_prop_box("AshMillBackWall", Vector3(-5.2, 1.45, -7.85), Vector3(8.1, 2.45, 0.42), Color(0.22, 0.19, 0.15))
+	context.make_prop_box("AshMillLeftWall", Vector3(-9.15, 1.45, -5.25), Vector3(0.42, 2.45, 5.2), Color(0.20, 0.17, 0.14))
+	context.make_prop_box("AshMillRightWall", Vector3(-1.25, 1.45, -5.25), Vector3(0.42, 2.45, 5.2), Color(0.20, 0.17, 0.14))
+	for x in [-8.6, -6.8, -4.9, -3.0, -1.8]:
+		context.make_visual_box("AshMillCharredBeam", Vector3(x, 2.75, -7.62), Vector3(0.28, 3.0, 0.28), Color(0.105, 0.067, 0.038))
+	context.make_visual_box("AshMillLintel", Vector3(-5.2, 2.48, -7.62), Vector3(7.2, 0.26, 0.30), Color(0.105, 0.067, 0.038))
+	context.make_prop_box("AshMillDoor", Vector3(-5.2, 0.85, -7.64), Vector3(1.20, 1.70, 0.12), Color(0.08, 0.045, 0.025))
+	context.make_light("AshMillForgeGlow", Vector3(-5.2, 1.5, -7.15), Color(0.72, 0.22, 0.08), 1.1)
+
+func _make_burned_home(context: ZoneBuildContext, origin: Vector3, suffix: String) -> void:
+	context.make_prop_box("%sHomeFoundation" % suffix, origin + Vector3(0, 0.20, 0), Vector3(6.2, 0.40, 4.8), Color(0.16, 0.105, 0.070))
+	context.make_prop_box("%sHomeBackWall" % suffix, origin + Vector3(0, 1.25, 1.95), Vector3(5.8, 2.1, 0.38), Color(0.19, 0.11, 0.065))
+	context.make_prop_box("%sHomeLeftWall" % suffix, origin + Vector3(-2.72, 1.25, 0), Vector3(0.38, 2.1, 4.0), Color(0.18, 0.10, 0.058))
+	context.make_prop_box("%sHomeRightWall" % suffix, origin + Vector3(2.72, 1.25, 0), Vector3(0.38, 2.1, 4.0), Color(0.18, 0.10, 0.058))
+	context.make_prop_box("%sHomeDoor" % suffix, origin + Vector3(0, 0.80, -1.98), Vector3(0.88, 1.42, 0.12), Color(0.075, 0.040, 0.022))
+	context.make_visual_box("%sHomeBurnedBeam" % suffix, origin + Vector3(0.0, 2.25, -1.92), Vector3(5.8, 0.26, 0.30), Color(0.065, 0.035, 0.018))
+	var roof_left = context.make_visual_box("%sHomeRoofTiles" % suffix, origin + Vector3(-1.48, 2.50, 0), Vector3(3.25, 0.20, 5.15), Color(0.13, 0.060, 0.036))
+	var roof_right = context.make_visual_box("%sHomeRoofTiles" % suffix, origin + Vector3(1.48, 2.50, 0), Vector3(3.25, 0.20, 5.15), Color(0.13, 0.060, 0.036))
+	roof_left.rotation_degrees.z = -15.0
+	roof_right.rotation_degrees.z = 15.0
+
+func _make_burned_yard(context: ZoneBuildContext, origin: Vector3) -> void:
+	for pos in [origin + Vector3(-3.2, 0, 0), origin + Vector3(0, 0, 0.6), origin + Vector3(3.0, 0, -0.3)]:
+		context.make_visual_box("BurnedYardAsh", pos + Vector3(0, 0.055, 0), Vector3(1.4, 0.016, 0.72), Color(0.055, 0.032, 0.024))
+	context.make_prop_box("BurnedYardFirepit", origin + Vector3(0, 0.22, -0.8), Vector3(1.1, 0.44, 0.72), Color(0.12, 0.075, 0.045))
 
 func _add_route_gates(context: ZoneBuildContext) -> void:
 	var links: Array = LINKS[context.zone_id]

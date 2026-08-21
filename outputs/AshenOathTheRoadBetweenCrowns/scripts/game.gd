@@ -3380,6 +3380,14 @@ func _make_loose_role(role_name: String, pos: Vector3, scale_value: Vector3, yaw
 			tree_batch_data[tree_batch_data.size() - 1] = item
 		return null
 	if key == "forest_rock":
+		if _is_river_excluded(pos, 0.75) or _is_first_route_clearance(pos, 0.55):
+			return null
+		var rock := _make_role_visual("forest_rock", "environment", scale_value)
+		if rock != null:
+			rock.position = river_safe_position(pos, 0.75)
+			rock.rotation_degrees.y = yaw
+			zone_root.add_child(rock)
+			return rock
 		_make_rubble(pos)
 		return null
 	if key == "crate":
@@ -4332,6 +4340,51 @@ func _make_road(pos: Vector3, size: Vector3, color: Color) -> void:
 	mesh.material_override = _road_material(current_zone_id == "greyfen", color)
 	zone_root.add_child(mesh)
 
+func _make_world_wheel(id: String, pos: Vector3, radius: float, depth: float, color: Color, rotation_degrees: Vector3 = Vector3.ZERO) -> void:
+	var wheel := MeshInstance3D.new()
+	wheel.name = id
+	var wheel_mesh := CylinderMesh.new()
+	wheel_mesh.top_radius = radius
+	wheel_mesh.bottom_radius = radius
+	wheel_mesh.height = depth
+	wheel_mesh.radial_segments = 16
+	wheel.mesh = wheel_mesh
+	wheel.position = pos
+	wheel.rotation_degrees = rotation_degrees
+	wheel.material_override = world_materials.get_material("timber", str(settings.settings.get("quality_preset", "balanced")), color, 0.0, true)
+	wheel.set_meta("world_prop_kind", "mill_wheel")
+	zone_root.add_child(wheel)
+	var hub := MeshInstance3D.new()
+	hub.name = "%sHub" % id
+	var hub_mesh := CylinderMesh.new()
+	hub_mesh.top_radius = radius * 0.17
+	hub_mesh.bottom_radius = radius * 0.17
+	hub_mesh.height = depth * 1.18
+	hub_mesh.radial_segments = 12
+	hub.mesh = hub_mesh
+	hub.position = pos
+	hub.rotation_degrees = rotation_degrees
+	hub.material_override = world_materials.get_material("metal", str(settings.settings.get("quality_preset", "balanced")), Color(0.20, 0.18, 0.14), 0.0, false)
+	zone_root.add_child(hub)
+
+func _make_water_patch(id: String, pos: Vector3, size: Vector3, color: Color) -> void:
+	var water := MeshInstance3D.new()
+	water.name = id
+	var water_mesh := BoxMesh.new()
+	water_mesh.size = size
+	water.mesh = water_mesh
+	water.position = pos
+	var material: StandardMaterial3D = world_materials.get_material("water", str(settings.settings.get("quality_preset", "balanced")), color, 1.0, true).duplicate() as StandardMaterial3D
+	material.roughness = 0.24
+	material.metallic = 0.08
+	material.emission_enabled = true
+	material.emission = color.lightened(0.12)
+	material.emission_energy_multiplier = 0.16
+	water.material_override = material
+	water.set_meta("world_prop_kind", "marsh_water")
+	water.set_meta("non_walkable_visual_only", true)
+	zone_root.add_child(water)
+
 func _make_fence(pos: Vector3, vertical: bool) -> void:
 	_make_prop_box("FencePost", pos + Vector3(0, 0.2, 0), Vector3(0.16, 0.8, 0.16), Color(0.15, 0.09, 0.055))
 	var rail_size = Vector3(2.5, 0.12, 0.12)
@@ -4814,7 +4867,8 @@ func _terrain_material(name: String, color: Color) -> StandardMaterial3D:
 
 func _road_material(paved: bool, color: Color) -> StandardMaterial3D:
 	if world_materials != null:
-		return world_materials.get_material("cobblestone" if paved else "wet_mud", str(settings.settings.get("quality_preset", "balanced")), Color(0.82, 0.80, 0.76) if paved else Color(0.60, 0.64, 0.58), 0.15 if paved else 0.78, true)
+		var road_tint := Color(0.82, 0.80, 0.76) if paved else Color(0.38, 0.31, 0.22).lerp(color, 0.15)
+		return world_materials.get_material("cobblestone" if paved else "wet_mud", str(settings.settings.get("quality_preset", "balanced")), road_tint, 0.15 if paved else 0.78, true)
 	var key = "road:paved" if paved else "road:mud"
 	if material_cache.has(key):
 		return material_cache[key]

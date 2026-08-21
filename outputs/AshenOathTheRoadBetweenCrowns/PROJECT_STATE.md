@@ -3,10 +3,10 @@
 ## Current Working Checkpoint - 2026-08-21
 
 The authoritative production baseline remains `bd24495` on the deployed
-branch. The current Soul Rebuild continuation is an uncommitted working tree
-on `codex/soul-rebuild`; it has not been exported, pushed, or deployed from
-this checkpoint. Historical release claims below are retained for audit but
-must not be read as validation of these current source edits.
+branch. The current Soul Rebuild continuation is on the pushed development
+branch `codex/soul-rebuild`; production `main`, `web/`, and Vercel remain
+unchanged. Historical release claims below are retained for audit but must not
+be read as validation of these current source edits.
 
 This checkpoint has targeted local passes for lifecycle cleanup, save/input
 foundations, character presentation, sword combat, Oathfire, AI, Greyfen and
@@ -23,6 +23,14 @@ source, and the river surface now shows animated current ribbons. The Oathfire
 and combat verifiers no longer trigger a deferred-autosave player-null error
 during shutdown. Characters, combat, and world targeted profiles pass after
 these changes.
+
+The current `WORLD-015` slice adds a bounded later-wild presentation pass:
+narrow damp-earth route surfaces, textured shoulders, path stones, grass,
+waystones, mapped rock silhouettes, a memory altar, framed mill and farmstead
+shells, a non-colliding marsh water material, and safer landmark dressing.
+Fresh 1280x720 captures exist for Deep Woods, Old Mill, Burned Farmstead, and
+Marsh Crossing. The later zones remain deliberately stylized and below the
+final visual bar; this is a development checkpoint, not production approval.
 
 Bog Wretch and Gravebound Knight now instantiate connected skinned Ghoul-family
 runtime bodies instead of the previous Slime/Skeleton primitives. Their

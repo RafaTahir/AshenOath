@@ -73,6 +73,21 @@ func make_play_area_bounds(width: float, depth: float, color: Color) -> void:
 func make_road(pos: Vector3, size: Vector3, color: Color) -> void:
 	_host._make_road(pos, size, color)
 
+func make_terrain_patch(id: String, pos: Vector3, size: Vector3, color: Color) -> void:
+	_host._make_terrain_patch(id, pos, size, color)
+
+func make_grass_tufts(points: Array, color: Color) -> void:
+	_host._make_grass_tufts(points, color)
+
+func make_path_stone(pos: Vector3, scale_value: float) -> void:
+	_host._make_path_stone(pos, scale_value)
+
+func make_world_wheel(id: String, pos: Vector3, radius: float, depth: float, color: Color, rotation_degrees: Vector3 = Vector3.ZERO) -> void:
+	_host._make_world_wheel(id, pos, radius, depth, color, rotation_degrees)
+
+func make_water_patch(id: String, pos: Vector3, size: Vector3, color: Color) -> void:
+	_host._make_water_patch(id, pos, size, color)
+
 func make_fog_sheet(pos: Vector3, size: Vector3, color: Color) -> void:
 	_host._make_fog_sheet(pos, size, color)
 
