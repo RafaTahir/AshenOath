@@ -32,6 +32,10 @@ func _initialize() -> void:
 	game.call("_load_zone", "wychwood", Vector3(0, 1, 8))
 	await _frames(5)
 	_verify_wychwood(game)
+	if game.has_method("prepare_resource_shutdown"):
+		game.call("prepare_resource_shutdown")
+	game.queue_free()
+	await _frames(3)
 	# Print the assertion result before SceneTree teardown. Godot's dummy
 	# renderer can report cleanup diagnostics while the verifier scene exits;
 	# those are classified after the PASS marker by the release runner.

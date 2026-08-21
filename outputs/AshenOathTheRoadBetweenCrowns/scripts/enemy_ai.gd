@@ -631,12 +631,14 @@ func _try_build_mapped_body() -> bool:
 	var mapped = null
 	var uses_real_body := false
 	var visual_source: String = enemy_id
-	if enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute", "bell_eater", "rootbound_colossus", "ashwing", "halvern_boss", "white_hart_avatar"]:
+	if enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute", "bog_wretch", "gravebound_knight", "bell_eater", "rootbound_colossus", "ashwing", "halvern_boss", "white_hart_avatar"]:
 		visual_source = {
 			"ghoulkin": "ghoulkin_creature",
 			"wychwood_stalker": "ghoul_stalker_real",
 			"wychwood_raider": "ghoulkin_creature",
 			"wychwood_brute": "ghoul_brute_real",
+			"bog_wretch": "bog_wretch_creature",
+			"gravebound_knight": "gravebound_knight_creature",
 			"bell_eater": "ghoul_brute_real",
 			"rootbound_colossus": "ghoul_brute_real",
 			"ashwing": "ashwing_creature",
@@ -709,7 +711,7 @@ func _try_build_mapped_body() -> bool:
 			})
 		else:
 			animation_driver.configure(mapped, {
-				"idle": "Idle2" if visual_source in ["ghoul_stalker_real", "ghoul_brute_real"] else "Idle",
+				"idle": "Idle2" if visual_source in ["ghoul_stalker_real", "ghoul_brute_real", "bog_wretch_creature", "gravebound_knight_creature"] else "Idle",
 				"walk":"Walk", "walk_back":"Walk_Back", "strafe":"Walk",
 				"run":"Run", "windup":"Attack", "attack":"Attack",
 				"hit":"Hit", "death":"Death"

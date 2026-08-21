@@ -48,6 +48,18 @@ release are complete. The deployed production baseline remains unchanged.
 - Added deterministic cleanup to the combat, Oathfire, water, world, animation,
   and character capture paths. A deferred autosave is now cancelled at the
   resource-shutdown boundary, and normal saves still reject invalid live actors.
+- Replaced the released Bog Wretch and Gravebound Knight Slime/Skeleton
+  fallbacks with complete connected Ghoul-family runtime bodies. Their role
+  manifests now carry registered CC0 pack IDs, explicit local fallbacks, swamp
+  or iron material identity, and valid `Idle2` animation aliases. The monster
+  verifier now instantiates both roles and checks their skeleton, animation
+  driver, visual root, and absence of the primitive weak-point fallback.
+- Regenerated the compact monster source GLBs with mesh-native eye sockets,
+  brow ridges, jaw and mouth cavity geometry, teeth, claws, rib/cloth details,
+  and role-specific swamp or iron material identity. Portrait capture now keeps
+  generated Ghoul-family fronts facing the camera instead of recording their
+  backs. These remain interim bodies pending dedicated horror-family and
+  Gravebound armor sources.
 
 ## Verification
 
@@ -58,6 +70,9 @@ The following targeted gates passed after the code changes:
 - `run_ticket_gate.ps1 -Profiles world -NoCache`
 - Direct `verify_oath_001.gd` after the deferred-autosave fix.
 - Direct `verify_engine_003.gd` after the save/lifecycle fix.
+- Direct `verify_mon_002.gd` after the connected-family mapping repair.
+- `verify_asset_acceptance.py` and `verify_content_integrity.py` after manifest
+  updates.
 - Graphical `capture_sky_003.gd` on Godot Compatibility / ANGLE at 1280x720.
 - Graphical `capture_water_002.gd`, `capture_world_001.gd`,
   `capture_character_real_portraits.gd`, and `capture_anim_003.gd` all produced
@@ -90,6 +105,9 @@ but remain a lifecycle cleanup item for the final release gate.
 - Anwen's staff, the river current, house roofs, boss dressing, and sword
   readability are improved in this checkpoint, but they are not substitutes for
   the approved final character, monster, building, and boss asset families.
+- Bog Wretch and Gravebound Knight now avoid primitive runtime geometry, but
+  they still use shared provisional Ghoul-family bodies until bespoke final
+  creature/armor sources pass the visual asset gate.
 - Later campaign architecture, river/bridge composition, and Hart Glade still
   need the locked visual standard and fresh full-route evidence.
 - The full campaign, ending, save-permutation, and browser route have not been

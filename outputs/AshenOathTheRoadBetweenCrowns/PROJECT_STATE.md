@@ -24,6 +24,13 @@ and combat verifiers no longer trigger a deferred-autosave player-null error
 during shutdown. Characters, combat, and world targeted profiles pass after
 these changes.
 
+Bog Wretch and Gravebound Knight now instantiate connected skinned Ghoul-family
+runtime bodies instead of the previous Slime/Skeleton primitives. Their
+monster verifier checks live skeletons, animation drivers, visual roots, and
+fallback absence; asset acceptance and content integrity pass with explicit
+pending-role fallbacks. Bespoke final creature and Vargan armor sources remain
+open rather than being falsely marked approved.
+
 The complete Soul Rebuild acceptance bar is not yet met. Ghoulkin and later
 boss mappings remain interim/low-poly, later-zone architecture and finale
 dressing remain below the locked visual bar, the full campaign has not been

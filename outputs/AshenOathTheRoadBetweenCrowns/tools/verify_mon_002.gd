@@ -28,6 +28,8 @@ func _run() -> void:
 			failures += 1
 			push_error("enemy presentation missing %s" % needle)
 	await _verify_white_hart_runtime(parsed if typeof(parsed) == TYPE_DICTIONARY else {})
+	await _verify_connected_family_runtime("bog_wretch", parsed if typeof(parsed) == TYPE_DICTIONARY else {})
+	await _verify_connected_family_runtime("gravebound_knight", parsed if typeof(parsed) == TYPE_DICTIONARY else {})
 	if failures == 0:
 		print("PASS MON-002: released monster and boss roles have data and presentation mappings")
 		quit(0)
@@ -59,6 +61,27 @@ func _verify_white_hart_runtime(enemy_definitions: Dictionary) -> void:
 	check(_find_named(hart, "SpectralAntlerMain") != null, "White Hart crown has no antler geometry")
 	check(_find_named(hart, "HartBody") == null, "White Hart still uses segmented primitive fallback")
 	hart.queue_free()
+	target.queue_free()
+
+func _verify_connected_family_runtime(role_id: String, enemy_definitions: Dictionary) -> void:
+	var definition: Dictionary = enemy_definitions.get(role_id, {})
+	if definition.is_empty():
+		return
+	var target := Node3D.new()
+	target.name = "%sVerifierTarget" % role_id
+	root.add_child(target)
+	var actor := EnemyAI.new()
+	actor.name = "%sVerifierActor" % role_id
+	root.add_child(actor)
+	actor.setup(role_id, definition, target)
+	await process_frame
+	check(_find_type(actor, "Skeleton3D") != null, "%s runtime has no Skeleton3D" % role_id)
+	check(_find_type(actor, "AnimationPlayer") != null, "%s runtime has no AnimationPlayer" % role_id)
+	var driver := actor.find_child("CharacterAnimationDriver", true, false)
+	check(driver != null and driver.has_method("is_valid") and driver.is_valid(), "%s runtime has no valid animation driver" % role_id)
+	check(actor.find_child("visual_root", true, false) != null, "%s runtime has no visual root" % role_id)
+	check(actor.find_child("EnemyWeakPointMarker", true, false) == null, "%s fell back to primitive weak-point body" % role_id)
+	actor.queue_free()
 	target.queue_free()
 
 func _find_type(node: Node, type_name: String) -> Node:

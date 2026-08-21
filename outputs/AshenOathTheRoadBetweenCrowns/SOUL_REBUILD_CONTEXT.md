@@ -21,6 +21,12 @@ shutdown-safe capture/verifier cleanup. The deferred autosave race that could
 read a released player during Oathfire teardown is fixed. Character, combat,
 world, Oathfire, and lifecycle targeted gates pass on this source state.
 
+The released Bog Wretch and Gravebound Knight mappings no longer fall through
+to primitive Slime/Skeleton bodies. Both now use connected skinned Ghoul-family
+runtime bodies with role-specific swamp or iron material profiles and explicit
+pending fallbacks in the asset manifest. This improves runtime coherence while
+leaving final bespoke creature and armor approval open.
+
 The full 62-ticket Soul Rebuild acceptance is still open: interim monster and
 boss assets, later-zone visual reconstruction, full real-input campaign proof,
 fresh export/packed startup, and post-edit live PCK comparison remain. Do not

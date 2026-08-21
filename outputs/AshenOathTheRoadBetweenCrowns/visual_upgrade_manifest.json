@@ -162,10 +162,18 @@
         "notes": "Interim dragon silhouette for Ashwing. It replaces the incorrect OrcSkull mapping while a skinned flying-drake source is prepared; flight presentation remains controller-driven until that source is available."
       },
       "bog_wretch_creature": {
-        "status": "current_asset_available",
-        "path": "",
-        "fallback_role": "bog_wretch",
-        "notes": "Uses existing mapped creature until a higher-fidelity bog monster is supplied."
+        "status": "mon_002_connected_family_runtime",
+        "path": "res://assets_external/characters_real/GhoulStalker_Real.glb",
+        "source": "Ashen Oath derived CC0 production mesh",
+        "license": "CC0 1.0",
+        "notes": "Connected long-limbed cursed-human body with swamp material profile; keeps the Bog Wretch from falling back to a primitive Slime mesh."
+      },
+      "gravebound_knight_creature": {
+        "status": "mon_002_connected_family_runtime",
+        "path": "res://assets_external/characters_real/GhoulBrute_Real.glb",
+        "source": "Ashen Oath derived CC0 production mesh",
+        "license": "CC0 1.0",
+        "notes": "Connected broad cursed-human body with iron/ash material profile; replaces the incomplete Skeleton OBJ until the authored Vargan armor outfit is ready."
       }
     }
   }

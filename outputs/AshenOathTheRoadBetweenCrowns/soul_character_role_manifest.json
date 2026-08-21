@@ -97,6 +97,34 @@
       "approved": false,
       "current_fallback": "res://assets_external/characters_real/GhoulGaunt_Real.glb"
     },
+    "bog_wretch": {
+      "family": "monster",
+      "source_pack": "quaternius_ultimate_monsters",
+      "target_height": 1.60,
+      "triangle_budget": 18000,
+      "texture_budget": 1024,
+      "required_clips": ["Idle2", "Walk", "Attack", "Hit", "Death"],
+      "equipment_sockets": [],
+      "status": "runtime_accepted_connected_family",
+      "approved": false,
+      "path": "res://assets_external/characters_real/GhoulStalker_Real.glb",
+      "current_fallback": "res://assets_external/characters_real/GhoulStalker_Real.glb",
+      "notes": "Runtime-complete connected cursed-human family body with swamp material profile; final bespoke Bog Wretch asset remains open."
+    },
+    "gravebound_knight": {
+      "family": "monster",
+      "source_pack": "quaternius_ultimate_monsters",
+      "target_height": 1.88,
+      "triangle_budget": 20000,
+      "texture_budget": 1024,
+      "required_clips": ["Idle2", "Walk", "Attack", "Hit", "Death"],
+      "equipment_sockets": [],
+      "status": "runtime_accepted_connected_family",
+      "approved": false,
+      "path": "res://assets_external/characters_real/GhoulBrute_Real.glb",
+      "current_fallback": "res://assets_external/characters_real/GhoulBrute_Real.glb",
+      "notes": "Runtime-complete connected broad cursed-human family body with iron/ash material profile; final Vargan armor outfit remains open."
+    },
     "white_hart": {
       "family": "animal",
       "source_pack": "quaternius_ultimate_animated_animals",

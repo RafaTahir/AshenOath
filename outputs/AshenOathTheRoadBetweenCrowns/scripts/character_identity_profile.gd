@@ -44,7 +44,11 @@ const HUMAN_ROLES := [
 	"villager_worker_human", "villager_hooded_human", "castle_guard_human", "road_ranger_human",
 	"generic_villager_01", "generic_villager_02", "castle_guard", "road_ranger", "lord_edric", "edric"
 ]
-const MONSTER_ROLES := ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute", "ghoulkin_skeleton", "bog_wretch", "gravebound_knight"]
+const MONSTER_ROLES := [
+	"ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute",
+	"ghoulkin_skeleton", "bog_wretch", "gravebound_knight", "bell_eater",
+	"rootbound_colossus", "ashwing", "halvern_boss", "white_hart_avatar"
+]
 
 static func apply(root: Node, role_id: String) -> Dictionary:
 	var role := role_id.to_lower()
@@ -132,10 +136,14 @@ static func _occupation_profile(role: String, primary: Color, secondary: Color, 
 	}
 
 static func _color_for(token: String, role: String, profile: Dictionary) -> Color:
-	if role in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute", "ghoulkin_skeleton"]:
+	if role in MONSTER_ROLES:
 		var monster_skin: Color = {
 			"wychwood_stalker": Color("667462"), "wychwood_raider": Color("716957"),
-			"wychwood_brute": Color("5b6255"), "ghoulkin": Color("7b765f")
+			"wychwood_brute": Color("5b6255"), "ghoulkin": Color("7b765f"),
+			"bog_wretch": Color("3f6650"), "gravebound_knight": Color("4e5360"),
+			"bell_eater": Color("5d4840"), "rootbound_colossus": Color("405b43"),
+			"ashwing": Color("614a3d"), "halvern_boss": Color("434957"),
+			"white_hart_avatar": Color("c0c7b3")
 		}.get(role, Color("626052"))
 		if token.contains("eye"):
 			return Color("d98a37") if role != "wychwood_brute" else Color("b94d32")

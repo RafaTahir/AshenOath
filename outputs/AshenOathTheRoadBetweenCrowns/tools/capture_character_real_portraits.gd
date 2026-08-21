@@ -15,6 +15,8 @@ const ROLES := {
 	"ghoul_gaunt":"ghoulkin_creature",
 	"ghoul_stalker":"ghoul_stalker_real",
 	"ghoul_brute":"ghoul_brute_real",
+	"bog_wretch":"bog_wretch_creature",
+	"gravebound_knight":"gravebound_knight_creature",
 	"ashwing":"ashwing_creature"
 }
 
@@ -58,9 +60,11 @@ func _initialize() -> void:
 		character.name = "CHARACTER_REAL_%s" % role
 		stage.add_child(character)
 		await process_frame
-		if category == "characters":
-			# Runtime third-person characters face gameplay -Z; the portrait camera
-			# looks from +Z, so rotate the composed actor for a front-facing proof.
+		if _portrait_needs_yaw_flip(visual_role):
+			# Quaternius humanoids and the dragon source expose their authored
+			# front on the opposite horizontal axis from the portrait camera. The
+			# generated Ghoul-family GLBs are already authored for this camera and
+			# must not be flipped or the evidence records their backs.
 			character.rotate_y(PI)
 		if role == "ashwing":
 			camera.position = Vector3(0.0, 1.80, 8.0)
@@ -106,8 +110,19 @@ func _identity_role(capture_role: String) -> String:
 		"road_ranger": "road_ranger",
 		"ghoul_gaunt": "ghoulkin",
 		"ghoul_stalker": "wychwood_stalker",
-		"ghoul_brute": "wychwood_brute"
+		"ghoul_brute": "wychwood_brute",
+		"bog_wretch": "bog_wretch",
+		"gravebound_knight": "gravebound_knight"
 	}.get(capture_role, capture_role)
+
+func _portrait_needs_yaw_flip(visual_role: String) -> bool:
+	return visual_role not in [
+		"ghoulkin_creature",
+		"ghoul_stalker_real",
+		"ghoul_brute_real",
+		"bog_wretch_creature",
+		"gravebound_knight_creature"
+	]
 
 func _play_idle(character: Node) -> void:
 	var player := character.find_child("AnimationPlayer", true, false) as AnimationPlayer

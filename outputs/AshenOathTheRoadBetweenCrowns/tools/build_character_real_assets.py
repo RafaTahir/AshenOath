@@ -22,7 +22,7 @@ def clear():
         if hasattr(block, "remove"):
             pass
 
-def armature():
+def armature(monster=False):
     data=bpy.data.armatures.new("AshenHumanoidSkeleton"); obj=bpy.data.objects.new("AshenHumanoidSkeleton",data)
     bpy.context.collection.objects.link(obj); bpy.context.view_layer.objects.active=obj; obj.select_set(True)
     bpy.ops.object.mode_set(mode='EDIT')
@@ -30,8 +30,8 @@ def armature():
       "Root":((0,0,0),(0,0,.12),None),"Hips":((0,0,.86),(0,0,1.02),"Root"),
       "Spine":((0,0,1.0),(0,0,1.28),"Hips"),"Chest":((0,0,1.27),(0,0,1.48),"Spine"),
       "Neck":((0,0,1.47),(0,0,1.58),"Chest"),"Head":((0,0,1.57),(0,0,1.82),"Neck"),
-      "UpperArm.L":((.22,0,1.43),(.48,0,1.37),"Chest"),"Forearm.L":((.48,0,1.37),(.70,0,1.25),"UpperArm.L"),"Hand.L":((.70,0,1.25),(.80,0,1.20),"Forearm.L"),
-      "UpperArm.R":((-.22,0,1.43),(-.48,0,1.37),"Chest"),"Forearm.R":((-.48,0,1.37),(-.70,0,1.25),"UpperArm.R"),"Hand.R":((-.70,0,1.25),(-.80,0,1.20),"Forearm.R"),
+      "UpperArm.L":((.22,0,1.43),(.39,-.005,1.27),"Chest"),"Forearm.L":((.39,-.005,1.27),(.54,-.045,1.06),"UpperArm.L"),"Hand.L":((.54,-.045,1.06),(.60,-.10,.98),"Forearm.L"),
+      "UpperArm.R":((-.22,0,1.43),(-.39,.005,1.27),"Chest"),"Forearm.R":((-.39,.005,1.27),(-.54,.045,1.06),"UpperArm.R"),"Hand.R":((-.54,.045,1.06),(-.60,.10,.98),"Forearm.R"),
       "Thigh.L":((.14,0,.91),(.15,0,.52),"Hips"),"Shin.L":((.15,0,.52),(.15,0,.14),"Thigh.L"),"Foot.L":((.15,0,.14),(.15,-.18,.08),"Shin.L"),
       "Thigh.R":((-.14,0,.91),(-.15,0,.52),"Hips"),"Shin.R":((-.15,0,.52),(-.15,0,.14),"Thigh.R"),"Foot.R":((-.15,0,.14),(-.15,-.18,.08),"Shin.R"),
     }
@@ -79,10 +79,12 @@ def consolidate_skinned_meshes(rig):
         polygon.material_index=unique.index(material) if material in unique else 0
 
 def build(role,cfg):
-    clear(); rig=armature()
+    clear(); rig=armature(cfg.get("monster", False))
     skin=mat("Skin",cfg["skin"],.68); hair=mat("Hair",cfg["hair"],.84)
     cloth=mat("Cloth",cfg["cloth"],.86); accent=mat("Leather",cfg["accent"],.78)
-    eye=mat("Eyes",(0.035,0.09,0.10,1) if not cfg.get("monster") else (0.46,0.10,0.035,1),.3)
+    eye=mat("Eyes",(0.035,0.09,0.10,1) if not cfg.get("monster") else (0.90,0.16,0.025,1),.3)
+    socket=mat("EyeSockets",(0.025,0.018,0.015,1),.92)
+    mouth=mat("MouthCavity",(0.012,0.006,0.005,1),.96)
     white=mat("EyeWhite",(0.72,0.70,0.64,1),.55); lip=mat("Lips",(0.30,0.09,0.075,1),.72)
     metal=mat("Metal",(0.20,0.22,0.24,1),.32,.65)
     brute=1.16 if cfg.get("brute") else 1.0; lean=.80 if cfg.get("lean") else 1.0
@@ -91,19 +93,29 @@ def build(role,cfg):
     primitive("Waist",(0,0,.92),(.22*brute,.15,.14),accent,"Hips",rig)
     primitive("Neck",(0,0,1.52),(.074*brute,.068,.105),skin,"Neck",rig,kind="cylinder",verts=12)
     primitive("ShoulderLine",(0,0,1.43),(.36*brute,.16,.105),cloth,"Chest",rig)
-    primitive("Head",(0,-.005,1.68),(.145*brute,.125,.18),skin,"Head",rig,verts=16)
+    head_depth=.16 if cfg.get("monster") else .125
+    head_height=.22 if cfg.get("monster") else .18
+    primitive("Head",(0,-.005,1.68),(.145*brute,head_depth,head_height),skin,"Head",rig,verts=16)
     primitive("Nose",(0,-.132,1.68),(.032,.045,.060),skin,"Head",rig,verts=16)
     primitive("EarL",(.145*brute,0,1.68),(.025,.018,.048),skin,"Head",rig,verts=12)
     primitive("EarR",(-.145*brute,0,1.68),(.025,.018,.048),skin,"Head",rig,verts=12)
     for x in (-.054,.054):
-        primitive("Eye", (x,-.119,1.715),(.029,.014,.021),white,"Head",rig,verts=16)
-        primitive("Iris", (x,-.133,1.715),(.013,.008,.013),eye,"Head",rig,verts=12)
+        if cfg.get("monster"):
+            primitive("EyeSocket", (x,-.142,1.725),(.050,.017,.036),socket,"Head",rig,verts=16)
+            primitive("Eye", (x,-.158,1.725),(.026,.013,.022),eye,"Head",rig,verts=16)
+            primitive("Iris", (x,-.171,1.725),(.011,.007,.012),mouth,"Head",rig,verts=12)
+            primitive("BrowRidge", (x,-.155,1.775),(.058,.018,.016),skin,"Head",rig,kind="cube")
+        else:
+            primitive("Eye", (x,-.119,1.715),(.029,.014,.021),white,"Head",rig,verts=16)
+            primitive("Iris", (x,-.133,1.715),(.013,.008,.013),eye,"Head",rig,verts=12)
     primitive("UpperLip",(0,-.143,1.622),(.058,.010,.011),lip,"Head",rig,kind="cube")
     primitive("LowerLip",(0,-.145,1.606),(.052,.011,.010),lip,"Head",rig,kind="cube")
     if cfg.get("monster"):
-        primitive("Jaw",(0,-.025,1.59),(.13*brute,.12,.12),skin,"Head",rig,verts=16)
-        for x in (-.045,-.015,.015,.045):
-            primitive("Tooth",(x,-.154,1.60),(.009,.008,.025),white,"Head",rig,kind="cube")
+        primitive("Jaw",(0,-.065,1.59),(.14*brute,.145,.13),skin,"Head",rig,verts=16)
+        primitive("MouthCavity",(0,-.177,1.615),(.098*brute,.014,.052),mouth,"Head",rig,verts=16)
+        for x in (-.050,-.017,.017,.050):
+            primitive("Tooth",(x,-.194,1.615),(.010,.009,.032 if abs(x) < .03 else .024),white,"Head",rig,kind="cube")
+        primitive("BrowScar",(.055,-.163,1.765),(.012,.008,.046),accent,"Head",rig,kind="cube")
     else:
         primitive("Chin",(0,-.112,1.585),(.083,.045,.055),skin,"Head",rig,verts=16)
         primitive("HairCap",(0,.018,1.76),(.153*brute,.132,.105),hair,"Head",rig,verts=20)
@@ -111,15 +123,26 @@ def build(role,cfg):
         primitive("BrowL",(.052,-.137,1.755),(.045,.009,.008),hair,"Head",rig,kind="cube")
         primitive("BrowR",(-.052,-.137,1.755),(.045,.009,.008),hair,"Head",rig,kind="cube")
     for side,s in (("L",1),("R",-1)):
-        primitive("UpperArm"+side,(s*.385,0,1.39),(.205*brute,.105,.11),cloth,"UpperArm."+side,rig)
-        primitive("Elbow"+side,(s*.515,-.008,1.335),(.105*brute,.092,.098),skin if cfg.get("monster") else cloth,"Forearm."+side,rig)
-        primitive("Forearm"+side,(s*.595,-.018,1.29),(.175*brute,.082,.085),skin if cfg.get("monster") else accent,"Forearm."+side,rig)
-        primitive("Hand"+side,(s*.755,-.045,1.22),(.105*brute,.062,.075),skin,"Hand."+side,rig)
+        if cfg.get("monster"):
+            primitive("UpperArm"+side,(s*.315,0,1.35),(.165*brute,.11,.12),cloth,"UpperArm."+side,rig)
+            primitive("Elbow"+side,(s*.43,-.018,1.23),(.11*brute,.095,.11),skin,"Forearm."+side,rig)
+            primitive("Forearm"+side,(s*.515,-.045,1.10),(.17*brute,.085,.09),skin,"Forearm."+side,rig)
+            primitive("Hand"+side,(s*.59,-.08,.99),(.115*brute,.068,.09),skin,"Hand."+side,rig)
+            primitive("Claw"+side,(s*.62,-.14,.94),(.065*brute,.045,.10),accent,"Hand."+side,rig,kind="cylinder",verts=10)
+        else:
+            primitive("UpperArm"+side,(s*.385,0,1.39),(.205*brute,.105,.11),cloth,"UpperArm."+side,rig)
+            primitive("Elbow"+side,(s*.515,-.008,1.335),(.105*brute,.092,.098),skin if cfg.get("monster") else cloth,"Forearm."+side,rig)
+            primitive("Forearm"+side,(s*.595,-.018,1.29),(.175*brute,.082,.085),skin if cfg.get("monster") else accent,"Forearm."+side,rig)
+            primitive("Hand"+side,(s*.755,-.045,1.22),(.105*brute,.062,.075),skin,"Hand."+side,rig)
         primitive("Thigh"+side,(s*.14,0,.70),(.115*brute,.12,.25),cloth,"Thigh."+side,rig)
         primitive("Knee"+side,(s*.15,-.01,.49),(.105*brute,.11,.12),cloth,"Shin."+side,rig)
         primitive("Shin"+side,(s*.15,0,.30),(.092*lean,.10,.23),accent,"Shin."+side,rig)
         primitive("Foot"+side,(s*.15,-.10,.10),(.095*brute,.18,.075),accent,"Foot."+side,rig)
     primitive("Belt",(0,-.01,.94),(.27*brute,.18,.045),accent,"Hips",rig,kind="cube")
+    if cfg.get("monster"):
+        primitive("RibPlateL",(-.11,-.168,1.27),(.075,.026,.16),accent,"Chest",rig,kind="cube")
+        primitive("RibPlateR",(.11,-.168,1.27),(.075,.026,.16),accent,"Chest",rig,kind="cube")
+        primitive("TornCloth",(0,-.18,.78),(.19,.025,.17),cloth,"Hips",rig,kind="cube")
     if cfg.get("armor"):
         primitive("Breastplate",(0,-.14,1.29),(.30,.045,.29),metal,"Chest",rig,kind="cube")
         primitive("ShoulderL",(.29,0,1.43),(.13,.17,.08),metal,"UpperArm.L",rig)
