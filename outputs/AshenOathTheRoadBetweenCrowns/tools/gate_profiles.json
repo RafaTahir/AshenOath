@@ -1071,6 +1071,25 @@
         "verify_qa_012"
       ]
     },
+    "qa012": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/combat_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/hud.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/input_router.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_spatial_service.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/castle_vargan_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_012.gd"
+      ],
+      "gates": [
+        "verify_qa_012",
+        "verify_runtime_regressions",
+        "verify_save_003",
+        "verify_gate_transitions",
+        "verify_navigation_001",
+        "verify_river_swimming"
+      ]
+    },
     "production": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/PROD_002_ISSUE_REGISTRY.json",

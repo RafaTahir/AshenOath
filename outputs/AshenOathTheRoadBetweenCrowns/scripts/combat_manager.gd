@@ -36,6 +36,29 @@ func resolve_player_blade_contact(player: Node3D, enemies: Array, contact: Dicti
 				closest = candidate
 		if contact_distance <= (0.78 if heavy else 0.66) and _has_contact_line(player, enemy, closest):
 			candidates.append({"enemy": enemy, "point": closest, "score": contact_distance + player.global_position.distance_to(target) * 0.08})
+	# Imported/normalized weapon rigs can momentarily put the visual blade a few
+	# centimetres off the authored hand socket while an attack is starting. Keep
+	# the measured sweep authoritative, but provide a bounded forward fallback so
+	# a clearly front-facing enemy cannot receive a cosmetic swing with no hit.
+	if candidates.is_empty():
+		var forward := -player.global_transform.basis.z
+		forward.y = 0.0
+		forward = forward.normalized()
+		for enemy in enemies:
+			if enemy == null or enemy.dead or (enemy.has_method("is_encounter_active") and not enemy.is_encounter_active()):
+				continue
+			var target: Vector3 = enemy.global_position + Vector3(0, 0.9, 0)
+			var offset: Vector3 = target - (player.global_position + Vector3(0, 0.9, 0))
+			offset.y = 0.0
+			var distance: float = offset.length()
+			if distance <= 0.01 or distance > reach + 0.85:
+				continue
+			var facing := forward.dot(offset.normalized())
+			if facing < 0.15:
+				continue
+			var fallback_point: Vector3 = enemy.global_position + Vector3(0, 0.9, 0)
+			if _has_contact_line(player, enemy, fallback_point):
+				candidates.append({"enemy": enemy, "point": fallback_point, "score": distance * 0.08 + (1.0 - facing) * 0.2})
 	candidates.sort_custom(func(a, b): return float(a.score) < float(b.score))
 	if candidates.is_empty():
 		message.emit("Your blade cuts only mist.")

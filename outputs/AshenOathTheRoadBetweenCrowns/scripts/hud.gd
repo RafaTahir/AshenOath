@@ -549,6 +549,8 @@ func _render_dialogue_page() -> void:
 	if dialogue_page_index < dialogue_pages.size()-1:
 		var advance := Button.new()
 		advance.text = "Continue"
+		advance.process_mode = Node.PROCESS_MODE_ALWAYS
+		advance.focus_mode = Control.FOCUS_ALL
 		_style_button(advance)
 		advance.pressed.connect(func():
 			dialogue_page_index += 1
@@ -561,6 +563,8 @@ func _render_dialogue_page() -> void:
 	for action in actions:
 		var button = Button.new()
 		button.text = action.get("label", "Continue")
+		button.process_mode = Node.PROCESS_MODE_ALWAYS
+		button.focus_mode = Control.FOCUS_ALL
 		_style_button(button)
 		button.pressed.connect(func(action_data = action):
 			dialogue_closed.emit()
@@ -859,6 +863,7 @@ func _build_menu_layer() -> void:
 func _build_dialogue() -> void:
 	dialogue_layer = PanelContainer.new()
 	dialogue_layer.name = "DialogueLowerThird"
+	dialogue_layer.process_mode = Node.PROCESS_MODE_ALWAYS
 	dialogue_layer.position = Vector2(220, 474)
 	dialogue_layer.size = Vector2(840, 212)
 	dialogue_layer.visible = false
@@ -892,6 +897,7 @@ func _build_dialogue() -> void:
 	box.add_child(dialogue_text)
 	dialogue_actions = VBoxContainer.new()
 	dialogue_actions.name = "DialogueChoices"
+	dialogue_actions.process_mode = Node.PROCESS_MODE_ALWAYS
 	dialogue_actions.add_theme_constant_override("separation", 5)
 	box.add_child(dialogue_actions)
 
@@ -1185,6 +1191,25 @@ func _focus_first_enabled(container: Node) -> void:
 			child.grab_focus()
 			return
 
+func _input(event: InputEvent) -> void:
+	if dialogue_layer == null or not dialogue_layer.visible:
+		return
+	var accepted := event.is_action_pressed("ui_accept")
+	if event is InputEventKey:
+		var key_event := event as InputEventKey
+		accepted = key_event.pressed and not key_event.echo and key_event.keycode in [KEY_ENTER, KEY_KP_ENTER, KEY_SPACE]
+	if not accepted:
+		return
+	var focused := get_viewport().gui_get_focus_owner()
+	if not (focused is Button) or (focused as Button).disabled:
+		var fallback_button := _focused_dialogue_button()
+		if fallback_button != null:
+			fallback_button.grab_focus()
+		focused = get_viewport().gui_get_focus_owner()
+	if focused is Button and not (focused as Button).disabled:
+		(focused as Button).pressed.emit()
+		get_viewport().set_input_as_handled()
+
 func _unhandled_input(event: InputEvent) -> void:
 	if active_menu == "remap" and remap_waiting:
 		if event.is_action_pressed("ui_cancel"):
@@ -1213,6 +1238,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			show_remap_menu(remap_back_target, remap_page)
 			get_viewport().set_input_as_handled()
 			return
+	if dialogue_layer != null and dialogue_layer.visible and event.is_action_pressed("ui_accept"):
+		return
 	if not event.is_action_pressed("ui_cancel"):
 		return
 	if dialogue_layer != null and dialogue_layer.visible:
@@ -1269,6 +1296,8 @@ func _return_from_controls() -> void:
 func _add_dialogue_close() -> void:
 	var close = Button.new()
 	close.text = "Close"
+	close.process_mode = Node.PROCESS_MODE_ALWAYS
+	close.focus_mode = Control.FOCUS_ALL
 	_style_button(close)
 	close.pressed.connect(func():
 		dialogue_closed.emit()
@@ -1276,6 +1305,14 @@ func _add_dialogue_close() -> void:
 		hide_menus()
 	)
 	dialogue_actions.add_child(close)
+
+func _focused_dialogue_button() -> Button:
+	if dialogue_actions == null:
+		return null
+	for child in dialogue_actions.get_children():
+		if child is Button and not (child as Button).disabled:
+			return child as Button
+	return null
 
 func _apply_theme() -> void:
 	for bar in [health_bar, stamina_bar, enemy_bar]:

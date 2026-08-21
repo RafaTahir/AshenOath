@@ -91,7 +91,10 @@ func _build_courtyard(context: ZoneBuildContext) -> void:
 		context.make_fog_sheet(Vector3(0, 0.7, -3), Vector3(28, 1, 11), Color(0.10, 0.11, 0.12, 0.12))
 	context.make_clue("vargan_gate_notice", "Read the gatehouse closure notice", Vector3(3.8, 0, 10), "main_blood_under_stone", "evidence_gate_notice", Color(0.36, 0.31, 0.23))
 	context.make_clue("vargan_iron_binding", "Inspect the blackened binding wire", Vector3(-4, 0, -6), "main_blood_under_stone", "evidence_iron_binding", Color(0.22, 0.20, 0.18))
-	context.make_zone_gate("Leave through the outer gate", Vector3(-7, 0, 16), "vargan_approach", Vector3(0, 1, -11))
+	# The gate sits outside the gatehouse's left wing. Keeping the threshold
+	# clear gives the return route a straight, player-sized approach instead of
+	# asking the player to walk through the solid wing collision.
+	context.make_zone_gate("Leave through the outer gate", Vector3(-10.5, 0, 16), "vargan_approach", Vector3(0, 1, -11))
 	context.make_zone_gate("Enter the record hall", Vector3(0, 0, -14), "record_hall", Vector3(0, 1, 12))
 
 func _build_record_hall(context: ZoneBuildContext) -> void:

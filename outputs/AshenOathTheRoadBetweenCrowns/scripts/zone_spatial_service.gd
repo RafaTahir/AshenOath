@@ -290,6 +290,9 @@ func _register_zone_defaults() -> void:
 		register_gate("wychwood_gate", Vector3(0, 0, -15.0), Vector3(0, 0.9, -12.5), Vector2(3.2, 2.2))
 		register_gate("castle_gate", Vector3(17.0, 0, 0.0), Vector3(15.5, 0.9, 0.0), Vector2(4.3, 2.35))
 		register_gate("long_road_gate", Vector3(-18.0, 0, -10.0), Vector3(-16.0, 0.9, -9.0), Vector2(3.4, 3.0))
+		# The gate is approached from the central road, so reserve the complete
+		# westward lane before any low berms, fences, trees, or props are dressed.
+		reserve_corridor("long_road_approach", Vector3(-10.0, 0, -10.0), Vector2(8.5, 3.6))
 		reserve_corridor("spawn", Vector3(0, 0, 13.0), Vector2(3.2, 2.4))
 		add_safe_spawn(Vector3(0, 0.9, 12.5))
 		# Keep recovery on authored road approaches rather than the dense river-side
@@ -311,7 +314,7 @@ func _register_zone_defaults() -> void:
 			register_gate("castle_approach_return", Vector3(-7, 0, 16), Vector3(0, 0.9, -12), Vector2(3.6, 2.5))
 			register_gate("castle_approach_forward", Vector3(0, 0, -12.2), Vector3(0, 0.9, 12), Vector2(3.8, 2.8))
 		elif zone_id == "vargan_court":
-			register_gate("castle_court_return", Vector3(-7, 0, 16), Vector3(0, 0.9, -11), Vector2(3.6, 2.5))
+			register_gate("castle_court_return", Vector3(-10.5, 0, 16), Vector3(0, 0.9, -11), Vector2(3.6, 2.5))
 			register_gate("castle_court_forward", Vector3(0, 0, -14), Vector3(0, 0.9, 12), Vector2(4.0, 2.8))
 		elif zone_id == "record_hall":
 			register_gate("record_hall_return", Vector3(-6, 0, 13), Vector3(0, 0.9, -11), Vector2(3.6, 2.5))

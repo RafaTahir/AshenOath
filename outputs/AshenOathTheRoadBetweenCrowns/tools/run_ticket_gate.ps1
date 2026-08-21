@@ -253,7 +253,7 @@ foreach ($gate in $gates) {
         ) $gateInputs $cache
     } elseif ($gate -eq "runtime_smoke") {
         Invoke-Compact $gate $Godot @("--headless", "--path", $Project, "--quit-after", "3") $gateInputs $cache
-    } elseif ($gate -in @("verify_perf_001", "verify_perf_002", "verify_perf_003", "verify_opening_qa_001")) {
+	} elseif ($gate -in @("verify_perf_001", "verify_perf_002", "verify_perf_003", "verify_opening_qa_001", "verify_qa_012")) {
         $script = Join-Path $PSScriptRoot "$gate.gd"
         Invoke-Compact $gate $Godot @(
             "--path", $Project,

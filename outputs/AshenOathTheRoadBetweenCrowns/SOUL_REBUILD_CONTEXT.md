@@ -438,3 +438,25 @@ verifier teardown and remain ENGINE-004 lifecycle debt. They are reported
 explicitly, not suppressed. This checkpoint remains development-only: final
 visual asset approval, full real-input campaign coverage, Web export, and
 production deployment remain open.
+
+### QA-012 real-input route checkpoint
+
+QA-012 is now a truthful graphical candidate gate rather than a direct state
+or zone-loader smoke test. On a fresh isolated profile it moved through the
+opening, interacted with Anwen and three Wychwood clues, defeated the staged
+five-enemy pack through mapped attack input, reported to Anwen, and traversed
+all released wilderness and Castle gates in both directions before returning
+to Greyfen. Story-gated Undercroft, Assembly, and Hart Glade thresholds were
+observed locked without mutating story state.
+
+The route found and fixed a Greyfen `LowBerm` collider in the west long-road
+approach and a Castle Courtyard outer gate positioned inside the gatehouse
+left-wing collision. The targeted `qa012` profile passes content integrity,
+runtime smoke, QA-012, runtime regressions, save migration, gate transitions,
+navigation, and river safety. `QA-012_RESULT.md` contains the exact route and
+running command.
+
+Compatibility renderer/RID/ObjectDB shutdown messages remain classified
+ENGINE-004 debt after the verifier pass. QA-012 is a development checkpoint;
+the final visual gallery, full release runner, Web export, `main` push, and
+Vercel deployment remain RELEASE-003 work.

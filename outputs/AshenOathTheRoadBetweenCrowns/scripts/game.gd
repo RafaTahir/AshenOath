@@ -2914,6 +2914,8 @@ func _make_path_stone(pos: Vector3, scale_value: float) -> void:
 func _make_low_berm(pos: Vector3, size: Vector3, color: Color) -> void:
 	if _is_river_excluded(pos,size.z*0.5):
 		return
+	if spatial_service != null and spatial_service.is_reserved(pos, maxf(size.x, size.z) * 0.5 + 0.35):
+		return
 	var body = StaticBody3D.new()
 	body.name = "LowBerm"
 	body.position = pos + Vector3(0, size.y * 0.5, 0)

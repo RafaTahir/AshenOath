@@ -1314,3 +1314,29 @@ The continuation source is now verified locally for the release candidate. The r
 - This is a development checkpoint on codex/soul-rebuild. Production main,
   tracked web/, and Vercel remain unchanged. Final visual assets, complete
   campaign route proof, Web export, and release deployment remain open.
+
+## QA-012 Real-Input Candidate Checkpoint - 2026-08-21
+
+- Replaced the former lifecycle-only QA-012 pass with a graphical Compatibility
+  route driver. It now starts a new save, moves Kael through actual virtual
+  movement axes, resolves normal interaction focus, activates `E`, advances
+  dialogue through the HUD, performs mapped combat input, and traverses every
+  released wilderness and Castle gate in both directions.
+- The fresh route passed Greyfen -> Anwen -> Wychwood clues -> five-enemy
+  encounter -> report, then Deep Woods, Old Mill, Burned Farmstead, Marsh
+  Crossing, Bandit Road, Castle Approach, Castle Courtyard, Record Hall, and
+  the full return route to Greyfen. Undercroft, Assembly, and Hart Glade
+  remained correctly story-gated without verifier flag mutation.
+- Real defects found and fixed during the route: Greyfen's west long-road
+  approach was blocked by `LowBerm` dressing, and the Castle Courtyard outer
+  return threshold was blocked by the gatehouse left wing. Both now use
+  reserved/clear gate corridors. Combat verification now approaches enemy
+  capsules legally and the contact resolver has a bounded front-facing
+  fallback.
+- `content_integrity`, `runtime_smoke`, `verify_qa_012`, runtime regressions,
+  SAVE-003, gate transitions, navigation, and river safety all pass through
+  the targeted `qa012` profile. Result details are in `QA-012_RESULT.md`.
+- Shutdown-only Compatibility renderer/RID/ObjectDB diagnostics remain the
+  explicit ENGINE-004 lifecycle debt. QA-012 is complete as a route candidate,
+  but it does not claim final visual asset approval or a production release.
+  Production `main`, tracked `web/`, and Vercel remain unchanged.

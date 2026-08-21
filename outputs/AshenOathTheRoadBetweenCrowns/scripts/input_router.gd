@@ -196,6 +196,18 @@ func install_default_actions() -> void:
 	for action in GAMEPAD_AXIS_BINDINGS:
 		var binding: Array = GAMEPAD_AXIS_BINDINGS[action]
 		_add_joy_axis(str(action), int(binding[0]), float(binding[1]))
+	# Godot's built-in UI actions are not guaranteed to have keyboard events in
+	# an exported project when the InputMap is assembled at runtime. Install the
+	# familiar desktop bindings alongside the gamepad bindings so focused menu,
+	# dialogue, journal, and remap controls work through the same action path.
+	_add_key("ui_accept", KEY_ENTER)
+	_add_key("ui_accept", KEY_KP_ENTER)
+	_add_key("ui_accept", KEY_SPACE)
+	_add_key("ui_cancel", KEY_ESCAPE)
+	_add_key("ui_up", KEY_UP)
+	_add_key("ui_down", KEY_DOWN)
+	_add_key("ui_left", KEY_LEFT)
+	_add_key("ui_right", KEY_RIGHT)
 	_add_joy_button("camera_zoom_in", JOY_BUTTON_DPAD_UP)
 	_add_joy_button("camera_zoom_out", JOY_BUTTON_DPAD_DOWN)
 	_add_joy_button("ui_accept", JOY_BUTTON_A)
