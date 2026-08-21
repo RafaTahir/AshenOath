@@ -61,6 +61,7 @@ func _build_village_silhouette(context: ZoneBuildContext) -> void:
 	context.make_village_house_dressed(Vector3(11.8,0,-7.8), -42.0, "DressedVillageHouse_ShrineFrame")
 
 func _build_boundary_dressing(context: ZoneBuildContext) -> void:
+	_build_horizon_ridges(context)
 	context.make_tree_wall(20.0, 15.2, 7, true)
 	context.make_tree_wall(20.0, -15.2, 7, true)
 	for tree in [
@@ -78,6 +79,55 @@ func _build_boundary_dressing(context: ZoneBuildContext) -> void:
 		context.make_fence(Vector3(-19, 0.35, z), true)
 		if absf(float(z)) > 2.5:
 			context.make_fence(Vector3(19, 0.35, z), true)
+
+func _build_horizon_ridges(context: ZoneBuildContext) -> void:
+	var layer := Node3D.new()
+	layer.name = "GreyfenHorizonRidges"
+	layer.set_meta("world_visual_role", "non_colliding_horizon_depth")
+	context.add_node(layer)
+	_add_horizon_ridge(layer, "NorthRidge", Vector3(0.0, -0.02, -18.7), 48.0, 6.6, Color(0.075, 0.125, 0.12), 0.0)
+	_add_horizon_ridge(layer, "SouthRidge", Vector3(0.0, -0.02, 18.7), 48.0, 5.4, Color(0.065, 0.105, 0.105), 0.0)
+	_add_horizon_ridge(layer, "WestRidge", Vector3(-21.4, -0.02, 0.0), 36.0, 5.0, Color(0.070, 0.115, 0.11), PI * 0.5)
+	_add_horizon_ridge(layer, "EastRidge", Vector3(21.4, -0.02, 0.0), 36.0, 5.8, Color(0.080, 0.125, 0.115), PI * 0.5)
+
+func _add_horizon_ridge(parent: Node3D, node_name: String, position: Vector3, width: float, height: float, color: Color, yaw: float) -> void:
+	var vertices := PackedVector3Array()
+	var indices := PackedInt32Array()
+	var segments := 18
+	# A connected strip avoids the saw-tooth silhouette of independent mountain
+	# triangles and reads as a distant, hazy ridgeline at gameplay distance.
+	for index in range(segments + 1):
+		var x := -width * 0.5 + width * float(index) / float(segments)
+		var wave := sin(float(index) * 0.58 + 0.7) * 0.11 + sin(float(index) * 1.23) * 0.045
+		var shoulder := 0.46 + wave + (0.08 if index % 6 == 2 else 0.0)
+		vertices.append(Vector3(x, 0.0, 0.0))
+		vertices.append(Vector3(x, height * shoulder, 0.0))
+	for index in range(segments):
+		var base := index * 2
+		indices.append(base)
+		indices.append(base + 2)
+		indices.append(base + 1)
+		indices.append(base + 1)
+		indices.append(base + 2)
+		indices.append(base + 3)
+	var arrays: Array = []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = vertices
+	arrays[Mesh.ARRAY_INDEX] = indices
+	var mesh := ArrayMesh.new()
+	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	var material := StandardMaterial3D.new()
+	material.albedo_color = color
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	material.cull_mode = BaseMaterial3D.CULL_DISABLED
+	var ridge := MeshInstance3D.new()
+	ridge.name = node_name
+	ridge.mesh = mesh
+	ridge.material_override = material
+	ridge.position = position
+	ridge.rotation.y = yaw
+	ridge.set_meta("world_visual_role", "horizon_ridge")
+	parent.add_child(ridge)
 
 func _build_landmarks(context: ZoneBuildContext) -> void:
 	context.make_notice_board(Vector3(-2.0, 0, 9.4))

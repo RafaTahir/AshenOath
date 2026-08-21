@@ -2,6 +2,18 @@
 
 ## Current Working Checkpoint - 2026-08-21
 
+### WORLD-012 Greyfen visual recovery update
+
+The latest Greyfen slice fixes an actual screenshot failure: the authored sky
+is now a transparent celestial overlay, leaving the 3D world visible under the
+WorldEnvironment gradient. Balanced houses use connected gabled roof meshes,
+the river material/current is toned into a darker flowing channel, and a
+continuous non-colliding ridge closes the empty village horizon. Fresh
+1280x720 Greyfen spawn, shrine, forge, and south-approach bridge captures are
+current and inspected. This is a bounded presentation improvement, not final
+visual approval; the opening still needs the cohesive character/monster and
+full authored environment gates before production release.
+
 ### OATH-002 combat-state checkpoint
 
 The Oathfire path now uses one state machine for sheathing, hand-based charge,

@@ -21,6 +21,7 @@ func _initialize() -> void:
 	if authored != null:
 		_assert(str(authored.get_meta("ticket", "")) == "WORLD-012", "Greyfen detail layer ticket marker is wrong")
 	_assert(_group_count(game.zone_root, "greyfen_house") == 4, "Greyfen route lost one of four houses")
+	_assert(game.zone_root.find_child("GreyfenHorizonRidges", true, false) != null, "Greyfen has no bounded horizon depth layer")
 	var modular_roofs := _named_count(game.zone_root, "ModularTileRoof")
 	var fallback_roofs := _named_count(game.zone_root, "LeftRoofSlope") + _named_count(game.zone_root, "RightRoofSlope")
 	var roof_contracts := 0
@@ -31,6 +32,11 @@ func _initialize() -> void:
 	_assert(_named_count(game.zone_root, "ModularDoorFacade") >= 4, "Balanced houses did not receive modular door assets")
 	_assert(_named_count(game.zone_root, "ModularWindowFacade") >= 4, "Balanced houses did not receive modular window assets")
 	_assert(_named_count(game.zone_root, "ModularChimney") >= 4, "Balanced houses did not receive modular chimney assets")
+	_assert(_named_count(game.zone_root, "AuthoredGabledRoof") >= 4, "Balanced houses did not receive connected gabled roof meshes")
+	var water := game.zone_root.find_child("FlowingRiverWater", true, false) as MeshInstance3D
+	_assert(water != null and water.material_override is ShaderMaterial, "Greyfen river has no animated water material")
+	if water != null and water.material_override is ShaderMaterial:
+		_assert(str(water.get_meta("water_role", "WATER-002")) == "WATER-002", "Greyfen water role contract is missing")
 	for name in ["GreyfenShrineArchLintel", "GreyfenForgeCanopy", "GreyfenForgeRack", "GreyfenMarketAwning"]:
 		_assert(_named_count(game.zone_root, name) > 0, "%s is missing" % name)
 	_assert(_route_clear(game.spatial_service, Vector3(0, 0.9, 12.5), Vector3(0, 0.9, -12.5)), "Main Greyfen road is obstructed")

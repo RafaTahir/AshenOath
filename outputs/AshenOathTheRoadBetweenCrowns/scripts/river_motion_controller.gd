@@ -74,7 +74,7 @@ func _build_dressing() -> void:
 		leaf_multimesh.set_instance_transform(index, Transform3D(Basis.IDENTITY, origin))
 
 	var ripple_material := StandardMaterial3D.new()
-	ripple_material.albedo_color = Color(0.44, 0.72, 0.64, 0.36)
+	ripple_material.albedo_color = Color(0.20, 0.46, 0.42, 0.30)
 	ripple_material.emission_enabled = true
 	ripple_material.emission = Color(0.10, 0.24, 0.20)
 	ripple_material.emission_energy_multiplier = 0.26
@@ -95,7 +95,7 @@ func _build_dressing() -> void:
 		ripple_origins.append(origin)
 	var current_material := ShaderMaterial.new()
 	var current_shader := Shader.new()
-	current_shader.code = "shader_type spatial; render_mode unshaded, blend_mix, cull_disabled; void fragment(){ vec2 uv=UV; float band=sin(uv.y*18.0+TIME*1.8)+sin(uv.y*41.0-TIME*2.2+uv.x*3.0); float edge=smoothstep(0.0,0.20,uv.x)*smoothstep(0.0,0.20,1.0-uv.x); float alpha=(0.10+0.09*(band*0.5+0.5))*edge; ALBEDO=vec3(0.24,0.62,0.57); EMISSION=vec3(0.12,0.30,0.26); ALPHA=alpha; }"
+	current_shader.code = "shader_type spatial; render_mode unshaded, blend_mix, cull_disabled; void fragment(){ vec2 uv=UV; float band=sin(uv.y*14.0+TIME*1.35)+sin(uv.y*33.0-TIME*1.6+uv.x*2.0); float edge=smoothstep(0.0,0.20,uv.x)*smoothstep(0.0,0.20,1.0-uv.x); float alpha=(0.055+0.055*(band*0.5+0.5))*edge; ALBEDO=vec3(0.15,0.42,0.38); EMISSION=vec3(0.06,0.16,0.14); ALPHA=alpha; }"
 	current_material.shader = current_shader
 	for index in range(3):
 		var ribbon := MeshInstance3D.new()

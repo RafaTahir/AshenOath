@@ -3248,18 +3248,17 @@ func _make_village_house_dressed(pos: Vector3, yaw: float, node_name: String) ->
 	_add_house_box(root, "StoneFoundation", Vector3(0, 0.18, 0), Vector3(4.55, 0.36, 3.55), Color(0.28, 0.27, 0.24))
 	_add_house_box(root, "PlasteredWall", Vector3(0, 1.05, 0), Vector3(4.3, 2.1, 3.35), plaster)
 	_add_house_gables(root, plaster, timber)
-	var modular_roof: Node3D = null
+	var roof_color := Color(0.16, 0.072, 0.045) if facade_variant != 2 else Color(0.12, 0.082, 0.060)
 	if str(settings.settings.get("quality_preset", "balanced")) != "potato":
-		# The same authored roof silhouette is now used in Balanced and Quality.
-		# Potato keeps the cheaper fallback, so full-detail presets share one visual
-		# language instead of changing the settlement's architecture.
-		modular_roof = _add_house_module(root, "greyfen_roof", Vector3(0.55, 0.55, 0.55), Vector3(0, 2.02, 0), 0.0, "ModularTileRoof")
-	if modular_roof == null:
-		root.set_meta("roof_treatment", "authored_fallback_slope")
+		# Use a real two-plane gable rather than two intersecting boxes. This keeps
+		# the roof readable from the road and gives each house a grounded silhouette
+		# without adding a high-poly asset or collision complexity.
+		_add_house_gabled_roof(root, roof_color)
+		root.set_meta("roof_treatment", "authored_gabled_mesh")
+	else:
+		root.set_meta("roof_treatment", "potato_fallback_slope")
 		_add_house_box(root, "LeftRoofSlope", Vector3(-0.9, 2.42, 0), Vector3(2.55, 0.42, 3.95), Color(0.14, 0.055, 0.035), Vector3(0, 0, -13))
 		_add_house_box(root, "RightRoofSlope", Vector3(0.9, 2.42, 0), Vector3(2.55, 0.42, 3.95), Color(0.14, 0.055, 0.035), Vector3(0, 0, 13))
-	else:
-		root.set_meta("roof_treatment", "modular_tile")
 	var chimney_x: float = -1.38 if facade_variant == 0 else 1.38
 	_add_house_box(root, "StoneChimney", Vector3(chimney_x, 2.63, 0.62), Vector3(0.48, 1.38, 0.48), Color(0.23, 0.22, 0.20))
 	_add_house_box(root, "ChimneyCap", Vector3(chimney_x, 3.31, 0.62), Vector3(0.62, 0.14, 0.62), Color(0.19, 0.18, 0.17))
@@ -3287,7 +3286,6 @@ func _make_village_house_dressed(pos: Vector3, yaw: float, node_name: String) ->
 	_add_house_box(root, "FrontCrossBrace", Vector3(1.43, 1.16, -1.85), Vector3(0.11, 1.42, 0.10), Color(0.10, 0.055, 0.03), Vector3(0, 0, 36))
 	# Small structural details give the facade readable construction at the
 	# actual gameplay camera distance while remaining part of the static batch.
-	var roof_color := Color(0.16, 0.072, 0.045) if facade_variant != 2 else Color(0.12, 0.082, 0.060)
 	_add_house_box(root, "RoofEaveFront", Vector3(0, 2.12, -1.86), Vector3(4.62, 0.16, 0.18), roof_color)
 	_add_house_box(root, "RoofEaveRear", Vector3(0, 2.12, 1.86), Vector3(4.62, 0.16, 0.18), roof_color)
 	_add_house_box(root, "RoofRidgeCap", Vector3(0, 3.05, 0), Vector3(0.26, 0.16, 3.72), roof_color)
@@ -3353,6 +3351,58 @@ func _add_house_gables(parent: Node3D, plaster: Color, timber: Color) -> void:
 	parent.add_child(gables)
 	for z in [-1.72, 1.72]:
 		_add_house_box(parent, "GableKingPost", Vector3(0, 2.57, z), Vector3(0.13, 1.14, 0.10), timber)
+
+func _add_house_gabled_roof(parent: Node3D, color: Color) -> MeshInstance3D:
+	var width := 4.78
+	var length := 4.10
+	var eave_y := 2.08
+	var ridge_y := 3.16
+	var half_length := length * 0.5
+	var half_width := width * 0.5
+	var vertices := PackedVector3Array()
+	var normals := PackedVector3Array()
+	var uvs := PackedVector2Array()
+	var indices := PackedInt32Array()
+	# Front is negative Z. Winding is chosen so both sloped planes face upward.
+	_append_house_quad(vertices, normals, uvs, indices,
+		Vector3(-half_width, eave_y, -half_length),
+		Vector3(-half_width, eave_y, half_length),
+		Vector3(0.0, ridge_y, half_length),
+		Vector3(0.0, ridge_y, -half_length))
+	_append_house_quad(vertices, normals, uvs, indices,
+		Vector3(0.0, ridge_y, -half_length),
+		Vector3(0.0, ridge_y, half_length),
+		Vector3(half_width, eave_y, half_length),
+		Vector3(half_width, eave_y, -half_length))
+	var arrays: Array = []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = vertices
+	arrays[Mesh.ARRAY_NORMAL] = normals
+	arrays[Mesh.ARRAY_TEX_UV] = uvs
+	arrays[Mesh.ARRAY_INDEX] = indices
+	var roof_mesh := ArrayMesh.new()
+	roof_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	var roof := MeshInstance3D.new()
+	roof.name = "AuthoredGabledRoof"
+	roof.mesh = roof_mesh
+	roof.material_override = world_materials.get_material("roof_tiles", str(settings.settings.get("quality_preset", "balanced")), color, 0.0, false)
+	roof.set_meta("world_visual_role", "gabled_roof")
+	parent.add_child(roof)
+	return roof
+
+func _append_house_quad(vertices: PackedVector3Array, normals: PackedVector3Array, uvs: PackedVector2Array, indices: PackedInt32Array, a: Vector3, b: Vector3, c: Vector3, d: Vector3) -> void:
+	var base := vertices.size()
+	var normal := (b - a).cross(c - a).normalized()
+	for point in [a, b, c, d]:
+		vertices.append(point)
+		normals.append(normal)
+		uvs.append(Vector2(point.x * 0.32, point.z * 0.32))
+	indices.append(base)
+	indices.append(base + 1)
+	indices.append(base + 2)
+	indices.append(base)
+	indices.append(base + 2)
+	indices.append(base + 3)
 
 func _add_house_box(parent: Node3D, node_name: String, local_pos: Vector3, size: Vector3, color: Color, local_rot: Vector3 = Vector3.ZERO) -> Node3D:
 	# Keep named authored details while rendering repeated pieces in material batches.

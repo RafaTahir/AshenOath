@@ -1,5 +1,27 @@
 # WORLD-012 Result — Authored Greyfen
 
+## 2026-08-21 Visual Recovery Update
+
+This checkpoint closes the previously missing rendered review for the Greyfen
+slice. The Compatibility capture path was fixed so the 2D celestial pass is a
+transparent overlay instead of an opaque full-screen gradient. Balanced houses
+now use connected gabled roof meshes, the river water/current pass is darker and
+less neon, and a low-cost continuous ridge layer closes the exposed horizon
+without adding collision or route blockers. The bridge capture now approaches
+from the south road and proves both banks and the crossing in one frame.
+
+Fresh captures were regenerated and inspected at 1280x720:
+
+- `WORLD_012_01_Greyfen_Spawn_Street.png`
+- `WORLD_012_02_Greyfen_Shrine_Quarter.png`
+- `WORLD_012_03_Greyfen_Forge_Yard.png`
+- `WORLD_012_04_Greyfen_River_Bridge.png`
+
+The frames are current, nonblank, route-readable, and visibly improved over
+the prior flat-sky capture. They remain stylized and are not being represented
+as final photoreal visual approval; house clutter and later-zone presentation
+remain open work in the Soul Rebuild plan.
+
 ## Status
 
 Implemented on the cumulative `codex/soul-rebuild` branch. Greyfen keeps its existing quest, river, bridge, gate, NPC, and collision ownership while the Balanced route receives a bounded authored-dressing pass and scale-safe facade treatment.

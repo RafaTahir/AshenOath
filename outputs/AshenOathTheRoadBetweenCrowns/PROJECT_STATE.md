@@ -2,6 +2,20 @@
 
 ## Current Working Checkpoint - 2026-08-21
 
+### WORLD-012 Greyfen visual recovery update
+
+The Greyfen presentation slice now has a transparent Compatibility sky overlay,
+connected Balanced gabled roofs, darker animated river water/current, and a
+continuous non-colliding horizon ridge layer that removes the exposed empty
+boundary. The bridge capture was moved onto the south approach so it proves the
+bridge and both banks instead of recording an invalid boundary-facing frame.
+The strengthened WORLD-012 verifier requires the horizon, gabled roofs, and
+WATER-002 material contract. Fresh 1280x720 spawn, shrine, forge, and bridge
+frames were captured and inspected. The slice is a real visual improvement but
+remains stylized; final asset-family replacement, later-zone polish, and full
+release acceptance are still open. Production main, tracked web, and Vercel
+remain unchanged.
+
 ### OATH-002 Oathfire state-machine checkpoint
 
 Oathfire now has one explicit transition contract: sheathing, charging,

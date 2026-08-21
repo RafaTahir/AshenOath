@@ -21,9 +21,12 @@ func _initialize() -> void:
 	game.call("_new_game")
 	await _frames(12)
 	await _capture(game, "WORLD_012_01_Greyfen_Spawn_Street", Vector3(0, 1, 12), 0.0)
-	await _capture(game, "WORLD_012_02_Greyfen_Shrine_Quarter", Vector3(6.0, 1, -4.2), 0.0)
-	await _capture(game, "WORLD_012_03_Greyfen_Forge_Yard", Vector3(8.0, 1, 0.2), -0.78)
-	await _capture(game, "WORLD_012_04_Greyfen_River_Bridge", Vector3(4.8, 1, 6.7), 1.57)
+	await _capture(game, "WORLD_012_02_Greyfen_Shrine_Quarter", Vector3(3.8, 0.72, -4.6), 0.0)
+	await _capture(game, "WORLD_012_03_Greyfen_Forge_Yard", Vector3(7.2, 0.72, 2.0), -0.55)
+	# Approach the bridge from the south road so recovery barriers cannot move the
+	# camera onto the empty outer boundary. The view keeps both banks and the
+	# crossing in frame while remaining on the authored route.
+	await _capture(game, "WORLD_012_04_Greyfen_River_Bridge", Vector3(0.0, 0.72, 8.6), 0.0)
 	print("WORLD-012 SCREENSHOTS: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
 	quit(0 if failures == 0 else 1)
 

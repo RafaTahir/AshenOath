@@ -510,9 +510,10 @@ func _build_sky_backdrop() -> void:
 	authored_sky.sky_material = authored_sky_material
 	sky_canvas = CanvasLayer.new()
 	sky_canvas.name = "SkyBackdropLayer"
+	# Keep the 2D pass above the 3D world, but transparent. The authored
+	# WorldEnvironment owns the sky gradient; this layer contributes only the
+	# camera-readable sun, moon, stars, and cloud silhouettes.
 	sky_canvas.layer = 1
-	# The backdrop is overlay-only in production: it contributes the reliable
-	# night star pass while the 3D world and authored sky remain unobscured.
 	sky_canvas.visible = true
 	add_child(sky_canvas)
 	sky_backdrop = SkyBackdrop.new()
