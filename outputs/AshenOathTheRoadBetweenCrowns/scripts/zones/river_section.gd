@@ -142,7 +142,7 @@ func _make_river_audio(root: Node3D, center_z: float) -> void:
 	player.position = Vector3(0, -0.10, center_z)
 	player.max_distance = 24.0
 	player.unit_size = 5.0
-	player.volume_db = -24.0
+	player.volume_db = -30.0
 	player.stream = _river_loop()
 	player.autoplay = true
 	root.add_child(player)
