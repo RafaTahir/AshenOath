@@ -226,3 +226,21 @@ active renderer/material errors before the verifier pass marker. Godot's known
 Compatibility shutdown diagnostics remain after isolated test teardown and are
 classified as warnings, not hidden. The result is recorded in
 `ENGINE-005_RESULT.md`; no Web export or production deployment was performed.
+
+## ASSET-004 Current Contract Checkpoint
+
+The asset contract has been corrected to match the actual local library. The
+source manifest records five CC0 pack families, dependencies, acquisition
+status, selected runtime artifacts, byte/hash evidence, and export policy. The
+role manifest contains nine route-visible role entries: only the optimized
+Ranger runtime is approved and export-eligible; the other eight roles are
+blocked with explicit reasons and playable fallbacks until their selected
+sources pass import, skeleton, clip, budget, license, and Codex visual review.
+The optimized UAL2 animation file is recorded as a selected runtime dependency;
+root-motion, FBX, setup, mannequin, raw, and download sources remain excluded.
+
+`verify_asset_acceptance.py` and the `assets` ticket profile pass. This is an
+honest asset-library checkpoint, not a claim that the final character or
+monster replacement has shipped. `ASSET-004_RESULT.md` records the exact
+artifact counts and next registration requirements. Production `web/`, `main`,
+and Vercel remain unchanged.

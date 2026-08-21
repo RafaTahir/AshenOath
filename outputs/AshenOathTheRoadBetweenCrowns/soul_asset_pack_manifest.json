@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "program": "SOUL-REBUILD",
   "policy": "free_cc0_only",
   "packs": [
@@ -11,10 +11,12 @@
       "sha256": null,
       "bytes": null,
       "entry_scene": null,
+      "runtime_artifacts": [],
       "dependencies": [],
       "preload_priority": 10,
       "license": "CC0 1.0",
-      "status": "source_locked_manual_download"
+      "status": "source_locked_manual_download",
+      "export_policy": "blocked_until_selected_runtime_artifacts_pass_visual_review"
     },
     {
       "id": "quaternius_modular_character_outfits_fantasy",
@@ -23,12 +25,20 @@
       "download_page": "https://quaternius.itch.io/modular-character-outfits-fantasy",
       "sha256": null,
       "bytes": null,
-      "entry_scene": null,
+      "entry_scene": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf",
+      "runtime_artifacts": [
+        {"path": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf", "bytes": 54070, "sha256": "df67e16cc2e94d8c58e8831d25835036564eb9f2a7a53e31b6f1cb7f7fe1fc78"},
+        {"path": "res://assets_external/characters_ranger/Male_Ranger_Runtime.bin", "bytes": 1746884, "sha256": "5bbb0d42cb324c6c27ce00417e68a876d92978f07d161f83590f0d7c0570eff6"},
+        {"path": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png", "bytes": 840454, "sha256": "220dd4fabbfecce9847e876e2e2b02327315c08aac096d4648b62d5c53716c90"},
+        {"path": "res://assets_external/characters_ranger/T_Ranger_Normal_1K.png", "bytes": 940081, "sha256": "a4daa2410b007ad9fe7e15ac7ecc1e579ab08aafa3725ba3f158c5a24c68b540"},
+        {"path": "res://assets_external/characters_ranger/T_Ranger_ORM_1K.png", "bytes": 786403, "sha256": "76cfba43d6748a79a7ea26184415e4810731f6e4b207c3c84a6b1a084b49bd9f"}
+      ],
       "dependencies": ["quaternius_universal_base_characters"],
       "preload_priority": 20,
       "license": "CC0 1.0",
       "status": "source_locked_with_selected_ranger_runtime",
-      "selected_runtime": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf"
+      "selected_runtime": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf",
+      "export_policy": "selected_runtime_artifacts_only"
     },
     {
       "id": "quaternius_universal_animation_library_2",
@@ -38,10 +48,14 @@
       "sha256": null,
       "bytes": null,
       "entry_scene": null,
+      "runtime_artifacts": [
+        {"path": "res://assets_external/animations/soul_universal_animation_library_2.glb", "bytes": 8061600, "sha256": "0815dd05531cae9bc313fc9c0ba81330bc72f8e19ec45f73738e74ddc5796a43"}
+      ],
       "dependencies": ["quaternius_universal_base_characters"],
       "preload_priority": 30,
       "license": "CC0 1.0",
-      "status": "source_locked_manual_download"
+      "status": "selected_runtime_animation_available",
+      "export_policy": "selected_runtime_artifacts_only"
     },
     {
       "id": "quaternius_ultimate_monsters",
@@ -51,10 +65,12 @@
       "sha256": null,
       "bytes": null,
       "entry_scene": null,
+      "runtime_artifacts": [],
       "dependencies": [],
       "preload_priority": 40,
       "license": "CC0 1.0",
-      "status": "source_locked_manual_download"
+      "status": "source_locked_manual_download",
+      "export_policy": "blocked_until_selected_runtime_artifacts_pass_visual_review"
     },
     {
       "id": "quaternius_ultimate_animated_animals",
@@ -64,16 +80,21 @@
       "sha256": null,
       "bytes": null,
       "entry_scene": null,
+      "runtime_artifacts": [],
       "dependencies": [],
       "preload_priority": 50,
       "license": "CC0 1.0",
-      "status": "source_locked_manual_download"
+      "status": "source_locked_manual_download",
+      "export_policy": "blocked_until_selected_runtime_artifacts_pass_visual_review"
     }
   ],
   "runtime_rules": {
     "allowed_runtime_formats": [".glb", ".gltf", ".ogg", ".wav", ".png", ".jpg", ".webp"],
-    "excluded_source_directories": ["assets_external/downloads", "assets_external/raw", "assets_external/animations"],
+    "excluded_source_directories": ["assets_external/downloads", "assets_external/raw"],
+    "excluded_source_patterns": ["assets_external/animations/*_RM.*", "assets_external/animations/*.fbx", "assets_external/animations/*Setup*", "assets_external/animations/*Mannequin*"],
     "forbidden_role_tokens": ["faceplane", "eye_box", "proxy", "fake_neck", "root_mounted", "placeholder"],
+    "required_role_fields": ["family", "source_pack", "status", "approved", "triangle_budget", "texture_budget", "required_clips", "equipment_sockets", "export_eligible"],
+    "required_artifact_fields": ["path", "bytes", "sha256"],
     "max_named_human_triangles": 20000,
     "max_crowd_human_triangles": 14000,
     "max_named_texture_dimension": 1024

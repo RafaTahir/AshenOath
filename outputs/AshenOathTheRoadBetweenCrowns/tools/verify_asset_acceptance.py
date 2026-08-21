@@ -10,6 +10,7 @@ fallback so the current prototype remains playable.
 from __future__ import annotations
 
 import argparse
+import fnmatch
 import hashlib
 import json
 import sys
@@ -48,6 +49,41 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def validate_artifacts(project: Path, artifacts: Any, forbidden: list[str], excluded_patterns: list[str], errors: list[str], label: str) -> int:
+    if not isinstance(artifacts, list):
+        errors.append(f"{label} runtime_artifacts must be an array")
+        return 0
+    total_bytes = 0
+    for index, artifact in enumerate(artifacts):
+        if not isinstance(artifact, dict):
+            errors.append(f"{label} artifact {index} must be an object")
+            continue
+        for key in ("path", "bytes", "sha256"):
+            if key not in artifact:
+                errors.append(f"{label} artifact {index} missing {key}")
+        path_value = str(artifact.get("path", ""))
+        path = res_path(project, path_value)
+        if path is None or not path.is_file():
+            errors.append(f"{label} artifact {index} has no local file: {path_value}")
+            continue
+        relative = path.relative_to(project).as_posix().lower()
+        if any(part in relative for part in ("assets_external/downloads/", "assets_external/raw/")):
+            errors.append(f"{label} artifact {index} points into an excluded source directory")
+        if any(fnmatch.fnmatch(relative, pattern.lower()) for pattern in excluded_patterns):
+            errors.append(f"{label} artifact {index} matches an excluded source pattern: {relative}")
+        if any(token in relative for token in forbidden):
+            errors.append(f"{label} artifact {index} uses a forbidden proxy token")
+        actual_bytes = path.stat().st_size
+        expected_bytes = artifact.get("bytes")
+        if not isinstance(expected_bytes, int) or expected_bytes != actual_bytes:
+            errors.append(f"{label} artifact {index} byte count does not match {path.name}")
+        expected_hash = str(artifact.get("sha256", "")).lower()
+        if len(expected_hash) != 64 or sha256(path) != expected_hash:
+            errors.append(f"{label} artifact {index} SHA-256 does not match {path.name}")
+        total_bytes += actual_bytes
+    return total_bytes
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("project", nargs="?", type=Path, default=Path(__file__).resolve().parents[1])
@@ -61,6 +97,9 @@ def main() -> int:
     pack_ids = {str(row.get("id", "")) for row in pack_rows if isinstance(row, dict)}
     if len(pack_ids) != len(pack_rows):
         errors.append("pack ids must be unique and non-empty")
+    rules = packs.get("runtime_rules", {})
+    forbidden = [str(token).lower() for token in rules.get("forbidden_role_tokens", [])]
+    excluded_patterns = [str(pattern).replace("\\", "/").lower() for pattern in rules.get("excluded_source_patterns", [])]
     for row in pack_rows:
         if not isinstance(row, dict):
             errors.append("pack entry must be an object")
@@ -75,12 +114,16 @@ def main() -> int:
         for dependency in row.get("dependencies", []):
             if dependency not in pack_ids:
                 errors.append(f"pack {row.get('id', '<unknown>')} has unknown dependency {dependency}")
-
-    rules = packs.get("runtime_rules", {})
-    forbidden = [str(token).lower() for token in rules.get("forbidden_role_tokens", [])]
+        if "runtime_artifacts" not in row:
+            errors.append(f"pack {row.get('id', '<unknown>')} missing runtime_artifacts")
+        if "export_policy" not in row:
+            errors.append(f"pack {row.get('id', '<unknown>')} missing export_policy")
+        validate_artifacts(project, row.get("runtime_artifacts", []), forbidden, excluded_patterns, errors, f"pack {row.get('id', '<unknown>')}")
     role_rows = roles.get("roles", {})
     approved_count = 0
     pending_count = 0
+    artifact_count = 0
+    artifact_bytes = 0
     for role_id, role in role_rows.items():
         if not isinstance(role, dict):
             errors.append(f"role {role_id} must be an object")
@@ -89,8 +132,13 @@ def main() -> int:
         if source_pack not in pack_ids:
             errors.append(f"role {role_id} references unknown pack {source_pack}")
         status = str(role.get("status", ""))
+        for required in ("family", "triangle_budget", "texture_budget", "required_clips", "equipment_sockets", "export_eligible"):
+            if required not in role:
+                errors.append(f"role {role_id} missing {required}")
         if bool(role.get("approved", False)):
             approved_count += 1
+            if role.get("export_eligible") is not True:
+                errors.append(f"approved role {role_id} must be export_eligible")
             path_value = str(role.get("path", ""))
             path = res_path(project, path_value)
             if path is None or not path.is_file():
@@ -106,8 +154,25 @@ def main() -> int:
                 errors.append(f"approved role {role_id} must record a SHA-256")
             elif sha256(path) != expected.lower():
                 errors.append(f"approved role {role_id} SHA-256 does not match {path.name}")
+            if not str(role.get("source_url", "")).startswith("https://"):
+                errors.append(f"approved role {role_id} must record its source URL")
+            license_file_value = str(role.get("license_file", ""))
+            license_file = res_path(project, license_file_value) if license_file_value else None
+            if license_file is None or not license_file.is_file():
+                errors.append(f"approved role {role_id} must record a local license file")
+            role_artifacts = role.get("runtime_artifacts", [])
+            artifact_bytes += validate_artifacts(project, role_artifacts, forbidden, excluded_patterns, errors, f"role {role_id}")
+            artifact_count += len(role_artifacts) if isinstance(role_artifacts, list) else 0
+            if not isinstance(role_artifacts, list) or not role_artifacts:
+                errors.append(f"approved role {role_id} must list runtime_artifacts")
+            elif not any(str(item.get("path", "")) == path_value for item in role_artifacts if isinstance(item, dict)):
+                errors.append(f"approved role {role_id} runtime_artifacts must include its path")
         else:
             pending_count += 1
+            if role.get("export_eligible") is not False:
+                errors.append(f"pending role {role_id} must not be export_eligible")
+            if not str(role.get("blocked_reason", "")).strip():
+                errors.append(f"pending role {role_id} needs a blocked_reason")
             fallback_value = str(role.get("current_fallback", ""))
             fallback = res_path(project, fallback_value) if fallback_value else None
             if fallback is None or not fallback.is_file():
@@ -120,6 +185,8 @@ def main() -> int:
         "roles": len(role_rows),
         "approved_roles": approved_count,
         "pending_roles": pending_count,
+        "runtime_artifacts": artifact_count,
+        "runtime_artifact_bytes": artifact_bytes,
         "errors": errors,
     }
     if args.json_report:

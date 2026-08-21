@@ -30,6 +30,7 @@ def main() -> int:
     parser.add_argument("--path", required=True, help="Project-relative res:// path")
     parser.add_argument("--source-pack", required=True)
     parser.add_argument("--license-file", required=True)
+    parser.add_argument("--source-url", default="", help="Official source page URL")
     parser.add_argument("--write", action="store_true")
     args = parser.parse_args()
     project = args.project.resolve()
@@ -41,22 +42,33 @@ def main() -> int:
         print(f"asset does not exist: {path}", file=sys.stderr)
         return 2
     relative = path.relative_to(project).as_posix().lower()
-    if any(token in relative for token in ("assets_external/downloads/", "assets_external/raw/", "assets_external/animations/")):
-        print("raw/download/animation source folders cannot be runtime paths", file=sys.stderr)
+    animation_source = "/assets_external/animations/"
+    is_selected_animation = path.name == "soul_universal_animation_library_2.glb"
+    if any(token in relative for token in ("assets_external/downloads/", "assets_external/raw/")):
+        print("raw/download source folders cannot be runtime paths", file=sys.stderr)
+        return 2
+    if animation_source in f"/{relative}" and (path.suffix.lower() == ".fbx" or "_rm" in path.stem.lower() or "setup" in path.stem.lower() or "mannequin" in path.stem.lower()) and not is_selected_animation:
+        print("unoptimized animation source cannot be a runtime path", file=sys.stderr)
         return 2
     license_path = project / args.license_file.replace("res://", "").replace("/", str(Path("/")))
     if not license_path.is_file():
         print(f"license file does not exist: {license_path}", file=sys.stderr)
         return 2
+    artifact = {"path": args.path, "bytes": path.stat().st_size, "sha256": digest(path)}
     entry = {
         "path": args.path,
         "source_pack": args.source_pack,
         "license_file": args.license_file,
         "bytes": path.stat().st_size,
-        "sha256": digest(path),
+        "sha256": artifact["sha256"],
         "approved": False,
+        "export_eligible": False,
+        "blocked_reason": "Registered source requires skeleton, clip, budget, and visual review before runtime approval.",
+        "runtime_artifacts": [artifact],
         "status": "registered_pending_visual_review",
     }
+    if args.source_url:
+        entry["source_url"] = args.source_url
     manifest_path = project / "soul_character_role_manifest.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     if args.role not in manifest.get("roles", {}):

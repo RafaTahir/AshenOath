@@ -1,7 +1,9 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "program": "SOUL-REBUILD",
   "policy": "free_cc0_only",
+  "source_of_truth": ["soul_asset_pack_manifest.json", "soul_character_role_manifest.json"],
+  "note": "Legacy compatibility view. Do not approve roles here; use the versioned source and role manifests plus verify_asset_acceptance.py.",
   "source_packs": [
     {
       "id": "quaternius_universal_base_characters",
@@ -40,11 +42,11 @@
     "mixed_human_source_family"
   ],
   "current_runtime_roles": {
-    "player_human": {"status": "temporary_shared_quaternius", "approved": false},
-    "sister_anwen_human": {"status": "temporary_shared_quaternius", "approved": false},
-    "villagers": {"status": "temporary_shared_quaternius", "approved": false},
-    "ghoulkin": {"status": "temporary_derived_rig", "approved": false},
+    "player_human": {"status": "blocked_temporary_fallback", "approved": false},
+    "sister_anwen_human": {"status": "blocked_temporary_fallback", "approved": false},
+    "villagers": {"status": "blocked_temporary_fallback", "approved": false},
+    "ghoulkin": {"status": "blocked_temporary_fallback", "approved": false},
     "road_ranger_human": {"status": "runtime_accepted_optimized_cc0", "approved": true, "model": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf", "license_file": "res://assets_external/licenses/Quaternius_Modular_Character_Outfits_Fantasy_CC0.txt"},
-    "white_hart_avatar": {"status": "temporary_wolf_placeholder", "approved": false}
+    "white_hart_avatar": {"status": "blocked_temporary_fallback", "approved": false}
   }
 }
