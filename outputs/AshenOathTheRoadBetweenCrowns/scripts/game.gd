@@ -1658,6 +1658,19 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 	])
 
 func _complete_ending(ending: String) -> void:
+	var ending_id := str(ending)
+	if ending_id not in ["expose", "free", "bind", "kill"]:
+		hud.toast("The covenant offers no such answer.")
+		get_tree().paused = false
+		hud.hide_menus()
+		return
+	# The final covenant is immutable. This guard covers stale dialogue nodes,
+	# reloads, and browser double-activation after the ending has resolved.
+	if str(story_state.get_flag("final_covenant", "")) != "" or bool(story_state.get_flag("final_choice_completed", false)):
+		hud.toast("The covenant has already been chosen.")
+		get_tree().paused = false
+		hud.hide_menus()
+		return
 	if not quests.is_active("main_hart_remembers") or str(story_state.get_flag("confession_method", "")) == "":
 		hud.toast("The Hart will not answer until Greyfen has heard the testimony.")
 		get_tree().paused = false
@@ -1673,11 +1686,11 @@ func _complete_ending(ending: String) -> void:
 	if witnesses.is_empty():
 		witnesses.append("kael")
 	story_state.set_flag("final_witnesses", witnesses)
-	quests.world_flags["ending"] = ending
-	story_state.set_flag("final_covenant", {"expose":"witness", "free":"mercy", "bind":"duty", "kill":"ash"}.get(ending, ending))
+	quests.world_flags["ending"] = ending_id
+	story_state.set_flag("final_covenant", {"expose":"witness", "free":"mercy", "bind":"duty", "kill":"ash"}.get(ending_id, ending_id))
 	quests.complete_objective("main_hart_remembers", "hear_testimony")
-	if ending == "kill" or ending == "bind":
-		pending_ending = ending
+	if ending_id == "kill" or ending_id == "bind":
+		pending_ending = ending_id
 		active_interactable = null
 		hud.set_prompt("")
 		hud.hide_menus()
@@ -1695,11 +1708,15 @@ func _complete_ending(ending: String) -> void:
 		audio.play_event("boss", 0.02)
 		hud.toast("The White Hart answers with antler, root, and light.")
 		return
-	_show_ending_consequence(ending)
+	_show_ending_consequence(ending_id)
 
 func _show_ending_consequence(ending: String) -> void:
 	quests.world_flags["ending"] = ending
 	quests.complete_objective("main_hart_remembers", "final_choice")
+	# This flag is separate from the covenant value so boss resolution and
+	# cached-zone rebuilds can distinguish a chosen outcome from a pending one.
+	story_state.set_flag("final_choice_completed", true)
+	pending_ending = ""
 	var title = "The Road Between Crowns"
 	var cards: Array[String] = EpilogueResolver.resolve(ending, story_state)
 	story_state.set_flag("epilogue_cards", cards)
@@ -1981,6 +1998,7 @@ func _on_enemy_died(enemy) -> void:
 		elif enemy.enemy_id == "white_hart_avatar":
 			var ending = pending_ending if pending_ending != "" else "kill"
 			pending_ending = ""
+			story_state.set_flag("hart_defeated", true)
 			_show_ending_consequence(ending)
 	elif current_zone_id == "greyfen" and bool(enemy.get_meta("act_one_cemetery_ambush", false)):
 		quests.complete_objective("main_bell_beneath_greyfen", "cemetery_ambush")

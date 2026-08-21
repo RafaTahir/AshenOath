@@ -68,6 +68,19 @@ re-proven through real input from this source state, and no fresh export/live
 PCK comparison has been performed after these edits. Production remains
 unchanged until those blockers are resolved.
 
+## QUEST-012 Completion Checkpoint - 2026-08-21
+
+The Hart Remembers arc now resolves all four covenant outcomes: Witness,
+Mercy, Duty, and Ash. Ending selection is validated, immutable after the first
+activation, saved through `final_witnesses`, `final_covenant`,
+`final_choice_completed`, and `epilogue_cards`, and rebuilt with state-specific
+Hart Glade aftermath dressing. The final choice gate passed all four peaceful
+and combat paths, including White Hart defeat handoff, reload, and repeated
+activation protection. Fresh Hart route captures were regenerated and
+inspected. This is a pushed development checkpoint only; interim monster/world
+visuals, shutdown diagnostics, complete real-input browser ending runs, and the
+final Web/live hash gate remain open.
+
 ## Current Product Status
 
 Ashen Oath is a **pre-alpha prototype**. It is not a commercial Alpha, Early Access build, finished campaign, photoreal game, or AAA production. The approved target is a polished 90-minute Web Act One followed by a 4-6 hour grounded-stylized campaign. See `PRODUCT_SCOPE_LOCK.md` and `ASHEN_OATH_MASTER_STUDIO_REVIEW.md`.

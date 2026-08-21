@@ -89,11 +89,53 @@ func _build_hart_glade(context: ZoneBuildContext) -> void:
 		context.make_tree(position)
 	for position in [Vector3(-7, 0, -7), Vector3(7, 0, -7), Vector3(-9, 0, -2), Vector3(9, 0, -2)]:
 		context.make_ritual_stone(position)
-	_make_hart_grove(context)
-	_make_hart_witness(context)
-	context.make_light("HartWitnessLight", Vector3(0, 6, -9), Color(0.62, 0.86, 0.75), 4.2)
-	context.make_named_interactable("white_hart", "dialogue", "Stand before the White Hart", Vector3(0, 0, -9), Color(0.78, 0.80, 0.68), Vector3(0.42, 0.72, 0.42))
+	var covenant := str(context.get_story_flag("final_covenant", ""))
+	if covenant == "":
+		_make_hart_grove(context)
+		_make_hart_witness(context)
+		context.make_light("HartWitnessLight", Vector3(0, 6, -9), Color(0.62, 0.86, 0.75), 4.2)
+		context.make_named_interactable("white_hart", "dialogue", "Stand before the White Hart", Vector3(0, 0, -9), Color(0.78, 0.80, 0.68), Vector3(0.42, 0.72, 0.42))
+	else:
+		_make_hart_aftermath(context, covenant)
 	context.make_zone_gate("Return to Greyfen's assembly", Vector3(-7, 0, 16), "assembly", Vector3(0, 1, -12))
+
+func _make_hart_aftermath(context: ZoneBuildContext, covenant: String) -> void:
+	# Completed endings are quiet world states, not a stale repeatable dialogue
+	# node. Keep the grove legible after reload with a restrained covenant marker.
+	var colors := {
+		"witness": Color(0.78, 0.72, 0.42),
+		"mercy": Color(0.44, 0.72, 0.86),
+		"duty": Color(0.58, 0.66, 0.48),
+		"ash": Color(0.42, 0.28, 0.24),
+	}
+	var tone: Color = colors.get(covenant, Color(0.35, 0.42, 0.38))
+	var plinth := MeshInstance3D.new()
+	plinth.name = "HartAftermath_%s" % covenant.capitalize()
+	var plinth_mesh := CylinderMesh.new()
+	plinth_mesh.top_radius = 1.65
+	plinth_mesh.bottom_radius = 1.85
+	plinth_mesh.height = 0.20
+	plinth_mesh.radial_segments = 20
+	plinth.mesh = plinth_mesh
+	plinth.position = Vector3(0, 0.10, -9)
+	plinth.material_override = context.make_material(tone.darkened(0.38))
+	context.add_node(plinth)
+	var seal := MeshInstance3D.new()
+	seal.name = "HartAftermathSeal"
+	var seal_mesh := TorusMesh.new()
+	seal_mesh.inner_radius = 1.64
+	seal_mesh.outer_radius = 1.76
+	seal_mesh.rings = 28
+	seal_mesh.ring_segments = 8
+	seal.mesh = seal_mesh
+	seal.position = Vector3(0, 0.23, -9)
+	var seal_material := context.make_material(tone)
+	seal_material.emission_enabled = true
+	seal_material.emission = tone
+	seal_material.emission_energy_multiplier = 0.42
+	seal.material_override = seal_material
+	context.add_node(seal)
+	context.make_light("HartAftermathLight", Vector3(0, 4.5, -9), tone, 2.4)
 
 func _make_hart_grove(context: ZoneBuildContext) -> void:
 	var plinth := MeshInstance3D.new()

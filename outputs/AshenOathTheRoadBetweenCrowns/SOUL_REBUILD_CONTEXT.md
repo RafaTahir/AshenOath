@@ -2,6 +2,17 @@
 
 ## Current Working Checkpoint - 2026-08-21
 
+### QUEST-012 continuation checkpoint
+
+The Hart Remembers arc now has four immutable covenant outcomes: Witness,
+Mercy, Duty, and Ash. The runtime verifier exercises all four, including the
+two boss-backed resolutions, White Hart defeat handoff, epilogue card creation,
+save round trip, stale-dialogue replay protection, and state-specific Hart
+Glade aftermath dressing. Story and World-006 targeted profiles pass and fresh
+Hart route captures exist. This remains a development checkpoint: later-zone
+visual quality is still below the locked bar, shutdown diagnostics remain
+open, and no production export, `main` push, or Vercel deployment has occurred.
+
 ### BOSS-007 continuation checkpoint
 
 The White Hart now has a data-driven three-phase encounter slice in the
