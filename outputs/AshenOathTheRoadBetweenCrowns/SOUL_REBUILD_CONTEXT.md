@@ -52,6 +52,15 @@ contracts, and fresh graphical sky captures. The active capture frames are
 after isolated graphical processes exit; no active-frame material error was
 seen in the targeted gates.
 
+The NARR-005 continuation closes the remaining authored-beat gaps in the
+campaign presentation layer. `QuestBeatDirector` now covers every non-optional
+objective in all ten main quests, including chapel opening, erased-name
+reading, Castle entry/evidence/haunting, the undercroft hook, and Hart arrival.
+QuestManager remains the only progression authority; beat state is still
+zone-aware and saveable. The strengthened verifier passes source coverage and
+beat-zone save/load round-trip. This improves guidance only and does not claim
+that the full campaign has passed real-input or final visual acceptance.
+
 The latest continuation slice adds Anwen's bone-attached upright staff, shared
 Balanced roof treatment, visible animated river-current ribbons, stronger
 Oathblade presentation, capsule/cylinder boss silhouette dressing, and

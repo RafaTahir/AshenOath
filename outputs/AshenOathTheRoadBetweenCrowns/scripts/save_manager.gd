@@ -50,7 +50,9 @@ func checkpoint(game) -> bool:
 func _is_game_shutting_down(game) -> bool:
 	if game == null or not is_instance_valid(game):
 		return true
-	return bool(game.get("resource_shutdown_prepared"))
+	# A missing dynamic property is a safe non-shutdown value. Comparing against
+	# true avoids invoking a runtime type constructor on older Godot Web builds.
+	return game.get("resource_shutdown_prepared") == true
 
 func _has_valid_player(game) -> bool:
 	if game == null or not is_instance_valid(game):

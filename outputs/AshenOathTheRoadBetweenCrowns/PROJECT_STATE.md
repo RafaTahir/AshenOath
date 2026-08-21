@@ -932,6 +932,19 @@ Known verifier note: Godot headless may emit ObjectDB cleanup warnings after pas
   diagnostics remain lifecycle debt; no production export or deployment was
   performed for this checkpoint.
 
+## NARR-005 Quest Beat Checkpoint - 2026-08-21
+
+- `QuestBeatDirector` now supplies authored arrival, investigation,
+  confrontation, choice, aftermath, and return-facing guidance for every
+  non-optional objective in all ten main quests. Chapel opening, erased-name
+  reading, Castle gate/courtyard/record hall/haunting, the undercroft hook, and
+  Hart arrival no longer fall back to generic tracker wording.
+- QuestManager remains authoritative for progression and save data. The beat
+  director remains a presentation service with a zone-aware save/load contract.
+- `verify_narr_005.gd` passes full main-quest beat coverage and beat-zone
+  round-trip checks. Real-input full-campaign pacing, fresh final captures,
+  and production release acceptance remain open.
+
 The project currently satisfies:
 
 - Web build launches past Godot splash.
