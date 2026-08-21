@@ -919,6 +919,7 @@ func _add_boss_silhouette() -> void:
 		_add_part(Vector3(0.58, 1.34, 0.0), Vector3(0.34, 0.78, 0.56), Color(0.17, 0.26, 0.14), "capsule", Vector3(0, 0, 12))
 		_add_part(Vector3(-0.28, 1.10, -0.42), Vector3(0.10, 0.48, 0.10), Color(0.30, 0.37, 0.17), "cylinder", Vector3(-28, 0, -14))
 		_add_part(Vector3(0.28, 1.10, -0.42), Vector3(0.10, 0.48, 0.10), Color(0.30, 0.37, 0.17), "cylinder", Vector3(-28, 0, 14))
+		_make_rootbound_identity()
 	elif enemy_id == "ashwing":
 		_add_part(Vector3(-0.74, 1.24, 0.12), Vector3(0.82, 0.16, 0.46), Color(0.26, 0.16, 0.12), "capsule", Vector3(0, 0, -8))
 		_add_part(Vector3(0.74, 1.24, 0.12), Vector3(0.82, 0.16, 0.46), Color(0.26, 0.16, 0.12), "capsule", Vector3(0, 0, 8))
@@ -1001,6 +1002,77 @@ func _make_bell_eater_identity() -> void:
 	boss_phase_sigil.position = Vector3(0, 1.52, -0.64)
 	boss_phase_sigil.material_override = _emissive_boss_material(Color(0.62, 0.28, 0.14), 0.72)
 	boss_visual_root.add_child(boss_phase_sigil)
+
+func _make_rootbound_identity() -> void:
+	# The body source supplies the animated mass; this layer gives Rootbound a
+	# readable story silhouette: bark harness, root arms, and an exposed oathwood
+	# heart that brightens as the phases open it.
+	var harness := MeshInstance3D.new()
+	harness.name = "RootboundBarkHarness"
+	var harness_mesh := TorusMesh.new()
+	harness_mesh.inner_radius = 0.60
+	harness_mesh.outer_radius = 0.72
+	harness_mesh.rings = 10
+	harness_mesh.ring_segments = 18
+	harness.mesh = harness_mesh
+	harness.position = Vector3(0, 1.38, 0.02)
+	harness.scale = Vector3(1.18, 0.74, 0.92)
+	harness.rotation.x = PI * 0.5
+	harness.material_override = _mat(Color(0.12, 0.20, 0.10))
+	boss_visual_root.add_child(harness)
+
+	for side in [-1.0, 1.0]:
+		var root_arm := MeshInstance3D.new()
+		root_arm.name = "RootboundRootArmLeft" if side < 0.0 else "RootboundRootArmRight"
+		var arm_mesh := CylinderMesh.new()
+		arm_mesh.top_radius = 0.055
+		arm_mesh.bottom_radius = 0.13
+		arm_mesh.height = 1.22
+		arm_mesh.radial_segments = 8
+		root_arm.mesh = arm_mesh
+		root_arm.position = Vector3(side * 0.68, 1.10, -0.10)
+		root_arm.rotation_degrees = Vector3(0, 0, side * -25.0)
+		root_arm.material_override = _mat(Color(0.18, 0.25, 0.11))
+		boss_visual_root.add_child(root_arm)
+		for branch_index in range(2):
+			var branch := MeshInstance3D.new()
+			branch.name = "RootboundBranch"
+			var branch_mesh := CylinderMesh.new()
+			branch_mesh.top_radius = 0.018
+			branch_mesh.bottom_radius = 0.06
+			branch_mesh.height = 0.52 if branch_index == 0 else 0.38
+			branch_mesh.radial_segments = 7
+			branch.mesh = branch_mesh
+			branch.position = Vector3(side * (0.86 + branch_index * 0.08), 1.42 + branch_index * 0.25, -0.12)
+			branch.rotation_degrees = Vector3(0, 0, side * (42.0 if branch_index == 0 else -34.0))
+			branch.material_override = _mat(Color(0.24, 0.31, 0.14))
+			boss_visual_root.add_child(branch)
+
+	var heart := MeshInstance3D.new()
+	heart.name = "RootboundHeart"
+	var heart_mesh := SphereMesh.new()
+	heart_mesh.radius = 0.20
+	heart_mesh.height = 0.38
+	heart.mesh = heart_mesh
+	heart.position = Vector3(0, 1.58, -0.62)
+	heart.scale = Vector3(0.82, 1.12, 0.58)
+	heart.material_override = _emissive_boss_material(Color(0.36, 0.78, 0.30), 0.90)
+	boss_visual_root.add_child(heart)
+	boss_phase_sigil = heart
+
+	var bark_plate := MeshInstance3D.new()
+	bark_plate.name = "RootboundBarkPlate"
+	var plate_mesh := CylinderMesh.new()
+	plate_mesh.top_radius = 0.32
+	plate_mesh.bottom_radius = 0.42
+	plate_mesh.height = 0.18
+	plate_mesh.radial_segments = 10
+	bark_plate.mesh = plate_mesh
+	bark_plate.position = Vector3(0, 1.72, -0.46)
+	bark_plate.rotation.x = PI * 0.5
+	bark_plate.scale = Vector3(1.0, 0.78, 0.80)
+	bark_plate.material_override = _mat(Color(0.12, 0.18, 0.09))
+	boss_visual_root.add_child(bark_plate)
 
 func _emissive_boss_material(color: Color, energy: float) -> StandardMaterial3D:
 	var material := _mat(color)
@@ -1227,6 +1299,7 @@ func _animate_boss_identity(delta: float) -> void:
 			boss_visual_root.rotation.z = lerpf(boss_visual_root.rotation.z, 0.0, minf(delta * 6.0, 1.0))
 	elif enemy_id == "rootbound_colossus":
 		boss_visual_root.rotation.y = sin(boss_visual_time * 0.72) * 0.035
+		boss_visual_root.scale = boss_visual_root.scale.lerp(Vector3.ONE * (1.0 + sin(boss_visual_time * 2.2) * 0.025), minf(delta * 5.0, 1.0))
 	elif enemy_id == "ashwing":
 		boss_visual_root.rotation.z = sin(boss_visual_time * 2.2) * 0.06
 
@@ -1244,6 +1317,12 @@ func apply_boss_phase_visual(next_phase: int) -> void:
 		2: Color(0.92, 0.46, 0.16),
 		3: Color(1.0, 0.78, 0.22),
 	}.get(next_phase, Color(0.82, 0.24, 0.14)) as Color
+	if enemy_id == "rootbound_colossus":
+		color = {
+			1: Color(0.30, 0.72, 0.26),
+			2: Color(0.62, 0.86, 0.26),
+			3: Color(0.88, 0.98, 0.54),
+		}.get(next_phase, Color(0.50, 0.88, 0.32)) as Color
 	material.albedo_color = color
 	material.emission = color
 	material.emission_energy_multiplier = 0.72 + float(next_phase) * 0.28

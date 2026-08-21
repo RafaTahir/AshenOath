@@ -48,6 +48,12 @@ bell identity, and fresh 1280x720 Bell-Eater captures. The targeted boss,
 monster, character-facing, and performance assertions pass. The encounter
 still uses an interim low-poly mapping and is not final visual approval.
 
+The BOSS-004 slice now spawns Rootbound Colossus from the reconstructed Deep
+Wood register objective, persists its phase health, adds a bark/root/exposed
+heart identity layer, and suppresses the encounter after defeat. Fresh
+Rootbound phase captures and the runtime state gate pass. Its connected source
+body remains an interim mapping, so the final monster bar is still open.
+
 Bog Wretch and Gravebound Knight now instantiate connected skinned Ghoul-family
 runtime bodies instead of the previous Slime/Skeleton primitives. Their
 monster verifier checks live skeletons, animation drivers, visual roots, and
