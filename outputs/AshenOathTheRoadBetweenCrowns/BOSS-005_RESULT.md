@@ -11,6 +11,9 @@ reload-safe Old Mill boss slice; this is not production approval.
   objective, three named phase actions, and explicit non-peaceful resolution.
 - Added an Ashwing identity layer: charred harness, emissive ash core, and
   scorched wing roots parented to the boss visual root.
+- Replaced the previous secondary scale multiplier with the dedicated
+  `ashwing_boss` role normalized to a 4.80 m focal-creature height and a
+  matching broad collision contract.
 - Added `interrupt_boss_windup()` to the enemy boss contract. It clears the
   active special attack, enters stagger recovery, records the reason, and
   emits an interruption signal.
@@ -37,9 +40,9 @@ production release.
 
 ## Screenshots
 
-- `Development_Gallery/screenshots/BOSS-005_01_Ashwing_Perceived_20260821_095107.png`
-- `Development_Gallery/screenshots/BOSS-005_02_Ashwing_Scorched_20260821_095107.png`
-- `Development_Gallery/screenshots/BOSS-005_03_Ashwing_BreakingPerch_20260821_095107.png`
+- `Development_Gallery/screenshots/BOSS-005_01_Ashwing_Perceived_20260821_135312.png`
+- `Development_Gallery/screenshots/BOSS-005_02_Ashwing_Scorched_20260821_135312.png`
+- `Development_Gallery/screenshots/BOSS-005_03_Ashwing_BreakingPerch_20260821_135312.png`
 
 ## Known limitation
 

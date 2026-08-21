@@ -186,6 +186,14 @@
         "license": "CC0 1.0",
         "notes": "Interim dragon silhouette for Ashwing. It replaces the incorrect OrcSkull mapping while a skinned flying-drake source is prepared; flight presentation remains controller-driven until that source is available."
       },
+      "ashwing_boss": {
+        "status": "boss_005_focal_creature_runtime",
+        "path": "res://assets_external/enemies/Dragon.fbx",
+        "source": "Quaternius Animated Monsters",
+        "license": "CC0 1.0",
+        "target_height": 4.80,
+        "notes": "Ashwing uses the connected animated Dragon source at focal-creature scale with charred harness, ember core, and scorched wing-root identity dressing."
+      },
       "bog_wretch_creature": {
         "status": "mon_002_connected_family_runtime",
         "path": "res://assets_external/characters_real/GhoulStalker_Real.glb",

@@ -33,18 +33,18 @@ func _initialize() -> void:
 		push_error("Ashwing was not available for capture")
 	else:
 		boss.set_physics_process(false)
-		game.player.global_position = Vector3(0, 1.0, -5.8)
+		game.player.global_position = Vector3(0, 1.0, -6.4)
 		game.player.velocity = Vector3.ZERO
 		boss.global_position = Vector3(0, 1.0, -9.0)
-		await _capture(game, boss, "BOSS-005_01_Ashwing_Perceived", Vector3(0, 1.0, -5.8), 0.0)
+		await _capture(game, boss, "BOSS-005_01_Ashwing_Perceived", Vector3(0, 1.0, -6.4), 0.0)
 		boss.apply_damage(boss.health_component.max_health * 0.40, "capture")
 		await _frames(16)
 		boss.look_at(game.player.global_position + Vector3.UP * 0.9, Vector3.UP)
-		await _capture(game, boss, "BOSS-005_02_Ashwing_Scorched", Vector3(0, 1.0, -5.8), 0.0)
+		await _capture(game, boss, "BOSS-005_02_Ashwing_Scorched", Vector3(0, 1.0, -6.4), 0.0)
 		boss.apply_damage(boss.health_component.max_health * 0.30, "capture")
 		await _frames(16)
 		boss.look_at(game.player.global_position + Vector3.UP * 0.9, Vector3.UP)
-		await _capture(game, boss, "BOSS-005_03_Ashwing_BreakingPerch", Vector3(0, 1.0, -5.8), 0.0)
+		await _capture(game, boss, "BOSS-005_03_Ashwing_BreakingPerch", Vector3(0, 1.0, -6.4), 0.0)
 	print("BOSS-005 SCREENSHOTS: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
 	if game.has_method("prepare_resource_shutdown"):
 		game.prepare_resource_shutdown()
@@ -66,6 +66,11 @@ func _capture(game: Node, boss: Node, stem: String, position: Vector3, yaw: floa
 	game.camera_rig.yaw = yaw
 	game.camera_rig.pitch = -0.14
 	game.hud.set_guidance_hint("")
+	game.set_process(false)
+	game.active_interactable = null
+	game.hud.set_prompt("")
+	game.hud.prompt_label.visible = false
+	game.hud.hint_label.visible = false
 	await _frames(34)
 	await RenderingServer.frame_post_draw
 	var image: Image = root.get_viewport().get_texture().get_image()

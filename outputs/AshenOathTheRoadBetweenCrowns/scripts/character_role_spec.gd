@@ -53,6 +53,7 @@ const SPECS := {
 	"rootbound_colossus": {"height": 4.40, "collision_height": 4.10, "collision_radius": 1.05, "lod": 52.0, "required_sockets": ["head"], "visual_forward_degrees": 0.0},
 	"rootbound_colossus_boss": {"height": 4.40, "collision_height": 4.10, "collision_radius": 1.05, "lod": 52.0, "required_sockets": ["head"], "visual_forward_degrees": 0.0},
 	"ashwing": {"height": 2.40, "collision_height": 2.10, "collision_radius": 0.56, "lod": 24.0, "required_sockets": [], "visual_forward_degrees": 180.0},
+	"ashwing_boss": {"height": 4.80, "collision_height": 3.80, "collision_radius": 0.90, "lod": 56.0, "required_sockets": [], "visual_forward_degrees": 180.0},
 	"halvern_boss": {"height": 1.88, "collision_height": 1.78, "collision_radius": 0.38, "lod": 20.0, "required_sockets": ["head", "weapon"], "visual_forward_degrees": 180.0},
 	"ghoulkin_creature": {"height": 1.72, "lod": 18.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
 	"ghoul_stalker_real": {"height": 1.72, "lod": 18.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},

@@ -728,7 +728,7 @@ func _try_build_mapped_body() -> bool:
 			"gravebound_knight": "gravebound_knight_creature",
 			"bell_eater": "bell_eater_boss",
 			"rootbound_colossus": "rootbound_colossus_boss",
-			"ashwing": "ashwing_creature",
+			"ashwing": "ashwing_boss",
 			"halvern_boss": "gravebound_knight_creature",
 			"white_hart_avatar": "white_hart_avatar",
 		}.get(enemy_id, "ghoul_gaunt_real")
@@ -780,7 +780,7 @@ func _try_build_mapped_body() -> bool:
 	animation_driver.name = "CharacterAnimationDriver"
 	mapped.add_child(animation_driver)
 	if uses_real_body:
-		if visual_source == "ashwing_creature":
+		if visual_source in ["ashwing_creature", "ashwing_boss"]:
 			animation_driver.configure(mapped, {
 				"idle":"DragonArmature|Dragon_Flying", "walk":"DragonArmature|Dragon_Flying",
 				"walk_back":"DragonArmature|Dragon_Flying", "strafe":"DragonArmature|Dragon_Flying",
@@ -983,6 +983,7 @@ func _add_boss_silhouette() -> void:
 	boss_identity_base_scale = {
 		"bell_eater": Vector3.ONE * 1.55,
 		"rootbound_colossus": Vector3(1.45, 1.60, 1.45),
+		"ashwing": Vector3(1.35, 1.22, 1.35),
 	}.get(enemy_id, Vector3.ONE)
 	boss_visual_root.scale = boss_identity_base_scale
 	visual_root.add_child(boss_visual_root)
@@ -1377,9 +1378,11 @@ func _mapped_enemy_scale() -> Vector3:
 		# contract; do not apply a second multiplicative scale here.
 		return Vector3.ONE
 	if enemy_id == "rootbound_colossus":
-		return Vector3(1.48, 1.42, 1.48)
+		# rootbound_colossus_boss is normalized to its full 4.40 m role.
+		return Vector3.ONE
 	if enemy_id == "ashwing":
-		return Vector3(1.30, 1.26, 1.30)
+		# ashwing_boss is normalized to its full 4.80 m flying-creature role.
+		return Vector3.ONE
 	if enemy_id == "halvern_boss":
 		return Vector3(1.04, 1.04, 1.04)
 	if enemy_id == "ghoulkin":

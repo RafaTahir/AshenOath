@@ -1025,7 +1025,9 @@ Known verifier note: Godot headless may emit ObjectDB cleanup warnings after pas
   Ashwing's windup clears the breath attack, staggers the boss, and records an
   `oathfire` interruption reason.
 - A charred harness, emissive ash core, and scorched wing-root identity layer
-  make the current Dragon source readable at gameplay distance.
+  make the current Dragon source readable at gameplay distance. The dedicated
+  `ashwing_boss` role now normalizes the flying creature to 4.80 m instead of
+  applying a second runtime scale multiplier.
 - `verify_boss_005.gd` and `capture_boss_005.gd` pass on Compatibility, with
   fresh native-720p frames in `Development_Gallery/screenshots/`.
 - The body source remains an interim low-poly mapping. MON-002 visual-family
