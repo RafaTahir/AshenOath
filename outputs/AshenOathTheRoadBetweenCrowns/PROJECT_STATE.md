@@ -138,9 +138,11 @@ during shutdown. Characters, combat, and world targeted profiles pass after
 these changes.
 
 The current `WORLD-015` slice adds a bounded later-wild presentation pass:
-narrow damp-earth route surfaces, textured shoulders, path stones, grass,
-waystones, mapped rock silhouettes, a memory altar, framed mill and farmstead
-shells, a non-colliding marsh water material, and safer landmark dressing.
+narrow damp-earth route surfaces, paired ruts and damp edges, path stones,
+grass, near-edge tree silhouettes, waystones, mapped rock silhouettes, a memory
+altar, framed mill and farmstead shells, mill brace/window cues, farmstead
+ash/ember cues, marsh water streaks, a non-colliding marsh water material, and
+safer landmark dressing.
 Fresh 1280x720 captures exist for Deep Woods, Old Mill, Burned Farmstead, and
 Marsh Crossing. The later zones remain deliberately stylized and below the
 final visual bar; this is a development checkpoint, not production approval.
@@ -973,7 +975,7 @@ Known verifier note: Godot headless may emit ObjectDB cleanup warnings after pas
 - Human models are skeletal, textured, lit, and animated but still lack realistic faces, hands, hair, facial rigs, and bespoke clothing.
 - CHAR-001 improves immediate identity and removes proxy anatomy, but the underlying Poly Pizza humans and skeletal Ghoulkin remain low-poly temporary assets rather than final character art.
 - Main-route character and Wychwood enemy skeletons animate; broader animation retargeting and facial performance remain incomplete.
-- The full campaign route is now playable through Deep Wood, mill, farmstead, marsh, bandit road, Castle Vargan, undercroft, assembly, and Hart Glade; visual fidelity remains deliberately stylized and uneven.
+- The full campaign route is now playable through Deep Wood, mill, farmstead, marsh, bandit road, Castle Vargan, undercroft, assembly, and Hart Glade; visual fidelity remains deliberately stylized and uneven. WORLD-015 now adds route ruts/damp edges, near-edge silhouettes, mill braces/window warmth, farmstead ash/ember dressing, and marsh water streaks while preserving route safety.
 - Castle Vargan is playable and verified with an authored approach, courtyard, and Record Hall, but its modular architecture remains below the final art target.
 - Five side quests have authored world interactions and consequences; the remaining five stay data-backed for a later content pass.
 - Audio is generated/procedural feedback, not mastered final game audio.

@@ -54,6 +54,16 @@ fresh 1280x720 formation/contact captures pass. The matching Ultimate Monsters
 source and final boss-family visual approval remain open; production remains
 unchanged.
 
+### WORLD-015 later-wild presentation checkpoint
+
+Deep Woods, Old Mill, Burned Farmstead, and Marsh Crossing now have a second
+route-safe dressing pass: paired road ruts and damp edges, nearer forest
+silhouettes, mill braces and warm window light, farmstead charred posts/ash and
+ember cues, and marsh water streaks/reflection light. Fresh 1280x720 captures
+pass the nonblank gate. The later zones remain deliberately stylized and their
+final architecture/material/sky acceptance is still open; production remains
+unchanged.
+
 ### Character contract checkpoint - current continuation
 
 The character foundation contract is enforced at runtime. An inspected role
