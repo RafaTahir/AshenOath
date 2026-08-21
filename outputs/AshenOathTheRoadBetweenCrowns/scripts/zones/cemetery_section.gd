@@ -283,7 +283,11 @@ func _build_bell_and_shrine(context: ZoneBuildContext, origin: Vector3) -> void:
 	context.make_visual_box("CrowShrineMark", origin + Vector3(2.05, 0.90, -3.13), Vector3(0.24, 0.42, 0.025), Color(0.045, 0.042, 0.038))
 	var shrine_state := str(context.get_story_flag("crow_shrine_state", ""))
 	var chapel_color := Color(0.46, 0.60, 0.50)
-	if shrine_state == "disturbed":
+	if shrine_state == "cleansed":
+		# Keep the clean covenant state explicit so saved consequences have a
+		# distinct authored presentation instead of relying on the default.
+		chapel_color = Color(0.46, 0.60, 0.50)
+	elif shrine_state == "disturbed":
 		chapel_color = Color(0.62, 0.34, 0.25)
 	elif shrine_state == "bound":
 		chapel_color = Color(0.30, 0.35, 0.40)

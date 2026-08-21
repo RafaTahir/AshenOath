@@ -956,6 +956,16 @@ Known verifier note: Godot headless may emit ObjectDB cleanup warnings after pas
 - The functional route remains accepted while final browser pacing, complete
   real-input campaign evidence, and final visual quality remain open.
 
+## QUEST-009 Bell Beneath Greyfen Checkpoint - 2026-08-21
+
+- The Crow Shrine has a verified three-way contract: `cleansed`, `disturbed`,
+  and `bound`. Each choice writes one persistent state, applies its declared
+  consequence once, completes the shrine objective, and refuses repeat use.
+- `verify_quest_009.gd` passes the dialogue contract, runtime action, one-shot
+  guard, cemetery visual state branches, and bell aftermath coverage.
+- Full real-input cemetery/Bell-Eater play and final before/after visual
+  approval remain open for the Milestone F gate.
+
 The project currently satisfies:
 
 - Web build launches past Godot splash.
