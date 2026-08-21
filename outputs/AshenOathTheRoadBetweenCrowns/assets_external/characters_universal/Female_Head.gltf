@@ -1463,12 +1463,12 @@
     {
       "mimeType": "image/png",
       "name": "T_Hair_2_Normal",
-      "uri": "T_Hair_2_Normal.png"
+      "uri": "T_Hair_2_Normal_1K.png"
     },
     {
       "mimeType": "image/png",
       "name": "T_Hair_2_BaseColor",
-      "uri": "T_Hair_2_BaseColor.png"
+      "uri": "T_Hair_2_BaseColor_1K.png"
     },
     {
       "mimeType": "image/png",
@@ -1483,17 +1483,17 @@
     {
       "mimeType": "image/png",
       "name": "T_Superhero_Female_Normal",
-      "uri": "T_Superhero_Female_Normal.png"
+      "uri": "T_Superhero_Female_Normal_1K.png"
     },
     {
       "mimeType": "image/png",
       "name": "T_Superhero_Female_Dark_BaseColor",
-      "uri": "T_Superhero_Female_Dark_BaseColor.png"
+      "uri": "T_Superhero_Female_Dark_BaseColor_1K.png"
     },
     {
       "mimeType": "image/png",
       "name": "T_Superhero_Female_Roughness",
-      "uri": "T_Superhero_Female_Roughness.png"
+      "uri": "T_Superhero_Female_Roughness_1K.png"
     }
   ],
   "skins": [

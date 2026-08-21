@@ -1578,17 +1578,17 @@
     {
       "mimeType": "image/png",
       "name": "T_Regular_Male_Normal",
-      "uri": "../characters_universal/T_Regular_Male_Normal.png"
+      "uri": "../characters_universal/T_Regular_Male_Normal_1K.png"
     },
     {
       "mimeType": "image/png",
       "name": "T_Regular_Male_Dark_BaseColor",
-      "uri": "../characters_universal/T_Regular_Male_Dark_BaseColor.png"
+      "uri": "../characters_universal/T_Regular_Male_Dark_BaseColor_1K.png"
     },
     {
       "mimeType": "image/png",
       "name": "T_Regular_Male_Roughness",
-      "uri": "../characters_universal/T_Regular_Male_Roughness.png"
+      "uri": "../characters_universal/T_Regular_Male_Roughness_1K.png"
     }
   ],
   "skins": [

@@ -1427,17 +1427,17 @@
 		{
 			"mimeType":"image/png",
 			"name":"T_Peasant_Normal",
-			"uri":"T_Peasant_Normal.png"
+			"uri":"T_Peasant_Normal_1K.png"
 		},
 		{
 			"mimeType":"image/png",
 			"name":"T_Peasant_BaseColor",
-			"uri":"T_Peasant_BaseColor.png"
+			"uri":"T_Peasant_BaseColor_1K.png"
 		},
 		{
 			"mimeType":"image/png",
 			"name":"T_Peasant_ORM",
-			"uri":"T_Peasant_ORM.png"
+			"uri":"T_Peasant_ORM_1K.png"
 		}
 	],
 	"skins":[
