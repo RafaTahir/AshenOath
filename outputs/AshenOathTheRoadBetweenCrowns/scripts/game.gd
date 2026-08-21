@@ -3983,7 +3983,6 @@ func _make_village_place(id: String, type: String, prompt: String, pos: Vector3,
 		mesh.size = Vector3(size.x, 0.16, size.z)
 		table.position.y = size.y
 		table.material_override = _mat(color.darkened(0.10))
-		area.add_child(table)
 		for x in [-size.x * 0.38, size.x * 0.38]:
 			for z in [-size.z * 0.34, size.z * 0.34]:
 				var leg := MeshInstance3D.new()
@@ -3999,7 +3998,8 @@ func _make_village_place(id: String, type: String, prompt: String, pos: Vector3,
 		mesh.size = size
 		table.position.y = size.y * 0.5
 		table.material_override = _mat(color)
-		area.add_child(table)
+	table.mesh = mesh
+	area.add_child(table)
 	var label := Label3D.new()
 	label.name = "InteractionWorldLabel"
 	label.text = prompt
