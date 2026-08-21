@@ -306,6 +306,9 @@ func _make_undercroft_dressing(context: ZoneBuildContext) -> void:
 	# unshaded architectural inlays keep the route readable without turning the
 	# undercroft into a bright outdoor room or adding more dynamic lights.
 	_make_flat_light_box(context, "UndercroftRouteInlay", Vector3(0, 0.085, 0), Vector3(6.0, 0.018, 28.0), Color(0.15, 0.13, 0.11))
+	_make_flat_light_box(context, "UndercroftAmbientCeiling", Vector3(0, 5.84, 0), Vector3(31.0, 0.025, 30.0), Color(0.075, 0.070, 0.068))
+	_make_flat_light_box(context, "UndercroftWallFillLeft", Vector3(-13.82, 3.0, 0), Vector3(0.025, 5.1, 29.0), Color(0.09, 0.085, 0.080))
+	_make_flat_light_box(context, "UndercroftWallFillRight", Vector3(13.82, 3.0, 0), Vector3(0.025, 5.1, 29.0), Color(0.085, 0.082, 0.080))
 	_make_flat_light_box(context, "UndercroftCeilingInlayA", Vector3(0, 6.08, -8.5), Vector3(8.0, 0.018, 4.2), Color(0.08, 0.07, 0.06))
 	_make_flat_light_box(context, "UndercroftCeilingInlayB", Vector3(0, 6.08, 7.5), Vector3(8.0, 0.018, 4.2), Color(0.07, 0.075, 0.09))
 	for z in [-12.0, -6.0, 0.0, 6.0, 12.0]:
@@ -325,6 +328,7 @@ func _make_assembly_dressing(context: ZoneBuildContext) -> void:
 	context.make_visual_box("AssemblyDaisFront", Vector3(0, 0.74, -10.9), Vector3(10.6, 0.16, 0.20), Color(0.35, 0.21, 0.10))
 	context.make_visual_box("AssemblyFireBowl", Vector3(0, 1.15, 4.2), Vector3(0.72, 0.24, 0.72), Color(0.26, 0.18, 0.09))
 	context.make_visual_box("AssemblyFire", Vector3(0, 1.38, 4.2), Vector3(0.22, 0.44, 0.22), Color(0.76, 0.34, 0.10))
+	context.make_light("AssemblyFireLight", Vector3(0, 2.0, 4.2), Color(0.78, 0.28, 0.08), 1.0)
 
 func _make_hart_glade_dressing(context: ZoneBuildContext) -> void:
 	# The grove is framed as a deliberate clearing, with a readable approach and
@@ -336,6 +340,8 @@ func _make_hart_glade_dressing(context: ZoneBuildContext) -> void:
 		context.make_path_stone(position, 0.68)
 	context.make_visual_box("HartGladeWitnessThreshold", Vector3(0, 0.10, -5.8), Vector3(4.0, 0.08, 0.18), Color(0.18, 0.34, 0.22))
 	context.make_visual_box("HartGladeMoonlitMarker", Vector3(0, 2.1, -9.0), Vector3(0.18, 3.4, 0.18), Color(0.19, 0.45, 0.29))
+	for position in [Vector3(-10.5, 0, -9.0), Vector3(10.5, 0, -9.0), Vector3(-11.0, 0, 4.5), Vector3(11.0, 0, 5.5)]:
+		context.make_loose_role("forest_tree_variant", position, Vector3(1.12, 1.06, 1.12), position.x * 2.0)
 
 func _make_flat_light_box(context: ZoneBuildContext, node_name: String, pos: Vector3, size: Vector3, color: Color) -> void:
 	var node := MeshInstance3D.new()

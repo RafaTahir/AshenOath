@@ -2,27 +2,31 @@
 
 ## Scope
 
-This development slice applies the authored presentation pass to Castle Vargan,
+This development slice applies a second authored presentation pass to Castle Vargan,
 the Record Hall, the undercroft, the Greyfen assembly, and Hart Glade. Route
 ownership, quest state, gate destinations, collision, and save contracts remain
 unchanged.
 
 ## Changes
 
-- Castle approach now has military-road shoulder variation, path stones, a
-  gatehouse keystone/threshold, and a framed keep entry.
+- Castle approach now has military-road shoulder variation, path stones,
+  repeated stone seams, edge insets, a gatehouse keystone/threshold, and a
+  framed keep entry.
 - Castle courtyard now has edge paving, stable framing, a cistern rim, a crest,
-  and a restrained training-yard marker.
+  a readable water surface, and a restrained training-yard marker.
 - Record Hall prop batches preserve authored material tints instead of reusing a
   single pale surface material. The archive now has floor insets, pilasters,
-  door arches, lantern accents, a ledger runner, and a warmer ceiling treatment.
+  door arches, lantern accents, visible ledger pages, a ledger runner, and a
+  warmer ceiling treatment.
 - The undercroft reserves its two Balanced light slots for the witness route,
   adds a readable unshaded route inlay, ceiling inlays, wall bands, arch bands,
-  and a witness threshold.
+  ambient ceiling/wall fill, and a witness threshold so the arrival space no
+  longer reads as a black void.
 - Greyfen assembly now has road wear, witness banners, a dais edge, and a small
-  ceremonial fire-bowl marker.
+  ceremonial fire-bowl marker, and localized fire light.
 - Hart Glade now has deliberate moss framing, approach stones, a witness
-  threshold, and a visible spectral Hart at gameplay distance.
+  threshold, near-edge forest silhouettes, and a visible spectral Hart at
+  gameplay distance.
 - Enemy visual-role construction now prefers visual-upgrade mappings before
   legacy combat fallbacks for focal creatures.
 - White Hart normalization uses its intended focal height and 48 m visibility
@@ -53,18 +57,19 @@ rather than suppressed.
 
 Fresh graphical Compatibility captures:
 
-- `Development_Gallery/screenshots/WORLD_005_01_BanditRoad_20260821_091422.png`
-- `Development_Gallery/screenshots/WORLD_005_02_CastleApproach_20260821_091422.png`
-- `Development_Gallery/screenshots/WORLD_005_03_CastleCourtyard_20260821_091422.png`
-- `Development_Gallery/screenshots/WORLD_005_04_RecordHall_20260821_091422.png`
-- `Development_Gallery/screenshots/WORLD_006_01_Undercroft_20260821_090821.png`
-- `Development_Gallery/screenshots/WORLD_006_02_Assembly_20260821_090821.png`
-- `Development_Gallery/screenshots/WORLD_006_03_HartGlade_20260821_090821.png`
+- `Development_Gallery/screenshots/WORLD_005_01_BanditRoad_20260821_143501.png`
+- `Development_Gallery/screenshots/WORLD_005_02_CastleApproach_20260821_143501.png`
+- `Development_Gallery/screenshots/WORLD_005_03_CastleCourtyard_20260821_143501.png`
+- `Development_Gallery/screenshots/WORLD_005_04_RecordHall_20260821_143501.png`
+- `Development_Gallery/screenshots/WORLD_006_01_Undercroft_20260821_143530.png`
+- `Development_Gallery/screenshots/WORLD_006_02_Assembly_20260821_143530.png`
+- `Development_Gallery/screenshots/WORLD_006_03_HartGlade_20260821_143530.png`
 
-The captures are current, nonblank, and route-readable. They remain stylized
-development evidence; final approval still requires a complete campaign pass,
-stronger bespoke boss/character assets, full export verification, and browser
-testing.
+The captures are current, nonblank, and route-readable. The Undercroft frame
+also proves the new ambient fill keeps the player path, pillars, and arrival
+space visible. They remain stylized development evidence; final approval still
+requires a complete campaign pass, stronger bespoke boss/character assets, full
+export verification, and browser testing.
 
 ## Running
 

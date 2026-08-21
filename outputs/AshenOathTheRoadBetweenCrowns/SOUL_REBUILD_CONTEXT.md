@@ -64,6 +64,17 @@ pass the nonblank gate. The later zones remain deliberately stylized and their
 final architecture/material/sky acceptance is still open; production remains
 unchanged.
 
+### WORLD-016 castle/finale presentation checkpoint
+
+Castle Approach, Courtyard, Record Hall, Undercroft, Assembly, and Hart Glade
+now have a second authored dressing pass: castle route seams and edge insets,
+cistern water, visible ledger pages, assembly fire light, Hart Glade edge
+silhouettes, and unshaded undercroft ceiling/wall fill. Fresh 1280x720 Castle
+and finale captures pass the route/nonblank checks, and the Undercroft arrival
+is readable rather than black. These areas remain stylized development visuals;
+final architecture, bespoke creature assets, and full browser acceptance remain
+open. Production remains unchanged.
+
 ### Character contract checkpoint - current continuation
 
 The character foundation contract is enforced at runtime. An inspected role

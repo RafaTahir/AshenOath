@@ -149,13 +149,15 @@ final visual bar; this is a development checkpoint, not production approval.
 
 The current `WORLD-016` slice extends that presentation method through Castle
 Vargan, the Record Hall, undercroft, Greyfen assembly, and Hart Glade. Castle
-materials now retain authored tint variants, the archive has readable interior
-bands and warm ledger staging, the undercroft reserves its light budget for the
-witness route, and the White Hart is visible at gameplay distance through its
-mapped animated animal source and spectral material treatment. Fresh WORLD-005
-and WORLD-006 captures exist. The regenerated Ghoul family is consolidated to
-the six-surface Compatibility budget and its performance gate passes after
-reimport.
+materials now retain authored tint variants, the approach has stone seams and
+edge insets, the courtyard has a readable cistern surface, the archive has
+readable interior bands and visible ledger staging, the undercroft reserves its
+light budget for the witness route and adds ambient ceiling/wall fill, and the
+White Hart is visible at gameplay distance through its mapped animated animal
+source and spectral material treatment. Assembly gains localized fire light and
+Hart Glade gains nearer edge silhouettes. Fresh WORLD-005 and WORLD-006 captures
+exist. The regenerated Ghoul family is consolidated to the six-surface
+Compatibility budget and its performance gate passes after reimport.
 
 The active BOSS-002/BOSS-003 slice adds checkpoint-health persistence,
 resolved-boss suppression, Bell-Eater phase visuals, a visible harness/chest

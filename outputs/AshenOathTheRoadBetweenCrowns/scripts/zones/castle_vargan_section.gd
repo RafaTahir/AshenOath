@@ -13,9 +13,20 @@ func build(context: ZoneBuildContext) -> void:
 func _base(context: ZoneBuildContext, zone_id: String, ground_color: Color, size := Vector2(44, 34)) -> void:
 	context.make_ground(Vector3(0, -0.08, 0), Vector3(size.x, 0.16, size.y), ground_color)
 	context.make_play_area_bounds(size.x, size.y, ground_color.darkened(0.38))
+	_make_castle_route_surface(context, zone_id)
 	var marker := Node3D.new()
 	marker.name = "CastleVargan_%s" % zone_id
 	context.add_node(marker)
+
+func _make_castle_route_surface(context: ZoneBuildContext, zone_id: String) -> void:
+	var seam := Color(0.055, 0.050, 0.045)
+	var edge := Color(0.23, 0.21, 0.18)
+	var route_width := 5.2 if zone_id == "vargan_approach" else (8.0 if zone_id == "vargan_court" else 7.0)
+	for z in [-12.0, -7.0, -2.0, 3.0, 8.0, 13.0]:
+		context.make_visual_box("CastleRouteStoneSeam", Vector3(-route_width * 0.38, 0.052, z), Vector3(0.08, 0.014, 2.6), seam)
+		context.make_visual_box("CastleRouteStoneSeam", Vector3(route_width * 0.40, 0.053, z + 0.22), Vector3(0.08, 0.015, 2.25), seam.darkened(0.12))
+		context.make_visual_box("CastleRouteEdgeInset", Vector3(-route_width * 0.57, 0.055, z + 0.28), Vector3(0.18, 0.012, 1.5), edge.darkened(0.20))
+		context.make_visual_box("CastleRouteEdgeInset", Vector3(route_width * 0.57, 0.056, z - 0.18), Vector3(0.18, 0.012, 1.35), edge.darkened(0.28))
 
 func _build_approach(context: ZoneBuildContext) -> void:
 	_base(context, "Approach", Color(0.105, 0.105, 0.10), Vector2(46, 38))
@@ -55,6 +66,7 @@ func _build_courtyard(context: ZoneBuildContext) -> void:
 	for z in [-2.5, 0.0, 2.5]:
 		context.make_prop_box("StableStall", Vector3(-10, 1, z), Vector3(0.25, 2, 2), Color(0.19, 0.13, 0.08))
 	context.make_prop_box("Cistern", Vector3(8, 0.55, 3), Vector3(4, 1.1, 4), Color(0.19, 0.19, 0.18))
+	context.make_visual_box("CisternWater", Vector3(8, 1.13, 3), Vector3(3.25, 0.035, 3.25), Color(0.08, 0.18, 0.20))
 	for x in [7.0, 10.0, 13.0]:
 		context.make_prop_box("WeaponRack", Vector3(x, 1.2, -5), Vector3(0.3, 2.4, 3), Color(0.20, 0.13, 0.075))
 	for i in range(4):
@@ -109,6 +121,8 @@ func _build_record_hall(context: ZoneBuildContext) -> void:
 	for p in [Vector3(-3, 0, -4), Vector3(3, 0, -4), Vector3(-3, 0, 5), Vector3(3, 0, 5)]:
 		context.make_pillar(p)
 	context.make_prop_box("SealedLedgerTable", Vector3(0, 0.8, -8), Vector3(4.2, 1.6, 2.2), Color(0.22, 0.14, 0.075))
+	for x in [-1.25, -0.82, -0.38, 0.42, 0.86, 1.24]:
+		context.make_visual_box("LedgerVisiblePage", Vector3(x, 1.70, -8.02), Vector3(0.22, 0.07, 0.48), Color(0.42, 0.30, 0.16))
 	var ledger_state := ""
 	if bool(context.get_story_flag("vargan_ledger_taken_openly", false)):
 		ledger_state = "open"
