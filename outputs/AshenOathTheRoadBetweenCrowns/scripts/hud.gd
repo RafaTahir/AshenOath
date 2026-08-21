@@ -68,6 +68,7 @@ var dialogue_page_index := 0
 var dialogue_session_data: Dictionary = {}
 var input_source: Node
 var input_device := "keyboard_mouse"
+var gamepad_profile: Dictionary = {}
 var active_menu := ""
 var settings_page := 0
 var remap_page := 0
@@ -1082,6 +1083,18 @@ func set_input_source(source: Node) -> void:
 	input_source = source
 	if input_source != null:
 		set_input_device(str(input_source.get("active_device")))
+
+func set_gamepad_profile(profile: Dictionary) -> void:
+	gamepad_profile = profile.duplicate(true)
+	if input_device == "gamepad" and active_menu in ["controls", "remap"]:
+		if active_menu == "controls":
+			show_controls_menu(controls_back_target)
+		else:
+			show_remap_menu(remap_back_target, remap_page)
+
+func restore_input_focus() -> void:
+	if menu_layer != null and menu_layer.visible and input_source != null and input_source.has_method("focus_first_enabled"):
+		input_source.focus_first_enabled(menu_layer)
 
 func _set_ui_pointer(context: String = "menu") -> void:
 	if input_source != null and input_source.has_method("set_ui_context"):

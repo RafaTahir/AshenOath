@@ -122,6 +122,11 @@ func configure(owner: Node) -> void:
 			hud.set_gamepad_profile(profile)
 		owner.call("_refresh_equipment_readout")
 	)
+	input_router.gamepad_disconnected.connect(func(_device_id: int):
+		hud.set_input_device(input_router.active_device)
+		hud.toast("Controller disconnected. Keyboard and mouse input is ready.")
+		hud.restore_input_focus()
+	)
 
 	day_night.time_changed.connect(func(minutes: float, phase: String, count: int):
 		var director = owner.get("visual_director")

@@ -7,6 +7,7 @@ signal pointer_mode_changed(mode: int)
 signal gamepad_profile_changed(profile: Dictionary)
 signal bindings_changed(bindings: Dictionary)
 signal input_context_changed(context: String)
+signal gamepad_disconnected(device_id: int)
 
 const DEVICE_KEYBOARD_MOUSE := "keyboard_mouse"
 const DEVICE_GAMEPAD := "gamepad"
@@ -172,6 +173,7 @@ var virtual_look := Vector2.ZERO
 var _virtual_actions: Dictionary = {}
 var keyboard_labels: Dictionary = KEYBOARD_LABELS.duplicate()
 var input_context := CONTEXT_MENU
+var last_disconnected_gamepad_id := -1
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -528,12 +530,28 @@ func _on_joy_connection_changed(device: int, connected: bool) -> void:
 	var remaining := Input.get_connected_joypads()
 	if remaining.is_empty():
 		clear_virtual_input()
+		last_disconnected_gamepad_id = device
 		active_gamepad_name = ""
 		active_gamepad_family = "generic"
 		_set_device(DEVICE_KEYBOARD_MOUSE)
 		_refresh_gamepad_profile()
+		clear_focus()
+		if input_context in UI_CONTEXTS:
+			show_pointer()
+		else:
+			restore_gameplay_pointer()
+		gamepad_disconnected.emit(device)
 	else:
 		_set_gamepad(int(remaining[0]))
+		gamepad_disconnected.emit(device)
+
+func get_disconnect_state() -> Dictionary:
+	return {
+		"last_device_id": last_disconnected_gamepad_id,
+		"active_device": active_device,
+		"fallback_ready": active_device == DEVICE_KEYBOARD_MOUSE or active_device == DEVICE_TOUCH,
+		"context": input_context,
+	}
 
 func _set_gamepad(device: int) -> void:
 	active_gamepad_id = maxi(device, 0)

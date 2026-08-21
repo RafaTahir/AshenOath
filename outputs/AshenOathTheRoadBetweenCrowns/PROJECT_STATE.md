@@ -2,6 +2,18 @@
 
 ## Current Working Checkpoint - 2026-08-21
 
+### ACCESS-003 controller recovery checkpoint
+
+The HUD now implements the gamepad-profile callback used by the runtime
+registry, so family-specific glyphs and remap labels can update when a device
+changes. Disconnecting the active controller clears virtual input and stale UI
+focus, falls back to keyboard/mouse, refreshes the profile, and presents a
+recovery notice. `verify_access_003` and the full product profile pass. Fresh
+product captures are current at `HUD_005_MainMenu_1080p_20260821_153537.png`,
+`SOUL_REBUILD_Greyfen_Current_20260821_153543.png`, and
+`SOUL_REBUILD_HartGlade_Current_20260821_153544.png`. Physical controller
+certification remains unclaimed; production is unchanged.
+
 ### AUDIO-007 campaign mix lifecycle checkpoint
 
 Audio pause now stops active transient world cues so combat and ambience do not

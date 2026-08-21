@@ -2,6 +2,15 @@
 
 ## Current Working Checkpoint - 2026-08-21
 
+### ACCESS-003 controller recovery checkpoint
+
+Gamepad profile updates now reach the HUD, and an active-controller loss
+clears stale virtual input/focus before returning to keyboard/mouse input.
+The targeted access/product gates pass with fresh menu, Greyfen, and Hart
+captures. Physical DualShock, DualSense, Xbox, and Switch hardware remains
+explicitly untested in this environment; generic SDL/browser mappings remain
+the fallback. Production is unchanged.
+
 ### AUDIO-007 campaign mix lifecycle checkpoint
 
 Transient world cues now stop at the pause edge, and rapid music-state changes
