@@ -978,6 +978,17 @@ Known verifier note: Godot headless may emit ObjectDB cleanup warnings after pas
 - Full real-input deeper-wilds route, Rootbound/Ashwing presentation, and
   final visual approval remain open for the Milestone F gate.
 
+## QUEST-011 Blood Under Stone Checkpoint - 2026-08-21
+
+- Castle evidence is verified in all 120 orders of the five evidence points;
+  the three-point threshold remains order-independent.
+- All three ledger outcomes persist, complete the ledger objective once, stage
+  the Record Hall haunting, and hand off to Edric and The Last Witness.
+- `verify_quest_011.gd` passes evidence, ledger, haunting, handoff, and replay
+  protection checks.
+- Full real-input Castle traversal and final visual acceptance remain open for
+  the Milestone F gate.
+
 The project currently satisfies:
 
 - Web build launches past Godot splash.

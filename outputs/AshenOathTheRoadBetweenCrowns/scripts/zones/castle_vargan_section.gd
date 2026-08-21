@@ -109,6 +109,19 @@ func _build_record_hall(context: ZoneBuildContext) -> void:
 	for p in [Vector3(-3, 0, -4), Vector3(3, 0, -4), Vector3(-3, 0, 5), Vector3(3, 0, 5)]:
 		context.make_pillar(p)
 	context.make_prop_box("SealedLedgerTable", Vector3(0, 0.8, -8), Vector3(4.2, 1.6, 2.2), Color(0.22, 0.14, 0.075))
+	var ledger_state := ""
+	if bool(context.get_story_flag("vargan_ledger_taken_openly", false)):
+		ledger_state = "open"
+	elif bool(context.get_story_flag("vargan_ledger_hidden", false)):
+		ledger_state = "hidden"
+	elif bool(context.get_story_flag("vargan_ledger_left_copied", false)):
+		ledger_state = "copied"
+	if ledger_state == "open":
+		context.make_visual_box("LedgerBrokenVarganSeal", Vector3(0, 1.72, -8.0), Vector3(0.82, 0.10, 0.42), Color(0.42, 0.16, 0.09))
+	elif ledger_state == "hidden":
+		context.make_visual_box("LedgerDustGap", Vector3(0, 1.72, -8.0), Vector3(0.62, 0.06, 0.28), Color(0.12, 0.08, 0.05))
+	elif ledger_state == "copied":
+		context.make_visual_box("LedgerCopiedSeal", Vector3(0, 1.74, -8.0), Vector3(0.70, 0.08, 0.34), Color(0.32, 0.24, 0.14))
 	_make_banner(context, Vector3(-4.8, 3.0, -13.3), Color(0.27, 0.045, 0.04))
 	_make_banner(context, Vector3(4.8, 3.0, -13.3), Color(0.27, 0.045, 0.04))
 	# Reserve the small Compatibility light budget for the archive itself before
