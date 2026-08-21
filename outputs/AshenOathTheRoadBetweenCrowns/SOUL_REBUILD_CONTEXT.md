@@ -35,6 +35,14 @@ distance and the generated Ghoul family is re-exported within the six-surface
 Compatibility budget. This remains development evidence, not final visual
 approval.
 
+The active BOSS-002/BOSS-003 slice makes Bell-Eater phase and checkpoint state
+durable: phase health is saved/restored, resolved encounters do not respawn
+after zone rebuild, and the harness, bell, chains, eyes, and phase sigil
+animate from one identity layer. Fresh Bell-Eater frames are in
+`Development_Gallery/screenshots/`. The encounter is readable but still uses
+an interim low-poly monster mapping; this is a development checkpoint, not a
+final visual approval or production release.
+
 The full 62-ticket Soul Rebuild acceptance is still open: interim monster and
 boss assets, later-zone visual reconstruction, full real-input campaign proof,
 fresh export/packed startup, and post-edit live PCK comparison remain. Do not

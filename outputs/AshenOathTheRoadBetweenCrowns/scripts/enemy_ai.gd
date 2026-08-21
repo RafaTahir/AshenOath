@@ -32,6 +32,8 @@ var slowed_time = 0.0
 var dead = false
 var body_visual: MeshInstance3D
 var visual_root: Node3D
+var boss_visual_root: Node3D
+var boss_phase_sigil: MeshInstance3D
 var asset_helper
 var base_color = Color.WHITE
 var base_body_scale = Vector3.ONE
@@ -77,6 +79,7 @@ var boss_phase := 1
 var is_boss := false
 var base_move_speed := 2.0
 var base_damage := 10.0
+var boss_visual_time := 0.0
 
 func setup(id: String, definition: Dictionary, target: Node3D) -> void:
 	enemy_id = id
@@ -518,8 +521,23 @@ func _build_body(color: Color) -> void:
 	var collision = CollisionShape3D.new()
 	var shape = CapsuleShape3D.new()
 	var role_spec := CharacterRoleSpec.for_role(enemy_id)
-	shape.height = 2.0 if enemy_id == "white_hart_avatar" else float(role_spec.get("collision_height", 1.15))
-	shape.radius = 0.58 if enemy_id == "white_hart_avatar" else float(role_spec.get("collision_radius", 0.35))
+	var collision_height := 2.0 if enemy_id == "white_hart_avatar" else float(role_spec.get("collision_height", 1.15))
+	var collision_radius := 0.58 if enemy_id == "white_hart_avatar" else float(role_spec.get("collision_radius", 0.35))
+	if is_boss:
+		collision_height = {
+			"bell_eater": 2.60,
+			"rootbound_colossus": 2.95,
+			"ashwing": 2.45,
+			"halvern_boss": 2.20,
+		}.get(enemy_id, collision_height)
+		collision_radius = {
+			"bell_eater": 0.62,
+			"rootbound_colossus": 0.76,
+			"ashwing": 0.66,
+			"halvern_boss": 0.50,
+		}.get(enemy_id, collision_radius)
+	shape.height = collision_height
+	shape.radius = collision_radius
 	collision.shape = shape
 	collision.position.y = 1.05 if enemy_id == "white_hart_avatar" else shape.height * 0.5 + shape.radius * 0.18
 	add_child(collision)
@@ -886,11 +904,16 @@ func _apply_boss_material(mapped: Node3D) -> void:
 	_apply_material(mapped, material)
 
 func _add_boss_silhouette() -> void:
+	boss_visual_root = Node3D.new()
+	boss_visual_root.name = "BossIdentityLayer"
+	boss_visual_root.set_meta("boss_identity", enemy_id)
+	visual_root.add_child(boss_visual_root)
 	if enemy_id == "bell_eater":
-		_add_part(Vector3(0, 1.40, -0.02), Vector3(0.94, 0.22, 0.52), Color(0.31, 0.20, 0.12), "cylinder")
+		_add_part(Vector3(0, 1.40, -0.02), Vector3(1.10, 0.26, 0.62), Color(0.31, 0.20, 0.12), "cylinder")
 		_add_part(Vector3(0, 1.03, 0.28), Vector3(0.30, 0.50, 0.16), Color(0.12, 0.10, 0.08), "cylinder")
 		_add_part(Vector3(-0.47, 1.16, 0.12), Vector3(0.09, 0.42, 0.09), Color(0.22, 0.14, 0.08), "cylinder", Vector3(0, 0, -28))
 		_add_part(Vector3(0.47, 1.16, 0.12), Vector3(0.09, 0.42, 0.09), Color(0.22, 0.14, 0.08), "cylinder", Vector3(0, 0, 28))
+		_make_bell_eater_identity()
 	elif enemy_id == "rootbound_colossus":
 		_add_part(Vector3(-0.58, 1.34, 0.0), Vector3(0.34, 0.78, 0.56), Color(0.17, 0.26, 0.14), "capsule", Vector3(0, 0, -12))
 		_add_part(Vector3(0.58, 1.34, 0.0), Vector3(0.34, 0.78, 0.56), Color(0.17, 0.26, 0.14), "capsule", Vector3(0, 0, 12))
@@ -900,6 +923,91 @@ func _add_boss_silhouette() -> void:
 		_add_part(Vector3(-0.74, 1.24, 0.12), Vector3(0.82, 0.16, 0.46), Color(0.26, 0.16, 0.12), "capsule", Vector3(0, 0, -8))
 		_add_part(Vector3(0.74, 1.24, 0.12), Vector3(0.82, 0.16, 0.46), Color(0.26, 0.16, 0.12), "capsule", Vector3(0, 0, 8))
 		_add_part(Vector3(0, 1.28, 0.34), Vector3(0.22, 0.20, 0.46), Color(0.44, 0.20, 0.10), "cylinder", Vector3(90, 0, 0))
+
+func _make_bell_eater_identity() -> void:
+	var harness := MeshInstance3D.new()
+	harness.name = "BellEaterHarnessBand"
+	var harness_mesh := TorusMesh.new()
+	harness_mesh.inner_radius = 0.48
+	harness_mesh.outer_radius = 0.58
+	harness_mesh.rings = 10
+	harness_mesh.ring_segments = 20
+	harness.mesh = harness_mesh
+	harness.position = Vector3(0, 1.47, 0.02)
+	harness.scale = Vector3(1.12, 0.78, 0.82)
+	harness.rotation.x = PI * 0.5
+	harness.material_override = _mat(Color(0.19, 0.12, 0.07))
+	boss_visual_root.add_child(harness)
+
+	var bell := MeshInstance3D.new()
+	bell.name = "BellEaterChestBell"
+	var bell_mesh := CylinderMesh.new()
+	bell_mesh.top_radius = 0.20
+	bell_mesh.bottom_radius = 0.36
+	bell_mesh.height = 0.48
+	bell_mesh.radial_segments = 14
+	bell.mesh = bell_mesh
+	bell.position = Vector3(0, 1.12, -0.38)
+	bell.rotation.x = PI
+	bell.scale = Vector3(0.78, 0.78, 0.78)
+	bell.material_override = _mat(Color(0.42, 0.24, 0.10))
+	boss_visual_root.add_child(bell)
+
+	var clapper := MeshInstance3D.new()
+	clapper.name = "BellEaterClapper"
+	var clapper_mesh := SphereMesh.new()
+	clapper_mesh.radius = 0.11
+	clapper_mesh.height = 0.22
+	clapper.mesh = clapper_mesh
+	clapper.position = Vector3(0, 0.92, -0.40)
+	clapper.material_override = _mat(Color(0.08, 0.06, 0.045))
+	boss_visual_root.add_child(clapper)
+
+	for side in [-1.0, 1.0]:
+		var chain := MeshInstance3D.new()
+		chain.name = "BellEaterChainLeft" if side < 0.0 else "BellEaterChainRight"
+		var chain_mesh := CylinderMesh.new()
+		chain_mesh.top_radius = 0.035
+		chain_mesh.bottom_radius = 0.055
+		chain_mesh.height = 0.92
+		chain_mesh.radial_segments = 6
+		chain.mesh = chain_mesh
+		chain.position = Vector3(side * 0.44, 1.23, -0.22)
+		chain.rotation_degrees = Vector3(0, 0, side * 18.0)
+		chain.material_override = _mat(Color(0.12, 0.09, 0.06))
+		boss_visual_root.add_child(chain)
+
+	for side in [-1.0, 1.0]:
+		var eye := MeshInstance3D.new()
+		eye.name = "BellEaterEyeLeft" if side < 0.0 else "BellEaterEyeRight"
+		var eye_mesh := SphereMesh.new()
+		eye_mesh.radius = 0.075
+		eye_mesh.height = 0.15
+		eye.mesh = eye_mesh
+		eye.position = Vector3(side * 0.18, 1.78, -0.49)
+		var eye_material := _mat(Color(0.96, 0.26, 0.08))
+		eye_material.emission_enabled = true
+		eye_material.emission = Color(0.96, 0.18, 0.04)
+		eye_material.emission_energy_multiplier = 1.8
+		eye.material_override = eye_material
+		boss_visual_root.add_child(eye)
+
+	boss_phase_sigil = MeshInstance3D.new()
+	boss_phase_sigil.name = "BossPhaseSigil"
+	var sigil_mesh := SphereMesh.new()
+	sigil_mesh.radius = 0.12
+	sigil_mesh.height = 0.24
+	boss_phase_sigil.mesh = sigil_mesh
+	boss_phase_sigil.position = Vector3(0, 1.52, -0.64)
+	boss_phase_sigil.material_override = _emissive_boss_material(Color(0.62, 0.28, 0.14), 0.72)
+	boss_visual_root.add_child(boss_phase_sigil)
+
+func _emissive_boss_material(color: Color, energy: float) -> StandardMaterial3D:
+	var material := _mat(color)
+	material.emission_enabled = true
+	material.emission = color
+	material.emission_energy_multiplier = energy
+	return material
 
 func _mapped_enemy_scale() -> Vector3:
 	if enemy_id == "bog_wretch":
@@ -1037,8 +1145,12 @@ func _add_part(pos: Vector3, scale_value: Vector3, color: Color, shape_name: Str
 	part.rotation_degrees = rot_degrees
 	part.scale = scale_value
 	part.material_override = _mat(color)
-	if visual_root != null:
-		visual_root.add_child(part)
+	# Boss identity pieces belong to the phase-animated identity layer. Keeping
+	# them beside that layer made shoulders and chains lag behind the bell/eyes
+	# during phase pulses and made the encounter read as detached geometry.
+	var parent: Node3D = boss_visual_root if boss_visual_root != null else visual_root
+	if parent != null:
+		parent.add_child(part)
 	else:
 		add_child(part)
 
@@ -1049,6 +1161,7 @@ func _animate_visuals(delta: float) -> void:
 	var movement_weight = clamp(moving_speed / max(move_speed, 0.1), 0.0, 1.0)
 	if animation_driver != null and animation_driver.is_valid():
 		_update_feedback_material()
+		_animate_boss_identity(delta)
 		if windup_marker != null:
 			windup_marker.visible = windup_time > 0.0
 		return
@@ -1098,6 +1211,43 @@ func _animate_visuals(delta: float) -> void:
 		windup_marker.visible = windup_time > 0.0
 		var pulse = 0.92 + 0.16 * sin(anim_phase * 12.0)
 		windup_marker.scale = windup_marker.scale.lerp(Vector3(0.85 * pulse, 0.012, 0.85 * pulse), 12.0 * delta)
+	_animate_boss_identity(delta)
+
+func _animate_boss_identity(delta: float) -> void:
+	if not is_boss or boss_visual_root == null:
+		return
+	boss_visual_time += delta
+	var pulse := 1.0 + sin(boss_visual_time * 3.4) * 0.035
+	if enemy_id == "bell_eater":
+		boss_visual_root.rotation.y = sin(boss_visual_time * 1.15) * 0.045
+		boss_visual_root.scale = boss_visual_root.scale.lerp(Vector3.ONE * pulse, minf(delta * 5.0, 1.0))
+		if windup_time > 0.0:
+			boss_visual_root.rotation.z = sin(boss_visual_time * 11.0) * 0.035
+		else:
+			boss_visual_root.rotation.z = lerpf(boss_visual_root.rotation.z, 0.0, minf(delta * 6.0, 1.0))
+	elif enemy_id == "rootbound_colossus":
+		boss_visual_root.rotation.y = sin(boss_visual_time * 0.72) * 0.035
+	elif enemy_id == "ashwing":
+		boss_visual_root.rotation.z = sin(boss_visual_time * 2.2) * 0.06
+
+func apply_boss_phase_visual(next_phase: int) -> void:
+	if not is_boss:
+		return
+	set_meta("boss_phase", next_phase)
+	if boss_phase_sigil == null:
+		return
+	var material := boss_phase_sigil.material_override as StandardMaterial3D
+	if material == null:
+		return
+	var color := {
+		1: Color(0.62, 0.28, 0.14),
+		2: Color(0.92, 0.46, 0.16),
+		3: Color(1.0, 0.78, 0.22),
+	}.get(next_phase, Color(0.82, 0.24, 0.14)) as Color
+	material.albedo_color = color
+	material.emission = color
+	material.emission_energy_multiplier = 0.72 + float(next_phase) * 0.28
+	boss_phase_sigil.scale = Vector3.ONE * (0.10 + float(next_phase) * 0.025)
 
 func _update_feedback_material() -> void:
 	var mat = body_visual.material_override as StandardMaterial3D

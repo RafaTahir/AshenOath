@@ -3860,6 +3860,8 @@ func _set_interactable_label_visible(area: Node, visible: bool) -> void:
 		label.visible = visible
 
 func _spawn_enemy(id: String, pos: Vector3) -> Node:
+	if _boss_is_resolved(id):
+		return null
 	if active_enemies.size() >= 5:
 		return null
 	pos = river_safe_position(pos,1.2)
@@ -3901,8 +3903,28 @@ func _spawn_enemy(id: String, pos: Vector3) -> Node:
 			boss_controller.call("load_state", boss_saved_states[id])
 		if boss_controller.has_signal("phase_changed"):
 			boss_controller.connect("phase_changed", Callable(self, "_on_boss_controller_phase_changed"))
+		if boss_controller.has_signal("resolved"):
+			boss_controller.connect("resolved", Callable(self, "_on_boss_resolved"))
 	active_enemies.append(enemy)
 	return enemy
+
+func _boss_is_resolved(id: String) -> bool:
+	if not bool(enemy_defs.get(id, {}).get("boss", false)):
+		return false
+	var story_resolved: String = str({
+		"bell_eater": "bell_eater_defeated",
+		"rootbound_colossus": "rootbound_colossus_defeated",
+		"ashwing": "ashwing_defeated",
+	}.get(id, ""))
+	if story_resolved != "" and bool(story_state.get_flag(story_resolved, false)):
+		return true
+	if id == "white_hart_avatar" and bool(story_state.get_flag("final_choice_completed", false)):
+		return true
+	var saved: Variant = boss_saved_states.get(id, {})
+	if typeof(saved) == TYPE_DICTIONARY:
+		var saved_outcome := str(saved.get("outcome", ""))
+		return saved_outcome in ["defeated", "release", "testimony", "witness", "mercy", "duty", "ash"]
+	return false
 
 func _ensure_bell_eater() -> void:
 	if current_zone_id != "greyfen" or bool(story_state.get_flag("bell_eater_defeated", false)):
@@ -3928,7 +3950,26 @@ func _on_boss_controller_phase_changed(boss_id: String, phase: int) -> void:
 func _on_boss_checkpoint(controller: Node) -> void:
 	if controller == null:
 		return
-	story_state.set_flag("boss_%s_checkpoint" % str(controller.get("boss_id")), int(controller.get("checkpoint")))
+	var boss_id := str(controller.get("boss_id"))
+	var state: Dictionary = controller.save_state() if controller.has_method("save_state") else {}
+	boss_saved_states[boss_id] = state
+	story_state.set_flag("boss_%s_checkpoint" % boss_id, int(controller.get("checkpoint")))
+	# A phase boundary is an authored checkpoint. It must survive a reload even
+	# when the player dies before the next ordinary autosave boundary.
+	if save_manager != null and player != null and is_instance_valid(player) and not resource_shutdown_prepared:
+		save_manager.checkpoint(self)
+
+func _on_boss_resolved(boss_id: String, outcome: String) -> void:
+	story_state.set_flag("boss_%s_outcome" % boss_id, outcome)
+	for candidate in active_enemies:
+		if not is_instance_valid(candidate) or str(candidate.enemy_id) != boss_id:
+			continue
+		var controller: Node = candidate.get_node_or_null("BossEncounterController")
+		if controller != null and controller.has_method("save_state"):
+			boss_saved_states[boss_id] = controller.save_state()
+		break
+	if save_manager != null and player != null and is_instance_valid(player) and not resource_shutdown_prepared:
+		save_manager.checkpoint(self)
 
 func _on_boss_peaceful_resolution(boss_id: String, outcome: String, enemy: Node) -> void:
 	story_state.set_flag("boss_%s_outcome" % boss_id, outcome)

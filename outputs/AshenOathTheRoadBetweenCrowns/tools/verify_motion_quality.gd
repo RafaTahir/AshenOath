@@ -102,7 +102,8 @@ func _frames(count: int) -> void:
 func _finish() -> void:
 	# Emit the result before freeing the intentionally large test tree. Any
 	# renderer diagnostics after this marker are teardown-only; diagnostics
-	# before it remain release blockers.
+	# before it remain release blockers. Queue the tree and yield so the
+	# renderer can release instance dependencies in scene-tree order.
 	if not failures.is_empty():
 		print("MOTION QUALITY VERIFIER: FAIL")
 		print("motion quality verification failed:")
@@ -111,5 +112,8 @@ func _finish() -> void:
 		print("MOTION QUALITY VERIFIER: PASS - real skeleton transforms changed")
 	var exit_code := 1 if not failures.is_empty() else 0
 	if is_instance_valid(tested_game):
-		tested_game.free()
+		tested_game.queue_free()
+		tested_game = null
+		await process_frame
+		await process_frame
 	quit(exit_code)

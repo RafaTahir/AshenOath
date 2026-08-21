@@ -42,6 +42,12 @@ and WORLD-006 captures exist. The regenerated Ghoul family is consolidated to
 the six-surface Compatibility budget and its performance gate passes after
 reimport.
 
+The active BOSS-002/BOSS-003 slice adds checkpoint-health persistence,
+resolved-boss suppression, Bell-Eater phase visuals, a visible harness/chest
+bell identity, and fresh 1280x720 Bell-Eater captures. The targeted boss,
+monster, character-facing, and performance assertions pass. The encounter
+still uses an interim low-poly mapping and is not final visual approval.
+
 Bog Wretch and Gravebound Knight now instantiate connected skinned Ghoul-family
 runtime bodies instead of the previous Slime/Skeleton primitives. Their
 monster verifier checks live skeletons, animation drivers, visual roots, and

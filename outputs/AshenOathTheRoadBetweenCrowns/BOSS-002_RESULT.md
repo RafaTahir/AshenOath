@@ -1,5 +1,10 @@
 # BOSS-002 Result
 
+## Checkpoint
+
+Development checkpoint on `codex/soul-rebuild`, 2026-08-21. This framework
+slice is implemented and locally verified; it is not a production release.
+
 ## Changes
 - Added `BossEncounter` with phase checkpoints, save/load state, peaceful-resolution eligibility, outcome metadata, and host callbacks.
 - Attached it to every data-marked boss at spawn.
@@ -15,4 +20,18 @@
 
 ## Verification
 - `verify_boss_002.gd` validates the framework and five-definition contract.
-- Real-input encounter, reload, performance, and fresh screenshots remain pending the Godot user-log startup repair.
+- `verify_boss_003.gd` exercises Bell-Eater phase changes, checkpoint health
+  restore, defeat persistence, and no-respawn behavior.
+- Fresh Compatibility captures cover Bell-Eater harness, phase 2, and phase 3
+  presentation in `Development_Gallery/screenshots/`.
+- Real browser campaign traversal, all five boss encounters, final visual
+  approval, export, and production deployment remain open.
+
+## Known limitations
+
+- Current boss bodies use the optimized connected CC0 runtime sources with
+  procedural identity dressing. They are readable but remain below the final
+  monster-quality bar.
+- Isolated Godot verifier/capture processes still report renderer RID,
+  allocator, and ObjectDB diagnostics during shutdown. Assertions pass before
+  teardown; lifecycle cleanup remains a release blocker.
