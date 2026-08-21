@@ -2,6 +2,14 @@
 
 ## Current Working Checkpoint - 2026-08-21
 
+### AUDIO-007 campaign mix lifecycle checkpoint
+
+Transient world cues now stop at the pause edge, and rapid music-state changes
+cancel stale crossfades so the active player set remains bounded. The targeted
+audio profile passes with fresh opening soundscape captures. The current sound
+library remains procedural/scratch development audio; final recorded/mastered
+mix work is still open and production is unchanged.
+
 ### HUD-005 product interface checkpoint
 
 The menu and gameplay HUD remain responsive at 1080p menu scale and native

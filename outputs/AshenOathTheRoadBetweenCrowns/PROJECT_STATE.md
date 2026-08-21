@@ -2,6 +2,16 @@
 
 ## Current Working Checkpoint - 2026-08-21
 
+### AUDIO-007 campaign mix lifecycle checkpoint
+
+Audio pause now stops active transient world cues so combat and ambience do not
+bleed into menus or dialogue. Rapid music changes cancel stale crossfades and
+keep music players bounded. The full targeted audio profile passes, with fresh
+opening soundscape captures at `AUDIO-006_01` through `AUDIO-006_04` timestamp
+`20260821_153153`. Procedural cues and scratch voices remain development audio,
+not final mastered score; production `main`, tracked `web/`, and Vercel remain
+unchanged.
+
 ### HUD-005 product interface checkpoint
 
 The responsive HUD/menu slice now labels this branch as a development

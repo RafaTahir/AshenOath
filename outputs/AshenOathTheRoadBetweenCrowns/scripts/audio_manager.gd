@@ -18,10 +18,12 @@ var master_volume_linear = 0.85
 var transient_players: Array[AudioStreamPlayer] = []
 var transient_pool_cursor := 0
 var music_transition_generation := 0
+var music_transition_tween: Tween
 var ambient_accents_enabled := true
 var game_paused := false
 var event_cooldowns: Dictionary = {}
 const TRANSIENT_POOL_SIZE := 8
+const MUSIC_GROUP := "ashen_oath_music_players"
 const WORLD_AUDIO_EVENTS := [
 	"step", "step_road", "step_forest", "step_mud", "step_stone", "step_wood",
 	"swing", "heavy", "hit", "light_hit", "heavy_hit", "hurt", "enemy_windup",
@@ -72,6 +74,8 @@ func _ready() -> void:
 func _exit_tree() -> void:
 	# Release generated streams before Godot tears down the audio server. This
 	# keeps short headless/Web startup checks from retaining the menu stream.
+	if music_transition_tween != null and music_transition_tween.is_valid():
+		music_transition_tween.kill()
 	for player in transient_players:
 		_release_player(player)
 	_release_player(ambient_player)
@@ -127,6 +131,13 @@ func set_ambient_accents_enabled(enabled: bool) -> void:
 
 func set_game_paused(paused: bool) -> void:
 	game_paused = paused
+	if paused:
+		# Environmental and combat one-shots belong to the world timeline. Stop
+		# them at the pause edge so a menu/dialogue cannot finish with a stale hit,
+		# forge, or river cue after the player resumes.
+		for player in transient_players:
+			if player != null and is_instance_valid(player):
+				player.stop()
 	if ambient_player != null:
 		ambient_player.stream_paused = paused
 	if music_player != null:
@@ -327,12 +338,15 @@ func stop_voice() -> void:
 		voice_player = null
 
 func set_music_state(state_id: String) -> void:
-	if state_id == music_state:
+	if state_id == music_state and music_player != null and is_instance_valid(music_player):
 		return
 	if not music.has(state_id):
 		_build_music_state(state_id)
 	if not music.has(state_id):
 		return
+	if music_transition_tween != null and music_transition_tween.is_valid():
+		music_transition_tween.kill()
+	_cleanup_stale_music_players(music_player)
 	print("AUDIO: music_state_%s" % state_id)
 	music_state = state_id
 	music_transition_generation += 1
@@ -342,19 +356,38 @@ func set_music_state(state_id: String) -> void:
 	incoming.bus = bus_name
 	incoming.stream = music[state_id]
 	incoming.volume_db = -52.0
+	incoming.add_to_group(MUSIC_GROUP)
 	add_child(incoming)
 	incoming.play()
 	music_player = incoming
-	var tween := create_tween()
-	tween.set_parallel(true)
-	tween.tween_property(incoming, "volume_db", _music_volume_for(state_id), 0.85)
+	var generation := music_transition_generation
+	music_transition_tween = create_tween()
+	music_transition_tween.set_parallel(true)
+	music_transition_tween.tween_property(incoming, "volume_db", _music_volume_for(state_id), 0.85)
 	if previous != null and is_instance_valid(previous):
-		tween.tween_property(previous, "volume_db", -52.0, 0.72)
-		tween.chain().tween_callback(func():
+		music_transition_tween.tween_property(previous, "volume_db", -52.0, 0.72)
+		music_transition_tween.chain().tween_callback(func():
+			if generation != music_transition_generation:
+				return
 			if is_instance_valid(previous) and previous != music_player:
 				previous.stop()
 				previous.queue_free()
 		)
+
+func _cleanup_stale_music_players(keep: AudioStreamPlayer) -> void:
+	for node in get_tree().get_nodes_in_group(MUSIC_GROUP):
+		if node == keep:
+			continue
+		if node is AudioStreamPlayer and is_instance_valid(node):
+			(node as AudioStreamPlayer).stop()
+			node.queue_free()
+
+func music_player_count() -> int:
+	var count := 0
+	for node in get_tree().get_nodes_in_group(MUSIC_GROUP):
+		if node is AudioStreamPlayer and is_instance_valid(node):
+			count += 1
+	return count
 
 func music_state_for_zone(zone_id: String) -> String:
 	var states := {

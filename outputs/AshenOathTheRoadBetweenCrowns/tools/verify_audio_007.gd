@@ -25,7 +25,14 @@ func _initialize() -> void:
 	audio.play_event("parry", 0.0)
 	audio.set_game_paused(true)
 	check(audio.game_paused, "Audio pause state was not retained")
+	await process_frame
+	for player in audio.transient_players:
+		check(not player.playing, "Transient world cue survived the pause edge")
 	audio.set_game_paused(false)
+	for state_id in ["wychwood_tension", "record_hall", "undercroft", "hart_glade", "greyfen_explore"]:
+		audio.set_music_state(state_id)
+	await process_frame
+	check(audio.music_player_count() <= 2, "Rapid music transitions left stale players alive")
 	audio.set_master_volume(0.0)
 	check(is_equal_approx(audio.master_volume_linear, 0.0), "Master volume mute did not apply")
 	audio.set_master_volume(0.85)
