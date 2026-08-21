@@ -40,7 +40,7 @@ func resolve_player_blade_contact(player: Node3D, enemies: Array, contact: Dicti
 	# centimetres off the authored hand socket while an attack is starting. Keep
 	# the measured sweep authoritative, but provide a bounded forward fallback so
 	# a clearly front-facing enemy cannot receive a cosmetic swing with no hit.
-	if candidates.is_empty():
+	if candidates.is_empty() and bool(contact.get("allow_forward_fallback", false)):
 		var forward := -player.global_transform.basis.z
 		forward.y = 0.0
 		forward = forward.normalized()

@@ -418,7 +418,8 @@ func _update_blade_contact() -> void:
 			"heavy": pending_attack_heavy,
 			"contact_phase": progress,
 			"sweep_length": maxf(previous_blade_tip.distance_to(blade_tip), previous_blade_base.distance_to(blade_base)),
-			"blade_direction": (blade_tip - blade_base).normalized() if blade_tip.distance_to(blade_base) > 0.001 else Vector3.ZERO
+			"blade_direction": (blade_tip - blade_base).normalized() if blade_tip.distance_to(blade_base) > 0.001 else Vector3.ZERO,
+			"allow_forward_fallback": true
 		})
 		pending_attack_damage = 0.0
 		pending_attack_radius = 0.0

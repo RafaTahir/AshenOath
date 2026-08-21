@@ -470,3 +470,12 @@ The fresh graphical ENGINE-004 run and full `engine` ticket profile pass with
 no active null-material errors. Compatibility RID/ObjectDB diagnostics still
 appear after the verifier pass during isolated process teardown and remain
 explicit shutdown debt rather than an active gameplay failure.
+
+### COMBAT-005 contact and parry correction
+
+Live player blade contacts opt into the bounded forward fallback, while direct
+measured resolver calls preserve translated misses. Enemy attack resolution now
+seeds stale traces locally and uses the player's active parry window only
+inside the normal melee envelope, placing the resolved contact at weapon
+height. The fresh combat, motion, AI, Oathfire, runtime, and content gates pass;
+production remains unchanged.

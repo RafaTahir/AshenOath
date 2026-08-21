@@ -43,6 +43,18 @@ Graphical capture passed on the Compatibility renderer and produced fresh 1280x7
 - `Development_Gallery/screenshots/Capture_14_player_heavy_attack_arc_2026-08-20_160029.png`
 - `Development_Gallery/screenshots/Capture_73_combat_001_blade_contact_2026-08-20_160029.png`
 
+### Contact and parry follow-up
+
+- The forward-facing contact fallback is now opt-in from live player blade
+  events. Direct measured resolver calls cannot turn an intentionally translated
+  miss into a hit.
+- Enemy attack resolution seeds a fresh local trace when a scripted or restored
+  attack has no current windup trace, and an active parry window resolves inside
+  the bounded melee envelope at the player's weapon height. Normal attacks
+  still require the measured weapon corridor.
+- Fresh `verify_combat_001` and the complete `combat` ticket profile pass after
+  the correction.
+
 ## Payload and deployment
 
 No Web export, `web/` synchronization, `main` push, or Vercel deployment was performed. `COMBAT-005` is an ordinary development ticket; production remains on the existing deployed opening build until the Milestone E gate.

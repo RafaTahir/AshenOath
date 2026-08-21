@@ -1351,3 +1351,14 @@ The continuation source is now verified locally for the release candidate. The r
   `engine` ticket profile pass. Active null-material errors are absent. The
   remaining RID/ObjectDB messages are emitted only after the verifier pass
   during isolated process teardown and remain classified as shutdown debt.
+
+## COMBAT-005 Contact and Parry Correction - 2026-08-21
+
+- Live player blade events explicitly opt into the bounded forward fallback;
+  direct measured resolver calls now preserve intentional misses. Enemy attack
+  resolution seeds stale or absent traces from the current enemy position and
+  resolves an active parry window only inside the normal melee envelope at the
+  player's weapon height.
+- Fresh `verify_combat_001`, motion, AI, Oathfire, runtime, and content gates
+  pass through the targeted `combat` profile. Production `main`, tracked
+  `web/`, and Vercel remain unchanged.

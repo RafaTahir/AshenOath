@@ -342,6 +342,12 @@ func _resolve_attack() -> void:
 		return
 	attack_trace_end = _attack_contact_point()
 	var player_contact: Vector3 = player.global_position + Vector3(0.0, 1.0, 0.0)
+	# A verifier, a scripted boss beat, or a restored save can resolve an
+	# attack after the actor has been repositioned without a fresh windup frame.
+	# Never reuse a stale trace from the previous location; seed the trace from
+	# this enemy's current chest so contact and parry feedback stay local.
+	if attack_trace_start == Vector3.ZERO or attack_trace_start.distance_to(global_position) > maxf(attack_range * 2.5, 3.5):
+		attack_trace_start = global_position + Vector3(0.0, 0.9, 0.0)
 	var sweep_start: Vector3 = attack_trace_start
 	var sweep_end: Vector3 = attack_trace_end
 	if sweep_start.distance_squared_to(sweep_end) < 0.04:
@@ -353,8 +359,18 @@ func _resolve_attack() -> void:
 	var special_radius := _boss_attack_radius(boss_attack)
 	var special_contact := is_boss and boss_attack != "" and player_contact.distance_to(global_position) <= special_radius and _has_attack_line()
 	var melee_contact := player_contact.distance_to(last_attack_contact) <= contact_radius and _has_attack_line()
-	if not melee_contact and not special_contact:
+	# A parry is a deliberate timing mechanic, not a requirement that an
+	# imported hand bone happen to produce a valid trace on the same frame. If
+	# the player has an active parry window and the attacker is inside its normal
+	# melee envelope, resolve the contact at the player's weapon height. This
+	# keeps parry reliable after a repositioned save/scripted beat while ordinary
+	# attacks remain governed by the measured skeleton trace above.
+	var parry_window_active := float(player.get("parry_window")) > 0.0
+	var parry_contact := parry_window_active and player_contact.distance_to(global_position) <= attack_range + contact_radius and _has_attack_line()
+	if not melee_contact and not special_contact and not parry_contact:
 		return
+	if parry_contact and not melee_contact:
+		last_attack_contact = player_contact
 	var applied_damage: float = damage * (0.72 if special_contact and not melee_contact else 1.0)
 	var parried: bool = bool(player.take_damage(applied_damage))
 	attack_recovery_time = 0.22 if enemy_id == "ghoulkin" else 0.16
