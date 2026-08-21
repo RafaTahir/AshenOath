@@ -10,6 +10,11 @@ slice is implemented and locally verified; it is not a production release.
 - Attached it to every data-marked boss at spawn.
 - Added defeat hooks for Bell-Eater, Rootbound Colossus, Ashwing, Halvern, and White Hart.
 - Added role-specific boss telegraph feedback.
+- Made resolution idempotent: a defeated or peacefully resolved boss cannot
+  emit a second outcome, accept another peaceful outcome, or re-enter active
+  encounter state after a saved outcome is restored.
+- Added `is_resolved()` and `get_encounter_state()` for one checkpoint/phase/
+  telegraph/outcome inspection contract.
 
 ## Route hooks
 - Bell-Eater spawns after the Crow Chapel opens.
@@ -19,7 +24,8 @@ slice is implemented and locally verified; it is not a production release.
 - White Hart retains the existing ending resolver.
 
 ## Verification
-- `verify_boss_002.gd` validates the framework and five-definition contract.
+- `verify_boss_002.gd` validates the framework, five-definition contract, and
+  idempotent resolution API.
 - `verify_boss_003.gd` exercises Bell-Eater phase changes, checkpoint health
   restore, defeat persistence, and no-respawn behavior.
 - Fresh Compatibility captures cover Bell-Eater harness, phase 2, and phase 3

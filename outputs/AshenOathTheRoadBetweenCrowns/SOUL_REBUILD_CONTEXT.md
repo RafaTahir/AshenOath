@@ -22,6 +22,14 @@ enemies face their chosen route. The runtime AI gate passes the five-enemy
 staged reveal and live spacing/reservation checks. Later browser performance and
 final monster-family visual acceptance remain required.
 
+### BOSS-002 lifecycle checkpoint
+
+Boss phases, checkpoints, telegraphs, peaceful outcomes, and defeat are now
+idempotent and save-aware. A restored resolved encounter is inactive, while
+phase checkpoint health remains authoritative. Framework and five encounter
+gates pass; final boss meshes, spectacle, and browser performance remain part
+of the full visual/release gate.
+
 ### MON-002 monster-family checkpoint
 
 Wychwood's four enemy roles now share a real imported animated skeleton source

@@ -10,7 +10,7 @@ func _run() -> void:
 		failures.append("boss encounter coordinator missing")
 	else:
 		var text := FileAccess.get_file_as_string("res://scripts/boss_encounter.gd")
-		for needle in ["phase_changed", "checkpoint_saved", "resolve_peaceful", "save_state", "load_state", "checkpoint_health_ratio", "current_telegraph"]:
+		for needle in ["phase_changed", "checkpoint_saved", "resolve_peaceful", "save_state", "load_state", "checkpoint_health_ratio", "current_telegraph", "get_encounter_state", "is_resolved", "_emit_resolved"]:
 			if not text.contains(needle):
 				failures.append("boss coordinator missing %s" % needle)
 	var parsed = JSON.parse_string(FileAccess.get_file_as_string("res://data/bosses.json"))

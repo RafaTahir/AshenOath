@@ -17,6 +17,7 @@ var phase := 1
 var outcome := ""
 var checkpoint := 1
 var checkpoint_health_ratio := 1.0
+var resolution_emitted := false
 
 func configure(id: String, boss_definition: Dictionary, boss_actor: Node, owner: Node) -> void:
 	boss_id = id
@@ -26,6 +27,8 @@ func configure(id: String, boss_definition: Dictionary, boss_actor: Node, owner:
 	phase = int(definition.get("starting_phase", 1))
 	checkpoint = phase
 	checkpoint_health_ratio = 1.0
+	outcome = ""
+	resolution_emitted = false
 	if enemy != null:
 		enemy.set_meta("boss_id", boss_id)
 		enemy.set_meta("boss_phase", phase)
@@ -35,6 +38,8 @@ func configure(id: String, boss_definition: Dictionary, boss_actor: Node, owner:
 			enemy.died.connect(_on_enemy_died)
 
 func _on_enemy_phase_changed(_actor: Node, next_phase: int) -> void:
+	if outcome != "":
+		return
 	phase = next_phase
 	checkpoint = phase
 	checkpoint_health_ratio = _current_health_ratio()
@@ -48,27 +53,54 @@ func _on_enemy_phase_changed(_actor: Node, next_phase: int) -> void:
 		host._on_boss_checkpoint(self)
 
 func _on_enemy_died(_actor: Node) -> void:
-	if outcome == "":
-		outcome = "defeated"
+	if outcome != "":
+		return
+	outcome = "defeated"
 	checkpoint = phase
 	checkpoint_health_ratio = 0.0
-	resolved.emit(boss_id, outcome)
+	_emit_resolved()
 
 func can_peaceful_resolve() -> bool:
-	return bool(definition.get("peaceful_resolution", false))
+	return outcome == "" and bool(definition.get("peaceful_resolution", false))
 
 func resolve_peaceful(next_outcome: String) -> bool:
 	if not can_peaceful_resolve() or enemy == null or bool(enemy.get("dead")):
 		return false
 	outcome = next_outcome.strip_edges().to_lower()
 	if outcome == "":
+		outcome = ""
+		return false
+	if outcome in ["defeated", "", "pending"]:
+		outcome = ""
 		return false
 	enemy.set_meta("peaceful_resolution", outcome)
 	enemy.set_meta("boss_resolved", true)
+	resolution_emitted = false
 	if host != null and host.has_method("_on_boss_peaceful_resolution"):
 		host._on_boss_peaceful_resolution(boss_id, outcome, enemy)
-	resolved.emit(boss_id, outcome)
+	_emit_resolved()
 	return true
+
+func is_resolved() -> bool:
+	return outcome != ""
+
+func get_encounter_state() -> Dictionary:
+	return {
+		"boss_id": boss_id,
+		"phase": phase,
+		"checkpoint": checkpoint,
+		"outcome": outcome,
+		"checkpoint_health_ratio": checkpoint_health_ratio,
+		"telegraph": current_telegraph(),
+		"peaceful_available": can_peaceful_resolve(),
+		"resolved": is_resolved(),
+	}
+
+func _emit_resolved() -> void:
+	if resolution_emitted:
+		return
+	resolution_emitted = true
+	resolved.emit(boss_id, outcome)
 
 func save_state() -> Dictionary:
 	var health_state: Dictionary = {}
@@ -84,12 +116,14 @@ func save_state() -> Dictionary:
 		"checkpoint_health_ratio": checkpoint_health_ratio,
 		"health": health_state,
 		"called_ghoulkin": bool(enemy.get_meta("called_ghoulkin", false)) if enemy != null else false,
+		"resolved": is_resolved(),
 	}
 
 func load_state(data: Dictionary) -> void:
 	phase = maxi(1, int(data.get("phase", phase)))
 	checkpoint = maxi(phase, int(data.get("checkpoint", phase)))
 	outcome = str(data.get("outcome", outcome))
+	resolution_emitted = false
 	checkpoint_health_ratio = clampf(float(data.get("checkpoint_health_ratio", _phase_health_ratio(phase))), 0.0, 1.0)
 	if enemy != null:
 		enemy.set_meta("boss_phase", phase)
@@ -101,6 +135,10 @@ func load_state(data: Dictionary) -> void:
 			enemy.set("damage", float(enemy.get("base_damage")) * [1.0, 1.08, 1.15][phase_index])
 		if enemy.has_method("apply_boss_phase_visual"):
 			enemy.apply_boss_phase_visual(phase)
+		if outcome != "":
+			enemy.set_meta("boss_resolved", true)
+			if enemy.has_method("set_encounter_active"):
+				enemy.set_encounter_active(false)
 		var health = enemy.get("health_component")
 		var saved_health = data.get("health", {})
 		if health != null and is_instance_valid(health) and health.has_method("load_state") and typeof(saved_health) == TYPE_DICTIONARY and not saved_health.is_empty():

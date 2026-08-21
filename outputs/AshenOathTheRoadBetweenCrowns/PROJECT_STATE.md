@@ -28,6 +28,15 @@ passes five-enemy staging, distinct lanes, spacing, river-safe pursuit, attack
 reservation, and ally-blocked attack lanes. This is a development checkpoint;
 browser low-FPS profiling and final monster visual replacement remain open.
 
+### BOSS-002 lifecycle checkpoint
+
+The shared boss coordinator now treats phase, checkpoint, telegraph, outcome,
+and peaceful resolution as one idempotent state contract. Defeat or peaceful
+resolution emits once, saved outcomes mark the encounter resolved and deactivate
+restored actors, and `get_encounter_state()` provides runtime inspection. The
+framework gate and Bell-Eater, Rootbound, Ashwing, Halvern, and White Hart
+specific gates pass. Boss body quality and full browser performance remain open.
+
 ### MON-002 monster-family checkpoint
 
 The Wychwood Ghoulkin, Stalker, Raider, and Brute now use the complete
