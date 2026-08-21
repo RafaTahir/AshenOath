@@ -88,6 +88,13 @@ func _build_old_mill(context: ZoneBuildContext) -> void:
 	context.make_loose_role("cart", Vector3(6.6, 0, 2.8), Vector3.ONE * 0.72, -22.0)
 	for pos in [Vector3(5.2,0,-5), Vector3(8.0,0,-3), Vector3(7.2,0,5)]:
 		context.make_rubble(pos)
+	var mill_fate := str(context.get_story_flag("mill_fate", ""))
+	if mill_fate == "preserved":
+		context.make_visual_box("PreservedMillLedgerSeal", Vector3(-6.95, 1.12, -7.18), Vector3(0.72, 0.18, 0.06), Color(0.52, 0.40, 0.20))
+	elif mill_fate == "burned":
+		context.make_visual_box("BurnedMillLedgerAsh", Vector3(-6.95, 0.14, -7.18), Vector3(0.90, 0.08, 0.42), Color(0.10, 0.065, 0.040))
+	elif mill_fate == "exposed":
+		context.make_visual_box("PostedMillLedgerCopies", Vector3(-6.95, 1.18, -7.18), Vector3(1.25, 0.95, 0.05), Color(0.44, 0.30, 0.16))
 	context.make_clue("millstones", "Inspect ash-caked millstones", Vector3(-5.0,0,-5), "main_ash_at_the_mill", "inspect_millstones", Color(0.4,0.35,0.3))
 	if context.is_quest_active("main_ash_at_the_mill") and not context.is_objective_done("main_ash_at_the_mill", "mill_encounter"):
 		for position in [Vector3(-3.2,0.8,-7.0), Vector3(-7.2,0.8,-6.2)]:

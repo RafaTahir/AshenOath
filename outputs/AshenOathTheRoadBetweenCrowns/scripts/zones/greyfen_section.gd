@@ -165,6 +165,11 @@ func _build_gameplay_content(context: ZoneBuildContext) -> void:
 	context.make_named_interactable("side_contracts", "dialogue", "Read village requests", Vector3(-3.2,0,9.4), Color(0.42,0.27,0.14), Vector3(0.4,0.4,0.4))
 	if context.is_quest_active("main_names_they_burned") and not context.is_objective_done("main_names_they_burned", "names_choice"):
 		context.make_named_interactable("names_decision", "dialogue", "Decide the fate of the names", Vector3(4.4,0,-5.0), Color(0.36,0.32,0.25), Vector3(0.45,0.45,0.45))
+	var names_policy := str(context.get_story_flag("names_policy", ""))
+	if names_policy == "published":
+		context.make_visual_box("PublishedRefugeeNames", Vector3(4.4, 1.28, -5.18), Vector3(1.8, 1.05, 0.06), Color(0.48, 0.38, 0.22))
+	elif names_policy == "withheld":
+		context.make_visual_box("WithheldRefugeeRegister", Vector3(4.4, 1.10, -5.18), Vector3(0.72, 0.18, 0.34), Color(0.18, 0.12, 0.08))
 	if context.crow_shrine_choice_ready():
 		context.make_named_interactable("crow_shrine_choice", "dialogue", "Choose the Crow Shrine's fate", Vector3(6.5,0,-7.5), Color(0.3,0.38,0.3), Vector3(0.45,0.45,0.45))
 	if context.road_ready_to_report():

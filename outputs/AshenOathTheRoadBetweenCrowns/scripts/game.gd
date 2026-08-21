@@ -1474,6 +1474,15 @@ func _handle_dialogue_action(action: Dictionary) -> void:
 		if action.get("sets_flags", {}).has("bog_core_fate") and str(story_state.get_flag("bog_core_fate", "")) != "":
 			hud.toast("The memory core has already been given a fate.")
 			return
+		# Every consequential story choice is one-shot. The flag guard above
+		# covers legacy one-off choices with custom wording; the objective guard
+		# keeps names, mill, testimony, ledger, and ending decisions from being
+		# replayed through a stale dialogue node or a saved interaction prompt.
+		var choice_quest_id := str(action.get("quest", ""))
+		var choice_objective_id := str(action.get("objective", ""))
+		if choice_quest_id != "" and choice_objective_id != "" and quests.is_objective_done(choice_quest_id, choice_objective_id):
+			hud.toast("That decision has already been made.")
+			return
 		for id in action.get("sets_flags", {}):
 			story_state.set_flag(str(id), action["sets_flags"][id])
 		for id in action.get("adjusts_values", {}):
@@ -1499,6 +1508,14 @@ func _handle_dialogue_action(action: Dictionary) -> void:
 				_mark_interaction_removed(active_interactable)
 				active_interactable.queue_free()
 				active_interactable = null
+		elif action.get("sets_flags", {}).has("names_policy"):
+			hud.show_status_cue("The names have a new public life", "victory")
+			hud.set_guidance_hint("Follow the ash road to the old mill.", 6.0)
+			_consume_story_choice_interactable("names_decision")
+		elif action.get("sets_flags", {}).has("mill_fate"):
+			hud.show_status_cue("The mill's record is settled", "victory")
+			hud.set_guidance_hint("Find Captain Senn on the bandit road.", 6.0)
+			_consume_story_choice_interactable("miller_record")
 		if action.get("sets_flags", {}).has("halvern_fate"):
 			var halvern_outcome := str(action["sets_flags"]["halvern_fate"])
 			for boss in active_enemies:
@@ -2189,6 +2206,13 @@ func _remove_interactable(id: String) -> void:
 	for child in zone_root.get_children():
 		if child.get("interaction_id") == id:
 			child.queue_free()
+
+func _consume_story_choice_interactable(id: String) -> void:
+	if active_interactable != null and str(active_interactable.get("interaction_id")) == id:
+		_mark_interaction_removed(active_interactable)
+		active_interactable.queue_free()
+		active_interactable = null
+	_remove_interactable(id)
 
 func _has_interactable(id: String) -> bool:
 	if zone_root == null:

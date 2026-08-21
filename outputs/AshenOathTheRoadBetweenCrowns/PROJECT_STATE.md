@@ -966,6 +966,18 @@ Known verifier note: Godot headless may emit ObjectDB cleanup warnings after pas
 - Full real-input cemetery/Bell-Eater play and final before/after visual
   approval remain open for the Milestone F gate.
 
+## QUEST-010 Teeth, Names, and Ash Checkpoint - 2026-08-21
+
+- Register reconstruction is verified across all 24 orders of the four
+  available fragments; any three complete the required threshold.
+- Names policy (`published` or `withheld`) and mill fate (`preserved`,
+  `burned`, or `exposed`) are persisted, one-shot, and leave visible
+  aftermath dressing in their authored locations.
+- `verify_quest_010.gd` passes the permutation, choice-contract, runtime
+  persistence, and repeat-application checks.
+- Full real-input deeper-wilds route, Rootbound/Ashwing presentation, and
+  final visual approval remain open for the Milestone F gate.
+
 The project currently satisfies:
 
 - Web build launches past Godot splash.

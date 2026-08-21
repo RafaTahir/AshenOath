@@ -81,6 +81,11 @@ func _update_evidence_groups(quest_id: String) -> void:
 			objective["done"] = true
 
 func is_objective_done(quest_id: String, objective_id: String) -> bool:
+	# Completed quests no longer have an active objective array. Preserve the
+	# completed truth so story-choice guards, HUD fallbacks, and save reloads do
+	# not treat a finished objective as available again.
+	if completed.has(quest_id):
+		return true
 	if not active.has(quest_id):
 		return false
 	for objective in active[quest_id]["objectives"]:
