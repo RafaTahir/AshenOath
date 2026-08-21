@@ -13,7 +13,7 @@ var current_ribbons: Array[MeshInstance3D] = []
 var leaf_origins: Array[Vector3] = []
 var ripple_origins: Array[Vector3] = []
 var update_accumulator := 0.0
-const UPDATE_INTERVAL := 1.0 / 12.0
+const UPDATE_INTERVAL := 1.0 / 30.0
 
 func configure(center: float, river_width: float, river_span: float) -> void:
 	center_z = center

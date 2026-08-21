@@ -7,6 +7,7 @@ const NpcAmbient = preload("res://scripts/npc_ambient.gd")
 const CharacterPresentation = preload("res://scripts/character_presentation.gd")
 const CombatFeedback = preload("res://scripts/combat_feedback.gd")
 const CharacterAnimationDriver = preload("res://scripts/character_animation_driver.gd")
+const BoardGameOpponent = preload("res://scripts/board_game_opponent.gd")
 const WorldVisualUpgrade = preload("res://scripts/world_visual_upgrade.gd")
 const WorldMotionController = preload("res://scripts/world_motion_controller.gd")
 const WorldPropController = preload("res://scripts/world_prop_controller.gd")
@@ -1362,6 +1363,11 @@ func _handle_interaction(area) -> void:
 			quests.complete_objective("side_bitter_roots", "collect_roots")
 		elif area.interaction_id == "sacrifice_roots":
 			hud.toast("The roots drink from old blood. Mira knew this place.")
+		elif area.interaction_id == "post_victory_token":
+			story_state.set_flag("road_token_recovered", true)
+			hud.toast("Oren's token is complete. Vargan binding wire is wound through the scratched name.")
+			hud.set_guidance_hint("Return to Greyfen. Decide who receives the token.", 6.0)
+			audio.play_event("reveal", 0.02)
 		elif area.interaction_id == "chapel_door":
 			story_state.set_flag("crow_chapel_opened", true)
 			hud.toast("The chapel seal yields. The Crow Shrine inside is still bound to the erased names.")
@@ -1452,6 +1458,24 @@ func _handle_road_of_crows_clue(area) -> void:
 			if quests.is_objective_done("main_road_of_crows", "fight_ghoulkin"):
 				for evidence_id in ["bram", "sella", "oren", "vargan_wire"]:
 					quests.complete_evidence("main_road_of_crows", evidence_id)
+	if _road_evidence_count() >= 5 and not bool(story_state.get_flag("all_road_evidence", false)):
+		story_state.set_flag("all_road_evidence", true)
+		_make_all_evidence_safe_edge()
+		hud.toast("Every clue agrees: the pack followed the names, not the food. A safer edge of the clearing reveals itself.")
+		hud.set_guidance_hint("Use the marked edge when the creatures emerge.", 5.0)
+
+func _road_evidence_count() -> int:
+	var count := 0
+	for evidence_id in ["bram", "sella", "oren", "vargan_wire", "drag_marks"]:
+		if quests.is_objective_done("main_road_of_crows", evidence_id) or bool(story_state.get_flag("road_evidence_%s" % evidence_id, false)):
+			count += 1
+	return count
+
+func _make_all_evidence_safe_edge() -> void:
+	if zone_root == null or zone_root.find_child("RoadCrowsEvidenceSafeEdge", true, false) != null:
+		return
+	var edge := _make_visual_box("RoadCrowsEvidenceSafeEdge", Vector3(-4.25, 0.085, -6.25), Vector3(1.8, 0.025, 0.42), Color(0.31, 0.27, 0.14))
+	edge.set_meta("narrative_state", "safe_edge")
 
 func _apply_campaign_arrival(zone_id: String) -> void:
 	if zone_id in ["vargan_approach", "vargan_court", "record_hall"]:
@@ -2232,7 +2256,12 @@ func _on_enemy_died(enemy) -> void:
 			hud.set_guidance_hint("Read the miller's ledger beside the broken wall.", 5.5)
 	if enemy.health_component != null:
 		hud.show_enemy(enemy.display_name, 0.0, enemy.health_component.max_health)
-	hud.toast("%s slain." % enemy.display_name)
+	var memory_rule := str(enemy.get_meta("memory_rule", ""))
+	if memory_rule != "" and not bool(enemy.get_meta("memory_rule_seen", false)):
+		enemy.set_meta("memory_rule_seen", true)
+		hud.toast("%s slain. %s" % [enemy.display_name, memory_rule])
+	else:
+		hud.toast("%s slain." % enemy.display_name)
 	save_manager.autosave(self)
 
 func _on_enemy_damaged(enemy, current: float, maximum: float) -> void:
@@ -3274,6 +3303,7 @@ func _make_post_ghoulkin_story_clue() -> void:
 	_make_dark_track("RoadCrowsPostVictoryClawTracks", Vector3(1.45, 0.088, -4.75), Vector3(0.34, 0.025, 1.55), Color(0.060, 0.022, 0.016))
 	_make_visual_box("RoadCrowsPostVictoryCutThread", Vector3(0.55, 0.13, -3.72), Vector3(0.70, 0.030, 0.06), Color(0.36, 0.035, 0.030))
 	_make_black_feather_scatter("RoadCrowsPostVictoryFeathers", Vector3(0.35, 0.11, -3.95), 4, 0.55)
+	_make_named_interactable("post_victory_token", "clue", "Examine the token in the dead creature's hand", Vector3(1.35, 0.0, -4.55), Color(0.46, 0.28, 0.12), Vector3(0.55, 0.55, 0.55))
 
 func _make_narrative_aftermath(zone_id: String) -> void:
 	if zone_root == null:
@@ -3283,6 +3313,8 @@ func _make_narrative_aftermath(zone_id: String) -> void:
 			_make_post_ghoulkin_story_clue()
 			_make_visual_box("WychwoodPackAshResidue", Vector3(0.0, 0.078, -7.0), Vector3(1.7, 0.018, 1.25), Color(0.045, 0.035, 0.032))
 			_make_visual_box("WychwoodPackBrokenBinding", Vector3(1.2, 0.115, -6.4), Vector3(0.55, 0.025, 0.08), Color(0.22, 0.16, 0.10))
+		if bool(story_state.get_flag("all_road_evidence", false)):
+			_make_all_evidence_safe_edge()
 		for evidence in [
 			["bram", Vector3(-2.0, 0.10, 7.4), Color(0.30, 0.18, 0.12)],
 			["sella", Vector3(-4.0, 0.10, 4.0), Color(0.24, 0.035, 0.03)],
@@ -3826,6 +3858,10 @@ func _make_named_interactable(id: String, type: String, prompt: String, pos: Vec
 	if mapped != null:
 		area.add_child(mapped)
 		_configure_npc_animation(mapped, id)
+	elif id == "vargan_ledger_choice":
+		_make_ledger_interaction_visual(area, scale_override)
+	elif id == "post_victory_token":
+		_make_token_interaction_visual(area, scale_override)
 	elif type == "zone" or type == "blocked_zone":
 		_make_gate_marker(area, color, scale_override)
 	else:
@@ -3858,6 +3894,72 @@ func _make_named_interactable(id: String, type: String, prompt: String, pos: Vec
 	_connect_interactable(area)
 	return area
 
+func _make_ledger_interaction_visual(area: Node3D, scale_override: Vector3) -> void:
+	var ledger_root := Node3D.new()
+	ledger_root.name = "SealedCommandLedgerVisual"
+	ledger_root.scale = scale_override
+	area.add_child(ledger_root)
+	var cover := MeshInstance3D.new()
+	cover.name = "LedgerLeatherCover"
+	var cover_mesh := BoxMesh.new()
+	cover_mesh.size = Vector3(0.82, 0.11, 0.56)
+	cover.mesh = cover_mesh
+	cover.position = Vector3(0.0, 0.17, 0.0)
+	cover.rotation_degrees = Vector3(0.0, 0.0, -7.0)
+	cover.material_override = _mat(Color(0.16, 0.075, 0.040))
+	ledger_root.add_child(cover)
+	var pages := MeshInstance3D.new()
+	pages.name = "LedgerPages"
+	var pages_mesh := BoxMesh.new()
+	pages_mesh.size = Vector3(0.68, 0.065, 0.46)
+	pages.mesh = pages_mesh
+	pages.position = Vector3(0.0, 0.232, 0.0)
+	pages.rotation_degrees = Vector3(0.0, 0.0, -7.0)
+	pages.material_override = _mat(Color(0.58, 0.48, 0.31))
+	ledger_root.add_child(pages)
+	var seal := MeshInstance3D.new()
+	seal.name = "LedgerWaxSeal"
+	var seal_mesh := CylinderMesh.new()
+	seal_mesh.top_radius = 0.075
+	seal_mesh.bottom_radius = 0.075
+	seal_mesh.height = 0.025
+	seal_mesh.radial_segments = 10
+	seal.mesh = seal_mesh
+	seal.position = Vector3(0.18, 0.285, -0.04)
+	seal.rotation_degrees = Vector3(90.0, 0.0, -7.0)
+	seal.material_override = _mat(Color(0.43, 0.075, 0.045))
+	ledger_root.add_child(seal)
+
+func _make_token_interaction_visual(area: Node3D, scale_override: Vector3) -> void:
+	var token_root := Node3D.new()
+	token_root.name = "OrenTokenAndVarganWireVisual"
+	token_root.scale = scale_override
+	area.add_child(token_root)
+	var token := MeshInstance3D.new()
+	token.name = "OrenCompleteToken"
+	var token_mesh := BoxMesh.new()
+	token_mesh.size = Vector3(0.28, 0.07, 0.38)
+	token.mesh = token_mesh
+	token.position = Vector3(-0.12, 0.12, 0.0)
+	token.rotation_degrees = Vector3(0.0, -24.0, 8.0)
+	token.material_override = _mat(Color(0.48, 0.30, 0.12))
+	token_root.add_child(token)
+	var wire := MeshInstance3D.new()
+	wire.name = "VarganBindingWire"
+	var wire_mesh := TorusMesh.new()
+	wire_mesh.inner_radius = 0.07
+	wire_mesh.outer_radius = 0.09
+	wire_mesh.rings = 8
+	wire_mesh.ring_segments = 6
+	wire.mesh = wire_mesh
+	wire.position = Vector3(0.12, 0.15, 0.05)
+	wire.rotation_degrees = Vector3(78.0, 12.0, 14.0)
+	var wire_material := _mat(Color(0.13, 0.13, 0.12))
+	wire_material.metallic = 0.55
+	wire_material.roughness = 0.48
+	wire.material_override = wire_material
+	token_root.add_child(wire)
+
 func _make_village_place(id: String, type: String, prompt: String, pos: Vector3, size: Vector3, color: Color):
 	pos = river_safe_position(pos,maxf(size.z*0.5,0.8))
 	var area = Interactable.new()
@@ -3875,20 +3977,29 @@ func _make_village_place(id: String, type: String, prompt: String, pos: Vector3,
 	var table := MeshInstance3D.new()
 	table.name = "%s_VisibleProp" % id
 	var mesh := BoxMesh.new()
-	mesh.size = size
-	table.mesh = mesh
-	table.position.y = size.y * 0.5
-	table.material_override = _mat(color)
-	area.add_child(table)
 	if type == "minigame":
-		var board := MeshInstance3D.new()
-		board.name = "%s_GameBoard" % id
-		var board_mesh := BoxMesh.new()
-		board_mesh.size = Vector3(size.x * 0.72,0.06,size.z * 0.72)
-		board.mesh = board_mesh
-		board.position.y = size.y + 0.05
-		board.material_override = _mat(Color(0.62,0.50,0.30))
-		area.add_child(board)
+		# A board-game table has visible legs, a thin worn top, two seats, and an
+		# opponent. It should read as a social place before the overlay opens.
+		mesh.size = Vector3(size.x, 0.16, size.z)
+		table.position.y = size.y
+		table.material_override = _mat(color.darkened(0.10))
+		area.add_child(table)
+		for x in [-size.x * 0.38, size.x * 0.38]:
+			for z in [-size.z * 0.34, size.z * 0.34]:
+				var leg := MeshInstance3D.new()
+				leg.name = "%s_TableLeg" % id
+				var leg_mesh := BoxMesh.new()
+				leg_mesh.size = Vector3(0.14, size.y * 0.92, 0.14)
+				leg.mesh = leg_mesh
+				leg.position = Vector3(x, size.y * 0.46, z)
+				leg.material_override = _mat(color.darkened(0.20))
+				area.add_child(leg)
+		_make_board_game_staging(area, id, size)
+	else:
+		mesh.size = size
+		table.position.y = size.y * 0.5
+		table.material_override = _mat(color)
+		area.add_child(table)
 	var label := Label3D.new()
 	label.name = "InteractionWorldLabel"
 	label.text = prompt
@@ -3902,6 +4013,102 @@ func _make_village_place(id: String, type: String, prompt: String, pos: Vector3,
 	_connect_interactable(area)
 	return area
 
+func _make_board_game_staging(area: Node3D, id: String, size: Vector3) -> void:
+	var board_size := Vector2(size.x * 0.70, size.z * 0.68)
+	var board_back := MeshInstance3D.new()
+	board_back.name = "%s_CarvedBoard" % id
+	var board_mesh := BoxMesh.new()
+	board_mesh.size = Vector3(board_size.x + 0.18, 0.055, board_size.y + 0.18)
+	board_back.mesh = board_mesh
+	board_back.position = Vector3(0.0, size.y + 0.10, 0.0)
+	board_back.material_override = _mat(Color(0.20, 0.11, 0.055))
+	area.add_child(board_back)
+	var columns := 3 if id == "common_table" else 6
+	var rows := columns
+	for row in range(rows):
+		for column in range(columns):
+			var square := MeshInstance3D.new()
+			square.name = "%s_BoardSquare_%d_%d" % [id, row, column]
+			var square_mesh := BoxMesh.new()
+			square_mesh.size = Vector3(board_size.x / columns - 0.018, 0.018, board_size.y / rows - 0.018)
+			square.mesh = square_mesh
+			var x := -board_size.x * 0.5 + board_size.x * (float(column) + 0.5) / float(columns)
+			var z := -board_size.y * 0.5 + board_size.y * (float(row) + 0.5) / float(rows)
+			square.position = Vector3(x, size.y + 0.14, z)
+			square.material_override = _mat(Color(0.38, 0.24, 0.12) if (row + column) % 2 == 0 else Color(0.16, 0.095, 0.045))
+			area.add_child(square)
+			if id == "common_table" and (row + column) % 2 == 1 and row != 1:
+				var mark := MeshInstance3D.new()
+				mark.name = "%s_CarvedMark_%d_%d" % [id, row, column]
+				var mark_mesh := CylinderMesh.new()
+				mark_mesh.top_radius = 0.075
+				mark_mesh.bottom_radius = 0.075
+				mark_mesh.height = 0.035
+				mark_mesh.radial_segments = 10
+				mark.mesh = mark_mesh
+				mark.position = Vector3(x, size.y + 0.18, z)
+				mark.material_override = _mat(Color(0.72, 0.48, 0.20) if row < 2 else Color(0.72, 0.68, 0.48))
+				area.add_child(mark)
+	_make_board_game_chair(area, Vector3(0.0, 0.0, size.z * 0.90), PI)
+	_make_board_game_chair(area, Vector3(0.0, 0.0, -size.z * 0.90), 0.0)
+	var opponent_role := "rook_smuggler" if id == "common_table" else "blacksmith_tor"
+	var opponent_id := "board_rook" if id == "common_table" else "board_tor"
+	var opponent := _make_role_visual(opponent_role, "characters", Vector3.ONE)
+	if opponent == null:
+		return
+	opponent.name = "%s_Opponent" % id
+	opponent.position = Vector3(0.0, 0.0, size.z * 0.92)
+	opponent.rotation_degrees.y = 180.0
+	area.add_child(opponent)
+	CharacterPresentation.apply_npc(opponent, opponent_id)
+	_configure_npc_animation(opponent, "board_rook" if id == "common_table" else "board_tor")
+	var gesture := Node3D.new()
+	gesture.name = "BoardGameBeckoningGesture"
+	gesture.position = Vector3(0.34, 1.18, -0.28)
+	var palm := MeshInstance3D.new()
+	var palm_mesh := BoxMesh.new()
+	palm_mesh.size = Vector3(0.16, 0.09, 0.08)
+	palm.mesh = palm_mesh
+	palm.material_override = _mat(Color(0.58, 0.39, 0.25))
+	gesture.add_child(palm)
+	var finger := MeshInstance3D.new()
+	var finger_mesh := BoxMesh.new()
+	finger_mesh.size = Vector3(0.18, 0.045, 0.045)
+	finger.mesh = finger_mesh
+	finger.position = Vector3(0.08, 0.04, -0.01)
+	finger.rotation_degrees.z = -18.0
+	finger.material_override = palm.material_override
+	gesture.add_child(finger)
+	opponent.add_child(gesture)
+	var gesture_controller := BoardGameOpponent.new()
+	gesture_controller.name = "BoardGameOpponentController"
+	opponent.add_child(gesture_controller)
+	gesture_controller.configure(player, gesture)
+	var ambient := NpcAmbient.new()
+	ambient.setup("rook" if id == "common_table" else "blacksmith_tor", player)
+	opponent.add_child(ambient)
+
+func _make_board_game_chair(area: Node3D, position: Vector3, yaw: float) -> void:
+	var chair := Node3D.new()
+	chair.name = "BoardGameChair_North" if position.z < 0.0 else "BoardGameChair_South"
+	chair.position = position
+	chair.rotation.y = yaw
+	area.add_child(chair)
+	var seat := MeshInstance3D.new()
+	var seat_mesh := BoxMesh.new()
+	seat_mesh.size = Vector3(0.90, 0.14, 0.82)
+	seat.mesh = seat_mesh
+	seat.position.y = 0.62
+	seat.material_override = _mat(Color(0.20, 0.12, 0.065))
+	chair.add_child(seat)
+	var back := MeshInstance3D.new()
+	var back_mesh := BoxMesh.new()
+	back_mesh.size = Vector3(0.90, 0.90, 0.12)
+	back.mesh = back_mesh
+	back.position = Vector3(0.0, 1.02, 0.32)
+	back.material_override = seat.material_override
+	chair.add_child(back)
+
 func _world_prop_spec(id: String) -> Dictionary:
 	return {
 		"notice_board": {"kind": "notice_board", "state_key": "evidence_report"},
@@ -3910,31 +4117,36 @@ func _world_prop_spec(id: String) -> Dictionary:
 		"shrine_prayer": {"kind": "shrine", "state_key": "shrine_prayer_state"},
 		"common_table": {"kind": "table", "state_key": "common_table_state"},
 		"barrel_board": {"kind": "table", "state_key": "barrel_board_state"},
+		"vargan_ledger_choice": {"kind": "ledger", "state_key": "vargan_ledger_state"},
 	}.get(id, {})
 
 func _configure_npc_animation(mapped: Node3D, id: String) -> void:
 	var clips := {
-		"idle": "Idle_No", "walk": "Zombie_Walk_Fwd", "walk_back": "Zombie_Walk_Back",
-		"strafe": "Walk_Carry", "run": "Walk_Carry", "work": "Interact",
-		"dialogue": "Idle_No", "hit": "RecieveHit", "death": "Death"
+		"idle": "Idle", "walk": "Walk", "walk_back": "Walk",
+		"strafe": "Walk", "run": "Sprint", "work": "Interact",
+		"dialogue": "Idle_Talking", "hit": "Hit_Chest", "death": "Death01"
 	}
 	if id == "sister_anwen":
-		clips["idle"] = "Idle_No"
+		clips["idle"] = "Idle_Talking"
 		# The shared female base does not ship a death clip. Anwen is a protected
 		# story NPC, so keep the real hit reaction as the safe non-lethal fallback
 		# instead of claiming an unavailable death animation in the contract.
-		clips["hit"] = "Hit_Knockback"
+		clips["hit"] = "Hit_Chest"
 		clips.erase("death")
 	elif id == "rook":
-		clips["idle"] = "Attacking_Idle"
-		clips["hit"] = "RecieveHit_2"
+		clips["idle"] = "Idle_Talking"
+		clips["hit"] = "Hit_Head"
+	elif id in ["board_rook", "board_tor"]:
+		clips["idle"] = "Sitting_Idle"
+		clips["dialogue"] = "Sitting_Talking"
+		clips["work"] = "Sitting_Talking"
 	var driver = CharacterAnimationDriver.new()
 	driver.name = "CharacterAnimationDriver"
 	mapped.add_child(driver)
 	driver.configure(mapped, clips)
 	# Named NPCs remain animated at a steady presentation rate, while avoiding
 	# synchronizing ten skeletal evaluators on the same Compatibility frame.
-	driver.set_update_rate_hz(12.0)
+	driver.set_update_rate_hz(30.0)
 
 func _stage_dialogue_moment(area) -> void:
 	if player == null or area == null or not (area is Node3D):
@@ -5122,6 +5334,11 @@ func _role_for_interactable(id: String) -> String:
 		"edric": "castle_guard",
 		"vargan_gate_guard": "castle_guard",
 		"vargan_record_keeper": "castle_guard",
+		"vargan_steward": "vargan_steward",
+		"vargan_servant": "vargan_servant",
+		"vargan_patrol": "vargan_patrol",
+		"edric_castle": "edric_castle",
+		"edric_campaign": "edric_campaign",
 		"captain_senn": "road_ranger",
 		"halvern": "castle_guard",
 		"white_hart": "white_hart_avatar"
@@ -5138,7 +5355,12 @@ func _visual_role_for_interactable(id: String) -> String:
 		"farmer_toma": "villager_human",
 		"edric": "castle_guard_human",
 		"vargan_gate_guard": "castle_guard_human",
-		"vargan_record_keeper": "castle_guard_human",
+		"vargan_record_keeper": "villager_worker_human",
+		"vargan_steward": "villager_worker_human",
+		"vargan_servant": "villager_female_human",
+		"vargan_patrol": "road_ranger_human",
+		"edric_castle": "road_ranger_human",
+		"edric_campaign": "road_ranger_human",
 		"captain_senn": "road_ranger_human",
 		"halvern": "castle_guard_human"
 	}
@@ -5163,6 +5385,9 @@ func _make_role_visual(role_name: String, category: String, scale_value: Vector3
 			"greyfen_door_facade", "greyfen_window_facade", "greyfen_chimney",
 			"greyfen_roof",
 			"forest_tree", "forest_tree_variant", "forest_rock",
+			"castle_wall", "castle_arch", "castle_roof", "castle_door",
+			"castle_bookcase", "castle_chair", "castle_bench", "castle_table",
+			"castle_weapon_stand", "castle_lantern",
 		]
 		if str(settings.settings.get("quality_preset", "balanced")) == "potato" or role_name not in balanced_environment_roles:
 			return null
@@ -5209,6 +5434,13 @@ func _visual_role_for_legacy_character(role_name: String) -> String:
 		"generic_villager_01": "villager_human",
 		"lord_edric": "castle_guard_human",
 		"castle_guard": "castle_guard_human",
+		"vargan_gate_guard": "castle_guard_human",
+		"vargan_record_keeper": "villager_worker_human",
+		"vargan_steward": "villager_worker_human",
+		"vargan_servant": "villager_female_human",
+		"vargan_patrol": "road_ranger_human",
+		"edric_castle": "road_ranger_human",
+		"edric_campaign": "road_ranger_human",
 		"road_ranger": "road_ranger_human"
 	}
 	return str(roles.get(role_name, ""))
@@ -5219,7 +5451,8 @@ func _make_light(name: String, pos: Vector3, color: Color, energy: float) -> voi
 	var quality := str(settings.settings.get("quality_preset", "balanced")) if settings != null else "balanced"
 	# Two authored local pools preserve route landmarks without multiplying
 	# Compatibility-renderer lighting work across the entire outdoor frame.
-	if quality == "balanced" and runtime_light_count >= 2:
+	var balanced_light_cap := 4 if current_zone_id == "record_hall" else 2
+	if quality == "balanced" and runtime_light_count >= balanced_light_cap:
 		return
 	var light = OmniLight3D.new()
 	light.name = name
@@ -5257,8 +5490,8 @@ func _mat(color: Color) -> StandardMaterial3D:
 		# unlit. A restrained self-lit lift preserves their authored color without
 		# turning the room into a flat white box.
 		material.emission_enabled = true
-		material.emission = color.lightened(0.12)
-		material.emission_energy_multiplier = 0.28
+		material.emission = color.lightened(0.18)
+		material.emission_energy_multiplier = 0.52
 	material_cache[key] = material
 	return material
 

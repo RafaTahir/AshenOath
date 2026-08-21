@@ -95,7 +95,12 @@
       "voice_sister_anwen_road_warning_01",
       "voice_sister_anwen_wychwood_warning_01"
     ],
-    "actions": [{"label": "I will inspect the corpse.", "type": "complete_objective", "quest": "main_road_of_crows", "objective": "speak_anwen"}]
+    "actions": [
+      {"label": "I'll bring back evidence.", "type": "story_choice", "conditions": {"flag_unset": "anwen_response"}, "sets_flags": {"anwen_response": "evidence"}, "adjusts_values": {"anwen_trust": 1}, "result": "Anwen nods once. 'Then bring back what the road tried to hide.'"},
+      {"label": "You can explain when I return.", "type": "story_choice", "conditions": {"flag_unset": "anwen_response"}, "sets_flags": {"anwen_response": "terms"}, "result": "Kael leaves the silence between them intact. Anwen looks relieved, then ashamed of it."},
+      {"label": "If the shrine is involved, I report it.", "type": "story_choice", "conditions": {"flag_unset": "anwen_response"}, "sets_flags": {"anwen_response": "report"}, "adjusts_values": {"greyfen_fear": 1}, "result": "Anwen's hand tightens around the prayer cord. 'Then do not let fear choose the wording.'"},
+      {"label": "I will inspect the corpse.", "type": "complete_objective", "quest": "main_road_of_crows", "objective": "speak_anwen"}
+    ]
   },
   "mira": {
     "name": "Mira Fen",

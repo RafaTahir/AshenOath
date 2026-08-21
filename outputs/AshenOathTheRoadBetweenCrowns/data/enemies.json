@@ -13,7 +13,9 @@
     "contact_radius": 0.68,
     "behavior_profile": "skirmisher",
     "perception_memory": 2.2,
-    "color": "#6d6f4a"
+    "color": "#6d6f4a",
+    "memory_rule": "It follows erased names and abandons food when a token is nearby.",
+    "motivation": "A denied name is the only thing holding its borrowed body together."
   },
   "bog_wretch": {
     "name": "Bog Wretch",
@@ -26,7 +28,9 @@
     "weakness": "ash_bomb",
     "behavior_profile": "lurker",
     "perception_memory": 3.0,
-    "color": "#425f47"
+    "color": "#425f47",
+    "memory_rule": "It hides beside memory-rich roots and retreats when ash exposes its core.",
+    "motivation": "It protects the last frightened memory absorbed by the marsh."
   },
   "gravebound_knight": {
     "name": "Gravebound Knight",
@@ -39,7 +43,9 @@
     "weakness": "rot_oil",
     "behavior_profile": "sentinel",
     "perception_memory": 4.0,
-    "color": "#4a4d56"
+    "color": "#4a4d56",
+    "memory_rule": "It guards a sealed threshold and tests every oath spoken near it.",
+    "motivation": "It believes keeping the order is the only way to keep the dead contained."
   },
   "wychwood_stalker": {
     "name": "Wychwood Stalker",
@@ -55,7 +61,9 @@
     "contact_radius": 0.64,
     "behavior_profile": "flanker",
     "perception_memory": 2.8,
-    "color": "#2f5738"
+    "color": "#2f5738",
+    "memory_rule": "It circles behind the witness and remembers where the trap was placed.",
+    "motivation": "It hunts the hands that moved the evidence after the road attack."
   },
   "wychwood_raider": {
     "name": "Wychwood Raider",
@@ -71,7 +79,9 @@
     "contact_radius": 0.68,
     "behavior_profile": "feinter",
     "perception_memory": 2.4,
-    "color": "#52633f"
+    "color": "#52633f",
+    "memory_rule": "It feints toward the body, then lunges for carried tokens and loose evidence.",
+    "motivation": "It is pulled toward the objects that still carry a living person's name."
   },
   "wychwood_brute": {
     "name": "Wychwood Brute",
@@ -87,7 +97,9 @@
     "contact_radius": 0.82,
     "behavior_profile": "brute",
     "perception_memory": 1.8,
-    "color": "#3f4932"
+    "color": "#3f4932",
+    "memory_rule": "It arrives last and breaks the route rather than pursuing beyond its clearing.",
+    "motivation": "It carries the weight of many bodies but only one unfinished command."
   },
   "white_hart_avatar": {
     "name": "White Hart Avatar",
@@ -101,6 +113,8 @@
     "behavior_profile": "boss",
     "perception_memory": 6.0,
     "color": "#d8d2bd",
+    "memory_rule": "It answers names with memory echoes and cannot be forced to accept a false oath.",
+    "motivation": "It is the witness bound beneath the road, not a benevolent forest god.",
     "boss": true,
     "peaceful_resolution": true
   },
@@ -119,7 +133,9 @@
     "contact_radius": 0.92,
     "boss": true,
     "peaceful_resolution": false,
-    "color": "#5e5147"
+    "color": "#5e5147",
+    "memory_rule": "Its bell shockwave grows from the graves; silence interrupts its summons.",
+    "motivation": "It consumes the names Greyfen buried because the bell is the only witness left."
   },
   "rootbound_colossus": {
     "name": "Rootbound Colossus",
@@ -136,7 +152,9 @@
     "contact_radius": 1.04,
     "boss": true,
     "peaceful_resolution": false,
-    "color": "#405844"
+    "color": "#405844",
+    "memory_rule": "Its root lanes leave a readable central gap and its heart opens after a rupture.",
+    "motivation": "It defends the soil fed by the ash of people Greyfen refused to name."
   },
   "ashwing": {
     "name": "Ashwing Carrion Drake",
@@ -153,7 +171,9 @@
     "contact_radius": 0.96,
     "boss": true,
     "peaceful_resolution": false,
-    "color": "#665447"
+    "color": "#665447",
+    "memory_rule": "Its breath and wing pressure are directional; breaking its perch exposes it.",
+    "motivation": "It nests above the mill where refugee ash became part of the harvest."
   },
   "halvern_boss": {
     "name": "Halvern, Gravebound Knight",
@@ -170,7 +190,9 @@
     "contact_radius": 0.74,
     "boss": true,
     "peaceful_resolution": true,
-    "color": "#4c505a"
+    "color": "#4c505a",
+    "memory_rule": "Its guard can be broken by a clean parry, opening a testimony window.",
+    "motivation": "It stayed loyal until obedience became murder, then chose the grave as punishment."
   },
   "bandit": {
     "name": "Road Bandit",

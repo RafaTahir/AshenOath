@@ -193,8 +193,8 @@ func _update_sky_cycle(daylight: float, twilight: float, night: float, minutes: 
 	var arc_t := clampf((fposmod(minutes, 1440.0) - 330.0) / 870.0, 0.0, 1.0)
 	var sun_screen_x := lerpf(-34.0, 34.0, arc_t)
 	var sun_screen_y := 10.0 + sin(clampf((fposmod(minutes, 1440.0) - 420.0) / 690.0, 0.0, 1.0) * PI) * 12.0
-	var sun_position: Vector3 = sky_origin + view_forward * 88.0 + view_right * sun_screen_x + view_up * sun_screen_y
-	var moon_position: Vector3 = sky_origin + view_forward * 86.0 - view_right * sun_screen_x + view_up * (14.0 - sin(clampf((fposmod(minutes, 1440.0) - 420.0) / 690.0, 0.0, 1.0) * PI) * 5.0)
+	var sun_position: Vector3 = sky_origin + view_forward * 48.0 + view_right * sun_screen_x * 0.55 + view_up * sun_screen_y * 0.55
+	var moon_position: Vector3 = sky_origin + view_forward * 46.0 - view_right * sun_screen_x * 0.55 + view_up * (14.0 - sin(clampf((fposmod(minutes, 1440.0) - 420.0) / 690.0, 0.0, 1.0) * PI) * 5.0) * 0.55
 	sun_disc.position = sun_position
 	sun_halo.position = sun_position + Vector3(0, 0, 0.4)
 	sun_rays.position = sun_position
@@ -244,7 +244,7 @@ func _update_sky_cycle(daylight: float, twilight: float, night: float, minutes: 
 		var cloud := cloud_layer.get_child(i) as Node3D
 		cloud.visible = bool(profile.clouds) and i < cloud_count
 		var cloud_drift := 0.0 if _reduced_motion() else fmod(minutes * (0.018 + i * 0.002), 28.0) - 14.0
-		var cloud_anchor := Vector3(-58.0 + i * 19.0, 23.0 + float(i % 3) * 5.0, 132.0 + float(i % 3) * 16.0)
+		var cloud_anchor := Vector3(-18.0 + i * 6.0, 15.0 + float(i % 3) * 3.0, 34.0 + float(i % 3) * 4.0)
 		cloud.position = view_right * (cloud_anchor.x + cloud_drift) + view_up * cloud_anchor.y + view_forward * cloud_anchor.z
 
 func _sky_backdrop_palette(profile: Dictionary) -> Dictionary:
@@ -520,35 +520,33 @@ func _build_sky_layer() -> void:
 			lobe.position = spec.position
 			lobe.rotation.z = float(spec.rotation)
 			lobe.material_override = cloud_materials[lobe_index]
-			# Compatibility drivers can ignore the generated alpha texture on a
-			# billboard quad and expose its full rectangle. Keep this legacy pool
-			# resident for deterministic quality budgets, but let the authored 2D
-			# cloud pass render the visible formation.
-			lobe.transparency = 1.0
-			lobe.visible = false
+			# The generated alpha texture shapes the cloud. Keep depth testing on so
+			# towers and roofs can occlude the formation.
+			lobe.transparency = 0.0
+			lobe.visible = true
 			cloud.add_child(lobe)
 		cloud_layer.add_child(cloud)
 
 func _build_sky_backdrop() -> void:
 	authored_sky_material = ProceduralSkyMaterial.new()
-	authored_sky_material.sun_angle_max = 0.0
+	authored_sky_material.sun_angle_max = 0.55
 	authored_sky_material.sun_curve = 0.05
 	authored_sky_material.energy_multiplier = 0.82
 	authored_sky = Sky.new()
 	authored_sky.sky_material = authored_sky_material
 	sky_canvas = CanvasLayer.new()
 	sky_canvas.name = "SkyBackdropLayer"
-	# Keep the 2D pass above the 3D world, but transparent. The authored
-	# WorldEnvironment owns the sky gradient; this layer contributes only the
-	# camera-readable sun, moon, stars, and cloud silhouettes.
-	sky_canvas.layer = 1
-	sky_canvas.visible = true
+	# Keep the old 2D implementation available for diagnostics, but never draw
+	# its fixed-pixel sun/clouds in production. The Environment and depth-tested
+	# world-space layer own the actual sky.
+	sky_canvas.layer = -1
+	sky_canvas.visible = false
 	add_child(sky_canvas)
 	sky_backdrop = SkyBackdrop.new()
 	sky_backdrop.name = "AuthoredSkyBackdrop"
 	sky_backdrop.set_meta("ticket", "SKY-003")
 	sky_backdrop.set_meta("render_role", "gradient_stars_sun_moon_clouds")
-	sky_backdrop.call("set_overlay_only", true)
+	sky_backdrop.call("set_overlay_only", false)
 	sky_canvas.add_child(sky_backdrop)
 
 func _position_sky_layer(zone_id: String) -> void:
@@ -559,13 +557,13 @@ func _position_sky_layer(zone_id: String) -> void:
 		origin = Vector3(0, -10, 0)
 		sun_disc.position = Vector3(-95, 58, -120)
 		sun_disc.rotation_degrees = Vector3(64, -38, 0)
-		cloud_layer.position = Vector3(0, 0, 8)
+		cloud_layer.position = Vector3.ZERO
 		cloud_layer.visible = true
 	elif zone_id in ["ruins","old_mill","bandit_road","vargan_approach","vargan_court","record_hall","undercroft","assembly"]:
 		origin = Vector3(0, -12, 0)
 		sun_disc.position = Vector3(110, 70, -95)
 		sun_disc.rotation_degrees = Vector3(60, 42, 0)
-		cloud_layer.position = Vector3(0, 2, -4)
+		cloud_layer.position = Vector3.ZERO
 		cloud_layer.visible = zone_id not in ["record_hall", "undercroft"]
 	else:
 		origin = Vector3(0, -10, 0)
@@ -590,7 +588,7 @@ func _build_star_field() -> void:
 	star_field.name = "ProceduralStarField"
 	var star_mesh := QuadMesh.new()
 	star_mesh.size = Vector2(0.95, 0.95)
-	var star_material := _emissive_billboard_material(Color(0.72, 0.82, 1.0), 0.72, 0.86)
+	var star_material := _emissive_billboard_material(Color(0.72, 0.82, 1.0), 0.72, 0.86, false)
 	star_material.no_depth_test = true
 	star_material.albedo_texture = celestial_disc_texture
 	star_mesh.material = star_material
@@ -693,7 +691,7 @@ func _sky_material(color: Color) -> StandardMaterial3D:
 	material.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
 	return material
 
-func _emissive_billboard_material(color: Color, energy: float, alpha: float) -> StandardMaterial3D:
+func _emissive_billboard_material(color: Color, energy: float, alpha: float, depth_test := true) -> StandardMaterial3D:
 	var material = StandardMaterial3D.new()
 	material.albedo_color = Color(color.r, color.g, color.b, alpha)
 	material.emission_enabled = true
@@ -703,5 +701,5 @@ func _emissive_billboard_material(color: Color, energy: float, alpha: float) -> 
 	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	material.cull_mode = BaseMaterial3D.CULL_DISABLED
 	material.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
-	material.no_depth_test = true
+	material.no_depth_test = not depth_test
 	return material

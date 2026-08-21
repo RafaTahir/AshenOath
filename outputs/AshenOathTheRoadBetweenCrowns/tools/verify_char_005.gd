@@ -4,16 +4,16 @@ const ROLE_PATHS := {
 	"male": "res://assets_external/characters_universal/Superhero_Male_FullBody.gltf",
 	"female": "res://assets_external/characters_universal/Superhero_Female_FullBody.gltf",
 }
-const ANIMATION_PATH := "res://assets_external/animations/soul_universal_animation_library_2.glb"
+const ANIMATION_PATH := "res://assets_external/animations/AnimationLibrary_Godot_Standard.glb"
 const FORBIDDEN := ["faceplane", "eyeleft", "eyeright", "fake_neck", "hunchedback", "proxy"]
 
 var failures: Array[String] = []
 
 func _initialize() -> void:
-	_check(ResourceLoader.exists(ANIMATION_PATH), "Universal Animation Library 2 is not imported")
+	_check(ResourceLoader.exists(ANIMATION_PATH), "Neutral Animation Library is not imported")
 	var animation_scene := _instantiate(ANIMATION_PATH)
 	var animation_player := animation_scene.find_child("AnimationPlayer", true, false) if animation_scene != null else null
-	_check(animation_player != null, "Universal Animation Library 2 has no AnimationPlayer")
+	_check(animation_player != null, "Neutral Animation Library has no AnimationPlayer")
 	if animation_player != null:
 		var clips: PackedStringArray = animation_player.get_animation_list()
 		_check(clips.size() >= 20, "Universal animation library exposes too few clips: %d" % clips.size())

@@ -11,7 +11,7 @@ const DEFAULT_SPEC := {
 	"lod": 14.0,
 	"ground_offset": 0.0,
 	"skeleton_profile": "QuaterniusUniversalHumanoid",
-	"animation_profile": "UAL2_shared",
+	"animation_profile": "Neutral_shared_retargeted",
 	"equipment_sockets": {
 		"head": ["head", "Head"],
 		"weapon": ["hand_r", "handr", "r_hand"],

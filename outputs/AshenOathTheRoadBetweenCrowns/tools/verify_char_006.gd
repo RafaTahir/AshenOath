@@ -32,8 +32,8 @@ func _initialize() -> void:
 	var composite := _find_composite(visual_root)
 	_check(composite != null and int(composite.get_meta("character_rig_layer_count", 0)) == 1, "Kael rig layers were not consolidated")
 	if driver != null and driver.has_method("is_valid") and driver.is_valid():
-		_check(driver.get_animation_player().has_animation("Sword_Regular_A"), "UAL2 sword attack is not attached to Kael")
-		_check(driver.get_animation_player().has_animation("Idle_No"), "UAL2 idle is not attached to Kael")
+		_check(driver.get_animation_player().has_animation("Sword_Attack"), "Neutral sword attack is not attached to Kael")
+		_check(driver.get_animation_player().has_animation("Idle"), "Neutral idle is not attached to Kael")
 	var skeleton: Skeleton3D = _find_skeleton(visual_root)
 	_check(skeleton != null, "Kael lacks Skeleton3D")
 	if skeleton != null:

@@ -98,6 +98,9 @@ var beam_release_emitted := false
 var beam_cancel_reason := ""
 var beam_state_sequence := 0
 var beam_release_direction := Vector3.ZERO
+var sword_sheathed := true
+var sword_combat_linger := 0.0
+const SWORD_COMBAT_LINGER := 3.2
 
 const BEAM_STATE_IDLE := ""
 const BEAM_STATE_SHEATHING := "sheathing"
@@ -148,6 +151,7 @@ func _physics_process(delta: float) -> void:
 		buffered_attack = ""
 	step_up_cooldown = max(step_up_cooldown - delta, 0.0)
 	_update_beam_sequence(delta)
+	_update_sword_combat_state(delta)
 	if transition_locked:
 		velocity = Vector3.ZERO
 		_animate_visuals(delta, Vector3.ZERO, false)
@@ -346,6 +350,8 @@ func _handle_combat_input() -> void:
 		return
 	var light_pressed := _action_just_pressed("light_attack")
 	var heavy_pressed := _action_just_pressed("heavy_attack")
+	if light_pressed or heavy_pressed or _action_just_pressed("block"):
+		_draw_sword_for_combat()
 	if attack_cooldown > 0.0:
 		if light_pressed or heavy_pressed:
 			buffered_attack = "heavy" if heavy_pressed else "light"
@@ -585,6 +591,25 @@ func _begin_beam_redraw() -> void:
 	if animation_driver != null and animation_driver.has_method("stop_action"):
 		animation_driver.stop_action("idle", 0.12)
 
+func _draw_sword_for_combat() -> void:
+	sword_combat_linger = SWORD_COMBAT_LINGER
+	if sword_sheathed:
+		_set_sword_sheathed(false)
+		if animation_driver != null:
+			animation_driver.trigger_action("draw", 1.0, 0.08)
+
+func _update_sword_combat_state(delta: float) -> void:
+	if sword_sheathed:
+		return
+	if beam_cast_state != BEAM_STATE_IDLE or attack_anim_time > 0.0 or parry_window > 0.0 or _action_pressed("block"):
+		sword_combat_linger = SWORD_COMBAT_LINGER
+		return
+	sword_combat_linger = maxf(sword_combat_linger - delta, 0.0)
+	if sword_combat_linger <= 0.0:
+		_set_sword_sheathed(true)
+		if animation_driver != null:
+			animation_driver.trigger_action("sheath", 1.0, 0.08)
+
 func cancel_beam_charge(reason: String = "cancelled") -> void:
 	var was_active := beam_cast_state != BEAM_STATE_IDLE or beam_charging or beam_locked_direction.length_squared() > 0.5
 	beam_charging = false
@@ -659,12 +684,17 @@ func _hide_beam_charge_visuals() -> void:
 			glow.visible = false
 
 func _set_sword_sheathed(sheathed: bool) -> void:
+	sword_sheathed = sheathed
+	if not sheathed:
+		sword_combat_linger = SWORD_COMBAT_LINGER
 	if weapon_root != null:
 		weapon_root.visible = not sheathed
 	if rig_sword_visual != null:
 		rig_sword_visual.visible = not sheathed
 	if sheathed_sword_visual != null:
 		sheathed_sword_visual.visible = sheathed
+	if sheathed and slash_arc_root != null:
+		slash_arc_root.visible = false
 
 func is_blocking() -> bool:
 	return _action_pressed("block") and stamina_component.stamina > 8.0
@@ -728,6 +758,7 @@ func _build_body() -> void:
 	if _try_build_mapped_body():
 		CharacterPresentation.apply_player(self, visual_root)
 		_add_beam_charge_visual()
+		_set_sword_sheathed(true)
 		return
 
 	var cloak = MeshInstance3D.new()
@@ -776,6 +807,7 @@ func _build_body() -> void:
 	_add_weapon_visuals(Vector3(0.43, 0.86, -0.38))
 	CharacterPresentation.apply_player(self, visual_root)
 	_add_beam_charge_visual()
+	_set_sword_sheathed(true)
 
 func _add_beam_charge_visual() -> void:
 	beam_charge_visual = MeshInstance3D.new()
@@ -830,12 +862,13 @@ func _make_oathfire_hand(node_name: String, skeleton: Skeleton3D, aliases: Array
 	return glow
 
 func _build_sheathed_sword() -> void:
-	# The imported sword has an inconsistent source scale. Reuse the authored
-	# Oathblade mesh so the hand and back versions have identical proportions.
+	# The back weapon is a real scabbard, not a second naked blade hidden behind
+	# the character. It follows the spine socket and keeps the drawn weapon free
+	# to follow the hand during combat.
 	var socket_parent: Node3D = visual_root
 	var skeleton := _find_skeleton(visual_root)
 	if skeleton != null:
-		var back_index := _find_bone_index(skeleton, ["Spine2", "Chest", "Torso", "Spine"])
+		var back_index := _find_bone_index(skeleton, ["spine_03", "spine_02", "Spine3", "Spine2", "Chest", "Torso", "Spine"])
 		if back_index >= 0:
 			var attachment := BoneAttachment3D.new()
 			attachment.name = "KaelBackSwordSocket"
@@ -843,11 +876,44 @@ func _build_sheathed_sword() -> void:
 			attachment.bone_name = skeleton.get_bone_name(back_index)
 			skeleton.add_child(attachment)
 			socket_parent = _create_equipment_space(attachment, "KaelBackSwordEquipmentSpace")
-	sheathed_sword_visual = _build_oathblade_visual(socket_parent)
-	sheathed_sword_visual.name = "OathfireSheathedSword"
-	sheathed_sword_visual.position = Vector3(-0.22, 0.10, 0.15) if socket_parent != visual_root else Vector3(-0.24, 1.46, 0.22)
-	sheathed_sword_visual.rotation_degrees = Vector3(-8, 4, -18)
-	sheathed_sword_visual.scale = Vector3.ONE * 0.92
+	sheathed_sword_visual = Node3D.new()
+	sheathed_sword_visual.name = "KaelBackScabbard"
+	socket_parent.add_child(sheathed_sword_visual)
+	sheathed_sword_visual.position = Vector3(0.05, -0.05, -0.28) if socket_parent != visual_root else Vector3(0.10, 1.42, 0.30)
+	sheathed_sword_visual.rotation_degrees = Vector3(-10, 0, -32)
+	sheathed_sword_visual.scale = Vector3.ONE * 0.70
+	var scabbard := MeshInstance3D.new()
+	scabbard.name = "OathbladeScabbardBody"
+	var scabbard_mesh := CylinderMesh.new()
+	scabbard_mesh.top_radius = 0.075
+	scabbard_mesh.bottom_radius = 0.055
+	scabbard_mesh.height = 0.78
+	scabbard_mesh.radial_segments = 8
+	scabbard.mesh = scabbard_mesh
+	scabbard.position = Vector3(0.0, -0.49, 0.0)
+	scabbard.material_override = _mat(Color(0.16, 0.075, 0.035))
+	sheathed_sword_visual.add_child(scabbard)
+	var throat := MeshInstance3D.new()
+	throat.name = "OathbladeScabbardThroat"
+	var throat_mesh := CylinderMesh.new()
+	throat_mesh.top_radius = 0.095
+	throat_mesh.bottom_radius = 0.095
+	throat_mesh.height = 0.075
+	throat_mesh.radial_segments = 8
+	throat.mesh = throat_mesh
+	throat.position = Vector3(0.0, -0.055, 0.0)
+	throat.material_override = _metal_mat(Color(0.42, 0.30, 0.16))
+	sheathed_sword_visual.add_child(throat)
+	var cap := MeshInstance3D.new()
+	cap.name = "OathbladeScabbardCap"
+	var cap_mesh := SphereMesh.new()
+	cap_mesh.radius = 0.065
+	cap_mesh.height = 0.10
+	cap_mesh.radial_segments = 8
+	cap.mesh = cap_mesh
+	cap.position = Vector3(0.0, -0.96, 0.0)
+	cap.material_override = _metal_mat(Color(0.34, 0.24, 0.14))
+	sheathed_sword_visual.add_child(cap)
 	sheathed_sword_visual.visible = false
 
 func _try_build_mapped_body() -> bool:
@@ -887,11 +953,11 @@ func _try_build_mapped_body() -> bool:
 	animation_driver.name = "CharacterAnimationDriver"
 	mapped.add_child(animation_driver)
 	var animated: bool = bool(animation_driver.configure(mapped, {
-		"idle": "Idle_Loop", "walk": "Zombie_Walk_Fwd", "walk_back": "Zombie_Walk_Back",
-		"strafe": "Walk_Carry", "run": "Walk_Carry",
-		"jump": "NinjaJump_Start", "attack_light": "Sword_Regular_A",
-		"attack_heavy": "Sword_Regular_B", "dodge": "Slide",
-		"parry": "Sword_Block", "beam_cast": "Idle_Shield", "hit": "Hit_Knockback", "death": "Hit_Knockback"
+		"idle": "Idle", "walk": "Walk", "walk_back": "Walk",
+		"strafe": "Walk", "run": "Sprint",
+		"jump": "Jump_Start", "attack_light": "Sword_Attack",
+		"attack_heavy": "Sword_Attack", "dodge": "Roll",
+		"parry": "Sword_Idle", "beam_cast": "Spell_Simple_Idle", "hit": "Hit_Chest", "death": "Death01"
 	}))
 	if not animated:
 		_add_mapped_weapon_visuals()
@@ -1240,14 +1306,14 @@ func _animate_visuals(delta: float, move_dir: Vector3, moving: bool) -> void:
 	var idle_breath = sin(move_phase * 0.72) * (1.0 - grounded_weight)
 	var pelvis_offset = (left_foot_ground_offset + right_foot_ground_offset) * 0.22
 	visual_root.position.y = bob + pelvis_offset - 0.018 * grounded_weight - 0.030 * hurt_weight - 0.10 * landing_compression
-	var lateral_lean = clamp(-velocity.x * 0.85, -4.0, 4.0)
+	var lateral_lean = clamp(-velocity.dot(global_transform.basis.x) * 0.22, -1.5, 1.5)
 	var local_normal = global_transform.basis.inverse() * smoothed_ground_normal
 	var slope_pitch = rad_to_deg(atan2(local_normal.z, max(local_normal.y, 0.25)))
 	var slope_roll = -rad_to_deg(atan2(local_normal.x, max(local_normal.y, 0.25)))
-	var forward_lean = (-6.5 if running else -4.2) * grounded_weight if moving else 0.9 * idle_breath
+	var forward_lean = (-3.5 if running else -2.3) * grounded_weight if moving else 0.9 * idle_breath
 	forward_lean += slope_pitch * 0.45 + 8.0 * jump_pose_weight - 11.0 * landing_compression
 	forward_lean += -7.0 * dodge_weight + 5.0 * hurt_weight - 3.5 * block_pose_weight
-	var root_z = lateral_lean + slope_roll * 0.50 + 4.5 * sin(move_phase) * grounded_weight + 9.0 * dodge_weight * sign(dodge_dir.x) - 3.0 * block_pose_weight
+	var root_z = lateral_lean + slope_roll * 0.35 + 0.65 * sin(move_phase) * grounded_weight + 9.0 * dodge_weight * sign(dodge_dir.x) - 3.0 * block_pose_weight
 	visual_root.rotation_degrees.z = lerp(visual_root.rotation_degrees.z, root_z, 9.0 * delta)
 	visual_root.rotation_degrees.x = lerp(visual_root.rotation_degrees.x, forward_lean, 9.0 * delta)
 	if attack_anim_time > 0.0:

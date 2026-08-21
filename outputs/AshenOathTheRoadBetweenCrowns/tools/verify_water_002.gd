@@ -42,6 +42,10 @@ func _verify_river(game, zone_id: String) -> void:
 	check(water != null and water is MeshInstance3D, "%s flowing water is missing" % zone_id)
 	if water is MeshInstance3D:
 		check(str(water.get_meta("water_role", "")) == "WATER-002", "%s water role metadata is missing" % zone_id)
+		check((water as MeshInstance3D).mesh is PlaneMesh, "%s water surface must be subdivided plane geometry" % zone_id)
+		if (water as MeshInstance3D).mesh is PlaneMesh:
+			var plane := (water as MeshInstance3D).mesh as PlaneMesh
+			check(plane.subdivide_depth >= 24 and plane.subdivide_width >= 6, "%s water surface lacks vertex resolution for flow" % zone_id)
 		var material := (water as MeshInstance3D).material_override
 		check(material is ShaderMaterial, "%s water shader material is missing" % zone_id)
 		if material is ShaderMaterial:

@@ -12,6 +12,7 @@ var active_game := ""
 var ttt_board: Array[int] = []
 var draughts_board: Array[int] = []
 var draughts_selected := -1
+var draughts_legal_targets: Array[int] = []
 var finished := false
 var world_control_locked := false
 var input_source: Node
@@ -29,6 +30,7 @@ func open_game(game_id: String) -> void:
 	active_game = game_id
 	finished = false
 	draughts_selected = -1
+	draughts_legal_targets.clear()
 	overlay.visible = true
 	world_control_locked = true
 	_set_ui_pointer()
@@ -207,7 +209,7 @@ func _ttt_winner() -> int:
 	return 0
 
 func _setup_draughts() -> void:
-	draughts_board.resize(36); draughts_board.fill(0); draughts_selected = -1
+	draughts_board.resize(36); draughts_board.fill(0); draughts_selected = -1; draughts_legal_targets.clear()
 	for row in range(2):
 		for col in range(6):
 			if (row + col) % 2 == 1: draughts_board[row*6+col] = 1
@@ -220,7 +222,16 @@ func _render_draughts() -> void:
 	for index in range(36):
 		var button := Button.new(); button.custom_minimum_size = Vector2(66,58); button.add_theme_font_size_override("font_size",32)
 		button.text = {0:"",1:"●",2:"♛",-1:"○",-2:"♕"}.get(draughts_board[index],"")
-		var square := StyleBoxFlat.new(); square.bg_color = Color(0.48,0.35,0.21) if ((index/6)+(index%6))%2 == 0 else Color(0.10,0.075,0.055); square.border_color = Color(0.30,0.21,0.12); square.set_border_width_all(1); _style_board_button(button, square)
+		var square := StyleBoxFlat.new(); square.bg_color = Color(0.48,0.35,0.21) if ((index/6)+(index%6))%2 == 0 else Color(0.10,0.075,0.055); square.border_color = Color(0.30,0.21,0.12); square.set_border_width_all(1)
+		if index == draughts_selected:
+			square.bg_color = Color(0.42, 0.24, 0.08)
+			square.border_color = Color(1.0, 0.76, 0.30)
+			square.set_border_width_all(3)
+		elif index in draughts_legal_targets:
+			square.bg_color = Color(0.24, 0.34, 0.20)
+			square.border_color = Color(0.64, 0.82, 0.42)
+			square.set_border_width_all(2)
+		_style_board_button(button, square)
 		button.add_theme_color_override("font_color",Color(0.94,0.70,0.28) if draughts_board[index] > 0 else Color(0.86,0.86,0.80))
 		button.pressed.connect(func(): _on_draughts_square(index)); board_grid.add_child(button)
 	call_deferred("_focus_first_board_button")
@@ -236,10 +247,22 @@ func _focus_first_board_button() -> void:
 func _on_draughts_square(index: int) -> void:
 	if finished: return
 	if draughts_selected < 0:
-		if draughts_board[index] > 0: draughts_selected = index; status_label.text = "Choose where the piece should go."
+		if draughts_board[index] > 0:
+			draughts_selected = index
+			draughts_legal_targets.clear()
+			for move in get_draughts_moves(1):
+				if int(move.from) == index:
+					draughts_legal_targets.append(int(move.to))
+			status_label.text = "Choose a highlighted destination."
+			_render_draughts()
 	else:
-		if not play_draughts(draughts_selected,index): status_label.text = "That piece cannot move there."
-		draughts_selected = -1
+		var from_index := draughts_selected
+		if not play_draughts(from_index,index):
+			status_label.text = "That piece cannot move there."
+		else:
+			draughts_selected = -1
+			draughts_legal_targets.clear()
+			_render_draughts()
 
 func _style_action_button(button: Button) -> void:
 	button.custom_minimum_size = Vector2(240, 52)

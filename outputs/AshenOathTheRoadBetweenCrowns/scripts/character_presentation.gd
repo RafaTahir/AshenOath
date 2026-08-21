@@ -39,6 +39,7 @@ static func apply_npc(owner: Node3D, role_id: String) -> void:
 		CharacterIdentityProfile.apply(owner, role)
 		if role in ["sister_anwen", "sister_anwen_human"]:
 			_add_anwen_staff(owner)
+		_add_castle_role_equipment(owner, role)
 		return
 	# Non-skeletal bodies are not allowed to acquire fake clothing or facial
 	# geometry. Keep the shadow only and let the asset acceptance gate reject the
@@ -147,6 +148,114 @@ static func _add_anwen_staff(owner: Node3D) -> void:
 	inlay_material.emission_energy_multiplier = 0.38
 	inlay.material_override = inlay_material
 	equipment.add_child(inlay)
+
+static func _add_castle_role_equipment(owner: Node3D, role: String) -> void:
+	var castle_role := role.to_lower()
+	if not (castle_role.contains("vargan") or castle_role.contains("edric") or castle_role in ["castle_guard", "castle_guard_human"]):
+		return
+	if owner.find_child("CastleRoleEquipment", true, false) != null:
+		return
+	var skeleton := _find_skeleton(owner)
+	if skeleton == null:
+		return
+	var wants_left := castle_role.contains("guard") or castle_role.contains("record") or castle_role.contains("steward")
+	var aliases: Array[String] = []
+	if wants_left:
+		aliases = ["Hand.L", "hand_l", "left_hand"]
+	else:
+		aliases = ["Hand.R", "hand_r", "right_hand"]
+	var bone_index := _find_bone_index(skeleton, aliases)
+	if bone_index < 0:
+		return
+	var attachment := BoneAttachment3D.new()
+	attachment.name = "CastleRoleEquipmentSocket"
+	attachment.bone_idx = bone_index
+	attachment.bone_name = skeleton.get_bone_name(bone_index)
+	skeleton.add_child(attachment)
+	var equipment := WorldOrientedEquipment.new()
+	equipment.name = "CastleRoleEquipment"
+	equipment.scale = _inverse_attachment_scale(attachment)
+	attachment.add_child(equipment)
+	if castle_role.contains("patrol") or castle_role.contains("ranger"):
+		_add_spear(equipment)
+	elif castle_role.contains("guard"):
+		_add_shield(equipment)
+	else:
+		_add_record_book(equipment, castle_role.contains("steward"))
+
+static func _inverse_attachment_scale(attachment: BoneAttachment3D) -> Vector3:
+	var inherited := attachment.global_basis.get_scale()
+	return Vector3(1.0 / max(abs(inherited.x), 0.0001), 1.0 / max(abs(inherited.y), 0.0001), 1.0 / max(abs(inherited.z), 0.0001))
+
+static func _add_spear(parent: Node3D) -> void:
+	var shaft := MeshInstance3D.new()
+	shaft.name = "VarganPatrolSpear"
+	var shaft_mesh := CylinderMesh.new()
+	shaft_mesh.top_radius = 0.018
+	shaft_mesh.bottom_radius = 0.028
+	shaft_mesh.height = 1.28
+	shaft_mesh.radial_segments = 8
+	shaft.mesh = shaft_mesh
+	shaft.position = Vector3(0.0, -0.64, 0.0)
+	shaft.rotation_degrees = Vector3(0.0, 0.0, -12.0)
+	shaft.material_override = _mat(Color("4b3020"), 0.82)
+	parent.add_child(shaft)
+	var spearhead := MeshInstance3D.new()
+	spearhead.name = "VarganPatrolSpearhead"
+	var spear_mesh := PrismMesh.new()
+	spear_mesh.size = Vector3(0.10, 0.22, 0.06)
+	spearhead.mesh = spear_mesh
+	spearhead.position = Vector3(0.13, -0.08, 0.0)
+	spearhead.rotation_degrees = Vector3(0.0, 0.0, -12.0)
+	spearhead.material_override = _mat(Color("6f624b"), 0.42)
+	parent.add_child(spearhead)
+
+static func _add_shield(parent: Node3D) -> void:
+	var shield := MeshInstance3D.new()
+	shield.name = "VarganGuardShield"
+	var shield_mesh := CylinderMesh.new()
+	shield_mesh.top_radius = 0.34
+	shield_mesh.bottom_radius = 0.34
+	shield_mesh.height = 0.075
+	shield_mesh.radial_segments = 10
+	shield.mesh = shield_mesh
+	shield.position = Vector3(0.0, -0.30, -0.02)
+	shield.rotation_degrees = Vector3(90.0, 0.0, 0.0)
+	shield.scale = Vector3(1.0, 1.18, 1.0)
+	shield.material_override = _mat(Color("3d4852"), 0.55)
+	parent.add_child(shield)
+	var boss := MeshInstance3D.new()
+	boss.name = "VarganGuardShieldBoss"
+	var boss_mesh := CylinderMesh.new()
+	boss_mesh.top_radius = 0.07
+	boss_mesh.bottom_radius = 0.07
+	boss_mesh.height = 0.09
+	boss_mesh.radial_segments = 8
+	boss.mesh = boss_mesh
+	boss.position = Vector3(0.0, -0.30, -0.065)
+	boss.rotation_degrees = Vector3(90.0, 0.0, 0.0)
+	boss.material_override = _mat(Color("9c7845"), 0.45)
+	parent.add_child(boss)
+
+static func _add_record_book(parent: Node3D, steward: bool) -> void:
+	var book := MeshInstance3D.new()
+	book.name = "VarganRecordBook"
+	var book_mesh := BoxMesh.new()
+	book_mesh.size = Vector3(0.26, 0.055, 0.34 if steward else 0.28)
+	book.mesh = book_mesh
+	book.position = Vector3(0.0, -0.25, -0.04)
+	book.rotation_degrees = Vector3(12.0, 0.0, -18.0)
+	book.material_override = _mat(Color("5b281e") if not steward else Color("6c4f29"), 0.72)
+	parent.add_child(book)
+	var clasp := MeshInstance3D.new()
+	clasp.name = "VarganRecordBookClasp"
+	var clasp_mesh := BoxMesh.new()
+	clasp_mesh.size = Vector3(0.035, 0.065, 0.12)
+	clasp.mesh = clasp_mesh
+	clasp.position = Vector3(0.11, -0.25, -0.04)
+	clasp.rotation_degrees = book.rotation_degrees
+	clasp.material_override = _mat(Color("a1854e"), 0.35)
+	parent.add_child(clasp)
 
 static func _find_bone_index(skeleton: Skeleton3D, aliases: Array[String]) -> int:
 	for index in range(skeleton.get_bone_count()):

@@ -29,6 +29,8 @@ var attack_range = 1.4
 var sense_range = 10.0
 var tag = "beast"
 var weakness = ""
+var memory_rule := ""
+var motivation := ""
 var attack_cooldown = 0.0
 var slowed_time = 0.0
 var dead = false
@@ -98,6 +100,8 @@ func setup(id: String, definition: Dictionary, target: Node3D) -> void:
 	sense_range = float(definition.get("sense_range", 10.0))
 	tag = definition.get("tag", "beast")
 	weakness = definition.get("weakness", "")
+	memory_rule = str(definition.get("memory_rule", ""))
+	motivation = str(definition.get("motivation", ""))
 	is_boss = bool(definition.get("boss", false))
 	player = target
 	home_position = global_position
@@ -121,6 +125,8 @@ func setup(id: String, definition: Dictionary, target: Node3D) -> void:
 	contact_radius = float(definition.get("contact_radius", 0.78 if behavior_profile == "brute" else 0.68))
 	flank_sign = -1.0 if int(get_instance_id()) % 2 == 0 else 1.0
 	_build_body(base_color)
+	set_meta("memory_rule", memory_rule)
+	set_meta("motivation", motivation)
 
 func setup_navigation(service) -> void:
 	spatial_service = service
@@ -378,7 +384,7 @@ func _resolve_attack() -> void:
 	last_attack_contact = Geometry3D.get_closest_point_to_segment(player_contact, sweep_start, sweep_end)
 	var boss_attack := _boss_attack_id()
 	var special_radius := _boss_attack_radius(boss_attack)
-	var special_contact := is_boss and boss_attack != "" and player_contact.distance_to(global_position) <= special_radius and _has_attack_line()
+	var special_contact := is_boss and boss_attack != "" and _special_attack_hits_player(boss_attack, special_radius)
 	var melee_contact := player_contact.distance_to(last_attack_contact) <= contact_radius and _has_attack_line()
 	# A parry is a deliberate timing mechanic, not a requirement that an
 	# imported hand bone happen to produce a valid trace on the same frame. If
@@ -389,6 +395,10 @@ func _resolve_attack() -> void:
 	var parry_window_active := float(player.get("parry_window")) > 0.0
 	var parry_contact := parry_window_active and player_contact.distance_to(global_position) <= attack_range + contact_radius and _has_attack_line()
 	if not melee_contact and not special_contact and not parry_contact:
+		if is_boss and boss_attack != "":
+			# A missed boss action is still an authored beat. The release VFX and
+			# audio must communicate the dodge instead of disappearing silently.
+			special_attack_resolved.emit(self, boss_attack, attack_trace_end, special_radius, 0.0, false)
 		return
 	if parry_contact and not melee_contact:
 		last_attack_contact = player_contact
@@ -444,6 +454,29 @@ func _boss_attack_radius(attack_id: String) -> float:
 		"antler_sweep": 3.8,
 		"road_reopening": 4.0,
 	}.get(attack_id, attack_range + 0.8)
+
+func _special_attack_hits_player(attack_id: String, radius: float) -> bool:
+	if player == null or player_contact_distance() > radius or not _has_attack_line():
+		return false
+	var offset: Vector3 = player.global_position - global_position
+	offset.y = 0.0
+	if offset.length_squared() <= 0.01:
+		return true
+	var local: Vector3 = global_transform.basis.inverse() * offset
+	if attack_id in ["ash_breath", "wing_blast", "swoop", "counter_lunge"]:
+		var forward := -global_transform.basis.z
+		forward.y = 0.0
+		if forward.length_squared() > 0.01 and forward.normalized().dot(offset.normalized()) < (0.32 if attack_id == "wing_blast" else 0.48):
+			return false
+	if attack_id == "root_lanes":
+		# The central gap between the three root lanes is intentional. Reading the
+		# telegraph and stepping sideways is safer than tanking a radial hit.
+		var lane := fmod(absf(local.x), 2.35)
+		return lane < 0.62 or lane > 1.72
+	return true
+
+func player_contact_distance() -> float:
+	return player.global_position.distance_to(global_position) if player != null else INF
 
 func _has_attack_line() -> bool:
 	var origin := global_position+Vector3(0,0.9,0)

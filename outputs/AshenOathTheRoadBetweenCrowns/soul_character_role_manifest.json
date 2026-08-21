@@ -105,7 +105,7 @@
       "path": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf",
       "sha256": "DF67E16CC2E94D8C58E8831D25835036564EB9F2A7A53E31B6F1CB7F7FE1FC78",
       "model": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf",
-      "animation_library": "res://assets_external/animations/soul_universal_animation_library_2.glb"
+      "animation_library": "res://assets_external/animations/AnimationLibrary_Godot_Standard.glb"
     },
     "ghoulkin": {
       "family": "monster",

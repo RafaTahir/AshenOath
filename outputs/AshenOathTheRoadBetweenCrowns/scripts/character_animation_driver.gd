@@ -19,6 +19,8 @@ const STATE_ALIASES := {
 	"attack_heavy": ["swordslash", "attack", "punch"],
 	"dodge": ["roll", "dodge", "run"],
 	"parry": ["parry", "block", "hitreceive", "hitrecieve", "receivehit", "recievehit"],
+	"draw": ["sworddraw", "draw", "interact", "idle"],
+	"sheath": ["swordsheath", "sheath", "interact", "idle"],
 	"beam_cast": ["interact", "cast", "attack"],
 	"hit": ["hitreceive", "hitrecieve", "receivehit", "recievehit", "hitreact", "spawn"],
 	"death": ["death", "die"]
@@ -339,12 +341,33 @@ func _resolve_clip(state: String, requested: String) -> StringName:
 		var alias_key := _clip_key(str(alias))
 		if not keys.has(alias_key):
 			keys.append(alias_key)
+	var candidates := animation_player.get_animation_list()
+	# Resolve exact names first. The old contains-only pass could select a
+	# zombie/carry clip for a normal walk simply because it appeared earlier in
+	# an imported library.
 	for key in keys:
-		for candidate in animation_player.get_animation_list():
+		for candidate in candidates:
 			var candidate_key := _clip_key(str(candidate))
-			if candidate_key == key or candidate_key.ends_with(key) or candidate_key.contains(key):
+			if candidate_key == key and _locomotion_candidate_allowed(state, candidate_key):
+				return candidate
+	for key in keys:
+		for candidate in candidates:
+			var candidate_key := _clip_key(str(candidate))
+			if not _locomotion_candidate_allowed(state, candidate_key):
+				continue
+			if candidate_key.ends_with(key) or candidate_key.contains(key):
 				return candidate
 	return StringName()
+
+func _locomotion_candidate_allowed(state: String, candidate_key: String) -> bool:
+	if state not in ["walk", "walk_back", "strafe", "run"]:
+		return true
+	# These clips are useful for special enemies or carried-object animation,
+	# but they visibly collapse a human gait when used as general locomotion.
+	for banned in ["zombie", "carry", "limp", "crawl", "stagger", "attack", "sword", "hit"]:
+		if candidate_key.contains(banned):
+			return false
+	return true
 
 func _clip_key(value: String) -> String:
 	return value.to_lower().replace("characterarmature", "").replace("humanarmature", "").replace("human armature", "").replace("|", "").replace("_", "").replace("-", "").replace(" ", "")

@@ -16,6 +16,13 @@ var unlocked = {
 var world_flags = {}
 var tracked_quest_id := ""
 var tracker_context_zone := ""
+const IMPLEMENTED_SIDE_QUESTS := {
+	"side_widows_bell": true,
+	"side_iron_remembers": true,
+	"side_bitter_roots": true,
+	"side_black_dog": true,
+	"side_empty_grave": true,
+}
 
 func load_quests(path: String) -> void:
 	var parsed = _read_json(path)
@@ -24,6 +31,9 @@ func load_quests(path: String) -> void:
 
 func start_quest(id: String) -> bool:
 	if not quest_defs.has(id):
+		return false
+	if not is_runtime_content_ready(id):
+		message.emit("That request is still being prepared.")
 		return false
 	if completed.has(id) or active.has(id):
 		return false
@@ -102,6 +112,11 @@ func is_completed(id: String) -> bool:
 func is_unlocked(id: String) -> bool:
 	return bool(unlocked.get(id, false))
 
+func is_runtime_content_ready(id: String) -> bool:
+	if not id.begins_with("side_"):
+		return true
+	return bool(IMPLEMENTED_SIDE_QUESTS.get(id, false))
+
 func get_tracker_text() -> String:
 	if active.is_empty():
 		return "No active quest\nFind a contract or speak to villagers."
@@ -168,6 +183,27 @@ func set_tracked_quest(id: String) -> bool:
 
 func get_tracked_quest() -> String:
 	return tracked_quest_id if active.has(tracked_quest_id) else ""
+
+func get_active_objective_id(quest_id: String) -> String:
+	if not active.has(quest_id):
+		return ""
+	var grouped_candidates: Array[String] = []
+	for objective in active[quest_id].get("objectives", []):
+		if bool(objective.get("done", false)):
+			continue
+		var group := str(objective.get("group", ""))
+		if group != "":
+			var progress := _group_progress(quest_id, group)
+			if int(progress.get("done", 0)) >= int(progress.get("required", 1)):
+				continue
+			if bool(objective.get("optional", false)):
+				grouped_candidates.append(str(objective.get("id", "")))
+				continue
+			return str(objective.get("id", ""))
+		return str(objective.get("id", ""))
+	if not grouped_candidates.is_empty():
+		return grouped_candidates[0]
+	return ""
 
 func set_tracked_quest_for_zone(zone_id: String) -> void:
 	tracker_context_zone = zone_id

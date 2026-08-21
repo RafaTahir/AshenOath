@@ -20,6 +20,8 @@ func _initialize() -> void:
 	if director == null:
 		_finish()
 		return
+	_check(not director.sky_canvas.visible, "Production sky still exposes the screen-space CanvasLayer")
+	_check(director.sun_disc.material_override.no_depth_test == false, "Sun disc is not depth-tested")
 	var backdrop = director.sky_backdrop
 	_check(backdrop != null, "SKY-003 authored backdrop is missing")
 	if backdrop != null:

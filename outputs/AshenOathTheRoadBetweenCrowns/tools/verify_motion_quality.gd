@@ -25,6 +25,12 @@ func _initialize() -> void:
 		_finish(); return
 	_assert(player.animation_driver != null and player.animation_driver.is_valid(), "player has no valid skeletal animation driver")
 	_assert(player.left_leg_proxy == null, "player still exposes proxy-box animation")
+	_assert(bool(player.get("sword_sheathed")), "player sword is not sheathed on exploration spawn")
+	_assert(player.sheathed_sword_visual != null, "player back scabbard is missing")
+	if player.animation_driver != null:
+		for state in ["walk", "walk_back", "strafe", "run"]:
+			var clip := str(player.animation_driver.get_clip_for_state(state)).to_lower()
+			_assert(not clip.contains("zombie") and not clip.contains("carry"), "player %s resolves to a limping/carry clip: %s" % [state, clip])
 	if player.animation_driver != null:
 		_assert(_state_moves_bones(player.animation_driver, "run"), "player run clip does not move real bones")
 		_assert(_state_moves_bones(player.animation_driver, "attack_light"), "player sword attack does not move real bones")

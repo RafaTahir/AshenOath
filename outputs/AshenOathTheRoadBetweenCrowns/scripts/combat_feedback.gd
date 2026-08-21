@@ -303,6 +303,34 @@ static func boss_attack_release(parent: Node3D, pos: Vector3, direction: Vector3
 		wedge.material_override = _emissive(color, 0.90)
 		root.add_child(wedge)
 		wedge.look_at(wedge.global_position + direction.normalized(), Vector3.UP)
+	if attack_id == "root_lanes":
+		for lane_index in range(3):
+			var lane := MeshInstance3D.new()
+			var lane_mesh := BoxMesh.new()
+			lane_mesh.size = Vector3(0.16, 0.045, radius * 1.45)
+			lane.mesh = lane_mesh
+			lane.position = Vector3((float(lane_index) - 1.0) * 1.35, 0.035, 0.0)
+			lane.material_override = _emissive(color, 0.82)
+			root.add_child(lane)
+	elif attack_id == "ground_rupture":
+		for ring_index in range(2):
+			var crack := MeshInstance3D.new()
+			var crack_mesh := BoxMesh.new()
+			crack_mesh.size = Vector3(radius * (0.20 + ring_index * 0.14), 0.035, 0.08)
+			crack.mesh = crack_mesh
+			crack.position = Vector3(0.0, 0.04, -radius * (0.25 + ring_index * 0.22))
+			crack.rotation.y = -0.34 if ring_index == 0 else 0.46
+			crack.material_override = _emissive(color, 0.74)
+			root.add_child(crack)
+	elif attack_id == "heart_stagger":
+		var heart := MeshInstance3D.new()
+		var heart_mesh := SphereMesh.new()
+		heart_mesh.radius = 0.22
+		heart_mesh.height = 0.44
+		heart.mesh = heart_mesh
+		heart.position = Vector3(0.0, 0.34, 0.0)
+		heart.material_override = _emissive(color, 1.25)
+		root.add_child(heart)
 	var tween := root.create_tween()
 	tween.tween_property(root, "scale", Vector3.ONE * (1.18 if parried else 1.45), 0.20)
 	tween.tween_callback(root.queue_free)

@@ -108,7 +108,7 @@ func _compose_player_body(outfit_root: Node3D, outfit_path: String, role_name: S
 	var merged_layers := _merge_shared_rig_layers(outfit_root, [base, hair])
 	composite.set_meta("character_composite", true)
 	composite.set_meta("character_rig_layer_count", 1 if merged_layers else 3)
-	composite.set_meta("character_identity", "kael" if is_kael else "anwen")
+	composite.set_meta("character_identity", "kael" if is_kael else role_name.to_lower())
 	composite.set_meta("character_base_path", base_path)
 	composite.set_meta("character_outfit_path", outfit_path)
 	composite.set_meta("character_hair_path", hair_path)
@@ -158,7 +158,7 @@ func _hair_path_for_role(role_name: String, male: bool) -> String:
 	var role := role_name.to_lower()
 	if role in ["sister_anwen_human", "sister_anwen"] or not male:
 		return "res://assets_external/characters_universal/Hair_Buns.gltf"
-	if role.contains("hooded") or role.contains("ranger"):
+	if role.contains("hooded") or role.contains("ranger") or role.contains("patrol") or role.contains("guard"):
 		return "res://assets_external/characters_universal/Hair_Buzzed.gltf"
 	return "res://assets_external/characters_universal/Hair_SimpleParted.gltf"
 

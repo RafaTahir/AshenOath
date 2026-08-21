@@ -40,6 +40,9 @@ func get_dialogue(id: String) -> Dictionary:
 	base["presentation"] = _presentation_contract(base.get("presentation", {}))
 	var visible_actions: Array = []
 	for action in base.get("actions", []):
+		if str(action.get("type", "")) == "start_quest" and quest_manager != null and quest_manager.has_method("is_runtime_content_ready"):
+			if not quest_manager.is_runtime_content_ready(str(action.get("quest", ""))):
+				continue
 		if _conditions_match(action.get("conditions", {})):
 			visible_actions.append(action)
 	base["actions"] = visible_actions
@@ -114,9 +117,13 @@ func _conditions_match(raw_conditions: Variant) -> bool:
 	if typeof(raw_conditions) != TYPE_DICTIONARY:
 		return true
 	var conditions: Dictionary = raw_conditions
+	if conditions.has("flag_unset") and story_state != null:
+		var unset_id := str(conditions.get("flag_unset", ""))
+		if unset_id != "" and story_state.get_flag(unset_id, null) != null:
+			return false
 	var story_conditions: Dictionary = {}
 	for key in conditions:
-		if key not in ["quest_active", "quest_available", "quest_completed", "objectives_done", "objectives_not_done"]:
+		if key not in ["quest_active", "quest_available", "quest_completed", "objectives_done", "objectives_not_done", "flag_unset"]:
 			story_conditions[key] = conditions[key]
 	if story_state != null and not story_state.matches(story_conditions):
 		return false

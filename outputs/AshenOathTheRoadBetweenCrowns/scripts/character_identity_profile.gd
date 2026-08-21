@@ -86,6 +86,12 @@ static func _profile_for(role: String) -> Dictionary:
 		return _occupation_profile(role, Color("272634"), Color("3b394d"), Color("a47a66"))
 	if role.contains("pilgrim") or role.contains("shrine"):
 		return _occupation_profile(role, Color("343b32"), Color("5a5540"), Color("99705b"))
+	if role.contains("steward") or role.contains("record_keeper"):
+		return _occupation_profile(role, Color("3b302b"), Color("6d5941"), Color("a47b63"))
+	if role.contains("servant"):
+		return _occupation_profile(role, Color("4a3b35"), Color("6b5142"), Color("b07f68"))
+	if role.contains("patrol"):
+		return _occupation_profile(role, Color("26333b"), Color("5a4a38"), Color("8f664f"))
 	if role.contains("guard") or role.contains("vargan") or role.contains("edric"):
 		return _occupation_profile(role, Color("30363d"), Color("4d2424"), Color("a2765e"))
 	if role.contains("ranger") or role.contains("senn") or role.contains("rook"):

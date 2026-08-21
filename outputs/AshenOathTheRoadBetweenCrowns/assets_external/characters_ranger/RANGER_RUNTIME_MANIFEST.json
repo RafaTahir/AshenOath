@@ -14,6 +14,6 @@
     {"path": "T_Ranger_Normal_1K.png", "bytes": 940081, "sha256": "A4DAA2410B007AD9FE7E15AC7ECC1E579AB08AAFA3725BA3F158C5A24C68B540"},
     {"path": "T_Ranger_ORM_1K.png", "bytes": 786403, "sha256": "76CFBA43D6748A79A7EA26184415E4810731F6E4B207C3C84A6B1A084B49BD9F"}
   ],
-  "animation_source": "res://assets_external/animations/soul_universal_animation_library_2.glb",
+  "animation_source": "res://assets_external/animations/AnimationLibrary_Godot_Standard.glb",
   "raw_source_policy": "Raw Ranger source remains outside the runtime folder and is excluded from Web export."
 }

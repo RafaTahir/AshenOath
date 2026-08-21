@@ -24,10 +24,13 @@ func _initialize() -> void:
 		check(audio.has_voice(id), "AudioManager did not register voice: %s" % id)
 		var stream = audio.voices.get(id)
 		check(stream != null and str(stream.get_meta("scratch_voice_path", "")).contains("/voices/scratch/"), "Voice did not prefer recorded scratch audio: %s" % id)
+		check(not audio.call("_has_production_voice", id), "Scratch voice is being treated as final acting: %s" % id)
 		var file := FileAccess.open(path, FileAccess.READ)
 		if file != null:
 			payload += file.get_length()
 	check(payload <= int(manifest.get("maximum_payload_bytes", 0)), "Scratch voice payload exceeds its 15 MB budget")
+	check(not bool(audio.get("browser_voice_fallback_enabled")), "Robotic browser voice is enabled for default delivery")
+	check(audio.has_method("set_browser_voice_fallback_enabled"), "Accessibility voice fallback cannot be enabled explicitly")
 	print("VOICE-001 payload_bytes=%d" % payload)
 	_finish()
 

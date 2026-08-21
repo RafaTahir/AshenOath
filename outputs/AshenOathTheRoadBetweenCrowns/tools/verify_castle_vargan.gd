@@ -40,6 +40,13 @@ func _initialize() -> void:
 	await settle(3)
 	check(game.zone_root.find_child("CastleVargan_OuterCourtyard", true, false) != null, "Outer Courtyard is missing")
 	for id in ["vargan_gate_guard", "vargan_steward", "vargan_gate_notice", "vargan_iron_binding"]: check(game.zone_root.find_child(id, true, false) != null, "Missing courtyard actor/evidence: %s" % id)
+	for id in ["vargan_gate_guard", "vargan_steward", "vargan_servant", "vargan_patrol"]:
+		var actor: Node = game.zone_root.find_child(id, true, false)
+		check(actor != null, "Missing route-visible Castle actor: %s" % id)
+		if actor != null:
+			check(not actor.find_children("*", "Skeleton3D", true, false).is_empty(), "Castle actor is not skeletal: %s" % id)
+			for mesh in actor.find_children("*", "MeshInstance3D", true, false):
+				check(not (mesh as MeshInstance3D).mesh is CapsuleMesh, "Castle actor still uses a capsule placeholder: %s" % id)
 	check(game.zone_root.find_child("CastleGuardPatrolRoutine", true, false) != null, "Castle patrol routine is missing in Balanced mode")
 	game.call("_handle_dialogue_action", game.dialogue.get_dialogue("vargan_gate_guard")["actions"][0])
 	for id in ["vargan_gate_notice", "vargan_iron_binding"]:

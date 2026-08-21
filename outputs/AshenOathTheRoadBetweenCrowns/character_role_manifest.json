@@ -5,12 +5,12 @@
   "animation_map": {
     "idle": "Idle",
     "walk": "Walk",
-    "run": "Run",
-    "attack": "Attack",
-    "heavy_attack": "HeavyAttack",
-    "hit": "RecieveHit",
-    "dodge": "Dodge",
-    "death": "Death"
+    "run": "Sprint",
+    "attack": "Sword_Attack",
+    "heavy_attack": "Sword_Attack",
+    "hit": "Hit_Chest",
+    "dodge": "Roll",
+    "death": "Death01"
   },
   "equipment_sockets": {
     "right_hand": "Hand.R",

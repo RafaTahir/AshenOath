@@ -31,7 +31,7 @@
         "source": "Quaternius Universal Base Characters + Modular Character Outfits: Fantasy",
         "source_url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
         "license": "CC0 1.0",
-        "notes": "CHAR-006 current runtime fallback: complete skinned male peasant outfit composite with native face surfaces, shared UAL2 animation library, bone-bound sword, and existing Oathblade presentation. A clothed unified hero source remains open."
+        "notes": "CHAR-006 current runtime fallback: complete skinned male peasant outfit composite with native face surfaces, retargeted neutral Walk/Sprint animation library, bone-bound sword, and back scabbard presentation. A clothed unified hero source remains open."
       },
       "sister_anwen_human": {
         "status": "char_007_shared_female_body_fused_animation",
@@ -39,7 +39,7 @@
         "source": "Quaternius Universal Base Characters + Modular Character Outfits: Fantasy",
         "source_url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
         "license": "CC0 1.0",
-        "notes": "CHAR-007 current runtime fallback: native-face female peasant outfit composite with shared UAL2 clips. Shrine identity remains in the existing staff, prayer cord, dialogue staging, and authored color profile; a clothed elder/cleric source remains open."
+        "notes": "CHAR-007 current runtime fallback: native-face female peasant outfit composite with retargeted neutral clips. Shrine identity remains in the existing staff, prayer cord, dialogue staging, and authored color profile; a clothed elder/cleric source remains open."
       },
       "mira_human": {
         "status": "char_008_shared_female_named_identity",
@@ -107,7 +107,7 @@
           "res://assets_external/characters_ranger/T_Ranger_Normal_1K.png",
           "res://assets_external/characters_ranger/T_Ranger_ORM_1K.png"
         ],
-        "animation_source": "res://assets_external/animations/soul_universal_animation_library_2.glb",
+        "animation_source": "res://assets_external/animations/AnimationLibrary_Godot_Standard.glb",
         "target_height": 1.75,
         "notes": "Complete 65-bone skinned Ranger outfit with native hood/body pieces, shared non-root-motion UAL2 clips, and 1K runtime maps. Used by Captain Senn and road ranger roles."
       }

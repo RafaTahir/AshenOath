@@ -10,6 +10,8 @@ var bus_name = "Master"
 var ambient_player: AudioStreamPlayer
 var music_player: AudioStreamPlayer
 var voice_player: AudioStreamPlayer
+var browser_voice_fallback_enabled := false
+var development_voice_stubs_enabled := false
 var current_ambient_zone = ""
 var ambient_accent_time = 0.0
 var music_state = ""
@@ -291,9 +293,11 @@ func has_voice(voice_id: String) -> bool:
 
 func play_voice(voice_id: String) -> void:
 	stop_voice()
-	if _speak_voice_id(voice_id):
+	if _has_production_voice(voice_id):
+		_play_voice_now(voice_id)
 		return
-	_play_voice_now(voice_id)
+	if browser_voice_fallback_enabled and _speak_voice_id(voice_id):
+		return
 
 func _play_voice_now(voice_id: String) -> void:
 	if not voices.has(voice_id):
@@ -314,20 +318,35 @@ func _play_voice_now(voice_id: String) -> void:
 
 func play_voice_sequence(voice_ids: Array) -> void:
 	stop_voice()
-	var text_parts: Array = []
-	for voice_id in voice_ids:
-		var id = str(voice_id)
-		if voice_texts.has(id):
-			text_parts.append(str(voice_texts[id]))
-	if not text_parts.is_empty() and _speak_text(text_parts, str(voice_ids[0]) if voice_ids.size() > 0 else "voice_sequence"):
-		return
 	_voice_queue.clear()
 	for voice_id in voice_ids:
 		var id = str(voice_id)
-		if voices.has(id):
+		if _has_production_voice(id):
 			_voice_queue.append(id)
 	if not _voice_queue.is_empty():
 		_play_next_voice()
+	elif browser_voice_fallback_enabled:
+		var text_parts: Array = []
+		for voice_id in voice_ids:
+			var id = str(voice_id)
+			if voice_texts.has(id):
+				text_parts.append(str(voice_texts[id]))
+		_speak_text(text_parts, str(voice_ids[0]) if voice_ids.size() > 0 else "voice_sequence")
+
+func set_browser_voice_fallback_enabled(enabled: bool) -> void:
+	browser_voice_fallback_enabled = enabled
+
+func _has_production_voice(voice_id: String) -> bool:
+	if not voices.has(voice_id):
+		return false
+	var stream := voices[voice_id] as AudioStream
+	if stream == null:
+		return false
+	if development_voice_stubs_enabled:
+		return true
+	# Scratch WAVs and generated tone placeholders are development material. Do
+	# not silently ship them as if they were finished acting.
+	return not bool(stream.get_meta("development_voice_stub", false)) and not bool(stream.get_meta("scratch_voice", false))
 
 func stop_voice() -> void:
 	_voice_queue.clear()
@@ -601,6 +620,7 @@ func _load_scratch_voice_library() -> void:
 			var stream := load(path) as AudioStream
 			if stream != null:
 				stream.set_meta("scratch_voice_path", path)
+				stream.set_meta("scratch_voice", true)
 				voices[voice_id] = stream
 
 func _build_music_library() -> void:
@@ -716,8 +736,9 @@ func _speak_text(text_parts: Array, debug_id: String) -> bool:
 		return false
 	var escaped_text = JSON.stringify(text)
 	var volume = clamp(master_volume_linear, 0.0, 1.0)
-	var pitch = 0.82 if debug_id.contains("sister") else 0.92
-	var rate = 0.86 if debug_id.contains("sister") else 0.94
+	var feminine = debug_id.contains("sister") or debug_id.contains("anwen") or debug_id.contains("mira") or debug_id.contains("elna")
+	var pitch = 0.84 if feminine else (0.89 if debug_id.contains("hart") else 0.94)
+	var rate = 0.88 if feminine else (0.82 if debug_id.contains("hart") else 0.94)
 	var js = """
 (function() {
 	if (!('speechSynthesis' in window) || typeof SpeechSynthesisUtterance === 'undefined') {
@@ -728,10 +749,18 @@ func _speak_text(text_parts: Array, debug_id: String) -> bool:
 	utterance.volume = %f;
 	utterance.pitch = %f;
 	utterance.rate = %f;
+	var voices = window.speechSynthesis.getVoices();
+	var feminine = %s;
+	var preferred = voices.filter(function(v) {
+		return /^en(-|_)/i.test(v.lang) && feminine === /(female|susan|samantha|hazel|zira|aria|google uk english female)/i.test(v.name);
+	});
+	if (preferred.length > 0) {
+		utterance.voice = preferred[0];
+	}
 	window.speechSynthesis.speak(utterance);
 	return true;
 })()
-""" % [escaped_text, volume, pitch, rate]
+""" % [escaped_text, volume, pitch, rate, "true" if feminine else "false"]
 	var spoken = JavaScriptBridge.eval(js, true)
 	if bool(spoken):
 		print("AUDIO: %s" % debug_id)
@@ -791,6 +820,7 @@ func _tone(freq: float, seconds: float, amp: float, sweep: float = 0.0) -> Audio
 	stream.mix_rate = mix_rate
 	stream.stereo = false
 	stream.data = data
+	stream.set_meta("development_voice_stub", true)
 	return stream
 
 func _noise(seconds: float, amp: float) -> AudioStreamWAV:

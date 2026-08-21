@@ -54,13 +54,16 @@ func build(context: ZoneBuildContext, center_z: float, width: float, span: float
 func _make_water(root: Node3D, center_z: float, width: float, span: float) -> void:
 	var water := MeshInstance3D.new()
 	water.name = "FlowingRiverWater"
-	var water_mesh := BoxMesh.new()
-	water_mesh.size = Vector3(width,0.06,span-0.30)
+	var water_mesh := PlaneMesh.new()
+	water_mesh.orientation = PlaneMesh.FACE_Y
+	water_mesh.size = Vector2(width, span - 0.30)
+	water_mesh.subdivide_width = 8
+	water_mesh.subdivide_depth = 32
 	water.mesh = water_mesh
 	water.position = Vector3(0,-0.24,center_z)
 	var material := ShaderMaterial.new()
 	var shader := Shader.new()
-	shader.code = "shader_type spatial; render_mode blend_mix,depth_draw_opaque,cull_back; uniform vec4 deep_color:source_color=vec4(0.010,0.040,0.065,0.96); uniform vec4 shallow_color:source_color=vec4(0.028,0.145,0.180,0.92); uniform vec4 foam_color:source_color=vec4(0.32,0.58,0.52,0.64); uniform float flow_speed=1.0; void vertex(){ float wave_a=sin(VERTEX.x*1.7+TIME*1.25*flow_speed); float wave_b=sin(VERTEX.z*3.1-TIME*0.82*flow_speed); VERTEX.y += wave_a*0.018+wave_b*0.010; } void fragment(){ vec2 flow_uv=UV+vec2(TIME*0.020*flow_speed,-TIME*0.085*flow_speed); float current_a=sin(flow_uv.y*31.0+sin(flow_uv.x*13.0)*1.5)*0.5+0.5; float current_b=sin(flow_uv.y*67.0-TIME*1.2+flow_uv.x*9.0)*0.5+0.5; float current=mix(current_a,current_b,0.38); float shore=1.0-smoothstep(0.0,0.16,min(UV.y,1.0-UV.y)); float depth=smoothstep(0.0,1.0,abs(UV.y-0.5)*2.0); float foam=shore*smoothstep(0.58,0.88,current); float ripple=smoothstep(0.76,0.96,sin(flow_uv.y*104.0+flow_uv.x*19.0-TIME*1.8)*0.5+0.5); vec3 water=mix(shallow_color.rgb,deep_color.rgb,depth*0.86); water += current*vec3(0.012,0.040,0.036); water += ripple*vec3(0.018,0.052,0.046); ALBEDO=mix(water,foam_color.rgb,foam*0.42); ROUGHNESS=mix(0.16,0.52,depth); METALLIC=0.02; ALPHA=mix(deep_color.a,foam_color.a,foam*0.20); NORMAL=normalize(vec3((current_a-0.5)*0.16,1.0,(current_b-0.5)*0.12)); }"
+	shader.code = "shader_type spatial; render_mode blend_mix,depth_draw_opaque,cull_back; uniform vec4 deep_color:source_color=vec4(0.010,0.040,0.065,0.96); uniform vec4 shallow_color:source_color=vec4(0.028,0.145,0.180,0.92); uniform vec4 foam_color:source_color=vec4(0.32,0.58,0.52,0.64); uniform float flow_speed=1.0; void vertex(){ float wave_a=sin(VERTEX.z*1.8+TIME*1.05*flow_speed+sin(VERTEX.x*0.8)*0.7); float wave_b=sin(VERTEX.z*4.4-TIME*0.72*flow_speed+VERTEX.x*1.4); float cross=sin((VERTEX.z+VERTEX.x*0.62)*2.7-TIME*0.45); VERTEX.y += wave_a*0.026+wave_b*0.010+cross*0.008; } void fragment(){ vec2 flow_uv=UV+vec2(sin(UV.y*8.0)*0.012+TIME*0.018*flow_speed,-TIME*0.070*flow_speed); float current_a=sin(flow_uv.y*18.0+sin(flow_uv.x*11.0+TIME*0.15)*2.6)*0.5+0.5; float current_b=sin(flow_uv.y*37.0-TIME*0.82+sin(flow_uv.x*17.0)*1.8)*0.5+0.5; float eddy=sin(flow_uv.x*22.0+flow_uv.y*9.0-TIME*0.36)*0.5+0.5; float current=mix(current_a,current_b,0.42)*0.78+eddy*0.22; float shore=1.0-smoothstep(0.0,0.18,min(UV.x,1.0-UV.x)); float depth=smoothstep(0.0,1.0,abs(UV.x-0.5)*2.0); float foam=shore*smoothstep(0.58,0.86,current); float ripple=smoothstep(0.72,0.94,sin(flow_uv.y*72.0+flow_uv.x*23.0-TIME*1.45)*0.5+0.5); vec3 water=mix(shallow_color.rgb,deep_color.rgb,depth*0.86); water += current*vec3(0.012,0.040,0.036); water += ripple*vec3(0.018,0.052,0.046); ALBEDO=mix(water,foam_color.rgb,foam*0.42); ROUGHNESS=mix(0.16,0.52,depth); METALLIC=0.02; ALPHA=mix(deep_color.a,foam_color.a,foam*0.20); NORMAL=normalize(vec3((current_a-0.5)*0.18,1.0,(current_b-0.5)*0.14)); }"
 	material.shader = shader
 	water.material_override = material
 	water.set_meta("water_role", "WATER-002")
@@ -139,7 +142,7 @@ func _make_river_audio(root: Node3D, center_z: float) -> void:
 	player.position = Vector3(0, -0.10, center_z)
 	player.max_distance = 24.0
 	player.unit_size = 5.0
-	player.volume_db = -31.0
+	player.volume_db = -24.0
 	player.stream = _river_loop()
 	player.autoplay = true
 	root.add_child(player)

@@ -5,7 +5,7 @@
   "ecosystem": "Quaternius Universal Base Characters",
   "license": "CC0 1.0 Universal",
   "shared_skeleton_profile": "QuaterniusUniversalHumanoid",
-  "shared_animation_source": "res://assets_external/animations/soul_universal_animation_library_2.glb",
+  "shared_animation_source": "res://assets_external/animations/AnimationLibrary_Godot_Standard.glb",
   "source_pack": {
     "id": "quaternius_universal_base_characters",
     "download_page": "https://quaternius.itch.io/universal-base-characters",
