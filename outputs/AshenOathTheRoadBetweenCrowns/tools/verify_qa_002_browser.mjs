@@ -315,10 +315,12 @@ async function startNewGame(cdp, expectedUrl) {
   await cdp.send("Input.dispatchMouseEvent", { type: "mouseReleased", x: 1015, y: 227, button: "left", clickCount: 1 }, INPUT_TIMEOUT_MS);
   await waitFor(async () => (await telemetry(cdp))?.new_game_ready, "Greyfen menu prewarm", 15000);
   await sleep(420);
-  await cdp.send("Input.dispatchMouseEvent", { type: "mouseMoved", x: 1015, y: 227, button: "none" }, INPUT_TIMEOUT_MS);
-  await cdp.send("Input.dispatchMouseEvent", { type: "mousePressed", x: 1015, y: 227, button: "left", clickCount: 1 }, INPUT_TIMEOUT_MS);
+  // The menu rebuild is scaled from the 1920x1080 UI canvas. Click the center
+  // of the focused New Game control through the real browser input path.
+  await cdp.send("Input.dispatchMouseEvent", { type: "mouseMoved", x: 1015, y: 210, button: "none" }, INPUT_TIMEOUT_MS);
+  await cdp.send("Input.dispatchMouseEvent", { type: "mousePressed", x: 1015, y: 210, button: "left", clickCount: 1 }, INPUT_TIMEOUT_MS);
   await sleep(70);
-  await cdp.send("Input.dispatchMouseEvent", { type: "mouseReleased", x: 1015, y: 227, button: "left", clickCount: 1 }, INPUT_TIMEOUT_MS);
+  await cdp.send("Input.dispatchMouseEvent", { type: "mouseReleased", x: 1015, y: 210, button: "left", clickCount: 1 }, INPUT_TIMEOUT_MS);
   return waitFor(async () => {
     const errors = consoleErrors(cdp);
     if (errors.length) throw fatal(`startup console error: ${errors[0]}`);
@@ -655,8 +657,7 @@ async function testBrowser(name, executable) {
     "--enable-unsafe-swiftshader",
     "--ignore-gpu-blocklist",
     "--autoplay-policy=no-user-gesture-required",
-    ...(fullCampaign ? ["--disable-frame-rate-limit", "--disable-gpu-vsync"] : []),
-    "about:blank",
+     "about:blank",
   ], { stdio: "ignore", windowsHide: true });
   const started = Date.now();
   let cdp;

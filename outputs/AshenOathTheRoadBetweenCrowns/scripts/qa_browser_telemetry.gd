@@ -2,13 +2,14 @@ extends Node
 
 const WINDOW_STATE := "window.__ASHEN_OATH_QA__"
 const WINDOW_COMMAND := "window.__ASHEN_OATH_QA_COMMAND__"
-const UPDATE_INTERVAL := 0.10
+const UPDATE_INTERVAL := 0.20
 
 var enabled := false
 var _elapsed := 0.0
 var _game: Node
 var _frame_times: Array[float] = []
 var _command_result: Dictionary = {}
+var _last_prewarm_ready := false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -37,6 +38,12 @@ func _process(delta: float) -> void:
 	if not is_instance_valid(_game):
 		_game = _find_game()
 	_poll_command()
+	if _game != null and not bool(_game.get("game_started")):
+		var hud: Node = _game.get("hud") as Node
+		var prewarm_ready := bool(hud.get("new_game_ready")) if hud != null else false
+		if prewarm_ready == _last_prewarm_ready:
+			return
+		_last_prewarm_ready = prewarm_ready
 	var state := snapshot_for_game(_game)
 	var payload := JSON.stringify(state)
 	JavaScriptBridge.eval("%s = JSON.parse(%s);" % [WINDOW_STATE, JSON.stringify(payload)], false)
@@ -79,6 +86,10 @@ func snapshot_for_game(game: Node) -> Dictionary:
 			"dead": player_health != null and float(player_health.get("health")) <= 0.0,
 			"on_floor": player.is_on_floor() if player is CharacterBody3D else true,
 		}
+	# Greyfen is prewarmed behind the menu. Do not walk the full zone tree while
+	# the browser is waiting for the real New Game input.
+	if not bool(game.get("game_started")):
+		return state
 	if camera_rig != null:
 		state.camera = {
 			"yaw": float(camera_rig.get("yaw")),
