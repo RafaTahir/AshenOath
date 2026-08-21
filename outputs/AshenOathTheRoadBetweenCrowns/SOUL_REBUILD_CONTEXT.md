@@ -2,6 +2,18 @@
 
 ## Current Working Checkpoint - 2026-08-21
 
+### ENGINE-004 lifecycle checkpoint
+
+ENGINE-004 now owns the latest development checkpoint. Build-only terrain and
+detail marker nodes are freed after MultiMesh transforms are copied, final
+shutdown releases explicit skinned/material anchors and build-time arrays, and
+`verify_engine_004.gd` passes active material, invalid-geometry, cache, staged
+retirement, and final-anchor checks across Greyfen, Wychwood, Castle Approach,
+Record Hall, and return. QA-005 classifies five remaining renderer messages as
+shutdown-only warnings after the verifier pass marker; active null-material
+errors are absent. Production `main`, tracked `web/`, and Vercel remain
+unchanged until the complete visual and release gates pass.
+
 ### QUEST-012 continuation checkpoint
 
 The Hart Remembers arc now has four immutable covenant outcomes: Witness,

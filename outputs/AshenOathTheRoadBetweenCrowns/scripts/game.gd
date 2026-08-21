@@ -1039,8 +1039,21 @@ func finalize_resource_shutdown() -> void:
 	if camera_rig != null and is_instance_valid(camera_rig):
 		camera_rig.queue_free()
 	camera_rig = null
+	# Keep explicit ownership of every branch detached for shared skeletal
+	# resource anchoring. A detached branch is not guaranteed to be released by
+	# freeing its hidden owner during final tree teardown, so release the exact
+	# anchors first while their references are still known.
+	for raw_branch in skinned_resource_anchors.values():
+		var branch := raw_branch as Node
+		if branch != null and is_instance_valid(branch):
+			branch.free()
+	skinned_resource_anchors.clear()
 	if retired_skinned_actor_pool != null and is_instance_valid(retired_skinned_actor_pool):
-		retired_skinned_actor_pool.queue_free()
+		# This pool owns branches detached from retired zone roots. At this point
+		# prepare_resource_shutdown() has waited for every staged root to leave the
+		# renderer, so synchronous destruction is safe and prevents orphaned
+		# MeshInstance3D nodes from surviving outside the scene tree.
+		retired_skinned_actor_pool.free()
 	retired_skinned_actor_pool = null
 	if asset_helper != null and asset_helper.has_method("clear_runtime_caches"):
 		asset_helper.clear_runtime_caches()
@@ -1052,6 +1065,21 @@ func finalize_resource_shutdown() -> void:
 		zone_streaming.clear_requests()
 	if runtime_packs != null and runtime_packs.has_method("clear_requests"):
 		runtime_packs.clear_requests()
+	# These arrays are build-time ownership, not runtime state. They retain
+	# queued marker MeshInstance3D nodes and shared materials after their zone
+	# has retired, which keeps renderer instances alive outside the scene tree.
+	# Clear them only after staged retirement so no visible zone references are
+	# invalidated during normal travel.
+	tree_batch_data.clear()
+	deadfall_batch_data.clear()
+	prop_batch_data.clear()
+	visual_box_batch_data.clear()
+	terrain_patch_batch_data.clear()
+	house_batch_data.clear()
+	material_cache.clear()
+	shared_box_mesh = null
+	retirement_material = null
+	retired_material_anchors.clear()
 	if runtime_services != null and is_instance_valid(runtime_services):
 		runtime_services.process_mode = Node.PROCESS_MODE_DISABLED
 		for service in runtime_services.get_children():
@@ -4233,7 +4261,10 @@ func _flush_environment_batches() -> void:
 			var marker: Node3D = terrain_items[i].node
 			var patch_size: Vector3 = terrain_items[i].size
 			terrain_batch.multimesh.set_instance_transform(i, Transform3D(marker.basis.scaled(patch_size), marker.position))
-			marker.queue_free()
+			# This node is a build-only transform carrier; the MultiMesh now owns
+			# the rendered instance. Free it immediately so it cannot outlive the
+			# zone root as an orphaned renderer instance during teardown.
+			marker.free()
 	var visual_groups: Dictionary = {}
 	for item in visual_box_batch_data:
 		var color: Color = item.color
@@ -4249,7 +4280,9 @@ func _flush_environment_batches() -> void:
 			var marker: Node3D = items[i].node
 			var detail_size: Vector3 = items[i].size
 			detail_batch.multimesh.set_instance_transform(i, Transform3D(marker.basis.scaled(detail_size), marker.position))
-			marker.queue_free()
+			# Like terrain markers, these nodes have no runtime purpose after the
+			# batched transform has been copied.
+			marker.free()
 	for house_key in house_batch_data:
 		var house_group: Dictionary = house_batch_data[house_key]
 		var house_transforms: Array = house_group.transforms

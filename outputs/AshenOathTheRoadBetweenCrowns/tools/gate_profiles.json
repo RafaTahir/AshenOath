@@ -1015,7 +1015,8 @@
       ],
       "gates": [
         "verify_engine_002",
-        "verify_engine_003"
+        "verify_engine_003",
+        "verify_engine_004"
       ]
     },
     "product": {

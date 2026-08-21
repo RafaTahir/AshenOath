@@ -8,6 +8,14 @@ branch `codex/soul-rebuild`; production `main`, `web/`, and Vercel remain
 unchanged. Historical release claims below are retained for audit but must not
 be read as validation of these current source edits.
 
+ENGINE-004 is the latest completed development checkpoint. Build-only
+terrain/detail marker nodes now release after batching, final shutdown clears
+explicit skinned/material anchors and build-time ownership arrays, and the new
+engine lifecycle gate passes Greyfen, Wychwood, Castle Approach, Record Hall,
+and return. Fresh QA-005 classification reports no active material/resource
+error; five renderer teardown warnings remain explicitly classified debt.
+Production `main`, tracked `web/`, and Vercel remain unchanged.
+
 This checkpoint has targeted local passes for lifecycle cleanup, save/input
 foundations, character presentation, sword combat, Oathfire, AI, Greyfen and
 campaign world contracts, authored lighting, and the 1280x720 sky capture.
