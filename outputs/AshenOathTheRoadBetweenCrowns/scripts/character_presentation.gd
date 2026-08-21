@@ -3,6 +3,16 @@ extends RefCounted
 const CharacterVisualContract = preload("res://scripts/character_visual_contract.gd")
 const CharacterIdentityProfile = preload("res://scripts/character_identity_profile.gd")
 
+class WorldOrientedEquipment extends Node3D:
+	var actor: Node3D
+
+	func _process(_delta: float) -> void:
+		if actor == null or not is_instance_valid(actor):
+			queue_free()
+			return
+		var position_before := global_position
+		global_transform = Transform3D(actor.global_transform.basis.orthonormalized(), position_before)
+
 static func apply_player(owner: Node3D, visual_root: Node3D) -> void:
 	if owner == null or visual_root == null:
 		return
@@ -31,6 +41,8 @@ static func apply_npc(owner: Node3D, role_id: String) -> void:
 	if _has_skeleton(owner):
 		CharacterVisualContract.remove_proxy_anatomy(owner)
 		CharacterIdentityProfile.apply(owner, role)
+		if role in ["sister_anwen", "sister_anwen_human"]:
+			_add_anwen_staff(owner)
 		return
 	# Non-skeletal bodies are not allowed to acquire fake clothing or facial
 	# geometry. Keep the shadow only and let the asset acceptance gate reject the
@@ -74,6 +86,89 @@ static func _add_contact_shadow(owner: Node3D, scale_value: Vector3, y: float) -
 	shadow.scale = scale_value
 	shadow.material_override = _mat(Color(0.018, 0.014, 0.010), 0.96)
 	owner.add_child(shadow)
+
+static func _add_anwen_staff(owner: Node3D) -> void:
+	# Anwen's identity is carried by a real prop socket rather than a root
+	# mounted silhouette. The staff follows the imported hand bone through
+	# dialogue and locomotion, and its equipment parent is excluded from body
+	# bounds and character material validation.
+	if owner.find_child("AnwenStaffEquipment", true, false) != null:
+		return
+	var skeleton := _find_skeleton(owner)
+	if skeleton == null:
+		return
+	var hand_index := _find_bone_index(skeleton, ["LeftHand", "Hand.L", "hand_l", "left_hand"])
+	if hand_index < 0:
+		hand_index = _find_bone_index(skeleton, ["RightHand", "Hand.R", "hand_r", "right_hand"])
+	if hand_index < 0:
+		return
+	var attachment := BoneAttachment3D.new()
+	attachment.name = "AnwenStaffSocket"
+	attachment.bone_idx = hand_index
+	attachment.bone_name = skeleton.get_bone_name(hand_index)
+	skeleton.add_child(attachment)
+	var equipment := WorldOrientedEquipment.new()
+	equipment.name = "AnwenStaffEquipment"
+	equipment.actor = owner
+	equipment.position = Vector3.ZERO
+	attachment.add_child(equipment)
+	var staff := MeshInstance3D.new()
+	staff.name = "AnwenStaffWood"
+	var staff_mesh := CylinderMesh.new()
+	staff_mesh.top_radius = 0.018
+	staff_mesh.bottom_radius = 0.027
+	staff_mesh.height = 1.02
+	staff_mesh.radial_segments = 8
+	staff.mesh = staff_mesh
+	staff.position = Vector3(0.0, -0.52, 0.0)
+	staff.material_override = _mat(Color("4f392c"), 0.82)
+	equipment.add_child(staff)
+	var crest := MeshInstance3D.new()
+	crest.name = "AnwenStaffCrest"
+	var crest_mesh := SphereMesh.new()
+	crest_mesh.radius = 0.058
+	crest_mesh.height = 0.116
+	crest_mesh.radial_segments = 12
+	crest.mesh = crest_mesh
+	crest.position = Vector3(0.0, -0.02, 0.0)
+	var crest_material := _mat(Color("a1854e"), 0.30)
+	crest_material.metallic = 0.62
+	crest.material_override = crest_material
+	equipment.add_child(crest)
+	var inlay := MeshInstance3D.new()
+	inlay.name = "AnwenStaffInlay"
+	var inlay_mesh := CylinderMesh.new()
+	inlay_mesh.top_radius = 0.045
+	inlay_mesh.bottom_radius = 0.045
+	inlay_mesh.height = 0.014
+	inlay_mesh.radial_segments = 8
+	inlay.mesh = inlay_mesh
+	inlay.position = Vector3(0.0, -0.02, -0.075)
+	inlay.rotation_degrees = Vector3(90.0, 0.0, 0.0)
+	var inlay_material := _mat(Color("d7b66d"), 0.28)
+	inlay_material.emission_enabled = true
+	inlay_material.emission = Color("6e4d25")
+	inlay_material.emission_energy_multiplier = 0.38
+	inlay.material_override = inlay_material
+	equipment.add_child(inlay)
+
+static func _find_bone_index(skeleton: Skeleton3D, aliases: Array[String]) -> int:
+	for index in range(skeleton.get_bone_count()):
+		var normalized := skeleton.get_bone_name(index).to_lower().replace("_", "").replace(".", "").replace("-", "").replace(" ", "")
+		for alias in aliases:
+			var wanted := alias.to_lower().replace("_", "").replace(".", "").replace("-", "").replace(" ", "")
+			if normalized == wanted or normalized.ends_with(wanted):
+				return index
+	return -1
+
+static func _find_skeleton(root: Node) -> Skeleton3D:
+	if root is Skeleton3D:
+		return root as Skeleton3D
+	for child in root.get_children():
+		var found := _find_skeleton(child)
+		if found != null:
+			return found
+	return null
 
 static func _add_ghoulkin_details(owner: Node3D, quality: bool) -> void:
 	var parent = _find_named_node(owner, "visual_root")

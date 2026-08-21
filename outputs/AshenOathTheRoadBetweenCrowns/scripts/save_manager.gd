@@ -13,6 +13,13 @@ const RELEASED_ZONES := [
 signal message(text: String)
 
 func save_game(game, path: String = SAVE_PATH, label: String = "Game saved.") -> bool:
+	# Deferred autosaves can outlive a zone teardown. Never serialize a partially
+	# released runtime, but keep invalid saves visible during normal play.
+	if _is_game_shutting_down(game):
+		return false
+	if not _has_valid_player(game):
+		message.emit("Save failed. Your previous save was preserved.")
+		return false
 	var data := _build_save_data(game)
 	if not _write_atomic(path, data):
 		message.emit("Save failed. Your previous save was preserved.")
@@ -39,6 +46,17 @@ func autosave(game) -> bool:
 
 func checkpoint(game) -> bool:
 	return save_game(game, CHECKPOINT_PATH, "Checkpoint reached.")
+
+func _is_game_shutting_down(game) -> bool:
+	if game == null or not is_instance_valid(game):
+		return true
+	return bool(game.get("resource_shutdown_prepared"))
+
+func _has_valid_player(game) -> bool:
+	if game == null or not is_instance_valid(game):
+		return false
+	var runtime_player = game.get("player")
+	return runtime_player != null and is_instance_valid(runtime_player)
 
 func load_checkpoint(game) -> bool:
 	return load_first_available(game, [CHECKPOINT_PATH, AUTOSAVE_PATH, SAVE_PATH])

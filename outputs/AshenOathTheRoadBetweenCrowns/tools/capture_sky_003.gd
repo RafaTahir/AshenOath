@@ -83,9 +83,19 @@ func _frames(count: int) -> void:
 
 func _release_game(game: Node) -> void:
 	if game != null and is_instance_valid(game):
-		if game.has_method("prepare_resource_shutdown"):
+		if game.has_method("finalize_resource_shutdown"):
+			game.finalize_resource_shutdown()
+		elif game.has_method("prepare_resource_shutdown"):
 			game.prepare_resource_shutdown()
-			await _frames(int(game.ZONE_RETIRE_FRAMES) + 4)
+		await _frames(int(game.ZONE_RETIRE_FRAMES) + 4)
 		game.queue_free()
-	await _frames(8)
+	# Let queued scene-tree ownership releases propagate through the renderer
+	# before the capture process exits; immediate process termination produces
+	# false shutdown leak reports even after all live nodes are retired.
+	await _frames(24)
+	if is_instance_valid(game):
+		# The tree has completed the staged retirement above. A final owner release
+		# prevents the capture process from exiting with the old game root alive.
+		game.free()
+		await _frames(2)
 	RenderingServer.force_sync()

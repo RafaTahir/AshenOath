@@ -29,6 +29,7 @@ func _verify_sky(game) -> void:
 	check(sky.sun_disc.visible and not sky.moon_disc.visible,"Midday sun/moon visibility overlaps")
 	sky.set_time(0.0,"night",0)
 	check(sky.moon_disc.visible and not sky.sun_disc.visible,"Midnight sun/moon visibility overlaps")
+	check(sky.sky_backdrop.visible and bool(sky.sky_backdrop.get_sky_state().get("stars_visible", false)),"Authored night sky backdrop is hidden")
 	var cards := 0
 	var spheres := 0
 	for node in _walk(sky.cloud_layer):

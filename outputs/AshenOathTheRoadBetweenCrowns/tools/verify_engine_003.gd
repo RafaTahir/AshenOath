@@ -28,8 +28,11 @@ func _initialize() -> void:
 	var final_snapshot: Dictionary = game.zone_lifecycle_snapshot()
 	check(int(final_snapshot.cached_count) == 0, "Shutdown retained cached zones")
 	check(int(final_snapshot.retiring_count) == 0, "Shutdown retained retiring zones")
+	game.finalize_resource_shutdown()
+	await _frames(4)
 	game.queue_free()
-	await _frames(5)
+	await _frames(24)
+	check(not is_instance_valid(game), "Game root did not retire after resource shutdown")
 	_finish()
 
 func _verify_static_contract() -> void:
@@ -42,6 +45,7 @@ func _verify_static_contract() -> void:
 		"_validate_zone_render_resources(visual_director)",
 		"_validate_zone_render_resources(player)",
 		"func prepare_resource_shutdown(",
+		"func finalize_resource_shutdown(",
 		"func zone_lifecycle_snapshot(",
 	]:
 		check(game_source.contains(required), "Missing lifecycle contract: %s" % required)

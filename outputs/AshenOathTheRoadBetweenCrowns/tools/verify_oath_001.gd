@@ -64,8 +64,10 @@ func _initialize() -> void:
 	await settle(3)
 	check(get_nodes_in_group("oathfire_runtime_effect").is_empty(), "Oathfire VFX survived a zone transition")
 	check(player.beam_cast_state == "" and player.get_beam_locked_direction() == Vector3.ZERO, "Oathfire state survived cancellation/zone transition")
+	var result_code := 0 if failures == 0 else 1
 	print("OATH-001 VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
-	quit(0 if failures == 0 else 1)
+	await _finish(game)
+	quit(result_code)
 
 func _on_beam_requested(_ratio: float, direction: Vector3) -> void:
 	release_count += 1
@@ -81,3 +83,17 @@ func check(condition: bool, message: String) -> void:
 		return
 	failures += 1
 	push_error("OATH-001: %s" % message)
+
+func _finish(game: Node) -> void:
+	if game != null and is_instance_valid(game):
+		if game.has_method("finalize_resource_shutdown"):
+			game.finalize_resource_shutdown()
+		elif game.has_method("prepare_resource_shutdown"):
+			game.prepare_resource_shutdown()
+		await settle(int(game.ZONE_RETIRE_FRAMES) + 4)
+		game.queue_free()
+	await settle(24)
+	if is_instance_valid(game):
+		game.free()
+		await settle(2)
+	RenderingServer.force_sync()

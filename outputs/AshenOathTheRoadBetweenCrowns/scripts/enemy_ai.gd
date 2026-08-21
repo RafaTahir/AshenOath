@@ -885,14 +885,19 @@ func _apply_boss_material(mapped: Node3D) -> void:
 
 func _add_boss_silhouette() -> void:
 	if enemy_id == "bell_eater":
-		_add_part(Vector3(0, 1.32, -0.02), Vector3(0.90, 0.18, 0.42), Color(0.31, 0.20, 0.12), "box")
-		_add_part(Vector3(0, 1.05, 0.28), Vector3(0.24, 0.44, 0.10), Color(0.12, 0.10, 0.08), "box")
+		_add_part(Vector3(0, 1.40, -0.02), Vector3(0.94, 0.22, 0.52), Color(0.31, 0.20, 0.12), "cylinder")
+		_add_part(Vector3(0, 1.03, 0.28), Vector3(0.30, 0.50, 0.16), Color(0.12, 0.10, 0.08), "cylinder")
+		_add_part(Vector3(-0.47, 1.16, 0.12), Vector3(0.09, 0.42, 0.09), Color(0.22, 0.14, 0.08), "cylinder", Vector3(0, 0, -28))
+		_add_part(Vector3(0.47, 1.16, 0.12), Vector3(0.09, 0.42, 0.09), Color(0.22, 0.14, 0.08), "cylinder", Vector3(0, 0, 28))
 	elif enemy_id == "rootbound_colossus":
-		_add_part(Vector3(-0.58, 1.34, 0.0), Vector3(0.30, 0.72, 0.52), Color(0.17, 0.26, 0.14), "box")
-		_add_part(Vector3(0.58, 1.34, 0.0), Vector3(0.30, 0.72, 0.52), Color(0.17, 0.26, 0.14), "box")
+		_add_part(Vector3(-0.58, 1.34, 0.0), Vector3(0.34, 0.78, 0.56), Color(0.17, 0.26, 0.14), "capsule", Vector3(0, 0, -12))
+		_add_part(Vector3(0.58, 1.34, 0.0), Vector3(0.34, 0.78, 0.56), Color(0.17, 0.26, 0.14), "capsule", Vector3(0, 0, 12))
+		_add_part(Vector3(-0.28, 1.10, -0.42), Vector3(0.10, 0.48, 0.10), Color(0.30, 0.37, 0.17), "cylinder", Vector3(-28, 0, -14))
+		_add_part(Vector3(0.28, 1.10, -0.42), Vector3(0.10, 0.48, 0.10), Color(0.30, 0.37, 0.17), "cylinder", Vector3(-28, 0, 14))
 	elif enemy_id == "ashwing":
-		_add_part(Vector3(-0.74, 1.24, 0.12), Vector3(0.78, 0.12, 0.42), Color(0.26, 0.16, 0.12), "box")
-		_add_part(Vector3(0.74, 1.24, 0.12), Vector3(0.78, 0.12, 0.42), Color(0.26, 0.16, 0.12), "box")
+		_add_part(Vector3(-0.74, 1.24, 0.12), Vector3(0.82, 0.16, 0.46), Color(0.26, 0.16, 0.12), "capsule", Vector3(0, 0, -8))
+		_add_part(Vector3(0.74, 1.24, 0.12), Vector3(0.82, 0.16, 0.46), Color(0.26, 0.16, 0.12), "capsule", Vector3(0, 0, 8))
+		_add_part(Vector3(0, 1.28, 0.34), Vector3(0.22, 0.20, 0.46), Color(0.44, 0.20, 0.10), "cylinder", Vector3(90, 0, 0))
 
 func _mapped_enemy_scale() -> Vector3:
 	if enemy_id == "bog_wretch":
@@ -1002,12 +1007,19 @@ func _is_bad_white_material(material: Material) -> bool:
 		return standard.albedo_texture == null and color.r > 0.85 and color.g > 0.85 and color.b > 0.85
 	return false
 
-func _add_part(pos: Vector3, scale_value: Vector3, color: Color, shape_name: String) -> void:
+func _add_part(pos: Vector3, scale_value: Vector3, color: Color, shape_name: String, rot_degrees: Vector3 = Vector3.ZERO) -> void:
 	var part = MeshInstance3D.new()
 	if shape_name == "sphere":
 		part.mesh = SphereMesh.new()
 	elif shape_name == "capsule":
 		part.mesh = CapsuleMesh.new()
+	elif shape_name == "cylinder":
+		var cylinder := CylinderMesh.new()
+		cylinder.top_radius = 0.5
+		cylinder.bottom_radius = 0.62
+		cylinder.height = 1.0
+		cylinder.radial_segments = 10
+		part.mesh = cylinder
 	elif shape_name == "cone":
 		var cone := CylinderMesh.new()
 		cone.top_radius = 0.0
@@ -1020,6 +1032,7 @@ func _add_part(pos: Vector3, scale_value: Vector3, color: Color, shape_name: Str
 		mesh.size = Vector3.ONE
 		part.mesh = mesh
 	part.position = pos
+	part.rotation_degrees = rot_degrees
 	part.scale = scale_value
 	part.material_override = _mat(color)
 	if visual_root != null:

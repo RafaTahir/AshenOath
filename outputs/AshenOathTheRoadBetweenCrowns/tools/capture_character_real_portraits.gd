@@ -2,6 +2,7 @@ extends SceneTree
 
 const CharacterVisualContract = preload("res://scripts/character_visual_contract.gd")
 const CharacterIdentityProfile = preload("res://scripts/character_identity_profile.gd")
+const CharacterPresentation = preload("res://scripts/character_presentation.gd")
 const AssetSpawnHelper = preload("res://scripts/asset_spawn_helper.gd")
 
 const ROLES := {
@@ -69,6 +70,8 @@ func _initialize() -> void:
 			camera.look_at_from_position(camera.position, Vector3(0.0, 1.03, 0.0), Vector3.UP)
 		CharacterVisualContract.remove_proxy_anatomy(character)
 		CharacterIdentityProfile.apply(character, _identity_role(role))
+		if category == "characters":
+			CharacterPresentation.apply_npc(character, _identity_role(role))
 		await process_frame
 		_normalize_character(character)
 		var skeleton := character.find_child("Skeleton3D", true, false) as Skeleton3D

@@ -34,6 +34,20 @@ const INTERIOR_ZONES := ["record_hall", "undercroft"]
 const FOREST_ZONES := ["wychwood", "deep_wood", "marsh_crossing", "burned_farmstead", "hart_glade"]
 const CASTLE_ZONES := ["vargan_approach", "vargan_court", "assembly"]
 
+func clear_runtime_caches() -> void:
+	# Detach the active environment before dropping cached Environment objects.
+	# Mesh/material ownership remains with the scene nodes until the host tree
+	# is released, avoiding null renderer resources during teardown.
+	if world_environment != null and is_instance_valid(world_environment):
+		world_environment.environment = null
+	current_environment = null
+	current_zone_root = null
+	environment_cache.clear()
+	night_node_cache.clear()
+	cloud_materials.clear()
+	cloud_texture = null
+	celestial_disc_texture = null
+
 func _ready() -> void:
 	world_environment = WorldEnvironment.new()
 	add_child(world_environment)
@@ -133,9 +147,12 @@ func set_time(minutes: float, phase: String, _day_count: int = 0) -> void:
 	_update_sky_cycle(daylight, twilight, night, minutes, profile)
 	if sky_backdrop != null:
 		sky_backdrop.call("set_state", daylight, twilight, night, minutes, _quality_preset(), current_zone, _reduced_motion(), _sky_backdrop_palette(profile), true)
-		# Only the star pass is drawn in this CanvasLayer. It is additive and
-		# restricted to the upper sky, so it cannot cover gameplay geometry.
-		sky_backdrop.visible = night > 0.20 and daylight + twilight <= 0.08
+		# The authored 2D pass owns the visible celestial layer in all outdoor
+		# phases. It draws organic cloud silhouettes by day and the moon/stars by
+		# night, while the 3D nodes remain as lightweight state/fallback contracts.
+		# This prevents the old alpha-card cloud pool from presenting as hard
+		# rectangles on Compatibility/ANGLE drivers.
+		sky_backdrop.visible = true
 	_update_zone_night_state(smoothstep(float(profile.night_light_threshold), 1.0, night))
 
 func _update_sky_cycle(daylight: float, twilight: float, night: float, minutes: float, profile: Dictionary) -> void:
@@ -176,20 +193,26 @@ func _update_sky_cycle(daylight: float, twilight: float, night: float, minutes: 
 	sun_rays.visible = sun_disc.visible and sun_amount > 0.14
 	moon_disc.visible = not sun_disc.visible and moon_above_horizon and night > 0.05
 	moon_halo.visible = moon_disc.visible and quality == "quality"
-	_set_mesh_alpha(sun_disc, 0.92 * sun_amount)
-	_set_mesh_alpha(sun_halo, 0.18 * sun_amount)
-	_set_mesh_alpha(moon_disc, 0.94 * night)
-	_set_mesh_alpha(moon_halo, 0.20 * night)
+	# Keep the 3D fallback deliberately faint: the CanvasLayer pass is the
+	# readable presentation, and a faint 3D landmark remains available on
+	# renderers that do not composite the overlay correctly.
+	_set_mesh_alpha(sun_disc, 0.10 * sun_amount)
+	_set_mesh_alpha(sun_halo, 0.025 * sun_amount)
+	_set_mesh_alpha(moon_disc, 0.10 * night)
+	_set_mesh_alpha(moon_halo, 0.025 * night)
 	star_field.visible = night > 0.22
 	sky_dome.visible = false
-	_set_mesh_alpha(star_field, clampf((night - 0.10) / 0.70, 0.0, 0.92))
+	_set_mesh_alpha(star_field, clampf((night - 0.10) / 0.70, 0.0, 0.12))
 	if star_field != null and star_field.multimesh != null:
 		star_field.multimesh.visible_instance_count = 28 if quality == "potato" else (96 if quality == "quality" else 62)
 	# Keep the authored seven-cluster pool resident, then expose a deterministic
 	# tier budget. Balanced needs enough depth to read as a sky, while Potato
 	# retains two low-overdraw formations instead of collapsing to one card.
 	var cloud_count := 7 if quality == "quality" else (4 if quality == "balanced" else 2)
-	cloud_layer.visible = bool(profile.clouds)
+	# The legacy 3D card pool remains constructed for deterministic resource and
+	# quality accounting, but it is fully out of the render path. The authored
+	# CanvasLayer formations above are the only visible cloud pass.
+	cloud_layer.visible = false
 	# Keep cloud formations atmospheric rather than allowing one alpha card to
 	# cover the whole gameplay composition, especially on low-FOV laptops.
 	var cloud_alpha := clampf(daylight*0.44+twilight*0.38+night*0.16,0.10,0.48)
@@ -469,6 +492,12 @@ func _build_sky_layer() -> void:
 			lobe.position = spec.position
 			lobe.rotation.z = float(spec.rotation)
 			lobe.material_override = cloud_materials[lobe_index]
+			# Compatibility drivers can ignore the generated alpha texture on a
+			# billboard quad and expose its full rectangle. Keep this legacy pool
+			# resident for deterministic quality budgets, but let the authored 2D
+			# cloud pass render the visible formation.
+			lobe.transparency = 1.0
+			lobe.visible = false
 			cloud.add_child(lobe)
 		cloud_layer.add_child(cloud)
 

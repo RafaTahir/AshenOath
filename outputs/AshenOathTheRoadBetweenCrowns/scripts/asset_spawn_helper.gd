@@ -11,6 +11,14 @@ var mesh_cache: Dictionary = {}
 var material_cache: Dictionary = {}
 var resource_cache: Dictionary = {}
 
+func clear_runtime_caches() -> void:
+	# Cache ownership ends with the host game. Clear references after the
+	# owning scene roots have been retired so imported resources can release
+	# without detaching live meshes from the renderer.
+	mesh_cache.clear()
+	material_cache.clear()
+	resource_cache.clear()
+
 func _ready() -> void:
 	if database == null:
 		database = AssetDatabase.new()

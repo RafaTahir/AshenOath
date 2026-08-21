@@ -1,10 +1,13 @@
-# RELEASE-003 Result
+# RELEASE-003 Result (Historical)
 
 ## Status
 
-Local release suite and production deployment passed on 2026-08-21. The
-verified commit is pushed to `main`; Vercel served the matching PCK and the
-cache-busted production endpoint returned HTTP 200.
+This document records the prior release attempt and is **superseded** by the
+current uncommitted Soul Rebuild recovery checkpoint. Its hashes, screenshots,
+and browser results are historical evidence and must not be used as proof for
+the current working tree. The deployed production baseline remains unchanged
+until a fresh post-edit export, packed startup, live hash comparison, and
+complete acceptance run pass.
 
 ## Verification
 

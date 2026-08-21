@@ -27,6 +27,7 @@ func _initialize() -> void:
 	await _frames(20)
 	await _capture(game, "WATER-002_02_Wychwood_Bridge_Current", Vector3(0, 1, 4.3), 0.0)
 	print("WATER-002 SCREENSHOTS: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
+	await _release_game(game)
 	quit(0 if failures == 0 else 1)
 
 func _capture(game, stem: String, position: Vector3, yaw: float) -> void:
@@ -74,3 +75,17 @@ func _is_visible(image: Image) -> bool:
 func _frames(count: int) -> void:
 	for _index in range(count):
 		await process_frame
+
+func _release_game(game: Node) -> void:
+	if game != null and is_instance_valid(game):
+		if game.has_method("finalize_resource_shutdown"):
+			game.finalize_resource_shutdown()
+		elif game.has_method("prepare_resource_shutdown"):
+			game.prepare_resource_shutdown()
+		await _frames(int(game.ZONE_RETIRE_FRAMES) + 4)
+		game.queue_free()
+	await _frames(24)
+	if is_instance_valid(game):
+		game.free()
+		await _frames(2)
+	RenderingServer.force_sync()

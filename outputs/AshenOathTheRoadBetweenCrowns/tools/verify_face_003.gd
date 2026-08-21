@@ -11,8 +11,8 @@ func _initialize() -> void:
 	helper = AssetSpawnHelper.new()
 	root.add_child(helper)
 	await process_frame
-	_verify_asset_role("player_human", "Kael")
-	_verify_asset_role("sister_anwen_human", "Sister Anwen")
+	await _verify_asset_role("player_human", "Kael")
+	await _verify_asset_role("sister_anwen_human", "Sister Anwen")
 
 	var packed := load("res://scenes/main.tscn") as PackedScene
 	_assert(packed != null, "main scene is unavailable")
@@ -36,7 +36,7 @@ func _initialize() -> void:
 		for enemy in tested_game.active_enemies:
 			_verify_runtime_face(enemy, str(enemy.enemy_id))
 
-	_finish()
+	await _finish()
 
 func _verify_asset_role(role: String, label: String) -> void:
 	var visual: Node3D = helper.spawn_visual_role(role, "characters")
@@ -52,7 +52,8 @@ func _verify_asset_role(role: String, label: String) -> void:
 		CharacterPresentation.apply_npc(owner, role)
 	await _frames(1)
 	_verify_face_contract(owner if role != "player_human" else visual, label)
-	owner.free()
+	owner.queue_free()
+	await _frames(2)
 
 func _verify_runtime_face(actor: Node, label: String) -> void:
 	_assert(actor != null, "%s actor is missing" % label)
@@ -97,9 +98,13 @@ func _frames(count: int) -> void:
 
 func _finish() -> void:
 	if is_instance_valid(tested_game):
-		tested_game.free()
+		if tested_game.has_method("finalize_resource_shutdown"):
+			tested_game.finalize_resource_shutdown()
+		tested_game.queue_free()
+		await _frames(12)
 	if is_instance_valid(helper):
-		helper.free()
+		helper.queue_free()
+		await _frames(2)
 	if failures.is_empty():
 		print("FACE-003 VERIFIER: PASS - native face materials and feature driver")
 		quit(0)

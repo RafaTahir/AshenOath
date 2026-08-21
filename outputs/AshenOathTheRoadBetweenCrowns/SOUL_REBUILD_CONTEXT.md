@@ -1,22 +1,30 @@
 # Ashen Oath Soul-Rebuild Context
 
-## Current Release Checkpoint - 2026-08-21
+## Current Working Checkpoint - 2026-08-21
 
-The cumulative Soul Rebuild implementation is locally release-verified on
-`codex/soul-rebuild`. Runtime, content, story, save, character, animation,
-combat, AI, Oathfire, river, navigation, Greyfen, Castle, audio, visual,
-lifecycle, material, budget, export, packed startup, Chrome, Edge, and mobile
-emulation gates pass. The full browser route reaches Hart Glade through 37
-checkpoints without console or network errors.
+The deployed production baseline is the earlier `bd24495` release. The current
+Soul Rebuild continuation is uncommitted on `codex/soul-rebuild`, and its Web
+artifact has not been rebuilt or deployed. Historical hashes and browser runs
+in this file are evidence for the prior checkpoint only.
 
-The verified seven-file artifact is `97,898,609` bytes and its local PCK hash is
-`98AA203BA4EC02991DCDD75FEE8BE5A7F34DE5D4E706F53F96264C4F565FFC6C`. Release
-commit `bf51a5db39fb4fd15a643ac3ccd9aaf9de14511b` is pushed to `main`, and the
-live Vercel `index.pck` matches this hash byte-for-byte at
-`https://ashenoath.vercel.app/?v=soul-rebuild`. Headless SwiftShader FPS is
-diagnostic only; native performance acceptance comes from the graphical
-Compatibility gate. Shutdown allocator warnings are classified, not
-active-frame failures.
+The current source has targeted passes for lifecycle cleanup, save/input
+foundations, characters, combat, Oathfire, AI, authored world/lighting
+contracts, and fresh graphical sky captures. The active capture frames are
+1280x720 and nonblank. Godot still emits shutdown-only allocator diagnostics
+after isolated graphical processes exit; no active-frame material error was
+seen in the targeted gates.
+
+The latest continuation slice adds Anwen's bone-attached upright staff, shared
+Balanced roof treatment, visible animated river-current ribbons, stronger
+Oathblade presentation, capsule/cylinder boss silhouette dressing, and
+shutdown-safe capture/verifier cleanup. The deferred autosave race that could
+read a released player during Oathfire teardown is fixed. Character, combat,
+world, Oathfire, and lifecycle targeted gates pass on this source state.
+
+The full 62-ticket Soul Rebuild acceptance is still open: interim monster and
+boss assets, later-zone visual reconstruction, full real-input campaign proof,
+fresh export/packed startup, and post-edit live PCK comparison remain. Do not
+describe this checkpoint as a production release.
 
 This is the compact handoff document for the 62-ticket soul-rebuild program. It is intentionally shorter than the historical phase archive.
 

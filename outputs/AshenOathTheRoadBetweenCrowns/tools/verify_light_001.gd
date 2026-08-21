@@ -61,7 +61,7 @@ func _verify_phase_states(director: Node, clock: Node) -> void:
 		if phase == "day":
 			_check(director.sun_disc.visible, "sun is hidden during daytime")
 			_check(not director.moon_disc.visible and not director.star_field.visible, "night celestial objects remain visible by day")
-			_check(director.cloud_layer.visible, "day clouds are hidden")
+			_check(director.sky_backdrop.visible and bool(director.sky_backdrop.get_sky_state().get("clouds_visible", false)), "authored day clouds are hidden")
 		elif phase == "night":
 			_check(not director.sun_disc.visible, "sun remains visible at night")
 			_check(director.moon_disc.visible and director.star_field.visible, "moon or stars are hidden at night")
@@ -105,11 +105,11 @@ func _verify_quality_density(game: Node, director: Node) -> void:
 	director.apply_zone("greyfen", null)
 	game.settings.set_quality_preset("balanced")
 	director.set_time(720.0, "day", 0)
-	_check(_visible_children(director.cloud_layer) == 4, "Balanced does not show four cloud formations")
+	_check(int(director.sky_backdrop.get_visible_cloud_count()) == 4, "Balanced authored cloud budget is incorrect")
 	_check(director.star_field.multimesh.visible_instance_count == 62, "Balanced star budget is incorrect")
 	game.settings.set_quality_preset("potato")
 	director.set_time(60.0, "night", 0)
-	_check(_visible_children(director.cloud_layer) == 2, "Potato cloud budget is incorrect")
+	_check(int(director.sky_backdrop.get_visible_cloud_count()) == 2, "Potato authored cloud budget is incorrect")
 	_check(director.star_field.multimesh.visible_instance_count == 28, "Potato star budget is incorrect")
 	game.settings.set_quality_preset("balanced")
 

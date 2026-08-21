@@ -81,6 +81,7 @@ var route_enemy_cache: Dictionary = {}
 var route_zone_signatures: Dictionary = {}
 var route_spatial_cache: Dictionary = {}
 var retired_zone_roots: Array[Node] = []
+var retired_zone_cleanup_root: Node3D
 var pending_zone_retirements := 0
 var retired_skinned_actor_pool: Node3D
 var skinned_resource_anchors: Dictionary = {}
@@ -107,6 +108,7 @@ var loading_started_usec := 0
 var last_loading_metrics: Dictionary = {}
 var new_game_start_pending := false
 var zone_load_request_pending := false
+var resource_shutdown_prepared := false
 var requested_zone_id := ""
 var requested_zone_spawn := Vector3.ZERO
 var greyfen_prewarm_started := false
@@ -124,6 +126,11 @@ const MAX_TRANSITION_HISTORY := 16
 func _ready() -> void:
 	var ready_started := Time.get_ticks_msec()
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	retired_zone_cleanup_root = Node3D.new()
+	retired_zone_cleanup_root.name = "RetiredZoneCleanupRoot"
+	retired_zone_cleanup_root.visible = false
+	retired_zone_cleanup_root.process_mode = Node.PROCESS_MODE_DISABLED
+	add_child(retired_zone_cleanup_root)
 	shared_box_mesh = BoxMesh.new()
 	shared_box_mesh.size = Vector3.ONE
 	var phase_started := Time.get_ticks_msec()
@@ -703,17 +710,19 @@ func _zone_state_signature() -> int:
 
 func _deferred_free_zone(retired_root: Node) -> void:
 	# Keep the complete render hierarchy intact until the scene tree disposes it.
-	# Manually detaching skins or surfaces races RenderingServer teardown.
+	# Manually detaching skins or surfaces races RenderingServer teardown. The
+	# hidden cleanup owner keeps the retired root scene-owned while queue_free()
+	# lets Godot release renderer dependencies at the end of a frame.
 	for _frame in range(ZONE_RETIRE_FRAMES):
 		await get_tree().process_frame
 	if is_instance_valid(retired_root):
-		if retired_root.is_inside_tree() and retired_root.get_parent() != null:
+		if retired_zone_cleanup_root != null and is_instance_valid(retired_zone_cleanup_root):
+			retired_root.reparent(retired_zone_cleanup_root, false)
+		elif retired_root.is_inside_tree() and retired_root.get_parent() != null:
 			retired_root.get_parent().remove_child(retired_root)
-		RenderingServer.force_sync()
-		await get_tree().process_frame
 		retired_zone_roots.erase(retired_root)
-		retired_root.free()
-		RenderingServer.force_sync()
+		retired_root.queue_free()
+		await get_tree().process_frame
 	else:
 		retired_zone_roots.erase(retired_root)
 	pending_zone_retirements = maxi(pending_zone_retirements - 1, 0)
@@ -980,7 +989,7 @@ func _set_single_zone_collision_enabled(node: Node, enabled: bool) -> void:
 func _schedule_zone_autosave() -> void:
 	var expected_zone: String = current_zone_id
 	get_tree().create_timer(0.35).timeout.connect(func():
-		if game_started and current_zone_id == expected_zone and save_manager != null:
+		if not resource_shutdown_prepared and game_started and player != null and is_instance_valid(player) and current_zone_id == expected_zone and save_manager != null:
 			save_manager.autosave(self)
 	, CONNECT_ONE_SHOT)
 
@@ -1000,6 +1009,9 @@ func _clear_route_zone_cache() -> void:
 		_release_route_spatial_service(str(raw_id))
 
 func prepare_resource_shutdown() -> void:
+	if resource_shutdown_prepared:
+		return
+	resource_shutdown_prepared = true
 	if zone_root != null and is_instance_valid(zone_root):
 		_retire_zone_root(zone_root)
 	zone_root = null
@@ -1011,6 +1023,40 @@ func prepare_resource_shutdown() -> void:
 	route_zone_signatures.clear()
 	for raw_id in route_spatial_cache.keys().duplicate():
 		_release_route_spatial_service(str(raw_id))
+	if greyfen_prewarm_spatial_service != null and is_instance_valid(greyfen_prewarm_spatial_service):
+		greyfen_prewarm_spatial_service.queue_free()
+	greyfen_prewarm_spatial_service = null
+	_release_active_spatial_service()
+
+func finalize_resource_shutdown() -> void:
+	# Called only after staged zone retirement has completed. Actors and camera
+	# are no longer needed, so release their scene ownership before clearing
+	# global caches held by runtime services.
+	prepare_resource_shutdown()
+	if player != null and is_instance_valid(player):
+		player.queue_free()
+	player = null
+	if camera_rig != null and is_instance_valid(camera_rig):
+		camera_rig.queue_free()
+	camera_rig = null
+	if retired_skinned_actor_pool != null and is_instance_valid(retired_skinned_actor_pool):
+		retired_skinned_actor_pool.queue_free()
+	retired_skinned_actor_pool = null
+	if asset_helper != null and asset_helper.has_method("clear_runtime_caches"):
+		asset_helper.clear_runtime_caches()
+	if world_materials != null and world_materials.has_method("clear_cache"):
+		world_materials.clear_cache()
+	if visual_director != null and visual_director.has_method("clear_runtime_caches"):
+		visual_director.clear_runtime_caches()
+	if zone_streaming != null and zone_streaming.has_method("clear_requests"):
+		zone_streaming.clear_requests()
+	if runtime_packs != null and runtime_packs.has_method("clear_requests"):
+		runtime_packs.clear_requests()
+	if runtime_services != null and is_instance_valid(runtime_services):
+		runtime_services.process_mode = Node.PROCESS_MODE_DISABLED
+		for service in runtime_services.get_children():
+			if service is Node:
+				(service as Node).process_mode = Node.PROCESS_MODE_DISABLED
 
 func zone_lifecycle_snapshot() -> Dictionary:
 	var cached_ids: Array[String] = []
@@ -2879,18 +2925,43 @@ func _make_fake_fog_bank(pos: Vector3) -> void:
 	_make_visual_box("LowColdFogBank", pos + Vector3(0, 0.07, 0), Vector3(1.6, 0.10, 0.55), Color(0.105, 0.125, 0.118))
 
 func _make_crow_silhouettes() -> void:
+	var index := 0
 	for item in [
 		[Vector3(-8.5, 5.8, -11.5), -14.0],
 		[Vector3(-7.8, 6.15, -12.2), 8.0],
 		[Vector3(10.2, 5.5, -10.6), 18.0]
 	]:
-		var root = Node3D.new()
+		var root := Node3D.new()
 		root.name = "CrowSilhouette"
 		root.position = item[0]
 		root.rotation_degrees.y = float(item[1])
+		root.set_meta("motion_type", "bird")
+		root.set_meta("motion_phase", float(index) * 1.7)
+		root.set_meta("motion_amount", 4.0)
 		zone_root.add_child(root)
-		_add_visual_box_child(root, "CrowWing", Vector3(-0.16, 0, 0), Vector3(0.34, 0.035, 0.08), Color(0.010, 0.010, 0.012))
-		_add_visual_box_child(root, "CrowWing", Vector3(0.16, 0, 0), Vector3(0.34, 0.035, 0.08), Color(0.010, 0.010, 0.012))
+		_add_crow_part(root, "CrowBody", SphereMesh.new(), Vector3(0, 0, 0), Vector3(0.18, 0.12, 0.30), Color(0.010, 0.010, 0.012))
+		_add_crow_part(root, "CrowHead", SphereMesh.new(), Vector3(0, 0.10, -0.22), Vector3(0.12, 0.11, 0.13), Color(0.016, 0.016, 0.018))
+		var beak_mesh := CylinderMesh.new()
+		beak_mesh.top_radius = 0.0
+		beak_mesh.bottom_radius = 0.055
+		beak_mesh.height = 0.16
+		_add_crow_part(root, "CrowBeak", beak_mesh, Vector3(0, 0.08, -0.36), Vector3(0.72, 0.72, 1.0), Color(0.15, 0.12, 0.08), Vector3(-90, 0, 0))
+		_add_crow_part(root, "CrowWingLeft", SphereMesh.new(), Vector3(-0.18, 0.0, -0.01), Vector3(0.30, 0.035, 0.13), Color(0.008, 0.008, 0.010), Vector3(0, 0, -18))
+		_add_crow_part(root, "CrowWingRight", SphereMesh.new(), Vector3(0.18, 0.0, -0.01), Vector3(0.30, 0.035, 0.13), Color(0.008, 0.008, 0.010), Vector3(0, 0, 18))
+		_add_crow_part(root, "CrowTail", SphereMesh.new(), Vector3(0, -0.02, 0.24), Vector3(0.12, 0.04, 0.24), Color(0.008, 0.008, 0.010), Vector3(18, 0, 0))
+		index += 1
+
+func _add_crow_part(parent: Node3D, name: String, mesh: Mesh, local_pos: Vector3, scale_value: Vector3, color: Color, rotation_degrees := Vector3.ZERO) -> MeshInstance3D:
+	var part := MeshInstance3D.new()
+	part.name = name
+	part.mesh = mesh
+	part.position = local_pos
+	part.scale = scale_value
+	part.rotation_degrees = rotation_degrees
+	part.material_override = _mat(color)
+	part.visibility_range_end = 32.0
+	parent.add_child(part)
+	return part
 
 func _make_visual_box(name: String, pos: Vector3, size: Vector3, color: Color) -> MeshInstance3D:
 	pos = river_safe_position(pos,size.z*0.5+0.18)
@@ -3060,16 +3131,18 @@ func _make_village_house_dressed(pos: Vector3, yaw: float, node_name: String) ->
 	_add_house_box(root, "StoneFoundation", Vector3(0, 0.18, 0), Vector3(4.55, 0.36, 3.55), Color(0.28, 0.27, 0.24))
 	_add_house_box(root, "PlasteredWall", Vector3(0, 1.05, 0), Vector3(4.3, 2.1, 3.35), plaster)
 	_add_house_gables(root, plaster, timber)
-	if str(settings.settings.get("quality_preset", "balanced")) != "quality":
+	var modular_roof: Node3D = null
+	if str(settings.settings.get("quality_preset", "balanced")) != "potato":
+		# The same authored roof silhouette is now used in Balanced and Quality.
+		# Potato keeps the cheaper fallback, so full-detail presets share one visual
+		# language instead of changing the settlement's architecture.
+		modular_roof = _add_house_module(root, "greyfen_roof", Vector3(0.55, 0.55, 0.55), Vector3(0, 2.02, 0), 0.0, "ModularTileRoof")
+	if modular_roof == null:
 		root.set_meta("roof_treatment", "authored_fallback_slope")
 		_add_house_box(root, "LeftRoofSlope", Vector3(-0.9, 2.42, 0), Vector3(2.55, 0.42, 3.95), Color(0.14, 0.055, 0.035), Vector3(0, 0, -13))
 		_add_house_box(root, "RightRoofSlope", Vector3(0.9, 2.42, 0), Vector3(2.55, 0.42, 3.95), Color(0.14, 0.055, 0.035), Vector3(0, 0, 13))
 	else:
-		# The detailed tile source is reserved for Quality. Balanced keeps the
-		# same authored silhouette with the lower-cost slope mesh so native 720p
-		# frame pacing is not spent on roof micro-geometry.
 		root.set_meta("roof_treatment", "modular_tile")
-		_add_house_module(root, "greyfen_roof", Vector3(0.55, 0.55, 0.55), Vector3(0, 2.02, 0), 0.0, "ModularTileRoof")
 	var chimney_x: float = -1.38 if facade_variant == 0 else 1.38
 	_add_house_box(root, "StoneChimney", Vector3(chimney_x, 2.63, 0.62), Vector3(0.48, 1.38, 0.48), Color(0.23, 0.22, 0.20))
 	_add_house_box(root, "ChimneyCap", Vector3(chimney_x, 3.31, 0.62), Vector3(0.62, 0.14, 0.62), Color(0.19, 0.18, 0.17))

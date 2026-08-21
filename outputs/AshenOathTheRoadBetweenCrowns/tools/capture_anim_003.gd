@@ -55,6 +55,15 @@ func _capture_state(state: String, fraction: float, file_name: String) -> void:
 	if animation != null:
 		animation_player.seek(animation.length * fraction, true)
 	await _frames(14)
+	# The capture intentionally samples a clip without player locomotion. Refresh
+	# the bone-attached sword after the seek so the proof frame uses the current
+	# hand position rather than the setup pose from before the animation played.
+	if state == "attack_light":
+		player.call("_update_sword_equipment_pose", 0.0, 0.58, 0.0, false, true)
+	elif state == "attack_heavy":
+		player.call("_update_sword_equipment_pose", 0.0, 0.58, 0.0, true, true)
+	else:
+		player.call("_update_sword_equipment_pose", 0.0, 0.0, 0.0, false, false)
 	_frame_player(player)
 	await _frames(8)
 	var image := root.get_texture().get_image()
@@ -120,7 +129,9 @@ func _frame_player(player: Node) -> void:
 	if has_bounds:
 		center = bounds.get_center()
 		height = clampf(bounds.size.y, 1.4, 2.4)
-	capture_camera.look_at_from_position(center + Vector3(0, height * 0.06, maxf(height * 1.85, 3.0)), center + Vector3(0, height * 0.04, 0), Vector3.UP)
+	# Frame the gameplay-facing side so the hand socket, guard, and blade path
+	# are visible in the motion evidence instead of hiding behind the torso.
+	capture_camera.look_at_from_position(center + Vector3(0, height * 0.06, -maxf(height * 1.85, 3.0)), center + Vector3(0, height * 0.04, 0), Vector3.UP)
 
 func _make_contact_sheet() -> void:
 	if captures.size() != STATES.size():

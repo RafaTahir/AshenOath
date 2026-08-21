@@ -79,7 +79,7 @@ func _verify_day_night(game: Node) -> void:
 	clock.set_time(720.0, 2)
 	_check(clock.current_phase == "day", "day phase boundary failed")
 	_check(director.sun_disc.visible and not director.star_field.visible, "day sky visibility is incorrect")
-	_check(director.cloud_layer.visible, "day clouds are hidden")
+	_check(director.sky_backdrop.visible and bool(director.sky_backdrop.get_sky_state().get("clouds_visible", false)), "authored day clouds are hidden")
 	clock.set_time(1140.0, 2)
 	_check(clock.current_phase == "dusk", "dusk phase boundary failed")
 	clock.set_time(60.0, 3)

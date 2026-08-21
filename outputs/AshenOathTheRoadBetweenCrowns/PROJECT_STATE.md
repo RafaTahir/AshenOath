@@ -1,23 +1,35 @@
 # Ashen Oath Project State
 
-## Current Release Checkpoint - 2026-08-21
+## Current Working Checkpoint - 2026-08-21
 
-The cumulative Soul Rebuild work has passed the authoritative local release
-suite on `codex/soul-rebuild`. The graphical Compatibility gate passes native
-1280x720 Balanced performance in every required zone and combat sample. Chrome
-and Edge desktop plus mobile-emulation full-campaign routes reach Hart Glade
-through 37 checkpoints without browser console or network errors. The verified
-seven-file Web artifact is `97,898,609` bytes with PCK SHA-256
-`98AA203BA4EC02991DCDD75FEE8BE5A7F34DE5D4E706F53F96264C4F565FFC6C`.
+The authoritative production baseline remains `bd24495` on the deployed
+branch. The current Soul Rebuild continuation is an uncommitted working tree
+on `codex/soul-rebuild`; it has not been exported, pushed, or deployed from
+this checkpoint. Historical release claims below are retained for audit but
+must not be read as validation of these current source edits.
 
-The release is committed as `bf51a5db39fb4fd15a643ac3ccd9aaf9de14511b`, pushed
-to `codex/soul-rebuild` and `main`, and deployed by Vercel. The live
-`index.pck` matches the verified local PCK hash byte-for-byte. Shutdown-only
-Godot allocator diagnostics remain classified warnings; no active-frame
-renderer error blocked the passing gates.
-The game remains grounded stylized dark fantasy, not photoreal or AAA. Firefox,
-physical-controller certification, and native mobile/store packages remain
-deferred.
+This checkpoint has targeted local passes for lifecycle cleanup, save/input
+foundations, character presentation, sword combat, Oathfire, AI, Greyfen and
+campaign world contracts, authored lighting, and the 1280x720 sky capture.
+Fresh graphical sky frames were captured at 1280x720. The active frames are
+clean; Godot still prints shutdown-only renderer allocator/RID/ObjectDB
+diagnostics when the isolated capture process exits.
+
+The latest continuation tranche also has fresh river-current, Greyfen roof,
+character, sword, and combat evidence. Sister Anwen's staff is bone-attached
+and kept upright in world space, the character verifier excludes declared
+equipment from body-height measurements, Balanced houses use the authored roof
+source, and the river surface now shows animated current ribbons. The Oathfire
+and combat verifiers no longer trigger a deferred-autosave player-null error
+during shutdown. Characters, combat, and world targeted profiles pass after
+these changes.
+
+The complete Soul Rebuild acceptance bar is not yet met. Ghoulkin and later
+boss mappings remain interim/low-poly, later-zone architecture and finale
+dressing remain below the locked visual bar, the full campaign has not been
+re-proven through real input from this source state, and no fresh export/live
+PCK comparison has been performed after these edits. Production remains
+unchanged until those blockers are resolved.
 
 ## Current Product Status
 

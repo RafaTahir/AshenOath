@@ -112,12 +112,28 @@ func _initialize() -> void:
 		check(resolved_parry_position.distance_to(player.global_position + Vector3(0, 1.0, 0)) < 1.2, "Parry contact point is detached from the weapons")
 		check(enemy.stagger_time >= 1.0, "Parry did not stagger the attacker")
 
+	var result_code := 0 if failures == 0 else 1
 	print("COMBAT-001 VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
-	quit(0 if failures == 0 else 1)
+	await _finish(game)
+	quit(result_code)
 
 func settle(count: int) -> void:
 	for _index in range(count):
 		await process_frame
+
+func _finish(game: Node) -> void:
+	if game != null and is_instance_valid(game):
+		if game.has_method("finalize_resource_shutdown"):
+			game.finalize_resource_shutdown()
+		elif game.has_method("prepare_resource_shutdown"):
+			game.prepare_resource_shutdown()
+		await settle(int(game.ZONE_RETIRE_FRAMES) + 4)
+		game.queue_free()
+	await settle(24)
+	if is_instance_valid(game):
+		game.free()
+		await settle(2)
+	RenderingServer.force_sync()
 
 func check(condition: bool, message: String) -> void:
 	if not condition:

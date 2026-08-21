@@ -108,6 +108,11 @@ func cancel_request(zone_id: String) -> void:
 	if requests.has(id) and str(requests[id].get("state", "")) == "loading":
 		requests.erase(id)
 
+func clear_requests() -> void:
+	# ResourceLoader owns the threaded request itself; dropping our references
+	# prevents retired zone resources from staying alive through this service.
+	requests.clear()
+
 func retire_unneeded_zones(keep_ids: Array[String]) -> void:
 	var keep := {}
 	for id in keep_ids:

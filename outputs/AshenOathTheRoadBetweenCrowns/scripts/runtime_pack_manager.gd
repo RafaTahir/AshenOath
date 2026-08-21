@@ -74,6 +74,9 @@ func cancel_request(pack_id: String) -> void:
 	if requests.has(id) and str(requests[id].get("state", "")) != "ready":
 		requests.erase(id)
 
+func clear_requests() -> void:
+	requests.clear()
+
 func retire_unneeded_packs(keep_ids: Array[String]) -> void:
 	var keep := {}
 	for id in keep_ids:

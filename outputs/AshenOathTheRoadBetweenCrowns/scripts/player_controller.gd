@@ -811,7 +811,10 @@ func _try_build_mapped_body() -> bool:
 		imported_sword.visible = false
 	rig_sword_visual = _attach_rig_sword(mapped)
 	if rig_sword_visual != null:
-		_configure_blade_markers(rig_sword_visual, Vector3(0, 0, -0.08), Vector3(0, 0, -1.18), true)
+		# Oathblade geometry is authored along local -Y. Keep the contact
+		# contract on that same axis so the damage sweep and the rendered blade
+		# cannot diverge into the old detached-pole presentation.
+		_configure_blade_markers(rig_sword_visual, Vector3(0, -0.08, 0), Vector3(0, -1.04, 0), true)
 		# Establish the authored ready pose before the first physics tick. Capture
 		# tools and dialogue staging can sample the rig before _animate_visuals runs;
 		# leaving the imported hand axis untouched makes the sword read as a pole.
@@ -880,16 +883,17 @@ func _attach_rig_sword(mapped: Node3D) -> Node3D:
 func _build_oathblade_visual(parent: Node3D) -> Node3D:
 	var oathblade := Node3D.new()
 	oathblade.name = "KaelOathblade"
-	# Keep the blade readable at gameplay distance without turning it into a
-	# pole that reaches from Kael's hand to the ground.
-	# Keep the blade readable at the native gameplay camera distance. The prior
-	# 0.86 scale made the measured rendered weapon fall below the 0.75 m
-	# readability contract even though its contact markers still reached enemies.
-	oathblade.scale = Vector3.ONE * 1.0
+	# Keep the blade readable at gameplay distance without letting a one-metre
+	# local mesh read as a pole beside a 1.78 m character. The hand, markers,
+	# slash ribbon, and collision all use this same normalized weapon scale.
+	oathblade.scale = Vector3.ONE * 0.92
 	parent.add_child(oathblade)
-	var steel := _metal_mat(Color(0.68, 0.72, 0.75))
-	steel.metallic = 0.82
-	steel.roughness = 0.24
+	var steel := _metal_mat(Color(0.84, 0.88, 0.92))
+	steel.metallic = 0.72
+	steel.roughness = 0.20
+	steel.emission_enabled = true
+	steel.emission = Color(0.055, 0.065, 0.075)
+	steel.emission_energy_multiplier = 0.22
 	steel.emission_enabled = false
 	steel.cull_mode = BaseMaterial3D.CULL_DISABLED
 	var blade := MeshInstance3D.new()
@@ -900,10 +904,10 @@ func _build_oathblade_visual(parent: Node3D) -> Node3D:
 	var guard := MeshInstance3D.new()
 	guard.name = "OathbladeGuard"
 	var guard_mesh := BoxMesh.new()
-	guard_mesh.size = Vector3(0.30, 0.055, 0.075)
+	guard_mesh.size = Vector3(0.34, 0.060, 0.082)
 	guard.mesh = guard_mesh
 	guard.position = Vector3(0.0, -0.075, 0.0)
-	guard.material_override = _metal_mat(Color(0.52, 0.36, 0.15))
+	guard.material_override = _metal_mat(Color(0.64, 0.43, 0.17))
 	oathblade.add_child(guard)
 	var grip := MeshInstance3D.new()
 	grip.name = "OathbladeGrip"
@@ -930,8 +934,8 @@ func _build_oathblade_visual(parent: Node3D) -> Node3D:
 func _build_oathblade_mesh() -> ImmediateMesh:
 	var mesh := ImmediateMesh.new()
 	var vertices := [
-		Vector3(-0.090, -0.09, 0.026), Vector3(0.090, -0.09, 0.026), Vector3(0.0, -0.98, 0.020),
-		Vector3(-0.090, -0.09, -0.026), Vector3(0.090, -0.09, -0.026), Vector3(0.0, -0.98, -0.020)
+		Vector3(-0.112, -0.09, 0.035), Vector3(0.112, -0.09, 0.035), Vector3(0.0, -0.98, 0.022),
+		Vector3(-0.112, -0.09, -0.035), Vector3(0.112, -0.09, -0.035), Vector3(0.0, -0.98, -0.022)
 	]
 	var faces := [[0, 2, 1], [3, 4, 5], [0, 1, 4], [0, 4, 3], [0, 3, 5], [0, 5, 2], [1, 2, 5], [1, 5, 4]]
 	mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLES)
@@ -954,9 +958,9 @@ func _update_sword_equipment_pose(windup: float, strike: float, recovery: float,
 		return
 	var forward := -global_transform.basis.z.normalized()
 	var right := global_transform.basis.x.normalized()
-	# Keep the ready blade visibly diagonal instead of reading as a vertical
-	# pole. The attack states still own the full swing arc below.
-	var idle_direction := (Vector3.DOWN * 0.56 + right * 0.58 - forward * 0.45).normalized()
+	# Keep the ready blade down and outside the torso instead of crossing the
+	# chest. The attack states still own the full swing arc below.
+	var idle_direction := (Vector3.DOWN * 0.78 + right * 0.54).normalized()
 	var blade_direction := idle_direction
 	if attacking:
 		var windup_direction: Vector3

@@ -9,6 +9,7 @@ var span := 0.0
 var flow_time := 0.0
 var leaves: MultiMeshInstance3D
 var ripples: Array[Node3D] = []
+var current_ribbons: Array[MeshInstance3D] = []
 var leaf_origins: Array[Vector3] = []
 var ripple_origins: Array[Vector3] = []
 var update_accumulator := 0.0
@@ -41,6 +42,11 @@ func _physics_process(delta: float) -> void:
 		var pulse := 0.78 + 0.22 * sin(flow_time * (1.5 + float(index % 3) * 0.25) + float(index))
 		ripple.scale = Vector3(pulse, 1.0, 1.0)
 		ripple.position.y = ripple_origins[index].y + sin(flow_time * 1.7 + float(index)) * 0.008
+	for index in range(current_ribbons.size()):
+		var ribbon := current_ribbons[index]
+		if not is_instance_valid(ribbon):
+			continue
+		ribbon.position.z = center_z - span * 0.30 + fposmod(flow_time * (0.16 + float(index) * 0.035) + float(index) * 1.9, span * 0.60)
 
 func _build_dressing() -> void:
 	var leaf_mesh := QuadMesh.new()
@@ -87,3 +93,17 @@ func _build_dressing() -> void:
 		add_child(ripple)
 		ripples.append(ripple)
 		ripple_origins.append(origin)
+	var current_material := ShaderMaterial.new()
+	var current_shader := Shader.new()
+	current_shader.code = "shader_type spatial; render_mode unshaded, blend_mix, cull_disabled; void fragment(){ vec2 uv=UV; float band=sin(uv.y*18.0+TIME*1.8)+sin(uv.y*41.0-TIME*2.2+uv.x*3.0); float edge=smoothstep(0.0,0.20,uv.x)*smoothstep(0.0,0.20,1.0-uv.x); float alpha=(0.10+0.09*(band*0.5+0.5))*edge; ALBEDO=vec3(0.24,0.62,0.57); EMISSION=vec3(0.12,0.30,0.26); ALPHA=alpha; }"
+	current_material.shader = current_shader
+	for index in range(3):
+		var ribbon := MeshInstance3D.new()
+		ribbon.name = "RiverCurrentRibbon_%02d" % index
+		var ribbon_mesh := PlaneMesh.new()
+		ribbon_mesh.size = Vector2(width * (0.58 + float(index) * 0.08), span * 0.22)
+		ribbon.mesh = ribbon_mesh
+		ribbon.position = Vector3(0.0, -0.185, center_z - span * 0.30 + float(index) * 2.1)
+		ribbon.material_override = current_material
+		add_child(ribbon)
+		current_ribbons.append(ribbon)
