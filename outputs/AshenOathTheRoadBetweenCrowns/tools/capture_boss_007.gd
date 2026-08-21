@@ -33,14 +33,14 @@ func _initialize() -> void:
 		push_error("White Hart was not available for capture")
 	else:
 		boss.set_physics_process(false)
-		boss.global_position = Vector3(0, 0.8, -7)
-		await _capture(game, boss, "BOSS-007_01_Hart_Witness", Vector3(0, 1.0, -2.2), 0.0)
+		boss.global_position = Vector3(0, 1.0, -7)
+		await _capture(game, boss, "BOSS-007_01_Hart_Witness", Vector3(0, 1.0, -3.4), 0.0)
 		boss.apply_damage(boss.health_component.max_health * 0.40, "capture")
 		await _frames(14)
-		await _capture(game, boss, "BOSS-007_02_Hart_Mercy", Vector3(0, 1.0, -2.2), 0.0)
+		await _capture(game, boss, "BOSS-007_02_Hart_Mercy", Vector3(0, 1.0, -3.4), 0.0)
 		boss.apply_damage(boss.health_component.max_health * 0.50, "capture")
 		await _frames(14)
-		await _capture(game, boss, "BOSS-007_03_Hart_Debt", Vector3(0, 1.0, -2.2), 0.0)
+		await _capture(game, boss, "BOSS-007_03_Hart_Debt", Vector3(0, 1.0, -3.4), 0.0)
 	print("BOSS-007 SCREENSHOTS: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
 	if game.has_method("prepare_resource_shutdown"):
 		game.prepare_resource_shutdown()
@@ -62,6 +62,11 @@ func _capture(game: Node, boss: Node, stem: String, position: Vector3, yaw: floa
 	game.camera_rig.yaw = yaw
 	game.camera_rig.pitch = -0.10
 	game.hud.set_guidance_hint("")
+	game.set_process(false)
+	game.active_interactable = null
+	game.hud.set_prompt("")
+	game.hud.prompt_label.visible = false
+	game.hud.hint_label.visible = false
 	await _frames(34)
 	await RenderingServer.frame_post_draw
 	var image: Image = root.get_viewport().get_texture().get_image()

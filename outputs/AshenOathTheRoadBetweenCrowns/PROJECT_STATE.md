@@ -1058,6 +1058,10 @@ Known verifier note: Godot headless may emit ObjectDB cleanup warnings after pas
 - The connected Wolf-derived body retains the bone-attached antler crown and
   now receives a memory halo, chest oath mark, phase-reactive rings, and
   restrained identity motion under one boss layer.
+- The encounter and witness display now use the dedicated `white_hart_boss`
+  role: a 3.60 m normalized focal body, 3.30 m collision capsule, and measured
+  -1.90 m imported ground correction. The earlier small-avatar shrink and
+  floating presentation are removed.
 - `verify_boss_007.gd` passes identity, animation, phase transitions, phase
   checkpoint restore, Mercy covenant resolution, final-choice completion, and
   no-respawn after Hart Glade reload. `capture_boss_007.gd` produces fresh

@@ -1,5 +1,6 @@
 extends RefCounted
 
+const CharacterRoleSpec = preload("res://scripts/character_role_spec.gd")
 const ZONES := ["undercroft", "assembly", "hart_glade"]
 
 func build(context: ZoneBuildContext) -> void:
@@ -183,21 +184,40 @@ func _make_hart_witness(context: ZoneBuildContext) -> void:
 	# The finale landmark uses the same connected animated animal source as the
 	# encounter body. The antler crown is attached to the imported head bone so
 	# it follows the idle/walk skeleton instead of floating beside the creature.
-	var root: Node3D = context.make_visual_role("white_hart_avatar", "enemies", Vector3(0, 0, -9), Vector3.ONE * 1.48, 180.0) as Node3D
+	# The witness display uses the same focal role as the encounter. Its 3.60 m
+	# normalized height keeps the final creature readable at gameplay distance;
+	# the small multiplier is only a restrained spectral presence, not a second
+	# source normalization pass.
+	var root: Node3D = context.make_visual_role("white_hart_boss", "enemies", Vector3(0, 0, -9), Vector3.ONE * 1.08, 180.0) as Node3D
 	if root == null:
 		return
+	root.position.y += CharacterRoleSpec.ground_offset("white_hart_boss")
 	root.name = "WhiteHartWitnessDisplay"
 	root.set_meta("focal_creature", true)
-	var spectral_material := context.make_material(Color(0.34, 0.52, 0.43))
-	spectral_material.roughness = 0.62
+	var spectral_material := context.make_material(Color(0.72, 0.78, 0.69))
+	spectral_material.roughness = 0.52
 	spectral_material.emission_enabled = true
-	spectral_material.emission = Color(0.10, 0.28, 0.18)
-	spectral_material.emission_energy_multiplier = 0.28
+	spectral_material.emission = Color(0.24, 0.38, 0.28)
+	spectral_material.emission_energy_multiplier = 0.42
 	for raw_mesh in root.find_children("*", "MeshInstance3D", true, false):
 		var hart_mesh := raw_mesh as MeshInstance3D
 		if hart_mesh != null:
 			hart_mesh.material_override = spectral_material
 	_add_hart_antler_crown(root, context)
+	var oath_mark := MeshInstance3D.new()
+	oath_mark.name = "WhiteHartWitnessOathMark"
+	var mark_mesh := SphereMesh.new()
+	mark_mesh.radius = 0.18
+	mark_mesh.height = 0.36
+	oath_mark.mesh = mark_mesh
+	oath_mark.position = Vector3(0, 1.48, -0.58)
+	oath_mark.scale = Vector3(0.78, 1.22, 0.58)
+	var mark_material := context.make_material(Color(0.54, 0.92, 0.72))
+	mark_material.emission_enabled = true
+	mark_material.emission = Color(0.38, 0.82, 0.60)
+	mark_material.emission_energy_multiplier = 0.72
+	oath_mark.material_override = mark_material
+	root.add_child(oath_mark)
 
 func _add_hart_antler_crown(root: Node3D, context: ZoneBuildContext) -> void:
 	var skeleton := _find_skeleton(root)

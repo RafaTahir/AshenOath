@@ -464,7 +464,7 @@ func _finalize_asset_root(root: Node3D, role_name: String = "") -> void:
 	else:
 		root.rotation_degrees.y = 180.0 if root.name.to_lower().contains("character") else root.rotation_degrees.y
 	var hero_role := role_name in ["player_human", "player_kael", "sister_anwen_human", "sister_anwen"]
-	var focal_creature := role_name in ["white_hart_avatar", "ashwing_creature", "ashwing_boss", "bell_eater_boss", "rootbound_colossus", "rootbound_colossus_boss"]
+	var focal_creature := role_name in ["white_hart_avatar", "white_hart_boss", "ashwing_creature", "ashwing_boss", "bell_eater_boss", "rootbound_colossus", "rootbound_colossus_boss"]
 	var lod_distance := 48.0 if focal_creature else CharacterRoleSpec.lod_distance(role_name, 14.0)
 	var lod_bias := 0.50 if hero_role else 0.40
 	for mesh_instance in _collect_meshes(root):

@@ -129,10 +129,12 @@ The mapped animated Wolf body receives a restrained memory halo, oath mark,
 phase-reactive rings, and the existing bone-attached antler crown. The targeted
 verifier passes identity, animation, phases, checkpoint restore, Mercy
 resolution, objective completion, and reload safety. Fresh native-720p frames
-exist for Witness, Mercy, and Debt. The body and Hart Glade remain interim
-visuals; MON-002 and the later visual gate still require a final supernatural
-stag treatment. No production export or deployment has occurred for this
-checkpoint.
+exist for Witness, Mercy, and Debt. The encounter and witness display now use
+the dedicated `white_hart_boss` role at 3.60 m with a measured imported ground
+offset, so the Hart is grounded and readable at the gameplay camera distance.
+The body and Hart Glade remain interim visuals; MON-002 and the later visual
+gate still require a final supernatural stag treatment. No production export
+or deployment has occurred for this checkpoint.
 
 ### BOSS-005 continuation checkpoint
 

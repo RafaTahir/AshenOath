@@ -590,8 +590,8 @@ func _build_body(color: Color) -> void:
 	var collision = CollisionShape3D.new()
 	var shape = CapsuleShape3D.new()
 	var role_spec := CharacterRoleSpec.for_role(enemy_id)
-	var collision_height := 2.0 if enemy_id == "white_hart_avatar" else float(role_spec.get("collision_height", 1.15))
-	var collision_radius := 0.58 if enemy_id == "white_hart_avatar" else float(role_spec.get("collision_radius", 0.35))
+	var collision_height := 3.30 if enemy_id == "white_hart_avatar" else float(role_spec.get("collision_height", 1.15))
+	var collision_radius := 0.78 if enemy_id == "white_hart_avatar" else float(role_spec.get("collision_radius", 0.35))
 	if is_boss:
 		collision_height = {
 			"bell_eater": 3.60,
@@ -608,7 +608,7 @@ func _build_body(color: Color) -> void:
 	shape.height = collision_height
 	shape.radius = collision_radius
 	collision.shape = shape
-	collision.position.y = 1.05 if enemy_id == "white_hart_avatar" else shape.height * 0.5 + shape.radius * 0.18
+	collision.position.y = shape.height * 0.5 + shape.radius * 0.18
 	add_child(collision)
 	visual_root = Node3D.new()
 	visual_root.name = "visual_root"
@@ -730,7 +730,7 @@ func _try_build_mapped_body() -> bool:
 			"rootbound_colossus": "rootbound_colossus_boss",
 			"ashwing": "ashwing_boss",
 			"halvern_boss": "gravebound_knight_creature",
-			"white_hart_avatar": "white_hart_avatar",
+			"white_hart_avatar": "white_hart_boss",
 		}.get(enemy_id, "ghoul_gaunt_real")
 		mapped = asset_helper.spawn_visual_role(visual_source, "enemies")
 		uses_real_body = mapped != null and not mapped.name.ends_with("_placeholder")
@@ -770,6 +770,7 @@ func _try_build_mapped_body() -> bool:
 		# root-mounted anatomy on top of a valid animated body.
 		mapped.set_meta("monster_variant_profile", enemy_id)
 	_ground_mapped_visual(mapped)
+	mapped.position.y += CharacterRoleSpec.ground_offset(visual_source)
 	if is_boss:
 		_add_boss_silhouette()
 	if enemy_id == "white_hart_avatar":
@@ -788,7 +789,7 @@ func _try_build_mapped_body() -> bool:
 				"attack":"DragonArmature|Dragon_Attack2", "hit":"DragonArmature|Dragon_Hit",
 				"death":"DragonArmature|Dragon_Death"
 			})
-		elif visual_source == "white_hart_avatar":
+		elif visual_source in ["white_hart_avatar", "white_hart_boss"]:
 			animation_driver.configure(mapped, {
 				"idle": "|WolfArmature|Idle", "walk": "|WolfArmature|Walking",
 				"walk_back": "|WolfArmature|Walking", "strafe": "|WolfArmature|Walking",
@@ -861,10 +862,10 @@ func _add_spectral_antler_crown(mapped: Node3D) -> void:
 		var main_mesh := CylinderMesh.new()
 		main_mesh.top_radius = 0.025
 		main_mesh.bottom_radius = 0.055
-		main_mesh.height = 0.58
+		main_mesh.height = 0.78
 		main_mesh.radial_segments = 8
 		main.mesh = main_mesh
-		main.position = Vector3(side * 0.14, 0.20, 0.01)
+		main.position = Vector3(side * 0.16, 0.28, 0.01)
 		main.rotation_degrees.z = side * -20.0
 		main.material_override = antler_material
 		parent.add_child(main)
@@ -874,10 +875,10 @@ func _add_spectral_antler_crown(mapped: Node3D) -> void:
 			var branch_mesh := CylinderMesh.new()
 			branch_mesh.top_radius = 0.014
 			branch_mesh.bottom_radius = 0.035
-			branch_mesh.height = 0.26 if branch_index == 0 else 0.20
+			branch_mesh.height = 0.34 if branch_index == 0 else 0.25
 			branch_mesh.radial_segments = 8
 			branch.mesh = branch_mesh
-			branch.position = Vector3(side * (0.25 + branch_index * 0.045), 0.34 + branch_index * 0.13, 0.01)
+			branch.position = Vector3(side * (0.29 + branch_index * 0.06), 0.46 + branch_index * 0.17, 0.01)
 			branch.rotation_degrees.z = side * (42.0 if branch_index == 0 else -36.0)
 			branch.material_override = antler_material
 			parent.add_child(branch)
@@ -1329,8 +1330,8 @@ func _make_white_hart_identity() -> void:
 	var halo := MeshInstance3D.new()
 	halo.name = "WhiteHartMemoryHalo"
 	var halo_mesh := TorusMesh.new()
-	halo_mesh.inner_radius = 0.92
-	halo_mesh.outer_radius = 1.04
+	halo_mesh.inner_radius = 1.26
+	halo_mesh.outer_radius = 1.40
 	halo_mesh.rings = 16
 	halo_mesh.ring_segments = 24
 	halo.mesh = halo_mesh
@@ -1345,8 +1346,8 @@ func _make_white_hart_identity() -> void:
 	mark_mesh.radius = 0.16
 	mark_mesh.height = 0.32
 	oath_mark.mesh = mark_mesh
-	oath_mark.position = Vector3(0, 1.08, -0.42)
-	oath_mark.scale = Vector3(0.72, 1.18, 0.58)
+	oath_mark.position = Vector3(0, 1.55, -0.60)
+	oath_mark.scale = Vector3(0.88, 1.42, 0.70)
 	oath_mark.material_override = _emissive_boss_material(Color(0.46, 0.82, 0.68), 0.86)
 	boss_visual_root.add_child(oath_mark)
 	boss_phase_sigil = oath_mark
@@ -1355,12 +1356,12 @@ func _make_white_hart_identity() -> void:
 		var ring := MeshInstance3D.new()
 		ring.name = "WhiteHartMemoryRingLeft" if side < 0.0 else "WhiteHartMemoryRingRight"
 		var ring_mesh := TorusMesh.new()
-		ring_mesh.inner_radius = 0.24
-		ring_mesh.outer_radius = 0.29
+		ring_mesh.inner_radius = 0.30
+		ring_mesh.outer_radius = 0.36
 		ring_mesh.rings = 10
 		ring_mesh.ring_segments = 16
 		ring.mesh = ring_mesh
-		ring.position = Vector3(side * 0.42, 0.72, -0.08)
+		ring.position = Vector3(side * 0.62, 0.96, -0.12)
 		ring.rotation_degrees = Vector3(16.0, 0, side * 28.0)
 		ring.material_override = _emissive_boss_material(Color(0.32, 0.56, 0.70), 0.42)
 		boss_visual_root.add_child(ring)
@@ -1376,7 +1377,9 @@ func _mapped_enemy_scale() -> Vector3:
 	if enemy_id == "bog_wretch":
 		return Vector3(1.25, 1.25, 1.25)
 	if enemy_id == "white_hart_avatar":
-		return Vector3(0.65, 0.65, 0.65)
+		# white_hart_boss is normalized to its 3.60 m focal role. Do not shrink
+		# the Wolf source back to a small avatar at the spectacle distance.
+		return Vector3.ONE
 	if enemy_id == "bell_eater":
 		# bell_eater_boss is normalized to its full 3.80 m focal-creature
 		# contract; do not apply a second multiplicative scale here.

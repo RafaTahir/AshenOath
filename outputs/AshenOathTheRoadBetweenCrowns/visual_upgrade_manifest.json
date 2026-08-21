@@ -179,6 +179,14 @@
         "license": "CC0 1.0",
         "notes": "Connected animated animal base; spectral antlers are attached to the imported head bone at runtime."
       },
+      "white_hart_boss": {
+        "status": "boss_007_focal_creature_runtime",
+        "path": "res://assets_external/enemies/Wolf.fbx",
+        "source": "Quaternius Ultimate Animated Animals",
+        "license": "CC0 1.0",
+        "target_height": 3.60,
+        "notes": "Finale display and encounter use one 3.60 m normalized wolf-derived Hart role with bone-attached spectral antlers, pale moonlit material, oath mark, and phase identity."
+      },
       "ashwing_creature": {
         "status": "mon_002_interim_dragon_mesh",
         "path": "res://assets_external/enemies/Dragon.fbx",

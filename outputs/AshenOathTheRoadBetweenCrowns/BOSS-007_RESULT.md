@@ -12,6 +12,10 @@ approval.
   peaceful-resolution contract, reward, and aftermath state.
 - Added a restrained memory-covenant identity layer: ground halo, chest oath
   mark, phase-reactive memory rings, and existing bone-attached antler crown.
+- Added a dedicated `white_hart_boss` role contract at 3.60 m with a corrected
+  3.30 m collision capsule, same-source legacy compatibility, and a measured
+  -1.90 m imported Wolf ground offset. The encounter and witness display now
+  share the same focal scale instead of shrinking the creature at runtime.
 - Added phase-specific White Hart colors and motion while preserving the
   connected animated wolf source, leash, collision, and existing ending handoff.
 - Added Mercy/Witness/Duty/Ash covenant normalization through the existing
@@ -38,16 +42,17 @@ lifecycle debt and are not suppressed.
 
 ## Screenshots
 
-- `Development_Gallery/screenshots/BOSS-007_01_Hart_Witness_20260821_100733.png`
-- `Development_Gallery/screenshots/BOSS-007_02_Hart_Mercy_20260821_100733.png`
-- `Development_Gallery/screenshots/BOSS-007_03_Hart_Debt_20260821_100733.png`
+- `Development_Gallery/screenshots/BOSS-007_01_Hart_Witness_20260821_141248.png`
+- `Development_Gallery/screenshots/BOSS-007_02_Hart_Mercy_20260821_141248.png`
+- `Development_Gallery/screenshots/BOSS-007_03_Hart_Debt_20260821_141248.png`
 
 ## Known limitation
 
 The current Wolf-derived body with antler crown is a connected, animated
-interim Hart source. It is not the final MON-002 creature-family replacement;
-the final visual gate still requires a more distinctive supernatural stag
-asset/material treatment and stronger Hart Glade presentation.
+interim Hart source. It is now grounded and readable at gameplay distance,
+but it is not the final supernatural stag; the final visual gate still requires
+a more distinctive creature-family asset/material treatment and stronger Hart
+Glade architecture.
 
 ## Running steps
 
