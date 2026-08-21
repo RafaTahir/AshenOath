@@ -24,6 +24,9 @@ func _initialize() -> void:
 	check(main_count == 10 and side_count == 10, "Quest type counts are wrong")
 	for id in quests.quest_defs:
 		quests.unlocked[id] = true
+		if str(quests.quest_defs[id].get("type", "")) == "side" and not quests.is_runtime_content_ready(str(id)):
+			check(not quests.start_quest(str(id)), "%s started before runtime support" % id)
+			continue
 		if not quests.is_active(id) and not quests.is_completed(id): quests.start_quest(id)
 		if quests.is_active(id):
 			for objective in quests.active[id]["objectives"].duplicate(true): quests.complete_objective(id, str(objective["id"]))
