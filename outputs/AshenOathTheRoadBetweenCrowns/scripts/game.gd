@@ -238,6 +238,7 @@ func _setup_runtime() -> void:
 	runtime_packs = services["runtime_packs"]
 	runtime_services.configure(self)
 	zone_runtime_coordinator = ZoneRuntimeCoordinator.new(self)
+	zone_runtime_coordinator.configure(quest_presentation, quest_beats, interaction_focus, quests)
 	if OS.has_feature("ashenoath_qa"):
 		var qa_script = load("res://scripts/qa_browser_telemetry.gd")
 		if qa_script != null:
@@ -262,6 +263,13 @@ func _new_game() -> void:
 func _request_zone_load(zone_id: String, spawn_pos: Vector3) -> void:
 	if zone_transition_pending or zone_load_request_pending:
 		return
+	if zone_runtime_coordinator != null:
+		var request := zone_runtime_coordinator.normalize_zone_request(zone_id, spawn_pos)
+		if not bool(request.get("ok", false)):
+			hud.toast("That road is not open yet.")
+			return
+		zone_id = str(request.get("zone_id", zone_id))
+		spawn_pos = request.get("spawn_position", spawn_pos)
 	zone_load_request_pending = true
 	requested_zone_id = zone_id.strip_edges().to_lower()
 	requested_zone_spawn = spawn_pos
@@ -544,12 +552,8 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	var life_controller := zone_root.find_child("GreyfenLifeController", true, false)
 	if life_controller != null and life_controller.has_method("set_spatial_service"):
 		life_controller.set_spatial_service(spatial_service)
-	if quest_presentation != null:
-		quest_presentation.set_zone(zone_id)
-	if quest_beats != null:
-		quest_beats.set_zone(zone_id)
-	else:
-		quests.set_tracked_quest_for_zone(zone_id)
+	if zone_runtime_coordinator != null:
+		zone_runtime_coordinator.sync_zone(zone_id)
 	_refresh_tracker()
 	if visual_director != null:
 		visual_director.apply_zone(zone_id, zone_root)
@@ -606,6 +610,8 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 				"support_ready": true,
 				"velocity_reset": true
 			})
+			if zone_runtime_coordinator != null:
+				zone_runtime_coordinator.record_playable_transition(current_zone_id, elapsed_ms, true)
 			print("LOADING: zone=%s playable_ms=%.1f" % [current_zone_id, elapsed_ms])
 			loading_started_usec = 0
 			hud.hide_loading()
@@ -650,6 +656,8 @@ func _advance_zone_transition() -> void:
 		"support_ready": true,
 		"velocity_reset": player.velocity.is_zero_approx()
 	})
+	if zone_runtime_coordinator != null:
+		zone_runtime_coordinator.record_playable_transition(current_zone_id, elapsed_ms, true)
 	print("LOADING: zone=%s playable_ms=%.1f" % [current_zone_id, elapsed_ms])
 	loading_started_usec = 0
 	hud.hide_loading()
@@ -2406,11 +2414,7 @@ func _apply_runtime_settings(current_settings: Dictionary) -> void:
 		visual_director.sun.directional_shadow_max_distance = 42.0
 
 func _refresh_tracker() -> void:
-	if quest_beats != null:
-		quest_beats.refresh()
-	var tracker_text: String = str(quest_presentation.get_tracker_text() if quest_presentation != null else quests.get_tracker_text())
-	if quest_beats != null and quest_beats.has_method("decorate_tracker"):
-		tracker_text = quest_beats.decorate_tracker(tracker_text)
+	var tracker_text := zone_runtime_coordinator.refresh_presentation() if zone_runtime_coordinator != null else str(quest_presentation.get_tracker_text() if quest_presentation != null else quests.get_tracker_text())
 	hud.set_tracker(tracker_text)
 	_update_compass()
 
@@ -3889,7 +3893,7 @@ func _connect_interactable(area) -> void:
 func _update_interaction_focus() -> void:
 	_refresh_interaction_candidates()
 	var camera: Camera3D = get_viewport().get_camera_3d()
-	var best = interaction_focus.choose(interaction_candidates, player, camera, Callable(self, "_interaction_target_valid")) if interaction_focus != null else null
+	var best = zone_runtime_coordinator.choose_interaction(interaction_candidates, player, camera, Callable(self, "_interaction_target_valid")) if zone_runtime_coordinator != null else null
 	if active_interactable != best:
 		if active_interactable != null and is_instance_valid(active_interactable):
 			_set_interactable_label_visible(active_interactable,false)

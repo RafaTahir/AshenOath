@@ -210,3 +210,19 @@ Godot gates run with an explicit log-file because the sandbox cannot create the 
 The current continuation is an uncommitted recovery checkpoint. Fresh graphical character evidence, a native Compatibility visible-quality run, runtime contracts, asset checks, product captures, and opening timing have been rerun. The older Web artifact and browser results in `RELEASE-003_RESULT.md` are historical evidence only; a new export, packed startup, live hash comparison, and deployment are still required after the current source changes. Web Greyfen prewarm is now enabled behind the visible launch/menu state with a bounded 30-frame warmup; the opening gate records 10.982 seconds engine-ready and 51 ms New Game activation.
 
 The current visual gate is intentionally honest: Kael and Anwen pass the native-face/connected-body portrait check, while Ghoulkin remains a grounded low-poly interim family and Ashwing remains an interim animated Dragon mapping. The latest Greyfen and Hart captures are fresh, but still show stylized/procedural architecture and finale dressing below the locked visual bar. Later campaign architecture, river/bridge composition, and complete route evidence still require the visual acceptance pass before production deployment.
+
+## ENGINE-005 Development Checkpoint
+
+The typed coordination boundary is now implemented and verified on
+`codex/soul-rebuild`. `ZoneRuntimeCoordinator` receives the quest presentation,
+quest-beat, interaction-focus, and quest-manager services; validates registered
+zone requests; synchronizes zone context; refreshes the tracked objective;
+selects focused interactions; and records playable transition timing. The
+runtime host delegates those operations instead of duplicating direct service
+calls.
+
+`verify_engine_005.gd` and the targeted engine profile pass. QA-005 reports no
+active renderer/material errors before the verifier pass marker. Godot's known
+Compatibility shutdown diagnostics remain after isolated test teardown and are
+classified as warnings, not hidden. The result is recorded in
+`ENGINE-005_RESULT.md`; no Web export or production deployment was performed.

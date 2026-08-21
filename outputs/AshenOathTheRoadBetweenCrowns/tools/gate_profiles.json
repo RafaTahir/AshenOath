@@ -1011,6 +1011,7 @@
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_build_context.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_composition_router.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_runtime_coordinator.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/*.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/asset_spawn_helper.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/world_material_library.gd"
@@ -1018,7 +1019,8 @@
       "gates": [
         "verify_engine_002",
         "verify_engine_003",
-        "verify_engine_004"
+        "verify_engine_004",
+        "verify_engine_005"
       ]
     },
     "save": {

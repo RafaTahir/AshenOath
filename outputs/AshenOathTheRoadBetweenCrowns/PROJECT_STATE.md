@@ -1097,3 +1097,21 @@ The continuation source is now verified locally for the release candidate. The r
 - Web-specific Greyfen prewarming is deferred so New Game cannot hang behind a hidden full-zone build; desktop prewarming remains enabled. The active Web build is bounded and browser-tested.
 - Known environment diagnostics: the sandbox cannot persist Godot user settings and Godot reports renderer resource leaks during process teardown. These occurred after passing runtime assertions, not during active gameplay.
 - The project remains a functional stylized pre-alpha, not AAA/photoreal: several route-visible environments and character assets are still low-poly/blockout quality, and broad Firefox/physical-controller certification remains deferred.
+
+## ENGINE-005 Checkpoint - 2026-08-21
+
+- `ZoneRuntimeCoordinator` now owns the typed handoff between zone lifecycle,
+  quest presentation, quest beats, interaction focus, and tracked-objective
+  refresh. `game.gd` delegates those operations through the coordinator.
+- Zone requests are normalized against the registered composition list and
+  invalid requests fail without mutating the active route.
+- `verify_engine_005.gd` and the complete targeted `engine` profile pass,
+  including `content_integrity`, `runtime_smoke`, ENGINE-002 through ENGINE-005,
+  and QA-005 log classification.
+- Active renderer/material errors are release-blocking. The fresh ENGINE-005
+  gameplay log has none before its pass marker; the remaining Compatibility
+  renderer/RID messages occur only during isolated test-scene teardown and are
+  recorded as shutdown warnings.
+- This checkpoint is pushed to `codex/soul-rebuild`; production `main`, the
+  tracked Web export, and Vercel remain unchanged until the full visual,
+  campaign, export, and live-browser gates pass.
