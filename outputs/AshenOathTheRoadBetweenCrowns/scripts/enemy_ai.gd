@@ -5,6 +5,7 @@ signal damaged(enemy: Node, current: float, maximum: float)
 signal windup_started(enemy: Node)
 signal attack_resolved(enemy: Node, parried: bool, contact_position: Vector3)
 signal special_attack_resolved(enemy: Node, attack_id: String, contact_position: Vector3, radius: float, damage: float, parried: bool)
+signal special_attack_interrupted(enemy: Node, attack_id: String, reason: String)
 signal boss_phase_changed(enemy: Node, phase: int)
 
 const HealthComponent = preload("res://scripts/health_component.gd")
@@ -347,6 +348,18 @@ func _boss_attack_id() -> String:
 		var phase_data: Dictionary = controller.phase_definition()
 		return str(phase_data.get("telegraph", ""))
 	return ""
+
+func interrupt_boss_windup(reason: String = "interrupt") -> bool:
+	if not is_boss or windup_time <= 0.0:
+		return false
+	var attack_id := _boss_attack_id()
+	windup_time = 0.0
+	pending_attack_time = 0.0
+	attack_recovery_time = 0.18
+	stagger(0.90)
+	set_meta("last_boss_interrupt", reason)
+	special_attack_interrupted.emit(self, attack_id, reason)
+	return true
 
 func _boss_attack_radius(attack_id: String) -> float:
 	return {
@@ -924,6 +937,7 @@ func _add_boss_silhouette() -> void:
 		_add_part(Vector3(-0.74, 1.24, 0.12), Vector3(0.82, 0.16, 0.46), Color(0.26, 0.16, 0.12), "capsule", Vector3(0, 0, -8))
 		_add_part(Vector3(0.74, 1.24, 0.12), Vector3(0.82, 0.16, 0.46), Color(0.26, 0.16, 0.12), "capsule", Vector3(0, 0, 8))
 		_add_part(Vector3(0, 1.28, 0.34), Vector3(0.22, 0.20, 0.46), Color(0.44, 0.20, 0.10), "cylinder", Vector3(90, 0, 0))
+		_make_ashwing_identity()
 
 func _make_bell_eater_identity() -> void:
 	var harness := MeshInstance3D.new()
@@ -1073,6 +1087,47 @@ func _make_rootbound_identity() -> void:
 	bark_plate.scale = Vector3(1.0, 0.78, 0.80)
 	bark_plate.material_override = _mat(Color(0.12, 0.18, 0.09))
 	boss_visual_root.add_child(bark_plate)
+
+func _make_ashwing_identity() -> void:
+	# Ashwing's mapped dragon supplies the animated silhouette. These restrained
+	# details establish the burned-mill identity without adding a second body:
+	# a charred harness, ember core, and scorched wing roots.
+	var harness := MeshInstance3D.new()
+	harness.name = "AshwingBurntHarness"
+	var harness_mesh := TorusMesh.new()
+	harness_mesh.inner_radius = 0.46
+	harness_mesh.outer_radius = 0.56
+	harness_mesh.rings = 10
+	harness_mesh.ring_segments = 18
+	harness.mesh = harness_mesh
+	harness.position = Vector3(0, 1.28, 0.10)
+	harness.scale = Vector3(1.36, 0.52, 0.86)
+	harness.rotation.x = PI * 0.5
+	harness.material_override = _mat(Color(0.16, 0.08, 0.05))
+	boss_visual_root.add_child(harness)
+
+	var core := MeshInstance3D.new()
+	core.name = "AshwingAshCore"
+	var core_mesh := SphereMesh.new()
+	core_mesh.radius = 0.19
+	core_mesh.height = 0.36
+	core.mesh = core_mesh
+	core.position = Vector3(0, 1.34, -0.48)
+	core.scale = Vector3(1.0, 0.82, 0.70)
+	core.material_override = _emissive_boss_material(Color(0.96, 0.30, 0.06), 1.15)
+	boss_visual_root.add_child(core)
+	boss_phase_sigil = core
+
+	for side in [-1.0, 1.0]:
+		var scorch := MeshInstance3D.new()
+		scorch.name = "AshwingScorchedWingRootLeft" if side < 0.0 else "AshwingScorchedWingRootRight"
+		var scorch_mesh := CapsuleMesh.new()
+		scorch.mesh = scorch_mesh
+		scorch.position = Vector3(side * 0.64, 1.30, 0.10)
+		scorch.scale = Vector3(0.48, 0.10, 0.22)
+		scorch.rotation_degrees = Vector3(0, 0, side * 12.0)
+		scorch.material_override = _mat(Color(0.38, 0.12, 0.055))
+		boss_visual_root.add_child(scorch)
 
 func _emissive_boss_material(color: Color, energy: float) -> StandardMaterial3D:
 	var material := _mat(color)

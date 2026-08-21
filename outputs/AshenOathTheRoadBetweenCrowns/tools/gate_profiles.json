@@ -30,7 +30,8 @@
         "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_ai_003.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_boss_002.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_boss_003.gd",
-        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_boss_004.gd"
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_boss_004.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_boss_005.gd"
       ],
       "gates": [
         "verify_combat_005",
@@ -39,7 +40,8 @@
         "verify_ai_003",
         "verify_boss_002",
         "verify_boss_003",
-        "verify_boss_004"
+        "verify_boss_004",
+        "verify_boss_005"
       ]
     },
     "targeting": {
@@ -823,6 +825,21 @@
         "verify_boss_004"
       ]
     },
+    "boss_ashwing": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/boss_encounter.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/enemy_ai.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/campaign_wilderness_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/bosses.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/enemies.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_boss_005.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/capture_boss_005.gd"
+      ],
+      "gates": [
+        "verify_boss_005"
+      ]
+    },
     "boss_001": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/white_hart_encounter_contract.json",
@@ -1070,6 +1087,7 @@
     "world_006": "capture_world_006",
     "boss_bell_eater": "capture_boss_003",
     "boss_rootbound": "capture_boss_004",
+    "boss_ashwing": "capture_boss_005",
     "boss_001": "capture_boss_001",
     "lighting": "capture_light_001",
 	"progression": "capture_prog_001",

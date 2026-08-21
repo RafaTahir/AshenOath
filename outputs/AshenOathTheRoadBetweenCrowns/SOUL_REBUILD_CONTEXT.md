@@ -2,6 +2,17 @@
 
 ## Current Working Checkpoint - 2026-08-21
 
+### BOSS-005 continuation checkpoint
+
+Ashwing now has a reload-safe Old Mill encounter slice. Its authored phases,
+checkpoint objective, charred harness, ash core, and scorched wing roots are
+active. The actual Oathfire cast resolver interrupts Ashwing's windup and
+stagger-locks the encounter when the beam hits during `ash_breath`. Runtime
+verification and fresh Compatibility captures pass. The animated Dragon body
+is still an interim low-poly mapping; MON-002 remains responsible for the
+final cohesive monster-family replacement. No production export or deployment
+has occurred for this checkpoint.
+
 The deployed production baseline is the earlier `bd24495` release. The current
 Soul Rebuild continuation is uncommitted on `codex/soul-rebuild`, and its Web
 artifact has not been rebuilt or deployed. Historical hashes and browser runs

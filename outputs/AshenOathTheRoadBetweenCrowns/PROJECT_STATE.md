@@ -885,6 +885,21 @@ Known verifier note: Godot headless may emit ObjectDB cleanup warnings after pas
 
 ## Current Acceptance State
 
+## BOSS-005 Ashwing Checkpoint - 2026-08-21
+
+- Ashwing now spawns from the completed Old Mill ash-bound encounter with an
+  authored three-phase definition and durable checkpoint/health state.
+- Oathfire uses the normal multi-target cast resolver; a beam hit during
+  Ashwing's windup clears the breath attack, staggers the boss, and records an
+  `oathfire` interruption reason.
+- A charred harness, emissive ash core, and scorched wing-root identity layer
+  make the current Dragon source readable at gameplay distance.
+- `verify_boss_005.gd` and `capture_boss_005.gd` pass on Compatibility, with
+  fresh native-720p frames in `Development_Gallery/screenshots/`.
+- The body source remains an interim low-poly mapping. MON-002 visual-family
+  replacement and the final BOSS-005 acceptance gate remain open. Known
+  shutdown-only renderer cleanup diagnostics remain classified debt.
+
 The project currently satisfies:
 
 - Web build launches past Godot splash.

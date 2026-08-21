@@ -1768,6 +1768,9 @@ func _on_player_beam(charge_ratio: float, direction: Vector3) -> void:
 	CombatFeedback.impact_burst(zone_root, origin, false, Color(0.62, 0.95, 1.0))
 	CombatFeedback.impact_burst(zone_root, endpoint, true, Color(0.26, 0.82, 1.0))
 	for enemy in hits:
+		if is_instance_valid(enemy) and enemy.has_method("interrupt_boss_windup") and str(enemy.get("enemy_id")) == "ashwing":
+			if enemy.interrupt_boss_windup("oathfire"):
+				hud.toast("Oathfire breaks Ashwing's breath.")
 		CombatFeedback.impact_burst(zone_root, enemy.global_position + Vector3(0, 0.9, 0), true, Color(0.30, 0.88, 1.0))
 	hud.show_status_cue("Oathfire Beam", "item")
 
