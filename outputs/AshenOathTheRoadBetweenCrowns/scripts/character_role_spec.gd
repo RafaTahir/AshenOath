@@ -48,7 +48,10 @@ const SPECS := {
 	# cursed-human source is normalized directly to the encounter silhouette so
 	# the rendered body and collision capsule stay in the same scale contract.
 	"bell_eater_boss": {"height": 3.80, "collision_height": 3.60, "collision_radius": 0.82, "lod": 48.0, "required_sockets": ["head"], "visual_forward_degrees": 0.0},
-	"rootbound_colossus": {"height": 2.75, "collision_height": 2.45, "collision_radius": 0.62, "lod": 24.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
+	# Rootbound is a landmark-scale forest guardian. Normalize its connected
+	# source once to the encounter height; identity dressing never multiplies it.
+	"rootbound_colossus": {"height": 4.40, "collision_height": 4.10, "collision_radius": 1.05, "lod": 52.0, "required_sockets": ["head"], "visual_forward_degrees": 0.0},
+	"rootbound_colossus_boss": {"height": 4.40, "collision_height": 4.10, "collision_radius": 1.05, "lod": 52.0, "required_sockets": ["head"], "visual_forward_degrees": 0.0},
 	"ashwing": {"height": 2.40, "collision_height": 2.10, "collision_radius": 0.56, "lod": 24.0, "required_sockets": [], "visual_forward_degrees": 180.0},
 	"halvern_boss": {"height": 1.88, "collision_height": 1.78, "collision_radius": 0.38, "lod": 20.0, "required_sockets": ["head", "weapon"], "visual_forward_degrees": 180.0},
 	"ghoulkin_creature": {"height": 1.72, "lod": 18.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},

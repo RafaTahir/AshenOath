@@ -595,13 +595,13 @@ func _build_body(color: Color) -> void:
 	if is_boss:
 		collision_height = {
 			"bell_eater": 3.60,
-			"rootbound_colossus": 2.95,
+			"rootbound_colossus": 4.10,
 			"ashwing": 2.45,
 			"halvern_boss": 2.20,
 		}.get(enemy_id, collision_height)
 		collision_radius = {
 			"bell_eater": 0.82,
-			"rootbound_colossus": 0.76,
+			"rootbound_colossus": 1.05,
 			"ashwing": 0.66,
 			"halvern_boss": 0.50,
 		}.get(enemy_id, collision_radius)
@@ -727,7 +727,7 @@ func _try_build_mapped_body() -> bool:
 			"bog_wretch": "bog_wretch_creature",
 			"gravebound_knight": "gravebound_knight_creature",
 			"bell_eater": "bell_eater_boss",
-			"rootbound_colossus": "ghoul_brute_real",
+			"rootbound_colossus": "rootbound_colossus_boss",
 			"ashwing": "ashwing_creature",
 			"halvern_boss": "gravebound_knight_creature",
 			"white_hart_avatar": "white_hart_avatar",
@@ -798,7 +798,7 @@ func _try_build_mapped_body() -> bool:
 			})
 		else:
 			animation_driver.configure(mapped, {
-				"idle": "Idle2" if visual_source in ["ghoul_stalker_real", "ghoul_brute_real", "bell_eater_boss", "bog_wretch_creature", "gravebound_knight_creature"] else "Idle",
+				"idle": "Idle2" if visual_source in ["ghoul_stalker_real", "ghoul_brute_real", "bell_eater_boss", "rootbound_colossus_boss", "bog_wretch_creature", "gravebound_knight_creature"] else "Idle",
 				"walk":"Walk", "walk_back":"Walk_Back", "strafe":"Walk",
 				"run":"Run", "windup":"Attack", "attack":"Attack",
 				"hit":"Hit", "death":"Death"
@@ -980,7 +980,10 @@ func _add_boss_silhouette() -> void:
 	boss_visual_root = Node3D.new()
 	boss_visual_root.name = "BossIdentityLayer"
 	boss_visual_root.set_meta("boss_identity", enemy_id)
-	boss_identity_base_scale = Vector3.ONE * (1.55 if enemy_id == "bell_eater" else 1.0)
+	boss_identity_base_scale = {
+		"bell_eater": Vector3.ONE * 1.55,
+		"rootbound_colossus": Vector3(1.45, 1.60, 1.45),
+	}.get(enemy_id, Vector3.ONE)
 	boss_visual_root.scale = boss_identity_base_scale
 	visual_root.add_child(boss_visual_root)
 	if enemy_id == "bell_eater":
@@ -988,10 +991,6 @@ func _add_boss_silhouette() -> void:
 		# floated beside it and made the boss look assembled from primitives.
 		_make_bell_eater_identity()
 	elif enemy_id == "rootbound_colossus":
-		_add_part(Vector3(-0.58, 1.34, 0.0), Vector3(0.34, 0.78, 0.56), Color(0.17, 0.26, 0.14), "capsule", Vector3(0, 0, -12))
-		_add_part(Vector3(0.58, 1.34, 0.0), Vector3(0.34, 0.78, 0.56), Color(0.17, 0.26, 0.14), "capsule", Vector3(0, 0, 12))
-		_add_part(Vector3(-0.28, 1.10, -0.42), Vector3(0.10, 0.48, 0.10), Color(0.30, 0.37, 0.17), "cylinder", Vector3(-28, 0, -14))
-		_add_part(Vector3(0.28, 1.10, -0.42), Vector3(0.10, 0.48, 0.10), Color(0.30, 0.37, 0.17), "cylinder", Vector3(-28, 0, 14))
 		_make_rootbound_identity()
 	elif enemy_id == "ashwing":
 		_add_part(Vector3(-0.74, 1.24, 0.12), Vector3(0.82, 0.16, 0.46), Color(0.26, 0.16, 0.12), "capsule", Vector3(0, 0, -8))
@@ -1136,6 +1135,17 @@ func _make_rootbound_identity() -> void:
 	harness.material_override = _mat(Color(0.12, 0.20, 0.10))
 	boss_visual_root.add_child(harness)
 
+	var mantle := MeshInstance3D.new()
+	mantle.name = "RootboundShoulderMantle"
+	var mantle_mesh := SphereMesh.new()
+	mantle_mesh.radius = 0.72
+	mantle_mesh.height = 0.72
+	mantle.mesh = mantle_mesh
+	mantle.position = Vector3(0, 1.96, 0.02)
+	mantle.scale = Vector3(1.48, 0.46, 0.88)
+	mantle.material_override = _mat(Color(0.10, 0.16, 0.08))
+	boss_visual_root.add_child(mantle)
+
 	for side in [-1.0, 1.0]:
 		var root_arm := MeshInstance3D.new()
 		root_arm.name = "RootboundRootArmLeft" if side < 0.0 else "RootboundRootArmRight"
@@ -1163,14 +1173,42 @@ func _make_rootbound_identity() -> void:
 			branch.material_override = _mat(Color(0.24, 0.31, 0.14))
 			boss_visual_root.add_child(branch)
 
+	for side in [-1.0, 1.0]:
+		var foot_root := MeshInstance3D.new()
+		foot_root.name = "RootboundRootFootLeft" if side < 0.0 else "RootboundRootFootRight"
+		var foot_mesh := CylinderMesh.new()
+		foot_mesh.top_radius = 0.07
+		foot_mesh.bottom_radius = 0.25
+		foot_mesh.height = 0.82
+		foot_mesh.radial_segments = 8
+		foot_root.mesh = foot_mesh
+		foot_root.position = Vector3(side * 0.50, 0.34, 0.08)
+		foot_root.rotation_degrees = Vector3(0, 0, side * -22.0)
+		foot_root.material_override = _mat(Color(0.16, 0.23, 0.10))
+		boss_visual_root.add_child(foot_root)
+
+	for crown_index in range(3):
+		var crown := MeshInstance3D.new()
+		crown.name = "RootboundCrownBranch"
+		var crown_mesh := CylinderMesh.new()
+		crown_mesh.top_radius = 0.025
+		crown_mesh.bottom_radius = 0.11
+		crown_mesh.height = 0.92 if crown_index == 1 else 0.68
+		crown_mesh.radial_segments = 8
+		crown.mesh = crown_mesh
+		crown.position = Vector3((float(crown_index) - 1.0) * 0.34, 2.40 + (0.12 if crown_index == 1 else 0.0), 0.10)
+		crown.rotation_degrees = Vector3(0, (float(crown_index) - 1.0) * 12.0, (float(crown_index) - 1.0) * -18.0)
+		crown.material_override = _mat(Color(0.19, 0.28, 0.12))
+		boss_visual_root.add_child(crown)
+
 	var heart := MeshInstance3D.new()
 	heart.name = "RootboundHeart"
 	var heart_mesh := SphereMesh.new()
 	heart_mesh.radius = 0.20
 	heart_mesh.height = 0.38
 	heart.mesh = heart_mesh
-	heart.position = Vector3(0, 1.58, -0.62)
-	heart.scale = Vector3(0.82, 1.12, 0.58)
+	heart.position = Vector3(0, 1.66, -0.68)
+	heart.scale = Vector3(1.05, 1.35, 0.72)
 	heart.material_override = _emissive_boss_material(Color(0.36, 0.78, 0.30), 0.90)
 	boss_visual_root.add_child(heart)
 	boss_phase_sigil = heart
@@ -1531,7 +1569,7 @@ func _animate_boss_identity(delta: float) -> void:
 			boss_visual_root.rotation.z = lerpf(boss_visual_root.rotation.z, 0.0, minf(delta * 6.0, 1.0))
 	elif enemy_id == "rootbound_colossus":
 		boss_visual_root.rotation.y = sin(boss_visual_time * 0.72) * 0.035
-		boss_visual_root.scale = boss_visual_root.scale.lerp(Vector3.ONE * (1.0 + sin(boss_visual_time * 2.2) * 0.025), minf(delta * 5.0, 1.0))
+		boss_visual_root.scale = boss_visual_root.scale.lerp(boss_identity_base_scale * (1.0 + sin(boss_visual_time * 2.2) * 0.025), minf(delta * 5.0, 1.0))
 	elif enemy_id == "ashwing":
 		boss_visual_root.rotation.z = sin(boss_visual_time * 2.2) * 0.06
 	elif enemy_id == "halvern_boss":

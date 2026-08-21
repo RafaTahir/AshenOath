@@ -3,15 +3,20 @@
 ## Checkpoint
 
 Development checkpoint on `codex/soul-rebuild`, 2026-08-21. Rootbound
-Colossus is implemented as a reload-safe Deep Wood encounter slice; this is
-not production approval.
+Colossus is implemented as a reload-safe Deep Wood encounter slice with a
+dedicated 4.40 m focal-creature normalization contract; this is not production
+approval.
 
 ## Changes
 
 - Extended the Rootbound definition with a bounded memory-clearing arena,
   phase actions, checkpoint objective, and explicit non-peaceful resolution.
-- Added a visible Rootbound identity layer: bark harness, root arms and
-  branches, bark plate, and an emissive exposed oathwood heart.
+- Added a visible Rootbound identity layer: bark harness, shoulder mantle,
+  root arms and feet, crown branches, bark plate, and an emissive exposed
+  oathwood heart.
+- Replaced the previous multiplicative boss scale with the dedicated
+  `rootbound_colossus_boss` role. Collision now matches the 4.40 m body and
+  the imported body faces the player-facing Godot direction.
 - Made the heart phase-reactive and made the identity layer pulse as the
   encounter advances.
 - Added a player-state verifier and a graphical Compatibility capture for
@@ -21,7 +26,8 @@ not production approval.
 
 - `verify_boss_004.gd`: PASS - spawn trigger, runtime actor contract, identity
   pieces, phase 2/3, checkpoint health restore, defeat flag, and no respawn.
-- `capture_boss_004.gd`: PASS - fresh 1280x720 Compatibility frames.
+- `capture_boss_004.gd`: PASS - fresh 1280x720 Compatibility frames from a
+  closer encounter distance with focus/prompt suppression.
 - JSON parsing and `git diff --check`: PASS.
 - Known Godot shutdown-only renderer/RID/ObjectDB diagnostics remain visible
   after isolated verifier/capture processes exit; they are not suppressed and
@@ -29,9 +35,9 @@ not production approval.
 
 ## Screenshots
 
-- `Development_Gallery/screenshots/BOSS-004_01_Rootbound_Buried_20260821_094435.png`
-- `Development_Gallery/screenshots/BOSS-004_02_Rootbound_Uprooted_20260821_094435.png`
-- `Development_Gallery/screenshots/BOSS-004_03_Rootbound_ExposedHeart_20260821_094435.png`
+- `Development_Gallery/screenshots/BOSS-004_01_Rootbound_Buried_20260821_134826.png`
+- `Development_Gallery/screenshots/BOSS-004_02_Rootbound_Uprooted_20260821_134826.png`
+- `Development_Gallery/screenshots/BOSS-004_03_Rootbound_ExposedHeart_20260821_134826.png`
 
 ## Remaining
 

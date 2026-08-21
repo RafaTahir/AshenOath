@@ -219,10 +219,10 @@ development checkpoint, not final visual approval or production release.
 
 The BOSS-004 slice adds the same durable encounter contract to Rootbound
 Colossus in Deep Wood. Register reconstruction spawns the boss, the phase
-checkpoint restores health, the bark/root/exposed-heart layer gives it a
-distinct readable silhouette, and a defeated encounter does not respawn after
-zone rebuild. Fresh phase frames and a runtime gate pass; the source body is
-still an interim low-poly mapping.
+checkpoint restores health, and the dedicated 4.40 m `rootbound_colossus_boss`
+role gives it a bark mantle, root feet/crown, and exposed-heart silhouette. A
+defeated encounter does not respawn after zone rebuild. Fresh phase frames and
+a runtime gate pass; the source body is still an interim low-poly mapping.
 
 The full 62-ticket Soul Rebuild acceptance is still open: interim monster and
 boss assets, later-zone visual reconstruction, full real-input campaign proof,

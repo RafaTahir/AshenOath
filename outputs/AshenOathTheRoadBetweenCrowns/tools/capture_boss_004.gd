@@ -32,15 +32,15 @@ func _initialize() -> void:
 		push_error("Rootbound Colossus was not available for capture")
 	else:
 		boss.set_physics_process(false)
-		await _capture(game, boss, "BOSS-004_01_Rootbound_Buried", Vector3(0, 1.0, -5.8), 0.0)
+		await _capture(game, boss, "BOSS-004_01_Rootbound_Buried", Vector3(0, 1.0, -7.0), 0.0)
 		boss.apply_damage(boss.health_component.max_health * 0.40, "capture")
 		await _frames(16)
 		boss.look_at(game.player.global_position + Vector3.UP * 0.9, Vector3.UP)
-		await _capture(game, boss, "BOSS-004_02_Rootbound_Uprooted", Vector3(0, 1.0, -5.8), 0.0)
+		await _capture(game, boss, "BOSS-004_02_Rootbound_Uprooted", Vector3(0, 1.0, -7.0), 0.0)
 		boss.apply_damage(boss.health_component.max_health * 0.30, "capture")
 		await _frames(16)
 		boss.look_at(game.player.global_position + Vector3.UP * 0.9, Vector3.UP)
-		await _capture(game, boss, "BOSS-004_03_Rootbound_ExposedHeart", Vector3(0, 1.0, -5.8), 0.0)
+		await _capture(game, boss, "BOSS-004_03_Rootbound_ExposedHeart", Vector3(0, 1.0, -7.0), 0.0)
 	print("BOSS-004 SCREENSHOTS: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
 	if game.has_method("prepare_resource_shutdown"):
 		game.prepare_resource_shutdown()
@@ -62,6 +62,11 @@ func _capture(game: Node, boss: Node, stem: String, position: Vector3, yaw: floa
 	game.camera_rig.yaw = yaw
 	game.camera_rig.pitch = -0.14
 	game.hud.set_guidance_hint("")
+	game.set_process(false)
+	game.active_interactable = null
+	game.hud.set_prompt("")
+	game.hud.prompt_label.visible = false
+	game.hud.hint_label.visible = false
 	await _frames(34)
 	await RenderingServer.frame_post_draw
 	var image: Image = root.get_viewport().get_texture().get_image()

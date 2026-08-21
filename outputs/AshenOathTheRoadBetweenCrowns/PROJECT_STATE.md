@@ -165,10 +165,11 @@ assertions pass. The encounter still uses an interim low-poly mapping and is
 not final visual approval.
 
 The BOSS-004 slice now spawns Rootbound Colossus from the reconstructed Deep
-Wood register objective, persists its phase health, adds a bark/root/exposed
-heart identity layer, and suppresses the encounter after defeat. Fresh
-Rootbound phase captures and the runtime state gate pass. Its connected source
-body remains an interim mapping, so the final monster bar is still open.
+Wood register objective, persists its phase health, and uses a dedicated 4.40 m
+`rootbound_colossus_boss` normalization role with bark mantle, root feet/crown,
+and an exposed heart identity layer. Fresh Rootbound phase captures and the
+runtime state gate pass. Its connected source body remains an interim mapping,
+so the final monster bar is still open.
 
 Bog Wretch and Gravebound Knight now instantiate connected skinned Ghoul-family
 runtime bodies instead of the previous Slime/Skeleton primitives. Their

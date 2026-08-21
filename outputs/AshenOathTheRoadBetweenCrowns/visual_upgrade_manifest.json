@@ -164,6 +164,14 @@
         "target_height": 3.80,
         "notes": "Bell-Eater uses the connected GhoulBrute source at focal-creature scale; harness, chest bell, jaw, teeth, horns, and phase light are one encounter identity layer."
       },
+      "rootbound_colossus_boss": {
+        "status": "boss_004_focal_creature_runtime",
+        "path": "res://assets_external/characters_real/GhoulBrute_Real.glb",
+        "source": "Ashen Oath derived CC0 production mesh",
+        "license": "CC0 1.0",
+        "target_height": 4.40,
+        "notes": "Rootbound uses one normalized connected body at colossus scale with a bark mantle, root feet, crown branches, and a phase-reactive exposed oathwood heart."
+      },
       "white_hart_avatar": {
         "status": "mon_002_connected_animal_runtime",
         "path": "res://assets_external/enemies/Wolf.fbx",
