@@ -273,6 +273,10 @@ foreach ($gate in $gates) {
             "--json-report",
             (Join-Path $Logs "asset_acceptance.json")
         ) $gateInputs $cache
+    } elseif ($gate -eq "verify_pipe_003") {
+        Invoke-Compact $gate $Python @(
+            (Join-Path $PSScriptRoot "verify_pipe_003.py")
+        ) $gateInputs $cache
     } elseif ($gate -eq "verify_runtime_packs") {
         Invoke-Compact $gate $Python @(
             (Join-Path $PSScriptRoot "verify_runtime_packs.py"),

@@ -234,11 +234,15 @@
         "outputs/AshenOathTheRoadBetweenCrowns/soul_asset_pack_manifest.json",
         "outputs/AshenOathTheRoadBetweenCrowns/soul_character_role_manifest.json",
         "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_asset_acceptance.py",
-        "outputs/AshenOathTheRoadBetweenCrowns/tools/register_soul_asset.py"
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/register_soul_asset.py",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/character_asset_pipeline.py",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_pipe_003.py",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/build_character_real_assets.py"
       ],
       "gates": [
         "verify_asset_001",
         "verify_asset_acceptance",
+        "verify_pipe_003",
         "verify_runtime_packs",
         "verify_character_real_001",
         "verify_visible_quality"

@@ -244,3 +244,11 @@ honest asset-library checkpoint, not a claim that the final character or
 monster replacement has shipped. `ASSET-004_RESULT.md` records the exact
 artifact counts and next registration requirements. Production `web/`, `main`,
 and Vercel remain unchanged.
+
+`PIPE-003` adds `tools/character_asset_pipeline.py`, a deterministic plan/execute
+boundary for selected GLB/GLTF sources. It rejects raw/download/source-animation
+inputs and unsafe runtime outputs, preserves root-motion-off policy, records
+artifact hashes, and registers converted outputs as pending visual review.
+`verify_pipe_003.py` is wired into the assets profile and passes. Blender and
+gltfpack are intentionally external prerequisites; the current generated Ghoul
+files remain fallbacks, not approved final monsters.
