@@ -93,10 +93,18 @@ func _build_dressing() -> void:
 		add_child(ripple)
 		ripples.append(ripple)
 		ripple_origins.append(origin)
-	var current_material := ShaderMaterial.new()
-	var current_shader := Shader.new()
-	current_shader.code = "shader_type spatial; render_mode unshaded, blend_mix, cull_disabled; void fragment(){ vec2 uv=UV; float band=sin(uv.y*14.0+TIME*1.35)+sin(uv.y*33.0-TIME*1.6+uv.x*2.0); float edge=smoothstep(0.0,0.20,uv.x)*smoothstep(0.0,0.20,1.0-uv.x); float alpha=(0.055+0.055*(band*0.5+0.5))*edge; ALBEDO=vec3(0.15,0.42,0.38); EMISSION=vec3(0.06,0.16,0.14); ALPHA=alpha; }"
-	current_material.shader = current_shader
+	# Keep current ribbons on a validated built-in material. The water surface
+	# owns the animated shader; these overlays only need motion and a soft
+	# translucent highlight. Avoiding per-ribbon ShaderMaterials also prevents
+	# Compatibility renderer null-material lookups during zone retirement.
+	var current_material := StandardMaterial3D.new()
+	current_material.albedo_color = Color(0.15, 0.42, 0.38, 0.10)
+	current_material.emission_enabled = true
+	current_material.emission = Color(0.06, 0.16, 0.14)
+	current_material.emission_energy_multiplier = 0.18
+	current_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	current_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	current_material.cull_mode = BaseMaterial3D.CULL_DISABLED
 	for index in range(3):
 		var ribbon := MeshInstance3D.new()
 		ribbon.name = "RiverCurrentRibbon_%02d" % index

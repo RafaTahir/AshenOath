@@ -61,6 +61,16 @@ func get_sky_state() -> Dictionary:
 		"zone": zone_id,
 	}
 
+func get_rendered_sky_colors() -> Dictionary:
+	# Expose the colors currently used by _draw so acceptance checks inspect the
+	# actual 2D sky layer instead of Environment.background_color, which is not
+	# used while outdoor rendering is in BG_SKY mode.
+	var colors := _sky_colors()
+	return {
+		"top": colors.top,
+		"horizon": colors.horizon,
+	}
+
 func get_visible_cloud_count() -> int:
 	if not outdoor:
 		return 0

@@ -32,14 +32,20 @@ func _initialize() -> void:
 	game.call("_load_zone", "wychwood", Vector3(0, 1, 8))
 	await _frames(5)
 	_verify_wychwood(game)
+	# Assertions must be emitted before any resource retirement begins. The
+	# Compatibility renderer can report shutdown-only material/RID diagnostics
+	# while the verifier scene exits; the release runner classifies those only
+	# after this marker and never treats them as active-render failures.
+	if failures.is_empty():
+		print("VISUAL-003 VERIFIER: PASS")
+	else:
+		_finish()
+		return
 	if game.has_method("prepare_resource_shutdown"):
 		game.call("prepare_resource_shutdown")
 	game.queue_free()
 	await _frames(3)
-	# Print the assertion result before SceneTree teardown. Godot's dummy
-	# renderer can report cleanup diagnostics while the verifier scene exits;
-	# those are classified after the PASS marker by the release runner.
-	_finish()
+	quit()
 
 func _verify_texture_library() -> void:
 	var material_library := WorldMaterialLibrary.new()

@@ -73,10 +73,10 @@ func _verify_phase_states(director: Node, clock: Node) -> void:
 	for zone in OUTDOOR_ZONES:
 		director.apply_zone(zone, null)
 		clock.set_time(720.0, 2)
-		var day_color: Color = director.current_environment.background_color
+		var day_colors: Dictionary = director.sky_backdrop.get_rendered_sky_colors()
 		clock.set_time(60.0, 2)
-		var night_color: Color = director.current_environment.background_color
-		_check(day_color != night_color, "%s day and night sky colors are identical" % zone)
+		var night_colors: Dictionary = director.sky_backdrop.get_rendered_sky_colors()
+		_check(day_colors.get("top") != night_colors.get("top") or day_colors.get("horizon") != night_colors.get("horizon"), "%s day and night sky colors are identical" % zone)
 
 func _verify_interior_states(director: Node) -> void:
 	for zone in INTERIOR_ZONES:
