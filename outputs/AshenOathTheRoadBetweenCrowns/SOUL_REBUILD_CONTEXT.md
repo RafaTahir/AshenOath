@@ -12,10 +12,12 @@ Chrome and Edge desktop plus mobile emulation passed the real-input route with
 no console or network errors. Shutdown-only renderer diagnostics are
 classified by QA-005; active rendering errors are absent.
 
-The next action is the final release checkpoint: synchronize the verified
-artifact into the repository root `web/`, commit the reviewed worktree, push
-`codex/soul-rebuild` and `main`, then compare the live Vercel PCK hash. Firefox
-and physical-controller certification remain untested on this Windows host.
+The final release checkpoint is complete at commit
+`13465620581c2817e3fc455f938afbf5debf059f`. The verified artifact is
+synchronized into the repository root `web/`, both `codex/soul-rebuild` and
+`main` are pushed, and the live Vercel PCK matches the local hash. Production
+is available at `https://ashenoath.vercel.app/?v=soul-rebuild`. Firefox and
+physical-controller certification remain untested on this Windows host.
 
 ## Current Working Checkpoint - 2026-08-21
 

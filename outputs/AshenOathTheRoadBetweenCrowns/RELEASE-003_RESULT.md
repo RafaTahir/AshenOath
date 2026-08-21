@@ -3,8 +3,7 @@
 ## Status
 
 The complete Soul Rebuild release gate has passed against the verified current
-worktree. Production remains unchanged until the final Git checkpoint and live
-PCK comparison complete. The generated authoritative report is
+worktree and is deployed to production. The generated authoritative report is
 `release_reports/latest.json` with 92 passing gates and zero failures.
 
 The runner records `d16ea7efffbb795da576c09dd6e1306dc7a0c2da` as its source
@@ -55,10 +54,13 @@ exact verified worktree.
 ## Git and Deployment
 
 - Development branch: `codex/soul-rebuild`.
-- Release commit: pending final commit.
-- Development push: pending final commit.
-- Production `main` push: pending final commit.
-- Live Vercel PCK comparison: pending production push.
+- Release commit: `13465620581c2817e3fc455f938afbf5debf059f`.
+- Development push: `PASS` (`origin/codex/soul-rebuild`).
+- Production `main` push: `PASS` (`origin/main`).
+- Live Vercel PCK SHA-256:
+  `E4A0BB7AFC47A5EE3E5690E0645CCDF8A4A491F9F310877A4BD96CD5FEEDBE62`.
+- Local/live PCK comparison: `PASS`.
+- Production smoke endpoint: `HTTP 200`.
 - Production URL: `https://ashenoath.vercel.app/?v=soul-rebuild`.
 
 ## Exact Local Running Steps

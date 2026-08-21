@@ -14,10 +14,12 @@ Chrome and Edge desktop/mobile-emulation routes passed without console or
 network errors. Shutdown-only Godot allocator diagnostics are classified; no
 active renderer/material/resource error failed the release gate.
 
-The verified export is ready for the final Git/Vercel checkpoint. `main`, the
-tracked root `web/`, and production Vercel remain unchanged until that
-checkpoint completes. Firefox and physical-controller certification remain
-explicitly untested on this Windows environment.
+The verified export is deployed at commit
+`13465620581c2817e3fc455f938afbf5debf059f`. `origin/main`, the tracked root
+`web/`, and Vercel now share the verified PCK hash above. The production smoke
+endpoint returns HTTP 200 at `https://ashenoath.vercel.app/?v=soul-rebuild`.
+Firefox and physical-controller certification remain explicitly untested in
+this Windows environment.
 
 ## Current Working Checkpoint - 2026-08-21
 
