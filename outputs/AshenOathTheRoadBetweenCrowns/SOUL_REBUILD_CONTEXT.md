@@ -61,6 +61,13 @@ zone-aware and saveable. The strengthened verifier passes source coverage and
 beat-zone save/load round-trip. This improves guidance only and does not claim
 that the full campaign has passed real-input or final visual acceptance.
 
+The QUEST-008 continuation adds an explicit Road-of-Crows report contract for
+private Anwen, public notice-board, and retained-evidence outcomes. Its new
+permutation gate exercises all 120 clue orders and proves the three-clue
+threshold remains order-independent without losing the report targets. The
+route is functionally covered; final browser pacing and visual evidence remain
+Milestone F work.
+
 The latest continuation slice adds Anwen's bone-attached upright staff, shared
 Balanced roof treatment, visible animated river-current ribbons, stronger
 Oathblade presentation, capsule/cylinder boss silhouette dressing, and

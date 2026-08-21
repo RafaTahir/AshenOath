@@ -12,6 +12,11 @@
     "evidence_report",
     "cemetery_ambush_cleared"
   ],
+  "report_methods": {
+    "private": {"interaction": "sister_anwen", "trust_delta": 1, "fear_delta": 0, "anwen_relocates": true},
+    "public": {"interaction": "notice_board", "trust_delta": -1, "fear_delta": 1, "anwen_relocates": true},
+    "retained": {"interaction": "retain_evidence", "trust_delta": 0, "fear_delta": 0, "anwen_relocates": true}
+  },
   "world_reactions": {
     "examined_evidence": "small grounded state marker remains after interaction",
     "pack_victory": "tracks, ash residue, and broken binding return on zone rebuild",

@@ -945,6 +945,17 @@ Known verifier note: Godot headless may emit ObjectDB cleanup warnings after pas
   round-trip checks. Real-input full-campaign pacing, fresh final captures,
   and production release acceptance remain open.
 
+## QUEST-008 Road of Crows Checkpoint - 2026-08-21
+
+- The Road of Crows contract now records all three report methods: private
+  delivery to Sister Anwen, public delivery at the notice board, and retained
+  evidence. Their trust/fear deltas and Anwen relocation are explicit data.
+- `verify_quest_008.gd` passes every one of the 120 permutations of the five
+  evidence clues. The three-clue progression threshold remains order
+  independent and the remaining optional clues can still be collected.
+- The functional route remains accepted while final browser pacing, complete
+  real-input campaign evidence, and final visual quality remain open.
+
 The project currently satisfies:
 
 - Web build launches past Godot splash.
