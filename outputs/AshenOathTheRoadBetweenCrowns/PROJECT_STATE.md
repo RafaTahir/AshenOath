@@ -156,9 +156,13 @@ reimport.
 
 The active BOSS-002/BOSS-003 slice adds checkpoint-health persistence,
 resolved-boss suppression, Bell-Eater phase visuals, a visible harness/chest
-bell identity, and fresh 1280x720 Bell-Eater captures. The targeted boss,
-monster, character-facing, and performance assertions pass. The encounter
-still uses an interim low-poly mapping and is not final visual approval.
+bell identity, and fresh 1280x720 Bell-Eater captures. Bell-Eater now uses a
+dedicated 3.80 m focal-creature role with a matching collision capsule and
+corrected derived-body facing; old floating proxy torso/arm rods are removed.
+Named cemetery NPCs evacuate while the encounter is active and return after
+victory. The targeted boss, monster, character-facing, and performance
+assertions pass. The encounter still uses an interim low-poly mapping and is
+not final visual approval.
 
 The BOSS-004 slice now spawns Rootbound Colossus from the reconstructed Deep
 Wood register objective, persists its phase health, adds a bark/root/exposed

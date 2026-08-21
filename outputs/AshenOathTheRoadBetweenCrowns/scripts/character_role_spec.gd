@@ -44,14 +44,20 @@ const SPECS := {
 	"gravebound_knight": {"height": 1.88, "collision_height": 1.78, "collision_radius": 0.38, "lod": 18.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
 	"white_hart_avatar": {"height": 2.55, "collision_height": 2.25, "collision_radius": 0.58, "lod": 24.0, "required_sockets": [], "visual_forward_degrees": 180.0},
 	"bell_eater": {"height": 2.35, "collision_height": 2.10, "collision_radius": 0.50, "lod": 22.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
+	# Bell-Eater is a focal creature, not a human-sized Ghoulkin. Its imported
+	# cursed-human source is normalized directly to the encounter silhouette so
+	# the rendered body and collision capsule stay in the same scale contract.
+	"bell_eater_boss": {"height": 3.80, "collision_height": 3.60, "collision_radius": 0.82, "lod": 48.0, "required_sockets": ["head"], "visual_forward_degrees": 0.0},
 	"rootbound_colossus": {"height": 2.75, "collision_height": 2.45, "collision_radius": 0.62, "lod": 24.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
 	"ashwing": {"height": 2.40, "collision_height": 2.10, "collision_radius": 0.56, "lod": 24.0, "required_sockets": [], "visual_forward_degrees": 180.0},
 	"halvern_boss": {"height": 1.88, "collision_height": 1.78, "collision_radius": 0.38, "lod": 20.0, "required_sockets": ["head", "weapon"], "visual_forward_degrees": 180.0},
 	"ghoulkin_creature": {"height": 1.72, "lod": 18.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
 	"ghoul_stalker_real": {"height": 1.72, "lod": 18.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
-	"ghoul_brute_real": {"height": 1.90, "lod": 20.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
+	# The derived cursed-human GLB is authored facing Godot -Z already. Keeping
+	# the human 180-degree correction here made bosses turn their backs to Kael.
+	"ghoul_brute_real": {"height": 1.90, "lod": 20.0, "required_sockets": ["head"], "visual_forward_degrees": 0.0},
 	"bog_wretch_creature": {"height": 1.72, "lod": 18.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
-	"gravebound_knight_creature": {"height": 1.88, "lod": 18.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
+	"gravebound_knight_creature": {"height": 1.88, "lod": 18.0, "required_sockets": ["head"], "visual_forward_degrees": 0.0},
 	"ashwing_creature": {"height": 2.40, "lod": 24.0, "required_sockets": [], "visual_forward_degrees": 180.0},
 }
 

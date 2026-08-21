@@ -82,6 +82,7 @@ var is_boss := false
 var base_move_speed := 2.0
 var base_damage := 10.0
 var boss_visual_time := 0.0
+var boss_identity_base_scale := Vector3.ONE
 
 func setup(id: String, definition: Dictionary, target: Node3D) -> void:
 	enemy_id = id
@@ -593,13 +594,13 @@ func _build_body(color: Color) -> void:
 	var collision_radius := 0.58 if enemy_id == "white_hart_avatar" else float(role_spec.get("collision_radius", 0.35))
 	if is_boss:
 		collision_height = {
-			"bell_eater": 2.60,
+			"bell_eater": 3.60,
 			"rootbound_colossus": 2.95,
 			"ashwing": 2.45,
 			"halvern_boss": 2.20,
 		}.get(enemy_id, collision_height)
 		collision_radius = {
-			"bell_eater": 0.62,
+			"bell_eater": 0.82,
 			"rootbound_colossus": 0.76,
 			"ashwing": 0.66,
 			"halvern_boss": 0.50,
@@ -725,7 +726,7 @@ func _try_build_mapped_body() -> bool:
 			"wychwood_brute": "ghoulkin_skeleton",
 			"bog_wretch": "bog_wretch_creature",
 			"gravebound_knight": "gravebound_knight_creature",
-			"bell_eater": "ghoul_brute_real",
+			"bell_eater": "bell_eater_boss",
 			"rootbound_colossus": "ghoul_brute_real",
 			"ashwing": "ashwing_creature",
 			"halvern_boss": "gravebound_knight_creature",
@@ -797,7 +798,7 @@ func _try_build_mapped_body() -> bool:
 			})
 		else:
 			animation_driver.configure(mapped, {
-				"idle": "Idle2" if visual_source in ["ghoul_stalker_real", "ghoul_brute_real", "bog_wretch_creature", "gravebound_knight_creature"] else "Idle",
+				"idle": "Idle2" if visual_source in ["ghoul_stalker_real", "ghoul_brute_real", "bell_eater_boss", "bog_wretch_creature", "gravebound_knight_creature"] else "Idle",
 				"walk":"Walk", "walk_back":"Walk_Back", "strafe":"Walk",
 				"run":"Run", "windup":"Attack", "attack":"Attack",
 				"hit":"Hit", "death":"Death"
@@ -963,24 +964,28 @@ func _horror_material() -> StandardMaterial3D:
 func _apply_boss_material(mapped: Node3D) -> void:
 	var material := StandardMaterial3D.new()
 	material.albedo_color = {
-		"bell_eater": Color(0.28, 0.22, 0.18),
+		"bell_eater": Color(0.13, 0.075, 0.055),
 		"rootbound_colossus": Color(0.22, 0.33, 0.20),
 		"ashwing": Color(0.30, 0.18, 0.14),
 		"halvern_boss": Color(0.24, 0.26, 0.30),
 	}.get(enemy_id, base_color)
 	material.roughness = 0.82
+	if enemy_id == "bell_eater":
+		material.emission_enabled = true
+		material.emission = Color(0.045, 0.010, 0.004)
+		material.emission_energy_multiplier = 0.22
 	_apply_material(mapped, material)
 
 func _add_boss_silhouette() -> void:
 	boss_visual_root = Node3D.new()
 	boss_visual_root.name = "BossIdentityLayer"
 	boss_visual_root.set_meta("boss_identity", enemy_id)
+	boss_identity_base_scale = Vector3.ONE * (1.55 if enemy_id == "bell_eater" else 1.0)
+	boss_visual_root.scale = boss_identity_base_scale
 	visual_root.add_child(boss_visual_root)
 	if enemy_id == "bell_eater":
-		_add_part(Vector3(0, 1.40, -0.02), Vector3(1.10, 0.26, 0.62), Color(0.31, 0.20, 0.12), "cylinder")
-		_add_part(Vector3(0, 1.03, 0.28), Vector3(0.30, 0.50, 0.16), Color(0.12, 0.10, 0.08), "cylinder")
-		_add_part(Vector3(-0.47, 1.16, 0.12), Vector3(0.09, 0.42, 0.09), Color(0.22, 0.14, 0.08), "cylinder", Vector3(0, 0, -28))
-		_add_part(Vector3(0.47, 1.16, 0.12), Vector3(0.09, 0.42, 0.09), Color(0.22, 0.14, 0.08), "cylinder", Vector3(0, 0, 28))
+		# The imported body is the only anatomy. Earlier proxy torso/arm rods
+		# floated beside it and made the boss look assembled from primitives.
 		_make_bell_eater_identity()
 	elif enemy_id == "rootbound_colossus":
 		_add_part(Vector3(-0.58, 1.34, 0.0), Vector3(0.34, 0.78, 0.56), Color(0.17, 0.26, 0.14), "capsule", Vector3(0, 0, -12))
@@ -1065,6 +1070,43 @@ func _make_bell_eater_identity() -> void:
 		eye_material.emission_energy_multiplier = 1.8
 		eye.material_override = eye_material
 		boss_visual_root.add_child(eye)
+
+	var jaw := MeshInstance3D.new()
+	jaw.name = "BellEaterJaw"
+	var jaw_mesh := SphereMesh.new()
+	jaw_mesh.radius = 0.28
+	jaw_mesh.height = 0.22
+	jaw.mesh = jaw_mesh
+	jaw.position = Vector3(0, 1.58, -0.54)
+	jaw.scale = Vector3(1.0, 0.72, 0.52)
+	jaw.material_override = _mat(Color(0.075, 0.045, 0.035))
+	boss_visual_root.add_child(jaw)
+	for index in range(3):
+		var tooth := MeshInstance3D.new()
+		tooth.name = "BellEaterTooth_%d" % index
+		var tooth_mesh := CylinderMesh.new()
+		tooth_mesh.top_radius = 0.0
+		tooth_mesh.bottom_radius = 0.038
+		tooth_mesh.height = 0.15
+		tooth_mesh.radial_segments = 6
+		tooth.mesh = tooth_mesh
+		tooth.position = Vector3(-0.13 + float(index) * 0.13, 1.53, -0.68)
+		tooth.rotation.x = PI
+		tooth.material_override = _mat(Color(0.58, 0.50, 0.36))
+		boss_visual_root.add_child(tooth)
+	for side in [-1.0, 1.0]:
+		var horn := MeshInstance3D.new()
+		horn.name = "BellEaterHornLeft" if side < 0.0 else "BellEaterHornRight"
+		var horn_mesh := CylinderMesh.new()
+		horn_mesh.top_radius = 0.018
+		horn_mesh.bottom_radius = 0.07
+		horn_mesh.height = 0.42
+		horn_mesh.radial_segments = 7
+		horn.mesh = horn_mesh
+		horn.position = Vector3(side * 0.25, 1.94, -0.36)
+		horn.rotation_degrees = Vector3(0, 0, side * -22.0)
+		horn.material_override = _mat(Color(0.16, 0.12, 0.085))
+		boss_visual_root.add_child(horn)
 
 	boss_phase_sigil = MeshInstance3D.new()
 	boss_phase_sigil.name = "BossPhaseSigil"
@@ -1293,7 +1335,9 @@ func _mapped_enemy_scale() -> Vector3:
 	if enemy_id == "white_hart_avatar":
 		return Vector3(0.65, 0.65, 0.65)
 	if enemy_id == "bell_eater":
-		return Vector3(1.25, 1.25, 1.25)
+		# bell_eater_boss is normalized to its full 3.80 m focal-creature
+		# contract; do not apply a second multiplicative scale here.
+		return Vector3.ONE
 	if enemy_id == "rootbound_colossus":
 		return Vector3(1.48, 1.42, 1.48)
 	if enemy_id == "ashwing":
@@ -1480,7 +1524,7 @@ func _animate_boss_identity(delta: float) -> void:
 	var pulse := 1.0 + sin(boss_visual_time * 3.4) * 0.035
 	if enemy_id == "bell_eater":
 		boss_visual_root.rotation.y = sin(boss_visual_time * 1.15) * 0.045
-		boss_visual_root.scale = boss_visual_root.scale.lerp(Vector3.ONE * pulse, minf(delta * 5.0, 1.0))
+		boss_visual_root.scale = boss_visual_root.scale.lerp(boss_identity_base_scale * pulse, minf(delta * 5.0, 1.0))
 		if windup_time > 0.0:
 			boss_visual_root.rotation.z = sin(boss_visual_time * 11.0) * 0.035
 		else:

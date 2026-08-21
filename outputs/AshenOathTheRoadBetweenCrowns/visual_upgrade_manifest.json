@@ -156,6 +156,14 @@
         "license": "CC0 1.0",
         "notes": "Primary released Ghoulkin family body."
       },
+      "bell_eater_boss": {
+        "status": "boss_003_focal_creature_runtime",
+        "path": "res://assets_external/characters_real/GhoulBrute_Real.glb",
+        "source": "Ashen Oath derived CC0 production mesh",
+        "license": "CC0 1.0",
+        "target_height": 3.80,
+        "notes": "Bell-Eater uses the connected GhoulBrute source at focal-creature scale; harness, chest bell, jaw, teeth, horns, and phase light are one encounter identity layer."
+      },
       "white_hart_avatar": {
         "status": "mon_002_connected_animal_runtime",
         "path": "res://assets_external/enemies/Wolf.fbx",

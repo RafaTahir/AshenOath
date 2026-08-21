@@ -163,6 +163,12 @@ func _enroll_named_npcs() -> void:
 func _update_actor(entry: Dictionary, delta: float) -> void:
 	var node: Node3D = entry.node
 	if not is_instance_valid(node): return
+	# Major encounters temporarily own their arena. The game restores this
+	# marker after the encounter so named villagers do not walk through a boss
+	# fight or re-enter its collision space while the player is engaged.
+	if bool(node.get_meta("bell_eater_evacuated", false)):
+		_set_motion(entry, 0.0)
+		return
 	if bool(entry.get("activity_active", false)):
 		_update_activity(entry, delta)
 		return

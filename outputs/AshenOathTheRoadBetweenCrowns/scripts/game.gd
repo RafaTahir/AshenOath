@@ -2030,6 +2030,7 @@ func _on_enemy_died(enemy) -> void:
 		CombatFeedback.ground_ring(zone_root, enemy.global_position, Color(0.12, 0.08, 0.055), 0.9, 0.24)
 	if bool(enemy.get("is_boss")):
 		if enemy.enemy_id == "bell_eater":
+			_restore_bell_eater_bystanders()
 			story_state.set_flag("bell_eater_defeated", true)
 			story_state.set_flag("cemetery_bell_silent", true)
 			hud.show_status_cue("The Bell-Eater is silent", "victory")
@@ -4106,10 +4107,51 @@ func _ensure_bell_eater() -> void:
 		boss.name = "BellEaterEncounter"
 		boss.leash_radius = 9.0
 		boss.set_meta("boss_arena", "cemetery")
+		_evacuate_bell_eater_bystanders()
 		hud.show_status_cue("The Bell-Eater wakes", "danger")
 		hud.toast("The bell rings once beneath the chapel. Something large pulls against the graves.")
 		hud.set_guidance_hint("Defeat the Bell-Eater beneath the Crow Chapel.", 6.0)
 		audio.play_event("boss", 0.02)
+
+func _evacuate_bell_eater_bystanders() -> void:
+	if zone_root == null:
+		return
+	var staging := {
+		"sister_anwen": Vector3(9.2, 0.0, 5.2),
+		"widow_elna": Vector3(8.6, 0.0, 6.0),
+	}
+	for actor_id in staging:
+		var actor := zone_root.find_child(actor_id, true, false) as Node3D
+		if actor == null or bool(actor.get_meta("bell_eater_evacuated", false)):
+			continue
+		actor.set_meta("bell_eater_evacuated", true)
+		actor.set_meta("bell_eater_return_position", actor.global_position)
+		actor.global_position = validate_walkable_position(staging[actor_id])
+		if actor is Area3D:
+			(actor as Area3D).monitoring = false
+			(actor as Area3D).monitorable = false
+		var driver := actor.find_child("CharacterAnimationDriver", true, false)
+		if driver != null and driver.has_method("set_dialogue_pose"):
+			driver.set_dialogue_pose(true)
+		_face_npc_toward_player(actor)
+
+func _restore_bell_eater_bystanders() -> void:
+	if zone_root == null:
+		return
+	for actor_id in ["sister_anwen", "widow_elna"]:
+		var actor := zone_root.find_child(actor_id, true, false) as Node3D
+		if actor == null or not bool(actor.get_meta("bell_eater_evacuated", false)):
+			continue
+		var original: Variant = actor.get_meta("bell_eater_return_position", actor.global_position)
+		if original is Vector3:
+			actor.global_position = validate_walkable_position(original)
+		if actor is Area3D:
+			(actor as Area3D).monitoring = true
+			(actor as Area3D).monitorable = true
+		actor.set_meta("bell_eater_evacuated", false)
+		var driver := actor.find_child("CharacterAnimationDriver", true, false)
+		if driver != null and driver.has_method("set_dialogue_pose"):
+			driver.set_dialogue_pose(false)
 
 func _on_boss_controller_phase_changed(boss_id: String, phase: int) -> void:
 	story_state.set_flag("boss_%s_phase" % boss_id, phase)

@@ -209,10 +209,13 @@ approval.
 The active BOSS-002/BOSS-003 slice makes Bell-Eater phase and checkpoint state
 durable: phase health is saved/restored, resolved encounters do not respawn
 after zone rebuild, and the harness, bell, chains, eyes, and phase sigil
-animate from one identity layer. Fresh Bell-Eater frames are in
+animate from one identity layer. Bell-Eater now uses a dedicated 3.80 m
+focal-creature role with a matching collision capsule, corrected derived-body
+facing, and no floating proxy torso/arm rods. Cemetery NPCs evacuate during
+the fight and return after victory. Fresh Bell-Eater frames are in
 `Development_Gallery/screenshots/`. The encounter is readable but still uses
-an interim low-poly monster mapping; this is a development checkpoint, not a
-final visual approval or production release.
+an interim low-poly monster mapping and a blockout cemetery; this is a
+development checkpoint, not final visual approval or production release.
 
 The BOSS-004 slice adds the same durable encounter contract to Rootbound
 Colossus in Deep Wood. Register reconstruction spawns the boss, the phase
