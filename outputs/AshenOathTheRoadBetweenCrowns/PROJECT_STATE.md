@@ -16,6 +16,18 @@ and the targeted combat ticket gate pass. Fresh Oathfire charge, release, and
 wall-impact captures are current. This is a development checkpoint; the
 production Web export and Vercel build remain unchanged.
 
+### AI-003 tactical behavior checkpoint
+
+Wychwood pursuit now validates the complete proposed movement step after crowd
+separation and after a forced navigation refresh. If both options are blocked,
+the enemy stops rather than crossing a reserved route or river barrier. Moving
+actors face their actual route direction, making flanks and retreats readable.
+`EnemyAI.get_tactical_state()` exposes engagement lanes, leash, route safety,
+attack-token, perception, windup, and recovery state. The real runtime AI gate
+passes five-enemy staging, distinct lanes, spacing, river-safe pursuit, attack
+reservation, and ally-blocked attack lanes. This is a development checkpoint;
+browser low-FPS profiling and final monster visual replacement remain open.
+
 ### MON-002 monster-family checkpoint
 
 The Wychwood Ghoulkin, Stalker, Raider, and Brute now use the complete

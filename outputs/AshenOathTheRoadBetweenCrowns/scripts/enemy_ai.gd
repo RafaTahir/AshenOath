@@ -213,12 +213,15 @@ func _physics_process(delta: float) -> void:
 		elif behavior_profile == "lurker" and pursuit_distance > 5.0:
 			speed_factor *= 0.62
 		dir = (dir+_crowd_separation()*0.72).normalized()
-		var proposed: Vector3 = global_position + dir * move_speed * speed_factor * delta
-		if spatial_service != null and not spatial_service.validate_segment(global_position, proposed, 0.50):
-			dir = _navigation_direction(engagement_target, true)
+		dir = _validated_step_direction(dir, engagement_target, move_speed * speed_factor * delta)
 		velocity.x = dir.x * move_speed * speed_factor
 		velocity.z = dir.z * move_speed * speed_factor
-		look_at(Vector3(player.global_position.x, global_position.y, player.global_position.z), Vector3.UP)
+		if dir.length_squared() > 0.01:
+			# A moving actor faces the route it is actually taking. This keeps
+			# flanks and retreats readable instead of producing sideways slides.
+			look_at(global_position + dir, Vector3.UP)
+		else:
+			look_at(Vector3(player.global_position.x, global_position.y, player.global_position.z), Vector3.UP)
 	else:
 		velocity.x = 0.0
 		velocity.z = 0.0
@@ -262,6 +265,23 @@ func _navigation_direction(target: Vector3, force_refresh: bool = false) -> Vect
 		direction = route_target - global_position
 		direction.y = 0.0
 	return direction.normalized() if direction.length_squared() > 0.002 else Vector3.ZERO
+
+func _validated_step_direction(direction: Vector3, target: Vector3, step_distance: float) -> Vector3:
+	var candidate := direction
+	candidate.y = 0.0
+	if candidate.length_squared() < 0.002:
+		return Vector3.ZERO
+	candidate = candidate.normalized()
+	if spatial_service == null:
+		return candidate
+	var proposed := global_position + candidate * maxf(step_distance, 0.02)
+	if spatial_service.validate_segment(global_position, proposed, 0.50):
+		return candidate
+	var rerouted := _navigation_direction(target, true)
+	if rerouted.length_squared() < 0.002:
+		return Vector3.ZERO
+	var reroute_position := global_position + rerouted * maxf(step_distance, 0.02)
+	return rerouted if spatial_service.validate_segment(global_position, reroute_position, 0.50) else Vector3.ZERO
 
 func apply_damage(amount: float, source_tag: String = "") -> void:
 	if dead or not encounter_active:
@@ -464,6 +484,37 @@ func get_attack_trace() -> Dictionary:
 
 func get_behavior_state() -> Dictionary:
 	return {"profile":behavior_profile,"windup":pending_attack_time,"stagger":stagger_time,"recovery":attack_recovery_time,"owns_attack_token":owns_attack_token,"can_see_player":can_see_player,"memory":perception_memory_time,"last_known":last_known_player_position}
+
+func get_tactical_state() -> Dictionary:
+	var route_safe := true
+	for index in range(navigation_route.size()):
+		if spatial_service != null:
+			var point: Vector3 = navigation_route[index]
+			var validated: Vector3 = spatial_service.validate_position(point, 0.50, spatial_service.bank_for(point))
+			if spatial_service.is_river_excluded(point, 0.50) or validated.distance_to(point) > 0.12:
+				route_safe = false
+				break
+		if index > 0 and spatial_service != null and not spatial_service.validate_segment(navigation_route[index - 1], navigation_route[index], 0.50):
+			route_safe = false
+			break
+	return {
+		"enemy_id": enemy_id,
+		"profile": behavior_profile,
+		"preferred_distance": preferred_distance,
+		"approach_angle": approach_angle_degrees,
+		"flank_sign": flank_sign,
+		"encounter_slot": encounter_slot,
+		"leash_radius": leash_radius,
+		"route_points": navigation_route.size(),
+		"route_safe": route_safe,
+		"navigation_refresh_time": navigation_refresh_time,
+		"owns_attack_token": owns_attack_token,
+		"attack_lane_clear": _attack_lane_clear() if player != null else false,
+		"perception": can_see_player,
+		"memory": perception_memory_time,
+		"windup": pending_attack_time,
+		"attack_recovery": attack_recovery_time,
+	}
 
 func _on_died() -> void:
 	dead = true

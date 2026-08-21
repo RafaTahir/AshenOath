@@ -13,6 +13,15 @@ profile pass with current native-720p charge/release/wall-impact evidence.
 This improves the runtime contract but does not waive the larger visual gate:
 the surrounding world and monster family still require final visual review.
 
+### AI-003 tactical behavior checkpoint
+
+The Wychwood pack now treats navigation, crowd separation, attack reservations,
+attack-lane clearance, leash recovery, and perception as one movement contract.
+Unsafe direct steps stop or reroute through the spatial service, and moving
+enemies face their chosen route. The runtime AI gate passes the five-enemy
+staged reveal and live spacing/reservation checks. Later browser performance and
+final monster-family visual acceptance remain required.
+
 ### MON-002 monster-family checkpoint
 
 Wychwood's four enemy roles now share a real imported animated skeleton source
