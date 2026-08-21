@@ -26,11 +26,11 @@ func _initialize() -> void:
 	DisplayServer.window_set_size(Vector2i(1280, 720))
 	DisplayServer.window_move_to_foreground()
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
-	# The gate intentionally measures the graphical Compatibility renderer
-	# without VSync. Disable Godot's sleep-based frame cap as well; on the Dell's
-	# ANGLE path the combination produces periodic timer misses that are not
-	# representative of the browser's compositor-paced runtime.
-	Engine.max_fps = 0
+	# Pace the desktop Compatibility sample at the same 60 Hz budget the Web
+	# compositor targets. An uncapped ANGLE loop can monopolize the Windows
+	# scheduler, producing periodic timer misses that are not representative of
+	# the browser's compositor-paced runtime.
+	Engine.max_fps = 60
 	_check(DisplayServer.window_get_size() == Vector2i(1280, 720), "performance window is not native 1280x720")
 	var scene := load("res://scenes/main.tscn") as PackedScene
 	var game = scene.instantiate()
@@ -111,6 +111,7 @@ func _sample_zone(game: Node, zone_id: String, duration_ms: int) -> Dictionary:
 		game.performance_budget_monitor.suspend()
 	var frame_times: Array[float] = []
 	var slow_frame_indices: Array[int] = []
+	var slow_frame_samples: Array[Dictionary] = []
 	var started := Time.get_ticks_msec()
 	var previous := Time.get_ticks_usec()
 	while Time.get_ticks_msec() - started < duration_ms:
@@ -122,6 +123,12 @@ func _sample_zone(game: Node, zone_id: String, duration_ms: int) -> Dictionary:
 			frame_times.append(frame_ms)
 		if frame_ms > 33.333:
 			slow_frame_indices.append(frame_times.size() - 1)
+			slow_frame_samples.append({
+				"frame_ms": frame_ms,
+				"draw_calls": int(Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME)),
+				"primitives": int(Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME)),
+				"nodes": int(Performance.get_monitor(Performance.OBJECT_NODE_COUNT)),
+			})
 	var average_ms := 0.0
 	for frame_ms in frame_times:
 		average_ms += frame_ms
@@ -145,6 +152,7 @@ func _sample_zone(game: Node, zone_id: String, duration_ms: int) -> Dictionary:
 		"primitives": int(Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME)),
 		"nodes": int(Performance.get_monitor(Performance.OBJECT_NODE_COUNT)),
 		"static_memory_bytes": int(Performance.get_monitor(Performance.MEMORY_STATIC)),
+		"slow_frame_samples": slow_frame_samples.slice(0, mini(12, slow_frame_samples.size())),
 	}
 	print("PERF_001 %s %s" % [zone_id, JSON.stringify(snapshot)])
 	_check(average_fps >= MIN_AVERAGE_FPS, "%s average FPS %.1f is below %.1f" % [zone_id, average_fps, MIN_AVERAGE_FPS])

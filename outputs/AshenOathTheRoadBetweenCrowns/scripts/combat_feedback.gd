@@ -1,5 +1,8 @@
 extends RefCounted
 
+static var _mesh_cache: Dictionary = {}
+static var _material_cache: Dictionary = {}
+
 static func impact_burst(parent: Node3D, pos: Vector3, heavy: bool, color: Color = Color(1.0, 0.66, 0.24)) -> void:
 	if parent == null:
 		return
@@ -11,9 +14,7 @@ static func impact_burst(parent: Node3D, pos: Vector3, heavy: bool, color: Color
 	for i in range(count):
 		var shard = MeshInstance3D.new()
 		shard.name = "ImpactShard"
-		var mesh = BoxMesh.new()
-		mesh.size = Vector3(0.055, 0.055, 0.30 if heavy else 0.22)
-		shard.mesh = mesh
+		shard.mesh = _cached_box_mesh("impact_heavy" if heavy else "impact_normal", Vector3(0.055, 0.055, 0.30 if heavy else 0.22))
 		shard.position = Vector3(randf_range(-0.08, 0.08), randf_range(-0.04, 0.08), randf_range(-0.08, 0.08))
 		shard.rotation_degrees = Vector3(randf_range(-35, 35), float(i) * (360.0 / float(count)), randf_range(-45, 45))
 		shard.material_override = _emissive(color, 1.15 if heavy else 0.9)
@@ -29,12 +30,7 @@ static func ground_ring(parent: Node3D, pos: Vector3, color: Color, radius: floa
 	var ring = MeshInstance3D.new()
 	ring.name = "CombatGroundRing"
 	ring.set_meta("visual_name", "CombatGroundRing")
-	var mesh = CylinderMesh.new()
-	mesh.top_radius = 0.5
-	mesh.bottom_radius = 0.5
-	mesh.height = 0.018
-	mesh.radial_segments = 28
-	ring.mesh = mesh
+	ring.mesh = _cached_ground_ring_mesh()
 	ring.position = parent.to_local(Vector3(pos.x, 0.052, pos.z))
 	ring.scale = Vector3(radius, 0.014, radius)
 	ring.material_override = _mat(color, 0.84)
@@ -54,20 +50,12 @@ static func beam_endpoint(parent: Node3D, pos: Vector3, direction: Vector3, rich
 	parent.add_child(root)
 	var flare := MeshInstance3D.new()
 	flare.name = "OathfireEndpointFlare"
-	var flare_mesh := SphereMesh.new()
-	flare_mesh.radius = 0.16 if rich else 0.10
-	flare_mesh.height = flare_mesh.radius * 2.0
-	flare.mesh = flare_mesh
+	flare.mesh = _cached_sphere_mesh("beam_flare_rich" if rich else "beam_flare_potato", 0.16 if rich else 0.10)
 	flare.material_override = _emissive(Color(0.70, 0.96, 1.0), 2.2)
 	root.add_child(flare)
 	var ring := MeshInstance3D.new()
 	ring.name = "OathfireEndpointRing"
-	var ring_mesh := TorusMesh.new()
-	ring_mesh.inner_radius = 0.15 if rich else 0.10
-	ring_mesh.outer_radius = 0.23 if rich else 0.16
-	ring_mesh.rings = 8
-	ring_mesh.ring_segments = 18
-	ring.mesh = ring_mesh
+	ring.mesh = _cached_torus_mesh("beam_ring_rich" if rich else "beam_ring_potato", 0.15 if rich else 0.10, 0.23 if rich else 0.16, 8, 18)
 	ring.rotation = Vector3(PI * 0.5, 0.0, 0.0)
 	ring.material_override = _emissive(Color(0.24, 0.74, 1.0), 1.4)
 	root.add_child(ring)
@@ -83,9 +71,7 @@ static func block_flash(parent: Node3D, pos: Vector3, parry: bool, contact_overr
 	var flash = MeshInstance3D.new()
 	flash.name = "ParryFlash" if parry else "BlockFlash"
 	flash.set_meta("visual_name", flash.name)
-	var mesh = BoxMesh.new()
-	mesh.size = Vector3(0.70 if parry else 0.52, 0.06, 0.08)
-	flash.mesh = mesh
+	flash.mesh = _cached_box_mesh("parry_flash" if parry else "block_flash", Vector3(0.70 if parry else 0.52, 0.06, 0.08))
 	var flash_world_position := contact_override if contact_override.length_squared() > 0.0001 else pos + Vector3(0, 1.1, -0.42)
 	flash.position = parent.to_local(flash_world_position)
 	flash.rotation_degrees = Vector3(0, 0, 12 if parry else -8)
@@ -109,9 +95,7 @@ static func weapon_contact(parent: Node3D, base: Vector3, tip: Vector3, point: V
 	direction = direction.normalized()
 	var flash := MeshInstance3D.new()
 	flash.name = "BladeContactArc"
-	var mesh := BoxMesh.new()
-	mesh.size = Vector3(0.07 if heavy else 0.045, 0.07 if heavy else 0.045, 0.64 if heavy else 0.42)
-	flash.mesh = mesh
+	flash.mesh = _cached_box_mesh("blade_contact_heavy" if heavy else "blade_contact_normal", Vector3(0.07 if heavy else 0.045, 0.07 if heavy else 0.045, 0.64 if heavy else 0.42))
 	flash.material_override = _emissive(color, 1.65 if heavy else 1.15)
 	root.add_child(flash)
 	flash.look_at(root.global_position + direction, Vector3.UP)
@@ -144,12 +128,7 @@ static func weapon_contact(parent: Node3D, base: Vector3, tip: Vector3, point: V
 		root.add_child(sweep)
 	var ring := MeshInstance3D.new()
 	ring.name = "ContactRing"
-	var ring_mesh := CylinderMesh.new()
-	ring_mesh.top_radius = 0.12 if heavy else 0.08
-	ring_mesh.bottom_radius = ring_mesh.top_radius
-	ring_mesh.height = 0.025
-	ring_mesh.radial_segments = 16
-	ring.mesh = ring_mesh
+	ring.mesh = _cached_contact_ring_mesh(heavy)
 	ring.material_override = _emissive(color.lightened(0.18), 1.2)
 	root.add_child(ring)
 	var tween := root.create_tween()
@@ -162,14 +141,29 @@ static func warning_marker(parent: Node3D, target: Node3D) -> MeshInstance3D:
 	var marker = MeshInstance3D.new()
 	marker.name = "EnemyWindupWarning"
 	marker.set_meta("visual_name", "EnemyWindupWarning")
-	var mesh = PrismMesh.new()
-	mesh.size = Vector3(0.26, 0.018, 0.72)
-	marker.mesh = mesh
+	marker.mesh = _cached_prism_mesh("enemy_warning", Vector3(0.26, 0.018, 0.72))
 	marker.position = Vector3(0, 0.055, -0.58)
 	marker.scale = Vector3(1.0, 1.0, 1.0)
 	marker.material_override = _emissive(Color(0.52, 0.07, 0.035), 0.34)
 	target.add_child(marker)
 	return marker
+
+static func prewarm_enemy_feedback(parent: Node3D) -> void:
+	if parent == null or parent.has_meta("enemy_feedback_prewarmed"):
+		return
+	parent.set_meta("enemy_feedback_prewarmed", true)
+	# Allocate the first combat-only meshes and materials while an enemy wave is
+	# being revealed. Keeping the warmer hidden avoids a first-hit hitch when
+	# Compatibility/ANGLE compiles the ground ring and impact burst together.
+	var warmer := Node3D.new()
+	warmer.name = "EnemyFeedbackPrewarm"
+	warmer.visible = false
+	parent.add_child(warmer)
+	ground_ring(warmer, warmer.global_position, Color(0.46, 0.05, 0.025), 0.62, 0.05)
+	impact_burst(warmer, warmer.global_position, false, Color(0.85, 0.30, 0.12))
+	var marker := warning_marker(warmer, warmer)
+	if marker != null:
+		marker.visible = false
 
 static func boss_telegraph(parent: Node3D, pos: Vector3, boss_id: String) -> void:
 	if parent == null:
@@ -256,16 +250,93 @@ static func boss_attack_release(parent: Node3D, pos: Vector3, direction: Vector3
 	tween.tween_callback(root.queue_free)
 
 static func _emissive(color: Color, energy: float) -> StandardMaterial3D:
-	var material = StandardMaterial3D.new()
+	var key := "emissive:%s:%.3f" % [color.to_html(false), energy]
+	var cached = _material_cache.get(key)
+	if cached is StandardMaterial3D:
+		return cached as StandardMaterial3D
+	var material := StandardMaterial3D.new()
 	material.albedo_color = color
 	material.emission_enabled = true
 	material.emission = color
 	material.emission_energy_multiplier = energy
 	material.roughness = 0.7
+	_material_cache[key] = material
 	return material
 
 static func _mat(color: Color, roughness: float) -> StandardMaterial3D:
-	var material = StandardMaterial3D.new()
+	var key := "mat:%s:%.3f" % [color.to_html(false), roughness]
+	var cached = _material_cache.get(key)
+	if cached is StandardMaterial3D:
+		return cached as StandardMaterial3D
+	var material := StandardMaterial3D.new()
 	material.albedo_color = color
 	material.roughness = roughness
+	_material_cache[key] = material
 	return material
+
+static func _cached_box_mesh(key: String, size: Vector3) -> BoxMesh:
+	var cached = _mesh_cache.get(key)
+	if cached is BoxMesh:
+		return cached as BoxMesh
+	var mesh := BoxMesh.new()
+	mesh.size = size
+	_mesh_cache[key] = mesh
+	return mesh
+
+static func _cached_ground_ring_mesh() -> CylinderMesh:
+	var cached = _mesh_cache.get("ground_ring")
+	if cached is CylinderMesh:
+		return cached as CylinderMesh
+	var mesh := CylinderMesh.new()
+	mesh.top_radius = 0.5
+	mesh.bottom_radius = 0.5
+	mesh.height = 0.018
+	mesh.radial_segments = 28
+	_mesh_cache["ground_ring"] = mesh
+	return mesh
+
+static func _cached_contact_ring_mesh(heavy: bool) -> CylinderMesh:
+	var key := "contact_ring_heavy" if heavy else "contact_ring_normal"
+	var cached = _mesh_cache.get(key)
+	if cached is CylinderMesh:
+		return cached as CylinderMesh
+	var mesh := CylinderMesh.new()
+	mesh.top_radius = 0.12 if heavy else 0.08
+	mesh.bottom_radius = mesh.top_radius
+	mesh.height = 0.025
+	mesh.radial_segments = 16
+	_mesh_cache[key] = mesh
+	return mesh
+
+static func _cached_sphere_mesh(key: String, radius: float) -> SphereMesh:
+	var cached = _mesh_cache.get(key)
+	if cached is SphereMesh:
+		return cached as SphereMesh
+	var mesh := SphereMesh.new()
+	mesh.radius = radius
+	mesh.height = radius * 2.0
+	mesh.radial_segments = 12
+	mesh.rings = 8
+	_mesh_cache[key] = mesh
+	return mesh
+
+static func _cached_torus_mesh(key: String, inner_radius: float, outer_radius: float, rings: int, segments: int) -> TorusMesh:
+	var cached = _mesh_cache.get(key)
+	if cached is TorusMesh:
+		return cached as TorusMesh
+	var mesh := TorusMesh.new()
+	mesh.inner_radius = inner_radius
+	mesh.outer_radius = outer_radius
+	mesh.rings = rings
+	mesh.ring_segments = segments
+	_mesh_cache[key] = mesh
+	return mesh
+
+static func _cached_prism_mesh(key: String, size: Vector3) -> PrismMesh:
+	var cached = _mesh_cache.get(key)
+	if cached is PrismMesh:
+		return cached as PrismMesh
+	var mesh := PrismMesh.new()
+	mesh.size = size
+	_mesh_cache[key] = mesh
+	return mesh

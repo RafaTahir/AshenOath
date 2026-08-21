@@ -36,7 +36,7 @@ var reduced_motion := false
 const INTERIOR_ZONES := ["record_hall", "undercroft"]
 const FOREST_ZONES := ["wychwood", "deep_wood", "marsh_crossing", "burned_farmstead", "hart_glade"]
 const CASTLE_ZONES := ["vargan_approach", "vargan_court", "assembly"]
-const MIN_VISUAL_TIME_DELTA_MINUTES := 3.5
+const MIN_VISUAL_TIME_DELTA_MINUTES := 14.0
 
 func clear_runtime_caches() -> void:
 	# Detach the active environment before dropping cached Environment objects.

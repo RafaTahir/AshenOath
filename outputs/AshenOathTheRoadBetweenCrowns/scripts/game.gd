@@ -3932,7 +3932,9 @@ func _configure_npc_animation(mapped: Node3D, id: String) -> void:
 	driver.name = "CharacterAnimationDriver"
 	mapped.add_child(driver)
 	driver.configure(mapped, clips)
-	driver.set_update_rate_hz(20.0)
+	# Named NPCs remain animated at a steady presentation rate, while avoiding
+	# synchronizing ten skeletal evaluators on the same Compatibility frame.
+	driver.set_update_rate_hz(12.0)
 
 func _stage_dialogue_moment(area) -> void:
 	if player == null or area == null or not (area is Node3D):

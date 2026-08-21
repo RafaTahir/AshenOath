@@ -54,6 +54,8 @@ var behavior_profile := "direct"
 var flank_sign := 1.0
 var parry_exposed_time := 0.0
 var far_tick_accumulator := 0.0
+var near_tick_accumulator := 0.0
+const NEAR_AI_TICK_INTERVAL := 1.0 / 30.0
 var attack_gate: Callable
 var owns_attack_token := false
 var encounter_active := true
@@ -154,6 +156,16 @@ func _physics_process(delta: float) -> void:
 		far_tick_accumulator = 0.0
 	else:
 		far_tick_accumulator = 0.0
+	# Normal enemies do not need a full physics decision at every rendered
+	# frame. A stable 30 Hz decision cadence keeps pursuit, spacing, and attack
+	# timing responsive at the native 720p budget while leaving bosses on the
+	# full physics cadence for readable phase telegraphs.
+	if not is_boss:
+		near_tick_accumulator += delta
+		if near_tick_accumulator < NEAR_AI_TICK_INTERVAL:
+			return
+		delta = near_tick_accumulator
+		near_tick_accumulator = 0.0
 	attack_cooldown = max(attack_cooldown - delta, 0.0)
 	attack_recovery_time = max(attack_recovery_time - delta, 0.0)
 	slowed_time = max(slowed_time - delta, 0.0)
@@ -322,6 +334,15 @@ func set_encounter_active(value: bool) -> void:
 		collision.set_deferred("disabled", not value)
 	if value:
 		velocity = Vector3.ZERO
+		near_tick_accumulator = 0.0
+		CombatFeedback.prewarm_enemy_feedback(self)
+		# Build the first windup marker at wave activation, before combat sampling
+		# or the enemy's first attack. Lazy PrismMesh/material creation here can
+		# otherwise create a single visible hitch on Intel/ANGLE.
+		if windup_marker == null:
+			windup_marker = CombatFeedback.warning_marker(self, self)
+			if windup_marker != null:
+				windup_marker.visible = false
 		if animation_driver != null:
 			animation_driver.set_locomotion(0.0, Vector3.ZERO, true)
 
@@ -843,7 +864,10 @@ func _try_build_mapped_body() -> bool:
 			"attack": "Punch", "hit": "HitReact", "death": "Death"
 		})
 	if animation_driver.is_valid():
-		animation_driver.set_update_rate_hz(20.0)
+		# One active combat skeleton is sufficient for the 720p presentation;
+		# keeping its updates off the crowded 60 Hz path avoids isolated attack
+		# evaluation spikes on Intel/ANGLE without changing hit timing.
+		animation_driver.set_update_rate_hz(12.0)
 	_configure_attack_contact_bone()
 	return true
 

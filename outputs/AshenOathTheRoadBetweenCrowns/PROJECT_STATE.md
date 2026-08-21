@@ -1362,3 +1362,22 @@ The continuation source is now verified locally for the release candidate. The r
 - Fresh `verify_combat_001`, motion, AI, Oathfire, runtime, and content gates
   pass through the targeted `combat` profile. Production `main`, tracked
   `web/`, and Vercel remain unchanged.
+
+## Actual completion continuation - 2026-08-21
+
+- The current development branch includes the ENGINE-004 anchor-retirement,
+  COMBAT-005 contact/parry, QA-005 renderer-classification, and PERF-008
+  runtime follow-up corrections. The latest targeted combat, world, and
+  navigation profiles pass.
+- Combat feedback uses cached meshes/materials and wave prewarming; normal
+  enemies make decisions at a stable 30 Hz while bosses retain full cadence.
+- A fresh isolated graphical Compatibility run at native 1280x720 Balanced
+  passed every required zone and Wychwood combat profile: Greyfen `56.5 / 35.4`,
+  Wychwood `59.4 / 35.5`, Wychwood combat `58.0 / 34.0`, Vargan courtyard
+  `60.0 / 50.8`, Record Hall `60.0 / 51.6`, and Hart Glade `60.0 / 52.0`
+  FPS average/1% low. Static memory stayed below 106 MB; cold and warm
+  transitions remained within 900 ms and 350 ms.
+- This is still a development checkpoint until the authoritative source suite,
+  fresh screenshot gate, Web export, packed startup, browser smoke tests, and
+  final Git/Vercel hash comparison pass. Production `main`, tracked `web/`, and
+  Vercel remain unchanged.

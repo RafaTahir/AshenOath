@@ -479,3 +479,23 @@ seeds stale traces locally and uses the player's active parry window only
 inside the normal melee envelope, placing the resolved contact at weapon
 height. The fresh combat, motion, AI, Oathfire, runtime, and content gates pass;
 production remains unchanged.
+
+## Actual completion continuation - 2026-08-21
+
+The current development checkpoint has closed the latest performance blocker.
+Combat feedback reuses shared meshes/materials and prewarms the wave effects;
+normal enemies use a stable 30 Hz decision cadence while bosses retain full
+phase cadence. The graphical Compatibility gate is paced at the Web-like 60 Hz
+budget without changing its 32 FPS average / 30 FPS 1% low acceptance floor.
+
+Fresh native 1280x720 Balanced measurements passed Greyfen `56.5 / 35.4`,
+Wychwood `59.4 / 35.5`, Wychwood combat `58.0 / 34.0`, Vargan courtyard
+`60.0 / 50.8`, Record Hall `60.0 / 51.6`, and Hart Glade `60.0 / 52.0` FPS
+average/1% low. Static memory stayed below 106 MB and transitions stayed
+inside the 350/900 ms budgets. Targeted combat, world, and navigation profiles
+also pass.
+
+The authoritative release still must run from the resulting source checkpoint,
+regenerate current screenshots, export and packed-start the Web build, run the
+browser gates, synchronize `web/`, and compare the production PCK hash. Until
+those steps pass, `main`, tracked `web/`, and Vercel remain unchanged.

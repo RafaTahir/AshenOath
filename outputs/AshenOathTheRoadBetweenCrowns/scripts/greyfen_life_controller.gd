@@ -158,7 +158,7 @@ func _enroll_named_npcs() -> void:
 		actors.append(entry)
 		_configure_agent(entry)
 		if entry.driver != null and entry.driver.has_method("set_update_rate_hz"):
-			entry.driver.set_update_rate_hz(20.0 if quality == "quality" else 10.0)
+			entry.driver.set_update_rate_hz(16.0 if quality == "quality" else 8.0)
 
 func _update_actor(entry: Dictionary, delta: float) -> void:
 	var node: Node3D = entry.node
@@ -433,5 +433,5 @@ func _make_skeletal_villager(parent: Node3D, role_id: String, index: int, scale_
 	driver.name = "CharacterAnimationDriver"
 	mapped.add_child(driver)
 	driver.configure(mapped, {"idle":"Idle", "walk":"Walk", "run":"Run", "hit":"RecieveHit", "death":"Death"})
-	driver.set_update_rate_hz(20.0 if quality == "quality" else 10.0)
+	driver.set_update_rate_hz(16.0 if quality == "quality" else 8.0)
 	return driver

@@ -29,6 +29,7 @@ const DORMANT_GLOW := Color(0.20, 0.28, 0.30)
 const READY_GLOW := Color(0.44, 0.76, 0.68)
 const TRAVEL_GLOW := Color(0.79, 0.65, 0.35)
 const ERROR_GLOW := Color(0.58, 0.18, 0.15)
+const BALANCED_VISIBILITY_RANGE := 22.0
 
 func configure(destination_id: String, id: String = "") -> void:
 	destination = destination_id
@@ -164,6 +165,7 @@ func _build_visuals() -> void:
 		arch.mesh = mesh
 		arch.position = part["pos"]
 		arch.material_override = stone
+		arch.visibility_range_end = BALANCED_VISIBILITY_RANGE
 		add_child(arch)
 		_arch_parts.append(arch)
 	# Short stone voussoirs turn the flat lintel into a readable, walk-through
@@ -178,6 +180,7 @@ func _build_visuals() -> void:
 		voussoir.position = Vector3(cos(arch_angle) * 0.92, 1.28 + sin(arch_angle) * 1.02, 0.0)
 		voussoir.rotation.z = -arch_angle + PI * 0.5
 		voussoir.material_override = edge
+		voussoir.visibility_range_end = BALANCED_VISIBILITY_RANGE
 		add_child(voussoir)
 		_arch_parts.append(voussoir)
 
@@ -193,6 +196,7 @@ func _build_visuals() -> void:
 	_panel_material.albedo_color = Color(DORMANT_GLOW.r, DORMANT_GLOW.g, DORMANT_GLOW.b, 0.28)
 	_panel_material.roughness = 0.25
 	_panel.material_override = _panel_material
+	_panel.visibility_range_end = BALANCED_VISIBILITY_RANGE
 	add_child(_panel)
 	for layer_index in range(2):
 		var veil := MeshInstance3D.new()
@@ -210,6 +214,7 @@ func _build_visuals() -> void:
 		veil_material.emission = Color(0.08, 0.24, 0.25)
 		veil_material.emission_energy_multiplier = 0.34
 		veil.material_override = veil_material
+		veil.visibility_range_end = BALANCED_VISIBILITY_RANGE
 		add_child(veil)
 		_veil_layers.append(veil)
 
@@ -226,6 +231,7 @@ func _build_visuals() -> void:
 	_ring_material.emission_enabled = true
 	_ring_material.emission_energy_multiplier = 1.3
 	_ring.material_override = _ring_material
+	_ring.visibility_range_end = BALANCED_VISIBILITY_RANGE
 	add_child(_ring)
 	var threshold := MeshInstance3D.new()
 	threshold.name = "OathGateThresholdStone"
@@ -234,6 +240,7 @@ func _build_visuals() -> void:
 	threshold.mesh = threshold_mesh
 	threshold.position = Vector3(0.0, 0.05, 0.15)
 	threshold.material_override = edge
+	threshold.visibility_range_end = BALANCED_VISIBILITY_RANGE
 	add_child(threshold)
 
 	_mote_material = StandardMaterial3D.new()
@@ -250,6 +257,7 @@ func _build_visuals() -> void:
 		mote.name = "OathGateAshMote_%02d" % index
 		mote.mesh = mote_mesh
 		mote.material_override = _mote_material
+		mote.visibility_range_end = BALANCED_VISIBILITY_RANGE
 		mote.position = Vector3((float(index) - 3.0) * 0.24, 0.45 + index * 0.18, 0.0)
 		add_child(mote)
 		_motes.append(mote)
