@@ -261,6 +261,12 @@ func _new_game() -> void:
 	get_tree().paused = false
 	_start_new_game_world()
 
+func _handle_quit_request() -> void:
+	if OS.has_feature("web"):
+		hud.show_exit_notice()
+		return
+	get_tree().quit()
+
 func _request_zone_load(zone_id: String, spawn_pos: Vector3) -> void:
 	if zone_transition_pending or zone_load_request_pending:
 		return

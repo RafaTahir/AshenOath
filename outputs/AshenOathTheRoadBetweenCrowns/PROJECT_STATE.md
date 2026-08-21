@@ -2,6 +2,17 @@
 
 ## Current Working Checkpoint - 2026-08-21
 
+### HUD-005 product interface checkpoint
+
+The responsive HUD/menu slice now labels this branch as a development
+candidate rather than a shipped release. The 1080p menu exposes New Game,
+Continue, Controls, Settings, Credits, Quit, and the launch return action.
+Desktop Quit exits through Godot; Web Quit presents an explicit browser-safe
+departure notice. The product profile and fresh 1280x720/1080p captures pass.
+Final full-route HUD composition and release evidence remain open for QA-012
+and RELEASE-003; production `main`, tracked `web/`, and Vercel remain
+unchanged.
+
 ### CIN-002 human dialogue presentation checkpoint
 
 Dialogue resolution now produces stable speaker IDs and presentation metadata

@@ -2,6 +2,15 @@
 
 ## Current Working Checkpoint - 2026-08-21
 
+### HUD-005 product interface checkpoint
+
+The menu and gameplay HUD remain responsive at 1080p menu scale and native
+720p gameplay scale. The main menu now has a real Quit action with a desktop
+exit path and a browser-safe departure notice, and its build identity clearly
+states `DEVELOPMENT CANDIDATE`. The product profile passes with fresh menu,
+Greyfen, and Hart captures. Full-route UI review remains part of QA-012 and
+RELEASE-003; production is unchanged.
+
 ### CIN-002 human dialogue presentation checkpoint
 
 Resolved dialogue pages now carry stable speaker IDs and a normalized

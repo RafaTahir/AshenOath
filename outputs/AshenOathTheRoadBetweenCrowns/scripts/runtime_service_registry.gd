@@ -137,6 +137,7 @@ func configure(owner: Node) -> void:
 	hud.menu_hovered.connect(func(): audio.play_event("menu_hover", 0.025))
 	hud.menu_clicked.connect(func(): audio.play_event("menu_click", 0.015))
 	hud.new_game_requested.connect(Callable(owner, "_new_game"))
+	hud.quit_requested.connect(Callable(owner, "_handle_quit_request"))
 	hud.continue_requested.connect(func():
 		audio.play_event("ui")
 		if not save_manager.load_game(owner):

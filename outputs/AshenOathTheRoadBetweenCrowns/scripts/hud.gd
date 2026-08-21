@@ -8,6 +8,7 @@ signal load_checkpoint_requested
 signal resume_requested
 signal journal_requested
 signal launch_accepted
+signal quit_requested
 signal settings_requested(action: String)
 signal action_selected(action: Dictionary)
 signal craft_requested(item_id: String)
@@ -18,7 +19,7 @@ signal dialogue_page_changed(speaker: String, speaker_id: String, page_index: in
 signal menu_hovered
 signal menu_clicked
 
-const MENU_BUILD_LABEL = "SOUL REBUILD | RELEASE-003 | NATIVE 720P | ASHENOATH.VERCEL.APP"
+const MENU_BUILD_LABEL = "SOUL REBUILD | DEVELOPMENT CANDIDATE | NATIVE 720P | ASHENOATH.VERCEL.APP"
 const MENU_SIZE = Vector2(1920.0, 1080.0)
 const GAMEPLAY_SIZE = Vector2i(1280, 720)
 const SAVE_PATH = "user://ashen_oath_save.json"
@@ -126,6 +127,7 @@ func show_main_menu() -> void:
 	_add_menu_button(box, "Controls", func(): show_controls_menu("main"))
 	_add_menu_button(box, "Settings", func(): show_settings_menu("main"))
 	_add_menu_button(box, "Credits", func(): show_credits_menu())
+	_add_menu_button(box, "Quit", func(): quit_requested.emit())
 	_add_menu_button(box, "Return to Launch Screen", show_launch_screen)
 
 func set_new_game_ready(value: bool) -> void:
@@ -297,6 +299,17 @@ func show_credits_menu() -> void:
 	var box = _menu_box("Credits", "", "made under an ashen moon")
 	_add_menu_text(box, "Ashen Oath vertical slice.\nExternal art/audio/UI assets are tracked under assets_external/licenses.\nPublish public builds with those license notes included.")
 	_add_menu_button(box, "Back", func(): show_main_menu())
+
+func show_exit_notice() -> void:
+	active_menu = "quit"
+	_set_internal_canvas(Vector2i(MENU_SIZE))
+	_set_ui_pointer("menu")
+	_clear_menu()
+	menu_layer.visible = true
+	var box := _menu_box("Leave the Road", "", "browser departure")
+	_add_menu_text(box, "Ashen Oath cannot close a browser tab by itself.")
+	_add_menu_text(box, "Your last checkpoint remains safe. Close this tab when you are ready.")
+	_add_menu_button(box, "Back to Menu", func(): show_main_menu())
 
 func hide_menus() -> void:
 	active_menu = ""

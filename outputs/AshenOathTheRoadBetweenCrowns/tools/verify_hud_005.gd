@@ -13,8 +13,11 @@ func _initialize() -> void:
 	check(hud.get_window().content_scale_size == Vector2i(1920, 1080), "Menu canvas is not responsive 1080p")
 	check(_contains_label(hud.menu_layer, "ASHEN OATH"), "Menu title is missing")
 	check(_contains_label(hud.menu_layer, "SOUL REBUILD"), "Menu build identity is stale")
-	for label in ["New Game", "Continue", "Controls", "Settings", "Credits"]:
+	for label in ["New Game", "Continue", "Controls", "Settings", "Credits", "Quit"]:
 		check(_button(hud.menu_layer, label) != null, "Main menu action is missing: %s" % label)
+	check("DEVELOPMENT CANDIDATE" in hud.MENU_BUILD_LABEL, "Development menu identity is stale")
+	hud.show_exit_notice()
+	check(_contains_label(hud.menu_layer, "cannot close a browser tab"), "Browser-safe exit notice is missing")
 	hud.hide_menus()
 	hud.set_tracker("Road of Crows\n- Speak with Sister Anwen")
 	hud.set_prompt("E  Speak with Sister Anwen")
