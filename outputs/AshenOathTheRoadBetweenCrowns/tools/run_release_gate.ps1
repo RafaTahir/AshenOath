@@ -17,7 +17,16 @@ $GodotCandidates.Add((Join-Path $RepoRoot "tools\godot\Godot_v4.6.3-stable_win64
 $GodotCandidates.Add("C:\Users\User\Downloads\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe")
 $Godot = $GodotCandidates | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
 if ([string]::IsNullOrWhiteSpace($Godot)) {
-	$Godot = Get-ChildItem -LiteralPath $env:USERPROFILE -Recurse -Filter "Godot_v4.6.3-stable_win64_console.exe" -File -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName
+    $Godot = Get-ChildItem -LiteralPath $env:USERPROFILE -Recurse -Filter "Godot_v4.6.3-stable_win64_console.exe" -File -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName
+}
+$GraphicalGodotCandidates = [System.Collections.Generic.List[string]]::new()
+if ($env:GODOT_GRAPHICAL_BIN) { $GraphicalGodotCandidates.Add($env:GODOT_GRAPHICAL_BIN) }
+$GraphicalGodotCandidates.Add((Join-Path $RepoRoot "tools\godot\Godot_v4.6.3-stable_win64.exe"))
+$GraphicalGodotCandidates.Add("C:\Temp\AshenOathGodot4.6.3\Godot_v4.6.3-stable_win64.exe")
+$GraphicalGodotCandidates.Add("C:\Users\User\Downloads\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64.exe")
+$GodotGraphical = $GraphicalGodotCandidates | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
+if ([string]::IsNullOrWhiteSpace($GodotGraphical)) {
+    $GodotGraphical = Get-ChildItem -LiteralPath $env:USERPROFILE -Recurse -Filter "Godot_v4.6.3-stable_win64.exe" -File -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName
 }
 $Python = "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe"
 $Node = "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe"
@@ -146,16 +155,18 @@ function Invoke-ExternalGate(
     Write-Host ("RELEASE GATE {0}: PASS ({1:n1}s)" -f $Name, $timer.Elapsed.TotalSeconds)
 }
 
-function Invoke-GodotGate([string]$Name, [string[]]$Arguments) {
-    $log = Join-Path $Logs "$Name.log"
+function Invoke-GodotGate([string]$Name, [string[]]$Arguments, [string]$Executable = "") {
+	$Runner = $Godot
+	if (-not [string]::IsNullOrWhiteSpace($Executable)) { $Runner = $Executable }
+	$log = Join-Path $Logs "$Name.log"
     $timer = [System.Diagnostics.Stopwatch]::StartNew()
     $previousErrorPreference = $ErrorActionPreference
     $ErrorActionPreference = "Continue"
     try {
         if ($VerboseOutput) {
-            & $Godot @Arguments 2>&1 | Tee-Object -FilePath $log
-        } else {
-            & $Godot @Arguments *> $log
+			& $Runner @Arguments 2>&1 | Tee-Object -FilePath $log
+		} else {
+			& $Runner @Arguments *> $log
         }
         $exitCode = $LASTEXITCODE
     } finally {
@@ -207,7 +218,7 @@ function Invoke-GodotGate([string]$Name, [string[]]$Arguments) {
 }
 
 try {
-    if (!(Test-Path -LiteralPath $Godot)) { throw "Godot 4.6.3 not found: $Godot" }
+    if (!(Test-Path -LiteralPath $Godot)) { throw "Godot 4.6.3 console binary not found: $Godot" }
     if (!(Test-Path -LiteralPath $Python)) { throw "Bundled Python not found: $Python" }
     if (!(Test-Path -LiteralPath $Node)) { throw "Bundled Node.js not found: $Node" }
 
@@ -281,10 +292,13 @@ try {
     }
 
     if ((-not $IsResume -or $resumeFromVerifier -or $resumeFromPerformance) -and [string]::IsNullOrWhiteSpace($Only) -and -not $SkipPerformance) {
+		if ([string]::IsNullOrWhiteSpace($GodotGraphical) -or -not (Test-Path -LiteralPath $GodotGraphical)) {
+			throw "Graphical Godot 4.6.3 binary not found for verify_perf_001: $GodotGraphical"
+		}
         Invoke-GodotGate "verify_perf_001" @(
             "--path", $Project, "--rendering-method", "gl_compatibility",
             "--script", "tools/verify_perf_001.gd"
-        )
+        ) $GodotGraphical
     }
     if (-not $IsResume -and [string]::IsNullOrWhiteSpace($Only)) {
         $qaLogArguments = @()
