@@ -1505,6 +1505,10 @@ func _handle_dialogue_action(action: Dictionary) -> void:
 	audio.stop_voice()
 	audio.play_event("ui")
 	var type = str(action.get("type", ""))
+	if not _dialogue_action_available(action):
+		hud.toast("That part of the story is not ready yet.")
+		_refresh_tracker()
+		return
 	if type == "start_quest":
 		quests.start_quest(action.get("quest", ""))
 		if action.get("quest", "") == "main_road_of_crows":
@@ -1604,6 +1608,45 @@ func _handle_dialogue_action(action: Dictionary) -> void:
 	_refresh_tracker()
 	if current_zone_id != "":
 		_load_zone(current_zone_id, player.global_position)
+
+func _dialogue_action_available(action: Dictionary) -> bool:
+	var type := str(action.get("type", ""))
+	var quest_id := str(action.get("quest", ""))
+	var objective_id := str(action.get("objective", ""))
+	if type == "start_quest":
+		return quest_id != "" and quests.is_unlocked(quest_id) and not quests.is_active(quest_id) and not quests.is_completed(quest_id)
+	if type == "complete_objective":
+		return quest_id != "" and objective_id != "" and quests.is_active(quest_id) and not quests.is_objective_done(quest_id, objective_id)
+	if type == "resolve_side_quest":
+		return quest_id != "" and quests.is_active(quest_id) and _quest_required_objectives_done(quest_id)
+	if type == "story_choice" and quest_id != "" and objective_id != "":
+		if not quests.is_active(quest_id) or quests.is_objective_done(quest_id, objective_id):
+			return false
+		return _story_choice_prerequisites_done(quest_id, objective_id)
+	return true
+
+func _quest_required_objectives_done(quest_id: String) -> bool:
+	var definition: Dictionary = quests.quest_defs.get(quest_id, {})
+	for raw_objective in definition.get("objectives", []):
+		if bool(raw_objective.get("optional", false)):
+			continue
+		if not quests.is_objective_done(quest_id, str(raw_objective.get("id", ""))):
+			return false
+	return true
+
+func _story_choice_prerequisites_done(quest_id: String, choice_id: String) -> bool:
+	var definition: Dictionary = quests.quest_defs.get(quest_id, {})
+	var found_choice := false
+	for raw_objective in definition.get("objectives", []):
+		var objective_id := str(raw_objective.get("id", ""))
+		if objective_id == choice_id:
+			found_choice = true
+			break
+		if bool(raw_objective.get("optional", false)):
+			continue
+		if not quests.is_objective_done(quest_id, objective_id):
+			return false
+	return found_choice
 	save_manager.autosave(self)
 
 func _on_launch_accepted() -> void:

@@ -145,10 +145,10 @@
       }
     ],
     "actions": [
-      {"label": "Start Bitter Roots", "type": "start_quest", "quest": "side_bitter_roots"},
-      {"label": "I found the roots.", "type": "complete_objective", "quest": "side_bitter_roots", "objective": "collect_roots"},
-      {"label": "Keep the truth between us.", "type": "story_choice", "quest": "side_bitter_roots", "objective": "mira_choice", "sets_flags": {"mira_truth": "kept"}, "result": "Mira keeps working, but no longer meets your eyes."},
-      {"label": "Greyfen deserves the truth.", "type": "story_choice", "quest": "side_bitter_roots", "objective": "mira_choice", "sets_flags": {"mira_truth": "confessed"}, "adjusts_values": {"greyfen_fear": 1}, "result": "Mira agrees to name what feeds the roots."}
+      {"label": "Start Bitter Roots", "type": "start_quest", "quest": "side_bitter_roots", "conditions": {"quest_available": "side_bitter_roots"}},
+      {"label": "I found the roots.", "type": "complete_objective", "quest": "side_bitter_roots", "objective": "collect_roots", "conditions": {"quest_active": "side_bitter_roots", "objectives_not_done": [{"quest": "side_bitter_roots", "id": "collect_roots"}]}},
+      {"label": "Keep the truth between us.", "type": "story_choice", "quest": "side_bitter_roots", "objective": "mira_choice", "conditions": {"quest_active": "side_bitter_roots", "objectives_done": [{"quest": "side_bitter_roots", "id": "collect_roots"}], "objectives_not_done": [{"quest": "side_bitter_roots", "id": "mira_choice"}]}, "sets_flags": {"mira_truth": "kept"}, "result": "Mira keeps working, but no longer meets your eyes."},
+      {"label": "Greyfen deserves the truth.", "type": "story_choice", "quest": "side_bitter_roots", "objective": "mira_choice", "conditions": {"quest_active": "side_bitter_roots", "objectives_done": [{"quest": "side_bitter_roots", "id": "collect_roots"}], "objectives_not_done": [{"quest": "side_bitter_roots", "id": "mira_choice"}]}, "sets_flags": {"mira_truth": "confessed"}, "adjusts_values": {"greyfen_fear": 1}, "result": "Mira agrees to name what feeds the roots."}
     ]
   },
   "edric": {
@@ -179,10 +179,10 @@
       "Find why the cemetery bell rings. Bring me cruelty or kindness, but bring me an answer."
     ],
     "actions": [
-      {"label": "Accept A Widow's Bell", "type": "start_quest", "quest": "side_widows_bell"},
-      {"label": "I found Harl's bell.", "type": "complete_objective", "quest": "side_widows_bell", "objective": "find_bell"},
-      {"label": "He was calling for a witness.", "type": "story_choice", "quest": "side_widows_bell", "objective": "widow_choice", "sets_flags": {"widow_truth": "told"}, "adjusts_values": {"anwen_trust": 1}, "result": "Elna rings the bell once, then cuts its cord."},
-      {"label": "The wind caught an old cord.", "type": "story_choice", "quest": "side_widows_bell", "objective": "widow_choice", "sets_flags": {"widow_truth": "comforted"}, "result": "Elna nods. She knows a kindness when she hears one."}
+      {"label": "Accept A Widow's Bell", "type": "start_quest", "quest": "side_widows_bell", "conditions": {"quest_available": "side_widows_bell"}},
+      {"label": "I found Harl's bell.", "type": "complete_objective", "quest": "side_widows_bell", "objective": "find_bell", "conditions": {"quest_active": "side_widows_bell", "objectives_not_done": [{"quest": "side_widows_bell", "id": "find_bell"}]}},
+      {"label": "He was calling for a witness.", "type": "story_choice", "quest": "side_widows_bell", "objective": "widow_choice", "conditions": {"quest_active": "side_widows_bell", "objectives_done": [{"quest": "side_widows_bell", "id": "find_bell"}], "objectives_not_done": [{"quest": "side_widows_bell", "id": "widow_choice"}]}, "sets_flags": {"widow_truth": "told"}, "adjusts_values": {"anwen_trust": 1}, "result": "Elna rings the bell once, then cuts its cord."},
+      {"label": "The wind caught an old cord.", "type": "story_choice", "quest": "side_widows_bell", "objective": "widow_choice", "conditions": {"quest_active": "side_widows_bell", "objectives_done": [{"quest": "side_widows_bell", "id": "find_bell"}], "objectives_not_done": [{"quest": "side_widows_bell", "id": "widow_choice"}]}, "sets_flags": {"widow_truth": "comforted"}, "result": "Elna nods. She knows a kindness when she hears one."}
     ]
   },
   "blacksmith_tor": {
@@ -194,10 +194,10 @@
     ],
     "actions": [
       {"label": "Take scrap iron.", "type": "give_ingredients", "conditions": {"tor_scrap_taken": false}, "items": {"scrap_iron": 2}, "sets_flags": {"tor_scrap_taken": true}},
-      {"label": "Accept Iron Remembers.", "type": "start_quest", "quest": "side_iron_remembers"},
-      {"label": "I recovered iron from the chapel.", "type": "complete_objective", "quest": "side_iron_remembers", "objective": "recover_iron"},
-      {"label": "Forge the victims' names into a memorial.", "type": "story_choice", "quest": "side_iron_remembers", "objective": "tor_choice", "sets_flags": {"iron_fate": "memorial"}, "adjusts_values": {"anwen_trust": 1}, "result": "Tor stamps each recovered name into warm iron."},
-      {"label": "Forge it into a weapon.", "type": "story_choice", "quest": "side_iron_remembers", "objective": "tor_choice", "sets_flags": {"iron_fate": "weapon"}, "adjusts_values": {"hart_debt": 1}, "result": "Tor folds the witness into an edge."}
+      {"label": "Accept Iron Remembers.", "type": "start_quest", "quest": "side_iron_remembers", "conditions": {"quest_available": "side_iron_remembers"}},
+      {"label": "I recovered iron from the chapel.", "type": "complete_objective", "quest": "side_iron_remembers", "objective": "recover_iron", "conditions": {"quest_active": "side_iron_remembers", "objectives_not_done": [{"quest": "side_iron_remembers", "id": "recover_iron"}]}},
+      {"label": "Forge the victims' names into a memorial.", "type": "story_choice", "quest": "side_iron_remembers", "objective": "tor_choice", "conditions": {"quest_active": "side_iron_remembers", "objectives_done": [{"quest": "side_iron_remembers", "id": "recover_iron"}], "objectives_not_done": [{"quest": "side_iron_remembers", "id": "tor_choice"}]}, "sets_flags": {"iron_fate": "memorial"}, "adjusts_values": {"anwen_trust": 1}, "result": "Tor stamps each recovered name into warm iron."},
+      {"label": "Forge it into a weapon.", "type": "story_choice", "quest": "side_iron_remembers", "objective": "tor_choice", "conditions": {"quest_active": "side_iron_remembers", "objectives_done": [{"quest": "side_iron_remembers", "id": "recover_iron"}], "objectives_not_done": [{"quest": "side_iron_remembers", "id": "tor_choice"}]}, "sets_flags": {"iron_fate": "weapon"}, "adjusts_values": {"hart_debt": 1}, "result": "Tor folds the witness into an edge."}
     ]
   },
   "farmer_toma": {
@@ -209,10 +209,10 @@
       "Find what hunts the fold. Bring proof, not village gossip."
     ],
     "actions": [
-      {"label": "Accept The Black Dog Contract", "type": "start_quest", "quest": "side_black_dog"},
-      {"label": "I followed the sheepfold tracks.", "type": "complete_objective", "quest": "side_black_dog", "objective": "find_dog"},
-      {"label": "The guardian protected the children.", "type": "story_choice", "quest": "side_black_dog", "objective": "dog_choice", "sets_flags": {"black_dog_fate": "spared"}, "adjusts_values": {"anwen_trust": 1}, "result": "Toma looks toward the fold and lowers his knife."},
-      {"label": "Tell them it fled.", "type": "story_choice", "quest": "side_black_dog", "objective": "dog_choice", "sets_flags": {"black_dog_fate": "hidden"}, "result": "Greyfen accepts the easier story."}
+      {"label": "Accept The Black Dog Contract", "type": "start_quest", "quest": "side_black_dog", "conditions": {"quest_available": "side_black_dog"}},
+      {"label": "I followed the sheepfold tracks.", "type": "complete_objective", "quest": "side_black_dog", "objective": "find_dog", "conditions": {"quest_active": "side_black_dog", "objectives_not_done": [{"quest": "side_black_dog", "id": "find_dog"}]}},
+      {"label": "The guardian protected the children.", "type": "story_choice", "quest": "side_black_dog", "objective": "dog_choice", "conditions": {"quest_active": "side_black_dog", "objectives_done": [{"quest": "side_black_dog", "id": "find_dog"}], "objectives_not_done": [{"quest": "side_black_dog", "id": "dog_choice"}]}, "sets_flags": {"black_dog_fate": "spared"}, "adjusts_values": {"anwen_trust": 1}, "result": "Toma looks toward the fold and lowers his knife."},
+      {"label": "Tell them it fled.", "type": "story_choice", "quest": "side_black_dog", "objective": "dog_choice", "conditions": {"quest_active": "side_black_dog", "objectives_done": [{"quest": "side_black_dog", "id": "find_dog"}], "objectives_not_done": [{"quest": "side_black_dog", "id": "dog_choice"}]}, "sets_flags": {"black_dog_fate": "hidden"}, "result": "Greyfen accepts the easier story."}
     ]
   },
   "returned_soldier": {
@@ -222,8 +222,8 @@
       "I remember the road. I do not remember whether the man who walked it deserves to keep breathing."
     ],
     "actions": [
-      {"label": "Your name belongs among the witnesses.", "type": "story_choice", "quest": "side_empty_grave", "objective": "walker_choice", "sets_flags": {"returned_soldier_fate": "named"}, "adjusts_values": {"anwen_trust": 1}, "result": "He gives Kael his name and agrees to stand before Greyfen."},
-      {"label": "Keep the name. Leave the grave empty.", "type": "story_choice", "quest": "side_empty_grave", "objective": "walker_choice", "sets_flags": {"returned_soldier_fate": "anonymous"}, "result": "He leaves before dawn, owing Greyfen nothing."}
+      {"label": "Your name belongs among the witnesses.", "type": "story_choice", "quest": "side_empty_grave", "objective": "walker_choice", "conditions": {"quest_active": "side_empty_grave", "objectives_done": [{"quest": "side_empty_grave", "id": "follow_empty_grave"}], "objectives_not_done": [{"quest": "side_empty_grave", "id": "walker_choice"}]}, "sets_flags": {"returned_soldier_fate": "named"}, "adjusts_values": {"anwen_trust": 1}, "result": "He gives Kael his name and agrees to stand before Greyfen."},
+      {"label": "Keep the name. Leave the grave empty.", "type": "story_choice", "quest": "side_empty_grave", "objective": "walker_choice", "conditions": {"quest_active": "side_empty_grave", "objectives_done": [{"quest": "side_empty_grave", "id": "follow_empty_grave"}], "objectives_not_done": [{"quest": "side_empty_grave", "id": "walker_choice"}]}, "sets_flags": {"returned_soldier_fate": "anonymous"}, "result": "He leaves before dawn, owing Greyfen nothing."}
     ]
   },
   "white_hart": {

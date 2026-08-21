@@ -96,7 +96,7 @@ func configure(owner: Node) -> void:
 	quest_beats.setup(quests, story_state)
 	dialogue.load_dialogue("res://data/dialogue.json")
 	dialogue.load_dialogue("res://data/campaign_dialogue.json")
-	dialogue.setup(story_state)
+	dialogue.setup(story_state, quests)
 	inventory.load_items("res://data/items.json")
 	crafting.setup(inventory, quests, story_state)
 	input_router.install_default_actions()

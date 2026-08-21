@@ -2,6 +2,19 @@
 
 ## Current Working Checkpoint - 2026-08-21
 
+### SIDE-003 consequential side-quest flow checkpoint
+
+The five selected side quests now gate their contact dialogue against the
+active quest and required investigation objective. Consequential choices are
+hidden before the clue, become available after the clue, and disappear after
+resolution. `DialogueManager` supports quest/objective conditions and
+`game.gd` rejects stale or out-of-order dialogue actions at runtime. The
+targeted `story` ticket profile and `verify_side_003.gd` pass. Fresh changed
+views are recorded in `Development_Gallery/screenshots/WORLD_001_*_20260821_151120.png`
+and `WORLD_002_*_20260821_151155.png`. Full side-quest aftermath and save/
+reload permutation coverage remains open for `QA-012`; production `main`,
+tracked `web/`, and Vercel remain unchanged.
+
 ### WORLD-012 Greyfen visual recovery update
 
 The Greyfen presentation slice now has a transparent Compatibility sky overlay,

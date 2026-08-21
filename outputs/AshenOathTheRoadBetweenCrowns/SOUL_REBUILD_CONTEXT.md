@@ -2,6 +2,18 @@
 
 ## Current Working Checkpoint - 2026-08-21
 
+### SIDE-003 consequential side-quest flow checkpoint
+
+The five selected side quests now expose contact handoffs and consequential
+choices only when the matching quest state is valid. `DialogueManager` resolves
+quest/objective conditions, while `game.gd` rejects stale or out-of-order
+actions after reload or duplicate activation. `verify_side_003.gd` and the
+targeted story profile pass. Fresh changed-view evidence is in
+`Development_Gallery/screenshots/WORLD_001_*_20260821_151120.png` and
+`WORLD_002_*_20260821_151155.png`. Full side-quest aftermath and save/reload
+permutations remain a `QA-012` responsibility; this development checkpoint
+does not change production `main`, tracked `web/`, or Vercel.
+
 ### WORLD-012 Greyfen visual recovery update
 
 The latest Greyfen slice fixes an actual screenshot failure: the authored sky
