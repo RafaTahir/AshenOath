@@ -197,7 +197,12 @@ func _check_ghoulkin_material() -> void:
 		var driver: Node = enemy.find_child("CharacterAnimationDriver", true, false)
 		if driver != null and driver.is_valid():
 			driver.trigger_action("windup", 1.0, 0.08, true)
-		for i in range(10):
+		# Nearby enemy animation is intentionally evaluated at a bounded 12 Hz
+		# cadence in the live build. Ten rendered frames can therefore sample
+		# only the clip's initial anticipation pose and falsely call a valid
+		# imported attack static. Cover the complete authored windup window while
+		# keeping this a real runtime sample rather than seeking the animation.
+		for i in range(32):
 			if enemy.has_method("_animate_visuals"):
 				enemy.call("_animate_visuals", 0.016)
 			await process_frame

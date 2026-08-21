@@ -2,43 +2,45 @@ extends RefCounted
 
 static var _mesh_cache: Dictionary = {}
 static var _material_cache: Dictionary = {}
+static var _impact_pools: Dictionary = {}
+static var _ground_ring_pool: Array = []
 
 static func impact_burst(parent: Node3D, pos: Vector3, heavy: bool, color: Color = Color(1.0, 0.66, 0.24)) -> void:
 	if parent == null:
 		return
-	var root = Node3D.new()
-	root.name = "CombatImpactBurst"
+	var key := "heavy" if heavy else "normal"
+	var root: Node3D = _acquire_impact_root(parent, key)
 	root.position = parent.to_local(pos)
-	parent.add_child(root)
-	var count = 7 if heavy else 5
-	for i in range(count):
-		var shard = MeshInstance3D.new()
-		shard.name = "ImpactShard"
-		shard.mesh = _cached_box_mesh("impact_heavy" if heavy else "impact_normal", Vector3(0.055, 0.055, 0.30 if heavy else 0.22))
+	root.scale = Vector3.ONE
+	root.visible = true
+	var count := 7 if heavy else 5
+	for i in range(root.get_child_count()):
+		var shard := root.get_child(i) as MeshInstance3D
+		if shard == null:
+			continue
+		shard.visible = i < count
+		if i >= count:
+			continue
 		shard.position = Vector3(randf_range(-0.08, 0.08), randf_range(-0.04, 0.08), randf_range(-0.08, 0.08))
 		shard.rotation_degrees = Vector3(randf_range(-35, 35), float(i) * (360.0 / float(count)), randf_range(-45, 45))
 		shard.material_override = _emissive(color, 1.15 if heavy else 0.9)
-		root.add_child(shard)
 	var tween = root.create_tween()
 	tween.tween_property(root, "scale", Vector3.ONE * (1.7 if heavy else 1.25), 0.14)
 	tween.parallel().tween_property(root, "position:y", root.position.y + 0.12, 0.14)
-	tween.tween_callback(root.queue_free)
+	tween.tween_callback(func(): _release_impact_root(root, key))
 
 static func ground_ring(parent: Node3D, pos: Vector3, color: Color, radius: float = 1.0, life: float = 0.22) -> void:
 	if parent == null:
 		return
-	var ring = MeshInstance3D.new()
-	ring.name = "CombatGroundRing"
-	ring.set_meta("visual_name", "CombatGroundRing")
-	ring.mesh = _cached_ground_ring_mesh()
+	var ring: MeshInstance3D = _acquire_ground_ring(parent)
 	ring.position = parent.to_local(Vector3(pos.x, 0.052, pos.z))
 	ring.scale = Vector3(radius, 0.014, radius)
 	ring.material_override = _mat(color, 0.84)
-	parent.add_child(ring)
+	ring.visible = true
 	var tween = ring.create_tween()
 	tween.tween_property(ring, "scale", Vector3(radius * 1.6, 0.014, radius * 1.6), life)
 	tween.parallel().tween_property(ring, "position:y", ring.position.y + 0.01, life)
-	tween.tween_callback(ring.queue_free)
+	tween.tween_callback(func(): _release_ground_ring(ring))
 
 static func beam_endpoint(parent: Node3D, pos: Vector3, direction: Vector3, rich: bool = true) -> void:
 	if parent == null:
@@ -152,18 +154,74 @@ static func prewarm_enemy_feedback(parent: Node3D) -> void:
 	if parent == null or parent.has_meta("enemy_feedback_prewarmed"):
 		return
 	parent.set_meta("enemy_feedback_prewarmed", true)
-	# Allocate the first combat-only meshes and materials while an enemy wave is
-	# being revealed. Keeping the warmer hidden avoids a first-hit hitch when
-	# Compatibility/ANGLE compiles the ground ring and impact burst together.
-	var warmer := Node3D.new()
-	warmer.name = "EnemyFeedbackPrewarm"
-	warmer.visible = false
-	parent.add_child(warmer)
-	ground_ring(warmer, warmer.global_position, Color(0.46, 0.05, 0.025), 0.62, 0.05)
-	impact_burst(warmer, warmer.global_position, false, Color(0.85, 0.30, 0.12))
-	var marker := warning_marker(warmer, warmer)
-	if marker != null:
-		marker.visible = false
+	# Render one small wake-up pulse as the wave is revealed. Allocating these
+	# meshes while hidden only warms the CPU-side resources; Compatibility/ANGLE
+	# still compiles the visible shader path on the first real impact, which can
+	# produce a 40-50 ms combat hitch on Intel HD 620. The pulse is intentionally
+	# part of the encounter presentation, so the warm-up is not invisible work.
+	ground_ring(parent, parent.global_position, Color(0.46, 0.05, 0.025), 0.24, 0.14)
+	impact_burst(parent, parent.global_position, false, Color(0.85, 0.30, 0.12))
+
+static func _acquire_impact_root(parent: Node3D, key: String) -> Node3D:
+	var pool: Array = _impact_pools.get(key, [])
+	var root: Node3D = null
+	while not pool.is_empty() and root == null:
+		var candidate = pool.pop_back()
+		if is_instance_valid(candidate):
+			root = candidate as Node3D
+	_impact_pools[key] = pool
+	if root == null:
+		root = Node3D.new()
+		root.name = "CombatImpactBurst"
+		root.set_meta("combat_feedback_pool_key", key)
+		var count := 7 if key == "heavy" else 5
+		for i in range(count):
+			var shard := MeshInstance3D.new()
+			shard.name = "ImpactShard"
+			shard.mesh = _cached_box_mesh("impact_heavy" if key == "heavy" else "impact_normal", Vector3(0.055, 0.055, 0.30 if key == "heavy" else 0.22))
+			root.add_child(shard)
+	if root.get_parent() != parent:
+		var old_parent := root.get_parent()
+		if old_parent != null:
+			old_parent.remove_child(root)
+		parent.add_child(root)
+	return root
+
+static func _release_impact_root(root: Node3D, key: String) -> void:
+	if not is_instance_valid(root):
+		return
+	root.visible = false
+	root.scale = Vector3.ONE
+	var pool: Array = _impact_pools.get(key, [])
+	if root not in pool:
+		pool.append(root)
+	_impact_pools[key] = pool
+
+static func _acquire_ground_ring(parent: Node3D) -> MeshInstance3D:
+	var ring: MeshInstance3D = null
+	while not _ground_ring_pool.is_empty() and ring == null:
+		var candidate = _ground_ring_pool.pop_back()
+		if is_instance_valid(candidate):
+			ring = candidate as MeshInstance3D
+	if ring == null:
+		ring = MeshInstance3D.new()
+		ring.name = "CombatGroundRing"
+		ring.set_meta("visual_name", "CombatGroundRing")
+		ring.mesh = _cached_ground_ring_mesh()
+	if ring.get_parent() != parent:
+		var old_parent := ring.get_parent()
+		if old_parent != null:
+			old_parent.remove_child(ring)
+		parent.add_child(ring)
+	return ring
+
+static func _release_ground_ring(ring: MeshInstance3D) -> void:
+	if not is_instance_valid(ring):
+		return
+	ring.visible = false
+	ring.scale = Vector3.ONE
+	if ring not in _ground_ring_pool:
+		_ground_ring_pool.append(ring)
 
 static func boss_telegraph(parent: Node3D, pos: Vector3, boss_id: String) -> void:
 	if parent == null:

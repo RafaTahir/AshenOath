@@ -52,7 +52,14 @@ func setup(follow_target: Node3D, source: Node = null) -> void:
 	camera.fov = 63.0
 	add_child(camera)
 	_initialized = false
-	_capture_pointer()
+	# Do not request Web pointer lock during camera construction. The browser
+	# has no user gesture yet, and touch emulation must remain pointer-lock free.
+	# Desktop Web captures on the first real mouse gesture through _input;
+	# native desktop still captures immediately via the input router.
+	if input_source != null and input_source.has_method("restore_gameplay_pointer"):
+		input_source.restore_gameplay_pointer()
+	else:
+		_capture_pointer()
 
 func set_zone(zone_id: String) -> void:
 	current_zone_id = zone_id

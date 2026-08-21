@@ -19,7 +19,7 @@ signal dialogue_page_changed(speaker: String, speaker_id: String, page_index: in
 signal menu_hovered
 signal menu_clicked
 
-const MENU_BUILD_LABEL = "SOUL REBUILD | DEVELOPMENT CANDIDATE | NATIVE 720P | ASHENOATH.VERCEL.APP"
+const MENU_BUILD_LABEL = "SOUL REBUILD | RELEASE-003 | NATIVE 720P | ASHENOATH.VERCEL.APP"
 const MENU_SIZE = Vector2(1920.0, 1080.0)
 const GAMEPLAY_SIZE = Vector2i(1280, 720)
 const SAVE_PATH = "user://ashen_oath_save.json"

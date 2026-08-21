@@ -1,5 +1,24 @@
 # Ashen Oath Project State
 
+## Current Release Gate - 2026-08-21
+
+The Soul Rebuild authoritative release run has passed: `92` gates, `0`
+failures. Fresh graphical Compatibility performance at native 1280x720
+Balanced is above the release floor in every measured zone: Greyfen `56.71`
+FPS average / `36.32` FPS 1% low, Wychwood `60.00 / 44.88`, Wychwood combat
+`59.89 / 37.48`, Vargan Court `60.00 / 54.60`, Record Hall `60.00 / 55.17`,
+and Hart Glade `60.01 / 56.85`. The seven-file Web export is `93.9 MB`, with
+PCK SHA-256
+`E4A0BB7AFC47A5EE3E5690E0645CCDF8A4A491F9F310877A4BD96CD5FEEDBE62`.
+Chrome and Edge desktop/mobile-emulation routes passed without console or
+network errors. Shutdown-only Godot allocator diagnostics are classified; no
+active renderer/material/resource error failed the release gate.
+
+The verified export is ready for the final Git/Vercel checkpoint. `main`, the
+tracked root `web/`, and production Vercel remain unchanged until that
+checkpoint completes. Firefox and physical-controller certification remain
+explicitly untested on this Windows environment.
+
 ## Current Working Checkpoint - 2026-08-21
 
 ### ACCESS-003 controller recovery checkpoint

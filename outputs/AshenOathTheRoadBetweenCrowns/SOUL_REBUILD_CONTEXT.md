@@ -1,5 +1,22 @@
 # Ashen Oath Soul-Rebuild Context
 
+## Current Release Gate - 2026-08-21
+
+The complete authoritative release runner now passes `92/92` gates. The
+current verified worktree has native 1280x720 Balanced performance above the
+release floor in Greyfen, Wychwood, Wychwood combat, Vargan Court, Record
+Hall, and Hart Glade. The exact seven-file Web artifact is `93.9 MB`; its
+local PCK SHA-256 is
+`E4A0BB7AFC47A5EE3E5690E0645CCDF8A4A491F9F310877A4BD96CD5FEEDBE62`.
+Chrome and Edge desktop plus mobile emulation passed the real-input route with
+no console or network errors. Shutdown-only renderer diagnostics are
+classified by QA-005; active rendering errors are absent.
+
+The next action is the final release checkpoint: synchronize the verified
+artifact into the repository root `web/`, commit the reviewed worktree, push
+`codex/soul-rebuild` and `main`, then compare the live Vercel PCK hash. Firefox
+and physical-controller certification remain untested on this Windows host.
+
 ## Current Working Checkpoint - 2026-08-21
 
 ### ACCESS-003 controller recovery checkpoint

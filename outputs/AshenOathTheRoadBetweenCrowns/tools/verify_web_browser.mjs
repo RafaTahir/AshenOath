@@ -29,6 +29,31 @@ const browsers = [
   existsSync(executable) && (!requestedBrowser || name.toLowerCase() === requestedBrowser)
 );
 
+async function dispatchPrimaryActivation(cdp, point) {
+  if (!mobileMode) {
+    await cdp.send("Input.dispatchMouseEvent", {
+      type: "mousePressed", x: point.x, y: point.y, button: "left", clickCount: 1,
+    }, 60000);
+    await sleep(70);
+    await cdp.send("Input.dispatchMouseEvent", {
+      type: "mouseReleased", x: point.x, y: point.y, button: "left", clickCount: 1,
+    }, 60000);
+    return;
+  }
+  // Mobile emulation has touch enabled. Drive the same pointer path as a
+  // phone/tablet instead of sending a desktop mouse command through Chrome's
+  // touch compositor, which can leave Input.dispatchMouseEvent pending while
+  // the WebGL canvas is starting on Intel/ANGLE.
+  const touchPoint = { id: 1, x: point.x, y: point.y, radiusX: 1, radiusY: 1, force: 1 };
+  await cdp.send("Input.dispatchTouchEvent", {
+    type: "touchStart", touchPoints: [touchPoint], modifiers: 0,
+  }, 60000);
+  await sleep(70);
+  await cdp.send("Input.dispatchTouchEvent", {
+    type: "touchEnd", touchPoints: [], modifiers: 0,
+  }, 60000);
+}
+
 if (!existsSync(join(exportDir, "index.html"))) {
   throw new Error(`WEB BROWSER: export missing at ${exportDir}`);
 }
@@ -256,8 +281,7 @@ async function testBrowser(name, executable) {
       return {x: rect.left + rect.width / 2, y: rect.top + rect.height / 2};
     })()`), `${name} boot-shell start control`);
     if (bootButton) {
-      await cdp.send("Input.dispatchMouseEvent", { type: "mousePressed", x: bootButton.x, y: bootButton.y, button: "left", clickCount: 1 });
-      await cdp.send("Input.dispatchMouseEvent", { type: "mouseReleased", x: bootButton.x, y: bootButton.y, button: "left", clickCount: 1 });
+      await dispatchPrimaryActivation(cdp, bootButton);
     }
     let canvasDiagnostic = null;
     const canvas = await waitFor(async () => {
@@ -325,10 +349,10 @@ async function testBrowser(name, executable) {
     });
     // The visible launch action either starts the desktop prewarm or, on Web,
     // confirms that New Game may use the bounded active build.
-    await cdp.send("Input.dispatchMouseEvent", { type: "mouseMoved", x: menuInputPoint.x, y: menuInputPoint.y, button: "none" });
-    await cdp.send("Input.dispatchMouseEvent", { type: "mousePressed", x: menuInputPoint.x, y: menuInputPoint.y, button: "left", clickCount: 1 }, 60000);
-    await sleep(70);
-    await cdp.send("Input.dispatchMouseEvent", { type: "mouseReleased", x: menuInputPoint.x, y: menuInputPoint.y, button: "left", clickCount: 1 }, 60000);
+    if (!mobileMode) {
+      await cdp.send("Input.dispatchMouseEvent", { type: "mouseMoved", x: menuInputPoint.x, y: menuInputPoint.y, button: "none" });
+    }
+    await dispatchPrimaryActivation(cdp, menuInputPoint);
     await waitFor(async () => consoleLines().some((line) =>
       line.includes("LOADING: Greyfen prewarmed total=")
       || line.includes("LOADING: Greyfen prewarm deferred for Web")
@@ -336,10 +360,10 @@ async function testBrowser(name, executable) {
       throw new Error(`${error.message}; console=${JSON.stringify(consoleLines().slice(-30))}; canvas=${JSON.stringify(canvasDiagnostic)}`);
     });
     const newGameStarted = Date.now();
-    await cdp.send("Input.dispatchMouseEvent", { type: "mouseMoved", x: menuInputPoint.x, y: menuInputPoint.y, button: "none" });
-    await cdp.send("Input.dispatchMouseEvent", { type: "mousePressed", x: menuInputPoint.x, y: menuInputPoint.y, button: "left", clickCount: 1 }, 60000);
-    await sleep(70);
-    await cdp.send("Input.dispatchMouseEvent", { type: "mouseReleased", x: menuInputPoint.x, y: menuInputPoint.y, button: "left", clickCount: 1 }, 60000);
+    if (!mobileMode) {
+      await cdp.send("Input.dispatchMouseEvent", { type: "mouseMoved", x: menuInputPoint.x, y: menuInputPoint.y, button: "none" });
+    }
+    await dispatchPrimaryActivation(cdp, menuInputPoint);
     await waitFor(async () => {
       return consoleLines().some((line) => line.includes("LOADING: zone=greyfen playable_ms="));
     }, `${name} New Game startup`).catch((error) => {
@@ -388,10 +412,7 @@ async function testBrowser(name, executable) {
     };
   } finally {
     if (cdp) cdp.close();
-    spawnSync("taskkill.exe", ["/PID", String(browser.pid), "/T", "/F"], {
-      encoding: "utf8",
-      windowsHide: true,
-    });
+    terminateIsolatedBrowser(browser, profile);
     await Promise.race([
       new Promise((resolveExit) => browser.once("exit", resolveExit)),
       sleep(1500),
@@ -402,6 +423,27 @@ async function testBrowser(name, executable) {
       // A late Crashpad handle must not mask the browser/game acceptance result.
     }
   }
+}
+
+function terminateIsolatedBrowser(browser, profile) {
+  // Chromium/Edge can relaunch the visible root and leave renderer/utility
+  // children behind. Match only this test's unique temporary profile so the
+  // cleanup cannot touch a user's normal browser session.
+  spawnSync("taskkill.exe", ["/PID", String(browser.pid), "/T", "/F"], {
+    encoding: "utf8",
+    windowsHide: true,
+  });
+  if (process.platform !== "win32") return;
+  const escapedProfile = profile.replace(/'/g, "''");
+  const command = [
+    `$profile = '${escapedProfile}'`,
+    "$ids = @(Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -and $_.CommandLine.Contains($profile) } | Select-Object -ExpandProperty ProcessId)",
+    "foreach ($id in $ids) { Stop-Process -Id $id -Force -ErrorAction SilentlyContinue }",
+  ].join("; ");
+  spawnSync("powershell.exe", ["-NoProfile", "-NonInteractive", "-Command", command], {
+    encoding: "utf8",
+    windowsHide: true,
+  });
 }
 
 const report = { schema_version: 1, status: "pass", mode: mobileMode ? "mobile-landscape-emulation" : "desktop", export_dir: exportDir, browsers: [] };

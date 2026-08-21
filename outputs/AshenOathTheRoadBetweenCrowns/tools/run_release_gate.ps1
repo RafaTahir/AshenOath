@@ -155,6 +155,41 @@ function Invoke-ExternalGate(
     Write-Host ("RELEASE GATE {0}: PASS ({1:n1}s)" -f $Name, $timer.Elapsed.TotalSeconds)
 }
 
+function Invoke-CapturedProcess(
+    [string]$Executable,
+    [string[]]$Arguments,
+    [string]$Log
+) {
+    # The graphical Godot binary is a GUI subsystem process on Windows. The
+    # PowerShell call operator can return as soon as that process hands off to
+    # its window process, which makes a performance gate look like a 0-second
+    # pass and leaves the real test outside release ownership. Start it with
+    # an awaited process handle and capture both streams explicitly.
+    $stdoutPath = "$Log.stdout.tmp"
+    $stderrPath = "$Log.stderr.tmp"
+    Remove-Item -LiteralPath $stdoutPath, $stderrPath -Force -ErrorAction SilentlyContinue
+    $argumentLine = (($Arguments | ForEach-Object {
+        $value = [string]$_
+        if ($value -match '[\s"]') {
+            '"' + $value.Replace('"', '\\"') + '"'
+        } else {
+            $value
+        }
+    }) -join ' ')
+    # Keep the Compatibility window foregroundable. On Intel/ANGLE, hiding a
+    # graphical Godot window changes compositor pacing and produces a lower
+    # frame-time profile than the browser-facing desktop path we are measuring.
+    $process = Start-Process -FilePath $Executable -ArgumentList $argumentLine `
+        -RedirectStandardOutput $stdoutPath -RedirectStandardError $stderrPath `
+        -PassThru -Wait
+    $stdout = if (Test-Path -LiteralPath $stdoutPath) { Get-Content -LiteralPath $stdoutPath -Raw } else { "" }
+    $stderr = if (Test-Path -LiteralPath $stderrPath) { Get-Content -LiteralPath $stderrPath -Raw } else { "" }
+    if ($stdout.Length -gt 0) { [IO.File]::WriteAllText($Log, $stdout) } else { [IO.File]::WriteAllText($Log, "") }
+    if ($stderr.Length -gt 0) { Add-Content -LiteralPath $Log -Value $stderr -NoNewline }
+    Remove-Item -LiteralPath $stdoutPath, $stderrPath -Force -ErrorAction SilentlyContinue
+    return [int]$process.ExitCode
+}
+
 function Invoke-GodotGate([string]$Name, [string[]]$Arguments, [string]$Executable = "") {
 	$Runner = $Godot
 	if (-not [string]::IsNullOrWhiteSpace($Executable)) { $Runner = $Executable }
@@ -163,12 +198,16 @@ function Invoke-GodotGate([string]$Name, [string[]]$Arguments, [string]$Executab
     $previousErrorPreference = $ErrorActionPreference
     $ErrorActionPreference = "Continue"
     try {
-        if ($VerboseOutput) {
+        if (-not [string]::IsNullOrWhiteSpace($Executable)) {
+            $exitCode = Invoke-CapturedProcess $Runner $Arguments $log
+            if ($VerboseOutput -and (Test-Path -LiteralPath $log)) { Get-Content -LiteralPath $log }
+        } elseif ($VerboseOutput) {
 			& $Runner @Arguments 2>&1 | Tee-Object -FilePath $log
+			$exitCode = $LASTEXITCODE
 		} else {
 			& $Runner @Arguments *> $log
-        }
-        $exitCode = $LASTEXITCODE
+			$exitCode = $LASTEXITCODE
+		}
     } finally {
         $ErrorActionPreference = $previousErrorPreference
     }
@@ -186,6 +225,12 @@ function Invoke-GodotGate([string]$Name, [string[]]$Arguments, [string]$Executab
         if ($lines[$index] -match '\bPASS\b|Screenshot capture complete') {
             $passIndex = $index
         }
+    }
+    if ($passIndex -lt 0) {
+        $failure = "$Name produced no verifier pass marker"
+        Add-Result $Name "fail" $timer.Elapsed.TotalSeconds $log @() $failure
+        if (-not $VerboseOutput -and (Test-Path -LiteralPath $log)) { Get-Content -LiteralPath $log -Tail 40 }
+        throw $failure
     }
     $warnings = [System.Collections.Generic.List[string]]::new()
     $fatal = [System.Collections.Generic.List[string]]::new()

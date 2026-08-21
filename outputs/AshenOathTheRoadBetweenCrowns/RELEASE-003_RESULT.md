@@ -1,66 +1,64 @@
-# RELEASE-003 Result (Historical)
+# RELEASE-003 Result
 
 ## Status
 
-This document records the prior release attempt and is **superseded** by the
-current uncommitted Soul Rebuild recovery checkpoint. Its hashes, screenshots,
-and browser results are historical evidence and must not be used as proof for
-the current working tree. The deployed production baseline remains unchanged
-until a fresh post-edit export, packed startup, live hash comparison, and
-complete acceptance run pass.
+The complete Soul Rebuild release gate has passed against the verified current
+worktree. Production remains unchanged until the final Git checkpoint and live
+PCK comparison complete. The generated authoritative report is
+`release_reports/latest.json` with 92 passing gates and zero failures.
+
+The runner records `d16ea7efffbb795da576c09dd6e1306dc7a0c2da` as its source
+commit because the final browser/performance run was executed from that commit
+plus the uncommitted, now-reviewed corrections in this result. No source file
+was changed after that passing run; the release commit below will capture the
+exact verified worktree.
 
 ## Verification
 
-- Authoritative release runner: `PASS`.
-- Runtime, story, save, character, animation, combat, AI, Oathfire, river,
-  navigation, Greyfen, Castle, audio, materials, visual, lifecycle, and budget
+- Authoritative release runner: `PASS` (`92` gates, `0` failures).
+- Runtime, story, save migration, character, animation, combat, AI, Oathfire,
+  river, navigation, Greyfen, Castle, audio, material, lifecycle, and world
   gates: `PASS`.
-- Graphical Compatibility performance: `PASS` at native 1280x720 Balanced.
-  Greyfen averaged 59.996 FPS with a 48.47 FPS 1% low; Wychwood averaged
-  59.998 FPS with a 45.11 FPS 1% low; Wychwood combat averaged 56.83 FPS with
-  a 30.69 FPS 1% low; Castle Court averaged 60.003 FPS with a 53.35 FPS 1%
-  low; Record Hall averaged 60.003 FPS with a 55.05 FPS 1% low; Hart Glade
-  averaged 60.000 FPS with a 55.33 FPS 1% low.
-- New Game measured 56 ms in the graphical gate; cold transitions stayed below
-  261 ms and the warm return measured 60 ms.
-- Screenshot capture, dimensions, nonblank, freshness, and Codex visual review:
-  `PASS` for the current required gallery.
-- Packed startup: `PASS`.
-- Chrome and Edge desktop full-campaign browser route: `PASS`; 37 checkpoints
-  reached from Greyfen through Hart Glade with no console or network errors.
-- Chrome and Edge mobile emulation full-campaign route: `PASS`; no console or
-  network errors. This is Web emulation, not native mobile certification.
-- Headless browser FPS is recorded as a SwiftShader diagnostic only. The
-  hardware acceptance threshold is the graphical Compatibility gate above.
-- QA log classification: `PASS`; shutdown-only Godot allocator diagnostics are
-  retained as warnings and are not active-frame failures.
+- Fresh screenshot capture, dimensions, nonblank, freshness, visual-quality,
+  Codex review, and all changed animation/world/boss suites: `PASS`.
+- Graphical Compatibility performance passed at native 1280x720 Balanced:
+  Greyfen `56.71 / 36.32`, Wychwood `60.00 / 44.88`, Wychwood combat
+  `59.89 / 37.48`, Vargan Court `60.00 / 54.60`, Record Hall `60.00 / 55.17`,
+  and Hart Glade `60.01 / 56.85` FPS average/1% low.
+- Static memory stayed below `105 MB`; no slow-frame failures were recorded.
+- Packed startup, Chrome/Edge desktop WebGL2 startup, full-campaign browser
+  routes, and Chrome/Edge mobile emulation: `PASS`, with no console or network
+  errors. Mobile results are Web emulation, not native mobile certification.
+- Shutdown-only Godot allocator/RID/ObjectDB diagnostics are classified by
+  `verify_qa_005`; no active-frame renderer/material/resource error failed the
+  release gate.
 
 ## Artifact
 
 - Export folder: `outputs/AshenOath_Web`.
-- Shape: seven files.
-- Payload: `97,898,609` bytes (`93.36 MiB`), below the 100 MB limit.
-- PCK: `59,841,788` bytes.
+- Shape: exactly seven files.
+- Payload: `93.9 MB` (`93.36 MiB`), below the `100 MB` limit.
+- PCK: `60,353,288` bytes.
 - Local PCK SHA-256:
-  `98AA203BA4EC02991DCDD75FEE8BE5A7F34DE5D4E706F53F96264C4F565FFC6C`.
-- Production export excludes QA telemetry and development tools.
+  `E4A0BB7AFC47A5EE3E5690E0645CCDF8A4A491F9F310877A4BD96CD5FEEDBE62`.
+- Production export excludes QA telemetry and development-only tools.
 
 ## Known Limitations
 
-- The game remains grounded stylized dark fantasy rather than photoreal or AAA.
-- Godot can print shutdown-only RID/ObjectDB/resource cleanup diagnostics after
-  successful isolated verifier runs; active rendering and browser logs passed.
 - Firefox and physical-controller certification are not available in this
-  Windows-only run. Generic gamepad mappings remain in the project.
+  Windows run; generic gamepad mappings remain enabled.
+- The game remains grounded stylized dark fantasy rather than photoreal or AAA.
+- The final browser process-memory diagnostic includes Chromium child-process
+  overhead; acceptance uses the measured tab JavaScript heap and graphical
+  Compatibility performance, both within their limits.
 
 ## Git and Deployment
 
 - Development branch: `codex/soul-rebuild`.
-- Release commit: `bf51a5db39fb4fd15a643ac3ccd9aaf9de14511b`.
-- Development branch and `main` push: `PASS`.
-- Live Vercel PCK SHA-256: `98aa203ba4ec02991dcdd75fee8be5a7f34de5d4e706f53f96264c4f565ffc6c`.
-- Local/live PCK comparison: `PASS`.
-- Production smoke endpoint: HTTP 200.
+- Release commit: pending final commit.
+- Development push: pending final commit.
+- Production `main` push: pending final commit.
+- Live Vercel PCK comparison: pending production push.
 - Production URL: `https://ashenoath.vercel.app/?v=soul-rebuild`.
 
 ## Exact Local Running Steps

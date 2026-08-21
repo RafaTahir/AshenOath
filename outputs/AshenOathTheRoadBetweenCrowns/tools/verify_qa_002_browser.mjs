@@ -801,10 +801,7 @@ async function testBrowser(name, executable) {
     };
   } finally {
     if (cdp) cdp.close();
-    spawnSync("taskkill.exe", ["/PID", String(browser.pid), "/T", "/F"], {
-      encoding: "utf8",
-      windowsHide: true,
-    });
+    terminateIsolatedBrowser(browser, profile);
     await Promise.race([
       new Promise((done) => browser.once("exit", done)),
       sleep(1500),
@@ -815,6 +812,27 @@ async function testBrowser(name, executable) {
       // A late browser crash-handler lock must not mask the QA result.
     }
   }
+}
+
+function terminateIsolatedBrowser(browser, profile) {
+  // Chromium/Edge can relaunch the visible root and leave renderer/utility
+  // children behind. Match only this test's unique temporary profile so the
+  // cleanup cannot touch a user's normal browser session.
+  spawnSync("taskkill.exe", ["/PID", String(browser.pid), "/T", "/F"], {
+    encoding: "utf8",
+    windowsHide: true,
+  });
+  if (process.platform !== "win32") return;
+  const escapedProfile = profile.replace(/'/g, "''");
+  const command = [
+    `$profile = '${escapedProfile}'`,
+    "$ids = @(Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -and $_.CommandLine.Contains($profile) } | Select-Object -ExpandProperty ProcessId)",
+    "foreach ($id in $ids) { Stop-Process -Id $id -Force -ErrorAction SilentlyContinue }",
+  ].join("; ");
+  spawnSync("powershell.exe", ["-NoProfile", "-NonInteractive", "-Command", command], {
+    encoding: "utf8",
+    windowsHide: true,
+  });
 }
 
 const report = {
