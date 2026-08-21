@@ -5087,7 +5087,7 @@ func _make_light(name: String, pos: Vector3, color: Color, energy: float) -> voi
 	light.position = pos
 	light.light_color = color
 	light.light_energy = energy
-	light.omni_range = 14.0 if quality == "quality" else 8.0
+	light.omni_range = 14.0 if quality == "quality" or name in ["UndercroftNavigationFill", "UndercroftHalvernFill"] else 8.0
 	light.shadow_enabled = false
 	zone_root.add_child(light)
 	runtime_light_count += 1
@@ -5099,7 +5099,7 @@ func _compatibility_budget_mode() -> bool:
 	return settings == null or str(settings.settings.get("quality_preset", "balanced")) != "quality"
 
 func _keep_performance_light(name: String) -> bool:
-	return name in ["Village Warmth", "Shrine Beacon", "Wychwood Gate Lantern", "Moon Shaft", "Trail Threat", "ClearingColdSpot", "SpawnWarmRead", "LedgerTableLight", "RecordHallNavigationFill", "RecordHallEntryFill", "RecordHallArchiveFill", "HartWitnessLight"]
+	return name in ["Village Warmth", "Shrine Beacon", "Wychwood Gate Lantern", "Moon Shaft", "Trail Threat", "ClearingColdSpot", "SpawnWarmRead", "LedgerTableLight", "RecordHallNavigationFill", "RecordHallEntryFill", "RecordHallArchiveFill", "HartWitnessLight", "UndercroftNavigationFill", "UndercroftHalvernFill"]
 
 func _build_global_environment() -> void:
 	visual_director = VisualDirector.new()

@@ -61,7 +61,10 @@ const SPECS := {
 	# the human 180-degree correction here made bosses turn their backs to Kael.
 	"ghoul_brute_real": {"height": 1.90, "lod": 20.0, "required_sockets": ["head"], "visual_forward_degrees": 0.0},
 	"bog_wretch_creature": {"height": 1.72, "lod": 18.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
-	"gravebound_knight_creature": {"height": 1.88, "lod": 18.0, "required_sockets": ["head"], "visual_forward_degrees": 0.0},
+	# The Gravebound source's visible face is on its imported +Z side. Keep the
+	# actor's gameplay yaw authoritative, but rotate this mesh once so Halvern's
+	# guard, face, and testimony stance face Kael instead of showing his back.
+	"gravebound_knight_creature": {"height": 1.88, "lod": 18.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
 	"ashwing_creature": {"height": 2.40, "lod": 24.0, "required_sockets": [], "visual_forward_degrees": 180.0},
 }
 

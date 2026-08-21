@@ -974,6 +974,10 @@ func _apply_boss_material(mapped: Node3D) -> void:
 		material.emission_enabled = true
 		material.emission = Color(0.045, 0.010, 0.004)
 		material.emission_energy_multiplier = 0.22
+	elif enemy_id == "halvern_boss":
+		material.emission_enabled = true
+		material.emission = Color(0.055, 0.075, 0.12)
+		material.emission_energy_multiplier = 0.32
 	_apply_material(mapped, material)
 
 func _add_boss_silhouette() -> void:

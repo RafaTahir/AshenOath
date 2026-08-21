@@ -153,10 +153,10 @@ missing legacy alias. His Vargan cuirass, grave seal, asymmetric shoulders,
 and broken banner sit under the boss identity layer. A genuine player parry
 opens a testimony window, sets `halvern_guard_broken`, completes the guard
 break objective, and preserves the existing parry feedback. Phase checkpoint,
-health restore, testimony resolution, and reload safety pass. Fresh frames
-exist, but the undercroft is too dark for final visual approval and the armor
-source remains interim low-poly. No production export or deployment has
-occurred for this checkpoint.
+health restore, testimony resolution, and reload safety pass. The undercroft
+now uses two named Balanced light pools and a brighter authored interior
+profile, so the duel remains readable. The armor source remains interim
+low-poly. No production export or deployment has occurred for this checkpoint.
 
 The deployed production baseline is the earlier `bd24495` release. The current
 Soul Rebuild continuation is uncommitted on `codex/soul-rebuild`, and its Web

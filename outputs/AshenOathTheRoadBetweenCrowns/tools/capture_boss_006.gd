@@ -33,19 +33,19 @@ func _initialize() -> void:
 	else:
 		boss.set_physics_process(false)
 		boss.global_position = Vector3(0, 1.0, -5.5)
-		await _capture(game, boss, "BOSS-006_01_Halvern_TheGate", Vector3(0, 1.0, -2.2), 0.0)
-		game.player.global_position = Vector3(0, 1.0, -4.0)
+		await _capture(game, boss, "BOSS-006_01_Halvern_TheGate", Vector3(0, 1.0, -3.2), 0.0)
+		game.player.global_position = Vector3(0, 1.0, -3.4)
 		game.player.parry_window = game.player.get_parry_window_duration()
 		boss.windup_time = 0.48
 		boss.attack_trace_start = boss.global_position + Vector3(0, 0.9, 0)
 		boss.attack_trace_end = game.player.global_position + Vector3(0, 0.9, 0)
 		boss.call("_resolve_attack")
 		await _frames(12)
-		await _capture(game, boss, "BOSS-006_02_Halvern_ParryWindow", Vector3(0, 1.0, -2.2), 0.0)
+		await _capture(game, boss, "BOSS-006_02_Halvern_ParryWindow", Vector3(0, 1.0, -3.2), 0.0)
 		boss.apply_damage(boss.health_component.max_health * 0.55, "capture")
 		await _frames(16)
 		boss.look_at(game.player.global_position + Vector3.UP * 0.9, Vector3.UP)
-		await _capture(game, boss, "BOSS-006_03_Halvern_TheRefusal", Vector3(0, 1.0, -2.2), 0.0)
+		await _capture(game, boss, "BOSS-006_03_Halvern_TheRefusal", Vector3(0, 1.0, -3.2), 0.0)
 	print("BOSS-006 SCREENSHOTS: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
 	if game.has_method("prepare_resource_shutdown"):
 		game.prepare_resource_shutdown()
@@ -67,6 +67,11 @@ func _capture(game: Node, boss: Node, stem: String, position: Vector3, yaw: floa
 	game.camera_rig.yaw = yaw
 	game.camera_rig.pitch = -0.14
 	game.hud.set_guidance_hint("")
+	game.set_process(false)
+	game.active_interactable = null
+	game.hud.set_prompt("")
+	game.hud.prompt_label.visible = false
+	game.hud.hint_label.visible = false
 	await _frames(34)
 	await RenderingServer.frame_post_draw
 	var image: Image = root.get_viewport().get_texture().get_image()

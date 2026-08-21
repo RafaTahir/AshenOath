@@ -42,6 +42,12 @@ func build(context: ZoneBuildContext) -> void:
 	for z in [-10.0,-3.0,4.0,11.0]:
 		context.make_torch(Vector3(-3.2,0,z))
 		context.make_torch(Vector3(3.2,0,z))
+	if zone_id == "undercroft":
+		# Torch meshes remain readable decoration, but Balanced keeps only named
+		# navigation pools. These two pools make the duel readable without
+		# multiplying per-torch shadow work.
+		context.make_light("UndercroftNavigationFill", Vector3(0, 4.2, 0), Color(0.30, 0.38, 0.54), 5.0)
+		context.make_light("UndercroftHalvernFill", Vector3(0, 2.8, -6), Color(0.52, 0.38, 0.24), 3.4)
 	if zone_id in ["deep_wood","burned_farmstead","marsh_crossing","bandit_road","hart_glade"]:
 		context.make_tree_cluster([
 			Vector3(-15,0,-12),Vector3(-12,0,-5),Vector3(-15,0,5),Vector3(-11,0,12),

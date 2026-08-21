@@ -37,16 +37,16 @@ debt and are not suppressed.
 
 ## Screenshots
 
-- `Development_Gallery/screenshots/BOSS-006_01_Halvern_TheGate_20260821_095819.png`
-- `Development_Gallery/screenshots/BOSS-006_02_Halvern_ParryWindow_20260821_095819.png`
-- `Development_Gallery/screenshots/BOSS-006_03_Halvern_TheRefusal_20260821_095819.png`
+- `Development_Gallery/screenshots/BOSS-006_01_Halvern_TheGate_20260821_135941.png`
+- `Development_Gallery/screenshots/BOSS-006_02_Halvern_ParryWindow_20260821_135941.png`
+- `Development_Gallery/screenshots/BOSS-006_03_Halvern_TheRefusal_20260821_135941.png`
 
 ## Known limitation
 
-The undercroft lighting remains too dark for final visual acceptance and the
-connected Gravebound family remains an interim low-poly monster/armor source.
-The next lighting/material pass must improve readable face, armor, and arena
-contrast without changing the combat state machine.
+The undercroft is now readable under the authored two-pool Balanced lighting
+profile, but the connected Gravebound family remains an interim low-poly
+monster/armor source. Final visual acceptance still needs a stronger released
+character family and a more authored undercroft shell.
 
 ## Running steps
 

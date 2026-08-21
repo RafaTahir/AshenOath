@@ -413,6 +413,15 @@ func _lighting_profile(zone_id: String) -> Dictionary:
 				"day_brightness": 1.24, "night_brightness": 1.26,
 				"contrast": 1.16, "saturation": 0.90, "interior_directional": 0.34,
 			}, true)
+		elif zone_id == "undercroft":
+			profile.merge({
+				"interior_background": Color(0.045, 0.038, 0.032),
+				"interior_fog_color": Color(0.055, 0.044, 0.036),
+				"ambient_day": Color(0.34, 0.30, 0.28), "ambient_night": Color(0.28, 0.30, 0.36),
+				"ambient_day_energy": 1.42, "ambient_night_energy": 1.34,
+				"day_brightness": 1.42, "night_brightness": 1.38,
+				"contrast": 1.12, "saturation": 0.88, "interior_directional": 0.42,
+			}, true)
 	return profile
 
 func _build_sky_layer() -> void:

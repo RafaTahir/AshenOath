@@ -1042,11 +1042,13 @@ Known verifier note: Godot headless may emit ObjectDB cleanup warnings after pas
 - A real player parry opens a Halvern testimony window, records
   `halvern_guard_broken`, and completes `break_halvern_guard` without direct
   interaction mutation.
+- The undercroft now keeps two named Balanced light pools and a brighter
+  authored interior profile, so Halvern's parry stance remains readable.
 - Phase-two checkpoint and health restore, testimony resolution, and no-respawn
   reload pass in `verify_boss_006.gd`; fresh Compatibility captures are stored
   in `Development_Gallery/screenshots/`.
-- Undercroft lighting remains too dark for final visual approval and is an open
-  LIGHT/SKY quality task. The current monster/armor source is still interim.
+- The undercroft lighting repair is now captured and readable; the current
+  monster/armor source remains interim and final visual approval is still open.
 
 ## BOSS-007 White Hart Checkpoint - 2026-08-21
 
