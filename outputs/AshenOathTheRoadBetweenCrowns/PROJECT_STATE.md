@@ -2,6 +2,20 @@
 
 ## Current Working Checkpoint - 2026-08-21
 
+### OATH-002 Oathfire state-machine checkpoint
+
+Oathfire now has one explicit transition contract: sheathing, charging,
+releasing, redrawing, and idle. The initial flattened facing is captured once
+and reused by the player pose, hand-origin charge sphere, release signal,
+collision resolver, clipped endpoint, and impact feedback. Transition locking
+authoritatively cancels an active cast, restores the sword, clears the direction,
+and records the cancellation reason. `get_oathfire_state()` exposes charge,
+cooldown, hand/sword visibility, and release telemetry for runtime verification.
+`verify_oath_002`, `verify_oath_001`, runtime smoke, combat, content integrity,
+and the targeted combat ticket gate pass. Fresh Oathfire charge, release, and
+wall-impact captures are current. This is a development checkpoint; the
+production Web export and Vercel build remain unchanged.
+
 ### MON-002 monster-family checkpoint
 
 The Wychwood Ghoulkin, Stalker, Raider, and Brute now use the complete

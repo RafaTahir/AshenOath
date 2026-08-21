@@ -5,13 +5,15 @@
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/player_controller.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/combat_*.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/enemy_ai.gd",
-        "outputs/AshenOathTheRoadBetweenCrowns/data/enemies.json"
+        "outputs/AshenOathTheRoadBetweenCrowns/data/enemies.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_oath_002.gd"
       ],
       "gates": [
         "verify_motion_quality",
         "verify_combat_001",
         "verify_ai_001",
-        "verify_oath_001"
+        "verify_oath_001",
+        "verify_oath_002"
       ]
     },
     "spectacle": {

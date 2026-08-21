@@ -1810,7 +1810,16 @@ func _on_player_beam(charge_ratio: float, direction: Vector3) -> void:
 	if player == null or zone_root == null:
 		return
 	_clear_oathfire_effects()
-	var locked_direction: Vector3 = direction.normalized()
+	var locked_direction: Vector3 = direction
+	locked_direction.y = 0.0
+	if locked_direction.length_squared() < 0.5 and player.has_method("get_beam_locked_direction"):
+		locked_direction = player.get_beam_locked_direction()
+	if locked_direction.length_squared() < 0.5:
+		locked_direction = -player.global_transform.basis.z
+	locked_direction.y = 0.0
+	if locked_direction.length_squared() < 0.5:
+		locked_direction = Vector3.FORWARD
+	locked_direction = locked_direction.normalized()
 	var origin: Vector3 = player.get_oathfire_origin() if player.has_method("get_oathfire_origin") else player.global_position + Vector3(0, 1.12, 0) + locked_direction * 0.62
 	var beam_range: float = 12.0 + progression.effect_value("beam_range_bonus", 0.0)
 	var endpoint: Vector3 = origin + locked_direction * beam_range
@@ -1829,6 +1838,7 @@ func _on_player_beam(charge_ratio: float, direction: Vector3) -> void:
 		"origin": origin,
 		"direction": locked_direction,
 		"endpoint": endpoint,
+		"endpoint_distance": origin.distance_to(endpoint),
 		"width": 1.2,
 		"damage": damage,
 		"charge_ratio": charge_ratio

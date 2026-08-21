@@ -95,6 +95,15 @@ var beam_locked_direction := Vector3.ZERO
 var beam_pending_ratio := 0.0
 var beam_release_elapsed := 0.0
 var beam_release_emitted := false
+var beam_cancel_reason := ""
+var beam_state_sequence := 0
+var beam_release_direction := Vector3.ZERO
+
+const BEAM_STATE_IDLE := ""
+const BEAM_STATE_SHEATHING := "sheathing"
+const BEAM_STATE_CHARGING := "charging"
+const BEAM_STATE_RELEASING := "releasing"
+const BEAM_STATE_REDRAWING := "redrawing"
 var movement_state = "idle"
 var movement_blend = 0.0
 var strafe_blend = 0.0
@@ -155,6 +164,8 @@ func _physics_process(delta: float) -> void:
 	_update_blade_contact()
 
 func set_transition_locked(locked: bool) -> void:
+	if locked and beam_cast_state != BEAM_STATE_IDLE:
+		cancel_beam_charge("transition")
 	transition_locked = locked
 	if locked:
 		can_control = false
@@ -461,12 +472,12 @@ func _blade_axis_from_rendered_bounds(parent: Node3D) -> Dictionary:
 	return {"base": base, "tip": tip}
 
 func _handle_beam_input() -> void:
-	if _action_just_pressed("oathfire_beam") and beam_cooldown <= 0.0 and beam_cast_state == "" and dodge_time <= 0.0:
+	if _action_just_pressed("oathfire_beam") and beam_cooldown <= 0.0 and beam_cast_state == BEAM_STATE_IDLE and dodge_time <= 0.0:
 		_begin_oathfire_cast()
-	if beam_cast_state == "charging" and _action_pressed("oathfire_beam"):
+	if beam_cast_state == BEAM_STATE_CHARGING and _action_pressed("oathfire_beam"):
 		beam_charge_time = min(beam_charge_time + get_physics_process_delta_time(), 1.25)
 		_update_beam_charge_visual()
-	if beam_cast_state == "charging" and _action_just_released("oathfire_beam"):
+	if beam_cast_state == BEAM_STATE_CHARGING and _action_just_released("oathfire_beam"):
 		var ratio: float = clampf((beam_charge_time - 0.35) / 0.90, 0.0, 1.0)
 		if beam_charge_time >= 0.35 and stamina_component.spend(get_oathfire_stamina_cost()):
 			_commit_oathfire_release(ratio)
@@ -475,87 +486,108 @@ func _handle_beam_input() -> void:
 			_begin_beam_redraw()
 		else:
 			_begin_beam_redraw()
-	elif beam_cast_state == "sheathing" and _action_just_released("oathfire_beam"):
+	elif beam_cast_state == BEAM_STATE_SHEATHING and _action_just_released("oathfire_beam"):
 		_begin_beam_redraw()
 
-func _begin_oathfire_cast() -> void:
-	beam_cast_state = "sheathing"
-	beam_phase_changed.emit("sheathing")
-	beam_state_time = 0.24
+func _set_beam_state(next_state: String, duration: float = -1.0) -> void:
+	if beam_cast_state == next_state:
+		if duration >= 0.0:
+			beam_state_time = duration
+		return
+	beam_cast_state = next_state
+	beam_state_sequence += 1
+	if duration >= 0.0:
+		beam_state_time = duration
+	if next_state != BEAM_STATE_IDLE:
+		beam_phase_changed.emit(next_state)
+
+func _begin_oathfire_cast() -> bool:
+	if transition_locked or not can_control or beam_cooldown > 0.0 or dodge_time > 0.0 or beam_cast_state != BEAM_STATE_IDLE:
+		return false
+	var captured := _lock_beam_direction()
+	if captured.length_squared() < 0.5:
+		return false
+	_set_beam_state(BEAM_STATE_SHEATHING, 0.24)
 	beam_charging = true
 	beam_charge_time = 0.0
 	beam_pending_ratio = 0.0
 	beam_release_elapsed = 0.0
 	beam_release_emitted = false
-	_lock_beam_direction()
+	beam_cancel_reason = ""
+	beam_release_direction = Vector3.ZERO
 	_set_sword_sheathed(true)
+	return true
 
 func _commit_oathfire_release(ratio: float) -> void:
+	if beam_locked_direction.length_squared() < 0.5:
+		_lock_beam_direction()
+	beam_locked_direction.y = 0.0
+	beam_locked_direction = beam_locked_direction.normalized()
 	beam_pending_ratio = clampf(ratio, 0.0, 1.0)
 	beam_release_elapsed = 0.0
 	beam_release_emitted = false
+	beam_release_direction = beam_locked_direction
 	beam_cooldown = get_oathfire_cooldown_duration()
 	attack_cooldown = 0.75
 	beam_charging = false
-	beam_cast_state = "releasing"
-	beam_phase_changed.emit("releasing")
-	beam_state_time = 0.34
+	_set_beam_state(BEAM_STATE_RELEASING, 0.34)
 	_update_beam_charge_visual()
 
 func _update_beam_sequence(delta: float) -> void:
-	if beam_cast_state == "":
+	if beam_cast_state == BEAM_STATE_IDLE:
 		return
 	if beam_locked_direction.length_squared() > 0.5:
 		face_target(global_position + beam_locked_direction * 4.0)
 	beam_state_time = max(beam_state_time - delta, 0.0)
-	if beam_cast_state == "sheathing" and beam_state_time <= 0.0:
+	if beam_cast_state == BEAM_STATE_SHEATHING and beam_state_time <= 0.0:
 		if _action_pressed("oathfire_beam"):
-			beam_cast_state = "charging"
-			beam_phase_changed.emit("charging")
-			beam_state_time = 0.0
+			_set_beam_state(BEAM_STATE_CHARGING, 0.0)
 			if animation_driver != null:
 				animation_driver.trigger_action("beam_cast")
 			_update_beam_charge_visual()
 		else:
 			_begin_beam_redraw()
-	elif beam_cast_state == "releasing":
+	elif beam_cast_state == BEAM_STATE_RELEASING:
 		beam_release_elapsed += delta
 		_update_beam_charge_visual()
 		if not beam_release_emitted and beam_release_elapsed >= 0.11:
 			beam_release_emitted = true
-			beam_requested.emit(beam_pending_ratio, beam_locked_direction)
+			beam_requested.emit(beam_pending_ratio, beam_release_direction if beam_release_direction.length_squared() > 0.5 else beam_locked_direction)
 			_hide_beam_charge_visuals()
 		if beam_state_time <= 0.0:
 			_begin_beam_redraw()
-	elif beam_cast_state == "redrawing" and beam_state_time <= 0.0:
-		beam_cast_state = ""
+	elif beam_cast_state == BEAM_STATE_REDRAWING and beam_state_time <= 0.0:
+		_set_beam_state(BEAM_STATE_IDLE)
 		beam_charging = false
 		beam_charge_time = 0.0
 		beam_locked_direction = Vector3.ZERO
 		beam_pending_ratio = 0.0
 		beam_release_elapsed = 0.0
 		beam_release_emitted = false
+		beam_release_direction = Vector3.ZERO
 		_set_sword_sheathed(false)
 
 func _begin_beam_redraw() -> void:
 	beam_charging = false
-	beam_cast_state = "redrawing"
-	beam_phase_changed.emit("redrawing")
-	beam_state_time = 0.24
+	_set_beam_state(BEAM_STATE_REDRAWING, 0.24)
 	_hide_beam_charge_visuals()
 	if animation_driver != null and animation_driver.has_method("stop_action"):
 		animation_driver.stop_action("idle", 0.12)
 
-func cancel_beam_charge() -> void:
+func cancel_beam_charge(reason: String = "cancelled") -> void:
+	var was_active := beam_cast_state != BEAM_STATE_IDLE or beam_charging or beam_locked_direction.length_squared() > 0.5
 	beam_charging = false
 	beam_charge_time = 0.0
-	beam_cast_state = ""
-	beam_phase_changed.emit("cancelled")
+	_set_beam_state(BEAM_STATE_IDLE)
 	beam_state_time = 0.0
 	beam_locked_direction = Vector3.ZERO
 	beam_pending_ratio = 0.0
 	beam_release_elapsed = 0.0
 	beam_release_emitted = false
+	beam_release_direction = Vector3.ZERO
+	beam_cancel_reason = reason if was_active else ""
+	if was_active:
+		beam_phase_changed.emit("cancelled")
 	_hide_beam_charge_visuals()
 	if animation_driver != null and animation_driver.has_method("stop_action"):
 		animation_driver.stop_action("idle", 0.12)
@@ -571,6 +603,23 @@ func _lock_beam_direction() -> Vector3:
 
 func get_beam_locked_direction() -> Vector3:
 	return beam_locked_direction
+
+func get_oathfire_state() -> Dictionary:
+	var charge_ratio := beam_pending_ratio if beam_cast_state == BEAM_STATE_RELEASING else clampf(beam_charge_time / 1.25, 0.0, 1.0)
+	return {
+		"state": beam_cast_state,
+		"state_sequence": beam_state_sequence,
+		"charge_ratio": charge_ratio,
+		"charge_time": beam_charge_time,
+		"cooldown": beam_cooldown,
+		"locked_direction": beam_locked_direction,
+		"release_direction": beam_release_direction,
+		"sword_sheathed": sheathed_sword_visual != null and sheathed_sword_visual.visible,
+		"charge_visible": beam_charge_visual != null and beam_charge_visual.visible,
+		"hands_visible": beam_left_hand_glow != null and beam_left_hand_glow.visible and beam_right_hand_glow != null and beam_right_hand_glow.visible,
+		"release_emitted": beam_release_emitted,
+		"cancel_reason": beam_cancel_reason,
+	}
 
 func get_oathfire_origin() -> Vector3:
 	var left: Vector3 = beam_left_hand_glow.global_position if beam_left_hand_glow != null else global_position + Vector3(-0.16, 1.28, -0.48)

@@ -2,6 +2,17 @@
 
 ## Current Working Checkpoint - 2026-08-21
 
+### OATH-002 combat-state checkpoint
+
+The Oathfire path now uses one state machine for sheathing, hand-based charge,
+release, redraw, and cancellation. Its initial facing is immutable through
+camera movement and is shared by player orientation, hand-origin effects,
+damage, beam endpoint, and impact feedback. Transition locks cancel it
+authoritatively and restore the sword. `verify_oath_002` and the targeted combat
+profile pass with current native-720p charge/release/wall-impact evidence.
+This improves the runtime contract but does not waive the larger visual gate:
+the surrounding world and monster family still require final visual review.
+
 ### MON-002 monster-family checkpoint
 
 Wychwood's four enemy roles now share a real imported animated skeleton source
