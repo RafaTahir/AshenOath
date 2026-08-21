@@ -956,7 +956,7 @@ func _try_build_mapped_body() -> bool:
 		"idle": "Idle", "walk": "Walk", "walk_back": "Walk",
 		"strafe": "Walk", "run": "Sprint",
 		"jump": "Jump_Start", "attack_light": "Sword_Attack",
-		"attack_heavy": "Sword_Attack", "dodge": "Roll",
+		"attack_heavy": "Sword_Attack_RM", "dodge": "Roll",
 		"parry": "Sword_Idle", "beam_cast": "Spell_Simple_Idle", "hit": "Hit_Chest", "death": "Death01"
 	}))
 	if not animated:
