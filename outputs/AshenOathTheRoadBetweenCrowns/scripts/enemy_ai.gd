@@ -720,10 +720,10 @@ func _try_build_mapped_body() -> bool:
 	var visual_source: String = enemy_id
 	if enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute", "bog_wretch", "gravebound_knight", "bell_eater", "rootbound_colossus", "ashwing", "halvern_boss", "white_hart_avatar"]:
 		visual_source = {
-			"ghoulkin": "ghoulkin_skeleton",
-			"wychwood_stalker": "ghoulkin_skeleton",
-			"wychwood_raider": "ghoulkin_skeleton",
-			"wychwood_brute": "ghoulkin_skeleton",
+			"ghoulkin": "ghoul_gaunt_real",
+			"wychwood_stalker": "ghoul_stalker_real",
+			"wychwood_raider": "ghoul_gaunt_real",
+			"wychwood_brute": "ghoul_brute_real",
 			"bog_wretch": "bog_wretch_creature",
 			"gravebound_knight": "gravebound_knight_creature",
 			"bell_eater": "bell_eater_boss",
@@ -799,10 +799,10 @@ func _try_build_mapped_body() -> bool:
 			})
 		else:
 			animation_driver.configure(mapped, {
-				"idle": "Idle2" if visual_source in ["ghoul_stalker_real", "ghoul_brute_real", "bell_eater_boss", "rootbound_colossus_boss", "bog_wretch_creature", "gravebound_knight_creature"] else "Idle",
-				"walk":"Walk", "walk_back":"Walk_Back", "strafe":"Walk",
+				"idle": "Idle",
+				"walk":"Walk", "walk_back":"Walk", "strafe":"Walk",
 				"run":"Run", "windup":"Attack", "attack":"Attack",
-				"hit":"Hit", "death":"Death"
+				"hit":"RecieveHit", "death":"Death"
 			})
 	elif visual_source == "ghoulkin_skeleton":
 		animation_driver.configure(mapped, {

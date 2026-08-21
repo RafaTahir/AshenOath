@@ -114,7 +114,7 @@
     },
     "enemies": {
       "ghoul_gaunt_real": {
-		"status": "mon_001",
+		"status": "mon_002_wychwood_gaunt_runtime",
 		"path": "res://assets_external/characters_real/GhoulGaunt_Real.glb",
         "source": "Ashen Oath derived CC0 production mesh",
         "license": "CC0 1.0",
@@ -128,27 +128,27 @@
 		"notes": "Rejected for released Ghoulkin presentation after identical-camera review: oversized cartoon proportions and weak horror identity. Retained only as a quarantined source reference."
 	  },
       "ghoul_stalker_real": {
-        "status": "mon_001",
+		"status": "mon_002_wychwood_stalker_runtime",
         "path": "res://assets_external/characters_real/GhoulStalker_Real.glb",
         "source": "Ashen Oath derived CC0 production mesh",
         "license": "CC0 1.0",
         "notes": "Forward-leaning long-limbed Wychwood flanker."
       },
       "ghoul_brute_real": {
-        "status": "mon_001",
+		"status": "mon_002_wychwood_brute_runtime",
         "path": "res://assets_external/characters_real/GhoulBrute_Real.glb",
         "source": "Ashen Oath derived CC0 production mesh",
         "license": "CC0 1.0",
         "notes": "Broad Wychwood heavy body with connected face, hands, and feet."
       },
       "ghoulkin_skeleton": {
-        "status": "mon_002_verified_runtime",
+		"status": "legacy_quarantined_not_route_mapped",
         "path": "res://assets_external/enemies/Skeleton.fbx",
         "source": "Animated Monsters by Quaternius",
         "source_url": "https://opengameart.org/sites/default/files/Animated%20Monster%20Pack%20by%20%40Quaternius.zip",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
-        "notes": "Complete articulated skeleton family source used for Wychwood cursed-remains roles. Variant identity comes from scale, posture, material profile, and attack spacing; no proxy anatomy is added."
+		"notes": "Legacy articulated source retained for audit and fallback comparison only. Wychwood no longer maps to this generic skeleton; released roles use the connected Ghoul family GLBs."
       },
       "ghoulkin_creature": {
         "status": "mon_001",

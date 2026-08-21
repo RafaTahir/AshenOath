@@ -44,13 +44,15 @@ of the full visual/release gate.
 
 ### MON-002 monster-family checkpoint
 
-Wychwood's four enemy roles now share a real imported animated skeleton source
-with complete skull/rib/hand/foot anatomy and five usable clips. The old
-generated Ghoul mannequin mapping and detached variant silhouette geometry were
-removed from the Wychwood path. The runtime and face contracts pass, and fresh
-1280x720 formation/contact captures are current. The Ultimate Monsters source
-and bespoke boss family replacements remain explicitly pending; no final visual
-approval is claimed. Production remains unchanged.
+Wychwood's four enemy roles now use one connected Ghoul family: gaunt for
+Ghoulkin/Raider, hooded lean for Stalker, and broad for Brute. Each role loads a
+skinned body with modeled skull/face, hands, feet, six material surfaces, and
+the shared Idle/Walk/Run/Attack/HeavyAttack/RecieveHit/Dodge/Death clips. The
+legacy Skeleton.fbx source is quarantined and no longer mapped to route-visible
+Wychwood actors. Runtime family instantiation, animation-driver validity, and
+fresh 1280x720 formation/contact captures pass. The matching Ultimate Monsters
+source and final boss-family visual approval remain open; production remains
+unchanged.
 
 ### Character contract checkpoint - current continuation
 

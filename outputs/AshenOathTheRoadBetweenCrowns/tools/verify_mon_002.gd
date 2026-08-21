@@ -3,6 +3,12 @@ extends SceneTree
 const EnemyAI = preload("res://scripts/enemy_ai.gd")
 
 var required := ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute", "bog_wretch", "gravebound_knight", "bell_eater", "rootbound_colossus", "ashwing", "halvern_boss", "white_hart_avatar"]
+const WYCHWOOD_VISUAL_ROLES := {
+	"ghoulkin": "ghoul_gaunt_real",
+	"wychwood_stalker": "ghoul_stalker_real",
+	"wychwood_raider": "ghoul_gaunt_real",
+	"wychwood_brute": "ghoul_brute_real",
+}
 var failures := 0
 
 func _init() -> void:
@@ -28,6 +34,7 @@ func _run() -> void:
 			failures += 1
 			push_error("enemy presentation missing %s" % needle)
 	_verify_wychwood_family_source()
+	await _verify_wychwood_family_runtime(parsed if typeof(parsed) == TYPE_DICTIONARY else {})
 	await _verify_white_hart_runtime(parsed if typeof(parsed) == TYPE_DICTIONARY else {})
 	await _verify_connected_family_runtime("bog_wretch", parsed if typeof(parsed) == TYPE_DICTIONARY else {})
 	await _verify_connected_family_runtime("gravebound_knight", parsed if typeof(parsed) == TYPE_DICTIONARY else {})
@@ -45,10 +52,46 @@ func _verify_wychwood_family_source() -> void:
 	if typeof(upgrade_data) != TYPE_DICTIONARY:
 		return
 	var enemy_roles: Dictionary = upgrade_data.get("roles", {}).get("enemies", {})
-	var family_entry: Dictionary = enemy_roles.get("ghoulkin_skeleton", {})
-	check(not family_entry.is_empty(), "Wychwood family has no explicit articulated source role")
-	check(str(family_entry.get("path", "")) == "res://assets_external/enemies/Skeleton.fbx", "Wychwood family is not mapped to the verified skeleton source")
-	check(ResourceLoader.exists("res://assets_external/enemies/Skeleton.fbx"), "verified skeleton source is not loadable")
+	for enemy_id in WYCHWOOD_VISUAL_ROLES:
+		var role_id := str(WYCHWOOD_VISUAL_ROLES[enemy_id])
+		var family_entry: Dictionary = enemy_roles.get(role_id, {})
+		check(not family_entry.is_empty(), "%s has no explicit connected family role" % enemy_id)
+		var source_path := str(family_entry.get("path", ""))
+		check(source_path == "res://assets_external/characters_real/%s.glb" % {
+			"ghoul_gaunt_real": "GhoulGaunt_Real",
+			"ghoul_stalker_real": "GhoulStalker_Real",
+			"ghoul_brute_real": "GhoulBrute_Real",
+		}.get(role_id, ""), "%s is mapped to an unexpected family source" % enemy_id)
+		check(ResourceLoader.exists(source_path), "%s family source is not loadable" % enemy_id)
+	var legacy_entry: Dictionary = enemy_roles.get("ghoulkin_skeleton", {})
+	check(str(legacy_entry.get("status", "")).contains("legacy_quarantined"), "legacy Skeleton source must be quarantined")
+
+func _verify_wychwood_family_runtime(enemy_definitions: Dictionary) -> void:
+	for enemy_id in WYCHWOOD_VISUAL_ROLES:
+		var definition: Dictionary = enemy_definitions.get(enemy_id, {})
+		check(not definition.is_empty(), "%s has no encounter definition" % enemy_id)
+		if definition.is_empty():
+			continue
+		var target := Node3D.new()
+		target.name = "%sVerifierTarget" % enemy_id
+		root.add_child(target)
+		var actor := EnemyAI.new()
+		actor.name = "%sVerifierActor" % enemy_id
+		root.add_child(actor)
+		actor.setup(enemy_id, definition, target)
+		await process_frame
+		check(_find_type(actor, "Skeleton3D") != null, "%s runtime has no Skeleton3D" % enemy_id)
+		check(_find_type(actor, "AnimationPlayer") != null, "%s runtime has no AnimationPlayer" % enemy_id)
+		var driver := actor.find_child("CharacterAnimationDriver", true, false)
+		check(driver != null and driver.has_method("is_valid") and driver.is_valid(), "%s runtime has no valid animation driver" % enemy_id)
+		check(actor.find_child("visual_root", true, false) != null, "%s runtime has no visual root" % enemy_id)
+		check(actor.find_child("%s_placeholder" % enemy_id, true, false) == null, "%s fell back to a placeholder body" % enemy_id)
+		var visual := actor.find_child("%s_visual" % enemy_id, true, false)
+		check(visual != null, "%s runtime has no mapped visual instance" % enemy_id)
+		if visual != null:
+			check(str(visual.get_meta("monster_family_role", "")) == str(WYCHWOOD_VISUAL_ROLES[enemy_id]), "%s runtime selected the wrong family role" % enemy_id)
+		actor.queue_free()
+		target.queue_free()
 
 func _verify_white_hart_runtime(enemy_definitions: Dictionary) -> void:
 	var definition: Dictionary = enemy_definitions.get("white_hart_avatar", {})

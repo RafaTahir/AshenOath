@@ -1,44 +1,44 @@
 {
-  "version": 2,
+  "version": 3,
   "ticket": "MON-002",
   "families": {
     "ghoulkin": {
-      "visual_role": "ghoulkin_creature",
+      "visual_role": "ghoul_gaunt_real",
       "profile": "skirmisher",
       "height": 1.63,
-      "skin": "ghoulkin_skin.jpg",
-      "runtime_source_role": "ghoulkin_skeleton",
-      "source_path": "res://assets_external/enemies/Skeleton.fbx"
+      "skin": "runtime_materials",
+      "runtime_source_role": "ghoul_gaunt_real",
+      "source_path": "res://assets_external/characters_real/GhoulGaunt_Real.glb"
     },
     "wychwood_stalker": {
-      "visual_role": "ghoulkin_skeleton",
+      "visual_role": "ghoul_stalker_real",
       "profile": "flanker",
       "height": 1.59,
-      "skin": "stalker_skin.jpg",
-      "runtime_source_role": "ghoulkin_skeleton",
-      "source_path": "res://assets_external/enemies/Skeleton.fbx"
+      "skin": "runtime_materials",
+      "runtime_source_role": "ghoul_stalker_real",
+      "source_path": "res://assets_external/characters_real/GhoulStalker_Real.glb"
     },
     "wychwood_raider": {
-      "visual_role": "ghoulkin_skeleton",
+      "visual_role": "ghoul_gaunt_real",
       "profile": "feinter",
       "height": 1.72,
-      "skin": "ghoulkin_skin.jpg",
-      "runtime_source_role": "ghoulkin_skeleton",
-      "source_path": "res://assets_external/enemies/Skeleton.fbx"
+      "skin": "runtime_materials",
+      "runtime_source_role": "ghoul_gaunt_real",
+      "source_path": "res://assets_external/characters_real/GhoulGaunt_Real.glb"
     },
     "wychwood_brute": {
-      "visual_role": "ghoulkin_skeleton",
+      "visual_role": "ghoul_brute_real",
       "profile": "brute",
       "height": 1.98,
-      "skin": "brute_skin.jpg",
-      "runtime_source_role": "ghoulkin_skeleton",
-      "source_path": "res://assets_external/enemies/Skeleton.fbx"
+      "skin": "runtime_materials",
+      "runtime_source_role": "ghoul_brute_real",
+      "source_path": "res://assets_external/characters_real/GhoulBrute_Real.glb"
     }
   },
   "shared_contract": {
     "required_states": ["idle", "walk", "run", "attack", "hit", "death"],
     "root_motion": false,
     "proxy_anatomy": false,
-    "source_policy": "all_wychwood_roles_use_complete_imported_skeleton"
+    "source_policy": "all_wychwood_roles_use_connected_skinned_family_glbs"
   }
 }

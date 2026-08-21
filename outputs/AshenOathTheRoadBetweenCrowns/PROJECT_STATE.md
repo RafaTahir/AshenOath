@@ -53,16 +53,17 @@ specific gates pass. Boss body quality and full browser performance remain open.
 
 ### MON-002 monster-family checkpoint
 
-The Wychwood Ghoulkin, Stalker, Raider, and Brute now use the complete
-animated Quaternius `Skeleton.fbx` source instead of the rejected generated
-Ghoul mannequins. The imported body supplies skull, ribs, hands, feet, and
-Skeleton Idle/Running/Attack/Spawn/Death clips. Detached Wychwood silhouette
-boxes were removed; role scale, tint, locomotion, attack spacing, and quest
-behavior remain authoritative. `verify_mon_002`, `verify_face_003`, runtime
-smoke, and fresh graphical AI captures pass. Ultimate Monsters, bespoke boss
-families, and final visual approval remain pending because the Drive source is
-currently quota-blocked. Production `main`, tracked `web/`, and Vercel remain
-unchanged.
+The Wychwood Ghoulkin, Stalker, Raider, and Brute now use the connected
+`GhoulGaunt_Real.glb`, `GhoulStalker_Real.glb`, and `GhoulBrute_Real.glb` family
+instead of the generic `Skeleton.fbx` route mapping. Ghoulkin/Raider use the
+gaunt body, Stalker uses the hooded lean body, and Brute uses the broad body.
+The family supplies connected skull/face, hands, feet, six runtime material
+surfaces, and the imported Idle/Walk/Run/Attack/HeavyAttack/RecieveHit/Dodge/
+Death clips. `Skeleton.fbx` is retained only as a quarantined audit source.
+`verify_mon_002`, runtime family instantiation, animation-driver validation,
+and fresh 1280x720 AI formation/contact captures pass. The matching Ultimate
+Monsters family replacements and final visual approval remain open. Production
+`main`, tracked `web/`, and Vercel remain unchanged.
 
 ### Character contract checkpoint - current continuation
 
