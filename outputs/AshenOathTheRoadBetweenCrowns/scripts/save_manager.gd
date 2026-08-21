@@ -1,6 +1,6 @@
 extends Node
 
-const CURRENT_VERSION := 6
+const CURRENT_VERSION := 7
 const SAVE_PATH := "user://ashen_oath_save.json"
 const AUTOSAVE_PATH := "user://ashen_oath_autosave.json"
 const CHECKPOINT_PATH := "user://ashen_oath_checkpoint.json"
@@ -100,6 +100,10 @@ func migrate_save_data(raw_data: Dictionary) -> Dictionary:
 		data["quest_beats"] = {}
 	if not data.has("settings") or typeof(data.get("settings")) != TYPE_DICTIONARY:
 		data["settings"] = {}
+	var presentation: Dictionary = data.quest_presentation
+	var presentation_zone := _normalize_zone(str(presentation.get("zone_id", data.zone)))
+	presentation["zone_id"] = presentation_zone
+	data["quest_presentation"] = presentation
 	if source_version < 3 and _legacy_road_complete(data.quests):
 		var story: Dictionary = data.story_state
 		var flags: Dictionary = story.get("flags", {}) if typeof(story.get("flags", {})) == TYPE_DICTIONARY else {}
@@ -107,10 +111,21 @@ func migrate_save_data(raw_data: Dictionary) -> Dictionary:
 		story["flags"] = flags
 		data["story_state"] = story
 	var world: Dictionary = data.world_state
+	world["removed_interactions"] = _sanitize_bool_map(world.get("removed_interactions", {}))
 	if not world.has("wychwood_pack_kills"):
 		world["wychwood_pack_kills"] = int(world.get("ghoulkin_kills", 0))
+	world["wychwood_pack_kills"] = clampi(int(world.get("wychwood_pack_kills", 0)), 0, 5)
+	world["ghoulkin_kills"] = int(world.get("wychwood_pack_kills", 0))
+	world["pending_ending"] = _normalize_ending(str(world.get("pending_ending", "")))
+	if typeof(world.get("boss_states", {})) != TYPE_DICTIONARY:
+		world["boss_states"] = {}
 	if typeof(world.get("day_night", {})) != TYPE_DICTIONARY:
 		world["day_night"] = {}
+	else:
+		var day_night: Dictionary = world.get("day_night", {})
+		day_night["world_time_minutes"] = clampf(_finite_number(day_night.get("world_time_minutes", 990.0), 990.0), 0.0, 1439.999)
+		day_night["day_count"] = maxi(int(day_night.get("day_count", 0)), 0)
+		world["day_night"] = day_night
 	data["world_state"] = world
 	data["player_health"] = _normalize_health(data.player_health)
 	data["player_stamina"] = _normalize_stamina(data.player_stamina)
@@ -210,8 +225,18 @@ func _default_position(zone: String) -> Array:
 	var defaults := {
 		"greyfen": [0.0, 1.0, 7.0],
 		"wychwood": [0.0, 1.0, 8.0],
+		"cemetery": [0.0, 1.0, 12.0],
+		"deep_wood": [0.0, 1.0, 12.0],
+		"old_mill": [0.0, 1.0, 12.0],
+		"burned_farmstead": [0.0, 1.0, 12.0],
+		"marsh_crossing": [0.0, 1.0, 12.0],
+		"bandit_road": [0.0, 1.0, 12.0],
 		"vargan_approach": [0.0, 1.0, 10.0],
+		"vargan_court": [0.0, 1.0, 12.0],
 		"record_hall": [0.0, 1.0, 7.0],
+		"undercroft": [0.0, 1.0, 12.0],
+		"assembly": [0.0, 1.0, 12.0],
+		"hart_glade": [0.0, 1.0, 12.0],
 	}
 	return defaults.get(zone, [0.0, 1.0, 6.0]).duplicate()
 
@@ -235,11 +260,38 @@ func _sanitize_settings(state: Dictionary) -> Dictionary:
 		"invert_y", "master_volume", "subtitle_scale", "camera_shake", "reduced_motion",
 		"high_contrast", "control_preset",
 	]
-	var result := {}
+	var result: Dictionary = {}
 	for key in allowed:
-		if state.has(key):
-			result[key] = state[key]
+		if not state.has(key):
+			continue
+		var value: Variant = state[key]
+		if key in ["gamepad_profiles", "custom_bindings"]:
+			if typeof(value) == TYPE_DICTIONARY:
+				result[key] = value.duplicate(true)
+		elif key in ["vsync", "fullscreen", "potato_mode", "gamepad_invert_x", "gamepad_invert_y", "gamepad_vibration", "reduced_motion", "high_contrast"]:
+			if typeof(value) == TYPE_BOOL:
+				result[key] = value
+		elif key in ["shadow_quality", "foliage_density", "visual_density", "target_fps"]:
+			if typeof(value) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(value)):
+				result[key] = int(value)
+		elif key in ["quality_preset", "touch_controls", "control_preset"]:
+			if typeof(value) == TYPE_STRING:
+				result[key] = value
+		elif typeof(value) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(value)):
+			result[key] = float(value)
 	return result
+
+func _sanitize_bool_map(value: Variant) -> Dictionary:
+	if typeof(value) != TYPE_DICTIONARY:
+		return {}
+	var result: Dictionary = {}
+	for key in value:
+		if typeof(value[key]) == TYPE_BOOL and bool(value[key]):
+			result[str(key)] = true
+	return result
+
+func _normalize_ending(value: String) -> String:
+	return value if value in ["", "witness", "mercy", "duty", "ash"] else ""
 
 func _legacy_road_complete(quests: Dictionary) -> bool:
 	var completed = quests.get("completed", {})

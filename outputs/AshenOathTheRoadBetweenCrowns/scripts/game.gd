@@ -318,6 +318,13 @@ func _start_new_game_world() -> void:
 	save_manager.checkpoint(self)
 
 func load_save_state(data: Dictionary) -> void:
+	if save_manager != null and save_manager.has_method("migrate_save_data"):
+		var migrated: Dictionary = save_manager.migrate_save_data(data)
+		if migrated.is_empty():
+			if hud != null:
+				hud.toast("This save belongs to a newer version of Ashen Oath.")
+			return
+		data = migrated
 	_clear_route_zone_cache()
 	game_started = true
 	if audio != null:
@@ -2531,14 +2538,22 @@ func _keep_player_in_world() -> void:
 
 func _safe_loaded_position(zone: String, pos: Vector3) -> Vector3:
 	var river_z := _river_center(zone)
-	# The bridge deck is valid walkable space even though its collision sits below the capsule.
-	if river_z < 900.0 and absf(pos.x) < 2.0 and absf(pos.z - river_z) <= 2.25 and pos.y >= 0.18:
-		return pos
 	if spatial_service != null and spatial_service.zone_id == zone:
-		return spatial_service.nearest_safe(pos, spatial_service.bank_for(pos))
+		var active_candidate: Vector3 = spatial_service.validate_position(pos, 0.90, spatial_service.bank_for(pos))
+		if river_z < 900.0 and absf(active_candidate.x) <= 2.0 and absf(active_candidate.z - river_z) <= 2.25 and not spatial_service.is_river_excluded(active_candidate, 0.90):
+			active_candidate.y = maxf(active_candidate.y, 0.95)
+			return active_candidate
+		return spatial_service.nearest_safe(active_candidate, spatial_service.bank_for(active_candidate))
 	var validator = ZoneSpatialService.new()
 	validator.configure(zone, _river_center(zone), _zone_half_extents(zone))
-	return validator.nearest_safe(pos, validator.bank_for(pos))
+	var fallback_candidate: Vector3 = validator.validate_position(pos, 0.90, validator.bank_for(pos))
+	if river_z < 900.0 and absf(fallback_candidate.x) <= 2.0 and absf(fallback_candidate.z - river_z) <= 2.25 and not validator.is_river_excluded(fallback_candidate, 0.90):
+		fallback_candidate.y = maxf(fallback_candidate.y, 0.95)
+		validator.free()
+		return fallback_candidate
+	var safe := validator.nearest_safe(fallback_candidate, validator.bank_for(fallback_candidate))
+	validator.free()
+	return safe
 
 func validate_walkable_position(pos: Vector3) -> Vector3:
 	if spatial_service != null:

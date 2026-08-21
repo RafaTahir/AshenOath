@@ -14,6 +14,15 @@ shutdown-only warnings after the verifier pass marker; active null-material
 errors are absent. Production `main`, tracked `web/`, and Vercel remain
 unchanged until the complete visual and release gates pass.
 
+### SAVE-003 migration checkpoint
+
+SAVE-003 advances the save schema to version 7. Direct and file-backed loads
+share migration, malformed quest/story/settings/world containers are sanitized,
+unknown tracked quests are discarded without inventing progress, all released
+zones have explicit safe defaults, and invalid river/campaign positions are
+validated through the zone spatial service. `verify_save_003.gd` passes the
+malformed-data and real Wychwood recovery route. Production remains unchanged.
+
 ### QUEST-012 continuation checkpoint
 
 The Hart Remembers arc now has four immutable covenant outcomes: Witness,

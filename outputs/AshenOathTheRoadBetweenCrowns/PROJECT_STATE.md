@@ -16,6 +16,13 @@ and return. Fresh QA-005 classification reports no active material/resource
 error; five renderer teardown warnings remain explicitly classified debt.
 Production `main`, tracked `web/`, and Vercel remain unchanged.
 
+SAVE-003 is also complete on the development branch. Save schema version 7
+now migrates direct and file-backed loads consistently, sanitizes quest/story/
+settings/world containers, rejects unknown tracked quests, validates invalid
+campaign positions through spatial recovery, and preserves neutral legacy
+choices. `verify_save_003` passes malformed migration and real Wychwood river
+recovery; production remains unchanged.
+
 This checkpoint has targeted local passes for lifecycle cleanup, save/input
 foundations, character presentation, sword combat, Oathfire, AI, Greyfen and
 campaign world contracts, authored lighting, and the 1280x720 sky capture.
@@ -117,7 +124,7 @@ The local Web candidate produced by this checkpoint is 65.8 MB total with a 29.5
 
 `ASSET-004` and `PIPE-003` now define a reproducible source/role contract in `soul_asset_pack_manifest.json` and `soul_character_role_manifest.json`. Five selected CC0 source families are recorded with dependencies and preload priorities. Six route-visible roles remain explicitly pending local pack acquisition and visual review; zero are falsely marked approved. `verify_asset_acceptance.py` passes and rejects raw/download runtime paths, missing licenses, missing fallback files, forbidden proxy tokens, and unverified approved hashes.
 
-The recovery runtime now includes `ZoneRuntimeCoordinator` transition/build/rollback snapshots, `QuestPresentationState` objective IDs/text for compass fallback, and save schema version 6 with sanitized settings migration. These are foundation changes only; they do not mean the route has passed visual acceptance.
+The recovery runtime now includes `ZoneRuntimeCoordinator` transition/build/rollback snapshots, `QuestPresentationState` objective IDs/text for compass fallback, and save schema version 7 with sanitized settings, quest, story, world, and invalid-position migration. These are foundation changes only; they do not mean the route has passed visual acceptance.
 
 The latest opening-presentation checkpoint adds midpoint dialogue framing, stable Anwen-facing behavior during the pause, bone-scale compensation for imported face/hair details, and removal of redundant interaction labels during dialogue. Runtime, input, save, player-route, character/river/sun, visible-quality, material, browser, performance, and lifecycle gates pass. The eleven-view visual gate is Codex-reviewed rather than human-approved.
 

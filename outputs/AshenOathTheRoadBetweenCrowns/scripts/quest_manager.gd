@@ -114,6 +114,8 @@ func get_tracker_text() -> String:
 		if id not in ordered_ids:
 			ordered_ids.append(id)
 	for id in ordered_ids:
+		if not quest_defs.has(id) or typeof(active.get(id, {})) != TYPE_DICTIONARY:
+			continue
 		var title = str(quest_defs[id].get("title", id))
 		for objective in active[id]["objectives"]:
 			if bool(objective.get("done", false)):
@@ -195,12 +197,15 @@ func set_tracked_quest_for_zone(zone_id: String) -> void:
 func get_journal_text() -> String:
 	var text = "ACTIVE QUESTS\n"
 	for id in active.keys():
+		if not quest_defs.has(id):
+			continue
 		text += "\n%s\n" % quest_defs[id].get("title", id)
 		for objective in active[id]["objectives"]:
 			text += "%s %s\n" % ["[x]" if bool(objective.get("done", false)) else "[ ]", objective["text"]]
 	text += "\nCOMPLETED\n"
 	for id in completed.keys():
-		text += "- %s\n" % quest_defs[id].get("title", id)
+		if quest_defs.has(id):
+			text += "- %s\n" % quest_defs[id].get("title", id)
 	return text
 
 func _try_complete_quest(id: String) -> void:
@@ -230,14 +235,66 @@ func save_state() -> Dictionary:
 	}
 
 func load_state(state: Dictionary) -> void:
-	active = state.get("active", active)
-	completed = state.get("completed", completed)
-	unlocked = state.get("unlocked", unlocked)
-	world_flags = state.get("world_flags", world_flags)
-	tracked_quest_id = str(state.get("tracked_quest_id", tracked_quest_id))
-	tracker_context_zone = str(state.get("tracker_context_zone", tracker_context_zone))
+	active = _sanitize_active(state.get("active", {}))
+	completed = _sanitize_id_map(state.get("completed", {}), true)
+	var loaded_unlocked := _sanitize_id_map(state.get("unlocked", {}), false)
+	for id in loaded_unlocked:
+		unlocked[id] = loaded_unlocked[id]
+	var loaded_flags: Variant = state.get("world_flags", {})
+	world_flags = loaded_flags.duplicate(true) if typeof(loaded_flags) == TYPE_DICTIONARY else {}
+	tracked_quest_id = str(state.get("tracked_quest_id", ""))
+	tracker_context_zone = str(state.get("tracker_context_zone", "")).strip_edges().to_lower()
+	if not active.has(tracked_quest_id):
+		tracked_quest_id = _first_main_active()
 	_migrate_teeth_in_rain()
 	changed.emit()
+
+func _sanitize_id_map(raw: Variant, completed_map: bool) -> Dictionary:
+	if typeof(raw) != TYPE_DICTIONARY:
+		return {}
+	var result: Dictionary = {}
+	for raw_id in raw:
+		var id := str(raw_id)
+		if not quest_defs.has(id):
+			continue
+		var value: Variant = raw[raw_id]
+		if completed_map:
+			if bool(value):
+				result[id] = true
+		elif typeof(value) == TYPE_BOOL:
+			result[id] = value
+	return result
+
+func _sanitize_active(raw: Variant) -> Dictionary:
+	if typeof(raw) != TYPE_DICTIONARY:
+		return {}
+	var result: Dictionary = {}
+	for raw_id in raw:
+		var id := str(raw_id)
+		if not quest_defs.has(id) or typeof(raw[raw_id]) != TYPE_DICTIONARY:
+			continue
+		var saved_entry: Dictionary = raw[raw_id]
+		var saved_objectives: Dictionary = {}
+		if typeof(saved_entry.get("objectives", [])) == TYPE_ARRAY:
+			for raw_objective in saved_entry.objectives:
+				if typeof(raw_objective) == TYPE_DICTIONARY:
+					saved_objectives[str(raw_objective.get("id", ""))] = raw_objective
+		var objectives: Array = []
+		for definition in quest_defs[id].get("objectives", []):
+			var runtime_objective: Dictionary = definition.duplicate(true)
+			var saved_objective: Dictionary = saved_objectives.get(str(definition.get("id", "")), {})
+			runtime_objective["done"] = bool(saved_objective.get("done", false))
+			if saved_objective.has("optional_satisfied"):
+				runtime_objective["optional_satisfied"] = bool(saved_objective.optional_satisfied)
+			objectives.append(runtime_objective)
+		result[id] = {"objectives": objectives}
+	return result
+
+func _first_main_active() -> String:
+	for id in active:
+		if quest_defs.has(id) and str(quest_defs[id].get("type", "")) == "main":
+			return str(id)
+	return str(active.keys()[0]) if not active.is_empty() else ""
 
 func _migrate_teeth_in_rain() -> void:
 	if not active.has("main_teeth_in_rain") or not quest_defs.has("main_teeth_in_rain"):

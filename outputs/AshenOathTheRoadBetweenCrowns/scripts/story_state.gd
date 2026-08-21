@@ -42,10 +42,14 @@ func save_state() -> Dictionary:
 	return {"version": VERSION, "flags": flags.duplicate(true), "values": values.duplicate(true)}
 
 func load_state(data: Dictionary) -> void:
-	flags = data.get("flags", {}).duplicate(true)
-	var loaded: Dictionary = data.get("values", {})
+	var loaded_flags: Variant = data.get("flags", {})
+	flags = loaded_flags.duplicate(true) if typeof(loaded_flags) == TYPE_DICTIONARY else {}
+	var loaded_values_raw: Variant = data.get("values", {})
+	var loaded: Dictionary = loaded_values_raw if typeof(loaded_values_raw) == TYPE_DICTIONARY else {}
 	values = {"anwen_trust": 0, "greyfen_fear": 0, "hart_debt": 0}
 	for id in loaded:
+		if typeof(loaded[id]) not in [TYPE_INT, TYPE_FLOAT] or not is_finite(float(loaded[id])):
+			continue
 		var limit: Vector2i = VALUE_LIMITS.get(id, Vector2i(-999, 999))
 		values[id] = clampi(int(loaded[id]), limit.x, limit.y)
 	changed.emit()

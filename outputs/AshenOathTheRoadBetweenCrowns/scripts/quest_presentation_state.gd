@@ -103,4 +103,5 @@ func save_state() -> Dictionary:
 	return {"zone_id": zone_id}
 
 func load_state(state: Dictionary) -> void:
-	zone_id = str(state.get("zone_id", zone_id)).strip_edges().to_lower()
+	var requested := str(state.get("zone_id", zone_id)).strip_edges().to_lower()
+	zone_id = requested if ZONE_LABELS.has(requested) else "greyfen"

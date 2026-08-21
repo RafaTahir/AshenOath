@@ -1019,6 +1019,22 @@
         "verify_engine_004"
       ]
     },
+    "save": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/save_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/quest_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/story_state.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/quest_presentation_state.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_save_001.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_save_003.gd"
+      ],
+      "gates": [
+        "verify_save_001",
+        "verify_save_003",
+        "verify_runtime_regressions"
+      ]
+    },
     "product": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/hud.gd",
