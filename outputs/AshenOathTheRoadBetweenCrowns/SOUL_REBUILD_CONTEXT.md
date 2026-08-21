@@ -23,6 +23,18 @@ zones have explicit safe defaults, and invalid river/campaign positions are
 validated through the zone spatial service. `verify_save_003.gd` passes the
 malformed-data and real Wychwood recovery route. Production remains unchanged.
 
+### INPUT-002 continuation checkpoint
+
+`InputRouter` now owns the input-context contract for menu, gameplay, pause,
+dialogue, journal, settings, controls, remapping, minigame, death, and
+transition states. HUD panels, minigames, pause/resume, and camera pointer
+handling delegate to the same service. Focus helpers prevent stale menu focus
+and remap navigation remains keyboard/gamepad safe. `verify_input_002`, the
+existing INPUT-001/003/004 gates, runtime regressions, UI-001, and the full
+input ticket profile pass. Headless Godot cannot prove an OS pointer lock, so
+that exact assertion remains reserved for graphical/browser testing. This is a
+development checkpoint; production remains unchanged.
+
 ### QUEST-012 continuation checkpoint
 
 The Hart Remembers arc now has four immutable covenant outcomes: Witness,

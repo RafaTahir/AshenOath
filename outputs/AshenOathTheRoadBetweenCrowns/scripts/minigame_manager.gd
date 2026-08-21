@@ -46,16 +46,16 @@ func close_game() -> void:
 	closed.emit()
 
 func _set_ui_pointer() -> void:
-	if input_source != null and input_source.has_method("release_pointer"):
+	if input_source != null and input_source.has_method("set_ui_context"):
+		input_source.set_ui_context("minigame")
+	elif input_source != null and input_source.has_method("release_pointer"):
 		input_source.release_pointer()
-	else:
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 func _set_gameplay_pointer() -> void:
-	if input_source != null and input_source.has_method("restore_gameplay_pointer"):
+	if input_source != null and input_source.has_method("set_gameplay_context"):
+		input_source.set_gameplay_context()
+	elif input_source != null and input_source.has_method("restore_gameplay_pointer"):
 		input_source.restore_gameplay_pointer()
-	else:
-		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func is_open() -> bool:
 	return overlay != null and overlay.visible

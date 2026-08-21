@@ -242,8 +242,6 @@ func get_zoom_distance() -> float:
 func _capture_pointer() -> void:
 	if input_source != null and input_source.has_method("capture_pointer"):
 		input_source.capture_pointer()
-	else:
-		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func apply_settings(mouse_sensitivity: float, use_invert_y: bool, controller_sensitivity: float = 1.0) -> void:
 	sensitivity = mouse_sensitivity

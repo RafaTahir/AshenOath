@@ -114,7 +114,7 @@ func _process(delta: float) -> void:
 func show_main_menu() -> void:
 	active_menu = "main"
 	_set_internal_canvas(Vector2i(MENU_SIZE))
-	_set_ui_pointer()
+	_set_ui_pointer("menu")
 	_clear_menu()
 	menu_layer.visible = true
 	var box = _menu_box("ASHEN OATH", "The Road Between Crowns", "contracts | curses | consequences")
@@ -137,7 +137,7 @@ func set_new_game_ready(value: bool) -> void:
 func show_launch_screen() -> void:
 	active_menu = "launch"
 	_set_internal_canvas(Vector2i(MENU_SIZE))
-	_set_ui_pointer()
+	_set_ui_pointer("menu")
 	_clear_menu()
 	menu_layer.visible = true
 	var box = _menu_box("ASHEN OATH", "The Road Between Crowns", "click to wake the road")
@@ -150,7 +150,7 @@ func show_launch_screen() -> void:
 func show_pause_menu() -> void:
 	active_menu = "pause"
 	_set_internal_canvas(Vector2i(MENU_SIZE))
-	_set_ui_pointer()
+	_set_ui_pointer("pause")
 	_clear_menu()
 	menu_layer.visible = true
 	var box = _menu_box("Paused", "", "the road holds its breath")
@@ -168,7 +168,7 @@ func show_settings_menu(back_target: String = "pause", requested_page: int = -1)
 	controls_back_target = back_target
 	if requested_page >= 0:
 		settings_page = requested_page
-	_set_ui_pointer()
+	_set_ui_pointer("settings")
 	_clear_menu()
 	menu_layer.visible = true
 	var box = _menu_box("Settings", "Display & Controls", "tune the lantern")
@@ -216,7 +216,7 @@ func _settings_entries(s: Dictionary) -> Array:
 func show_controls_menu(back_target: String = "main") -> void:
 	active_menu = "controls"
 	controls_back_target = back_target
-	_set_ui_pointer()
+	_set_ui_pointer("controls")
 	_clear_menu()
 	menu_layer.visible = true
 	var box = _menu_box("Controls", "", "blade | breath | road")
@@ -235,7 +235,7 @@ func show_remap_menu(back_target: String = "main", requested_page: int = -1) -> 
 	remap_waiting = false
 	if requested_page >= 0:
 		remap_page = requested_page
-	_set_ui_pointer()
+	_set_ui_pointer("remap")
 	_clear_menu()
 	menu_layer.visible = true
 	var box := _menu_box("Customize Controls", "Bindings", "choose an action, then press a key or button")
@@ -290,7 +290,7 @@ func _return_from_remap() -> void:
 func show_credits_menu() -> void:
 	active_menu = "credits"
 	_set_internal_canvas(Vector2i(MENU_SIZE))
-	_set_ui_pointer()
+	_set_ui_pointer("menu")
 	_clear_menu()
 	menu_layer.visible = true
 	var box = _menu_box("Credits", "", "made under an ashen moon")
@@ -300,9 +300,12 @@ func show_credits_menu() -> void:
 func hide_menus() -> void:
 	active_menu = ""
 	_set_internal_canvas(GAMEPLAY_SIZE)
-	var focus_owner := get_viewport().gui_get_focus_owner()
-	if focus_owner != null and is_instance_valid(focus_owner):
-		focus_owner.release_focus()
+	if input_source != null and input_source.has_method("clear_focus"):
+		input_source.clear_focus()
+	else:
+		var focus_owner := get_viewport().gui_get_focus_owner()
+		if focus_owner != null and is_instance_valid(focus_owner):
+			focus_owner.release_focus()
 	menu_layer.visible = false
 	dialogue_layer.visible = false
 	inventory_layer.visible = false
@@ -499,7 +502,7 @@ func mark_stamina_exhausted() -> void:
 	show_status_cue("Stamina spent", "stamina")
 
 func show_dialogue(data: Dictionary) -> void:
-	_set_ui_pointer()
+	_set_ui_pointer("dialogue")
 	dialogue_layer.visible = true
 	dialogue_session_data = data.duplicate(true)
 	dialogue_pages.clear()
@@ -549,7 +552,7 @@ func _render_dialogue_page() -> void:
 	call_deferred("_focus_first_enabled", dialogue_actions)
 
 func show_inventory(inventory, quests, story_state = null, progression = null) -> void:
-	_set_ui_pointer()
+	_set_ui_pointer("journal")
 	inventory_layer.visible = true
 	var oil_name = "None"
 	if inventory.active_oil != "":
@@ -646,7 +649,7 @@ func show_inventory(inventory, quests, story_state = null, progression = null) -
 	call_deferred("_focus_first_enabled", craft_buttons)
 
 func show_ending(title: String, body: String) -> void:
-	_set_ui_pointer()
+	_set_ui_pointer("menu")
 	_clear_menu()
 	menu_layer.visible = true
 	var box = _menu_box(title)
@@ -658,7 +661,7 @@ func show_ending(title: String, body: String) -> void:
 	_add_menu_button(box, "Return to Launch Screen", show_launch_screen)
 
 func show_death_screen(body: String) -> void:
-	_set_ui_pointer()
+	_set_ui_pointer("death")
 	_clear_menu()
 	menu_layer.visible = true
 	var box = _menu_box("Kael Falls")
@@ -1061,17 +1064,17 @@ func set_input_source(source: Node) -> void:
 	if input_source != null:
 		set_input_device(str(input_source.get("active_device")))
 
-func _set_ui_pointer() -> void:
-	if input_source != null and input_source.has_method("release_pointer"):
+func _set_ui_pointer(context: String = "menu") -> void:
+	if input_source != null and input_source.has_method("set_ui_context"):
+		input_source.set_ui_context(context)
+	elif input_source != null and input_source.has_method("release_pointer"):
 		input_source.release_pointer()
-	else:
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 func _set_gameplay_pointer() -> void:
-	if input_source != null and input_source.has_method("restore_gameplay_pointer"):
+	if input_source != null and input_source.has_method("set_gameplay_context"):
+		input_source.set_gameplay_context()
+	elif input_source != null and input_source.has_method("restore_gameplay_pointer"):
 		input_source.restore_gameplay_pointer()
-	else:
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if input_device == "touch" else Input.MOUSE_MODE_CAPTURED
 
 func apply_accessibility(current: Dictionary) -> void:
 	reduced_motion = bool(current.get("reduced_motion", false))
@@ -1142,6 +1145,9 @@ func _controller_sensitivity_label(value: float) -> String:
 func _focus_first_enabled(container: Node) -> void:
 	if container == null or not is_instance_valid(container):
 		return
+	if input_source != null and input_source.has_method("focus_first_enabled"):
+		if input_source.focus_first_enabled(container) != null:
+			return
 	for child in container.get_children():
 		if child is Button and not child.disabled:
 			child.grab_focus()

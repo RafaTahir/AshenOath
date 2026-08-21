@@ -23,6 +23,15 @@ campaign positions through spatial recovery, and preserves neutral legacy
 choices. `verify_save_003` passes malformed migration and real Wychwood river
 recovery; production remains unchanged.
 
+INPUT-002 is complete on the development branch. `InputRouter` now owns
+explicit menu, gameplay, pause, dialogue, journal, settings, controls,
+remapping, minigame, death, and transition contexts. HUD panels, minigames,
+pause/resume, and the camera delegate pointer ownership and focus cleanup to
+that contract. The new context/focus gate and the existing input, gamepad,
+remapping, runtime-regression, and UI gates pass. Production remains
+unchanged; the exact pointer-lock assertion remains graphical/browser work
+because headless Godot has no capture surface.
+
 This checkpoint has targeted local passes for lifecycle cleanup, save/input
 foundations, character presentation, sword combat, Oathfire, AI, Greyfen and
 campaign world contracts, authored lighting, and the 1280x720 sky capture.

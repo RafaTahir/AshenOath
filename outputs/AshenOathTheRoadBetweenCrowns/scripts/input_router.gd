@@ -6,10 +6,28 @@ signal device_changed(device: String)
 signal pointer_mode_changed(mode: int)
 signal gamepad_profile_changed(profile: Dictionary)
 signal bindings_changed(bindings: Dictionary)
+signal input_context_changed(context: String)
 
 const DEVICE_KEYBOARD_MOUSE := "keyboard_mouse"
 const DEVICE_GAMEPAD := "gamepad"
 const DEVICE_TOUCH := "touch"
+
+const CONTEXT_MENU := "menu"
+const CONTEXT_GAMEPLAY := "gameplay"
+const CONTEXT_PAUSE := "pause"
+const CONTEXT_DIALOGUE := "dialogue"
+const CONTEXT_JOURNAL := "journal"
+const CONTEXT_SETTINGS := "settings"
+const CONTEXT_CONTROLS := "controls"
+const CONTEXT_REMAP := "remap"
+const CONTEXT_MINIGAME := "minigame"
+const CONTEXT_DEATH := "death"
+const CONTEXT_TRANSITION := "transition"
+const UI_CONTEXTS := [
+	CONTEXT_MENU, CONTEXT_PAUSE, CONTEXT_DIALOGUE, CONTEXT_JOURNAL,
+	CONTEXT_SETTINGS, CONTEXT_CONTROLS, CONTEXT_REMAP, CONTEXT_MINIGAME,
+	CONTEXT_DEATH, CONTEXT_TRANSITION,
+]
 
 var _web_pointer_capture_block_until := 0
 
@@ -153,6 +171,7 @@ var virtual_move := Vector2.ZERO
 var virtual_look := Vector2.ZERO
 var _virtual_actions: Dictionary = {}
 var keyboard_labels: Dictionary = KEYBOARD_LABELS.duplicate()
+var input_context := CONTEXT_MENU
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -205,6 +224,47 @@ func set_settings_manager(manager: Node) -> void:
 	settings_manager = manager
 	if manager != null and manager.get("settings") != null:
 		settings_ref = manager.get("settings")
+
+func set_context(context: String) -> void:
+	var normalized := context.strip_edges().to_lower()
+	if normalized not in UI_CONTEXTS and normalized != CONTEXT_GAMEPLAY:
+		normalized = CONTEXT_MENU
+	var changed := input_context != normalized
+	input_context = normalized
+	if normalized == CONTEXT_GAMEPLAY:
+		restore_gameplay_pointer()
+	else:
+		show_pointer()
+	if changed:
+		input_context_changed.emit(input_context)
+
+func set_gameplay_context() -> void:
+	set_context(CONTEXT_GAMEPLAY)
+
+func set_ui_context(context: String = CONTEXT_MENU) -> void:
+	set_context(context)
+
+func get_context() -> String:
+	return input_context
+
+func is_gameplay_context() -> bool:
+	return input_context == CONTEXT_GAMEPLAY
+
+func focus_first_enabled(container: Node) -> Control:
+	if container == null or not is_instance_valid(container):
+		return null
+	var candidates := container.find_children("*", "Button", true, false)
+	for candidate in candidates:
+		var button := candidate as Button
+		if button != null and not button.disabled and button.focus_mode != Control.FOCUS_NONE:
+			button.grab_focus()
+			return button
+	return null
+
+func clear_focus() -> void:
+	var focus_owner := get_viewport().gui_get_focus_owner()
+	if focus_owner != null and is_instance_valid(focus_owner):
+		focus_owner.release_focus()
 
 func get_action_bindings(action: String) -> Array[InputEvent]:
 	if not InputMap.has_action(action):

@@ -2328,6 +2328,8 @@ func _pause_game() -> void:
 	audio.set_game_paused(true)
 	get_tree().paused = true
 	paused_by_menu = true
+	if input_router != null and input_router.has_method("set_context"):
+		input_router.set_context("pause")
 	audio.play_event("ui")
 	hud.show_pause_menu()
 
@@ -2335,6 +2337,8 @@ func _resume_game() -> void:
 	audio.set_game_paused(false)
 	get_tree().paused = false
 	paused_by_menu = false
+	if input_router != null and input_router.has_method("set_gameplay_context"):
+		input_router.set_gameplay_context()
 	audio.play_event("ui")
 	hud.hide_menus()
 

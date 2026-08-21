@@ -160,11 +160,13 @@
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/runtime_service_registry.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/project.godot",
         "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_input_001.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_input_002.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_input_003.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_input_004.gd"
       ],
       "gates": [
         "verify_input_001",
+        "verify_input_002",
         "verify_input_003",
         "verify_input_004",
         "verify_runtime_regressions",
