@@ -26,7 +26,7 @@
     "villager_hooded": "res://assets_external/characters_universal/Female_Peasant.gltf",
     "castle_guard": "res://assets_external/characters_universal/Male_Peasant.gltf",
     "road_ranger": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf",
-    "ghoul_gaunt": "res://assets_external/animated/OrcSkull_Animated_CC0.gltf",
+    "ghoul_gaunt": "res://assets_external/characters_real/GhoulGaunt_Real.glb",
     "ghoul_stalker": "res://assets_external/characters_real/GhoulStalker_Real.glb",
     "ghoul_brute": "res://assets_external/characters_real/GhoulBrute_Real.glb",
     "orc_skull_real": "res://assets_external/animated/OrcSkull_Animated_CC0.gltf"

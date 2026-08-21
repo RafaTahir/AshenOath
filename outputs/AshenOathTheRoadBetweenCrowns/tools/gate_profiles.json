@@ -459,9 +459,12 @@
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/npc_ambient.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_identity_profile.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/greyfen_life_controller.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_role_spec.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_role_contract.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_char_009.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_char_002.gd",
-        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_face_003.gd"
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_face_003.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_character_role_contract.gd"
       ],
       "gates": [
         "verify_char_005",
@@ -471,6 +474,7 @@
         "verify_char_009",
         "verify_char_002",
         "verify_char_001",
+        "verify_character_role_contract",
         "verify_motion_quality",
         "verify_anim_003",
         "verify_face_003",

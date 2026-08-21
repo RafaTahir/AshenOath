@@ -28,9 +28,9 @@
   "roles": {
       "player_human": {"model": "res://assets_external/characters_universal/Male_Peasant.gltf", "target_height": 1.78, "outfit_slot": "hunter_peasant_base", "face_profile": "kael"},
     "sister_anwen_human": {"model": "res://assets_external/characters_universal/Female_Peasant.gltf", "target_height": 1.68, "outfit_slot": "cleric_peasant_base", "face_profile": "anwen"},
-    "villager_male": {"model": "res://assets_external/characters_universal/Superhero_Male_FullBody.gltf", "target_height": 1.72, "outfit_slot": "peasant_male", "face_profile": "crowd_male"},
-    "villager_female": {"model": "res://assets_external/characters_universal/Superhero_Female_FullBody.gltf", "target_height": 1.66, "outfit_slot": "peasant_female", "face_profile": "crowd_female"},
-    "castle_guard": {"model": "res://assets_external/characters_universal/Superhero_Male_FullBody.gltf", "target_height": 1.82, "outfit_slot": "guard", "face_profile": "castle_guard"},
+    "villager_male": {"model": "res://assets_external/characters_universal/Male_Peasant.gltf", "target_height": 1.72, "outfit_slot": "peasant_male", "face_profile": "crowd_male", "status": "runtime_fallback_pending_visual_review"},
+    "villager_female": {"model": "res://assets_external/characters_universal/Female_Peasant.gltf", "target_height": 1.66, "outfit_slot": "peasant_female", "face_profile": "crowd_female", "status": "runtime_fallback_pending_visual_review"},
+    "castle_guard": {"model": "res://assets_external/characters_universal/Male_Peasant.gltf", "target_height": 1.82, "outfit_slot": "guard", "face_profile": "castle_guard", "status": "runtime_fallback_pending_visual_review"},
     "road_ranger": {"model": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf", "target_height": 1.75, "outfit_slot": "ranger", "face_profile": "traveler", "animation_library": "res://assets_external/animations/soul_universal_animation_library_2.glb"}
   },
   "runtime_policy": {

@@ -2,6 +2,29 @@
 
 ## Current Working Checkpoint - 2026-08-21
 
+### Character contract checkpoint - current continuation
+
+The character foundation contract is enforced at runtime. An inspected role
+must have one skeleton, skinned meshes, material surfaces, grounded rendered
+bounds within its target height, required sockets, and exactly one
+normalization pass. The native face driver recognizes imported eye, brow, skin,
+head, hair, jaw, mouth, and teeth surfaces. The released identity profile no
+longer adds synthetic face cards, eye boxes, fake necks, or proxy limbs.
+
+The connected Universal full-body candidate was captured and rejected because
+its current wardrobe import is underwear-only for the male and bald/underwear-
+only for the female. Runtime therefore remains on the complete clothed male
+and female peasant composites while the proper hunter, cleric, crowd, and guard
+outfit pass remains open. These fallback composites are grounded and have
+native face/hair surfaces, but they are not final visual approval.
+
+The current targeted character gates pass: CHAR-005 through CHAR-009,
+FACE-003, CHARACTER-REAL-001, and the new role-contract verifier. Asset
+acceptance passes with one approved Ranger role and eight pending roles. Fresh
+character evidence is in `Development_Gallery/screenshots/CHAR_006_*` through
+`CHAR_009_*`. No production export or deployment has been performed for this
+continuation.
+
 ### ENGINE-004 lifecycle checkpoint
 
 ENGINE-004 now owns the latest development checkpoint. Build-only terrain and

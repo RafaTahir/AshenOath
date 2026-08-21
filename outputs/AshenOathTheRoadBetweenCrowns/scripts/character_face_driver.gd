@@ -31,7 +31,14 @@ func configure(root: Node3D, role: String) -> bool:
 			continue
 		var token := str(mesh.name).to_lower()
 		var surface_count: int = mesh.mesh.get_surface_count()
-		if token.contains("head") or token.contains("face") or token.contains("skin") or token.contains("body") or token.contains("skull") or token.contains("jaw") or token.contains("mouth") or token.contains("teeth"):
+		var material_token := ""
+		for surface_index in range(surface_count):
+			var material = mesh.get_surface_override_material(surface_index)
+			if material == null:
+				material = mesh.mesh.surface_get_material(surface_index)
+			material_token += " %s" % str(material.resource_name).to_lower() if material != null else ""
+		var face_token := "%s %s" % [token, material_token]
+		if face_token.contains("head") or face_token.contains("face") or face_token.contains("skin") or face_token.contains("body") or face_token.contains("skull") or face_token.contains("jaw") or face_token.contains("mouth") or face_token.contains("teeth") or face_token.contains("eye") or face_token.contains("brow"):
 			native_face_surface_count += surface_count
 		if token.contains("eye") and not token.contains("brow"):
 			eye_meshes.append(mesh)

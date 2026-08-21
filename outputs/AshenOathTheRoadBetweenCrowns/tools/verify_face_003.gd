@@ -8,6 +8,7 @@ var helper: Node
 var tested_game: Node
 
 func _initialize() -> void:
+	_verify_identity_driver_source()
 	helper = AssetSpawnHelper.new()
 	root.add_child(helper)
 	await process_frame
@@ -37,6 +38,14 @@ func _initialize() -> void:
 			_verify_runtime_face(enemy, str(enemy.enemy_id))
 
 	await _finish()
+
+func _verify_identity_driver_source() -> void:
+	var source := FileAccess.get_file_as_string("res://scripts/character_identity_profile.gd")
+	for forbidden in [
+		"FeatureScaleNormalizer", "HeadFeatureSocket", "MonsterHeadFeatures", "_add_feature_box",
+		"_add_feature_sphere", "_add_human_face_details", "_add_monster_eye_details"
+	]:
+		_assert(not source.contains(forbidden), "character identity profile still contains synthetic anatomy helper: %s" % forbidden)
 
 func _verify_asset_role(role: String, label: String) -> void:
 	var visual: Node3D = helper.spawn_visual_role(role, "characters")

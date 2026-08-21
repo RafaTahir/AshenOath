@@ -2,6 +2,32 @@
 
 ## Current Working Checkpoint - 2026-08-21
 
+### Character contract checkpoint - current continuation
+
+The character foundation contract is now enforced at runtime rather than by
+node presence alone. Each inspected human role must expose exactly one
+skeleton, skinned meshes, material surfaces, grounded rendered bounds within
+its target height, required equipment sockets, and one normalization pass.
+The face driver now recognizes native eye, brow, skin, head, hair, jaw, mouth,
+and teeth surfaces, and the released identity profile no longer creates
+synthetic face cards, eye boxes, fake necks, or proxy limbs.
+
+The Universal full-body candidate was tested graphically and rejected: its
+current import contains an underwear-only male body and a bald underwear-only
+female body. It is not mapped into runtime. Kael, Anwen, villagers, and guards
+remain on the complete clothed Universal peasant composites while a proper
+clothed hunter/cleric/occupation outfit pass is still open. The restored
+composites are grounded and show native face/hair surfaces, but this is not a
+claim that the final visual identity ticket has passed.
+
+Current targeted results: CHAR-005, CHAR-006, CHAR-007, CHAR-008, CHAR-009,
+FACE-003, CHARACTER-REAL-001, and the new character-role contract gate pass;
+asset acceptance passes with one approved Ranger role and eight pending roles.
+Fresh evidence is in `Development_Gallery/screenshots/CHAR_006_*`,
+`CHAR_007_*`, `CHAR_008_*`, and `CHAR_009_*`. The evidence is current and
+nonblank, but pending roles remain visually unapproved. Production `main`,
+tracked `web/`, and Vercel remain unchanged.
+
 The authoritative production baseline remains `bd24495` on the deployed
 branch. The current Soul Rebuild continuation is on the pushed development
 branch `codex/soul-rebuild`; production `main`, `web/`, and Vercel remain

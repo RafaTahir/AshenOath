@@ -68,6 +68,21 @@ func _spawn_from_entry(entry: Dictionary, role_name: String, fallback_category: 
 
 func _compose_player_body(outfit_root: Node3D, outfit_path: String, role_name: String) -> Node3D:
 	var normalized_path := outfit_path.replace("\\", "/").to_lower()
+	var is_fullbody_male := normalized_path.ends_with("superhero_male_fullbody.gltf")
+	var is_fullbody_female := normalized_path.ends_with("superhero_female_fullbody.gltf")
+	if is_fullbody_male or is_fullbody_female:
+		# These sources already contain one connected head, body, hair and
+		# skeleton. Wrap the imported scene only to keep the existing character
+		# composition contract stable; do not add a second head or costume layer.
+		var composite := Node3D.new()
+		composite.name = "%sCompleteHumanoid" % ("Male" if is_fullbody_male else "Female")
+		composite.add_child(outfit_root)
+		composite.set_meta("character_composite", true)
+		composite.set_meta("character_rig_layer_count", 1)
+		composite.set_meta("character_identity", "unified_male" if is_fullbody_male else "unified_female")
+		composite.set_meta("character_base_path", outfit_path)
+		composite.set_meta("character_outfit_path", outfit_path)
+		return composite
 	var is_kael := role_name in ["player_human", "player_kael"] and normalized_path.ends_with("male_peasant.gltf")
 	var is_anwen := role_name in ["sister_anwen_human", "sister_anwen"] and normalized_path.ends_with("female_peasant.gltf")
 	var is_shared_male := normalized_path.ends_with("male_peasant.gltf")
@@ -602,12 +617,22 @@ func _tint_for_path(lowered_path: String) -> Color:
 	return Color(0.82, 0.80, 0.74)
 
 func _normalize_scene_bounds(root: Node3D, target_height: float) -> void:
+	if bool(root.get_meta("character_normalized", false)):
+		# A source may be composed from several shared-rig layers, but the
+		# resulting root is normalized exactly once after composition.
+		return
 	var bounds: AABB = _calculate_node_bounds(root)
 	if bounds.size == Vector3.ZERO:
 		return
 	var height: float = max(bounds.size.y, 0.01)
 	var longest: float = max(max(bounds.size.x, bounds.size.y), bounds.size.z)
-	var scale_factor: float = target_height / max(height, longest * 0.25, 0.01)
+	var scale_basis := height
+	# Character bounds are measured from the complete skinned body. The
+	# longest-axis fallback is only for non-character imported props, where a
+	# malformed source origin can otherwise create a paper-thin result.
+	if not _has_skeleton(root):
+		scale_basis = max(height, longest * 0.25)
+	var scale_factor: float = target_height / max(scale_basis, 0.01)
 	scale_factor = clamp(scale_factor, 0.01, 8.0)
 	var center_xz = Vector3(bounds.position.x + bounds.size.x * 0.5, bounds.position.y, bounds.position.z + bounds.size.z * 0.5)
 	root.scale *= scale_factor
@@ -621,8 +646,13 @@ func _normalize_scene_bounds(root: Node3D, target_height: float) -> void:
 func apply_normalized_scale(root: Node3D, multiplier: float) -> void:
 	if root == null:
 		return
+	if bool(root.get_meta("character_role_scale_applied", false)):
+		return
 	var base_scale: Vector3 = root.get_meta("normalized_scale", root.scale)
-	root.scale = base_scale * multiplier
+	var role_scale := clampf(multiplier, 0.85, 1.50)
+	root.scale = base_scale * role_scale
+	root.set_meta("character_role_scale", role_scale)
+	root.set_meta("character_role_scale_applied", true)
 
 func _calculate_node_bounds(root: Node3D) -> AABB:
 	var state: Dictionary = {"has_bounds": false, "bounds": AABB()}
