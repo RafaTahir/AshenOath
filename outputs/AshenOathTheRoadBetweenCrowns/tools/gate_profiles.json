@@ -351,6 +351,16 @@
       ],
       "views": ["soul_baseline"]
     },
+    "qa_013": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/qa_013_baseline_manifest.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/QA-013_RESULT.md",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_013.py"
+      ],
+      "gates": [
+        "verify_qa_013"
+      ]
+    },
     "packs": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_manifest.json",

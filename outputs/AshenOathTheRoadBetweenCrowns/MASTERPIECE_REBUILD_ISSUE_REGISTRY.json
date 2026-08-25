@@ -26,7 +26,7 @@
   "tickets": [
     {"id": "PROD-004", "milestone": "A", "title": "Truthful masterpiece rebuild status", "status": "in_progress"},
     {"id": "ENGINE-006", "milestone": "A", "title": "Runtime ownership extraction", "status": "functional_but_incomplete"},
-    {"id": "QA-013", "milestone": "A", "title": "Reproducible visual and runtime baseline", "status": "planned"},
+    {"id": "QA-013", "milestone": "A", "title": "Reproducible visual and runtime baseline", "status": "functional_but_incomplete"},
     {"id": "ASSET-005", "milestone": "A", "title": "Approved runtime asset library", "status": "functional_but_incomplete"},
     {"id": "BOOT-003", "milestone": "A", "title": "Single immediate browser boot", "status": "planned"},
     {"id": "LOADGAME-002", "milestone": "A", "title": "Crow Flight loading interaction", "status": "planned"},

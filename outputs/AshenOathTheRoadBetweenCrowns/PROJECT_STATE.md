@@ -29,6 +29,15 @@ export inputs. `verify_asset_005.py` passes statically; imported skeleton,
 rendered appearance, screenshots, and packed-Web acceptance remain blocked by
 the missing Godot executable.
 
+### QA-013 baseline ledger - 2026-08-26
+
+`qa_013_baseline_manifest.json` now preserves the nine-view historical image
+set and the latest available startup, transition, FPS, memory, node, draw-call,
+and primitive measurements under one reproducible schema. The baseline verifier
+passes its evidence-integrity checks, but the ticket remains
+`functional_but_incomplete`: every view is explicitly historical and fresh
+identical-camera recapture is still required once Godot 4.6.3 is available.
+
 ### Masterpiece Rebuild C-slice - bow, ammunition, and Greyfen commerce
 
 `AMMO-001` and `SHOP-001` have runtime implementations on

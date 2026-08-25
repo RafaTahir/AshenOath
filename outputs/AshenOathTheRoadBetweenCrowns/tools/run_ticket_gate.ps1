@@ -293,6 +293,10 @@ foreach ($gate in $gates) {
         Invoke-Compact $gate $Python @(
             (Join-Path $PSScriptRoot "verify_qa_soul_001.py"), $Project
         ) $gateInputs $cache
+    } elseif ($gate -eq "verify_qa_013") {
+        Invoke-Compact $gate $Python @(
+            (Join-Path $PSScriptRoot "verify_qa_013.py"), $Project
+        ) $gateInputs $cache
     } elseif ($gate -eq "verify_web_001") {
         Invoke-Compact $gate $Python @(
             (Join-Path $PSScriptRoot "verify_web_001.py"), $Project, $RepoRoot

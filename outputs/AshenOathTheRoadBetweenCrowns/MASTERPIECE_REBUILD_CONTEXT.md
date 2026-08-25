@@ -19,6 +19,9 @@ acceptance gates pass:
 - the ASSET-005 runtime boundary is now explicit: Captain Senn's processed
   Ranger is the only approved role, while ten route-visible roles remain
   playable but visually blocked fallbacks;
+- QA-013 now preserves one reproducible baseline ledger for historical images,
+  startup, transition, zone FPS, memory, and scene counts; fresh graphical
+  recapture remains required when Godot is available;
 - authored Greyfen, Wychwood, campaign, river, sky, and interior presentation;
 - contact-driven combat and human-reviewed voice delivery;
 - complete real-input campaign and final production evidence.
