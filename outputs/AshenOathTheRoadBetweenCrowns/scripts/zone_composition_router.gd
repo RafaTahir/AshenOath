@@ -23,6 +23,7 @@ static func build_core(host: Node, zone_id: String) -> Dictionary:
 	if canonical_id not in CORE_ZONES:
 		return _failure(canonical_id, "unregistered core zone")
 	var context := ZoneBuildContext.new(host, canonical_id)
+	context.record_operation("begin:%s" % canonical_id)
 	match canonical_id:
 		"greyfen":
 			GreyfenSection.new().build(context)
@@ -37,6 +38,7 @@ static func build_campaign(host: Node, zone_id: String) -> Dictionary:
 	if not CampaignSection.SECTIONS.has(canonical_id):
 		return _failure(canonical_id, "unregistered campaign zone")
 	var context := ZoneBuildContext.new(host, canonical_id)
+	context.record_operation("begin:%s" % canonical_id)
 	CampaignSection.new().build(context)
 	return context.validate()
 

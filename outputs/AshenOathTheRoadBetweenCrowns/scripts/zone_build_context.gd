@@ -6,6 +6,8 @@ var zone_id: String
 var ground_count := 0
 var bounds_count := 0
 var gate_count := 0
+var operation_count := 0
+var operations: Array[String] = []
 
 var zone_root: Node3D:
 	get:
@@ -30,6 +32,12 @@ func _init(game_host: Node, id: String) -> void:
 func add_node(node: Node, parent: Node = null) -> void:
 	var target := parent if parent != null else zone_root
 	target.add_child(node)
+	record_operation("add_node:%s" % str(node.name))
+
+func record_operation(label: String) -> void:
+	operation_count += 1
+	if operations.size() < 96:
+		operations.append(label)
 
 func configure_zone_controller(controller: Node) -> void:
 	controller.configure(_host, quality_preset())
@@ -257,6 +265,8 @@ func validate() -> Dictionary:
 		"ground_count": ground_count,
 		"bounds_count": bounds_count,
 		"gate_count": gate_count,
+		"operation_count": operation_count,
+		"operations": operations.duplicate(),
 	}
 	if zone_root != null:
 		zone_root.set_meta("zone_build_contract", result)

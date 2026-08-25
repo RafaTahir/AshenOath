@@ -19,6 +19,9 @@ var transition_count := 0
 var failure_count := 0
 var last_failure: Dictionary = {}
 var last_activation: Dictionary = {}
+var build_count := 0
+var last_build: Dictionary = {}
+var build_started_usec := 0
 
 func _init(runtime_host: Node) -> void:
 	host = runtime_host
@@ -83,6 +86,26 @@ func begin_transition(zone_id: String, previous_zone: String, spawn_position: Ve
 		"state": "building",
 	}
 
+func begin_build(zone_id: String, composition_kind: String) -> void:
+	build_count += 1
+	build_started_usec = Time.get_ticks_usec()
+	last_build = {
+		"zone": zone_id,
+		"composition_kind": composition_kind,
+		"state": "building",
+		"build_index": build_count,
+	}
+
+func finish_build(result: Dictionary, root: Node3D) -> Dictionary:
+	var elapsed_ms := float(Time.get_ticks_usec() - build_started_usec) / 1000.0 if build_started_usec > 0 else 0.0
+	var completed := result.duplicate(true)
+	completed["build_ms"] = elapsed_ms
+	completed["node_count"] = _node_count(root)
+	completed["state"] = "validated" if bool(result.get("ok", false)) else "failed"
+	last_build = completed
+	build_started_usec = 0
+	return completed
+
 func validate_build(zone_id: String, result: Dictionary, root: Node3D) -> Dictionary:
 	var errors: Array[String] = []
 	if not bool(result.get("ok", false)):
@@ -91,6 +114,9 @@ func validate_build(zone_id: String, result: Dictionary, root: Node3D) -> Dictio
 		errors.append("zone root is missing")
 	elif root.get_child_count() == 0:
 		errors.append("zone root is empty")
+	for required_counter in ["ground_count", "bounds_count", "gate_count"]:
+		if int(result.get(required_counter, 0)) < 1:
+			errors.append("missing build contract: %s" % required_counter)
 	var contract: Dictionary = root.get_meta("zone_build_contract", {})
 	if not contract.is_empty() and not bool(contract.get("ok", false)):
 		errors.append_array(contract.get("errors", []))
@@ -123,6 +149,8 @@ func snapshot() -> Dictionary:
 		"failure_count": failure_count,
 		"last_failure": last_failure.duplicate(true),
 		"last_activation": last_activation.duplicate(true),
+		"build_count": build_count,
+		"last_build": last_build.duplicate(true),
 		"presentation_zone": str(quest_presentation.get_zone_id()) if quest_presentation != null and quest_presentation.has_method("get_zone_id") else "",
 		"tracked_quest": str(quest_presentation.get_tracked_quest()) if quest_presentation != null and quest_presentation.has_method("get_tracked_quest") else str(quest_manager.get_tracked_quest()) if quest_manager != null else "",
 	}

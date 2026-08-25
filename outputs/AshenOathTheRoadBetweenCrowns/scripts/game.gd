@@ -544,10 +544,14 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 			])
 		var composition_kind := ZoneCompositionRouter.composition_kind(zone_id)
 		var build_result: Dictionary
+		if zone_runtime_coordinator != null:
+			zone_runtime_coordinator.begin_build(zone_id, composition_kind)
 		if composition_kind == "campaign":
 			build_result = ZoneCompositionRouter.build_campaign(self, zone_id)
 		else:
 			build_result = ZoneCompositionRouter.build_core(self, zone_id)
+		if zone_runtime_coordinator != null:
+			build_result = zone_runtime_coordinator.finish_build(build_result, zone_root)
 		var build_validation := zone_runtime_coordinator.validate_build(zone_id, build_result, zone_root) if zone_runtime_coordinator != null else build_result
 		if not bool(build_validation.get("ok", false)):
 			push_error("Zone composition failed for %s: %s" % [
