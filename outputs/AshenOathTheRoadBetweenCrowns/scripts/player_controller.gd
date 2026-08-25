@@ -5,6 +5,8 @@ signal potion_requested
 signal bomb_requested
 signal beam_requested(charge_ratio: float, direction: Vector3)
 signal beam_phase_changed(phase: String)
+signal arrow_requested(request: Dictionary)
+signal arrow_unavailable
 signal footstep
 signal parried
 signal blocked(amount: float)
@@ -101,6 +103,15 @@ var beam_release_direction := Vector3.ZERO
 var sword_sheathed := true
 var sword_combat_linger := 0.0
 const SWORD_COMBAT_LINGER := 3.2
+var inventory_ref
+var weapon_mode := "sword"
+var bow_aiming := false
+var bow_draw_time := 0.0
+var bow_recovery := 0.0
+var selected_arrow_id := "standard_arrow"
+var bow_visual: Node3D
+const BOW_MAX_DRAW := 1.0
+const BOW_RANGE := 24.0
 
 const BEAM_STATE_IDLE := ""
 const BEAM_STATE_SHEATHING := "sheathing"
@@ -150,6 +161,7 @@ func _physics_process(delta: float) -> void:
 	if attack_buffer_time <= 0.0:
 		buffered_attack = ""
 	step_up_cooldown = max(step_up_cooldown - delta, 0.0)
+	bow_recovery = max(bow_recovery - delta, 0.0)
 	_update_beam_sequence(delta)
 	_update_sword_combat_state(delta)
 	if transition_locked:
@@ -178,6 +190,44 @@ func set_transition_locked(locked: bool) -> void:
 		velocity = Vector3.ZERO
 	elif health_component == null or health_component.health > 0.0:
 		can_control = true
+
+func bind_inventory(value) -> void:
+	inventory_ref = value
+	if inventory_ref != null and int(inventory_ref.items.get(selected_arrow_id, 0)) <= 0:
+		_cycle_arrow_type()
+
+func get_weapon_mode() -> String:
+	return weapon_mode
+
+func get_selected_arrow_id() -> String:
+	return selected_arrow_id
+
+func get_selected_arrow_count() -> int:
+	return int(inventory_ref.items.get(selected_arrow_id, 0)) if inventory_ref != null else 0
+
+func _set_weapon_mode(next_mode: String) -> void:
+	var normalized := "bow" if next_mode == "bow" else "sword"
+	if weapon_mode == normalized:
+		return
+	bow_aiming = false
+	bow_draw_time = 0.0
+	weapon_mode = normalized
+	if normalized == "bow":
+		_set_sword_sheathed(true)
+	else:
+		_set_sword_sheathed(true)
+	if bow_visual != null:
+		bow_visual.visible = normalized == "bow"
+
+func _cycle_arrow_type() -> void:
+	var arrow_ids := ["standard_arrow", "bodkin_arrow", "ashfire_arrow"]
+	var start := arrow_ids.find(selected_arrow_id)
+	for offset in range(1, arrow_ids.size() + 1):
+		var candidate: String = arrow_ids[(start + offset) % arrow_ids.size()]
+		if inventory_ref != null and int(inventory_ref.items.get(candidate, 0)) > 0:
+			selected_arrow_id = candidate
+			return
+	selected_arrow_id = "standard_arrow"
 
 func set_progression(manager) -> void:
 	if progression != null and progression.changed.is_connected(_apply_progression_stats):
@@ -254,6 +304,8 @@ func _handle_movement(delta: float) -> void:
 		var wants_run := _action_pressed("run") and input_vec.length() > 0.1
 		var is_running = wants_run and stamina_component.spend(10.0 * delta)
 		var speed = run_speed if is_running else walk_speed
+		if bow_aiming:
+			speed *= 0.42
 		if input_vec.y > 0.15:
 			speed *= 0.68
 		if beam_cast_state != "":
@@ -265,7 +317,12 @@ func _handle_movement(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, target_velocity.x, response * delta)
 		velocity.z = move_toward(velocity.z, target_velocity.z, response * delta)
 		var intentional_backpedal := input_vec.y > 0.15
-		if move_dir.length() > 0.1 and beam_cast_state == "" and not intentional_backpedal:
+		if bow_aiming and camera_controller != null:
+			var aim_forward := camera_controller.get_flat_forward()
+			if aim_forward.length_squared() > 0.5:
+				var aim_yaw := atan2(-aim_forward.x, -aim_forward.z)
+				rotation.y = lerp_angle(rotation.y, aim_yaw, 1.0 - exp(-turn_speed * delta))
+		elif move_dir.length() > 0.1 and beam_cast_state == "" and not intentional_backpedal:
 			var target_yaw = atan2(-move_dir.x, -move_dir.z)
 			rotation.y = lerp_angle(rotation.y, target_yaw, 1.0 - exp(-turn_speed * delta))
 		movement_state = "run" if is_running else ("backward" if input_vec.y > 0.15 else ("strafe" if abs(input_vec.x) > 0.55 else ("walk" if move_dir.length() > 0.1 else "idle")))
@@ -345,6 +402,16 @@ func _sample_foot_offset(side: float, delta: float, current: float) -> float:
 	return lerp(current, target, 1.0 - exp(-12.0 * delta))
 
 func _handle_combat_input() -> void:
+	if _action_just_pressed("weapon_bow"):
+		_set_weapon_mode("bow")
+	if _action_just_pressed("weapon_sword"):
+		_set_weapon_mode("sword")
+	if weapon_mode == "bow":
+		_handle_bow_input()
+		if _action_just_pressed("oathfire_beam"):
+			_set_weapon_mode("sword")
+			_handle_beam_input()
+		return
 	_handle_beam_input()
 	if beam_cast_state != "":
 		return
@@ -387,6 +454,71 @@ func _handle_combat_input() -> void:
 		parry_window = get_parry_window_duration()
 		if animation_driver != null:
 			animation_driver.trigger_action("parry")
+
+func _handle_bow_input() -> void:
+	if _action_just_pressed("cycle_arrow"):
+		_cycle_arrow_type()
+	if bow_recovery > 0.0:
+		return
+	var aiming_now := _action_pressed("aim_bow")
+	if aiming_now:
+		bow_aiming = true
+		bow_draw_time = minf(bow_draw_time + get_physics_process_delta_time(), BOW_MAX_DRAW)
+		if animation_driver != null and bow_draw_time <= get_physics_process_delta_time() * 1.5:
+			animation_driver.trigger_action("bow_aim", 1.0, 0.10)
+		if _action_just_pressed("fire_bow"):
+			_release_bow()
+		return
+	if bow_aiming and _action_just_released("aim_bow"):
+		bow_aiming = false
+		bow_draw_time = 0.0
+	if bow_aiming and _action_just_pressed("fire_bow"):
+		_release_bow()
+	elif _action_just_pressed("fire_bow"):
+		# A fire press without aim is intentionally ignored. This prevents an
+		# accidental sword-style click from consuming an arrow.
+		return
+
+func _release_bow() -> void:
+	if inventory_ref == null:
+		arrow_unavailable.emit()
+		return
+	if int(inventory_ref.items.get(selected_arrow_id, 0)) <= 0:
+		_cycle_arrow_type()
+	if int(inventory_ref.items.get(selected_arrow_id, 0)) <= 0:
+		arrow_unavailable.emit()
+		return
+	var direction := -global_transform.basis.z
+	if camera_controller != null:
+		var locked_target: Node3D = camera_controller.get_locked_combat_target() if camera_controller.has_method("get_locked_combat_target") else null
+		if locked_target != null and is_instance_valid(locked_target):
+			direction = (locked_target.global_position + Vector3.UP * 0.92 - get_arrow_origin()).normalized()
+		else:
+			direction = camera_controller.get_flat_forward()
+	direction.y = 0.0
+	if direction.length_squared() < 0.5:
+		direction = -global_transform.basis.z
+	direction.y = 0.0
+	direction = direction.normalized()
+	var arrow_origin := get_arrow_origin()
+	inventory_ref.consume(selected_arrow_id)
+	arrow_requested.emit({
+		"origin": arrow_origin,
+		"direction": direction,
+		"arrow_id": selected_arrow_id,
+		"draw_ratio": clampf(bow_draw_time / BOW_MAX_DRAW, 0.0, 1.0),
+		"range": BOW_RANGE,
+		"width": 0.34,
+	})
+	bow_aiming = false
+	bow_draw_time = 0.0
+	bow_recovery = 0.24
+	if animation_driver != null:
+		animation_driver.trigger_action("attack_light", 1.0, 0.08)
+
+func get_arrow_origin() -> Vector3:
+	var forward := -global_transform.basis.z.normalized()
+	return global_position + Vector3.UP * 1.30 + forward * 0.48
 
 func _begin_blade_attack(damage: float, radius: float, heavy: bool) -> void:
 	attack_sequence_id += 1
@@ -820,6 +952,7 @@ func _add_beam_charge_visual() -> void:
 	beam_left_hand_glow = _make_oathfire_hand("OathfireLeftHand", skeleton, ["LeftHand", "Hand.L", "lefthand", "leftwrist"], Vector3(-0.28, 1.22, -0.42))
 	beam_right_hand_glow = _make_oathfire_hand("OathfireRightHand", skeleton, ["RightHand", "Hand.R", "righthand", "rightwrist"], Vector3(0.28, 1.22, -0.42))
 	_build_sheathed_sword()
+	_build_bow_visual()
 
 func _make_oathfire_hand(node_name: String, skeleton: Skeleton3D, aliases: Array[String], fallback_position: Vector3) -> MeshInstance3D:
 	var glow := MeshInstance3D.new()
@@ -860,6 +993,51 @@ func _make_oathfire_hand(node_name: String, skeleton: Skeleton3D, aliases: Array
 	if socket_parent == visual_root:
 		glow.position = fallback_position
 	return glow
+
+func _build_bow_visual() -> void:
+	if bow_visual != null:
+		return
+	bow_visual = Node3D.new()
+	bow_visual.name = "KaelBowAndQuiver"
+	bow_visual.position = Vector3(-0.38, 1.20, 0.20)
+	bow_visual.rotation_degrees = Vector3(0.0, 8.0, -12.0)
+	bow_visual.visible = false
+	visual_root.add_child(bow_visual)
+	var grip := MeshInstance3D.new()
+	var grip_mesh := BoxMesh.new()
+	grip_mesh.size = Vector3(0.08, 0.48, 0.08)
+	grip.mesh = grip_mesh
+	grip.position = Vector3(0.0, 0.0, 0.0)
+	grip.material_override = _mat(Color(0.24, 0.12, 0.055))
+	bow_visual.add_child(grip)
+	for side in [-1.0, 1.0]:
+		var limb := MeshInstance3D.new()
+		var limb_mesh := BoxMesh.new()
+		limb_mesh.size = Vector3(0.055, 0.44, 0.055)
+		limb.mesh = limb_mesh
+		limb.position = Vector3(0.0, 0.43 * side, 0.0)
+		limb.rotation_degrees.z = -12.0 * side
+		limb.material_override = _mat(Color(0.34, 0.18, 0.08))
+		bow_visual.add_child(limb)
+		var string := MeshInstance3D.new()
+		var string_mesh := BoxMesh.new()
+		string_mesh.size = Vector3(0.018, 0.50, 0.018)
+		string.mesh = string_mesh
+		string.position = Vector3(0.08, 0.43 * side, 0.0)
+		string.rotation_degrees.z = 8.0 * side
+		string.material_override = _mat(Color(0.72, 0.61, 0.42))
+		bow_visual.add_child(string)
+	var quiver := MeshInstance3D.new()
+	var quiver_mesh := CylinderMesh.new()
+	quiver_mesh.top_radius = 0.08
+	quiver_mesh.bottom_radius = 0.06
+	quiver_mesh.height = 0.60
+	quiver_mesh.radial_segments = 8
+	quiver.mesh = quiver_mesh
+	quiver.position = Vector3(-0.22, -0.06, 0.20)
+	quiver.rotation_degrees = Vector3(12.0, 0.0, -18.0)
+	quiver.material_override = _mat(Color(0.12, 0.07, 0.035))
+	bow_visual.add_child(quiver)
 
 func _build_sheathed_sword() -> void:
 	# The back weapon is a real scabbard, not a second naked blade hidden behind

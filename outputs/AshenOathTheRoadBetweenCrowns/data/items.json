@@ -46,5 +46,26 @@
     "description": "A sprung jaw that slows beasts long enough to strike.",
     "recipe": {"scrap_iron": 2, "grave_moss": 1},
     "effect": {"slow": 4.0}
+  },
+  "standard_arrow": {
+    "name": "Standard Arrow",
+    "type": "ammo",
+    "cap": 24,
+    "description": "A balanced hunting arrow for ordinary targets.",
+    "effect": {"damage": 28, "velocity": 28.0}
+  },
+  "bodkin_arrow": {
+    "name": "Bodkin Arrow",
+    "type": "ammo",
+    "cap": 9,
+    "description": "A narrow iron head made to find the gap in armor.",
+    "effect": {"damage": 42, "armor_pierce": 0.35, "velocity": 30.0}
+  },
+  "ashfire_arrow": {
+    "name": "Ashfire Arrow",
+    "type": "ammo",
+    "cap": 6,
+    "description": "A wrapped head that burns with a brief oath-flame on impact.",
+    "effect": {"damage": 36, "burn": 18, "velocity": 26.0}
   }
 }

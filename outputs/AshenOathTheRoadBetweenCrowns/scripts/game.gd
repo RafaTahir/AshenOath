@@ -35,6 +35,7 @@ var quest_beats
 var dialogue
 var story_state
 var inventory
+var vendor_service
 var crafting
 var combat
 var save_manager
@@ -147,7 +148,16 @@ func _ready() -> void:
 	add_child(performance_budget_monitor)
 	performance_budget_monitor.configure(self)
 	var services_ms := Time.get_ticks_msec() - phase_started
-	hud.show_launch_screen()
+	# The browser shell is already the audio/input consent surface. Showing a
+	# second in-engine launch screen made Web startup require two clicks and
+	# doubled the perceived wait. Desktop keeps the explicit launch surface so
+	# audio capture remains predictable there; Web enters the real menu directly
+	# while Greyfen prewarming happens behind it.
+	if OS.has_feature("web"):
+		hud.show_main_menu()
+		_on_launch_accepted()
+	else:
+		hud.show_launch_screen()
 	audio.set_music_state("main_menu")
 	get_tree().paused = true
 	print("LOADING: runtime ready total=%dms environment=%dms services=%dms" % [
@@ -228,6 +238,7 @@ func _setup_runtime() -> void:
 	quest_beats = services["quest_beats"]
 	dialogue = services["dialogue"]
 	inventory = services["inventory"]
+	vendor_service = services["vendor_service"]
 	crafting = services["crafting"]
 	combat = services["combat"]
 	save_manager = services["save_manager"]
@@ -325,6 +336,8 @@ func _start_new_game_world() -> void:
 	pending_anwen_relocation = false
 	tutorial_flags.clear()
 	inventory.reset_starting_loadout()
+	if vendor_service != null:
+		vendor_service.reset_state()
 	progression.load_state({})
 	current_zone_id = "greyfen"
 	day_night.set_time(day_night.START_TIME_MINUTES, 0)
@@ -354,6 +367,8 @@ func load_save_state(data: Dictionary) -> void:
 	get_tree().paused = false
 	hud.hide_menus()
 	inventory.load_state(data.get("inventory", {}))
+	if vendor_service != null:
+		vendor_service.load_state(data.get("vendors", {}))
 	quests.load_state(data.get("quests", {}))
 	if quest_presentation != null:
 		quest_presentation.load_state(data.get("quest_presentation", {}))
@@ -394,11 +409,15 @@ func _spawn_player(pos: Vector3) -> void:
 		camera_rig.target_lock_changed.connect(_on_target_lock_changed)
 	_apply_progression_to_player()
 	_apply_runtime_settings(settings.settings)
+	if player.has_method("bind_inventory"):
+		player.bind_inventory(inventory)
 	player.blade_contact_requested.connect(_on_player_blade_contact)
 	player.potion_requested.connect(_use_potion)
 	player.bomb_requested.connect(_throw_bomb)
 	player.beam_requested.connect(_on_player_beam)
 	player.beam_phase_changed.connect(_on_player_beam_phase)
+	player.arrow_requested.connect(_on_player_arrow)
+	player.arrow_unavailable.connect(_on_player_arrow_unavailable)
 	player.footstep.connect(_on_player_footstep)
 	player.parried.connect(_on_player_parried)
 	player.blocked.connect(_on_player_blocked)
@@ -1239,6 +1258,13 @@ func _handle_interaction(area) -> void:
 		world_vfx.pulse_interaction((area as Node3D).global_position)
 	if area.interaction_type == "minigame":
 		minigames.open_game("tic_tac_toe" if area.interaction_id == "common_table" else "draughts")
+	elif area.interaction_type == "vendor":
+		if vendor_service == null:
+			hud.toast("The shop is not available right now.")
+			return
+		audio.set_game_paused(true)
+		get_tree().paused = true
+		hud.show_vendor(area.interaction_id, vendor_service, inventory, quests, story_state)
 	elif area.interaction_type == "village_place":
 		_handle_village_place(area.interaction_id)
 	elif area.interaction_type == "dialogue":
@@ -1925,6 +1951,81 @@ func _on_player_blade_contact(contact: Dictionary) -> void:
 				elif heavy:
 					_record_bog_stagger(target, "heavy blows")
 
+func _on_player_arrow_unavailable() -> void:
+	hud.toast("No arrows. Tor keeps a reserve at his forge in Greyfen.")
+	hud.show_status_cue("No arrows", "hurt")
+
+func _on_player_arrow(request: Dictionary) -> void:
+	if player == null or zone_root == null:
+		return
+	var origin: Vector3 = request.get("origin", player.global_position + Vector3.UP * 1.3)
+	var direction: Vector3 = request.get("direction", -player.global_transform.basis.z)
+	direction.y = 0.0
+	if direction.length_squared() < 0.5:
+		direction = -player.global_transform.basis.z
+		direction.y = 0.0
+	direction = direction.normalized()
+	var arrow_id := str(request.get("arrow_id", "standard_arrow"))
+	var arrow_def: Dictionary = inventory.item_defs.get(arrow_id, {})
+	var effect: Dictionary = arrow_def.get("effect", {})
+	var damage := float(effect.get("damage", 28.0))
+	var endpoint: Vector3 = origin + direction * float(request.get("range", 24.0))
+	var query := PhysicsRayQueryParameters3D.create(origin, endpoint)
+	var arrow_exclusions: Array[RID] = [player.get_rid()]
+	for enemy in active_enemies:
+		if is_instance_valid(enemy):
+			arrow_exclusions.append(enemy.get_rid())
+	query.exclude = arrow_exclusions
+	query.collide_with_areas = false
+	var wall_hit := get_world_3d().direct_space_state.intersect_ray(query)
+	if not wall_hit.is_empty():
+		endpoint = wall_hit.position
+	var result := combat.resolve_arrow_shot(active_enemies, {
+		"origin": origin,
+		"endpoint": endpoint,
+		"direction": direction,
+		"width": float(request.get("width", 0.34)),
+		"damage": damage,
+		"source_tag": "arrow_%s" % arrow_id,
+	})
+	_make_arrow_trail(origin, endpoint, Color(0.92, 0.70, 0.34) if arrow_id == "standard_arrow" else (Color(0.72, 0.86, 0.96) if arrow_id == "bodkin_arrow" else Color(1.0, 0.30, 0.12)))
+	if bool(result.get("hit", false)):
+		audio.play_event("light_hit", 0.03)
+		hud.show_status_cue("Arrow hit: %d" % int(damage), "item")
+		CombatFeedback.impact_burst(zone_root, result.get("point", endpoint), false, Color(1.0, 0.52, 0.20) if arrow_id == "ashfire_arrow" else Color(0.95, 0.78, 0.38))
+		var target = result.get("enemy")
+		if target != null and is_instance_valid(target):
+			hud.show_enemy(target.display_name, target.health_component.health, target.health_component.max_health)
+	else:
+		audio.play_event("swing", 0.02)
+
+func _make_arrow_trail(origin: Vector3, endpoint: Vector3, color: Color) -> void:
+	var length := origin.distance_to(endpoint)
+	if length <= 0.05:
+		return
+	var root := Node3D.new()
+	root.name = "ArrowFlightEffect"
+	root.add_to_group("arrow_runtime_effect")
+	zone_root.add_child(root)
+	root.global_position = origin.lerp(endpoint, 0.5)
+	root.look_at(endpoint, Vector3.UP)
+	var shaft := MeshInstance3D.new()
+	var shaft_mesh := CylinderMesh.new()
+	shaft_mesh.top_radius = 0.018
+	shaft_mesh.bottom_radius = 0.022
+	shaft_mesh.height = length
+	shaft_mesh.radial_segments = 6
+	shaft.mesh = shaft_mesh
+	shaft.rotation_degrees.x = 90.0
+	shaft.material_override = _oathfire_material(Color(color.r, color.g, color.b, 0.88), 1.1)
+	root.add_child(shaft)
+	root.scale = Vector3(0.12, 0.12, 0.12)
+	var tween := create_tween()
+	tween.tween_property(root, "scale", Vector3.ONE, 0.06)
+	tween.tween_interval(0.08)
+	tween.tween_property(root, "scale", Vector3(0.08, 0.08, 0.08), 0.12)
+	tween.tween_callback(root.queue_free)
+
 func _on_player_beam_phase(phase: String) -> void:
 	match phase:
 		"sheathing": audio.play_event("oathfire_sheathe",0.02)
@@ -2146,6 +2247,21 @@ func _use_inventory_item(item_id: String) -> void:
 			combat.place_trap(player, active_enemies)
 			hud.show_status_cue("Iron Trap set", "item")
 			_refresh_equipment_readout()
+
+func _purchase_from_vendor(vendor_id: String, item_id: String, quantity: int = 1) -> void:
+	if vendor_service == null:
+		return
+	var result: Dictionary
+	if item_id == "__emergency_arrows__":
+		result = vendor_service.claim_emergency_arrow_refill(vendor_id, inventory)
+	else:
+		result = vendor_service.buy(vendor_id, item_id, quantity, inventory, story_state, quests)
+	if bool(result.get("ok", false)):
+		audio.play_event("ui")
+		_refresh_equipment_readout()
+		hud.show_status_cue(str(result.get("message", "Purchase complete.")), "item")
+	else:
+		audio.play_event("ui")
 
 func _on_enemy_died(enemy) -> void:
 	audio.play_event("death", 0.05)
@@ -2576,7 +2692,7 @@ func _refresh_equipment_readout() -> void:
 	var oil_name = ""
 	if inventory.active_oil != "":
 		oil_name = inventory.get_item_name(inventory.active_oil)
-	hud.update_equipment(int(inventory.items.get("redroot_potion", 0)), int(inventory.items.get("ash_bomb", 0)), oil_name)
+	hud.update_equipment(int(inventory.items.get("redroot_potion", 0)), int(inventory.items.get("ash_bomb", 0)), oil_name, int(inventory.items.get("standard_arrow", 0)), "Standard")
 
 func _update_tutorial_prompts() -> void:
 	if player == null:
@@ -3990,6 +4106,40 @@ func _make_village_place(id: String, type: String, prompt: String, pos: Vector3,
 				leg.material_override = _mat(color.darkened(0.20))
 				area.add_child(leg)
 		_make_board_game_staging(area, id, size)
+	elif type == "vendor":
+		# A shop needs to read as a place before the prompt appears: counter,
+		# canopy, stock crates, and a warm local light. The transaction remains
+		# owned by VendorService so the dressing cannot change save state.
+		mesh.size = Vector3(size.x, 0.16, size.z)
+		table.position.y = size.y
+		table.material_override = _mat(color.darkened(0.12))
+		var canopy := MeshInstance3D.new()
+		canopy.name = "%s_Canopy" % id
+		var canopy_mesh := BoxMesh.new()
+		canopy_mesh.size = Vector3(size.x + 0.32, 0.12, size.z + 0.28)
+		canopy.mesh = canopy_mesh
+		canopy.position = Vector3(0.0, size.y + 1.55, 0.0)
+		canopy.material_override = _mat(color.lightened(0.12))
+		area.add_child(canopy)
+		for x in [-size.x * 0.42, size.x * 0.42]:
+			var post := MeshInstance3D.new()
+			post.name = "%s_CanopyPost" % id
+			var post_mesh := BoxMesh.new()
+			post_mesh.size = Vector3(0.10, 1.55, 0.10)
+			post.mesh = post_mesh
+			post.position = Vector3(x, size.y * 0.78, 0.0)
+			post.material_override = _mat(color.darkened(0.25))
+			area.add_child(post)
+		for x in [-size.x * 0.30, size.x * 0.30]:
+			var crate := MeshInstance3D.new()
+			crate.name = "%s_StockCrate" % id
+			var crate_mesh := BoxMesh.new()
+			crate_mesh.size = Vector3(0.36, 0.30, 0.36)
+			crate.mesh = crate_mesh
+			crate.position = Vector3(x, 0.18, size.z * 0.58)
+			crate.material_override = _mat(color.darkened(0.28))
+			area.add_child(crate)
+		_make_light("%s_ShopGlow" % id, pos + Vector3(0, 1.25, 0), color.lightened(0.18), 0.7)
 	else:
 		mesh.size = size
 		table.position.y = size.y * 0.5

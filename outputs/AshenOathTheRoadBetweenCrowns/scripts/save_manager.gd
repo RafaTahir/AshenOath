@@ -1,6 +1,6 @@
 extends Node
 
-const CURRENT_VERSION := 7
+const CURRENT_VERSION := 8
 const SAVE_PATH := "user://ashen_oath_save.json"
 const AUTOSAVE_PATH := "user://ashen_oath_autosave.json"
 const CHECKPOINT_PATH := "user://ashen_oath_checkpoint.json"
@@ -86,10 +86,11 @@ func migrate_save_data(raw_data: Dictionary) -> Dictionary:
 	data["version"] = CURRENT_VERSION
 	data["zone"] = _normalize_zone(str(data.get("zone", "greyfen")))
 	data["player_position"] = _normalize_position(data.get("player_position", [0.0, 1.0, 7.0]), data.zone)
-	for key in ["inventory", "quests", "story_state", "progression", "world_state", "player_health", "player_stamina"]:
+	for key in ["inventory", "vendors", "quests", "story_state", "progression", "world_state", "player_health", "player_stamina"]:
 		if not data.has(key) or typeof(data.get(key)) != TYPE_DICTIONARY:
 			data[key] = {}
 	_sanitize_dictionary_fields(data.inventory, ["items", "ingredients"])
+	_sanitize_dictionary_fields(data.vendors, ["emergency_refill_claimed"])
 	_sanitize_dictionary_fields(data.quests, ["active", "completed", "unlocked", "world_flags"])
 	_sanitize_dictionary_fields(data.story_state, ["flags", "values"])
 	_sanitize_dictionary_fields(data.progression, ["unlocked", "rewarded_quests"])
@@ -150,6 +151,7 @@ func _build_save_data(game) -> Dictionary:
 		"player_health": game.player.health_component.save_state(),
 		"player_stamina": game.player.stamina_component.save_state(),
 		"inventory": game.inventory.save_state(),
+		"vendors": game.vendor_service.save_state() if game.get("vendor_service") != null else {},
 		"quests": game.quests.save_state(),
 		"quest_presentation": game.quest_presentation.save_state() if game.get("quest_presentation") != null else {},
 		"quest_beats": game.quest_beats.save_state() if game.get("quest_beats") != null else {},

@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "registry_id": "ashen-oath-masterpiece-rebuild",
+  "project": "Ashen Oath",
+  "baseline_commit": "d7e09d0",
+  "branch": "codex/masterpiece-rebuild",
+  "production_url": "https://ashenoath.vercel.app/",
+  "status_values": [
+    "planned",
+    "in_progress",
+    "verified",
+    "functional_but_incomplete",
+    "visually_rejected",
+    "blocked",
+    "deferred"
+  ],
+  "milestones": [
+    {"id": "A", "name": "Truth, architecture, and fast boot", "deploy_after": true},
+    {"id": "B", "name": "Seamless exterior world", "deploy_after": true},
+    {"id": "C", "name": "Characters, equipment, bow, and shop", "deploy_after": true},
+    {"id": "D", "name": "Authored opening and human story delivery", "deploy_after": true},
+    {"id": "E", "name": "Combat, monsters, and major encounters", "deploy_after": true},
+    {"id": "F", "name": "Complete campaign soul", "deploy_after": true},
+    {"id": "G", "name": "Product finish and shipment", "deploy_after": true}
+  ],
+  "tickets": [
+    {"id": "PROD-004", "milestone": "A", "title": "Truthful masterpiece rebuild status", "status": "in_progress"},
+    {"id": "ENGINE-006", "milestone": "A", "title": "Runtime ownership extraction", "status": "planned"},
+    {"id": "QA-013", "milestone": "A", "title": "Reproducible visual and runtime baseline", "status": "planned"},
+    {"id": "ASSET-005", "milestone": "A", "title": "Approved runtime asset library", "status": "planned"},
+    {"id": "BOOT-003", "milestone": "A", "title": "Single immediate browser boot", "status": "planned"},
+    {"id": "LOADGAME-002", "milestone": "A", "title": "Crow Flight loading interaction", "status": "planned"},
+    {"id": "PACK-003", "milestone": "A", "title": "Real versioned runtime packs", "status": "planned"},
+    {"id": "STREAM-003", "milestone": "A", "title": "Verified pack streaming lifecycle", "status": "planned"},
+    {"id": "LOAD-QA-002", "milestone": "A", "title": "Startup and cache acceptance", "status": "planned"},
+    {"id": "BOW-001", "milestone": "C", "title": "Hybrid bow aim and release", "status": "functional_but_incomplete"},
+    {"id": "AMMO-001", "milestone": "C", "title": "Capped arrow families and save migration", "status": "functional_but_incomplete"},
+    {"id": "SHOP-001", "milestone": "C", "title": "Tor and Mira vendor transactions", "status": "functional_but_incomplete"}
+  ],
+  "known_blockers": [
+    "runtime_pack_manifest.json is manifest-only for opening and campaign packs",
+    "Godot graphical acceptance is blocked locally because the engine executable is unavailable",
+    "route-visible character and boss mappings remain visually provisional",
+    "exterior zones remain portal-separated procedural compositions",
+    "bow, ammunition, vendor transactions, and shop UI need graphical and packed-Web acceptance",
+    "scratch voices and browser speech are not final dialogue delivery"
+  ]
+}

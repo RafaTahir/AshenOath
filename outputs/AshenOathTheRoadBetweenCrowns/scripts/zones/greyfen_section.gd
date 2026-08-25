@@ -228,6 +228,8 @@ func _build_gameplay_content(context: ZoneBuildContext) -> void:
 		context.make_named_interactable("retain_evidence", "dialogue", "Keep Oren's token", Vector3(1.8,0,8.8), Color(0.38,0.24,0.16), Vector3(0.35,0.35,0.35))
 	context.make_village_place("village_well", "village_place", "Draw from the village well", Vector3(-8.0,0,-0.5), Vector3(2.2,0.9,2.2), Color(0.19,0.18,0.16))
 	context.make_village_place("forge_corner", "village_place", "Inspect Tor's old iron", Vector3(11.0,0,-1.2), Vector3(1.5,0.7,1.2), Color(0.28,0.18,0.10))
+	context.make_village_place("tor_forge", "vendor", "Buy arrows and gear from Tor", Vector3(10.2,0,-0.3), Vector3(1.8,0.78,1.35), Color(0.34,0.20,0.10))
+	context.make_village_place("mira_apothecary", "vendor", "Buy remedies from Mira", Vector3(-5.4,0,-1.2), Vector3(1.75,0.78,1.25), Color(0.20,0.34,0.24))
 	context.make_village_place("shrine_prayer", "village_place", "Sit at the shrine bench", Vector3(8.0,0,-6.2), Vector3(2.4,0.55,0.7), Color(0.22,0.15,0.09))
 	context.make_village_place("common_table", "minigame", "Play Three Marks with Rook", Vector3(-5.4,0,7.2), Vector3(2.8,0.85,1.8), Color(0.28,0.18,0.10))
 	context.make_village_place("barrel_board", "minigame", "Play Greyfen Draughts with Tor", Vector3(7.0,0,6.8), Vector3(2.2,0.85,1.5), Color(0.24,0.15,0.08))

@@ -6,6 +6,7 @@ const QuestBeatDirector = preload("res://scripts/quest_beat_director.gd")
 const DialogueManager = preload("res://scripts/dialogue_manager.gd")
 const StoryState = preload("res://scripts/story_state.gd")
 const InventoryManager = preload("res://scripts/inventory_manager.gd")
+const VendorService = preload("res://scripts/vendor_service.gd")
 const CraftingManager = preload("res://scripts/crafting_manager.gd")
 const CombatManager = preload("res://scripts/combat_manager.gd")
 const SaveManager = preload("res://scripts/save_manager.gd")
@@ -24,7 +25,7 @@ const ZoneStreamingService = preload("res://scripts/zone_streaming_service.gd")
 const RuntimePackManager = preload("res://scripts/runtime_pack_manager.gd")
 
 const REQUIRED_SERVICES := [
-	"story_state", "quests", "quest_presentation", "quest_beats", "dialogue", "inventory", "crafting", "combat",
+	"story_state", "quests", "quest_presentation", "quest_beats", "dialogue", "inventory", "vendor_service", "crafting", "combat",
 	"save_manager", "settings", "world_materials", "day_night", "audio",
 	"asset_helper", "hud", "minigames", "progression", "input_router", "interaction_focus", "mobile_touch", "zone_streaming", "runtime_packs"
 ]
@@ -41,6 +42,7 @@ func create_services() -> Dictionary:
 		"quest_beats": QuestBeatDirector.new(),
 		"dialogue": DialogueManager.new(),
 		"inventory": InventoryManager.new(),
+		"vendor_service": VendorService.new(),
 		"crafting": CraftingManager.new(),
 		"combat": CombatManager.new(),
 		"save_manager": SaveManager.new(),
@@ -75,6 +77,7 @@ func configure(owner: Node) -> void:
 	var quest_beats = services["quest_beats"]
 	var dialogue = services["dialogue"]
 	var inventory = services["inventory"]
+	var vendor_service = services["vendor_service"]
 	var crafting = services["crafting"]
 	var combat = services["combat"]
 	var save_manager = services["save_manager"]
@@ -98,6 +101,7 @@ func configure(owner: Node) -> void:
 	dialogue.load_dialogue("res://data/campaign_dialogue.json")
 	dialogue.setup(story_state, quests)
 	inventory.load_items("res://data/items.json")
+	vendor_service.load_vendors("res://data/vendors.json")
 	crafting.setup(inventory, quests, story_state)
 	input_router.install_default_actions()
 	input_router.set_settings_manager(settings)
@@ -164,6 +168,10 @@ func configure(owner: Node) -> void:
 		audio.play_event("ui")
 		hud.show_inventory(inventory, quests, story_state, progression)
 	)
+	hud.vendor_purchase_requested.connect(func(vendor_id: String, item_id: String, quantity: int):
+		owner.call("_purchase_from_vendor", vendor_id, item_id, quantity)
+		hud.show_vendor(vendor_id, vendor_service, inventory, quests, story_state)
+	)
 	hud.resume_requested.connect(Callable(owner, "_resume_game"))
 	hud.settings_requested.connect(Callable(owner, "_handle_setting"))
 	hud.action_selected.connect(Callable(owner, "_handle_dialogue_action"))
@@ -190,6 +198,8 @@ func configure(owner: Node) -> void:
 	quests.quest_completed.connect(Callable(owner, "_on_quest_completed"))
 	inventory.message.connect(Callable(hud, "toast"))
 	inventory.changed.connect(Callable(owner, "_refresh_equipment_readout"))
+	vendor_service.message.connect(Callable(hud, "toast"))
+	vendor_service.changed.connect(Callable(owner, "_refresh_equipment_readout"))
 	save_manager.message.connect(Callable(hud, "toast"))
 	progression.message.connect(Callable(hud, "toast"))
 	combat.message.connect(Callable(hud, "toast"))

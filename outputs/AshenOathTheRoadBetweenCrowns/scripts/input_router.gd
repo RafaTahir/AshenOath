@@ -56,11 +56,16 @@ const KEYBOARD_BINDINGS := {
 	"target_lock": KEY_T,
 	"target_next": KEY_Y,
 	"target_previous": KEY_U,
+	"weapon_sword": KEY_1,
+	"weapon_bow": KEY_2,
+	"cycle_arrow": KEY_Z,
 }
 
 const MOUSE_BINDINGS := {
 	"light_attack": MOUSE_BUTTON_LEFT,
 	"heavy_attack": MOUSE_BUTTON_RIGHT,
+	"aim_bow": MOUSE_BUTTON_RIGHT,
+	"fire_bow": MOUSE_BUTTON_LEFT,
 }
 
 const GAMEPAD_BUTTON_BINDINGS := {
@@ -75,6 +80,9 @@ const GAMEPAD_BUTTON_BINDINGS := {
 	"open_inventory": JOY_BUTTON_BACK,
 	"pause": JOY_BUTTON_START,
 	"target_lock": JOY_BUTTON_RIGHT_STICK,
+	"weapon_sword": JOY_BUTTON_Y,
+	"weapon_bow": JOY_BUTTON_X,
+	"cycle_arrow": JOY_BUTTON_DPAD_UP,
 }
 
 const GAMEPAD_AXIS_BINDINGS := {
@@ -88,6 +96,8 @@ const GAMEPAD_AXIS_BINDINGS := {
 	"camera_down": [JOY_AXIS_RIGHT_Y, 1.0],
 	"oathfire_beam": [JOY_AXIS_TRIGGER_LEFT, 1.0],
 	"heavy_attack": [JOY_AXIS_TRIGGER_RIGHT, 1.0],
+	"aim_bow": [JOY_AXIS_TRIGGER_LEFT, 1.0],
+	"fire_bow": [JOY_AXIS_TRIGGER_RIGHT, 1.0],
 	# These semantic actions share the right stick with camera look. The
 	# camera consumes them only while a target is locked, so free look remains
 	# unchanged and target switching is still discoverable/remappable.
@@ -113,6 +123,9 @@ const KEYBOARD_LABELS := {
 	"target_lock": "T",
 	"target_next": "Y",
 	"target_previous": "U",
+	"weapon_sword": "1",
+	"weapon_bow": "2",
+	"cycle_arrow": "Z",
 }
 
 const GAMEPAD_LABELS := {
@@ -133,6 +146,9 @@ const GAMEPAD_LABELS := {
 	"target_lock": "R3",
 	"target_next": "Right Stick Left/Right",
 	"target_previous": "Right Stick Left/Right",
+	"weapon_sword": "Y",
+	"weapon_bow": "X",
+	"cycle_arrow": "D-Pad Up",
 }
 
 const TOUCH_LABELS := {

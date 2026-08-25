@@ -31,6 +31,7 @@ func get_context_prompt() -> String:
 		"blocked_zone": "Locked",
 		"minigame": "Play",
 		"village_place": "Use",
+		"vendor": "Shop",
 	}.get(interaction_type, "Interact"))
 	return "%s — %s" % [verb, display_name]
 

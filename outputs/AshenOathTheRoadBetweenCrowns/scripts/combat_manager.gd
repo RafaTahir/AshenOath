@@ -209,3 +209,38 @@ func resolve_oathfire_cast(enemies: Array, cast: Dictionary) -> Array:
 		hits.append(enemy)
 	message.emit("Oathfire tears through %d foe%s." % [hits.size(), "" if hits.size() == 1 else "s"] if not hits.is_empty() else "Oathfire burns into the mist.")
 	return hits
+
+func resolve_arrow_shot(enemies: Array, cast: Dictionary) -> Dictionary:
+	var origin: Vector3 = cast.get("origin", Vector3.ZERO)
+	var endpoint: Vector3 = cast.get("endpoint", origin)
+	var direction: Vector3 = cast.get("direction", endpoint - origin)
+	var width := float(cast.get("width", 0.34))
+	var damage := float(cast.get("damage", 28.0))
+	var forward := direction.normalized()
+	var length := origin.distance_to(endpoint)
+	var best_enemy: Node = null
+	var best_along := INF
+	var best_point := endpoint
+	if length <= 0.05 or forward.length_squared() < 0.5:
+		return {"hit": false, "endpoint": endpoint, "enemy": null, "point": endpoint}
+	for enemy in enemies:
+		if enemy == null or enemy.dead or (enemy.has_method("is_encounter_active") and not enemy.is_encounter_active()):
+			continue
+		var target: Vector3 = enemy.global_position + Vector3.UP * 0.92
+		var offset := target - origin
+		var along := offset.dot(forward)
+		if along <= 0.0 or along > length or along >= best_along:
+			continue
+		var nearest := origin + forward * along
+		if target.distance_to(nearest) > width:
+			continue
+		best_enemy = enemy
+		best_along = along
+		best_point = target
+	if best_enemy == null:
+		message.emit("The arrow disappears into the dark.")
+		return {"hit": false, "endpoint": endpoint, "enemy": null, "point": endpoint}
+	best_enemy.apply_damage(damage, str(cast.get("source_tag", "arrow")))
+	enemy_hit.emit(best_enemy.display_name, damage)
+	impact.emit(best_point, false)
+	return {"hit": true, "endpoint": endpoint, "enemy": best_enemy, "point": best_point, "damage": damage}

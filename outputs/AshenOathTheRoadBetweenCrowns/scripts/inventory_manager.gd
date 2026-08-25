@@ -10,7 +10,10 @@ var items = {
 	"ash_bomb": 1,
 	"moon_oil": 0,
 	"rot_oil": 0,
-	"iron_trap": 0
+	"iron_trap": 0,
+	"standard_arrow": 24,
+	"bodkin_arrow": 0,
+	"ashfire_arrow": 0
 }
 var ingredients = {
 	"redroot": 2,
@@ -23,7 +26,7 @@ var ingredients = {
 }
 var active_oil = ""
 var coin = 15
-const ITEM_TYPE_ORDER := ["potion", "bomb", "oil", "trap"]
+const ITEM_TYPE_ORDER := ["ammo", "potion", "bomb", "oil", "trap"]
 
 func load_items(path: String) -> void:
 	var parsed = _read_json(path)
@@ -31,7 +34,12 @@ func load_items(path: String) -> void:
 		item_defs = parsed
 
 func add_item(id: String, amount: int = 1) -> void:
-	items[id] = int(items.get(id, 0)) + amount
+	var target := int(items.get(id, 0)) + amount
+	if get_item_type(id) == "ammo":
+		var cap := get_ammo_cap(id)
+		if cap > 0:
+			target = mini(target, cap)
+	items[id] = maxi(target, 0)
 	changed.emit()
 
 func add_ingredients(new_items: Dictionary) -> void:
@@ -57,6 +65,22 @@ func can_craft(id: String) -> bool:
 
 func can_consume(id: String) -> bool:
 	return item_defs.has(id) and int(items.get(id, 0)) > 0
+
+func get_ammo_count(id: String) -> int:
+	return int(items.get(id, 0)) if get_item_type(id) == "ammo" else 0
+
+func get_ammo_cap(id: String) -> int:
+	return int(item_defs.get(id, {}).get("cap", 0))
+
+func add_ammo(id: String, amount: int) -> int:
+	if get_item_type(id) != "ammo":
+		return 0
+	var before := get_ammo_count(id)
+	var cap := get_ammo_cap(id)
+	var target := before + amount if cap <= 0 else mini(before + amount, cap)
+	items[id] = maxi(target, 0)
+	changed.emit()
+	return target - before
 
 func apply_oil(id: String) -> bool:
 	if get_item_type(id) != "oil" or not can_consume(id):
@@ -158,7 +182,7 @@ func _read_json(path: String):
 	var parsed = JSON.parse_string(file.get_as_text())
 	return parsed if parsed != null else {}
 func reset_starting_loadout() -> void:
-	items = {"redroot_potion": 3, "bitterleaf_tonic": 1, "ash_bomb": 1, "moon_oil": 0, "rot_oil": 0, "iron_trap": 0}
+	items = {"redroot_potion": 3, "bitterleaf_tonic": 1, "ash_bomb": 1, "moon_oil": 0, "rot_oil": 0, "iron_trap": 0, "standard_arrow": 24, "bodkin_arrow": 0, "ashfire_arrow": 0}
 	ingredients = {"redroot": 2, "bitterleaf": 2, "mooncap": 1, "ash_salt": 2, "sparkstone": 1, "grave_moss": 1, "scrap_iron": 1}
 	active_oil = ""
 	coin = 15

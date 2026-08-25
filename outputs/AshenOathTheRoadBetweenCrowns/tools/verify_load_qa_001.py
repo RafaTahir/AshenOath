@@ -25,10 +25,13 @@ def main() -> int:
             "start control": 'id="start"',
             "engine start": "engine.startGame",
             "keyboard input": "addEventListener('keydown'",
-            "pointer input": "addEventListener('pointermove'",
+            "pointer input": "addEventListener('pointerdown'",
             "gamepad input": "navigator.getGamepads",
             "progress": "onProgress",
             "reduced motion": "prefers-reduced-motion",
+            "automatic engine start": "window.setTimeout(begin, 0)",
+            "flap interaction": "function flap()",
+            "branch obstacles": "const branches = []",
         }
         for label, token in required.items():
             if token not in html:
@@ -46,7 +49,7 @@ def main() -> int:
     game = project / "scripts" / "game.gd"
     for path, tokens in {
         hud: ["func arm_loading", "loading_elapsed", "MOUSE_FILTER_IGNORE"],
-        game: ["hud.arm_loading(\"Opening Greyfen...\")", "hud.arm_loading(\"Crossing the Oath Gate...\")"],
+        game: ["hud.arm_loading(\"Opening Greyfen...\")", "hud.arm_loading(\"Crossing the Oath Gate...\")", "if OS.has_feature(\"web\"):", "hud.show_main_menu()"],
     }.items():
         try:
             source = path.read_text(encoding="utf-8")
@@ -61,7 +64,7 @@ def main() -> int:
         for error in errors:
             print(f"- {error}")
         return 1
-    print("LOAD-QA-001: PASS (interactive shell, gamepad loading input, delayed nonblocking vignette, pack budget)")
+    print("LOAD-QA-002: PASS (automatic boot, playable Crow Flight, gamepad input, nonblocking progress, pack budget)")
     return 0
 
 

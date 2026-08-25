@@ -13,6 +13,7 @@ signal settings_requested(action: String)
 signal action_selected(action: Dictionary)
 signal craft_requested(item_id: String)
 signal item_use_requested(item_id: String)
+signal vendor_purchase_requested(vendor_id: String, item_id: String, quantity: int)
 signal upgrade_requested(upgrade_id: String)
 signal dialogue_closed
 signal dialogue_page_changed(speaker: String, speaker_id: String, page_index: int, total_pages: int)
@@ -80,6 +81,8 @@ var raw_hint := ""
 var last_potions := 0
 var last_bombs := 0
 var last_oil_name := ""
+var last_arrow_count := -1
+var last_arrow_type := "Standard"
 var toasts_suppressed := false
 var reduced_motion := false
 var high_contrast := false
@@ -225,11 +228,11 @@ func show_controls_menu(back_target: String = "main") -> void:
 	menu_layer.visible = true
 	var box = _menu_box("Controls", "", "blade | breath | road")
 	if input_device == "gamepad":
-		_add_menu_text(box, "Left Stick move | Right Stick look | D-Pad Up/Down zoom\nL3 run | B dodge | Y jump\nRB light attack | RT heavy attack\nHold LT Oathfire Beam | Tap/Hold LB parry or block | A interact\nD-Pad Left potion | D-Pad Right bomb | View journal | Menu pause")
+		_add_menu_text(box, "Left Stick move | Right Stick look | D-Pad Up/Down zoom\nL3 run | B dodge | Y sword | X bow\nRB light attack | RT heavy attack | LT aim/fire bow\nHold LT Oathfire Beam | Tap/Hold LB parry or block | A interact\nD-Pad Up cycle arrows | D-Pad Left potion | D-Pad Right bomb | View journal | Menu pause")
 	elif input_device == "touch":
 		_add_menu_text(box, "Left thumb move | Drag right side to look\nStrike / Heavy attack | Dodge | Jump\nHold Guard to block or parry | Hold Oath to charge Oathfire\nUse interacts | Potion heals | Pause opens the menu\nLandscape orientation is required during gameplay")
 	else:
-		_add_menu_text(box, "WASD move | Mouse look | Wheel zoom | Page Up/Down zoom\nShift run | Space dodge | X jump\nLeft mouse light attack | Right mouse heavy attack\nHold C Oathfire Beam | Tap Q parry | Hold Q block | E interact\nR potion | F bomb | Tab inventory | Esc pause")
+		_add_menu_text(box, "WASD move | Mouse look | Wheel zoom | Page Up/Down zoom\nShift run | Space dodge | X jump | 1 sword | 2 bow\nLeft mouse light attack / fire bow | Right mouse heavy / aim bow\nHold C Oathfire Beam | Tap Q parry | Hold Q block | E interact\nZ cycle arrows | R potion | F bomb | Tab inventory | Esc pause")
 	_add_menu_button(box, "Customize Controls", func(): show_remap_menu(back_target))
 	_add_menu_button(box, "Back", _return_from_controls)
 
@@ -503,13 +506,18 @@ func show_status_cue(text: String, kind: String = "neutral") -> void:
 		status_label.modulate = Color(1, 1, 1, 1)
 	)
 
-func update_equipment(potions: int, bombs: int, oil_name: String) -> void:
+func update_equipment(potions: int, bombs: int, oil_name: String, arrow_count: int = -1, arrow_type: String = "Standard") -> void:
 	last_potions = potions
 	last_bombs = bombs
 	last_oil_name = oil_name
+	last_arrow_count = arrow_count
+	last_arrow_type = arrow_type
 	var oil_text = oil_name if oil_name != "" else "No oil"
-	equipment_label.text = "%s Redroot x%d   %s Ash Bomb x%d   Oil: %s" % [
-		_action_label("use_potion"), potions, _action_label("throw_bomb"), bombs, oil_text
+	var arrow_text := ""
+	if arrow_count >= 0:
+		arrow_text = "   Bow %s x%d" % [arrow_type, arrow_count]
+	equipment_label.text = "%s Redroot x%d   %s Ash Bomb x%d   Oil: %s%s" % [
+		_action_label("use_potion"), potions, _action_label("throw_bomb"), bombs, oil_text, arrow_text
 	]
 
 func mark_stamina_exhausted() -> void:
@@ -662,6 +670,53 @@ func show_inventory(inventory, quests, story_state = null, progression = null) -
 			upgrade_button.pressed.connect(func(upgrade_id = id): upgrade_requested.emit(upgrade_id))
 			craft_buttons.add_child(upgrade_button)
 	var close = Button.new()
+	close.text = "Close"
+	_style_button(close)
+	close.pressed.connect(func():
+		dialogue_closed.emit()
+		get_tree().paused = false
+		hide_menus()
+	)
+	craft_buttons.add_child(close)
+	call_deferred("_focus_first_enabled", craft_buttons)
+
+func show_vendor(vendor_id: String, vendor_service, inventory, quests = null, story_state = null) -> void:
+	_set_ui_pointer("journal")
+	inventory_layer.visible = true
+	var vendor: Dictionary = vendor_service.get_vendor(vendor_id)
+	var vendor_name := str(vendor.get("name", "Vendor"))
+	var vendor_subtitle := str(vendor.get("subtitle", "A practical Greyfen exchange."))
+	var text := "%s\n%s\n\nCoin: %d\n\nSTOCK\n" % [vendor_name.to_upper(), vendor_subtitle, int(inventory.coin)]
+	var stock: Array[Dictionary] = vendor_service.list_stock(vendor_id, inventory, story_state, quests)
+	for entry in stock:
+		var item_id := str(entry.get("item_id", ""))
+		var item_name := inventory.get_item_name(item_id)
+		var owned := int(entry.get("owned", 0))
+		var cap := int(entry.get("cap", 999))
+		var price := int(entry.get("price", 0))
+		text += "- %s  %d/%d  |  %d coin\n  %s\n" % [item_name, owned, cap, price, str(inventory.item_defs.get(item_id, {}).get("description", ""))]
+	text += "\nTor's reserve policy: returning to Greyfen with fewer than five arrows earns one free emergency bundle."
+	inventory_text.text = text
+	for child in craft_buttons.get_children():
+		child.queue_free()
+	for entry in stock:
+		var item_id := str(entry.get("item_id", ""))
+		var owned := int(entry.get("owned", 0))
+		var cap := int(entry.get("cap", 999))
+		var price := int(entry.get("price", 0))
+		var buy_button := Button.new()
+		buy_button.text = "Buy %s — %d coin" % [inventory.get_item_name(item_id), price]
+		buy_button.disabled = owned >= cap or int(inventory.coin) < price
+		_style_button(buy_button)
+		buy_button.pressed.connect(func(id = item_id): vendor_purchase_requested.emit(vendor_id, id, 1))
+		craft_buttons.add_child(buy_button)
+	if vendor_id == "tor_forge" and int(inventory.items.get("standard_arrow", 0)) < 5:
+		var refill := Button.new()
+		refill.text = "Claim Tor's free emergency arrows"
+		_style_button(refill)
+		refill.pressed.connect(func(): vendor_purchase_requested.emit(vendor_id, "__emergency_arrows__", 1))
+		craft_buttons.add_child(refill)
+	var close := Button.new()
 	close.text = "Close"
 	_style_button(close)
 	close.pressed.connect(func():

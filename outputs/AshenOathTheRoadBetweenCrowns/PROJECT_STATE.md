@@ -1,5 +1,33 @@
 # Ashen Oath Project State
 
+## Masterpiece Rebuild Status - 2026-08-26
+
+The current production checkpoint remains `d7e09d0` and is synchronized with
+`origin/main` and the tracked Web output. The `codex/masterpiece-rebuild`
+branch is a new cumulative development line. The project is not claiming final
+Soul Rebuild quality: the current runtime still has provisional character and
+boss mappings, procedural/blockout world presentation, manifest-only runtime
+packs, portal-separated exterior regions, scratch voice delivery, and an
+unverified visual gate. The development branch now contains the first
+player-facing bow/ammunition/shop slice: three capped arrow types, target-aware
+wall-clipped release, Tor's Forge, Mira's Apothecary, persistent purchases, and
+the Greyfen emergency-arrow fallback. It is not yet Web-export or screenshot
+accepted because Godot is not installed in this workspace. Historical ticket
+result documents are retained as development evidence and must not be read as
+approval of those open visual or player-facing defects.
+
+### Masterpiece Rebuild C-slice - bow, ammunition, and Greyfen commerce
+
+`AMMO-001` and `SHOP-001` have runtime implementations on
+`codex/masterpiece-rebuild`. Standard, Bodkin, and Ashfire arrows are saved in
+the existing inventory payload with caps of 24, 9, and 6. `Tor's Forge` sells
+weapons, arrows, and traps; `Mira's Apothecary` sells remedies. The shop uses
+the existing HUD, pause, input-focus, vendor-service, and atomic save paths.
+`BOW-001` adds sword/bow switching, hold-to-aim, release-to-fire, arrow cycling,
+soft-lock targeting, wall clipping, impact feedback, and a bounded bow/quiver
+visual. The static gate passes; in-engine animation, screenshot, and packed-Web
+acceptance remain open until a Godot runtime is available.
+
 ## Current Release Gate - 2026-08-21
 
 The Soul Rebuild authoritative release run has passed: `92` gates, `0`

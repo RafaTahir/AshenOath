@@ -1,0 +1,24 @@
+{
+  "tor_forge": {
+    "name": "Tor's Forge",
+    "subtitle": "Iron, strings, and arrows that hold their line",
+    "stock": [
+      {"item_id": "standard_arrow", "price": 1, "cap": 24},
+      {"item_id": "bodkin_arrow", "price": 4, "cap": 9},
+      {"item_id": "ashfire_arrow", "price": 7, "cap": 6},
+      {"item_id": "iron_trap", "price": 8, "cap": 6},
+      {"item_id": "moon_oil", "price": 12, "cap": 3, "requires_quest": "main_teeth_in_rain"}
+    ]
+  },
+  "mira_apothecary": {
+    "name": "Mira's Apothecary",
+    "subtitle": "Bitter medicine, clean bandages, and things that burn curses",
+    "stock": [
+      {"item_id": "redroot_potion", "price": 6, "cap": 8},
+      {"item_id": "bitterleaf_tonic", "price": 5, "cap": 8},
+      {"item_id": "ash_bomb", "price": 10, "cap": 6},
+      {"item_id": "moon_oil", "price": 12, "cap": 3, "requires_quest": "main_teeth_in_rain"},
+      {"item_id": "rot_oil", "price": 12, "cap": 3, "requires_flag": "mira_truth_known"}
+    ]
+  }
+}
