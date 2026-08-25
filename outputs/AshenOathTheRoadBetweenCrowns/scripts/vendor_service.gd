@@ -59,7 +59,7 @@ func buy(vendor_id: String, item_id: String, quantity: int, inventory, story_sta
 		return _fail("You need %d more coin." % (price - int(inventory.coin)))
 	inventory.coin -= price
 	inventory.add_item(item_id, quantity)
-	var display_name := inventory.get_item_name(item_id)
+	var display_name: String = str(inventory.get_item_name(item_id))
 	var text := "Bought %s x%d for %d coin." % [display_name, quantity, price]
 	message.emit(text)
 	purchase_completed.emit(vendor_id, item_id, quantity)

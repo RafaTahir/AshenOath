@@ -30,7 +30,7 @@
     {"id": "ASSET-005", "milestone": "A", "title": "Approved runtime asset library", "status": "functional_but_incomplete"},
     {"id": "BOOT-003", "milestone": "A", "title": "Single immediate browser boot", "status": "planned"},
     {"id": "LOADGAME-002", "milestone": "A", "title": "Crow Flight loading interaction", "status": "planned"},
-    {"id": "PACK-003", "milestone": "A", "title": "Real versioned runtime packs", "status": "planned"},
+    {"id": "PACK-003", "milestone": "A", "title": "Real versioned runtime packs", "status": "functional_but_incomplete"},
     {"id": "STREAM-003", "milestone": "A", "title": "Verified pack streaming lifecycle", "status": "planned"},
     {"id": "LOAD-QA-002", "milestone": "A", "title": "Startup and cache acceptance", "status": "planned"},
     {"id": "BOW-001", "milestone": "C", "title": "Hybrid bow aim and release", "status": "functional_but_incomplete"},

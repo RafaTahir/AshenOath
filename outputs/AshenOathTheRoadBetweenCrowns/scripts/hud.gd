@@ -690,7 +690,7 @@ func show_vendor(vendor_id: String, vendor_service, inventory, quests = null, st
 	var stock: Array[Dictionary] = vendor_service.list_stock(vendor_id, inventory, story_state, quests)
 	for entry in stock:
 		var item_id := str(entry.get("item_id", ""))
-		var item_name := inventory.get_item_name(item_id)
+		var item_name: String = str(inventory.get_item_name(item_id))
 		var owned := int(entry.get("owned", 0))
 		var cap := int(entry.get("cap", 999))
 		var price := int(entry.get("price", 0))

@@ -25,8 +25,8 @@ has been freshly captured or visually approved.
   graphical recapture remains required.
 - Preserved source reports and all nine baseline images: present and readable.
 - Baseline anchor: QA-SOUL-001 at 1280x720 gameplay / 1920x1080 menu.
-- Godot graphical recapture: not run because Godot 4.6.3 is unavailable in
-  this workspace.
+- Godot 4.6.3 is now provisioned in the external runtime cache, but the fresh
+  graphical recapture was not run as part of QA-013 and remains open.
 
 ## Known Limitations
 

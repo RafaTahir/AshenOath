@@ -37,8 +37,9 @@ blocked from visual approval until their rendered identity gates pass.
 - Runtime packs: PASS - 6 packs within the 100 MB budget.
 - Python syntax compilation: PASS for `verify_asset_005.py`.
 - `git diff --check`: PASS, with expected Git line-ending notices only.
-- Godot graphical/runtime, screenshots, packed Web export, and browser checks:
-  not run because Godot 4.6.3 is not installed in this workspace.
+- Godot 4.6.3 is now provisioned in the external runtime cache. Graphical
+  runtime, screenshots, packed Web export, and browser checks were not run as
+  part of ASSET-005 and remain open for later acceptance tickets.
 
 ## Changed Views
 

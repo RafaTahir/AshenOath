@@ -367,11 +367,15 @@
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/runtime_pack_manager.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_streaming_service.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_runtime_packs.py",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_pack_candidates.py",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/build_runtime_packs.ps1",
         "outputs/AshenOathTheRoadBetweenCrowns/tools/build_web_runtime_manifest.py",
+        "outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_candidates.json",
         "outputs/AshenOathTheRoadBetweenCrowns/export_presets.cfg"
       ],
       "gates": [
         "verify_runtime_packs",
+        "verify_pack_candidates",
         "web_export"
       ],
       "web_required": true

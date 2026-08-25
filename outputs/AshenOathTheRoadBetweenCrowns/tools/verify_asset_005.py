@@ -177,7 +177,12 @@ def main() -> int:
         if pattern not in preset:
             errors.append(f"export preset does not exclude {pattern}")
     raw_monster_pattern = "assets_external/enemies/quaternius_lowpoly_animated_monsters__*"
-    if raw_monster_pattern in preset:
+    include_filters = "\n".join(
+        line.split("=", 1)[1]
+        for line in preset.splitlines()
+        if line.startswith("include_filter=")
+    )
+    if raw_monster_pattern in include_filters:
         errors.append("raw duplicate monster pattern must not be an export input")
     ignore = (project / ".gitignore").read_text(encoding="utf-8")
     if "/assets_external/enemies/quaternius_lowpoly_animated_monsters__*" not in ignore:

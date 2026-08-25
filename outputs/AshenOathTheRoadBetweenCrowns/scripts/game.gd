@@ -1984,7 +1984,7 @@ func _on_player_arrow(request: Dictionary) -> void:
 	var wall_hit := get_world_3d().direct_space_state.intersect_ray(query)
 	if not wall_hit.is_empty():
 		endpoint = wall_hit.position
-	var result := combat.resolve_arrow_shot(active_enemies, {
+	var result: Dictionary = combat.resolve_arrow_shot(active_enemies, {
 		"origin": origin,
 		"endpoint": endpoint,
 		"direction": direction,
@@ -2060,7 +2060,7 @@ func _on_player_beam(charge_ratio: float, direction: Vector3) -> void:
 			beam_exclusions.append(enemy.get_rid())
 	query.exclude = beam_exclusions
 	query.collide_with_areas = false
-	var result = get_world_3d().direct_space_state.intersect_ray(query)
+	var result: Dictionary = get_world_3d().direct_space_state.intersect_ray(query)
 	if not result.is_empty():
 		endpoint = result.position
 	var damage: float = lerpf(35.0, 70.0, charge_ratio)

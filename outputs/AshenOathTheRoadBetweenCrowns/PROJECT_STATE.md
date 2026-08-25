@@ -6,15 +6,26 @@ The current production checkpoint remains `d7e09d0` and is synchronized with
 `origin/main` and the tracked Web output. The `codex/masterpiece-rebuild`
 branch is a new cumulative development line. The project is not claiming final
 Soul Rebuild quality: the current runtime still has provisional character and
-boss mappings, procedural/blockout world presentation, manifest-only runtime
-packs, portal-separated exterior regions, scratch voice delivery, and an
+boss mappings, procedural/blockout world presentation, external runtime-pack
+candidates that are not yet mounted, portal-separated exterior regions, scratch
+voice delivery, and an
 unverified visual gate. The development branch now contains the first
 player-facing bow/ammunition/shop slice: three capped arrow types, target-aware
 wall-clipped release, Tor's Forge, Mira's Apothecary, persistent purchases, and
 the Greyfen emergency-arrow fallback. It is not yet Web-export or screenshot
-accepted because Godot is not installed in this workspace. Historical ticket
+accepted for the bow slice; Godot 4.6.3 is now provisioned in the external
+runtime cache, so graphical acceptance is the next open gate. Historical ticket
 result documents are retained as development evidence and must not be read as
 approval of those open visual or player-facing defects.
+
+### Current truth boundary - 2026-08-26
+
+PACK-003 is the current development checkpoint. Six named runtime PCK
+candidates have been exported and hash-verified outside the repository at a
+combined `80.51 MB`. They remain external candidates: the current runtime
+still uses its embedded PCK because STREAM-003 has not yet implemented
+download, verification, mounting, caching, and rollback. Production `main`,
+tracked `web/`, and Vercel remain unchanged.
 
 ### ASSET-005 runtime asset boundary - 2026-08-26
 
@@ -26,8 +37,8 @@ travelers, Ghoulkin, Bog Wretch, Gravebound Knight, Ashwing, and the White Hart
 remain `blocked_fallback` roles with existing playable paths and documented
 visual blockers. Unprocessed duplicate monster sources are ignored and are not
 export inputs. `verify_asset_005.py` passes statically; imported skeleton,
-rendered appearance, screenshots, and packed-Web acceptance remain blocked by
-the missing Godot executable.
+rendered appearance, screenshots, and packed-Web acceptance remain open.
+Godot 4.6.3 is now provisioned for the next graphical gate.
 
 ### QA-013 baseline ledger - 2026-08-26
 
@@ -36,7 +47,7 @@ set and the latest available startup, transition, FPS, memory, node, draw-call,
 and primitive measurements under one reproducible schema. The baseline verifier
 passes its evidence-integrity checks, but the ticket remains
 `functional_but_incomplete`: every view is explicitly historical and fresh
-identical-camera recapture is still required once Godot 4.6.3 is available.
+identical-camera recapture is still required.
 
 ### Masterpiece Rebuild C-slice - bow, ammunition, and Greyfen commerce
 
@@ -48,7 +59,7 @@ the existing HUD, pause, input-focus, vendor-service, and atomic save paths.
 `BOW-001` adds sword/bow switching, hold-to-aim, release-to-fire, arrow cycling,
 soft-lock targeting, wall clipping, impact feedback, and a bounded bow/quiver
 visual. The static gate passes; in-engine animation, screenshot, and packed-Web
-acceptance remain open until a Godot runtime is available.
+acceptance remain open until the Godot graphical and packed-Web gates run.
 
 ## Current Release Gate - 2026-08-21
 

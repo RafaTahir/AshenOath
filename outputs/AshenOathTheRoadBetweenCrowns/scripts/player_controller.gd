@@ -318,7 +318,7 @@ func _handle_movement(delta: float) -> void:
 		velocity.z = move_toward(velocity.z, target_velocity.z, response * delta)
 		var intentional_backpedal := input_vec.y > 0.15
 		if bow_aiming and camera_controller != null:
-			var aim_forward := camera_controller.get_flat_forward()
+			var aim_forward: Vector3 = camera_controller.get_flat_forward()
 			if aim_forward.length_squared() > 0.5:
 				var aim_yaw := atan2(-aim_forward.x, -aim_forward.z)
 				rotation.y = lerp_angle(rotation.y, aim_yaw, 1.0 - exp(-turn_speed * delta))

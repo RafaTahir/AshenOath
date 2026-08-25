@@ -1,7 +1,16 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "program": "SOUL-REBUILD",
-  "artifact_policy": "runtime_packs_are_optional_until_verified",
+  "artifact_policy": "runtime_pack_candidates_verified_external_until_stream_003",
+  "candidate_manifest": "res://runtime_pack_candidates.json",
+  "pack_presets": {
+    "base": "Runtime Pack Base",
+    "opening": "Runtime Pack Opening",
+    "campaign": "Runtime Pack Campaign",
+    "characters": "Runtime Pack Characters",
+    "monsters": "Runtime Pack Monsters",
+    "audio": "Runtime Pack Audio"
+  },
   "max_deployment_bytes": 104857600,
   "packs": {
     "base": {
@@ -13,6 +22,9 @@
       "dependencies": [],
       "preload_priority": 0,
       "status": "embedded_current_pck",
+      "candidate_artifact": "base.pck",
+      "candidate_bytes": 1245364,
+      "candidate_sha256": "e2698fe7618fd6963b5a58803add0804c82c8ad4ca33acc11ff572fae15ca3cf",
       "contents": ["menu", "managers", "player", "greyfen_critical"]
     },
     "opening": {
@@ -24,6 +36,9 @@
       "dependencies": ["base"],
       "preload_priority": 10,
       "status": "manifest_only",
+      "candidate_artifact": "opening.pck",
+      "candidate_bytes": 31190712,
+      "candidate_sha256": "0c1aa12dde7c570d34add2ecbca91cdbd9e65f444077e69703c0fe22ce32f7b4",
       "contents": ["greyfen", "wychwood", "cemetery", "opening_actors"]
     },
     "campaign": {
@@ -35,6 +50,9 @@
       "dependencies": ["base", "opening"],
       "preload_priority": 20,
       "status": "manifest_only",
+      "candidate_artifact": "campaign.pck",
+      "candidate_bytes": 27067212,
+      "candidate_sha256": "f52090e6880b9ad277b5c8be92f21c78349acb40e68389f9f4f299037c829d9d",
       "contents": ["deep_woods", "long_road", "castle", "finale"]
     },
     "characters": {
@@ -46,6 +64,9 @@
       "dependencies": ["base"],
       "preload_priority": 30,
       "status": "manifest_only",
+      "candidate_artifact": "characters.pck",
+      "candidate_bytes": 20799264,
+      "candidate_sha256": "854079584e3f35e152b96622d68ffc71f1fa8c3070fe98ce13b9f585b37baf1e",
       "contents": ["shared_humans", "outfits", "animation_library"]
     },
     "monsters": {
@@ -57,6 +78,9 @@
       "dependencies": ["base"],
       "preload_priority": 40,
       "status": "manifest_only",
+      "candidate_artifact": "monsters.pck",
+      "candidate_bytes": 1549260,
+      "candidate_sha256": "e5cd7162e3f347bb8e36584d50805ead4844bcbf2f379e188a7bce7e398aa158",
       "contents": ["monster_families", "bosses", "animals"]
     },
     "audio": {
@@ -68,6 +92,9 @@
       "dependencies": ["base"],
       "preload_priority": 50,
       "status": "embedded_current_pck",
+      "candidate_artifact": "audio.pck",
+      "candidate_bytes": 2577104,
+      "candidate_sha256": "ca06c482c7c5620fbdd19fcdfa5439e0eeb3f23b26277bf068393bb587274bf5",
       "contents": ["ambience", "combat_cues", "voice_fallbacks"]
     }
   }

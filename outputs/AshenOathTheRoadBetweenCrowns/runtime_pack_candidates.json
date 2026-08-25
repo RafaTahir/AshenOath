@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "ticket": "PACK-003",
+  "project": "Ashen Oath",
+  "artifact_directory": "external_cache/ashenoath-packs-v2",
+  "artifacts_are_external": true,
+  "max_deployment_bytes": 104857600,
+  "total_bytes": 84428916,
+  "packs": [
+    {
+      "id": "base",
+      "version": "dev",
+      "preset": "Runtime Pack Base",
+      "artifact": "base.pck",
+      "bytes": 1245364,
+      "sha256": "e2698fe7618fd6963b5a58803add0804c82c8ad4ca33acc11ff572fae15ca3cf",
+      "status": "candidate_external"
+    },
+    {
+      "id": "opening",
+      "version": "dev",
+      "preset": "Runtime Pack Opening",
+      "artifact": "opening.pck",
+      "bytes": 31190712,
+      "sha256": "0c1aa12dde7c570d34add2ecbca91cdbd9e65f444077e69703c0fe22ce32f7b4",
+      "status": "candidate_external"
+    },
+    {
+      "id": "campaign",
+      "version": "dev",
+      "preset": "Runtime Pack Campaign",
+      "artifact": "campaign.pck",
+      "bytes": 27067212,
+      "sha256": "f52090e6880b9ad277b5c8be92f21c78349acb40e68389f9f4f299037c829d9d",
+      "status": "candidate_external"
+    },
+    {
+      "id": "characters",
+      "version": "dev",
+      "preset": "Runtime Pack Characters",
+      "artifact": "characters.pck",
+      "bytes": 20799264,
+      "sha256": "854079584e3f35e152b96622d68ffc71f1fa8c3070fe98ce13b9f585b37baf1e",
+      "status": "candidate_external"
+    },
+    {
+      "id": "monsters",
+      "version": "dev",
+      "preset": "Runtime Pack Monsters",
+      "artifact": "monsters.pck",
+      "bytes": 1549260,
+      "sha256": "e5cd7162e3f347bb8e36584d50805ead4844bcbf2f379e188a7bce7e398aa158",
+      "status": "candidate_external"
+    },
+    {
+      "id": "audio",
+      "version": "dev",
+      "preset": "Runtime Pack Audio",
+      "artifact": "audio.pck",
+      "bytes": 2577104,
+      "sha256": "ca06c482c7c5620fbdd19fcdfa5439e0eeb3f23b26277bf068393bb587274bf5",
+      "status": "candidate_external"
+    }
+  ],
+  "errors": []
+}

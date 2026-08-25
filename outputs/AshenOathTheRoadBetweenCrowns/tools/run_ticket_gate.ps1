@@ -152,6 +152,13 @@ function Invoke-Compact(
     }
     New-Item -ItemType Directory -Force -Path $Logs | Out-Null
     $log = Join-Path $Logs "$Name.log"
+    $engineLogPath = "$log.godot.log"
+    $stderrLogPath = "$log.stderr.log"
+    Set-Content -LiteralPath $log -Value "" -Encoding utf8
+    Set-Content -LiteralPath $stderrLogPath -Value "" -Encoding utf8
+    if (Test-Path -LiteralPath $engineLogPath) {
+        Set-Content -LiteralPath $engineLogPath -Value "" -Encoding utf8
+    }
     $timer = [Diagnostics.Stopwatch]::StartNew()
     $previousPreference = $ErrorActionPreference
     $ErrorActionPreference = "Continue"
@@ -163,19 +170,39 @@ function Invoke-Compact(
             # Keep it separate from PowerShell's redirected summary stream.
             $invocationArguments = @("--log-file", "$log.godot.log") + $invocationArguments
         }
-        & $Executable @invocationArguments *> $log
-        $exitCode = $LASTEXITCODE
+        if ($Executable -match "Godot") {
+            # The Windows Godot release executable is a GUI-subsystem process,
+            # so '&' can return before the verifier has finished. Start-Process
+            # with -Wait keeps ticket gates truthful on both executable forms.
+            $argumentLine = ($invocationArguments | ForEach-Object {
+                $value = [string]$_
+                if ($value -match '[\s"]') {
+                    '"' + $value.Replace('"', '\"') + '"'
+                } else {
+                    $value
+                }
+            }) -join ' '
+            $process = Start-Process -FilePath $Executable -ArgumentList $argumentLine -Wait -PassThru `
+                -RedirectStandardOutput $log -RedirectStandardError $stderrLogPath
+            $exitCode = $process.ExitCode
+        } else {
+            & $Executable @invocationArguments *> $log
+            $exitCode = $LASTEXITCODE
+        }
     } finally {
         $ErrorActionPreference = $previousPreference
     }
     $timer.Stop()
 	$lines = @(Get-Content -LiteralPath $log -ErrorAction SilentlyContinue)
-	$engineLogPath = "$log.godot.log"
+	$stderrLines = @()
+	if (Test-Path -LiteralPath $stderrLogPath) {
+		$stderrLines = @(Get-Content -LiteralPath $stderrLogPath -ErrorAction SilentlyContinue)
+	}
 	$engineLines = @()
 	if (Test-Path -LiteralPath $engineLogPath) {
 		$engineLines = @(Get-Content -LiteralPath $engineLogPath -ErrorAction SilentlyContinue)
 	}
-	$diagnosticLines = @($lines + $engineLines)
+	$diagnosticLines = @($lines + $stderrLines + $engineLines)
 	$parseFailure = $diagnosticLines | Where-Object { $_ -match "SCRIPT ERROR|Parse Error|Compile Error|Cannot open resource pack|Cannot open resource|Failed to load|Resource not found" } | Select-Object -First 1
 	$verifierFailure = $diagnosticLines | Where-Object { $_ -match "VERIFIER:\s*FAIL|ASSERTION FAILED|Assertion failed" } | Select-Object -First 1
 	if ($exitCode -ne 0 -or $parseFailure -or $verifierFailure) {
@@ -283,6 +310,11 @@ foreach ($gate in $gates) {
             $Project,
             "--json-report",
             (Join-Path $Logs "runtime_packs.json")
+        ) $gateInputs $cache
+    } elseif ($gate -eq "verify_pack_candidates") {
+        Invoke-Compact $gate $Python @(
+            (Join-Path $PSScriptRoot "verify_pack_candidates.py"),
+            (Join-Path $Project "runtime_pack_candidates.json")
         ) $gateInputs $cache
     } elseif ($gate -eq "verify_load_qa_001") {
         Invoke-Compact $gate $Python @(

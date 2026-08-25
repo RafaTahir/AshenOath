@@ -16,6 +16,10 @@ acceptance gates pass:
 - final bow art and animation evidence; the first bow/ammunition/vendor slice is
   implemented on the development branch but still needs graphical and packed-Web
   acceptance;
+- PACK-003 now produces six real, hash-verified external PCK candidates totaling
+  80.51 MB. They are not yet mounted by the runtime; STREAM-003 owns download,
+  cache, retry, and transactional activation before they can replace embedded
+  content;
 - the ASSET-005 runtime boundary is now explicit: Captain Senn's processed
   Ranger is the only approved role, while ten route-visible roles remain
   playable but visually blocked fallbacks;
