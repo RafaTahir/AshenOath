@@ -16,6 +16,19 @@ accepted because Godot is not installed in this workspace. Historical ticket
 result documents are retained as development evidence and must not be read as
 approval of those open visual or player-facing defects.
 
+### ASSET-005 runtime asset boundary - 2026-08-26
+
+`runtime_asset_manifest.json` is now the explicit acceptance boundary for
+runtime character and monster sources. Captain Senn's processed Ranger is the
+only role marked `approved_runtime` with exact local hashes, 1K maps, a local
+CC0 record, and export eligibility. Kael, Sister Anwen, villagers, guards,
+travelers, Ghoulkin, Bog Wretch, Gravebound Knight, Ashwing, and the White Hart
+remain `blocked_fallback` roles with existing playable paths and documented
+visual blockers. Unprocessed duplicate monster sources are ignored and are not
+export inputs. `verify_asset_005.py` passes statically; imported skeleton,
+rendered appearance, screenshots, and packed-Web acceptance remain blocked by
+the missing Godot executable.
+
 ### Masterpiece Rebuild C-slice - bow, ammunition, and Greyfen commerce
 
 `AMMO-001` and `SHOP-001` have runtime implementations on

@@ -16,6 +16,9 @@ acceptance gates pass:
 - final bow art and animation evidence; the first bow/ammunition/vendor slice is
   implemented on the development branch but still needs graphical and packed-Web
   acceptance;
+- the ASSET-005 runtime boundary is now explicit: Captain Senn's processed
+  Ranger is the only approved role, while ten route-visible roles remain
+  playable but visually blocked fallbacks;
 - authored Greyfen, Wychwood, campaign, river, sky, and interior presentation;
 - contact-driven combat and human-reviewed voice delivery;
 - complete real-input campaign and final production evidence.

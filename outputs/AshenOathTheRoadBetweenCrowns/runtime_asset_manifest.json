@@ -1,0 +1,200 @@
+{
+  "schema_version": 1,
+  "ticket": "ASSET-005",
+  "program": "SOUL-REBUILD",
+  "policy": "free_cc0_only",
+  "status": "audited_pending_visual_acceptance",
+  "source_of_truth": true,
+  "source_packs": [
+    {
+      "id": "quaternius_universal_base_characters",
+      "url": "https://quaternius.com/packs/universalbasecharacters.html",
+      "license": "CC0 1.0",
+      "status": "source_locked_pending_selected_download",
+      "runtime_roles": ["kael", "anwen", "villager", "guard", "traveler"]
+    },
+    {
+      "id": "quaternius_modular_character_outfits_fantasy",
+      "url": "https://quaternius.com/packs/modularcharacteroutfitsfantasy.html",
+      "license": "CC0 1.0",
+      "status": "runtime_selected_ranger_only",
+      "runtime_roles": ["road_ranger_human"]
+    },
+    {
+      "id": "quaternius_universal_animation_library_2",
+      "url": "https://quaternius.com/packs/universalanimationlibrary2.html",
+      "license": "CC0 1.0",
+      "status": "runtime_selected_shared_library",
+      "runtime_roles": ["road_ranger_human"]
+    },
+    {
+      "id": "quaternius_ultimate_monsters",
+      "url": "https://quaternius.com/packs/ultimatemonsters.html",
+      "license": "CC0 1.0",
+      "status": "source_locked_pending_selected_download",
+      "runtime_roles": ["ghoulkin", "bell_eater", "rootbound_colossus", "ashwing", "gravebound_knight"]
+    },
+    {
+      "id": "quaternius_ultimate_animated_animals",
+      "url": "https://quaternius.com/packs/ultimateanimatedanimals.html",
+      "license": "CC0 1.0",
+      "status": "source_locked_pending_selected_download",
+      "runtime_roles": ["white_hart"]
+    }
+  ],
+  "shared_runtime_files": [
+    {
+      "path": "res://assets_external/animations/AnimationLibrary_Godot_Standard.glb",
+      "bytes": 6671104,
+      "sha256": "1b7bf67866360665426bb99e4c71bd619f19b408453c24e30f0c3071601eee5c"
+    }
+  ],
+  "roles": {
+    "road_ranger_human": {
+      "display_name": "Captain Senn",
+      "family": "human",
+      "source_pack": "quaternius_modular_character_outfits_fantasy",
+      "status": "approved_runtime",
+      "approved": true,
+      "export_eligible": true,
+      "model": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf",
+      "source_url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
+      "license_file": "res://assets_external/licenses/Quaternius_Modular_Character_Outfits_Fantasy_CC0.txt",
+      "target_height_m": 1.75,
+      "triangle_budget": 20000,
+      "texture_budget": 1024,
+      "required_clips": ["Idle", "Walk", "Run", "ReceiveHit", "Death"],
+      "equipment_sockets": ["Head", "Hand.R", "Hand.L", "Sword.Back", "Bow.Hand", "Quiver.Back"],
+      "runtime_files": [
+        {"path": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf", "bytes": 54079, "sha256": "8eea71448ca41108589c7d13e9261de92b7068df8166b6e54bf29e6f1e530dbe"},
+        {"path": "res://assets_external/characters_ranger/Male_Ranger_Runtime.bin", "bytes": 1746884, "sha256": "5bbb0d42cb324c6c27ce00417e68a876d92978f07d161f83590f0d7c0570eff6"},
+        {"path": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png", "bytes": 840454, "sha256": "220dd4fabbfecce9847e876e2e2b02327315c08aac096d4648b62d5c53716c90"},
+        {"path": "res://assets_external/characters_ranger/T_Ranger_Normal_1K.png", "bytes": 940081, "sha256": "a4daa2410b007ad9fe7e15ac7ecc1e579ab08aafa3725ba3f158c5a24c68b540"},
+        {"path": "res://assets_external/characters_ranger/T_Ranger_ORM_1K.png", "bytes": 786403, "sha256": "76cfba43d6748a79a7ea26184415e4810731f6e4b207c3c84a6b1a084b49bd9f"}
+      ],
+      "animation_source": "res://assets_external/animations/AnimationLibrary_Godot_Standard.glb"
+    },
+    "kael": {
+      "display_name": "Kael",
+      "family": "human",
+      "source_pack": "quaternius_universal_base_characters",
+      "status": "blocked_fallback",
+      "approved": false,
+      "export_eligible": false,
+      "fallback": "res://assets_external/characters_universal/Male_Peasant.gltf",
+      "blocked_reason": "The playable peasant fallback has not passed the distinct hunter face, clothing, equipment, and identical-camera visual gate."
+    },
+    "anwen": {
+      "display_name": "Sister Anwen",
+      "family": "human",
+      "source_pack": "quaternius_universal_base_characters",
+      "status": "blocked_fallback",
+      "approved": false,
+      "export_eligible": false,
+      "fallback": "res://assets_external/characters_universal/Female_Peasant.gltf",
+      "blocked_reason": "The playable peasant fallback has not passed the distinct elder cleric face, clothing, staff, and dialogue-distance visual gate."
+    },
+    "villager": {
+      "display_name": "Greyfen villager",
+      "family": "human",
+      "source_pack": "quaternius_universal_base_characters",
+      "status": "blocked_fallback",
+      "approved": false,
+      "export_eligible": false,
+      "fallback": "res://assets_external/characters_universal/Male_Peasant.gltf",
+      "blocked_reason": "Crowd variation, occupation silhouettes, and adjacent-duplicate rejection remain open."
+    },
+    "guard": {
+      "display_name": "Vargan guard",
+      "family": "human",
+      "source_pack": "quaternius_universal_base_characters",
+      "status": "blocked_fallback",
+      "approved": false,
+      "export_eligible": false,
+      "fallback": "res://assets_external/characters_universal/Male_Peasant.gltf",
+      "blocked_reason": "Guard armor silhouette and equipment attachment evidence remain open."
+    },
+    "traveler": {
+      "display_name": "Road traveler",
+      "family": "human",
+      "source_pack": "quaternius_universal_base_characters",
+      "status": "blocked_fallback",
+      "approved": false,
+      "export_eligible": false,
+      "fallback": "res://assets_external/characters_universal/Female_Peasant.gltf",
+      "blocked_reason": "Traveler wardrobe and route-visible identity evidence remain open."
+    },
+    "ghoulkin": {
+      "display_name": "Ghoulkin family",
+      "family": "monster",
+      "source_pack": "quaternius_ultimate_monsters",
+      "status": "blocked_fallback",
+      "approved": false,
+      "export_eligible": false,
+      "fallback": "res://assets_external/characters_real/GhoulGaunt_Real.glb",
+      "blocked_reason": "The connected temporary Ghoul family is playable but has not passed final monster-family visual approval."
+    },
+    "bog_wretch": {
+      "display_name": "Bog Wretch",
+      "family": "monster",
+      "source_pack": "quaternius_ultimate_monsters",
+      "status": "blocked_fallback",
+      "approved": false,
+      "export_eligible": false,
+      "fallback": "res://assets_external/characters_real/GhoulStalker_Real.glb",
+      "blocked_reason": "The temporary family fallback does not yet express the authored swamp identity."
+    },
+    "gravebound_knight": {
+      "display_name": "Gravebound Knight",
+      "family": "monster",
+      "source_pack": "quaternius_ultimate_monsters",
+      "status": "blocked_fallback",
+      "approved": false,
+      "export_eligible": false,
+      "fallback": "res://assets_external/characters_real/GhoulBrute_Real.glb",
+      "blocked_reason": "Vargan armor, weapon, and testimony-ready identity are not yet an accepted runtime asset."
+    },
+    "ashwing": {
+      "display_name": "Ashwing Carrion Drake",
+      "family": "monster",
+      "source_pack": "quaternius_ultimate_monsters",
+      "status": "blocked_fallback",
+      "approved": false,
+      "export_eligible": false,
+      "fallback": "res://assets_external/enemies/Dragon.fbx",
+      "blocked_reason": "The current dragon is an interim silhouette; final drake materials and flight presentation remain open."
+    },
+    "white_hart": {
+      "display_name": "The White Hart",
+      "family": "monster",
+      "source_pack": "quaternius_ultimate_animated_animals",
+      "status": "blocked_fallback",
+      "approved": false,
+      "export_eligible": false,
+      "fallback": "res://assets_external/enemies/Wolf.fbx",
+      "blocked_reason": "The wolf-derived Hart is a functional fallback; the final antlered witness asset and visual evidence remain open."
+    }
+  },
+  "quarantine": [
+    {"pattern": "assets_external/enemies/quaternius_lowpoly_animated_monsters__*", "reason": "Unprocessed duplicate monster-pack source; never a runtime mapping or Web export input."},
+    {"pattern": "assets_external/animations/*.fbx", "reason": "Raw animation source; the optimized Godot library is the only runtime animation input."},
+    {"pattern": "assets_external/animations/*Setup*", "reason": "Tool/setup image or source artifact, not a runtime dependency."},
+    {"pattern": "assets_external/downloads/*", "reason": "Raw downloaded archives are excluded from the runtime contract."},
+    {"pattern": "assets_external/raw/*", "reason": "Raw source staging area is excluded from the runtime contract."}
+  ],
+  "runtime_rules": {
+    "allowed_formats": [".glb", ".gltf", ".bin", ".png", ".jpg", ".webp", ".ogg", ".wav"],
+    "forbidden_path_tokens": ["proxy", "faceplane", "eye_box", "fake_neck", "root_mounted", "placeholder"],
+    "max_named_human_triangles": 20000,
+    "max_named_texture_dimension": 1024,
+    "approved_role_requires_hashes": true,
+    "blocked_role_requires_existing_fallback": true
+  },
+  "pipeline": {
+    "registration_tool": "res://tools/register_soul_asset.py",
+    "processing_tool": "res://tools/character_asset_pipeline.py",
+    "builder": "res://tools/build_character_real_assets.py",
+    "root_motion": "disabled",
+    "raw_sources_outside_export": true
+  }
+}

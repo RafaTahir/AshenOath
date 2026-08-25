@@ -7,3 +7,8 @@
 # under assets_external/characters_ranger/.
 /assets_external/characters_universal/Male_Ranger.*
 /assets_external/characters_universal/T_Ranger_*
+
+# Unprocessed duplicate monster-pack sources. Runtime roles must use a
+# hashed, explicitly accepted artifact instead of these raw copies.
+/assets_external/enemies/quaternius_lowpoly_animated_monsters__*
+/assets_external/licenses/quaternius_lowpoly_animated_monsters/quaternius_lowpoly_animated_monsters__*

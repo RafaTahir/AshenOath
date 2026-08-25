@@ -27,7 +27,7 @@
       "bytes": null,
       "entry_scene": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf",
       "runtime_artifacts": [
-        {"path": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf", "bytes": 54070, "sha256": "df67e16cc2e94d8c58e8831d25835036564eb9f2a7a53e31b6f1cb7f7fe1fc78"},
+        {"path": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf", "bytes": 54079, "sha256": "8eea71448ca41108589c7d13e9261de92b7068df8166b6e54bf29e6f1e530dbe"},
         {"path": "res://assets_external/characters_ranger/Male_Ranger_Runtime.bin", "bytes": 1746884, "sha256": "5bbb0d42cb324c6c27ce00417e68a876d92978f07d161f83590f0d7c0570eff6"},
         {"path": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png", "bytes": 840454, "sha256": "220dd4fabbfecce9847e876e2e2b02327315c08aac096d4648b62d5c53716c90"},
         {"path": "res://assets_external/characters_ranger/T_Ranger_Normal_1K.png", "bytes": 940081, "sha256": "a4daa2410b007ad9fe7e15ac7ecc1e579ab08aafa3725ba3f158c5a24c68b540"},

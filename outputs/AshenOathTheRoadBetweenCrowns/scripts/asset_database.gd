@@ -2,10 +2,12 @@ extends Node
 
 const CURATED_RUNTIME_PATH = "res://curated_runtime_assets.json"
 const VISUAL_UPGRADE_PATH = "res://visual_upgrade_manifest.json"
+const RUNTIME_ACCEPTANCE_PATH = "res://runtime_asset_manifest.json"
 
 var manifest = {}
 var role_mapping = {}
 var visual_upgrade = {}
+var runtime_acceptance = {}
 
 func _ready() -> void:
 	reload()
@@ -14,6 +16,7 @@ func reload() -> void:
 	manifest = _read_json(CURATED_RUNTIME_PATH)
 	role_mapping = manifest
 	visual_upgrade = _read_json(VISUAL_UPGRADE_PATH)
+	runtime_acceptance = _read_json(RUNTIME_ACCEPTANCE_PATH)
 
 func get_asset_for_role(role_name: String) -> Dictionary:
 	var roles = role_mapping.get("roles", {})
@@ -22,9 +25,9 @@ func get_asset_for_role(role_name: String) -> Dictionary:
 		if typeof(entry) == TYPE_DICTIONARY:
 			var path = str(entry.get("path", ""))
 			if path != "" and (ResourceLoader.exists(path) or FileAccess.file_exists(path)):
-				return entry
-			return _placeholder_entry(role_name, group, entry)
-	return _placeholder_entry(role_name, "", {})
+				return _with_runtime_acceptance(role_name, entry)
+			return _with_runtime_acceptance(role_name, _placeholder_entry(role_name, group, entry))
+	return _with_runtime_acceptance(role_name, _placeholder_entry(role_name, "", {}))
 
 func has_asset_for_role(role_name: String) -> bool:
 	var entry = get_asset_for_role(role_name)
@@ -36,9 +39,9 @@ func get_visual_asset_for_role(role_name: String) -> Dictionary:
 	if typeof(found) == TYPE_DICTIONARY:
 		var path = str(found.get("path", ""))
 		if path != "" and (ResourceLoader.exists(path) or FileAccess.file_exists(path)):
-			return found
-		return _placeholder_entry(role_name, str(found.get("group", "")), found)
-	return _placeholder_entry(role_name, "", {})
+			return _with_runtime_acceptance(role_name, found)
+		return _with_runtime_acceptance(role_name, _placeholder_entry(role_name, str(found.get("group", "")), found))
+	return _with_runtime_acceptance(role_name, _placeholder_entry(role_name, "", {}))
 
 func has_visual_asset_for_role(role_name: String) -> bool:
 	var entry = get_visual_asset_for_role(role_name)
@@ -47,6 +50,14 @@ func has_visual_asset_for_role(role_name: String) -> bool:
 
 func get_visual_upgrade_roles() -> Dictionary:
 	return visual_upgrade.get("roles", {})
+
+func get_runtime_acceptance(role_name: String) -> Dictionary:
+	var roles: Dictionary = runtime_acceptance.get("roles", {})
+	var entry = roles.get(role_name, {})
+	return entry.duplicate(true) if typeof(entry) == TYPE_DICTIONARY else {}
+
+func is_release_eligible(role_name: String) -> bool:
+	return bool(get_runtime_acceptance(role_name).get("export_eligible", false))
 
 func get_assets_by_category(category: String) -> Array:
 	var results = []
@@ -82,6 +93,16 @@ func _placeholder_entry(role_name: String, group: String, existing: Dictionary) 
 	result["group"] = group
 	if not result.has("placeholder_type"):
 		result["placeholder_type"] = "primitive_scene_required"
+	return result
+
+func _with_runtime_acceptance(role_name: String, entry: Dictionary) -> Dictionary:
+	var result = entry.duplicate(true)
+	var acceptance = get_runtime_acceptance(role_name)
+	if not acceptance.is_empty():
+		result["runtime_acceptance_status"] = str(acceptance.get("status", "unknown"))
+		result["runtime_approved"] = bool(acceptance.get("approved", false))
+		result["runtime_export_eligible"] = bool(acceptance.get("export_eligible", false))
+		result["runtime_blocked_reason"] = str(acceptance.get("blocked_reason", ""))
 	return result
 
 func _find_visual_entry(role_name: String):

@@ -99,8 +99,14 @@ def main() -> int:
         if path.removeprefix("res://") in preset:
             failures.append(f"quarantined asset remains in Web preset: {path}")
 
+    export_entries = {
+        item.strip().strip('"')
+        for line in preset.splitlines()
+        if "export_files=" in line or "include_filter=" in line
+        for item in line.split("=", 1)[-1].replace("PackedStringArray(", "").replace(")", "").split(",")
+    }
     for forbidden in ("asset_manifest.json", "asset_role_mapping_suggested.json"):
-        if forbidden in preset:
+        if forbidden in export_entries:
             failures.append(f"broad legacy manifest remains exported: {forbidden}")
     if "curated_runtime_assets.json" not in preset:
         failures.append("curated runtime manifest is absent from Web preset")
