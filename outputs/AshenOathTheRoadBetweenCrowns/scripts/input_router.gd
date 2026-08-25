@@ -512,7 +512,9 @@ func activate_touch() -> void:
 
 func show_pointer() -> void:
 	if OS.has_feature("web"):
-		_web_pointer_capture_block_until = Time.get_ticks_msec() + 120
+		# Keep the menu-closing click from being reinterpreted as a deferred
+		# pointer-lock request by the gameplay camera.
+		_web_pointer_capture_block_until = Time.get_ticks_msec() + 350
 	_set_pointer_mode(Input.MOUSE_MODE_VISIBLE)
 
 func capture_pointer() -> void:

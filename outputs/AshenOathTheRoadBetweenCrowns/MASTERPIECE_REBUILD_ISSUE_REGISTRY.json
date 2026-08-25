@@ -24,15 +24,15 @@
     {"id": "G", "name": "Product finish and shipment", "deploy_after": true}
   ],
   "tickets": [
-    {"id": "PROD-004", "milestone": "A", "title": "Truthful masterpiece rebuild status", "status": "in_progress"},
+    {"id": "PROD-004", "milestone": "A", "title": "Truthful masterpiece rebuild status", "status": "verified"},
     {"id": "ENGINE-006", "milestone": "A", "title": "Runtime ownership extraction", "status": "functional_but_incomplete"},
     {"id": "QA-013", "milestone": "A", "title": "Reproducible visual and runtime baseline", "status": "functional_but_incomplete"},
     {"id": "ASSET-005", "milestone": "A", "title": "Approved runtime asset library", "status": "functional_but_incomplete"},
-    {"id": "BOOT-003", "milestone": "A", "title": "Single immediate browser boot", "status": "planned"},
-    {"id": "LOADGAME-002", "milestone": "A", "title": "Crow Flight loading interaction", "status": "planned"},
+    {"id": "BOOT-003", "milestone": "A", "title": "Single immediate browser boot", "status": "functional_but_incomplete"},
+    {"id": "LOADGAME-002", "milestone": "A", "title": "Crow Flight loading interaction", "status": "functional_but_incomplete"},
     {"id": "PACK-003", "milestone": "A", "title": "Real versioned runtime packs", "status": "functional_but_incomplete"},
     {"id": "STREAM-003", "milestone": "A", "title": "Verified pack streaming lifecycle", "status": "functional_but_incomplete"},
-    {"id": "LOAD-QA-002", "milestone": "A", "title": "Startup and cache acceptance", "status": "planned"},
+    {"id": "LOAD-QA-002", "milestone": "A", "title": "Startup and cache acceptance", "status": "functional_but_incomplete"},
     {"id": "BOW-001", "milestone": "C", "title": "Hybrid bow aim and release", "status": "functional_but_incomplete"},
     {"id": "AMMO-001", "milestone": "C", "title": "Capped arrow families and save migration", "status": "functional_but_incomplete"},
     {"id": "SHOP-001", "milestone": "C", "title": "Tor and Mira vendor transactions", "status": "functional_but_incomplete"}

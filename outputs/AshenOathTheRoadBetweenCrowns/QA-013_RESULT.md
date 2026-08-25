@@ -6,9 +6,9 @@
 
 QA-013 now has a machine-readable baseline ledger for loading, transitions,
 zone performance, memory, node counts, draw calls, primitives, and the nine
-required visual views. The ledger reuses the preserved QA-SOUL-001 evidence and
-labels every image as historical. It does not claim that the current branch
-has been freshly captured or visually approved.
+required visual views. The exact camera set was freshly recaptured against the
+current branch on 2026-08-26 at 1280x720 gameplay and 1920x1080 menu. The
+frames are current technical evidence, not final visual approval.
 
 ## Changes
 
@@ -21,19 +21,21 @@ has been freshly captured or visually approved.
 
 ## Verification
 
-- `QA-013` baseline verifier: PASS - historical evidence intact; fresh
-  graphical recapture remains required.
-- Preserved source reports and all nine baseline images: present and readable.
+- `QA-013` baseline verifier: PASS - current evidence intact; final visual
+  review remains separate.
+- Current source report and all nine recaptured images: present and readable.
 - Baseline anchor: QA-SOUL-001 at 1280x720 gameplay / 1920x1080 menu.
-- Godot 4.6.3 is now provisioned in the external runtime cache, but the fresh
-  graphical recapture was not run as part of QA-013 and remains open.
+- Godot 4.6.3 Compatibility recapture completed with ANGLE Intel HD 620.
+- Current scene-ready timing: 10005.8 ms; Greyfen/New Game: 6069.6 ms;
+  Wychwood transition: 668.4 ms; Castle approach: 388.5 ms; Hart Glade:
+  290.9 ms.
 
 ## Known Limitations
 
-- This ticket is not visual approval. The next graphical-capable run must
-  regenerate the nine views against the current source and update the ledger.
-- Historical opening measurements include slow scene-ready and transition
-  samples; those values are intentionally retained as optimization targets.
+- This ticket is not visual approval. Character/world visual acceptance remains
+  a later gate and the current captures visibly retain provisional geometry.
+- Current Greyfen 1% low measured 14.2 FPS during the short capture sample;
+  this is evidence for later performance work, not a release pass.
 - Physical gamepad, Firefox, and fresh browser-route measurements remain open.
 
 ## Running Steps

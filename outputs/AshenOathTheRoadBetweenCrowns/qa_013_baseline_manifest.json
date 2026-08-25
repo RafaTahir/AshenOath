@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "ticket": "QA-013",
-  "status": "baseline_recorded_recapture_pending",
+  "status": "current_recapture_recorded_visual_review_pending",
   "baseline_anchor": {
     "production_commit": "d7e09d0",
     "historical_capture_ticket": "QA-SOUL-001",
@@ -10,37 +10,37 @@
   },
   "environment": {
     "hardware": "Dell Latitude 7280 / Intel HD Graphics 620",
-    "renderer": "ANGLE D3D11 Compatibility",
+    "renderer": "ANGLE (Intel HD Graphics 620 / D3D11 Compatibility)",
     "gameplay_viewport": [1280, 720],
     "menu_viewport": [1920, 1080],
-    "godot_graphical_recapture": "blocked_missing_executable",
-    "fresh_capture_required": true
+    "godot_graphical_recapture": "current_recapture_20260826_030918",
+    "fresh_capture_required": false
   },
   "required_views": [
-    {"id": "main_menu", "path": "Development_Gallery/screenshots/QA-SOUL-001_01_Main_Menu_20260813_211054.png", "size": [1920, 1080], "status": "preserved_historical"},
-    {"id": "kael", "path": "Development_Gallery/screenshots/QA-SOUL-001_02_Kael_20260813_211054.png", "size": [1280, 720], "status": "preserved_historical"},
-    {"id": "anwen", "path": "Development_Gallery/screenshots/QA-SOUL-001_03_Anwen_20260813_211054.png", "size": [1280, 720], "status": "preserved_historical"},
-    {"id": "greyfen", "path": "Development_Gallery/screenshots/QA-SOUL-001_04_Greyfen_20260813_211054.png", "size": [1280, 720], "status": "preserved_historical"},
-    {"id": "river", "path": "Development_Gallery/screenshots/QA-SOUL-001_05_River_20260813_211054.png", "size": [1280, 720], "status": "preserved_historical"},
-    {"id": "wychwood", "path": "Development_Gallery/screenshots/QA-SOUL-001_06_Wychwood_20260813_211054.png", "size": [1280, 720], "status": "preserved_historical"},
-    {"id": "combat", "path": "Development_Gallery/screenshots/QA-SOUL-001_07_Combat_20260813_211054.png", "size": [1280, 720], "status": "preserved_historical"},
-    {"id": "castle", "path": "Development_Gallery/screenshots/QA-SOUL-001_08_Castle_20260813_211054.png", "size": [1280, 720], "status": "preserved_historical"},
-    {"id": "hart", "path": "Development_Gallery/screenshots/QA-SOUL-001_09_Hart_20260813_211054.png", "size": [1280, 720], "status": "preserved_historical"}
+    {"id": "main_menu", "path": "Development_Gallery/screenshots/QA-SOUL-001_01_Main_Menu_20260826_030918.png", "size": [1920, 1080], "status": "current_recaptured_visual_review_pending"},
+    {"id": "kael", "path": "Development_Gallery/screenshots/QA-SOUL-001_02_Kael_20260826_030918.png", "size": [1280, 720], "status": "current_recaptured_visual_review_pending"},
+    {"id": "anwen", "path": "Development_Gallery/screenshots/QA-SOUL-001_03_Anwen_20260826_030918.png", "size": [1280, 720], "status": "current_recaptured_visual_review_pending"},
+    {"id": "greyfen", "path": "Development_Gallery/screenshots/QA-SOUL-001_04_Greyfen_20260826_030918.png", "size": [1280, 720], "status": "current_recaptured_visual_review_pending"},
+    {"id": "river", "path": "Development_Gallery/screenshots/QA-SOUL-001_05_River_20260826_030918.png", "size": [1280, 720], "status": "current_recaptured_visual_review_pending"},
+    {"id": "wychwood", "path": "Development_Gallery/screenshots/QA-SOUL-001_06_Wychwood_20260826_030918.png", "size": [1280, 720], "status": "current_recaptured_visual_review_pending"},
+    {"id": "combat", "path": "Development_Gallery/screenshots/QA-SOUL-001_07_Combat_20260826_030918.png", "size": [1280, 720], "status": "current_recaptured_visual_review_pending"},
+    {"id": "castle", "path": "Development_Gallery/screenshots/QA-SOUL-001_08_Castle_20260826_030918.png", "size": [1280, 720], "status": "current_recaptured_visual_review_pending"},
+    {"id": "hart", "path": "Development_Gallery/screenshots/QA-SOUL-001_09_Hart_20260826_030918.png", "size": [1280, 720], "status": "current_recaptured_visual_review_pending"}
   ],
   "timings_ms": {
-    "scene_ready": 4769.821,
-    "new_game": 8401.234,
-    "transition_wychwood": 908.723,
-    "transition_vargan_approach": 656.156,
-    "transition_hart_glade": 802.951,
+    "scene_ready": 10005.828,
+    "new_game": 6069.601,
+    "transition_wychwood": 668.368,
+    "transition_vargan_approach": 388.534,
+    "transition_hart_glade": 290.882,
     "opening_engine_ready": 11452.0,
     "opening_new_game_after_ready": 28.0,
     "opening_cold_transition": 363.0,
     "opening_warm_transition": 34.0
   },
   "zones": {
-    "greyfen": {"average_fps": 56.7064, "one_percent_low_fps": 36.3237, "frames": 454, "nodes": 1334, "draw_calls": 260, "primitives": 109197, "static_memory_bytes": 99497248},
-    "wychwood": {"average_fps": 60.0038, "one_percent_low_fps": 44.8789, "frames": 480, "nodes": 1769, "draw_calls": 165, "primitives": 65837, "static_memory_bytes": 104608130},
+    "greyfen": {"average_fps": 33.2641, "one_percent_low_fps": 14.1523, "frames": 60, "nodes": 1457, "draw_calls": 295, "primitives": 88218, "static_memory_bytes": 86844765, "sample_status": "current_graphical_recapture"},
+    "wychwood": {"average_fps": 55.8200, "one_percent_low_fps": 22.8496, "frames": 101, "nodes": 1894, "draw_calls": 82, "primitives": 28904, "static_memory_bytes": 86844765, "sample_status": "current_graphical_recapture"},
     "wychwood_combat": {"average_fps": 59.8863, "one_percent_low_fps": 37.4756, "frames": 480, "nodes": 1786, "draw_calls": 153, "primitives": 57915, "static_memory_bytes": 104774730},
     "vargan_court": {"average_fps": 59.9983, "one_percent_low_fps": 54.5971, "frames": 481, "nodes": 955, "draw_calls": 118, "primitives": 38950, "static_memory_bytes": 89981508},
     "record_hall": {"average_fps": 60.0033, "one_percent_low_fps": 55.1736, "frames": 480, "nodes": 603, "draw_calls": 68, "primitives": 24226, "static_memory_bytes": 88736624},
@@ -52,8 +52,8 @@
     ".release-gate/opening_final.out"
   ],
   "known_debt": [
-    "Fresh identical-camera capture is blocked until Godot 4.6.3 is available.",
-    "Historical QA-SOUL-001 imagery does not approve current character, monster, world, or combat presentation.",
+    "Current identical-camera capture is present; it does not approve current character, monster, world, or combat presentation.",
+    "The fresh visual frames remain technical evidence pending later role and world acceptance gates.",
     "The baseline records measured opening and zone timings so loading and lifecycle work can be compared without hiding regressions.",
     "Renderer teardown diagnostics remain a later ENGINE-004/ENGINE-006 acceptance item."
   ]

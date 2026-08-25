@@ -42,7 +42,7 @@
       <div id="road"><canvas id="road-canvas" width="650" height="180" aria-label="Crow Flight loading game"></canvas></div>
       <div id="progress-track" aria-hidden="true"><div id="progress"></div></div>
       <div id="status" role="status" aria-live="polite">Preparing the road. Flap to guide the crow.</div>
-      <button id="start" type="button">Enter the Road</button>
+      <button id="start" type="button" aria-label="Flap the crow">Flap / Continue</button>
       <div id="hint">Space, click, tap, or gamepad A to flap. The game opens as soon as Greyfen is ready.</div>
     </div>
   </section>
@@ -57,10 +57,36 @@
       const ctx = road.getContext('2d');
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       let engine = null, started = false, ready = false, last = 0, score = 0;
+      let gamepadPressed = false;
+      const bootMetrics = {
+        state: 'shell_ready',
+        first_paint_ms: performance.now(),
+        engine_start_ms: 0,
+        engine_ready_ms: 0,
+        progress_samples: 0,
+        input_events: 0,
+        last_input: '',
+        crow_score: 0,
+      };
+      window.__ashenOathBoot = bootMetrics;
+      document.documentElement.dataset.bootState = bootMetrics.state;
+      performance.mark('ashen-oath-first-paint');
+      function setBootState(state, extra = {}) {
+        bootMetrics.state = state;
+        Object.assign(bootMetrics, extra);
+        document.documentElement.dataset.bootState = state;
+        window.dispatchEvent(new CustomEvent('ashen-oath-boot', { detail: { ...bootMetrics } }));
+      }
+      function setStatus(text) { status.textContent = text; }
       let crowY = 90, crowVelocity = 0, branchOffset = 0, nextBranch = 260;
       const branches = [];
       const ember = { x: 460, y: 72, active: true };
-      function flap() { if (!started || ready) return; crowVelocity = -4.8; }
+      function flap(source = 'pointer') {
+        if (!started || ready) return;
+        crowVelocity = -4.8;
+        bootMetrics.input_events += 1;
+        bootMetrics.last_input = source;
+      }
       function resetBranch() { const gap = 70 + Math.random() * 35; const top = 18 + Math.random() * 48; branches.push({ x: road.width + 30, top, bottom: top + gap }); }
       function draw() {
         const w = road.width, h = road.height;
@@ -78,21 +104,37 @@
         if (started && !ready && !reduce) {
           crowVelocity += .22 * dt; crowY += crowVelocity * dt; branchOffset += 1.1 * dt; nextBranch -= 1.55 * dt; ember.x -= 1.7 * dt; if (ember.x < -12) { ember.x = road.width + 12; ember.y = 30 + Math.random() * 110; ember.active = true; }
           for (const branch of branches) branch.x -= 1.55 * dt; while (nextBranch <= 0) { resetBranch(); nextBranch = 150 + Math.random() * 100; } while (branches.length && branches[0].x < -30) branches.shift();
-          if (Math.abs(crowY - ember.y) < 18 && Math.abs(110 - ember.x) < 24 && ember.active) { score++; ember.active = false; status.textContent = 'The road remembers. Ember ' + score + ' gathered.'; }
-          if (crowY < 8 || crowY > road.height - 8 || branches.some((b) => 110 > b.x - 15 && 110 < b.x + 28 && (crowY < b.top || crowY > b.bottom))) { crowY = 90; crowVelocity = 0; branches.length = 0; nextBranch = 260; status.textContent = 'The crow circles back. Keep the oath alive.'; }
+          if (Math.abs(crowY - ember.y) < 18 && Math.abs(110 - ember.x) < 24 && ember.active) { score++; ember.active = false; bootMetrics.crow_score = score; setStatus('The road remembers. Ember ' + score + ' gathered.'); }
+          if (crowY < 8 || crowY > road.height - 8 || branches.some((b) => 110 > b.x - 15 && 110 < b.x + 28 && (crowY < b.top || crowY > b.bottom))) { crowY = 90; crowVelocity = 0; branches.length = 0; nextBranch = 260; setStatus('The crow circles back. Keep the oath alive.'); }
         }
         draw(); requestAnimationFrame(tick);
       }
-      window.addEventListener('keydown', (event) => { if ([' ', 'ArrowUp', 'w', 'W'].includes(event.key)) { event.preventDefault(); flap(); } });
-      road.addEventListener('pointerdown', flap); start.addEventListener('click', () => { if (!started) begin(); else flap(); });
-      function pollGamepad() { if (started && !ready && navigator.getGamepads) { const pad = Array.from(navigator.getGamepads()).find(Boolean); if (pad?.buttons?.[0]?.pressed) flap(); } requestAnimationFrame(pollGamepad); }
+      window.addEventListener('keydown', (event) => { if ([' ', 'ArrowUp', 'w', 'W'].includes(event.key)) { event.preventDefault(); flap('keyboard'); } });
+      road.addEventListener('pointerdown', () => flap('pointer'));
+      start.addEventListener('click', () => { if (!started) begin(); else flap('button'); });
+      function pollGamepad() {
+        let pressed = false;
+        if (started && !ready && navigator.getGamepads) {
+          const pad = Array.from(navigator.getGamepads()).find(Boolean);
+          pressed = Boolean(pad?.buttons?.[0]?.pressed);
+          if (pressed && !gamepadPressed) flap('gamepad');
+        }
+        gamepadPressed = pressed;
+        requestAnimationFrame(pollGamepad);
+      }
       function begin() {
         if (started) return;
-        started = true; start.textContent = 'Guide the Crow'; status.textContent = 'Opening the road while you fly.';
-        try { engine = new Engine($GODOT_CONFIG); } catch (error) { status.textContent = 'The road could not be opened. Reload to try again.'; console.error(error); return; }
+        started = true;
+        start.textContent = 'Flap the Crow';
+        setStatus('Opening the road while you fly.');
+        bootMetrics.engine_start_ms = performance.now();
+        performance.mark('ashen-oath-engine-start');
+        setBootState('engine_starting');
+        try { engine = new Engine($GODOT_CONFIG); } catch (error) { setBootState('failed', { error: String(error) }); setStatus('The road could not be opened. Reload to try again.'); console.error(error); return; }
         const missing = Engine.getMissingFeatures({ threads: false });
-        if (missing.length) { status.textContent = 'This browser is missing WebGL 2.0: ' + missing.join(', '); console.error(status.textContent); return; }
-        engine.startGame({ onProgress: (current, total) => { const ratio = current > 0 && total > 0 ? current / total : 0; progress.style.width = `${Math.round(ratio * 100)}%`; status.textContent = ratio > 0 ? `Opening the road... ${Math.round(ratio * 100)}%` : 'Opening the road...'; } }).then(() => { ready = true; boot.classList.add('hidden'); document.getElementById('canvas').focus(); }, (error) => { started = false; status.textContent = 'The road could not be opened. Reload to try again.'; console.error(error); start.textContent = 'Retry'; });
+        if (missing.length) { setBootState('failed', { missing_features: missing }); setStatus('This browser is missing WebGL 2.0: ' + missing.join(', ')); console.error(status.textContent); return; }
+        setBootState('loading');
+        engine.startGame({ onProgress: (current, total) => { const ratio = current > 0 && total > 0 ? current / total : 0; bootMetrics.progress_samples += 1; progress.style.width = `${Math.round(ratio * 100)}%`; setStatus(ratio > 0 ? `Opening the road... ${Math.round(ratio * 100)}%` : 'Opening the road...'); } }).then(() => { ready = true; bootMetrics.engine_ready_ms = performance.now(); performance.mark('ashen-oath-engine-ready'); setBootState('ready', { engine_ready_elapsed_ms: Math.round(bootMetrics.engine_ready_ms - bootMetrics.engine_start_ms) }); boot.classList.add('hidden'); document.getElementById('canvas').focus(); }, (error) => { started = false; setBootState('failed', { error: String(error) }); setStatus('The road could not be opened. Reload to try again.'); console.error(error); start.textContent = 'Retry'; });
       }
       draw(); requestAnimationFrame(tick); requestAnimationFrame(pollGamepad); window.setTimeout(begin, 0);
     })();

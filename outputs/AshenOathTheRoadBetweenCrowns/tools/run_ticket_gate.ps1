@@ -316,12 +316,26 @@ foreach ($gate in $gates) {
             (Join-Path $PSScriptRoot "verify_pack_candidates.py"),
             (Join-Path $Project "runtime_pack_candidates.json")
         ) $gateInputs $cache
-    } elseif ($gate -eq "verify_load_qa_001") {
-        Invoke-Compact $gate $Python @(
-            (Join-Path $PSScriptRoot "verify_load_qa_001.py"),
-            $Project
-        ) $gateInputs $cache
-    } elseif ($gate -eq "verify_qa_soul_001") {
+	} elseif ($gate -eq "verify_load_qa_001") {
+		Invoke-Compact $gate $Python @(
+			(Join-Path $PSScriptRoot "verify_load_qa_001.py"),
+			$Project
+		) $gateInputs $cache
+	} elseif ($gate -in @("verify_boot_003", "verify_loadgame_002", "verify_load_qa_002")) {
+		Invoke-Compact $gate $Python @(
+			(Join-Path $PSScriptRoot "$gate.py"),
+			$Project
+		) $gateInputs $cache
+	} elseif ($gate -eq "verify_engine_006") {
+		Invoke-Compact $gate $Python @(
+			(Join-Path $PSScriptRoot "verify_engine_006.py"),
+			$Project
+		) $gateInputs $cache
+	} elseif ($gate -eq "verify_asset_005") {
+		Invoke-Compact $gate $Python @(
+			(Join-Path $PSScriptRoot "verify_asset_005.py")
+		) $gateInputs $cache
+	} elseif ($gate -eq "verify_qa_soul_001") {
         Invoke-Compact $gate $Python @(
             (Join-Path $PSScriptRoot "verify_qa_soul_001.py"), $Project
         ) $gateInputs $cache

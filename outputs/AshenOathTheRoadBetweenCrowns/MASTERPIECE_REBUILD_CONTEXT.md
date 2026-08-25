@@ -11,28 +11,36 @@ The following are explicitly unfinished until their rendered and player-facing
 acceptance gates pass:
 
 - real split Web packs and low-startup boot;
+- the immediate Web boot shell and Crow Flight wait activity are now implemented
+  and have dedicated acceptance gates; the current embedded-PCK fallback remains
+  deliberate until hosted pack URLs are promoted;
 - seamless exterior sectors;
 - final human, monster, boss, weapon, and equipment presentation;
 - final bow art and animation evidence; the first bow/ammunition/vendor slice is
   implemented on the development branch but still needs graphical and packed-Web
   acceptance;
-- PACK-003 now produces six real, hash-verified external PCK candidates totaling
-  80.51 MB. They are not yet mounted by the runtime; STREAM-003 owns download,
-  cache, retry, and transactional activation before they can replace embedded
-  content;
-- STREAM-003 now implements the download-to-temp, hash/size validation, cache,
+- PACK-003 produces six real, hash-verified external PCK candidates totaling
+  80.52 MB. They remain outside the shipped Web artifact while the loading
+  candidate decision is open;
+- STREAM-003 implements the download-to-temp, hash/size validation, cache,
   local mount, retry, cancellation, progress, and embedded-fallback lifecycle.
-  The manifest still has empty production URLs until the loading candidate
-  ticket hosts and wires the verified packs;
+  The manifest still has empty production URLs, so the current candidate uses
+  the embedded PCK fallback;
 - the ASSET-005 runtime boundary is now explicit: Captain Senn's processed
   Ranger is the only approved role, while ten route-visible roles remain
   playable but visually blocked fallbacks;
-- QA-013 now preserves one reproducible baseline ledger for historical images,
-  startup, transition, zone FPS, memory, and scene counts; fresh graphical
-  recapture remains required when Godot is available;
+- QA-013 now preserves one reproducible baseline ledger with a current
+  identical-camera nine-view recapture, startup, transition, zone FPS, memory,
+  and scene counts; final visual approval remains a separate gate;
 - authored Greyfen, Wychwood, campaign, river, sky, and interior presentation;
 - contact-driven combat and human-reviewed voice delivery;
 - complete real-input campaign and final production evidence.
+
+Milestone A's aggregate implementation/export/browser gate passed on
+2026-08-26. It is still not release-ready: Chrome/Edge cold engine readiness
+measured 42.94/27.11 seconds, New Game measured 4.79/6.22 seconds after the
+Greyfen readiness point, and production pack URLs remain empty. See
+`MILESTONE-A_RESULT.md` for the current evidence and blockers.
 
 Existing result documents are historical evidence only. They do not override a
 current `visually_rejected`, `functional_but_incomplete`, or `blocked` status.

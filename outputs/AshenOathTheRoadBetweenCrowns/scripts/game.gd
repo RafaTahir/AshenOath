@@ -1751,7 +1751,10 @@ func _on_launch_accepted() -> void:
 		zone_streaming.prewarm_neighbors("greyfen")
 	if not greyfen_prewarm_started and not game_started:
 		greyfen_prewarm_started = true
-		_prewarm_greyfen_after_menu_frame()
+		# Do not include the heavy Greyfen build in Godot's initial Web
+		# Engine.startGame promise. The HTML shell and real menu are already
+		# visible; warm the route on the first deferred frame instead.
+		call_deferred("_prewarm_greyfen_after_menu_frame")
 
 func _prewarm_greyfen_after_menu_frame() -> void:
 	# Start immediately after the launch shell is accepted. Deferring the first

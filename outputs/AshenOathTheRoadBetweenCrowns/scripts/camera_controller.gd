@@ -87,8 +87,9 @@ func _input(event: InputEvent) -> void:
 			return
 		_capture_pointer()
 	elif event is InputEventMouseMotion:
-		if Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
-			_capture_pointer()
+		# A motion event is not a browser user gesture. Requesting pointer lock
+		# here produces a rejected Promise on Web after menus release the mouse.
+		# A real mouse-button event above remains the capture path.
 		_apply_mouse_motion(event.relative)
 
 func _apply_mouse_motion(relative: Vector2) -> void:

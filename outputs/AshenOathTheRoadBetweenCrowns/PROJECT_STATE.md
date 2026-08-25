@@ -22,15 +22,28 @@ approval of those open visual or player-facing defects.
 
 PACK-003 is the current development checkpoint. Six named runtime PCK
 candidates have been exported and hash-verified outside the repository at a
-combined `80.51 MB`. They remain external candidates: the current runtime
-still uses its embedded PCK because STREAM-003 has not yet implemented
-download, verification, mounting, caching, and rollback. Production `main`,
-tracked `web/`, and Vercel remain unchanged.
+combined `80.52 MB`. They remain external candidates: the current runtime
+still uses its embedded PCK because production URLs have not been configured.
+STREAM-003 implements download, verification, mounting, caching, retry, and
+rollback. Production `main`, tracked `web/`, and Vercel remain unchanged.
 
 STREAM-003 is now implemented on top of that checkpoint. The runtime can
 queue, download, verify, cache, mount, retry, cancel, and retire split packs,
 while empty manifest URLs preserve the current embedded fallback. Hosting and
 production URL wiring remain open for the later loading milestone.
+
+The remaining Milestone-A boot work is now implemented on the development
+branch. BOOT-003 keeps Web on one immediate HTML-to-menu path and excludes the
+QA telemetry script from the production Web preset. LOADGAME-002 formalizes
+Crow Flight as the keyboard, pointer/touch, gamepad, and reduced-motion wait
+activity. LOAD-QA-002 adds deterministic boot timing telemetry plus pack
+metadata, fallback, and cache-contract checks. The full Milestone-A aggregate
+gate passed, including packed startup and Chrome/Edge browser smoke. It remains
+functional-but-incomplete for release because cold engine readiness measured
+42.94 seconds in Chrome and 27.11 seconds in Edge, New Game measured 4.79-6.22
+seconds after the Greyfen readiness point, and production pack URLs are still
+empty. Production `main`, tracked `web/`, and Vercel remain unchanged. See
+`MILESTONE-A_RESULT.md` for the authoritative result.
 
 ### ASSET-005 runtime asset boundary - 2026-08-26
 
@@ -47,12 +60,13 @@ Godot 4.6.3 is now provisioned for the next graphical gate.
 
 ### QA-013 baseline ledger - 2026-08-26
 
-`qa_013_baseline_manifest.json` now preserves the nine-view historical image
-set and the latest available startup, transition, FPS, memory, node, draw-call,
-and primitive measurements under one reproducible schema. The baseline verifier
-passes its evidence-integrity checks, but the ticket remains
-`functional_but_incomplete`: every view is explicitly historical and fresh
-identical-camera recapture is still required.
+`qa_013_baseline_manifest.json` now records a current nine-view identical-camera
+recapture at 1280x720 gameplay / 1920x1080 menu, plus startup, transition, FPS,
+memory, node, draw-call, and primitive measurements under one reproducible
+schema. The baseline verifier passes its evidence-integrity checks. The frames
+remain technical evidence rather than final character/world visual approval;
+the short current Greyfen sample also recorded a 14.2 FPS 1% low and is not a
+release performance pass.
 
 ### Masterpiece Rebuild C-slice - bow, ammunition, and Greyfen commerce
 
@@ -66,9 +80,11 @@ soft-lock targeting, wall clipping, impact feedback, and a bounded bow/quiver
 visual. The static gate passes; in-engine animation, screenshot, and packed-Web
 acceptance remain open until the Godot graphical and packed-Web gates run.
 
-## Current Release Gate - 2026-08-21
+## Historical Release Gate (superseded) - 2026-08-21
 
-The Soul Rebuild authoritative release run has passed: `92` gates, `0`
+The historical Soul Rebuild release run passed `92` gates, but it is superseded
+by the current truth boundary above and must not be used as current approval.
+It recorded `92` gates, `0`
 failures. Fresh graphical Compatibility performance at native 1280x720
 Balanced is above the release floor in every measured zone: Greyfen `56.71`
 FPS average / `36.32` FPS 1% low, Wychwood `60.00 / 44.88`, Wychwood combat
@@ -80,9 +96,9 @@ Chrome and Edge desktop/mobile-emulation routes passed without console or
 network errors. Shutdown-only Godot allocator diagnostics are classified; no
 active renderer/material/resource error failed the release gate.
 
-The verified export is deployed at commit
+The historical export was deployed at commit
 `13465620581c2817e3fc455f938afbf5debf059f`. `origin/main`, the tracked root
-`web/`, and Vercel now share the verified PCK hash above. The production smoke
+`web/`, and Vercel shared the historical PCK hash above at that time. The production smoke
 endpoint returns HTTP 200 at `https://ashenoath.vercel.app/?v=soul-rebuild`.
 Firefox and physical-controller certification remain explicitly untested in
 this Windows environment.

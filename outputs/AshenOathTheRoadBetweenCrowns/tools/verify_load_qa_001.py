@@ -30,7 +30,7 @@ def main() -> int:
             "progress": "onProgress",
             "reduced motion": "prefers-reduced-motion",
             "automatic engine start": "window.setTimeout(begin, 0)",
-            "flap interaction": "function flap()",
+            "flap interaction": "function flap(",
             "branch obstacles": "const branches = []",
         }
         for label, token in required.items():

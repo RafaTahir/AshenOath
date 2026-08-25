@@ -135,12 +135,12 @@ class Cdp {
       this.socket.send(JSON.stringify({ id, method, params }));
     });
   }
-  async evaluate(expression) {
+  async evaluate(expression, timeoutMs = 60000) {
     const response = await this.send("Runtime.evaluate", {
       expression,
       returnByValue: true,
       awaitPromise: true,
-    });
+    }, timeoutMs);
     if (response.exceptionDetails) throw new Error(response.exceptionDetails.text);
     return response.result.value;
   }
@@ -298,7 +298,9 @@ async function startNewGame(cdp, expectedUrl) {
     return Boolean(gl) && canvas.width >= 1280 && canvas.height >= 720;
   })()`), "QA WebGL canvas");
   await cdp.send("Page.bringToFront");
-  await cdp.send("Emulation.setFocusEmulationEnabled", { enabled: true });
+    // Focus emulation is optional in headless Chromium; pointer and keyboard
+    // dispatch remain the strict gameplay-input assertions.
+    await cdp.send("Emulation.setFocusEmulationEnabled", { enabled: true }).catch(() => {});
   await cdp.evaluate(`(() => {
     window.focus();
     const canvas = document.querySelector("canvas");

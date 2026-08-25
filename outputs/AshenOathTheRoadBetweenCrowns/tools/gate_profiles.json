@@ -436,11 +436,21 @@
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/hud.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_streaming_service.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/runtime_pack_manager.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_manifest.json",
         "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_load_qa_001.py",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_boot_003.py",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_loadgame_002.py",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_load_qa_002.py",
         "outputs/AshenOathTheRoadBetweenCrowns/export_presets.cfg"
       ],
       "gates": [
+        "verify_engine_006",
+        "verify_qa_013",
+        "verify_asset_005",
+        "verify_boot_003",
+        "verify_loadgame_002",
+        "verify_load_qa_002",
         "verify_load_qa_001",
         "verify_runtime_regressions",
         "verify_stream_001",
@@ -449,6 +459,43 @@
       ],
       "web_required": true
     },
+	"milestone_a": {
+	  "patterns": [
+		"outputs/AshenOathTheRoadBetweenCrowns/MASTERPIECE_REBUILD_ISSUE_REGISTRY.json",
+		"outputs/AshenOathTheRoadBetweenCrowns/MASTERPIECE_REBUILD_CONTEXT.md",
+		"outputs/AshenOathTheRoadBetweenCrowns/PROJECT_STATE.md",
+		"outputs/AshenOathTheRoadBetweenCrowns/web_boot_shell.html",
+		"outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+		"outputs/AshenOathTheRoadBetweenCrowns/scripts/hud.gd",
+		"outputs/AshenOathTheRoadBetweenCrowns/scripts/runtime_pack_manager.gd",
+		"outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_streaming_service.gd",
+		"outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_manifest.json",
+		"outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_candidates.json",
+		"outputs/AshenOathTheRoadBetweenCrowns/export_presets.cfg",
+		"outputs/AshenOathTheRoadBetweenCrowns/tools/*.py",
+		"outputs/AshenOathTheRoadBetweenCrowns/tools/*.gd"
+	  ],
+	  "gates": [
+		"verify_engine_006",
+		"verify_qa_013",
+		"verify_asset_005",
+		"verify_boot_003",
+		"verify_loadgame_002",
+		"verify_load_qa_002",
+		"verify_load_qa_001",
+		"verify_runtime_regressions",
+		"verify_stream_001",
+		"verify_stream_003",
+		"verify_runtime_packs",
+		"verify_pack_candidates",
+		"verify_portal_001",
+		"verify_scene_001",
+		"verify_zone_builder_integrity",
+		"web_export",
+		"verify_web_browser"
+	  ],
+	  "web_required": true
+	},
 	"materials": {
 		"patterns": [
 			"outputs/AshenOathTheRoadBetweenCrowns/scripts/world_material_library.gd",

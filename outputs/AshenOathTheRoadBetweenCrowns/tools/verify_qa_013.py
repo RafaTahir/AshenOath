@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Validate the reproducible QA-013 baseline ledger.
 
-This gate validates evidence integrity and deliberately reports that fresh
-graphical recapture is still pending when Godot is unavailable. It never turns
-historical screenshots into visual approval.
+This gate validates evidence integrity for either the preserved historical
+baseline or a current identical-camera recapture. It never turns screenshots
+into final visual approval.
 """
 
 from __future__ import annotations
@@ -38,14 +38,19 @@ def main() -> int:
 
     if manifest.get("schema_version") != 1 or manifest.get("ticket") != "QA-013":
         errors.append("baseline manifest schema or ticket identity is invalid")
-    if manifest.get("status") != "baseline_recorded_recapture_pending":
-        errors.append("baseline status must distinguish preserved evidence from fresh approval")
+    current_capture = manifest.get("status") == "current_recapture_recorded_visual_review_pending"
+    historical_capture = manifest.get("status") == "baseline_recorded_recapture_pending"
+    if not current_capture and not historical_capture:
+        errors.append("baseline status must distinguish historical evidence from current recapture")
     if manifest.get("environment", {}).get("gameplay_viewport") != [1280, 720]:
         errors.append("baseline gameplay viewport is not native 1280x720")
     if manifest.get("environment", {}).get("menu_viewport") != [1920, 1080]:
         errors.append("baseline menu viewport is not 1920x1080")
-    if manifest.get("environment", {}).get("fresh_capture_required") is not True:
-        errors.append("fresh capture requirement must remain explicit")
+    fresh_capture_required = manifest.get("environment", {}).get("fresh_capture_required")
+    if current_capture and fresh_capture_required is not False:
+        errors.append("current recapture must clear the fresh capture requirement")
+    if historical_capture and fresh_capture_required is not True:
+        errors.append("historical baseline must retain the fresh capture requirement")
 
     views = manifest.get("required_views", [])
     if len(views) != 9:
@@ -55,8 +60,9 @@ def main() -> int:
             errors.append("baseline view row must be an object")
             continue
         path = project / str(view.get("path", ""))
-        if view.get("status") != "preserved_historical":
-            errors.append(f"view {view.get('id')} must be marked preserved_historical")
+        valid_view_statuses = {"preserved_historical", "current_recaptured_visual_review_pending"}
+        if view.get("status") not in valid_view_statuses:
+            errors.append(f"view {view.get('id')} has an invalid evidence status")
         if not path.is_file():
             errors.append(f"baseline image missing: {path}")
             continue
@@ -91,7 +97,7 @@ def main() -> int:
     report = {
         "ticket": "QA-013",
         "status": "pass" if not errors else "fail",
-        "fresh_capture": "blocked_missing_godot",
+        "fresh_capture": "current_recapture_present" if current_capture else "blocked_missing_godot",
         "historical_evidence_preserved": not bool(errors),
         "errors": errors,
     }
@@ -103,7 +109,7 @@ def main() -> int:
         for error in errors:
             print(f"- {error}")
         return 1
-    print("QA-013 BASELINE VERIFIER: PASS - historical baseline is intact; fresh graphical recapture remains required")
+    print("QA-013 BASELINE VERIFIER: PASS - current evidence is intact; final visual approval remains separate")
     return 0
 
 
