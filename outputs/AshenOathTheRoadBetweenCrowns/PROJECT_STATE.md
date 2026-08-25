@@ -27,6 +27,11 @@ still uses its embedded PCK because STREAM-003 has not yet implemented
 download, verification, mounting, caching, and rollback. Production `main`,
 tracked `web/`, and Vercel remain unchanged.
 
+STREAM-003 is now implemented on top of that checkpoint. The runtime can
+queue, download, verify, cache, mount, retry, cancel, and retire split packs,
+while empty manifest URLs preserve the current embedded fallback. Hosting and
+production URL wiring remain open for the later loading milestone.
+
 ### ASSET-005 runtime asset boundary - 2026-08-26
 
 `runtime_asset_manifest.json` is now the explicit acceptance boundary for

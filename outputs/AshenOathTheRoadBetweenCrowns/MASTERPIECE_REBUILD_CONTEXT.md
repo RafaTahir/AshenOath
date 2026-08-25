@@ -20,6 +20,10 @@ acceptance gates pass:
   80.51 MB. They are not yet mounted by the runtime; STREAM-003 owns download,
   cache, retry, and transactional activation before they can replace embedded
   content;
+- STREAM-003 now implements the download-to-temp, hash/size validation, cache,
+  local mount, retry, cancellation, progress, and embedded-fallback lifecycle.
+  The manifest still has empty production URLs until the loading candidate
+  ticket hosts and wires the verified packs;
 - the ASSET-005 runtime boundary is now explicit: Captain Senn's processed
   Ranger is the only approved role, while ten route-visible roles remain
   playable but visually blocked fallbacks;

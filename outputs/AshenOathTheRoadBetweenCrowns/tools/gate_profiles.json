@@ -401,11 +401,15 @@
         "outputs/AshenOathTheRoadBetweenCrowns/zone_streaming_topology.json",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_streaming_service.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/runtime_pack_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_manifest.json",
         "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_stream_001.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_stream_003.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/export_presets.cfg"
       ],
       "gates": [
         "verify_stream_001",
+        "verify_stream_003",
         "verify_portal_001",
         "verify_scene_001",
         "verify_zone_builder_integrity",
