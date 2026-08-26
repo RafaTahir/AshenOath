@@ -8,9 +8,10 @@ animation, bow aiming, ammunition, Greyfen vendors, and their gameplay gate.
 ## Status
 
 Milestone C is implemented and locally release-accepted for the selected
-runtime character/equipment slice. It is ready for cumulative production
-promotion after the verified Web artifact is synchronized. Milestone E still
-owns final monster-family replacement and large-encounter presentation.
+runtime character/equipment slice. A browser-only startup-pack handoff issue
+was found during the first live smoke test, fixed with signal-driven prewarm,
+and revalidated locally before the corrected artifact was promoted. Milestone
+E still owns final monster-family replacement and large-encounter presentation.
 
 ## Delivered tickets
 
@@ -31,8 +32,8 @@ owns final monster-family replacement and large-encounter presentation.
 ## Artifact
 
 The verified Web candidate contains the seven root runtime files plus five
-external streamed packs, for 12 files and `98,606,993` bytes (`94.039 MB`).
-The embedded root PCK is `1,773,280` bytes with SHA-256:
+external streamed packs, for 12 files and `98,607,441` bytes (`94.039 MB`).
+The embedded root PCK is `1,773,728` bytes with SHA-256:
 
 `5ca009899b4676bd2a6cd67cc48937d753e4c7bc97c702085b3a115018698dfa`
 
@@ -68,12 +69,14 @@ per-ticket evidence and exact commands.
 
 | Browser | Canvas | Engine ready | New Game | JS heap | Console |
 |---|---|---:|---:|---:|---|
-| Chrome | 1280x720 WebGL2 | 7.75 s | 4.86 s | 11.8 MB | none |
-| Edge | 1280x720 WebGL2 | 8.54 s | 0.66 s | 11.9 MB | none |
+| Chrome | 1280x720 WebGL2 | 18.42 s | 7.53 s | 11.0 MB | none |
+| Edge | 1280x720 WebGL2 | 11.46 s | 6.14 s | 11.7 MB | none |
 
 The final packed startup log reaches the menu with exit code 0. The browser
 run reaches Greyfen, shows the selected Kael body and sword/back scabbard, and
-no longer reports the earlier primitive `sister_anwen` fallback.
+no longer reports the earlier primitive `sister_anwen` fallback. The final
+handoff run also records `Greyfen prewarmed` and
+`new_game_handoff prewarmed=true` in both browsers after the startup fix.
 
 ## Honest boundary
 

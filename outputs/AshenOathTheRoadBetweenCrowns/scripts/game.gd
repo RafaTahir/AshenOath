@@ -1885,7 +1885,13 @@ func _on_launch_accepted() -> void:
 		if startup_packs_waiting:
 			return
 		startup_packs_waiting = true
+		if runtime_packs.has_signal("pack_ready") and not runtime_packs.pack_ready.is_connected(_on_startup_pack_ready):
+			runtime_packs.pack_ready.connect(_on_startup_pack_ready)
 		runtime_packs.request_startup_packs()
+		# Cached Web packs can complete synchronously. The signal path handles
+		# asynchronous downloads without depending on a paused-tree frame.
+		if runtime_packs.startup_packs_ready():
+			_on_startup_pack_ready("__startup__")
 		call_deferred("_wait_for_startup_packs_then_prewarm")
 		return
 	if zone_streaming != null and zone_streaming.has_method("prewarm_neighbors"):
@@ -1895,6 +1901,18 @@ func _on_launch_accepted() -> void:
 		# Do not include the heavy Greyfen build in Godot's initial Web
 		# Engine.startGame promise. The HTML shell and real menu are already
 		# visible; warm the route on the first deferred frame instead.
+		call_deferred("_prewarm_greyfen_after_menu_frame")
+
+func _on_startup_pack_ready(_pack_id: String) -> void:
+	if not startup_packs_waiting or game_started or runtime_packs == null:
+		return
+	if not runtime_packs.startup_packs_ready():
+		return
+	startup_packs_waiting = false
+	if zone_streaming != null and zone_streaming.has_method("prewarm_neighbors"):
+		zone_streaming.prewarm_neighbors("greyfen")
+	if not greyfen_prewarm_started:
+		greyfen_prewarm_started = true
 		call_deferred("_prewarm_greyfen_after_menu_frame")
 
 func _wait_for_startup_packs_then_prewarm() -> void:
