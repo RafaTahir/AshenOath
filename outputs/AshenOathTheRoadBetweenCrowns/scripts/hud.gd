@@ -377,8 +377,15 @@ func _build_loading_layer() -> void:
 
 func _set_internal_canvas(size: Vector2i) -> void:
 	var window := get_window()
-	if window != null and window.content_scale_size != size:
-		window.content_scale_size = size
+	if window == null:
+		return
+	# Resizing the Web render target between the 1080p menu layout and the
+	# native 720p gameplay canvas forces a synchronous ANGLE allocation during
+	# New Game. Keep one native Web viewport and let the responsive controls
+	# scale inside it; desktop retains the authored 1080p menu canvas.
+	var target_size := GAMEPLAY_SIZE if OS.has_feature("web") else size
+	if window.content_scale_size != target_size:
+		window.content_scale_size = target_size
 
 func update_health(current: float, maximum: float) -> void:
 	var previous = last_health

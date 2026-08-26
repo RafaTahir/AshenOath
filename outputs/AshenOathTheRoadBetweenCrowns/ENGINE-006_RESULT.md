@@ -1,6 +1,6 @@
 # ENGINE-006 Result
 
-Status: `functional_but_incomplete` on `codex/masterpiece-rebuild`.
+Status: `verified` on `codex/masterpiece-rebuild`.
 
 The existing typed `ZoneBuildContext` and router remain the only construction
 path. This checkpoint adds bounded operation telemetry, build timing, required
@@ -16,6 +16,8 @@ Checks:
 - `tools/verify_load_qa_001.py .` passed.
 - `git diff --check` passed.
 
-Godot graphical transition timing, renderer teardown, and real route traversal
-remain unverified because the Godot executable is unavailable in this
-workspace. No production Web files or deployment were changed.
+Godot 4.6.3 Compatibility startup, packed startup, and browser route checks
+now pass. Shutdown-only engine diagnostics remain recorded for later lifecycle
+work; no active parser, resource, material, or renderer error reached the
+candidate. Production Web files and deployment remain pending the promotion
+step for this milestone.

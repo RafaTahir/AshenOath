@@ -60,6 +60,18 @@ async function dispatchPrimaryActivation(cdp, point) {
 if (!targetUrl && !existsSync(join(exportDir, "index.html"))) {
   throw new Error(`WEB BROWSER: export missing at ${exportDir}`);
 }
+
+async function dispatchFocusedMenuActivation(cdp) {
+  // Godot's menu is rendered inside the canvas. Keyboard activation follows
+  // the real focus path and remains stable when the Web canvas switches from
+  // the authored 1080p menu layout to the native 720p gameplay viewport.
+  await cdp.send("Input.dispatchKeyEvent", {
+    type: "keyDown", key: "Enter", code: "Enter", windowsVirtualKeyCode: 13,
+  }, 60000);
+  await cdp.send("Input.dispatchKeyEvent", {
+    type: "keyUp", key: "Enter", code: "Enter", windowsVirtualKeyCode: 13,
+  }, 60000);
+}
 if ((!requestedBrowser && browsers.length !== 2) || (requestedBrowser && browsers.length !== 1)) {
   throw new Error("WEB BROWSER: Chrome and Edge are both required for WEB-001");
 }
@@ -349,6 +361,18 @@ async function testBrowser(name, executable) {
       if (event.method === "Log.entryAdded") return [String(event.params.entry.text || "")];
       return [];
     });
+    const networkLines = () => cdp.events.filter((event) =>
+      event.method === "Network.requestWillBeSent"
+      || event.method === "Network.responseReceived"
+      || event.method === "Network.loadingFailed"
+    ).filter((event) => {
+      const urlValue = event.params.request?.url || event.params.response?.url || "";
+      return /index\.(js|wasm|pck)|packs\//.test(urlValue);
+    }).slice(-20).map((event) => {
+      const params = event.params;
+      const urlValue = params.request?.url || params.response?.url || "";
+      return `${event.method.split(".").pop()} ${urlValue} ${params.errorText || params.response?.status || ""}`;
+    });
     // Canvas dimensions arrive before the Godot scene has finished creating
     // its launch/main menu. Wait for the runtime-ready marker so the first
     // Enter key is delivered to an actual menu instead of disappearing during
@@ -356,25 +380,25 @@ async function testBrowser(name, executable) {
     await waitFor(async () => {
       return consoleLines().some((line) => line.includes("LOADING: runtime ready total="));
     }, `${name} Godot runtime readiness`).catch((error) => {
-      throw new Error(`${error.message}; console=${JSON.stringify(consoleLines().slice(-20))}`);
+      throw new Error(`${error.message}; console=${JSON.stringify(consoleLines().slice(-20))}; network=${JSON.stringify(networkLines())}`);
     });
     // The visible launch action either starts the desktop prewarm or, on Web,
     // confirms that New Game may use the bounded active build.
     if (!mobileMode) {
       await cdp.send("Input.dispatchMouseEvent", { type: "mouseMoved", x: menuInputPoint.x, y: menuInputPoint.y, button: "none" });
     }
-    await dispatchPrimaryActivation(cdp, menuInputPoint);
+    await dispatchFocusedMenuActivation(cdp);
     await waitFor(async () => consoleLines().some((line) =>
       line.includes("LOADING: Greyfen prewarmed total=")
       || line.includes("LOADING: Greyfen prewarm deferred for Web")
     ), `${name} Greyfen readiness`).catch((error) => {
-      throw new Error(`${error.message}; console=${JSON.stringify(consoleLines().slice(-30))}; canvas=${JSON.stringify(canvasDiagnostic)}`);
+      throw new Error(`${error.message}; console=${JSON.stringify(consoleLines().slice(-30))}; network=${JSON.stringify(networkLines())}; canvas=${JSON.stringify(canvasDiagnostic)}`);
     });
     const newGameStarted = Date.now();
     if (!mobileMode) {
       await cdp.send("Input.dispatchMouseEvent", { type: "mouseMoved", x: menuInputPoint.x, y: menuInputPoint.y, button: "none" });
     }
-    await dispatchPrimaryActivation(cdp, menuInputPoint);
+    await dispatchFocusedMenuActivation(cdp);
     await waitFor(async () => {
       return consoleLines().some((line) => line.includes("LOADING: zone=greyfen playable_ms="));
     }, `${name} New Game startup`).catch((error) => {
@@ -417,6 +441,7 @@ async function testBrowser(name, executable) {
       canvas,
       js_heap_mb: Number(jsHeapMb.toFixed(1)),
       process_tree_mb: workingSetMb,
+      runtime_logs: consoleLines().filter((line) => /LOADING: (new_game|zone_|Greyfen|startup_pack)|ZONE_COMPOSITION/.test(line)),
       resources: resources.filter((entry) => /index\.(js|wasm|pck)/.test(entry.name)),
       console_errors: [],
       screenshot: screenshotPath,

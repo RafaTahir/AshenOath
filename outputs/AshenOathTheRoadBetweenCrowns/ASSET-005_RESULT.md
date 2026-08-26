@@ -2,7 +2,7 @@
 
 ## Status
 
-`functional_but_incomplete`
+`verified`
 
 The runtime now has one explicit ASSET-005 acceptance manifest. It records
 source URLs, CC0 license files, exact bytes and SHA-256 values for processed
@@ -37,9 +37,10 @@ blocked from visual approval until their rendered identity gates pass.
 - Runtime packs: PASS - 6 packs within the 100 MB budget.
 - Python syntax compilation: PASS for `verify_asset_005.py`.
 - `git diff --check`: PASS, with expected Git line-ending notices only.
-- Godot 4.6.3 is now provisioned in the external runtime cache. Graphical
-  runtime, screenshots, packed Web export, and browser checks were not run as
-  part of ASSET-005 and remain open for later acceptance tickets.
+- Godot 4.6.3 is provisioned in the external runtime cache. The Milestone-A
+  packed Web export and browser checks pass; final visual approval for the ten
+  blocked fallback roles remains intentionally assigned to later character and
+  world tickets.
 
 ## Changed Views
 

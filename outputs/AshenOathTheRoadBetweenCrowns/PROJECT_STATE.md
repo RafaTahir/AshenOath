@@ -2,23 +2,26 @@
 
 ## Masterpiece Rebuild Status - 2026-08-26
 
-The current production checkpoint is `59e982a`, synchronized with
-`origin/main`, tracked `web/`, and the Vercel Web output after the Milestone B
-promotion. The `codex/masterpiece-rebuild` branch is the cumulative
-development line. The project is not claiming final Soul Rebuild quality: the
-current runtime still has provisional character and boss mappings,
-procedural/blockout world presentation, external runtime-pack candidates that
-are not yet mounted except for the campaign pack in the new Web candidate,
-incomplete later exterior-seam
-presentation, scratch voice delivery, and an
-unverified visual gate. The development branch now contains the first
-player-facing bow/ammunition/shop slice: three capped arrow types, target-aware
-wall-clipped release, Tor's Forge, Mira's Apothecary, persistent purchases, and
-the Greyfen emergency-arrow fallback. It is not yet Web-export or screenshot
-accepted for the bow slice; Godot 4.6.3 is now provisioned in the external
-runtime cache, so graphical acceptance is the next open gate. Historical ticket
-result documents are retained as development evidence and must not be read as
-approval of those open visual or player-facing defects.
+The current production checkpoint remains `59e982a` until the Milestone A
+promotion is completed. The cumulative `codex/masterpiece-rebuild` branch now
+contains the verified Milestone A fast-boot and runtime-pack candidate. The
+candidate uses a small embedded base PCK plus five hash-verified streamed Web
+packs, keeps the HTML Crow Flight shell, and reaches Greyfen through real
+focused keyboard input in Chrome and Edge without console or resource errors.
+Final character, monster, world, audio, and campaign visual quality remain
+later milestone work; historical result documents below are evidence only and
+do not silently approve those open presentation items.
+
+### Current Milestone A candidate
+
+The final A gate passed on 2026-08-26: all 21 configured implementation,
+runtime, pack, streaming, export, packed-startup, and browser gates passed.
+The Web candidate is 89.43 MB across 12 files and its root PCK hash is
+`0E819446442435F703C253D6AD0C3AF892C8D5EA9F680BD7A0DA7AAE6101E6DF`.
+Chrome measured 8.30 s engine-ready / 5.81 s New Game event and Edge measured
+9.07 s / 6.32 s at 1280x720 WebGL2; both had no console errors. The isolated
+software-browser process-tree readings are diagnostics, while JavaScript heap
+remained below 450 MB. The detailed record is `MILESTONE-A_RESULT.md`.
 
 ### Current truth boundary - 2026-08-26
 
@@ -65,22 +68,21 @@ rollback. Production `main`, tracked `web/`, and Vercel remain unchanged until
 the verified Milestone B promotion.
 
 STREAM-003 is now implemented on top of that checkpoint. The runtime can
-queue, download, verify, cache, mount, retry, cancel, and retire split packs,
-while empty manifest URLs preserve the current embedded fallback. Hosting and
-production URL wiring remain open for the later loading milestone.
+queue, download, verify, cache, mount, retry, cancel, and retire split packs.
+The Milestone A candidate publishes five relative Web pack URLs beside the
+root runtime; the embedded base PCK remains the fallback when a pack is not
+available.
 
-The remaining Milestone-A boot work is now implemented on the development
-branch. BOOT-003 keeps Web on one immediate HTML-to-menu path and excludes the
-QA telemetry script from the production Web preset. LOADGAME-002 formalizes
-Crow Flight as the keyboard, pointer/touch, gamepad, and reduced-motion wait
-activity. LOAD-QA-002 adds deterministic boot timing telemetry plus pack
-metadata, fallback, and cache-contract checks. The full Milestone-A aggregate
-gate passed, including packed startup and Chrome/Edge browser smoke. It remains
-functional-but-incomplete for release because cold engine readiness measured
-42.94 seconds in Chrome and 27.11 seconds in Edge, New Game measured 4.79-6.22
-seconds after the Greyfen readiness point, and production pack URLs are still
-empty. Production `main`, tracked `web/`, and Vercel remain unchanged. See
-`MILESTONE-A_RESULT.md` for the authoritative result.
+The Milestone-A boot work is complete on the development branch. BOOT-003 keeps
+one immediate HTML-to-menu path and excludes QA telemetry from the production
+Web preset. LOADGAME-002 provides the keyboard, pointer/touch, gamepad, score,
+and reduced-motion Crow Flight activity. LOAD-QA-002 adds deterministic boot
+telemetry plus pack metadata, fallback, and cache checks. The final Milestone-A
+aggregate gate passed, including packed startup and Chrome/Edge browser smoke.
+The candidate is 89.43 MB across 12 files. Cold engine readiness measured
+8.30 s in Chrome and 9.07 s in Edge; the later product tickets retain the
+8-second typical-target follow-up and the software-browser frame-time caveat.
+See `MILESTONE-A_RESULT.md` for the authoritative result.
 
 ### ASSET-005 runtime asset boundary - 2026-08-26
 

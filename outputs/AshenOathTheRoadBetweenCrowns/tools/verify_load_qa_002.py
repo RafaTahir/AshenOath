@@ -10,6 +10,7 @@ from pathlib import Path
 
 
 PACK_IDS = {"base", "opening", "campaign", "characters", "monsters", "audio"}
+REQUIRED_EXTERNAL_PACKS = {"opening", "campaign", "characters", "monsters", "audio"}
 MAX_BYTES = 100 * 1024 * 1024
 
 
@@ -61,7 +62,22 @@ def main() -> int:
             errors.append(f"{pack_id} candidate byte metadata disagrees between manifests")
         if str(pack.get("candidate_sha256", "")).lower() != str(candidate.get("sha256", "")).lower():
             errors.append(f"{pack_id} candidate hash metadata disagrees between manifests")
-        if str(pack.get("url", "")).strip():
+
+        configured_url = str(pack.get("url", "")).strip()
+        status = str(pack.get("status", ""))
+        if pack_id in REQUIRED_EXTERNAL_PACKS:
+            if not configured_url:
+                errors.append(f"{pack_id} has no production URL for its streamed runtime pack")
+            if status != "streamed_web_candidate":
+                errors.append(f"{pack_id} is not marked as a streamed Web candidate")
+            if int(pack.get("bytes", 0)) != int(candidate.get("bytes", 0)):
+                errors.append(f"{pack_id} production byte metadata disagrees with its candidate")
+            if str(pack.get("sha256", "")).lower() != str(candidate.get("sha256", "")).lower():
+                errors.append(f"{pack_id} production hash metadata disagrees with its candidate")
+        elif configured_url or not status.startswith("embedded"):
+            errors.append("base must remain the embedded startup pack")
+
+        if configured_url:
             diagnostics.append(f"{pack_id}: external URL configured")
         else:
             diagnostics.append(f"{pack_id}: embedded/cache fallback active")
@@ -116,7 +132,7 @@ def main() -> int:
                 errors.append(f"external candidate has no GDPC header: {pack_id}")
         diagnostics.append("external candidate directory verified")
     else:
-        diagnostics.append("external candidate directory not supplied; metadata and embedded fallback verified")
+        diagnostics.append("external candidate directory not supplied; metadata verified")
 
     report = {
         "schema_version": 1,

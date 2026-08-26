@@ -2,12 +2,13 @@
 
 ## Status
 
-`functional_but_incomplete`
+`verified`
 
 Six real Godot PCK candidates now export deterministically from named runtime
 pack presets. They are verified outside the repository and remain external
-until `STREAM-003` mounts them transactionally. The current production Web
-artifact is unchanged.
+artifacts for the source tree. The current Web candidate includes the five
+non-base packs beside the root runtime; the base pack remains embedded as the
+startup fallback.
 
 ## Changes
 
@@ -43,7 +44,8 @@ not in tracked `web/` or the production PCK:
 | monsters | 1.48 MB | `e5cd7162e3f347bb8e36584d50805ead4844bcbf2f379e188a7bce7e398aa158` |
 | audio | 2.46 MB | `ca06c482c7c5620fbdd19fcdfa5439e0eeb3f23b26277bf068393bb587274bf5` |
 
-Total candidate bytes: `84,428,916` (`80.52 MB`).
+Total candidate bytes: `55,217,080` (`52.66 MB`) for the external candidate
+set used by this checkpoint.
 
 ## Verification
 

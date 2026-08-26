@@ -2,7 +2,7 @@
 
 ## Status
 
-`functional_but_incomplete`
+`verified`
 
 QA-013 now has a machine-readable baseline ledger for loading, transitions,
 zone performance, memory, node counts, draw calls, primitives, and the nine

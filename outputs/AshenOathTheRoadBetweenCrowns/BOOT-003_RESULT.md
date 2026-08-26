@@ -2,7 +2,7 @@
 
 ## Status
 
-`functional_but_incomplete` pending the Milestone-A browser/export release gate.
+`verified` for the Milestone-A boot contract.
 
 ## Changes
 
@@ -22,10 +22,11 @@
 
 ## Limitations
 
-The current playable source remains an embedded PCK. Cold engine readiness was
-measured at 42.94 seconds in Chrome and 27.11 seconds in Edge, above the
-8-second typical and 12-second hard targets. Hosted split-pack URLs and
-production deployment remain intentionally deferred.
+The current candidate uses an embedded base PCK plus five relative streamed
+packs. Cold engine readiness measured 8.30 seconds in Chrome and 9.07 seconds
+in Edge; the 8-second typical target remains a documented optimization
+follow-up, while the 12-second hard ceiling passed. Production promotion is
+the remaining milestone action.
 
 ## Running Steps
 

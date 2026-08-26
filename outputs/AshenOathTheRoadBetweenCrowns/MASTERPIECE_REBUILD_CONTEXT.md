@@ -4,8 +4,10 @@ This is the active implementation context for the 66-ticket Masterpiece Rebuild.
 The historical production baseline was the synchronized `main` checkpoint
 from `RELEASE-004`; the current production checkpoint is recorded below.
 The current branch is `codex/masterpiece-rebuild`, and the current production
-checkpoint after Milestone B promotion is `59e982a` (the Web artifact itself
-was exported in `0b4e317`).
+checkpoint after Milestone B promotion is `59e982a` until the Milestone A
+candidate is promoted. The current A candidate is an 89.43 MB, 12-file Web
+export with root PCK SHA-256
+`0E819446442435F703C253D6AD0C3AF892C8D5EA9F680BD7A0DA7AAE6101E6DF`.
 
 ## Truth boundary
 
@@ -13,12 +15,11 @@ The game is functionally broad but visually and architecturally provisional.
 The following are explicitly unfinished until their rendered and player-facing
 acceptance gates pass:
 
-- real split Web packs and low-startup boot; the Milestone B candidate now
-  mounts the campaign pack on demand, while the remaining packs are still
-  external candidates and the cold browser target remains open;
-- the immediate Web boot shell and Crow Flight wait activity are now implemented
-  and have dedicated acceptance gates; the current embedded-PCK fallback remains
-  deliberate until hosted pack URLs are promoted;
+- the cold browser target still needs further loading optimization; the current
+  candidate has real relative opening, campaign, character, monster, and audio
+  packs beside the root runtime, with the embedded base PCK as fallback;
+- the immediate Web boot shell, Crow Flight wait activity, and focused keyboard
+  startup path are implemented and pass the current browser gate;
 - later-zone visual reconstruction beyond the now-playable seamless exterior
   sectors;
 - final human, monster, boss, weapon, and equipment presentation;
@@ -26,12 +27,11 @@ acceptance gates pass:
   implemented on the development branch but still needs graphical and packed-Web
   acceptance;
 - PACK-003 produces six real, hash-verified external PCK candidates totaling
-  55.58 MB. The current Web candidate stages the 0.84 MB campaign pack beside
-  the seven root runtime files; the other packs remain external candidates;
+  55,217,080 bytes. The current Web candidate stages five streamed packs beside
+  the root runtime; the six-pack candidate set remains outside source control;
 - STREAM-003 implements the download-to-temp, hash/size validation, cache,
   local mount, retry, cancellation, progress, and embedded-fallback lifecycle.
-  The campaign manifest URL is now `packs/campaign.pck` for the candidate;
-  other pack URLs remain empty until their later loading tickets;
+  The A candidate uses relative pack URLs that resolve beside the Web export;
 - the ASSET-005 runtime boundary is now explicit: Captain Senn's processed
   Ranger is the only approved role, while ten route-visible roles remain
   playable but visually blocked fallbacks;
@@ -42,11 +42,12 @@ acceptance gates pass:
 - contact-driven combat and human-reviewed voice delivery;
 - complete real-input campaign and final production evidence.
 
-Milestone A's aggregate implementation/export/browser gate passed on
-2026-08-26. It is still not release-ready: Chrome/Edge cold engine readiness
-measured 42.94/27.11 seconds, New Game measured 4.79/6.22 seconds after the
-Greyfen readiness point, and production pack URLs remain empty. See
-`MILESTONE-A_RESULT.md` for the current evidence and blockers.
+Milestone A's final aggregate implementation/export/browser gate passed on
+2026-08-26. Chrome/Edge engine readiness measured 8.30/9.07 seconds and the
+candidate reached Greyfen with no browser console or resource errors. The
+8-second typical-startup follow-up, software-browser event-to-frame timing,
+and later visual quality work remain explicitly documented. See
+`MILESTONE-A_RESULT.md` for the current evidence.
 
 Existing result documents are historical evidence only. They do not override a
 current `visually_rejected`, `functional_but_incomplete`, or `blocked` status.

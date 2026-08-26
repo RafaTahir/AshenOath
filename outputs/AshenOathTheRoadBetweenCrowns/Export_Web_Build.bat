@@ -27,15 +27,21 @@ mkdir "%OUT_DIR%"
 if errorlevel 1 exit /b %errorlevel%
 
 set "PACK_DIR=%ASHEN_OATH_PACK_DIRECTORY%"
-if not defined PACK_DIR set "PACK_DIR=%PROJECT_DIR%.release-gate\runtime-packs"
-if not exist "%PACK_DIR%\campaign.pck" (
-  echo Building the verified campaign runtime pack...
-  powershell -ExecutionPolicy Bypass -File "%PROJECT_DIR%tools\build_runtime_packs.ps1" -OutputDirectory "%PACK_DIR%" -Force
+if not defined PACK_DIR set "PACK_DIR=%PROJECT_DIR%\.release-gate\runtime-packs"
+set "MISSING_PACK="
+for %%P in (opening campaign characters monsters audio) do (
+  if not exist "%PACK_DIR%\%%P.pck" set "MISSING_PACK=1"
+)
+if defined MISSING_PACK (
+  echo Building the verified runtime packs...
+  powershell -ExecutionPolicy Bypass -File "%PROJECT_DIR%\tools\build_runtime_packs.ps1" -OutputDirectory "%PACK_DIR%" -Force
   if errorlevel 1 exit /b %errorlevel%
 )
 if not exist "%OUT_DIR%\packs" mkdir "%OUT_DIR%\packs"
-copy /Y "%PACK_DIR%\campaign.pck" "%OUT_DIR%\packs\campaign.pck" >nul
-if errorlevel 1 exit /b %errorlevel%
+for %%P in (opening campaign characters monsters audio) do (
+  copy /Y "%PACK_DIR%\%%P.pck" "%OUT_DIR%\packs\%%P.pck" >nul
+  if errorlevel 1 exit /b %errorlevel%
+)
 
 "%PYTHON%" "%PROJECT_DIR%\tools\verify_web_export.py" "%OUT_DIR%"
 if errorlevel 1 exit /b %errorlevel%

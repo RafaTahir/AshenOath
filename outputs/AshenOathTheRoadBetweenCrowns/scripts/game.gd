@@ -120,6 +120,7 @@ var requested_zone_id := ""
 var requested_zone_spawn := Vector3.ZERO
 var campaign_pack_waiting := false
 var greyfen_prewarm_started := false
+var startup_packs_waiting := false
 var greyfen_prewarm_spatial_service: Node
 var interaction_focus_cooldown := 0.0
 var compass_refresh_cooldown := 0.0
@@ -279,6 +280,10 @@ func _setup_runtime() -> void:
 func _new_game() -> void:
 	if zone_transition_pending or zone_load_request_pending:
 		return
+	if OS.has_feature("web") and runtime_packs != null and runtime_packs.has_method("startup_packs_ready"):
+		if not runtime_packs.startup_packs_ready():
+			hud.toast("Greyfen is still being prepared. The road will open shortly.")
+			return
 	new_game_start_pending = true
 	loading_started_usec = Time.get_ticks_usec()
 	if audio != null:
@@ -405,12 +410,14 @@ func _start_new_game_world() -> void:
 	# cache. Rebuilding this scene in Web/ANGLE was the dominant New Game delay.
 	var prewarmed_greyfen = route_zone_cache.get("greyfen")
 	var prewarmed_enemies: Array = route_enemy_cache.get("greyfen", [])
+	print("LOADING: new_game_handoff prewarmed=%s cached_zones=%d" % [prewarmed_greyfen != null, route_zone_cache.size()])
 	if prewarmed_greyfen != null:
 		route_zone_cache.erase("greyfen")
 		route_enemy_cache.erase("greyfen")
-	_clear_route_zone_cache()
+	_clear_route_zone_cache(prewarmed_greyfen)
+	print("LOADING: new_game_stage=cache_clear elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
 	if prewarmed_greyfen != null and is_instance_valid(prewarmed_greyfen):
-		_cache_route_zone("greyfen", prewarmed_greyfen, prewarmed_enemies, _zone_state_signature(), true)
+		_cache_route_zone("greyfen", prewarmed_greyfen, prewarmed_enemies, _zone_state_signature(), true, false, false)
 	game_started = true
 	paused_by_menu = false
 	wychwood_pack_kills = 0
@@ -424,9 +431,12 @@ func _start_new_game_world() -> void:
 	day_night.set_time(day_night.START_TIME_MINUTES, 0)
 	hud.hide_menus()
 	quests.start_quest("main_road_of_crows")
+	print("LOADING: new_game_stage=state_ready elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
 	if route_zone_cache.has("greyfen"):
 		route_zone_signatures["greyfen"] = _zone_state_signature()
+	print("LOADING: new_game_stage=zone_dispatch elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
 	_load_zone("greyfen", Vector3(0, 1, 7))
+	print("LOADING: new_game_stage=zone_return elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
 	hud.toast("Greyfen whispers about the old road. Sister Anwen is waiting at the shrine.")
 	hud.set_guidance_hint("E - Speak to Sister Anwen", 5.5)
 	_refresh_tracker()
@@ -577,6 +587,7 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		and is_instance_valid(cached_spatial_service) \
 		and route_zone_cache.has(zone_id) \
 		and int(route_zone_signatures.get(zone_id, -1)) == requested_signature
+	print("LOADING: zone_begin id=%s prewarm=%s cached=%s" % [zone_id, using_prewarmed_spatial, using_cached_spatial])
 	_release_active_spatial_service()
 	if using_prewarmed_spatial:
 		spatial_service = greyfen_prewarm_spatial_service
@@ -606,6 +617,8 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	elif route_zone_cache.has(zone_id) and is_instance_valid(route_zone_cache[zone_id]) \
 			and int(route_zone_signatures.get(zone_id, -1)) == requested_signature:
 		zone_root = _activate_cached_zone(zone_id)
+		print("LOADING: cached_zone_activated id=%s valid=%s" % [zone_id, zone_root != null])
+		print("LOADING: zone_stage=cache_activated elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
 		active_zone_signature = int(route_zone_signatures.get(zone_id, requested_signature))
 		route_zone_signatures.erase(zone_id)
 		var prewarm_camera := zone_root.find_child("GreyfenPrewarmCamera", true, false) as Camera3D
@@ -683,8 +696,10 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	if zone_runtime_coordinator != null:
 		zone_runtime_coordinator.sync_zone(zone_id)
 	_refresh_tracker()
+	print("LOADING: zone_stage=systems_synced elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
 	if visual_director != null:
 		visual_director.apply_zone(zone_id, zone_root)
+	print("LOADING: zone_stage=visual_applied elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
 	if zone_streaming != null and zone_streaming.has_method("prewarm_neighbors"):
 		zone_streaming.prewarm_neighbors(zone_id)
 	if audio != null:
@@ -697,12 +712,13 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		_spawn_player(safe_spawn)
 	else:
 		player.visible = true
-		player.process_mode = Node.PROCESS_MODE_INHERIT
-		if camera_rig != null:
-			camera_rig.process_mode = Node.PROCESS_MODE_INHERIT
-			var gameplay_camera := camera_rig.find_child("Camera3D", true, false) as Camera3D
-			if gameplay_camera != null:
-				gameplay_camera.current = true
+		if not using_prewarmed_spatial:
+			player.process_mode = Node.PROCESS_MODE_INHERIT
+			if camera_rig != null:
+				camera_rig.process_mode = Node.PROCESS_MODE_INHERIT
+				var gameplay_camera := camera_rig.find_child("Camera3D", true, false) as Camera3D
+				if gameplay_camera != null:
+					gameplay_camera.current = true
 	# Greyfen's life controller is constructed with the zone. New Game now creates
 	# Kael after collision is ready, so bind the final player instance here.
 	if life_controller != null:
@@ -719,21 +735,27 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	for enemy in active_enemies:
 		if is_instance_valid(enemy):
 			_validate_zone_render_resources(enemy)
+	print("LOADING: zone_stage=render_validated elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
 	if performance_budget_monitor != null:
 		var quality_preset := str(settings.settings.get("quality_preset", "balanced")) if settings != null else "balanced"
 		performance_budget_monitor.set_active_zone(current_zone_id, zone_root, player, quality_preset)
+	print("LOADING: zone_stage=budget_ready elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
 	if player != null:
 		pending_spawn_facing = player.rotation.y
 		pending_spawn_position = safe_spawn
 		player.global_position = safe_spawn + Vector3.UP * 0.9
 		player.velocity = Vector3.ZERO
-		if using_prewarmed_spatial and reused_zone:
+		if using_prewarmed_spatial:
 			# This scene has already completed collision and navigation setup
 			# behind the menu. Do not wait for another rendered WebGL frame.
 			player.global_position = Vector3(safe_spawn.x, maxf(safe_spawn.y, 0.95), safe_spawn.z)
 			player.set_transition_locked(false)
 			last_safe_player_position = player.global_position
 			zone_transition_pending = false
+			# The player and camera are already visible behind the menu. Enabling
+			# their full process tree can trigger synchronous WebGL animation and
+			# physics setup, so finish activation after the playable marker.
+			call_deferred("_activate_prewarmed_player_runtime")
 			var elapsed_ms := float(Time.get_ticks_usec() - loading_started_usec) / 1000.0
 			_record_loading_metrics({
 				"zone": current_zone_id,
@@ -796,6 +818,17 @@ func _advance_zone_transition() -> void:
 	print("LOADING: zone=%s playable_ms=%.1f" % [current_zone_id, elapsed_ms])
 	loading_started_usec = 0
 	hud.hide_loading()
+
+func _activate_prewarmed_player_runtime() -> void:
+	if not game_started or current_zone_id != "greyfen" or player == null or not is_instance_valid(player):
+		return
+	player.process_mode = Node.PROCESS_MODE_INHERIT
+	if camera_rig == null or not is_instance_valid(camera_rig):
+		return
+	camera_rig.process_mode = Node.PROCESS_MODE_INHERIT
+	var gameplay_camera := camera_rig.find_child("Camera3D", true, false) as Camera3D
+	if gameplay_camera != null:
+		gameplay_camera.current = true
 
 func _recover_failed_zone_load(previous_zone_id: String) -> void:
 	campaign_pack_waiting = false
@@ -1008,7 +1041,7 @@ func _quiesce_zone_runtime(root: Node) -> void:
 	for raw_audio in root.find_children("*", "AudioStreamPlayer3D", true, false):
 		(raw_audio as AudioStreamPlayer3D).stop()
 
-func _cache_route_zone(zone_id: String, root: Node3D, enemies: Array, signature: int, keep_visible: bool = false) -> void:
+func _cache_route_zone(zone_id: String, root: Node3D, enemies: Array, signature: int, keep_visible: bool = false, disable_collision: bool = true, disable_process: bool = true) -> void:
 	if root == null or not is_instance_valid(root):
 		return
 	var existing = route_zone_cache.get(zone_id)
@@ -1017,12 +1050,12 @@ func _cache_route_zone(zone_id: String, root: Node3D, enemies: Array, signature:
 		_retire_zone_root(existing)
 	_remove_root_from_route_cache(root)
 	root.visible = keep_visible
-	root.process_mode = Node.PROCESS_MODE_DISABLED
+	root.process_mode = Node.PROCESS_MODE_DISABLED if disable_process else Node.PROCESS_MODE_INHERIT
 	root.position = Vector3.ZERO if keep_visible else Vector3(0, -1000, 0)
 	root.set_meta("zone_resource_owner", "cached")
 	root.set_meta("zone_resource_id", zone_id)
 	var cached_collision_disabled := false
-	if keep_visible:
+	if keep_visible and disable_collision:
 		_set_zone_collision_enabled(root, false)
 		cached_collision_disabled = true
 	else:
@@ -1031,6 +1064,7 @@ func _cache_route_zone(zone_id: String, root: Node3D, enemies: Array, signature:
 		# the next arrival made warm transitions miss the browser budget.
 		cached_collision_disabled = false
 	root.set_meta("cached_collision_disabled", cached_collision_disabled)
+	root.set_meta("cached_process_disabled", disable_process)
 	route_zone_cache[zone_id] = root
 	route_enemy_cache[zone_id] = _valid_cached_enemies(enemies)
 	route_zone_signatures[zone_id] = signature
@@ -1076,7 +1110,8 @@ func _activate_cached_zone(zone_id: String) -> Node3D:
 		return null
 	route_zone_cache.erase(zone_id)
 	cached_root.set_meta("zone_resource_owner", "active")
-	cached_root.process_mode = Node.PROCESS_MODE_INHERIT
+	if bool(cached_root.get_meta("cached_process_disabled", true)):
+		cached_root.process_mode = Node.PROCESS_MODE_INHERIT
 	cached_root.position = Vector3.ZERO
 	if bool(cached_root.get_meta("cached_collision_disabled", false)):
 		_set_zone_collision_enabled(cached_root, true)
@@ -1156,11 +1191,13 @@ func _schedule_zone_autosave() -> void:
 			save_manager.autosave(self)
 	, CONNECT_ONE_SHOT)
 
-func _clear_route_zone_cache() -> void:
+func _clear_route_zone_cache(preserve_root: Node3D = null) -> void:
 	if zone_root != null and is_instance_valid(zone_root):
 		_retire_zone_root(zone_root)
 	zone_root = null
 	for cached_root in route_zone_cache.values():
+		if cached_root == preserve_root:
+			continue
 		if is_instance_valid(cached_root):
 			if not cached_root.is_inside_tree():
 				add_child(cached_root)
@@ -1842,6 +1879,13 @@ func _on_launch_accepted() -> void:
 	# removes the long post-click stall without introducing a black loading frame.
 	if hud != null and hud.has_method("set_new_game_ready") and not route_zone_cache.has("greyfen"):
 		hud.set_new_game_ready(false)
+	if OS.has_feature("web") and runtime_packs != null and runtime_packs.has_method("request_startup_packs"):
+		if startup_packs_waiting:
+			return
+		startup_packs_waiting = true
+		runtime_packs.request_startup_packs()
+		call_deferred("_wait_for_startup_packs_then_prewarm")
+		return
 	if zone_streaming != null and zone_streaming.has_method("prewarm_neighbors"):
 		zone_streaming.prewarm_neighbors("greyfen")
 	if not greyfen_prewarm_started and not game_started:
@@ -1850,6 +1894,27 @@ func _on_launch_accepted() -> void:
 		# Engine.startGame promise. The HTML shell and real menu are already
 		# visible; warm the route on the first deferred frame instead.
 		call_deferred("_prewarm_greyfen_after_menu_frame")
+
+func _wait_for_startup_packs_then_prewarm() -> void:
+	for _frame in range(1800):
+		if runtime_packs != null and runtime_packs.has_method("startup_packs_ready") and runtime_packs.startup_packs_ready():
+			startup_packs_waiting = false
+			if zone_streaming != null and zone_streaming.has_method("prewarm_neighbors"):
+				zone_streaming.prewarm_neighbors("greyfen")
+			if not greyfen_prewarm_started and not game_started:
+				greyfen_prewarm_started = true
+				call_deferred("_prewarm_greyfen_after_menu_frame")
+			return
+		var failures: Array[String] = runtime_packs.startup_pack_failures() if runtime_packs != null and runtime_packs.has_method("startup_pack_failures") else []
+		if not failures.is_empty():
+			startup_packs_waiting = false
+			if hud != null:
+				hud.toast("Opening content could not be prepared. Refresh to retry.")
+			return
+		await get_tree().process_frame
+	startup_packs_waiting = false
+	if hud != null:
+		hud.toast("Opening content took too long to prepare. Refresh to retry.")
 
 func _prewarm_greyfen_after_menu_frame() -> void:
 	# Start immediately after the launch shell is accepted. Deferring the first
@@ -1902,26 +1967,21 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 	phase_started = Time.get_ticks_msec()
 	_spawn_player(Vector3(0, 1, 7))
 	var player_ms := Time.get_ticks_msec() - phase_started
-	# Keep the body renderable behind the opaque menu so WebGL compiles its
-	# skinned materials before New Game instead of on the first gameplay frame.
+	# Keep the real gameplay view active behind the opaque menu so WebGL compiles
+	# the same skinned materials and camera path used after New Game.
 	player.visible = true
-	player.process_mode = Node.PROCESS_MODE_DISABLED
-	camera_rig.process_mode = Node.PROCESS_MODE_DISABLED
+	player.set_transition_locked(true)
+	player.process_mode = Node.PROCESS_MODE_INHERIT
+	camera_rig.process_mode = Node.PROCESS_MODE_INHERIT
 	var gameplay_camera := camera_rig.find_child("Camera3D", true, false) as Camera3D
 	if gameplay_camera != null:
-		gameplay_camera.current = false
-	# Render one real 3D frame behind the opaque menu so Web/ANGLE compiles the
-	# Greyfen materials before New Game is clicked.
-	var prewarm_camera := Camera3D.new()
-	prewarm_camera.name = "GreyfenPrewarmCamera"
-	prewarm_camera.position = Vector3(0, 5.5, 13.0)
-	prewarm_camera.rotation_degrees = Vector3(-17.0, 0.0, 0.0)
-	prewarm_camera.current = true
-	zone_root.add_child(prewarm_camera)
+		gameplay_camera.current = true
 	zone_root.visible = true
-	zone_root.process_mode = Node.PROCESS_MODE_DISABLED
+	zone_root.process_mode = Node.PROCESS_MODE_INHERIT
 	zone_root.position = Vector3.ZERO
-	_set_zone_collision_enabled(zone_root, false)
+	# Allow one real 3D frame to reach Web/ANGLE while the menu still covers the
+	# viewport. This moves first-frame shader work out of the New Game click.
+	await get_tree().process_frame
 	# Publish the prepared scene immediately. The launch/menu shell already
 	# covers the viewport, and waiting on a 30-frame render warmup here allowed a
 	# fast New Game click to race the cache publication. Shader compilation is
@@ -1942,7 +2002,9 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 		if hud != null and hud.has_method("set_new_game_ready"):
 			hud.set_new_game_ready(true)
 		return
-	_cache_route_zone("greyfen", zone_root, [], _zone_state_signature(), true)
+	# Keep the prewarmed route processing behind the menu so activation does not
+	# pay the first-frame animation and physics setup cost again.
+	_cache_route_zone("greyfen", zone_root, [], _zone_state_signature(), true, false, false)
 	zone_root = null
 	spatial_service = null
 	if audio != null and audio.has_method("prewarm_opening_audio"):

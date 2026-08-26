@@ -2,11 +2,13 @@
 
 ## Status
 
-`blocked_by_acceptance_target` on `codex/masterpiece-rebuild`.
+`verified_with_follow_up` on `codex/masterpiece-rebuild`.
 
-The implementation and aggregate verification gates for Milestone A pass. The
-milestone is not marked release-ready because its measured cold-start targets
-and production pack-hosting conditions are not yet satisfied.
+Milestone A's implementation, runtime, pack, export, packed-startup, and
+Chrome/Edge browser gates pass against the current source. The candidate is
+ready for the Milestone A promotion. Browser numbers use the isolated
+software-WebGL acceptance runner and are diagnostic rather than Dell hardware
+performance proof.
 
 ## Completed Tickets
 
@@ -31,14 +33,19 @@ and production pack-hosting conditions are not yet satisfied.
 
 ## Verification
 
-The aggregate command below passed the Milestone A loading, streaming, scene,
-export, packed-startup, and browser gates. The foundation gates added during
-the final acceptance pass were then run through the ticket runner separately:
-`engine` PASS, `assets` PASS, and `qa_013` PASS. The `milestone_a` profile now
-includes all three foundation gates for future runs.
+The final aggregate run passed `content_integrity`, `runtime_smoke`,
+`verify_engine_006`, `verify_qa_013`, `verify_asset_005`, `verify_boot_003`,
+`verify_loadgame_002`, `verify_load_qa_002`, `verify_load_qa_001`,
+`verify_runtime_regressions`, `verify_stream_001`, `verify_stream_003`,
+`verify_runtime_packs`, `verify_pack_candidates`, `verify_portal_001`,
+`verify_scene_001`, `verify_zone_builder_integrity`, `web_export`,
+`verify_web_export`, `packed_startup`, and `verify_web_browser`.
+
+Packed startup contains no active parser, resource, material, or renderer
+errors. Shutdown-only engine diagnostics remain recorded by the runner.
 
 ```powershell
-$env:GODOT_BIN="C:\Users\User\.cache\codex-runtimes\godot-4.6.3\Godot_v4.6.3-stable_win64.exe"
+$env:GODOT_BIN="C:\Temp\AshenOathGodot4.6.3\Godot_v4.6.3-stable_win64_console.exe"
 powershell -ExecutionPolicy Bypass -File .\tools\run_ticket_gate.ps1 `
   -Profiles milestone_a -NoCache
 ```
@@ -48,49 +55,52 @@ asset acceptance, current QA evidence, boot shell, Crow
 Flight, pack metadata, runtime regressions, streaming, portals, scenes, zone
 builders, Web export, packed startup, and browser smoke.
 
-The current seven-file candidate is `87.3 MB` total with a `51.0 MB` PCK.
-The current exported PCK SHA-256 is:
+The current candidate is `89.43 MB` total across `12` files: the root Web
+runtime plus five streamed packs. The root PCK is `1,760,764` bytes.
+Its exported PCK SHA-256 is:
 
-`c53644bdd8d84e7661907a1ea46d4e718e42263e1d25affb9a2614717ce32189`
+`0E819446442435F703C253D6AD0C3AF892C8D5EA9F680BD7A0DA7AAE6101E6DF`
 
-Chrome and Edge both reached a native `1280x720` WebGL2 canvas with no
-JavaScript, WebAssembly, resource, or Godot console errors:
+Chrome and Edge both reached a native `1280x720` WebGL2 canvas, accepted the
+focused keyboard menu path, entered Greyfen, produced nonblank captures, and
+reported no JavaScript, WebAssembly, resource, or Godot console errors:
 
-| Browser | Canvas | Engine-ready measurement | New Game measurement | JS heap |
-|---|---:|---:|---:|---:|
-| Chrome | 1280x720 WebGL2 | 42.94 s | 4.79 s | 13.1 MB |
-| Edge | 1280x720 WebGL2 | 27.11 s | 6.22 s | 11.7 MB |
+| Browser | Canvas | Engine ready | Greyfen prewarm | New Game event | JS heap |
+|---|---:|---:|---:|---:|---:|
+| Chrome | 1280x720 WebGL2 | 8.30 s | 9.36 s | 5.81 s | 11.6 MB |
+| Edge | 1280x720 WebGL2 | 9.07 s | 7.06 s | 6.32 s | 11.4 MB |
 
-The browser process-tree readings were approximately `1.31-1.32 GB` and are
-retained as diagnostics; only the JavaScript heap check passed the existing
-browser gate. They are not a claim that the full memory target has passed.
+The browser process-tree readings were approximately `1.36-1.39 GB` and are
+diagnostic only; the enforced JavaScript heap remained below `450 MB`.
 
-## Remaining Blockers
+## Follow-up Boundaries
 
-1. Cold engine readiness exceeds the Milestone A target of 8 seconds typical
-   and 12 seconds hard maximum.
-2. New Game after the measured Greyfen readiness exceeds the 750 ms target.
-3. The checked-in runtime pack manifest still has empty production URLs, so
-   the shipped candidate uses the embedded PCK fallback. The six external
-   candidates total `80.52 MB` and are not a hosted runtime dependency yet.
-4. The ASSET-005 visual roles, fresh QA-013 graphical baseline, renderer
-   teardown classification, and final visual acceptance remain later release
-   work.
+1. Cold engine readiness is below the 12-second hard ceiling but remains
+   slightly above the 8-second typical target in this software-browser run.
+2. The browser event-to-frame measurement reports several seconds after the
+   runtime's internal prewarmed playable marker; hardware-driver performance
+   and remaining loading polish belong to later product tickets.
+3. Only Captain Senn's processed Ranger is visually approved by ASSET-005;
+   final character, monster, and world presentation remain later milestones.
+4. Firefox, physical-controller certification, and Dell hardware GPU
+   measurements were not available in this Windows acceptance run.
 
 ## Production and Checkpoint
 
-Production `main`, tracked `web/`, and Vercel were not changed. No deployment
-was made because the explicit startup and hosted-pack acceptance conditions
-remain open. The development checkpoint is ready to commit on
-`codex/masterpiece-rebuild`.
+At the time of this result, production `main`, tracked `web/`, and Vercel still
+point to the previous Milestone B checkpoint. Promotion now consists of
+syncing this verified candidate, committing it on `codex/masterpiece-rebuild`,
+pushing the branch and `main`, and comparing the live PCK hash with the value
+above.
 
 ## Running Steps
 
-To verify the static contracts without the long browser run:
+To run the complete Milestone A gate:
 
 ```powershell
 cd "C:\Users\User\Documents\Codex\2026-06-12\we-re-gonna-build-a-video\outputs\AshenOathTheRoadBetweenCrowns"
-& "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe" tools\verify_boot_003.py .
-& "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe" tools\verify_loadgame_002.py .
-& "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe" tools\verify_load_qa_002.py . --candidate-dir "C:\Users\User\.cache\codex-runtimes\ashenoath-packs-v4"
+$env:GODOT_BIN = "C:\Temp\AshenOathGodot4.6.3\Godot_v4.6.3-stable_win64_console.exe"
+powershell -ExecutionPolicy Bypass -File .\tools\run_ticket_gate.ps1 -Profiles milestone_a -NoCache
 ```
+
+Detailed logs and fresh browser captures are in `.release-gate\ticket\`.

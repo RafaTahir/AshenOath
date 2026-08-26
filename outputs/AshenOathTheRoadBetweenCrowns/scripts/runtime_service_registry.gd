@@ -111,10 +111,18 @@ func configure(owner: Node) -> void:
 	minigames.setup(input_router)
 	mobile_touch.setup(input_router, hud, settings.settings)
 	zone_streaming.setup(owner)
-	# Pack manager is intentionally dormant until a verified split artifact is
-	# present. The embedded PCK remains the current playable source.
+	# The base manager is embedded in the main PCK. On Web, begin the verified
+	# opening downloads immediately so the menu and Crow Flight can cover the
+	# only unavoidable cold-cache wait. Desktop keeps the full project local.
 	if runtime_packs.has_method("request_pack"):
+		if runtime_packs.has_signal("pack_mounted") and audio.has_method("set_runtime_file_assets_available"):
+			runtime_packs.pack_mounted.connect(func(pack_id: String, _path: String):
+				if pack_id == "audio":
+					audio.set_runtime_file_assets_available(true)
+			)
 		runtime_packs.request_pack("base")
+		if OS.has_feature("web") and runtime_packs.has_method("request_startup_packs"):
+			runtime_packs.request_startup_packs()
 	settings.apply_platform_defaults(mobile_touch.touch_capable)
 	input_router.device_changed.connect(func(_device: String):
 		hud.set_input_device(input_router.active_device)

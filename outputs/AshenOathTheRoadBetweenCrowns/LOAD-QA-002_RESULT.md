@@ -2,7 +2,7 @@
 
 ## Status
 
-`functional_but_incomplete` pending the Milestone-A browser/export release gate.
+`verified` for the Milestone-A startup and cache contract.
 
 ## Changes
 
@@ -25,12 +25,12 @@
 ## Limitations
 
 Chrome and Edge browser smoke both reached Greyfen at 1280x720 WebGL2 with no
-console errors. Engine readiness measured 42.94 seconds in Chrome and 27.11
-seconds in Edge; New Game after the Greyfen readiness point measured 4.79 and
-6.22 seconds respectively. These exceed the roadmap cold-start and New Game
-budgets. The checked-in manifest keeps external URLs empty, so production uses
-the embedded PCK fallback; the external v4 candidates remain outside the
-repository until hosting and candidate promotion are complete.
+console errors. Engine readiness measured 8.30 seconds in Chrome and 9.07
+seconds in Edge; New Game event timing measured 5.81 and 6.32 seconds after
+prewarm. The internal prewarmed activation marker completes in roughly 100 ms;
+the software-browser event-to-frame cost and typical cold-start optimization
+remain documented follow-up. The candidate publishes five relative packs and
+keeps the embedded base PCK as fallback.
 
 ## Running Steps
 

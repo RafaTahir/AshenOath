@@ -6,20 +6,6 @@ class_name ZoneSceneCatalog
 ## until their visual, collision, and save contracts are approved.
 
 const MANIFEST_PATH := "res://zone_scene_manifest.json"
-const PACKED_SCENES := {
-	"greyfen": {
-		"gameplay": preload("res://scenes/zones/greyfen_gameplay.tscn"),
-		"decoration": preload("res://scenes/zones/greyfen_decoration.tscn"),
-	},
-	"wychwood": {
-		"gameplay": preload("res://scenes/zones/wychwood_gameplay.tscn"),
-		"decoration": preload("res://scenes/zones/wychwood_decoration.tscn"),
-	},
-	"cemetery": {
-		"gameplay": preload("res://scenes/zones/cemetery_gameplay.tscn"),
-		"decoration": preload("res://scenes/zones/cemetery_decoration.tscn"),
-	},
-}
 const FALLBACK_PATHS := {
 	"greyfen": {
 		"gameplay": "res://scenes/zones/greyfen_gameplay.tscn",
@@ -48,8 +34,10 @@ static func attach(zone_id: String, parent: Node3D) -> Dictionary:
 		var path := str(zone.get(layer, ""))
 		if path == "":
 			continue
-		var packed := PACKED_SCENES.get(zone_id.strip_edges().to_lower(), {}).get(layer) as PackedScene
-		if packed == null and ResourceLoader.exists(path):
+		# Scene layers are part of the opening pack. Dynamic loading keeps them
+		# out of the initial menu PCK while preserving the authored layer API.
+		var packed: PackedScene
+		if ResourceLoader.exists(path):
 			packed = ResourceLoader.load(path) as PackedScene
 		if packed == null:
 			result.ok = false

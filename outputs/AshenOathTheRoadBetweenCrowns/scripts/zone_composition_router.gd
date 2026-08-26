@@ -1,10 +1,11 @@
 extends RefCounted
 
-const GreyfenSection = preload("res://scripts/zones/greyfen_section.gd")
-const RuinsSection = preload("res://scripts/zones/ruins_section.gd")
-const WychwoodSection = preload("res://scripts/zones/wychwood_section.gd")
-
 const CORE_ZONES: Array[String] = ["greyfen", "wychwood", "ruins"]
+const CORE_BUILDER_PATHS := {
+	"greyfen": "res://scripts/zones/greyfen_section.gd",
+	"wychwood": "res://scripts/zones/wychwood_section.gd",
+	"ruins": "res://scripts/zones/ruins_section.gd",
+}
 const CAMPAIGN_ZONES: Array[String] = [
 	"deep_wood", "old_mill", "burned_farmstead", "marsh_crossing", "bandit_road",
 	"vargan_approach", "vargan_court", "record_hall", "undercroft", "assembly", "hart_glade",
@@ -28,13 +29,16 @@ static func build_core(host: Node, zone_id: String) -> Dictionary:
 		return _failure(canonical_id, "unregistered core zone")
 	var context := ZoneBuildContext.new(host, canonical_id)
 	context.record_operation("begin:%s" % canonical_id)
-	match canonical_id:
-		"greyfen":
-			GreyfenSection.new().build(context)
-		"wychwood":
-			WychwoodSection.new().build(context)
-		"ruins":
-			RuinsSection.new().build(context)
+	# Core builders live in the opening runtime pack. Resolve them only after
+	# that pack has mounted so the production menu PCK stays small and the
+	# browser never parses a resource it cannot provide yet.
+	var builder_script: Script = load(str(CORE_BUILDER_PATHS.get(canonical_id, ""))) as Script
+	if builder_script == null:
+		return _failure(canonical_id, "core builder pack is not mounted")
+	var builder = builder_script.new()
+	if builder == null or not builder.has_method("build"):
+		return _failure(canonical_id, "core builder is invalid")
+	builder.build(context)
 	return context.validate()
 
 static func build_campaign(host: Node, zone_id: String) -> Dictionary:

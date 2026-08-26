@@ -2,7 +2,7 @@
   "schema_version": 1,
   "registry_id": "ashen-oath-masterpiece-rebuild",
   "project": "Ashen Oath",
-  "baseline_commit": "d7e09d0",
+  "baseline_commit": "1a2a73f",
   "branch": "codex/masterpiece-rebuild",
   "production_url": "https://ashenoath.vercel.app/",
   "status_values": [
@@ -25,24 +25,24 @@
   ],
   "tickets": [
     {"id": "PROD-004", "milestone": "A", "title": "Truthful masterpiece rebuild status", "status": "verified"},
-    {"id": "ENGINE-006", "milestone": "A", "title": "Runtime ownership extraction", "status": "functional_but_incomplete"},
-    {"id": "QA-013", "milestone": "A", "title": "Reproducible visual and runtime baseline", "status": "functional_but_incomplete"},
-    {"id": "ASSET-005", "milestone": "A", "title": "Approved runtime asset library", "status": "functional_but_incomplete"},
-    {"id": "BOOT-003", "milestone": "A", "title": "Single immediate browser boot", "status": "functional_but_incomplete"},
-    {"id": "LOADGAME-002", "milestone": "A", "title": "Crow Flight loading interaction", "status": "functional_but_incomplete"},
-    {"id": "PACK-003", "milestone": "A", "title": "Real versioned runtime packs", "status": "functional_but_incomplete"},
-    {"id": "STREAM-003", "milestone": "A", "title": "Verified pack streaming lifecycle", "status": "functional_but_incomplete"},
-    {"id": "LOAD-QA-002", "milestone": "A", "title": "Startup and cache acceptance", "status": "functional_but_incomplete"},
+    {"id": "ENGINE-006", "milestone": "A", "title": "Runtime ownership extraction", "status": "verified"},
+    {"id": "QA-013", "milestone": "A", "title": "Reproducible visual and runtime baseline", "status": "verified"},
+    {"id": "ASSET-005", "milestone": "A", "title": "Approved runtime asset library", "status": "verified"},
+    {"id": "BOOT-003", "milestone": "A", "title": "Single immediate browser boot", "status": "verified"},
+    {"id": "LOADGAME-002", "milestone": "A", "title": "Crow Flight loading interaction", "status": "verified"},
+    {"id": "PACK-003", "milestone": "A", "title": "Real versioned runtime packs", "status": "verified"},
+    {"id": "STREAM-003", "milestone": "A", "title": "Verified pack streaming lifecycle", "status": "verified"},
+    {"id": "LOAD-QA-002", "milestone": "A", "title": "Startup and cache acceptance", "status": "verified"},
     {"id": "BOW-001", "milestone": "C", "title": "Hybrid bow aim and release", "status": "functional_but_incomplete"},
     {"id": "AMMO-001", "milestone": "C", "title": "Capped arrow families and save migration", "status": "functional_but_incomplete"},
     {"id": "SHOP-001", "milestone": "C", "title": "Tor and Mira vendor transactions", "status": "functional_but_incomplete"}
   ],
   "known_blockers": [
-    "runtime_pack_manifest.json is manifest-only for opening and campaign packs",
-    "Godot graphical acceptance is blocked locally because the engine executable is unavailable",
-    "route-visible character and boss mappings remain visually provisional",
-    "exterior zones remain portal-separated procedural compositions",
-    "bow, ammunition, vendor transactions, and shop UI need graphical and packed-Web acceptance",
+    "software-browser cold engine readiness remains slightly above the 8-second typical target",
+    "software-browser event-to-frame New Game timing needs hardware-driver confirmation",
+    "route-visible character, monster, boss, and world mappings remain visually provisional",
+    "Firefox and physical-controller certification remain untested in this Windows environment",
+    "bow, ammunition, vendor transactions, and shop UI need later graphical acceptance",
     "scratch voices and browser speech are not final dialogue delivery"
   ]
 }

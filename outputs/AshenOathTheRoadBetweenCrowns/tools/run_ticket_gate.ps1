@@ -322,10 +322,17 @@ foreach ($gate in $gates) {
 			$Project
 		) $gateInputs $cache
 	} elseif ($gate -in @("verify_boot_003", "verify_loadgame_002", "verify_load_qa_002")) {
-		Invoke-Compact $gate $Python @(
+		$loadQaArguments = @(
 			(Join-Path $PSScriptRoot "$gate.py"),
 			$Project
-		) $gateInputs $cache
+		)
+		if ($gate -eq "verify_load_qa_002") {
+			$loadQaArguments += @(
+				"--candidate-dir",
+				(Join-Path $Project ".release-gate\runtime-packs")
+			)
+		}
+		Invoke-Compact $gate $Python $loadQaArguments $gateInputs $cache
 	} elseif ($gate -eq "verify_engine_006") {
 		Invoke-Compact $gate $Python @(
 			(Join-Path $PSScriptRoot "verify_engine_006.py"),

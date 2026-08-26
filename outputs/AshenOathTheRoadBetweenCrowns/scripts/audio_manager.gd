@@ -45,6 +45,7 @@ var generated_library_ready := false
 var recorded_library_ready := false
 var voice_library_ready := false
 var audio_bootstrap_started := false
+var runtime_file_assets_available := true
 
 func _process(delta: float) -> void:
 	for event_name in event_cooldowns.keys():
@@ -65,6 +66,10 @@ func _process(delta: float) -> void:
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	# The production Web PCK deliberately excludes the recorded audio library.
+	# Keep the menu on generated cues until RuntimePackManager mounts audio.pck;
+	# probing those paths before the mount produces real browser resource errors.
+	runtime_file_assets_available = not OS.has_feature("web")
 	# Keep the critical boot path limited to menu feedback and one menu music
 	# state. Combat, campaign music, recorded cues, and scratch voice assets are
 	# prepared after the menu is visible so Web startup is not held by audio that
@@ -192,12 +197,33 @@ func set_game_paused(paused: bool) -> void:
 		music_player.stream_paused = paused
 
 func prewarm_opening_audio() -> void:
+	refresh_runtime_assets()
 	for state_id in ["greyfen_explore", "wychwood_tension"]:
 		if not music.has(state_id):
 			_build_music_state(state_id)
 	for zone_id in ["greyfen", "wychwood"]:
 		if not ambient_streams.has(zone_id):
 			ambient_streams[zone_id] = _build_ambient_stream(zone_id)
+
+func refresh_runtime_assets() -> void:
+	# The recorded audio pack can mount after AudioManager._ready(). Rebuild
+	# only the file-backed libraries so menu tones and active players remain
+	# stable while newly mounted variants become available.
+	if not runtime_file_assets_available:
+		recorded_library_ready = true
+		voice_library_ready = true
+		return
+	recorded_library_ready = false
+	voice_library_ready = false
+	_build_recorded_library()
+	_build_voice_library()
+
+func set_runtime_file_assets_available(available: bool) -> void:
+	if runtime_file_assets_available == available and available:
+		return
+	runtime_file_assets_available = available
+	if available:
+		refresh_runtime_assets()
 
 func play_event(event_name: String, pitch_variation: float = 0.06) -> void:
 	_play_event_internal(event_name, pitch_variation, 1.0)
@@ -588,6 +614,8 @@ func _build_recorded_library() -> void:
 	if recorded_library_ready:
 		return
 	recorded_library_ready = true
+	if not runtime_file_assets_available:
+		return
 	var root_path := "res://assets_external/audio/rpg/"
 	recorded_variants["step_road"] = _load_streams(root_path, ["footstep00.ogg","footstep01.ogg","footstep02.ogg","footstep03.ogg"])
 	recorded_variants["step_forest"] = _load_streams(root_path, ["footstep04.ogg","footstep05.ogg","footstep06.ogg"])
@@ -601,8 +629,8 @@ func _build_recorded_library() -> void:
 	recorded_variants["oathfire_sheathe"] = _load_streams(root_path, ["drawKnife1.ogg"])
 	recorded_variants["cloth_wind"] = _load_streams(root_path, ["cloth1.ogg","cloth2.ogg","cloth3.ogg"])
 	recorded_variants["village_life"] = _load_streams(root_path, ["creak1.ogg","creak2.ogg"])
-	var ui_hover := load("res://assets_external/audio/ui/rollover2.wav") as AudioStream
-	var ui_click := load("res://assets_external/audio/ui/click3.wav") as AudioStream
+	var ui_hover := _load_audio_stream("res://assets_external/audio/ui/rollover2.wav")
+	var ui_click := _load_audio_stream("res://assets_external/audio/ui/click3.wav")
 	if ui_hover != null:
 		recorded_variants["menu_hover"] = [ui_hover]
 	if ui_click != null:
@@ -614,10 +642,18 @@ func _build_recorded_library() -> void:
 func _load_streams(root_path: String, file_names: Array) -> Array:
 	var streams: Array = []
 	for file_name in file_names:
-		var stream := load(root_path + str(file_name)) as AudioStream
+		var stream := _load_audio_stream(root_path + str(file_name))
 		if stream != null:
 			streams.append(stream)
 	return streams
+
+func _load_audio_stream(path: String) -> AudioStream:
+	# Split Web packs are mounted after the base PCK. Avoid invoking load() for
+	# an optional stream that is not present in the currently mounted pack;
+	# this keeps packed startup free of false missing-resource errors.
+	if not ResourceLoader.exists(path):
+		return null
+	return ResourceLoader.load(path) as AudioStream
 
 func _build_voice_library() -> void:
 	if voice_library_ready:
@@ -664,9 +700,12 @@ func _build_voice_library() -> void:
 	for voice_id in campaign_lines:
 		voice_texts[voice_id] = campaign_lines[voice_id]
 		voices[voice_id] = _voice_stub([102.0, 118.0, 94.0], 1.05, 0.055)
-	_load_scratch_voice_library()
+	if runtime_file_assets_available:
+		_load_scratch_voice_library()
 
 func _load_scratch_voice_library() -> void:
+	if not runtime_file_assets_available:
+		return
 	var root_path := "res://assets_external/audio/voices/scratch/"
 	for voice_id in voice_texts.keys():
 		var path := root_path + str(voice_id) + ".wav"
