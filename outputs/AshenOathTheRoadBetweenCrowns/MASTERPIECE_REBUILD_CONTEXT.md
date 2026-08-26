@@ -3,10 +3,9 @@
 This is the active implementation context for the 66-ticket Masterpiece Rebuild.
 The historical production baseline was the synchronized `main` checkpoint
 from `RELEASE-004`; the current production checkpoint is recorded below.
-The current branch is `codex/masterpiece-rebuild`, and the current production
-checkpoint after Milestone B promotion is `59e982a` until the Milestone A
-candidate is promoted. The current A candidate is an 89.43 MB, 12-file Web
-export with root PCK SHA-256
+The current branch is `codex/masterpiece-rebuild`, and Milestone A is promoted
+to production in commit `45e628e`. `origin/main`, tracked `web/`, and Vercel
+share the current 89.43 MB, 12-file Web export with root PCK SHA-256
 `0E819446442435F703C253D6AD0C3AF892C8D5EA9F680BD7A0DA7AAE6101E6DF`.
 
 ## Truth boundary

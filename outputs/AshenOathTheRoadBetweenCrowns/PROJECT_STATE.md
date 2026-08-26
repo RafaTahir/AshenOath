@@ -2,26 +2,29 @@
 
 ## Masterpiece Rebuild Status - 2026-08-26
 
-The current production checkpoint remains `59e982a` until the Milestone A
-promotion is completed. The cumulative `codex/masterpiece-rebuild` branch now
-contains the verified Milestone A fast-boot and runtime-pack candidate. The
-candidate uses a small embedded base PCK plus five hash-verified streamed Web
-packs, keeps the HTML Crow Flight shell, and reaches Greyfen through real
-focused keyboard input in Chrome and Edge without console or resource errors.
+The current production checkpoint is `45e628e`, promoted from the cumulative
+`codex/masterpiece-rebuild` branch on 2026-08-26. `origin/main`, tracked `web/`,
+and Vercel contain the verified Milestone A fast-boot and runtime-pack
+candidate. The candidate uses a small embedded base PCK plus five hash-verified
+streamed Web packs, keeps the HTML Crow Flight shell, and reaches Greyfen
+through real focused keyboard input in Chrome and Edge without console or
+resource errors.
 Final character, monster, world, audio, and campaign visual quality remain
 later milestone work; historical result documents below are evidence only and
 do not silently approve those open presentation items.
 
-### Current Milestone A candidate
+### Current Milestone A promotion
 
 The final A gate passed on 2026-08-26: all 21 configured implementation,
 runtime, pack, streaming, export, packed-startup, and browser gates passed.
 The Web candidate is 89.43 MB across 12 files and its root PCK hash is
 `0E819446442435F703C253D6AD0C3AF892C8D5EA9F680BD7A0DA7AAE6101E6DF`.
-Chrome measured 8.30 s engine-ready / 5.81 s New Game event and Edge measured
-9.07 s / 6.32 s at 1280x720 WebGL2; both had no console errors. The isolated
+Chrome measured 8.72 s engine-ready / 6.39 s New Game event and Edge measured
+9.63 s / 5.26 s at 1280x720 WebGL2; both had no console errors. The isolated
 software-browser process-tree readings are diagnostics, while JavaScript heap
-remained below 450 MB. The detailed record is `MILESTONE-A_RESULT.md`.
+remained below 450 MB. The detailed record is `MILESTONE-A_RESULT.md`. The
+live PCK matches the verified local hash at
+`https://ashenoath.vercel.app/?v=milestone-a-45e628e`.
 
 ### Current truth boundary - 2026-08-26
 

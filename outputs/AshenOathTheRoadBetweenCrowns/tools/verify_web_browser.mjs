@@ -287,9 +287,33 @@ async function testBrowser(name, executable) {
     await cdp.send("Runtime.enable");
     const navigationStarted = Date.now();
     await cdp.send("Page.navigate", { url });
+    // The authored shell starts the engine while the document is still
+    // loading its large Web runtime and external packs. Waiting for the
+    // browser's final readyState can therefore turn a healthy page into a
+    // false navigation timeout. The boot root and start control are the
+    // meaningful navigation boundary; later waits verify engine readiness.
+    const expectedOrigin = new URL(url).origin;
     await waitFor(async () => cdp.evaluate(
-      `location.href.startsWith(${JSON.stringify(url.split("?")[0])}) && document.readyState === "complete"`
-    ), `${name} page navigation`);
+      `location.origin === ${JSON.stringify(expectedOrigin)} && Boolean(document.querySelector("#boot"))`
+    ), `${name} page navigation`).catch(async (error) => {
+      let diagnostic = null;
+      try {
+        diagnostic = await cdp.evaluate(`(() => ({
+          href: location.href,
+          ready_state: document.readyState,
+          title: document.title,
+          body: document.body?.innerText?.slice(0, 300) || "",
+          boot: Boolean(document.querySelector("#boot")),
+          canvas: Boolean(document.querySelector("#canvas")),
+        }))()`);
+      } catch {}
+      const eventTail = cdp.events.filter((event) =>
+        event.method === "Runtime.exceptionThrown"
+        || event.method === "Log.entryAdded"
+        || event.method === "Network.loadingFailed"
+      ).slice(-8).map((event) => JSON.stringify(event.params).slice(0, 500));
+      throw new Error(`${error.message}; navigation=${JSON.stringify(diagnostic)}; events=${eventTail.join(" | ")}`);
+    });
     // The production Web preset uses the authored HTML boot shell. Its main
     // Godot canvas intentionally remains 300x150 until the player activates
     // the visible "Enter the Road" control. Activate that control through

@@ -2,11 +2,11 @@
 
 ## Status
 
-`verified_with_follow_up` on `codex/masterpiece-rebuild`.
+`verified_with_follow_up` and promoted from `codex/masterpiece-rebuild`.
 
 Milestone A's implementation, runtime, pack, export, packed-startup, and
 Chrome/Edge browser gates pass against the current source. The candidate is
-ready for the Milestone A promotion. Browser numbers use the isolated
+promoted to production. Browser numbers use the isolated
 software-WebGL acceptance runner and are diagnostic rather than Dell hardware
 performance proof.
 
@@ -63,12 +63,13 @@ Its exported PCK SHA-256 is:
 
 Chrome and Edge both reached a native `1280x720` WebGL2 canvas, accepted the
 focused keyboard menu path, entered Greyfen, produced nonblank captures, and
-reported no JavaScript, WebAssembly, resource, or Godot console errors:
+reported no JavaScript, WebAssembly, resource, or Godot console errors. The
+live run accepts Vercel's canonical redirect from `/index.html` to `/`:
 
 | Browser | Canvas | Engine ready | Greyfen prewarm | New Game event | JS heap |
 |---|---:|---:|---:|---:|---:|
-| Chrome | 1280x720 WebGL2 | 8.30 s | 9.36 s | 5.81 s | 11.6 MB |
-| Edge | 1280x720 WebGL2 | 9.07 s | 7.06 s | 6.32 s | 11.4 MB |
+| Chrome | 1280x720 WebGL2 | 8.72 s | 7.47 s | 6.39 s | 11.3 MB |
+| Edge | 1280x720 WebGL2 | 9.63 s | 7.72 s | 5.26 s | 11.5 MB |
 
 The browser process-tree readings were approximately `1.36-1.39 GB` and are
 diagnostic only; the enforced JavaScript heap remained below `450 MB`.
@@ -87,11 +88,11 @@ diagnostic only; the enforced JavaScript heap remained below `450 MB`.
 
 ## Production and Checkpoint
 
-At the time of this result, production `main`, tracked `web/`, and Vercel still
-point to the previous Milestone B checkpoint. Promotion now consists of
-syncing this verified candidate, committing it on `codex/masterpiece-rebuild`,
-pushing the branch and `main`, and comparing the live PCK hash with the value
-above.
+Milestone A was promoted in commit `45e628e`. The development branch,
+`origin/main`, tracked `web/`, and Vercel all contain the verified candidate;
+the live root PCK matches the SHA-256 above. Production smoke passed in Chrome
+and Edge at the canonical URL:
+`https://ashenoath.vercel.app/?v=milestone-a-45e628e`.
 
 ## Running Steps
 
