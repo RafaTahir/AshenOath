@@ -1,6 +1,6 @@
 extends Node
 
-const CURRENT_VERSION := 8
+const CURRENT_VERSION := 9
 const SAVE_PATH := "user://ashen_oath_save.json"
 const AUTOSAVE_PATH := "user://ashen_oath_autosave.json"
 const CHECKPOINT_PATH := "user://ashen_oath_checkpoint.json"
@@ -86,6 +86,10 @@ func migrate_save_data(raw_data: Dictionary) -> Dictionary:
 	data["version"] = CURRENT_VERSION
 	data["zone"] = _normalize_zone(str(data.get("zone", "greyfen")))
 	data["player_position"] = _normalize_position(data.get("player_position", [0.0, 1.0, 7.0]), data.zone)
+	data["world_sector"] = _normalize_zone(str(data.get("world_sector", data.zone)))
+	data["world_position"] = _normalize_position(data.get("world_position", _local_to_world(data.player_position, data.world_sector)), data.world_sector)
+	if not data.has("seamless_world") or typeof(data.get("seamless_world")) != TYPE_DICTIONARY:
+		data["seamless_world"] = {}
 	for key in ["inventory", "vendors", "quests", "story_state", "progression", "world_state", "player_health", "player_stamina"]:
 		if not data.has(key) or typeof(data.get(key)) != TYPE_DICTIONARY:
 			data[key] = {}
@@ -143,11 +147,14 @@ func _build_save_data(game) -> Dictionary:
 		"version": CURRENT_VERSION,
 		"saved_at_utc": Time.get_datetime_string_from_system(true),
 		"zone": game.current_zone_id,
+		"world_sector": game.current_zone_id,
 		"player_position": [
 			game.player.global_position.x,
 			game.player.global_position.y,
 			game.player.global_position.z
 		],
+		"world_position": _game_world_position(game),
+		"seamless_world": game.seamless_world.save_state() if game.get("seamless_world") != null and game.seamless_world.has_method("save_state") else {},
 		"player_health": game.player.health_component.save_state(),
 		"player_stamina": game.player.stamina_component.save_state(),
 		"inventory": game.inventory.save_state(),
@@ -208,7 +215,43 @@ func _read_slot(path: String) -> Dictionary:
 
 func _normalize_zone(zone: String) -> String:
 	zone = zone.strip_edges().to_lower()
+	var aliases := {
+		"deep_woods": "deep_wood",
+		"long_road": "bandit_road",
+		"castle_approach": "vargan_approach",
+		"courtyard": "vargan_court",
+	}
+	zone = str(aliases.get(zone, zone))
 	return zone if zone in RELEASED_ZONES else "greyfen"
+
+func _game_world_position(game) -> Array:
+	var local_position := Vector3(game.player.global_position)
+	var service = game.get("seamless_world")
+	if service != null and service.has_method("world_position_for_player"):
+		local_position = service.world_position_for_player(game.player, game.current_zone_id)
+	return [local_position.x, local_position.y, local_position.z]
+
+func _local_to_world(local_position: Array, zone: String) -> Array:
+	var position := _normalize_position(local_position, zone)
+	var coordinates := {
+		"greyfen": Vector2i(0, 0),
+		"wychwood": Vector2i(0, 1),
+		"deep_wood": Vector2i(0, 2),
+		"old_mill": Vector2i(0, 3),
+		"burned_farmstead": Vector2i(0, 4),
+		"marsh_crossing": Vector2i(0, 5),
+		"bandit_road": Vector2i(0, 6),
+		"vargan_approach": Vector2i(1, 6),
+		"vargan_court": Vector2i(1, 7),
+		"record_hall": Vector2i(1, 8),
+		"undercroft": Vector2i(1, 9),
+		"assembly": Vector2i(1, 10),
+		"hart_glade": Vector2i(1, 11),
+		"cemetery": Vector2i(1, 0),
+		"ruins": Vector2i(-1, 0),
+	}
+	var cell: Vector2i = coordinates.get(zone, Vector2i.ZERO)
+	return [float(cell.x * 48.0) + float(position[0]), position[1], float(cell.y * 40.0) + float(position[2])]
 
 func _normalize_position(raw_position: Variant, zone: String) -> Array:
 	if typeof(raw_position) != TYPE_ARRAY or raw_position.size() < 3:

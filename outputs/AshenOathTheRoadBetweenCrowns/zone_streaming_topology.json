@@ -1,14 +1,15 @@
 {
   "schema_version": 1,
   "topology": {
-    "greyfen": ["wychwood", "cemetery", "vargan_approach"],
+    "greyfen": ["wychwood", "cemetery", "deep_wood", "vargan_approach"],
     "wychwood": ["greyfen", "deep_wood"],
     "cemetery": ["greyfen", "wychwood"],
     "deep_wood": ["wychwood", "long_road"],
-    "long_road": ["deep_wood", "vargan_approach"],
-    "vargan_approach": ["greyfen", "long_road", "courtyard"],
-    "courtyard": ["vargan_approach", "record_hall"],
-    "record_hall": ["courtyard", "undercroft"],
+	"long_road": ["deep_wood", "bandit_road"],
+	"bandit_road": ["marsh_crossing", "vargan_approach"],
+    "vargan_approach": ["greyfen", "long_road", "vargan_court"],
+    "vargan_court": ["vargan_approach", "record_hall"],
+    "record_hall": ["vargan_court", "undercroft"],
     "undercroft": ["record_hall", "assembly"],
     "assembly": ["undercroft", "hart_glade"],
     "hart_glade": ["assembly"]

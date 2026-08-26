@@ -20,6 +20,28 @@ approval of those open visual or player-facing defects.
 
 ### Current truth boundary - 2026-08-26
 
+### Milestone B - seamless exterior route checkpoint
+
+`WORLDGRID-001`, `SEAM-001`, `SEAM-002`, `NAV-002`, `SAVE-004`, and
+`INTERIOR-001` are implemented on `codex/masterpiece-rebuild`. The real-input
+`SEAM-QA-001` circuit passes in both directions across Greyfen, Wychwood,
+Deep Woods, Old Mill, Burned Farmstead, Marsh Crossing, Bandit Road, and
+Vargan Approach. Exterior travel no longer exposes a portal node or the
+full-screen loading layer; Castle approach to courtyard uses a physical door.
+The save schema is version 9 and migrates legacy interior sectors into the
+world atlas. Fresh seam evidence is recorded in
+`Development_Gallery/screenshots/SEAM_001_01_GreyfenBoundary_20260826_142809.png`
+and `SEAM_001_02_WychwoodArrival_20260826_142809.png`.
+
+The targeted `seamless` gate and full `milestone_b` export/browser gate pass.
+The verified seven-file candidate is `87.30 MB` with PCK SHA-256
+`CB8FCD2C88500EEB090DF68E1F2C76679094874C06E89FA02F3CCAF081430F8C`.
+Production `web/`, `main`, and Vercel remain unchanged because cold browser
+engine readiness is still above the product target and shutdown-only
+allocator/ObjectDB diagnostics remain visible in graphical verifier teardown.
+This is a verified development checkpoint, not final visual approval; later
+zone geometry remains procedural.
+
 PACK-003 is the current development checkpoint. Six named runtime PCK
 candidates have been exported and hash-verified outside the repository at a
 combined `80.52 MB`. They remain external candidates: the current runtime

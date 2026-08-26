@@ -1210,6 +1210,79 @@
         "verify_web_browser"
       ]
     },
+    "worldgrid": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/world_sector_manifest.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/world_sector_manifest.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_world_grid_001.py"
+      ],
+      "gates": ["verify_world_grid_001"]
+    },
+    "seamless": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/world_sector_manifest.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/zone_streaming_topology.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/zone_scene_manifest.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/seamless_world_service.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/world_sector_manifest.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_streaming_service.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_seam_001.py",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_seam_002.py",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_nav_002.py",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_save_004.py",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_interior_001.py",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_seam_qa_001.gd"
+      ],
+      "gates": [
+        "verify_world_grid_001",
+        "verify_seam_001",
+        "verify_seam_002",
+        "verify_nav_002",
+        "verify_save_004",
+        "verify_interior_001",
+        "verify_seam_qa_001",
+        "verify_stream_003",
+        "verify_navigation_001",
+        "verify_save_003",
+        "verify_scene_001",
+        "verify_zone_builder_integrity"
+      ],
+      "views": ["seamless"]
+    },
+    "milestone_b": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/world_sector_manifest.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/zone_streaming_topology.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/zone_scene_manifest.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/seamless_world_service.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/world_sector_manifest.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_streaming_service.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/save_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/export_presets.cfg",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_*001.py",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_*002.py"
+      ],
+      "gates": [
+        "verify_world_grid_001",
+        "verify_seam_001",
+        "verify_seam_002",
+        "verify_nav_002",
+        "verify_save_004",
+        "verify_interior_001",
+        "verify_seam_qa_001",
+        "verify_stream_003",
+        "verify_navigation_001",
+        "verify_save_003",
+        "verify_scene_001",
+        "verify_zone_builder_integrity",
+        "web_export",
+        "verify_web_browser"
+      ],
+      "web_required": true,
+      "views": ["seamless"]
+    },
     "web_002": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/WEB_002_FULL_CAMPAIGN_CANDIDATE.md",
@@ -1264,6 +1337,7 @@
 	"product": "capture_product_001",
 	"cinematic": "capture_cin_002",
     "combat": "capture_slice_screenshots",
-    "targeting": "capture_slice_screenshots"
+    "targeting": "capture_slice_screenshots",
+    "seamless": "capture_seamless"
 }
 }

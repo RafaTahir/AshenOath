@@ -16,8 +16,8 @@ const AUTHORED_LAYER_PATHS := {
 	"cemetery": "res://scenes/zones/cemetery_gameplay.tscn",
 }
 const EMBEDDED_ZONE_IDS := [
-	"greyfen", "wychwood", "cemetery", "ruins", "deep_wood", "long_road",
-	"vargan_approach", "courtyard", "record_hall", "undercroft", "assembly", "hart_glade",
+	"greyfen", "wychwood", "cemetery", "ruins", "deep_wood", "long_road", "bandit_road",
+	"vargan_approach", "vargan_court", "record_hall", "undercroft", "assembly", "hart_glade",
 ]
 
 var requests: Dictionary = {}
@@ -36,7 +36,10 @@ func setup(owner: Node) -> void:
 
 func neighbors(zone_id: String) -> Array[String]:
 	var result: Array[String] = []
-	for value in topology.get(zone_id.strip_edges().to_lower(), []):
+	var normalized := zone_id.strip_edges().to_lower()
+	if normalized == "long_road":
+		normalized = "bandit_road"
+	for value in topology.get(normalized, []):
 		result.append(str(value))
 	return result
 

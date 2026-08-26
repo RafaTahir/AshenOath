@@ -25,6 +25,7 @@ const ZoneSceneCatalog = preload("res://scripts/zone_scene_catalog.gd")
 const OathGatePortal = preload("res://scripts/oath_gate_portal.gd")
 const BossEncounterScript = preload("res://scripts/boss_encounter.gd")
 const PerformanceBudgetMonitor = preload("res://scripts/performance_budget_monitor.gd")
+const SeamlessWorldService = preload("res://scripts/seamless_world_service.gd")
 
 var player
 var camera_rig
@@ -53,6 +54,7 @@ var input_router
 var interaction_focus
 var mobile_touch
 var zone_streaming
+var seamless_world: SeamlessWorldService
 var runtime_packs
 var qa_adapter
 var zone_root: Node3D
@@ -197,6 +199,8 @@ func _process(delta: float) -> void:
 	if zone_transition_pending:
 		_advance_zone_transition()
 		return
+	if seamless_world != null and seamless_world.update_player(player, current_zone_id, delta):
+		return
 	_keep_player_in_world()
 	interaction_focus_cooldown -= delta
 	if interaction_focus_cooldown <= 0.0:
@@ -258,6 +262,10 @@ func _setup_runtime() -> void:
 	runtime_services.configure(self)
 	zone_runtime_coordinator = ZoneRuntimeCoordinator.new(self)
 	zone_runtime_coordinator.configure(quest_presentation, quest_beats, interaction_focus, quests)
+	seamless_world = SeamlessWorldService.new()
+	seamless_world.name = "SeamlessWorldService"
+	add_child(seamless_world)
+	seamless_world.configure(self, zone_streaming)
 	if OS.has_feature("ashenoath_qa"):
 		var qa_script = load("res://scripts/qa_browser_telemetry.gd")
 		if qa_script != null:
@@ -304,6 +312,36 @@ func _request_zone_load(zone_id: String, spawn_pos: Vector3) -> void:
 	if player != null:
 		player.set_transition_locked(true)
 	_perform_requested_zone_load()
+
+func request_seamless_boundary_transition(zone_id: String, spawn_pos: Vector3, edge_id: String = "") -> bool:
+	if zone_transition_pending or zone_load_request_pending or player == null:
+		return false
+	var target := zone_id.strip_edges().to_lower()
+	if zone_runtime_coordinator != null:
+		var request := zone_runtime_coordinator.normalize_zone_request(target, spawn_pos)
+		if not bool(request.get("ok", false)):
+			if hud != null:
+				hud.toast("The road beyond %s is not ready." % edge_id)
+			if seamless_world != null:
+				seamless_world.on_zone_failed(target, "unknown_destination")
+			return false
+		target = str(request.get("zone_id", target))
+		spawn_pos = request.get("spawn_position", spawn_pos)
+	requested_zone_id = target
+	requested_zone_spawn = spawn_pos
+	loading_started_usec = Time.get_ticks_usec()
+	zone_load_request_pending = false
+	player.set_transition_locked(true)
+	# Boundary travel keeps the previous rendered frame and never arms the
+	# full-screen loading layer. The destination is prewarmed by
+	# SeamlessWorldService before this call.
+	_perform_direct_zone_load(target, spawn_pos)
+	return true
+
+func _perform_direct_zone_load(zone_id: String, spawn_pos: Vector3) -> void:
+	requested_zone_id = ""
+	requested_zone_spawn = Vector3.ZERO
+	_load_zone(zone_id, spawn_pos)
 
 func _perform_requested_zone_load() -> void:
 	var destination := requested_zone_id
@@ -381,13 +419,18 @@ func load_save_state(data: Dictionary) -> void:
 		settings.apply()
 	story_state.load_state(data.get("story_state", {}))
 	progression.load_state(data.get("progression", {}))
+	if seamless_world != null and seamless_world.has_method("load_state"):
+		seamless_world.load_state(data.get("seamless_world", {}))
 	progression.reconcile_completed_quests(quests.quest_defs, quests.completed)
 	if int(data.get("version", 0)) < 3 and quests.is_completed("main_road_of_crows"):
 		story_state.set_flag("legacy_report_choice_required", true)
 	load_world_state(data.get("world_state", {}))
-	var zone = str(data.get("zone", "greyfen"))
+	var zone = str(data.get("world_sector", data.get("zone", "greyfen")))
 	var pos_array: Array = data.get("player_position", [0, 1, 7])
 	var pos = Vector3(float(pos_array[0]), float(pos_array[1]), float(pos_array[2]))
+	var world_array: Array = data.get("world_position", [])
+	if seamless_world != null and world_array.size() >= 3:
+		pos = seamless_world.local_position_for(zone, Vector3(float(world_array[0]), float(world_array[1]), float(world_array[2])))
 	pos = _safe_loaded_position(zone, pos)
 	_load_zone(zone, pos)
 	player.health_component.load_state(data.get("player_health", {}))
@@ -661,6 +704,8 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 			player.set_transition_locked(true)
 			zone_transition_frames = 0
 			zone_transition_pending = true
+	if seamless_world != null:
+		seamless_world.on_zone_activated(current_zone_id, safe_spawn)
 	if game_started:
 		_schedule_zone_autosave()
 	if zone_id == "wychwood" and quests.is_active("main_road_of_crows") and not quests.is_objective_done("main_road_of_crows", "fight_ghoulkin"):
@@ -707,6 +752,8 @@ func _advance_zone_transition() -> void:
 	hud.hide_loading()
 
 func _recover_failed_zone_load(previous_zone_id: String) -> void:
+	if seamless_world != null:
+		seamless_world.on_zone_failed(current_zone_id, "zone_build_failed")
 	zone_transition_pending = false
 	zone_load_request_pending = false
 	requested_zone_id = ""
@@ -1180,6 +1227,7 @@ func zone_lifecycle_snapshot() -> Dictionary:
 		"transition_history": transition_history.duplicate(true),
 		"material_cache_count": material_cache.size(),
 		"zone_runtime": zone_runtime_coordinator.snapshot() if zone_runtime_coordinator != null else {},
+		"seamless_world": seamless_world.snapshot() if seamless_world != null else {},
 		"performance": performance_budget_monitor.get_snapshot() if performance_budget_monitor != null else {},
 	}
 
@@ -2712,7 +2760,7 @@ func _update_tutorial_prompts() -> void:
 		audio.play_event("cloth_wind", 0.03)
 		audio.set_music_state("wychwood_tension")
 		hud.toast("The village noise thins behind you. The old road keeps its own silence.")
-		hud.set_guidance_hint("Wychwood gate ahead. Stay on the lit road.", 4.5)
+		hud.set_guidance_hint("The north road leaves Greyfen. Follow it into Wychwood.", 4.5)
 	if current_zone_id == "greyfen" and not bool(tutorial_flags.get("shrine_audio", false)) and player.global_position.distance_to(Vector3(6.0, player.global_position.y, -7.0)) < 5.0:
 		tutorial_flags["shrine_audio"] = true
 		audio.set_music_state("shrine_anwen")
@@ -2921,24 +2969,85 @@ func river_safe_path(points: Array, margin: float = 0.90) -> Array:
 		sanitized.append(safe_point)
 	return sanitized
 
-func _zone_half_extents(zone_id: String) -> Vector2:
+func get_zone_half_extents(zone_id: String) -> Vector2:
 	if zone_id == "wychwood":
 		return Vector2(22, 17)
 	if zone_id == "greyfen":
 		return Vector2(21, 17)
+	if zone_id == "bandit_road":
+		return Vector2(22, 19)
+	if zone_id in ["vargan_approach", "vargan_court"]:
+		return Vector2(23, 19)
+	if zone_id == "record_hall":
+		return Vector2(17, 15)
+	if zone_id == "undercroft":
+		return Vector2(18, 17)
+	if zone_id == "assembly":
+		return Vector2(21, 17)
+	if zone_id == "hart_glade":
+		return Vector2(22, 19)
 	return Vector2(24, 21)
+
+func _zone_half_extents(zone_id: String) -> Vector2:
+	return get_zone_half_extents(zone_id)
 
 func _make_play_area_bounds(width: float, depth: float, color: Color) -> void:
 	var half_w = width * 0.5
 	var half_d = depth * 0.5
-	_make_prop_box("NorthBerm", Vector3(0, 0.9, -half_d), Vector3(width, 1.8, 1.2), color)
-	_make_prop_box("SouthBerm", Vector3(0, 0.9, half_d), Vector3(width, 1.8, 1.2), color)
-	_make_prop_box("WestBerm", Vector3(-half_w, 0.9, 0), Vector3(1.2, 1.8, depth), color)
-	_make_prop_box("EastBerm", Vector3(half_w, 0.9, 0), Vector3(1.2, 1.8, depth), color)
-	_make_invisible_wall(Vector3(0, 1.6, -half_d - 0.65), Vector3(width, 3.2, 0.4))
-	_make_invisible_wall(Vector3(0, 1.6, half_d + 0.65), Vector3(width, 3.2, 0.4))
-	_make_invisible_wall(Vector3(-half_w - 0.65, 1.6, 0), Vector3(0.4, 3.2, depth))
-	_make_invisible_wall(Vector3(half_w + 0.65, 1.6, 0), Vector3(0.4, 3.2, depth))
+	_make_boundary_edge("north", width, depth, color)
+	_make_boundary_edge("south", width, depth, color)
+	_make_boundary_edge("west", width, depth, color)
+	_make_boundary_edge("east", width, depth, color)
+
+func _make_boundary_edge(edge_id: String, width: float, depth: float, color: Color) -> void:
+	var half_w := width * 0.5
+	var half_d := depth * 0.5
+	var open_edge: Dictionary = seamless_world.open_edges_for(current_zone_id).get(edge_id, {}) if seamless_world != null else {}
+	var opening_half := float(open_edge.get("half_width", 0.0))
+	var lane := float(open_edge.get("lane", 0.0))
+	var is_open := not open_edge.is_empty() and opening_half > 0.0
+	var wall_thickness := 1.2
+	var wall_height := 1.8
+	var collision_thickness := 0.4
+	if not is_open:
+		match edge_id:
+			"north":
+				_make_prop_box("NorthBerm", Vector3(0, 0.9, -half_d), Vector3(width, wall_height, wall_thickness), color)
+				_make_invisible_wall(Vector3(0, 1.6, -half_d - 0.65), Vector3(width, 3.2, collision_thickness))
+			"south":
+				_make_prop_box("SouthBerm", Vector3(0, 0.9, half_d), Vector3(width, wall_height, wall_thickness), color)
+				_make_invisible_wall(Vector3(0, 1.6, half_d + 0.65), Vector3(width, 3.2, collision_thickness))
+			"west":
+				_make_prop_box("WestBerm", Vector3(-half_w, 0.9, 0), Vector3(wall_thickness, wall_height, depth), color)
+				_make_invisible_wall(Vector3(-half_w - 0.65, 1.6, 0), Vector3(collision_thickness, 3.2, depth))
+			"east":
+				_make_prop_box("EastBerm", Vector3(half_w, 0.9, 0), Vector3(wall_thickness, wall_height, depth), color)
+				_make_invisible_wall(Vector3(half_w + 0.65, 1.6, 0), Vector3(collision_thickness, 3.2, depth))
+		return
+	var line_half := half_w if edge_id in ["north", "south"] else half_d
+	var start := clampf(lane - opening_half, -line_half + 0.6, line_half - 0.6)
+	var finish := clampf(lane + opening_half, -line_half + 0.6, line_half - 0.6)
+	var segments := [[-line_half, start], [finish, line_half]]
+	for segment in segments:
+		var segment_start := float(segment[0])
+		var segment_end := float(segment[1])
+		if segment_end - segment_start < 0.35:
+			continue
+		var center := (segment_start + segment_end) * 0.5
+		var length := segment_end - segment_start
+		match edge_id:
+			"north":
+				_make_prop_box("NorthBerm", Vector3(center, 0.9, -half_d), Vector3(length, wall_height, wall_thickness), color)
+				_make_invisible_wall(Vector3(center, 1.6, -half_d - 0.65), Vector3(length, 3.2, collision_thickness))
+			"south":
+				_make_prop_box("SouthBerm", Vector3(center, 0.9, half_d), Vector3(length, wall_height, wall_thickness), color)
+				_make_invisible_wall(Vector3(center, 1.6, half_d + 0.65), Vector3(length, 3.2, collision_thickness))
+			"west":
+				_make_prop_box("WestBerm", Vector3(-half_w, 0.9, center), Vector3(wall_thickness, wall_height, length), color)
+				_make_invisible_wall(Vector3(-half_w - 0.65, 1.6, center), Vector3(collision_thickness, 3.2, length))
+			"east":
+				_make_prop_box("EastBerm", Vector3(half_w, 0.9, center), Vector3(wall_thickness, wall_height, length), color)
+				_make_invisible_wall(Vector3(half_w + 0.65, 1.6, center), Vector3(collision_thickness, 3.2, length))
 
 func _make_invisible_wall(pos: Vector3, size: Vector3) -> void:
 	var body = StaticBody3D.new()
@@ -4409,11 +4518,25 @@ func _make_zone_gate(prompt: String, pos: Vector3, zone_target: String, spawn_po
 	var area = _make_named_interactable("gate_%s" % zone_target, "zone", prompt, pos, Color(0.18, 0.22, 0.28), Vector3(1.0, 1.2, 1.0))
 	if area == null:
 		return null
+	area.zone_target = zone_target
+	area.set_meta("spawn_pos", spawn_pos)
 	# The trigger remains owned by Interactable; only its old marker geometry is
 	# replaced so route logic and save compatibility stay unchanged.
 	for child in area.get_children():
 		if child is MeshInstance3D:
 			child.visible = false
+	if seamless_world != null and seamless_world.should_suppress_exterior_gate(current_zone_id, zone_target):
+		# Exterior travel is now driven by the sector boundary, not an in-world
+		# portal. Keep the Area3D as a named migration marker for old saves, but
+		# remove its focus/collision path so it cannot steal interaction priority.
+		area.set_meta("seamless_exterior_gate", true)
+		area.monitoring = false
+		area.monitorable = false
+		return area
+	if seamless_world != null and seamless_world.should_use_physical_door(current_zone_id, zone_target):
+		area.set_meta("interior_door", true)
+		_add_physical_door_visual(area, zone_target)
+		return area
 	var portal := OathGatePortal.new()
 	portal.name = "OathGatePortal"
 	portal.configure(zone_target, "gate_%s" % zone_target)
@@ -4426,9 +4549,35 @@ func _make_zone_gate(prompt: String, pos: Vector3, zone_target: String, spawn_po
 			portal.set_ready()
 	else:
 		portal.set_state(OathGatePortal.PortalState.READY)
-	area.zone_target = zone_target
-	area.set_meta("spawn_pos", spawn_pos)
 	return area
+
+func _add_physical_door_visual(area: Node3D, zone_target: String) -> void:
+	var frame_material := _mat(Color(0.16, 0.13, 0.10))
+	var door_material := _mat(Color(0.08, 0.055, 0.040))
+	var frame := MeshInstance3D.new()
+	frame.name = "InteriorDoorFrame"
+	var frame_mesh := BoxMesh.new()
+	frame_mesh.size = Vector3(2.5, 3.0, 0.24)
+	frame.mesh = frame_mesh
+	frame.position = Vector3(0, 1.5, 0)
+	frame.material_override = frame_material
+	area.add_child(frame)
+	var door := MeshInstance3D.new()
+	door.name = "InteriorDoor"
+	var door_mesh := BoxMesh.new()
+	door_mesh.size = Vector3(1.65, 2.45, 0.12)
+	door.mesh = door_mesh
+	door.position = Vector3(0, 1.25, -0.15)
+	door.material_override = door_material
+	area.add_child(door)
+	var label := Label3D.new()
+	label.name = "InteriorDoorDestination"
+	label.text = _zone_display_name(zone_target)
+	label.position = Vector3(0, 2.2, -0.24)
+	label.font_size = 22
+	label.modulate = Color(0.82, 0.72, 0.53, 0.85)
+	label.visible = false
+	area.add_child(label)
 
 func _make_blocked_gate(prompt: String, pos: Vector3, message: String):
 	var area = _make_named_interactable("blocked_ruins", "blocked_zone", prompt, pos, Color(0.20, 0.16, 0.11), Vector3(0.8, 0.8, 0.8))
@@ -4441,7 +4590,7 @@ func _connect_interactable(area) -> void:
 	if area is Area3D and area not in interaction_area_cache:
 		interaction_area_cache.append(area as Area3D)
 	area.body_entered.connect(func(body: Node):
-		if body == player and area not in interaction_candidates:
+		if body == player and not bool(area.get_meta("seamless_exterior_gate", false)) and area not in interaction_candidates:
 			interaction_candidates.append(area)
 	)
 	area.body_exited.connect(func(body: Node):
@@ -4454,6 +4603,9 @@ func _connect_interactable(area) -> void:
 
 func _update_interaction_focus() -> void:
 	_refresh_interaction_candidates()
+	for candidate in interaction_candidates.duplicate():
+		if candidate != null and is_instance_valid(candidate) and bool(candidate.get_meta("seamless_exterior_gate", false)):
+			interaction_candidates.erase(candidate)
 	var camera: Camera3D = get_viewport().get_camera_3d()
 	var best = zone_runtime_coordinator.choose_interaction(interaction_candidates, player, camera, Callable(self, "_interaction_target_valid")) if zone_runtime_coordinator != null else null
 	if active_interactable != best:
@@ -4485,6 +4637,8 @@ func _refresh_interaction_candidates() -> void:
 	# walking the entire world or inventing a second focus system.
 	for candidate in interaction_area_cache:
 		if candidate == null or candidate.is_queued_for_deletion() or not candidate.has_method("get_context_prompt"):
+			continue
+		if bool(candidate.get_meta("seamless_exterior_gate", false)):
 			continue
 		var range_limit := 3.6 if str(candidate.get("interaction_type")) == "zone" else 2.8
 		if candidate.global_position.distance_to(player.global_position) <= range_limit:

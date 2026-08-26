@@ -45,6 +45,26 @@ Greyfen readiness point, and production pack URLs remain empty. See
 Existing result documents are historical evidence only. They do not override a
 current `visually_rejected`, `functional_but_incomplete`, or `blocked` status.
 
+## Milestone B working status - 2026-08-26
+
+WORLDGRID-001, SEAM-001, SEAM-002, NAV-002, SAVE-004, and INTERIOR-001 are
+implemented on `codex/masterpiece-rebuild`. The player-driven SEAM-QA-001
+verifier passes the complete Greyfen -> Wychwood -> Deep Woods -> Old Mill ->
+Burned Farmstead -> Marsh -> Bandit Road -> Vargan Approach circuit in both
+directions, with grounded arrivals, no exterior OathGatePortal nodes, and no
+full-screen loading layer. Castle approach to courtyard is retained as a
+physical-door route. Legacy interior save coordinates now migrate to the
+correct world cells.
+
+The Milestone B targeted gate and full milestone-B export/browser gate pass.
+The verified seven-file candidate is `87.30 MB` with PCK SHA-256
+`CB8FCD2C88500EEB090DF68E1F2C76679094874C06E89FA02F3CCAF081430F8C`.
+Fresh seam captures are current at `20260826_142809`. Production `web/`,
+`main`, and Vercel remain unchanged because cold browser engine readiness is
+still above the product target and shutdown-only Godot allocator/ObjectDB
+diagnostics remain visible in graphical verifier teardown. This milestone is
+therefore a verified development checkpoint, not a final production release.
+
 ## Locked product decisions
 
 - Exterior regions become one continuous walkable world. Interiors may stream
