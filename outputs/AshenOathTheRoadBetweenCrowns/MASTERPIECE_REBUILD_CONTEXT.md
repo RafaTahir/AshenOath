@@ -3,18 +3,18 @@
 This is the active implementation context for the 66-ticket Masterpiece Rebuild.
 The historical production baseline was the synchronized `main` checkpoint
 from `RELEASE-004`; the current production checkpoint is recorded below.
-The current branch is `codex/masterpiece-rebuild`, and Milestone A is promoted
-to production in commit `45e628e`. `origin/main`, tracked `web/`, and Vercel
-share the current 89.43 MB, 12-file Web export with root PCK SHA-256
-`0E819446442435F703C253D6AD0C3AF892C8D5EA9F680BD7A0DA7AAE6101E6DF`.
+The current branch is `codex/masterpiece-rebuild`, and Milestone C is promoted
+to production in commit `85e8057`. `origin/main`, tracked `web/`, and Vercel
+share the current 94.039 MB, 12-file Web export with root PCK SHA-256
+`ea92c69fe8cc5be67b2969941a12ab687ca13c6d85a28bf0e970f5435c694b99`.
 
-Milestone C is now the verified cumulative release candidate on this branch.
+Milestone C is now the verified cumulative production checkpoint on this branch.
 It contains the direct selected human bodies, equipment loadout, bow/ammo
 slice, Greyfen vendors, current external pack records, and fresh browser
 proof. The C candidate is 94.039 MB across 12 files with root PCK SHA-256
-`5ca009899b4676bd2a6cd67cc48937d753e4c7bc97c702085b3a115018698dfa`.
-Production promotion is recorded after the C artifact is synchronized; until
-then the A deployment remains the public fallback.
+`ea92c69fe8cc5be67b2969941a12ab687ca13c6d85a28bf0e970f5435c694b99`.
+The C artifact is synchronized to `web/`, pushed to `origin/main`, and live at
+`https://ashenoath.vercel.app/?v=milestone-c-85e8057`.
 
 ## Truth boundary
 

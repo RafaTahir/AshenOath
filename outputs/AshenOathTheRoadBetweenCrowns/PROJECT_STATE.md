@@ -2,18 +2,18 @@
 
 ## Masterpiece Rebuild Status - 2026-08-26
 
-The current production checkpoint is `45e628e`, promoted from the cumulative
+The current production checkpoint is `85e8057`, promoted from the cumulative
 `codex/masterpiece-rebuild` branch on 2026-08-26. `origin/main`, tracked `web/`,
-and Vercel contain the verified Milestone A fast-boot and runtime-pack
-candidate. The candidate uses a small embedded base PCK plus five hash-verified
-streamed Web packs, keeps the HTML Crow Flight shell, and reaches Greyfen
-through real focused keyboard input in Chrome and Edge without console or
-resource errors.
-Final character, monster, world, audio, and campaign visual quality remain
-later milestone work; historical result documents below are evidence only and
-do not silently approve those open presentation items.
+and Vercel contain the verified Milestone C character, equipment, bow, ammo,
+and Greyfen commerce candidate. It uses a small embedded base PCK plus five
+hash-verified streamed Web packs, keeps the HTML Crow Flight shell, and
+reaches Greyfen through real focused keyboard input in Chrome and Edge without
+console or resource errors.
+Final monster, boss, world, audio, and campaign visual quality remain later
+milestone work; historical result documents below are evidence only and do not
+silently approve those open presentation items.
 
-### Current Milestone A promotion
+### Historical Milestone A promotion
 
 The final A gate passed on 2026-08-26: all 21 configured implementation,
 runtime, pack, streaming, export, packed-startup, and browser gates passed.
@@ -28,7 +28,7 @@ live PCK matches the verified local hash at
 
 ### Current truth boundary - 2026-08-26
 
-### Milestone C candidate - characters, equipment, bow, and Greyfen commerce
+### Milestone C production checkpoint - characters, equipment, bow, and Greyfen commerce
 
 The selected Quaternius animated human family is now wired directly into the
 runtime for Kael, Sister Anwen, villagers, guards, travelers, and Captain
@@ -45,12 +45,18 @@ vendor paths. The selected direct bodies and equipment passed the character,
 motion, face, gameplay, asset, pack, and browser gates. Fresh C evidence is
 recorded in `CHAR-GAMEPLAY-QA-001_RESULT.md` and `MILESTONE-C_RESULT.md`.
 
-The verified C Web candidate is 12 files / 94.039 MB with root PCK SHA-256
-`5ca009899b4676bd2a6cd67cc48937d753e4c7bc97c702085b3a115018698dfa`.
-Chrome and Edge both reached native 1280x720 WebGL2 Greyfen with no console
-errors. This is a cohesive stylized character foundation, not a claim of
+The verified and promoted C Web candidate is 12 files / 94.039 MB with root
+PCK SHA-256
+`ea92c69fe8cc5be67b2969941a12ab687ca13c6d85a28bf0e970f5435c694b99`.
+Chrome and Edge reached native 1280x720 WebGL2 Greyfen with no console errors
+after the browser-only startup-pack handoff fix. This is a cohesive stylized
+character foundation, not a claim of
 photoreal faces or final monster-family replacement; monster roles remain
 explicitly pending for Milestone E.
+
+The live production URL is
+`https://ashenoath.vercel.app/?v=milestone-c-85e8057`, and its `index.pck`
+matches the verified local artifact.
 
 ### Milestone B - seamless exterior route checkpoint
 

@@ -7,7 +7,7 @@ animation, bow aiming, ammunition, Greyfen vendors, and their gameplay gate.
 
 ## Status
 
-Milestone C is implemented and locally release-accepted for the selected
+Milestone C is implemented, release-accepted, and promoted for the selected
 runtime character/equipment slice. A browser-only startup-pack handoff issue
 was found during the first live smoke test, fixed with signal-driven prewarm,
 and revalidated locally before the corrected artifact was promoted. Milestone
@@ -35,7 +35,7 @@ The verified Web candidate contains the seven root runtime files plus five
 external streamed packs, for 12 files and `98,607,441` bytes (`94.039 MB`).
 The embedded root PCK is `1,773,728` bytes with SHA-256:
 
-`5ca009899b4676bd2a6cd67cc48937d753e4c7bc97c702085b3a115018698dfa`
+`ea92c69fe8cc5be67b2969941a12ab687ca13c6d85a28bf0e970f5435c694b99`
 
 External candidate records currently verified:
 
@@ -77,6 +77,15 @@ run reaches Greyfen, shows the selected Kael body and sword/back scabbard, and
 no longer reports the earlier primitive `sister_anwen` fallback. The final
 handoff run also records `Greyfen prewarmed` and
 `new_game_handoff prewarmed=true` in both browsers after the startup fix.
+
+## Production promotion
+
+Commit `85e8057` was pushed to `codex/masterpiece-rebuild` and `origin/main`.
+The live PCK at `https://ashenoath.vercel.app/` matches the verified local
+artifact byte-for-byte and by SHA-256. The isolated live Chrome retry passed
+at 1280x720 WebGL2 (7.35 s engine-ready, 4.37 s New Game); the live Edge run
+also passed (13.48 s engine-ready, 9.37 s New Game). Both recorded no
+JavaScript, WebAssembly, resource, or Godot console errors.
 
 ## Honest boundary
 
