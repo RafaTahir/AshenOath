@@ -2,6 +2,7 @@ extends SceneTree
 
 const AssetSpawnHelper = preload("res://scripts/asset_spawn_helper.gd")
 const CharacterPresentation = preload("res://scripts/character_presentation.gd")
+const CharacterRoleContract = preload("res://scripts/character_role_contract.gd")
 
 const ROLES := [
 	["player_human", "kael", 1.45, 2.05],
@@ -37,7 +38,7 @@ func _verify_role(role: String, identity: String, minimum_height: float, maximum
 		return
 	owner.add_child(visual)
 	if role == "player_human":
-		CharacterPresentation.apply_player(owner, owner)
+		CharacterPresentation.apply_player(owner, visual)
 	else:
 		CharacterPresentation.apply_npc(owner, identity)
 	await process_frame
@@ -55,10 +56,9 @@ func _verify_role(role: String, identity: String, minimum_height: float, maximum
 			"%s rendered height %.2f is outside %.2f-%.2f m" % [role, ranger_bounds.size.y, minimum_height, maximum_height])
 		owner.free()
 		return
-	_check(bool(visual.get_meta("character_composite", false)), "%s is not a shared humanoid composite" % role)
-	_check(_has_named_layer(visual, "superhero") or _has_named_layer(visual, "eyebrows"), "%s lacks its native modeled head" % role)
-	_check(_has_named_layer(visual, "peasant"), "%s lacks its complete outfit body" % role)
-	_check(_has_named_layer(visual, "hair"), "%s lacks bone-driven native hair" % role)
+	_check(bool(visual.get_meta("character_composite", false)), "%s is not a consolidated shared humanoid body" % role)
+	_check(str(visual.get_meta("character_asset_family", "")) == "quaternius_animated_humanoid", "%s is outside the selected cohesive animated family" % role)
+	_check(str(visual.get_meta("character_base_path", "")).contains("assets_external/animated/"), "%s does not use a direct optimized animated source" % role)
 	_check(_count_type(visual, "Skeleton3D") == 1, "%s must use one consolidated skeleton" % role)
 	_check(_count_type(visual, "AnimationPlayer") == 1, "%s must use one consolidated animation player" % role)
 	_check(int(visual.get_meta("character_rig_layer_count", 0)) == 1, "%s rig consolidation metadata is invalid" % role)
@@ -68,15 +68,9 @@ func _verify_role(role: String, identity: String, minimum_height: float, maximum
 	var bounds: AABB = report.get("bounds", AABB())
 	_check(bounds.size.y >= minimum_height and bounds.size.y <= maximum_height,
 		"%s rendered height %.2f is outside %.2f-%.2f m" % [role, bounds.size.y, minimum_height, maximum_height])
-	var base_path := str(visual.get_meta("character_base_path", ""))
-	_check(base_path.ends_with("_Head.gltf"), "%s still loads a full duplicate base body" % role)
+	var role_report: Dictionary = CharacterRoleContract.inspect(visual, role)
+	_check(bool(role_report.get("valid", false)), "%s failed the shared role contract: %s" % [role, role_report])
 	owner.free()
-
-func _has_named_layer(node: Node, token: String) -> bool:
-	for child in node.find_children("*", "", true, false):
-		if str(child.name).to_lower().contains(token):
-			return true
-	return false
 
 func _count_type(node: Node, type_name: String) -> int:
 	return node.find_children("*", type_name, true, false).size()

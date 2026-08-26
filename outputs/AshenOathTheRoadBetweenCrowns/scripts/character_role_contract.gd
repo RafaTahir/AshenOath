@@ -110,6 +110,10 @@ static func _profile_for_skeleton(skeleton: Skeleton3D) -> String:
 		names.append(_normalize_name(str(skeleton.get_bone_name(bone_index))))
 	if names.has("handr") and names.has("handl") and names.has("head"):
 		return "QuaterniusUniversalHumanoid"
+	# The selected compact Quaternius examples use Fist/Weapon sockets and a
+	# 32-bone hierarchy. They are complete skinned bodies, not proxy layers.
+	if names.has("root") and names.has("hips") and (names.has("fistr") or names.has("weaponr")) and (names.has("head") or names.has("head2")):
+		return "QuaterniusAnimatedHumanoid32"
 	return "unclassified"
 
 static func _normalize_name(value: String) -> String:

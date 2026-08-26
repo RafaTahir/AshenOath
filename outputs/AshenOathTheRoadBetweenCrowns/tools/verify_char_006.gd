@@ -1,5 +1,7 @@
 extends SceneTree
 
+const CharacterRoleSpec = preload("res://scripts/character_role_spec.gd")
+
 var failures: Array[String] = []
 var game: Node = null
 
@@ -36,18 +38,20 @@ func _initialize() -> void:
 		_check(driver.get_animation_player().has_animation("Idle"), "Neutral idle is not attached to Kael")
 	var skeleton: Skeleton3D = _find_skeleton(visual_root)
 	_check(skeleton != null, "Kael lacks Skeleton3D")
+	var hand_index := -1
 	if skeleton != null:
-		_check(skeleton.find_bone("hand_r") >= 0, "Kael shared rig lacks hand_r")
+		hand_index = _find_bone_alias(skeleton, CharacterRoleSpec.equipment_sockets("player_human").get("weapon", []))
+		_check(hand_index >= 0, "Kael shared rig lacks a right-hand equipment bone")
 		var sword_socket := visual_root.find_child("KaelSwordSocket", true, false)
 		_check(sword_socket != null, "Kael sword is not attached to a bone socket")
-		_check(sword_socket != null and sword_socket.get("bone_name") == "hand_r", "Kael sword socket is not on hand_r")
-	_check(skeleton != null and skeleton.find_bone("Head") >= 0, "Kael has no native head bone")
+		_check(sword_socket != null and _matches_bone_alias(str(sword_socket.get("bone_name")), CharacterRoleSpec.equipment_sockets("player_human").get("weapon", [])), "Kael sword socket is not on a right-hand bone")
+	_check(skeleton != null and _find_bone_alias(skeleton, CharacterRoleSpec.equipment_sockets("player_human").get("head", [])) >= 0, "Kael has no native head bone")
 	_check(not _has_proxy_anatomy(visual_root), "Kael still has forbidden proxy anatomy")
 	if driver != null and driver.has_method("trigger_action"):
-		var before := skeleton.get_bone_pose(skeleton.find_bone("hand_r")) if skeleton != null else Transform3D.IDENTITY
+		var before := skeleton.get_bone_pose(hand_index) if skeleton != null and hand_index >= 0 else Transform3D.IDENTITY
 		driver.trigger_action("attack_light")
 		await _frames(8)
-		var after := skeleton.get_bone_pose(skeleton.find_bone("hand_r")) if skeleton != null else Transform3D.IDENTITY
+		var after := skeleton.get_bone_pose(hand_index) if skeleton != null and hand_index >= 0 else Transform3D.IDENTITY
 		_check(before != after, "Kael sword attack did not change the hand pose")
 	_finish()
 
@@ -68,6 +72,20 @@ func _find_composite(node: Node) -> Node:
 		if found != null:
 			return found
 	return null
+
+func _find_bone_alias(skeleton: Skeleton3D, aliases: Array) -> int:
+	for index in range(skeleton.get_bone_count()):
+		if _matches_bone_alias(str(skeleton.get_bone_name(index)), aliases):
+			return index
+	return -1
+
+func _matches_bone_alias(value: String, aliases: Array) -> bool:
+	var normalized := value.to_lower().replace("_", "").replace(".", "").replace("-", "")
+	for alias in aliases:
+		var wanted := str(alias).to_lower().replace("_", "").replace(".", "").replace("-", "")
+		if normalized == wanted or normalized.ends_with(wanted):
+			return true
+	return false
 
 func _has_proxy_anatomy(node: Node) -> bool:
 	for child in node.find_children("*", "", true, false):

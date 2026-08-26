@@ -25,7 +25,7 @@ func _initialize() -> void:
 		actor.add_child(visual)
 		CharacterPresentation.apply_npc(actor, "sister_anwen")
 		await _frames(2)
-		_play_all(visual, "Idle_No")
+		_play_all(visual, "Idle")
 		await _frames(18)
 		_save("CHAR_007_Anwen_Shared_Rig")
 		actor.rotation_degrees.y = 24.0

@@ -3,11 +3,11 @@ extends SceneTree
 const CharacterRoleSpec = preload("res://scripts/character_role_spec.gd")
 const AssetSpawnHelper = preload("res://scripts/asset_spawn_helper.gd")
 const EXPECTED := {
-	"player_human":"res://assets_external/characters_universal/Male_Peasant.gltf",
-	"sister_anwen_human":"res://assets_external/characters_universal/Female_Peasant.gltf",
-	"villager_human":"res://assets_external/characters_universal/Male_Peasant.gltf",
-	"villager_female_human":"res://assets_external/characters_universal/Female_Peasant.gltf",
-	"castle_guard_human":"res://assets_external/characters_universal/Male_Peasant.gltf",
+	"player_human":"res://assets_external/animated/Warrior_Animated_CC0.gltf",
+	"sister_anwen_human":"res://assets_external/animated/Cleric_Animated_CC0.gltf",
+	"villager_human":"res://assets_external/animated/Monk_Animated_CC0.gltf",
+	"villager_female_human":"res://assets_external/animated/Cleric_Animated_CC0.gltf",
+	"castle_guard_human":"res://assets_external/animated/Warrior_Animated_CC0.gltf",
 	"road_ranger_human":"res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf"
 }
 var failures := 0

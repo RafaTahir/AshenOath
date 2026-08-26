@@ -1,5 +1,8 @@
 extends SceneTree
 
+const CharacterRoleContract = preload("res://scripts/character_role_contract.gd")
+const CharacterRoleSpec = preload("res://scripts/character_role_spec.gd")
+
 var failures: Array[String] = []
 var game: Node = null
 
@@ -28,19 +31,19 @@ func _initialize() -> void:
 	_check(driver != null and driver.has_method("is_valid") and driver.is_valid(), "Anwen has no valid fused animation driver")
 	if driver != null:
 		_check(driver.get("animation_players").size() == 1, "Anwen must use one consolidated animation rig")
-		_check(driver.get_animation_player().has_animation("Idle_Talking"), "Neutral dialogue idle is not attached to Anwen")
+		_check(driver.get_animation_player().has_animation("Idle_Talking") or driver.get_animation_player().has_animation("Idle"), "Neutral dialogue idle is not attached to Anwen")
 	var composite := _find_composite(visual)
 	_check(composite != null and int(composite.get_meta("character_rig_layer_count", 0)) == 1, "Anwen rig layers were not consolidated")
 	var skeleton := _find_skeleton(visual)
 	_check(skeleton != null, "Anwen lacks Skeleton3D")
 	if skeleton != null:
-		_check(skeleton.find_bone("Head") >= 0, "Anwen has no native head bone")
-		_check(skeleton.find_bone("hand_r") >= 0, "Anwen shared rig lacks hand_r")
+		_check(_find_bone_alias(skeleton, CharacterRoleSpec.equipment_sockets("sister_anwen_human").get("head", [])) >= 0, "Anwen has no native head bone")
+		_check(_find_bone_alias(skeleton, CharacterRoleSpec.equipment_sockets("sister_anwen_human").get("weapon", [])) >= 0, "Anwen lacks a right-hand equipment bone")
 	_check(_has_visible_skinned_mesh(visual), "Anwen has no visible skinned mesh")
 	_check(not _has_proxy_anatomy(visual), "Anwen still has forbidden proxy anatomy")
-	var bounds := _rendered_bounds(visual)
-	_check(bounds.size.y > 1.45 and bounds.size.y < 1.90, "Anwen rendered height is outside the role range")
-	_check(absf(bounds.position.y) < 0.12, "Anwen rendered feet are not grounded")
+	var role_report: Dictionary = CharacterRoleContract.inspect(visual, "sister_anwen_human")
+	_check(bool(role_report.get("grounded", false)), "Anwen rendered feet are not grounded")
+	_check(absf(float(role_report.get("rendered_height", 0.0)) - CharacterRoleSpec.target_height("sister_anwen_human")) <= CharacterRoleSpec.height_tolerance("sister_anwen_human"), "Anwen rendered height is outside the role range")
 
 	# Approach behavior is part of Anwen's visible contract: put Kael inside
 	# her attention radius and prove the +Z-facing wrapper turns toward him.
@@ -77,6 +80,15 @@ func _has_visible_skinned_mesh(node: Node) -> bool:
 		if mesh.mesh != null and mesh.visible and mesh.skin != null:
 			return true
 	return false
+
+func _find_bone_alias(skeleton: Skeleton3D, aliases: Array) -> int:
+	for index in range(skeleton.get_bone_count()):
+		var normalized := str(skeleton.get_bone_name(index)).to_lower().replace("_", "").replace(".", "")
+		for alias in aliases:
+			var wanted := str(alias).to_lower().replace("_", "").replace(".", "")
+			if normalized == wanted or normalized.ends_with(wanted):
+				return index
+	return -1
 
 func _has_proxy_anatomy(node: Node) -> bool:
 	for child in node.find_children("*", "", true, false):

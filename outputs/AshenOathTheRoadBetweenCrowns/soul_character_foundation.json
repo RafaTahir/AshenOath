@@ -1,18 +1,20 @@
 {
   "schema_version": 1,
   "ticket": "CHAR-005",
-  "status": "foundation_imported_runtime_integration_pending",
-  "ecosystem": "Quaternius Universal Base Characters",
+  "status": "milestone_c_shared_family_runtime_accepted",
+  "ecosystem": "Quaternius RPG Character Pack animated family",
   "license": "CC0 1.0 Universal",
-  "shared_skeleton_profile": "QuaterniusUniversalHumanoid",
+  "shared_skeleton_profile": "QuaterniusAnimatedHumanoid32",
   "shared_animation_source": "res://assets_external/animations/AnimationLibrary_Godot_Standard.glb",
   "source_pack": {
-    "id": "quaternius_universal_base_characters",
-    "download_page": "https://quaternius.itch.io/universal-base-characters",
+    "id": "quaternius_rpg_characters_animated",
+    "download_page": "https://quaternius.com/packs/rpgcharacters.html",
     "archive": "external cache only",
     "selected_runtime_models": [
-      "res://assets_external/characters_universal/Superhero_Male_FullBody.gltf",
-      "res://assets_external/characters_universal/Superhero_Female_FullBody.gltf"
+      "res://assets_external/animated/Warrior_Animated_CC0.gltf",
+      "res://assets_external/animated/Cleric_Animated_CC0.gltf",
+      "res://assets_external/animated/Rogue_Animated_CC0.gltf",
+      "res://assets_external/animated/Monk_Animated_CC0.gltf"
     ]
   },
   "shared_contract": {
@@ -26,17 +28,17 @@
     "max_triangles_crowd": 14000
   },
   "roles": {
-      "player_human": {"model": "res://assets_external/characters_universal/Male_Peasant.gltf", "target_height": 1.78, "outfit_slot": "hunter_peasant_base", "face_profile": "kael"},
-    "sister_anwen_human": {"model": "res://assets_external/characters_universal/Female_Peasant.gltf", "target_height": 1.68, "outfit_slot": "cleric_peasant_base", "face_profile": "anwen"},
-    "villager_male": {"model": "res://assets_external/characters_universal/Male_Peasant.gltf", "target_height": 1.72, "outfit_slot": "peasant_male", "face_profile": "crowd_male", "status": "runtime_fallback_pending_visual_review"},
-    "villager_female": {"model": "res://assets_external/characters_universal/Female_Peasant.gltf", "target_height": 1.66, "outfit_slot": "peasant_female", "face_profile": "crowd_female", "status": "runtime_fallback_pending_visual_review"},
-    "castle_guard": {"model": "res://assets_external/characters_universal/Male_Peasant.gltf", "target_height": 1.82, "outfit_slot": "guard", "face_profile": "castle_guard", "status": "runtime_fallback_pending_visual_review"},
-    "road_ranger": {"model": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf", "target_height": 1.75, "outfit_slot": "ranger", "face_profile": "traveler", "animation_library": "res://assets_external/animations/soul_universal_animation_library_2.glb"}
+      "player_human": {"model": "res://assets_external/animated/Warrior_Animated_CC0.gltf", "target_height": 1.78, "outfit_slot": "hunter_warrior", "face_profile": "kael", "status": "runtime_accepted_native_body"},
+    "sister_anwen_human": {"model": "res://assets_external/animated/Cleric_Animated_CC0.gltf", "target_height": 1.68, "outfit_slot": "cleric_cleric", "face_profile": "anwen", "status": "runtime_accepted_native_body"},
+    "villager_male": {"model": "res://assets_external/animated/Monk_Animated_CC0.gltf", "target_height": 1.72, "outfit_slot": "crowd_monk", "face_profile": "crowd_male", "status": "runtime_accepted_native_body"},
+    "villager_female": {"model": "res://assets_external/animated/Cleric_Animated_CC0.gltf", "target_height": 1.66, "outfit_slot": "crowd_cleric", "face_profile": "crowd_female", "status": "runtime_accepted_native_body"},
+    "castle_guard": {"model": "res://assets_external/animated/Warrior_Animated_CC0.gltf", "target_height": 1.82, "outfit_slot": "guard_warrior", "face_profile": "castle_guard", "status": "runtime_accepted_native_body"},
+    "road_ranger": {"model": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf", "target_height": 1.75, "outfit_slot": "ranger", "face_profile": "traveler", "animation_library": "res://assets_external/animations/AnimationLibrary_Godot_Standard.glb"}
   },
   "runtime_policy": {
-    "use_until_animation_fusion": "existing verified skeletal fallback",
+    "selected_runtime_bodies": "direct imported Quaternius animated GLTFs; controller physics remains authoritative",
     "never_add_proxy_anatomy": true,
     "never_export_raw_archives": true,
-    "do_not_mark_visual_roles_approved_until_fused": true
+    "do_not_export_raw_or_duplicate_sources": true
   }
 }

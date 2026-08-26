@@ -154,8 +154,9 @@ def main() -> int:
             if fallback is None or not fallback.is_file():
                 errors.append(f"blocked role {role_id} needs an existing playable fallback")
 
-    if approved != ["road_ranger_human"]:
-        errors.append(f"only the processed Ranger is approved at this boundary, found: {approved}")
+    expected_approved = ["road_ranger_human", "kael", "anwen", "villager", "guard", "traveler"]
+    if approved != expected_approved:
+        errors.append(f"Milestone C approved runtime roles differ from the manifest contract: {approved}")
 
     for index, artifact in enumerate(manifest.get("shared_runtime_files", [])):
         check_artifact(project, artifact, errors, f"shared runtime artifact {index}")
@@ -203,7 +204,7 @@ def main() -> int:
         for error in errors:
             print(f"- {error}")
         return 1
-    print(f"ASSET-005 VERIFIER: PASS ({len(approved)} approved runtime role, {len(blocked)} explicit fallbacks)")
+    print(f"ASSET-005 VERIFIER: PASS ({len(approved)} approved runtime roles, {len(blocked)} explicit fallbacks)")
     return 0
 
 

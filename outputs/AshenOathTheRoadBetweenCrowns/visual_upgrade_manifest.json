@@ -26,75 +26,89 @@
     },
     "characters": {
       "player_human": {
-        "status": "char_006_shared_body_fused_animation",
-        "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
-        "source": "Quaternius Universal Base Characters + Modular Character Outfits: Fantasy",
-        "source_url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
+        "status": "char_010_runtime_native_animated_warrior",
+        "path": "res://assets_external/animated/Warrior_Animated_CC0.gltf",
+        "source": "Quaternius animated RPG character source",
+        "source_url": "https://quaternius.com/packs/rpgcharacters.html",
         "license": "CC0 1.0",
-        "notes": "CHAR-006 current runtime fallback: complete skinned male peasant outfit composite with native face surfaces, retargeted neutral Walk/Sprint animation library, bone-bound sword, and back scabbard presentation. A clothed unified hero source remains open."
+        "runtime_textures": ["res://assets_external/animated/Warrior_Animated_CC0_Warrior_Texture.png", "res://assets_external/animated/Warrior_Animated_CC0_Warrior_Sword_Texture.png"],
+        "target_height": 1.78,
+        "notes": "Connected 32-bone Warrior body with native Face mesh, clothing, hair, embedded animation clips, and one-pass normalization. Kael's authored sword and back scabbard remain bone-attached by PlayerController."
       },
       "sister_anwen_human": {
-        "status": "char_007_shared_female_body_fused_animation",
-        "path": "res://assets_external/characters_universal/Female_Peasant.gltf",
-        "source": "Quaternius Universal Base Characters + Modular Character Outfits: Fantasy",
-        "source_url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
+        "status": "char_010_runtime_native_animated_cleric",
+        "path": "res://assets_external/animated/Cleric_Animated_CC0.gltf",
+        "source": "Quaternius animated RPG character source",
+        "source_url": "https://quaternius.com/packs/rpgcharacters.html",
         "license": "CC0 1.0",
-        "notes": "CHAR-007 current runtime fallback: native-face female peasant outfit composite with retargeted neutral clips. Shrine identity remains in the existing staff, prayer cord, dialogue staging, and authored color profile; a clothed elder/cleric source remains open."
+        "runtime_textures": ["res://assets_external/animated/Cleric_Animated_CC0_Cleric_Texture.png", "res://assets_external/animated/Cleric_Animated_CC0_Cleric_Staff_Texture.png"],
+        "target_height": 1.68,
+        "notes": "Connected 32-bone Cleric body with native Head mesh, robe, staff, and embedded animation clips. The native staff is used without a duplicate overlay."
       },
       "mira_human": {
-        "status": "char_008_shared_female_named_identity",
-        "path": "res://assets_external/characters_universal/Female_Peasant.gltf",
-        "source": "Quaternius Universal Base Characters + Modular Character Outfits: Fantasy",
-        "source_url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
+        "status": "char_010_runtime_native_animated_monk",
+        "path": "res://assets_external/animated/Monk_Animated_CC0.gltf",
+        "source": "Quaternius animated RPG character source",
+        "source_url": "https://quaternius.com/packs/rpgcharacters.html",
         "license": "CC0 1.0",
-        "notes": "Shared female native-face body with deterministic herbalist palette; future occupation outfit slots remain compatible."
+        "runtime_textures": ["res://assets_external/animated/Monk_Animated_CC0_Monk_Texture.png"],
+        "target_height": 1.66,
+        "notes": "Distinct compact Monk silhouette used for Mira's practical herbalist identity tint and animation family."
       },
       "rook_human": {
-        "status": "char_008_shared_male_named_identity",
-        "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
-        "source": "Quaternius Universal Base Characters + Modular Character Outfits: Fantasy",
-        "source_url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
+        "status": "char_010_runtime_native_animated_rogue",
+        "path": "res://assets_external/animated/Rogue_Animated_CC0.gltf",
+        "source": "Quaternius animated RPG character source",
+        "source_url": "https://quaternius.com/packs/rpgcharacters.html",
         "license": "CC0 1.0",
-        "notes": "Shared male native-face body with deterministic ranger/smuggler palette and existing dagger interaction contract."
+        "runtime_textures": ["res://assets_external/animated/Rogue_Animated_CC0_Rogue_Texture.png", "res://assets_external/animated/Rogue_Animated_CC0_Rogue_Dagger_Texture.png"],
+        "target_height": 1.75,
+        "notes": "Distinct Rogue silhouette with native Face mesh, belt, pouch, dagger, and embedded locomotion/combat clips for Rook and traveler roles."
       },
       "villager_human": {
-        "status": "char_008_shared_male_crowd_identity",
-        "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
-        "source": "Quaternius Universal Base Characters + Modular Character Outfits: Fantasy",
-        "source_url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
+        "status": "char_010_runtime_native_animated_monk",
+        "path": "res://assets_external/animated/Monk_Animated_CC0.gltf",
+        "source": "Quaternius animated RPG character source",
+        "source_url": "https://quaternius.com/packs/rpgcharacters.html",
         "license": "CC0 1.0",
-        "notes": "Shared male body with deterministic crowd palette; no procedural face or costume overlays."
+        "runtime_textures": ["res://assets_external/animated/Monk_Animated_CC0_Monk_Texture.png"],
+        "notes": "Connected native-face crowd base with deterministic worker palette."
       },
       "villager_female_human": {
-        "status": "char_008_shared_female_crowd_identity",
-        "path": "res://assets_external/characters_universal/Female_Peasant.gltf",
-        "source": "Quaternius Universal Base Characters + Modular Character Outfits: Fantasy",
-        "source_url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
-        "license": "CC0 1.0"
+        "status": "char_010_runtime_native_animated_cleric",
+        "path": "res://assets_external/animated/Cleric_Animated_CC0.gltf",
+        "source": "Quaternius animated RPG character source",
+        "source_url": "https://quaternius.com/packs/rpgcharacters.html",
+        "license": "CC0 1.0",
+        "runtime_textures": ["res://assets_external/animated/Cleric_Animated_CC0_Cleric_Texture.png"],
+        "notes": "Connected native-face female crowd base with deterministic mourner palette; native staff is suppressed for non-cleric crowd roles."
       },
       "villager_worker_human": {
-        "status": "char_008_shared_male_worker_identity",
-        "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
-        "source": "Quaternius Universal Base Characters + Modular Character Outfits: Fantasy",
-        "source_url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
+        "status": "char_010_runtime_native_animated_warrior",
+        "path": "res://assets_external/animated/Warrior_Animated_CC0.gltf",
+        "source": "Quaternius animated RPG character source",
+        "source_url": "https://quaternius.com/packs/rpgcharacters.html",
         "license": "CC0 1.0",
-        "notes": "Shared male body with deterministic forge/work palette."
+        "runtime_textures": ["res://assets_external/animated/Warrior_Animated_CC0_Warrior_Texture.png"],
+        "notes": "Connected native-face worker base with forge palette and real work-compatible idle animation."
       },
       "villager_hooded_human": {
-        "status": "char_008_shared_female_traveler_identity",
-        "path": "res://assets_external/characters_universal/Female_Peasant.gltf",
-        "source": "Quaternius Universal Base Characters + Modular Character Outfits: Fantasy",
-        "source_url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
+        "status": "char_010_runtime_native_animated_rogue",
+        "path": "res://assets_external/animated/Rogue_Animated_CC0.gltf",
+        "source": "Quaternius animated RPG character source",
+        "source_url": "https://quaternius.com/packs/rpgcharacters.html",
         "license": "CC0 1.0",
-        "notes": "Shared female body with restrained mourner/traveler palette; hooded outfit remains deferred to a later outfit ticket."
+        "runtime_textures": ["res://assets_external/animated/Rogue_Animated_CC0_Rogue_Texture.png"],
+        "notes": "Connected native-face traveler base with hood-compatible dark palette and Rogue movement family."
       },
       "castle_guard_human": {
-        "status": "char_008_shared_male_guard_identity",
-        "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
-        "source": "Quaternius Universal Base Characters + Modular Character Outfits: Fantasy",
-        "source_url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
+        "status": "char_010_runtime_native_animated_warrior",
+        "path": "res://assets_external/animated/Warrior_Animated_CC0.gltf",
+        "source": "Quaternius animated RPG character source",
+        "source_url": "https://quaternius.com/packs/rpgcharacters.html",
         "license": "CC0 1.0",
-        "notes": "Shared male body with deterministic Vargan guard palette; armor outfit slot remains compatible with later named wardrobe work."
+        "runtime_textures": ["res://assets_external/animated/Warrior_Animated_CC0_Warrior_Texture.png"],
+        "notes": "Connected native-face guard base with Vargan palette, imported armor silhouette, and real sword-compatible rig."
       },
       "road_ranger_human": {
         "status": "char_facing_ranger_001_runtime_accepted",

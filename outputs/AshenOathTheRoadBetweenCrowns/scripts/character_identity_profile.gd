@@ -64,13 +64,28 @@ static func apply(root: Node, role_id: String) -> Dictionary:
 
 static func _has_native_face_material(root: Node) -> bool:
 	var matches := 0
+	var approved_complete_family := _contains_complete_family(root)
 	for mesh in root.find_children("*", "MeshInstance3D", true, false):
 		var token := str(mesh.name).to_lower()
 		if token.contains("head") or token.contains("face") or token.contains("eye") or token.contains("hair") or token.contains("skin"):
 			matches += 1
+		elif approved_complete_family and (mesh.skin != null or mesh.skeleton != NodePath("")) and mesh.mesh != null and mesh.mesh.get_surface_count() > 0:
+			# Monk and Ranger bodies intentionally keep facial anatomy in the
+			# connected skinned body mesh instead of a separate Head node. These
+			# families are accepted only after the complete-body asset contract has
+			# already validated their skeleton, materials, and normalized bounds.
+			matches += 1
 		elif role_is_monster(root) and (mesh.skin != null or mesh.skeleton != NodePath("")) and mesh.mesh != null and mesh.mesh.get_surface_count() > 0:
 			matches += 1
 	return matches >= 1
+
+static func _contains_complete_family(root: Node) -> bool:
+	if str(root.get_meta("character_asset_family", "")) in ["quaternius_animated_humanoid", "quaternius_ranger"]:
+		return true
+	for child in root.get_children():
+		if _contains_complete_family(child):
+			return true
+	return false
 
 static func role_is_monster(root: Node) -> bool:
 	return str(root.get_meta("character_identity_profile", "")) in MONSTER_ROLES

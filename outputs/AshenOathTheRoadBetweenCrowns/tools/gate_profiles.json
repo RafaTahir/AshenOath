@@ -518,6 +518,7 @@
         "outputs/AshenOathTheRoadBetweenCrowns/soul_character_foundation.json",
         "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/*",
         "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_ranger/*",
+		"outputs/AshenOathTheRoadBetweenCrowns/assets_external/animated/*",
 		"outputs/AshenOathTheRoadBetweenCrowns/assets_external/animations/AnimationLibrary_Godot_Standard.glb",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/asset_spawn_helper.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_animation_fusion.gd",
@@ -531,6 +532,8 @@
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/greyfen_life_controller.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_role_spec.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_role_contract.gd",
+		"outputs/AshenOathTheRoadBetweenCrowns/scripts/equipment_loadout.gd",
+		"outputs/AshenOathTheRoadBetweenCrowns/tools/verify_char_gameplay_qa_001.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_char_009.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_char_002.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_face_003.gd",
@@ -595,6 +598,40 @@
         "verify_input_003",
         "verify_input_004",
         "verify_char_qa_001"
+      ]
+    },
+    "char_gameplay_qa_001": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/asset_spawn_helper.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_identity_profile.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_face_driver.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_presentation.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_role_contract.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_role_spec.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_animation_driver.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/player_controller.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/greyfen_life_controller.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/equipment_loadout.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/inventory_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/vendor_service.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/save_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/items.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/vendors.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/character_role_manifest.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/soul_character_foundation.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/soul_character_role_manifest.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/runtime_asset_manifest.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_char_gameplay_qa_001.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_bow_shop_001.py"
+      ],
+      "gates": [
+        "content_integrity",
+        "runtime_smoke",
+        "verify_char_qa_001",
+        "verify_face_003",
+        "verify_char_gameplay_qa_001",
+        "verify_bow_shop_001"
       ]
     },
     "opening_qa_001": {
@@ -1310,7 +1347,8 @@
     "character_anwen": "capture_char_007",
 	"character_named": "capture_char_008",
 	"character_facing_ranger": "capture_char_facing_ranger_001",
-	"crowd": "capture_char_009",
+    "crowd": "capture_char_009",
+	"character_real": "capture_character_real_portraits",
     "greyfen": "capture_world_001",
     "wychwood": "capture_world_002",
     "campaign": "capture_world_003",

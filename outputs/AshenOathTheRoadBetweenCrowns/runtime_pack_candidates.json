@@ -1,65 +1,72 @@
 {
   "schema_version": 1,
   "ticket": "PACK-003",
+  "generated_at_utc": "2026-08-26T12:31:17.5757928Z",
   "project": "Ashen Oath",
-  "artifact_directory": "external_cache/ashenoath-packs-milestone-a",
+  "artifact_directory": "external_runtime_packs",
   "artifacts_are_external": true,
   "max_deployment_bytes": 104857600,
-  "total_bytes": 55217080,
+  "total_bytes": 60052576,
   "packs": [
     {
       "id": "base",
       "version": "dev",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
-      "bytes": 1266436,
-      "sha256": "dd636ef782ee26793facd5096066a39f3097aaaddaeed593bd83a0f1cadd6673",
-      "status": "candidate_external"
+      "bytes": 1278468,
+      "sha256": "b1833dc82241553c8ba7ce6a6fed593ed79c9538b605229a920775cee2f34a04",
+      "status": "candidate_external",
+      "log": "base.log"
     },
     {
       "id": "opening",
       "version": "dev",
       "preset": "Runtime Pack Opening",
       "artifact": "opening.pck",
-      "bytes": 27599304,
-      "sha256": "c8830d20445e89515768a8451dbbf6ebcaa43f94f048890ccf2247b69bcd0f72",
-      "status": "candidate_external"
+      "bytes": 27605288,
+      "sha256": "0df6abfe559c63484d9cfd4a053d6d78fc0da9241f679d1f94f7bcef98d3f0d5",
+      "status": "candidate_external",
+      "log": "opening.log"
     },
     {
       "id": "campaign",
       "version": "dev",
       "preset": "Runtime Pack Campaign",
       "artifact": "campaign.pck",
-      "bytes": 885096,
-      "sha256": "812346ca91b144f90e56a73ae0b48e70bbd4b8b615fd0581358e0455b2f6042d",
-      "status": "candidate_external"
+      "bytes": 885576,
+      "sha256": "485e76a52326ad7c323933ccbb273264bec818eac4f9bf1fc1d0720164e7d2e3",
+      "status": "candidate_external",
+      "log": "campaign.log"
     },
     {
       "id": "characters",
       "version": "dev",
       "preset": "Runtime Pack Characters",
       "artifact": "characters.pck",
-      "bytes": 21333448,
-      "sha256": "8085520378881f0d13ab4006e4b932798456b693c4c06418f07ad3c1eb7934f0",
-      "status": "candidate_external"
+      "bytes": 26140176,
+      "sha256": "47de600e2ab082d2993daa0900001bc6cf4dd9f9cfec45dc6385f966e26fe4ca",
+      "status": "candidate_external",
+      "log": "characters.log"
     },
     {
       "id": "monsters",
       "version": "dev",
       "preset": "Runtime Pack Monsters",
       "artifact": "monsters.pck",
-      "bytes": 1552476,
-      "sha256": "98ab279c53e256e3dfb7b7639ac206b988918395c430f327332379ec9c887e13",
-      "status": "candidate_external"
+      "bytes": 1557612,
+      "sha256": "504f97e40cd7c233f7e60a051de5773709721df35ec29c11f7edd843485c33b9",
+      "status": "candidate_external",
+      "log": "monsters.log"
     },
     {
       "id": "audio",
       "version": "dev",
       "preset": "Runtime Pack Audio",
       "artifact": "audio.pck",
-      "bytes": 2580320,
-      "sha256": "bfdca7427226729dcb8587caf6f6775cd86b2cd1846707b1dfa4ee5fec9e305c",
-      "status": "candidate_external"
+      "bytes": 2585456,
+      "sha256": "760f98c1baf039bf8627464960c51b992b7ccdf9e4ad384fdb2d7500fdb7d8d5",
+      "status": "candidate_external",
+      "log": "audio.log"
     }
   ],
   "errors": []

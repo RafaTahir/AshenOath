@@ -36,6 +36,9 @@ func _initialize() -> void:
 		await process_frame
 		_check(_find_skeleton(visual) != null, "%s lacks Skeleton3D" % visual_role)
 		_check(_has_head_and_hand(visual), "%s lacks native head/hand bones" % visual_role)
+		var family := str(visual.get_meta("character_asset_family", ""))
+		var ranger_family := visual_role == "road_ranger_human" and str(visual.get_meta("character_base_path", "")).contains("characters_ranger/")
+		_check(family == "quaternius_animated_humanoid" or ranger_family, "%s is outside the selected cohesive animated family" % visual_role)
 		_check(_has_textured_mesh(visual), "%s has no textured skinned mesh" % visual_role)
 		_check(not _has_proxy_anatomy(visual), "%s contains proxy anatomy" % visual_role)
 		# The helper owns animation fusion; named preview actors are validated by
@@ -62,7 +65,16 @@ func _has_head_and_hand(node: Node3D) -> bool:
 	var skeleton := _find_skeleton(node)
 	if skeleton == null:
 		return false
-	return skeleton.find_bone("Head") >= 0 and skeleton.find_bone("hand_r") >= 0
+	return _has_bone_alias(skeleton, ["Head", "Head_2"]) and _has_bone_alias(skeleton, ["Hand.R", "Weapon.R", "Fist.R", "hand_r"])
+
+func _has_bone_alias(skeleton: Skeleton3D, aliases: Array) -> bool:
+	for index in range(skeleton.get_bone_count()):
+		var normalized := str(skeleton.get_bone_name(index)).to_lower().replace("_", "").replace(".", "")
+		for alias in aliases:
+			var wanted := str(alias).to_lower().replace("_", "").replace(".", "")
+			if normalized == wanted or normalized.ends_with(wanted):
+				return true
+	return false
 
 func _has_textured_mesh(node: Node3D) -> bool:
 	for mesh in node.find_children("*", "MeshInstance3D", true, false):

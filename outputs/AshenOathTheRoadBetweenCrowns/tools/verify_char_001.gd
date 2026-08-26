@@ -77,9 +77,15 @@ func verify_actor(actor: Node, expected_profile: String, target_height: float, t
 	var identity_root := _find_identity_root(actor)
 	check(identity_root != null, "%s has no identity profile" % expected_profile)
 	if identity_root != null:
-		check(int(identity_root.get_meta("character_identity_surfaces", 0)) > 0, "%s has no identity material surfaces" % expected_profile)
+		var identity_surfaces := int(identity_root.get_meta("character_identity_surfaces", 0))
+		check(identity_surfaces > 0, "%s has no identity material surfaces" % expected_profile)
 		if not expected_profile.contains("ghoul"):
-			check(int(identity_root.get_meta("character_face_surfaces", 0)) >= 2, "%s has no readable head/skin surface contract" % expected_profile)
+			var face_contract: Dictionary = identity_root.get_meta("character_face_contract", {})
+			var native_family := _contains_selected_family(actor)
+			var readable_face := int(identity_root.get_meta("character_face_surfaces", 0)) >= 2
+			if native_family:
+				readable_face = readable_face or bool(face_contract.get("valid", false))
+			check(readable_face, "%s has no readable native face contract" % expected_profile)
 	var rendered_bounds := _rendered_bounds(actor)
 	var height := rendered_bounds.size.y
 	check(absf(height - target_height) <= tolerance, "%s height %.2f is outside %.2f +/- %.2f" % [expected_profile, height, target_height, tolerance])
@@ -100,6 +106,14 @@ func _find_identity_root(node: Node) -> Node:
 		if result != null:
 			return result
 	return null
+
+func _contains_selected_family(node: Node) -> bool:
+	if str(node.get_meta("character_asset_family", "")) in ["quaternius_animated_humanoid", "quaternius_ranger"]:
+		return true
+	for child in node.get_children():
+		if _contains_selected_family(child):
+			return true
+	return false
 
 func _palette_signature(node: Node) -> String:
 	if node == null:

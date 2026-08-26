@@ -27,7 +27,7 @@ func _initialize() -> void:
 			continue
 		actor.add_child(visual)
 		CharacterPresentation.apply_npc(actor, str(item[1]))
-		_play_all(visual, "Idle_No")
+		_play_all(visual, "Idle")
 	await _frames(18)
 	_save("CHAR_008_Named_Ecosystem_Lineup")
 	stage.queue_free()
@@ -62,7 +62,8 @@ func _create_stage() -> Node3D:
 	ground.material_override = ground_material
 	result.add_child(ground)
 	var camera := Camera3D.new()
-	camera.position = Vector3(0, 1.42, 6.6)
+	# Face the lineup so the capture proves identity and front-facing equipment.
+	camera.position = Vector3(0, 1.42, -6.6)
 	camera.look_at_from_position(camera.position, Vector3(0, 0.98, 0), Vector3.UP)
 	camera.fov = 42.0
 	camera.current = true

@@ -20,6 +20,7 @@ const AssetSpawnHelper = preload("res://scripts/asset_spawn_helper.gd")
 const CharacterPresentation = preload("res://scripts/character_presentation.gd")
 const CharacterRoleSpec = preload("res://scripts/character_role_spec.gd")
 const CharacterAnimationDriver = preload("res://scripts/character_animation_driver.gd")
+const EquipmentLoadout = preload("res://scripts/equipment_loadout.gd")
 
 var walk_speed = 3.4
 var run_speed = 5.3
@@ -103,6 +104,7 @@ var beam_release_direction := Vector3.ZERO
 var sword_sheathed := true
 var sword_combat_linger := 0.0
 const SWORD_COMBAT_LINGER := 3.2
+var equipment_loadout: EquipmentLoadout
 var inventory_ref
 var weapon_mode := "sword"
 var bow_aiming := false
@@ -110,6 +112,9 @@ var bow_draw_time := 0.0
 var bow_recovery := 0.0
 var selected_arrow_id := "standard_arrow"
 var bow_visual: Node3D
+var bow_quiver_visual: Node3D
+var bow_attachment: BoneAttachment3D
+var bow_quiver_attachment: BoneAttachment3D
 const BOW_MAX_DRAW := 1.0
 const BOW_RANGE := 24.0
 
@@ -208,16 +213,22 @@ func get_selected_arrow_count() -> int:
 func _set_weapon_mode(next_mode: String) -> void:
 	var normalized := "bow" if next_mode == "bow" else "sword"
 	if weapon_mode == normalized:
+		if equipment_loadout != null:
+			equipment_loadout.set_active_weapon(normalized)
 		return
 	bow_aiming = false
 	bow_draw_time = 0.0
 	weapon_mode = normalized
+	if equipment_loadout != null:
+		equipment_loadout.set_active_weapon(normalized)
 	if normalized == "bow":
 		_set_sword_sheathed(true)
 	else:
 		_set_sword_sheathed(true)
 	if bow_visual != null:
 		bow_visual.visible = normalized == "bow"
+	if bow_quiver_visual != null:
+		bow_quiver_visual.visible = normalized == "bow"
 
 func _cycle_arrow_type() -> void:
 	var arrow_ids := ["standard_arrow", "bodkin_arrow", "ashfire_arrow"]
@@ -226,8 +237,12 @@ func _cycle_arrow_type() -> void:
 		var candidate: String = arrow_ids[(start + offset) % arrow_ids.size()]
 		if inventory_ref != null and int(inventory_ref.items.get(candidate, 0)) > 0:
 			selected_arrow_id = candidate
+			if equipment_loadout != null:
+				equipment_loadout.set_selected_arrow(candidate)
 			return
 	selected_arrow_id = "standard_arrow"
+	if equipment_loadout != null:
+		equipment_loadout.set_selected_arrow(selected_arrow_id)
 
 func set_progression(manager) -> void:
 	if progression != null and progression.changed.is_connected(_apply_progression_stats):
@@ -463,6 +478,8 @@ func _handle_bow_input() -> void:
 	var aiming_now := _action_pressed("aim_bow")
 	if aiming_now:
 		bow_aiming = true
+		if equipment_loadout != null:
+			equipment_loadout.set_bow_aiming(true)
 		bow_draw_time = minf(bow_draw_time + get_physics_process_delta_time(), BOW_MAX_DRAW)
 		if animation_driver != null and bow_draw_time <= get_physics_process_delta_time() * 1.5:
 			animation_driver.trigger_action("bow_aim", 1.0, 0.10)
@@ -471,6 +488,8 @@ func _handle_bow_input() -> void:
 		return
 	if bow_aiming and _action_just_released("aim_bow"):
 		bow_aiming = false
+		if equipment_loadout != null:
+			equipment_loadout.set_bow_aiming(false)
 		bow_draw_time = 0.0
 	if bow_aiming and _action_just_pressed("fire_bow"):
 		_release_bow()
@@ -500,6 +519,7 @@ func _release_bow() -> void:
 		direction = -global_transform.basis.z
 	direction.y = 0.0
 	direction = direction.normalized()
+	face_target(global_position + direction * 4.0)
 	var arrow_origin := get_arrow_origin()
 	inventory_ref.consume(selected_arrow_id)
 	arrow_requested.emit({
@@ -511,12 +531,16 @@ func _release_bow() -> void:
 		"width": 0.34,
 	})
 	bow_aiming = false
+	if equipment_loadout != null:
+		equipment_loadout.set_bow_aiming(false)
 	bow_draw_time = 0.0
 	bow_recovery = 0.24
 	if animation_driver != null:
 		animation_driver.trigger_action("attack_light", 1.0, 0.08)
 
 func get_arrow_origin() -> Vector3:
+	if bow_attachment != null and is_instance_valid(bow_attachment):
+		return bow_attachment.global_position + Vector3.UP * 0.04 - global_transform.basis.z.normalized() * 0.18
 	var forward := -global_transform.basis.z.normalized()
 	return global_position + Vector3.UP * 1.30 + forward * 0.48
 
@@ -827,6 +851,8 @@ func _set_sword_sheathed(sheathed: bool) -> void:
 		sheathed_sword_visual.visible = sheathed
 	if sheathed and slash_arc_root != null:
 		slash_arc_root.visible = false
+	if equipment_loadout != null:
+		equipment_loadout.set_sword_drawn(not sheathed)
 
 func is_blocking() -> bool:
 	return _action_pressed("block") and stamina_component.stamina > 8.0
@@ -949,10 +975,11 @@ func _add_beam_charge_visual() -> void:
 	beam_charge_visual.visible = false
 	add_child(beam_charge_visual)
 	var skeleton := _find_skeleton(visual_root)
-	beam_left_hand_glow = _make_oathfire_hand("OathfireLeftHand", skeleton, ["LeftHand", "Hand.L", "lefthand", "leftwrist"], Vector3(-0.28, 1.22, -0.42))
-	beam_right_hand_glow = _make_oathfire_hand("OathfireRightHand", skeleton, ["RightHand", "Hand.R", "righthand", "rightwrist"], Vector3(0.28, 1.22, -0.42))
+	beam_left_hand_glow = _make_oathfire_hand("OathfireLeftHand", skeleton, ["LeftHand", "Hand.L", "Fist.L", "FistL", "lefthand", "leftwrist"], Vector3(-0.28, 1.22, -0.42))
+	beam_right_hand_glow = _make_oathfire_hand("OathfireRightHand", skeleton, ["RightHand", "Hand.R", "Weapon.R", "WeaponR", "Fist.R", "FistR", "righthand", "rightwrist"], Vector3(0.28, 1.22, -0.42))
 	_build_sheathed_sword()
 	_build_bow_visual()
+	_ensure_equipment_loadout()
 
 func _make_oathfire_hand(node_name: String, skeleton: Skeleton3D, aliases: Array[String], fallback_position: Vector3) -> MeshInstance3D:
 	var glow := MeshInstance3D.new()
@@ -997,12 +1024,24 @@ func _make_oathfire_hand(node_name: String, skeleton: Skeleton3D, aliases: Array
 func _build_bow_visual() -> void:
 	if bow_visual != null:
 		return
+	var skeleton := _find_skeleton(visual_root)
+	var hand_parent: Node3D = visual_root
+	if skeleton != null:
+		var hand_index := _find_bone_index(skeleton, ["LeftHand", "Hand.L", "Fist.L", "FistL", "hand_l", "lefthand"])
+		if hand_index >= 0:
+			bow_attachment = BoneAttachment3D.new()
+			bow_attachment.name = "KaelBowHandSocket"
+			bow_attachment.bone_idx = hand_index
+			bow_attachment.bone_name = skeleton.get_bone_name(hand_index)
+			skeleton.add_child(bow_attachment)
+			hand_parent = _create_equipment_space(bow_attachment, "KaelBowHandEquipmentSpace")
 	bow_visual = Node3D.new()
-	bow_visual.name = "KaelBowAndQuiver"
-	bow_visual.position = Vector3(-0.38, 1.20, 0.20)
+	bow_visual.name = "KaelBowHandEquipment"
+	bow_visual.position = Vector3(0.04, -0.02, 0.04) if hand_parent != visual_root else Vector3(-0.38, 1.20, 0.20)
 	bow_visual.rotation_degrees = Vector3(0.0, 8.0, -12.0)
+	bow_visual.scale = Vector3.ONE * 0.82
 	bow_visual.visible = false
-	visual_root.add_child(bow_visual)
+	hand_parent.add_child(bow_visual)
 	var grip := MeshInstance3D.new()
 	var grip_mesh := BoxMesh.new()
 	grip_mesh.size = Vector3(0.08, 0.48, 0.08)
@@ -1027,17 +1066,31 @@ func _build_bow_visual() -> void:
 		string.rotation_degrees.z = 8.0 * side
 		string.material_override = _mat(Color(0.72, 0.61, 0.42))
 		bow_visual.add_child(string)
+	var quiver_parent: Node3D = visual_root
+	if skeleton != null:
+		var back_index := _find_bone_index(skeleton, ["spine_03", "spine_02", "Spine3", "Spine2", "Chest", "Torso", "Spine", "Body"])
+		if back_index >= 0:
+			bow_quiver_attachment = BoneAttachment3D.new()
+			bow_quiver_attachment.name = "KaelQuiverBackSocket"
+			bow_quiver_attachment.bone_idx = back_index
+			bow_quiver_attachment.bone_name = skeleton.get_bone_name(back_index)
+			skeleton.add_child(bow_quiver_attachment)
+			quiver_parent = _create_equipment_space(bow_quiver_attachment, "KaelQuiverBackEquipmentSpace")
+	bow_quiver_visual = Node3D.new()
+	bow_quiver_visual.name = "KaelQuiverBackEquipment"
+	bow_quiver_visual.position = Vector3(-0.22, -0.12, 0.16) if quiver_parent != visual_root else Vector3(-0.22, 1.05, 0.28)
+	bow_quiver_visual.rotation_degrees = Vector3(12.0, 0.0, -18.0)
+	quiver_parent.add_child(bow_quiver_visual)
 	var quiver := MeshInstance3D.new()
+	quiver.name = "KaelArrowQuiver"
 	var quiver_mesh := CylinderMesh.new()
 	quiver_mesh.top_radius = 0.08
 	quiver_mesh.bottom_radius = 0.06
 	quiver_mesh.height = 0.60
 	quiver_mesh.radial_segments = 8
 	quiver.mesh = quiver_mesh
-	quiver.position = Vector3(-0.22, -0.06, 0.20)
-	quiver.rotation_degrees = Vector3(12.0, 0.0, -18.0)
 	quiver.material_override = _mat(Color(0.12, 0.07, 0.035))
-	bow_visual.add_child(quiver)
+	bow_quiver_visual.add_child(quiver)
 
 func _build_sheathed_sword() -> void:
 	# The back weapon is a real scabbard, not a second naked blade hidden behind
@@ -1046,7 +1099,7 @@ func _build_sheathed_sword() -> void:
 	var socket_parent: Node3D = visual_root
 	var skeleton := _find_skeleton(visual_root)
 	if skeleton != null:
-		var back_index := _find_bone_index(skeleton, ["spine_03", "spine_02", "Spine3", "Spine2", "Chest", "Torso", "Spine"])
+		var back_index := _find_bone_index(skeleton, ["spine_03", "spine_02", "Spine3", "Spine2", "Chest", "Torso", "Spine", "Body"])
 		if back_index >= 0:
 			var attachment := BoneAttachment3D.new()
 			attachment.name = "KaelBackSwordSocket"
@@ -1130,19 +1183,50 @@ func _try_build_mapped_body() -> bool:
 	animation_driver = CharacterAnimationDriver.new()
 	animation_driver.name = "CharacterAnimationDriver"
 	mapped.add_child(animation_driver)
-	var animated: bool = bool(animation_driver.configure(mapped, {
-		"idle": "Idle", "walk": "Walk", "walk_back": "Walk",
-		"strafe": "Walk", "run": "Sprint",
-		"jump": "Jump_Start", "attack_light": "Sword_Attack",
-		"attack_heavy": "Sword_Attack_RM", "dodge": "Roll",
-		"parry": "Sword_Idle", "beam_cast": "Spell_Simple_Idle", "hit": "Hit_Chest", "death": "Death01"
-	}))
+	var animated: bool = bool(animation_driver.configure(mapped, _animation_map_for_visual(mapped)))
 	if not animated:
 		_add_mapped_weapon_visuals()
 	else:
 		animation_driver.set_update_rate_hz(30.0)
 		_add_slash_arc_visuals()
 	return true
+
+func _animation_map_for_visual(mapped: Node3D) -> Dictionary:
+	var family := str(mapped.get_meta("character_animation_family", "")).to_lower()
+	if family.contains("warrior"):
+		return {
+			"idle": "Idle", "walk": "Walk", "walk_back": "Walk", "strafe": "Walk", "run": "Run",
+			"jump": "Roll", "attack_light": "Sword_Attack", "attack_heavy": "Sword_Attack2",
+			"dodge": "Roll", "parry": "Idle_Weapon", "beam_cast": "Idle_Weapon",
+			"hit": "RecieveHit", "death": "Death"
+		}
+	if family.contains("cleric"):
+		return {
+			"idle": "Idle", "walk": "Walk", "walk_back": "Walk", "strafe": "Walk", "run": "Run",
+			"jump": "Run", "attack_light": "Staff_Attack", "attack_heavy": "Staff_Attack",
+			"dodge": "Run", "parry": "Idle_Weapon", "beam_cast": "Spell1",
+			"hit": "RecieveHit", "death": "Death"
+		}
+	if family.contains("rogue"):
+		return {
+			"idle": "Idle", "walk": "Walk", "walk_back": "Walk", "strafe": "Walk", "run": "Run",
+			"jump": "Roll", "attack_light": "Dagger_Attack", "attack_heavy": "Dagger_Attack2",
+			"dodge": "Roll", "parry": "Attacking_Idle", "beam_cast": "Attacking_Idle",
+			"hit": "RecieveHit", "death": "Death"
+		}
+	if family.contains("monk"):
+		return {
+			"idle": "Idle", "walk": "Walk", "walk_back": "Walk", "strafe": "Walk", "run": "Run",
+			"jump": "Roll", "attack_light": "Attack", "attack_heavy": "Attack2",
+			"dodge": "Roll", "parry": "Idle_Attacking", "beam_cast": "Idle_Attacking",
+			"hit": "RecieveHit", "death": "Death"
+		}
+	return {
+		"idle": "Idle", "walk": "Walk", "walk_back": "Walk", "strafe": "Walk", "run": "Sprint",
+		"jump": "Jump_Start", "attack_light": "Sword_Attack", "attack_heavy": "Sword_Attack_RM",
+		"dodge": "Roll", "parry": "Sword_Idle", "beam_cast": "Spell_Simple_Idle",
+		"hit": "Hit_Chest", "death": "Death01"
+	}
 
 func _attach_rig_sword(mapped: Node3D) -> Node3D:
 	var skeleton := _find_skeleton(mapped)
@@ -1153,6 +1237,10 @@ func _attach_rig_sword(mapped: Node3D) -> Node3D:
 		hand_index = skeleton.find_bone("Hand.R")
 	if hand_index < 0:
 		hand_index = skeleton.find_bone("hand_r")
+	if hand_index < 0:
+		hand_index = skeleton.find_bone("Weapon.R")
+	if hand_index < 0:
+		hand_index = skeleton.find_bone("Fist.R")
 	if hand_index < 0:
 		for bone_index in range(skeleton.get_bone_count()):
 			var bone_name := str(skeleton.get_bone_name(bone_index)).to_lower()
@@ -1349,6 +1437,41 @@ func _find_bone_index(skeleton: Skeleton3D, aliases: Array[String]) -> int:
 			if normalized.contains(wanted):
 				return bone_index
 	return -1
+
+func _ensure_equipment_loadout() -> void:
+	if equipment_loadout == null:
+		equipment_loadout = EquipmentLoadout.new()
+		equipment_loadout.name = "EquipmentLoadout"
+		add_child(equipment_loadout)
+	equipment_loadout.bind_node("sword_hand", rig_sword_visual if rig_sword_visual != null else weapon_root)
+	equipment_loadout.bind_node("sword_back", sheathed_sword_visual)
+	equipment_loadout.bind_node("bow", bow_visual)
+	equipment_loadout.bind_node("quiver", bow_quiver_visual)
+	equipment_loadout.set_active_weapon(weapon_mode)
+	equipment_loadout.set_sword_drawn(not sword_sheathed)
+	equipment_loadout.set_selected_arrow(selected_arrow_id)
+
+func save_equipment_state() -> Dictionary:
+	if equipment_loadout != null:
+		return equipment_loadout.save_state()
+	return {
+		"active_weapon": weapon_mode,
+		"sword_drawn": not sword_sheathed,
+		"selected_arrow_id": selected_arrow_id,
+	}
+
+func load_equipment_state(data: Dictionary) -> void:
+	if typeof(data) != TYPE_DICTIONARY:
+		return
+	selected_arrow_id = str(data.get("selected_arrow_id", selected_arrow_id))
+	if selected_arrow_id == "":
+		selected_arrow_id = "standard_arrow"
+	weapon_mode = "bow" if str(data.get("active_weapon", "sword")).to_lower() == "bow" else "sword"
+	sword_sheathed = not bool(data.get("sword_drawn", false))
+	if equipment_loadout != null:
+		equipment_loadout.load_state(data)
+	_set_weapon_mode(weapon_mode)
+	_set_sword_sheathed(sword_sheathed)
 
 func _find_first_mesh(root: Node) -> MeshInstance3D:
 	if root is MeshInstance3D:

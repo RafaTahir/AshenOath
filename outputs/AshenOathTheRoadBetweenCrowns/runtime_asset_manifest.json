@@ -14,6 +14,13 @@
       "runtime_roles": ["kael", "anwen", "villager", "guard", "traveler"]
     },
     {
+      "id": "quaternius_rpg_characters_animated",
+      "url": "https://quaternius.com/packs/rpgcharacters.html",
+      "license": "CC0 1.0",
+      "status": "selected_runtime_human_family",
+      "runtime_roles": ["kael", "anwen", "villager", "guard", "traveler"]
+    },
+    {
       "id": "quaternius_modular_character_outfits_fantasy",
       "url": "https://quaternius.com/packs/modularcharacteroutfitsfantasy.html",
       "license": "CC0 1.0",
@@ -77,52 +84,94 @@
     "kael": {
       "display_name": "Kael",
       "family": "human",
-      "source_pack": "quaternius_universal_base_characters",
-      "status": "blocked_fallback",
-      "approved": false,
-      "export_eligible": false,
-      "fallback": "res://assets_external/characters_universal/Male_Peasant.gltf",
-      "blocked_reason": "The playable peasant fallback has not passed the distinct hunter face, clothing, equipment, and identical-camera visual gate."
+      "source_pack": "quaternius_rpg_characters_animated",
+      "status": "approved_runtime",
+      "approved": true,
+      "export_eligible": true,
+      "model": "res://assets_external/animated/Warrior_Animated_CC0.gltf",
+      "source_url": "https://quaternius.com/packs/rpgcharacters.html",
+      "license_file": "res://assets_external/licenses/Quaternius_RPG_Characters_CC0.txt",
+      "runtime_files": [
+        {"path": "res://assets_external/animated/Warrior_Animated_CC0.gltf", "bytes": 3035392, "sha256": "2bab905ce12d279e1d099c2a8de0b1ef31c9f5e8d1959b41d24470b4f4181add"},
+        {"path": "res://assets_external/animated/Warrior_Animated_CC0_Warrior_Texture.png", "bytes": 693384, "sha256": "5d016c19db78e8b6077eead3e1086a3bb3453cfaa8adb5e583b08dc39869ff17"},
+        {"path": "res://assets_external/animated/Warrior_Animated_CC0_Warrior_Sword_Texture.png", "bytes": 169153, "sha256": "ae902ecaba0eb6d15d47ef428e81d63f9ca2d8a266aad7dae393a8363ea9344a"}
+      ],
+      "blocked_reason": ""
     },
     "anwen": {
       "display_name": "Sister Anwen",
       "family": "human",
-      "source_pack": "quaternius_universal_base_characters",
-      "status": "blocked_fallback",
-      "approved": false,
-      "export_eligible": false,
-      "fallback": "res://assets_external/characters_universal/Female_Peasant.gltf",
-      "blocked_reason": "The playable peasant fallback has not passed the distinct elder cleric face, clothing, staff, and dialogue-distance visual gate."
+      "source_pack": "quaternius_rpg_characters_animated",
+      "status": "approved_runtime",
+      "approved": true,
+      "export_eligible": true,
+      "model": "res://assets_external/animated/Cleric_Animated_CC0.gltf",
+      "source_url": "https://quaternius.com/packs/rpgcharacters.html",
+      "license_file": "res://assets_external/licenses/Quaternius_RPG_Characters_CC0.txt",
+      "runtime_files": [
+        {"path": "res://assets_external/animated/Cleric_Animated_CC0.gltf", "bytes": 2985183, "sha256": "6497456a3fa1c151d7a6ab4f7b4c343ee416c23d9454505b950c93ea558e4601"},
+        {"path": "res://assets_external/animated/Cleric_Animated_CC0_Cleric_Texture.png", "bytes": 788637, "sha256": "f17f9208cb86fd98db429bf8a1a0edc97c713a8357a44a392e562047bc0fe913"},
+        {"path": "res://assets_external/animated/Cleric_Animated_CC0_Cleric_Staff_Texture.png", "bytes": 209022, "sha256": "37fd6917e617738676d5904d15816c11a3a7e8c0cbef4b3b8f1b95c968d6d785"}
+      ],
+      "blocked_reason": ""
     },
     "villager": {
       "display_name": "Greyfen villager",
       "family": "human",
-      "source_pack": "quaternius_universal_base_characters",
-      "status": "blocked_fallback",
-      "approved": false,
-      "export_eligible": false,
-      "fallback": "res://assets_external/characters_universal/Male_Peasant.gltf",
-      "blocked_reason": "Crowd variation, occupation silhouettes, and adjacent-duplicate rejection remain open."
+      "source_pack": "quaternius_rpg_characters_animated",
+      "status": "approved_runtime_family",
+      "approved": true,
+      "export_eligible": true,
+      "model": "res://assets_external/animated/Monk_Animated_CC0.gltf",
+      "source_url": "https://quaternius.com/packs/rpgcharacters.html",
+      "license_file": "res://assets_external/licenses/Quaternius_RPG_Characters_CC0.txt",
+      "model_family": "res://assets_external/animated/{Monk,Cleric,Rogue,Warrior}_Animated_CC0.gltf",
+      "runtime_files": [
+        {"path": "res://assets_external/animated/Monk_Animated_CC0.gltf", "bytes": 2655048, "sha256": "085c049ebb593e0edbef9f0dd1f62fce70f668f6be7be99f3a1aa5378c83e8a2"},
+        {"path": "res://assets_external/animated/Monk_Animated_CC0_Monk_Texture.png", "bytes": 731007, "sha256": "1f4f7b45373c3b2b125c6c35bc8b3ebe8c31801e78ca13285c04416f2f2950f8"},
+        {"path": "res://assets_external/animated/Cleric_Animated_CC0.gltf", "bytes": 2985183, "sha256": "6497456a3fa1c151d7a6ab4f7b4c343ee416c23d9454505b950c93ea558e4601"},
+        {"path": "res://assets_external/animated/Cleric_Animated_CC0_Cleric_Texture.png", "bytes": 788637, "sha256": "f17f9208cb86fd98db429bf8a1a0edc97c713a8357a44a392e562047bc0fe913"},
+        {"path": "res://assets_external/animated/Cleric_Animated_CC0_Cleric_Staff_Texture.png", "bytes": 209022, "sha256": "37fd6917e617738676d5904d15816c11a3a7e8c0cbef4b3b8f1b95c968d6d785"},
+        {"path": "res://assets_external/animated/Rogue_Animated_CC0.gltf", "bytes": 2568479, "sha256": "5a9eaca0871cd69f554747a1d42870b3bca702ba721d941d909fc530cf18afb8"},
+        {"path": "res://assets_external/animated/Rogue_Animated_CC0_Rogue_Texture.png", "bytes": 646086, "sha256": "540694206878779aa43f8f17524062e88bea35d2bb666b3f2081d23079a081d3"},
+        {"path": "res://assets_external/animated/Rogue_Animated_CC0_Rogue_Dagger_Texture.png", "bytes": 144932, "sha256": "b4c25a611639bb03c7aa454c2c6d053bdc34fcf0a622e88212e6a6f085816ec6"},
+        {"path": "res://assets_external/animated/Warrior_Animated_CC0.gltf", "bytes": 3035392, "sha256": "2bab905ce12d279e1d099c2a8de0b1ef31c9f5e8d1959b41d24470b4f4181add"},
+        {"path": "res://assets_external/animated/Warrior_Animated_CC0_Warrior_Texture.png", "bytes": 693384, "sha256": "5d016c19db78e8b6077eead3e1086a3bb3453cfaa8adb5e583b08dc39869ff17"}
+      ],
+      "blocked_reason": ""
     },
     "guard": {
       "display_name": "Vargan guard",
       "family": "human",
-      "source_pack": "quaternius_universal_base_characters",
-      "status": "blocked_fallback",
-      "approved": false,
-      "export_eligible": false,
-      "fallback": "res://assets_external/characters_universal/Male_Peasant.gltf",
-      "blocked_reason": "Guard armor silhouette and equipment attachment evidence remain open."
+      "source_pack": "quaternius_rpg_characters_animated",
+      "status": "approved_runtime",
+      "approved": true,
+      "export_eligible": true,
+      "model": "res://assets_external/animated/Warrior_Animated_CC0.gltf",
+      "source_url": "https://quaternius.com/packs/rpgcharacters.html",
+      "license_file": "res://assets_external/licenses/Quaternius_RPG_Characters_CC0.txt",
+      "runtime_files": [
+        {"path": "res://assets_external/animated/Warrior_Animated_CC0.gltf", "bytes": 3035392, "sha256": "2bab905ce12d279e1d099c2a8de0b1ef31c9f5e8d1959b41d24470b4f4181add"},
+        {"path": "res://assets_external/animated/Warrior_Animated_CC0_Warrior_Texture.png", "bytes": 693384, "sha256": "5d016c19db78e8b6077eead3e1086a3bb3453cfaa8adb5e583b08dc39869ff17"}
+      ],
+      "blocked_reason": ""
     },
     "traveler": {
       "display_name": "Road traveler",
       "family": "human",
-      "source_pack": "quaternius_universal_base_characters",
-      "status": "blocked_fallback",
-      "approved": false,
-      "export_eligible": false,
-      "fallback": "res://assets_external/characters_universal/Female_Peasant.gltf",
-      "blocked_reason": "Traveler wardrobe and route-visible identity evidence remain open."
+      "source_pack": "quaternius_rpg_characters_animated",
+      "status": "approved_runtime",
+      "approved": true,
+      "export_eligible": true,
+      "model": "res://assets_external/animated/Rogue_Animated_CC0.gltf",
+      "source_url": "https://quaternius.com/packs/rpgcharacters.html",
+      "license_file": "res://assets_external/licenses/Quaternius_RPG_Characters_CC0.txt",
+      "runtime_files": [
+        {"path": "res://assets_external/animated/Rogue_Animated_CC0.gltf", "bytes": 2568479, "sha256": "5a9eaca0871cd69f554747a1d42870b3bca702ba721d941d909fc530cf18afb8"},
+        {"path": "res://assets_external/animated/Rogue_Animated_CC0_Rogue_Texture.png", "bytes": 646086, "sha256": "540694206878779aa43f8f17524062e88bea35d2bb666b3f2081d23079a081d3"},
+        {"path": "res://assets_external/animated/Rogue_Animated_CC0_Rogue_Dagger_Texture.png", "bytes": 144932, "sha256": "b4c25a611639bb03c7aa454c2c6d053bdc34fcf0a622e88212e6a6f085816ec6"}
+      ],
+      "blocked_reason": ""
     },
     "ghoulkin": {
       "display_name": "Ghoulkin family",

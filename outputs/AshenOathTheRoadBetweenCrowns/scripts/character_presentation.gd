@@ -29,23 +29,80 @@ static func apply_player(owner: Node3D, visual_root: Node3D) -> void:
 static func apply_npc(owner: Node3D, role_id: String, include_ground_shadow: bool = true) -> void:
 	if owner == null:
 		return
+	var visual_target := _find_character_visual(owner)
 	if owner.has_meta("character_presentation_applied"):
+		# Interactable actors can be wrapped by an Area3D after their imported
+		# visual is created. Repair the child contract if the wrapper was marked
+		# first, rather than leaving the real body without its face driver.
+		if visual_target != owner and _has_skeleton(visual_target) and visual_target.find_child("CharacterFaceDriver", true, false) == null:
+			CharacterIdentityProfile.apply(visual_target, role_id.to_lower())
+		if visual_target != owner:
+			_copy_identity_contract(owner, visual_target, role_id.to_lower())
 		return
 	owner.set_meta("character_presentation_applied", true)
 	if include_ground_shadow:
 		_add_contact_shadow(owner, Vector3(0.72, 0.016, 0.50), 0.0)
 	var role = role_id.to_lower()
-	if _has_skeleton(owner):
-		CharacterVisualContract.remove_proxy_anatomy(owner)
-		CharacterIdentityProfile.apply(owner, role)
+	if _has_skeleton(visual_target):
+		CharacterVisualContract.remove_proxy_anatomy(visual_target)
+		CharacterIdentityProfile.apply(visual_target, role)
+		if visual_target != owner:
+			_copy_identity_contract(owner, visual_target, role)
+		# The selected GLTFs are complete authored bodies. Hide native held props
+		# when the role does not use them so a villager cannot inherit a staff or
+		# sword merely because it shares the same compact source family.
+		_set_native_role_equipment_visible(owner, role)
 		if role in ["sister_anwen", "sister_anwen_human"]:
-			_add_anwen_staff(owner)
+			# Cleric_Animated already contains a skinned staff on its Weapon.R
+			# socket. Do not layer a second root-equivalent staff over it.
+			if owner.find_child("Cleric_Staff", true, false) == null:
+				_add_anwen_staff(owner)
 		_add_castle_role_equipment(owner, role)
 		return
 	# Non-skeletal bodies are not allowed to acquire fake clothing or facial
 	# geometry. Keep the shadow only and let the asset acceptance gate reject the
 	# role until a complete shared-rig replacement is installed.
 	owner.set_meta("character_overlay_contract", "disabled")
+
+static func _copy_identity_contract(owner: Node3D, visual_target: Node3D, role: String) -> void:
+	# Interactable wrappers own the collision and prompt, while the imported
+	# visual owns the actual materials and face driver. Mirror the measurable
+	# contract so verifiers and save/debug tools inspect the same actor identity.
+	for key in [
+		"character_identity_profile",
+		"character_identity_surfaces",
+		"character_face_surfaces",
+		"character_face_features",
+		"character_face_contract",
+		"character_asset_family",
+		"character_composite",
+		"character_rig_layer_count",
+		"character_role_contract"
+	]:
+		if visual_target.has_meta(key):
+			owner.set_meta(key, visual_target.get_meta(key))
+	if not owner.has_meta("character_identity_profile"):
+		owner.set_meta("character_identity_profile", role)
+
+static func _find_character_visual(owner: Node3D) -> Node3D:
+	if owner.get_meta("character_asset_family", "") != "" or bool(owner.get_meta("character_composite", false)):
+		return owner
+	for child in owner.get_children():
+		if child is Node3D:
+			var found := _find_character_visual(child as Node3D)
+			if found != child or child.get_meta("character_asset_family", "") != "":
+				return found
+	return owner
+
+static func _set_native_role_equipment_visible(owner: Node3D, role: String) -> void:
+	var keeps_staff := role in ["sister_anwen", "sister_anwen_human"] or role.contains("cleric") or role.contains("pilgrim")
+	var native_staff := owner.find_child("Cleric_Staff", true, false)
+	if native_staff != null:
+		native_staff.visible = keeps_staff
+	var keeps_sword := role.contains("guard") or role.contains("edric") or role.contains("halvern") or role.contains("knight")
+	var native_sword := owner.find_child("Warrior_Sword", true, false)
+	if native_sword != null:
+		native_sword.visible = keeps_sword
 
 static func apply_enemy(owner: Node3D, scale_value: Vector3 = Vector3(0.78, 0.014, 0.58)) -> void:
 	if owner == null or owner.has_meta("character_grounding_applied"):
@@ -162,9 +219,9 @@ static func _add_castle_role_equipment(owner: Node3D, role: String) -> void:
 	var wants_left := castle_role.contains("guard") or castle_role.contains("record") or castle_role.contains("steward")
 	var aliases: Array[String] = []
 	if wants_left:
-		aliases = ["Hand.L", "hand_l", "left_hand"]
+		aliases = ["Hand.L", "Fist.L", "FistL", "hand_l", "left_hand"]
 	else:
-		aliases = ["Hand.R", "hand_r", "right_hand"]
+		aliases = ["Hand.R", "Weapon.R", "WeaponR", "Fist.R", "FistR", "hand_r", "right_hand"]
 	var bone_index := _find_bone_index(skeleton, aliases)
 	if bone_index < 0:
 		return

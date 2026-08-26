@@ -6,6 +6,19 @@ param(
 
 $ErrorActionPreference = "Stop"
 $Project = Split-Path -Parent $PSScriptRoot
+
+function Get-Sha256Hex([string]$Path) {
+    $algorithm = [System.Security.Cryptography.SHA256]::Create()
+    $stream = [System.IO.File]::OpenRead($Path)
+    try {
+        $digest = $algorithm.ComputeHash($stream)
+    } finally {
+        $stream.Dispose()
+        $algorithm.Dispose()
+    }
+    return ([System.BitConverter]::ToString($digest)).Replace("-", "").ToLowerInvariant()
+}
+
 if ([string]::IsNullOrWhiteSpace($OutputDirectory)) {
     $OutputDirectory = Join-Path $Project ".release-gate\runtime-packs"
 } elseif (-not [System.IO.Path]::IsPathRooted($OutputDirectory)) {
@@ -63,7 +76,7 @@ foreach ($pack in $packs) {
         $stream.Dispose()
     }
     $magic = [System.Text.Encoding]::ASCII.GetString($magicBytes)
-    $hash = (Get-FileHash -LiteralPath $target -Algorithm SHA256).Hash.ToLowerInvariant()
+    $hash = Get-Sha256Hex $target
     if ($magic -ne "GDPC") {
         $errors.Add(("{0}: output is not a Godot PCK (magic {1})" -f $pack.id, $magic))
         continue

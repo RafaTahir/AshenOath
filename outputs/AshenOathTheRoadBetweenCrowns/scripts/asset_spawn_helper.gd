@@ -68,6 +68,34 @@ func _spawn_from_entry(entry: Dictionary, role_name: String, fallback_category: 
 
 func _compose_player_body(outfit_root: Node3D, outfit_path: String, role_name: String) -> Node3D:
 	var normalized_path := outfit_path.replace("\\", "/").to_lower()
+	var is_ranger_runtime := normalized_path.contains("assets_external/characters_ranger/") and normalized_path.ends_with("male_ranger_runtime.gltf")
+	if is_ranger_runtime:
+		# Ranger is already a complete skinned Quaternius-compatible body. Mark it
+		# as a single authored layer so the character gates and runtime diagnostics
+		# do not confuse it with the retired multi-GLTF composite path.
+		outfit_root.set_meta("character_composite", true)
+		outfit_root.set_meta("character_rig_layer_count", 1)
+		outfit_root.set_meta("character_identity", role_name.to_lower())
+		outfit_root.set_meta("character_base_path", outfit_path)
+		outfit_root.set_meta("character_outfit_path", outfit_path)
+		outfit_root.set_meta("character_asset_family", "quaternius_ranger")
+		outfit_root.set_meta("character_animation_family", "universal_animation_library_2")
+		return outfit_root
+	var is_animated_complete := normalized_path.contains("assets_external/animated/") and normalized_path.ends_with(".gltf") and (
+		normalized_path.contains("warrior_animated") or normalized_path.contains("cleric_animated") or
+		normalized_path.contains("rogue_animated") or normalized_path.contains("monk_animated"))
+	if is_animated_complete:
+		# These selected Quaternius sources already contain one connected skinned
+		# body, native head/face surfaces, clothing, and their own clips. Keep the
+		# imported hierarchy intact so its 32-bone animation player remains valid.
+		outfit_root.set_meta("character_composite", true)
+		outfit_root.set_meta("character_rig_layer_count", 1)
+		outfit_root.set_meta("character_identity", role_name.to_lower())
+		outfit_root.set_meta("character_base_path", outfit_path)
+		outfit_root.set_meta("character_outfit_path", outfit_path)
+		outfit_root.set_meta("character_asset_family", "quaternius_animated_humanoid")
+		outfit_root.set_meta("character_animation_family", normalized_path.get_file().get_basename().to_lower())
+		return outfit_root
 	var is_fullbody_male := normalized_path.ends_with("superhero_male_fullbody.gltf")
 	var is_fullbody_female := normalized_path.ends_with("superhero_female_fullbody.gltf")
 	if is_fullbody_male or is_fullbody_female:

@@ -36,10 +36,9 @@ func _initialize() -> void:
 		check(actor.find_children("*", "AnimationPlayer", true, false).size() > 0, "%s has no animation player" % role)
 		check(absf(float(actor.get_meta("normalized_target_height", 0.0)) - float(REQUIRED_ROLES[role])) < 0.02, "%s target height is wrong" % role)
 		actor.queue_free()
-	# CHAR-008 keeps castle guards on the shared male humanoid source. The
-	# production Ranger hotfix intentionally gives road roles Captain Senn's
-	# dedicated Ranger outfit while retaining the same skeleton/animation family.
-	check(str(paths.castle_guard_human) == str(paths.villager_human), "Castle guards do not use the shared male humanoid source")
+	# Guards use the same selected Quaternius animated family while retaining a
+	# distinct Warrior silhouette from the Monk/Cleric crowd recipes.
+	check(str(paths.castle_guard_human).contains("assets_external/animated/Warrior_Animated_CC0.gltf"), "Castle guards do not use the selected Warrior runtime source")
 	check(str(paths.road_ranger_human).contains("characters_ranger/Male_Ranger_Runtime.gltf"), "Road Ranger does not use the approved Ranger runtime source")
 	var crowd_paths := {
 		str(paths.villager_human): true,
@@ -47,7 +46,9 @@ func _initialize() -> void:
 		str(paths.villager_worker_human): true,
 		str(paths.villager_hooded_human): true,
 	}
-	check(crowd_paths.size() == 2, "Greyfen crowd is not using the two shared male/female body sources")
+	check(crowd_paths.size() >= 3, "Greyfen crowd does not provide at least three cohesive body variants")
+	for crowd_path in crowd_paths:
+		check(str(crowd_path).contains("assets_external/animated/"), "Greyfen crowd uses a mismatched runtime family: %s" % crowd_path)
 	var manifest = JSON.parse_string(FileAccess.get_file_as_string("res://character_role_manifest.json"))
 	check(typeof(manifest) == TYPE_DICTIONARY and int(manifest.get("version", 0)) >= 2, "Character role manifest was not upgraded")
 	check((manifest as Dictionary).get("role_specs", {}).size() >= 8, "Character role specs are incomplete")

@@ -130,7 +130,7 @@
         bootMetrics.engine_start_ms = performance.now();
         performance.mark('ashen-oath-engine-start');
         setBootState('engine_starting');
-        try { engine = new Engine({"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":1760892,"index.wasm":37700666},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4}); } catch (error) { setBootState('failed', { error: String(error) }); setStatus('The road could not be opened. Reload to try again.'); console.error(error); return; }
+        try { engine = new Engine({"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":1773280,"index.wasm":37700666},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4}); } catch (error) { setBootState('failed', { error: String(error) }); setStatus('The road could not be opened. Reload to try again.'); console.error(error); return; }
         const missing = Engine.getMissingFeatures({ threads: false });
         if (missing.length) { setBootState('failed', { missing_features: missing }); setStatus('This browser is missing WebGL 2.0: ' + missing.join(', ')); console.error(status.textContent); return; }
         setBootState('loading');

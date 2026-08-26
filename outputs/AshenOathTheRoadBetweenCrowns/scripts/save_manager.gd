@@ -90,7 +90,7 @@ func migrate_save_data(raw_data: Dictionary) -> Dictionary:
 	data["world_position"] = _normalize_position(data.get("world_position", _local_to_world(data.player_position, data.world_sector)), data.world_sector)
 	if not data.has("seamless_world") or typeof(data.get("seamless_world")) != TYPE_DICTIONARY:
 		data["seamless_world"] = {}
-	for key in ["inventory", "vendors", "quests", "story_state", "progression", "world_state", "player_health", "player_stamina"]:
+	for key in ["inventory", "vendors", "quests", "story_state", "progression", "world_state", "player_health", "player_stamina", "equipment"]:
 		if not data.has(key) or typeof(data.get(key)) != TYPE_DICTIONARY:
 			data[key] = {}
 	_sanitize_dictionary_fields(data.inventory, ["items", "ingredients"])
@@ -157,6 +157,7 @@ func _build_save_data(game) -> Dictionary:
 		"seamless_world": game.seamless_world.save_state() if game.get("seamless_world") != null and game.seamless_world.has_method("save_state") else {},
 		"player_health": game.player.health_component.save_state(),
 		"player_stamina": game.player.stamina_component.save_state(),
+		"equipment": game.player.save_equipment_state() if game.player.has_method("save_equipment_state") else {},
 		"inventory": game.inventory.save_state(),
 		"vendors": game.vendor_service.save_state() if game.get("vendor_service") != null else {},
 		"quests": game.quests.save_state(),

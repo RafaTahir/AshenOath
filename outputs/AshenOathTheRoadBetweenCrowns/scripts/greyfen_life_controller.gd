@@ -428,10 +428,21 @@ func _make_skeletal_villager(parent: Node3D, role_id: String, index: int, scale_
 	mapped.set_meta("char_009_identity", CROWD_IDENTITIES[index % CROWD_IDENTITIES.size()])
 	mapped.set_meta("char_009_variant_index", index)
 	parent.add_child(mapped)
-	CharacterPresentation.apply_npc(parent, str(mapped.get_meta("char_009_identity", role_id)), false)
+	# Apply presentation to the imported actor itself. Applying it to the zone
+	# parent leaves the routine without its native face driver and makes the
+	# visual acceptance gate report a false faceless crowd failure.
+	CharacterPresentation.apply_npc(mapped, str(mapped.get_meta("char_009_identity", role_id)), false)
 	var driver = CharacterAnimationDriver.new()
 	driver.name = "CharacterAnimationDriver"
 	mapped.add_child(driver)
-	driver.configure(mapped, {"idle":"Idle", "walk":"Walk", "run":"Run", "hit":"RecieveHit", "death":"Death"})
+	var family := str(mapped.get_meta("character_animation_family", "")).to_lower()
+	var clips := {"idle":"Idle", "walk":"Walk", "run":"Run", "hit":"RecieveHit", "death":"Death"}
+	if family.contains("cleric"):
+		clips["work"] = "Idle_Weapon"
+	elif family.contains("rogue"):
+		clips["work"] = "Idle"
+	elif family.contains("monk"):
+		clips["work"] = "Idle"
+	driver.configure(mapped, clips)
 	driver.set_update_rate_hz(16.0 if quality == "quality" else 8.0)
 	return driver

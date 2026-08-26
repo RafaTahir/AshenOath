@@ -491,6 +491,8 @@ func load_save_state(data: Dictionary) -> void:
 	_load_zone_after_runtime_pack(zone, pos)
 	player.health_component.load_state(data.get("player_health", {}))
 	player.stamina_component.load_state(data.get("player_stamina", {}))
+	if player.has_method("load_equipment_state"):
+		player.load_equipment_state(data.get("equipment", {}))
 	_apply_progression_to_player()
 	_refresh_tracker()
 	_refresh_equipment_readout()
@@ -4497,6 +4499,15 @@ func _configure_npc_animation(mapped: Node3D, id: String) -> void:
 		"strafe": "Walk", "run": "Sprint", "work": "Interact",
 		"dialogue": "Idle_Talking", "hit": "Hit_Chest", "death": "Death01"
 	}
+	var family := str(mapped.get_meta("character_animation_family", "")).to_lower()
+	if family.contains("warrior"):
+		clips.merge({"run": "Run", "work": "Idle_Weapon", "dialogue": "Idle", "hit": "RecieveHit", "death": "Death"}, true)
+	elif family.contains("cleric"):
+		clips.merge({"run": "Run", "work": "Idle_Weapon", "dialogue": "Idle", "hit": "RecieveHit", "death": "Death"}, true)
+	elif family.contains("rogue"):
+		clips.merge({"run": "Run", "work": "Idle", "dialogue": "Idle", "hit": "RecieveHit", "death": "Death"}, true)
+	elif family.contains("monk"):
+		clips.merge({"run": "Run", "work": "Idle", "dialogue": "Idle", "hit": "RecieveHit", "death": "Death"}, true)
 	if id == "sister_anwen":
 		clips["idle"] = "Idle_Talking"
 		# The shared female base does not ship a death clip. Anwen is a protected

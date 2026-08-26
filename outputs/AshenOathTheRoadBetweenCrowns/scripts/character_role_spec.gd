@@ -13,9 +13,9 @@ const DEFAULT_SPEC := {
 	"skeleton_profile": "QuaterniusUniversalHumanoid",
 	"animation_profile": "Neutral_shared_retargeted",
 	"equipment_sockets": {
-		"head": ["head", "Head"],
-		"weapon": ["hand_r", "handr", "r_hand"],
-		"offhand": ["hand_l", "handl", "l_hand"]
+		"head": ["head", "Head", "Head_2"],
+		"weapon": ["hand_r", "handr", "r_hand", "Hand.R", "Weapon.R", "WeaponR", "Fist.R", "FistR"],
+		"offhand": ["hand_l", "handl", "l_hand", "Hand.L", "Fist.L", "FistL"]
 	},
 	"required_sockets": ["head", "weapon", "offhand"],
 	"height_tolerance": 0.08,

@@ -45,8 +45,9 @@ def main() -> int:
     if len(role_rows) < 9:
         failures.append("role manifest does not cover the nine soul-rebuild role contracts")
     approved = [role_id for role_id, role in role_rows.items() if isinstance(role, dict) and role.get("approved")]
-    if approved != ["ranger"]:
-        failures.append(f"only the approved Ranger runtime may be green, found: {approved}")
+    expected_approved = ["kael", "sister_anwen", "villager", "guard", "ranger"]
+    if approved != expected_approved:
+        failures.append(f"Milestone C approved runtime roles differ from the manifest contract: {approved}")
     for role_id, role in role_rows.items():
         if not isinstance(role, dict):
             continue

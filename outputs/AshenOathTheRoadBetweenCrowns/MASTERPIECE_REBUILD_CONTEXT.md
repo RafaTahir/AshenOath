@@ -8,6 +8,14 @@ to production in commit `45e628e`. `origin/main`, tracked `web/`, and Vercel
 share the current 89.43 MB, 12-file Web export with root PCK SHA-256
 `0E819446442435F703C253D6AD0C3AF892C8D5EA9F680BD7A0DA7AAE6101E6DF`.
 
+Milestone C is now the verified cumulative release candidate on this branch.
+It contains the direct selected human bodies, equipment loadout, bow/ammo
+slice, Greyfen vendors, current external pack records, and fresh browser
+proof. The C candidate is 94.039 MB across 12 files with root PCK SHA-256
+`5ca009899b4676bd2a6cd67cc48937d753e4c7bc97c702085b3a115018698dfa`.
+Production promotion is recorded after the C artifact is synchronized; until
+then the A deployment remains the public fallback.
+
 ## Truth boundary
 
 The game is functionally broad but visually and architecturally provisional.
@@ -22,9 +30,8 @@ acceptance gates pass:
 - later-zone visual reconstruction beyond the now-playable seamless exterior
   sectors;
 - final human, monster, boss, weapon, and equipment presentation;
-- final bow art and animation evidence; the first bow/ammunition/vendor slice is
-  implemented on the development branch but still needs graphical and packed-Web
-  acceptance;
+- final bow art and expanded combat presentation; the first
+  bow/ammunition/vendor slice is implemented and accepted in the C candidate;
 - PACK-003 produces six real, hash-verified external PCK candidates totaling
   55,217,080 bytes. The current Web candidate stages five streamed packs beside
   the root runtime; the six-pack candidate set remains outside source control;

@@ -28,6 +28,30 @@ live PCK matches the verified local hash at
 
 ### Current truth boundary - 2026-08-26
 
+### Milestone C candidate - characters, equipment, bow, and Greyfen commerce
+
+The selected Quaternius animated human family is now wired directly into the
+runtime for Kael, Sister Anwen, villagers, guards, travelers, and Captain
+Senn's Ranger role. Each selected body remains one connected imported
+hierarchy with one skeleton and one animation player. Kael's sword uses the
+actual hand socket while the sheathed sword, bow, and quiver use validated
+back sockets. `EquipmentLoadout` persists weapon mode, sheathing, selected
+arrow, and related presentation state.
+
+`BOW-001`, `BOW-002`, `AMMO-001`, and `SHOP-001` are playable on the existing
+Greyfen route. Standard/Bodkin/Ashfire ammunition caps are 24/9/6; Tor's
+Forge and Mira's Apothecary use the existing save, HUD, input-focus, and
+vendor paths. The selected direct bodies and equipment passed the character,
+motion, face, gameplay, asset, pack, and browser gates. Fresh C evidence is
+recorded in `CHAR-GAMEPLAY-QA-001_RESULT.md` and `MILESTONE-C_RESULT.md`.
+
+The verified C Web candidate is 12 files / 94.039 MB with root PCK SHA-256
+`5ca009899b4676bd2a6cd67cc48937d753e4c7bc97c702085b3a115018698dfa`.
+Chrome and Edge both reached native 1280x720 WebGL2 Greyfen with no console
+errors. This is a cohesive stylized character foundation, not a claim of
+photoreal faces or final monster-family replacement; monster roles remain
+explicitly pending for Milestone E.
+
 ### Milestone B - seamless exterior route checkpoint
 
 `WORLDGRID-001`, `SEAM-001`, `SEAM-002`, `NAV-002`, `SAVE-004`, and
