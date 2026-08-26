@@ -2,13 +2,14 @@
 
 ## Masterpiece Rebuild Status - 2026-08-26
 
-The current production checkpoint is `85e8057`, promoted from the cumulative
-`codex/masterpiece-rebuild` branch on 2026-08-26. `origin/main`, tracked `web/`,
-and Vercel contain the verified Milestone C character, equipment, bow, ammo,
-and Greyfen commerce candidate. It uses a small embedded base PCK plus five
-hash-verified streamed Web packs, keeps the HTML Crow Flight shell, and
-reaches Greyfen through real focused keyboard input in Chrome and Edge without
-console or resource errors.
+The current production source checkpoint is `b132db4`, promoted from the
+cumulative `codex/masterpiece-rebuild` branch on 2026-08-26. The verified
+runtime artifact was built at `85e8057`; `origin/main`, tracked `web/`, and
+Vercel contain that Milestone C character, equipment, bow, ammo, and Greyfen
+commerce runtime. It uses a small embedded base PCK plus five hash-verified
+streamed Web packs, keeps the HTML Crow Flight shell, and reaches Greyfen
+through real focused keyboard input in Chrome and Edge without console or
+resource errors.
 Final monster, boss, world, audio, and campaign visual quality remain later
 milestone work; historical result documents below are evidence only and do not
 silently approve those open presentation items.
@@ -57,6 +58,12 @@ explicitly pending for Milestone E.
 The live production URL is
 `https://ashenoath.vercel.app/?v=milestone-c-85e8057`, and its `index.pck`
 matches the verified local artifact.
+
+## Historical Checkpoint Ledger
+
+The dated entries below preserve earlier implementation evidence. They are
+superseded by the current truth at the top of this file and must not be read
+as the current branch, deployment, or acceptance status.
 
 ### Milestone B - seamless exterior route checkpoint
 

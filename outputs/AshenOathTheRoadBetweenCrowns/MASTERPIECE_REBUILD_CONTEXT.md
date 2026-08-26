@@ -4,8 +4,8 @@ This is the active implementation context for the 66-ticket Masterpiece Rebuild.
 The historical production baseline was the synchronized `main` checkpoint
 from `RELEASE-004`; the current production checkpoint is recorded below.
 The current branch is `codex/masterpiece-rebuild`, and Milestone C is promoted
-to production in commit `85e8057`. `origin/main`, tracked `web/`, and Vercel
-share the current 94.039 MB, 12-file Web export with root PCK SHA-256
+to production in source checkpoint `b132db4` (runtime artifact `85e8057`).
+`origin/main`, tracked `web/`, and Vercel share the current 94.039 MB, 12-file Web export with root PCK SHA-256
 `ea92c69fe8cc5be67b2969941a12ab687ca13c6d85a28bf0e970f5435c694b99`.
 
 Milestone C is now the verified cumulative production checkpoint on this branch.
@@ -29,24 +29,30 @@ acceptance gates pass:
   startup path are implemented and pass the current browser gate;
 - later-zone visual reconstruction beyond the now-playable seamless exterior
   sectors;
-- final human, monster, boss, weapon, and equipment presentation;
-- final bow art and expanded combat presentation; the first
-  bow/ammunition/vendor slice is implemented and accepted in the C candidate;
+- final monster and boss families, richer hero facial art, and expanded
+  combat presentation beyond the accepted C slice;
+- final bow art; the first bow/ammunition/vendor slice is implemented and
+  accepted in the C production checkpoint;
 - PACK-003 produces six real, hash-verified external PCK candidates totaling
   55,217,080 bytes. The current Web candidate stages five streamed packs beside
   the root runtime; the six-pack candidate set remains outside source control;
 - STREAM-003 implements the download-to-temp, hash/size validation, cache,
   local mount, retry, cancellation, progress, and embedded-fallback lifecycle.
   The A candidate uses relative pack URLs that resolve beside the Web export;
-- the ASSET-005 runtime boundary is now explicit: Captain Senn's processed
-  Ranger is the only approved role, while ten route-visible roles remain
-  playable but visually blocked fallbacks;
+- the ASSET-005 runtime boundary now includes the selected direct Quaternius
+  human roles and Captain Senn's processed Ranger; broader monster roles and
+  final boss mappings remain explicitly pending for Milestone E;
 - QA-013 now preserves one reproducible baseline ledger with a current
   identical-camera nine-view recapture, startup, transition, zone FPS, memory,
   and scene counts; final visual approval remains a separate gate;
 - authored Greyfen, Wychwood, campaign, river, sky, and interior presentation;
 - contact-driven combat and human-reviewed voice delivery;
 - complete real-input campaign and final production evidence.
+
+## Historical Checkpoints (superseded)
+
+The dated entries below preserve earlier milestone evidence and do not replace
+the current production truth above.
 
 Milestone A's final aggregate implementation/export/browser gate passed on
 2026-08-26. Chrome/Edge engine readiness measured 8.30/9.07 seconds and the
