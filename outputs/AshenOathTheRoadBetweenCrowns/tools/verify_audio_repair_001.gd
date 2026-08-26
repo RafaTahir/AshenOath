@@ -7,6 +7,7 @@ func _initialize() -> void:
 	var audio := AudioManager.new()
 	root.add_child(audio)
 	await process_frame
+	await audio.wait_until_ready()
 	check(audio.has_method("play_event_limited"), "Debounced event API is missing")
 	check(audio.has_method("set_game_paused"), "World-audio pause API is missing")
 	check(audio.has_method("play_footstep"), "Surface-aware footstep API is missing")

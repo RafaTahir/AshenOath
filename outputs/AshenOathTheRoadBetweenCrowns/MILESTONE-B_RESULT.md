@@ -8,15 +8,18 @@ coordinate save migration, and physical interior-door semantics.
 
 ## Gates
 
-The targeted `milestone_b` profile passed:
+The structural `milestone_b` profile passed:
 
 - content integrity and runtime smoke
 - WORLDGRID-001, SEAM-001, SEAM-002, NAV-002
 - SAVE-004 and INTERIOR-001
 - player-driven SEAM-QA-001 circuit
 - STREAM-003, navigation, save, scene, and zone-builder regressions
+- focused audio and character regression profiles after the boot optimization
 - Web export, seven-file artifact validation, and packed startup
-- Chrome and Edge WebGL2 startup/New Game smoke with no console errors
+- Chrome and Edge WebGL2 startup/New Game smoke with no console errors. The
+  first two-browser invocation hit a CDP screenshot timeout after Chrome had
+  passed; an isolated Edge retry passed against the same export.
 - current seamless changed-view capture
 
 SEAM-QA-001 traversed both directions through:
@@ -25,30 +28,40 @@ SEAM-QA-001 traversed both directions through:
 
 The final export contains seven files, totals `87.30 MB`, and has PCK SHA-256:
 
-`CB8FCD2C88500EEB090DF68E1F2C76679094874C06E89FA02F3CCAF081430F8C`
+`D9BC435932A644F1BAA7D7DE8A1F1252F2E639320DF07C9523E4AAC22AB734BB`
 
 Browser evidence:
 
-- Chrome: 1280x720 WebGL2, no console errors, engine ready `25.47 s`, New
-  Game ready `8.10 s`.
-- Edge: 1280x720 WebGL2, no console errors, engine ready `28.41 s`, New Game
-  ready `4.71 s`.
+- Chrome: 1280x720 WebGL2, no console errors, engine ready `30.79 s`, New
+  Game ready `4.17 s`.
+- Edge retry: 1280x720 WebGL2, no console errors, engine ready `26.29 s`, New
+  Game ready `5.11 s`.
+
+The clean-source pass also defers noncritical generated, recorded, and voice
+audio libraries until after the menu path and moves the shared humanoid clip
+library and unused Dragon FBX out of script-level boot preloads. A warmed
+headless boot remains approximately `0.53 s`; the fresh-profile graphical
+harness remains variable because it uses a software ANGLE path.
 
 ## Evidence
 
-- `Development_Gallery/screenshots/SEAM_001_01_GreyfenBoundary_20260826_142809.png`
-- `Development_Gallery/screenshots/SEAM_001_02_WychwoodArrival_20260826_142809.png`
+- `Development_Gallery/screenshots/SEAM_001_01_GreyfenBoundary_20260826_150551.png`
+- `Development_Gallery/screenshots/SEAM_001_02_WychwoodArrival_20260826_150551.png`
 - `.release-gate/ticket/web_browser_chrome.png`
 - `.release-gate/ticket/web_browser_edge.png`
+- `.release-gate/ticket/web_browser_edge_retry_edge.png`
 
 ## Known blockers and honest status
 
 The route/lifecycle work passes, but the broader release contract still has
 open items: cold browser startup remains above the 12-second target, the
 later-zone art is still procedural/blockout-grade, and graphical verifier
-teardown prints shutdown-only allocator/ObjectDB diagnostics. These are not
-hidden by this ticket and keep the production release classified as
-functional-but-incomplete rather than visually final.
+teardown prints shutdown-only allocator/ObjectDB diagnostics. The startup
+target is not waived by the optimization; the browser measurements above are
+the current truth. These issues keep the production release classified as
+functional-but-incomplete rather than visually final. The Edge screenshot
+timeout was isolated to the first browser invocation and passed on retry; it
+remains a harness-flakiness note rather than a gameplay failure.
 
 The verified Web candidate is ready for a development checkpoint. Production
 `main`, tracked `web/`, and Vercel remain unchanged until the startup/lifecycle

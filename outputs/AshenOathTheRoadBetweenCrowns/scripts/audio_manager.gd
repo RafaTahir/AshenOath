@@ -41,6 +41,10 @@ var opening_soundscape_zone := ""
 var opening_soundscape_listener: Node3D
 var opening_soundscape_anchors: Dictionary = {}
 var opening_soundscape_quality := "balanced"
+var generated_library_ready := false
+var recorded_library_ready := false
+var voice_library_ready := false
+var audio_bootstrap_started := false
 
 func _process(delta: float) -> void:
 	for event_name in event_cooldowns.keys():
@@ -61,9 +65,12 @@ func _process(delta: float) -> void:
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	_build_library()
-	_build_recorded_library()
-	_build_voice_library()
+	# Keep the critical boot path limited to menu feedback and one menu music
+	# state. Combat, campaign music, recorded cues, and scratch voice assets are
+	# prepared after the menu is visible so Web startup is not held by audio that
+	# cannot affect the first frame.
+	_build_menu_library()
+	_build_music_state("main_menu")
 	for index in range(TRANSIENT_POOL_SIZE):
 		var pooled := AudioStreamPlayer.new()
 		pooled.name = "TransientCue%02d" % index
@@ -71,7 +78,46 @@ func _ready() -> void:
 		add_child(pooled)
 		transient_players.append(pooled)
 	set_master_volume(master_volume_linear)
+	call_deferred("_bootstrap_audio_after_menu")
+
+func _bootstrap_audio_after_menu() -> void:
+	if audio_bootstrap_started:
+		return
+	audio_bootstrap_started = true
+	# Give the Web shell and Godot menu one frame to become interactive before
+	# loading the non-critical audio libraries. Missing cues remain subtitle-safe
+	# while this deferred work is in progress.
+	await get_tree().process_frame
+	await get_tree().process_frame
+	_build_library()
+	_build_recorded_library()
+	_build_voice_library()
 	_prewarm_common_cues()
+
+func wait_until_ready() -> void:
+	# Tests and systems that require registered voice/recorded cues can await the
+	# same deferred boundary used by the menu boot path. This keeps lazy startup
+	# honest without forcing every caller to duplicate frame timing assumptions.
+	while not (generated_library_ready and recorded_library_ready and voice_library_ready):
+		await get_tree().process_frame
+
+func prewarm_campaign_music() -> void:
+	# Campaign music stays lazy during the menu boot path. Callers that are
+	# explicitly validating or preparing a full campaign can opt into building
+	# the complete state table without making every launch pay that cost.
+	for state_id in [
+		"main_menu", "greyfen_explore", "shrine_anwen", "wychwood_tension",
+		"ghoulkin_combat", "deep_wood", "ash_mill", "marsh_crossing",
+		"bandit_road", "castle_silence", "record_hall", "undercroft",
+		"assembly", "hart_glade", "boss_bell_eater", "boss_rootbound_colossus",
+		"boss_ashwing", "boss_halvern_boss", "boss_white_hart_avatar"
+	]:
+		_build_music_state(state_id)
+
+func _build_menu_library() -> void:
+	sounds["ui"] = _tone(660.0, 0.055, 0.20)
+	sounds["menu_hover"] = _tone_mix([392.0, 588.0], 0.060, 0.085, 32.0, 0.006)
+	sounds["menu_click"] = _tone_mix([196.0, 392.0, 587.0], 0.110, 0.105, 24.0, 0.010)
 
 func _exit_tree() -> void:
 	# Release generated streams before Godot tears down the audio server. This
@@ -286,6 +332,9 @@ func _event_stream(event_name: String) -> AudioStream:
 	if has_recorded_event(event_name):
 		var variants: Array = recorded_variants[event_name]
 		return variants[randi() % variants.size()] as AudioStream
+	# Audio is non-blocking presentation. A cue may arrive during the deferred
+	# bootstrap; silently skipping it is preferable to rebuilding the entire
+	# library inside an interaction or combat frame.
 	return sounds.get(event_name) as AudioStream
 
 func has_voice(voice_id: String) -> bool:
@@ -481,6 +530,9 @@ func _play_next_voice() -> void:
 	_play_voice_now(next_id)
 
 func _build_library() -> void:
+	if generated_library_ready:
+		return
+	generated_library_ready = true
 	sounds["ui"] = _tone(660.0, 0.055, 0.20)
 	sounds["menu_hover"] = _tone_mix([392.0, 588.0], 0.060, 0.085, 32.0, 0.006)
 	sounds["menu_click"] = _tone_mix([196.0, 392.0, 587.0], 0.110, 0.105, 24.0, 0.010)
@@ -531,12 +583,11 @@ func _build_library() -> void:
 	sounds["portal_ready"] = _tone_mix([196.0, 294.0, 441.0], 0.32, 0.11, 54.0, 0.008)
 	sounds["portal_travel"] = _tone_mix([92.0, 184.0, 368.0], 0.38, 0.16, 96.0, 0.014)
 	sounds["portal_error"] = _tone_mix([72.0, 54.0], 0.24, 0.10, -28.0, 0.012)
-	# Build every authored music identity up front. Zone transitions and
-	# verification must see the same complete library before the first state
-	# change; lazy creation alone made later campaign zones appear unconfigured.
-	_build_music_library()
 
 func _build_recorded_library() -> void:
+	if recorded_library_ready:
+		return
+	recorded_library_ready = true
 	var root_path := "res://assets_external/audio/rpg/"
 	recorded_variants["step_road"] = _load_streams(root_path, ["footstep00.ogg","footstep01.ogg","footstep02.ogg","footstep03.ogg"])
 	recorded_variants["step_forest"] = _load_streams(root_path, ["footstep04.ogg","footstep05.ogg","footstep06.ogg"])
@@ -569,6 +620,9 @@ func _load_streams(root_path: String, file_names: Array) -> Array:
 	return streams
 
 func _build_voice_library() -> void:
+	if voice_library_ready:
+		return
+	voice_library_ready = true
 	voice_texts["voice_sister_anwen_test"] = "Sister Anwen: The road remembers every oath broken upon it."
 	voice_texts["voice_player_test"] = "Player: Then I will hear what the dead have to say."
 	voice_texts["voice_sister_anwen_greeting_01"] = "Keep your blade low in Greyfen, hunter. Fear already has hands around every throat here."

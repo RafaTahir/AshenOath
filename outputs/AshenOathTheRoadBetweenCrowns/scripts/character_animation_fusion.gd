@@ -6,12 +6,15 @@ extends RefCounted
 ## are deliberately never selected by the role maps.
 
 const ANIMATION_LIBRARY_PATH := "res://assets_external/animations/AnimationLibrary_Godot_Standard.glb"
-const ANIMATION_LIBRARY_SCENE: PackedScene = preload("res://assets_external/animations/AnimationLibrary_Godot_Standard.glb")
 
 static func attach_shared_library(root: Node3D) -> AnimationPlayer:
 	if root == null:
 		return null
-	var source_scene := ANIMATION_LIBRARY_SCENE.instantiate() as Node3D
+	# Keep the shared clip library out of the engine boot dependency graph. The
+	# first visible character pays this cost during scene construction, while
+	# the menu and browser boot shell remain free to become interactive.
+	var source_library_scene := ResourceLoader.load(ANIMATION_LIBRARY_PATH) as PackedScene
+	var source_scene := source_library_scene.instantiate() as Node3D if source_library_scene != null else null
 	if source_scene == null:
 		return _find_animation_player(root)
 	var source_player := _find_animation_player(source_scene)

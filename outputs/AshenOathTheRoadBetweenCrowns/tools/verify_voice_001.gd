@@ -16,6 +16,7 @@ func _initialize() -> void:
 	var audio := AudioManager.new()
 	root.add_child(audio)
 	await process_frame
+	await audio.wait_until_ready()
 	var payload := 0
 	for voice_id in manifest.get("required_lines", []):
 		var id := str(voice_id)

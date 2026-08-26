@@ -15,9 +15,8 @@ const CharacterPresentation = preload("res://scripts/character_presentation.gd")
 const CharacterRoleSpec = preload("res://scripts/character_role_spec.gd")
 const CombatFeedback = preload("res://scripts/combat_feedback.gd")
 const CharacterAnimationDriver = preload("res://scripts/character_animation_driver.gd")
-# Keep the current Ashwing runtime source reachable to Godot's dependency
-# scanner; the role manifest still owns which source is selected at runtime.
-const ASHWING_RUNTIME_SOURCE = preload("res://assets_external/enemies/Dragon.fbx")
+# The role manifest owns the Ashwing source selected at runtime; do not pull
+# the large optional enemy asset into the browser boot dependency graph here.
 
 var enemy_id = "ghoulkin"
 var display_name = "Enemy"

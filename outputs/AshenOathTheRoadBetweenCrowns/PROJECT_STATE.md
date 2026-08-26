@@ -7,8 +7,8 @@ The current production checkpoint remains `d7e09d0` and is synchronized with
 branch is a new cumulative development line. The project is not claiming final
 Soul Rebuild quality: the current runtime still has provisional character and
 boss mappings, procedural/blockout world presentation, external runtime-pack
-candidates that are not yet mounted, portal-separated exterior regions, scratch
-voice delivery, and an
+candidates that are not yet mounted, incomplete later exterior-seam
+presentation, scratch voice delivery, and an
 unverified visual gate. The development branch now contains the first
 player-facing bow/ammunition/shop slice: three capped arrow types, target-aware
 wall-clipped release, Tor's Forge, Mira's Apothecary, persistent purchases, and
@@ -30,22 +30,28 @@ Vargan Approach. Exterior travel no longer exposes a portal node or the
 full-screen loading layer; Castle approach to courtyard uses a physical door.
 The save schema is version 9 and migrates legacy interior sectors into the
 world atlas. Fresh seam evidence is recorded in
-`Development_Gallery/screenshots/SEAM_001_01_GreyfenBoundary_20260826_142809.png`
-and `SEAM_001_02_WychwoodArrival_20260826_142809.png`.
+`Development_Gallery/screenshots/SEAM_001_01_GreyfenBoundary_20260826_150551.png`
+and `SEAM_001_02_WychwoodArrival_20260826_150551.png`.
 
-The targeted `seamless` gate and full `milestone_b` export/browser gate pass.
-The verified seven-file candidate is `87.30 MB` with PCK SHA-256
-`CB8FCD2C88500EEB090DF68E1F2C76679094874C06E89FA02F3CCAF081430F8C`.
-Production `web/`, `main`, and Vercel remain unchanged because cold browser
-engine readiness is still above the product target and shutdown-only
-allocator/ObjectDB diagnostics remain visible in graphical verifier teardown.
-This is a verified development checkpoint, not final visual approval; later
-zone geometry remains procedural.
+The targeted `seamless` gate, structural Milestone B gates, export, packed
+startup, and browser route checks pass. The first two-browser run hit an Edge
+CDP screenshot timeout after Chrome passed; an isolated Edge retry passed
+against the same export. The clean-source seven-file candidate is `87.30 MB`
+with PCK SHA-256
+`D9BC435932A644F1BAA7D7DE8A1F1252F2E639320DF07C9523E4AAC22AB734BB`.
+Production `web/`, `main`, and Vercel remain unchanged because fresh-profile
+cold browser engine readiness is still above the product target and
+shutdown-only allocator/ObjectDB diagnostics remain visible in graphical
+verifier teardown. Noncritical audio and heavy character resources now load
+after the menu path or at first use; the final browser measurements are
+recorded in `MILESTONE-B_RESULT.md`. This is a verified development
+checkpoint, not final visual approval; later-zone geometry remains procedural.
 
-PACK-003 is the current development checkpoint. Six named runtime PCK
-candidates have been exported and hash-verified outside the repository at a
+PACK-003 remains an earlier development checkpoint. Six named runtime PCK
+candidates were exported and hash-verified outside the repository at a
 combined `80.52 MB`. They remain external candidates: the current runtime
-still uses its embedded PCK because production URLs have not been configured.
+still uses its embedded PCK because production URLs have not been configured;
+the active checkpoint is now Milestone B.
 STREAM-003 implements download, verification, mounting, caching, retry, and
 rollback. Production `main`, tracked `web/`, and Vercel remain unchanged.
 

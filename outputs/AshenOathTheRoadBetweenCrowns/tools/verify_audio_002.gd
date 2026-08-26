@@ -8,6 +8,8 @@ func _initialize() -> void:
 	var audio := AudioManager.new()
 	root.add_child(audio)
 	await process_frame
+	await audio.wait_until_ready()
+	audio.prewarm_campaign_music()
 	var required_states := [
 		"main_menu", "greyfen_explore", "wychwood_tension", "ghoulkin_combat",
 		"deep_wood", "ash_mill", "marsh_crossing", "bandit_road",

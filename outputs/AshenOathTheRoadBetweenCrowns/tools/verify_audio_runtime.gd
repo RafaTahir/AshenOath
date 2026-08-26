@@ -6,6 +6,7 @@ func _initialize() -> void:
 	var audio = AudioManager.new()
 	root.add_child(audio)
 	await process_frame
+	await audio.wait_until_ready()
 	_assert(audio.has_method("play_voice"), "AudioManager is missing play_voice")
 	_assert(audio.has_method("play_voice_sequence"), "AudioManager is missing play_voice_sequence")
 	_assert(audio.has_method("stop_voice"), "AudioManager is missing stop_voice")

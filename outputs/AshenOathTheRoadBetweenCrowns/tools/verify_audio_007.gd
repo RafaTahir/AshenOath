@@ -8,6 +8,7 @@ func _initialize() -> void:
 	var audio := AudioManager.new()
 	root.add_child(audio)
 	await process_frame
+	await audio.wait_until_ready()
 	for state_id in [
 		"boss_bell_eater",
 		"boss_rootbound_colossus",

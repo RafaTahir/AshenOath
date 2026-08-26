@@ -56,12 +56,18 @@ full-screen loading layer. Castle approach to courtyard is retained as a
 physical-door route. Legacy interior save coordinates now migrate to the
 correct world cells.
 
-The Milestone B targeted gate and full milestone-B export/browser gate pass.
-The verified seven-file candidate is `87.30 MB` with PCK SHA-256
-`CB8FCD2C88500EEB090DF68E1F2C76679094874C06E89FA02F3CCAF081430F8C`.
-Fresh seam captures are current at `20260826_142809`. Production `web/`,
-`main`, and Vercel remain unchanged because cold browser engine readiness is
-still above the product target and shutdown-only Godot allocator/ObjectDB
+The Milestone B structural gates, export, packed startup, and browser route
+checks pass. The first two-browser run hit an Edge CDP screenshot timeout after
+Chrome passed; the same export passed an isolated Edge retry. The clean-source
+seven-file candidate is `87.30 MB` with PCK SHA-256
+`D9BC435932A644F1BAA7D7DE8A1F1252F2E639320DF07C9523E4AAC22AB734BB`.
+Fresh seam captures are current at `20260826_150551`. Noncritical audio and
+heavy script-level asset preloads are deferred or moved to first use; this
+keeps warmed headless boot near `0.53 s`, but fresh-profile graphical browser
+measurements remain variable at Chrome `30.79 s` and Edge `26.29 s` to
+engine-ready, with New Game at `4.17 s` and `5.11 s`. Production `web/`,
+`main`, and Vercel remain unchanged because cold browser readiness is still
+above the product target and shutdown-only Godot allocator/ObjectDB
 diagnostics remain visible in graphical verifier teardown. This milestone is
 therefore a verified development checkpoint, not a final production release.
 

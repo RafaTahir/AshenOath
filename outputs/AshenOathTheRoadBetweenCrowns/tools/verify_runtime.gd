@@ -31,6 +31,7 @@ func _initialize() -> void:
 	_assert(await _menu_has_setting_values(game.hud, game.settings.settings), "Settings menu does not expose current values")
 	game.call("_new_game")
 	await _wait_for_zone_ready(game, "greyfen")
+	await game.audio.wait_until_ready()
 	_assert(str(game.settings.settings.get("quality_preset", "")) in ["potato", "balanced", "quality"], "Visual preset is invalid")
 	_assert(is_equal_approx(float(game.settings.settings.get("resolution_scale", 0.0)), 1.0), "Balanced gameplay is not native 720p")
 	_assert(int(game.settings.settings.get("target_fps", 0)) == 30, "Balanced target is not 30 FPS")
@@ -99,13 +100,18 @@ func _initialize() -> void:
 	await _settle_frames(1)
 	if DisplayServer.get_name().to_lower() != "headless":
 		_assert(Input.mouse_mode == Input.MOUSE_MODE_CAPTURED, "Gameplay did not recapture the mouse after closing dialogue")
-	_assert(_has_child_named(game.zone_root, "gate_vargan_approach"), "Playable Castle Vargan gate is missing")
+	_assert(_has_child_named(game.zone_root, "gate_vargan_approach"), "Castle Vargan route marker is missing")
 	var castle_gate = _find_child_named(game.zone_root, "gate_vargan_approach")
 	if castle_gate == null:
-		_fail("Castle Vargan gate lookup failed after presence assertion")
+		_fail("Castle Vargan route marker lookup failed after presence assertion")
 		return
-	_assert(await _activate_focused_interaction(game, castle_gate), "Castle Vargan gate could not be activated through normal focus and E input")
-	await _settle_frames(1)
+	_assert(bool(castle_gate.get_meta("seamless_exterior_gate", false)), "Castle Vargan exterior route still exposes a mandatory portal")
+	# Exterior gates are now route markers. Exercise the player-facing boundary
+	# instead of invoking an interaction that the seamless-world contract
+	# intentionally suppresses.
+	game.player.global_position = Vector3(20.4, 0.95, 0.0)
+	game.player.velocity = Vector3.ZERO
+	await _wait_for_zone_ready(game, "vargan_approach")
 	_assert(str(game.current_zone_id) == "vargan_approach", "Castle Vargan gate did not open from New Game")
 	_assert(game.quests.is_active("main_blood_under_stone"), "Castle arrival did not start Blood Under Stone")
 

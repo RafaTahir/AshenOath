@@ -1,6 +1,5 @@
 extends Node
 
-## Explicit export dependency for the neutral humanoid animation library. The
-## runtime also loads it through the fusion service, but dynamic role manifests
-## are not sufficient for Godot's Web resource scanner.
-const NEUTRAL_HUMANOID_ANIMATION_LIBRARY: PackedScene = preload("res://assets_external/animations/AnimationLibrary_Godot_Standard.glb")
+## Runtime asset anchor retained for scene compatibility. Runtime character
+## code loads the shared animation library on first use, so this node must not
+## preload that multi-megabyte resource during browser boot.
