@@ -1,8 +1,10 @@
 # Ashen Oath Masterpiece Rebuild Context
 
 This is the active implementation context for the 66-ticket Masterpiece Rebuild.
-The production baseline is the synchronized `main` checkpoint from `RELEASE-004`.
-The current branch is `codex/masterpiece-rebuild`.
+The historical production baseline was the synchronized `main` checkpoint
+from `RELEASE-004`; the current production checkpoint is recorded below.
+The current branch is `codex/masterpiece-rebuild`, and the current production
+checkpoint after Milestone B promotion is `0b4e317`.
 
 ## Truth boundary
 
@@ -75,6 +77,9 @@ startup target remains above target in this software-browser environment, and
 Godot still emits shutdown-only allocator/ObjectDB diagnostics after passing
 isolated graphical gates. Those remain follow-up work for the loading and
 lifecycle tickets; they do not invalidate the passed Milestone B route gates.
+The verified candidate is now promoted to `origin/main` and Vercel; the live
+main and campaign-pack hashes match the local export, and Chrome/Edge
+production smoke tests reached Greyfen without console errors.
 
 ## Locked product decisions
 

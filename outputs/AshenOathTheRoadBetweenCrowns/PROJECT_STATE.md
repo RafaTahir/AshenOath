@@ -2,9 +2,9 @@
 
 ## Masterpiece Rebuild Status - 2026-08-26
 
-The current production checkpoint remains `d7e09d0` and is synchronized with
-`origin/main` and the tracked Web output until the Milestone B promotion is
-completed. The `codex/masterpiece-rebuild` branch is the cumulative
+The current production checkpoint is `0b4e317`, synchronized with
+`origin/main`, tracked `web/`, and the Vercel Web output after the Milestone B
+promotion. The `codex/masterpiece-rebuild` branch is the cumulative
 development line. The project is not claiming final Soul Rebuild quality: the
 current runtime still has provisional character and boss mappings,
 procedural/blockout world presentation, external runtime-pack candidates that
@@ -47,9 +47,13 @@ for engine-ready/New Game. The campaign mount test passes from the reduced
 main PCK. Fresh seam evidence is current at
 `SEAM_001_01_GreyfenBoundary_20260826_161353.png` and
 `SEAM_001_02_WychwoodArrival_20260826_161353.png`.
-Production `web/`, `main`, and Vercel remain unchanged until the promotion
-step. The broader cold-start target and shutdown-only diagnostics remain
-documented follow-up work; later-zone geometry remains procedural.
+Production `web/`, `main`, and Vercel now contain the verified Milestone B
+candidate. The live main PCK matches the local SHA-256
+`FB90BA224A97BC01341755198A2D0FC61847D534A750245FFBA38CF25D30991B`, and the
+live `packs/campaign.pck` matches
+`E3773163700109A7E2195E485A41BA46461220445CE645878CD583825A383D8E`. The
+broader cold-start target and shutdown-only diagnostics remain documented
+follow-up work; later-zone geometry remains procedural.
 
 PACK-003 remains an external candidate set. Six named runtime PCK candidates
 were exported and hash-verified at a combined `55.58 MB`; the current Web

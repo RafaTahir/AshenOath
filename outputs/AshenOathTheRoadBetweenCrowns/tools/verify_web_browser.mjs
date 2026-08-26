@@ -8,6 +8,7 @@ const args = Object.fromEntries(process.argv.slice(2).map((value, index, all) =>
   value.startsWith("--") ? [value.slice(2), all[index + 1]?.startsWith("--") ? true : all[index + 1]] : []
 ).filter(([key]) => key));
 const exportDir = resolve(args.export || "../AshenOath_Web");
+const targetUrl = args.url ? String(args.url) : "";
 const reportPath = resolve(args.report || ".release-gate/web_001_browser_report.json");
 const timeoutMs = Number(args.timeout || 90000);
 const maxMemoryMb = Number(args["max-memory-mb"] || 450);
@@ -56,7 +57,7 @@ async function dispatchPrimaryActivation(cdp, point) {
   }, 60000);
 }
 
-if (!existsSync(join(exportDir, "index.html"))) {
+if (!targetUrl && !existsSync(join(exportDir, "index.html"))) {
   throw new Error(`WEB BROWSER: export missing at ${exportDir}`);
 }
 if ((!requestedBrowser && browsers.length !== 2) || (requestedBrowser && browsers.length !== 1)) {
@@ -86,8 +87,8 @@ const server = createServer((request, response) => {
   });
   createReadStream(path).pipe(response);
 });
-await new Promise((resolveListen) => server.listen(0, "127.0.0.1", resolveListen));
-const port = server.address().port;
+if (!targetUrl) await new Promise((resolveListen) => server.listen(0, "127.0.0.1", resolveListen));
+const port = targetUrl ? 0 : server.address().port;
 
 const sleep = (ms) => new Promise((resolveSleep) => setTimeout(resolveSleep, ms));
 async function fetchJson(url) {
@@ -201,7 +202,7 @@ class Cdp {
 async function testBrowser(name, executable) {
   const debugPort = await availablePort();
   const profile = join(tmpdir(), `ashen-oath-web001-${mobileMode ? "mobile-" : ""}${name.toLowerCase()}-${Date.now()}`);
-  const url = `http://127.0.0.1:${port}/index.html?v=${mobileMode ? "mobile001" : "web001"}-${name.toLowerCase()}${mobileMode ? "&touch=1" : ""}`;
+  const url = targetUrl || `http://127.0.0.1:${port}/index.html?v=${mobileMode ? "mobile001" : "web001"}-${name.toLowerCase()}${mobileMode ? "&touch=1" : ""}`;
   const browserArgs = [
     "--headless=new",
     `--remote-debugging-port=${debugPort}`,
@@ -456,7 +457,7 @@ function terminateIsolatedBrowser(browser, profile) {
   });
 }
 
-const report = { schema_version: 1, status: "pass", mode: mobileMode ? "mobile-landscape-emulation" : "desktop", export_dir: exportDir, browsers: [] };
+const report = { schema_version: 1, status: "pass", mode: mobileMode ? "mobile-landscape-emulation" : "desktop", target_url: targetUrl || null, export_dir: exportDir, browsers: [] };
 try {
   for (const [name, executable] of browsers) {
     const result = await testBrowser(name, executable);
@@ -472,7 +473,7 @@ try {
   report.failure = error.message;
   console.error(`WEB BROWSER: FAIL - ${error.message}`);
 } finally {
-  server.close();
+  if (!targetUrl) server.close();
   mkdirSync(resolve(reportPath, ".."), { recursive: true });
   writeFileSync(reportPath, JSON.stringify(report, null, 2) + "\n");
 }
