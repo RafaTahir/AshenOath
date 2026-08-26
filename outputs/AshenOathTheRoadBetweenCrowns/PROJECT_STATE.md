@@ -35,10 +35,10 @@ and `SEAM_001_02_WychwoodArrival_20260826_150551.png`.
 
 The targeted `seamless` gate, structural Milestone B gates, export, packed
 startup, and browser route checks pass. The first two-browser run hit an Edge
-CDP screenshot timeout after Chrome passed; an isolated Edge retry passed
-against the same export. The clean-source seven-file candidate is `87.30 MB`
-with PCK SHA-256
-`D9BC435932A644F1BAA7D7DE8A1F1252F2E639320DF07C9523E4AAC22AB734BB`.
+CDP screenshot timeout after Chrome passed; independent final Chrome and Edge
+probes passed against the committed-tree export. The clean-source seven-file
+candidate is `87.30 MB` with PCK SHA-256
+`27994E556ADE09F69EE2D1CE7FE2DBD34D15EF5A89D39435E126AC64C54F9903`.
 Production `web/`, `main`, and Vercel remain unchanged because fresh-profile
 cold browser engine readiness is still above the product target and
 shutdown-only allocator/ObjectDB diagnostics remain visible in graphical

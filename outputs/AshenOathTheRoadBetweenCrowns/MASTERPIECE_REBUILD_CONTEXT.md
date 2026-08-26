@@ -58,14 +58,15 @@ correct world cells.
 
 The Milestone B structural gates, export, packed startup, and browser route
 checks pass. The first two-browser run hit an Edge CDP screenshot timeout after
-Chrome passed; the same export passed an isolated Edge retry. The clean-source
+Chrome passed; independent final Chrome and Edge probes passed against the
+committed-tree export. The clean-source
 seven-file candidate is `87.30 MB` with PCK SHA-256
-`D9BC435932A644F1BAA7D7DE8A1F1252F2E639320DF07C9523E4AAC22AB734BB`.
+`27994E556ADE09F69EE2D1CE7FE2DBD34D15EF5A89D39435E126AC64C54F9903`.
 Fresh seam captures are current at `20260826_150551`. Noncritical audio and
 heavy script-level asset preloads are deferred or moved to first use; this
 keeps warmed headless boot near `0.53 s`, but fresh-profile graphical browser
-measurements remain variable at Chrome `30.79 s` and Edge `26.29 s` to
-engine-ready, with New Game at `4.17 s` and `5.11 s`. Production `web/`,
+measurements remain variable at Chrome `33.40 s` and Edge `19.60 s` to
+engine-ready, with New Game at `5.66 s` and `4.99 s`. Production `web/`,
 `main`, and Vercel remain unchanged because cold browser readiness is still
 above the product target and shutdown-only Godot allocator/ObjectDB
 diagnostics remain visible in graphical verifier teardown. This milestone is
