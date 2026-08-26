@@ -10,26 +10,22 @@
     html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #080d10; }
     body { color: #e7e0d0; font-family: Georgia, 'Times New Roman', serif; }
     #canvas { width: 100vw; height: 100vh; display: block; background: #080d10; outline: none; }
-    #boot { position: fixed; inset: 0; display: grid; place-items: center; overflow: hidden; background:
-      radial-gradient(circle at 68% 37%, rgba(218, 163, 82, .20), transparent 18%),
-      linear-gradient(160deg, #18262b 0%, #0b1418 48%, #05080a 100%); }
-    #boot::before { content: ''; position: absolute; inset: 0; opacity: .42; background:
-      linear-gradient(118deg, transparent 0 50%, rgba(90, 120, 112, .24) 50.2% 50.8%, transparent 51%),
-      linear-gradient(70deg, transparent 0 63%, rgba(42, 66, 70, .30) 63.2% 63.7%, transparent 64%); }
-    #boot-card { position: relative; width: min(620px, 90vw); padding: 42px 44px 36px; text-align: center; }
-    #crest { width: 88px; height: 88px; margin: 0 auto 20px; border: 1px solid rgba(214, 172, 99, .76); transform: rotate(45deg); display: grid; place-items: center; box-shadow: 0 0 40px rgba(212, 158, 75, .20); }
-    #crest::before { content: '✦'; color: #e1b567; font-size: 34px; transform: rotate(-45deg); }
+    #boot { position: fixed; inset: 0; display: grid; place-items: center; overflow: hidden; background: radial-gradient(circle at 68% 37%, rgba(218, 163, 82, .20), transparent 18%), linear-gradient(160deg, #18262b 0%, #0b1418 48%, #05080a 100%); }
+    #boot::before { content: ''; position: absolute; inset: 0; opacity: .42; background: linear-gradient(118deg, transparent 0 50%, rgba(90, 120, 112, .24) 50.2% 50.8%, transparent 51%), linear-gradient(70deg, transparent 0 63%, rgba(42, 66, 70, .30) 63.2% 63.7%, transparent 64%); }
+    #boot-card { position: relative; width: min(650px, 92vw); padding: 34px 38px 28px; text-align: center; }
+    #crest { width: 72px; height: 72px; margin: 0 auto 18px; border: 1px solid rgba(214, 172, 99, .76); transform: rotate(45deg); display: grid; place-items: center; box-shadow: 0 0 40px rgba(212, 158, 75, .20); }
+    #crest::before { content: 'ASH'; color: #e1b567; font: 700 13px system-ui, sans-serif; letter-spacing: .12em; transform: rotate(-45deg); }
     h1 { margin: 0; letter-spacing: .22em; font-size: clamp(28px, 5vw, 58px); font-weight: 500; }
     #subtitle { margin-top: 10px; color: #c6a877; letter-spacing: .16em; font-size: clamp(12px, 1.7vw, 18px); text-transform: uppercase; }
-    #tagline { margin: 26px auto 22px; max-width: 420px; color: #9da9a5; font-size: 17px; line-height: 1.55; }
-    #road { position: relative; width: 100%; height: 112px; margin: 6px 0 18px; border: 1px solid rgba(200, 170, 112, .20); background: rgba(4, 8, 10, .28); overflow: hidden; }
+    #tagline { margin: 20px auto 18px; max-width: 460px; color: #9da9a5; font-size: 17px; line-height: 1.55; }
+    #road { position: relative; width: 100%; height: 180px; margin: 6px 0 14px; border: 1px solid rgba(200, 170, 112, .20); background: rgba(4, 8, 10, .28); overflow: hidden; }
     #road-canvas { width: 100%; height: 100%; display: block; }
-    #progress-track { height: 4px; margin: 16px auto 0; max-width: 420px; background: rgba(220, 208, 174, .16); }
+    #progress-track { height: 4px; margin: 12px auto 0; max-width: 460px; background: rgba(220, 208, 174, .16); }
     #progress { width: 0%; height: 100%; background: linear-gradient(90deg, #7b6b4a, #e1b567); transition: width .18s ease; }
-    #status { min-height: 24px; margin-top: 12px; color: #a9b3ad; font: 13px/1.4 system-ui, sans-serif; }
-    #start { margin-top: 18px; border: 1px solid #c8a767; background: #1c2a2b; color: #f3e6c7; padding: 13px 28px; font: 600 14px system-ui, sans-serif; letter-spacing: .12em; text-transform: uppercase; cursor: pointer; }
+    #status { min-height: 24px; margin-top: 10px; color: #a9b3ad; font: 13px/1.4 system-ui, sans-serif; }
+    #start { margin-top: 14px; border: 1px solid #c8a767; background: #1c2a2b; color: #f3e6c7; padding: 11px 24px; font: 600 14px system-ui, sans-serif; letter-spacing: .12em; text-transform: uppercase; cursor: pointer; }
     #start:hover, #start:focus-visible { background: #2b4140; box-shadow: 0 0 22px rgba(225, 181, 103, .22); outline: none; }
-    #hint { margin-top: 14px; color: #72817e; font: 12px system-ui, sans-serif; }
+    #hint { margin-top: 10px; color: #72817e; font: 12px system-ui, sans-serif; }
     .hidden { display: none !important; }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; } }
   </style>
@@ -42,12 +38,12 @@
       <div id="crest" aria-hidden="true"></div>
       <h1>ASHEN OATH</h1>
       <div id="subtitle">The Road Between Crowns</div>
-      <div id="tagline">Every road keeps a witness. Every oath leaves a mark.</div>
-      <div id="road"><canvas id="road-canvas" width="620" height="112" aria-label="The Crow's Crossing loading game"></canvas></div>
+      <div id="tagline">Guide the witness through the branches while Greyfen wakes behind the veil.</div>
+      <div id="road"><canvas id="road-canvas" width="650" height="180" aria-label="Crow Flight loading game"></canvas></div>
       <div id="progress-track" aria-hidden="true"><div id="progress"></div></div>
-      <div id="status" role="status" aria-live="polite">Click Enter the Road to begin.</div>
-      <button id="start" type="button">Enter the Road</button>
-      <div id="hint">Guide the crow with A/D, the arrow keys, or a connected gamepad.</div>
+      <div id="status" role="status" aria-live="polite">Preparing the road. Flap to guide the crow.</div>
+      <button id="start" type="button" aria-label="Flap the crow">Flap / Continue</button>
+      <div id="hint">Space, click, tap, or gamepad A to flap. The game opens as soon as Greyfen is ready.</div>
     </div>
   </section>
   <script src="index.js"></script>
@@ -60,56 +56,87 @@
       const road = document.getElementById('road-canvas');
       const ctx = road.getContext('2d');
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      let running = false;
-      let started = false;
-      let crowX = road.width * .18;
-      let emberX = road.width * .74;
-      let drift = 0;
-      let score = 0;
-      let engine;
-
-      function drawRoad() {
+      let engine = null, started = false, ready = false, last = 0, score = 0;
+      let gamepadPressed = false;
+      const bootMetrics = {
+        state: 'shell_ready',
+        first_paint_ms: performance.now(),
+        engine_start_ms: 0,
+        engine_ready_ms: 0,
+        progress_samples: 0,
+        input_events: 0,
+        last_input: '',
+        crow_score: 0,
+      };
+      window.__ashenOathBoot = bootMetrics;
+      document.documentElement.dataset.bootState = bootMetrics.state;
+      performance.mark('ashen-oath-first-paint');
+      function setBootState(state, extra = {}) {
+        bootMetrics.state = state;
+        Object.assign(bootMetrics, extra);
+        document.documentElement.dataset.bootState = state;
+        window.dispatchEvent(new CustomEvent('ashen-oath-boot', { detail: { ...bootMetrics } }));
+      }
+      function setStatus(text) { status.textContent = text; }
+      let crowY = 90, crowVelocity = 0, branchOffset = 0, nextBranch = 260;
+      const branches = [];
+      const ember = { x: 460, y: 72, active: true };
+      function flap(source = 'pointer') {
+        if (!started || ready) return;
+        crowVelocity = -4.8;
+        bootMetrics.input_events += 1;
+        bootMetrics.last_input = source;
+      }
+      function resetBranch() { const gap = 70 + Math.random() * 35; const top = 18 + Math.random() * 48; branches.push({ x: road.width + 30, top, bottom: top + gap }); }
+      function draw() {
         const w = road.width, h = road.height;
-        ctx.clearRect(0, 0, w, h);
-        ctx.fillStyle = '#0a1519'; ctx.fillRect(0, 0, w, h);
-        ctx.strokeStyle = 'rgba(181, 154, 98, .22)'; ctx.lineWidth = 2;
-        ctx.beginPath(); ctx.moveTo(0, h * .72); ctx.bezierCurveTo(w * .25, h * .44, w * .62, h * .86, w, h * .48); ctx.stroke();
-        ctx.fillStyle = 'rgba(120, 148, 135, .20)';
-        for (let i = 0; i < 9; i++) { const x = (i * 89 + drift * (i % 2 ? .3 : -.2)) % (w + 40) - 20; ctx.beginPath(); ctx.moveTo(x, h * .76); ctx.lineTo(x + 18, h * .22); ctx.lineTo(x + 28, h * .76); ctx.fill(); }
-        ctx.fillStyle = '#d8b56d'; ctx.shadowColor = '#d8b56d'; ctx.shadowBlur = 14;
-        ctx.beginPath(); ctx.arc(emberX, h * .48, 5, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0;
-        ctx.fillStyle = '#080b0e'; ctx.strokeStyle = '#b7c2b9'; ctx.lineWidth = 2;
-        ctx.beginPath(); ctx.ellipse(crowX, h * .48, 13, 8, -.14, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(crowX + 11, h * .47); ctx.lineTo(crowX + 24, h * .42); ctx.lineTo(crowX + 12, h * .53); ctx.fill();
-        ctx.fillStyle = '#f1d796'; ctx.beginPath(); ctx.arc(crowX + 9, h * .44, 1.5, 0, Math.PI * 2); ctx.fill();
+        ctx.clearRect(0, 0, w, h); ctx.fillStyle = '#09171b'; ctx.fillRect(0, 0, w, h);
+        ctx.fillStyle = 'rgba(112, 148, 135, .16)';
+        for (let i = 0; i < 10; i++) { const x = (i * 82 - branchOffset * (i % 2 ? .35 : .18)) % (w + 60) - 30; ctx.beginPath(); ctx.moveTo(x, h); ctx.lineTo(x + 34, 36 + (i % 3) * 12); ctx.lineTo(x + 62, h); ctx.fill(); }
+        ctx.strokeStyle = 'rgba(211, 177, 110, .24)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, h - 22); ctx.bezierCurveTo(w * .25, h * .62, w * .60, h * .92, w, h * .55); ctx.stroke();
+        ctx.fillStyle = '#d8b56d'; ctx.shadowColor = '#d8b56d'; ctx.shadowBlur = 14; if (ember.active) { ctx.beginPath(); ctx.arc(ember.x, ember.y, 5, 0, Math.PI * 2); ctx.fill(); } ctx.shadowBlur = 0;
+        ctx.fillStyle = '#070b0e'; ctx.strokeStyle = '#b7c2b9'; ctx.lineWidth = 2; ctx.beginPath(); ctx.ellipse(110, crowY, 15, 9, -.12, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); ctx.beginPath(); ctx.moveTo(122, crowY - 1); ctx.lineTo(136, crowY - 6); ctx.lineTo(124, crowY + 4); ctx.fill(); ctx.fillStyle = '#f1d796'; ctx.beginPath(); ctx.arc(120, crowY - 4, 1.5, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = 'rgba(22, 35, 36, .92)'; for (const branch of branches) { ctx.fillRect(branch.x, 0, 18, branch.top); ctx.fillRect(branch.x, branch.bottom, 18, h - branch.bottom); }
+        ctx.fillStyle = '#c8a767'; ctx.font = '12px system-ui'; ctx.fillText('embers ' + score, 14, 22);
       }
-
-      function moveCrow(amount) { if (!started) return; crowX = Math.max(22, Math.min(road.width - 22, crowX + amount)); }
-      window.addEventListener('keydown', (event) => { if (['ArrowLeft','a','A'].includes(event.key)) moveCrow(-18); if (['ArrowRight','d','D'].includes(event.key)) moveCrow(18); if (event.key === 'Enter' && !started) begin(); });
-      road.addEventListener('pointermove', (event) => { if (!started) return; const rect = road.getBoundingClientRect(); crowX = ((event.clientX - rect.left) / rect.width) * road.width; });
-      function tick() {
-        if (started && navigator.getGamepads) {
-          const pad = Array.from(navigator.getGamepads()).find(Boolean);
-          if (pad) {
-            const axis = Number(pad.axes?.[0] || 0);
-            if (Math.abs(axis) > .22) moveCrow(axis * 9);
-            if (pad.buttons?.[0]?.pressed && !running) begin();
-          }
+      function tick(time) {
+        const dt = Math.min(2.0, (time - last) / 16.67 || 1); last = time;
+        if (started && !ready && !reduce) {
+          crowVelocity += .22 * dt; crowY += crowVelocity * dt; branchOffset += 1.1 * dt; nextBranch -= 1.55 * dt; ember.x -= 1.7 * dt; if (ember.x < -12) { ember.x = road.width + 12; ember.y = 30 + Math.random() * 110; ember.active = true; }
+          for (const branch of branches) branch.x -= 1.55 * dt; while (nextBranch <= 0) { resetBranch(); nextBranch = 150 + Math.random() * 100; } while (branches.length && branches[0].x < -30) branches.shift();
+          if (Math.abs(crowY - ember.y) < 18 && Math.abs(110 - ember.x) < 24 && ember.active) { score++; ember.active = false; bootMetrics.crow_score = score; setStatus('The road remembers. Ember ' + score + ' gathered.'); }
+          if (crowY < 8 || crowY > road.height - 8 || branches.some((b) => 110 > b.x - 15 && 110 < b.x + 28 && (crowY < b.top || crowY > b.bottom))) { crowY = 90; crowVelocity = 0; branches.length = 0; nextBranch = 260; setStatus('The crow circles back. Keep the oath alive.'); }
         }
-        if (started && !reduce) { drift += 1; emberX -= 1.2; if (emberX < -10) emberX = road.width + 10; if (Math.abs(crowX - emberX) < 22) { score++; emberX = road.width + 10; status.textContent = `The road remembers. Ember ${score} gathered.`; } }
-        drawRoad(); requestAnimationFrame(tick);
+        draw(); requestAnimationFrame(tick);
       }
-
+      window.addEventListener('keydown', (event) => { if ([' ', 'ArrowUp', 'w', 'W'].includes(event.key)) { event.preventDefault(); flap('keyboard'); } });
+      road.addEventListener('pointerdown', () => flap('pointer'));
+      start.addEventListener('click', () => { if (!started) begin(); else flap('button'); });
+      function pollGamepad() {
+        let pressed = false;
+        if (started && !ready && navigator.getGamepads) {
+          const pad = Array.from(navigator.getGamepads()).find(Boolean);
+          pressed = Boolean(pad?.buttons?.[0]?.pressed);
+          if (pressed && !gamepadPressed) flap('gamepad');
+        }
+        gamepadPressed = pressed;
+        requestAnimationFrame(pollGamepad);
+      }
       function begin() {
         if (started) return;
-        started = true; running = true; start.disabled = true; start.textContent = 'Opening Greyfen...'; status.textContent = 'The crows are carrying your oath.';
-        try { engine = new Engine({"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":52754836,"index.wasm":37700666},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4}); } catch (error) { status.textContent = 'The road could not be opened. Reload to try again.'; console.error(error); return; }
+        started = true;
+        start.textContent = 'Flap the Crow';
+        setStatus('Opening the road while you fly.');
+        bootMetrics.engine_start_ms = performance.now();
+        performance.mark('ashen-oath-engine-start');
+        setBootState('engine_starting');
+        try { engine = new Engine({"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":45942372,"index.wasm":37700666},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4}); } catch (error) { setBootState('failed', { error: String(error) }); setStatus('The road could not be opened. Reload to try again.'); console.error(error); return; }
         const missing = Engine.getMissingFeatures({ threads: false });
-        if (missing.length) { status.textContent = 'This browser is missing WebGL 2.0: ' + missing.join(', '); console.error(status.textContent); return; }
-        engine.startGame({ onProgress: (current, total) => { const ratio = current > 0 && total > 0 ? current / total : 0; progress.style.width = `${Math.round(ratio * 100)}%`; status.textContent = ratio > 0 ? `Opening the road... ${Math.round(ratio * 100)}%` : 'Opening the road...'; } }).then(() => { running = false; boot.classList.add('hidden'); document.getElementById('canvas').focus(); }, (error) => { running = false; status.textContent = 'The road could not be opened. Reload to try again.'; console.error(error); start.disabled = false; start.textContent = 'Retry'; });
+        if (missing.length) { setBootState('failed', { missing_features: missing }); setStatus('This browser is missing WebGL 2.0: ' + missing.join(', ')); console.error(status.textContent); return; }
+        setBootState('loading');
+        engine.startGame({ onProgress: (current, total) => { const ratio = current > 0 && total > 0 ? current / total : 0; bootMetrics.progress_samples += 1; progress.style.width = `${Math.round(ratio * 100)}%`; setStatus(ratio > 0 ? `Opening the road... ${Math.round(ratio * 100)}%` : 'Opening the road...'); } }).then(() => { ready = true; bootMetrics.engine_ready_ms = performance.now(); performance.mark('ashen-oath-engine-ready'); setBootState('ready', { engine_ready_elapsed_ms: Math.round(bootMetrics.engine_ready_ms - bootMetrics.engine_start_ms) }); boot.classList.add('hidden'); document.getElementById('canvas').focus(); }, (error) => { started = false; setBootState('failed', { error: String(error) }); setStatus('The road could not be opened. Reload to try again.'); console.error(error); start.textContent = 'Retry'; });
       }
-      start.addEventListener('click', begin);
-      tick();
+      draw(); requestAnimationFrame(tick); requestAnimationFrame(pollGamepad); window.setTimeout(begin, 0);
     })();
   </script>
 </body>
