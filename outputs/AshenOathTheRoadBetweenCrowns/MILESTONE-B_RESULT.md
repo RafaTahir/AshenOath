@@ -60,10 +60,12 @@ Fresh changed-view captures:
 
 ## Production verification
 
-The verified candidate was promoted in commit `0b4e317` (`MILESTONE-B:
-publish verified Web candidate`). The cumulative branch and `origin/main` now
-point to that commit, and tracked `web/` contains the same seven root runtime
-files plus the staged `packs/campaign.pck`.
+The verified candidate artifact was promoted in commit `0b4e317` (`MILESTONE-B:
+publish verified Web candidate`). The final evidence and live-browser tooling
+checkpoint is `59e982a` (`MILESTONE-B: record production promotion and live
+smoke`); the cumulative branch and `origin/main` now point to that checkpoint.
+Tracked `web/` contains the same seven root runtime files plus the staged
+`packs/campaign.pck`.
 
 The deployed artifact matches the local export:
 
@@ -93,11 +95,11 @@ and are intentionally deferred to the visual and campaign milestones.
 
 ## Promotion status
 
-Promotion is complete. Commit `0b4e317` is pushed to `codex/masterpiece-rebuild`
-and `origin/main`; Vercel serves the matching main PCK and campaign pack. The
-cache-busted production smoke URL is:
+Promotion is complete. Commit `59e982a` is pushed to
+`codex/masterpiece-rebuild` and `origin/main`; Vercel serves the matching main
+PCK and campaign pack. The cache-busted production smoke URL is:
 
-`https://ashenoath.vercel.app/?v=milestone-b-0b4e317-live`
+`https://ashenoath.vercel.app/?v=milestone-b-59e982a-live`
 
 ## Running
 
@@ -107,6 +109,6 @@ $env:GODOT_BIN='C:\Users\User\.cache\codex-runtimes\godot-4.6.3\Godot_v4.6.3-sta
 $env:ASHEN_OATH_PACK_DIRECTORY='C:\Users\User\.cache\codex-runtimes\ashenoath-packs-v2'
 powershell -ExecutionPolicy Bypass -File .\tools\run_ticket_gate.ps1 -Profiles milestone_b -ChangedViews seamless -NoCache
 
-node .\tools\verify_web_browser.mjs --url "https://ashenoath.vercel.app/?v=milestone-b-0b4e317-live" --browser chrome --renderer software --timeout 180000 --report .release-gate\ticket\live_web_browser_chrome.json
-node .\tools\verify_web_browser.mjs --url "https://ashenoath.vercel.app/?v=milestone-b-0b4e317-live" --browser edge --renderer software --timeout 180000 --report .release-gate\ticket\live_web_browser_edge.json
+node .\tools\verify_web_browser.mjs --url "https://ashenoath.vercel.app/?v=milestone-b-59e982a-live" --browser chrome --renderer software --timeout 180000 --report .release-gate\ticket\live_web_browser_chrome.json
+node .\tools\verify_web_browser.mjs --url "https://ashenoath.vercel.app/?v=milestone-b-59e982a-live" --browser edge --renderer software --timeout 180000 --report .release-gate\ticket\live_web_browser_edge.json
 ```

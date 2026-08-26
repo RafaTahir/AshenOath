@@ -4,7 +4,8 @@ This is the active implementation context for the 66-ticket Masterpiece Rebuild.
 The historical production baseline was the synchronized `main` checkpoint
 from `RELEASE-004`; the current production checkpoint is recorded below.
 The current branch is `codex/masterpiece-rebuild`, and the current production
-checkpoint after Milestone B promotion is `0b4e317`.
+checkpoint after Milestone B promotion is `59e982a` (the Web artifact itself
+was exported in `0b4e317`).
 
 ## Truth boundary
 

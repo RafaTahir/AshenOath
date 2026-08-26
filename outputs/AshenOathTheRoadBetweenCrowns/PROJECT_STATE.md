@@ -2,7 +2,7 @@
 
 ## Masterpiece Rebuild Status - 2026-08-26
 
-The current production checkpoint is `0b4e317`, synchronized with
+The current production checkpoint is `59e982a`, synchronized with
 `origin/main`, tracked `web/`, and the Vercel Web output after the Milestone B
 promotion. The `codex/masterpiece-rebuild` branch is the cumulative
 development line. The project is not claiming final Soul Rebuild quality: the
@@ -48,7 +48,7 @@ main PCK. Fresh seam evidence is current at
 `SEAM_001_01_GreyfenBoundary_20260826_161353.png` and
 `SEAM_001_02_WychwoodArrival_20260826_161353.png`.
 Production `web/`, `main`, and Vercel now contain the verified Milestone B
-candidate. The live main PCK matches the local SHA-256
+candidate (the binary artifact was exported in `0b4e317`). The live main PCK matches the local SHA-256
 `FB90BA224A97BC01341755198A2D0FC61847D534A750245FFBA38CF25D30991B`, and the
 live `packs/campaign.pck` matches
 `E3773163700109A7E2195E485A41BA46461220445CE645878CD583825A383D8E`. The
