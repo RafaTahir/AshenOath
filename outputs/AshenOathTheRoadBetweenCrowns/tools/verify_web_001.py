@@ -42,7 +42,8 @@ def main() -> int:
     if '"res://scripts/world_vfx_controller.gd"' not in preset:
         fail("export omits the runtime world VFX controller", failures)
     for runtime_character in (
-        "AnimatedHuman_PolyPizza_Quaternius_CC0.glb",
+        "Male_Peasant.gltf",
+        "Female_Peasant.gltf",
         "GhoulGaunt_Real.glb",
         "GhoulStalker_Real.glb",
         "GhoulBrute_Real.glb",

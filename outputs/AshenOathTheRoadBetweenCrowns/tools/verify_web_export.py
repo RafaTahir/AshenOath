@@ -15,6 +15,7 @@ EXPECTED_FILES = {
     "index.audio.position.worklet.js",
 }
 FORBIDDEN_SUFFIXES = {".map", ".debug", ".zip", ".blend"}
+ALLOWED_RUNTIME_SUBDIRECTORIES = {"packs"}
 
 
 def mb(size: int) -> float:
@@ -41,9 +42,20 @@ def main() -> int:
         print(f"WEB EXPORT: FAIL - missing export directory: {export_dir}")
         return 1
 
-    paths = {path.name: path for path in export_dir.iterdir() if path.is_file()}
-    missing = sorted(EXPECTED_FILES - paths.keys())
-    extras = sorted(paths.keys() - EXPECTED_FILES)
+    root_paths = {path.name: path for path in export_dir.iterdir() if path.is_file()}
+    nested_paths = {}
+    for directory in export_dir.iterdir():
+        if not directory.is_dir():
+            continue
+        if directory.name not in ALLOWED_RUNTIME_SUBDIRECTORIES:
+            failures.append(f"unexpected export subdirectory: {directory.name}")
+            continue
+        for path in directory.rglob("*"):
+            if path.is_file():
+                nested_paths[path.relative_to(export_dir).as_posix()] = path
+    paths = {**root_paths, **nested_paths}
+    missing = sorted(EXPECTED_FILES - root_paths.keys())
+    extras = sorted(root_paths.keys() - EXPECTED_FILES)
     if missing:
         failures.append("missing files: " + ", ".join(missing))
     forbidden = [name for name in extras if Path(name).suffix.lower() in FORBIDDEN_SUFFIXES]
@@ -67,6 +79,14 @@ def main() -> int:
     if empty:
         failures.append("empty runtime files: " + ", ".join(sorted(empty)))
 
+    for name, path in nested_paths.items():
+        if Path(name).suffix.lower() in FORBIDDEN_SUFFIXES:
+            failures.append(f"forbidden development file: {name}")
+        if Path(name).suffix.lower() == ".pck":
+            with path.open("rb") as stream:
+                if stream.read(4) != b"GDPC":
+                    failures.append(f"invalid Godot PCK: {name}")
+
     file_report = {
         name: {
             "bytes": path.stat().st_size,
@@ -84,6 +104,7 @@ def main() -> int:
         "total_megabytes": round(mb(total_bytes), 3),
         "limits": {"total_megabytes": MAX_TOTAL_MB, "pck_megabytes": MAX_PCK_MB},
         "extras": extras,
+        "nested_files": sorted(nested_paths),
         "failures": failures,
         "files": file_report,
     }

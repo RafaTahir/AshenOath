@@ -118,6 +118,7 @@ var zone_load_request_pending := false
 var resource_shutdown_prepared := false
 var requested_zone_id := ""
 var requested_zone_spawn := Vector3.ZERO
+var campaign_pack_waiting := false
 var greyfen_prewarm_started := false
 var greyfen_prewarm_spatial_service: Node
 var interaction_focus_cooldown := 0.0
@@ -341,14 +342,56 @@ func request_seamless_boundary_transition(zone_id: String, spawn_pos: Vector3, e
 func _perform_direct_zone_load(zone_id: String, spawn_pos: Vector3) -> void:
 	requested_zone_id = ""
 	requested_zone_spawn = Vector3.ZERO
-	_load_zone(zone_id, spawn_pos)
+	_load_zone_after_runtime_pack(zone_id, spawn_pos)
 
 func _perform_requested_zone_load() -> void:
 	var destination := requested_zone_id
 	var arrival := requested_zone_spawn
 	zone_load_request_pending = false
 	requested_zone_id = ""
-	_load_zone(destination, arrival)
+	_load_zone_after_runtime_pack(destination, arrival)
+
+func _load_zone_after_runtime_pack(zone_id: String, spawn_pos: Vector3) -> void:
+	if not _zone_requires_campaign_pack(zone_id) or not OS.has_feature("web"):
+		_load_zone(zone_id, spawn_pos)
+		return
+	if runtime_packs == null or not runtime_packs.has_method("request_pack"):
+		_recover_failed_zone_load(current_zone_id)
+		return
+	if not runtime_packs.is_ready("campaign"):
+		campaign_pack_waiting = true
+		if hud != null and hud.has_method("arm_loading"):
+			hud.arm_loading("Preparing the road beyond Greyfen...")
+		runtime_packs.request_pack("campaign")
+		_wait_for_campaign_pack(zone_id, spawn_pos)
+		return
+	_load_zone(zone_id, spawn_pos)
+
+func _wait_for_campaign_pack(zone_id: String, spawn_pos: Vector3) -> void:
+	for _frame in range(900):
+		await get_tree().process_frame
+		if not campaign_pack_waiting:
+			return
+		if runtime_packs != null and runtime_packs.is_ready("campaign"):
+			campaign_pack_waiting = false
+			if hud != null and hud.has_method("hide_loading"):
+				hud.hide_loading()
+			_load_zone(zone_id, spawn_pos)
+			return
+		if runtime_packs != null and runtime_packs.get_state("campaign") == "failed":
+			break
+	campaign_pack_waiting = false
+	if hud != null and hud.has_method("hide_loading"):
+		hud.hide_loading()
+	if hud != null:
+		hud.toast("The road pack could not be prepared. You remain in Greyfen.")
+	_recover_failed_zone_load(current_zone_id)
+
+func _zone_requires_campaign_pack(zone_id: String) -> bool:
+	return zone_id in [
+		"deep_wood", "old_mill", "burned_farmstead", "marsh_crossing", "bandit_road",
+		"vargan_approach", "vargan_court", "record_hall", "undercroft", "assembly", "hart_glade",
+	]
 
 func _start_new_game_world() -> void:
 	# An explicit transition can be requested before the menu's deferred setup
@@ -432,7 +475,10 @@ func load_save_state(data: Dictionary) -> void:
 	if seamless_world != null and world_array.size() >= 3:
 		pos = seamless_world.local_position_for(zone, Vector3(float(world_array[0]), float(world_array[1]), float(world_array[2])))
 	pos = _safe_loaded_position(zone, pos)
-	_load_zone(zone, pos)
+	# Campaign saves must follow the same streamed-pack handoff as a gate
+	# transition. Otherwise a legacy save opened directly in a later sector
+	# reaches the lazy builder before its script pack is mounted.
+	_load_zone_after_runtime_pack(zone, pos)
 	player.health_component.load_state(data.get("player_health", {}))
 	player.stamina_component.load_state(data.get("player_stamina", {}))
 	_apply_progression_to_player()
@@ -752,6 +798,7 @@ func _advance_zone_transition() -> void:
 	hud.hide_loading()
 
 func _recover_failed_zone_load(previous_zone_id: String) -> void:
+	campaign_pack_waiting = false
 	if seamless_world != null:
 		seamless_world.on_zone_failed(current_zone_id, "zone_build_failed")
 	zone_transition_pending = false

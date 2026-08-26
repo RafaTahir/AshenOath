@@ -10,22 +10,25 @@ The game is functionally broad but visually and architecturally provisional.
 The following are explicitly unfinished until their rendered and player-facing
 acceptance gates pass:
 
-- real split Web packs and low-startup boot;
+- real split Web packs and low-startup boot; the Milestone B candidate now
+  mounts the campaign pack on demand, while the remaining packs are still
+  external candidates and the cold browser target remains open;
 - the immediate Web boot shell and Crow Flight wait activity are now implemented
   and have dedicated acceptance gates; the current embedded-PCK fallback remains
   deliberate until hosted pack URLs are promoted;
-- seamless exterior sectors;
+- later-zone visual reconstruction beyond the now-playable seamless exterior
+  sectors;
 - final human, monster, boss, weapon, and equipment presentation;
 - final bow art and animation evidence; the first bow/ammunition/vendor slice is
   implemented on the development branch but still needs graphical and packed-Web
   acceptance;
 - PACK-003 produces six real, hash-verified external PCK candidates totaling
-  80.52 MB. They remain outside the shipped Web artifact while the loading
-  candidate decision is open;
+  55.58 MB. The current Web candidate stages the 0.84 MB campaign pack beside
+  the seven root runtime files; the other packs remain external candidates;
 - STREAM-003 implements the download-to-temp, hash/size validation, cache,
   local mount, retry, cancellation, progress, and embedded-fallback lifecycle.
-  The manifest still has empty production URLs, so the current candidate uses
-  the embedded PCK fallback;
+  The campaign manifest URL is now `packs/campaign.pck` for the candidate;
+  other pack URLs remain empty until their later loading tickets;
 - the ASSET-005 runtime boundary is now explicit: Captain Senn's processed
   Ranger is the only approved role, while ten route-visible roles remain
   playable but visually blocked fallbacks;
@@ -57,20 +60,21 @@ physical-door route. Legacy interior save coordinates now migrate to the
 correct world cells.
 
 The Milestone B structural gates, export, packed startup, and browser route
-checks pass. The first two-browser run hit an Edge CDP screenshot timeout after
-Chrome passed; independent final Chrome and Edge probes passed against the
-committed-tree export. The clean-source
-seven-file candidate is `87.30 MB` with PCK SHA-256
-`27994E556ADE09F69EE2D1CE7FE2DBD34D15EF5A89D39435E126AC64C54F9903`.
-Fresh seam captures are current at `20260826_150551`. Noncritical audio and
-heavy script-level asset preloads are deferred or moved to first use; this
-keeps warmed headless boot near `0.53 s`, but fresh-profile graphical browser
-measurements remain variable at Chrome `33.40 s` and Edge `19.60 s` to
-engine-ready, with New Game at `5.66 s` and `4.99 s`. Production `web/`,
-`main`, and Vercel remain unchanged because cold browser readiness is still
-above the product target and shutdown-only Godot allocator/ObjectDB
-diagnostics remain visible in graphical verifier teardown. This milestone is
-therefore a verified development checkpoint, not a final production release.
+checks pass. The final authoritative profile also passed both browser smoke
+tests after the lazy pack handoff: Chrome reached a 1280x720 WebGL2 canvas with
+engine-ready `28.04 s` and New Game `6.64 s`; Edge reached the same canvas with
+engine-ready `25.63 s` and New Game `7.86 s`. Both had no browser console or
+resource errors. The candidate is `80.95 MB` total, with a `43.81 MB` main
+PCK (`FB90BA224A97BC01341755198A2D0FC61847D534A750245FFBA38CF25D30991B`) and
+`packs/campaign.pck` at `884,856` bytes with SHA-256
+`E3773163700109A7E2195E485A41BA46461220445CE645878CD583825A383D8E`.
+Fresh seam captures are current at `20260826_161353`. The main PCK no longer
+preloads campaign builders; the campaign pack mount verifier proves the lazy
+builder is available before later-zone construction. The broader product cold
+startup target remains above target in this software-browser environment, and
+Godot still emits shutdown-only allocator/ObjectDB diagnostics after passing
+isolated graphical gates. Those remain follow-up work for the loading and
+lifecycle tickets; they do not invalidate the passed Milestone B route gates.
 
 ## Locked product decisions
 

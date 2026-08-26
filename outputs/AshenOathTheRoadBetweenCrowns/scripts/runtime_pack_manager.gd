@@ -202,7 +202,7 @@ func _start_next_download() -> void:
 
 func _start_download(id: String) -> void:
 	var request: Dictionary = requests.get(id, {})
-	var url := str(request.get("url", ""))
+	var url := _resolve_url(str(request.get("url", "")))
 	if url == "":
 		_mark_embedded_ready(id)
 		return
@@ -221,6 +221,22 @@ func _start_download(id: String) -> void:
 		_start_next_download()
 		return
 	pack_progress.emit(id, 0.0)
+
+func _resolve_url(raw_url: String) -> String:
+	var url := raw_url.strip_edges()
+	if url == "" or url.begins_with("http://") or url.begins_with("https://"):
+		return url
+	if not OS.has_feature("web"):
+		return url
+	# Runtime packs are deployed beside the Web candidate. HTTPRequest needs an
+	# absolute URL on Web, while keeping the manifest portable for local hosts.
+	var origin := ""
+	# This branch is reached only by Web exports. The class is still parsed by
+	# desktop Godot, so keep the platform check outside the JavaScript call.
+	origin = str(JavaScriptBridge.eval("window.location.origin"))
+	if origin == "" or origin == "null":
+		return url
+	return origin.rstrip("/") + "/" + url.trim_prefix("/")
 
 func _on_download_completed(result: int, response_code: int, _headers: PackedStringArray, _body: PackedByteArray) -> void:
 	var id := active_download_id

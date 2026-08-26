@@ -13,6 +13,8 @@ const timeoutMs = Number(args.timeout || 90000);
 const maxMemoryMb = Number(args["max-memory-mb"] || 450);
 const requestedBrowser = String(args.browser || "").toLowerCase();
 const mobileMode = Boolean(args.mobile);
+const rendererMode = String(args.renderer || process.env.ASHEN_OATH_BROWSER_RENDERER || "software").toLowerCase();
+const useSoftwareRenderer = rendererMode !== "hardware";
 const viewportWidth = mobileMode ? 960 : 1280;
 const viewportHeight = mobileMode ? 540 : 720;
 // The Godot menu is rendered inside the canvas, so its action point must scale
@@ -200,7 +202,7 @@ async function testBrowser(name, executable) {
   const debugPort = await availablePort();
   const profile = join(tmpdir(), `ashen-oath-web001-${mobileMode ? "mobile-" : ""}${name.toLowerCase()}-${Date.now()}`);
   const url = `http://127.0.0.1:${port}/index.html?v=${mobileMode ? "mobile001" : "web001"}-${name.toLowerCase()}${mobileMode ? "&touch=1" : ""}`;
-  const browser = spawn(executable, [
+  const browserArgs = [
     "--headless=new",
     `--remote-debugging-port=${debugPort}`,
     "--remote-allow-origins=*",
@@ -215,17 +217,22 @@ async function testBrowser(name, executable) {
     // initialize. This is an isolated local acceptance browser, not a
     // production runtime, so use the stable renderer path for the test.
     "--no-sandbox",
-    // The managed Windows runner cannot start Chrome's sandboxed GPU
-    // subprocess reliably. Keep WebGL available in-process so the browser
-    // acceptance test measures the actual canvas instead of hanging at boot.
-    "--in-process-gpu",
-    "--disable-gpu-sandbox",
-    "--use-angle=swiftshader",
-    "--enable-unsafe-swiftshader",
-    "--ignore-gpu-blocklist",
     "--autoplay-policy=no-user-gesture-required",
     "about:blank",
-  ], { stdio: "ignore", windowsHide: true });
+  ];
+  if (useSoftwareRenderer) {
+    // The managed Windows runner cannot start Chrome's sandboxed GPU
+    // subprocess reliably. Keep WebGL available in-process for diagnostics.
+    // Hardware acceptance explicitly omits these flags.
+    browserArgs.splice(browserArgs.length - 1, 0,
+      "--in-process-gpu",
+      "--disable-gpu-sandbox",
+      "--use-angle=swiftshader",
+      "--enable-unsafe-swiftshader",
+      "--ignore-gpu-blocklist",
+    );
+  }
+  const browser = spawn(executable, browserArgs, { stdio: "ignore", windowsHide: true });
   const started = Date.now();
   let cdp;
   try {

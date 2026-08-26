@@ -23,8 +23,8 @@
       "preload_priority": 0,
       "status": "embedded_current_pck",
       "candidate_artifact": "base.pck",
-      "candidate_bytes": 1245364,
-      "candidate_sha256": "e2698fe7618fd6963b5a58803add0804c82c8ad4ca33acc11ff572fae15ca3cf",
+      "candidate_bytes": 1263460,
+      "candidate_sha256": "29bc257087df0d1af3138e19d358d1b7c99cce2f2149c30bc8880eb12211cc02",
       "contents": ["menu", "managers", "player", "greyfen_critical"]
     },
     "opening": {
@@ -37,22 +37,22 @@
       "preload_priority": 10,
       "status": "manifest_only",
       "candidate_artifact": "opening.pck",
-      "candidate_bytes": 31190712,
-      "candidate_sha256": "0c1aa12dde7c570d34add2ecbca91cdbd9e65f444077e69703c0fe22ce32f7b4",
+      "candidate_bytes": 31193784,
+      "candidate_sha256": "b354622f794f460d8b9826599f0f7d75f5a3918d8cdb088a67aa616152d9c8f0",
       "contents": ["greyfen", "wychwood", "cemetery", "opening_actors"]
     },
     "campaign": {
       "version": "dev",
-      "url": "",
-      "sha256": "",
-      "bytes": 0,
+      "url": "packs/campaign.pck",
+      "sha256": "e3773163700109a7e2195e485a41ba46461220445ce645878cd583825a383d8e",
+      "bytes": 884856,
       "entry_scene": "",
       "dependencies": ["base", "opening"],
       "preload_priority": 20,
-      "status": "manifest_only",
+      "status": "streamed_web_candidate",
       "candidate_artifact": "campaign.pck",
-      "candidate_bytes": 27067212,
-      "candidate_sha256": "f52090e6880b9ad277b5c8be92f21c78349acb40e68389f9f4f299037c829d9d",
+      "candidate_bytes": 884856,
+      "candidate_sha256": "e3773163700109a7e2195e485a41ba46461220445ce645878cd583825a383d8e",
       "contents": ["deep_woods", "long_road", "castle", "finale"]
     },
     "characters": {
@@ -65,8 +65,8 @@
       "preload_priority": 30,
       "status": "manifest_only",
       "candidate_artifact": "characters.pck",
-      "candidate_bytes": 20799264,
-      "candidate_sha256": "854079584e3f35e152b96622d68ffc71f1fa8c3070fe98ce13b9f585b37baf1e",
+      "candidate_bytes": 20802240,
+      "candidate_sha256": "f10124a594b9f2d063cee7ab9a1264c29c86a4aa6e8cf0c511eb4ca3f20597b0",
       "contents": ["shared_humans", "outfits", "animation_library"]
     },
     "monsters": {
@@ -79,8 +79,8 @@
       "preload_priority": 40,
       "status": "manifest_only",
       "candidate_artifact": "monsters.pck",
-      "candidate_bytes": 1549260,
-      "candidate_sha256": "e5cd7162e3f347bb8e36584d50805ead4844bcbf2f379e188a7bce7e398aa158",
+      "candidate_bytes": 1552236,
+      "candidate_sha256": "b6f077d257d5ab4bfc48cd13002f4aba6d3c00d7bbb696b282f6178e02ee45e3",
       "contents": ["monster_families", "bosses", "animals"]
     },
     "audio": {
@@ -93,8 +93,8 @@
       "preload_priority": 50,
       "status": "embedded_current_pck",
       "candidate_artifact": "audio.pck",
-      "candidate_bytes": 2577104,
-      "candidate_sha256": "ca06c482c7c5620fbdd19fcdfa5439e0eeb3f23b26277bf068393bb587274bf5",
+      "candidate_bytes": 2580080,
+      "candidate_sha256": "1b28359b7d7ed280ab2a39b5b4028e4daf88b1c49c5a3b9c7206f0aea2282d00",
       "contents": ["ambience", "combat_cues", "voice_fallbacks"]
     }
   }

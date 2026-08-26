@@ -18,6 +18,23 @@ func _run() -> void:
 	if not manager.is_ready("base") or manager.get_progress("base") < 1.0:
 		errors.append("embedded base did not become ready")
 
+	var user_args := OS.get_cmdline_user_args()
+	# A packed Web candidate omits campaign builders from the initial PCK. When
+	# a campaign artifact is supplied, prove that mounting it exposes the lazy
+	# builder before any later-zone construction is attempted.
+	if user_args.size() >= 2:
+		var campaign_path := str(user_args[1])
+		if not manager.mount_local_pack("campaign", campaign_path):
+			errors.append("verified external campaign pack failed to mount: %s" % manager.get_last_error("campaign"))
+		else:
+			var campaign_script: Script = load("res://scripts/zones/campaign_section.gd") as Script
+			if campaign_script == null:
+				errors.append("campaign pack did not expose campaign_section.gd")
+			else:
+				var builder = campaign_script.new()
+				if builder == null or not builder.has_method("build"):
+					errors.append("mounted campaign builder is not instantiable")
+
 	manager.set_pack_source("opening", "http://127.0.0.1:1/missing.pck")
 	if not manager.request_pack("opening"):
 		errors.append("download request could not be queued")
@@ -29,8 +46,7 @@ func _run() -> void:
 	if manager.get_state("opening") not in ["cancelled", "failed"]:
 		errors.append("cancel did not settle the request")
 
-	var user_args := OS.get_cmdline_user_args()
-	if not user_args.is_empty():
+	if user_args.size() >= 1:
 		var external_path := str(user_args[0])
 		if not manager.mount_local_pack("base", external_path):
 			errors.append("verified external base pack failed to mount: %s" % manager.get_last_error("base"))

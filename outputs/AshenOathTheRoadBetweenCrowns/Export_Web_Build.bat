@@ -26,10 +26,22 @@ mkdir "%OUT_DIR%"
 "%GODOT%" --headless --path "%PROJECT_DIR%" --export-release "Web Browser" "%OUT_DIR%\index.html"
 if errorlevel 1 exit /b %errorlevel%
 
+set "PACK_DIR=%ASHEN_OATH_PACK_DIRECTORY%"
+if not defined PACK_DIR set "PACK_DIR=%PROJECT_DIR%.release-gate\runtime-packs"
+if not exist "%PACK_DIR%\campaign.pck" (
+  echo Building the verified campaign runtime pack...
+  powershell -ExecutionPolicy Bypass -File "%PROJECT_DIR%tools\build_runtime_packs.ps1" -OutputDirectory "%PACK_DIR%" -Force
+  if errorlevel 1 exit /b %errorlevel%
+)
+if not exist "%OUT_DIR%\packs" mkdir "%OUT_DIR%\packs"
+copy /Y "%PACK_DIR%\campaign.pck" "%OUT_DIR%\packs\campaign.pck" >nul
+if errorlevel 1 exit /b %errorlevel%
+
 "%PYTHON%" "%PROJECT_DIR%\tools\verify_web_export.py" "%OUT_DIR%"
 if errorlevel 1 exit /b %errorlevel%
 
 echo.
 echo Web build ready:
 echo %OUT_DIR%
+
 echo Upload the contents of this folder to Vercel, Netlify, Cloudflare Pages, or itch.io.

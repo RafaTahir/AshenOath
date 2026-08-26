@@ -3,11 +3,13 @@
 ## Masterpiece Rebuild Status - 2026-08-26
 
 The current production checkpoint remains `d7e09d0` and is synchronized with
-`origin/main` and the tracked Web output. The `codex/masterpiece-rebuild`
-branch is a new cumulative development line. The project is not claiming final
-Soul Rebuild quality: the current runtime still has provisional character and
-boss mappings, procedural/blockout world presentation, external runtime-pack
-candidates that are not yet mounted, incomplete later exterior-seam
+`origin/main` and the tracked Web output until the Milestone B promotion is
+completed. The `codex/masterpiece-rebuild` branch is the cumulative
+development line. The project is not claiming final Soul Rebuild quality: the
+current runtime still has provisional character and boss mappings,
+procedural/blockout world presentation, external runtime-pack candidates that
+are not yet mounted except for the campaign pack in the new Web candidate,
+incomplete later exterior-seam
 presentation, scratch voice delivery, and an
 unverified visual gate. The development branch now contains the first
 player-facing bow/ammunition/shop slice: three capped arrow types, target-aware
@@ -34,26 +36,29 @@ world atlas. Fresh seam evidence is recorded in
 and `SEAM_001_02_WychwoodArrival_20260826_150551.png`.
 
 The targeted `seamless` gate, structural Milestone B gates, export, packed
-startup, and browser route checks pass. The first two-browser run hit an Edge
-CDP screenshot timeout after Chrome passed; independent final Chrome and Edge
-probes passed against the committed-tree export. The clean-source seven-file
-candidate is `87.30 MB` with PCK SHA-256
-`27994E556ADE09F69EE2D1CE7FE2DBD34D15EF5A89D39435E126AC64C54F9903`.
-Production `web/`, `main`, and Vercel remain unchanged because fresh-profile
-cold browser engine readiness is still above the product target and
-shutdown-only allocator/ObjectDB diagnostics remain visible in graphical
-verifier teardown. Noncritical audio and heavy character resources now load
-after the menu path or at first use; the final browser measurements are
-recorded in `MILESTONE-B_RESULT.md`. This is a verified development
-checkpoint, not final visual approval; later-zone geometry remains procedural.
+startup, and browser route checks pass. The final export is `80.95 MB` total:
+the main PCK is `43.81 MB` with SHA-256
+`FB90BA224A97BC01341755198A2D0FC61847D534A750245FFBA38CF25D30991B`, and
+`packs/campaign.pck` is `884,856` bytes with SHA-256
+`E3773163700109A7E2195E485A41BA46461220445CE645878CD583825A383D8E`.
+Chrome and Edge reached 1280x720 WebGL2 with no console/resource errors; the
+authoritative browser run measured `28.04 s`/`6.64 s` and `25.63 s`/`7.86 s`
+for engine-ready/New Game. The campaign mount test passes from the reduced
+main PCK. Fresh seam evidence is current at
+`SEAM_001_01_GreyfenBoundary_20260826_161353.png` and
+`SEAM_001_02_WychwoodArrival_20260826_161353.png`.
+Production `web/`, `main`, and Vercel remain unchanged until the promotion
+step. The broader cold-start target and shutdown-only diagnostics remain
+documented follow-up work; later-zone geometry remains procedural.
 
-PACK-003 remains an earlier development checkpoint. Six named runtime PCK
-candidates were exported and hash-verified outside the repository at a
-combined `80.52 MB`. They remain external candidates: the current runtime
-still uses its embedded PCK because production URLs have not been configured;
-the active checkpoint is now Milestone B.
+PACK-003 remains an external candidate set. Six named runtime PCK candidates
+were exported and hash-verified at a combined `55.58 MB`; the current Web
+candidate stages only `campaign.pck` beside the root runtime because that is
+the only pack required to prove lazy later-zone construction in Milestone B.
+The active checkpoint is now Milestone B.
 STREAM-003 implements download, verification, mounting, caching, retry, and
-rollback. Production `main`, tracked `web/`, and Vercel remain unchanged.
+rollback. Production `main`, tracked `web/`, and Vercel remain unchanged until
+the verified Milestone B promotion.
 
 STREAM-003 is now implemented on top of that checkpoint. The runtime can
 queue, download, verify, cache, mount, retry, cancel, and retire split packs,

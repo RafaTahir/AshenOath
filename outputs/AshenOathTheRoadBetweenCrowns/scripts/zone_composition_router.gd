@@ -1,15 +1,19 @@
 extends RefCounted
 
-const CampaignSection = preload("res://scripts/zones/campaign_section.gd")
 const GreyfenSection = preload("res://scripts/zones/greyfen_section.gd")
 const RuinsSection = preload("res://scripts/zones/ruins_section.gd")
 const WychwoodSection = preload("res://scripts/zones/wychwood_section.gd")
 
 const CORE_ZONES: Array[String] = ["greyfen", "wychwood", "ruins"]
+const CAMPAIGN_ZONES: Array[String] = [
+	"deep_wood", "old_mill", "burned_farmstead", "marsh_crossing", "bandit_road",
+	"vargan_approach", "vargan_court", "record_hall", "undercroft", "assembly", "hart_glade",
+]
+const CAMPAIGN_BUILDER_PATH := "res://scripts/zones/campaign_section.gd"
 
 static func supports(zone_id: String) -> bool:
 	var canonical_id := _canonical(zone_id)
-	return canonical_id in CORE_ZONES or CampaignSection.SECTIONS.has(canonical_id)
+	return canonical_id in CORE_ZONES or canonical_id in CAMPAIGN_ZONES
 
 static func composition_kind(zone_id: String) -> String:
 	var canonical_id := _canonical(zone_id)
@@ -35,18 +39,25 @@ static func build_core(host: Node, zone_id: String) -> Dictionary:
 
 static func build_campaign(host: Node, zone_id: String) -> Dictionary:
 	var canonical_id := _canonical(zone_id)
-	if not CampaignSection.SECTIONS.has(canonical_id):
+	if canonical_id not in CAMPAIGN_ZONES:
 		return _failure(canonical_id, "unregistered campaign zone")
 	var context := ZoneBuildContext.new(host, canonical_id)
 	context.record_operation("begin:%s" % canonical_id)
-	CampaignSection.new().build(context)
+	# Campaign builders are resolved only when a player reaches the campaign.
+	# This keeps later-zone scripts and optional assets out of the startup graph.
+	var builder_script: Script = load(CAMPAIGN_BUILDER_PATH) as Script
+	if builder_script == null:
+		return _failure(canonical_id, "campaign builder pack is not mounted")
+	var builder = builder_script.new()
+	if builder == null or not builder.has_method("build"):
+		return _failure(canonical_id, "campaign builder is invalid")
+	builder.build(context)
 	return context.validate()
 
 static func registered_zones() -> Array[String]:
 	var result: Array[String] = []
 	result.assign(CORE_ZONES)
-	for zone_id in CampaignSection.SECTIONS.keys():
-		result.append(str(zone_id))
+	result.append_array(CAMPAIGN_ZONES)
 	result.sort()
 	return result
 
