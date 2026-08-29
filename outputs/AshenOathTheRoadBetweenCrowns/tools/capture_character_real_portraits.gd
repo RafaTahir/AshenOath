@@ -13,8 +13,8 @@ const ROLES := {
 	"castle_guard":"castle_guard_human",
 	"road_ranger":"road_ranger_human",
 	"ghoul_gaunt":"ghoulkin_creature",
-	"ghoul_stalker":"ghoul_stalker_real",
-	"ghoul_brute":"ghoul_brute_real",
+	"ghoul_stalker":"wychwood_stalker",
+	"ghoul_brute":"wychwood_brute",
 	"bog_wretch":"bog_wretch_creature",
 	"gravebound_knight":"gravebound_knight_creature",
 	"ashwing":"ashwing_creature"
@@ -52,7 +52,7 @@ func _initialize() -> void:
 	await process_frame
 	for role in ROLES:
 		var visual_role: String = str(ROLES[role])
-		var category := "enemies" if visual_role in ["ghoulkin_creature", "ghoul_stalker_real", "ghoul_brute_real", "ashwing_creature"] else "characters"
+		var category := "enemies" if visual_role in ["ghoulkin_creature", "wychwood_stalker", "wychwood_brute", "ashwing_creature"] else "characters"
 		var character := helper.spawn_visual_role(visual_role, category)
 		if character == null:
 			push_error("Unable to spawn runtime portrait role: %s" % visual_role)
@@ -118,8 +118,8 @@ func _identity_role(capture_role: String) -> String:
 func _portrait_needs_yaw_flip(visual_role: String) -> bool:
 	return visual_role not in [
 		"ghoulkin_creature",
-		"ghoul_stalker_real",
-		"ghoul_brute_real",
+		"wychwood_stalker",
+		"wychwood_brute",
 		"bog_wretch_creature",
 		"gravebound_knight_creature"
 	]

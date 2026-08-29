@@ -3,7 +3,7 @@ extends RefCounted
 const CharacterFaceDriver = preload("res://scripts/character_face_driver.gd")
 
 const KAEL := {
-	"skin": Color("a9785f"), "hair": Color("241914"), "eyes": Color("171412"),
+	"skin": Color("a9785f"), "hair": Color("77756f"), "eyes": Color("171412"),
 	"primary": Color("202a25"), "secondary": Color("30362d"), "linen": Color("b8ad99"),
 	"leather": Color("4a2d1c"), "boots": Color("2b1d17"), "metal": Color("8e784b")
 }
@@ -24,9 +24,10 @@ const MONSTER_ROLES := [
 	"rootbound_colossus", "ashwing", "halvern_boss", "white_hart_avatar"
 ]
 
-static func apply(root: Node, role_id: String) -> Dictionary:
+static func apply(root: Node, role_id: String, variant_seed: String = "") -> Dictionary:
 	var role := role_id.to_lower()
-	var profile := _profile_for(role)
+	var resolved_seed := variant_seed if not variant_seed.is_empty() else role
+	var profile := _profile_for(role, resolved_seed)
 	var surfaces := 0
 	var face_surfaces := 0
 	for mesh in root.find_children("*", "MeshInstance3D", true, false):
@@ -44,6 +45,8 @@ static func apply(root: Node, role_id: String) -> Dictionary:
 			if token.contains("head") or token.contains("skin") or token.contains("eyes") or token.contains("hair") or token.contains("skull") or token.contains("jaw") or token.contains("mouth") or token.contains("teeth"):
 				face_surfaces += 1
 	root.set_meta("character_identity_profile", role)
+	root.set_meta("character_variant_seed", resolved_seed)
+	root.set_meta("character_variant_recipe", _recipe_for(role, profile))
 	root.set_meta("character_identity_surfaces", surfaces)
 	root.set_meta("character_face_surfaces", face_surfaces)
 	# Identity is now carried by the imported mesh materials. Earlier passes
@@ -90,28 +93,31 @@ static func _contains_complete_family(root: Node) -> bool:
 static func role_is_monster(root: Node) -> bool:
 	return str(root.get_meta("character_identity_profile", "")) in MONSTER_ROLES
 
-static func _profile_for(role: String) -> Dictionary:
+static func _profile_for(role: String, variant_seed: String = "") -> Dictionary:
 	if role in ["player", "player_kael", "player_human", "kael"]:
 		return KAEL
 	if role in ["sister_anwen", "sister_anwen_human", "anwen"]:
 		return ANWEN
+	var seed_text := variant_seed if not variant_seed.is_empty() else role
 	if role.contains("blacksmith") or role.contains("forge"):
-		return _occupation_profile(role, Color("2f2925"), Color("5b3522"), Color("a88a6c"))
+		return _occupation_profile(role, Color("2f2925"), Color("5b3522"), Color("a88a6c"), seed_text)
 	if role.contains("widow") or role.contains("mourner"):
-		return _occupation_profile(role, Color("272634"), Color("3b394d"), Color("a47a66"))
+		return _occupation_profile(role, Color("272634"), Color("3b394d"), Color("a47a66"), seed_text)
 	if role.contains("pilgrim") or role.contains("shrine"):
-		return _occupation_profile(role, Color("343b32"), Color("5a5540"), Color("99705b"))
+		return _occupation_profile(role, Color("343b32"), Color("5a5540"), Color("99705b"), seed_text)
 	if role.contains("steward") or role.contains("record_keeper"):
-		return _occupation_profile(role, Color("3b302b"), Color("6d5941"), Color("a47b63"))
+		return _occupation_profile(role, Color("3b302b"), Color("6d5941"), Color("a47b63"), seed_text)
 	if role.contains("servant"):
-		return _occupation_profile(role, Color("4a3b35"), Color("6b5142"), Color("b07f68"))
+		return _occupation_profile(role, Color("4a3b35"), Color("6b5142"), Color("b07f68"), seed_text)
 	if role.contains("patrol"):
-		return _occupation_profile(role, Color("26333b"), Color("5a4a38"), Color("8f664f"))
+		return _occupation_profile(role, Color("26333b"), Color("5a4a38"), Color("8f664f"), seed_text)
 	if role.contains("guard") or role.contains("vargan") or role.contains("edric"):
-		return _occupation_profile(role, Color("30363d"), Color("4d2424"), Color("a2765e"))
+		return _occupation_profile(role, Color("30363d"), Color("4d2424"), Color("a2765e"), seed_text)
 	if role.contains("ranger") or role.contains("senn") or role.contains("rook"):
-		return _occupation_profile(role, Color("26342d"), Color("44372a"), Color("8f664f"))
-	var seed := absi(role.hash())
+		return _occupation_profile(role, Color("26342d"), Color("44372a"), Color("8f664f"), seed_text)
+	if role.contains("mira"):
+		return _occupation_profile(role, Color("263b2b"), Color("4d5a3c"), Color("a97559"), seed_text)
+	var seed := _stable_seed(seed_text)
 	var skins := [Color("8d604c"), Color("a97559"), Color("bc876b"), Color("76503f")]
 	var hairs := [Color("241a15"), Color("4a3020"), Color("71604e"), Color("302523")]
 	var cloth := [Color("3b4430"), Color("4a3430"), Color("303e49"), Color("4a422e")]
@@ -121,13 +127,33 @@ static func _profile_for(role: String) -> Dictionary:
 		"linen": Color("b5aa91"), "leather": Color("4b3020"), "boots": Color("2d211a"), "metal": Color("786742")
 	}
 
-static func _occupation_profile(role: String, primary: Color, secondary: Color, skin: Color) -> Dictionary:
-	var seed := absi(role.hash())
+static func _occupation_profile(role: String, primary: Color, secondary: Color, skin: Color, variant_seed: String = "") -> Dictionary:
+	var seed := _stable_seed(variant_seed if not variant_seed.is_empty() else role)
 	var hair_options := [Color("241a15"), Color("4a3020"), Color("71604e"), Color("302523")]
+	var skin_options := [skin, skin.lightened(0.07), skin.darkened(0.06), Color("8d604c")]
+	var eye_options := [Color("1b1816"), Color("30251e"), Color("26312c")]
 	return {
-		"skin": skin, "hair": hair_options[seed % hair_options.size()], "eyes": Color("1b1816"),
+		"skin": skin_options[seed % skin_options.size()], "hair": hair_options[int(seed / 3) % hair_options.size()], "eyes": eye_options[int(seed / 5) % eye_options.size()],
 		"primary": primary, "secondary": secondary, "linen": Color("b5aa91"),
 		"leather": Color("4b3020"), "boots": Color("2d211a"), "metal": Color("786742")
+	}
+
+static func _stable_seed(value: String) -> int:
+	var result := 17
+	for index in range(value.length()):
+		result = abs((result * 31 + value.unicode_at(index)) % 2147483647)
+	return result
+
+static func _recipe_for(role: String, profile: Dictionary) -> Dictionary:
+	var female := role.contains("female") or role.contains("anwen") or role.contains("mira") or role.contains("widow") or role.contains("servant")
+	var skin: Color = profile.get("skin", Color.WHITE)
+	var hair: Color = profile.get("hair", Color.WHITE)
+	var primary: Color = profile.get("primary", Color.WHITE)
+	return {
+		"body_family": "universal_female" if female else "universal_male",
+		"complexion": skin.to_html(false),
+		"hair_tint": hair.to_html(false),
+		"clothing_tint": primary.to_html(false)
 	}
 
 static func _color_for(token: String, role: String, profile: Dictionary) -> Color:

@@ -793,12 +793,13 @@ func _try_build_mapped_body() -> bool:
 	var mapped = null
 	var uses_real_body := false
 	var visual_source: String = enemy_id
+	var skeleton_family_source := false
 	if enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute", "bog_wretch", "gravebound_knight", "bell_eater", "rootbound_colossus", "ashwing", "halvern_boss", "white_hart_avatar"]:
 		visual_source = {
-			"ghoulkin": "ghoul_gaunt_real",
-			"wychwood_stalker": "ghoul_stalker_real",
-			"wychwood_raider": "ghoul_gaunt_real",
-			"wychwood_brute": "ghoul_brute_real",
+			"ghoulkin": "ghoulkin_skeleton",
+			"wychwood_stalker": "ghoulkin_skeleton",
+			"wychwood_raider": "ghoulkin_skeleton",
+			"wychwood_brute": "ghoulkin_skeleton",
 			"bog_wretch": "bog_wretch_creature",
 			"gravebound_knight": "gravebound_knight_creature",
 			"bell_eater": "bell_eater_boss",
@@ -806,9 +807,13 @@ func _try_build_mapped_body() -> bool:
 			"ashwing": "ashwing_boss",
 			"halvern_boss": "gravebound_knight_creature",
 			"white_hart_avatar": "white_hart_boss",
-		}.get(enemy_id, "ghoul_gaunt_real")
+		}.get(enemy_id, "ghoulkin_skeleton")
 		mapped = asset_helper.spawn_visual_role(visual_source, "enemies")
-		uses_real_body = mapped != null and not mapped.name.ends_with("_placeholder")
+		skeleton_family_source = visual_source in [
+			"ghoulkin_skeleton", "ghoulkin_creature", "bog_wretch_creature",
+			"gravebound_knight_creature", "bell_eater_boss", "rootbound_colossus_boss"
+		]
+		uses_real_body = mapped != null and not mapped.name.ends_with("_placeholder") and not skeleton_family_source
 	if mapped == null:
 		mapped = asset_helper.spawn_enemy(visual_source)
 	if mapped == null or mapped.name.ends_with("_placeholder"):
@@ -855,7 +860,17 @@ func _try_build_mapped_body() -> bool:
 	animation_driver = CharacterAnimationDriver.new()
 	animation_driver.name = "CharacterAnimationDriver"
 	mapped.add_child(animation_driver)
-	if uses_real_body:
+	if skeleton_family_source:
+		animation_driver.configure(mapped, {
+			"idle": "SkeletonArmature|Skeleton_Idle",
+			"windup": "SkeletonArmature|Skeleton_Attack",
+			"walk": "SkeletonArmature|Skeleton_Running",
+			"run": "SkeletonArmature|Skeleton_Running",
+			"attack": "SkeletonArmature|Skeleton_Attack",
+			"hit": "SkeletonArmature|Skeleton_Spawn",
+			"death": "SkeletonArmature|Skeleton_Death"
+		})
+	elif uses_real_body:
 		if visual_source in ["ashwing_creature", "ashwing_boss"]:
 			animation_driver.configure(mapped, {
 				"idle":"DragonArmature|Dragon_Flying", "walk":"DragonArmature|Dragon_Flying",
@@ -879,16 +894,6 @@ func _try_build_mapped_body() -> bool:
 				"run":"Run", "windup":"Attack", "attack":"Attack",
 				"hit":"RecieveHit", "death":"Death"
 			})
-	elif visual_source == "ghoulkin_skeleton":
-		animation_driver.configure(mapped, {
-			"idle": "SkeletonArmature|Skeleton_Idle",
-			"windup": "SkeletonArmature|Skeleton_Attack",
-			"walk": "SkeletonArmature|Skeleton_Running",
-			"run": "SkeletonArmature|Skeleton_Running",
-			"attack": "SkeletonArmature|Skeleton_Attack",
-			"hit": "SkeletonArmature|Skeleton_Spawn",
-			"death": "SkeletonArmature|Skeleton_Death"
-		})
 	else:
 		animation_driver.configure(mapped, {
 			"idle": "Idle", "walk": "Walk", "run": "Run", "jump": "Jump_Idle",

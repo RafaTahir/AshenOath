@@ -4,10 +4,10 @@ const EnemyAI = preload("res://scripts/enemy_ai.gd")
 
 var required := ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute", "bog_wretch", "gravebound_knight", "bell_eater", "rootbound_colossus", "ashwing", "halvern_boss", "white_hart_avatar"]
 const WYCHWOOD_VISUAL_ROLES := {
-	"ghoulkin": "ghoul_gaunt_real",
-	"wychwood_stalker": "ghoul_stalker_real",
-	"wychwood_raider": "ghoul_gaunt_real",
-	"wychwood_brute": "ghoul_brute_real",
+	"ghoulkin": "ghoulkin_skeleton",
+	"wychwood_stalker": "ghoulkin_skeleton",
+	"wychwood_raider": "ghoulkin_skeleton",
+	"wychwood_brute": "ghoulkin_skeleton",
 }
 var failures := 0
 
@@ -57,14 +57,10 @@ func _verify_wychwood_family_source() -> void:
 		var family_entry: Dictionary = enemy_roles.get(role_id, {})
 		check(not family_entry.is_empty(), "%s has no explicit connected family role" % enemy_id)
 		var source_path := str(family_entry.get("path", ""))
-		check(source_path == "res://assets_external/characters_real/%s.glb" % {
-			"ghoul_gaunt_real": "GhoulGaunt_Real",
-			"ghoul_stalker_real": "GhoulStalker_Real",
-			"ghoul_brute_real": "GhoulBrute_Real",
-		}.get(role_id, ""), "%s is mapped to an unexpected family source" % enemy_id)
+		check(source_path == "res://assets_external/enemies/Skeleton.fbx", "%s is mapped to an unexpected family source" % enemy_id)
 		check(ResourceLoader.exists(source_path), "%s family source is not loadable" % enemy_id)
 	var legacy_entry: Dictionary = enemy_roles.get("ghoulkin_skeleton", {})
-	check(str(legacy_entry.get("status", "")).contains("legacy_quarantined"), "legacy Skeleton source must be quarantined")
+	check(str(legacy_entry.get("status", "")).contains("char_restore") or str(legacy_entry.get("status", "")).contains("legacy_quarantined"), "retained Skeleton source must have an explicit retained status")
 
 func _verify_wychwood_family_runtime(enemy_definitions: Dictionary) -> void:
 	for enemy_id in WYCHWOOD_VISUAL_ROLES:

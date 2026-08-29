@@ -427,6 +427,7 @@ func _make_skeletal_villager(parent: Node3D, role_id: String, index: int, scale_
 	mapped.set_meta("char_002_identity", role_id)
 	mapped.set_meta("char_009_identity", CROWD_IDENTITIES[index % CROWD_IDENTITIES.size()])
 	mapped.set_meta("char_009_variant_index", index)
+	mapped.set_meta("character_variant_seed", "%s:%d" % [role_id, index])
 	parent.add_child(mapped)
 	# Apply presentation to the imported actor itself. Applying it to the zone
 	# parent leaves the routine without its native face driver and makes the

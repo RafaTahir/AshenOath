@@ -31,11 +31,11 @@ func _initialize() -> void:
 	await capture_candidate_greyfen("ART_001_02_Greyfen_Modular_Candidate")
 	await capture_character_pair("kael", "ART_001_03_Kael_Baseline", "ART_001_04_Kael_Warrior_Candidate")
 	await capture_character_pair("sister_anwen", "ART_001_05_Anwen_Baseline", "ART_001_06_Anwen_Cleric_Candidate")
-	await capture_character_pair("ghoulkin", "ART_001_07_Ghoulkin_Baseline", "ART_001_08_Ghoulkin_OrcSkull_Candidate")
+	await capture_character_pair("ghoulkin", "ART_001_07_Ghoulkin_Baseline", "ART_001_08_Ghoulkin_Retained_Source")
 	make_contact_sheet("ART_001_09_Greyfen_Comparison", "ART_001_01_Greyfen_Baseline", "ART_001_02_Greyfen_Modular_Candidate")
 	make_contact_sheet("ART_001_10_Kael_Comparison", "ART_001_03_Kael_Baseline", "ART_001_04_Kael_Warrior_Candidate")
 	make_contact_sheet("ART_001_11_Anwen_Comparison", "ART_001_05_Anwen_Baseline", "ART_001_06_Anwen_Cleric_Candidate")
-	make_contact_sheet("ART_001_12_Ghoulkin_Comparison", "ART_001_07_Ghoulkin_Baseline", "ART_001_08_Ghoulkin_OrcSkull_Candidate")
+	make_contact_sheet("ART_001_12_Ghoulkin_Comparison", "ART_001_07_Ghoulkin_Baseline", "ART_001_08_Ghoulkin_Retained_Source")
 	var image_count := captured.size()
 	await clean_shutdown()
 	if failures > 0:

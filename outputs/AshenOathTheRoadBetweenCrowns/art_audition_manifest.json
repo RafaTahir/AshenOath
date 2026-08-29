@@ -11,24 +11,24 @@
   "roles": {
     "kael": {
       "baseline": "res://assets_external/characters/Adventurer_PolyPizza_Quaternius_CC0.glb",
-      "candidate": "res://assets_external/animated/Warrior_Animated_CC0.gltf",
-      "decision": "rejected_for_char_001",
+      "candidate": "res://assets_external/characters_universal/Male_Peasant.gltf",
+      "decision": "selected_for_char_restore_001",
       "required_height": 1.78,
-      "notes": "Warrior has a clearer hunter/combat silhouette, authored clothing and a matching weapon. Facial identity remains a CHAR-001 requirement."
+      "notes": "A1 uses the Universal male body with native head, simple-parted hair, grey hunter palette, and validated weapon sockets."
     },
     "sister_anwen": {
       "baseline": "res://assets_external/characters/AnimatedWoman_PolyPizza_Quaternius_CC0.glb",
-      "candidate": "res://assets_external/animated/Cleric_Animated_CC0.gltf",
-      "decision": "rejected_for_char_001",
+      "candidate": "res://assets_external/characters_universal/Female_Peasant.gltf",
+      "decision": "selected_for_char_restore_001",
       "required_height": 1.68,
-      "notes": "Cleric communicates shrine authority through robe, staff and silhouette. Age, hair and facial identity still require authored treatment."
+      "notes": "A2 uses the Universal female body with native head, buns, grey cleric palette, and a validated staff socket."
     },
     "ghoulkin": {
-      "baseline": "res://assets_external/characters_real/GhoulGaunt_Real.glb",
-      "candidate": "res://assets_external/animated/OrcSkull_Animated_CC0.gltf",
-      "decision": "reference_only_for_mon_001",
+      "baseline": "historical generated cursed-human comparison",
+      "candidate": "res://assets_external/enemies/Skeleton.fbx",
+      "decision": "selected_retained_source_for_char_restore_001",
       "required_height": 1.82,
-      "notes": "OrcSkull is cohesive and animated but is only a direction candidate. MON-001 must remove heroic proportions and create a cursed-human horror silhouette."
+      "notes": "The retained Skeleton source is used with deterministic gaunt, stalker, raider, brute, and boss profiles until a bespoke family passes a later visual gate."
     }
   },
   "greyfen": {

@@ -58,7 +58,9 @@ func _verify_role(role: String, identity: String, minimum_height: float, maximum
 		return
 	_check(bool(visual.get_meta("character_composite", false)), "%s is not a consolidated shared humanoid body" % role)
 	_check(str(visual.get_meta("character_asset_family", "")) == "quaternius_animated_humanoid", "%s is outside the selected cohesive animated family" % role)
-	_check(str(visual.get_meta("character_base_path", "")).contains("assets_external/animated/"), "%s does not use a direct optimized animated source" % role)
+	var base_path := str(visual.get_meta("character_base_path", "")).replace("\\", "/")
+	var approved_universal_source := base_path.contains("assets_external/characters_universal/")
+	_check(approved_universal_source, "%s does not use the approved Universal optimized source" % role)
 	_check(_count_type(visual, "Skeleton3D") == 1, "%s must use one consolidated skeleton" % role)
 	_check(_count_type(visual, "AnimationPlayer") == 1, "%s must use one consolidated animation player" % role)
 	_check(int(visual.get_meta("character_rig_layer_count", 0)) == 1, "%s rig consolidation metadata is invalid" % role)

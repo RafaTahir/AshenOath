@@ -1,8 +1,8 @@
 extends SceneTree
 
 const ROLE_PATHS := {
-	"male": "res://assets_external/animated/Warrior_Animated_CC0.gltf",
-	"female": "res://assets_external/animated/Cleric_Animated_CC0.gltf",
+	"male": "res://assets_external/characters_universal/Male_Peasant.gltf",
+	"female": "res://assets_external/characters_universal/Female_Peasant.gltf",
 }
 const ANIMATION_PATH := "res://assets_external/animations/AnimationLibrary_Godot_Standard.glb"
 const FORBIDDEN := ["faceplane", "eyeleft", "eyeright", "fake_neck", "hunchedback", "proxy"]

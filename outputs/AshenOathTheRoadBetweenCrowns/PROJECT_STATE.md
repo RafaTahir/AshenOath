@@ -14,6 +14,23 @@ Final monster, boss, world, audio, and campaign visual quality remain later
 milestone work; historical result documents below are evidence only and do not
 silently approve those open presentation items.
 
+### CHAR-RESTORE-001 working-tree checkpoint - 2026-08-30
+
+The preferred A-set character presentation is implemented locally on
+`codex/masterpiece-rebuild` and has passed the targeted character, animation,
+monster, asset, performance-contract, and Web-reference checks. Kael and
+Sister Anwen use the selected Universal male/female body, head, and hair
+composition; deterministic occupation recipes provide crowd variation; and
+Captain Senn remains on the approved Ranger runtime. Wychwood and retained
+boss roles now resolve to the retained Skeleton, Dragon, and Wolf sources
+instead of the retired generated B/C families.
+
+The obsolete B/C runtime families and their exact rejected screenshots were
+removed after a zero-reference scan. Fresh CHAR-RESTORE-001 evidence is
+captured at 1280x720. This is a local ticket checkpoint only: it has not been
+pushed to `origin` or deployed to Vercel. Unrelated migration, deployment
+workflow, runtime-pack, and existing CHARACTER_REAL screenshot changes remain
+in the working tree and are intentionally not part of this checkpoint.
 ### Historical Milestone A promotion
 
 The final A gate passed on 2026-08-26: all 21 configured implementation,

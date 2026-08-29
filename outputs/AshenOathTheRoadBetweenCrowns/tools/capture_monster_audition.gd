@@ -4,10 +4,7 @@ const OUTPUT := "res://Development_Gallery/screenshots/MON_002_MONSTER_AUDITION.
 const SOURCES := [
 	"res://assets_external/enemies/Skeleton.fbx",
 	"res://assets_external/enemies/Dragon.fbx",
-	"res://assets_external/enemies/Wolf.fbx",
-	"res://assets_external/characters_real/GhoulGaunt_Real.glb",
-	"res://assets_external/characters_real/GhoulStalker_Real.glb",
-	"res://assets_external/characters_real/GhoulBrute_Real.glb"
+	"res://assets_external/enemies/Wolf.fbx"
 ]
 
 var failures := 0

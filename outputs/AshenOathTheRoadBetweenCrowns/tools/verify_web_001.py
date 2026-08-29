@@ -44,9 +44,14 @@ def main() -> int:
     for runtime_character in (
         "Male_Peasant.gltf",
         "Female_Peasant.gltf",
-        "GhoulGaunt_Real.glb",
-        "GhoulStalker_Real.glb",
-        "GhoulBrute_Real.glb",
+        "Male_Head.gltf",
+        "Female_Head.gltf",
+        "Hair_Buns.gltf",
+        "Hair_Buzzed.gltf",
+        "Hair_SimpleParted.gltf",
+        "Skeleton.fbx",
+        "Dragon.fbx",
+        "Wolf.fbx",
     ):
         if runtime_character not in preset:
             fail(f"export omits mapped runtime character: {runtime_character}", failures)

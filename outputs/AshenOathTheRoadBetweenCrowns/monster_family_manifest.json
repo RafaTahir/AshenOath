@@ -3,42 +3,42 @@
   "ticket": "MON-002",
   "families": {
     "ghoulkin": {
-      "visual_role": "ghoul_gaunt_real",
+      "visual_role": "ghoulkin_skeleton",
       "profile": "skirmisher",
       "height": 1.63,
       "skin": "runtime_materials",
-      "runtime_source_role": "ghoul_gaunt_real",
-      "source_path": "res://assets_external/characters_real/GhoulGaunt_Real.glb"
+      "runtime_source_role": "ghoulkin_skeleton",
+      "source_path": "res://assets_external/enemies/Skeleton.fbx"
     },
     "wychwood_stalker": {
-      "visual_role": "ghoul_stalker_real",
+      "visual_role": "ghoulkin_skeleton",
       "profile": "flanker",
       "height": 1.59,
       "skin": "runtime_materials",
-      "runtime_source_role": "ghoul_stalker_real",
-      "source_path": "res://assets_external/characters_real/GhoulStalker_Real.glb"
+      "runtime_source_role": "ghoulkin_skeleton",
+      "source_path": "res://assets_external/enemies/Skeleton.fbx"
     },
     "wychwood_raider": {
-      "visual_role": "ghoul_gaunt_real",
+      "visual_role": "ghoulkin_skeleton",
       "profile": "feinter",
       "height": 1.72,
       "skin": "runtime_materials",
-      "runtime_source_role": "ghoul_gaunt_real",
-      "source_path": "res://assets_external/characters_real/GhoulGaunt_Real.glb"
+      "runtime_source_role": "ghoulkin_skeleton",
+      "source_path": "res://assets_external/enemies/Skeleton.fbx"
     },
     "wychwood_brute": {
-      "visual_role": "ghoul_brute_real",
+      "visual_role": "ghoulkin_skeleton",
       "profile": "brute",
       "height": 1.98,
       "skin": "runtime_materials",
-      "runtime_source_role": "ghoul_brute_real",
-      "source_path": "res://assets_external/characters_real/GhoulBrute_Real.glb"
+      "runtime_source_role": "ghoulkin_skeleton",
+      "source_path": "res://assets_external/enemies/Skeleton.fbx"
     }
   },
   "shared_contract": {
     "required_states": ["idle", "walk", "run", "attack", "hit", "death"],
     "root_motion": false,
     "proxy_anatomy": false,
-    "source_policy": "all_wychwood_roles_use_connected_skinned_family_glbs"
+    "source_policy": "all_wychwood_roles_use_validated_skeleton_family_with_deterministic_profiles"
   }
 }

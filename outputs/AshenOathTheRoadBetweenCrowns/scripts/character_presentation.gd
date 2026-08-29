@@ -18,7 +18,7 @@ static func apply_player(owner: Node3D, visual_root: Node3D) -> void:
 	_add_contact_shadow(owner, Vector3(0.92, 0.018, 0.62), 0.0)
 	if _has_skeleton(visual_root):
 		CharacterVisualContract.remove_proxy_anatomy(visual_root)
-		CharacterIdentityProfile.apply(visual_root, "player_kael")
+		CharacterIdentityProfile.apply(visual_root, "player_kael", "kael")
 		return
 	# A non-skeletal asset is an emergency fallback only. Do not decorate it with
 	# root-mounted anatomy: those parts drift, inflate the neck, and desync from
@@ -35,7 +35,7 @@ static func apply_npc(owner: Node3D, role_id: String, include_ground_shadow: boo
 		# visual is created. Repair the child contract if the wrapper was marked
 		# first, rather than leaving the real body without its face driver.
 		if visual_target != owner and _has_skeleton(visual_target) and visual_target.find_child("CharacterFaceDriver", true, false) == null:
-			CharacterIdentityProfile.apply(visual_target, role_id.to_lower())
+			CharacterIdentityProfile.apply(visual_target, role_id.to_lower(), _variant_seed(owner, role_id))
 		if visual_target != owner:
 			_copy_identity_contract(owner, visual_target, role_id.to_lower())
 		return
@@ -45,7 +45,7 @@ static func apply_npc(owner: Node3D, role_id: String, include_ground_shadow: boo
 	var role = role_id.to_lower()
 	if _has_skeleton(visual_target):
 		CharacterVisualContract.remove_proxy_anatomy(visual_target)
-		CharacterIdentityProfile.apply(visual_target, role)
+		CharacterIdentityProfile.apply(visual_target, role, _variant_seed(owner, role))
 		if visual_target != owner:
 			_copy_identity_contract(owner, visual_target, role)
 		# The selected GLTFs are complete authored bodies. Hide native held props
@@ -53,8 +53,8 @@ static func apply_npc(owner: Node3D, role_id: String, include_ground_shadow: boo
 		# sword merely because it shares the same compact source family.
 		_set_native_role_equipment_visible(owner, role)
 		if role in ["sister_anwen", "sister_anwen_human"]:
-			# Cleric_Animated already contains a skinned staff on its Weapon.R
-			# socket. Do not layer a second root-equivalent staff over it.
+			# The Universal body owns its native hand/skin layers. Do not layer a
+			# second root-equivalent staff over the validated bone attachment.
 			if owner.find_child("Cleric_Staff", true, false) == null:
 				_add_anwen_staff(owner)
 		_add_castle_role_equipment(owner, role)
@@ -77,7 +77,9 @@ static func _copy_identity_contract(owner: Node3D, visual_target: Node3D, role: 
 		"character_asset_family",
 		"character_composite",
 		"character_rig_layer_count",
-		"character_role_contract"
+		"character_role_contract",
+		"character_variant_seed",
+		"character_variant_recipe"
 	]:
 		if visual_target.has_meta(key):
 			owner.set_meta(key, visual_target.get_meta(key))
@@ -112,11 +114,18 @@ static func apply_enemy(owner: Node3D, scale_value: Vector3 = Vector3(0.78, 0.01
 	if _has_skeleton(owner):
 		CharacterVisualContract.remove_proxy_anatomy(owner)
 		var enemy_role = str(owner.get("enemy_id")) if owner.get("enemy_id") != null else "ghoulkin"
-		CharacterIdentityProfile.apply(owner, enemy_role)
+		CharacterIdentityProfile.apply(owner, enemy_role, _variant_seed(owner, enemy_role))
 		return
 	# No root-mounted monster anatomy. A non-skeletal enemy is a temporary
 	# fallback and must remain visibly honest rather than wearing fake limbs.
 	owner.set_meta("character_overlay_contract", "disabled")
+
+static func _variant_seed(owner: Node, fallback: String) -> String:
+	if owner != null and owner.has_meta("character_variant_seed"):
+		var stored := str(owner.get_meta("character_variant_seed", ""))
+		if not stored.is_empty():
+			return stored
+	return fallback
 
 static func _villager_cloth_color(role: String) -> Color:
 	if role.contains("widow"):
@@ -332,86 +341,6 @@ static func _find_skeleton(root: Node) -> Skeleton3D:
 		if found != null:
 			return found
 	return null
-
-static func _add_ghoulkin_details(owner: Node3D, quality: bool) -> void:
-	var parent = _find_named_node(owner, "visual_root")
-	if parent == null:
-		parent = owner
-	_add_box(parent, "GhoulkinHunchedBackRead", Vector3(0, 1.02, 0.18), Vector3(0.52, 0.28, 0.32), Color(0.16, 0.15, 0.12), Vector3(-12, 0, 0))
-	_add_box(parent, "GhoulkinLongArmLeft", Vector3(-0.42, 0.70, -0.18), Vector3(0.11, 0.72, 0.13), Color(0.18, 0.16, 0.13), Vector3(20, 0, -18))
-	_add_box(parent, "GhoulkinLongArmRight", Vector3(0.42, 0.70, -0.18), Vector3(0.11, 0.72, 0.13), Color(0.18, 0.16, 0.13), Vector3(20, 0, 18))
-	_add_box(parent, "GhoulkinClawLeft", Vector3(-0.51, 0.34, -0.45), Vector3(0.15, 0.045, 0.34), Color(0.49, 0.46, 0.35), Vector3(18, 0, -18))
-	_add_box(parent, "GhoulkinClawRight", Vector3(0.51, 0.34, -0.45), Vector3(0.15, 0.045, 0.34), Color(0.49, 0.46, 0.35), Vector3(18, 0, 18))
-	_add_fake_light_gem(parent, "GhoulkinEyeLeft", Vector3(-0.07, 1.42, -0.34), Color(0.78, 0.95, 0.58), 0.9)
-	_add_fake_light_gem(parent, "GhoulkinEyeRight", Vector3(0.07, 1.42, -0.34), Color(0.78, 0.95, 0.58), 0.9)
-	if quality:
-		for x in [-0.18, 0.0, 0.18]:
-			_add_box(parent, "GhoulkinRibRead", Vector3(x, 0.98, -0.36), Vector3(0.055, 0.28, 0.035), Color(0.41, 0.38, 0.30), Vector3(0, 0, x * 35.0))
-		_add_box(parent, "GhoulkinRotStain", Vector3(0, 0.86, -0.39), Vector3(0.36, 0.24, 0.025), Color(0.08, 0.18, 0.10))
-
-static func _add_cloak_panel(parent: Node3D, name: String, pos: Vector3, size: Vector3, color: Color, pitch: float) -> void:
-	_add_box(parent, name, pos, size, color, Vector3(pitch, 0, 0))
-
-static func _add_shoulders(parent: Node3D, prefix: String, color: Color, width: float) -> void:
-	for side in [-1, 1]:
-		_add_box(parent, "%sShoulderRead" % prefix, Vector3(width * side, 1.34, -0.08), Vector3(0.22, 0.14, 0.26), color, Vector3(0, 0, -9 * side))
-
-static func _add_head_detail(parent: Node3D, prefix: String, skin: Color, hair: Color, hood: bool) -> void:
-	_add_box(parent, "%sFacePlane" % prefix, Vector3(0, 1.62, -0.31), Vector3(0.22, 0.27, 0.025), skin)
-	_add_box(parent, "%sEyeLeft" % prefix, Vector3(-0.055, 1.66, -0.328), Vector3(0.028, 0.018, 0.010), Color(0.018, 0.014, 0.010))
-	_add_box(parent, "%sEyeRight" % prefix, Vector3(0.055, 1.66, -0.328), Vector3(0.028, 0.018, 0.010), Color(0.018, 0.014, 0.010))
-	var hair_mesh = MeshInstance3D.new()
-	hair_mesh.name = "%sHairSilhouette" % prefix
-	hair_mesh.set_meta("visual_name", hair_mesh.name)
-	var sphere = SphereMesh.new()
-	sphere.radius = 0.22
-	sphere.height = 0.24
-	hair_mesh.mesh = sphere
-	hair_mesh.scale = Vector3(0.82, 0.56, 0.66)
-	hair_mesh.position = Vector3(0, 1.76, -0.07)
-	hair_mesh.material_override = _mat(hair, 0.82)
-	parent.add_child(hair_mesh)
-	if hood:
-		var hood_mesh = MeshInstance3D.new()
-		hood_mesh.name = "%sHoodSilhouette" % prefix
-		hood_mesh.set_meta("visual_name", hood_mesh.name)
-		var hood_sphere = SphereMesh.new()
-		hood_sphere.radius = 0.29
-		hood_sphere.height = 0.34
-		hood_mesh.mesh = hood_sphere
-		hood_mesh.scale = Vector3(0.88, 0.74, 0.78)
-		hood_mesh.position = Vector3(0, 1.70, -0.02)
-		hood_mesh.material_override = _mat(Color(0.10, 0.10, 0.12), 0.9)
-		parent.add_child(hood_mesh)
-
-static func _add_fake_light_gem(parent: Node3D, name: String, pos: Vector3, color: Color, energy: float) -> void:
-	var node = MeshInstance3D.new()
-	node.name = name
-	node.set_meta("visual_name", name)
-	var sphere = SphereMesh.new()
-	sphere.radius = 0.045
-	sphere.height = 0.07
-	node.mesh = sphere
-	node.position = pos
-	var material = _mat(color, 0.45)
-	material.emission_enabled = true
-	material.emission = color
-	material.emission_energy_multiplier = energy
-	node.material_override = material
-	parent.add_child(node)
-
-static func _add_box(parent: Node3D, name: String, pos: Vector3, size: Vector3, color: Color, rot: Vector3 = Vector3.ZERO) -> MeshInstance3D:
-	var node = MeshInstance3D.new()
-	node.name = name
-	node.set_meta("visual_name", name)
-	var mesh = BoxMesh.new()
-	mesh.size = size
-	node.mesh = mesh
-	node.position = pos
-	node.rotation_degrees = rot
-	node.material_override = _mat(color, 0.86)
-	parent.add_child(node)
-	return node
 
 static func _mat(color: Color, roughness: float) -> StandardMaterial3D:
 	var material = StandardMaterial3D.new()

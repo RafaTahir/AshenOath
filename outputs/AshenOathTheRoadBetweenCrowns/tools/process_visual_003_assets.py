@@ -66,19 +66,16 @@ def process_grass() -> None:
 
 
 def process_monster_skins() -> None:
-    source = ROOT / "assets_external" / "animated" / "OrcSkull_Animated_CC0_Atlas_Monsters.png"
-    image = Image.open(source).convert("RGB").resize((1024, 1024), Image.Resampling.LANCZOS)
-    profiles = {
-        "ghoulkin_skin": ((0.62, 0.66, 0.55), 0.64, 1.22),
-        "stalker_skin": ((0.42, 0.54, 0.47), 0.54, 1.32),
-        "brute_skin": ((0.52, 0.43, 0.36), 0.58, 1.28),
-    }
-    for name, (tint, saturation, contrast) in profiles.items():
-        graded = ImageEnhance.Color(image).enhance(saturation)
-        graded = ImageEnhance.Contrast(graded).enhance(contrast)
-        overlay = Image.new("RGB", graded.size, tuple(int(channel * 255) for channel in tint))
-        graded = Image.blend(graded, overlay, 0.34).filter(ImageFilter.UnsharpMask(radius=1.2, percent=80, threshold=3))
-        save_jpeg(graded, OUTPUT / f"{name}.jpg", 84)
+    # Monster roles now derive their silhouettes from the retained animated
+    # Skeleton source. The three compact role skins are already checked into
+    # the runtime texture set; never regenerate them from a retired source.
+    expected = [OUTPUT / "ghoulkin_skin.jpg", OUTPUT / "stalker_skin.jpg", OUTPUT / "brute_skin.jpg"]
+    missing = [path.name for path in expected if not path.is_file()]
+    if missing:
+        raise RuntimeError(
+            "Missing retained Skeleton-family skins: %s. Restore them from the approved runtime texture source before processing."
+            % ", ".join(missing)
+        )
 
 
 def main() -> None:

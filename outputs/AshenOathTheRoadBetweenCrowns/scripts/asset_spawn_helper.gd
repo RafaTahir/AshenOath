@@ -81,21 +81,6 @@ func _compose_player_body(outfit_root: Node3D, outfit_path: String, role_name: S
 		outfit_root.set_meta("character_asset_family", "quaternius_ranger")
 		outfit_root.set_meta("character_animation_family", "universal_animation_library_2")
 		return outfit_root
-	var is_animated_complete := normalized_path.contains("assets_external/animated/") and normalized_path.ends_with(".gltf") and (
-		normalized_path.contains("warrior_animated") or normalized_path.contains("cleric_animated") or
-		normalized_path.contains("rogue_animated") or normalized_path.contains("monk_animated"))
-	if is_animated_complete:
-		# These selected Quaternius sources already contain one connected skinned
-		# body, native head/face surfaces, clothing, and their own clips. Keep the
-		# imported hierarchy intact so its 32-bone animation player remains valid.
-		outfit_root.set_meta("character_composite", true)
-		outfit_root.set_meta("character_rig_layer_count", 1)
-		outfit_root.set_meta("character_identity", role_name.to_lower())
-		outfit_root.set_meta("character_base_path", outfit_path)
-		outfit_root.set_meta("character_outfit_path", outfit_path)
-		outfit_root.set_meta("character_asset_family", "quaternius_animated_humanoid")
-		outfit_root.set_meta("character_animation_family", normalized_path.get_file().get_basename().to_lower())
-		return outfit_root
 	var is_fullbody_male := normalized_path.ends_with("superhero_male_fullbody.gltf")
 	var is_fullbody_female := normalized_path.ends_with("superhero_female_fullbody.gltf")
 	if is_fullbody_male or is_fullbody_female:
@@ -140,6 +125,12 @@ func _compose_player_body(outfit_root: Node3D, outfit_path: String, role_name: S
 	composite.set_meta("character_base_path", base_path)
 	composite.set_meta("character_outfit_path", outfit_path)
 	composite.set_meta("character_hair_path", hair_path)
+	# Universal body/head/hair layers are merged onto one shared skeleton. Keep
+	# the family marker on the composite root so all runtime and QA contracts
+	# inspect the same authored source instead of mistaking it for a legacy
+	# direct-body mapping.
+	composite.set_meta("character_asset_family", "quaternius_animated_humanoid")
+	composite.set_meta("character_animation_family", "universal_animation_library_2")
 	return composite
 
 func _merge_shared_rig_layers(outfit_root: Node3D, layers: Array) -> bool:
@@ -358,7 +349,7 @@ func _resolve_obj_index(raw_value: String, count: int) -> int:
 
 func _target_height_for_path(path: String) -> float:
 	var lowered: String = path.to_lower()
-	if "characters" in lowered or "warrior_animated" in lowered or "cleric_animated" in lowered or "monk_animated" in lowered or "rogue_animated" in lowered:
+	if "characters" in lowered:
 		return 1.78
 	if "orcskull" in lowered or "skeleton" in lowered:
 		return 1.72
@@ -624,11 +615,9 @@ func _fallback_material_for_path(path: String) -> StandardMaterial3D:
 		color = Color(0.58, 0.52, 0.42)
 	elif "slime" in lowered or "wolf" in lowered or "enemies" in lowered:
 		color = Color(0.22, 0.17, 0.13)
-	elif "cleric" in lowered or "monk" in lowered:
+	elif "universal" in lowered:
 		color = Color(0.24, 0.22, 0.19)
-	elif "rogue" in lowered:
-		color = Color(0.12, 0.11, 0.10)
-	elif "warrior" in lowered or "characters" in lowered:
+	elif "characters" in lowered:
 		color = Color(0.25, 0.24, 0.20)
 	var material = _mat_with_roughness(color, roughness)
 	material.metallic = metallic
@@ -636,12 +625,8 @@ func _fallback_material_for_path(path: String) -> StandardMaterial3D:
 	return material
 
 func _tint_for_path(lowered_path: String) -> Color:
-	if "cleric" in lowered_path or "monk" in lowered_path:
+	if "universal" in lowered_path:
 		return Color(0.88, 0.84, 0.76)
-	if "rogue" in lowered_path:
-		return Color(0.58, 0.55, 0.52)
-	if "warrior" in lowered_path:
-		return Color(0.78, 0.75, 0.68)
 	return Color(0.82, 0.80, 0.74)
 
 func _normalize_scene_bounds(root: Node3D, target_height: float) -> void:
@@ -710,106 +695,6 @@ func _apply_character_wrapper(root: Node3D, role_name: String) -> void:
 	# They are intentionally disabled: incomplete roles must be replaced by a
 	# shared rig, never cosmetically disguised with root-mounted geometry.
 	root.set_meta("character_overlay_contract", "disabled")
-
-func _character_profile(role_name: String) -> Dictionary:
-	var key = role_name.to_lower()
-	if key.contains("sister") or key.contains("widow"):
-		return {"cloth": Color(0.20, 0.22, 0.28), "trim": Color(0.62, 0.58, 0.43), "skin": Color(0.78, 0.66, 0.55), "hair": Color(0.78, 0.74, 0.64), "staff": true, "hood": true}
-	if key.contains("mira"):
-		return {"cloth": Color(0.17, 0.34, 0.22), "trim": Color(0.48, 0.34, 0.16), "skin": Color(0.74, 0.60, 0.48), "hair": Color(0.18, 0.11, 0.07), "satchel": true}
-	if key.contains("rook"):
-		return {"cloth": Color(0.12, 0.12, 0.13), "trim": Color(0.34, 0.23, 0.14), "skin": Color(0.64, 0.48, 0.36), "hair": Color(0.08, 0.06, 0.045), "dagger": true, "hood": true}
-	if key.contains("player"):
-		return {"cloth": Color(0.13, 0.14, 0.13), "trim": Color(0.42, 0.37, 0.28), "skin": Color(0.70, 0.56, 0.44), "hair": Color(0.82, 0.78, 0.62), "dagger": true}
-	return {"cloth": Color(0.24, 0.20, 0.16), "trim": Color(0.40, 0.28, 0.16), "skin": Color(0.68, 0.52, 0.40), "hair": Color(0.15, 0.10, 0.065)}
-
-func _add_character_cloak(root: Node3D, profile: Dictionary) -> void:
-	var cloak = MeshInstance3D.new()
-	var mesh = BoxMesh.new()
-	mesh.size = Vector3(0.68, 1.02, 0.10)
-	cloak.mesh = mesh
-	cloak.position = Vector3(0, 0.98, 0.17)
-	cloak.rotation_degrees.x = -7
-	cloak.material_override = _mat_with_roughness(profile.get("cloth", Color(0.18, 0.16, 0.14)), 0.86)
-	root.add_child(cloak)
-
-func _add_character_face(root: Node3D, profile: Dictionary) -> void:
-	var face = MeshInstance3D.new()
-	var mesh = BoxMesh.new()
-	mesh.size = Vector3(0.22, 0.28, 0.025)
-	face.mesh = mesh
-	face.position = Vector3(0, 1.62, -0.23)
-	face.material_override = _mat_with_roughness(profile.get("skin", Color(0.70, 0.56, 0.44)), 0.72)
-	root.add_child(face)
-	for eye_x in [-0.055, 0.055]:
-		var eye = MeshInstance3D.new()
-		var eye_mesh = BoxMesh.new()
-		eye_mesh.size = Vector3(0.026, 0.018, 0.01)
-		eye.mesh = eye_mesh
-		eye.position = Vector3(eye_x, 1.66, -0.247)
-		eye.material_override = _mat_with_roughness(Color(0.025, 0.020, 0.016), 0.6)
-		root.add_child(eye)
-
-func _add_character_hair(root: Node3D, profile: Dictionary) -> void:
-	var hair = MeshInstance3D.new()
-	var mesh = SphereMesh.new()
-	mesh.radius = 0.22
-	mesh.height = 0.28
-	hair.mesh = mesh
-	hair.scale = Vector3(0.85, 0.62, 0.72)
-	hair.position = Vector3(0, 1.77, -0.02)
-	hair.material_override = _mat_with_roughness(profile.get("hair", Color(0.12, 0.08, 0.05)), 0.78)
-	root.add_child(hair)
-	if bool(profile.get("hood", false)):
-		var hood = MeshInstance3D.new()
-		var hood_mesh = SphereMesh.new()
-		hood_mesh.radius = 0.27
-		hood_mesh.height = 0.34
-		hood.mesh = hood_mesh
-		hood.scale = Vector3(0.92, 0.76, 0.82)
-		hood.position = Vector3(0, 1.72, 0.02)
-		hood.material_override = _mat_with_roughness(profile.get("cloth", Color(0.16, 0.15, 0.14)).darkened(0.08), 0.88)
-		root.add_child(hood)
-
-func _add_character_belt(root: Node3D, profile: Dictionary) -> void:
-	var belt = MeshInstance3D.new()
-	var mesh = BoxMesh.new()
-	mesh.size = Vector3(0.52, 0.07, 0.12)
-	belt.mesh = mesh
-	belt.position = Vector3(0, 0.91, -0.03)
-	belt.material_override = _mat_with_roughness(profile.get("trim", Color(0.36, 0.24, 0.14)), 0.82)
-	root.add_child(belt)
-
-func _add_character_shoulders(root: Node3D, profile: Dictionary) -> void:
-	for side in [-1, 1]:
-		var shoulder = MeshInstance3D.new()
-		var mesh = BoxMesh.new()
-		mesh.size = Vector3(0.20, 0.12, 0.24)
-		shoulder.mesh = mesh
-		shoulder.position = Vector3(0.34 * side, 1.31, -0.02)
-		shoulder.rotation_degrees.z = -10 * side
-		shoulder.material_override = _mat_with_roughness(profile.get("trim", Color(0.36, 0.29, 0.20)), 0.84)
-		root.add_child(shoulder)
-
-func _add_staff(root: Node3D, profile: Dictionary) -> void:
-	var staff = MeshInstance3D.new()
-	var mesh = BoxMesh.new()
-	mesh.size = Vector3(0.045, 1.65, 0.045)
-	staff.mesh = mesh
-	staff.position = Vector3(-0.42, 0.88, -0.03)
-	staff.rotation_degrees.z = -6
-	staff.material_override = _mat_with_roughness(Color(0.22, 0.14, 0.075), 0.85)
-	root.add_child(staff)
-
-func _add_dagger(root: Node3D, profile: Dictionary) -> void:
-	var dagger = MeshInstance3D.new()
-	var mesh = BoxMesh.new()
-	mesh.size = Vector3(0.04, 0.04, 0.48)
-	dagger.mesh = mesh
-	dagger.position = Vector3(0.34, 0.82, 0.11)
-	dagger.rotation_degrees = Vector3(18, -18, 6)
-	dagger.material_override = _mat_with_roughness(Color(0.58, 0.58, 0.56), 0.62)
-	root.add_child(dagger)
 
 func _mat_with_roughness(color: Color, roughness: float) -> StandardMaterial3D:
 	var material = StandardMaterial3D.new()

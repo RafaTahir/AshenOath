@@ -11,10 +11,16 @@
     "download_page": "https://quaternius.com/packs/rpgcharacters.html",
     "archive": "external cache only",
     "selected_runtime_models": [
-      "res://assets_external/animated/Warrior_Animated_CC0.gltf",
-      "res://assets_external/animated/Cleric_Animated_CC0.gltf",
-      "res://assets_external/animated/Rogue_Animated_CC0.gltf",
-      "res://assets_external/animated/Monk_Animated_CC0.gltf"
+      "res://assets_external/characters_universal/Male_Peasant.gltf",
+      "res://assets_external/characters_universal/Female_Peasant.gltf",
+      "res://assets_external/characters_universal/Male_Head.gltf",
+      "res://assets_external/characters_universal/Female_Head.gltf",
+      "res://assets_external/characters_universal/Hair_Buns.gltf",
+      "res://assets_external/characters_universal/Hair_Buzzed.gltf",
+      "res://assets_external/characters_universal/Hair_SimpleParted.gltf",
+      "res://assets_external/enemies/Skeleton.fbx",
+      "res://assets_external/enemies/Dragon.fbx",
+      "res://assets_external/enemies/Wolf.fbx"
     ]
   },
   "shared_contract": {
@@ -28,11 +34,11 @@
     "max_triangles_crowd": 14000
   },
   "roles": {
-      "player_human": {"model": "res://assets_external/animated/Warrior_Animated_CC0.gltf", "target_height": 1.78, "outfit_slot": "hunter_warrior", "face_profile": "kael", "status": "runtime_accepted_native_body"},
-    "sister_anwen_human": {"model": "res://assets_external/animated/Cleric_Animated_CC0.gltf", "target_height": 1.68, "outfit_slot": "cleric_cleric", "face_profile": "anwen", "status": "runtime_accepted_native_body"},
-    "villager_male": {"model": "res://assets_external/animated/Monk_Animated_CC0.gltf", "target_height": 1.72, "outfit_slot": "crowd_monk", "face_profile": "crowd_male", "status": "runtime_accepted_native_body"},
-    "villager_female": {"model": "res://assets_external/animated/Cleric_Animated_CC0.gltf", "target_height": 1.66, "outfit_slot": "crowd_cleric", "face_profile": "crowd_female", "status": "runtime_accepted_native_body"},
-    "castle_guard": {"model": "res://assets_external/animated/Warrior_Animated_CC0.gltf", "target_height": 1.82, "outfit_slot": "guard_warrior", "face_profile": "castle_guard", "status": "runtime_accepted_native_body"},
+      "player_human": {"model": "res://assets_external/characters_universal/Male_Peasant.gltf", "target_height": 1.78, "outfit_slot": "hunter_a1", "face_profile": "kael", "status": "runtime_accepted_universal_a_set"},
+    "sister_anwen_human": {"model": "res://assets_external/characters_universal/Female_Peasant.gltf", "target_height": 1.68, "outfit_slot": "cleric_a2", "face_profile": "anwen", "status": "runtime_accepted_universal_a_set"},
+    "villager_male": {"model": "res://assets_external/characters_universal/Male_Peasant.gltf", "target_height": 1.72, "outfit_slot": "crowd_male", "face_profile": "crowd_male", "status": "runtime_accepted_universal_family"},
+    "villager_female": {"model": "res://assets_external/characters_universal/Female_Peasant.gltf", "target_height": 1.66, "outfit_slot": "crowd_female", "face_profile": "crowd_female", "status": "runtime_accepted_universal_family"},
+    "castle_guard": {"model": "res://assets_external/characters_universal/Male_Peasant.gltf", "target_height": 1.82, "outfit_slot": "guard", "face_profile": "castle_guard", "status": "runtime_accepted_universal_family"},
     "road_ranger": {"model": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf", "target_height": 1.75, "outfit_slot": "ranger", "face_profile": "traveler", "animation_library": "res://assets_external/animations/AnimationLibrary_Godot_Standard.glb"}
   },
   "runtime_policy": {

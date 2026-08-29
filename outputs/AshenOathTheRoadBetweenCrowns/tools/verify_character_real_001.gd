@@ -3,11 +3,11 @@ extends SceneTree
 const CharacterRoleSpec = preload("res://scripts/character_role_spec.gd")
 const AssetSpawnHelper = preload("res://scripts/asset_spawn_helper.gd")
 const EXPECTED := {
-	"player_human":"res://assets_external/animated/Warrior_Animated_CC0.gltf",
-	"sister_anwen_human":"res://assets_external/animated/Cleric_Animated_CC0.gltf",
-	"villager_human":"res://assets_external/animated/Monk_Animated_CC0.gltf",
-	"villager_female_human":"res://assets_external/animated/Cleric_Animated_CC0.gltf",
-	"castle_guard_human":"res://assets_external/animated/Warrior_Animated_CC0.gltf",
+	"player_human":"res://assets_external/characters_universal/Male_Peasant.gltf",
+	"sister_anwen_human":"res://assets_external/characters_universal/Female_Peasant.gltf",
+	"villager_human":"res://assets_external/characters_universal/Male_Peasant.gltf",
+	"villager_female_human":"res://assets_external/characters_universal/Female_Peasant.gltf",
+	"castle_guard_human":"res://assets_external/characters_universal/Male_Peasant.gltf",
 	"road_ranger_human":"res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf"
 }
 var failures := 0
@@ -24,9 +24,9 @@ func _initialize() -> void:
 		await _verify_runtime_role(helper, role)
 		check(is_equal_approx(CharacterRoleSpec.visual_forward_degrees(role), 180.0), "%s is missing the +Z-to--Z facing calibration" % role)
 	for path in [
-		"res://assets_external/characters_real/GhoulGaunt_Real.glb",
-		"res://assets_external/characters_real/GhoulStalker_Real.glb",
-		"res://assets_external/characters_real/GhoulBrute_Real.glb"
+		"res://assets_external/enemies/Skeleton.fbx",
+		"res://assets_external/enemies/Dragon.fbx",
+		"res://assets_external/enemies/Wolf.fbx"
 	]:
 		_verify_scene(path,path.get_file())
 	if failures == 0:
@@ -82,7 +82,11 @@ func _verify_skinned_identity(node: Node, label: String) -> void:
 		for surface_index in range(mesh_instance.mesh.get_surface_count()):
 			if mesh_instance.mesh.surface_get_material(surface_index) != null or mesh_instance.get_surface_override_material(surface_index) != null:
 				material_count += 1
-		var bounds := mesh_instance.mesh.get_aabb()
+		# Imported FBX/GLTF scenes frequently keep the authored size on the
+		# MeshInstance transform while the mesh resource itself is tiny. Measure
+		# the rendered bounds in the verifier's scene space, just like runtime
+		# grounding does, instead of rejecting a valid imported character.
+		var bounds := _transformed_aabb(mesh_instance)
 		if not has_bounds:
 			combined = bounds
 			has_bounds = true
@@ -90,7 +94,25 @@ func _verify_skinned_identity(node: Node, label: String) -> void:
 			combined = combined.merge(bounds)
 	check(skinned_count > 0, "%s has no skinned body mesh" % label)
 	check(material_count > 0, "%s has no imported surface materials" % label)
-	check(has_bounds and combined.size.y > 0.9, "%s does not have a complete grounded body bound" % label)
+	check(has_bounds and combined.size.y > 0.9 and combined.size.x > 0.2 and combined.size.z > 0.2, "%s does not have a complete grounded body bound" % label)
+
+func _transformed_aabb(mesh_instance: MeshInstance3D) -> AABB:
+	var local_box := mesh_instance.mesh.get_aabb()
+	var world_box := AABB()
+	var initialized := false
+	for corner_index in range(8):
+		var corner := Vector3(
+			local_box.position.x + (local_box.size.x if corner_index & 1 else 0.0),
+			local_box.position.y + (local_box.size.y if corner_index & 2 else 0.0),
+			local_box.position.z + (local_box.size.z if corner_index & 4 else 0.0)
+		)
+		var transformed := mesh_instance.global_transform * corner
+		if not initialized:
+			world_box = AABB(transformed, Vector3.ZERO)
+			initialized = true
+		else:
+			world_box = world_box.expand(transformed)
+	return world_box
 
 func _verify_consolidated_anatomy(node: Node, label: String) -> void:
 	var skinned_mesh: MeshInstance3D

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "purpose": "Browser-first visual roles. Skeletal humans and monsters use a shared bone-bound facial identity atlas; models remain optimized stylized assets rather than photoreal character scans.",
+  "purpose": "Browser-first visual roles. Released humans use the Quaternius Universal base, native head and hair layers, deterministic identity recipes, and validated bone-attached equipment; monsters use retained animated CC0 sources with role profiles.",
   "roles": {
     "environment": {
       "sky_system": {
@@ -26,89 +26,107 @@
     },
     "characters": {
       "player_human": {
-        "status": "char_010_runtime_native_animated_warrior",
-        "path": "res://assets_external/animated/Warrior_Animated_CC0.gltf",
-        "source": "Quaternius animated RPG character source",
-        "source_url": "https://quaternius.com/packs/rpgcharacters.html",
+        "status": "char_restore_001_a_set",
+        "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
+        "source": "Quaternius Universal Base Characters",
+        "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
         "license": "CC0 1.0",
-        "runtime_textures": ["res://assets_external/animated/Warrior_Animated_CC0_Warrior_Texture.png", "res://assets_external/animated/Warrior_Animated_CC0_Warrior_Sword_Texture.png"],
+        "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
+        "runtime_parts": ["res://assets_external/characters_universal/Male_Head.gltf", "res://assets_external/characters_universal/Hair_SimpleParted.gltf"],
+        "runtime_textures": ["res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png", "res://assets_external/characters_universal/T_Peasant_Normal_1K.png", "res://assets_external/characters_universal/T_Peasant_ORM_1K.png", "res://assets_external/characters_universal/T_Eye_Brown.png"],
         "target_height": 1.78,
-        "notes": "Connected 32-bone Warrior body with native Face mesh, clothing, hair, embedded animation clips, and one-pass normalization. Kael's authored sword and back scabbard remain bone-attached by PlayerController."
+        "notes": "A1 Kael identity: connected Universal male body with native male head and simple-parted hair, grey-haired weathered hunter palette, shared animation, and bone-attached sword/back scabbard."
       },
       "sister_anwen_human": {
-        "status": "char_010_runtime_native_animated_cleric",
-        "path": "res://assets_external/animated/Cleric_Animated_CC0.gltf",
-        "source": "Quaternius animated RPG character source",
-        "source_url": "https://quaternius.com/packs/rpgcharacters.html",
+        "status": "char_restore_001_a_set",
+        "path": "res://assets_external/characters_universal/Female_Peasant.gltf",
+        "source": "Quaternius Universal Base Characters",
+        "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
         "license": "CC0 1.0",
-        "runtime_textures": ["res://assets_external/animated/Cleric_Animated_CC0_Cleric_Texture.png", "res://assets_external/animated/Cleric_Animated_CC0_Cleric_Staff_Texture.png"],
+        "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
+        "runtime_parts": ["res://assets_external/characters_universal/Female_Head.gltf", "res://assets_external/characters_universal/Hair_Buns.gltf"],
+        "runtime_textures": ["res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png", "res://assets_external/characters_universal/T_Peasant_Normal_1K.png", "res://assets_external/characters_universal/T_Peasant_ORM_1K.png", "res://assets_external/characters_universal/T_Eye_Brown.png"],
         "target_height": 1.68,
-        "notes": "Connected 32-bone Cleric body with native Head mesh, robe, staff, and embedded animation clips. The native staff is used without a duplicate overlay."
+        "notes": "A2 Anwen identity: connected Universal female body with native female head and buns, grey-haired cleric palette, shared animation, and bone-attached staff."
       },
       "mira_human": {
-        "status": "char_010_runtime_native_animated_monk",
-        "path": "res://assets_external/animated/Monk_Animated_CC0.gltf",
-        "source": "Quaternius animated RPG character source",
-        "source_url": "https://quaternius.com/packs/rpgcharacters.html",
+        "status": "char_restore_001_universal_female",
+        "path": "res://assets_external/characters_universal/Female_Peasant.gltf",
+        "source": "Quaternius Universal Base Characters",
+        "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
         "license": "CC0 1.0",
-        "runtime_textures": ["res://assets_external/animated/Monk_Animated_CC0_Monk_Texture.png"],
+        "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
+        "runtime_parts": ["res://assets_external/characters_universal/Female_Head.gltf", "res://assets_external/characters_universal/Hair_Buns.gltf"],
+        "runtime_textures": ["res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png", "res://assets_external/characters_universal/T_Peasant_Normal_1K.png", "res://assets_external/characters_universal/T_Peasant_ORM_1K.png", "res://assets_external/characters_universal/T_Eye_Brown.png"],
         "target_height": 1.66,
-        "notes": "Distinct compact Monk silhouette used for Mira's practical herbalist identity tint and animation family."
+        "notes": "Mira uses the shared female base with a deterministic herbalist recipe, complexion, grey/brown hair variation, and practical work palette."
       },
       "rook_human": {
-        "status": "char_010_runtime_native_animated_rogue",
-        "path": "res://assets_external/animated/Rogue_Animated_CC0.gltf",
-        "source": "Quaternius animated RPG character source",
-        "source_url": "https://quaternius.com/packs/rpgcharacters.html",
+        "status": "char_restore_001_universal_male",
+        "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
+        "source": "Quaternius Universal Base Characters",
+        "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
         "license": "CC0 1.0",
-        "runtime_textures": ["res://assets_external/animated/Rogue_Animated_CC0_Rogue_Texture.png", "res://assets_external/animated/Rogue_Animated_CC0_Rogue_Dagger_Texture.png"],
+        "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
+        "runtime_parts": ["res://assets_external/characters_universal/Male_Head.gltf", "res://assets_external/characters_universal/Hair_Buzzed.gltf"],
+        "runtime_textures": ["res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png", "res://assets_external/characters_universal/T_Peasant_Normal_1K.png", "res://assets_external/characters_universal/T_Peasant_ORM_1K.png", "res://assets_external/characters_universal/T_Eye_Normal.png"],
         "target_height": 1.75,
-        "notes": "Distinct Rogue silhouette with native Face mesh, belt, pouch, dagger, and embedded locomotion/combat clips for Rook and traveler roles."
+        "notes": "Rook uses the shared male base with a deterministic smuggler recipe and bone-attached dagger only when the role requires it."
       },
       "villager_human": {
-        "status": "char_010_runtime_native_animated_monk",
-        "path": "res://assets_external/animated/Monk_Animated_CC0.gltf",
-        "source": "Quaternius animated RPG character source",
-        "source_url": "https://quaternius.com/packs/rpgcharacters.html",
+        "status": "char_restore_001_universal_male",
+        "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
+        "source": "Quaternius Universal Base Characters",
+        "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
         "license": "CC0 1.0",
-        "runtime_textures": ["res://assets_external/animated/Monk_Animated_CC0_Monk_Texture.png"],
-        "notes": "Connected native-face crowd base with deterministic worker palette."
+        "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
+        "runtime_parts": ["res://assets_external/characters_universal/Male_Head.gltf", "res://assets_external/characters_universal/Hair_Buzzed.gltf"],
+        "runtime_textures": ["res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png", "res://assets_external/characters_universal/T_Peasant_Normal_1K.png", "res://assets_external/characters_universal/T_Peasant_ORM_1K.png", "res://assets_external/characters_universal/T_Eye_Brown.png"],
+        "notes": "Male crowd base with deterministic worker and villager recipes."
       },
       "villager_female_human": {
-        "status": "char_010_runtime_native_animated_cleric",
-        "path": "res://assets_external/animated/Cleric_Animated_CC0.gltf",
-        "source": "Quaternius animated RPG character source",
-        "source_url": "https://quaternius.com/packs/rpgcharacters.html",
+        "status": "char_restore_001_universal_female",
+        "path": "res://assets_external/characters_universal/Female_Peasant.gltf",
+        "source": "Quaternius Universal Base Characters",
+        "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
         "license": "CC0 1.0",
-        "runtime_textures": ["res://assets_external/animated/Cleric_Animated_CC0_Cleric_Texture.png"],
-        "notes": "Connected native-face female crowd base with deterministic mourner palette; native staff is suppressed for non-cleric crowd roles."
+        "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
+        "runtime_parts": ["res://assets_external/characters_universal/Female_Head.gltf", "res://assets_external/characters_universal/Hair_Buns.gltf"],
+        "runtime_textures": ["res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png", "res://assets_external/characters_universal/T_Peasant_Normal_1K.png", "res://assets_external/characters_universal/T_Peasant_ORM_1K.png", "res://assets_external/characters_universal/T_Eye_Brown.png"],
+        "notes": "Female crowd base with deterministic mourner and worker recipes; no cleric staff is added to ordinary villagers."
       },
       "villager_worker_human": {
-        "status": "char_010_runtime_native_animated_warrior",
-        "path": "res://assets_external/animated/Warrior_Animated_CC0.gltf",
-        "source": "Quaternius animated RPG character source",
-        "source_url": "https://quaternius.com/packs/rpgcharacters.html",
+        "status": "char_restore_001_universal_male",
+        "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
+        "source": "Quaternius Universal Base Characters",
+        "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
         "license": "CC0 1.0",
-        "runtime_textures": ["res://assets_external/animated/Warrior_Animated_CC0_Warrior_Texture.png"],
-        "notes": "Connected native-face worker base with forge palette and real work-compatible idle animation."
+        "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
+        "runtime_parts": ["res://assets_external/characters_universal/Male_Head.gltf", "res://assets_external/characters_universal/Hair_Buzzed.gltf"],
+        "runtime_textures": ["res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png", "res://assets_external/characters_universal/T_Peasant_Normal_1K.png", "res://assets_external/characters_universal/T_Peasant_ORM_1K.png", "res://assets_external/characters_universal/T_Eye_Brown.png"],
+        "notes": "Male forge-worker base with deterministic worker palette and real work-compatible idle animation."
       },
       "villager_hooded_human": {
-        "status": "char_010_runtime_native_animated_rogue",
-        "path": "res://assets_external/animated/Rogue_Animated_CC0.gltf",
-        "source": "Quaternius animated RPG character source",
-        "source_url": "https://quaternius.com/packs/rpgcharacters.html",
+        "status": "char_restore_001_universal_male",
+        "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
+        "source": "Quaternius Universal Base Characters",
+        "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
         "license": "CC0 1.0",
-        "runtime_textures": ["res://assets_external/animated/Rogue_Animated_CC0_Rogue_Texture.png"],
-        "notes": "Connected native-face traveler base with hood-compatible dark palette and Rogue movement family."
+        "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
+        "runtime_parts": ["res://assets_external/characters_universal/Male_Head.gltf", "res://assets_external/characters_universal/Hair_SimpleParted.gltf"],
+        "runtime_textures": ["res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png", "res://assets_external/characters_universal/T_Peasant_Normal_1K.png", "res://assets_external/characters_universal/T_Peasant_ORM_1K.png", "res://assets_external/characters_universal/T_Eye_Normal.png"],
+        "notes": "Male traveler base with deterministic pilgrim recipe and shared movement family."
       },
       "castle_guard_human": {
-        "status": "char_010_runtime_native_animated_warrior",
-        "path": "res://assets_external/animated/Warrior_Animated_CC0.gltf",
-        "source": "Quaternius animated RPG character source",
-        "source_url": "https://quaternius.com/packs/rpgcharacters.html",
+        "status": "char_restore_001_universal_male",
+        "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
+        "source": "Quaternius Universal Base Characters",
+        "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
         "license": "CC0 1.0",
-        "runtime_textures": ["res://assets_external/animated/Warrior_Animated_CC0_Warrior_Texture.png"],
-        "notes": "Connected native-face guard base with Vargan palette, imported armor silhouette, and real sword-compatible rig."
+        "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
+        "runtime_parts": ["res://assets_external/characters_universal/Male_Head.gltf", "res://assets_external/characters_universal/Hair_Buzzed.gltf"],
+        "runtime_textures": ["res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png", "res://assets_external/characters_universal/T_Peasant_Normal_1K.png", "res://assets_external/characters_universal/T_Peasant_ORM_1K.png", "res://assets_external/characters_universal/T_Eye_Brown.png"],
+        "notes": "Male guard base with deterministic Vargan guard palette, occupation equipment, and sword-compatible rig."
       },
       "road_ranger_human": {
         "status": "char_facing_ranger_001_runtime_accepted",
@@ -128,32 +146,40 @@
     },
     "enemies": {
       "ghoul_gaunt_real": {
-		"status": "mon_002_wychwood_gaunt_runtime",
-		"path": "res://assets_external/characters_real/GhoulGaunt_Real.glb",
-        "source": "Ashen Oath derived CC0 production mesh",
+        "status": "char_restore_001_retained_skeleton_family",
+        "path": "res://assets_external/enemies/Skeleton.fbx",
+        "source": "Quaternius Animated Monsters",
+        "source_url": "https://opengameart.org/sites/default/files/Animated%20Monster%20Pack%20by%20%40Quaternius.zip",
         "license": "CC0 1.0",
-		"notes": "Connected gaunt cursed-human body for Ghoulkin and Raider profiles."
-	  },
-	  "orc_skull_real": {
-		"status": "quarantined_rejected_visual",
-		"path": "res://assets_external/animated/OrcSkull_Animated_CC0.gltf",
-		"source": "Quaternius Ultimate Monsters",
-		"license": "CC0 1.0",
-		"notes": "Rejected for released Ghoulkin presentation after identical-camera review: oversized cartoon proportions and weak horror identity. Retained only as a quarantined source reference."
-	  },
+        "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
+        "notes": "Compatibility alias retained for old role IDs; runtime uses the validated Skeleton source with gaunt profile styling."
+      },
+      "orc_skull_real": {
+        "status": "char_restore_001_retained_monster_alias",
+        "path": "res://assets_external/enemies/Skeleton.fbx",
+        "source": "Quaternius Animated Monsters",
+        "source_url": "https://opengameart.org/sites/default/files/Animated%20Monster%20Pack%20by%20%40Quaternius.zip",
+        "license": "CC0 1.0",
+        "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
+        "notes": "Legacy role alias now resolves to the retained validated source; the rejected cartoon source is no longer an active reference."
+      },
       "ghoul_stalker_real": {
-		"status": "mon_002_wychwood_stalker_runtime",
-        "path": "res://assets_external/characters_real/GhoulStalker_Real.glb",
-        "source": "Ashen Oath derived CC0 production mesh",
+        "status": "char_restore_001_retained_skeleton_family",
+        "path": "res://assets_external/enemies/Skeleton.fbx",
+        "source": "Quaternius Animated Monsters",
+        "source_url": "https://opengameart.org/sites/default/files/Animated%20Monster%20Pack%20by%20%40Quaternius.zip",
         "license": "CC0 1.0",
-        "notes": "Forward-leaning long-limbed Wychwood flanker."
+        "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
+        "notes": "Compatibility alias retained for old role IDs; runtime uses the validated Skeleton source with stalker profile styling."
       },
       "ghoul_brute_real": {
-		"status": "mon_002_wychwood_brute_runtime",
-        "path": "res://assets_external/characters_real/GhoulBrute_Real.glb",
-        "source": "Ashen Oath derived CC0 production mesh",
+        "status": "char_restore_001_retained_skeleton_family",
+        "path": "res://assets_external/enemies/Skeleton.fbx",
+        "source": "Quaternius Animated Monsters",
+        "source_url": "https://opengameart.org/sites/default/files/Animated%20Monster%20Pack%20by%20%40Quaternius.zip",
         "license": "CC0 1.0",
-        "notes": "Broad Wychwood heavy body with connected face, hands, and feet."
+        "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
+        "notes": "Compatibility alias retained for old role IDs; runtime uses the validated Skeleton source with brute profile styling."
       },
       "ghoulkin_skeleton": {
 		"status": "legacy_quarantined_not_route_mapped",
@@ -162,29 +188,33 @@
         "source_url": "https://opengameart.org/sites/default/files/Animated%20Monster%20Pack%20by%20%40Quaternius.zip",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
-		"notes": "Legacy articulated source retained for audit and fallback comparison only. Wychwood no longer maps to this generic skeleton; released roles use the connected Ghoul family GLBs."
+        "notes": "Retained articulated source for all Wychwood family roles; deterministic scale, material, posture, and attack profiles provide silhouette variation without duplicate meshes."
       },
       "ghoulkin_creature": {
-        "status": "mon_001",
-        "path": "res://assets_external/characters_real/GhoulGaunt_Real.glb",
+        "status": "char_restore_001_retained_skeleton_family",
+        "path": "res://assets_external/enemies/Skeleton.fbx",
+        "source": "Quaternius Animated Monsters",
         "license": "CC0 1.0",
-        "notes": "Primary released Ghoulkin family body."
+        "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
+        "notes": "Primary released Ghoulkin family source with role-specific scale, material, posture, and eye treatment."
       },
       "bell_eater_boss": {
         "status": "boss_003_focal_creature_runtime",
-        "path": "res://assets_external/characters_real/GhoulBrute_Real.glb",
-        "source": "Ashen Oath derived CC0 production mesh",
+        "path": "res://assets_external/enemies/Skeleton.fbx",
+        "source": "Quaternius Animated Monsters",
         "license": "CC0 1.0",
+        "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
         "target_height": 3.80,
-        "notes": "Bell-Eater uses the connected GhoulBrute source at focal-creature scale; harness, chest bell, jaw, teeth, horns, and phase light are one encounter identity layer."
+        "notes": "Bell-Eater uses the retained Skeleton source at focal-creature scale; harness, chest bell, jaw-light, and phase dressing are one encounter identity layer."
       },
       "rootbound_colossus_boss": {
         "status": "boss_004_focal_creature_runtime",
-        "path": "res://assets_external/characters_real/GhoulBrute_Real.glb",
-        "source": "Ashen Oath derived CC0 production mesh",
+        "path": "res://assets_external/enemies/Skeleton.fbx",
+        "source": "Quaternius Animated Monsters",
         "license": "CC0 1.0",
+        "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
         "target_height": 4.40,
-        "notes": "Rootbound uses one normalized connected body at colossus scale with a bark mantle, root feet, crown branches, and a phase-reactive exposed oathwood heart."
+        "notes": "Rootbound uses the retained Skeleton source at colossus scale with bark mantle, root feet, crown branches, and a phase-reactive exposed oathwood heart."
       },
       "white_hart_avatar": {
         "status": "mon_002_connected_animal_runtime",
@@ -206,7 +236,7 @@
         "path": "res://assets_external/enemies/Dragon.fbx",
         "source": "Quaternius Animated Monsters",
         "license": "CC0 1.0",
-        "notes": "Interim dragon silhouette for Ashwing. It replaces the incorrect OrcSkull mapping while a skinned flying-drake source is prepared; flight presentation remains controller-driven until that source is available."
+        "notes": "Interim dragon silhouette for Ashwing; flight presentation remains controller-driven until a bespoke drake source passes the visual gate."
       },
       "ashwing_boss": {
         "status": "boss_005_focal_creature_runtime",
@@ -218,17 +248,19 @@
       },
       "bog_wretch_creature": {
         "status": "mon_002_connected_family_runtime",
-        "path": "res://assets_external/characters_real/GhoulStalker_Real.glb",
-        "source": "Ashen Oath derived CC0 production mesh",
+        "path": "res://assets_external/enemies/Skeleton.fbx",
+        "source": "Quaternius Animated Monsters",
         "license": "CC0 1.0",
-        "notes": "Connected long-limbed cursed-human body with swamp material profile; keeps the Bog Wretch from falling back to a primitive Slime mesh."
+        "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
+        "notes": "Retained articulated Skeleton source with swamp material, elongated posture, and memory-core dressing for the Bog Wretch."
       },
       "gravebound_knight_creature": {
         "status": "mon_002_connected_family_runtime",
-        "path": "res://assets_external/characters_real/GhoulBrute_Real.glb",
-        "source": "Ashen Oath derived CC0 production mesh",
+        "path": "res://assets_external/enemies/Skeleton.fbx",
+        "source": "Quaternius Animated Monsters",
         "license": "CC0 1.0",
-        "notes": "Connected broad cursed-human body with iron/ash material profile; replaces the incomplete Skeleton OBJ until the authored Vargan armor outfit is ready."
+        "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
+        "notes": "Retained articulated Skeleton source with iron/ash material, armor dressing, and testimony-ready posture profile."
       }
     }
   }
