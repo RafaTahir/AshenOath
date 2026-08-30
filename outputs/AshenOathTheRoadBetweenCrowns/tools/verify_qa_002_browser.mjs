@@ -311,10 +311,11 @@ async function startNewGame(cdp, expectedUrl) {
   // compiling the prewarmed scene, which looked like a browser hang even
   // though the launch action had already fired. This remains real player
   // input and matches the stable desktop Web smoke path.
-  await cdp.send("Input.dispatchMouseEvent", { type: "mouseMoved", x: 1015, y: 227, button: "none" }, INPUT_TIMEOUT_MS);
-  await cdp.send("Input.dispatchMouseEvent", { type: "mousePressed", x: 1015, y: 227, button: "left", clickCount: 1 }, INPUT_TIMEOUT_MS);
+  const newGamePoint = { x: Math.round(viewport.width * 0.736), y: Math.round(viewport.height * 0.177) };
+  await cdp.send("Input.dispatchMouseEvent", { type: "mouseMoved", x: newGamePoint.x, y: newGamePoint.y, button: "none" }, INPUT_TIMEOUT_MS);
+  await cdp.send("Input.dispatchMouseEvent", { type: "mousePressed", x: newGamePoint.x, y: newGamePoint.y, button: "left", clickCount: 1 }, INPUT_TIMEOUT_MS);
   await sleep(70);
-  await cdp.send("Input.dispatchMouseEvent", { type: "mouseReleased", x: 1015, y: 227, button: "left", clickCount: 1 }, INPUT_TIMEOUT_MS);
+  await cdp.send("Input.dispatchMouseEvent", { type: "mouseReleased", x: newGamePoint.x, y: newGamePoint.y, button: "left", clickCount: 1 }, INPUT_TIMEOUT_MS);
   // Cold QA exports may spend several seconds compiling the Compatibility
   // renderer while the prewarm signal is already progressing. Keep this a
   // bounded readiness gate, but do not turn normal first-run compilation into
@@ -323,10 +324,10 @@ async function startNewGame(cdp, expectedUrl) {
   await sleep(420);
   // The menu rebuild is scaled from the 1920x1080 UI canvas. Click the center
   // of the focused New Game control through the real browser input path.
-  await cdp.send("Input.dispatchMouseEvent", { type: "mouseMoved", x: 1015, y: 210, button: "none" }, INPUT_TIMEOUT_MS);
-  await cdp.send("Input.dispatchMouseEvent", { type: "mousePressed", x: 1015, y: 210, button: "left", clickCount: 1 }, INPUT_TIMEOUT_MS);
+  await cdp.send("Input.dispatchMouseEvent", { type: "mouseMoved", x: newGamePoint.x, y: newGamePoint.y, button: "none" }, INPUT_TIMEOUT_MS);
+  await cdp.send("Input.dispatchMouseEvent", { type: "mousePressed", x: newGamePoint.x, y: newGamePoint.y, button: "left", clickCount: 1 }, INPUT_TIMEOUT_MS);
   await sleep(70);
-  await cdp.send("Input.dispatchMouseEvent", { type: "mouseReleased", x: 1015, y: 210, button: "left", clickCount: 1 }, INPUT_TIMEOUT_MS);
+  await cdp.send("Input.dispatchMouseEvent", { type: "mouseReleased", x: newGamePoint.x, y: newGamePoint.y, button: "left", clickCount: 1 }, INPUT_TIMEOUT_MS);
   return waitFor(async () => {
     const errors = consoleErrors(cdp);
     if (errors.length) throw fatal(`startup console error: ${errors[0]}`);
