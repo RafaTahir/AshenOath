@@ -9,7 +9,10 @@ func _initialize() -> void:
 	inventory.load_items("res://data/items.json")
 	var contract = JSON.parse_string(FileAccess.get_file_as_string("res://preparation_contract.json"))
 	check(typeof(contract) == TYPE_DICTIONARY, "Preparation contract is invalid")
-	check(inventory.ordered_item_ids().size() == 6, "Released preparation set is incomplete")
+	var contract_items: Array = contract.get("items", []) if typeof(contract) == TYPE_DICTIONARY else []
+	check(contract_items.size() == 6, "Preparation contract must define six craftable items")
+	for item_id in contract_items:
+		check(inventory.item_defs.has(str(item_id)), "Preparation contract item is missing: %s" % str(item_id))
 	var moon_status := inventory.recipe_status("moon_oil")
 	check(not bool(moon_status.craftable), "Moon Oil should not be craftable from the default ingredients")
 	check(int(moon_status.missing.get("mooncap", 0)) == 1, "Moon Oil shortage is not reported accurately")
