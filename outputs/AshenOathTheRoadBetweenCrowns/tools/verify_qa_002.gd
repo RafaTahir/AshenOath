@@ -33,8 +33,10 @@ func _verify_static_contract() -> void:
 		"Game does not attach QA telemetry only in the QA build")
 	_check(telemetry_source.contains("snapshot_for_game"),
 		"QA telemetry has no read-only snapshot interface")
-	var production_section := export_source.split("[preset.1]", false)[0]
-	_check(not production_section.contains("qa_browser_telemetry.gd"),
+	var production_section := _preset_section(export_source, 0)
+	var production_sources := _preset_line(production_section, "export_files") \
+		+ _preset_line(production_section, "include_filter")
+	_check(not production_sources.contains("qa_browser_telemetry.gd"),
 		"QA command implementation is not isolated from the production preset")
 	_check(export_source.contains('name="Web QA Browser"') and
 		export_source.contains('"res://scripts/qa_browser_telemetry.gd"'),
@@ -92,6 +94,20 @@ func _verify_runtime_snapshot() -> void:
 func _read(path: String) -> String:
 	_check(FileAccess.file_exists(path), "Missing QA-002 file: %s" % path)
 	return FileAccess.get_file_as_string(path) if FileAccess.file_exists(path) else ""
+
+func _preset_section(source: String, preset_id: int) -> String:
+	var marker := "[preset.%d]" % preset_id
+	var start := source.find(marker)
+	if start < 0:
+		return ""
+	var end := source.find("\n[preset.", start + marker.length())
+	return source.substr(start) if end < 0 else source.substr(start, end - start)
+
+func _preset_line(section: String, key: String) -> String:
+	for line in section.split("\n"):
+		if line.begins_with(key + "="):
+			return line
+	return ""
 
 func _check(condition: bool, message: String) -> void:
 	if condition:
