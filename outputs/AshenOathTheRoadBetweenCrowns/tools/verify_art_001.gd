@@ -1,6 +1,7 @@
 extends SceneTree
 
 const AssetSpawnHelperScript = preload("res://scripts/asset_spawn_helper.gd")
+const CharacterAnimationFusion = preload("res://scripts/character_animation_fusion.gd")
 
 var failures := 0
 
@@ -17,9 +18,9 @@ func _initialize() -> void:
 		return
 	check(str(manifest.get("direction", "")) == "grounded_stylized_dark_fantasy", "Visual direction is not locked")
 	var expected_decisions := {
-		"kael": "rejected_for_char_001",
-		"sister_anwen": "rejected_for_char_001",
-		"ghoulkin": "reference_only_for_mon_001"
+		"kael": "selected_for_char_restore_001",
+		"sister_anwen": "selected_for_char_restore_001",
+		"ghoulkin": "selected_retained_source_for_char_restore_001"
 	}
 	for role_id in ["kael", "sister_anwen", "ghoulkin"]:
 		var role: Dictionary = manifest.get("roles", {}).get(role_id, {})
@@ -54,7 +55,18 @@ func verify_character_candidate(role_id: String, path: String) -> void:
 	await process_frame
 	check(instance.find_children("*", "Skeleton3D", true, false).size() > 0, "%s candidate has no Skeleton3D" % role_id)
 	check(instance.find_children("*", "MeshInstance3D", true, false).size() > 0, "%s candidate has no mesh" % role_id)
-	check(instance.find_children("*", "AnimationPlayer", true, false).size() > 0, "%s candidate has no AnimationPlayer" % role_id)
+	var animation_players: Array = instance.find_children("*", "AnimationPlayer", true, false)
+	if animation_players.is_empty():
+		# Universal body and retained monster source files are intentionally mesh-
+		# only. The runtime attaches the shared, root-motion-free library before
+		# the actor becomes visible; validate that same production path here.
+		var fused_player := CharacterAnimationFusion.attach_shared_library(instance)
+		check(fused_player != null, "%s candidate could not receive the shared animation library" % role_id)
+		animation_players = instance.find_children("*", "AnimationPlayer", true, false)
+	check(animation_players.size() > 0, "%s candidate has no runtime AnimationPlayer" % role_id)
+	if animation_players.size() > 0:
+		var runtime_player := animation_players[0] as AnimationPlayer
+		check(runtime_player != null and not runtime_player.get_animation_list().is_empty(), "%s candidate has no runtime animation clips" % role_id)
 	for mesh in instance.find_children("*", "MeshInstance3D", true, false):
 		if mesh.mesh == null:
 			continue
