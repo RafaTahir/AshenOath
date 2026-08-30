@@ -1,6 +1,35 @@
 # Ashen Oath Project State
 
-## Masterpiece Rebuild Status - 2026-08-26
+## Current Working Truth - Production Startup and A-Set Restoration - 2026-08-30
+
+The active source checkpoint is on `codex/masterpiece-rebuild`. This work
+restores the preferred complete stylized A-set for Kael and Sister Anwen,
+keeps the Universal family for deterministic crowd variation, retains the
+Ranger mapping for Captain Senn, and removes the ambiguous startup refusal.
+The Web shell now exposes a visible build/pack identity, keeps New Game
+clickable during Greyfen prewarm, and presents Retry when boot or pack
+preparation fails. The Crow Flight activity remains optional while loading.
+
+The current local Web candidate is 12 files totaling 93,388,231 bytes
+(89.1 MB by the Web export verifier). Its root PCK is 1,869,552 bytes with
+SHA-256 `494ef4c3a52d9bc8977aaae4f4fac1e3ca1f967f0e96780bb518367ac43adea9`.
+The candidate contains the cache-busted shell identity
+`A-SET-RESTORE-001 | packs a-set-20260830` and five verified streamed packs.
+
+Fresh isolated browser checks pass in Chrome and Edge at 1280x720 WebGL2,
+with real New Game activation and no console, resource, or WebGL errors.
+Chrome measured 10.59 s engine-ready and 8.06 s New Game readiness; Edge
+measured 18.11 s and 17.16 s. These timings are recorded as remaining
+startup optimization debt rather than hidden by the release evidence.
+
+The targeted `web`, `assets`, and `characters` profiles pass, as do the
+direct BOOT-003, LOADGAME-002, LOAD-QA-001, and LOAD-QA-002 contracts. The
+historical QA-013 baseline profile remains unavailable because its preserved
+evidence files were never present; no synthetic baseline was created. Full
+milestone promotion and live deployment status are recorded in the final
+release result and task report for this checkpoint.
+
+## Historical Masterpiece Rebuild Snapshot - 2026-08-26
 
 The current production source checkpoint is `b132db4`, promoted from the
 cumulative `codex/masterpiece-rebuild` branch on 2026-08-26. The verified
@@ -31,6 +60,7 @@ captured at 1280x720. This is a local ticket checkpoint only: it has not been
 pushed to `origin` or deployed to Vercel. Unrelated migration, deployment
 workflow, runtime-pack, and existing CHARACTER_REAL screenshot changes remain
 in the working tree and are intentionally not part of this checkpoint.
+
 ### Historical Milestone A promotion
 
 The final A gate passed on 2026-08-26: all 21 configured implementation,
@@ -658,7 +688,7 @@ The current Web `.pck` is large because the export still includes broad runtime 
 From PowerShell:
 
 ```powershell
-cd "C:\Users\User\Documents\Codex\2026-06-12\we-re-gonna-build-a-video\outputs\AshenOath_Web"
+cd "D:\Projects\AshenOath\outputs\AshenOath_Web"
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe" -m http.server 8787 --bind 127.0.0.1
 ```
 
@@ -1196,11 +1226,11 @@ The export includes JSON, runtime scripts, selected imported assets, audio, UI, 
 Common commands:
 
 ```powershell
-& "C:\Users\User\Downloads\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe" --headless --path "C:\Users\User\Documents\Codex\2026-06-12\we-re-gonna-build-a-video\outputs\AshenOathTheRoadBetweenCrowns" --script res://tools/verify_runtime.gd
+& "C:\Users\User\Downloads\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe" --headless --path "D:\Projects\AshenOath\outputs\AshenOathTheRoadBetweenCrowns" --script res://tools/verify_runtime.gd
 ```
 
 ```powershell
-& "C:\Users\User\Downloads\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe" --path "C:\Users\User\Documents\Codex\2026-06-12\we-re-gonna-build-a-video\outputs\AshenOathTheRoadBetweenCrowns" --script res://tools/capture_slice_screenshots.gd
+& "C:\Users\User\Downloads\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe" --path "D:\Projects\AshenOath\outputs\AshenOathTheRoadBetweenCrowns" --script res://tools/capture_slice_screenshots.gd
 ```
 
 Development screenshots are collected in:
@@ -1212,7 +1242,7 @@ Development screenshots are collected in:
 Open `Development_Gallery/index.html` directly in a browser to review the gallery. Originals should remain in their source folders.
 
 ```powershell
-cd "C:\Users\User\Documents\Codex\2026-06-12\we-re-gonna-build-a-video\outputs\AshenOathTheRoadBetweenCrowns"
+cd "D:\Projects\AshenOath\outputs\AshenOathTheRoadBetweenCrowns"
 cmd /c Export_Web_Build.bat
 ```
 

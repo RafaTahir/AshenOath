@@ -121,6 +121,8 @@ var requested_zone_spawn := Vector3.ZERO
 var campaign_pack_waiting := false
 var greyfen_prewarm_started := false
 var startup_packs_waiting := false
+var startup_prepare_failed := false
+var new_game_requested_while_preparing := false
 var greyfen_prewarm_spatial_service: Node
 var interaction_focus_cooldown := 0.0
 var compass_refresh_cooldown := 0.0
@@ -282,9 +284,17 @@ func _new_game() -> void:
 		return
 	if OS.has_feature("web") and runtime_packs != null and runtime_packs.has_method("startup_packs_ready"):
 		if not runtime_packs.startup_packs_ready():
-			hud.toast("Greyfen is still being prepared. The road will open shortly.")
+			new_game_start_pending = true
+			new_game_requested_while_preparing = true
+			if not startup_packs_waiting and not greyfen_prewarm_started:
+				startup_prepare_failed = false
+				_on_launch_accepted()
+			if hud != null:
+				hud.set_new_game_status("Greyfen is waking. Your New Game request will open as soon as it is ready.")
+				hud.toast("Greyfen is still being prepared. New Game will open shortly.")
 			return
 	new_game_start_pending = true
+	new_game_requested_while_preparing = false
 	loading_started_usec = Time.get_ticks_usec()
 	if audio != null:
 		audio.set_game_paused(false)
@@ -406,6 +416,8 @@ func _start_new_game_world() -> void:
 	new_game_start_pending = false
 	if hud != null and hud.has_method("set_new_game_ready"):
 		hud.set_new_game_ready(true)
+	if hud != null and hud.has_method("set_new_game_status"):
+		hud.set_new_game_status("Greyfen is ready.")
 	# Keep the menu-prewarmed Greyfen tree while clearing any stale campaign
 	# cache. Rebuilding this scene in Web/ANGLE was the dominant New Game delay.
 	var prewarmed_greyfen = route_zone_cache.get("greyfen")
@@ -1876,6 +1888,9 @@ func _story_choice_prerequisites_done(quest_id: String, choice_id: String) -> bo
 
 func _on_launch_accepted() -> void:
 	audio.play_event("ui", 0.0)
+	startup_prepare_failed = false
+	if hud != null and hud.has_method("set_new_game_status"):
+		hud.set_new_game_status("Greyfen is waking. New Game remains available while it prepares.")
 	# Keep the same menu-covered prewarm on Web and desktop. The HTML shell is
 	# already visible, so moving Greyfen construction before the New Game click
 	# removes the long post-click stall without introducing a black loading frame.
@@ -1929,12 +1944,23 @@ func _wait_for_startup_packs_then_prewarm() -> void:
 		if not failures.is_empty():
 			startup_packs_waiting = false
 			if hud != null:
-				hud.toast("Opening content could not be prepared. Refresh to retry.")
+				hud.toast("Opening content could not be prepared. Select New Game to retry.")
+			_opening_prepare_failed("Opening content could not be prepared. Select New Game to retry.")
 			return
 		await get_tree().process_frame
 	startup_packs_waiting = false
 	if hud != null:
-		hud.toast("Opening content took too long to prepare. Refresh to retry.")
+		hud.toast("Opening content took too long to prepare. Select New Game to retry.")
+	_opening_prepare_failed("Opening content took too long to prepare. Select New Game to retry.")
+
+func _opening_prepare_failed(message: String) -> void:
+	startup_packs_waiting = false
+	greyfen_prewarm_started = false
+	startup_prepare_failed = true
+	if hud != null and hud.has_method("set_new_game_ready"):
+		hud.set_new_game_ready(true)
+	if hud != null and hud.has_method("set_new_game_status"):
+		hud.set_new_game_status(message)
 
 func _prewarm_greyfen_after_menu_frame() -> void:
 	# Start immediately after the launch shell is accepted. Deferring the first
@@ -1970,8 +1996,7 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 		zone_root = null
 		prewarm_service.queue_free()
 		spatial_service = null
-		if hud != null and hud.has_method("set_new_game_ready"):
-			hud.set_new_game_ready(true)
+		_opening_prepare_failed("Greyfen could not be prepared. Select New Game to retry.")
 		return
 	var prewarm_root: Node3D = zone_root
 	phase_started = Time.get_ticks_msec()
@@ -2031,9 +2056,14 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 		audio.prewarm_opening_audio()
 	if hud != null and hud.has_method("set_new_game_ready"):
 		hud.set_new_game_ready(true)
+	if hud != null and hud.has_method("set_new_game_status"):
+		hud.set_new_game_status("Greyfen is ready.")
 	print("LOADING: Greyfen prewarmed total=%dms build=%dms world=%dms player=%dms" % [
 		Time.get_ticks_msec() - prewarm_started, build_ms, world_finalize_ms, player_ms,
 	])
+	if new_game_start_pending:
+		get_tree().paused = false
+		_start_new_game_world()
 
 func _complete_ending(ending: String) -> void:
 	var ending_id := str(ending)
@@ -4214,6 +4244,7 @@ func _make_named_interactable(id: String, type: String, prompt: String, pos: Vec
 	var mapped = _make_role_visual(role, "characters", Vector3.ONE)
 	if mapped != null:
 		area.add_child(mapped)
+		area.set_meta("character_variant_seed", id)
 		_configure_npc_animation(mapped, id)
 	elif id == "vargan_ledger_choice":
 		_make_ledger_interaction_visual(area, scale_override)

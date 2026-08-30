@@ -30,7 +30,7 @@ check used before a milestone release.
 If GitHub CLI is installed and authenticated later:
 
 ```powershell
-cd "C:\Users\User\Documents\Codex\2026-06-12\we-re-gonna-build-a-video"
+cd "D:\Projects\AshenOath"
 gh repo create ashen-oath --private --source . --remote origin --push
 ```
 
@@ -68,7 +68,7 @@ The project includes `vercel.json`, which declares `web` as the output directory
 After implementing an ordinary ticket on `codex/roadmap-*`:
 
 ```powershell
-cd "C:\Users\User\Documents\Codex\2026-06-12\we-re-gonna-build-a-video"
+cd "D:\Projects\AshenOath"
 .\scripts\deploy_web_update.ps1 -TicketId "TICKET-ID" -Summary "short task summary"
 ```
 
@@ -122,7 +122,7 @@ https://ashenoath.vercel.app/?v=ticket-id
 ## Local Web Test
 
 ```powershell
-cd "C:\Users\User\Documents\Codex\2026-06-12\we-re-gonna-build-a-video\web"
+cd "D:\Projects\AshenOath\web"
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe" -m http.server 8787 --bind 127.0.0.1
 ```
 

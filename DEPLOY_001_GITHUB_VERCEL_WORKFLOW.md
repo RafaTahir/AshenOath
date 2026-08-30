@@ -2,7 +2,7 @@
 
 ## Repo Status
 
-- Workspace root: `C:\Users\User\Documents\Codex\2026-06-12\we-re-gonna-build-a-video`
+- Workspace root: `D:\Projects\AshenOath`
 - Godot source project: `outputs/AshenOathTheRoadBetweenCrowns`
 - Slim export source: `outputs/AshenOath_Web_Slim`
 - Deployable static folder: `web`

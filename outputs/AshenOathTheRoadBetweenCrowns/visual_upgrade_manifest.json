@@ -210,6 +210,36 @@
         "target_height": 2.05,
         "notes": "Distinct winged Raider body using the existing Dragon rig and attack clips at a grounded clearing scale."
       },
+      "wychwood_stalker": {
+        "status": "char_restore_001_runtime_alias",
+        "path": "res://assets_external/enemies/Bat.fbx",
+        "source": "Animated Monsters by Quaternius",
+        "source_url": "https://opengameart.org/sites/default/files/Animated%20Monster%20Pack%20by%20%40Quaternius.zip",
+        "license": "CC0 1.0",
+        "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
+        "target_height": 1.60,
+        "notes": "Exact encounter-role alias for the validated Stalker family; keeps the same connected animated Bat source used by runtime combat."
+      },
+      "wychwood_raider": {
+        "status": "char_restore_001_runtime_alias",
+        "path": "res://assets_external/enemies/Dragon.fbx",
+        "source": "Animated Monsters by Quaternius",
+        "source_url": "https://opengameart.org/sites/default/files/Animated%20Monster%20Pack%20by%20%40Quaternius.zip",
+        "license": "CC0 1.0",
+        "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
+        "target_height": 2.05,
+        "notes": "Exact encounter-role alias for the validated Raider family; keeps the same connected animated Dragon source used by runtime combat."
+      },
+      "wychwood_brute": {
+        "status": "char_restore_001_runtime_alias",
+        "path": "res://assets_external/enemies/Skeleton.fbx",
+        "source": "Animated Monsters by Quaternius",
+        "source_url": "https://opengameart.org/sites/default/files/Animated%20Monster%20Pack%20by%20%40Quaternius.zip",
+        "license": "CC0 1.0",
+        "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
+        "target_height": 1.92,
+        "notes": "Exact encounter-role alias for the validated Brute family; uses the connected Skeleton source with runtime brute scale and material profile."
+      },
       "ghoulkin_creature": {
         "status": "char_restore_001_retained_skeleton_family",
         "path": "res://assets_external/enemies/Skeleton.fbx",

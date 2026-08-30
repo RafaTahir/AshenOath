@@ -87,6 +87,7 @@ var toasts_suppressed := false
 var reduced_motion := false
 var high_contrast := false
 var new_game_ready := true
+var new_game_status := "Greyfen is ready."
 var hud_root: Control
 var tracker_back: Control
 var compass_back: Control
@@ -125,7 +126,8 @@ func show_main_menu() -> void:
 	menu_layer.visible = true
 	var box = _menu_box("ASHEN OATH", "The Road Between Crowns", "contracts | curses | consequences")
 	_add_menu_text(box, "Greyfen waits under ash and oath-light.")
-	_add_menu_button(box, "New Game" if new_game_ready else "Preparing Greyfen...", func(): new_game_requested.emit(), not new_game_ready)
+	_add_menu_button(box, "New Game", func(): new_game_requested.emit())
+	_add_menu_text(box, new_game_status)
 	_add_menu_button(box, "Continue", func(): continue_requested.emit(), not _has_continue_save())
 	_add_menu_text(box, _save_status_text())
 	_add_menu_button(box, "Controls", func(): show_controls_menu("main"))
@@ -138,6 +140,13 @@ func set_new_game_ready(value: bool) -> void:
 	if new_game_ready == value:
 		return
 	new_game_ready = value
+	if active_menu == "main":
+		show_main_menu()
+
+func set_new_game_status(text: String) -> void:
+	new_game_status = text.strip_edges()
+	if new_game_status == "":
+		new_game_status = "Greyfen is ready."
 	if active_menu == "main":
 		show_main_menu()
 
