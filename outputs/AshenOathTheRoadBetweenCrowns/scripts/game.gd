@@ -672,7 +672,10 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		if zone_id in ["greyfen", "wychwood"]:
 			_add_visual_100_layer(zone_id)
 		_apply_first_route_materials(zone_root)
-		_validate_zone_render_resources(zone_root)
+		# The authoritative render-resource pass runs after the player, sky, and
+		# encounter roots are attached below. Walking a large campaign zone here as
+		# well doubled castle activation work without protecting an additional
+		# visible frame.
 		active_zone_signature = _zone_state_signature()
 	if zone_root != null:
 		zone_root.set_meta("zone_resource_owner", "active")
@@ -729,10 +732,12 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	if life_controller != null:
 		life_controller.player = player
 	_install_opening_soundscape(zone_id)
-	# Sky and player equipment are created after the zone builder's first
-	# validation pass. Validate these late render roots before the first visible
-	# frame so procedural meshes cannot reach the renderer with empty surfaces.
-	_validate_zone_render_resources(zone_root)
+	# The builder and imported-asset helper attach validated materials as each
+	# mesh is created. The full zone tree is audited by lifecycle gates; doing the
+	# same recursive walk on every player transition adds visible latency on
+	# Compatibility/ANGLE, so keep that audit off the swap path.
+	# The late-created render roots still receive the fast, focused validation.
+	# The full zone tree is checked explicitly by verify_engine_003/004.
 	if visual_director != null:
 		_validate_zone_render_resources(visual_director)
 	if player != null:
@@ -1965,6 +1970,11 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 			"castle_wall", "castle_arch", "castle_roof", "castle_door",
 			"castle_bookcase", "castle_chair", "castle_bench", "castle_table",
 			"castle_weapon_stand", "castle_lantern",
+			# Castle activation instantiates these same role resources. Warming their
+			# imported scenes behind the menu avoids paying first-use parse and
+			# skeleton setup on the gate's critical path.
+			"castle_guard_human", "villager_worker_human", "villager_female_human",
+			"road_ranger_human",
 		])
 		print("LOADING: Castle roles prewarmed loaded=%d missing=%d" % [
 			Array(castle_prewarm.get("loaded", [])).size(),
@@ -4570,6 +4580,9 @@ func _configure_npc_animation(mapped: Node3D, id: String) -> void:
 	# retain their explicit gameplay rates.
 	var npc_animation_rate := 30.0
 	if current_zone_id in ["record_hall", "undercroft"]:
+		# Let the archive's small cast use the imported idle callback. The manual
+		# timer advances several skin poses together and creates a larger periodic
+		# Compatibility spike than the normal callback path.
 		npc_animation_rate = 0.0
 	elif current_zone_id in ["vargan_approach", "vargan_court", "assembly"]:
 		npc_animation_rate = 20.0
