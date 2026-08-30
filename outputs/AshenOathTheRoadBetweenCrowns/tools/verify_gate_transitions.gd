@@ -1,5 +1,7 @@
 extends SceneTree
 
+const WorldSectorManifest = preload("res://scripts/world_sector_manifest.gd")
+
 var failures := 0
 
 func _initialize() -> void:
@@ -51,6 +53,14 @@ func _initialize() -> void:
 	quit(0 if failures == 0 else 1)
 
 func use_gate(game, target: String) -> void:
+	var source := WorldSectorManifest.canonical(str(game.current_zone_id))
+	# Exterior sectors use the seamless-world boundary contract. Their former
+	# Area3D markers remain in the scene for save compatibility, but are
+	# intentionally non-interactable. Drive the player to the registered edge so
+	# this release gate exercises the same route the shipped game uses.
+	if game.seamless_world != null and game.seamless_world.is_exterior_route(source, target):
+		await use_seamless_boundary(game, source, target)
+		return
 	var gate = find_gate(game.zone_root, target)
 	check(gate != null, "Missing real gate from %s to %s" % [game.current_zone_id, target])
 	if gate == null:
@@ -91,6 +101,70 @@ func use_gate(game, target: String) -> void:
 	event.pressed = true
 	game.call("_unhandled_input", event)
 	await wait_for_zone(game, target)
+
+func use_seamless_boundary(game, source: String, target: String) -> void:
+	var edge := WorldSectorManifest.edge_between(source, target)
+	check(not edge.is_empty(), "Missing manifest edge from %s to %s" % [source, target])
+	if edge.is_empty():
+		return
+	var bounds := WorldSectorManifest.bounds(source)
+	var outward := _edge_outward(str(edge.get("id", "")))
+	var lane := float(edge.get("lane", 0.0))
+	var edge_position := _edge_position(str(edge.get("id", "")), lane, bounds)
+	var far_position := edge_position - outward * 4.5 + Vector3.UP * 0.95
+	var near_position := edge_position - outward * 0.45 + Vector3.UP * 0.95
+	check(_corridor_clear(game, far_position, near_position), "%s seamless approach has a player-sized collision blocker" % target)
+	game.player.global_position = far_position
+	game.player.velocity = Vector3.ZERO
+	var yaw := atan2(-outward.x, -outward.z)
+	game.player.rotation.y = yaw
+	if game.camera_rig != null:
+		game.camera_rig.yaw = yaw
+	for _frame in range(3):
+		await physics_frame
+		await process_frame
+	# The player must reach the sector edge through normal movement. No direct
+	# transition call or interaction handler is used for this route.
+	Input.action_press("move_forward")
+	var reached := false
+	for _frame in range(150):
+		await physics_frame
+		await process_frame
+		if game.current_zone_id == target:
+			# Release on the first activated frame. Waiting for the next frame can
+			# apply one more movement tick after the arrival has already reset the
+			# player, which obscures a real transition result with test input.
+			Input.action_release("move_forward")
+			reached = true
+			break
+	Input.action_release("move_forward")
+	Input.action_release("move_back")
+	Input.action_release("move_left")
+	Input.action_release("move_right")
+	check(reached, "Player never crossed the %s seamless boundary" % target)
+	if reached:
+		# Let the destination's two-frame grounding handoff finish after the
+		# movement action is released before checking arrival state.
+		for _frame in range(3):
+			await physics_frame
+			await process_frame
+		await wait_for_zone(game, target)
+
+func _edge_outward(edge_id: String) -> Vector3:
+	match edge_id:
+		"north": return Vector3(0.0, 0.0, -1.0)
+		"south": return Vector3(0.0, 0.0, 1.0)
+		"west": return Vector3(-1.0, 0.0, 0.0)
+		"east": return Vector3(1.0, 0.0, 0.0)
+	return Vector3.FORWARD
+
+func _edge_position(edge_id: String, lane: float, bounds: Vector2) -> Vector3:
+	match edge_id:
+		"north": return Vector3(lane, 0.95, -bounds.y + 0.25)
+		"south": return Vector3(lane, 0.95, bounds.y - 0.25)
+		"west": return Vector3(-bounds.x + 0.25, 0.95, lane)
+		"east": return Vector3(bounds.x - 0.25, 0.95, lane)
+	return Vector3(lane, 0.95, 0.0)
 
 func _corridor_clear(game: Node, start: Vector3, destination: Vector3) -> bool:
 	var shape := CapsuleShape3D.new()
