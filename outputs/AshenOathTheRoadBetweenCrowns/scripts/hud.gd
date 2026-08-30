@@ -998,16 +998,27 @@ func _clear_menu() -> void:
 		child.queue_free()
 
 func _menu_box(title: String, subtitle: String = "", omen_text: String = "") -> VBoxContainer:
+	var viewport_size := _menu_viewport_size()
+	var compact := viewport_size.y <= 800.0 or viewport_size.x <= 1366.0
+	var horizontal_margin := clampf(viewport_size.x * 0.055, 24.0, 112.0)
+	var vertical_margin := clampf(viewport_size.y * 0.060, 24.0, 72.0)
+	var shell_separation := 30.0 if compact else 84.0
+	var panel_width := clampf(viewport_size.x * 0.42, 420.0, 570.0)
+	# Give ordinary menus enough vertical breathing room to show their full
+	# action list at 1080p. Long settings/remap pages still use the same
+	# container's scrollbar when the available viewport is shorter.
+	var panel_height := minf(760.0, maxf(260.0, viewport_size.y - vertical_margin * 2.0))
+	var content_width := maxf(panel_width - 56.0, 320.0)
 	_build_menu_background()
 	var margin = MarginContainer.new()
 	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
-	margin.add_theme_constant_override("margin_left", 112)
-	margin.add_theme_constant_override("margin_top", 72)
-	margin.add_theme_constant_override("margin_right", 112)
-	margin.add_theme_constant_override("margin_bottom", 64)
+	margin.add_theme_constant_override("margin_left", int(horizontal_margin))
+	margin.add_theme_constant_override("margin_top", int(vertical_margin))
+	margin.add_theme_constant_override("margin_right", int(horizontal_margin))
+	margin.add_theme_constant_override("margin_bottom", int(vertical_margin))
 	menu_layer.add_child(margin)
 	var shell = HBoxContainer.new()
-	shell.add_theme_constant_override("separation", 84)
+	shell.add_theme_constant_override("separation", int(shell_separation))
 	margin.add_child(shell)
 	var title_stack = VBoxContainer.new()
 	title_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1015,12 +1026,13 @@ func _menu_box(title: String, subtitle: String = "", omen_text: String = "") -> 
 	title_stack.add_theme_constant_override("separation", 14)
 	shell.add_child(title_stack)
 	var title_spacer = Control.new()
-	title_spacer.custom_minimum_size = Vector2(1, 142)
+	title_spacer.custom_minimum_size = Vector2(1, 54.0 if compact else 142.0)
 	title_stack.add_child(title_spacer)
 	var title_label = Label.new()
 	title_label.text = title
 	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	title_label.add_theme_font_size_override("font_size", 92)
+	title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	title_label.add_theme_font_size_override("font_size", 56 if compact else 92)
 	title_label.add_theme_color_override("font_color", Color(0.93, 0.78, 0.47))
 	title_label.add_theme_color_override("font_shadow_color", Color(0.0, 0.0, 0.0, 0.92))
 	title_label.add_theme_constant_override("shadow_offset_x", 3)
@@ -1030,13 +1042,14 @@ func _menu_box(title: String, subtitle: String = "", omen_text: String = "") -> 
 		var subtitle_label = Label.new()
 		subtitle_label.text = subtitle
 		subtitle_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-		subtitle_label.add_theme_font_size_override("font_size", 34)
+		subtitle_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		subtitle_label.add_theme_font_size_override("font_size", 22 if compact else 34)
 		subtitle_label.add_theme_color_override("font_color", Color(0.78, 0.70, 0.56))
 		title_stack.add_child(subtitle_label)
 	if omen_text != "":
 		var omen = Label.new()
 		omen.text = omen_text.to_upper()
-		omen.add_theme_font_size_override("font_size", 16)
+		omen.add_theme_font_size_override("font_size", 12 if compact else 16)
 		omen.add_theme_color_override("font_color", Color(0.56, 0.50, 0.40))
 		title_stack.add_child(omen)
 	var title_fill = Control.new()
@@ -1044,20 +1057,38 @@ func _menu_box(title: String, subtitle: String = "", omen_text: String = "") -> 
 	title_stack.add_child(title_fill)
 	var build = Label.new()
 	build.text = MENU_BUILD_LABEL
-	build.add_theme_font_size_override("font_size", 15)
+	build.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	build.add_theme_font_size_override("font_size", 10 if compact else 15)
 	build.add_theme_color_override("font_color", Color(0.50, 0.46, 0.38))
 	title_stack.add_child(build)
 	var panel = PanelContainer.new()
-	panel.custom_minimum_size = Vector2(570, 760 if title == "Settings" else 610)
+	panel.custom_minimum_size = Vector2(panel_width, panel_height)
 	panel.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	_style_panel(panel, Color(0.030, 0.026, 0.022, 0.88), Color(0.58, 0.42, 0.20, 0.86))
 	shell.add_child(panel)
-	var box = VBoxContainer.new()
-	box.add_theme_constant_override("separation", 14)
-	panel.add_child(box)
+	var scroll := ScrollContainer.new()
+	scroll.name = "MenuScroll"
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	panel.add_child(scroll)
+	var box := VBoxContainer.new()
+	box.name = "MenuContent"
+	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	box.custom_minimum_size = Vector2(content_width, 0.0)
+	box.set_meta("compact_buttons", compact)
+	box.set_meta("menu_button_width", content_width)
+	box.set_meta("menu_button_height", 46.0 if compact else 62.0)
+	box.set_meta("menu_font_size", 18 if compact else 23)
+	box.add_theme_constant_override("separation", 10 if compact else 14)
+	scroll.add_child(box)
 	return box
 
 func _build_menu_background() -> void:
+	var viewport_size := _menu_viewport_size()
+	var width := viewport_size.x
+	var height := viewport_size.y
 	var base = ColorRect.new()
 	base.set_anchors_preset(Control.PRESET_FULL_RECT)
 	base.color = Color(0.006, 0.008, 0.010, 1.0)
@@ -1066,10 +1097,20 @@ func _build_menu_background() -> void:
 	moon.set_anchors_preset(Control.PRESET_FULL_RECT)
 	moon.color = Color(0.030, 0.045, 0.060, 0.72)
 	menu_layer.add_child(moon)
-	_add_menu_glow(Vector2(340, 720), Vector2(780, 240), Color(0.95, 0.44, 0.16, 0.20))
-	_add_menu_glow(Vector2(1260, 250), Vector2(630, 180), Color(0.32, 0.44, 0.58, 0.18))
-	_add_menu_silhouette([Vector2(0, 1080), Vector2(0, 714), Vector2(177, 657), Vector2(315, 711), Vector2(477, 630), Vector2(682, 696), Vector2(930, 627), Vector2(1230, 708), Vector2(1560, 645), Vector2(1920, 738), Vector2(1920, 1080)], Color(0.010, 0.014, 0.014, 0.94))
-	_add_menu_silhouette([Vector2(0, 1080), Vector2(0, 879), Vector2(285, 834), Vector2(585, 882), Vector2(963, 810), Vector2(1350, 876), Vector2(1920, 822), Vector2(1920, 1080)], Color(0.018, 0.020, 0.018, 0.98))
+	_add_menu_glow(Vector2(width * 0.18, height * 0.67), Vector2(width * 0.41, height * 0.22), Color(0.95, 0.44, 0.16, 0.20))
+	_add_menu_glow(Vector2(width * 0.66, height * 0.23), Vector2(width * 0.33, height * 0.17), Color(0.32, 0.44, 0.58, 0.18))
+	_add_menu_silhouette([
+		Vector2(0, height), Vector2(0, height * 0.66), Vector2(width * 0.09, height * 0.61),
+		Vector2(width * 0.16, height * 0.66), Vector2(width * 0.25, height * 0.58),
+		Vector2(width * 0.36, height * 0.65), Vector2(width * 0.49, height * 0.58),
+		Vector2(width * 0.64, height * 0.66), Vector2(width * 0.81, height * 0.60),
+		Vector2(width, height * 0.68), Vector2(width, height)
+	], Color(0.010, 0.014, 0.014, 0.94))
+	_add_menu_silhouette([
+		Vector2(0, height), Vector2(0, height * 0.81), Vector2(width * 0.15, height * 0.77),
+		Vector2(width * 0.31, height * 0.82), Vector2(width * 0.50, height * 0.75),
+		Vector2(width * 0.70, height * 0.81), Vector2(width, height * 0.76), Vector2(width, height)
+	], Color(0.018, 0.020, 0.018, 0.98))
 	for i in range(38):
 		_add_ash_particle(i)
 
@@ -1089,8 +1130,9 @@ func _add_menu_silhouette(points: PackedVector2Array, color: Color) -> void:
 
 func _add_ash_particle(index: int) -> void:
 	var ash = ColorRect.new()
-	var x = float((index * 127) % 1860) + 28.0
-	var y = float((index * 73) % 980) + 34.0
+	var viewport_size := _menu_viewport_size()
+	var x = fmod(float(index * 127), maxf(viewport_size.x - 32.0, 1.0)) + 16.0
+	var y = fmod(float(index * 73), maxf(viewport_size.y - 28.0, 1.0)) + 14.0
 	ash.position = Vector2(x, y)
 	ash.size = Vector2(2.0 + float(index % 3), 2.0 + float((index + 1) % 3))
 	ash.color = Color(0.72, 0.64, 0.48, 0.18)
@@ -1114,8 +1156,9 @@ func _add_menu_button(box: VBoxContainer, text: String, callback: Callable, disa
 	button.mouse_filter = Control.MOUSE_FILTER_STOP
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	button.action_mode = BaseButton.ACTION_MODE_BUTTON_PRESS
-	button.custom_minimum_size = Vector2(510, 46 if bool(box.get_meta("compact_buttons", false)) else 62)
+	button.custom_minimum_size = Vector2(float(box.get_meta("menu_button_width", 510.0)), float(box.get_meta("menu_button_height", 62.0)))
 	_style_button(button)
+	button.add_theme_font_size_override("font_size", int(box.get_meta("menu_font_size", 23)))
 	button.mouse_entered.connect(func():
 		if not button.disabled:
 			menu_hovered.emit()
@@ -1136,10 +1179,18 @@ func _add_menu_text(box: VBoxContainer, text: String) -> void:
 	var label = Label.new()
 	label.text = text
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.custom_minimum_size = Vector2(float(box.get_meta("menu_button_width", 510.0)), 0.0)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.add_theme_color_override("font_color", Color(0.72, 0.66, 0.54))
-	label.add_theme_font_size_override("font_size", 20)
+	label.add_theme_font_size_override("font_size", 16 if bool(box.get_meta("compact_buttons", false)) else 20)
 	box.add_child(label)
+
+func _menu_viewport_size() -> Vector2:
+	if get_viewport() == null:
+		return MENU_SIZE
+	var size := get_viewport().get_visible_rect().size
+	return MENU_SIZE if size.x < 320.0 or size.y < 240.0 else size
 
 func _current_settings() -> Dictionary:
 	var settings_node = get_tree().root.find_child("Settings", true, false)

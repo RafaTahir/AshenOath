@@ -3,6 +3,7 @@ extends Node
 signal action_started(action_name: String)
 signal action_finished(action_name: String)
 signal contract_failed(reason: String)
+signal locomotion_step(side: StringName)
 
 const STATE_ALIASES := {
 	"idle": ["idle", "idlesword", "idleweapon", "attackingidle"],
@@ -10,6 +11,7 @@ const STATE_ALIASES := {
 	"walk_back": ["walkback", "backwalk", "walk", "walking"],
 	"strafe": ["strafe", "walk", "walking"],
 	"run": ["run", "running", "sprint"],
+	"run_back": ["runback", "backrun", "run", "running", "sprint"],
 	"jump": ["jump", "jumpidle", "run"],
 	"work": ["work", "interact", "idle", "idlesword"],
 	"dialogue": ["dialogue", "talk", "interact", "idle", "idlesword"],
@@ -66,6 +68,11 @@ var action_elapsed := 0.0
 var action_looping := false
 var active_action_clip := StringName()
 var root_motion_disabled := true
+var last_locomotion_clip := StringName()
+var last_locomotion_state := StringName()
+var last_locomotion_phase := -1.0
+var locomotion_phase_distance := 0.0
+var locomotion_step_index := 0
 
 func configure(root: Node3D, clips: Dictionary) -> bool:
 	character_root = root
@@ -85,6 +92,11 @@ func configure(root: Node3D, clips: Dictionary) -> bool:
 	action_elapsed = 0.0
 	action_looping = false
 	active_action_clip = StringName()
+	last_locomotion_clip = StringName()
+	last_locomotion_state = StringName()
+	last_locomotion_phase = -1.0
+	locomotion_phase_distance = 0.0
+	locomotion_step_index = 0
 	_collect_animation_players(root)
 	animation_player = animation_players[0] if not animation_players.is_empty() else null
 	skeleton = _find_type(root, "Skeleton3D") as Skeleton3D
@@ -109,6 +121,10 @@ func configure(root: Node3D, clips: Dictionary) -> bool:
 func _process(delta: float) -> void:
 	if animation_player == null or distance_suspended:
 		return
+	current_playback_scale = lerpf(current_playback_scale, target_playback_scale, 1.0 - exp(-10.0 * delta))
+	var playback_direction := _playback_direction_for_state(current_state)
+	for player in animation_players:
+		player.speed_scale = current_playback_scale * playback_direction
 	if manual_update_interval > 0.0:
 		manual_update_accumulator += delta
 		if manual_update_accumulator < manual_update_interval:
@@ -119,9 +135,7 @@ func _process(delta: float) -> void:
 			player.advance(delta)
 	if action_active:
 		action_elapsed += delta
-	current_playback_scale = lerpf(current_playback_scale, target_playback_scale, 1.0 - exp(-10.0 * delta))
-	for player in animation_players:
-		player.speed_scale = current_playback_scale
+	_emit_locomotion_step_events()
 
 func set_update_rate_hz(rate_hz: float) -> void:
 	manual_update_interval = 0.0 if rate_hz <= 0.0 else 1.0 / maxf(rate_hz, 1.0)
@@ -164,17 +178,17 @@ func set_locomotion(speed_ratio: float, _direction: Vector3, grounded: bool) -> 
 		current_local_direction = Vector3.ZERO
 	if not is_valid() or dead or action_active or presentation_state != "":
 		return
+	var source_forward_positive_z := character_root != null and bool(character_root.get_meta("source_forward_positive_z", false))
+	var moving_backwards := current_local_direction.z > 0.35 if not source_forward_positive_z else current_local_direction.z < -0.35
 	var state := "idle"
 	if not grounded:
 		state = "jump"
 	elif speed_ratio > 0.72:
-		state = "run"
+		state = "run_back" if moving_backwards else "run"
 	elif speed_ratio > 0.05:
 		if absf(current_local_direction.x) > absf(current_local_direction.z) * 1.15:
 			state = "strafe"
 		else:
-			var source_forward_positive_z := character_root != null and bool(character_root.get_meta("source_forward_positive_z", false))
-			var moving_backwards := current_local_direction.z > 0.35 if not source_forward_positive_z else current_local_direction.z < -0.35
 			if moving_backwards:
 				state = "walk_back"
 			else:
@@ -182,7 +196,9 @@ func set_locomotion(speed_ratio: float, _direction: Vector3, grounded: bool) -> 
 	locomotion_state = state
 	if state == "walk":
 		target_playback_scale = clampf(speed_ratio / 0.58, 0.68, 1.22)
-	elif state == "run":
+	elif state == "walk_back":
+		target_playback_scale = clampf(speed_ratio / 0.46, 0.68, 1.16)
+	elif state in ["run", "run_back"]:
 		target_playback_scale = clampf(0.88 + (speed_ratio - 0.72) * 0.85, 0.88, 1.20)
 	else:
 		target_playback_scale = 1.0
@@ -323,7 +339,11 @@ func _play_state(state: String, blend: float) -> void:
 	if clip == StringName():
 		return
 	current_state = state
-	_play_clip_all(clip, blend)
+	last_locomotion_clip = StringName()
+	last_locomotion_state = StringName()
+	last_locomotion_phase = -1.0
+	locomotion_phase_distance = 0.0
+	_play_clip_all(clip, blend, _playback_direction_for_state(state))
 
 func _clip_for(state: String) -> StringName:
 	if resolved_clip_map.has(state):
@@ -360,7 +380,7 @@ func _resolve_clip(state: String, requested: String) -> StringName:
 	return StringName()
 
 func _locomotion_candidate_allowed(state: String, candidate_key: String) -> bool:
-	if state not in ["walk", "walk_back", "strafe", "run"]:
+	if state not in ["walk", "walk_back", "strafe", "run", "run_back"]:
 		return true
 	# These clips are useful for special enemies or carried-object animation,
 	# but they visibly collapse a human gait when used as general locomotion.
@@ -409,7 +429,54 @@ func _collect_animation_players(root: Node) -> void:
 	for child in root.get_children():
 		_collect_animation_players(child)
 
-func _play_clip_all(clip: StringName, blend: float) -> void:
+func _play_clip_all(clip: StringName, blend: float, playback_direction: float = 1.0) -> void:
 	for player in animation_players:
 		if player.has_animation(clip):
-			player.play(clip, blend)
+			player.play(clip, blend, current_playback_scale * playback_direction, playback_direction < 0.0)
+
+func _playback_direction_for_state(state: String) -> float:
+	if state not in ["walk_back", "run_back"]:
+		return 1.0
+	var reverse_state_clip := _clip_for(state)
+	var forward_state := "run" if state == "run_back" else "walk"
+	var forward_clip := _clip_for(forward_state)
+	# Prefer an authored reverse clip. If the shared library only provides a
+	# forward gait, play that clip backwards so the feet travel with the actor
+	# instead of visibly walking forward while the physics moves in reverse.
+	return -1.0 if reverse_state_clip == StringName() or reverse_state_clip == forward_clip else 1.0
+
+func _emit_locomotion_step_events() -> void:
+	if animation_player == null or action_active or current_state not in ["walk", "walk_back", "strafe", "run", "run_back"]:
+		last_locomotion_clip = StringName()
+		last_locomotion_state = StringName()
+		last_locomotion_phase = -1.0
+		locomotion_phase_distance = 0.0
+		return
+	var clip := _clip_for(current_state)
+	if clip == StringName() or not animation_player.has_animation(clip):
+		return
+	var animation := animation_player.get_animation(clip)
+	if animation == null or animation.length <= 0.0:
+		return
+	var phase := fposmod(animation_player.current_animation_position / animation.length, 1.0)
+	if last_locomotion_clip != clip or last_locomotion_state != StringName(current_state) or last_locomotion_phase < 0.0:
+		last_locomotion_clip = clip
+		last_locomotion_state = StringName(current_state)
+		last_locomotion_phase = phase
+		locomotion_phase_distance = 0.0
+		return
+	# Use the animation position itself as the clock. Some imported clips report
+	# increasing positions even when played backwards, so signed phase tests can
+	# mistake a normal reverse frame for multiple contacts. Absolute wrapped
+	# phase distance stays correct for forward and reverse playback alike.
+	var phase_delta := phase - last_locomotion_phase
+	if phase_delta > 0.5:
+		phase_delta -= 1.0
+	elif phase_delta < -0.5:
+		phase_delta += 1.0
+	locomotion_phase_distance += absf(phase_delta)
+	while locomotion_phase_distance >= 0.5:
+		locomotion_phase_distance -= 0.5
+		locomotion_step.emit(StringName("left") if locomotion_step_index % 2 == 0 else StringName("right"))
+		locomotion_step_index += 1
+	last_locomotion_phase = phase
