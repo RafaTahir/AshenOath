@@ -234,6 +234,35 @@ func _load_cached_resource(path: String):
 		resource_cache[path] = resource
 	return resource
 
+func prewarm_roles(role_names: Array) -> Dictionary:
+	# Load selected runtime resources into the shared cache without spawning nodes.
+	_ensure_database()
+	var loaded: Array[String] = []
+	var missing: Array[String] = []
+	for raw_role in role_names:
+		var role := str(raw_role)
+		if role == "":
+			continue
+		var entry: Dictionary = database.get_asset_for_role(role)
+		var path := str(entry.get("path", ""))
+		if path == "" or not (ResourceLoader.exists(path) or FileAccess.file_exists(path)):
+			missing.append(role)
+			continue
+		# Castle's selected environment kit is intentionally kept as compact OBJ
+		# sources. ResourceLoader cannot cache those files, so prewarming only the
+		# ResourceLoader path leaves the expensive text parse for the first gate
+		# transition. Populate the same mesh/material caches used by spawning.
+		var warmed := false
+		if path.get_extension().to_lower() == "obj":
+			warmed = _load_obj_mesh(path) != null and _obj_material(path) != null
+		else:
+			warmed = _load_cached_resource(path) != null
+		if warmed:
+			loaded.append(role)
+		else:
+			missing.append(role)
+	return {"loaded": loaded, "missing": missing}
+
 func _instantiate_obj(path: String) -> Node3D:
 	var mesh: ArrayMesh = _load_obj_mesh(path)
 	if mesh == null:

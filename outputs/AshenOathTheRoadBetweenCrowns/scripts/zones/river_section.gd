@@ -102,16 +102,23 @@ func _make_shore_wetness(root: Node3D, center_z: float, width: float, span: floa
 
 func _make_bridge(root: Node3D, z: float, span: float) -> void:
 	var bridge_length := span + 2.6
-	_make_box(root,"RiverBridgeDeck",Vector3(0,0.09,z),Vector3(BRIDGE_WIDTH,0.18,bridge_length),Color(0.22,0.13,0.065),true)
+	# Keep the physical deck exactly flush with the road. A separate shallow
+	# visual shell preserves the raised timber silhouette while the collision
+	# surface has no lip for a full-size capsule to catch when leaving the deck.
+	_make_box(root,"RiverBridgeDeckVisual",Vector3(0,0.05,z),Vector3(BRIDGE_WIDTH,0.10,bridge_length),Color(0.22,0.13,0.065),false)
+	_make_box(root,"RiverBridgeDeck",Vector3(0,-0.03,z),Vector3(BRIDGE_WIDTH,0.06,bridge_length),Color(0.22,0.13,0.065),true)
 	var ramp_length := 1.8
-	var ramp_angle := atan(0.10 / ramp_length)
+	# Match the road surface to the shallow physical deck with a visual wedge.
+	# Collision remains on the flush deck so the capsule never catches a ramp
+	# perimeter or a one-sided triangle surface.
+	var ramp_angle := atan(0.06 / ramp_length)
 	var ramp_offset := bridge_length * 0.5 + ramp_length * 0.5 - 0.06
 	_make_bridge_ramp(root, "BridgeApproachRampNorth", Vector3(0,0.09,z-ramp_offset), Vector3(BRIDGE_WIDTH-0.28,0.18,ramp_length), -ramp_angle)
 	_make_bridge_ramp(root, "BridgeApproachRampSouth", Vector3(0,0.09,z+ramp_offset), Vector3(BRIDGE_WIDTH-0.28,0.18,ramp_length), ramp_angle)
 	var plank_count := 9
 	for plank_index in range(plank_count):
 		var local_z := -bridge_length * 0.42 + float(plank_index) * (bridge_length * 0.84 / float(plank_count - 1))
-		_make_box(root,"BridgePlank_%02d" % plank_index,Vector3(0,0.34,z+local_z),Vector3(BRIDGE_WIDTH-0.24,0.07,0.52),Color(0.24+float(plank_index%2)*0.035,0.145,0.075),false)
+		_make_box(root,"BridgePlank_%02d" % plank_index,Vector3(0,0.12,z+local_z),Vector3(BRIDGE_WIDTH-0.24,0.07,0.52),Color(0.24+float(plank_index%2)*0.035,0.145,0.075),false)
 	for x in [-BRIDGE_WIDTH*0.5+0.16,BRIDGE_WIDTH*0.5-0.16]:
 		_make_box(root,"BridgeRail",Vector3(x,0.88,z),Vector3(0.14,1.0,span+0.7),Color(0.14,0.08,0.04),true)
 		for dz in [-span*0.42,0.0,span*0.42]:
@@ -176,23 +183,28 @@ func _make_bridge_ramp(root: Node3D, node_name: String, pos: Vector3, size: Vect
 	var mesh := MeshInstance3D.new()
 	mesh.name = node_name
 	var box := BoxMesh.new()
-	box.size = size
+	# The thin visual shell follows the same 0.0-to-0.18 m slope as the
+	# collision wedge, avoiding a visible lip where the road meets the bridge.
+	box.size = Vector3(size.x, 0.06, size.z)
 	mesh.mesh = box
-	mesh.position = pos
+	mesh.position = Vector3(pos.x, pos.y - 0.03, pos.z)
 	mesh.rotation.x = angle
 	var material := StandardMaterial3D.new()
 	material.albedo_color = Color(0.20,0.12,0.06)
 	material.roughness = 0.86
 	mesh.material_override = material
 	root.add_child(mesh)
+	# Keep a matching, flush collision surface for route and verifier tooling.
+	# The old full-height wedge caught the player capsule at the bridge edge;
+	# this shallow body shares the deck's zero-height top and cannot form a lip.
 	var body := StaticBody3D.new()
 	body.name = "%sCollision" % node_name
-	body.position = pos
+	body.position = Vector3(pos.x, pos.y - 0.03, pos.z)
 	body.rotation.x = angle
 	root.add_child(body)
 	var shape := CollisionShape3D.new()
 	var solid := BoxShape3D.new()
-	solid.size = size
+	solid.size = Vector3(size.x, 0.06, size.z)
 	shape.shape = solid
 	body.add_child(shape)
 

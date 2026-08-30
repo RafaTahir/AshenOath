@@ -178,6 +178,20 @@ func validate_path(points: Array, clearance: float = 0.9) -> Array:
 
 func nearest_safe(position: Vector3, preferred_bank: int = 0) -> Vector3:
 	var wanted_bank := preferred_bank if preferred_bank != 0 else bank_for(position)
+	# Keep a valid requested point stable. This function is also used when a
+	# zone is entered with an authored arrival, so falling through to a distant
+	# recovery anchor for every valid point can place the actor on a route edge
+	# and make the first movement look blocked by the ground slab itself.
+	var requested := _clamp_to_bounds(position, 1.0)
+	requested.y = 0.0
+	# A low point in the channel is a failed bridge/bed entry even when its X
+	# coordinate happens to be inside the legal bridge lane. Emergency recovery
+	# must choose the requested bank, never preserve that invalid centre point.
+	var low_channel_entry := river_center < 900.0 and absf(position.z - river_center) < RIVER_HALF_SPAN and position.y < 0.2
+	if wanted_bank != 0 and (is_river_excluded(requested, 0.8) or low_channel_entry):
+		requested.z = river_center + float(wanted_bank) * (RIVER_HALF_SPAN + 1.0)
+	if not _inside_entries(requested, exclusions, 0.6) and not is_position_occupied(requested, 0.42, 1.65):
+		return requested
 	# Recovery must prefer authored road anchors. Searching around the failed
 	# coordinate can select a roof, yard, or prop when the failure occurred
 	# beside a building or scenery wall.
@@ -192,7 +206,7 @@ func nearest_safe(position: Vector3, preferred_bank: int = 0) -> Vector3:
 			continue
 		if not is_position_occupied(anchor, 0.42, 1.65):
 			return anchor
-	var base := _clamp_to_bounds(position, 1.0)
+	var base := requested
 	if wanted_bank != 0 and river_center < 900.0:
 		base.z = river_center + float(wanted_bank) * maxf(absf(base.z - river_center), RIVER_HALF_SPAN + 1.0)
 	var candidates: Array[Vector3] = [base]
@@ -225,6 +239,10 @@ func is_position_occupied(position: Vector3, radius: float, height: float) -> bo
 	query.collision_mask = 1
 	query.collide_with_areas = false
 	query.collide_with_bodies = true
+	for actor in get_tree().get_nodes_in_group("player"):
+		var player_body := actor as CollisionObject3D
+		if player_body != null:
+			query.exclude.append(player_body.get_rid())
 	return not get_world_3d().direct_space_state.intersect_shape(query, 1).is_empty()
 
 func _nearest_spawn(position: Vector3, preferred_bank: int = 0) -> Vector3:

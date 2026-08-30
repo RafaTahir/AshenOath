@@ -912,7 +912,10 @@ func _build_body() -> void:
 	capsule_shape.height = CharacterRoleSpec.collision_height("player_human", 1.65)
 	capsule_shape.radius = CharacterRoleSpec.collision_radius("player_human", 0.32)
 	collision.shape = capsule_shape
-	collision.position.y = capsule_shape.height * 0.5 + capsule_shape.radius * 0.18
+	# CapsuleShape3D.height is the complete capsule height, including its
+	# hemispheres. Keep its base on the actor root so low bridge lips and
+	# authored ramps are treated as walkable ground instead of a wall.
+	collision.position.y = capsule_shape.height * 0.5
 	add_child(collision)
 	if _try_build_mapped_body():
 		CharacterPresentation.apply_player(self, visual_root)

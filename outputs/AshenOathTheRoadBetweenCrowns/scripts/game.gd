@@ -75,7 +75,7 @@ var paused_by_menu = true
 var pending_ending = ""
 var removed_interactions = {}
 var autosave_cooldown = 180.0
-var last_safe_player_position = Vector3(0, 1, 7)
+var last_safe_player_position = Vector3(0, 1, 9.8)
 var tutorial_flags = {}
 var material_cache: Dictionary = {}
 var runtime_light_count := 0
@@ -435,7 +435,7 @@ func _start_new_game_world() -> void:
 	if route_zone_cache.has("greyfen"):
 		route_zone_signatures["greyfen"] = _zone_state_signature()
 	print("LOADING: new_game_stage=zone_dispatch elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
-	_load_zone("greyfen", Vector3(0, 1, 7))
+	_load_zone("greyfen", Vector3(0, 1, 9.8))
 	print("LOADING: new_game_stage=zone_return elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
 	hud.toast("Greyfen whispers about the old road. Sister Anwen is waiting at the shrine.")
 	hud.set_guidance_hint("E - Speak to Sister Anwen", 5.5)
@@ -709,7 +709,10 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		audio.set_music_state(audio.music_state_for_zone(zone_id))
 		if zone_id == "greyfen":
 			audio.play_event("shrine_hum", 0.01)
-	var safe_spawn: Vector3 = spatial_service.nearest_safe(spawn_pos, spatial_service.bank_for(spawn_pos))
+	# Authored arrivals are already reserved by the zone builder. Preserve their
+	# exact route position here; nearest_safe() is an emergency recovery API and
+	# can otherwise move a valid arrival to a distant edge anchor.
+	var safe_spawn: Vector3 = spatial_service.validate_position(spawn_pos, 0.8, spatial_service.bank_for(spawn_pos))
 	if player == null:
 		_spawn_player(safe_spawn)
 	else:
@@ -1954,6 +1957,19 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 	zone_root = Node3D.new()
 	zone_root.name = "greyfen"
 	add_child(zone_root)
+	# Castle environment imports are otherwise paid on the first gate travel.
+	# Warm the shared resource cache while the menu still covers the viewport so
+	# the first Castle arrival remains a scene activation rather than an import.
+	if asset_helper != null and asset_helper.has_method("prewarm_roles"):
+		var castle_prewarm: Dictionary = asset_helper.prewarm_roles([
+			"castle_wall", "castle_arch", "castle_roof", "castle_door",
+			"castle_bookcase", "castle_chair", "castle_bench", "castle_table",
+			"castle_weapon_stand", "castle_lantern",
+		])
+		print("LOADING: Castle roles prewarmed loaded=%d missing=%d" % [
+			Array(castle_prewarm.get("loaded", [])).size(),
+			Array(castle_prewarm.get("missing", [])).size(),
+		])
 	runtime_light_count = 0
 	tree_batch_data.clear()
 	deadfall_batch_data.clear()
@@ -1985,7 +2001,7 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 	# Kael's rig and camera are also expensive to instantiate in WebGL. Prepare
 	# them while the launch/menu presentation is already covering the viewport.
 	phase_started = Time.get_ticks_msec()
-	_spawn_player(Vector3(0, 1, 7))
+	_spawn_player(Vector3(0, 1, 9.8))
 	var player_ms := Time.get_ticks_msec() - phase_started
 	# Keep the real gameplay view active behind the opaque menu so WebGL compiles
 	# the same skinned materials and camera path used after New Game.
@@ -3053,9 +3069,12 @@ func _is_river_recovery_position(zone: String, pos: Vector3) -> bool:
 	var river_z := _river_center(zone)
 	if river_z > 900.0:
 		return false
-	# The bridge deck occupies the river exclusion band by design. Let the
-	# player capsule settle onto its collision before considering recovery.
-	if spatial_service != null and spatial_service.zone_id == zone and not spatial_service.is_river_excluded(pos, 0.0) and pos.y >= 0.18:
+	# The bridge deck occupies the river exclusion band by design. It is flush
+	# with the banks, so identify the legal crossing by the full bridge corridor
+	# rather than by actor height. This also prevents the recovery guard from
+	# snapping a player off the deck while stepping onto the far bank.
+	var on_bridge_deck := pos.y >= 0.2 and absf(pos.x) <= 2.72 and absf(pos.z - river_z) <= 3.15
+	if on_bridge_deck:
 		return false
 	return absf(pos.z-river_z) < 2.0 and (absf(pos.x) > 2.7 or pos.y < 0.12)
 
@@ -4813,7 +4832,20 @@ func _interaction_target_valid(area: Area3D) -> bool:
 	query.collide_with_areas = false
 	query.collide_with_bodies = true
 	var hit := get_world_3d().direct_space_state.intersect_ray(query)
-	return hit.is_empty()
+	if hit.is_empty():
+		return true
+	# A named character's skinned body is the intended target, not an
+	# obstruction. At conversation distance the eye-line ray naturally lands on
+	# the speaker's own capsule or imported mesh. Accept only a collider that is
+	# spatially bound to this interaction; unrelated scenery still blocks focus.
+	var collider := hit.get("collider") as Node3D
+	if collider != null:
+		var current: Node = collider
+		while current != null:
+			if current == area or (current is Node3D and (current as Node3D).global_position.distance_to(area.global_position) <= 1.2):
+				return true
+			current = current.get_parent()
+	return false
 
 func _set_interactable_label_visible(area: Node, visible: bool) -> void:
 	var label := area.find_child("InteractionWorldLabel", true, false) as Label3D

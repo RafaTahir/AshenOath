@@ -63,6 +63,8 @@ func _initialize() -> void:
 	first.set_physics_process(false)
 	second.set_physics_process(false)
 	game.player.set_physics_process(false)
+	if game.active_enemy_attacker != null:
+		game.call("_enemy_attack_token", game.active_enemy_attacker, false)
 	game.player.global_position = Vector3(0, 0.9, 0)
 	first.global_position = Vector3(0, 0.9, 1.2)
 	second.global_position = Vector3(0, 0.9, 2.0)
@@ -79,8 +81,13 @@ func _initialize() -> void:
 	var attack_clip: StringName = first.animation_driver.get_clip_for_state("attack")
 	check(attack_clip != StringName(), "Enemy attack clip is unresolved")
 	if animation_player != null and attack_clip != StringName():
+		animation_player.stop()
 		animation_player.play(attack_clip)
-		animation_player.advance(0.18)
+		# Manual animation players do not reliably apply an advance immediately
+		# after play in a headless tick. Seek samples the same authored clip at a
+		# deterministic windup time without changing gameplay timing.
+		animation_player.seek(0.0, true)
+		animation_player.seek(0.18, true)
 	first.attack_trace_end = first.call("_attack_contact_point")
 	var trace: Dictionary = first.get_attack_trace()
 	var trace_start: Vector3 = trace.get("start", Vector3.ZERO)

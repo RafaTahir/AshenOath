@@ -169,26 +169,58 @@ function consoleErrors(cdp) {
   );
 }
 
-async function dispatchKey(cdp, code, key, down) {
+async function dispatchKey(cdp, code, key, down, raw = false, autoRepeat = false) {
+  const virtualKeyCode = code === "KeyW" ? 87
+    : code === "KeyA" ? 65
+    : code === "KeyS" ? 83
+    : code === "KeyD" ? 68
+    : code === "KeyE" ? 69
+    : code === "KeyC" ? 67
+    : code === "KeyR" ? 82
+    : code === "KeyF" ? 70
+    : code === "KeyQ" ? 81
+    : code === "ShiftLeft" ? 16
+    : code === "Space" ? 32
+    : code === "ArrowLeft" ? 37
+    : code === "ArrowRight" ? 39
+    : code === "Enter" ? 13 : 0;
   await cdp.send("Input.dispatchKeyEvent", {
-    type: down ? "keyDown" : "keyUp",
+    type: down ? (raw ? "rawKeyDown" : "keyDown") : "keyUp",
     key,
     code,
-    windowsVirtualKeyCode: code === "KeyW" ? 87
-      : code === "KeyA" ? 65
-      : code === "KeyS" ? 83
-      : code === "KeyD" ? 68
-      : code === "KeyE" ? 69
-      : code === "KeyC" ? 67
-      : code === "KeyR" ? 82
-      : code === "KeyF" ? 70
-      : code === "KeyQ" ? 81
-      : code === "ShiftLeft" ? 16
-      : code === "Space" ? 32
-      : code === "ArrowLeft" ? 37
-      : code === "ArrowRight" ? 39
-      : code === "Enter" ? 13 : 0,
+    windowsVirtualKeyCode: virtualKeyCode,
+    nativeVirtualKeyCode: virtualKeyCode,
+    ...(down && key.length === 1 && !raw && !autoRepeat ? { text: key, unmodifiedText: key } : {}),
+    ...(down && autoRepeat ? { autoRepeat: true } : {}),
     modifiers: code === "ShiftLeft" && down ? 8 : 0,
+  }, INPUT_TIMEOUT_MS);
+}
+
+async function refocusGameplay(cdp) {
+  await cdp.send("Page.bringToFront");
+  await cdp.evaluate(`(() => {
+    window.focus();
+    const canvas = document.querySelector("canvas");
+    if (canvas) {
+      canvas.tabIndex = 0;
+      canvas.focus({ preventScroll: true });
+    }
+    return document.activeElement?.tagName || "";
+  })()`);
+  // A harmless pointer move reasserts the renderer surface after a menu
+  // button consumed the preceding click. It does not activate gameplay.
+  await cdp.send("Input.dispatchMouseEvent", {
+    type: "mouseMoved", x: Math.round(viewport.width * 0.5),
+    y: Math.round(viewport.height * 0.12), button: "none",
+  }, INPUT_TIMEOUT_MS);
+  await cdp.send("Input.dispatchMouseEvent", {
+    type: "mousePressed", x: Math.round(viewport.width * 0.5),
+    y: Math.round(viewport.height * 0.5), button: "left", clickCount: 1,
+  }, INPUT_TIMEOUT_MS);
+  await sleep(35);
+  await cdp.send("Input.dispatchMouseEvent", {
+    type: "mouseReleased", x: Math.round(viewport.width * 0.5),
+    y: Math.round(viewport.height * 0.5), button: "left", clickCount: 1,
   }, INPUT_TIMEOUT_MS);
 }
 
@@ -199,9 +231,84 @@ async function tapKey(cdp, code, key, duration = 70) {
 }
 
 async function holdKey(cdp, code, key, duration) {
+  await cdp.evaluate(`(() => {
+    const canvas = document.querySelector("canvas");
+    if (canvas) {
+      canvas.tabIndex = 0;
+      canvas.focus({ preventScroll: true });
+    }
+  })()`);
+  // Send one browser keydown and keep it held. Repeated synthetic keydowns can
+  // be interpreted as focus changes by the Web input bridge and make a
+  // continuous physical hold look like pulses to Godot.
   await dispatchKey(cdp, code, key, true);
-  await sleep(duration);
+  // Chromium may omit the first key event while the canvas is reclaiming
+  // focus after a captured pointer click. A single browser repeat establishes
+  // the held state without the long pulse loop used by the old harness.
+  await sleep(55);
+  await dispatchKey(cdp, code, key, true, false, true);
+  await sleep(Math.min(300, duration));
+  await sleep(Math.max(0, duration - Math.min(300, duration)));
   await dispatchKey(cdp, code, key, false);
+}
+
+async function holdTowardPoint(cdp, waypoint, timeout = 7000) {
+  // Treat movement as a real held input and release it from observed player
+  // position, not from a guessed frame count. This tolerates WebGL frame
+  // scheduling without ever teleporting or mutating the player transform.
+  await cdp.evaluate(`(() => {
+    const canvas = document.querySelector("canvas");
+    if (canvas) {
+      canvas.tabIndex = 0;
+      canvas.focus({ preventScroll: true });
+    }
+  })()`);
+  const initialState = await telemetry(cdp).catch(() => null);
+  const player = initialState?.player?.position;
+  const yaw = Number(initialState?.camera?.yaw || 0);
+  const dx = Number(waypoint.x) - Number(player?.x || 0);
+  const dz = Number(waypoint.z) - Number(player?.z || 0);
+  // Movement is camera-relative in the actual controller. The old diagnostic
+  // always held W, which worked for the north/south road but could never reach
+  // a side-offset interaction such as Anwen at the end of the route.
+  const forward = dx * -Math.sin(yaw) + dz * -Math.cos(yaw);
+  const right = dx * Math.cos(yaw) + dz * -Math.sin(yaw);
+  const selected = Math.abs(forward) >= Math.abs(right)
+    ? (forward >= 0 ? ["KeyW", "w"] : ["KeyS", "s"])
+    : (right >= 0 ? ["KeyD", "d"] : ["KeyA", "a"]);
+  // Clear any delayed release from the preceding segment before starting a
+  // new physical hold. The Web bridge can deliver a keyup after its CDP call
+  // has already returned.
+  for (const [code, key] of [["KeyW", "w"], ["KeyA", "a"], ["KeyS", "s"], ["KeyD", "d"]]) {
+    await dispatchKey(cdp, code, key, false);
+  }
+  await sleep(90);
+  await dispatchKey(cdp, selected[0], selected[1], true);
+  await sleep(55);
+  await dispatchKey(cdp, selected[0], selected[1], true);
+  const started = Date.now();
+  let lastKeySignal = started;
+  let lastState = null;
+  while (Date.now() - started < timeout) {
+    await sleep(120);
+    // The browser-to-Godot Web input bridge can drop a held-key repeat while
+    // the Compatibility renderer is busy. Reassert the same physical key at a
+    // modest cadence; no keyup is sent until the observed waypoint is reached.
+    if (Date.now() - lastKeySignal >= 240) {
+      await dispatchKey(cdp, selected[0], selected[1], true);
+      lastKeySignal = Date.now();
+    }
+    lastState = await telemetry(cdp).catch(() => null);
+    const player = lastState?.player?.position;
+    if (!player) continue;
+    const distance = Math.hypot(waypoint.x - player.x, waypoint.z - player.z);
+    if (distance <= 0.58) break;
+  }
+  await dispatchKey(cdp, selected[0], selected[1], false);
+  await sleep(120);
+  await dispatchKey(cdp, "KeyW", "w", false);
+  await sleep(120);
+  return lastState || await telemetry(cdp).catch(() => null);
 }
 
 async function moveCameraRelative(cdp, yaw, dx, dz, duration = 180) {
@@ -277,6 +384,40 @@ async function capture(cdp, path) {
   return path;
 }
 
+async function clickPoint(cdp, point) {
+  await cdp.send("Input.dispatchMouseEvent", {
+    type: "mouseMoved", x: point.x, y: point.y, button: "none",
+  }, INPUT_TIMEOUT_MS);
+  await cdp.send("Input.dispatchMouseEvent", {
+    type: "mousePressed", x: point.x, y: point.y, button: "left", clickCount: 1,
+  }, INPUT_TIMEOUT_MS);
+  await sleep(70);
+  await cdp.send("Input.dispatchMouseEvent", {
+    type: "mouseReleased", x: point.x, y: point.y, button: "left", clickCount: 1,
+  }, INPUT_TIMEOUT_MS);
+}
+
+async function waitForNewGameReady(cdp, timeout = 2500) {
+  return waitFor(async () => {
+    const state = await telemetry(cdp);
+    return state?.ready && state.zone === "greyfen" && !state.transition_pending ? state : null;
+  }, "New Game Greyfen telemetry", timeout);
+}
+
+async function activateNewGame(cdp, point) {
+  // The menu rebuilds its Button tree when Greyfen prewarming completes. Use
+  // the actual rendered control first, then give the focused first action a
+  // keyboard activation only if the click did not start the game. This avoids
+  // both a race with queued menu frees and an accidental second activation.
+  await clickPoint(cdp, point);
+  try {
+    return await waitForNewGameReady(cdp);
+  } catch {
+    await tapKey(cdp, "Enter", "Enter", 90);
+    return waitForNewGameReady(cdp, 10000);
+  }
+}
+
 async function startNewGame(cdp, expectedUrl) {
   await cdp.send("Page.navigate", { url: expectedUrl });
   await waitFor(async () => cdp.evaluate(
@@ -306,34 +447,22 @@ async function startNewGame(cdp, expectedUrl) {
     const canvas = document.querySelector("canvas");
     if (canvas) { canvas.tabIndex = 0; canvas.focus(); }
   })()`);
-  // Use the visible in-game menu action for startup. The earlier Enter tap
-  // could leave a CDP key-up request pending while the WebGL renderer was
-  // compiling the prewarmed scene, which looked like a browser hang even
-  // though the launch action had already fired. This remains real player
-  // input and matches the stable desktop Web smoke path.
+  // The Web build prewarms Greyfen behind the visible menu automatically.
+  // Waiting for the ready marker before activating the control prevents the
+  // first click from landing on the disabled Preparing Greyfen button.
   const newGamePoint = { x: Math.round(viewport.width * 0.736), y: Math.round(viewport.height * 0.177) };
-  await cdp.send("Input.dispatchMouseEvent", { type: "mouseMoved", x: newGamePoint.x, y: newGamePoint.y, button: "none" }, INPUT_TIMEOUT_MS);
-  await cdp.send("Input.dispatchMouseEvent", { type: "mousePressed", x: newGamePoint.x, y: newGamePoint.y, button: "left", clickCount: 1 }, INPUT_TIMEOUT_MS);
-  await sleep(70);
-  await cdp.send("Input.dispatchMouseEvent", { type: "mouseReleased", x: newGamePoint.x, y: newGamePoint.y, button: "left", clickCount: 1 }, INPUT_TIMEOUT_MS);
   // Cold QA exports may spend several seconds compiling the Compatibility
   // renderer while the prewarm signal is already progressing. Keep this a
   // bounded readiness gate, but do not turn normal first-run compilation into
   // a false browser failure.
   await waitFor(async () => (await telemetry(cdp))?.new_game_ready, "Greyfen menu prewarm", 45000);
   await sleep(420);
-  // The menu rebuild is scaled from the 1920x1080 UI canvas. Click the center
-  // of the focused New Game control through the real browser input path.
-  await cdp.send("Input.dispatchMouseEvent", { type: "mouseMoved", x: newGamePoint.x, y: newGamePoint.y, button: "none" }, INPUT_TIMEOUT_MS);
-  await cdp.send("Input.dispatchMouseEvent", { type: "mousePressed", x: newGamePoint.x, y: newGamePoint.y, button: "left", clickCount: 1 }, INPUT_TIMEOUT_MS);
-  await sleep(70);
-  await cdp.send("Input.dispatchMouseEvent", { type: "mouseReleased", x: newGamePoint.x, y: newGamePoint.y, button: "left", clickCount: 1 }, INPUT_TIMEOUT_MS);
-  return waitFor(async () => {
-    const errors = consoleErrors(cdp);
-    if (errors.length) throw fatal(`startup console error: ${errors[0]}`);
-    const state = await telemetry(cdp);
-    return state?.ready && state.zone === "greyfen" && !state.transition_pending ? state : null;
-  }, "New Game Greyfen telemetry");
+  await activateNewGame(cdp, newGamePoint);
+  await refocusGameplay(cdp);
+  const state = await waitForNewGameReady(cdp, 10000);
+  const errors = consoleErrors(cdp);
+  if (errors.length) throw fatal(`startup console error: ${errors[0]}`);
+  return state;
 }
 
 async function driveToGate(cdp, target, checkpoints, timeout = 45000) {
@@ -402,9 +531,11 @@ async function driveToGate(cdp, target, checkpoints, timeout = 45000) {
       await sleep(60);
     }
     if (distance > 0.42) {
-      await dispatchKey(cdp, "ShiftLeft", "Shift", true);
-      await holdKey(cdp, "KeyW", "w", clamp(distance * 38, 130, 420));
-      await dispatchKey(cdp, "ShiftLeft", "Shift", false);
+      // Compatibility WebGL can defer input delivery while a frame is being
+      // presented. Release from an observed waypoint arrival so the route
+      // cannot crawl from short fixed pulses or overshoot into scenery.
+      const progress = await holdTowardPoint(cdp, waypoint, clamp((distance / 2.6) * 1000 + 9000, 14000, 30000));
+      if (!progress?.player?.position) throw new Error(`No player telemetry while approaching ${target}`);
     } else {
       await sleep(180);
     }
@@ -439,7 +570,7 @@ async function traverse(cdp, target, checkpoints) {
   return useGate(cdp, target, checkpoints);
 }
 
-async function driveToInteraction(cdp, id, checkpoints, timeout = 45000) {
+async function driveToInteraction(cdp, id, checkpoints, timeout = 240000) {
   const started = Date.now();
   let route = [];
   let routeIndex = 0;
@@ -484,7 +615,14 @@ async function driveToInteraction(cdp, id, checkpoints, timeout = 45000) {
       await sleep(140);
       continue;
     }
-    if (distance > 0.38) await holdKey(cdp, "KeyW", "w", clamp(distance * 32, 80, 240));
+    if (distance > 0.38) {
+      // Headless WebGL diagnostics can run below the hardware target. Scale
+      // the real key hold from route distance instead of assuming 32 rendered
+      // frames per second, otherwise a valid held input becomes a single
+      // sub-frame pulse and the route crawls.
+      const progress = await holdTowardPoint(cdp, waypoint, clamp((distance / 2.6) * 1000 + 9000, 14000, 30000));
+      if (!progress?.player?.position) throw new Error(`No player telemetry while approaching ${id}`);
+    }
     else await sleep(120);
   }
   throw new Error(`Could not focus interaction ${id}`);

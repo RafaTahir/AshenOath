@@ -57,6 +57,7 @@ var parry_exposed_time := 0.0
 var far_tick_accumulator := 0.0
 var near_tick_accumulator := 0.0
 const NEAR_AI_TICK_INTERVAL := 1.0 / 30.0
+const MIN_COMBAT_SPACING := 0.82
 var attack_gate: Callable
 var owns_attack_token := false
 var encounter_active := true
@@ -71,6 +72,7 @@ var preferred_distance := 2.15
 var approach_angle_degrees := 0.0
 var contact_radius := 0.72
 var attack_contact_bone := -1
+var attack_contact_local_offset := Vector3.ZERO
 var attack_trace_start := Vector3.ZERO
 var attack_trace_end := Vector3.ZERO
 var last_attack_contact := Vector3.ZERO
@@ -262,6 +264,7 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.y = -0.1
 	move_and_slide()
+	_enforce_peer_spacing()
 	if animation_driver != null:
 		animation_driver.set_locomotion(Vector2(velocity.x, velocity.z).length() / max(move_speed, 0.1), velocity, is_on_floor())
 	_animate_visuals(delta)
@@ -495,8 +498,31 @@ func _crowd_separation() -> Vector3:
 		offset.y = 0.0
 		var distance := offset.length()
 		if distance > 0.01 and distance < 1.55:
-			separation += offset.normalized()*(1.55-distance)/1.55
+			var urgency := (1.55-distance)/1.55
+			if distance < MIN_COMBAT_SPACING:
+				urgency += ((MIN_COMBAT_SPACING-distance)/MIN_COMBAT_SPACING) * 1.8
+			separation += offset.normalized() * urgency
 	return separation.normalized() if separation.length_squared() > 0.01 else Vector3.ZERO
+
+func _enforce_peer_spacing() -> void:
+	if encounter_peers.is_empty():
+		return
+	for other in encounter_peers:
+		if other == self or not is_instance_valid(other) or bool(other.get("dead")) or not bool(other.get("encounter_active")):
+			continue
+		var offset: Vector3 = global_position - other.global_position
+		offset.y = 0.0
+		var distance := offset.length()
+		if distance >= MIN_COMBAT_SPACING:
+			continue
+		var away := offset.normalized()
+		if distance <= 0.01:
+			away = Vector3(-1.0 if encounter_slot % 2 == 0 else 1.0, 0.0, 0.0)
+		var correction := (MIN_COMBAT_SPACING - distance) * 0.60
+		var candidate := global_position + away * correction
+		candidate.y = global_position.y
+		if spatial_service == null or spatial_service.validate_segment(global_position, candidate, 0.50):
+			global_position = candidate
 
 func _engagement_target(target_position: Vector3 = Vector3.INF) -> Vector3:
 	var focus: Vector3 = player.global_position if target_position == Vector3.INF else target_position
@@ -551,7 +577,8 @@ func _attack_contact_point() -> Vector3:
 		var skeleton: Skeleton3D = animation_driver.get_skeleton()
 		if skeleton != null and attack_contact_bone >= 0:
 			attack_trace_uses_skeleton = true
-			return (skeleton.global_transform * skeleton.get_bone_global_pose(attack_contact_bone)).origin
+			var contact_pose := skeleton.get_bone_global_pose(attack_contact_bone)
+			return skeleton.global_transform * (contact_pose * attack_contact_local_offset)
 	attack_trace_uses_skeleton = false
 	return global_position + Vector3(0.0, 1.05, 0.0)
 
@@ -1006,18 +1033,31 @@ func _safe_inverse_scale(value: float) -> float:
 
 func _configure_attack_contact_bone() -> void:
 	attack_contact_bone = -1
+	attack_contact_local_offset = Vector3.ZERO
 	if animation_driver == null or not animation_driver.is_valid():
 		return
 	var skeleton: Skeleton3D = animation_driver.get_skeleton()
 	if skeleton == null:
 		return
-	var preferred := ["hand.r", "hand_r", "righthand", "right_hand", "mixamorig:righthand", "head", "jaw", "hand.l", "hand_l", "lefthand", "left_hand"]
+	var preferred := ["hand.r", "hand_r", "righthand", "right_hand", "mixamorig:righthand", "hand.l", "hand_l", "lefthand", "left_hand"]
 	for index in range(skeleton.get_bone_count()):
 		var compact: String = skeleton.get_bone_name(index).to_lower().replace(" ", "").replace("-", "").replace("_", "").replace(".", "").replace(":", "")
 		for candidate in preferred:
 			var wanted: String = candidate.replace(".", "").replace(":", "").replace("_", "")
 			if compact.contains(wanted):
 				attack_contact_bone = index
+				return
+	# A few of the compact skeleton-family source meshes do not expose hand
+	# bones. Keep their contact authored by the animated skeleton instead of
+	# silently reverting to a static actor-space point: the offset is a short
+	# strike probe in the selected bone's local forward direction, so rotations
+	# in the imported attack clip produce a measured contact path.
+	for wanted_part in ["head", "torso", "neck"]:
+		for index in range(skeleton.get_bone_count()):
+			var compact: String = skeleton.get_bone_name(index).to_lower().replace(" ", "").replace("-", "").replace("_", "").replace(".", "").replace(":", "")
+			if compact.contains(wanted_part):
+				attack_contact_bone = index
+				attack_contact_local_offset = Vector3(0.0, 0.0, -0.58)
 				return
 
 func _ground_mapped_visual(mapped: Node3D) -> void:
