@@ -11,20 +11,20 @@
       "source_path": "res://assets_external/enemies/Skeleton.fbx"
     },
     "wychwood_stalker": {
-      "visual_role": "ghoulkin_skeleton",
+      "visual_role": "wychwood_stalker_creature",
       "profile": "flanker",
-      "height": 1.59,
+      "height": 1.45,
       "skin": "runtime_materials",
-      "runtime_source_role": "ghoulkin_skeleton",
-      "source_path": "res://assets_external/enemies/Skeleton.fbx"
+      "runtime_source_role": "wychwood_stalker_creature",
+      "source_path": "res://assets_external/enemies/Bat.fbx"
     },
     "wychwood_raider": {
-      "visual_role": "ghoulkin_skeleton",
+      "visual_role": "wychwood_raider_creature",
       "profile": "feinter",
-      "height": 1.72,
+      "height": 2.20,
       "skin": "runtime_materials",
-      "runtime_source_role": "ghoulkin_skeleton",
-      "source_path": "res://assets_external/enemies/Skeleton.fbx"
+      "runtime_source_role": "wychwood_raider_creature",
+      "source_path": "res://assets_external/enemies/Dragon.fbx"
     },
     "wychwood_brute": {
       "visual_role": "ghoulkin_skeleton",
@@ -39,6 +39,6 @@
     "required_states": ["idle", "walk", "run", "attack", "hit", "death"],
     "root_motion": false,
     "proxy_anatomy": false,
-    "source_policy": "all_wychwood_roles_use_validated_skeleton_family_with_deterministic_profiles"
+    "source_policy": "roles_use_validated_cc0_monster_families_with_deterministic_profiles"
   }
 }
