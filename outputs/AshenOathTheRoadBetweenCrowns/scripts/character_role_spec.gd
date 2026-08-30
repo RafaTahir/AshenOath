@@ -60,8 +60,8 @@ const SPECS := {
 	"ashwing_boss": {"height": 4.80, "collision_height": 3.80, "collision_radius": 0.90, "lod": 56.0, "required_sockets": [], "visual_forward_degrees": 180.0},
 	"halvern_boss": {"height": 1.88, "collision_height": 1.78, "collision_radius": 0.38, "lod": 20.0, "required_sockets": ["head", "weapon"], "visual_forward_degrees": 180.0},
 	"ghoulkin_creature": {"height": 1.72, "lod": 18.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
-	"wychwood_stalker_creature": {"height": 1.45, "collision_height": 1.35, "collision_radius": 0.30, "lod": 18.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
-	"wychwood_raider_creature": {"height": 2.20, "collision_height": 1.95, "collision_radius": 0.38, "lod": 22.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
+	"wychwood_stalker_creature": {"height": 1.60, "collision_height": 1.48, "collision_radius": 0.30, "lod": 18.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
+	"wychwood_raider_creature": {"height": 2.05, "collision_height": 1.85, "collision_radius": 0.38, "lod": 22.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
 	"ghoul_stalker_real": {"height": 1.72, "lod": 18.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
 	# The derived cursed-human GLB is authored facing Godot -Z already. Keeping
 	# the human 180-degree correction here made bosses turn their backs to Kael.

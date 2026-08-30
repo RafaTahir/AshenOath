@@ -197,7 +197,7 @@
         "source_url": "https://opengameart.org/sites/default/files/Animated%20Monster%20Pack%20by%20%40Quaternius.zip",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
-        "target_height": 1.45,
+        "target_height": 1.60,
         "notes": "Distinct winged Stalker body with authored head and eye materials; scaled and leashed by the existing Wychwood encounter profile."
       },
       "wychwood_raider_creature": {
@@ -207,7 +207,7 @@
         "source_url": "https://opengameart.org/sites/default/files/Animated%20Monster%20Pack%20by%20%40Quaternius.zip",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
-        "target_height": 2.20,
+        "target_height": 2.05,
         "notes": "Distinct winged Raider body using the existing Dragon rig and attack clips at a grounded clearing scale."
       },
       "ghoulkin_creature": {
