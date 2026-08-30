@@ -190,6 +190,26 @@
         "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
         "notes": "Retained articulated source for all Wychwood family roles; deterministic scale, material, posture, and attack profiles provide silhouette variation without duplicate meshes."
       },
+      "wychwood_stalker_creature": {
+        "status": "mon_001_distinct_bat_family",
+        "path": "res://assets_external/enemies/Bat.fbx",
+        "source": "Animated Monsters by Quaternius",
+        "source_url": "https://opengameart.org/sites/default/files/Animated%20Monster%20Pack%20by%20%40Quaternius.zip",
+        "license": "CC0 1.0",
+        "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
+        "target_height": 1.45,
+        "notes": "Distinct winged Stalker body with authored head and eye materials; scaled and leashed by the existing Wychwood encounter profile."
+      },
+      "wychwood_raider_creature": {
+        "status": "mon_001_distinct_dragon_family",
+        "path": "res://assets_external/enemies/Dragon.fbx",
+        "source": "Animated Monsters by Quaternius",
+        "source_url": "https://opengameart.org/sites/default/files/Animated%20Monster%20Pack%20by%20%40Quaternius.zip",
+        "license": "CC0 1.0",
+        "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
+        "target_height": 2.20,
+        "notes": "Distinct winged Raider body using the existing Dragon rig and attack clips at a grounded clearing scale."
+      },
       "ghoulkin_creature": {
         "status": "char_restore_001_retained_skeleton_family",
         "path": "res://assets_external/enemies/Skeleton.fbx",

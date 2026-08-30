@@ -797,8 +797,8 @@ func _try_build_mapped_body() -> bool:
 	if enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute", "bog_wretch", "gravebound_knight", "bell_eater", "rootbound_colossus", "ashwing", "halvern_boss", "white_hart_avatar"]:
 		visual_source = {
 			"ghoulkin": "ghoulkin_skeleton",
-			"wychwood_stalker": "ghoulkin_skeleton",
-			"wychwood_raider": "ghoulkin_skeleton",
+			"wychwood_stalker": "wychwood_stalker_creature",
+			"wychwood_raider": "wychwood_raider_creature",
 			"wychwood_brute": "ghoulkin_skeleton",
 			"bog_wretch": "bog_wretch_creature",
 			"gravebound_knight": "gravebound_knight_creature",
@@ -871,7 +871,15 @@ func _try_build_mapped_body() -> bool:
 			"death": "SkeletonArmature|Skeleton_Death"
 		})
 	elif uses_real_body:
-		if visual_source in ["ashwing_creature", "ashwing_boss"]:
+		if visual_source == "wychwood_stalker_creature":
+			animation_driver.configure(mapped, {
+				"idle":"BatArmature|Bat_Flying", "walk":"BatArmature|Bat_Flying",
+				"walk_back":"BatArmature|Bat_Flying", "strafe":"BatArmature|Bat_Flying",
+				"run":"BatArmature|Bat_Flying", "windup":"BatArmature|Bat_Attack",
+				"attack":"BatArmature|Bat_Attack2", "hit":"BatArmature|Bat_Hit",
+				"death":"BatArmature|Bat_Death"
+			})
+		elif visual_source in ["ashwing_creature", "ashwing_boss", "wychwood_raider_creature"]:
 			animation_driver.configure(mapped, {
 				"idle":"DragonArmature|Dragon_Flying", "walk":"DragonArmature|Dragon_Flying",
 				"walk_back":"DragonArmature|Dragon_Flying", "strafe":"DragonArmature|Dragon_Flying",
@@ -1516,7 +1524,11 @@ func _find_first_mesh(root: Node) -> MeshInstance3D:
 
 func _apply_material(root: Node, material: Material) -> void:
 	if root is MeshInstance3D:
-		root.material_override = material
+		# Preserve authored animal eyes while applying the Wychwood role tint to
+		# the body, so distinct silhouettes also retain readable faces.
+		var mesh_name := str(root.name).to_lower()
+		if not (mesh_name.contains("eye") or mesh_name.contains("pupil")):
+			root.material_override = material
 	for child in root.get_children():
 		_apply_material(child, material)
 
