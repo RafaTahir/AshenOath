@@ -62,7 +62,8 @@ var cloak_motion_proxy: MeshInstance3D
 var asset_helper
 var animation_driver
 var move_phase = 0.0
-var step_phase = 0.0
+var footstep_distance = 0.0
+var animation_step_signal_bound := false
 var attack_anim_time = 0.0
 var attack_anim_heavy = false
 var pending_attack_damage := 0.0
@@ -1188,6 +1189,9 @@ func _try_build_mapped_body() -> bool:
 		_add_mapped_weapon_visuals()
 	else:
 		animation_driver.set_update_rate_hz(30.0)
+		if animation_driver.has_signal("locomotion_step") and not animation_driver.locomotion_step.is_connected(_on_animation_locomotion_step):
+			animation_driver.locomotion_step.connect(_on_animation_locomotion_step)
+			animation_step_signal_bound = true
 		_add_slash_arc_visuals()
 	return true
 
@@ -1195,34 +1199,34 @@ func _animation_map_for_visual(mapped: Node3D) -> Dictionary:
 	var family := str(mapped.get_meta("character_animation_family", "")).to_lower()
 	if family.contains("warrior"):
 		return {
-			"idle": "Idle", "walk": "Walk", "walk_back": "Walk", "strafe": "Walk", "run": "Run",
+			"idle": "Idle", "walk": "Walk", "walk_back": "Walk_Back", "strafe": "Walk", "run": "Run", "run_back": "Run_Back",
 			"jump": "Roll", "attack_light": "Sword_Attack", "attack_heavy": "Sword_Attack2",
 			"dodge": "Roll", "parry": "Idle_Weapon", "beam_cast": "Idle_Weapon",
 			"hit": "RecieveHit", "death": "Death"
 		}
 	if family.contains("cleric"):
 		return {
-			"idle": "Idle", "walk": "Walk", "walk_back": "Walk", "strafe": "Walk", "run": "Run",
+			"idle": "Idle", "walk": "Walk", "walk_back": "Walk_Back", "strafe": "Walk", "run": "Run", "run_back": "Run_Back",
 			"jump": "Run", "attack_light": "Staff_Attack", "attack_heavy": "Staff_Attack",
 			"dodge": "Run", "parry": "Idle_Weapon", "beam_cast": "Spell1",
 			"hit": "RecieveHit", "death": "Death"
 		}
 	if family.contains("rogue"):
 		return {
-			"idle": "Idle", "walk": "Walk", "walk_back": "Walk", "strafe": "Walk", "run": "Run",
+			"idle": "Idle", "walk": "Walk", "walk_back": "Walk_Back", "strafe": "Walk", "run": "Run", "run_back": "Run_Back",
 			"jump": "Roll", "attack_light": "Dagger_Attack", "attack_heavy": "Dagger_Attack2",
 			"dodge": "Roll", "parry": "Attacking_Idle", "beam_cast": "Attacking_Idle",
 			"hit": "RecieveHit", "death": "Death"
 		}
 	if family.contains("monk"):
 		return {
-			"idle": "Idle", "walk": "Walk", "walk_back": "Walk", "strafe": "Walk", "run": "Run",
+			"idle": "Idle", "walk": "Walk", "walk_back": "Walk_Back", "strafe": "Walk", "run": "Run", "run_back": "Run_Back",
 			"jump": "Roll", "attack_light": "Attack", "attack_heavy": "Attack2",
 			"dodge": "Roll", "parry": "Idle_Attacking", "beam_cast": "Idle_Attacking",
 			"hit": "RecieveHit", "death": "Death"
 		}
 	return {
-		"idle": "Idle", "walk": "Walk", "walk_back": "Walk", "strafe": "Walk", "run": "Sprint",
+		"idle": "Idle", "walk": "Walk", "walk_back": "Walk_Back", "strafe": "Walk", "run": "Sprint", "run_back": "Run_Back",
 		"jump": "Jump_Start", "attack_light": "Sword_Attack", "attack_heavy": "Sword_Attack_RM",
 		"dodge": "Roll", "parry": "Sword_Idle", "beam_cast": "Spell_Simple_Idle",
 		"hit": "Hit_Chest", "death": "Death01"
@@ -1587,12 +1591,11 @@ func _animate_visuals(delta: float, move_dir: Vector3, moving: bool) -> void:
 			animation_driver.trigger_action("dodge")
 	if moving:
 		move_phase += delta * (8.7 if running else 6.2)
-		step_phase += delta * (3.05 if running else 2.15)
-		if step_phase >= 1.0:
-			step_phase = 0.0
-			footstep.emit()
+		if not animation_step_signal_bound:
+			_update_distance_footsteps(delta, running)
 	else:
 		move_phase += delta * 1.45
+		footstep_distance = 0.0
 	var speed_factor = clamp(Vector2(velocity.x, velocity.z).length() / max(run_speed, 0.1), 0.0, 1.0)
 	movement_blend = lerp(movement_blend, speed_factor, 1.0 - exp(-10.0 * delta))
 	strafe_blend = lerp(strafe_blend, 1.0 if movement_state == "strafe" else 0.0, 1.0 - exp(-9.0 * delta))
@@ -1665,6 +1668,28 @@ func _animate_visuals(delta: float, move_dir: Vector3, moving: bool) -> void:
 		var mat = body_visual.material_override as StandardMaterial3D
 		if mat != null:
 			mat.albedo_color = body_base_color.lerp(Color(0.72, 0.22, 0.12), 0.72) if hurt_flash_time > 0.0 else body_base_color
+
+func _on_animation_locomotion_step(_side: StringName) -> void:
+	# Animation contact is authoritative for rigged bodies. Gate it against
+	# actual movement so a blocked actor cannot produce a stream of footsteps
+	# while its clip is still blending out.
+	if movement_state not in ["walk", "backward", "strafe", "run"]:
+		return
+	if not is_on_floor() or Vector2(velocity.x, velocity.z).length() < 0.18:
+		return
+	footstep.emit()
+
+func _update_distance_footsteps(delta: float, running: bool) -> void:
+	if not is_on_floor():
+		return
+	var horizontal_speed := Vector2(velocity.x, velocity.z).length()
+	if horizontal_speed < 0.18:
+		return
+	footstep_distance += horizontal_speed * delta
+	var step_distance := 1.52 if running else (1.22 if movement_state == "backward" else 1.34)
+	while footstep_distance >= step_distance:
+		footstep_distance -= step_distance
+		footstep.emit()
 
 func _animate_motion_proxies(delta: float, moving: bool, speed_factor: float, dodge_weight: float, hurt_weight: float, block_weight: float, windup_weight: float, swing_weight: float) -> void:
 	var gait = sin(move_phase)

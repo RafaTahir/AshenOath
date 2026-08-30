@@ -15,7 +15,7 @@ func _initialize() -> void:
 	check(_contains_label(hud.menu_layer, "SOUL REBUILD"), "Menu build identity is stale")
 	for label in ["New Game", "Continue", "Controls", "Settings", "Credits", "Quit"]:
 		check(_button(hud.menu_layer, label) != null, "Main menu action is missing: %s" % label)
-	check("DEVELOPMENT CANDIDATE" in hud.MENU_BUILD_LABEL, "Development menu identity is stale")
+	check("SOUL REBUILD" in hud.MENU_BUILD_LABEL and "NATIVE 720P" in hud.MENU_BUILD_LABEL, "Menu build identity is stale")
 	hud.show_exit_notice()
 	check(_contains_label(hud.menu_layer, "cannot close a browser tab"), "Browser-safe exit notice is missing")
 	hud.hide_menus()
