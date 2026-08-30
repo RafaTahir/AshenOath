@@ -4563,9 +4563,17 @@ func _configure_npc_animation(mapped: Node3D, id: String) -> void:
 	driver.name = "CharacterAnimationDriver"
 	mapped.add_child(driver)
 	driver.configure(mapped, clips)
-	# Named NPCs remain animated at a steady presentation rate, while avoiding
-	# synchronizing ten skeletal evaluators on the same Compatibility frame.
-	driver.set_update_rate_hz(30.0)
+	# Interior archive actors are few and remain in view during the record-hall
+	# presentation. Let Godot's normal animation callback distribute their small
+	# updates per frame; manual 15 Hz advances create a visible CPU spike every
+	# fourth frame on the Compatibility renderer. The player and combat actors
+	# retain their explicit gameplay rates.
+	var npc_animation_rate := 30.0
+	if current_zone_id in ["record_hall", "undercroft"]:
+		npc_animation_rate = 0.0
+	elif current_zone_id in ["vargan_approach", "vargan_court", "assembly"]:
+		npc_animation_rate = 20.0
+	driver.set_update_rate_hz(npc_animation_rate)
 
 func _stage_dialogue_moment(area) -> void:
 	if player == null or area == null or not (area is Node3D):
