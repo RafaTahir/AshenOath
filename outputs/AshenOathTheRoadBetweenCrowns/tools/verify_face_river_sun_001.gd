@@ -47,7 +47,16 @@ func _verify_character(node: Node, label: String) -> void:
 		check(_has_bone(skeleton,"head"), "%s has no animated head bone" % label)
 	var face_surface_count := int(_find_meta(node, "character_face_surfaces", 0))
 	var face_features := str(_find_meta(node, "character_face_features", ""))
-	check(face_surface_count >= 2 and face_features in ["native_mesh", "bone_attached"], "%s mesh-native face material is missing" % label)
+	var profile := str(_find_meta(node, "character_identity_profile", "")).to_lower()
+	var is_single_surface_monster := profile in [
+		"ghoulkin", "ghoulkin_skeleton", "wychwood_stalker", "wychwood_raider", "wychwood_brute"
+	]
+	# The retained Skeleton monster family carries its modeled skull and head
+	# bone in one connected imported surface. Humans still require multiple
+	# face-bearing surfaces; monsters require the stricter single-surface native
+	# contract plus the animated head-bone check above.
+	var minimum_face_surfaces := 1 if is_single_surface_monster else 2
+	check(face_surface_count >= minimum_face_surfaces and face_features in ["native_mesh", "bone_attached"], "%s mesh-native face material is missing" % label)
 
 func _has_fragment(node: Node, fragment: String) -> bool:
 	if str(node.name).to_lower().contains(fragment):

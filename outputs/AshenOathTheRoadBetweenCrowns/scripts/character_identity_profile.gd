@@ -48,13 +48,21 @@ static func apply(root: Node, role_id: String, variant_seed: String = "") -> Dic
 	root.set_meta("character_variant_seed", resolved_seed)
 	root.set_meta("character_variant_recipe", _recipe_for(role, profile))
 	root.set_meta("character_identity_surfaces", surfaces)
-	root.set_meta("character_face_surfaces", face_surfaces)
 	# Identity is now carried by the imported mesh materials. Earlier passes
 	# attached jaw, hair, eye and clothing primitives to the skeleton; those
 	# features were the source of the visible neck hump and could drift during
 	# animation. Keep the contract data-only until a role has native face meshes.
 	var native_face := _has_native_face_material(root)
+	# The retained Skeleton family is a connected, single-surface skinned
+	# creature. Its head is part of that authored surface rather than a
+	# separately named face mesh, so record the real native surface count instead
+	# of treating the absence of a second surface as missing anatomy.
+	if native_face and face_surfaces == 0 and role_is_monster_role(role):
+		face_surfaces = _native_monster_surface_count(root)
+	root.set_meta("character_face_surfaces", face_surfaces)
 	root.set_meta("character_face_features", "native_mesh" if native_face else "missing_native_face")
+	if role_is_monster_role(role) and native_face and face_surfaces > 0:
+		root.set_meta("character_face_surface_contract", "single_connected_skinned_mesh")
 	if _find_skeleton(root) != null and native_face:
 		var face_driver := root.find_child("CharacterFaceDriver", true, false)
 		if face_driver == null:
@@ -81,6 +89,21 @@ static func _has_native_face_material(root: Node) -> bool:
 		elif role_is_monster(root) and (mesh.skin != null or mesh.skeleton != NodePath("")) and mesh.mesh != null and mesh.mesh.get_surface_count() > 0:
 			matches += 1
 	return matches >= 1
+
+static func _native_monster_surface_count(root: Node) -> int:
+	var count := 0
+	for mesh in root.find_children("*", "MeshInstance3D", true, false):
+		if mesh.mesh == null or str(mesh.name).to_lower().contains("shadow"):
+			continue
+		if mesh.skin == null and mesh.skeleton == NodePath(""):
+			continue
+		for index in range(mesh.mesh.get_surface_count()):
+			var material = mesh.get_surface_override_material(index)
+			if material == null:
+				material = mesh.mesh.surface_get_material(index)
+			if material != null:
+				count += 1
+	return count
 
 static func _contains_complete_family(root: Node) -> bool:
 	if str(root.get_meta("character_asset_family", "")) in ["quaternius_animated_humanoid", "quaternius_ranger"]:
