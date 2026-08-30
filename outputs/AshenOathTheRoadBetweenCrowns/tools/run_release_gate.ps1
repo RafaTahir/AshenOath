@@ -262,6 +262,22 @@ function Invoke-GodotGate([string]$Name, [string[]]$Arguments, [string]$Executab
     Write-Host ("RELEASE GATE {0}: PASS ({1:n1}s)" -f $Name, $timer.Elapsed.TotalSeconds)
 }
 
+function Sync-QAWebPacks {
+    $sourcePackDirectory = Join-Path $Web "packs"
+    if (-not (Test-Path -LiteralPath $sourcePackDirectory)) {
+        throw "Verified Web export is missing runtime packs: $sourcePackDirectory"
+    }
+    $qaPackDirectory = Join-Path $QAWeb "packs"
+    New-Item -ItemType Directory -Force -Path $qaPackDirectory | Out-Null
+    foreach ($packName in @("opening", "campaign", "characters", "monsters", "audio")) {
+        $sourcePack = Join-Path $sourcePackDirectory "$packName.pck"
+        if (-not (Test-Path -LiteralPath $sourcePack)) {
+            throw "Verified Web export is missing runtime pack: $sourcePack"
+        }
+        Copy-Item -LiteralPath $sourcePack -Destination (Join-Path $qaPackDirectory "$packName.pck") -Force
+    }
+}
+
 try {
     if (!(Test-Path -LiteralPath $Godot)) { throw "Godot 4.6.3 console binary not found: $Godot" }
     if (!(Test-Path -LiteralPath $Python)) { throw "Bundled Python not found: $Python" }
@@ -440,6 +456,7 @@ try {
         Invoke-ExternalGate "qa_web_export" $Godot @(
             "--headless", "--path", $Project, "--export-release", "Web QA Browser"
         )
+        Sync-QAWebPacks
         Invoke-ExternalGate "verify_qa_002" $Godot @(
             "--headless", "--path", $Project, "--script", "tools/verify_qa_002.gd"
         )
@@ -469,6 +486,7 @@ try {
 		# The package and all preceding browser gates are already recorded in the
 		# release report. Resume only the failed full-campaign browser gate and
 		# its mobile companion against the verified QA export.
+		Sync-QAWebPacks
 		Invoke-ExternalGate "verify_web_002_browser" $Node @(
 			(Join-Path $Project "tools\verify_qa_002_browser.mjs"),
 			"--export", $QAWeb,
