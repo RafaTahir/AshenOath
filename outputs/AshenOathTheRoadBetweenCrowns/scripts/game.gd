@@ -75,7 +75,7 @@ var paused_by_menu = true
 var pending_ending = ""
 var removed_interactions = {}
 var autosave_cooldown = 180.0
-var last_safe_player_position = Vector3(0, 1, 7)
+var last_safe_player_position = Vector3(0, 1, 9.8)
 var tutorial_flags = {}
 var material_cache: Dictionary = {}
 var runtime_light_count := 0
@@ -447,7 +447,7 @@ func _start_new_game_world() -> void:
 	if route_zone_cache.has("greyfen"):
 		route_zone_signatures["greyfen"] = _zone_state_signature()
 	print("LOADING: new_game_stage=zone_dispatch elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
-	_load_zone("greyfen", Vector3(0, 1, 7))
+	_load_zone("greyfen", Vector3(0, 1, 9.8))
 	print("LOADING: new_game_stage=zone_return elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
 	hud.toast("Greyfen whispers about the old road. Sister Anwen is waiting at the shrine.")
 	hud.set_guidance_hint("E - Speak to Sister Anwen", 5.5)
@@ -684,7 +684,10 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		if zone_id in ["greyfen", "wychwood"]:
 			_add_visual_100_layer(zone_id)
 		_apply_first_route_materials(zone_root)
-		_validate_zone_render_resources(zone_root)
+		# The authoritative render-resource pass runs after the player, sky, and
+		# encounter roots are attached below. Walking a large campaign zone here as
+		# well doubled castle activation work without protecting an additional
+		# visible frame.
 		active_zone_signature = _zone_state_signature()
 	if zone_root != null:
 		zone_root.set_meta("zone_resource_owner", "active")
@@ -721,7 +724,10 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		audio.set_music_state(audio.music_state_for_zone(zone_id))
 		if zone_id == "greyfen":
 			audio.play_event("shrine_hum", 0.01)
-	var safe_spawn: Vector3 = spatial_service.nearest_safe(spawn_pos, spatial_service.bank_for(spawn_pos))
+	# Authored arrivals are already reserved by the zone builder. Preserve their
+	# exact route position here; nearest_safe() is an emergency recovery API and
+	# can otherwise move a valid arrival to a distant edge anchor.
+	var safe_spawn: Vector3 = spatial_service.validate_position(spawn_pos, 0.8, spatial_service.bank_for(spawn_pos))
 	if player == null:
 		_spawn_player(safe_spawn)
 	else:
@@ -738,10 +744,12 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	if life_controller != null:
 		life_controller.player = player
 	_install_opening_soundscape(zone_id)
-	# Sky and player equipment are created after the zone builder's first
-	# validation pass. Validate these late render roots before the first visible
-	# frame so procedural meshes cannot reach the renderer with empty surfaces.
-	_validate_zone_render_resources(zone_root)
+	# The builder and imported-asset helper attach validated materials as each
+	# mesh is created. The full zone tree is audited by lifecycle gates; doing the
+	# same recursive walk on every player transition adds visible latency on
+	# Compatibility/ANGLE, so keep that audit off the swap path.
+	# The late-created render roots still receive the fast, focused validation.
+	# The full zone tree is checked explicitly by verify_engine_003/004.
 	if visual_director != null:
 		_validate_zone_render_resources(visual_director)
 	if player != null:
@@ -1980,6 +1988,24 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 	zone_root = Node3D.new()
 	zone_root.name = "greyfen"
 	add_child(zone_root)
+	# Castle environment imports are otherwise paid on the first gate travel.
+	# Warm the shared resource cache while the menu still covers the viewport so
+	# the first Castle arrival remains a scene activation rather than an import.
+	if asset_helper != null and asset_helper.has_method("prewarm_roles"):
+		var castle_prewarm: Dictionary = asset_helper.prewarm_roles([
+			"castle_wall", "castle_arch", "castle_roof", "castle_door",
+			"castle_bookcase", "castle_chair", "castle_bench", "castle_table",
+			"castle_weapon_stand", "castle_lantern",
+			# Castle activation instantiates these same role resources. Warming their
+			# imported scenes behind the menu avoids paying first-use parse and
+			# skeleton setup on the gate's critical path.
+			"castle_guard_human", "villager_worker_human", "villager_female_human",
+			"road_ranger_human",
+		])
+		print("LOADING: Castle roles prewarmed loaded=%d missing=%d" % [
+			Array(castle_prewarm.get("loaded", [])).size(),
+			Array(castle_prewarm.get("missing", [])).size(),
+		])
 	runtime_light_count = 0
 	tree_batch_data.clear()
 	deadfall_batch_data.clear()
@@ -2010,7 +2036,7 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 	# Kael's rig and camera are also expensive to instantiate in WebGL. Prepare
 	# them while the launch/menu presentation is already covering the viewport.
 	phase_started = Time.get_ticks_msec()
-	_spawn_player(Vector3(0, 1, 7))
+	_spawn_player(Vector3(0, 1, 9.8))
 	var player_ms := Time.get_ticks_msec() - phase_started
 	# Keep the real gameplay view active behind the opaque menu so WebGL compiles
 	# the same skinned materials and camera path used after New Game.
@@ -3083,9 +3109,12 @@ func _is_river_recovery_position(zone: String, pos: Vector3) -> bool:
 	var river_z := _river_center(zone)
 	if river_z > 900.0:
 		return false
-	# The bridge deck occupies the river exclusion band by design. Let the
-	# player capsule settle onto its collision before considering recovery.
-	if spatial_service != null and spatial_service.zone_id == zone and not spatial_service.is_river_excluded(pos, 0.0) and pos.y >= 0.18:
+	# The bridge deck occupies the river exclusion band by design. It is flush
+	# with the banks, so identify the legal crossing by the full bridge corridor
+	# rather than by actor height. This also prevents the recovery guard from
+	# snapping a player off the deck while stepping onto the far bank.
+	var on_bridge_deck := pos.y >= 0.2 and absf(pos.x) <= 2.72 and absf(pos.z - river_z) <= 3.15
+	if on_bridge_deck:
 		return false
 	return absf(pos.z-river_z) < 2.0 and (absf(pos.x) > 2.7 or pos.y < 0.12)
 
@@ -4575,9 +4604,20 @@ func _configure_npc_animation(mapped: Node3D, id: String) -> void:
 	driver.name = "CharacterAnimationDriver"
 	mapped.add_child(driver)
 	driver.configure(mapped, clips)
-	# Named NPCs remain animated at a steady presentation rate, while avoiding
-	# synchronizing ten skeletal evaluators on the same Compatibility frame.
-	driver.set_update_rate_hz(30.0)
+	# Interior archive actors are few and remain in view during the record-hall
+	# presentation. Let Godot's normal animation callback distribute their small
+	# updates per frame; manual 15 Hz advances create a visible CPU spike every
+	# fourth frame on the Compatibility renderer. The player and combat actors
+	# retain their explicit gameplay rates.
+	var npc_animation_rate := 30.0
+	if current_zone_id in ["record_hall", "undercroft"]:
+		# Let the archive's small cast use the imported idle callback. The manual
+		# timer advances several skin poses together and creates a larger periodic
+		# Compatibility spike than the normal callback path.
+		npc_animation_rate = 0.0
+	elif current_zone_id in ["vargan_approach", "vargan_court", "assembly"]:
+		npc_animation_rate = 20.0
+	driver.set_update_rate_hz(npc_animation_rate)
 
 func _stage_dialogue_moment(area) -> void:
 	if player == null or area == null or not (area is Node3D):
@@ -4844,7 +4884,20 @@ func _interaction_target_valid(area: Area3D) -> bool:
 	query.collide_with_areas = false
 	query.collide_with_bodies = true
 	var hit := get_world_3d().direct_space_state.intersect_ray(query)
-	return hit.is_empty()
+	if hit.is_empty():
+		return true
+	# A named character's skinned body is the intended target, not an
+	# obstruction. At conversation distance the eye-line ray naturally lands on
+	# the speaker's own capsule or imported mesh. Accept only a collider that is
+	# spatially bound to this interaction; unrelated scenery still blocks focus.
+	var collider := hit.get("collider") as Node3D
+	if collider != null:
+		var current: Node = collider
+		while current != null:
+			if current == area or (current is Node3D and (current as Node3D).global_position.distance_to(area.global_position) <= 1.2):
+				return true
+			current = current.get_parent()
+	return false
 
 func _set_interactable_label_visible(area: Node, visible: bool) -> void:
 	var label := area.find_child("InteractionWorldLabel", true, false) as Label3D
@@ -5356,6 +5409,12 @@ func _make_multimesh_batch(node_name: String, mesh: Mesh, count: int, material: 
 	instance.multimesh = batch
 	instance.material_override = _valid_material_or_fallback(material)
 	instance.visibility_range_end = 58.0
+	if _compatibility_budget_mode():
+		# Static environment batches do not need individual shadow maps on the
+		# Compatibility/ANGLE target. The authored directional light and contact
+		# materials still ground the route while this removes repeated shadow
+		# submissions from Greyfen and forest dressing.
+		instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	zone_root.add_child(instance)
 	return instance
 
@@ -5617,14 +5676,20 @@ func _make_prop_box(name: String, pos: Vector3, size: Vector3, color: Color) -> 
 	# Decorative gate landmarks can be rebuilt around the opening by their caller.
 	if spatial_service != null and spatial_service.is_reserved(pos, maxf(size.x, size.z) * 0.5 + 0.35):
 		return
+	var lower := name.to_lower()
 	var separate_body := name in ["NorthBerm","SouthBerm","WestBerm","EastBerm"]
-	var body: StaticBody3D
-	if separate_body:
+	# Thin seams, ledges, trim, and surface dressing are visual detail rather
+	# than walkable blockers. Avoid creating hundreds of tiny physics shapes for
+	# them; major walls, buildings, fences, and route props retain authoritative
+	# collision below the detail threshold.
+	var decorative_only := size.y <= 0.28 and not _prop_requires_collision(lower)
+	var body: StaticBody3D = null
+	if not decorative_only and separate_body:
 		body = StaticBody3D.new()
 		body.name = name
 		body.position = pos
 		zone_root.add_child(body)
-	else:
+	elif not decorative_only:
 		if prop_collision_body == null:
 			prop_collision_body = StaticBody3D.new()
 			prop_collision_body.name = "BatchedPropCollisions"
@@ -5635,16 +5700,16 @@ func _make_prop_box(name: String, pos: Vector3, size: Vector3, color: Color) -> 
 	var box = BoxShape3D.new()
 	box.size = size
 	shape.shape = box
-	if not separate_body:
-		shape.position = pos
-	body.add_child(shape)
+	if not decorative_only:
+		if not separate_body:
+			shape.position = pos
+		body.add_child(shape)
 	var mesh = MeshInstance3D.new()
 	mesh.mesh = shared_box_mesh
 	mesh.scale = size
-	var lower := name.to_lower()
 	if lower.contains("glow") or lower.contains("window") or lower.contains("coal") or lower.contains("candle"):
 		mesh.material_override = _emissive_mat(color, 0.65)
-		if separate_body:
+		if separate_body and body != null:
 			body.add_child(mesh)
 		else:
 			mesh.position = pos
@@ -5672,6 +5737,12 @@ func _make_prop_box(name: String, pos: Vector3, size: Vector3, color: Color) -> 
 		if not prop_batch_data.has(batch_key):
 			prop_batch_data[batch_key] = {"material": material, "transforms": []}
 		prop_batch_data[batch_key].transforms.append(Transform3D(Basis.IDENTITY.scaled(size), pos))
+
+func _prop_requires_collision(lower_name: String) -> bool:
+	return lower_name.contains("wall") or lower_name.contains("fence") or lower_name.contains("rail") \
+		or lower_name.contains("post") or lower_name.contains("door") or lower_name.contains("gate") \
+		or lower_name.contains("tower") or lower_name.contains("stable") or lower_name.contains("house") \
+		or lower_name.contains("building") or lower_name.contains("bridge") or lower_name.contains("berm")
 
 func _is_first_route_clearance(pos: Vector3, radius: float = 0.0) -> bool:
 	if current_zone_id == "greyfen":

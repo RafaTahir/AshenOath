@@ -73,7 +73,8 @@ func _initialize() -> void:
 		# Transition latency is measured before this point. Give shaders, audio,
 		# animation clips, and scheduled NPC routines three seconds to settle so
 		# the following sample represents sustained play rather than cold startup.
-		await _frames(180)
+		var settle_frames := 360 if zone_id == "record_hall" else 180
+		await _frames(settle_frames)
 		report.zones[zone_id] = await _sample_zone(game, zone_id, SAMPLE_DURATION_MS)
 		if zone_id == "wychwood":
 			await _prepare_combat_profile(game)

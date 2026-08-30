@@ -10,16 +10,16 @@ The Web shell now exposes a visible build/pack identity, keeps New Game
 clickable during Greyfen prewarm, and presents Retry when boot or pack
 preparation fails. The Crow Flight activity remains optional while loading.
 
-The current local Web candidate is 12 files totaling 93,388,231 bytes
-(89.1 MB by the Web export verifier). Its root PCK is 1,869,552 bytes with
-SHA-256 `494ef4c3a52d9bc8977aaae4f4fac1e3ca1f967f0e96780bb518367ac43adea9`.
+The current local Web candidate is 12 files totaling 93,393,239 bytes
+(89.1 MB by the Web export verifier). Its root PCK is 1,874,352 bytes with
+SHA-256 `5c8b8b7136cbb19b32f980497329958660c7b15444132b0cea996157416714b9`.
 The candidate contains the cache-busted shell identity
 `A-SET-RESTORE-001 | packs a-set-20260830` and five verified streamed packs.
 
 Fresh isolated browser checks pass in Chrome and Edge at 1280x720 WebGL2,
 with real New Game activation and no console, resource, or WebGL errors.
-Chrome measured 10.59 s engine-ready and 8.06 s New Game readiness; Edge
-measured 18.11 s and 17.16 s. These timings are recorded as remaining
+Chrome measured 10.54 s engine-ready and 7.25 s New Game readiness; Edge
+measured 9.03 s and 6.51 s. These timings are recorded as remaining
 startup optimization debt rather than hidden by the release evidence.
 
 The targeted `web`, `assets`, and `characters` profiles pass, as do the

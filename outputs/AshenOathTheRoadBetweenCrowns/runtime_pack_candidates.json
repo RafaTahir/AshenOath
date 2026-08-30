@@ -1,20 +1,20 @@
 {
   "schema_version": 1,
   "ticket": "PACK-003",
-  "generated_at_utc": "2026-08-30T13:09:09.0102255Z",
+  "generated_at_utc": "2026-08-30T13:23:33.4709429Z",
   "project": "Ashen Oath",
   "artifact_directory": "external_runtime_packs",
   "artifacts_are_external": true,
   "max_deployment_bytes": 104857600,
-  "total_bytes": 54719468,
+  "total_bytes": 54721980,
   "packs": [
     {
       "id": "base",
       "version": "dev",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
-      "bytes": 1261316,
-      "sha256": "7b726c7688b66918ebe26f384e2b3e7f13d544b70179cc24ea2b76a7a4cc1208",
+      "bytes": 1263620,
+      "sha256": "e7d87d5fe631a231cbf368a7dcdf3f34ffc309990697d4c5da9cec772052f17e",
       "status": "candidate_external",
       "log": "base.log"
     },
@@ -23,8 +23,8 @@
       "version": "dev",
       "preset": "Runtime Pack Opening",
       "artifact": "opening.pck",
-      "bytes": 27584888,
-      "sha256": "bae55f9c73e0788e26edb51830392d53f0e10bba62136daf2f554605e1e57f7b",
+      "bytes": 27585096,
+      "sha256": "f8d5c0d86bd4c6d915ca1c3f9ad2b0a9605cb459146f91f62362e0e22891dedf",
       "status": "candidate_external",
       "log": "opening.log"
     },

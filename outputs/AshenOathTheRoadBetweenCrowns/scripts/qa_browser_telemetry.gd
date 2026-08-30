@@ -237,7 +237,6 @@ func _poll_command() -> void:
 			_command_result = {"action": action, "target": target_id, "ok": true, "position": _vector(player.global_position)}
 		_:
 			_command_result.error = "unsupported command"
-
 func _performance_state() -> Dictionary:
 	if _frame_times.is_empty():
 		return {"average_fps": 0.0, "one_percent_low_fps": 0.0, "samples": 0}

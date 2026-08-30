@@ -187,6 +187,7 @@ var gamepad_profiles: Dictionary = {}
 var virtual_move := Vector2.ZERO
 var virtual_look := Vector2.ZERO
 var _virtual_actions: Dictionary = {}
+var _keyboard_pressed: Dictionary = {}
 var keyboard_labels: Dictionary = KEYBOARD_LABELS.duplicate()
 var input_context := CONTEXT_MENU
 var last_disconnected_gamepad_id := -1
@@ -345,7 +346,18 @@ func format_binding(event: InputEvent) -> String:
 	return "Unbound"
 
 func _input(event: InputEvent) -> void:
-	if event is InputEventJoypadButton and event.pressed:
+	if event is InputEventKey:
+		var key_event := event as InputEventKey
+		# Web pointer capture can clear Godot's action cache while a physical key
+		# is still held. Retain the raw key state so movement and held actions do
+		# not stop after the first captured frame.
+		if key_event.keycode > 0:
+			_keyboard_pressed[key_event.keycode] = key_event.pressed
+		if key_event.physical_keycode > 0:
+			_keyboard_pressed[key_event.physical_keycode] = key_event.pressed
+		if key_event.pressed and not key_event.echo:
+			_set_device(DEVICE_KEYBOARD_MOUSE)
+	elif event is InputEventJoypadButton and event.pressed:
 		active_gamepad_id = maxi(event.device, 0)
 		_set_gamepad(active_gamepad_id)
 		_set_device(DEVICE_GAMEPAD)
@@ -353,8 +365,6 @@ func _input(event: InputEvent) -> void:
 		active_gamepad_id = maxi(event.device, 0)
 		_set_gamepad(active_gamepad_id)
 		_set_device(DEVICE_GAMEPAD)
-	elif event is InputEventKey and event.pressed and not event.echo:
-		_set_device(DEVICE_KEYBOARD_MOUSE)
 	elif event is InputEventMouseButton and event.pressed:
 		_set_device(DEVICE_KEYBOARD_MOUSE)
 	elif event is InputEventMouseMotion and event.relative.length_squared() > 9.0:
@@ -362,6 +372,17 @@ func _input(event: InputEvent) -> void:
 
 func movement_vector() -> Vector2:
 	var physical := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
+	var raw_keyboard := Vector2.ZERO
+	if _raw_action_pressed(&"move_left"):
+		raw_keyboard.x -= 1.0
+	if _raw_action_pressed(&"move_right"):
+		raw_keyboard.x += 1.0
+	if _raw_action_pressed(&"move_forward"):
+		raw_keyboard.y -= 1.0
+	if _raw_action_pressed(&"move_back"):
+		raw_keyboard.y += 1.0
+	if raw_keyboard.length_squared() > physical.length_squared():
+		physical = raw_keyboard.limit_length(1.0)
 	if active_device == DEVICE_GAMEPAD:
 		physical = _shape_stick(physical, gamepad_deadzone, false)
 	return physical if physical.length_squared() >= virtual_move.length_squared() else virtual_move
@@ -396,7 +417,23 @@ func _shape_stick(value: Vector2, deadzone: float, apply_inversion: bool) -> Vec
 func is_action_pressed(action: StringName) -> bool:
 	if active_device == DEVICE_TOUCH and action == &"run" and virtual_move.length() > 0.82:
 		return true
-	return Input.is_action_pressed(action)
+	return Input.is_action_pressed(action) or _raw_action_pressed(action)
+
+func _raw_action_pressed(action: StringName) -> bool:
+	if not InputMap.has_action(action):
+		return false
+	for event in InputMap.action_get_events(action):
+		if not event is InputEventKey:
+			continue
+		var key_event := event as InputEventKey
+		if key_event.keycode > 0 and bool(_keyboard_pressed.get(key_event.keycode, false)):
+			return true
+		if key_event.physical_keycode > 0 and bool(_keyboard_pressed.get(key_event.physical_keycode, false)):
+			return true
+	return false
+
+func debug_keyboard_state() -> Dictionary:
+	return _keyboard_pressed.duplicate()
 
 func is_action_just_pressed(action: StringName) -> bool:
 	return Input.is_action_just_pressed(action)

@@ -17,9 +17,9 @@ Branch: `codex/masterpiece-rebuild`
 
 - Candidate: `outputs/AshenOath_Web`
 - Shape: 12 files, including five external runtime packs
-- Total: 93,388,231 bytes (89.1 MB by `verify_web_export.py`)
-- Root PCK: 1,869,552 bytes
-- Root PCK SHA-256: `494ef4c3a52d9bc8977aaae4f4fac1e3ca1f967f0e96780bb518367ac43adea9`
+- Total: 93,393,239 bytes (89.1 MB by `verify_web_export.py`)
+- Root PCK: 1,874,352 bytes
+- Root PCK SHA-256: `5c8b8b7136cbb19b32f980497329958660c7b15444132b0cea996157416714b9`
 - Shell ID: `A-SET-RESTORE-001`
 - Pack contract: `a-set-20260830`
 
@@ -63,9 +63,9 @@ evidence limitation, not converted into a false pass.
 
 ## Browser Measurements
 
-- Chrome: 1280x720 WebGL2, engine-ready 10,591 ms, New Game ready 8,057 ms,
+- Chrome: 1280x720 WebGL2, engine-ready 10,541 ms, New Game ready 7,253 ms,
   JavaScript heap 11.5 MB, no console errors.
-- Edge: 1280x720 WebGL2, engine-ready 18,110 ms, New Game ready 17,162 ms,
+- Edge: 1280x720 WebGL2, engine-ready 9,033 ms, New Game ready 6,507 ms,
   JavaScript heap 11.5 MB, no console errors.
 
 The startup path is reliable but remains slower than the long-term cold-boot
@@ -92,5 +92,5 @@ node tools\verify_web_browser.mjs --export ..\AshenOath_Web --browser chrome
 node tools\verify_web_browser.mjs --export ..\AshenOath_Web --browser edge
 ```
 
-Deployment promotion and the final live PCK comparison are recorded after
-the checkpoint is pushed.
+The final live PCK comparison is recorded in the deployment section of the
+task completion report after promotion.
