@@ -315,7 +315,11 @@ async function startNewGame(cdp, expectedUrl) {
   await cdp.send("Input.dispatchMouseEvent", { type: "mousePressed", x: 1015, y: 227, button: "left", clickCount: 1 }, INPUT_TIMEOUT_MS);
   await sleep(70);
   await cdp.send("Input.dispatchMouseEvent", { type: "mouseReleased", x: 1015, y: 227, button: "left", clickCount: 1 }, INPUT_TIMEOUT_MS);
-  await waitFor(async () => (await telemetry(cdp))?.new_game_ready, "Greyfen menu prewarm", 15000);
+  // Cold QA exports may spend several seconds compiling the Compatibility
+  // renderer while the prewarm signal is already progressing. Keep this a
+  // bounded readiness gate, but do not turn normal first-run compilation into
+  // a false browser failure.
+  await waitFor(async () => (await telemetry(cdp))?.new_game_ready, "Greyfen menu prewarm", 45000);
   await sleep(420);
   // The menu rebuild is scaled from the 1920x1080 UI canvas. Click the center
   // of the focused New Game control through the real browser input path.
