@@ -31,7 +31,10 @@ def main() -> int:
     hud = (project / "scripts" / "hud.gd").read_text(encoding="utf-8")
     failures: list[str] = []
 
-    if len(re.findall(r"^\[preset\.\d+\]$", preset, re.MULTILINE)) != 2:
+    web_preset_names = re.findall(
+        r'^\[preset\.\d+\]\s*\n\s*name="([^"]+)"', preset, re.MULTILINE
+    )
+    if web_preset_names.count("Web Browser") != 1 or web_preset_names.count("Web QA Browser") != 1:
         failures.append("one production Web preset and one disposable QA Web preset are required")
     for zone, relative in REQUIRED_ZONES.items():
         resource = f'res://{relative}'
