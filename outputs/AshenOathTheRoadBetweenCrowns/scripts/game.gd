@@ -5378,6 +5378,12 @@ func _make_multimesh_batch(node_name: String, mesh: Mesh, count: int, material: 
 	instance.multimesh = batch
 	instance.material_override = _valid_material_or_fallback(material)
 	instance.visibility_range_end = 58.0
+	if _compatibility_budget_mode():
+		# Static environment batches do not need individual shadow maps on the
+		# Compatibility/ANGLE target. The authored directional light and contact
+		# materials still ground the route while this removes repeated shadow
+		# submissions from Greyfen and forest dressing.
+		instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	zone_root.add_child(instance)
 	return instance
 
@@ -5639,14 +5645,20 @@ func _make_prop_box(name: String, pos: Vector3, size: Vector3, color: Color) -> 
 	# Decorative gate landmarks can be rebuilt around the opening by their caller.
 	if spatial_service != null and spatial_service.is_reserved(pos, maxf(size.x, size.z) * 0.5 + 0.35):
 		return
+	var lower := name.to_lower()
 	var separate_body := name in ["NorthBerm","SouthBerm","WestBerm","EastBerm"]
-	var body: StaticBody3D
-	if separate_body:
+	# Thin seams, ledges, trim, and surface dressing are visual detail rather
+	# than walkable blockers. Avoid creating hundreds of tiny physics shapes for
+	# them; major walls, buildings, fences, and route props retain authoritative
+	# collision below the detail threshold.
+	var decorative_only := size.y <= 0.28 and not _prop_requires_collision(lower)
+	var body: StaticBody3D = null
+	if not decorative_only and separate_body:
 		body = StaticBody3D.new()
 		body.name = name
 		body.position = pos
 		zone_root.add_child(body)
-	else:
+	elif not decorative_only:
 		if prop_collision_body == null:
 			prop_collision_body = StaticBody3D.new()
 			prop_collision_body.name = "BatchedPropCollisions"
@@ -5657,16 +5669,16 @@ func _make_prop_box(name: String, pos: Vector3, size: Vector3, color: Color) -> 
 	var box = BoxShape3D.new()
 	box.size = size
 	shape.shape = box
-	if not separate_body:
-		shape.position = pos
-	body.add_child(shape)
+	if not decorative_only:
+		if not separate_body:
+			shape.position = pos
+		body.add_child(shape)
 	var mesh = MeshInstance3D.new()
 	mesh.mesh = shared_box_mesh
 	mesh.scale = size
-	var lower := name.to_lower()
 	if lower.contains("glow") or lower.contains("window") or lower.contains("coal") or lower.contains("candle"):
 		mesh.material_override = _emissive_mat(color, 0.65)
-		if separate_body:
+		if separate_body and body != null:
 			body.add_child(mesh)
 		else:
 			mesh.position = pos
@@ -5694,6 +5706,12 @@ func _make_prop_box(name: String, pos: Vector3, size: Vector3, color: Color) -> 
 		if not prop_batch_data.has(batch_key):
 			prop_batch_data[batch_key] = {"material": material, "transforms": []}
 		prop_batch_data[batch_key].transforms.append(Transform3D(Basis.IDENTITY.scaled(size), pos))
+
+func _prop_requires_collision(lower_name: String) -> bool:
+	return lower_name.contains("wall") or lower_name.contains("fence") or lower_name.contains("rail") \
+		or lower_name.contains("post") or lower_name.contains("door") or lower_name.contains("gate") \
+		or lower_name.contains("tower") or lower_name.contains("stable") or lower_name.contains("house") \
+		or lower_name.contains("building") or lower_name.contains("bridge") or lower_name.contains("berm")
 
 func _is_first_route_clearance(pos: Vector3, radius: float = 0.0) -> bool:
 	if current_zone_id == "greyfen":
