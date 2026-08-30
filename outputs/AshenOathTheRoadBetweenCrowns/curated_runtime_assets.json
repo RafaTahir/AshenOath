@@ -79,6 +79,8 @@
     }
   },
   "quarantine": [
-     {"path":"res://assets_external/enemies/Skeleton.fbx","reason":"Retained validated monster source; role-specific profile styling is applied by EnemyAI."}
+    {"path":"res://assets_external/animated/Warrior_Animated_CC0.gltf","reason":"ART-001 rejected: faceless and role-inappropriate for Kael."},
+    {"path":"res://assets_external/animated/Cleric_Animated_CC0.gltf","reason":"ART-001 rejected: masked combatant silhouette does not read as Anwen."},
+    {"path":"res://assets_external/animated/OrcSkull_Animated_CC0.gltf","reason":"Rejected for runtime: toy-like visual direction and unstable skinned-resource disposal in Godot 4.6.3."}
   ]
 }

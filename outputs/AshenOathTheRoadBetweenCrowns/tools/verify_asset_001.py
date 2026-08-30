@@ -7,6 +7,7 @@ import hashlib
 import json
 import sys
 import fnmatch
+import re
 from pathlib import Path
 
 
@@ -41,6 +42,40 @@ def local_path(resource_path: str) -> Path:
     if not resource_path.startswith("res://"):
         raise ValueError(f"not a res:// path: {resource_path}")
     return ROOT / resource_path.removeprefix("res://")
+
+
+def _preset_sections(preset_text: str) -> list[str]:
+    """Return each Web preset as an independent export contract."""
+    return [
+        match.group(0)
+        for match in re.finditer(
+            r"(?ms)^\[preset\.\d+\]\s*\n.*?(?=^\[preset\.\d+\]\s*$|\Z)",
+            preset_text,
+        )
+    ]
+
+
+def _line_values(section: str, key: str) -> list[str]:
+    values: list[str] = []
+    for line in section.splitlines():
+        if not line.startswith(f"{key}="):
+            continue
+        raw = line.split("=", 1)[1]
+        raw = raw.replace("PackedStringArray(", "").rstrip(")")
+        values.extend(item.strip().strip('"') for item in raw.split(",") if item.strip())
+    return values
+
+
+def _is_exported(resource_path: str, preset_text: str) -> bool:
+    """Check exact/pattern inclusion within one of the Web pack presets."""
+    export_token = resource_path.removeprefix("res://")
+    for section in _preset_sections(preset_text):
+        includes = _line_values(section, "include_filter") + _line_values(section, "export_files")
+        excludes = _line_values(section, "exclude_filter")
+        if any(item == export_token or fnmatch.fnmatch(export_token, item) for item in includes):
+            if not any(fnmatch.fnmatch(export_token, item) for item in excludes):
+                return True
+    return False
 
 
 def main() -> int:
@@ -80,13 +115,7 @@ def main() -> int:
                 "bytes": len(payload),
                 "sha256": hashlib.sha256(payload).hexdigest(),
             }
-            export_token = path.removeprefix("res://")
-            include_filter = ""
-            if "include_filter=" in preset:
-                include_filter = preset.split("include_filter=", 1)[1].split("\n", 1)[0]
-            export_patterns = [item.strip().strip('"') for item in include_filter.split(",")]
-            exported = export_token in preset or any(fnmatch.fnmatch(export_token, pattern) for pattern in export_patterns)
-            if not exported:
+            if not _is_exported(path, preset):
                 failures.append(f"curated asset is absent from Web preset: {path}")
 
     quarantined = manifest.get("quarantine", [])
@@ -96,7 +125,7 @@ def main() -> int:
         path = str(entry.get("path", ""))
         if not entry.get("reason"):
             failures.append(f"quarantine reason is missing: {path}")
-        if path.removeprefix("res://") in preset:
+        if _is_exported(path, preset):
             failures.append(f"quarantined asset remains in Web preset: {path}")
 
     export_entries = {
