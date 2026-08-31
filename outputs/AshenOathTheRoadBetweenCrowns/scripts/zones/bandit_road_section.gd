@@ -24,14 +24,20 @@ func build(context: ZoneBuildContext) -> void:
 	context.make_prop_box("RoadsideDitch", Vector3(5.2, 0.05, 2), Vector3(2.0, 0.10, 19), Color(0.075, 0.07, 0.045))
 
 	# Senn's camp is offset from the travel lane so combat never blocks either gate.
-	context.make_prop_box("CommandTent", Vector3(9.5, 1.35, -1.5), Vector3(6.0, 2.7, 4.8), Color(0.19, 0.095, 0.055))
+	# Keep the camp shelter outside the diagonal east-gate approach. The old
+	# footprint sat across the player-sized route from the marsh arrival and
+	# turned a clear destination lane into a hidden collision wall.
+	context.make_prop_box("CommandTent", Vector3(10.0, 1.35, -8.0), Vector3(6.0, 2.7, 4.8), Color(0.19, 0.095, 0.055))
 	context.make_prop_box("CampTable", Vector3(6.8, 0.55, 1.7), Vector3(2.6, 1.1, 1.4), Color(0.20, 0.13, 0.07))
 	context.make_loose_role("cart", Vector3(-8.5, 0, 4.0), Vector3.ONE * 0.68, 12.0)
 	for position in [Vector3(7.0, 0, -4.0), Vector3(11.5, 0, -4.0), Vector3(8.0, 0, 3.2)]:
 		context.make_torch(position)
 	for position in [Vector3(-14, 0, -12), Vector3(-13, 0, -2), Vector3(-14, 0, 10), Vector3(14, 0, -11), Vector3(14, 0, 8)]:
 		context.make_tree(position)
-	for position in [Vector3(-9, 0, -9), Vector3(10, 0, 9), Vector3(-10, 0, 11)]:
+	# Keep the east-side rubble on the outer shoulder. The former (10, 9)
+	# placement sat inside the diagonal approach from the marsh arrival to the
+	# Vargan boundary and blocked a player-sized capsule before the edge.
+	for position in [Vector3(-9, 0, -9), Vector3(16, 0, 10), Vector3(-10, 0, 11)]:
 		context.make_rubble(position)
 
 	context.make_named_interactable("captain_senn", "dialogue", "Confront Captain Senn", Vector3(8.7, 0, -1.2), Color(0.34, 0.20, 0.13))

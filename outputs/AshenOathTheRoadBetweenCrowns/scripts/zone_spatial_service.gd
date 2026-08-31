@@ -33,7 +33,16 @@ func configure(id: String, river_z: float, extents: Vector2) -> void:
 	_register_zone_defaults()
 
 func register_bridge(id: String, bank_a: Vector3, bank_b: Vector3, half_width: float) -> void:
-	bridges[id] = {"bank_a": bank_a, "bank_b": bank_b, "half_width": half_width}
+	var centre_z := (bank_a.z + bank_b.z) * 0.5
+	var half_length := maxf(absf(bank_b.z - bank_a.z) * 0.5 - 0.15, RIVER_HALF_SPAN)
+	bridges[id] = {
+		"id": id,
+		"bank_a": bank_a,
+		"bank_b": bank_b,
+		"center_z": centre_z,
+		"half_length": half_length,
+		"half_width": half_width,
+	}
 
 func register_gate(id: String, center: Vector3, arrival: Vector3, half_size: Vector2) -> void:
 	gates[id] = {"center": center, "arrival": arrival, "half_size": half_size}
@@ -79,9 +88,12 @@ func build_navigation(parent: Node3D) -> NavigationRegion3D:
 	nav_mesh.agent_max_slope = 46.0
 	var vertices := PackedVector3Array()
 	var polygons: Array[PackedInt32Array] = []
-	# Route segments remain authoritative for river and bridge safety. A single
-	# deterministic navigation polygon avoids overlapping raster edges in Web.
-	_add_rect(vertices, polygons, -half_extents.x, -half_extents.y, half_extents.x, half_extents.y)
+	# Do not bake one rectangle over the whole zone: that silently gives agents a
+	# straight-line path through the river. The generated mesh is deliberately
+	# simple and deterministic, but has separate bank polygons plus an explicit
+	# bridge lane. Player/AI route validation remains the final authority for
+	# props and authored exclusions.
+	_add_walkable_navigation_polygons(vertices, polygons)
 	nav_mesh.vertices = vertices
 	for polygon in polygons:
 		nav_mesh.add_polygon(polygon)
@@ -99,13 +111,33 @@ func get_navigation_map() -> RID:
 func is_reserved(position: Vector3, margin: float = 0.0) -> bool:
 	return _inside_entries(position, reserved_corridors, margin)
 
+func is_on_bridge(position: Vector3, clearance: float = 0.0) -> bool:
+	if river_center >= 900.0:
+		return false
+	for bridge in bridges.values():
+		# The bridge query uses the actor root footprint. A point below the
+		# waterline is still invalid and must be recovered even if its X/Z is
+		# aligned with a legal deck.
+		if position.y < -0.25:
+			continue
+		var width_limit := float(bridge.half_width) - minf(clearance, 0.35)
+		var length_limit := float(bridge.half_length) + clearance
+		if absf(position.x) <= width_limit and absf(position.z - float(bridge.center_z)) <= length_limit:
+			return true
+	return false
+
 func is_river_excluded(position: Vector3, margin: float = 0.0) -> bool:
 	if river_center >= 900.0 or absf(position.z - river_center) >= RIVER_HALF_SPAN + margin:
 		return false
-	for bridge in bridges.values():
-		if absf(position.x) <= float(bridge.half_width) - minf(margin, 0.35):
-			return false
-	return true
+	return not is_on_bridge(position, margin)
+
+func is_walkable_position(position: Vector3, clearance: float = 0.8, preferred_bank: int = 0) -> bool:
+	var validated := validate_position(position, clearance, preferred_bank)
+	if validated.distance_squared_to(position) > maxf(clearance * clearance, 0.04):
+		return false
+	return not is_river_excluded(position, clearance) \
+		and not _inside_entries(position, exclusions, clearance) \
+		and not is_position_occupied(position, clearance * 0.52, 1.65)
 
 func bank_for(position: Vector3) -> int:
 	if river_center >= 900.0:
@@ -117,7 +149,7 @@ func validate_position(position: Vector3, clearance: float = 0.8, preferred_bank
 	var requested_bank := preferred_bank if preferred_bank != 0 else bank_for(position)
 	if is_river_excluded(result, clearance):
 		result.z = river_center + float(requested_bank) * (RIVER_HALF_SPAN + clearance)
-	if _inside_entries(result, exclusions, clearance):
+	if _inside_entries(result, exclusions, clearance) or is_position_occupied(result, clearance * 0.52, 1.65):
 		return nearest_safe(result, requested_bank)
 	result.y = maxf(result.y, 0.0)
 	return result
@@ -235,7 +267,17 @@ func is_position_occupied(position: Vector3, radius: float, height: float) -> bo
 	shape.height = maxf(height, radius * 2.0)
 	var query := PhysicsShapeQueryParameters3D.new()
 	query.shape = shape
-	query.transform = Transform3D(Basis.IDENTITY, position + Vector3.UP * (height * 0.5 + 0.08))
+	# `position` is an actor/root ground point, while CapsuleShape3D's transform
+	# is its center. Keep the probe a small, explicit distance above the floor;
+	# placing its lower hemisphere on the ground slab makes the physics server
+	# report every location as occupied and collapses all props to a fallback
+	# recovery anchor during zone construction.
+	var floor_clearance := 0.14
+	# Godot's capsule height includes the cylindrical portion in some imported
+	# physics paths, so account for the hemispheres explicitly when positioning
+	# the query center. This keeps the actual lower extent above the floor too,
+	# rather than only the nominal `height` value.
+	query.transform = Transform3D(Basis.IDENTITY, Vector3(position.x, maxf(position.y, 0.0) + floor_clearance + shape.height * 0.5 + radius, position.z))
 	query.collision_mask = 1
 	query.collide_with_areas = false
 	query.collide_with_bodies = true
@@ -294,6 +336,25 @@ func _add_rect(vertices: PackedVector3Array, polygons: Array[PackedInt32Array], 
 	vertices.append_array(PackedVector3Array([Vector3(x0, 0.05, z0), Vector3(x1, 0.05, z0), Vector3(x1, 0.05, z1), Vector3(x0, 0.05, z1)]))
 	polygons.append(PackedInt32Array([offset, offset + 1, offset + 2, offset + 3]))
 
+func _add_walkable_navigation_polygons(vertices: PackedVector3Array, polygons: Array[PackedInt32Array]) -> void:
+	var x0 := -half_extents.x
+	var x1 := half_extents.x
+	var z0 := -half_extents.y
+	var z1 := half_extents.y
+	if river_center >= 900.0:
+		_add_rect(vertices, polygons, x0, z0, x1, z1)
+		return
+	var river_min := river_center - RIVER_HALF_SPAN
+	var river_max := river_center + RIVER_HALF_SPAN
+	_add_rect(vertices, polygons, x0, z0, x1, river_min)
+	_add_rect(vertices, polygons, x0, river_max, x1, z1)
+	# A bridge lane is the only connector between the bank polygons. The small
+	# overlap at each bank edge prevents an agent from seeing a one-voxel gap.
+	for bridge in bridges.values():
+		var half_width := float(bridge.get("half_width", DEFAULT_BRIDGE_HALF_WIDTH))
+		var half_length := float(bridge.get("half_length", RIVER_HALF_SPAN))
+		_add_rect(vertices, polygons, -half_width, float(bridge.center_z) - half_length, half_width, float(bridge.center_z) + half_length)
+
 func _deduplicate(points: Array[Vector3]) -> Array[Vector3]:
 	var result: Array[Vector3] = []
 	for point in points:
@@ -329,6 +390,11 @@ func _register_zone_defaults() -> void:
 		register_gate("campaign_return", Vector3(-7, 0, 13.5), Vector3(0, 0.9, 12.0), Vector2(3.2, 2.4))
 		register_gate("campaign_forward", Vector3(7, 0, -13.5), Vector3(0, 0.9, -12.0), Vector2(3.2, 2.4))
 		if zone_id == "vargan_approach":
+			# The west edge arrives from the bandit road at (-16, 0). Keep the
+			# authored route to the central gate clear before Castle walls and
+			# roadside dressing are generated.
+			reserve_corridor("castle_west_arrival", Vector3(-11.0, 0.0, 0.0), Vector2(6.5, 5.0))
+		if zone_id == "vargan_approach":
 			register_gate("castle_approach_return", Vector3(-7, 0, 16), Vector3(0, 0.9, -12), Vector2(3.6, 2.5))
 			register_gate("castle_approach_forward", Vector3(0, 0, -12.2), Vector3(0, 0.9, 12), Vector2(3.8, 2.8))
 		elif zone_id == "vargan_court":
@@ -337,6 +403,18 @@ func _register_zone_defaults() -> void:
 		elif zone_id == "record_hall":
 			register_gate("record_hall_return", Vector3(-6, 0, 13), Vector3(0, 0.9, -11), Vector2(3.6, 2.5))
 			register_gate("record_hall_forward", Vector3(6, 0, -13), Vector3(0, 0.9, 12), Vector2(3.8, 2.6))
+		if zone_id == "bandit_road":
+			# The manifest's east boundary is the physical road into Vargan. The
+			# arrival from the marsh starts near (0, 13), so reserve a stepped
+			# diagonal corridor to (22, -12) before ditches, trees, camp props, or
+			# rubble are authored. A direct endpoint-only clearance check cannot
+			# protect this route from axis-aligned scenery colliders.
+			for approach in [
+				Vector3(4.0, 0.0, 8.4), Vector3(8.0, 0.0, 3.8),
+				Vector3(12.0, 0.0, -0.8), Vector3(16.0, 0.0, -5.4),
+				Vector3(20.0, 0.0, -10.0)
+			]:
+				reserve_corridor("vargan_boundary_approach", approach, Vector2(2.4, 2.4))
 		reserve_corridor("campaign_route", Vector3(0, 0, 0), Vector2(4.0, 15.0))
 		add_safe_spawn(Vector3(0, 0.9, 12.0))
 		add_safe_spawn(Vector3(0, 0.9, -12.0))

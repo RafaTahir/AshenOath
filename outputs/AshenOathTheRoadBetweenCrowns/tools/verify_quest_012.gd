@@ -37,6 +37,7 @@ func _initialize() -> void:
 		await _verify_runtime_ending(hart_actions_by_id.get(ending, {}), ending)
 
 	print("QUEST-012 VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
+	print("VERIFIER_PHASE: SHUTDOWN")
 	quit(0 if failures == 0 else 1)
 
 func _verify_runtime_ending(action: Dictionary, ending: String) -> void:
@@ -101,10 +102,21 @@ func _verify_runtime_ending(action: Dictionary, ending: String) -> void:
 	await _frames(12)
 	_check(game.zone_root.find_child("HartAftermathSeal", true, false) != null, "Ending %s did not rebuild visible Hart aftermath" % ending)
 	_check(game.zone_root.find_child("white_hart", true, false) == null, "Ending %s left a stale Hart interaction after reload" % ending)
+	await _shutdown_game(game)
+
+func _shutdown_game(game: Node) -> void:
+	if game == null or not is_instance_valid(game):
+		return
 	if game.has_method("prepare_resource_shutdown"):
 		game.prepare_resource_shutdown()
 		await _frames(int(game.ZONE_RETIRE_FRAMES) + 4)
+	if game.has_method("finalize_resource_shutdown"):
+		game.finalize_resource_shutdown()
+		await _frames(12)
+	if game.is_inside_tree():
+		root.remove_child(game)
 	game.queue_free()
+	RenderingServer.force_sync()
 	await _frames(8)
 
 func _has_objectives(objectives: Array, ids: Array) -> bool:

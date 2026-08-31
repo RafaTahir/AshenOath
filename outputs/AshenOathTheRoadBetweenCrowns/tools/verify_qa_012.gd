@@ -5,6 +5,8 @@ extends SceneTree
 ## not call private zone loaders, interaction handlers, teleport the player, or
 ## mutate StoryState to unlock a route.
 
+const WorldSectorManifest = preload("res://scripts/world_sector_manifest.gd")
+
 const MAX_ROUTE_SECONDS := 38.0
 const MAX_DIALOGUE_PAGES := 18
 const ROUTE_CLEARANCE := 0.55
@@ -98,6 +100,10 @@ func _run_released_gate_route() -> void:
 	})
 
 func _travel_to(destination: String) -> void:
+	var source := WorldSectorManifest.canonical(str(game.get("current_zone_id")))
+	if game.get("seamless_world") != null and game.seamless_world.is_exterior_route(source, destination):
+		await _travel_seamless_boundary(source, destination)
+		return
 	var gate := _find_gate(destination)
 	_check(gate != null, "No player-facing gate to %s in %s" % [destination, str(game.get("current_zone_id"))])
 	if gate == null:
@@ -108,6 +114,57 @@ func _travel_to(destination: String) -> void:
 	if failures.is_empty():
 		await _press_action("interact", 2)
 		_check(await _wait_for_playable_zone(destination, 10.0), "Gate interaction did not load %s" % destination)
+
+func _travel_seamless_boundary(source: String, destination: String) -> void:
+	var edge := WorldSectorManifest.edge_between(source, destination)
+	_check(not edge.is_empty(), "No manifest boundary from %s to %s" % [source, destination])
+	if edge.is_empty():
+		return
+	var bounds := WorldSectorManifest.bounds(source)
+	var edge_id := str(edge.get("id", ""))
+	var lane := float(edge.get("lane", 0.0))
+	var edge_position := _edge_position(edge_id, lane, bounds)
+	await _drive_to(edge_position, "boundary_%s" % destination)
+	if not failures.is_empty():
+		return
+	var outward := _edge_outward(edge_id)
+	var camera_rig = game.get("camera_rig")
+	if camera_rig != null:
+		camera_rig.set("yaw", atan2(-outward.x, -outward.z))
+	_set_virtual_axes(Vector2(0.0, -1.0), Vector2.ZERO)
+	_set_virtual_action("run", true)
+	var reached := false
+	for _frame in range(180):
+		if str(game.get("current_zone_id")) == destination:
+			reached = true
+			break
+		await physics_frame
+		await process_frame
+	_clear_virtual_input()
+	_check(reached, "Player never crossed the %s boundary" % destination)
+	if reached:
+		_check(await _wait_for_playable_zone(destination, 10.0), "Boundary did not load %s" % destination)
+
+func _edge_outward(edge_id: String) -> Vector3:
+	match edge_id:
+		"north": return Vector3(0.0, 0.0, -1.0)
+		"south": return Vector3(0.0, 0.0, 1.0)
+		"west": return Vector3(-1.0, 0.0, 0.0)
+		"east": return Vector3(1.0, 0.0, 0.0)
+	return Vector3.FORWARD
+
+func _edge_position(edge_id: String, lane: float, bounds: Vector2) -> Vector3:
+	# Stop inside the sector before applying the outward input. Steering to the
+	# exact edge lets the seamless boundary monitor begin a transition while
+	# _drive_to is still trying to finish a source-space waypoint, which can
+	# leave the player one capsule-width short of the handoff on slow frames.
+	var inset := 2.0
+	match edge_id:
+		"north": return Vector3(lane, 0.95, -bounds.y + inset)
+		"south": return Vector3(lane, 0.95, bounds.y - inset)
+		"west": return Vector3(-bounds.x + inset, 0.95, lane)
+		"east": return Vector3(bounds.x - inset, 0.95, lane)
+	return Vector3(lane, 0.95, 0.0)
 
 func _use_interaction(id: String, expects_dialogue: bool) -> void:
 	var area := _find_interaction(id)
@@ -133,26 +190,56 @@ func _drive_to(destination: Vector3, label: String) -> void:
 	_check(not raw_route.is_empty(), "No safe route to %s" % label)
 	if raw_route.is_empty():
 		return
+	var source_zone := str(game.get("current_zone_id"))
 	var route_started := Time.get_ticks_msec()
 	for raw_point in raw_route:
 		var point: Vector3 = raw_point
 		var point_started := Time.get_ticks_msec()
 		while _flat_distance(player.global_position, point) > 0.78:
+			# A seamless boundary can activate while the last local waypoint is
+			# still inside the source sector. Once the authoritative zone changes,
+			# stop steering toward source-space coordinates and let the caller verify
+			# the destination sector's playable arrival.
+			if str(game.get("current_zone_id")) != source_zone:
+				return
 			if float(Time.get_ticks_msec() - route_started) / 1000.0 > MAX_ROUTE_SECONDS:
 				_fail("Player route timed out at %s" % label)
 				return
 			if float(Time.get_ticks_msec() - point_started) / 1000.0 > 10.0:
-				_fail("Player made no progress toward %s" % label)
+				var collision_names: Array[String] = []
+				for collision_index in range(player.get_slide_collision_count()):
+					var collision := player.get_slide_collision(collision_index)
+					var collider := collision.get_collider() if collision != null else null
+					collision_names.append(str(collider.name) if collider != null else "unknown")
+				_fail("Player made no progress toward %s at %s (target=%s wall=%s floor=%s slides=%d)" % [
+					label,
+					str(player.global_position),
+					str(point),
+					str(player.is_on_wall()),
+					str(player.is_on_floor()),
+					player.get_slide_collision_count(),
+				])
+				if not collision_names.is_empty():
+					_fail("Route collision surfaces at %s: %s" % [label, ", ".join(collision_names)])
 				return
 			await _turn_camera_toward(player.global_position, point)
 			var before := player.global_position
 			_set_virtual_axes(Vector2(0.0, -1.0), Vector2.ZERO)
 			_set_virtual_action("run", true)
-			await _frames(4)
+			# Movement is authoritative in _physics_process. Sampling only
+			# process_frame here can clear the virtual input before a physics tick
+			# on a busy Compatibility run, leaving the player visibly moving but
+			# short of the route point.
+			for _physics_step in range(4):
+				await physics_frame
+				await process_frame
 			_clear_virtual_input()
-			await _frames(1)
+			await physics_frame
+			await process_frame
 			if before.distance_to(player.global_position) < 0.005 and player.is_on_floor():
 				await _frames(3)
+	if str(game.get("current_zone_id")) != source_zone:
+		return
 	_check(_flat_distance(player.global_position, destination) <= 3.8, "Player did not reach %s" % label)
 
 func _turn_camera_toward(origin: Vector3, destination: Vector3) -> void:
@@ -176,6 +263,13 @@ func _fight_active_enemies(label: String, timeout_seconds: float) -> void:
 	var started := Time.get_ticks_msec()
 	var player := game.get("player") as CharacterBody3D
 	var attack_attempts := 0
+	# Enter the authored clearing through the same movement path a player uses.
+	# Do not route to an enemy body: enemy capsules are intentional obstacles and
+	# a target-centered destination can make a valid attack approach look blocked.
+	if player != null and _flat_distance(player.global_position, Vector3(0.0, player.global_position.y, -6.5)) > 1.15:
+		await _drive_to(Vector3(0.0, player.global_position.y, -6.5), "%s clearing" % label)
+	if not failures.is_empty():
+		return
 	while float(Time.get_ticks_msec() - started) / 1000.0 < timeout_seconds:
 		var living: Array[Node] = []
 		for enemy in game.get("active_enemies"):
@@ -189,27 +283,19 @@ func _fight_active_enemies(label: String, timeout_seconds: float) -> void:
 		var target: Node3D = living[0] as Node3D
 		var offset := target.global_position - player.global_position
 		offset.y = 0.0
-		# Never route a physics-controlled player to an enemy's center. The
-		# enemy capsule is an intentional obstacle, so that request can stall
-		# at the exact point where a legal attack approach already exists.
-		# Route only a short, same-line step toward the combat body instead.
-		# This keeps the player inside the authored clearing even when an enemy
-		# is being pushed toward its leash boundary by the encounter AI.
-		if offset.length() > 1.75:
-			var approach_direction := offset.normalized()
-			var step_distance := minf(offset.length() - 1.55, 2.5)
-			var approach_point := player.global_position + approach_direction * step_distance
-			approach_point.y = player.global_position.y
-			await _drive_to(approach_point, "%s attack approach" % label)
+		var distance := offset.length()
+		if distance > 2.65:
+			# Let the physics controller take short forward steps toward the living
+			# target. The enemy remains an obstacle; there is no transform
+			# correction or target-centered teleport in this route.
+			await _turn_camera_toward(player.global_position, target.global_position)
+			_set_virtual_axes(Vector2(0.0, -1.0), Vector2.ZERO)
+			_set_virtual_action("run", true)
+			await _frames(3)
+			_clear_virtual_input()
+			await _frames(8)
+			continue
 		await _turn_camera_toward(player.global_position, target.global_position)
-		# Give the controller a brief real forward input so Kael's authored
-		# facing follows the target before the contact window begins.
-		_set_virtual_axes(Vector2(0.0, -1.0), Vector2.ZERO)
-		await _frames(2)
-		_clear_virtual_input()
-		# Attack immediately after closing distance. Waiting for the moving enemy
-		# to remain inside a second distance check caused a chase loop that never
-		# delivered the player's mapped mouse attack.
 		await _press_action("light_attack", 2)
 		attack_attempts += 1
 		if attack_attempts % 4 == 0:
@@ -409,7 +495,13 @@ func _finish() -> void:
 	if game != null and is_instance_valid(game):
 		if game.has_method("prepare_resource_shutdown"):
 			game.prepare_resource_shutdown()
-		await _frames(8)
+		await _frames(20)
+		if game.has_method("finalize_resource_shutdown"):
+			game.finalize_resource_shutdown()
+		await _frames(12)
+		print("VERIFIER_PHASE: SHUTDOWN")
 		game.queue_free()
 	await _frames(8)
+	RenderingServer.force_sync()
+	await _frames(4)
 	quit(0 if failures.is_empty() else 1)
