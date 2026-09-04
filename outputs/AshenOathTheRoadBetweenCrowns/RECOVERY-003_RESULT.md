@@ -2,17 +2,16 @@
 
 ## Status
 
-Partial recovery checkpoint. The atomic route/lifecycle fix below is committed
-locally on `codex/masterpiece-rebuild`; the broader recovery changes remain in
-the working tree and are not pushed or deployed. Production remains unchanged.
-The current performance continuation is intentionally uncommitted because its
-direct acceptance gate still fails.
+Partial recovery checkpoint. The atomic verifier/lifecycle fix below is
+verified locally on `codex/masterpiece-rebuild`; the broader recovery changes
+remain in the working tree and are not pushed or deployed. Production remains
+unchanged. The full release gate is paused after `verify_world_002`.
 
 ## Current Atomic Checkpoint
 
-- Current atomic work: `QA-002` browser-route stabilization for the Anwen
-  approach and dialogue interaction. The broader recovery remains paused with
-  `PERF-001` as the next documented blocker.
+- Current atomic work: `WORLD-002` verifier teardown and result-ordering repair.
+  The broader recovery remains paused after this gate; no next recovery ticket
+  has been started.
 - Completed fix: the browser route harness now uses camera-relative movement,
   request-scoped QA command results, progress-based key rearming, and the
   normal rendered dialogue action path. It records route checkpoints without
@@ -34,24 +33,22 @@ direct acceptance gate still fails.
   Castle approach/courtyard/Record Hall round trip, and the final return to Greyfen.
   The clean `story` ticket profile also passed, including `verify_quest_012`, with
   no active renderer/resource failure.
-- Current continuation: `game.gd` now invalidates interaction focus on movement,
-  camera turns, zone changes, quest changes, and trigger entry/exit, and caches
-  compass scans while the player and objective are unchanged. This reduces
-  repeated idle raycasts and marker scans without changing interaction rules.
-- Latest continuation result: the targeted graphical `performance` profile
-  completed and parsed the updated runtime, but failed its real threshold in
-  Greyfen: `43.17 FPS` average and `28.06 FPS` 1% low from five `34-37 ms`
-  frames. Wychwood measured `56.23 FPS` average / `31.67 FPS` 1% low and
-  Wychwood combat measured `55.98 / 40.80`; the remaining zones passed.
-- Remaining blocker: the broader recovery is still incomplete; the current
-  Greyfen 1% low failure remains unresolved, in addition to visual acceptance,
-  source-aligned Web export, target-hardware performance, and production browser
-  evidence remaining open.
-- Exact next action on resume: continue this same `PERF-001` frame-pacing fix by
-  isolating the recurring Greyfen update burst, make the smallest gameplay-safe
-  optimization, and rerun only the graphical performance profile. Do not create
-  a checkpoint commit, export, push, deploy, or start another recovery ticket
-  until that gate passes.
+- Completed fix: `verify_world_002.gd` now prepares and finalizes the game root,
+  emits `VERIFIER_PHASE: SHUTDOWN`, retires the root, synchronizes rendering,
+  and only then prints its final result and exits. This keeps active-render
+  failures fatal while classifying orderly teardown correctly.
+- Latest atomic result: the authoritative single-gate run passed
+  `verify_world_002` in `7.76 s` with `nodes=420`, `meshes=73`, `lights=2`, and
+  `enemies=5`; the log ends with the shutdown phase followed by `WORLD-002
+  VERIFIER: PASS`. Evidence: `.release-gate/verify_world_002.log`.
+- Remaining blocker: the broader recovery and release suite are incomplete.
+  `verify_world_003` is the next mandatory gate and has not been run yet; export,
+  screenshots, full performance, Web packaging, push, and deployment remain
+  intentionally untouched in this checkpoint.
+- Exact next action on resume: run only `verify_world_003` through the
+  authoritative gate and investigate its first genuine failure. Do not rerun
+  `verify_world_002`, export, push, deploy, or start another recovery ticket
+  unless explicitly requested.
 
 ## Completed In This Checkpoint
 
