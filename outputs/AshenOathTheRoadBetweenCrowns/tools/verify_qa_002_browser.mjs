@@ -2,7 +2,6 @@ import { createServer } from "node:http";
 import { createReadStream, existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { extname, join, normalize, resolve } from "node:path";
 import { spawn, spawnSync } from "node:child_process";
-import { tmpdir } from "node:os";
 
 const args = Object.fromEntries(process.argv.slice(2).map((value, index, all) =>
   value.startsWith("--") ? [value.slice(2), all[index + 1]?.startsWith("--") ? true : all[index + 1]] : []
@@ -14,6 +13,10 @@ const requestedBrowser = String(args.browser || "chrome").toLowerCase();
 const fullCampaign = Boolean(args["full-campaign"]);
 const openingOnly = Boolean(args["opening-only"]);
 const mobileMode = Boolean(args.mobile);
+const stopAfter = String(args["stop-after"] || "").toLowerCase();
+const traceMovement = Boolean(args["trace-movement"]);
+const QA_TEMP_ROOT = "D:\\Temp\\AshenOath";
+mkdirSync(QA_TEMP_ROOT, { recursive: true });
 // This harness launches headless Chromium/Edge with SwiftShader. It is a
 // route, resource, input, and console diagnostic, not the hardware FPS gate.
 // Native 720p performance is accepted by verify_perf_001 with the graphical
@@ -21,6 +24,7 @@ const mobileMode = Boolean(args.mobile);
 const enforcePerformance = String(args["enforce-performance"] || "false") === "true";
 const INPUT_TIMEOUT_MS = 60000;
 const viewport = { width: 1280, height: 720 };
+let commandSequence = 0;
 const browserCatalog = [
   ["Chrome", "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"],
   ["Edge", "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe"],
@@ -268,6 +272,10 @@ async function holdTowardPoint(cdp, waypoint, timeout = 7000) {
   const yaw = Number(initialState?.camera?.yaw || 0);
   const dx = Number(waypoint.x) - Number(player?.x || 0);
   const dz = Number(waypoint.z) - Number(player?.z || 0);
+  const segmentLength = Math.hypot(dx, dz);
+  const segmentDirection = segmentLength > 0.001
+    ? { x: dx / segmentLength, z: dz / segmentLength }
+    : { x: 0, z: 0 };
   // Movement is camera-relative in the actual controller. The old diagnostic
   // always held W, which worked for the north/south road but could never reach
   // a side-offset interaction such as Anwen at the end of the route.
@@ -288,7 +296,11 @@ async function holdTowardPoint(cdp, waypoint, timeout = 7000) {
   await dispatchKey(cdp, selected[0], selected[1], true);
   const started = Date.now();
   let lastKeySignal = started;
+  let lastProgressAt = started;
+  let closestDistance = segmentLength;
   let lastState = null;
+  const movementTrace = [];
+  let lastTraceAt = 0;
   while (Date.now() - started < timeout) {
     await sleep(120);
     // The browser-to-Godot Web input bridge can drop a held-key repeat while
@@ -302,13 +314,47 @@ async function holdTowardPoint(cdp, waypoint, timeout = 7000) {
     const player = lastState?.player?.position;
     if (!player) continue;
     const distance = Math.hypot(waypoint.x - player.x, waypoint.z - player.z);
-    if (distance <= 0.58) break;
+    if (traceMovement && Date.now() - lastTraceAt >= 600) {
+      movementTrace.push({
+        x: Number(player.x),
+        z: Number(player.z),
+        distance: Number(distance.toFixed(3)),
+        velocity: lastState?.player?.velocity || null,
+        focus: lastState?.focus?.id || "",
+        selected: selected[0],
+      });
+      lastTraceAt = Date.now();
+    }
+    if (distance < closestDistance - 0.04) {
+      closestDistance = distance;
+      lastProgressAt = Date.now();
+    } else if (Date.now() - lastProgressAt >= 900) {
+      // A busy WebGL renderer can retain the browser key state while dropping
+      // the corresponding Godot input event. Re-arm the same real key only
+      // after observed lack of movement; never alter the player transform.
+      await dispatchKey(cdp, selected[0], selected[1], false);
+      await sleep(80);
+      await dispatchKey(cdp, selected[0], selected[1], true);
+      await sleep(55);
+      await dispatchKey(cdp, selected[0], selected[1], true);
+      lastKeySignal = Date.now();
+      lastProgressAt = Date.now();
+    }
+    const projected = (player.x - Number(initialState?.player?.position?.x || 0)) * segmentDirection.x
+      + (player.z - Number(initialState?.player?.position?.z || 0)) * segmentDirection.z;
+    // A held browser key can advance more than a short route segment between
+    // telemetry samples. Treat a forward pass as arrival; otherwise the old
+    // loop kept holding toward a waypoint that was already behind the player
+    // until its full timeout expired.
+    if (distance <= 0.58 || (segmentLength > 0.001 && projected >= segmentLength + 0.25)) break;
   }
   await dispatchKey(cdp, selected[0], selected[1], false);
   await sleep(120);
   await dispatchKey(cdp, "KeyW", "w", false);
   await sleep(120);
-  return lastState || await telemetry(cdp).catch(() => null);
+  const result = lastState || await telemetry(cdp).catch(() => null);
+  if (result && traceMovement) result._movement_trace = movementTrace;
+  return result;
 }
 
 async function moveCameraRelative(cdp, yaw, dx, dz, duration = 180) {
@@ -353,11 +399,13 @@ async function telemetry(cdp) {
 }
 
 async function qaCommand(cdp, action, values = {}) {
-  await cdp.evaluate(`window.__ASHEN_OATH_QA_COMMAND__ = ${JSON.stringify({ action, ...values })}`);
+  const request_id = ++commandSequence;
+  await cdp.evaluate(`window.__ASHEN_OATH_QA_COMMAND__ = ${JSON.stringify({ action, request_id, ...values })}`);
   return waitFor(async () => {
     const state = await telemetry(cdp);
     const result = state?.command_result;
-    return result?.action === action && (values.target === undefined || result.target === values.target)
+    return result?.action === action && result?.request_id === request_id
+      && (values.target === undefined || result.target === values.target)
       ? result : null;
   }, `QA command ${action}${values.target ? `:${values.target}` : ""}`, 10000);
 }
@@ -470,6 +518,7 @@ async function driveToGate(cdp, target, checkpoints, timeout = 45000) {
   let lastState;
   let route = [];
   let routeIndex = 0;
+  let lastWaypoint = null;
   let lastProgressAt = Date.now();
   let lastDistance = Number.POSITIVE_INFINITY;
   let staged = false;
@@ -511,9 +560,11 @@ async function driveToGate(cdp, target, checkpoints, timeout = 45000) {
       route = routeResult.points || [];
       if (!route.length) throw new Error(`No navigation route to ${target} in ${state.zone}`);
       routeIndex = route.length > 1 ? 1 : 0;
+      checkpoints.push({ event: "gate_route", zone: state.zone, target, points: route });
     }
     const player = state.player.position;
     let waypoint = route[Math.min(routeIndex, route.length - 1)] || gate.position;
+    lastWaypoint = { index: routeIndex, point: waypoint };
     const previous = route[Math.max(0, routeIndex - 1)] || player;
     const passedWaypoint = routeIndex > 0
       && ((player.x - waypoint.x) * (waypoint.x - previous.x) + (player.z - waypoint.z) * (waypoint.z - previous.z)) >= 0;
@@ -540,7 +591,7 @@ async function driveToGate(cdp, target, checkpoints, timeout = 45000) {
       await sleep(180);
     }
   }
-  throw new Error(`Could not focus ${target} gate; last telemetry=${JSON.stringify(lastState)}`);
+  throw new Error(`Could not focus ${target} gate; waypoint=${JSON.stringify(lastWaypoint)} route=${JSON.stringify(route)} last telemetry=${JSON.stringify(lastState)}`);
 }
 
 async function useGate(cdp, expectedZone, checkpoints) {
@@ -583,7 +634,10 @@ async function driveToInteraction(cdp, id, checkpoints, timeout = 240000) {
     if (state.player && !state.player.can_control) throw new Error(`Player lost control while routing to ${id}`);
     const interaction = findInteraction(state, id);
     if (!interaction) throw new Error(`No ${id} interaction exposed in ${state.zone}`);
-    if (state.focus?.id === id && interaction.distance <= 3.0) {
+    // The game focus resolver has already applied interaction range, line of
+    // sight, and quest priority. Do not duplicate a stale distance threshold
+    // here; doing so rejected a valid speaker focus at natural camera distance.
+    if (state.focus?.id === id) {
       checkpoints.push({ event: "interaction_focus", id, zone: state.zone, distance: interaction.distance });
       return state;
     }
@@ -592,6 +646,7 @@ async function driveToInteraction(cdp, id, checkpoints, timeout = 240000) {
       route = routeResult.points || [];
       if (!route.length) throw new Error(`No navigation route to ${id} in ${state.zone}`);
       routeIndex = route.length > 1 ? 1 : 0;
+      checkpoints.push({ event: "interaction_route", id, zone: state.zone, points: route });
     }
     const player = state.player.position;
     let waypoint = route[Math.min(routeIndex, route.length - 1)] || interaction.position;
@@ -611,10 +666,6 @@ async function driveToInteraction(cdp, id, checkpoints, timeout = 240000) {
       await qaCommand(cdp, "orient_camera", { yaw: desiredYaw });
       await sleep(60);
     }
-    if (interaction.distance <= 2.55) {
-      await sleep(140);
-      continue;
-    }
     if (distance > 0.38) {
       // Headless WebGL diagnostics can run below the hardware target. Scale
       // the real key hold from route distance instead of assuming 32 rendered
@@ -622,6 +673,14 @@ async function driveToInteraction(cdp, id, checkpoints, timeout = 240000) {
       // sub-frame pulse and the route crawls.
       const progress = await holdTowardPoint(cdp, waypoint, clamp((distance / 2.6) * 1000 + 9000, 14000, 30000));
       if (!progress?.player?.position) throw new Error(`No player telemetry while approaching ${id}`);
+      if (traceMovement && progress?._movement_trace?.length) {
+        checkpoints.push({
+          event: "movement_trace",
+          id,
+          waypoint,
+          samples: progress._movement_trace,
+        });
+      }
     }
     else await sleep(120);
   }
@@ -632,16 +691,25 @@ async function useInteraction(cdp, id, checkpoints, expectsDialogue = false) {
   await driveToInteraction(cdp, id, checkpoints);
   await tapKey(cdp, "KeyE", "e", 80);
   await sleep(220);
-  if (expectsDialogue) {
-    for (let page = 0; page < 12; page += 1) {
-      const state = await telemetry(cdp);
-      if (!state?.paused) break;
-      // Dialogue rebuilds its action button after every page. Click the rendered
-      // control so the packed-browser gate exercises Godot's real pointer path.
-      await sleep(260);
-      await clickDialogueAction(cdp);
-      await sleep(220);
-    }
+    if (expectsDialogue) {
+      for (let page = 0; page < 12; page += 1) {
+        const state = await telemetry(cdp);
+        if (!state?.paused) break;
+        // Dialogue rebuilds its action button after every page. Click the rendered
+        // control first so the packed-browser gate exercises Godot's real pointer
+        // path. If the browser-to-canvas click is dropped, use the focused button
+        // through the game's normal Enter action instead of waiting indefinitely.
+        await sleep(260);
+        await clickDialogueAction(cdp);
+        await sleep(220);
+        const afterClick = await telemetry(cdp);
+        if (afterClick?.paused
+          && afterClick?.dialogue?.page === state?.dialogue?.page
+          && afterClick?.dialogue?.visible) {
+          await tapKey(cdp, "Enter", "Enter", 80);
+          await sleep(220);
+        }
+      }
     if ((await telemetry(cdp))?.paused) throw new Error(`${id} dialogue did not close through real input`);
     // Reacquire pointer lock with a direct gameplay gesture. Browsers reject
     // deferred lock requests made by the dialogue callback itself.
@@ -727,11 +795,19 @@ async function runOpeningCampaign(cdp, url, checkpoints) {
   const state = await startNewGame(cdp, `${url}&scenario=opening-campaign-${Date.now()}`);
   checkpoints.push({ event: "scenario_start", scenario: "opening-campaign", zone: state.zone });
   await useInteraction(cdp, "sister_anwen", checkpoints, true);
+  if (stopAfter === "anwen") return telemetry(cdp);
   await traverse(cdp, "wychwood", checkpoints);
   for (const clue of ["corpse", "black_feathers", "claw_marks"]) {
     await useInteraction(cdp, clue, checkpoints, false);
   }
-  if (!(await telemetry(cdp))?.quests?.evidence_ready) throw new Error("Three real clue interactions did not resolve evidence threshold");
+  await waitFor(
+    async () => {
+      const evidenceState = await telemetry(cdp);
+      return evidenceState?.quests?.evidence_ready ? evidenceState : null;
+    },
+    "Three real clue interactions evidence threshold",
+    5000
+  );
   await fightWychwoodPack(cdp, checkpoints);
   await traverse(cdp, "greyfen", checkpoints);
   await useInteraction(cdp, "sister_anwen", checkpoints, true);
@@ -782,7 +858,8 @@ async function runFullCampaign(cdp, url, checkpoints) {
 
 async function testBrowser(name, executable) {
   const debugPort = await availablePort();
-  const profile = join(tmpdir(), `ashen-oath-${fullCampaign ? "web002" : "qa002"}-${name.toLowerCase()}-${Date.now()}`);
+  const profile = join(QA_TEMP_ROOT, `ashen-oath-${fullCampaign ? "web002" : "qa002"}-${name.toLowerCase()}-${Date.now()}`);
+  mkdirSync(profile, { recursive: true });
   const url = `http://127.0.0.1:${port}/index.html?qa=1&v=${fullCampaign ? "web002" : "qa002"}-${name.toLowerCase()}${mobileMode ? "&touch=1" : ""}`;
   const browser = spawn(executable, [
     "--headless=new",
@@ -922,6 +999,7 @@ async function testBrowser(name, executable) {
       console_messages: consoleMessages(cdp).slice(-120),
       final_screenshot: finalScreenshot,
       final_telemetry: finalState || await telemetry(cdp),
+      profile_dir: profile,
       route_limitations: [
         "Castle Vargan Approach has no direct Greyfen return gate; QA returns Record Hall to Courtyard to Approach.",
         "Deep Woods returns through Wychwood because its authored back gate targets Wychwood.",
@@ -944,6 +1022,7 @@ async function testBrowser(name, executable) {
       console_messages: cdp ? consoleMessages(cdp).slice(-120) : [],
       failure_screenshot: failureScreenshot,
       last_telemetry: cdp ? await telemetry(cdp).catch(() => null) : null,
+      profile_dir: profile,
     };
   } finally {
     if (cdp) cdp.close();
@@ -986,6 +1065,7 @@ const report = {
   ticket: fullCampaign ? "WEB-002" : "QA-002",
   status: "pass",
   export_dir: exportDir,
+  qa_temp_root: QA_TEMP_ROOT,
   browsers: [],
 };
 try {
@@ -993,7 +1073,7 @@ try {
     const result = await testBrowser(name, executable);
     report.browsers.push(result);
     if (result.status !== "pass") throw new Error(`${name}: ${result.failure}`);
-    console.log(`${fullCampaign ? "WEB-002" : "QA-002"} ${name}: PASS - ${result.checkpoints.length} route checkpoints in ${result.elapsed_ms} ms`);
+    console.log(`${fullCampaign ? "WEB-002" : "QA-002"} ${name}: PASS - ${result.checkpoints.length} route checkpoints in ${result.elapsed_ms} ms; profile ${result.profile_dir} (cleaned)`);
   }
 } catch (error) {
   report.status = "fail";

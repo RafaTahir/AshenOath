@@ -5,10 +5,26 @@
 Partial recovery checkpoint. The atomic route/lifecycle fix below is committed
 locally on `codex/masterpiece-rebuild`; the broader recovery changes remain in
 the working tree and are not pushed or deployed. Production remains unchanged.
+The current performance continuation is intentionally uncommitted because its
+direct acceptance gate still fails.
 
 ## Current Atomic Checkpoint
 
-- Current ticket: `QA-012` real-input campaign route and `QUEST-012` verifier lifecycle.
+- Current atomic work: `QA-002` browser-route stabilization for the Anwen
+  approach and dialogue interaction. The broader recovery remains paused with
+  `PERF-001` as the next documented blocker.
+- Completed fix: the browser route harness now uses camera-relative movement,
+  request-scoped QA command results, progress-based key rearming, and the
+  normal rendered dialogue action path. It records route checkpoints without
+  mutating the player transform or story state.
+- Latest atomic result: the focused Chrome probe passed with 9 checkpoints in
+  `313951 ms`; it reached Greyfen, focused Anwen at `3.214 m`, completed her
+  dialogue, and reported zero console, network, JavaScript, WebAssembly, or
+  Godot runtime errors. The exact evidence is
+  `.release-gate/qa_002/anwen-probe.json`.
+- Browser isolation result: the profile was created under
+  `D:\Temp\AshenOath` and removed after the pass. No browser profile was left
+  outside the project QA temp root.
 - Completed fix: the player route driver now advances on physics frames, stops at an
   inset sector boundary before outward travel, and stops steering when the
   authoritative sector changes. `QUEST-012` now finalizes each ending fixture and
@@ -18,13 +34,24 @@ the working tree and are not pushed or deployed. Production remains unchanged.
   Castle approach/courtyard/Record Hall round trip, and the final return to Greyfen.
   The clean `story` ticket profile also passed, including `verify_quest_012`, with
   no active renderer/resource failure.
-- Remaining blocker: the broader recovery is still incomplete; visual acceptance,
+- Current continuation: `game.gd` now invalidates interaction focus on movement,
+  camera turns, zone changes, quest changes, and trigger entry/exit, and caches
+  compass scans while the player and objective are unchanged. This reduces
+  repeated idle raycasts and marker scans without changing interaction rules.
+- Latest continuation result: the targeted graphical `performance` profile
+  completed and parsed the updated runtime, but failed its real threshold in
+  Greyfen: `43.17 FPS` average and `28.06 FPS` 1% low from five `34-37 ms`
+  frames. Wychwood measured `56.23 FPS` average / `31.67 FPS` 1% low and
+  Wychwood combat measured `55.98 / 40.80`; the remaining zones passed.
+- Remaining blocker: the broader recovery is still incomplete; the current
+  Greyfen 1% low failure remains unresolved, in addition to visual acceptance,
   source-aligned Web export, target-hardware performance, and production browser
-  evidence remain open.
-- Exact next action on resume: continue with the remaining recovery verification
-  queue after the passed `story` profile, starting at the outstanding visual,
-  performance, and Web/export gates. Do not rerun the completed route fix unless
-  one of its inputs changes.
+  evidence remaining open.
+- Exact next action on resume: continue this same `PERF-001` frame-pacing fix by
+  isolating the recurring Greyfen update burst, make the smallest gameplay-safe
+  optimization, and rerun only the graphical performance profile. Do not create
+  a checkpoint commit, export, push, deploy, or start another recovery ticket
+  until that gate passes.
 
 ## Completed In This Checkpoint
 
@@ -75,6 +102,7 @@ the working tree and are not pushed or deployed. Production remains unchanged.
 | Character portrait capture | PASS, 12 fresh 1280x720 frames | `D:\Temp\AshenOath\character_portraits_standing.log` |
 | `QA-012` graphical real-input route | PASS | `.release-gate/ticket/verify_qa_012.log` |
 | `story` ticket profile | PASS | `.release-gate/ticket/verify_quest_012.log` and ticket-gate output |
+| `performance` ticket profile after cache fix | FAIL | `.release-gate/ticket/verify_perf_001.log` |
 
 The clean lifecycle run contains no leaked renderer resources, leaked ObjectDB
 nodes, or leaked SceneTree timers. The visible-quality and audio runs now complete without
