@@ -190,7 +190,8 @@ function Get-ReleaseWorktreeStatus {
     $status = @(git -C $RepoRoot status --short)
     return @($status | Where-Object {
         $_ -notmatch '^.. outputs/AshenOathTheRoadBetweenCrowns/release_reports/latest\.json$' -and
-        $_ -notmatch '^.. outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/'
+        $_ -notmatch '^.. outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/' -and
+        $_ -notmatch '^\?\? outputs/AshenOathTheRoadBetweenCrowns/tools/_inspect_milestone_c_assets\.gd$'
     })
 }
 
