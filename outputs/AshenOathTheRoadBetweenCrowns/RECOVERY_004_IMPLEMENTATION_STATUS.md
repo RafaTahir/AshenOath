@@ -1,6 +1,6 @@
 # RECOVERY-004 Implementation Status
 
-## Current Atomic Checkpoint - 2026-09-06
+## Current Atomic Checkpoint - 2026-09-06 (Lifecycle-clean animation gate)
 
 - Current work: animation presentation and dialogue first-frame pose repair.
 - Completed: shared animation playback now samples the selected clip immediately
@@ -9,17 +9,18 @@
   pose before the scene pause and releases it when dialogue ends. The animation
   evidence helper now samples manual players before capture and refreshes the
   hand-attached sword pose for light and heavy attack frames.
-- Latest result: direct `tools/verify_anim_003.gd` passed. Fresh
+- The animation verifier now uses the project lifecycle shutdown contract before
+  retiring its test tree, instead of directly freeing an active runtime root.
+- Latest result: direct `tools/verify_anim_003.gd` passed through staged shutdown
+  with no null-material, RID, or ObjectDB diagnostics. Fresh
   `Capture_05_sister_anwen_dialogue_2026-09-06_013231.png` shows grounded Kael
   and Sister Anwen without the first-frame T-pose. Fresh
   `ANIM_001_05_Kael_Motion_Contact_Sheet.png` shows grounded idle/walk/action
   poses and a visible sword during the attack sample. `git diff --check` passed.
-- Remaining blocker: the focused verifier still prints two null-material and
-  an ObjectDB shutdown diagnostic after its test tree is freed. These occur in
-  teardown after the pass marker and remain an unresolved lifecycle/release
-  blocker. The broader release blockers also remain: visual placeholder debt,
-  incomplete campaign proof, startup/target-hardware evidence, and no verified
-  export/deployment from this checkpoint.
+- Remaining blocker: the broader release blockers remain: visual placeholder
+  debt, incomplete campaign proof, startup/target-hardware evidence, and no
+  verified export/deployment from this checkpoint. Other lifecycle paths still
+  require the full release run before the registry can be narrowed.
 - Exact next action on resume: resolve the outstanding release-integrity and
   lifecycle/performance blockers, beginning with the startup/resource path, and
   rerun only the affected gates. Do not repeat this animation verifier unless

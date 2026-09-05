@@ -142,8 +142,21 @@ func _frames(count: int) -> void:
 		await process_frame
 
 func _finish() -> void:
+	# Use the same staged lifecycle contract as the release runner. Directly
+	# freeing the test tree while imported materials and skeletons are still
+	# referenced causes false renderer/ObjectDB diagnostics after a valid pass.
+	print("VERIFIER_PHASE: SHUTDOWN")
 	if is_instance_valid(tested_game):
-		tested_game.free()
+		if tested_game.has_method("prepare_resource_shutdown"):
+			tested_game.prepare_resource_shutdown()
+			var retire_frames := int(tested_game.get("ZONE_RETIRE_FRAMES")) if tested_game.get("ZONE_RETIRE_FRAMES") != null else 8
+			await _frames(retire_frames + 4)
+		if tested_game.has_method("finalize_resource_shutdown"):
+			tested_game.finalize_resource_shutdown()
+		await _frames(4)
+		if is_instance_valid(tested_game):
+			tested_game.queue_free()
+		await _frames(24)
 	if failures.is_empty():
 		print("ANIM-003 VERIFIER: PASS - shared presentation states and real bone motion")
 		quit(0)
