@@ -189,6 +189,12 @@ func set_update_rate_hz(rate_hz: float) -> void:
 func is_valid() -> bool:
 	return animation_player != null and skeleton != null and skeleton.get_bone_count() > 0
 
+func is_evaluation_scheduled() -> bool:
+	# Manual and externally ticked drivers intentionally keep AnimationPlayer
+	# inactive between scheduled advances. This reports the real runtime
+	# contract without making a verifier mistake throttling for a dead rig.
+	return is_valid() and not distance_suspended and (externally_ticked or manual_update_interval > 0.0 or animation_player.active)
+
 func set_distance_suspended(suspended: bool) -> void:
 	if distance_suspended == suspended:
 		return

@@ -61,7 +61,8 @@ func _verify_driver(driver, label: String, required_states: Array[String]) -> vo
 	for state in required_states:
 		_assert(states.has(state) or driver.get_clip_for_state(state) != StringName(), "%s has no resolved %s clip" % [label, state])
 	var player := driver.get_animation_player() as AnimationPlayer
-	_assert(player != null and player.active, "%s AnimationPlayer is inactive at inspection distance" % label)
+	var scheduled := driver.is_evaluation_scheduled() if driver.has_method("is_evaluation_scheduled") else player != null and player.active
+	_assert(player != null and scheduled, "%s animation evaluation is inactive at inspection distance" % label)
 	_assert(driver.get_skeleton() != null and driver.get_skeleton().get_bone_count() > 0, "%s has no animated skeleton" % label)
 
 func _verify_locomotion_cadence(driver) -> void:
