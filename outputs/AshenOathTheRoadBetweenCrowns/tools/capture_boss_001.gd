@@ -31,9 +31,27 @@ func _initialize() -> void:
 	else:
 		var stamp := Time.get_datetime_string_from_system().replace(":", "").replace("-", "").replace("T", "_")
 		image.save_png(ProjectSettings.globalize_path("%s/BOSS_001_WhiteHart_%s.png" % [OUTPUT_DIR, stamp]))
+	var result_code := 0 if failures == 0 else 1
+	print("VERIFIER_PHASE: SHUTDOWN")
+	await _release_game(game)
 	print("BOSS-001 SCREENSHOT: %s" % ("PASS" if failures == 0 else "FAIL"))
-	quit(0 if failures == 0 else 1)
+	quit(result_code)
 
 func settle(count: int) -> void:
 	for _index in range(count):
 		await process_frame
+
+func _release_game(game: Node) -> void:
+	if is_instance_valid(game) and game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+		await settle(20)
+	if is_instance_valid(game) and game.has_method("finalize_resource_shutdown"):
+		game.finalize_resource_shutdown()
+		await settle(16)
+	if is_instance_valid(game) and game.is_inside_tree():
+		root.remove_child(game)
+	if is_instance_valid(game):
+		game.free()
+	RenderingServer.force_sync()
+	await settle(12)
+	RenderingServer.force_sync()

@@ -53,10 +53,13 @@ static func apply_npc(owner: Node3D, role_id: String, include_ground_shadow: boo
 		# sword merely because it shares the same compact source family.
 		_set_native_role_equipment_visible(owner, role)
 		if role in ["sister_anwen", "sister_anwen_human"]:
-			# The Universal body owns its native hand/skin layers. Do not layer a
-			# second root-equivalent staff over the validated bone attachment.
-			if owner.find_child("Cleric_Staff", true, false) == null:
-				_add_anwen_staff(owner)
+			# The imported female source can carry a root-authored Cleric_Staff.
+			# Hide that duplicate and use one compact staff on the validated hand
+			# socket so the prop cannot read as a floating pole in dialogue.
+			var native_anwen_staff := owner.find_child("Cleric_Staff", true, false)
+			if native_anwen_staff != null:
+				native_anwen_staff.visible = false
+			_add_anwen_staff(owner)
 		_add_castle_role_equipment(owner, role)
 		return
 	# Non-skeletal bodies are not allowed to acquire fake clothing or facial
@@ -97,7 +100,7 @@ static func _find_character_visual(owner: Node3D) -> Node3D:
 	return owner
 
 static func _set_native_role_equipment_visible(owner: Node3D, role: String) -> void:
-	var keeps_staff := role in ["sister_anwen", "sister_anwen_human"] or role.contains("cleric") or role.contains("pilgrim")
+	var keeps_staff := role.contains("cleric") or role.contains("pilgrim")
 	var native_staff := owner.find_child("Cleric_Staff", true, false)
 	if native_staff != null:
 		native_staff.visible = keeps_staff

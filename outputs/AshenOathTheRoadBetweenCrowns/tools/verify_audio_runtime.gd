@@ -36,10 +36,18 @@ func _initialize() -> void:
 	_assert(game_source.contains("voice_player_ghoulkin_death_01"), "Player victory voice hook is missing")
 	_assert(game_source.contains("set_music_state(\"ghoulkin_combat\")"), "Combat music trigger hook is missing")
 	_assert(game_source.contains("victory_return_cue"), "Victory cue hook is missing")
-	audio.queue_free()
-	await process_frame
 	print("AUDIO RUNTIME VERIFIER: PASS")
-	quit()
+	# All checks above are active audio verification. Retire the generated
+	# streams and pooled players before process exit so resource diagnostics are
+	# classified as owned shutdown work rather than a runtime leak.
+	print("VERIFIER_PHASE: SHUTDOWN")
+	if audio != null and is_instance_valid(audio):
+		audio.stop_zone_audio()
+		audio.stop_voice()
+		audio.queue_free()
+	for _index in range(8):
+		await process_frame
+	quit(0)
 
 func _assert(condition: bool, message: String) -> void:
 	if not condition:

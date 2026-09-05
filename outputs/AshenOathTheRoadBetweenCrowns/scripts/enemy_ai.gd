@@ -715,104 +715,11 @@ func _build_body(color: Color) -> void:
 	visual_root = Node3D.new()
 	visual_root.name = "visual_root"
 	add_child(visual_root)
-	if enemy_id == "white_hart_avatar" and _try_build_mapped_body():
-		CharacterPresentation.apply_enemy(self, _enemy_shadow_scale())
-		return
-	if enemy_id == "white_hart_avatar":
-		_build_hart_body()
-		CharacterPresentation.apply_enemy(self, _enemy_shadow_scale())
-		return
 	if _try_build_mapped_body():
 		CharacterPresentation.apply_enemy(self, _enemy_shadow_scale())
 		return
-
-	var body = MeshInstance3D.new()
-	var mesh = CapsuleMesh.new()
-	mesh.height = 1.05
-	mesh.radius = 0.38
-	body.mesh = mesh
-	body.position.y = 0.65
-	body.material_override = _mat(color)
-	visual_root.add_child(body)
-	body_visual = body
-
-	if enemy_id == "bog_wretch":
-		body.scale = Vector3(1.25, 0.9, 1.25)
-		_add_part(Vector3(0, 1.22, 0), Vector3(0.55, 0.16, 0.55), Color(0.18, 0.27, 0.18), "sphere")
-		_add_part(Vector3(0.38, 0.52, -0.1), Vector3(0.12, 0.6, 0.12), Color(0.20, 0.32, 0.22), "box")
-		_add_part(Vector3(-0.38, 0.52, -0.1), Vector3(0.12, 0.6, 0.12), Color(0.20, 0.32, 0.22), "box")
-	elif enemy_id == "gravebound_knight":
-		body.scale = Vector3(1.05, 1.2, 1.05)
-		_add_part(Vector3(0, 1.35, -0.04), Vector3(0.72, 0.35, 0.22), Color(0.19, 0.20, 0.22), "box")
-		_add_part(Vector3(-0.58, 0.88, -0.08), Vector3(0.12, 0.18, 0.95), Color(0.48, 0.45, 0.38), "box")
-		_add_part(Vector3(0.55, 0.82, -0.08), Vector3(0.16, 0.8, 0.16), Color(0.38, 0.38, 0.39), "box")
-	elif enemy_id == "wychwood_stalker":
-		body.scale = Vector3(1.45, 0.55, 0.7)
-		_add_part(Vector3(0.0, 0.92, -0.52), Vector3(0.35, 0.2, 0.35), Color(0.10, 0.24, 0.12), "sphere")
-		_add_part(Vector3(0.22, 1.08, -0.62), Vector3(0.06, 0.38, 0.06), Color(0.33, 0.26, 0.18), "box")
-		_add_part(Vector3(-0.22, 1.08, -0.62), Vector3(0.06, 0.38, 0.06), Color(0.33, 0.26, 0.18), "box")
-	elif enemy_id == "white_hart_avatar":
-		body.scale = Vector3(1.25, 1.4, 1.0)
-		_add_part(Vector3(0, 1.55, -0.35), Vector3(0.35, 0.28, 0.35), Color(0.82, 0.80, 0.70), "sphere")
-		_add_part(Vector3(0.28, 1.9, -0.38), Vector3(0.06, 0.65, 0.06), Color(0.48, 0.42, 0.31), "box")
-		_add_part(Vector3(-0.28, 1.9, -0.38), Vector3(0.06, 0.65, 0.06), Color(0.48, 0.42, 0.31), "box")
-	else:
-		_add_part(Vector3(0.22, 0.92, -0.28), Vector3(0.12, 0.5, 0.12), Color(0.36, 0.36, 0.29), "box")
-		_add_part(Vector3(-0.22, 0.92, -0.28), Vector3(0.12, 0.5, 0.12), Color(0.36, 0.36, 0.29), "box")
-	base_body_scale = body.scale
-	CharacterPresentation.apply_enemy(self, _enemy_shadow_scale())
-
-	var marker = MeshInstance3D.new()
-	marker.name = "EnemyWeakPointMarker"
-	marker.mesh = SphereMesh.new()
-	marker.scale = Vector3(0.09, 0.09, 0.09)
-	marker.position = Vector3(0, 1.55, -0.35)
-	marker.material_override = _mat(Color(0.95, 0.22, 0.12))
-	visual_root.add_child(marker)
-
-func _build_hart_body() -> void:
-	var body_material := _mat(Color(0.52, 0.72, 0.62))
-	body_material.emission_enabled = true
-	body_material.emission = Color(0.10, 0.30, 0.22)
-	body_material.emission_energy_multiplier = 0.42
-	var shadow_material := _mat(Color(0.10, 0.16, 0.15))
-	var antler_material := _mat(Color(0.58, 0.48, 0.30))
-	# Keep the witness animal-shaped. The earlier upright chest/neck read as a
-	# humanoid mannequin from the approach road even though it had antlers.
-	body_visual = _hart_mesh("HartBody", CapsuleMesh.new(), Vector3(0, 1.28, 0.08), Vector3(0.88, 1.48, 0.72), body_material, Vector3(90, 0, 0))
-	_hart_mesh("HartRump", SphereMesh.new(), Vector3(0, 1.34, 0.66), Vector3(0.72, 0.58, 0.62), body_material)
-	_hart_mesh("HartChest", SphereMesh.new(), Vector3(0, 1.42, -0.66), Vector3(0.68, 0.66, 0.56), body_material)
-	_hart_mesh("HartNeck", CapsuleMesh.new(), Vector3(0, 1.78, -0.88), Vector3(0.40, 0.60, 0.40), body_material, Vector3(-48, 0, 0))
-	_hart_mesh("HartHead", SphereMesh.new(), Vector3(0, 2.08, -1.34), Vector3(0.50, 0.40, 0.60), body_material)
-	_hart_mesh("HartMuzzle", SphereMesh.new(), Vector3(0, 1.99, -1.74), Vector3(0.30, 0.18, 0.40), body_material)
-	_hart_mesh("HartMane", SphereMesh.new(), Vector3(0, 1.78, -0.70), Vector3(0.38, 0.54, 0.32), shadow_material)
-	_hart_mesh("HartEar", SphereMesh.new(), Vector3(-0.30, 2.28, -1.16), Vector3(0.20, 0.10, 0.28), shadow_material, Vector3(0, 0, -18))
-	_hart_mesh("HartEar", SphereMesh.new(), Vector3(0.30, 2.28, -1.16), Vector3(0.20, 0.10, 0.28), shadow_material, Vector3(0, 0, 18))
-	_hart_mesh("HartTail", CapsuleMesh.new(), Vector3(0, 1.56, 1.10), Vector3(0.16, 0.42, 0.16), shadow_material, Vector3(-34, 0, 0))
-	for side in [-1.0, 1.0]:
-		for z in [-0.46, 0.52]:
-			_hart_mesh("HartLeg", CapsuleMesh.new(), Vector3(side * 0.44, 0.60, z), Vector3(0.15, 0.68, 0.15), shadow_material)
-			_hart_mesh("HartHoof", BoxMesh.new(), Vector3(side * 0.44, 0.12, z - 0.08), Vector3(0.22, 0.14, 0.30), antler_material)
-		_hart_mesh("HartAntlerMain", CylinderMesh.new(), Vector3(side * 0.25, 2.58, -1.30), Vector3(0.10, 0.74, 0.10), antler_material, Vector3(0, 0, side * -18.0))
-		_hart_mesh("HartAntlerBranch", CylinderMesh.new(), Vector3(side * 0.48, 2.88, -1.30), Vector3(0.065, 0.42, 0.065), antler_material, Vector3(0, 0, side * 34.0))
-		var eye := _hart_mesh("HartEye", SphereMesh.new(), Vector3(side * 0.18, 2.14, -1.70), Vector3(0.070, 0.070, 0.070), _mat(Color(0.52, 1.0, 0.78)))
-		var eye_material := eye.material_override as StandardMaterial3D
-		if eye_material != null:
-			eye_material.emission_enabled = true
-			eye_material.emission = Color(0.52, 1.0, 0.78)
-			eye_material.emission_energy_multiplier = 2.0
-	_hart_mesh("HartSigilLight", SphereMesh.new(), Vector3(0, 1.42, -0.70), Vector3(0.13, 0.13, 0.13), _mat(Color(0.52, 1.0, 0.78)))
-
-func _hart_mesh(node_name: String, mesh: Mesh, position: Vector3, scale_value: Vector3, material: Material, rotation_degrees := Vector3.ZERO) -> MeshInstance3D:
-	var node := MeshInstance3D.new()
-	node.name = node_name
-	node.mesh = mesh
-	node.position = position
-	node.scale = scale_value
-	node.rotation_degrees = rotation_degrees
-	node.material_override = material
-	visual_root.add_child(node)
-	return node
+	visual_root.set_meta("enemy_visual_failure", true)
+	push_error("Enemy visual role could not be built for '%s'; refusing primitive fallback" % enemy_id)
 
 func _try_build_mapped_body() -> bool:
 	asset_helper = AssetSpawnHelper.new()

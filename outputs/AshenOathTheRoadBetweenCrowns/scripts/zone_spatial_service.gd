@@ -12,6 +12,7 @@ var safe_spawns: Array[Vector3] = []
 var recovery_anchors: Array[Vector3] = []
 var bridges: Dictionary = {}
 var gates: Dictionary = {}
+var player_body: CollisionObject3D
 var navigation_region: NavigationRegion3D
 var navigation_map: RID
 
@@ -24,6 +25,7 @@ func configure(id: String, river_z: float, extents: Vector2) -> void:
 	zone_id = id
 	river_center = river_z
 	half_extents = extents
+	player_body = null
 	reserved_corridors.clear()
 	exclusions.clear()
 	safe_spawns.clear()
@@ -31,6 +33,11 @@ func configure(id: String, river_z: float, extents: Vector2) -> void:
 	bridges.clear()
 	gates.clear()
 	_register_zone_defaults()
+
+func set_player_body(body: CollisionObject3D) -> void:
+	# Recovery probes must ignore the player capsule explicitly. Relying on a
+	# scene group is fragile because spawned players do not need that group.
+	player_body = body if body != null and is_instance_valid(body) else null
 
 func register_bridge(id: String, bank_a: Vector3, bank_b: Vector3, half_width: float) -> void:
 	var centre_z := (bank_a.z + bank_b.z) * 0.5
@@ -281,10 +288,14 @@ func is_position_occupied(position: Vector3, radius: float, height: float) -> bo
 	query.collision_mask = 1
 	query.collide_with_areas = false
 	query.collide_with_bodies = true
+	var excluded_rids: Array[RID] = []
+	if player_body != null and is_instance_valid(player_body):
+		excluded_rids.append(player_body.get_rid())
 	for actor in get_tree().get_nodes_in_group("player"):
-		var player_body := actor as CollisionObject3D
-		if player_body != null:
-			query.exclude.append(player_body.get_rid())
+		var grouped_player := actor as CollisionObject3D
+		if grouped_player != null and not excluded_rids.has(grouped_player.get_rid()):
+			excluded_rids.append(grouped_player.get_rid())
+	query.exclude = excluded_rids
 	return not get_world_3d().direct_space_state.intersect_shape(query, 1).is_empty()
 
 func _nearest_spawn(position: Vector3, preferred_bank: int = 0) -> Vector3:

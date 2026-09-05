@@ -4,10 +4,10 @@ const EnemyAI = preload("res://scripts/enemy_ai.gd")
 
 var required := ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute", "bog_wretch", "gravebound_knight", "bell_eater", "rootbound_colossus", "ashwing", "halvern_boss", "white_hart_avatar"]
 const WYCHWOOD_VISUAL_ROLES := {
-	"ghoulkin": "ghoulkin_skeleton",
-	"wychwood_stalker": "ghoulkin_skeleton",
-	"wychwood_raider": "ghoulkin_skeleton",
-	"wychwood_brute": "ghoulkin_skeleton",
+	"ghoulkin": {"role": "ghoulkin_skeleton", "path": "res://assets_external/enemies/Skeleton.fbx"},
+	"wychwood_stalker": {"role": "wychwood_stalker_creature", "path": "res://assets_external/enemies/Bat.fbx"},
+	"wychwood_raider": {"role": "wychwood_raider_creature", "path": "res://assets_external/enemies/Dragon.fbx"},
+	"wychwood_brute": {"role": "ghoulkin_skeleton", "path": "res://assets_external/enemies/Skeleton.fbx"},
 }
 var failures := 0
 
@@ -53,11 +53,12 @@ func _verify_wychwood_family_source() -> void:
 		return
 	var enemy_roles: Dictionary = upgrade_data.get("roles", {}).get("enemies", {})
 	for enemy_id in WYCHWOOD_VISUAL_ROLES:
-		var role_id := str(WYCHWOOD_VISUAL_ROLES[enemy_id])
+		var expected: Dictionary = WYCHWOOD_VISUAL_ROLES[enemy_id]
+		var role_id := str(expected.get("role", ""))
 		var family_entry: Dictionary = enemy_roles.get(role_id, {})
 		check(not family_entry.is_empty(), "%s has no explicit connected family role" % enemy_id)
 		var source_path := str(family_entry.get("path", ""))
-		check(source_path == "res://assets_external/enemies/Skeleton.fbx", "%s is mapped to an unexpected family source" % enemy_id)
+		check(source_path == str(expected.get("path", "")), "%s is mapped to an unexpected family source" % enemy_id)
 		check(ResourceLoader.exists(source_path), "%s family source is not loadable" % enemy_id)
 	var legacy_entry: Dictionary = enemy_roles.get("ghoulkin_skeleton", {})
 	check(str(legacy_entry.get("status", "")).contains("char_restore") or str(legacy_entry.get("status", "")).contains("legacy_quarantined"), "retained Skeleton source must have an explicit retained status")
@@ -85,7 +86,7 @@ func _verify_wychwood_family_runtime(enemy_definitions: Dictionary) -> void:
 		var visual := actor.find_child("%s_visual" % enemy_id, true, false)
 		check(visual != null, "%s runtime has no mapped visual instance" % enemy_id)
 		if visual != null:
-			check(str(visual.get_meta("monster_family_role", "")) == str(WYCHWOOD_VISUAL_ROLES[enemy_id]), "%s runtime selected the wrong family role" % enemy_id)
+			check(str(visual.get_meta("monster_family_role", "")) == str(WYCHWOOD_VISUAL_ROLES[enemy_id].get("role", "")), "%s runtime selected the wrong family role" % enemy_id)
 		actor.queue_free()
 		target.queue_free()
 

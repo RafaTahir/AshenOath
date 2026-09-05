@@ -4,6 +4,7 @@ const AudioManager = preload("res://scripts/audio_manager.gd")
 const MANIFEST_PATH := "res://voice_production_manifest.json"
 
 var failures := 0
+var tested_audio: Node = null
 
 func _initialize() -> void:
 	var manifest = JSON.parse_string(FileAccess.get_file_as_string(MANIFEST_PATH))
@@ -14,6 +15,7 @@ func _initialize() -> void:
 	check(str(manifest.get("status", "")) == "scratch", "Synthetic voice must be identified as scratch delivery")
 	check(str(manifest.get("authoritative_delivery", "")) == "subtitles", "Subtitles are not authoritative")
 	var audio := AudioManager.new()
+	tested_audio = audio
 	root.add_child(audio)
 	await process_frame
 	await audio.wait_until_ready()
@@ -33,10 +35,20 @@ func _initialize() -> void:
 	check(not bool(audio.get("browser_voice_fallback_enabled")), "Robotic browser voice is enabled for default delivery")
 	check(audio.has_method("set_browser_voice_fallback_enabled"), "Accessibility voice fallback cannot be enabled explicitly")
 	print("VOICE-001 payload_bytes=%d" % payload)
-	_finish()
+	await _finish()
 
 func _finish() -> void:
 	print("VOICE-001 VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
+	# The checks above are active voice-library verification. Retire the audio
+	# manager and generated streams before process exit so remaining diagnostics
+	# are classified as owned shutdown work.
+	print("VERIFIER_PHASE: SHUTDOWN")
+	if tested_audio != null and is_instance_valid(tested_audio):
+		tested_audio.stop_zone_audio()
+		tested_audio.stop_voice()
+		tested_audio.queue_free()
+	for _index in range(8):
+		await process_frame
 	quit(0 if failures == 0 else 1)
 
 func check(condition: bool, message: String) -> void:

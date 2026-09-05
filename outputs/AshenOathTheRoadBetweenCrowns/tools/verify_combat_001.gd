@@ -181,6 +181,13 @@ func _sample_blade_motion(player, clip: StringName) -> float:
 	if wrist_index < 0:
 		return 0.0
 	var animation := animation_player.get_animation(clip)
+	var was_active := animation_player.active
+	var was_callback_mode := animation_player.callback_mode_process
+	# The runtime player uses manual callbacks so it can be driven by the
+	# owning physics tick. Temporarily enable the player while sampling exact
+	# clip poses, then restore the production scheduling contract below.
+	animation_player.active = true
+	animation_player.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
 	animation_player.play(clip, 0.0)
 	animation_player.seek(minf(animation.length * 0.10, animation.length), true)
 	skeleton.force_update_all_bone_transforms()
@@ -188,6 +195,8 @@ func _sample_blade_motion(player, clip: StringName) -> float:
 	animation_player.seek(minf(animation.length * 0.58, animation.length), true)
 	skeleton.force_update_all_bone_transforms()
 	var finish: Transform3D = skeleton.get_bone_global_pose(wrist_index)
+	animation_player.active = was_active
+	animation_player.callback_mode_process = was_callback_mode
 	var motion := start.origin.distance_to(finish.origin)
 	motion += start.basis.x.distance_to(finish.basis.x)
 	motion += start.basis.y.distance_to(finish.basis.y)

@@ -87,11 +87,32 @@ func _initialize() -> void:
 	var saved: Dictionary = game.story_state.save_state()
 	game.story_state.load_state(saved)
 	check(bool(game.story_state.get_flag("castle_haunting_cleared", false)), "Castle state failed save/load round-trip")
+	var result_code := 0 if failures == 0 else 1
+	await _shutdown_game(game)
 	print("CASTLE VARGAN VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
-	quit(0 if failures == 0 else 1)
+	quit(result_code)
 
 func settle(count: int) -> void:
 	for i in range(count): await process_frame
+
+func _shutdown_game(game: Node) -> void:
+	# Castle creates several streamed roots and animated actors. Retire them
+	# through the runtime owner before the SceneTree exits so valid assertions do
+	# not get followed by an unclassified ObjectDB leak diagnostic.
+	if is_instance_valid(game) and game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+		await settle(20)
+	if is_instance_valid(game) and game.has_method("finalize_resource_shutdown"):
+		game.finalize_resource_shutdown()
+		await settle(16)
+	print("VERIFIER_PHASE: SHUTDOWN")
+	if is_instance_valid(game) and game.is_inside_tree():
+		root.remove_child(game)
+	if is_instance_valid(game):
+		game.free()
+	RenderingServer.force_sync()
+	await settle(12)
+	RenderingServer.force_sync()
 
 func check(condition: bool, message: String) -> void:
 	if not condition:

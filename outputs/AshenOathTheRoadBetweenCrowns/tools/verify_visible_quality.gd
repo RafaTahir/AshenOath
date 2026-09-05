@@ -388,7 +388,15 @@ func _finish() -> void:
 	if game != null and is_instance_valid(game):
 		if game.has_method("prepare_resource_shutdown"):
 			game.prepare_resource_shutdown()
-		game.queue_free()
+		# Allow the runtime's staged retirement window to finish before releasing
+		# service owners. This keeps the visual gate from creating a renderer query
+		# against a resource that is already being detached in the same frame.
+		await _settle_frames(12)
+		if is_instance_valid(game) and game.has_method("finalize_resource_shutdown"):
+			game.finalize_resource_shutdown()
+		await _settle_frames(4)
+		if is_instance_valid(game):
+			game.queue_free()
 	await _settle_frames(12)
 	RenderingServer.force_sync()
 	await _settle_frames(2)

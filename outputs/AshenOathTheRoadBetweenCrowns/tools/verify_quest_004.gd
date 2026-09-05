@@ -58,12 +58,28 @@ func _initialize() -> void:
 	check(str(game.story_state.get_flag("edric_stance", "")) == "cooperate", "Edric stance was not stored")
 	check(game.quests.is_completed("main_blood_under_stone"), "Blood Under Stone did not complete after Edric's answer")
 	check(game.quests.is_active("main_last_witness") or game.quests.is_unlocked("main_last_witness"), "The Last Witness did not unlock")
+	var result_code := 0 if failures == 0 else 1
+	await _shutdown_game(game)
 	print("QUEST-004 VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
-	quit(0 if failures == 0 else 1)
+	quit(result_code)
 
 func settle(count: int) -> void:
 	for _index in range(count):
 		await process_frame
+
+func _shutdown_game(game: Node) -> void:
+	if is_instance_valid(game) and game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+		await settle(20)
+	if is_instance_valid(game) and game.has_method("finalize_resource_shutdown"):
+		game.finalize_resource_shutdown()
+		await settle(12)
+	print("VERIFIER_PHASE: SHUTDOWN")
+	if is_instance_valid(game):
+		game.queue_free()
+		await settle(8)
+	RenderingServer.force_sync()
+	await settle(4)
 
 func check(condition: bool, message: String) -> void:
 	if condition:

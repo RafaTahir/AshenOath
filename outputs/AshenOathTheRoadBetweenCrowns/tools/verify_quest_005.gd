@@ -55,12 +55,28 @@ func _initialize() -> void:
 	check(game.quests.is_completed("main_hart_remembers"), "Peaceful Hart ending did not complete the campaign")
 	var witnesses = game.story_state.get_flag("final_witnesses", [])
 	check(typeof(witnesses) == TYPE_ARRAY and "halvern" in witnesses, "Final witness snapshot omitted Halvern")
+	var result_code := 0 if failures == 0 else 1
+	await _shutdown_game(game)
 	print("QUEST-005 VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
-	quit(0 if failures == 0 else 1)
+	quit(result_code)
 
 func settle(count: int) -> void:
 	for _index in range(count):
 		await process_frame
+
+func _shutdown_game(game: Node) -> void:
+	if is_instance_valid(game) and game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+		await settle(20)
+	if is_instance_valid(game) and game.has_method("finalize_resource_shutdown"):
+		game.finalize_resource_shutdown()
+		await settle(12)
+	print("VERIFIER_PHASE: SHUTDOWN")
+	if is_instance_valid(game):
+		game.queue_free()
+		await settle(8)
+	RenderingServer.force_sync()
+	await settle(4)
 
 func check(condition: bool, message: String) -> void:
 	if condition:

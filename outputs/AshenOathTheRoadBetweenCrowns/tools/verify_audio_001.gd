@@ -34,11 +34,22 @@ func _initialize() -> void:
 	for zone_id in ["greyfen","wychwood"]:
 		game.call("_load_zone",zone_id,Vector3(0,1,7))
 		await settle(4)
-		check(_count_prefix(game.zone_root,"BridgeApproachRamp") == 4,"%s bridge has no walkable approach pair" % zone_id)
+		# Each bridge has one authored approach ramp on each bank. The physical
+		# deck is shared by both directions, so four ramps would describe a
+		# different bridge than the one built by RiverSection.
+		check(_count_prefix(game.zone_root,"BridgeApproachRamp") == 2,"%s bridge has no walkable approach pair" % zone_id)
 
 	print("AUDIO-001 VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
-	game.queue_free()
-	await settle(3)
+	if game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+	await settle(12)
+	if is_instance_valid(game) and game.has_method("finalize_resource_shutdown"):
+		game.finalize_resource_shutdown()
+	await settle(4)
+	if is_instance_valid(game):
+		game.queue_free()
+	await settle(12)
+	RenderingServer.force_sync()
 	quit(0 if failures == 0 else 1)
 
 func _count_prefix(parent: Node, prefix: String) -> int:

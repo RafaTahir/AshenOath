@@ -128,19 +128,27 @@ func _play_idle(character: Node) -> void:
 	var player := character.find_child("AnimationPlayer", true, false) as AnimationPlayer
 	if player == null:
 		return
-	# The Ghoul family has a second authored idle on the Stalker and Brute
-	# rigs; prefer it so portrait evidence does not freeze every variant in the
-	# same arms-out presentation. Human and dragon roles fall through cleanly.
+	# Prefer a true standing idle. A broad substring search selects Crouch_Idle
+	# before Idle in the Universal library, which makes every portrait look bent
+	# at the knees and invalidates the visual evidence.
 	var candidates := ["idle2", "idle", "flying", "standing", "rest", "skeletonidle"]
 	var selected := StringName()
 	for animation_name in player.get_animation_list():
 		var key := str(animation_name).to_lower().replace(" ", "").replace("_", "").replace("-", "").replace("|", "")
-		for candidate in candidates:
-			if key.contains(candidate):
-				selected = animation_name
-				break
-		if selected != StringName():
+		if key == "idle":
+			selected = animation_name
 			break
+	if selected == StringName():
+		for animation_name in player.get_animation_list():
+			var key := str(animation_name).to_lower().replace(" ", "").replace("_", "").replace("-", "").replace("|", "")
+			if key.contains("crouch") or key.contains("sitting") or key.contains("sit"):
+				continue
+			for candidate in candidates:
+				if key.contains(candidate):
+					selected = animation_name
+					break
+			if selected != StringName():
+				break
 	if selected != StringName():
 		player.play(selected)
 	else:

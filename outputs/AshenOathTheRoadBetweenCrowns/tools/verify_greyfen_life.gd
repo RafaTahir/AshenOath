@@ -59,11 +59,31 @@ func _initialize() -> void:
 	check(life != null and life.actor_count() >= 7,"Potato Greyfen lost required routine actors")
 	check(game.zone_root.find_child("common_table",true,false) != null and game.zone_root.find_child("barrel_board",true,false) != null,"Potato mode removed minigames")
 
+	var result_code := 0 if failures == 0 else 1
+	await _shutdown_game(game)
 	print("GREYFEN LIFE VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
-	quit(0 if failures == 0 else 1)
+	quit(result_code)
 
 func _settle(count: int) -> void:
 	for i in range(count): await process_frame
+
+func _shutdown_game(game: Node) -> void:
+	# Own the runtime shutdown so a passing routine/minigame check cannot leave
+	# scene resources alive until process exit.
+	if game != null and is_instance_valid(game) and game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+	await _settle(20)
+	if game != null and is_instance_valid(game) and game.has_method("finalize_resource_shutdown"):
+		game.finalize_resource_shutdown()
+	await _settle(12)
+	print("VERIFIER_PHASE: SHUTDOWN")
+	if game != null and is_instance_valid(game) and game.is_inside_tree():
+		root.remove_child(game)
+	if game != null and is_instance_valid(game):
+		game.free()
+	RenderingServer.force_sync()
+	await _settle(8)
+	RenderingServer.force_sync()
 
 func check(condition: bool, message: String) -> void:
 	if not condition:

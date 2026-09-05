@@ -95,7 +95,7 @@ func configure(owner: Node) -> void:
 
 	hud.process_mode = Node.PROCESS_MODE_ALWAYS
 	quests.load_quests("res://data/quests.json")
-	quest_presentation.setup(quests)
+	quest_presentation.setup(quests, quest_beats)
 	quest_beats.setup(quests, story_state)
 	dialogue.load_dialogue("res://data/dialogue.json")
 	dialogue.load_dialogue("res://data/campaign_dialogue.json")

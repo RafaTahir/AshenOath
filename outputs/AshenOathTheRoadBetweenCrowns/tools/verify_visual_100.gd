@@ -21,9 +21,7 @@ func _initialize() -> void:
 	_assert(_has_textured_surface(game.zone_root), "Wychwood has no textured authored surface")
 	_assert(game.zone_root.find_child("WorldMotionController", true, false) != null, "shared world motion controller is missing")
 	_assert(game.zone_root.find_child("SurfaceFeedbackManager", true, false) != null, "surface feedback manager is missing")
-	# Emit the assertion result before freeing the test scene. Dummy-renderer
-	# cleanup diagnostics are shutdown noise and are classified after PASS.
-	_finish()
+	await _finish(game)
 
 func _has_synthetic_feature(node: Node) -> bool:
 	if node.has_meta("feature_id") or node.name.begins_with("Visual100Feature"):
@@ -50,9 +48,25 @@ func _frames(count: int) -> void:
 func _assert(condition: bool, message: String) -> void:
 	if not condition: failures.append(message); push_error(message)
 
-func _finish() -> void:
-	if not failures.is_empty():
-		print("Visual100 verification failed")
-		quit(1); return
-	print("VISUAL100 VERIFIER: PASS - synthetic markers removed; authored systems present")
-	quit()
+func _shutdown_game(game: Node) -> void:
+	if is_instance_valid(game) and game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+		await _frames(20)
+	if is_instance_valid(game) and game.has_method("finalize_resource_shutdown"):
+		game.finalize_resource_shutdown()
+		await _frames(12)
+	print("VERIFIER_PHASE: SHUTDOWN")
+	if is_instance_valid(game):
+		game.queue_free()
+		await _frames(8)
+	RenderingServer.force_sync()
+	await _frames(4)
+
+func _finish(game: Node = null) -> void:
+	var result_code := 0 if failures.is_empty() else 1
+	await _shutdown_game(game)
+	if failures.is_empty():
+		print("VISUAL100 VERIFIER: PASS - synthetic markers removed; authored systems present")
+	else:
+		print("Visual100 verification failed (%d)" % failures.size())
+	quit(result_code)

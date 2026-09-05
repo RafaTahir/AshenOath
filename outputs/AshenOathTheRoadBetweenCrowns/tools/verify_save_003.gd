@@ -25,8 +25,9 @@ func _initialize() -> void:
 		await _verify_invalid_position_recovery(game, manager)
 		game.prepare_resource_shutdown()
 		await _wait_for_retirement(game)
+		game.finalize_resource_shutdown()
 		game.queue_free()
-		await _frames(24)
+		await _frames(60)
 
 	manager.queue_free()
 	await process_frame
@@ -65,6 +66,9 @@ func _verify_migration_contract(manager: Node) -> void:
 
 func _verify_story_and_quest_sanitization() -> void:
 	var story := StoryState.new()
+	# StoryState is a Node, not a RefCounted value. Give the fixture an explicit
+	# owner so the verifier cannot leave an orphaned script instance at exit.
+	root.add_child(story)
 	story.load_state({"flags": [], "values": {"anwen_trust": "bad", "hart_debt": 99, "greyfen_fear": -4}})
 	_check(int(story.values.get("anwen_trust", 99)) == 0, "Story value fallback was not neutral")
 	_check(int(story.values.get("hart_debt", 0)) == 6, "Story value upper bound was not enforced")
@@ -82,7 +86,8 @@ func _verify_story_and_quest_sanitization() -> void:
 	_check(not quests.active.has("unknown_quest"), "Unknown active quest survived migration")
 	_check(not quests.completed.has("unknown_quest"), "Unknown completed quest survived migration")
 	_check(quests.get_tracked_quest() == "", "Invalid tracked quest was not cleared")
-	quests.queue_free()
+	quests.free()
+	story.free()
 
 func _verify_runtime_save_shape(game: Node, manager: Node) -> void:
 	var data: Dictionary = manager.migrate_save_data({

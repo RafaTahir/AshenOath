@@ -6,7 +6,7 @@ func _initialize() -> void:
 	var scene = load("res://scenes/main.tscn")
 	_check(scene != null, "Main scene could not be loaded")
 	if scene == null:
-		_finish()
+		await _finish()
 		return
 	var game = scene.instantiate()
 	root.add_child(game)
@@ -90,7 +90,7 @@ func _initialize() -> void:
 	_check(game.crafting.craft("moon_oil"), "Refined Moon Oil could not be crafted")
 	_check(int(game.inventory.ingredients.get("mooncap", -1)) == 1, "Refined formula did not reduce Moon Oil's net mooncap cost")
 	_verify_legacy_migration()
-	_finish()
+	await _finish(game)
 
 func _verify_legacy_migration() -> void:
 	var manager = preload("res://scripts/quest_manager.gd").new()
@@ -161,6 +161,21 @@ func _check(condition: bool, message: String) -> void:
 		failures += 1
 		push_error(message)
 
-func _finish() -> void:
+func _finish(game: Node = null) -> void:
+	var result_code := 0 if failures == 0 else 1
+	if game != null and is_instance_valid(game) and game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+	await _settle(20)
+	if game != null and is_instance_valid(game) and game.has_method("finalize_resource_shutdown"):
+		game.finalize_resource_shutdown()
+	await _settle(12)
+	print("VERIFIER_PHASE: SHUTDOWN")
+	if game != null and is_instance_valid(game) and game.is_inside_tree():
+		root.remove_child(game)
+	if game != null and is_instance_valid(game):
+		game.free()
+	RenderingServer.force_sync()
+	await _settle(8)
+	RenderingServer.force_sync()
 	print("QUEST-002 VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
-	quit(0 if failures == 0 else 1)
+	quit(result_code)

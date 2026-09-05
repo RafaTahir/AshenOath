@@ -25,8 +25,10 @@ func _initialize() -> void:
 	await _frames(4)
 	_verify_zone_route(game, "wychwood")
 	_verify_service_boundary(game)
+	var result_code := 0 if failures == 0 else 1
+	await _shutdown_game(game)
 	print("ENGINE-001 VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
-	quit(0 if failures == 0 else 1)
+	quit(result_code)
 
 func _verify_service_boundary(game) -> void:
 	var registry = game.get("runtime_services")
@@ -90,6 +92,25 @@ func _verify_composition_contract() -> void:
 func _frames(count: int) -> void:
 	for _i in range(count):
 		await process_frame
+
+func _shutdown_game(game) -> void:
+	# Release the same runtime-owned resources exercised by this verifier before
+	# quitting. Without an explicit phase boundary, renderer teardown diagnostics
+	# are indistinguishable from active-route failures.
+	if game != null and is_instance_valid(game) and game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+	await _frames(20)
+	if game != null and is_instance_valid(game) and game.has_method("finalize_resource_shutdown"):
+		game.finalize_resource_shutdown()
+	await _frames(12)
+	print("VERIFIER_PHASE: SHUTDOWN")
+	if game != null and is_instance_valid(game) and game.is_inside_tree():
+		root.remove_child(game)
+	if game != null and is_instance_valid(game):
+		game.free()
+	RenderingServer.force_sync()
+	await _frames(8)
+	RenderingServer.force_sync()
 
 func check(condition: bool, message: String) -> void:
 	if not condition:

@@ -20,8 +20,10 @@ func _initialize() -> void:
 	await _frames(3)
 	_verify_zone(game, "wychwood", Vector3(0, 1, 13), "gate_greyfen")
 	_verify_pack(game)
+	var result_code := 0 if failures == 0 else 1
+	await _shutdown_game(game)
 	print("RECOVERY-002 FOUNDATION: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
-	quit(0 if failures == 0 else 1)
+	quit(result_code)
 
 func _verify_zone(game, id: String, gate_position: Vector3, gate_name: String) -> void:
 	check(game.spatial_service != null, "%s spatial service missing" % id)
@@ -54,6 +56,24 @@ func _verify_pack(game) -> void:
 
 func _frames(count: int) -> void:
 	for _i in range(count): await process_frame
+
+func _shutdown_game(game: Node) -> void:
+	# Retire the active scene before reporting so renderer diagnostics cannot be
+	# mistaken for a failure in the spatial/character foundation assertions.
+	if game != null and is_instance_valid(game) and game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+	await _frames(20)
+	if game != null and is_instance_valid(game) and game.has_method("finalize_resource_shutdown"):
+		game.finalize_resource_shutdown()
+	await _frames(12)
+	print("VERIFIER_PHASE: SHUTDOWN")
+	if game != null and is_instance_valid(game) and game.is_inside_tree():
+		root.remove_child(game)
+	if game != null and is_instance_valid(game):
+		game.free()
+	RenderingServer.force_sync()
+	await _frames(8)
+	RenderingServer.force_sync()
 
 func check(condition: bool, message: String) -> void:
 	if not condition:

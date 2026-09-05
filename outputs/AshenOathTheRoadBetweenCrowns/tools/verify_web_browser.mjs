@@ -2,7 +2,6 @@ import { createServer } from "node:http";
 import { createReadStream, existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { extname, join, normalize, resolve } from "node:path";
 import { spawn, spawnSync } from "node:child_process";
-import { tmpdir } from "node:os";
 
 const args = Object.fromEntries(process.argv.slice(2).map((value, index, all) =>
   value.startsWith("--") ? [value.slice(2), all[index + 1]?.startsWith("--") ? true : all[index + 1]] : []
@@ -14,7 +13,12 @@ const timeoutMs = Number(args.timeout || 90000);
 const maxMemoryMb = Number(args["max-memory-mb"] || 450);
 const requestedBrowser = String(args.browser || "").toLowerCase();
 const mobileMode = Boolean(args.mobile);
-const rendererMode = String(args.renderer || process.env.ASHEN_OATH_BROWSER_RENDERER || "software").toLowerCase();
+const QA_TEMP_ROOT = "D:\\Temp\\AshenOath";
+mkdirSync(QA_TEMP_ROOT, { recursive: true });
+// Hardware WebGL is the release acceptance path. Software remains available
+// only when explicitly requested for diagnostics on machines without a usable
+// accelerated browser profile.
+const rendererMode = String(args.renderer || process.env.ASHEN_OATH_BROWSER_RENDERER || "hardware").toLowerCase();
 const useSoftwareRenderer = rendererMode !== "hardware";
 const viewportWidth = mobileMode ? 960 : 1280;
 const viewportHeight = mobileMode ? 540 : 720;
@@ -23,7 +27,9 @@ const viewportHeight = mobileMode ? 540 : 720;
 // the mobile canvas and made a clean runtime look like a readiness timeout.
 const menuInputPoint = {
   x: viewportWidth * (1015 / 1280),
-  y: viewportHeight * (227 / 720),
+  // The compact native-720p menu places New Game near the top of the
+  // right-hand panel. The previous point landed below that button.
+  y: viewportHeight * (128 / 720),
 };
 const browsers = [
   ["Chrome", "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"],
@@ -66,7 +72,7 @@ async function dispatchFocusedMenuActivation(cdp) {
   // the real focus path and remains stable when the Web canvas switches from
   // the authored 1080p menu layout to the native 720p gameplay viewport.
   await cdp.send("Input.dispatchKeyEvent", {
-    type: "keyDown", key: "Enter", code: "Enter", windowsVirtualKeyCode: 13,
+    type: "keyDown", key: "Enter", code: "Enter", text: "\r", unmodifiedText: "\r", windowsVirtualKeyCode: 13,
   }, 60000);
   await cdp.send("Input.dispatchKeyEvent", {
     type: "keyUp", key: "Enter", code: "Enter", windowsVirtualKeyCode: 13,
@@ -211,9 +217,45 @@ class Cdp {
   }
 }
 
+async function captureViewportScreenshot(cdp, name) {
+  let surfaceError = null;
+  try {
+    return {
+      ...(await cdp.send("Page.captureScreenshot", {
+        format: "png",
+        fromSurface: true,
+        captureBeyondViewport: false,
+      })),
+      capture_mode: "surface",
+    };
+  } catch (error) {
+    surfaceError = error;
+  }
+  // Some managed ANGLE configurations can render the WebGL surface but hang
+  // when the compositor is asked to capture it. A viewport capture is still a
+  // real rendered screenshot; retain the first failure in the final error if
+  // this second bounded attempt also fails.
+  try {
+    return {
+      ...(await cdp.send("Page.captureScreenshot", {
+        format: "png",
+        fromSurface: false,
+        captureBeyondViewport: false,
+      })),
+      capture_mode: "viewport",
+    };
+  } catch (viewportError) {
+    throw new Error(
+      `${name} screenshot capture failed: surface=${surfaceError?.message || "unknown"}; `
+      + `viewport=${viewportError.message}`
+    );
+  }
+}
+
 async function testBrowser(name, executable) {
   const debugPort = await availablePort();
-  const profile = join(tmpdir(), `ashen-oath-web001-${mobileMode ? "mobile-" : ""}${name.toLowerCase()}-${Date.now()}`);
+  const profile = join(QA_TEMP_ROOT, `ashen-oath-web001-${mobileMode ? "mobile-" : ""}${name.toLowerCase()}-${Date.now()}`);
+  mkdirSync(profile, { recursive: true });
   const url = targetUrl || `http://127.0.0.1:${port}/index.html?v=${mobileMode ? "mobile001" : "web001"}-${name.toLowerCase()}${mobileMode ? "&touch=1" : ""}`;
   const browserArgs = [
     "--headless=new",
@@ -406,11 +448,24 @@ async function testBrowser(name, executable) {
     }, `${name} Godot runtime readiness`).catch((error) => {
       throw new Error(`${error.message}; console=${JSON.stringify(consoleLines().slice(-20))}; network=${JSON.stringify(networkLines())}`);
     });
+    // Keep a diagnostic of the actual compact menu geometry. This is useful
+    // when a browser delivers a healthy canvas but misses a player click;
+    // it is written beside the report and never enters the game export.
+    await sleep(250);
+    const menuScreenshot = await captureViewportScreenshot(cdp, `${name} menu`);
+    const menuScreenshotPath = reportPath.replace(/\.json$/i, `_menu_${name.toLowerCase()}.png`);
+    mkdirSync(resolve(menuScreenshotPath, ".."), { recursive: true });
+    writeFileSync(menuScreenshotPath, Buffer.from(menuScreenshot.data, "base64"));
     // The visible launch action either starts the desktop prewarm or, on Web,
     // confirms that New Game may use the bounded active build.
     if (!mobileMode) {
       await cdp.send("Input.dispatchMouseEvent", { type: "mouseMoved", x: menuInputPoint.x, y: menuInputPoint.y, button: "none" });
     }
+    // Exercise the actual New Game control while the opening is preparing.
+    // The click queues the request; the key event covers browsers that do not
+    // deliver a canvas pointer event on the first compact-menu frame.
+    const newGameRequestedAt = Date.now();
+    await dispatchPrimaryActivation(cdp, menuInputPoint);
     await dispatchFocusedMenuActivation(cdp);
     await waitFor(async () => consoleLines().some((line) =>
       line.includes("LOADING: Greyfen prewarmed total=")
@@ -418,17 +473,24 @@ async function testBrowser(name, executable) {
     ), `${name} Greyfen readiness`).catch((error) => {
       throw new Error(`${error.message}; console=${JSON.stringify(consoleLines().slice(-30))}; network=${JSON.stringify(networkLines())}; canvas=${JSON.stringify(canvasDiagnostic)}`);
     });
-    const newGameStarted = Date.now();
-    if (!mobileMode) {
-      await cdp.send("Input.dispatchMouseEvent", { type: "mouseMoved", x: menuInputPoint.x, y: menuInputPoint.y, button: "none" });
+    const queuedNewGame = consoleLines().some((line) => line.includes("LOADING: new_game_stage="));
+    if (!queuedNewGame) {
+      if (!mobileMode) {
+        await cdp.send("Input.dispatchMouseEvent", { type: "mouseMoved", x: menuInputPoint.x, y: menuInputPoint.y, button: "none" });
+      }
+      await dispatchPrimaryActivation(cdp, menuInputPoint);
+      await dispatchFocusedMenuActivation(cdp);
     }
-    await dispatchFocusedMenuActivation(cdp);
     await waitFor(async () => {
-      return consoleLines().some((line) => line.includes("LOADING: zone=greyfen playable_ms="));
+      return consoleLines().some((line) => line.includes("LOADING: new_game_stage=ready elapsed=")
+        || line.includes("LOADING: zone=greyfen playable_ms="));
     }, `${name} New Game startup`).catch((error) => {
       throw new Error(`${error.message}; console=${JSON.stringify(consoleLines().slice(-30))}`);
     });
-    const newGameReadyMs = Date.now() - newGameStarted;
+    const runtimeReadyLine = consoleLines().findLast((line) => line.includes("LOADING: new_game_stage=ready elapsed="));
+    const runtimeReadyMatch = runtimeReadyLine?.match(/elapsed=([0-9.]+)/);
+    const measuredRuntimeReadyMs = runtimeReadyMatch ? Number(runtimeReadyMatch[1]) : null;
+    const newGameReadyMs = measuredRuntimeReadyMs ?? (Date.now() - newGameRequestedAt);
     if (mobileMode) {
       await waitFor(async () => {
         const logs = cdp.events.filter((event) => event.method === "Runtime.consoleAPICalled")
@@ -450,7 +512,13 @@ async function testBrowser(name, executable) {
     if (jsHeapMb > maxMemoryMb) {
       throw new Error(`${name} runtime heap uses ${jsHeapMb.toFixed(1)} MB (limit ${maxMemoryMb} MB)`);
     }
-    const screenshot = await cdp.send("Page.captureScreenshot", { format: "png", fromSurface: true });
+    let screenshot;
+    try {
+      screenshot = await captureViewportScreenshot(cdp, name);
+    } catch (error) {
+      const runtimeTail = consoleLines().filter((line) => /LOADING:|ZONE_COMPOSITION|ERROR|SCRIPT ERROR/.test(line)).slice(-40);
+      throw new Error(`${error.message}; runtime=${JSON.stringify(runtimeTail)}; network=${JSON.stringify(networkLines())}`);
+    }
     if (!screenshot.data || screenshot.data.length < 4096) throw new Error(`${name} screenshot is blank`);
     const screenshotPath = reportPath.replace(/\.json$/i, `_${name.toLowerCase()}.png`);
     mkdirSync(resolve(screenshotPath, ".."), { recursive: true });
@@ -462,6 +530,8 @@ async function testBrowser(name, executable) {
       total_startup_ms: Date.now() - started,
       engine_ready_ms: engineReadyMs,
       new_game_ready_ms: newGameReadyMs,
+      new_game_wall_clock_ms: Date.now() - newGameRequestedAt,
+      new_game_requested_ms: newGameRequestedAt - navigationStarted,
       canvas,
       js_heap_mb: Number(jsHeapMb.toFixed(1)),
       process_tree_mb: workingSetMb,
@@ -469,6 +539,8 @@ async function testBrowser(name, executable) {
       resources: resources.filter((entry) => /index\.(js|wasm|pck)/.test(entry.name)),
       console_errors: [],
       screenshot: screenshotPath,
+      screenshot_capture_mode: screenshot.capture_mode,
+      profile_dir: profile,
     };
   } finally {
     if (cdp) cdp.close();
@@ -506,7 +578,7 @@ function terminateIsolatedBrowser(browser, profile) {
   });
 }
 
-const report = { schema_version: 1, status: "pass", mode: mobileMode ? "mobile-landscape-emulation" : "desktop", target_url: targetUrl || null, export_dir: exportDir, browsers: [] };
+const report = { schema_version: 1, status: "pass", mode: mobileMode ? "mobile-landscape-emulation" : "desktop", target_url: targetUrl || null, export_dir: exportDir, qa_temp_root: QA_TEMP_ROOT, browsers: [] };
 try {
   for (const [name, executable] of browsers) {
     const result = await testBrowser(name, executable);
@@ -514,7 +586,7 @@ try {
     console.log(
       `WEB BROWSER ${name}: PASS - ${result.canvas.width}x${result.canvas.height} WebGL${result.canvas.webgl}, `
       + `engine ${result.engine_ready_ms} ms, New Game ${result.new_game_ready_ms} ms, `
-      + `heap ${result.js_heap_mb} MB`
+      + `heap ${result.js_heap_mb} MB, profile ${result.profile_dir} (cleaned)`
     );
   }
 } catch (error) {

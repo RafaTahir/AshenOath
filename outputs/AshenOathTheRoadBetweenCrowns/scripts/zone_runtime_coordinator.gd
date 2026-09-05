@@ -60,6 +60,9 @@ func sync_zone(zone_id: String) -> Dictionary:
 func refresh_presentation() -> String:
 	if quest_beats != null and quest_beats.has_method("refresh"):
 		quest_beats.refresh()
+	if quest_presentation != null and quest_presentation.has_method("get_objective_view_model"):
+		var view: Dictionary = quest_presentation.get_objective_view_model()
+		return str(view.get("tracker_text", "No objective in this area."))
 	var tracker := str(quest_presentation.get_tracker_text()) if quest_presentation != null and quest_presentation.has_method("get_tracker_text") else str(quest_manager.get_tracker_text()) if quest_manager != null else "No objective in this area."
 	if quest_beats != null and quest_beats.has_method("decorate_tracker"):
 		tracker = quest_beats.decorate_tracker(tracker)

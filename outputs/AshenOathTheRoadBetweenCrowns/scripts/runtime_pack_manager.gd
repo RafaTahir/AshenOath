@@ -18,7 +18,12 @@ const MAX_DEPLOYMENT_BYTES := 104857600
 const MAX_RETRIES := 2
 const CHUNK_SIZE := 1024 * 1024
 const MAX_CONCURRENT_DOWNLOADS := 3
-const STARTUP_PACK_IDS: Array[String] = ["opening", "characters", "monsters", "audio"]
+# Only the pack required to enter the opening is on the readiness-critical
+# path. Campaign, optional character variants, monsters, and audio can arrive
+# after control is handed to the player. Keeping this list small is important:
+# a Web request must never make Greyfen wait for Castle or finale content.
+const STARTUP_PACK_IDS: Array[String] = ["base"]
+const BACKGROUND_PACK_IDS: Array[String] = ["opening", "characters", "monsters", "audio", "campaign"]
 
 var manifest: Dictionary = {}
 var requests: Dictionary = {}
@@ -30,6 +35,7 @@ var active_download_id := ""
 var downloaders: Dictionary = {}
 var active_downloads: Dictionary = {}
 var startup_requested := false
+var background_requested := false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -105,6 +111,20 @@ func is_ready(pack_id: String) -> bool:
 	var id := _normalise_id(pack_id)
 	return bool(mounted.get(id, false)) or get_state(id) == "ready"
 
+func has_embedded_content(pack_id: String) -> bool:
+	# Some Web candidates intentionally keep their builder scripts in the root
+	# PCK while optional art/audio packs continue downloading. A zone must be
+	# allowed to use that embedded builder instead of locking the player behind
+	# a pack that cannot add anything required by the active scene.
+	var id := _normalise_id(pack_id)
+	match id:
+		"campaign":
+			return ResourceLoader.exists("res://scripts/zones/campaign_section.gd")
+		"opening":
+			return ResourceLoader.exists("res://scripts/zones/wychwood_section.gd")
+		_:
+			return false
+
 func is_cached(pack_id: String) -> bool:
 	var id := _normalise_id(pack_id)
 	var path := _cache_path(id)
@@ -120,6 +140,17 @@ func request_startup_packs() -> bool:
 		if not request_pack(id):
 			accepted = false
 	_emit_startup_progress()
+	return accepted
+
+func request_background_packs() -> bool:
+	# This is deliberately separate from startup readiness. Callers can use it
+	# once the opening is playable without turning a later download into an
+	# input lock or a false loading state.
+	background_requested = true
+	var accepted := true
+	for id in BACKGROUND_PACK_IDS:
+		if not request_pack(id):
+			accepted = false
 	return accepted
 
 func startup_packs_ready() -> bool:
@@ -242,6 +273,7 @@ func clear_requests() -> void:
 		cancel_request(str(id))
 	requests.clear()
 	startup_requested = false
+	background_requested = false
 
 func retire_unneeded_packs(keep_ids: Array[String]) -> void:
 	var keep: Dictionary = {}
@@ -304,8 +336,7 @@ func _start_download(id: String) -> void:
 		_fail(id, "HTTP request failed: %s" % error_string(error))
 		_start_pending_downloads()
 		return
-	if startup_requested:
-		print("LOADING: startup_pack downloading id=%s url=%s" % [id, url])
+	print("LOADING: %s downloading id=%s url=%s" % [_pack_log_label(id), id, url])
 	pack_progress.emit(id, 0.0)
 	_emit_startup_progress()
 
@@ -334,8 +365,7 @@ func _on_download_completed(result: int, response_code: int, _headers: PackedStr
 		_start_pending_downloads()
 		return
 	if result != HTTPRequest.RESULT_SUCCESS or response_code < 200 or response_code >= 300:
-		if startup_requested:
-			print("LOADING: startup_pack failed id=%s response=%d result=%d" % [id, response_code, result])
+		print("LOADING: %s failed id=%s response=%d result=%d" % [_pack_log_label(id), id, response_code, result])
 		_fail(id, "Pack download failed (%d, result %d)" % [response_code, result])
 		_start_pending_downloads()
 		return
@@ -406,21 +436,22 @@ func _mark_mounted(id: String, path: String) -> void:
 	pack_progress.emit(id, 1.0)
 	pack_mounted.emit(id, path)
 	pack_ready.emit(id)
-	if startup_requested:
-		print("LOADING: startup_pack mounted id=%s" % id)
+	print("LOADING: %s mounted id=%s" % [_pack_log_label(id), id])
 	_emit_startup_progress()
 
 func _fail(id: String, reason: String) -> void:
 	requests[id] = {"state": "failed", "progress": 0.0, "error": reason}
 	pack_failed.emit(id, reason)
-	if startup_requested:
-		print("LOADING: startup_pack error id=%s reason=%s" % [id, reason])
+	print("LOADING: %s error id=%s reason=%s" % [_pack_log_label(id), id, reason])
 	_emit_startup_progress()
 
 func _emit_startup_progress() -> void:
 	if not startup_requested:
 		return
 	pack_progress.emit("__startup__", startup_pack_progress())
+
+func _pack_log_label(id: String) -> String:
+	return "startup_pack" if STARTUP_PACK_IDS.has(id) else "background_pack"
 
 func _cache_path(id: String) -> String:
 	var version := str(get_pack(id).get("version", "dev")).replace("/", "_").replace("\\", "_")

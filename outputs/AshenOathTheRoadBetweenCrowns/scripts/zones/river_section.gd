@@ -105,8 +105,10 @@ func _make_bridge(root: Node3D, z: float, span: float) -> void:
 	# Keep the physical deck exactly flush with the road. A separate shallow
 	# visual shell preserves the raised timber silhouette while the collision
 	# surface has no lip for a full-size capsule to catch when leaving the deck.
-	_make_box(root,"RiverBridgeDeckVisual",Vector3(0,0.05,z),Vector3(BRIDGE_WIDTH,0.10,bridge_length),Color(0.22,0.13,0.065),false)
-	_make_box(root,"RiverBridgeDeck",Vector3(0,-0.03,z),Vector3(BRIDGE_WIDTH,0.06,bridge_length),Color(0.22,0.13,0.065),true)
+	_make_box(root,"RiverBridgeDeckVisual",Vector3(0,0.09,z),Vector3(BRIDGE_WIDTH,0.10,bridge_length),Color(0.22,0.13,0.065),false)
+	# Greyfen's road slabs finish at y=0.038. Put the collision deck at the
+	# same top height so a CharacterBody crosses without catching a hidden lip.
+	_make_box(root,"RiverBridgeDeck",Vector3(0,0.01,z),Vector3(BRIDGE_WIDTH,0.06,bridge_length),Color(0.22,0.13,0.065),true)
 	var ramp_length := 1.8
 	# Match the road surface to the shallow physical deck with a visual wedge.
 	# Collision remains on the flush deck so the capsule never catches a ramp
@@ -183,30 +185,18 @@ func _make_bridge_ramp(root: Node3D, node_name: String, pos: Vector3, size: Vect
 	var mesh := MeshInstance3D.new()
 	mesh.name = node_name
 	var box := BoxMesh.new()
-	# The thin visual shell follows the same 0.0-to-0.18 m slope as the
-	# collision wedge, avoiding a visible lip where the road meets the bridge.
-	box.size = Vector3(size.x, 0.06, size.z)
+	# The deck already overlaps both road slabs and is the authoritative physical
+	# surface. Keep this as a low visual transition only; a second rotated
+	# collider creates a tiny lip that catches the player capsule at the bank.
+	box.size = Vector3(size.x, 0.025, size.z)
 	mesh.mesh = box
-	mesh.position = Vector3(pos.x, pos.y - 0.03, pos.z)
-	mesh.rotation.x = angle
+	mesh.position = Vector3(pos.x, 0.012, pos.z)
+	mesh.rotation.x = 0.0
 	var material := StandardMaterial3D.new()
 	material.albedo_color = Color(0.20,0.12,0.06)
 	material.roughness = 0.86
 	mesh.material_override = material
 	root.add_child(mesh)
-	# Keep a matching, flush collision surface for route and verifier tooling.
-	# The old full-height wedge caught the player capsule at the bridge edge;
-	# this shallow body shares the deck's zero-height top and cannot form a lip.
-	var body := StaticBody3D.new()
-	body.name = "%sCollision" % node_name
-	body.position = Vector3(pos.x, pos.y - 0.03, pos.z)
-	body.rotation.x = angle
-	root.add_child(body)
-	var shape := CollisionShape3D.new()
-	var solid := BoxShape3D.new()
-	solid.size = Vector3(size.x, 0.06, size.z)
-	shape.shape = solid
-	body.add_child(shape)
 
 func _make_bank_barriers(root: Node3D, center_z: float, width: float, span: float) -> void:
 	var side_length := (width - BRIDGE_WIDTH) * 0.5

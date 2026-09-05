@@ -30,8 +30,11 @@ func _initialize() -> void:
 	await _capture(game, "WORLD_002_02_InvestigationRoad", Vector3(-1.2, 1, 7.0), 0.05)
 	await _capture(game, "WORLD_002_03_RiverCrossing", Vector3(0, 1, 4.3), 0.0)
 	await _capture(game, "WORLD_002_04_CombatClearing", Vector3(0, 1, -3.3), 0.0)
+	var result_code := 0 if failures == 0 else 1
+	print("VERIFIER_PHASE: SHUTDOWN")
+	await _release_game(game)
 	print("WORLD-002 SCREENSHOTS: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
-	quit(0 if failures == 0 else 1)
+	quit(result_code)
 
 func _capture(game, stem: String, position: Vector3, yaw: float) -> void:
 	game.player.global_position = position
@@ -69,6 +72,24 @@ func _capture(game, stem: String, position: Vector3, yaw: float) -> void:
 func _frames(count: int) -> void:
 	for _index in range(count):
 		await process_frame
+
+func _release_game(game: Node) -> void:
+	# Release streamed roots and global renderer owners before the process exits.
+	# A screenshot PASS must never be followed by a teardown leak that masks the
+	# state of the captured world.
+	if is_instance_valid(game) and game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+		await _frames(20)
+	if is_instance_valid(game) and game.has_method("finalize_resource_shutdown"):
+		game.finalize_resource_shutdown()
+		await _frames(16)
+	if is_instance_valid(game) and game.is_inside_tree():
+		root.remove_child(game)
+	if is_instance_valid(game):
+		game.free()
+	RenderingServer.force_sync()
+	await _frames(12)
+	RenderingServer.force_sync()
 
 func _read_stable_frame() -> Image:
 	var image: Image

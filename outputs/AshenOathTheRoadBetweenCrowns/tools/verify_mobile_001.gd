@@ -6,7 +6,7 @@ func _initialize() -> void:
 	var scene: PackedScene = load("res://scenes/main.tscn")
 	_check(scene != null, "main scene is missing")
 	if scene == null:
-		_finish()
+		await _finish()
 		return
 	var game = scene.instantiate()
 	root.add_child(game)
@@ -16,8 +16,7 @@ func _initialize() -> void:
 	_check(touch != null, "mobile touch service is missing")
 	_check(router != null, "input router is missing")
 	if touch == null or router == null:
-		game.queue_free()
-		_finish()
+		await _finish(game)
 		return
 
 	_verify_settings(game.settings)
@@ -42,10 +41,7 @@ func _initialize() -> void:
 	_check(touch.visible, "touch controls do not return after closing menus")
 
 	touch._release_all()
-	# Emit PASS before freeing the test tree. Renderer messages produced while
-	# Godot tears down the dummy scene are shutdown diagnostics, not active
-	# mobile-render failures, and the release runner classifies them after PASS.
-	_finish()
+	await _finish(game)
 
 func _verify_settings(settings: Node) -> void:
 	_check(settings.settings.has("touch_controls"), "touch visibility mode is not persisted")
@@ -135,10 +131,25 @@ func _check(condition: bool, message: String) -> void:
 	failures.append(message)
 	push_error("MOBILE-001: %s" % message)
 
-func _finish() -> void:
+
+func _finish(game: Node = null) -> void:
+	var result_code := 0 if failures.is_empty() else 1
+	if game != null and is_instance_valid(game) and game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+	await _settle(20)
+	if game != null and is_instance_valid(game) and game.has_method("finalize_resource_shutdown"):
+		game.finalize_resource_shutdown()
+	await _settle(12)
+	print("VERIFIER_PHASE: SHUTDOWN")
+	if game != null and is_instance_valid(game) and game.is_inside_tree():
+		root.remove_child(game)
+	if game != null and is_instance_valid(game):
+		game.free()
+	RenderingServer.force_sync()
+	await _settle(8)
+	RenderingServer.force_sync()
 	if failures.is_empty():
 		print("MOBILE-001 VERIFIER: PASS (touch layout, actions, prompts, settings, menu safety)")
-		quit()
 	else:
 		print("MOBILE-001 VERIFIER: FAIL (%d)" % failures.size())
-		quit(1)
+	quit(result_code)

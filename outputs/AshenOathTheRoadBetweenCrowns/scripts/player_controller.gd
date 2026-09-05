@@ -923,53 +923,11 @@ func _build_body() -> void:
 		_set_sword_sheathed(true)
 		return
 
-	var cloak = MeshInstance3D.new()
-	var cloak_mesh = BoxMesh.new()
-	cloak_mesh.size = Vector3(0.74, 1.08, 0.18)
-	cloak.mesh = cloak_mesh
-	cloak.position = Vector3(0, 1.0, 0.22)
-	cloak.rotation_degrees.x = -6
-	cloak.material_override = _mat(Color(0.10, 0.11, 0.10))
-	visual_root.add_child(cloak)
-
-	var body = MeshInstance3D.new()
-	var mesh = CapsuleMesh.new()
-	mesh.height = 1.45
-	mesh.radius = 0.34
-	body.mesh = mesh
-	body.position.y = 0.92
-	body.material_override = _mat(Color(0.24, 0.27, 0.25))
-	visual_root.add_child(body)
-	body_visual = body
-
-	var chest = MeshInstance3D.new()
-	var chest_mesh = BoxMesh.new()
-	chest_mesh.size = Vector3(0.72, 0.42, 0.24)
-	chest.mesh = chest_mesh
-	chest.position = Vector3(0, 1.25, -0.02)
-	chest.material_override = _mat(Color(0.17, 0.18, 0.17))
-	visual_root.add_child(chest)
-
-	var head = MeshInstance3D.new()
-	head.mesh = SphereMesh.new()
-	head.scale = Vector3(0.34, 0.28, 0.34)
-	head.position.y = 1.78
-	head.material_override = _mat(Color(0.72, 0.66, 0.57))
-	visual_root.add_child(head)
-
-	var scar = MeshInstance3D.new()
-	var scar_mesh = BoxMesh.new()
-	scar_mesh.size = Vector3(0.03, 0.2, 0.01)
-	scar.mesh = scar_mesh
-	scar.position = Vector3(0.11, 1.81, -0.31)
-	scar.rotation_degrees.z = 18
-	scar.material_override = _mat(Color(0.45, 0.09, 0.07))
-	visual_root.add_child(scar)
-
-	_add_weapon_visuals(Vector3(0.43, 0.86, -0.38))
-	CharacterPresentation.apply_player(self, visual_root)
-	_add_beam_charge_visual()
-	_set_sword_sheathed(true)
+	# Required character roles never receive procedural anatomy. Keeping the
+	# controller/collision shell alive makes the failure diagnosable without
+	# shipping a faceless polygon as the player.
+	visual_root.set_meta("character_visual_failure", true)
+	push_error("Player visual role could not be built; refusing primitive fallback")
 
 func _add_beam_charge_visual() -> void:
 	beam_charge_visual = MeshInstance3D.new()
@@ -1192,6 +1150,7 @@ func _try_build_mapped_body() -> bool:
 		_add_mapped_weapon_visuals()
 	else:
 		animation_driver.set_update_rate_hz(30.0)
+		animation_driver.set_external_tick(true)
 		if animation_driver.has_signal("locomotion_step") and not animation_driver.locomotion_step.is_connected(_on_animation_locomotion_step):
 			animation_driver.locomotion_step.connect(_on_animation_locomotion_step)
 			animation_step_signal_bound = true
@@ -1333,10 +1292,16 @@ func _build_oathblade_visual(parent: Node3D) -> Node3D:
 func _build_oathblade_mesh() -> ImmediateMesh:
 	var mesh := ImmediateMesh.new()
 	var vertices := [
-		Vector3(-0.112, -0.09, 0.035), Vector3(0.112, -0.09, 0.035), Vector3(0.0, -0.98, 0.022),
-		Vector3(-0.112, -0.09, -0.035), Vector3(0.112, -0.09, -0.035), Vector3(0.0, -0.98, -0.022)
+		Vector3(-0.11, -0.10, 0.04), Vector3(0.11, -0.10, 0.04), Vector3(0.07, -0.78, 0.032),
+		Vector3(-0.07, -0.78, 0.032), Vector3(0.0, -1.03, 0.0),
+		Vector3(-0.11, -0.10, -0.04), Vector3(0.11, -0.10, -0.04), Vector3(0.07, -0.78, -0.032),
+		Vector3(-0.07, -0.78, -0.032), Vector3(0.0, -1.03, 0.0)
 	]
-	var faces := [[0, 2, 1], [3, 4, 5], [0, 1, 4], [0, 4, 3], [0, 3, 5], [0, 5, 2], [1, 2, 5], [1, 5, 4]]
+	var faces := [
+		[0, 1, 2], [0, 2, 3], [5, 7, 6], [5, 8, 7], [3, 2, 4], [8, 9, 4],
+		[0, 5, 6], [0, 6, 1], [1, 6, 7], [1, 7, 2], [2, 7, 9], [2, 9, 4],
+		[4, 9, 8], [4, 8, 3], [3, 8, 5], [3, 5, 0]
+	]
 	mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLES)
 	for face in faces:
 		var a: Vector3 = vertices[face[0]]
@@ -1590,6 +1555,7 @@ func _animate_visuals(delta: float, move_dir: Vector3, moving: bool) -> void:
 	var running = movement_state == "run" or (_action_pressed("run") and moving)
 	if animation_driver != null and animation_driver.is_valid():
 		animation_driver.set_locomotion(Vector2(velocity.x, velocity.z).length() / max(run_speed, 0.1), move_dir, is_on_floor())
+		animation_driver.advance_external(delta)
 		if movement_state == "dodge" and animation_driver.current_state != "dodge":
 			animation_driver.trigger_action("dodge")
 	if moving:

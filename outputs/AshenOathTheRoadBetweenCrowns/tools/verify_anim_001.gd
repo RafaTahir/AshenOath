@@ -6,7 +6,7 @@ func _initialize() -> void:
 	var packed := load("res://scenes/main.tscn") as PackedScene
 	_assert(packed != null, "main scene is unavailable")
 	if packed == null:
-		_finish()
+		await _finish()
 		return
 	var game = packed.instantiate()
 	root.add_child(game)
@@ -47,10 +47,7 @@ func _initialize() -> void:
 		_verify_driver(enemy.animation_driver, str(enemy.enemy_id), ["idle", "walk", "run", "attack", "hit", "death"])
 		_assert(not _has_proxy_anatomy(enemy), "%s contains proxy anatomy" % enemy.enemy_id)
 
-	# Print the result before freeing the multi-zone test tree. Any renderer
-	# diagnostics emitted by Godot while releasing that tree are shutdown-only
-	# and must be classified after the pass marker.
-	_finish()
+	await _finish(game)
 
 func _verify_driver(driver, label: String, required_states: Array[String]) -> void:
 	_assert(driver != null and driver.has_method("get_contract_report"), "%s has no shared animation driver" % label)
@@ -121,10 +118,25 @@ func _frames(count: int) -> void:
 	for _index in range(count):
 		await process_frame
 
-func _finish() -> void:
+
+func _finish(game: Node = null) -> void:
+	var result_code := 0 if failures.is_empty() else 1
+	if game != null and is_instance_valid(game) and game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+	await _frames(20)
+	if game != null and is_instance_valid(game) and game.has_method("finalize_resource_shutdown"):
+		game.finalize_resource_shutdown()
+	await _frames(12)
+	print("VERIFIER_PHASE: SHUTDOWN")
+	if game != null and is_instance_valid(game) and game.is_inside_tree():
+		root.remove_child(game)
+	if game != null and is_instance_valid(game):
+		game.free()
+	RenderingServer.force_sync()
+	await _frames(8)
+	RenderingServer.force_sync()
 	if failures.is_empty():
 		print("ANIM-001 VERIFIER: PASS")
-		quit()
-		return
-	print("ANIM-001 VERIFIER: FAIL (%d)" % failures.size())
-	quit(1)
+	else:
+		print("ANIM-001 VERIFIER: FAIL (%d)" % failures.size())
+	quit(result_code)

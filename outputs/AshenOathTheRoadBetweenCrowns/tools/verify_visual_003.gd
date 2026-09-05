@@ -32,20 +32,7 @@ func _initialize() -> void:
 	game.call("_load_zone", "wychwood", Vector3(0, 1, 8))
 	await _frames(5)
 	_verify_wychwood(game)
-	# Assertions must be emitted before any resource retirement begins. The
-	# Compatibility renderer can report shutdown-only material/RID diagnostics
-	# while the verifier scene exits; the release runner classifies those only
-	# after this marker and never treats them as active-render failures.
-	if failures.is_empty():
-		print("VISUAL-003 VERIFIER: PASS")
-	else:
-		_finish()
-		return
-	if game.has_method("prepare_resource_shutdown"):
-		game.call("prepare_resource_shutdown")
-	game.queue_free()
-	await _frames(3)
-	quit()
+	await _finish(game)
 
 func _verify_texture_library() -> void:
 	var material_library := WorldMaterialLibrary.new()
@@ -193,10 +180,22 @@ func _check(condition: bool, message: String) -> void:
 		failures.append(message)
 		push_error(message)
 
-func _finish() -> void:
-	if not failures.is_empty():
-		print("VISUAL-003 VERIFIER: FAIL (%d)" % failures.size())
-		quit(1)
-		return
-	print("VISUAL-003 VERIFIER: PASS")
-	quit()
+func _shutdown_game(game: Node) -> void:
+	if is_instance_valid(game) and game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+		await _frames(20)
+	if is_instance_valid(game) and game.has_method("finalize_resource_shutdown"):
+		game.finalize_resource_shutdown()
+		await _frames(12)
+	print("VERIFIER_PHASE: SHUTDOWN")
+	if is_instance_valid(game):
+		game.queue_free()
+		await _frames(8)
+	RenderingServer.force_sync()
+	await _frames(4)
+
+func _finish(game: Node = null) -> void:
+	var result_code := 0 if failures.is_empty() else 1
+	await _shutdown_game(game)
+	print("VISUAL-003 VERIFIER: %s" % ("PASS" if failures.is_empty() else "FAIL (%d)" % failures.size()))
+	quit(result_code)

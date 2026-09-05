@@ -131,6 +131,8 @@ func _sample_zone(game: Node, zone_id: String, duration_ms: int) -> Dictionary:
 				"draw_calls": int(Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME)),
 				"primitives": int(Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME)),
 				"nodes": int(Performance.get_monitor(Performance.OBJECT_NODE_COUNT)),
+				"process_ms": float(Performance.get_monitor(Performance.TIME_PROCESS)) * 1000.0,
+				"physics_process_ms": float(Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS)) * 1000.0,
 			})
 	var average_ms := 0.0
 	for frame_ms in frame_times:

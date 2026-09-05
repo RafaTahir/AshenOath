@@ -14,11 +14,15 @@ func _initialize() -> void:
 	game.call("_new_game")
 	await _settle(3)
 	await _verify_zone(game,"greyfen",4.5)
+	await _verify_physical_bridge_crossings(game, 4.5)
 	game.call("_load_zone","wychwood",Vector3(0,1,8))
 	await _settle(3)
 	await _verify_zone(game,"wychwood",0.0)
+	await _verify_physical_bridge_crossings(game, 0.0)
 	check(not game.player.has_method("enter_water"), "Obsolete swimming entry remains active")
 	check(not game.player.has_method("is_swimming"), "Obsolete swimming state remains active")
+	print("VERIFIER_PHASE: SHUTDOWN")
+	await _shutdown_game(game)
 	print("RIVER-002 SAFETY VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
 	quit(0 if failures == 0 else 1)
 
@@ -30,7 +34,8 @@ func _verify_zone(game, zone_id: String, center_z: float) -> void:
 	check(_count_named(game.zone_root,"RiverBankBarrier") == 4, "%s does not have four bank barriers" % zone_id)
 	check(_count_named(game.zone_root,"RiverRecoveryVolume") == 2, "%s does not have two recovery volumes" % zone_id)
 	check(_count_named(game.zone_root,"BridgePlank") >= 9, "%s bridge planks are incomplete" % zone_id)
-	check(_count_named(game.zone_root,"BridgeApproachRamp") == 4, "%s bridge approach ramps are missing visible or collision parts" % zone_id)
+	check(_count_named(game.zone_root,"BridgeApproachRamp") == 2, "%s bridge approach visuals are incomplete" % zone_id)
+	check(_count_named(game.zone_root,"BridgeApproachRampNorthCollision") == 0 and _count_named(game.zone_root,"BridgeApproachRampSouthCollision") == 0, "%s bridge approach still has a lip collider" % zone_id)
 	check(_bridge_floor_is_walkable(game,center_z), "%s bridge approach requires a jump" % zone_id)
 	check(_all_interactions_clear(game.zone_root,center_z), "%s contains an interaction in the river exclusion band" % zone_id)
 	check(_all_enemies_clear(game.active_enemies,center_z), "%s contains an enemy in the river exclusion band" % zone_id)
@@ -46,6 +51,46 @@ func _verify_zone(game, zone_id: String, center_z: float) -> void:
 	check(is_equal_approx(valid_bridge_save.z,center_z), "%s bridge save was incorrectly migrated" % zone_id)
 	var invalid_water_save := game.call("_safe_loaded_position",zone_id,Vector3(8.0,-0.5,center_z)) as Vector3
 	check(absf(invalid_water_save.z-center_z) > 2.5, "%s water save was not migrated" % zone_id)
+
+func _verify_physical_bridge_crossings(game, center_z: float) -> void:
+	var player = game.player
+	check(player is CharacterBody3D, "%s bridge test has no CharacterBody3D" % str(game.current_zone_id))
+	if not player is CharacterBody3D:
+		return
+	# Drive the actual player controller across the authored deck. This catches
+	# the failure mode that ray-height checks miss: capsule lips, recovery
+	# volumes, and a deck that is visually present but not physically continuous.
+	player.can_control = true
+	player.set_transition_locked(false)
+	player.global_position = Vector3(0.0, 0.25, center_z + 3.45)
+	player.rotation.y = 0.0
+	await _walk_with_input(game, "move_forward", 90, center_z, -1.0)
+	check(player.global_position.z < center_z - 2.55, "%s south-to-north bridge crossing stopped at z=%.2f" % [str(game.current_zone_id), player.global_position.z])
+	check(not game.call("_is_river_recovery_position", str(game.current_zone_id), player.global_position), "%s crossing ended in river recovery state" % str(game.current_zone_id))
+
+	player.global_position = Vector3(0.0, 0.25, center_z - 3.45)
+	player.rotation.y = PI
+	# Player movement follows the active camera, not the actor yaw. From the
+	# north bank the real return input is reverse, so this leg exercises the
+	# same player-facing control path without accidentally walking away from
+	# the bridge.
+	await _walk_with_input(game, "move_back", 90, center_z, 1.0)
+	check(player.global_position.z > center_z + 2.55, "%s north-to-south bridge crossing stopped at z=%.2f" % [str(game.current_zone_id), player.global_position.z])
+	check(not game.call("_is_river_recovery_position", str(game.current_zone_id), player.global_position), "%s return crossing ended in river recovery state" % str(game.current_zone_id))
+
+func _walk_with_input(game, action: String, frame_count: int, center_z: float, direction: float) -> void:
+	var player = game.player
+	var previous_z: float = player.global_position.z
+	Input.action_press(action)
+	for _frame in range(frame_count):
+		await physics_frame
+		var current_z: float = player.global_position.z
+		check(absf(current_z - previous_z) < 1.5, "%s bridge movement teleported during physical crossing" % str(game.current_zone_id))
+		if absf(current_z - center_z) < 2.25:
+			check(not game.call("_is_river_recovery_position", str(game.current_zone_id), player.global_position), "%s physical crossing triggered river recovery" % str(game.current_zone_id))
+		previous_z = current_z
+	Input.action_release(action)
+	await physics_frame
 
 func _verify_recovery(game, center_z: float, forced_position: Vector3, expected_side: float) -> void:
 	game.player.global_position = forced_position
@@ -138,6 +183,25 @@ func _count_named(parent: Node, target: String) -> int:
 func _settle(frames: int) -> void:
 	for _i in range(frames):
 		await process_frame
+
+func _shutdown_game(game: Node) -> void:
+	# Release active and cached zone ownership before SceneTree teardown. A
+	# direct quit leaves hidden collision/render resources alive long enough for
+	# Compatibility to report them as leaks, which obscures real runtime errors.
+	if game != null and game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+		await _settle(int(game.ZONE_RETIRE_FRAMES) + 4)
+	if game != null and game.has_method("finalize_resource_shutdown"):
+		game.finalize_resource_shutdown()
+	# PhysicsServer3D releases CharacterBody shapes on a physics flush, while
+	# the scene tree releases queued nodes on a process flush. Give both servers
+	# a frame before the verifier exits so teardown diagnostics stay meaningful.
+	await physics_frame
+	await _settle(3)
+	if game != null and is_instance_valid(game):
+		game.queue_free()
+	await physics_frame
+	await _settle(8)
 
 func check(condition: bool, message: String) -> void:
 	if not condition:

@@ -17,6 +17,9 @@ var next_blink := 2.4
 var focus_target: Node3D
 var look_offset := 0.0
 var valid := false
+var update_timer: Timer
+var update_interval := 0.12
+var distance_suspended := false
 
 func configure(root: Node3D, role: String) -> bool:
 	character_root = root
@@ -49,17 +52,33 @@ func configure(root: Node3D, role: String) -> bool:
 			brow_meshes.append(mesh)
 	valid = not eye_meshes.is_empty() or native_face_surface_count > 0
 	next_blink = 1.8 + float(absi(role_id.hash()) % 180) / 100.0
-	set_process(valid)
+	update_interval = 0.10 if role_id in ["sister_anwen", "mira", "rook"] else 0.12
+	if update_timer == null:
+		update_timer = Timer.new()
+		update_timer.name = "CharacterFaceTick"
+		update_timer.one_shot = false
+		update_timer.process_callback = Timer.TIMER_PROCESS_IDLE
+		update_timer.timeout.connect(_on_update_timer_timeout)
+		add_child(update_timer)
+	update_timer.wait_time = update_interval
+	if valid:
+		var phase_delay := float(absi((role_id + str(root.get_instance_id())).hash()) % 1000) / 1000.0 * update_interval
+		if is_inside_tree():
+			update_timer.start(update_interval + phase_delay)
+		else:
+			call_deferred("_start_update_timer", update_interval + phase_delay)
 	return valid
 
-func _process(delta: float) -> void:
+func _start_update_timer(delay: float) -> void:
+	if update_timer != null and valid and is_inside_tree():
+		update_timer.start(delay)
+
+func _on_update_timer_timeout() -> void:
 	if not valid or character_root == null:
 		return
-	update_accumulator += delta
-	if update_accumulator < (0.10 if role_id in ["sister_anwen", "mira", "rook"] else 0.12):
+	if distance_suspended:
 		return
-	var step := update_accumulator
-	update_accumulator = 0.0
+	var step := update_interval
 	if focus_target == null or not is_instance_valid(focus_target):
 		var players := get_tree().get_nodes_in_group("player")
 		if not players.is_empty() and players[0] is Node3D:
@@ -85,6 +104,11 @@ func _process(delta: float) -> void:
 		if next_blink <= 0.0:
 			blink_remaining = 0.14
 			next_blink = 2.2 + float(absi((role_id + str(Time.get_ticks_msec())).hash()) % 220) / 100.0
+
+func set_distance_suspended(suspended: bool) -> void:
+	distance_suspended = suspended
+	if update_timer != null:
+		update_timer.paused = suspended
 
 func _apply_eye_look() -> void:
 	for mesh in eye_meshes:

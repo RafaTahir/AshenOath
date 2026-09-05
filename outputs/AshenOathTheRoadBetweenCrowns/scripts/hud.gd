@@ -20,7 +20,7 @@ signal dialogue_page_changed(speaker: String, speaker_id: String, page_index: in
 signal menu_hovered
 signal menu_clicked
 
-const MENU_BUILD_LABEL = "SOUL REBUILD | RELEASE-003 | NATIVE 720P | ASHENOATH.VERCEL.APP"
+const MENU_BUILD_LABEL = "SOUL REBUILD | NATIVE 720P | ASHENOATH.VERCEL.APP"
 const MENU_SIZE = Vector2(1920.0, 1080.0)
 const GAMEPLAY_SIZE = Vector2i(1280, 720)
 const SAVE_PATH = "user://ashen_oath_save.json"
@@ -135,6 +135,7 @@ func show_main_menu() -> void:
 	_add_menu_button(box, "Credits", func(): show_credits_menu())
 	_add_menu_button(box, "Quit", func(): quit_requested.emit())
 	_add_menu_button(box, "Return to Launch Screen", show_launch_screen)
+	call_deferred("_focus_first_enabled", menu_layer)
 
 func set_new_game_ready(value: bool) -> void:
 	if new_game_ready == value:
@@ -162,6 +163,7 @@ func show_launch_screen() -> void:
 		launch_accepted.emit()
 		show_main_menu()
 	)
+	call_deferred("_focus_first_enabled", menu_layer)
 
 func show_pause_menu() -> void:
 	active_menu = "pause"

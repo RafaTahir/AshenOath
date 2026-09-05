@@ -50,6 +50,7 @@ func _initialize() -> void:
 	check(lights <= 8, "Greyfen exceeds the eight-light budget: %d" % lights)
 	print("WORLD-001 METRICS nodes=%d meshes=%d lights=%d" % [nodes, meshes, lights])
 	print("WORLD-001 VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
+	await _shutdown_game(game)
 	quit(0 if failures == 0 else 1)
 
 func _route_clear(service, start: Vector3, destination: Vector3) -> bool:
@@ -80,6 +81,20 @@ func _walk(node: Node) -> Array:
 func _frames(count: int) -> void:
 	for _index in range(count):
 		await process_frame
+
+func _shutdown_game(game: Node) -> void:
+	if is_instance_valid(game) and game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+		await _frames(20)
+	if is_instance_valid(game) and game.has_method("finalize_resource_shutdown"):
+		game.finalize_resource_shutdown()
+		await _frames(12)
+	print("VERIFIER_PHASE: SHUTDOWN")
+	if is_instance_valid(game):
+		game.queue_free()
+		await _frames(8)
+	RenderingServer.force_sync()
+	await _frames(4)
 
 func check(condition: bool, message: String) -> void:
 	if not condition:

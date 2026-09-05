@@ -27,13 +27,13 @@ func _initialize() -> void:
 	for enemy in main.active_enemies:
 		_verify_character(enemy, str(enemy.enemy_id))
 	var passed := failures == 0
+	var result_code := 0 if passed else 1
+	await _shutdown_game(main)
 	if passed:
 		print("FACE-RIVER-SUN-001 VERIFIER: PASS")
 	else:
 		push_error("FACE-RIVER-SUN-001 VERIFIER: %d failure(s)" % failures)
-	main.queue_free()
-	await process_frame
-	quit(0 if passed else 1)
+	quit(result_code)
 
 func _verify_character(node: Node, label: String) -> void:
 	check(node != null, "%s is missing" % label)
@@ -109,3 +109,22 @@ func check(condition: bool, message: String) -> void:
 func _frames(count: int) -> void:
 	for i in range(count):
 		await process_frame
+
+func _shutdown_game(main: Node) -> void:
+	# Close the runtime lifecycle before reporting the result. Immediate queue_free
+	# leaves Compatibility renderer resources active long enough to be classified
+	# as an active material failure by the release runner.
+	if main != null and is_instance_valid(main) and main.has_method("prepare_resource_shutdown"):
+		main.prepare_resource_shutdown()
+	await _frames(20)
+	if main != null and is_instance_valid(main) and main.has_method("finalize_resource_shutdown"):
+		main.finalize_resource_shutdown()
+	await _frames(12)
+	print("VERIFIER_PHASE: SHUTDOWN")
+	if main != null and is_instance_valid(main) and main.is_inside_tree():
+		root.remove_child(main)
+	if main != null and is_instance_valid(main):
+		main.free()
+	RenderingServer.force_sync()
+	await _frames(8)
+	RenderingServer.force_sync()

@@ -23,11 +23,11 @@ static func composition_kind(zone_id: String) -> String:
 		return ""
 	return canonical_id if canonical_id in CORE_ZONES else "campaign"
 
-static func build_core(host: Node, zone_id: String) -> Dictionary:
+static func build_core(host: Node, zone_id: String, build_profile: String = "full") -> Dictionary:
 	var canonical_id := _canonical(zone_id)
 	if canonical_id not in CORE_ZONES:
 		return _failure(canonical_id, "unregistered core zone")
-	var context := ZoneBuildContext.new(host, canonical_id)
+	var context := ZoneBuildContext.new(host, canonical_id, build_profile)
 	context.record_operation("begin:%s" % canonical_id)
 	# Core builders live in the opening runtime pack. Resolve them only after
 	# that pack has mounted so the production menu PCK stays small and the
@@ -41,11 +41,11 @@ static func build_core(host: Node, zone_id: String) -> Dictionary:
 	builder.build(context)
 	return context.validate()
 
-static func build_campaign(host: Node, zone_id: String) -> Dictionary:
+static func build_campaign(host: Node, zone_id: String, build_profile: String = "full") -> Dictionary:
 	var canonical_id := _canonical(zone_id)
 	if canonical_id not in CAMPAIGN_ZONES:
 		return _failure(canonical_id, "unregistered campaign zone")
-	var context := ZoneBuildContext.new(host, canonical_id)
+	var context := ZoneBuildContext.new(host, canonical_id, build_profile)
 	context.record_operation("begin:%s" % canonical_id)
 	# Campaign builders are resolved only when a player reaches the campaign.
 	# This keeps later-zone scripts and optional assets out of the startup graph.
@@ -57,6 +57,20 @@ static func build_campaign(host: Node, zone_id: String) -> Dictionary:
 		return _failure(canonical_id, "campaign builder is invalid")
 	builder.build(context)
 	return context.validate()
+
+static func build_core_detail_stage(host: Node, zone_id: String, stage: String) -> Dictionary:
+	var canonical_id := _canonical(zone_id)
+	if canonical_id not in CORE_ZONES:
+		return _failure(canonical_id, "unregistered core zone")
+	var context := ZoneBuildContext.new(host, canonical_id, "opening_detail")
+	var builder_script: Script = load(str(CORE_BUILDER_PATHS.get(canonical_id, ""))) as Script
+	if builder_script == null:
+		return _failure(canonical_id, "core builder pack is not mounted")
+	var builder = builder_script.new()
+	if builder == null or not builder.has_method("build_detail_stage"):
+		return _failure(canonical_id, "core builder has no detail-stage contract")
+	builder.build_detail_stage(context, stage)
+	return {"ok": true, "zone": canonical_id, "stage": stage}
 
 static func registered_zones() -> Array[String]:
 	var result: Array[String] = []

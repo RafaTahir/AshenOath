@@ -210,7 +210,13 @@ func _drive_to(destination: Vector3, label: String) -> void:
 				for collision_index in range(player.get_slide_collision_count()):
 					var collision := player.get_slide_collision(collision_index)
 					var collider := collision.get_collider() if collision != null else null
-					collision_names.append(str(collider.name) if collider != null else "unknown")
+					if collider is Node:
+						var detail := str(collider.get_path())
+						if collider.has_meta("zone_collision_kind"):
+							detail += " kind=%s" % str(collider.get_meta("zone_collision_kind"))
+						collision_names.append(detail)
+					else:
+						collision_names.append("unknown")
 				_fail("Player made no progress toward %s at %s (target=%s wall=%s floor=%s slides=%d)" % [
 					label,
 					str(player.global_position),

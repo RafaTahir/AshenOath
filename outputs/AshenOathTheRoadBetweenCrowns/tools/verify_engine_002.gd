@@ -27,6 +27,7 @@ func _initialize() -> void:
 	game.call("_new_game")
 	await _wait_for_zone(game, "greyfen")
 	await _verify_registered_zone_contracts(game)
+	await _shutdown_game(game)
 	_finish()
 
 func _verify_static_contract() -> void:
@@ -95,6 +96,26 @@ func _wait_for_zone(game, zone_id: String) -> void:
 func _frames(count: int) -> void:
 	for _i in range(count):
 		await process_frame
+
+func _shutdown_game(game) -> void:
+	# The verifier must close the same lifecycle it exercises. Without an
+	# explicit retirement phase, the final zone remains render-visible until
+	# process exit and engine diagnostics are indistinguishable from active
+	# material failures.
+	if game != null and is_instance_valid(game) and game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+	await _frames(20)
+	if game != null and is_instance_valid(game) and game.has_method("finalize_resource_shutdown"):
+		game.finalize_resource_shutdown()
+	await _frames(12)
+	print("VERIFIER_PHASE: SHUTDOWN")
+	if game != null and is_instance_valid(game) and game.is_inside_tree():
+		root.remove_child(game)
+	if game != null and is_instance_valid(game):
+		game.free()
+	RenderingServer.force_sync()
+	await _frames(8)
+	RenderingServer.force_sync()
 
 func _finish() -> void:
 	print("ENGINE-002 VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))

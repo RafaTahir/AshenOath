@@ -145,51 +145,42 @@ func _make_grave_row_rhythm(parent: Node3D, context: ZoneBuildContext) -> void:
 	row_root.set_meta("rows", 3)
 	row_root.set_meta("purpose", "readable_investigation_framing")
 	parent.add_child(row_root)
-	var stone_material := context.make_material(Color(0.25, 0.255, 0.24))
-	stone_material.roughness = 1.0
+	# Grave markers are static detail. Submit them through the shared visual
+	# batch so the cemetery keeps its rhythm without nine independent render
+	# instances in the full-detail scene.
+	var stone_color := Color(0.25, 0.255, 0.24)
 	for row in range(3):
 		for column in range(3):
-			var marker := MeshInstance3D.new()
-			marker.name = "CemeteryRowMarker"
-			var mesh := BoxMesh.new()
-			mesh.size = Vector3(0.09, 0.48 + float((row + column) % 2) * 0.10, 0.16)
-			marker.mesh = mesh
-			marker.position = Vector3(-1.25 + float(column) * 0.72, 0.32, -1.3 + float(row) * 1.0)
-			marker.rotation.y = -0.10 + float((row + column) % 3) * 0.12
-			marker.material_override = stone_material
+			var marker := Node3D.new()
+			marker.name = "CemeteryRowMarker_%d_%d" % [row, column]
+			marker.set_meta("batched_visual", true)
 			row_root.add_child(marker)
+			var marker_pos := origin_from_parent(parent) + Vector3(-1.25 + float(column) * 0.72, 0.32, -1.3 + float(row) * 1.0)
+			var marker_size := Vector3(0.09, 0.48 + float((row + column) % 2) * 0.10, 0.16)
+			context.make_visual_box("CemeteryRowMarkerVisual", marker_pos, marker_size, stone_color)
 
 func _make_crow_roost(parent: Node3D, context: ZoneBuildContext) -> void:
 	var roost := Node3D.new()
 	roost.name = "CrowShrineRoost"
 	roost.set_meta("stateful", true)
 	parent.add_child(roost)
-	var branch_material := context.make_material(Color(0.10, 0.055, 0.025))
+	# These silhouettes are far from the camera and static. Keep the authored
+	# roost hierarchy, but batch its six low-detail pieces with the environment.
 	for index in range(3):
-		var branch := MeshInstance3D.new()
-		branch.name = "CrowShrineBranch"
-		var branch_mesh := CylinderMesh.new()
-		branch_mesh.top_radius = 0.045
-		branch_mesh.bottom_radius = 0.075
-		branch_mesh.height = 1.15
-		branch_mesh.radial_segments = 6
-		branch.mesh = branch_mesh
-		branch.position = Vector3(2.05 + float(index - 1) * 0.42, 1.05, -3.0 + float(index % 2) * 0.12)
-		branch.rotation.z = -0.64 + float(index) * 0.58
-		branch.material_override = branch_material
+		var branch_pos := origin_from_parent(parent) + Vector3(2.05 + float(index - 1) * 0.42, 1.05, -3.0 + float(index % 2) * 0.12)
+		var branch := Node3D.new()
+		branch.name = "CrowShrineBranch_%d" % index
+		branch.set_meta("batched_visual", true)
 		roost.add_child(branch)
-		var crow := MeshInstance3D.new()
-		crow.name = "CrowShrineSilhouette"
-		var crow_mesh := SphereMesh.new()
-		crow_mesh.radius = 0.12
-		crow_mesh.height = 0.30
-		crow_mesh.radial_segments = 6
-		crow_mesh.rings = 3
-		crow.mesh = crow_mesh
-		crow.scale = Vector3(1.0, 0.72, 1.45)
-		crow.position = branch.position + Vector3(0, 0.62, 0)
-		crow.material_override = context.make_material(Color(0.012, 0.014, 0.016))
+		context.make_visual_box("CrowShrineBranchVisual", branch_pos, Vector3(0.09, 1.15, 0.09), Color(0.10, 0.055, 0.025))
+		var crow := Node3D.new()
+		crow.name = "CrowShrineSilhouette_%d" % index
+		crow.set_meta("batched_visual", true)
 		roost.add_child(crow)
+		context.make_visual_box("CrowShrineSilhouetteVisual", branch_pos + Vector3(0, 0.62, 0), Vector3(0.20, 0.22, 0.30), Color(0.012, 0.014, 0.016))
+
+func origin_from_parent(parent: Node3D) -> Vector3:
+	return parent.global_position
 
 func _make_cemetery_state_anchors(parent: Node3D, context: ZoneBuildContext) -> void:
 	var states := Node3D.new()

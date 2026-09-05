@@ -3,6 +3,7 @@ extends SceneTree
 const WorldSectorManifest = preload("res://scripts/world_sector_manifest.gd")
 
 var failures := 0
+var aborted := false
 
 func _initialize() -> void:
 	var scene := load("res://scenes/main.tscn") as PackedScene
@@ -12,39 +13,34 @@ func _initialize() -> void:
 		return
 	var game = scene.instantiate()
 	root.add_child(game)
-	await process_frame
-	game.call("_on_launch_accepted")
-	await process_frame
-	await process_frame
+	await _settle(6)
+	if game.hud != null and game.hud.has_method("restore_input_focus"):
+		game.hud.restore_input_focus()
+	await _send_action("ui_accept")
+	await _settle(4)
+	if game.hud != null and game.hud.has_method("restore_input_focus"):
+		game.hud.restore_input_focus()
 	var new_game_started := Time.get_ticks_msec()
-	game.call("_new_game")
+	await _send_action("ui_accept")
 	await wait_for_zone(game, "greyfen")
 	var click_to_play_ms := Time.get_ticks_msec() - new_game_started
 	check(click_to_play_ms < 1500, "Prewarmed New Game exceeded 1500 ms: %d ms" % click_to_play_ms)
 	print("NEW GAME CLICK-TO-PLAY: %d ms" % click_to_play_ms)
-	await use_gate(game, "deep_wood")
-	await use_gate(game, "old_mill")
-	await use_gate(game, "burned_farmstead")
-	await use_gate(game, "marsh_crossing")
-	await use_gate(game, "bandit_road")
-	await use_gate(game, "vargan_approach")
-	await use_gate(game, "vargan_court")
-	await use_gate(game, "record_hall")
-	await use_gate(game, "vargan_court")
-	await use_gate(game, "vargan_approach")
-	await use_gate(game, "bandit_road")
-	await use_gate(game, "marsh_crossing")
-	await use_gate(game, "burned_farmstead")
-	await use_gate(game, "old_mill")
-	await use_gate(game, "deep_wood")
-	await use_gate(game, "wychwood")
-	await use_gate(game, "greyfen")
-	await use_gate(game, "vargan_approach")
-	await use_gate(game, "vargan_court")
-	await use_gate(game, "vargan_approach")
-	check(not game.zone_transition_pending, "Final gate left the loading state active")
-	check(game.player != null and game.player.can_control, "Final gate did not restore player control")
+	var route := [
+		"deep_wood", "old_mill", "burned_farmstead", "marsh_crossing", "bandit_road",
+		"vargan_approach", "vargan_court", "record_hall", "vargan_court", "vargan_approach",
+		"bandit_road", "marsh_crossing", "burned_farmstead", "old_mill", "deep_wood",
+		"wychwood", "greyfen", "vargan_approach", "vargan_court", "vargan_approach"
+	]
+	for target in route:
+		if aborted:
+			break
+		await use_gate(game, str(target))
+	if not aborted:
+		check(not game.zone_transition_pending, "Final gate left the loading state active")
+		check(game.player != null and game.player.can_control, "Final gate did not restore player control")
 	print("GATE TRANSITION VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
+	print("VERIFIER_PHASE: SHUTDOWN")
 	if game.has_method("prepare_resource_shutdown"):
 		game.prepare_resource_shutdown()
 	await _frames(game.ZONE_RETIRE_FRAMES + 4)
@@ -68,23 +64,17 @@ func use_gate(game, target: String) -> void:
 	var outward := Vector3(gate.global_position.x, 0.0, gate.global_position.z).normalized()
 	if outward.length_squared() < 0.1:
 		outward = Vector3.FORWARD
-	var far_position: Vector3 = gate.global_position - outward * 4.5 + Vector3.UP * 0.95
+	var far_position: Vector3 = game.player.global_position
 	var near_position: Vector3 = gate.global_position - outward * 1.7 + Vector3.UP * 0.95
-	check(_corridor_clear(game, far_position, near_position), "%s gate approach has a player-sized collision blocker" % target)
-	game.player.global_position = far_position
-	game.player.velocity = Vector3.ZERO
-	for step in range(1, 15):
-		game.player.global_position = far_position.lerp(near_position, float(step) / 14.0)
-		game.player.velocity = Vector3.ZERO
-		await physics_frame
-		await process_frame
+	var gate_corridor_clear := _corridor_clear(game, far_position, near_position)
+	check(gate_corridor_clear, "%s gate approach has a player-sized collision blocker" % target)
+	if not gate_corridor_clear:
+		return
+	await _walk_player_to(game, near_position)
 	var toward_gate: Vector3 = gate.global_position - game.player.global_position
 	toward_gate.y = 0.0
 	game.camera_rig.yaw = atan2(-toward_gate.normalized().x, -toward_gate.normalized().z)
-	for _frame in range(4):
-		await physics_frame
-		await process_frame
-		game.call("_update_interaction_focus")
+	await _settle(10)
 	if gate not in game.interaction_candidates:
 		print("GATE DEBUG: target=%s player=%s gate=%s distance=%.2f overlaps=%s" % [
 			target, game.player.global_position, gate.global_position,
@@ -96,10 +86,7 @@ func use_gate(game, target: String) -> void:
 	check(game.call("_interaction_target_valid", gate), "Gate %s failed normal line-of-sight validation" % target)
 	if game.active_interactable != gate:
 		return
-	var event := InputEventAction.new()
-	event.action = "interact"
-	event.pressed = true
-	game.call("_unhandled_input", event)
+	await _send_action("interact")
 	await wait_for_zone(game, target)
 
 func use_seamless_boundary(game, source: String, target: String) -> void:
@@ -111,20 +98,17 @@ func use_seamless_boundary(game, source: String, target: String) -> void:
 	var outward := _edge_outward(str(edge.get("id", "")))
 	var lane := float(edge.get("lane", 0.0))
 	var edge_position := _edge_position(str(edge.get("id", "")), lane, bounds)
-	var far_position := edge_position - outward * 4.5 + Vector3.UP * 0.95
-	var near_position := edge_position - outward * 0.45 + Vector3.UP * 0.95
-	check(_corridor_clear(game, far_position, near_position), "%s seamless approach has a player-sized collision blocker" % target)
-	game.player.global_position = far_position
-	game.player.velocity = Vector3.ZERO
+	var far_position: Vector3 = game.player.global_position
+	var near_position := edge_position + Vector3.UP * 0.95
+	var seamless_corridor_clear := _corridor_clear(game, far_position, near_position)
+	check(seamless_corridor_clear, "%s seamless approach has a player-sized collision blocker" % target)
+	if not seamless_corridor_clear:
+		return
+	await _walk_player_to(game, near_position)
 	var yaw := atan2(-outward.x, -outward.z)
-	game.player.rotation.y = yaw
 	if game.camera_rig != null:
 		game.camera_rig.yaw = yaw
-	for _frame in range(3):
-		await physics_frame
-		await process_frame
-	# The player must reach the sector edge through normal movement. No direct
-	# transition call or interaction handler is used for this route.
+	# The player must reach and cross the sector edge through normal movement.
 	Input.action_press("move_forward")
 	var reached := false
 	for _frame in range(150):
@@ -170,19 +154,48 @@ func _corridor_clear(game: Node, start: Vector3, destination: Vector3) -> bool:
 	var shape := CapsuleShape3D.new()
 	shape.radius = 0.52
 	shape.height = 1.78
-	var distance := start.distance_to(destination)
-	var samples := maxi(3, ceili(distance / 0.35))
-	for index in range(samples + 1):
-		var point := start.lerp(destination, float(index) / float(samples))
-		var query := PhysicsShapeQueryParameters3D.new()
-		query.shape = shape
-		query.transform = Transform3D(Basis.IDENTITY, point)
-		query.collision_mask = 1
-		query.collide_with_areas = false
-		query.collide_with_bodies = true
-		query.exclude = [game.player.get_rid()]
-		if not game.get_world_3d().direct_space_state.intersect_shape(query, 16).is_empty():
+	var route: Array = [start, destination]
+	if game.spatial_service != null and game.spatial_service.has_method("build_route"):
+		var built: Array = game.spatial_service.build_route(start, destination, 0.52)
+		if built.is_empty():
 			return false
+		route = built
+	for leg_index in range(route.size() - 1):
+		var leg_start: Vector3 = route[leg_index]
+		var leg_end: Vector3 = route[leg_index + 1]
+		var distance := leg_start.distance_to(leg_end)
+		var samples := maxi(3, ceili(distance / 0.35))
+		for index in range(samples + 1):
+			var point: Vector3 = leg_start.lerp(leg_end, float(index) / float(samples))
+			point.y = 0.95
+			var query := PhysicsShapeQueryParameters3D.new()
+			query.shape = shape
+			query.transform = Transform3D(Basis.IDENTITY, point)
+			query.collision_mask = 1
+			query.collide_with_areas = false
+			query.collide_with_bodies = true
+			query.exclude = [game.player.get_rid()]
+			var hits: Array[Dictionary] = game.get_world_3d().direct_space_state.intersect_shape(query, 16)
+			if not hits.is_empty():
+				var hit_names: Array[String] = []
+				for hit in hits:
+					var collider = hit.get("collider")
+					if collider is Node:
+						var detail := str(collider.get_path())
+						var shape_index := int(hit.get("shape", -1))
+						if shape_index >= 0 and collider is CollisionObject3D:
+							var shapes: Array = collider.find_children("*", "CollisionShape3D", true, false)
+							if shape_index < shapes.size():
+								var shape_node := shapes[shape_index] as CollisionShape3D
+								if shape_node != null:
+									detail += " shape=%d local=%s" % [shape_index, str(shape_node.position)]
+									if shape_node.shape is BoxShape3D:
+										detail += " size=%s" % str((shape_node.shape as BoxShape3D).size)
+						hit_names.append(detail)
+					else:
+						hit_names.append(str(hit.get("rid", "unknown")))
+				print("GATE COLLISION: point=%s colliders=%s" % [point, ", ".join(hit_names)])
+				return false
 	return true
 
 func find_gate(scope: Node, target: String):
@@ -201,6 +214,54 @@ func wait_for_zone(game, target: String) -> void:
 		await process_frame
 	check(false, "%s did not become playable within 90 frames" % target)
 
+func _walk_player_to(game, target: Vector3) -> void:
+	var start_zone := str(game.current_zone_id)
+	var route: Array = [target]
+	if game.spatial_service != null and game.spatial_service.has_method("build_route"):
+		var built: Array = game.spatial_service.build_route(game.player.global_position, target, 0.52)
+		if not built.is_empty():
+			route = built
+	for raw_point in route:
+		var point: Vector3 = raw_point
+		point.y = 0.95
+		var reached := false
+		Input.action_press("move_forward")
+		for _frame in range(360):
+			if str(game.current_zone_id) != start_zone:
+				Input.action_release("move_forward")
+				return
+			var delta: Vector3 = point - game.player.global_position
+			delta.y = 0.0
+			if delta.length() <= 0.85:
+				reached = true
+				break
+			if game.camera_rig != null:
+				game.camera_rig.yaw = atan2(-delta.normalized().x, -delta.normalized().z)
+			await physics_frame
+			await process_frame
+		Input.action_release("move_forward")
+		if not reached:
+			check(false, "Player could not physically reach route waypoint %s" % str(point))
+			return
+	Input.action_release("move_forward")
+
+func _send_action(action: String) -> void:
+	var down := InputEventAction.new()
+	down.action = action
+	down.pressed = true
+	Input.parse_input_event(down)
+	await physics_frame
+	await process_frame
+	var up := InputEventAction.new()
+	up.action = action
+	up.pressed = false
+	Input.parse_input_event(up)
+
+func _settle(count: int) -> void:
+	for _index in range(count):
+		await physics_frame
+		await process_frame
+
 func _frames(count: int) -> void:
 	for _index in range(count):
 		await process_frame
@@ -208,4 +269,5 @@ func _frames(count: int) -> void:
 func check(condition: bool, message: String) -> void:
 	if not condition:
 		failures += 1
+		aborted = true
 		push_error(message)

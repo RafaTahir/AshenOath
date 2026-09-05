@@ -23,8 +23,28 @@ func _initialize() -> void:
 		game._enemy_attack_token(game.active_enemies[0], false)
 	check(game.player.has_method("get_beam_locked_direction"), "Oathfire direction contract is missing")
 	check(game.minigames.overlay.size.x >= 700 and game.minigames.overlay.size.y >= 680, "1080p minigame presentation is missing")
+	var result_code := 0 if failures == 0 else 1
+	await _shutdown_game(game)
 	print("MASTER-002 VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
-	quit(0 if failures == 0 else 1)
+	quit(result_code)
+
+func _shutdown_game(game: Node) -> void:
+	if is_instance_valid(game) and game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+		await _frames(20)
+	if is_instance_valid(game) and game.has_method("finalize_resource_shutdown"):
+		game.finalize_resource_shutdown()
+		await _frames(12)
+	print("VERIFIER_PHASE: SHUTDOWN")
+	if is_instance_valid(game):
+		game.queue_free()
+		await _frames(8)
+	RenderingServer.force_sync()
+	await _frames(4)
+
+func _frames(count: int) -> void:
+	for _index in range(count):
+		await process_frame
 
 func check(condition: bool, message: String) -> void:
 	if not condition:

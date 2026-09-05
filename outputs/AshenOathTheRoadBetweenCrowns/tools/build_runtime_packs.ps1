@@ -6,6 +6,11 @@ param(
 
 $ErrorActionPreference = "Stop"
 $Project = Split-Path -Parent $PSScriptRoot
+$RepoRoot = Split-Path -Parent (Split-Path -Parent $Project)
+
+$SourceCommit = ""
+try { $SourceCommit = (git -C $RepoRoot rev-parse HEAD).Trim() } catch {}
+$BuildId = if ($env:ASHENOATH_RELEASE_ID) { $env:ASHENOATH_RELEASE_ID } elseif ($SourceCommit) { "pack-003-$($SourceCommit.Substring(0,12))" } else { "pack-003-local" }
 
 function Get-Sha256Hex([string]$Path) {
     $algorithm = [System.Security.Cryptography.SHA256]::Create()
@@ -83,7 +88,7 @@ foreach ($pack in $packs) {
     }
     $records.Add([ordered]@{
         id = $pack.id
-        version = "dev"
+        version = $BuildId
         preset = $pack.preset
         artifact = $pack.file
         bytes = [int64]$fileInfo.Length
@@ -99,9 +104,11 @@ foreach ($record in $records) {
     $totalBytes += [int64]$record["bytes"]
 }
 $manifest = [ordered]@{
-    schema_version = 1
+    schema_version = 2
     ticket = "PACK-003"
     generated_at_utc = (Get-Date).ToUniversalTime().ToString("o")
+    build_id = $BuildId
+    generated_from_commit = $SourceCommit
     project = "Ashen Oath"
     artifact_directory = $OutputDirectory
     artifacts_are_external = $true

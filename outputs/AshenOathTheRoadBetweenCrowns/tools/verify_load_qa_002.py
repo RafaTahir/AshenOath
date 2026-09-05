@@ -74,8 +74,21 @@ def main() -> int:
                 errors.append(f"{pack_id} production byte metadata disagrees with its candidate")
             if str(pack.get("sha256", "")).lower() != str(candidate.get("sha256", "")).lower():
                 errors.append(f"{pack_id} production hash metadata disagrees with its candidate")
-        elif configured_url or not status.startswith("embedded"):
-            errors.append("base must remain the embedded startup pack")
+        elif pack_id == "base":
+            if configured_url or not status.startswith("embedded"):
+                errors.append("base must remain the embedded startup pack")
+            if str(pack.get("embedded_artifact", "")) != "index.pck":
+                errors.append("base must identify index.pck as its embedded artifact")
+            if str(pack.get("embedded_source_artifact", "")) != str(candidate.get("artifact", "")):
+                errors.append("base embedded source artifact disagrees with its candidate")
+            if int(pack.get("embedded_source_bytes", 0)) != int(candidate.get("bytes", 0)):
+                errors.append("base embedded source byte metadata disagrees with its candidate")
+            if str(pack.get("embedded_source_sha256", "")).lower() != str(candidate.get("sha256", "")).lower():
+                errors.append("base embedded source hash metadata disagrees with its candidate")
+            if str(pack.get("embedded_source_kind", "")) != "standalone_pack_candidate":
+                errors.append("base embedded source kind is missing or invalid")
+        else:
+            errors.append(f"{pack_id} has an unsupported non-streamed pack status")
 
         if configured_url:
             diagnostics.append(f"{pack_id}: external URL configured")
@@ -117,9 +130,10 @@ def main() -> int:
     if args.candidate_dir:
         candidate_dir = args.candidate_dir.resolve()
         external_report["checked"] = True
-        for pack_id in sorted(PACK_IDS):
+        pack_root = candidate_dir / "packs" if (candidate_dir / "packs").is_dir() else candidate_dir
+        for pack_id in sorted(REQUIRED_EXTERNAL_PACKS):
             row = candidate_rows.get(pack_id, {})
-            artifact = candidate_dir / str(row.get("artifact", f"{pack_id}.pck"))
+            artifact = pack_root / str(row.get("artifact", f"{pack_id}.pck"))
             if not artifact.is_file():
                 errors.append(f"external candidate missing: {artifact}")
                 continue

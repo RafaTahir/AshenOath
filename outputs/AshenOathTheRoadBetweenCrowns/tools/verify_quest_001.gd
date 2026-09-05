@@ -1,13 +1,26 @@
 extends SceneTree
 
 var failures := 0
+var finished := false
+var watchdog: Timer
+var game: Node
 
 func _initialize() -> void:
+	watchdog = Timer.new()
+	watchdog.name = "QuestVerifierWatchdog"
+	watchdog.wait_time = 45.0
+	watchdog.one_shot = true
+	watchdog.autostart = true
+	root.add_child(watchdog)
+	watchdog.timeout.connect(func():
+		if not finished:
+			_fail("QUEST-001 timed out before completing its route")
+	)
 	var scene = load("res://scenes/main.tscn")
 	if scene == null:
 		_fail("Main scene could not be loaded")
 		return
-	var game = scene.instantiate()
+	game = scene.instantiate()
 	root.add_child(game)
 	await process_frame
 	game.call("_new_game")
@@ -18,6 +31,7 @@ func _initialize() -> void:
 	var sister = _find_named(game.zone_root, "sister_anwen")
 	_check(sister != null, "Sister Anwen is missing")
 	if sister == null:
+		await _shutdown_game()
 		_finish()
 		return
 	game.call("_handle_interaction", sister)
@@ -104,6 +118,7 @@ func _initialize() -> void:
 	_check(game.quests.is_completed("main_teeth_in_rain"), "Memory-core choice did not finish Teeth in the Rain")
 	_check(game.quests.is_active("main_names_they_burned"), "Act Two handoff did not unlock")
 
+	await _shutdown_game()
 	_finish()
 
 func _objective_is_optional(game, quest_id: String, objective_id: String) -> bool:
@@ -138,6 +153,24 @@ func _settle_frames(count: int) -> void:
 	for _i in range(count):
 		await process_frame
 
+func _shutdown_game() -> void:
+	if game == null or not is_instance_valid(game):
+		return
+	if game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+	for _i in range(600):
+		await process_frame
+		if int(game.zone_lifecycle_snapshot().get("retiring_count", 0)) == 0:
+			break
+	if game.has_method("finalize_resource_shutdown"):
+		game.finalize_resource_shutdown()
+	await _settle_frames(8)
+	if game.is_inside_tree():
+		root.remove_child(game)
+	game.free()
+	game = null
+	await _settle_frames(60)
+
 func _check(condition: bool, message: String) -> void:
 	if not condition:
 		failures += 1
@@ -149,5 +182,11 @@ func _fail(message: String) -> void:
 	_finish()
 
 func _finish() -> void:
+	if finished:
+		return
+	finished = true
+	if watchdog != null and is_instance_valid(watchdog):
+		watchdog.stop()
+		watchdog.queue_free()
 	print("QUEST-001 VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
 	quit(0 if failures == 0 else 1)

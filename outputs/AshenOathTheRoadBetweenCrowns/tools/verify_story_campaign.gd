@@ -49,9 +49,29 @@ func _initialize() -> void:
 		check(game.current_zone_id == zone and marker != null, "Campaign zone failed: %s" % zone)
 
 	print("STORY CAMPAIGN VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
+	await _shutdown_game(game)
 	quit(0 if failures == 0 else 1)
 
 func check(condition: bool, message: String) -> void:
 	if not condition:
 		failures += 1
 		push_error(message)
+
+func _frames(count: int) -> void:
+	for _index in range(count):
+		await process_frame
+
+func _shutdown_game(game: Node) -> void:
+	if is_instance_valid(game) and game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+		await _frames(20)
+	if is_instance_valid(game) and game.has_method("finalize_resource_shutdown"):
+		game.finalize_resource_shutdown()
+		await _frames(12)
+	print("VERIFIER_PHASE: SHUTDOWN")
+	for child in root.get_children():
+		if is_instance_valid(child):
+			child.queue_free()
+	await _frames(8)
+	RenderingServer.force_sync()
+	await _frames(4)

@@ -31,17 +31,26 @@ func _initialize() -> void:
 		await _wait_for_retirement(game)
 		_validate_active_zone(game, zone_id)
 
+	print("VERIFIER_PHASE: SHUTDOWN")
 	game.prepare_resource_shutdown()
 	await _wait_for_retirement(game)
 	var before_finalize: Dictionary = game.zone_lifecycle_snapshot()
 	_check(int(before_finalize.get("cached_count", 0)) == 0, "Shutdown retained cached zones")
 	_check(int(before_finalize.get("retiring_count", 0)) == 0, "Shutdown retained retiring zones")
 	game.finalize_resource_shutdown()
+	# Let queued service-owner frees settle before inspecting the tree. The
+	# verifier must own the final renderer flush so shutdown diagnostics are
+	# attributable to the runtime rather than to an immediate quit.
 	await _frames(4)
 	var after_finalize: Dictionary = game.zone_lifecycle_snapshot()
 	_check(int(after_finalize.get("material_anchor_count", 0)) == 0, "Finalization retained material anchors")
-	game.queue_free()
-	await _frames(24)
+	if game.is_inside_tree():
+		root.remove_child(game)
+	if is_instance_valid(game):
+		game.free()
+	RenderingServer.force_sync()
+	await _frames(60)
+	RenderingServer.force_sync()
 	_check(not is_instance_valid(game), "Game root did not retire after resource shutdown")
 
 	if failures.is_empty():

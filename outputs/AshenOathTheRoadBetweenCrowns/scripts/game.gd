@@ -112,6 +112,7 @@ var zone_transition_frames := 0
 var pending_spawn_position := Vector3.ZERO
 var pending_spawn_facing := 0.0
 var loading_started_usec := 0
+var new_game_started_usec := 0
 var last_loading_metrics: Dictionary = {}
 var new_game_start_pending := false
 var zone_load_request_pending := false
@@ -119,15 +120,46 @@ var resource_shutdown_prepared := false
 var requested_zone_id := ""
 var requested_zone_spawn := Vector3.ZERO
 var campaign_pack_waiting := false
+var opening_pack_waiting := false
 var greyfen_prewarm_started := false
 var startup_packs_waiting := false
 var startup_prepare_failed := false
 var new_game_requested_while_preparing := false
 var greyfen_prewarm_spatial_service: Node
+var opening_detail_pending := false
+var opening_detail_stage_index := 0
+var opening_detail_generation := 0
+var opening_save_generation := 0
+var opening_checkpoint_pending := false
+var owned_timers: Array[Timer] = []
+# Keep each late-opening chunk small enough that the first controllable frame
+# never competes with a large import or decoration batch on Web/ANGLE.
+# Keep the first playable window free of optional scene imports, pack mounts,
+# and IndexedDB writes. These operations resume after the player has had time
+# to see the opening and the browser has completed its first capture.
+const OPENING_DETAIL_INITIAL_DELAY_SECONDS := 30.0
+const OPENING_DETAIL_MIN_PLAYER_DISTANCE := 7.0
+const OPENING_DETAIL_RETRY_SECONDS := 5.0
+const BACKGROUND_RUNTIME_DELAY_SECONDS := 45.0
+const OPENING_SAVE_DELAY_SECONDS := 30.0
+const OPENING_DETAIL_STAGES: Array[String] = [
+	"boundary", "landmark_board", "landmark_shrine", "landmark_blacksmith",
+	"landmark_cemetery", "landmark_cart_road", "village_dressing",
+	"village_first_impression", "village_quality", "trees", "aftermath"
+]
 var interaction_focus_cooldown := 0.0
 var compass_refresh_cooldown := 0.0
 var tutorial_refresh_cooldown := 0.0
 var target_status_refresh_cooldown := 0.0
+var interaction_focus_dirty := true
+var interaction_focus_cache_valid := false
+var last_focus_position := Vector3.ZERO
+var last_focus_forward := Vector3.ZERO
+var compass_dirty := true
+var compass_cache_valid := false
+var last_compass_position := Vector3.ZERO
+var last_compass_zone := ""
+var last_compass_signature := ""
 const MAX_CACHED_ROUTE_ZONES := 1
 const ZONE_RETIRE_FRAMES := 8
 const MAX_SKINNED_RESOURCE_ANCHORS := 4
@@ -161,7 +193,11 @@ func _ready() -> void:
 	# while Greyfen prewarming happens behind it.
 	if OS.has_feature("web"):
 		hud.show_main_menu()
+		# The HTML shell has already provided the consent/input surface. Start the
+		# opening prewarm behind the real menu so New Game is immediately visible
+		# and the player does not pay the Greyfen build cost after clicking it.
 		_on_launch_accepted()
+		print("LOADING: web_menu_ready opening_prewarm_hidden=true")
 	else:
 		hud.show_launch_screen()
 	audio.set_music_state("main_menu")
@@ -209,7 +245,8 @@ func _process(delta: float) -> void:
 	interaction_focus_cooldown -= delta
 	if interaction_focus_cooldown <= 0.0:
 		interaction_focus_cooldown = 0.10
-		_update_interaction_focus()
+		if _interaction_focus_needs_refresh():
+			_update_interaction_focus()
 	tutorial_refresh_cooldown -= delta
 	if tutorial_refresh_cooldown <= 0.0:
 		tutorial_refresh_cooldown = 0.10
@@ -224,8 +261,9 @@ func _process(delta: float) -> void:
 		save_manager.autosave(self)
 	compass_refresh_cooldown -= delta
 	if compass_refresh_cooldown <= 0.0:
-		compass_refresh_cooldown = 0.25
-		_update_compass()
+		compass_refresh_cooldown = 0.50
+		if _compass_needs_refresh():
+			_update_compass()
 
 func _play_voice_smoke_test(voice_id: String, label: String) -> void:
 	if audio == null:
@@ -282,6 +320,14 @@ func _setup_runtime() -> void:
 func _new_game() -> void:
 	if zone_transition_pending or zone_load_request_pending:
 		return
+	# Start the player-facing timer at the first New Game request, including the
+	# queued cold-pack/prewarm path. The old branch left this at zero until the
+	# cache was ready, which made the measured handoff look like a stale prior
+	# transition and hid the actual wait from diagnostics.
+	if loading_started_usec <= 0:
+		loading_started_usec = Time.get_ticks_usec()
+	if new_game_started_usec <= 0:
+		new_game_started_usec = loading_started_usec
 	if OS.has_feature("web") and runtime_packs != null and runtime_packs.has_method("startup_packs_ready"):
 		if not runtime_packs.startup_packs_ready():
 			new_game_start_pending = true
@@ -293,9 +339,22 @@ func _new_game() -> void:
 				hud.set_new_game_status("Greyfen is waking. Your New Game request will open as soon as it is ready.")
 				hud.toast("Greyfen is still being prepared. New Game will open shortly.")
 			return
+		# Opening readiness and Greyfen prewarm are separate states. Keep the
+		# click queued until the prepared route is published; otherwise a fast
+		# click races the deferred build and falls back to the slow cold builder.
+		if not route_zone_cache.has("greyfen"):
+			new_game_start_pending = true
+			new_game_requested_while_preparing = true
+			_on_launch_accepted()
+			if hud != null:
+				hud.set_new_game_status("Greyfen is opening. Your New Game request is queued.")
+			return
 	new_game_start_pending = true
 	new_game_requested_while_preparing = false
-	loading_started_usec = Time.get_ticks_usec()
+	if loading_started_usec <= 0:
+		loading_started_usec = Time.get_ticks_usec()
+	if new_game_started_usec <= 0:
+		new_game_started_usec = loading_started_usec
 	if audio != null:
 		audio.set_game_paused(false)
 	if hud != null and hud.has_method("arm_loading"):
@@ -367,11 +426,30 @@ func _perform_requested_zone_load() -> void:
 	_load_zone_after_runtime_pack(destination, arrival)
 
 func _load_zone_after_runtime_pack(zone_id: String, spawn_pos: Vector3) -> void:
+	if _zone_requires_opening_pack(zone_id) and OS.has_feature("web"):
+		if runtime_packs == null or not runtime_packs.has_method("request_pack"):
+			_recover_failed_zone_load(current_zone_id)
+			return
+		if not runtime_packs.is_ready("opening"):
+			opening_pack_waiting = true
+			if hud != null and hud.has_method("arm_loading"):
+				hud.arm_loading("Preparing the road into Wychwood...")
+			runtime_packs.request_pack("opening")
+			_wait_for_opening_pack(zone_id, spawn_pos)
+			return
 	if not _zone_requires_campaign_pack(zone_id) or not OS.has_feature("web"):
 		_load_zone(zone_id, spawn_pos)
 		return
 	if runtime_packs == null or not runtime_packs.has_method("request_pack"):
 		_recover_failed_zone_load(current_zone_id)
+		return
+	# The production and QA Web candidates embed the campaign builder in the
+	# root PCK. External campaign packs are optional in that configuration, so
+	# do not lock a player at a gate while an unrelated background download is
+	# still in flight. Builds without the embedded builder continue through the
+	# transactional pack path below.
+	if runtime_packs.has_method("has_embedded_content") and runtime_packs.has_embedded_content("campaign"):
+		_load_zone(zone_id, spawn_pos)
 		return
 	if not runtime_packs.is_ready("campaign"):
 		campaign_pack_waiting = true
@@ -402,11 +480,34 @@ func _wait_for_campaign_pack(zone_id: String, spawn_pos: Vector3) -> void:
 		hud.toast("The road pack could not be prepared. You remain in Greyfen.")
 	_recover_failed_zone_load(current_zone_id)
 
+func _wait_for_opening_pack(zone_id: String, spawn_pos: Vector3) -> void:
+	for _frame in range(900):
+		await get_tree().process_frame
+		if not opening_pack_waiting:
+			return
+		if runtime_packs != null and runtime_packs.is_ready("opening"):
+			opening_pack_waiting = false
+			if hud != null and hud.has_method("hide_loading"):
+				hud.hide_loading()
+			_load_zone(zone_id, spawn_pos)
+			return
+		if runtime_packs != null and runtime_packs.get_state("opening") == "failed":
+			break
+	opening_pack_waiting = false
+	if hud != null and hud.has_method("hide_loading"):
+		hud.hide_loading()
+	if hud != null:
+		hud.toast("The Wychwood pack could not be prepared. You remain in Greyfen.")
+	_recover_failed_zone_load(current_zone_id)
+
 func _zone_requires_campaign_pack(zone_id: String) -> bool:
 	return zone_id in [
 		"deep_wood", "old_mill", "burned_farmstead", "marsh_crossing", "bandit_road",
 		"vargan_approach", "vargan_court", "record_hall", "undercroft", "assembly", "hart_glade",
 	]
+
+func _zone_requires_opening_pack(zone_id: String) -> bool:
+	return zone_id in ["wychwood", "cemetery"]
 
 func _start_new_game_world() -> void:
 	# An explicit transition can be requested before the menu's deferred setup
@@ -424,9 +525,19 @@ func _start_new_game_world() -> void:
 	var prewarmed_enemies: Array = route_enemy_cache.get("greyfen", [])
 	print("LOADING: new_game_handoff prewarmed=%s cached_zones=%d" % [prewarmed_greyfen != null, route_zone_cache.size()])
 	if prewarmed_greyfen != null:
+		# Remove only the preserved root from the cache before trimming unrelated
+		# entries. Do not pass it through the retirement path: that schedules a
+		# renderer teardown for the very scene we are about to activate.
 		route_zone_cache.erase("greyfen")
 		route_enemy_cache.erase("greyfen")
-	_clear_route_zone_cache(prewarmed_greyfen)
+		route_zone_signatures.erase("greyfen")
+		# The prewarm root is still held by zone_root while the menu is covering
+		# it. Clear that active reference before trimming unrelated cache entries;
+		# otherwise _clear_route_zone_cache() mistakes the root we are handing off
+		# for a retired zone and performs the expensive renderer teardown again.
+		if zone_root == prewarmed_greyfen:
+			zone_root = null
+	_clear_route_zone_cache()
 	print("LOADING: new_game_stage=cache_clear elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
 	if prewarmed_greyfen != null and is_instance_valid(prewarmed_greyfen):
 		_cache_route_zone("greyfen", prewarmed_greyfen, prewarmed_enemies, _zone_state_signature(), true, false, false)
@@ -441,28 +552,94 @@ func _start_new_game_world() -> void:
 	progression.load_state({})
 	current_zone_id = "greyfen"
 	day_night.set_time(day_night.START_TIME_MINUTES, 0)
+	opening_detail_pending = prewarmed_greyfen != null and str(prewarmed_greyfen.get_meta("opening_build_profile", "")) == "opening_fast"
+	opening_detail_stage_index = 0
+	opening_detail_generation += 1
+	opening_save_generation += 1
+	opening_checkpoint_pending = true
+	print("LOADING: handoff_phase=hide_menu_begin")
 	hud.hide_menus()
+	print("LOADING: handoff_phase=hide_menu_end")
+	print("LOADING: handoff_phase=quest_begin")
 	quests.start_quest("main_road_of_crows")
+	print("LOADING: handoff_phase=quest_end")
+	# The opening is now playable. Remaining packs must not delay New Game or
+	# the first quest interaction, so they are requested in the background.
+	if runtime_packs != null and runtime_packs.has_method("request_background_packs"):
+		call_deferred("_schedule_background_runtime_packs")
 	print("LOADING: new_game_stage=state_ready elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
 	if route_zone_cache.has("greyfen"):
 		route_zone_signatures["greyfen"] = _zone_state_signature()
 	print("LOADING: new_game_stage=zone_dispatch elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
+	print("LOADING: handoff_phase=load_zone_begin")
 	_load_zone("greyfen", Vector3(0, 1, 9.8))
-	print("LOADING: new_game_stage=zone_return elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
+	print("LOADING: handoff_phase=load_zone_end")
+	if opening_detail_pending:
+		call_deferred("_run_opening_detail_stage", opening_detail_generation)
+	var new_game_elapsed_ms := float(Time.get_ticks_usec() - new_game_started_usec) / 1000.0 if new_game_started_usec > 0 else 0.0
+	print("LOADING: new_game_stage=ready elapsed=%.1f" % new_game_elapsed_ms)
+	# Keep the legacy stage label for older diagnostics, but report the same
+	# request-to-control duration rather than the reset transition clock.
+	print("LOADING: new_game_stage=zone_return elapsed=%.1f" % new_game_elapsed_ms)
+	new_game_started_usec = 0
 	hud.toast("Greyfen whispers about the old road. Sister Anwen is waiting at the shrine.")
 	hud.set_guidance_hint("E - Speak to Sister Anwen", 5.5)
 	_refresh_tracker()
 	_refresh_equipment_readout()
+	# FileAccess on Web can synchronously block the renderer for several seconds
+	# on the first IndexedDB transaction. Persist the new-game checkpoint after
+	# the opening frame has settled instead of making the first visible control
+	# handoff wait on storage I/O.
+	call_deferred("_schedule_opening_save", opening_save_generation)
+
+func _request_background_runtime_packs() -> void:
+	if not game_started or runtime_packs == null:
+		return
+	if runtime_packs.has_method("request_background_packs"):
+		runtime_packs.request_background_packs()
+	# Neighbor scene requests are also background work. Keep them behind the
+	# first playable frame so a cold New Game never waits on campaign metadata.
+	if zone_streaming != null and zone_streaming.has_method("prewarm_neighbors"):
+		zone_streaming.prewarm_neighbors(current_zone_id if current_zone_id != "" else "greyfen")
+
+func should_defer_neighbor_prewarm() -> bool:
+	# Keep the first Greyfen frame free of threaded scene imports while input and
+	# opening save state settle. The delayed background request resumes prewarm.
+	return opening_checkpoint_pending and game_started and current_zone_id == "greyfen"
+
+func _schedule_background_runtime_packs() -> void:
+	# Do not let a fast local download/mount compete with the first playable
+	# frames. The opening can request a campaign pack on demand; this timer only
+	# starts optional background work after the handoff has visibly settled.
+	var delay_timer := _create_owned_timer(BACKGROUND_RUNTIME_DELAY_SECONDS, true)
+	await delay_timer.timeout
+	if not game_started or current_zone_id == "":
+		return
+	_request_background_runtime_packs()
+
+func _schedule_opening_save(generation: int) -> void:
+	var delay_timer := _create_owned_timer(OPENING_SAVE_DELAY_SECONDS, true)
+	await delay_timer.timeout
+	if generation != opening_save_generation or not game_started or save_manager == null:
+		return
+	if resource_shutdown_prepared or player == null or not is_instance_valid(player):
+		return
+	# Save the current state rather than a stale Greyfen-only snapshot. If the
+	# player reaches another supported zone during the delay, the normal autosave
+	# path still owns that transition and this checkpoint remains a safe fallback.
 	save_manager.checkpoint(self)
+	opening_checkpoint_pending = false
 
 func load_save_state(data: Dictionary) -> void:
+	var migrated_data: Dictionary = data
 	if save_manager != null and save_manager.has_method("migrate_save_data"):
-		var migrated: Dictionary = save_manager.migrate_save_data(data)
-		if migrated.is_empty():
+		migrated_data = save_manager.migrate_save_data(data)
+		if migrated_data.is_empty():
 			if hud != null:
 				hud.toast("This save belongs to a newer version of Ashen Oath.")
 			return
-		data = migrated
+	data = migrated_data
+	opening_checkpoint_pending = false
 	_clear_route_zone_cache()
 	game_started = true
 	if audio != null:
@@ -539,8 +716,19 @@ func _spawn_player(pos: Vector3) -> void:
 	player.died.connect(_on_player_died)
 	player.health_component.changed.connect(hud.update_health)
 	player.stamina_component.changed.connect(hud.update_stamina)
+	_bind_spatial_player_body()
 	hud.update_health(player.health_component.health, player.health_component.max_health)
 	hud.update_stamina(player.stamina_component.stamina, player.stamina_component.max_stamina)
+
+func _bind_spatial_player_body() -> void:
+	if player == null or not is_instance_valid(player):
+		return
+	var body := player as CollisionObject3D
+	if body == null:
+		return
+	for service in [spatial_service, greyfen_prewarm_spatial_service]:
+		if service != null and is_instance_valid(service) and service.has_method("set_player_body"):
+			service.set_player_body(body)
 
 func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	if new_game_start_pending and not game_started:
@@ -589,10 +777,19 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	interaction_candidates.clear()
 	interaction_area_cache.clear()
 	interaction_area_cache_ready = false
+	interaction_focus_dirty = true
+	interaction_focus_cache_valid = false
+	compass_dirty = true
+	compass_cache_valid = false
+	last_compass_zone = ""
+	last_compass_signature = ""
 	# Guidance belongs to the previous route. Clear it before the new zone
 	# refreshes its own contextual hint so stale prompts cannot survive a gate.
 	hud.set_guidance_hint("")
 	current_zone_id = zone_id
+	if zone_id != "greyfen":
+		opening_detail_pending = false
+		opening_detail_generation += 1
 	var using_prewarmed_spatial := zone_id == "greyfen" \
 		and greyfen_prewarm_spatial_service != null \
 		and is_instance_valid(greyfen_prewarm_spatial_service)
@@ -618,6 +815,7 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		spatial_service.name = "ZoneSpatialService"
 		add_child(spatial_service)
 		spatial_service.configure(zone_id, _river_center(zone_id), _zone_half_extents(zone_id))
+	_bind_spatial_player_body()
 	if camera_rig != null and camera_rig.has_method("set_zone"):
 		camera_rig.set_zone(zone_id)
 	active_enemies.clear()
@@ -717,7 +915,7 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	if visual_director != null:
 		visual_director.apply_zone(zone_id, zone_root)
 	print("LOADING: zone_stage=visual_applied elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
-	if zone_streaming != null and zone_streaming.has_method("prewarm_neighbors"):
+	if zone_streaming != null and zone_streaming.has_method("prewarm_neighbors") and not should_defer_neighbor_prewarm():
 		zone_streaming.prewarm_neighbors(zone_id)
 	if audio != null:
 		audio.play_ambient(zone_id)
@@ -771,7 +969,9 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 			# This scene has already completed collision and navigation setup
 			# behind the menu. Do not wait for another rendered WebGL frame.
 			player.global_position = Vector3(safe_spawn.x, maxf(safe_spawn.y, 0.95), safe_spawn.z)
+			print("LOADING: handoff_phase=unlock_begin")
 			player.set_transition_locked(false)
+			print("LOADING: handoff_phase=unlock_end")
 			last_safe_player_position = player.global_position
 			zone_transition_pending = false
 			# The player and camera are already visible behind the menu. Enabling
@@ -789,15 +989,20 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 				zone_runtime_coordinator.record_playable_transition(current_zone_id, elapsed_ms, true)
 			print("LOADING: zone=%s playable_ms=%.1f" % [current_zone_id, elapsed_ms])
 			loading_started_usec = 0
+			print("LOADING: handoff_phase=hide_loading_begin")
 			hud.hide_loading()
+			print("LOADING: handoff_phase=hide_loading_end")
 		else:
 			player.set_transition_locked(true)
 			zone_transition_frames = 0
 			zone_transition_pending = true
+	print("LOADING: handoff_phase=before_seamless")
 	if seamless_world != null:
 		seamless_world.on_zone_activated(current_zone_id, safe_spawn)
+	print("LOADING: handoff_phase=after_seamless")
 	if game_started:
 		_schedule_zone_autosave()
+	print("LOADING: handoff_phase=after_autosave")
 	if zone_id == "wychwood" and quests.is_active("main_road_of_crows") and not quests.is_objective_done("main_road_of_crows", "fight_ghoulkin"):
 		audio.play_event("reveal", 0.02)
 		audio.play_event("wychwood_tension", 0.01)
@@ -927,13 +1132,13 @@ func _deferred_free_zone(retired_root: Node) -> void:
 	for _frame in range(ZONE_RETIRE_FRAMES):
 		await get_tree().process_frame
 	if is_instance_valid(retired_root):
-		if retired_zone_cleanup_root != null and is_instance_valid(retired_zone_cleanup_root):
-			retired_root.reparent(retired_zone_cleanup_root, false)
-		elif retired_root.is_inside_tree() and retired_root.get_parent() != null:
-			retired_root.get_parent().remove_child(retired_root)
+		# The root has been hidden, disabled, and given a full renderer grace
+		# window above. Release server-owned geometry before destroying the
+		# hierarchy; this avoids leaving physics shapes and renderer instances
+		# alive when a retired procedural zone is torn down.
+		_release_zone_render_resources(retired_root)
 		retired_zone_roots.erase(retired_root)
-		retired_root.queue_free()
-		await get_tree().process_frame
+		retired_root.free()
 	else:
 		retired_zone_roots.erase(retired_root)
 	pending_zone_retirements = maxi(pending_zone_retirements - 1, 0)
@@ -944,6 +1149,44 @@ func _deferred_free_zone(retired_root: Node) -> void:
 	# them.
 	if pending_zone_retirements == 0:
 		retired_material_anchors.clear()
+
+func _release_zone_render_resources(root: Node) -> void:
+	if root == null or not is_instance_valid(root):
+		return
+	# CollisionShape3D owns a PhysicsServer shape RID while its shape property is
+	# populated. Clear it after the zone is disabled so the server can release
+	# the RID before the parent hierarchy is destroyed.
+	for raw_shape in root.find_children("*", "CollisionShape3D", true, false):
+		var shape_node := raw_shape as CollisionShape3D
+		if shape_node == null:
+			continue
+		shape_node.disabled = true
+		shape_node.shape = null
+	for raw_region in root.find_children("*", "NavigationRegion3D", true, false):
+		var region := raw_region as NavigationRegion3D
+		if region == null:
+			continue
+		region.enabled = false
+		region.navigation_mesh = null
+	# MeshInstance3D and MultiMeshInstance3D similarly retain renderer-side
+	# instances until their geometry reference is cleared. This is only called
+	# for hidden/retiring roots, never for an active zone.
+	for raw_mesh in root.find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := raw_mesh as MeshInstance3D
+		if mesh_instance == null:
+			continue
+		mesh_instance.visible = false
+		# Detach geometry before clearing its override. A retiring instance with a
+		# live mesh and a null override can make the renderer query a null material
+		# during the final frame on the Compatibility/dummy backends.
+		mesh_instance.mesh = null
+		mesh_instance.material_override = null
+	for raw_batch in root.find_children("*", "MultiMeshInstance3D", true, false):
+		var batch := raw_batch as MultiMeshInstance3D
+		if batch == null:
+			continue
+		batch.visible = false
+		batch.multimesh = null
 
 func _retire_zone_root(retired_root: Node) -> void:
 	if retired_root == null or not is_instance_valid(retired_root):
@@ -1053,6 +1296,30 @@ func _record_loading_metrics(metrics: Dictionary) -> void:
 	while transition_history.size() > MAX_TRANSITION_HISTORY:
 		transition_history.pop_front()
 
+func _create_owned_timer(seconds: float, ignore_time_scale: bool = false) -> Timer:
+	var timer := Timer.new()
+	timer.name = "OwnedDelayTimer"
+	timer.wait_time = maxf(seconds, 0.0)
+	timer.one_shot = true
+	timer.ignore_time_scale = ignore_time_scale
+	add_child(timer)
+	owned_timers.append(timer)
+	timer.timeout.connect(func():
+		owned_timers.erase(timer)
+		if is_instance_valid(timer):
+			timer.queue_free()
+	)
+	timer.start()
+	return timer
+
+func _cancel_owned_timers() -> void:
+	for timer in owned_timers.duplicate():
+		if timer == null or not is_instance_valid(timer):
+			continue
+		timer.stop()
+		timer.queue_free()
+	owned_timers.clear()
+
 func _quiesce_zone_runtime(root: Node) -> void:
 	for raw_player in root.find_children("*", "AnimationPlayer", true, false):
 		var animation_player := raw_player as AnimationPlayer
@@ -1120,11 +1387,12 @@ func _release_active_spatial_service() -> void:
 
 
 func _defer_cached_zone_collision_disable(zone_id: String) -> void:
-	get_tree().create_timer(0.45, true, false, true).timeout.connect(func():
+	var delay_timer := _create_owned_timer(0.45, true)
+	delay_timer.timeout.connect(func():
 		var cached_root: Node3D = route_zone_cache.get(zone_id)
 		if cached_root != null and is_instance_valid(cached_root) and str(cached_root.get_meta("zone_resource_owner", "")) == "cached":
 			_set_zone_collision_enabled(cached_root, false)
-	, CONNECT_ONE_SHOT)
+	)
 
 func _activate_cached_zone(zone_id: String) -> Node3D:
 	var cached_root = route_zone_cache.get(zone_id)
@@ -1208,10 +1476,13 @@ func _set_single_zone_collision_enabled(node: Node, enabled: bool) -> void:
 
 func _schedule_zone_autosave() -> void:
 	var expected_zone: String = current_zone_id
-	get_tree().create_timer(0.35).timeout.connect(func():
+	var delay_timer := _create_owned_timer(0.35)
+	delay_timer.timeout.connect(func():
+		if opening_checkpoint_pending:
+			return
 		if not resource_shutdown_prepared and game_started and player != null and is_instance_valid(player) and current_zone_id == expected_zone and save_manager != null:
 			save_manager.autosave(self)
-	, CONNECT_ONE_SHOT)
+	)
 
 func _clear_route_zone_cache(preserve_root: Node3D = null) -> void:
 	if zone_root != null and is_instance_valid(zone_root):
@@ -1234,6 +1505,7 @@ func prepare_resource_shutdown() -> void:
 	if resource_shutdown_prepared:
 		return
 	resource_shutdown_prepared = true
+	_cancel_owned_timers()
 	if performance_budget_monitor != null:
 		performance_budget_monitor.suspend()
 	if zone_root != null and is_instance_valid(zone_root):
@@ -1270,6 +1542,7 @@ func finalize_resource_shutdown() -> void:
 	for raw_branch in skinned_resource_anchors.values():
 		var branch := raw_branch as Node
 		if branch != null and is_instance_valid(branch):
+			_release_zone_render_resources(branch)
 			branch.free()
 	skinned_resource_anchors.clear()
 	if retired_skinned_actor_pool != null and is_instance_valid(retired_skinned_actor_pool):
@@ -1277,6 +1550,7 @@ func finalize_resource_shutdown() -> void:
 		# prepare_resource_shutdown() has waited for every staged root to leave the
 		# renderer, so synchronous destruction is safe and prevents orphaned
 		# MeshInstance3D nodes from surviving outside the scene tree.
+		_release_zone_render_resources(retired_skinned_actor_pool)
 		retired_skinned_actor_pool.free()
 	retired_skinned_actor_pool = null
 	if asset_helper != null and asset_helper.has_method("clear_runtime_caches"):
@@ -1289,6 +1563,7 @@ func finalize_resource_shutdown() -> void:
 		zone_streaming.clear_requests()
 	if runtime_packs != null and runtime_packs.has_method("clear_requests"):
 		runtime_packs.clear_requests()
+	CombatFeedback.clear_runtime_caches()
 	# These arrays are build-time ownership, not runtime state. They retain
 	# queued marker MeshInstance3D nodes and shared materials after their zone
 	# has retired, which keeps renderer instances alive outside the scene tree.
@@ -1304,11 +1579,33 @@ func finalize_resource_shutdown() -> void:
 	shared_box_mesh = null
 	retirement_material = null
 	retired_material_anchors.clear()
+	# These nodes are global renderer/service owners rather than part of the
+	# retired zone hierarchy. Release them explicitly after staged scene disposal
+	# so a verifier or editor preview cannot leave their WorldEnvironment,
+	# lights, timers, or service-owned render resources alive until process exit.
+	if visual_director != null and is_instance_valid(visual_director):
+		_release_zone_render_resources(visual_director)
+		visual_director.queue_free()
+	visual_director = null
+	if retired_zone_cleanup_root != null and is_instance_valid(retired_zone_cleanup_root):
+		retired_zone_cleanup_root.queue_free()
+	retired_zone_cleanup_root = null
+	if performance_budget_monitor != null and is_instance_valid(performance_budget_monitor):
+		performance_budget_monitor.queue_free()
+	performance_budget_monitor = null
+	if seamless_world != null and is_instance_valid(seamless_world):
+		seamless_world.queue_free()
+	seamless_world = null
+	if qa_adapter != null and is_instance_valid(qa_adapter):
+		qa_adapter.queue_free()
+	qa_adapter = null
 	if runtime_services != null and is_instance_valid(runtime_services):
 		runtime_services.process_mode = Node.PROCESS_MODE_DISABLED
 		for service in runtime_services.get_children():
 			if service is Node:
 				(service as Node).process_mode = Node.PROCESS_MODE_DISABLED
+		runtime_services.queue_free()
+	runtime_services = null
 
 func zone_lifecycle_snapshot() -> Dictionary:
 	var cached_ids: Array[String] = []
@@ -1905,20 +2202,24 @@ func _on_launch_accepted() -> void:
 	if hud != null and hud.has_method("set_new_game_ready") and not route_zone_cache.has("greyfen"):
 		hud.set_new_game_ready(false)
 	if OS.has_feature("web") and runtime_packs != null and runtime_packs.has_method("request_startup_packs"):
+		if runtime_packs.startup_packs_ready():
+			print("LOADING: startup_pack_ready source=launch")
+			_begin_opening_prewarm()
+			return
 		if startup_packs_waiting:
 			return
 		startup_packs_waiting = true
 		if runtime_packs.has_signal("pack_ready") and not runtime_packs.pack_ready.is_connected(_on_startup_pack_ready):
 			runtime_packs.pack_ready.connect(_on_startup_pack_ready)
 		runtime_packs.request_startup_packs()
+		# request_startup_packs may mount a cache immediately, before the
+		# signal connection above can observe a later state change. Recheck on
+		# the next idle frame as well as through pack_ready.
+		call_deferred("_begin_opening_prewarm_if_ready")
 		# Cached Web packs can complete synchronously. The signal path handles
 		# asynchronous downloads without depending on a paused-tree frame.
-		if runtime_packs.startup_packs_ready():
-			_on_startup_pack_ready("__startup__")
 		call_deferred("_wait_for_startup_packs_then_prewarm")
 		return
-	if zone_streaming != null and zone_streaming.has_method("prewarm_neighbors"):
-		zone_streaming.prewarm_neighbors("greyfen")
 	if not greyfen_prewarm_started and not game_started:
 		greyfen_prewarm_started = true
 		# Do not include the heavy Greyfen build in Godot's initial Web
@@ -1927,26 +2228,27 @@ func _on_launch_accepted() -> void:
 		call_deferred("_prewarm_greyfen_after_menu_frame")
 
 func _on_startup_pack_ready(_pack_id: String) -> void:
-	if not startup_packs_waiting or game_started or runtime_packs == null:
+	if game_started or runtime_packs == null:
 		return
 	if not runtime_packs.startup_packs_ready():
 		return
+	print("LOADING: startup_pack_ready source=signal id=%s" % _pack_id)
 	startup_packs_waiting = false
-	if zone_streaming != null and zone_streaming.has_method("prewarm_neighbors"):
-		zone_streaming.prewarm_neighbors("greyfen")
-	if not greyfen_prewarm_started:
-		greyfen_prewarm_started = true
-		call_deferred("_prewarm_greyfen_after_menu_frame")
+	_begin_opening_prewarm()
+
+func _begin_opening_prewarm_if_ready() -> void:
+	if game_started or greyfen_prewarm_started or runtime_packs == null:
+		return
+	if runtime_packs.has_method("startup_packs_ready") and runtime_packs.startup_packs_ready():
+		print("LOADING: startup_pack_ready source=deferred")
+		startup_packs_waiting = false
+		_begin_opening_prewarm()
 
 func _wait_for_startup_packs_then_prewarm() -> void:
 	for _frame in range(1800):
 		if runtime_packs != null and runtime_packs.has_method("startup_packs_ready") and runtime_packs.startup_packs_ready():
 			startup_packs_waiting = false
-			if zone_streaming != null and zone_streaming.has_method("prewarm_neighbors"):
-				zone_streaming.prewarm_neighbors("greyfen")
-			if not greyfen_prewarm_started and not game_started:
-				greyfen_prewarm_started = true
-				call_deferred("_prewarm_greyfen_after_menu_frame")
+			_begin_opening_prewarm()
 			return
 		var failures: Array[String] = runtime_packs.startup_pack_failures() if runtime_packs != null and runtime_packs.has_method("startup_pack_failures") else []
 		if not failures.is_empty():
@@ -1960,6 +2262,17 @@ func _wait_for_startup_packs_then_prewarm() -> void:
 	if hud != null:
 		hud.toast("Opening content took too long to prepare. Select New Game to retry.")
 	_opening_prepare_failed("Opening content took too long to prepare. Select New Game to retry.")
+
+func _begin_opening_prewarm() -> void:
+	if game_started or greyfen_prewarm_started:
+		return
+	greyfen_prewarm_started = true
+	# Wychwood and cemetery remain streamed, but their request starts now rather
+	# than after the player has already reached the first route fork.
+	if runtime_packs != null and runtime_packs.has_method("request_pack"):
+		runtime_packs.request_pack("opening")
+	print("LOADING: Greyfen prewarm begin")
+	call_deferred("_prewarm_greyfen_after_menu_frame")
 
 func _opening_prepare_failed(message: String) -> void:
 	startup_packs_waiting = false
@@ -1979,6 +2292,7 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 	if game_started or zone_root != null or route_zone_cache.has("greyfen"):
 		return
 	var prewarm_started := Time.get_ticks_msec()
+	print("LOADING: Greyfen prewarm build_begin")
 	var phase_started := prewarm_started
 	var prewarm_service := ZoneSpatialService.new()
 	prewarm_service.name = "GreyfenPrewarmSpatialService"
@@ -1988,24 +2302,6 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 	zone_root = Node3D.new()
 	zone_root.name = "greyfen"
 	add_child(zone_root)
-	# Castle environment imports are otherwise paid on the first gate travel.
-	# Warm the shared resource cache while the menu still covers the viewport so
-	# the first Castle arrival remains a scene activation rather than an import.
-	if asset_helper != null and asset_helper.has_method("prewarm_roles"):
-		var castle_prewarm: Dictionary = asset_helper.prewarm_roles([
-			"castle_wall", "castle_arch", "castle_roof", "castle_door",
-			"castle_bookcase", "castle_chair", "castle_bench", "castle_table",
-			"castle_weapon_stand", "castle_lantern",
-			# Castle activation instantiates these same role resources. Warming their
-			# imported scenes behind the menu avoids paying first-use parse and
-			# skeleton setup on the gate's critical path.
-			"castle_guard_human", "villager_worker_human", "villager_female_human",
-			"road_ranger_human",
-		])
-		print("LOADING: Castle roles prewarmed loaded=%d missing=%d" % [
-			Array(castle_prewarm.get("loaded", [])).size(),
-			Array(castle_prewarm.get("missing", [])).size(),
-		])
 	runtime_light_count = 0
 	tree_batch_data.clear()
 	deadfall_batch_data.clear()
@@ -2014,8 +2310,9 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 	terrain_patch_batch_data.clear()
 	house_batch_data.clear()
 	environment_batches_flushed = false
-	var prewarm_build := ZoneCompositionRouter.build_core(self, "greyfen")
+	var prewarm_build := ZoneCompositionRouter.build_core(self, "greyfen", "opening_fast")
 	var build_ms := Time.get_ticks_msec() - phase_started
+	print("LOADING: Greyfen prewarm build_complete ms=%d ok=%s" % [build_ms, bool(prewarm_build.get("ok", false))])
 	if not bool(prewarm_build.get("ok", false)):
 		push_error("Greyfen prewarm composition failed: %s" % ", ".join(prewarm_build.get("errors", [])))
 		_retire_zone_root(zone_root)
@@ -2031,6 +2328,8 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 	_apply_first_route_materials(zone_root)
 	_validate_zone_render_resources(zone_root)
 	prewarm_service.build_navigation(zone_root)
+	prewarm_root.set_meta("opening_build_profile", "opening_fast")
+	_clear_environment_batch_buffers()
 	var world_finalize_ms := Time.get_ticks_msec() - phase_started
 	greyfen_prewarm_spatial_service = prewarm_service
 	# Kael's rig and camera are also expensive to instantiate in WebGL. Prepare
@@ -2050,15 +2349,11 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 	zone_root.visible = true
 	zone_root.process_mode = Node.PROCESS_MODE_INHERIT
 	zone_root.position = Vector3.ZERO
-	# Allow one real 3D frame to reach Web/ANGLE while the menu still covers the
-	# viewport. This moves first-frame shader work out of the New Game click.
-	await get_tree().process_frame
-	# Publish the prepared scene immediately. The launch/menu shell already
-	# covers the viewport, and waiting on a 30-frame render warmup here allowed a
-	# fast New Game click to race the cache publication. Shader compilation is
-	# allowed to happen on the first real frame; the scene build, materials, and
-	# navigation are already complete and the release performance gate settles
-	# before sampling sustained play.
+	# Publish the prepared scene as soon as its gameplay resources are valid. Do
+	# not await a forced full-scene render here: on Web/ANGLE that single frame
+	# can monopolize the browser for 18+ seconds. The menu continues rendering
+	# this visible, paused cache behind its controls, so shader/material work is
+	# amortized over ordinary menu frames instead of becoming a New Game gate.
 	# New Game can activate Greyfen while this menu-covered prewarm is still
 	# finishing. Never let the background task overwrite the active zone or its
 	# spatial service after that handoff.
@@ -2090,6 +2385,61 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 	if new_game_start_pending:
 		get_tree().paused = false
 		_start_new_game_world()
+
+func _run_opening_detail_stage(generation: int) -> void:
+	if generation != opening_detail_generation or not opening_detail_pending:
+		return
+	# call_deferred only queues another idle callback; several callbacks can still
+	# drain in one browser turn. Let the playable scene settle for a short idle
+	# window first, then yield a real frame between every decoration chunk so the
+	# browser can paint and accept movement before late scenery compiles.
+	if opening_detail_stage_index == 0:
+		var initial_delay := _create_owned_timer(OPENING_DETAIL_INITIAL_DELAY_SECONDS, true)
+		await initial_delay.timeout
+	else:
+		await get_tree().process_frame
+		var stage_delay := _create_owned_timer(0.1, true)
+		await stage_delay.timeout
+	if generation != opening_detail_generation or not opening_detail_pending:
+		return
+	if not game_started or current_zone_id != "greyfen" or zone_root == null or not is_instance_valid(zone_root):
+		opening_detail_pending = false
+		return
+	# Optional scenery should never compete with the first controllable view or
+	# with a player who is still reading the spawn composition. Wait until Kael
+	# has actually left the opening staging area, then build one small chunk at a
+	# time while the route is in use.
+	if player == null or not is_instance_valid(player) or player.global_position.distance_to(Vector3(0.0, 0.0, 9.8)) < OPENING_DETAIL_MIN_PLAYER_DISTANCE:
+		var retry_timer := _create_owned_timer(OPENING_DETAIL_RETRY_SECONDS, true)
+		await retry_timer.timeout
+		if generation == opening_detail_generation and opening_detail_pending:
+			call_deferred("_run_opening_detail_stage", generation)
+		return
+	if opening_detail_stage_index >= OPENING_DETAIL_STAGES.size():
+		opening_detail_pending = false
+		zone_root.set_meta("opening_detail_complete", true)
+		_validate_zone_render_resources(zone_root)
+		print("LOADING: Greyfen deferred_detail complete")
+		return
+	var stage := OPENING_DETAIL_STAGES[opening_detail_stage_index]
+	var started := Time.get_ticks_msec()
+	# Each stage gets a fresh batch buffer. Existing published MultiMeshes remain
+	# untouched, while late decoration is still grouped instead of creating one
+	# renderer instance per small prop.
+	environment_batches_flushed = false
+	var result := ZoneCompositionRouter.build_core_detail_stage(self, "greyfen", stage)
+	if not bool(result.get("ok", false)):
+		push_error("Greyfen deferred detail failed at %s: %s" % [stage, ", ".join(result.get("errors", []))])
+		opening_detail_pending = false
+		return
+	_flush_environment_batches()
+	_clear_environment_batch_buffers()
+	environment_batches_flushed = true
+	opening_detail_stage_index += 1
+	print("LOADING: Greyfen deferred_detail stage=%s ms=%d" % [stage, Time.get_ticks_msec() - started])
+	# Yield between chunks so movement, focus, and audio get a normal frame even
+	# on Web/ANGLE. A generation token cancels the continuation on zone travel.
+	call_deferred("_run_opening_detail_stage", generation)
 
 func _complete_ending(ending: String) -> void:
 	var ending_id := str(ending)
@@ -2737,7 +3087,7 @@ func _on_combat_impact(pos: Vector3, heavy: bool) -> void:
 
 func _hitstop(seconds: float) -> void:
 	Engine.time_scale = 0.18
-	var timer = get_tree().create_timer(seconds, true, false, true)
+	var timer := _create_owned_timer(seconds, true)
 	timer.timeout.connect(func(): Engine.time_scale = 1.0)
 
 func _has_living_enemy(enemy_id: String) -> bool:
@@ -2913,16 +3263,18 @@ func _apply_runtime_settings(current_settings: Dictionary) -> void:
 		visual_director.sun.directional_shadow_max_distance = 42.0
 
 func _refresh_tracker() -> void:
-	var tracker_text: String
-	if quest_beats != null and quest_beats.has_method("refresh"):
-		quest_beats.refresh()
-		tracker_text = str(quest_presentation.get_tracker_text() if quest_presentation != null else quests.get_tracker_text())
-		if quest_beats.has_method("decorate_tracker"):
-			tracker_text = quest_beats.decorate_tracker(tracker_text)
-	elif zone_runtime_coordinator != null:
+	# Quest changes can alter both the preferred interaction target and the
+	# compass summary without moving the player. Invalidate the small runtime
+	# caches instead of forcing per-frame scans.
+	interaction_focus_dirty = true
+	compass_dirty = true
+	var tracker_text := "No objective in this area."
+	if zone_runtime_coordinator != null:
 		tracker_text = zone_runtime_coordinator.refresh_presentation()
+	elif quest_presentation != null and quest_presentation.has_method("get_objective_view_model"):
+		tracker_text = str(quest_presentation.get_objective_view_model().get("tracker_text", tracker_text))
 	else:
-		tracker_text = str(quest_presentation.get_tracker_text() if quest_presentation != null else quests.get_tracker_text())
+		tracker_text = str(quests.get_tracker_text())
 	hud.set_tracker(tracker_text)
 	_update_compass()
 
@@ -2977,14 +3329,41 @@ func _update_compass() -> void:
 		return
 	var zone_name: String = str(quest_presentation.get_zone_display_name(current_zone_id)) if quest_presentation != null else _zone_display_name(current_zone_id)
 	hud.set_compass("%s | %s" % [zone_name, _nearest_interactable_summary()])
+	compass_dirty = false
+	compass_cache_valid = true
+	last_compass_position = player.global_position
+	last_compass_zone = current_zone_id
+	last_compass_signature = _compass_state_signature()
+
+func _compass_state_signature() -> String:
+	if quest_presentation != null and quest_presentation.has_method("get_objective_view_model"):
+		var view: Dictionary = quest_presentation.get_objective_view_model()
+		return "%s|%s|%s|%s" % [
+			str(view.get("quest_id", "")),
+			str(view.get("objective_id", "")),
+			str(view.get("tracker_text", "")),
+			str(view.get("next_action", "")),
+		]
+	if quests != null:
+		var tracked_id: String = str(quests.get_tracked_quest()) if quests.has_method("get_tracked_quest") else ""
+		return "%s|%s" % [str(tracked_id), _tracked_objective_id(str(tracked_id))]
+	return ""
+
+func _compass_needs_refresh() -> bool:
+	if compass_dirty or not compass_cache_valid or player == null:
+		return true
+	if current_zone_id != last_compass_zone or _compass_state_signature() != last_compass_signature:
+		return true
+	return player.global_position.distance_squared_to(last_compass_position) >= 0.0625
 
 func _nearest_interactable_summary() -> String:
 	if zone_root == null or player == null:
 		return "No marker"
 	var best_text = "No marker"
 	var best_score = 9999.0
-	var tracked_id: String = quest_presentation.get_tracked_quest() if quest_presentation != null else (quests.get_tracked_quest() if quests.has_method("get_tracked_quest") else "")
-	var tracked_objective: String = str(quest_presentation.get_active_objective_id(tracked_id)) if quest_presentation != null else _tracked_objective_id(tracked_id)
+	var objective_view: Dictionary = quest_presentation.get_objective_view_model() if quest_presentation != null and quest_presentation.has_method("get_objective_view_model") else {}
+	var tracked_id: String = str(objective_view.get("quest_id", "")) if not objective_view.is_empty() else (quests.get_tracked_quest() if quests.has_method("get_tracked_quest") else "")
+	var tracked_objective: String = str(objective_view.get("objective_id", "")) if not objective_view.is_empty() else _tracked_objective_id(tracked_id)
 	var found_tracked_target := false
 	# Interaction areas are indexed once on zone activation. Scanning every
 	# direct child of the complete procedural zone from the compass timer caused
@@ -3113,7 +3492,14 @@ func _is_river_recovery_position(zone: String, pos: Vector3) -> bool:
 	# with the banks, so identify the legal crossing by the full bridge corridor
 	# rather than by actor height. This also prevents the recovery guard from
 	# snapping a player off the deck while stepping onto the far bank.
-	var on_bridge_deck := pos.y >= 0.2 and absf(pos.x) <= 2.72 and absf(pos.z - river_z) <= 3.15
+	# The deck is flush with the road at world Y=0, so a grounded actor root
+	# normally remains near zero while its capsule stands on the deck. Requiring
+	# Y>=0.2 incorrectly classified every ordinary bridge crossing as water.
+	var on_bridge_deck := false
+	if spatial_service != null and spatial_service.has_method("is_on_bridge"):
+		on_bridge_deck = spatial_service.is_on_bridge(pos, 0.0)
+	else:
+		on_bridge_deck = pos.y >= -0.14 and absf(pos.x) <= 2.72 and absf(pos.z - river_z) <= 3.15
 	if on_bridge_deck:
 		return false
 	return absf(pos.z-river_z) < 2.0 and (absf(pos.x) > 2.7 or pos.y < 0.12)
@@ -4042,7 +4428,10 @@ func _make_village_dressing() -> void:
 		["crate", Vector3(-7.3, 0, 4.9), 0.64, 25.0],
 		["crate", Vector3(8.0, 0, 2.8), 0.72, -18.0],
 		["barrel", Vector3(10.7, 0, 2.9), 0.58, 18.0],
-		["forest_rock", Vector3(4.6, 0, -11.0), 0.55, 0.0],
+		# Keep the return-to-Castle sightline clear. This rock used to sit on the
+		# diagonal from the Wychwood arrival to Greyfen's east exit and its imported
+		# collider stopped the player before the gate became focusable.
+		["forest_rock", Vector3(8.6, 0, -11.7), 0.55, 0.0],
 		["forest_rock", Vector3(-4.8, 0, -12.4), 0.52, 0.0],
 		["crate", Vector3(5.5, 0, -6.9), 0.46, -12.0],
 		["barrel", Vector3(7.2, 0, -6.4), 0.46, 10.0]
@@ -4120,7 +4509,15 @@ func _make_loose_role(role_name: String, pos: Vector3, scale_value: Vector3, yaw
 			return null
 		var rock := _make_role_visual("forest_rock", "environment", scale_value)
 		if rock != null:
-			rock.position = river_safe_position(pos, 0.75)
+			var safe_rock_position := river_safe_position(pos, 0.75)
+			# `nearest_safe()` is an actor-recovery API. It can legitimately return
+			# an authored spawn anchor when a scenery source point overlaps a wall or
+			# another prop, but a visual rock must never be teleported across the
+			# zone into a player route. Omit the obstructed decoration instead.
+			if safe_rock_position.distance_to(pos) > 1.6:
+				rock.free()
+				return null
+			rock.position = safe_rock_position
 			rock.rotation_degrees.y = yaw
 			zone_root.add_child(rock)
 			return rock
@@ -4801,6 +5198,7 @@ func _connect_interactable(area) -> void:
 	area.body_entered.connect(func(body: Node):
 		if body == player and not bool(area.get_meta("seamless_exterior_gate", false)) and area not in interaction_candidates:
 			interaction_candidates.append(area)
+			interaction_focus_dirty = true
 	)
 	area.body_exited.connect(func(body: Node):
 		if body == player:
@@ -4808,6 +5206,7 @@ func _connect_interactable(area) -> void:
 			_set_interactable_label_visible(area,false)
 			if active_interactable == area:
 				active_interactable = null
+			interaction_focus_dirty = true
 	)
 
 func _update_interaction_focus() -> void:
@@ -4821,12 +5220,29 @@ func _update_interaction_focus() -> void:
 		if active_interactable != null and is_instance_valid(active_interactable):
 			_set_interactable_label_visible(active_interactable,false)
 		active_interactable = best
+		compass_dirty = true
 		if active_interactable != null:
 			_set_interactable_label_visible(active_interactable,true)
 	if active_interactable != null:
 		hud.set_prompt("E  %s" % active_interactable.get_context_prompt())
 	else:
 		hud.set_prompt("")
+	interaction_focus_dirty = false
+	interaction_focus_cache_valid = true
+	last_focus_position = player.global_position
+	var camera_after_update: Camera3D = get_viewport().get_camera_3d()
+	last_focus_forward = (-camera_after_update.global_basis.z).normalized() if camera_after_update != null else (-player.global_basis.z).normalized()
+
+func _interaction_focus_needs_refresh() -> bool:
+	if player == null or interaction_focus_dirty or not interaction_focus_cache_valid:
+		return true
+	if active_interactable != null and (not is_instance_valid(active_interactable) or not active_interactable.is_inside_tree()):
+		return true
+	if player.global_position.distance_squared_to(last_focus_position) >= 0.0064:
+		return true
+	var camera: Camera3D = get_viewport().get_camera_3d()
+	var current_forward: Vector3 = (-camera.global_basis.z).normalized() if camera != null else (-player.global_basis.z).normalized()
+	return last_focus_forward.is_zero_approx() or last_focus_forward.dot(current_forward) < 0.9995
 
 func _refresh_interaction_candidates() -> void:
 	if zone_root == null or player == null:
@@ -4849,7 +5265,8 @@ func _refresh_interaction_candidates() -> void:
 			continue
 		if bool(candidate.get_meta("seamless_exterior_gate", false)):
 			continue
-		var range_limit := 3.6 if str(candidate.get("interaction_type")) == "zone" else 2.8
+		var candidate_type := str(candidate.get("interaction_type"))
+		var range_limit := 3.6 if candidate_type in ["zone", "dialogue"] else 2.8
 		if candidate.global_position.distance_to(player.global_position) <= range_limit:
 			if str(candidate.get("interaction_type")) == "zone":
 				var portal := candidate.find_child("OathGatePortal", true, false) as OathGatePortal
@@ -4868,8 +5285,14 @@ func _interaction_target_valid(area: Area3D) -> bool:
 		return player.global_position.distance_to(area.global_position) <= 3.65
 	var camera := get_viewport().get_camera_3d()
 	var origin: Vector3 = camera.global_position if camera != null else player.global_position + Vector3.UP
-	var target_height := 0.92 if area.interaction_type in ["clue", "herb", "village_place"] else 0.5
-	var target: Vector3 = area.global_position + Vector3.UP * target_height
+	# Aim dialogue focus at the speaker's torso instead of the trigger origin.
+	# Low trigger origins are frequently hidden behind benches, steps, or road
+	# dressing even when the speaker is clearly visible at conversation distance.
+	var target_height := 0.92 if area.interaction_type in ["clue", "herb", "village_place"] else 0.96
+	var targets: Array[Vector3] = [area.global_position + Vector3.UP * target_height]
+	if area.interaction_type == "dialogue":
+		targets.append(area.global_position + Vector3.UP * 1.30)
+	var target: Vector3 = targets[0]
 	var direction := origin.direction_to(target)
 	var forward: Vector3 = -camera.global_basis.z if camera != null else -player.global_basis.z
 	if forward.dot(direction) < 0.22:
@@ -4879,24 +5302,25 @@ func _interaction_target_valid(area: Area3D) -> bool:
 	# is skipped because the target is below the normal eye-line.
 	if area.interaction_type in ["clue", "herb", "village_place"]:
 		return true
-	var query := PhysicsRayQueryParameters3D.create(origin, target)
-	query.exclude = [player.get_rid()]
-	query.collide_with_areas = false
-	query.collide_with_bodies = true
-	var hit := get_world_3d().direct_space_state.intersect_ray(query)
-	if hit.is_empty():
-		return true
-	# A named character's skinned body is the intended target, not an
-	# obstruction. At conversation distance the eye-line ray naturally lands on
-	# the speaker's own capsule or imported mesh. Accept only a collider that is
-	# spatially bound to this interaction; unrelated scenery still blocks focus.
-	var collider := hit.get("collider") as Node3D
-	if collider != null:
-		var current: Node = collider
-		while current != null:
-			if current == area or (current is Node3D and (current as Node3D).global_position.distance_to(area.global_position) <= 1.2):
-				return true
-			current = current.get_parent()
+	for target_point in targets:
+		var query := PhysicsRayQueryParameters3D.create(origin, target_point)
+		query.exclude = [player.get_rid()]
+		query.collide_with_areas = false
+		query.collide_with_bodies = true
+		var hit := get_world_3d().direct_space_state.intersect_ray(query)
+		if hit.is_empty():
+			return true
+		# A named character's skinned body is the intended target, not an
+		# obstruction. At conversation distance the eye-line ray naturally lands
+		# on the speaker's own capsule or imported mesh. Accept only a collider
+		# spatially bound to this interaction; unrelated scenery still blocks focus.
+		var collider := hit.get("collider") as Node3D
+		if collider != null:
+			var current: Node = collider
+			while current != null:
+				if current == area or (current is Node3D and (current as Node3D).global_position.distance_to(area.global_position) <= 1.2):
+					return true
+				current = current.get_parent()
 	return false
 
 func _set_interactable_label_visible(area: Node, visible: bool) -> void:
@@ -5250,6 +5674,17 @@ func _make_deadfall(pos: Vector3) -> void:
 	var rotation := Vector3(deg_to_rad(88.0), deg_to_rad(randf_range(-20.0, 20.0)), deg_to_rad(randf_range(-8.0, 8.0)))
 	deadfall_batch_data.append(Transform3D(Basis.from_euler(rotation), pos + Vector3(0, 0.35, 0)))
 
+func _clear_environment_batch_buffers() -> void:
+	# Build-time arrays are only transform carriers. Once copied into their
+	# MultiMesh nodes they must be released, otherwise a later detail stage would
+	# rebatch the entire zone and duplicate geometry.
+	tree_batch_data.clear()
+	deadfall_batch_data.clear()
+	prop_batch_data.clear()
+	visual_box_batch_data.clear()
+	terrain_patch_batch_data.clear()
+	house_batch_data.clear()
+
 func _flush_environment_batches() -> void:
 	var terrain_groups: Dictionary = {}
 	for item in terrain_patch_batch_data:
@@ -5267,9 +5702,10 @@ func _flush_environment_batches() -> void:
 			var patch_size: Vector3 = terrain_items[i].size
 			terrain_batch.multimesh.set_instance_transform(i, Transform3D(marker.basis.scaled(patch_size), marker.position))
 			# This node is a build-only transform carrier; the MultiMesh now owns
-			# the rendered instance. Free it immediately so it cannot outlive the
-			# zone root as an orphaned renderer instance during teardown.
-			marker.free()
+			# the rendered instance. Defer removal until the current scene-tree
+			# notification finishes so RenderingServer can unregister the instance
+			# without leaving a detached renderer allocation.
+			marker.queue_free()
 	var visual_groups: Dictionary = {}
 	for item in visual_box_batch_data:
 		var color: Color = item.color
@@ -5286,8 +5722,9 @@ func _flush_environment_batches() -> void:
 			var detail_size: Vector3 = items[i].size
 			detail_batch.multimesh.set_instance_transform(i, Transform3D(marker.basis.scaled(detail_size), marker.position))
 			# Like terrain markers, these nodes have no runtime purpose after the
-			# batched transform has been copied.
-			marker.free()
+			# batched transform has been copied. Defer removal for the same
+			# scene-tree/renderer ownership reason as terrain markers.
+			marker.queue_free()
 	for house_key in house_batch_data:
 		var house_group: Dictionary = house_batch_data[house_key]
 		var house_transforms: Array = house_group.transforms
@@ -5669,7 +6106,11 @@ func _make_prop_box(name: String, pos: Vector3, size: Vector3, color: Color) -> 
 	if name not in authored_prop_ids:
 		authored_prop_ids.append(name)
 		zone_root.set_meta("authored_prop_ids", authored_prop_ids)
-	if name not in ["NorthBerm","SouthBerm","WestBerm","EastBerm"]:
+	# Authored cemetery landmarks are deliberately fitted against the chapel
+	# shell. Do not run them through actor recovery: nearby chapel geometry would
+	# relocate the prop and the reserved-route check would then discard it.
+	var preserve_authored_position := name in ["OssuarySealedDoor", "CemeteryCrowShrine"]
+	if name not in ["NorthBerm","SouthBerm","WestBerm","EastBerm"] and not preserve_authored_position:
 		pos = river_safe_position(pos,size.z*0.5+0.15)
 	# Solid scenery must yield to registered route and gate clearances. This is
 	# deliberately applied before the shared collision batch receives a shape.
@@ -5682,7 +6123,11 @@ func _make_prop_box(name: String, pos: Vector3, size: Vector3, color: Color) -> 
 	# than walkable blockers. Avoid creating hundreds of tiny physics shapes for
 	# them; major walls, buildings, fences, and route props retain authoritative
 	# collision below the detail threshold.
-	var decorative_only := size.y <= 0.28 and not _prop_requires_collision(lower)
+	# Torch and lantern posts are visual route dressing. Their tiny collision
+	# footprints create disproportionate capsule snags at diagonal approaches,
+	# especially where a player is following a validated sector edge lane.
+	var decorative_only := (size.y <= 0.28 and not _prop_requires_collision(lower)) \
+		or lower.contains("torch") or lower.contains("lantern")
 	var body: StaticBody3D = null
 	if not decorative_only and separate_body:
 		body = StaticBody3D.new()
@@ -5695,19 +6140,19 @@ func _make_prop_box(name: String, pos: Vector3, size: Vector3, color: Color) -> 
 			prop_collision_body.name = "BatchedPropCollisions"
 			zone_root.add_child(prop_collision_body)
 		body = prop_collision_body
-	var shape = CollisionShape3D.new()
-	shape.name = "%sCollision" % name
-	var box = BoxShape3D.new()
-	box.size = size
-	shape.shape = box
 	if not decorative_only:
+		var shape := CollisionShape3D.new()
+		shape.name = "%sCollision" % name
+		var box := BoxShape3D.new()
+		box.size = size
+		shape.shape = box
 		if not separate_body:
 			shape.position = pos
 		body.add_child(shape)
-	var mesh = MeshInstance3D.new()
-	mesh.mesh = shared_box_mesh
-	mesh.scale = size
 	if lower.contains("glow") or lower.contains("window") or lower.contains("coal") or lower.contains("candle"):
+		var mesh := MeshInstance3D.new()
+		mesh.mesh = shared_box_mesh
+		mesh.scale = size
 		mesh.material_override = _emissive_mat(color, 0.65)
 		if separate_body and body != null:
 			body.add_child(mesh)

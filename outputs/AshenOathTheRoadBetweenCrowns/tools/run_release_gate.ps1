@@ -2,9 +2,11 @@ param(
     [switch]$SkipExport,
     [switch]$SkipPerformance,
     [switch]$SkipScreenshots,
-    [switch]$VerboseOutput,
-    [string]$Only = "",
-    [string]$ResumeFrom = ""
+    [switch]$Strict,
+[switch]$VerboseOutput,
+[string]$Only = "",
+[string]$ResumeFrom = "",
+[int]$TimeoutSeconds = 240
 )
 
 $ErrorActionPreference = "Stop"
@@ -107,22 +109,191 @@ function Add-Result(
     })
 }
 
+function Get-ArtifactSnapshot {
+    $records = [System.Collections.Generic.List[object]]::new()
+    $totalBytes = [int64]0
+    if (Test-Path -LiteralPath $Web -PathType Container) {
+        $artifactRoot = (Resolve-Path -LiteralPath $Web).Path.TrimEnd('\')
+        foreach ($item in Get-ChildItem -LiteralPath $Web -Recurse -File | Sort-Object FullName) {
+            $relativePath = $item.FullName.Substring($artifactRoot.Length + 1).Replace('\', '/')
+            $hash = (Get-FileHash -LiteralPath $item.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+            $totalBytes += [int64]$item.Length
+            $records.Add([ordered]@{
+                path = $relativePath
+                bytes = [int64]$item.Length
+                sha256 = $hash
+            })
+        }
+    }
+    $pck = $records | Where-Object { $_.path -eq "index.pck" } | Select-Object -First 1
+    return [ordered]@{
+        directory = $Web
+        total_bytes = $totalBytes
+        files = @($records)
+        pck_sha256 = if ($null -ne $pck) { [string]$pck.sha256 } else { "" }
+        max_bytes = 104857600
+    }
+}
+
+function Get-SourceFingerprint {
+    # Keep this contract byte-for-byte aligned with verify_release_report.py:
+    # relative path, NUL, and the lowercase hexadecimal SHA-256 of each runtime
+    # input. Hex is used because Windows PowerShell 5 lacks FromHexString.
+    $entries = [System.Collections.Generic.List[object]]::new()
+    foreach ($root in @((Join-Path $Project "scripts"), (Join-Path $Project "scenes"), (Join-Path $Project "data"))) {
+        if (-not (Test-Path -LiteralPath $root)) { continue }
+        foreach ($file in Get-ChildItem -LiteralPath $root -Recurse -File | Where-Object { $_.Extension.ToLowerInvariant() -in @('.gd','.tscn','.json') } | Sort-Object FullName) {
+            $relative = $file.FullName.Substring($Project.Length + 1).Replace('\','/')
+            $digest = (Get-FileHash -LiteralPath $file.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+            $entries.Add([pscustomobject]@{ Path = $relative; Digest = $digest })
+        }
+    }
+    foreach ($relative in @(
+        "project.godot",
+        "export_presets.cfg",
+        "runtime_asset_manifest.json",
+        "curated_runtime_assets.json",
+        "character_role_manifest.json",
+        "soul_character_role_manifest.json",
+        "runtime_pack_manifest.json",
+        "runtime_pack_candidates.json",
+        "web_boot_shell.html"
+    )) {
+        $candidate = Join-Path $Project $relative
+        if (Test-Path -LiteralPath $candidate) {
+            $entries.Add([pscustomobject]@{ Path = $relative; Digest = (Get-FileHash -LiteralPath $candidate -Algorithm SHA256).Hash.ToLowerInvariant() })
+        }
+    }
+    $sha = [System.Security.Cryptography.SHA256]::Create()
+    $stream = [System.IO.MemoryStream]::new()
+    $encoding = [System.Text.Encoding]::UTF8
+    try {
+        foreach ($entry in ($entries | Sort-Object Path)) {
+            $pathBytes = $encoding.GetBytes([string]$entry.Path)
+            $digestBytes = $encoding.GetBytes([string]$entry.Digest)
+            $stream.Write($pathBytes, 0, $pathBytes.Length)
+            $stream.WriteByte(0)
+            $stream.Write($digestBytes, 0, $digestBytes.Length)
+        }
+        return ([BitConverter]::ToString($sha.ComputeHash($stream.ToArray()))).Replace('-','').ToLowerInvariant()
+    } finally {
+        $stream.Dispose()
+        $sha.Dispose()
+    }
+}
+
+function Get-ReleaseWorktreeStatus {
+    # A strict release is allowed to create the evidence and report it is
+    # validating. Runtime source changes remain visible and still block. This
+    # keeps the report honest without requiring a commit in the middle of a
+    # release run.
+    $status = @(git -C $RepoRoot status --short)
+    return @($status | Where-Object {
+        $_ -notmatch '^.. outputs/AshenOathTheRoadBetweenCrowns/release_reports/latest\.json$' -and
+        $_ -notmatch '^.. outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/'
+    })
+}
+
+function Get-BlockingIssueSnapshot {
+    $registryPath = Join-Path $Project "RECOVERY_004_ISSUE_REGISTRY.json"
+    if (-not (Test-Path -LiteralPath $registryPath -PathType Leaf)) {
+        return @()
+    }
+    try {
+        $registry = Get-Content -LiteralPath $registryPath -Raw | ConvertFrom-Json
+        return @($registry.categories | Where-Object {
+            $_.status -ne "verified" -and $_.status -ne "deferred"
+        } | ForEach-Object {
+            [ordered]@{
+                id = [string]$_.id
+                severity = [string]$_.severity
+                status = [string]$_.status
+            }
+        })
+    } catch {
+        return @([ordered]@{ id = "RECOVERY-004-REGISTRY"; severity = "blocker"; status = "unreadable" })
+    }
+}
+
 function Write-ReleaseReport([string]$Status, [string]$Failure = "") {
     $head = ""
 	try { $head = (git -C $RepoRoot rev-parse HEAD).Trim() } catch {}
+    $branch = ""
+    try { $branch = (git -C $RepoRoot branch --show-current).Trim() } catch {}
+    $gitStatus = @()
+    try { $gitStatus = @(Get-ReleaseWorktreeStatus) } catch {}
     $report = [ordered]@{
-        schema_version = 1
+        schema_version = 2
+        release_id = if ($env:ASHENOATH_RELEASE_ID) { $env:ASHENOATH_RELEASE_ID } else { "recovery-004" }
         status = $Status
         started_at = $StartedAt.ToUniversalTime().ToString("o")
         finished_at = (Get-Date).ToUniversalTime().ToString("o")
         source_commit = $head
+        source_branch = $branch
+        source_fingerprint = Get-SourceFingerprint
+        git_status = $gitStatus
         mode = $(if ([string]::IsNullOrWhiteSpace($Only)) { "full" } else { "targeted" })
         requested_gate = $Only
         project = "outputs/AshenOathTheRoadBetweenCrowns"
+        artifact = Get-ArtifactSnapshot
+        release_blockers = Get-BlockingIssueSnapshot
         failure = $Failure
         results = @($Results)
+        screenshots = [ordered]@{}
     }
     $report | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $ReportPath -Encoding utf8
+}
+
+function ConvertTo-ArgumentLine([string[]]$Arguments) {
+    return (($Arguments | ForEach-Object {
+        $value = [string]$_
+        if ($value -match '[\s"]') {
+            '"' + $value.Replace('"', '\\"') + '"'
+        } else {
+            $value
+        }
+    }) -join ' ')
+}
+
+function Stop-IsolatedProcess([Diagnostics.Process]$Process) {
+    if ($null -eq $Process -or $Process.HasExited) { return }
+    # Browser and export helpers may create children. Kill only the process
+    # tree started by this gate, never a user-owned process by name.
+    try {
+        & taskkill.exe /PID $Process.Id /T /F 2>$null | Out-Null
+    } catch {
+        try { Stop-Process -Id $Process.Id -Force -ErrorAction SilentlyContinue } catch {}
+    }
+    try { $Process.WaitForExit(5000) } catch {}
+}
+
+function Invoke-ManagedProcess(
+    [string]$Executable,
+    [string[]]$Arguments,
+    [string]$StdoutPath,
+    [string]$StderrPath
+) {
+    Remove-Item -LiteralPath $StdoutPath, $StderrPath -Force -ErrorAction SilentlyContinue
+    $launchExecutable = $Executable
+    $argumentLine = ConvertTo-ArgumentLine $Arguments
+    if ([IO.Path]::GetExtension($Executable).ToLowerInvariant() -eq ".bat") {
+        $launchExecutable = $env:ComSpec
+        $argumentLine = '/d /s /c "' + $Executable + '" ' + $argumentLine
+    }
+    $process = Start-Process -FilePath $launchExecutable -ArgumentList $argumentLine `
+        -RedirectStandardOutput $StdoutPath -RedirectStandardError $StderrPath -PassThru
+    $completed = $process.WaitForExit($TimeoutSeconds * 1000)
+    $timedOut = -not $completed
+    if ($timedOut) {
+        Stop-IsolatedProcess $process
+        $exitCode = 124
+    } else {
+        $exitCode = [int]$process.ExitCode
+    }
+    return [pscustomobject]@{
+        ExitCode = $exitCode
+        TimedOut = $timedOut
+    }
 }
 
 function Invoke-ExternalGate(
@@ -132,19 +303,22 @@ function Invoke-ExternalGate(
 ) {
     $log = Join-Path $Logs "$Name.log"
     $timer = [System.Diagnostics.Stopwatch]::StartNew()
-    $previousErrorPreference = $ErrorActionPreference
-    $ErrorActionPreference = "Continue"
-    try {
-        if ($VerboseOutput) {
-            & $Executable @Arguments 2>&1 | Tee-Object -FilePath $log
-        } else {
-            & $Executable @Arguments *> $log
-        }
-        $exitCode = $LASTEXITCODE
-    } finally {
-        $ErrorActionPreference = $previousErrorPreference
-    }
+    $stdoutPath = "$log.stdout.tmp"
+    $stderrPath = "$log.stderr.tmp"
+    $managed = Invoke-ManagedProcess $Executable $Arguments $stdoutPath $stderrPath
+    $stdout = if (Test-Path -LiteralPath $stdoutPath) { Get-Content -LiteralPath $stdoutPath -Raw } else { "" }
+    $stderr = if (Test-Path -LiteralPath $stderrPath) { Get-Content -LiteralPath $stderrPath -Raw } else { "" }
+    [IO.File]::WriteAllText($log, $stdout + $stderr)
+    if ($VerboseOutput -and ($stdout.Length -gt 0 -or $stderr.Length -gt 0)) { Write-Host ($stdout + $stderr) -NoNewline }
+    Remove-Item -LiteralPath $stdoutPath, $stderrPath -Force -ErrorAction SilentlyContinue
+    $exitCode = $managed.ExitCode
     $timer.Stop()
+    if ($managed.TimedOut) {
+        $failure = "$Name timed out after $TimeoutSeconds seconds"
+        Add-Result $Name "fail" $timer.Elapsed.TotalSeconds $log @() $failure
+        if (-not $VerboseOutput) { Get-Content -LiteralPath $log -Tail 40 }
+        throw "$failure. Full log: $log"
+    }
     if ($exitCode -ne 0) {
         $failure = "$Name failed with exit code $exitCode"
         Add-Result $Name "fail" $timer.Elapsed.TotalSeconds $log @() $failure
@@ -179,37 +353,33 @@ function Invoke-CapturedProcess(
     # Keep the Compatibility window foregroundable. On Intel/ANGLE, hiding a
     # graphical Godot window changes compositor pacing and produces a lower
     # frame-time profile than the browser-facing desktop path we are measuring.
-    $process = Start-Process -FilePath $Executable -ArgumentList $argumentLine `
-        -RedirectStandardOutput $stdoutPath -RedirectStandardError $stderrPath `
-        -PassThru -Wait
+    $managed = Invoke-ManagedProcess $Executable $Arguments $stdoutPath $stderrPath
     $stdout = if (Test-Path -LiteralPath $stdoutPath) { Get-Content -LiteralPath $stdoutPath -Raw } else { "" }
     $stderr = if (Test-Path -LiteralPath $stderrPath) { Get-Content -LiteralPath $stderrPath -Raw } else { "" }
     if ($stdout.Length -gt 0) { [IO.File]::WriteAllText($Log, $stdout) } else { [IO.File]::WriteAllText($Log, "") }
     if ($stderr.Length -gt 0) { Add-Content -LiteralPath $Log -Value $stderr -NoNewline }
     Remove-Item -LiteralPath $stdoutPath, $stderrPath -Force -ErrorAction SilentlyContinue
-    return [int]$process.ExitCode
+    if ($managed.TimedOut) { return 124 }
+    return [int]$managed.ExitCode
 }
 
 function Invoke-GodotGate([string]$Name, [string[]]$Arguments, [string]$Executable = "") {
 	$Runner = $Godot
 	if (-not [string]::IsNullOrWhiteSpace($Executable)) { $Runner = $Executable }
-	$log = Join-Path $Logs "$Name.log"
+    $log = Join-Path $Logs "$Name.log"
     $timer = [System.Diagnostics.Stopwatch]::StartNew()
-    $previousErrorPreference = $ErrorActionPreference
-    $ErrorActionPreference = "Continue"
-    try {
-        if (-not [string]::IsNullOrWhiteSpace($Executable)) {
-            $exitCode = Invoke-CapturedProcess $Runner $Arguments $log
-            if ($VerboseOutput -and (Test-Path -LiteralPath $log)) { Get-Content -LiteralPath $log }
-        } elseif ($VerboseOutput) {
-			& $Runner @Arguments 2>&1 | Tee-Object -FilePath $log
-			$exitCode = $LASTEXITCODE
-		} else {
-			& $Runner @Arguments *> $log
-			$exitCode = $LASTEXITCODE
-		}
-    } finally {
-        $ErrorActionPreference = $previousErrorPreference
+    if (-not [string]::IsNullOrWhiteSpace($Executable)) {
+        $exitCode = Invoke-CapturedProcess $Runner $Arguments $log
+    } else {
+        $stdoutPath = "$log.stdout.tmp"
+        $stderrPath = "$log.stderr.tmp"
+        $managed = Invoke-ManagedProcess $Runner $Arguments $stdoutPath $stderrPath
+        $stdout = if (Test-Path -LiteralPath $stdoutPath) { Get-Content -LiteralPath $stdoutPath -Raw } else { "" }
+        $stderr = if (Test-Path -LiteralPath $stderrPath) { Get-Content -LiteralPath $stderrPath -Raw } else { "" }
+        [IO.File]::WriteAllText($log, $stdout + $stderr)
+        if ($VerboseOutput -and ($stdout.Length -gt 0 -or $stderr.Length -gt 0)) { Write-Host ($stdout + $stderr) -NoNewline }
+        Remove-Item -LiteralPath $stdoutPath, $stderrPath -Force -ErrorAction SilentlyContinue
+        $exitCode = $managed.ExitCode
     }
     $timer.Stop()
     if ($exitCode -ne 0) {
@@ -234,23 +404,40 @@ function Invoke-GodotGate([string]$Name, [string[]]$Arguments, [string]$Executab
     }
     $warnings = [System.Collections.Generic.List[string]]::new()
     $fatal = [System.Collections.Generic.List[string]]::new()
-    $isHeadless = $Arguments -contains "--headless"
-	$teardownPattern = 'Parameter "material" is null|RID allocations .* leaked at exit|Pages in use exist at exit|resources still in use at exit|Buffer with GL ID .* leaked|shaders of type .* never freed|ObjectDB instances leaked at exit|Leaked instance dependency|did not call instance_notify_deleted'
+	# Runtime diagnostics are fatal until a verifier explicitly enters its
+	# shutdown phase. This prevents a test from printing PASS early and hiding a
+	# real active-render failure, while allowing the known Godot 4.6.3
+	# Compatibility allocator messages emitted after all owned nodes have been
+	# retired. Verifiers that use this classification must print the phase
+	# marker immediately before cleanup and print their final PASS afterwards.
+	$shutdownIndex = -1
+	for ($index = 0; $index -lt $lines.Count; $index++) {
+		if ($lines[$index] -match 'VERIFIER_PHASE:\s*SHUTDOWN') {
+			$shutdownIndex = $index
+			break
+		}
+	}
+	$shutdownResourcePattern = 'Parameter "material" is null|RID allocations .* leaked at exit|Pages in use exist at exit|resources still in use at exit|Buffer with GL ID .* leaked|shaders of type .* never freed|ObjectDB instances leaked at exit|Leaked instance dependency|did not call instance_notify_deleted|Orphan .* at exit'
+	$activeResourcePattern = 'Parameter "material" is null|RID allocations .* leaked at exit|Pages in use exist at exit|resources still in use at exit|Buffer with GL ID .* leaked|shaders of type .* never freed|ObjectDB instances leaked at exit|Leaked instance dependency|did not call instance_notify_deleted|Orphan .* at exit|Condition .* is true'
     $fatalPattern = 'SCRIPT ERROR|Parse Error|Compile Error|Failed to load|Cannot open|ERROR:|VERIFIER:\s*FAIL|ASSERTION FAILED|Assertion failed'
     for ($index = 0; $index -lt $lines.Count; $index++) {
         $line = $lines[$index]
-        if ($line -notmatch $fatalPattern) { continue }
+		if ($line -match $shutdownResourcePattern) {
+			if ($shutdownIndex -ge 0 -and $index -gt $shutdownIndex) {
+				$warnings.Add($line.Trim())
+			} else {
+				$fatal.Add($line.Trim())
+			}
+			continue
+		}
+		if ($line -notmatch $fatalPattern) { continue }
         # PowerShell wraps native stderr as an ErrorRecord and abbreviates the
         # original line inside CategoryInfo. The complete stderr line is also
         # present in the log and is classified independently below.
         if ($line -match '^\s*\+\s+CategoryInfo|FullyQualifiedErrorId.*NativeCommandError') {
             continue
         }
-        if ($line -match $teardownPattern -and $passIndex -ge 0 -and $index -gt $passIndex) {
-            $warnings.Add($line.Trim())
-        } else {
-            $fatal.Add($line.Trim())
-        }
+		$fatal.Add($line.Trim())
     }
     if ($fatal.Count -gt 0) {
         $failure = "$Name emitted a release-blocking error: $($fatal[0])"
@@ -298,6 +485,12 @@ try {
             "--json-report",
             $ContentReportPath
         )
+        Invoke-ExternalGate "verify_runtime_required_components" $Python @(
+            (Join-Path $Project "tools\verify_runtime_required_components.py"),
+            $Project,
+            "--json-report",
+            (Join-Path $Logs "runtime_required_components.json")
+        )
         Invoke-ExternalGate "verify_asset_001_files" $Python @(
             (Join-Path $Project "tools\verify_asset_001.py")
         )
@@ -313,10 +506,10 @@ try {
     }
 
     $verifiers = @(
-		"verify_runtime.gd", "verify_runtime_regressions.gd", "verify_zone_builder_integrity.gd", "verify_gate_transitions.gd", "verify_engine_001.gd", "verify_engine_003.gd", "verify_story_campaign.gd", "verify_quest_001.gd", "verify_quest_002.gd", "verify_save_001.gd", "verify_qa_002.gd", "verify_art_001.gd", "verify_asset_001.gd", "verify_character_real_001.gd", "verify_face_river_sun_001.gd",
+        "verify_runtime_smoke.gd", "verify_runtime.gd", "verify_runtime_regressions.gd", "verify_zone_builder_integrity.gd", "verify_gate_transitions.gd", "verify_engine_001.gd", "verify_engine_003.gd", "verify_engine_004.gd", "verify_story_campaign.gd", "verify_quest_002.gd", "verify_objective_view_model.gd", "verify_save_001.gd", "verify_qa_002.gd", "verify_art_001.gd", "verify_asset_001.gd", "verify_character_real_001.gd", "verify_face_river_sun_001.gd",
         "verify_motion_quality.gd", "verify_river_swimming.gd", "verify_greyfen_life.gd",
 		"verify_castle_vargan.gd", "verify_audio_runtime.gd", "verify_audio_001.gd", "verify_visible_quality.gd",
-		"verify_recovery_002_foundation.gd", "verify_navigation_001.gd", "verify_char_001.gd", "verify_anim_001.gd", "verify_combat_001.gd", "verify_ai_001.gd", "verify_oath_001.gd", "verify_ui_001.gd", "verify_input_001.gd", "verify_mobile_001.gd", "verify_world_001.gd", "verify_world_002.gd", "verify_world_003.gd", "verify_zone_budgets.gd",
+		"verify_recovery_002_foundation.gd", "verify_navigation_001.gd", "verify_char_001.gd", "verify_anim_001.gd", "verify_combat_001.gd", "verify_ai_001.gd", "verify_oath_001.gd", "verify_ui_001.gd", "verify_input_001.gd", "verify_mobile_001.gd", "verify_world_001.gd", "verify_world_002.gd", "verify_world_003.gd", "verify_world_014.gd", "verify_zone_budgets.gd",
         "verify_visual_003.gd", "verify_visual_100.gd", "verify_master_002.gd", "verify_master_003.gd",
         "verify_mat_001.gd", "verify_char_002.gd", "verify_mon_001.gd", "verify_vfx_001.gd", "verify_water_001.gd",
         "verify_gameplay_001.gd", "verify_combat_002.gd", "verify_ai_002.gd", "verify_inv_001.gd", "verify_dialogue_001.gd", "verify_narr_001.gd",
@@ -531,6 +724,15 @@ try {
 	}
     $finalStatus = $(if ([string]::IsNullOrWhiteSpace($Only)) { "pass" } else { "partial-pass" })
     Write-ReleaseReport $finalStatus
+    if ($Strict -and [string]::IsNullOrWhiteSpace($Only)) {
+        Invoke-ExternalGate "verify_release_report" $Python @(
+            (Join-Path $Project "tools\verify_release_report.py"),
+            $Project,
+            "--report", $ReportPath,
+            "--strict"
+        )
+        Write-ReleaseReport "pass"
+    }
     Write-Host "AUTHORITATIVE RELEASE GATE: $($finalStatus.ToUpper())"
     Write-Host "Release report: $ReportPath"
 }

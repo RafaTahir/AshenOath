@@ -46,12 +46,31 @@ func _initialize() -> void:
 	var saved: Dictionary = game.story_state.save_state()
 	game.story_state.load_state(saved)
 	check(game.story_state.get_flag("epilogue_cards", []).size() == saved_cards.size(), "Epilogue cards failed save round-trip")
+	var result_code := 0 if failures == 0 else 1
+	await _shutdown_game(game, state)
 	print("QUEST-006 VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
-	quit(0 if failures == 0 else 1)
+	quit(result_code)
 
 func settle(count: int) -> void:
 	for _index in range(count):
 		await process_frame
+
+func _shutdown_game(game: Node, state: Node) -> void:
+	if is_instance_valid(game) and game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+		await settle(20)
+	if is_instance_valid(game) and game.has_method("finalize_resource_shutdown"):
+		game.finalize_resource_shutdown()
+		await settle(12)
+	print("VERIFIER_PHASE: SHUTDOWN")
+	if is_instance_valid(game):
+		game.queue_free()
+		await settle(8)
+	if is_instance_valid(state):
+		state.queue_free()
+		await settle(4)
+	RenderingServer.force_sync()
+	await settle(4)
 
 func check(condition: bool, message: String) -> void:
 	if condition:

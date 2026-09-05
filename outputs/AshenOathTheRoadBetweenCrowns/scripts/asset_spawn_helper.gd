@@ -63,6 +63,12 @@ func _spawn_from_entry(entry: Dictionary, role_name: String, fallback_category: 
 			fallback.name = role_name
 			_prepare_spawned_asset(fallback,path,role_name,fallback_category)
 			return fallback
+	if fallback_category in ["characters", "enemies"]:
+		# A missing role visual is a release failure, not a reason to disguise the
+		# problem with a capsule and sphere. Gameplay callers can keep their
+		# collision actor alive while QA reports the missing rendered role.
+		push_error("Required runtime visual missing for role '%s' (path: '%s')" % [role_name, path])
+		return null
 	push_warning("Using primitive placeholder for asset role: %s" % role_name)
 	return _placeholder(role_name, fallback_category)
 
@@ -150,11 +156,27 @@ func _merge_shared_rig_layers(outfit_root: Node3D, layers: Array) -> bool:
 		var meshes: Array[Node] = layer_node.find_children("*", "MeshInstance3D", true, false)
 		for raw_mesh in meshes:
 			var mesh := raw_mesh as MeshInstance3D
+			var mesh_pose := _composed_local_transform(mesh)
+			var skeleton_pose := _composed_local_transform(shared_skeleton)
 			mesh.owner = null
+			# Imported head and hair scenes carry meaningful layer transforms. Keep
+			# their composed pose while moving the skin onto the shared skeleton.
+			# These layers are composed before entering the scene tree, so using
+			# Node.reparent(..., true) would query an unavailable global transform
+			# and emit renderer errors. Convert the pose explicitly instead.
 			mesh.reparent(shared_skeleton, false)
+			mesh.transform = skeleton_pose.affine_inverse() * mesh_pose
 			mesh.skeleton = NodePath("..")
 		layer_node.free()
 	return true
+
+func _composed_local_transform(node: Node3D) -> Transform3D:
+	var result := node.transform
+	var parent := node.get_parent()
+	while parent is Node3D:
+		result = (parent as Node3D).transform * result
+		parent = parent.get_parent()
+	return result
 
 func _find_skeleton(node: Node) -> Skeleton3D:
 	if node is Skeleton3D:

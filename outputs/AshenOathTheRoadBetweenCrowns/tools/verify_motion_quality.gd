@@ -118,6 +118,10 @@ func _finish() -> void:
 		print("MOTION QUALITY VERIFIER: PASS - real skeleton transforms changed")
 	var exit_code := 1 if not failures.is_empty() else 0
 	if is_instance_valid(tested_game):
+		# Everything above this boundary is active-render verification. The
+		# remaining frames only retire the intentionally large test tree so the
+		# release runner can classify renderer cleanup diagnostics correctly.
+		print("VERIFIER_PHASE: SHUTDOWN")
 		tested_game.queue_free()
 		tested_game = null
 		await process_frame

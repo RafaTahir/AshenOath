@@ -59,8 +59,8 @@
       const buildMeta = document.getElementById('build-meta');
       const ctx = road.getContext('2d');
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const SHELL_BUILD_ID = 'A-SET-RESTORE-001';
-      const RUNTIME_PACK_CONTRACT = 'a-set-20260830';
+      const SHELL_BUILD_ID = 'RECOVERY-004-CANDIDATE';
+      const RUNTIME_PACK_CONTRACT = 'recovery-004-20260831';
       let engine = null, started = false, ready = false, last = 0, score = 0;
       let gamepadPressed = false;
       const bootMetrics = {
@@ -144,7 +144,7 @@
         const missing = Engine.getMissingFeatures({ threads: false });
         if (missing.length) { setRetryState('This browser is missing WebGL 2.0: ' + missing.join(', '), { missing_features: missing }); console.error(status.textContent); return; }
         setBootState('loading');
-        engine.startGame({ onProgress: (current, total) => { const ratio = current > 0 && total > 0 ? current / total : 0; bootMetrics.progress_samples += 1; progress.style.width = `${Math.round(ratio * 100)}%`; setStatus(ratio > 0 ? `Opening the road... ${Math.round(ratio * 100)}%` : 'Opening the road...'); } }).then(() => { ready = true; bootMetrics.engine_ready_ms = performance.now(); performance.mark('ashen-oath-engine-ready'); setBootState('ready', { engine_ready_elapsed_ms: Math.round(bootMetrics.engine_ready_ms - bootMetrics.engine_start_ms) }); boot.classList.add('hidden'); document.getElementById('canvas').focus(); }, (error) => { setRetryState('The road could not be opened. Choose Retry to try again.', { error: String(error) }); console.error(error); });
+        engine.startGame({ onProgress: (current, total) => { const ratio = current > 0 && total > 0 ? current / total : 0; const visibleRatio = Math.min(0.92, ratio); bootMetrics.progress_samples += 1; progress.style.width = `${Math.round(visibleRatio * 100)}%`; setStatus(ratio >= 1 ? 'Runtime files are ready. Preparing Greyfen...' : (ratio > 0 ? `Opening the road... ${Math.round(visibleRatio * 100)}%` : 'Opening the road...')); } }).then(() => { ready = true; bootMetrics.engine_ready_ms = performance.now(); performance.mark('ashen-oath-engine-ready'); progress.style.width = '100%'; setBootState('ready', { engine_ready_elapsed_ms: Math.round(bootMetrics.engine_ready_ms - bootMetrics.engine_start_ms) }); setStatus('Greyfen is ready. Enter the road.'); boot.classList.add('hidden'); document.getElementById('canvas').focus(); }, (error) => { setRetryState('The road could not be opened. Choose Retry to try again.', { error: String(error) }); console.error(error); });
       }
       function setRetryState(message, extra = {}) {
         started = false;

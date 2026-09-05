@@ -36,13 +36,8 @@ func _initialize() -> void:
 	_check(str(game.zone_runtime_coordinator.snapshot().get("presentation_zone", "")) == "wychwood", "Zone transition did not synchronize presentation")
 	_check(not game.zone_transition_pending, "Zone transition remained pending after coordinator activation")
 	var result_code := 0 if failures.is_empty() else 1
+	await _shutdown_game(game)
 	_print_result()
-	# Emit the result before releasing the scene. Godot's Compatibility renderer
-	# can report shutdown-only RID/material diagnostics while freeing procedural
-	# resources; QA-005 must classify those after the gameplay pass marker rather
-	# than treating them as active route failures.
-	game.queue_free()
-	await _frames(8)
 	quit(result_code)
 
 func _verify_static_extraction() -> void:
@@ -73,6 +68,25 @@ func _wait_for_zone(game: Node, zone_id: String) -> void:
 func _frames(count: int) -> void:
 	for _index in range(count):
 		await process_frame
+
+func _shutdown_game(game) -> void:
+	# Own teardown explicitly so renderer diagnostics are emitted after a
+	# verifiable shutdown boundary rather than being mistaken for active-route
+	# failures by the release runner.
+	if game != null and is_instance_valid(game) and game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+	await _frames(20)
+	if game != null and is_instance_valid(game) and game.has_method("finalize_resource_shutdown"):
+		game.finalize_resource_shutdown()
+	await _frames(12)
+	print("VERIFIER_PHASE: SHUTDOWN")
+	if game != null and is_instance_valid(game) and game.is_inside_tree():
+		root.remove_child(game)
+	if game != null and is_instance_valid(game):
+		game.free()
+	RenderingServer.force_sync()
+	await _frames(8)
+	RenderingServer.force_sync()
 
 func _finish() -> void:
 	_print_result()

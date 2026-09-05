@@ -3,6 +3,7 @@ extends RefCounted
 
 var _host: Node
 var zone_id: String
+var build_profile := "full"
 var ground_count := 0
 var bounds_count := 0
 var gate_count := 0
@@ -25,9 +26,13 @@ var enemy_defs:
 	get:
 		return _host.enemy_defs
 
-func _init(game_host: Node, id: String) -> void:
+func _init(game_host: Node, id: String, profile: String = "full") -> void:
 	_host = game_host
 	zone_id = id
+	build_profile = profile
+
+func is_opening_fast() -> bool:
+	return zone_id == "greyfen" and build_profile == "opening_fast"
 
 func add_node(node: Node, parent: Node = null) -> void:
 	var target := parent if parent != null else zone_root

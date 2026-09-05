@@ -109,7 +109,9 @@
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/save_manager.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/quest_beat_director.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/quest_presentation_state.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/objective_view_model.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/data/campaign_dialogue.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_objective_view_model.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_narr_005.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_campaign_quests_008_012.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_side_003.gd",
@@ -117,7 +119,7 @@
       ],
       "gates": [
         "verify_story_campaign",
-        "verify_quest_001",
+        "verify_qa_012",
         "verify_quest_002",
         "verify_quest_008",
         "verify_quest_009",
@@ -125,6 +127,7 @@
         "verify_quest_011",
         "verify_quest_012",
         "verify_save_001",
+        "verify_objective_view_model",
         "verify_narr_005",
         "verify_campaign_quests_008_012",
         "verify_side_003",
@@ -650,7 +653,6 @@
       ],
       "gates": [
         "verify_runtime",
-        "verify_quest_001",
         "verify_world_012",
         "verify_world_013",
         "verify_world_014",
@@ -737,7 +739,6 @@
       ],
       "gates": [
         "verify_gameplay_001",
-        "verify_quest_001",
         "verify_story_campaign",
         "verify_save_001"
       ]
@@ -1132,12 +1133,13 @@
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/asset_spawn_helper.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/world_material_library.gd"
       ],
-      "gates": [
-        "verify_engine_002",
-        "verify_engine_003",
-        "verify_engine_004",
-        "verify_engine_005"
-      ]
+	  "gates": [
+		"verify_engine_002",
+		"verify_engine_003",
+		"verify_engine_004",
+		"verify_engine_005",
+		"verify_runtime_required_components"
+	  ]
     },
     "save": {
       "patterns": [

@@ -58,6 +58,7 @@ var target_playback_scale := 1.0
 var current_playback_scale := 1.0
 var manual_update_interval := 0.0
 var manual_update_accumulator := 0.0
+var externally_ticked := false
 var current_direction := Vector3.ZERO
 var current_local_direction := Vector3.ZERO
 var requested_speed_ratio := 0.0
@@ -119,20 +120,47 @@ func configure(root: Node3D, clips: Dictionary) -> bool:
 	return true
 
 func _process(delta: float) -> void:
+	if externally_ticked:
+		return
+	_advance_animation(delta)
+
+func set_external_tick(enabled: bool) -> void:
+	# The owning physics/simulation loop can drive throttled animation without
+	# waking this node on every rendered frame.
+	externally_ticked = enabled
+	set_process(not enabled)
+
+func advance_external(delta: float) -> void:
+	if not externally_ticked:
+		return
+	_advance_animation(delta)
+
+func _advance_animation(delta: float) -> void:
 	if animation_player == null or distance_suspended:
 		return
-	current_playback_scale = lerpf(current_playback_scale, target_playback_scale, 1.0 - exp(-10.0 * delta))
-	var playback_direction := _playback_direction_for_state(current_state)
-	for player in animation_players:
-		player.speed_scale = current_playback_scale * playback_direction
 	if manual_update_interval > 0.0:
 		manual_update_accumulator += delta
 		if manual_update_accumulator < manual_update_interval:
 			return
 		delta = manual_update_accumulator
 		manual_update_accumulator = 0.0
+		# Manual NPC animation is deliberately advanced only at its requested
+		# rate. Keeping imported AnimationPlayers active between these ticks
+		# still makes the Compatibility renderer evaluate every skeleton every
+		# rendered frame, defeating the distance/quality budget.
+		current_playback_scale = lerpf(current_playback_scale, target_playback_scale, 1.0 - exp(-10.0 * delta))
+		var manual_playback_direction := _playback_direction_for_state(current_state)
 		for player in animation_players:
+			player.speed_scale = current_playback_scale * manual_playback_direction
 			player.advance(delta)
+		if action_active:
+			action_elapsed += delta
+		_emit_locomotion_step_events()
+		return
+	current_playback_scale = lerpf(current_playback_scale, target_playback_scale, 1.0 - exp(-10.0 * delta))
+	var playback_direction := _playback_direction_for_state(current_state)
+	for player in animation_players:
+		player.speed_scale = current_playback_scale * playback_direction
 	if action_active:
 		action_elapsed += delta
 	_emit_locomotion_step_events()
@@ -154,6 +182,9 @@ func set_update_rate_hz(rate_hz: float) -> void:
 			if manual_update_interval <= 0.0
 			else AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
 		)
+		# A manual player must not also be evaluated by Godot's idle callback.
+		# `advance()` above still evaluates the animation at the scheduled tick.
+		player.active = manual_update_interval <= 0.0
 
 func is_valid() -> bool:
 	return animation_player != null and skeleton != null and skeleton.get_bone_count() > 0
@@ -164,7 +195,7 @@ func set_distance_suspended(suspended: bool) -> void:
 	distance_suspended = suspended
 	process_mode = Node.PROCESS_MODE_DISABLED if suspended else Node.PROCESS_MODE_INHERIT
 	for player in animation_players:
-		player.active = not suspended
+		player.active = not suspended and manual_update_interval <= 0.0
 	if not suspended and not dead:
 		_play_state(current_state if current_state != "" else "idle", 0.0)
 

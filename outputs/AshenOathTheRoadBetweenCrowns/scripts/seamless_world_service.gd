@@ -102,7 +102,11 @@ func on_zone_activated(zone_id: String, local_position: Vector3 = Vector3.ZERO) 
 	cooldown = 0.25
 	last_transition["state"] = "active"
 	last_transition["activated_at_usec"] = Time.get_ticks_usec()
-	if streaming_service != null:
+	var defer_neighbor_prewarm: bool = host != null and host.has_method("should_defer_neighbor_prewarm") and host.should_defer_neighbor_prewarm()
+	# Greyfen is also activated during the menu prewarm/New Game handoff. Do not
+	# start adjacent scene imports from that synchronous activation path; the
+	# host schedules the same work after the opening checkpoint window.
+	if streaming_service != null and normalized != "greyfen" and not defer_neighbor_prewarm:
 		for neighbor in WorldSectorManifest.neighbors(normalized):
 			if streaming_service.has_method("request_zone"):
 				streaming_service.request_zone(neighbor)

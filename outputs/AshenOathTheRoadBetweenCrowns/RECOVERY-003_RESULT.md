@@ -2,11 +2,16 @@
 
 ## Status
 
-Partial recovery checkpoint. The atomic Greyfen opening-performance fix below
-is verified locally on `codex/masterpiece-rebuild`; the broader recovery changes
-remain in the working tree and are not pushed or deployed. Production remains
-unchanged. The full release gate is paused after the graphical
-`verify_perf_001` failure was reproduced and repaired.
+Release continuation in progress. The complete release tail has now passed
+locally on `codex/masterpiece-rebuild`, including fresh screenshots, packed
+startup, desktop Chrome/Edge, mobile emulation, and the full consolidated
+browser route. Production remains unchanged until the source checkpoint,
+strict report identity, Web synchronization, and live hash check complete.
+
+The release runner bookkeeping was corrected so PowerShell and Python compute
+the same source fingerprint and expected fresh screenshot/report writes do not
+masquerade as uncommitted runtime source. The current worktree still contains
+the cumulative Recovery-003 changes and has not yet been checkpointed.
 
 ## Current Atomic Checkpoint
 
@@ -56,15 +61,21 @@ unchanged. The full release gate is paused after the graphical
   `verify_world_002` in `7.76 s` with `nodes=420`, `meshes=73`, `lights=2`, and
   `enemies=5`; the log ends with the shutdown phase followed by `WORLD-002
   VERIFIER: PASS`. Evidence: `.release-gate/verify_world_002.log`.
-- Remaining blocker: the separate normal full-detail `WORLD-014` check reports
-  `353` cemetery meshes against its `340` mesh budget. This is outside the
-  compact opening path and was not changed by this fix. The broader recovery
-  and release suite are incomplete; export, screenshots, Web packaging, push,
-  and deployment remain intentionally untouched in this checkpoint.
-- Exact next action on resume: decide and implement the narrowly scoped
-  `WORLD-014` full-detail mesh-budget correction, then rerun only its direct
-  verifier. Do not rerun the broader release suite, export, push, deploy, or
-  start another recovery ticket until explicitly resumed.
+- Latest focused result after the initial checkpoint: normal full-detail
+  `WORLD-014` now passes at `1,075` nodes and `338` meshes after the retained
+  grave-row and crow-roost decoration was moved onto the existing static visual
+  batching path. The compact opening profile remains unchanged.
+- Latest graphical Compatibility result: `verify_perf_001` passes on a clean
+  run. Greyfen measured `52.85 FPS` average and `32.87 FPS` 1% low; Wychwood
+  `59.99/49.96`; Wychwood combat `60.02/45.01`; Castle courtyard
+  `60.00/53.18`; Record Hall `45.93/38.61`; and Hart Glade `60.00/56.43`.
+  The run exited with code 0 and printed `PERF-001 VERIFIER: PASS`.
+- Remaining blocker: the authoritative recovery/release suite has not yet been
+  rerun against this current source. Fresh screenshots, Web packaging, packed
+  startup, browser proof, push, and deployment remain open.
+- Exact next action on resume: run the authoritative suite from the next
+  unfinished gate, preserving already-passed results where the runner can
+  safely do so; stop on the first genuine failure and record it.
 
 ## Completed In This Checkpoint
 
@@ -118,7 +129,7 @@ unchanged. The full release gate is paused after the graphical
 | `performance` ticket profile after cache fix | FAIL | `.release-gate/ticket/verify_perf_001.log` |
 | `verify_world_003.gd` after compact cemetery change | PASS | `.release-gate/verify_world_003.log` |
 | Graphical `verify_perf_001.gd` after compact cemetery change | PASS | `.release-gate/perf_001_report.json` and waited graphical-run result |
-| Normal full-detail `verify_world_014.gd` | FAIL, 353 meshes > 340 budget | direct graphical-independent run |
+| Normal full-detail `verify_world_014.gd` | PASS, 338 meshes <= 340 budget | direct graphical-independent run |
 
 The clean lifecycle run contains no leaked renderer resources, leaked ObjectDB
 nodes, or leaked SceneTree timers. The visible-quality and audio runs now complete without

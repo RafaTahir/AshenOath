@@ -62,12 +62,17 @@ func snapshot_for_game(game: Node) -> Dictionary:
 		"new_game_ready": bool(hud.get("new_game_ready")) if hud != null else false,
 		"zone": str(game.get("current_zone_id")),
 		"transition_pending": bool(game.get("zone_transition_pending")),
+		"zone_load_request_pending": bool(game.get("zone_load_request_pending")),
+		"opening_pack_waiting": bool(game.get("opening_pack_waiting")),
+		"campaign_pack_waiting": bool(game.get("campaign_pack_waiting")),
 		"paused": get_tree().paused,
 		"player": {},
 		"camera": {},
 		"focus": {},
+		"focus_candidates": [],
 		"gates": [],
 		"interactions": [],
+		"dialogue": {"visible": false, "page": -1, "pages": 0},
 		"enemies": [],
 		"quests": {},
 		"performance": _performance_state(),
@@ -76,15 +81,27 @@ func snapshot_for_game(game: Node) -> Dictionary:
 		"save_exists": FileAccess.file_exists("user://ashen_oath_save.json"),
 		"command_result": _command_result,
 	}
+	var runtime_packs = game.get("runtime_packs")
+	if runtime_packs != null:
+		state["runtime_packs"] = {}
+		for pack_id in ["opening", "campaign", "characters", "monsters", "audio"]:
+			state.runtime_packs[pack_id] = {
+				"state": str(runtime_packs.get_state(pack_id)) if runtime_packs.has_method("get_state") else "",
+				"progress": float(runtime_packs.get_progress(pack_id)) if runtime_packs.has_method("get_progress") else 0.0,
+				"error": str(runtime_packs.get_last_error(pack_id)) if runtime_packs.has_method("get_last_error") else "",
+			}
 	if player != null:
 		var player_health = player.get("health_component")
+		var player_body := player as CharacterBody3D
 		state.player = {
 			"position": _vector(player.global_position),
+			"velocity": _vector(player_body.velocity) if player_body != null else _vector(Vector3.ZERO),
 			"facing_yaw": player.global_rotation.y,
 			"can_control": bool(player.get("can_control")),
 			"health": float(player_health.get("health")) if player_health != null else 0.0,
 			"dead": player_health != null and float(player_health.get("health")) <= 0.0,
 			"on_floor": player.is_on_floor() if player is CharacterBody3D else true,
+			"slide_collisions": _slide_collisions(player_body),
 		}
 	# Greyfen is prewarmed behind the menu. Do not walk the full zone tree while
 	# the browser is waiting for the real New Game input.
@@ -94,6 +111,28 @@ func snapshot_for_game(game: Node) -> Dictionary:
 		state.camera = {
 			"yaw": float(camera_rig.get("yaw")),
 			"pitch": float(camera_rig.get("pitch")),
+		}
+	var focus_candidates: Array = []
+	var candidates_variant = game.get("interaction_candidates")
+	if candidates_variant is Array:
+		for candidate in candidates_variant:
+			if candidate == null or not is_instance_valid(candidate) or not candidate.is_inside_tree():
+				continue
+			var distance := player.global_position.distance_to(candidate.global_position) if player != null else -1.0
+			focus_candidates.append({
+				"id": str(candidate.get("interaction_id")),
+				"type": str(candidate.get("interaction_type")),
+				"distance": distance,
+				"valid": bool(game.call("_interaction_target_valid", candidate)),
+			})
+	state.focus_candidates = focus_candidates
+	if hud != null:
+		var dialogue_layer: Control = hud.get("dialogue_layer") as Control
+		var dialogue_pages: Array = hud.get("dialogue_pages") as Array
+		state.dialogue = {
+			"visible": dialogue_layer != null and dialogue_layer.visible,
+			"page": int(hud.get("dialogue_page_index")),
+			"pages": dialogue_pages.size() if dialogue_pages != null else 0,
 		}
 	if focus != null and is_instance_valid(focus):
 		state.focus = _interaction_state(focus, player)
@@ -146,7 +185,8 @@ func _poll_command() -> void:
 		return
 	JavaScriptBridge.eval("%s = null;" % WINDOW_COMMAND, false)
 	var action := str(command.get("action", ""))
-	_command_result = {"action": action, "ok": false}
+	var request_id := int(command.get("request_id", 0))
+	_command_result = {"action": action, "request_id": request_id, "ok": false}
 	if not is_instance_valid(_game):
 		_command_result.error = "game unavailable"
 		return
@@ -168,7 +208,7 @@ func _poll_command() -> void:
 				_:
 					_command_result.error = "unsupported route target"
 					return
-			_command_result = {"action": action, "target": target, "ok": true}
+			_command_result = {"action": action, "request_id": request_id, "target": target, "ok": true}
 		"save":
 			var manager = _game.get("save_manager")
 			_command_result.ok = manager != null and bool(manager.save_game(_game))
@@ -194,14 +234,14 @@ func _poll_command() -> void:
 			var encoded: Array = []
 			for point in points:
 				encoded.append(_vector(point))
-			_command_result = {"action": action, "ok": not encoded.is_empty(), "points": encoded}
+			_command_result = {"action": action, "request_id": request_id, "ok": not encoded.is_empty(), "points": encoded}
 		"orient_camera":
 			var camera_controller = _game.get("camera_rig")
 			if camera_controller == null:
 				_command_result.error = "camera controller unavailable"
 				return
 			camera_controller.set("yaw", float(command.get("yaw", 0.0)))
-			_command_result = {"action": action, "ok": true, "yaw": float(camera_controller.get("yaw"))}
+			_command_result = {"action": action, "request_id": request_id, "ok": true, "yaw": float(camera_controller.get("yaw"))}
 		"stage_gate":
 			var target_id := str(command.get("target", ""))
 			var player: CharacterBody3D = _game.get("player") as CharacterBody3D
@@ -234,7 +274,7 @@ func _poll_command() -> void:
 			var validated: Vector3 = spatial.validate_position(candidate, 0.55, spatial.bank_for(candidate))
 			player.global_position = candidate if validated.distance_to(candidate) > 2.5 else validated
 			player.velocity = Vector3.ZERO
-			_command_result = {"action": action, "target": target_id, "ok": true, "position": _vector(player.global_position)}
+			_command_result = {"action": action, "request_id": request_id, "target": target_id, "ok": true, "position": _vector(player.global_position)}
 		_:
 			_command_result.error = "unsupported command"
 func _performance_state() -> Dictionary:
@@ -283,6 +323,19 @@ func _interaction_state(node: Node, player: Node3D) -> Dictionary:
 
 func _vector(value: Vector3) -> Dictionary:
 	return {"x": value.x, "y": value.y, "z": value.z}
+
+func _slide_collisions(body: CharacterBody3D) -> Array:
+	var result: Array = []
+	if body == null:
+		return result
+	for index in range(body.get_slide_collision_count()):
+		var collision := body.get_slide_collision(index)
+		var collider := collision.get_collider()
+		result.append({
+			"normal": _vector(collision.get_normal()),
+			"collider": collider.name if collider is Node else str(collider),
+		})
+	return result
 
 func _has_property(node: Object, property_name: String) -> bool:
 	if node == null:

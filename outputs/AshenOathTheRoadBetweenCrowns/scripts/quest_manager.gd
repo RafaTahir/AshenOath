@@ -15,6 +15,7 @@ var unlocked = {
 }
 var world_flags = {}
 var tracked_quest_id := ""
+var tracked_quest_is_manual := false
 var tracker_context_zone := ""
 const IMPLEMENTED_SIDE_QUESTS := {
 	"side_widows_bell": true,
@@ -46,7 +47,7 @@ func start_quest(id: String) -> bool:
 		runtime_objective["done"] = false
 		objectives.append(runtime_objective)
 	active[id] = {"objectives": objectives}
-	if tracked_quest_id == "" or str(quest_defs[id].get("type", "")) == "main":
+	if not tracked_quest_is_manual and (tracked_quest_id == "" or str(quest_defs[id].get("type", "")) == "main"):
 		tracked_quest_id = id
 	message.emit("Quest started: %s" % quest_defs[id].get("title", id))
 	changed.emit()
@@ -175,11 +176,22 @@ func _group_summary_objective(quest_id: String, group_id: String) -> Dictionary:
 	return {}
 
 func set_tracked_quest(id: String) -> bool:
+	if id.strip_edges() == "":
+		clear_tracked_quest()
+		return true
 	if not active.has(id):
 		return false
 	tracked_quest_id = id
+	tracked_quest_is_manual = true
 	changed.emit()
 	return true
+
+func clear_tracked_quest() -> void:
+	var had_state := tracked_quest_id != "" or tracked_quest_is_manual
+	tracked_quest_id = ""
+	tracked_quest_is_manual = false
+	if had_state:
+		changed.emit()
 
 func get_tracked_quest() -> String:
 	return tracked_quest_id if active.has(tracked_quest_id) else ""
@@ -207,6 +219,10 @@ func get_active_objective_id(quest_id: String) -> String:
 
 func set_tracked_quest_for_zone(zone_id: String) -> void:
 	tracker_context_zone = zone_id
+	if tracked_quest_is_manual and active.has(tracked_quest_id):
+		changed.emit()
+		return
+	tracked_quest_is_manual = false
 	var preferences := {
 		"greyfen":["main_bell_beneath_greyfen","main_road_of_crows"],
 		"wychwood":["main_road_of_crows","main_teeth_in_rain"],
@@ -252,6 +268,7 @@ func _try_complete_quest(id: String) -> void:
 	active.erase(id)
 	if tracked_quest_id == id:
 		tracked_quest_id = ""
+		tracked_quest_is_manual = false
 	for next_id in quest_defs[id].get("unlocks", []):
 		unlocked[next_id] = true
 	message.emit("Quest complete: %s" % quest_defs[id].get("title", id))
@@ -267,6 +284,7 @@ func save_state() -> Dictionary:
 		"unlocked": unlocked,
 		"world_flags": world_flags,
 		"tracked_quest_id": tracked_quest_id,
+		"tracked_quest_is_manual": tracked_quest_is_manual,
 		"tracker_context_zone": tracker_context_zone
 	}
 
@@ -279,9 +297,11 @@ func load_state(state: Dictionary) -> void:
 	var loaded_flags: Variant = state.get("world_flags", {})
 	world_flags = loaded_flags.duplicate(true) if typeof(loaded_flags) == TYPE_DICTIONARY else {}
 	tracked_quest_id = str(state.get("tracked_quest_id", ""))
+	tracked_quest_is_manual = bool(state.get("tracked_quest_is_manual", false))
 	tracker_context_zone = str(state.get("tracker_context_zone", "")).strip_edges().to_lower()
 	if not active.has(tracked_quest_id):
 		tracked_quest_id = _first_main_active()
+		tracked_quest_is_manual = false
 	_migrate_teeth_in_rain()
 	changed.emit()
 

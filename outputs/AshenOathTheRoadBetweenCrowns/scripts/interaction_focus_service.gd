@@ -25,11 +25,20 @@ func choose(candidates: Array, player: Node3D, camera: Camera3D, validator: Call
 		var interaction_type := str(candidate.get("interaction_type"))
 		var offset: Vector3 = candidate.global_position - player.global_position
 		var distance := offset.length()
-		var focus_range := 3.6 if interaction_type == "zone" else 2.8
+		# Conversation targets need a little more room than small props. This
+		# keeps a speaker focusable from a natural shoulder-camera distance while
+		# leaving clue, vendor, and scenery ranges unchanged.
+		var focus_range := 3.6 if interaction_type in ["zone", "dialogue"] else 2.8
 		if distance > focus_range or distance < 0.01:
 			continue
 		var facing := forward.dot(offset.normalized())
-		if (interaction_type != "zone" and facing < 0.12) or (validator.is_valid() and not bool(validator.call(candidate))):
+		# Dialogue has a target-specific eye-line validator in game.gd. Requiring
+		# this service's separate trigger-origin angle as well can reject a speaker
+		# who is visibly centered at conversation distance, especially with a
+		# shoulder camera. Other interactions keep the wider service-level angle
+		# gate so scenery cannot steal focus from the object being examined.
+		var valid_target := not validator.is_valid() or bool(validator.call(candidate))
+		if not valid_target or (interaction_type != "zone" and interaction_type != "dialogue" and facing < 0.12):
 			continue
 		var priority := 0.0
 		var quest_id := str(candidate.get("quest_id"))

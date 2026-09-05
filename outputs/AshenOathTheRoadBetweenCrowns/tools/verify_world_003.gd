@@ -49,8 +49,10 @@ func _initialize() -> void:
 		check(game.current_zone_id == "vargan_approach", "Castle Vargan gateway did not transition from Greyfen")
 		check(game.player.global_position.distance_to(Vector3(0, 1, 14)) < 3.0, "Castle arrival position is unsafe or incorrect")
 
+	var result_code := 0 if failures == 0 else 1
+	await _shutdown_game(game)
 	print("WORLD-003 VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
-	quit(0 if failures == 0 else 1)
+	quit(result_code)
 
 func _castle_corridor_has_clearance(scope: Node) -> bool:
 	for shape_node in scope.find_children("*", "CollisionShape3D", true, false):
@@ -80,6 +82,20 @@ func _route_clear(service, start: Vector3, destination: Vector3) -> bool:
 func _frames(count: int) -> void:
 	for _index in range(count):
 		await process_frame
+
+func _shutdown_game(game: Node) -> void:
+	if is_instance_valid(game) and game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+		await _frames(20)
+	if is_instance_valid(game) and game.has_method("finalize_resource_shutdown"):
+		game.finalize_resource_shutdown()
+		await _frames(12)
+	print("VERIFIER_PHASE: SHUTDOWN")
+	if is_instance_valid(game):
+		game.queue_free()
+		await _frames(8)
+	RenderingServer.force_sync()
+	await _frames(4)
 
 func check(condition: bool, message: String) -> void:
 	if not condition:

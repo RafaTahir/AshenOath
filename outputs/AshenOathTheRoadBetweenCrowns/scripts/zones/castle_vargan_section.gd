@@ -245,7 +245,11 @@ func _make_approach_dressing(context: ZoneBuildContext) -> void:
 	context.make_visual_box("ApproachKeepBannerRail", Vector3(0, 5.9, -18.95), Vector3(5.2, 0.12, 0.12), Color(0.12, 0.09, 0.06))
 	for side in [-1.0, 1.0]:
 		for z in [-9.5, -3.5, 2.5, 8.5]:
-			context.make_prop_box("ApproachCurtainWall", Vector3(side * 8.6, 2.15, z), Vector3(2.0, 4.3, 5.2), Color(0.17, 0.17, 0.17))
+			# These outer wall blocks are visual dressing around the military road.
+			# Their wide footprints intersect the diagonal edge lane on both the
+			# bandit-road arrival and the return trip, so the real boundary walls
+			# remain authoritative while these sections stay non-blocking.
+			context.make_visual_box("ApproachCurtainWall", Vector3(side * 8.6, 2.15, z), Vector3(2.0, 4.3, 5.2), Color(0.17, 0.17, 0.17))
 			context.make_visual_box("ApproachWallCap", Vector3(side * 8.6, 4.48, z), Vector3(2.25, 0.18, 5.35), Color(0.22, 0.20, 0.18))
 			for cap_z in [z - 1.8, z, z + 1.8]:
 				context.make_visual_box("ApproachWallMerlon", Vector3(side * 8.6, 4.95, cap_z), Vector3(0.62, 0.78, 0.62), Color(0.14, 0.14, 0.145))

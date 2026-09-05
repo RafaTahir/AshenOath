@@ -1,18 +1,241 @@
 ﻿{
-    "schema_version":  1,
+    "schema_version":  2,
+    "release_id":  "recovery-004",
     "status":  "pass",
-    "started_at":  "2026-08-30T09:12:33.0942995Z",
-    "finished_at":  "2026-08-30T09:57:39.6277405Z",
-    "source_commit":  "b531da2475607ad6b76b286fe32d89fc690d8563",
+    "started_at":  "2026-09-05T12:06:42.1045281Z",
+    "finished_at":  "2026-09-05T12:28:37.5281140Z",
+    "source_commit":  "ae8d308d12121348cd0c82aaa19ae52bfd9416be",
+    "source_branch":  "codex/masterpiece-rebuild",
+    "source_fingerprint":  "1ee2da7c5755f41079a7949c86a4e063cbbef9107645e2985e49d537b8602449",
+    "git_status":  [
+                       " M outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/ANIM_001_01_Kael_Idle.png",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/ANIM_001_02_Kael_Walk.png",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/ANIM_001_03_Kael_Attack.png",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/ANIM_001_04_Kael_Oathfire_Sheathed.png",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/ANIM_001_05_Kael_Motion_Contact_Sheet.png",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/CHARACTER_REAL_001_bog_wretch.png",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/CHARACTER_REAL_001_ghoul_brute.png",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/CHARACTER_REAL_001_ghoul_gaunt.png",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/CHARACTER_REAL_001_ghoul_stalker.png",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/CHARACTER_REAL_001_gravebound_knight.png",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/PROJECT_STATE.md",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/RECOVERY-003_RESULT.md",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/export_presets.cfg",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/release_reports/latest.json",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_candidates.json",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_manifest.json",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/asset_spawn_helper.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/audio_manager.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/character_animation_driver.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/character_face_driver.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/character_presentation.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/combat_feedback.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/enemy_ai.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/greyfen_life_controller.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/hud.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/interaction_focus_service.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/player_controller.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/qa_browser_telemetry.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/quest_manager.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/quest_presentation_state.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/runtime_asset_anchor.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/runtime_pack_manager.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/runtime_service_registry.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/seamless_world_service.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_build_context.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_composition_router.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_runtime_coordinator.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_spatial_service.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/castle_vargan_section.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/cemetery_section.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/river_section.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/build_runtime_packs.ps1",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/capture_boss_001.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/capture_character_real_portraits.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/capture_world_002.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/gate_profiles.json",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/run_release_gate.ps1",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/run_ticket_gate.ps1",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/sync_runtime_pack_manifest.py",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/test_verify_screenshot_qa_003.py",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_ai_001.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_anim_001.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_audio_001.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_audio_runtime.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_boss_001.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_castle_vargan.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_combat_001.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_engine_001.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_engine_002.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_engine_003.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_engine_004.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_engine_005.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_face_river_sun_001.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_gate_transitions.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_greyfen_life.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_load_qa_002.py",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_master_002.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_master_003.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_mobile_001.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_mon_002.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_motion_quality.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_narr_005.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_packed_startup.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_perf_001.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_012.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_quest_001.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_quest_002.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_quest_004.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_quest_005.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_quest_006.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_recovery_002_foundation.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_river_swimming.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_runtime.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_save_003.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_story_campaign.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_visible_quality.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_visual_003.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_visual_100.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_voice_001.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_water_001.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_web_002.py",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_web_browser.mjs",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_world_001.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_world_003.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_world_012.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_world_014.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_zone_budgets.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/web_boot_shell.html",
+                       " M scripts/deploy_web_update.ps1",
+                       "?? outputs/AshenOathTheRoadBetweenCrowns/scripts/objective_view_model.gd",
+                       "?? outputs/AshenOathTheRoadBetweenCrowns/tools/_inspect_milestone_c_assets.gd",
+                       "?? outputs/AshenOathTheRoadBetweenCrowns/tools/_profile_active_nodes.gd",
+                       "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_objective_view_model.gd",
+                       "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_release_report.py",
+                       "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_runtime_required_components.py",
+                       "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_runtime_smoke.gd"
+                   ],
     "mode":  "full",
     "requested_gate":  "",
     "project":  "outputs/AshenOathTheRoadBetweenCrowns",
+    "artifact":  {
+                     "directory":  "D:\\Projects\\AshenOath\\outputs\\AshenOath_Web",
+                     "total_bytes":  93839270,
+                     "files":  [
+                                   {
+                                       "path":  "index.audio.position.worklet.js",
+                                       "bytes":  2973,
+                                       "sha256":  "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8"
+                                   },
+                                   {
+                                       "path":  "index.audio.worklet.js",
+                                       "bytes":  7298,
+                                       "sha256":  "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3"
+                                   },
+                                   {
+                                       "path":  "index.html",
+                                       "bytes":  12603,
+                                       "sha256":  "febbefc6e57793570538c91c4a89754a9c675ed5231c2c97845812b470e24325"
+                                   },
+                                   {
+                                       "path":  "index.js",
+                                       "bytes":  315759,
+                                       "sha256":  "e3f56ee40e6f84371053db06692cfac15e2c8659547b11c6b2dfa1996dabd981"
+                                   },
+                                   {
+                                       "path":  "index.pck",
+                                       "bytes":  17643144,
+                                       "sha256":  "d673cc403ff71db587691f67c07e6f8af87881c0a459fb36a5c70d8964b63d40"
+                                   },
+                                   {
+                                       "path":  "index.png",
+                                       "bytes":  21443,
+                                       "sha256":  "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e"
+                                   },
+                                   {
+                                       "path":  "index.wasm",
+                                       "bytes":  37700666,
+                                       "sha256":  "26b61ce95247012ab3dca3ff51e96d1cdbff44ee91a8c20a83e150afca83f1b6"
+                                   },
+                                   {
+                                       "path":  "packs/audio.pck",
+                                       "bytes":  2587776,
+                                       "sha256":  "8dcccabb8182063ea6ab961146686703371e417715d4f3bbeb6a3138cbb39774"
+                                   },
+                                   {
+                                       "path":  "packs/campaign.pck",
+                                       "bytes":  882392,
+                                       "sha256":  "bce3236424b857ca3f28b640831c312a8dfc0ee06201d23275e02a7f27143850"
+                                   },
+                                   {
+                                       "path":  "packs/characters.pck",
+                                       "bytes":  5652808,
+                                       "sha256":  "16aff8ce6991431058c661eeda140c28796d586e1f6c1f25f18a7d4aa9733fa0"
+                                   },
+                                   {
+                                       "path":  "packs/monsters.pck",
+                                       "bytes":  1153728,
+                                       "sha256":  "66550fe92f3e558fdd66529487a45283971da9056d5b2abb03e857142d725fb9"
+                                   },
+                                   {
+                                       "path":  "packs/opening.pck",
+                                       "bytes":  27858680,
+                                       "sha256":  "995f2d51b5ca18c6c1baa04258ea182b4b16f574e1d5cefbabcd0faf2deff959"
+                                   }
+                               ],
+                     "pck_sha256":  "d673cc403ff71db587691f67c07e6f8af87881c0a459fb36a5c70d8964b63d40",
+                     "max_bytes":  104857600
+                 },
+    "release_blockers":  [
+                             {
+                                 "id":  "release_integrity",
+                                 "severity":  "blocker",
+                                 "status":  "in_progress"
+                             },
+                             {
+                                 "id":  "traversal_collision_zones",
+                                 "severity":  "high",
+                                 "status":  "functional_but_incomplete"
+                             },
+                             {
+                                 "id":  "characters_npcs",
+                                 "severity":  "high",
+                                 "status":  "visually_rejected"
+                             },
+                             {
+                                 "id":  "monsters_combat",
+                                 "severity":  "high",
+                                 "status":  "functional_but_incomplete"
+                             },
+                             {
+                                 "id":  "world_presentation",
+                                 "severity":  "high",
+                                 "status":  "visually_rejected"
+                             },
+                             {
+                                 "id":  "ui_story_input",
+                                 "severity":  "medium",
+                                 "status":  "in_progress"
+                             },
+                             {
+                                 "id":  "audio",
+                                 "severity":  "medium",
+                                 "status":  "functional_but_incomplete"
+                             },
+                             {
+                                 "id":  "architecture_performance",
+                                 "severity":  "blocker",
+                                 "status":  "in_progress"
+                             }
+                         ],
     "failure":  "",
     "results":  [
                     {
                         "name":  "verify_security_001",
                         "status":  "pass",
-                        "duration_seconds":  0.35,
+                        "duration_seconds":  1.4,
                         "log":  "verify_security_001.log",
                         "warnings":  [
 
@@ -22,7 +245,7 @@
                     {
                         "name":  "verify_recovery_004",
                         "status":  "pass",
-                        "duration_seconds":  0.13,
+                        "duration_seconds":  1.57,
                         "log":  "verify_recovery_004.log",
                         "warnings":  [
 
@@ -32,8 +255,18 @@
                     {
                         "name":  "verify_content_integrity",
                         "status":  "pass",
-                        "duration_seconds":  0.16,
+                        "duration_seconds":  1.09,
                         "log":  "verify_content_integrity.log",
+                        "warnings":  [
+
+                                     ],
+                        "failure":  ""
+                    },
+                    {
+                        "name":  "verify_runtime_required_components",
+                        "status":  "pass",
+                        "duration_seconds":  1.65,
+                        "log":  "verify_runtime_required_components.log",
                         "warnings":  [
 
                                      ],
@@ -42,7 +275,7 @@
                     {
                         "name":  "verify_asset_001_files",
                         "status":  "pass",
-                        "duration_seconds":  0.62,
+                        "duration_seconds":  1.92,
                         "log":  "verify_asset_001_files.log",
                         "warnings":  [
 
@@ -52,7 +285,7 @@
                     {
                         "name":  "verify_prod_002",
                         "status":  "pass",
-                        "duration_seconds":  0.16,
+                        "duration_seconds":  0.97,
                         "log":  "verify_prod_002.log",
                         "warnings":  [
 
@@ -62,8 +295,18 @@
                     {
                         "name":  "verify_prod_003",
                         "status":  "pass",
-                        "duration_seconds":  0.12,
+                        "duration_seconds":  0.98,
                         "log":  "verify_prod_003.log",
+                        "warnings":  [
+
+                                     ],
+                        "failure":  ""
+                    },
+                    {
+                        "name":  "verify_runtime_smoke",
+                        "status":  "pass",
+                        "duration_seconds":  6.75,
+                        "log":  "verify_runtime_smoke.log",
                         "warnings":  [
 
                                      ],
@@ -75,34 +318,24 @@
                         "duration_seconds":  14.24,
                         "log":  "verify_runtime.log",
                         "warnings":  [
-                                         "ERROR: 53 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 291 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Pages in use exist at exit in PagedAllocator:"
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_runtime_regressions",
                         "status":  "pass",
-                        "duration_seconds":  11.94,
+                        "duration_seconds":  13.08,
                         "log":  "verify_runtime_regressions.log",
                         "warnings":  [
-                                         "ERROR: 60 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 386 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Pages in use exist at exit in PagedAllocator:"
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_zone_builder_integrity",
                         "status":  "pass",
-                        "duration_seconds":  0.38,
+                        "duration_seconds":  1.79,
                         "log":  "verify_zone_builder_integrity.log",
                         "warnings":  [
 
@@ -112,99 +345,77 @@
                     {
                         "name":  "verify_gate_transitions",
                         "status":  "pass",
-                        "duration_seconds":  56.59,
+                        "duration_seconds":  184.59,
                         "log":  "verify_gate_transitions.log",
                         "warnings":  [
-                                         "ERROR: 63 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 492 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Pages in use exist at exit in PagedAllocator:"
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_engine_001",
                         "status":  "pass",
-                        "duration_seconds":  6.13,
+                        "duration_seconds":  8.4,
                         "log":  "verify_engine_001.log",
                         "warnings":  [
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Parameter \"material\" is null.",
-                                         "ERROR: Parameter \"material\" is null.",
-                                         "ERROR: 26 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 144 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE"
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_engine_003",
                         "status":  "pass",
-                        "duration_seconds":  8.99,
+                        "duration_seconds":  10.42,
                         "log":  "verify_engine_003.log",
                         "warnings":  [
-                                         "ERROR: 53 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 291 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Pages in use exist at exit in PagedAllocator:"
+
+                                     ],
+                        "failure":  ""
+                    },
+                    {
+                        "name":  "verify_engine_004",
+                        "status":  "pass",
+                        "duration_seconds":  10.85,
+                        "log":  "verify_engine_004.log",
+                        "warnings":  [
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_story_campaign",
                         "status":  "pass",
-                        "duration_seconds":  9.3,
+                        "duration_seconds":  11.14,
                         "log":  "verify_story_campaign.log",
                         "warnings":  [
-                                         "ERROR: 29 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 242 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Pages in use exist at exit in PagedAllocator:"
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_quest_001",
-                        "status":  "pass",
-                        "duration_seconds":  11.55,
-                        "log":  "verify_quest_001.log",
-                        "warnings":  [
-                                         "ERROR: 104 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 549 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Pages in use exist at exit in PagedAllocator:"
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_quest_002",
                         "status":  "pass",
-                        "duration_seconds":  14.09,
+                        "duration_seconds":  11.54,
                         "log":  "verify_quest_002.log",
                         "warnings":  [
-                                         "ERROR: 104 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 561 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Pages in use exist at exit in PagedAllocator:"
+
+                                     ],
+                        "failure":  ""
+                    },
+                    {
+                        "name":  "verify_objective_view_model",
+                        "status":  "pass",
+                        "duration_seconds":  1.74,
+                        "log":  "verify_objective_view_model.log",
+                        "warnings":  [
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_save_001",
                         "status":  "pass",
-                        "duration_seconds":  0.46,
+                        "duration_seconds":  1.47,
                         "log":  "verify_save_001.log",
                         "warnings":  [
 
@@ -214,22 +425,17 @@
                     {
                         "name":  "verify_qa_002",
                         "status":  "pass",
-                        "duration_seconds":  8.42,
+                        "duration_seconds":  7.19,
                         "log":  "verify_qa_002.log",
                         "warnings":  [
-                                         "ERROR: 52 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 270 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Pages in use exist at exit in PagedAllocator:"
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_art_001",
                         "status":  "pass",
-                        "duration_seconds":  1.48,
+                        "duration_seconds":  2.61,
                         "log":  "verify_art_001.log",
                         "warnings":  [
 
@@ -239,7 +445,7 @@
                     {
                         "name":  "verify_asset_001",
                         "status":  "pass",
-                        "duration_seconds":  2.51,
+                        "duration_seconds":  3.23,
                         "log":  "verify_asset_001.log",
                         "warnings":  [
 
@@ -249,7 +455,7 @@
                     {
                         "name":  "verify_character_real_001",
                         "status":  "pass",
-                        "duration_seconds":  1.93,
+                        "duration_seconds":  3.05,
                         "log":  "verify_character_real_001.log",
                         "warnings":  [
 
@@ -259,420 +465,279 @@
                     {
                         "name":  "verify_face_river_sun_001",
                         "status":  "pass",
-                        "duration_seconds":  6.8,
+                        "duration_seconds":  7.38,
                         "log":  "verify_face_river_sun_001.log",
-                        "warnings":  [
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Parameter \"material\" is null.",
-                                         "ERROR: Parameter \"material\" is null.",
-                                         "ERROR: 26 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 144 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE"
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_motion_quality",
-                        "status":  "pass",
-                        "duration_seconds":  6.03,
-                        "log":  "verify_motion_quality.log",
-                        "warnings":  [
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Parameter \"material\" is null.",
-                                         "ERROR: Parameter \"material\" is null.",
-                                         "ERROR: 26 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 144 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE"
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_river_swimming",
-                        "status":  "pass",
-                        "duration_seconds":  6.06,
-                        "log":  "verify_river_swimming.log",
-                        "warnings":  [
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Parameter \"material\" is null.",
-                                         "ERROR: Parameter \"material\" is null.",
-                                         "ERROR: 26 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 144 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE"
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_greyfen_life",
-                        "status":  "pass",
-                        "duration_seconds":  8.75,
-                        "log":  "verify_greyfen_life.log",
-                        "warnings":  [
-                                         "ERROR: 56 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 277 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Pages in use exist at exit in PagedAllocator:"
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_castle_vargan",
-                        "status":  "pass",
-                        "duration_seconds":  23.65,
-                        "log":  "verify_castle_vargan.log",
-                        "warnings":  [
-                                         "ERROR: 27 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 225 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Pages in use exist at exit in PagedAllocator:"
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_audio_runtime",
-                        "status":  "pass",
-                        "duration_seconds":  3.71,
-                        "log":  "verify_audio_runtime.log",
                         "warnings":  [
 
                                      ],
                         "failure":  ""
                     },
                     {
+                        "name":  "verify_motion_quality",
+                        "status":  "pass",
+                        "duration_seconds":  7.63,
+                        "log":  "verify_motion_quality.log",
+                        "warnings":  [
+                                         "ERROR: Parameter \"material\" is null.",
+                                         "ERROR: Parameter \"material\" is null."
+                                     ],
+                        "failure":  ""
+                    },
+                    {
+                        "name":  "verify_river_swimming",
+                        "status":  "pass",
+                        "duration_seconds":  19.28,
+                        "log":  "verify_river_swimming.log",
+                        "warnings":  [
+
+                                     ],
+                        "failure":  ""
+                    },
+                    {
+                        "name":  "verify_greyfen_life",
+                        "status":  "pass",
+                        "duration_seconds":  8.86,
+                        "log":  "verify_greyfen_life.log",
+                        "warnings":  [
+
+                                     ],
+                        "failure":  ""
+                    },
+                    {
+                        "name":  "verify_castle_vargan",
+                        "status":  "pass",
+                        "duration_seconds":  9.97,
+                        "log":  "verify_castle_vargan.log",
+                        "warnings":  [
+
+                                     ],
+                        "failure":  ""
+                    },
+                    {
+                        "name":  "verify_audio_runtime",
+                        "status":  "pass",
+                        "duration_seconds":  2.26,
+                        "log":  "verify_audio_runtime.log",
+                        "warnings":  [
+                                         "WARNING: ObjectDB instances leaked at exit (run with --verbose for details).",
+                                         "ERROR: 4 resources still in use at exit (run with --verbose for details)."
+                                     ],
+                        "failure":  ""
+                    },
+                    {
                         "name":  "verify_audio_001",
                         "status":  "pass",
-                        "duration_seconds":  16.66,
+                        "duration_seconds":  7.93,
                         "log":  "verify_audio_001.log",
                         "warnings":  [
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Parameter \"material\" is null.",
-                                         "ERROR: Parameter \"material\" is null.",
-                                         "ERROR: 26 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 144 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE"
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_visible_quality",
                         "status":  "pass",
-                        "duration_seconds":  20.33,
+                        "duration_seconds":  10.46,
                         "log":  "verify_visible_quality.log",
                         "warnings":  [
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Parameter \"material\" is null.",
-                                         "ERROR: 26 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 144 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE"
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_recovery_002_foundation",
                         "status":  "pass",
-                        "duration_seconds":  15.62,
+                        "duration_seconds":  7.77,
                         "log":  "verify_recovery_002_foundation.log",
                         "warnings":  [
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Parameter \"material\" is null.",
-                                         "ERROR: Parameter \"material\" is null.",
-                                         "ERROR: 26 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 144 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE"
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_navigation_001",
                         "status":  "pass",
-                        "duration_seconds":  11.53,
+                        "duration_seconds":  8.1,
                         "log":  "verify_navigation_001.log",
                         "warnings":  [
-                                         "ERROR: 26 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 144 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Pages in use exist at exit in PagedAllocator:"
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_char_001",
                         "status":  "pass",
-                        "duration_seconds":  8.81,
+                        "duration_seconds":  8.55,
                         "log":  "verify_char_001.log",
                         "warnings":  [
-                                         "ERROR: 26 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 144 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Pages in use exist at exit in PagedAllocator:"
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_anim_001",
                         "status":  "pass",
-                        "duration_seconds":  9.98,
+                        "duration_seconds":  7.88,
                         "log":  "verify_anim_001.log",
                         "warnings":  [
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Parameter \"material\" is null.",
-                                         "ERROR: Parameter \"material\" is null.",
-                                         "ERROR: 26 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 144 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE"
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_combat_001",
                         "status":  "pass",
-                        "duration_seconds":  8.72,
+                        "duration_seconds":  7.36,
                         "log":  "verify_combat_001.log",
                         "warnings":  [
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Parameter \"material\" is null.",
-                                         "ERROR: 26 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 144 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE"
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_ai_001",
                         "status":  "pass",
-                        "duration_seconds":  10.63,
+                        "duration_seconds":  10.95,
                         "log":  "verify_ai_001.log",
                         "warnings":  [
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Parameter \"material\" is null.",
-                                         "ERROR: Parameter \"material\" is null.",
-                                         "ERROR: 26 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 144 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE"
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_oath_001",
                         "status":  "pass",
-                        "duration_seconds":  9.73,
+                        "duration_seconds":  7.92,
                         "log":  "verify_oath_001.log",
                         "warnings":  [
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Parameter \"material\" is null.",
-                                         "ERROR: 26 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 135 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE"
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_ui_001",
                         "status":  "pass",
-                        "duration_seconds":  7.12,
+                        "duration_seconds":  7.32,
                         "log":  "verify_ui_001.log",
                         "warnings":  [
-                                         "ERROR: 26 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 135 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Pages in use exist at exit in PagedAllocator:"
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_input_001",
                         "status":  "pass",
-                        "duration_seconds":  5.94,
+                        "duration_seconds":  6.65,
                         "log":  "verify_input_001.log",
                         "warnings":  [
-                                         "ERROR: 26 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Pages in use exist at exit in PagedAllocator:",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 135 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit."
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_mobile_001",
                         "status":  "pass",
-                        "duration_seconds":  6.07,
+                        "duration_seconds":  7.73,
                         "log":  "verify_mobile_001.log",
                         "warnings":  [
-                                         "ERROR: 26 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 135 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Pages in use exist at exit in PagedAllocator:"
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_world_001",
                         "status":  "pass",
-                        "duration_seconds":  5.91,
+                        "duration_seconds":  7.01,
                         "log":  "verify_world_001.log",
                         "warnings":  [
-                                         "ERROR: 26 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 135 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Pages in use exist at exit in PagedAllocator:"
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_world_002",
                         "status":  "pass",
-                        "duration_seconds":  6.12,
+                        "duration_seconds":  7.77,
                         "log":  "verify_world_002.log",
                         "warnings":  [
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Parameter \"material\" is null.",
-                                         "ERROR: Parameter \"material\" is null.",
-                                         "ERROR: 26 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 144 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE"
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_world_003",
                         "status":  "pass",
-                        "duration_seconds":  8.05,
+                        "duration_seconds":  9.68,
                         "log":  "verify_world_003.log",
                         "warnings":  [
-                                         "ERROR: 53 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 282 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Pages in use exist at exit in PagedAllocator:"
+
+                                     ],
+                        "failure":  ""
+                    },
+                    {
+                        "name":  "verify_world_014",
+                        "status":  "pass",
+                        "duration_seconds":  8.83,
+                        "log":  "verify_world_014.log",
+                        "warnings":  [
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_zone_budgets",
                         "status":  "pass",
-                        "duration_seconds":  12.93,
+                        "duration_seconds":  14.04,
                         "log":  "verify_zone_budgets.log",
                         "warnings":  [
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Parameter \"material\" is null.",
-                                         "ERROR: Parameter \"material\" is null.",
-                                         "ERROR: 58 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 390 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE"
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_visual_003",
                         "status":  "pass",
-                        "duration_seconds":  6.63,
+                        "duration_seconds":  8.25,
                         "log":  "verify_visual_003.log",
                         "warnings":  [
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Parameter \"material\" is null.",
-                                         "ERROR: 26 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 144 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE"
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_visual_100",
                         "status":  "pass",
-                        "duration_seconds":  6.13,
+                        "duration_seconds":  7.86,
                         "log":  "verify_visual_100.log",
                         "warnings":  [
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Parameter \"material\" is null.",
-                                         "ERROR: Parameter \"material\" is null.",
-                                         "ERROR: 26 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 144 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE"
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_master_002",
                         "status":  "pass",
-                        "duration_seconds":  6.62,
+                        "duration_seconds":  7.69,
                         "log":  "verify_master_002.log",
                         "warnings":  [
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Parameter \"material\" is null.",
-                                         "ERROR: Parameter \"material\" is null.",
-                                         "ERROR: 26 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE",
-                                         "ERROR: 144 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit."
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_master_003",
                         "status":  "pass",
-                        "duration_seconds":  6.14,
+                        "duration_seconds":  7.75,
                         "log":  "verify_master_003.log",
                         "warnings":  [
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Parameter \"material\" is null.",
-                                         "ERROR: Parameter \"material\" is null.",
-                                         "ERROR: 26 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 144 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE"
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_mat_001",
                         "status":  "pass",
-                        "duration_seconds":  1.18,
+                        "duration_seconds":  1.83,
                         "log":  "verify_mat_001.log",
                         "warnings":  [
 
@@ -682,7 +747,7 @@
                     {
                         "name":  "verify_char_002",
                         "status":  "pass",
-                        "duration_seconds":  1.68,
+                        "duration_seconds":  2.83,
                         "log":  "verify_char_002.log",
                         "warnings":  [
 
@@ -692,7 +757,7 @@
                     {
                         "name":  "verify_mon_001",
                         "status":  "pass",
-                        "duration_seconds":  0.86,
+                        "duration_seconds":  1.69,
                         "log":  "verify_mon_001.log",
                         "warnings":  [
 
@@ -702,7 +767,7 @@
                     {
                         "name":  "verify_vfx_001",
                         "status":  "pass",
-                        "duration_seconds":  0.74,
+                        "duration_seconds":  1.63,
                         "log":  "verify_vfx_001.log",
                         "warnings":  [
 
@@ -712,24 +777,17 @@
                     {
                         "name":  "verify_water_001",
                         "status":  "pass",
-                        "duration_seconds":  6.13,
+                        "duration_seconds":  8.04,
                         "log":  "verify_water_001.log",
                         "warnings":  [
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Parameter \"material\" is null.",
-                                         "ERROR: Parameter \"material\" is null.",
-                                         "ERROR: 26 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 144 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE"
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_gameplay_001",
                         "status":  "pass",
-                        "duration_seconds":  0.37,
+                        "duration_seconds":  1.29,
                         "log":  "verify_gameplay_001.log",
                         "warnings":  [
 
@@ -739,7 +797,7 @@
                     {
                         "name":  "verify_combat_002",
                         "status":  "pass",
-                        "duration_seconds":  1.11,
+                        "duration_seconds":  2.51,
                         "log":  "verify_combat_002.log",
                         "warnings":  [
 
@@ -749,7 +807,7 @@
                     {
                         "name":  "verify_ai_002",
                         "status":  "pass",
-                        "duration_seconds":  0.37,
+                        "duration_seconds":  1.33,
                         "log":  "verify_ai_002.log",
                         "warnings":  [
 
@@ -759,7 +817,7 @@
                     {
                         "name":  "verify_inv_001",
                         "status":  "pass",
-                        "duration_seconds":  0.37,
+                        "duration_seconds":  1.27,
                         "log":  "verify_inv_001.log",
                         "warnings":  [
 
@@ -769,7 +827,7 @@
                     {
                         "name":  "verify_dialogue_001",
                         "status":  "pass",
-                        "duration_seconds":  0.37,
+                        "duration_seconds":  1.86,
                         "log":  "verify_dialogue_001.log",
                         "warnings":  [
 
@@ -779,7 +837,7 @@
                     {
                         "name":  "verify_narr_001",
                         "status":  "pass",
-                        "duration_seconds":  0.37,
+                        "duration_seconds":  1.27,
                         "log":  "verify_narr_001.log",
                         "warnings":  [
 
@@ -789,7 +847,7 @@
                     {
                         "name":  "verify_world_004",
                         "status":  "pass",
-                        "duration_seconds":  0.39,
+                        "duration_seconds":  1.83,
                         "log":  "verify_world_004.log",
                         "warnings":  [
 
@@ -799,7 +857,7 @@
                     {
                         "name":  "verify_quest_003",
                         "status":  "pass",
-                        "duration_seconds":  0.36,
+                        "duration_seconds":  1.56,
                         "log":  "verify_quest_003.log",
                         "warnings":  [
 
@@ -809,7 +867,7 @@
                     {
                         "name":  "verify_world_005",
                         "status":  "pass",
-                        "duration_seconds":  0.38,
+                        "duration_seconds":  1.39,
                         "log":  "verify_world_005.log",
                         "warnings":  [
 
@@ -819,22 +877,17 @@
                     {
                         "name":  "verify_quest_004",
                         "status":  "pass",
-                        "duration_seconds":  9.06,
+                        "duration_seconds":  9.79,
                         "log":  "verify_quest_004.log",
                         "warnings":  [
-                                         "ERROR: 27 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 225 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Pages in use exist at exit in PagedAllocator:"
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_world_006",
                         "status":  "pass",
-                        "duration_seconds":  0.37,
+                        "duration_seconds":  1.38,
                         "log":  "verify_world_006.log",
                         "warnings":  [
 
@@ -844,68 +897,47 @@
                     {
                         "name":  "verify_quest_005",
                         "status":  "pass",
-                        "duration_seconds":  7.1,
+                        "duration_seconds":  10.26,
                         "log":  "verify_quest_005.log",
                         "warnings":  [
-                                         "ERROR: 26 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 159 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Pages in use exist at exit in PagedAllocator:"
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_boss_001",
                         "status":  "pass",
-                        "duration_seconds":  6.54,
+                        "duration_seconds":  7.82,
                         "log":  "verify_boss_001.log",
                         "warnings":  [
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Parameter \"material\" is null.",
-                                         "ERROR: 26 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 139 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE"
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_side_001",
                         "status":  "pass",
-                        "duration_seconds":  17.88,
+                        "duration_seconds":  15.62,
                         "log":  "verify_side_001.log",
                         "warnings":  [
-                                         "ERROR: 208 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 1089 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Pages in use exist at exit in PagedAllocator:"
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_quest_006",
                         "status":  "pass",
-                        "duration_seconds":  6,
+                        "duration_seconds":  7.36,
                         "log":  "verify_quest_006.log",
                         "warnings":  [
-                                         "ERROR: 26 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy9DummyMeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage13DummyMaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N13RendererDummy15MaterialStorage11DummyShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 135 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "Godot_v4.6.3-stable_win64_console.exe : ERROR: Pages in use exist at exit in PagedAllocator:"
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_qa_004",
                         "status":  "pass",
-                        "duration_seconds":  1.51,
+                        "duration_seconds":  2.73,
                         "log":  "verify_qa_004.log",
                         "warnings":  [
 
@@ -915,7 +947,7 @@
                     {
                         "name":  "verify_perf_003",
                         "status":  "pass",
-                        "duration_seconds":  0.4,
+                        "duration_seconds":  0.94,
                         "log":  "verify_perf_003.log",
                         "warnings":  [
 
@@ -925,28 +957,8 @@
                     {
                         "name":  "verify_perf_001",
                         "status":  "pass",
-                        "duration_seconds":  89.98,
+                        "duration_seconds":  86.99,
                         "log":  "verify_perf_001.log",
-                        "warnings":  [
-                                         "ERROR: 52 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N5GLES34MeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N5GLES38MaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N5GLES36ShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 314 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneGLES323GeometryInstanceSurfaceE",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneGLES321GeometryInstanceGLES3E",
-                                         "ERROR: 1 shaders of type SceneShaderGLES3 were never freed",
-                                         "ERROR: Buffer with GL ID of 352: leaked 480 bytes.",
-                                         "ERROR: Buffer with GL ID of 353: leaked 192 bytes.",
-                                         "ERROR: Buffer with GL ID of 354: leaked 72 bytes."
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_qa_005",
-                        "status":  "pass",
-                        "duration_seconds":  1.6,
-                        "log":  "verify_qa_005.log",
                         "warnings":  [
 
                                      ],
@@ -955,27 +967,17 @@
                     {
                         "name":  "capture_slice_screenshots",
                         "status":  "pass",
-                        "duration_seconds":  96.75,
+                        "duration_seconds":  150.68,
                         "log":  "capture_slice_screenshots.log",
                         "warnings":  [
-                                         "ERROR: 187 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N5GLES34MeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N5GLES38MaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N5GLES36ShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 1183 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneGLES323GeometryInstanceSurfaceE",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneGLES321GeometryInstanceGLES3E",
-                                         "ERROR: 1 shaders of type SceneShaderGLES3 were never freed",
-                                         "ERROR: Buffer with GL ID of 169: leaked 480 bytes.",
-                                         "ERROR: Buffer with GL ID of 170: leaked 192 bytes.",
-                                         "ERROR: Buffer with GL ID of 171: leaked 72 bytes."
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "capture_anim_001",
                         "status":  "pass",
-                        "duration_seconds":  7.82,
+                        "duration_seconds":  14.14,
                         "log":  "capture_anim_001.log",
                         "warnings":  [
 
@@ -985,159 +987,77 @@
                     {
                         "name":  "capture_world_001",
                         "status":  "pass",
-                        "duration_seconds":  12.33,
+                        "duration_seconds":  13.45,
                         "log":  "capture_world_001.log",
                         "warnings":  [
-                                         "ERROR: 26 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N5GLES34MeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N5GLES38MaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N5GLES36ShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 135 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneGLES323GeometryInstanceSurfaceE",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneGLES321GeometryInstanceGLES3E",
-                                         "ERROR: 1 shaders of type SceneShaderGLES3 were never freed",
-                                         "ERROR: Buffer with GL ID of 169: leaked 480 bytes.",
-                                         "ERROR: Buffer with GL ID of 170: leaked 192 bytes.",
-                                         "ERROR: Buffer with GL ID of 171: leaked 72 bytes."
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "capture_world_002",
                         "status":  "pass",
-                        "duration_seconds":  14.76,
+                        "duration_seconds":  17.36,
                         "log":  "capture_world_002.log",
                         "warnings":  [
-                                         "ERROR: Parameter \"material\" is null.",
-                                         "ERROR: Parameter \"material\" is null.",
-                                         "ERROR: Parameter \"material\" is null.",
-                                         "ERROR: Parameter \"material\" is null.",
-                                         "ERROR: Parameter \"material\" is null.",
-                                         "ERROR: Parameter \"material\" is null.",
-                                         "ERROR: Parameter \"material\" is null.",
-                                         "ERROR: Parameter \"material\" is null.",
-                                         "ERROR: 26 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N5GLES34MeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N5GLES38MaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N5GLES36ShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 144 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneGLES323GeometryInstanceSurfaceE",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneGLES321GeometryInstanceGLES3E",
-                                         "ERROR: 1 shaders of type SceneShaderGLES3 were never freed",
-                                         "ERROR: Buffer with GL ID of 169: leaked 480 bytes.",
-                                         "ERROR: Buffer with GL ID of 170: leaked 192 bytes.",
-                                         "ERROR: Buffer with GL ID of 171: leaked 72 bytes."
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "capture_world_003",
                         "status":  "pass",
-                        "duration_seconds":  16.7,
+                        "duration_seconds":  16.13,
                         "log":  "capture_world_003.log",
                         "warnings":  [
-                                         "ERROR: 26 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N5GLES34MeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N5GLES38MaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N5GLES36ShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 135 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneGLES323GeometryInstanceSurfaceE",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneGLES321GeometryInstanceGLES3E",
-                                         "ERROR: 1 shaders of type SceneShaderGLES3 were never freed",
-                                         "ERROR: Buffer with GL ID of 169: leaked 480 bytes.",
-                                         "ERROR: Buffer with GL ID of 170: leaked 192 bytes.",
-                                         "ERROR: Buffer with GL ID of 171: leaked 72 bytes."
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "capture_world_004",
                         "status":  "pass",
-                        "duration_seconds":  13.88,
+                        "duration_seconds":  16.16,
                         "log":  "capture_world_004.log",
                         "warnings":  [
-                                         "ERROR: 28 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N5GLES34MeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N5GLES38MaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N5GLES36ShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 170 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneGLES323GeometryInstanceSurfaceE",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneGLES321GeometryInstanceGLES3E",
-                                         "ERROR: 1 shaders of type SceneShaderGLES3 were never freed",
-                                         "ERROR: Buffer with GL ID of 169: leaked 480 bytes.",
-                                         "ERROR: Buffer with GL ID of 170: leaked 192 bytes.",
-                                         "ERROR: Buffer with GL ID of 171: leaked 72 bytes."
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "capture_world_005",
                         "status":  "pass",
-                        "duration_seconds":  15.11,
+                        "duration_seconds":  17.13,
                         "log":  "capture_world_005.log",
                         "warnings":  [
-                                         "ERROR: 28 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N5GLES34MeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N5GLES38MaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N5GLES36ShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 193 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneGLES323GeometryInstanceSurfaceE",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneGLES321GeometryInstanceGLES3E",
-                                         "ERROR: 1 shaders of type SceneShaderGLES3 were never freed",
-                                         "ERROR: Buffer with GL ID of 169: leaked 480 bytes.",
-                                         "ERROR: Buffer with GL ID of 170: leaked 192 bytes.",
-                                         "ERROR: Buffer with GL ID of 171: leaked 72 bytes."
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "capture_world_006",
                         "status":  "pass",
-                        "duration_seconds":  12.94,
+                        "duration_seconds":  16.38,
                         "log":  "capture_world_006.log",
                         "warnings":  [
-                                         "ERROR: 26 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N5GLES34MeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N5GLES38MaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N5GLES36ShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 149 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneGLES323GeometryInstanceSurfaceE",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneGLES321GeometryInstanceGLES3E",
-                                         "ERROR: 1 shaders of type SceneShaderGLES3 were never freed",
-                                         "ERROR: Buffer with GL ID of 169: leaked 480 bytes.",
-                                         "ERROR: Buffer with GL ID of 170: leaked 192 bytes.",
-                                         "ERROR: Buffer with GL ID of 171: leaked 72 bytes."
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "capture_boss_001",
                         "status":  "pass",
-                        "duration_seconds":  10.51,
+                        "duration_seconds":  13.29,
                         "log":  "capture_boss_001.log",
                         "warnings":  [
-                                         "ERROR: Parameter \"material\" is null.",
-                                         "ERROR: Parameter \"material\" is null.",
-                                         "ERROR: Parameter \"material\" is null.",
-                                         "ERROR: Parameter \"material\" is null.",
-                                         "ERROR: 26 RID allocations of type \u0027P12GodotShape3D\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N5GLES34MeshE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N5GLES38MaterialE\u0027 were leaked at exit.",
-                                         "ERROR: 1 RID allocations of type \u0027N5GLES36ShaderE\u0027 were leaked at exit.",
-                                         "ERROR: 139 RID allocations of type \u0027N17RendererSceneCull8InstanceE\u0027 were leaked at exit.",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneGLES323GeometryInstanceSurfaceE",
-                                         "ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneGLES321GeometryInstanceGLES3E",
-                                         "ERROR: 1 shaders of type SceneShaderGLES3 were never freed",
-                                         "ERROR: Buffer with GL ID of 169: leaked 480 bytes.",
-                                         "ERROR: Buffer with GL ID of 170: leaked 192 bytes.",
-                                         "ERROR: Buffer with GL ID of 171: leaked 72 bytes."
+
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_screenshot_qa_003",
                         "status":  "pass",
-                        "duration_seconds":  0.94,
+                        "duration_seconds":  2.21,
                         "log":  "verify_screenshot_qa_003.log",
                         "warnings":  [
 
@@ -1147,7 +1067,7 @@
                     {
                         "name":  "verify_qa_006",
                         "status":  "pass",
-                        "duration_seconds":  0.55,
+                        "duration_seconds":  2.24,
                         "log":  "verify_qa_006.log",
                         "warnings":  [
 
@@ -1157,7 +1077,7 @@
                     {
                         "name":  "verify_web_001",
                         "status":  "pass",
-                        "duration_seconds":  0.14,
+                        "duration_seconds":  1.07,
                         "log":  "verify_web_001.log",
                         "warnings":  [
 
@@ -1167,7 +1087,7 @@
                     {
                         "name":  "verify_web_002",
                         "status":  "pass",
-                        "duration_seconds":  0.12,
+                        "duration_seconds":  1.02,
                         "log":  "verify_web_002.log",
                         "warnings":  [
 
@@ -1177,7 +1097,7 @@
                     {
                         "name":  "web_export",
                         "status":  "pass",
-                        "duration_seconds":  160.76,
+                        "duration_seconds":  200.31,
                         "log":  "web_export.log",
                         "warnings":  [
 
@@ -1187,7 +1107,7 @@
                     {
                         "name":  "verify_web_export",
                         "status":  "pass",
-                        "duration_seconds":  0.97,
+                        "duration_seconds":  1.48,
                         "log":  "verify_web_export.log",
                         "warnings":  [
 
@@ -1197,7 +1117,7 @@
                     {
                         "name":  "packed_startup",
                         "status":  "pass",
-                        "duration_seconds":  1.89,
+                        "duration_seconds":  7.46,
                         "log":  "packed_startup.log",
                         "warnings":  [
 
@@ -1207,7 +1127,7 @@
                     {
                         "name":  "verify_web_browser",
                         "status":  "pass",
-                        "duration_seconds":  111.97,
+                        "duration_seconds":  129.28,
                         "log":  "verify_web_browser.log",
                         "warnings":  [
 
@@ -1217,7 +1137,7 @@
                     {
                         "name":  "qa_web_export",
                         "status":  "pass",
-                        "duration_seconds":  20.11,
+                        "duration_seconds":  56.41,
                         "log":  "qa_web_export.log",
                         "warnings":  [
 
@@ -1227,7 +1147,7 @@
                     {
                         "name":  "verify_qa_002",
                         "status":  "pass",
-                        "duration_seconds":  9,
+                        "duration_seconds":  8.12,
                         "log":  "verify_qa_002.log",
                         "warnings":  [
 
@@ -1237,7 +1157,7 @@
                     {
                         "name":  "verify_mobile_browser",
                         "status":  "pass",
-                        "duration_seconds":  100.29,
+                        "duration_seconds":  103.87,
                         "log":  "verify_mobile_browser.log",
                         "warnings":  [
 
@@ -1247,7 +1167,7 @@
                     {
                         "name":  "verify_web_002_browser",
                         "status":  "pass",
-                        "duration_seconds":  796.57,
+                        "duration_seconds":  766.64,
                         "log":  "verify_web_002_browser.log",
                         "warnings":  [
 
@@ -1257,12 +1177,25 @@
                     {
                         "name":  "verify_web_002_mobile",
                         "status":  "pass",
-                        "duration_seconds":  749.75,
+                        "duration_seconds":  538.3,
                         "log":  "verify_web_002_mobile.log",
                         "warnings":  [
 
                                      ],
                         "failure":  ""
+                    },
+                    {
+                        "name":  "verify_release_report",
+                        "status":  "pass",
+                        "duration_seconds":  2.84,
+                        "log":  "verify_release_report.log",
+                        "warnings":  [
+
+                                     ],
+                        "failure":  ""
                     }
-                ]
+                ],
+    "screenshots":  {
+
+                    }
 }

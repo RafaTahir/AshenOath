@@ -46,6 +46,7 @@ var recorded_library_ready := false
 var voice_library_ready := false
 var audio_bootstrap_started := false
 var runtime_file_assets_available := true
+var owned_timers: Array[Timer] = []
 
 func _process(delta: float) -> void:
 	for event_name in event_cooldowns.keys():
@@ -127,6 +128,7 @@ func _build_menu_library() -> void:
 func _exit_tree() -> void:
 	# Release generated streams before Godot tears down the audio server. This
 	# keeps short headless/Web startup checks from retaining the menu stream.
+	_cancel_owned_timers()
 	if music_transition_tween != null and music_transition_tween.is_valid():
 		music_transition_tween.kill()
 	for player in transient_players:
@@ -146,6 +148,29 @@ func _exit_tree() -> void:
 	music.clear()
 	ambient_streams.clear()
 
+func _create_owned_timer(seconds: float, ignore_time_scale: bool = false) -> Timer:
+	var timer := Timer.new()
+	timer.name = "AudioOwnedTimer_%d" % owned_timers.size()
+	timer.one_shot = true
+	timer.wait_time = maxf(seconds, 0.001)
+	timer.ignore_time_scale = ignore_time_scale
+	add_child(timer)
+	owned_timers.append(timer)
+	timer.timeout.connect(func():
+		owned_timers.erase(timer)
+		if is_instance_valid(timer):
+			timer.queue_free()
+	)
+	timer.start()
+	return timer
+
+func _cancel_owned_timers() -> void:
+	for timer in owned_timers.duplicate():
+		if timer != null and is_instance_valid(timer):
+			timer.stop()
+			timer.queue_free()
+	owned_timers.clear()
+
 func _release_player(player: AudioStreamPlayer) -> void:
 	if player == null or not is_instance_valid(player):
 		return
@@ -162,11 +187,11 @@ func _prewarm_common_cues() -> void:
 		player.volume_db = -80.0
 		player.play()
 		warmers.append(player)
-	get_tree().create_timer(0.12, true, false, true).timeout.connect(func():
+	_create_owned_timer(0.12, true).timeout.connect(func():
 		for player in warmers:
 			if is_instance_valid(player):
 				player.stop()
-	, CONNECT_ONE_SHOT)
+	)
 
 func set_master_volume(linear_volume: float) -> void:
 	master_volume_linear = clamp(linear_volume, 0.0, 1.0)
@@ -506,7 +531,7 @@ func play_music_cue(cue_id: String, next_state: String = "") -> void:
 	if sounds.has(cue_id):
 		play_event(cue_id, 0.015)
 	if next_state != "":
-		var timer = get_tree().create_timer(0.7)
+		var timer := _create_owned_timer(0.7)
 		timer.timeout.connect(func(): set_music_state(next_state))
 
 func play_footstep(zone_id: String, on_road: bool, surface: String = "") -> void:

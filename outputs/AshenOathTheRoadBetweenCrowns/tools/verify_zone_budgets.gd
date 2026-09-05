@@ -33,10 +33,10 @@ func _initialize() -> void:
 	_verify_zone(game, "vargan_court_potato")
 	_write_report()
 	game.settings.set_quality_preset("balanced")
-	# Print the result before releasing the multi-zone test tree. The renderer
-	# can emit shutdown-only material/RID diagnostics during that release; they
-	# must appear after the pass marker for the authoritative runner to classify
-	# them correctly.
+	# Retire the multi-zone test tree through the same staged lifecycle as the
+	# runtime. This keeps shutdown-only renderer diagnostics after the explicit
+	# phase marker while active-render errors remain fatal.
+	await _shutdown_game(game)
 	_finish()
 
 func _verify_zone(game, zone_id: String) -> void:
@@ -73,6 +73,20 @@ func _write_report() -> void:
 func _frames(count: int) -> void:
 	for _index in range(count):
 		await process_frame
+
+func _shutdown_game(game: Node) -> void:
+	if is_instance_valid(game) and game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+		await _frames(20)
+	if is_instance_valid(game) and game.has_method("finalize_resource_shutdown"):
+		game.finalize_resource_shutdown()
+		await _frames(12)
+	print("VERIFIER_PHASE: SHUTDOWN")
+	if is_instance_valid(game):
+		game.queue_free()
+		await _frames(8)
+	RenderingServer.force_sync()
+	await _frames(4)
 
 func _check(condition: bool, message: String) -> void:
 	if not condition:

@@ -6,10 +6,11 @@ var failures := 0
 func _initialize() -> void:
 	var director := FileAccess.get_file_as_string("res://scripts/quest_beat_director.gd")
 	var game_source := FileAccess.get_file_as_string("res://scripts/game.gd")
+	var presentation_source := FileAccess.get_file_as_string("res://scripts/quest_presentation_state.gd")
 	var quest_data = JSON.parse_string(FileAccess.get_file_as_string("res://data/quests.json"))
 	check("class_name QuestBeatDirector" in director, "QuestBeatDirector class is missing")
 	check("decorate_tracker" in director and "get_next_action" in director, "Quest beat presentation contract is incomplete")
-	check("quest_beats.refresh()" in game_source and "quest_beats.decorate_tracker" in game_source, "HUD is not using the authoritative quest beat view")
+	check("get_objective_view_model" in presentation_source and "zone_runtime_coordinator.refresh_presentation()" in game_source, "HUD is not using the authoritative objective view")
 	check("quest_beats" in FileAccess.get_file_as_string("res://scripts/save_manager.gd"), "Quest beat save migration is missing")
 	check(director.find("const BEATS") >= 0 and director.find("func refresh") >= 0, "Quest beat source is not readable")
 	var beat_director := QuestBeatDirector.new()

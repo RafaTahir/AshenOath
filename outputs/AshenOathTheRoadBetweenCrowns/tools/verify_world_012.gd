@@ -53,7 +53,7 @@ func _initialize() -> void:
 	_assert(meshes <= 520, "Greyfen exceeds WORLD-012 mesh budget: %d" % meshes)
 	_assert(lights <= 8, "Greyfen exceeds eight-light budget: %d" % lights)
 	print("WORLD-012 METRICS nodes=%d meshes=%d lights=%d" % [nodes, meshes, lights])
-	_finish(game)
+	await _finish(game)
 
 func _route_clear(service: Node, start: Vector3, destination: Vector3) -> bool:
 	var route: Array = service.build_route(start, destination, 0.7)
@@ -84,6 +84,20 @@ func _frames(count: int) -> void:
 	for _index in range(count):
 		await process_frame
 
+func _shutdown_game(game: Node) -> void:
+	if is_instance_valid(game) and game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+		await _frames(20)
+	if is_instance_valid(game) and game.has_method("finalize_resource_shutdown"):
+		game.finalize_resource_shutdown()
+		await _frames(12)
+	print("VERIFIER_PHASE: SHUTDOWN")
+	if is_instance_valid(game):
+		game.queue_free()
+		await _frames(8)
+	RenderingServer.force_sync()
+	await _frames(4)
+
 func _assert(condition: bool, message: String) -> void:
 	if condition:
 		return
@@ -91,13 +105,11 @@ func _assert(condition: bool, message: String) -> void:
 	push_error(message)
 
 func _finish(game = null) -> void:
-	if game != null and is_instance_valid(game):
-		game.free()
 	if failures.is_empty():
 		print("WORLD-012 VERIFIER: PASS - authored Greyfen detail and route safety")
-		quit(0)
-		return
-	print("WORLD-012 VERIFIER: FAIL (%d)" % failures.size())
-	for failure in failures:
-		print("- %s" % failure)
-	quit(1)
+	else:
+		print("WORLD-012 VERIFIER: FAIL (%d)" % failures.size())
+		for failure in failures:
+			print("- %s" % failure)
+	await _shutdown_game(game)
+	quit(0 if failures.is_empty() else 1)

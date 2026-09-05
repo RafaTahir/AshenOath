@@ -70,7 +70,7 @@ func _verify_runtime_snapshot() -> void:
 	var telemetry_script := load(TELEMETRY) as GDScript
 	_check(telemetry_script != null, "QA telemetry script does not load")
 	if telemetry_script == null:
-		game.queue_free()
+		await _shutdown_game(game, null)
 		return
 	var telemetry: Node = telemetry_script.new()
 	root.add_child(telemetry)
@@ -88,8 +88,27 @@ func _verify_runtime_snapshot() -> void:
 	for target in ["wychwood", "deep_wood", "vargan_approach"]:
 		_check(target in targets, "Runtime telemetry omitted the %s gate" % target)
 	_check(not bool(telemetry.get("enabled")), "QA telemetry enabled outside a query-gated Web run")
-	telemetry.queue_free()
-	game.queue_free()
+	await _shutdown_game(game, telemetry)
+
+func _shutdown_game(game: Node, telemetry: Node) -> void:
+	if is_instance_valid(game) and game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+		await _frames(20)
+	if is_instance_valid(game) and game.has_method("finalize_resource_shutdown"):
+		game.finalize_resource_shutdown()
+		await _frames(12)
+	print("VERIFIER_PHASE: SHUTDOWN")
+	if is_instance_valid(telemetry):
+		telemetry.queue_free()
+	if is_instance_valid(game):
+		game.queue_free()
+		await _frames(8)
+	RenderingServer.force_sync()
+	await _frames(4)
+
+func _frames(count: int) -> void:
+	for _index in range(count):
+		await process_frame
 
 func _read(path: String) -> String:
 	_check(FileAccess.file_exists(path), "Missing QA-002 file: %s" % path)

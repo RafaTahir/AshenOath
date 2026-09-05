@@ -3,6 +3,7 @@ param(
     [string[]]$ChangedViews = @(),
     [string[]]$ChangedFiles = @(),
     [string]$BaseRef = "HEAD",
+    [int]$TimeoutSeconds = 180,
     [switch]$DryRun,
     [switch]$NoCache,
     [switch]$ForceWeb
@@ -20,11 +21,14 @@ if ([string]::IsNullOrWhiteSpace($Godot)) {
 	$Godot = Get-ChildItem -LiteralPath $env:USERPROFILE -Recurse -Filter "Godot_v4.6.3-stable_win64_console.exe" -File -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName
 }
 $Python = "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe"
+$Node = "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe"
+if (!(Test-Path -LiteralPath $Node)) { throw "Bundled Node runtime missing: $Node" }
 $ProfilesPath = Join-Path $PSScriptRoot "gate_profiles.json"
 $Logs = Join-Path $Project ".release-gate\ticket"
 $CacheDirectory = Join-Path $Project ".verification-cache"
 $CachePath = Join-Path $CacheDirectory "ticket-gates.json"
 $Web = Join-Path (Split-Path -Parent $Project) "AshenOath_Web"
+$QAWeb = Join-Path (Split-Path -Parent $Project) ".release-gate\AshenOath_QA"
 
 if (!(Test-Path -LiteralPath $ProfilesPath)) { throw "Gate profiles missing: $ProfilesPath" }
 $Configuration = Get-Content -LiteralPath $ProfilesPath -Raw | ConvertFrom-Json
@@ -138,6 +142,31 @@ function Write-Cache([hashtable]$Cache) {
     $Cache | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $CachePath -Encoding utf8
 }
 
+function Prepare-QAWebArtifact([hashtable]$Cache, [string[]]$Inputs) {
+    # The browser route harness requires the disposable QA preset because the
+    # production export deliberately excludes its read-only telemetry adapter.
+    # Keep the QA artifact outside tracked Web output and copy only the already
+    # verified runtime packs beside it.
+    New-Item -ItemType Directory -Force -Path $QAWeb | Out-Null
+    Invoke-Compact "qa_web_export" $Godot @(
+        "--headless", "--path", $Project, "--export-release", "Web QA Browser"
+    ) $Inputs $Cache
+    $qaIndex = Join-Path $QAWeb "index.html"
+    if (!(Test-Path -LiteralPath $qaIndex)) {
+        throw "Web QA export did not produce $qaIndex"
+    }
+    $packSource = Join-Path $Project ".release-gate\runtime-packs"
+    $packDestination = Join-Path $QAWeb "packs"
+    New-Item -ItemType Directory -Force -Path $packDestination | Out-Null
+    foreach ($packName in @("opening", "campaign", "characters", "monsters", "audio")) {
+        $source = Join-Path $packSource "$packName.pck"
+        if (!(Test-Path -LiteralPath $source)) {
+            throw "Verified runtime pack is missing for QA browser export: $source"
+        }
+        Copy-Item -LiteralPath $source -Destination (Join-Path $packDestination "$packName.pck") -Force
+    }
+}
+
 function Invoke-Compact(
     [string]$Name,
     [string]$Executable,
@@ -160,6 +189,7 @@ function Invoke-Compact(
         Set-Content -LiteralPath $engineLogPath -Value "" -Encoding utf8
     }
     $timer = [Diagnostics.Stopwatch]::StartNew()
+    $timedOut = $false
     $previousPreference = $ErrorActionPreference
     $ErrorActionPreference = "Continue"
     try {
@@ -170,10 +200,17 @@ function Invoke-Compact(
             # Keep it separate from PowerShell's redirected summary stream.
             $invocationArguments = @("--log-file", "$log.godot.log") + $invocationArguments
         }
-        if ($Executable -match "Godot") {
+        if ($Executable -match "Godot.*console") {
+            # Console Godot already propagates the verifier exit code reliably.
+            # Invoke it directly so wrapper process state cannot turn a clean
+            # verifier result into a false ticket failure.
+            & $Executable @invocationArguments 1> $log 2> $stderrLogPath
+            $exitCode = $LASTEXITCODE
+        } elseif ($Executable -match "Godot") {
             # The Windows Godot release executable is a GUI-subsystem process,
             # so '&' can return before the verifier has finished. Start-Process
-            # with -Wait keeps ticket gates truthful on both executable forms.
+            # with a bounded wait keeps ticket gates truthful on both executable
+            # forms and prevents one hung verifier from blocking the workflow.
             $argumentLine = ($invocationArguments | ForEach-Object {
                 $value = [string]$_
                 if ($value -match '[\s"]') {
@@ -182,9 +219,16 @@ function Invoke-Compact(
                     $value
                 }
             }) -join ' '
-            $process = Start-Process -FilePath $Executable -ArgumentList $argumentLine -Wait -PassThru `
+            $process = Start-Process -FilePath $Executable -ArgumentList $argumentLine -PassThru `
                 -RedirectStandardOutput $log -RedirectStandardError $stderrLogPath
-            $exitCode = $process.ExitCode
+            if (-not $process.WaitForExit($TimeoutSeconds * 1000)) {
+                $timedOut = $true
+                Stop-Process -Id $process.Id -Force -ErrorAction SilentlyContinue
+                $process.WaitForExit(5000)
+                $exitCode = 124
+            } else {
+                $exitCode = $process.ExitCode
+            }
         } else {
             & $Executable @invocationArguments *> $log
             $exitCode = $LASTEXITCODE
@@ -205,13 +249,38 @@ function Invoke-Compact(
 	$diagnosticLines = @($lines + $stderrLines + $engineLines)
 	$parseFailure = $diagnosticLines | Where-Object { $_ -match "SCRIPT ERROR|Parse Error|Compile Error|Cannot open resource pack|Cannot open resource|Failed to load|Resource not found" } | Select-Object -First 1
 	$verifierFailure = $diagnosticLines | Where-Object { $_ -match "VERIFIER:\s*FAIL|ASSERTION FAILED|Assertion failed" } | Select-Object -First 1
-	if ($exitCode -ne 0 -or $parseFailure -or $verifierFailure) {
+	# A passing marker cannot hide a renderer/material/resource failure. Only a
+	# verifier's explicit shutdown phase may downgrade the known engine teardown
+	# diagnostics; active-render failures remain fatal.
+	$shutdownIndex = -1
+	for ($index = 0; $index -lt $diagnosticLines.Count; $index++) {
+		if ($diagnosticLines[$index] -match 'VERIFIER_PHASE:\s*SHUTDOWN') {
+			$shutdownIndex = $index
+			break
+		}
+	}
+	$resourcePattern = 'Parameter "material" is null|RID allocations .* leaked at exit|Pages in use exist at exit|resources still in use at exit|Buffer with GL ID .* leaked|shaders of type .* never freed|ObjectDB instances leaked at exit|Leaked instance dependency|did not call instance_notify_deleted|Orphan .* at exit|Condition .* is true'
+	$fatalResource = $null
+	foreach ($index in 0..([math]::Max(0, $diagnosticLines.Count - 1))) {
+		if ($diagnosticLines[$index] -notmatch $resourcePattern) { continue }
+		if ($shutdownIndex -lt 0 -or $index -lt $shutdownIndex) {
+			$fatalResource = $diagnosticLines[$index]
+			break
+		}
+	}
+	if ($timedOut) {
+		Write-Host ("TICKET GATE {0}: FAIL (timed out after {1}s)" -f $Name, $TimeoutSeconds) -ForegroundColor Red
+		Get-Content -LiteralPath $log -Tail 40
+		throw "$Name timed out after $TimeoutSeconds seconds. Full log: $log"
+	}
+	if ($exitCode -ne 0 -or $parseFailure -or $verifierFailure -or $fatalResource) {
 		Write-Host ("TICKET GATE {0}: FAIL" -f $Name) -ForegroundColor Red
 		Get-Content -LiteralPath $log -Tail 40
 		if (Test-Path -LiteralPath $engineLogPath) {
 			Get-Content -LiteralPath $engineLogPath -Tail 40
 		}
-        throw "$Name failed. Full log: $log"
+		if ($fatalResource) { throw "$Name emitted an active renderer/resource failure: $fatalResource. Full log: $log" }
+		throw "$Name failed. Full log: $log"
     }
     $Cache[$Name] = @{
         hash = $hash
@@ -278,8 +347,8 @@ foreach ($gate in $gates) {
             "--json-report",
             (Join-Path $Logs "content_integrity.json")
         ) $gateInputs $cache
-    } elseif ($gate -eq "runtime_smoke") {
-        Invoke-Compact $gate $Godot @("--headless", "--path", $Project, "--quit-after", "3") $gateInputs $cache
+	} elseif ($gate -eq "runtime_smoke") {
+		Invoke-Compact $gate $Godot @("--headless", "--path", $Project, "--script", "tools/verify_runtime_smoke.gd") $gateInputs $cache
 	} elseif ($gate -in @("verify_perf_001", "verify_perf_002", "verify_perf_003", "verify_opening_qa_001", "verify_qa_012")) {
         $script = Join-Path $PSScriptRoot "$gate.gd"
         Invoke-Compact $gate $Godot @(
@@ -333,6 +402,13 @@ foreach ($gate in $gates) {
 			)
 		}
 		Invoke-Compact $gate $Python $loadQaArguments $gateInputs $cache
+	} elseif ($gate -eq "verify_runtime_required_components") {
+		Invoke-Compact $gate $Python @(
+			(Join-Path $PSScriptRoot "verify_runtime_required_components.py"),
+			$Project,
+			"--json-report",
+			(Join-Path $Logs "runtime_required_components.json")
+		) $gateInputs $cache
 	} elseif ($gate -eq "verify_engine_006") {
 		Invoke-Compact $gate $Python @(
 			(Join-Path $PSScriptRoot "verify_engine_006.py"),
@@ -372,26 +448,27 @@ foreach ($gate in $gates) {
             (Join-Path $PSScriptRoot "verify_web_export.py"), $Web,
             "--json-report", (Join-Path $Logs "web_export.json")
         ) $gateInputs $cache
-        Invoke-Compact "packed_startup" $Godot @(
-            "--headless", "--path", $Web,
-            "--main-pack", (Join-Path $Web "index.pck"),
-            "--quit-after", "5"
-        ) $gateInputs $cache
+		Invoke-Compact "packed_startup" $Godot @(
+			"--headless", "--path", $Project,
+			"--main-pack", (Join-Path $Web "index.pck"),
+			"--script", "tools/verify_packed_startup.gd"
+		) $gateInputs $cache
     } elseif ($gate -eq "verify_web_browser") {
-        Invoke-Compact $gate "node.exe" @(
+		Invoke-Compact $gate $Node @(
             (Join-Path $PSScriptRoot "verify_web_browser.mjs"),
             "--export", $Web,
             "--report", (Join-Path $Logs "web_browser.json")
         ) $gateInputs $cache
     } elseif ($gate -eq "verify_qa_002_browser") {
-        Invoke-Compact $gate "node.exe" @(
+		Prepare-QAWebArtifact $cache $files
+		Invoke-Compact $gate $Node @(
             (Join-Path $PSScriptRoot "verify_qa_002_browser.mjs"),
-            "--export", $Web,
+			"--export", $QAWeb,
             "--browser", "chrome",
             "--report", (Join-Path $Logs "qa_002_browser.json")
         ) $gateInputs $cache
     } elseif ($gate -eq "verify_opening_qa_001_browser") {
-        Invoke-Compact $gate "node.exe" @(
+		Invoke-Compact $gate $Node @(
             (Join-Path $PSScriptRoot "verify_qa_002_browser.mjs"),
             "--export", $Web,
             "--browser", "all",
@@ -399,7 +476,7 @@ foreach ($gate in $gates) {
             "--report", (Join-Path $Logs "opening_qa_001_browser.json")
         ) $gateInputs $cache
     } elseif ($gate -eq "verify_web_002_browser") {
-        Invoke-Compact $gate "node.exe" @(
+		Invoke-Compact $gate $Node @(
             (Join-Path $PSScriptRoot "verify_qa_002_browser.mjs"),
             "--export", $Web,
             "--browser", "all",
@@ -407,7 +484,7 @@ foreach ($gate in $gates) {
             "--report", (Join-Path $Logs "web_002_browser.json")
         ) $gateInputs $cache
     } elseif ($gate -eq "verify_web_002_mobile") {
-        Invoke-Compact $gate "node.exe" @(
+		Invoke-Compact $gate $Node @(
             (Join-Path $PSScriptRoot "verify_qa_002_browser.mjs"),
             "--export", $Web,
             "--browser", "all",
@@ -416,7 +493,7 @@ foreach ($gate in $gates) {
             "--report", (Join-Path $Logs "web_002_mobile.json")
         ) $gateInputs $cache
     } elseif ($gate -eq "verify_mobile_browser") {
-        Invoke-Compact $gate "node.exe" @(
+		Invoke-Compact $gate $Node @(
             (Join-Path $PSScriptRoot "verify_web_browser.mjs"),
             "--export", $Web,
             "--report", (Join-Path $Logs "mobile_browser.json"),

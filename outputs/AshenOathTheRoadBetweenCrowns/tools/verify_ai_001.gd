@@ -1,6 +1,7 @@
 extends SceneTree
 
 var failures := 0
+var tested_game: Node = null
 
 func _initialize() -> void:
 	var scene: PackedScene = load("res://scenes/main.tscn")
@@ -9,6 +10,7 @@ func _initialize() -> void:
 		quit(1)
 		return
 	var game = scene.instantiate()
+	tested_game = game
 	root.add_child(game)
 	await process_frame
 	game.call("_new_game")
@@ -96,7 +98,9 @@ func _initialize() -> void:
 	check(trace_start.distance_to(trace_end) > 0.04, "Enemy attack clip produces no measured hand motion")
 
 	print("AI-001 VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
-	quit(0 if failures == 0 else 1)
+	var result_code := 0 if failures == 0 else 1
+	await _finish(game)
+	quit(result_code)
 
 func settle(count: int) -> void:
 	for _index in range(count):
@@ -106,3 +110,19 @@ func check(condition: bool, message: String) -> void:
 	if not condition:
 		failures += 1
 		push_error(message)
+
+func _finish(game: Node) -> void:
+	if game != null and is_instance_valid(game):
+		if game.has_method("finalize_resource_shutdown"):
+			game.finalize_resource_shutdown()
+		elif game.has_method("prepare_resource_shutdown"):
+			game.prepare_resource_shutdown()
+		await settle(int(game.ZONE_RETIRE_FRAMES) + 4)
+		# Diagnostics after this marker belong to owned test-tree retirement.
+		print("VERIFIER_PHASE: SHUTDOWN")
+		game.queue_free()
+	await settle(24)
+	if is_instance_valid(game):
+		game.free()
+		await settle(2)
+	RenderingServer.force_sync()

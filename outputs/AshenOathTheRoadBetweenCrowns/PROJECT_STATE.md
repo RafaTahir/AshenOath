@@ -1,33 +1,62 @@
 # Ashen Oath Project State
 
-## Current Working Truth - Production Startup and A-Set Restoration - 2026-08-30
+## Recovery-003 Release Continuation - 2026-09-05
 
-The active source checkpoint is on `codex/masterpiece-rebuild`. This work
-restores the preferred complete stylized A-set for Kael and Sister Anwen,
-keeps the Universal family for deterministic crowd variation, retains the
-Ranger mapping for Captain Senn, and removes the ambiguous startup refusal.
-The Web shell now exposes a visible build/pack identity, keeps New Game
-clickable during Greyfen prewarm, and presents Retry when boot or pack
-preparation fails. The Crow Flight activity remains optional while loading.
+The current development source has passed the complete gameplay, screenshot,
+packed-startup, desktop-browser, and mobile-browser release tail. The strict
+release report bookkeeping is being corrected before a production checkpoint:
+its source fingerprint now uses the same path ordering as the Python verifier,
+and expected fresh screenshot/report writes are excluded from the release
+worktree-dirty field. No production push or deployment has been claimed from
+this continuation yet.
 
-The current local Web candidate is 12 files totaling 93,393,239 bytes
-(89.1 MB by the Web export verifier). Its root PCK is 1,874,352 bytes with
-SHA-256 `5c8b8b7136cbb19b32f980497329958660c7b15444132b0cea996157416714b9`.
-The candidate contains the cache-busted shell identity
-`A-SET-RESTORE-001 | packs a-set-20260830` and five verified streamed packs.
+## Current Working Truth - Recovery-003 - 2026-08-31
 
-Fresh isolated browser checks pass in Chrome and Edge at 1280x720 WebGL2,
-with real New Game activation and no console, resource, or WebGL errors.
-Chrome measured 10.54 s engine-ready and 7.25 s New Game readiness; Edge
-measured 9.03 s and 6.51 s. These timings are recorded as remaining
-startup optimization debt rather than hidden by the release evidence.
+The canonical physical repository is `D:\Projects\AshenOath`; this apparent
+workspace is the preserved C: directory junction. The active branch is
+`codex/masterpiece-rebuild` at `60b61482a108a81af2a12a323a5226174dc6abec`.
+The worktree is intentionally dirty and contains preserved migration,
+startup/export, bridge/navigation, QA, and release-tool changes. No current
+Recovery-003 changes have been committed, pushed, or deployed, and production
+remains frozen at the previously deployed artifact.
 
-The targeted `web`, `assets`, and `characters` profiles pass, as do the
-direct BOOT-003, LOADGAME-002, LOAD-QA-001, and LOAD-QA-002 contracts. The
-historical QA-013 baseline profile remains unavailable because its preserved
-evidence files were never present; no synthetic baseline was created. Full
-milestone promotion and live deployment status are recorded in the final
-release result and task report for this checkpoint.
+This checkpoint completes the scoped truth and lifecycle repairs: the shared
+objective view model now feeds tracker, contextual guidance, and zone refresh;
+manual quest tracking survives zone changes and save/load; staged zone
+retirement releases the renderer resources created by procedural props; and
+the engine and save fixtures now own their teardown. The accidental orphaned
+prop collision/mesh construction path is removed. Temporary lifecycle probes
+were deleted.
+
+The presentation hardening pass now preserves native imported head and hair
+transforms during Universal body composition, refuses primitive player/enemy
+visual fallbacks, uses a fuller hand-socket Oathblade mesh, and keeps Anwen's
+single bone-attached staff instead of the duplicate imported pole. Portrait
+evidence selects the exact standing `Idle` clip and has been refreshed for the
+12 retained character/monster roles. This improves the runtime contract but
+does not approve the still-provisional monster families or procedural world
+presentation.
+
+Audio shutdown now owns and cancels its short-lived timers, and the audio
+verification contract correctly recognizes the two bank approach ramps built
+by the river section. The complete `audio` profile passes without the prior
+teardown material diagnostic.
+
+Current checks: `ENGINE-003`, `ENGINE-004`, `SAVE-003`, `NARR-005`,
+`OBJECTIVE VIEW MODEL`, `VISIBLE QUALITY`, and the combined `combat`, `assets`,
+and `engine` ticket gate pass. `ENGINE-004`, the cleaned save fixture, and the
+visible-quality run show no leaked renderer resources or ObjectDB nodes; a
+single engine shutdown `StringName: timeout` notice remains diagnostic-only.
+The legacy `QUEST-001` harness now has a bounded watchdog and deterministic
+cleanup, but it still calls interaction handlers and mutates objectives
+directly, so it is not player-route acceptance evidence.
+
+Release remains blocked by the known visual-quality debt, incomplete real
+player campaign proof, slow cold startup, native target-hardware performance
+failures, and the lack of a fresh export from this uncommitted source. The
+current local Web folder must not be reported as matching this source until a
+new export and packed-browser run are completed. Historical result documents
+below remain evidence only and do not override this current truth boundary.
 
 ## Historical Masterpiece Rebuild Snapshot - 2026-08-26
 

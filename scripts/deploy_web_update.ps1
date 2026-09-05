@@ -20,6 +20,7 @@ $ExportDir = Join-Path $RepoRoot "outputs\AshenOath_Web"
 $WebDir = Join-Path $RepoRoot "web"
 $Gate = Join-Path $ProjectDir "tools\run_release_gate.ps1"
 $TicketGate = Join-Path $ProjectDir "tools\run_ticket_gate.ps1"
+$LivePck = $null
 
 if ($Production -and -not $RoadmapMilestone) {
   throw "Production deployment requires both -Production and -RoadmapMilestone."
@@ -90,13 +91,15 @@ try {
 
   $commitHash = (git rev-parse HEAD).Trim()
   $localPckHash = (Get-FileHash -Algorithm SHA256 (Join-Path $WebDir "index.pck")).Hash
-  $livePck = Join-Path $env:TEMP "ashenoath-live-index.pck"
+  $qaTempRoot = "D:\Temp\AshenOath"
+  New-Item -ItemType Directory -Force -Path $qaTempRoot | Out-Null
+  $LivePck = Join-Path $qaTempRoot "ashenoath-live-index.pck"
   $deadline = (Get-Date).AddMinutes(8)
   $liveHash = ""
   while ((Get-Date) -lt $deadline) {
     try {
-      Invoke-WebRequest -Uri "$ProductionUrl/index.pck?v=$commitHash" -OutFile $livePck -UseBasicParsing
-      $liveHash = (Get-FileHash -Algorithm SHA256 $livePck).Hash
+      Invoke-WebRequest -Uri "$ProductionUrl/index.pck?v=$commitHash" -OutFile $LivePck -UseBasicParsing
+      $liveHash = (Get-FileHash -Algorithm SHA256 $LivePck).Hash
       if ($liveHash -eq $localPckHash) { break }
     } catch {}
     Start-Sleep -Seconds 15
@@ -109,5 +112,8 @@ try {
   Write-Host "Production URL: $ProductionUrl?v=$TicketId"
 }
 finally {
+  if ($LivePck -and (Test-Path -LiteralPath $LivePck)) {
+    Remove-Item -LiteralPath $LivePck -Force -ErrorAction SilentlyContinue
+  }
   Pop-Location
 }

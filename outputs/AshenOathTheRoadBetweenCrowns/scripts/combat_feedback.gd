@@ -5,6 +5,22 @@ static var _material_cache: Dictionary = {}
 static var _impact_pools: Dictionary = {}
 static var _ground_ring_pool: Array = []
 
+static func clear_runtime_caches() -> void:
+	# Feedback pools are static because combat effects are reused between hits,
+	# but static ownership outlives a retired zone. Release pooled nodes before
+	# the host clears imported materials and exits its scene tree.
+	for raw_pool in _impact_pools.values():
+		for raw_root in raw_pool:
+			if raw_root != null and is_instance_valid(raw_root):
+				raw_root.free()
+	_impact_pools.clear()
+	for raw_ring in _ground_ring_pool:
+		if raw_ring != null and is_instance_valid(raw_ring):
+			raw_ring.free()
+	_ground_ring_pool.clear()
+	_mesh_cache.clear()
+	_material_cache.clear()
+
 static func impact_burst(parent: Node3D, pos: Vector3, heavy: bool, color: Color = Color(1.0, 0.66, 0.24)) -> void:
 	if parent == null:
 		return

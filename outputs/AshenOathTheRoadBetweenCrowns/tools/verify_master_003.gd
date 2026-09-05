@@ -20,8 +20,10 @@ func _initialize() -> void:
 	game.call("_load_zone","wychwood",Vector3(0,1,8))
 	await _frames(4)
 	_verify_enemies(game)
+	var result_code := 0 if failures == 0 else 1
+	await _shutdown_game(game)
 	print("MASTER-003 VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
-	quit(0 if failures == 0 else 1)
+	quit(result_code)
 
 func _verify_sky(game) -> void:
 	var sky = game.visual_director
@@ -111,6 +113,20 @@ func _walk(parent: Node) -> Array:
 
 func _frames(count: int) -> void:
 	for _i in range(count): await process_frame
+
+func _shutdown_game(game: Node) -> void:
+	if is_instance_valid(game) and game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+		await _frames(20)
+	if is_instance_valid(game) and game.has_method("finalize_resource_shutdown"):
+		game.finalize_resource_shutdown()
+		await _frames(12)
+	print("VERIFIER_PHASE: SHUTDOWN")
+	if is_instance_valid(game):
+		game.queue_free()
+		await _frames(8)
+	RenderingServer.force_sync()
+	await _frames(4)
 
 func check(condition: bool, message: String) -> void:
 	if not condition:
