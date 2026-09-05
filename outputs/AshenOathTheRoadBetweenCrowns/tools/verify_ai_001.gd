@@ -82,15 +82,29 @@ func _initialize() -> void:
 	var animation_player: AnimationPlayer = first.animation_driver.get_animation_player()
 	var attack_clip: StringName = first.animation_driver.get_clip_for_state("attack")
 	check(attack_clip != StringName(), "Enemy attack clip is unresolved")
+	var animation_was_active := false
+	var animation_was_callback_mode := AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_IDLE
+	var animation_sampled := false
 	if animation_player != null and attack_clip != StringName():
+		animation_was_active = animation_player.active
+		animation_was_callback_mode = animation_player.callback_mode_process
 		animation_player.stop()
+		# Production enemy rigs are manually ticked to keep dormant and nearby
+		# actors within the frame budget. Temporarily evaluate the authored clip
+		# explicitly so this verifier measures real bone motion instead of the
+		# inactive interval between scheduled advances.
+		animation_player.active = true
+		animation_player.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
 		animation_player.play(attack_clip)
-		# Manual animation players do not reliably apply an advance immediately
-		# after play in a headless tick. Seek samples the same authored clip at a
-		# deterministic windup time without changing gameplay timing.
 		animation_player.seek(0.0, true)
+		(first.animation_driver.get_skeleton() as Skeleton3D).force_update_all_bone_transforms()
 		animation_player.seek(0.18, true)
+		(first.animation_driver.get_skeleton() as Skeleton3D).force_update_all_bone_transforms()
+		animation_sampled = true
 	first.attack_trace_end = first.call("_attack_contact_point")
+	if animation_sampled and animation_player != null:
+		animation_player.active = animation_was_active
+		animation_player.callback_mode_process = animation_was_callback_mode
 	var trace: Dictionary = first.get_attack_trace()
 	var trace_start: Vector3 = trace.get("start", Vector3.ZERO)
 	var trace_end: Vector3 = trace.get("end", Vector3.ZERO)
