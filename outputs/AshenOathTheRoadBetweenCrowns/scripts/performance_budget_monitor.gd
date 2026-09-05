@@ -15,6 +15,7 @@ var active_root: Node
 var player: Node3D
 var quality := "balanced"
 var suspended := true
+var sampling_enabled := false
 var snapshot: Dictionary = {}
 var frame_times_ms: Array[float] = []
 var frame_time_cursor := 0
@@ -27,8 +28,19 @@ var budget_violations: Array[String] = []
 
 func configure(runtime_host: Node) -> void:
 	host = runtime_host
+	# Budget telemetry is valuable for QA and release evidence, but its rolling
+	# 1% calculation sorts a frame buffer and must not tax normal player frames.
+	# Production can opt in explicitly without changing the shipped scene.
+	sampling_enabled = OS.has_feature("ashenoath_qa") or OS.get_environment("ASHEN_PERF_MONITOR") == "1"
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	clear()
+
+func set_sampling_enabled(enabled: bool) -> void:
+	sampling_enabled = enabled
+	if not enabled:
+		frame_times_ms.clear()
+		frame_time_cursor = 0
+		snapshot = _empty_snapshot()
 
 func set_active_zone(zone_id: String, root: Node, target: Node3D, quality_preset: String) -> void:
 	active_zone = zone_id.strip_edges().to_lower()
@@ -96,7 +108,7 @@ func record_transition(elapsed_ms: float) -> void:
 	_update_snapshot(true)
 
 func _process(delta: float) -> void:
-	if suspended or get_tree().paused or active_root == null or not is_instance_valid(active_root):
+	if not sampling_enabled or suspended or get_tree().paused or active_root == null or not is_instance_valid(active_root):
 		return
 	if delta <= 0.0 or delta >= 0.25:
 		return

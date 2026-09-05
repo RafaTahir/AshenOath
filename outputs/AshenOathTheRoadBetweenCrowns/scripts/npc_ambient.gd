@@ -13,6 +13,7 @@ var breathe_amount = 0.006
 var attention_hold = 0.0
 var planted_yaw_offset = 0.0
 var animation_driver
+var face_driver
 var far_tick_accumulator := 0.0
 var distance_hidden := false
 
@@ -46,6 +47,7 @@ func _ready() -> void:
 	phase = randf() * TAU
 	planted_yaw_offset = randf_range(-7.0, 7.0)
 	animation_driver = parent_3d.find_child("CharacterAnimationDriver", true, false)
+	face_driver = parent_3d.find_child("CharacterFaceDriver", true, false)
 	if animation_driver != null:
 		animation_driver.set_locomotion(0.0, Vector3.ZERO, true)
 
@@ -74,11 +76,15 @@ func _process(delta: float) -> void:
 		_set_distance_visible(parent_3d, distance <= render_distance)
 		if animation_driver != null and animation_driver.has_method("set_distance_suspended"):
 			animation_driver.set_distance_suspended(true)
+		if face_driver != null and face_driver.has_method("set_distance_suspended"):
+			face_driver.set_distance_suspended(true)
 		return
 	else:
 		_set_distance_visible(parent_3d, true)
 		if animation_driver != null and animation_driver.has_method("set_distance_suspended"):
 			animation_driver.set_distance_suspended(false)
+		if face_driver != null and face_driver.has_method("set_distance_suspended"):
+			face_driver.set_distance_suspended(false)
 		far_tick_accumulator = 0.0
 	phase += delta * (0.48 if role_id == "sister_anwen" else 0.62)
 	var target_yaw = base_yaw + planted_yaw_offset + sin(phase * 0.38) * sway_amount

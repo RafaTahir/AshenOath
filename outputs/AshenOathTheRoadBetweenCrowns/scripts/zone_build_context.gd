@@ -132,6 +132,20 @@ func make_loose_role(role: String, pos: Vector3, scale_value: Vector3, rotation_
 	return _host._make_loose_role(role, pos, scale_value, rotation_y)
 
 func make_visual_role(role: String, category: String, pos: Vector3, scale_value: Vector3, rotation_y: float = 0.0):
+	# Imported castle dressing is visual enrichment rather than arrival-critical
+	# gameplay. If its OBJ mesh is not already cached, leave a transform marker
+	# for the host to resolve after the player is live instead of parsing text in
+	# the transition's synchronous build.
+	if _host.has_method("should_defer_visual_role") and _host.should_defer_visual_role(role, category):
+		var marker := Node3D.new()
+		marker.name = "DeferredVisualRole_%s" % role
+		marker.set_meta("deferred_visual_role", role)
+		marker.set_meta("deferred_visual_category", category)
+		marker.set_meta("deferred_visual_scale", scale_value)
+		marker.position = pos
+		marker.rotation_degrees.y = rotation_y
+		add_node(marker)
+		return marker
 	var node = _host._make_role_visual(role, category, scale_value)
 	if node == null:
 		return null

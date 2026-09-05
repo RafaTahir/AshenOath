@@ -605,6 +605,18 @@ func cache_stats() -> Dictionary:
 		"resources": resource_cache.size(),
 	}
 
+func is_role_warmed(role_name: String) -> bool:
+	_ensure_database()
+	if database == null:
+		return false
+	var entry: Dictionary = database.get_asset_for_role(role_name)
+	var path := str(entry.get("path", ""))
+	if path == "":
+		return false
+	if path.get_extension().to_lower() == "obj":
+		return mesh_cache.has(path) and material_cache.has(path)
+	return resource_cache.has(path)
+
 func _needs_fallback_material(mesh_instance: MeshInstance3D) -> bool:
 	if mesh_instance.material_override != null:
 		return _is_default_white_material(mesh_instance.material_override)

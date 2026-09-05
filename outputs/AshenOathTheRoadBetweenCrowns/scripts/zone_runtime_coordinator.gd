@@ -103,7 +103,13 @@ func finish_build(result: Dictionary, root: Node3D) -> Dictionary:
 	var elapsed_ms := float(Time.get_ticks_usec() - build_started_usec) / 1000.0 if build_started_usec > 0 else 0.0
 	var completed := result.duplicate(true)
 	completed["build_ms"] = elapsed_ms
-	completed["node_count"] = _node_count(root)
+	var node_count := _node_count(root)
+	completed["node_count"] = node_count
+	if root != null and is_instance_valid(root):
+		# Node count is diagnostic data, not a second activation requirement. Cache
+		# the one traversal performed for this build so activation and snapshots
+		# do not walk the same zone again on the transition path.
+		root.set_meta("zone_runtime_node_count", node_count)
 	completed["state"] = "validated" if bool(result.get("ok", false)) else "failed"
 	last_build = completed
 	build_started_usec = 0
@@ -128,11 +134,14 @@ func validate_build(zone_id: String, result: Dictionary, root: Node3D) -> Dictio
 func activate(zone_id: String, root: Node3D, reused: bool) -> void:
 	active_zone = zone_id
 	pending_zone = ""
+	var node_count := int(root.get_meta("zone_runtime_node_count", -1)) if root != null and is_instance_valid(root) else 0
+	if node_count < 0:
+		node_count = _node_count(root)
 	last_activation = {
 		"zone": zone_id,
 		"state": "active",
 		"reused": reused,
-		"node_count": _node_count(root),
+		"node_count": node_count,
 	}
 
 func rollback(zone_id: String, previous_zone: String, errors: Array) -> void:
@@ -161,7 +170,11 @@ func snapshot() -> Dictionary:
 func _node_count(root: Node) -> int:
 	if root == null or not is_instance_valid(root):
 		return 0
-	var count := 1
-	for child in root.get_children():
-		count += _node_count(child)
+	var count := 0
+	var pending: Array[Node] = [root]
+	while not pending.is_empty():
+		var current: Node = pending.pop_back() as Node
+		count += 1
+		for child in current.get_children():
+			pending.append(child)
 	return count

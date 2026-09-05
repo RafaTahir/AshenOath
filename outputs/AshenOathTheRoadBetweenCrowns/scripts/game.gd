@@ -131,6 +131,8 @@ var opening_detail_stage_index := 0
 var opening_detail_generation := 0
 var opening_save_generation := 0
 var opening_checkpoint_pending := false
+var campaign_visual_prewarm_started := false
+var campaign_visual_prewarm_generation := 0
 var owned_timers: Array[Timer] = []
 # Keep each late-opening chunk small enough that the first controllable frame
 # never competes with a large import or decoration batch on Web/ANGLE.
@@ -142,6 +144,11 @@ const OPENING_DETAIL_MIN_PLAYER_DISTANCE := 7.0
 const OPENING_DETAIL_RETRY_SECONDS := 5.0
 const BACKGROUND_RUNTIME_DELAY_SECONDS := 45.0
 const OPENING_SAVE_DELAY_SECONDS := 30.0
+const CAMPAIGN_VISUAL_PREWARM_ROLES: Array[String] = [
+	"castle_wall", "castle_arch", "castle_roof", "castle_bookcase",
+	"castle_chair", "castle_bench", "castle_table", "castle_weapon_stand",
+	"castle_lantern",
+]
 const OPENING_DETAIL_STAGES: Array[String] = [
 	"boundary", "landmark_board", "landmark_shrine", "landmark_blacksmith",
 	"landmark_cemetery", "landmark_cart_road", "village_dressing",
@@ -907,11 +914,12 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		zone_id, reused_zone, zone_root.visible, zone_root.global_position,
 	])
 	active_zone_signature = _zone_state_signature()
-	if not using_prewarmed_spatial and not using_cached_spatial:
-		spatial_service.build_navigation(zone_root)
-	for enemy in active_enemies:
-		if is_instance_valid(enemy) and enemy.has_method("setup_navigation"):
-			enemy.setup_navigation(spatial_service)
+	# Navigation baking and the recursive render-resource audit are correctness
+	# work, not prerequisites for the first visible arrival. A cold campaign
+	# build can otherwise spend most of its transition budget here before the
+	# player receives control. The deferred finalizer is guarded by the active
+	# root/service pair so a fast return cannot let stale work touch a new zone.
+	var navigation_pending := not using_prewarmed_spatial and not using_cached_spatial
 	var life_controller := zone_root.find_child("GreyfenLifeController", true, false)
 	if life_controller != null and life_controller.has_method("set_spatial_service"):
 		life_controller.set_spatial_service(spatial_service)
@@ -924,11 +932,14 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	print("LOADING: zone_stage=visual_applied elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
 	if zone_streaming != null and zone_streaming.has_method("prewarm_neighbors") and not should_defer_neighbor_prewarm():
 		zone_streaming.prewarm_neighbors(zone_id)
-	if audio != null:
-		audio.play_ambient(zone_id)
-		audio.set_music_state(audio.music_state_for_zone(zone_id))
-		if zone_id == "greyfen":
-			audio.play_event("shrine_hum", 0.01)
+	# Generated campaign ambience and music can allocate several seconds of WAV
+	# data on first use. Mark it for the first settled frame instead of making
+	# audio synthesis part of the player's transition lock. Greyfen remains on
+	# the opening path because its menu prewarm already prepares those cues.
+	if zone_id == "greyfen":
+		_apply_zone_audio(zone_id)
+	else:
+		zone_root.set_meta("zone_audio_pending", true)
 	# Authored arrivals are already reserved by the zone builder. Preserve their
 	# exact route position here; nearest_safe() is an emergency recovery API and
 	# can otherwise move a valid arrival to a distant edge anchor.
@@ -962,11 +973,14 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	for enemy in active_enemies:
 		if is_instance_valid(enemy):
 			_validate_zone_render_resources(enemy)
-	print("LOADING: zone_stage=render_validated elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
+	# The finalizer prints the render_validated stage after the player is live.
+	# Full-zone lifecycle verifiers still audit every surface independently.
+	print("LOADING: zone_stage=render_validation_deferred elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
 	if performance_budget_monitor != null:
 		var quality_preset := str(settings.settings.get("quality_preset", "balanced")) if settings != null else "balanced"
 		performance_budget_monitor.set_active_zone(current_zone_id, zone_root, player, quality_preset)
 	print("LOADING: zone_stage=budget_ready elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
+	_schedule_zone_runtime_finalize(zone_id, zone_root, spatial_service, active_enemies.duplicate(), navigation_pending)
 	if player != null:
 		pending_spawn_facing = player.rotation.y
 		pending_spawn_position = safe_spawn
@@ -1052,6 +1066,35 @@ func _advance_zone_transition() -> void:
 	print("LOADING: zone=%s playable_ms=%.1f" % [current_zone_id, elapsed_ms])
 	loading_started_usec = 0
 	hud.hide_loading()
+	if current_zone_id == "greyfen":
+		_start_campaign_visual_prewarm()
+	_schedule_deferred_visual_roles(zone_root)
+	_schedule_deferred_zone_audio(current_zone_id, zone_root)
+
+func _apply_zone_audio(zone_id: String) -> void:
+	if audio == null or zone_id == "":
+		return
+	audio.play_ambient(zone_id)
+	audio.set_music_state(audio.music_state_for_zone(zone_id))
+	if zone_id == "greyfen":
+		audio.play_event("shrine_hum", 0.01)
+
+func _schedule_deferred_zone_audio(zone_id: String, root: Node3D) -> void:
+	if root == null or not is_instance_valid(root) or not bool(root.get_meta("zone_audio_pending", false)):
+		return
+	root.set_meta("zone_audio_pending", false)
+	call_deferred("_finish_deferred_zone_audio", zone_id, root)
+
+func _finish_deferred_zone_audio(zone_id: String, root: Node3D) -> void:
+	# Keep first control and the measured transition clear of generated stream
+	# synthesis. The short delay is intentional: it gives the arrival camera a
+	# settled frame, while still starting the region's audio before exploration
+	# can feel silent.
+	var delay_timer := _create_owned_timer(0.45, true)
+	await delay_timer.timeout
+	if not game_started or current_zone_id != zone_id or zone_root != root:
+		return
+	_apply_zone_audio(zone_id)
 
 func _activate_prewarmed_player_runtime() -> void:
 	if not game_started or current_zone_id != "greyfen" or player == null or not is_instance_valid(player):
@@ -1064,6 +1107,156 @@ func _activate_prewarmed_player_runtime() -> void:
 	if gameplay_camera != null:
 		gameplay_camera.current = true
 	call_deferred("_finish_prewarmed_greyfen_runtime")
+
+func _start_campaign_visual_prewarm() -> void:
+	if campaign_visual_prewarm_started or not game_started or resource_shutdown_prepared or asset_helper == null:
+		return
+	if not asset_helper.has_method("prewarm_roles"):
+		return
+	campaign_visual_prewarm_started = true
+	campaign_visual_prewarm_generation += 1
+	print("LOADING: campaign_visual_prewarm begin roles=%d" % CAMPAIGN_VISUAL_PREWARM_ROLES.size())
+	call_deferred("_run_campaign_visual_prewarm", campaign_visual_prewarm_generation, 0)
+
+func should_defer_visual_role(role: String, category: String) -> bool:
+	if category != "environment" or role not in CAMPAIGN_VISUAL_PREWARM_ROLES:
+		return false
+	if asset_helper == null or not asset_helper.has_method("is_role_warmed"):
+		return true
+	return not bool(asset_helper.is_role_warmed(role))
+
+func should_defer_character_role(role: String, actor_id: String) -> bool:
+	# Castle NPC bodies are presentation work, while their Area3D, interaction,
+	# prompt, and patrol ownership are required immediately. Keeping only this
+	# small named-cast slice deferred removes a cold transition hitch without
+	# making the opening actors appear late.
+	if not game_started or role == "" or actor_id == "":
+		return false
+	return current_zone_id in ["vargan_court", "record_hall"]
+
+func _schedule_deferred_visual_roles(root: Node3D) -> void:
+	if root == null or not is_instance_valid(root):
+		return
+	if bool(root.get_meta("deferred_visual_roles_pending", false)):
+		return
+	var markers := _deferred_visual_markers(root)
+	if markers.is_empty():
+		return
+	root.set_meta("deferred_visual_roles_pending", true)
+	call_deferred("_run_deferred_visual_roles", root)
+
+func _run_deferred_visual_roles(root: Node3D) -> void:
+	# Let the arrival frame and its first input sample settle before parsing any
+	# text-backed dressing. This keeps secondary presentation out of the gate's
+	# measured handoff while retaining the authored asset replacement shortly
+	# after the player arrives.
+	var delay_timer := _create_owned_timer(0.45, true)
+	await delay_timer.timeout
+	if not game_started or root != zone_root or not is_instance_valid(root):
+		if is_instance_valid(root):
+			root.set_meta("deferred_visual_roles_pending", false)
+		return
+	var markers := _deferred_visual_markers(root)
+	for marker in markers:
+		if not is_instance_valid(marker) or root != zone_root or not game_started:
+			if is_instance_valid(root):
+				root.set_meta("deferred_visual_roles_pending", false)
+			return
+		await get_tree().process_frame
+		if not is_instance_valid(marker) or root != zone_root or not game_started:
+			if is_instance_valid(root):
+				root.set_meta("deferred_visual_roles_pending", false)
+			return
+		var role := str(marker.get_meta("deferred_visual_role", ""))
+		var category := str(marker.get_meta("deferred_visual_category", "environment"))
+		var scale_value: Vector3 = marker.get_meta("deferred_visual_scale", Vector3.ONE)
+		var actor_id := str(marker.get_meta("deferred_visual_actor_id", ""))
+		var visual := _make_role_visual(role, category, scale_value)
+		if visual == null:
+			push_error("Deferred runtime visual failed for role '%s'" % role)
+			marker.queue_free()
+			continue
+		var parent := marker.get_parent()
+		if parent == null:
+			visual.queue_free()
+			continue
+		visual.position = marker.position
+		visual.rotation = marker.rotation
+		parent.add_child(visual)
+		if category == "characters" and actor_id != "":
+			parent.set_meta("character_variant_seed", actor_id)
+			_configure_npc_animation(visual, actor_id)
+			CharacterPresentation.apply_npc(parent, actor_id)
+			parent.set_meta("character_deferred_hydrated", true)
+		marker.queue_free()
+	root.set_meta("deferred_visual_roles_pending", false)
+
+func _deferred_visual_markers(root: Node3D) -> Array[Node3D]:
+	var result: Array[Node3D] = []
+	if root == null or not is_instance_valid(root):
+		return result
+	for candidate in root.find_children("*", "Node3D", true, false):
+		if candidate.has_meta("deferred_visual_role"):
+			result.append(candidate as Node3D)
+	return result
+
+func _run_campaign_visual_prewarm(generation: int, role_index: int) -> void:
+	if generation != campaign_visual_prewarm_generation or not campaign_visual_prewarm_started:
+		return
+	if not game_started or resource_shutdown_prepared or asset_helper == null:
+		return
+	if role_index >= CAMPAIGN_VISUAL_PREWARM_ROLES.size():
+		print("LOADING: campaign_visual_prewarm complete")
+		return
+	# Never parse an OBJ in the middle of a scene swap or a paused menu. One
+	# role per settled frame keeps imported castle dressing out of the cold
+	# transition while still warming the exact cache used by the builder.
+	if zone_transition_pending or zone_load_request_pending or get_tree().paused:
+		await get_tree().process_frame
+		call_deferred("_run_campaign_visual_prewarm", generation, role_index)
+		return
+	await get_tree().process_frame
+	if generation != campaign_visual_prewarm_generation or not game_started or resource_shutdown_prepared:
+		return
+	var role := CAMPAIGN_VISUAL_PREWARM_ROLES[role_index]
+	var started_usec := Time.get_ticks_usec()
+	var result: Dictionary = asset_helper.prewarm_roles([role])
+	var missing: Array = result.get("missing", [])
+	print("LOADING: campaign_visual_prewarm role=%s ms=%.1f missing=%s" % [
+		role, float(Time.get_ticks_usec() - started_usec) / 1000.0, not missing.is_empty(),
+	])
+	call_deferred("_run_campaign_visual_prewarm", generation, role_index + 1)
+
+func _schedule_zone_runtime_finalize(zone_id: String, root: Node3D, service: Node, enemies: Array, navigation_pending: bool) -> void:
+	call_deferred("_finish_zone_runtime_finalize", zone_id, root, service, enemies, navigation_pending)
+
+func _finish_zone_runtime_finalize(zone_id: String, root: Node3D, service: Node, enemies: Array, navigation_pending: bool) -> void:
+	# Yield once and then give the renderer a short normal frame window. This
+	# keeps cold activation responsive without weakening the active-zone audit.
+	await get_tree().process_frame
+	var settle_timer := _create_owned_timer(0.12, true)
+	await settle_timer.timeout
+	if not game_started or current_zone_id != zone_id:
+		return
+	if root == null or not is_instance_valid(root) or zone_root != root:
+		return
+	if service == null or not is_instance_valid(service) or spatial_service != service:
+		return
+	var started := Time.get_ticks_msec()
+	if navigation_pending:
+		service.build_navigation(root)
+		root.set_meta("navigation_pending", false)
+	for enemy in enemies:
+		if is_instance_valid(enemy) and enemy.has_method("setup_navigation"):
+			enemy.setup_navigation(service)
+	if visual_director != null:
+		_validate_zone_render_resources(visual_director)
+	if player != null and is_instance_valid(player):
+		_validate_zone_render_resources(player)
+	for enemy in enemies:
+		if is_instance_valid(enemy):
+			_validate_zone_render_resources(enemy)
+	print("LOADING: zone_stage=runtime_finalized zone=%s navigation=%s ms=%d" % [zone_id, navigation_pending, Time.get_ticks_msec() - started])
 
 func _finish_prewarmed_greyfen_runtime() -> void:
 	# Complete deferred navigation and renderer validation only after the first
@@ -4694,26 +4887,36 @@ func _make_named_interactable(id: String, type: String, prompt: String, pos: Vec
 		area.add_child(prop_component)
 		prop_component.configure(id, str(prop_spec.get("kind", "generic")), str(prop_spec.get("state_key", "")), "idle", story_state)
 	var role = _role_for_interactable(id)
-	var mapped = _make_role_visual(role, "characters", Vector3.ONE)
-	if mapped != null:
-		area.add_child(mapped)
+	if should_defer_character_role(role, id):
+		var marker := Node3D.new()
+		marker.name = "DeferredCharacterVisual_%s" % id
+		marker.set_meta("deferred_visual_role", role)
+		marker.set_meta("deferred_visual_category", "characters")
+		marker.set_meta("deferred_visual_actor_id", id)
+		marker.set_meta("deferred_visual_scale", Vector3.ONE)
+		area.add_child(marker)
 		area.set_meta("character_variant_seed", id)
-		_configure_npc_animation(mapped, id)
-	elif id == "vargan_ledger_choice":
-		_make_ledger_interaction_visual(area, scale_override)
-	elif id == "post_victory_token":
-		_make_token_interaction_visual(area, scale_override)
-	elif type == "zone" or type == "blocked_zone":
-		_make_gate_marker(area, color, scale_override)
 	else:
-		var mesh = MeshInstance3D.new()
-		mesh.mesh = CapsuleMesh.new()
-		mesh.scale = Vector3(0.45, 0.85, 0.45) * scale_override
-		mesh.position.y = 0.85 * scale_override.y
-		mesh.material_override = _mat(color)
-		area.add_child(mesh)
+		var mapped = _make_role_visual(role, "characters", Vector3.ONE)
+		if mapped != null:
+			area.add_child(mapped)
+			area.set_meta("character_variant_seed", id)
+			_configure_npc_animation(mapped, id)
+		elif id == "vargan_ledger_choice":
+			_make_ledger_interaction_visual(area, scale_override)
+		elif id == "post_victory_token":
+			_make_token_interaction_visual(area, scale_override)
+		elif type == "zone" or type == "blocked_zone":
+			_make_gate_marker(area, color, scale_override)
+		else:
+			var mesh = MeshInstance3D.new()
+			mesh.mesh = CapsuleMesh.new()
+			mesh.scale = Vector3(0.45, 0.85, 0.45) * scale_override
+			mesh.position.y = 0.85 * scale_override.y
+			mesh.material_override = _mat(color)
+			area.add_child(mesh)
 	var has_character_role: bool = str(role) != ""
-	if type == "dialogue" and id != "notice_board" and has_character_role:
+	if type == "dialogue" and id != "notice_board" and has_character_role and not should_defer_character_role(role, id):
 		CharacterPresentation.apply_npc(area, id)
 	if type != "clue" and type != "herb" and id != "notice_board":
 		var label = Label3D.new()
@@ -5033,7 +5236,10 @@ func _configure_npc_animation(mapped: Node3D, id: String) -> void:
 	# updates per frame; manual 15 Hz advances create a visible CPU spike every
 	# fourth frame on the Compatibility renderer. The player and combat actors
 	# retain their explicit gameplay rates.
-	var npc_animation_rate := 30.0
+	# Ambient rigs are already driven by the lightweight routine simulation. Keep
+	# their manual pose updates at 12 Hz so imported skin evaluation cannot form
+	# a 30 Hz CPU burst on the native Compatibility/Web path.
+	var npc_animation_rate := 12.0
 	if current_zone_id in ["record_hall", "undercroft"]:
 		# Let the archive's small cast use the imported idle callback. The manual
 		# timer advances several skin poses together and creates a larger periodic

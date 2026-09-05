@@ -59,6 +59,7 @@ var current_playback_scale := 1.0
 var manual_update_interval := 0.0
 var manual_update_accumulator := 0.0
 var externally_ticked := false
+var manual_tick_timer: Timer
 var current_direction := Vector3.ZERO
 var current_local_direction := Vector3.ZERO
 var requested_speed_ratio := 0.0
@@ -128,7 +129,17 @@ func set_external_tick(enabled: bool) -> void:
 	# The owning physics/simulation loop can drive throttled animation without
 	# waking this node on every rendered frame.
 	externally_ticked = enabled
-	set_process(not enabled)
+	if manual_tick_timer != null and is_instance_valid(manual_tick_timer):
+		if enabled:
+			manual_tick_timer.stop()
+		elif manual_update_interval > 0.0 and not distance_suspended:
+			manual_tick_timer.start(manual_update_interval)
+	set_process(not enabled and manual_update_interval <= 0.0)
+
+func _on_manual_tick() -> void:
+	if externally_ticked or distance_suspended or manual_update_interval <= 0.0:
+		return
+	_advance_animation(manual_update_interval)
 
 func advance_external(delta: float) -> void:
 	if not externally_ticked:
@@ -167,15 +178,27 @@ func _advance_animation(delta: float) -> void:
 
 func set_update_rate_hz(rate_hz: float) -> void:
 	manual_update_interval = 0.0 if rate_hz <= 0.0 else 1.0 / maxf(rate_hz, 1.0)
-	# Do not advance every nearby NPC on the same manual-animation frame. That
-	# creates a small but repeatable Compatibility-renderer CPU burst in Greyfen
-	# when the crowd is visible. A stable per-instance phase keeps the same
-	# update rate while distributing the work over the interval.
-	if manual_update_interval > 0.0 and character_root != null:
-		var phase_slot := int(character_root.get_instance_id() % 17)
-		manual_update_accumulator = manual_update_interval * float(phase_slot) / 17.0
+	# Manual NPC animation is timer-driven. The previous implementation still
+	# entered _process on every rendered frame and only returned after checking
+	# its accumulator, which kept every ambient rig in the Web script budget.
+	if manual_update_interval > 0.0:
+		if manual_tick_timer == null or not is_instance_valid(manual_tick_timer):
+			manual_tick_timer = Timer.new()
+			manual_tick_timer.name = "ManualAnimationTick"
+			manual_tick_timer.one_shot = false
+			manual_tick_timer.process_callback = Timer.TIMER_PROCESS_IDLE
+			manual_tick_timer.timeout.connect(_on_manual_tick)
+			add_child(manual_tick_timer)
+		manual_tick_timer.wait_time = manual_update_interval
+		manual_update_accumulator = 0.0
+		if not externally_ticked and not distance_suspended:
+			var phase_slot := int(character_root.get_instance_id() % 17) if character_root != null else 0
+			var first_tick := manual_update_interval * (1.0 - float(phase_slot) / 17.0)
+			manual_tick_timer.start(maxf(first_tick, 0.02))
 	else:
 		manual_update_accumulator = 0.0
+		if manual_tick_timer != null and is_instance_valid(manual_tick_timer):
+			manual_tick_timer.stop()
 	for player in animation_players:
 		player.callback_mode_process = (
 			AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_IDLE
@@ -185,6 +208,7 @@ func set_update_rate_hz(rate_hz: float) -> void:
 		# A manual player must not also be evaluated by Godot's idle callback.
 		# `advance()` above still evaluates the animation at the scheduled tick.
 		player.active = manual_update_interval <= 0.0
+	set_process(not externally_ticked and manual_update_interval <= 0.0)
 
 func is_valid() -> bool:
 	return animation_player != null and skeleton != null and skeleton.get_bone_count() > 0
@@ -200,6 +224,11 @@ func set_distance_suspended(suspended: bool) -> void:
 		return
 	distance_suspended = suspended
 	process_mode = Node.PROCESS_MODE_DISABLED if suspended else Node.PROCESS_MODE_INHERIT
+	if manual_tick_timer != null and is_instance_valid(manual_tick_timer):
+		if suspended or externally_ticked or manual_update_interval <= 0.0:
+			manual_tick_timer.stop()
+		else:
+			manual_tick_timer.start(manual_update_interval)
 	for player in animation_players:
 		player.active = not suspended and manual_update_interval <= 0.0
 	if not suspended and not dead:

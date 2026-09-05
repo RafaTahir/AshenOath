@@ -1,5 +1,33 @@
 # RECOVERY-004 Implementation Status
 
+## Current Atomic Checkpoint - 2026-09-06 (Campaign handoff and performance floor)
+
+- Current work: remove noncritical campaign presentation and audio work from the
+  player-facing transition window while retaining the same runtime visuals after
+  the arrival frame.
+- Completed: campaign castle environment roles now hydrate after the first
+  controllable frame when they are not already cached; Castle courtyard and
+  Record Hall named NPC bodies use the same guarded deferred path and retain
+  their interaction Areas, prompts, animation setup, identity materials,
+  equipment, and ambient routines. The graphical performance verifier now
+  enforces the recovery target of 900 ms for cold transitions instead of the
+  previous 1.5 s allowance.
+- Latest result: parser/editor scan, `verify_engine_005.gd`, and graphical
+  `verify_perf_001.gd` passed. Balanced native 1280x720 measured Greyfen
+  59.56 FPS average / 31.84 FPS 1% low, Wychwood 59.96 / 30.24, Wychwood
+  combat 59.92 / 30.50, Castle courtyard 43.81 / 37.85, Record Hall 42.80 /
+  38.41, and Hart Glade 60.04 / 31.10. Static memory stayed below 107 MB;
+  measured cold transitions were all below 900 ms and the warm return was
+  below 350 ms. The latest logs contain no active renderer, parser, resource,
+  or assertion errors.
+- Remaining blocker: this is a performance/lifecycle checkpoint only. The
+  broader recovery still has visual-quality, campaign proof, and release
+  evidence work; no Web export, push, or deployment is claimed here.
+- Exact next action on resume: run the authoritative affected release gates,
+  classify any remaining active-runtime failures, and only then prepare the
+  production artifact. Do not repeat the graphical performance gate unless
+  its inputs change.
+
 ## Current Atomic Checkpoint - 2026-09-06 (Startup handoff optimization)
 
 - Current work: move noncritical Greyfen prewarm work off the New Game handoff.

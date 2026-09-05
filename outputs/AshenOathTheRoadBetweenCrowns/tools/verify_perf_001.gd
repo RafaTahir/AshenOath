@@ -12,7 +12,7 @@ const MIN_ONE_PERCENT_LOW_FPS := 30.0
 const MAX_STATIC_MEMORY_BYTES := 450 * 1024 * 1024
 # Full campaign zones may compile first-use imported materials on Intel/ANGLE;
 # keep that cold bootstrap bounded while the warm-cache budget stays strict.
-const MAX_COLD_TRANSITION_MS := 1500.0
+const MAX_COLD_TRANSITION_MS := 900.0
 const MAX_WARM_TRANSITION_MS := 350.0
 const SAMPLE_DURATION_MS := 8000
 
