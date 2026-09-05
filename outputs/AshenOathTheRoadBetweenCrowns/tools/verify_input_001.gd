@@ -14,7 +14,7 @@ func _initialize() -> void:
 	var router = game.input_router
 	_check(router != null, "runtime input router is missing")
 	if router == null:
-		game.queue_free()
+		await _shutdown_game(game)
 		_finish()
 		return
 	_verify_bindings()
@@ -34,8 +34,7 @@ func _initialize() -> void:
 		print("INPUT-001 VERIFIER: PASS (keyboard, gamepad, focus, prompts, settings, virtual input)")
 	else:
 		print("INPUT-001 VERIFIER: FAIL (%d)" % failures.size())
-	game.queue_free()
-	await _settle(2)
+	await _shutdown_game(game)
 	quit(0 if passed else 1)
 
 func _verify_bindings() -> void:
@@ -165,6 +164,24 @@ func _settle(frames: int) -> void:
 	for _index in range(frames):
 		await process_frame
 		await physics_frame
+
+func _shutdown_game(game: Node) -> void:
+	# Retire the runtime-owned roots before the process exits so the release
+	# runner can distinguish active leaks from normal engine shutdown output.
+	if is_instance_valid(game) and game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+		await _settle(20)
+	if is_instance_valid(game) and game.has_method("finalize_resource_shutdown"):
+		game.finalize_resource_shutdown()
+		await _settle(16)
+	print("VERIFIER_PHASE: SHUTDOWN")
+	if is_instance_valid(game) and game.is_inside_tree():
+		root.remove_child(game)
+	if is_instance_valid(game):
+		game.free()
+	RenderingServer.force_sync()
+	await _settle(12)
+	RenderingServer.force_sync()
 
 func _check(condition: bool, message: String) -> void:
 	if condition:

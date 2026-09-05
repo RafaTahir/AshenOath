@@ -37,7 +37,10 @@ func _initialize() -> void:
 		if evidence != null: game.call("_handle_interaction", evidence)
 
 	game.call("_load_zone", "vargan_court", Vector3(0, 1, 12))
-	await settle(3)
+	# Castle named actors are intentionally hydrated just after the arrival
+	# handoff to keep the cold transition responsive. Wait through that
+	# presentation budget before asserting the rendered actor contract.
+	await settle(45)
 	check(game.zone_root.find_child("CastleVargan_OuterCourtyard", true, false) != null, "Outer Courtyard is missing")
 	for id in ["vargan_gate_guard", "vargan_steward", "vargan_gate_notice", "vargan_iron_binding"]: check(game.zone_root.find_child(id, true, false) != null, "Missing courtyard actor/evidence: %s" % id)
 	for id in ["vargan_gate_guard", "vargan_steward", "vargan_servant", "vargan_patrol"]:

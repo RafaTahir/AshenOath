@@ -28,6 +28,28 @@
   production artifact. Do not repeat the graphical performance gate unless
   its inputs change.
 
+## Paused Checkpoint - 2026-09-06
+
+- Current ticket: `RECOVERY-004`, performance/lifecycle verification handoff.
+- Completed in this atomic slice: Castle Vargan verification now waits through
+  the intentional deferred actor-hydration window, and the input verifier now
+  uses the runtime shutdown contract before retiring its test tree.
+- Latest direct results: `verify_castle_vargan.gd` and `verify_input_001.gd`
+  both passed after the fixes, with no active renderer, ObjectDB, or resource
+  diagnostics in their logs. `git diff --check` also passed for the checkpoint
+  files.
+- Release state: the broader release attempt reached the export/browser tail;
+  the aggregate `verify_web_002_browser` run was interrupted at its bounded
+  timeout while sequential full-campaign browser evidence was still running.
+  No production export synchronization, push, merge, or deployment was done
+  from this paused checkpoint.
+- Remaining blocker: full-campaign browser aggregation and the broader visual
+  and release acceptance are incomplete. Existing unrelated working-tree
+  changes remain preserved and uncommitted.
+- Exact next action on resume: resume at `verify_web_002_browser`, preserving
+  the passed results already recorded, then continue only with the remaining
+  release gates if that browser result passes.
+
 ## Current Atomic Checkpoint - 2026-09-06 (Startup handoff optimization)
 
 - Current work: move noncritical Greyfen prewarm work off the New Game handoff.
