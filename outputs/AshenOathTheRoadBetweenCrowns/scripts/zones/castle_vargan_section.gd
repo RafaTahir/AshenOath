@@ -100,29 +100,20 @@ func _build_courtyard(context: ZoneBuildContext) -> void:
 	context.make_zone_gate("Enter the record hall", Vector3(0, 0, -14), "record_hall", Vector3(0, 1, 12))
 
 func _build_record_hall(context: ZoneBuildContext) -> void:
-	_base(context, "RecordHall", Color(0.090, 0.077, 0.064), Vector2(34, 30))
+	# Extend the floor beyond the raised entry camera so its far box edge cannot
+	# project as a dark horizontal strip across the archive aisle.
+	_base(context, "RecordHall", Color(0.090, 0.077, 0.064), Vector2(34, 40))
 	context.make_road(Vector3(0, 0.02, 0), Vector3(7, 0.05, 26), Color(0.12, 0.105, 0.09))
 	_make_record_hall_dressing(context)
 	_make_authored_record_hall_dressing(context)
-	for x in [-14.0, 14.0]:
-		context.make_prop_box("RecordHallWall", Vector3(x, 3, 0), Vector3(1, 6, 30), Color(0.18, 0.165, 0.145))
-		context.make_visual_box("RecordHallWallLight", Vector3(x - signf(x) * 0.52, 3.0, 0), Vector3(0.08, 5.7, 29.0), Color(0.22, 0.16, 0.11))
-	for z in [-14.0, 14.0]:
-		context.make_prop_box("RecordHallWall", Vector3(0, 3, z), Vector3(28, 6, 1), Color(0.18, 0.165, 0.145))
-		context.make_visual_box("RecordHallWallLight", Vector3(0, 3.0, z - signf(z) * 0.52), Vector3(27.5, 5.7, 0.08), Color(0.22, 0.16, 0.11))
-	# The archive is enclosed rather than opening onto the outdoor sky. Rafters,
-	# a dark ceiling, and a warm ledger pool make the room read as architecture.
-	context.make_visual_box("RecordHallCeiling", Vector3(0, 6.45, 0), Vector3(40, 0.28, 40), Color(0.22, 0.14, 0.08))
-	# The large wall collision is intentionally allowed to yield to reserved
-	# navigation volumes, so keep a separate non-blocking interior backplate to
-	# prevent the archive from exposing a black void through the route frame.
-	context.make_visual_box("RecordHallRearInterior", Vector3(0, 3.0, -13.45), Vector3(27.0, 5.8, 0.18), Color(0.12, 0.085, 0.055))
-	context.make_visual_box("RecordHallRearDoor", Vector3(0, 2.0, -13.34), Vector3(3.0, 4.0, 0.08), Color(0.055, 0.038, 0.028))
-	for x in [-10.5, -3.5, 3.5, 10.5]:
-		context.make_visual_box("RecordHallRafter", Vector3(x, 6.05, 0), Vector3(0.24, 0.34, 28), Color(0.16, 0.10, 0.055))
-	for z in [-11.0, 11.0]:
-		for x in [-9.0, 0.0, 9.0]:
-			context.make_visual_box("RecordHallWallBand", Vector3(x, 4.8, z), Vector3(4.6, 0.16, 0.10), Color(0.28, 0.22, 0.15))
+	# The invisible play-area boundary supplies the room edge. Do not add a
+	# visible side shell here: even a low plinth projects as a dark slab from
+	# the entry camera and hides the archive aisle.
+	# The room boundary is already protected by the invisible play-area wall.
+	# Avoid a second full-width rear shell here: from the entry aisle it reads as
+	# a black slab instead of architecture and hides the archive sightline.
+	# Keep the archive camera-safe. Long ceiling, rear, and head-height framing
+	# pieces projected as dark slabs across the aisle from the raised entry view.
 	for x in [-9.0, -5.5, 5.5, 9.0]:
 		for z in [-7.0, -2.0, 3.0, 8.0]:
 			context.make_prop_box("LedgerShelf", Vector3(x, 1.5, z), Vector3(1.0, 3.0, 3.6), Color(0.18, 0.115, 0.065))
@@ -150,9 +141,9 @@ func _build_record_hall(context: ZoneBuildContext) -> void:
 	# adding torch decoration. The old order let four torch lights consume the
 	# budget, leaving the room ceiling and shelves effectively unlit.
 	context.make_light("LedgerTableLight", Vector3(0, 3.5, -7), Color(0.62, 0.50, 0.34), 3.0)
-	context.make_light("RecordHallNavigationFill", Vector3(0, 4.5, 4), Color(0.46, 0.52, 0.66), 2.8)
-	context.make_light("RecordHallEntryFill", Vector3(0, 3.2, 10), Color(0.52, 0.42, 0.31), 2.0)
-	context.make_light("RecordHallArchiveFill", Vector3(-8, 3.2, 1), Color(0.34, 0.40, 0.52), 1.6)
+	context.make_light("RecordHallNavigationFill", Vector3(0, 4.8, 4), Color(0.46, 0.52, 0.66), 3.2)
+	context.make_light("RecordHallEntryFill", Vector3(0, 3.8, 10), Color(0.52, 0.42, 0.31), 2.4)
+	context.make_light("RecordHallArchiveFill", Vector3(-8, 3.8, 1), Color(0.34, 0.40, 0.52), 2.0)
 	for p in [Vector3(-3,0,10), Vector3(3,0,10), Vector3(-3,0,-6), Vector3(3,0,-6)]:
 		context.make_torch(p)
 	context.make_named_interactable("vargan_record_keeper", "dialogue", "Speak to the record keeper", Vector3(-4, 0, 9), Color(0.28, 0.24, 0.20))
@@ -281,8 +272,9 @@ func _make_record_hall_dressing(context: ZoneBuildContext) -> void:
 	# Warm wood, iron, and parchment accents break up the archive’s stone shell.
 	for z in [-11.8, -6.0, 0.0, 6.0, 11.8]:
 		context.make_terrain_patch("RecordHallFloorInset", Vector3(0, 0.008, z), Vector3(5.8, 0.025, 0.82), Color(0.16, 0.115, 0.075))
-	for x in [-12.8, 12.8]:
-		context.make_visual_box("RecordHallWallPilaster", Vector3(x, 2.9, 0), Vector3(0.38, 5.7, 29.0), Color(0.24, 0.19, 0.14))
+	# The room boundary is collision-only here. Long side pilasters were visually
+	# reading as solid walls from the raised entry camera and creating a false
+	# horizontal slab across the aisle.
 	for z in [-12.8, 12.8]:
 		context.make_visual_box("RecordHallDoorArch", Vector3(0, 3.9, z), Vector3(5.4, 0.28, 0.18), Color(0.29, 0.22, 0.15))
 	for x in [-8.8, 8.8]:

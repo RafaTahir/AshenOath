@@ -3821,19 +3821,24 @@ func _make_boundary_edge(edge_id: String, width: float, depth: float, color: Col
 	var wall_thickness := 1.2
 	var wall_height := 1.8
 	var collision_thickness := 0.4
+	var enclosed_zone: bool = current_zone_id in ["record_hall", "undercroft"]
 	if not is_open:
 		match edge_id:
 			"north":
-				_make_prop_box("NorthBerm", Vector3(0, 0.9, -half_d), Vector3(width, wall_height, wall_thickness), color)
+				if not enclosed_zone:
+					_make_prop_box("NorthBerm", Vector3(0, 0.9, -half_d), Vector3(width, wall_height, wall_thickness), color)
 				_make_invisible_wall(Vector3(0, 1.6, -half_d - 0.65), Vector3(width, 3.2, collision_thickness))
 			"south":
-				_make_prop_box("SouthBerm", Vector3(0, 0.9, half_d), Vector3(width, wall_height, wall_thickness), color)
+				if not enclosed_zone:
+					_make_prop_box("SouthBerm", Vector3(0, 0.9, half_d), Vector3(width, wall_height, wall_thickness), color)
 				_make_invisible_wall(Vector3(0, 1.6, half_d + 0.65), Vector3(width, 3.2, collision_thickness))
 			"west":
-				_make_prop_box("WestBerm", Vector3(-half_w, 0.9, 0), Vector3(wall_thickness, wall_height, depth), color)
+				if not enclosed_zone:
+					_make_prop_box("WestBerm", Vector3(-half_w, 0.9, 0), Vector3(wall_thickness, wall_height, depth), color)
 				_make_invisible_wall(Vector3(-half_w - 0.65, 1.6, 0), Vector3(collision_thickness, 3.2, depth))
 			"east":
-				_make_prop_box("EastBerm", Vector3(half_w, 0.9, 0), Vector3(wall_thickness, wall_height, depth), color)
+				if not enclosed_zone:
+					_make_prop_box("EastBerm", Vector3(half_w, 0.9, 0), Vector3(wall_thickness, wall_height, depth), color)
 				_make_invisible_wall(Vector3(half_w + 0.65, 1.6, 0), Vector3(collision_thickness, 3.2, depth))
 		return
 	var line_half := half_w if edge_id in ["north", "south"] else half_d
@@ -3849,16 +3854,20 @@ func _make_boundary_edge(edge_id: String, width: float, depth: float, color: Col
 		var length := segment_end - segment_start
 		match edge_id:
 			"north":
-				_make_prop_box("NorthBerm", Vector3(center, 0.9, -half_d), Vector3(length, wall_height, wall_thickness), color)
+				if not enclosed_zone:
+					_make_prop_box("NorthBerm", Vector3(center, 0.9, -half_d), Vector3(length, wall_height, wall_thickness), color)
 				_make_invisible_wall(Vector3(center, 1.6, -half_d - 0.65), Vector3(length, 3.2, collision_thickness))
 			"south":
-				_make_prop_box("SouthBerm", Vector3(center, 0.9, half_d), Vector3(length, wall_height, wall_thickness), color)
+				if not enclosed_zone:
+					_make_prop_box("SouthBerm", Vector3(center, 0.9, half_d), Vector3(length, wall_height, wall_thickness), color)
 				_make_invisible_wall(Vector3(center, 1.6, half_d + 0.65), Vector3(length, 3.2, collision_thickness))
 			"west":
-				_make_prop_box("WestBerm", Vector3(-half_w, 0.9, center), Vector3(wall_thickness, wall_height, length), color)
+				if not enclosed_zone:
+					_make_prop_box("WestBerm", Vector3(-half_w, 0.9, center), Vector3(wall_thickness, wall_height, length), color)
 				_make_invisible_wall(Vector3(-half_w - 0.65, 1.6, center), Vector3(collision_thickness, 3.2, length))
 			"east":
-				_make_prop_box("EastBerm", Vector3(half_w, 0.9, center), Vector3(wall_thickness, wall_height, length), color)
+				if not enclosed_zone:
+					_make_prop_box("EastBerm", Vector3(half_w, 0.9, center), Vector3(wall_thickness, wall_height, length), color)
 				_make_invisible_wall(Vector3(half_w + 0.65, 1.6, center), Vector3(collision_thickness, 3.2, length))
 
 func _make_invisible_wall(pos: Vector3, size: Vector3) -> void:
@@ -4271,7 +4280,13 @@ func _add_crow_part(parent: Node3D, name: String, mesh: Mesh, local_pos: Vector3
 	return part
 
 func _make_visual_box(name: String, pos: Vector3, size: Vector3, color: Color) -> MeshInstance3D:
-	pos = river_safe_position(pos,size.z*0.5+0.18)
+	# Long interior trim spans most of a room. Passing its half-depth through the
+	# outdoor occupancy clamp can move authored pilasters and rafters into the
+	# central aisle, where they become camera-blocking slabs. Interior zones have
+	# no river crossing to protect, so retain their authored placement.
+	var preserve_interior_position: bool = current_zone_id in ["record_hall", "undercroft"]
+	if not preserve_interior_position:
+		pos = river_safe_position(pos, size.z * 0.5 + 0.18)
 	var mesh_instance = MeshInstance3D.new()
 	mesh_instance.name = name
 	mesh_instance.set_meta("visual_name", name)

@@ -1,5 +1,41 @@
 # RECOVERY-004 Implementation Status
 
+## Current Atomic Checkpoint - 2026-09-06 (Record Hall camera-safe presentation)
+
+- Current ticket: `RECOVERY-004`, Record Hall presentation and entry-camera
+  occlusion fix.
+- Completed in this atomic slice: removed the visible enclosed-zone berms,
+  full-width rear shell, side-wall/pilaster framing, ceiling panels, rafters,
+  and head-height cross-room trim that projected as dark slabs across the
+  archive aisle. The Record Hall floor remains extended beyond the raised entry
+  camera, its authored detail positions are preserved instead of being passed
+  through the outdoor occupancy clamp, and the rear landmark is kept as a small
+  segmented doorway/header treatment. The temporary geometry print and
+  Record-Hall probe scripts were removed after diagnosis.
+- Latest direct evidence: the focused graphical capture exited `0` and printed
+  `RECORD-HALL CAPTURE: PASS`. Fresh 1280x720 frames are
+  `Development_Gallery/screenshots/Capture_38_record_hall_2026-09-06_075240.png`
+  and
+  `Development_Gallery/screenshots/Capture_57_castle_record_hall_haunting_2026-09-06_075240.png`.
+  Visual inspection confirms that the former full-width aisle obstruction is
+  gone and Kael, the route, pillars, shelves, and haunting actor remain visible.
+- Direct checks: `verify_castle_vargan.gd` exited `0` with
+  `CASTLE VARGAN VERIFIER: PASS`; `verify_render_resources.gd` exited `0` with
+  `RENDER RESOURCE VERIFIER: PASS`. No parser, assertion, active-renderer, or
+  resource error occurred. Godot still printed its known ANGLE driver warning,
+  and the Castle verifier reported an exit-time ObjectDB leak warning; that
+  shutdown warning remains unresolved and is not being relabeled as a pass.
+- Remaining blockers: Record Hall is camera-safe but still low-poly and
+  visually under-authored, with a dark/open sky presentation; the broader
+  Greyfen, Wychwood, Castle, and Hart visual debt, the blocked non-fallback Hart
+  asset, full campaign evidence, and production release remain pending. The
+  ObjectDB shutdown warning also remains a lifecycle blocker.
+- Exact next action on resume: continue only with the remaining Record Hall
+  presentation/lifecycle cleanup and its directly affected evidence; do not
+  start another ticket, export, or deployment until unpaused.
+- Checkpoint policy: this atomic fix is verified and remains local only. No
+  push, merge, export, deployment, reset, revert, or stash was performed.
+
 ## Current Atomic Checkpoint - 2026-09-06 (Opening boot profile)
 
 - Current ticket: `RECOVERY-004`, startup readiness slice (`LOAD-001`).
