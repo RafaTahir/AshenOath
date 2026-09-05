@@ -519,6 +519,7 @@ try {
         "verify_perf_003.gd"
     )
     $verifierNames = @($verifiers | ForEach-Object { [IO.Path]::GetFileNameWithoutExtension($_) })
+    $qa005ManifestPath = Join-Path $Logs "qa_005_inputs.json"
     $resumeFromVerifier = $IsResume -and ($verifierNames -contains $ResumeFrom)
     $resumeFromPerformance = $IsResume -and $ResumeFrom -eq "verify_perf_001"
     $screenshotGates = @(
@@ -556,20 +557,18 @@ try {
         ) $GodotGraphical
     }
     if (-not $IsResume -and [string]::IsNullOrWhiteSpace($Only)) {
-        $qaLogArguments = @()
-        foreach ($verifierName in $verifierNames) {
-            $qaLogArguments += "--log"
-            $qaLogArguments += (Join-Path $Logs "$verifierName.log")
+        $qa005Logs = @($verifierNames + "verify_perf_001" | ForEach-Object { "$_.log" })
+        $qa005Manifest = [ordered]@{
+            schema_version = 1
+            run_id = [guid]::NewGuid().ToString("N")
+            started_at = $StartedAt.ToUniversalTime().ToString("o")
+            logs = @($qa005Logs)
         }
-        $qaLogArguments += "--log"
-        $qaLogArguments += (Join-Path $Logs "verify_perf_001.log")
-        # Flatten the log switches into the argument array. Passing the
-        # collection as one nested element makes argparse see the entire list
-        # as a single malformed --log value and masks the real QA result.
+        $qa005Manifest | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath $qa005ManifestPath -Encoding utf8
         $qaArguments = @(
             (Join-Path $Project "tools\verify_qa_005.py"),
-            $Project
-        ) + $qaLogArguments + @(
+            $Project,
+            "--run-manifest", $qa005ManifestPath,
             "--report", (Join-Path $Logs "qa_005_report.json")
         )
         Invoke-ExternalGate "verify_qa_005" $Python $qaArguments

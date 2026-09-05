@@ -1,5 +1,28 @@
 # RECOVERY-004 Implementation Status
 
+## Current Atomic Checkpoint - 2026-09-05
+
+- Current ticket: `QA-005`, scoped to authoritative runtime-log classification.
+- Completed: the classifier now consumes the release runner's fresh
+  `qa_005_inputs.json` manifest, refuses unscoped historical-log directory
+  scans, validates that declared logs stay inside `.release-gate`, and keeps
+  active runtime errors release-blocking while classifying only post-pass
+  teardown diagnostics as warnings. The release runner now writes and passes
+  that manifest for each full run.
+- Latest result: Python compilation and PowerShell parsing passed. A focused
+  fixture proved that a current pass is not contaminated by an adjacent old
+  failure, an active material error fails, and an unscoped historical scan
+  fails closed. The fixture was removed from `D:\Temp\AshenOath`.
+- Remaining blocker: the previously observed `BOSS-007` graphical run still
+  emitted an active null-material renderer error. That issue was not changed
+  in this atomic piece and remains release-blocking.
+- Exact next action on resume: diagnose and fix the BOSS-007 active material
+  error, then rerun only its direct graphical verifier and the resource-log
+  classification that consumes its current-run log.
+- Checkpoint policy: no export, push, merge, deployment, or unrelated recovery
+  ticket was started. Existing dirty `project.godot`, release report, and
+  diagnostic files remain untouched.
+
 ## Scope
 
 This is the current recovery checkpoint for the Complete Recovery and Improvement Plan. It is intentionally honest: the project is still a pre-alpha Web prototype. The visual-review policy is now Codex-owned: fresh screenshots are inspected by Codex and checked by automated pixel, dimension, exposure, freshness, scale, grounding, material, and route heuristics; no separate human approval is required.

@@ -75,19 +75,79 @@ def classify(path: Path) -> dict[str, object]:
     }
 
 
+def load_run_logs(manifest_path: Path, project: Path, logs_dir: Path) -> list[Path]:
+    """Resolve only the logs declared by the current authoritative run.
+
+    A release directory is intentionally persistent, so globbing every ``*.log``
+    can accidentally re-evaluate an older failed run.  The release runner writes
+    a fresh manifest before invoking this verifier; direct callers must provide
+    either that manifest or explicit ``--log`` arguments.
+    """
+    try:
+        payload = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise ValueError(f"cannot read run manifest: {error}") from error
+    entries = payload.get("logs")
+    if not isinstance(entries, list) or not entries:
+        raise ValueError("run manifest has no declared logs")
+    resolved: list[Path] = []
+    for entry in entries:
+        value = entry.get("path") if isinstance(entry, dict) else entry
+        if not isinstance(value, str) or not value.strip():
+            raise ValueError("run manifest contains an invalid log path")
+        path = Path(value)
+        if not path.is_absolute():
+            path = logs_dir / path
+        path = path.resolve()
+        try:
+            path.relative_to(logs_dir)
+        except ValueError as error:
+            raise ValueError(f"run manifest log escapes .release-gate: {value}") from error
+        if path.is_file():
+            resolved.append(path)
+        else:
+            raise ValueError(f"declared current-run log is missing: {path.name}")
+    return resolved
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("project", type=Path)
     parser.add_argument("--log", action="append", dest="logs", help="Specific log to classify.")
     parser.add_argument("--logs-dir", type=Path, help="Directory of logs to classify.")
+    parser.add_argument(
+        "--run-manifest",
+        type=Path,
+        help="Current-run JSON manifest containing the exact logs to classify.",
+    )
     parser.add_argument("--report", type=Path)
     args = parser.parse_args()
     project = args.project.resolve()
+    directory = (args.logs_dir or project / ".release-gate").resolve()
+    if args.logs and args.run_manifest:
+        print("QA-005: FAIL - use --log or --run-manifest, not both")
+        return 1
     if args.logs:
         logs = [Path(item).resolve() for item in args.logs]
+    elif args.run_manifest:
+        try:
+            logs = load_run_logs(args.run_manifest.resolve(), project, directory)
+        except ValueError as error:
+            print(f"QA-005: FAIL - {error}")
+            return 1
     else:
-        directory = (args.logs_dir or project / ".release-gate").resolve()
-        logs = sorted(directory.glob("*.log"))
+        default_manifest = directory / "qa_005_inputs.json"
+        if not default_manifest.is_file():
+            print(
+                "QA-005: FAIL - no current-run manifest supplied; "
+                "refusing to scan historical logs (use --run-manifest or --log)"
+            )
+            return 1
+        try:
+            logs = load_run_logs(default_manifest, project, directory)
+        except ValueError as error:
+            print(f"QA-005: FAIL - {error}")
+            return 1
     logs = [path for path in logs if path.is_file()]
     if not logs:
         print("QA-005: FAIL - no gate logs supplied")
