@@ -1176,11 +1176,10 @@ func _release_zone_render_resources(root: Node) -> void:
 		if mesh_instance == null:
 			continue
 		mesh_instance.visible = false
-		# Detach geometry before clearing its override. A retiring instance with a
-		# live mesh and a null override can make the renderer query a null material
-		# during the final frame on the Compatibility/dummy backends.
+		# Detach geometry before releasing the node. Keep its existing override
+		# until free() rather than clearing it in the same frame: Compatibility can
+		# query a retiring instance between the mesh and override property updates.
 		mesh_instance.mesh = null
-		mesh_instance.material_override = null
 	for raw_batch in root.find_children("*", "MultiMeshInstance3D", true, false):
 		var batch := raw_batch as MultiMeshInstance3D
 		if batch == null:

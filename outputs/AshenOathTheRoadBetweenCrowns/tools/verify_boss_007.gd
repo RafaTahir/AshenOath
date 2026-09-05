@@ -63,7 +63,14 @@ func _initialize() -> void:
 		await _frames(20)
 		_check(_find_living_boss(game, "white_hart_avatar") == null, "Resolved White Hart respawned after reload")
 
-	if game.has_method("prepare_resource_shutdown"):
+	# Use the complete ownership release contract before destroying the test tree.
+	# The partial prepare path leaves global render owners alive and can make the
+	# Compatibility backend query a null material during final scene teardown.
+	print("VERIFIER_PHASE: SHUTDOWN")
+	if game.has_method("finalize_resource_shutdown"):
+		game.finalize_resource_shutdown()
+		await _frames(int(game.ZONE_RETIRE_FRAMES) + 4)
+	elif game.has_method("prepare_resource_shutdown"):
 		game.prepare_resource_shutdown()
 		await _frames(int(game.ZONE_RETIRE_FRAMES) + 4)
 	game.queue_free()

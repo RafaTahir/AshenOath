@@ -2,23 +2,30 @@
 
 ## Current Atomic Checkpoint - 2026-09-05
 
-- Current ticket: `QA-005`, scoped to authoritative runtime-log classification.
+- Current ticket: `QA-005` / `ENGINE-004`, scoped to authoritative runtime-log
+  classification and the shared renderer teardown contract.
 - Completed: the classifier now consumes the release runner's fresh
   `qa_005_inputs.json` manifest, refuses unscoped historical-log directory
   scans, validates that declared logs stay inside `.release-gate`, and keeps
   active runtime errors release-blocking while classifying only post-pass
   teardown diagnostics as warnings. The release runner now writes and passes
-  that manifest for each full run.
+  that manifest for each full run. BOSS-007 now uses the complete
+  `finalize_resource_shutdown()` path and declares its shutdown phase before
+  destroying the test tree; the shared lifecycle cleanup no longer produces
+  the reproduced null-material renderer errors.
 - Latest result: Python compilation and PowerShell parsing passed. A focused
   fixture proved that a current pass is not contaminated by an adjacent old
   failure, an active material error fails, and an unscoped historical scan
-  fails closed. The fixture was removed from `D:\Temp\AshenOath`.
-- Remaining blocker: the previously observed `BOSS-007` graphical run still
-  emitted an active null-material renderer error. That issue was not changed
-  in this atomic piece and remains release-blocking.
-- Exact next action on resume: diagnose and fix the BOSS-007 active material
-  error, then rerun only its direct graphical verifier and the resource-log
-  classification that consumes its current-run log.
+  fails closed. The graphical BOSS-007 verifier, render-resource verifier, and
+  ENGINE-004 transition/shutdown cycle all passed without renderer errors. The
+  fixture and disposable diagnostic were removed from `D:\Temp\AshenOath` and
+  the project tools directory.
+- Remaining blockers: the broader recovery still has visual-quality, campaign
+  proof, startup, target-hardware, export, and deployment blockers; this
+  checkpoint does not claim a release pass.
+- Exact next action on resume: continue with the next unresolved recovery
+  blocker after reviewing the current release evidence; do not rerun this
+  cleanup set unless its inputs change.
 - Checkpoint policy: no export, push, merge, deployment, or unrelated recovery
   ticket was started. Existing dirty `project.godot`, release report, and
   diagnostic files remain untouched.
