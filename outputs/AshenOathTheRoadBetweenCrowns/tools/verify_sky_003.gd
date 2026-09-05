@@ -32,8 +32,17 @@ func _initialize() -> void:
 	_verify_exterior_states(director, backdrop)
 	_verify_interior_suppression(director, backdrop)
 	_verify_quality_budgets(game, director, backdrop)
+	# Release imported meshes, materials, timers, and cached zone owners through
+	# the runtime lifecycle contract before destroying the verifier tree. A direct
+	# queue_free here makes a valid sky pass emit an ObjectDB leak at process exit.
+	if game.has_method("finalize_resource_shutdown"):
+		game.finalize_resource_shutdown()
+		await _frames(int(game.ZONE_RETIRE_FRAMES) + 4)
+	elif game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+		await _frames(int(game.ZONE_RETIRE_FRAMES) + 4)
 	game.queue_free()
-	await process_frame
+	await _frames(8)
 	_finish()
 
 func _verify_exterior_states(director: Node, backdrop: Node) -> void:

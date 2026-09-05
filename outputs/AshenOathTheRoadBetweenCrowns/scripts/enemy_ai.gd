@@ -1370,8 +1370,10 @@ func _make_white_hart_identity() -> void:
 	var halo := MeshInstance3D.new()
 	halo.name = "WhiteHartMemoryHalo"
 	var halo_mesh := TorusMesh.new()
-	halo_mesh.inner_radius = 1.26
-	halo_mesh.outer_radius = 1.40
+	# Keep the covenant cue close to the hooves. The previous wide ring read as
+	# a gameplay marker and overwhelmed the imported creature at distance.
+	halo_mesh.inner_radius = 0.86
+	halo_mesh.outer_radius = 0.96
 	halo_mesh.rings = 16
 	halo_mesh.ring_segments = 24
 	halo.mesh = halo_mesh
@@ -1396,13 +1398,13 @@ func _make_white_hart_identity() -> void:
 		var ring := MeshInstance3D.new()
 		ring.name = "WhiteHartMemoryRingLeft" if side < 0.0 else "WhiteHartMemoryRingRight"
 		var ring_mesh := TorusMesh.new()
-		ring_mesh.inner_radius = 0.30
-		ring_mesh.outer_radius = 0.36
+		ring_mesh.inner_radius = 0.16
+		ring_mesh.outer_radius = 0.21
 		ring_mesh.rings = 10
 		ring_mesh.ring_segments = 16
 		ring.mesh = ring_mesh
-		ring.position = Vector3(side * 0.62, 0.96, -0.12)
-		ring.rotation_degrees = Vector3(16.0, 0, side * 28.0)
+		ring.position = Vector3(side * 0.42, 0.78, -0.18)
+		ring.rotation_degrees = Vector3(12.0, 0, side * 24.0)
 		ring.material_override = _emissive_boss_material(Color(0.32, 0.56, 0.70), 0.42)
 		boss_visual_root.add_child(ring)
 

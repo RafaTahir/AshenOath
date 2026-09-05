@@ -42,11 +42,16 @@ const SPECS := {
 	"wychwood_brute": {"height": 1.90, "collision_height": 1.80, "collision_radius": 0.40, "lod": 20.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
 	"bog_wretch": {"height": 1.60, "collision_height": 1.52, "collision_radius": 0.38, "lod": 16.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
 	"gravebound_knight": {"height": 1.88, "collision_height": 1.78, "collision_radius": 0.38, "lod": 18.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
-	"white_hart_avatar": {"height": 2.55, "collision_height": 2.25, "collision_radius": 0.58, "lod": 24.0, "required_sockets": [], "visual_forward_degrees": 180.0},
+	# The retained Wolf source is authored along +X rather than the humanoid
+	# +Z convention. A quarter-turn presents its face toward the actor target.
+	"white_hart_avatar": {"height": 2.55, "collision_height": 2.25, "collision_radius": 0.58, "lod": 24.0, "required_sockets": [], "visual_forward_degrees": 90.0},
 	# The finale Hart is a landmark creature. Keep the legacy avatar role for
 	# old saves and interaction data, but normalize the released boss display to
 	# one explicit focal height instead of applying a second runtime multiplier.
-	"white_hart_boss": {"height": 3.60, "collision_height": 3.30, "collision_radius": 0.78, "lod": 56.0, "ground_offset": -1.90, "required_sockets": [], "visual_forward_degrees": 180.0},
+	# The Wolf source carries an authored local origin above its visible feet.
+	# Preserve the measured source correction after rendered-bounds grounding so
+	# the Hart's hooves meet the glade platform rather than floating above it.
+	"white_hart_boss": {"height": 3.60, "collision_height": 3.30, "collision_radius": 0.78, "lod": 56.0, "ground_offset": -1.90, "required_sockets": [], "visual_forward_degrees": 90.0},
 	"bell_eater": {"height": 2.35, "collision_height": 2.10, "collision_radius": 0.50, "lod": 22.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
 	# Bell-Eater is a focal creature, not a human-sized Ghoulkin. Its imported
 	# cursed-human source is normalized directly to the encounter silhouette so

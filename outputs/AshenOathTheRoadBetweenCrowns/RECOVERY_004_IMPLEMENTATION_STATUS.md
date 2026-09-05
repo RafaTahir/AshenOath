@@ -1,5 +1,41 @@
 # RECOVERY-004 Implementation Status
 
+## Current Atomic Checkpoint - 2026-09-06 (Lifecycle-clean visual review)
+
+- Current ticket: `RECOVERY-004`, opening activation safety and visual review.
+- Completed in this atomic slice: the focused character verifier and sky
+  verifier now use the staged runtime shutdown contract; the White Hart role
+  keeps its measured grounded source offset, presents the retained Wolf source
+  toward the actor, and uses a smaller ground-level memory cue instead of a
+  screen-dominating aura. The production sky path remains depth-tested 3D
+  geometry with the full-screen diagnostic canvas disabled.
+- Latest direct results: `verify_char_006.gd`, `verify_boss_007.gd`,
+  `verify_sky_003.gd`, and `verify_render_resources.gd` all exited `0` and
+  passed without parser, assertion, active-renderer, resource, or ObjectDB
+  shutdown errors. The current 11-view screenshot set also passes the
+  automated freshness, 1280x720, nonblank, and exposure checks.
+- Visual review result: the evidence is current but not release-approved.
+  Greyfen and Wychwood remain procedural/blockout quality, Castle approach
+  and Record Hall lack authored architectural depth (Record Hall is still too
+  dark in the gameplay frame), and the Hart remains an explicitly blocked Wolf
+  fallback rather than a true antlered creature. These are visible acceptance
+  blockers, not verifier failures.
+- Performance context remains the previously measured graphical Compatibility
+  result: Greyfen 48.5 FPS average / 34.4 FPS 1% low; Wychwood 60.0 / 54.2;
+  Wychwood combat 59.6 / 37.9; Vargan Court 60.0 / 44.2; Record Hall 44.0 /
+  37.8; Hart Glade 60.0 / 56.8; warm return 34.95 ms; slowest recorded
+  transition 321.2 ms; static memory below 107 MB.
+- Remaining blockers: visual acceptance, a validated non-fallback Hart asset,
+  broader campaign evidence, production export parity, and deployment. The
+  current screenshot verifier proves freshness and image health only; it does
+  not override the visual review result.
+- Exact next action on resume: remediate the rejected Castle/Record Hall and
+  Hart/world presentation, then recapture the affected views and rerun only
+  the visual gates that consume those views. Do not export or deploy until
+  those frames pass visual review.
+- Checkpoint policy: this state is local only. No push, merge, export,
+  deployment, reset, revert, or stash was performed.
+
 ## Current Atomic Checkpoint - 2026-09-06 (Opening activation safety)
 
 - Current ticket: `RECOVERY-004`, opening activation and recovery safety.

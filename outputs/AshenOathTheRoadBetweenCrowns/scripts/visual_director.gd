@@ -228,10 +228,9 @@ func _update_sky_cycle(daylight: float, twilight: float, night: float, minutes: 
 	# tier budget. Balanced needs enough depth to read as a sky, while Potato
 	# retains two low-overdraw formations instead of collapsing to one card.
 	var cloud_count := 7 if quality == "quality" else (4 if quality == "balanced" else 2)
-	# The legacy 3D card pool remains constructed for deterministic resource and
-	# quality accounting, but it is fully out of the render path. The authored
-	# CanvasLayer formations above are the only visible cloud pass.
-	cloud_layer.visible = false
+	# Keep the authored 3D formations in the world render path. Their textured
+	# lobes are depth-tested, so roofs and trees can occlude them naturally.
+	cloud_layer.visible = bool(profile.clouds)
 	# Keep cloud formations atmospheric rather than allowing one alpha card to
 	# cover the whole gameplay composition, especially on low-FOV laptops.
 	var cloud_alpha := clampf(daylight*0.44+twilight*0.38+night*0.16,0.10,0.48)
@@ -536,9 +535,10 @@ func _build_sky_backdrop() -> void:
 	authored_sky.sky_material = authored_sky_material
 	sky_canvas = CanvasLayer.new()
 	sky_canvas.name = "SkyBackdropLayer"
-	# Keep the old 2D implementation available for diagnostics, but never draw
-	# its fixed-pixel sun/clouds in production. The Environment and depth-tested
-	# world-space layer own the actual sky.
+	# CanvasLayer is retained for diagnostics only. The Compatibility renderer
+	# composites canvas layers after the 3D viewport, so a full-screen backdrop
+	# would cover terrain and actors. The authored Environment sky and depth-
+	# tested world-space celestial pool own the production render path.
 	sky_canvas.layer = -1
 	sky_canvas.visible = false
 	add_child(sky_canvas)

@@ -106,7 +106,12 @@ func _frames(count: int) -> void:
 
 func _finish() -> void:
 	if is_instance_valid(game):
-		game.free()
+		# Use the same staged shutdown contract as the other character verifier so
+		# imported animation/material resources are released before SceneTree exit.
+		if game.has_method("finalize_resource_shutdown"):
+			game.finalize_resource_shutdown()
+		game.queue_free()
+		await _frames(12)
 	if failures.is_empty():
 		print("CHAR-006 VERIFIER: PASS - Kael uses the fused shared humanoid and bone sword")
 	else:
