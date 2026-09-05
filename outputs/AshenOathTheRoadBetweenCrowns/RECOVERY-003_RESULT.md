@@ -2,16 +2,31 @@
 
 ## Status
 
-Partial recovery checkpoint. The atomic verifier/lifecycle fix below is
-verified locally on `codex/masterpiece-rebuild`; the broader recovery changes
+Partial recovery checkpoint. The atomic Greyfen opening-performance fix below
+is verified locally on `codex/masterpiece-rebuild`; the broader recovery changes
 remain in the working tree and are not pushed or deployed. Production remains
-unchanged. The full release gate is paused after `verify_world_002`.
+unchanged. The full release gate is paused after the graphical
+`verify_perf_001` failure was reproduced and repaired.
 
 ## Current Atomic Checkpoint
 
-- Current atomic work: `WORLD-002` verifier teardown and result-ordering repair.
-  The broader recovery remains paused after this gate; no next recovery ticket
-  has been started.
+- Current atomic work: reduce the Greyfen first-render cost introduced by
+  immediate cemetery landmarks in the `opening_fast` profile while preserving
+  the complete full-detail cemetery build. The broader recovery remains
+  paused; no next recovery ticket has been started.
+- Completed fix: `CemeterySection.build()` now accepts a compact opening mode.
+  Fast Greyfen keeps its cemetery staging markers, route geometry, collision,
+  bell, shrine, chapel, and interactions, while deferring loose edge trees,
+  fog, and decorative authored presentation meshes. The normal full build
+  still emits the complete cemetery presentation.
+- Latest atomic result: the focused cemetery route gate passed, and the
+  graphical Compatibility performance gate passed all sampled zones. Greyfen
+  measured `51.6 FPS` average and `31.1 FPS` 1% low; Wychwood `60.0/51.0`,
+  Wychwood combat `60.0/40.4`, Castle courtyard `60.0/52.3`, Record Hall
+  `44.1/38.4`, and Hart Glade `60.0/55.6`. The direct graphical run exited
+  with code 0 and printed `PERF-001 VERIFIER: PASS`.
+- Evidence: `.release-gate/perf_001_report.json`, the waited graphical-run
+  result in the task log, and the targeted cemetery gate log.
 - Completed fix: the browser route harness now uses camera-relative movement,
   request-scoped QA command results, progress-based key rearming, and the
   normal rendered dialogue action path. It records route checkpoints without
@@ -41,14 +56,15 @@ unchanged. The full release gate is paused after `verify_world_002`.
   `verify_world_002` in `7.76 s` with `nodes=420`, `meshes=73`, `lights=2`, and
   `enemies=5`; the log ends with the shutdown phase followed by `WORLD-002
   VERIFIER: PASS`. Evidence: `.release-gate/verify_world_002.log`.
-- Remaining blocker: the broader recovery and release suite are incomplete.
-  `verify_world_003` is the next mandatory gate and has not been run yet; export,
-  screenshots, full performance, Web packaging, push, and deployment remain
-  intentionally untouched in this checkpoint.
-- Exact next action on resume: run only `verify_world_003` through the
-  authoritative gate and investigate its first genuine failure. Do not rerun
-  `verify_world_002`, export, push, deploy, or start another recovery ticket
-  unless explicitly requested.
+- Remaining blocker: the separate normal full-detail `WORLD-014` check reports
+  `353` cemetery meshes against its `340` mesh budget. This is outside the
+  compact opening path and was not changed by this fix. The broader recovery
+  and release suite are incomplete; export, screenshots, Web packaging, push,
+  and deployment remain intentionally untouched in this checkpoint.
+- Exact next action on resume: decide and implement the narrowly scoped
+  `WORLD-014` full-detail mesh-budget correction, then rerun only its direct
+  verifier. Do not rerun the broader release suite, export, push, deploy, or
+  start another recovery ticket until explicitly resumed.
 
 ## Completed In This Checkpoint
 
@@ -100,6 +116,9 @@ unchanged. The full release gate is paused after `verify_world_002`.
 | `QA-012` graphical real-input route | PASS | `.release-gate/ticket/verify_qa_012.log` |
 | `story` ticket profile | PASS | `.release-gate/ticket/verify_quest_012.log` and ticket-gate output |
 | `performance` ticket profile after cache fix | FAIL | `.release-gate/ticket/verify_perf_001.log` |
+| `verify_world_003.gd` after compact cemetery change | PASS | `.release-gate/verify_world_003.log` |
+| Graphical `verify_perf_001.gd` after compact cemetery change | PASS | `.release-gate/perf_001_report.json` and waited graphical-run result |
+| Normal full-detail `verify_world_014.gd` | FAIL, 353 meshes > 340 budget | direct graphical-independent run |
 
 The clean lifecycle run contains no leaked renderer resources, leaked ObjectDB
 nodes, or leaked SceneTree timers. The visible-quality and audio runs now complete without
@@ -120,7 +139,11 @@ that notice is documented rather than suppressed.
   player-route evidence.
 - Fresh source-aligned Web export, packed startup, and production browser
   verification were not run after this source change.
-- Native target-hardware performance and cold startup targets remain open.
+- Native target-hardware performance and cold startup targets remain open beyond
+  this focused sample; the current graphical Compatibility sample itself now
+  passes its configured thresholds.
+- The normal full-detail cemetery presentation still exceeds the independent
+  `WORLD-014` mesh budget by 13 meshes.
 - The local checkpoint commit is not pushed; no `main` promotion or Vercel
   deployment occurred.
 

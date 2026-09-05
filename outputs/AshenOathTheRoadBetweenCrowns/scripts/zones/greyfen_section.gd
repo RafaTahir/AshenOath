@@ -6,6 +6,7 @@ const RiverSection = preload("res://scripts/zones/river_section.gd")
 
 func build(context: ZoneBuildContext) -> void:
 	seed(41021)
+	var opening_fast := context.is_opening_fast()
 	var root := Node3D.new()
 	root.name = "AuthoredGreyfenSection"
 	root.set_meta("ticket", "WORLD-001")
@@ -23,20 +24,59 @@ func build(context: ZoneBuildContext) -> void:
 
 	_build_light_composition(context)
 	_build_village_silhouette(context)
-	_build_boundary_dressing(context)
-	_build_landmarks(context)
 	_build_authored_greyfen_details(context)
-
-	context.make_village_dressing()
-	context.make_greyfen_first_impression_dressing()
-	context.make_quality_greyfen_overhaul()
+	# The cemetery is a released investigation route, not optional dressing. Keep
+	# its landmarks and collision present in the fast opening composition so a
+	# player can follow the quest there before deferred decoration begins.
+	if opening_fast:
+		CemeterySection.new().build(context, Vector3(14, 0, 8.6), true)
 	context.make_spawn_composition()
-	context.make_tree_cluster([
-		Vector3(-16,0,-12), Vector3(-14,0,12), Vector3(16,0,-11),
-		Vector3(15,0,13), Vector3(0,0,15),
-	])
 	_build_gameplay_content(context)
-	context.make_narrative_aftermath()
+	if not opening_fast:
+		_build_boundary_dressing(context)
+		_build_landmarks(context)
+		context.make_village_dressing()
+		context.make_greyfen_first_impression_dressing()
+		context.make_quality_greyfen_overhaul()
+		context.make_tree_cluster([
+			Vector3(-16,0,-12), Vector3(-14,0,12), Vector3(16,0,-11),
+			Vector3(15,0,13), Vector3(0,0,15),
+		])
+		context.make_narrative_aftermath()
+
+func build_detail_stage(context: ZoneBuildContext, stage: String) -> void:
+	# Opening prewarm publishes the playable road, actors, gates, and compact
+	# landmark layer first. Deferred stages add noncritical village dressing in
+	# bounded chunks so WebGL never compiles the whole zone in one frame.
+	seed(41021)
+	match stage:
+		"boundary":
+			_build_boundary_dressing(context)
+		"landmark_board":
+			context.make_notice_board(Vector3(-2.0, 0, 9.4))
+		"landmark_shrine":
+			context.make_shrine_scene(Vector3(6.0, 0, -7.0))
+		"landmark_blacksmith":
+			context.make_blacksmith_scene(Vector3(10.5, 0, -1.2))
+		"landmark_cemetery":
+			if context.zone_root.find_child("GreyfenCemeterySection", true, false) == null:
+				CemeterySection.new().build(context, Vector3(14, 0, 8.6))
+		"landmark_cart_road":
+			context.make_cart(Vector3(-6.2, 0, 9.0))
+			_build_castle_road(context)
+		"village_dressing":
+			context.make_village_dressing()
+		"village_first_impression":
+			context.make_greyfen_first_impression_dressing()
+		"village_quality":
+			context.make_quality_greyfen_overhaul()
+		"trees":
+			context.make_tree_cluster([
+				Vector3(-16,0,-12), Vector3(-14,0,12), Vector3(16,0,-11),
+				Vector3(15,0,13), Vector3(0,0,15),
+			])
+		"aftermath":
+			context.make_narrative_aftermath()
 
 func _build_light_composition(context: ZoneBuildContext) -> void:
 	context.make_light("Village Warmth", Vector3(-1.5, 5.2, 2), Color(1.0, 0.58, 0.30), 3.0)
@@ -58,7 +98,9 @@ func _build_village_silhouette(context: ZoneBuildContext) -> void:
 	context.make_village_house_dressed(Vector3(-5,0,-3), 8.0, "DressedVillageHouse_WestLane")
 	context.make_village_house_dressed(Vector3(7,0,1), -18.0, "DressedVillageHouse_EastLane")
 	context.make_village_house_dressed(Vector3(-10,0,8), 24.0, "DressedVillageHouse_SpawnFrame")
-	context.make_village_house_dressed(Vector3(11.8,0,-7.8), -42.0, "DressedVillageHouse_ShrineFrame")
+	# Keep the house in the shrine quarter without narrowing the diagonal return
+	# lane from the Wychwood arrival to Greyfen's Castle exit.
+	context.make_village_house_dressed(Vector3(14.0,0,-8.4), -42.0, "DressedVillageHouse_ShrineFrame")
 
 func _build_boundary_dressing(context: ZoneBuildContext) -> void:
 	_build_horizon_ridges(context)
@@ -158,8 +200,8 @@ func _build_authored_greyfen_details(context: ZoneBuildContext) -> void:
 	# The shrine receives a readable arch and the forge receives a working yard
 	# silhouette. Both sit outside the main road corridor.
 	for x in [4.35, 7.65]:
-		context.make_prop_box("GreyfenShrineArchStone", Vector3(x, 1.28, -7.75), Vector3(0.34, 2.56, 0.34), Color(0.34, 0.35, 0.32))
-	context.make_prop_box("GreyfenShrineArchLintel", Vector3(6.0, 2.42, -7.75), Vector3(3.55, 0.30, 0.34), Color(0.14, 0.075, 0.038))
+		context.make_visual_box("GreyfenShrineArchStone", Vector3(x, 1.28, -7.75), Vector3(0.34, 2.56, 0.34), Color(0.34, 0.35, 0.32))
+	context.make_visual_box("GreyfenShrineArchLintel", Vector3(6.0, 2.42, -7.75), Vector3(3.55, 0.30, 0.34), Color(0.14, 0.075, 0.038))
 	_mark_detail(layer, "GreyfenShrineArchLintel")
 	context.make_prop_box("GreyfenForgeCanopy", Vector3(10.5, 2.03, -1.30), Vector3(3.75, 0.18, 2.35), Color(0.14, 0.070, 0.035))
 	_mark_detail(layer, "GreyfenForgeCanopy")
@@ -206,7 +248,11 @@ func _build_gameplay_content(context: ZoneBuildContext) -> void:
 	var board_prompt := "Post the road evidence publicly" if road_ready else "Read notice board"
 	context.make_named_interactable("notice_board", "dialogue", board_prompt, Vector3(-2, 0, 9.4), Color(0.48, 0.28, 0.12), Vector3(0.45, 0.45, 0.45))
 	var anwen_at_cemetery := context.is_quest_active("main_bell_beneath_greyfen")
-	var anwen_position := Vector3(11.0, 0, 4.8) if anwen_at_cemetery else Vector3(3.2, 0, -5.0)
+	# Keep the opening speaker on the cleared shrine approach, beside the main
+	# road. The former x=3.2 staging point sat beyond the road-side clearance,
+	# forcing a diagonal approach through the shrine dressing before focus could
+	# resolve at ordinary conversation distance.
+	var anwen_position := Vector3(11.0, 0, 4.8) if anwen_at_cemetery else Vector3(2.0, 0, -5.0)
 	var anwen_prompt := "Meet Sister Anwen at the cemetery gate" if anwen_at_cemetery else ("Report the road evidence privately" if road_ready else "Talk to Sister Anwen")
 	context.make_named_interactable("sister_anwen", "dialogue", anwen_prompt, anwen_position, Color(0.34, 0.35, 0.48))
 	context.make_named_interactable("mira", "dialogue", "Talk to Mira Fen", Vector3(-6.8, 0, -2.3), Color(0.22, 0.48, 0.32), Vector3(0.62, 0.62, 0.62))

@@ -1,7 +1,7 @@
 extends RefCounted
 
 
-func build(context: ZoneBuildContext, origin: Vector3) -> void:
+func build(context: ZoneBuildContext, origin: Vector3, compact: bool = false) -> void:
 	var section := Node3D.new()
 	section.name = "GreyfenCemeterySection"
 	section.position = origin
@@ -23,8 +23,24 @@ func build(context: ZoneBuildContext, origin: Vector3) -> void:
 	_build_grave_court(context, origin)
 	_build_chapel(context, origin)
 	_build_bell_and_shrine(context, origin)
-	_build_edge_dressing(context, origin)
-	_build_authored_presentation(context, origin)
+	if compact:
+		# The opening profile keeps the cemetery playable and recognizable, but
+		# defers loose trees, fog, and authored detail meshes until the full zone
+		# is activated. This avoids a first-render burst while retaining every
+		# landmark, collision, and interaction required by the opening route.
+		_add_compact_presentation_marker(context, origin)
+	else:
+		_build_edge_dressing(context, origin)
+		_build_authored_presentation(context, origin)
+
+func _add_compact_presentation_marker(context: ZoneBuildContext, origin: Vector3) -> void:
+	var layer := Node3D.new()
+	layer.name = "CemeteryAuthoredPresentation"
+	layer.position = origin
+	layer.set_meta("ticket", "WORLD-014")
+	layer.set_meta("compact_opening", true)
+	layer.set_meta("detail_deferred", true)
+	context.add_node(layer)
 
 func _build_authored_presentation(context: ZoneBuildContext, origin: Vector3) -> void:
 	var layer := Node3D.new()
