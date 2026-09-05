@@ -5,25 +5,28 @@ extends RefCounted
 ## the same bone names, so physics remains authoritative and root-motion clips
 ## are deliberately never selected by the role maps.
 
-const ANIMATION_LIBRARY_PATH := "res://assets_external/animations/AnimationLibrary_Godot_Standard.glb"
+const ANIMATION_LIBRARY_PATH := "res://assets_external/animations/AnimationLibrary_Godot_Opening.tres"
 
 static func attach_shared_library(root: Node3D) -> AnimationPlayer:
 	if root == null:
 		return null
-	# Keep the shared clip library out of the engine boot dependency graph. The
-	# first visible character pays this cost during scene construction, while
-	# the menu and browser boot shell remain free to become interactive.
-	var source_library_scene := ResourceLoader.load(ANIMATION_LIBRARY_PATH) as PackedScene
-	var source_scene := source_library_scene.instantiate() as Node3D if source_library_scene != null else null
-	if source_scene == null:
-		return _find_animation_player(root)
-	var source_player := _find_animation_player(source_scene)
-	if source_player == null:
-		source_scene.free()
-		return _find_animation_player(root)
-	var source_library := source_player.get_animation_library("")
+	# The opening library is a direct AnimationLibrary resource extracted from
+	# the authored GLB. Loading the resource avoids instantiating its unused
+	# mannequin scene while preserving the same retargeting contract.
+	var source_resource := ResourceLoader.load(ANIMATION_LIBRARY_PATH)
+	var source_library := source_resource as AnimationLibrary
+	var source_scene: Node3D = null
 	if source_library == null:
-		source_scene.free()
+		# Keep a scene fallback for local authoring tools that still point this
+		# helper at a full animation-scene resource.
+		var source_library_scene := source_resource as PackedScene
+		source_scene = source_library_scene.instantiate() as Node3D if source_library_scene != null else null
+		if source_scene != null:
+			var source_player := _find_animation_player(source_scene)
+			source_library = source_player.get_animation_library("") if source_player != null else null
+	if source_library == null:
+		if source_scene != null:
+			source_scene.free()
 		return _find_animation_player(root)
 	var targets: Array[Node3D] = []
 	for skeleton in root.find_children("*", "Skeleton3D", true, false):
@@ -49,7 +52,8 @@ static func attach_shared_library(root: Node3D) -> AnimationPlayer:
 			target.add_animation_library("", retargeted_library)
 		if first_target == null:
 			first_target = target
-	source_scene.free()
+	if source_scene != null:
+		source_scene.free()
 	return first_target
 
 static func is_shared_body(path: String) -> bool:

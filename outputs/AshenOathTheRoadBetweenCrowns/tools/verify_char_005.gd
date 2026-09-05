@@ -4,19 +4,26 @@ const ROLE_PATHS := {
 	"male": "res://assets_external/characters_universal/Male_Peasant.gltf",
 	"female": "res://assets_external/characters_universal/Female_Peasant.gltf",
 }
-const ANIMATION_PATH := "res://assets_external/animations/AnimationLibrary_Godot_Standard.glb"
+const ANIMATION_PATH := "res://assets_external/animations/AnimationLibrary_Godot_Opening.tres"
+const REQUIRED_CLIPS := [
+	"Idle", "Idle_Talking", "Idle_Torch", "Interact", "Sitting_Idle", "Sitting_Talking",
+	"Walk", "Sprint", "Jump_Start", "Roll", "Sword_Idle", "Sword_Attack", "Sword_Attack_RM",
+	"Spell_Simple_Idle", "Hit_Chest", "Hit_Head", "Death01"
+]
 const FORBIDDEN := ["faceplane", "eyeleft", "eyeright", "fake_neck", "hunchedback", "proxy"]
 
 var failures: Array[String] = []
 
 func _initialize() -> void:
 	_check(ResourceLoader.exists(ANIMATION_PATH), "Neutral Animation Library is not imported")
-	var animation_scene := _instantiate(ANIMATION_PATH)
-	var animation_player := animation_scene.find_child("AnimationPlayer", true, false) if animation_scene != null else null
-	_check(animation_player != null, "Neutral Animation Library has no AnimationPlayer")
-	if animation_player != null:
-		var clips: PackedStringArray = animation_player.get_animation_list()
-		_check(clips.size() >= 20, "Universal animation library exposes too few clips: %d" % clips.size())
+	var animation_resource := ResourceLoader.load(ANIMATION_PATH)
+	var animation_library := animation_resource as AnimationLibrary
+	_check(animation_library != null, "Opening AnimationLibrary resource is unavailable")
+	if animation_library != null:
+		var clips: PackedStringArray = animation_library.get_animation_list()
+		_check(clips.size() == REQUIRED_CLIPS.size(), "Opening animation library clip count changed: %d" % clips.size())
+		for clip_name in REQUIRED_CLIPS:
+			_check(animation_library.has_animation(clip_name), "Opening animation library is missing clip: %s" % clip_name)
 		print("CHAR-005 animation clips: %d" % clips.size())
 	for role_id in ROLE_PATHS:
 		var actor := _instantiate(ROLE_PATHS[role_id])
@@ -45,8 +52,6 @@ func _initialize() -> void:
 		var bounds := _mesh_bounds(actor)
 		_check(bounds.size.y >= 1.4 and bounds.size.x >= 0.25, "%s base body bounds are incomplete: %s" % [role_id, str(bounds)])
 		actor.free()
-	if animation_scene != null:
-		animation_scene.free()
 	if failures.is_empty():
 		print("CHAR-005 VERIFIER: PASS - shared CC0 humanoid foundation is importable")
 	else:

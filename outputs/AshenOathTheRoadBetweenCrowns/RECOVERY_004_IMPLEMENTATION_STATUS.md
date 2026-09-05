@@ -1,5 +1,40 @@
 # RECOVERY-004 Implementation Status
 
+## Current Atomic Checkpoint - 2026-09-06 (Compact opening animation library)
+
+- Current work: reduce the shared Universal character animation dependency while
+  preserving the existing retargeting and root-motion contract.
+- Completed: extracted the 17 clips used by the shipped player, NPC, dialogue,
+  bow, and equipment states into
+  `assets_external/animations/AnimationLibrary_Godot_Opening.tres`; the
+  repeatable extractor remains at
+  `tools/_extract_opening_animation_library.gd`. Runtime fusion now loads the
+  direct `AnimationLibrary` resource, with a full-scene fallback retained for
+  authoring tools. Production and QA export filters, the asset anchor, the
+  character verifier, and the character gate input list all point at the same
+  compact resource. The original 44-clip GLB remains authoring-only and is
+  explicitly excluded from the Web presets.
+- Latest direct results: Godot editor/parser scan passed; `verify_char_005.gd`
+  passed with 17 required clips; `verify_anim_003.gd` passed for Kael, Anwen,
+  retained Greyfen routines, and five Wychwood enemies; and
+  `verify_motion_quality.gd` passed with real skeleton motion. No export,
+  screenshot, deployment, or production Web files were changed in this paused
+  slice.
+- Measured asset result: the compact library is 1,291,941 bytes versus
+  6,671,104 bytes for the source GLB, removing approximately 5.1 MB from the
+  potential root dependency without changing the authored animation clips used
+  by runtime roles.
+- Remaining blocker: this is an isolated dependency optimization checkpoint;
+  the broader recovery remains visually, campaign-evidence, and release
+  blocked. The compact resource still needs a resumed production Web export and
+  packed-startup verification before it can be considered artifact-proven.
+- Exact next action on resume: export the current production preset to a
+  temporary D: candidate and run Web artifact plus packed-startup checks. Do
+  not repeat the focused animation gates unless the resource or fusion contract
+  changes.
+- Checkpoint policy: this atomic slice is committed locally only. No push,
+  merge, deployment, source reset, revert, stash, or new ticket was started.
+
 ## Current Atomic Checkpoint - 2026-09-06 (Campaign handoff and performance floor)
 
 - Current work: remove noncritical campaign presentation and audio work from the
