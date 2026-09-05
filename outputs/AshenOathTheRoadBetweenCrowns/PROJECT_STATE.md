@@ -3,12 +3,14 @@
 ## Recovery-003 Release Continuation - 2026-09-05
 
 The current development source has passed the complete gameplay, screenshot,
-packed-startup, desktop-browser, and mobile-browser release tail. The strict
-release report bookkeeping is being corrected before a production checkpoint:
-its source fingerprint now uses the same path ordering as the Python verifier,
-and expected fresh screenshot/report writes are excluded from the release
-worktree-dirty field. No production push or deployment has been claimed from
-this continuation yet.
+packed-startup, desktop-browser, and mobile-browser release tail. The
+`ZoneStreamingService` frame-poll reduction is now parser-clean, runtime-smoke
+clean, and verified by the awaited graphical Compatibility gate: Greyfen
+measured `50.2 FPS` average and `34.4 FPS` 1% low, with every other sampled
+zone also above the configured thresholds. Production has not been pushed or
+deployed from this continuation. The next release decision remains blocked by
+the documented visual, release-integrity, and broader campaign issues; no
+export or deployment was started by this atomic fix.
 
 ## Current Working Truth - Recovery-003 - 2026-08-31
 

@@ -1,5 +1,24 @@
 # RECOVERY-003 Result
 
+## Paused Atomic Checkpoint - 2026-09-05
+
+- Current ticket: `RECOVERY-003`, release-continuation performance checkpoint.
+- Last source checkpoint: `f19227c` (`RECOVERY-003: sample enemy attack bones deterministically`).
+- Completed in this atomic piece: deterministic manual animation sampling for the
+  motion/combat verifiers, release-runner fingerprint and expected-output handling,
+  and the focused verifier reruns already recorded below.
+- Latest required verification: graphical Compatibility `verify_perf_001` was
+  rerun through the awaited graphical runner. All sampled zones passed except
+  Greyfen's 1% low, which measured `28.9 FPS` against the required `30.0 FPS`.
+  The run exited with a verifier failure; this is a genuine performance blocker,
+  not a harness success.
+- Current status: incomplete. No new source change was made after `f19227c`, no
+  export, push, merge, deployment, or next ticket was started. The generated
+  failed report remains preserved in `.release-gate/` for diagnosis.
+- Exact next action on resume: make one targeted Greyfen frame-time fix, then
+  rerun only the graphical `verify_perf_001` gate before considering any broader
+  release work.
+
 ## Status
 
 Release continuation in progress. The complete release tail has now passed
@@ -15,23 +34,21 @@ the cumulative Recovery-003 changes and has not yet been checkpointed.
 
 ## Current Atomic Checkpoint
 
-- Current atomic work: reduce the Greyfen first-render cost introduced by
-  immediate cemetery landmarks in the `opening_fast` profile while preserving
-  the complete full-detail cemetery build. The broader recovery remains
-  paused; no next recovery ticket has been started.
-- Completed fix: `CemeterySection.build()` now accepts a compact opening mode.
-  Fast Greyfen keeps its cemetery staging markers, route geometry, collision,
-  bell, shrine, chapel, and interactions, while deferring loose edge trees,
-  fog, and decorative authored presentation meshes. The normal full build
-  still emits the complete cemetery presentation.
-- Latest atomic result: the focused cemetery route gate passed, and the
-  graphical Compatibility performance gate passed all sampled zones. Greyfen
-  measured `51.6 FPS` average and `31.1 FPS` 1% low; Wychwood `60.0/51.0`,
-  Wychwood combat `60.0/40.4`, Castle courtyard `60.0/52.3`, Record Hall
-  `44.1/38.4`, and Hart Glade `60.0/55.6`. The direct graphical run exited
+- Current atomic work: reduce Greyfen frame-time spikes while preserving the
+  same gameplay and adjacent-zone prewarming behavior. The broader recovery
+  remains active, but no separate recovery ticket was started in this slice.
+- Completed fix: `ZoneStreamingService` now polls threaded resource status at
+  10 Hz and emits progress only when it changes. This removes repeated
+  per-rendered-frame loader queries from the active zone without delaying
+  readiness or changing the requested resources.
+- Latest atomic result: runtime smoke passed, and the awaited graphical
+  Compatibility performance gate passed all sampled zones. Greyfen measured
+  `50.2 FPS` average and `34.4 FPS` 1% low; Wychwood `60.0/53.1`, Wychwood
+  combat `59.7/37.9`, Castle courtyard `60.0/57.0`, Record Hall `42.8/38.0`,
+  and Hart Glade `60.0/57.5`. Warm return measured `86.3 ms`; the run exited
   with code 0 and printed `PERF-001 VERIFIER: PASS`.
-- Evidence: `.release-gate/perf_001_report.json`, the waited graphical-run
-  result in the task log, and the targeted cemetery gate log.
+- Evidence: `.release-gate/perf_001_report.json`,
+  `.release-gate/verify_perf_001.log`, and the runtime-smoke result.
 - Completed fix: the browser route harness now uses camera-relative movement,
   request-scoped QA command results, progress-based key rearming, and the
   normal rendered dialogue action path. It records route checkpoints without
@@ -65,11 +82,8 @@ the cumulative Recovery-003 changes and has not yet been checkpointed.
   `WORLD-014` now passes at `1,075` nodes and `338` meshes after the retained
   grave-row and crow-roost decoration was moved onto the existing static visual
   batching path. The compact opening profile remains unchanged.
-- Latest graphical Compatibility result: `verify_perf_001` passes on a clean
-  run. Greyfen measured `52.85 FPS` average and `32.87 FPS` 1% low; Wychwood
-  `59.99/49.96`; Wychwood combat `60.02/45.01`; Castle courtyard
-  `60.00/53.18`; Record Hall `45.93/38.61`; and Hart Glade `60.00/56.43`.
-  The run exited with code 0 and printed `PERF-001 VERIFIER: PASS`.
+- The earlier graphical Compatibility result remains historical evidence; the
+  latest result is the 2026-09-05 run recorded in the atomic checkpoint above.
 - Remaining blocker: the authoritative recovery/release suite has not yet been
   rerun against this current source. Fresh screenshots, Web packaging, packed
   startup, browser proof, push, and deployment remain open.

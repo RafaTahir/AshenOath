@@ -23,6 +23,8 @@ const EMBEDDED_ZONE_IDS := [
 var requests: Dictionary = {}
 var owner_node: Node
 var topology: Dictionary = {}
+var _status_poll_accumulator := 0.0
+const STATUS_POLL_INTERVAL := 0.10
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -115,6 +117,7 @@ func clear_requests() -> void:
 	# ResourceLoader owns the threaded request itself; dropping our references
 	# prevents retired zone resources from staying alive through this service.
 	requests.clear()
+	_status_poll_accumulator = 0.0
 
 func retire_unneeded_zones(keep_ids: Array[String]) -> void:
 	var keep := {}
@@ -124,7 +127,14 @@ func retire_unneeded_zones(keep_ids: Array[String]) -> void:
 		if not keep.has(str(id).to_lower()):
 			requests.erase(id)
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	# Threaded loading does not need a status query on every rendered frame. On
+	# Compatibility/ANGLE, polling and emitting progress each frame can compete
+	# with the active zone even though the loader itself runs off the main thread.
+	_status_poll_accumulator += delta
+	if _status_poll_accumulator < STATUS_POLL_INTERVAL:
+		return
+	_status_poll_accumulator = 0.0
 	for id in requests.keys():
 		var request: Dictionary = requests[id]
 		if str(request.get("state", "")) != "loading":
@@ -133,9 +143,11 @@ func _process(_delta: float) -> void:
 		var progress := []
 		var status := ResourceLoader.load_threaded_get_status(path, progress)
 		var value := float(progress[0]) if not progress.is_empty() else 0.0
+		var previous_value := float(request.get("progress", 0.0))
 		request["progress"] = value
 		requests[id] = request
-		zone_progress.emit(str(id), value)
+		if absf(value - previous_value) >= 0.001:
+			zone_progress.emit(str(id), value)
 		if status == ResourceLoader.THREAD_LOAD_LOADED:
 			var resource := ResourceLoader.load_threaded_get(path)
 			request["state"] = "ready"
