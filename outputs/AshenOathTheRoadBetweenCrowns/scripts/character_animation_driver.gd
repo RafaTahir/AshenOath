@@ -476,6 +476,10 @@ func _play_clip_all(clip: StringName, blend: float, playback_direction: float = 
 	for player in animation_players:
 		if player.has_animation(clip):
 			player.play(clip, blend, current_playback_scale * playback_direction, playback_direction < 0.0)
+			# Sample the first pose immediately. This is required for manual players,
+			# but is also important for a newly spawned actor that can be paused for
+			# dialogue or capture before its first idle callback.
+			player.advance(0.0)
 
 func _playback_direction_for_state(state: String) -> float:
 	if state not in ["walk_back", "run_back"]:

@@ -5020,6 +5020,13 @@ func _stage_dialogue_moment(area) -> void:
 		return
 	var npc = area as Node3D
 	dialogue_focus_actor = npc
+	# Dialogue pauses the tree immediately after this staging call. Put Kael in
+	# the same authored presentation state as the speaker before the pause so a
+	# freshly spawned player cannot render the imported setup/T-pose in the
+	# conversation frame.
+	var player_driver = player.get("animation_driver")
+	if player_driver != null and player_driver.has_method("set_dialogue_pose"):
+		player_driver.set_dialogue_pose(true)
 	if area.interaction_id == "sister_anwen":
 		npc.set_meta("dialogue_facing_lock", true)
 		var anwen_driver = npc.find_child("CharacterAnimationDriver", true, false)
@@ -5069,6 +5076,10 @@ func _face_npc_toward_player(npc: Node3D) -> void:
 func _release_dialogue_facing() -> void:
 	audio.stop_voice()
 	dialogue_focus_actor = null
+	if player != null and is_instance_valid(player):
+		var player_driver = player.get("animation_driver")
+		if player_driver != null and player_driver.has_method("set_dialogue_pose"):
+			player_driver.set_dialogue_pose(false)
 	if zone_root == null:
 		return
 	var anwen = zone_root.find_child("sister_anwen", true, false)

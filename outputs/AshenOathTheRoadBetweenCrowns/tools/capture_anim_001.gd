@@ -46,6 +46,10 @@ func _capture_state(state: String, fraction: float, file_name: String) -> void:
 	if state == "beam_cast":
 		player.call("_set_sword_sheathed", true)
 		player.rotation_degrees.y = -22.0
+	elif state in ["attack_light", "attack_heavy", "parry"]:
+		# Combat captures must sample the same drawn-sword state that real input
+		# selects before the attack clip begins.
+		player.call("_set_sword_sheathed", false)
 	var clip: StringName = player.animation_driver.get_clip_for_state(state)
 	var animation_player := player.animation_driver.get_animation_player() as AnimationPlayer
 	if clip == StringName() or animation_player == null:
@@ -55,7 +59,19 @@ func _capture_state(state: String, fraction: float, file_name: String) -> void:
 	animation_player.play(clip)
 	var animation := animation_player.get_animation(clip)
 	animation_player.seek(animation.length * fraction, true)
+	if animation_player.callback_mode_process == AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL:
+		# PlayerController throttles its shared AnimationPlayer and disables the
+		# idle callback. Apply the sampled pose explicitly before rendering.
+		animation_player.advance(0.0)
 	await _frames(14)
+	if animation_player.callback_mode_process == AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL:
+		animation_player.advance(0.0)
+	if state == "attack_light":
+		# Physics is paused for deterministic captures; refresh the same hand-based
+		# blade pose that the live controller updates during its attack timeline.
+		player.call("_update_sword_equipment_pose", 0.0, 0.58, 0.0, false, true)
+	elif state == "attack_heavy":
+		player.call("_update_sword_equipment_pose", 0.0, 0.58, 0.0, true, true)
 	_frame_player()
 	await _frames(8)
 	capture_camera.current = true
