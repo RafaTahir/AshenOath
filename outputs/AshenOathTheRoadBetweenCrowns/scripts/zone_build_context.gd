@@ -34,6 +34,9 @@ func _init(game_host: Node, id: String, profile: String = "full") -> void:
 func is_opening_fast() -> bool:
 	return zone_id == "greyfen" and build_profile == "opening_fast"
 
+func is_opening_boot() -> bool:
+	return zone_id == "greyfen" and build_profile == "opening_boot"
+
 func add_node(node: Node, parent: Node = null) -> void:
 	var target := parent if parent != null else zone_root
 	target.add_child(node)

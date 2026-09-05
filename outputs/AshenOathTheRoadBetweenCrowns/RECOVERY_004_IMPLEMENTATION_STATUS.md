@@ -1,5 +1,35 @@
 # RECOVERY-004 Implementation Status
 
+## Current Atomic Checkpoint - 2026-09-06 (Opening boot profile)
+
+- Current ticket: `RECOVERY-004`, startup readiness slice (`LOAD-001`).
+- Completed in this atomic slice: the Greyfen menu prewarm now uses the
+  minimal `opening_boot` profile, retaining ground, river, bridges, bounds,
+  spawn composition, Anwen staging, and legal exit gates while deferring the
+  heavier village and investigation decoration. The gameplay hydration stage
+  runs after handoff, removes temporary boot gates before publishing the full
+  gameplay content, and keeps the existing queued New Game path intact.
+- Latest direct result: `tools/verify_load_001.gd` exited `0` with
+  `LOAD-001: PASS`. On the current D: workspace, runtime readiness was
+  approximately 238 ms, Greyfen prewarm was approximately 1,294 ms, total
+  menu prewarm was approximately 1,658 ms, and the prewarmed New Game handoff
+  reached playable Greyfen in approximately 19 ms. Anwen was present after
+  handoff, deferred detail remained pending as intended, and the run ended
+  without parser, assertion, active-renderer, resource, or ObjectDB shutdown
+  errors.
+- Remaining blockers: the wider recovery is still visually and release
+  blocked. Greyfen and Wychwood remain procedural/blockout quality, Record
+  Hall remains too dark/occluded in current evidence, and the retained Wolf
+  source remains an explicitly blocked White Hart fallback. Full export,
+  campaign evidence, and deployment remain pending.
+- Exact next action on resume: address the already-recorded Castle/Record Hall
+  presentation and validated non-fallback Hart asset, then recapture only the
+  affected views. Do not repeat this load gate unless the boot or hydration
+  inputs change, and do not export or deploy before the visual blockers are
+  resolved.
+- Checkpoint policy: this startup fix is verified and remains local only. No
+  push, merge, export, deployment, reset, revert, or stash was performed.
+
 ## Current Atomic Checkpoint - 2026-09-06 (Bridge surface contract)
 
 - Current ticket: `RECOVERY-004`, bridge traversal safety.

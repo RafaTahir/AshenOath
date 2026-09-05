@@ -142,6 +142,7 @@ var owned_timers: Array[Timer] = []
 # and IndexedDB writes. These operations resume after the player has had time
 # to see the opening and the browser has completed its first capture.
 const OPENING_DETAIL_INITIAL_DELAY_SECONDS := 30.0
+const OPENING_GAMEPLAY_HYDRATE_DELAY_SECONDS := 0.65
 const OPENING_DETAIL_MIN_PLAYER_DISTANCE := 7.0
 const OPENING_DETAIL_RETRY_SECONDS := 5.0
 const BACKGROUND_RUNTIME_DELAY_SECONDS := 45.0
@@ -156,7 +157,7 @@ const CAMPAIGN_VISUAL_PREWARM_ROLES: Array[String] = [
 	"castle_lantern",
 ]
 const OPENING_DETAIL_STAGES: Array[String] = [
-	"boundary", "landmark_board", "landmark_shrine", "landmark_blacksmith",
+	"gameplay", "boundary", "landmark_board", "landmark_shrine", "landmark_blacksmith",
 	"landmark_cemetery", "landmark_cart_road", "village_dressing",
 	"village_first_impression", "village_quality", "trees", "aftermath"
 ]
@@ -572,7 +573,7 @@ func _start_new_game_world() -> void:
 	progression.load_state({})
 	current_zone_id = "greyfen"
 	day_night.set_time(day_night.START_TIME_MINUTES, 0)
-	opening_detail_pending = prewarmed_greyfen != null and str(prewarmed_greyfen.get_meta("opening_build_profile", "")) == "opening_fast"
+	opening_detail_pending = prewarmed_greyfen != null and str(prewarmed_greyfen.get_meta("opening_build_profile", "")) in ["opening_fast", "opening_boot"]
 	opening_detail_stage_index = 0
 	opening_detail_generation += 1
 	opening_save_generation += 1
@@ -2542,7 +2543,7 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 	terrain_patch_batch_data.clear()
 	house_batch_data.clear()
 	environment_batches_flushed = false
-	var prewarm_build := ZoneCompositionRouter.build_core(self, "greyfen", "opening_fast")
+	var prewarm_build := ZoneCompositionRouter.build_core(self, "greyfen", "opening_boot")
 	var build_ms := Time.get_ticks_msec() - phase_started
 	print("LOADING: Greyfen prewarm build_complete ms=%d ok=%s" % [build_ms, bool(prewarm_build.get("ok", false))])
 	if not bool(prewarm_build.get("ok", false)):
@@ -2562,7 +2563,7 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 	# Publish a valid cache now and finish them after handoff so a menu click does
 	# not inherit a synchronous navigation or recursive renderer walk.
 	prewarm_root.set_meta("prewarm_navigation_pending", true)
-	prewarm_root.set_meta("opening_build_profile", "opening_fast")
+	prewarm_root.set_meta("opening_build_profile", "opening_boot")
 	_clear_environment_batch_buffers()
 	var world_finalize_ms := Time.get_ticks_msec() - phase_started
 	greyfen_prewarm_spatial_service = prewarm_service
@@ -2627,7 +2628,11 @@ func _run_opening_detail_stage(generation: int) -> void:
 	# drain in one browser turn. Let the playable scene settle for a short idle
 	# window first, then yield a real frame between every decoration chunk so the
 	# browser can paint and accept movement before late scenery compiles.
-	if opening_detail_stage_index == 0:
+	var stage := OPENING_DETAIL_STAGES[opening_detail_stage_index] if opening_detail_stage_index < OPENING_DETAIL_STAGES.size() else ""
+	if stage == "gameplay":
+		var gameplay_timer := _create_owned_timer(OPENING_GAMEPLAY_HYDRATE_DELAY_SECONDS, true)
+		await gameplay_timer.timeout
+	elif opening_detail_stage_index == 0:
 		var initial_delay := _create_owned_timer(OPENING_DETAIL_INITIAL_DELAY_SECONDS, true)
 		await initial_delay.timeout
 	else:
@@ -2655,7 +2660,6 @@ func _run_opening_detail_stage(generation: int) -> void:
 		_validate_zone_render_resources(zone_root)
 		print("LOADING: Greyfen deferred_detail complete")
 		return
-	var stage := OPENING_DETAIL_STAGES[opening_detail_stage_index]
 	var started := Time.get_ticks_msec()
 	# Each stage gets a fresh batch buffer. Existing published MultiMeshes remain
 	# untouched, while late decoration is still grouped instead of creating one

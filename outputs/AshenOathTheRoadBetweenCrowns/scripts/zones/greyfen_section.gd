@@ -7,6 +7,7 @@ const RiverSection = preload("res://scripts/zones/river_section.gd")
 func build(context: ZoneBuildContext) -> void:
 	seed(41021)
 	var opening_fast := context.is_opening_fast()
+	var opening_boot := context.is_opening_boot()
 	var root := Node3D.new()
 	root.name = "AuthoredGreyfenSection"
 	root.set_meta("ticket", "WORLD-001")
@@ -23,14 +24,18 @@ func build(context: ZoneBuildContext) -> void:
 	context.make_greyfen_path_edges()
 
 	_build_light_composition(context)
-	_build_village_silhouette(context)
-	_build_authored_greyfen_details(context)
+	if not opening_boot:
+		_build_village_silhouette(context)
+		_build_authored_greyfen_details(context)
 	# The cemetery is a released investigation route, not optional dressing. Keep
 	# its landmarks and collision present in the fast opening composition so a
 	# player can follow the quest there before deferred decoration begins.
 	if opening_fast:
 		CemeterySection.new().build(context, Vector3(14, 0, 8.6), true)
 	context.make_spawn_composition()
+	if opening_boot:
+		_build_boot_gameplay_content(context)
+		return
 	_build_gameplay_content(context)
 	if not opening_fast:
 		_build_boundary_dressing(context)
@@ -50,6 +55,8 @@ func build_detail_stage(context: ZoneBuildContext, stage: String) -> void:
 	# bounded chunks so WebGL never compiles the whole zone in one frame.
 	seed(41021)
 	match stage:
+		"gameplay":
+			_build_gameplay_content(context)
 		"boundary":
 			_build_boundary_dressing(context)
 		"landmark_board":
@@ -243,7 +250,34 @@ func _build_castle_road(context: ZoneBuildContext) -> void:
 	context.make_visual_box("CastleRoadRuts", Vector3(15.0, 0.052, -0.72), Vector3(5.8, 0.025, 0.18), Color(0.065, 0.045, 0.030))
 	context.make_visual_box("CastleRoadRuts", Vector3(15.0, 0.052, 0.72), Vector3(5.8, 0.025, 0.18), Color(0.065, 0.045, 0.030))
 
+func _build_boot_gameplay_content(context: ZoneBuildContext) -> void:
+	# The boot profile is deliberately small: it is the scene shown while the
+	# menu-covered prewarm finishes. Keep the first objective and all legal exits
+	# available, then hydrate the full village on the first settled gameplay
+	# frames. These gate markers are removed before the full gameplay stage so
+	# the player never receives duplicate focus targets.
+	context.make_named_interactable("sister_anwen", "dialogue", "Talk to Sister Anwen", Vector3(2.0, 0, -5.0), Color(0.34, 0.35, 0.48))
+	var boot_gates := [
+		["To Wychwood", Vector3(0, 0, -15.2), "wychwood", Vector3(0, 1, 13)],
+		["The long road", Vector3(-18, 0, -10), "deep_wood", Vector3(0, 1, 12)],
+		["Road to Castle Vargan", Vector3(17.5, 0, 0), "vargan_approach", Vector3(0, 1, 14)],
+	]
+	for entry in boot_gates:
+		var gate = context.make_zone_gate(entry[0], entry[1], entry[2], entry[3])
+		if gate != null:
+			gate.set_meta("opening_boot_gate", true)
+			if str(entry[2]) == "vargan_approach":
+				gate.rotation_degrees.y = 90.0
+
+func _remove_boot_gates(context: ZoneBuildContext) -> void:
+	if context.zone_root == null:
+		return
+	for child in context.zone_root.get_children().duplicate():
+		if child is Area3D and bool(child.get_meta("opening_boot_gate", false)):
+			child.free()
+
 func _build_gameplay_content(context: ZoneBuildContext) -> void:
+	_remove_boot_gates(context)
 	var road_ready := context.road_ready_to_report()
 	var board_prompt := "Post the road evidence publicly" if road_ready else "Read notice board"
 	context.make_named_interactable("notice_board", "dialogue", board_prompt, Vector3(-2, 0, 9.4), Color(0.48, 0.28, 0.12), Vector3(0.45, 0.45, 0.45))
@@ -254,7 +288,8 @@ func _build_gameplay_content(context: ZoneBuildContext) -> void:
 	# resolve at ordinary conversation distance.
 	var anwen_position := Vector3(11.0, 0, 4.8) if anwen_at_cemetery else Vector3(2.0, 0, -5.0)
 	var anwen_prompt := "Meet Sister Anwen at the cemetery gate" if anwen_at_cemetery else ("Report the road evidence privately" if road_ready else "Talk to Sister Anwen")
-	context.make_named_interactable("sister_anwen", "dialogue", anwen_prompt, anwen_position, Color(0.34, 0.35, 0.48))
+	if context.zone_root.find_child("sister_anwen", true, false) == null:
+		context.make_named_interactable("sister_anwen", "dialogue", anwen_prompt, anwen_position, Color(0.34, 0.35, 0.48))
 	context.make_named_interactable("mira", "dialogue", "Talk to Mira Fen", Vector3(-6.8, 0, -2.3), Color(0.22, 0.48, 0.32), Vector3(0.62, 0.62, 0.62))
 	context.make_named_interactable("rook", "dialogue", "Talk to Rook", Vector3(-7.8, 0, 8.5), Color(0.42, 0.33, 0.23), Vector3(0.62, 0.62, 0.62))
 	context.make_named_interactable("widow_elna", "dialogue", "Talk to Widow Elna", Vector3(13.0, 0, 7.0), Color(0.32, 0.30, 0.42), Vector3(0.54, 0.54, 0.54))
