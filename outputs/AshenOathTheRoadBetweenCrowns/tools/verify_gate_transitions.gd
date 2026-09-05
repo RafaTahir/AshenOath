@@ -70,7 +70,8 @@ func use_gate(game, target: String) -> void:
 	check(gate_corridor_clear, "%s gate approach has a player-sized collision blocker" % target)
 	if not gate_corridor_clear:
 		return
-	await _walk_player_to(game, near_position)
+	if not await _walk_player_to(game, near_position):
+		return
 	var toward_gate: Vector3 = gate.global_position - game.player.global_position
 	toward_gate.y = 0.0
 	game.camera_rig.yaw = atan2(-toward_gate.normalized().x, -toward_gate.normalized().z)
@@ -104,7 +105,8 @@ func use_seamless_boundary(game, source: String, target: String) -> void:
 	check(seamless_corridor_clear, "%s seamless approach has a player-sized collision blocker" % target)
 	if not seamless_corridor_clear:
 		return
-	await _walk_player_to(game, near_position)
+	if not await _walk_player_to(game, near_position):
+		return
 	var yaw := atan2(-outward.x, -outward.z)
 	if game.camera_rig != null:
 		game.camera_rig.yaw = yaw
@@ -214,7 +216,7 @@ func wait_for_zone(game, target: String) -> void:
 		await process_frame
 	check(false, "%s did not become playable within 90 frames" % target)
 
-func _walk_player_to(game, target: Vector3) -> void:
+func _walk_player_to(game, target: Vector3) -> bool:
 	var start_zone := str(game.current_zone_id)
 	var route: Array = [target]
 	if game.spatial_service != null and game.spatial_service.has_method("build_route"):
@@ -229,7 +231,7 @@ func _walk_player_to(game, target: Vector3) -> void:
 		for _frame in range(360):
 			if str(game.current_zone_id) != start_zone:
 				Input.action_release("move_forward")
-				return
+				return true
 			var delta: Vector3 = point - game.player.global_position
 			delta.y = 0.0
 			if delta.length() <= 0.85:
@@ -242,8 +244,9 @@ func _walk_player_to(game, target: Vector3) -> void:
 		Input.action_release("move_forward")
 		if not reached:
 			check(false, "Player could not physically reach route waypoint %s" % str(point))
-			return
+			return false
 	Input.action_release("move_forward")
+	return true
 
 func _send_action(action: String) -> void:
 	var down := InputEventAction.new()
