@@ -1,5 +1,31 @@
 # RECOVERY-004 Implementation Status
 
+## Current Atomic Checkpoint - 2026-09-06 (Startup handoff optimization)
+
+- Current work: move noncritical Greyfen prewarm work off the New Game handoff.
+- Completed: the Web opening path now activates embedded Greyfen gameplay content
+  without waiting for the optional opening art pack. Greyfen prewarm publishes its
+  cached route before navigation baking and renderer validation, then completes
+  those correctness passes after the first controllable frame. The duplicate
+  opening-pack request was removed from the critical prewarm path.
+- Latest result: the targeted headless runtime verifier passed with zero parser,
+  resource, assertion, or error lines. The graphical Compatibility opening gate
+  reached Greyfen prewarm in 7494 ms, made New Game playable in 122 ms, completed
+  Wychwood in 398 ms, returned to Greyfen in 71 ms, and measured 101.0 MB static
+  memory. Its only failures were the pre-existing Greyfen performance results:
+  27.1 FPS average and 13.3 FPS 1% low against the broader 32/30 gate. The
+  startup handoff itself therefore passes; performance remains an explicit
+  blocker. Logs: `D:\Temp\AshenOath\recovery_004_runtime_targeted.log` and the
+  graphical opening-gate output from the same run.
+- Remaining blocker: Greyfen target-hardware performance is below the required
+  floor. This checkpoint does not claim the opening milestone, visual review,
+  export, or deployment is complete.
+- Exact next action on resume: profile and reduce Greyfen frame cost, then rerun
+  the graphical performance/opening gate. Do not repeat the startup or animation
+  checks unless their inputs change.
+- Checkpoint policy: this focused change is committed locally only. No push,
+  merge, export, deployment, reset, revert, stash, or new ticket was started.
+
 ## Current Atomic Checkpoint - 2026-09-06 (Lifecycle-clean animation gate)
 
 - Current work: animation presentation and dialogue first-frame pose repair.

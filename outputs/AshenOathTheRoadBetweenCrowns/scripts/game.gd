@@ -430,6 +430,13 @@ func _load_zone_after_runtime_pack(zone_id: String, spawn_pos: Vector3) -> void:
 		if runtime_packs == null or not runtime_packs.has_method("request_pack"):
 			_recover_failed_zone_load(current_zone_id)
 			return
+		# The Web candidate embeds the opening builders and gameplay-critical route
+		# geometry in the root PCK. Do not make a valid gate wait on the optional
+		# 28 MB art pack; its background request can finish while the player is in
+		# Greyfen and enrich later visits.
+		if runtime_packs.has_method("has_embedded_content") and runtime_packs.has_embedded_content("opening"):
+			_load_zone(zone_id, spawn_pos)
+			return
 		if not runtime_packs.is_ready("opening"):
 			opening_pack_waiting = true
 			if hud != null and hud.has_method("arm_loading"):
@@ -1056,6 +1063,26 @@ func _activate_prewarmed_player_runtime() -> void:
 	var gameplay_camera := camera_rig.find_child("Camera3D", true, false) as Camera3D
 	if gameplay_camera != null:
 		gameplay_camera.current = true
+	call_deferred("_finish_prewarmed_greyfen_runtime")
+
+func _finish_prewarmed_greyfen_runtime() -> void:
+	# Complete deferred navigation and renderer validation only after the first
+	# controllable frame. The metadata guard prevents a late callback from
+	# touching a zone that has already been replaced or retired.
+	await get_tree().process_frame
+	if not game_started or current_zone_id != "greyfen" or zone_root == null or not is_instance_valid(zone_root):
+		return
+	if not bool(zone_root.get_meta("prewarm_navigation_pending", false)):
+		return
+	var started := Time.get_ticks_msec()
+	if spatial_service != null and is_instance_valid(spatial_service):
+		spatial_service.build_navigation(zone_root)
+	zone_root.set_meta("prewarm_navigation_pending", false)
+	_validate_zone_render_resources(zone_root)
+	for enemy in active_enemies:
+		if is_instance_valid(enemy) and enemy.has_method("setup_navigation"):
+			enemy.setup_navigation(spatial_service)
+	print("LOADING: Greyfen deferred_runtime_complete ms=%d" % (Time.get_ticks_msec() - started))
 
 func _recover_failed_zone_load(previous_zone_id: String) -> void:
 	campaign_pack_waiting = false
@@ -2266,10 +2293,9 @@ func _begin_opening_prewarm() -> void:
 	if game_started or greyfen_prewarm_started:
 		return
 	greyfen_prewarm_started = true
-	# Wychwood and cemetery remain streamed, but their request starts now rather
-	# than after the player has already reached the first route fork.
-	if runtime_packs != null and runtime_packs.has_method("request_pack"):
-		runtime_packs.request_pack("opening")
+	# Wychwood and cemetery remain streamed. Their optional art pack is requested
+	# by the background lifecycle instead of competing with Greyfen's first
+	# controllable frame.
 	print("LOADING: Greyfen prewarm begin")
 	call_deferred("_prewarm_greyfen_after_menu_frame")
 
@@ -2325,8 +2351,10 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 	_flush_environment_batches()
 	_add_visual_100_layer("greyfen")
 	_apply_first_route_materials(zone_root)
-	_validate_zone_render_resources(zone_root)
-	prewarm_service.build_navigation(zone_root)
+	# These are correctness passes, not prerequisites for the first player frame.
+	# Publish a valid cache now and finish them after handoff so a menu click does
+	# not inherit a synchronous navigation or recursive renderer walk.
+	prewarm_root.set_meta("prewarm_navigation_pending", true)
 	prewarm_root.set_meta("opening_build_profile", "opening_fast")
 	_clear_environment_batch_buffers()
 	var world_finalize_ms := Time.get_ticks_msec() - phase_started
