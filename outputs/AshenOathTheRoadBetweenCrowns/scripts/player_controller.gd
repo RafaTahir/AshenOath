@@ -284,21 +284,33 @@ func get_blade_attack_damage(heavy: bool = false) -> float:
 func _movement_input() -> Vector2:
 	if input_source != null and input_source.has_method("movement_vector"):
 		return input_source.movement_vector()
+	# Character fixtures and portrait captures can instantiate the controller
+	# before InputRouter has installed its actions. Missing actions are neutral
+	# input, not an engine error.
+	for action in ["move_left", "move_right", "move_forward", "move_back"]:
+		if not InputMap.has_action(action):
+			return Vector2.ZERO
 	return Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 
 func _action_pressed(action: StringName) -> bool:
 	if input_source != null and input_source.has_method("is_action_pressed"):
 		return input_source.is_action_pressed(action)
+	if not InputMap.has_action(action):
+		return false
 	return Input.is_action_pressed(action)
 
 func _action_just_pressed(action: StringName) -> bool:
 	if input_source != null and input_source.has_method("is_action_just_pressed"):
 		return input_source.is_action_just_pressed(action)
+	if not InputMap.has_action(action):
+		return false
 	return Input.is_action_just_pressed(action)
 
 func _action_just_released(action: StringName) -> bool:
 	if input_source != null and input_source.has_method("is_action_just_released"):
 		return input_source.is_action_just_released(action)
+	if not InputMap.has_action(action):
+		return false
 	return Input.is_action_just_released(action)
 
 func _handle_movement(delta: float) -> void:
@@ -1231,9 +1243,9 @@ func _attach_rig_sword(mapped: Node3D) -> Node3D:
 	sword_equipment_pivot = Node3D.new()
 	sword_equipment_pivot.name = "KaelSwordGripPivot"
 	equipment_space.add_child(sword_equipment_pivot)
-	# Follow the hand position, but own the blade orientation so imported wrist axes
-	# cannot turn the weapon into an upright pole.
-	sword_equipment_pivot.top_level = true
+	# The pivot remains inside the normalized hand attachment hierarchy. The
+	# per-frame pose below changes only its local result, so the blade follows the
+	# hand between animation ticks instead of becoming a detached world object.
 	# The imported FBX had null Compatibility surfaces and was hidden
 	# immediately. Use the validated Web-safe weapon directly.
 	return _build_oathblade_visual(sword_equipment_pivot)
@@ -1244,7 +1256,7 @@ func _build_oathblade_visual(parent: Node3D) -> Node3D:
 	# Keep the blade readable at gameplay distance without letting a one-metre
 	# local mesh read as a pole beside a 1.78 m character. The hand, markers,
 	# slash ribbon, and collision all use this same normalized weapon scale.
-	oathblade.scale = Vector3.ONE * 0.92
+	oathblade.scale = Vector3.ONE * 0.82
 	parent.add_child(oathblade)
 	var steel := _metal_mat(Color(0.84, 0.88, 0.92))
 	steel.metallic = 0.72
@@ -1262,7 +1274,7 @@ func _build_oathblade_visual(parent: Node3D) -> Node3D:
 	var guard := MeshInstance3D.new()
 	guard.name = "OathbladeGuard"
 	var guard_mesh := BoxMesh.new()
-	guard_mesh.size = Vector3(0.34, 0.060, 0.082)
+	guard_mesh.size = Vector3(0.25, 0.055, 0.072)
 	guard.mesh = guard_mesh
 	guard.position = Vector3(0.0, -0.075, 0.0)
 	guard.material_override = _metal_mat(Color(0.64, 0.43, 0.17))
@@ -1270,9 +1282,9 @@ func _build_oathblade_visual(parent: Node3D) -> Node3D:
 	var grip := MeshInstance3D.new()
 	grip.name = "OathbladeGrip"
 	var grip_mesh := CylinderMesh.new()
-	grip_mesh.top_radius = 0.033
-	grip_mesh.bottom_radius = 0.038
-	grip_mesh.height = 0.22
+	grip_mesh.top_radius = 0.028
+	grip_mesh.bottom_radius = 0.032
+	grip_mesh.height = 0.19
 	grip_mesh.radial_segments = 8
 	grip.mesh = grip_mesh
 	grip.position = Vector3(0.0, 0.065, 0.0)
@@ -1281,8 +1293,8 @@ func _build_oathblade_visual(parent: Node3D) -> Node3D:
 	var pommel := MeshInstance3D.new()
 	pommel.name = "OathbladePommel"
 	var pommel_mesh := SphereMesh.new()
-	pommel_mesh.radius = 0.055
-	pommel_mesh.height = 0.11
+	pommel_mesh.radius = 0.045
+	pommel_mesh.height = 0.09
 	pommel.mesh = pommel_mesh
 	pommel.position = Vector3(0.0, 0.18, 0.0)
 	pommel.material_override = _metal_mat(Color(0.52, 0.34, 0.15))
@@ -1292,10 +1304,10 @@ func _build_oathblade_visual(parent: Node3D) -> Node3D:
 func _build_oathblade_mesh() -> ImmediateMesh:
 	var mesh := ImmediateMesh.new()
 	var vertices := [
-		Vector3(-0.11, -0.10, 0.04), Vector3(0.11, -0.10, 0.04), Vector3(0.07, -0.78, 0.032),
-		Vector3(-0.07, -0.78, 0.032), Vector3(0.0, -1.03, 0.0),
-		Vector3(-0.11, -0.10, -0.04), Vector3(0.11, -0.10, -0.04), Vector3(0.07, -0.78, -0.032),
-		Vector3(-0.07, -0.78, -0.032), Vector3(0.0, -1.03, 0.0)
+		Vector3(-0.075, -0.10, 0.035), Vector3(0.075, -0.10, 0.035), Vector3(0.047, -0.72, 0.028),
+		Vector3(-0.047, -0.72, 0.028), Vector3(0.0, -0.98, 0.0),
+		Vector3(-0.075, -0.10, -0.035), Vector3(0.075, -0.10, -0.035), Vector3(0.047, -0.72, -0.028),
+		Vector3(-0.047, -0.72, -0.028), Vector3(0.0, -0.98, 0.0)
 	]
 	var faces := [
 		[0, 1, 2], [0, 2, 3], [5, 7, 6], [5, 8, 7], [3, 2, 4], [8, 9, 4],

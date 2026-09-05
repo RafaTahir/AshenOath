@@ -44,6 +44,11 @@ func _capture_state(state: String, fraction: float, file_name: String) -> void:
 	if state == "beam_cast":
 		player.call("_set_sword_sheathed", true)
 		player.rotation_degrees.y = -22.0
+	elif state in ["attack_light", "attack_heavy", "parry"]:
+		# Combat proof must show the same drawn state that real attack input
+		# selects. Otherwise the body pose is valid but the sword is hidden in its
+		# back scabbard, making the screenshot falsely appear weaponless.
+		player.call("_set_sword_sheathed", false)
 	var clip: StringName = driver.get_clip_for_state(state)
 	var animation_player := driver.get_animation_player() as AnimationPlayer
 	if clip == StringName() or animation_player == null:
@@ -54,7 +59,14 @@ func _capture_state(state: String, fraction: float, file_name: String) -> void:
 	var animation := animation_player.get_animation(clip)
 	if animation != null:
 		animation_player.seek(animation.length * fraction, true)
+	if animation_player.callback_mode_process == AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL:
+		# PlayerController deliberately disables idle evaluation for throttled
+		# animation. Advance the sampled frame explicitly or the screenshot will
+		# capture the imported T-pose even though the runtime contract is valid.
+		animation_player.advance(0.0)
 	await _frames(14)
+	if animation_player.callback_mode_process == AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL:
+		animation_player.advance(0.0)
 	# The capture intentionally samples a clip without player locomotion. Refresh
 	# the bone-attached sword after the seek so the proof frame uses the current
 	# hand position rather than the setup pose from before the animation played.

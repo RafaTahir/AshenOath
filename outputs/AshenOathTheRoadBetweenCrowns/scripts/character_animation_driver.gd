@@ -332,6 +332,12 @@ func get_skeleton() -> Skeleton3D:
 func get_animation_player() -> AnimationPlayer:
 	return animation_player
 
+func get_playback_direction_for_state(state: String) -> float:
+	# Expose the resolved direction to focused motion tests. A reverse gait may
+	# use an authored reverse clip or a forward clip played backwards; callers
+	# should not infer that distinction from the clip name alone.
+	return _playback_direction_for_state(state)
+
 func get_clip_for_state(state: String) -> StringName:
 	return _clip_for(state)
 
@@ -474,13 +480,20 @@ func _play_clip_all(clip: StringName, blend: float, playback_direction: float = 
 func _playback_direction_for_state(state: String) -> float:
 	if state not in ["walk_back", "run_back"]:
 		return 1.0
-	var reverse_state_clip := _clip_for(state)
-	var forward_state := "run" if state == "run_back" else "walk"
-	var forward_clip := _clip_for(forward_state)
-	# Prefer an authored reverse clip. If the shared library only provides a
-	# forward gait, play that clip backwards so the feet travel with the actor
-	# instead of visibly walking forward while the physics moves in reverse.
-	return -1.0 if reverse_state_clip == StringName() or reverse_state_clip == forward_clip else 1.0
+	var resolved_clip := _clip_for(state)
+	if resolved_clip == StringName():
+		return 1.0
+	# Prefer an authored reverse clip. If the role did not provide an explicit
+	# reverse mapping and resolution fell through to the forward gait alias,
+	# reverse playback so the feet travel with the actor instead of visibly
+	# walking forward while the physics moves in reverse. This also covers crowd
+	# roles whose compact map intentionally contains only walk/run clips.
+	var requested := str(clip_map.get(state, "")).strip_edges()
+	if requested.is_empty():
+		return -1.0
+	var requested_key := _clip_key(requested)
+	var resolved_key := _clip_key(str(resolved_clip))
+	return 1.0 if resolved_key == requested_key or resolved_key.ends_with(requested_key) else -1.0
 
 func _emit_locomotion_step_events() -> void:
 	if animation_player == null or action_active or current_state not in ["walk", "walk_back", "strafe", "run", "run_back"]:

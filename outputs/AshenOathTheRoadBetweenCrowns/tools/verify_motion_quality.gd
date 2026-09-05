@@ -57,10 +57,9 @@ func _initialize() -> void:
 			_assert(_state_moves_bones(enemy.animation_driver, "attack"), "%s attack clip does not move real bones" % enemy.enemy_id)
 			_assert(_state_moves_bones(enemy.animation_driver, "death"), "%s death clip does not move real bones" % enemy.enemy_id)
 
-	# Emit the pass marker before SceneTree teardown. Godot's dummy renderer can
-	# report shutdown-only material/RID cleanup diagnostics while freeing this
-	# multi-zone test tree; the release runner classifies diagnostics after the
-	# pass marker as teardown warnings rather than active rendering failures.
+	# Emit the result before SceneTree teardown. The test tree owns multiple
+	# zones, so use the runtime's shutdown contract before freeing it instead of
+	# relying on queue_free() to release renderer-owned dependencies in order.
 	_finish()
 
 func _clip_moves_bones(driver: Node, clip: StringName) -> bool:
@@ -119,11 +118,21 @@ func _finish() -> void:
 	var exit_code := 1 if not failures.is_empty() else 0
 	if is_instance_valid(tested_game):
 		# Everything above this boundary is active-render verification. The
-		# remaining frames only retire the intentionally large test tree so the
-		# release runner can classify renderer cleanup diagnostics correctly.
+		# remaining frames retire the intentionally large test tree through the
+		# same lifecycle used by a real runtime shutdown.
 		print("VERIFIER_PHASE: SHUTDOWN")
-		tested_game.queue_free()
+		if tested_game.has_method("finalize_resource_shutdown"):
+			tested_game.finalize_resource_shutdown()
+		elif tested_game.has_method("prepare_resource_shutdown"):
+			tested_game.prepare_resource_shutdown()
+		var retirement_frames := 12
+		if tested_game.has_method("get") and tested_game.get("ZONE_RETIRE_FRAMES") != null:
+			retirement_frames = maxi(int(tested_game.get("ZONE_RETIRE_FRAMES")) + 4, retirement_frames)
+		await _frames(retirement_frames)
+		if is_instance_valid(tested_game) and tested_game.is_inside_tree():
+			root.remove_child(tested_game)
+		if is_instance_valid(tested_game):
+			tested_game.free()
 		tested_game = null
-		await process_frame
-		await process_frame
+		await _frames(4)
 	quit(exit_code)

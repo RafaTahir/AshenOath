@@ -94,9 +94,17 @@ func _verify_locomotion_contract() -> void:
 	_assert(backward_distance > 0.05, "backward input did not move the player")
 	_assert(backward_steps <= 2, "reverse animation emitted duplicate foot-contact events")
 	_assert(observed_footsteps == observed_steps, "footstep audio events drifted from animation contacts")
+	if driver.has_method("get_playback_direction_for_state"):
+		_assert(float(driver.get_playback_direction_for_state("walk_back")) < 0.0 or driver.get_clip_for_state("walk_back") != driver.get_clip_for_state("walk"), "backward gait is not reversed when no authored reverse clip exists")
 	if is_instance_valid(game):
-		game.queue_free()
-	await _frames(2)
+		if game.has_method("finalize_resource_shutdown"):
+			game.call("finalize_resource_shutdown")
+			await _frames(12)
+		if game.is_inside_tree():
+			root.remove_child(game)
+		if is_instance_valid(game):
+			game.free()
+	await _frames(4)
 
 func _frames(count: int) -> void:
 	for _i in range(count):

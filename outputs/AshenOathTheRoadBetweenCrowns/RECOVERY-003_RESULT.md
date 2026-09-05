@@ -1,5 +1,33 @@
 # RECOVERY-003 Result
 
+## Paused Atomic Checkpoint - 2026-09-05 (locomotion and combat presentation)
+
+- Current ticket: `RECOVERY-003`, focused character locomotion and sword-evidence
+  repair.
+- Completed work: backward gait fallback now reverses forward-only clips when no
+  authored reverse clip exists; missing input actions are treated as neutral in
+  standalone fixtures; the hand-attached Oathblade remains in the normalized
+  equipment hierarchy and has a gameplay-sized mesh; combat captures explicitly
+  draw the sword and advance manually processed animation frames; motion and
+  walk/menu verifiers now retire runtime resources through the shutdown contract.
+- Latest result: `verify_walk_menu_fix.gd`, `verify_motion_quality.gd`,
+  `verify_combat_001.gd`, and `verify_runtime_smoke.gd` all passed with clean
+  exits. Graphical `capture_anim_003.gd` and `capture_char_006.gd` both passed
+  at 1280x720 Compatibility resolution. The regenerated attack and parry
+  evidence contains an actual drawn sword and animated body pose. The CHAR-006
+  capture now warms the imported rig, samples the real PlayerController socket,
+  and rejects background-only frames before saving evidence.
+- Evidence: refreshed `ANIM_003_*` and `CHAR_006_Kael_Sword_Attack.png` frames in
+  `Development_Gallery/screenshots/`, plus the direct native verifier output
+  recorded during this checkpoint.
+- Remaining blocker: this is not a release approval. The broader recovery still
+  has known visual-quality, campaign-proof, startup, target-hardware, export,
+  and deployment blockers. No Web export, push, merge, or deployment was done
+  in this paused slice.
+- Exact next action on resume: begin only the next explicitly selected recovery
+  ticket after reviewing the current release blockers; do not rerun this
+  focused motion/capture set unless one of its inputs changes.
+
 ## Paused Atomic Checkpoint - 2026-09-05
 
 - Current ticket: `RECOVERY-003`, release-continuation performance checkpoint.
