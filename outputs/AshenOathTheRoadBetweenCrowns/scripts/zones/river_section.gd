@@ -1,8 +1,9 @@
 extends RefCounted
 
 const RiverMotionController = preload("res://scripts/river_motion_controller.gd")
+const BridgeSurfaceContract = preload("res://scripts/bridge_surface_contract.gd")
 
-const BRIDGE_WIDTH := 5.4
+const BRIDGE_WIDTH := BridgeSurfaceContract.DECK_WIDTH
 const BANK_CLEARANCE := 1.15
 
 var visual_box_batches: Dictionary = {}
@@ -15,7 +16,7 @@ func build(context: ZoneBuildContext, center_z: float, width: float, span: float
 	root.name = "LivingRiverSection"
 	root.set_meta("river_center_z", center_z)
 	root.set_meta("river_span", span)
-	root.set_meta("bridge_half_width", BRIDGE_WIDTH * 0.5)
+	root.set_meta("bridge_half_width", BridgeSurfaceContract.HALF_WIDTH)
 	context.add_node(root)
 
 	_make_box(root, "RiverBed", Vector3(0,-1.72,center_z), Vector3(width,0.20,span), Color(0.055,0.075,0.065), false)
@@ -101,14 +102,14 @@ func _make_shore_wetness(root: Node3D, center_z: float, width: float, span: floa
 		root.add_child(wet)
 
 func _make_bridge(root: Node3D, z: float, span: float) -> void:
-	var bridge_length := span + 2.6
+	var bridge_length := BridgeSurfaceContract.bridge_length(span)
 	# Keep the physical deck exactly flush with the road. A separate shallow
 	# visual shell preserves the raised timber silhouette while the collision
 	# surface has no lip for a full-size capsule to catch when leaving the deck.
 	_make_box(root,"RiverBridgeDeckVisual",Vector3(0,0.09,z),Vector3(BRIDGE_WIDTH,0.10,bridge_length),Color(0.22,0.13,0.065),false)
 	# Greyfen's road slabs finish at y=0.038. Put the collision deck at the
 	# same top height so a CharacterBody crosses without catching a hidden lip.
-	_make_box(root,"RiverBridgeDeck",Vector3(0,0.01,z),Vector3(BRIDGE_WIDTH,0.06,bridge_length),Color(0.22,0.13,0.065),true)
+	_make_box(root,"RiverBridgeDeck",Vector3(0,0.0,z),Vector3(BRIDGE_WIDTH,BridgeSurfaceContract.DECK_COLLISION_THICKNESS,bridge_length),Color(0.22,0.13,0.065),true)
 	var ramp_length := 1.8
 	# Match the road surface to the shallow physical deck with a visual wedge.
 	# Collision remains on the flush deck so the capsule never catches a ramp
@@ -117,6 +118,10 @@ func _make_bridge(root: Node3D, z: float, span: float) -> void:
 	var ramp_offset := bridge_length * 0.5 + ramp_length * 0.5 - 0.06
 	_make_bridge_ramp(root, "BridgeApproachRampNorth", Vector3(0,0.09,z-ramp_offset), Vector3(BRIDGE_WIDTH-0.28,0.18,ramp_length), -ramp_angle)
 	_make_bridge_ramp(root, "BridgeApproachRampSouth", Vector3(0,0.09,z+ramp_offset), Vector3(BRIDGE_WIDTH-0.28,0.18,ramp_length), ramp_angle)
+	# The ramps are a visual wedge. These low aprons overlap the deck and ground
+	# so a full CharacterBody capsule never meets a seam or requires a jump.
+	_make_bridge_apron_collision(root, "BridgeApproachSurfaceNorthCollision", Vector3(0, 0.0, z-ramp_offset), Vector3(BRIDGE_WIDTH-0.28, BridgeSurfaceContract.DECK_COLLISION_THICKNESS, ramp_length))
+	_make_bridge_apron_collision(root, "BridgeApproachSurfaceSouthCollision", Vector3(0, 0.0, z+ramp_offset), Vector3(BRIDGE_WIDTH-0.28, BridgeSurfaceContract.DECK_COLLISION_THICKNESS, ramp_length))
 	var plank_count := 9
 	for plank_index in range(plank_count):
 		var local_z := -bridge_length * 0.42 + float(plank_index) * (bridge_length * 0.84 / float(plank_count - 1))
@@ -197,6 +202,17 @@ func _make_bridge_ramp(root: Node3D, node_name: String, pos: Vector3, size: Vect
 	material.roughness = 0.86
 	mesh.material_override = material
 	root.add_child(mesh)
+
+func _make_bridge_apron_collision(root: Node3D, node_name: String, pos: Vector3, size: Vector3) -> void:
+	var body := StaticBody3D.new()
+	body.name = node_name
+	body.position = pos
+	root.add_child(body)
+	var shape := CollisionShape3D.new()
+	var box := BoxShape3D.new()
+	box.size = size
+	shape.shape = box
+	body.add_child(shape)
 
 func _make_bank_barriers(root: Node3D, center_z: float, width: float, span: float) -> void:
 	var side_length := (width - BRIDGE_WIDTH) * 0.5

@@ -1,7 +1,8 @@
 extends Node3D
 
-const RIVER_HALF_SPAN := 2.25
-const DEFAULT_BRIDGE_HALF_WIDTH := 2.35
+const BridgeSurfaceContract = preload("res://scripts/bridge_surface_contract.gd")
+const RIVER_HALF_SPAN := BridgeSurfaceContract.RIVER_HALF_SPAN
+const DEFAULT_BRIDGE_HALF_WIDTH := BridgeSurfaceContract.HALF_WIDTH
 
 var zone_id := ""
 var river_center := 999.0
@@ -41,7 +42,7 @@ func set_player_body(body: CollisionObject3D) -> void:
 
 func register_bridge(id: String, bank_a: Vector3, bank_b: Vector3, half_width: float) -> void:
 	var centre_z := (bank_a.z + bank_b.z) * 0.5
-	var half_length := maxf(absf(bank_b.z - bank_a.z) * 0.5 - 0.15, RIVER_HALF_SPAN)
+	var half_length := BridgeSurfaceContract.bridge_half_length(absf(bank_b.z - bank_a.z))
 	bridges[id] = {
 		"id": id,
 		"bank_a": bank_a,
@@ -122,14 +123,7 @@ func is_on_bridge(position: Vector3, clearance: float = 0.0) -> bool:
 	if river_center >= 900.0:
 		return false
 	for bridge in bridges.values():
-		# The bridge query uses the actor root footprint. A point below the
-		# waterline is still invalid and must be recovered even if its X/Z is
-		# aligned with a legal deck.
-		if position.y < -0.25:
-			continue
-		var width_limit := float(bridge.half_width) - minf(clearance, 0.35)
-		var length_limit := float(bridge.half_length) + clearance
-		if absf(position.x) <= width_limit and absf(position.z - float(bridge.center_z)) <= length_limit:
+		if BridgeSurfaceContract.contains(position, float(bridge.center_z), float(bridge.half_length), clearance):
 			return true
 	return false
 

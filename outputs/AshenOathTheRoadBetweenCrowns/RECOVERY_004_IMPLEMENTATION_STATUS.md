@@ -1,5 +1,33 @@
 # RECOVERY-004 Implementation Status
 
+## Current Atomic Checkpoint - 2026-09-06 (Bridge surface contract)
+
+- Current ticket: `RECOVERY-004`, bridge traversal safety.
+- Completed in this atomic slice: the shared `BridgeSurfaceContract` now owns
+  bridge width, river span, deck length, and legal deck containment. Greyfen
+  and Wychwood river construction use the same contract for the rendered deck,
+  flush collision deck, and bridge aprons. The spatial service uses the same
+  contract for bridge recognition and recovery, so the legal crossing surface
+  cannot disagree with the river exclusion rule.
+- Direct result: `verify_river_swimming.gd` exited `0` with
+  `RIVER-002 SAFETY VERIFIER: PASS`. The verifier drove the actual
+  `CharacterBody3D` across both river crossings in both directions, checked
+  bridge approach floor continuity, bank barriers, recovery, interaction and
+  enemy clearances, and confirmed that neither crossing triggered river
+  recovery. No parser, assertion, active-renderer, resource, or shutdown error
+  was reported.
+- Current remaining blockers: the fresh visual evidence is still not release
+  approved because Greyfen/Wychwood remain procedural, Castle/Record Hall are
+  weak and dark, and the retained Wolf source is an explicitly blocked White
+  Hart fallback. Production export, full release verification, and deployment
+  remain intentionally pending.
+- Exact next action on resume: address the already-recorded visual blockers,
+  beginning with Castle/Record Hall and a validated non-fallback Hart asset,
+  then recapture only the affected views. Do not export or deploy until those
+  frames pass visual review.
+- Checkpoint policy: this bridge fix is verified and committed locally only.
+  No push, merge, export, deployment, reset, revert, or stash was performed.
+
 ## Current Atomic Checkpoint - 2026-09-06 (Lifecycle-clean visual review)
 
 - Current ticket: `RECOVERY-004`, opening activation safety and visual review.
