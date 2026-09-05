@@ -45,6 +45,15 @@ static func remove_proxy_anatomy(root: Node) -> void:
 		var lowered := str(child.name).to_lower().replace("_"," ")
 		for token in forbidden:
 			if lowered.contains(token):
+				# Hide invalid overlays immediately so a deferred queue_free cannot
+				# expose one frame of detached anatomy during actor activation.
+				if child is CanvasItem:
+					(child as CanvasItem).visible = false
+				if child is Node3D:
+					(child as Node3D).process_mode = Node.PROCESS_MODE_DISABLED
+				if child is CollisionObject3D:
+					(child as CollisionObject3D).collision_layer = 0
+					(child as CollisionObject3D).collision_mask = 0
 				child.queue_free()
 				break
 

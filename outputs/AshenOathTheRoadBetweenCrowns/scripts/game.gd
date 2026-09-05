@@ -1,5 +1,6 @@
 extends Node3D
 
+const BridgeSurfaceContract = preload("res://scripts/bridge_surface_contract.gd")
 const EnemyAI = preload("res://scripts/enemy_ai.gd")
 const Interactable = preload("res://scripts/interactable.gd")
 const VisualDirector = preload("res://scripts/visual_director.gd")
@@ -133,6 +134,7 @@ var opening_save_generation := 0
 var opening_checkpoint_pending := false
 var campaign_visual_prewarm_started := false
 var campaign_visual_prewarm_generation := 0
+var campaign_visual_prewarm_not_before_msec := 0
 var owned_timers: Array[Timer] = []
 # Keep each late-opening chunk small enough that the first controllable frame
 # never competes with a large import or decoration batch on Web/ANGLE.
@@ -144,6 +146,10 @@ const OPENING_DETAIL_MIN_PLAYER_DISTANCE := 7.0
 const OPENING_DETAIL_RETRY_SECONDS := 5.0
 const BACKGROUND_RUNTIME_DELAY_SECONDS := 45.0
 const OPENING_SAVE_DELAY_SECONDS := 30.0
+# Campaign presentation roles are optional after Greyfen is playable. Waiting
+# for a settled opening window keeps imported Castle meshes out of the first
+# few seconds of player movement and out of the opening performance sample.
+const CAMPAIGN_VISUAL_PREWARM_DELAY_SECONDS := 18.0
 const CAMPAIGN_VISUAL_PREWARM_ROLES: Array[String] = [
 	"castle_wall", "castle_arch", "castle_roof", "castle_bookcase",
 	"castle_chair", "castle_bench", "castle_table", "castle_weapon_stand",
@@ -1115,6 +1121,7 @@ func _start_campaign_visual_prewarm() -> void:
 		return
 	campaign_visual_prewarm_started = true
 	campaign_visual_prewarm_generation += 1
+	campaign_visual_prewarm_not_before_msec = Time.get_ticks_msec() + int(CAMPAIGN_VISUAL_PREWARM_DELAY_SECONDS * 1000.0)
 	print("LOADING: campaign_visual_prewarm begin roles=%d" % CAMPAIGN_VISUAL_PREWARM_ROLES.size())
 	call_deferred("_run_campaign_visual_prewarm", campaign_visual_prewarm_generation, 0)
 
@@ -1207,6 +1214,13 @@ func _run_campaign_visual_prewarm(generation: int, role_index: int) -> void:
 		return
 	if role_index >= CAMPAIGN_VISUAL_PREWARM_ROLES.size():
 		print("LOADING: campaign_visual_prewarm complete")
+		return
+	if Time.get_ticks_msec() < campaign_visual_prewarm_not_before_msec:
+		var wait_seconds := maxf(float(campaign_visual_prewarm_not_before_msec - Time.get_ticks_msec()) / 1000.0, 0.05)
+		var wait_timer := _create_owned_timer(minf(wait_seconds, 1.0), true)
+		await wait_timer.timeout
+		if generation == campaign_visual_prewarm_generation:
+			call_deferred("_run_campaign_visual_prewarm", generation, role_index)
 		return
 	# Never parse an OBJ in the middle of a scene swap or a paused menu. One
 	# role per settled frame keeps imported castle dressing out of the cold
@@ -3719,7 +3733,7 @@ func _is_river_recovery_position(zone: String, pos: Vector3) -> bool:
 	if spatial_service != null and spatial_service.has_method("is_on_bridge"):
 		on_bridge_deck = spatial_service.is_on_bridge(pos, 0.0)
 	else:
-		on_bridge_deck = pos.y >= -0.14 and absf(pos.x) <= 2.72 and absf(pos.z - river_z) <= 3.15
+		on_bridge_deck = BridgeSurfaceContract.contains(pos, river_z, BridgeSurfaceContract.bridge_half_length(3.4), 0.0)
 	if on_bridge_deck:
 		return false
 	return absf(pos.z-river_z) < 2.0 and (absf(pos.x) > 2.7 or pos.y < 0.12)

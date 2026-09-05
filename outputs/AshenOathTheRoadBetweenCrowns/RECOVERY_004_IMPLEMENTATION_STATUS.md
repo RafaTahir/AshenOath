@@ -1,5 +1,36 @@
 # RECOVERY-004 Implementation Status
 
+## Current Atomic Checkpoint - 2026-09-06 (Opening activation safety)
+
+- Current ticket: `RECOVERY-004`, opening activation and recovery safety.
+- Completed in this atomic slice: invalid proxy-anatomy nodes are hidden,
+  disabled, and removed from collision before deferred deletion can expose a
+  detached frame; optional campaign visual prewarm waits 18 seconds after the
+  first playable frame so Castle mesh imports do not compete with Greyfen
+  startup or opening performance; and the bridge recovery fallback now uses
+  the shared `BridgeSurfaceContract` instead of a duplicate hard-coded shape.
+- Latest direct results: `verify_char_006.gd`, `verify_char_007.gd`,
+  `verify_motion_quality.gd`, `verify_greyfen_life.gd`,
+  `verify_render_resources.gd`, `verify_engine_005.gd`,
+  `verify_runtime_regressions.gd`, and `verify_gate_transitions.gd` passed.
+  The graphical Compatibility `verify_perf_001.gd` pass measured Greyfen at
+  48.5 FPS average / 34.4 FPS 1% low, Wychwood at 60.0 / 54.2, Wychwood
+  combat at 59.6 / 37.9, Vargan Court at 60.0 / 44.2, Record Hall at 44.0 /
+  37.8, and Hart Glade at 60.0 / 56.8. Warm return was 34.95 ms and the
+  slowest recorded transition was 321.2 ms. The focused runs produced no
+  parser, active-renderer, resource, or assertion failures.
+- Known limitation: the isolated `verify_char_006.gd` run still reported an
+  ObjectDB leak warning during shutdown; later lifecycle/resource runs were
+  clean, but this warning is not being declared resolved in this checkpoint.
+  Fresh world and boss captures remain visibly procedural, so broader visual
+  acceptance, campaign evidence, export, deployment, and production release
+  are still blocked.
+- Exact next action on resume: investigate the remaining visual-quality gate
+  and the isolated character-verifier shutdown warning, then rerun only the
+  affected gates before any export or release cycle.
+- Checkpoint policy: this atomic slice is committed locally only. No push,
+  merge, export, deployment, reset, revert, or stash was performed.
+
 ## Current Atomic Checkpoint - 2026-09-06 (Compact opening animation library)
 
 - Current work: reduce the shared Universal character animation dependency while
