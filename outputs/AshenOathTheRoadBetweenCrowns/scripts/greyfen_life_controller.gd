@@ -214,7 +214,7 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 		return
 	var direction := offset.normalized()
 	var next_position := node.global_position + direction * minf(float(entry.speed) * delta, offset.length())
-	if spatial_service != null and not spatial_service.validate_segment(node.global_position, next_position, 0.58):
+	if spatial_service != null and not spatial_service.validate_runtime_segment(node.global_position, next_position, 0.58):
 		entry.route = []
 		entry.pause = 0.5
 		_set_motion(entry, 0.0)

@@ -593,8 +593,10 @@ func get_tactical_state() -> Dictionary:
 	for index in range(navigation_route.size()):
 		if spatial_service != null:
 			var point: Vector3 = navigation_route[index]
-			var validated: Vector3 = spatial_service.validate_position(point, 0.50, spatial_service.bank_for(point))
-			if spatial_service.is_river_excluded(point, 0.50) or validated.distance_to(point) > 0.12:
+			# Route points are evaluated against authored spatial rules here. Occupancy
+			# is intentionally left to movement-time steering so an enemy does not
+			# reject its own current position (or a temporary combat peer) as unsafe.
+			if spatial_service.is_river_excluded(point, 0.50):
 				route_safe = false
 				break
 		if index > 0 and spatial_service != null and not spatial_service.validate_segment(navigation_route[index - 1], navigation_route[index], 0.50):

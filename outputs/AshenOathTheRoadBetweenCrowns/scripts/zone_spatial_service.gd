@@ -170,6 +170,26 @@ func validate_segment(start: Vector3, destination: Vector3, clearance: float = 0
 			return false
 	return true
 
+func validate_runtime_segment(start: Vector3, destination: Vector3, clearance: float = 0.9, ignore_body: CollisionObject3D = null) -> bool:
+	"""Validate a short actor step against both authored rules and live colliders.
+
+	Route construction can happen before scenery colliders exist, so the public
+	validate_segment() remains deterministic and data-driven. Movement uses this
+	stronger query after the zone is live, which prevents direct-position actors
+	from stepping through a tree, prop, wall, or another combatant.
+	"""
+	if not validate_segment(start, destination, clearance):
+		return false
+	if not is_inside_tree() or get_world_3d() == null:
+		return true
+	var distance := start.distance_to(destination)
+	var samples := maxi(2, ceili(distance / 0.28))
+	for index in range(samples + 1):
+		var point := start.lerp(destination, float(index) / float(samples))
+		if _is_position_occupied_with_ignore(point, maxf(clearance * 0.52, 0.28), 1.65, ignore_body):
+			return false
+	return true
+
 func build_route(start: Vector3, destination: Vector3, clearance: float = 0.9) -> Array[Vector3]:
 	var source := validate_position(start, clearance, bank_for(start))
 	var target := validate_position(destination, clearance, bank_for(destination))
@@ -267,6 +287,9 @@ func nearest_safe(position: Vector3, preferred_bank: int = 0) -> Vector3:
 	return _nearest_spawn(position, wanted_bank)
 
 func is_position_occupied(position: Vector3, radius: float, height: float) -> bool:
+	return _is_position_occupied_with_ignore(position, radius, height, null)
+
+func _is_position_occupied_with_ignore(position: Vector3, radius: float, height: float, ignore_body: CollisionObject3D) -> bool:
 	if not is_inside_tree() or get_world_3d() == null:
 		return false
 	var shape := CapsuleShape3D.new()
@@ -291,6 +314,8 @@ func is_position_occupied(position: Vector3, radius: float, height: float) -> bo
 	var excluded_rids: Array[RID] = []
 	if player_body != null and is_instance_valid(player_body):
 		excluded_rids.append(player_body.get_rid())
+	if ignore_body != null and is_instance_valid(ignore_body) and not excluded_rids.has(ignore_body.get_rid()):
+		excluded_rids.append(ignore_body.get_rid())
 	for actor in get_tree().get_nodes_in_group("player"):
 		var grouped_player := actor as CollisionObject3D
 		if grouped_player != null and not excluded_rids.has(grouped_player.get_rid()):
