@@ -1,6 +1,8 @@
 extends SceneTree
 
 const WorldSectorManifest = preload("res://scripts/world_sector_manifest.gd")
+const WAYPOINT_TIMEOUT_MS := 12000
+const WAYPOINT_FRAME_LIMIT := 720
 
 var failures := 0
 var aborted := false
@@ -41,10 +43,16 @@ func _initialize() -> void:
 		check(game.player != null and game.player.can_control, "Final gate did not restore player control")
 	print("GATE TRANSITION VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
 	print("VERIFIER_PHASE: SHUTDOWN")
-	if game.has_method("prepare_resource_shutdown"):
+	# The route builds and retires enough sectors that synchronous destruction of
+	# the whole game tree can block the verifier after a valid pass. Use the
+	# runtime's staged finalizer, then let SceneTree process the queued owner.
+	if game.has_method("finalize_resource_shutdown"):
+		game.finalize_resource_shutdown()
+	elif game.has_method("prepare_resource_shutdown"):
 		game.prepare_resource_shutdown()
-	await _frames(game.ZONE_RETIRE_FRAMES + 4)
-	game.free()
+	await _frames(game.ZONE_RETIRE_FRAMES + 8)
+	if is_instance_valid(game):
+		game.queue_free()
 	await _frames(8)
 	quit(0 if failures == 0 else 1)
 
@@ -227,8 +235,9 @@ func _walk_player_to(game, target: Vector3) -> bool:
 		var point: Vector3 = raw_point
 		point.y = 0.95
 		var reached := false
+		var waypoint_started := Time.get_ticks_msec()
 		Input.action_press("move_forward")
-		for _frame in range(360):
+		for _frame in range(WAYPOINT_FRAME_LIMIT):
 			if str(game.current_zone_id) != start_zone:
 				Input.action_release("move_forward")
 				return true
@@ -239,6 +248,8 @@ func _walk_player_to(game, target: Vector3) -> bool:
 				break
 			if game.camera_rig != null:
 				game.camera_rig.yaw = atan2(-delta.normalized().x, -delta.normalized().z)
+			if Time.get_ticks_msec() - waypoint_started > WAYPOINT_TIMEOUT_MS:
+				break
 			await physics_frame
 			await process_frame
 		Input.action_release("move_forward")

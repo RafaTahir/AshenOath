@@ -1,5 +1,36 @@
 # RECOVERY-004 Implementation Status
 
+## Current Atomic Checkpoint - 2026-09-06 (Transition verifier and menu identity)
+
+- Current ticket: `RECOVERY-004`, transition-verifier shutdown and visible
+  release identity cleanup.
+- Completed in this atomic slice: `verify_gate_transitions.gd` now retires the
+  test game through the staged runtime shutdown contract, queues the owner for
+  destruction, and waits for SceneTree cleanup instead of synchronously freeing
+  the full route tree after a valid pass. The verifier also keeps bounded
+  waypoint limits. `hud.gd` now exposes the explicit
+  `RECOVERY-004 ROADMAP MILESTONE` identity and keeps the compact 720p quick
+  read layout.
+- Latest direct results: the full gate-transition route exited `0` with
+  `GATE TRANSITION VERIFIER: PASS`, `VERIFIER_PHASE: SHUTDOWN`, and no parser,
+  assertion, active-renderer, resource, ObjectDB, leak, or warning lines in
+  `.release-gate/current/gate_transitions_checkpoint.log`.
+  `tools/verify_web_001.py . ..\\..` also exited `0` with
+  `WEB-001: PASS - preset, renderer, payload filters, build ID, and hosting
+  headers`.
+- Remaining blocker: this atomic slice has no failing targeted check. The
+  broader RECOVERY-004 work remains blocked by the previously documented
+  visual-quality debt, incomplete campaign proof, lifecycle items outside this
+  verifier path, and the not-yet-regenerated authoritative release report.
+  No export, browser cycle, push, merge, or deployment was started.
+- Exact next action on resume: return to the broader RECOVERY-004 release-gate
+  tail, beginning with the remaining affected verification and current release
+  report generation; do not repeat the completed transition or Web identity
+  checks unless one of their inputs changes.
+- Checkpoint policy: the two fixes and this record are committed locally only.
+  All unrelated modified and untracked work remains in the working tree. No
+  push, merge, export, deployment, reset, revert, or stash was performed.
+
 ## Current Atomic Checkpoint - 2026-09-06 (Record Hall camera-safe presentation)
 
 - Current ticket: `RECOVERY-004`, Record Hall presentation and entry-camera

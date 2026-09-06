@@ -20,7 +20,7 @@ signal dialogue_page_changed(speaker: String, speaker_id: String, page_index: in
 signal menu_hovered
 signal menu_clicked
 
-const MENU_BUILD_LABEL = "SOUL REBUILD | NATIVE 720P | ASHENOATH.VERCEL.APP"
+const MENU_BUILD_LABEL = "RECOVERY-004 ROADMAP MILESTONE | PRE-ALPHA | NATIVE 720P | ASHENOATH.VERCEL.APP"
 const MENU_SIZE = Vector2(1920.0, 1080.0)
 const GAMEPLAY_SIZE = Vector2i(1280, 720)
 const SAVE_PATH = "user://ashen_oath_save.json"
@@ -534,7 +534,9 @@ func update_equipment(potions: int, bombs: int, oil_name: String, arrow_count: i
 	var arrow_text := ""
 	if arrow_count >= 0:
 		arrow_text = "   Bow %s x%d" % [arrow_type, arrow_count]
-	equipment_label.text = "%s Redroot x%d   %s Ash Bomb x%d   Oil: %s%s" % [
+	# Keep the quick-read compact at 720p; the second line prevents supply text
+	# from pushing beyond the vitals column on narrow gameplay viewports.
+	equipment_label.text = "%s Redroot x%d   %s Ash Bomb x%d\nOil: %s%s" % [
 		_action_label("use_potion"), potions, _action_label("throw_bomb"), bombs, oil_text, arrow_text
 	]
 
@@ -782,14 +784,14 @@ func _build_hud() -> void:
 	var bars_back = ColorRect.new()
 	bars_back.name = "VitalsBackdrop"
 	bars_back.position = Vector2(16, 16)
-	bars_back.size = Vector2(246, 80)
+	bars_back.size = Vector2(230, 82)
 	bars_back.color = Color(0.018, 0.016, 0.014, 0.62)
 	root.add_child(bars_back)
-	_add_hud_accent(bars_back, Vector2.ZERO, Vector2(3, 80))
+	_add_hud_accent(bars_back, Vector2.ZERO, Vector2(3, 82))
 	var bars = VBoxContainer.new()
-	bars.position = Vector2(24, 21)
-	bars.custom_minimum_size = Vector2(226, 66)
-	bars.add_theme_constant_override("separation", 3)
+	bars.position = Vector2(23, 20)
+	bars.custom_minimum_size = Vector2(214, 72)
+	bars.add_theme_constant_override("separation", 2)
 	root.add_child(bars)
 	health_bar = ProgressBar.new()
 	health_bar.max_value = 125
@@ -805,7 +807,10 @@ func _build_hud() -> void:
 	bars.add_child(_labeled_bar("Stamina", stamina_bar, stamina_value_label))
 	equipment_label = Label.new()
 	equipment_label.name = "EquipmentQuickRead"
-	equipment_label.text = "R Redroot x0   F Ash Bomb x0   Oil: No oil"
+	equipment_label.text = "[R] Redroot x0   [F] Ash Bomb x0\nOil: No oil"
+	equipment_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	equipment_label.clip_text = true
+	equipment_label.custom_minimum_size = Vector2(214, 30)
 	equipment_label.add_theme_font_size_override("font_size", 12)
 	bars.add_child(equipment_label)
 	enemy_label = Label.new()
@@ -843,28 +848,28 @@ func _build_hud() -> void:
 	root.add_child(prompt_label)
 	tracker_back = ColorRect.new()
 	tracker_back.name = "QuestTrackerBackdrop"
-	tracker_back.position = Vector2(964, 14)
-	tracker_back.size = Vector2(300, 84)
+	tracker_back.position = Vector2(980, 14)
+	tracker_back.size = Vector2(284, 70)
 	tracker_back.color = Color(0.018, 0.016, 0.014, 0.62)
 	root.add_child(tracker_back)
-	_add_hud_accent(tracker_back, Vector2(297, 0), Vector2(3, 84))
+	_add_hud_accent(tracker_back, Vector2(281, 0), Vector2(3, 70))
 	tracker_label = Label.new()
 	tracker_label.name = "QuestTrackerObjective"
-	tracker_label.position = Vector2(976, 21)
-	tracker_label.size = Vector2(272, 68)
+	tracker_label.position = Vector2(990, 20)
+	tracker_label.size = Vector2(258, 56)
 	tracker_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	tracker_label.clip_text = true
 	root.add_child(tracker_label)
 	compass_back = ColorRect.new()
 	compass_back.name = "CompassBackdrop"
-	compass_back.position = Vector2(380, 14)
-	compass_back.size = Vector2(520, 28)
+	compass_back.position = Vector2(430, 14)
+	compass_back.size = Vector2(420, 26)
 	compass_back.color = Color(0.018, 0.016, 0.014, 0.46)
 	root.add_child(compass_back)
 	compass_label = Label.new()
 	compass_label.name = "LocationAndObjectiveCompass"
-	compass_label.position = Vector2(380, 16)
-	compass_label.size = Vector2(520, 26)
+	compass_label.position = Vector2(430, 15)
+	compass_label.size = Vector2(420, 24)
 	compass_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	root.add_child(compass_label)
 	toast_label = Label.new()
@@ -898,13 +903,13 @@ func _apply_hud_layout() -> void:
 		return
 	var center_x := viewport_size.x * 0.5
 	if tracker_back != null:
-		tracker_back.position = Vector2(maxf(viewport_size.x - 316.0, 12.0), 14.0)
+		tracker_back.position = Vector2(maxf(viewport_size.x - 300.0, 12.0), 14.0)
 	if tracker_label != null:
-		tracker_label.position = Vector2(maxf(viewport_size.x - 304.0, 24.0), 21.0)
+		tracker_label.position = Vector2(maxf(viewport_size.x - 290.0, 24.0), 20.0)
 	if compass_back != null:
-		compass_back.position = Vector2(center_x - 260.0, 14.0)
+		compass_back.position = Vector2(center_x - 210.0, 14.0)
 	if compass_label != null:
-		compass_label.position = Vector2(center_x - 260.0, 16.0)
+		compass_label.position = Vector2(center_x - 210.0, 15.0)
 	if enemy_label != null:
 		enemy_label.position = Vector2(center_x - 166.0, 44.0)
 	if enemy_bar != null:
@@ -993,13 +998,13 @@ func _labeled_bar(label_text: String, bar: ProgressBar, value_label: Label) -> H
 	var row = HBoxContainer.new()
 	var label = Label.new()
 	label.text = label_text
-	label.custom_minimum_size = Vector2(56, 18)
+	label.custom_minimum_size = Vector2(48, 18)
 	row.add_child(label)
-	bar.custom_minimum_size = Vector2(142, 16)
+	bar.custom_minimum_size = Vector2(112, 16)
 	row.add_child(bar)
 	value_label.text = "%d / %d" % [int(bar.value), int(bar.max_value)]
 	value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	value_label.custom_minimum_size = Vector2(64, 20)
+	value_label.custom_minimum_size = Vector2(54, 20)
 	value_label.add_theme_font_size_override("font_size", 12)
 	row.add_child(value_label)
 	return row
