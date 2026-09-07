@@ -5264,22 +5264,14 @@ func _configure_npc_animation(mapped: Node3D, id: String) -> void:
 	driver.name = "CharacterAnimationDriver"
 	mapped.add_child(driver)
 	driver.configure(mapped, clips)
-	# Interior archive actors are few and remain in view during the record-hall
-	# presentation. Let Godot's normal animation callback distribute their small
-	# updates per frame; manual 15 Hz advances create a visible CPU spike every
-	# fourth frame on the Compatibility renderer. The player and combat actors
-	# retain their explicit gameplay rates.
-	# Ambient rigs are already driven by the lightweight routine simulation. Keep
-	# their manual pose updates at 12 Hz so imported skin evaluation cannot form
-	# a 30 Hz CPU burst on the native Compatibility/Web path.
-	var npc_animation_rate := 12.0
-	if current_zone_id in ["record_hall", "undercroft"]:
-		# Let the archive's small cast use the imported idle callback. The manual
-		# timer advances several skin poses together and creates a larger periodic
-		# Compatibility spike than the normal callback path.
-		npc_animation_rate = 0.0
-	elif current_zone_id in ["vargan_approach", "vargan_court", "assembly"]:
-		npc_animation_rate = 20.0
+	# Non-player rigs do not own physics or combat timing. Drive them through a
+	# phase-staggered manual clock so imported skin evaluation cannot wake every
+	# skeleton on every rendered frame. The player and active enemies retain
+	# their explicit gameplay rates. Eight Hz is still frequent enough for an
+	# idle or conversation pose at the camera distances used by these actors,
+	# while removing the synchronized 20 Hz/idle-callback spikes measured in the
+	# Castle and Record Hall performance samples.
+	var npc_animation_rate := 8.0
 	driver.set_update_rate_hz(npc_animation_rate)
 
 func _stage_dialogue_moment(area) -> void:

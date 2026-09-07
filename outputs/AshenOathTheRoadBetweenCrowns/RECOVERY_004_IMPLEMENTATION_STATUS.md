@@ -1,5 +1,27 @@
 # RECOVERY-004 Implementation Status
 
+## Current Atomic Checkpoint - 2026-09-08 (NPC animation workload fix)
+
+- Current ticket: `RECOVERY-004`, focused graphical performance slice.
+- Completed in this atomic slice: `_configure_npc_animation()` now gives
+  non-player rigs one phase-staggered 8 Hz manual update rate. Player and
+  active-enemy gameplay timing remain unchanged. This removes the prior
+  mixed 0/12/20 Hz paths and the synchronized imported-skin evaluation spikes
+  measured in Castle and Record Hall.
+- Latest direct result: graphical Compatibility `tools/verify_perf_001.gd`
+  exited `0` with `PERF-001 VERIFIER: PASS`. Greyfen, Wychwood, Wychwood
+  combat, Vargan Court, Record Hall, and Hart Glade all recorded approximately
+  60 FPS average, at least 36 FPS 1% low, and zero slow frames. Measured
+  transitions in the report are within the configured limits, and the report
+  status is `pass`. `git diff --check` also passed for the source edit.
+- Remaining blocker: this fixes the measured performance slice only. The
+  broader recovery still has documented visual-quality debt, incomplete
+  full-campaign proof, lifecycle/release-evidence work, and unpushed source
+  changes. No export, push, merge, or deployment was performed.
+- Exact next action on resume: continue the next explicitly selected recovery
+  slice or gate; do not rerun `verify_perf_001.gd` unless this animation path,
+  its verifier, or its measured scene inputs change.
+
 ## Current Atomic Checkpoint - 2026-09-07 (Character mapping and asset-manifest integrity)
 
 - Current ticket: `RECOVERY-004`, character presentation and runtime asset
