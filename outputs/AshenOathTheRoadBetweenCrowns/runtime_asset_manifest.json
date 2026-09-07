@@ -11,56 +11,84 @@
       "url": "https://quaternius.com/packs/universalbasecharacters.html",
       "license": "CC0 1.0",
       "status": "source_locked_pending_selected_download",
-      "runtime_roles": ["kael", "anwen", "villager", "guard", "traveler"]
+      "runtime_roles": [
+        "kael",
+        "anwen",
+        "villager",
+        "guard",
+        "traveler"
+      ]
     },
     {
       "id": "quaternius_rpg_characters_animated",
       "url": "https://quaternius.com/packs/rpgcharacters.html",
       "license": "CC0 1.0",
       "status": "selected_runtime_human_family",
-      "runtime_roles": ["kael", "anwen", "villager", "guard", "traveler"]
+      "runtime_roles": [
+        "kael",
+        "anwen",
+        "villager",
+        "guard",
+        "traveler"
+      ]
     },
     {
       "id": "quaternius_modular_character_outfits_fantasy",
       "url": "https://quaternius.com/packs/modularcharacteroutfitsfantasy.html",
       "license": "CC0 1.0",
       "status": "runtime_selected_ranger_only",
-      "runtime_roles": ["road_ranger_human"]
+      "runtime_roles": [
+        "road_ranger_human"
+      ]
     },
     {
       "id": "quaternius_universal_animation_library_2",
       "url": "https://quaternius.com/packs/universalanimationlibrary2.html",
       "license": "CC0 1.0",
       "status": "runtime_selected_shared_library",
-      "runtime_roles": ["road_ranger_human"]
+      "runtime_roles": [
+        "road_ranger_human"
+      ]
     },
     {
       "id": "quaternius_lowpoly_animated_monsters",
       "url": "https://opengameart.org/sites/default/files/Animated%20Monster%20Pack%20by%20%40Quaternius.zip",
       "license": "CC0 1.0",
       "status": "selected_runtime_skeleton_family",
-      "runtime_roles": ["ghoulkin", "bog_wretch", "gravebound_knight"]
+      "runtime_roles": [
+        "ghoulkin",
+        "bog_wretch",
+        "gravebound_knight"
+      ]
     },
     {
       "id": "quaternius_ultimate_monsters",
       "url": "https://quaternius.com/packs/ultimatemonsters.html",
       "license": "CC0 1.0",
       "status": "source_locked_pending_selected_download",
-      "runtime_roles": ["ghoulkin", "bell_eater", "rootbound_colossus", "ashwing", "gravebound_knight"]
+      "runtime_roles": [
+        "ghoulkin",
+        "bell_eater",
+        "rootbound_colossus",
+        "ashwing",
+        "gravebound_knight"
+      ]
     },
     {
       "id": "quaternius_ultimate_animated_animals",
       "url": "https://quaternius.com/packs/ultimateanimatedanimals.html",
       "license": "CC0 1.0",
       "status": "source_locked_pending_selected_download",
-      "runtime_roles": ["white_hart"]
+      "runtime_roles": [
+        "white_hart"
+      ]
     }
   ],
   "shared_runtime_files": [
     {
-      "path": "res://assets_external/animations/AnimationLibrary_Godot_Standard.glb",
-      "bytes": 6671104,
-      "sha256": "1b7bf67866360665426bb99e4c71bd619f19b408453c24e30f0c3071601eee5c"
+      "path": "res://assets_external/animations/AnimationLibrary_Godot_Opening.tres",
+      "bytes": 1291941,
+      "sha256": "b426248c749635f3fcacac6b91b29273b63059ef57bd03fffa628fe766a49b3e"
     }
   ],
   "roles": {
@@ -77,16 +105,49 @@
       "target_height_m": 1.75,
       "triangle_budget": 20000,
       "texture_budget": 1024,
-      "required_clips": ["Idle", "Walk", "Run", "ReceiveHit", "Death"],
-      "equipment_sockets": ["Head", "Hand.R", "Hand.L", "Sword.Back", "Bow.Hand", "Quiver.Back"],
-      "runtime_files": [
-        {"path": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf", "bytes": 54079, "sha256": "8eea71448ca41108589c7d13e9261de92b7068df8166b6e54bf29e6f1e530dbe"},
-        {"path": "res://assets_external/characters_ranger/Male_Ranger_Runtime.bin", "bytes": 1746884, "sha256": "5bbb0d42cb324c6c27ce00417e68a876d92978f07d161f83590f0d7c0570eff6"},
-        {"path": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png", "bytes": 840454, "sha256": "220dd4fabbfecce9847e876e2e2b02327315c08aac096d4648b62d5c53716c90"},
-        {"path": "res://assets_external/characters_ranger/T_Ranger_Normal_1K.png", "bytes": 940081, "sha256": "a4daa2410b007ad9fe7e15ac7ecc1e579ab08aafa3725ba3f158c5a24c68b540"},
-        {"path": "res://assets_external/characters_ranger/T_Ranger_ORM_1K.png", "bytes": 786403, "sha256": "76cfba43d6748a79a7ea26184415e4810731f6e4b207c3c84a6b1a084b49bd9f"}
+      "required_clips": [
+        "Idle",
+        "Walk",
+        "Run",
+        "ReceiveHit",
+        "Death"
       ],
-      "animation_source": "res://assets_external/animations/AnimationLibrary_Godot_Standard.glb"
+      "equipment_sockets": [
+        "Head",
+        "Hand.R",
+        "Hand.L",
+        "Sword.Back",
+        "Bow.Hand",
+        "Quiver.Back"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf",
+          "bytes": 54079,
+          "sha256": "8eea71448ca41108589c7d13e9261de92b7068df8166b6e54bf29e6f1e530dbe"
+        },
+        {
+          "path": "res://assets_external/characters_ranger/Male_Ranger_Runtime.bin",
+          "bytes": 1746884,
+          "sha256": "5bbb0d42cb324c6c27ce00417e68a876d92978f07d161f83590f0d7c0570eff6"
+        },
+        {
+          "path": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png",
+          "bytes": 840454,
+          "sha256": "220dd4fabbfecce9847e876e2e2b02327315c08aac096d4648b62d5c53716c90"
+        },
+        {
+          "path": "res://assets_external/characters_ranger/T_Ranger_Normal_1K.png",
+          "bytes": 940081,
+          "sha256": "a4daa2410b007ad9fe7e15ac7ecc1e579ab08aafa3725ba3f158c5a24c68b540"
+        },
+        {
+          "path": "res://assets_external/characters_ranger/T_Ranger_ORM_1K.png",
+          "bytes": 786403,
+          "sha256": "76cfba43d6748a79a7ea26184415e4810731f6e4b207c3c84a6b1a084b49bd9f"
+        }
+      ],
+      "animation_source": "res://assets_external/animations/AnimationLibrary_Godot_Opening.tres"
     },
     "kael": {
       "display_name": "Kael",
@@ -99,16 +160,56 @@
       "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
       "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
       "runtime_files": [
-        {"path": "res://assets_external/characters_universal/Male_Peasant.gltf", "bytes": 34843, "sha256": "731676abc53ef4cf4e74ac61a85f4294d2255588fa659c6bbd9d5b3a1c0aaff6"},
-        {"path": "res://assets_external/characters_universal/Male_Peasant.bin", "bytes": 674764, "sha256": "e46bde795f7b69b351d322d7a5628e07131cfb48ed0afe366293f1b3f530433c"},
-        {"path": "res://assets_external/characters_universal/Male_Head.gltf", "bytes": 40570, "sha256": "e49ed6b260dd28353c7b22178f0aee354d3b3def02ae701265490938131ae6f4"},
-        {"path": "res://assets_external/characters_universal/Male_Head.bin", "bytes": 737452, "sha256": "28ea9c1544535a542140180cf3af1a4000ecc35e0dd191f8687cc5a61beb8872"},
-        {"path": "res://assets_external/characters_universal/Hair_SimpleParted.gltf", "bytes": 24639, "sha256": "451e578936425522bbe23fcc92d9fc25da23ad5a681d952aae0c149189bef062"},
-        {"path": "res://assets_external/characters_universal/Hair_SimpleParted.bin", "bytes": 51332, "sha256": "ecd7c81959f3985d6254458a440daaaa18a8bfbb1dbe111c68a04a72374d54db"},
-        {"path": "res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png", "bytes": 655637, "sha256": "404460677f67b0d1056f02f0d5e30111f54d431825f7ea007c9c61aa8782ea7b"},
-        {"path": "res://assets_external/characters_universal/T_Peasant_Normal_1K.png", "bytes": 890240, "sha256": "e821600a279520cb6c6f68ed66011608038ddd94d101dbeb92fe94ecc99f9339"},
-        {"path": "res://assets_external/characters_universal/T_Peasant_ORM_1K.png", "bytes": 648791, "sha256": "97e11d88919a5fc4258b2809ec2ee2364f469687e6010bf14f14c55233ed972e"},
-        {"path": "res://assets_external/characters_universal/T_Eye_Brown.png", "bytes": 35958, "sha256": "d08e3356a83211bc6ca21fe3a8e39f4b5c1a3b8f85457fc2c0fb57be09935025"}
+        {
+          "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
+          "bytes": 34843,
+          "sha256": "731676abc53ef4cf4e74ac61a85f4294d2255588fa659c6bbd9d5b3a1c0aaff6"
+        },
+        {
+          "path": "res://assets_external/characters_universal/Male_Peasant.bin",
+          "bytes": 674764,
+          "sha256": "e46bde795f7b69b351d322d7a5628e07131cfb48ed0afe366293f1b3f530433c"
+        },
+        {
+          "path": "res://assets_external/characters_universal/Male_Head.gltf",
+          "bytes": 40570,
+          "sha256": "e49ed6b260dd28353c7b22178f0aee354d3b3def02ae701265490938131ae6f4"
+        },
+        {
+          "path": "res://assets_external/characters_universal/Male_Head.bin",
+          "bytes": 737452,
+          "sha256": "28ea9c1544535a542140180cf3af1a4000ecc35e0dd191f8687cc5a61beb8872"
+        },
+        {
+          "path": "res://assets_external/characters_universal/Hair_SimpleParted.gltf",
+          "bytes": 24639,
+          "sha256": "451e578936425522bbe23fcc92d9fc25da23ad5a681d952aae0c149189bef062"
+        },
+        {
+          "path": "res://assets_external/characters_universal/Hair_SimpleParted.bin",
+          "bytes": 51332,
+          "sha256": "ecd7c81959f3985d6254458a440daaaa18a8bfbb1dbe111c68a04a72374d54db"
+        },
+        {
+          "path": "res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png",
+          "bytes": 655637,
+          "sha256": "404460677f67b0d1056f02f0d5e30111f54d431825f7ea007c9c61aa8782ea7b"
+        },
+        {
+          "path": "res://assets_external/characters_universal/T_Peasant_Normal_1K.png",
+          "bytes": 890240,
+          "sha256": "e821600a279520cb6c6f68ed66011608038ddd94d101dbeb92fe94ecc99f9339"
+        },
+        {
+          "path": "res://assets_external/characters_universal/T_Peasant_ORM_1K.png",
+          "bytes": 648791,
+          "sha256": "97e11d88919a5fc4258b2809ec2ee2364f469687e6010bf14f14c55233ed972e"
+        },
+        {
+          "path": "res://assets_external/characters_universal/T_Eye_Brown.png",
+          "bytes": 35958,
+          "sha256": "d08e3356a83211bc6ca21fe3a8e39f4b5c1a3b8f85457fc2c0fb57be09935025"
+        }
       ],
       "blocked_reason": ""
     },
@@ -123,16 +224,56 @@
       "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
       "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
       "runtime_files": [
-        {"path": "res://assets_external/characters_universal/Female_Peasant.gltf", "bytes": 31461, "sha256": "eea58d4539638cee1270fe0bf7d4d59a5878eb71e5aac6cb1c907531ad248fcb"},
-        {"path": "res://assets_external/characters_universal/Female_Peasant.bin", "bytes": 658600, "sha256": "40eccaa2bd545c893142ef7dca0866ea8f20df3a86c67c5615024bc4fe546e83"},
-        {"path": "res://assets_external/characters_universal/Female_Head.gltf", "bytes": 41414, "sha256": "44794328bed68f79e6ada8b9ba08c1f26d7172d2a61ae7092bbda7df68ed2df3"},
-        {"path": "res://assets_external/characters_universal/Female_Head.bin", "bytes": 1008748, "sha256": "894ed1f35302980c7a43f9eb726cf22f3874a081e6dae53bbdc85fc6549ca51e"},
-        {"path": "res://assets_external/characters_universal/Hair_Buns.gltf", "bytes": 25358, "sha256": "16c66a1c15c53439b8ddf51573f27cb73d7cf72e02c1d4fcdb7b1bd4c50cbec8"},
-        {"path": "res://assets_external/characters_universal/Hair_Buns.bin", "bytes": 205916, "sha256": "811606cc84f0bfdefa2e6f1396f3d94c35138308a96d78a4f447b2e7dfc6ed6c"},
-        {"path": "res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png", "bytes": 655637, "sha256": "404460677f67b0d1056f02f0d5e30111f54d431825f7ea007c9c61aa8782ea7b"},
-        {"path": "res://assets_external/characters_universal/T_Peasant_Normal_1K.png", "bytes": 890240, "sha256": "e821600a279520cb6c6f68ed66011608038ddd94d101dbeb92fe94ecc99f9339"},
-        {"path": "res://assets_external/characters_universal/T_Peasant_ORM_1K.png", "bytes": 648791, "sha256": "97e11d88919a5fc4258b2809ec2ee2364f469687e6010bf14f14c55233ed972e"},
-        {"path": "res://assets_external/characters_universal/T_Eye_Brown.png", "bytes": 35958, "sha256": "d08e3356a83211bc6ca21fe3a8e39f4b5c1a3b8f85457fc2c0fb57be09935025"}
+        {
+          "path": "res://assets_external/characters_universal/Female_Peasant.gltf",
+          "bytes": 31461,
+          "sha256": "eea58d4539638cee1270fe0bf7d4d59a5878eb71e5aac6cb1c907531ad248fcb"
+        },
+        {
+          "path": "res://assets_external/characters_universal/Female_Peasant.bin",
+          "bytes": 658600,
+          "sha256": "40eccaa2bd545c893142ef7dca0866ea8f20df3a86c67c5615024bc4fe546e83"
+        },
+        {
+          "path": "res://assets_external/characters_universal/Female_Head.gltf",
+          "bytes": 41414,
+          "sha256": "44794328bed68f79e6ada8b9ba08c1f26d7172d2a61ae7092bbda7df68ed2df3"
+        },
+        {
+          "path": "res://assets_external/characters_universal/Female_Head.bin",
+          "bytes": 1008748,
+          "sha256": "894ed1f35302980c7a43f9eb726cf22f3874a081e6dae53bbdc85fc6549ca51e"
+        },
+        {
+          "path": "res://assets_external/characters_universal/Hair_Buns.gltf",
+          "bytes": 25358,
+          "sha256": "16c66a1c15c53439b8ddf51573f27cb73d7cf72e02c1d4fcdb7b1bd4c50cbec8"
+        },
+        {
+          "path": "res://assets_external/characters_universal/Hair_Buns.bin",
+          "bytes": 205916,
+          "sha256": "811606cc84f0bfdefa2e6f1396f3d94c35138308a96d78a4f447b2e7dfc6ed6c"
+        },
+        {
+          "path": "res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png",
+          "bytes": 655637,
+          "sha256": "404460677f67b0d1056f02f0d5e30111f54d431825f7ea007c9c61aa8782ea7b"
+        },
+        {
+          "path": "res://assets_external/characters_universal/T_Peasant_Normal_1K.png",
+          "bytes": 890240,
+          "sha256": "e821600a279520cb6c6f68ed66011608038ddd94d101dbeb92fe94ecc99f9339"
+        },
+        {
+          "path": "res://assets_external/characters_universal/T_Peasant_ORM_1K.png",
+          "bytes": 648791,
+          "sha256": "97e11d88919a5fc4258b2809ec2ee2364f469687e6010bf14f14c55233ed972e"
+        },
+        {
+          "path": "res://assets_external/characters_universal/T_Eye_Brown.png",
+          "bytes": 35958,
+          "sha256": "d08e3356a83211bc6ca21fe3a8e39f4b5c1a3b8f85457fc2c0fb57be09935025"
+        }
       ],
       "blocked_reason": ""
     },
@@ -140,7 +281,7 @@
       "display_name": "Greyfen villager",
       "family": "human",
       "source_pack": "quaternius_universal_base_characters",
-      "status": "approved_runtime_family",
+      "status": "char_restore_004_unified_male_clothed",
       "approved": true,
       "export_eligible": true,
       "model": "res://assets_external/characters_universal/Male_Peasant.gltf",
@@ -148,64 +289,174 @@
       "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
       "model_family": "res://assets_external/characters_universal/{Male_Peasant,Female_Peasant}_and_native_head_hair.gltf",
       "runtime_files": [
-        {"path": "res://assets_external/characters_universal/Male_Peasant.gltf", "bytes": 34843, "sha256": "731676abc53ef4cf4e74ac61a85f4294d2255588fa659c6bbd9d5b3a1c0aaff6"},
-        {"path": "res://assets_external/characters_universal/Male_Peasant.bin", "bytes": 674764, "sha256": "e46bde795f7b69b351d322d7a5628e07131cfb48ed0afe366293f1b3f530433c"},
-        {"path": "res://assets_external/characters_universal/Female_Peasant.gltf", "bytes": 31461, "sha256": "eea58d4539638cee1270fe0bf7d4d59a5878eb71e5aac6cb1c907531ad248fcb"},
-        {"path": "res://assets_external/characters_universal/Female_Peasant.bin", "bytes": 658600, "sha256": "40eccaa2bd545c893142ef7dca0866ea8f20df3a86c67c5615024bc4fe546e83"},
-        {"path": "res://assets_external/characters_universal/Male_Head.gltf", "bytes": 40570, "sha256": "e49ed6b260dd28353c7b22178f0aee354d3b3def02ae701265490938131ae6f4"},
-        {"path": "res://assets_external/characters_universal/Female_Head.gltf", "bytes": 41414, "sha256": "44794328bed68f79e6ada8b9ba08c1f26d7172d2a61ae7092bbda7df68ed2df3"},
-        {"path": "res://assets_external/characters_universal/Hair_Buns.gltf", "bytes": 25358, "sha256": "16c66a1c15c53439b8ddf51573f27cb73d7cf72e02c1d4fcdb7b1bd4c50cbec8"},
-        {"path": "res://assets_external/characters_universal/Hair_Buzzed.gltf", "bytes": 24633, "sha256": "d3856f39364c6ea6360dca4f5127d02f8e64b408feb54875eb0eb45b8b6fbe9f"},
-        {"path": "res://assets_external/characters_universal/Hair_SimpleParted.gltf", "bytes": 24639, "sha256": "451e578936425522bbe23fcc92d9fc25da23ad5a681d952aae0c149189bef062"},
-        {"path": "res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png", "bytes": 655637, "sha256": "404460677f67b0d1056f02f0d5e30111f54d431825f7ea007c9c61aa8782ea7b"},
-        {"path": "res://assets_external/characters_universal/T_Peasant_Normal_1K.png", "bytes": 890240, "sha256": "e821600a279520cb6c6f68ed66011608038ddd94d101dbeb92fe94ecc99f9339"},
-        {"path": "res://assets_external/characters_universal/T_Peasant_ORM_1K.png", "bytes": 648791, "sha256": "97e11d88919a5fc4258b2809ec2ee2364f469687e6010bf14f14c55233ed972e"},
-        {"path": "res://assets_external/characters_universal/T_Eye_Brown.png", "bytes": 35958, "sha256": "d08e3356a83211bc6ca21fe3a8e39f4b5c1a3b8f85457fc2c0fb57be09935025"}
+        {
+          "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
+          "bytes": 34843,
+          "sha256": "731676abc53ef4cf4e74ac61a85f4294d2255588fa659c6bbd9d5b3a1c0aaff6"
+        },
+        {
+          "path": "res://assets_external/characters_universal/Male_Peasant.bin",
+          "bytes": 674764,
+          "sha256": "e46bde795f7b69b351d322d7a5628e07131cfb48ed0afe366293f1b3f530433c"
+        },
+        {
+          "path": "res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png",
+          "bytes": 655637,
+          "sha256": "404460677f67b0d1056f02f0d5e30111f54d431825f7ea007c9c61aa8782ea7b"
+        },
+        {
+          "path": "res://assets_external/characters_universal/T_Peasant_Normal_1K.png",
+          "bytes": 890240,
+          "sha256": "e821600a279520cb6c6f68ed66011608038ddd94d101dbeb92fe94ecc99f9339"
+        },
+        {
+          "path": "res://assets_external/characters_universal/T_Peasant_ORM_1K.png",
+          "bytes": 648791,
+          "sha256": "97e11d88919a5fc4258b2809ec2ee2364f469687e6010bf14f14c55233ed972e"
+        },
+        {
+          "path": "res://assets_external/characters_universal/T_Hair_1_BaseColor_1K.png",
+          "bytes": 646770,
+          "sha256": "55f89ff98f76333d7c0d5342dbd69d1a780f42807c8de93616bfd016764d8d29"
+        },
+        {
+          "path": "res://assets_external/characters_universal/T_Hair_1_Normal_1K.png",
+          "bytes": 1196137,
+          "sha256": "4121d112782a2867373f14bf310d886a2aa13b6ddcc4bfa4821dff84d72540ba"
+        },
+        {
+          "path": "res://assets_external/characters_universal/T_Eye_Brown.png",
+          "bytes": 35958,
+          "sha256": "d08e3356a83211bc6ca21fe3a8e39f4b5c1a3b8f85457fc2c0fb57be09935025"
+        },
+        {
+          "path": "res://assets_external/characters_universal/T_Eye_Normal.png",
+          "bytes": 15099,
+          "sha256": "9ed61f7726a54fe346a78b9e5a18905d8e2b88f86235d97f53cd207a26f3f8c7"
+        }
       ],
-      "blocked_reason": ""
+      "blocked_reason": "",
+      "notes": "Complete clothed Universal body assembly with one shared skeleton, native face anatomy, deterministic palette variation, and 1K maps."
     },
     "guard": {
       "display_name": "Vargan guard",
       "family": "human",
       "source_pack": "quaternius_universal_base_characters",
-      "status": "approved_runtime",
+      "status": "char_restore_004_unified_male_clothed",
       "approved": true,
       "export_eligible": true,
       "model": "res://assets_external/characters_universal/Male_Peasant.gltf",
       "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
       "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
       "runtime_files": [
-        {"path": "res://assets_external/characters_universal/Male_Peasant.gltf", "bytes": 34843, "sha256": "731676abc53ef4cf4e74ac61a85f4294d2255588fa659c6bbd9d5b3a1c0aaff6"},
-        {"path": "res://assets_external/characters_universal/Male_Peasant.bin", "bytes": 674764, "sha256": "e46bde795f7b69b351d322d7a5628e07131cfb48ed0afe366293f1b3f530433c"},
-        {"path": "res://assets_external/characters_universal/Male_Head.gltf", "bytes": 40570, "sha256": "e49ed6b260dd28353c7b22178f0aee354d3b3def02ae701265490938131ae6f4"},
-        {"path": "res://assets_external/characters_universal/Hair_Buzzed.gltf", "bytes": 24633, "sha256": "d3856f39364c6ea6360dca4f5127d02f8e64b408feb54875eb0eb45b8b6fbe9f"},
-        {"path": "res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png", "bytes": 655637, "sha256": "404460677f67b0d1056f02f0d5e30111f54d431825f7ea007c9c61aa8782ea7b"},
-        {"path": "res://assets_external/characters_universal/T_Peasant_Normal_1K.png", "bytes": 890240, "sha256": "e821600a279520cb6c6f68ed66011608038ddd94d101dbeb92fe94ecc99f9339"},
-        {"path": "res://assets_external/characters_universal/T_Peasant_ORM_1K.png", "bytes": 648791, "sha256": "97e11d88919a5fc4258b2809ec2ee2364f469687e6010bf14f14c55233ed972e"}
+        {
+          "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
+          "bytes": 34843,
+          "sha256": "731676abc53ef4cf4e74ac61a85f4294d2255588fa659c6bbd9d5b3a1c0aaff6"
+        },
+        {
+          "path": "res://assets_external/characters_universal/Male_Peasant.bin",
+          "bytes": 674764,
+          "sha256": "e46bde795f7b69b351d322d7a5628e07131cfb48ed0afe366293f1b3f530433c"
+        },
+        {
+          "path": "res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png",
+          "bytes": 655637,
+          "sha256": "404460677f67b0d1056f02f0d5e30111f54d431825f7ea007c9c61aa8782ea7b"
+        },
+        {
+          "path": "res://assets_external/characters_universal/T_Peasant_Normal_1K.png",
+          "bytes": 890240,
+          "sha256": "e821600a279520cb6c6f68ed66011608038ddd94d101dbeb92fe94ecc99f9339"
+        },
+        {
+          "path": "res://assets_external/characters_universal/T_Peasant_ORM_1K.png",
+          "bytes": 648791,
+          "sha256": "97e11d88919a5fc4258b2809ec2ee2364f469687e6010bf14f14c55233ed972e"
+        },
+        {
+          "path": "res://assets_external/characters_universal/T_Hair_1_BaseColor_1K.png",
+          "bytes": 646770,
+          "sha256": "55f89ff98f76333d7c0d5342dbd69d1a780f42807c8de93616bfd016764d8d29"
+        },
+        {
+          "path": "res://assets_external/characters_universal/T_Hair_1_Normal_1K.png",
+          "bytes": 1196137,
+          "sha256": "4121d112782a2867373f14bf310d886a2aa13b6ddcc4bfa4821dff84d72540ba"
+        },
+        {
+          "path": "res://assets_external/characters_universal/T_Eye_Brown.png",
+          "bytes": 35958,
+          "sha256": "d08e3356a83211bc6ca21fe3a8e39f4b5c1a3b8f85457fc2c0fb57be09935025"
+        },
+        {
+          "path": "res://assets_external/characters_universal/T_Eye_Normal.png",
+          "bytes": 15099,
+          "sha256": "9ed61f7726a54fe346a78b9e5a18905d8e2b88f86235d97f53cd207a26f3f8c7"
+        }
       ],
-      "blocked_reason": ""
+      "blocked_reason": "",
+      "notes": "Complete clothed Universal body assembly with one shared skeleton, native face anatomy, deterministic palette variation, and 1K maps."
     },
     "traveler": {
       "display_name": "Road traveler",
       "family": "human",
       "source_pack": "quaternius_universal_base_characters",
-      "status": "approved_runtime",
+      "status": "char_restore_004_unified_male_clothed",
       "approved": true,
       "export_eligible": true,
       "model": "res://assets_external/characters_universal/Male_Peasant.gltf",
       "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
       "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
       "runtime_files": [
-        {"path": "res://assets_external/characters_universal/Male_Peasant.gltf", "bytes": 34843, "sha256": "731676abc53ef4cf4e74ac61a85f4294d2255588fa659c6bbd9d5b3a1c0aaff6"},
-        {"path": "res://assets_external/characters_universal/Male_Peasant.bin", "bytes": 674764, "sha256": "e46bde795f7b69b351d322d7a5628e07131cfb48ed0afe366293f1b3f530433c"},
-        {"path": "res://assets_external/characters_universal/Male_Head.gltf", "bytes": 40570, "sha256": "e49ed6b260dd28353c7b22178f0aee354d3b3def02ae701265490938131ae6f4"},
-        {"path": "res://assets_external/characters_universal/Hair_SimpleParted.gltf", "bytes": 24639, "sha256": "451e578936425522bbe23fcc92d9fc25da23ad5a681d952aae0c149189bef062"},
-        {"path": "res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png", "bytes": 655637, "sha256": "404460677f67b0d1056f02f0d5e30111f54d431825f7ea007c9c61aa8782ea7b"},
-        {"path": "res://assets_external/characters_universal/T_Peasant_Normal_1K.png", "bytes": 890240, "sha256": "e821600a279520cb6c6f68ed66011608038ddd94d101dbeb92fe94ecc99f9339"},
-        {"path": "res://assets_external/characters_universal/T_Peasant_ORM_1K.png", "bytes": 648791, "sha256": "97e11d88919a5fc4258b2809ec2ee2364f469687e6010bf14f14c55233ed972e"},
-        {"path": "res://assets_external/characters_universal/T_Eye_Normal.png", "bytes": 15099, "sha256": "9ed61f7726a54fe346a78b9e5a18905d8e2b88f86235d97f53cd207a26f3f8c7"}
+        {
+          "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
+          "bytes": 34843,
+          "sha256": "731676abc53ef4cf4e74ac61a85f4294d2255588fa659c6bbd9d5b3a1c0aaff6"
+        },
+        {
+          "path": "res://assets_external/characters_universal/Male_Peasant.bin",
+          "bytes": 674764,
+          "sha256": "e46bde795f7b69b351d322d7a5628e07131cfb48ed0afe366293f1b3f530433c"
+        },
+        {
+          "path": "res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png",
+          "bytes": 655637,
+          "sha256": "404460677f67b0d1056f02f0d5e30111f54d431825f7ea007c9c61aa8782ea7b"
+        },
+        {
+          "path": "res://assets_external/characters_universal/T_Peasant_Normal_1K.png",
+          "bytes": 890240,
+          "sha256": "e821600a279520cb6c6f68ed66011608038ddd94d101dbeb92fe94ecc99f9339"
+        },
+        {
+          "path": "res://assets_external/characters_universal/T_Peasant_ORM_1K.png",
+          "bytes": 648791,
+          "sha256": "97e11d88919a5fc4258b2809ec2ee2364f469687e6010bf14f14c55233ed972e"
+        },
+        {
+          "path": "res://assets_external/characters_universal/T_Hair_1_BaseColor_1K.png",
+          "bytes": 646770,
+          "sha256": "55f89ff98f76333d7c0d5342dbd69d1a780f42807c8de93616bfd016764d8d29"
+        },
+        {
+          "path": "res://assets_external/characters_universal/T_Hair_1_Normal_1K.png",
+          "bytes": 1196137,
+          "sha256": "4121d112782a2867373f14bf310d886a2aa13b6ddcc4bfa4821dff84d72540ba"
+        },
+        {
+          "path": "res://assets_external/characters_universal/T_Eye_Brown.png",
+          "bytes": 35958,
+          "sha256": "d08e3356a83211bc6ca21fe3a8e39f4b5c1a3b8f85457fc2c0fb57be09935025"
+        },
+        {
+          "path": "res://assets_external/characters_universal/T_Eye_Normal.png",
+          "bytes": 15099,
+          "sha256": "9ed61f7726a54fe346a78b9e5a18905d8e2b88f86235d97f53cd207a26f3f8c7"
+        }
       ],
-      "blocked_reason": ""
+      "blocked_reason": "",
+      "notes": "Complete clothed Universal body assembly with one shared skeleton, native face anatomy, deterministic palette variation, and 1K maps."
     },
     "ghoulkin": {
       "display_name": "Ghoulkin family",
@@ -259,15 +510,46 @@
     }
   },
   "quarantine": [
-    {"pattern": "assets_external/enemies/quaternius_lowpoly_animated_monsters__*", "reason": "Unprocessed duplicate monster-pack source; never a runtime mapping or Web export input."},
-    {"pattern": "assets_external/animations/*.fbx", "reason": "Raw animation source; the optimized Godot library is the only runtime animation input."},
-    {"pattern": "assets_external/animations/*Setup*", "reason": "Tool/setup image or source artifact, not a runtime dependency."},
-    {"pattern": "assets_external/downloads/*", "reason": "Raw downloaded archives are excluded from the runtime contract."},
-    {"pattern": "assets_external/raw/*", "reason": "Raw source staging area is excluded from the runtime contract."}
+    {
+      "pattern": "assets_external/enemies/quaternius_lowpoly_animated_monsters__*",
+      "reason": "Unprocessed duplicate monster-pack source; never a runtime mapping or Web export input."
+    },
+    {
+      "pattern": "assets_external/animations/*.fbx",
+      "reason": "Raw animation source; the optimized Godot library is the only runtime animation input."
+    },
+    {
+      "pattern": "assets_external/animations/*Setup*",
+      "reason": "Tool/setup image or source artifact, not a runtime dependency."
+    },
+    {
+      "pattern": "assets_external/downloads/*",
+      "reason": "Raw downloaded archives are excluded from the runtime contract."
+    },
+    {
+      "pattern": "assets_external/raw/*",
+      "reason": "Raw source staging area is excluded from the runtime contract."
+    }
   ],
   "runtime_rules": {
-    "allowed_formats": [".glb", ".gltf", ".bin", ".png", ".jpg", ".webp", ".ogg", ".wav"],
-    "forbidden_path_tokens": ["proxy", "faceplane", "eye_box", "fake_neck", "root_mounted", "placeholder"],
+    "allowed_formats": [
+      ".glb",
+      ".gltf",
+      ".bin",
+      ".png",
+      ".jpg",
+      ".webp",
+      ".ogg",
+      ".wav"
+    ],
+    "forbidden_path_tokens": [
+      "proxy",
+      "faceplane",
+      "eye_box",
+      "fake_neck",
+      "root_mounted",
+      "placeholder"
+    ],
     "max_named_human_triangles": 20000,
     "max_named_texture_dimension": 1024,
     "approved_role_requires_hashes": true,

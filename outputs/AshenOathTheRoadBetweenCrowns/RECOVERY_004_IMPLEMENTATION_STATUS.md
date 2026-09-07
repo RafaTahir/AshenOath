@@ -1,5 +1,39 @@
 # RECOVERY-004 Implementation Status
 
+## Current Atomic Checkpoint - 2026-09-07 (Character mapping and asset-manifest integrity)
+
+- Current ticket: `RECOVERY-004`, character presentation and runtime asset
+  integrity slice.
+- Completed in this atomic slice: the active crowd and named-human mappings
+  now resolve to the clothed Universal `Male_Peasant.gltf` and
+  `Female_Peasant.gltf` assemblies. Kael and Anwen remain on their protected
+  A-set recipes, and Captain Senn remains on the Ranger runtime asset. The
+  generated full-body candidates that failed visual review are preserved as
+  untracked experiments but are no longer referenced by active manifests,
+  export filters, or Web checks. The shared opening animation artifact record
+  was corrected to the current local file size and SHA-256.
+- Latest direct results: `tools/verify_asset_005.py` exited `0` with
+  `ASSET-005 VERIFIER: PASS (6 approved runtime roles, 5 explicit fallbacks)`;
+  `tools/verify_web_001.py . ..\\..` exited `0` with `WEB-001: PASS`. The
+  previously run direct character checks for `verify_char_002.gd`,
+  `verify_character_real_001.gd`, `verify_character_role_contract.gd`,
+  `verify_char_007.gd`, `verify_char_008.gd`, and `verify_char_009.gd` also
+  passed against the restored mappings.
+- Visual result: the rejected base/underwear full-body experiment is not an
+  approved release asset. The restored peasant assemblies are clothed and
+  remain in the same Universal family, but the broader character presentation
+  is still low-poly/provisional and the guard equipment treatment remains a
+  known visual limitation. This checkpoint does not claim final character
+  acceptance.
+- Remaining blocker: broader RECOVERY-004 visual quality, authored crowd
+  variation, lifecycle cleanup, full-campaign proof, and release evidence are
+  still incomplete. No export, browser cycle, push, merge, or deployment was
+  performed for this checkpoint.
+- Exact next action on resume: continue the next explicitly selected recovery
+  slice after unpausing; do not repeat ASSET-005 or WEB-001 unless one of their
+  inputs changes. The preserved untracked experiments remain available for
+  audit and are not production inputs.
+
 ## Current Atomic Checkpoint - 2026-09-06 (Transition verifier and menu identity)
 
 - Current ticket: `RECOVERY-004`, transition-verifier shutdown and visible
