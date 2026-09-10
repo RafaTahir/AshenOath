@@ -178,6 +178,21 @@ function consoleMessages(cdp) {
     }));
 }
 
+function consoleWarningLine(line) {
+  // Godot's Web stdout bridge reports push_warning() as a Chromium
+  // console.error event. Preserve those diagnostics in the report without
+  // confusing a deliberate game warning with a JavaScript or runtime error.
+  return line.includes("WARNING:") || line.includes("at: push_warning");
+}
+
+function consoleWarnings(cdp) {
+  const runtime = cdp.events.filter((event) =>
+    event.method === "Runtime.consoleAPICalled"
+    || (event.method === "Log.entryAdded" && event.params.entry.level === "warning")
+  ).map((event) => JSON.stringify(event.params).slice(0, 1200));
+  return runtime.filter(consoleWarningLine);
+}
+
 function consoleErrors(cdp) {
   const runtime = cdp.events.filter((event) =>
     event.method === "Runtime.exceptionThrown"
@@ -187,6 +202,7 @@ function consoleErrors(cdp) {
   return runtime.filter((line) =>
     !line.includes("Tracking Prevention blocked access to storage")
     && !line.includes("crbug.com/1173575")
+    && !consoleWarningLine(line)
   );
 }
 
@@ -1141,6 +1157,7 @@ async function testBrowser(name, executable) {
       elapsed_ms: Date.now() - started,
       checkpoints,
       console_errors: [],
+      console_warnings: consoleWarnings(cdp),
       network_failures: [],
       js_heap_mb: jsHeapMb,
       runtime_resources: resources.filter((entry) => /index\.(js|wasm|pck)/.test(entry.name)),
@@ -1167,6 +1184,7 @@ async function testBrowser(name, executable) {
       elapsed_ms: Date.now() - started,
       checkpoints,
       console_errors: cdp ? consoleErrors(cdp) : [],
+      console_warnings: cdp ? consoleWarnings(cdp) : [],
       console_messages: cdp ? consoleMessages(cdp).slice(-120) : [],
       failure_screenshot: failureScreenshot,
       last_telemetry: cdp ? await telemetry(cdp).catch(() => null) : null,

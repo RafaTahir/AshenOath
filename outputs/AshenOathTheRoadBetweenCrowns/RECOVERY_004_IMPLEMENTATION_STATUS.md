@@ -1058,3 +1058,20 @@ Do not sync `.release-gate/AshenOath_QA` into `web/`; it is not the production b
   the accumulated source changes settle, perform exactly one new QA export and
   one browser acceptance run; do not use a harness filter to claim visual
   approval.
+
+## QA Classification Follow-up - 2026-09-11
+
+- The rejected Chrome result exposed that Godot Web forwards `push_warning()`
+  output through the browser `console.error` channel. The existing harness
+  therefore conflated an intentional, release-blocking visual warning with a
+  JavaScript, resource, or renderer error and aborted before the route.
+- The harness now classifies warning-prefixed Godot diagnostics as
+  `console_warnings` in the report while retaining them in the raw
+  `console_messages`. JavaScript exceptions, `push_error()` output, network
+  failures, and active renderer/resource errors remain fatal.
+- Cheapest proof: `node --check tools/verify_qa_002_browser.mjs` passes and no
+  Web export or browser run was repeated after the classification edit.
+- Current truth: the two required human roles remain visually unapproved and
+  still block release through the character/visual gates. This change only
+  makes the browser route runner truthful enough to continue to the next
+  player-facing assertion when the next source-aligned candidate is ready.

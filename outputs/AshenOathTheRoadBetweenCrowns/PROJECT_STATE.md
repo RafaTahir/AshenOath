@@ -63,7 +63,9 @@ reached Greyfen through New Game, and had no JavaScript, network, WebGL, or
 resource-load failure. It was rejected at the browser console gate because the
 runtime correctly surfaced the still-unapproved `sister_anwen_human` and
 `player_human` visual roles. This is an unresolved character-acceptance issue,
-not a new bridge or startup diagnosis; no additional Web run was started.
+not a new bridge or startup diagnosis. The browser harness now reports those
+Godot `push_warning()` lines as `console_warnings` while keeping actual runtime
+errors fatal; no additional Web run was started after that tooling correction.
 
 ## Recovery-004 Current Truth - 2026-09-10
 
