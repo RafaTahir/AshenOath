@@ -3,23 +3,25 @@
 ## Recovery-004 Current Checkpoint - 2026-09-10
 
 The current development source is on `codex/masterpiece-rebuild` at local
-checkpoint `cace227c8f78a91e01b634304d1188d99225fced`, with the reviewed
-mobile deferred-visual fix and release-runner report guard now verified in a
-rebuilt QA Web artifact. The current full-campaign mobile checks passed in
-Chrome and Edge with `47` route checkpoints each, no console errors, and
-temporary profiles under `D:\Temp\AshenOath`.
+checkpoint `f2d391189137971a5a60627089d3083d6935f37f`, with the reviewed
+mobile deferred-visual fix and release-runner report guard verified in a
+fresh QA Web artifact. The complete authoritative runner passed from this
+source: 96 gates, fresh screenshot suites, graphical Compatibility profiling,
+packed startup, desktop and mobile browser smoke, and full campaign routes.
+The full-campaign Chrome and Edge checks each passed `47` checkpoints with no
+console errors and temporary profiles under `D:\Temp\AshenOath`.
 
-The latest direct source checks pass, and the focused browser blocker is
-cleared. The current visual review remains truthful: the game is a functional
-stylized prototype with low-poly/procedural world and combat presentation
-below the intended final art bar. The recovery registry still records open
-visual, traversal, lifecycle, story, audio, and architecture blockers; those
-claims are not silently promoted by technical passes. Production remains
-unchanged until a complete report and final artifact are regenerated.
+The focused browser blocker is cleared. The current visual review remains
+truthful: the game is a functional stylized prototype with low-poly/procedural
+world and combat presentation below the intended final art bar. The recovery
+registry still records open visual, traversal, lifecycle, story, audio, and
+architecture blockers; those claims are not silently promoted by technical
+passes. Production remains unchanged until the remaining release-policy
+blockers are resolved.
 
-Exact next action: checkpoint the intended tracked source/evidence changes,
-run the complete authoritative release runner, and inspect its report before
-any production synchronization or deployment.
+Exact next action: bind the regenerated pack metadata and release evidence to
+the next source checkpoint, then continue resolving the registry blockers
+before production synchronization or deployment.
 
 ## Recovery-003 Release Continuation - 2026-09-05
 

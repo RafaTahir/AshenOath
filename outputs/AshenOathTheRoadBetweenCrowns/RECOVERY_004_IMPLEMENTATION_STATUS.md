@@ -20,17 +20,20 @@
   full mobile campaign in Chrome (`47` checkpoints, `346196 ms`, empty console
   errors) and Edge (`47` checkpoints, `323497 ms`, empty console errors). Both
   profiles were created under `D:\Temp\AshenOath` and cleaned after completion.
-- Remaining truth: the mobile deferred-visual blocker is cleared. The broader
-  recovery issue registry still records visual, traversal, lifecycle, story,
-  audio, and architecture blockers; these are not silently promoted by this
-  focused fix. The complete release report and production artifact still need
-  to be regenerated from the checkpointed source.
+- Remaining truth: the mobile deferred-visual blocker is cleared. The complete
+  authoritative runner then passed 96 gates from the checkpointed source,
+  including fresh screenshots, graphical performance, packed startup, and
+  Chrome/Edge desktop and mobile campaign routes. The broader recovery issue
+  registry still records visual, traversal, lifecycle, story, audio, and
+  architecture blockers; these are not silently promoted by technical passes.
 - Checkpoint decision: the source and evidence are coherent enough for the
-  pending local checkpoint commit. No production Web files were changed and no
-  push, merge, or deployment has occurred in this focused slice.
-- Exact next action: checkpoint the intended tracked source/evidence changes,
-  rerun the complete authoritative release gate, then inspect the report and
-  artifact before any deployment decision.
+  pending local evidence checkpoint. The generated pack metadata and release
+  report are now being bound to this source revision. Production Web files
+  remain unchanged and no push, merge, or deployment has occurred in this
+  recovery slice.
+- Exact next action: commit the generated pack metadata and release evidence,
+  rerun the complete release identity tail needed for that new commit, then
+  continue resolving the remaining release-policy blockers.
 
 ## Current Evidence Checkpoint - 2026-09-08 (objective, lighting, and capture hardening)
 
