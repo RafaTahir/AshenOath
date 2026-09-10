@@ -41,6 +41,9 @@ def main() -> int:
             fail(f"export does not exclude {excluded}", failures)
     if '"res://scripts/world_vfx_controller.gd"' not in preset:
         fail("export omits the runtime world VFX controller", failures)
+    # Runtime assets may be owned by the opening/character/monster packs. The
+    # production preset must still declare every mapped source somewhere, but
+    # placing all opening skins in the root PCK defeats staged boot.
     for runtime_character in (
         "Male_Peasant.gltf",
         "Female_Peasant.gltf",
@@ -54,7 +57,7 @@ def main() -> int:
         "Wolf.fbx",
     ):
         if runtime_character not in preset:
-            fail(f"export omits mapped runtime character: {runtime_character}", failures)
+            fail(f"export presets omit mapped runtime character: {runtime_character}", failures)
     if 'renderer/rendering_method="gl_compatibility"' not in project_settings:
         fail("project is not using the Compatibility renderer", failures)
     if 'viewport_width=1280' not in project_settings or 'viewport_height=720' not in project_settings:

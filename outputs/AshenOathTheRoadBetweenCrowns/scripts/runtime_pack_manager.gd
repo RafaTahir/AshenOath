@@ -18,11 +18,11 @@ const MAX_DEPLOYMENT_BYTES := 104857600
 const MAX_RETRIES := 2
 const CHUNK_SIZE := 1024 * 1024
 const MAX_CONCURRENT_DOWNLOADS := 3
-# Only the pack required to enter the opening is on the readiness-critical
-# path. Campaign, optional character variants, monsters, and audio can arrive
-# after control is handed to the player. Keeping this list small is important:
-# a Web request must never make Greyfen wait for Castle or finale content.
-const STARTUP_PACK_IDS: Array[String] = ["base"]
+# Base and the opening-critical pack are on the readiness-critical path.
+# Campaign, optional character variants, monsters, and audio can arrive after
+# control is handed to the player. Keeping this list small is important: a Web
+# request must never make Greyfen wait for Castle or finale content.
+const STARTUP_PACK_IDS: Array[String] = ["base", "opening"]
 const BACKGROUND_PACK_IDS: Array[String] = ["opening", "characters", "monsters", "audio", "campaign"]
 
 var manifest: Dictionary = {}
@@ -112,18 +112,14 @@ func is_ready(pack_id: String) -> bool:
 	return bool(mounted.get(id, false)) or get_state(id) == "ready"
 
 func has_embedded_content(pack_id: String) -> bool:
-	# Some Web candidates intentionally keep their builder scripts in the root
-	# PCK while optional art/audio packs continue downloading. A zone must be
-	# allowed to use that embedded builder instead of locking the player behind
-	# a pack that cannot add anything required by the active scene.
+	# Builder scripts can live in the root PCK even when the scene assets belong
+	# to an external pack. The generated manifest is the authority for Web
+	# ownership; checking ResourceLoader here would incorrectly bypass a needed
+	# streamed-pack request.
 	var id := _normalise_id(pack_id)
-	match id:
-		"campaign":
-			return ResourceLoader.exists("res://scripts/zones/campaign_section.gd")
-		"opening":
-			return ResourceLoader.exists("res://scripts/zones/wychwood_section.gd")
-		_:
-			return false
+	if id == "":
+		return false
+	return str(get_pack(id).get("status", "")).begins_with("embedded")
 
 func is_cached(pack_id: String) -> bool:
 	var id := _normalise_id(pack_id)

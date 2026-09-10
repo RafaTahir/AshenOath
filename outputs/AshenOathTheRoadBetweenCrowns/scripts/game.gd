@@ -444,10 +444,10 @@ func _load_zone_after_runtime_pack(zone_id: String, spawn_pos: Vector3) -> void:
 		if runtime_packs == null or not runtime_packs.has_method("request_pack"):
 			_recover_failed_zone_load(current_zone_id)
 			return
-		# The Web candidate embeds the opening builders and gameplay-critical route
-		# geometry in the root PCK. Do not make a valid gate wait on the optional
-		# 28 MB art pack; its background request can finish while the player is in
-		# Greyfen and enrich later visits.
+		# The Web candidate keeps the opening builders in the root PCK, but its
+		# gameplay-critical opening art is owned by the startup opening pack. The
+		# manifest-backed check below prevents a gate from bypassing that pack just
+		# because a builder script happens to be embedded in the root.
 		if runtime_packs.has_method("has_embedded_content") and runtime_packs.has_embedded_content("opening"):
 			_load_zone(zone_id, spawn_pos)
 			return
@@ -464,11 +464,9 @@ func _load_zone_after_runtime_pack(zone_id: String, spawn_pos: Vector3) -> void:
 	if runtime_packs == null or not runtime_packs.has_method("request_pack"):
 		_recover_failed_zone_load(current_zone_id)
 		return
-	# The production and QA Web candidates embed the campaign builder in the
-	# root PCK. External campaign packs are optional in that configuration, so
-	# do not lock a player at a gate while an unrelated background download is
-	# still in flight. Builds without the embedded builder continue through the
-	# transactional pack path below.
+	# The production and QA Web candidates may embed the campaign builder in the
+	# root PCK, but campaign art remains owned by the external campaign pack. The
+	# manifest-backed check below keeps the builder from bypassing that pack.
 	if runtime_packs.has_method("has_embedded_content") and runtime_packs.has_embedded_content("campaign"):
 		_load_zone(zone_id, spawn_pos)
 		return
