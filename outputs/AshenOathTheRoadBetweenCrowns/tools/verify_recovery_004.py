@@ -33,7 +33,24 @@ def main() -> int:
     statuses = set(registry.get("status_values", []))
     tickets = registry.get("tickets", [])
     ticket_ids = [str(ticket.get("id", "")) for ticket in tickets]
-    require(len(ticket_ids) == 31, "recovery ticket set must contain 31 tickets")
+    # The audit plan defines 31 recovery tickets. QA-002 was added as a
+    # supplemental checkpoint when the player-driven route harness was made
+    # fail-closed; keep it explicit instead of silently changing the plan's
+    # denominator or rejecting the current registry.
+    planned_ticket_ids = {
+        "SECURITY-001", "QA-005", "QA-006", "PROD-003", "ENGINE-004",
+        "ENGINE-005", "INPUT-002", "SAVE-003", "QUEST-007", "UI-003",
+        "WORLD-007", "WORLD-008", "MAT-002", "CHAR-003", "ANIM-002",
+        "COMBAT-004", "SKY-002", "AUDIO-004", "PERF-004", "WORLD-009",
+        "WORLD-010", "WORLD-011", "CHAR-004", "NARR-004", "AUDIO-005",
+        "PERF-005", "ACCESS-002", "QA-007", "QA-008", "WEB-003",
+        "RELEASE-002",
+    }
+    supplemental_ticket_ids = {"QA-002"}
+    require(len(planned_ticket_ids) == 31, "internal planned recovery ticket list is not 31 tickets")
+    require(planned_ticket_ids.issubset(set(ticket_ids)), "one or more planned recovery tickets are missing")
+    require(set(ticket_ids).issubset(planned_ticket_ids | supplemental_ticket_ids), "registry contains an unclassified recovery ticket")
+    require(len(ticket_ids) == len(planned_ticket_ids | supplemental_ticket_ids), "recovery ticket set contains an unexpected ticket count")
     require(len(ticket_ids) == len(set(ticket_ids)), "recovery ticket IDs are duplicated")
     require(all(str(ticket.get("status")) in statuses for ticket in tickets), "unknown recovery ticket status")
     require(any(str(ticket.get("id")) == "SECURITY-001" and ticket.get("status") == "verified" for ticket in tickets),

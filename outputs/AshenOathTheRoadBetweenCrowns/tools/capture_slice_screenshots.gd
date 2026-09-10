@@ -234,6 +234,7 @@ func _capture(game, file_name: String, player_pos: Vector3, zone_id: String, spa
 	player_pos.y = maxf(player_pos.y, 0.95)
 	game.player.global_position = player_pos
 	game.player.velocity = Vector3.ZERO
+	_stabilize_player_capture_pose(game.player)
 	if game.camera_rig != null:
 		game.camera_rig.yaw = camera_yaw
 		game.camera_rig.pitch = -0.2
@@ -265,6 +266,7 @@ func _capture_dialogue(game, file_name: String, player_pos: Vector3) -> void:
 	await _wait_for_zone_ready(game)
 	game.player.global_position = player_pos
 	game.player.velocity = Vector3.ZERO
+	_stabilize_player_capture_pose(game.player)
 	var sister = _find_child_named(game.zone_root, "sister_anwen")
 	if sister == null:
 		push_error("dialogue capture could not find Sister Anwen")
@@ -290,6 +292,7 @@ func _capture_anwen_approach(game, file_name: String) -> void:
 	await _wait_for_zone_ready(game)
 	game.player.global_position = Vector3(3.2, 1, -2.6)
 	game.player.velocity = Vector3.ZERO
+	_stabilize_player_capture_pose(game.player)
 	if game.camera_rig != null:
 		game.camera_rig.yaw = 0.0
 		game.camera_rig.pitch = -0.16
@@ -615,6 +618,18 @@ func _reset_combat_capture_pose(captured_player: Node) -> void:
 	captured_player.hurt_flash_time = 0.0
 	captured_player.was_on_floor = true
 
+func _stabilize_player_capture_pose(game_player: Node) -> void:
+	if game_player == null:
+		return
+	_reset_combat_capture_pose(game_player)
+	var driver = game_player.get("animation_driver")
+	if driver != null and driver.has_method("stop_action"):
+		driver.stop_action("idle", 0.0)
+	if driver != null and driver.has_method("set_locomotion"):
+		driver.set_locomotion(0.0, Vector3.ZERO, true)
+	if driver != null and driver.has_method("advance_external"):
+		driver.advance_external(0.05)
+
 func _capture_victory_state(game, file_name: String) -> void:
 	for objective_id in ["speak_anwen", "inspect_corpse", "find_claw_marks", "find_black_feathers"]:
 		game.quests.complete_objective("main_road_of_crows", objective_id)
@@ -725,9 +740,25 @@ func _save_viewport(file_name: String) -> void:
 	_save_image(image, file_name)
 
 func _save_image(image: Image, file_name: String) -> void:
-	image.save_png("%s/%s.png" % [output_dir, file_name])
+	var output_path := "%s/%s.png" % [output_dir, file_name]
+	if not _write_png(image, output_path, file_name):
+		quit(1)
+		return
 	var gallery_name = "%s_%s_%s.png" % [gallery_phase, file_name, gallery_timestamp]
-	image.save_png("%s/%s" % [gallery_dir, gallery_name])
+	var gallery_path := "%s/%s" % [gallery_dir, gallery_name]
+	if not _write_png(image, gallery_path, "%s gallery" % file_name):
+		quit(1)
+
+func _write_png(image: Image, path: String, label: String) -> bool:
+	var error: Error = image.save_png(path)
+	if error != OK:
+		push_error("%s screenshot save failed for %s: %s" % [label, path, error])
+		return false
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null or file.get_length() <= 0:
+		push_error("%s screenshot save produced an empty file: %s" % [label, path])
+		return false
+	return true
 
 func _timestamp_for_file() -> String:
 	var datetime = Time.get_datetime_dict_from_system()

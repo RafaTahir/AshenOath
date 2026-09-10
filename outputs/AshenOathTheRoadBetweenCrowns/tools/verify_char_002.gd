@@ -38,7 +38,7 @@ func _initialize() -> void:
 		actor.queue_free()
 	# Guards use the same Universal family while retaining their own occupation
 	# palette, hair recipe, and equipment sockets.
-	check(str(paths.castle_guard_human).contains("assets_external/characters_universal/Male_Peasant.gltf"), "Castle guards do not use the selected Universal male runtime source")
+	check(str(paths.castle_guard_human).contains("assets_external/characters_universal/Male_Peasant.gltf"), "Castle guards do not use the selected clothed Universal male runtime source")
 	check(str(paths.road_ranger_human).contains("characters_ranger/Male_Ranger_Runtime.gltf"), "Road Ranger does not use the approved Ranger runtime source")
 	var crowd_paths := {
 		str(paths.villager_human): true,

@@ -35,8 +35,7 @@ func _initialize() -> void:
 		_verify_interior_states(director)
 		_verify_clock_persistence(clock)
 		_verify_quality_density(game, director)
-	game.queue_free()
-	await process_frame
+	await _shutdown_game(game)
 	_finish()
 
 func _verify_profiles(director: Node) -> void:
@@ -123,6 +122,24 @@ func _visible_children(node: Node) -> int:
 func _frames(count: int) -> void:
 	for _i in range(count):
 		await process_frame
+
+func _shutdown_game(game: Node) -> void:
+	# Lighting verification swaps profiles across streamed zones. Retire those
+	# roots through the runtime owner before the SceneTree exits so a passing
+	# assertion cannot be followed by a misleading ObjectDB leak diagnostic.
+	if is_instance_valid(game) and game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+		await _frames(20)
+	if is_instance_valid(game) and game.has_method("finalize_resource_shutdown"):
+		game.finalize_resource_shutdown()
+		await _frames(16)
+	if is_instance_valid(game) and game.is_inside_tree():
+		root.remove_child(game)
+	if is_instance_valid(game):
+		game.free()
+	RenderingServer.force_sync()
+	await _frames(12)
+	RenderingServer.force_sync()
 
 func _check(condition: bool, message: String) -> void:
 	if not condition:

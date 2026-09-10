@@ -255,7 +255,15 @@ static func _add_castle_role_equipment(owner: Node3D, role: String) -> void:
 
 static func _inverse_attachment_scale(attachment: BoneAttachment3D) -> Vector3:
 	var inherited := attachment.global_basis.get_scale()
-	return Vector3(1.0 / max(abs(inherited.x), 0.0001), 1.0 / max(abs(inherited.y), 0.0001), 1.0 / max(abs(inherited.z), 0.0001))
+	# Imported character roots can carry a very small authored scale. An
+	# unbounded inverse turns a hand prop into a giant floating primitive. Keep
+	# the correction within the authored equipment range while preserving the
+	# skeleton's transform.
+	return Vector3(
+		clampf(1.0 / max(abs(inherited.x), 0.0001), 0.72, 1.35),
+		clampf(1.0 / max(abs(inherited.y), 0.0001), 0.72, 1.35),
+		clampf(1.0 / max(abs(inherited.z), 0.0001), 0.72, 1.35)
+	)
 
 static func _add_spear(parent: Node3D) -> void:
 	var shaft := MeshInstance3D.new()
@@ -284,14 +292,17 @@ static func _add_shield(parent: Node3D) -> void:
 	var shield := MeshInstance3D.new()
 	shield.name = "VarganGuardShield"
 	var shield_mesh := CylinderMesh.new()
-	shield_mesh.top_radius = 0.34
-	shield_mesh.bottom_radius = 0.34
-	shield_mesh.height = 0.075
+	shield_mesh.top_radius = 0.22
+	shield_mesh.bottom_radius = 0.22
+	shield_mesh.height = 0.055
 	shield_mesh.radial_segments = 10
 	shield.mesh = shield_mesh
-	shield.position = Vector3(0.0, -0.30, -0.02)
+	# The parent is the actual wrist BoneAttachment3D. Keep the shield close to
+	# that socket; a large downward offset follows the hand basis upward on the
+	# imported Universal rig and makes the prop float behind the shoulder.
+	shield.position = Vector3(0.0, -0.015, -0.045)
 	shield.rotation_degrees = Vector3(90.0, 0.0, 0.0)
-	shield.scale = Vector3(1.0, 1.18, 1.0)
+	shield.scale = Vector3(1.0, 1.12, 1.0)
 	shield.material_override = _mat(Color("3d4852"), 0.55)
 	parent.add_child(shield)
 	var boss := MeshInstance3D.new()
@@ -302,7 +313,7 @@ static func _add_shield(parent: Node3D) -> void:
 	boss_mesh.height = 0.09
 	boss_mesh.radial_segments = 8
 	boss.mesh = boss_mesh
-	boss.position = Vector3(0.0, -0.30, -0.065)
+	boss.position = Vector3(0.0, -0.015, -0.092)
 	boss.rotation_degrees = Vector3(90.0, 0.0, 0.0)
 	boss.material_override = _mat(Color("9c7845"), 0.45)
 	parent.add_child(boss)

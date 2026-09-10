@@ -5,7 +5,7 @@
   "ecosystem": "Quaternius RPG Character Pack animated family",
   "license": "CC0 1.0 Universal",
   "shared_skeleton_profile": "QuaterniusAnimatedHumanoid32",
-  "shared_animation_source": "res://assets_external/animations/AnimationLibrary_Godot_Standard.glb",
+  "shared_animation_source": "res://assets_external/animations/AnimationLibrary_Godot_Opening.tres",
   "source_pack": {
     "id": "quaternius_rpg_characters_animated",
     "download_page": "https://quaternius.com/packs/rpgcharacters.html",
@@ -39,7 +39,7 @@
     "villager_male": {"model": "res://assets_external/characters_universal/Male_Peasant.gltf", "target_height": 1.72, "outfit_slot": "crowd_male", "face_profile": "crowd_male", "status": "runtime_accepted_universal_family"},
     "villager_female": {"model": "res://assets_external/characters_universal/Female_Peasant.gltf", "target_height": 1.66, "outfit_slot": "crowd_female", "face_profile": "crowd_female", "status": "runtime_accepted_universal_family"},
     "castle_guard": {"model": "res://assets_external/characters_universal/Male_Peasant.gltf", "target_height": 1.82, "outfit_slot": "guard", "face_profile": "castle_guard", "status": "runtime_accepted_universal_family"},
-    "road_ranger": {"model": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf", "target_height": 1.75, "outfit_slot": "ranger", "face_profile": "traveler", "animation_library": "res://assets_external/animations/AnimationLibrary_Godot_Standard.glb"}
+    "road_ranger": {"model": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf", "target_height": 1.75, "outfit_slot": "ranger", "face_profile": "traveler", "animation_library": "res://assets_external/animations/AnimationLibrary_Godot_Opening.tres"}
   },
   "runtime_policy": {
     "selected_runtime_bodies": "direct imported Quaternius animated GLTFs; controller physics remains authoritative",

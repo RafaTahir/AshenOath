@@ -104,8 +104,11 @@ func _compose_player_body(outfit_root: Node3D, outfit_path: String, role_name: S
 		return composite
 	var is_kael := role_name in ["player_human", "player_kael"] and normalized_path.ends_with("male_peasant.gltf")
 	var is_anwen := role_name in ["sister_anwen_human", "sister_anwen"] and normalized_path.ends_with("female_peasant.gltf")
-	var is_shared_male := normalized_path.ends_with("male_peasant.gltf")
-	var is_shared_female := normalized_path.ends_with("female_peasant.gltf")
+	# Match the complete filename. `female_peasant.gltf` also ends with the
+	# substring `male_peasant.gltf`, which previously gave Anwen and female
+	# villagers the male head assembly.
+	var is_shared_male := normalized_path.ends_with("/male_peasant.gltf")
+	var is_shared_female := normalized_path.ends_with("/female_peasant.gltf")
 	if not is_kael and not is_anwen and not is_shared_male and not is_shared_female:
 		return outfit_root
 	var base_path := "res://assets_external/characters_universal/Male_Head.gltf" if (is_kael or is_shared_male) else "res://assets_external/characters_universal/Female_Head.gltf"

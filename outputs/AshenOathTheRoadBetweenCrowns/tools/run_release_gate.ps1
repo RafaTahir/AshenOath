@@ -35,6 +35,10 @@ $Node = "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\
 $Web = Join-Path (Split-Path -Parent $Project) "AshenOath_Web"
 $QAWeb = Join-Path (Split-Path -Parent $Project) ".release-gate\AshenOath_QA"
 $Logs = Join-Path $Project ".release-gate"
+# The full-campaign browser gate runs clean Chrome and Edge sessions
+# sequentially. Each session has its own bounded route timeout; this outer
+# budget must cover both sessions without treating a valid run as a hang.
+$BrowserRouteTimeoutSeconds = 1800
 $ReportDirectory = Join-Path $Project "release_reports"
 $ReportPath = Join-Path $ReportDirectory "latest.json"
 $ContentReportPath = Join-Path $Logs "content_integrity.json"
@@ -216,6 +220,33 @@ function Get-BlockingIssueSnapshot {
     }
 }
 
+function Get-ScreenshotEvidence {
+    $capturePath = Join-Path $Logs "qa_003_milestone_report.json"
+    $evidence = [ordered]@{}
+    if (-not (Test-Path -LiteralPath $capturePath -PathType Leaf)) {
+        return $evidence
+    }
+    try {
+        $captureReport = Get-Content -LiteralPath $capturePath -Raw | ConvertFrom-Json
+        foreach ($entry in @($captureReport.results)) {
+            $viewId = [string]$entry.view_id
+            if ([string]::IsNullOrWhiteSpace($viewId)) { continue }
+            $status = if ([string]$entry.status -eq "pass") { "approved" } else { "pending" }
+            $evidence[$viewId] = [ordered]@{
+                status = $status
+                image = [string]$entry.image
+                message = [string]$entry.message
+                metrics = $entry.metrics
+            }
+        }
+    } catch {
+        # Leave the evidence empty so the strict report verifier blocks the
+        # release instead of accepting malformed or partial screenshot data.
+        return [ordered]@{}
+    }
+    return $evidence
+}
+
 function Write-ReleaseReport([string]$Status, [string]$Failure = "") {
     $head = ""
 	try { $head = (git -C $RepoRoot rev-parse HEAD).Trim() } catch {}
@@ -223,6 +254,7 @@ function Write-ReleaseReport([string]$Status, [string]$Failure = "") {
     try { $branch = (git -C $RepoRoot branch --show-current).Trim() } catch {}
     $gitStatus = @()
     try { $gitStatus = @(Get-ReleaseWorktreeStatus) } catch {}
+    $screenshotEvidence = Get-ScreenshotEvidence
     $report = [ordered]@{
         schema_version = 2
         release_id = if ($env:ASHENOATH_RELEASE_ID) { $env:ASHENOATH_RELEASE_ID } else { "recovery-004" }
@@ -240,7 +272,7 @@ function Write-ReleaseReport([string]$Status, [string]$Failure = "") {
         release_blockers = Get-BlockingIssueSnapshot
         failure = $Failure
         results = @($Results)
-        screenshots = [ordered]@{}
+        screenshots = $screenshotEvidence
     }
     $report | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $ReportPath -Encoding utf8
 }
@@ -272,9 +304,47 @@ function Invoke-ManagedProcess(
     [string]$Executable,
     [string[]]$Arguments,
     [string]$StdoutPath,
-    [string]$StderrPath
+    [string]$StderrPath,
+    [int]$TimeoutOverride = 0
 ) {
     Remove-Item -LiteralPath $StdoutPath, $StderrPath -Force -ErrorAction SilentlyContinue
+    $effectiveTimeoutSeconds = if ($TimeoutOverride -gt 0) { $TimeoutOverride } else { $TimeoutSeconds }
+    if ([IO.Path]::GetFileName($Executable) -match '^Godot_.*_console\.exe$') {
+        # Capture the console build through an owned Process handle. Invoking
+        # it with PowerShell's call operator can surface Godot's shutdown
+        # diagnostics as a terminating native-command error after the verifier
+        # has already passed. An explicit redirected handle keeps stdout and
+        # stderr in the gate log so shutdown classification remains reliable.
+        $startInfo = [Diagnostics.ProcessStartInfo]::new()
+        $startInfo.FileName = $Executable
+        $startInfo.Arguments = ConvertTo-ArgumentLine $Arguments
+        $startInfo.UseShellExecute = $false
+        $startInfo.CreateNoWindow = $true
+        $startInfo.RedirectStandardOutput = $true
+        $startInfo.RedirectStandardError = $true
+        $process = [Diagnostics.Process]::new()
+        $process.StartInfo = $startInfo
+        try {
+            [void]$process.Start()
+            $stdoutTask = $process.StandardOutput.ReadToEndAsync()
+            $stderrTask = $process.StandardError.ReadToEndAsync()
+            $completed = $process.WaitForExit($effectiveTimeoutSeconds * 1000)
+            if (-not $completed) {
+                Stop-IsolatedProcess $process
+            }
+            $stdout = $stdoutTask.GetAwaiter().GetResult()
+            $stderr = $stderrTask.GetAwaiter().GetResult()
+            [IO.File]::WriteAllText($StdoutPath, $stdout)
+            [IO.File]::WriteAllText($StderrPath, $stderr)
+            $exitCode = if ($completed) { [int]$process.ExitCode } else { 124 }
+        } finally {
+            $process.Dispose()
+        }
+        return [pscustomobject]@{
+            ExitCode = $exitCode
+            TimedOut = -not $completed
+        }
+    }
     $launchExecutable = $Executable
     $argumentLine = ConvertTo-ArgumentLine $Arguments
     if ([IO.Path]::GetExtension($Executable).ToLowerInvariant() -eq ".bat") {
@@ -283,7 +353,7 @@ function Invoke-ManagedProcess(
     }
     $process = Start-Process -FilePath $launchExecutable -ArgumentList $argumentLine `
         -RedirectStandardOutput $StdoutPath -RedirectStandardError $StderrPath -PassThru
-    $completed = $process.WaitForExit($TimeoutSeconds * 1000)
+    $completed = $process.WaitForExit($effectiveTimeoutSeconds * 1000)
     $timedOut = -not $completed
     if ($timedOut) {
         Stop-IsolatedProcess $process
@@ -300,13 +370,14 @@ function Invoke-ManagedProcess(
 function Invoke-ExternalGate(
     [string]$Name,
     [string]$Executable,
-    [string[]]$Arguments
+    [string[]]$Arguments,
+    [int]$TimeoutOverride = 0
 ) {
     $log = Join-Path $Logs "$Name.log"
     $timer = [System.Diagnostics.Stopwatch]::StartNew()
     $stdoutPath = "$log.stdout.tmp"
     $stderrPath = "$log.stderr.tmp"
-    $managed = Invoke-ManagedProcess $Executable $Arguments $stdoutPath $stderrPath
+    $managed = Invoke-ManagedProcess $Executable $Arguments $stdoutPath $stderrPath $TimeoutOverride
     $stdout = if (Test-Path -LiteralPath $stdoutPath) { Get-Content -LiteralPath $stdoutPath -Raw } else { "" }
     $stderr = if (Test-Path -LiteralPath $stderrPath) { Get-Content -LiteralPath $stderrPath -Raw } else { "" }
     [IO.File]::WriteAllText($log, $stdout + $stderr)
@@ -315,7 +386,8 @@ function Invoke-ExternalGate(
     $exitCode = $managed.ExitCode
     $timer.Stop()
     if ($managed.TimedOut) {
-        $failure = "$Name timed out after $TimeoutSeconds seconds"
+        $timeoutLabel = if ($TimeoutOverride -gt 0) { $TimeoutOverride } else { $TimeoutSeconds }
+        $failure = "$Name timed out after $timeoutLabel seconds"
         Add-Result $Name "fail" $timer.Elapsed.TotalSeconds $log @() $failure
         if (-not $VerboseOutput) { Get-Content -LiteralPath $log -Tail 40 }
         throw "$failure. Full log: $log"
@@ -326,6 +398,41 @@ function Invoke-ExternalGate(
         if (-not $VerboseOutput) { Get-Content -LiteralPath $log -Tail 40 }
         throw $failure
     }
+	# Browser gates write structured reports in addition to their process exit
+	# code. Treat a non-pass report as a failure even if a wrapper or native
+	# process masks the child's exit status.
+	$reportArgIndex = [Array]::IndexOf($Arguments, "--report")
+	if ($reportArgIndex -ge 0 -and $reportArgIndex + 1 -lt $Arguments.Count) {
+		$reportFile = [string]$Arguments[$reportArgIndex + 1]
+		if (-not (Test-Path -LiteralPath $reportFile)) {
+			$failure = "$Name completed without its structured report: $reportFile"
+			Add-Result $Name "fail" $timer.Elapsed.TotalSeconds $log @() $failure
+			if (-not $VerboseOutput) { Get-Content -LiteralPath $log -Tail 40 }
+			throw $failure
+		}
+		$reportStatus = $null
+		$reportParseError = $null
+		try {
+			$structuredReport = Get-Content -LiteralPath $reportFile -Raw | ConvertFrom-Json
+			if ($structuredReport.PSObject.Properties.Name -contains "status") {
+				$reportStatus = [string]$structuredReport.status
+			}
+		} catch {
+			$reportParseError = $_.Exception.Message
+		}
+		if ($null -ne $reportParseError) {
+			$failure = "$Name produced an unreadable structured report: $reportParseError"
+			Add-Result $Name "fail" $timer.Elapsed.TotalSeconds $log @() $failure
+			if (-not $VerboseOutput) { Get-Content -LiteralPath $log -Tail 40 }
+			throw $failure
+		}
+		if ($null -ne $reportStatus -and $reportStatus -ne "pass") {
+			$failure = "$Name reported status '$reportStatus' despite exit code 0"
+			Add-Result $Name "fail" $timer.Elapsed.TotalSeconds $log @() $failure
+			if (-not $VerboseOutput) { Get-Content -LiteralPath $log -Tail 40 }
+			throw $failure
+		}
+	}
     Add-Result $Name "pass" $timer.Elapsed.TotalSeconds $log
     Write-Host ("RELEASE GATE {0}: PASS ({1:n1}s)" -f $Name, $timer.Elapsed.TotalSeconds)
 }
@@ -564,7 +671,12 @@ try {
             started_at = $StartedAt.ToUniversalTime().ToString("o")
             logs = @($qa005Logs)
         }
-        $qa005Manifest | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath $qa005ManifestPath -Encoding utf8
+        # Windows PowerShell's `-Encoding utf8` writes a BOM, while the
+        # verifier manifest is a UTF-8 interchange file consumed by Python.
+        # Write it explicitly without a BOM so a fresh run cannot fail before
+        # it classifies the current gate logs.
+        $manifestJson = $qa005Manifest | ConvertTo-Json -Depth 4
+        [IO.File]::WriteAllText($qa005ManifestPath, $manifestJson + [Environment]::NewLine, [Text.UTF8Encoding]::new($false))
         $qaArguments = @(
             (Join-Path $Project "tools\verify_qa_005.py"),
             $Project,
@@ -665,7 +777,7 @@ try {
             "--browser", "all",
             "--full-campaign", "true",
             "--report", (Join-Path $Logs "web_002_browser.json")
-        )
+        ) -TimeoutOverride $BrowserRouteTimeoutSeconds
         Invoke-ExternalGate "verify_web_002_mobile" $Node @(
             (Join-Path $Project "tools\verify_qa_002_browser.mjs"),
             "--export", $QAWeb,
@@ -673,7 +785,7 @@ try {
             "--full-campaign", "true",
             "--mobile", "true",
             "--report", (Join-Path $Logs "web_002_mobile.json")
-        )
+        ) -TimeoutOverride $BrowserRouteTimeoutSeconds
     }
 	if ([string]::IsNullOrWhiteSpace($Only) -and -not $SkipExport -and $webTailResume) {
 		# The package and all preceding browser gates are already recorded in the
@@ -686,7 +798,7 @@ try {
 			"--browser", "all",
 			"--full-campaign", "true",
 			"--report", (Join-Path $Logs "web_002_browser.json")
-		)
+		) -TimeoutOverride $BrowserRouteTimeoutSeconds
 		Invoke-ExternalGate "verify_web_002_mobile" $Node @(
 			(Join-Path $Project "tools\verify_qa_002_browser.mjs"),
 			"--export", $QAWeb,
@@ -694,7 +806,7 @@ try {
 			"--full-campaign", "true",
 			"--mobile", "true",
 			"--report", (Join-Path $Logs "web_002_mobile.json")
-		)
+		) -TimeoutOverride $BrowserRouteTimeoutSeconds
 	}
 	if ([string]::IsNullOrWhiteSpace($Only) -and -not $SkipExport -and $mobileTailResume) {
 		# Desktop Web and export gates already passed in the prior report. Resume
@@ -712,7 +824,7 @@ try {
 			"--browser", "all",
 			"--full-campaign", "true",
 			"--report", (Join-Path $Logs "web_002_browser.json")
-		)
+		) -TimeoutOverride $BrowserRouteTimeoutSeconds
 		Invoke-ExternalGate "verify_web_002_mobile" $Node @(
 			(Join-Path $Project "tools\verify_qa_002_browser.mjs"),
 			"--export", $QAWeb,
@@ -720,9 +832,12 @@ try {
 			"--full-campaign", "true",
 			"--mobile", "true",
 			"--report", (Join-Path $Logs "web_002_mobile.json")
-		)
+		) -TimeoutOverride $BrowserRouteTimeoutSeconds
 	}
-    $finalStatus = $(if ([string]::IsNullOrWhiteSpace($Only)) { "pass" } else { "partial-pass" })
+    # A skipped or resumed run is evidence for the requested slice only.
+    # Never label it as a complete release pass when mandatory stages did not run.
+    $hasSkippedStages = $SkipExport -or $SkipPerformance -or $SkipScreenshots -or $IsResume
+    $finalStatus = $(if ([string]::IsNullOrWhiteSpace($Only) -and -not $hasSkippedStages) { "pass" } else { "partial-pass" })
     Write-ReleaseReport $finalStatus
     if ($Strict -and [string]::IsNullOrWhiteSpace($Only)) {
         Invoke-ExternalGate "verify_release_report" $Python @(

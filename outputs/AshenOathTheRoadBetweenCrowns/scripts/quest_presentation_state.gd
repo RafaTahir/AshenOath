@@ -24,6 +24,17 @@ const ZONE_LABELS := {
 	"ruins": "Old Ruins",
 }
 
+# A completed finale quest still needs a clear route home. This is a system
+# objective rather than a quest mutation, so it remains available after the
+# ending choice without reopening or altering story state.
+const ZONE_FALLBACK_OBJECTIVES := {
+	"hart_glade": {
+		"title": "RETURN ROUTE",
+		"text": "Follow the road to Greyfen's assembly",
+		"next": "Follow the road to Greyfen's assembly",
+	},
+}
+
 var quest_manager: Node
 var quest_beats: Node
 var zone_id := "greyfen"
@@ -100,6 +111,16 @@ func get_objective_view_model() -> Dictionary:
 	view.contextual_text = view.next_action if view.next_action != "" else view.objective_text
 	if view.tracker_text == "All tracked objectives complete.":
 		view.contextual_text = ""
+	if view.objective_id == "":
+		var fallback: Dictionary = ZONE_FALLBACK_OBJECTIVES.get(zone_id, {})
+		if not fallback.is_empty():
+			view.quest_id = ""
+			view.quest_title = str(fallback.get("title", "RETURN ROUTE"))
+			view.objective_id = "return_to_assembly"
+			view.objective_text = str(fallback.get("text", "Follow the road home"))
+			view.next_action = str(fallback.get("next", view.objective_text))
+			view.tracker_text = "%s\n- %s" % [view.quest_title, view.next_action]
+			view.contextual_text = view.next_action
 	return view.to_dictionary()
 
 func save_state() -> Dictionary:

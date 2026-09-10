@@ -1,7 +1,7 @@
 import argparse
-import argparse
 import hashlib
 import json
+import re
 from pathlib import Path
 
 MAX_TOTAL_MB = 100.0
@@ -69,6 +69,27 @@ def main() -> int:
         for runtime_name in ("index.js", "index.wasm", "index.pck"):
             if runtime_name not in html_text:
                 failures.append(f"index.html does not reference {runtime_name}")
+        # Godot injects the runtime byte sizes into the custom shell. A stale
+        # size makes the visible progress bar claim readiness before the PCK is
+        # actually available, so treat the shell/artifact pair as one contract.
+        size_match = re.search(r'"fileSizes"\s*:\s*\{([^{}]*)\}', html_text)
+        if size_match is None:
+            failures.append("index.html is missing the generated Engine fileSizes contract")
+        else:
+            declared_sizes = {
+                name: int(value)
+                for name, value in re.findall(r'"(index\.(?:wasm|pck))"\s*:\s*(\d+)', size_match.group(1))
+            }
+            for runtime_name in ("index.wasm", "index.pck"):
+                actual_path = paths.get(runtime_name)
+                declared = declared_sizes.get(runtime_name)
+                if actual_path is None or declared is None:
+                    failures.append(f"index.html fileSizes is missing {runtime_name}")
+                elif declared != actual_path.stat().st_size:
+                    failures.append(
+                        f"index.html fileSizes.{runtime_name}={declared} does not match "
+                        f"artifact bytes {actual_path.stat().st_size}"
+                    )
 
     total_bytes = sum(path.stat().st_size for path in paths.values())
     if mb(total_bytes) >= MAX_TOTAL_MB:

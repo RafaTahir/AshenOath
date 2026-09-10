@@ -32,8 +32,16 @@
         "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
-        "runtime_parts": ["res://assets_external/characters_universal/Male_Head.gltf", "res://assets_external/characters_universal/Hair_SimpleParted.gltf"],
-        "runtime_textures": ["res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png", "res://assets_external/characters_universal/T_Peasant_Normal_1K.png", "res://assets_external/characters_universal/T_Peasant_ORM_1K.png", "res://assets_external/characters_universal/T_Eye_Brown.png"],
+        "runtime_parts": [
+          "res://assets_external/characters_universal/Male_Head.gltf",
+          "res://assets_external/characters_universal/Hair_SimpleParted.gltf"
+        ],
+        "runtime_textures": [
+          "res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png",
+          "res://assets_external/characters_universal/T_Peasant_Normal_1K.png",
+          "res://assets_external/characters_universal/T_Peasant_ORM_1K.png",
+          "res://assets_external/characters_universal/T_Eye_Brown.png"
+        ],
         "target_height": 1.78,
         "notes": "A1 Kael identity: connected Universal male body with native male head and simple-parted hair, grey-haired weathered hunter palette, shared animation, and bone-attached sword/back scabbard."
       },
@@ -44,89 +52,153 @@
         "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
-        "runtime_parts": ["res://assets_external/characters_universal/Female_Head.gltf", "res://assets_external/characters_universal/Hair_Buns.gltf"],
-        "runtime_textures": ["res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png", "res://assets_external/characters_universal/T_Peasant_Normal_1K.png", "res://assets_external/characters_universal/T_Peasant_ORM_1K.png", "res://assets_external/characters_universal/T_Eye_Brown.png"],
+        "runtime_parts": [
+          "res://assets_external/characters_universal/Female_Head.gltf",
+          "res://assets_external/characters_universal/Hair_Buns.gltf"
+        ],
+        "runtime_textures": [
+          "res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png",
+          "res://assets_external/characters_universal/T_Peasant_Normal_1K.png",
+          "res://assets_external/characters_universal/T_Peasant_ORM_1K.png",
+          "res://assets_external/characters_universal/T_Eye_Brown.png"
+        ],
         "target_height": 1.68,
         "notes": "A2 Anwen identity: connected Universal female body with native female head and buns, grey-haired cleric palette, shared animation, and bone-attached staff."
       },
       "mira_human": {
-        "status": "char_restore_001_universal_female",
+        "status": "char_restore_004_unified_female_clothed",
         "path": "res://assets_external/characters_universal/Female_Peasant.gltf",
         "source": "Quaternius Universal Base Characters",
         "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
-        "runtime_parts": ["res://assets_external/characters_universal/Female_Head.gltf", "res://assets_external/characters_universal/Hair_Buns.gltf"],
-        "runtime_textures": ["res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png", "res://assets_external/characters_universal/T_Peasant_Normal_1K.png", "res://assets_external/characters_universal/T_Peasant_ORM_1K.png", "res://assets_external/characters_universal/T_Eye_Brown.png"],
+        "runtime_parts": [],
+        "runtime_textures": [
+          "res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png",
+          "res://assets_external/characters_universal/T_Peasant_Normal_1K.png",
+          "res://assets_external/characters_universal/T_Peasant_ORM_1K.png",
+          "res://assets_external/characters_universal/T_Hair_2_BaseColor_1K.png",
+          "res://assets_external/characters_universal/T_Hair_2_Normal_1K.png",
+          "res://assets_external/characters_universal/T_Eye_Brown.png",
+          "res://assets_external/characters_universal/T_Eye_Normal.png"
+        ],
         "target_height": 1.66,
-        "notes": "Mira uses the shared female base with a deterministic herbalist recipe, complexion, grey/brown hair variation, and practical work palette."
+        "notes": "Complete clothed Universal body assembly with native face, brows, eyes, role hair, one shared skeleton, deterministic role palette, and 1K maps."
       },
       "rook_human": {
-        "status": "char_restore_001_universal_male",
+        "status": "char_restore_004_unified_male_clothed",
         "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
         "source": "Quaternius Universal Base Characters",
         "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
-        "runtime_parts": ["res://assets_external/characters_universal/Male_Head.gltf", "res://assets_external/characters_universal/Hair_Buzzed.gltf"],
-        "runtime_textures": ["res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png", "res://assets_external/characters_universal/T_Peasant_Normal_1K.png", "res://assets_external/characters_universal/T_Peasant_ORM_1K.png", "res://assets_external/characters_universal/T_Eye_Normal.png"],
+        "runtime_parts": [],
+        "runtime_textures": [
+          "res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png",
+          "res://assets_external/characters_universal/T_Peasant_Normal_1K.png",
+          "res://assets_external/characters_universal/T_Peasant_ORM_1K.png",
+          "res://assets_external/characters_universal/T_Hair_1_BaseColor_1K.png",
+          "res://assets_external/characters_universal/T_Hair_1_Normal_1K.png",
+          "res://assets_external/characters_universal/T_Eye_Brown.png",
+          "res://assets_external/characters_universal/T_Eye_Normal.png"
+        ],
         "target_height": 1.75,
-        "notes": "Rook uses the shared male base with a deterministic smuggler recipe and bone-attached dagger only when the role requires it."
+        "notes": "Complete clothed Universal body assembly with native face, brows, eyes, role hair, one shared skeleton, deterministic role palette, and 1K maps."
       },
       "villager_human": {
-        "status": "char_restore_001_universal_male",
+        "status": "char_restore_004_unified_male_clothed",
         "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
         "source": "Quaternius Universal Base Characters",
         "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
-        "runtime_parts": ["res://assets_external/characters_universal/Male_Head.gltf", "res://assets_external/characters_universal/Hair_Buzzed.gltf"],
-        "runtime_textures": ["res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png", "res://assets_external/characters_universal/T_Peasant_Normal_1K.png", "res://assets_external/characters_universal/T_Peasant_ORM_1K.png", "res://assets_external/characters_universal/T_Eye_Brown.png"],
-        "notes": "Male crowd base with deterministic worker and villager recipes."
+        "runtime_parts": [],
+        "runtime_textures": [
+          "res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png",
+          "res://assets_external/characters_universal/T_Peasant_Normal_1K.png",
+          "res://assets_external/characters_universal/T_Peasant_ORM_1K.png",
+          "res://assets_external/characters_universal/T_Hair_1_BaseColor_1K.png",
+          "res://assets_external/characters_universal/T_Hair_1_Normal_1K.png",
+          "res://assets_external/characters_universal/T_Eye_Brown.png",
+          "res://assets_external/characters_universal/T_Eye_Normal.png"
+        ],
+        "notes": "Complete clothed Universal body assembly with native face, brows, eyes, role hair, one shared skeleton, deterministic role palette, and 1K maps."
       },
       "villager_female_human": {
-        "status": "char_restore_001_universal_female",
+        "status": "char_restore_004_unified_female_clothed",
         "path": "res://assets_external/characters_universal/Female_Peasant.gltf",
         "source": "Quaternius Universal Base Characters",
         "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
-        "runtime_parts": ["res://assets_external/characters_universal/Female_Head.gltf", "res://assets_external/characters_universal/Hair_Buns.gltf"],
-        "runtime_textures": ["res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png", "res://assets_external/characters_universal/T_Peasant_Normal_1K.png", "res://assets_external/characters_universal/T_Peasant_ORM_1K.png", "res://assets_external/characters_universal/T_Eye_Brown.png"],
-        "notes": "Female crowd base with deterministic mourner and worker recipes; no cleric staff is added to ordinary villagers."
+        "runtime_parts": [],
+        "runtime_textures": [
+          "res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png",
+          "res://assets_external/characters_universal/T_Peasant_Normal_1K.png",
+          "res://assets_external/characters_universal/T_Peasant_ORM_1K.png",
+          "res://assets_external/characters_universal/T_Hair_2_BaseColor_1K.png",
+          "res://assets_external/characters_universal/T_Hair_2_Normal_1K.png",
+          "res://assets_external/characters_universal/T_Eye_Brown.png",
+          "res://assets_external/characters_universal/T_Eye_Normal.png"
+        ],
+        "notes": "Complete clothed Universal body assembly with native face, brows, eyes, role hair, one shared skeleton, deterministic role palette, and 1K maps."
       },
       "villager_worker_human": {
-        "status": "char_restore_001_universal_male",
+        "status": "char_restore_004_unified_male_clothed",
         "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
         "source": "Quaternius Universal Base Characters",
         "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
-        "runtime_parts": ["res://assets_external/characters_universal/Male_Head.gltf", "res://assets_external/characters_universal/Hair_Buzzed.gltf"],
-        "runtime_textures": ["res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png", "res://assets_external/characters_universal/T_Peasant_Normal_1K.png", "res://assets_external/characters_universal/T_Peasant_ORM_1K.png", "res://assets_external/characters_universal/T_Eye_Brown.png"],
-        "notes": "Male forge-worker base with deterministic worker palette and real work-compatible idle animation."
+        "runtime_parts": [],
+        "runtime_textures": [
+          "res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png",
+          "res://assets_external/characters_universal/T_Peasant_Normal_1K.png",
+          "res://assets_external/characters_universal/T_Peasant_ORM_1K.png",
+          "res://assets_external/characters_universal/T_Hair_1_BaseColor_1K.png",
+          "res://assets_external/characters_universal/T_Hair_1_Normal_1K.png",
+          "res://assets_external/characters_universal/T_Eye_Brown.png",
+          "res://assets_external/characters_universal/T_Eye_Normal.png"
+        ],
+        "notes": "Complete clothed Universal body assembly with native face, brows, eyes, role hair, one shared skeleton, deterministic role palette, and 1K maps."
       },
       "villager_hooded_human": {
-        "status": "char_restore_001_universal_male",
+        "status": "char_restore_004_unified_male_clothed",
         "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
         "source": "Quaternius Universal Base Characters",
         "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
-        "runtime_parts": ["res://assets_external/characters_universal/Male_Head.gltf", "res://assets_external/characters_universal/Hair_SimpleParted.gltf"],
-        "runtime_textures": ["res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png", "res://assets_external/characters_universal/T_Peasant_Normal_1K.png", "res://assets_external/characters_universal/T_Peasant_ORM_1K.png", "res://assets_external/characters_universal/T_Eye_Normal.png"],
-        "notes": "Male traveler base with deterministic pilgrim recipe and shared movement family."
+        "runtime_parts": [],
+        "runtime_textures": [
+          "res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png",
+          "res://assets_external/characters_universal/T_Peasant_Normal_1K.png",
+          "res://assets_external/characters_universal/T_Peasant_ORM_1K.png",
+          "res://assets_external/characters_universal/T_Hair_1_BaseColor_1K.png",
+          "res://assets_external/characters_universal/T_Hair_1_Normal_1K.png",
+          "res://assets_external/characters_universal/T_Eye_Brown.png",
+          "res://assets_external/characters_universal/T_Eye_Normal.png"
+        ],
+        "notes": "Complete clothed Universal body assembly with native face, brows, eyes, role hair, one shared skeleton, deterministic role palette, and 1K maps."
       },
       "castle_guard_human": {
-        "status": "char_restore_001_universal_male",
+        "status": "char_restore_004_unified_male_clothed",
         "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
         "source": "Quaternius Universal Base Characters",
         "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
-        "runtime_parts": ["res://assets_external/characters_universal/Male_Head.gltf", "res://assets_external/characters_universal/Hair_Buzzed.gltf"],
-        "runtime_textures": ["res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png", "res://assets_external/characters_universal/T_Peasant_Normal_1K.png", "res://assets_external/characters_universal/T_Peasant_ORM_1K.png", "res://assets_external/characters_universal/T_Eye_Brown.png"],
-        "notes": "Male guard base with deterministic Vargan guard palette, occupation equipment, and sword-compatible rig."
+        "runtime_parts": [],
+        "runtime_textures": [
+          "res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png",
+          "res://assets_external/characters_universal/T_Peasant_Normal_1K.png",
+          "res://assets_external/characters_universal/T_Peasant_ORM_1K.png",
+          "res://assets_external/characters_universal/T_Hair_1_BaseColor_1K.png",
+          "res://assets_external/characters_universal/T_Hair_1_Normal_1K.png",
+          "res://assets_external/characters_universal/T_Eye_Brown.png",
+          "res://assets_external/characters_universal/T_Eye_Normal.png"
+        ],
+        "notes": "Complete clothed Universal body assembly with native face, brows, eyes, role hair, one shared skeleton, deterministic role palette, and 1K maps."
       },
       "road_ranger_human": {
         "status": "char_facing_ranger_001_runtime_accepted",
@@ -139,7 +211,7 @@
           "res://assets_external/characters_ranger/T_Ranger_Normal_1K.png",
           "res://assets_external/characters_ranger/T_Ranger_ORM_1K.png"
         ],
-        "animation_source": "res://assets_external/animations/AnimationLibrary_Godot_Standard.glb",
+        "animation_source": "res://assets_external/animations/AnimationLibrary_Godot_Opening.tres",
         "target_height": 1.75,
         "notes": "Complete 65-bone skinned Ranger outfit with native hood/body pieces, shared non-root-motion UAL2 clips, and 1K runtime maps. Used by Captain Senn and road ranger roles."
       }
@@ -182,7 +254,7 @@
         "notes": "Compatibility alias retained for old role IDs; runtime uses the validated Skeleton source with brute profile styling."
       },
       "ghoulkin_skeleton": {
-		"status": "legacy_quarantined_not_route_mapped",
+        "status": "legacy_quarantined_not_route_mapped",
         "path": "res://assets_external/enemies/Skeleton.fbx",
         "source": "Animated Monsters by Quaternius",
         "source_url": "https://opengameart.org/sites/default/files/Animated%20Monster%20Pack%20by%20%40Quaternius.zip",
@@ -197,7 +269,7 @@
         "source_url": "https://opengameart.org/sites/default/files/Animated%20Monster%20Pack%20by%20%40Quaternius.zip",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
-        "target_height": 1.60,
+        "target_height": 1.6,
         "notes": "Distinct winged Stalker body with authored head and eye materials; scaled and leashed by the existing Wychwood encounter profile."
       },
       "wychwood_raider_creature": {
@@ -217,7 +289,7 @@
         "source_url": "https://opengameart.org/sites/default/files/Animated%20Monster%20Pack%20by%20%40Quaternius.zip",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
-        "target_height": 1.60,
+        "target_height": 1.6,
         "notes": "Exact encounter-role alias for the validated Stalker family; keeps the same connected animated Bat source used by runtime combat."
       },
       "wychwood_raider": {
@@ -254,7 +326,7 @@
         "source": "Quaternius Animated Monsters",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
-        "target_height": 3.80,
+        "target_height": 3.8,
         "notes": "Bell-Eater uses the retained Skeleton source at focal-creature scale; harness, chest bell, jaw-light, and phase dressing are one encounter identity layer."
       },
       "rootbound_colossus_boss": {
@@ -263,7 +335,7 @@
         "source": "Quaternius Animated Monsters",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
-        "target_height": 4.40,
+        "target_height": 4.4,
         "notes": "Rootbound uses the retained Skeleton source at colossus scale with bark mantle, root feet, crown branches, and a phase-reactive exposed oathwood heart."
       },
       "white_hart_avatar": {
@@ -278,7 +350,7 @@
         "path": "res://assets_external/enemies/Wolf.fbx",
         "source": "Quaternius Ultimate Animated Animals",
         "license": "CC0 1.0",
-        "target_height": 3.60,
+        "target_height": 3.6,
         "notes": "Finale display and encounter use one 3.60 m normalized wolf-derived Hart role with bone-attached spectral antlers, pale moonlit material, oath mark, and phase identity."
       },
       "ashwing_creature": {
@@ -293,7 +365,7 @@
         "path": "res://assets_external/enemies/Dragon.fbx",
         "source": "Quaternius Animated Monsters",
         "license": "CC0 1.0",
-        "target_height": 4.80,
+        "target_height": 4.8,
         "notes": "Ashwing uses the connected animated Dragon source at focal-creature scale with charred harness, ember core, and scorched wing-root identity dressing."
       },
       "bog_wretch_creature": {

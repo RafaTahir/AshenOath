@@ -1129,6 +1129,11 @@ func _start_campaign_visual_prewarm() -> void:
 func should_defer_visual_role(role: String, category: String) -> bool:
 	if category != "environment" or role not in CAMPAIGN_VISUAL_PREWARM_ROLES:
 		return false
+	# Potato/mobile intentionally omits optional campaign dressing. Do not leave
+	# markers for visuals that this quality tier is guaranteed to reject during
+	# deferred hydration; the gameplay-critical collision and route remain live.
+	if settings != null and str(settings.settings.get("quality_preset", "balanced")) == "potato":
+		return false
 	if asset_helper == null or not asset_helper.has_method("is_role_warmed"):
 		return true
 	return not bool(asset_helper.is_role_warmed(role))
@@ -1181,6 +1186,12 @@ func _run_deferred_visual_roles(root: Node3D) -> void:
 		var actor_id := str(marker.get_meta("deferred_visual_actor_id", ""))
 		var visual := _make_role_visual(role, category, scale_value)
 		if visual == null:
+			# A Potato/mobile run is allowed to omit noncritical environment
+			# dressing. This is a deliberate quality decision, not a missing
+			# gameplay role, so it must not become a browser console error.
+			if category == "environment" and settings != null and str(settings.settings.get("quality_preset", "balanced")) == "potato":
+				marker.queue_free()
+				continue
 			push_error("Deferred runtime visual failed for role '%s'" % role)
 			marker.queue_free()
 			continue

@@ -32,14 +32,50 @@
     "orc_skull_real": "res://assets_external/enemies/Skeleton.fbx"
   },
   "role_specs": {
-    "kael": {"height": 1.78, "lod": 22.0, "occupation": "hunter"},
-    "anwen": {"height": 1.68, "lod": 22.0, "occupation": "cleric"},
-    "villager_male": {"height": 1.72, "lod": 14.0, "occupation": "villager"},
-    "villager_female": {"height": 1.66, "lod": 14.0, "occupation": "villager"},
-    "villager_worker": {"height": 1.74, "lod": 14.0, "occupation": "worker"},
-    "villager_hooded": {"height": 1.69, "lod": 14.0, "occupation": "pilgrim"},
-    "castle_guard": {"height": 1.82, "lod": 16.0, "occupation": "guard"},
-    "road_ranger": {"height": 1.75, "lod": 16.0, "occupation": "ranger"}
+    "kael": {
+      "height": 1.78,
+      "lod": 22.0,
+      "occupation": "hunter"
+    },
+    "anwen": {
+      "height": 1.68,
+      "lod": 22.0,
+      "occupation": "cleric"
+    },
+    "villager_male": {
+      "height": 1.72,
+      "lod": 14.0,
+      "occupation": "villager"
+    },
+    "villager_female": {
+      "height": 1.66,
+      "lod": 14.0,
+      "occupation": "villager"
+    },
+    "villager_worker": {
+      "height": 1.74,
+      "lod": 14.0,
+      "occupation": "worker"
+    },
+    "villager_hooded": {
+      "height": 1.69,
+      "lod": 14.0,
+      "occupation": "pilgrim"
+    },
+    "castle_guard": {
+      "height": 1.82,
+      "lod": 16.0,
+      "occupation": "guard"
+    },
+    "road_ranger": {
+      "height": 1.75,
+      "lod": 16.0,
+      "occupation": "ranger"
+    }
   },
-  "lod_distance": {"hero_full": 22.0, "crowd_full": 14.0, "animation_far_tick": 20.0}
+  "lod_distance": {
+    "hero_full": 22.0,
+    "crowd_full": 14.0,
+    "animation_far_tick": 20.0
+  }
 }

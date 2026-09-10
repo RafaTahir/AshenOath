@@ -34,6 +34,14 @@ func _initialize() -> void:
 		_check(driver.get_animation_player().has_animation("Idle_Talking") or driver.get_animation_player().has_animation("Idle"), "Neutral dialogue idle is not attached to Anwen")
 	var composite := _find_composite(visual)
 	_check(composite != null and int(composite.get_meta("character_rig_layer_count", 0)) == 1, "Anwen rig layers were not consolidated")
+	var base_path := str(visual.get_meta("character_base_path", "")).to_lower()
+	var hair_path := str(visual.get_meta("character_hair_path", "")).to_lower()
+	var recipe: Dictionary = visual.get_meta("character_variant_recipe", {})
+	_check(base_path.ends_with("/female_head.gltf"), "Anwen did not resolve the female native head asset")
+	_check(hair_path.ends_with("/hair_buns.gltf"), "Anwen did not resolve the buns hair asset")
+	_check(str(recipe.get("body_family", "")) == "universal_female", "Anwen recipe is not the female Universal family")
+	_check(_has_mesh_named(visual, "superhero_female"), "Anwen has no female facial/body mesh")
+	_check(not _has_mesh_named(visual, "superhero_male"), "Anwen resolved a male facial/body mesh")
 	var skeleton := _find_skeleton(visual)
 	_check(skeleton != null, "Anwen lacks Skeleton3D")
 	if skeleton != null:
@@ -78,6 +86,13 @@ func _find_composite(node: Node) -> Node:
 func _has_visible_skinned_mesh(node: Node) -> bool:
 	for mesh in node.find_children("*", "MeshInstance3D", true, false):
 		if mesh.mesh != null and mesh.visible and mesh.skin != null:
+			return true
+	return false
+
+func _has_mesh_named(node: Node, token: String) -> bool:
+	var wanted := token.to_lower()
+	for mesh in node.find_children("*", "MeshInstance3D", true, false):
+		if str(mesh.name).to_lower().contains(wanted):
 			return true
 	return false
 

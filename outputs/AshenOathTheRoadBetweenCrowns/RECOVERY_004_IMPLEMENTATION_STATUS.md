@@ -1,5 +1,62 @@
 # RECOVERY-004 Implementation Status
 
+## Current Evidence Checkpoint - 2026-09-10 (mobile deferred-visual error fix)
+
+- Current ticket: `RECOVERY-004`, release-integrity follow-up for the mobile
+  browser gate.
+- Completed in this atomic slice: Potato/mobile no longer schedules optional
+  Castle environment dressing for deferred hydration. If a stale marker still
+  exists, the same quality tier discards it without raising a runtime error.
+  Balanced and Quality still raise an error for a genuine missing deferred
+  visual. `run_release_gate.ps1` now also validates every structured browser
+  report and fails when a report is missing, unreadable, or reports a
+  non-`pass` status despite a masked process exit code.
+- Latest direct results: `verify_content_integrity.py`, `verify_asset_005.py`,
+  `verify_web_001.py`, the Godot project parse/import check, PowerShell parser
+  validation, `git diff --check`, and native `verify_qa_002.gd` all passed.
+  Native QA-002 reached Greyfen in 48.1 ms after the prewarmed handoff and
+  exited cleanly.
+- Latest Web result: a rebuilt disposable `Web QA Browser` export passed the
+  full mobile campaign in Chrome (`47` checkpoints, `346196 ms`, empty console
+  errors) and Edge (`47` checkpoints, `323497 ms`, empty console errors). Both
+  profiles were created under `D:\Temp\AshenOath` and cleaned after completion.
+- Remaining truth: the mobile deferred-visual blocker is cleared. The broader
+  recovery issue registry still records visual, traversal, lifecycle, story,
+  audio, and architecture blockers; these are not silently promoted by this
+  focused fix. The complete release report and production artifact still need
+  to be regenerated from the checkpointed source.
+- Checkpoint decision: the source and evidence are coherent enough for the
+  pending local checkpoint commit. No production Web files were changed and no
+  push, merge, or deployment has occurred in this focused slice.
+- Exact next action: checkpoint the intended tracked source/evidence changes,
+  rerun the complete authoritative release gate, then inspect the report and
+  artifact before any deployment decision.
+
+## Current Evidence Checkpoint - 2026-09-08 (objective, lighting, and capture hardening)
+
+- Completed: the objective presentation now supplies a truthful `RETURN ROUTE`
+  view for a completed Hart Glade finale; the forest and interior lighting
+  profiles are brighter and more deliberate; the lighting verifier retires
+  its streamed test tree cleanly; and screenshot capture checks both PNG write
+  results and non-empty output files.
+- Completed: capture placement explicitly settles the player into the real
+  authored idle pose before sampling, preventing rapid zone changes from
+  recording an imported setup/T-pose frame.
+- Direct results: objective view model, LIGHT-001, SKY-003, visible quality,
+  and Castle Vargan all pass. The resumed complete screenshot chain passes,
+  including the refreshed 1280x720 Hart return-route and Castle gate frames.
+  The latest Castle and Hart pixels were inspected and are no longer affected
+  by the two identified evidence defects.
+- Remaining truth: current visuals still include the known low-poly/procedural
+  world and combat limitations, and the recovery issue registry remains
+  blocked in its release-integrity, traversal, character, monster, world,
+  UI/story, audio, and architecture categories. The final performance/export
+  report must be regenerated after these source edits before any deployment
+  decision.
+- Exact next action: run the full authoritative release runner, then validate
+  the resulting report and artifact against the committed source before
+  syncing `web/`.
+
 ## Current Atomic Checkpoint - 2026-09-08 (NPC animation workload fix)
 
 - Current ticket: `RECOVERY-004`, focused graphical performance slice.

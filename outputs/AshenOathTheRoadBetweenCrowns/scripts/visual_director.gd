@@ -395,10 +395,11 @@ func _lighting_profile(zone_id: String) -> Dictionary:
 			"id": "hart" if zone_id == "hart_glade" else "forest",
 			"day_sky": Color(0.10, 0.23, 0.25), "dawn_sky": Color(0.19, 0.25, 0.22),
 			"dusk_sky": Color(0.10, 0.16, 0.15), "night_sky": Color(0.010, 0.038, 0.060),
-			"ambient_day": Color(0.29, 0.38, 0.34), "ambient_night": Color(0.18, 0.31, 0.38),
+			"ambient_day": Color(0.34, 0.43, 0.40), "ambient_night": Color(0.22, 0.35, 0.42),
 			"fog_day_color": Color(0.16, 0.29, 0.27), "fog_night_color": Color(0.08, 0.19, 0.24),
-			"fog_day": 0.035, "fog_night": 0.058, "day_brightness": 1.07,
-			"night_brightness": 1.20, "sun_energy": 0.72, "moon_energy": 0.92,
+			"fog_day": 0.035, "fog_night": 0.058, "day_brightness": 1.12,
+			"night_brightness": 1.23, "ambient_day_energy": 1.02, "ambient_night_energy": 0.96,
+			"sun_energy": 0.84, "moon_energy": 0.96,
 			"saturation": 0.89,
 		}, true)
 		if zone_id == "hart_glade":
@@ -419,17 +420,17 @@ func _lighting_profile(zone_id: String) -> Dictionary:
 			"night_sky": Color(0.014, 0.012, 0.012), "interior_background": Color(0.024, 0.019, 0.016),
 			"interior_fog_color": Color(0.028, 0.022, 0.018), "interior_fog_day": 0.004, "interior_fog_night": 0.007,
 			"ambient_day": Color(0.31, 0.25, 0.20), "ambient_night": Color(0.21, 0.22, 0.28),
-			"ambient_day_energy": 0.90, "ambient_night_energy": 0.84,
-			"fog_night": 0.012, "day_brightness": 1.10, "night_brightness": 1.14,
-			"contrast": 1.22, "saturation": 0.84, "interior_directional": 0.24,
+			"ambient_day_energy": 1.05, "ambient_night_energy": 0.95,
+			"fog_night": 0.012, "day_brightness": 1.18, "night_brightness": 1.20,
+			"contrast": 1.22, "saturation": 0.84, "interior_directional": 0.32,
 		}, true)
 		if zone_id == "record_hall":
 			profile.merge({
 				"interior_background": Color(0.034, 0.027, 0.022),
 				"interior_fog_color": Color(0.040, 0.031, 0.024),
-				"ambient_day_energy": 1.08, "ambient_night_energy": 1.00,
-				"day_brightness": 1.24, "night_brightness": 1.26,
-				"contrast": 1.16, "saturation": 0.90, "interior_directional": 0.34,
+				"ambient_day_energy": 1.32, "ambient_night_energy": 1.18,
+				"day_brightness": 1.38, "night_brightness": 1.34,
+				"contrast": 1.16, "saturation": 0.90, "interior_directional": 0.46,
 			}, true)
 		elif zone_id == "undercroft":
 			profile.merge({
