@@ -1031,3 +1031,30 @@ Do not sync `.release-gate/AshenOath_QA` into `web/`; it is not the production b
   recovery slice, then perform one source-aligned QA export and one browser
   acceptance run after those changes settle. Do not repeat the obstruction
   telemetry sequence.
+
+## Fresh QA Browser Checkpoint - 2026-09-11
+
+- The single fresh `Web QA Browser` export completed successfully from the
+  source that includes the marker-layer prewarm fix. It was written to
+  `D:\Projects\AshenOath\outputs\.release-gate\AshenOath_QA`; the root artifact
+  contains the current `world_sector_manifest.json`, and the existing verified
+  runtime packs were placed beside it without another pack build.
+- The single Chrome acceptance run exited `1` at the startup console gate.
+  The game itself initialized WebGL2, prewarmed Greyfen, accepted the New Game
+  path, reached `new_game_ready=true`, loaded Greyfen, and reported no JavaScript,
+  network, WebGL, or missing-resource failure. The failure was the intentional
+  runtime warning for `sister_anwen_human` and `player_human`, whose visual
+  roles remain `approved=false` in `asset_acceptance_manifest.json`; the
+  harness correctly treats that release-blocking warning as a browser-console
+  failure instead of calling the visual role accepted.
+- The run's diagnostic performance sample was 14.87 FPS under the harness's
+  WebKit/SwiftShader path and is not a hardware acceptance measurement. Its
+  temporary profile was removed successfully from `D:\Temp\AshenOath`.
+- Current truth: this QA candidate is rejected for unresolved character visual
+  acceptance, not for the Greyfen obstruction or startup/resource loading. No
+  additional telemetry, export, or browser run is justified in this cycle.
+- Exact next action: repair and natively verify the unapproved character-role
+  mappings and their visual evidence as one bounded source/native slice. After
+  the accumulated source changes settle, perform exactly one new QA export and
+  one browser acceptance run; do not use a harness filter to claim visual
+  approval.

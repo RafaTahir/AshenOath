@@ -25,8 +25,8 @@ open and is not being claimed by this checkpoint.
 
 The canonical physical repository is `D:\Projects\AshenOath`; this apparent
 workspace is its preserved C: directory junction. The active branch is
-`codex/masterpiece-rebuild` at local checkpoint `d07878c`. The worktree is
-intentionally dirty only with the verified marker-layer prewarm lifecycle fix;
+`codex/masterpiece-rebuild` at local checkpoint `0b3988b`. The worktree is
+intentionally clean apart from the user-owned diagnostic;
 the user-owned diagnostic
 `tools/_inspect_milestone_c_assets.gd` remains untracked and untouched.
 
@@ -57,6 +57,13 @@ Exact next action: continue the remaining source/native recovery work, then run
 one source-aligned export and browser acceptance sequence after the accumulated
 fixes. Historical sections below are retained as audit evidence and do not
 override this current truth.
+
+The one fresh QA browser candidate after the lifecycle fix initialized WebGL2,
+reached Greyfen through New Game, and had no JavaScript, network, WebGL, or
+resource-load failure. It was rejected at the browser console gate because the
+runtime correctly surfaced the still-unapproved `sister_anwen_human` and
+`player_human` visual roles. This is an unresolved character-acceptance issue,
+not a new bridge or startup diagnosis; no additional Web run was started.
 
 ## Recovery-004 Current Truth - 2026-09-10
 
