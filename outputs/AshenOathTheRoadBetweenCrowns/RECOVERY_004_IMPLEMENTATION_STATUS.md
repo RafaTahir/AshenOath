@@ -1,5 +1,46 @@
 # RECOVERY-004 Implementation Status
 
+## Current Evidence Checkpoint - 2026-09-10 (split Web packs and route safety)
+
+- Current ticket: `RECOVERY-004`, release-integrity and runtime-pack
+  ownership follow-up on `codex/masterpiece-rebuild`.
+- Completed in this atomic slice: production Web ownership now keeps only the
+  base runtime in the root PCK and treats the opening, campaign, character,
+  monster, and audio artifacts as externally verified packs. The runtime pack
+  manager recognizes embedded content from the generated manifest status rather
+  than from builder-script presence, so streamed opening content cannot be
+  silently treated as already mounted. Pack metadata was regenerated from the
+  current checkpoint and the candidate files were bound to the same source
+  identity.
+- Latest direct results: six runtime packs exported and hash-verified at
+  `58.14 MB` total; `verify_runtime_packs.py`, `verify_pack_candidates.py`,
+  `verify_web_001.py`, `verify_web_export.py`, and the packed-startup verifier
+  all passed. The current Web candidate is `12` files / `95.1 MB`, with root
+  PCK SHA-256
+  `b9bb251a4e6e39138708c36a1a166eedf7ede28a25858155ac0318801a0f82a7`.
+  The actual CharacterBody river sweep also passed `RIVER-002 SAFETY
+  VERIFIER` in both directions for Greyfen and Wychwood.
+- Latest browser result: fresh local Chrome and Edge smoke runs reached the
+  native `1280x720` WebGL2 canvas with empty console-error lists. Chrome
+  reached engine readiness in `11875 ms` and New Game readiness in `9544.9
+  ms`; Edge reached `10216 ms` and `7520.8 ms`. Both temporary profiles were
+  created below `D:\Temp\AshenOath` and cleaned after the run. These timings
+  are recorded evidence, not a claim that the stricter sub-second New Game
+  target is met.
+- Checkpoint commits: `fb8f789` bound the generated metadata to its source
+  checkpoint; `604ba90` recorded the rebuilt candidate pack hashes. Both are
+  pushed to `origin/codex/masterpiece-rebuild`. The intentionally untracked
+  rejected asset experiments remain excluded.
+- Remaining truth: the complete release decision remains **FAIL** while the
+  recovery registry records unresolved release-integrity, traversal/collision,
+  character, monster/combat, world-presentation, UI/story/input,
+  audio, and architecture/performance categories. This candidate has not
+  been synchronized into tracked `web/`, promoted to `main`, or deployed to
+  Vercel.
+- Exact next action: continue with the documented recovery blockers and then
+  regenerate the authoritative release report from the resulting source. Do
+  not promote this candidate or deploy while any registry blocker remains.
+
 ## Current Evidence Checkpoint - 2026-09-10 (truthful full-run release decision)
 
 - Current ticket: `RECOVERY-004`, release-integrity follow-up after the complete
