@@ -1179,3 +1179,25 @@ Do not sync `.release-gate/AshenOath_QA` into `web/`; it is not the production b
   settled, perform exactly one fresh QA export and one Chrome/Edge acceptance
   run against that accumulated artifact. Do not add isolated telemetry or
   rebuild Web solely to inspect the current failure.
+
+## Native Recovery Slice Checkpoint - 2026-09-11
+
+- Re-ran the cheapest directly affected native/static gates after the modeled
+  bow, arrow, staff, and motion-evidence checkpoint.
+- `ENGINE-005 VERIFIER`: PASS - typed zone, interaction, quest-presentation,
+  and transition coordination.
+- `INPUT-002 VERIFIER`: PASS - centralized input contexts, pointer ownership,
+  focus, and remap persistence.
+- `SAVE-003 VERIFIER`: PASS - migration, sanitization, runtime save shape,
+  invalid-position recovery, and zone reload.
+- `OBJECTIVE VIEW MODEL VERIFIER`: PASS.
+- `UI-002 VERIFIER`: PASS.
+- `BOOT-003`: PASS. `LOAD-QA-002`: PASS.
+- Logs are retained under `D:\Temp\AshenOath\` with the `_current` suffix.
+- These native/static results close the corresponding contract slices. They do
+  not close the open production browser route, visual-quality debt, full
+  campaign proof, or target-hardware release gates. Shutdown-only diagnostics
+  remain classified lifecycle debt where present.
+- Exact next action: continue with one bounded source/native recovery slice;
+  defer the next QA Web export and browser run until the accumulated source
+  fixes are ready for one acceptance attempt.

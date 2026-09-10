@@ -1826,3 +1826,13 @@ The continuation source is now verified locally for the release candidate. The r
   fresh screenshot gate, Web export, packed startup, browser smoke tests, and
   final Git/Vercel hash comparison pass. Production `main`, tracked `web/`, and
   Vercel remain unchanged.
+
+## Recovery Contract Slice Checkpoint - 2026-09-11
+
+- Fresh native/static checks pass for `ENGINE-005`, `INPUT-002`, `SAVE-003`,
+  the objective view model, `UI-002`, `BOOT-003`, and `LOAD-QA-002`.
+- The corresponding recovery registry entries are now marked `verified` for
+  their contract scope. This does not claim browser persistence, visual
+  approval, full-campaign completion, or release readiness.
+- Logs are retained under `D:\Temp\AshenOath\`; no Web export, browser run,
+  tracked `web/` update, push, or deployment was performed for this checkpoint.
