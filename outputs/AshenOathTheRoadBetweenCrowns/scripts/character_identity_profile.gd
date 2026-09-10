@@ -28,6 +28,7 @@ static func apply(root: Node, role_id: String, variant_seed: String = "") -> Dic
 	var role := role_id.to_lower()
 	var resolved_seed := variant_seed if not variant_seed.is_empty() else role
 	var profile := _profile_for(role, resolved_seed)
+	var recipe := _recipe_for(role, profile, resolved_seed)
 	var surfaces := 0
 	var face_surfaces := 0
 	for mesh in root.find_children("*", "MeshInstance3D", true, false):
@@ -40,14 +41,20 @@ static func apply(root: Node, role_id: String, variant_seed: String = "") -> Dic
 			var surface_name := str(mesh.mesh.surface_get_name(index)).to_lower() if mesh.mesh is ArrayMesh else ""
 			var material_name := str(source.resource_name).to_lower() if source != null else ""
 			var token := "%s %s %s" % [str(mesh.name).to_lower(), surface_name, material_name]
-			mesh.set_surface_override_material(index, _identity_material(source, _color_for(token, role, profile), role_is_monster_role(role)))
+			mesh.set_surface_override_material(index, _identity_material(
+				source,
+				_color_for(token, role, profile),
+				role_is_monster_role(role),
+				_wash_strength(token, role)
+			))
 			surfaces += 1
 			if token.contains("head") or token.contains("skin") or token.contains("eyes") or token.contains("hair") or token.contains("skull") or token.contains("jaw") or token.contains("mouth") or token.contains("teeth"):
 				face_surfaces += 1
 	root.set_meta("character_identity_profile", role)
 	root.set_meta("character_variant_seed", resolved_seed)
-	root.set_meta("character_variant_recipe", _recipe_for(role, profile))
+	root.set_meta("character_variant_recipe", recipe)
 	root.set_meta("character_identity_surfaces", surfaces)
+	_apply_bounded_variant_scale(root, role, resolved_seed)
 	# Identity is now carried by the imported mesh materials. Earlier passes
 	# attached jaw, hair, eye and clothing primitives to the skeleton; those
 	# features were the source of the visible neck hump and could drift during
@@ -167,17 +174,59 @@ static func _stable_seed(value: String) -> int:
 		result = abs((result * 31 + value.unicode_at(index)) % 2147483647)
 	return result
 
-static func _recipe_for(role: String, profile: Dictionary) -> Dictionary:
+static func _recipe_for(role: String, profile: Dictionary, variant_seed: String = "") -> Dictionary:
 	var female := role.contains("female") or role.contains("anwen") or role.contains("mira") or role.contains("widow") or role.contains("servant")
 	var skin: Color = profile.get("skin", Color.WHITE)
 	var hair: Color = profile.get("hair", Color.WHITE)
 	var primary: Color = profile.get("primary", Color.WHITE)
+	var seed := _stable_seed(variant_seed if not variant_seed.is_empty() else role)
+	var hair_styles := ["parted", "cropped", "tied", "braided"]
+	var builds := ["slender", "steady", "broad", "rangy"]
+	var clothing_styles := ["worker", "traveler", "guard", "pilgrim"]
 	return {
 		"body_family": "universal_female" if female else "universal_male",
 		"complexion": skin.to_html(false),
 		"hair_tint": hair.to_html(false),
-		"clothing_tint": primary.to_html(false)
+		"clothing_tint": primary.to_html(false),
+		"hair_style": hair_styles[seed % hair_styles.size()],
+		"body_build": builds[int(seed / 3) % builds.size()],
+		"clothing_style": clothing_styles[int(seed / 7) % clothing_styles.size()]
 	}
+
+static func _wash_strength(token: String, role: String) -> float:
+	if role_is_monster_role(role):
+		return 0.42
+	# Imported Universal textures are shared and bright. The previous single
+	# 10% wash made every crowd member read as the same white-haired mannequin.
+	# Semantic washes keep the source texture detail while making each stable
+	# recipe visible at gameplay distance.
+	if token.contains("hair"):
+		return 0.64
+	if token.contains("eyes") or token.contains("eyebrow"):
+		return 0.78
+	if token.contains("skin") or token.contains("head"):
+		return 0.26
+	if token.contains("shirt") or token.contains("pants") or token.contains("green") or token.contains("cloth") or token.contains("leather") or token.contains("brown") or token.contains("white"):
+		return 0.34
+	return 0.24
+
+static func _apply_bounded_variant_scale(root: Node, role: String, variant_seed: String) -> void:
+	if role_is_monster_role(role) or role in ["player", "player_kael", "player_human", "kael", "sister_anwen", "sister_anwen_human", "anwen"]:
+		return
+	if root.has_meta("character_variant_scale"):
+		return
+	var seed := _stable_seed(variant_seed if not variant_seed.is_empty() else role)
+	# Keep height unchanged so CharacterRoleSpec and the collision capsule stay
+	# authoritative. A small width/depth range supplies silhouette variation
+	# without producing giant actors or invalidating grounded origins.
+	var width := 0.95 + float(seed % 11) * 0.01
+	var depth := 0.95 + float(int(seed / 11) % 11) * 0.01
+	var node_root := root as Node3D
+	if node_root == null:
+		return
+	var current: Vector3 = node_root.scale
+	node_root.scale = Vector3(current.x * width, current.y, current.z * depth)
+	root.set_meta("character_variant_scale", Vector3(width, 1.0, depth))
 
 static func _color_for(token: String, role: String, profile: Dictionary) -> Color:
 	if role in MONSTER_ROLES:
@@ -220,7 +269,7 @@ static func _color_for(token: String, role: String, profile: Dictionary) -> Colo
 		return profile.secondary
 	return profile.primary
 
-static func _identity_material(source, color: Color, monster := false) -> StandardMaterial3D:
+static func _identity_material(source, color: Color, monster := false, wash_override: float = -1.0) -> StandardMaterial3D:
 	var material: StandardMaterial3D
 	if source is StandardMaterial3D:
 		material = source.duplicate() as StandardMaterial3D
@@ -233,6 +282,8 @@ static func _identity_material(source, color: Color, monster := false) -> Standa
 		# stronger role wash keeps stalker/raider/brute readable at gameplay
 		# distance while preserving the source texture detail.
 		var wash := 0.42 if monster else 0.10
+		if wash_override >= 0.0:
+			wash = wash_override
 		material.albedo_color = Color.WHITE.lerp(color, wash)
 	else:
 		material.albedo_color = color

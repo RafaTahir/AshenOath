@@ -662,3 +662,11 @@ Do not sync `.release-gate/AshenOath_QA` into `web/`; it is not the production b
 - Latest result: the diagnostic exited with code 0; the focused manifest, visual, combat, and diff checks recorded by the preceding checkpoint remain the required verification for the committed mapping fix. The diagnostic output is retained outside the repository at `D:\Temp\AshenOath\inspect_milestone_c_assets.txt`.
 - Remaining blocker: the current monster family is still categorized as `functional_but_incomplete` because the retained Skeleton presentation is stylized/provisional and the broader visual, lifecycle, and release gates remain open. The intentionally untracked `tools/_inspect_milestone_c_assets.gd` helper remains preserved and excluded from the checkpoint.
 - Exact next action: after the paused goal is explicitly resumed, choose a new scoped recovery ticket. Do not begin monster-identity work, export, push, merge, or deploy from this paused checkpoint.
+
+## Recovery Progress - 2026-09-10 (deterministic crowd identity visibility)
+
+- Current ticket: `CHAR-003` character identity and NPC presentation improvement.
+- Completed work: strengthened the existing deterministic material recipe so semantic hair, eye, skin, and clothing surfaces receive visible but texture-preserving washes. Added stable recipe labels for hair style, body build, and clothing style, plus bounded width/depth variation for non-hero humanoids without changing normalized height or collision authority.
+- Latest result: `tools/verify_char_009.gd` passed; `tools/verify_char_qa_001.gd` passed; the graphical `tools/capture_char_009.gd` capture passed at 1280x720 and rendered visibly different male/female crowd silhouettes, hair tones, and complexions. `git diff --check` passed. No source assets or proxy anatomy were added.
+- Remaining blocker: the shared Universal outfit geometry still limits occupation-level silhouette variation, and the broader character category remains `visually_rejected` until Kael, Anwen, named actors, and gameplay-distance evidence pass the full visual gate.
+- Exact next action: continue with the next scoped character presentation improvement, then run its changed-view capture and affected visual/motion checks. Do not promote this progress slice as a release approval by itself.
