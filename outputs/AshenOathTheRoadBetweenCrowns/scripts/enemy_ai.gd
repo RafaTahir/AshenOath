@@ -746,7 +746,8 @@ func _try_build_mapped_body() -> bool:
 		}.get(enemy_id, "ghoulkin_skeleton")
 		mapped = asset_helper.spawn_visual_role(visual_source, "enemies")
 		skeleton_family_source = visual_source in [
-			"ghoulkin_skeleton", "ghoulkin_creature", "bog_wretch_creature",
+			"ghoulkin_skeleton", "ghoulkin_creature", "wychwood_stalker_creature",
+			"wychwood_raider_creature", "bog_wretch_creature",
 			"gravebound_knight_creature", "bell_eater_boss", "rootbound_colossus_boss"
 		]
 		uses_real_body = mapped != null and not mapped.name.ends_with("_placeholder") and not skeleton_family_source

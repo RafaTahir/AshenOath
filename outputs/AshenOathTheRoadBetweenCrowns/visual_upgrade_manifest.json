@@ -263,44 +263,44 @@
         "notes": "Retained articulated source for all Wychwood family roles; deterministic scale, material, posture, and attack profiles provide silhouette variation without duplicate meshes."
       },
       "wychwood_stalker_creature": {
-        "status": "mon_001_distinct_bat_family",
-        "path": "res://assets_external/enemies/Bat.fbx",
+        "status": "mon_002_connected_ghoulkin_family",
+        "path": "res://assets_external/enemies/Skeleton.fbx",
         "source": "Animated Monsters by Quaternius",
         "source_url": "https://opengameart.org/sites/default/files/Animated%20Monster%20Pack%20by%20%40Quaternius.zip",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
         "target_height": 1.6,
-        "notes": "Distinct winged Stalker body with authored head and eye materials; scaled and leashed by the existing Wychwood encounter profile."
+        "notes": "Humanoid Stalker variant using the connected Skeleton family; role-specific ash-green material, lean scale, posture, spacing, and attack profile provide distinction without an animal substitution."
       },
       "wychwood_raider_creature": {
-        "status": "mon_001_distinct_dragon_family",
-        "path": "res://assets_external/enemies/Dragon.fbx",
+        "status": "mon_002_connected_ghoulkin_family",
+        "path": "res://assets_external/enemies/Skeleton.fbx",
         "source": "Animated Monsters by Quaternius",
         "source_url": "https://opengameart.org/sites/default/files/Animated%20Monster%20Pack%20by%20%40Quaternius.zip",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
-        "target_height": 2.05,
-        "notes": "Distinct winged Raider body using the existing Dragon rig and attack clips at a grounded clearing scale."
+        "target_height": 1.86,
+        "notes": "Humanoid Raider variant using the connected Skeleton family; broader ash-bone material, grounded scale, posture, spacing, and attack profile provide a readable heavy role."
       },
       "wychwood_stalker": {
-        "status": "char_restore_001_runtime_alias",
-        "path": "res://assets_external/enemies/Bat.fbx",
+        "status": "mon_002_connected_ghoulkin_alias",
+        "path": "res://assets_external/enemies/Skeleton.fbx",
         "source": "Animated Monsters by Quaternius",
         "source_url": "https://opengameart.org/sites/default/files/Animated%20Monster%20Pack%20by%20%40Quaternius.zip",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
         "target_height": 1.6,
-        "notes": "Exact encounter-role alias for the validated Stalker family; keeps the same connected animated Bat source used by runtime combat."
+        "notes": "Exact encounter-role alias for the connected Skeleton Stalker family; runtime styling carries the role distinction."
       },
       "wychwood_raider": {
-        "status": "char_restore_001_runtime_alias",
-        "path": "res://assets_external/enemies/Dragon.fbx",
+        "status": "mon_002_connected_ghoulkin_alias",
+        "path": "res://assets_external/enemies/Skeleton.fbx",
         "source": "Animated Monsters by Quaternius",
         "source_url": "https://opengameart.org/sites/default/files/Animated%20Monster%20Pack%20by%20%40Quaternius.zip",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
-        "target_height": 2.05,
-        "notes": "Exact encounter-role alias for the validated Raider family; keeps the same connected animated Dragon source used by runtime combat."
+        "target_height": 1.86,
+        "notes": "Exact encounter-role alias for the connected Skeleton Raider family; runtime styling carries the role distinction."
       },
       "wychwood_brute": {
         "status": "char_restore_001_runtime_alias",
