@@ -9,7 +9,8 @@
   exports `runtime_asset_manifest.json` in the root, base-pack, and QA
   filters, plus the HUD compatibility fix for browser physical Enter/Space
   key fields. `DIALOGUE-001`, `INPUT-004`, `ASSET-005`, `WEB-001`, runtime
-  smoke, and the full native seam route pass.
+  smoke, and the full native seam route pass. `INPUT-004` now includes a
+  direct physical-Enter dialogue-page regression assertion.
 - One fresh QA Web artifact was tested after the manifest fix: seven files,
   89.8 MB, PCK SHA-256
   `773588adf91789f83558035e4290698447b5cbfc33d1313c0a986d434b04d26a`.

@@ -24,6 +24,7 @@ func _initialize() -> void:
 	_verify_conflict_swap_and_reset(router)
 	_verify_keyboard_remap(router, settings)
 	await _verify_hud_navigation(hud)
+	await _verify_dialogue_physical_accept(hud)
 
 	var passed := failures.is_empty()
 	print("INPUT-004 VERIFIER: %s" % ("PASS - glyph labels, remapping, conflict recovery, defaults, and focus navigation" if passed else "FAIL (%d)" % failures.size()))
@@ -85,6 +86,22 @@ func _verify_hud_navigation(hud: Node) -> void:
 	_check(hud.active_menu == "remap", "remap menu did not open")
 	_check(hud.menu_layer.find_children("*", "Button", true, false).size() >= 8, "remap menu is missing bindings or navigation controls")
 	_check(hud.menu_layer.get_viewport().gui_get_focus_owner() is Button, "remap menu did not focus a controller-navigable button")
+
+func _verify_dialogue_physical_accept(hud: Node) -> void:
+	hud.show_dialogue({
+		"name": "Input Probe",
+		"pages": [
+			{"speaker": "Input Probe", "text": "First page."},
+			{"speaker": "Input Probe", "text": "Second page."},
+		],
+	})
+	await process_frame
+	var enter := InputEventKey.new()
+	enter.pressed = true
+	enter.physical_keycode = KEY_ENTER
+	hud._input(enter)
+	_check(int(hud.get("dialogue_page_index")) == 1, "physical Enter did not advance a focused dialogue page")
+	hud.hide_menus()
 
 func _has_joy_button(action: String, button: int) -> bool:
 	for event in InputMap.action_get_events(action):

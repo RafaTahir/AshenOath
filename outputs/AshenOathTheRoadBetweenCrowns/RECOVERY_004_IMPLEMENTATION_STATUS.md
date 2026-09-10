@@ -1102,8 +1102,10 @@ Do not sync `.release-gate/AshenOath_QA` into `web/`; it is not the production b
   button could remain visible without advancing. The HUD now accepts either
   field while retaining the existing gamepad/action path.
 - Cheapest proof after that surgical source fix: `DIALOGUE-001 VERIFIER: PASS`
-  and `INPUT-004 VERIFIER: PASS`; `git diff --check` is clean. No Web export or
-  browser run was repeated after the dialogue fix.
+  and `INPUT-004 VERIFIER: PASS`; `INPUT-004` now directly sends a physical
+  Enter event to a focused dialogue page and asserts that the page advances.
+  `git diff --check` is clean. No Web export or browser run was repeated after
+  the dialogue fix.
 - Current truth: obstruction ownership, marker-layer teardown race, Web role
   manifest inclusion, and native dialogue/input parsing are closed at this
   checkpoint. Browser acceptance remains open until the accumulated fix is
