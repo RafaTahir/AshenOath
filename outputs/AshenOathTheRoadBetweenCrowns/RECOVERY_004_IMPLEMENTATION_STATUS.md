@@ -28,7 +28,7 @@
   traversal/collision, characters, monsters/combat, world presentation,
   UI/story/input, audio, and architecture/performance.
 - Checkpoint decision: the generated pack metadata and release report are bound
-  to source `04516b561b25d95653dff07ef8f6bc309576560b`. The runner now fails a
+  to source `602a900f3b7ac5992831873f4cea426ebb6b410d`. The runner now fails a
   complete run when unresolved registry blockers remain; targeted and partial
   runs remain usable as development evidence. Production Web files remain
   unchanged.

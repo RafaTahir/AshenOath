@@ -3,7 +3,7 @@
 ## Recovery-004 Current Checkpoint - 2026-09-10
 
 The current development source is on `codex/masterpiece-rebuild` at local
-checkpoint `04516b561b25d95653dff07ef8f6bc309576560b`, with the reviewed
+checkpoint `602a900f3b7ac5992831873f4cea426ebb6b410d`, with the reviewed
 mobile deferred-visual fix, generated runtime-pack metadata, release evidence,
 and release-runner report guard verified in a fresh QA Web artifact. The
 complete authoritative runner passed 96 executable gates from this source:
