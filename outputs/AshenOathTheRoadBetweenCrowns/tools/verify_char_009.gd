@@ -53,10 +53,24 @@ func _initialize() -> void:
 			check(visual.find_children("*", "AnimationPlayer", true, false).size() > 0, "%s has no crowd animation player" % str(entry.get("id", "routine")))
 		check(ambient_count >= 4, "Greyfen must retain four ambient routines")
 		check(identities.size() >= 4, "ambient crowd variation is too repetitive")
-	if is_instance_valid(game):
-		game.free()
+	await _shutdown_game(game)
 	print("CHAR-009 VERIFIER: %s" % ("PASS - crowd scale, identity, and animation variation" if failures == 0 else "FAIL (%d)" % failures))
 	quit(0 if failures == 0 else 1)
+
+func _shutdown_game(game: Node) -> void:
+	# Use the same staged ownership release as a real route transition. A direct
+	# free() here leaves queued zone actors and renderer-owned dependencies alive
+	# long enough to produce a misleading ObjectDB leak after a green result.
+	if game != null and is_instance_valid(game):
+		if game.has_method("finalize_resource_shutdown"):
+			game.finalize_resource_shutdown()
+		elif game.has_method("prepare_resource_shutdown"):
+			game.prepare_resource_shutdown()
+		var retirement_frames := int(game.get("ZONE_RETIRE_FRAMES")) if game.get("ZONE_RETIRE_FRAMES") != null else 8
+		await _frames(retirement_frames + 8)
+		if is_instance_valid(game):
+			game.queue_free()
+		await _frames(8)
 
 func _has_proxy_anatomy(node: Node) -> bool:
 	for child in node.find_children("*", "", true, false):
