@@ -3,9 +3,10 @@
 ## Recovery-004 Current Truth - 2026-09-10
 
 The active development branch is `codex/masterpiece-rebuild` at local
-checkpoint `672feac04871b276a2efaa728108acf19367ad32`. The latest verified
-engineering slice is lifecycle teardown plus authoritative release-report
-identity. The worktree contains only the intentionally untracked diagnostic
+checkpoint `d7da54f071fafa04d7253442a477f5a386fc6b27`. The latest verified
+engineering slices are lifecycle teardown, authoritative release-report
+identity, and an off-center real-player bridge capsule sweep for Greyfen and
+Wychwood. The worktree contains only the intentionally untracked diagnostic
 `tools/_inspect_milestone_c_assets.gd` outside the checkpoint.
 
 The release runner now rejects stale reports, missing issue registries, source
@@ -15,7 +16,9 @@ monster/combat, world, UI/story/input, audio, and architecture/performance
 categories. Existing historical PASS claims do not override this state.
 
 Exact next action: continue with a scoped runtime repair and its direct evidence;
-do not export or promote production until a fresh complete report passes.
+the local bridge sweep passes, but production still needs a fresh export and the
+recovery registry remains blocked. Do not export or promote production until a
+fresh complete report passes.
 
 ## Recovery-004 Current Checkpoint - 2026-09-10
 

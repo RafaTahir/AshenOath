@@ -1,5 +1,25 @@
 # RECOVERY-004 Implementation Status
 
+## Current Evidence Checkpoint - 2026-09-10 (off-center bridge capsule sweep)
+
+- Current ticket: `TRAV-001`, bridge surface contract verification on
+  `codex/masterpiece-rebuild`.
+- Completed in this atomic slice: the river safety verifier now drives the
+  real `CharacterBody3D` across two interior bridge lanes (`x=-1.2` and
+  `x=+1.2`) in both directions for Greyfen and Wychwood. Each lane checks
+  lateral stability, complete bank-to-bank travel, no river recovery, and no
+  jump-required stop. The existing centerline, bank-barrier, save-migration,
+  interaction-clearance, and NPC-route checks remain active.
+- Latest direct result: the Godot Compatibility headless run exited `0` with
+  `RIVER-002 SAFETY VERIFIER: PASS`; the log is
+  `D:\Temp\AshenOath\trav-001-river.log` and its Godot stderr log is empty.
+- Scope boundary: this proves the current local source geometry and player
+  capsule. It does not certify the stale production Web artifact, full route,
+  or visual quality, and it does not change quest logic or river visuals.
+- Exact next action: continue the next scoped recovery blocker, preserving this
+  local bridge evidence until a fresh export is produced. Do not promote or
+  deploy while the recovery registry still contains release blockers.
+
 ## Current Evidence Checkpoint - 2026-09-10 (split Web packs and route safety)
 
 - Current ticket: `RECOVERY-004`, release-integrity and runtime-pack
