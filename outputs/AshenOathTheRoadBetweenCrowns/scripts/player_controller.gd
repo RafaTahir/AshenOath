@@ -121,6 +121,8 @@ var bow_quiver_attachment: BoneAttachment3D
 const BOW_MAX_DRAW := 1.0
 const BOW_RANGE := 24.0
 const MODELED_SWORD_PATH := "res://assets_external/characters/Sword.fbx"
+const MODELED_BOW_PATH := "res://assets_external/characters/Ranger_Bow.fbx"
+const MODELED_ARROW_PATH := "res://assets_external/characters/Ranger_Arrow.fbx"
 
 const BEAM_STATE_IDLE := ""
 const BEAM_STATE_SHEATHING := "sheathing"
@@ -1019,30 +1021,21 @@ func _build_bow_visual() -> void:
 	bow_visual.scale = Vector3.ONE * 0.82
 	bow_visual.visible = false
 	hand_parent.add_child(bow_visual)
-	var grip := MeshInstance3D.new()
-	var grip_mesh := BoxMesh.new()
-	grip_mesh.size = Vector3(0.08, 0.48, 0.08)
-	grip.mesh = grip_mesh
-	grip.position = Vector3(0.0, 0.0, 0.0)
-	grip.material_override = _mat(Color(0.24, 0.12, 0.055))
-	bow_visual.add_child(grip)
-	for side in [-1.0, 1.0]:
-		var limb := MeshInstance3D.new()
-		var limb_mesh := BoxMesh.new()
-		limb_mesh.size = Vector3(0.055, 0.44, 0.055)
-		limb.mesh = limb_mesh
-		limb.position = Vector3(0.0, 0.43 * side, 0.0)
-		limb.rotation_degrees.z = -12.0 * side
-		limb.material_override = _mat(Color(0.34, 0.18, 0.08))
-		bow_visual.add_child(limb)
-		var string := MeshInstance3D.new()
-		var string_mesh := BoxMesh.new()
-		string_mesh.size = Vector3(0.018, 0.50, 0.018)
-		string.mesh = string_mesh
-		string.position = Vector3(0.08, 0.43 * side, 0.0)
-		string.rotation_degrees.z = 8.0 * side
-		string.material_override = _mat(Color(0.72, 0.61, 0.42))
-		bow_visual.add_child(string)
+	var modeled_bow := _instantiate_modeled_prop(MODELED_BOW_PATH)
+	if modeled_bow != null:
+		modeled_bow.name = "KaelBowModeled"
+		# The Ranger prop is authored along local Y, like the sword. Normalize the
+		# source once inside the existing hand socket; the controller still owns
+		# aim, draw, release, and visibility state.
+		modeled_bow.scale = Vector3.ONE * 0.30
+		modeled_bow.position = Vector3(0.04, -0.01, 0.04)
+		_prepare_modeled_prop(modeled_bow, Color(0.24, 0.12, 0.055))
+		modeled_bow.set_meta("equipment_visual_source", MODELED_BOW_PATH)
+		bow_visual.set_meta("equipment_visual_source", MODELED_BOW_PATH)
+		bow_visual.add_child(modeled_bow)
+	else:
+		bow_visual.set_meta("equipment_visual_failure", MODELED_BOW_PATH)
+		push_error("Modeled bow source could not be loaded: %s" % MODELED_BOW_PATH)
 	var quiver_parent: Node3D = visual_root
 	if skeleton != null:
 		var back_index := _find_bone_index(skeleton, ["spine_03", "spine_02", "Spine3", "Spine2", "Chest", "Torso", "Spine", "Body"])
@@ -1068,6 +1061,50 @@ func _build_bow_visual() -> void:
 	quiver.mesh = quiver_mesh
 	quiver.material_override = _mat(Color(0.12, 0.07, 0.035))
 	bow_quiver_visual.add_child(quiver)
+	var modeled_arrow := _instantiate_modeled_prop(MODELED_ARROW_PATH)
+	if modeled_arrow != null:
+		modeled_arrow.name = "KaelQuiverArrow"
+		modeled_arrow.scale = Vector3.ONE * 0.30
+		modeled_arrow.position = Vector3(0.0, -0.18, 0.0)
+		_prepare_modeled_prop(modeled_arrow, Color(0.58, 0.42, 0.24))
+		modeled_arrow.set_meta("equipment_visual_source", MODELED_ARROW_PATH)
+		bow_quiver_visual.add_child(modeled_arrow)
+	else:
+		bow_quiver_visual.set_meta("equipment_visual_failure", MODELED_ARROW_PATH)
+		push_error("Modeled arrow source could not be loaded: %s" % MODELED_ARROW_PATH)
+
+func _instantiate_modeled_prop(path: String) -> Node3D:
+	if path.is_empty() or not ResourceLoader.exists(path):
+		return null
+	if asset_helper != null and asset_helper.has_method("load_runtime_resource") and asset_helper.has_method("instantiate_runtime_resource"):
+		var cached_resource = asset_helper.load_runtime_resource(path)
+		var cached_instance: Node3D = asset_helper.instantiate_runtime_resource(cached_resource)
+		if cached_instance != null:
+			return cached_instance
+	var resource = ResourceLoader.load(path)
+	if resource is PackedScene:
+		var instance := (resource as PackedScene).instantiate()
+		return instance as Node3D
+	if resource is Mesh:
+		var mesh_instance := MeshInstance3D.new()
+		mesh_instance.mesh = resource as Mesh
+		return mesh_instance
+	return null
+
+func _prepare_modeled_prop(root: Node3D, fallback_color: Color) -> void:
+	if root == null:
+		return
+	for raw_mesh in root.find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := raw_mesh as MeshInstance3D
+		if mesh_instance == null or mesh_instance.mesh == null:
+			continue
+		mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+		for surface_index in range(mesh_instance.mesh.get_surface_count()):
+			var material := mesh_instance.get_surface_override_material(surface_index)
+			if material == null:
+				material = mesh_instance.mesh.surface_get_material(surface_index)
+			if material == null:
+				mesh_instance.set_surface_override_material(surface_index, _mat(fallback_color))
 
 func _build_sheathed_sword() -> void:
 	# The back weapon is a real scabbard, not a second naked blade hidden behind

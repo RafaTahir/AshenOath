@@ -1,5 +1,40 @@
 # RECOVERY-004 Implementation Status
 
+## Native Contract Checkpoint - 2026-09-11 (modeled bow, arrow, and staff)
+
+- The current atomic source slice is complete on `codex/masterpiece-rebuild`.
+  Kael's bow now uses the existing modeled
+  `res://assets_external/characters/Ranger_Bow.fbx` under the validated hand
+  socket, and the quiver carries the modeled
+  `res://assets_external/characters/Ranger_Arrow.fbx` on the existing back
+  socket. Sister Anwen now uses the existing modeled
+  `res://assets_external/characters/Cleric_Staff.fbx` on her hand socket.
+- The old procedural bow limbs, string, and bow grip were removed. The existing
+  bow state machine, arrow inventory, aiming, release, save state, and equipment
+  visibility contract are unchanged. Missing imported props fail explicitly
+  rather than silently recreating primitive weapon geometry.
+- Production and QA Web presets explicitly include the three imported prop
+  sources. Runtime pack metadata was regenerated against local source commit
+  `ddc9a910e17f1d6cb298366cb34b4ac3bae13873` before this uncommitted slice.
+- Direct proof after the edit: Godot editor/import initialization completed
+  successfully; `CHAR-GAMEPLAY-QA-001`, `ANIM-001`, `COMBAT-001`, `OATH-001`,
+  and `MOTION QUALITY` all report `PASS`. Fresh graphical 1280x720 character
+  evidence was captured for Kael, Anwen, crowd variation, Ranger Senn, monster
+  families, gameplay distance, and Anwen dialogue. The images are stored in
+  `Development_Gallery/screenshots/` and show the modeled Anwen staff attached
+  at the hand and no new proxy anatomy.
+- Remaining limitation: the A-set bodies and retained monster families still
+  carry the previously documented low-poly/provisional visual debt. Native
+  shutdown-only Godot ObjectDB/orphan/resource accounting remains an open
+  lifecycle blocker; it was not relabeled as fixed by this prop slice.
+- No Web export, browser run, push, merge, production `web/` sync, or Vercel
+  deployment was performed. The user-owned untracked
+  `tools/_inspect_milestone_c_assets.gd` remains untouched.
+- Exact next action: create a local checkpoint commit for this verified source
+  slice, then continue lifecycle and visual-debt recovery. Defer the single
+  source-aligned Web export/browser acceptance sequence until the accumulated
+  source fixes are ready.
+
 ## Native Contract Checkpoint - 2026-09-11 (sword and bridge probes)
 
 - The current source checkpoint is on `codex/masterpiece-rebuild`. Kael's

@@ -1,5 +1,30 @@
 # Ashen Oath Project State
 
+## Recovery-004 Latest Native Checkpoint - 2026-09-11 (modeled equipment props)
+
+- The current atomic source fix replaces Kael's procedural bow with the
+  modeled `Ranger_Bow.fbx`, adds the modeled `Ranger_Arrow.fbx` to his existing
+  quiver socket, and replaces Anwen's generated staff with the modeled
+  `Cleric_Staff.fbx`. All three remain attached through the existing validated
+  hand/back bone sockets; bow aiming, arrow state, sword state, and dialogue
+  behavior were not rewritten.
+- The old procedural bow limbs/string/grip path is gone. Missing imported props
+  now produce an explicit runtime error instead of silently recreating a
+  primitive visual. Production and QA export presets include the imported
+  prop sources.
+- Native proof is green for `CHAR-GAMEPLAY-QA-001`, `ANIM-001`, `COMBAT-001`,
+  `OATH-001`, and `MOTION QUALITY`. Fresh graphical 1280x720 character
+  evidence was captured and inspected for the A-set, Anwen, crowd variation,
+  Ranger Senn, monster families, and gameplay-distance views.
+- This is a local source/native checkpoint only. The current product remains
+  not release-ready because the documented low-poly/provisional role debt and
+  shutdown-only resource diagnostics remain open. No Web export, browser run,
+  production sync, push, merge, or deployment was performed.
+- Exact next action: commit this verified source slice locally, then continue
+  scoped lifecycle and visual-debt work before the one source-aligned export
+  and browser acceptance run. The user-owned untracked diagnostic remains
+  untouched.
+
 ## Recovery-004 Latest Native Checkpoint - 2026-09-11
 
 - The canonical source remains on `codex/masterpiece-rebuild` in

@@ -2,6 +2,7 @@ extends RefCounted
 
 const CharacterVisualContract = preload("res://scripts/character_visual_contract.gd")
 const CharacterIdentityProfile = preload("res://scripts/character_identity_profile.gd")
+const CLERIC_STAFF_PATH := "res://assets_external/characters/Cleric_Staff.fbx"
 
 class WorldOrientedEquipment extends Node3D:
 	var actor: Node3D
@@ -184,48 +185,33 @@ static func _add_anwen_staff(owner: Node3D) -> void:
 	# hand position and remains attached during animation.
 	equipment.rotation_degrees = Vector3(180.0, 0.0, 0.0)
 	attachment.add_child(equipment)
-	var staff := MeshInstance3D.new()
-	staff.name = "AnwenStaffWood"
-	var staff_mesh := CylinderMesh.new()
-	staff_mesh.top_radius = 0.018
-	staff_mesh.bottom_radius = 0.027
-	# Keep the staff readable as a hand prop at conversation distance. The
-	# imported hand sits below the shoulder on the Universal rig; a full metre
-	# shaft therefore rises behind Anwen's head in the idle pose.
-	staff_mesh.height = 0.68
-	staff_mesh.radial_segments = 8
-	staff.mesh = staff_mesh
-	staff.position = Vector3(0.0, -0.34, 0.0)
-	staff.material_override = _mat(Color("76513a"), 0.86)
-	equipment.add_child(staff)
-	var crest := MeshInstance3D.new()
-	crest.name = "AnwenStaffCrest"
-	var crest_mesh := SphereMesh.new()
-	crest_mesh.radius = 0.065
-	crest_mesh.height = 0.13
-	crest_mesh.radial_segments = 12
-	crest.mesh = crest_mesh
-	crest.position = Vector3(0.0, -0.02, 0.0)
-	var crest_material := _mat(Color("c8a75b"), 0.36)
-	crest_material.metallic = 0.62
-	crest.material_override = crest_material
-	equipment.add_child(crest)
-	var inlay := MeshInstance3D.new()
-	inlay.name = "AnwenStaffInlay"
-	var inlay_mesh := CylinderMesh.new()
-	inlay_mesh.top_radius = 0.045
-	inlay_mesh.bottom_radius = 0.045
-	inlay_mesh.height = 0.014
-	inlay_mesh.radial_segments = 8
-	inlay.mesh = inlay_mesh
-	inlay.position = Vector3(0.0, -0.02, -0.075)
-	inlay.rotation_degrees = Vector3(90.0, 0.0, 0.0)
-	var inlay_material := _mat(Color("d7b66d"), 0.28)
-	inlay_material.emission_enabled = true
-	inlay_material.emission = Color("6e4d25")
-	inlay_material.emission_energy_multiplier = 0.38
-	inlay.material_override = inlay_material
-	equipment.add_child(inlay)
+	var modeled_staff := _instantiate_prop(CLERIC_STAFF_PATH)
+	if modeled_staff != null:
+		modeled_staff.name = "AnwenStaffModeled"
+		# The source is authored as a vertical staff with a broad ornamental head.
+		# Keep its full silhouette, but fit the hand prop to the Universal rig and
+		# keep the imported source's origin under the validated socket.
+		modeled_staff.scale = Vector3.ONE * 0.27
+		modeled_staff.position = Vector3(0.0, -0.28, 0.0)
+		equipment.add_child(modeled_staff)
+		return
+	# A missing staff source is an explicit runtime warning, not a fabricated
+	# replacement. The cleric remains playable and the asset gate reports the
+	# missing optional prop for the next build.
+	push_warning("Anwen staff source could not be loaded: %s" % CLERIC_STAFF_PATH)
+
+static func _instantiate_prop(path: String) -> Node3D:
+	if path.is_empty() or not ResourceLoader.exists(path):
+		return null
+	var resource := ResourceLoader.load(path)
+	if resource is PackedScene:
+		var instance := (resource as PackedScene).instantiate()
+		return instance as Node3D
+	if resource is Mesh:
+		var mesh_instance := MeshInstance3D.new()
+		mesh_instance.mesh = resource as Mesh
+		return mesh_instance
+	return null
 
 static func _add_castle_role_equipment(owner: Node3D, role: String) -> void:
 	var castle_role := role.to_lower()
