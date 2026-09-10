@@ -1309,10 +1309,13 @@ func _build_oathblade_visual(parent: Node3D) -> Node3D:
 func _build_oathblade_mesh() -> ImmediateMesh:
 	var mesh := ImmediateMesh.new()
 	var vertices := [
-		Vector3(-0.075, -0.10, 0.035), Vector3(0.075, -0.10, 0.035), Vector3(0.047, -0.72, 0.028),
-		Vector3(-0.047, -0.72, 0.028), Vector3(0.0, -0.98, 0.0),
-		Vector3(-0.075, -0.10, -0.035), Vector3(0.075, -0.10, -0.035), Vector3(0.047, -0.72, -0.028),
-		Vector3(-0.047, -0.72, -0.028), Vector3(0.0, -0.98, 0.0)
+		# A restrained single-edged hunter blade: narrow shoulder, shallow
+		# fuller, and a centered point. The previous 15 cm shoulder made the
+		# weapon read as a pale wedge at gameplay distance.
+		Vector3(-0.050, -0.10, 0.026), Vector3(0.050, -0.10, 0.026), Vector3(0.034, -0.72, 0.018),
+		Vector3(-0.034, -0.72, 0.018), Vector3(0.0, -1.02, 0.0),
+		Vector3(-0.050, -0.10, -0.026), Vector3(0.050, -0.10, -0.026), Vector3(0.034, -0.72, -0.018),
+		Vector3(-0.034, -0.72, -0.018), Vector3(0.0, -1.02, 0.0)
 	]
 	var faces := [
 		[0, 1, 2], [0, 2, 3], [5, 7, 6], [5, 8, 7], [3, 2, 4], [8, 9, 4],

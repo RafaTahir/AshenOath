@@ -76,9 +76,27 @@ func _compose_player_body(outfit_root: Node3D, outfit_path: String, role_name: S
 	var normalized_path := outfit_path.replace("\\", "/").to_lower()
 	var is_ranger_runtime := normalized_path.contains("assets_external/characters_ranger/") and normalized_path.ends_with("male_ranger_runtime.gltf")
 	if is_ranger_runtime:
-		# Ranger is already a complete skinned Quaternius-compatible body. Mark it
-		# as a single authored layer so the character gates and runtime diagnostics
-		# do not confuse it with the retired multi-GLTF composite path.
+		# The optimized Ranger outfit owns the body, clothing, and 65-bone rig, but
+		# its hood source leaves an open collar around the neck and does not carry a
+		# fitted face. Reuse the same-family Universal head/hair layers on the
+		# compatible skeleton, then hide only that incompatible hood shell. This
+		# keeps Senn recognizably Ranger while removing the visible neck ring without
+		# adding root-mounted proxy anatomy.
+		var ranger_hood := outfit_root.find_child("Male_Ranger_Head_Hood", true, false) as MeshInstance3D
+		if ranger_hood != null:
+			ranger_hood.visible = false
+		var ranger_head := _instantiate_resource(_load_cached_resource("res://assets_external/characters_universal/Male_Head.gltf"))
+		var ranger_hair := _instantiate_resource(_load_cached_resource("res://assets_external/characters_universal/Hair_SimpleParted.gltf"))
+		var merged_ranger_face := _merge_shared_rig_layers(outfit_root, [ranger_head, ranger_hair])
+		if not merged_ranger_face:
+			if ranger_hood != null:
+				ranger_hood.visible = true
+			if ranger_head != null:
+				ranger_head.free()
+			if ranger_hair != null:
+				ranger_hair.free()
+		else:
+			outfit_root.set_meta("character_ranger_face_source", "universal_male_head_simple_parted")
 		outfit_root.set_meta("character_composite", true)
 		outfit_root.set_meta("character_rig_layer_count", 1)
 		outfit_root.set_meta("character_identity", role_name.to_lower())
