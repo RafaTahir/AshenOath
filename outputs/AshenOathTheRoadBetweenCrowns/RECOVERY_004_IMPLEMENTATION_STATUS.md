@@ -612,13 +612,13 @@ Do not sync `.release-gate/AshenOath_QA` into `web/`; it is not the production b
 
 ## Next Work Order
 
-## Latest Atomic Checkpoint - 2026-09-10
+## Latest Atomic Checkpoint - 2026-09-10 (bridge deck and road dressing follow-up)
 
-- Current ticket: `WORLD-001` / NPC route-facing follow-up.
-- Completed work: removed the repeated Greyfen road-rut dressing that read as tiled blocks at gameplay distance; kept the continuous road, collision, and route geometry unchanged. Route-walking NPCs now snap to their validated segment heading at each movement update, while activity and dialogue facing retain smooth turning.
-- Latest result: `git diff --check` passed; Godot 4.6.3 editor import scan passed; `LIFE-001` passed; motion-quality verification passed; fresh graphical `WORLD-001` captures passed at 1280x720. The spawn capture is `Development_Gallery/screenshots/WORLD_001_01_SpawnStreet_20260910_182518.png`.
-- Remaining blocker: the existing headless shutdown `ObjectDB` cleanup diagnostic remains tracked as ENGINE-004/QA-005 debt. The opening visuals and monster mappings also remain stylized/provisional and are not claimed as release-complete by this checkpoint.
-- Exact next action: continue with the next scoped player-facing recovery fix, beginning with the remaining traversal/startup truth and then the visual/runtime blockers; do not treat this checkpoint as a production release.
+- Current ticket: `WORLD-001` / NPC route-facing and Greyfen bridge follow-up.
+- Completed work: removed the repeated Greyfen road-rut dressing that read as tiled blocks at gameplay distance; restored a low-profile rounded `BalancedPavedRoadDetail` wear layer so the runtime scene contract remains intact; and aligned the physical Greyfen/Wychwood bridge deck and apron collision tops with the shared bridge surface contract. Continuous road, collision, and route geometry remain otherwise unchanged. Route-walking NPCs now snap to their validated segment heading at each movement update, while activity and dialogue facing retain smooth turning.
+- Latest result: `git diff --check` passed; the Godot 4.6.3 import scan passed; `verify_runtime.gd` passed; `LIFE-001` passed; `RIVER-002 SAFETY VERIFIER` passed with the actual CharacterBody sweep; and the prior motion-quality check remains passed. Fresh graphical `WORLD-001` captures passed at 1280x720 after the road/bridge edits: `Development_Gallery/screenshots/WORLD_001_01_SpawnStreet_20260910_183314.png`, `WORLD_001_02_VillageCentre_20260910_183314.png`, `WORLD_001_03_ShrineQuarter_20260910_183314.png`, and `WORLD_001_04_ForgeStreet_20260910_183314.png`.
+- Remaining blocker: the headless `ObjectDB` shutdown diagnostic still appears in the life verifier and remains tracked as ENGINE-004/QA-005 debt. The opening visuals and monster mappings also remain stylized/provisional and are not claimed as release-complete by this checkpoint.
+- Exact next action: resume with the next explicitly selected recovery slice; do not rerun these focused checks unless the road, bridge, NPC route, or their verifier inputs change. This checkpoint does not authorize export, push, merge, deployment, or production promotion.
 
 1. Keep the renderer/RID/ObjectDB shutdown diagnostics tracked as ENGINE-004/QA-005 debt; they do not invalidate the passing release gate but should be eliminated in the next engineering pass.
 2. Continue visual reconstruction of Greyfen, Wychwood, Castle/Record Hall, and the Hart only as a new scoped ticket; the current release remains deliberately stylized and honest.

@@ -3923,40 +3923,50 @@ func _make_wychwood_terrain_layers() -> void:
 func _make_balanced_road_surface(paved: bool) -> void:
 	if _performance_mode():
 		return
-	# Greyfen already has a continuous authored road surface. The dense paved
-	# cobble overlay creates visible rectangular seams at gameplay distance.
-	if paved:
-		return
 	var batch = MultiMeshInstance3D.new()
 	batch.name = "BalancedPavedRoadDetail" if paved else "BalancedWychwoodRoadDetail"
-	var detail_mesh = BoxMesh.new()
-	detail_mesh.size = Vector3(0.70, 0.040, 0.53) if paved else Vector3(1.2, 0.012, 0.48)
+	# Rounded, low-profile wear keeps the road readable without the raised
+	# rectangular slabs that formed a checkerboard at gameplay distance.
+	var detail_mesh: Mesh
+	if paved:
+		var cobble := SphereMesh.new()
+		cobble.radius = 0.20
+		cobble.height = 0.035
+		cobble.radial_segments = 8
+		cobble.rings = 3
+		detail_mesh = cobble
+	else:
+		var shoulder := BoxMesh.new()
+		shoulder.size = Vector3(1.2, 0.012, 0.48)
+		detail_mesh = shoulder
 	var multimesh = MultiMesh.new()
 	multimesh.transform_format = MultiMesh.TRANSFORM_3D
 	multimesh.use_colors = paved
 	multimesh.mesh = detail_mesh
-	var rows = 43 if paved else 12
-	var columns = 6 if paved else 1
+	var rows = 20 if paved else 12
+	var columns = 4 if paved else 1
 	multimesh.instance_count = rows * columns
 	var index = 0
 	for row in range(rows):
 		for column in range(columns):
-			var row_offset := 0.09 if paved and row % 2 == 1 else 0.0
-			var x = (float(column) - 2.5) * 0.62 + row_offset if paved else sin(float(row) * 1.7) * 0.55
-			var z = -13.0 + float(row) * (0.63 if paved else 2.05)
-			var yaw = sin(float(row * 7 + column * 3)) * 0.035 if paved else sin(float(row) * 0.8) * 0.16
+			var row_offset := 0.10 if paved and row % 2 == 1 else 0.0
+			var x = (float(column) - 1.5) * 0.78 + row_offset + sin(float(row * 5 + column)) * 0.08 if paved else sin(float(row) * 1.7) * 0.55
+			var z = -12.4 + float(row) * (1.30 if paved else 2.05) + (sin(float(row) * 1.3) * 0.08 if paved else 0.0)
+			var yaw = sin(float(row * 7 + column * 3)) * 0.16 if paved else sin(float(row) * 0.8) * 0.16
 			var basis := Basis(Vector3.UP, yaw)
 			if paved:
-				basis = basis.scaled(Vector3(0.82 + float((row + column) % 3) * 0.025, 1.0, 0.82 + float((row * 2 + column) % 3) * 0.025))
-			multimesh.set_instance_transform(index, Transform3D(basis, Vector3(x, 0.064, z)))
+				basis = basis.scaled(Vector3(0.78 + float((row + column) % 3) * 0.08, 0.82, 0.72 + float((row * 2 + column) % 3) * 0.10))
+			multimesh.set_instance_transform(index, Transform3D(basis, Vector3(x, 0.058, z)))
 			if paved:
-				var shade := 0.82 + float((row + column * 2) % 4) * 0.045
+				var shade := 0.74 + float((row + column * 2) % 4) * 0.035
 				multimesh.set_instance_color(index, Color(shade, shade * 0.94, shade * 0.84, 1.0))
 			index += 1
 	batch.multimesh = multimesh
 	var material: StandardMaterial3D
 	if paved:
-		material = world_materials.get_material("cobblestone", str(settings.settings.get("quality_preset", "balanced")), Color(0.72, 0.69, 0.62), 0.16, false).duplicate()
+		material = StandardMaterial3D.new()
+		material.albedo_color = Color(0.34, 0.32, 0.28)
+		material.roughness = 0.94
 		material.vertex_color_use_as_albedo = true
 	else:
 		material = StandardMaterial3D.new()

@@ -107,9 +107,11 @@ func _make_bridge(root: Node3D, z: float, span: float) -> void:
 	# visual shell preserves the raised timber silhouette while the collision
 	# surface has no lip for a full-size capsule to catch when leaving the deck.
 	_make_box(root,"RiverBridgeDeckVisual",Vector3(0,0.09,z),Vector3(BRIDGE_WIDTH,0.10,bridge_length),Color(0.22,0.13,0.065),false)
-	# Greyfen's road slabs finish at y=0.038. Put the collision deck at the
-	# same top height so a CharacterBody crosses without catching a hidden lip.
-	_make_box(root,"RiverBridgeDeck",Vector3(0,0.0,z),Vector3(BRIDGE_WIDTH,BridgeSurfaceContract.DECK_COLLISION_THICKNESS,bridge_length),Color(0.22,0.13,0.065),true)
+	# Greyfen's walkable ground has a top at y=0. Keep the collision deck's top
+	# exactly there; a six-centimetre lip is enough to stop a CharacterBody even
+	# when a height-ray verifier reports a continuous surface.
+	var deck_collision_y := -BridgeSurfaceContract.DECK_COLLISION_THICKNESS * 0.5
+	_make_box(root,"RiverBridgeDeck",Vector3(0,deck_collision_y,z),Vector3(BRIDGE_WIDTH,BridgeSurfaceContract.DECK_COLLISION_THICKNESS,bridge_length),Color(0.22,0.13,0.065),true)
 	var ramp_length := 1.8
 	# Match the road surface to the shallow physical deck with a visual wedge.
 	# Collision remains on the flush deck so the capsule never catches a ramp
@@ -120,8 +122,8 @@ func _make_bridge(root: Node3D, z: float, span: float) -> void:
 	_make_bridge_ramp(root, "BridgeApproachRampSouth", Vector3(0,0.09,z+ramp_offset), Vector3(BRIDGE_WIDTH-0.28,0.18,ramp_length), ramp_angle)
 	# The ramps are a visual wedge. These low aprons overlap the deck and ground
 	# so a full CharacterBody capsule never meets a seam or requires a jump.
-	_make_bridge_apron_collision(root, "BridgeApproachSurfaceNorthCollision", Vector3(0, 0.0, z-ramp_offset), Vector3(BRIDGE_WIDTH-0.28, BridgeSurfaceContract.DECK_COLLISION_THICKNESS, ramp_length))
-	_make_bridge_apron_collision(root, "BridgeApproachSurfaceSouthCollision", Vector3(0, 0.0, z+ramp_offset), Vector3(BRIDGE_WIDTH-0.28, BridgeSurfaceContract.DECK_COLLISION_THICKNESS, ramp_length))
+	_make_bridge_apron_collision(root, "BridgeApproachSurfaceNorthCollision", Vector3(0, deck_collision_y, z-ramp_offset), Vector3(BRIDGE_WIDTH-0.28, BridgeSurfaceContract.DECK_COLLISION_THICKNESS, ramp_length))
+	_make_bridge_apron_collision(root, "BridgeApproachSurfaceSouthCollision", Vector3(0, deck_collision_y, z+ramp_offset), Vector3(BRIDGE_WIDTH-0.28, BridgeSurfaceContract.DECK_COLLISION_THICKNESS, ramp_length))
 	var plank_count := 9
 	for plank_index in range(plank_count):
 		var local_z := -bridge_length * 0.42 + float(plank_index) * (bridge_length * 0.84 / float(plank_count - 1))
