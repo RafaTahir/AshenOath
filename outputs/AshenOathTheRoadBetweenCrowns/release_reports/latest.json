@@ -4,12 +4,10 @@
     "status":  "fail",
     "started_at":  "2026-09-10T07:14:07.9100689Z",
     "finished_at":  "2026-09-10T08:02:02.5739717Z",
-    "source_commit":  "04516b561b25d95653dff07ef8f6bc309576560b",
+    "source_commit":  "e603cf8870e18c781fe851c69d0b3e3ac64b9b43",
     "source_branch":  "codex/masterpiece-rebuild",
     "source_fingerprint":  "96ca9f344eae36eca9e40355ee8e9ae997571b1bf2d053695a41d5df84e50e55",
     "git_status":  [
-                       " M outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_candidates.json",
-                       " M outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_manifest.json",
                        "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/",
                        "?? outputs/AshenOathTheRoadBetweenCrowns/tools/prepare_universal_fullbody_runtime.py",
                        "?? outputs/AshenOathTheRoadBetweenCrowns/tools/update_universal_role_manifests.py"
