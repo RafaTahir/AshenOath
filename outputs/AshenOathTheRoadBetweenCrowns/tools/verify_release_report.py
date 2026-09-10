@@ -52,6 +52,7 @@ def source_fingerprint(project: Path) -> str:
         "runtime_pack_manifest.json",
         "runtime_pack_candidates.json",
         "web_boot_shell.html",
+        "RECOVERY_004_ISSUE_REGISTRY.json",
     ):
         candidate = project / relative
         if candidate.is_file():
@@ -124,6 +125,71 @@ def validate_artifact(project: Path, report: dict[str, Any], errors: list[str]) 
         fail(errors, str(artifact.get("pck_sha256", "")).lower() == hashlib.sha256(pck.read_bytes()).hexdigest(), "root PCK hash is stale")
 
 
+def current_registry_snapshot(project: Path) -> tuple[dict[str, Any] | None, str, str | None]:
+    path = project / "RECOVERY_004_ISSUE_REGISTRY.json"
+    try:
+        raw = path.read_bytes()
+        registry = json.loads(raw.decode("utf-8-sig"))
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as error:
+        return None, "", str(error)
+    category_statuses = sorted(
+        [
+            {
+                "id": str(item.get("id", "")),
+                "severity": str(item.get("severity", "")),
+                "status": str(item.get("status", "")),
+            }
+            for item in registry.get("categories", [])
+            if isinstance(item, dict)
+        ],
+        key=lambda item: item["id"],
+    )
+    snapshot = {
+        "path": path.name,
+        "exists": True,
+        "sha256": hashlib.sha256(raw).hexdigest(),
+        "schema_version": int(registry.get("schema_version", 0)),
+        "registry_id": str(registry.get("registry_id", "")),
+        "category_statuses": category_statuses,
+    }
+    return snapshot, snapshot["sha256"], None
+
+
+def validate_registry(project: Path, report: dict[str, Any], errors: list[str]) -> None:
+    current, digest, read_error = current_registry_snapshot(project)
+    fail(errors, current is not None, f"issue registry is unreadable: {read_error or 'unknown error'}")
+    recorded = report.get("issue_registry")
+    fail(errors, isinstance(recorded, dict), "report issue registry snapshot is missing")
+    if current is None or not isinstance(recorded, dict):
+        return
+    fail(errors, recorded.get("exists") is True, "report issue registry snapshot is not present")
+    fail(errors, str(recorded.get("sha256", "")).lower() == digest, "issue registry snapshot is stale")
+    fail(errors, recorded.get("schema_version") == current.get("schema_version"), "issue registry schema is stale")
+    fail(errors, recorded.get("registry_id") == current.get("registry_id"), "issue registry identity is stale")
+    fail(errors, recorded.get("category_statuses") == current.get("category_statuses"), "issue registry category statuses are stale")
+    expected_blockers = [
+        item
+        for item in current["category_statuses"]
+        if item["status"] not in {"verified", "deferred"}
+    ]
+    actual_blockers = report.get("release_blockers", [])
+    fail(errors, isinstance(actual_blockers, list), "report release blockers are not a list")
+    if isinstance(actual_blockers, list):
+        normalized = sorted(
+            [
+                {
+                    "id": str(item.get("id", "")),
+                    "severity": str(item.get("severity", "")),
+                    "status": str(item.get("status", "")),
+                }
+                for item in actual_blockers
+                if isinstance(item, dict)
+            ],
+            key=lambda item: item["id"],
+        )
+        fail(errors, normalized == expected_blockers, "report release blockers do not match the current issue registry")
+
+
 def validate_screenshots(project: Path, report: dict[str, Any], errors: list[str], strict: bool) -> None:
     gallery = project / "Development_Gallery" / "screenshots"
     fail(errors, gallery.is_dir(), f"screenshot gallery is missing: {gallery}")
@@ -166,7 +232,8 @@ def main() -> int:
     except (OSError, json.JSONDecodeError) as error:
         print(f"RELEASE REPORT: FAIL - {error}")
         return 1
-    fail(errors, int(report.get("schema_version", 0)) >= 2, "report schema must be version 2 or newer")
+    fail(errors, int(report.get("schema_version", 0)) >= 3, "report schema must be version 3 or newer")
+    fail(errors, bool(str(report.get("report_id", ""))), "report id is missing")
     allowed_statuses = {"pass"} if args.strict else {"pass", "partial-pass"}
     fail(errors, str(report.get("status", "")) in allowed_statuses, "report status is not a release pass")
     repo = project.parent.parent
@@ -191,15 +258,21 @@ def main() -> int:
                 f"report source commit {source_commit} does not match HEAD {head} for runtime changes: {changed}",
             )
     fail(errors, str(report.get("source_fingerprint", "")) == source_fingerprint(project), "report source fingerprint is stale")
+    revision = report.get("verification_revision")
+    fail(errors, isinstance(revision, dict), "report verification revision is missing")
+    if isinstance(revision, dict):
+        fail(errors, revision.get("source_commit") == source_commit, "verification revision source commit is stale")
+        fail(errors, revision.get("source_fingerprint") == report.get("source_fingerprint"), "verification revision fingerprint is stale")
     git_status = report.get("git_status", [])
     if args.strict:
         fail(errors, isinstance(git_status, list) and not git_status, "strict release report was generated from a dirty worktree")
     blockers = report.get("release_blockers", [])
     fail(errors, isinstance(blockers, list) and not blockers, "release blockers remain")
+    validate_registry(project, report, errors)
     results = report.get("results", [])
     fail(errors, isinstance(results, list) and bool(results), "report has no gate results")
     for result in results if isinstance(results, list) else []:
-        if not isinstance(result, dict) or str(result.get("status", "")) != "pass":
+        if not isinstance(result, dict) or not result.get("name") or not result.get("log") or str(result.get("status", "")) != "pass":
             errors.append(f"non-passing gate in report: {result}")
     validate_artifact(project, report, errors)
     validate_screenshots(project, report, errors, args.strict)

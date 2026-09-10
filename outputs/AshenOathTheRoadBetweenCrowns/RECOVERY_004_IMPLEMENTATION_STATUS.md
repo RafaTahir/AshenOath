@@ -718,3 +718,22 @@ Do not sync `.release-gate/AshenOath_QA` into `web/`; it is not the production b
 - Latest result: `tools/verify_gate_transitions.gd` completed the full real-input transition route with `GATE TRANSITION VERIFIER: PASS`, exit code 0, and no `ERROR`, `SCRIPT ERROR`, `ObjectDB instances leaked at exit`, or `Orphan StringName` diagnostics in the final log. `git diff --check` passed. The route exercised Greyfen, Wychwood, Deep Woods, Old Mill, Burned Farmstead, Marsh Crossing, Bandit Road, Vargan Approach, Vargan Court, and return legs.
 - Remaining blocker: this closes the gate-route shutdown leak, but the broader recovery is still not complete. Visual quality, startup cold-path time, performance acceptance, campaign real-input coverage, and release evidence remain open in the registry.
 - Exact next action: continue with the next recovery blocker from the current worktree after this local checkpoint. Do not treat the lifecycle pass as a release or deployment approval.
+## Latest Recovery Checkpoint - 2026-09-10 (authoritative release identity)
+
+- Current ticket: `REL-TRUTH-001` / release-report contract.
+- Completed work: release reports now use schema 3 with a unique report ID, a
+  verification revision, a source fingerprint that includes the recovery issue
+  registry, and a byte/hash snapshot of that registry. Missing or malformed
+  registries are blockers rather than an empty blocker list. Resume validation
+  now uses the canonical repository variable and cannot silently compare the
+  wrong repository path.
+- Latest result: PowerShell parser validation, Python compilation, and diff
+  checks passed. The pre-existing report was intentionally rejected with
+  explicit stale schema, source, artifact, blocker, and registry diagnostics;
+  no obsolete report was accepted as current evidence.
+- Remaining blocker: the current registry still records unresolved traversal,
+  visual, campaign, performance, and release-integrity categories. A fresh
+  complete report requires the relevant runtime gates and artifact export.
+- Exact next action: continue with the next scoped runtime blocker, regenerate
+  the report only after its evidence is current, and retain the report as a
+  failed record until every mandatory acceptance gate genuinely passes.

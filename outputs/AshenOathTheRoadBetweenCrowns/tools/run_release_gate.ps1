@@ -44,6 +44,7 @@ $ReportPath = Join-Path $ReportDirectory "latest.json"
 $ContentReportPath = Join-Path $Logs "content_integrity.json"
 $StartedAt = Get-Date
 $Results = [System.Collections.Generic.List[object]]::new()
+$ReportId = [guid]::NewGuid().ToString("N")
 New-Item -ItemType Directory -Force -Path $Logs | Out-Null
 New-Item -ItemType Directory -Force -Path $ReportDirectory | Out-Null
 New-Item -ItemType Directory -Force -Path $QAWeb | Out-Null
@@ -58,7 +59,7 @@ if ($IsResume) {
     $previousReport = Get-Content -LiteralPath $ReportPath -Raw | ConvertFrom-Json
 	$currentHead = (git -C $RepoRoot rev-parse HEAD).Trim()
     if ($previousReport.source_commit -ne $currentHead) {
-        $changedSinceReport = @(git -C $repoRoot diff --name-only "$($previousReport.source_commit)..$currentHead")
+		$changedSinceReport = @(git -C $RepoRoot diff --name-only "$($previousReport.source_commit)..$currentHead")
         $unsafeResumeChanges = @($changedSinceReport | Where-Object {
             $_ -notmatch '^outputs/AshenOathTheRoadBetweenCrowns/tools/' -and
             $_ -notmatch '^outputs/AshenOathTheRoadBetweenCrowns/.*\.md$' -and
@@ -161,7 +162,8 @@ function Get-SourceFingerprint {
         "soul_character_role_manifest.json",
         "runtime_pack_manifest.json",
         "runtime_pack_candidates.json",
-        "web_boot_shell.html"
+        "web_boot_shell.html",
+        "RECOVERY_004_ISSUE_REGISTRY.json"
     )) {
         $candidate = Join-Path $Project $relative
         if (Test-Path -LiteralPath $candidate) {
@@ -202,7 +204,7 @@ function Get-ReleaseWorktreeStatus {
 function Get-BlockingIssueSnapshot {
     $registryPath = Join-Path $Project "RECOVERY_004_ISSUE_REGISTRY.json"
     if (-not (Test-Path -LiteralPath $registryPath -PathType Leaf)) {
-        return @()
+        return @([ordered]@{ id = "RECOVERY-004-REGISTRY"; severity = "blocker"; status = "missing" })
     }
     try {
         $registry = Get-Content -LiteralPath $registryPath -Raw | ConvertFrom-Json
@@ -217,6 +219,48 @@ function Get-BlockingIssueSnapshot {
         })
     } catch {
         return @([ordered]@{ id = "RECOVERY-004-REGISTRY"; severity = "blocker"; status = "unreadable" })
+    }
+}
+
+function Get-IssueRegistrySnapshot {
+    $registryPath = Join-Path $Project "RECOVERY_004_ISSUE_REGISTRY.json"
+    if (-not (Test-Path -LiteralPath $registryPath -PathType Leaf)) {
+        return [ordered]@{
+            path = "RECOVERY_004_ISSUE_REGISTRY.json"
+            exists = $false
+            sha256 = ""
+            schema_version = 0
+            registry_id = ""
+            category_statuses = @()
+        }
+    }
+    try {
+        $registry = Get-Content -LiteralPath $registryPath -Raw | ConvertFrom-Json
+        $categoryStatuses = @($registry.categories | ForEach-Object {
+            [ordered]@{
+                id = [string]$_.id
+                severity = [string]$_.severity
+                status = [string]$_.status
+            }
+        } | Sort-Object id)
+        return [ordered]@{
+            path = "RECOVERY_004_ISSUE_REGISTRY.json"
+            exists = $true
+            sha256 = (Get-FileHash -LiteralPath $registryPath -Algorithm SHA256).Hash.ToLowerInvariant()
+            schema_version = [int]$registry.schema_version
+            registry_id = [string]$registry.registry_id
+            category_statuses = @($categoryStatuses)
+        }
+    } catch {
+        return [ordered]@{
+            path = "RECOVERY_004_ISSUE_REGISTRY.json"
+            exists = $true
+            sha256 = ""
+            schema_version = 0
+            registry_id = ""
+            category_statuses = @()
+            error = $_.Exception.Message
+        }
     }
 }
 
@@ -256,7 +300,8 @@ function Write-ReleaseReport([string]$Status, [string]$Failure = "") {
     try { $gitStatus = @(Get-ReleaseWorktreeStatus) } catch {}
     $screenshotEvidence = Get-ScreenshotEvidence
     $report = [ordered]@{
-        schema_version = 2
+        schema_version = 3
+        report_id = $ReportId
         release_id = if ($env:ASHENOATH_RELEASE_ID) { $env:ASHENOATH_RELEASE_ID } else { "recovery-004" }
         status = $Status
         started_at = $StartedAt.ToUniversalTime().ToString("o")
@@ -264,11 +309,17 @@ function Write-ReleaseReport([string]$Status, [string]$Failure = "") {
         source_commit = $head
         source_branch = $branch
         source_fingerprint = Get-SourceFingerprint
+        verification_revision = [ordered]@{
+            source_commit = $head
+            source_fingerprint = Get-SourceFingerprint
+            registry_sha256 = [string](Get-IssueRegistrySnapshot).sha256
+        }
         git_status = $gitStatus
         mode = $(if ([string]::IsNullOrWhiteSpace($Only)) { "full" } else { "targeted" })
         requested_gate = $Only
         project = "outputs/AshenOathTheRoadBetweenCrowns"
         artifact = Get-ArtifactSnapshot
+        issue_registry = Get-IssueRegistrySnapshot
         release_blockers = Get-BlockingIssueSnapshot
         failure = $Failure
         results = @($Results)

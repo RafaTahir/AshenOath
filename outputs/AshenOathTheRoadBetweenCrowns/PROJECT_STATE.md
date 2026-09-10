@@ -1,5 +1,22 @@
 # Ashen Oath Project State
 
+## Recovery-004 Current Truth - 2026-09-10
+
+The active development branch is `codex/masterpiece-rebuild` at local
+checkpoint `672feac04871b276a2efaa728108acf19367ad32`. The latest verified
+engineering slice is lifecycle teardown plus authoritative release-report
+identity. The worktree contains only the intentionally untracked diagnostic
+`tools/_inspect_milestone_c_assets.gd` outside the checkpoint.
+
+The release runner now rejects stale reports, missing issue registries, source
+fingerprint drift, and blocker-list drift. The full product remains **not
+release-ready**: the registry still records unresolved traversal, character,
+monster/combat, world, UI/story/input, audio, and architecture/performance
+categories. Existing historical PASS claims do not override this state.
+
+Exact next action: continue with a scoped runtime repair and its direct evidence;
+do not export or promote production until a fresh complete report passes.
+
 ## Recovery-004 Current Checkpoint - 2026-09-10
 
 The current development source is on `codex/masterpiece-rebuild` at local
