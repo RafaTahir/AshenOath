@@ -409,6 +409,13 @@ foreach ($gate in $gates) {
 			"--json-report",
 			(Join-Path $Logs "runtime_required_components.json")
 		) $gateInputs $cache
+	} elseif ($gate -eq "verify_runtime_asset_policy") {
+		Invoke-Compact $gate $Godot @(
+			"--headless", "--path", $Project,
+			"--rendering-method", "gl_compatibility",
+			"--audio-driver", "Dummy",
+			"--script", (Join-Path $PSScriptRoot "verify_runtime_asset_policy.gd")
+		) $gateInputs $cache
 	} elseif ($gate -eq "verify_engine_006") {
 		Invoke-Compact $gate $Python @(
 			(Join-Path $PSScriptRoot "verify_engine_006.py"),

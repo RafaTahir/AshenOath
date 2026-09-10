@@ -1264,3 +1264,17 @@ Do not sync `.release-gate/AshenOath_QA` into `web/`; it is not the production b
   browser run, tracked `web/` change, push, or deployment was performed.
 - Exact next action: continue source/native recovery and defer one fresh Web
   acceptance run until the accumulated startup and route fixes are ready.
+
+## Targeted Runner Registration Checkpoint - 2026-09-11
+
+- Registered `verify_runtime_asset_policy` in the `engine` ticket profile and
+  added its runtime manifest and verifier to the profile input map. The
+  targeted engine workflow now exercises both the static required-component
+  policy and the native runtime spawn-policy proof.
+- This is tooling-only. It does not change runtime behavior, Web output,
+  browser evidence, production state, or the user-owned diagnostic file.
+- Direct native policy proof and JSON/profile validation remain PASS. No Web
+  export or browser run was started for this registration change.
+- Exact next action: continue with the next bounded source/native recovery
+  slice; reserve one fresh QA export and one Chrome/Edge acceptance run for
+  the accumulated fixes rather than for individual diagnostics.

@@ -27,6 +27,9 @@ release tooling cannot mistake the current prototype visual for approval.
 - `tools/verify_runtime_asset_policy.gd`
   - Proves an approved Kael role and a diagnostic Ghoulkin fallback through
     the actual runtime spawner and node metadata.
+- `tools/run_ticket_gate.ps1` and `tools/gate_profiles.json`
+  - Register the native runtime asset-policy proof in the targeted `engine`
+    profile so the fallback contract cannot be omitted from future ticket runs.
 - `PROJECT_STATE.md`, `RECOVERY_004_IMPLEMENTATION_STATUS.md`, and the
   recovery registry record the checkpoint and its open visual limitations.
 
@@ -37,6 +40,8 @@ release tooling cannot mistake the current prototype visual for approval.
   visual fallbacks).
 - `ASSET-005`: PASS (6 approved runtime roles, 5 explicit fallbacks).
 - Native runtime asset policy: PASS.
+- Targeted runner/profile registration: PASS (the new gate is selected by the
+  `engine` profile and receives the runtime manifest/verifier inputs).
 - Render-resource scan: PASS; no active renderer, null-material, RID, ObjectDB,
   or shutdown error matched in the check output.
 
