@@ -1836,3 +1836,13 @@ The continuation source is now verified locally for the release candidate. The r
   approval, full-campaign completion, or release readiness.
 - Logs are retained under `D:\Temp\AshenOath\`; no Web export, browser run,
   tracked `web/` update, push, or deployment was performed for this checkpoint.
+
+## Warm New Game Loader Checkpoint - 2026-09-11
+
+- Cached Greyfen handoff no longer arms the delayed full-screen loader. The
+  loader remains available for genuine cold route work and failures.
+- `LOAD-001` passes with the new warm-overlay assertions; native menu prewarm
+  measured `1669 ms`. Parser/editor scan passes.
+- This is a partial startup improvement only. Cold production-browser latency,
+  visual debt, full-campaign proof, and release gates remain open. Production
+  `main`, tracked `web/`, and Vercel remain unchanged.

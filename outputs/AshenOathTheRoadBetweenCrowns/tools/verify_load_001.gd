@@ -35,6 +35,8 @@ func _initialize() -> void:
 	if playable:
 		_check(str(game.current_zone_id) == "greyfen", "New Game activated the wrong zone")
 		_check(game.player != null and is_instance_valid(game.player), "player was not activated")
+		_check(not bool(game.hud.loading_armed), "Warm New Game handoff still armed the loading overlay")
+		_check(game.hud.loading_layer == null or not bool(game.hud.loading_layer.visible), "Warm New Game handoff displayed the loading overlay")
 		# The full gameplay stage is intentionally delayed by less than one second;
 		# wait for that stage and prove the first objective's speaker appears.
 		var hydrated := await _wait_for_node("sister_anwen", 3.0)

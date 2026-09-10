@@ -1201,3 +1201,18 @@ Do not sync `.release-gate/AshenOath_QA` into `web/`; it is not the production b
 - Exact next action: continue with one bounded source/native recovery slice;
   defer the next QA Web export and browser run until the accumulated source
   fixes are ready for one acceptance attempt.
+
+## Warm New Game Loader Checkpoint - 2026-09-11
+
+- `_new_game()` now keeps the delayed full-screen loading layer disarmed when
+  Greyfen has already been published by the menu prewarm. Cold route loads
+  retain the readiness-aware loader and its retry path.
+- `verify_load_001.gd` now asserts that a warm New Game handoff neither arms
+  nor displays the loader after activation.
+- Native result: `LOAD-001: PASS`; menu prewarm measured `1669 ms` in the
+  current Compatibility run. The parser/editor scan also passed.
+- This removes an unnecessary warm-start overlay but does not yet close the
+  known cold production-browser startup/pack latency blocker. No Web export,
+  browser run, tracked `web/` change, push, or deployment was performed.
+- Exact next action: continue source/native recovery and defer one fresh Web
+  acceptance run until the accumulated startup and route fixes are ready.

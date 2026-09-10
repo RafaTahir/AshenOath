@@ -374,7 +374,12 @@ func _new_game() -> void:
 		new_game_started_usec = loading_started_usec
 	if audio != null:
 		audio.set_game_paused(false)
-	if hud != null and hud.has_method("arm_loading"):
+	# A menu-prewarmed Greyfen is already built and has a valid spatial service.
+	# Do not arm the full-screen loader for that warm handoff: the handoff itself
+	# is synchronous and the overlay would only appear when a slow browser frame
+	# exceeds the delayed-visibility threshold. Cold route loads retain the
+	# readiness-aware loader for real work and failure feedback.
+	if hud != null and hud.has_method("arm_loading") and not route_zone_cache.has("greyfen"):
 		hud.arm_loading("Opening Greyfen...")
 	get_tree().paused = false
 	_start_new_game_world()
