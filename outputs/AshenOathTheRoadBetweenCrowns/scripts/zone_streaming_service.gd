@@ -47,6 +47,13 @@ func neighbors(zone_id: String) -> Array[String]:
 
 func prewarm_neighbors(zone_id: String) -> void:
 	for neighbor in neighbors(zone_id):
+		# The current authored layers are deliberately marker-only shells. They are
+		# attached synchronously by ZoneSceneCatalog during activation, so starting a
+		# threaded request here races that load on the next transition and leaves a
+		# duplicate ResourceLoader request alive during shutdown. Keep this path for
+		# future geometry-bearing layers, but do not prewarm optional anchor shells.
+		if AUTHORED_LAYER_PATHS.has(neighbor):
+			continue
 		var path := str(AUTHORED_LAYER_PATHS.get(neighbor, ""))
 		request_zone(neighbor, path)
 	var keep_ids: Array[String] = []

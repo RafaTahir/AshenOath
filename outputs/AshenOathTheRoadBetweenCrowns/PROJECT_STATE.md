@@ -25,9 +25,9 @@ open and is not being claimed by this checkpoint.
 
 The canonical physical repository is `D:\Projects\AshenOath`; this apparent
 workspace is its preserved C: directory junction. The active branch is
-`codex/masterpiece-rebuild` at committed base `5e9cc4c`. The worktree is
-intentionally dirty with the preserved source, manifest, QA-harness, and
-fresh character-capture changes; the user-owned diagnostic
+`codex/masterpiece-rebuild` at local checkpoint `d07878c`. The worktree is
+intentionally dirty only with the verified marker-layer prewarm lifecycle fix;
+the user-owned diagnostic
 `tools/_inspect_milestone_c_assets.gd` remains untracked and untouched.
 
 The Greyfen west-boundary browser obstruction was traced to the QA export
@@ -46,15 +46,17 @@ not been re-exported, synchronized to tracked `web/`, promoted to `main`, or
 deployed. The v28 browser artifact is diagnostic evidence, not a release
 candidate.
 
-The final native obstruction proof also emits one shutdown-only
-`RefCounted`/`ObjectDB` leak after its pass marker. It is independent of the
-west Greyfen collision diagnosis and remains an open lifecycle blocker until
-its owner is identified; no active-render or route failure was observed.
+The final native obstruction proof previously emitted one shutdown-only
+`RefCounted`/`ObjectDB` leak because an optional marker-only authored layer was
+threaded-prewarmed and then synchronously attached during the next activation.
+That duplicate request path is now disabled for marker shells. The verbose
+native seam circuit passes without the duplicate-load message or leak, and no
+active-render or route failure was observed.
 
-Exact next action: continue the remaining source/native recovery work, then
-run one source-aligned export and browser acceptance sequence after the
-accumulated fixes. Historical sections below are retained as audit evidence
-and do not override this current truth.
+Exact next action: continue the remaining source/native recovery work, then run
+one source-aligned export and browser acceptance sequence after the accumulated
+fixes. Historical sections below are retained as audit evidence and do not
+override this current truth.
 
 ## Recovery-004 Current Truth - 2026-09-10
 

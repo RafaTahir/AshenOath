@@ -1001,3 +1001,33 @@ Do not sync `.release-gate/AshenOath_QA` into `web/`; it is not the production b
   open, separately documented blocker. The next diagnostic must inspect other
   `RefCounted` ownership paths using source/native evidence before another
   code change.
+
+## Current Atomic Checkpoint - 2026-09-11 (marker-layer prewarm lifecycle)
+
+- Scope completed: traced the remaining shutdown-only `RefCounted` leak in the
+  full seam circuit without adding another runtime telemetry field or running
+  another Web export/browser loop.
+- Root cause: `ZoneStreamingService.prewarm_neighbors()` started a threaded
+  request for the optional marker-only `*_gameplay.tscn` layer, while the next
+  activation synchronously attached that same layer through
+  `ZoneSceneCatalog.attach()`. The verbose native evidence named
+  `res://scenes/zones/greyfen_gameplay.tscn`; the current layer shells are only
+  254-431 byte anchor scenes and contain no runtime geometry.
+- Surgical fix: optional marker-only authored layers are no longer threaded-
+  prewarmed. Normal synchronous attachment and explicit portal requests remain
+  unchanged, and the prewarm path is available for future geometry-bearing
+  layers.
+- Cheapest proof: `tools/verify_seam_qa_001.gd` completed the full
+  bidirectional 16-boundary circuit with exit code `0`. Its verbose log at
+  `D:\Temp\AshenOath\native_seam_after_duplicate_load_fix.log` contains the
+  `SEAM-QA-001 VERIFIER: PASS` marker and no duplicate threaded-load message,
+  `ObjectDB instances leaked`, `Leaked instance`, `ERROR:`, `SCRIPT ERROR`,
+  RID, material, or parser diagnostics. No Godot process remains running.
+- Current status: the obstruction and this lifecycle warning are closed at the
+  source/native level. Broader visual debt, campaign proof, and final release
+  acceptance remain open; no Web artifact was rebuilt after the earlier v26
+  diagnostic candidate.
+- Exact next action: continue only with the next already-scoped source/native
+  recovery slice, then perform one source-aligned QA export and one browser
+  acceptance run after those changes settle. Do not repeat the obstruction
+  telemetry sequence.
