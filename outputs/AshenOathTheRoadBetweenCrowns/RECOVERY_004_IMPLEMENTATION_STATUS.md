@@ -1,5 +1,29 @@
 # RECOVERY-004 Implementation Status
 
+## Current Atomic Checkpoint - 2026-09-11 (objective presentation authority)
+
+- Scope completed: consolidated tracker construction around the selected
+  objective view. `QuestManager` remains authoritative for progression, while
+  `QuestPresentationState` now owns the displayed quest title, next action,
+  grouped progress, and no-objective fallback.
+- Root cause fixed: presentation previously started from the all-active-quest
+  tracker and patched one line with a beat action. That allowed unrelated
+  active quests and stale wording to leak into the selected route.
+- The authoritative builder preserves group counts and uses the beat-directed
+  action when available. A regression covers Road of Crows plus a concurrent
+  side quest and verifies the evidence transition remains `0/3` for the main
+  route.
+- Cheapest proof passed: editor/parser scan, `verify_objective_view_model.gd`,
+  and `verify_engine_005.gd`. No active renderer/resource error occurred;
+  diagnostic-only monster fallback warnings remain intentionally visible.
+- Current truth: objective presentation is closed for this slice. Direct
+  transient tutorial/combat hints, full player-route story proof, visual debt,
+  browser acceptance, target-hardware performance, and production release
+  remain open. No Web export, browser run, push, or deployment was performed.
+- Exact next action: continue the next bounded source/native recovery slice;
+  defer Web export/browser work until the accumulated source fixes are ready
+  for one source-aligned acceptance attempt.
+
 ## Current Atomic Checkpoint - 2026-09-11 (runtime visual-role policy)
 
 - Scope completed: made runtime visual fallback behavior explicit and

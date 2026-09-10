@@ -1,5 +1,26 @@
 # Ashen Oath Project State
 
+## Recovery-004 Latest Native Checkpoint - 2026-09-11 (objective presentation authority)
+
+- `QuestPresentationState` now builds tracker text from the selected quest and
+  objective rather than borrowing the QuestManager's all-active-quest summary.
+  The same view model supplies the tracker action, grouped evidence progress,
+  contextual text, and the compass signature, so another active quest cannot
+  leak a stale title or objective into the selected route.
+- The first Road of Crows evidence transition preserves the authored action
+  and group progress (`0/3`) after Anwen is spoken to. The existing zone-aware
+  quest fallback and manual tracking behavior remain intact.
+- Native proof is green for the objective view model and typed engine
+  coordination checks. The parser/editor scan is clean; the only runtime
+  messages in the engine route are the already-declared diagnostic warnings
+  for unapproved monster visuals.
+- This is a source/native checkpoint only. Full player-route, visual, browser,
+  performance, campaign, and production release gates remain open. No Web
+  export, tracked `web/` change, push, merge, or deployment was performed.
+- Exact next action: continue the bounded source/native recovery work, then
+  perform one source-aligned Web export and one browser acceptance run after
+  the accumulated fixes are ready.
+
 ## Recovery-004 Latest Native Checkpoint - 2026-09-11 (runtime visual-role policy)
 
 - The runtime asset contract now records an explicit fallback mode for every

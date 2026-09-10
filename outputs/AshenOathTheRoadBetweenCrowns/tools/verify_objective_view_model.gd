@@ -39,6 +39,14 @@ func _initialize() -> void:
 	_check(str(view.get("tracker_text", "")).contains("Speak with Sister Anwen"), "Tracker did not use the objective view action")
 	_check(str(view.get("contextual_text", "")) == "Speak with Sister Anwen", "Contextual guidance disagrees with the objective view")
 
+	_check(quests.start_quest("side_widows_bell"), "Second active quest could not be started for tracker isolation")
+	_check(quests.complete_objective("main_road_of_crows", "speak_anwen"), "Opening objective could not advance for tracker isolation")
+	var evidence_view: Dictionary = presentation.get_objective_view_model()
+	_check(str(evidence_view.get("quest_id", "")) == "main_road_of_crows", "Tracker switched away from the selected main quest")
+	_check(str(evidence_view.get("objective_id", "")) == "evidence_ready", "Evidence group did not select its authoritative summary objective")
+	_check(str(evidence_view.get("tracker_text", "")).contains("(0/3)"), "Grouped objective progress was lost from the authoritative tracker")
+	_check(not str(evidence_view.get("tracker_text", "")).contains("Widow's Bell"), "Tracker leaked another active quest title")
+
 	var saved: Dictionary = quests.save_state()
 	var restored := QuestManager.new()
 	root.add_child(restored)
