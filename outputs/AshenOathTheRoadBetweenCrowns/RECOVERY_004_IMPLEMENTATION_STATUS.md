@@ -1,5 +1,32 @@
 # RECOVERY-004 Implementation Status
 
+## Paused Atomic Checkpoint - 2026-09-10 (performance prewarm isolation)
+
+- Current atomic work: isolate synchronous campaign visual prewarm from cold
+  zone transitions after the Hart Glade performance gate exposed a first-use
+  overlap.
+- Completed: `game.gd` now suspends campaign visual prewarm at the start of
+  every zone load, resumes it only after the player is playable, reschedules a
+  prewarm coroutine that encounters a transition after its yield, and clears
+  the suspend state on both failed recovery and normal shutdown.
+- Latest direct result: the Godot editor/parser load completed with no parser,
+  resource, or active-render error matches in
+  `D:\Temp\AshenOath\paused-atomic-parser.log`. The graphical Compatibility
+  `verify_perf_001.gd` run passed. Hart Glade cold activation measured
+  `116.2 ms` (previous failing measurement: `1024.9 ms`), Wychwood cold
+  `398.0 ms`, Vargan Court `238.1 ms`, Record Hall `72.2 ms`, warm return
+  `35.0 ms`, and New Game `16.1 ms`. Zone samples remained approximately
+  `47.9-60.0 FPS` average with `35.7-57.3 FPS` 1% lows and static memory below
+  `82.4 MB`.
+- Remaining blocker: this checkpoint proves only the current performance fix.
+  The broader recovery/release remains blocked by unresolved visual-quality
+  registry outcomes and the still-unrun complete screenshot, export, browser,
+  and production acceptance sequence.
+- Exact next action on resume: run the complete release evidence sequence
+  against this committed source, beginning with the screenshot gate and then
+  export, packed startup, and fresh browser checks; do not repeat this atomic
+  performance edit unless its inputs change.
+
 ## Current Evidence Checkpoint - 2026-09-10 (route and world gate repair)
 
 - Current ticket: `RECOVERY-004`, traversal and Greyfen presentation follow-up on

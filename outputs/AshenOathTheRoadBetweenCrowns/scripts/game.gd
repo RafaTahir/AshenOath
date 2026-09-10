@@ -135,6 +135,7 @@ var opening_checkpoint_pending := false
 var campaign_visual_prewarm_started := false
 var campaign_visual_prewarm_generation := 0
 var campaign_visual_prewarm_not_before_msec := 0
+var campaign_visual_prewarm_suspended := false
 var owned_timers: Array[Timer] = []
 # Keep each late-opening chunk small enough that the first controllable frame
 # never competes with a large import or decoration batch on Web/ANGLE.
@@ -756,6 +757,9 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	if new_game_start_pending and not game_started:
 		new_game_start_pending = false
 	zone_id = zone_id.strip_edges().to_lower()
+	# Synchronous visual imports must never overlap a zone swap. The prewarm
+	# coroutine is resumed after the player is playable again.
+	campaign_visual_prewarm_suspended = true
 	if performance_budget_monitor != null:
 		performance_budget_monitor.suspend()
 	loading_started_usec = loading_started_usec if loading_started_usec > 0 else Time.get_ticks_usec()
@@ -1003,6 +1007,7 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 			print("LOADING: handoff_phase=unlock_end")
 			last_safe_player_position = player.global_position
 			zone_transition_pending = false
+			campaign_visual_prewarm_suspended = false
 			# The player and camera are already visible behind the menu. Enabling
 			# their full process tree can trigger synchronous WebGL animation and
 			# physics setup, so finish activation after the playable marker.
@@ -1060,6 +1065,7 @@ func _advance_zone_transition() -> void:
 	player.set_transition_locked(false)
 	last_safe_player_position = player.global_position
 	zone_transition_pending = false
+	campaign_visual_prewarm_suspended = false
 	var elapsed_ms := float(Time.get_ticks_usec() - loading_started_usec) / 1000.0
 	_record_loading_metrics({
 		"zone": current_zone_id,
@@ -1238,12 +1244,15 @@ func _run_campaign_visual_prewarm(generation: int, role_index: int) -> void:
 	# Never parse an OBJ in the middle of a scene swap or a paused menu. One
 	# role per settled frame keeps imported castle dressing out of the cold
 	# transition while still warming the exact cache used by the builder.
-	if zone_transition_pending or zone_load_request_pending or get_tree().paused:
+	if campaign_visual_prewarm_suspended or zone_transition_pending or zone_load_request_pending or get_tree().paused:
 		await get_tree().process_frame
 		call_deferred("_run_campaign_visual_prewarm", generation, role_index)
 		return
 	await get_tree().process_frame
 	if generation != campaign_visual_prewarm_generation or not game_started or resource_shutdown_prepared:
+		return
+	if campaign_visual_prewarm_suspended or zone_transition_pending or zone_load_request_pending or get_tree().paused:
+		call_deferred("_run_campaign_visual_prewarm", generation, role_index)
 		return
 	var role := CAMPAIGN_VISUAL_PREWARM_ROLES[role_index]
 	var started_usec := Time.get_ticks_usec()
@@ -1309,6 +1318,7 @@ func _recover_failed_zone_load(previous_zone_id: String) -> void:
 	if seamless_world != null:
 		seamless_world.on_zone_failed(current_zone_id, "zone_build_failed")
 	zone_transition_pending = false
+	campaign_visual_prewarm_suspended = false
 	zone_load_request_pending = false
 	requested_zone_id = ""
 	if zone_root != null:
@@ -1768,6 +1778,7 @@ func prepare_resource_shutdown() -> void:
 	campaign_pack_waiting = false
 	opening_detail_pending = false
 	campaign_visual_prewarm_started = false
+	campaign_visual_prewarm_suspended = false
 	opening_detail_generation += 1
 	campaign_visual_prewarm_generation += 1
 	_cancel_owned_timers()
