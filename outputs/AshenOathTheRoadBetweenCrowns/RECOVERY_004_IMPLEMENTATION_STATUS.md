@@ -612,5 +612,13 @@ Do not sync `.release-gate/AshenOath_QA` into `web/`; it is not the production b
 
 ## Next Work Order
 
+## Latest Atomic Checkpoint - 2026-09-10
+
+- Current ticket: `WORLD-001` / NPC route-facing follow-up.
+- Completed work: removed the repeated Greyfen road-rut dressing that read as tiled blocks at gameplay distance; kept the continuous road, collision, and route geometry unchanged. Route-walking NPCs now snap to their validated segment heading at each movement update, while activity and dialogue facing retain smooth turning.
+- Latest result: `git diff --check` passed; Godot 4.6.3 editor import scan passed; `LIFE-001` passed; motion-quality verification passed; fresh graphical `WORLD-001` captures passed at 1280x720. The spawn capture is `Development_Gallery/screenshots/WORLD_001_01_SpawnStreet_20260910_182518.png`.
+- Remaining blocker: the existing headless shutdown `ObjectDB` cleanup diagnostic remains tracked as ENGINE-004/QA-005 debt. The opening visuals and monster mappings also remain stylized/provisional and are not claimed as release-complete by this checkpoint.
+- Exact next action: continue with the next scoped player-facing recovery fix, beginning with the remaining traversal/startup truth and then the visual/runtime blockers; do not treat this checkpoint as a production release.
+
 1. Keep the renderer/RID/ObjectDB shutdown diagnostics tracked as ENGINE-004/QA-005 debt; they do not invalidate the passing release gate but should be eliminated in the next engineering pass.
 2. Continue visual reconstruction of Greyfen, Wychwood, Castle/Record Hall, and the Hart only as a new scoped ticket; the current release remains deliberately stylized and honest.

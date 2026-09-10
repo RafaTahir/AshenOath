@@ -220,7 +220,9 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 		_set_motion(entry, 0.0)
 		return
 	node.global_position = next_position
-	_face(node,node.global_position + direction,delta)
+	# Route segments are authoritative: snap the visual yaw at each waypoint so
+	# the locomotion clip never spends a visible step facing away from travel.
+	_face(node,node.global_position + direction,delta,true)
 	_set_motion(entry,float(entry.speed),direction)
 
 func _make_entry(id: String, node: Node3D, path: Array, speed: float, driver: Node, named: bool) -> Dictionary:
@@ -398,11 +400,14 @@ func _set_motion(entry: Dictionary, speed: float, direction: Vector3 = Vector3.Z
 			driver.set_locomotion(clampf(speed / 2.0,0.0,0.70),direction,true)
 	entry.phase = float(entry.phase) + get_process_delta_time() * (0.8 + speed * 1.7)
 
-func _face(node: Node3D, target: Vector3, delta: float) -> void:
+func _face(node: Node3D, target: Vector3, delta: float, snap_to_route: bool = false) -> void:
 	var offset := target - node.global_position
 	offset.y = 0.0
 	if offset.length() < 0.05: return
 	var wanted := atan2(-offset.x,-offset.z)
+	if snap_to_route:
+		node.rotation.y = wanted
+		return
 	node.rotation.y = lerp_angle(node.rotation.y,wanted,min(delta*3.0,1.0))
 
 func _make_skeletal_villager(parent: Node3D, role_id: String, index: int, scale_value: float):

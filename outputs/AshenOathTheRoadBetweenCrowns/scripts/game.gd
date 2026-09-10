@@ -3923,6 +3923,10 @@ func _make_wychwood_terrain_layers() -> void:
 func _make_balanced_road_surface(paved: bool) -> void:
 	if _performance_mode():
 		return
+	# Greyfen already has a continuous authored road surface. The dense paved
+	# cobble overlay creates visible rectangular seams at gameplay distance.
+	if paved:
+		return
 	var batch = MultiMeshInstance3D.new()
 	batch.name = "BalancedPavedRoadDetail" if paved else "BalancedWychwoodRoadDetail"
 	var detail_mesh = BoxMesh.new()
@@ -4113,11 +4117,10 @@ func _make_quality_survival_cluster(pos: Vector3) -> void:
 	_make_visual_box("QualityClothScrap", pos + Vector3(0.1, 0.045, 0.5), Vector3(0.82, 0.018, 0.32), Color(0.23, 0.055, 0.044))
 
 func _make_road_ruts() -> void:
-	for z in [-11.5, -8.6, -5.7, -2.8, 0.1, 3.0, 5.9, 8.8]:
-		_make_visual_box("RoadWheelRut", Vector3(-0.82, 0.044, z), Vector3(0.18, 0.018, 2.0), Color(0.075, 0.058, 0.040))
-		_make_visual_box("RoadWheelRut", Vector3(0.82, 0.044, z + 0.18), Vector3(0.18, 0.018, 2.0), Color(0.075, 0.058, 0.040))
-	for z in [-10.0, 2.0, 10.0]:
-		_make_visual_box("RoadCenterMud", Vector3(0, 0.046, z), Vector3(0.42, 0.016, 1.25), Color(0.090, 0.066, 0.043))
+	# The base road already contains the authored wear pass. These repeated
+	# raised strips read as tiled blocks at gameplay distance and add no route
+	# or narrative value, so keep the dressing hook without spawning them.
+	return
 
 func _make_lantern_rhythm() -> void:
 	var points = [
