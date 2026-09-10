@@ -105,6 +105,8 @@ var beam_release_direction := Vector3.ZERO
 var sword_sheathed := true
 var sword_combat_linger := 0.0
 const SWORD_COMBAT_LINGER := 3.2
+var sword_grip_basis := Basis.IDENTITY
+var sword_grip_calibrated := false
 var equipment_loadout: EquipmentLoadout
 var inventory_ref
 var weapon_mode := "sword"
@@ -1243,9 +1245,12 @@ func _attach_rig_sword(mapped: Node3D) -> Node3D:
 	sword_equipment_pivot = Node3D.new()
 	sword_equipment_pivot.name = "KaelSwordGripPivot"
 	equipment_space.add_child(sword_equipment_pivot)
-	# The pivot remains inside the normalized hand attachment hierarchy. The
-	# per-frame pose below changes only its local result, so the blade follows the
-	# hand between animation ticks instead of becoming a detached world object.
+	# The pivot remains inside the normalized hand attachment hierarchy. Its
+	# grip basis is calibrated from the imported hand once the skeleton is live;
+	# subsequent poses preserve that hand frame and add only deliberate combat
+	# motion. This prevents the weapon from becoming a detached world object.
+	sword_grip_basis = Basis.IDENTITY
+	sword_grip_calibrated = false
 	# The imported FBX had null Compatibility surfaces and was hidden
 	# immediately. Use the validated Web-safe weapon directly.
 	return _build_oathblade_visual(sword_equipment_pivot)
@@ -1334,6 +1339,15 @@ func _update_sword_equipment_pose(windup: float, strike: float, recovery: float,
 		return
 	var forward := -global_transform.basis.z.normalized()
 	var right := global_transform.basis.x.normalized()
+	var hand_basis := sword_attachment.global_transform.basis.orthonormalized()
+	if not sword_grip_calibrated and absf(hand_basis.determinant()) > 0.1:
+		# Universal characters use different bind-pose hand axes across imported
+		# revisions. Record the correction in hand-local space once, then let the
+		# live bone animation carry the weapon through every pose.
+		var calibration_direction := (Vector3.DOWN * 0.78 + right * 0.54).normalized()
+		var local_calibration_direction := (hand_basis.inverse() * calibration_direction).normalized()
+		sword_grip_basis = Basis(Quaternion(Vector3.DOWN, local_calibration_direction)).orthonormalized()
+		sword_grip_calibrated = true
 	# Keep the ready blade down and outside the torso instead of crossing the
 	# chest. The attack states still own the full swing arc below.
 	var idle_direction := (Vector3.DOWN * 0.78 + right * 0.54).normalized()
@@ -1352,8 +1366,16 @@ func _update_sword_equipment_pose(windup: float, strike: float, recovery: float,
 			blade_direction = windup_direction.slerp(strike_direction, smoothstep(0.0, 1.0, strike))
 		if recovery > 0.0:
 			blade_direction = strike_direction.slerp(idle_direction, smoothstep(0.0, 1.0, recovery))
-	var hand_position := sword_attachment.global_position + right * 0.018 + Vector3.UP * 0.012
-	var blade_basis := Basis(Quaternion(Vector3.DOWN, blade_direction)).orthonormalized()
+	# Start from the current hand frame, rather than reconstructing a world
+	# rotation from the actor root. The minimal direction correction keeps the
+	# calibrated blade readable during the authored attack arc while preserving
+	# wrist/elbow motion from the active animation clip.
+	var hand_weapon_basis := (hand_basis * sword_grip_basis).orthonormalized()
+	var current_blade_direction := (hand_weapon_basis * Vector3.DOWN).normalized()
+	var direction_correction := Quaternion(current_blade_direction, blade_direction)
+	var blade_basis := (Basis(direction_correction) * hand_weapon_basis).orthonormalized()
+	var hand_offset := hand_basis * Vector3(0.018, 0.012, 0.0)
+	var hand_position := sword_attachment.global_position + hand_offset
 	sword_equipment_pivot.global_transform = Transform3D(blade_basis, hand_position)
 
 func _make_sword_readable(sword: Node3D) -> void:
