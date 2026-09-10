@@ -1,5 +1,33 @@
 # RECOVERY-004 Implementation Status
 
+## Native Contract Checkpoint - 2026-09-11 (sword and bridge probes)
+
+- The current source checkpoint is on `codex/masterpiece-rebuild`. Kael's
+  imported `Sword.fbx` now exposes its first valid render mesh as the stable
+  `OathbladeSteel` contract under `KaelOathblade`; no duplicate blade geometry
+  was added and the existing hand socket, blade markers, slash, parry, and
+  Oathfire paths remain authoritative.
+- The river verifier now clears carried player velocity before each independent
+  bridge approach and lane probe. This removes test-state contamination from a
+  preceding combat/teleport sample without changing player physics or bridge
+  behavior. The actual bridge geometry remains the owner validated by the
+  prior obstruction analysis.
+- Direct proof after these edits: graphical `verify_visible_quality.gd`,
+  `verify_combat_001.gd`, `verify_oath_001.gd`, `verify_render_resources.gd`,
+  and `verify_river_swimming.gd` all report `PASS`. The visual run produced no
+  active renderer/material errors, and the sword probe reports one imported
+  mesh with four valid source surfaces and a non-null presentation override.
+- Native shutdown still prints Godot's ObjectDB/orphan/resource accounting in
+  some verifier exits. These messages are after active rendering and are not
+  currently assigned to a specific owner, so lifecycle cleanup remains a
+  separate release blocker rather than being relabeled as clean.
+- No Web export, browser run, push, merge, or deployment was performed in this
+  checkpoint. The user-owned untracked `tools/_inspect_milestone_c_assets.gd`
+  remains untouched.
+- Exact next action: continue source/native lifecycle and visual-debt recovery;
+  defer the single source-aligned QA export/browser acceptance sequence until
+  that accumulated fix set is ready.
+
 ## Native Route And Crowd Checkpoint - 2026-09-11
 
 - The player-driven native gate suite now passes the full connected route after

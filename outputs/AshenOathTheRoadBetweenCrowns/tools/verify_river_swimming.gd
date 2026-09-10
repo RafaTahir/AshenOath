@@ -72,12 +72,14 @@ func _verify_physical_bridge_crossings(game, center_z: float) -> void:
 	# ground-to-deck seam used by normal play. The deck-only probes below cannot
 	# detect a bank edge that catches the capsule before it reaches the bridge.
 	player.global_position = Vector3(0.0, 0.25, center_z + 5.3)
+	player.velocity = Vector3.ZERO
 	player.rotation.y = 0.0
 	await _walk_with_input(game, "move_forward", 150, center_z, -1.0)
 	check(player.global_position.z < center_z - 2.55, "%s bank-to-bridge approach stopped at z=%.2f" % [str(game.current_zone_id), player.global_position.z])
 	check(not game.call("_is_river_recovery_position", str(game.current_zone_id), player.global_position), "%s bank-to-bridge approach triggered river recovery" % str(game.current_zone_id))
 	for lane_x in [-1.2, 1.2]:
 		player.global_position = Vector3(lane_x, 0.25, center_z + 3.45)
+		player.velocity = Vector3.ZERO
 		player.rotation.y = 0.0
 		_reset_camera(game)
 		await _walk_with_input(game, "move_forward", 90, center_z, -1.0)
@@ -87,6 +89,7 @@ func _verify_physical_bridge_crossings(game, center_z: float) -> void:
 		check(not game.call("_is_river_recovery_position", str(game.current_zone_id), player.global_position), "%s crossing ended in river recovery state at lane x=%.2f" % [str(game.current_zone_id), lane_x])
 
 		player.global_position = Vector3(lane_x, 0.25, center_z - 3.45)
+		player.velocity = Vector3.ZERO
 		player.rotation.y = PI
 		_reset_camera(game)
 		# Player movement follows the active camera, not the actor yaw. From the

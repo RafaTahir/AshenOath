@@ -1,5 +1,27 @@
 # Ashen Oath Project State
 
+## Recovery-004 Latest Native Checkpoint - 2026-09-11
+
+- The canonical source remains on `codex/masterpiece-rebuild` in
+  `D:\Projects\AshenOath`; the apparent C: workspace is its verified
+  directory junction. This checkpoint fixes the modeled sword acceptance
+  contract by naming the imported `Sword.fbx` render mesh `OathbladeSteel`
+  under Kael's hand socket, without adding a second blade or changing combat
+  ownership.
+- The bridge safety verifier now resets player velocity before each independent
+  approach/lane sample. This makes the real CharacterBody bridge probe
+  deterministic while preserving the bridge and player physics contract.
+- Direct native results: graphical visible quality, combat, Oathfire, render
+  resource, and river safety gates all report `PASS`. No active renderer or
+  null-material error appeared in the graphical run. Some native verifier exits
+  still emit shutdown-only Godot ObjectDB/orphan/resource accounting; that
+  lifecycle work remains open and is not claimed as resolved.
+- No Web export, browser acceptance, production sync, push, or deployment was
+  performed. The user-owned untracked diagnostic remains untouched.
+- Exact next action: continue the broader source/native recovery, then perform
+  one source-aligned QA export and one browser acceptance run after the grouped
+  fixes are ready.
+
 ## Recovery-004 Latest Checkpoint - 2026-09-11
 
 - Canonical physical repository: `D:\Projects\AshenOath`; the apparent C:

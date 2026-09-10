@@ -1337,11 +1337,14 @@ func _attach_modeled_sword(oathblade: Node3D) -> bool:
 	modeled.position = Vector3(0.0, 0.045, 0.0)
 	oathblade.add_child(modeled)
 	var mesh_count := 0
+	var canonical_blade: MeshInstance3D = null
 	for raw_mesh in modeled.find_children("*", "MeshInstance3D", true, false):
 		var mesh_instance := raw_mesh as MeshInstance3D
 		if mesh_instance == null or mesh_instance.mesh == null:
 			continue
 		mesh_count += 1
+		if canonical_blade == null:
+			canonical_blade = mesh_instance
 		mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 		# The imported FBX carries named materials, but their source values are
 		# too dark for the browser lighting profile. Keep the authored mesh and
@@ -1356,7 +1359,12 @@ func _attach_modeled_sword(oathblade: Node3D) -> bool:
 					material = mesh_instance.mesh.surface_get_material(surface_index)
 				if material == null:
 					mesh_instance.set_surface_override_material(surface_index, _metal_mat(Color(0.72, 0.78, 0.82)))
-	return mesh_count > 0
+	if canonical_blade != null:
+		# Keep the imported geometry as the single source of truth while exposing
+		# the stable blade contract used by contact, visuals, and release gates.
+		canonical_blade.name = "OathbladeSteel"
+		canonical_blade.set_meta("modeled_blade", true)
+	return mesh_count > 0 and canonical_blade != null
 
 func _build_oathblade_mesh() -> ImmediateMesh:
 	var mesh := ImmediateMesh.new()
