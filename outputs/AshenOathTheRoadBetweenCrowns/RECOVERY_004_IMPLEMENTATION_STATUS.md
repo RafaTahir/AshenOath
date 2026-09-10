@@ -1075,3 +1075,42 @@ Do not sync `.release-gate/AshenOath_QA` into `web/`; it is not the production b
   still block release through the character/visual gates. This change only
   makes the browser route runner truthful enough to continue to the next
   player-facing assertion when the next source-aligned candidate is ready.
+
+## Source-Aligned Browser Checkpoint - 2026-09-11
+
+- The earlier warning classification was followed by one fresh QA export and
+  one Chrome browser acceptance run, as required by the recovery sequence. The
+  export at `D:\Projects\AshenOath\outputs\.release-gate\AshenOath_QA`
+  contains seven files, totals 89.8 MB, and has PCK SHA-256
+  `773588adf91789f83558035e4290698447b5cbfc33d1313c0a986d434b04d26a`.
+  The PCK contains the authoritative `runtime_asset_manifest.json`; the
+  source filter fix is therefore present in the tested artifact.
+- The browser run reached the real New Game route, initialized WebGL2, loaded
+  Greyfen, focused Anwen, and produced no JavaScript, network, WebGL,
+  resource, or classified console error. It exited `1` because the real
+  dialogue remained at page `0/5` after the harness sent click and Enter
+  input; the report is at
+  `D:\Temp\AshenOath\qa_002_browser_after_manifest_filter_fix.json` and
+  the failure frame is
+  `D:\Temp\AshenOath\qa_002_browser_after_manifest_filter_fix_chrome_failure.png`.
+  This is a valid player-route input failure, not an obstruction or missing
+  manifest failure. The diagnostic SwiftShader sample was about 15 FPS and is
+  not a Dell hardware-performance result.
+- Root cause of the dialogue failure: the HUD accepted only
+  `InputEventKey.keycode` for Enter, keypad Enter, and Space. Browser backends
+  can provide the physical key in `physical_keycode`, so a focused dialogue
+  button could remain visible without advancing. The HUD now accepts either
+  field while retaining the existing gamepad/action path.
+- Cheapest proof after that surgical source fix: `DIALOGUE-001 VERIFIER: PASS`
+  and `INPUT-004 VERIFIER: PASS`; `git diff --check` is clean. No Web export or
+  browser run was repeated after the dialogue fix.
+- Current truth: obstruction ownership, marker-layer teardown race, Web role
+  manifest inclusion, and native dialogue/input parsing are closed at this
+  checkpoint. Browser acceptance remains open until the accumulated fix is
+  tested once in a fresh source-aligned Web candidate. Broader visual debt,
+  full-campaign proof, target-hardware performance, and production release
+  remain blocked and are not being claimed as complete.
+- Exact next action: after the next bounded source/native recovery slice is
+  settled, perform exactly one fresh QA export and one Chrome/Edge acceptance
+  run against that accumulated artifact. Do not add isolated telemetry or
+  rebuild Web solely to inspect the current failure.

@@ -1,5 +1,30 @@
 # Ashen Oath Project State
 
+## Recovery-004 Latest Checkpoint - 2026-09-11
+
+- Canonical physical repository: `D:\Projects\AshenOath`; the apparent C:
+  workspace remains its verified directory junction. Active branch:
+  `codex/masterpiece-rebuild`.
+- The source/native checkpoint includes the Web preset fix that explicitly
+  exports `runtime_asset_manifest.json` in the root, base-pack, and QA
+  filters, plus the HUD compatibility fix for browser physical Enter/Space
+  key fields. `DIALOGUE-001`, `INPUT-004`, `ASSET-005`, `WEB-001`, runtime
+  smoke, and the full native seam route pass.
+- One fresh QA Web artifact was tested after the manifest fix: seven files,
+  89.8 MB, PCK SHA-256
+  `773588adf91789f83558035e4290698447b5cbfc33d1313c0a986d434b04d26a`.
+  One Chrome real-input run reached Greyfen and Anwen without JavaScript,
+  network, WebGL, resource, or classified console errors, but failed because
+  dialogue stayed at page `0/5`; this browser result predates the physical-key
+  HUD fix and is retained as the current open acceptance blocker.
+- No production Web output was modified, no push or deployment occurred, and
+  the user-owned untracked diagnostic remains untouched. Production remains
+  frozen. The current source/native work is locally checkpointable but not a
+  release candidate.
+- Exact next action: continue source/native recovery only, then run one fresh
+  source-aligned QA export and one browser acceptance pass after the next
+  accumulated fix set. Do not repeat isolated telemetry or export loops.
+
 ## Recovery-004 Current Truth - 2026-09-11
 
 ### Latest native recovery evidence

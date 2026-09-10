@@ -1329,7 +1329,12 @@ func _input(event: InputEvent) -> void:
 	var accepted := event.is_action_pressed("ui_accept")
 	if event is InputEventKey:
 		var key_event := event as InputEventKey
-		accepted = key_event.pressed and not key_event.echo and key_event.keycode in [KEY_ENTER, KEY_KP_ENTER, KEY_SPACE]
+		# Browser backends can populate either the logical or physical key field.
+		# Accept both so a focused dialogue button remains usable while the tree is paused.
+		accepted = key_event.pressed and not key_event.echo and (
+			key_event.keycode in [KEY_ENTER, KEY_KP_ENTER, KEY_SPACE]
+			or key_event.physical_keycode in [KEY_ENTER, KEY_KP_ENTER, KEY_SPACE]
+		)
 	if not accepted:
 		return
 	var focused := get_viewport().gui_get_focus_owner()
