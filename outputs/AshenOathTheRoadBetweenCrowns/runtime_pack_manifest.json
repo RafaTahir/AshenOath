@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "program": "SOUL-REBUILD",
-  "release_id": "dev-2aab4fc50b89",
+  "release_id": "dev-f40b6c499cf9",
   "artifact_policy": "external_runtime_packs",
   "candidate_manifest": "res://runtime_pack_candidates.json",
   "pack_presets": {
@@ -15,7 +15,7 @@
   "max_deployment_bytes": 104857600,
   "packs": {
     "base": {
-      "version": "dev-2aab4fc50b89",
+      "version": "dev-f40b6c499cf9",
       "url": "",
       "sha256": "",
       "bytes": 0,
@@ -25,7 +25,7 @@
       "status": "embedded_current_pck",
       "candidate_artifact": "base.pck",
       "candidate_bytes": 1448052,
-      "candidate_sha256": "5b4e0e8d10b7b7113cd4f35129eac99bbc5598018b43dd0f0f177e76beb97e5d",
+      "candidate_sha256": "748006a211b6cc112c42706102432afe20fa5345a8e6c156f02bf746cf1ed17e",
       "contents": [
         "menu",
         "managers",
@@ -35,13 +35,13 @@
       "embedded_artifact": "index.pck",
       "embedded_source_artifact": "base.pck",
       "embedded_source_bytes": 1448052,
-      "embedded_source_sha256": "5b4e0e8d10b7b7113cd4f35129eac99bbc5598018b43dd0f0f177e76beb97e5d",
+      "embedded_source_sha256": "748006a211b6cc112c42706102432afe20fa5345a8e6c156f02bf746cf1ed17e",
       "embedded_source_kind": "standalone_pack_candidate"
     },
     "opening": {
-      "version": "dev-2aab4fc50b89",
-      "url": "packs/opening.pck?v=dev-2aab4fc50b89",
-      "sha256": "2120c54a3f2cf9ec2a4272abfc1973e60b75351e013f52f9d5c30dab7223af59",
+      "version": "dev-f40b6c499cf9",
+      "url": "packs/opening.pck?v=dev-f40b6c499cf9",
+      "sha256": "d6f46a580f8b2454f50f5ec90aba9841ff6d10f4bee1f6cb76b0b9fc54413f77",
       "bytes": 48662984,
       "entry_scene": "res://scenes/zones/greyfen_gameplay.tscn",
       "dependencies": [
@@ -51,7 +51,7 @@
       "status": "streamed_web_candidate",
       "candidate_artifact": "opening.pck",
       "candidate_bytes": 48662984,
-      "candidate_sha256": "2120c54a3f2cf9ec2a4272abfc1973e60b75351e013f52f9d5c30dab7223af59",
+      "candidate_sha256": "d6f46a580f8b2454f50f5ec90aba9841ff6d10f4bee1f6cb76b0b9fc54413f77",
       "contents": [
         "greyfen",
         "wychwood",
@@ -60,8 +60,8 @@
       ]
     },
     "campaign": {
-      "version": "dev-2aab4fc50b89",
-      "url": "packs/campaign.pck?v=dev-2aab4fc50b89",
+      "version": "dev-f40b6c499cf9",
+      "url": "packs/campaign.pck?v=dev-f40b6c499cf9",
       "sha256": "0ba5639ae5878a8373e840a71a2136337fca45e7dc4a01e5e831fa5498e297d1",
       "bytes": 1022072,
       "entry_scene": "",
@@ -82,8 +82,8 @@
       ]
     },
     "characters": {
-      "version": "dev-2aab4fc50b89",
-      "url": "packs/characters.pck?v=dev-2aab4fc50b89",
+      "version": "dev-f40b6c499cf9",
+      "url": "packs/characters.pck?v=dev-f40b6c499cf9",
       "sha256": "49213fa4400219ac07b9b925b6f9006ce4314e2a4e5c854498506ad1e52fdf89",
       "bytes": 5796680,
       "entry_scene": "",
@@ -101,8 +101,8 @@
       ]
     },
     "monsters": {
-      "version": "dev-2aab4fc50b89",
-      "url": "packs/monsters.pck?v=dev-2aab4fc50b89",
+      "version": "dev-f40b6c499cf9",
+      "url": "packs/monsters.pck?v=dev-f40b6c499cf9",
       "sha256": "a7857b67909ce775b3a3314d4224e8cd0bb84c6b340c052e64f3c9613425ae7e",
       "bytes": 1297600,
       "entry_scene": "",
@@ -121,8 +121,8 @@
       ]
     },
     "audio": {
-      "version": "dev-2aab4fc50b89",
-      "url": "packs/audio.pck?v=dev-2aab4fc50b89",
+      "version": "dev-f40b6c499cf9",
+      "url": "packs/audio.pck?v=dev-f40b6c499cf9",
       "sha256": "af6b3c76e93462942e219b5bafb90a64d27e21284577f5fab1ab333a6fa426cd",
       "bytes": 2731648,
       "entry_scene": "",
@@ -141,8 +141,8 @@
       ]
     }
   },
-  "build_id": "dev-2aab4fc50b89",
-  "generated_from_commit": "2aab4fc50b895cbfefb432cb27b730e6fb2eaffa",
-  "generated_at_utc": "2026-09-10T08:59:57.608721Z",
+  "build_id": "dev-f40b6c499cf9",
+  "generated_from_commit": "f40b6c499cf9fe02428aeed06deac9f667979eb3",
+  "generated_at_utc": "2026-09-10T09:06:51.825812Z",
   "total_bytes": 59510984
 }
