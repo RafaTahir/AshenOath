@@ -210,6 +210,30 @@ def check_runtime_policy_contract(project: Path, errors: list[str]) -> None:
                 errors.append(f"runtime policy marker is missing from {relative}: {marker}")
 
 
+def check_runtime_policy_rules(manifest: dict[str, Any], errors: list[str]) -> None:
+    rules = manifest.get("runtime_rules", {})
+    if not isinstance(rules, dict):
+        errors.append("runtime_rules must be an object")
+        return
+    if rules.get("missing_required_is_fatal") is not True:
+        errors.append("missing_required_is_fatal must be true")
+    if rules.get("unregistered_required_role_is_fatal") is not True:
+        errors.append("unregistered_required_role_is_fatal must be true")
+    if rules.get("unapproved_required_role_mode") != "diagnostic_fallback_only":
+        errors.append("unapproved_required_role_mode must be diagnostic_fallback_only")
+    roles = manifest.get("roles", {})
+    if not isinstance(roles, dict):
+        return
+    for role_id, role in roles.items():
+        if not isinstance(role, dict):
+            continue
+        approved = bool(role.get("approved", False))
+        if approved and role.get("fallback_mode", "none") != "none":
+            errors.append(f"approved role {role_id} must have fallback_mode none")
+        if not approved and role.get("fallback_mode") != "diagnostic_only":
+            errors.append(f"blocked role {role_id} must have fallback_mode diagnostic_only")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("project", nargs="?", type=Path, default=Path(__file__).resolve().parents[1])
@@ -233,6 +257,7 @@ def main() -> int:
             check_role(project, str(role_id), role, blocked, errors)
     check_curated_roles(project, curated_manifest, errors)
     check_runtime_policy_contract(project, errors)
+    check_runtime_policy_rules(runtime_manifest, errors)
 
     export_text = (project / "export_presets.cfg").read_text(encoding="utf-8", errors="replace") if (project / "export_presets.cfg").is_file() else ""
     if "assets_external/downloads/*" not in export_text or "assets_external/raw/*" not in export_text:

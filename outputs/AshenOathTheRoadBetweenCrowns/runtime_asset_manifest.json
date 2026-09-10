@@ -99,6 +99,7 @@
       "status": "approved_runtime",
       "approved": true,
       "export_eligible": true,
+      "fallback_mode": "none",
       "model": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf",
       "source_url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
       "license_file": "res://assets_external/licenses/Quaternius_Modular_Character_Outfits_Fantasy_CC0.txt",
@@ -156,6 +157,7 @@
       "status": "approved_runtime",
       "approved": true,
       "export_eligible": true,
+      "fallback_mode": "none",
       "model": "res://assets_external/characters_universal/Male_Peasant.gltf",
       "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
       "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
@@ -220,6 +222,7 @@
       "status": "approved_runtime",
       "approved": true,
       "export_eligible": true,
+      "fallback_mode": "none",
       "model": "res://assets_external/characters_universal/Female_Peasant.gltf",
       "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
       "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
@@ -284,6 +287,7 @@
       "status": "char_restore_004_unified_male_clothed",
       "approved": true,
       "export_eligible": true,
+      "fallback_mode": "none",
       "model": "res://assets_external/characters_universal/Male_Peasant.gltf",
       "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
       "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
@@ -345,6 +349,7 @@
       "status": "char_restore_004_unified_male_clothed",
       "approved": true,
       "export_eligible": true,
+      "fallback_mode": "none",
       "model": "res://assets_external/characters_universal/Male_Peasant.gltf",
       "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
       "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
@@ -405,6 +410,7 @@
       "status": "char_restore_004_unified_male_clothed",
       "approved": true,
       "export_eligible": true,
+      "fallback_mode": "none",
       "model": "res://assets_external/characters_universal/Male_Peasant.gltf",
       "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
       "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
@@ -465,6 +471,7 @@
       "status": "blocked_fallback",
       "approved": false,
       "export_eligible": false,
+      "fallback_mode": "diagnostic_only",
       "fallback": "res://assets_external/enemies/Skeleton.fbx",
       "blocked_reason": "Retained Skeleton family is runtime-valid; bespoke cursed-human family visual approval remains a later gate."
     },
@@ -475,6 +482,7 @@
       "status": "blocked_fallback",
       "approved": false,
       "export_eligible": false,
+      "fallback_mode": "diagnostic_only",
       "fallback": "res://assets_external/enemies/Slime.fbx",
       "blocked_reason": "Retained Slime family is runtime-valid; final swamp material and visual approval remain a later gate."
     },
@@ -485,6 +493,7 @@
       "status": "blocked_fallback",
       "approved": false,
       "export_eligible": false,
+      "fallback_mode": "diagnostic_only",
       "fallback": "res://assets_external/characters/KnightCharacter.fbx",
       "blocked_reason": "Retained Knight family is runtime-valid; final Gravebound armor and visual approval remain a later gate."
     },
@@ -495,6 +504,7 @@
       "status": "blocked_fallback",
       "approved": false,
       "export_eligible": false,
+      "fallback_mode": "diagnostic_only",
       "fallback": "res://assets_external/enemies/Dragon.fbx",
       "blocked_reason": "The current dragon is an interim silhouette; final drake materials and flight presentation remain open."
     },
@@ -505,6 +515,7 @@
       "status": "blocked_fallback",
       "approved": false,
       "export_eligible": false,
+      "fallback_mode": "diagnostic_only",
       "fallback": "res://assets_external/enemies/Wolf.fbx",
       "blocked_reason": "The wolf-derived Hart is a functional fallback; the final antlered witness asset and visual evidence remain open."
     }
@@ -553,7 +564,10 @@
     "max_named_human_triangles": 20000,
     "max_named_texture_dimension": 1024,
     "approved_role_requires_hashes": true,
-    "blocked_role_requires_existing_fallback": true
+    "blocked_role_requires_existing_fallback": true,
+    "missing_required_is_fatal": true,
+    "unregistered_required_role_is_fatal": true,
+    "unapproved_required_role_mode": "diagnostic_fallback_only"
   },
   "pipeline": {
     "registration_tool": "res://tools/register_soul_asset.py",

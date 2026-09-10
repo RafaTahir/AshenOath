@@ -1,5 +1,29 @@
 # Ashen Oath Project State
 
+## Recovery-004 Latest Native Checkpoint - 2026-09-11 (runtime visual-role policy)
+
+- The runtime asset contract now records an explicit fallback mode for every
+  required visual role. Approved human roles use `fallback_mode: none`; the
+  five currently unapproved monster roles use `fallback_mode:
+  diagnostic_only` and remain release-blocking visual debt.
+- Asset spawning records the selected runtime path, whether a fallback was
+  used, and the resulting role state on the spawned node. Diagnostic fallback
+  warnings are emitted once per role and are available to release tooling;
+  missing required visuals still fail with an error rather than silently
+  creating primitive anatomy.
+- Native proof is green for the new runtime asset policy verifier, runtime
+  component policy, asset acceptance, and render-resource scanning. The
+  parser/editor scan is also clean. The expected Ghoulkin diagnostic warning
+  is not an active renderer failure.
+- This is a source/native checkpoint only. The five monster roles remain
+  visually unapproved, and broader visual, campaign, browser, performance,
+  and release gates remain open. No Web export, tracked `web/` change, push,
+  merge, or deployment was performed.
+- Exact next action: continue the scoped source/native recovery work, then
+  perform one source-aligned Web export and one browser acceptance run after
+  the accumulated fixes are ready. Do not use this policy pass as visual
+  approval for a blocked role.
+
 ## Recovery-004 Latest Native Checkpoint - 2026-09-11 (modeled equipment props)
 
 - The current atomic source fix replaces Kael's procedural bow with the

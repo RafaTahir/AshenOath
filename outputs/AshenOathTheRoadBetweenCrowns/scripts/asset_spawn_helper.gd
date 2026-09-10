@@ -10,6 +10,8 @@ var database
 var mesh_cache: Dictionary = {}
 var material_cache: Dictionary = {}
 var resource_cache: Dictionary = {}
+var runtime_role_diagnostics: Dictionary = {}
+var _reported_blocked_roles: Dictionary = {}
 
 func clear_runtime_caches() -> void:
 	# Cache ownership ends with the host game. Clear references after the
@@ -18,6 +20,13 @@ func clear_runtime_caches() -> void:
 	mesh_cache.clear()
 	material_cache.clear()
 	resource_cache.clear()
+
+func clear_runtime_diagnostics() -> void:
+	runtime_role_diagnostics.clear()
+	_reported_blocked_roles.clear()
+
+func get_runtime_diagnostics() -> Dictionary:
+	return runtime_role_diagnostics.duplicate(true)
 
 func _ready() -> void:
 	if database == null:
@@ -50,44 +59,74 @@ func has_visual_role(role_name: String) -> bool:
 func _spawn_from_entry(entry: Dictionary, role_name: String, fallback_category: String, variant_seed: String = "") -> Node3D:
 	var path: String = str(entry.get("path", ""))
 	var runtime_policy: Dictionary = entry.get("runtime_policy", {}) if typeof(entry.get("runtime_policy", {})) == TYPE_DICTIONARY else {}
-	if fallback_category in ["characters", "enemies"] and bool(runtime_policy.get("release_blocked", false)):
-		# Keep the retained local body available for gameplay diagnostics, but make
-		# the unresolved visual debt explicit in both the node metadata and logs.
-		# Release tooling rejects this state; it must never masquerade as an
-		# approved production role.
-		push_warning("Runtime visual role '%s' is not release-approved: %s" % [role_name, str(runtime_policy.get("reason", "unregistered role"))])
+	var diagnostic_fallback := fallback_category in ["characters", "enemies"] and bool(runtime_policy.get("release_blocked", false))
+	if diagnostic_fallback:
+		_record_runtime_role_use(role_name, fallback_category, path, runtime_policy)
 	if path != "" and (ResourceLoader.exists(path) or FileAccess.file_exists(path)):
 		var resource = _load_cached_resource(path)
 		var spawned: Node3D = _instantiate_resource(resource)
 		if spawned != null:
 			spawned = _compose_player_body(spawned, path, role_name, variant_seed)
 			spawned.name = role_name
-			_apply_runtime_policy_metadata(spawned, role_name, runtime_policy)
+			_apply_runtime_policy_metadata(spawned, role_name, runtime_policy, path)
 			_prepare_spawned_asset(spawned,path,role_name,fallback_category)
 			return spawned
 		var fallback: Node3D = _instantiate_source_file(path)
 		if fallback != null:
 			fallback = _compose_player_body(fallback, path, role_name, variant_seed)
 			fallback.name = role_name
-			_apply_runtime_policy_metadata(fallback, role_name, runtime_policy)
+			_apply_runtime_policy_metadata(fallback, role_name, runtime_policy, path)
 			_prepare_spawned_asset(fallback,path,role_name,fallback_category)
 			return fallback
 	if fallback_category in ["characters", "enemies"]:
 		# A missing role visual is a release failure, not a reason to disguise the
 		# problem with a capsule and sphere. Gameplay callers can keep their
 		# collision actor alive while QA reports the missing rendered role.
+		_record_runtime_role_failure(role_name, fallback_category, path, runtime_policy, "missing_path")
 		push_error("Required runtime visual missing for role '%s' (path: '%s')" % [role_name, path])
 		return null
 	push_warning("Using primitive placeholder for asset role: %s" % role_name)
 	return _placeholder(role_name, fallback_category)
 
-func _apply_runtime_policy_metadata(root: Node3D, role_name: String, policy: Dictionary) -> void:
+func _apply_runtime_policy_metadata(root: Node3D, role_name: String, policy: Dictionary, selected_path: String = "") -> void:
 	if root == null:
 		return
+	var is_required_fallback := bool(policy.get("required", false)) and bool(policy.get("release_blocked", false))
 	root.set_meta("runtime_role", role_name)
 	root.set_meta("runtime_role_policy", policy.duplicate(true))
 	root.set_meta("runtime_release_blocked", bool(policy.get("release_blocked", false)))
 	root.set_meta("runtime_visual_approved", bool(policy.get("approved", false)))
+	root.set_meta("runtime_asset_path", selected_path)
+	root.set_meta("runtime_fallback_used", is_required_fallback)
+	root.set_meta("runtime_role_state", "diagnostic_fallback" if is_required_fallback else ("approved" if bool(policy.get("approved", false)) else "optional"))
+
+func _record_runtime_role_use(role_name: String, category: String, path: String, policy: Dictionary) -> void:
+	var key := "%s:%s" % [category, role_name.to_lower()]
+	var record: Dictionary = runtime_role_diagnostics.get(key, {})
+	record["role"] = role_name
+	record["category"] = category
+	record["path"] = path
+	record["status"] = str(policy.get("status", "blocked"))
+	record["approved"] = bool(policy.get("approved", false))
+	record["fallback_mode"] = str(policy.get("fallback_mode", "diagnostic_only"))
+	record["reason"] = str(policy.get("reason", ""))
+	record["spawn_count"] = int(record.get("spawn_count", 0)) + 1
+	runtime_role_diagnostics[key] = record
+	if not _reported_blocked_roles.has(key):
+		_reported_blocked_roles[key] = true
+		push_warning("Runtime visual role '%s' uses an explicit diagnostic fallback: %s" % [role_name, str(policy.get("reason", "unregistered role"))])
+
+func _record_runtime_role_failure(role_name: String, category: String, path: String, policy: Dictionary, failure: String) -> void:
+	var key := "%s:%s" % [category, role_name.to_lower()]
+	var record: Dictionary = runtime_role_diagnostics.get(key, {})
+	record["role"] = role_name
+	record["category"] = category
+	record["path"] = path
+	record["status"] = str(policy.get("status", "missing"))
+	record["approved"] = bool(policy.get("approved", false))
+	record["fallback_mode"] = str(policy.get("fallback_mode", "none"))
+	record["failure"] = failure
+	runtime_role_diagnostics[key] = record
 
 func _compose_player_body(outfit_root: Node3D, outfit_path: String, role_name: String, variant_seed: String = "") -> Node3D:
 	var normalized_path := outfit_path.replace("\\", "/").to_lower()

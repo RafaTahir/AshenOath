@@ -58,7 +58,9 @@ func get_asset_for_role(role_name: String) -> Dictionary:
 		if typeof(entry) == TYPE_DICTIONARY:
 			var path = str(entry.get("path", ""))
 			if path != "" and (ResourceLoader.exists(path) or FileAccess.file_exists(path)):
-				return _with_runtime_acceptance(role_name, entry)
+				var resolved: Dictionary = entry.duplicate(true)
+				resolved["group"] = group
+				return _with_runtime_acceptance(role_name, resolved)
 			return _with_runtime_acceptance(role_name, _placeholder_entry(role_name, group, entry))
 	return _with_runtime_acceptance(role_name, _placeholder_entry(role_name, "", {}))
 
@@ -100,6 +102,7 @@ func get_runtime_policy(role_name: String, category: String = "") -> Dictionary:
 			"approved": false,
 			"status": "unregistered" if required else "optional",
 			"release_blocked": required,
+			"fallback_mode": "diagnostic_only" if required else "none",
 			"reason": "Required visual role has no runtime acceptance record." if required else "",
 		}
 	var approved := bool(acceptance.get("approved", false)) and bool(acceptance.get("export_eligible", false))
@@ -109,6 +112,7 @@ func get_runtime_policy(role_name: String, category: String = "") -> Dictionary:
 		"approved": approved,
 		"status": str(acceptance.get("status", "unknown")),
 		"release_blocked": required and not approved,
+		"fallback_mode": "none" if approved or not required else "diagnostic_only",
 		"reason": str(acceptance.get("blocked_reason", "")),
 	}
 

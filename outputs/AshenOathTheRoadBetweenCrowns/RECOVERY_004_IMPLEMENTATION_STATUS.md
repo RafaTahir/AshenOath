@@ -1,5 +1,29 @@
 # RECOVERY-004 Implementation Status
 
+## Current Atomic Checkpoint - 2026-09-11 (runtime visual-role policy)
+
+- Scope completed: made runtime visual fallback behavior explicit and
+  machine-readable for required character and enemy roles. Approved roles are
+  marked `approved` with `runtime_fallback_used=false`; unapproved required
+  roles are marked `diagnostic_fallback` with `runtime_fallback_used=true`.
+- Root cause fixed: curated asset lookup did not preserve the entry category,
+  so enemy acceptance policy could be evaluated as optional. The lookup now
+  carries its `characters` or `enemies` group into runtime policy evaluation.
+- The runtime helper records selected asset path, fallback usage, role state,
+  fallback mode, reason, and per-role spawn count. Missing required paths stay
+  fatal; there is no silent primitive fallback for required visuals.
+- Cheapest proof passed: editor/parser scan, `RUNTIME-001` component policy,
+  `ASSET-005`, the focused native runtime asset-policy verifier, and
+  `verify_render_resources.gd`. The expected one-time Ghoulkin diagnostic
+  warning is intentional; no active renderer or null-material error occurred.
+- Current truth: this closes the runtime policy slice but does not approve the
+  blocked monster visuals. The broader visual, campaign, browser,
+  performance, and production release gates remain open. No Web export,
+  browser run, tracked `web/` update, push, or deployment was performed.
+- Exact next action: continue the next bounded source/native recovery slice;
+  defer the next Web export/browser attempt until accumulated source fixes
+  are ready for one source-aligned acceptance run.
+
 ## Native Contract Checkpoint - 2026-09-11 (modeled bow, arrow, and staff)
 
 - The current atomic source slice is complete on `codex/masterpiece-rebuild`.
