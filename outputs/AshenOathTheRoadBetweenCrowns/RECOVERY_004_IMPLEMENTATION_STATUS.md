@@ -1,9 +1,9 @@
 # RECOVERY-004 Implementation Status
 
-## Current Evidence Checkpoint - 2026-09-10 (mobile deferred-visual error fix)
+## Current Evidence Checkpoint - 2026-09-10 (truthful full-run release decision)
 
-- Current ticket: `RECOVERY-004`, release-integrity follow-up for the mobile
-  browser gate.
+- Current ticket: `RECOVERY-004`, release-integrity follow-up after the complete
+  authoritative gate run.
 - Completed in this atomic slice: Potato/mobile no longer schedules optional
   Castle environment dressing for deferred hydration. If a stale marker still
   exists, the same quality tier discards it without raising a runtime error.
@@ -20,20 +20,21 @@
   full mobile campaign in Chrome (`47` checkpoints, `346196 ms`, empty console
   errors) and Edge (`47` checkpoints, `323497 ms`, empty console errors). Both
   profiles were created under `D:\Temp\AshenOath` and cleaned after completion.
-- Remaining truth: the mobile deferred-visual blocker is cleared. The complete
-  authoritative runner then passed 96 gates from the checkpointed source,
-  including fresh screenshots, graphical performance, packed startup, and
-  Chrome/Edge desktop and mobile campaign routes. The broader recovery issue
-  registry still records visual, traversal, lifecycle, story, audio, and
-  architecture blockers; these are not silently promoted by technical passes.
-- Checkpoint decision: the source and evidence are coherent enough for the
-  pending local evidence checkpoint. The generated pack metadata and release
-  report are now being bound to this source revision. Production Web files
-  remain unchanged and no push, merge, or deployment has occurred in this
-  recovery slice.
-- Exact next action: commit the generated pack metadata and release evidence,
-  rerun the complete release identity tail needed for that new commit, then
-  continue resolving the remaining release-policy blockers.
+- Remaining truth: the complete authoritative runner passed 96 executable gates
+  from the checkpointed source, including fresh screenshots, graphical
+  performance, packed startup, and Chrome/Edge desktop and mobile campaign
+  routes. The release decision is nevertheless **FAIL** because the issue
+  registry still records eight unresolved categories: release integrity,
+  traversal/collision, characters, monsters/combat, world presentation,
+  UI/story/input, audio, and architecture/performance.
+- Checkpoint decision: the generated pack metadata and release report are bound
+  to source `04516b561b25d95653dff07ef8f6bc309576560b`. The runner now fails a
+  complete run when unresolved registry blockers remain; targeted and partial
+  runs remain usable as development evidence. Production Web files remain
+  unchanged.
+- Exact next action: resolve the registry blockers through targeted recovery
+  tickets, then run a new complete release gate. Do not synchronize `web/`,
+  push `main`, or deploy while any blocker remains.
 
 ## Current Evidence Checkpoint - 2026-09-08 (objective, lighting, and capture hardening)
 

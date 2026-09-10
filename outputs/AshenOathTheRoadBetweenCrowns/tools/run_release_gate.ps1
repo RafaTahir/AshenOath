@@ -837,7 +837,18 @@ try {
     # A skipped or resumed run is evidence for the requested slice only.
     # Never label it as a complete release pass when mandatory stages did not run.
     $hasSkippedStages = $SkipExport -or $SkipPerformance -or $SkipScreenshots -or $IsResume
-    $finalStatus = $(if ([string]::IsNullOrWhiteSpace($Only) -and -not $hasSkippedStages) { "pass" } else { "partial-pass" })
+    $isCompleteReleaseRun = [string]::IsNullOrWhiteSpace($Only) -and -not $hasSkippedStages
+    $blockingIssues = @(Get-BlockingIssueSnapshot)
+    if ($isCompleteReleaseRun -and $blockingIssues.Count -gt 0) {
+        $blockerSummary = ($blockingIssues | ForEach-Object {
+            "%s=%s" -f [string]$_.id, [string]$_.status
+        }) -join ", "
+        $failure = "Release blocked by unresolved issue registry entries: $blockerSummary"
+        Write-ReleaseReport "fail" $failure
+        Write-Error "AUTHORITATIVE RELEASE GATE: FAIL - $failure"
+        exit 1
+    }
+    $finalStatus = $(if ($isCompleteReleaseRun) { "pass" } else { "partial-pass" })
     Write-ReleaseReport $finalStatus
     if ($Strict -and [string]::IsNullOrWhiteSpace($Only)) {
         Invoke-ExternalGate "verify_release_report" $Python @(
