@@ -635,7 +635,7 @@ func _schedule_background_runtime_packs() -> void:
 	# starts optional background work after the handoff has visibly settled.
 	var delay_timer := _create_owned_timer(BACKGROUND_RUNTIME_DELAY_SECONDS, true)
 	await delay_timer.timeout
-	if not game_started or current_zone_id == "":
+	if resource_shutdown_prepared or not game_started or current_zone_id == "":
 		return
 	_request_background_runtime_packs()
 
@@ -1100,7 +1100,7 @@ func _finish_deferred_zone_audio(zone_id: String, root: Node3D) -> void:
 	# can feel silent.
 	var delay_timer := _create_owned_timer(0.45, true)
 	await delay_timer.timeout
-	if not game_started or current_zone_id != zone_id or zone_root != root:
+	if resource_shutdown_prepared or not game_started or current_zone_id != zone_id or zone_root != root:
 		return
 	_apply_zone_audio(zone_id)
 
@@ -1166,18 +1166,18 @@ func _run_deferred_visual_roles(root: Node3D) -> void:
 	# after the player arrives.
 	var delay_timer := _create_owned_timer(0.45, true)
 	await delay_timer.timeout
-	if not game_started or root != zone_root or not is_instance_valid(root):
+	if resource_shutdown_prepared or not game_started or root != zone_root or not is_instance_valid(root):
 		if is_instance_valid(root):
 			root.set_meta("deferred_visual_roles_pending", false)
 		return
 	var markers := _deferred_visual_markers(root)
 	for marker in markers:
-		if not is_instance_valid(marker) or root != zone_root or not game_started:
+		if resource_shutdown_prepared or not is_instance_valid(marker) or root != zone_root or not game_started:
 			if is_instance_valid(root):
 				root.set_meta("deferred_visual_roles_pending", false)
 			return
 		await get_tree().process_frame
-		if not is_instance_valid(marker) or root != zone_root or not game_started:
+		if resource_shutdown_prepared or not is_instance_valid(marker) or root != zone_root or not game_started:
 			if is_instance_valid(root):
 				root.set_meta("deferred_visual_roles_pending", false)
 			return
@@ -1563,7 +1563,13 @@ func _cancel_owned_timers() -> void:
 		if timer == null or not is_instance_valid(timer):
 			continue
 		timer.stop()
-		timer.queue_free()
+		# Coroutines awaiting this timer's timeout must be resumed before the
+		# timer is released. Freeing it silently leaves the await state alive at
+		# shutdown, which appears as a leaked RefCounted and orphaned StringName.
+		# Every continuation checks resource_shutdown_prepared before doing work.
+		timer.emit_signal("timeout")
+		if is_instance_valid(timer):
+			timer.queue_free()
 	owned_timers.clear()
 
 func _quiesce_zone_runtime(root: Node) -> void:
@@ -1751,6 +1757,19 @@ func prepare_resource_shutdown() -> void:
 	if resource_shutdown_prepared:
 		return
 	resource_shutdown_prepared = true
+	# Invalidate deferred frame continuations before releasing their scene-owned
+	# resources. A shutdown can otherwise leave a suspended GDScript state alive
+	# until process exit, even though the active route has already completed.
+	game_started = false
+	new_game_start_pending = false
+	new_game_requested_while_preparing = false
+	startup_packs_waiting = false
+	opening_pack_waiting = false
+	campaign_pack_waiting = false
+	opening_detail_pending = false
+	campaign_visual_prewarm_started = false
+	opening_detail_generation += 1
+	campaign_visual_prewarm_generation += 1
 	_cancel_owned_timers()
 	if performance_budget_monitor != null:
 		performance_budget_monitor.suspend()
@@ -1852,6 +1871,9 @@ func finalize_resource_shutdown() -> void:
 				(service as Node).process_mode = Node.PROCESS_MODE_DISABLED
 		runtime_services.queue_free()
 	runtime_services = null
+	if zone_runtime_coordinator != null:
+		zone_runtime_coordinator.dispose()
+	zone_runtime_coordinator = null
 
 func zone_lifecycle_snapshot() -> Dictionary:
 	var cached_ids: Array[String] = []
@@ -2634,7 +2656,7 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 		_start_new_game_world()
 
 func _run_opening_detail_stage(generation: int) -> void:
-	if generation != opening_detail_generation or not opening_detail_pending:
+	if resource_shutdown_prepared or generation != opening_detail_generation or not opening_detail_pending:
 		return
 	# call_deferred only queues another idle callback; several callbacks can still
 	# drain in one browser turn. Let the playable scene settle for a short idle
@@ -2651,7 +2673,7 @@ func _run_opening_detail_stage(generation: int) -> void:
 		await get_tree().process_frame
 		var stage_delay := _create_owned_timer(0.1, true)
 		await stage_delay.timeout
-	if generation != opening_detail_generation or not opening_detail_pending:
+	if resource_shutdown_prepared or generation != opening_detail_generation or not opening_detail_pending:
 		return
 	if not game_started or current_zone_id != "greyfen" or zone_root == null or not is_instance_valid(zone_root):
 		opening_detail_pending = false

@@ -702,3 +702,19 @@ Do not sync `.release-gate/AshenOath_QA` into `web/`; it is not the production b
 - Latest result: `tools/verify_char_009.gd` passed under Godot 4.6.3 without the prior post-pass `ObjectDB instances leaked at exit` diagnostic. The route-facing Ranger and blade changes remain covered by their previously recorded focused passes.
 - Remaining blocker: the campaign gate verifier still emits a shutdown-only ObjectDB diagnostic after its pass marker, so the broader lifecycle category remains `in_progress`. This change does not yet prove all verifier trees or ordinary game shutdown are clean.
 - Exact next action: trace the remaining gate-verifier teardown ownership, then continue with the next recovery blocker. Do not classify the lifecycle category as verified from this single verifier.
+
+## Latest Atomic Checkpoint - 2026-09-10 (gate transition shutdown ownership)
+
+- Current ticket: `ENGINE-004` / `RES-001` lifecycle cleanup; gate-transition verifier teardown was the active atomic slice.
+- Completed work: added explicit `ZoneRuntimeCoordinator.dispose()` ownership release; invalidated deferred game continuations and queued background work during `prepare_resource_shutdown()`; resumed owned timer awaiters before timer release; and changed `verify_gate_transitions.gd` to remove and free its game root after staged retirement, force a renderer sync, and wait for queued destruction to settle. The preserved untracked diagnostic `tools/_inspect_milestone_c_assets.gd` was not touched.
+- Latest result: the full player-driven gate route completed successfully with `GATE TRANSITION VERIFIER: PASS` and exit code 0. The route covered the Greyfen, Wychwood, Deep Woods, Old Mill, Burned Farmstead, Marsh Crossing, Bandit Road, Vargan Approach, Vargan Court, and return legs. `git diff --check` passed. The focused engine lifecycle gate had already passed after the timer/coordinator changes.
+- Remaining blocker: Godot still reports one shutdown-only `ObjectDB instances leaked at exit` warning after the gate route pass. The earlier orphan `timeout` diagnostic is no longer present, but the remaining `RefCounted` owner is not yet identified. Because teardown is not clean, this atomic slice is not committed and the lifecycle category remains incomplete.
+- Exact next action: on resume, isolate the remaining `RefCounted` owner in the gate-route shutdown path with targeted verbose/ObjectDB instrumentation, then rerun only this gate. Do not begin another recovery ticket, export, push, merge, or deployment from this incomplete checkpoint.
+
+## Latest Atomic Checkpoint - 2026-09-10 (lifecycle teardown verified)
+
+- Current ticket: `ENGINE-004` / `RES-001` lifecycle cleanup.
+- Completed work: retained the coordinator disposal, shutdown-generation invalidation, owned-timer continuation release, and verifier-owned explicit root teardown from the preceding slice. The invalid physics-query probe was removed; no unrelated source or diagnostic work was changed.
+- Latest result: `tools/verify_gate_transitions.gd` completed the full real-input transition route with `GATE TRANSITION VERIFIER: PASS`, exit code 0, and no `ERROR`, `SCRIPT ERROR`, `ObjectDB instances leaked at exit`, or `Orphan StringName` diagnostics in the final log. `git diff --check` passed. The route exercised Greyfen, Wychwood, Deep Woods, Old Mill, Burned Farmstead, Marsh Crossing, Bandit Road, Vargan Approach, Vargan Court, and return legs.
+- Remaining blocker: this closes the gate-route shutdown leak, but the broader recovery is still not complete. Visual quality, startup cold-path time, performance acceptance, campaign real-input coverage, and release evidence remain open in the registry.
+- Exact next action: continue with the next recovery blocker from the current worktree after this local checkpoint. Do not treat the lifecycle pass as a release or deployment approval.

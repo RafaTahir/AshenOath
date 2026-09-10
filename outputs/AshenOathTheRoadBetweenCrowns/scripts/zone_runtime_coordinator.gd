@@ -167,6 +167,22 @@ func snapshot() -> Dictionary:
 		"tracked_quest": str(quest_presentation.get_tracked_quest()) if quest_presentation != null and quest_presentation.has_method("get_tracked_quest") else str(quest_manager.get_tracked_quest()) if quest_manager != null else "",
 	}
 
+func dispose() -> void:
+	# The coordinator is a RefCounted lifecycle object owned by game.gd. Clear
+	# its service references explicitly before the host is freed so a verifier or
+	# scene reload cannot retain a stale owner graph past shutdown.
+	host = null
+	quest_manager = null
+	quest_presentation = null
+	quest_beats = null
+	interaction_focus = null
+	pending_zone = ""
+	active_zone = ""
+	last_failure.clear()
+	last_activation.clear()
+	last_build.clear()
+	build_started_usec = 0
+
 func _node_count(root: Node) -> int:
 	if root == null or not is_instance_valid(root):
 		return 0

@@ -51,9 +51,16 @@ func _initialize() -> void:
 	elif game.has_method("prepare_resource_shutdown"):
 		game.prepare_resource_shutdown()
 	await _frames(game.ZONE_RETIRE_FRAMES + 8)
+	# Remove the verifier-owned root explicitly after staged retirement. Queueing
+	# the root and quitting eight frames later can leave service children and a
+	# suspended RefCounted state in ObjectDB even though the route passed.
 	if is_instance_valid(game):
-		game.queue_free()
-	await _frames(8)
+		if game.is_inside_tree():
+			root.remove_child(game)
+		game.free()
+	RenderingServer.force_sync()
+	await _frames(60)
+	RenderingServer.force_sync()
 	quit(0 if failures == 0 else 1)
 
 func use_gate(game, target: String) -> void:
