@@ -109,6 +109,22 @@ if (!targetUrl) await new Promise((resolveListen) => server.listen(0, "127.0.0.1
 const port = targetUrl ? 0 : server.address().port;
 
 const sleep = (ms) => new Promise((resolveSleep) => setTimeout(resolveSleep, ms));
+async function removeTemporaryProfile(profile) {
+  // Chromium may keep a Crashpad handle briefly after the browser process has
+  // exited. Retry the isolated profile cleanup so successful QA runs do not
+  // accumulate browser state in the dedicated temp root.
+  const deadline = Date.now() + 8000;
+  while (existsSync(profile) && Date.now() < deadline) {
+    try {
+      rmSync(profile, { recursive: true, force: true, maxRetries: 2, retryDelay: 150 });
+    } catch {
+      // The next retry handles late browser-owned handles.
+    }
+    if (!existsSync(profile)) return true;
+    await sleep(250);
+  }
+  return !existsSync(profile);
+}
 async function fetchJson(url) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 5000);
@@ -549,10 +565,8 @@ async function testBrowser(name, executable) {
       new Promise((resolveExit) => browser.once("exit", resolveExit)),
       sleep(1500),
     ]);
-    try {
-      rmSync(profile, { recursive: true, force: true, maxRetries: 4, retryDelay: 250 });
-    } catch {
-      // A late Crashpad handle must not mask the browser/game acceptance result.
+    if (!(await removeTemporaryProfile(profile))) {
+      console.warn(`WEB BROWSER ${name}: temporary profile could not be removed: ${profile}`);
     }
   }
 }

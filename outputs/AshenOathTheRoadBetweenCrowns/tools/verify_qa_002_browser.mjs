@@ -66,6 +66,22 @@ await new Promise((done) => server.listen(0, "127.0.0.1", done));
 const port = server.address().port;
 
 const sleep = (ms) => new Promise((done) => setTimeout(done, ms));
+async function removeTemporaryProfile(profile) {
+  // Chromium may keep a Crashpad handle briefly after the browser process has
+  // exited. Retry the isolated profile cleanup so successful QA runs do not
+  // accumulate browser state in the dedicated temp root.
+  const deadline = Date.now() + 8000;
+  while (existsSync(profile) && Date.now() < deadline) {
+    try {
+      rmSync(profile, { recursive: true, force: true, maxRetries: 2, retryDelay: 150 });
+    } catch {
+      // The next retry handles late browser-owned handles.
+    }
+    if (!existsSync(profile)) return true;
+    await sleep(250);
+  }
+  return !existsSync(profile);
+}
 const clamp = (value, minimum, maximum) => Math.max(minimum, Math.min(maximum, value));
 const angleDelta = (from, to) => {
   let value = (to - from + Math.PI) % (Math.PI * 2);
@@ -1031,10 +1047,8 @@ async function testBrowser(name, executable) {
       new Promise((done) => browser.once("exit", done)),
       sleep(1500),
     ]);
-    try {
-      rmSync(profile, { recursive: true, force: true, maxRetries: 4, retryDelay: 250 });
-    } catch {
-      // A late browser crash-handler lock must not mask the QA result.
+    if (!(await removeTemporaryProfile(profile))) {
+      console.warn(`QA-002 BROWSER ${name}: temporary profile could not be removed: ${profile}`);
     }
   }
 }

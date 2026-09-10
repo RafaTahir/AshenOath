@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "program": "SOUL-REBUILD",
-  "release_id": "dev-04516b561b25",
+  "release_id": "dev-0a1514f46079",
   "artifact_policy": "external_runtime_packs",
   "candidate_manifest": "res://runtime_pack_candidates.json",
   "pack_presets": {
@@ -15,7 +15,7 @@
   "max_deployment_bytes": 104857600,
   "packs": {
     "base": {
-      "version": "dev-04516b561b25",
+      "version": "dev-0a1514f46079",
       "url": "",
       "sha256": "",
       "bytes": 0,
@@ -24,8 +24,8 @@
       "preload_priority": 0,
       "status": "embedded_current_pck",
       "candidate_artifact": "base.pck",
-      "candidate_bytes": 1448196,
-      "candidate_sha256": "87fd5493c4e2ae3d4938777999a89cd433b8abfe9ccea10ffa57d981fded8a25",
+      "candidate_bytes": 1448052,
+      "candidate_sha256": "ca162e536b2ccae8daf5d90926028029e913c8397a85eeae333fec8f4cebe8a7",
       "contents": [
         "menu",
         "managers",
@@ -34,15 +34,15 @@
       ],
       "embedded_artifact": "index.pck",
       "embedded_source_artifact": "base.pck",
-      "embedded_source_bytes": 1448196,
-      "embedded_source_sha256": "87fd5493c4e2ae3d4938777999a89cd433b8abfe9ccea10ffa57d981fded8a25",
+      "embedded_source_bytes": 1448052,
+      "embedded_source_sha256": "ca162e536b2ccae8daf5d90926028029e913c8397a85eeae333fec8f4cebe8a7",
       "embedded_source_kind": "standalone_pack_candidate"
     },
     "opening": {
-      "version": "dev-04516b561b25",
-      "url": "packs/opening.pck?v=dev-04516b561b25",
-      "sha256": "7428bd1a620608ae2381e1ff37d81199ccb4f390d20102b56385a3a4840cde68",
-      "bytes": 28004072,
+      "version": "dev-0a1514f46079",
+      "url": "packs/opening.pck?v=dev-0a1514f46079",
+      "sha256": "6b479e7e4bb8ebfadfc76f69fe8bef2abda496e4683259580f3fca839151aee3",
+      "bytes": 48662984,
       "entry_scene": "res://scenes/zones/greyfen_gameplay.tscn",
       "dependencies": [
         "base"
@@ -50,8 +50,8 @@
       "preload_priority": 10,
       "status": "streamed_web_candidate",
       "candidate_artifact": "opening.pck",
-      "candidate_bytes": 28004072,
-      "candidate_sha256": "7428bd1a620608ae2381e1ff37d81199ccb4f390d20102b56385a3a4840cde68",
+      "candidate_bytes": 48662984,
+      "candidate_sha256": "6b479e7e4bb8ebfadfc76f69fe8bef2abda496e4683259580f3fca839151aee3",
       "contents": [
         "greyfen",
         "wychwood",
@@ -60,8 +60,8 @@
       ]
     },
     "campaign": {
-      "version": "dev-04516b561b25",
-      "url": "packs/campaign.pck?v=dev-04516b561b25",
+      "version": "dev-0a1514f46079",
+      "url": "packs/campaign.pck?v=dev-0a1514f46079",
       "sha256": "0ba5639ae5878a8373e840a71a2136337fca45e7dc4a01e5e831fa5498e297d1",
       "bytes": 1022072,
       "entry_scene": "",
@@ -82,8 +82,8 @@
       ]
     },
     "characters": {
-      "version": "dev-04516b561b25",
-      "url": "packs/characters.pck?v=dev-04516b561b25",
+      "version": "dev-0a1514f46079",
+      "url": "packs/characters.pck?v=dev-0a1514f46079",
       "sha256": "49213fa4400219ac07b9b925b6f9006ce4314e2a4e5c854498506ad1e52fdf89",
       "bytes": 5796680,
       "entry_scene": "",
@@ -101,8 +101,8 @@
       ]
     },
     "monsters": {
-      "version": "dev-04516b561b25",
-      "url": "packs/monsters.pck?v=dev-04516b561b25",
+      "version": "dev-0a1514f46079",
+      "url": "packs/monsters.pck?v=dev-0a1514f46079",
       "sha256": "a7857b67909ce775b3a3314d4224e8cd0bb84c6b340c052e64f3c9613425ae7e",
       "bytes": 1297600,
       "entry_scene": "",
@@ -121,8 +121,8 @@
       ]
     },
     "audio": {
-      "version": "dev-04516b561b25",
-      "url": "packs/audio.pck?v=dev-04516b561b25",
+      "version": "dev-0a1514f46079",
+      "url": "packs/audio.pck?v=dev-0a1514f46079",
       "sha256": "af6b3c76e93462942e219b5bafb90a64d27e21284577f5fab1ab333a6fa426cd",
       "bytes": 2731648,
       "entry_scene": "",
@@ -141,8 +141,8 @@
       ]
     }
   },
-  "build_id": "dev-04516b561b25",
-  "generated_from_commit": "04516b561b25d95653dff07ef8f6bc309576560b",
-  "generated_at_utc": "2026-09-10T07:33:35.919071Z",
-  "total_bytes": 38852072
+  "build_id": "dev-0a1514f46079",
+  "generated_from_commit": "0a1514f4607989bc53499d27eb3231c86ec7b584",
+  "generated_at_utc": "2026-09-10T08:48:06.947229Z",
+  "total_bytes": 59510984
 }
