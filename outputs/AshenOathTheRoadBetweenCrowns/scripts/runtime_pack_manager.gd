@@ -18,11 +18,11 @@ const MAX_DEPLOYMENT_BYTES := 104857600
 const MAX_RETRIES := 2
 const CHUNK_SIZE := 1024 * 1024
 const MAX_CONCURRENT_DOWNLOADS := 3
-# Base and the opening-critical pack are on the readiness-critical path.
-# Campaign, optional character variants, monsters, and audio can arrive after
-# control is handed to the player. Keeping this list small is important: a Web
-# request must never make Greyfen wait for Castle or finale content.
-const STARTUP_PACK_IDS: Array[String] = ["base", "opening"]
+# The root Web PCK owns the menu, managers, core zone builders, and the small
+# A-set hero/Anwen runtime layers. Heavy world art remains streamable, so a
+# cold browser never waits for a multi-megabyte opening archive before giving
+# the player control.
+const STARTUP_PACK_IDS: Array[String] = ["base"]
 const BACKGROUND_PACK_IDS: Array[String] = ["opening", "characters", "monsters", "audio", "campaign"]
 
 var manifest: Dictionary = {}

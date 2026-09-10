@@ -142,8 +142,8 @@ func _capture_monster_families() -> void:
 	_clear_actors()
 	var specs := [
 		["ghoulkin_skeleton", "ghoulkin", -2.60, 0.20, 1.00],
-		["ghoulkin_skeleton", "wychwood_stalker", -1.30, 0.00, 0.92],
-		["ghoulkin_skeleton", "wychwood_raider", 0.00, 0.12, 1.10],
+		["wychwood_stalker_creature", "wychwood_stalker", -1.30, 0.00, 0.92],
+		["wychwood_raider_creature", "wychwood_raider", 0.00, 0.12, 0.86],
 		["ghoulkin_skeleton", "wychwood_brute", 1.30, 0.18, 1.22],
 		["gravebound_knight_creature", "gravebound_knight", 2.60, 0.05, 1.10]
 	]

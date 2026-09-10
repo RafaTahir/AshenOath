@@ -526,7 +526,10 @@ func _zone_requires_campaign_pack(zone_id: String) -> bool:
 	]
 
 func _zone_requires_opening_pack(zone_id: String) -> bool:
-	return zone_id in ["wychwood", "cemetery"]
+	# Core builders and the A-set character layers are embedded in the root Web
+	# PCK. The optional opening archive may improve decoration in the background,
+	# but it must never turn a legal route into a blocking download gate.
+	return false
 
 func _start_new_game_world() -> void:
 	# An explicit transition can be requested before the menu's deferred setup

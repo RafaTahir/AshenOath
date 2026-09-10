@@ -111,6 +111,22 @@ func _compose_player_body(outfit_root: Node3D, outfit_path: String, role_name: S
 	var is_shared_female := normalized_path.ends_with("/female_peasant.gltf")
 	if not is_kael and not is_anwen and not is_shared_male and not is_shared_female:
 		return outfit_root
+	# The A-set Universal peasant scenes are already complete humanoids. They
+	# contain the body, native head, eyes, brows and hair on the imported rig.
+	# Composing Male_Head/Female_Head and another hair scene here creates the
+	# visible neck hump and doubled silhouette that used to appear on Kael and
+	# Anwen. Keep the source as one authored layer and only apply identity
+	# materials/facing during the normal preparation pass.
+	if _has_native_humanoid_parts(outfit_root):
+		outfit_root.set_meta("character_composite", true)
+		outfit_root.set_meta("character_rig_layer_count", 1)
+		outfit_root.set_meta("character_identity", "kael" if is_kael else ("anwen" if is_anwen else role_name.to_lower()))
+		outfit_root.set_meta("character_base_path", outfit_path)
+		outfit_root.set_meta("character_outfit_path", outfit_path)
+		outfit_root.set_meta("character_hair_path", "")
+		outfit_root.set_meta("character_asset_family", "quaternius_animated_humanoid")
+		outfit_root.set_meta("character_animation_family", "universal_animation_library_2")
+		return outfit_root
 	var base_path := "res://assets_external/characters_universal/Male_Head.gltf" if (is_kael or is_shared_male) else "res://assets_external/characters_universal/Female_Head.gltf"
 	var base := _instantiate_resource(_load_cached_resource(base_path))
 	if base == null:
@@ -141,6 +157,23 @@ func _compose_player_body(outfit_root: Node3D, outfit_path: String, role_name: S
 	composite.set_meta("character_asset_family", "quaternius_animated_humanoid")
 	composite.set_meta("character_animation_family", "universal_animation_library_2")
 	return composite
+
+func _has_native_humanoid_parts(root: Node) -> bool:
+	var has_body := false
+	var has_face := false
+	var has_hair := false
+	for raw_mesh in root.find_children("*", "MeshInstance3D", true, false):
+		var mesh := raw_mesh as MeshInstance3D
+		if mesh == null:
+			continue
+		var token := mesh.name.to_lower()
+		if token.contains("body") or token.contains("arms") or token.contains("legs") or token.contains("feet"):
+			has_body = true
+		if token.contains("head") or token.contains("eyes") or token.contains("eyebrow") or token.contains("face"):
+			has_face = true
+		if token.contains("hair"):
+			has_hair = true
+	return has_body and has_face and has_hair
 
 func _merge_shared_rig_layers(outfit_root: Node3D, layers: Array) -> bool:
 	var shared_skeleton := _find_skeleton(outfit_root)
