@@ -639,6 +639,14 @@ Do not sync `.release-gate/AshenOath_QA` into `web/`; it is not the production b
 - Remaining blocker: cold browser engine readiness is still above the product target, and the headless Godot run still emits the known shutdown-only ObjectDB/RID diagnostics. The broader visual, campaign, and release gates remain incomplete. The diagnostic inspection helper remains intentionally untracked.
 - Exact next action: after the paused goal is explicitly resumed, choose the next scoped fix; do not rerun this startup/export check unless its source, pack filters, or artifact inputs change. This checkpoint does not authorize push, merge, deployment, or production promotion.
 
+## Latest Atomic Checkpoint - 2026-09-10 (monster manifest alignment)
+
+- Current ticket: `MON-001` / `CHAR-RESTORE-001` manifest consistency follow-up.
+- Completed work: aligned `monster_family_manifest.json` and `curated_runtime_assets.json` with the already-corrected runtime and visual-upgrade mappings. Wychwood stalker and raider now consistently resolve to `Skeleton.fbx`, use the connected Ghoulkin-family status, and retain their role-specific height and behavior profiles across all active manifests.
+- Latest result: bundled Python parsed `monster_family_manifest.json`, `curated_runtime_assets.json`, and `visual_upgrade_manifest.json` successfully; `git diff --check` passed; focused `verify_visual_003.gd` and `verify_combat_001.gd` reruns passed after the metadata change.
+- Remaining blocker: the broader monster/combat category remains `functional_but_incomplete`; this alignment does not create new monster anatomy or complete the boss presentation gate. The preserved untracked `tools/_inspect_milestone_c_assets.gd` diagnostic remains excluded.
+- Exact next action: resume with the next scoped recovery ticket after reviewing the remaining monster identity and world-presentation blockers. Do not export, push, merge, or deploy solely from this metadata checkpoint.
+
 ## Latest Atomic Checkpoint - 2026-09-10 (monster family mapping follow-up)
 
 - Current ticket: `MON-001` / `CHAR-RESTORE-001` monster-family mapping follow-up.

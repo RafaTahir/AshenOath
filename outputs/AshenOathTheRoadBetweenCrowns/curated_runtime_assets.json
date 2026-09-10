@@ -188,20 +188,20 @@
         "notes": "Complete animated skeleton body with authored skull, ribs, hands, feet, and five imported locomotion/combat clips. Used as the Wychwood cursed-remains family source while the Ultimate Monsters download remains quota-blocked."
       },
       "wychwood_stalker_creature": {
-        "status": "mon_001_distinct_bat_family",
-        "path": "res://assets_external/enemies/Bat.fbx",
+        "status": "mon_002_connected_ghoulkin_family",
+        "path": "res://assets_external/enemies/Skeleton.fbx",
         "source_pack": "Quaternius Animated Monsters",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
-        "notes": "Connected animated bat body used for the Wychwood Stalker silhouette; flight and attack clips remain controller-timed."
+        "notes": "Connected animated Skeleton body used for the Wychwood Stalker silhouette; lean scale, ash-green material, and flanker behavior carry the role distinction."
       },
       "wychwood_raider_creature": {
-        "status": "mon_001_distinct_dragon_family",
-        "path": "res://assets_external/enemies/Dragon.fbx",
+        "status": "mon_002_connected_ghoulkin_family",
+        "path": "res://assets_external/enemies/Skeleton.fbx",
         "source_pack": "Quaternius Animated Monsters",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
-        "notes": "Connected animated dragon body used for the Wychwood Raider silhouette at a reduced encounter scale."
+        "notes": "Connected animated Skeleton body used for the Wychwood Raider silhouette at a heavier encounter scale with ash-bone material and feint behavior."
       },
       "bog_wretch": {
         "status": "char_restore_001_skeleton_family",

@@ -16,15 +16,15 @@
       "height": 1.60,
       "skin": "runtime_materials",
       "runtime_source_role": "wychwood_stalker_creature",
-      "source_path": "res://assets_external/enemies/Bat.fbx"
+      "source_path": "res://assets_external/enemies/Skeleton.fbx"
     },
     "wychwood_raider": {
       "visual_role": "wychwood_raider_creature",
       "profile": "feinter",
-      "height": 2.05,
+      "height": 1.86,
       "skin": "runtime_materials",
       "runtime_source_role": "wychwood_raider_creature",
-      "source_path": "res://assets_external/enemies/Dragon.fbx"
+      "source_path": "res://assets_external/enemies/Skeleton.fbx"
     },
     "wychwood_brute": {
       "visual_role": "ghoulkin_skeleton",
