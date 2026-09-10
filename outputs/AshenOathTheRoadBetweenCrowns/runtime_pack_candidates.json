@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
   "ticket": "PACK-003",
-  "generated_at_utc": "2026-09-10T09:06:51.825812Z",
-  "build_id": "dev-f40b6c499cf9",
-  "generated_from_commit": "f40b6c499cf9fe02428aeed06deac9f667979eb3",
+  "generated_at_utc": "2026-09-10T09:10:53.805253Z",
+  "build_id": "dev-fb8f7898f0af",
+  "generated_from_commit": "fb8f7898f0af580fbd8b245991d421a5c82ce3f2",
   "project": "Ashen Oath",
   "artifact_directory": "external_runtime_packs",
   "artifacts_are_external": true,
@@ -12,27 +12,27 @@
   "packs": [
     {
       "id": "base",
-      "version": "pack-003-f40b6c499cf9",
+      "version": "pack-003-fb8f7898f0af",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
       "bytes": 1448052,
-      "sha256": "748006a211b6cc112c42706102432afe20fa5345a8e6c156f02bf746cf1ed17e",
+      "sha256": "8107d10767aaec17840537ca927a6c03a1ccb3a57986db8bfa430ad02cd9bf4a",
       "status": "candidate_external",
       "log": "base.log"
     },
     {
       "id": "opening",
-      "version": "pack-003-f40b6c499cf9",
+      "version": "pack-003-fb8f7898f0af",
       "preset": "Runtime Pack Opening",
       "artifact": "opening.pck",
       "bytes": 48662984,
-      "sha256": "d6f46a580f8b2454f50f5ec90aba9841ff6d10f4bee1f6cb76b0b9fc54413f77",
+      "sha256": "17c94b7834d7d8a6b09e95ef04cde3f4fc4625a2b59d82aa669f12e32146a435",
       "status": "candidate_external",
       "log": "opening.log"
     },
     {
       "id": "campaign",
-      "version": "pack-003-f40b6c499cf9",
+      "version": "pack-003-fb8f7898f0af",
       "preset": "Runtime Pack Campaign",
       "artifact": "campaign.pck",
       "bytes": 1022072,
@@ -42,7 +42,7 @@
     },
     {
       "id": "characters",
-      "version": "pack-003-f40b6c499cf9",
+      "version": "pack-003-fb8f7898f0af",
       "preset": "Runtime Pack Characters",
       "artifact": "characters.pck",
       "bytes": 5796680,
@@ -52,7 +52,7 @@
     },
     {
       "id": "monsters",
-      "version": "pack-003-f40b6c499cf9",
+      "version": "pack-003-fb8f7898f0af",
       "preset": "Runtime Pack Monsters",
       "artifact": "monsters.pck",
       "bytes": 1297600,
@@ -62,7 +62,7 @@
     },
     {
       "id": "audio",
-      "version": "pack-003-f40b6c499cf9",
+      "version": "pack-003-fb8f7898f0af",
       "preset": "Runtime Pack Audio",
       "artifact": "audio.pck",
       "bytes": 2731648,
