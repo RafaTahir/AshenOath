@@ -622,3 +622,11 @@ Do not sync `.release-gate/AshenOath_QA` into `web/`; it is not the production b
 
 1. Keep the renderer/RID/ObjectDB shutdown diagnostics tracked as ENGINE-004/QA-005 debt; they do not invalidate the passing release gate but should be eliminated in the next engineering pass.
 2. Continue visual reconstruction of Greyfen, Wychwood, Castle/Record Hall, and the Hart only as a new scoped ticket; the current release remains deliberately stylized and honest.
+
+## Latest Atomic Checkpoint - 2026-09-10 (Anwen staff socket correction)
+
+- Current ticket: `CHAR-RESTORE-001` atomic presentation follow-up.
+- Completed work: corrected the Universal hand-socket orientation for Anwen's staff, shortened the shaft to the hand-prop scale, lowered its attachment offset, and kept the prop on a `BoneAttachment3D` so it follows the hand during animation. No proxy anatomy or root-mounted fallback was added.
+- Latest result: the graphical `capture_char_restore_001.gd` run passed at 1280x720; `verify_character_real_001.gd`, `verify_char_qa_001.gd`, and `verify_char_gameplay_qa_001.gd` all passed. The inspected `CHAR-RESTORE-001_A2_Anwen.png` frame shows a grounded, hand-held staff with no shaft through the head or detached upper prop.
+- Remaining blocker: the broader recovery remains incomplete. The existing ObjectDB shutdown diagnostic, provisional world/monster presentation, and unrelated dirty export/asset work are still tracked; no production promotion is justified by this atomic fix.
+- Exact next action: after the paused goal is explicitly resumed, review the remaining dirty files and select the next scoped recovery slice before any broader verification or release work.

@@ -178,27 +178,35 @@ static func _add_anwen_staff(owner: Node3D) -> void:
 	equipment.name = "AnwenStaffEquipment"
 	equipment.actor = owner
 	equipment.position = Vector3.ZERO
+	# The Universal hand bone points its local shaft axis toward the shoulder in
+	# the relaxed cleric pose. Flip the socket space once so the staff descends
+	# from the hand instead of rising behind the head; it still inherits the
+	# hand position and remains attached during animation.
+	equipment.rotation_degrees = Vector3(180.0, 0.0, 0.0)
 	attachment.add_child(equipment)
 	var staff := MeshInstance3D.new()
 	staff.name = "AnwenStaffWood"
 	var staff_mesh := CylinderMesh.new()
 	staff_mesh.top_radius = 0.018
 	staff_mesh.bottom_radius = 0.027
-	staff_mesh.height = 1.02
+	# Keep the staff readable as a hand prop at conversation distance. The
+	# imported hand sits below the shoulder on the Universal rig; a full metre
+	# shaft therefore rises behind Anwen's head in the idle pose.
+	staff_mesh.height = 0.68
 	staff_mesh.radial_segments = 8
 	staff.mesh = staff_mesh
-	staff.position = Vector3(0.0, -0.52, 0.0)
-	staff.material_override = _mat(Color("4f392c"), 0.82)
+	staff.position = Vector3(0.0, -0.34, 0.0)
+	staff.material_override = _mat(Color("76513a"), 0.86)
 	equipment.add_child(staff)
 	var crest := MeshInstance3D.new()
 	crest.name = "AnwenStaffCrest"
 	var crest_mesh := SphereMesh.new()
-	crest_mesh.radius = 0.058
-	crest_mesh.height = 0.116
+	crest_mesh.radius = 0.065
+	crest_mesh.height = 0.13
 	crest_mesh.radial_segments = 12
 	crest.mesh = crest_mesh
 	crest.position = Vector3(0.0, -0.02, 0.0)
-	var crest_material := _mat(Color("a1854e"), 0.30)
+	var crest_material := _mat(Color("c8a75b"), 0.36)
 	crest_material.metallic = 0.62
 	crest.material_override = crest_material
 	equipment.add_child(crest)
