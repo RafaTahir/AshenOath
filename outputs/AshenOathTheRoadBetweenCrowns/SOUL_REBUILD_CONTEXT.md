@@ -1,5 +1,43 @@
 # Ashen Oath Soul-Rebuild Context
 
+## Current Worktree Truth - 2026-09-11
+
+The latest native checkpoint closes the previously observed route blockers.
+`verify_gate_transitions.gd` now traverses the entire released route in both
+directions, including the wilderness and Castle sections; river and navigation
+gates pass as well. The fixes are authored-corridor relocations, not a change
+to quest unlocks or bridge-only river rules.
+
+The crowd seed is now consumed by mesh composition, so retained routines vary
+their compatible hair sources as well as their materials. The duplicate Web
+startup request was removed and the native load gate remains green. No final
+Web artifact has been produced from this newer source yet, and the documented
+visual fallback debt remains open.
+
+The current monster family audition is source-aligned and runtime-composed:
+Stalker uses Bat, Raider uses Dragon, Bog Wretch uses Slime, and Gravebound
+uses KnightCharacter, each with explicit imported animation clips. The capture
+is evidence of distinct retained families, not approval of the still-open
+bespoke boss-art upgrade.
+
+The active development branch is `codex/masterpiece-rebuild` at committed
+base `5e9cc4c`; the canonical physical project is `D:\Projects\AshenOath`.
+The worktree contains preserved Recovery-004 source and QA changes plus the
+current modeled-sword repair. Kael's drawn weapon now uses the valid
+`assets_external/characters/Sword.fbx` under the hand socket, with the
+existing blade-contact and animation contracts retained. Native parser,
+combat, motion, runtime-component, Web-inclusion, and asset checks pass, and
+fresh animation evidence exists in `Development_Gallery/screenshots/`.
+
+This is an engineering checkpoint, not a production release. The west
+Greyfen browser obstruction was identified as an omitted
+`world_sector_manifest.json` in the QA export and is source/native-validated;
+the later SwiftShader/CDP held-key stop remains a disposable harness failure.
+The v28 Web artifact is diagnostic only. Character, monster, world,
+audio, UI/story, lifecycle, and final browser/release acceptance remain
+open in the recovery registry. Historical release claims below are retained
+for audit and do not override this current state.
+
 ## Current Release Gate - 2026-08-21
 
 The complete authoritative release runner now passes `92/92` gates. The

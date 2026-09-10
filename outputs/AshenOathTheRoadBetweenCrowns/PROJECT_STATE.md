@@ -1,5 +1,61 @@
 # Ashen Oath Project State
 
+## Recovery-004 Current Truth - 2026-09-11
+
+### Latest native recovery evidence
+
+The strict player-driven native route verifier now passes the complete
+Greyfen-to-Wychwood-to-campaign-to-Castle chain and the return legs. The three
+reported arrival blockers were authored scenery colliders in the Deep Woods,
+Old Mill, and Bandit Road corridors; each was moved out of the reserved
+approach and the route was rerun successfully. River safety and navigation
+checks also pass.
+
+Crowd routines now use stable seeds to select compatible hair sources, and the
+character crowd verifier plus a fresh 1280x720 capture pass. Web startup no
+longer requests the embedded base pack twice; the native load gate remains
+green. This source is still not a release candidate: final Web export,
+production parity, remaining visual debt, and browser acceptance are open.
+
+The retained monster family mapping is now visually differentiated in a fresh
+runtime capture: Bat Stalker, Dragon Raider, Slime Bog Wretch, armored
+Gravebound Knight, Skeleton Ghoulkin, and spectral Wolf Hart. Their animation
+contracts resolve real imported clips. The final bespoke boss-art gate remains
+open and is not being claimed by this checkpoint.
+
+The canonical physical repository is `D:\Projects\AshenOath`; this apparent
+workspace is its preserved C: directory junction. The active branch is
+`codex/masterpiece-rebuild` at committed base `5e9cc4c`. The worktree is
+intentionally dirty with the preserved source, manifest, QA-harness, and
+fresh character-capture changes; the user-owned diagnostic
+`tools/_inspect_milestone_c_assets.gd` remains untracked and untouched.
+
+The Greyfen west-boundary browser obstruction was traced to the QA export
+omitting `world_sector_manifest.json`, not to a bridge, tree, or floor
+collider. The manifest is now included and validated by static/native checks.
+Kael's drawn weapon now uses the valid modeled `Sword.fbx` under the existing
+hand socket with readable material, while blade-contact and attack timing
+remain authoritative. Native parser, combat, motion, runtime-component,
+Web-inclusion, and asset checks pass; fresh 1280x720 animation evidence was
+captured.
+
+The product is still **not release-ready**. The recovery registry continues
+to record unresolved traversal, character, monster/combat, world, UI/story,
+audio, and architecture/performance categories, and the current source has
+not been re-exported, synchronized to tracked `web/`, promoted to `main`, or
+deployed. The v28 browser artifact is diagnostic evidence, not a release
+candidate.
+
+The final native obstruction proof also emits one shutdown-only
+`RefCounted`/`ObjectDB` leak after its pass marker. It is independent of the
+west Greyfen collision diagnosis and remains an open lifecycle blocker until
+its owner is identified; no active-render or route failure was observed.
+
+Exact next action: continue the remaining source/native recovery work, then
+run one source-aligned export and browser acceptance sequence after the
+accumulated fixes. Historical sections below are retained as audit evidence
+and do not override this current truth.
+
 ## Recovery-004 Current Truth - 2026-09-10
 
 The active development branch is `codex/masterpiece-rebuild` at local

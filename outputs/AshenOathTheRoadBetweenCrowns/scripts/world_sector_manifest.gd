@@ -3,12 +3,21 @@ class_name WorldSectorManifest
 
 const PATH := "res://world_sector_manifest.json"
 static var _data: Dictionary = {}
+static var _load_error := ""
 static var _aliases := {
 	"deep_woods": "deep_wood",
 	"long_road": "bandit_road",
 	"castle_approach": "vargan_approach",
 	"courtyard": "vargan_court"
 }
+
+static func is_valid() -> bool:
+	_ensure_loaded()
+	return _load_error == "" and not (_data.get("sectors", {}) as Dictionary).is_empty()
+
+static func load_error() -> String:
+	_ensure_loaded()
+	return _load_error
 
 static func canonical(zone_id: String) -> String:
 	var normalized := zone_id.strip_edges().to_lower()
@@ -68,11 +77,20 @@ static func edge_for_position(zone_id: String, position: Vector3, zone_bounds: V
 		var half_width := float(edge.get("half_width", 3.0))
 		var lane := float(edge.get("lane", 0.0))
 		var valid := false
+		# Authored gates can sit a few metres inside a sector boundary so their
+		# approach has room for a readable landmark. Treat that threshold as part
+		# of the same spatial contract; otherwise a player can reach the visible
+		# gate and remain outside the boundary query forever.
+		var raw_trigger: Array = edge.get("trigger", [])
+		if raw_trigger.size() >= 3:
+			var trigger := Vector3(float(raw_trigger[0]), float(raw_trigger[1]), float(raw_trigger[2]))
+			var trigger_radius := maxf(float(edge.get("trigger_radius", 1.35)), margin + 0.45)
+			valid = Vector2(position.x - trigger.x, position.z - trigger.z).length() <= trigger_radius
 		match str(edge_id):
-			"north": valid = position.z <= -zone_bounds.y + margin and absf(position.x - lane) <= half_width
-			"south": valid = position.z >= zone_bounds.y - margin and absf(position.x - lane) <= half_width
-			"west": valid = position.x <= -zone_bounds.x + margin and absf(position.z - lane) <= half_width
-			"east": valid = position.x >= zone_bounds.x - margin and absf(position.z - lane) <= half_width
+			"north": valid = valid or (position.z <= -zone_bounds.y + margin and absf(position.x - lane) <= half_width)
+			"south": valid = valid or (position.z >= zone_bounds.y - margin and absf(position.x - lane) <= half_width)
+			"west": valid = valid or (position.x <= -zone_bounds.x + margin and absf(position.z - lane) <= half_width)
+			"east": valid = valid or (position.x >= zone_bounds.x - margin and absf(position.z - lane) <= half_width)
 		if valid:
 			var result := edge.duplicate(true)
 			result["id"] = str(edge_id)
@@ -108,7 +126,17 @@ static func _ensure_loaded() -> void:
 	if not _data.is_empty():
 		return
 	if not FileAccess.file_exists(PATH):
+		_load_error = "missing:%s" % PATH
 		_data = {"sectors": {}}
+		push_error("WORLD SECTOR MANIFEST: %s" % _load_error)
 		return
 	var parsed = JSON.parse_string(FileAccess.get_file_as_string(PATH))
-	_data = parsed if typeof(parsed) == TYPE_DICTIONARY else {"sectors": {}}
+	if typeof(parsed) != TYPE_DICTIONARY or typeof(parsed.get("sectors", null)) != TYPE_DICTIONARY:
+		_load_error = "invalid:%s" % PATH
+		_data = {"sectors": {}}
+		push_error("WORLD SECTOR MANIFEST: %s" % _load_error)
+		return
+	_data = parsed
+	if (_data.get("sectors", {}) as Dictionary).is_empty():
+		_load_error = "empty:%s" % PATH
+		push_error("WORLD SECTOR MANIFEST: %s" % _load_error)

@@ -52,8 +52,14 @@ func _verify_locomotion_contract() -> void:
 	game = packed.instantiate()
 	root.add_child(game)
 	await _frames(2)
-	if game.has_method("_new_game"):
-		game.call("_new_game")
+	_assert(game.get_script() != null, "main scene instantiated as an editor placeholder")
+	_assert(game.has_method("_new_game"), "main scene has no callable _new_game entry point")
+	if game.get_script() == null or not game.has_method("_new_game"):
+		if is_instance_valid(game):
+			game.queue_free()
+		await _frames(2)
+		return
+	game.call("_new_game")
 	await _frames(90)
 	var player: Node = game.get("player")
 	_assert(player != null, "player failed to instantiate")
@@ -79,21 +85,28 @@ func _verify_locomotion_contract() -> void:
 	var forward_state: String = str(driver.get_locomotion_state())
 	var forward_distance: float = player.global_position.distance_to(start_position)
 	var forward_steps := observed_steps
+	var forward_velocity := Vector3(player.velocity.x, 0.0, player.velocity.z).normalized()
+	var visible_forward: Vector3 = Vector3.ZERO
+	if driver.has_method("get_visible_forward"):
+		visible_forward = driver.get_visible_forward()
 	Input.action_release("move_forward")
 	_assert(forward_state in ["walk", "run"], "forward input did not select a locomotion gait")
 	_assert(forward_distance > 0.08, "forward input did not move the player")
 	_assert(forward_steps > 0, "forward animation emitted no foot-contact events")
+	_assert(visible_forward.length_squared() > 0.5 and visible_forward.dot(forward_velocity) > 0.45, "visible forward does not align with forward velocity")
 	var backward_start: Vector3 = player.global_position
 	Input.action_press("move_back")
 	await _physics_frames(18)
 	var backward_state: String = str(driver.get_locomotion_state())
 	var backward_distance: float = player.global_position.distance_to(backward_start)
 	var backward_steps := observed_steps - forward_steps
+	var backward_velocity := Vector3(player.velocity.x, 0.0, player.velocity.z).normalized()
 	Input.action_release("move_back")
 	_assert(backward_state == "walk_back", "backward input did not select walk_back")
 	_assert(backward_distance > 0.05, "backward input did not move the player")
 	_assert(backward_steps <= 2, "reverse animation emitted duplicate foot-contact events")
 	_assert(observed_footsteps == observed_steps, "footstep audio events drifted from animation contacts")
+	_assert(visible_forward.length_squared() > 0.5 and visible_forward.dot(backward_velocity) < -0.20, "backpedal did not preserve facing while velocity reversed")
 	if driver.has_method("get_playback_direction_for_state"):
 		_assert(float(driver.get_playback_direction_for_state("walk_back")) < 0.0 or driver.get_clip_for_state("walk_back") != driver.get_clip_for_state("walk"), "backward gait is not reversed when no authored reverse clip exists")
 	if is_instance_valid(game):

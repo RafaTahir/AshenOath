@@ -26,7 +26,7 @@ func _initialize() -> void:
 		var actor := Node3D.new()
 		actor.position = Vector3(float(item[2]), 0.0, 0.0)
 		stage.add_child(actor)
-		var visual: Node3D = helper.spawn_visual_role(str(item[0]), "characters")
+		var visual: Node3D = helper.spawn_visual_role(str(item[0]), "characters", "%s:%s" % [str(item[1]), str(item[0])])
 		if visual == null:
 			failures += 1
 			continue

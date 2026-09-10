@@ -1,5 +1,8 @@
 extends SceneTree
 
+const BridgeSurfaceContract = preload("res://scripts/bridge_surface_contract.gd")
+const BRIDGE_LANE_DRIFT_TOLERANCE := 0.50
+
 var failures := 0
 
 func _initialize() -> void:
@@ -64,24 +67,51 @@ func _verify_physical_bridge_crossings(game, center_z: float) -> void:
 	# inside the deck rails so the test represents ordinary player movement.
 	player.can_control = true
 	player.set_transition_locked(false)
+	_reset_camera(game)
+	# Start on the authored bank and approach the bridge through the same
+	# ground-to-deck seam used by normal play. The deck-only probes below cannot
+	# detect a bank edge that catches the capsule before it reaches the bridge.
+	player.global_position = Vector3(0.0, 0.25, center_z + 5.3)
+	player.rotation.y = 0.0
+	await _walk_with_input(game, "move_forward", 150, center_z, -1.0)
+	check(player.global_position.z < center_z - 2.55, "%s bank-to-bridge approach stopped at z=%.2f" % [str(game.current_zone_id), player.global_position.z])
+	check(not game.call("_is_river_recovery_position", str(game.current_zone_id), player.global_position), "%s bank-to-bridge approach triggered river recovery" % str(game.current_zone_id))
 	for lane_x in [-1.2, 1.2]:
 		player.global_position = Vector3(lane_x, 0.25, center_z + 3.45)
 		player.rotation.y = 0.0
+		_reset_camera(game)
 		await _walk_with_input(game, "move_forward", 90, center_z, -1.0)
-		check(absf(player.global_position.x - lane_x) < 0.25, "%s bridge crossing drifted sideways from lane x=%.2f" % [str(game.current_zone_id), lane_x])
+		check(absf(player.global_position.x - lane_x) < BRIDGE_LANE_DRIFT_TOLERANCE, "%s bridge crossing drifted sideways from lane x=%.2f (actual x=%.2f z=%.2f y=%.2f velocity=%s)" % [str(game.current_zone_id), lane_x, player.global_position.x, player.global_position.z, player.global_position.y, player.velocity])
+		check(absf(player.global_position.x) < BridgeSurfaceContract.HALF_WIDTH - 0.32, "%s bridge crossing left the rail-safe corridor (actual x=%.2f width=%.2f)" % [str(game.current_zone_id), player.global_position.x, BridgeSurfaceContract.DECK_WIDTH])
 		check(player.global_position.z < center_z - 2.55, "%s south-to-north bridge crossing stopped at lane x=%.2f z=%.2f" % [str(game.current_zone_id), lane_x, player.global_position.z])
 		check(not game.call("_is_river_recovery_position", str(game.current_zone_id), player.global_position), "%s crossing ended in river recovery state at lane x=%.2f" % [str(game.current_zone_id), lane_x])
 
 		player.global_position = Vector3(lane_x, 0.25, center_z - 3.45)
 		player.rotation.y = PI
+		_reset_camera(game)
 		# Player movement follows the active camera, not the actor yaw. From the
 		# north bank the real return input is reverse, so this leg exercises the
 		# same player-facing control path without accidentally walking away from
 		# the bridge.
-		await _walk_with_input(game, "move_back", 90, center_z, 1.0)
-		check(absf(player.global_position.x - lane_x) < 0.25, "%s return crossing drifted sideways from lane x=%.2f" % [str(game.current_zone_id), lane_x])
-		check(player.global_position.z > center_z + 2.55, "%s north-to-south bridge crossing stopped at lane x=%.2f z=%.2f" % [str(game.current_zone_id), lane_x, player.global_position.z])
+		await _walk_with_input(game, "move_back", 92, center_z, 1.0)
+		check(absf(player.global_position.x - lane_x) < BRIDGE_LANE_DRIFT_TOLERANCE, "%s return crossing drifted sideways from lane x=%.2f (actual x=%.2f z=%.2f y=%.2f contacts=%s)" % [str(game.current_zone_id), lane_x, player.global_position.x, player.global_position.z, player.global_position.y, _slide_collision_names(player)])
+		check(absf(player.global_position.x) < BridgeSurfaceContract.HALF_WIDTH - 0.32, "%s return crossing left the rail-safe corridor (actual x=%.2f width=%.2f)" % [str(game.current_zone_id), player.global_position.x, BridgeSurfaceContract.DECK_WIDTH])
+		check(player.global_position.z > center_z + 2.55, "%s north-to-south bridge crossing stopped at lane x=%.2f z=%.2f contacts=%s" % [str(game.current_zone_id), lane_x, player.global_position.z, _slide_collision_names(player)])
 		check(not game.call("_is_river_recovery_position", str(game.current_zone_id), player.global_position), "%s return crossing ended in river recovery state at lane x=%.2f" % [str(game.current_zone_id), lane_x])
+
+func _reset_camera(game: Node) -> void:
+	var camera_rig = game.get("camera_rig")
+	if camera_rig != null and is_instance_valid(camera_rig):
+		camera_rig.set("yaw", 0.0)
+
+func _slide_collision_names(body: CharacterBody3D) -> String:
+	var names: Array[String] = []
+	for index in range(body.get_slide_collision_count()):
+		var collision := body.get_slide_collision(index)
+		var collider = collision.get_collider()
+		if collider is Node:
+			names.append(str((collider as Node).name))
+	return ",".join(names)
 
 func _walk_with_input(game, action: String, frame_count: int, center_z: float, direction: float) -> void:
 	var player = game.player

@@ -105,7 +105,10 @@ func setup(id: String, definition: Dictionary, target: Node3D) -> void:
 	motivation = str(definition.get("motivation", ""))
 	is_boss = bool(definition.get("boss", false))
 	player = target
-	home_position = global_position
+	# Some diagnostic and streaming callers configure the actor before attaching
+	# it to the active scene. Reading global_position in that state emits an
+	# engine error and can poison an otherwise valid runtime check.
+	home_position = global_position if is_inside_tree() else position
 	health_component = HealthComponent.new()
 	add_child(health_component)
 	health_component.configure(float(definition.get("health", 60.0)))
@@ -746,9 +749,8 @@ func _try_build_mapped_body() -> bool:
 		}.get(enemy_id, "ghoulkin_skeleton")
 		mapped = asset_helper.spawn_visual_role(visual_source, "enemies")
 		skeleton_family_source = visual_source in [
-			"ghoulkin_skeleton", "ghoulkin_creature", "wychwood_stalker_creature",
-			"wychwood_raider_creature", "bog_wretch_creature",
-			"gravebound_knight_creature", "bell_eater_boss", "rootbound_colossus_boss"
+			"ghoulkin_skeleton", "ghoulkin_creature", "bell_eater_boss",
+			"rootbound_colossus_boss"
 		]
 		uses_real_body = mapped != null and not mapped.name.ends_with("_placeholder") and not skeleton_family_source
 	if mapped == null:
@@ -832,6 +834,22 @@ func _try_build_mapped_body() -> bool:
 				"attack": "|WolfArmature|Walking", "hit": "|WolfArmature|Walking",
 				"death": "|WolfArmature|Walking"
 			})
+		elif visual_source == "bog_wretch_creature":
+			animation_driver.configure(mapped, {
+				"idle": "Armature|Slime_Idle", "walk": "Armature|Slime_Walk",
+				"walk_back": "Armature|Slime_Walk", "strafe": "Armature|Slime_Walk",
+				"run": "Armature|Slime_Walk", "windup": "Armature|Slime_Attack",
+				"attack": "Armature|Slime_Attack", "hit": "Armature|Slime_Attack",
+				"death": "Armature|Slime_Death"
+			})
+		elif visual_source == "gravebound_knight_creature":
+			animation_driver.configure(mapped, {
+				"idle": "HumanArmature|Idle_swordRight", "walk": "HumanArmature|Walking",
+				"walk_back": "HumanArmature|Walking", "strafe": "HumanArmature|Walking",
+				"run": "HumanArmature|Run_swordRight", "windup": "HumanArmature|Run_swordAttack",
+				"attack": "HumanArmature|swordAttackJump", "hit": "HumanArmature|Death",
+				"death": "HumanArmature|Death"
+			})
 		else:
 			animation_driver.configure(mapped, {
 				"idle": "Idle",
@@ -845,11 +863,15 @@ func _try_build_mapped_body() -> bool:
 			"windup": "Punch",
 			"attack": "Punch", "hit": "HitReact", "death": "Death"
 		})
-	if animation_driver.is_valid():
-		# One active combat skeleton is sufficient for the 720p presentation;
-		# keeping its updates off the crowded 60 Hz path avoids isolated attack
-		# evaluation spikes on Intel/ANGLE without changing hit timing.
-		animation_driver.set_update_rate_hz(12.0)
+	if not animation_driver.is_valid():
+		var animation_report: Dictionary = animation_driver.get_contract_report()
+		push_error("Enemy visual role '%s' has no valid idle animation: %s" % [enemy_id, animation_report.get("errors", [])])
+		mapped.queue_free()
+		return false
+	# One active combat skeleton is sufficient for the 720p presentation;
+	# keeping its updates off the crowded 60 Hz path avoids isolated attack
+	# evaluation spikes on Intel/ANGLE without changing hit timing.
+	animation_driver.set_update_rate_hz(12.0)
 	_configure_attack_contact_bone()
 	return true
 

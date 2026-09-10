@@ -263,24 +263,24 @@
         "notes": "Retained articulated source for all Wychwood family roles; deterministic scale, material, posture, and attack profiles provide silhouette variation without duplicate meshes."
       },
       "wychwood_stalker_creature": {
-        "status": "mon_002_connected_ghoulkin_family",
-        "path": "res://assets_external/enemies/Skeleton.fbx",
+        "status": "mon_002_distinct_bat_stalker",
+        "path": "res://assets_external/enemies/Bat.fbx",
         "source": "Animated Monsters by Quaternius",
         "source_url": "https://opengameart.org/sites/default/files/Animated%20Monster%20Pack%20by%20%40Quaternius.zip",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
         "target_height": 1.6,
-        "notes": "Humanoid Stalker variant using the connected Skeleton family; role-specific ash-green material, lean scale, posture, spacing, and attack profile provide distinction without an animal substitution."
+        "notes": "Distinct animated Bat silhouette for the Stalker role; the imported flight/attack clips, ash-green material, lean scale, spacing, and flanking profile make the role readable at gameplay distance."
       },
       "wychwood_raider_creature": {
-        "status": "mon_002_connected_ghoulkin_family",
-        "path": "res://assets_external/enemies/Skeleton.fbx",
+        "status": "mon_002_distinct_dragon_raider",
+        "path": "res://assets_external/enemies/Dragon.fbx",
         "source": "Animated Monsters by Quaternius",
         "source_url": "https://opengameart.org/sites/default/files/Animated%20Monster%20Pack%20by%20%40Quaternius.zip",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
         "target_height": 1.86,
-        "notes": "Humanoid Raider variant using the connected Skeleton family; broader ash-bone material, grounded scale, posture, spacing, and attack profile provide a readable heavy role."
+        "notes": "Distinct compact Dragon silhouette for the Raider role; the imported attack clips, ash-bone material, grounded scale, spacing, and feint profile provide a readable aerial predator variant."
       },
       "wychwood_stalker": {
         "status": "mon_002_connected_ghoulkin_alias",
@@ -369,20 +369,20 @@
         "notes": "Ashwing uses the connected animated Dragon source at focal-creature scale with charred harness, ember core, and scorched wing-root identity dressing."
       },
       "bog_wretch_creature": {
-        "status": "mon_002_connected_family_runtime",
-        "path": "res://assets_external/enemies/Skeleton.fbx",
+        "status": "mon_002_distinct_slime_wretch",
+        "path": "res://assets_external/enemies/Slime.fbx",
         "source": "Quaternius Animated Monsters",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
-        "notes": "Retained articulated Skeleton source with swamp material, elongated posture, and memory-core dressing for the Bog Wretch."
+        "notes": "Distinct animated Slime silhouette for the Bog Wretch; swamp material, low grounded profile, pooling motion, and memory-core dressing carry its story role."
       },
       "gravebound_knight_creature": {
-        "status": "mon_002_connected_family_runtime",
-        "path": "res://assets_external/enemies/Skeleton.fbx",
+        "status": "mon_002_distinct_knight_family",
+        "path": "res://assets_external/characters/KnightCharacter.fbx",
         "source": "Quaternius Animated Monsters",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
-        "notes": "Retained articulated Skeleton source with iron/ash material, armor dressing, and testimony-ready posture profile."
+        "notes": "Distinct animated armored humanoid for Gravebound roles; iron/ash material, grounded stance, authored sword-idle clips, and testimony-ready posture carry the identity."
       }
     }
   }

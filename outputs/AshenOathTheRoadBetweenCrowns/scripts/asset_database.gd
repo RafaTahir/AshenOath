@@ -9,6 +9,39 @@ var role_mapping = {}
 var visual_upgrade = {}
 var runtime_acceptance = {}
 
+# Runtime manifests use concise production role ids while gameplay and visual
+# manifests retain historical aliases. Keeping the alias table here makes the
+# acceptance decision identical for every lookup path.
+const ACCEPTANCE_ROLE_ALIASES := {
+	"player_kael": "kael",
+	"player_human": "kael",
+	"sister_anwen": "anwen",
+	"sister_anwen_human": "anwen",
+	"mira_human": "villager",
+	"rook_human": "traveler",
+	"villager_human": "villager",
+	"villager_female_human": "villager",
+	"villager_worker_human": "villager",
+	"villager_hooded_human": "villager",
+	"castle_guard_human": "guard",
+	"road_ranger": "road_ranger_human",
+	"ghoulkin_skeleton": "ghoulkin",
+	"ghoulkin_creature": "ghoulkin",
+	"wychwood_stalker": "ghoulkin",
+	"wychwood_stalker_creature": "ghoulkin",
+	"wychwood_raider": "ghoulkin",
+	"wychwood_raider_creature": "ghoulkin",
+	"wychwood_brute": "ghoulkin",
+	"bog_wretch_creature": "bog_wretch",
+	"gravebound_knight_creature": "gravebound_knight",
+	"bell_eater_boss": "ghoulkin",
+	"rootbound_colossus_boss": "gravebound_knight",
+	"ashwing_creature": "ashwing",
+	"ashwing_boss": "ashwing",
+	"white_hart_avatar": "white_hart",
+	"white_hart_boss": "white_hart",
+}
+
 func _ready() -> void:
 	reload()
 
@@ -53,8 +86,31 @@ func get_visual_upgrade_roles() -> Dictionary:
 
 func get_runtime_acceptance(role_name: String) -> Dictionary:
 	var roles: Dictionary = runtime_acceptance.get("roles", {})
-	var entry = roles.get(role_name, {})
+	var canonical := str(ACCEPTANCE_ROLE_ALIASES.get(role_name.to_lower(), role_name.to_lower()))
+	var entry = roles.get(role_name, roles.get(canonical, {}))
 	return entry.duplicate(true) if typeof(entry) == TYPE_DICTIONARY else {}
+
+func get_runtime_policy(role_name: String, category: String = "") -> Dictionary:
+	var acceptance := get_runtime_acceptance(role_name)
+	var required := category in ["characters", "enemies"]
+	if acceptance.is_empty():
+		return {
+			"required": required,
+			"known": false,
+			"approved": false,
+			"status": "unregistered" if required else "optional",
+			"release_blocked": required,
+			"reason": "Required visual role has no runtime acceptance record." if required else "",
+		}
+	var approved := bool(acceptance.get("approved", false)) and bool(acceptance.get("export_eligible", false))
+	return {
+		"required": required,
+		"known": true,
+		"approved": approved,
+		"status": str(acceptance.get("status", "unknown")),
+		"release_blocked": required and not approved,
+		"reason": str(acceptance.get("blocked_reason", "")),
+	}
 
 func is_release_eligible(role_name: String) -> bool:
 	return bool(get_runtime_acceptance(role_name).get("export_eligible", false))
@@ -98,6 +154,8 @@ func _placeholder_entry(role_name: String, group: String, existing: Dictionary) 
 func _with_runtime_acceptance(role_name: String, entry: Dictionary) -> Dictionary:
 	var result = entry.duplicate(true)
 	var acceptance = get_runtime_acceptance(role_name)
+	var category := str(result.get("group", ""))
+	result["runtime_policy"] = get_runtime_policy(role_name, category)
 	if not acceptance.is_empty():
 		result["runtime_acceptance_status"] = str(acceptance.get("status", "unknown"))
 		result["runtime_approved"] = bool(acceptance.get("approved", false))

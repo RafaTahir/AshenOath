@@ -78,8 +78,8 @@ func make_ground(pos: Vector3, size: Vector3, color: Color) -> void:
 	_host._make_ground(pos, size, color)
 	ground_count += 1
 
-func make_split_ground(width: float, depth: float, river_z: float, river_span: float, color: Color) -> void:
-	_host._make_split_ground(width, depth, river_z, river_span, color)
+func make_split_ground(width: float, depth: float, river_z: float, river_span: float, color: Color, bridge_width: float = 0.0, bridge_length: float = 0.0, bridge_approach_length: float = 0.0) -> void:
+	_host._make_split_ground(width, depth, river_z, river_span, color, bridge_width, bridge_length, bridge_approach_length)
 	ground_count += 1
 
 func make_play_area_bounds(width: float, depth: float, color: Color) -> void:
@@ -183,6 +183,12 @@ func make_material(color: Color) -> StandardMaterial3D:
 
 func recover_from_river(body: CharacterBody3D, center_z: float, span: float) -> void:
 	_host._recover_from_river(body, center_z, span)
+
+func river_recovery_handler() -> Callable:
+	# Runtime river volumes must not capture this short-lived build context in a
+	# signal closure. Return a host-bound callable so the zone can be retired
+	# without retaining a RefCounted builder owner until process shutdown.
+	return Callable(_host, "_recover_from_river")
 
 func make_greyfen_terrain_layers() -> void:
 	_host._make_greyfen_terrain_layers()

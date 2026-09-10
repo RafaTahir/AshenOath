@@ -136,6 +136,7 @@ var campaign_visual_prewarm_started := false
 var campaign_visual_prewarm_generation := 0
 var campaign_visual_prewarm_not_before_msec := 0
 var campaign_visual_prewarm_suspended := false
+var background_runtime_timer_pending := false
 var owned_timers: Array[Timer] = []
 # Keep each late-opening chunk small enough that the first controllable frame
 # never competes with a large import or decoration batch on Web/ANGLE.
@@ -147,6 +148,7 @@ const OPENING_GAMEPLAY_HYDRATE_DELAY_SECONDS := 0.65
 const OPENING_DETAIL_MIN_PLAYER_DISTANCE := 7.0
 const OPENING_DETAIL_RETRY_SECONDS := 5.0
 const BACKGROUND_RUNTIME_DELAY_SECONDS := 45.0
+const BACKGROUND_RUNTIME_RETRY_SECONDS := 12.0
 const OPENING_SAVE_DELAY_SECONDS := 30.0
 # Campaign presentation roles are optional after Greyfen is playable. Waiting
 # for a settled opening window keeps imported Castle meshes out of the first
@@ -618,6 +620,18 @@ func _start_new_game_world() -> void:
 func _request_background_runtime_packs() -> void:
 	if not game_started or runtime_packs == null:
 		return
+	# Optional pack mounts and neighbor imports can compile shaders and touch
+	# IndexedDB for several frames on Web/ANGLE. Never let that work compete
+	# with a player-controlled Greyfen crossing; retry after the actor is idle or
+	# after the player has entered the next sector, where the campaign pack is
+	# already an explicit transition dependency.
+	if current_zone_id == "greyfen":
+		# Greyfen is the opening route and owns the first player-controlled
+		# crossing. Optional pack mounts are allowed only after the player has
+		# actually left this sector; a delayed download can still block Web/ANGLE
+		# frames even when the actor is briefly stationary at a seam.
+		_schedule_background_runtime_packs(BACKGROUND_RUNTIME_RETRY_SECONDS)
+		return
 	if runtime_packs.has_method("request_background_packs"):
 		runtime_packs.request_background_packs()
 	# Neighbor scene requests are also background work. Keep them behind the
@@ -630,12 +644,16 @@ func should_defer_neighbor_prewarm() -> bool:
 	# opening save state settle. The delayed background request resumes prewarm.
 	return opening_checkpoint_pending and game_started and current_zone_id == "greyfen"
 
-func _schedule_background_runtime_packs() -> void:
+func _schedule_background_runtime_packs(delay_seconds: float = BACKGROUND_RUNTIME_DELAY_SECONDS) -> void:
 	# Do not let a fast local download/mount compete with the first playable
 	# frames. The opening can request a campaign pack on demand; this timer only
 	# starts optional background work after the handoff has visibly settled.
-	var delay_timer := _create_owned_timer(BACKGROUND_RUNTIME_DELAY_SECONDS, true)
+	if background_runtime_timer_pending:
+		return
+	background_runtime_timer_pending = true
+	var delay_timer := _create_owned_timer(delay_seconds, true)
 	await delay_timer.timeout
+	background_runtime_timer_pending = false
 	if resource_shutdown_prepared or not game_started or current_zone_id == "":
 		return
 	_request_background_runtime_packs()
@@ -1234,6 +1252,18 @@ func _run_campaign_visual_prewarm(generation: int, role_index: int) -> void:
 	if role_index >= CAMPAIGN_VISUAL_PREWARM_ROLES.size():
 		print("LOADING: campaign_visual_prewarm complete")
 		return
+	# Campaign role imports can compile meshes and materials on Web/ANGLE even
+	# when they are scheduled one role at a time. Do not let that optional work
+	# interrupt a live Greyfen crossing; the next settled frame can resume it.
+	if current_zone_id == "greyfen":
+		# Keep optional campaign role imports out of every Greyfen movement path,
+		# including bridge approaches. The pending task continues once a sector
+		# handoff changes current_zone_id.
+		var moving_retry_timer := _create_owned_timer(OPENING_DETAIL_RETRY_SECONDS, true)
+		await moving_retry_timer.timeout
+		if generation == campaign_visual_prewarm_generation:
+			call_deferred("_run_campaign_visual_prewarm", generation, role_index)
+		return
 	if Time.get_ticks_msec() < campaign_visual_prewarm_not_before_msec:
 		var wait_seconds := maxf(float(campaign_visual_prewarm_not_before_msec - Time.get_ticks_msec()) / 1000.0, 0.05)
 		var wait_timer := _create_owned_timer(minf(wait_seconds, 1.0), true)
@@ -1581,6 +1611,7 @@ func _cancel_owned_timers() -> void:
 		if is_instance_valid(timer):
 			timer.queue_free()
 	owned_timers.clear()
+	background_runtime_timer_pending = false
 
 func _quiesce_zone_runtime(root: Node) -> void:
 	for raw_player in root.find_children("*", "AnimationPlayer", true, false):
@@ -2696,6 +2727,16 @@ func _run_opening_detail_stage(generation: int) -> void:
 	if player == null or not is_instance_valid(player) or player.global_position.distance_to(Vector3(0.0, 0.0, 9.8)) < OPENING_DETAIL_MIN_PLAYER_DISTANCE:
 		var retry_timer := _create_owned_timer(OPENING_DETAIL_RETRY_SECONDS, true)
 		await retry_timer.timeout
+		if generation == opening_detail_generation and opening_detail_pending:
+			call_deferred("_run_opening_detail_stage", generation)
+		return
+	# Optional detail must never begin while Kael is actively traversing the
+	# opening route. Web/ANGLE can spend a long frame compiling imported scenery;
+	# waiting for an idle player keeps a bridge or gate crossing responsive while
+	# retaining the deferred presentation upgrade after the player stops.
+	if player.velocity.length_squared() > 0.04:
+		var moving_retry_timer := _create_owned_timer(OPENING_DETAIL_RETRY_SECONDS, true)
+		await moving_retry_timer.timeout
 		if generation == opening_detail_generation and opening_detail_pending:
 			call_deferred("_run_opening_detail_stage", generation)
 		return
@@ -5936,13 +5977,52 @@ func _make_ground(pos: Vector3, size: Vector3, color: Color) -> void:
 	mesh.material_override = _terrain_material("CampaignGround", color)
 	body.add_child(mesh)
 
-func _make_split_ground(width: float, depth: float, river_z: float, river_span: float, color: Color) -> void:
+func _make_split_ground(width: float, depth: float, river_z: float, river_span: float, color: Color, bridge_width: float = 0.0, bridge_length: float = 0.0, bridge_approach_length: float = 0.0) -> void:
 	var south_edge := river_z + river_span * 0.5
 	var north_edge := river_z - river_span * 0.5
 	var north_depth := north_edge + depth * 0.5
 	var south_depth := depth * 0.5 - south_edge
+	if bridge_width > 0.0 and bridge_length > 0.0 and bridge_approach_length > 0.0:
+		var side_width := maxf((width - bridge_width) * 0.5, 0.1)
+		var side_center := bridge_width * 0.5 + side_width * 0.5
+		_make_ground(Vector3(-side_center,-0.08,-depth*0.5+north_depth*0.5),Vector3(side_width,0.16,north_depth),color)
+		_make_ground(Vector3(side_center,-0.08,-depth*0.5+north_depth*0.5),Vector3(side_width,0.16,north_depth),color)
+		_make_ground(Vector3(-side_center,-0.08,south_edge+south_depth*0.5),Vector3(side_width,0.16,south_depth),color)
+		_make_ground(Vector3(side_center,-0.08,south_edge+south_depth*0.5),Vector3(side_width,0.16,south_depth),color)
+		# The center lane is split into bank approaches and one short bridge
+		# surface. Keeping these extents finite prevents a stale zone-wide box
+		# from owning the bank/bridge seam and lets the visual ramp meet one
+		# authoritative collision surface.
+		var support_half_length := bridge_length * 0.5 + bridge_approach_length
+		var north_corridor_end := river_z - support_half_length
+		var north_corridor_depth := maxf(north_corridor_end + depth * 0.5, 0.0)
+		if north_corridor_depth > 0.05:
+			_make_ground(Vector3(0.0,-0.08,-depth*0.5+north_corridor_depth*0.5), Vector3(bridge_width,0.16,north_corridor_depth), color)
+		var south_corridor_start := river_z + support_half_length
+		var south_corridor_depth := maxf(depth * 0.5 - south_corridor_start, 0.0)
+		if south_corridor_depth > 0.05:
+			_make_ground(Vector3(0.0,-0.08,south_corridor_start+south_corridor_depth*0.5), Vector3(bridge_width,0.16,south_corridor_depth), color)
+		_make_bridge_corridor_collision(bridge_width, river_z, bridge_length, bridge_approach_length)
+		return
 	_make_ground(Vector3(0,-0.08,-depth*0.5+north_depth*0.5),Vector3(width,0.16,north_depth),color)
 	_make_ground(Vector3(0,-0.08,south_edge+south_depth*0.5),Vector3(width,0.16,south_depth),color)
+
+func _make_bridge_corridor_collision(bridge_width: float, river_z: float, bridge_length: float, approach_length: float) -> void:
+	var body := StaticBody3D.new()
+	body.name = "RiverBridgeContinuousSurface"
+	body.position = Vector3(0.0, 0.0, river_z)
+	zone_root.add_child(body)
+	# Keep the gameplay surface perfectly flush with the authored bank ground.
+	# A single finite primitive has no concave edge or one-sided triangle seam
+	# for the CharacterBody capsule to catch on. Its length matches the visual
+	# bridge and both approach ramps instead of spanning the entire zone.
+	var collision := CollisionShape3D.new()
+	var shape := BoxShape3D.new()
+	var support_length := bridge_length + approach_length * 2.0
+	shape.size = Vector3(bridge_width, 0.20, support_length)
+	collision.position = Vector3(0.0, -0.10, 0.0)
+	collision.shape = shape
+	body.add_child(collision)
 
 func _make_hut(pos: Vector3) -> void:
 	_make_prop_box("Hut", pos + Vector3(0, 1, 0), Vector3(3.6, 2, 3.0), Color(0.22, 0.16, 0.12))
@@ -6719,7 +6799,7 @@ func _make_role_visual(role_name: String, category: String, scale_value: Vector3
 	if category == "characters":
 		var visual_role = _visual_role_for_legacy_character(role_name)
 		if visual_role != "" and asset_helper.has_method("spawn_visual_role") and asset_helper.has_method("has_visual_role") and asset_helper.has_visual_role(visual_role):
-			node = asset_helper.spawn_visual_role(visual_role, "characters")
+			node = asset_helper.spawn_visual_role(visual_role, "characters", role_name)
 			if node != null and not node.name.ends_with("_placeholder"):
 				return node
 			if node != null:

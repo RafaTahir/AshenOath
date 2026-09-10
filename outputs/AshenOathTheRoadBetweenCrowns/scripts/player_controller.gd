@@ -120,6 +120,7 @@ var bow_attachment: BoneAttachment3D
 var bow_quiver_attachment: BoneAttachment3D
 const BOW_MAX_DRAW := 1.0
 const BOW_RANGE := 24.0
+const MODELED_SWORD_PATH := "res://assets_external/characters/Sword.fbx"
 
 const BEAM_STATE_IDLE := ""
 const BEAM_STATE_SHEATHING := "sheathing"
@@ -1258,11 +1259,19 @@ func _attach_rig_sword(mapped: Node3D) -> Node3D:
 func _build_oathblade_visual(parent: Node3D) -> Node3D:
 	var oathblade := Node3D.new()
 	oathblade.name = "KaelOathblade"
-	# Keep the blade readable at gameplay distance without letting a one-metre
-	# local mesh read as a pole beside a 1.78 m character. The hand, markers,
-	# slash ribbon, and collision all use this same normalized weapon scale.
-	oathblade.scale = Vector3.ONE * 0.82
+	# The hand, markers, slash ribbon, and collision all share this normalized
+	# weapon root. Prefer the authored Quaternius sword; its FBX importer keeps
+	# a 100x source-unit transform, so the child is normalized once here rather
+	# than allowing that source scale to leak into the hand socket.
+	oathblade.scale = Vector3.ONE
 	parent.add_child(oathblade)
+	if _attach_modeled_sword(oathblade):
+		oathblade.set_meta("weapon_visual_source", MODELED_SWORD_PATH)
+		return oathblade
+	# Keep a local diagnostic fallback for a missing imported source. The runtime
+	# asset gate still rejects that state; this branch exists only to keep native
+	# tools able to report the missing asset without silently losing the socket.
+	push_error("Modeled sword source could not be loaded: %s" % MODELED_SWORD_PATH)
 	var steel := _metal_mat(Color(0.84, 0.88, 0.92))
 	steel.metallic = 0.72
 	steel.roughness = 0.20
@@ -1305,6 +1314,49 @@ func _build_oathblade_visual(parent: Node3D) -> Node3D:
 	pommel.material_override = _metal_mat(Color(0.52, 0.34, 0.15))
 	oathblade.add_child(pommel)
 	return oathblade
+
+func _attach_modeled_sword(oathblade: Node3D) -> bool:
+	var modeled: Node3D = null
+	if asset_helper != null and asset_helper.has_method("load_runtime_resource") and asset_helper.has_method("instantiate_runtime_resource"):
+		var resource = asset_helper.load_runtime_resource(MODELED_SWORD_PATH)
+		modeled = asset_helper.instantiate_runtime_resource(resource)
+	else:
+		var resource = ResourceLoader.load(MODELED_SWORD_PATH)
+		if resource is PackedScene:
+			var instance := (resource as PackedScene).instantiate()
+			if instance is Node3D:
+				modeled = instance as Node3D
+	if modeled == null:
+		return false
+	modeled.name = "OathbladeModeledMesh"
+	# The imported Sword mesh is authored along its local +Y after the FBX
+	# conversion. Flip it so the hilt stays at the hand and the blade extends
+	# down local -Y, matching the existing contact-marker contract.
+	modeled.rotation_degrees = Vector3(180.0, 0.0, 0.0)
+	modeled.scale = Vector3.ONE * 0.22
+	modeled.position = Vector3(0.0, 0.045, 0.0)
+	oathblade.add_child(modeled)
+	var mesh_count := 0
+	for raw_mesh in modeled.find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := raw_mesh as MeshInstance3D
+		if mesh_instance == null or mesh_instance.mesh == null:
+			continue
+		mesh_count += 1
+		mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+		# The imported FBX carries named materials, but their source values are
+		# too dark for the browser lighting profile. Keep the authored mesh and
+		# replace only the presentation material with a readable blade finish.
+		mesh_instance.material_override = _metal_mat(Color(0.78, 0.82, 0.88))
+		if mesh_instance.mesh.get_surface_count() == 0:
+			mesh_instance.material_override = _metal_mat(Color(0.72, 0.78, 0.82))
+		else:
+			for surface_index in range(mesh_instance.mesh.get_surface_count()):
+				var material := mesh_instance.get_surface_override_material(surface_index)
+				if material == null:
+					material = mesh_instance.mesh.surface_get_material(surface_index)
+				if material == null:
+					mesh_instance.set_surface_override_material(surface_index, _metal_mat(Color(0.72, 0.78, 0.82)))
+	return mesh_count > 0
 
 func _build_oathblade_mesh() -> ImmediateMesh:
 	var mesh := ImmediateMesh.new()

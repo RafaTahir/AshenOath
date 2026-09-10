@@ -1,4 +1,5 @@
 import argparse
+import fnmatch
 import re
 from pathlib import Path
 
@@ -20,12 +21,37 @@ REQUIRED_ZONES = {
 }
 
 
+def preset_block(preset: str, name: str) -> str:
+    """Return one export preset without confusing QA and production filters."""
+    blocks = re.split(r"(?=^\[preset\.\d+\]$)", preset, flags=re.MULTILINE)
+    for block in blocks:
+        if re.search(rf'^name="{re.escape(name)}"$', block, re.MULTILINE):
+            return block
+    return ""
+
+
+def export_includes(block: str, resource: str) -> bool:
+    """Match Godot's relative include_filter entries against a res:// path."""
+    match = re.search(r'^include_filter="([^"]*)"$', block, re.MULTILINE)
+    if not match:
+        return False
+    relative = resource.removeprefix("res://")
+    patterns = [item.strip().replace("\\", "/") for item in match.group(1).split(",")]
+    return any(
+        fnmatch.fnmatch(relative, pattern) or fnmatch.fnmatch(resource, pattern)
+        for pattern in patterns
+        if pattern
+    )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("project", type=Path)
     args = parser.parse_args()
     project = args.project.resolve()
     preset = (project / "export_presets.cfg").read_text(encoding="utf-8")
+    production_preset = preset_block(preset, "Web Browser")
+    qa_preset = preset_block(preset, "Web QA Browser")
     router = (project / "scripts" / "zone_composition_router.gd").read_text(encoding="utf-8")
     campaign_router = (project / "scripts" / "zones" / "campaign_section.gd").read_text(encoding="utf-8")
     hud = (project / "scripts" / "hud.gd").read_text(encoding="utf-8")
@@ -36,9 +62,12 @@ def main() -> int:
     )
     if web_preset_names.count("Web Browser") != 1 or web_preset_names.count("Web QA Browser") != 1:
         failures.append("one production Web preset and one disposable QA Web preset are required")
+    for preset_name, block in (("Web Browser", production_preset), ("Web QA Browser", qa_preset)):
+        if not export_includes(block, "res://world_sector_manifest.json"):
+            failures.append(f"{preset_name} omits res://world_sector_manifest.json")
     for zone, relative in REQUIRED_ZONES.items():
         resource = f'res://{relative}'
-        if f'"{resource}"' not in preset:
+        if not export_includes(production_preset, resource):
             failures.append(f"export omits {resource}")
         if relative.endswith(("greyfen_section.gd", "wychwood_section.gd")) and resource not in router:
             failures.append(f"zone router does not preload {relative}")

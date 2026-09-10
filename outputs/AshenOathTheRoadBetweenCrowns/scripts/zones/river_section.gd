@@ -103,27 +103,16 @@ func _make_shore_wetness(root: Node3D, center_z: float, width: float, span: floa
 
 func _make_bridge(root: Node3D, z: float, span: float) -> void:
 	var bridge_length := BridgeSurfaceContract.bridge_length(span)
-	# Keep the physical deck exactly flush with the road. A separate shallow
-	# visual shell preserves the raised timber silhouette while the collision
-	# surface has no lip for a full-size capsule to catch when leaving the deck.
+	# The zone ground builder owns one continuous, collider-tested bridge corridor.
+	# Keep this bridge section visual-only so a second deck or apron shape cannot
+	# introduce a seam at the bank joins.
 	_make_box(root,"RiverBridgeDeckVisual",Vector3(0,0.09,z),Vector3(BRIDGE_WIDTH,0.10,bridge_length),Color(0.22,0.13,0.065),false)
-	# Greyfen's walkable ground has a top at y=0. Keep the collision deck's top
-	# exactly there; a six-centimetre lip is enough to stop a CharacterBody even
-	# when a height-ray verifier reports a continuous surface.
-	var deck_collision_y := -BridgeSurfaceContract.DECK_COLLISION_THICKNESS * 0.5
-	_make_box(root,"RiverBridgeDeck",Vector3(0,deck_collision_y,z),Vector3(BRIDGE_WIDTH,BridgeSurfaceContract.DECK_COLLISION_THICKNESS,bridge_length),Color(0.22,0.13,0.065),true)
 	var ramp_length := 1.8
-	# Match the road surface to the shallow physical deck with a visual wedge.
-	# Collision remains on the flush deck so the capsule never catches a ramp
-	# perimeter or a one-sided triangle surface.
+	# Match the visible approach wedges to the shared collision profile.
 	var ramp_angle := atan(0.06 / ramp_length)
 	var ramp_offset := bridge_length * 0.5 + ramp_length * 0.5 - 0.06
 	_make_bridge_ramp(root, "BridgeApproachRampNorth", Vector3(0,0.09,z-ramp_offset), Vector3(BRIDGE_WIDTH-0.28,0.18,ramp_length), -ramp_angle)
 	_make_bridge_ramp(root, "BridgeApproachRampSouth", Vector3(0,0.09,z+ramp_offset), Vector3(BRIDGE_WIDTH-0.28,0.18,ramp_length), ramp_angle)
-	# The ramps are a visual wedge. These low aprons overlap the deck and ground
-	# so a full CharacterBody capsule never meets a seam or requires a jump.
-	_make_bridge_apron_collision(root, "BridgeApproachSurfaceNorthCollision", Vector3(0, deck_collision_y, z-ramp_offset), Vector3(BRIDGE_WIDTH-0.28, BridgeSurfaceContract.DECK_COLLISION_THICKNESS, ramp_length))
-	_make_bridge_apron_collision(root, "BridgeApproachSurfaceSouthCollision", Vector3(0, deck_collision_y, z+ramp_offset), Vector3(BRIDGE_WIDTH-0.28, BridgeSurfaceContract.DECK_COLLISION_THICKNESS, ramp_length))
 	var plank_count := 9
 	for plank_index in range(plank_count):
 		var local_z := -bridge_length * 0.42 + float(plank_index) * (bridge_length * 0.84 / float(plank_count - 1))
@@ -205,15 +194,31 @@ func _make_bridge_ramp(root: Node3D, node_name: String, pos: Vector3, size: Vect
 	mesh.material_override = material
 	root.add_child(mesh)
 
-func _make_bridge_apron_collision(root: Node3D, node_name: String, pos: Vector3, size: Vector3) -> void:
+func _make_bridge_apron_collision(root: Node3D, node_name: String, pos: Vector3, size: Vector3, slope_sign: float) -> void:
 	var body := StaticBody3D.new()
 	body.name = node_name
 	body.position = pos
 	root.add_child(body)
 	var shape := CollisionShape3D.new()
-	var box := BoxShape3D.new()
-	box.size = size
-	shape.shape = box
+	var half_width := size.x * 0.5
+	var half_length := size.z * 0.5
+	var outer_z := slope_sign * half_length
+	var inner_z := -slope_sign * half_length
+	var bottom_y := -size.y * 0.5
+	var outer_top_y := 0.0 - pos.y
+	var inner_top_y := BridgeSurfaceContract.DECK_COLLISION_TOP - pos.y
+	var wedge := ConvexPolygonShape3D.new()
+	wedge.points = PackedVector3Array([
+		Vector3(-half_width, bottom_y, outer_z),
+		Vector3(half_width, bottom_y, outer_z),
+		Vector3(-half_width, bottom_y, inner_z),
+		Vector3(half_width, bottom_y, inner_z),
+		Vector3(-half_width, outer_top_y, outer_z),
+		Vector3(half_width, outer_top_y, outer_z),
+		Vector3(-half_width, inner_top_y, inner_z),
+		Vector3(half_width, inner_top_y, inner_z),
+	])
+	shape.shape = wedge
 	body.add_child(shape)
 
 func _make_bank_barriers(root: Node3D, center_z: float, width: float, span: float) -> void:
@@ -229,6 +234,7 @@ func _make_bank_barriers(root: Node3D, center_z: float, width: float, span: floa
 func _make_recovery_volumes(root: Node3D, context: ZoneBuildContext, center_z: float, width: float, span: float) -> void:
 	var side_length := (width - BRIDGE_WIDTH) * 0.5
 	var side_offset := BRIDGE_WIDTH * 0.5 + side_length * 0.5
+	var recovery_handler := context.river_recovery_handler()
 	var recovery_index := 0
 	for x in [-side_offset, side_offset]:
 		var volume := Area3D.new()
@@ -241,10 +247,7 @@ func _make_recovery_volumes(root: Node3D, context: ZoneBuildContext, center_z: f
 		box.size = Vector3(side_length,3.0,span+0.5)
 		shape.shape = box
 		volume.add_child(shape)
-		volume.body_entered.connect(func(body):
-			if body is CharacterBody3D:
-				context.recover_from_river(body, center_z, span)
-		)
+		volume.body_entered.connect(recovery_handler.bind(center_z, span))
 
 func _make_invisible_barrier(root: Node3D, node_name: String, pos: Vector3, size: Vector3) -> void:
 	var body := StaticBody3D.new()

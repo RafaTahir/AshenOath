@@ -19,6 +19,7 @@ func _initialize() -> void:
 		var actors: Array = life.get("actors")
 		var previous_body := ""
 		var identities: Dictionary = {}
+		var hair_sources: Dictionary = {}
 		var ambient_count := 0
 		for entry in actors:
 			if bool(entry.get("named", false)):
@@ -38,11 +39,14 @@ func _initialize() -> void:
 				continue
 			var body_role: String = str(visual.get_meta("char_002_body_role", ""))
 			var identity: String = str(visual.get_meta("char_009_identity", ""))
+			var hair_source: String = str(visual.get_meta("character_hair_path", ""))
 			check(not body_role.is_empty(), "%s has no body role" % str(entry.get("id", "routine")))
 			check(not identity.is_empty(), "%s has no deterministic identity" % str(entry.get("id", "routine")))
+			check(not hair_source.is_empty(), "%s has no authored hair source" % str(entry.get("id", "routine")))
 			check(body_role != previous_body, "adjacent crowd actors repeat the same body role")
 			previous_body = body_role
 			identities[identity] = true
+			hair_sources[hair_source] = true
 			var driver: Node = visual.find_child("CharacterAnimationDriver", true, false)
 			check(driver != null and driver.has_method("is_valid") and driver.is_valid(), "%s lacks a valid crowd animation driver" % str(entry.get("id", "routine")))
 			var normalized_height: float = float(visual.get_meta("normalized_target_height", 0.0))
@@ -53,6 +57,7 @@ func _initialize() -> void:
 			check(visual.find_children("*", "AnimationPlayer", true, false).size() > 0, "%s has no crowd animation player" % str(entry.get("id", "routine")))
 		check(ambient_count >= 4, "Greyfen must retain four ambient routines")
 		check(identities.size() >= 4, "ambient crowd variation is too repetitive")
+		check(hair_sources.size() >= 2, "ambient crowd hair sources are not varied")
 	await _shutdown_game(game)
 	print("CHAR-009 VERIFIER: %s" % ("PASS - crowd scale, identity, and animation variation" if failures == 0 else "FAIL (%d)" % failures))
 	quit(0 if failures == 0 else 1)

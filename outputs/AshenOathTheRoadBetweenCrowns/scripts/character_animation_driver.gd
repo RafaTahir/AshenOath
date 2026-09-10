@@ -211,7 +211,8 @@ func set_update_rate_hz(rate_hz: float) -> void:
 	set_process(not externally_ticked and manual_update_interval <= 0.0)
 
 func is_valid() -> bool:
-	return animation_player != null and skeleton != null and skeleton.get_bone_count() > 0
+	return animation_player != null and skeleton != null and skeleton.get_bone_count() > 0 \
+		and contract_errors.is_empty() and resolved_clip_map.has("idle")
 
 func is_evaluation_scheduled() -> bool:
 	# Manual and externally ticked drivers intentionally keep AnimationPlayer
@@ -390,6 +391,13 @@ func get_contract_report() -> Dictionary:
 
 func get_locomotion_state() -> String:
 	return locomotion_state
+
+func get_visible_forward() -> Vector3:
+	if character_root == null:
+		return Vector3.ZERO
+	var forward := character_root.global_transform.basis.z if bool(character_root.get_meta("source_forward_positive_z", false)) else -character_root.global_transform.basis.z
+	forward.y = 0.0
+	return forward.normalized() if forward.length_squared() > 0.002 else Vector3.ZERO
 
 func has_active_action() -> bool:
 	return action_active

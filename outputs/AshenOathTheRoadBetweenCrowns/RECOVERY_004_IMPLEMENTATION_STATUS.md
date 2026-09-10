@@ -1,5 +1,118 @@
 # RECOVERY-004 Implementation Status
 
+## Native Route And Crowd Checkpoint - 2026-09-11
+
+- The player-driven native gate suite now passes the full connected route after
+  three authored-corridor blockers were removed: the Deep Woods ritual stone,
+  Old Mill rubble, and a Bandit Road tree were each relocated outside their
+  arrival approaches. `verify_gate_transitions.gd` completed the Greyfen,
+  Wychwood, wilderness, Castle, Record Hall, and return legs without a jump,
+  recovery trigger, or blocked gate.
+- `verify_river_swimming.gd` and `verify_navigation_001.gd` also pass. The
+  bridge-only river contract remains intact; the warnings emitted for blocked
+  monster visual roles are visual-debt diagnostics, not active route errors.
+- Crowd composition now consumes each routine's stable seed when selecting a
+  compatible hair source. `verify_char_009.gd` passes the distinct-hair and
+  identity checks, and a fresh 1280x720 crowd capture was recorded.
+- The duplicate Web startup-pack request is removed from the service registry;
+  the native load gate still passes with approximately 0.5s runtime setup,
+  approximately 1.8s Greyfen prewarm, and approximately 30ms New Game handoff.
+- The retained monster roles now use distinct runtime sources: Bat for the
+  Stalker, Dragon for the Raider, Slime for the Bog Wretch, and KnightCharacter
+  for the Gravebound. Their explicit imported animation maps resolve idle,
+  movement, attack, hit, and death clips; an unresolved idle map is now a
+  runtime failure rather than a frozen visual. Fresh evidence is recorded in
+  `MON_002_RUNTIME_FAMILIES.png`.
+- These are source/native checkpoints only. The current branch has not yet
+  received a source-aligned final Web export after the sword, crowd, and route
+  edits, and production remains unchanged.
+
+## Current Atomic Checkpoint - 2026-09-11 (modeled hand sword)
+
+- Current source: `codex/masterpiece-rebuild` at `5e9cc4c` with the preserved
+  worktree changes for the Greyfen boundary manifest, browser harness, and
+  the modeled-sword repair. The user-owned untracked
+  `tools/_inspect_milestone_c_assets.gd` remains untouched.
+- Completed in this slice: Kael's drawn sword now instantiates the valid
+  `res://assets_external/characters/Sword.fbx` scene under the existing
+  hand-bone equipment root. The imported source is normalized once, uses a
+  readable cached presentation material, and keeps the existing blade base,
+  tip, slash, parry, and Oathfire contracts. The procedural wedge remains
+  only as an explicit missing-source diagnostic fallback and is rejected by
+  the runtime role gate.
+- Direct proof: the Godot editor/import scan is parser-clean; `COMBAT-001`,
+  `MOTION QUALITY`, `RUNTIME-001`, `WEB-002`, and `ASSET-005` pass. The fresh
+  graphical animation capture refreshed `ANIM_001_01` through `ANIM_001_05`
+  at 1280x720. The new combat verifier requires the modeled source and hand
+  equipment node, so a future regression cannot silently restore the wedge.
+- Remaining limitation: the character and world visual registries still
+  contain the documented low-poly/interim roles and later-zone presentation
+  debt. The current source has not been re-exported or promoted; the v28 Web
+  artifact remains diagnostic evidence only.
+- Exact next action: continue the broader recovery from the next scoped
+  source/native blocker, then perform one source-aligned release export and
+  browser acceptance after the accumulated runtime fixes. Do not repeat the
+  obstruction telemetry loop.
+
+## Browser Obstruction Root-Cause Record - 2026-09-11
+
+- Diagnostic scope: the v23-v27 Chrome route traces at the west Greyfen
+  approach, approximately `x=-7.83, z=-10.42`, plus source/static inspection
+  and the native seamless-route reproduction. No additional runtime telemetry
+  is required for this blocker.
+- Physical ownership: the only body reported at the stalled point was the
+  Greyfen left-bank floor slab created by `_make_split_ground` through
+  `ZoneBuildContext`. Its bounds are approximately `x=[-21.0,-2.7]` and
+  `z=[-17.0,2.8]`, with a level top surface. The bridge body is the separate
+  `RiverBridgeContinuousSurface` corridor at the river center. Deferred
+  boundary scenery is disabled during the fast opening build, and the traces
+  reported no wall, overlap, tree, gate, or river-recovery collision. The
+  apparent obstruction was therefore a walkable floor location, not a scenery
+  collider or bridge seam.
+- Root cause: `world_sector_manifest.json` was missing from the `Web QA Browser`
+  export include filter. The game still created the visible deep-wood gate, but
+  `WorldSectorManifest._ensure_loaded()` correctly fell back to an empty
+  sector set, so `SeamlessWorldService.update_player()` had no boundary edge
+  to activate. This made a valid west-gate approach look like a blocked route.
+- Surgical fix: add `world_sector_manifest.json` to the QA export filter. No
+  gameplay, physics, river, or world-builder change was needed for this
+  obstruction.
+- Cheapest proof after the fix: `verify_seam_002.py`,
+  `verify_world_grid_001.py`, and `verify_web_002.py` passed; the native
+  `verify_seam_qa_001.gd` route passed; the v26 export log confirmed the
+  manifest was packed; and v26 Chrome evidence crossed the west boundary into
+  `deep_wood` with no console or network errors. The later v27 failure was a
+  disposable SwiftShader/CDP held-key race: the trace stopped in Greyfen
+  before the boundary and did not reproduce the game-side failure.
+- Harness hardening now staged for the single final QA run: the browser driver
+  reasserts the existing raw key as an auto-repeat signal without pulsing a
+  key-up. This remains an input-harness change only and does not alter player
+  movement or transforms.
+- Final v28 attempt: the one fresh `Web QA Browser` export was written to
+  `D:\Projects\AshenOath\outputs\.release-gate\ticket\AshenOath_QA_v28`;
+  it contains 7 files totaling `93,846,246` bytes and the export log confirms
+  `world_sector_manifest.json` is packed. The single Chrome acceptance run
+  produced no console errors and removed its profile from
+  `D:\Temp\AshenOath`, but the disposable SwiftShader/CDP input path stopped
+  at `x=-5.863, z=-10.323` before the west boundary. Telemetry again reported
+  `on_floor=true`, `on_wall=false`, no overlaps, only the Greyfen floor slab
+  `@StaticBody3D@261`, and no river recovery. This is a harness failure, not a
+  new physical owner or a regression of the manifest fix. The earlier v26 run
+  on the same source-aligned candidate did cross into `deep_wood` with no
+  console or network errors.
+- Exact next action: do not run another Web export or browser attempt for this
+  obstruction. Preserve the v28 artifact and report as diagnostic evidence;
+  resume the broader recovery from source/native work, and defer browser
+  acceptance until the driver is replaced or isolated from the SwiftShader
+  held-key race. The browser route remains unaccepted even though the game
+  side of the original missing-manifest defect is closed.
+- Prevention follow-up: `WorldSectorManifest` now exposes explicit validity and
+  load-error state and reports a missing, malformed, or empty manifest instead
+  of silently presenting an empty sector graph. `verify_web_002.py` now checks
+  that both `Web Browser` and `Web QA Browser` include the manifest. The
+  affected static checks (`WEB-002`, `SEAM-002`, `WORLDGRID-001`, and
+  `NAV-002`) and the native `SEAM-QA-001` circuit all pass after this guard.
+
 ## Paused Atomic Checkpoint - 2026-09-10 (performance prewarm isolation)
 
 - Current atomic work: isolate synchronous campaign visual prewarm from cold
@@ -810,3 +923,81 @@ Do not sync `.release-gate/AshenOath_QA` into `web/`; it is not the production b
 - Exact next action: continue with the next scoped runtime blocker, regenerate
   the report only after its evidence is current, and retain the report as a
   failed record until every mandatory acceptance gate genuinely passes.
+
+## Current Atomic Checkpoint - 2026-09-11 (west Greyfen obstruction closure)
+
+- Current ticket: `WEB-002` / `SEAM-002` browser obstruction follow-up.
+- Browser status: the test-owned browser run has finished; no test Chrome or
+  Edge process remains active. The final v28 diagnostic produced no JavaScript,
+  network, resource, or WebGL console error and stopped only because the
+  disposable SwiftShader/CDP held-key path lost movement before the boundary.
+  The earlier v26 run on the same source-aligned candidate crossed into
+  `deep_wood`, so v27/v28 are harness failures rather than a new game-side
+  obstruction.
+- Complete candidate-owner analysis for the reported point
+  `x=-7.83, z=-10.42`:
+  - `_make_split_ground()` creates four lateral bank slabs. The left north-bank
+    `StaticBody3D` has world bounds approximately
+    `x=[-21.0,-2.7]`, `z=[-17.0,2.8]`, `y=[-0.16,0.0]`; the reported point is
+    inside this level walkable slab and its top is the only physical owner
+    reported by the v23-v28 traces.
+  - The same builder creates the north and south center-lane support slabs.
+    Their x bounds are `[-2.7,2.7]`, so neither can own the reported point.
+    The finite `RiverBridgeContinuousSurface` has the same x bounds and spans
+    only approximately `z=[-0.3,9.3]`; it is not under the reported point.
+  - `RiverSection` creates the two bridge rails and posts around the river
+    center, four `RiverBankBarrier` bodies at the bank edges, and two
+    `RiverRecoveryVolume` areas over the river span. Their z ranges are near
+    `2.8..6.2` or their x ranges are centered on the bridge; none overlaps the
+    reported point. The water, bank slopes, reeds, stones, foam, and wetness
+    are visual-only at this location.
+  - `_make_play_area_bounds()` creates only perimeter walls at approximately
+    `x=+-21.65` or `z=+-17.65`; none overlaps. Greyfen's `LowBerm` path
+    collision is not built by the Greyfen path-edge builder. The four dressed
+    house collision boxes and authored detail props are all more than one
+    player radius from the point; the nearest house is the west-lane house
+    around `(-5,-3)`.
+  - Opening-fast Greyfen skips boundary trees, tree walls, village dressing,
+    and quality collision generation. In the full detail path, `_make_tree()`
+    and `_make_prop_box()` apply reserved-route and river checks before adding
+    collision. Existing traces reported no tree, prop, gate, overlap, or
+    recovery collision at the point.
+- Root cause: `world_sector_manifest.json` was absent from the `Web QA Browser`
+  include filter. `WorldSectorManifest` therefore correctly fell back to an
+  empty sector graph; the visible gate remained, but no boundary edge could
+  activate. The player was standing on valid Greyfen floor, not blocked by a
+  physical object.
+- Surgical fix and cheapest proof: the manifest was added to the QA export
+  filter; `verify_seam_002.py`, `verify_world_grid_001.py`, `verify_web_002.py`,
+  and native `verify_seam_qa_001.gd` passed. The final native rerun in
+  `D:\Temp\AshenOath\obstruction_native_final.log` exited `0` with
+  `SEAM-QA-001 VERIFIER: PASS` and completed the bidirectional exterior
+  circuit. No additional runtime telemetry or code change is required for
+  this obstruction.
+- Remaining blocker: the native rerun still prints one shutdown-only
+  `ObjectDB instances leaked at exit` warning after the pass marker. It does
+  not identify a new collision owner and must remain a separate lifecycle
+  failure until traced. The current branch also remains blocked by the
+  previously documented visual, campaign, and release evidence debt.
+- Exact next action: do not export or rerun a browser for this obstruction.
+  Continue with the lifecycle warning using source/native inspection, then do
+  one source-aligned QA export and one browser acceptance run after the
+  accumulated source fixes settle.
+
+## Native Teardown Follow-up - 2026-09-11
+
+- Hypothesis tested: the river recovery-volume signal closure retained the
+  short-lived `ZoneBuildContext` and caused the remaining shutdown-only
+  `RefCounted` leak.
+- Surgical change: `RiverSection` now binds a host-owned recovery callable
+  returned by `ZoneBuildContext` instead of capturing the build context in an
+  anonymous signal closure.
+- Result: the affected native route still passes, but verbose shutdown still
+  reports one `ObjectDB instances leaked at exit` entry with a different
+  `RefCounted` ID. The callback-retention hypothesis is therefore not
+  confirmed as the remaining owner. No additional telemetry field or Web
+  rebuild is justified for this result.
+- Current truth: obstruction repair is verified; lifecycle cleanup remains an
+  open, separately documented blocker. The next diagnostic must inspect other
+  `RefCounted` ownership paths using source/native evidence before another
+  code change.

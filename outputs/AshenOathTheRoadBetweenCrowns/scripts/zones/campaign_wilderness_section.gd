@@ -75,7 +75,10 @@ func _build_deep_wood(context: ZoneBuildContext) -> void:
 	_make_memory_altar(context, Vector3(0, 0, -9.6), Color(0.28, 0.54, 0.46))
 	for pos in [Vector3(-7,0,6), Vector3(7,0,1), Vector3(-7,0,-5), Vector3(7,0,-10)]:
 		context.make_deadfall(pos)
-	for pos in [Vector3(-5.8,0,-7.5), Vector3(5.9,0,-8.4), Vector3(0,0,-10.5)]:
+	# Keep the east ritual marker outside the diagonal arrival-to-north-gate
+	# corridor. Its former position at (5.9, -8.4) was a real player-sized
+	# blocker even though the destination edge itself was clear.
+	for pos in [Vector3(-5.8,0,-7.5), Vector3(7.6,0,-8.4), Vector3(0,0,-10.5)]:
 		context.make_ritual_stone(pos)
 	context.make_light("Deep Wood Memory Glow", Vector3(0, 4.5, -8.5), Color(0.34, 0.56, 0.48), 2.0)
 	if context.is_quest_active("main_teeth_in_rain") and context.is_objective_done("main_teeth_in_rain", "name_the_dead"):
@@ -110,7 +113,10 @@ func _build_old_mill(context: ZoneBuildContext) -> void:
 	context.make_loose_role("barrel", Vector3(-0.4, 0, -4.2), Vector3.ONE * 0.72, 0.0)
 	context.make_loose_role("crate", Vector3(-0.3, 0, -3.3), Vector3.ONE * 0.62, -8.0)
 	context.make_loose_role("cart", Vector3(6.6, 0, 2.8), Vector3.ONE * 0.72, -22.0)
-	for pos in [Vector3(5.2,0,-5), Vector3(8.0,0,-3), Vector3(7.2,0,5)]:
+	# Keep route dressing outside the diagonal north-exit approach. The former
+	# rubble at (5.2, -5.0) overlapped a player capsule even though the exit
+	# itself was unobstructed.
+	for pos in [Vector3(9.0,0,-5), Vector3(8.0,0,-3), Vector3(7.2,0,5)]:
 		context.make_rubble(pos)
 	var mill_fate := str(context.get_story_flag("mill_fate", ""))
 	if mill_fate == "preserved":

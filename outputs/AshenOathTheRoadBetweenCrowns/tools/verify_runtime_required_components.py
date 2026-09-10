@@ -44,6 +44,19 @@ REQUIRED_FILES = (
     "export_presets.cfg",
 )
 
+POLICY_MARKERS = {
+    "scripts/asset_database.gd": (
+        "ACCEPTANCE_ROLE_ALIASES",
+        "func get_runtime_policy",
+        'result["runtime_policy"]',
+    ),
+    "scripts/asset_spawn_helper.gd": (
+        "runtime_release_blocked",
+        "_apply_runtime_policy_metadata",
+        "Runtime visual role",
+    ),
+}
+
 FORBIDDEN_RUNTIME_TOKENS = (
     "proxy",
     "faceplane",
@@ -184,6 +197,19 @@ def check_curated_roles(project: Path, manifest: dict[str, Any], errors: list[st
                 errors.append(f"curated role {role_id} uses a forbidden proxy token")
 
 
+def check_runtime_policy_contract(project: Path, errors: list[str]) -> None:
+    for relative, markers in POLICY_MARKERS.items():
+        path = project / relative
+        try:
+            source = path.read_text(encoding="utf-8")
+        except OSError as exc:
+            errors.append(f"runtime policy source is unreadable: {relative}: {exc}")
+            continue
+        for marker in markers:
+            if marker not in source:
+                errors.append(f"runtime policy marker is missing from {relative}: {marker}")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("project", nargs="?", type=Path, default=Path(__file__).resolve().parents[1])
@@ -206,6 +232,7 @@ def main() -> int:
         for role_id, role in roles.items():
             check_role(project, str(role_id), role, blocked, errors)
     check_curated_roles(project, curated_manifest, errors)
+    check_runtime_policy_contract(project, errors)
 
     export_text = (project / "export_presets.cfg").read_text(encoding="utf-8", errors="replace") if (project / "export_presets.cfg").is_file() else ""
     if "assets_external/downloads/*" not in export_text or "assets_external/raw/*" not in export_text:

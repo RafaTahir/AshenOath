@@ -1,23 +1,28 @@
 ﻿{
-    "schema_version":  2,
+    "schema_version":  3,
+    "report_id":  "27a58e60353f4573af0e78f691a8b307",
     "release_id":  "recovery-004",
     "status":  "fail",
-    "started_at":  "2026-09-10T07:14:07.9100689Z",
-    "finished_at":  "2026-09-10T08:02:02.5739717Z",
-    "source_commit":  "e603cf8870e18c781fe851c69d0b3e3ac64b9b43",
+    "started_at":  "2026-09-10T14:44:28.3898343Z",
+    "finished_at":  "2026-09-10T15:11:38.4674895Z",
+    "source_commit":  "5e9cc4c1fd0c1df4069f77aa3e95fbf2466d2883",
     "source_branch":  "codex/masterpiece-rebuild",
-    "source_fingerprint":  "96ca9f344eae36eca9e40355ee8e9ae997571b1bf2d053695a41d5df84e50e55",
+    "source_fingerprint":  "c377eb28d3251c3addd10deb7f7bbbeb565124d912507bf3b0399677c0dd7106",
+    "verification_revision":  {
+                                  "source_commit":  "5e9cc4c1fd0c1df4069f77aa3e95fbf2466d2883",
+                                  "source_fingerprint":  "c377eb28d3251c3addd10deb7f7bbbeb565124d912507bf3b0399677c0dd7106",
+                                  "registry_sha256":  "4f7cf0357a099b93c2b4bc7d884fb772c0ce67165c722689042ecbbe4c05e710"
+                              },
     "git_status":  [
-                       "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/",
-                       "?? outputs/AshenOathTheRoadBetweenCrowns/tools/prepare_universal_fullbody_runtime.py",
-                       "?? outputs/AshenOathTheRoadBetweenCrowns/tools/update_universal_role_manifests.py"
+                       " M outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_candidates.json",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_manifest.json"
                    ],
     "mode":  "full",
     "requested_gate":  "",
     "project":  "outputs/AshenOathTheRoadBetweenCrowns",
     "artifact":  {
                      "directory":  "D:\\Projects\\AshenOath\\outputs\\AshenOath_Web",
-                     "total_bytes":  99691098,
+                     "total_bytes":  72859610,
                      "files":  [
                                    {
                                        "path":  "index.audio.position.worklet.js",
@@ -32,7 +37,7 @@
                                    {
                                        "path":  "index.html",
                                        "bytes":  12603,
-                                       "sha256":  "72a6f87ae38ae826b1322e61946df925a849b82413916ba8e5fa9bbbe88a7026"
+                                       "sha256":  "5be6878a083eee94f6aa820f884c98d5c303e19a5b0b35d265e065311e9550a2"
                                    },
                                    {
                                        "path":  "index.js",
@@ -41,8 +46,8 @@
                                    },
                                    {
                                        "path":  "index.pck",
-                                       "bytes":  22778284,
-                                       "sha256":  "083ee08e777e0db10381481f06aaf92c7c3c6de039517bb976192c9942dbb4f5"
+                                       "bytes":  22783296,
+                                       "sha256":  "e1db5d76852b4f60eec45887e8eccbcc4a83392418a312c97aa73193ccfdf06a"
                                    },
                                    {
                                        "path":  "index.png",
@@ -56,33 +61,82 @@
                                    },
                                    {
                                        "path":  "packs/audio.pck",
-                                       "bytes":  2731648,
-                                       "sha256":  "af6b3c76e93462942e219b5bafb90a64d27e21284577f5fab1ab333a6fa426cd"
+                                       "bytes":  2752240,
+                                       "sha256":  "cb49defd226050d02f9031312b9aa2dfd657f79635c17cea96f5f1aaba8938d9"
                                    },
                                    {
                                        "path":  "packs/campaign.pck",
-                                       "bytes":  1022072,
-                                       "sha256":  "0ba5639ae5878a8373e840a71a2136337fca45e7dc4a01e5e831fa5498e297d1"
+                                       "bytes":  1042664,
+                                       "sha256":  "52fbdff4df3304676204f797ae1bde86d733b2175f49e7ce37969e49053c2c1a"
                                    },
                                    {
                                        "path":  "packs/characters.pck",
-                                       "bytes":  5796680,
-                                       "sha256":  "49213fa4400219ac07b9b925b6f9006ce4314e2a4e5c854498506ad1e52fdf89"
+                                       "bytes":  5817272,
+                                       "sha256":  "4ab107a7eaea963747eea8282f7f44976c33b713abf3a40288eac945f0dc3bab"
                                    },
                                    {
                                        "path":  "packs/monsters.pck",
-                                       "bytes":  1297600,
-                                       "sha256":  "a7857b67909ce775b3a3314d4224e8cd0bb84c6b340c052e64f3c9613425ae7e"
+                                       "bytes":  1318192,
+                                       "sha256":  "fddeb9e774b91c6ef762510a799b16cdc244f0e81db7985c63a0eb37a21db02e"
                                    },
                                    {
                                        "path":  "packs/opening.pck",
-                                       "bytes":  28004072,
-                                       "sha256":  "7428bd1a620608ae2381e1ff37d81199ccb4f390d20102b56385a3a4840cde68"
+                                       "bytes":  1085204,
+                                       "sha256":  "040691ebb73f729e19d013f759d77c64d2abf54964b103df38074c9de4033370"
                                    }
                                ],
-                     "pck_sha256":  "083ee08e777e0db10381481f06aaf92c7c3c6de039517bb976192c9942dbb4f5",
+                     "pck_sha256":  "e1db5d76852b4f60eec45887e8eccbcc4a83392418a312c97aa73193ccfdf06a",
                      "max_bytes":  104857600
                  },
+    "issue_registry":  {
+                           "path":  "RECOVERY_004_ISSUE_REGISTRY.json",
+                           "exists":  true,
+                           "sha256":  "4f7cf0357a099b93c2b4bc7d884fb772c0ce67165c722689042ecbbe4c05e710",
+                           "schema_version":  1,
+                           "registry_id":  "ashen-oath-recovery-004",
+                           "category_statuses":  [
+                                                     {
+                                                         "id":  "ui_story_input",
+                                                         "severity":  "medium",
+                                                         "status":  "in_progress"
+                                                     },
+                                                     {
+                                                         "id":  "world_presentation",
+                                                         "severity":  "high",
+                                                         "status":  "visually_rejected"
+                                                     },
+                                                     {
+                                                         "id":  "architecture_performance",
+                                                         "severity":  "blocker",
+                                                         "status":  "in_progress"
+                                                     },
+                                                     {
+                                                         "id":  "audio",
+                                                         "severity":  "medium",
+                                                         "status":  "functional_but_incomplete"
+                                                     },
+                                                     {
+                                                         "id":  "traversal_collision_zones",
+                                                         "severity":  "high",
+                                                         "status":  "functional_but_incomplete"
+                                                     },
+                                                     {
+                                                         "id":  "release_integrity",
+                                                         "severity":  "blocker",
+                                                         "status":  "in_progress"
+                                                     },
+                                                     {
+                                                         "id":  "monsters_combat",
+                                                         "severity":  "high",
+                                                         "status":  "functional_but_incomplete"
+                                                     },
+                                                     {
+                                                         "id":  "characters_npcs",
+                                                         "severity":  "high",
+                                                         "status":  "visually_rejected"
+                                                     }
+                                                 ]
+                       },
     "release_blockers":  [
                              {
                                  "id":  "release_integrity",
@@ -125,12 +179,12 @@
                                  "status":  "in_progress"
                              }
                          ],
-    "failure":  "Release blocked by unresolved issue registry entries: release_integrity=in_progress, traversal_collision_zones=functional_but_incomplete, characters_npcs=visually_rejected, monsters_combat=functional_but_incomplete, world_presentation=visually_rejected, ui_story_input=in_progress, audio=functional_but_incomplete, architecture_performance=in_progress",
+    "failure":  "verify_web_002_browser reported status \u0027fail\u0027 despite exit code 0",
     "results":  [
                     {
                         "name":  "verify_security_001",
                         "status":  "pass",
-                        "duration_seconds":  1.13,
+                        "duration_seconds":  1.25,
                         "log":  "verify_security_001.log",
                         "warnings":  [
 
@@ -140,7 +194,7 @@
                     {
                         "name":  "verify_recovery_004",
                         "status":  "pass",
-                        "duration_seconds":  1.04,
+                        "duration_seconds":  0.96,
                         "log":  "verify_recovery_004.log",
                         "warnings":  [
 
@@ -150,7 +204,7 @@
                     {
                         "name":  "verify_content_integrity",
                         "status":  "pass",
-                        "duration_seconds":  1.28,
+                        "duration_seconds":  0.99,
                         "log":  "verify_content_integrity.log",
                         "warnings":  [
 
@@ -170,7 +224,7 @@
                     {
                         "name":  "verify_asset_001_files",
                         "status":  "pass",
-                        "duration_seconds":  1.93,
+                        "duration_seconds":  1.77,
                         "log":  "verify_asset_001_files.log",
                         "warnings":  [
 
@@ -180,7 +234,7 @@
                     {
                         "name":  "verify_prod_002",
                         "status":  "pass",
-                        "duration_seconds":  1.1,
+                        "duration_seconds":  1.63,
                         "log":  "verify_prod_002.log",
                         "warnings":  [
 
@@ -190,7 +244,7 @@
                     {
                         "name":  "verify_prod_003",
                         "status":  "pass",
-                        "duration_seconds":  1.05,
+                        "duration_seconds":  0.99,
                         "log":  "verify_prod_003.log",
                         "warnings":  [
 
@@ -200,7 +254,7 @@
                     {
                         "name":  "verify_runtime_smoke",
                         "status":  "pass",
-                        "duration_seconds":  4.48,
+                        "duration_seconds":  3.67,
                         "log":  "verify_runtime_smoke.log",
                         "warnings":  [
 
@@ -210,7 +264,7 @@
                     {
                         "name":  "verify_runtime",
                         "status":  "pass",
-                        "duration_seconds":  17.19,
+                        "duration_seconds":  15.93,
                         "log":  "verify_runtime.log",
                         "warnings":  [
 
@@ -220,7 +274,7 @@
                     {
                         "name":  "verify_runtime_regressions",
                         "status":  "pass",
-                        "duration_seconds":  12.35,
+                        "duration_seconds":  12.41,
                         "log":  "verify_runtime_regressions.log",
                         "warnings":  [
 
@@ -230,7 +284,7 @@
                     {
                         "name":  "verify_zone_builder_integrity",
                         "status":  "pass",
-                        "duration_seconds":  0.43,
+                        "duration_seconds":  0.44,
                         "log":  "verify_zone_builder_integrity.log",
                         "warnings":  [
 
@@ -240,7 +294,7 @@
                     {
                         "name":  "verify_gate_transitions",
                         "status":  "pass",
-                        "duration_seconds":  187.22,
+                        "duration_seconds":  188.31,
                         "log":  "verify_gate_transitions.log",
                         "warnings":  [
 
@@ -250,7 +304,7 @@
                     {
                         "name":  "verify_engine_001",
                         "status":  "pass",
-                        "duration_seconds":  8.34,
+                        "duration_seconds":  7.93,
                         "log":  "verify_engine_001.log",
                         "warnings":  [
 
@@ -260,7 +314,7 @@
                     {
                         "name":  "verify_engine_003",
                         "status":  "pass",
-                        "duration_seconds":  11.27,
+                        "duration_seconds":  11.33,
                         "log":  "verify_engine_003.log",
                         "warnings":  [
 
@@ -270,7 +324,7 @@
                     {
                         "name":  "verify_engine_004",
                         "status":  "pass",
-                        "duration_seconds":  11.79,
+                        "duration_seconds":  11.98,
                         "log":  "verify_engine_004.log",
                         "warnings":  [
 
@@ -280,17 +334,17 @@
                     {
                         "name":  "verify_story_campaign",
                         "status":  "pass",
-                        "duration_seconds":  8.46,
+                        "duration_seconds":  8.54,
                         "log":  "verify_story_campaign.log",
                         "warnings":  [
-
+                                         "WARNING: ObjectDB instances leaked at exit (run with --verbose for details)."
                                      ],
                         "failure":  ""
                     },
                     {
                         "name":  "verify_quest_002",
                         "status":  "pass",
-                        "duration_seconds":  17.15,
+                        "duration_seconds":  17.64,
                         "log":  "verify_quest_002.log",
                         "warnings":  [
 
@@ -310,7 +364,7 @@
                     {
                         "name":  "verify_save_001",
                         "status":  "pass",
-                        "duration_seconds":  0.51,
+                        "duration_seconds":  0.61,
                         "log":  "verify_save_001.log",
                         "warnings":  [
 
@@ -320,7 +374,7 @@
                     {
                         "name":  "verify_qa_002",
                         "status":  "pass",
-                        "duration_seconds":  4.68,
+                        "duration_seconds":  4.75,
                         "log":  "verify_qa_002.log",
                         "warnings":  [
 
@@ -330,7 +384,7 @@
                     {
                         "name":  "verify_art_001",
                         "status":  "pass",
-                        "duration_seconds":  2.02,
+                        "duration_seconds":  1.45,
                         "log":  "verify_art_001.log",
                         "warnings":  [
 
@@ -340,7 +394,7 @@
                     {
                         "name":  "verify_asset_001",
                         "status":  "pass",
-                        "duration_seconds":  2.99,
+                        "duration_seconds":  2.92,
                         "log":  "verify_asset_001.log",
                         "warnings":  [
 
@@ -350,7 +404,7 @@
                     {
                         "name":  "verify_character_real_001",
                         "status":  "pass",
-                        "duration_seconds":  2.2,
+                        "duration_seconds":  2.09,
                         "log":  "verify_character_real_001.log",
                         "warnings":  [
 
@@ -360,7 +414,7 @@
                     {
                         "name":  "verify_face_river_sun_001",
                         "status":  "pass",
-                        "duration_seconds":  7.85,
+                        "duration_seconds":  7.92,
                         "log":  "verify_face_river_sun_001.log",
                         "warnings":  [
 
@@ -370,7 +424,7 @@
                     {
                         "name":  "verify_motion_quality",
                         "status":  "pass",
-                        "duration_seconds":  7.35,
+                        "duration_seconds":  7.46,
                         "log":  "verify_motion_quality.log",
                         "warnings":  [
 
@@ -380,7 +434,7 @@
                     {
                         "name":  "verify_river_swimming",
                         "status":  "pass",
-                        "duration_seconds":  19.73,
+                        "duration_seconds":  31.99,
                         "log":  "verify_river_swimming.log",
                         "warnings":  [
 
@@ -390,7 +444,7 @@
                     {
                         "name":  "verify_greyfen_life",
                         "status":  "pass",
-                        "duration_seconds":  12.24,
+                        "duration_seconds":  10.79,
                         "log":  "verify_greyfen_life.log",
                         "warnings":  [
 
@@ -400,7 +454,7 @@
                     {
                         "name":  "verify_castle_vargan",
                         "status":  "pass",
-                        "duration_seconds":  10.65,
+                        "duration_seconds":  10.11,
                         "log":  "verify_castle_vargan.log",
                         "warnings":  [
                                          "WARNING: ObjectDB instances leaked at exit (run with --verbose for details)."
@@ -420,7 +474,7 @@
                     {
                         "name":  "verify_audio_001",
                         "status":  "pass",
-                        "duration_seconds":  8.48,
+                        "duration_seconds":  8.39,
                         "log":  "verify_audio_001.log",
                         "warnings":  [
 
@@ -430,7 +484,7 @@
                     {
                         "name":  "verify_visible_quality",
                         "status":  "pass",
-                        "duration_seconds":  10.83,
+                        "duration_seconds":  10.96,
                         "log":  "verify_visible_quality.log",
                         "warnings":  [
 
@@ -440,7 +494,7 @@
                     {
                         "name":  "verify_recovery_002_foundation",
                         "status":  "pass",
-                        "duration_seconds":  7.96,
+                        "duration_seconds":  7.94,
                         "log":  "verify_recovery_002_foundation.log",
                         "warnings":  [
 
@@ -450,7 +504,7 @@
                     {
                         "name":  "verify_navigation_001",
                         "status":  "pass",
-                        "duration_seconds":  7.7,
+                        "duration_seconds":  7.96,
                         "log":  "verify_navigation_001.log",
                         "warnings":  [
 
@@ -460,7 +514,7 @@
                     {
                         "name":  "verify_char_001",
                         "status":  "pass",
-                        "duration_seconds":  7.6,
+                        "duration_seconds":  7.99,
                         "log":  "verify_char_001.log",
                         "warnings":  [
 
@@ -470,7 +524,7 @@
                     {
                         "name":  "verify_anim_001",
                         "status":  "pass",
-                        "duration_seconds":  7.8,
+                        "duration_seconds":  8.16,
                         "log":  "verify_anim_001.log",
                         "warnings":  [
 
@@ -480,7 +534,7 @@
                     {
                         "name":  "verify_combat_001",
                         "status":  "pass",
-                        "duration_seconds":  8.33,
+                        "duration_seconds":  8.19,
                         "log":  "verify_combat_001.log",
                         "warnings":  [
 
@@ -490,7 +544,7 @@
                     {
                         "name":  "verify_ai_001",
                         "status":  "pass",
-                        "duration_seconds":  11.07,
+                        "duration_seconds":  10.93,
                         "log":  "verify_ai_001.log",
                         "warnings":  [
 
@@ -500,7 +554,7 @@
                     {
                         "name":  "verify_oath_001",
                         "status":  "pass",
-                        "duration_seconds":  8.23,
+                        "duration_seconds":  8.29,
                         "log":  "verify_oath_001.log",
                         "warnings":  [
 
@@ -510,7 +564,7 @@
                     {
                         "name":  "verify_ui_001",
                         "status":  "pass",
-                        "duration_seconds":  8.05,
+                        "duration_seconds":  8.12,
                         "log":  "verify_ui_001.log",
                         "warnings":  [
 
@@ -520,7 +574,7 @@
                     {
                         "name":  "verify_input_001",
                         "status":  "pass",
-                        "duration_seconds":  8.83,
+                        "duration_seconds":  8.88,
                         "log":  "verify_input_001.log",
                         "warnings":  [
 
@@ -530,7 +584,7 @@
                     {
                         "name":  "verify_mobile_001",
                         "status":  "pass",
-                        "duration_seconds":  8.42,
+                        "duration_seconds":  8.5,
                         "log":  "verify_mobile_001.log",
                         "warnings":  [
 
@@ -540,7 +594,7 @@
                     {
                         "name":  "verify_world_001",
                         "status":  "pass",
-                        "duration_seconds":  7.61,
+                        "duration_seconds":  7.72,
                         "log":  "verify_world_001.log",
                         "warnings":  [
 
@@ -550,7 +604,7 @@
                     {
                         "name":  "verify_world_002",
                         "status":  "pass",
-                        "duration_seconds":  8.56,
+                        "duration_seconds":  8.11,
                         "log":  "verify_world_002.log",
                         "warnings":  [
 
@@ -560,7 +614,7 @@
                     {
                         "name":  "verify_world_003",
                         "status":  "pass",
-                        "duration_seconds":  11.16,
+                        "duration_seconds":  11.27,
                         "log":  "verify_world_003.log",
                         "warnings":  [
 
@@ -570,7 +624,7 @@
                     {
                         "name":  "verify_world_014",
                         "status":  "pass",
-                        "duration_seconds":  10.63,
+                        "duration_seconds":  10.67,
                         "log":  "verify_world_014.log",
                         "warnings":  [
 
@@ -580,7 +634,7 @@
                     {
                         "name":  "verify_zone_budgets",
                         "status":  "pass",
-                        "duration_seconds":  13.56,
+                        "duration_seconds":  13.72,
                         "log":  "verify_zone_budgets.log",
                         "warnings":  [
 
@@ -590,7 +644,7 @@
                     {
                         "name":  "verify_visual_003",
                         "status":  "pass",
-                        "duration_seconds":  8.44,
+                        "duration_seconds":  8.49,
                         "log":  "verify_visual_003.log",
                         "warnings":  [
 
@@ -600,7 +654,7 @@
                     {
                         "name":  "verify_visual_100",
                         "status":  "pass",
-                        "duration_seconds":  7.82,
+                        "duration_seconds":  7.91,
                         "log":  "verify_visual_100.log",
                         "warnings":  [
 
@@ -610,7 +664,7 @@
                     {
                         "name":  "verify_master_002",
                         "status":  "pass",
-                        "duration_seconds":  7.78,
+                        "duration_seconds":  7.94,
                         "log":  "verify_master_002.log",
                         "warnings":  [
 
@@ -620,7 +674,7 @@
                     {
                         "name":  "verify_master_003",
                         "status":  "pass",
-                        "duration_seconds":  7.9,
+                        "duration_seconds":  7.96,
                         "log":  "verify_master_003.log",
                         "warnings":  [
 
@@ -630,7 +684,7 @@
                     {
                         "name":  "verify_mat_001",
                         "status":  "pass",
-                        "duration_seconds":  0.99,
+                        "duration_seconds":  0.98,
                         "log":  "verify_mat_001.log",
                         "warnings":  [
 
@@ -640,7 +694,7 @@
                     {
                         "name":  "verify_char_002",
                         "status":  "pass",
-                        "duration_seconds":  2.11,
+                        "duration_seconds":  2.1,
                         "log":  "verify_char_002.log",
                         "warnings":  [
 
@@ -660,7 +714,7 @@
                     {
                         "name":  "verify_vfx_001",
                         "status":  "pass",
-                        "duration_seconds":  0.72,
+                        "duration_seconds":  0.7,
                         "log":  "verify_vfx_001.log",
                         "warnings":  [
 
@@ -670,7 +724,7 @@
                     {
                         "name":  "verify_water_001",
                         "status":  "pass",
-                        "duration_seconds":  7.94,
+                        "duration_seconds":  9.05,
                         "log":  "verify_water_001.log",
                         "warnings":  [
 
@@ -700,7 +754,7 @@
                     {
                         "name":  "verify_ai_002",
                         "status":  "pass",
-                        "duration_seconds":  0.42,
+                        "duration_seconds":  0.41,
                         "log":  "verify_ai_002.log",
                         "warnings":  [
 
@@ -710,7 +764,7 @@
                     {
                         "name":  "verify_inv_001",
                         "status":  "pass",
-                        "duration_seconds":  0.42,
+                        "duration_seconds":  0.41,
                         "log":  "verify_inv_001.log",
                         "warnings":  [
 
@@ -730,7 +784,7 @@
                     {
                         "name":  "verify_narr_001",
                         "status":  "pass",
-                        "duration_seconds":  0.43,
+                        "duration_seconds":  0.42,
                         "log":  "verify_narr_001.log",
                         "warnings":  [
 
@@ -740,7 +794,7 @@
                     {
                         "name":  "verify_world_004",
                         "status":  "pass",
-                        "duration_seconds":  0.43,
+                        "duration_seconds":  0.42,
                         "log":  "verify_world_004.log",
                         "warnings":  [
 
@@ -750,7 +804,7 @@
                     {
                         "name":  "verify_quest_003",
                         "status":  "pass",
-                        "duration_seconds":  0.43,
+                        "duration_seconds":  0.42,
                         "log":  "verify_quest_003.log",
                         "warnings":  [
 
@@ -770,7 +824,7 @@
                     {
                         "name":  "verify_quest_004",
                         "status":  "pass",
-                        "duration_seconds":  8.06,
+                        "duration_seconds":  8.22,
                         "log":  "verify_quest_004.log",
                         "warnings":  [
 
@@ -780,7 +834,7 @@
                     {
                         "name":  "verify_world_006",
                         "status":  "pass",
-                        "duration_seconds":  1.07,
+                        "duration_seconds":  0.43,
                         "log":  "verify_world_006.log",
                         "warnings":  [
 
@@ -790,7 +844,7 @@
                     {
                         "name":  "verify_quest_005",
                         "status":  "pass",
-                        "duration_seconds":  10.27,
+                        "duration_seconds":  8.85,
                         "log":  "verify_quest_005.log",
                         "warnings":  [
 
@@ -800,7 +854,7 @@
                     {
                         "name":  "verify_boss_001",
                         "status":  "pass",
-                        "duration_seconds":  8.02,
+                        "duration_seconds":  8.16,
                         "log":  "verify_boss_001.log",
                         "warnings":  [
 
@@ -810,7 +864,7 @@
                     {
                         "name":  "verify_side_001",
                         "status":  "pass",
-                        "duration_seconds":  28.3,
+                        "duration_seconds":  28.72,
                         "log":  "verify_side_001.log",
                         "warnings":  [
 
@@ -820,7 +874,7 @@
                     {
                         "name":  "verify_quest_006",
                         "status":  "pass",
-                        "duration_seconds":  7.6,
+                        "duration_seconds":  7.8,
                         "log":  "verify_quest_006.log",
                         "warnings":  [
 
@@ -830,7 +884,7 @@
                     {
                         "name":  "verify_qa_004",
                         "status":  "pass",
-                        "duration_seconds":  1.36,
+                        "duration_seconds":  1.46,
                         "log":  "verify_qa_004.log",
                         "warnings":  [
 
@@ -840,7 +894,7 @@
                     {
                         "name":  "verify_perf_003",
                         "status":  "pass",
-                        "duration_seconds":  0.43,
+                        "duration_seconds":  0.42,
                         "log":  "verify_perf_003.log",
                         "warnings":  [
 
@@ -850,7 +904,7 @@
                     {
                         "name":  "verify_perf_001",
                         "status":  "pass",
-                        "duration_seconds":  85.55,
+                        "duration_seconds":  84.39,
                         "log":  "verify_perf_001.log",
                         "warnings":  [
 
@@ -860,7 +914,7 @@
                     {
                         "name":  "verify_qa_005",
                         "status":  "pass",
-                        "duration_seconds":  1.92,
+                        "duration_seconds":  1.85,
                         "log":  "verify_qa_005.log",
                         "warnings":  [
 
@@ -870,7 +924,7 @@
                     {
                         "name":  "capture_slice_screenshots",
                         "status":  "pass",
-                        "duration_seconds":  147.02,
+                        "duration_seconds":  126.91,
                         "log":  "capture_slice_screenshots.log",
                         "warnings":  [
 
@@ -880,7 +934,7 @@
                     {
                         "name":  "capture_anim_001",
                         "status":  "pass",
-                        "duration_seconds":  11.86,
+                        "duration_seconds":  11.56,
                         "log":  "capture_anim_001.log",
                         "warnings":  [
 
@@ -890,7 +944,7 @@
                     {
                         "name":  "capture_world_001",
                         "status":  "pass",
-                        "duration_seconds":  13.88,
+                        "duration_seconds":  13.47,
                         "log":  "capture_world_001.log",
                         "warnings":  [
 
@@ -900,7 +954,7 @@
                     {
                         "name":  "capture_world_002",
                         "status":  "pass",
-                        "duration_seconds":  16.87,
+                        "duration_seconds":  16.66,
                         "log":  "capture_world_002.log",
                         "warnings":  [
 
@@ -910,7 +964,7 @@
                     {
                         "name":  "capture_world_003",
                         "status":  "pass",
-                        "duration_seconds":  15.92,
+                        "duration_seconds":  16.53,
                         "log":  "capture_world_003.log",
                         "warnings":  [
 
@@ -920,7 +974,7 @@
                     {
                         "name":  "capture_world_004",
                         "status":  "pass",
-                        "duration_seconds":  16.03,
+                        "duration_seconds":  16,
                         "log":  "capture_world_004.log",
                         "warnings":  [
 
@@ -930,7 +984,7 @@
                     {
                         "name":  "capture_world_005",
                         "status":  "pass",
-                        "duration_seconds":  19.46,
+                        "duration_seconds":  17.93,
                         "log":  "capture_world_005.log",
                         "warnings":  [
 
@@ -940,7 +994,7 @@
                     {
                         "name":  "capture_world_006",
                         "status":  "pass",
-                        "duration_seconds":  15.35,
+                        "duration_seconds":  15.67,
                         "log":  "capture_world_006.log",
                         "warnings":  [
 
@@ -950,7 +1004,7 @@
                     {
                         "name":  "capture_boss_001",
                         "status":  "pass",
-                        "duration_seconds":  12.95,
+                        "duration_seconds":  12.65,
                         "log":  "capture_boss_001.log",
                         "warnings":  [
 
@@ -960,7 +1014,7 @@
                     {
                         "name":  "verify_screenshot_qa_003",
                         "status":  "pass",
-                        "duration_seconds":  2.2,
+                        "duration_seconds":  2.11,
                         "log":  "verify_screenshot_qa_003.log",
                         "warnings":  [
 
@@ -970,7 +1024,7 @@
                     {
                         "name":  "verify_qa_006",
                         "status":  "pass",
-                        "duration_seconds":  1.85,
+                        "duration_seconds":  2.24,
                         "log":  "verify_qa_006.log",
                         "warnings":  [
 
@@ -980,7 +1034,7 @@
                     {
                         "name":  "verify_web_001",
                         "status":  "pass",
-                        "duration_seconds":  1,
+                        "duration_seconds":  1.05,
                         "log":  "verify_web_001.log",
                         "warnings":  [
 
@@ -990,7 +1044,7 @@
                     {
                         "name":  "verify_web_002",
                         "status":  "pass",
-                        "duration_seconds":  1.05,
+                        "duration_seconds":  0.93,
                         "log":  "verify_web_002.log",
                         "warnings":  [
 
@@ -1000,7 +1054,7 @@
                     {
                         "name":  "web_export",
                         "status":  "pass",
-                        "duration_seconds":  203.83,
+                        "duration_seconds":  203.89,
                         "log":  "web_export.log",
                         "warnings":  [
 
@@ -1010,7 +1064,7 @@
                     {
                         "name":  "verify_web_export",
                         "status":  "pass",
-                        "duration_seconds":  3.28,
+                        "duration_seconds":  1.38,
                         "log":  "verify_web_export.log",
                         "warnings":  [
 
@@ -1020,7 +1074,7 @@
                     {
                         "name":  "packed_startup",
                         "status":  "pass",
-                        "duration_seconds":  35.79,
+                        "duration_seconds":  3.82,
                         "log":  "packed_startup.log",
                         "warnings":  [
 
@@ -1030,7 +1084,7 @@
                     {
                         "name":  "verify_web_browser",
                         "status":  "pass",
-                        "duration_seconds":  113.31,
+                        "duration_seconds":  131.35,
                         "log":  "verify_web_browser.log",
                         "warnings":  [
 
@@ -1040,7 +1094,7 @@
                     {
                         "name":  "qa_web_export",
                         "status":  "pass",
-                        "duration_seconds":  70.94,
+                        "duration_seconds":  59.25,
                         "log":  "qa_web_export.log",
                         "warnings":  [
 
@@ -1050,7 +1104,7 @@
                     {
                         "name":  "verify_qa_002",
                         "status":  "pass",
-                        "duration_seconds":  5.6,
+                        "duration_seconds":  6.95,
                         "log":  "verify_qa_002.log",
                         "warnings":  [
 
@@ -1060,7 +1114,7 @@
                     {
                         "name":  "verify_mobile_browser",
                         "status":  "pass",
-                        "duration_seconds":  109.34,
+                        "duration_seconds":  108.34,
                         "log":  "verify_mobile_browser.log",
                         "warnings":  [
 
@@ -1069,144 +1123,134 @@
                     },
                     {
                         "name":  "verify_web_002_browser",
-                        "status":  "pass",
-                        "duration_seconds":  734.75,
+                        "status":  "fail",
+                        "duration_seconds":  131.35,
                         "log":  "verify_web_002_browser.log",
                         "warnings":  [
 
                                      ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_web_002_mobile",
-                        "status":  "pass",
-                        "duration_seconds":  601.13,
-                        "log":  "verify_web_002_mobile.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
+                        "failure":  "verify_web_002_browser reported status \u0027fail\u0027 despite exit code 0"
                     }
                 ],
     "screenshots":  {
                         "greyfen_spawn":  {
                                               "status":  "approved",
-                                              "image":  "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_01_greyfen_spawn_2026-09-10_152606.png",
+                                              "image":  "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_01_greyfen_spawn_2026-09-10_225637.png",
                                               "message":  "approved",
                                               "metrics":  {
-                                                              "mean_luminance":  101.67,
-                                                              "max_channel_variance":  2714.413,
-                                                              "dark_ratio":  0.00475,
+                                                              "mean_luminance":  101.619,
+                                                              "max_channel_variance":  2707.217,
+                                                              "dark_ratio":  0.00586,
                                                               "bright_ratio":  0.00021
                                                           }
                                           },
                         "anwen_dialogue":  {
                                                "status":  "approved",
-                                               "image":  "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_05_sister_anwen_dialogue_2026-09-10_152606.png",
+                                               "image":  "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_05_sister_anwen_dialogue_2026-09-10_225637.png",
                                                "message":  "approved",
                                                "metrics":  {
-                                                               "mean_luminance":  66.895,
-                                                               "max_channel_variance":  2287.878,
-                                                               "dark_ratio":  0.00929,
-                                                               "bright_ratio":  0.00282
+                                                               "mean_luminance":  70.51,
+                                                               "max_channel_variance":  2540.602,
+                                                               "dark_ratio":  0.00937,
+                                                               "bright_ratio":  0.00283
                                                            }
                                            },
                         "greyfen_river_bridge":  {
                                                      "status":  "approved",
-                                                     "image":  "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_70_greyfen_river_bridge_2026-09-10_152606.png",
+                                                     "image":  "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_70_greyfen_river_bridge_2026-09-10_225637.png",
                                                      "message":  "approved",
                                                      "metrics":  {
-                                                                     "mean_luminance":  101.435,
-                                                                     "max_channel_variance":  2637.989,
-                                                                     "dark_ratio":  0.00352,
+                                                                     "mean_luminance":  101.734,
+                                                                     "max_channel_variance":  2604.132,
+                                                                     "dark_ratio":  0.00343,
                                                                      "bright_ratio":  0.00021
                                                                  }
                                                  },
                         "wychwood_combat":  {
                                                 "status":  "approved",
-                                                "image":  "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_10_combat_clearing_2026-09-10_152606.png",
+                                                "image":  "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_10_combat_clearing_2026-09-10_225637.png",
                                                 "message":  "approved",
                                                 "metrics":  {
-                                                                "mean_luminance":  57.585,
-                                                                "max_channel_variance":  948.901,
-                                                                "dark_ratio":  0.00629,
+                                                                "mean_luminance":  57.713,
+                                                                "max_channel_variance":  956.485,
+                                                                "dark_ratio":  0.00631,
                                                                 "bright_ratio":  0.00021
                                                             }
                                             },
                         "sword_ready":  {
                                             "status":  "approved",
-                                            "image":  "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_15_player_sword_ready_2026-09-10_152606.png",
+                                            "image":  "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_15_player_sword_ready_2026-09-10_225637.png",
                                             "message":  "approved",
                                             "metrics":  {
-                                                            "mean_luminance":  101.577,
-                                                            "max_channel_variance":  2765.584,
-                                                            "dark_ratio":  0.00394,
+                                                            "mean_luminance":  102.016,
+                                                            "max_channel_variance":  2736.968,
+                                                            "dark_ratio":  0.0039,
                                                             "bright_ratio":  0.00021
                                                         }
                                         },
                         "light_attack":  {
                                              "status":  "approved",
-                                             "image":  "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_13_player_light_attack_arc_2026-09-10_152606.png",
+                                             "image":  "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_13_player_light_attack_arc_2026-09-10_225637.png",
                                              "message":  "approved",
                                              "metrics":  {
-                                                             "mean_luminance":  86.32,
-                                                             "max_channel_variance":  2878.939,
-                                                             "dark_ratio":  0.01083,
+                                                             "mean_luminance":  88.145,
+                                                             "max_channel_variance":  2817.168,
+                                                             "dark_ratio":  0.01221,
                                                              "bright_ratio":  0.00021
                                                          }
                                          },
                         "heavy_attack":  {
                                              "status":  "approved",
-                                             "image":  "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_14_player_heavy_attack_arc_2026-09-10_152606.png",
+                                             "image":  "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_14_player_heavy_attack_arc_2026-09-10_225637.png",
                                              "message":  "approved",
                                              "metrics":  {
-                                                             "mean_luminance":  89.374,
-                                                             "max_channel_variance":  3235.598,
-                                                             "dark_ratio":  0.00925,
+                                                             "mean_luminance":  90.264,
+                                                             "max_channel_variance":  3183.235,
+                                                             "dark_ratio":  0.01183,
                                                              "bright_ratio":  0.00021
                                                          }
                                          },
                         "blade_contact":  {
                                               "status":  "approved",
-                                              "image":  "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_73_combat_001_blade_contact_2026-09-10_152606.png",
+                                              "image":  "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_73_combat_001_blade_contact_2026-09-10_225637.png",
                                               "message":  "approved",
                                               "metrics":  {
-                                                              "mean_luminance":  56.543,
-                                                              "max_channel_variance":  1494.213,
-                                                              "dark_ratio":  0.00881,
+                                                              "mean_luminance":  56.47,
+                                                              "max_channel_variance":  1494.406,
+                                                              "dark_ratio":  0.01042,
                                                               "bright_ratio":  0.00021
                                                           }
                                           },
                         "vargan_approach":  {
                                                 "status":  "approved",
-                                                "image":  "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_36_vargan_approach_2026-09-10_152606.png",
+                                                "image":  "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_36_vargan_approach_2026-09-10_225637.png",
                                                 "message":  "approved",
                                                 "metrics":  {
-                                                                "mean_luminance":  90.549,
-                                                                "max_channel_variance":  2292.781,
-                                                                "dark_ratio":  0.0054,
+                                                                "mean_luminance":  90.933,
+                                                                "max_channel_variance":  2313.142,
+                                                                "dark_ratio":  0.00543,
                                                                 "bright_ratio":  0.00021
                                                             }
                                             },
                         "record_hall":  {
                                             "status":  "approved",
-                                            "image":  "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_38_record_hall_2026-09-10_152606.png",
+                                            "image":  "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_38_record_hall_2026-09-10_225637.png",
                                             "message":  "approved",
                                             "metrics":  {
-                                                            "mean_luminance":  25.976,
-                                                            "max_channel_variance":  1832.648,
-                                                            "dark_ratio":  0.49114,
+                                                            "mean_luminance":  25.908,
+                                                            "max_channel_variance":  1825.258,
+                                                            "dark_ratio":  0.49184,
                                                             "bright_ratio":  0.0002
                                                         }
                                         },
                         "hart_glade":  {
                                            "status":  "approved",
-                                           "image":  "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_41_white_hart_glade_2026-09-10_152606.png",
+                                           "image":  "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_41_white_hart_glade_2026-09-10_225637.png",
                                            "message":  "approved",
                                            "metrics":  {
-                                                           "mean_luminance":  68.004,
-                                                           "max_channel_variance":  1323.431,
-                                                           "dark_ratio":  0.00345,
+                                                           "mean_luminance":  68.082,
+                                                           "max_channel_variance":  1329.736,
+                                                           "dark_ratio":  0.00364,
                                                            "bright_ratio":  0.00021
                                                        }
                                        }

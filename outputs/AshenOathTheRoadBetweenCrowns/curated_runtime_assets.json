@@ -188,36 +188,36 @@
         "notes": "Complete animated skeleton body with authored skull, ribs, hands, feet, and five imported locomotion/combat clips. Used as the Wychwood cursed-remains family source while the Ultimate Monsters download remains quota-blocked."
       },
       "wychwood_stalker_creature": {
-        "status": "mon_002_connected_ghoulkin_family",
-        "path": "res://assets_external/enemies/Skeleton.fbx",
+        "status": "mon_002_distinct_bat_stalker",
+        "path": "res://assets_external/enemies/Bat.fbx",
         "source_pack": "Quaternius Animated Monsters",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
-        "notes": "Connected animated Skeleton body used for the Wychwood Stalker silhouette; lean scale, ash-green material, and flanker behavior carry the role distinction."
+        "notes": "Connected animated Bat body used for the Wychwood Stalker silhouette; ash-green material, flight attack clips, and flanker behavior carry the role distinction."
       },
       "wychwood_raider_creature": {
-        "status": "mon_002_connected_ghoulkin_family",
-        "path": "res://assets_external/enemies/Skeleton.fbx",
+        "status": "mon_002_distinct_dragon_raider",
+        "path": "res://assets_external/enemies/Dragon.fbx",
         "source_pack": "Quaternius Animated Monsters",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
-        "notes": "Connected animated Skeleton body used for the Wychwood Raider silhouette at a heavier encounter scale with ash-bone material and feint behavior."
+        "notes": "Connected animated Dragon body used for the Wychwood Raider silhouette at a compact scale with ash-bone material and feint behavior."
       },
       "bog_wretch": {
-        "status": "char_restore_001_skeleton_family",
-        "path": "res://assets_external/enemies/Skeleton.fbx",
+        "status": "mon_002_distinct_slime_wretch",
+        "path": "res://assets_external/enemies/Slime.fbx",
         "source_pack": "Quaternius Animated Monsters",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
-        "notes": "Skeleton source with swamp palette and Bog Wretch behavior profile."
+        "notes": "Slime source with swamp palette, pooling animation, and Bog Wretch behavior profile."
       },
       "gravebound_knight": {
-        "status": "char_restore_001_skeleton_family",
-        "path": "res://assets_external/enemies/Skeleton.fbx",
+        "status": "mon_002_distinct_knight_family",
+        "path": "res://assets_external/characters/KnightCharacter.fbx",
         "source_pack": "Quaternius Animated Monsters",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
-        "notes": "Skeleton source with iron/ash palette and Gravebound behavior profile."
+        "notes": "Knight source with iron/ash palette, sword stance, and Gravebound behavior profile."
       },
       "wychwood_stalker": {
         "status": "char_restore_001_skeleton_family",

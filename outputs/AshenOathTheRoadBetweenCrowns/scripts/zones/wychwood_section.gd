@@ -1,6 +1,7 @@
 extends RefCounted
 
 const RiverSection = preload("res://scripts/zones/river_section.gd")
+const BridgeSurfaceContract = preload("res://scripts/bridge_surface_contract.gd")
 
 func build(context: ZoneBuildContext) -> void:
 	seed(78233)
@@ -10,7 +11,7 @@ func build(context: ZoneBuildContext) -> void:
 	root.set_meta("main_route_half_width", 2.6)
 	context.add_node(root)
 
-	context.make_split_ground(44.0, 34.0, 0.0, 3.4, Color(0.065, 0.105, 0.07))
+	context.make_split_ground(44.0, 34.0, 0.0, 3.4, Color(0.065, 0.105, 0.07), BridgeSurfaceContract.DECK_WIDTH, BridgeSurfaceContract.bridge_length(3.4), BridgeSurfaceContract.APPROACH_LENGTH)
 	RiverSection.new().build(context, 0.0, 44.0, 3.4)
 	context.make_wychwood_terrain_layers()
 	context.make_play_area_bounds(44, 34, Color(0.04, 0.075, 0.045))

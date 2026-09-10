@@ -3,6 +3,7 @@ extends RefCounted
 const CemeterySection = preload("res://scripts/zones/cemetery_section.gd")
 const GreyfenLifeController = preload("res://scripts/greyfen_life_controller.gd")
 const RiverSection = preload("res://scripts/zones/river_section.gd")
+const BridgeSurfaceContract = preload("res://scripts/bridge_surface_contract.gd")
 
 func build(context: ZoneBuildContext) -> void:
 	seed(41021)
@@ -14,7 +15,7 @@ func build(context: ZoneBuildContext) -> void:
 	root.set_meta("main_route_half_width", 2.8)
 	context.add_node(root)
 
-	context.make_split_ground(42.0, 34.0, 4.5, 3.4, Color(0.16, 0.18, 0.13))
+	context.make_split_ground(42.0, 34.0, 4.5, 3.4, Color(0.16, 0.18, 0.13), BridgeSurfaceContract.DECK_WIDTH, BridgeSurfaceContract.bridge_length(3.4), BridgeSurfaceContract.APPROACH_LENGTH)
 	RiverSection.new().build(context, 4.5, 42.0, 3.4)
 	context.make_greyfen_terrain_layers()
 	context.make_play_area_bounds(42, 34, Color(0.09, 0.12, 0.08))

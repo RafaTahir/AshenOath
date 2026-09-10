@@ -120,12 +120,10 @@ func configure(owner: Node) -> void:
 				if pack_id == "audio":
 					audio.set_runtime_file_assets_available(true)
 			)
-		# Keep startup readiness owned by one state transition. Calling request_pack
-		# here as well as request_startup_packs() used to emit duplicate base-pack
-		# progress and readiness work during Web boot.
-		if OS.has_feature("web") and runtime_packs.has_method("request_startup_packs"):
-			runtime_packs.request_startup_packs()
-		else:
+		# Startup readiness belongs to the launch transition. Requesting Web packs
+		# while services are being constructed races the menu and duplicates the
+		# base-pack progress path owned by Game._on_launch_accepted().
+		if not OS.has_feature("web"):
 			runtime_packs.request_pack("base")
 	settings.apply_platform_defaults(mobile_touch.touch_capable)
 	input_router.device_changed.connect(func(_device: String):

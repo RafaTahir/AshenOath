@@ -15,6 +15,7 @@ const openingOnly = Boolean(args["opening-only"]);
 const mobileMode = Boolean(args.mobile);
 const stopAfter = String(args["stop-after"] || "").toLowerCase();
 const traceMovement = Boolean(args["trace-movement"]);
+const noRearm = Boolean(args["no-rearm"]);
 const QA_TEMP_ROOT = "D:\\Temp\\AshenOath";
 mkdirSync(QA_TEMP_ROOT, { recursive: true });
 // This harness launches headless Chromium/Edge with SwiftShader. It is a
@@ -272,7 +273,7 @@ async function holdKey(cdp, code, key, duration) {
   await dispatchKey(cdp, code, key, false);
 }
 
-async function holdTowardPoint(cdp, waypoint, timeout = 7000) {
+async function holdTowardPoint(cdp, waypoint, timeout = 7000, expectedZone = "") {
   // Treat movement as a real held input and release it from observed player
   // position, not from a guessed frame count. This tolerates WebGL frame
   // scheduling without ever teleporting or mutating the player transform.
@@ -297,9 +298,17 @@ async function holdTowardPoint(cdp, waypoint, timeout = 7000) {
   // a side-offset interaction such as Anwen at the end of the route.
   const forward = dx * -Math.sin(yaw) + dz * -Math.cos(yaw);
   const right = dx * Math.cos(yaw) + dz * -Math.sin(yaw);
-  const selected = Math.abs(forward) >= Math.abs(right)
-    ? (forward >= 0 ? ["KeyW", "w"] : ["KeyS", "s"])
-    : (right >= 0 ? ["KeyD", "d"] : ["KeyA", "a"]);
+  // Convert the desired world-space direction into the actual camera-relative
+  // movement vector. A dominant-axis approximation can turn a near-forward
+  // route into a lateral walk when the camera has a small yaw offset, leaving
+  // the player parked against a bridge approach or prop. Holding both axes
+  // preserves the requested route without changing the player's transform.
+  const inputX = right / Math.max(segmentLength, 0.001);
+  const inputY = -forward / Math.max(segmentLength, 0.001);
+  const selected = [];
+  if (Math.abs(inputX) > 0.14) selected.push(inputX >= 0 ? ["KeyD", "d"] : ["KeyA", "a"]);
+  if (Math.abs(inputY) > 0.14) selected.push(inputY >= 0 ? ["KeyS", "s"] : ["KeyW", "w"]);
+  if (selected.length === 0) selected.push(["KeyW", "w"]);
   // Clear any delayed release from the preceding segment before starting a
   // new physical hold. The Web bridge can deliver a keyup after its CDP call
   // has already returned.
@@ -307,26 +316,31 @@ async function holdTowardPoint(cdp, waypoint, timeout = 7000) {
     await dispatchKey(cdp, code, key, false);
   }
   await sleep(90);
-  await dispatchKey(cdp, selected[0], selected[1], true);
+  // Use CDP's raw key path for game movement. It maps to the browser's
+  // physical held-key state without dispatching a text-input event to the
+  // Web canvas, which is important when Compatibility frames are sparse.
+  for (const [code, key] of selected) await dispatchKey(cdp, code, key, true, true);
   await sleep(55);
-  await dispatchKey(cdp, selected[0], selected[1], true);
+  for (const [code, key] of selected) await dispatchKey(cdp, code, key, true, true);
   const started = Date.now();
-  let lastKeySignal = started;
   let lastProgressAt = started;
+  let lastKeySignal = started;
   let closestDistance = segmentLength;
   let lastState = null;
   const movementTrace = [];
   let lastTraceAt = 0;
   while (Date.now() - started < timeout) {
     await sleep(120);
-    // The browser-to-Godot Web input bridge can drop a held-key repeat while
-    // the Compatibility renderer is busy. Reassert the same physical key at a
-    // modest cadence; no keyup is sent until the observed waypoint is reached.
-    if (Date.now() - lastKeySignal >= 240) {
-      await dispatchKey(cdp, selected[0], selected[1], true);
+    lastState = await telemetry(cdp).catch(() => null);
+    if (expectedZone && lastState?.zone === expectedZone) break;
+    // SwiftShader can keep the browser page alive while losing the renderer's
+    // held-key state. Reassert the same raw key as an auto-repeat event without
+    // sending a key-up; this preserves one continuous physical hold and avoids
+    // the movement pulses that caused the earlier route false negatives.
+    if (Date.now() - lastKeySignal >= 750) {
+      for (const [code, key] of selected) await dispatchKey(cdp, code, key, true, true, true);
       lastKeySignal = Date.now();
     }
-    lastState = await telemetry(cdp).catch(() => null);
     const player = lastState?.player?.position;
     if (!player) continue;
     const distance = Math.hypot(waypoint.x - player.x, waypoint.z - player.z);
@@ -336,24 +350,29 @@ async function holdTowardPoint(cdp, waypoint, timeout = 7000) {
         z: Number(player.z),
         distance: Number(distance.toFixed(3)),
         velocity: lastState?.player?.velocity || null,
+        slide_collisions: Array.isArray(lastState?.player?.slide_collisions)
+          ? lastState.player.slide_collisions.map((collision) => ({
+              collider: collision.collider || null,
+              normal: collision.normal || null,
+            }))
+          : [],
         focus: lastState?.focus?.id || "",
-        selected: selected[0],
+        selected: selected.map((entry) => entry[0]),
       });
       lastTraceAt = Date.now();
     }
     if (distance < closestDistance - 0.04) {
       closestDistance = distance;
       lastProgressAt = Date.now();
-    } else if (Date.now() - lastProgressAt >= 900) {
+    } else if (!noRearm && Date.now() - lastProgressAt >= 900) {
       // A busy WebGL renderer can retain the browser key state while dropping
       // the corresponding Godot input event. Re-arm the same real key only
       // after observed lack of movement; never alter the player transform.
-      await dispatchKey(cdp, selected[0], selected[1], false);
+      for (const [code, key] of selected) await dispatchKey(cdp, code, key, false);
       await sleep(80);
-      await dispatchKey(cdp, selected[0], selected[1], true);
+      for (const [code, key] of selected) await dispatchKey(cdp, code, key, true, true);
       await sleep(55);
-      await dispatchKey(cdp, selected[0], selected[1], true);
-      lastKeySignal = Date.now();
+      for (const [code, key] of selected) await dispatchKey(cdp, code, key, true, true);
       lastProgressAt = Date.now();
     }
     const projected = (player.x - Number(initialState?.player?.position?.x || 0)) * segmentDirection.x
@@ -364,13 +383,33 @@ async function holdTowardPoint(cdp, waypoint, timeout = 7000) {
     // until its full timeout expired.
     if (distance <= 0.58 || (segmentLength > 0.001 && projected >= segmentLength + 0.25)) break;
   }
-  await dispatchKey(cdp, selected[0], selected[1], false);
+  for (const [code, key] of selected) await dispatchKey(cdp, code, key, false);
   await sleep(120);
   await dispatchKey(cdp, "KeyW", "w", false);
   await sleep(120);
   const result = lastState || await telemetry(cdp).catch(() => null);
   if (result && traceMovement) result._movement_trace = movementTrace;
   return result;
+}
+
+function collapseCollinearRoute(points) {
+  if (!Array.isArray(points) || points.length < 3) return points || [];
+  const collapsed = [points[0]];
+  for (let index = 1; index < points.length - 1; index += 1) {
+    const current = points[index];
+    const previous = collapsed[collapsed.length - 1];
+    const next = points[index + 1];
+    const ax = Number(current.x) - Number(previous.x);
+    const az = Number(current.z) - Number(previous.z);
+    const bx = Number(next.x) - Number(current.x);
+    const bz = Number(next.z) - Number(current.z);
+    const cross = ax * bz - az * bx;
+    const dot = ax * bx + az * bz;
+    if (Math.abs(cross) <= 0.02 && dot >= 0) continue;
+    collapsed.push(current);
+  }
+  collapsed.push(points[points.length - 1]);
+  return collapsed;
 }
 
 async function moveCameraRelative(cdp, yaw, dx, dz, duration = 180) {
@@ -434,6 +473,21 @@ function fatal(message) {
 
 function findGate(state, target) {
   return state?.gates?.find((gate) => gate.target === target);
+}
+
+const SEAMLESS_EXTERIOR_ROUTES = new Set([
+  "greyfen>wychwood", "wychwood>greyfen",
+  "greyfen>deep_wood", "deep_wood>wychwood", "wychwood>deep_wood",
+  "deep_wood>old_mill", "old_mill>deep_wood",
+  "old_mill>burned_farmstead", "burned_farmstead>old_mill",
+  "burned_farmstead>marsh_crossing", "marsh_crossing>burned_farmstead",
+  "marsh_crossing>bandit_road", "bandit_road>marsh_crossing",
+  "bandit_road>vargan_approach", "vargan_approach>bandit_road",
+  "vargan_approach>greyfen",
+]);
+
+function isSeamlessExteriorRoute(source, target) {
+  return SEAMLESS_EXTERIOR_ROUTES.has(`${source}>${target}`);
 }
 
 function findInteraction(state, id) {
@@ -531,6 +585,7 @@ async function startNewGame(cdp, expectedUrl) {
 
 async function driveToGate(cdp, target, checkpoints, timeout = 45000) {
   const started = Date.now();
+  let routeTimeout = timeout;
   let lastState;
   let route = [];
   let routeIndex = 0;
@@ -538,16 +593,39 @@ async function driveToGate(cdp, target, checkpoints, timeout = 45000) {
   let lastProgressAt = Date.now();
   let lastDistance = Number.POSITIVE_INFINITY;
   let staged = false;
-  while (Date.now() - started < timeout) {
+  let seamless = false;
+  let sourceZone = "";
+  while (Date.now() - started < routeTimeout) {
     const state = await telemetry(cdp);
     lastState = state;
     if (!state?.ready || state.transition_pending || state.paused) {
       await sleep(150);
       continue;
     }
+    if (!sourceZone) sourceZone = state.zone;
+    if (state.zone === target && seamless) {
+      checkpoints.push({
+        event: "seamless_boundary_crossed",
+        from: sourceZone,
+        zone: target,
+        elapsed_ms: Date.now() - started,
+        player: state.player.position,
+      });
+      return state;
+    }
+    if (!seamless && state.zone !== target && state.zone) {
+      seamless = isSeamlessExteriorRoute(state.zone, target);
+      if (seamless) {
+        // SwiftShader/Compatibility browser runs can deliver a physical key
+        // heartbeat far slower than wall-clock time. Keep the player-driven
+        // route alive long enough to finish a genuine exterior crossing while
+        // retaining the normal timeout for ordinary interactable gates.
+        routeTimeout = Math.max(routeTimeout, 180000);
+      }
+    }
     const gate = findGate(state, target);
     if (!gate) throw new Error(`No ${target} gate exposed in ${state.zone}`);
-    if (fullCampaign && !staged) {
+    if (fullCampaign && !staged && !seamless) {
       const stagedResult = await qaCommand(cdp, "stage_gate", { target });
       if (!stagedResult.ok) throw new Error(`Could not stage ${target} gate approach`);
       checkpoints.push({ event: "gate_approach_staged", zone: state.zone, target });
@@ -556,7 +634,7 @@ async function driveToGate(cdp, target, checkpoints, timeout = 45000) {
       await sleep(250);
       continue;
     }
-    if (state.focus?.target === target && gate.distance <= 3.2) {
+    if (!seamless && state.focus?.target === target && gate.distance <= 3.2) {
       checkpoints.push({
         event: "gate_focus",
         zone: state.zone,
@@ -573,10 +651,17 @@ async function driveToGate(cdp, target, checkpoints, timeout = 45000) {
     }
     if (!route.length) {
       const routeResult = await qaCommand(cdp, "route_to", gate.position);
-      route = routeResult.points || [];
-      if (!route.length) throw new Error(`No navigation route to ${target} in ${state.zone}`);
+      const fullRoute = routeResult.points || [];
+      if (!fullRoute.length) throw new Error(`No navigation route to ${target} in ${state.zone}`);
+      route = collapseCollinearRoute(fullRoute);
       routeIndex = route.length > 1 ? 1 : 0;
-      checkpoints.push({ event: "gate_route", zone: state.zone, target, points: route });
+      checkpoints.push({
+        event: "gate_route",
+        zone: state.zone,
+        target,
+        points: fullRoute,
+        movement_points: route,
+      });
     }
     const player = state.player.position;
     let waypoint = route[Math.min(routeIndex, route.length - 1)] || gate.position;
@@ -597,12 +682,56 @@ async function driveToGate(cdp, target, checkpoints, timeout = 45000) {
       await qaCommand(cdp, "orient_camera", { yaw: desiredYaw });
       await sleep(60);
     }
-    if (distance > 0.42) {
+    if (seamless && routeIndex >= route.length - 1 && distance <= 1.0) {
+      // Exterior links are boundary transitions, not interactable doors. Stay
+      // on the validated bridge/road route until its final threshold point;
+      // only then continue outward through the authored boundary. Steering at
+      // the first near-waypoint used to cut diagonally across Greyfen's river.
+      const gateDx = Number(gate.position.x) - Number(player.x);
+      const gateDz = Number(gate.position.z) - Number(player.z);
+      const outwardLength = Math.hypot(gateDx, gateDz);
+      const outward = outwardLength > 0.001
+        ? { x: gateDx / outwardLength, z: gateDz / outwardLength }
+        : { x: 0, z: -1 };
+      const boundaryPoint = {
+        x: Number(gate.position.x) + outward.x * 3.0,
+        y: Number(gate.position.y || 0),
+        z: Number(gate.position.z) + outward.z * 3.0,
+      };
+      const boundaryYaw = Math.atan2(-outward.x, -outward.z);
+      await qaCommand(cdp, "orient_camera", { yaw: boundaryYaw });
+      const progress = await holdTowardPoint(cdp, boundaryPoint, 12000, target);
+      lastState = progress || lastState;
+      if (progress?.zone === target) {
+        checkpoints.push({
+          event: "seamless_boundary_crossed",
+          from: sourceZone,
+          zone: target,
+          elapsed_ms: Date.now() - started,
+          player: progress.player?.position || null,
+        });
+        return progress;
+      }
+    } else if (distance > 0.42) {
       // Compatibility WebGL can defer input delivery while a frame is being
       // presented. Release from an observed waypoint arrival so the route
       // cannot crawl from short fixed pulses or overshoot into scenery.
-      const progress = await holdTowardPoint(cdp, waypoint, clamp((distance / 2.6) * 1000 + 9000, 14000, 30000));
+      const movementTimeout = seamless
+        ? clamp((distance / 2.6) * 1000 + 28000, 30000, 60000)
+        : clamp((distance / 2.6) * 1000 + 9000, 14000, 30000);
+      const progress = await holdTowardPoint(cdp, waypoint, movementTimeout, seamless ? target : "");
+      lastState = progress || lastState;
       if (!progress?.player?.position) throw new Error(`No player telemetry while approaching ${target}`);
+      if (traceMovement && progress._movement_trace?.length) {
+        checkpoints.push({
+          event: "gate_movement_trace",
+          zone: state.zone,
+          target,
+          route_index: routeIndex,
+          waypoint,
+          samples: progress._movement_trace,
+        });
+      }
     } else {
       await sleep(180);
     }
@@ -633,7 +762,8 @@ async function useGate(cdp, expectedZone, checkpoints) {
 }
 
 async function traverse(cdp, target, checkpoints) {
-  await driveToGate(cdp, target, checkpoints);
+  const state = await driveToGate(cdp, target, checkpoints);
+  if (state?.zone === target) return state;
   return useGate(cdp, target, checkpoints);
 }
 
@@ -851,6 +981,7 @@ async function runFullCampaign(cdp, url, checkpoints) {
   checkpoints.push({ event: "save_created", save_exists: Boolean(saved) });
   for (const target of ["deep_wood", "old_mill", "burned_farmstead", "marsh_crossing", "bandit_road", "vargan_approach", "vargan_court"]) {
     await traverse(cdp, target, checkpoints);
+    if (stopAfter === target) return telemetry(cdp);
   }
   await qaCommand(cdp, "prepare_route", { target: "record_hall" });
   await traverse(cdp, "record_hall", checkpoints);
@@ -876,7 +1007,8 @@ async function testBrowser(name, executable) {
   const debugPort = await availablePort();
   const profile = join(QA_TEMP_ROOT, `ashen-oath-${fullCampaign ? "web002" : "qa002"}-${name.toLowerCase()}-${Date.now()}`);
   mkdirSync(profile, { recursive: true });
-  const url = `http://127.0.0.1:${port}/index.html?qa=1&v=${fullCampaign ? "web002" : "qa002"}-${name.toLowerCase()}${mobileMode ? "&touch=1" : ""}`;
+  const diagnosticQuery = traceMovement ? "&diag=1" : "";
+  const url = `http://127.0.0.1:${port}/index.html?qa=1&v=${fullCampaign ? "web002" : "qa002"}-${name.toLowerCase()}${mobileMode ? "&touch=1" : ""}${diagnosticQuery}`;
   const browser = spawn(executable, [
     "--headless=new",
     `--remote-debugging-port=${debugPort}`,

@@ -7,8 +7,9 @@ class_name BridgeSurfaceContract
 const DECK_WIDTH := 5.4
 const HALF_WIDTH := DECK_WIDTH * 0.5
 const RIVER_HALF_SPAN := 2.25
-const DECK_COLLISION_TOP := 0.06
+const DECK_COLLISION_TOP := 0.12
 const DECK_COLLISION_THICKNESS := 0.12
+const APPROACH_LENGTH := 1.8
 
 static func bridge_length(river_span: float) -> float:
 	return absf(river_span) + 2.6

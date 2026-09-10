@@ -81,6 +81,9 @@ func _verify_wychwood_family_runtime(enemy_definitions: Dictionary) -> void:
 		check(_find_type(actor, "AnimationPlayer") != null, "%s runtime has no AnimationPlayer" % enemy_id)
 		var driver := actor.find_child("CharacterAnimationDriver", true, false)
 		check(driver != null and driver.has_method("is_valid") and driver.is_valid(), "%s runtime has no valid animation driver" % enemy_id)
+		if driver != null and driver.has_method("get_contract_report"):
+			var animation_report: Dictionary = driver.get_contract_report()
+			check(bool(animation_report.get("valid", false)), "%s runtime animation contract is unresolved: %s" % [enemy_id, animation_report.get("errors", [])])
 		check(actor.find_child("visual_root", true, false) != null, "%s runtime has no visual root" % enemy_id)
 		check(actor.find_child("%s_placeholder" % enemy_id, true, false) == null, "%s fell back to a placeholder body" % enemy_id)
 		var visual := actor.find_child("%s_visual" % enemy_id, true, false)
@@ -132,6 +135,9 @@ func _verify_connected_family_runtime(role_id: String, enemy_definitions: Dictio
 	check(_find_type(actor, "AnimationPlayer") != null, "%s runtime has no AnimationPlayer" % role_id)
 	var driver := actor.find_child("CharacterAnimationDriver", true, false)
 	check(driver != null and driver.has_method("is_valid") and driver.is_valid(), "%s runtime has no valid animation driver" % role_id)
+	if driver != null and driver.has_method("get_contract_report"):
+		var animation_report: Dictionary = driver.get_contract_report()
+		check(bool(animation_report.get("valid", false)), "%s runtime animation contract is unresolved: %s" % [role_id, animation_report.get("errors", [])])
 	check(actor.find_child("visual_root", true, false) != null, "%s runtime has no visual root" % role_id)
 	check(actor.find_child("EnemyWeakPointMarker", true, false) == null, "%s fell back to primitive weak-point body" % role_id)
 	actor.queue_free()

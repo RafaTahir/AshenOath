@@ -475,8 +475,8 @@
       "status": "blocked_fallback",
       "approved": false,
       "export_eligible": false,
-      "fallback": "res://assets_external/enemies/Skeleton.fbx",
-      "blocked_reason": "Retained Skeleton family is runtime-valid; bespoke swamp anatomy and visual approval remain a later gate."
+      "fallback": "res://assets_external/enemies/Slime.fbx",
+      "blocked_reason": "Retained Slime family is runtime-valid; final swamp material and visual approval remain a later gate."
     },
     "gravebound_knight": {
       "display_name": "Gravebound Knight",
@@ -485,8 +485,8 @@
       "status": "blocked_fallback",
       "approved": false,
       "export_eligible": false,
-      "fallback": "res://assets_external/enemies/Skeleton.fbx",
-      "blocked_reason": "Retained Skeleton family is runtime-valid; bespoke Gravebound armor and visual approval remain a later gate."
+      "fallback": "res://assets_external/characters/KnightCharacter.fbx",
+      "blocked_reason": "Retained Knight family is runtime-valid; final Gravebound armor and visual approval remain a later gate."
     },
     "ashwing": {
       "display_name": "Ashwing Carrion Drake",

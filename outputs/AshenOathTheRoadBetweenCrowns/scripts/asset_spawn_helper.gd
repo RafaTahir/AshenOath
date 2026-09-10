@@ -34,12 +34,12 @@ func spawn_for_role(role_name: String, fallback_category: String = "props") -> N
 	var entry: Dictionary = database.get_asset_for_role(role_name)
 	return _spawn_from_entry(entry, role_name, fallback_category)
 
-func spawn_visual_role(role_name: String, fallback_category: String = "props") -> Node3D:
+func spawn_visual_role(role_name: String, fallback_category: String = "props", variant_seed: String = "") -> Node3D:
 	_ensure_database()
 	if not database.has_method("get_visual_asset_for_role"):
 		return null
 	var entry: Dictionary = database.get_visual_asset_for_role(role_name)
-	return _spawn_from_entry(entry, role_name, fallback_category)
+	return _spawn_from_entry(entry, role_name, fallback_category, variant_seed)
 
 func has_visual_role(role_name: String) -> bool:
 	_ensure_database()
@@ -47,20 +47,29 @@ func has_visual_role(role_name: String) -> bool:
 		return false
 	return database.has_visual_asset_for_role(role_name)
 
-func _spawn_from_entry(entry: Dictionary, role_name: String, fallback_category: String) -> Node3D:
+func _spawn_from_entry(entry: Dictionary, role_name: String, fallback_category: String, variant_seed: String = "") -> Node3D:
 	var path: String = str(entry.get("path", ""))
+	var runtime_policy: Dictionary = entry.get("runtime_policy", {}) if typeof(entry.get("runtime_policy", {})) == TYPE_DICTIONARY else {}
+	if fallback_category in ["characters", "enemies"] and bool(runtime_policy.get("release_blocked", false)):
+		# Keep the retained local body available for gameplay diagnostics, but make
+		# the unresolved visual debt explicit in both the node metadata and logs.
+		# Release tooling rejects this state; it must never masquerade as an
+		# approved production role.
+		push_warning("Runtime visual role '%s' is not release-approved: %s" % [role_name, str(runtime_policy.get("reason", "unregistered role"))])
 	if path != "" and (ResourceLoader.exists(path) or FileAccess.file_exists(path)):
 		var resource = _load_cached_resource(path)
 		var spawned: Node3D = _instantiate_resource(resource)
 		if spawned != null:
-			spawned = _compose_player_body(spawned, path, role_name)
+			spawned = _compose_player_body(spawned, path, role_name, variant_seed)
 			spawned.name = role_name
+			_apply_runtime_policy_metadata(spawned, role_name, runtime_policy)
 			_prepare_spawned_asset(spawned,path,role_name,fallback_category)
 			return spawned
 		var fallback: Node3D = _instantiate_source_file(path)
 		if fallback != null:
-			fallback = _compose_player_body(fallback, path, role_name)
+			fallback = _compose_player_body(fallback, path, role_name, variant_seed)
 			fallback.name = role_name
+			_apply_runtime_policy_metadata(fallback, role_name, runtime_policy)
 			_prepare_spawned_asset(fallback,path,role_name,fallback_category)
 			return fallback
 	if fallback_category in ["characters", "enemies"]:
@@ -72,7 +81,15 @@ func _spawn_from_entry(entry: Dictionary, role_name: String, fallback_category: 
 	push_warning("Using primitive placeholder for asset role: %s" % role_name)
 	return _placeholder(role_name, fallback_category)
 
-func _compose_player_body(outfit_root: Node3D, outfit_path: String, role_name: String) -> Node3D:
+func _apply_runtime_policy_metadata(root: Node3D, role_name: String, policy: Dictionary) -> void:
+	if root == null:
+		return
+	root.set_meta("runtime_role", role_name)
+	root.set_meta("runtime_role_policy", policy.duplicate(true))
+	root.set_meta("runtime_release_blocked", bool(policy.get("release_blocked", false)))
+	root.set_meta("runtime_visual_approved", bool(policy.get("approved", false)))
+
+func _compose_player_body(outfit_root: Node3D, outfit_path: String, role_name: String, variant_seed: String = "") -> Node3D:
 	var normalized_path := outfit_path.replace("\\", "/").to_lower()
 	var is_ranger_runtime := normalized_path.contains("assets_external/characters_ranger/") and normalized_path.ends_with("male_ranger_runtime.gltf")
 	if is_ranger_runtime:
@@ -149,7 +166,7 @@ func _compose_player_body(outfit_root: Node3D, outfit_path: String, role_name: S
 	var base := _instantiate_resource(_load_cached_resource(base_path))
 	if base == null:
 		return outfit_root
-	var hair_path := _hair_path_for_role(role_name, is_shared_male)
+	var hair_path := _hair_path_for_role(role_name, is_shared_male, variant_seed)
 	var hair := _instantiate_resource(_load_cached_resource(hair_path))
 	var composite := Node3D.new()
 	var label := "Kael" if is_kael else ("Anwen" if is_anwen else role_name.capitalize())
@@ -249,13 +266,24 @@ func _skeletons_match(first: Skeleton3D, second: Skeleton3D) -> bool:
 			return false
 	return true
 
-func _hair_path_for_role(role_name: String, male: bool) -> String:
+func _hair_path_for_role(role_name: String, male: bool, variant_seed: String = "") -> String:
 	var role := role_name.to_lower()
 	if role in ["sister_anwen_human", "sister_anwen"] or not male:
 		return "res://assets_external/characters_universal/Hair_Buns.gltf"
 	if role.contains("hooded") or role.contains("ranger") or role.contains("patrol") or role.contains("guard"):
 		return "res://assets_external/characters_universal/Hair_Buzzed.gltf"
+	# Crowd recipes must affect the authored mesh, not only its material wash.
+	# Keep named heroes fixed while allowing stable actor seeds to alternate the
+	# two compatible male hair sources without changing the shared skeleton.
+	if not variant_seed.is_empty() and _stable_seed(variant_seed) % 2 == 1:
+		return "res://assets_external/characters_universal/Hair_Buzzed.gltf"
 	return "res://assets_external/characters_universal/Hair_SimpleParted.gltf"
+
+func _stable_seed(value: String) -> int:
+	var result := 17
+	for index in range(value.length()):
+		result = absi((result * 31 + value.unicode_at(index)) % 2147483647)
+	return result
 
 func spawn_character(role_name: String) -> Node3D:
 	return spawn_for_role(role_name, "characters")
@@ -291,6 +319,12 @@ func _instantiate_resource(resource) -> Node3D:
 		mesh_instance.mesh = resource
 		return mesh_instance
 	return null
+
+func load_runtime_resource(path: String):
+	return _load_cached_resource(path)
+
+func instantiate_runtime_resource(resource) -> Node3D:
+	return _instantiate_resource(resource)
 
 func _instantiate_source_file(path: String) -> Node3D:
 	var ext: String = path.get_extension().to_lower()

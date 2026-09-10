@@ -19,6 +19,8 @@ func _initialize() -> void:
 	check(player.has_signal("blade_contact_requested"), "Player lacks authoritative blade-contact signal")
 	check(player.rig_sword_visual != null, "Kael has no drawn sword visual")
 	check(player.rig_sword_visual.name == "KaelOathblade", "Kael is still using the ambiguous imported sword instead of the controlled Oathblade")
+	check(str(player.rig_sword_visual.get_meta("weapon_visual_source", "")) == "res://assets_external/characters/Sword.fbx", "Kael's sword is not using the approved modeled Sword.fbx source")
+	check(player.rig_sword_visual.find_child("OathbladeModeledMesh", true, false) != null, "Kael's modeled sword mesh is missing from the hand equipment root")
 	check(player.sword_attachment != null and player.sword_equipment_pivot != null, "Kael's Oathblade lacks its hand socket or equipment pivot")
 	check(_has_bone_attachment_ancestor(player.rig_sword_visual), "Kael's drawn sword is not attached to a skeleton bone")
 	var sword_bounds := _visible_rendered_bounds(player.rig_sword_visual)

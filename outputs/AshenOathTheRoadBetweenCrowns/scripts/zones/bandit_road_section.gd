@@ -32,7 +32,9 @@ func build(context: ZoneBuildContext) -> void:
 	context.make_loose_role("cart", Vector3(-8.5, 0, 4.0), Vector3.ONE * 0.68, 12.0)
 	for position in [Vector3(7.0, 0, -4.0), Vector3(11.5, 0, -4.0), Vector3(8.0, 0, 3.2)]:
 		context.make_torch(position)
-	for position in [Vector3(-14, 0, -12), Vector3(-13, 0, -2), Vector3(-14, 0, 10), Vector3(14, 0, -11), Vector3(14, 0, 8)]:
+	# Keep the east tree on the outer shoulder. At (14, 8) its collider cut
+	# across the diagonal arrival lane toward the Vargan boundary.
+	for position in [Vector3(-14, 0, -12), Vector3(-13, 0, -2), Vector3(-14, 0, 10), Vector3(14, 0, -11), Vector3(17, 0, 11)]:
 		context.make_tree(position)
 	# Keep the east-side rubble on the outer shoulder. The former (10, 9)
 	# placement sat inside the diagonal approach from the marsh arrival to the

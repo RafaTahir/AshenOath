@@ -418,7 +418,7 @@ func _make_skeletal_villager(parent: Node3D, role_id: String, index: int, scale_
 		"villager_hooded_human",
 	]
 	var role := str(role_cycle[index % role_cycle.size()])
-	var mapped = asset_helper.spawn_visual_role(role, "characters")
+	var mapped = asset_helper.spawn_visual_role(role, "characters", "%s:%d" % [role_id, index])
 	if mapped == null or mapped.name.ends_with("_placeholder"):
 		push_error("Rigged villager asset unavailable for %s" % role_id)
 		return null
