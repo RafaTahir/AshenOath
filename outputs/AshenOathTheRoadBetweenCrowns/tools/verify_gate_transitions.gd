@@ -22,6 +22,7 @@ func _initialize() -> void:
 	await _settle(4)
 	if game.hud != null and game.hud.has_method("restore_input_focus"):
 		game.hud.restore_input_focus()
+	await _wait_for_opening_ready(game)
 	var new_game_started := Time.get_ticks_msec()
 	await _send_action("ui_accept")
 	await wait_for_zone(game, "greyfen")
@@ -62,6 +63,18 @@ func _initialize() -> void:
 	await _frames(60)
 	RenderingServer.force_sync()
 	quit(0 if failures == 0 else 1)
+
+func _wait_for_opening_ready(game) -> void:
+	# Prewarming is intentionally hidden behind the menu. Do not fold that cold
+	# work into the warm New Game handoff measurement, but do keep a hard bound so
+	# a stuck pack/build path cannot make this verifier wait forever.
+	for _frame in range(900):
+		var ready := game.hud != null and bool(game.hud.get("new_game_ready"))
+		var cached: bool = game.route_zone_cache.has("greyfen")
+		if ready and cached:
+			return
+		await process_frame
+	check(false, "Greyfen did not become ready behind the menu within 15 seconds")
 
 func use_gate(game, target: String) -> void:
 	var source := WorldSectorManifest.canonical(str(game.current_zone_id))
@@ -160,11 +173,15 @@ func _edge_outward(edge_id: String) -> Vector3:
 	return Vector3.FORWARD
 
 func _edge_position(edge_id: String, lane: float, bounds: Vector2) -> Vector3:
+	# Keep the test capsule inside the authored boundary wall. The old 0.25 m
+	# inset placed the actor inside the wall's collision envelope at the same
+	# time that the runtime edge detector already accepted a 0.85 m margin.
+	var edge_clearance := 1.75
 	match edge_id:
-		"north": return Vector3(lane, 0.95, -bounds.y + 0.25)
-		"south": return Vector3(lane, 0.95, bounds.y - 0.25)
-		"west": return Vector3(-bounds.x + 0.25, 0.95, lane)
-		"east": return Vector3(bounds.x - 0.25, 0.95, lane)
+		"north": return Vector3(lane, 0.95, -bounds.y + edge_clearance)
+		"south": return Vector3(lane, 0.95, bounds.y - edge_clearance)
+		"west": return Vector3(-bounds.x + edge_clearance, 0.95, lane)
+		"east": return Vector3(bounds.x - edge_clearance, 0.95, lane)
 	return Vector3(lane, 0.95, 0.0)
 
 func _corridor_clear(game: Node, start: Vector3, destination: Vector3) -> bool:

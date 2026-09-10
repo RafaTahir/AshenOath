@@ -3968,7 +3968,9 @@ func _make_balanced_road_surface(paved: bool) -> void:
 	multimesh.transform_format = MultiMesh.TRANSFORM_3D
 	multimesh.use_colors = paved
 	multimesh.mesh = detail_mesh
-	var rows = 20 if paved else 12
+	# Keep paving dense enough to read as a continuous staggered surface while
+	# retaining one MultiMesh draw and the same authored road footprint.
+	var rows = 36 if paved else 12
 	var columns = 4 if paved else 1
 	multimesh.instance_count = rows * columns
 	var index = 0
@@ -3976,7 +3978,7 @@ func _make_balanced_road_surface(paved: bool) -> void:
 		for column in range(columns):
 			var row_offset := 0.10 if paved and row % 2 == 1 else 0.0
 			var x = (float(column) - 1.5) * 0.78 + row_offset + sin(float(row * 5 + column)) * 0.08 if paved else sin(float(row) * 1.7) * 0.55
-			var z = -12.4 + float(row) * (1.30 if paved else 2.05) + (sin(float(row) * 1.3) * 0.08 if paved else 0.0)
+			var z = -12.4 + float(row) * (0.72 if paved else 2.05) + (sin(float(row) * 1.3) * 0.08 if paved else 0.0)
 			var yaw = sin(float(row * 7 + column * 3)) * 0.16 if paved else sin(float(row) * 0.8) * 0.16
 			var basis := Basis(Vector3.UP, yaw)
 			if paved:
@@ -4877,7 +4879,10 @@ func _make_shrine_scene(pos: Vector3) -> void:
 	_make_prop_box("ShrineCloth", pos + Vector3(0.58, 0.38, -0.42), Vector3(0.46, 0.08, 0.32), Color(0.36, 0.08, 0.07))
 	_make_loose_role("shrine", pos + Vector3(0, 0.15, -0.05), Vector3(1.45, 1.45, 1.45), 0.0)
 	_make_loose_role("crate", pos + Vector3(-1.15, 0, -0.65), Vector3.ONE * 0.48, -12.0)
-	_make_loose_role("barrel", pos + Vector3(1.2, 0, -0.55), Vector3.ONE * 0.42, 16.0)
+	# Keep shrine dressing off the diagonal Greyfen-to-Castle approach. This
+	# barrel used to sit directly on the player-sized route after returning from
+	# Wychwood, making the Castle gateway fail its real capsule sweep.
+	_make_loose_role("barrel", pos + Vector3(1.2, 0, 1.40), Vector3.ONE * 0.42, 16.0)
 	_make_light("ShrineGlow", pos + Vector3(0, 1.7, -0.3), Color(0.56, 0.78, 0.62), 1.6)
 	_make_world_prop_anchor("shrine", "shrine", pos, "crow_shrine_state")
 

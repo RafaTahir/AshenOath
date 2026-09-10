@@ -1,5 +1,31 @@
 # RECOVERY-004 Implementation Status
 
+## Current Evidence Checkpoint - 2026-09-10 (route and world gate repair)
+
+- Current ticket: `RECOVERY-004`, traversal and Greyfen presentation follow-up on
+  `codex/masterpiece-rebuild`.
+- Completed in this slice: the real gate traversal now keeps player-sized test
+  capsules inside authored boundary walls, waits for the hidden Greyfen
+  prewarm before timing New Game, defers the desktop launch-menu rebuild so a
+  single accept event cannot activate New Game twice, moves the collidable
+  shrine barrel out of the Greyfen-to-Castle approach, and restores a dense
+  144-instance staggered Greyfen paving surface in one MultiMesh.
+- Latest direct results: `verify_gate_transitions.gd` passed every tested
+  Greyfen/Wychwood/campaign route in both directions with a measured warm New
+  Game handoff of 74-187 ms. `verify_world_001.gd` passed with 1099 nodes,
+  336 meshes, and 2 lights. The full source gate sequence through
+  `verify_perf_003.gd` passed; graphical Compatibility profiling also passed
+  Greyfen, Wychwood, Wychwood combat, Castle courtyard, Record Hall, and Hart
+  Glade at approximately 59.9-60.0 FPS average with 30.8-32.7 FPS 1% lows,
+  34.9 ms warm return, and 84.2-430.1 ms cold transitions.
+- Scope boundary: this is local source and graphical evidence. It does not by
+  itself approve unresolved visual-quality registry categories or certify the
+  deployed Web artifact until the final export, screenshot, and browser gates
+  complete.
+- Exact next action: run the complete screenshot, export, packed-startup, and
+  fresh Chrome/Edge release checks against the committed source, then update
+  the authoritative report and decide promotion from the evidence.
+
 ## Current Evidence Checkpoint - 2026-09-10 (off-center bridge capsule sweep)
 
 - Current ticket: `TRAV-001`, bridge surface contract verification on

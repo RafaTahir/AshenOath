@@ -161,7 +161,10 @@ func show_launch_screen() -> void:
 	_add_menu_text(box, "Click once to enable audio and mouse capture.")
 	_add_menu_button(box, "Enter", func():
 		launch_accepted.emit()
-		show_main_menu()
+		# Rebuild the main menu after the current accept event has finished. If it
+		# happens synchronously, the newly focused New Game button can consume the
+		# same ui_accept and start a run without a deliberate second click.
+		call_deferred("show_main_menu")
 	)
 	call_deferred("_focus_first_enabled", menu_layer)
 
