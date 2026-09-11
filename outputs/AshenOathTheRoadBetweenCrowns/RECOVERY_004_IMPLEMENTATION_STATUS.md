@@ -1402,3 +1402,24 @@ Do not sync `.release-gate/AshenOath_QA` into `web/`; it is not the production b
 - Exact next action: continue the existing bounded source/native recovery;
   perform the one fresh QA export and one browser acceptance run only after
   the accumulated source fixes are settled.
+
+## QA-005 Shutdown-Boundary Checkpoint - 2026-09-11
+
+- The standalone QA-005 classifier previously converted teardown-looking
+  `ERROR:` lines to warnings solely because they appeared after a PASS marker.
+  A verifier could therefore pass early and hide an active renderer/resource
+  failure before cleanup began.
+- `tools/verify_qa_005.py` now uses the same explicit
+  `VERIFIER_PHASE: SHUTDOWN` boundary as the release runner. Teardown
+  diagnostics are warnings only after that marker; without it they remain
+  active failures. The report records the shutdown phase line for auditability.
+- Direct proof: the existing current-run manifest passes all 66 declared logs;
+  the focused classifier probe fails an active teardown line before shutdown
+  and accepts it as a warning after shutdown. No Web export or browser run was
+  started.
+- Remaining blockers are unchanged: rejected/provisional character, monster,
+  and world visuals; incomplete production-browser route; target-hardware and
+  release evidence; and the stale historical release report.
+- Exact next action: continue one bounded source/native recovery slice, then
+  reserve one fresh QA export and one browser acceptance run for the settled
+  accumulated changes.

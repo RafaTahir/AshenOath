@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Classify Godot gate logs without hiding active runtime errors.
 
-The release runner already records shutdown diagnostics as warnings when they
-occur after a verifier's pass marker. This standalone check makes that rule
-auditable and fails logs that contain an active parser, resource, renderer, or
-verifier failure before a pass marker.
+The release runner records teardown diagnostics as warnings only after a
+verifier explicitly enters its shutdown phase. This standalone check keeps the
+same boundary and fails logs that contain an active parser, resource,
+renderer, or verifier failure before that phase.
 """
 
 from __future__ import annotations
@@ -29,6 +29,7 @@ FATAL = re.compile(
     re.IGNORECASE,
 )
 PASS = re.compile(r"\bPASS\b|Screenshot capture complete", re.IGNORECASE)
+SHUTDOWN = re.compile(r"VERIFIER_PHASE:\s*SHUTDOWN", re.IGNORECASE)
 
 
 def read_log_lines(path: Path) -> list[str]:
@@ -53,6 +54,7 @@ def read_log_lines(path: Path) -> list[str]:
 def classify(path: Path) -> dict[str, object]:
     lines = read_log_lines(path)
     pass_index = max((index for index, line in enumerate(lines) if PASS.search(line)), default=-1)
+    shutdown_index = next((index for index, line in enumerate(lines) if SHUTDOWN.search(line)), -1)
     warnings: list[str] = []
     failures: list[str] = []
     for index, line in enumerate(lines):
@@ -60,7 +62,7 @@ def classify(path: Path) -> dict[str, object]:
             continue
         if re.search(r"CategoryInfo|FullyQualifiedErrorId", line):
             continue
-        if TEARDOWN.search(line) and pass_index >= 0 and index > pass_index:
+        if TEARDOWN.search(line) and shutdown_index >= 0 and index > shutdown_index:
             warnings.append(line.strip())
         else:
             failures.append(line.strip())
@@ -70,6 +72,7 @@ def classify(path: Path) -> dict[str, object]:
         "log": str(path),
         "status": "fail" if failures else "pass",
         "pass_marker_line": pass_index + 1 if pass_index >= 0 else None,
+        "shutdown_phase_line": shutdown_index + 1 if shutdown_index >= 0 else None,
         "active_failures": failures,
         "shutdown_warnings": warnings,
     }
