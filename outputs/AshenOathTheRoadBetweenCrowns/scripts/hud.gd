@@ -67,6 +67,7 @@ var enemy_hide_tween: Tween
 var dialogue_pages: Array = []
 var dialogue_page_index := 0
 var dialogue_session_data: Dictionary = {}
+var dialogue_closing := false
 var input_source: Node
 var input_device := "keyboard_mouse"
 var gamepad_profile: Dictionary = {}
@@ -549,6 +550,7 @@ func mark_stamina_exhausted() -> void:
 
 func show_dialogue(data: Dictionary) -> void:
 	_set_ui_pointer("dialogue")
+	dialogue_closing = false
 	dialogue_layer.visible = true
 	dialogue_session_data = data.duplicate(true)
 	dialogue_pages.clear()
@@ -582,6 +584,7 @@ func _render_dialogue_page() -> void:
 		advance.text = "Continue"
 		advance.process_mode = Node.PROCESS_MODE_ALWAYS
 		advance.focus_mode = Control.FOCUS_ALL
+		advance.action_mode = BaseButton.ACTION_MODE_BUTTON_PRESS
 		_style_button(advance)
 		advance.pressed.connect(func():
 			dialogue_page_index += 1
@@ -596,8 +599,11 @@ func _render_dialogue_page() -> void:
 		button.text = action.get("label", "Continue")
 		button.process_mode = Node.PROCESS_MODE_ALWAYS
 		button.focus_mode = Control.FOCUS_ALL
+		button.action_mode = BaseButton.ACTION_MODE_BUTTON_PRESS
 		_style_button(button)
 		button.pressed.connect(func(action_data = action):
+			if not _close_dialogue_surface():
+				return
 			dialogue_closed.emit()
 			action_selected.emit(action_data)
 		)
@@ -1335,6 +1341,15 @@ func _input(event: InputEvent) -> void:
 			key_event.keycode in [KEY_ENTER, KEY_KP_ENTER, KEY_SPACE]
 			or key_event.physical_keycode in [KEY_ENTER, KEY_KP_ENTER, KEY_SPACE]
 		)
+	elif event is InputEventMouseButton:
+		var mouse_event := event as InputEventMouseButton
+		if mouse_event.pressed and mouse_event.button_index == MOUSE_BUTTON_LEFT and dialogue_actions != null:
+			# Paused Web frames can drop the release half of a pointer click. Dialogue
+			# buttons use press activation, so mirror that contract at the HUD root
+			# only when the child hit test is unavailable. Handling press only keeps a
+			# normal press/release pair from advancing twice.
+			var inside_actions := dialogue_actions.get_global_rect().has_point(mouse_event.position)
+			accepted = inside_actions or (OS.has_feature("web") and dialogue_actions.get_child_count() == 1)
 	if not accepted:
 		return
 	var focused := get_viewport().gui_get_focus_owner()
@@ -1380,9 +1395,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not event.is_action_pressed("ui_cancel"):
 		return
 	if dialogue_layer != null and dialogue_layer.visible:
+		if not _close_dialogue_surface():
+			return
 		dialogue_closed.emit()
-		get_tree().paused = false
-		hide_menus()
 	elif inventory_layer != null and inventory_layer.visible:
 		dialogue_closed.emit()
 		get_tree().paused = false
@@ -1435,13 +1450,24 @@ func _add_dialogue_close() -> void:
 	close.text = "Close"
 	close.process_mode = Node.PROCESS_MODE_ALWAYS
 	close.focus_mode = Control.FOCUS_ALL
+	close.action_mode = BaseButton.ACTION_MODE_BUTTON_PRESS
 	_style_button(close)
 	close.pressed.connect(func():
+		if not _close_dialogue_surface():
+			return
 		dialogue_closed.emit()
-		get_tree().paused = false
-		hide_menus()
 	)
 	dialogue_actions.add_child(close)
+
+func _close_dialogue_surface() -> bool:
+	# Hide the surface before notifying game logic so a delayed browser event
+	# cannot activate a stale button while the zone is being rebuilt.
+	if dialogue_closing or dialogue_layer == null or not dialogue_layer.visible:
+		return false
+	dialogue_closing = true
+	hide_menus()
+	get_tree().paused = false
+	return true
 
 func _focused_dialogue_button() -> Button:
 	if dialogue_actions == null:

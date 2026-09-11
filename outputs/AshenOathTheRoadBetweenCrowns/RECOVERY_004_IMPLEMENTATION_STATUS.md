@@ -1,5 +1,41 @@
 # RECOVERY-004 Implementation Status
 
+## Current Atomic Checkpoint - 2026-09-11 (paused dialogue press activation)
+
+- Current work: finish the browser-input fix exposed by the completed QA run.
+  The latest fresh run stopped at Sister Anwen's first dialogue page before the
+  Wychwood route began; no browser process remains active and no replacement
+  Web export was started after that run.
+- Root cause: dialogue controls used Godot's default release activation. In a
+  paused Compatibility Web frame, the browser can deliver the pointer press
+  while dropping the release, leaving the visible `Continue` button on page
+  one. The native button geometry, focus, and dialogue state were valid; this
+  was not a world collider or route obstruction.
+- Completed fix: `scripts/hud.gd` now uses press activation for Continue,
+  dialogue actions, and Close controls. Its Web fallback handles only the
+  left-button press and marks the event handled, so the normal press/release
+  pair cannot advance twice. The existing pause, focus, mouse-mode, and action
+  signal contracts remain unchanged.
+- Cheapest proof passed: `--check-only --script scripts/hud.gd` exited `0`;
+  `D:\Temp\AshenOath\native_dialogue_press_activation.log` reports
+  `DIALOGUE PRESS PROBE: PASS` at a 1280x720 viewport, including one press,
+  one page advance, and a no-op release. The temporary probe was removed.
+- Obstruction truth remains unchanged: static ownership and native movement
+  prove that `(-7.83, -10.42)` is a valid Greyfen floor point. The earlier
+  apparent blocker came from a stale/mis-targeted browser route and a retired
+  floor body in telemetry, not from a tree, bridge, gate, prop, or river body.
+- Current truth: this source fix is verified locally but not yet exported into
+  Web. The latest QA browser acceptance is still unaccepted because the run
+  ended at dialogue; no new telemetry fields, Web export, browser run, push,
+  merge, or deployment was performed for this checkpoint.
+- Remaining blocker: one source-aligned QA export and one combined Chrome/Edge
+  acceptance run are still required. Existing SwiftShader performance values
+  remain diagnostic only; the native hardware performance gate is separate.
+- Exact next action: when resuming this recovery, export the current source
+  once, run the combined browser acceptance once, preserve its full report and
+  screenshot, then continue only from the resulting evidence. Do not add
+  isolated telemetry or start an intermediate browser cycle.
+
 ## Current Atomic Checkpoint - 2026-09-11 (objective presentation authority)
 
 - Scope completed: consolidated tracker construction around the selected
