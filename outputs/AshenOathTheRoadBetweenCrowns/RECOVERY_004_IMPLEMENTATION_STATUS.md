@@ -1354,3 +1354,28 @@ Do not sync `.release-gate/AshenOath_QA` into `web/`; it is not the production b
 - Exact next action: run the directly affected native AI/combat proof and keep
   the accumulated Web export/browser acceptance deferred until the remaining
   source fixes are settled.
+
+## Lifecycle Verifier Ownership Checkpoint - 2026-09-11
+
+- The verbose `ENGINE-004` trace identified the only two resources reported at
+  process exit as `res://scripts/game.gd` and `res://scenes/main.tscn`. They
+  were retained by the asynchronous verifier function state and its local
+  `PackedScene`, not by a runtime mesh, material, audio stream, or collision
+  owner. The same trace listed no other active resource owner.
+- `tools/verify_engine_004.gd` now clears its local scene/game references,
+  prints the terminal result, and defers `_finish` until the async verifier
+  has returned. This preserves the existing runtime shutdown sequence and
+  fixes the harness-owned retention without changing gameplay lifecycle code.
+- Latest direct result: `ENGINE-004 VERIFIER: PASS`; the verbose log contains
+  no `Leaked instance`, `Resource still in use`, `ObjectDB instances leaked`,
+  `resources still in use`, `SCRIPT ERROR`, or active renderer/resource error.
+  The run was performed without `--quit-after`, so the verifier owned its
+  complete shutdown and exit.
+- Remaining blocker: the broader recovery is still not release-ready because
+  character/monster/world visuals remain rejected or provisional, the full
+  production browser route is unproven, and target-hardware/release evidence
+  remains open. No Web export, browser run, tracked `web/` change, push,
+  merge, or deployment was performed.
+- Exact next action: continue one bounded source/native recovery slice; defer
+  the next QA Web export and browser acceptance run until accumulated source
+  fixes are ready for one acceptance attempt.

@@ -53,13 +53,21 @@ func _initialize() -> void:
 	RenderingServer.force_sync()
 	_check(not is_instance_valid(game), "Game root did not retire after resource shutdown")
 
+	# Let the async verifier return before quitting. Calling quit() while this
+	# function state is still suspended retains its local PackedScene and the
+	# game script resource until process exit, which looks like a runtime leak.
+	scene = null
+	game = null
+	var exit_code := 0 if failures.is_empty() else 1
 	if failures.is_empty():
 		print("ENGINE-004 VERIFIER: PASS")
 	else:
 		print("ENGINE-004 VERIFIER: FAIL (%d)" % failures.size())
 		for failure in failures:
 			push_error(failure)
-	_finish(0 if failures.is_empty() else 1)
+	# Defer quit until this async function has returned and released its local
+	# PackedScene/script references.
+	call_deferred("_finish", exit_code)
 
 func _validate_active_zone(game: Node, zone_id: String) -> void:
 	_check(str(game.current_zone_id) == zone_id, "Active zone mismatch: %s" % zone_id)

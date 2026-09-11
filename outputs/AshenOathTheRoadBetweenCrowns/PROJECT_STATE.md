@@ -1,5 +1,24 @@
 # Ashen Oath Project State
 
+## Recovery-004 Latest Native Checkpoint - 2026-09-11 (lifecycle verifier ownership)
+
+- The focused `ENGINE-004` shutdown trace now exits cleanly after the verifier
+  releases its local `PackedScene` and game references before quitting. The
+  prior two reported resources were `res://scripts/game.gd` and
+  `res://scenes/main.tscn`, retained by the asynchronous verifier function
+  state rather than by active mesh, material, audio, or collision ownership.
+- `tools/verify_engine_004.gd` now prints its result, schedules quit with
+  `call_deferred`, and returns from the async entry point first. The verbose
+  rerun produced `ENGINE-004 VERIFIER: PASS` with no leaked instances, active
+  renderer/resource errors, or resources still in use at exit.
+- Remaining release blockers are unchanged: rejected character/monster/world
+  visual quality, incomplete full-campaign and production-browser proof, and
+  target-hardware/release evidence. No Web export, tracked `web/` update,
+  push, merge, or deployment was performed for this checkpoint.
+- Exact next action: continue one bounded source/native recovery slice. Defer
+  the next QA Web export and browser run until the accumulated source fixes
+  are ready for one acceptance attempt.
+
 ## Recovery-004 Latest Native Checkpoint - 2026-09-11 (runtime pack identity)
 
 - Runtime pack metadata is now aligned to the current source HEAD
