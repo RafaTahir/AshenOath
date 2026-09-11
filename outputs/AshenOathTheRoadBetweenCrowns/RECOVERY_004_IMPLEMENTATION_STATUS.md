@@ -1442,3 +1442,58 @@ Do not sync `.release-gate/AshenOath_QA` into `web/`; it is not the production b
 - Exact next action: continue one bounded source/native recovery slice. Defer
   the single fresh QA export and browser acceptance run until the accumulated
   source fixes are ready.
+
+## Obstruction Root-Cause Checkpoint - 2026-09-11
+
+- The preserved v23/v28 browser work is complete. No isolated QA browser
+  process or temporary profile remains active, and no additional telemetry
+  field was added during this analysis.
+- The reported point `(-7.83, -10.42)` is on the Greyfen left-bank floor. The
+  failed browser snapshot was later at Anwen, `(0, -3.332)`, where the only
+  runtime contact recorded was `/root/AshenOath/greyfen/@StaticBody3D@273`
+  with one `BoxShape3D` of size `(5.4, 0.16, 16.7)` at local position
+  `(0, -0.08, -8.65)`. That is the central north-road floor slab, not the
+  left-bank slab at the reported point. Its contact normal was `(0, 1, 0)`,
+  depth was about `0.005`, and its remainder/travel were vertical. This is
+  ordinary floor snap contact, not a lateral obstruction.
+- Static ownership audit for that coordinate:
+  - `_make_split_ground()` owns the containing left-bank slab. It spans
+    approximately x `[-21.3, -3.0]` and z `[-17.0, 2.8]`; the point is inside.
+    The central slab observed in the browser snapshot spans x `[-2.7, 2.7]`
+    and therefore does not own the reported point.
+  - The bridge surface and bridge lane are centered at x `0` and therefore
+    cannot own x `-7.83`. The river bank barriers are at the river edges near
+    z `2.62` and `6.38`, also outside the point.
+  - Greyfen boundary walls are at x `-21/21` or z `-17/17`; none overlap.
+  - The West Lane house collision centered near `(-5, -3)` misses after its
+    authored rotation and extents are applied. The nearby forest rock and
+    rubble source points miss the reported coordinate and are filtered or
+    omitted when route clearance applies.
+  - Boundary tree walls and loose trees are outside the point. Tree creation
+    is additionally guarded by reserved-route, river-exclusion, and first-route
+    clearance checks. The nearby quality fog sheet is visual-only and has no
+    collision body.
+  - Gate trigger areas, recovery volumes, and spatial reservations do not
+    create a solid body at this point. No house, prop, bridge, gate, river, or
+    tree collider was reported by the runtime trace.
+- Root cause: the apparent obstruction was not a Greyfen physics owner. The
+  failing v23/v28 route stopped while the browser harness was still observing
+  the five-page Anwen dialogue (`paused=true`, page `0`, visible), so movement
+  toward the Wychwood gate never began. The `interaction_used` checkpoint was
+  recorded before the harness proved that the following route had actually
+  left dialogue. The most likely failure was a dropped logical Enter event in
+  the paused Godot Web viewport after the pointer path did not advance the
+  dialogue; the existing evidence does not justify changing the floor or
+  scenery collision.
+- Surgical fix: `tools/verify_qa_002_browser.mjs` now lets `tapKey()` send the
+  same key through the CDP raw-key path. The Anwen dialogue loop retries raw
+  Enter exactly once only when the pointer click and normal Enter leave the
+  same page visible. This remains real browser input, adds no QA state
+  mutation, and avoids another isolated telemetry loop.
+- Direct proof passed: `node --check tools/verify_qa_002_browser.mjs`,
+  `git diff --check`, `verify_workflow_002.ps1`, and native
+  `DIALOGUE-001 VERIFIER: PASS`. No source/game collision change was made.
+- Remaining action for this blocker: one fresh source-aligned QA Web export,
+  followed by one combined Chrome/Edge acceptance run. If that run fails,
+  preserve its diagnostics and stop; do not add another one-field telemetry
+  patch or rebuild Web merely to observe a new isolated fact.

@@ -261,10 +261,10 @@ async function refocusGameplay(cdp) {
   }, INPUT_TIMEOUT_MS);
 }
 
-async function tapKey(cdp, code, key, duration = 70) {
-  await dispatchKey(cdp, code, key, true);
+async function tapKey(cdp, code, key, duration = 70, raw = false) {
+  await dispatchKey(cdp, code, key, true, raw);
   await sleep(duration);
-  await dispatchKey(cdp, code, key, false);
+  await dispatchKey(cdp, code, key, false, raw);
 }
 
 async function holdKey(cdp, code, key, duration) {
@@ -870,6 +870,18 @@ async function useInteraction(cdp, id, checkpoints, expectsDialogue = false) {
           && afterClick?.dialogue?.visible) {
           await tapKey(cdp, "Enter", "Enter", 80);
           await sleep(220);
+          const afterEnter = await telemetry(cdp);
+          // A paused Godot Web viewport can receive CDP's logical key event
+          // without forwarding it as a physical InputEventKey. Retry the same
+          // user action through rawKeyDown once, but only when the page did
+          // not advance or close. This keeps the route real-input driven and
+          // avoids adding telemetry or mutating game state.
+          if (afterEnter?.paused
+            && afterEnter?.dialogue?.page === state?.dialogue?.page
+            && afterEnter?.dialogue?.visible) {
+            await tapKey(cdp, "Enter", "Enter", 80, true);
+            await sleep(220);
+          }
         }
       }
     if ((await telemetry(cdp))?.paused) throw new Error(`${id} dialogue did not close through real input`);
