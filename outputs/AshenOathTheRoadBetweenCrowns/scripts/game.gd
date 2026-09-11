@@ -2514,8 +2514,12 @@ func _on_launch_accepted() -> void:
 	# Keep the same menu-covered prewarm on Web and desktop. The HTML shell is
 	# already visible, so moving Greyfen construction before the New Game click
 	# removes the long post-click stall without introducing a black loading frame.
+	# Keep New Game actionable while the menu-covered prewarm runs. _new_game()
+	# records the request and starts it as soon as the prepared Greyfen cache is
+	# published; disabling the button here made the queue path unreachable to a
+	# real mouse or controller click.
 	if hud != null and hud.has_method("set_new_game_ready") and not route_zone_cache.has("greyfen"):
-		hud.set_new_game_ready(false)
+		hud.set_new_game_ready(true)
 	if OS.has_feature("web") and runtime_packs != null and runtime_packs.has_method("request_startup_packs"):
 		if runtime_packs.startup_packs_ready():
 			print("LOADING: startup_pack_ready source=launch")

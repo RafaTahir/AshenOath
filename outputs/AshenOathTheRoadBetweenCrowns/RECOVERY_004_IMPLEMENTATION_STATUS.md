@@ -1265,6 +1265,20 @@ Do not sync `.release-gate/AshenOath_QA` into `web/`; it is not the production b
 - Exact next action: continue source/native recovery and defer one fresh Web
   acceptance run until the accumulated startup and route fixes are ready.
 
+## Startup Queue Checkpoint - 2026-09-11
+
+- Web startup no longer disables the visible New Game button while the
+  menu-covered Greyfen prewarm is in progress. The existing `_new_game()` queue
+  path remains authoritative and now remains reachable through a real click or
+  controller accept event.
+- `verify_load_001.gd` now asserts this state before waiting for prewarm, then
+  continues to verify the warm handoff, no loading overlay, and Anwen hydration.
+- This is a source/native startup fix only. No new browser telemetry, Web
+  export, tracked `web/` output, push, or deployment was performed.
+- Exact next action: continue bounded source/native recovery; defer the single
+  fresh QA export and browser acceptance run until the accumulated fixes are
+  ready.
+
 ## Targeted Runner Registration Checkpoint - 2026-09-11
 
 - Registered `verify_runtime_asset_policy` in the `engine` ticket profile and

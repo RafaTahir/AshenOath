@@ -20,6 +20,7 @@ func _initialize() -> void:
 	paused = true
 	var prewarm_started := Time.get_ticks_msec()
 	game.call("_on_launch_accepted")
+	_check(bool(game.hud.new_game_ready), "New Game was disabled while Greyfen prewarms")
 	var prewarm_ready := await _wait_for_prewarm(30.0)
 	_check(prewarm_ready, "Greyfen prewarm did not publish within 30 seconds")
 	if prewarm_ready:
