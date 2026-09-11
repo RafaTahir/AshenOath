@@ -1497,3 +1497,26 @@ Do not sync `.release-gate/AshenOath_QA` into `web/`; it is not the production b
   followed by one combined Chrome/Edge acceptance run. If that run fails,
   preserve its diagnostics and stop; do not add another one-field telemetry
   patch or rebuild Web merely to observe a new isolated fact.
+
+## Obstruction Acceptance Checkpoint - 2026-09-11
+
+- The one fresh QA Web export was completed from the checkpointed source and
+  then stopped at the strict artifact gate. It produced the expected seven
+  root runtime files plus five runtime packs, but the total was `101.369 MB`,
+  above the `100 MB` release ceiling.
+- Payload breakdown: `index.pck` `53.61 MB`, `index.wasm` `35.95 MB`,
+  `characters.pck` `5.55 MB`, `audio.pck` `2.62 MB`, `monsters.pck` `1.26 MB`,
+  `opening.pck` `1.04 MB`, `campaign.pck` `0.99 MB`; the remaining shell and
+  worklet files account for the balance.
+- Result: `verify_web_export.py` failed with
+  `WEB EXPORT: FAIL - payload 101.4 MB exceeds 100 MB`. This is a genuine
+  release assertion, so no browser acceptance run was started after it and no
+  second Web export was attempted.
+- Current local checkpoint: `c196382` contains the surgical browser input fix
+  and the obstruction ownership analysis. The payload result is documented
+  here as the next blocking fact; the user-owned untracked diagnostic remains
+  untouched and unstaged.
+- Exact next action: reduce the QA/runtime payload below the release ceiling
+  through one planned packaging change, then perform one fresh export and one
+  combined Chrome/Edge acceptance run. Do not add isolated telemetry or rerun
+  browser startup before the payload gate is repaired.
