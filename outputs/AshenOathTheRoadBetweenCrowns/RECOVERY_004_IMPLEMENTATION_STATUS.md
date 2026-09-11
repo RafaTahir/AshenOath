@@ -1423,3 +1423,22 @@ Do not sync `.release-gate/AshenOath_QA` into `web/`; it is not the production b
 - Exact next action: continue one bounded source/native recovery slice, then
   reserve one fresh QA export and one browser acceptance run for the settled
   accumulated changes.
+
+## Ticket-Gate Cache Integrity Checkpoint - 2026-09-11
+
+- `tools/run_ticket_gate.ps1` now includes its own source hash and the
+  `gate_profiles.json` hash in every ticket-gate cache key. A runner or profile
+  mapping change therefore invalidates previously cached passes.
+- A cached pass is now usable only while the corresponding detailed ticket log
+  is still present. Removing a log cannot leave an evidence-free cached pass.
+- Direct proof: the PowerShell parser check, `git diff --check`, and the
+  existing `WORKFLOW-002 VERIFIER: PASS` all succeeded after the edit. No game
+  source, export, browser run, or production artifact was changed.
+- The user-owned untracked `tools/_inspect_milestone_c_assets.gd` remains
+  untouched and unstaged.
+- Remaining blockers are unchanged: rejected/provisional character, monster,
+  and world visuals; incomplete production-browser route; target-hardware and
+  release evidence; and the stale historical release report.
+- Exact next action: continue one bounded source/native recovery slice. Defer
+  the single fresh QA export and browser acceptance run until the accumulated
+  source fixes are ready.

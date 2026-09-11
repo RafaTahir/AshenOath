@@ -72,6 +72,15 @@ function Get-GateHash([string]$Gate, [string[]]$Files) {
     if (Test-Path -LiteralPath $gateScript) {
         [void]$builder.AppendLine((Get-FileHash -LiteralPath $gateScript -Algorithm SHA256).Hash)
     }
+    # Cache validity depends on the runner and profile mapping as well as the gate inputs.
+    if (-not [string]::IsNullOrWhiteSpace($script:PSCommandPath) -and (Test-Path -LiteralPath $script:PSCommandPath -PathType Leaf)) {
+        [void]$builder.AppendLine("ticket_gate_runner")
+        [void]$builder.AppendLine((Get-FileHash -LiteralPath $script:PSCommandPath -Algorithm SHA256).Hash)
+    }
+    if (Test-Path -LiteralPath $script:ProfilesPath -PathType Leaf) {
+        [void]$builder.AppendLine("gate_profiles")
+        [void]$builder.AppendLine((Get-FileHash -LiteralPath $script:ProfilesPath -Algorithm SHA256).Hash)
+    }
     $bytes = [Text.Encoding]::UTF8.GetBytes($builder.ToString())
     $sha = [Security.Cryptography.SHA256]::Create()
     try { return ([BitConverter]::ToString($sha.ComputeHash($bytes))).Replace("-", "") }
@@ -175,7 +184,8 @@ function Invoke-Compact(
     [hashtable]$Cache
 ) {
     $hash = Get-GateHash $Name $Inputs
-    if (-not $NoCache -and $Cache.ContainsKey($Name) -and $Cache[$Name].hash -eq $hash -and $Cache[$Name].status -eq "pass") {
+    $cacheLog = Join-Path $Logs "$Name.log"
+    if (-not $NoCache -and $Cache.ContainsKey($Name) -and $Cache[$Name].hash -eq $hash -and $Cache[$Name].status -eq "pass" -and (Test-Path -LiteralPath $cacheLog -PathType Leaf)) {
         Write-Host ("TICKET GATE {0}: CACHED PASS" -f $Name)
         return
     }
