@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "program": "SOUL-REBUILD",
-  "release_id": "dev-ddc9a910e17f",
+  "release_id": "dev-d07a96459399",
   "artifact_policy": "external_runtime_packs",
   "candidate_manifest": "res://runtime_pack_candidates.json",
   "pack_presets": {
@@ -15,7 +15,7 @@
   "max_deployment_bytes": 104857600,
   "packs": {
     "base": {
-      "version": "dev-ddc9a910e17f",
+      "version": "dev-d07a96459399",
       "url": "",
       "sha256": "",
       "bytes": 0,
@@ -39,8 +39,8 @@
       "embedded_source_kind": "standalone_pack_candidate"
     },
     "opening": {
-      "version": "dev-ddc9a910e17f",
-      "url": "packs/opening.pck?v=dev-ddc9a910e17f",
+      "version": "dev-d07a96459399",
+      "url": "packs/opening.pck?v=dev-d07a96459399",
       "sha256": "31f29e677fcc63ab582e137e22eb4cc9079a54980cf0b2567155774c9856633f",
       "bytes": 1085892,
       "entry_scene": "res://scenes/zones/greyfen_gameplay.tscn",
@@ -60,8 +60,8 @@
       ]
     },
     "campaign": {
-      "version": "dev-ddc9a910e17f",
-      "url": "packs/campaign.pck?v=dev-ddc9a910e17f",
+      "version": "dev-d07a96459399",
+      "url": "packs/campaign.pck?v=dev-d07a96459399",
       "sha256": "52fbdff4df3304676204f797ae1bde86d733b2175f49e7ce37969e49053c2c1a",
       "bytes": 1042664,
       "entry_scene": "",
@@ -82,8 +82,8 @@
       ]
     },
     "characters": {
-      "version": "dev-ddc9a910e17f",
-      "url": "packs/characters.pck?v=dev-ddc9a910e17f",
+      "version": "dev-d07a96459399",
+      "url": "packs/characters.pck?v=dev-d07a96459399",
       "sha256": "4ab107a7eaea963747eea8282f7f44976c33b713abf3a40288eac945f0dc3bab",
       "bytes": 5817272,
       "entry_scene": "",
@@ -101,8 +101,8 @@
       ]
     },
     "monsters": {
-      "version": "dev-ddc9a910e17f",
-      "url": "packs/monsters.pck?v=dev-ddc9a910e17f",
+      "version": "dev-d07a96459399",
+      "url": "packs/monsters.pck?v=dev-d07a96459399",
       "sha256": "fddeb9e774b91c6ef762510a799b16cdc244f0e81db7985c63a0eb37a21db02e",
       "bytes": 1318192,
       "entry_scene": "",
@@ -121,8 +121,8 @@
       ]
     },
     "audio": {
-      "version": "dev-ddc9a910e17f",
-      "url": "packs/audio.pck?v=dev-ddc9a910e17f",
+      "version": "dev-d07a96459399",
+      "url": "packs/audio.pck?v=dev-d07a96459399",
       "sha256": "cb49defd226050d02f9031312b9aa2dfd657f79635c17cea96f5f1aaba8938d9",
       "bytes": 2752240,
       "entry_scene": "",
@@ -141,8 +141,8 @@
       ]
     }
   },
-  "build_id": "dev-ddc9a910e17f",
-  "generated_from_commit": "ddc9a910e17f1d6cb298366cb34b4ac3bae13873",
-  "generated_at_utc": "2026-09-10T23:16:44.052155Z",
+  "build_id": "dev-d07a96459399",
+  "generated_from_commit": "d07a96459399ba8d14231fb3659bdd9bf942cbca",
+  "generated_at_utc": "2026-09-11T00:04:38.059288Z",
   "total_bytes": 12016260
 }

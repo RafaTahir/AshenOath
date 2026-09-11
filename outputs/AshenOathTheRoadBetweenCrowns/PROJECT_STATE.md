@@ -1,5 +1,17 @@
 # Ashen Oath Project State
 
+## Recovery-004 Latest Native Checkpoint - 2026-09-11 (runtime pack identity)
+
+- Runtime pack metadata is now aligned to the current source HEAD
+  `d07a96459399ba8d14231fb3659bdd9bf942cbca`; the prior `ddc9a91` identity
+  was stale even though the candidate byte/hash records were still valid.
+- The static load gate now rejects manifests whose generated revision or build
+  ID differs from the repository revision. `LOAD-QA-002`, `WEB-001`,
+  `WEB-002`, runtime-pack validation, and Python compilation pass.
+- No Web export, tracked `web/` update, browser run, push, merge, or deployment
+  was performed for this metadata repair. The next browser cycle remains
+  deferred until the accumulated source/native recovery fixes are ready.
+
 ## Recovery-004 Latest Native Checkpoint - 2026-09-11 (objective presentation authority)
 
 - `QuestPresentationState` now builds tracker text from the selected quest and

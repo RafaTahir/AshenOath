@@ -1292,3 +1292,22 @@ Do not sync `.release-gate/AshenOath_QA` into `web/`; it is not the production b
 - Exact next action: continue with the next bounded source/native recovery
   slice; reserve one fresh QA export and one Chrome/Edge acceptance run for
   the accumulated fixes rather than for individual diagnostics.
+
+## Runtime Pack Identity Checkpoint - 2026-09-11
+
+- Current source revision: `d07a96459399ba8d14231fb3659bdd9bf942cbca`.
+- The runtime pack manifest and candidate manifest had been generated from the
+  older `ddc9a91` checkpoint. They were synchronized to the current HEAD while
+  retaining the existing candidate artifact sizes and SHA-256 values; no pack
+  or Web binary was rebuilt.
+- `tools/verify_load_qa_002.py` now requires both manifests to contain valid,
+  matching `generated_from_commit` and `build_id` values equal to repository
+  HEAD. `LOAD-QA-002`, `WEB-001`, `WEB-002`, `verify_runtime_packs.py`, and
+  Python compilation pass after the repair.
+- Current truth: source/pack identity drift is closed for this checkpoint. The
+  Web artifact remains intentionally deferred until the accumulated source
+  fixes are ready for the single fresh QA export and browser acceptance run.
+  Visual-role rejection, broader world presentation debt, full-campaign proof,
+  target-hardware performance, and production release remain open.
+- Exact next action: continue one bounded source/native recovery slice; do not
+  export or run a browser solely to recheck pack metadata.

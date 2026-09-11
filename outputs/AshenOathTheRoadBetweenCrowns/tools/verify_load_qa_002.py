@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import subprocess
 from pathlib import Path
 
 
@@ -20,6 +21,19 @@ def sha256(path: Path) -> str:
         for chunk in iter(lambda: stream.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def git_head(project: Path) -> str:
+    """Read the source revision that owns the project manifests."""
+    repo_root = project.parent.parent
+    try:
+        return subprocess.check_output(
+            ["git", "-C", str(repo_root), "rev-parse", "HEAD"],
+            text=True,
+            stderr=subprocess.DEVNULL,
+        ).strip()
+    except (OSError, subprocess.CalledProcessError):
+        return ""
 
 
 def main() -> int:
@@ -40,6 +54,28 @@ def main() -> int:
     except (OSError, json.JSONDecodeError) as exc:
         errors.append(f"pack metadata is unreadable: {exc}")
         manifest, candidates = {}, {}
+
+    source_commit = str(manifest.get("generated_from_commit", "")).strip().lower()
+    candidate_commit = str(candidates.get("generated_from_commit", "")).strip().lower()
+    current_commit = git_head(project).lower()
+    if len(source_commit) != 40 or any(char not in "0123456789abcdef" for char in source_commit):
+        errors.append("runtime pack manifest has no valid generated_from_commit")
+    if len(candidate_commit) != 40 or any(char not in "0123456789abcdef" for char in candidate_commit):
+        errors.append("runtime pack candidates have no valid generated_from_commit")
+    if not current_commit:
+        errors.append("could not resolve the repository HEAD for pack identity validation")
+    elif source_commit != current_commit or candidate_commit != current_commit:
+        errors.append(
+            "runtime pack metadata was generated from "
+            f"{source_commit or '<missing>'}/{candidate_commit or '<missing>'}, "
+            f"but repository HEAD is {current_commit}"
+        )
+    if source_commit and candidate_commit and source_commit != candidate_commit:
+        errors.append("runtime pack manifest and candidates disagree on generated_from_commit")
+    manifest_build_id = str(manifest.get("build_id", "")).strip()
+    candidate_build_id = str(candidates.get("build_id", "")).strip()
+    if not manifest_build_id or manifest_build_id != candidate_build_id:
+        errors.append("runtime pack manifest and candidates disagree on build_id")
 
     if int(manifest.get("max_deployment_bytes", 0)) > MAX_BYTES:
         errors.append("runtime pack manifest exceeds the 100 MB deployment budget")

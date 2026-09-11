@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
   "ticket": "PACK-003",
-  "generated_at_utc": "2026-09-10T23:16:44.052155Z",
-  "build_id": "dev-ddc9a910e17f",
-  "generated_from_commit": "ddc9a910e17f1d6cb298366cb34b4ac3bae13873",
+  "generated_at_utc": "2026-09-11T00:04:38.059288Z",
+  "build_id": "dev-d07a96459399",
+  "generated_from_commit": "d07a96459399ba8d14231fb3659bdd9bf942cbca",
   "project": "Ashen Oath",
   "artifact_directory": "external_runtime_packs",
   "artifacts_are_external": true,
