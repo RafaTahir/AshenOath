@@ -1338,3 +1338,19 @@ Do not sync `.release-gate/AshenOath_QA` into `web/`; it is not the production b
   recovery slice, then perform one source-aligned QA export and one browser
   acceptance run after the accumulated fixes are ready. Do not repeat isolated
   telemetry or export cycles for this mapping repair.
+
+## Enemy Spacing Ownership Checkpoint - 2026-09-11
+
+- Enemy peer spacing no longer writes `global_position` after
+  `CharacterBody3D.move_and_slide()`. Separation is now blended into velocity
+  before physics, checked through the existing spatial route contract, and
+  allowed to be resolved by the actor's collision body.
+- This preserves the existing encounter profiles, attack reservations,
+  navigation refresh cadence, leash rules, and minimum spacing while removing
+  the direct transform correction that could bypass walls, trees, river
+  barriers, or neighboring combatants.
+- `verify_ai_002.gd` now rejects the removed post-slide correction and requires
+  the velocity-steering path. No browser/export cycle was run.
+- Exact next action: run the directly affected native AI/combat proof and keep
+  the accumulated Web export/browser acceptance deferred until the remaining
+  source fixes are settled.

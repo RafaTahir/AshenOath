@@ -20,6 +20,9 @@ func _initialize() -> void:
 	for required in ["_update_perception", "_has_perception_line", "last_known_player_position", "perception_refresh_time = 0.18"]:
 		check(required in source, "Missing AI perception contract: %s" % required)
 	check("or not can_see_player" in source, "Enemies can still attack without visual contact")
+	check("_apply_peer_spacing" in source, "Enemy spacing is not applied through velocity steering")
+	check("_enforce_peer_spacing" not in source, "Enemy spacing still uses the removed post-slide correction")
+	check("global_position = candidate" not in source, "Enemy AI still teleports actors for peer spacing")
 	print("AI-002 VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
 	quit(0 if failures == 0 else 1)
 

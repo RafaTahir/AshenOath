@@ -1915,3 +1915,14 @@ The continuation source is now verified locally for the release candidate. The r
   this checkpoint closes source/animation mapping drift, not the visual debt.
 - No Web export, tracked `web/` update, push, merge, or deployment was made for
   this checkpoint. Production remains unchanged.
+
+## Enemy Spacing Ownership Checkpoint - 2026-09-11
+
+- Enemy crowd separation is now velocity steering before
+  `CharacterBody3D.move_and_slide()`, with the existing spatial segment check.
+  The former post-slide `global_position` correction was removed so enemy
+  collision, navigation, and river barriers retain authority.
+- The AI source regression proof requires the new steering path and rejects
+  direct peer-spacing teleportation. This is a native movement-safety fix; the
+  five-enemy encounter, monster visual approval, and final browser route remain
+  open.

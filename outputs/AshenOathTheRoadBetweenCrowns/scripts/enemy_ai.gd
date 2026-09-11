@@ -266,8 +266,11 @@ func _physics_process(delta: float) -> void:
 		velocity.y -= 24.0 * delta
 	else:
 		velocity.y = -0.1
+	_apply_peer_spacing(delta)
+	var facing_velocity := Vector3(velocity.x, 0.0, velocity.z)
+	if facing_velocity.length_squared() > 0.01:
+		look_at(global_position + facing_velocity, Vector3.UP)
 	move_and_slide()
-	_enforce_peer_spacing()
 	if animation_driver != null:
 		animation_driver.set_locomotion(Vector2(velocity.x, velocity.z).length() / max(move_speed, 0.1), velocity, is_on_floor())
 	_animate_visuals(delta)
@@ -507,25 +510,31 @@ func _crowd_separation() -> Vector3:
 			separation += offset.normalized() * urgency
 	return separation.normalized() if separation.length_squared() > 0.01 else Vector3.ZERO
 
-func _enforce_peer_spacing() -> void:
-	if encounter_peers.is_empty():
+func _apply_peer_spacing(delta: float) -> void:
+	"""Steer away from combat peers before physics resolves the move.
+
+	CharacterBody3D owns the final collision response. Keeping separation in
+	velocity avoids the old post-slide global-position correction, which could
+	teleport an enemy through a wall, tree, river barrier, or another actor.
+	"""
+	if dead or pending_attack_time > 0.0 or stagger_time > 0.0:
 		return
-	for other in encounter_peers:
-		if other == self or not is_instance_valid(other) or bool(other.get("dead")) or not bool(other.get("encounter_active")):
-			continue
-		var offset: Vector3 = global_position - other.global_position
-		offset.y = 0.0
-		var distance := offset.length()
-		if distance >= MIN_COMBAT_SPACING:
-			continue
-		var away := offset.normalized()
-		if distance <= 0.01:
-			away = Vector3(-1.0 if encounter_slot % 2 == 0 else 1.0, 0.0, 0.0)
-		var correction := (MIN_COMBAT_SPACING - distance) * 0.60
-		var candidate := global_position + away * correction
-		candidate.y = global_position.y
-		if spatial_service == null or spatial_service.validate_segment(global_position, candidate, 0.50):
-			global_position = candidate
+	var separation := _crowd_separation()
+	if separation.length_squared() < 0.01:
+		return
+	var current := Vector3(velocity.x, 0.0, velocity.z)
+	var speed := clampf(current.length(), move_speed * 0.45, move_speed)
+	var desired := separation * speed
+	if current.length_squared() > 0.01:
+		desired = current.normalized().lerp(separation, 0.45).normalized() * speed
+	var desired_direction := desired.normalized()
+	var step_distance := maxf(desired.length() * delta, 0.02)
+	if spatial_service != null and not spatial_service.validate_segment(
+		global_position, global_position + desired_direction * step_distance, 0.50
+	):
+		return
+	velocity.x = desired.x
+	velocity.z = desired.z
 
 func _engagement_target(target_position: Vector3 = Vector3.INF) -> Vector3:
 	var focus: Vector3 = player.global_position if target_position == Vector3.INF else target_position
