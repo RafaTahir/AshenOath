@@ -1379,3 +1379,26 @@ Do not sync `.release-gate/AshenOath_QA` into `web/`; it is not the production b
 - Exact next action: continue one bounded source/native recovery slice; defer
   the next QA Web export and browser acceptance run until accumulated source
   fixes are ready for one acceptance attempt.
+
+## Structured External-Report Checkpoint - 2026-09-11
+
+- The preserved v23/v28 browser run is complete; no isolated QA browser or
+  temporary profile remains active. No replacement Web export or browser run
+  was started after the obstruction analysis.
+- Release-tooling inspection found that `Invoke-ExternalGate` validated only
+  `--report` files. Existing integrity gates also write `--json-report`, so a
+  malformed or non-pass JSON report from those gates could be accepted when
+  the process exit code was zero.
+- `tools/run_release_gate.ps1` now applies one structured-report contract to
+  both flags: the file must exist, parse as JSON, contain a non-empty
+  `status`, and equal `pass`. This is tooling-only and does not change game
+  behavior, runtime assets, or browser evidence.
+- Direct proof: PowerShell parser validation, `git diff --check`, and the
+  WORKFLOW-002 verifier all pass after the edit. No Web export, browser run,
+  push, merge, or deployment was performed.
+- Remaining blockers: rejected/provisional character, monster, and world
+  visuals; incomplete full production-browser route; target-hardware and
+  release evidence; and the stale historical `release_reports/latest.json`.
+- Exact next action: continue the existing bounded source/native recovery;
+  perform the one fresh QA export and one browser acceptance run only after
+  the accumulated source fixes are settled.

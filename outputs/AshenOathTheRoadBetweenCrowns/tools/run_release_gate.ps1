@@ -449,10 +449,14 @@ function Invoke-ExternalGate(
         if (-not $VerboseOutput) { Get-Content -LiteralPath $log -Tail 40 }
         throw $failure
     }
-	# Browser gates write structured reports in addition to their process exit
-	# code. Treat a non-pass report as a failure even if a wrapper or native
-	# process masks the child's exit status.
-	$reportArgIndex = [Array]::IndexOf($Arguments, "--report")
+	# Gates write structured reports in addition to their process exit code.
+	# Treat a missing, malformed, or non-pass report as a failure even if a
+	# wrapper or native process masks the child's exit status. Both spellings
+	# are used by the existing Python gates and must share one contract.
+	$reportFlag = @("--report", "--json-report") | Where-Object {
+		[Array]::IndexOf($Arguments, $_) -ge 0
+	} | Select-Object -First 1
+	$reportArgIndex = if ($null -ne $reportFlag) { [Array]::IndexOf($Arguments, $reportFlag) } else { -1 }
 	if ($reportArgIndex -ge 0 -and $reportArgIndex + 1 -lt $Arguments.Count) {
 		$reportFile = [string]$Arguments[$reportArgIndex + 1]
 		if (-not (Test-Path -LiteralPath $reportFile)) {
@@ -477,7 +481,13 @@ function Invoke-ExternalGate(
 			if (-not $VerboseOutput) { Get-Content -LiteralPath $log -Tail 40 }
 			throw $failure
 		}
-		if ($null -ne $reportStatus -and $reportStatus -ne "pass") {
+		if ($null -eq $reportStatus -or [string]::IsNullOrWhiteSpace($reportStatus)) {
+			$failure = "$Name produced a structured report without a status: $reportFile"
+			Add-Result $Name "fail" $timer.Elapsed.TotalSeconds $log @() $failure
+			if (-not $VerboseOutput) { Get-Content -LiteralPath $log -Tail 40 }
+			throw $failure
+		}
+		if ($reportStatus -ne "pass") {
 			$failure = "$Name reported status '$reportStatus' despite exit code 0"
 			Add-Result $Name "fail" $timer.Elapsed.TotalSeconds $log @() $failure
 			if (-not $VerboseOutput) { Get-Content -LiteralPath $log -Tail 40 }
