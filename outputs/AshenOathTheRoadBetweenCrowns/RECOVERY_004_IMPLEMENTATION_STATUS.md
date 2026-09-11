@@ -1311,3 +1311,30 @@ Do not sync `.release-gate/AshenOath_QA` into `web/`; it is not the production b
   target-hardware performance, and production release remain open.
 - Exact next action: continue one bounded source/native recovery slice; do not
   export or run a browser solely to recheck pack metadata.
+
+## Monster Mapping Coherence Checkpoint - 2026-09-11
+
+- The Wychwood Stalker and Raider encounter roles were declared as Skeleton
+  family roles in `monster_family_manifest.json` and the active asset database,
+  but the curated and visual-upgrade manifests still pointed those aliases at
+  Bat and Dragon sources. That mismatch could select the wrong animation
+  namespace at runtime and made the monster gate validate a source the active
+  role policy did not use.
+- Both aliases now resolve to the retained `Skeleton.fbx` source. Their role
+  identity remains distinct through the existing scale, material, posture,
+  spacing, and behavior profiles. `enemy_ai.gd` now routes both aliases through
+  the `SkeletonArmature` animation contract; the Bat and Dragon mappings remain
+  available for their actual Ashwing/animal roles.
+- Direct proof: `MON-002 VERIFIER: PASS` and `RENDER RESOURCE VERIFIER: PASS`.
+  The isolated headless monster verifier emitted two dummy-renderer
+  `material is null` messages while instantiating imported Skeleton surfaces;
+  the active runtime-resource scan classified no renderer/material/resource
+  errors. This does not close the broader visual-family approval gate.
+- Current truth: Wychwood role source and animation selection are coherent at
+  the source/native level, but the retained Skeleton family remains a
+  diagnostic fallback pending final monster visual approval. No Web export,
+  browser run, push, merge, or deployment was performed.
+- Exact next action: continue with the next already-scoped source/native
+  recovery slice, then perform one source-aligned QA export and one browser
+  acceptance run after the accumulated fixes are ready. Do not repeat isolated
+  telemetry or export cycles for this mapping repair.

@@ -1903,3 +1903,15 @@ The continuation source is now verified locally for the release candidate. The r
 - This is a partial startup improvement only. Cold production-browser latency,
   visual debt, full-campaign proof, and release gates remain open. Production
   `main`, tracked `web/`, and Vercel remain unchanged.
+
+## Monster Mapping Coherence Checkpoint - 2026-09-11
+
+- Wychwood Stalker and Raider now use the same retained Skeleton source and
+  `SkeletonArmature` animation contract declared by the monster-family and
+  runtime role manifests. Their existing role-specific scale, material,
+  posture, spacing, and behavior profiles remain intact.
+- `MON-002 VERIFIER` and `RENDER RESOURCE VERIFIER` pass. The retained Skeleton
+  family is still a diagnostic fallback pending final visual-family approval;
+  this checkpoint closes source/animation mapping drift, not the visual debt.
+- No Web export, tracked `web/` update, push, merge, or deployment was made for
+  this checkpoint. Production remains unchanged.

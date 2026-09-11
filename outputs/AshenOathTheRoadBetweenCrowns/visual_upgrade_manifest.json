@@ -263,24 +263,24 @@
         "notes": "Retained articulated source for all Wychwood family roles; deterministic scale, material, posture, and attack profiles provide silhouette variation without duplicate meshes."
       },
       "wychwood_stalker_creature": {
-        "status": "mon_002_distinct_bat_stalker",
-        "path": "res://assets_external/enemies/Bat.fbx",
+        "status": "mon_002_connected_skeleton_stalker",
+        "path": "res://assets_external/enemies/Skeleton.fbx",
         "source": "Animated Monsters by Quaternius",
         "source_url": "https://opengameart.org/sites/default/files/Animated%20Monster%20Pack%20by%20%40Quaternius.zip",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
         "target_height": 1.6,
-        "notes": "Distinct animated Bat silhouette for the Stalker role; the imported flight/attack clips, ash-green material, lean scale, spacing, and flanking profile make the role readable at gameplay distance."
+        "notes": "Connected Skeleton source for the Stalker role; ash-green material, lean scale, Skeleton attack clips, spacing, and flanking profile make the role readable without a mismatched creature family."
       },
       "wychwood_raider_creature": {
-        "status": "mon_002_distinct_dragon_raider",
-        "path": "res://assets_external/enemies/Dragon.fbx",
+        "status": "mon_002_connected_skeleton_raider",
+        "path": "res://assets_external/enemies/Skeleton.fbx",
         "source": "Animated Monsters by Quaternius",
         "source_url": "https://opengameart.org/sites/default/files/Animated%20Monster%20Pack%20by%20%40Quaternius.zip",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
         "target_height": 1.86,
-        "notes": "Distinct compact Dragon silhouette for the Raider role; the imported attack clips, ash-bone material, grounded scale, spacing, and feint profile provide a readable aerial predator variant."
+        "notes": "Connected Skeleton source for the Raider role; compact scale, ash-bone material, Skeleton attack clips, grounded spacing, and feint profile provide a readable role variant."
       },
       "wychwood_stalker": {
         "status": "mon_002_connected_ghoulkin_alias",

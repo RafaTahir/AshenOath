@@ -750,7 +750,8 @@ func _try_build_mapped_body() -> bool:
 		mapped = asset_helper.spawn_visual_role(visual_source, "enemies")
 		skeleton_family_source = visual_source in [
 			"ghoulkin_skeleton", "ghoulkin_creature", "bell_eater_boss",
-			"rootbound_colossus_boss"
+			"rootbound_colossus_boss", "wychwood_stalker_creature",
+			"wychwood_raider_creature"
 		]
 		uses_real_body = mapped != null and not mapped.name.ends_with("_placeholder") and not skeleton_family_source
 	if mapped == null:

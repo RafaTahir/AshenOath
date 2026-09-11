@@ -5,8 +5,8 @@ const EnemyAI = preload("res://scripts/enemy_ai.gd")
 var required := ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute", "bog_wretch", "gravebound_knight", "bell_eater", "rootbound_colossus", "ashwing", "halvern_boss", "white_hart_avatar"]
 const WYCHWOOD_VISUAL_ROLES := {
 	"ghoulkin": {"role": "ghoulkin_skeleton", "path": "res://assets_external/enemies/Skeleton.fbx"},
-	"wychwood_stalker": {"role": "wychwood_stalker_creature", "path": "res://assets_external/enemies/Bat.fbx"},
-	"wychwood_raider": {"role": "wychwood_raider_creature", "path": "res://assets_external/enemies/Dragon.fbx"},
+	"wychwood_stalker": {"role": "wychwood_stalker_creature", "path": "res://assets_external/enemies/Skeleton.fbx"},
+	"wychwood_raider": {"role": "wychwood_raider_creature", "path": "res://assets_external/enemies/Skeleton.fbx"},
 	"wychwood_brute": {"role": "ghoulkin_skeleton", "path": "res://assets_external/enemies/Skeleton.fbx"},
 }
 var failures := 0
