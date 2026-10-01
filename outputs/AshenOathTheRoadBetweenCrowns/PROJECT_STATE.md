@@ -2,7 +2,7 @@
 
 ## Current Release Truth - 2026-10-02
 
-Recovery-004 is **36/37 accepted** under the explicitly approved `functional_candidate / lean_functional_smoke` scope. CERT-001 passes; RELEASE-001 awaits deployment/live proof. Current exact candidate is V10: PCK `5ddd1873ae33a55354f046201a3c379b88466eb40f0bd1a9a0389280f3857067`, 15 files / 96,042,769 bytes, synchronized to `web/` unchanged. Source, assets, worlds, quests and existing features are retained.
+Recovery-004 is **37/37 accepted** under the explicitly approved `functional_candidate / lean_functional_smoke` scope. CERT-001 and RELEASE-001 pass. Exact V10 is deployed: PCK `5ddd1873ae33a55354f046201a3c379b88466eb40f0bd1a9a0389280f3857067`, 15 files / 96,042,769 bytes. Every local/committed/live artifact hash matches. Production Chrome actual New Game, movement and durable Save/Continue pass. Source, assets, worlds, quests and existing features are retained.
 
 Chrome proves the real-input opening/combat/bridge/report and durable saves/settings/remapping/pause/resize/audio. Edge and Firefox prove startup/input/durable Save/Continue only. Scoped valid native story/branch/ending and world/presentation evidence is reused. Exhaustive autonomous browser campaign/ending coverage was intentionally withdrawn and is not passed. Original numerical targets are **not certified**; startup, memory, transition and low-frame misses remain in the report. Mix listening review is false; unavailable physical controllers remain untested.
 

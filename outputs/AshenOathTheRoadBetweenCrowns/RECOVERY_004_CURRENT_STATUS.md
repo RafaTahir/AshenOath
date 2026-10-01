@@ -2,13 +2,14 @@
 
 ## Current - 2026-10-02
 
-- Accepted: **36/37**, canonical current acceptance map and `latest_closure` in the registry.
-- Remaining: **RELEASE-001**.
+- Accepted: **37/37**, canonical current acceptance map and `latest_closure` in the registry.
+- Remaining: **none under the approved functional-candidate scope**.
 - Candidate: **V10**, 15 files / 96,042,769 bytes.
 - PCK: `5ddd1873ae33a55354f046201a3c379b88466eb40f0bd1a9a0389280f3857067`.
 - Certification: `release_reports/functional_candidate_v10.json` PASS; `CERT_001_RESULT.md`.
 - Browser scope: Chrome lean functional; Edge/Firefox startup/input/durable save smoke PASS.
-- Exact next action: commit/push certified source and unchanged Web bytes, integrate main, wait for Vercel, verify every artifact hash and actual production input/save smoke.
+- Production: unchanged V10 deployed; all 15 live file hashes and actual production Chrome input/durable Save/Continue PASS. See `RELEASE_001_RESULT.md`.
+- Exact next action: none. Recovery-004 is complete under this explicitly amended scope.
 
 The eight prerequisites close under the explicitly revised scope. Numerical misses remain disclosed, not strict-performance successes. Listening review is false; unavailable physical controllers untested; exhaustive browser campaign/boss/endings omitted, not passed. No new candidate, art, investigation or campaign replay is required.
 

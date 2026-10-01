@@ -16002,3 +16002,12 @@ Exact next action: aggregate this preserved evidence through CERT-001, then sync
 `release_reports/functional_candidate_v10.json` passes schema-4 strict completeness validation under `functional_candidate`. Owned evidence aggregation, browser aggregate, security, Web artifact completeness and registry gates pass, followed by source/pack/image/approval identity validation. Negative fixtures reject changed/missing evidence, failed ownership and strict-profile substitution. No browser replay or Web export was needed.
 
 Current ticket: RELEASE-001. Exact next action: synchronize unchanged V10 into tracked `web/`, commit/push the cumulative development branch, fast-forward main, wait for Vercel, verify every live file/pack hash and actual-input production Save/Continue smoke. Production is not yet claimed updated. Only this live proof can close 37/37.
+# 2026-10-02 — COMPLETE: 37/37
+
+Current ticket: RELEASE-001, accepted. Remaining Recovery-004 tickets: **zero under the user-approved functional_candidate / lean_functional_smoke contract**. No next recovery action.
+
+Implementation `134f5bc0e1ff3eca3e48f045fb116390a6261902` and exact-byte packaging promotion `64488911477995319beaf50be4e5b04426270251` were pushed on development/main. Vercel reports successful deployment. An actual ARTIFACT defect (Git text newline conversion) was repaired with `web/** -text`; no V10 game bytes or candidate were changed/re-exported.
+
+All **15** local/committed/live files match by SHA-256/size, including encoded WASM, root PCK and six packs. Production Chrome hardware smoke passes real mouse New Game, ordinary keyboard movement, durable manual save, browser reload, normal Continue, exact earned state/preferences and restored movement. Six checkpoints /79.551seconds; no fatal console/network errors; D profile cleaned. Evidence: `release_reports/recovery004_v10_evidence/live_v10_hashes.json` and `production_smoke_v10.json`.
+
+The release is a functionality-certified candidate, not strict performance certification. Original startup/memory/transition/low-frame misses remain disclosed; listening_reviewed=false; unavailable physical controllers untested; exhaustive browser campaign/boss/endings intentionally omitted, not passed. Retained native story/branch evidence keeps its original scope. `RELEASE_001_RESULT.md` is the final receipt. All lower checkpoint/next-action paragraphs are historical.

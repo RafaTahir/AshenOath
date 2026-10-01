@@ -23,7 +23,7 @@
       "unchanged_blockers": ["missing or stale evidence", "crash", "hang/watchdog", "parser/resource/renderer errors", "console/network errors", "route/combat/progression/save/input failures", "diagnostic mutation", "artifact identity", "security"],
       "preservation": "All retained content, quality presets, default presentation and scoped valid evidence remain. No new art, renderer research, refactor or optional polish.",
       "supersedes": "Only numerical-compliance export prerequisites, subjective listening approval and full Edge/Firefox campaign requirements in historical closure prose below. No existing ticket is accepted by this policy alone.",
-      "next_action": "Finish chrome_main_v10_chapel_axis.json: uninterrupted Chrome on unchanged V10. Dialogue-handoff run passes the previous mouse failure/opening/cemetery/shrine, then HARNESS diagonal reaches the chapel facade from(16.2132,7.6281). Driver now physically aligns the proven native z8.29 aisle before walking west, requires actual alignment/crossing;73 affected fixtures pass. Dialogue acknowledgement requires newer actual outcomes/no replay/paired release;350ms Web pointer guard, native west road and optional420ms focus peek fixes retained. V10 opening Save/Continue passes38 actual-input checkpoints; native/visual/packed evidence remains scoped and valid. Then missing earned-save branches/four endings and Edge/Firefox opening Save/Continue; revised closure/CERT/unchanged-byte authorized live release. Formal27/37;15 files96,042,769bytes; PCK5ddd1873ae33a55354f046201a3c379b88466eb40f0bd1a9a0389280f3857067. Numeric misses disclosed, not strict certification. No export/commit/push/merge/deployment."
+      "next_action": "Recovery-004 complete at37/37 under approved functional_candidate/lean scope. CERT passes, exact V10 bytes deployed and all15 live file hashes verified; production Chrome actual NewGame/movement/durable Save/Continue passes. Preserve limitations; no further recovery work is required under this contract. RELEASE_001_RESULT.md and release_reports/recovery004_v10_evidence contain the receipt."
     },
     "counting_rule": "Only complete current-ticket acceptance counts as accepted. Partial/native/historical checkpoints remain preserved but are not full-scope acceptance. This count is not an estimate of implementation effort.",
     "historical_tickets_field": "tickets",
@@ -64,18 +64,18 @@
       "ARCH-001": "accepted",
       "ARCH-002": "accepted",
       "CERT-001": "accepted",
-      "RELEASE-001": "pending"
+      "RELEASE-001": "accepted"
     },
     "closure_policy": "The current acceptance map and latest_closure are authoritative. Closure records below preserve pre-amendment dependencies and failures as history; their old next-action prose is not current direction. Scoped unchanged native evidence is reused, not claimed as a new browser campaign.",
     "latest_closure": {
       "at": "2026-10-02",
-      "accepted": "36/37",
+      "accepted": "37/37",
       "profile": "functional_candidate",
       "scope": "lean_functional_smoke",
       "evidence": "release_reports/recovery004_v10_evidence/bundle.json",
       "supersedes": "Historical full autonomous browser campaign, numerical-compliance and listening dependencies in closure prose only; failures remain recorded, not passed.",
-      "remaining": ["RELEASE-001"],
-      "next_action": "CERT-001 passes on unchanged V10. Promote exact bytes, commit/push/integrate main, verify every live artifact hash and real-input production smoke.",
+      "remaining": [],
+      "next_action": "Complete. Preserve certified V10 and its disclosed limitations; final receipt is RELEASE_001_RESULT.md.",
       "limitations": ["Original numerical targets not certified", "Mix not listening-reviewed", "Exhaustive autonomous browser campaign/endings intentionally omitted, not passed", "Edge/Firefox startup/input/save only", "Unavailable physical controllers untested"]
     },
     "closure": {
@@ -274,6 +274,7 @@
       }
     },
     "accepted_evidence": {
+      "RELEASE-001": "Accepted 2026-10-02: implementation134f5bc0e1ff3eca3e48f045fb116390a6261902 and packaging promotion64488911477995319beaf50be4e5b04426270251 pushed on development/main; Vercel successful. Git CRLF normalization was a demonstrated ARTIFACT defect; web/** -text restores exact frozen V10 without re-export. All15 committed/local/live files, including encoded WASM, rootPCK and six packs, match SHA256/size in live_v10_hashes.json. Actual production Chrome hardware mouse NewGame/W/manualSave/durable IDB/reload/visible Continue/exactearnedstate/S passes6 checkpoints in79551ms, with zero console/network errors; D profile cleaned. Cold control12764ms/click509ms; Continue25423ms/click8442ms; process-private upperbound519.5MB are observations, not strict certification. Functional-candidate limitations and omitted exhaustive browser coverage remain explicit. RELEASE_001_RESULT.md and the preserved production report contain the live receipt.",
       "CERT-001": "Accepted 2026-10-02: release_reports/functional_candidate_v10.json, schema4 candidate phase, five mandatory successful owned aggregation gates plus strict completeness/source/artifact/registry/11 source-bound reviewed-image report validation. No export or browser replay. Required current native GUI measurements/memory, scoped retained gameplay/story/audio/access records, exact V10 packed startup, Chrome/Edge/Firefox lean matrix and security/pack completeness pass. Controlled fixtures reject stale or missing inputs, failed process, changed files/logs/statuses, mutations and strict-profile substitution. Binding_origin explicitly preserved_v10_export_and_capture, not invented export-time provenance. Original numerical targets, unreviewed listening, unavailable physical controllers and omitted browser campaign are disclosed.",
       "STORY-001": "Accepted 2026-10-02 under approved functional_candidate/lean browser scope: preserved native uninterrupted ten-chapter Mercy route, four earned-save ending outcomes, side-quest and choice evidence in STORY_001_CHOICE_COVERAGE.md and combined routes remain valid at their stated unchanged story dependency scope. Current affected native scene/encounter/optional-clue checks are retained. V10 Chrome 38-checkpoint real-input opening/report/durable Save-Continue passes. Exhaustive autonomous browser campaign and ending coverage was withdrawn and is explicitly not claimed passed. See release_reports/recovery004_v10_evidence/bundle.json.",
       "WORLD-001": "Accepted 2026-10-02 under functional_candidate: frozen finite native composition cells in WORLD_001_CLOSURE_MATRIX.md, current source-bound V10 1280x720 reviewed captures, native five-kill/both-bridges/Anwen-return report and V10 Chrome actual-input opening integration pass. Numerical misses are disclosed, not hidden or passed. No new art requirement introduced.",

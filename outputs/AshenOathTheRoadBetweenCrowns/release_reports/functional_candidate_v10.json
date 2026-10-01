@@ -15,13 +15,13 @@
   "source_fingerprint": "d07c889741481e9eb85c5d81fa43884033be1c12464de2dc8eead2a0bac77a9c",
   "runtime_content_fingerprint": "d07c889741481e9eb85c5d81fa43884033be1c12464de2dc8eead2a0bac77a9c",
   "test_harness_fingerprint": "d279527aa9a68c37f14f88540fafed48caca64c37b8662e21519ec43a6a40af2",
-  "registry_fingerprint": "cf900ea9e09311c15881c61a4f343d8ba47a7021f401908018cba70771311e1a",
+  "registry_fingerprint": "73b8ed4ea909b4d82d51996630e2b889149f1a9213cf34c4c66b517c6a0b6aed",
   "execution_fingerprint": "1b9facb8a7d036151f457e5e4cdbfa015de5907df1d9feb0274af592ba8c2878",
   "verification_revision": {
     "source_commit": "5b530361a5aae8612626532287b5bd27d7b244b8",
     "runtime_content_fingerprint": "d07c889741481e9eb85c5d81fa43884033be1c12464de2dc8eead2a0bac77a9c",
     "test_harness_fingerprint": "d279527aa9a68c37f14f88540fafed48caca64c37b8662e21519ec43a6a40af2",
-    "registry_sha256": "cf900ea9e09311c15881c61a4f343d8ba47a7021f401908018cba70771311e1a",
+    "registry_sha256": "73b8ed4ea909b4d82d51996630e2b889149f1a9213cf34c4c66b517c6a0b6aed",
     "execution_fingerprint": "1b9facb8a7d036151f457e5e4cdbfa015de5907df1d9feb0274af592ba8c2878"
   },
   "git_status": [
@@ -982,7 +982,7 @@
   "issue_registry": {
     "path": "RECOVERY_004_ISSUE_REGISTRY.json",
     "exists": true,
-    "sha256": "cf900ea9e09311c15881c61a4f343d8ba47a7021f401908018cba70771311e1a",
+    "sha256": "73b8ed4ea909b4d82d51996630e2b889149f1a9213cf34c4c66b517c6a0b6aed",
     "schema_version": 1,
     "registry_id": "ashen-oath-recovery-004",
     "category_statuses": [
@@ -1030,101 +1030,6 @@
     "ticket_statuses": [
       {
         "id": "REL-TRUTH-001",
-        "severity": "blocker",
-        "status": "accepted"
-      },
-      {
-        "id": "CHAR-002",
-        "severity": "blocker",
-        "status": "accepted"
-      },
-      {
-        "id": "MON-001",
-        "severity": "blocker",
-        "status": "accepted"
-      },
-      {
-        "id": "WORLD-001",
-        "severity": "blocker",
-        "status": "accepted"
-      },
-      {
-        "id": "WORLD-002",
-        "severity": "blocker",
-        "status": "accepted"
-      },
-      {
-        "id": "PRES-001",
-        "severity": "blocker",
-        "status": "accepted"
-      },
-      {
-        "id": "RES-001",
-        "severity": "blocker",
-        "status": "accepted"
-      },
-      {
-        "id": "PERF-001",
-        "severity": "blocker",
-        "status": "accepted"
-      },
-      {
-        "id": "UI-001",
-        "severity": "blocker",
-        "status": "accepted"
-      },
-      {
-        "id": "AUDIO-001",
-        "severity": "blocker",
-        "status": "accepted"
-      },
-      {
-        "id": "ACCESS-001",
-        "severity": "blocker",
-        "status": "accepted"
-      },
-      {
-        "id": "QA-001",
-        "severity": "blocker",
-        "status": "accepted"
-      },
-      {
-        "id": "QA-002",
-        "severity": "blocker",
-        "status": "accepted"
-      },
-      {
-        "id": "QA-003",
-        "severity": "blocker",
-        "status": "accepted"
-      },
-      {
-        "id": "ARCH-001",
-        "severity": "blocker",
-        "status": "accepted"
-      },
-      {
-        "id": "ARCH-002",
-        "severity": "blocker",
-        "status": "accepted"
-      },
-      {
-        "id": "CHAR-001",
-        "severity": "blocker",
-        "status": "accepted"
-      },
-      {
-        "id": "CERT-001",
-        "severity": "blocker",
-        "status": "accepted"
-      },
-      {
-        "id": "STORY-001",
-        "severity": "blocker",
-        "status": "accepted"
-      },
-      {
-        "id": "QUEST-001",
         "severity": "blocker",
         "status": "accepted"
       },
@@ -1204,14 +1109,109 @@
         "status": "accepted"
       },
       {
+        "id": "QUEST-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
         "id": "SAVE-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "STORY-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "CHAR-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "CHAR-002",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "MON-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "WORLD-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "WORLD-002",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "PRES-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "RES-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "PERF-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "UI-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "AUDIO-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "ACCESS-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "QA-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "QA-002",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "QA-003",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "ARCH-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "ARCH-002",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "CERT-001",
         "severity": "blocker",
         "status": "accepted"
       },
       {
         "id": "RELEASE-001",
         "severity": "blocker",
-        "status": "pending"
+        "status": "accepted"
       }
     ]
   },
