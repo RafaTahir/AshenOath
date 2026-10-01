@@ -10,16 +10,67 @@ var database
 var mesh_cache: Dictionary = {}
 var material_cache: Dictionary = {}
 var resource_cache: Dictionary = {}
+var repaired_mesh_cache: Dictionary = {}
+var pending_role_resources: Dictionary = {}
+var prepared_animation_libraries: Dictionary = {}
 var runtime_role_diagnostics: Dictionary = {}
 var _reported_blocked_roles: Dictionary = {}
+
+func request_role_resources(role_names: Array) -> Error:
+	_ensure_database()
+	var paths: Array[String] = []
+	for role in role_names:
+		var entry: Dictionary = database.get_asset_for_role(str(role))
+		var path := str(entry.get("path", ""))
+		paths.append(path)
+	return request_resource_paths(paths)
+
+func request_resource_paths(paths: Array) -> Error:
+	for raw_path in paths:
+		var path := str(raw_path)
+		if path.is_empty() or not ResourceLoader.exists(path):
+			return ERR_FILE_NOT_FOUND
+		if resource_cache.has(path) or pending_role_resources.has(path):
+			continue
+		var error := ResourceLoader.load_threaded_request(path)
+		if error != OK:
+			return error
+		pending_role_resources[path] = Time.get_ticks_msec()
+	return OK
+
+func is_resource_cached(path: String) -> bool:
+	return resource_cache.has(path)
+
+func poll_role_resources(timeout_msec: int = 20000) -> Error:
+	for path in pending_role_resources.keys():
+		var status := ResourceLoader.load_threaded_get_status(path)
+		if status == ResourceLoader.THREAD_LOAD_LOADED:
+			var resource := ResourceLoader.load_threaded_get(path)
+			pending_role_resources.erase(path)
+			if resource == null:
+				return ERR_CANT_OPEN
+			resource_cache[path] = resource
+		elif status != ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+			pending_role_resources.erase(path)
+			return ERR_CANT_OPEN
+		elif Time.get_ticks_msec() - int(pending_role_resources[path]) > timeout_msec:
+			return ERR_TIMEOUT
+	return OK if pending_role_resources.is_empty() else ERR_BUSY
 
 func clear_runtime_caches() -> void:
 	# Cache ownership ends with the host game. Clear references after the
 	# owning scene roots have been retired so imported resources can release
 	# without detaching live meshes from the renderer.
+	# ResourceLoader has no cancellation API. Shutdown must consume outstanding
+	# requests; normal construction only polls completed requests without waiting.
+	for path in pending_role_resources:
+		ResourceLoader.load_threaded_get(path)
+	pending_role_resources.clear()
 	mesh_cache.clear()
 	material_cache.clear()
 	resource_cache.clear()
+	repaired_mesh_cache.clear()
+	prepared_animation_libraries.clear()
 
 func clear_runtime_diagnostics() -> void:
 	runtime_role_diagnostics.clear()
@@ -63,13 +114,25 @@ func _spawn_from_entry(entry: Dictionary, role_name: String, fallback_category: 
 	if diagnostic_fallback:
 		_record_runtime_role_use(role_name, fallback_category, path, runtime_policy)
 	if path != "" and (ResourceLoader.exists(path) or FileAccess.file_exists(path)):
+		var profile_started := Time.get_ticks_usec()
 		var resource = _load_cached_resource(path)
-		var spawned: Node3D = _instantiate_resource(resource)
+		var loaded_usec := Time.get_ticks_usec()
+		var spawned: Node3D = _instantiate_obj(path) if _is_forest_tree(path) else _instantiate_resource(resource)
 		if spawned != null:
+			var instantiated_usec := Time.get_ticks_usec()
 			spawned = _compose_player_body(spawned, path, role_name, variant_seed)
+			var composed_usec := Time.get_ticks_usec()
 			spawned.name = role_name
 			_apply_runtime_policy_metadata(spawned, role_name, runtime_policy, path)
 			_prepare_spawned_asset(spawned,path,role_name,fallback_category)
+			if OS.get_environment("ASHEN_PROFILE_GREYFEN_ACTORS") == "1" and fallback_category == "characters":
+				print("CHARACTER_ASSET_PROFILE role=%s load_ms=%.2f instantiate_ms=%.2f compose_ms=%.2f prepare_ms=%.2f" % [
+					role_name,
+					float(loaded_usec - profile_started) / 1000.0,
+					float(instantiated_usec - loaded_usec) / 1000.0,
+					float(composed_usec - instantiated_usec) / 1000.0,
+					float(Time.get_ticks_usec() - composed_usec) / 1000.0,
+				])
 			return spawned
 		var fallback: Node3D = _instantiate_source_file(path)
 		if fallback != null:
@@ -130,6 +193,23 @@ func _record_runtime_role_failure(role_name: String, category: String, path: Str
 
 func _compose_player_body(outfit_root: Node3D, outfit_path: String, role_name: String, variant_seed: String = "") -> Node3D:
 	var normalized_path := outfit_path.replace("\\", "/").to_lower()
+	var is_opening_assembly := normalized_path.contains("/characters_universal/runtime/") and normalized_path.ends_with("_atlas.gltf")
+	if is_opening_assembly:
+		outfit_root.set_meta("character_composite", true)
+		outfit_root.set_meta("character_rig_layer_count", 1)
+		outfit_root.set_meta("character_identity", "kael" if role_name in ["player_human", "player_kael"] else ("anwen" if role_name in ["sister_anwen_human", "sister_anwen"] else role_name.to_lower()))
+		outfit_root.set_meta("character_base_path", outfit_path)
+		outfit_root.set_meta("character_outfit_path", outfit_path)
+		var baked_hair := "Hair_SimpleParted.gltf"
+		if normalized_path.contains("anwen") or normalized_path.contains("villager_female"):
+			baked_hair = "Hair_Buns.gltf"
+		elif normalized_path.contains("villager_worker") or normalized_path.contains("villager_hooded"):
+			baked_hair = "Hair_Buzzed.gltf"
+		outfit_root.set_meta("character_hair_path", "baked:%s" % baked_hair)
+		outfit_root.set_meta("character_asset_family", "quaternius_animated_humanoid")
+		outfit_root.set_meta("character_animation_family", "universal_animation_library_2")
+		outfit_root.set_meta("character_prebaked_identity", true)
+		return outfit_root
 	var is_ranger_runtime := normalized_path.contains("assets_external/characters_ranger/") and normalized_path.ends_with("male_ranger_runtime.gltf")
 	if is_ranger_runtime:
 		# The optimized Ranger outfit owns the body, clothing, and 65-bone rig, but
@@ -413,6 +493,13 @@ func prewarm_roles(role_names: Array) -> Dictionary:
 	return {"loaded": loaded, "missing": missing}
 
 func _instantiate_obj(path: String) -> Node3D:
+	if _is_forest_tree(path):
+		var tree_mesh := _load_forest_tree_mesh(path)
+		if tree_mesh == null:
+			return null
+		var tree_instance := MeshInstance3D.new()
+		tree_instance.mesh = tree_mesh
+		return tree_instance
 	var mesh: ArrayMesh = _load_obj_mesh(path)
 	if mesh == null:
 		return null
@@ -421,9 +508,58 @@ func _instantiate_obj(path: String) -> Node3D:
 	mesh_instance.material_override = _obj_material(path)
 	return mesh_instance
 
+func get_forest_tree_mesh(path: String) -> ArrayMesh:
+	if not _is_forest_tree(path):
+		push_error("Unapproved forest tree mesh: " + path)
+		return null
+	return _load_forest_tree_mesh(path)
+
+func _load_forest_tree_mesh(path: String) -> ArrayMesh:
+	var key := path + ":runtime_tree"
+	if mesh_cache.has(key):
+		return mesh_cache[key]
+	var imported := _load_cached_resource(path) as ArrayMesh
+	if imported == null or imported.get_surface_count() < 2:
+		return null
+	var mesh := imported.duplicate(false) as ArrayMesh
+	for index in mesh.get_surface_count():
+		mesh.surface_set_material(index, _forest_tree_material(mesh.surface_get_name(index)))
+	mesh_cache[key] = mesh
+	return mesh
+
 func _load_obj_mesh(path: String) -> ArrayMesh:
 	if mesh_cache.has(path):
 		return mesh_cache[path]
+	var imported := _load_cached_resource(path) as ArrayMesh
+	if imported != null:
+		var bounds := imported.get_aabb()
+		var longest := maxf(bounds.size.x, maxf(bounds.size.y, bounds.size.z))
+		var scale_factor := clampf(_target_height_for_path(path) / maxf(bounds.size.y, maxf(longest * 0.25, 0.01)), 0.01, 8.0)
+		var center := Vector3(bounds.get_center().x, bounds.position.y, bounds.get_center().z)
+		var transform := Transform3D(Basis.IDENTITY.scaled(Vector3.ONE * scale_factor), -center * scale_factor)
+		var surface := SurfaceTool.new()
+		for index in imported.get_surface_count():
+			surface.append_from(imported, index, transform)
+		var result := surface.commit()
+		mesh_cache[path] = result
+		return result
+	return _load_obj_mesh_text(path)
+
+func _is_forest_tree(path: String) -> bool:
+	return path.ends_with("/TwistedTree_2.obj") or path.ends_with("/TwistedTree_4.obj") or path.ends_with("/CommonTree_5.obj")
+
+func _forest_tree_material(surface_name: String) -> StandardMaterial3D:
+	var bark := surface_name.begins_with("Bark_")
+	var key := "forest_tree_bark" if bark else "forest_tree_leaves"
+	if material_cache.has(key):
+		return material_cache[key]
+	var material := StandardMaterial3D.new()
+	material.albedo_color = Color(0.27, 0.20, 0.15) if bark else Color(0.12, 0.24, 0.13)
+	material.roughness = 0.88
+	material_cache[key] = material
+	return material
+
+func _load_obj_mesh_text(path: String) -> ArrayMesh:
 	var file = FileAccess.open(path, FileAccess.READ)
 	if file == null:
 		return null
@@ -673,16 +809,20 @@ func _finalize_asset_root(root: Node3D, role_name: String = "") -> void:
 		"player_human", "player_kael", "sister_anwen", "sister_anwen_human",
 		"mira_human", "rook_human", "villager_human", "villager_female_human",
 		"villager_worker_human", "villager_hooded_human", "castle_guard_human",
-		"road_ranger_human"
+		"road_ranger_human", "bandit_deserter", "bandit_tracker"
 	])
 
 func _prepare_spawned_asset(root: Node3D, path: String, role_name: String = "", category: String = "") -> void:
 	if path.get_extension().to_lower() != "obj":
 		_normalize_scene_bounds(root, _target_height_for_role(role_name, path))
 	_apply_safe_materials(root, path)
+	_apply_universal_character_material_budget(root, path)
 	_finalize_asset_root(root, role_name)
 	if CharacterAnimationFusion.is_shared_body(path):
-		var fused_player := CharacterAnimationFusion.attach_shared_library(root)
+		# Retain both the imported source and immutable retargeted variants with
+		# this helper; actor AnimationPlayers own independent playback state.
+		var library_source: Resource = _load_cached_resource(CharacterAnimationFusion.ANIMATION_LIBRARY_PATH)
+		var fused_player := CharacterAnimationFusion.attach_shared_library(root, library_source, prepared_animation_libraries)
 		root.set_meta("shared_animation_library", fused_player != null and fused_player.get_animation_list().size() > 0)
 	if "characters" in path.to_lower() and not _has_skeleton(root):
 		_apply_character_wrapper(root, root.name)
@@ -694,6 +834,37 @@ func _prepare_spawned_asset(root: Node3D, path: String, role_name: String = "", 
 		if not bool(report.valid):
 			push_error("Incomplete skeletal visual for %s: %s" % [role_name,str(report)])
 
+func _apply_universal_character_material_budget(root: Node3D, path: String) -> void:
+	if not path.to_lower().contains("/characters_universal/"):
+		return
+	if path.to_lower().contains("/runtime/") and path.to_lower().ends_with("_a_set_atlas.gltf"):
+		for mesh_instance in _collect_meshes(root):
+			mesh_instance.set_meta("universal_material_budget", "single_material_prebaked_atlas")
+		return
+	# The low-poly Universal meshes carry normal maps on every body/head surface.
+	# Preserve geometry, albedo, vertex colours, scalar response, skeletons and
+	# sockets while collapsing that redundant branch before the first frame.
+	for mesh_instance in _collect_meshes(root):
+		if mesh_instance.mesh == null or mesh_instance.mesh.get_surface_count() == 0:
+			continue
+		var local_mesh := mesh_instance.mesh.duplicate(false) as Mesh
+		if local_mesh == null:
+			continue
+		var changed := false
+		for surface_index in range(local_mesh.get_surface_count()):
+			var source := local_mesh.surface_get_material(surface_index)
+			if not (source is StandardMaterial3D):
+				continue
+			var material := (source as StandardMaterial3D).duplicate() as StandardMaterial3D
+			if material.normal_enabled or material.normal_texture != null:
+				material.normal_enabled = false
+				material.normal_texture = null
+				changed = true
+			local_mesh.surface_set_material(surface_index, material)
+		if changed:
+			mesh_instance.mesh = local_mesh
+			mesh_instance.set_meta("universal_material_budget", "normal_maps_collapsed")
+
 func _has_skeleton(root: Node) -> bool:
 	if root is Skeleton3D:
 		return true
@@ -703,26 +874,66 @@ func _has_skeleton(root: Node) -> bool:
 	return false
 
 func _apply_safe_materials(root: Node3D, path: String) -> void:
-	var fallback = _fallback_material_for_path(path)
+	var fallback: StandardMaterial3D = null
+	var authored_stag_palette := path.ends_with("/WhiteHart_Stag.glb")
 	for mesh_instance in _collect_meshes(root):
 		if mesh_instance.mesh == null:
 			continue
-		if mesh_instance.mesh.get_surface_count() == 0:
+		var mesh: Mesh = mesh_instance.mesh
+		if mesh.get_surface_count() == 0:
+			if fallback == null:
+				fallback = _fallback_material_for_path(path)
 			mesh_instance.material_override = fallback
 		else:
-			for surface_index in range(mesh_instance.mesh.get_surface_count()):
-				if mesh_instance.mesh.surface_get_material(surface_index) == null:
-					mesh_instance.mesh.surface_set_material(surface_index, fallback)
-				var effective := mesh_instance.get_surface_override_material(surface_index)
-				if effective == null:
-					effective = mesh_instance.mesh.surface_get_material(surface_index)
-				if effective == null or _is_default_white_material(effective):
-					var replacement := mesh_instance.material_override
-					if replacement == null or _is_default_white_material(replacement):
-						replacement = fallback
-					mesh_instance.set_surface_override_material(surface_index, replacement)
-		if mesh_instance.material_override != null and _is_default_white_material(mesh_instance.material_override):
-			mesh_instance.material_override = fallback
+			# Keep one material ownership path per instance. If an imported surface
+			# is empty or the default white material, make a local mesh copy and put
+			# the fallback on its base surface instead of adding a surface override
+			# beside material_override. That combination is unsafe during teardown.
+			var source_mesh: Mesh = mesh
+			var has_surface_overrides := false
+			var surface_overrides: Array[Material] = []
+			for surface_index in range(mesh.get_surface_count()):
+				var override_material := mesh_instance.get_surface_override_material(surface_index)
+				surface_overrides.append(override_material)
+				if override_material != null:
+					has_surface_overrides = true
+			var repairs: Dictionary = repaired_mesh_cache.get(source_mesh, {})
+			# Instance-specific imported materials must not leak into the shared
+			# source/path cache or disappear when override bindings are consolidated.
+			var local_mesh: Mesh = mesh.duplicate(false) as Mesh if has_surface_overrides else repairs.get(path)
+			if local_mesh != null:
+				mesh_instance.mesh = local_mesh
+				mesh = local_mesh
+			var authored_surfaces: Array = mesh.get_meta("authored_surface_overrides", []).duplicate()
+			for surface_index in range(mesh.get_surface_count()):
+				var authored_override := surface_overrides[surface_index]
+				if authored_override != null:
+					mesh.surface_set_material(surface_index, authored_override)
+					if surface_index not in authored_surfaces:
+						authored_surfaces.append(surface_index)
+				var surface_material: Material = mesh.surface_get_material(surface_index)
+				if surface_material == null or (surface_index not in authored_surfaces and not authored_stag_palette and _is_default_white_material(surface_material)):
+					if fallback == null:
+						fallback = _fallback_material_for_path(path)
+					if local_mesh == null:
+						# Only surface bindings change. Keep immutable authored materials
+						# and textures shared instead of duplicating their resource graph.
+						local_mesh = mesh.duplicate(false) as Mesh
+						if local_mesh != null:
+							mesh_instance.mesh = local_mesh
+							mesh = local_mesh
+					if local_mesh != null:
+						mesh.surface_set_material(surface_index, fallback)
+				# Clear any stale imported/generated surface binding. Valid base
+				# materials remain visible and do not need an instance override.
+				mesh_instance.set_surface_override_material(surface_index, null)
+			if has_surface_overrides:
+				mesh.set_meta("authored_surface_overrides", authored_surfaces)
+			if local_mesh != null and not has_surface_overrides:
+				repairs[path] = local_mesh
+				repaired_mesh_cache[source_mesh] = repairs
+			if mesh_instance.material_override != null and _is_default_white_material(mesh_instance.material_override):
+				mesh_instance.material_override = null
 		mesh_instance.set_meta("validated_material", true)
 
 func cache_stats() -> Dictionary:

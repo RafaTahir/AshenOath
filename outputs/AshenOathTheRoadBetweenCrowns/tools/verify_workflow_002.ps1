@@ -48,4 +48,7 @@ Require ($release -match "packed_startup") "Milestone packed startup gate was re
 $ignore = Get-Content -LiteralPath (Join-Path $RepoRoot ".gitignore") -Raw
 Require ($ignore -match "\.verification-cache") "Verification cache is not ignored."
 
+& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'verify_ticket_cache.ps1')
+Require ($LASTEXITCODE -eq 0) "Verification cache dependency regression failed."
+
 Write-Host "WORKFLOW-002 VERIFIER: PASS"

@@ -80,7 +80,10 @@ def main() -> int:
         elif pack_id != "base":
             pack["bytes"] = size
             pack["sha256"] = digest
-            pack["url"] = f"packs/{pack_id}.pck?v={build_id}"
+            # The digest is the cache identity. A semantic release label alone
+            # can let an old HTML shell reuse bytes from a different pack set.
+            pack["url"] = f"packs/{pack_id}.pck?sha256={digest}"
+            pack["cache_key"] = digest
             pack["status"] = "streamed_web_candidate"
 
     if failures:
@@ -97,6 +100,7 @@ def main() -> int:
     manifest["release_id"] = build_id
     manifest["build_id"] = build_id
     manifest["generated_from_commit"] = source_commit
+    manifest["source_dirty"] = bool(candidates.get("source_dirty", False))
     manifest["generated_at_utc"] = generated_at
     manifest["artifact_policy"] = (
         "opening_embedded_external_campaign"

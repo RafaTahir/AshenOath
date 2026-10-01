@@ -14,6 +14,8 @@ var objective_text := ""
 var next_action := ""
 var tracker_text := ""
 var contextual_text := ""
+var compass_text := ""
+var save_summary: Dictionary = {}
 
 func to_dictionary() -> Dictionary:
 	return {
@@ -26,4 +28,6 @@ func to_dictionary() -> Dictionary:
 		"next_action": next_action,
 		"tracker_text": tracker_text,
 		"contextual_text": contextual_text,
+		"compass_text": compass_text,
+		"save_summary": save_summary.duplicate(true),
 	}

@@ -2,6 +2,7 @@ extends SceneTree
 
 const CharacterRoleContract = preload("res://scripts/character_role_contract.gd")
 const CharacterRoleSpec = preload("res://scripts/character_role_spec.gd")
+const OPENING_ASSEMBLY_MANIFEST := "res://assets_external/characters_universal/runtime/OPENING_CHARACTER_ASSEMBLY_MANIFEST.json"
 
 var failures: Array[String] = []
 var game: Node = null
@@ -37,10 +38,14 @@ func _initialize() -> void:
 	var base_path := str(visual.get_meta("character_base_path", "")).to_lower()
 	var hair_path := str(visual.get_meta("character_hair_path", "")).to_lower()
 	var recipe: Dictionary = visual.get_meta("character_variant_recipe", {})
-	_check(base_path.ends_with("/female_head.gltf"), "Anwen did not resolve the female native head asset")
-	_check(hair_path.ends_with("/hair_buns.gltf"), "Anwen did not resolve the buns hair asset")
+	var assembly_sources := _opening_assembly_sources("anwen")
+	_check(base_path.ends_with("/anwen_a_set_atlas.gltf"), "Anwen did not resolve the prebaked A-set assembly")
+	_check(hair_path == "baked:hair_buns.gltf", "Anwen hair is not owned by the prebaked buns assembly")
+	_check(assembly_sources.has("Female_Peasant.gltf"), "Anwen assembly has no female peasant outfit source")
+	_check(assembly_sources.has("Female_Head.gltf"), "Anwen assembly has no female native head source")
+	_check(assembly_sources.has("Hair_Buns.gltf"), "Anwen assembly has no buns hair source")
 	_check(str(recipe.get("body_family", "")) == "universal_female", "Anwen recipe is not the female Universal family")
-	_check(_has_mesh_named(visual, "superhero_female"), "Anwen has no female facial/body mesh")
+	_check(_has_mesh_named(visual, "anwen_combined"), "Anwen has no consolidated female facial/body mesh")
 	_check(not _has_mesh_named(visual, "superhero_male"), "Anwen resolved a male facial/body mesh")
 	var skeleton := _find_skeleton(visual)
 	_check(skeleton != null, "Anwen lacks Skeleton3D")
@@ -95,6 +100,19 @@ func _has_mesh_named(node: Node, token: String) -> bool:
 		if str(mesh.name).to_lower().contains(wanted):
 			return true
 	return false
+
+func _opening_assembly_sources(role: String) -> Array:
+	if not FileAccess.file_exists(OPENING_ASSEMBLY_MANIFEST):
+		return []
+	var file := FileAccess.open(OPENING_ASSEMBLY_MANIFEST, FileAccess.READ)
+	if file == null:
+		return []
+	var parsed = JSON.parse_string(file.get_as_text())
+	if typeof(parsed) != TYPE_DICTIONARY:
+		return []
+	var roles: Dictionary = parsed.get("roles", {})
+	var entry: Dictionary = roles.get(role, {})
+	return entry.get("sources", []) as Array
 
 func _find_bone_alias(skeleton: Skeleton3D, aliases: Array) -> int:
 	for index in range(skeleton.get_bone_count()):

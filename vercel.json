@@ -3,6 +3,13 @@
   "cleanUrls": true,
   "headers": [
     {
+      "source": "/index.wasm",
+      "headers": [
+        { "key": "Content-Type", "value": "application/wasm" },
+        { "key": "Content-Encoding", "value": "gzip" }
+      ]
+    },
+    {
       "source": "/(index.html|index.pck|index.js|index.wasm|index.audio.worklet.js|index.audio.position.worklet.js)",
       "headers": [
         {

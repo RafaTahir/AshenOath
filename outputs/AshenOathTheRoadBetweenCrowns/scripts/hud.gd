@@ -89,6 +89,7 @@ var reduced_motion := false
 var high_contrast := false
 var new_game_ready := true
 var new_game_status := "Greyfen is ready."
+var new_game_status_label: Label
 var hud_root: Control
 var tracker_back: Control
 var compass_back: Control
@@ -103,7 +104,7 @@ func _ready() -> void:
 	if not get_viewport().size_changed.is_connected(_on_viewport_resized):
 		get_viewport().size_changed.connect(_on_viewport_resized)
 	_apply_hud_layout()
-	set_process(true)
+	_update_process_policy()
 
 func _process(delta: float) -> void:
 	if health_bar == null:
@@ -112,12 +113,22 @@ func _process(delta: float) -> void:
 		loading_elapsed += delta
 		if loading_elapsed >= 0.75:
 			loading_layer.visible = true
+			_update_process_policy()
 	var health_ratio = last_health / max(last_health_max, 1.0)
 	if health_ratio <= 0.28 and not reduced_motion:
 		var pulse = 0.86 + 0.14 * sin(Time.get_ticks_msec() * 0.008)
 		health_bar.modulate = Color(1.0, pulse, pulse, 1.0)
-	else:
+	elif health_bar.modulate != Color.WHITE:
 		health_bar.modulate = Color.WHITE
+
+func _update_process_policy() -> void:
+	if health_bar == null:
+		return
+	var pulse_active := last_health / maxf(last_health_max, 1.0) <= 0.28 and not reduced_motion
+	var loading_delay_active := loading_armed and loading_layer != null and not loading_layer.visible
+	if not pulse_active and health_bar.modulate != Color.WHITE:
+		health_bar.modulate = Color.WHITE
+	set_process(pulse_active or loading_delay_active)
 
 func show_main_menu() -> void:
 	active_menu = "main"
@@ -125,32 +136,41 @@ func show_main_menu() -> void:
 	_set_ui_pointer("menu")
 	_clear_menu()
 	menu_layer.visible = true
-	var box = _menu_box("ASHEN OATH", "The Road Between Crowns", "contracts | curses | consequences")
+	var box = _menu_box("ASHEN OATH", "The Road Between Crowns", "contracts | curses | consequences", 680.0)
 	_add_menu_text(box, "Greyfen waits under ash and oath-light.")
 	_add_menu_button(box, "New Game", func(): new_game_requested.emit())
-	_add_menu_text(box, new_game_status)
+	new_game_status_label = _add_menu_text(box, new_game_status)
 	_add_menu_button(box, "Continue", func(): continue_requested.emit(), not _has_continue_save())
 	_add_menu_text(box, _save_status_text())
 	_add_menu_button(box, "Controls", func(): show_controls_menu("main"))
 	_add_menu_button(box, "Settings", func(): show_settings_menu("main"))
 	_add_menu_button(box, "Credits", func(): show_credits_menu())
 	_add_menu_button(box, "Quit", func(): quit_requested.emit())
-	_add_menu_button(box, "Return to Launch Screen", show_launch_screen)
 	call_deferred("_focus_first_enabled", menu_layer)
 
 func set_new_game_ready(value: bool) -> void:
 	if new_game_ready == value:
 		return
 	new_game_ready = value
-	if active_menu == "main":
-		show_main_menu()
 
 func set_new_game_status(text: String) -> void:
 	new_game_status = text.strip_edges()
 	if new_game_status == "":
 		new_game_status = "Greyfen is ready."
-	if active_menu == "main":
-		show_main_menu()
+	if active_menu == "main" and is_instance_valid(new_game_status_label):
+		new_game_status_label.text = new_game_status
+
+func set_boot_shell_cover_active(active: bool) -> void:
+	# The HTML Crow Flight shell can cover the canvas while Godot compiles the
+	# first real gameplay frame. Hide only the in-engine menu during that frame;
+	# the already-built menu is restored atomically when Greyfen is render-ready.
+	if menu_layer == null:
+		return
+	if active:
+		menu_layer.visible = false
+	elif active_menu == "main":
+		menu_layer.visible = true
+		call_deferred("_focus_first_enabled", menu_layer)
 
 func show_launch_screen() -> void:
 	active_menu = "launch"
@@ -158,7 +178,7 @@ func show_launch_screen() -> void:
 	_set_ui_pointer("menu")
 	_clear_menu()
 	menu_layer.visible = true
-	var box = _menu_box("ASHEN OATH", "The Road Between Crowns", "click to wake the road")
+	var box = _menu_box("ASHEN OATH", "The Road Between Crowns", "click to wake the road", 300.0)
 	_add_menu_text(box, "Click once to enable audio and mouse capture.")
 	_add_menu_button(box, "Enter", func():
 		launch_accepted.emit()
@@ -243,7 +263,7 @@ func show_controls_menu(back_target: String = "main") -> void:
 	menu_layer.visible = true
 	var box = _menu_box("Controls", "", "blade | breath | road")
 	if input_device == "gamepad":
-		_add_menu_text(box, "Left Stick move | Right Stick look | D-Pad Up/Down zoom\nL3 run | B dodge | Y sword | X bow\nRB light attack | RT heavy attack | LT aim/fire bow\nHold LT Oathfire Beam | Tap/Hold LB parry or block | A interact\nD-Pad Up cycle arrows | D-Pad Left potion | D-Pad Right bomb | View journal | Menu pause")
+		_add_menu_text(box, "Left Stick move | Right Stick look | D-Pad Up/Down zoom\nL3 run | B dodge | Y jump | X switch sword/bow\nRB light attack | RT heavy attack / fire bow | LT aim bow\nSword: hold LT Oathfire | Tap/Hold LB parry or block | A interact\nBow: D-Pad Up cycle arrows | D-Pad Left potion | D-Pad Right bomb | View journal | Menu pause")
 	elif input_device == "touch":
 		_add_menu_text(box, "Left thumb move | Drag right side to look\nStrike / Heavy attack | Dodge | Jump\nHold Guard to block or parry | Hold Oath to charge Oathfire\nUse interacts | Potion heals | Pause opens the menu\nLandscape orientation is required during gameplay")
 	else:
@@ -267,7 +287,9 @@ func show_remap_menu(back_target: String = "main", requested_page: int = -1) -> 
 		var profile: Dictionary = input_source.get_gamepad_profile() if input_source.has_method("get_gamepad_profile") else {}
 		detected = "Detected: %s (%s)" % [str(profile.get("name", "Controller")), str(profile.get("glyph_theme", "generic")).capitalize()]
 	_add_menu_text(box, detected)
-	var actions := ["interact", "dodge", "jump", "run", "block", "light_attack", "heavy_attack", "oathfire_beam", "use_potion", "throw_bomb", "open_inventory", "pause"]
+	var actions := ["interact", "dodge", "jump", "run", "block", "light_attack", "heavy_attack", "oathfire_beam", "use_potion", "throw_bomb", "open_inventory", "pause",
+		"move_forward", "move_back", "move_left", "move_right", "camera_left", "camera_right", "camera_up", "camera_down", "camera_zoom_in", "camera_zoom_out",
+		"weapon_cycle", "weapon_sword", "weapon_bow", "aim_bow", "fire_bow", "cycle_arrow", "target_lock", "target_next", "target_previous"]
 	var page_count := maxi(1, ceili(float(actions.size()) / 6.0))
 	remap_page = clampi(remap_page, 0, page_count - 1)
 	_add_menu_text(box, "Page %d of %d" % [remap_page + 1, page_count])
@@ -287,6 +309,7 @@ func show_remap_menu(back_target: String = "main", requested_page: int = -1) -> 
 func _begin_remap(action: String) -> void:
 	remap_action_id = action
 	remap_waiting = true
+	get_viewport().set_input_as_handled()
 	toast("Press a key, mouse button, or controller input for %s. Escape cancels." % action.replace("_", " "))
 
 func _reset_bindings() -> void:
@@ -317,6 +340,7 @@ func show_credits_menu() -> void:
 	menu_layer.visible = true
 	var box = _menu_box("Credits", "", "made under an ashen moon")
 	_add_menu_text(box, "Ashen Oath vertical slice.\nExternal art/audio/UI assets are tracked under assets_external/licenses.\nPublish public builds with those license notes included.")
+	_add_menu_text(box, "Yo Frankie! ambience by Blender Foundation (CC-BY 3.0).\nDark Ambience Loop by Iwan Gabovitch, qubodup.net (CC-BY 3.0).")
 	_add_menu_button(box, "Back", func(): show_main_menu())
 
 func show_exit_notice() -> void:
@@ -355,12 +379,14 @@ func arm_loading(text: String = "Following the road...") -> void:
 	if loading_message != null:
 		loading_message.text = text
 	loading_layer.visible = false
+	_update_process_policy()
 
 func hide_loading() -> void:
 	loading_armed = false
 	loading_elapsed = 0.0
 	if loading_layer != null:
 		loading_layer.visible = false
+	_update_process_policy()
 
 func _build_loading_layer() -> void:
 	loading_layer = Control.new()
@@ -394,13 +420,15 @@ func _set_internal_canvas(size: Vector2i) -> void:
 	var window := get_window()
 	if window == null:
 		return
-	# Resizing the Web render target between the 1080p menu layout and the
-	# native 720p gameplay canvas forces a synchronous ANGLE allocation during
-	# New Game. Keep one native Web viewport and let the responsive controls
-	# scale inside it; desktop retains the authored 1080p menu canvas.
-	var target_size := GAMEPLAY_SIZE if OS.has_feature("web") else size
-	if window.content_scale_size != target_size:
-		window.content_scale_size = target_size
+	# UI coordinates must not reallocate the shared 3D render target. Preserve
+	# the desktop's authored menu layout through its Control transform instead.
+	if window.content_scale_size != GAMEPLAY_SIZE:
+		window.content_scale_size = GAMEPLAY_SIZE
+	if menu_layer != null:
+		var layout_size := GAMEPLAY_SIZE if OS.has_feature("web") else size
+		menu_layer.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+		menu_layer.size = Vector2(layout_size)
+		menu_layer.scale = Vector2(GAMEPLAY_SIZE) / Vector2(layout_size)
 
 func update_health(current: float, maximum: float) -> void:
 	var previous = last_health
@@ -414,6 +442,7 @@ func update_health(current: float, maximum: float) -> void:
 		show_status_cue("Blood lost", "hurt")
 	elif current > previous:
 		_flash_bar(health_bar, Color(0.78, 0.24, 0.16))
+	_update_process_policy()
 
 func update_stamina(current: float, maximum: float) -> void:
 	var previous = last_stamina
@@ -464,16 +493,27 @@ func set_prompt(text: String) -> void:
 	elif clean.begins_with("E - "):
 		clean = "[E]  " + clean.trim_prefix("E - ")
 	prompt_label.text = clean
-	prompt_label.visible = raw_prompt != ""
+	prompt_label.visible = raw_prompt != "" and not dialogue_layer.visible
 
 func set_tracker(text: String) -> void:
 	tracker_label.text = _format_tracker_text(text)
+	_fit_tracker_height.call_deferred()
+
+func _fit_tracker_height() -> void:
+	if not is_instance_valid(tracker_label) or not is_instance_valid(tracker_back):
+		return
+	var text_height := tracker_label.get_line_count() * tracker_label.get_line_height()
+	tracker_label.size.y = maxf(56.0, float(text_height) + 16.0)
+	tracker_back.size.y = tracker_label.size.y + 14.0
+	for accent in tracker_back.get_children():
+		if accent is ColorRect:
+			accent.size.y = tracker_back.size.y
 
 func set_compass(text: String) -> void:
 	compass_label.text = text.replace(" | ", "   •   ")
 
 func toast(text: String) -> void:
-	if toasts_suppressed:
+	if toasts_suppressed or dialogue_layer.visible:
 		return
 	toast_label.text = text
 	toast_label.visible = true
@@ -552,6 +592,12 @@ func show_dialogue(data: Dictionary) -> void:
 	_set_ui_pointer("dialogue")
 	dialogue_closing = false
 	dialogue_layer.visible = true
+	prompt_label.visible = false
+	hint_label.visible = false
+	if toast_tween != null and toast_tween.is_running():
+		toast_tween.kill()
+	toast_label.visible = false
+	toast_label.modulate = Color(1, 1, 1, 1)
 	dialogue_session_data = data.duplicate(true)
 	dialogue_pages.clear()
 	for page in data.get("pages", []):
@@ -578,6 +624,7 @@ func _render_dialogue_page() -> void:
 		dialogue_page_label.text = "%02d / %02d" % [dialogue_page_index + 1, dialogue_pages.size()]
 	dialogue_page_changed.emit(page_speaker, page_speaker_id, dialogue_page_index, dialogue_pages.size())
 	for child in dialogue_actions.get_children():
+		dialogue_actions.remove_child(child)
 		child.queue_free()
 	if dialogue_page_index < dialogue_pages.size()-1:
 		var advance := Button.new()
@@ -591,7 +638,7 @@ func _render_dialogue_page() -> void:
 			_render_dialogue_page()
 		)
 		dialogue_actions.add_child(advance)
-		call_deferred("_focus_first_enabled", dialogue_actions)
+		_focus_after_rebuild(dialogue_actions)
 		return
 	var actions: Array = dialogue_session_data.get("actions",[])
 	for action in actions:
@@ -610,7 +657,7 @@ func _render_dialogue_page() -> void:
 		dialogue_actions.add_child(button)
 	if actions.is_empty():
 		_add_dialogue_close()
-	call_deferred("_focus_first_enabled", dialogue_actions)
+	_focus_after_rebuild(dialogue_actions)
 
 func show_inventory(inventory, quests, story_state = null, progression = null) -> void:
 	_set_ui_pointer("journal")
@@ -668,6 +715,7 @@ func show_inventory(inventory, quests, story_state = null, progression = null) -
 		text += "\n\nPROGRESSION\n%s" % progression.get_summary_text()
 	inventory_text.text = text
 	for child in craft_buttons.get_children():
+		craft_buttons.remove_child(child)
 		child.queue_free()
 	for id in inventory.ordered_item_ids():
 		var button = Button.new()
@@ -707,7 +755,7 @@ func show_inventory(inventory, quests, story_state = null, progression = null) -
 		hide_menus()
 	)
 	craft_buttons.add_child(close)
-	call_deferred("_focus_first_enabled", craft_buttons)
+	_focus_after_rebuild(craft_buttons)
 
 func show_vendor(vendor_id: String, vendor_service, inventory, quests = null, story_state = null) -> void:
 	_set_ui_pointer("journal")
@@ -727,6 +775,7 @@ func show_vendor(vendor_id: String, vendor_service, inventory, quests = null, st
 	text += "\nTor's reserve policy: returning to Greyfen with fewer than five arrows earns one free emergency bundle."
 	inventory_text.text = text
 	for child in craft_buttons.get_children():
+		craft_buttons.remove_child(child)
 		child.queue_free()
 	for entry in stock:
 		var item_id := str(entry.get("item_id", ""))
@@ -754,7 +803,7 @@ func show_vendor(vendor_id: String, vendor_service, inventory, quests = null, st
 		hide_menus()
 	)
 	craft_buttons.add_child(close)
-	call_deferred("_focus_first_enabled", craft_buttons)
+	_focus_after_rebuild(craft_buttons)
 
 func show_ending(title: String, body: String) -> void:
 	_set_ui_pointer("menu")
@@ -874,6 +923,7 @@ func _build_hud() -> void:
 	compass_back.position = Vector2(430, 14)
 	compass_back.size = Vector2(420, 26)
 	compass_back.color = Color(0.018, 0.016, 0.014, 0.46)
+	compass_back.visible = false
 	root.add_child(compass_back)
 	compass_label = Label.new()
 	compass_label.name = "LocationAndObjectiveCompass"
@@ -936,7 +986,7 @@ func _apply_hud_layout() -> void:
 	if toast_label != null:
 		toast_label.position = Vector2(22.0, maxf(viewport_size.y - 94.0, 170.0))
 	if dialogue_layer != null:
-		dialogue_layer.position = Vector2(maxf((viewport_size.x - 840.0) * 0.5, 20.0), maxf(viewport_size.y - 246.0, 110.0))
+		dialogue_layer.position = Vector2(maxf((viewport_size.x - 840.0) * 0.5, 20.0), maxf(viewport_size.y - dialogue_layer.size.y - 34.0, 110.0))
 	if inventory_layer != null:
 		inventory_layer.position = Vector2(maxf((viewport_size.x - 996.0) * 0.5, 20.0), maxf((viewport_size.y - 584.0) * 0.5, 20.0))
 
@@ -955,6 +1005,7 @@ func _build_dialogue() -> void:
 	dialogue_layer.size = Vector2(840, 212)
 	dialogue_layer.visible = false
 	add_child(dialogue_layer)
+	dialogue_layer.resized.connect(_on_viewport_resized)
 	var box = VBoxContainer.new()
 	box.add_theme_constant_override("separation", 8)
 	dialogue_layer.add_child(box)
@@ -999,9 +1050,18 @@ func _build_inventory() -> void:
 	inventory_text = RichTextLabel.new()
 	inventory_text.custom_minimum_size = Vector2(560, 520)
 	columns.add_child(inventory_text)
+	var actions_scroll := ScrollContainer.new()
+	actions_scroll.name = "PreparationActionsScroll"
+	actions_scroll.custom_minimum_size = Vector2(320, 520)
+	actions_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	actions_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	actions_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	actions_scroll.follow_focus = true
+	columns.add_child(actions_scroll)
 	craft_buttons = VBoxContainer.new()
-	craft_buttons.custom_minimum_size = Vector2(320, 520)
-	columns.add_child(craft_buttons)
+	craft_buttons.custom_minimum_size = Vector2(320, 0)
+	craft_buttons.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	actions_scroll.add_child(craft_buttons)
 
 func _labeled_bar(label_text: String, bar: ProgressBar, value_label: Label) -> HBoxContainer:
 	var row = HBoxContainer.new()
@@ -1019,10 +1079,11 @@ func _labeled_bar(label_text: String, bar: ProgressBar, value_label: Label) -> H
 	return row
 
 func _clear_menu() -> void:
+	new_game_status_label = null
 	for child in menu_layer.get_children():
 		child.queue_free()
 
-func _menu_box(title: String, subtitle: String = "", omen_text: String = "") -> VBoxContainer:
+func _menu_box(title: String, subtitle: String = "", omen_text: String = "", height_limit: float = 760.0) -> VBoxContainer:
 	var viewport_size := _menu_viewport_size()
 	var compact := viewport_size.y <= 800.0 or viewport_size.x <= 1366.0
 	var horizontal_margin := clampf(viewport_size.x * 0.055, 24.0, 112.0)
@@ -1032,7 +1093,7 @@ func _menu_box(title: String, subtitle: String = "", omen_text: String = "") -> 
 	# Give ordinary menus enough vertical breathing room to show their full
 	# action list at 1080p. Long settings/remap pages still use the same
 	# container's scrollbar when the available viewport is shorter.
-	var panel_height := minf(760.0, maxf(260.0, viewport_size.y - vertical_margin * 2.0))
+	var panel_height := minf(height_limit, maxf(260.0, viewport_size.y - vertical_margin * 2.0))
 	var content_width := maxf(panel_width - 56.0, 320.0)
 	_build_menu_background()
 	var margin = MarginContainer.new()
@@ -1111,61 +1172,19 @@ func _menu_box(title: String, subtitle: String = "", omen_text: String = "") -> 
 	return box
 
 func _build_menu_background() -> void:
-	var viewport_size := _menu_viewport_size()
-	var width := viewport_size.x
-	var height := viewport_size.y
-	var base = ColorRect.new()
-	base.set_anchors_preset(Control.PRESET_FULL_RECT)
-	base.color = Color(0.006, 0.008, 0.010, 1.0)
-	menu_layer.add_child(base)
-	var moon = ColorRect.new()
-	moon.set_anchors_preset(Control.PRESET_FULL_RECT)
-	moon.color = Color(0.030, 0.045, 0.060, 0.72)
-	menu_layer.add_child(moon)
-	_add_menu_glow(Vector2(width * 0.18, height * 0.67), Vector2(width * 0.41, height * 0.22), Color(0.95, 0.44, 0.16, 0.20))
-	_add_menu_glow(Vector2(width * 0.66, height * 0.23), Vector2(width * 0.33, height * 0.17), Color(0.32, 0.44, 0.58, 0.18))
-	_add_menu_silhouette([
-		Vector2(0, height), Vector2(0, height * 0.66), Vector2(width * 0.09, height * 0.61),
-		Vector2(width * 0.16, height * 0.66), Vector2(width * 0.25, height * 0.58),
-		Vector2(width * 0.36, height * 0.65), Vector2(width * 0.49, height * 0.58),
-		Vector2(width * 0.64, height * 0.66), Vector2(width * 0.81, height * 0.60),
-		Vector2(width, height * 0.68), Vector2(width, height)
-	], Color(0.010, 0.014, 0.014, 0.94))
-	_add_menu_silhouette([
-		Vector2(0, height), Vector2(0, height * 0.81), Vector2(width * 0.15, height * 0.77),
-		Vector2(width * 0.31, height * 0.82), Vector2(width * 0.50, height * 0.75),
-		Vector2(width * 0.70, height * 0.81), Vector2(width, height * 0.76), Vector2(width, height)
-	], Color(0.018, 0.020, 0.018, 0.98))
-	for i in range(38):
-		_add_ash_particle(i)
-
-func _add_menu_glow(pos: Vector2, size: Vector2, color: Color) -> void:
-	for i in range(4):
-		var glow = ColorRect.new()
-		glow.position = pos - size * (0.5 + float(i) * 0.16)
-		glow.size = size * (1.0 + float(i) * 0.32)
-		glow.color = Color(color.r, color.g, color.b, color.a / float(i + 1))
-		menu_layer.add_child(glow)
-
-func _add_menu_silhouette(points: PackedVector2Array, color: Color) -> void:
-	var poly = Polygon2D.new()
-	poly.polygon = points
-	poly.color = color
-	menu_layer.add_child(poly)
-
-func _add_ash_particle(index: int) -> void:
-	var ash = ColorRect.new()
-	var viewport_size := _menu_viewport_size()
-	var x = fmod(float(index * 127), maxf(viewport_size.x - 32.0, 1.0)) + 16.0
-	var y = fmod(float(index * 73), maxf(viewport_size.y - 28.0, 1.0)) + 14.0
-	ash.position = Vector2(x, y)
-	ash.size = Vector2(2.0 + float(index % 3), 2.0 + float((index + 1) % 3))
-	ash.color = Color(0.72, 0.64, 0.48, 0.18)
-	menu_layer.add_child(ash)
-	var tween = create_tween()
-	tween.tween_property(ash, "position", ash.position + Vector2(24.0 + float(index % 5) * 5.0, -34.0), 5.0 + float(index % 7) * 0.45)
-	tween.parallel().tween_property(ash, "modulate:a", 0.28, 2.0)
-	tween.tween_property(ash, "modulate:a", 0.08, 1.4)
+	var backdrop := TextureRect.new()
+	backdrop.name = "GreyfenMenuBackdrop"
+	backdrop.set_anchors_preset(Control.PRESET_FULL_RECT)
+	backdrop.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	backdrop.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	backdrop.texture = preload("res://assets_external/ui/greyfen_menu_runtime.jpg")
+	backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	menu_layer.add_child(backdrop)
+	var shade := ColorRect.new()
+	shade.set_anchors_preset(Control.PRESET_FULL_RECT)
+	shade.color = Color(0.01, 0.015, 0.018, 0.28)
+	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	menu_layer.add_child(shade)
 
 func _add_menu_button(box: VBoxContainer, text: String, callback: Callable, disabled: bool = false) -> void:
 	var is_first_button := true
@@ -1200,7 +1219,7 @@ func _add_menu_button(box: VBoxContainer, text: String, callback: Callable, disa
 	if is_first_button and not disabled:
 		button.call_deferred("grab_focus")
 
-func _add_menu_text(box: VBoxContainer, text: String) -> void:
+func _add_menu_text(box: VBoxContainer, text: String) -> Label:
 	var label = Label.new()
 	label.text = text
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -1210,8 +1229,11 @@ func _add_menu_text(box: VBoxContainer, text: String) -> void:
 	label.add_theme_color_override("font_color", Color(0.72, 0.66, 0.54))
 	label.add_theme_font_size_override("font_size", 16 if bool(box.get_meta("compact_buttons", false)) else 20)
 	box.add_child(label)
+	return label
 
 func _menu_viewport_size() -> Vector2:
+	if menu_layer != null and menu_layer.size.x >= 320.0 and menu_layer.size.y >= 240.0:
+		return menu_layer.size
 	if get_viewport() == null:
 		return MENU_SIZE
 	var size := get_viewport().get_visible_rect().size
@@ -1230,7 +1252,7 @@ func set_input_source(source: Node) -> void:
 
 func set_gamepad_profile(profile: Dictionary) -> void:
 	gamepad_profile = profile.duplicate(true)
-	if input_device == "gamepad" and active_menu in ["controls", "remap"]:
+	if input_device == "gamepad" and active_menu in ["controls", "remap"] and not remap_waiting:
 		if active_menu == "controls":
 			show_controls_menu(controls_back_target)
 		else:
@@ -1262,8 +1284,9 @@ func apply_accessibility(current: Dictionary) -> void:
 	for label in [tracker_label, compass_label, prompt_label, hint_label, toast_label]:
 		if label == null:
 			continue
-		label.add_theme_constant_override("outline_size", 5 if high_contrast else 2)
+		label.add_theme_constant_override("outline_size", 5 if high_contrast else (4 if label == compass_label else 2))
 		label.add_theme_color_override("font_outline_color", Color.BLACK if high_contrast else Color(0.01, 0.01, 0.01, 0.78))
+	_update_process_policy()
 
 func set_input_device(device: String) -> void:
 	input_device = device if device in ["keyboard_mouse", "gamepad", "touch"] else "keyboard_mouse"
@@ -1271,7 +1294,7 @@ func set_input_device(device: String) -> void:
 		set_prompt(raw_prompt)
 	if raw_hint != "":
 		hint_label.text = _format_input_text(raw_hint)
-	update_equipment(last_potions, last_bombs, last_oil_name)
+	update_equipment(last_potions, last_bombs, last_oil_name, last_arrow_count, last_arrow_type)
 
 func _action_label(action: String) -> String:
 	if input_source != null and input_source.has_method("action_label"):
@@ -1318,6 +1341,10 @@ func _controller_sensitivity_label(value: float) -> String:
 		return "High"
 	return "Medium"
 
+func _focus_after_rebuild(container: Node) -> void:
+	await get_tree().process_frame
+	_focus_first_enabled(container)
+
 func _focus_first_enabled(container: Node) -> void:
 	if container == null or not is_instance_valid(container):
 		return
@@ -1330,9 +1357,28 @@ func _focus_first_enabled(container: Node) -> void:
 			return
 
 func _input(event: InputEvent) -> void:
+	if _capture_remap_input(event):
+		return
 	if dialogue_layer == null or not dialogue_layer.visible:
 		return
+	if event is InputEventKey:
+		var navigation_key := event as InputEventKey
+		var navigation_code := navigation_key.keycode if navigation_key.keycode != KEY_NONE else navigation_key.physical_keycode
+		if navigation_key.pressed and not navigation_key.echo and navigation_code in [KEY_TAB, KEY_UP, KEY_DOWN]:
+			var buttons: Array[Button] = []
+			for child in dialogue_actions.get_children():
+				if child is Button and not child.is_queued_for_deletion() and not child.disabled:
+					buttons.append(child)
+			if buttons.size() > 1:
+				var focused_button := get_viewport().gui_get_focus_owner()
+				var current_index := buttons.find(focused_button)
+				var direction := -1 if navigation_code == KEY_UP or (navigation_code == KEY_TAB and navigation_key.shift_pressed) else 1
+				var next_index := posmod(current_index + direction, buttons.size())
+				get_viewport().set_input_as_handled()
+				buttons[next_index].grab_focus()
+				return
 	var accepted := event.is_action_pressed("ui_accept")
+	var pointer_button: Button
 	if event is InputEventKey:
 		var key_event := event as InputEventKey
 		# Browser backends can populate either the logical or physical key field.
@@ -1344,16 +1390,17 @@ func _input(event: InputEvent) -> void:
 	elif event is InputEventMouseButton:
 		var mouse_event := event as InputEventMouseButton
 		if mouse_event.pressed and mouse_event.button_index == MOUSE_BUTTON_LEFT and dialogue_actions != null:
-			# Paused Web frames can drop the release half of a pointer click. Dialogue
-			# buttons use press activation, so mirror that contract at the HUD root
-			# only when the child hit test is unavailable. Handling press only keeps a
-			# normal press/release pair from advancing twice.
-			var inside_actions := dialogue_actions.get_global_rect().has_point(mouse_event.position)
-			accepted = inside_actions or (OS.has_feature("web") and dialogue_actions.get_child_count() == 1)
+			# Press activation remains reliable on paused Web frames, but the
+			# pointer's actual button must win over unrelated keyboard focus.
+			for child in dialogue_actions.get_children():
+				if child is Button and not child.is_queued_for_deletion() and not child.disabled and child.get_global_rect().has_point(mouse_event.position):
+					pointer_button = child
+					break
+			accepted = pointer_button != null
 	if not accepted:
 		return
-	var focused := get_viewport().gui_get_focus_owner()
-	if not (focused is Button) or (focused as Button).disabled:
+	var focused := pointer_button if pointer_button != null else get_viewport().gui_get_focus_owner()
+	if not (focused is Button) or (focused as Button).disabled or not dialogue_actions.is_ancestor_of(focused):
 		var fallback_button := _focused_dialogue_button()
 		if fallback_button != null:
 			fallback_button.grab_focus()
@@ -1362,13 +1409,14 @@ func _input(event: InputEvent) -> void:
 		(focused as Button).pressed.emit()
 		get_viewport().set_input_as_handled()
 
-func _unhandled_input(event: InputEvent) -> void:
+func _capture_remap_input(event: InputEvent) -> bool:
+	# Capture before GUI navigation consumes arrows, accept keys or clicks.
 	if active_menu == "remap" and remap_waiting:
 		if event.is_action_pressed("ui_cancel"):
 			remap_waiting = false
 			toast("Binding cancelled.")
 			get_viewport().set_input_as_handled()
-			return
+			return true
 		var is_binding_event := event is InputEventKey or event is InputEventMouseButton or event is InputEventJoypadButton or event is InputEventJoypadMotion
 		var pressed := true
 		if event is InputEventKey:
@@ -1389,7 +1437,10 @@ func _unhandled_input(event: InputEvent) -> void:
 				toast("That input cannot be assigned.")
 			show_remap_menu(remap_back_target, remap_page)
 			get_viewport().set_input_as_handled()
-			return
+			return true
+	return false
+
+func _unhandled_input(event: InputEvent) -> void:
 	if dialogue_layer != null and dialogue_layer.visible and event.is_action_pressed("ui_accept"):
 		return
 	if not event.is_action_pressed("ui_cancel"):

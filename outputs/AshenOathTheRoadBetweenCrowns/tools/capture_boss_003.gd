@@ -16,7 +16,13 @@ func _initialize() -> void:
 	await _frames(2)
 	game.settings.set_quality_preset("balanced")
 	game.call("_new_game")
-	await _frames(45)
+	var ready_deadline := Time.get_ticks_msec() + 60000
+	while (not game.game_started or game.paused_by_menu or game.player == null or not game.player.can_control or str(game.current_zone_id) != "greyfen" or game.opening_detail_pending or game.zone_transition_pending) and Time.get_ticks_msec() < ready_deadline:
+		await process_frame
+	if not game.game_started or game.paused_by_menu or game.player == null or not game.player.can_control or game.opening_detail_pending or game.zone_transition_pending:
+		push_error("Bell-Eater capture did not reach playable Greyfen")
+		quit(1)
+		return
 	var quest_id := "main_bell_beneath_greyfen"
 	if not game.quests.is_active(quest_id):
 		game.quests.unlocked[quest_id] = true
@@ -32,18 +38,23 @@ func _initialize() -> void:
 		failures += 1
 		push_error("Bell-Eater was not available for capture")
 	else:
+		game.process_mode = Node.PROCESS_MODE_PAUSABLE
+		paused = true
 		boss.set_physics_process(false)
-		await _capture(game, boss, "BOSS-003_01_BellEater_Harnessed", Vector3(11.5, 1.0, 8.8), -1.57)
+		boss.global_position = _floor_position(game, boss, boss.global_position)
+		await _capture(game, boss, "BOSS-003_01_BellEater_Harnessed", Vector3(10.0, 1.0, 12.6), 0.0)
 		boss.apply_damage(boss.health_component.max_health * 0.40, "capture")
 		await _frames(16)
 		boss.look_at(game.player.global_position + Vector3.UP * 0.9, Vector3.UP)
-		await _capture(game, boss, "BOSS-003_02_BellEater_Unchained", Vector3(11.5, 1.0, 8.8), -1.57)
+		await _capture(game, boss, "BOSS-003_02_BellEater_Unchained", Vector3(10.0, 1.0, 12.6), 0.0)
 		boss.apply_damage(boss.health_component.max_health * 0.30, "capture")
 		await _frames(16)
 		boss.look_at(game.player.global_position + Vector3.UP * 0.9, Vector3.UP)
-		await _capture(game, boss, "BOSS-003_03_BellEater_HollowBell", Vector3(11.5, 1.0, 8.8), -1.57)
+		await _capture(game, boss, "BOSS-003_03_BellEater_HollowBell", Vector3(10.0, 1.0, 12.6), 0.0)
 	print("BOSS-003 SCREENSHOTS: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
 	if game.has_method("prepare_resource_shutdown"):
+		paused = false
+		game.process_mode = Node.PROCESS_MODE_ALWAYS
 		game.prepare_resource_shutdown()
 		await _frames(int(game.ZONE_RETIRE_FRAMES) + 4)
 	game.queue_free()
@@ -57,11 +68,16 @@ func _find_boss(game: Node, id: String) -> Node:
 	return null
 
 func _capture(game: Node, boss: Node, stem: String, position: Vector3, yaw: float) -> void:
-	game.player.global_position = position
+	paused = false
+	game.player.global_position = _floor_position(game, boss, position)
 	game.player.velocity = Vector3.ZERO
-	boss.look_at(game.player.global_position + Vector3.UP * 0.9, Vector3.UP)
+	boss.look_at(Vector3(game.player.global_position.x, boss.global_position.y, game.player.global_position.z), Vector3.UP)
 	game.camera_rig.yaw = yaw
 	game.camera_rig.pitch = -0.14
+	game.camera_rig._initialized = false
+	game.camera_rig._process(1.0 / 60.0)
+	game.camera_rig.camera.make_current()
+	paused = true
 	game.hud.set_guidance_hint("")
 	game.set_process(false)
 	await _frames(34)
@@ -94,6 +110,16 @@ func _capture(game: Node, boss: Node, stem: String, position: Vector3, yaw: floa
 	var path := "%s/%s_%s.png" % [OUTPUT_DIR, stem, timestamp]
 	image.save_png(ProjectSettings.globalize_path(path))
 	print("CAPTURED %s" % path)
+
+func _floor_position(game: Node, boss: Node, position: Vector3) -> Vector3:
+	var query := PhysicsRayQueryParameters3D.create(Vector3(position.x, 5, position.z), Vector3(position.x, -3, position.z), 1)
+	query.exclude = [game.player.get_rid(), boss.get_rid()]
+	var hit: Dictionary = game.player.get_world_3d().direct_space_state.intersect_ray(query)
+	if hit.is_empty():
+		failures += 1
+		push_error("Bell-Eater capture has no physical support at %s" % position)
+		return position
+	return (hit.position as Vector3) + Vector3.UP * 0.03
 
 func _frames(count: int) -> void:
 	for _index in range(count):

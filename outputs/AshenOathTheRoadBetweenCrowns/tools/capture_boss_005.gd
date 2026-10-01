@@ -27,26 +27,33 @@ func _initialize() -> void:
 	game.story_state.set_flag("ashwing_defeated", false)
 	game.call("_load_zone", "old_mill", Vector3(0, 0, 12))
 	await _frames(16)
+	var deadline := Time.get_ticks_msec() + 30000
+	while game.zone_transition_pending and Time.get_ticks_msec() < deadline:
+		await process_frame
 	var boss = _find_boss(game, "ashwing")
 	if boss == null:
 		failures += 1
 		push_error("Ashwing was not available for capture")
 	else:
+		game.process_mode = Node.PROCESS_MODE_PAUSABLE
+		paused = true
 		boss.set_physics_process(false)
-		game.player.global_position = Vector3(0, 1.0, -6.4)
+		game.player.global_position = Vector3(5.0, 1.0, -2.4)
 		game.player.velocity = Vector3.ZERO
-		boss.global_position = Vector3(0, 1.0, -9.0)
-		await _capture(game, boss, "BOSS-005_01_Ashwing_Perceived", Vector3(0, 1.0, -6.4), 0.0)
+		boss.global_position = _floor_position(game, boss, Vector3(5.0, 0, -6.5))
+		await _capture(game, boss, "BOSS-005_01_Ashwing_Perceived", Vector3(5.0, 1.0, -2.4), 0.0)
 		boss.apply_damage(boss.health_component.max_health * 0.40, "capture")
 		await _frames(16)
 		boss.look_at(game.player.global_position + Vector3.UP * 0.9, Vector3.UP)
-		await _capture(game, boss, "BOSS-005_02_Ashwing_Scorched", Vector3(0, 1.0, -6.4), 0.0)
+		await _capture(game, boss, "BOSS-005_02_Ashwing_Scorched", Vector3(5.0, 1.0, -2.4), 0.0)
 		boss.apply_damage(boss.health_component.max_health * 0.30, "capture")
 		await _frames(16)
 		boss.look_at(game.player.global_position + Vector3.UP * 0.9, Vector3.UP)
-		await _capture(game, boss, "BOSS-005_03_Ashwing_BreakingPerch", Vector3(0, 1.0, -6.4), 0.0)
+		await _capture(game, boss, "BOSS-005_03_Ashwing_BreakingPerch", Vector3(5.0, 1.0, -2.4), 0.0)
 	print("BOSS-005 SCREENSHOTS: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
 	if game.has_method("prepare_resource_shutdown"):
+		paused = false
+		game.process_mode = Node.PROCESS_MODE_ALWAYS
 		game.prepare_resource_shutdown()
 		await _frames(int(game.ZONE_RETIRE_FRAMES) + 4)
 	game.queue_free()
@@ -60,11 +67,21 @@ func _find_boss(game: Node, id: String) -> Node:
 	return null
 
 func _capture(game: Node, boss: Node, stem: String, position: Vector3, yaw: float) -> void:
-	game.player.global_position = position
+	paused = false
+	game.player.global_position = _floor_position(game, boss, position)
 	game.player.velocity = Vector3.ZERO
-	boss.look_at(game.player.global_position + Vector3.UP * 0.9, Vector3.UP)
+	boss.look_at(Vector3(game.player.global_position.x, boss.global_position.y, game.player.global_position.z), Vector3.UP)
+	game.player.reset_physics_interpolation()
+	boss.reset_physics_interpolation()
 	game.camera_rig.yaw = yaw
 	game.camera_rig.pitch = -0.14
+	game.camera_rig._initialized = false
+	game.camera_rig._collision_refresh = 0.0
+	game.camera_rig._process(1.0 / 60.0)
+	game.camera_rig.camera.make_current()
+	game.camera_rig.reset_physics_interpolation()
+	game.camera_rig.camera.reset_physics_interpolation()
+	paused = true
 	game.hud.set_guidance_hint("")
 	game.set_process(false)
 	game.active_interactable = null
@@ -95,6 +112,16 @@ func _capture(game: Node, boss: Node, stem: String, position: Vector3, yaw: floa
 	var path := "%s/%s_%s.png" % [OUTPUT_DIR, stem, timestamp]
 	image.save_png(ProjectSettings.globalize_path(path))
 	print("CAPTURED %s" % path)
+
+func _floor_position(game: Node, boss: Node, position: Vector3) -> Vector3:
+	var query := PhysicsRayQueryParameters3D.create(Vector3(position.x, 6, position.z), Vector3(position.x, -3, position.z), 1)
+	query.exclude = [game.player.get_rid(), boss.get_rid()]
+	var hit: Dictionary = game.player.get_world_3d().direct_space_state.intersect_ray(query)
+	if hit.is_empty():
+		failures += 1
+		push_error("Ashwing capture has no physical support at %s" % position)
+		return position
+	return (hit.position as Vector3) + Vector3.UP * 0.03
 
 func _frames(count: int) -> void:
 	for _index in range(count):

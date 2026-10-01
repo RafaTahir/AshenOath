@@ -1,6 +1,6 @@
 extends SceneTree
 
-const OUTPUT_DIR := "res://Development_Gallery/screenshots"
+var output_dir := "res://Development_Gallery/screenshots"
 var failures := 0
 var timestamp := ""
 
@@ -9,8 +9,11 @@ func _initialize() -> void:
 		push_error("WORLD-001 capture requires a graphical renderer")
 		quit(1)
 		return
+	for argument in OS.get_cmdline_user_args():
+		if argument.begins_with("--candidate-dir=res://.release-gate/"):
+			output_dir = argument.trim_prefix("--candidate-dir=")
 	timestamp = Time.get_datetime_string_from_system().replace(":", "").replace("-", "").replace("T", "_")
-	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(OUTPUT_DIR))
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(output_dir))
 	var scene := load("res://scenes/main.tscn") as PackedScene
 	if scene == null:
 		push_error("Main scene unavailable")
@@ -22,6 +25,10 @@ func _initialize() -> void:
 	game.settings.set_quality_preset("balanced")
 	game.call("_new_game")
 	await _frames(10)
+	if not await _wait_for_opening_details(game):
+		await _release_game(game)
+		quit(1)
+		return
 	await _capture(game, "WORLD_001_01_SpawnStreet", Vector3(0, 1, 7), 0.0)
 	await _capture(game, "WORLD_001_02_VillageCentre", Vector3(-2, 1, 5), -0.18)
 	await _capture(game, "WORLD_001_03_ShrineQuarter", Vector3(2.0, 1, -6.0), 0.55)
@@ -33,6 +40,9 @@ func _initialize() -> void:
 func _capture(game, stem: String, position: Vector3, yaw: float) -> void:
 	game.call("_load_zone", "greyfen", position)
 	await _frames(5)
+	if not await _wait_for_opening_details(game):
+		failures += 1
+		return
 	game.player.global_position = position
 	game.player.velocity = Vector3.ZERO
 	game.camera_rig.yaw = yaw
@@ -57,9 +67,18 @@ func _capture(game, stem: String, position: Vector3, yaw: float) -> void:
 		failures += 1
 		push_error("Blank WORLD-001 frame: %s" % stem)
 		return
-	var path := "%s/%s_%s.png" % [OUTPUT_DIR, stem, timestamp]
+	var path := "%s/%s_%s.png" % [output_dir, stem, timestamp]
 	image.save_png(ProjectSettings.globalize_path(path))
 	print("CAPTURED %s" % path)
+
+func _wait_for_opening_details(game: Node) -> bool:
+	var deadline := Time.get_ticks_msec() + 30000
+	while Time.get_ticks_msec() < deadline:
+		if game.zone_root != null and not bool(game.opening_detail_pending) and bool(game.zone_root.get_meta("opening_detail_complete", false)):
+			return true
+		await process_frame
+	push_error("Greyfen dressing did not finish before WORLD-001 capture")
+	return false
 
 func _frames(count: int) -> void:
 	for _index in range(count):

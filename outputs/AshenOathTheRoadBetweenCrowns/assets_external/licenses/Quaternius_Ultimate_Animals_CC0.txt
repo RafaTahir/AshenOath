@@ -1,0 +1,17 @@
+Quaternius Ultimate Animated Animal Pack, July 2021
+https://quaternius.com/packs/ultimateanimatedanimals.html
+License: CC0 1.0 Universal Public Domain Dedication
+https://creativecommons.org/publicdomain/zero/1.0/
+
+Creator-linked public folder: 1uJ3N5HfB7jKTseJUNQr3N4YaN0UuEtHk
+Stag.gltf file: 1URNoFeIFblJXPFOV6qwPrxZr5dLZ3YGx
+License.txt file: 1F2uy8T2fRpdc6gZ4mnS02_C2E63WvKtn
+Retrieved 2026-09-16. Creator page and accompanying file both identify CC0.
+
+Original Stag.gltf SHA-256:
+170b964909d16d1ab4d428b1d714f25016913d32481acd9c3d62923192583be6
+
+Ashen Oath variant: WhiteHart_Stag.glb
+Material palette changed to pale coat, dark hooves/eyes, restrained antler emission.
+Mesh, skeleton, animation buffers and source proportions unchanged.
+Generated deterministically by tools/build_white_hart.py.

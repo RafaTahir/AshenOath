@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "capture_source_revision": "801d890",
+  "capture_source_revision": "5b530361a5aae8612626532287b5bd27d7b244b8",
   "runtime_source_roots": [
     "scripts",
     "scenes",
@@ -9,131 +9,1528 @@
   ],
   "policy": {
     "ordinary_ticket_allows_pending": true,
-    "milestone_requires_approval": false,
+    "milestone_requires_approval": true,
     "visual_review": "codex",
-    "review_authority": "Codex screenshot inspection plus automated pixel, dimension, exposure, freshness, and route checks"
+    "review_authority": "Codex screenshot inspection plus automated pixel, dimension, exposure, freshness, and route checks",
+    "approval_binding": "approved_sha256 plus PNG.capture.json binding exact image bytes to capture-time source/assets; historic unbound approvals are not release evidence",
+    "semantic_review": "Codex must inspect and record verdict/note for anatomy, grounding, scale, materials, composition, route_clearance and role_identity; capture provenance never grants approval"
   },
   "views": [
     {
       "id": "greyfen_spawn",
       "required": true,
       "current_glob": "Capture_01_greyfen_spawn_*.png",
-      "expected_size": [1280, 720],
+      "expected_size": [
+        1280,
+        720
+      ],
       "status": "approved",
       "reviewer": "Codex",
-      "note": "Codex review 2026-08-11: current 1280x720 frame is nonblank, exposed, grounded, and the Greyfen bridge route is readable. Stylized low-poly architecture remains a known quality limitation.",
-      "heuristics": { "min_mean_luminance": 1.5, "min_channel_variance": 4.0, "max_bright_ratio": 0.985 },
-      "baseline": { "path": "", "status": "not_set", "max_mean_absolute_difference": null }
+      "note": "Codex directly inspected all eleven 2026-10-01_235123 frames after the preparation repair. Existing finite anatomy, grounding, scale, material, composition, route and identity checks remain satisfied at these cameras. Heavy-blade occlusion and peripheral Record Hall crop remain scoped limitations. Staged captures are not campaign, ending, auditory or numerical-performance certification.",
+      "heuristics": {
+        "min_mean_luminance": 1.5,
+        "min_channel_variance": 4,
+        "max_bright_ratio": 0.985
+      },
+      "baseline": {
+        "path": "",
+        "status": "not_set",
+        "max_mean_absolute_difference": null
+      },
+      "historical_review": {
+        "status": "approved",
+        "reviewer": "Codex",
+        "note": "Codex review 2026-08-11: current 1280x720 frame is nonblank, exposed, grounded, and the Greyfen bridge route is readable. Stylized low-poly architecture remains a known quality limitation."
+      },
+      "reviewed_image": "Capture_01_greyfen_spawn_2026-10-01_235123.png",
+      "reviewed_sha256": "91189e0d1e4de57fb77c3e946c60bcbf36c2c118bc8a70cfc152b48d17541f6d",
+      "review_checks": {
+        "anatomy": {
+          "verdict": "accepted",
+          "note": "Kael's native head, torso and limbs are connected; distance does not certify detailed facial anatomy."
+        },
+        "grounding": {
+          "verdict": "accepted",
+          "note": "Boot contact and fitted roadside supplies are visible; the former unsupported notice papers and proxy capsules are absent."
+        },
+        "scale": {
+          "verdict": "accepted",
+          "note": "Player, villagers, bridge and frontages have coherent relative scale."
+        },
+        "materials": {
+          "verdict": "accepted",
+          "note": "Textured roofs, paving, timber and banks share the retained stylized palette without blank fallback surfaces."
+        },
+        "composition": {
+          "verdict": "accepted",
+          "note": "The bridge approach, village frontages and adjoining tree/hill horizon form a continuous readable scene."
+        },
+        "route_clearance": {
+          "verdict": "accepted",
+          "note": "The central road and bridge approach are visibly open; physical passage is certified separately."
+        },
+        "role_identity": {
+          "verdict": "accepted",
+          "note": "Kael's hunter layers and complete village humanoid family are visible; this is not a named-portrait approval."
+        }
+      },
+      "review_history": [
+        {
+          "status": "rejected",
+          "reviewer": "Codex",
+          "note": "Codex inspection 2026-09-27: Disconnected-looking foreground market pieces, noisy earth and weak horizons remain.",
+          "reviewed_image": "Capture_01_greyfen_spawn_2026-09-27_171838.png",
+          "reviewed_sha256": "54b0d21b969ac70ef0ff6937da55a34744eb0395d2d1ed4c7738dc27444d2562",
+          "review_checks": {
+            "anatomy": {
+              "verdict": "accepted",
+              "note": "Visible Kael torso and limbs are connected; this distance does not certify detailed facial anatomy."
+            },
+            "grounding": {
+              "verdict": "accepted",
+              "note": "Kael's boots meet the deck."
+            },
+            "scale": {
+              "verdict": "accepted",
+              "note": "Kael and distant villagers have plausible relative heights."
+            },
+            "materials": {
+              "verdict": "rejected",
+              "note": "Textured roofs/plaster exist, but ground noise and flat water fail the intended finish."
+            },
+            "composition": {
+              "verdict": "rejected",
+              "note": "Disconnected-looking foreground market pieces, noisy earth and weak horizons remain."
+            },
+            "route_clearance": {
+              "verdict": "accepted",
+              "note": "An approach lane is visible; this staged frame does not certify physical traversal."
+            },
+            "role_identity": {
+              "verdict": "accepted",
+              "note": "Kael's hunter outfit is present; named faces are too distant to certify."
+            }
+          }
+        },
+        {
+          "status": "approved",
+          "reviewer": "Codex",
+          "note": "Codex inspection 2026-10-01: current 1280x720 source-bound frame satisfies the retained finite visual contract. Approval is limited to this camera/state; real-input route, persistence and performance certification remain separate.",
+          "reviewed_image": "Capture_01_greyfen_spawn_2026-10-01_202939.png",
+          "reviewed_sha256": "ea547208b162dc825cd96ae4dc812e9ca7d5f59659ba9731d35153ae78f3e5e8",
+          "review_checks": {
+            "anatomy": {
+              "verdict": "accepted",
+              "note": "Kael's native head, torso and limbs are connected; distance does not certify detailed facial anatomy."
+            },
+            "grounding": {
+              "verdict": "accepted",
+              "note": "Boot contact and fitted roadside supplies are visible; the former unsupported notice papers and proxy capsules are absent."
+            },
+            "scale": {
+              "verdict": "accepted",
+              "note": "Player, villagers, bridge and frontages have coherent relative scale."
+            },
+            "materials": {
+              "verdict": "accepted",
+              "note": "Textured roofs, paving, timber and banks share the retained stylized palette without blank fallback surfaces."
+            },
+            "composition": {
+              "verdict": "accepted",
+              "note": "The bridge approach, village frontages and adjoining tree/hill horizon form a continuous readable scene."
+            },
+            "route_clearance": {
+              "verdict": "accepted",
+              "note": "The central road and bridge approach are visibly open; physical passage is certified separately."
+            },
+            "role_identity": {
+              "verdict": "accepted",
+              "note": "Kael's hunter layers and complete village humanoid family are visible; this is not a named-portrait approval."
+            }
+          }
+        }
+      ],
+      "approved_sha256": "91189e0d1e4de57fb77c3e946c60bcbf36c2c118bc8a70cfc152b48d17541f6d",
+      "reviewed_rendering_inputs_sha256": "33d5f0ee182543ceb50209e5b659a1fa7b3ca953aefd7b872d987c7b0e90d65d"
     },
     {
       "id": "anwen_dialogue",
       "required": true,
       "current_glob": "Capture_05_sister_anwen_dialogue_*.png",
-      "expected_size": [1280, 720],
+      "expected_size": [
+        1280,
+        720
+      ],
       "status": "approved",
       "reviewer": "Codex",
-      "note": "Codex review 2026-08-11: Anwen and Kael are both staged in the dialogue frame, the panel is readable, and the interaction state is clear. Character faces remain stylized rather than realistic.",
-      "heuristics": { "min_mean_luminance": 1.5, "min_channel_variance": 4.0, "max_bright_ratio": 0.985 },
-      "baseline": { "path": "", "status": "not_set", "max_mean_absolute_difference": null }
+      "note": "Codex directly inspected all eleven 2026-10-01_235123 frames after the preparation repair. Existing finite anatomy, grounding, scale, material, composition, route and identity checks remain satisfied at these cameras. Heavy-blade occlusion and peripheral Record Hall crop remain scoped limitations. Staged captures are not campaign, ending, auditory or numerical-performance certification.",
+      "heuristics": {
+        "min_mean_luminance": 1.5,
+        "min_channel_variance": 4,
+        "max_bright_ratio": 0.985
+      },
+      "baseline": {
+        "path": "",
+        "status": "not_set",
+        "max_mean_absolute_difference": null
+      },
+      "historical_review": {
+        "status": "approved",
+        "reviewer": "Codex",
+        "note": "Codex review 2026-08-11: Anwen and Kael are both staged in the dialogue frame, the panel is readable, and the interaction state is clear. Character faces remain stylized rather than realistic."
+      },
+      "reviewed_image": "Capture_05_sister_anwen_dialogue_2026-10-01_235123.png",
+      "reviewed_sha256": "05a2e78d0e7dea3e81ba5896584c2905e252fe4e85477845a201c4e35b3ab068",
+      "review_checks": {
+        "anatomy": {
+          "verdict": "accepted",
+          "note": "Anwen's grey-haired head, neck, robe and limbs are visible and connected; Kael is partly panel-occluded."
+        },
+        "grounding": {
+          "verdict": "accepted",
+          "note": "Anwen's boots are visible on the shrine approach; this conversation frame alone does not certify Kael's feet."
+        },
+        "scale": {
+          "verdict": "accepted",
+          "note": "Both speakers fit the shrine and each other in the shared humanoid proportion standard."
+        },
+        "materials": {
+          "verdict": "accepted",
+          "note": "Anwen's skin, hair and cleric layers are readable in the lit conversation frame."
+        },
+        "composition": {
+          "verdict": "accepted",
+          "note": "Anwen is no longer hidden behind Kael; the speaker and Continue panel are readable. Wychwood is contextual next-destination guidance, not a Greyfen zone-title claim."
+        },
+        "route_clearance": {
+          "verdict": "accepted",
+          "note": "Dialogue framing preserves the visible shrine approach; actual input and route clearance have separate evidence."
+        },
+        "role_identity": {
+          "verdict": "accepted",
+          "note": "Anwen is identifiable from grey hair, cleric outfit, held prayer/staff pose and speaker label."
+        }
+      },
+      "review_history": [
+        {
+          "status": "rejected",
+          "reviewer": "Codex",
+          "note": "Codex inspection 2026-09-27: Anwen is hidden behind Kael and the panel; Wychwood guidance contradicts staged Greyfen scenery.",
+          "reviewed_image": "Capture_05_sister_anwen_dialogue_2026-09-27_171838.png",
+          "reviewed_sha256": "68f5d26b8559d82ee59130f9a4db7c66c755226551cc0f70e5f44ffc43f2820c",
+          "review_checks": {
+            "anatomy": {
+              "verdict": "rejected",
+              "note": "Anwen is obscured; her head/body cannot be inspected."
+            },
+            "grounding": {
+              "verdict": "rejected",
+              "note": "Panel hides both speakers' foot contact."
+            },
+            "scale": {
+              "verdict": "rejected",
+              "note": "Kael fills foreground; Anwen's relative size is obscured."
+            },
+            "materials": {
+              "verdict": "rejected",
+              "note": "Buildings are textured; Anwen's facial material cannot be inspected."
+            },
+            "composition": {
+              "verdict": "rejected",
+              "note": "Anwen is hidden behind Kael and the panel; Wychwood guidance contradicts staged Greyfen scenery."
+            },
+            "route_clearance": {
+              "verdict": "rejected",
+              "note": "Dialogue panel hides the lower approach; no route-clearance approval."
+            },
+            "role_identity": {
+              "verdict": "rejected",
+              "note": "The panel names Anwen but the visible speaker is obscured."
+            }
+          }
+        },
+        {
+          "status": "approved",
+          "reviewer": "Codex",
+          "note": "Codex inspection 2026-10-01: current 1280x720 source-bound frame satisfies the retained finite visual contract. Approval is limited to this camera/state; real-input route, persistence and performance certification remain separate.",
+          "reviewed_image": "Capture_05_sister_anwen_dialogue_2026-10-01_202939.png",
+          "reviewed_sha256": "fc1daa6af38cf12226cdc7510b95904a1187fce9aa8cdd8c7f18e52e84b9f96b",
+          "review_checks": {
+            "anatomy": {
+              "verdict": "accepted",
+              "note": "Anwen's grey-haired head, neck, robe and limbs are visible and connected; Kael is partly panel-occluded."
+            },
+            "grounding": {
+              "verdict": "accepted",
+              "note": "Anwen's boots are visible on the shrine approach; this conversation frame alone does not certify Kael's feet."
+            },
+            "scale": {
+              "verdict": "accepted",
+              "note": "Both speakers fit the shrine and each other in the shared humanoid proportion standard."
+            },
+            "materials": {
+              "verdict": "accepted",
+              "note": "Anwen's skin, hair and cleric layers are readable in the lit conversation frame."
+            },
+            "composition": {
+              "verdict": "accepted",
+              "note": "Anwen is no longer hidden behind Kael; the speaker and Continue panel are readable. Wychwood is contextual next-destination guidance, not a Greyfen zone-title claim."
+            },
+            "route_clearance": {
+              "verdict": "accepted",
+              "note": "Dialogue framing preserves the visible shrine approach; actual input and route clearance have separate evidence."
+            },
+            "role_identity": {
+              "verdict": "accepted",
+              "note": "Anwen is identifiable from grey hair, cleric outfit, held prayer/staff pose and speaker label."
+            }
+          }
+        }
+      ],
+      "approved_sha256": "05a2e78d0e7dea3e81ba5896584c2905e252fe4e85477845a201c4e35b3ab068",
+      "reviewed_rendering_inputs_sha256": "33d5f0ee182543ceb50209e5b659a1fa7b3ca953aefd7b872d987c7b0e90d65d"
     },
     {
       "id": "greyfen_river_bridge",
       "required": true,
       "current_glob": "Capture_70_greyfen_river_bridge_*.png",
-      "expected_size": [1280, 720],
+      "expected_size": [
+        1280,
+        720
+      ],
       "status": "approved",
       "reviewer": "Codex",
-      "note": "Codex review 2026-08-11: bridge, banks, water channel, and crossing route are visible and unobstructed. Water and bank materials remain simplified.",
-      "heuristics": { "min_mean_luminance": 1.5, "min_channel_variance": 4.0, "max_bright_ratio": 0.985 },
-      "baseline": { "path": "", "status": "not_set", "max_mean_absolute_difference": null }
+      "note": "Codex directly inspected all eleven 2026-10-01_235123 frames after the preparation repair. Existing finite anatomy, grounding, scale, material, composition, route and identity checks remain satisfied at these cameras. Heavy-blade occlusion and peripheral Record Hall crop remain scoped limitations. Staged captures are not campaign, ending, auditory or numerical-performance certification.",
+      "heuristics": {
+        "min_mean_luminance": 1.5,
+        "min_channel_variance": 4,
+        "max_bright_ratio": 0.985
+      },
+      "baseline": {
+        "path": "",
+        "status": "not_set",
+        "max_mean_absolute_difference": null
+      },
+      "historical_review": {
+        "status": "approved",
+        "reviewer": "Codex",
+        "note": "Codex review 2026-08-11: bridge, banks, water channel, and crossing route are visible and unobstructed. Water and bank materials remain simplified."
+      },
+      "reviewed_image": "Capture_70_greyfen_river_bridge_2026-10-01_235123.png",
+      "reviewed_sha256": "c38be41a940753c1bf0bf35476df695b09ed0eb181669486a6c8c6fd8483c03d",
+      "review_checks": {
+        "anatomy": {
+          "verdict": "accepted",
+          "note": "Visible Kael head, torso and limbs are connected; no anatomy certification of distant actors is inferred."
+        },
+        "grounding": {
+          "verdict": "accepted",
+          "note": "Boot contact, deck and supported rails are visible. Former floating tan papers and brown interaction proxies are absent."
+        },
+        "scale": {
+          "verdict": "accepted",
+          "note": "Player, rails, banks and houses have coherent relative dimensions."
+        },
+        "materials": {
+          "verdict": "accepted",
+          "note": "The river channel, wet banks and connected terrain retain differentiated water and ground treatment."
+        },
+        "composition": {
+          "verdict": "accepted",
+          "note": "The bridge has integrated banks and a continuous village horizon. The small retained-evidence book lies on the deck, not suspended scenery."
+        },
+        "route_clearance": {
+          "verdict": "accepted",
+          "note": "Both deck and approaches are visibly unobstructed; bidirectional capsule/input proof remains separately required."
+        },
+        "role_identity": {
+          "verdict": "accepted",
+          "note": "Kael's retained hunter identity is visible; Wychwood guidance denotes his next objective."
+        }
+      },
+      "review_history": [
+        {
+          "status": "rejected",
+          "reviewer": "Codex",
+          "note": "Codex inspection 2026-09-27: Floating tan panels and geometric banks remain; Greyfen scenery displays Wychwood guidance.",
+          "reviewed_image": "Capture_70_greyfen_river_bridge_2026-09-27_171838.png",
+          "reviewed_sha256": "c0b3f9873ba46b0cb57c99a40cd06614a1d06f2e957f9e215bf622d3dface6d6",
+          "review_checks": {
+            "anatomy": {
+              "verdict": "accepted",
+              "note": "Visible Kael torso and limbs are connected; this distance does not certify detailed facial anatomy."
+            },
+            "grounding": {
+              "verdict": "rejected",
+              "note": "Kael meets the deck; nearby tan pieces appear unsupported."
+            },
+            "scale": {
+              "verdict": "accepted",
+              "note": "Player fits the bridge and buildings."
+            },
+            "materials": {
+              "verdict": "rejected",
+              "note": "Striped river lacks credible depth/bank integration."
+            },
+            "composition": {
+              "verdict": "rejected",
+              "note": "Floating tan panels and geometric banks remain; Greyfen scenery displays Wychwood guidance."
+            },
+            "route_clearance": {
+              "verdict": "accepted",
+              "note": "An approach lane is visible; this staged frame does not certify physical traversal."
+            },
+            "role_identity": {
+              "verdict": "accepted",
+              "note": "Kael is recognizable; no named NPC certification follows."
+            }
+          }
+        },
+        {
+          "status": "approved",
+          "reviewer": "Codex",
+          "note": "Codex inspection 2026-10-01: current 1280x720 source-bound frame satisfies the retained finite visual contract. Approval is limited to this camera/state; real-input route, persistence and performance certification remain separate.",
+          "reviewed_image": "Capture_70_greyfen_river_bridge_2026-10-01_202939.png",
+          "reviewed_sha256": "7a72d90d7b10bc6e9c1acb4402ec6093a6025e00df3ee9bfa98d66b3b66d7e07",
+          "review_checks": {
+            "anatomy": {
+              "verdict": "accepted",
+              "note": "Visible Kael head, torso and limbs are connected; no anatomy certification of distant actors is inferred."
+            },
+            "grounding": {
+              "verdict": "accepted",
+              "note": "Boot contact, deck and supported rails are visible. Former floating tan papers and brown interaction proxies are absent."
+            },
+            "scale": {
+              "verdict": "accepted",
+              "note": "Player, rails, banks and houses have coherent relative dimensions."
+            },
+            "materials": {
+              "verdict": "accepted",
+              "note": "The river channel, wet banks and connected terrain retain differentiated water and ground treatment."
+            },
+            "composition": {
+              "verdict": "accepted",
+              "note": "The bridge has integrated banks and a continuous village horizon. The small retained-evidence book lies on the deck, not suspended scenery."
+            },
+            "route_clearance": {
+              "verdict": "accepted",
+              "note": "Both deck and approaches are visibly unobstructed; bidirectional capsule/input proof remains separately required."
+            },
+            "role_identity": {
+              "verdict": "accepted",
+              "note": "Kael's retained hunter identity is visible; Wychwood guidance denotes his next objective."
+            }
+          }
+        }
+      ],
+      "approved_sha256": "c38be41a940753c1bf0bf35476df695b09ed0eb181669486a6c8c6fd8483c03d",
+      "reviewed_rendering_inputs_sha256": "33d5f0ee182543ceb50209e5b659a1fa7b3ca953aefd7b872d987c7b0e90d65d"
     },
     {
       "id": "wychwood_combat",
       "required": true,
       "current_glob": "Capture_10_combat_clearing_*.png",
-      "expected_size": [1280, 720],
+      "expected_size": [
+        1280,
+        720
+      ],
       "status": "approved",
       "reviewer": "Codex",
-      "note": "Codex review 2026-08-11: combat clearing, player, enemy, route boundaries, and encounter guidance are visible with usable spacing. Monster presentation remains stylized.",
-      "heuristics": { "min_mean_luminance": 1.5, "min_channel_variance": 4.0, "max_bright_ratio": 0.985 },
-      "baseline": { "path": "", "status": "not_set", "max_mean_absolute_difference": null }
+      "note": "Codex directly inspected all eleven 2026-10-01_235123 frames after the preparation repair. Existing finite anatomy, grounding, scale, material, composition, route and identity checks remain satisfied at these cameras. Heavy-blade occlusion and peripheral Record Hall crop remain scoped limitations. Staged captures are not campaign, ending, auditory or numerical-performance certification.",
+      "heuristics": {
+        "min_mean_luminance": 1.5,
+        "min_channel_variance": 4,
+        "max_bright_ratio": 0.985
+      },
+      "baseline": {
+        "path": "",
+        "status": "not_set",
+        "max_mean_absolute_difference": null
+      },
+      "historical_review": {
+        "status": "approved",
+        "reviewer": "Codex",
+        "note": "Codex review 2026-08-11: combat clearing, player, enemy, route boundaries, and encounter guidance are visible with usable spacing. Monster presentation remains stylized."
+      },
+      "reviewed_image": "Capture_10_combat_clearing_2026-10-01_235123.png",
+      "reviewed_sha256": "eb1efb923f5b42e33316bda02149ad0a61ffa1398510de19493d3250bec2ffdf",
+      "review_checks": {
+        "anatomy": {
+          "verdict": "accepted",
+          "note": "Kael and the visible cursed-human Ghoulkin have complete connected bodies; no bat/dragon substitute is visible."
+        },
+        "grounding": {
+          "verdict": "accepted",
+          "note": "Actors and authored floor objects sit in the clearing; the player is captured during an animated pose, not a static-foot-contact test."
+        },
+        "scale": {
+          "verdict": "accepted",
+          "note": "The Ghoulkin and Kael share a readable combat scale against trees and ruins."
+        },
+        "materials": {
+          "verdict": "accepted",
+          "note": "Forest floor, ruins and foliage use the retained coherent materials without white missing surfaces."
+        },
+        "composition": {
+          "verdict": "accepted",
+          "note": "Bounded woodland, ruins and deadfalls frame an occupied readable arena. Drag marks are the prompted clue presentation, not loose anatomy."
+        },
+        "route_clearance": {
+          "verdict": "accepted",
+          "note": "The occupied arena and exit lane are visible; five-enemy spacing and traversal require the separate real-input evidence."
+        },
+        "role_identity": {
+          "verdict": "accepted",
+          "note": "The visible hostile is the retained cursed-human family; this single frame does not claim all five actors are simultaneously visible."
+        }
+      },
+      "review_history": [
+        {
+          "status": "rejected",
+          "reviewer": "Codex",
+          "note": "Codex inspection 2026-09-27: Clue platform, loose objects and enemy staging compete; five-enemy readability is not demonstrated.",
+          "reviewed_image": "Capture_10_combat_clearing_2026-09-27_171838.png",
+          "reviewed_sha256": "cebe2b785258d02651d77fcc942021faa075a92e0bc70d011f889045bb2fb78d",
+          "review_checks": {
+            "anatomy": {
+              "verdict": "accepted",
+              "note": "Visible Kael torso and limbs are connected; this distance does not certify detailed facial anatomy."
+            },
+            "grounding": {
+              "verdict": "rejected",
+              "note": "Player stands beside an exposed rock/deck edge; contact is unclear."
+            },
+            "scale": {
+              "verdict": "rejected",
+              "note": "One enemy is visible; all five relative sizes are not proven."
+            },
+            "materials": {
+              "verdict": "accepted",
+              "note": "Foliage is textured, but noisy earth poorly separates path/arena."
+            },
+            "composition": {
+              "verdict": "rejected",
+              "note": "Clue platform, loose objects and enemy staging compete; five-enemy readability is not demonstrated."
+            },
+            "route_clearance": {
+              "verdict": "accepted",
+              "note": "An approach lane is visible; this staged frame does not certify physical traversal."
+            },
+            "role_identity": {
+              "verdict": "rejected",
+              "note": "The winged enemy and labels do not prove the entire Ghoulkin family."
+            }
+          }
+        },
+        {
+          "status": "approved",
+          "reviewer": "Codex",
+          "note": "Codex inspection 2026-10-01: current 1280x720 source-bound frame satisfies the retained finite visual contract. Approval is limited to this camera/state; real-input route, persistence and performance certification remain separate.",
+          "reviewed_image": "Capture_10_combat_clearing_2026-10-01_202939.png",
+          "reviewed_sha256": "087ea1fe05dcdaa34318705df01f8b0fc87f2d2a531fa8dce8cc04f09df480f6",
+          "review_checks": {
+            "anatomy": {
+              "verdict": "accepted",
+              "note": "Kael and the visible cursed-human Ghoulkin have complete connected bodies; no bat/dragon substitute is visible."
+            },
+            "grounding": {
+              "verdict": "accepted",
+              "note": "Actors and authored floor objects sit in the clearing; the player is captured during an animated pose, not a static-foot-contact test."
+            },
+            "scale": {
+              "verdict": "accepted",
+              "note": "The Ghoulkin and Kael share a readable combat scale against trees and ruins."
+            },
+            "materials": {
+              "verdict": "accepted",
+              "note": "Forest floor, ruins and foliage use the retained coherent materials without white missing surfaces."
+            },
+            "composition": {
+              "verdict": "accepted",
+              "note": "Bounded woodland, ruins and deadfalls frame an occupied readable arena. Drag marks are the prompted clue presentation, not loose anatomy."
+            },
+            "route_clearance": {
+              "verdict": "accepted",
+              "note": "The occupied arena and exit lane are visible; five-enemy spacing and traversal require the separate real-input evidence."
+            },
+            "role_identity": {
+              "verdict": "accepted",
+              "note": "The visible hostile is the retained cursed-human family; this single frame does not claim all five actors are simultaneously visible."
+            }
+          }
+        }
+      ],
+      "approved_sha256": "eb1efb923f5b42e33316bda02149ad0a61ffa1398510de19493d3250bec2ffdf",
+      "reviewed_rendering_inputs_sha256": "33d5f0ee182543ceb50209e5b659a1fa7b3ca953aefd7b872d987c7b0e90d65d"
     },
     {
       "id": "sword_ready",
       "required": true,
       "current_glob": "Capture_15_player_sword_ready_*.png",
-      "expected_size": [1280, 720],
+      "expected_size": [
+        1280,
+        720
+      ],
       "status": "approved",
       "reviewer": "Codex",
-      "note": "Codex review 2026-08-11: refreshed motion staging now keeps Kael on the south-bank route; sword and grounded silhouette are visible. The character model is still low-poly.",
-      "heuristics": { "min_mean_luminance": 1.5, "min_channel_variance": 4.0, "max_bright_ratio": 0.985 },
-      "baseline": { "path": "", "status": "not_set", "max_mean_absolute_difference": null }
+      "note": "Codex directly inspected all eleven 2026-10-01_235123 frames after the preparation repair. Existing finite anatomy, grounding, scale, material, composition, route and identity checks remain satisfied at these cameras. Heavy-blade occlusion and peripheral Record Hall crop remain scoped limitations. Staged captures are not campaign, ending, auditory or numerical-performance certification.",
+      "heuristics": {
+        "min_mean_luminance": 1.5,
+        "min_channel_variance": 4,
+        "max_bright_ratio": 0.985
+      },
+      "baseline": {
+        "path": "",
+        "status": "not_set",
+        "max_mean_absolute_difference": null
+      },
+      "historical_review": {
+        "status": "approved",
+        "reviewer": "Codex",
+        "note": "Codex review 2026-08-11: refreshed motion staging now keeps Kael on the south-bank route; sword and grounded silhouette are visible. The character model is still low-poly."
+      },
+      "reviewed_image": "Capture_15_player_sword_ready_2026-10-01_235123.png",
+      "reviewed_sha256": "ff14763855ef60ec1781858e653cc85673421dc02ff9a7a05869f065bb8bc686",
+      "review_checks": {
+        "anatomy": {
+          "verdict": "accepted",
+          "note": "Kael's head, torso, arms and legs form one continuous native body."
+        },
+        "grounding": {
+          "verdict": "accepted",
+          "note": "Both boots sit on the bridge deck in the idle pose; hand sword and back scabbard remain body-attached."
+        },
+        "scale": {
+          "verdict": "accepted",
+          "note": "Sword, scabbard, player and surrounding NPCs have the retained plausible gameplay proportions."
+        },
+        "materials": {
+          "verdict": "accepted",
+          "note": "Cloth, skin, hair, blade and scabbard render with their assigned materials."
+        },
+        "composition": {
+          "verdict": "accepted",
+          "note": "The side framing exposes the held sword, scabbard and complete idle silhouette."
+        },
+        "route_clearance": {
+          "verdict": "accepted",
+          "note": "The bridge lane remains visible; this staged idle is not movement proof."
+        },
+        "role_identity": {
+          "verdict": "accepted",
+          "note": "Kael's hunter identity and hand-equipped sword are readable at gameplay distance."
+        }
+      },
+      "review_history": [
+        {
+          "status": "rejected",
+          "reviewer": "Codex",
+          "note": "Codex inspection 2026-09-27: Walking/profile pose and wrong-zone guidance do not prove the advertised sword-ready state.",
+          "reviewed_image": "Capture_15_player_sword_ready_2026-09-27_171838.png",
+          "reviewed_sha256": "542b1c0050671238c9585e2fdbd79ca407f228e8c23f627ee3686812c64f4f53",
+          "review_checks": {
+            "anatomy": {
+              "verdict": "accepted",
+              "note": "Visible Kael torso and limbs are connected; this distance does not certify detailed facial anatomy."
+            },
+            "grounding": {
+              "verdict": "accepted",
+              "note": "Boot meets bridge deck."
+            },
+            "scale": {
+              "verdict": "accepted",
+              "note": "Player height matches nearby civilians."
+            },
+            "materials": {
+              "verdict": "rejected",
+              "note": "Weapon material cannot be assessed because the drawn sword is not readable."
+            },
+            "composition": {
+              "verdict": "rejected",
+              "note": "Walking/profile pose and wrong-zone guidance do not prove the advertised sword-ready state."
+            },
+            "route_clearance": {
+              "verdict": "accepted",
+              "note": "An approach lane is visible; this staged frame does not certify physical traversal."
+            },
+            "role_identity": {
+              "verdict": "rejected",
+              "note": "Kael is present but no clearly readable ready sword appears."
+            }
+          }
+        },
+        {
+          "status": "approved",
+          "reviewer": "Codex",
+          "note": "Codex inspection 2026-10-01: current 1280x720 source-bound frame satisfies the retained finite visual contract. Approval is limited to this camera/state; real-input route, persistence and performance certification remain separate.",
+          "reviewed_image": "Capture_15_player_sword_ready_2026-10-01_202939.png",
+          "reviewed_sha256": "7846fbc8187a09f29e0d1297e8834fbba270e7fb5e31034f2cb1e51085c5a714",
+          "review_checks": {
+            "anatomy": {
+              "verdict": "accepted",
+              "note": "Kael's head, torso, arms and legs form one continuous native body."
+            },
+            "grounding": {
+              "verdict": "accepted",
+              "note": "Both boots sit on the bridge deck in the idle pose; hand sword and back scabbard remain body-attached."
+            },
+            "scale": {
+              "verdict": "accepted",
+              "note": "Sword, scabbard, player and surrounding NPCs have the retained plausible gameplay proportions."
+            },
+            "materials": {
+              "verdict": "accepted",
+              "note": "Cloth, skin, hair, blade and scabbard render with their assigned materials."
+            },
+            "composition": {
+              "verdict": "accepted",
+              "note": "The side framing exposes the held sword, scabbard and complete idle silhouette."
+            },
+            "route_clearance": {
+              "verdict": "accepted",
+              "note": "The bridge lane remains visible; this staged idle is not movement proof."
+            },
+            "role_identity": {
+              "verdict": "accepted",
+              "note": "Kael's hunter identity and hand-equipped sword are readable at gameplay distance."
+            }
+          }
+        }
+      ],
+      "approved_sha256": "ff14763855ef60ec1781858e653cc85673421dc02ff9a7a05869f065bb8bc686",
+      "reviewed_rendering_inputs_sha256": "33d5f0ee182543ceb50209e5b659a1fa7b3ca953aefd7b872d987c7b0e90d65d"
     },
     {
       "id": "light_attack",
       "required": true,
       "current_glob": "Capture_13_player_light_attack_arc_*.png",
-      "expected_size": [1280, 720],
+      "expected_size": [
+        1280,
+        720
+      ],
       "status": "approved",
       "reviewer": "Codex",
-      "note": "Codex review 2026-08-11: light attack shows Kael's body, weapon, and connected strike ribbon without the former detached box trail. Effect remains procedural.",
-      "heuristics": { "min_mean_luminance": 1.5, "min_channel_variance": 4.0, "max_bright_ratio": 0.985 },
-      "baseline": { "path": "", "status": "not_set", "max_mean_absolute_difference": null }
+      "note": "Codex directly inspected all eleven 2026-10-01_235123 frames after the preparation repair. Existing finite anatomy, grounding, scale, material, composition, route and identity checks remain satisfied at these cameras. Heavy-blade occlusion and peripheral Record Hall crop remain scoped limitations. Staged captures are not campaign, ending, auditory or numerical-performance certification.",
+      "heuristics": {
+        "min_mean_luminance": 1.5,
+        "min_channel_variance": 4,
+        "max_bright_ratio": 0.985
+      },
+      "baseline": {
+        "path": "",
+        "status": "not_set",
+        "max_mean_absolute_difference": null
+      },
+      "historical_review": {
+        "status": "approved",
+        "reviewer": "Codex",
+        "note": "Codex review 2026-08-11: light attack shows Kael's body, weapon, and connected strike ribbon without the former detached box trail. Effect remains procedural."
+      },
+      "reviewed_image": "Capture_13_player_light_attack_arc_2026-10-01_235123.png",
+      "reviewed_sha256": "88b442ed2ae876ae868ad8925c55fcab88d35ad19ecece9bc308c497cce778c9",
+      "review_checks": {
+        "anatomy": {
+          "verdict": "accepted",
+          "note": "The lunge has connected torso and articulated limbs without a T-pose or detached anatomy."
+        },
+        "grounding": {
+          "verdict": "accepted",
+          "note": "Raised boots belong to the active lunge, not an idle-floating claim; weapon attachment remains continuous."
+        },
+        "scale": {
+          "verdict": "accepted",
+          "note": "The blade and attack reach are coherent with the player's body and clearing."
+        },
+        "materials": {
+          "verdict": "accepted",
+          "note": "Character and sword surfaces render without missing/white fallback material."
+        },
+        "composition": {
+          "verdict": "accepted",
+          "note": "The full moving body and extended right-hand sword are in frame."
+        },
+        "route_clearance": {
+          "verdict": "accepted",
+          "note": "The visible attack space is clear; collision/contact acceptance is supplied by the native and browser functional checks."
+        },
+        "role_identity": {
+          "verdict": "accepted",
+          "note": "Kael's light-attack pose and hand-attached weapon are distinguishable."
+        }
+      },
+      "review_history": [
+        {
+          "status": "rejected",
+          "reviewer": "Codex",
+          "note": "Codex inspection 2026-09-27: Attack pose exists, but flat triangular effect and wrong region text prevent release approval.",
+          "reviewed_image": "Capture_13_player_light_attack_arc_2026-09-27_171838.png",
+          "reviewed_sha256": "d0f3979b62e7967f4b64cb92aa5d61a805c853638b8e56a0f54721135271b94e",
+          "review_checks": {
+            "anatomy": {
+              "verdict": "accepted",
+              "note": "Visible Kael torso and limbs are connected; this distance does not certify detailed facial anatomy."
+            },
+            "grounding": {
+              "verdict": "accepted",
+              "note": "Boots/shadow contact deck."
+            },
+            "scale": {
+              "verdict": "accepted",
+              "note": "Same player scale as idle/civilians."
+            },
+            "materials": {
+              "verdict": "rejected",
+              "note": "White blade appears; large triangular effect dominates the hand silhouette."
+            },
+            "composition": {
+              "verdict": "rejected",
+              "note": "Attack pose exists, but flat triangular effect and wrong region text prevent release approval."
+            },
+            "route_clearance": {
+              "verdict": "accepted",
+              "note": "An approach lane is visible; this staged frame does not certify physical traversal."
+            },
+            "role_identity": {
+              "verdict": "accepted",
+              "note": "Kael and sword appear; no still-image damage synchronization proof."
+            }
+          }
+        },
+        {
+          "status": "approved",
+          "reviewer": "Codex",
+          "note": "Codex inspection 2026-10-01: current 1280x720 source-bound frame satisfies the retained finite visual contract. Approval is limited to this camera/state; real-input route, persistence and performance certification remain separate.",
+          "reviewed_image": "Capture_13_player_light_attack_arc_2026-10-01_202939.png",
+          "reviewed_sha256": "25e01ed261762a9f3f4988bfc7ad9935622281045b036e00bf05f82d4eee870b",
+          "review_checks": {
+            "anatomy": {
+              "verdict": "accepted",
+              "note": "The lunge has connected torso and articulated limbs without a T-pose or detached anatomy."
+            },
+            "grounding": {
+              "verdict": "accepted",
+              "note": "Raised boots belong to the active lunge, not an idle-floating claim; weapon attachment remains continuous."
+            },
+            "scale": {
+              "verdict": "accepted",
+              "note": "The blade and attack reach are coherent with the player's body and clearing."
+            },
+            "materials": {
+              "verdict": "accepted",
+              "note": "Character and sword surfaces render without missing/white fallback material."
+            },
+            "composition": {
+              "verdict": "accepted",
+              "note": "The full moving body and extended right-hand sword are in frame."
+            },
+            "route_clearance": {
+              "verdict": "accepted",
+              "note": "The visible attack space is clear; collision/contact acceptance is supplied by the native and browser functional checks."
+            },
+            "role_identity": {
+              "verdict": "accepted",
+              "note": "Kael's light-attack pose and hand-attached weapon are distinguishable."
+            }
+          }
+        }
+      ],
+      "approved_sha256": "88b442ed2ae876ae868ad8925c55fcab88d35ad19ecece9bc308c497cce778c9",
+      "reviewed_rendering_inputs_sha256": "33d5f0ee182543ceb50209e5b659a1fa7b3ca953aefd7b872d987c7b0e90d65d"
     },
     {
       "id": "heavy_attack",
       "required": true,
       "current_glob": "Capture_14_player_heavy_attack_arc_*.png",
-      "expected_size": [1280, 720],
+      "expected_size": [
+        1280,
+        720
+      ],
       "status": "approved",
       "reviewer": "Codex",
-      "note": "Codex review 2026-08-11: heavy attack shows a connected weapon path and readable strike pose. Effect remains procedural and not AAA-grade.",
-      "heuristics": { "min_mean_luminance": 1.5, "min_channel_variance": 4.0, "max_bright_ratio": 0.985 },
-      "baseline": { "path": "", "status": "not_set", "max_mean_absolute_difference": null }
+      "note": "Codex directly inspected all eleven 2026-10-01_235123 frames after the preparation repair. Existing finite anatomy, grounding, scale, material, composition, route and identity checks remain satisfied at these cameras. Heavy-blade occlusion and peripheral Record Hall crop remain scoped limitations. Staged captures are not campaign, ending, auditory or numerical-performance certification.",
+      "heuristics": {
+        "min_mean_luminance": 1.5,
+        "min_channel_variance": 4,
+        "max_bright_ratio": 0.985
+      },
+      "baseline": {
+        "path": "",
+        "status": "not_set",
+        "max_mean_absolute_difference": null
+      },
+      "historical_review": {
+        "status": "approved",
+        "reviewer": "Codex",
+        "note": "Codex review 2026-08-11: heavy attack shows a connected weapon path and readable strike pose. Effect remains procedural and not AAA-grade."
+      },
+      "reviewed_image": "Capture_14_player_heavy_attack_arc_2026-10-01_235123.png",
+      "reviewed_sha256": "8858cb2670746d79c44f771ae556f15e49965df77add875adc922a3b5d039232",
+      "review_checks": {
+        "anatomy": {
+          "verdict": "accepted",
+          "note": "Kael's heavy lunge retains continuous native head, torso and limbs."
+        },
+        "grounding": {
+          "verdict": "accepted",
+          "note": "Lifted boots are part of the attack animation; no detached equipment is visible."
+        },
+        "scale": {
+          "verdict": "accepted",
+          "note": "Heavy reach and body remain within the retained combat scale."
+        },
+        "materials": {
+          "verdict": "accepted",
+          "note": "Blade, outfit and compact trace retain their assigned nonblank surfaces."
+        },
+        "composition": {
+          "verdict": "accepted",
+          "note": "The complete dynamic pose is visible; the arm partly occludes the blade, so this frame alone does not certify its whole trajectory."
+        },
+        "route_clearance": {
+          "verdict": "accepted",
+          "note": "The attack lane is visible; staged framing does not substitute for collision or damage timing proof."
+        },
+        "role_identity": {
+          "verdict": "accepted",
+          "note": "Kael's heavy-attack state is readable with connected weapon presentation."
+        }
+      },
+      "review_history": [
+        {
+          "status": "rejected",
+          "reviewer": "Codex",
+          "note": "Codex inspection 2026-09-27: Only subtly distinct from light; triangular effect, wrong-zone text and no impact proof remain.",
+          "reviewed_image": "Capture_14_player_heavy_attack_arc_2026-09-27_171838.png",
+          "reviewed_sha256": "15238c44897b4bb7c8ec40e622cbf4509753c84508e925dc79dd082dee18f7fb",
+          "review_checks": {
+            "anatomy": {
+              "verdict": "accepted",
+              "note": "Visible Kael torso and limbs are connected; this distance does not certify detailed facial anatomy."
+            },
+            "grounding": {
+              "verdict": "accepted",
+              "note": "Boots/shadow contact deck."
+            },
+            "scale": {
+              "verdict": "accepted",
+              "note": "Scale matches light attack."
+            },
+            "materials": {
+              "verdict": "rejected",
+              "note": "Blade appears but triangular effect flattens its path."
+            },
+            "composition": {
+              "verdict": "rejected",
+              "note": "Only subtly distinct from light; triangular effect, wrong-zone text and no impact proof remain."
+            },
+            "route_clearance": {
+              "verdict": "accepted",
+              "note": "An approach lane is visible; this staged frame does not certify physical traversal."
+            },
+            "role_identity": {
+              "verdict": "accepted",
+              "note": "Player and blade appear; heavy enemy impact is not shown."
+            }
+          }
+        },
+        {
+          "status": "approved",
+          "reviewer": "Codex",
+          "note": "Codex inspection 2026-10-01: current 1280x720 source-bound frame satisfies the retained finite visual contract. Approval is limited to this camera/state; real-input route, persistence and performance certification remain separate.",
+          "reviewed_image": "Capture_14_player_heavy_attack_arc_2026-10-01_202939.png",
+          "reviewed_sha256": "dc0383f13185e372162f739c11b099d1fa13cbbafccbb8209f1c6d254f2f598d",
+          "review_checks": {
+            "anatomy": {
+              "verdict": "accepted",
+              "note": "Kael's heavy lunge retains continuous native head, torso and limbs."
+            },
+            "grounding": {
+              "verdict": "accepted",
+              "note": "Lifted boots are part of the attack animation; no detached equipment is visible."
+            },
+            "scale": {
+              "verdict": "accepted",
+              "note": "Heavy reach and body remain within the retained combat scale."
+            },
+            "materials": {
+              "verdict": "accepted",
+              "note": "Blade, outfit and compact trace retain their assigned nonblank surfaces."
+            },
+            "composition": {
+              "verdict": "accepted",
+              "note": "The complete dynamic pose is visible; the arm partly occludes the blade, so this frame alone does not certify its whole trajectory."
+            },
+            "route_clearance": {
+              "verdict": "accepted",
+              "note": "The attack lane is visible; staged framing does not substitute for collision or damage timing proof."
+            },
+            "role_identity": {
+              "verdict": "accepted",
+              "note": "Kael's heavy-attack state is readable with connected weapon presentation."
+            }
+          }
+        }
+      ],
+      "approved_sha256": "8858cb2670746d79c44f771ae556f15e49965df77add875adc922a3b5d039232",
+      "reviewed_rendering_inputs_sha256": "33d5f0ee182543ceb50209e5b659a1fa7b3ca953aefd7b872d987c7b0e90d65d"
     },
     {
       "id": "blade_contact",
       "required": true,
       "current_glob": "Capture_73_combat_001_blade_contact_*.png",
-      "expected_size": [1280, 720],
+      "expected_size": [
+        1280,
+        720
+      ],
       "status": "approved",
       "reviewer": "Codex",
-      "note": "Codex review 2026-08-11: blade-contact frame contains both actors and contact feedback; spacing is readable. Enemy body and hit VFX remain stylized.",
-      "heuristics": { "min_mean_luminance": 1.5, "min_channel_variance": 4.0, "max_bright_ratio": 0.985 },
-      "baseline": { "path": "", "status": "not_set", "max_mean_absolute_difference": null }
+      "note": "Codex directly inspected all eleven 2026-10-01_235123 frames after the preparation repair. Existing finite anatomy, grounding, scale, material, composition, route and identity checks remain satisfied at these cameras. Heavy-blade occlusion and peripheral Record Hall crop remain scoped limitations. Staged captures are not campaign, ending, auditory or numerical-performance certification.",
+      "heuristics": {
+        "min_mean_luminance": 1.5,
+        "min_channel_variance": 4,
+        "max_bright_ratio": 0.985
+      },
+      "baseline": {
+        "path": "",
+        "status": "not_set",
+        "max_mean_absolute_difference": null
+      },
+      "historical_review": {
+        "status": "approved",
+        "reviewer": "Codex",
+        "note": "Codex review 2026-08-11: blade-contact frame contains both actors and contact feedback; spacing is readable. Enemy body and hit VFX remain stylized."
+      },
+      "reviewed_image": "Capture_73_combat_001_blade_contact_2026-10-01_235123.png",
+      "reviewed_sha256": "3a0f737c036c85912d216765ee2a6ec0aff06f275ff8e8977cb0076f8f5aa047",
+      "review_checks": {
+        "anatomy": {
+          "verdict": "accepted",
+          "note": "Kael and the Ghoulkin have complete native bodies and limbs at the impact frame."
+        },
+        "grounding": {
+          "verdict": "accepted",
+          "note": "The moving lunge and enemy stance are coherent with the arena floor; no idle-grounding claim is inferred from lifted attack boots."
+        },
+        "scale": {
+          "verdict": "accepted",
+          "note": "Blade, victim and player maintain coherent melee proportions."
+        },
+        "materials": {
+          "verdict": "accepted",
+          "note": "Character, monster and compact yellow contact trace render with their assigned materials."
+        },
+        "composition": {
+          "verdict": "accepted",
+          "note": "The hand/blade direction, visible enemy and Hit 24 / remaining enemy health feedback coincide in the captured contact state."
+        },
+        "route_clearance": {
+          "verdict": "accepted",
+          "note": "The enemy and attack lane are visible; actual blade sweeps and real-input combat remain independent evidence."
+        },
+        "role_identity": {
+          "verdict": "accepted",
+          "note": "The hunter versus cursed-human encounter is readable without a primitive monster surrogate."
+        }
+      },
+      "review_history": [
+        {
+          "status": "rejected",
+          "reviewer": "Codex",
+          "note": "Codex inspection 2026-09-27: Enemy/player overlap hides blade contact; target/hit labels cannot replace visible impact.",
+          "reviewed_image": "Capture_73_combat_001_blade_contact_2026-09-27_171838.png",
+          "reviewed_sha256": "416dc559c0e37740b1f1c345a82d1cad0f7c134a5e7d75207691c38c4393c39d",
+          "review_checks": {
+            "anatomy": {
+              "verdict": "rejected",
+              "note": "Overlapping silhouettes obscure complete enemy anatomy."
+            },
+            "grounding": {
+              "verdict": "rejected",
+              "note": "Player boots are visible; enemy feet are obscured."
+            },
+            "scale": {
+              "verdict": "rejected",
+              "note": "Overlap prevents a clean actor-size comparison."
+            },
+            "materials": {
+              "verdict": "rejected",
+              "note": "Bodies are shaded; blade/impact material is not readable."
+            },
+            "composition": {
+              "verdict": "rejected",
+              "note": "Enemy/player overlap hides blade contact; target/hit labels cannot replace visible impact."
+            },
+            "route_clearance": {
+              "verdict": "accepted",
+              "note": "An approach lane is visible; this staged frame does not certify physical traversal."
+            },
+            "role_identity": {
+              "verdict": "rejected",
+              "note": "Ghoulkin name and hit amount exist, but body/contact identity is obscured."
+            }
+          }
+        },
+        {
+          "status": "approved",
+          "reviewer": "Codex",
+          "note": "Codex inspection 2026-10-01: current 1280x720 source-bound frame satisfies the retained finite visual contract. Approval is limited to this camera/state; real-input route, persistence and performance certification remain separate.",
+          "reviewed_image": "Capture_73_combat_001_blade_contact_2026-10-01_202939.png",
+          "reviewed_sha256": "3d6094112598edfb55667a2fd3c068bea764ed123da3b19c876603f3e1e64015",
+          "review_checks": {
+            "anatomy": {
+              "verdict": "accepted",
+              "note": "Kael and the Ghoulkin have complete native bodies and limbs at the impact frame."
+            },
+            "grounding": {
+              "verdict": "accepted",
+              "note": "The moving lunge and enemy stance are coherent with the arena floor; no idle-grounding claim is inferred from lifted attack boots."
+            },
+            "scale": {
+              "verdict": "accepted",
+              "note": "Blade, victim and player maintain coherent melee proportions."
+            },
+            "materials": {
+              "verdict": "accepted",
+              "note": "Character, monster and compact yellow contact trace render with their assigned materials."
+            },
+            "composition": {
+              "verdict": "accepted",
+              "note": "The hand/blade direction, visible enemy and Hit 24 / remaining enemy health feedback coincide in the captured contact state."
+            },
+            "route_clearance": {
+              "verdict": "accepted",
+              "note": "The enemy and attack lane are visible; actual blade sweeps and real-input combat remain independent evidence."
+            },
+            "role_identity": {
+              "verdict": "accepted",
+              "note": "The hunter versus cursed-human encounter is readable without a primitive monster surrogate."
+            }
+          }
+        }
+      ],
+      "approved_sha256": "3a0f737c036c85912d216765ee2a6ec0aff06f275ff8e8977cb0076f8f5aa047",
+      "reviewed_rendering_inputs_sha256": "33d5f0ee182543ceb50209e5b659a1fa7b3ca953aefd7b872d987c7b0e90d65d"
     },
     {
       "id": "vargan_approach",
       "required": true,
       "current_glob": "Capture_36_vargan_approach_*.png",
-      "expected_size": [1280, 720],
+      "expected_size": [
+        1280,
+        720
+      ],
       "status": "approved",
       "reviewer": "Codex",
-      "note": "Codex review 2026-08-11: cloud occlusion repaired; Castle approach now shows player, road, gatehouse, towers, and clear arrival composition. Castle geometry remains blockout-grade.",
-      "heuristics": { "min_mean_luminance": 1.5, "min_channel_variance": 4.0, "max_bright_ratio": 0.985 },
-      "baseline": { "path": "", "status": "not_set", "max_mean_absolute_difference": null }
+      "note": "Codex directly inspected all eleven 2026-10-01_235123 frames after the preparation repair. Existing finite anatomy, grounding, scale, material, composition, route and identity checks remain satisfied at these cameras. Heavy-blade occlusion and peripheral Record Hall crop remain scoped limitations. Staged captures are not campaign, ending, auditory or numerical-performance certification.",
+      "heuristics": {
+        "min_mean_luminance": 1.5,
+        "min_channel_variance": 4,
+        "max_bright_ratio": 0.985
+      },
+      "baseline": {
+        "path": "",
+        "status": "not_set",
+        "max_mean_absolute_difference": null
+      },
+      "historical_review": {
+        "status": "approved",
+        "reviewer": "Codex",
+        "note": "Codex review 2026-08-11: cloud occlusion repaired; Castle approach now shows player, road, gatehouse, towers, and clear arrival composition. Castle geometry remains blockout-grade."
+      },
+      "reviewed_image": "Capture_36_vargan_approach_2026-10-01_235123.png",
+      "reviewed_sha256": "b07f898c9f780e0754be873bf940116681729753c3a00fdf6fc279af49da2d62",
+      "review_checks": {
+        "anatomy": {
+          "verdict": "accepted",
+          "note": "Kael's gameplay-distance native head and limbs are continuous; distant facial detail is not certified."
+        },
+        "grounding": {
+          "verdict": "accepted",
+          "note": "Boots meet the paved approach; walls, piers and gatehouse are supported by continuous terrain."
+        },
+        "scale": {
+          "verdict": "accepted",
+          "note": "Player-to-gatehouse and wall scale communicate a fortified approach."
+        },
+        "materials": {
+          "verdict": "accepted",
+          "note": "Metre-scaled masonry, paving and earth are differentiated without blank gray fallback surfaces."
+        },
+        "composition": {
+          "verdict": "accepted",
+          "note": "Connected crenellated walls, piers, open gateway and keep create a coherent readable Castle approach with no exposed void."
+        },
+        "route_clearance": {
+          "verdict": "accepted",
+          "note": "The central paved approach and open gate are visibly clear; actual gate crossing has separate route evidence."
+        },
+        "role_identity": {
+          "verdict": "accepted",
+          "note": "Kael is recognizable; the distance does not certify the gate guard's face."
+        }
+      },
+      "review_history": [
+        {
+          "status": "rejected",
+          "reviewer": "Codex",
+          "note": "Codex inspection 2026-09-27: Improved arch/towers coexist with a blank central transition slab, repetitive walls and floating lights.",
+          "reviewed_image": "Capture_36_vargan_approach_2026-09-27_171838.png",
+          "reviewed_sha256": "5733372377566e8788bf05efa95dfea7b95b57bb0bdd5a921cb84029bfb7c218",
+          "review_checks": {
+            "anatomy": {
+              "verdict": "accepted",
+              "note": "Visible Kael torso and limbs are connected; this distance does not certify detailed facial anatomy."
+            },
+            "grounding": {
+              "verdict": "accepted",
+              "note": "Player meets road."
+            },
+            "scale": {
+              "verdict": "accepted",
+              "note": "Wall/player proportions are plausible."
+            },
+            "materials": {
+              "verdict": "accepted",
+              "note": "Textured stone is repetitive and haze-flattened."
+            },
+            "composition": {
+              "verdict": "rejected",
+              "note": "Improved arch/towers coexist with a blank central transition slab, repetitive walls and floating lights."
+            },
+            "route_clearance": {
+              "verdict": "accepted",
+              "note": "An approach lane is visible; this staged frame does not certify physical traversal."
+            },
+            "role_identity": {
+              "verdict": "rejected",
+              "note": "Castle landmark is present; the objective's guard is not visibly framed."
+            }
+          }
+        },
+        {
+          "status": "approved",
+          "reviewer": "Codex",
+          "note": "Codex inspection 2026-10-01: current 1280x720 source-bound frame satisfies the retained finite visual contract. Approval is limited to this camera/state; real-input route, persistence and performance certification remain separate.",
+          "reviewed_image": "Capture_36_vargan_approach_2026-10-01_202939.png",
+          "reviewed_sha256": "8a5da671290613de2a21684cf9ac13119245f12ab1919eeef5cba2faebd05118",
+          "review_checks": {
+            "anatomy": {
+              "verdict": "accepted",
+              "note": "Kael's gameplay-distance native head and limbs are continuous; distant facial detail is not certified."
+            },
+            "grounding": {
+              "verdict": "accepted",
+              "note": "Boots meet the paved approach; walls, piers and gatehouse are supported by continuous terrain."
+            },
+            "scale": {
+              "verdict": "accepted",
+              "note": "Player-to-gatehouse and wall scale communicate a fortified approach."
+            },
+            "materials": {
+              "verdict": "accepted",
+              "note": "Metre-scaled masonry, paving and earth are differentiated without blank gray fallback surfaces."
+            },
+            "composition": {
+              "verdict": "accepted",
+              "note": "Connected crenellated walls, piers, open gateway and keep create a coherent readable Castle approach with no exposed void."
+            },
+            "route_clearance": {
+              "verdict": "accepted",
+              "note": "The central paved approach and open gate are visibly clear; actual gate crossing has separate route evidence."
+            },
+            "role_identity": {
+              "verdict": "accepted",
+              "note": "Kael is recognizable; the distance does not certify the gate guard's face."
+            }
+          }
+        }
+      ],
+      "approved_sha256": "b07f898c9f780e0754be873bf940116681729753c3a00fdf6fc279af49da2d62",
+      "reviewed_rendering_inputs_sha256": "33d5f0ee182543ceb50209e5b659a1fa7b3ca953aefd7b872d987c7b0e90d65d"
     },
     {
       "id": "record_hall",
       "required": true,
       "current_glob": "Capture_38_record_hall_*.png",
-      "expected_size": [1280, 720],
+      "expected_size": [
+        1280,
+        720
+      ],
       "status": "approved",
       "reviewer": "Codex",
-      "note": "Codex review 2026-08-11: Record Hall is enclosed, path and player are readable, and no outdoor sky is exposed. Interior lighting and architecture remain simplified.",
-      "heuristics": { "min_mean_luminance": 1.5, "min_channel_variance": 4.0, "max_bright_ratio": 0.985 },
-      "baseline": { "path": "", "status": "not_set", "max_mean_absolute_difference": null }
+      "note": "Codex directly inspected all eleven 2026-10-01_235123 frames after the preparation repair. Existing finite anatomy, grounding, scale, material, composition, route and identity checks remain satisfied at these cameras. Heavy-blade occlusion and peripheral Record Hall crop remain scoped limitations. Staged captures are not campaign, ending, auditory or numerical-performance certification.",
+      "heuristics": {
+        "min_mean_luminance": 1.5,
+        "min_channel_variance": 4,
+        "max_bright_ratio": 0.985
+      },
+      "baseline": {
+        "path": "",
+        "status": "not_set",
+        "max_mean_absolute_difference": null
+      },
+      "historical_review": {
+        "status": "approved",
+        "reviewer": "Codex",
+        "note": "Codex review 2026-08-11: Record Hall is enclosed, path and player are readable, and no outdoor sky is exposed. Interior lighting and architecture remain simplified."
+      },
+      "reviewed_image": "Capture_38_record_hall_2026-10-01_235123.png",
+      "reviewed_sha256": "fcdab69e06757188d11bb8434b9bf6778e562060acc15011ca7bfc10333146db",
+      "review_checks": {
+        "anatomy": {
+          "verdict": "accepted",
+          "note": "Visible Kael is complete; the partially cropped peripheral witness does not supply a whole-body portrait approval."
+        },
+        "grounding": {
+          "verdict": "accepted",
+          "note": "Player, fitted cabinets, tables and chairs meet the supported floor."
+        },
+        "scale": {
+          "verdict": "accepted",
+          "note": "Archive furniture, aisle, player and vaulted room have coherent relative scale."
+        },
+        "materials": {
+          "verdict": "accepted",
+          "note": "Lit masonry, dark wood, books and memorial surfaces are readable; the aisle is not underexposed."
+        },
+        "composition": {
+          "verdict": "accepted",
+          "note": "Vault, paired cabinet rows, evidence tables and witness memorial form a deliberate readable archive interior."
+        },
+        "route_clearance": {
+          "verdict": "accepted",
+          "note": "The central aisle and evidence approach are visible and unobstructed; physical exits are proven separately."
+        },
+        "role_identity": {
+          "verdict": "accepted",
+          "note": "Kael and the archive's purpose are readable; staged guard guidance is not proof of earned campaign progression."
+        }
+      },
+      "review_history": [
+        {
+          "status": "rejected",
+          "reviewer": "Codex",
+          "note": "Codex inspection 2026-09-27: Archive improved but aisle is oversized/sparse, foreground NPC clipped and staged guidance still says gate guard.",
+          "reviewed_image": "Capture_38_record_hall_2026-09-27_171838.png",
+          "reviewed_sha256": "3bad26e19382bd6a07c297f9708183ee77e8baabfc175627ed67d01b9c44a0e3",
+          "review_checks": {
+            "anatomy": {
+              "verdict": "accepted",
+              "note": "Visible Kael torso and limbs are connected; this distance does not certify detailed facial anatomy."
+            },
+            "grounding": {
+              "verdict": "accepted",
+              "note": "Player/furniture meet floor."
+            },
+            "scale": {
+              "verdict": "accepted",
+              "note": "Player size is plausible; the large aisle dwarfs archival furnishings."
+            },
+            "materials": {
+              "verdict": "accepted",
+              "note": "Stone, timber and books are readable with no white fallback."
+            },
+            "composition": {
+              "verdict": "rejected",
+              "note": "Archive improved but aisle is oversized/sparse, foreground NPC clipped and staged guidance still says gate guard."
+            },
+            "route_clearance": {
+              "verdict": "accepted",
+              "note": "An approach lane is visible; this staged frame does not certify physical traversal."
+            },
+            "role_identity": {
+              "verdict": "rejected",
+              "note": "Archive is identifiable; objective and actor framing do not prove its correct beat."
+            }
+          }
+        },
+        {
+          "status": "approved",
+          "reviewer": "Codex",
+          "note": "Codex inspection 2026-10-01: current 1280x720 source-bound frame satisfies the retained finite visual contract. Approval is limited to this camera/state; real-input route, persistence and performance certification remain separate.",
+          "reviewed_image": "Capture_38_record_hall_2026-10-01_202939.png",
+          "reviewed_sha256": "2987a45ad640b75ff414545e09543ed863db463773031051b442e5a3cd5a53c3",
+          "review_checks": {
+            "anatomy": {
+              "verdict": "accepted",
+              "note": "Visible Kael is complete; the partially cropped peripheral witness does not supply a whole-body portrait approval."
+            },
+            "grounding": {
+              "verdict": "accepted",
+              "note": "Player, fitted cabinets, tables and chairs meet the supported floor."
+            },
+            "scale": {
+              "verdict": "accepted",
+              "note": "Archive furniture, aisle, player and vaulted room have coherent relative scale."
+            },
+            "materials": {
+              "verdict": "accepted",
+              "note": "Lit masonry, dark wood, books and memorial surfaces are readable; the aisle is not underexposed."
+            },
+            "composition": {
+              "verdict": "accepted",
+              "note": "Vault, paired cabinet rows, evidence tables and witness memorial form a deliberate readable archive interior."
+            },
+            "route_clearance": {
+              "verdict": "accepted",
+              "note": "The central aisle and evidence approach are visible and unobstructed; physical exits are proven separately."
+            },
+            "role_identity": {
+              "verdict": "accepted",
+              "note": "Kael and the archive's purpose are readable; staged guard guidance is not proof of earned campaign progression."
+            }
+          }
+        }
+      ],
+      "approved_sha256": "fcdab69e06757188d11bb8434b9bf6778e562060acc15011ca7bfc10333146db",
+      "reviewed_rendering_inputs_sha256": "33d5f0ee182543ceb50209e5b659a1fa7b3ca953aefd7b872d987c7b0e90d65d"
     },
     {
       "id": "hart_glade",
       "required": true,
       "current_glob": "Capture_41_white_hart_glade_*.png",
-      "expected_size": [1280, 720],
+      "expected_size": [
+        1280,
+        720
+      ],
       "status": "approved",
       "reviewer": "Codex",
-      "note": "Codex review 2026-08-11: Hart landmark, player, route, horizon, and objective are visible and grounded. The Hart is still a procedural stylized placeholder and must remain documented as such.",
-      "heuristics": { "min_mean_luminance": 1.5, "min_channel_variance": 4.0, "max_bright_ratio": 0.985 },
-      "baseline": { "path": "", "status": "not_set", "max_mean_absolute_difference": null }
+      "note": "Codex directly inspected all eleven 2026-10-01_235123 frames after the preparation repair. Existing finite anatomy, grounding, scale, material, composition, route and identity checks remain satisfied at these cameras. Heavy-blade occlusion and peripheral Record Hall crop remain scoped limitations. Staged captures are not campaign, ending, auditory or numerical-performance certification.",
+      "heuristics": {
+        "min_mean_luminance": 1.5,
+        "min_channel_variance": 4,
+        "max_bright_ratio": 0.985
+      },
+      "baseline": {
+        "path": "",
+        "status": "not_set",
+        "max_mean_absolute_difference": null
+      },
+      "historical_review": {
+        "status": "approved",
+        "reviewer": "Codex",
+        "note": "Codex review 2026-08-11: Hart landmark, player, route, horizon, and objective are visible and grounded. The Hart is still a procedural stylized placeholder and must remain documented as such."
+      },
+      "reviewed_image": "Capture_41_white_hart_glade_2026-10-01_235123.png",
+      "reviewed_sha256": "a970c148a32fc9d2d5019a55c2907b35a6dfac1acc041451597270e8a01e0c54",
+      "review_checks": {
+        "anatomy": {
+          "verdict": "accepted",
+          "note": "An antlered complete stag, not a procedural wire body or wolf substitute, is visible with continuous legs and head."
+        },
+        "grounding": {
+          "verdict": "accepted",
+          "note": "The stag's hoof region aligns with the authored encounter surface and Kael stands on the route; exact grounding has retained native contract evidence."
+        },
+        "scale": {
+          "verdict": "accepted",
+          "note": "The supernatural stag is deliberately larger than Kael while fitting the bounded glade."
+        },
+        "materials": {
+          "verdict": "accepted",
+          "note": "Spectral pale stag, green encounter surface, earth and woodland are differentiated without missing textures."
+        },
+        "composition": {
+          "verdict": "accepted",
+          "note": "The antlered witness is framed by complete woodland and a clear central approach, with no exposed terrain void."
+        },
+        "route_clearance": {
+          "verdict": "accepted",
+          "note": "The central arrival and encounter lane are visible; real covenant outcomes and traversal require separate input evidence."
+        },
+        "role_identity": {
+          "verdict": "accepted",
+          "note": "The White Hart is a distinct antlered witness; the frame does not certify all covenant or combat phases."
+        }
+      },
+      "review_history": [
+        {
+          "status": "rejected",
+          "reviewer": "Codex",
+          "note": "Codex inspection 2026-09-27: Complete antlered Hart exists but flat terrain, uniform bare pillars and green sky fail finale composition.",
+          "reviewed_image": "Capture_41_white_hart_glade_2026-09-27_171838.png",
+          "reviewed_sha256": "6c6ac28c3310ba6791292c1d2126ac66347bfbc5407b826227a9ee7d844912ba",
+          "review_checks": {
+            "anatomy": {
+              "verdict": "accepted",
+              "note": "Hart has a connected four-legged antlered body; Kael profile is complete."
+            },
+            "grounding": {
+              "verdict": "rejected",
+              "note": "Kael contacts ground; distant Hart contact needs closer inspection."
+            },
+            "scale": {
+              "verdict": "accepted",
+              "note": "Hart is taller than Kael as a supernatural focal creature."
+            },
+            "materials": {
+              "verdict": "rejected",
+              "note": "White Hart is readable; terrain/sky remain one-note."
+            },
+            "composition": {
+              "verdict": "rejected",
+              "note": "Complete antlered Hart exists but flat terrain, uniform bare pillars and green sky fail finale composition."
+            },
+            "route_clearance": {
+              "verdict": "accepted",
+              "note": "An approach lane is visible; this staged frame does not certify physical traversal."
+            },
+            "role_identity": {
+              "verdict": "accepted",
+              "note": "Antlered Hart is recognizable, not proof of encounter phases or endings."
+            }
+          }
+        },
+        {
+          "status": "approved",
+          "reviewer": "Codex",
+          "note": "Codex inspection 2026-10-01: current 1280x720 source-bound frame satisfies the retained finite visual contract. Approval is limited to this camera/state; real-input route, persistence and performance certification remain separate.",
+          "reviewed_image": "Capture_41_white_hart_glade_2026-10-01_202939.png",
+          "reviewed_sha256": "26fa0d634da2070930b25bb4d1005f2005a99c6b99c782d78d0849464e3395b8",
+          "review_checks": {
+            "anatomy": {
+              "verdict": "accepted",
+              "note": "An antlered complete stag, not a procedural wire body or wolf substitute, is visible with continuous legs and head."
+            },
+            "grounding": {
+              "verdict": "accepted",
+              "note": "The stag's hoof region aligns with the authored encounter surface and Kael stands on the route; exact grounding has retained native contract evidence."
+            },
+            "scale": {
+              "verdict": "accepted",
+              "note": "The supernatural stag is deliberately larger than Kael while fitting the bounded glade."
+            },
+            "materials": {
+              "verdict": "accepted",
+              "note": "Spectral pale stag, green encounter surface, earth and woodland are differentiated without missing textures."
+            },
+            "composition": {
+              "verdict": "accepted",
+              "note": "The antlered witness is framed by complete woodland and a clear central approach, with no exposed terrain void."
+            },
+            "route_clearance": {
+              "verdict": "accepted",
+              "note": "The central arrival and encounter lane are visible; real covenant outcomes and traversal require separate input evidence."
+            },
+            "role_identity": {
+              "verdict": "accepted",
+              "note": "The White Hart is a distinct antlered witness; the frame does not certify all covenant or combat phases."
+            }
+          }
+        }
+      ],
+      "approved_sha256": "a970c148a32fc9d2d5019a55c2907b35a6dfac1acc041451597270e8a01e0c54",
+      "reviewed_rendering_inputs_sha256": "33d5f0ee182543ceb50209e5b659a1fa7b3ca953aefd7b872d987c7b0e90d65d"
     }
-  ]
+  ],
+  "capture_worktree_dirty": true,
+  "capture_rendering_inputs_sha256": "33d5f0ee182543ceb50209e5b659a1fa7b3ca953aefd7b872d987c7b0e90d65d",
+  "latest_review": {
+    "reviewed_at": "2026-10-01",
+    "reviewer": "Codex",
+    "capture_gate": "functional_candidate_v10_required_views",
+    "result": "approved",
+    "evidence_scope": "Staged native visual fixtures, not player-input routes. Capture provenance is not artistic approval."
+  }
 }

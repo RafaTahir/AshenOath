@@ -76,6 +76,11 @@ var last_locomotion_phase := -1.0
 var locomotion_phase_distance := 0.0
 var locomotion_step_index := 0
 
+func _ready() -> void:
+	# Imported actors are configured before their visual root is parented. Defer
+	# timer startup until this driver actually belongs to the SceneTree.
+	_start_manual_tick(true)
+
 func configure(root: Node3D, clips: Dictionary) -> bool:
 	character_root = root
 	clip_map = clips.duplicate()
@@ -133,13 +138,18 @@ func set_external_tick(enabled: bool) -> void:
 		if enabled:
 			manual_tick_timer.stop()
 		elif manual_update_interval > 0.0 and not distance_suspended:
-			manual_tick_timer.start(manual_update_interval)
+			_start_manual_tick()
 	set_process(not enabled and manual_update_interval <= 0.0)
 
 func _on_manual_tick() -> void:
 	if externally_ticked or distance_suspended or manual_update_interval <= 0.0:
 		return
-	_advance_animation(manual_update_interval)
+	var elapsed := manual_tick_timer.wait_time
+	# Timer.start(first_delay) also replaces its repeating period. Restore the
+	# requested rate after that first staggered tick and account for its real span.
+	if not is_equal_approx(elapsed, manual_update_interval):
+		_start_manual_tick()
+	_advance_animation(elapsed)
 
 func advance_external(delta: float) -> void:
 	if not externally_ticked:
@@ -192,9 +202,7 @@ func set_update_rate_hz(rate_hz: float) -> void:
 		manual_tick_timer.wait_time = manual_update_interval
 		manual_update_accumulator = 0.0
 		if not externally_ticked and not distance_suspended:
-			var phase_slot := int(character_root.get_instance_id() % 17) if character_root != null else 0
-			var first_tick := manual_update_interval * (1.0 - float(phase_slot) / 17.0)
-			manual_tick_timer.start(maxf(first_tick, 0.02))
+			_start_manual_tick(true)
 	else:
 		manual_update_accumulator = 0.0
 		if manual_tick_timer != null and is_instance_valid(manual_tick_timer):
@@ -205,9 +213,8 @@ func set_update_rate_hz(rate_hz: float) -> void:
 			if manual_update_interval <= 0.0
 			else AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
 		)
-		# A manual player must not also be evaluated by Godot's idle callback.
-		# `advance()` above still evaluates the animation at the scheduled tick.
-		player.active = manual_update_interval <= 0.0
+		# MANUAL disables automatic evaluation; inactive also disables advance().
+		player.active = not distance_suspended
 	set_process(not externally_ticked and manual_update_interval <= 0.0)
 
 func is_valid() -> bool:
@@ -215,9 +222,8 @@ func is_valid() -> bool:
 		and contract_errors.is_empty() and resolved_clip_map.has("idle")
 
 func is_evaluation_scheduled() -> bool:
-	# Manual and externally ticked drivers intentionally keep AnimationPlayer
-	# inactive between scheduled advances. This reports the real runtime
-	# contract without making a verifier mistake throttling for a dead rig.
+	# Manual mixers stay active but evaluate only explicit scheduled advances.
+	# Distance suspension disables both the schedule and mixer.
 	return is_valid() and not distance_suspended and (externally_ticked or manual_update_interval > 0.0 or animation_player.active)
 
 func set_distance_suspended(suspended: bool) -> void:
@@ -229,11 +235,22 @@ func set_distance_suspended(suspended: bool) -> void:
 		if suspended or externally_ticked or manual_update_interval <= 0.0:
 			manual_tick_timer.stop()
 		else:
-			manual_tick_timer.start(manual_update_interval)
+			_start_manual_tick()
 	for player in animation_players:
-		player.active = not suspended and manual_update_interval <= 0.0
+		player.active = not suspended
 	if not suspended and not dead:
 		_play_state(current_state if current_state != "" else "idle", 0.0)
+
+func _start_manual_tick(stagger_first_tick := false) -> void:
+	if manual_tick_timer == null or not is_instance_valid(manual_tick_timer):
+		return
+	if not is_inside_tree() or externally_ticked or distance_suspended or manual_update_interval <= 0.0:
+		return
+	var delay := manual_update_interval
+	if stagger_first_tick:
+		var phase_slot := int(character_root.get_instance_id() % 17) if character_root != null else 0
+		delay *= 1.0 - float(phase_slot) / 17.0
+	manual_tick_timer.start(maxf(delay, 0.02))
 
 func set_locomotion(speed_ratio: float, _direction: Vector3, grounded: bool) -> void:
 	requested_speed_ratio = clampf(speed_ratio, 0.0, 1.35)
@@ -271,7 +288,7 @@ func set_locomotion(speed_ratio: float, _direction: Vector3, grounded: bool) -> 
 		target_playback_scale = 1.0
 	_play_state(state, 0.14)
 
-func trigger_action(action_name: String, playback_scale: float = 1.0, blend_time: float = 0.10, force: bool = false) -> bool:
+func trigger_action(action_name: String, playback_scale: float = 1.0, blend_time: float = 0.10, force: bool = false, duration: float = 0.0) -> bool:
 	if not is_valid() or dead:
 		return false
 	if action_active:
@@ -290,7 +307,9 @@ func trigger_action(action_name: String, playback_scale: float = 1.0, blend_time
 	action_elapsed = 0.0
 	action_looping = bool(LOOPING_ACTIONS.get(action_name, false))
 	active_action_clip = clip
-	target_playback_scale = clampf(playback_scale, 0.55, 1.45)
+	# Timed combat must finish its clip within the controller's damage/recovery
+	# clock. The general locomotion/action speed clamp cannot express that rate.
+	target_playback_scale = animation_player.get_animation(clip).length / duration if duration > 0.0 else clampf(playback_scale, 0.55, 1.45)
 	current_playback_scale = target_playback_scale
 	for player in animation_players:
 		player.speed_scale = current_playback_scale
@@ -348,10 +367,13 @@ func set_dead() -> void:
 	if dead:
 		return
 	dead = true
+	current_state = "death"
 	action_active = true
 	presentation_state = ""
 	action_looping = false
 	action_elapsed = 0.0
+	target_playback_scale = 1.0
+	current_playback_scale = 1.0
 	var clip := _clip_for("death")
 	if clip != StringName():
 		_play_clip_all(clip, 0.08)
@@ -512,7 +534,9 @@ func _collect_animation_players(root: Node) -> void:
 func _play_clip_all(clip: StringName, blend: float, playback_direction: float = 1.0) -> void:
 	for player in animation_players:
 		if player.has_animation(clip):
-			player.play(clip, blend, current_playback_scale * playback_direction, playback_direction < 0.0)
+			player.speed_scale = current_playback_scale * playback_direction
+			player.play(clip, blend, 1.0, playback_direction < 0.0)
+			player.seek(player.get_animation(clip).length if playback_direction < 0.0 else 0.0, true)
 			# Sample the first pose immediately. This is required for manual players,
 			# but is also important for a newly spawned actor that can be paused for
 			# dialogue or capture before its first idle callback.

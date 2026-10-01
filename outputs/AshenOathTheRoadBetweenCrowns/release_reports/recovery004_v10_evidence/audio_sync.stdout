@@ -1,0 +1,134 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+OpenGL API OpenGL ES 3.0 (ANGLE 2.1.1 git hash: aaebda1c5a40) - Compatibility - Using Device: Google Inc. (Intel) - ANGLE (Intel, Intel(R) HD Graphics 620 (0x00005916) Direct3D11 vs_5_0 ps_5_0, D3D11-31.0.101.2130)
+
+LOADING: Greyfen prewarm begin
+AUDIO: music_state_main_menu
+LOADING: runtime ready total=1007ms environment=200ms services=594ms
+LOADING: Greyfen prewarm build_begin
+LOADING: Greyfen prewarm build_complete ms=1063 ok=true
+LOADING: new_game_handoff prewarmed=true cached_zones=1
+LOADING: new_game_stage=cache_clear elapsed=13.7
+LOADING: handoff_phase=hide_menu_begin
+LOADING: handoff_phase=hide_menu_end
+LOADING: handoff_phase=quest_begin
+LOADING: handoff_phase=quest_end
+LOADING: new_game_stage=state_ready elapsed=63.1
+LOADING: new_game_stage=zone_dispatch elapsed=68.1
+LOADING: handoff_phase=load_zone_begin
+LOADING: zone_begin id=greyfen prewarm=true cached=false
+LOADING: cached_zone_activated id=greyfen valid=true
+LOADING: zone_stage=cache_activated elapsed=88.4
+ZONE_COMPOSITION: id=greyfen reused=true visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=109.4
+LOADING: zone_stage=visual_applied elapsed=117.2
+AUDIO: music_state_greyfen_explore
+LOADING: zone_stage=render_validation_deferred elapsed=129.0
+LOADING: zone_stage=budget_ready elapsed=134.0
+LOADING: handoff_phase=unlock_begin
+LOADING: handoff_phase=unlock_end
+LOADING: zone=greyfen playable_ms=149.0
+LOADING: handoff_phase=hide_loading_begin
+LOADING: handoff_phase=hide_loading_end
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: handoff_phase=load_zone_end
+LOADING: new_game_stage=ready elapsed=189.3
+LOADING: new_game_stage=zone_return elapsed=189.3
+LOADING: opening_menu_render_ready
+LOADING: Greyfen prewarmed total=26045ms build=1063ms world=185ms player=270ms
+LOADING: Greyfen deferred_runtime_complete ms=35
+LOADING: zone_stage=runtime_finalized zone=greyfen navigation=false ms=0
+LOADING: Greyfen deferred_detail stage=gameplay_base ms=11
+LOADING: Greyfen deferred_detail stage=gameplay_place_0 ms=1
+LOADING: opening_boot_materials_restored
+LOADING: Greyfen deferred_detail stage=gameplay_place_1 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_place_2 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_place_3 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_place_4 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_side_clues ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_main_clues ms=2
+LOADING: Greyfen deferred_detail stage=gameplay_gate_links ms=2
+LOADING: Greyfen deferred_detail stage=gameplay_gate_visual ms=2
+LOADING: Greyfen deferred_detail stage=gameplay_route_markers ms=3
+LOADING: Greyfen deferred_detail stage=gameplay_story ms=3
+LOADING: Greyfen deferred_detail stage=gameplay_visual_0 ms=2
+LOADING: Greyfen deferred_detail stage=gameplay_visual_1 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_visual_2 ms=3
+LOADING: Greyfen deferred_detail stage=gameplay_visual_3 ms=0
+LOADING: Greyfen deferred_detail stage=gameplay_visual_4 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_visual_5 ms=3
+LOADING: Greyfen deferred_detail stage=gameplay_visual_6 ms=2
+LOADING: Greyfen deferred_detail stage=gameplay_visual_7 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_visual_8 ms=2
+LOADING: Greyfen deferred_detail stage=gameplay_visual_9 ms=0
+LOADING: Greyfen deferred_detail stage=gameplay_visual_10 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_visual_11 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_visual_12 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_visual_13 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_visual_14 ms=3
+LOADING: Greyfen deferred_detail stage=gameplay_visual_15 ms=2
+LOADING: Greyfen deferred_detail stage=gameplay_mira ms=13
+LOADING: Greyfen deferred_detail stage=gameplay_rook ms=11
+LOADING: Greyfen deferred_detail stage=gameplay_widow_elna ms=10
+LOADING: Greyfen deferred_detail stage=gameplay_blacksmith_tor ms=13
+LOADING: Greyfen deferred_detail stage=gameplay_farmer_toma ms=9
+LOADING: Greyfen deferred_detail stage=gameplay_population ms=9
+LOADING: Greyfen deferred_detail stage=gameplay_common_table ms=3
+LOADING: Greyfen deferred_detail stage=gameplay_barrel_board ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_0 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_1 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_2 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_3 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_4 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_5 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_6 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_7 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_8 ms=3
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_9 ms=4
+LOADING: Greyfen deferred_detail stage=opening_river_visual ms=1
+LOADING: Greyfen deferred_detail stage=opening_terrain ms=1
+LOADING: Greyfen deferred_detail stage=opening_lighting ms=0
+LOADING: Greyfen deferred_detail stage=opening_spawn ms=9
+LOADING: Greyfen deferred_detail stage=village_house_0 ms=1
+LOADING: Greyfen deferred_detail stage=village_house_1 ms=0
+LOADING: Greyfen deferred_detail stage=village_house_2 ms=1
+LOADING: Greyfen deferred_detail stage=village_house_3 ms=0
+LOADING: Greyfen deferred_detail stage=village_architectural_details_0 ms=1
+LOADING: Greyfen deferred_detail stage=village_architectural_details_1 ms=1
+LOADING: Greyfen deferred_detail stage=village_architectural_details_2 ms=0
+LOADING: Greyfen deferred_detail stage=village_architectural_details_3 ms=0
+LOADING: Greyfen deferred_detail stage=village_architectural_details_4 ms=1
+LOADING: Greyfen deferred_detail stage=boundary_horizon ms=55
+LOADING: Greyfen deferred_detail stage=boundary_vegetation ms=51
+LOADING: Greyfen deferred_detail stage=boundary_lights ms=6
+LOADING: Greyfen deferred_detail stage=boundary_north_south_fences ms=5
+LOADING: Greyfen deferred_detail stage=boundary_side_fences ms=3
+LOADING: Greyfen deferred_detail stage=landmark_board ms=1
+LOADING: Greyfen deferred_detail stage=landmark_shrine ms=13
+LOADING: Greyfen deferred_detail stage=landmark_blacksmith ms=29
+LOADING: Greyfen deferred_detail stage=landmark_cemetery_approach ms=4
+LOADING: Greyfen deferred_detail stage=landmark_cemetery_boundary ms=5
+LOADING: Greyfen deferred_detail stage=landmark_cemetery_graves ms=4
+LOADING: Greyfen deferred_detail stage=landmark_cemetery_chapel ms=6
+LOADING: Greyfen deferred_detail stage=landmark_cemetery_bell ms=3
+LOADING: Greyfen deferred_detail stage=landmark_cemetery_edges ms=24
+LOADING: Greyfen deferred_detail stage=landmark_cemetery_presentation_bell ms=2
+LOADING: Greyfen deferred_detail stage=landmark_cemetery_presentation_chapel ms=1
+LOADING: Greyfen deferred_detail stage=landmark_cemetery_presentation_graves ms=1
+LOADING: Greyfen deferred_detail stage=landmark_cemetery_presentation_roost ms=2
+LOADING: Greyfen deferred_detail stage=landmark_cemetery_presentation_states ms=0
+LOADING: Greyfen deferred_detail stage=landmark_cart_road ms=1
+LOADING: Greyfen deferred_detail stage=village_dressing ms=2
+LOADING: Greyfen deferred_detail stage=village_first_impression_ruts ms=0
+LOADING: Greyfen deferred_detail stage=village_first_impression_lanterns ms=6
+LOADING: Greyfen deferred_detail stage=village_first_impression_shrine ms=14
+LOADING: Greyfen deferred_detail stage=village_first_impression_story ms=18
+LOADING: Greyfen deferred_detail stage=village_first_impression_crows ms=5
+LOADING: Greyfen deferred_detail stage=village_quality ms=0
+LOADING: Greyfen deferred_detail stage=trees ms=2
+LOADING: Greyfen deferred_detail stage=aftermath ms=0
+LOADING: Greyfen deferred_detail complete
+REAL_INPUT audio_sync=PASS {"heavy":1,"light":1,"phases":["sheathing","charging","releasing"],"releases":1,"stage":"paused","steps":{"backward":1,"forward":1,"sprint":2}}
+VERIFIER_PHASE: SHUTDOWN
+OPENING REAL INPUT NATIVE: PASS

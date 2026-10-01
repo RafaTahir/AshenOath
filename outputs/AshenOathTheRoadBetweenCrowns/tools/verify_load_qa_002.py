@@ -10,8 +10,8 @@ import subprocess
 from pathlib import Path
 
 
-PACK_IDS = {"base", "opening", "campaign", "characters", "monsters", "audio"}
-REQUIRED_EXTERNAL_PACKS = {"opening", "campaign", "characters", "monsters", "audio"}
+PACK_IDS = {"base", "opening", "campaign", "characters", "monsters", "audio", "quality_materials"}
+REQUIRED_EXTERNAL_PACKS = {"opening", "campaign", "characters", "monsters", "audio", "quality_materials"}
 MAX_BYTES = 100 * 1024 * 1024
 
 
@@ -84,7 +84,7 @@ def main() -> int:
     packs = manifest.get("packs", {})
     candidate_rows = {str(row.get("id")): row for row in candidates.get("packs", [])}
     if set(packs) != PACK_IDS or set(candidate_rows) != PACK_IDS:
-        errors.append("manifest and candidate manifest do not contain exactly the six Milestone-A packs")
+        errors.append("manifest and candidate manifest do not contain exactly the seven runtime packs")
 
     for pack_id in sorted(PACK_IDS):
         pack = packs.get(pack_id, {})
@@ -147,9 +147,31 @@ def main() -> int:
 
     shell_path = project / "web_boot_shell.html"
     shell = shell_path.read_text(encoding="utf-8") if shell_path.is_file() else ""
-    for token in ("window.__ashenOathBoot", "ashen-oath-first-paint", "ashen-oath-engine-ready", "navigator.getGamepads"):
+    for token in (
+        "window.__ashenOathBoot",
+        "ashen-oath-first-paint",
+        "ashen-oath-engine-ready",
+        "navigator.getGamepads",
+        "prefetchOpeningPack",
+        "runtime_pack_manifest.json",
+        "cache: 'force-cache'",
+        "__ashenOathOpeningState",
+        "waitForOpeningReady",
+        "crypto.subtle.digest('SHA-256'",
+        "Engine.load(",
+        "engine.copyToFS(",
+        "mountOpeningPackAfterReady",
+        "window.__ashenOathBeginOpeningPackMount = mountOpeningPackAfterReady",
+        "ashenoath-runtime-packs-v1",
+    ):
         if token not in shell:
             errors.append(f"boot/cache acceptance lacks {token}")
+    if "const openingPreloadPromise = prefetchOpeningPack();" in shell:
+        errors.append("opening pack still begins on the WebAssembly startup critical path")
+    if "window.setTimeout(mountOpeningPackAfterReady" in shell:
+        errors.append("opening pack begins at shell/menu readiness instead of gameplay control")
+    if 'const STARTUP_PACK_IDS: Array[String] = ["base"]' not in manager:
+        errors.append("minimal startup readiness is not base-only")
 
     preset = (project / "export_presets.cfg").read_text(encoding="utf-8") if (project / "export_presets.cfg").is_file() else ""
     if 'html/custom_html_shell="res://web_boot_shell.html"' not in preset:
@@ -161,6 +183,9 @@ def main() -> int:
     )
     if "scripts/qa_browser_telemetry.gd" in production_sources:
         errors.append("production export still exposes QA telemetry")
+    for token in ("_try_mount_web_preloaded_pack", "__ashenOathPreloadedPacks", "load_resource_pack"):
+        if token not in manager:
+            errors.append(f"runtime pack manager lacks preloaded opening contract {token}")
 
     external_report = {"checked": False, "packs": {}}
     if args.candidate_dir:
@@ -201,7 +226,7 @@ def main() -> int:
         for error in errors:
             print(f"- {error}")
         return 1
-    print("LOAD-QA-002: PASS (boot timing contract, cache validation, six-pack budget, fallback safety)")
+    print("LOAD-QA-002: PASS (boot timing contract, cache validation, seven-pack budget, fallback safety)")
     return 0
 
 

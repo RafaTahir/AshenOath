@@ -11,7 +11,7 @@ signal zone_activation_requested(zone_id: String, arrival_id: String)
 
 const TOPOLOGY_PATH := "res://zone_streaming_topology.json"
 const AUTHORED_LAYER_PATHS := {
-	"greyfen": "res://scenes/zones/greyfen_gameplay.tscn",
+	"greyfen": "res://scenes/runtime/greyfen_gameplay_core.tscn",
 	"wychwood": "res://scenes/zones/wychwood_gameplay.tscn",
 	"cemetery": "res://scenes/zones/cemetery_gameplay.tscn",
 }
@@ -47,11 +47,8 @@ func neighbors(zone_id: String) -> Array[String]:
 
 func prewarm_neighbors(zone_id: String) -> void:
 	for neighbor in neighbors(zone_id):
-		# The current authored layers are deliberately marker-only shells. They are
-		# attached synchronously by ZoneSceneCatalog during activation, so starting a
-		# threaded request here races that load on the next transition and leaves a
-		# duplicate ResourceLoader request alive during shutdown. Keep this path for
-		# future geometry-bearing layers, but do not prewarm optional anchor shells.
+		# Authored layers are attached transactionally by ZoneSceneCatalog during
+		# activation. Do not race that ownership with a second threaded request.
 		if AUTHORED_LAYER_PATHS.has(neighbor):
 			continue
 		var path := str(AUTHORED_LAYER_PATHS.get(neighbor, ""))

@@ -1,0 +1,935 @@
+{
+	"acceptance_profile": "functional_candidate",
+	"generated_at_utc": "2026-10-01T15:45:41",
+	"greyfen_hydration_frames": {
+		"average_fps": 49.8748659277798,
+		"frames": 279,
+		"one_percent_low_fps": 10.146275471379,
+		"slow_frame_count": 7,
+		"slow_frames": [
+			{
+				"draw_calls": 123,
+				"frame_ms": 140.268,
+				"nodes": 694,
+				"physics_ms": 0.898,
+				"primitives": 70470,
+				"process_ms": 85.309,
+				"stage_after": "gameplay_place_2",
+				"stage_before": "gameplay_place_2"
+			},
+			{
+				"draw_calls": 185,
+				"frame_ms": 81.287,
+				"nodes": 946,
+				"physics_ms": 1.948,
+				"primitives": 119434,
+				"process_ms": 29.069,
+				"stage_after": "landmark_cemetery_approach",
+				"stage_before": "landmark_blacksmith"
+			},
+			{
+				"draw_calls": 161,
+				"frame_ms": 74.12,
+				"nodes": 874,
+				"physics_ms": 1.948,
+				"primitives": 109877,
+				"process_ms": 29.069,
+				"stage_after": "boundary_lights",
+				"stage_before": "boundary_vegetation"
+			},
+			{
+				"draw_calls": 125,
+				"frame_ms": 71.611,
+				"nodes": 705,
+				"physics_ms": 0.898,
+				"primitives": 70550,
+				"process_ms": 85.309,
+				"stage_after": "gameplay_route_markers",
+				"stage_before": "gameplay_gate_visual"
+			},
+			{
+				"draw_calls": 157,
+				"frame_ms": 61.997,
+				"nodes": 853,
+				"physics_ms": 1.948,
+				"primitives": 91143,
+				"process_ms": 29.069,
+				"stage_after": "boundary_vegetation",
+				"stage_before": "boundary_horizon"
+			},
+			{
+				"draw_calls": 196,
+				"frame_ms": 42.48,
+				"nodes": 1012,
+				"physics_ms": 1.948,
+				"primitives": 129172,
+				"process_ms": 29.069,
+				"stage_after": "landmark_cemetery_presentation_bell",
+				"stage_before": "landmark_cemetery_edges"
+			},
+			{
+				"draw_calls": 175,
+				"frame_ms": 33.695,
+				"nodes": 935,
+				"physics_ms": 1.948,
+				"primitives": 110646,
+				"process_ms": 29.069,
+				"stage_after": "landmark_blacksmith",
+				"stage_before": "landmark_shrine"
+			}
+		],
+		"worst_frame_ms": 140.268
+	},
+	"limits": {
+		"maximum_cold_transition_ms": 900.0,
+		"maximum_static_memory_bytes": 471859200,
+		"maximum_warm_transition_ms": 350.0,
+		"minimum_average_fps": 32.0,
+		"minimum_one_percent_low_fps": 30.0,
+		"profile_preset": "balanced"
+	},
+	"performance_certified": false,
+	"scope": "full",
+	"scope_limitation": "Native diagnostic zone sampling; not player-route or total-process-memory proof.",
+	"status": "pass",
+	"target_misses": [
+		"Greyfen post-control hydration 1% low 10.1 is below 30.0",
+		"wychwood cold transition exceeded 900 ms",
+		"wychwood 1% low 14.1 is below 30.0",
+		"warm return exceeded 350 ms"
+	],
+	"transitions": {
+		"greyfen_after_hydration": {
+			"held_keys": {
+
+			},
+			"movement_input": [
+				0.0,
+				0.0
+			],
+			"position": [
+				0.0,
+				0.00109370425343513,
+				9.80000019073486
+			],
+			"seam": {
+				"active_sector_ids": [
+					"greyfen",
+					"wychwood",
+					"deep_wood",
+					"vargan_approach"
+				],
+				"current_sector": "greyfen",
+				"discovered_count": 1,
+				"failed_transition_count": 0,
+				"last_world_position": [
+					0.0,
+					1.0,
+					9.80000019073486
+				],
+				"pending_transition": {
+
+				},
+				"previous_sector": "",
+				"transition_count": 0
+			},
+			"velocity": [
+				0.0,
+				0.0,
+				0.0
+			],
+			"zone": "greyfen"
+		},
+		"greyfen_after_settle": {
+			"held_keys": {
+
+			},
+			"movement_input": [
+				0.0,
+				0.0
+			],
+			"position": [
+				0.0,
+				0.00109370425343513,
+				9.80000019073486
+			],
+			"seam": {
+				"active_sector_ids": [
+					"greyfen",
+					"wychwood",
+					"deep_wood",
+					"vargan_approach"
+				],
+				"current_sector": "greyfen",
+				"discovered_count": 1,
+				"failed_transition_count": 0,
+				"last_world_position": [
+					0.0,
+					1.0,
+					9.80000019073486
+				],
+				"pending_transition": {
+
+				},
+				"previous_sector": "",
+				"transition_count": 0
+			},
+			"velocity": [
+				0.0,
+				0.0,
+				0.0
+			],
+			"zone": "greyfen"
+		},
+		"greyfen_cold_ms": 0.002,
+		"greyfen_hydration_ms": 5594,
+		"hart_glade_after_settle": {
+			"held_keys": {
+
+			},
+			"movement_input": [
+				0.0,
+				0.0
+			],
+			"position": [
+				0.0,
+				0.00020173192024231,
+				8.0
+			],
+			"seam": {
+				"active_sector_ids": [
+					"hart_glade",
+					"assembly"
+				],
+				"current_sector": "hart_glade",
+				"discovered_count": 5,
+				"failed_transition_count": 0,
+				"last_world_position": [
+					48.0,
+					0.176666602492332,
+					448.0
+				],
+				"pending_transition": {
+
+				},
+				"previous_sector": "record_hall",
+				"transition_count": 0
+			},
+			"velocity": [
+				0.0,
+				0.0,
+				0.0
+			],
+			"zone": "hart_glade"
+		},
+		"hart_glade_cold_ms": 213.995,
+		"new_game_ms": 19.363,
+		"record_hall_after_settle": {
+			"held_keys": {
+
+			},
+			"movement_input": [
+				0.0,
+				0.0
+			],
+			"position": [
+				0.0,
+				0.00020173192024231,
+				8.0
+			],
+			"seam": {
+				"active_sector_ids": [
+					"record_hall",
+					"vargan_court",
+					"undercroft"
+				],
+				"current_sector": "record_hall",
+				"discovered_count": 4,
+				"failed_transition_count": 0,
+				"last_world_position": [
+					48.0,
+					0.176666602492332,
+					328.0
+				],
+				"pending_transition": {
+
+				},
+				"previous_sector": "vargan_court",
+				"transition_count": 0
+			},
+			"velocity": [
+				0.0,
+				0.0,
+				0.0
+			],
+			"zone": "record_hall"
+		},
+		"record_hall_cold_ms": 82.835,
+		"vargan_court_after_settle": {
+			"held_keys": {
+
+			},
+			"movement_input": [
+				0.0,
+				0.0
+			],
+			"position": [
+				0.0,
+				0.00020173192024231,
+				8.0
+			],
+			"seam": {
+				"active_sector_ids": [
+					"vargan_court",
+					"vargan_approach",
+					"record_hall"
+				],
+				"current_sector": "vargan_court",
+				"discovered_count": 3,
+				"failed_transition_count": 0,
+				"last_world_position": [
+					48.0,
+					0.176666602492332,
+					288.0
+				],
+				"pending_transition": {
+
+				},
+				"previous_sector": "wychwood",
+				"transition_count": 0
+			},
+			"velocity": [
+				0.0,
+				0.0,
+				0.0
+			],
+			"zone": "vargan_court"
+		},
+		"vargan_court_cold_ms": 380.768,
+		"warm_return_ms": 564.827,
+		"wychwood_after_settle": {
+			"held_keys": {
+
+			},
+			"movement_input": [
+				0.0,
+				0.0
+			],
+			"position": [
+				0.0,
+				0.00020173192024231,
+				8.0
+			],
+			"seam": {
+				"active_sector_ids": [
+					"wychwood",
+					"greyfen",
+					"deep_wood"
+				],
+				"current_sector": "wychwood",
+				"discovered_count": 2,
+				"failed_transition_count": 0,
+				"last_world_position": [
+					0.0,
+					1.0,
+					48.0
+				],
+				"pending_transition": {
+
+				},
+				"previous_sector": "greyfen",
+				"transition_count": 0
+			},
+			"velocity": [
+				0.0,
+				0.0,
+				0.0
+			],
+			"zone": "wychwood"
+		},
+		"wychwood_cold_ms": 1165.895
+	},
+	"zones": {
+		"greyfen": {
+			"average_fps": 46.0370749414961,
+			"draw_calls": 250,
+			"end_state": {
+				"held_keys": {
+
+				},
+				"movement_input": [
+					0.0,
+					0.0
+				],
+				"position": [
+					0.0,
+					0.00109370425343513,
+					9.80000019073486
+				],
+				"seam": {
+					"active_sector_ids": [
+						"greyfen",
+						"wychwood",
+						"deep_wood",
+						"vargan_approach"
+					],
+					"current_sector": "greyfen",
+					"discovered_count": 1,
+					"failed_transition_count": 0,
+					"last_world_position": [
+						0.0,
+						1.0,
+						9.80000019073486
+					],
+					"pending_transition": {
+
+					},
+					"previous_sector": "",
+					"transition_count": 0
+				},
+				"velocity": [
+					0.0,
+					0.0,
+					0.0
+				],
+				"zone": "greyfen"
+			},
+			"escaped_state": {
+
+			},
+			"frames": 369,
+			"nodes": 1118,
+			"one_percent_low_fps": 35.1219169542274,
+			"primitives": 138394,
+			"slow_frame_count": 0,
+			"slow_frame_indices": [],
+			"slow_frame_samples": [],
+			"start_state": {
+				"held_keys": {
+
+				},
+				"movement_input": [
+					0.0,
+					0.0
+				],
+				"position": [
+					0.0,
+					0.00109370425343513,
+					9.80000019073486
+				],
+				"seam": {
+					"active_sector_ids": [
+						"greyfen",
+						"wychwood",
+						"deep_wood",
+						"vargan_approach"
+					],
+					"current_sector": "greyfen",
+					"discovered_count": 1,
+					"failed_transition_count": 0,
+					"last_world_position": [
+						0.0,
+						1.0,
+						9.80000019073486
+					],
+					"pending_transition": {
+
+					},
+					"previous_sector": "",
+					"transition_count": 0
+				},
+				"velocity": [
+					0.0,
+					0.0,
+					0.0
+				],
+				"zone": "greyfen"
+			},
+			"static_memory_bytes": 82066952
+		},
+		"hart_glade": {
+			"average_fps": 60.0017025483098,
+			"draw_calls": 66,
+			"end_state": {
+				"held_keys": {
+
+				},
+				"movement_input": [
+					0.0,
+					0.0
+				],
+				"position": [
+					0.0,
+					0.00020173192024231,
+					8.0
+				],
+				"seam": {
+					"active_sector_ids": [
+						"hart_glade",
+						"assembly"
+					],
+					"current_sector": "hart_glade",
+					"discovered_count": 5,
+					"failed_transition_count": 0,
+					"last_world_position": [
+						48.0,
+						0.176666602492332,
+						448.0
+					],
+					"pending_transition": {
+
+					},
+					"previous_sector": "record_hall",
+					"transition_count": 0
+				},
+				"velocity": [
+					0.0,
+					0.0,
+					0.0
+				],
+				"zone": "hart_glade"
+			},
+			"escaped_state": {
+
+			},
+			"frames": 480,
+			"nodes": 548,
+			"one_percent_low_fps": 55.1888562661427,
+			"primitives": 53008,
+			"slow_frame_count": 0,
+			"slow_frame_indices": [],
+			"slow_frame_samples": [],
+			"start_state": {
+				"held_keys": {
+
+				},
+				"movement_input": [
+					0.0,
+					0.0
+				],
+				"position": [
+					0.0,
+					0.00020173192024231,
+					8.0
+				],
+				"seam": {
+					"active_sector_ids": [
+						"hart_glade",
+						"assembly"
+					],
+					"current_sector": "hart_glade",
+					"discovered_count": 5,
+					"failed_transition_count": 0,
+					"last_world_position": [
+						48.0,
+						0.176666602492332,
+						448.0
+					],
+					"pending_transition": {
+
+					},
+					"previous_sector": "record_hall",
+					"transition_count": 0
+				},
+				"velocity": [
+					0.0,
+					0.0,
+					0.0
+				],
+				"zone": "hart_glade"
+			},
+			"static_memory_bytes": 84033361
+		},
+		"record_hall": {
+			"average_fps": 59.9996607087793,
+			"draw_calls": 76,
+			"end_state": {
+				"held_keys": {
+
+				},
+				"movement_input": [
+					0.0,
+					0.0
+				],
+				"position": [
+					0.0,
+					0.00020173192024231,
+					8.0
+				],
+				"seam": {
+					"active_sector_ids": [
+						"record_hall",
+						"vargan_court",
+						"undercroft"
+					],
+					"current_sector": "record_hall",
+					"discovered_count": 4,
+					"failed_transition_count": 0,
+					"last_world_position": [
+						48.0,
+						0.176666602492332,
+						328.0
+					],
+					"pending_transition": {
+
+					},
+					"previous_sector": "vargan_court",
+					"transition_count": 0
+				},
+				"velocity": [
+					0.0,
+					0.0,
+					0.0
+				],
+				"zone": "record_hall"
+			},
+			"escaped_state": {
+
+			},
+			"frames": 481,
+			"nodes": 679,
+			"one_percent_low_fps": 53.7726920760561,
+			"primitives": 82366,
+			"slow_frame_count": 0,
+			"slow_frame_indices": [],
+			"slow_frame_samples": [],
+			"start_state": {
+				"held_keys": {
+
+				},
+				"movement_input": [
+					0.0,
+					0.0
+				],
+				"position": [
+					0.0,
+					0.00020173192024231,
+					8.0
+				],
+				"seam": {
+					"active_sector_ids": [
+						"record_hall",
+						"vargan_court",
+						"undercroft"
+					],
+					"current_sector": "record_hall",
+					"discovered_count": 4,
+					"failed_transition_count": 0,
+					"last_world_position": [
+						48.0,
+						0.176666602492332,
+						328.0
+					],
+					"pending_transition": {
+
+					},
+					"previous_sector": "vargan_court",
+					"transition_count": 0
+				},
+				"velocity": [
+					0.0,
+					0.0,
+					0.0
+				],
+				"zone": "record_hall"
+			},
+			"static_memory_bytes": 85680281
+		},
+		"vargan_court": {
+			"average_fps": 60.0088004590111,
+			"draw_calls": 118,
+			"end_state": {
+				"held_keys": {
+
+				},
+				"movement_input": [
+					0.0,
+					0.0
+				],
+				"position": [
+					0.0,
+					0.00020173192024231,
+					8.0
+				],
+				"seam": {
+					"active_sector_ids": [
+						"vargan_court",
+						"vargan_approach",
+						"record_hall"
+					],
+					"current_sector": "vargan_court",
+					"discovered_count": 3,
+					"failed_transition_count": 0,
+					"last_world_position": [
+						48.0,
+						0.176666602492332,
+						288.0
+					],
+					"pending_transition": {
+
+					},
+					"previous_sector": "wychwood",
+					"transition_count": 0
+				},
+				"velocity": [
+					0.0,
+					0.0,
+					0.0
+				],
+				"zone": "vargan_court"
+			},
+			"escaped_state": {
+
+			},
+			"frames": 481,
+			"nodes": 1128,
+			"one_percent_low_fps": 48.6741170515167,
+			"primitives": 92273,
+			"slow_frame_count": 0,
+			"slow_frame_indices": [],
+			"slow_frame_samples": [],
+			"start_state": {
+				"held_keys": {
+
+				},
+				"movement_input": [
+					0.0,
+					0.0
+				],
+				"position": [
+					0.0,
+					0.00020173192024231,
+					8.0
+				],
+				"seam": {
+					"active_sector_ids": [
+						"vargan_court",
+						"vargan_approach",
+						"record_hall"
+					],
+					"current_sector": "vargan_court",
+					"discovered_count": 3,
+					"failed_transition_count": 0,
+					"last_world_position": [
+						48.0,
+						0.176666602492332,
+						288.0
+					],
+					"pending_transition": {
+
+					},
+					"previous_sector": "wychwood",
+					"transition_count": 0
+				},
+				"velocity": [
+					0.0,
+					0.0,
+					0.0
+				],
+				"zone": "vargan_court"
+			},
+			"static_memory_bytes": 94245577
+		},
+		"wychwood": {
+			"average_fps": 50.8519322922139,
+			"draw_calls": 167,
+			"end_state": {
+				"held_keys": {
+
+				},
+				"movement_input": [
+					0.0,
+					0.0
+				],
+				"position": [
+					0.0,
+					0.00020173192024231,
+					8.0
+				],
+				"seam": {
+					"active_sector_ids": [
+						"wychwood",
+						"greyfen",
+						"deep_wood"
+					],
+					"current_sector": "wychwood",
+					"discovered_count": 2,
+					"failed_transition_count": 0,
+					"last_world_position": [
+						0.0,
+						0.00020173192024231,
+						48.0
+					],
+					"pending_transition": {
+
+					},
+					"previous_sector": "greyfen",
+					"transition_count": 0
+				},
+				"velocity": [
+					0.0,
+					0.0,
+					0.0
+				],
+				"zone": "wychwood"
+			},
+			"escaped_state": {
+
+			},
+			"frames": 407,
+			"nodes": 1665,
+			"one_percent_low_fps": 14.1029799596655,
+			"primitives": 162473,
+			"slow_frame_count": 1,
+			"slow_frame_indices": [
+				308
+			],
+			"slow_frame_samples": [
+				{
+					"draw_calls": 167,
+					"frame_ms": 242.935,
+					"nodes": 1665,
+					"physics_process_ms": 1.699,
+					"primitives": 162473,
+					"process_ms": 24.052
+				}
+			],
+			"start_state": {
+				"held_keys": {
+
+				},
+				"movement_input": [
+					0.0,
+					0.0
+				],
+				"position": [
+					0.0,
+					0.00020173192024231,
+					8.0
+				],
+				"seam": {
+					"active_sector_ids": [
+						"wychwood",
+						"greyfen",
+						"deep_wood"
+					],
+					"current_sector": "wychwood",
+					"discovered_count": 2,
+					"failed_transition_count": 0,
+					"last_world_position": [
+						0.0,
+						1.0,
+						48.0
+					],
+					"pending_transition": {
+
+					},
+					"previous_sector": "greyfen",
+					"transition_count": 0
+				},
+				"velocity": [
+					0.0,
+					0.0,
+					0.0
+				],
+				"zone": "wychwood"
+			},
+			"static_memory_bytes": 93161460
+		},
+		"wychwood_combat": {
+			"average_fps": 51.8334360634566,
+			"draw_calls": 135,
+			"end_state": {
+				"held_keys": {
+
+				},
+				"movement_input": [
+					0.0,
+					0.0
+				],
+				"position": [
+					0.0,
+					0.00999997556209564,
+					-3.5
+				],
+				"seam": {
+					"active_sector_ids": [
+						"wychwood",
+						"greyfen",
+						"deep_wood"
+					],
+					"current_sector": "wychwood",
+					"discovered_count": 2,
+					"failed_transition_count": 0,
+					"last_world_position": [
+						0.0,
+						0.00020173192024231,
+						48.0
+					],
+					"pending_transition": {
+
+					},
+					"previous_sector": "greyfen",
+					"transition_count": 0
+				},
+				"velocity": [
+					0.0,
+					0.0,
+					0.0
+				],
+				"zone": "wychwood"
+			},
+			"escaped_state": {
+
+			},
+			"frames": 415,
+			"nodes": 1682,
+			"one_percent_low_fps": 38.0929162412958,
+			"primitives": 113068,
+			"slow_frame_count": 0,
+			"slow_frame_indices": [],
+			"slow_frame_samples": [],
+			"start_state": {
+				"held_keys": {
+
+				},
+				"movement_input": [
+					0.0,
+					0.0
+				],
+				"position": [
+					0.0,
+					0.00999997556209564,
+					-3.5
+				],
+				"seam": {
+					"active_sector_ids": [
+						"wychwood",
+						"greyfen",
+						"deep_wood"
+					],
+					"current_sector": "wychwood",
+					"discovered_count": 2,
+					"failed_transition_count": 0,
+					"last_world_position": [
+						0.0,
+						0.00020173192024231,
+						48.0
+					],
+					"pending_transition": {
+
+					},
+					"previous_sector": "greyfen",
+					"transition_count": 0
+				},
+				"velocity": [
+					0.0,
+					0.0,
+					0.0
+				],
+				"zone": "wychwood"
+			},
+			"static_memory_bytes": 93451680
+		}
+	}
+}

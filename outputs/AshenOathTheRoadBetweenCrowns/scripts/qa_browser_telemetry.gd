@@ -2,7 +2,10 @@ extends Node
 
 const WINDOW_STATE := "window.__ASHEN_OATH_QA__"
 const WINDOW_COMMAND := "window.__ASHEN_OATH_QA_COMMAND__"
-const UPDATE_INTERVAL := 0.20
+const WINDOW_OBSERVATION_BINDING := "__ASHEN_OATH_QA_OBSERVATION__"
+const UPDATE_INTERVAL := 0.45
+const DIAGNOSTIC_UPDATE_INTERVAL := 0.20
+const PERFORMANCE_REFRESH_INTERVAL := 1.0
 
 var enabled := false
 var _elapsed := 0.0
@@ -11,6 +14,8 @@ var _frame_times: Array[float] = []
 var _command_result: Dictionary = {}
 var _last_prewarm_ready := false
 var _diagnostics_enabled := false
+var _performance_elapsed := 0.0
+var _performance_cache: Dictionary = {"average_fps": 0.0, "one_percent_low_fps": 0.0, "samples": 0}
 var _catalog_root: Node3D
 var _catalog_child_count := -1
 var _catalog_interaction_count := -1
@@ -25,7 +30,7 @@ func _ready() -> void:
 	if not OS.has_feature("web") or not OS.has_feature("ashenoath_qa"):
 		set_process(false)
 		return
-	 enabled = bool(JavaScriptBridge.eval(
+	enabled = bool(JavaScriptBridge.eval(
 		"new URLSearchParams(window.location.search).get('qa') === '1'",
 		true
 	))
@@ -43,7 +48,9 @@ func _process(delta: float) -> void:
 	if _frame_times.size() > 600:
 		_frame_times.pop_front()
 	_elapsed += delta
-	if _elapsed < UPDATE_INTERVAL:
+	_performance_elapsed += delta
+	var publish_interval := DIAGNOSTIC_UPDATE_INTERVAL if _diagnostics_enabled else UPDATE_INTERVAL
+	if _elapsed < publish_interval:
 		return
 	_elapsed = 0.0
 	if not is_instance_valid(_game):
@@ -56,8 +63,28 @@ func _process(delta: float) -> void:
 			return
 		_last_prewarm_ready = prewarm_ready
 	var state := snapshot_for_game(_game)
+	# Publish through JSON.parse rather than interpolating the object as
+	# executable JavaScript. This keeps prompts and future Unicode text data
+	# out of the JS parser and avoids a browser-only exception while preserving
+	# the same read-only snapshot value.
 	var payload := JSON.stringify(state)
-	JavaScriptBridge.eval("%s = JSON.parse(%s);" % [WINDOW_STATE, JSON.stringify(payload)], false)
+	# The payload is already valid JSON/JavaScript. Assign it directly instead of
+	# serializing the complete snapshot a second time and asking the browser to
+	# parse the resulting string on the same Web main thread as rendering.
+	# Escape the two legacy JavaScript line separators so text remains a valid
+	# expression even when a future prompt or dialogue line contains them.
+	var javascript_payload := payload.replace(String.chr(0x2028), "\\u2028").replace(String.chr(0x2029), "\\u2029")
+	var binding_payload := JSON.stringify(payload)
+	JavaScriptBridge.eval(
+		"if (typeof %s === 'function') %s(%s); %s = %s;" % [
+			WINDOW_OBSERVATION_BINDING,
+			WINDOW_OBSERVATION_BINDING,
+			binding_payload,
+			WINDOW_STATE,
+			javascript_payload,
+		],
+		false
+	)
 
 func snapshot_for_game(game: Node) -> Dictionary:
 	if game == null or not is_instance_valid(game):
@@ -67,6 +94,33 @@ func snapshot_for_game(game: Node) -> Dictionary:
 	var focus: Node = game.get("active_interactable") as Node
 	var zone_root: Node = game.get("zone_root") as Node
 	var hud: Node = game.get("hud") as Node
+	# Dialogue pauses gameplay while its UI keeps processing. Publish the
+	# smallest useful state before touching runtime-pack, camera, enemy, or
+	# interaction catalogs; those queries can starve the Web Runtime domain on a
+	# Compatibility frame even though the paused dialogue is already visible.
+	var paused := get_tree().paused
+	if paused:
+		var paused_dialogue_layer: Control = hud.get("dialogue_layer") as Control if hud != null else null
+		var paused_dialogue_pages: Array = hud.get("dialogue_pages") as Array if hud != null else []
+		var paused_position := _vector(player.global_position) if player != null else {}
+		return {
+			"enabled": true,
+			"ready": bool(game.get("game_started")) and player != null,
+			"new_game_ready": bool(hud.get("new_game_ready")) if hud != null else false,
+			"zone": str(game.get("current_zone_id")),
+			"transition_pending": bool(game.get("zone_transition_pending")),
+			"zone_load_request_pending": bool(game.get("zone_load_request_pending")),
+			"paused": true,
+			"player": {"position": paused_position},
+			"focus": {},
+			"dialogue": {
+				"visible": paused_dialogue_layer != null and paused_dialogue_layer.visible,
+				"page": int(hud.get("dialogue_page_index")) if hud != null else -1,
+				"pages": paused_dialogue_pages.size(),
+			},
+			"mouse_mode": Input.mouse_mode,
+			"command_result": _command_result,
+		}
 	var state := {
 		"enabled": true,
 		"ready": bool(game.get("game_started")) and player != null,
@@ -76,7 +130,7 @@ func snapshot_for_game(game: Node) -> Dictionary:
 		"zone_load_request_pending": bool(game.get("zone_load_request_pending")),
 		"opening_pack_waiting": bool(game.get("opening_pack_waiting")),
 		"campaign_pack_waiting": bool(game.get("campaign_pack_waiting")),
-		"paused": get_tree().paused,
+		"paused": paused,
 		"player": {},
 		"bridge_surfaces": [],
 		"camera": {},
@@ -96,7 +150,7 @@ func snapshot_for_game(game: Node) -> Dictionary:
 	var runtime_packs = game.get("runtime_packs")
 	if runtime_packs != null:
 		state["runtime_packs"] = {}
-		for pack_id in ["opening", "campaign", "characters", "monsters", "audio"]:
+		for pack_id in ["opening", "quality_materials", "campaign", "characters", "monsters", "audio"]:
 			state.runtime_packs[pack_id] = {
 				"state": str(runtime_packs.get_state(pack_id)) if runtime_packs.has_method("get_state") else "",
 				"progress": float(runtime_packs.get_progress(pack_id)) if runtime_packs.has_method("get_progress") else 0.0,
@@ -105,6 +159,9 @@ func snapshot_for_game(game: Node) -> Dictionary:
 	if player != null:
 		var player_health = player.get("health_component")
 		var player_body := player as CharacterBody3D
+		var floor_velocity := Vector3.ZERO
+		if player_body != null and player_body.is_on_floor() and player_body.has_method("get_platform_velocity"):
+			floor_velocity = player_body.get_platform_velocity()
 		state.player = {
 			"position": _vector(player.global_position),
 			"velocity": _vector(player_body.velocity) if player_body != null else _vector(Vector3.ZERO),
@@ -115,7 +172,7 @@ func snapshot_for_game(game: Node) -> Dictionary:
 			"on_floor": player.is_on_floor() if player is CharacterBody3D else true,
 			"on_wall": player.is_on_wall() if player is CharacterBody3D else false,
 			"floor_normal": _vector(player.get_floor_normal()) if player is CharacterBody3D and player.is_on_floor() else _vector(Vector3.ZERO),
-			"floor_velocity": _vector(player.get_floor_velocity()) if player is CharacterBody3D and player.is_on_floor() else _vector(Vector3.ZERO),
+			"floor_velocity": _vector(floor_velocity),
 			"slide_collisions": _slide_collisions(player_body),
 		}
 		if player_body != null:
@@ -144,20 +201,25 @@ func snapshot_for_game(game: Node) -> Dictionary:
 			"yaw": float(camera_rig.get("yaw")),
 			"pitch": float(camera_rig.get("pitch")),
 		}
-	var focus_candidates: Array = []
-	var candidates_variant = game.get("interaction_candidates")
-	if candidates_variant is Array:
-		for candidate in candidates_variant:
-			if candidate == null or not is_instance_valid(candidate) or not candidate.is_inside_tree():
-				continue
-			var distance := player.global_position.distance_to(candidate.global_position) if player != null else -1.0
-			focus_candidates.append({
-				"id": str(candidate.get("interaction_id")),
-				"type": str(candidate.get("interaction_type")),
-				"distance": distance,
-				"valid": bool(game.call("_interaction_target_valid", candidate)),
-			})
-	state.focus_candidates = focus_candidates
+	# Candidate validation performs distance and line-of-sight work for every
+	# interaction. It is useful for focused native diagnostics, but normal browser
+	# routing only needs the already-resolved focus and catalog below. Avoid doing
+	# those raycasts on the same Web main thread that renders the world.
+	if _diagnostics_enabled:
+		var focus_candidates: Array = []
+		var candidates_variant = game.get("interaction_candidates")
+		if candidates_variant is Array:
+			for candidate in candidates_variant:
+				if candidate == null or not is_instance_valid(candidate) or candidate.is_queued_for_deletion() or not candidate.is_inside_tree():
+					continue
+				var distance := player.global_position.distance_to(candidate.global_position) if player != null else -1.0
+				focus_candidates.append({
+					"id": str(candidate.get("interaction_id")),
+					"type": str(candidate.get("interaction_type")),
+					"distance": distance,
+					"valid": bool(game.call("_interaction_target_valid", candidate)),
+				})
+		state.focus_candidates = focus_candidates
 	if hud != null:
 		var dialogue_layer: Control = hud.get("dialogue_layer") as Control
 		var dialogue_pages: Array = hud.get("dialogue_pages") as Array
@@ -167,20 +229,27 @@ func snapshot_for_game(game: Node) -> Dictionary:
 			"pages": dialogue_pages.size() if dialogue_pages != null else 0,
 		}
 	if focus != null and is_instance_valid(focus):
-		state.focus = _interaction_state(focus, player)
+		if not focus.is_queued_for_deletion() and focus.is_inside_tree():
+			state.focus = _interaction_state(focus, player)
+	# Dialogue intentionally pauses the gameplay tree. Keep this observation
+	# path small while the UI owns input: rebuilding every gate, interaction, and
+	# enemy entry here competes with the paused Web renderer and can make a valid
+	# close state appear to the browser as a Runtime timeout. The next unpaused
+	# snapshot repopulates the full route state after the handoff.
+	if get_tree().paused:
+		return state
 	if zone_root != null and is_instance_valid(zone_root):
 		var interaction_cache: Variant = game.get("interaction_area_cache")
-		var interaction_count: int = interaction_cache.size() if interaction_cache is Array else -1
-		_refresh_zone_catalog(zone_root, interaction_count)
+		_refresh_zone_catalog(zone_root, interaction_cache if interaction_cache is Array else [])
 		state.bridge_surfaces = _catalog_bridge_surfaces.duplicate(true)
 		var gates: Array = []
 		var interactions: Array = []
 		for node in _catalog_gates:
-			if not is_instance_valid(node) or not node.is_inside_tree():
+			if not is_instance_valid(node) or not node.is_inside_tree() or node.is_queued_for_deletion():
 				continue
 			gates.append(_interaction_state(node, player))
 		for node in _catalog_interactions:
-			if not is_instance_valid(node) or not node.is_inside_tree():
+			if not is_instance_valid(node) or not node.is_inside_tree() or node.is_queued_for_deletion():
 				continue
 			var interaction := _interaction_state(node, player)
 			interactions.append(interaction)
@@ -194,7 +263,7 @@ func snapshot_for_game(game: Node) -> Dictionary:
 		state.interactions = interactions
 	var enemies: Array = []
 	for enemy in game.get("active_enemies"):
-		if enemy == null or not is_instance_valid(enemy):
+		if enemy == null or not is_instance_valid(enemy) or enemy.is_queued_for_deletion() or not enemy.is_inside_tree():
 			continue
 		var health = enemy.get("health_component")
 		enemies.append({
@@ -318,18 +387,25 @@ func _poll_command() -> void:
 			_command_result.error = "unsupported command"
 func _performance_state() -> Dictionary:
 	if _frame_times.is_empty():
-		return {"average_fps": 0.0, "one_percent_low_fps": 0.0, "samples": 0}
+		return _performance_cache.duplicate(true)
+	if _performance_cache.get("samples", 0) > 0 and _performance_elapsed < PERFORMANCE_REFRESH_INTERVAL:
+		return _performance_cache.duplicate(true)
+	_performance_elapsed = 0.0
 	var total := 0.0
 	for frame_time in _frame_times:
 		total += frame_time
 	var ordered := _frame_times.duplicate()
 	ordered.sort()
-	var low_index := clampi(int(floor(float(ordered.size() - 1) * 0.99)), 0, ordered.size() - 1)
-	return {
+	var slow_count := maxi(1, ceili(float(ordered.size()) * 0.01))
+	var slow_total := 0.0
+	for index in range(ordered.size() - slow_count, ordered.size()):
+		slow_total += ordered[index]
+	_performance_cache = {
 		"average_fps": float(_frame_times.size()) / maxf(total, 0.001),
-		"one_percent_low_fps": 1.0 / maxf(float(ordered[low_index]), 0.001),
+		"one_percent_low_fps": 1.0 / maxf(slow_total / float(slow_count), 0.001),
 		"samples": _frame_times.size(),
 	}
+	return _performance_cache.duplicate(true)
 
 func _audio_state() -> Dictionary:
 	var master := AudioServer.get_bus_index("Master")
@@ -348,6 +424,8 @@ func _find_game() -> Node:
 	return null
 
 func _interaction_state(node: Node, player: Node3D) -> Dictionary:
+	if node == null or not is_instance_valid(node) or node.is_queued_for_deletion() or not node.is_inside_tree():
+		return {}
 	var position := Vector3.ZERO
 	if node is Node3D:
 		position = (node as Node3D).global_position
@@ -422,7 +500,7 @@ func _overlap_colliders(body: CharacterBody3D) -> Array:
 func _bridge_surface_state(root: Node3D) -> Array:
 	var result: Array = []
 	for node in root.find_children("RiverBridgeContinuousSurface", "StaticBody3D", true, false):
-		if not is_instance_valid(node):
+		if not is_instance_valid(node) or node.is_queued_for_deletion() or not node.is_inside_tree():
 			continue
 		for raw_shape in node.find_children("*", "CollisionShape3D", true, false):
 			var shape_node := raw_shape as CollisionShape3D
@@ -450,21 +528,33 @@ func _aabb_state(mesh: Mesh) -> Dictionary:
 		"size": _vector(bounds.size),
 	}
 
-func _refresh_zone_catalog(zone_root: Node3D, interaction_count: int = -1) -> void:
+func _refresh_zone_catalog(zone_root: Node3D, interaction_cache: Array = []) -> void:
 	var child_count := zone_root.get_child_count() if zone_root != null and is_instance_valid(zone_root) else -1
-	if zone_root == _catalog_root and is_instance_valid(_catalog_root) \
-			and child_count == _catalog_child_count \
+	var interaction_count := interaction_cache.size()
+	var same_root := zone_root == _catalog_root and is_instance_valid(_catalog_root)
+	if same_root and child_count == _catalog_child_count \
 			and interaction_count == _catalog_interaction_count:
+		return
+	if zone_root == null or not is_instance_valid(zone_root):
+		_catalog_root = zone_root
+		_catalog_child_count = child_count
+		_catalog_interaction_count = interaction_count
+		_catalog_gates.clear()
+		_catalog_interactions.clear()
+		_catalog_bridge_surfaces.clear()
 		return
 	_catalog_root = zone_root
 	_catalog_child_count = child_count
 	_catalog_interaction_count = interaction_count
 	_catalog_gates.clear()
 	_catalog_interactions.clear()
-	_catalog_bridge_surfaces.clear()
-	if zone_root == null or not is_instance_valid(zone_root):
-		return
+	# Deferred scenery changes the root child count while the player's proximity
+	# cache can legitimately be empty. That cache is suitable for focus work, not
+	# for the complete read-only QA catalog, so rebuild from the authoritative
+	# zone tree whenever either invalidation input changes.
 	for node in zone_root.find_children("*", "Area3D", true, false):
+		if not is_instance_valid(node) or not node.is_inside_tree() or node.is_queued_for_deletion():
+			continue
 		if str(node.get("interaction_type")) == "zone":
 			_catalog_gates.append(node)
 		else:

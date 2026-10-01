@@ -1,0 +1,16 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+OpenGL API OpenGL ES 3.0 (ANGLE 2.1.1 git hash: aaebda1c5a40) - Compatibility - Using Device: Google Inc. (Intel) - ANGLE (Intel, Intel(R) HD Graphics 620 (0x00005916) Direct3D11 vs_5_0 ps_5_0, D3D11-31.0.101.2130)
+
+PACKED STARTUP: mounted opening
+PACKED STARTUP: mounted campaign
+PACKED STARTUP: mounted characters
+PACKED STARTUP: mounted monsters
+PACKED STARTUP: mounted audio
+PACKED STARTUP: mounted quality_materials
+LOADING: Greyfen prewarm begin
+AUDIO: music_state_main_menu
+LOADING: runtime ready total=101ms environment=11ms services=68ms
+LOADING: Greyfen prewarm build_begin
+LOADING: Greyfen prewarm build_complete ms=318 ok=true
+VERIFIER_PHASE: SHUTDOWN
+PACKED STARTUP VERIFIER: PASS

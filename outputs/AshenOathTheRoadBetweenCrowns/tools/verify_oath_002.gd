@@ -5,6 +5,11 @@ var release_count := 0
 var released_direction := Vector3.ZERO
 
 func _initialize() -> void:
+	if DisplayServer.get_name().to_lower() == "headless":
+		push_error("OATH-001 rendered verification requires a graphical renderer")
+		quit(1)
+		return
+	root.size = Vector2i(1280, 720)
 	call_deferred("_run")
 
 func _run() -> void:
@@ -44,6 +49,8 @@ func _run() -> void:
 	player.beam_charging = true
 	player.beam_charge_time = 1.05
 	player.call("_update_beam_charge_visual")
+	player.call("_animate_visuals", 1.0 / 30.0, Vector3.ZERO, false)
+	await process_frame
 	var state: Dictionary = player.get_oathfire_state()
 	check(str(state.get("state", "")) == "charging", "Charge state is not reported")
 	check(bool(state.get("sword_sheathed", false)), "Sword was not sheathed during charge")
@@ -52,7 +59,25 @@ func _run() -> void:
 	var origin: Vector3 = player.get_oathfire_origin()
 	var left: Vector3 = player.beam_left_hand_glow.global_position
 	var right: Vector3 = player.beam_right_hand_glow.global_position
+	var left_bone := _live_socket_origin(player.beam_left_hand_socket)
+	var right_bone := _live_socket_origin(player.beam_right_hand_socket)
+	print("OATH HAND ALIGNMENT ", JSON.stringify({"left_glow": str(left), "right_glow": str(right), "left_bone": str(left_bone), "right_bone": str(right_bone), "charge": str(player.beam_charge_visual.global_position)}))
 	check(origin.distance_to(left.lerp(right, 0.5)) < 0.5, "Charge origin is disconnected from the hands")
+	check(left.distance_to(left_bone) < 0.12 and right.distance_to(right_bone) < 0.12, "Hand effects are disconnected from the live hand bones")
+	check(left.lerp(right, 0.5).y - player.global_position.y > 0.75, "Oathfire charge is below Kael's hands")
+	check(player.beam_charge_visual.global_position.distance_to(left.lerp(right, 0.5) + locked * 0.24) < 0.12, "Charge sphere is disconnected from the current hand midpoint")
+	var camera := root.get_viewport().get_camera_3d()
+	if camera != null:
+		var hand_screen := camera.unproject_position(left.lerp(right, 0.5))
+		var charge_screen := camera.unproject_position(player.beam_charge_visual.global_position)
+		var screen_separation := hand_screen.distance_to(charge_screen)
+		print("OATH SCREEN ALIGNMENT ", JSON.stringify({"hands": str(hand_screen), "charge": str(charge_screen), "separation_px": screen_separation}))
+		check(screen_separation <= 36.0, "Charge sphere is visually disconnected from Kael's hands")
+	check(player.beam_arm_pose_applied, "Two-hand charge pose is not active")
+	check(left.distance_to(right) <= 0.45, "Charge hands did not converge around Oathfire")
+	check((left.lerp(right, 0.5) - player.global_position).dot(-player.global_basis.z) > 0.25, "Charge hands are not in front of Kael")
+	check(player.beam_charge_visual.get_aabb().size.x * player.beam_charge_visual.global_basis.get_scale().x <= 0.34, "Charge sphere is oversized")
+	await _capture_frame("D:/Temp/AshenOath/oath001_charge.png")
 
 	# Release uses the same locked direction and starts a cooldown.
 	player.call("_commit_oathfire_release", 0.82)
@@ -84,6 +109,21 @@ func _run() -> void:
 		check(cast_origin.distance_to(endpoint) < 4.0, "Beam endpoint ignored world collision")
 		check(abs(float(cast.get("endpoint_distance", -1.0)) - cast_origin.distance_to(endpoint)) < 0.01, "Cast endpoint distance is stale")
 	check(get_nodes_in_group("oathfire_runtime_effect").size() == 1, "Release did not create one coherent beam effect")
+	var effects := get_nodes_in_group("oathfire_runtime_effect")
+	if effects.size() == 1:
+		var effect := effects[0] as Node3D
+		var core := effect.find_child("OathfireBeamCore", true, false) as MeshInstance3D
+		check(core != null and core.mesh is CylinderMesh, "Release has no authoritative beam core")
+		if core != null and core.mesh is CylinderMesh and not cast.is_empty():
+			var endpoint: Vector3 = cast.get("endpoint", Vector3.ZERO)
+			var cast_origin: Vector3 = cast.get("origin", Vector3.ZERO)
+			check(effect.global_position.distance_to(cast_origin.lerp(endpoint, 0.5)) < 0.03, "Beam visual midpoint differs from the cast")
+			check(absf((core.mesh as CylinderMesh).height - cast_origin.distance_to(endpoint)) < 0.03, "Beam visual length differs from the cast")
+	var endpoint_visual := game.zone_root.find_child("OathfireImpactEndpoint", true, false) as Node3D
+	check(endpoint_visual != null, "Collision endpoint has no rendered impact")
+	if endpoint_visual != null and not cast.is_empty():
+		check(endpoint_visual.global_position.distance_to(cast.get("endpoint", Vector3.ZERO)) < 0.03, "Rendered impact differs from the authoritative endpoint")
+	await _capture_frame("D:/Temp/AshenOath/oath001_release.png")
 
 	# Transition lock is the authoritative cancellation path and restores the sword.
 	await settle(32)
@@ -96,6 +136,9 @@ func _run() -> void:
 	check(not bool(state.get("charge_visible", false)), "Transition cancellation left charge VFX visible")
 	check(not bool(state.get("sword_sheathed", true)), "Transition cancellation left sword sheathed")
 	check(str(state.get("cancel_reason", "")) == "transition", "Cancellation reason was not recorded")
+	player.call("_update_oathfire_arm_pose")
+	check(not player.beam_arm_pose_applied, "Transition cancellation retained the two-hand arm pose")
+	check(get_nodes_in_group("oathfire_runtime_effect").is_empty(), "Transition cancellation retained a release effect")
 	player.set_transition_locked(false)
 
 	await settle(32)
@@ -119,6 +162,29 @@ func check(condition: bool, message: String) -> void:
 		return
 	failures += 1
 	push_error("OATH-002: %s" % message)
+
+func _capture_frame(path: String) -> void:
+	await RenderingServer.frame_post_draw
+	var image := root.get_texture().get_image()
+	check(image != null and image.get_size() == Vector2i(1280, 720), "Rendered evidence has the wrong dimensions")
+	if image != null:
+		var bright_samples := 0
+		for y in range(0, image.get_height(), 12):
+			for x in range(0, image.get_width(), 12):
+				var pixel := image.get_pixel(x, y)
+				if pixel.r + pixel.g + pixel.b > 0.18:
+					bright_samples += 1
+		check(bright_samples >= 24, "Rendered evidence is blank")
+		image.save_png(path)
+		print("OATH-001 IMAGE ", path)
+
+func _live_socket_origin(socket: BoneAttachment3D) -> Vector3:
+	if socket == null:
+		return Vector3.INF
+	var skeleton := socket.get_parent() as Skeleton3D
+	if skeleton == null or socket.bone_idx < 0:
+		return socket.global_position
+	return (skeleton.global_transform * skeleton.get_bone_global_pose(socket.bone_idx)).origin
 
 func finish(game: Node) -> void:
 	if game != null and is_instance_valid(game):

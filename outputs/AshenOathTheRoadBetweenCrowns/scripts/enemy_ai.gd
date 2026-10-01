@@ -19,6 +19,7 @@ const CharacterAnimationDriver = preload("res://scripts/character_animation_driv
 # the large optional enemy asset into the browser boot dependency graph here.
 
 var enemy_id = "ghoulkin"
+var visual_role_override := ""
 var display_name = "Enemy"
 var player
 var health_component
@@ -192,12 +193,9 @@ func _physics_process(delta: float) -> void:
 	var pursuit_distance := global_position.distance_to(pursuit_position) if pursuit_position != Vector3.INF else INF
 	var home_distance: float = global_position.distance_to(home_position)
 	if pending_attack_time > 0.0:
-		pending_attack_time -= delta
-		attack_trace_end = _attack_contact_point()
+		_tick_pending_attack(delta)
 		velocity.x = 0.0
 		velocity.z = 0.0
-		if pending_attack_time <= 0.0:
-			_resolve_attack()
 	elif stagger_time > 0.0:
 		velocity.x = move_toward(velocity.x, 0.0, 12.0 * delta)
 		velocity.z = move_toward(velocity.z, 0.0, 12.0 * delta)
@@ -253,11 +251,14 @@ func _physics_process(delta: float) -> void:
 		velocity.x = 0.0
 		velocity.z = 0.0
 		if can_see_player and attack_cooldown <= 0.0 and player.has_method("take_damage") and _attack_lane_clear() and _claim_attack_token():
+			var attack_facing := Vector3(to_player.x, 0.0, to_player.z)
+			if attack_facing.length_squared() > 0.01:
+				look_at(global_position + attack_facing, Vector3.UP)
 			attack_cooldown = _attack_cooldown()
 			windup_time = _windup_duration()
 			pending_attack_time = windup_time
 			if animation_driver != null:
-				animation_driver.trigger_action("windup")
+				_start_attack_animation()
 			attack_trace_start = _attack_contact_point()
 			attack_trace_end = attack_trace_start
 			_show_windup_marker()
@@ -336,6 +337,16 @@ func slow(seconds: float) -> void:
 
 func set_encounter_active(value: bool) -> void:
 	encounter_active = value
+	if not value:
+		if animation_driver != null:
+			animation_driver.set_external_tick(false)
+		# A suspended strike must not reserve the encounter's attack lane or
+		# resume halfway through its telegraph when this actor becomes active.
+		_release_attack_token()
+		pending_attack_time = 0.0
+		windup_time = 0.0
+		velocity = Vector3.ZERO
+		_hide_windup_marker()
 	visible = value
 	set_physics_process(value)
 	if visual_root != null:
@@ -364,6 +375,8 @@ func is_encounter_active() -> bool:
 	return encounter_active
 
 func stagger(seconds: float = 0.7) -> void:
+	if animation_driver != null:
+		animation_driver.set_external_tick(false)
 	stagger_time = max(stagger_time, seconds)
 	windup_time = 0.0
 	pending_attack_time = 0.0
@@ -371,7 +384,19 @@ func stagger(seconds: float = 0.7) -> void:
 	if animation_driver != null:
 		animation_driver.trigger_action("hit")
 
+func _tick_pending_attack(delta: float) -> void:
+	if pending_attack_time <= 0.0:
+		return
+	if animation_driver != null:
+		animation_driver.advance_external(minf(delta, pending_attack_time))
+	pending_attack_time = maxf(0.0, pending_attack_time - delta)
+	attack_trace_end = _attack_contact_point()
+	if pending_attack_time <= 0.0:
+		_resolve_attack()
+
 func _resolve_attack() -> void:
+	if animation_driver != null:
+		animation_driver.set_external_tick(false)
 	_release_attack_token()
 	if dead or player == null or not player.has_method("take_damage"):
 		return
@@ -385,31 +410,17 @@ func _resolve_attack() -> void:
 		attack_trace_start = global_position + Vector3(0.0, 0.9, 0.0)
 	var sweep_start: Vector3 = attack_trace_start
 	var sweep_end: Vector3 = attack_trace_end
-	if sweep_start.distance_squared_to(sweep_end) < 0.04:
-		var forward := -global_transform.basis.z
-		forward.y = 0.0
-		sweep_end += forward.normalized() * attack_range
 	last_attack_contact = Geometry3D.get_closest_point_to_segment(player_contact, sweep_start, sweep_end)
 	var boss_attack := _boss_attack_id()
 	var special_radius := _boss_attack_radius(boss_attack)
 	var special_contact := is_boss and boss_attack != "" and _special_attack_hits_player(boss_attack, special_radius)
 	var melee_contact := player_contact.distance_to(last_attack_contact) <= contact_radius and _has_attack_line()
-	# A parry is a deliberate timing mechanic, not a requirement that an
-	# imported hand bone happen to produce a valid trace on the same frame. If
-	# the player has an active parry window and the attacker is inside its normal
-	# melee envelope, resolve the contact at the player's weapon height. This
-	# keeps parry reliable after a repositioned save/scripted beat while ordinary
-	# attacks remain governed by the measured skeleton trace above.
-	var parry_window_active := float(player.get("parry_window")) > 0.0
-	var parry_contact := parry_window_active and player_contact.distance_to(global_position) <= attack_range + contact_radius and _has_attack_line()
-	if not melee_contact and not special_contact and not parry_contact:
+	if not melee_contact and not special_contact:
 		if is_boss and boss_attack != "":
 			# A missed boss action is still an authored beat. The release VFX and
 			# audio must communicate the dodge instead of disappearing silently.
 			special_attack_resolved.emit(self, boss_attack, attack_trace_end, special_radius, 0.0, false)
 		return
-	if parry_contact and not melee_contact:
-		last_attack_contact = player_contact
 	var applied_damage: float = damage * (0.72 if special_contact and not melee_contact else 1.0)
 	var parried: bool = bool(player.take_damage(applied_damage))
 	attack_recovery_time = 0.22 if enemy_id == "ghoulkin" else 0.16
@@ -423,6 +434,14 @@ func _resolve_attack() -> void:
 		if is_boss:
 			set_meta("last_parried", true)
 			parry_window_opened.emit(self, 1.15)
+
+func _start_attack_animation() -> void:
+	var clip: StringName = animation_driver.get_clip_for_state("windup")
+	# The retained Skeleton clip reaches its strike at 85% of its authored
+	# length. Preserve the telegraph clock and leave uncalibrated families alone.
+	var duration: float = windup_time / 0.85 if str(clip) == "SkeletonArmature|Skeleton_Attack" else 0.0
+	animation_driver.set_external_tick(true)
+	animation_driver.trigger_action("windup", 1.0, 0.10, false, duration)
 
 func _boss_attack_id() -> String:
 	if not is_boss:
@@ -489,16 +508,15 @@ func player_contact_distance() -> float:
 func _has_attack_line() -> bool:
 	var origin := global_position+Vector3(0,0.9,0)
 	var target: Vector3 = player.global_position+Vector3(0,0.9,0)
-	var query := PhysicsRayQueryParameters3D.create(origin,target)
+	var query := PhysicsRayQueryParameters3D.create(origin,target, 1)
 	query.exclude = [get_rid(),player.get_rid()]
 	query.collide_with_areas = false
 	return get_world_3d().direct_space_state.intersect_ray(query).is_empty()
 
 func _crowd_separation() -> Vector3:
 	var separation := Vector3.ZERO
-	var peers := encounter_peers if not encounter_peers.is_empty() else get_tree().get_nodes_in_group("enemies")
-	for other in peers:
-		if other == self or not is_instance_valid(other) or bool(other.get("dead")):
+	for other in encounter_peers:
+		if other == self or not is_instance_valid(other) or bool(other.get("dead")) or not bool(other.get("encounter_active")):
 			continue
 		var offset: Vector3 = global_position-other.global_position
 		offset.y = 0.0
@@ -565,7 +583,7 @@ func _has_perception_line() -> bool:
 		return false
 	var origin := global_position + Vector3(0, 1.20, 0)
 	var target: Vector3 = player.global_position + Vector3(0, 1.05, 0)
-	var query := PhysicsRayQueryParameters3D.create(origin, target)
+	var query := PhysicsRayQueryParameters3D.create(origin, target, 1)
 	query.exclude = [get_rid()]
 	query.collide_with_areas = false
 	var hit := get_world_3d().direct_space_state.intersect_ray(query)
@@ -574,8 +592,7 @@ func _has_perception_line() -> bool:
 func _attack_lane_clear() -> bool:
 	var start := global_position
 	var finish: Vector3 = player.global_position
-	var peers := encounter_peers if not encounter_peers.is_empty() else get_tree().get_nodes_in_group("enemies")
-	for other in peers:
+	for other in encounter_peers:
 		if other == self or not is_instance_valid(other) or bool(other.get("dead")) or not bool(other.get("encounter_active")):
 			continue
 		var other_pos: Vector3 = other.global_position
@@ -641,6 +658,7 @@ func _on_died() -> void:
 	collision_layer = 0
 	collision_mask = 0
 	if animation_driver != null and animation_driver.is_valid():
+		animation_driver.set_external_tick(false)
 		animation_driver.set_dead()
 	elif visual_root != null:
 		visual_root.rotation_degrees.x = 84.0
@@ -740,28 +758,26 @@ func _try_build_mapped_body() -> bool:
 	add_child(asset_helper)
 	var mapped = null
 	var uses_real_body := false
-	var visual_source: String = enemy_id
+	var visual_source: String = visual_role_override if enemy_id == "bandit" and not visual_role_override.is_empty() else enemy_id
 	var skeleton_family_source := false
 	if enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute", "bog_wretch", "gravebound_knight", "bell_eater", "rootbound_colossus", "ashwing", "halvern_boss", "white_hart_avatar"]:
 		visual_source = {
-			"ghoulkin": "ghoulkin_skeleton",
+			"ghoulkin": "ghoulkin_creature",
 			"wychwood_stalker": "wychwood_stalker_creature",
 			"wychwood_raider": "wychwood_raider_creature",
-			"wychwood_brute": "ghoulkin_skeleton",
+			"wychwood_brute": "wychwood_brute_creature",
 			"bog_wretch": "bog_wretch_creature",
 			"gravebound_knight": "gravebound_knight_creature",
 			"bell_eater": "bell_eater_boss",
 			"rootbound_colossus": "rootbound_colossus_boss",
 			"ashwing": "ashwing_boss",
-			"halvern_boss": "gravebound_knight_creature",
+			"halvern_boss": "halvern_boss",
 			"white_hart_avatar": "white_hart_boss",
-		}.get(enemy_id, "ghoulkin_skeleton")
+		}.get(enemy_id, "ghoulkin_creature")
+		if not visual_role_override.is_empty():
+			visual_source = visual_role_override
 		mapped = asset_helper.spawn_visual_role(visual_source, "enemies")
-		skeleton_family_source = visual_source in [
-			"ghoulkin_skeleton", "ghoulkin_creature", "bell_eater_boss",
-			"rootbound_colossus_boss", "wychwood_stalker_creature",
-			"wychwood_raider_creature"
-		]
+		skeleton_family_source = visual_source == "ghoulkin_skeleton"
 		uses_real_body = mapped != null and not mapped.name.ends_with("_placeholder") and not skeleton_family_source
 	if mapped == null:
 		mapped = asset_helper.spawn_enemy(visual_source)
@@ -772,6 +788,8 @@ func _try_build_mapped_body() -> bool:
 	mapped.name = "%s_visual" % enemy_id
 	mapped.set_meta("monster_family_role", visual_source)
 	mapped.set_meta("monster_behavior_profile", behavior_profile)
+	set_meta("camera_subject_height", CharacterRoleSpec.target_height(visual_source) * _mapped_enemy_scale().y)
+	set_meta("camera_subject_bounds", CharacterRoleSpec.encounter_camera_bounds(visual_source))
 	asset_helper.apply_normalized_scale(mapped, _mapped_enemy_scale().y)
 	if _is_wychwood_pack():
 		var profile_scale: Vector3 = {
@@ -781,16 +799,14 @@ func _try_build_mapped_body() -> bool:
 			"wychwood_brute": Vector3(1.12, 1.0, 1.04)
 		}.get(enemy_id, Vector3.ONE)
 		mapped.scale *= profile_scale
-	if enemy_id == "white_hart_avatar":
-		var material = StandardMaterial3D.new()
-		material.albedo_color = Color(0.86, 0.83, 0.70)
-		material.emission_enabled = true
-		material.emission = Color(0.78, 0.86, 0.92)
-		material.emission_energy_multiplier = 0.25
-		_apply_material(mapped, material)
-	elif _is_wychwood_pack():
-		_apply_material(mapped, _horror_material())
-	if is_boss:
+	if _is_wychwood_pack():
+		_tint_authored_materials(mapped, {
+			"ghoulkin": Color(0.58, 0.62, 0.55),
+			"wychwood_stalker": Color(0.58, 0.48, 0.44),
+			"wychwood_raider": Color(0.60, 0.58, 0.48),
+			"wychwood_brute": Color(0.46, 0.52, 0.62),
+		}.get(enemy_id, Color.WHITE))
+	if is_boss and enemy_id != "white_hart_avatar":
 		_apply_boss_material(mapped)
 	visual_root.add_child(mapped)
 	if _is_wychwood_pack():
@@ -798,37 +814,44 @@ func _try_build_mapped_body() -> bool:
 		# scale, locomotion profile, and attack spacing. Do not add detached
 		# root-mounted anatomy on top of a valid animated body.
 		mapped.set_meta("monster_variant_profile", enemy_id)
-	_ground_mapped_visual(mapped)
-	mapped.position.y += CharacterRoleSpec.ground_offset(visual_source)
-	if is_boss:
+	if is_boss and enemy_id != "white_hart_avatar":
 		_add_boss_silhouette()
-	if enemy_id == "white_hart_avatar":
-		_add_spectral_antler_crown(mapped)
 	body_visual = _find_first_mesh(mapped)
 	base_body_scale = mapped.scale
 	animation_driver = CharacterAnimationDriver.new()
 	animation_driver.name = "CharacterAnimationDriver"
 	mapped.add_child(animation_driver)
 	if skeleton_family_source:
+		_add_skeleton_impact_clip(mapped)
 		animation_driver.configure(mapped, {
 			"idle": "SkeletonArmature|Skeleton_Idle",
 			"windup": "SkeletonArmature|Skeleton_Attack",
 			"walk": "SkeletonArmature|Skeleton_Running",
 			"run": "SkeletonArmature|Skeleton_Running",
 			"attack": "SkeletonArmature|Skeleton_Attack",
-			"hit": "SkeletonArmature|Skeleton_Spawn",
+			"hit": "recovery/Impact",
 			"death": "SkeletonArmature|Skeleton_Death"
 		})
 	elif uses_real_body:
-		if visual_source == "wychwood_stalker_creature":
+		if visual_source == "ghoulkin_creature":
 			animation_driver.configure(mapped, {
-				"idle":"BatArmature|Bat_Flying", "walk":"BatArmature|Bat_Flying",
-				"walk_back":"BatArmature|Bat_Flying", "strafe":"BatArmature|Bat_Flying",
-				"run":"BatArmature|Bat_Flying", "windup":"BatArmature|Bat_Attack",
-				"attack":"BatArmature|Bat_Attack2", "hit":"BatArmature|Bat_Hit",
-				"death":"BatArmature|Bat_Death"
+				"idle":"Idle", "walk":"Walk", "walk_back":"Walk",
+				"strafe":"Walk", "run":"Sprint", "windup":"Sword_Attack",
+				"attack":"Sword_Attack", "hit":"Hit_Chest", "death":"Death01"
 			})
-		elif visual_source in ["ashwing_creature", "ashwing_boss", "wychwood_raider_creature"]:
+		elif visual_source in ["wychwood_stalker_creature", "wychwood_raider_creature", "wychwood_brute_creature", "bell_eater_boss"]:
+			animation_driver.configure(mapped, {
+				"idle":"Idle", "walk":"Walk", "walk_back":"Walk", "strafe":"Walk",
+				"run":"Run", "windup":"Weapon", "attack":"Punch",
+				"hit":"HitReact", "death":"Death"
+			})
+		elif visual_source == "rootbound_colossus_boss":
+			animation_driver.configure(mapped, {
+				"idle":"Idle1_Action", "walk":"Walk1_Action", "walk_back":"Walk1_Action",
+				"strafe":"Walk2_Action", "run":"Walk2_Action", "windup":"Roar_Action",
+				"attack":"Punch_Action", "hit":"Damage_Action", "death":"Death_Action"
+			})
+		elif visual_source in ["ashwing_creature", "ashwing_boss"]:
 			animation_driver.configure(mapped, {
 				"idle":"DragonArmature|Dragon_Flying", "walk":"DragonArmature|Dragon_Flying",
 				"walk_back":"DragonArmature|Dragon_Flying", "strafe":"DragonArmature|Dragon_Flying",
@@ -838,11 +861,9 @@ func _try_build_mapped_body() -> bool:
 			})
 		elif visual_source in ["white_hart_avatar", "white_hart_boss"]:
 			animation_driver.configure(mapped, {
-				"idle": "|WolfArmature|Idle", "walk": "|WolfArmature|Walking",
-				"walk_back": "|WolfArmature|Walking", "strafe": "|WolfArmature|Walking",
-				"run": "|WolfArmature|Walking", "windup": "|WolfArmature|Walking",
-				"attack": "|WolfArmature|Walking", "hit": "|WolfArmature|Walking",
-				"death": "|WolfArmature|Walking"
+				"idle": "Idle", "walk": "Walk", "walk_back": "Walk", "strafe": "Walk",
+				"run": "Gallop", "windup": "Attack_Headbutt", "attack": "Attack_Headbutt",
+				"hit": "Idle_HitReact1", "death": "Death"
 			})
 		elif visual_source == "bog_wretch_creature":
 			animation_driver.configure(mapped, {
@@ -854,11 +875,17 @@ func _try_build_mapped_body() -> bool:
 			})
 		elif visual_source == "gravebound_knight_creature":
 			animation_driver.configure(mapped, {
-				"idle": "HumanArmature|Idle_swordRight", "walk": "HumanArmature|Walking",
-				"walk_back": "HumanArmature|Walking", "strafe": "HumanArmature|Walking",
-				"run": "HumanArmature|Run_swordRight", "windup": "HumanArmature|Run_swordAttack",
-				"attack": "HumanArmature|swordAttackJump", "hit": "HumanArmature|Death",
-				"death": "HumanArmature|Death"
+				"idle": "SkeletonArmature|Skeleton_Idle", "walk": "SkeletonArmature|Skeleton_Running",
+				"walk_back": "SkeletonArmature|Skeleton_Running", "strafe": "SkeletonArmature|Skeleton_Running",
+				"run": "SkeletonArmature|Skeleton_Running", "windup": "SkeletonArmature|Skeleton_Attack",
+				"attack": "SkeletonArmature|Skeleton_Attack", "hit": "SkeletonArmature|Skeleton_Attack",
+				"death": "SkeletonArmature|Skeleton_Death"
+			})
+		elif visual_source == "halvern_boss":
+			animation_driver.configure(mapped, {
+				"idle": "Sword_Idle", "walk": "Walk", "walk_back": "Walk",
+				"strafe": "Walk", "run": "Sprint", "windup": "Sword_Attack",
+				"attack": "Sword_Attack", "hit": "Hit_Chest", "death": "Death01"
 			})
 		else:
 			animation_driver.configure(mapped, {
@@ -882,6 +909,21 @@ func _try_build_mapped_body() -> bool:
 	# keeping its updates off the crowded 60 Hz path avoids isolated attack
 	# evaluation spikes on Intel/ANGLE without changing hit timing.
 	animation_driver.set_update_rate_hz(12.0)
+	_ground_mapped_visual(mapped)
+	mapped.position.y += CharacterRoleSpec.ground_offset(visual_source)
+	if enemy_id in ["halvern_boss", "bandit"]:
+		_attach_humanoid_sword("Halvern" if enemy_id == "halvern_boss" else "Bandit")
+		if enemy_id == "bandit" and visual_source == "bandit_tracker":
+			_attach_bandit_shield()
+	elif enemy_id == "bell_eater":
+		_attach_bell_eater_harness(mapped)
+	elif enemy_id == "rootbound_colossus":
+		# The hunched chest surface sits well ahead of the imported chest pivot.
+		_attach_boss_identity_to_bone(mapped, "Chest", "RootboundHeartSocket", Vector3(0, 0, -1.48), true)
+	elif enemy_id == "ashwing":
+		var authored_basis := boss_visual_root.basis
+		_attach_boss_identity_to_bone(mapped, "Body", "AshwingHarnessSocket", Vector3.ZERO)
+		boss_visual_root.basis = boss_visual_root.basis * authored_basis
 	_configure_attack_contact_bone()
 	return true
 
@@ -973,6 +1015,31 @@ func _safe_inverse_scale(value: float) -> float:
 		return 1.0
 	return 1.0 / value
 
+func _add_skeleton_impact_clip(mapped: Node3D) -> void:
+	for node in mapped.find_children("*", "AnimationPlayer", true, false):
+		var animator := node as AnimationPlayer
+		if animator.has_animation_library("recovery") or not animator.has_animation("SkeletonArmature|Skeleton_Idle"):
+			continue
+		var idle := animator.get_animation("SkeletonArmature|Skeleton_Idle")
+		var impact := Animation.new()
+		impact.length = 0.34
+		for source_track in range(idle.get_track_count()):
+			var type := idle.track_get_type(source_track)
+			if type not in [Animation.TYPE_POSITION_3D, Animation.TYPE_ROTATION_3D, Animation.TYPE_SCALE_3D] or idle.track_get_key_count(source_track) == 0:
+				continue
+			var path := idle.track_get_path(source_track)
+			var value = idle.track_get_key_value(source_track, 0)
+			var track := impact.add_track(type)
+			impact.track_set_path(track, path)
+			impact.track_insert_key(track, 0.0, value)
+			if type == Animation.TYPE_ROTATION_3D and str(path).to_lower().ends_with(":head"):
+				impact.track_insert_key(track, 0.08, (value as Quaternion) * Quaternion(Vector3.RIGHT, -0.24))
+				impact.track_insert_key(track, 0.18, (value as Quaternion) * Quaternion(Vector3.RIGHT, -0.14))
+			impact.track_insert_key(track, impact.length, value)
+		var library := AnimationLibrary.new()
+		library.add_animation("Impact", impact)
+		animator.add_animation_library("recovery", library)
+
 func _configure_attack_contact_bone() -> void:
 	attack_contact_bone = -1
 	attack_contact_local_offset = Vector3.ZERO
@@ -982,11 +1049,11 @@ func _configure_attack_contact_bone() -> void:
 	if skeleton == null:
 		return
 	var preferred := ["hand.r", "hand_r", "righthand", "right_hand", "mixamorig:righthand", "hand.l", "hand_l", "lefthand", "left_hand"]
-	for index in range(skeleton.get_bone_count()):
-		var compact: String = skeleton.get_bone_name(index).to_lower().replace(" ", "").replace("-", "").replace("_", "").replace(".", "").replace(":", "")
-		for candidate in preferred:
-			var wanted: String = candidate.replace(".", "").replace(":", "").replace("_", "")
-			if compact.contains(wanted):
+	for candidate in preferred:
+		var wanted: String = candidate.replace(".", "").replace(":", "").replace("_", "")
+		for index in range(skeleton.get_bone_count()):
+			var compact: String = skeleton.get_bone_name(index).to_lower().replace(" ", "").replace("-", "").replace("_", "").replace(".", "").replace(":", "")
+			if compact == wanted:
 				attack_contact_bone = index
 				return
 	# A few of the compact skeleton-family source meshes do not expose hand
@@ -999,7 +1066,15 @@ func _configure_attack_contact_bone() -> void:
 			var compact: String = skeleton.get_bone_name(index).to_lower().replace(" ", "").replace("-", "").replace("_", "").replace(".", "").replace(":", "")
 			if compact.contains(wanted_part):
 				attack_contact_bone = index
-				attack_contact_local_offset = Vector3(0.0, 0.0, -0.58)
+				# Source FBX rigs have arbitrary bone axes and unit scales. Store
+				# a metre-sized actor-forward probe in rest-bone space once.
+				var rest_basis := skeleton.get_bone_global_rest(index).basis
+				var ancestor: Node = skeleton
+				while ancestor != null and ancestor != self:
+					if ancestor is Node3D:
+						rest_basis = (ancestor as Node3D).basis * rest_basis
+					ancestor = ancestor.get_parent()
+				attack_contact_local_offset = rest_basis.inverse() * Vector3(0, 0, -0.58)
 				return
 
 func _ground_mapped_visual(mapped: Node3D) -> void:
@@ -1008,6 +1083,7 @@ func _ground_mapped_visual(mapped: Node3D) -> void:
 	if bool(state.initialized):
 		var bounds: AABB = state.bounds
 		mapped.position.y -= bounds.position.y
+		set_meta("camera_subject_height", maxf(float(get_meta("camera_subject_height", 1.9)), bounds.size.y))
 
 func _accumulate_visual_bounds(node: Node, parent_transform: Transform3D, state: Dictionary) -> void:
 	var current_transform := parent_transform
@@ -1016,11 +1092,44 @@ func _accumulate_visual_bounds(node: Node, parent_transform: Transform3D, state:
 	if node is MeshInstance3D:
 		var mesh_instance := node as MeshInstance3D
 		if mesh_instance.mesh != null and (mesh_instance.skin != null or mesh_instance.skeleton != NodePath("")):
-			var mesh_bounds: AABB = current_transform * mesh_instance.mesh.get_aabb()
+			var mesh_bounds: AABB = current_transform * _posed_mesh_bounds(mesh_instance)
 			state.bounds = (state.bounds as AABB).merge(mesh_bounds) if bool(state.initialized) else mesh_bounds
 			state.initialized = true
 	for child in node.get_children():
 		_accumulate_visual_bounds(child, current_transform, state)
+
+func _posed_mesh_bounds(instance: MeshInstance3D) -> AABB:
+	var skeleton := instance.get_node_or_null(instance.skeleton) as Skeleton3D
+	var skin := instance.skin
+	if skeleton == null or skin == null:
+		return instance.mesh.get_aabb()
+	var transforms: Array[Transform3D] = []
+	for bind in range(skin.get_bind_count()):
+		var bone := skin.get_bind_bone(bind)
+		if skin.get_bind_name(bind) != StringName():
+			bone = skeleton.find_bone(skin.get_bind_name(bind))
+		if bone < 0 or bone >= skeleton.get_bone_count():
+			return instance.mesh.get_aabb()
+		transforms.append(skeleton.get_bone_global_pose(bone) * skin.get_bind_pose(bind))
+	var initialized := false
+	var bounds := AABB()
+	for surface in range(instance.mesh.get_surface_count()):
+		var arrays := instance.mesh.surface_get_arrays(surface)
+		var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
+		var bones = arrays[Mesh.ARRAY_BONES]
+		var weights = arrays[Mesh.ARRAY_WEIGHTS]
+		var influences: int = bones.size() / vertices.size() if bones != null and not vertices.is_empty() else 0
+		for vertex in range(vertices.size()):
+			var point := vertices[vertex]
+			if influences > 0:
+				point = Vector3.ZERO
+				for influence in range(influences):
+					var index := vertex * influences + influence
+					if weights[index] > 0.0:
+						point += (transforms[bones[index]] * vertices[vertex]) * weights[index]
+			bounds = bounds.expand(point) if initialized else AABB(point, Vector3.ZERO)
+			initialized = true
+	return bounds if initialized else instance.mesh.get_aabb()
 
 func _horror_material() -> StandardMaterial3D:
 	var material := StandardMaterial3D.new()
@@ -1036,6 +1145,13 @@ func _horror_material() -> StandardMaterial3D:
 	return material
 
 func _apply_boss_material(mapped: Node3D) -> void:
+	if enemy_id in ["bell_eater", "rootbound_colossus", "halvern_boss"]:
+		_tint_authored_materials(mapped, {
+			"bell_eater": Color(0.30, 0.18, 0.13),
+			"rootbound_colossus": Color(0.42, 0.55, 0.38),
+			"halvern_boss": Color(0.42, 0.45, 0.52),
+		}.get(enemy_id, Color.WHITE))
+		return
 	var material := StandardMaterial3D.new()
 	material.albedo_color = {
 		"bell_eater": Color(0.13, 0.075, 0.055),
@@ -1053,6 +1169,29 @@ func _apply_boss_material(mapped: Node3D) -> void:
 		material.emission = Color(0.055, 0.075, 0.12)
 		material.emission_energy_multiplier = 0.32
 	_apply_material(mapped, material)
+
+func _tint_authored_materials(root: Node, tint: Color) -> void:
+	for raw_mesh in root.find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := raw_mesh as MeshInstance3D
+		if mesh_instance == null or mesh_instance.mesh == null:
+			continue
+		var local_mesh := mesh_instance.mesh.duplicate(false) as Mesh
+		if local_mesh == null:
+			continue
+		mesh_instance.mesh = local_mesh
+		for surface_index in local_mesh.get_surface_count():
+			var source_material := local_mesh.surface_get_material(surface_index) as StandardMaterial3D
+			if source_material == null:
+				continue
+			var material := source_material.duplicate(false) as StandardMaterial3D
+			material.albedo_color = Color(
+				source_material.albedo_color.r * tint.r,
+				source_material.albedo_color.g * tint.g,
+				source_material.albedo_color.b * tint.b,
+				source_material.albedo_color.a
+			)
+			material.roughness = maxf(source_material.roughness, 0.68)
+			local_mesh.surface_set_material(surface_index, material)
 
 func _add_boss_silhouette() -> void:
 	boss_visual_root = Node3D.new()
@@ -1072,9 +1211,8 @@ func _add_boss_silhouette() -> void:
 	elif enemy_id == "rootbound_colossus":
 		_make_rootbound_identity()
 	elif enemy_id == "ashwing":
-		_add_part(Vector3(-0.74, 1.24, 0.12), Vector3(0.82, 0.16, 0.46), Color(0.26, 0.16, 0.12), "capsule", Vector3(0, 0, -8))
-		_add_part(Vector3(0.74, 1.24, 0.12), Vector3(0.82, 0.16, 0.46), Color(0.26, 0.16, 0.12), "capsule", Vector3(0, 0, 8))
-		_add_part(Vector3(0, 1.28, 0.34), Vector3(0.22, 0.20, 0.46), Color(0.44, 0.20, 0.10), "cylinder", Vector3(90, 0, 0))
+		# The imported dragon is complete anatomy. Identity comes from the
+		# harness, ash core, and scorched wing roots, never duplicate body rods.
 		_make_ashwing_identity()
 	elif enemy_id == "halvern_boss":
 		_make_halvern_identity()
@@ -1082,229 +1220,101 @@ func _add_boss_silhouette() -> void:
 		_make_white_hart_identity()
 
 func _make_bell_eater_identity() -> void:
-	var harness := MeshInstance3D.new()
-	harness.name = "BellEaterHarnessBand"
-	var harness_mesh := TorusMesh.new()
-	harness_mesh.inner_radius = 0.48
-	harness_mesh.outer_radius = 0.58
-	harness_mesh.rings = 10
-	harness_mesh.ring_segments = 20
-	harness.mesh = harness_mesh
-	harness.position = Vector3(0, 1.47, 0.02)
-	harness.scale = Vector3(1.12, 0.78, 0.82)
-	harness.rotation.x = PI * 0.5
-	harness.material_override = _mat(Color(0.19, 0.12, 0.07))
-	boss_visual_root.add_child(harness)
-
+	boss_identity_base_scale = Vector3.ONE
+	boss_visual_root.scale = Vector3.ONE
 	var bell := MeshInstance3D.new()
 	bell.name = "BellEaterChestBell"
-	var bell_mesh := CylinderMesh.new()
-	bell_mesh.top_radius = 0.20
-	bell_mesh.bottom_radius = 0.36
-	bell_mesh.height = 0.48
-	bell_mesh.radial_segments = 14
-	bell.mesh = bell_mesh
-	bell.position = Vector3(0, 1.12, -0.38)
-	bell.rotation.x = PI
-	bell.scale = Vector3(0.78, 0.78, 0.78)
-	bell.material_override = _mat(Color(0.42, 0.24, 0.10))
+	bell.mesh = load("res://assets/bosses/bell_eater_bell.res") as Mesh
 	boss_visual_root.add_child(bell)
-
 	var clapper := MeshInstance3D.new()
 	clapper.name = "BellEaterClapper"
 	var clapper_mesh := SphereMesh.new()
-	clapper_mesh.radius = 0.11
-	clapper_mesh.height = 0.22
+	clapper_mesh.radius = 0.09
+	clapper_mesh.height = 0.18
+	clapper_mesh.radial_segments = 10
+	clapper_mesh.rings = 5
 	clapper.mesh = clapper_mesh
-	clapper.position = Vector3(0, 0.92, -0.40)
-	clapper.material_override = _mat(Color(0.08, 0.06, 0.045))
+	clapper.position = Vector3(0, -0.39, 0)
+	clapper.material_override = _mat(Color(0.10, 0.075, 0.04))
 	boss_visual_root.add_child(clapper)
+	var links := MultiMeshInstance3D.new()
+	links.name = "BellEaterHarnessLinks"
+	var link_mesh := TorusMesh.new()
+	link_mesh.inner_radius = 0.027
+	link_mesh.outer_radius = 0.045
+	link_mesh.rings = 6
+	link_mesh.ring_segments = 8
+	link_mesh.material = _mat(Color(0.16, 0.13, 0.085))
+	links.multimesh = MultiMesh.new()
+	links.multimesh.transform_format = MultiMesh.TRANSFORM_3D
+	links.multimesh.mesh = link_mesh
+	links.multimesh.instance_count = 12
+	for index in range(12):
+		var side := -1.0 if index < 6 else 1.0
+		var step := index % 6
+		var basis := Basis(Vector3.RIGHT, PI * 0.5)
+		if step % 2 == 1:
+			basis = Basis(Vector3.UP, PI * 0.5) * basis
+		links.multimesh.set_instance_transform(index, Transform3D(basis,
+			Vector3(side * (0.10 + 0.025 * step), 0.38 + 0.055 * step, 0.06 + 0.075 * step)))
+	boss_visual_root.add_child(links)
+	boss_phase_sigil = clapper
 
-	for side in [-1.0, 1.0]:
-		var chain := MeshInstance3D.new()
-		chain.name = "BellEaterChainLeft" if side < 0.0 else "BellEaterChainRight"
-		var chain_mesh := CylinderMesh.new()
-		chain_mesh.top_radius = 0.035
-		chain_mesh.bottom_radius = 0.055
-		chain_mesh.height = 0.92
-		chain_mesh.radial_segments = 6
-		chain.mesh = chain_mesh
-		chain.position = Vector3(side * 0.44, 1.23, -0.22)
-		chain.rotation_degrees = Vector3(0, 0, side * 18.0)
-		chain.material_override = _mat(Color(0.12, 0.09, 0.06))
-		boss_visual_root.add_child(chain)
+func _attach_bell_eater_harness(mapped: Node3D) -> void:
+	_attach_boss_identity_to_bone(mapped, "Torso", "BellEaterHarnessSocket", Vector3(0, 1.75, -1.15))
 
-	for side in [-1.0, 1.0]:
-		var eye := MeshInstance3D.new()
-		eye.name = "BellEaterEyeLeft" if side < 0.0 else "BellEaterEyeRight"
-		var eye_mesh := SphereMesh.new()
-		eye_mesh.radius = 0.075
-		eye_mesh.height = 0.15
-		eye.mesh = eye_mesh
-		eye.position = Vector3(side * 0.18, 1.78, -0.49)
-		var eye_material := _mat(Color(0.96, 0.26, 0.08))
-		eye_material.emission_enabled = true
-		eye_material.emission = Color(0.96, 0.18, 0.04)
-		eye_material.emission_energy_multiplier = 1.8
-		eye.material_override = eye_material
-		boss_visual_root.add_child(eye)
-
-	var jaw := MeshInstance3D.new()
-	jaw.name = "BellEaterJaw"
-	var jaw_mesh := SphereMesh.new()
-	jaw_mesh.radius = 0.28
-	jaw_mesh.height = 0.22
-	jaw.mesh = jaw_mesh
-	jaw.position = Vector3(0, 1.58, -0.54)
-	jaw.scale = Vector3(1.0, 0.72, 0.52)
-	jaw.material_override = _mat(Color(0.075, 0.045, 0.035))
-	boss_visual_root.add_child(jaw)
-	for index in range(3):
-		var tooth := MeshInstance3D.new()
-		tooth.name = "BellEaterTooth_%d" % index
-		var tooth_mesh := CylinderMesh.new()
-		tooth_mesh.top_radius = 0.0
-		tooth_mesh.bottom_radius = 0.038
-		tooth_mesh.height = 0.15
-		tooth_mesh.radial_segments = 6
-		tooth.mesh = tooth_mesh
-		tooth.position = Vector3(-0.13 + float(index) * 0.13, 1.53, -0.68)
-		tooth.rotation.x = PI
-		tooth.material_override = _mat(Color(0.58, 0.50, 0.36))
-		boss_visual_root.add_child(tooth)
-	for side in [-1.0, 1.0]:
-		var horn := MeshInstance3D.new()
-		horn.name = "BellEaterHornLeft" if side < 0.0 else "BellEaterHornRight"
-		var horn_mesh := CylinderMesh.new()
-		horn_mesh.top_radius = 0.018
-		horn_mesh.bottom_radius = 0.07
-		horn_mesh.height = 0.42
-		horn_mesh.radial_segments = 7
-		horn.mesh = horn_mesh
-		horn.position = Vector3(side * 0.25, 1.94, -0.36)
-		horn.rotation_degrees = Vector3(0, 0, side * -22.0)
-		horn.material_override = _mat(Color(0.16, 0.12, 0.085))
-		boss_visual_root.add_child(horn)
-
-	boss_phase_sigil = MeshInstance3D.new()
-	boss_phase_sigil.name = "BossPhaseSigil"
-	var sigil_mesh := SphereMesh.new()
-	sigil_mesh.radius = 0.12
-	sigil_mesh.height = 0.24
-	boss_phase_sigil.mesh = sigil_mesh
-	boss_phase_sigil.position = Vector3(0, 1.52, -0.64)
-	boss_phase_sigil.material_override = _emissive_boss_material(Color(0.62, 0.28, 0.14), 0.72)
-	boss_visual_root.add_child(boss_phase_sigil)
+func _attach_boss_identity_to_bone(mapped: Node3D, bone_name: String, socket_name: String, anchor: Vector3, relative_to_bone := false) -> void:
+	var skeletons := mapped.find_children("*", "Skeleton3D", true, false)
+	if skeletons.is_empty():
+		push_error("%s requires its authored equipment skeleton" % enemy_id)
+		return
+	var skeleton := skeletons[0] as Skeleton3D
+	var torso := skeleton.find_bone(bone_name)
+	if torso < 0:
+		push_error("%s requires the authored %s bone" % [enemy_id, bone_name])
+		return
+	animation_driver.get_animation_player().advance(0.0)
+	skeleton.force_update_all_bone_transforms()
+	var skeleton_to_actor := Transform3D.IDENTITY
+	var ancestor: Node = skeleton
+	while ancestor != null and ancestor != self:
+		if ancestor is Node3D:
+			skeleton_to_actor = (ancestor as Node3D).transform * skeleton_to_actor
+		ancestor = ancestor.get_parent()
+	var socket := BoneAttachment3D.new()
+	socket.name = socket_name
+	socket.bone_idx = torso
+	socket.bone_name = skeleton.get_bone_name(torso)
+	skeleton.add_child(socket)
+	var torso_frame := skeleton_to_actor * skeleton.get_bone_global_pose(torso)
+	if relative_to_bone:
+		anchor += torso_frame.origin
+	boss_visual_root.reparent(socket, false)
+	boss_visual_root.transform = torso_frame.affine_inverse() * Transform3D(Basis.IDENTITY, anchor)
 
 func _make_rootbound_identity() -> void:
-	# The body source supplies the animated mass; this layer gives Rootbound a
-	# readable story silhouette: bark harness, root arms, and an exposed oathwood
-	# heart that brightens as the phases open it.
-	var harness := MeshInstance3D.new()
-	harness.name = "RootboundBarkHarness"
-	var harness_mesh := TorusMesh.new()
-	harness_mesh.inner_radius = 0.60
-	harness_mesh.outer_radius = 0.72
-	harness_mesh.rings = 10
-	harness_mesh.ring_segments = 18
-	harness.mesh = harness_mesh
-	harness.position = Vector3(0, 1.38, 0.02)
-	harness.scale = Vector3(1.18, 0.74, 0.92)
-	harness.rotation.x = PI * 0.5
-	harness.material_override = _mat(Color(0.12, 0.20, 0.10))
-	boss_visual_root.add_child(harness)
-
-	var mantle := MeshInstance3D.new()
-	mantle.name = "RootboundShoulderMantle"
-	var mantle_mesh := SphereMesh.new()
-	mantle_mesh.radius = 0.72
-	mantle_mesh.height = 0.72
-	mantle.mesh = mantle_mesh
-	mantle.position = Vector3(0, 1.96, 0.02)
-	mantle.scale = Vector3(1.48, 0.46, 0.88)
-	mantle.material_override = _mat(Color(0.10, 0.16, 0.08))
-	boss_visual_root.add_child(mantle)
-
-	for side in [-1.0, 1.0]:
-		var root_arm := MeshInstance3D.new()
-		root_arm.name = "RootboundRootArmLeft" if side < 0.0 else "RootboundRootArmRight"
-		var arm_mesh := CylinderMesh.new()
-		arm_mesh.top_radius = 0.055
-		arm_mesh.bottom_radius = 0.13
-		arm_mesh.height = 1.22
-		arm_mesh.radial_segments = 8
-		root_arm.mesh = arm_mesh
-		root_arm.position = Vector3(side * 0.68, 1.10, -0.10)
-		root_arm.rotation_degrees = Vector3(0, 0, side * -25.0)
-		root_arm.material_override = _mat(Color(0.18, 0.25, 0.11))
-		boss_visual_root.add_child(root_arm)
-		for branch_index in range(2):
-			var branch := MeshInstance3D.new()
-			branch.name = "RootboundBranch"
-			var branch_mesh := CylinderMesh.new()
-			branch_mesh.top_radius = 0.018
-			branch_mesh.bottom_radius = 0.06
-			branch_mesh.height = 0.52 if branch_index == 0 else 0.38
-			branch_mesh.radial_segments = 7
-			branch.mesh = branch_mesh
-			branch.position = Vector3(side * (0.86 + branch_index * 0.08), 1.42 + branch_index * 0.25, -0.12)
-			branch.rotation_degrees = Vector3(0, 0, side * (42.0 if branch_index == 0 else -34.0))
-			branch.material_override = _mat(Color(0.24, 0.31, 0.14))
-			boss_visual_root.add_child(branch)
-
-	for side in [-1.0, 1.0]:
-		var foot_root := MeshInstance3D.new()
-		foot_root.name = "RootboundRootFootLeft" if side < 0.0 else "RootboundRootFootRight"
-		var foot_mesh := CylinderMesh.new()
-		foot_mesh.top_radius = 0.07
-		foot_mesh.bottom_radius = 0.25
-		foot_mesh.height = 0.82
-		foot_mesh.radial_segments = 8
-		foot_root.mesh = foot_mesh
-		foot_root.position = Vector3(side * 0.50, 0.34, 0.08)
-		foot_root.rotation_degrees = Vector3(0, 0, side * -22.0)
-		foot_root.material_override = _mat(Color(0.16, 0.23, 0.10))
-		boss_visual_root.add_child(foot_root)
-
-	for crown_index in range(3):
-		var crown := MeshInstance3D.new()
-		crown.name = "RootboundCrownBranch"
-		var crown_mesh := CylinderMesh.new()
-		crown_mesh.top_radius = 0.025
-		crown_mesh.bottom_radius = 0.11
-		crown_mesh.height = 0.92 if crown_index == 1 else 0.68
-		crown_mesh.radial_segments = 8
-		crown.mesh = crown_mesh
-		crown.position = Vector3((float(crown_index) - 1.0) * 0.34, 2.40 + (0.12 if crown_index == 1 else 0.0), 0.10)
-		crown.rotation_degrees = Vector3(0, (float(crown_index) - 1.0) * 12.0, (float(crown_index) - 1.0) * -18.0)
-		crown.material_override = _mat(Color(0.19, 0.28, 0.12))
-		boss_visual_root.add_child(crown)
-
+	# The imported body owns every limb. Only the exposed oath wound is added.
+	boss_identity_base_scale = Vector3.ONE
+	boss_visual_root.scale = Vector3.ONE
 	var heart := MeshInstance3D.new()
 	heart.name = "RootboundHeart"
-	var heart_mesh := SphereMesh.new()
-	heart_mesh.radius = 0.20
-	heart_mesh.height = 0.38
-	heart.mesh = heart_mesh
-	heart.position = Vector3(0, 1.66, -0.68)
-	heart.scale = Vector3(1.05, 1.35, 0.72)
-	heart.material_override = _emissive_boss_material(Color(0.36, 0.78, 0.30), 0.90)
+	var wound := SurfaceTool.new()
+	wound.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var edge := PackedVector3Array([
+		Vector3(-0.02, 0.22, -0.035), Vector3(0.09, 0.07, -0.035),
+		Vector3(0.025, 0.015, -0.035), Vector3(0.065, -0.13, -0.035),
+		Vector3(-0.015, -0.22, -0.035), Vector3(-0.06, -0.045, -0.035),
+		Vector3(-0.10, 0.075, -0.035)])
+	for index in range(edge.size()):
+		for point in [Vector3(0, 0, -0.045), edge[index], edge[(index + 1) % edge.size()]]:
+			wound.set_normal(Vector3.FORWARD)
+			wound.add_vertex(point)
+	heart.mesh = wound.commit()
+	heart.scale = Vector3(0.8, 1.0, 0.35)
+	heart.material_override = _emissive_boss_material(Color(0.15, 0.38, 0.10), 0.30)
+	(heart.material_override as StandardMaterial3D).cull_mode = BaseMaterial3D.CULL_DISABLED
 	boss_visual_root.add_child(heart)
 	boss_phase_sigil = heart
-
-	var bark_plate := MeshInstance3D.new()
-	bark_plate.name = "RootboundBarkPlate"
-	var plate_mesh := CylinderMesh.new()
-	plate_mesh.top_radius = 0.32
-	plate_mesh.bottom_radius = 0.42
-	plate_mesh.height = 0.18
-	plate_mesh.radial_segments = 10
-	bark_plate.mesh = plate_mesh
-	bark_plate.position = Vector3(0, 1.72, -0.46)
-	bark_plate.rotation.x = PI * 0.5
-	bark_plate.scale = Vector3(1.0, 0.78, 0.80)
-	bark_plate.material_override = _mat(Color(0.12, 0.18, 0.09))
-	boss_visual_root.add_child(bark_plate)
 
 func _make_ashwing_identity() -> void:
 	# Ashwing's mapped dragon supplies the animated silhouette. These restrained
@@ -1332,35 +1342,13 @@ func _make_ashwing_identity() -> void:
 	core.mesh = core_mesh
 	core.position = Vector3(0, 1.34, -0.48)
 	core.scale = Vector3(1.0, 0.82, 0.70)
-	core.material_override = _emissive_boss_material(Color(0.96, 0.30, 0.06), 1.15)
+	core.material_override = _emissive_boss_material(Color(0.25, 0.07, 0.01), 0.20)
 	boss_visual_root.add_child(core)
 	boss_phase_sigil = core
 
-	for side in [-1.0, 1.0]:
-		var scorch := MeshInstance3D.new()
-		scorch.name = "AshwingScorchedWingRootLeft" if side < 0.0 else "AshwingScorchedWingRootRight"
-		var scorch_mesh := CapsuleMesh.new()
-		scorch.mesh = scorch_mesh
-		scorch.position = Vector3(side * 0.64, 1.30, 0.10)
-		scorch.scale = Vector3(0.48, 0.10, 0.22)
-		scorch.rotation_degrees = Vector3(0, 0, side * 12.0)
-		scorch.material_override = _mat(Color(0.38, 0.12, 0.055))
-		boss_visual_root.add_child(scorch)
-
 func _make_halvern_identity() -> void:
-	# Halvern's mapped body is the connected Gravebound family. This layer
-	# supplies a readable Vargan cuirass, broken oath seal, and asymmetric
-	# shoulder silhouette without introducing a second root-mounted body.
-	var cuirass := MeshInstance3D.new()
-	cuirass.name = "HalvernVarganCuirass"
-	var cuirass_mesh := BoxMesh.new()
-	cuirass_mesh.size = Vector3(0.78, 0.72, 0.34)
-	cuirass.mesh = cuirass_mesh
-	cuirass.position = Vector3(0, 1.30, -0.18)
-	cuirass.scale = Vector3(1.0, 1.0, 0.82)
-	cuirass.material_override = _mat(Color(0.16, 0.18, 0.22))
-	boss_visual_root.add_child(cuirass)
-
+	# The complete Ranger-derived body supplies authored clothing, armor, face,
+	# and connected anatomy. Keep this layer to a non-anatomical oath effect.
 	var seal := MeshInstance3D.new()
 	seal.name = "HalvernGraveSeal"
 	var seal_mesh := TorusMesh.new()
@@ -1369,32 +1357,97 @@ func _make_halvern_identity() -> void:
 	seal_mesh.rings = 8
 	seal_mesh.ring_segments = 14
 	seal.mesh = seal_mesh
-	seal.position = Vector3(0, 1.37, -0.40)
+	seal.position = Vector3(0, 0.95, -0.40)
 	seal.rotation.x = PI * 0.5
 	seal.material_override = _emissive_boss_material(Color(0.36, 0.48, 0.72), 0.78)
 	boss_visual_root.add_child(seal)
 	boss_phase_sigil = seal
 
-	for side in [-1.0, 1.0]:
-		var shoulder := MeshInstance3D.new()
-		shoulder.name = "HalvernShoulderLeft" if side < 0.0 else "HalvernShoulderRight"
-		var shoulder_mesh := CapsuleMesh.new()
-		shoulder.mesh = shoulder_mesh
-		shoulder.position = Vector3(side * 0.52, 1.55, -0.04)
-		shoulder.scale = Vector3(0.28, 0.32, 0.42 if side < 0.0 else 0.30)
-		shoulder.rotation_degrees = Vector3(0, 0, side * 16.0)
-		shoulder.material_override = _mat(Color(0.22, 0.24, 0.29))
-		boss_visual_root.add_child(shoulder)
+func _attach_humanoid_sword(label: String) -> void:
+	var skeleton := visual_root.find_child("Skeleton3D", true, false) as Skeleton3D
+	if skeleton == null:
+		var skeletons := visual_root.find_children("*", "Skeleton3D", true, false)
+		if not skeletons.is_empty():
+			skeleton = skeletons[0] as Skeleton3D
+	var hand := skeleton.find_bone("hand_r") if skeleton != null else -1
+	if hand < 0:
+		push_error("%s requires the approved right-hand equipment socket" % label)
+		return
+	var resource = asset_helper.load_runtime_resource("res://assets_external/characters/Sword.fbx")
+	var sword := asset_helper.instantiate_runtime_resource(resource) as Node3D
+	if sword == null:
+		push_error("%s requires the authored Sword.fbx; no proxy weapon is permitted" % label)
+		return
+	var socket := BoneAttachment3D.new()
+	socket.name = label + "SwordSocket"
+	socket.bone_name = skeleton.get_bone_name(hand)
+	socket.bone_idx = hand
+	skeleton.add_child(socket)
+	var grip := Node3D.new()
+	grip.name = label + "SwordGrip"
+	socket.add_child(grip)
+	# Derive the authored grip in actor space, including offline zone builds.
+	# Reading global transforms here is invalid before the zone enters the tree.
+	animation_driver.get_animation_player().advance(0.0)
+	skeleton.force_update_all_bone_transforms()
+	var skeleton_to_actor := Transform3D.IDENTITY
+	var ancestor: Node = skeleton
+	while ancestor != null and ancestor != self:
+		if ancestor is Node3D:
+			skeleton_to_actor = (ancestor as Node3D).transform * skeleton_to_actor
+		ancestor = ancestor.get_parent()
+	var hand_pose := skeleton.get_bone_global_pose(hand)
+	var hand_basis := skeleton_to_actor.basis * hand_pose.basis
+	var inherited := hand_basis.get_scale().abs().max(Vector3.ONE * 0.0001)
+	var ready_direction := Vector3(0.50, -0.82, -0.15).normalized()
+	grip.basis = (hand_basis.orthonormalized().inverse() * Basis(Quaternion(Vector3.DOWN, ready_direction))).scaled(Vector3.ONE / inherited)
+	var finger_center := Vector3.ZERO
+	var finger_count := 0
+	for bone_name in ["index_02_r", "middle_02_r", "ring_02_r", "pinky_02_r"]:
+		var finger := skeleton.find_bone(bone_name)
+		if finger >= 0:
+			finger_center += skeleton.get_bone_global_pose(finger).origin
+			finger_count += 1
+	if finger_count > 0:
+		grip.position = hand_pose.affine_inverse() * (finger_center / float(finger_count))
+	sword.name = label + "AuthoredSword"
+	sword.rotation_degrees = Vector3(180, 0, 0)
+	sword.scale = Vector3.ONE * 0.22
+	sword.position = Vector3(0, 0.045, 0)
+	grip.add_child(sword)
+	var steel := StandardMaterial3D.new()
+	steel.albedo_color = Color(0.57, 0.63, 0.70)
+	steel.metallic = 0.7
+	steel.roughness = 0.42
+	for raw_mesh in sword.find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := raw_mesh as MeshInstance3D
+		mesh_instance.material_override = steel
 
-	var banner := MeshInstance3D.new()
-	banner.name = "HalvernBrokenBanner"
-	var banner_mesh := BoxMesh.new()
-	banner_mesh.size = Vector3(0.08, 0.92, 0.05)
-	banner.mesh = banner_mesh
-	banner.position = Vector3(-0.42, 1.25, 0.26)
-	banner.rotation_degrees = Vector3(0, 0, -12.0)
-	banner.material_override = _mat(Color(0.24, 0.10, 0.09))
-	boss_visual_root.add_child(banner)
+func _attach_bandit_shield() -> void:
+	var skeleton := visual_root.find_child("Skeleton3D", true, false) as Skeleton3D
+	if skeleton == null:
+		var skeletons := visual_root.find_children("*", "Skeleton3D", true, false)
+		if not skeletons.is_empty():
+			skeleton = skeletons[0] as Skeleton3D
+	var hand := skeleton.find_bone("hand_l") if skeleton != null else -1
+	if hand < 0:
+		push_error("Bandit tracker requires an approved left-hand equipment socket")
+		return
+	var resource = asset_helper.load_runtime_resource("res://assets_external/environment/props/Shield_Wooden.fbx")
+	var shield := asset_helper.instantiate_runtime_resource(resource) as Node3D
+	if shield == null:
+		push_error("Bandit tracker requires authored Shield_Wooden.fbx")
+		return
+	var socket := BoneAttachment3D.new()
+	socket.name = "BanditShieldSocket"
+	socket.bone_idx = hand
+	socket.bone_name = skeleton.get_bone_name(hand)
+	skeleton.add_child(socket)
+	shield.name = "BanditAuthoredShield"
+	shield.position = Vector3(0.0, -0.02, -0.05)
+	shield.rotation_degrees = Vector3(90, 0, 0)
+	shield.scale = Vector3.ONE * 0.30
+	socket.add_child(shield)
 
 func _make_white_hart_identity() -> void:
 	# The Wolf source and bone-attached antlers supply the body. These pieces
@@ -1650,17 +1703,19 @@ func _animate_boss_identity(delta: float) -> void:
 	boss_visual_time += delta
 	var pulse := 1.0 + sin(boss_visual_time * 3.4) * 0.035
 	if enemy_id == "bell_eater":
-		boss_visual_root.rotation.y = sin(boss_visual_time * 1.15) * 0.045
-		boss_visual_root.scale = boss_visual_root.scale.lerp(boss_identity_base_scale * pulse, minf(delta * 5.0, 1.0))
-		if windup_time > 0.0:
-			boss_visual_root.rotation.z = sin(boss_visual_time * 11.0) * 0.035
-		else:
-			boss_visual_root.rotation.z = lerpf(boss_visual_root.rotation.z, 0.0, minf(delta * 6.0, 1.0))
+		# The torso bone owns the harness frame. Only its hanging clapper sways.
+		var clapper := boss_visual_root.get_node_or_null("BellEaterClapper") as Node3D
+		if clapper != null:
+			clapper.position.x = sin(boss_visual_time * (11.0 if windup_time > 0.0 else 2.4)) * 0.025
 	elif enemy_id == "rootbound_colossus":
-		boss_visual_root.rotation.y = sin(boss_visual_time * 0.72) * 0.035
-		boss_visual_root.scale = boss_visual_root.scale.lerp(boss_identity_base_scale * (1.0 + sin(boss_visual_time * 2.2) * 0.025), minf(delta * 5.0, 1.0))
+		# Chest animation owns the wound position; pulse the effect, not its frame.
+		if boss_phase_sigil != null:
+			boss_phase_sigil.scale = Vector3(0.8, 1.0, 0.35) * pulse
 	elif enemy_id == "ashwing":
-		boss_visual_root.rotation.z = sin(boss_visual_time * 2.2) * 0.06
+		# The body bone owns equipment motion, including flight and attack lean.
+		if boss_phase_sigil != null:
+			var phase_scale := [Vector3(1.0, 0.82, 0.70), Vector3(1.24, 1.0, 0.86), Vector3(1.52, 1.22, 1.0)][clampi(boss_phase - 1, 0, 2)] as Vector3
+			boss_phase_sigil.scale = phase_scale * pulse
 	elif enemy_id == "halvern_boss":
 		boss_visual_root.rotation.y = sin(boss_visual_time * 0.8) * 0.025
 		boss_visual_root.scale = boss_visual_root.scale.lerp(Vector3.ONE * (1.0 + sin(boss_visual_time * 2.0) * 0.012), minf(delta * 5.0, 1.0))
@@ -1672,6 +1727,12 @@ func apply_boss_phase_visual(next_phase: int) -> void:
 	if not is_boss:
 		return
 	set_meta("boss_phase", next_phase)
+	if enemy_id == "bell_eater":
+		_apply_bell_eater_phase_visual(next_phase)
+		return
+	elif enemy_id == "ashwing":
+		_apply_ashwing_phase_visual(next_phase)
+		return
 	if boss_phase_sigil == null:
 		return
 	var material := boss_phase_sigil.material_override as StandardMaterial3D
@@ -1684,9 +1745,9 @@ func apply_boss_phase_visual(next_phase: int) -> void:
 	}.get(next_phase, Color(0.82, 0.24, 0.14)) as Color
 	if enemy_id == "rootbound_colossus":
 		color = {
-			1: Color(0.30, 0.72, 0.26),
-			2: Color(0.62, 0.86, 0.26),
-			3: Color(0.88, 0.98, 0.54),
+			1: Color(0.15, 0.38, 0.10),
+			2: Color(0.24, 0.44, 0.12),
+			3: Color(0.34, 0.52, 0.16),
 		}.get(next_phase, Color(0.50, 0.88, 0.32)) as Color
 	if enemy_id == "white_hart_avatar":
 		color = {
@@ -1697,7 +1758,46 @@ func apply_boss_phase_visual(next_phase: int) -> void:
 	material.albedo_color = color
 	material.emission = color
 	material.emission_energy_multiplier = 0.72 + float(next_phase) * 0.28
-	boss_phase_sigil.scale = Vector3.ONE * (0.10 + float(next_phase) * 0.025)
+	if enemy_id == "rootbound_colossus":
+		material.emission_energy_multiplier = 0.18 + float(next_phase) * 0.12
+	boss_phase_sigil.scale = Vector3(0.8, 1.0, 0.35) if enemy_id == "rootbound_colossus" else Vector3.ONE * (0.10 + float(next_phase) * 0.025)
+
+func _apply_bell_eater_phase_visual(next_phase: int) -> void:
+	if boss_visual_root == null:
+		return
+	var bell := boss_visual_root.get_node_or_null("BellEaterChestBell") as MeshInstance3D
+	var clapper := boss_visual_root.get_node_or_null("BellEaterClapper") as MeshInstance3D
+	var links := boss_visual_root.get_node_or_null("BellEaterHarnessLinks") as MultiMeshInstance3D
+	var phase := clampi(next_phase, 1, 3)
+	if links != null:
+		links.multimesh.visible_instance_count = [12, 6, 0][phase - 1]
+	if clapper != null:
+		clapper.visible = phase < 3
+	if bell != null and bell.mesh != null:
+		var material := bell.mesh.surface_get_material(0).duplicate() as StandardMaterial3D
+		material.emission_enabled = phase > 1
+		material.emission = Color(0.80, 0.24, 0.045)
+		material.emission_energy_multiplier = [0.0, 0.55, 1.1][phase - 1]
+		bell.material_override = material
+
+func _apply_ashwing_phase_visual(next_phase: int) -> void:
+	if boss_visual_root == null:
+		return
+	var harness := boss_visual_root.get_node_or_null("AshwingBurntHarness") as MeshInstance3D
+	var core := boss_visual_root.get_node_or_null("AshwingAshCore") as MeshInstance3D
+	if harness != null:
+		harness.visible = next_phase < 3
+		harness.scale = Vector3(1.36, 0.52, 0.86) if next_phase == 1 else Vector3(1.54, 0.42, 1.02)
+	if core != null:
+		var core_color := [Color(0.25, 0.07, 0.01), Color(0.36, 0.11, 0.018), Color(0.48, 0.18, 0.035)][clampi(next_phase - 1, 0, 2)] as Color
+		core.material_override = _emissive_boss_material(core_color, [0.20, 0.35, 0.50][clampi(next_phase - 1, 0, 2)])
+		core.scale = [Vector3(1.0, 0.82, 0.70), Vector3(1.24, 1.0, 0.86), Vector3(1.52, 1.22, 1.0)][clampi(next_phase - 1, 0, 2)] as Vector3
+	var body_material := body_visual.material_override as StandardMaterial3D if body_visual != null else null
+	if body_material != null:
+		body_material.albedo_color = [Color(0.30, 0.18, 0.14), Color(0.26, 0.105, 0.07), Color(0.16, 0.055, 0.035)][clampi(next_phase - 1, 0, 2)] as Color
+		body_material.emission_enabled = next_phase > 1
+		body_material.emission = Color(0.12, 0.025, 0.008) if next_phase == 2 else Color(0.18, 0.045, 0.012)
+		body_material.emission_energy_multiplier = 0.06 if next_phase == 2 else (0.14 if next_phase == 3 else 0.0)
 
 func _update_feedback_material() -> void:
 	var mat = body_visual.material_override as StandardMaterial3D

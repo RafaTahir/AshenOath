@@ -154,7 +154,18 @@ def main() -> int:
             if fallback is None or not fallback.is_file():
                 errors.append(f"blocked role {role_id} needs an existing playable fallback")
 
-    expected_approved = ["road_ranger_human", "kael", "anwen", "villager", "guard", "traveler"]
+    expected_approved = [
+        "road_ranger_human",
+        "kael",
+        "anwen",
+        "villager",
+        "guard",
+        "traveler",
+        "ghoulkin",
+        "bog_wretch",
+        "gravebound_knight",
+        "white_hart",
+    ]
     if approved != expected_approved:
         errors.append(f"Milestone C approved runtime roles differ from the manifest contract: {approved}")
 

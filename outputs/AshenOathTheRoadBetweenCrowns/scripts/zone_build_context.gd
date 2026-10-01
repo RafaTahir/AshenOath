@@ -86,6 +86,29 @@ func make_play_area_bounds(width: float, depth: float, color: Color) -> void:
 	_host._make_play_area_bounds(width, depth, color)
 	bounds_count += 1
 
+func register_authored_gameplay_core() -> bool:
+	var candidates: Array[Node] = [zone_root]
+	candidates.append_array(zone_root.find_children("*", "", true, false))
+	for candidate in candidates:
+		if not bool(candidate.get_meta("authored_gameplay_core", false)):
+			continue
+		var authored_ground := int(candidate.get_meta("ground_contract_count", 0))
+		var authored_bounds := int(candidate.get_meta("bounds_contract_count", 0))
+		if authored_ground < 1 or authored_bounds < 1:
+			return false
+		ground_count += authored_ground
+		bounds_count += authored_bounds
+		record_operation("authored_gameplay_core:%s" % str(candidate.name))
+		return true
+	return false
+
+func authored_anchor_position(anchor_name: String, fallback: Vector3) -> Vector3:
+	var anchor := zone_root.find_child(anchor_name, true, false) as Node3D
+	if anchor == null:
+		return fallback
+	record_operation("authored_anchor:%s" % anchor_name)
+	return zone_root.to_local(anchor.global_position)
+
 func make_road(pos: Vector3, size: Vector3, color: Color) -> void:
 	_host._make_road(pos, size, color)
 
@@ -128,18 +151,25 @@ func make_pillar(pos: Vector3) -> void:
 func make_prop_box(id: String, pos: Vector3, size: Vector3, color: Color) -> void:
 	_host._make_prop_box(id, pos, size, color)
 
+func make_reserved_collision_box(id: String, pos: Vector3, size: Vector3) -> void:
+	# Replacing a blockout visual must retain its exact reservation/collision policy.
+	_host._make_prop_box(id, pos, size, Color.WHITE, false)
+
+func make_collision_box(id: String, pos: Vector3, size: Vector3) -> void:
+	_host._make_collision_box(id, pos, size)
+
 func make_visual_box(id: String, pos: Vector3, size: Vector3, color: Color):
 	return _host._make_visual_box(id, pos, size, color)
 
 func make_loose_role(role: String, pos: Vector3, scale_value: Vector3, rotation_y: float):
 	return _host._make_loose_role(role, pos, scale_value, rotation_y)
 
-func make_visual_role(role: String, category: String, pos: Vector3, scale_value: Vector3, rotation_y: float = 0.0):
+func make_visual_role(role: String, category: String, pos: Vector3, scale_value: Vector3, rotation_y: float = 0.0, allow_defer: bool = true):
 	# Imported castle dressing is visual enrichment rather than arrival-critical
 	# gameplay. If its OBJ mesh is not already cached, leave a transform marker
 	# for the host to resolve after the player is live instead of parsing text in
 	# the transition's synchronous build.
-	if _host.has_method("should_defer_visual_role") and _host.should_defer_visual_role(role, category):
+	if allow_defer and _host.has_method("should_defer_visual_role") and _host.should_defer_visual_role(role, category):
 		var marker := Node3D.new()
 		marker.name = "DeferredVisualRole_%s" % role
 		marker.set_meta("deferred_visual_role", role)
@@ -157,6 +187,10 @@ func make_visual_role(role: String, category: String, pos: Vector3, scale_value:
 	add_node(node)
 	return node
 
+func make_fitted_environment_role(role: String, pos: Vector3, target_size: Vector3, rotation_y: float = 0.0, allow_defer: bool = true):
+	var fitted_scale: Vector3 = _host._environment_role_scale(role, target_size)
+	return make_visual_role(role, "environment", pos, fitted_scale, rotation_y, allow_defer)
+
 func make_clue(id: String, prompt: String, pos: Vector3, quest_id: String, objective_id: String, color: Color):
 	return _host._make_clue(id, prompt, pos, quest_id, objective_id, color)
 
@@ -172,14 +206,20 @@ func make_zone_gate(prompt: String, pos: Vector3, target: String, spawn_pos: Vec
 		gate_count += 1
 	return gate
 
-func spawn_enemy(id: String, pos: Vector3):
-	return _host._spawn_enemy(id, pos)
+func spawn_enemy(id: String, pos: Vector3, visual_role: String = ""):
+	return _host._spawn_enemy(id, pos, visual_role)
 
 func enemy_exists(id: String) -> bool:
 	return enemy_defs.has(id)
 
 func make_material(color: Color) -> StandardMaterial3D:
 	return _host._mat(color)
+
+func make_world_material(surface: String, tint: Color = Color.WHITE) -> StandardMaterial3D:
+	return _host.world_materials.get_material(surface, str(_host.settings.settings.get("quality_preset", "balanced")), tint, 0.0, false)
+
+func forest_tree_mesh(path: String) -> ArrayMesh:
+	return _host.asset_helper.get_forest_tree_mesh(path)
 
 func recover_from_river(body: CharacterBody3D, center_z: float, span: float) -> void:
 	_host._recover_from_river(body, center_z, span)
@@ -205,8 +245,8 @@ func make_wychwood_path_edges() -> void:
 func make_village_dressing() -> void:
 	_host._make_village_dressing()
 
-func make_greyfen_first_impression_dressing() -> void:
-	_host._make_greyfen_first_impression_dressing()
+func make_greyfen_first_impression_dressing(stage: String = "") -> void:
+	_host._make_greyfen_first_impression_dressing(stage)
 
 func make_quality_greyfen_overhaul() -> void:
 	_host._make_quality_greyfen_overhaul()
@@ -229,8 +269,8 @@ func make_shrine_scene(pos: Vector3) -> void:
 func make_blacksmith_scene(pos: Vector3) -> void:
 	_host._make_blacksmith_scene(pos)
 
-func make_cart(pos: Vector3) -> void:
-	_host._make_cart(pos)
+func make_cart(pos: Vector3, include_visual: bool = true) -> void:
+	_host._make_cart(pos, include_visual)
 
 func make_wychwood_gate_scene(pos: Vector3) -> void:
 	_host._make_wychwood_gate_scene(pos)

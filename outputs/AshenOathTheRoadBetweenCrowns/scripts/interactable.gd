@@ -33,6 +33,9 @@ func get_context_prompt() -> String:
 		"village_place": "Use",
 		"vendor": "Shop",
 	}.get(interaction_type, "Interact"))
+	# Written evidence uses the dialogue presentation system, not spoken action.
+	if interaction_type == "dialogue" and prompt.begins_with("Read "):
+		verb = "Read"
 	return "%s — %s" % [verb, display_name]
 
 func _extract_display_name(prompt_text: String, fallback_id: String) -> String:

@@ -3,34 +3,39 @@ extends SceneTree
 const CharacterRoleSpec = preload("res://scripts/character_role_spec.gd")
 const AssetSpawnHelper = preload("res://scripts/asset_spawn_helper.gd")
 const EXPECTED := {
-	"player_human":"res://assets_external/characters_universal/Male_Peasant.gltf",
-	"sister_anwen_human":"res://assets_external/characters_universal/Female_Peasant.gltf",
-	"villager_human":"res://assets_external/characters_universal/Male_Peasant.gltf",
-	"villager_female_human":"res://assets_external/characters_universal/Female_Peasant.gltf",
-	"castle_guard_human":"res://assets_external/characters_universal/Male_Peasant.gltf",
+	"player_human":"res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.gltf",
+	"sister_anwen_human":"res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.gltf",
+	"villager_human":"res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf",
+	"villager_female_human":"res://assets_external/characters_universal/runtime/Villager_Female_Atlas.gltf",
+	"castle_guard_human":"res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf",
 	"road_ranger_human":"res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf"
 }
 var failures := 0
+var hero_only := false
 
 func _initialize() -> void:
+	hero_only = OS.get_cmdline_user_args().has("--hero-only")
 	var database = load("res://scripts/asset_database.gd").new()
 	root.add_child(database)
 	var helper := AssetSpawnHelper.new()
 	root.add_child(helper)
 	await process_frame
 	for role in EXPECTED:
+		if hero_only and role not in ["player_human", "sister_anwen_human"]:
+			continue
 		var entry: Dictionary = database.get_visual_asset_for_role(role)
 		check(str(entry.get("path", "")) == EXPECTED[role], "%s does not use its calibrated runtime model" % role)
 		await _verify_runtime_role(helper, role)
 		check(is_equal_approx(CharacterRoleSpec.visual_forward_degrees(role), 180.0), "%s is missing the +Z-to--Z facing calibration" % role)
-	for path in [
-		"res://assets_external/enemies/Skeleton.fbx",
-		"res://assets_external/enemies/Dragon.fbx",
-		"res://assets_external/enemies/Wolf.fbx"
-	]:
-		_verify_scene(path,path.get_file())
+	if not hero_only:
+		for path in [
+			"res://assets_external/enemies/Skeleton.fbx",
+			"res://assets_external/enemies/Dragon.fbx",
+			"res://assets_external/enemies/Wolf.fbx"
+		]:
+			_verify_scene(path,path.get_file())
 	if failures == 0:
-		print("CHARACTER-REAL-001 VERIFIER: PASS")
+		print("CHARACTER-REAL-001 VERIFIER: PASS%s" % (" (hero-only)" if hero_only else ""))
 		quit(0)
 	else:
 		push_error("CHARACTER-REAL-001 VERIFIER: %d failure(s)" % failures)

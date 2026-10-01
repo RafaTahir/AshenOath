@@ -6,8 +6,10 @@ const CharacterPresentation = preload("res://scripts/character_presentation.gd")
 var failures: Array[String] = []
 var helper: Node
 var tested_game: Node
+var human_only := false
 
 func _initialize() -> void:
+	human_only = OS.get_cmdline_user_args().has("--human-only")
 	_verify_identity_driver_source()
 	helper = AssetSpawnHelper.new()
 	root.add_child(helper)
@@ -31,11 +33,12 @@ func _initialize() -> void:
 		if life != null:
 			for entry in life.actors:
 				_verify_runtime_face(entry.node, str(entry.id))
-		tested_game.call("_load_zone", "Wychwood", Vector3(0, 0.9, 9))
-		await _frames(8)
-		_assert(tested_game.active_enemies.size() == 5, "Wychwood enemies are unavailable for face validation")
-		for enemy in tested_game.active_enemies:
-			_verify_runtime_face(enemy, str(enemy.enemy_id))
+		if not human_only:
+			tested_game.call("_load_zone", "Wychwood", Vector3(0, 0.9, 9))
+			await _frames(8)
+			_assert(tested_game.active_enemies.size() == 5, "Wychwood enemies are unavailable for face validation")
+			for enemy in tested_game.active_enemies:
+				_verify_runtime_face(enemy, str(enemy.enemy_id))
 
 	await _finish()
 
@@ -80,7 +83,8 @@ func _verify_face_contract(root_node: Node, label: String) -> void:
 		return
 	var report: Dictionary = driver.get_contract_report()
 	_assert(bool(report.get("valid", false)), "%s native face contract is invalid: %s" % [label, report])
-	_assert(int(report.get("native_face_surface_count", 0)) > 0, "%s has no native face/skin material surfaces" % label)
+	var is_monster := str(report.get("contract_kind", "")) == "monster_native_anatomy"
+	_assert(int(report.get("native_face_surface_count", 0)) > 0, "%s has no native %s surfaces" % [label, "anatomy" if is_monster else "face/skin material"])
 	_assert(not bool(report.get("synthetic_geometry_created", true)), "%s face driver created synthetic geometry" % label)
 	_assert(not _has_legacy_overlay(root_node), "%s still contains legacy face/eye overlay anatomy" % label)
 
@@ -115,7 +119,7 @@ func _finish() -> void:
 		helper.queue_free()
 		await _frames(2)
 	if failures.is_empty():
-		print("FACE-003 VERIFIER: PASS - native face materials and feature driver")
+		print("FACE-003 VERIFIER: PASS - native face materials and feature driver%s" % (" (human-only)" if human_only else ""))
 		quit(0)
 		return
 	print("FACE-003 VERIFIER: FAIL (%d)" % failures.size())

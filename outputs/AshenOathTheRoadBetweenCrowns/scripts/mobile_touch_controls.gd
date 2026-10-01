@@ -20,6 +20,7 @@ var action_centers: Dictionary = {}
 var action_radii: Dictionary = {}
 var rotate_required := false
 var _announced := false
+var _visibility_refresh_pending := false
 
 func _ready() -> void:
 	name = "MobileTouchControls"
@@ -27,12 +28,18 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	set_process_input(true)
+	set_process(false)
 	touch_capable = _detect_touch_capability()
 	visibility_changed.connect(queue_redraw)
 
 func setup(router: Node, hud_node: CanvasLayer, settings: Dictionary) -> void:
 	input_router = router
 	hud = hud_node
+	if not input_router.input_context_changed.is_connected(_on_input_context_changed):
+		input_router.input_context_changed.connect(_on_input_context_changed)
+	for layer in [hud.menu_layer, hud.dialogue_layer, hud.inventory_layer]:
+		if layer != null and not layer.visibility_changed.is_connected(_queue_visibility_refresh):
+			layer.visibility_changed.connect(_queue_visibility_refresh)
 	apply_settings(settings)
 	if is_touch_enabled():
 		input_router.activate_touch()
@@ -44,12 +51,14 @@ func apply_settings(settings: Dictionary) -> void:
 		touch_mode = MODE_AUTO
 	look_sensitivity = clampf(float(settings.get("touch_look_sensitivity", 1.0)), 0.55, 1.55)
 	_update_layout()
+	_queue_visibility_refresh()
 
 func set_force_touch_for_test(enabled: bool) -> void:
 	force_touch_for_test = enabled
 	if enabled:
 		touch_capable = true
 	_update_layout()
+	_queue_visibility_refresh()
 
 func is_touch_enabled() -> bool:
 	return touch_mode == MODE_ON or force_touch_for_test or (touch_mode == MODE_AUTO and touch_capable)
@@ -63,6 +72,20 @@ func is_gameplay_visible() -> bool:
 	return menus_hidden and dialogue_hidden and inventory_hidden
 
 func _process(_delta: float) -> void:
+	# Compatibility for existing callers; idle frames no longer poll this node.
+	_refresh_visibility()
+
+func _queue_visibility_refresh() -> void:
+	if _visibility_refresh_pending or not is_inside_tree():
+		return
+	_visibility_refresh_pending = true
+	call_deferred("_refresh_visibility")
+
+func _on_input_context_changed(_context: String) -> void:
+	_queue_visibility_refresh()
+
+func _refresh_visibility() -> void:
+	_visibility_refresh_pending = false
 	var should_show := is_gameplay_visible()
 	if visible != should_show:
 		visible = should_show
@@ -72,11 +95,13 @@ func _process(_delta: float) -> void:
 			input_router.activate_touch()
 			_announced = true
 			print("MOBILE_TOUCH: ready landscape=%s viewport=%s" % [not rotate_required, get_viewport_rect().size])
-	_update_layout()
+	if rotate_required:
+		_release_all()
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_RESIZED:
 		_update_layout()
+		_queue_visibility_refresh()
 
 func _input(event: InputEvent) -> void:
 	if not visible or rotate_required or input_router == null:

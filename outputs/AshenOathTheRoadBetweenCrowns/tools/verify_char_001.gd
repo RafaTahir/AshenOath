@@ -118,16 +118,24 @@ func _contains_selected_family(node: Node) -> bool:
 func _palette_signature(node: Node) -> String:
 	if node == null:
 		return ""
-	var colors: Array[String] = []
+	var surfaces: Array[String] = []
 	for mesh in node.find_children("*", "MeshInstance3D", true, false):
 		if mesh.mesh == null:
 			continue
 		for index in range(mesh.mesh.get_surface_count()):
 			var material = mesh.get_surface_override_material(index)
+			if material == null:
+				material = mesh.mesh.surface_get_material(index)
 			if material is StandardMaterial3D:
-				colors.append((material as StandardMaterial3D).albedo_color.to_html(false))
-	colors.sort()
-	return ",".join(colors)
+				var standard := material as StandardMaterial3D
+				var texture_id := "none"
+				if standard.albedo_texture != null:
+					texture_id = standard.albedo_texture.resource_path
+					if texture_id.is_empty():
+						texture_id = str(standard.albedo_texture.get_rid())
+				surfaces.append("%s@%s" % [standard.albedo_color.to_html(false), texture_id])
+	surfaces.sort()
+	return ",".join(surfaces)
 
 func _has_active_animation(node: Node) -> bool:
 	for player in node.find_children("*", "AnimationPlayer", true, false):

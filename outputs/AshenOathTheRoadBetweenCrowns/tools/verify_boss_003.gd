@@ -22,12 +22,16 @@ func _initialize() -> void:
 	var boss = _find_boss(game, "bell_eater")
 	_check(boss != null, "Bell-Eater did not spawn after the chapel was opened")
 	if boss != null:
+		var arena_offset := Vector2(boss.global_position.x - 10.0, boss.global_position.z - 8.0)
+		_check(arena_offset.length() <= 1.5, "Bell-Eater was recovered outside the cemetery approach arena: %s" % boss.global_position)
 		_check(bool(boss.get("is_boss")), "Bell-Eater is not marked as a boss")
 		_check(boss.name == "BellEaterEncounter", "Bell-Eater encounter identity is missing")
 		_check(boss.get_node_or_null("BossEncounterController") != null, "Bell-Eater controller is missing")
-		_check(boss.find_child("BellEaterHarnessBand", true, false) != null, "Bell-Eater harness presentation is missing")
+		_check(boss.find_child("BellEaterHarnessLinks", true, false) != null, "Bell-Eater chain harness is missing")
 		_check(boss.find_child("BellEaterChestBell", true, false) != null, "Bell-Eater chest bell is missing")
-		_check(boss.find_child("BellEaterEyeLeft", true, false) != null and boss.find_child("BellEaterEyeRight", true, false) != null, "Bell-Eater face lights are incomplete")
+		_check(boss.find_child("BellEaterEyeLeft", true, false) == null and boss.find_child("BellEaterEyeRight", true, false) == null, "Bell-Eater still has proxy face anatomy")
+		var harness_socket := boss.find_child("BellEaterHarnessSocket", true, false) as BoneAttachment3D
+		_check(harness_socket != null and harness_socket.bone_name == "Torso", "Bell-Eater harness is not torso-bound")
 		var controller: Node = boss.get_node_or_null("BossEncounterController")
 		var maximum: float = boss.health_component.max_health
 		boss.apply_damage(maximum * 0.40, "boss_verifier")
@@ -48,6 +52,9 @@ func _initialize() -> void:
 		boss.apply_damage(9999.0, "boss_verifier")
 		await _frames(6)
 		_check(bool(game.story_state.get_flag("bell_eater_defeated", false)), "Bell-Eater aftermath flag was not saved")
+		_check(bool(game.story_state.get_flag("boss_reward_bell_iron", false)), "Bell-Eater iron reward was not persisted")
+		_check(bool(game.story_state.get_flag("boss_reward_chapel_key", false)), "Bell-Eater chapel-key reward was not persisted")
+		_check(bool(game.story_state.get_flag("cemetery_bell_silent", false)), "Bell-Eater declared aftermath was not persisted")
 		game.call("_ensure_bell_eater")
 		await _frames(2)
 		_check(_find_living_boss(game, "bell_eater") == null, "Defeated Bell-Eater respawned")

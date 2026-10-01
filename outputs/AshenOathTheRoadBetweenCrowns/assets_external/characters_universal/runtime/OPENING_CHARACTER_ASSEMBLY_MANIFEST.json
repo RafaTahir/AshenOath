@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "pipeline": "single-material opening character assemblies",
+  "license": "CC0 1.0",
+  "roles": {
+    "kael": {
+      "role": "kael",
+      "runtime": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.gltf",
+      "runtime_sha256": "76b9abd7664a1a230f74501d03e6388553ab933732d4e1ab66c399a34286f276",
+      "binary": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.bin",
+      "binary_sha256": "d808c177751183950b609ce6d7dcba3544d08bc9c653d06e22f6ff0075040926",
+      "atlas": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.png",
+      "atlas_sha256": "c9494c06134cc2e7dff2558307efe49e677b9a35127dfbdd70f5315ae9ea3101",
+      "sources": [
+        "Male_Peasant.gltf",
+        "Male_Head.gltf",
+        "Hair_SimpleParted.gltf"
+      ],
+      "material_count": 1,
+      "mesh_count": 1,
+      "primitive_count": 1,
+      "skin_count": 1
+    },
+    "anwen": {
+      "role": "anwen",
+      "runtime": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.gltf",
+      "runtime_sha256": "bc18388f80f73a739c996efa963565dc283d1491d1006643cc3ee0f3bf05587c",
+      "binary": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.bin",
+      "binary_sha256": "b4e8b543a3dd8510d097f6c63af461c6b61f2a3ed62f64748e09a7f556d989f9",
+      "atlas": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.png",
+      "atlas_sha256": "36a470db2bda34b853ebfd57307ecc86af0ba198067a9285fc1b33e95b29632d",
+      "sources": [
+        "Female_Peasant.gltf",
+        "Female_Head.gltf",
+        "Hair_Buns.gltf"
+      ],
+      "material_count": 1,
+      "mesh_count": 1,
+      "primitive_count": 1,
+      "skin_count": 1
+    },
+    "villager_male": {
+      "role": "villager_male",
+      "runtime": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf",
+      "runtime_sha256": "7039f60e180bcf8c1d699790e5cc578ef8d287e26e878ce4f7495d0549c36544",
+      "binary": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.bin",
+      "binary_sha256": "d808c177751183950b609ce6d7dcba3544d08bc9c653d06e22f6ff0075040926",
+      "atlas": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.png",
+      "atlas_sha256": "608c6c6acc4987dcfe92c01589131d9981e2e9711e78e093295640fb1e17518d",
+      "sources": [
+        "Male_Peasant.gltf",
+        "Male_Head.gltf",
+        "Hair_SimpleParted.gltf"
+      ],
+      "material_count": 1,
+      "mesh_count": 1,
+      "primitive_count": 1,
+      "skin_count": 1
+    },
+    "villager_female": {
+      "role": "villager_female",
+      "runtime": "res://assets_external/characters_universal/runtime/Villager_Female_Atlas.gltf",
+      "runtime_sha256": "6ccee1bf02f48738cccb95774a686e4ba85efb78b425196d499a469efb921153",
+      "binary": "res://assets_external/characters_universal/runtime/Villager_Female_Atlas.bin",
+      "binary_sha256": "b4e8b543a3dd8510d097f6c63af461c6b61f2a3ed62f64748e09a7f556d989f9",
+      "atlas": "res://assets_external/characters_universal/runtime/Villager_Female_Atlas.png",
+      "atlas_sha256": "a7f0f8fd3b8fc57974c2d93b44e1149aba6a7ae87d3a4bf087041ad3381f0ddb",
+      "sources": [
+        "Female_Peasant.gltf",
+        "Female_Head.gltf",
+        "Hair_Buns.gltf"
+      ],
+      "material_count": 1,
+      "mesh_count": 1,
+      "primitive_count": 1,
+      "skin_count": 1
+    },
+    "villager_worker": {
+      "role": "villager_worker",
+      "runtime": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf",
+      "runtime_sha256": "c98bfbee092140937e2907535a8beb2d3aa1e5185f9313f9b5a880a1f1291afe",
+      "binary": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.bin",
+      "binary_sha256": "42eda764ce432ec2cc96adeab7453f2676d1be764c9f032e125664c73ce4ce1d",
+      "atlas": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.png",
+      "atlas_sha256": "920aaef0d1ee27e63c15bedb68a307c893fc417ab6494e90b854e58cbd7f79d7",
+      "sources": [
+        "Male_Peasant.gltf",
+        "Male_Head.gltf",
+        "Hair_Buzzed.gltf"
+      ],
+      "material_count": 1,
+      "mesh_count": 1,
+      "primitive_count": 1,
+      "skin_count": 1
+    },
+    "villager_hooded": {
+      "role": "villager_hooded",
+      "runtime": "res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.gltf",
+      "runtime_sha256": "34fc435ac57da9bbeaa59854340bd298e74b821eb13157694c7cf38c0149d815",
+      "binary": "res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.bin",
+      "binary_sha256": "42eda764ce432ec2cc96adeab7453f2676d1be764c9f032e125664c73ce4ce1d",
+      "atlas": "res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.png",
+      "atlas_sha256": "06641f7bfa0ab6fb90e0aa07e64da1899d7d185b3859f255759c80102c85f80c",
+      "sources": [
+        "Male_Peasant.gltf",
+        "Male_Head.gltf",
+        "Hair_Buzzed.gltf"
+      ],
+      "material_count": 1,
+      "mesh_count": 1,
+      "primitive_count": 1,
+      "skin_count": 1
+    },
+    "bandit_deserter": {
+      "role": "bandit_deserter",
+      "runtime": "res://assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.gltf",
+      "runtime_sha256": "93869760db4a8568c4a221806aa86be1bd159c8fb830f076904b502f3010d1ec",
+      "binary": "res://assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.bin",
+      "binary_sha256": "015173382bfbff2178c9d15f0c3e1d2a704b7039a38bbb0be0113683e9561e5d",
+      "atlas": "res://assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.png",
+      "atlas_sha256": "f22a8f798bb7232386805add6ac58db0cf506702eac6a61ab4cdfa1c202ce686",
+      "sources": [
+        "Male_Ranger_Runtime.gltf",
+        "Male_Head.gltf",
+        "Hair_Buzzed.gltf"
+      ],
+      "source_license_files": [
+        "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
+        "res://assets_external/licenses/Quaternius_Modular_Character_Outfits_Fantasy_CC0.txt"
+      ],
+      "material_count": 1,
+      "mesh_count": 1,
+      "primitive_count": 1,
+      "skin_count": 1
+    },
+    "bandit_tracker": {
+      "role": "bandit_tracker",
+      "runtime": "res://assets_external/characters_universal/runtime/Bandit_Tracker_Atlas.gltf",
+      "runtime_sha256": "0e3f198c5cec76838ed0bcb2b65482d246762e767e392b2447a99ad1b325b681",
+      "binary": "res://assets_external/characters_universal/runtime/Bandit_Tracker_Atlas.bin",
+      "binary_sha256": "f8814d0ac031aa1eb8ec95d69661bd663485c05d0a14b48cfcbf86404a74c80b",
+      "atlas": "res://assets_external/characters_universal/runtime/Bandit_Tracker_Atlas.png",
+      "atlas_sha256": "17760978251d0b979c6b0c543ba956ae69d77eb8da39a7c8cc0c5a6acd1bc8c7",
+      "sources": [
+        "Male_Peasant.gltf",
+        "Male_Ranger_Runtime.gltf",
+        "Male_Head.gltf",
+        "Hair_SimpleParted.gltf"
+      ],
+      "source_license_files": [
+        "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
+        "res://assets_external/licenses/Quaternius_Modular_Character_Outfits_Fantasy_CC0.txt"
+      ],
+      "material_count": 1,
+      "mesh_count": 1,
+      "primitive_count": 1,
+      "skin_count": 1
+    }
+  }
+}

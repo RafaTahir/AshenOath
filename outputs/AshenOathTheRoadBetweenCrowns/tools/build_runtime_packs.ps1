@@ -30,6 +30,24 @@ if ([string]::IsNullOrWhiteSpace($OutputDirectory)) {
     $OutputDirectory = Join-Path $Project $OutputDirectory
 }
 $OutputDirectory = [System.IO.Path]::GetFullPath($OutputDirectory)
+$CandidateManifestPath = Join-Path $OutputDirectory "runtime_pack_candidates.json"
+
+# HEAD alone does not identify uncommitted runtime edits.
+$sourceStatus = @(git -C $RepoRoot status --porcelain --untracked-files=all -- $Project)
+if ($LASTEXITCODE -ne 0) { throw "Cannot establish pack source working-tree state." }
+$sourceDirty = $sourceStatus.Count -gt 0
+$existingManifest = $null
+if (-not $Force -and (Test-Path -LiteralPath $CandidateManifestPath)) {
+    try {
+        $existingManifest = Get-Content -LiteralPath $CandidateManifestPath -Raw | ConvertFrom-Json
+    } catch {
+        throw "PACK-003 candidate manifest is invalid: $CandidateManifestPath"
+    }
+    $existingCommit = [string]$existingManifest.generated_from_commit
+    if (-not $SourceCommit -or $existingCommit -ne $SourceCommit -or $sourceDirty -or $existingManifest.source_dirty) {
+        throw "PACK-003 unsafe reuse: candidate=$existingCommit, current=$SourceCommit, current_dirty=$sourceDirty, candidate_dirty=$($existingManifest.source_dirty). Re-run with -Force."
+    }
+}
 
 if ([string]::IsNullOrWhiteSpace($GodotPath)) {
     $candidates = @(
@@ -50,7 +68,8 @@ $packs = @(
     @{ id = "campaign"; preset = "Runtime Pack Campaign"; file = "campaign.pck" },
     @{ id = "characters"; preset = "Runtime Pack Characters"; file = "characters.pck" },
     @{ id = "monsters"; preset = "Runtime Pack Monsters"; file = "monsters.pck" },
-    @{ id = "audio"; preset = "Runtime Pack Audio"; file = "audio.pck" }
+    @{ id = "audio"; preset = "Runtime Pack Audio"; file = "audio.pck" },
+    @{ id = "quality_materials"; preset = "Runtime Pack Quality Materials"; file = "quality_materials.pck" }
 )
 
 $records = [System.Collections.Generic.List[object]]::new()
@@ -63,9 +82,15 @@ foreach ($pack in $packs) {
         Write-Host ("PACK-003 export: {0}" -f $pack.id)
         $errorLog = Join-Path $OutputDirectory ($pack.id + ".error.log")
         $argumentLine = "--headless --path `"$Project`" --export-pack `"$($pack.preset)`" `"$target`""
-        $process = Start-Process -FilePath $GodotPath -ArgumentList $argumentLine -Wait -PassThru -RedirectStandardOutput $log -RedirectStandardError $errorLog
+        $process = Start-Process -FilePath $GodotPath -ArgumentList $argumentLine -WindowStyle Hidden -Wait -PassThru -RedirectStandardOutput $log -RedirectStandardError $errorLog
         $exitCode = $process.ExitCode
     } else {
+        $previous = @($existingManifest.packs | Where-Object { $_.id -eq $pack.id })
+        if ($previous.Count -ne 1 -or
+            [int64]$previous[0].bytes -ne (Get-Item -LiteralPath $target).Length -or
+            [string]$previous[0].sha256 -ne (Get-Sha256Hex $target)) {
+            throw "PACK-003 $($pack.id): reuse has no matching verified artifact identity. Re-run with -Force."
+        }
         Write-Host ("PACK-003 reuse: {0}" -f $pack.id)
     }
     if (!(Test-Path -LiteralPath $target) -or $exitCode -ne 0) {
@@ -109,6 +134,7 @@ $manifest = [ordered]@{
     generated_at_utc = (Get-Date).ToUniversalTime().ToString("o")
     build_id = $BuildId
     generated_from_commit = $SourceCommit
+    source_dirty = $sourceDirty
     project = "Ashen Oath"
     artifact_directory = $OutputDirectory
     artifacts_are_external = $true

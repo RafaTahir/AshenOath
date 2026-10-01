@@ -2,9 +2,11 @@ extends SceneTree
 
 const OUTPUT := "res://Development_Gallery/screenshots/MON_002_MONSTER_AUDITION.png"
 const SOURCES := [
-	"res://assets_external/enemies/Skeleton.fbx",
-	"res://assets_external/enemies/Dragon.fbx",
-	"res://assets_external/enemies/Wolf.fbx"
+	"res://assets_external/enemies/ultimate_monsters/Demon.gltf",
+	"res://assets_external/enemies/ultimate_monsters/Ghost.glb",
+	"res://assets_external/enemies/ultimate_monsters/Orc.gltf",
+	"res://assets_external/enemies/ultimate_monsters/BlueDemon.gltf",
+	"res://assets_external/enemies/ultimate_monsters/Creep.glb"
 ]
 
 var failures := 0
@@ -17,6 +19,8 @@ func _initialize() -> void:
 	var world := Node3D.new()
 	world.name = "MonsterAuditionWorld"
 	root.add_child(world)
+	root.size = Vector2i(1280, 720)
+	root.content_scale_size = Vector2i(1280, 720)
 	var environment := WorldEnvironment.new()
 	var env := Environment.new()
 	env.background_mode = Environment.BG_COLOR
@@ -27,7 +31,7 @@ func _initialize() -> void:
 	environment.environment = env
 	world.add_child(environment)
 	var camera := Camera3D.new()
-	camera.position = Vector3(0.0, 2.3, 8.6)
+	camera.position = Vector3(0.0, 2.3, 11.5)
 	camera.look_at_from_position(camera.position, Vector3(0.0, 1.15, 0.0), Vector3.UP)
 	camera.fov = 42.0
 	world.add_child(camera)
@@ -65,9 +69,8 @@ func _initialize() -> void:
 			continue
 		actor.name = "Audition_%02d" % index
 		actor.position = Vector3((index - 2.5) * 2.15, 0.02, 0.0)
-		actor.scale = Vector3.ONE * (0.92 if index < 3 else 0.82)
 		world.add_child(actor)
-		_ground_actor(actor)
+		_normalize_actor(actor, 2.4)
 		var animation_player := actor.find_child("AnimationPlayer", true, false) as AnimationPlayer
 		if animation_player != null:
 			print("AUDITION_CLIPS %s: %s" % [path.get_file(), ",".join(animation_player.get_animation_list())])
@@ -95,7 +98,7 @@ func _initialize() -> void:
 	print("MON-002 AUDITION: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
 	quit(0 if failures == 0 else 1)
 
-func _ground_actor(actor: Node3D) -> void:
+func _normalize_actor(actor: Node3D, target_height: float) -> void:
 	var bounds := AABB()
 	var initialized := false
 	for mesh in actor.find_children("*", "MeshInstance3D", true, false):
@@ -105,8 +108,11 @@ func _ground_actor(actor: Node3D) -> void:
 		var local_bounds := instance.transform * instance.mesh.get_aabb()
 		bounds = bounds.merge(local_bounds) if initialized else local_bounds
 		initialized = true
-	if initialized and bounds.position.y < 0.0:
-		actor.position.y -= bounds.position.y
+	if not initialized or bounds.size.y <= 0.001:
+		return
+	var factor := target_height / bounds.size.y
+	actor.scale = Vector3.ONE * factor
+	actor.position.y = 0.02 - bounds.position.y * factor
 
 func _material(color: Color, roughness: float) -> StandardMaterial3D:
 	var material := StandardMaterial3D.new()

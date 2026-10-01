@@ -26,6 +26,7 @@ static func capture(zone_root: Node) -> Dictionary:
 		"transparent_surfaces": 0,
 		"mesh_surfaces": 0,
 		"null_material_surfaces": 0,
+		"null_material_owners": [],
 	}
 	if zone_root == null:
 		return result
@@ -59,7 +60,7 @@ static func _collect(node: Node, result: Dictionary, inherited_visible: bool = t
 				visible_count = batch.multimesh.instance_count
 			result.multimesh_instances = int(result.multimesh_instances) + visible_count
 			if batch.multimesh.mesh != null:
-				_collect_mesh(batch.multimesh.mesh, batch.material_override, result)
+				_collect_mesh(batch.multimesh.mesh, batch.material_override, result, str(batch.get_path()))
 	elif node is MeshInstance3D:
 		var mesh_instance := node as MeshInstance3D
 		result.meshes = int(result.meshes) + 1
@@ -75,19 +76,20 @@ static func _collect_mesh_instance(mesh_instance: MeshInstance3D, result: Dictio
 			material = mesh_instance.get_surface_override_material(surface)
 		if material == null:
 			material = mesh_instance.mesh.surface_get_material(surface)
-		_record_surface(material, result)
+		_record_surface(material, result, str(mesh_instance.get_path()), surface, mesh_instance.mesh.resource_name)
 
-static func _collect_mesh(mesh: Mesh, override_material: Material, result: Dictionary) -> void:
+static func _collect_mesh(mesh: Mesh, override_material: Material, result: Dictionary, owner: String) -> void:
 	for surface in range(mesh.get_surface_count()):
 		var material: Material = override_material
 		if material == null:
 			material = mesh.surface_get_material(surface)
-		_record_surface(material, result)
+		_record_surface(material, result, owner, surface, mesh.resource_name)
 
-static func _record_surface(material: Material, result: Dictionary) -> void:
+static func _record_surface(material: Material, result: Dictionary, owner: String, surface: int, mesh_name: String) -> void:
 	result.mesh_surfaces = int(result.mesh_surfaces) + 1
 	if material == null:
 		result.null_material_surfaces = int(result.null_material_surfaces) + 1
+		result.null_material_owners.append({"node": owner, "surface": surface, "mesh": mesh_name})
 		return
 	if material is BaseMaterial3D and (material as BaseMaterial3D).transparency != BaseMaterial3D.TRANSPARENCY_DISABLED:
 		result.transparent_surfaces = int(result.transparent_surfaces) + 1

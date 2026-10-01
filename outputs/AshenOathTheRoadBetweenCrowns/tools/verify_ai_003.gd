@@ -1,11 +1,14 @@
 extends SceneTree
 
 var failures := 0
+var original_physics_ticks := 60
 
 func _initialize() -> void:
 	call_deferred("_run")
 
 func _run() -> void:
+	original_physics_ticks = Engine.physics_ticks_per_second
+	Engine.physics_ticks_per_second = 30
 	var scene: PackedScene = load("res://scenes/main.tscn")
 	check(scene != null, "Main scene is missing")
 	if scene == null:
@@ -93,8 +96,66 @@ func _run() -> void:
 	check(not game.call("_enemy_attack_token", second, true), "Two enemies can attack simultaneously")
 	game.call("_enemy_attack_token", first, false)
 
+	# CharacterBody collision remains authoritative at the 30 Hz target floor.
+	# A runtime obstacle may stop or redirect pursuit, but spacing must never
+	# teleport the enemy through it.
+	first.set_encounter_peers([])
+	first.behavior_profile = "direct"
+	first.home_position = Vector3(0, 0.9, 4.0)
+	first.leash_radius = 12.0
+	first.global_position = first.home_position
+	game.player.global_position = Vector3(0, 0.9, 0.0)
+	first.last_known_player_position = game.player.global_position
+	first.perception_memory_time = 2.0
+	first.set_physics_process(true)
+	var wall := StaticBody3D.new()
+	var wall_shape := CollisionShape3D.new()
+	var wall_box := BoxShape3D.new()
+	wall_box.size = Vector3(4.0, 2.5, 0.30)
+	wall_shape.shape = wall_box
+	wall.add_child(wall_shape)
+	wall.position = Vector3(0, 1.25, 2.4)
+	game.zone_root.add_child(wall)
+	var obstacle_start: Vector3 = first.global_position
+	await settle(24)
+	var obstacle_displacement: float = first.global_position.distance_to(obstacle_start)
+	print("AI OBSTACLE RESULT ", JSON.stringify({"start": str(obstacle_start), "end": str(first.global_position), "displacement": obstacle_displacement, "maximum_travel": first.move_speed * 24.0 / 30.0 + 1.0}))
+	check(first.global_position.z >= 2.70, "30 Hz pursuit crossed a blocking world body")
+	check(obstacle_displacement <= first.move_speed * 24.0 / 30.0 + 1.0, "Obstacle response teleported the enemy")
+	wall.queue_free()
+	await settle(2)
+
+	# Skirmishers create real post-attack space, while actors beyond their leash
+	# return toward home through the same navigation contract.
+	first.behavior_profile = "skirmisher"
+	first.global_position = Vector3(0, 0.9, 1.25)
+	first.home_position = first.global_position
+	first.attack_recovery_time = 0.55
+	first.pending_attack_time = 0.0
+	first.stagger_time = 0.0
+	first.perception_memory_time = 2.0
+	first.can_see_player = true
+	var retreat_start: float = first.global_position.distance_to(game.player.global_position)
+	await settle(8)
+	check(first.global_position.distance_to(game.player.global_position) > retreat_start + 0.08, "Skirmisher did not retreat after attacking")
+	check(bool(first.get_tactical_state().get("route_safe", true)), "Retreat produced an unsafe route")
+
+	first.behavior_profile = "direct"
+	first.home_position = Vector3(0, 0.9, 0.0)
+	first.leash_radius = 3.0
+	first.global_position = Vector3(0, 0.9, 5.2)
+	first.attack_recovery_time = 0.0
+	first.navigation_route.clear()
+	first.navigation_target = Vector3.INF
+	var leash_start: float = first.global_position.distance_to(first.home_position)
+	await settle(15)
+	check(first.global_position.distance_to(first.home_position) < leash_start - 0.20, "Enemy did not return inside its leash")
+	check(bool(first.get_tactical_state().get("route_safe", true)), "Leash return produced an unsafe route")
+	first.set_physics_process(false)
+
 	print("AI-003 VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
 	var result_code := 0 if failures == 0 else 1
+	Engine.physics_ticks_per_second = original_physics_ticks
 	await finish(game)
 	quit(result_code)
 

@@ -34,6 +34,11 @@ __pycache__/
 **/.release-gate/
 **/.verification-cache/
 
+# Local browser/native preview artifacts and one-off probes
+outputs/AshenOathTheRoadBetweenCrowns/gl_compatibility*
+outputs/AshenOathTheRoadBetweenCrowns/tools/_probe_*.gd
+outputs/AshenOathTheRoadBetweenCrowns/tools/_inspect_milestone_c_assets.gd
+
 # Raw downloads and archives
 **/downloads/
 **/raw_downloads/
@@ -46,6 +51,7 @@ __pycache__/
 **/*.tar
 **/*.tar.gz
 **/*.tgz
+**/node_modules/
 
 # Development-only screenshots/galleries
 **/Development_Gallery/
@@ -65,5 +71,9 @@ outputs/AshenOath_Web/
 outputs/AshenOath_Web_Slim/
 
 # Keep the deployable static site tracked
+# World filtering depends on authored mip chains, so retain their import settings.
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/*_albedo.jpg.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/*_normal.jpg.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/*_orm.jpg.import
 !web/
 !web/**

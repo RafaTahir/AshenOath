@@ -3,12 +3,12 @@
   "ticket": "MON-002",
   "families": {
     "ghoulkin": {
-      "visual_role": "ghoulkin_skeleton",
+      "visual_role": "ghoulkin_creature",
       "profile": "skirmisher",
       "height": 1.63,
-      "skin": "runtime_materials",
-      "runtime_source_role": "ghoulkin_skeleton",
-      "source_path": "res://assets_external/enemies/Skeleton.fbx"
+      "skin": "authored_ash_skin_and_burial_cloth_atlas",
+      "runtime_source_role": "ghoulkin_creature",
+      "source_path": "res://assets_external/characters_universal/runtime/Ghoulkin_Authored_Atlas.gltf"
     },
     "wychwood_stalker": {
       "visual_role": "wychwood_stalker_creature",

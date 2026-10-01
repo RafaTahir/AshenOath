@@ -8,9 +8,9 @@
       "exterior": true,
       "bounds": [21.0, 17.0],
       "edges": {
-        "north": {"target": "wychwood", "lane": 0.0, "half_width": 3.8, "trigger": [0.0, 0.0, -15.2], "arrival": [0.0, 0.9, 13.0]},
-        "west": {"target": "deep_wood", "lane": -10.0, "half_width": 3.2, "trigger": [-18.0, 0.0, -10.0], "arrival": [0.0, 0.9, 13.0]},
-        "east": {"target": "vargan_approach", "lane": 0.0, "half_width": 3.8, "trigger": [17.5, 0.0, 0.0], "arrival": [-16.0, 0.9, 0.0]}
+        "north": {"target": "wychwood", "lane": 0.0, "half_width": 5.0, "trigger": [0.0, 0.0, -15.2], "arrival": [0.0, 0.9, 13.0]},
+        "west": {"target": "deep_wood", "lane": -10.0, "half_width": 3.2, "trigger": [-18.0, 0.0, -10.0], "arrival": [-7.0, 0.9, 11.0]},
+        "east": {"target": "vargan_approach", "lane": 0.0, "half_width": 3.8, "trigger": [17.5, 0.0, 0.0], "arrival": [0.0, 0.9, 16.0], "approach": [[0.0, 0.95, -3.9], [13.5, 0.95, -3.9], [15.0, 0.95, 0.0]]}
       }
     },
     "wychwood": {
@@ -18,8 +18,8 @@
       "exterior": true,
       "bounds": [22.0, 17.0],
       "edges": {
-        "south": {"target": "greyfen", "lane": 0.0, "half_width": 3.8, "trigger": [0.0, 0.0, 15.0], "arrival": [0.0, 0.9, -13.0]},
-        "north": {"target": "deep_wood", "lane": 10.8, "half_width": 3.2, "trigger": [10.8, 0.0, -13.2], "arrival": [0.0, 0.9, 13.0]}
+        "south": {"target": "greyfen", "lane": 0.0, "half_width": 5.0, "trigger": [0.0, 0.0, 15.0], "arrival": [0.0, 0.9, -13.0], "approach": [[10.8, 0.95, -5.0], [0.0, 0.95, -2.5]]},
+        "north": {"target": "deep_wood", "lane": 10.8, "half_width": 3.2, "trigger": [10.8, 0.0, -13.2], "arrival": [-7.0, 0.9, 11.0]}
       }
     },
     "deep_wood": {
@@ -27,8 +27,8 @@
       "exterior": true,
       "bounds": [20.0, 16.0],
       "edges": {
-        "south": {"target": "wychwood", "lane": -7.0, "half_width": 3.2, "trigger": [-7.0, 0.0, 13.5], "arrival": [0.0, 0.9, -13.0]},
-        "north": {"target": "old_mill", "lane": 7.0, "half_width": 3.2, "trigger": [7.0, 0.0, -13.5], "arrival": [0.0, 0.9, 13.0]}
+        "south": {"target": "wychwood", "lane": -7.0, "half_width": 3.2, "trigger": [-7.0, 0.0, 13.5], "arrival": [10.8, 0.9, -10.5]},
+        "north": {"target": "old_mill", "lane": 7.0, "half_width": 3.2, "trigger": [7.0, 0.0, -13.5], "arrival": [-7.0, 0.9, 11.0]}
       }
     },
     "old_mill": {
@@ -36,8 +36,8 @@
       "exterior": true,
       "bounds": [20.0, 16.0],
       "edges": {
-        "south": {"target": "deep_wood", "lane": -7.0, "half_width": 3.2, "trigger": [-7.0, 0.0, 13.5], "arrival": [0.0, 0.9, -13.0]},
-        "north": {"target": "burned_farmstead", "lane": 7.0, "half_width": 3.2, "trigger": [7.0, 0.0, -13.5], "arrival": [0.0, 0.9, 13.0]}
+        "south": {"target": "deep_wood", "lane": -7.0, "half_width": 3.2, "trigger": [-7.0, 0.0, 13.5], "arrival": [7.0, 0.9, -11.0]},
+        "north": {"target": "burned_farmstead", "lane": 7.0, "half_width": 3.2, "trigger": [7.0, 0.0, -13.5], "arrival": [-7.0, 0.9, 11.0]}
       }
     },
     "burned_farmstead": {
@@ -45,7 +45,7 @@
       "exterior": true,
       "bounds": [20.0, 16.0],
       "edges": {
-        "south": {"target": "old_mill", "lane": -7.0, "half_width": 3.2, "trigger": [-7.0, 0.0, 13.5], "arrival": [0.0, 0.9, -13.0]},
+        "south": {"target": "old_mill", "lane": -7.0, "half_width": 3.2, "trigger": [-7.0, 0.0, 13.5], "arrival": [7.0, 0.9, -11.0]},
         "north": {"target": "marsh_crossing", "lane": 7.0, "half_width": 3.2, "trigger": [7.0, 0.0, -13.5], "arrival": [0.0, 0.9, 13.0]}
       }
     },
@@ -54,8 +54,8 @@
       "exterior": true,
       "bounds": [20.0, 16.0],
       "edges": {
-        "south": {"target": "burned_farmstead", "lane": 0.0, "half_width": 3.2, "arrival": [0.0, 0.9, -13.0]},
-        "north": {"target": "bandit_road", "lane": 0.0, "half_width": 3.2, "arrival": [0.0, 0.9, 13.0]}
+        "south": {"target": "burned_farmstead", "lane": 0.0, "half_width": 3.2, "arrival": [7.0, 0.9, -11.0]},
+        "north": {"target": "bandit_road", "lane": 0.0, "half_width": 3.2, "arrival": [-7.0, 0.9, 13.0]}
       }
     },
     "bandit_road": {
@@ -64,7 +64,7 @@
       "bounds": [22.0, 19.0],
       "edges": {
         "south": {"target": "marsh_crossing", "lane": -7.0, "half_width": 3.2, "trigger": [-7.0, 0.0, 16.5], "arrival": [0.0, 0.9, -13.0]},
-        "east": {"target": "vargan_approach", "lane": 7.0, "half_width": 3.2, "trigger": [7.0, 0.0, -16.5], "arrival": [-16.0, 0.9, 0.0]}
+        "east": {"target": "vargan_approach", "lane": 7.0, "half_width": 3.2, "trigger": [7.0, 0.0, -16.5], "arrival": [-16.0, 0.9, 16.0]}
       }
     },
     "vargan_approach": {
@@ -72,8 +72,8 @@
       "exterior": true,
       "bounds": [23.0, 19.0],
       "edges": {
-        "west": {"target": "bandit_road", "lane": 16.0, "half_width": 3.2, "trigger": [-7.0, 0.0, 16.0], "arrival": [16.0, 0.9, 0.0]},
-        "south": {"target": "greyfen", "lane": 0.0, "half_width": 3.8, "arrival": [16.0, 0.9, 0.0]}
+        "west": {"target": "bandit_road", "lane": 16.0, "half_width": 3.2, "arrival": [16.0, 0.9, 7.0]},
+        "south": {"target": "greyfen", "lane": 0.0, "half_width": 3.8, "arrival": [15.0, 0.9, 0.0]}
       },
       "interior_doors": ["vargan_court"]
     },

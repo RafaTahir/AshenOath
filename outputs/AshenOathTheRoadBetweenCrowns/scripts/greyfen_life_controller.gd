@@ -53,6 +53,8 @@ var simulation_tick_accumulator := 0.0
 var spatial_service
 var story_signature := ""
 var last_story_line := ""
+var story_dirty := true
+var story_source: Node
 
 const CROWD_IDENTITIES := [
 	"generic_villager_01", "generic_villager_02", "farmer_toma", "widow_elna",
@@ -67,14 +69,22 @@ func _simulation_hz() -> float:
 	return 15.0 if quality == "quality" else 8.0
 
 func configure(game: Node, quality_preset: String) -> void:
+	if story_source != null and is_instance_valid(story_source) and story_source.changed.is_connected(_on_story_changed):
+		story_source.changed.disconnect(_on_story_changed)
 	host = game
+	story_source = game.story_state
+	if story_source != null:
+		story_source.changed.connect(_on_story_changed)
+	story_dirty = true
 	player = game.player
 	quality = quality_preset
 	rng.seed = 44017
-	asset_helper = AssetSpawnHelper.new()
-	add_child(asset_helper)
+	# Share the game's imported-resource and retargeted-animation cache. A
+	# controller-local helper repeated that work when the first villager spawned.
+	asset_helper = game.asset_helper
 	set_spatial_service(game.spatial_service)
-	_build_population()
+	if not bool(get_meta("staged_population", false)):
+		_build_population()
 	_enroll_named_npcs()
 	_sync_story_state(true)
 
@@ -91,22 +101,25 @@ func routine_ids() -> Array:
 	return actors.map(func(entry): return str(entry.id))
 
 func _process(delta: float) -> void:
-	if host == null or player == null or get_tree().paused: return
+	if host == null or player == null or get_tree().paused or not bool(host.get("game_started")): return
 	simulation_tick_accumulator += delta
 	if simulation_tick_accumulator < 1.0 / _simulation_hz():
 		return
 	delta = simulation_tick_accumulator
 	simulation_tick_accumulator = 0.0
 	line_cooldown = max(line_cooldown - delta, 0.0)
-	_sync_story_state(false)
-	var visible_ambient := _visible_ambient_ids()
+	if story_dirty:
+		_sync_story_state(false)
 	for entry in actors:
 		var actor_node: Node3D = entry.node
-		var render_distance := 6.0 if quality == "potato" else (16.0 if quality == "quality" else 6.5)
-		var over_budget := not bool(entry.named) and not visible_ambient.has(str(entry.id))
+		if entry.driver == null and is_instance_valid(actor_node):
+			var hydrated_driver = actor_node.find_child("CharacterAnimationDriver", true, false)
+			if hydrated_driver != null:
+				entry.driver = hydrated_driver
+		var render_distance := 8.0 if quality == "potato" else (18.0 if quality == "quality" else 16.0)
 		var was_distant := bool(entry.get("distance_suspended", false))
 		var distance_limit := render_distance - 0.8 if was_distant else render_distance + 0.8
-		var distant := is_instance_valid(actor_node) and (actor_node.global_position.distance_to(player.global_position) > distance_limit or over_budget)
+		var distant := is_instance_valid(actor_node) and actor_node.global_position.distance_to(player.global_position) > distance_limit
 		if is_instance_valid(actor_node) and distant != was_distant:
 			actor_node.visible = not distant
 			var driver = entry.driver
@@ -116,13 +129,17 @@ func _process(delta: float) -> void:
 		if not distant:
 			_update_actor(entry, delta)
 
-func _build_population() -> void:
+func build_population_member(index: int) -> void:
+	_build_population(index, 1)
+	_sync_story_state(true)
+
+func _build_population(first := 0, count := -1) -> void:
 	var population := 4 if quality == "potato" else (10 if quality == "quality" else 4)
 	var definitions := [
 		{"id":"walker_well","path":[Vector3(-12,0,8),Vector3(-5,0,5),Vector3(-8,0,-1)],"speed":1.05},
 		{"id":"walker_board","path":[Vector3(-11,0,-4),Vector3(-4,0,7),Vector3(1,0,8)],"speed":0.92},
 		{"id":"shrine_pilgrim","path":[Vector3(-4,0,-9),Vector3(2,0,-8),Vector3(4.6,0,-6.6)],"speed":0.72},
-		{"id":"forge_helper","path":[Vector3(7,0,7),Vector3(10,0,5),Vector3(8,0,2)],"speed":0.82},
+		{"id":"forge_helper","path":[Vector3(8,0,1.5),Vector3(10.5,0,1),Vector3(9.5,0,-1)],"speed":0.82},
 		{"id":"herb_helper","path":[Vector3(-9,0,-4),Vector3(-7,0,-2),Vector3(-10,0,1)],"speed":0.78},
 		{"id":"worried_villager","path":[Vector3(4,0,10),Vector3(1,0,5),Vector3(3,0,1)],"speed":0.68},
 		{"id":"young_villager","path":[Vector3(-12,0,5),Vector3(-8,0,3),Vector3(-10,0,0)],"speed":1.32,"scale":0.82},
@@ -130,17 +147,29 @@ func _build_population() -> void:
 		{"id":"quality_sweeper","path":[Vector3(6,0,8),Vector3(4,0,5),Vector3(7,0,2)],"speed":0.62},
 		{"id":"quality_mourner","path":[Vector3(10,0,11),Vector3(12,0,9),Vector3(10,0,7)],"speed":0.58}
 	]
-	for i in range(population):
+	var end := population if count < 0 else mini(population, first + count)
+	for i in range(first, end):
+		var actor_started := Time.get_ticks_usec()
 		var definition: Dictionary = definitions[i]
+		if host.zone_root.find_child("Routine_%s" % definition.id, true, false) != null:
+			continue
 		definition.path = host.river_safe_path(definition.path,0.9)
 		var actor := Node3D.new()
 		actor.name = "Routine_%s" % definition.id
 		actor.position = host.validate_walkable_position(definition.path[0])
 		host.zone_root.add_child(actor)
+		var spawn_started := Time.get_ticks_usec()
 		var driver = _make_skeletal_villager(actor, str(definition.id), i, float(definition.get("scale",1.0)))
+		var spawn_ms := float(Time.get_ticks_usec() - spawn_started) / 1000.0
 		var entry := _make_entry(definition.id, actor, definition.path, definition.speed, driver, false)
 		actors.append(entry)
 		_configure_agent(entry)
+		if OS.get_environment("ASHEN_PROFILE_GREYFEN_ACTORS") == "1":
+			print("GREYFEN_ACTOR_PROFILE id=%s spawn_ms=%.2f setup_ms=%.2f total_ms=%.2f" % [
+				definition.id, spawn_ms,
+				float(Time.get_ticks_usec() - spawn_started) / 1000.0 - spawn_ms,
+				float(Time.get_ticks_usec() - actor_started) / 1000.0,
+			])
 
 func _enroll_named_npcs() -> void:
 	var named := {
@@ -292,9 +321,13 @@ func _set_activity_pose(entry: Dictionary, active: bool) -> void:
 
 func _activity_anchor(entry: Dictionary) -> Vector3:
 	var activity := str(entry.profile.get("activity", ""))
+	if activity == "notice_board" and host != null and is_instance_valid(host.zone_root):
+		var board := host.zone_root.find_child("notice_board", true, false) as Node3D
+		if board != null:
+			return board.global_position + Vector3(0, 0, -1.2)
 	var anchors := {
 		"well": Vector3(-8.0, 0.0, -1.0),
-		"notice_board": Vector3(-3.0, 0.0, 9.0),
+		"notice_board": Vector3(4.4, 0.0, 10.9),
 		"shrine": Vector3(5.8, 0.0, -7.0),
 		"forge": Vector3(9.0, 0.0, -1.0),
 		"herb_stall": Vector3(-7.0, 0.0, -2.0),
@@ -303,9 +336,13 @@ func _activity_anchor(entry: Dictionary) -> Vector3:
 	}
 	return anchors.get(activity, Vector3.ZERO)
 
+func _on_story_changed() -> void:
+	story_dirty = true
+
 func _sync_story_state(force: bool) -> void:
 	if host == null:
 		return
+	story_dirty = false
 	var state = host.get("story_state")
 	var report := str(state.get_flag("evidence_report", "")) if state != null and state.has_method("get_flag") else ""
 	var bell := bool(state.get_flag("cemetery_bell_rung", false)) if state != null and state.has_method("get_flag") else false
@@ -371,16 +408,6 @@ func _precompute_routes(entry: Dictionary) -> void:
 		routes[destination_index] = spatial_service.build_route(source, destination, 0.72)
 	entry.routes = routes
 
-func _visible_ambient_ids() -> Dictionary:
-	var visible := {}
-	var retained := [] if quality == "potato" else (
-		["walker_well", "walker_board", "shrine_pilgrim", "forge_helper"] if quality == "quality"
-		else []
-	)
-	for id in retained:
-		visible[id] = true
-	return visible
-
 func _set_agent_target(entry: Dictionary) -> void:
 	pass
 
@@ -418,26 +445,45 @@ func _make_skeletal_villager(parent: Node3D, role_id: String, index: int, scale_
 		"villager_hooded_human",
 	]
 	var role := str(role_cycle[index % role_cycle.size()])
-	var mapped = asset_helper.spawn_visual_role(role, "characters", "%s:%d" % [role_id, index])
-	if mapped == null or mapped.name.ends_with("_placeholder"):
-		push_error("Rigged villager asset unavailable for %s" % role_id)
-		return null
-	mapped.name = "%s_rigged_human" % role_id
 	# The imported role is already normalized to its CharacterRoleSpec height.
 	# Apply only a bounded adult variation; the old 0.82 young scale produced
 	# visibly tiny actors and multiplied normalization a second time.
 	var target_scale := clampf(scale_value, 0.96, 1.04) * (0.99 + 0.01 * float(index % 2))
+	if host != null and host.has_method("should_defer_character_role") \
+			and bool(host.should_defer_character_role(role, role_id)):
+		var marker := Node3D.new()
+		marker.name = "DeferredCharacterVisual_%s" % role_id
+		marker.set_meta("deferred_visual_role", role)
+		marker.set_meta("deferred_visual_category", "characters")
+		marker.set_meta("deferred_visual_actor_id", CROWD_IDENTITIES[index % CROWD_IDENTITIES.size()])
+		marker.set_meta("deferred_visual_scale", Vector3.ONE * target_scale)
+		parent.set_meta("character_variant_seed", "%s:%d" % [role_id, index])
+		parent.set_meta("greyfen_routine_id", role_id)
+		parent.add_child(marker)
+		return null
+	var visual_started := Time.get_ticks_usec()
+	var mapped = asset_helper.spawn_visual_role(role, "characters", "%s:%d" % [role_id, index])
+	var load_ms := float(Time.get_ticks_usec() - visual_started) / 1000.0
+	if mapped == null or mapped.name.ends_with("_placeholder"):
+		push_error("Rigged villager asset unavailable for %s" % role_id)
+		return null
+	mapped.name = "%s_rigged_human" % role_id
 	asset_helper.apply_normalized_scale(mapped, target_scale)
 	mapped.set_meta("char_002_body_role", role)
 	mapped.set_meta("char_002_identity", role_id)
-	mapped.set_meta("char_009_identity", CROWD_IDENTITIES[index % CROWD_IDENTITIES.size()])
+	# Routine identity owns the visible occupation recipe. The old rotating
+	# generic aliases made well keepers, pilgrims, and forge workers render as
+	# unrelated clone recipes despite having distinct schedules.
+	mapped.set_meta("char_009_identity", role_id)
 	mapped.set_meta("char_009_variant_index", index)
 	mapped.set_meta("character_variant_seed", "%s:%d" % [role_id, index])
 	parent.add_child(mapped)
+	var presentation_started := Time.get_ticks_usec()
 	# Apply presentation to the imported actor itself. Applying it to the zone
 	# parent leaves the routine without its native face driver and makes the
 	# visual acceptance gate report a false faceless crowd failure.
-	CharacterPresentation.apply_npc(mapped, str(mapped.get_meta("char_009_identity", role_id)), false)
+	CharacterPresentation.apply_npc(mapped, role_id, false)
+	var presentation_ms := float(Time.get_ticks_usec() - presentation_started) / 1000.0
 	var driver = CharacterAnimationDriver.new()
 	driver.name = "CharacterAnimationDriver"
 	mapped.add_child(driver)
@@ -451,4 +497,9 @@ func _make_skeletal_villager(parent: Node3D, role_id: String, index: int, scale_
 		clips["work"] = "Idle"
 	driver.configure(mapped, clips)
 	driver.set_update_rate_hz(16.0 if quality == "quality" else 8.0)
+	if OS.get_environment("ASHEN_PROFILE_GREYFEN_ACTORS") == "1":
+		print("GREYFEN_VISUAL_PROFILE id=%s role=%s asset_ms=%.2f presentation_ms=%.2f driver_ms=%.2f" % [
+			role_id, role, load_ms, presentation_ms,
+			float(Time.get_ticks_usec() - presentation_started) / 1000.0 - presentation_ms,
+		])
 	return driver

@@ -74,6 +74,10 @@ func _initialize() -> void:
 	var haunting = game.zone_root.find_child("RecordHallHaunting", true, false)
 	check(haunting != null, "Record Hall haunting did not spawn after ledger choice")
 	if haunting != null:
+		check(str(haunting.get("visual_role_override")) == "ghoulkin_creature", "Record Hall haunting lost its spectral visual role")
+		var mapped_visual = haunting.find_child("wychwood_stalker_visual", true, false)
+		check(mapped_visual != null and str(mapped_visual.get_meta("monster_family_role", "")) == "ghoulkin_creature", "Record Hall haunting resolved a different monster body")
+		check(haunting.animation_driver != null and haunting.animation_driver.is_valid(), "Record Hall haunting animation is invalid")
 		haunting.apply_damage(9999.0, "verifier")
 		await settle(4)
 	check(bool(game.story_state.get_flag("castle_haunting_cleared", false)), "Haunting completion was not saved")

@@ -31,10 +31,24 @@ func _initialize() -> void:
 		_check(str(coordinator.snapshot().get("presentation_zone", "")) == "greyfen", "Snapshot did not retain presentation zone")
 		_check(coordinator.refresh_presentation() != "", "Presentation refresh returned no tracker text")
 		_check(coordinator.choose_interaction([], game.player, null, Callable()) == null, "Empty interaction selection was not deterministic")
+	var source_root: Node3D = game.zone_root
+	var source_spatial: Node = game.spatial_service
+	var source_position: Vector3 = game.player.global_position
+	var source_facing: float = game.player.rotation.y
 	game.call("_load_zone", "wychwood", Vector3(0, 1, 7))
 	await _wait_for_zone(game, "wychwood")
 	_check(str(game.zone_runtime_coordinator.snapshot().get("presentation_zone", "")) == "wychwood", "Zone transition did not synchronize presentation")
 	_check(not game.zone_transition_pending, "Zone transition remained pending after coordinator activation")
+	game.call("_recover_failed_zone_load", "greyfen")
+	_check(game.player.global_position.distance_to(source_position) < 0.01 and absf(game.player.rotation.y - source_facing) < 0.01, "Rollback did not restore the exact source transform")
+	await _frames(12)
+	_check(str(game.current_zone_id) == "greyfen", "Rollback did not restore the source root")
+	_check(str(coordinator.snapshot().get("active_zone", "")) == "greyfen", "Rollback left the coordinator in the failed destination")
+	_check(str(game.quest_presentation.get_zone_id()) == "greyfen", "Rollback left objective presentation in the failed destination")
+	_check(game.camera_rig.current_zone_id == "greyfen" and game.seamless_world.current_sector == "greyfen", "Rollback left camera/sector ownership in the destination")
+	_check(game.zone_root == source_root and game.spatial_service == source_spatial, "Rollback rebuilt or lost the retained source owners")
+	_check(Vector2(game.player.global_position.x, game.player.global_position.z).distance_to(Vector2(source_position.x, source_position.z)) < 0.01 and absf(game.player.rotation.y - source_facing) < 0.01, "Rollback moved away from its source after normal gravity settling")
+	_check(game.spatial_service != null and game.zone_root != null and not game.zone_transition_pending, "Rollback lost spatial ownership or player control")
 	var result_code := 0 if failures.is_empty() else 1
 	await _shutdown_game(game)
 	_print_result()
@@ -51,8 +65,9 @@ func _verify_static_extraction() -> void:
 	]:
 		_check(coordinator_source.contains(required), "Coordinator contract is missing %s" % required)
 	var game_source := FileAccess.get_file_as_string("res://scripts/game.gd")
-	_check(game_source.contains("zone_runtime_coordinator.sync_zone(zone_id)"), "Game does not delegate zone presentation sync")
-	_check(game_source.contains("zone_runtime_coordinator.refresh_presentation()"), "Game does not delegate tracker refresh")
+	_check(game_source.contains("zone_runtime_coordinator.load_zone(zone_id, spawn_pos)"), "Game does not delegate zone transitions")
+	_check(coordinator_source.contains("host.zone_runtime_coordinator.sync_zone(zone_id)"), "Transition coordinator does not synchronize zone presentation")
+	_check(game_source.contains("quest_hud_coordinator.refresh_tracker(hud, zone_runtime_coordinator.refresh_presentation"), "Game does not delegate tracker refresh")
 	_check(game_source.contains("zone_runtime_coordinator.choose_interaction("), "Game does not delegate interaction focus")
 	_check(not game_source.contains("interaction_focus.choose("), "Game still chooses interactions directly")
 	_check(not game_source.contains("quest_presentation.set_zone("), "Game still mutates quest presentation directly")

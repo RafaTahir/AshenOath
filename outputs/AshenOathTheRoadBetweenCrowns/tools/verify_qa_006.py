@@ -4,11 +4,13 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import subprocess
 from pathlib import Path
 
 from PIL import Image, ImageStat
+from visual_evidence import capture_identity_error, needs_input_digest, rendering_inputs_sha256, review_error
 
 
 def main() -> int:
@@ -41,10 +43,11 @@ def main() -> int:
             source_paths.extend(child for child in path.rglob("*") if child.is_file())
     newest_source = max(source_paths, key=lambda item: item.stat().st_mtime_ns) if source_paths else None
     gallery = project / "Development_Gallery" / "screenshots"
+    current_rendering_digest = rendering_inputs_sha256(project) if needs_input_digest(gallery, required) else ""
     for view in required:
         view_id = str(view.get("id", "unknown"))
         if view.get("status") != "approved":
-            failures.append(f"{view_id} is not Codex-reviewed")
+            failures.append(f"{view_id} is not approved (review status: {view.get('status', 'missing')})")
         reviewer = str(view.get("reviewer", "")).strip()
         if not reviewer:
             failures.append(f"{view_id} has no visual reviewer")
@@ -55,8 +58,20 @@ def main() -> int:
         if image is None:
             failures.append(f"{view_id} has no current screenshot")
             continue
-        if newest_source is not None and image.stat().st_mtime_ns < newest_source.stat().st_mtime_ns:
-            failures.append(f"{view_id} screenshot predates current source")
+        approved_sha256 = str(view.get("approved_sha256", ""))
+        if len(approved_sha256) != 64 or any(char not in "0123456789abcdef" for char in approved_sha256):
+            failures.append(f"{view_id} has no valid reviewed-image SHA-256")
+        elif hashlib.sha256(image.read_bytes()).hexdigest() != approved_sha256:
+            failures.append(f"{view_id} screenshot bytes changed since visual approval")
+        if current_rendering_digest:
+            identity_error = capture_identity_error(image, current_rendering_digest)
+            if identity_error:
+                failures.append(f"{view_id}: {identity_error}")
+        elif view.get("status") == "approved":
+            failures.append(f"{view_id}: current capture identity is unverified; approval is ineligible")
+        semantic_error = review_error(view)
+        if semantic_error:
+            failures.append(f"{view_id}: {semantic_error}")
         try:
             with Image.open(image) as opened:
                 rgb = opened.convert("RGB")
@@ -102,6 +117,8 @@ def main() -> int:
         "required_views": len(required),
         "failures": failures,
         "manifest": str(manifest_path),
+        "rendering_inputs_sha256": current_rendering_digest or None,
+        "capture_identity_check": "checked" if current_rendering_digest else "skipped_ineligible_reviews",
     }
     if args.report:
         args.report.parent.mkdir(parents=True, exist_ok=True)

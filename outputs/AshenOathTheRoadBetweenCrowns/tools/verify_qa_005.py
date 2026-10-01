@@ -1,11 +1,5 @@
 #!/usr/bin/env python3
-"""Classify Godot gate logs without hiding active runtime errors.
-
-The release runner records teardown diagnostics as warnings only after a
-verifier explicitly enters its shutdown phase. This standalone check keeps the
-same boundary and fails logs that contain an active parser, resource,
-renderer, or verifier failure before that phase.
-"""
+"""Classify Godot gate logs without hiding runtime or teardown errors."""
 
 from __future__ import annotations
 
@@ -20,7 +14,7 @@ TEARDOWN = re.compile(
     r"Pages in use exist at exit|resources still in use at exit|"
     r"Buffer with GL ID .* leaked|shaders of type .* never freed|"
     r"ObjectDB instances leaked at exit|Leaked instance dependency|"
-    r"did not call instance_notify_deleted",
+    r"did not call instance_notify_deleted|Orphan .* at exit|Condition .* is true",
     re.IGNORECASE,
 )
 FATAL = re.compile(
@@ -58,14 +52,11 @@ def classify(path: Path) -> dict[str, object]:
     warnings: list[str] = []
     failures: list[str] = []
     for index, line in enumerate(lines):
-        if not FATAL.search(line):
+        if not FATAL.search(line) and not TEARDOWN.search(line):
             continue
         if re.search(r"CategoryInfo|FullyQualifiedErrorId", line):
             continue
-        if TEARDOWN.search(line) and shutdown_index >= 0 and index > shutdown_index:
-            warnings.append(line.strip())
-        else:
-            failures.append(line.strip())
+        failures.append(line.strip())
     if pass_index < 0:
         failures.insert(0, "no verifier pass marker")
     return {

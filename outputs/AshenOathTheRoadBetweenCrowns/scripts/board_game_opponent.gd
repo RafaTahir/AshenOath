@@ -5,34 +5,39 @@ class_name BoardGameOpponent
 ## cheap and only animates when the player is close enough to notice it.
 
 var target: Node3D
-var gesture: Node3D
-var phase := 0.0
+var animation_driver: Node
+var invitation_cooldown := 0.0
+var invitation_started := false
 var check_accumulator := 0.0
 var inviting := false
+var target_refresh_remaining := 0.0
 
-func configure(player_target: Node3D, gesture_node: Node3D) -> void:
+func configure(player_target: Node3D, driver: Node) -> void:
 	target = player_target
-	gesture = gesture_node
-	if gesture != null:
-		gesture.visible = false
+	animation_driver = driver
 
 func _process(delta: float) -> void:
 	check_accumulator += delta
 	if check_accumulator < 0.10:
 		return
+	delta = check_accumulator
 	check_accumulator = 0.0
+	invitation_cooldown = maxf(0.0, invitation_cooldown - delta)
 	if target == null or not is_instance_valid(target):
-		var players := get_tree().get_nodes_in_group("player")
-		if not players.is_empty() and players[0] is Node3D:
-			target = players[0]
-	if target == null or gesture == null:
+		target_refresh_remaining -= delta
+		if target_refresh_remaining <= 0.0:
+			target_refresh_remaining = 0.75
+			target = get_tree().get_first_node_in_group("player") as Node3D
+	if not is_instance_valid(animation_driver):
+		animation_driver = get_parent().find_child("CharacterAnimationDriver", true, false)
+	if not is_instance_valid(target) or not is_instance_valid(animation_driver):
 		return
 	var distance := (get_parent() as Node3D).global_position.distance_to(target.global_position)
 	inviting = distance <= 4.8
-	gesture.visible = inviting
-	if inviting:
-		phase += delta * 5.0
-		gesture.rotation_degrees.z = sin(phase) * 20.0
-		gesture.position.y = 1.18 + sin(phase * 0.5) * 0.025
-	else:
-		gesture.rotation_degrees.z = 0.0
+	if inviting and invitation_cooldown <= 0.0 and not bool(animation_driver.action_active) and str(animation_driver.presentation_state) == "":
+		invitation_started = animation_driver.trigger_action("dialogue")
+		invitation_cooldown = 6.0
+	elif not inviting and invitation_started:
+		if bool(animation_driver.action_active) and str(animation_driver.current_state) == "dialogue":
+			animation_driver.stop_action()
+		invitation_started = false

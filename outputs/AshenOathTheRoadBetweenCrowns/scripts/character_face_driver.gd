@@ -20,6 +20,21 @@ var valid := false
 var update_timer: Timer
 var update_interval := 0.12
 var distance_suspended := false
+var focus_refresh_remaining := 0.0
+
+const NATIVE_MONSTER_ROLES := [
+	"ghoulkin",
+	"wychwood_stalker",
+	"wychwood_raider",
+	"wychwood_brute",
+	"bog_wretch",
+	"gravebound_knight",
+	"bell_eater",
+	"rootbound_colossus",
+	"ashwing",
+	"halvern_boss",
+	"white_hart_avatar",
+]
 
 func configure(root: Node3D, role: String) -> bool:
 	character_root = root
@@ -29,7 +44,11 @@ func configure(root: Node3D, role: String) -> bool:
 	base_eye_scales.clear()
 	base_eye_positions.clear()
 	native_face_surface_count = 0
-	var approved_complete_family := str(root.get_meta("character_asset_family", "")) in ["quaternius_animated_humanoid", "quaternius_ranger"]
+	focus_refresh_remaining = 0.0
+	var approved_complete_family := (
+		str(root.get_meta("character_asset_family", "")) in ["quaternius_animated_humanoid", "quaternius_ranger"]
+		or role_id in NATIVE_MONSTER_ROLES
+	)
 	for mesh in root.find_children("*", "MeshInstance3D", true, false):
 		if mesh.mesh == null:
 			continue
@@ -80,9 +99,11 @@ func _on_update_timer_timeout() -> void:
 		return
 	var step := update_interval
 	if focus_target == null or not is_instance_valid(focus_target):
-		var players := get_tree().get_nodes_in_group("player")
-		if not players.is_empty() and players[0] is Node3D:
-			focus_target = players[0] as Node3D
+		focus_refresh_remaining -= step
+		if focus_refresh_remaining <= 0.0:
+			focus_refresh_remaining = 0.75
+			var player_node := get_tree().get_first_node_in_group("player") as Node3D
+			focus_target = player_node
 	if focus_target != null:
 		var to_target := focus_target.global_position + Vector3.UP * 1.18 - character_root.global_position - Vector3.UP * 1.35
 		to_target.y = 0.0
@@ -128,6 +149,7 @@ func get_contract_report() -> Dictionary:
 	return {
 		"valid": valid,
 		"role": role_id,
+		"contract_kind": "monster_native_anatomy" if role_id in NATIVE_MONSTER_ROLES else "human_native_face",
 		"native_face_surface_count": native_face_surface_count,
 		"native_eye_mesh_count": eye_meshes.size(),
 		"native_brow_mesh_count": brow_meshes.size(),
@@ -138,3 +160,4 @@ func get_contract_report() -> Dictionary:
 
 func set_focus_target(target: Node3D) -> void:
 	focus_target = target
+	focus_refresh_remaining = 0.75

@@ -9,9 +9,9 @@ signal beat_changed(beat: Dictionary)
 const BEATS := {
 	"main_road_of_crows": {
 		"speak_anwen": {"stage":"shrine", "cue":"Anwen is waiting at the shrine.", "next":"Speak with Sister Anwen."},
-		"evidence_ready": {"stage":"wychwood_road", "cue":"The road has enough evidence to name what happened.", "next":"Find the five creatures in Wychwood."},
+		"evidence_ready": {"stage":"wychwood_road", "cue":"The road holds clues to what happened to the missing villagers.", "next":"Inspect the clues along the Wychwood road.", "compass":"Wychwood"},
 		"fight_ghoulkin": {"stage":"wychwood_clearing", "cue":"The clearing has gone quiet around Kael.", "next":"Survive the Wychwood pack."},
-		"return_village": {"stage":"greyfen_return", "cue":"The village needs to hear what Kael found.", "next":"Return to Greyfen and choose how to report."},
+		"return_village": {"stage":"greyfen_return", "cue":"The village needs to hear what Kael found.", "next":"Return to Greyfen and choose how to report.", "compass":"Greyfen"},
 	},
 	"main_bell_beneath_greyfen": {
 		"meet_anwen_gate": {"stage":"cemetery_gate", "cue":"Anwen has moved to the cemetery gate.", "next":"Meet Sister Anwen beside the graves."},
@@ -24,7 +24,7 @@ const BEATS := {
 		"speak_mira": {"stage":"greyfen_herbalist", "cue":"Mira knows what the ash is doing to the living.", "next":"Ask Mira what the dead remember."},
 		"read_chapel_names": {"stage":"ruined_crow_chapel", "cue":"The chapel wall still holds the names Greyfen tried to rub away.", "next":"Read the erased names in the Crow Chapel."},
 		"name_the_dead": {"stage":"ritual_stones", "cue":"A name spoken aloud can change the road.", "next":"Speak Oren's name at the ritual stones."},
-		"fight_bog_wretch": {"stage":"deep_wood_clearing", "cue":"Something in the deeper wood is carrying a human memory.", "next":"Find the Bog Wretch."},
+		"fight_bog_wretch": {"stage":"deep_wood_clearing", "cue":"Something in the deeper wood is carrying a human memory.", "next":"Find the Bog Wretch.", "compass":"Deep Wood"},
 		"bog_core_choice": {"stage":"deep_wood_clearing", "cue":"The memory core still holds a choice that belongs to the living.", "next":"Choose what to do with the Bog Wretch's memory core."},
 	},
 	"main_names_they_burned": {
@@ -32,18 +32,18 @@ const BEATS := {
 		"names_choice": {"stage":"greyfen_assembly", "cue":"The restored names can be spoken now or held until the road is weaker.", "next":"Choose whether to publish the names."},
 	},
 	"main_ash_at_the_mill": {
-		"reach_mill": {"stage":"old_mill_approach", "cue":"The mill is still turning on what Greyfen refused to name.", "next":"Reach the abandoned mill."},
+		"reach_mill": {"stage":"old_mill_approach", "cue":"The mill is still turning on what Greyfen refused to name.", "next":"Reach the abandoned mill.", "compass":"Old Mill"},
 		"inspect_millstones": {"stage":"old_mill_floor", "cue":"The stones remember what was ground into Greyfen's fields.", "next":"Inspect the millstones."},
 		"mill_encounter": {"stage":"old_mill_marsh_edge", "cue":"Ash is moving against the wind above the mill.", "next":"Clear the ash-bound mill."},
 		"mill_choice": {"stage":"old_mill_records", "cue":"The mill records can expose the bargain or preserve its evidence.", "next":"Choose the fate of the mill records."},
 	},
 	"main_soldier_without_banner": {
-		"reach_bandit_road": {"stage":"bandit_road", "cue":"Captain Senn kept the old road but discarded its banner.", "next":"Find Captain Senn on the bandit road."},
+		"reach_bandit_road": {"stage":"bandit_road", "cue":"Captain Senn kept the old road but discarded its banner.", "next":"Find Captain Senn on the bandit road.", "compass":"Bandit Road"},
 		"senn_confrontation": {"stage":"bandit_road_duel", "cue":"Senn is measuring whether Kael wants justice or testimony.", "next":"Break Senn's guard or win his surrender."},
 		"senn_choice": {"stage":"bandit_road_testimony", "cue":"A soldier without a banner still has a version of the order.", "next":"Choose Senn's punishment, testimony, or exile."},
 	},
 	"main_blood_under_stone": {
-		"reach_castle": {"stage":"vargan_approach", "cue":"The old military road ends at House Vargan.", "next":"Reach Castle Vargan."},
+		"reach_castle": {"stage":"vargan_approach", "cue":"The old military road ends at House Vargan.", "next":"Reach Castle Vargan.", "compass":"Castle Vargan"},
 		"speak_guard": {"stage":"vargan_gatehouse", "cue":"The gate guard knows the road was closed by an order, not weather.", "next":"Speak with the gate guard."},
 		"enter_courtyard": {"stage":"vargan_courtyard", "cue":"The portcullis is open, but House Vargan still watches the approach.", "next":"Enter Castle Vargan's outer courtyard."},
 		"castle_evidence_ready": {"stage":"vargan_records", "cue":"The road closure was deliberate, not forgotten.", "next":"Locate the sealed record hall."},
@@ -54,17 +54,17 @@ const BEATS := {
 		"last_witness_hook": {"stage":"vargan_undercroft_threshold", "cue":"The record hall points below the castle, where one witness refused the order.", "next":"Descend beneath Vargan stone to find the last witness."},
 	},
 	"main_last_witness": {
-		"reach_undercroft": {"stage":"vargan_undercroft", "cue":"The last witness is below the stone that kept the command sealed.", "next":"Enter the Vargan undercroft."},
+		"reach_undercroft": {"stage":"vargan_undercroft", "cue":"The last witness is below the stone that kept the command sealed.", "next":"Enter the Vargan undercroft.", "compass":"Undercroft"},
 		"break_halvern_guard": {"stage":"vargan_undercroft", "cue":"Halvern is guarding the last testimony with his life.", "next":"Force the Gravebound Knight to yield."},
 		"halvern_choice": {"stage":"vargan_undercroft_testimony", "cue":"The knight can be freed, questioned, or left to the grave he chose.", "next":"Choose Halvern's fate."},
 	},
 	"main_crowns_without_mercy": {
 		"gather_witnesses": {"stage":"witness_route", "cue":"A confession needs more than one surviving voice.", "next":"Gather witnesses or their surviving records."},
-		"greyfen_assembly": {"stage":"greyfen_assembly", "cue":"Greyfen has to hear the names together, not as scattered rumors.", "next":"Open Greyfen's assembly."},
+		"greyfen_assembly": {"stage":"greyfen_assembly", "cue":"Greyfen has to hear the names together, not as scattered rumors.", "next":"Open Greyfen's assembly.", "compass":"Greyfen"},
 		"confession_choice": {"stage":"greyfen_assembly_choice", "cue":"The assembly is listening. Kael must decide how much truth to carry forward.", "next":"Decide how the truth will be spoken."},
 	},
 	"main_hart_remembers": {
-		"enter_glade": {"stage":"white_hart_road", "cue":"The reopened road ends where the witness was bound.", "next":"Walk the reopened road to the White Hart."},
+		"enter_glade": {"stage":"white_hart_road", "cue":"The reopened road ends where the witness was bound.", "next":"Walk the reopened road to the White Hart.", "compass":"Hart Glade"},
 		"hear_testimony": {"stage":"white_hart_glade", "cue":"The road has reopened to its oldest witness.", "next":"Hear what the living and the dead remember."},
 		"final_choice": {"stage":"white_hart_glade", "cue":"Kael's final oath will decide what survives the truth.", "next":"Choose Witness, Mercy, Duty, or Ash."},
 	},

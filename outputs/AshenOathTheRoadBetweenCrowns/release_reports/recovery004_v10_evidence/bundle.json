@@ -1,0 +1,36 @@
+{
+  "acceptance_profile": "functional_candidate",
+  "browser_certification_scope": "lean_functional_smoke",
+  "exhaustive_browser_campaign_certified": false,
+  "listening_reviewed": false,
+  "artifact_directory": "D:/Temp/AshenOath/functional_candidate_20261001/export_v10",
+  "browser_artifact_fingerprint": "2159ebc1b37f5fe1cccfe7bb507c37144babab916984a890d9cc278f9df32f5a",
+  "artifact_fingerprint": "1c23706e7f6df65f01cb48dd804adc08cae15049c6090618d92c4f11099db0d6",
+  "pck_sha256": "5ddd1873ae33a55354f046201a3c379b88466eb40f0bd1a9a0389280f3857067",
+  "rendering_inputs_sha256": "33d5f0ee182543ceb50209e5b659a1fa7b3ca953aefd7b872d987c7b0e90d65d",
+  "export_log": "D:/Projects/AshenOath/outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/export_v10.log",
+  "visual_report": "D:/Projects/AshenOath/outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/visual_v10.json",
+  "native_measurements": "D:/Projects/AshenOath/outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/native_v10_measurements.json",
+  "native_owned_memory": "D:/Projects/AshenOath/outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/native_v10_owned_memory.json",
+  "browser_reports": [
+    "D:/Projects/AshenOath/outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/chrome_opening_save_v10_functional_watchdog.json",
+    "D:/Projects/AshenOath/outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/edge_smoke_v10_lean.json",
+    "D:/Projects/AshenOath/outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/firefox_smoke_v10_lean_persistence.json"
+  ],
+  "native_logs": {
+    "packed_startup": {"stdout": "D:/Projects/AshenOath/outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/packed_v10.stdout", "stderr": "D:/Projects/AshenOath/outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/packed_v10.stderr", "required_marker": "PACKED STARTUP VERIFIER: PASS", "scope": "V10 isolated packed startup; eager native mounting is not Web loading proof"},
+    "native_performance": {"stdout": "D:/Projects/AshenOath/outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/native_v10_measurements.stdout", "stderr": "D:/Projects/AshenOath/outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/native_v10_measurements.stderr", "required_marker": "PERF-001 VERIFIER: PASS", "scope": "Current owned GUI measurements under functional_candidate; numeric misses retained"},
+    "audio_sync": {"stdout": "D:/Projects/AshenOath/outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/audio_sync.stdout", "stderr": "D:/Projects/AshenOath/outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/audio_sync.stderr", "required_marker": "OPENING REAL INPUT NATIVE: PASS", "scope": "Physical forward/back/sprint/light/heavy/Oathfire and pause synchronization, unchanged audio/controller dependencies"},
+    "audio_combat": {"stdout": "D:/Projects/AshenOath/outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/audio_combat.stdout", "stderr": "D:/Projects/AshenOath/outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/audio_combat.stderr", "required_marker": "REAL_INPUT wychwood_affected_route=PASS", "scope": "Current five kills, both bridges, focused Anwen return/report; not cold-start measurement"},
+    "audio_parry": {"stdout": "D:/Projects/AshenOath/outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/audio_parry.stdout", "stderr": "D:/Projects/AshenOath/outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/audio_parry.stderr", "required_marker": "REAL_INPUT halvern_parry_manual_save=PASS", "scope": "Genuine earned-save normal Continue, real parry and manual save"},
+    "native_main_route": {"stdout": "D:/Projects/AshenOath/outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/native_main.stdout", "stderr": "D:/Projects/AshenOath/outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/native_main.stderr", "required_marker": "REAL_INPUT continuous_campaign=PASS", "scope": "Preserved 2026-09-28 uninterrupted native ten-chapter Mercy route at unchanged default story scope, plus separately documented current affected route/choice checks. Historical bandit-role warnings were resolved by later accepted native role evidence; this is not a new all-current-source or browser campaign run."}
+  },
+  "retained_records": {
+    "story": ["STORY_001_CONTINUOUS_ROUTE_RESULT.md", "STORY_001_CHOICE_COVERAGE.md", "STORY_001_COMBINED_ROUTES_RESULT.md"],
+    "world_opening": ["WORLD_001_CLOSURE_MATRIX.md", "WORLD_001_GREYFEN_FRONTIER_20260930.md", "WORLD_001_GROUNDED_GHOULKIN_20260930.md"],
+    "world_campaign": ["WORLD_002_CLOSURE_MATRIX.md", "WORLD_002_RECORDS_SERVICE_20261001.md"],
+    "presentation": ["PRES_001_RESULT.md"],
+    "audio": ["AUDIO_001_MIX_RESULT.md"],
+    "accessibility": ["ACCESS_001_WEAPON_CONTEXT_RESULT.md", "ACCESS_001_PAUSE_REPAIR_RESULT.md"]
+  }
+}

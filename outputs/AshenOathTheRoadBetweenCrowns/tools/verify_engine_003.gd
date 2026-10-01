@@ -51,13 +51,15 @@ func _verify_static_contract() -> void:
 	]:
 		check(game_source.contains(required), "Missing lifecycle contract: %s" % required)
 	check(game_source.contains("func _release_zone_render_resources("), "Retirement has no renderer-resource release contract")
-	check(game_source.contains("_release_zone_render_resources(retired_root)"), "Retirement does not release renderer resources before disposal")
-	var retire_start := game_source.find("func _deferred_free_zone(")
+	var residency_source := FileAccess.get_file_as_string("res://scripts/zone_residency_service.gd")
+	check(game_source.contains("zone_residency._retire_zone_root(retired_root)"), "Game does not delegate retirement ownership")
+	check(residency_source.contains("_release_zone_render_resources(retired_root)"), "Retirement does not release renderer resources before disposal")
+	var retire_start := residency_source.find("func _deferred_free_zone(")
 	# Keep the deferred-retirement contract separate from the helper that performs
 	# the final renderer-resource release. The helper is expected to null mesh
 	# references; the grace-period body must not do that early.
-	var retire_end := game_source.find("func _release_zone_render_resources(", retire_start)
-	var retirement_source := game_source.substr(retire_start, retire_end - retire_start)
+	var retire_end := residency_source.find("func _release_zone_render_resources(", retire_start)
+	var retirement_source := residency_source.substr(retire_start, retire_end - retire_start)
 	check(not retirement_source.contains(".mesh = null"), "Retirement nulls Mesh resources before node disposal")
 	check(not retirement_source.contains(".multimesh = null"), "Retirement nulls MultiMesh resources before node disposal")
 	var material_source := FileAccess.get_file_as_string("res://scripts/world_material_library.gd")

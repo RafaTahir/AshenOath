@@ -26,69 +26,35 @@
         "Fist.L",
         "Head"
       ],
-      "status": "char_restore_001_a_set",
+      "status": "opening_single_material_a_set",
       "approved": true,
       "export_eligible": true,
-      "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
-      "sha256": "731676abc53ef4cf4e74ac61a85f4294d2255588fa659c6bbd9d5b3a1c0aaff6",
-      "model": "res://assets_external/characters_universal/Male_Peasant.gltf",
-      "outfit": "res://assets_external/characters_universal/Male_Peasant.gltf",
+      "path": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.gltf",
+      "sha256": "76b9abd7664a1a230f74501d03e6388553ab933732d4e1ab66c399a34286f276",
+      "model": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.gltf",
+      "outfit": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.gltf",
       "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
       "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
       "runtime_artifacts": [
         {
-          "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
-          "bytes": 34843,
-          "sha256": "731676abc53ef4cf4e74ac61a85f4294d2255588fa659c6bbd9d5b3a1c0aaff6"
+          "path": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.gltf",
+          "bytes": 30477,
+          "sha256": "76b9abd7664a1a230f74501d03e6388553ab933732d4e1ab66c399a34286f276"
         },
         {
-          "path": "res://assets_external/characters_universal/Male_Peasant.bin",
-          "bytes": 674764,
-          "sha256": "e46bde795f7b69b351d322d7a5628e07131cfb48ed0afe366293f1b3f530433c"
+          "path": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.bin",
+          "bytes": 1171216,
+          "sha256": "d808c177751183950b609ce6d7dcba3544d08bc9c653d06e22f6ff0075040926"
         },
         {
-          "path": "res://assets_external/characters_universal/Male_Head.gltf",
-          "bytes": 40570,
-          "sha256": "e49ed6b260dd28353c7b22178f0aee354d3b3def02ae701265490938131ae6f4"
-        },
-        {
-          "path": "res://assets_external/characters_universal/Male_Head.bin",
-          "bytes": 737452,
-          "sha256": "28ea9c1544535a542140180cf3af1a4000ecc35e0dd191f8687cc5a61beb8872"
-        },
-        {
-          "path": "res://assets_external/characters_universal/Hair_SimpleParted.gltf",
-          "bytes": 24639,
-          "sha256": "451e578936425522bbe23fcc92d9fc25da23ad5a681d952aae0c149189bef062"
-        },
-        {
-          "path": "res://assets_external/characters_universal/Hair_SimpleParted.bin",
-          "bytes": 51332,
-          "sha256": "ecd7c81959f3985d6254458a440daaaa18a8bfbb1dbe111c68a04a72374d54db"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png",
-          "bytes": 655637,
-          "sha256": "404460677f67b0d1056f02f0d5e30111f54d431825f7ea007c9c61aa8782ea7b"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Peasant_Normal_1K.png",
-          "bytes": 890240,
-          "sha256": "e821600a279520cb6c6f68ed66011608038ddd94d101dbeb92fe94ecc99f9339"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Peasant_ORM_1K.png",
-          "bytes": 648791,
-          "sha256": "97e11d88919a5fc4258b2809ec2ee2364f469687e6010bf14f14c55233ed972e"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Eye_Brown.png",
-          "bytes": 35958,
-          "sha256": "d08e3356a83211bc6ca21fe3a8e39f4b5c1a3b8f85457fc2c0fb57be09935025"
+          "path": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.png",
+          "bytes": 1231404,
+          "sha256": "c9494c06134cc2e7dff2558307efe49e677b9a35127dfbdd70f5315ae9ea3101"
         }
       ],
       "animation_library": "embedded",
-      "notes": "A1 exact recipe: Universal male body, native male head, simple-parted grey hair, weathered hunter palette, shared clips, and validated sword/back-scabbard sockets."
+      "notes": "Complete clothed Universal body assembly with native facial anatomy, deterministic occupation palette, shared non-root-motion clips, and 1K maps.",
+      "blocked_reason": ""
     },
     "sister_anwen": {
       "family": "human",
@@ -107,69 +73,35 @@
         "Weapon.R",
         "Head"
       ],
-      "status": "char_restore_001_a_set",
+      "status": "opening_single_material_a_set",
       "approved": true,
       "export_eligible": true,
-      "path": "res://assets_external/characters_universal/Female_Peasant.gltf",
-      "sha256": "eea58d4539638cee1270fe0bf7d4d59a5878eb71e5aac6cb1c907531ad248fcb",
-      "model": "res://assets_external/characters_universal/Female_Peasant.gltf",
-      "outfit": "res://assets_external/characters_universal/Female_Peasant.gltf",
+      "path": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.gltf",
+      "sha256": "bc18388f80f73a739c996efa963565dc283d1491d1006643cc3ee0f3bf05587c",
+      "model": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.gltf",
+      "outfit": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.gltf",
       "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
       "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
       "runtime_artifacts": [
         {
-          "path": "res://assets_external/characters_universal/Female_Peasant.gltf",
-          "bytes": 31461,
-          "sha256": "eea58d4539638cee1270fe0bf7d4d59a5878eb71e5aac6cb1c907531ad248fcb"
+          "path": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.gltf",
+          "bytes": 31257,
+          "sha256": "bc18388f80f73a739c996efa963565dc283d1491d1006643cc3ee0f3bf05587c"
         },
         {
-          "path": "res://assets_external/characters_universal/Female_Peasant.bin",
-          "bytes": 658600,
-          "sha256": "40eccaa2bd545c893142ef7dca0866ea8f20df3a86c67c5615024bc4fe546e83"
+          "path": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.bin",
+          "bytes": 1440748,
+          "sha256": "b4e8b543a3dd8510d097f6c63af461c6b61f2a3ed62f64748e09a7f556d989f9"
         },
         {
-          "path": "res://assets_external/characters_universal/Female_Head.gltf",
-          "bytes": 41414,
-          "sha256": "44794328bed68f79e6ada8b9ba08c1f26d7172d2a61ae7092bbda7df68ed2df3"
-        },
-        {
-          "path": "res://assets_external/characters_universal/Female_Head.bin",
-          "bytes": 1008748,
-          "sha256": "894ed1f35302980c7a43f9eb726cf22f3874a081e6dae53bbdc85fc6549ca51e"
-        },
-        {
-          "path": "res://assets_external/characters_universal/Hair_Buns.gltf",
-          "bytes": 25358,
-          "sha256": "16c66a1c15c53439b8ddf51573f27cb73d7cf72e02c1d4fcdb7b1bd4c50cbec8"
-        },
-        {
-          "path": "res://assets_external/characters_universal/Hair_Buns.bin",
-          "bytes": 205916,
-          "sha256": "811606cc84f0bfdefa2e6f1396f3d94c35138308a96d78a4f447b2e7dfc6ed6c"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png",
-          "bytes": 655637,
-          "sha256": "404460677f67b0d1056f02f0d5e30111f54d431825f7ea007c9c61aa8782ea7b"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Peasant_Normal_1K.png",
-          "bytes": 890240,
-          "sha256": "e821600a279520cb6c6f68ed66011608038ddd94d101dbeb92fe94ecc99f9339"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Peasant_ORM_1K.png",
-          "bytes": 648791,
-          "sha256": "97e11d88919a5fc4258b2809ec2ee2364f469687e6010bf14f14c55233ed972e"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Eye_Brown.png",
-          "bytes": 35958,
-          "sha256": "d08e3356a83211bc6ca21fe3a8e39f4b5c1a3b8f85457fc2c0fb57be09935025"
+          "path": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.png",
+          "bytes": 1207791,
+          "sha256": "36a470db2bda34b853ebfd57307ecc86af0ba198067a9285fc1b33e95b29632d"
         }
       ],
       "animation_library": "embedded",
-      "notes": "A2 exact recipe: Universal female body, native female head, grey buns, cleric palette, stable player-facing dialogue, shared clips, and bone-attached staff."
+      "notes": "Complete clothed Universal body assembly with native facial anatomy, deterministic occupation palette, shared non-root-motion clips, and 1K maps.",
+      "blocked_reason": ""
     },
     "villager": {
       "family": "human",
@@ -190,64 +122,34 @@
         "Head",
         "Hand.R"
       ],
-      "status": "char_restore_004_unified_male_clothed",
+      "status": "opening_single_material_crowd",
       "approved": true,
       "export_eligible": true,
-      "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
-      "sha256": "731676abc53ef4cf4e74ac61a85f4294d2255588fa659c6bbd9d5b3a1c0aaff6",
+      "path": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf",
+      "sha256": "7039f60e180bcf8c1d699790e5cc578ef8d287e26e878ce4f7495d0549c36544",
       "model_family": "res://assets_external/characters_universal/{Male_Peasant,Female_Peasant}_and_native_head_hair.gltf",
-      "model": "res://assets_external/characters_universal/Male_Peasant.gltf",
+      "model": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf",
       "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
       "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
       "runtime_artifacts": [
         {
-          "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
-          "bytes": 34843,
-          "sha256": "731676abc53ef4cf4e74ac61a85f4294d2255588fa659c6bbd9d5b3a1c0aaff6"
+          "path": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf",
+          "bytes": 30510,
+          "sha256": "7039f60e180bcf8c1d699790e5cc578ef8d287e26e878ce4f7495d0549c36544"
         },
         {
-          "path": "res://assets_external/characters_universal/Male_Peasant.bin",
-          "bytes": 674764,
-          "sha256": "e46bde795f7b69b351d322d7a5628e07131cfb48ed0afe366293f1b3f530433c"
+          "path": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.bin",
+          "bytes": 1171216,
+          "sha256": "d808c177751183950b609ce6d7dcba3544d08bc9c653d06e22f6ff0075040926"
         },
         {
-          "path": "res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png",
-          "bytes": 655637,
-          "sha256": "404460677f67b0d1056f02f0d5e30111f54d431825f7ea007c9c61aa8782ea7b"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Peasant_Normal_1K.png",
-          "bytes": 890240,
-          "sha256": "e821600a279520cb6c6f68ed66011608038ddd94d101dbeb92fe94ecc99f9339"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Peasant_ORM_1K.png",
-          "bytes": 648791,
-          "sha256": "97e11d88919a5fc4258b2809ec2ee2364f469687e6010bf14f14c55233ed972e"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Hair_1_BaseColor_1K.png",
-          "bytes": 646770,
-          "sha256": "55f89ff98f76333d7c0d5342dbd69d1a780f42807c8de93616bfd016764d8d29"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Hair_1_Normal_1K.png",
-          "bytes": 1196137,
-          "sha256": "4121d112782a2867373f14bf310d886a2aa13b6ddcc4bfa4821dff84d72540ba"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Eye_Brown.png",
-          "bytes": 35958,
-          "sha256": "d08e3356a83211bc6ca21fe3a8e39f4b5c1a3b8f85457fc2c0fb57be09935025"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Eye_Normal.png",
-          "bytes": 15099,
-          "sha256": "9ed61f7726a54fe346a78b9e5a18905d8e2b88f86235d97f53cd207a26f3f8c7"
+          "path": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.png",
+          "bytes": 1250672,
+          "sha256": "608c6c6acc4987dcfe92c01589131d9981e2e9711e78e093295640fb1e17518d"
         }
       ],
       "notes": "Complete clothed Universal body assembly with native facial anatomy, deterministic occupation palette, shared non-root-motion clips, and 1K maps.",
-      "outfit": "res://assets_external/characters_universal/Male_Peasant.gltf",
+      "outfit": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf",
       "blocked_reason": ""
     },
     "guard": {
@@ -272,63 +174,33 @@
         "Hand.R",
         "Hand.L"
       ],
-      "status": "char_restore_004_unified_male_clothed",
+      "status": "opening_single_material_crowd",
       "approved": true,
       "export_eligible": true,
-      "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
-      "sha256": "731676abc53ef4cf4e74ac61a85f4294d2255588fa659c6bbd9d5b3a1c0aaff6",
-      "model": "res://assets_external/characters_universal/Male_Peasant.gltf",
+      "path": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf",
+      "sha256": "c98bfbee092140937e2907535a8beb2d3aa1e5185f9313f9b5a880a1f1291afe",
+      "model": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf",
       "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
       "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
       "runtime_artifacts": [
         {
-          "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
-          "bytes": 34843,
-          "sha256": "731676abc53ef4cf4e74ac61a85f4294d2255588fa659c6bbd9d5b3a1c0aaff6"
+          "path": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf",
+          "bytes": 30516,
+          "sha256": "c98bfbee092140937e2907535a8beb2d3aa1e5185f9313f9b5a880a1f1291afe"
         },
         {
-          "path": "res://assets_external/characters_universal/Male_Peasant.bin",
-          "bytes": 674764,
-          "sha256": "e46bde795f7b69b351d322d7a5628e07131cfb48ed0afe366293f1b3f530433c"
+          "path": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.bin",
+          "bytes": 1150432,
+          "sha256": "42eda764ce432ec2cc96adeab7453f2676d1be764c9f032e125664c73ce4ce1d"
         },
         {
-          "path": "res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png",
-          "bytes": 655637,
-          "sha256": "404460677f67b0d1056f02f0d5e30111f54d431825f7ea007c9c61aa8782ea7b"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Peasant_Normal_1K.png",
-          "bytes": 890240,
-          "sha256": "e821600a279520cb6c6f68ed66011608038ddd94d101dbeb92fe94ecc99f9339"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Peasant_ORM_1K.png",
-          "bytes": 648791,
-          "sha256": "97e11d88919a5fc4258b2809ec2ee2364f469687e6010bf14f14c55233ed972e"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Hair_1_BaseColor_1K.png",
-          "bytes": 646770,
-          "sha256": "55f89ff98f76333d7c0d5342dbd69d1a780f42807c8de93616bfd016764d8d29"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Hair_1_Normal_1K.png",
-          "bytes": 1196137,
-          "sha256": "4121d112782a2867373f14bf310d886a2aa13b6ddcc4bfa4821dff84d72540ba"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Eye_Brown.png",
-          "bytes": 35958,
-          "sha256": "d08e3356a83211bc6ca21fe3a8e39f4b5c1a3b8f85457fc2c0fb57be09935025"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Eye_Normal.png",
-          "bytes": 15099,
-          "sha256": "9ed61f7726a54fe346a78b9e5a18905d8e2b88f86235d97f53cd207a26f3f8c7"
+          "path": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.png",
+          "bytes": 1241900,
+          "sha256": "920aaef0d1ee27e63c15bedb68a307c893fc417ab6494e90b854e58cbd7f79d7"
         }
       ],
       "notes": "Complete clothed Universal body assembly with native facial anatomy, deterministic occupation palette, shared non-root-motion clips, and 1K maps.",
-      "outfit": "res://assets_external/characters_universal/Male_Peasant.gltf",
+      "outfit": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf",
       "blocked_reason": ""
     },
     "ranger": {
@@ -499,7 +371,7 @@
       "approved": false,
       "export_eligible": false,
       "blocked_reason": "The selected animated stag source is not locally acquired; the Wolf mapping is a temporary finale fallback.",
-      "current_fallback": "res://assets_external/enemies/Wolf.fbx"
+      "current_fallback": "res://assets_external/enemies/WhiteHart_Stag.glb"
     }
   }
 }

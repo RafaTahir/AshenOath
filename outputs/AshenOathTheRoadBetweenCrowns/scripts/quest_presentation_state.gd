@@ -91,16 +91,20 @@ func get_objective_view_model() -> Dictionary:
 	view.zone_name = get_zone_display_name()
 	if quest_manager == null:
 		view.tracker_text = "No objective in this area."
+		view.compass_text = "Explore %s" % view.zone_name
+		view.save_summary = _build_save_summary(view)
 		return view.to_dictionary()
 	view.quest_id = get_tracked_quest()
 	view.objective_id = get_active_objective_id(view.quest_id)
 	view.objective_text = get_active_objective_text(view.quest_id, view.objective_id)
 	if view.quest_id != "" and quest_manager.quest_defs.has(view.quest_id):
 		view.quest_title = str(quest_manager.quest_defs[view.quest_id].get("title", view.quest_id))
+	var compass_destination := view.zone_name
 	if quest_beats != null and quest_beats.has_method("get_current_beat"):
 		var beat: Dictionary = quest_beats.get_current_beat()
 		if str(beat.get("quest_id", "")) == view.quest_id and str(beat.get("objective_id", "")) == view.objective_id:
 			view.next_action = str(beat.get("next", "")).trim_suffix(".")
+			compass_destination = str(beat.get("compass", compass_destination))
 	view.tracker_text = _build_tracker_text(view)
 	view.contextual_text = view.next_action if view.next_action != "" else view.objective_text
 	if view.tracker_text == "All tracked objectives complete.":
@@ -115,7 +119,19 @@ func get_objective_view_model() -> Dictionary:
 			view.next_action = str(fallback.get("next", view.objective_text))
 			view.tracker_text = "%s\n- %s" % [view.quest_title, view.next_action]
 			view.contextual_text = view.next_action
+	view.compass_text = compass_destination
+	view.save_summary = _build_save_summary(view)
 	return view.to_dictionary()
+
+func _build_save_summary(view: ObjectiveViewModelContract) -> Dictionary:
+	return {
+		"zone_id": view.zone_id,
+		"zone_name": view.zone_name,
+		"quest_id": view.quest_id,
+		"quest_title": view.quest_title,
+		"objective_id": view.objective_id,
+		"next_action": view.contextual_text,
+	}
 
 func _build_tracker_text(view: ObjectiveViewModelContract) -> String:
 	# Build the tracker from the same selected objective that drives the compass
@@ -146,7 +162,13 @@ func _build_tracker_text(view: ObjectiveViewModelContract) -> String:
 	return "%s\n- %s (%d/%d)" % [title, action, done, required]
 
 func save_state() -> Dictionary:
-	return {"zone_id": zone_id}
+	return {
+		"zone_id": zone_id,
+		# This is a display snapshot for save-slot summaries. Progression is still
+		# restored from QuestManager, so a stale snapshot can never reopen or
+		# complete an objective.
+		"objective_summary": get_objective_view_model().get("save_summary", {}),
+	}
 
 func load_state(state: Dictionary) -> void:
 	var requested := str(state.get("zone_id", zone_id)).strip_edges().to_lower()

@@ -34,6 +34,10 @@ func _capture_role(role: String, identity: String, file_name: String) -> void:
 		stage.queue_free()
 		return
 	actor.add_child(visual)
+	# Universal humanoids are calibrated to face gameplay -Z, while this
+	# portrait camera sits on +Z. Turn only the gallery visual so the evidence
+	# captures the face rather than the back of the head.
+	visual.rotate_y(PI)
 	if identity == "player":
 		CharacterPresentation.apply_player(actor, visual)
 	else:

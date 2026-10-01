@@ -35,33 +35,9 @@ func resolve_player_blade_contact(player: Node3D, enemies: Array, contact: Dicti
 				contact_distance = candidate_distance
 				closest = candidate
 		if contact_distance <= (0.78 if heavy else 0.66) and _has_contact_line(player, enemy, closest):
-			candidates.append({"enemy": enemy, "point": closest, "score": contact_distance + player.global_position.distance_to(target) * 0.08})
-	# Imported/normalized weapon rigs can momentarily put the visual blade a few
-	# centimetres off the authored hand socket while an attack is starting. Keep
-	# the measured sweep authoritative, but provide a bounded forward fallback so
-	# a clearly front-facing enemy cannot receive a cosmetic swing with no hit.
-	if candidates.is_empty() and bool(contact.get("allow_forward_fallback", false)):
-		var forward := -player.global_transform.basis.z
-		forward.y = 0.0
-		forward = forward.normalized()
-		for enemy in enemies:
-			if enemy == null or enemy.dead or (enemy.has_method("is_encounter_active") and not enemy.is_encounter_active()):
-				continue
-			var target: Vector3 = enemy.global_position + Vector3(0, 0.9, 0)
-			var offset: Vector3 = target - (player.global_position + Vector3(0, 0.9, 0))
-			offset.y = 0.0
-			var distance: float = offset.length()
-			if distance <= 0.01 or distance > reach + 0.85:
-				continue
-			var facing := forward.dot(offset.normalized())
-			if facing < 0.15:
-				continue
-			var fallback_point: Vector3 = enemy.global_position + Vector3(0, 0.9, 0)
-			if _has_contact_line(player, enemy, fallback_point):
-				candidates.append({"enemy": enemy, "point": fallback_point, "score": distance * 0.08 + (1.0 - facing) * 0.2})
+			candidates.append({"enemy": enemy, "point": closest, "contact_distance": contact_distance, "score": contact_distance + player.global_position.distance_to(target) * 0.08})
 	candidates.sort_custom(func(a, b): return float(a.score) < float(b.score))
 	if candidates.is_empty():
-		message.emit("Your blade cuts only mist.")
 		var miss := {
 			"hit": false,
 			"point": blade_tip,
@@ -80,7 +56,9 @@ func resolve_player_blade_contact(player: Node3D, enemies: Array, contact: Dicti
 			"sweep_length": sweep_length,
 			"blade_direction": blade_direction,
 		}
-		contact_missed.emit(miss)
+		if bool(contact.get("final_sample", true)):
+			message.emit("Your blade cuts only mist.")
+			contact_missed.emit(miss)
 		return miss
 	var resolved: Dictionary = candidates[0]
 	var struck_enemy: Node = resolved.enemy
@@ -105,7 +83,7 @@ func resolve_player_blade_contact(player: Node3D, enemies: Array, contact: Dicti
 		"damage": damage,
 		"attack_id": str(contact.get("attack_id", "")),
 		"source_tag": source_tag,
-		"contact_distance": float(resolved.score),
+		"contact_distance": float(resolved.get("contact_distance", INF)),
 		"blade_contact_distance": float(resolved.get("contact_distance", INF)),
 		"contact_phase": contact_phase,
 		"sweep_length": sweep_length,
@@ -139,7 +117,7 @@ func _closest_point_on_segment(point: Vector3, start: Vector3, finish: Vector3) 
 
 func _has_contact_line(player: Node3D, enemy: Node3D, contact_point: Vector3) -> bool:
 	var origin := player.global_position + Vector3(0, 1.0, 0)
-	var query := PhysicsRayQueryParameters3D.create(origin, contact_point)
+	var query := PhysicsRayQueryParameters3D.create(origin, contact_point, 1)
 	query.exclude = [player.get_rid()]
 	query.collide_with_areas = false
 	var hit: Dictionary = player.get_world_3d().direct_space_state.intersect_ray(query)

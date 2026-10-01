@@ -61,7 +61,8 @@
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const SHELL_BUILD_ID = 'RECOVERY-004-CANDIDATE';
       const RUNTIME_PACK_CONTRACT = 'recovery-004-20260831';
-      let engine = null, started = false, ready = false, last = 0, score = 0;
+      const GODOT_CONFIG = $GODOT_CONFIG;
+      let engine = null, started = false, ready = false, engineBooted = false, last = 0, score = 0;
       let gamepadPressed = false;
       const bootMetrics = {
         state: 'shell_ready',
@@ -76,6 +77,7 @@
         runtime_pack_contract: RUNTIME_PACK_CONTRACT,
       };
       window.__ashenOathBoot = bootMetrics;
+      window.__ashenOathPreloadedPacks = {};
       document.documentElement.dataset.bootState = bootMetrics.state;
       buildMeta.textContent = SHELL_BUILD_ID + ' | packs ' + RUNTIME_PACK_CONTRACT;
       performance.mark('ashen-oath-first-paint');
@@ -86,6 +88,121 @@
         window.dispatchEvent(new CustomEvent('ashen-oath-boot', { detail: { ...bootMetrics } }));
       }
       function setStatus(text) { status.textContent = text; }
+      async function sha256Hex(payload) {
+        if (!crypto?.subtle) throw new Error('browser SHA-256 support unavailable');
+        return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', payload)))
+          .map((value) => value.toString(16).padStart(2, '0')).join('');
+      }
+      async function prefetchOpeningPack() {
+        try {
+          const releaseResponse = await fetch('release_manifest.json', { cache: 'no-cache' });
+          if (!releaseResponse.ok) throw new Error(`release manifest HTTP ${releaseResponse.status}`);
+          const release = await releaseResponse.json();
+          if (String(release?.build_id || '') !== SHELL_BUILD_ID) {
+            throw new Error(`shell build ${SHELL_BUILD_ID} != release ${release?.build_id || 'missing'}`);
+          }
+          const manifestResponse = await fetch('runtime_pack_manifest.json', { cache: 'no-cache' });
+          if (!manifestResponse.ok) throw new Error(`runtime pack manifest HTTP ${manifestResponse.status}`);
+          const manifestPayload = await manifestResponse.arrayBuffer();
+          const manifestDigest = await sha256Hex(manifestPayload);
+          if (manifestDigest !== String(release?.runtime_pack_manifest?.sha256 || '').toLowerCase()) {
+            throw new Error(`runtime manifest SHA-256 ${manifestDigest} != ${release?.runtime_pack_manifest?.sha256 || 'missing'}`);
+          }
+          const manifest = JSON.parse(new TextDecoder().decode(manifestPayload));
+          if (String(manifest?.release_id || '') !== SHELL_BUILD_ID) {
+            throw new Error(`runtime pack release ${manifest?.release_id || 'missing'} != shell ${SHELL_BUILD_ID}`);
+          }
+          setBootState(bootMetrics.state, {
+            release_compatibility_key: String(release?.compatibility_key || ''),
+            runtime_manifest_sha256: manifestDigest,
+          });
+          const opening = manifest?.packs?.opening;
+          if (!opening?.url) throw new Error('runtime pack manifest has no opening pack URL');
+          const packUrl = new URL(opening.url, window.location.href).href;
+          setBootState(bootMetrics.state, { opening_prefetch_state: 'loading' });
+          let packResponse = null;
+          if ('caches' in window) {
+            const cacheKey = String(release?.compatibility_key || manifestDigest).slice(0, 24);
+            const packCache = await caches.open(`ashenoath-runtime-packs-${cacheKey}`);
+            packResponse = await packCache.match(packUrl);
+            if (!packResponse) {
+              const downloaded = await fetch(packUrl, { cache: 'no-cache' });
+              if (!downloaded.ok) throw new Error(`opening pack HTTP ${downloaded.status}`);
+              await packCache.put(packUrl, downloaded.clone());
+              packResponse = downloaded;
+            }
+          } else {
+            packResponse = await fetch(packUrl, { cache: 'force-cache' });
+          }
+          if (!packResponse.ok) throw new Error(`opening pack HTTP ${packResponse.status}`);
+          const payload = await packResponse.arrayBuffer();
+          if (opening.bytes > 0 && payload.byteLength !== opening.bytes) {
+            throw new Error(`opening pack bytes ${payload.byteLength} != ${opening.bytes}`);
+          }
+          if (!opening.sha256) throw new Error('opening pack SHA-256 contract unavailable');
+          const digest = await sha256Hex(payload);
+          if (digest !== String(opening.sha256).toLowerCase()) {
+            throw new Error(`opening pack SHA-256 ${digest} != ${opening.sha256}`);
+          }
+          const preload = {
+            state: 'verified',
+            path: '/opening.pck',
+            url: packUrl,
+            version: String(opening.version || ''),
+            bytes: payload.byteLength,
+            sha256: digest,
+          };
+          window.__ashenOathPreloadedPacks.opening = preload;
+          setBootState(bootMetrics.state, {
+            opening_prefetch_state: 'ready',
+            opening_prefetch_bytes: payload.byteLength,
+          });
+          return { ...preload, payload };
+        } catch (error) {
+          // Godot retains authoritative retry, hash verification, and error UI.
+          // A shell prefetch failure must not prevent the engine from starting.
+          setBootState(bootMetrics.state, {
+            opening_prefetch_state: 'failed',
+            opening_prefetch_error: String(error),
+          });
+          window.__ashenOathPreloadedPacks.opening = { state: 'failed', error: String(error) };
+          return null;
+        }
+      }
+      let openingPreloadPromise = null;
+      async function mountOpeningPackAfterReady() {
+        if (openingPreloadPromise) return openingPreloadPromise;
+        openingPreloadPromise = (async () => {
+          const openingPreload = await prefetchOpeningPack();
+          if (!openingPreload) {
+            window.dispatchEvent(new CustomEvent('ashenoath-opening-pack', { detail: { state: 'failed' } }));
+            return null;
+          }
+          try {
+            if (!engineBooted || !engine) throw new Error('engine is not ready for opening pack mount');
+            engine.copyToFS(openingPreload.path, openingPreload.payload);
+            const { payload, ...metadata } = openingPreload;
+            window.__ashenOathPreloadedPacks.opening = { ...metadata, state: 'preloaded' };
+            setBootState(bootMetrics.state, { opening_prefetch_state: 'preloaded' });
+            window.dispatchEvent(new CustomEvent('ashenoath-opening-pack', {
+              detail: { ...metadata, state: 'preloaded' },
+            }));
+            return metadata;
+          } catch (error) {
+            const detail = { state: 'failed', error: String(error) };
+            window.__ashenOathPreloadedPacks.opening = detail;
+            setBootState(bootMetrics.state, {
+              opening_prefetch_state: 'failed',
+              opening_prefetch_error: String(error),
+            });
+            window.dispatchEvent(new CustomEvent('ashenoath-opening-pack', { detail }));
+            console.error(error);
+            return null;
+          }
+        })();
+        return openingPreloadPromise;
+      }
+      window.__ashenOathBeginOpeningPackMount = mountOpeningPackAfterReady;
       let crowY = 90, crowVelocity = 0, branchOffset = 0, nextBranch = 260;
       const branches = [];
       const ember = { x: 460, y: 72, active: true };
@@ -119,7 +236,14 @@
       }
       window.addEventListener('keydown', (event) => { if ([' ', 'ArrowUp', 'w', 'W'].includes(event.key)) { event.preventDefault(); flap('keyboard'); } });
       road.addEventListener('pointerdown', () => flap('pointer'));
-      start.addEventListener('click', () => { if (!started) begin(); else flap('button'); });
+      start.addEventListener('click', () => {
+        if (engineBooted && window.__ashenOathOpeningState?.state === 'failed') {
+          ready = true;
+          boot.classList.add('hidden');
+          document.getElementById('canvas').focus();
+        } else if (!started) begin();
+        else flap('button');
+      });
       function pollGamepad() {
         let pressed = false;
         if (started && !ready && navigator.getGamepads) {
@@ -130,7 +254,7 @@
         gamepadPressed = pressed;
         requestAnimationFrame(pollGamepad);
       }
-      function begin() {
+      async function begin() {
         if (started) return;
         started = true;
         ready = false;
@@ -140,22 +264,64 @@
         bootMetrics.engine_start_ms = performance.now();
         performance.mark('ashen-oath-engine-start');
         setBootState('engine_starting');
-        try { engine = new Engine($GODOT_CONFIG); } catch (error) { setRetryState('The road could not be opened. Choose Retry to try again.', { error: String(error) }); console.error(error); return; }
+        let engineLoadPromise = null;
+        try {
+          engine = new Engine(GODOT_CONFIG);
+          engineLoadPromise = Engine.load(
+            GODOT_CONFIG.executable,
+            GODOT_CONFIG.fileSizes?.[`${GODOT_CONFIG.executable}.wasm`],
+          );
+          await engineLoadPromise;
+        } catch (error) {
+          setRetryState('The road could not be opened. Choose Retry to try again.', { error: String(error) });
+          console.error(error);
+          return;
+        }
         const missing = Engine.getMissingFeatures({ threads: false });
         if (missing.length) { setRetryState('This browser is missing WebGL 2.0: ' + missing.join(', '), { missing_features: missing }); console.error(status.textContent); return; }
         setBootState('loading');
-        engine.startGame({ onProgress: (current, total) => { const ratio = current > 0 && total > 0 ? current / total : 0; const visibleRatio = Math.min(0.92, ratio); bootMetrics.progress_samples += 1; progress.style.width = `${Math.round(visibleRatio * 100)}%`; setStatus(ratio >= 1 ? 'Runtime files are ready. Preparing Greyfen...' : (ratio > 0 ? `Opening the road... ${Math.round(visibleRatio * 100)}%` : 'Opening the road...')); } }).then(() => { ready = true; bootMetrics.engine_ready_ms = performance.now(); performance.mark('ashen-oath-engine-ready'); progress.style.width = '100%'; setBootState('ready', { engine_ready_elapsed_ms: Math.round(bootMetrics.engine_ready_ms - bootMetrics.engine_start_ms) }); setStatus('Greyfen is ready. Enter the road.'); boot.classList.add('hidden'); document.getElementById('canvas').focus(); }, (error) => { setRetryState('The road could not be opened. Choose Retry to try again.', { error: String(error) }); console.error(error); });
+        engine.startGame({ onProgress: (current, total) => { const ratio = current > 0 && total > 0 ? current / total : 0; const visibleRatio = Math.min(0.92, ratio); bootMetrics.progress_samples += 1; progress.style.width = `${Math.round(visibleRatio * 100)}%`; setStatus(ratio >= 1 ? 'Runtime files are ready. Preparing Greyfen...' : (ratio > 0 ? `Opening the road... ${Math.round(visibleRatio * 100)}%` : 'Opening the road...')); } }).then(() => {
+          engineBooted = true;
+          bootMetrics.engine_ready_ms = performance.now();
+          performance.mark('ashen-oath-engine-ready');
+          setBootState('opening_preparing', { engine_ready_elapsed_ms: Math.round(bootMetrics.engine_ready_ms - bootMetrics.engine_start_ms) });
+          setStatus('Runtime ready. Preparing Greyfen\'s first view...');
+          waitForOpeningReady();
+        }, (error) => { setRetryState('The road could not be opened. Choose Retry to try again.', { error: String(error) }); console.error(error); });
+      }
+      function waitForOpeningReady() {
+        const opening = window.__ashenOathOpeningState;
+        if (opening?.state === 'ready') {
+          ready = true;
+          progress.style.width = '100%';
+          setBootState('ready', { opening_ready_ms: performance.now() });
+          setStatus(opening.message || 'Greyfen is ready. Enter the road.');
+          boot.classList.add('hidden');
+          console.log('LOADING: shell opening_ready');
+          document.getElementById('canvas').focus();
+          return;
+        }
+        if (opening?.state === 'failed') {
+          setBootState('opening_failed', { opening_error: opening.message || 'Opening preparation failed' });
+          setStatus(opening.message || 'Greyfen could not be prepared. Open the menu to retry.');
+          start.textContent = 'Open Retry Menu';
+          start.setAttribute('aria-label', 'Open the Ashen Oath retry menu');
+          return;
+        }
+        window.setTimeout(waitForOpeningReady, 50);
       }
       function setRetryState(message, extra = {}) {
         started = false;
         ready = false;
+        engineBooted = false;
         engine = null;
         setBootState('failed', extra);
         setStatus(message);
         start.textContent = 'Retry';
         start.setAttribute('aria-label', 'Retry opening Ashen Oath');
       }
-      draw(); requestAnimationFrame(tick); requestAnimationFrame(pollGamepad); window.setTimeout(begin, 0);
+      draw(); requestAnimationFrame(tick); requestAnimationFrame(pollGamepad);
+      window.setTimeout(begin, 0);
     })();
   </script>
 </body>

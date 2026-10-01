@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "mode": "milestone",
+  "dry_run": false,
+  "manifest": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\qa_003_approval_manifest.json",
+  "capture_source_revision": "5b530361a5aae8612626532287b5bd27d7b244b8",
+  "newest_runtime_source": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\hud.gd",
+  "status": "pass",
+  "rendering_inputs_sha256": "33d5f0ee182543ceb50209e5b659a1fa7b3ca953aefd7b872d987c7b0e90d65d",
+  "results": [
+    {
+      "view_id": "greyfen_spawn",
+      "status": "pass",
+      "image": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_01_greyfen_spawn_2026-10-01_235123.png",
+      "message": "approved",
+      "metrics": {
+        "mean_luminance": 82.101,
+        "max_channel_variance": 1910.161,
+        "dark_ratio": 0.00099,
+        "bright_ratio": 0.00021
+      }
+    },
+    {
+      "view_id": "anwen_dialogue",
+      "status": "pass",
+      "image": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_05_sister_anwen_dialogue_2026-10-01_235123.png",
+      "message": "approved",
+      "metrics": {
+        "mean_luminance": 66.713,
+        "max_channel_variance": 3194.103,
+        "dark_ratio": 0.00391,
+        "bright_ratio": 0.00204
+      }
+    },
+    {
+      "view_id": "greyfen_river_bridge",
+      "status": "pass",
+      "image": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_70_greyfen_river_bridge_2026-10-01_235123.png",
+      "message": "approved",
+      "metrics": {
+        "mean_luminance": 80.577,
+        "max_channel_variance": 1826.672,
+        "dark_ratio": 0.00139,
+        "bright_ratio": 0.00021
+      }
+    },
+    {
+      "view_id": "wychwood_combat",
+      "status": "pass",
+      "image": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_10_combat_clearing_2026-10-01_235123.png",
+      "message": "approved",
+      "metrics": {
+        "mean_luminance": 47.558,
+        "max_channel_variance": 467.115,
+        "dark_ratio": 0.00794,
+        "bright_ratio": 0.00021
+      }
+    },
+    {
+      "view_id": "sword_ready",
+      "status": "pass",
+      "image": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_15_player_sword_ready_2026-10-01_235123.png",
+      "message": "approved",
+      "metrics": {
+        "mean_luminance": 73.188,
+        "max_channel_variance": 2044.822,
+        "dark_ratio": 0.00428,
+        "bright_ratio": 0.00021
+      }
+    },
+    {
+      "view_id": "light_attack",
+      "status": "pass",
+      "image": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_13_player_light_attack_arc_2026-10-01_235123.png",
+      "message": "approved",
+      "metrics": {
+        "mean_luminance": 72.643,
+        "max_channel_variance": 2157.14,
+        "dark_ratio": 0.00446,
+        "bright_ratio": 0.00021
+      }
+    },
+    {
+      "view_id": "heavy_attack",
+      "status": "pass",
+      "image": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_14_player_heavy_attack_arc_2026-10-01_235123.png",
+      "message": "approved",
+      "metrics": {
+        "mean_luminance": 72.593,
+        "max_channel_variance": 2158.307,
+        "dark_ratio": 0.00411,
+        "bright_ratio": 0.00021
+      }
+    },
+    {
+      "view_id": "blade_contact",
+      "status": "pass",
+      "image": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_73_combat_001_blade_contact_2026-10-01_235123.png",
+      "message": "approved",
+      "metrics": {
+        "mean_luminance": 54.949,
+        "max_channel_variance": 1417.693,
+        "dark_ratio": 0.00801,
+        "bright_ratio": 0.00021
+      }
+    },
+    {
+      "view_id": "vargan_approach",
+      "status": "pass",
+      "image": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_36_vargan_approach_2026-10-01_235123.png",
+      "message": "approved",
+      "metrics": {
+        "mean_luminance": 84.609,
+        "max_channel_variance": 640.45,
+        "dark_ratio": 0.00145,
+        "bright_ratio": 0.00021
+      }
+    },
+    {
+      "view_id": "record_hall",
+      "status": "pass",
+      "image": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_38_record_hall_2026-10-01_235123.png",
+      "message": "approved",
+      "metrics": {
+        "mean_luminance": 52.661,
+        "max_channel_variance": 1652.843,
+        "dark_ratio": 0.13327,
+        "bright_ratio": 0.00021
+      }
+    },
+    {
+      "view_id": "hart_glade",
+      "status": "pass",
+      "image": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_41_white_hart_glade_2026-10-01_235123.png",
+      "message": "approved",
+      "metrics": {
+        "mean_luminance": 53.826,
+        "max_channel_variance": 600.933,
+        "dark_ratio": 0.00303,
+        "bright_ratio": 0.00021
+      }
+    }
+  ]
+}

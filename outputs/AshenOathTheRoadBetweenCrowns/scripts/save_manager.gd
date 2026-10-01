@@ -29,9 +29,13 @@ func save_game(game, path: String = SAVE_PATH, label: String = "Game saved.") ->
 
 func load_game(game, path: String = SAVE_PATH) -> bool:
 	var result := _read_slot(path)
+	if _reject_newer_save(result):
+		return false
 	var recovered_backup := false
 	if not bool(result.get("ok", false)):
 		var backup_result := _read_slot(backup_path(path))
+		if _reject_newer_save(backup_result):
+			return false
 		if not bool(backup_result.get("ok", false)):
 			message.emit("No valid save found.")
 			return false
@@ -67,9 +71,13 @@ func load_first_available(game, paths: Array) -> bool:
 	for path_value in paths:
 		var path := str(path_value)
 		var result := _read_slot(path)
+		if _reject_newer_save(result):
+			return false
 		var recovered_backup := false
 		if not bool(result.get("ok", false)):
 			result = _read_slot(backup_path(path))
+			if _reject_newer_save(result):
+				return false
 			recovered_backup = bool(result.get("ok", false))
 		if bool(result.get("ok", false)):
 			game.load_save_state(result.data)
@@ -79,6 +87,8 @@ func load_first_available(game, paths: Array) -> bool:
 	return false
 
 func migrate_save_data(raw_data: Dictionary) -> Dictionary:
+	if not _version_error(raw_data).is_empty():
+		return {}
 	var data: Dictionary = raw_data.duplicate(true)
 	var source_version := int(data.get("version", 0))
 	if source_version > CURRENT_VERSION:
@@ -94,7 +104,8 @@ func migrate_save_data(raw_data: Dictionary) -> Dictionary:
 		if not data.has(key) or typeof(data.get(key)) != TYPE_DICTIONARY:
 			data[key] = {}
 	_sanitize_dictionary_fields(data.inventory, ["items", "ingredients"])
-	_sanitize_dictionary_fields(data.vendors, ["emergency_refill_claimed"])
+	var refill: Variant = data.vendors.get("emergency_refill_claimed", false)
+	data.vendors["emergency_refill_claimed"] = typeof(refill) == TYPE_BOOL and refill
 	_sanitize_dictionary_fields(data.quests, ["active", "completed", "unlocked", "world_flags"])
 	_sanitize_dictionary_fields(data.story_state, ["flags", "values"])
 	_sanitize_dictionary_fields(data.progression, ["unlocked", "rewarded_quests"])
@@ -118,8 +129,8 @@ func migrate_save_data(raw_data: Dictionary) -> Dictionary:
 	var world: Dictionary = data.world_state
 	world["removed_interactions"] = _sanitize_bool_map(world.get("removed_interactions", {}))
 	if not world.has("wychwood_pack_kills"):
-		world["wychwood_pack_kills"] = int(world.get("ghoulkin_kills", 0))
-	world["wychwood_pack_kills"] = clampi(int(world.get("wychwood_pack_kills", 0)), 0, 5)
+		world["wychwood_pack_kills"] = world.get("ghoulkin_kills", 0)
+	world["wychwood_pack_kills"] = int(clampf(_finite_number(world.get("wychwood_pack_kills", 0), 0.0), 0.0, 5.0))
 	world["ghoulkin_kills"] = int(world.get("wychwood_pack_kills", 0))
 	world["pending_ending"] = _normalize_ending(str(world.get("pending_ending", "")))
 	if typeof(world.get("boss_states", {})) != TYPE_DICTIONARY:
@@ -129,7 +140,7 @@ func migrate_save_data(raw_data: Dictionary) -> Dictionary:
 	else:
 		var day_night: Dictionary = world.get("day_night", {})
 		day_night["world_time_minutes"] = clampf(_finite_number(day_night.get("world_time_minutes", 990.0), 990.0), 0.0, 1439.999)
-		day_night["day_count"] = maxi(int(day_night.get("day_count", 0)), 0)
+		day_night["day_count"] = int(clampf(_finite_number(day_night.get("day_count", 0), 0.0), 0.0, 2147483647.0))
 		world["day_night"] = day_night
 	data["world_state"] = world
 	data["player_health"] = _normalize_health(data.player_health)
@@ -209,10 +220,28 @@ func _read_slot(path: String) -> Dictionary:
 	var parsed = parser.data
 	if typeof(parsed) != TYPE_DICTIONARY:
 		return {"ok": false, "path": path, "reason": "invalid_json"}
+	var version_error := _version_error(parsed)
+	if not version_error.is_empty():
+		return {"ok": false, "path": path, "reason": version_error}
 	var migrated := migrate_save_data(parsed)
 	if migrated.is_empty():
 		return {"ok": false, "path": path, "reason": "future_version"}
 	return {"ok": true, "path": path, "data": migrated}
+
+func _version_error(data: Dictionary) -> String:
+	var version: Variant = data.get("version", 0)
+	if typeof(version) not in [TYPE_INT, TYPE_FLOAT]:
+		return "invalid_version"
+	var number := float(version)
+	if not is_finite(number) or number < 0.0 or number != floorf(number):
+		return "invalid_version"
+	return "future_version" if number > CURRENT_VERSION else ""
+
+func _reject_newer_save(result: Dictionary) -> bool:
+	if result.get("reason", "") != "future_version":
+		return false
+	message.emit("This save needs a newer game version. Your save files were preserved.")
+	return true
 
 func _normalize_zone(zone: String) -> String:
 	zone = zone.strip_edges().to_lower()
@@ -314,11 +343,11 @@ func _sanitize_settings(state: Dictionary) -> Dictionary:
 		if key in ["gamepad_profiles", "custom_bindings"]:
 			if typeof(value) == TYPE_DICTIONARY:
 				result[key] = value.duplicate(true)
-		elif key in ["vsync", "fullscreen", "potato_mode", "gamepad_invert_x", "gamepad_invert_y", "gamepad_vibration", "reduced_motion", "high_contrast"]:
+		elif key in ["vsync", "fullscreen", "potato_mode", "invert_y", "gamepad_invert_x", "gamepad_invert_y", "gamepad_vibration", "reduced_motion", "high_contrast"]:
 			if typeof(value) == TYPE_BOOL:
 				result[key] = value
 		elif key in ["shadow_quality", "foliage_density", "visual_density", "target_fps"]:
-			if typeof(value) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(value)):
+			if typeof(value) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(value)) and absf(float(value)) <= 2147483647.0:
 				result[key] = int(value)
 		elif key in ["quality_preset", "touch_controls", "control_preset"]:
 			if typeof(value) == TYPE_STRING:

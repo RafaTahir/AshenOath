@@ -1,6 +1,14 @@
 extends Node3D
 
+const GreyfenSocialPresentation = preload("res://scripts/greyfen_social_presentation.gd")
+const CemeteryEvidencePresentation = preload("res://scripts/cemetery_evidence_presentation.gd")
+const WychwoodEvidencePresentation = preload("res://scripts/wychwood_evidence_presentation.gd")
+const CampaignRecordPresentation = preload("res://scripts/campaign_record_presentation.gd")
+const WychwoodTerrainPresentation = preload("res://scripts/wychwood_terrain_presentation.gd")
+const StoryActorPresence = preload("res://scripts/story_actor_presence.gd")
+
 const BridgeSurfaceContract = preload("res://scripts/bridge_surface_contract.gd")
+const SpatialSurfaceContract = preload("res://scripts/spatial_surface_contract.gd")
 const EnemyAI = preload("res://scripts/enemy_ai.gd")
 const Interactable = preload("res://scripts/interactable.gd")
 const VisualDirector = preload("res://scripts/visual_director.gd")
@@ -22,13 +30,24 @@ const RuntimeServiceRegistry = preload("res://scripts/runtime_service_registry.g
 const RuntimeActorFactory = preload("res://scripts/runtime_actor_factory.gd")
 const ZoneCompositionRouter = preload("res://scripts/zone_composition_router.gd")
 const ZoneRuntimeCoordinator = preload("res://scripts/zone_runtime_coordinator.gd")
+const ZoneResidencyService = preload("res://scripts/zone_residency_service.gd")
+const DialogueRuntimeCoordinator = preload("res://scripts/dialogue_runtime_coordinator.gd")
+const CombatVfxCoordinator = preload("res://scripts/combat_vfx_coordinator.gd")
+const QuestHudCoordinator = preload("res://scripts/quest_hud_coordinator.gd")
 const ZoneSceneCatalog = preload("res://scripts/zone_scene_catalog.gd")
+const CemeterySection = preload("res://scripts/zones/cemetery_section.gd")
+const GreyfenSection = preload("res://scripts/zones/greyfen_section.gd")
+const RiverSection = preload("res://scripts/zones/river_section.gd")
+const CampaignWildernessSection = preload("res://scripts/zones/campaign_wilderness_section.gd")
 const OathGatePortal = preload("res://scripts/oath_gate_portal.gd")
 const BossEncounterScript = preload("res://scripts/boss_encounter.gd")
 const PerformanceBudgetMonitor = preload("res://scripts/performance_budget_monitor.gd")
 const SeamlessWorldService = preload("res://scripts/seamless_world_service.gd")
+const CharacterRoleSpec = preload("res://scripts/character_role_spec.gd")
+const ProductionObservationBridgeScript = preload("res://scripts/production_observation_bridge.gd")
 
 var player
+var production_observation_bridge
 var camera_rig
 var hud
 var quests
@@ -60,7 +79,9 @@ var runtime_packs
 var qa_adapter
 var zone_root: Node3D
 var active_interactable
-var dialogue_focus_actor: Node3D
+var dialogue_runtime_coordinator := DialogueRuntimeCoordinator.new()
+var combat_vfx_coordinator := CombatVfxCoordinator.new()
+var quest_hud_coordinator := QuestHudCoordinator.new()
 var interaction_candidates: Array = []
 var interaction_area_cache: Array[Area3D] = []
 var interaction_area_cache_ready := false
@@ -74,6 +95,8 @@ var wychwood_pack_kills = 0
 var game_started = false
 var paused_by_menu = true
 var pending_ending = ""
+var pending_player_restore: Dictionary = {}
+var zone_pack_request_serial := 0
 var removed_interactions = {}
 var autosave_cooldown = 180.0
 var last_safe_player_position = Vector3(0, 1, 9.8)
@@ -83,17 +106,37 @@ var runtime_light_count := 0
 var tree_batch_data: Array[Dictionary] = []
 var deadfall_batch_data: Array[Transform3D] = []
 var tree_collision_body: StaticBody3D
-var route_zone_cache: Dictionary = {}
-var route_enemy_cache: Dictionary = {}
-var route_zone_signatures: Dictionary = {}
-var route_spatial_cache: Dictionary = {}
-var retired_zone_roots: Array[Node] = []
+var route_zone_cache: Dictionary:
+	get: return zone_residency.route_zone_cache
+	set(value): zone_residency.route_zone_cache = value
+var route_enemy_cache: Dictionary:
+	get: return zone_residency.route_enemy_cache
+	set(value): zone_residency.route_enemy_cache = value
+var route_zone_signatures: Dictionary:
+	get: return zone_residency.route_zone_signatures
+	set(value): zone_residency.route_zone_signatures = value
+var route_spatial_cache: Dictionary:
+	get: return zone_residency.route_spatial_cache
+	set(value): zone_residency.route_spatial_cache = value
+var retired_zone_roots: Array[Node]:
+	get: return zone_residency.retired_zone_roots
+	set(value): zone_residency.retired_zone_roots = value
 var retired_zone_cleanup_root: Node3D
-var pending_zone_retirements := 0
-var retired_skinned_actor_pool: Node3D
-var skinned_resource_anchors: Dictionary = {}
-var retired_material_anchors: Dictionary = {}
-var retirement_material: StandardMaterial3D
+var pending_zone_retirements: int:
+	get: return zone_residency.pending_zone_retirements
+	set(value): zone_residency.pending_zone_retirements = value
+var retired_skinned_actor_pool: Node3D:
+	get: return zone_residency.retired_skinned_actor_pool
+	set(value): zone_residency.retired_skinned_actor_pool = value
+var skinned_resource_anchors: Dictionary:
+	get: return zone_residency.skinned_resource_anchors
+	set(value): zone_residency.skinned_resource_anchors = value
+var retired_material_anchors: Dictionary:
+	get: return zone_residency.retired_material_anchors
+	set(value): zone_residency.retired_material_anchors = value
+var retirement_material: StandardMaterial3D:
+	get: return zone_residency.retirement_material
+	set(value): zone_residency.retirement_material = value
 var transition_history: Array[Dictionary] = []
 var active_zone_signature := -1
 var shared_box_mesh: BoxMesh
@@ -101,8 +144,10 @@ var prop_batch_data: Dictionary = {}
 var visual_box_batch_data: Array[Dictionary] = []
 var terrain_patch_batch_data: Array[Dictionary] = []
 var house_batch_data: Dictionary = {}
+var house_module_batch_data: Dictionary = {}
 var spatial_service: Node
 var zone_runtime_coordinator: ZoneRuntimeCoordinator
+var zone_residency := ZoneResidencyService.new()
 var environment_batches_flushed := false
 var prop_collision_body: StaticBody3D
 var pending_anwen_relocation := false
@@ -128,14 +173,20 @@ var startup_prepare_failed := false
 var new_game_requested_while_preparing := false
 var greyfen_prewarm_spatial_service: Node
 var opening_detail_pending := false
+var opening_well_mesh: ArrayMesh
 var opening_detail_stage_index := 0
 var opening_detail_generation := 0
+var opening_boot_material_restore_generation := 0
+var opening_boot_material_restore_queue: Array[Dictionary] = []
 var opening_save_generation := 0
 var opening_checkpoint_pending := false
+var opening_pack_mount_waiting := false
 var campaign_visual_prewarm_started := false
 var campaign_visual_prewarm_generation := 0
 var campaign_visual_prewarm_not_before_msec := 0
 var campaign_visual_prewarm_suspended := false
+var campaign_visual_prewarm_zone := ""
+var campaign_visual_prewarm_roles: Array[String] = []
 var background_runtime_timer_pending := false
 var owned_timers: Array[Timer] = []
 # Keep each late-opening chunk small enough that the first controllable frame
@@ -144,27 +195,85 @@ var owned_timers: Array[Timer] = []
 # and IndexedDB writes. These operations resume after the player has had time
 # to see the opening and the browser has completed its first capture.
 const OPENING_DETAIL_INITIAL_DELAY_SECONDS := 30.0
-const OPENING_GAMEPLAY_HYDRATE_DELAY_SECONDS := 0.65
-const OPENING_DETAIL_MIN_PLAYER_DISTANCE := 7.0
+# The boot Anwen and all legal exits are already interactive. Keep the full
+# gameplay subtree out of the browser's first control window: even hidden
+# imported actors allocate renderer state when attached, which previously held
+# Edge's main thread before automation or a player could observe control.
+const OPENING_GAMEPLAY_HYDRATE_DELAY_SECONDS := 0.75
+const OPENING_DETAIL_STAGE_DELAY_SECONDS := 0.05
+const OPENING_BOOT_MATERIAL_RESTORE_DELAY_SECONDS := 1.5
+const OPENING_BOOT_MATERIAL_RESTORE_INTERVAL_SECONDS := 0.08
 const OPENING_DETAIL_RETRY_SECONDS := 5.0
 const BACKGROUND_RUNTIME_DELAY_SECONDS := 45.0
 const BACKGROUND_RUNTIME_RETRY_SECONDS := 12.0
 const OPENING_SAVE_DELAY_SECONDS := 30.0
-# Campaign presentation roles are optional after Greyfen is playable. Waiting
-# for a settled opening window keeps imported Castle meshes out of the first
-# few seconds of player movement and out of the opening performance sample.
+const OPENING_GAMEPLAY_VISUAL_BUCKETS := 16
+# Campaign presentation roles are optional. Only a sector immediately before a
+# Castle destination may warm them; Greyfen startup and unrelated wilderness
+# travel must never parse this OBJ set.
 const CAMPAIGN_VISUAL_PREWARM_DELAY_SECONDS := 18.0
-const CAMPAIGN_VISUAL_PREWARM_ROLES: Array[String] = [
+const CAMPAIGN_VISUAL_ROLES: Array[String] = [
 	"castle_wall", "castle_arch", "castle_roof", "castle_bookcase",
 	"castle_chair", "castle_bench", "castle_table", "castle_weapon_stand",
 	"castle_lantern",
 ]
+const PREDICTIVE_VISUAL_PREWARM_ROLES := {
+	"bandit_road": ["castle_wall", "castle_arch", "castle_roof", "castle_lantern"],
+	"vargan_approach": ["castle_bookcase", "castle_chair", "castle_bench", "castle_table", "castle_weapon_stand"],
+}
+# Environment OBJ meshes are normalized once by AssetSpawnHelper before zone
+# builders place them. Builders request world dimensions through this contract
+# instead of applying a second guessed multiplier to already-normalized bounds.
+const ENVIRONMENT_ROLE_NORMALIZED_SIZE := {
+	"greyfen_door_facade": Vector3(1.281, 2.0, 0.260),
+	"greyfen_window_facade": Vector3(1.281, 2.0, 0.260),
+	"greyfen_wall_facade": Vector3(1.281, 2.0, 0.260),
+	"greyfen_roof": Vector3(2.935, 2.0, 3.498),
+	"forest_tree": Vector3(10.563, 18.949, 9.203),
+	"cart": Vector3(1.549393, 1.35, 0.543576),
+	"castle_wall": Vector3(1.281, 2.0, 0.260),
+	"castle_arch": Vector3(1.333, 2.0, 0.043),
+	"castle_roof": Vector3(2.935, 2.0, 3.498),
+	"castle_door": Vector3(0.639, 1.2, 0.069),
+	"castle_bookcase": Vector3(0.689, 1.2, 0.202),
+	"castle_chair": Vector3(0.620, 1.2, 0.586),
+	"castle_bench": Vector3(4.8, 0.922, 0.924),
+	"castle_table": Vector3(4.202, 1.2, 1.618),
+	"castle_weapon_stand": Vector3(1.499505, 1.2, 1.063504),
+	"castle_lantern": Vector3(0.321, 1.2, 1.169),
+}
 const OPENING_DETAIL_STAGES: Array[String] = [
-	"gameplay", "boundary", "landmark_board", "landmark_shrine", "landmark_blacksmith",
-	"landmark_cemetery", "landmark_cart_road", "village_dressing",
-	"village_first_impression", "village_quality", "trees", "aftermath"
+	"gameplay_base", "gameplay_place_0", "gameplay_place_1", "gameplay_place_2", "gameplay_place_3", "gameplay_place_4",
+	"gameplay_side_clues", "gameplay_main_clues", "gameplay_gate_links",
+	"gameplay_gate_visual", "gameplay_route_markers", "gameplay_story",
+	"gameplay_visual_0", "gameplay_visual_1", "gameplay_visual_2", "gameplay_visual_3",
+	"gameplay_visual_4", "gameplay_visual_5", "gameplay_visual_6", "gameplay_visual_7",
+	"gameplay_visual_8", "gameplay_visual_9", "gameplay_visual_10", "gameplay_visual_11",
+	"gameplay_visual_12", "gameplay_visual_13", "gameplay_visual_14", "gameplay_visual_15",
+	"gameplay_mira", "gameplay_rook", "gameplay_widow_elna",
+	"gameplay_blacksmith_tor", "gameplay_farmer_toma", "gameplay_population",
+	"gameplay_common_table", "gameplay_barrel_board",
+	"gameplay_crowd_0", "gameplay_crowd_1", "gameplay_crowd_2", "gameplay_crowd_3",
+	"gameplay_crowd_4", "gameplay_crowd_5", "gameplay_crowd_6", "gameplay_crowd_7",
+	"gameplay_crowd_8", "gameplay_crowd_9",
+	"opening_river_visual", "opening_terrain", "opening_lighting", "opening_spawn",
+	"village_house_0", "village_house_1", "village_house_2", "village_house_3",
+	"village_architectural_details_0", "village_architectural_details_1", "village_architectural_details_2",
+	"village_architectural_details_3", "village_architectural_details_4",
+	"boundary_horizon", "boundary_vegetation", "boundary_lights", "boundary_north_south_fences", "boundary_side_fences",
+	"landmark_board", "landmark_shrine", "landmark_blacksmith",
+	"landmark_cemetery_approach", "landmark_cemetery_boundary", "landmark_cemetery_graves",
+	"landmark_cemetery_chapel", "landmark_cemetery_bell", "landmark_cemetery_edges",
+	"landmark_cemetery_presentation_bell", "landmark_cemetery_presentation_chapel",
+	"landmark_cemetery_presentation_graves", "landmark_cemetery_presentation_roost",
+	"landmark_cemetery_presentation_states",
+	"landmark_cart_road", "village_dressing",
+	"village_first_impression_ruts", "village_first_impression_lanterns", "village_first_impression_shrine",
+	"village_first_impression_story", "village_first_impression_crows", "village_quality", "trees", "aftermath"
 ]
+const OPENING_NAMED_ACTOR_IDS := ["mira", "rook", "widow_elna", "blacksmith_tor", "farmer_toma"]
 var interaction_focus_cooldown := 0.0
+var interaction_input_block_until_usec := 0
 var compass_refresh_cooldown := 0.0
 var tutorial_refresh_cooldown := 0.0
 var target_status_refresh_cooldown := 0.0
@@ -172,20 +281,34 @@ var interaction_focus_dirty := true
 var interaction_focus_cache_valid := false
 var last_focus_position := Vector3.ZERO
 var last_focus_forward := Vector3.ZERO
-var compass_dirty := true
-var compass_cache_valid := false
-var last_compass_position := Vector3.ZERO
-var last_compass_zone := ""
-var last_compass_signature := ""
-const MAX_CACHED_ROUTE_ZONES := 1
-const ZONE_RETIRE_FRAMES := 8
-const MAX_SKINNED_RESOURCE_ANCHORS := 4
-const MAX_RETIRED_MATERIAL_ANCHORS := 64
+var compass_dirty: bool:
+	get: return quest_hud_coordinator.dirty
+	set(value): quest_hud_coordinator.dirty = value
+var compass_cache_valid: bool:
+	get: return quest_hud_coordinator.cache_valid
+	set(value): quest_hud_coordinator.cache_valid = value
+var last_compass_position: Vector3:
+	get: return quest_hud_coordinator.last_position
+	set(value): quest_hud_coordinator.last_position = value
+var last_compass_zone: String:
+	get: return quest_hud_coordinator.last_zone
+	set(value): quest_hud_coordinator.last_zone = value
+var last_compass_signature: String:
+	get: return quest_hud_coordinator.last_signature
+	set(value): quest_hud_coordinator.last_signature = value
+const MAX_CACHED_ROUTE_ZONES := ZoneResidencyService.MAX_CACHED_ROUTE_ZONES
+const ZONE_RETIRE_FRAMES := ZoneResidencyService.ZONE_RETIRE_FRAMES
+const MAX_SKINNED_RESOURCE_ANCHORS := ZoneResidencyService.MAX_SKINNED_RESOURCE_ANCHORS
+const MAX_RETIRED_MATERIAL_ANCHORS := ZoneResidencyService.MAX_RETIRED_MATERIAL_ANCHORS
 const MAX_TRANSITION_HISTORY := 16
+const DIALOGUE_INTERACTION_GUARD_SECONDS := 0.8
 
 func _ready() -> void:
 	var ready_started := Time.get_ticks_msec()
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	zone_residency.name = "ZoneResidencyService"
+	add_child(zone_residency)
+	zone_residency.configure(_validate_zone_render_resources)
 	retired_zone_cleanup_root = Node3D.new()
 	retired_zone_cleanup_root.name = "RetiredZoneCleanupRoot"
 	retired_zone_cleanup_root.visible = false
@@ -202,21 +325,27 @@ func _ready() -> void:
 	performance_budget_monitor.name = "PerformanceBudgetMonitor"
 	add_child(performance_budget_monitor)
 	performance_budget_monitor.configure(self)
+	production_observation_bridge = ProductionObservationBridgeScript.new()
+	production_observation_bridge.name = "ProductionObservationBridge"
+	add_child(production_observation_bridge)
+	production_observation_bridge.setup(self)
 	var services_ms := Time.get_ticks_msec() - phase_started
 	# The browser shell is already the audio/input consent surface. Showing a
-	# second in-engine launch screen made Web startup require two clicks and
-	# doubled the perceived wait. Desktop keeps the explicit launch surface so
-	# audio capture remains predictable there; Web enters the real menu directly
-	# while Greyfen prewarming happens behind it.
+	# second in-engine launch screen made startup require two clicks and doubled
+	# the perceived wait. Both platforms enter the menu while Greyfen prewarms.
 	if OS.has_feature("web"):
 		hud.show_main_menu()
+		if hud.has_method("set_boot_shell_cover_active"):
+			hud.set_boot_shell_cover_active(true)
+		_publish_web_opening_state("preparing", "Preparing Greyfen's first view...")
 		# The HTML shell has already provided the consent/input surface. Start the
 		# opening prewarm behind the real menu so New Game is immediately visible
 		# and the player does not pay the Greyfen build cost after clicking it.
 		_on_launch_accepted()
 		print("LOADING: web_menu_ready opening_prewarm_hidden=true")
 	else:
-		hud.show_launch_screen()
+		hud.show_main_menu()
+		_on_launch_accepted()
 	audio.set_music_state("main_menu")
 	get_tree().paused = true
 	print("LOADING: runtime ready total=%dms environment=%dms services=%dms" % [
@@ -241,6 +370,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		else:
 			_pause_game()
 	elif event.is_action_pressed("interact") and active_interactable != null and not get_tree().paused:
+		# A Web key event can arrive after a dialogue closes. Ignore that delayed
+		# copy briefly so the interaction that opened the conversation cannot reopen
+		# the same speaker and strand the player on the route.
+		if Time.get_ticks_usec() < interaction_input_block_until_usec:
+			return
 		if _interaction_target_valid(active_interactable):
 			_handle_interaction(active_interactable)
 		else:
@@ -318,6 +452,7 @@ func _setup_runtime() -> void:
 	mobile_touch = services["mobile_touch"]
 	zone_streaming = services["zone_streaming"]
 	runtime_packs = services["runtime_packs"]
+	quest_hud_coordinator.configure(quest_presentation, quests)
 	runtime_services.configure(self)
 	zone_runtime_coordinator = ZoneRuntimeCoordinator.new(self)
 	zone_runtime_coordinator.configure(quest_presentation, quest_beats, interaction_focus, quests)
@@ -335,6 +470,10 @@ func _setup_runtime() -> void:
 	boss_defs = _read_json("res://data/bosses.json")
 
 func _new_game() -> void:
+	zone_pack_request_serial += 1
+	opening_pack_waiting = false
+	campaign_pack_waiting = false
+	pending_player_restore.clear()
 	if zone_transition_pending or zone_load_request_pending:
 		return
 	# Start the player-facing timer at the first New Game request, including the
@@ -356,16 +495,17 @@ func _new_game() -> void:
 				hud.set_new_game_status("Greyfen is waking. Your New Game request will open as soon as it is ready.")
 				hud.toast("Greyfen is still being prepared. New Game will open shortly.")
 			return
-		# Opening readiness and Greyfen prewarm are separate states. Keep the
-		# click queued until the prepared route is published; otherwise a fast
-		# click races the deferred build and falls back to the slow cold builder.
-		if not route_zone_cache.has("greyfen"):
-			new_game_start_pending = true
-			new_game_requested_while_preparing = true
+	# Opening readiness and Greyfen prewarm are separate states on every
+	# platform. A fast click must wait for the covered cache, not trigger a cold
+	# construction while the menu prewarm is still active.
+	if not route_zone_cache.has("greyfen"):
+		new_game_start_pending = true
+		new_game_requested_while_preparing = true
+		if not greyfen_prewarm_started:
 			_on_launch_accepted()
-			if hud != null:
-				hud.set_new_game_status("Greyfen is opening. Your New Game request is queued.")
-			return
+		if hud != null:
+			hud.set_new_game_status("Greyfen is opening. Your New Game request is queued.")
+		return
 	new_game_start_pending = true
 	new_game_requested_while_preparing = false
 	if loading_started_usec <= 0:
@@ -448,84 +588,104 @@ func _perform_requested_zone_load() -> void:
 	_load_zone_after_runtime_pack(destination, arrival)
 
 func _load_zone_after_runtime_pack(zone_id: String, spawn_pos: Vector3) -> void:
+	zone_pack_request_serial += 1
+	opening_pack_waiting = false
+	campaign_pack_waiting = false
 	if _zone_requires_opening_pack(zone_id) and OS.has_feature("web"):
 		if runtime_packs == null or not runtime_packs.has_method("request_pack"):
-			_recover_failed_zone_load(current_zone_id)
+			_recover_failed_pack_load()
 			return
 		# The Web candidate keeps the opening builders in the root PCK, but its
 		# gameplay-critical opening art is owned by the startup opening pack. The
 		# manifest-backed check below prevents a gate from bypassing that pack just
 		# because a builder script happens to be embedded in the root.
-		if runtime_packs.has_method("has_embedded_content") and runtime_packs.has_embedded_content("opening"):
-			_load_zone(zone_id, spawn_pos)
-			return
-		if not runtime_packs.is_ready("opening"):
+		if not runtime_packs.zone_packs_ready(zone_id):
 			opening_pack_waiting = true
 			if hud != null and hud.has_method("arm_loading"):
 				hud.arm_loading("Preparing the road into Wychwood...")
-			runtime_packs.request_pack("opening")
-			_wait_for_opening_pack(zone_id, spawn_pos)
+			runtime_packs.request_zone_packs(zone_id)
+			_wait_for_opening_pack(zone_id, spawn_pos, zone_pack_request_serial)
 			return
 	if not _zone_requires_campaign_pack(zone_id) or not OS.has_feature("web"):
 		_load_zone(zone_id, spawn_pos)
 		return
 	if runtime_packs == null or not runtime_packs.has_method("request_pack"):
-		_recover_failed_zone_load(current_zone_id)
+		_recover_failed_pack_load()
 		return
 	# The production and QA Web candidates may embed the campaign builder in the
 	# root PCK, but campaign art remains owned by the external campaign pack. The
 	# manifest-backed check below keeps the builder from bypassing that pack.
-	if runtime_packs.has_method("has_embedded_content") and runtime_packs.has_embedded_content("campaign"):
-		_load_zone(zone_id, spawn_pos)
-		return
-	if not runtime_packs.is_ready("campaign"):
+	if not runtime_packs.zone_packs_ready(zone_id):
 		campaign_pack_waiting = true
 		if hud != null and hud.has_method("arm_loading"):
 			hud.arm_loading("Preparing the road beyond Greyfen...")
-		runtime_packs.request_pack("campaign")
-		_wait_for_campaign_pack(zone_id, spawn_pos)
+		runtime_packs.request_zone_packs(zone_id)
+		_wait_for_campaign_pack(zone_id, spawn_pos, zone_pack_request_serial)
 		return
 	_load_zone(zone_id, spawn_pos)
 
-func _wait_for_campaign_pack(zone_id: String, spawn_pos: Vector3) -> void:
+func _wait_for_campaign_pack(zone_id: String, spawn_pos: Vector3, request_serial: int) -> void:
 	for _frame in range(900):
 		await get_tree().process_frame
-		if not campaign_pack_waiting:
+		if request_serial != zone_pack_request_serial or not campaign_pack_waiting:
 			return
-		if runtime_packs != null and runtime_packs.is_ready("campaign"):
+		if runtime_packs != null and runtime_packs.zone_packs_ready(zone_id):
 			campaign_pack_waiting = false
 			if hud != null and hud.has_method("hide_loading"):
 				hud.hide_loading()
 			_load_zone(zone_id, spawn_pos)
 			return
-		if runtime_packs != null and runtime_packs.get_state("campaign") == "failed":
+		if runtime_packs != null and not runtime_packs.zone_pack_failures(zone_id).is_empty():
 			break
 	campaign_pack_waiting = false
 	if hud != null and hud.has_method("hide_loading"):
 		hud.hide_loading()
 	if hud != null:
-		hud.toast("The road pack could not be prepared. You remain in Greyfen.")
-	_recover_failed_zone_load(current_zone_id)
+		hud.toast("The road pack could not be prepared. Please retry.")
+	_recover_failed_pack_load()
 
-func _wait_for_opening_pack(zone_id: String, spawn_pos: Vector3) -> void:
+func _wait_for_opening_pack(zone_id: String, spawn_pos: Vector3, request_serial: int) -> void:
 	for _frame in range(900):
 		await get_tree().process_frame
-		if not opening_pack_waiting:
+		if request_serial != zone_pack_request_serial or not opening_pack_waiting:
 			return
-		if runtime_packs != null and runtime_packs.is_ready("opening"):
+		if runtime_packs != null and runtime_packs.zone_packs_ready(zone_id):
 			opening_pack_waiting = false
 			if hud != null and hud.has_method("hide_loading"):
 				hud.hide_loading()
 			_load_zone(zone_id, spawn_pos)
 			return
-		if runtime_packs != null and runtime_packs.get_state("opening") == "failed":
+		if runtime_packs != null and not runtime_packs.zone_pack_failures(zone_id).is_empty():
 			break
 	opening_pack_waiting = false
 	if hud != null and hud.has_method("hide_loading"):
 		hud.hide_loading()
 	if hud != null:
-		hud.toast("The Wychwood pack could not be prepared. You remain in Greyfen.")
-	_recover_failed_zone_load(current_zone_id)
+		hud.toast("The opening pack could not be prepared. Please retry.")
+	_recover_failed_pack_load()
+
+func _recover_failed_pack_load() -> void:
+	# No destination was constructed: the current world must remain resident.
+	zone_pack_request_serial += 1
+	opening_pack_waiting = false
+	campaign_pack_waiting = false
+	pending_player_restore.clear()
+	zone_transition_pending = false
+	zone_load_request_pending = false
+	requested_zone_id = ""
+	campaign_visual_prewarm_suspended = false
+	if seamless_world != null:
+		seamless_world.on_zone_failed(current_zone_id, "pack_load_failed")
+	if player != null and is_instance_valid(player):
+		player.set_transition_locked(false)
+		player.velocity = Vector3.ZERO
+	else:
+		game_started = false
+		if hud != null:
+			hud.show_main_menu()
+	if hud != null:
+		hud.hide_loading()
+		hud.toast("The destination could not load. Please retry.")
 
 func _zone_requires_campaign_pack(zone_id: String) -> bool:
 	return zone_id in [
@@ -534,10 +694,7 @@ func _zone_requires_campaign_pack(zone_id: String) -> bool:
 	]
 
 func _zone_requires_opening_pack(zone_id: String) -> bool:
-	# Core builders and the A-set character layers are embedded in the root Web
-	# PCK. The optional opening archive may improve decoration in the background,
-	# but it must never turn a legal route into a blocking download gate.
-	return false
+	return zone_id in ["greyfen", "wychwood", "cemetery", "ruins"]
 
 func _start_new_game_world() -> void:
 	# An explicit transition can be requested before the menu's deferred setup
@@ -594,7 +751,10 @@ func _start_new_game_world() -> void:
 	quests.start_quest("main_road_of_crows")
 	print("LOADING: handoff_phase=quest_end")
 	# The opening is now playable. Remaining packs must not delay New Game or
-	# the first quest interaction, so they are requested in the background.
+	# the first quest interaction. In particular, do not start the character-pack
+	# download here: Web hash/mount work can monopolize the main thread before the
+	# first input sample. The deferred visual-role stage requests that pack only
+	# after first control, while Kael and Anwen remain root-resident.
 	if runtime_packs != null and runtime_packs.has_method("request_background_packs"):
 		call_deferred("_schedule_background_runtime_packs")
 	print("LOADING: new_game_stage=state_ready elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
@@ -604,6 +764,10 @@ func _start_new_game_world() -> void:
 	print("LOADING: handoff_phase=load_zone_begin")
 	_load_zone("greyfen", Vector3(0, 1, 9.8))
 	print("LOADING: handoff_phase=load_zone_end")
+	if not opening_boot_material_restore_queue.is_empty() \
+			or (visual_director != null and visual_director.is_opening_boot_budget_active()):
+		opening_boot_material_restore_generation += 1
+		call_deferred("_restore_opening_boot_materials", opening_boot_material_restore_generation)
 	if opening_detail_pending:
 		call_deferred("_run_opening_detail_stage", opening_detail_generation)
 	var new_game_elapsed_ms := float(Time.get_ticks_usec() - new_game_started_usec) / 1000.0 if new_game_started_usec > 0 else 0.0
@@ -612,9 +776,18 @@ func _start_new_game_world() -> void:
 	# request-to-control duration rather than the reset transition clock.
 	print("LOADING: new_game_stage=zone_return elapsed=%.1f" % new_game_elapsed_ms)
 	new_game_started_usec = 0
+	if OS.has_feature("web") and runtime_packs != null:
+		# The shell is menu-ready before this point. Triggering the external pack
+		# there can still monopolize the browser between the New Game click and
+		# Kael's first controllable frame. Start it only after the gameplay handoff.
+		JavaScriptBridge.eval(
+			"window.__ashenOathBeginOpeningPackMount && window.__ashenOathBeginOpeningPackMount();",
+			false
+		)
+		call_deferred("_wait_for_post_control_opening_pack")
 	hud.toast("Greyfen whispers about the old road. Sister Anwen is waiting at the shrine.")
-	hud.set_guidance_hint("E - Speak to Sister Anwen", 5.5)
 	_refresh_tracker()
+	_show_current_objective_guidance(5.5)
 	_refresh_equipment_readout()
 	# FileAccess on Web can synchronously block the renderer for several seconds
 	# on the first IndexedDB transaction. Persist the new-game checkpoint after
@@ -622,19 +795,45 @@ func _start_new_game_world() -> void:
 	# handoff wait on storage I/O.
 	call_deferred("_schedule_opening_save", opening_save_generation)
 
+func _wait_for_post_control_opening_pack() -> void:
+	if opening_pack_mount_waiting or runtime_packs == null or not game_started:
+		return
+	opening_pack_mount_waiting = true
+	for _frame in range(1800):
+		if resource_shutdown_prepared or not game_started:
+			opening_pack_mount_waiting = false
+			return
+		if runtime_packs.is_ready("opening"):
+			opening_pack_mount_waiting = false
+			return
+		var shell_state := str(runtime_packs.get_web_preloaded_state("opening")) \
+			if runtime_packs.has_method("get_web_preloaded_state") else ""
+		if shell_state == "preloaded":
+			runtime_packs.request_pack("opening")
+			opening_pack_mount_waiting = false
+			return
+		if shell_state == "failed":
+			# The manager owns the bounded HTTP retry path when shell caching or
+			# virtual-filesystem copy fails.
+			runtime_packs.request_pack("opening")
+			opening_pack_mount_waiting = false
+			return
+		await get_tree().process_frame
+	# A shell event may be unavailable in unusual embedded hosts. Fall back to
+	# the manager only after the first-control window, never during startup.
+	runtime_packs.request_pack("opening")
+	opening_pack_mount_waiting = false
+
 func _request_background_runtime_packs() -> void:
 	if not game_started or runtime_packs == null:
 		return
 	# Optional pack mounts and neighbor imports can compile shaders and touch
-	# IndexedDB for several frames on Web/ANGLE. Never let that work compete
-	# with a player-controlled Greyfen crossing; retry after the actor is idle or
-	# after the player has entered the next sector, where the campaign pack is
-	# already an explicit transition dependency.
-	if current_zone_id == "greyfen":
-		# Greyfen is the opening route and owns the first player-controlled
-		# crossing. Optional pack mounts are allowed only after the player has
-		# actually left this sector; a delayed download can still block Web/ANGLE
-		# frames even when the actor is briefly stationary at a seam.
+	# IndexedDB for several frames on Web/ANGLE. Keep that work out of the whole
+	# player-controlled opening route, not only the Greyfen sector: the first
+	# Wychwood clues and bridge return still run on the same critical path.
+	if _opening_route_is_active():
+		# Retry after the route is complete. The timer is intentionally the only
+		# retry mechanism so every background pack remains deferred as one batch.
 		_schedule_background_runtime_packs(BACKGROUND_RUNTIME_RETRY_SECONDS)
 		return
 	if runtime_packs.has_method("request_background_packs"):
@@ -643,6 +842,11 @@ func _request_background_runtime_packs() -> void:
 	# first playable frame so a cold New Game never waits on campaign metadata.
 	if zone_streaming != null and zone_streaming.has_method("prewarm_neighbors"):
 		zone_streaming.prewarm_neighbors(current_zone_id if current_zone_id != "" else "greyfen")
+
+func _opening_route_is_active() -> bool:
+	if current_zone_id not in ["greyfen", "wychwood"] or quests == null:
+		return false
+	return quests.is_active("main_road_of_crows") and not quests.is_completed("main_road_of_crows")
 
 func should_defer_neighbor_prewarm() -> bool:
 	# Keep the first Greyfen frame free of threaded scene imports while input and
@@ -701,9 +905,7 @@ func load_save_state(data: Dictionary) -> void:
 	if quest_beats != null:
 		quest_beats.load_state(data.get("quest_beats", {}))
 	if settings != null and typeof(data.get("settings", {})) == TYPE_DICTIONARY and not data.get("settings", {}).is_empty():
-		for key in data.settings:
-			if settings.settings.has(key) and typeof(settings.settings[key]) == typeof(data.settings[key]):
-				settings.settings[key] = data.settings[key]
+		settings.restore_settings(data.settings)
 		settings.apply()
 	story_state.load_state(data.get("story_state", {}))
 	progression.load_state(data.get("progression", {}))
@@ -723,11 +925,24 @@ func load_save_state(data: Dictionary) -> void:
 	# Campaign saves must follow the same streamed-pack handoff as a gate
 	# transition. Otherwise a legacy save opened directly in a later sector
 	# reaches the lazy builder before its script pack is mounted.
+	pending_player_restore = {
+		"health": data.get("player_health", {}).duplicate(true),
+		"stamina": data.get("player_stamina", {}).duplicate(true),
+		"equipment": data.get("equipment", {}).duplicate(true)
+	}
 	_load_zone_after_runtime_pack(zone, pos)
-	player.health_component.load_state(data.get("player_health", {}))
-	player.stamina_component.load_state(data.get("player_stamina", {}))
+	_refresh_tracker()
+	_refresh_equipment_readout()
+
+func _apply_pending_player_restore() -> void:
+	if pending_player_restore.is_empty() or player == null or not is_instance_valid(player):
+		return
+	var restore := pending_player_restore
+	pending_player_restore = {}
+	player.health_component.load_state(restore.health)
+	player.stamina_component.load_state(restore.stamina)
 	if player.has_method("load_equipment_state"):
-		player.load_equipment_state(data.get("equipment", {}))
+		player.load_equipment_state(restore.equipment)
 	_apply_progression_to_player()
 	_refresh_tracker()
 	_refresh_equipment_readout()
@@ -763,8 +978,20 @@ func _spawn_player(pos: Vector3) -> void:
 	player.health_component.changed.connect(hud.update_health)
 	player.stamina_component.changed.connect(hud.update_stamina)
 	_bind_spatial_player_body()
+	_sync_camera_enemy_cache()
 	hud.update_health(player.health_component.health, player.health_component.max_health)
 	hud.update_stamina(player.stamina_component.stamina, player.stamina_component.max_stamina)
+
+func _sync_camera_enemy_cache() -> void:
+	# Keep restored encounter actors on the same owned peer list as the camera.
+	# Cached-zone activation replaces active_enemies with a fresh filtered Array;
+	# rebinding here keeps spacing and attack-lane checks on the restored list;
+	# enemy controllers never discover peers in unrelated scene-tree groups.
+	for enemy in active_enemies:
+		if is_instance_valid(enemy) and enemy.has_method("set_encounter_peers"):
+			enemy.set_encounter_peers(active_enemies)
+	if camera_rig != null and is_instance_valid(camera_rig) and camera_rig.has_method("set_enemy_candidates"):
+		camera_rig.set_enemy_candidates(active_enemies)
 
 func _bind_spatial_player_body() -> void:
 	if player == null or not is_instance_valid(player):
@@ -777,336 +1004,10 @@ func _bind_spatial_player_body() -> void:
 			service.set_player_body(body)
 
 func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
-	if new_game_start_pending and not game_started:
-		new_game_start_pending = false
-	zone_id = zone_id.strip_edges().to_lower()
-	# Synchronous visual imports must never overlap a zone swap. The prewarm
-	# coroutine is resumed after the player is playable again.
-	campaign_visual_prewarm_suspended = true
-	if performance_budget_monitor != null:
-		performance_budget_monitor.suspend()
-	loading_started_usec = loading_started_usec if loading_started_usec > 0 else Time.get_ticks_usec()
-	if player != null and player.has_method("set_transition_locked"):
-		player.set_transition_locked(true)
-	if camera_rig != null and camera_rig.has_method("clear_target_lock"):
-		camera_rig.clear_target_lock()
-	if hud != null and hud.has_method("clear_target_lock_status"):
-		hud.clear_target_lock_status()
-	_clear_oathfire_effects()
-	runtime_light_count = 0
-	tree_batch_data.clear()
-	deadfall_batch_data.clear()
-	prop_batch_data.clear()
-	visual_box_batch_data.clear()
-	terrain_patch_batch_data.clear()
-	house_batch_data.clear()
-	environment_batches_flushed = false
-	tree_collision_body = null
-	prop_collision_body = null
-	if player != null and player.has_method("cancel_beam_charge"):
-		player.cancel_beam_charge()
-	var previous_zone_id: String = current_zone_id
-	var previous_enemies: Array = active_enemies.duplicate()
-	if zone_runtime_coordinator != null:
-		zone_runtime_coordinator.begin_transition(zone_id, previous_zone_id, spawn_pos)
-	var previous_spatial_service: Node = spatial_service
-	var reused_zone := false
-	var requested_signature := _zone_state_signature()
-	if zone_root != null:
-		if previous_zone_id == zone_id and active_zone_signature == requested_signature:
-			reused_zone = true
-		elif previous_zone_id == zone_id:
-			var stale_active := zone_root
-			_retire_zone_root(stale_active)
-			zone_root = null
-		else:
-			_cache_route_zone(previous_zone_id, zone_root, previous_enemies, active_zone_signature)
-			_cache_route_spatial_service(previous_zone_id, previous_spatial_service)
-	active_interactable = null
-	interaction_candidates.clear()
-	interaction_area_cache.clear()
-	interaction_area_cache_ready = false
-	interaction_focus_dirty = true
-	interaction_focus_cache_valid = false
-	compass_dirty = true
-	compass_cache_valid = false
-	last_compass_zone = ""
-	last_compass_signature = ""
-	# Guidance belongs to the previous route. Clear it before the new zone
-	# refreshes its own contextual hint so stale prompts cannot survive a gate.
-	hud.set_guidance_hint("")
-	current_zone_id = zone_id
-	if zone_id != "greyfen":
-		opening_detail_pending = false
-		opening_detail_generation += 1
-	var using_prewarmed_spatial := zone_id == "greyfen" \
-		and greyfen_prewarm_spatial_service != null \
-		and is_instance_valid(greyfen_prewarm_spatial_service)
-	var cached_spatial_service: Node = route_spatial_cache.get(zone_id)
-	var using_cached_spatial := cached_spatial_service != null \
-		and is_instance_valid(cached_spatial_service) \
-		and route_zone_cache.has(zone_id) \
-		and int(route_zone_signatures.get(zone_id, -1)) == requested_signature
-	print("LOADING: zone_begin id=%s prewarm=%s cached=%s" % [zone_id, using_prewarmed_spatial, using_cached_spatial])
-	_release_active_spatial_service()
-	if using_prewarmed_spatial:
-		spatial_service = greyfen_prewarm_spatial_service
-		greyfen_prewarm_spatial_service = null
-		spatial_service.name = "ZoneSpatialService"
-		spatial_service.process_mode = Node.PROCESS_MODE_INHERIT
-	elif using_cached_spatial:
-		spatial_service = cached_spatial_service
-		route_spatial_cache.erase(zone_id)
-		spatial_service.name = "ZoneSpatialService"
-		spatial_service.process_mode = Node.PROCESS_MODE_INHERIT
-	else:
-		spatial_service = ZoneSpatialService.new()
-		spatial_service.name = "ZoneSpatialService"
-		add_child(spatial_service)
-		spatial_service.configure(zone_id, _river_center(zone_id), _zone_half_extents(zone_id))
-	_bind_spatial_player_body()
-	if camera_rig != null and camera_rig.has_method("set_zone"):
-		camera_rig.set_zone(zone_id)
-	active_enemies.clear()
-	hud.set_prompt("")
-	# Target health belongs to the active encounter. Clear it before the new
-	# zone starts so Castle, finale, and dialogue views cannot inherit a dead
-	# Wychwood target from the previous route.
-	hud.hide_enemy()
-	if reused_zone:
-		active_enemies = _valid_cached_enemies(previous_enemies)
-	elif route_zone_cache.has(zone_id) and is_instance_valid(route_zone_cache[zone_id]) \
-			and int(route_zone_signatures.get(zone_id, -1)) == requested_signature:
-		zone_root = _activate_cached_zone(zone_id)
-		print("LOADING: cached_zone_activated id=%s valid=%s" % [zone_id, zone_root != null])
-		print("LOADING: zone_stage=cache_activated elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
-		active_zone_signature = int(route_zone_signatures.get(zone_id, requested_signature))
-		route_zone_signatures.erase(zone_id)
-		var prewarm_camera := zone_root.find_child("GreyfenPrewarmCamera", true, false) as Camera3D
-		if prewarm_camera != null:
-			prewarm_camera.current = false
-			prewarm_camera.queue_free()
-		active_enemies = _valid_cached_enemies(route_enemy_cache.get(zone_id, []))
-		route_enemy_cache.erase(zone_id)
-		reused_zone = true
-	else:
-		if route_zone_cache.has(zone_id):
-			var stale_root = route_zone_cache.get(zone_id)
-			route_zone_cache.erase(zone_id)
-			route_enemy_cache.erase(zone_id)
-			route_zone_signatures.erase(zone_id)
-			if is_instance_valid(stale_root):
-				_retire_zone_root(stale_root)
-		zone_root = Node3D.new()
-		zone_root.name = zone_id
-		add_child(zone_root)
-		var authored_layers := ZoneSceneCatalog.attach(zone_id, zone_root)
-		if not bool(authored_layers.get("ok", true)):
-			push_error("Authored zone layers failed for %s: %s" % [
-				zone_id, ", ".join(authored_layers.get("errors", []))
-			])
-		var composition_kind := ZoneCompositionRouter.composition_kind(zone_id)
-		var build_result: Dictionary
-		if zone_runtime_coordinator != null:
-			zone_runtime_coordinator.begin_build(zone_id, composition_kind)
-		if composition_kind == "campaign":
-			build_result = ZoneCompositionRouter.build_campaign(self, zone_id)
-		else:
-			build_result = ZoneCompositionRouter.build_core(self, zone_id)
-		if zone_runtime_coordinator != null:
-			build_result = zone_runtime_coordinator.finish_build(build_result, zone_root)
-		var build_validation := zone_runtime_coordinator.validate_build(zone_id, build_result, zone_root) if zone_runtime_coordinator != null else build_result
-		if not bool(build_validation.get("ok", false)):
-			push_error("Zone composition failed for %s: %s" % [
-				zone_id, ", ".join(build_validation.get("errors", []))
-			])
-			if zone_runtime_coordinator != null:
-				zone_runtime_coordinator.rollback(zone_id, previous_zone_id, build_validation.get("errors", []))
-			_recover_failed_zone_load(previous_zone_id)
-			return
-		if composition_kind == "campaign":
-			_apply_campaign_arrival(zone_id)
-		_flush_environment_batches()
-		_install_world_prop_controller(zone_id)
-		if zone_id in ["greyfen", "wychwood"]:
-			_add_visual_100_layer(zone_id)
-		_apply_first_route_materials(zone_root)
-		# The authoritative render-resource pass runs after the player, sky, and
-		# encounter roots are attached below. Walking a large campaign zone here as
-		# well doubled castle activation work without protecting an additional
-		# visible frame.
-		active_zone_signature = _zone_state_signature()
-	if zone_root != null:
-		zone_root.set_meta("zone_resource_owner", "active")
-		zone_root.set_meta("zone_resource_id", zone_id)
-		_install_world_prop_controller(zone_id)
-		if zone_runtime_coordinator != null:
-			zone_runtime_coordinator.activate(zone_id, zone_root, reused_zone)
-	_trim_route_zone_cache([previous_zone_id] if previous_zone_id != zone_id else [])
-	# Avoid recursive diagnostic walks during every transition; on Web/ANGLE those
-	# allocations made cached arrivals visibly slower.
-	print("ZONE_COMPOSITION: id=%s reused=%s visible=%s position=%s" % [
-		zone_id, reused_zone, zone_root.visible, zone_root.global_position,
-	])
-	active_zone_signature = _zone_state_signature()
-	# Navigation baking and the recursive render-resource audit are correctness
-	# work, not prerequisites for the first visible arrival. A cold campaign
-	# build can otherwise spend most of its transition budget here before the
-	# player receives control. The deferred finalizer is guarded by the active
-	# root/service pair so a fast return cannot let stale work touch a new zone.
-	var navigation_pending := not using_prewarmed_spatial and not using_cached_spatial
-	var life_controller := zone_root.find_child("GreyfenLifeController", true, false)
-	if life_controller != null and life_controller.has_method("set_spatial_service"):
-		life_controller.set_spatial_service(spatial_service)
-	if zone_runtime_coordinator != null:
-		zone_runtime_coordinator.sync_zone(zone_id)
-	_refresh_tracker()
-	print("LOADING: zone_stage=systems_synced elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
-	if visual_director != null:
-		visual_director.apply_zone(zone_id, zone_root)
-	print("LOADING: zone_stage=visual_applied elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
-	if zone_streaming != null and zone_streaming.has_method("prewarm_neighbors") and not should_defer_neighbor_prewarm():
-		zone_streaming.prewarm_neighbors(zone_id)
-	# Generated campaign ambience and music can allocate several seconds of WAV
-	# data on first use. Mark it for the first settled frame instead of making
-	# audio synthesis part of the player's transition lock. Greyfen remains on
-	# the opening path because its menu prewarm already prepares those cues.
-	if zone_id == "greyfen":
-		_apply_zone_audio(zone_id)
-	else:
-		zone_root.set_meta("zone_audio_pending", true)
-	# Authored arrivals are already reserved by the zone builder. Preserve their
-	# exact route position here; nearest_safe() is an emergency recovery API and
-	# can otherwise move a valid arrival to a distant edge anchor.
-	var safe_spawn: Vector3 = spatial_service.validate_position(spawn_pos, 0.8, spatial_service.bank_for(spawn_pos))
-	if player == null:
-		_spawn_player(safe_spawn)
-	else:
-		player.visible = true
-		if not using_prewarmed_spatial:
-			player.process_mode = Node.PROCESS_MODE_INHERIT
-			if camera_rig != null:
-				camera_rig.process_mode = Node.PROCESS_MODE_INHERIT
-				var gameplay_camera := camera_rig.find_child("Camera3D", true, false) as Camera3D
-				if gameplay_camera != null:
-					gameplay_camera.current = true
-	# Greyfen's life controller is constructed with the zone. New Game now creates
-	# Kael after collision is ready, so bind the final player instance here.
-	if life_controller != null:
-		life_controller.player = player
-	_install_opening_soundscape(zone_id)
-	# The builder and imported-asset helper attach validated materials as each
-	# mesh is created. The full zone tree is audited by lifecycle gates; doing the
-	# same recursive walk on every player transition adds visible latency on
-	# Compatibility/ANGLE, so keep that audit off the swap path.
-	# The late-created render roots still receive the fast, focused validation.
-	# The full zone tree is checked explicitly by verify_engine_003/004.
-	if visual_director != null:
-		_validate_zone_render_resources(visual_director)
-	if player != null:
-		_validate_zone_render_resources(player)
-	for enemy in active_enemies:
-		if is_instance_valid(enemy):
-			_validate_zone_render_resources(enemy)
-	# The finalizer prints the render_validated stage after the player is live.
-	# Full-zone lifecycle verifiers still audit every surface independently.
-	print("LOADING: zone_stage=render_validation_deferred elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
-	if performance_budget_monitor != null:
-		var quality_preset := str(settings.settings.get("quality_preset", "balanced")) if settings != null else "balanced"
-		performance_budget_monitor.set_active_zone(current_zone_id, zone_root, player, quality_preset)
-	print("LOADING: zone_stage=budget_ready elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
-	_schedule_zone_runtime_finalize(zone_id, zone_root, spatial_service, active_enemies.duplicate(), navigation_pending)
-	if player != null:
-		pending_spawn_facing = player.rotation.y
-		pending_spawn_position = safe_spawn
-		player.global_position = safe_spawn + Vector3.UP * 0.9
-		player.velocity = Vector3.ZERO
-		if using_prewarmed_spatial:
-			# This scene has already completed collision and navigation setup
-			# behind the menu. Do not wait for another rendered WebGL frame.
-			player.global_position = Vector3(safe_spawn.x, maxf(safe_spawn.y, 0.95), safe_spawn.z)
-			print("LOADING: handoff_phase=unlock_begin")
-			player.set_transition_locked(false)
-			print("LOADING: handoff_phase=unlock_end")
-			last_safe_player_position = player.global_position
-			zone_transition_pending = false
-			campaign_visual_prewarm_suspended = false
-			# The player and camera are already visible behind the menu. Enabling
-			# their full process tree can trigger synchronous WebGL animation and
-			# physics setup, so finish activation after the playable marker.
-			call_deferred("_activate_prewarmed_player_runtime")
-			var elapsed_ms := float(Time.get_ticks_usec() - loading_started_usec) / 1000.0
-			_record_loading_metrics({
-				"zone": current_zone_id,
-				"to_playable_ms": elapsed_ms,
-				"support_ready": true,
-				"velocity_reset": true
-			})
-			if zone_runtime_coordinator != null:
-				zone_runtime_coordinator.record_playable_transition(current_zone_id, elapsed_ms, true)
-			print("LOADING: zone=%s playable_ms=%.1f" % [current_zone_id, elapsed_ms])
-			loading_started_usec = 0
-			print("LOADING: handoff_phase=hide_loading_begin")
-			hud.hide_loading()
-			print("LOADING: handoff_phase=hide_loading_end")
-		else:
-			player.set_transition_locked(true)
-			zone_transition_frames = 0
-			zone_transition_pending = true
-	print("LOADING: handoff_phase=before_seamless")
-	if seamless_world != null:
-		seamless_world.on_zone_activated(current_zone_id, safe_spawn)
-	print("LOADING: handoff_phase=after_seamless")
-	if game_started:
-		_schedule_zone_autosave()
-	print("LOADING: handoff_phase=after_autosave")
-	if zone_id == "wychwood" and quests.is_active("main_road_of_crows") and not quests.is_objective_done("main_road_of_crows", "fight_ghoulkin"):
-		audio.play_event("reveal", 0.02)
-		audio.play_event("wychwood_tension", 0.01)
-		audio.set_music_state("wychwood_tension")
-		hud.toast("The woods go quiet. Survive the Ghoulkin.")
-		hud.set_guidance_hint("Left click strike | Space dodge | Tap Q parry | Hold Q block", 6.0)
-		hud.show_status_cue("Survive the clearing", "neutral")
+	zone_runtime_coordinator.load_zone(zone_id, spawn_pos)
 
 func _advance_zone_transition() -> void:
-	zone_transition_frames += 1
-	if player == null or spatial_service == null:
-		return
-	var grounded: Variant = _grounded_spawn_position(pending_spawn_position)
-	if grounded == null:
-		if zone_transition_frames > 3:
-			push_warning("Zone spawn support timed out; using validated recovery: %s" % current_zone_id)
-			grounded = spatial_service.nearest_safe(pending_spawn_position, spatial_service.bank_for(pending_spawn_position))
-			grounded.y = 0.95
-		else:
-			return
-	player.global_position = grounded
-	player.rotation.y = pending_spawn_facing
-	player.velocity = Vector3.ZERO
-	if zone_transition_frames < 2:
-		return
-	player.set_transition_locked(false)
-	last_safe_player_position = player.global_position
-	zone_transition_pending = false
-	campaign_visual_prewarm_suspended = false
-	var elapsed_ms := float(Time.get_ticks_usec() - loading_started_usec) / 1000.0
-	_record_loading_metrics({
-		"zone": current_zone_id,
-		"to_playable_ms": elapsed_ms,
-		"support_ready": true,
-		"velocity_reset": player.velocity.is_zero_approx()
-	})
-	if performance_budget_monitor != null:
-		performance_budget_monitor.record_transition(elapsed_ms)
-	if zone_runtime_coordinator != null:
-		zone_runtime_coordinator.record_playable_transition(current_zone_id, elapsed_ms, true)
-	print("LOADING: zone=%s playable_ms=%.1f" % [current_zone_id, elapsed_ms])
-	loading_started_usec = 0
-	hud.hide_loading()
-	if current_zone_id == "greyfen":
-		_start_campaign_visual_prewarm()
-	_schedule_deferred_visual_roles(zone_root)
-	_schedule_deferred_zone_audio(current_zone_id, zone_root)
+	zone_runtime_coordinator.advance_transition()
 
 func _apply_zone_audio(zone_id: String) -> void:
 	if audio == null or zone_id == "":
@@ -1136,7 +1037,7 @@ func _finish_deferred_zone_audio(zone_id: String, root: Node3D) -> void:
 func _activate_prewarmed_player_runtime() -> void:
 	if not game_started or current_zone_id != "greyfen" or player == null or not is_instance_valid(player):
 		return
-	player.process_mode = Node.PROCESS_MODE_INHERIT
+	player.process_mode = Node.PROCESS_MODE_PAUSABLE
 	if camera_rig == null or not is_instance_valid(camera_rig):
 		return
 	camera_rig.process_mode = Node.PROCESS_MODE_INHERIT
@@ -1146,18 +1047,38 @@ func _activate_prewarmed_player_runtime() -> void:
 	call_deferred("_finish_prewarmed_greyfen_runtime")
 
 func _start_campaign_visual_prewarm() -> void:
-	if campaign_visual_prewarm_started or not game_started or resource_shutdown_prepared or asset_helper == null:
+	if not game_started or resource_shutdown_prepared or asset_helper == null:
 		return
 	if not asset_helper.has_method("prewarm_roles"):
 		return
+	var requested_roles: Array[String] = []
+	for raw_role in PREDICTIVE_VISUAL_PREWARM_ROLES.get(current_zone_id, []):
+		requested_roles.append(str(raw_role))
+	if requested_roles.is_empty():
+		_cancel_campaign_visual_prewarm()
+		return
+	if campaign_visual_prewarm_started and campaign_visual_prewarm_zone == current_zone_id \
+			and campaign_visual_prewarm_roles == requested_roles:
+		return
+	_cancel_campaign_visual_prewarm()
 	campaign_visual_prewarm_started = true
+	campaign_visual_prewarm_zone = current_zone_id
+	campaign_visual_prewarm_roles = requested_roles
 	campaign_visual_prewarm_generation += 1
 	campaign_visual_prewarm_not_before_msec = Time.get_ticks_msec() + int(CAMPAIGN_VISUAL_PREWARM_DELAY_SECONDS * 1000.0)
-	print("LOADING: campaign_visual_prewarm begin roles=%d" % CAMPAIGN_VISUAL_PREWARM_ROLES.size())
+	print("LOADING: campaign_visual_prewarm begin zone=%s roles=%d" % [campaign_visual_prewarm_zone, campaign_visual_prewarm_roles.size()])
 	call_deferred("_run_campaign_visual_prewarm", campaign_visual_prewarm_generation, 0)
 
+func _cancel_campaign_visual_prewarm() -> void:
+	if campaign_visual_prewarm_started or not campaign_visual_prewarm_roles.is_empty():
+		campaign_visual_prewarm_generation += 1
+	campaign_visual_prewarm_started = false
+	campaign_visual_prewarm_zone = ""
+	campaign_visual_prewarm_roles.clear()
+	campaign_visual_prewarm_not_before_msec = 0
+
 func should_defer_visual_role(role: String, category: String) -> bool:
-	if category != "environment" or role not in CAMPAIGN_VISUAL_PREWARM_ROLES:
+	if category != "environment" or role not in CAMPAIGN_VISUAL_ROLES:
 		return false
 	# Potato/mobile intentionally omits optional campaign dressing. Do not leave
 	# markers for visuals that this quality tier is guaranteed to reject during
@@ -1173,7 +1094,15 @@ func should_defer_character_role(role: String, actor_id: String) -> bool:
 	# prompt, and patrol ownership are required immediately. Keeping only this
 	# small named-cast slice deferred removes a cold transition hitch without
 	# making the opening actors appear late.
-	if not game_started or role == "" or actor_id == "":
+	if role == "" or actor_id == "":
+		return false
+	var preparing_greyfen := zone_root != null and zone_root.name == "greyfen"
+	if OS.has_feature("web") and (current_zone_id == "greyfen" or preparing_greyfen) and role != "sister_anwen_human":
+		# Always publish a marker first. Pack readiness can change between stage
+		# construction and imported-scene parsing, including menu-covered prewarm.
+		# Direct spawning here requests Character-pack GLBs before they mount.
+		return true
+	if not game_started:
 		return false
 	return current_zone_id in ["vargan_court", "record_hall"]
 
@@ -1200,6 +1129,24 @@ func _run_deferred_visual_roles(root: Node3D) -> void:
 			root.set_meta("deferred_visual_roles_pending", false)
 		return
 	var markers := _deferred_visual_markers(root)
+	var needs_character_pack := false
+	for marker in markers:
+		if str(marker.get_meta("deferred_visual_category", "")) == "characters":
+			needs_character_pack = true
+			break
+	if needs_character_pack and OS.has_feature("web") and runtime_packs != null and runtime_packs.has_method("is_ready") \
+		and not bool(runtime_packs.is_ready("characters")):
+		if runtime_packs.has_method("get_state") and str(runtime_packs.get_state("characters")) == "failed":
+			root.set_meta("deferred_visual_roles_pending", false)
+			push_error("Deferred character pack failed: %s" % runtime_packs.get_last_error("characters"))
+			return
+		if runtime_packs.has_method("request_pack"):
+			runtime_packs.request_pack("characters")
+		var pack_retry := _create_owned_timer(0.5, true)
+		await pack_retry.timeout
+		if is_instance_valid(root) and root == zone_root and game_started:
+			call_deferred("_run_deferred_visual_roles", root)
+		return
 	for marker in markers:
 		if resource_shutdown_prepared or not is_instance_valid(marker) or root != zone_root or not game_started:
 			if is_instance_valid(root):
@@ -1231,6 +1178,8 @@ func _run_deferred_visual_roles(root: Node3D) -> void:
 			continue
 		visual.position = marker.position
 		visual.rotation = marker.rotation
+		if category == "characters" and asset_helper != null and asset_helper.has_method("apply_normalized_scale"):
+			asset_helper.apply_normalized_scale(visual, scale_value.y)
 		parent.add_child(visual)
 		if category == "characters" and actor_id != "":
 			parent.set_meta("character_variant_seed", actor_id)
@@ -1239,6 +1188,8 @@ func _run_deferred_visual_roles(root: Node3D) -> void:
 			parent.set_meta("character_deferred_hydrated", true)
 		marker.queue_free()
 	root.set_meta("deferred_visual_roles_pending", false)
+	if visual_director != null:
+		visual_director.refresh_zone_lighting(root)
 
 func _deferred_visual_markers(root: Node3D) -> Array[Node3D]:
 	var result: Array[Node3D] = []
@@ -1252,22 +1203,17 @@ func _deferred_visual_markers(root: Node3D) -> Array[Node3D]:
 func _run_campaign_visual_prewarm(generation: int, role_index: int) -> void:
 	if generation != campaign_visual_prewarm_generation or not campaign_visual_prewarm_started:
 		return
-	if not game_started or resource_shutdown_prepared or asset_helper == null:
+	if not game_started or resource_shutdown_prepared or asset_helper == null \
+			or current_zone_id != campaign_visual_prewarm_zone:
+		_cancel_campaign_visual_prewarm()
 		return
-	if role_index >= CAMPAIGN_VISUAL_PREWARM_ROLES.size():
-		print("LOADING: campaign_visual_prewarm complete")
-		return
-	# Campaign role imports can compile meshes and materials on Web/ANGLE even
-	# when they are scheduled one role at a time. Do not let that optional work
-	# interrupt a live Greyfen crossing; the next settled frame can resume it.
-	if current_zone_id == "greyfen":
-		# Keep optional campaign role imports out of every Greyfen movement path,
-		# including bridge approaches. The pending task continues once a sector
-		# handoff changes current_zone_id.
-		var moving_retry_timer := _create_owned_timer(OPENING_DETAIL_RETRY_SECONDS, true)
-		await moving_retry_timer.timeout
-		if generation == campaign_visual_prewarm_generation:
-			call_deferred("_run_campaign_visual_prewarm", generation, role_index)
+	if role_index >= campaign_visual_prewarm_roles.size():
+		var completed_zone := campaign_visual_prewarm_zone
+		print("LOADING: campaign_visual_prewarm complete zone=%s" % completed_zone)
+		campaign_visual_prewarm_started = false
+		campaign_visual_prewarm_zone = ""
+		campaign_visual_prewarm_roles.clear()
+		campaign_visual_prewarm_not_before_msec = 0
 		return
 	if Time.get_ticks_msec() < campaign_visual_prewarm_not_before_msec:
 		var wait_seconds := maxf(float(campaign_visual_prewarm_not_before_msec - Time.get_ticks_msec()) / 1000.0, 0.05)
@@ -1289,7 +1235,7 @@ func _run_campaign_visual_prewarm(generation: int, role_index: int) -> void:
 	if campaign_visual_prewarm_suspended or zone_transition_pending or zone_load_request_pending or get_tree().paused:
 		call_deferred("_run_campaign_visual_prewarm", generation, role_index)
 		return
-	var role := CAMPAIGN_VISUAL_PREWARM_ROLES[role_index]
+	var role := campaign_visual_prewarm_roles[role_index]
 	var started_usec := Time.get_ticks_usec()
 	var result: Dictionary = asset_helper.prewarm_roles([role])
 	var missing: Array = result.get("missing", [])
@@ -1349,47 +1295,15 @@ func _finish_prewarmed_greyfen_runtime() -> void:
 	print("LOADING: Greyfen deferred_runtime_complete ms=%d" % (Time.get_ticks_msec() - started))
 
 func _recover_failed_zone_load(previous_zone_id: String) -> void:
-	campaign_pack_waiting = false
-	if seamless_world != null:
-		seamless_world.on_zone_failed(current_zone_id, "zone_build_failed")
-	zone_transition_pending = false
-	campaign_visual_prewarm_suspended = false
-	zone_load_request_pending = false
-	requested_zone_id = ""
-	if zone_root != null:
-		_retire_zone_root(zone_root)
-		zone_root = null
-	_release_active_spatial_service()
-	if route_zone_cache.has(previous_zone_id) and is_instance_valid(route_zone_cache[previous_zone_id]):
-		zone_root = _activate_cached_zone(previous_zone_id)
-		var cached_spatial_service: Node = route_spatial_cache.get(previous_zone_id)
-		if cached_spatial_service != null and is_instance_valid(cached_spatial_service):
-			route_spatial_cache.erase(previous_zone_id)
-			spatial_service = cached_spatial_service
-			spatial_service.process_mode = Node.PROCESS_MODE_INHERIT
-		active_enemies = _valid_cached_enemies(route_enemy_cache.get(previous_zone_id, []))
-		route_enemy_cache.erase(previous_zone_id)
-		active_zone_signature = int(route_zone_signatures.get(previous_zone_id, -1))
-		route_zone_signatures.erase(previous_zone_id)
-		current_zone_id = previous_zone_id
-	if player != null:
-		player.set_transition_locked(false)
-		player.global_position = last_safe_player_position
-		player.velocity = Vector3.ZERO
-	if performance_budget_monitor != null:
-		var quality_preset := str(settings.settings.get("quality_preset", "balanced")) if settings != null else "balanced"
-		performance_budget_monitor.set_active_zone(previous_zone_id, zone_root, player, quality_preset)
-	if hud != null:
-		hud.hide_loading()
-		hud.toast("The road will not open. You remain in %s." % _zone_display_name(previous_zone_id))
+	zone_runtime_coordinator.recover_failed_transition(previous_zone_id)
 
 func _grounded_spawn_position(candidate: Vector3) -> Variant:
 	if get_world_3d() == null:
 		return null
-	var query := PhysicsRayQueryParameters3D.create(candidate + Vector3.UP * 6.0, candidate - Vector3.UP * 12.0, 1)
+	var excluded: Array[RID] = []
 	if player != null:
-		query.exclude = [player.get_rid()]
-	var hit := get_world_3d().direct_space_state.intersect_ray(query)
+		excluded.append(player.get_rid())
+	var hit := SpatialSurfaceContract.support_hit(get_world_3d().direct_space_state, candidate + Vector3.UP * 6.0, candidate - Vector3.UP * 12.0, excluded)
 	if hit.is_empty():
 		return null
 	return Vector3(candidate.x, float(hit.position.y) + 0.95, candidate.z)
@@ -1398,11 +1312,7 @@ func _zone_display_name(zone_id: String) -> String:
 	return zone_id.replace("_", " ").capitalize()
 
 func _valid_cached_enemies(entries: Array) -> Array:
-	var result: Array = []
-	for enemy in entries:
-		if is_instance_valid(enemy) and not enemy.is_queued_for_deletion():
-			result.append(enemy)
-	return result
+	return zone_residency._valid_cached_enemies(entries)
 
 func _zone_state_signature() -> int:
 	var quest_world_state: Dictionary = quests.save_state().duplicate(true) if quests != null else {}
@@ -1417,169 +1327,28 @@ func _zone_state_signature() -> int:
 	])
 
 func _deferred_free_zone(retired_root: Node) -> void:
-	# Keep the complete render hierarchy intact until the scene tree disposes it.
-	# Manually detaching skins or surfaces races RenderingServer teardown. The
-	# hidden cleanup owner keeps the retired root scene-owned while queue_free()
-	# lets Godot release renderer dependencies at the end of a frame.
-	for _frame in range(ZONE_RETIRE_FRAMES):
-		await get_tree().process_frame
-	if is_instance_valid(retired_root):
-		# The root has been hidden, disabled, and given a full renderer grace
-		# window above. Release server-owned geometry before destroying the
-		# hierarchy; this avoids leaving physics shapes and renderer instances
-		# alive when a retired procedural zone is torn down.
-		_release_zone_render_resources(retired_root)
-		retired_zone_roots.erase(retired_root)
-		retired_root.free()
-	else:
-		retired_zone_roots.erase(retired_root)
-	pending_zone_retirements = maxi(pending_zone_retirements - 1, 0)
-	# Material anchors only bridge the renderer-safe retirement window. Once the
-	# final staged root has been queued and released, no retired scene owns those
-	# materials anymore; dropping the anchors here prevents shutdown retention
-	# while keeping shared materials alive for any active zone that still uses
-	# them.
-	if pending_zone_retirements == 0:
-		retired_material_anchors.clear()
+	zone_residency._deferred_free_zone(retired_root)
 
 func _release_zone_render_resources(root: Node) -> void:
-	if root == null or not is_instance_valid(root):
-		return
-	# CollisionShape3D owns a PhysicsServer shape RID while its shape property is
-	# populated. Clear it after the zone is disabled so the server can release
-	# the RID before the parent hierarchy is destroyed.
-	for raw_shape in root.find_children("*", "CollisionShape3D", true, false):
-		var shape_node := raw_shape as CollisionShape3D
-		if shape_node == null:
-			continue
-		shape_node.disabled = true
-		shape_node.shape = null
-	for raw_region in root.find_children("*", "NavigationRegion3D", true, false):
-		var region := raw_region as NavigationRegion3D
-		if region == null:
-			continue
-		region.enabled = false
-		region.navigation_mesh = null
-	# MeshInstance3D and MultiMeshInstance3D similarly retain renderer-side
-	# instances until their geometry reference is cleared. This is only called
-	# for hidden/retiring roots, never for an active zone.
-	for raw_mesh in root.find_children("*", "MeshInstance3D", true, false):
-		var mesh_instance := raw_mesh as MeshInstance3D
-		if mesh_instance == null:
-			continue
-		mesh_instance.visible = false
-		# Detach geometry before releasing the node. Keep its existing override
-		# until free() rather than clearing it in the same frame: Compatibility can
-		# query a retiring instance between the mesh and override property updates.
-		mesh_instance.mesh = null
-	for raw_batch in root.find_children("*", "MultiMeshInstance3D", true, false):
-		var batch := raw_batch as MultiMeshInstance3D
-		if batch == null:
-			continue
-		batch.visible = false
-		batch.multimesh = null
+	zone_residency._release_zone_render_resources(root)
 
 func _retire_zone_root(retired_root: Node) -> void:
-	if retired_root == null or not is_instance_valid(retired_root):
-		return
-	if retired_zone_roots.has(retired_root):
-		return
-	_remove_root_from_route_cache(retired_root)
-	_anchor_retired_materials(retired_root)
-	_anchor_shared_skinned_resources(retired_root)
-	_quiesce_zone_runtime(retired_root)
-	_validate_zone_render_resources(retired_root)
-	_bind_retirement_material(retired_root)
-	_set_zone_collision_enabled(retired_root, false)
-	retired_root.visible = false
-	retired_root.process_mode = Node.PROCESS_MODE_DISABLED
-	retired_root.position = Vector3(0, -2000.0 - retired_zone_roots.size() * 100.0, 0)
-	retired_root.name = "__retiring_%s_%d" % [str(retired_root.name), pending_zone_retirements]
-	retired_root.set_meta("zone_resource_owner", "retiring")
-	retired_zone_roots.append(retired_root)
-	pending_zone_retirements += 1
-	_deferred_free_zone(retired_root)
+	zone_residency._retire_zone_root(retired_root)
 
 func _bind_retirement_material(root: Node) -> void:
-	if retirement_material == null:
-		retirement_material = StandardMaterial3D.new()
-		retirement_material.albedo_color = Color(0.08, 0.08, 0.08)
-		retirement_material.roughness = 1.0
-	_keep_retired_material(retirement_material)
-	for raw_mesh in root.find_children("*", "MeshInstance3D", true, false):
-		var mesh_instance := raw_mesh as MeshInstance3D
-		mesh_instance.material_override = retirement_material
-		if mesh_instance.mesh == null:
-			continue
-		for surface_index in range(mesh_instance.mesh.get_surface_count()):
-			mesh_instance.set_surface_override_material(surface_index, retirement_material)
-	for raw_batch in root.find_children("*", "MultiMeshInstance3D", true, false):
-		(raw_batch as MultiMeshInstance3D).material_override = retirement_material
+	zone_residency._bind_retirement_material(root)
 
 func _anchor_retired_materials(root: Node) -> void:
-	for raw_mesh in root.find_children("*", "MeshInstance3D", true, false):
-		var mesh_instance := raw_mesh as MeshInstance3D
-		if mesh_instance.material_override != null:
-			_keep_retired_material(mesh_instance.material_override)
-		if mesh_instance.mesh == null:
-			continue
-		for surface_index in range(mesh_instance.mesh.get_surface_count()):
-			var material := mesh_instance.get_surface_override_material(surface_index)
-			if material == null:
-				material = mesh_instance.mesh.surface_get_material(surface_index)
-			if material != null:
-				_keep_retired_material(material)
+	zone_residency._anchor_retired_materials(root)
 
 func _keep_retired_material(material: Material) -> void:
-	if retired_material_anchors.size() >= MAX_RETIRED_MATERIAL_ANCHORS:
-		return
-	var key := str(material.get_rid().get_id())
-	if not retired_material_anchors.has(key):
-		retired_material_anchors[key] = material
+	zone_residency._keep_retired_material(material)
 
 func _anchor_shared_skinned_resources(root: Node) -> void:
-	if retired_skinned_actor_pool == null or not is_instance_valid(retired_skinned_actor_pool):
-		retired_skinned_actor_pool = Node3D.new()
-		retired_skinned_actor_pool.name = "SharedSkinnedResourceAnchors"
-		retired_skinned_actor_pool.visible = false
-		retired_skinned_actor_pool.process_mode = Node.PROCESS_MODE_DISABLED
-		add_child(retired_skinned_actor_pool)
-	var branches: Array[Node] = []
-	for raw_skeleton in root.find_children("*", "Skeleton3D", true, false):
-		var branch := raw_skeleton as Node
-		while branch.get_parent() != null and branch.get_parent() != root:
-			branch = branch.get_parent()
-		if branch.get_parent() == root and not branches.has(branch):
-			branches.append(branch)
-	for branch in branches:
-		var fingerprint := _skinned_resource_fingerprint(branch)
-		if fingerprint.is_empty() or skinned_resource_anchors.has(fingerprint):
-			continue
-		if skinned_resource_anchors.size() >= MAX_SKINNED_RESOURCE_ANCHORS:
-			break
-		# A skinned branch is detached from the zone before the normal zone
-		# validation pass. Validate it in place so imported meshes with empty
-		# surfaces cannot reach the renderer during retirement.
-		_validate_zone_render_resources(branch)
-		branch.reparent(retired_skinned_actor_pool, false)
-		if branch is Node3D:
-			(branch as Node3D).visible = false
-		branch.process_mode = Node.PROCESS_MODE_DISABLED
-		skinned_resource_anchors[fingerprint] = branch
+	zone_residency._anchor_shared_skinned_resources(root)
 
 func _skinned_resource_fingerprint(branch: Node) -> String:
-	var fingerprints: Array[String] = []
-	for raw_mesh in branch.find_children("*", "MeshInstance3D", true, false):
-		var mesh_instance := raw_mesh as MeshInstance3D
-		if mesh_instance.skin == null or mesh_instance.mesh == null:
-			continue
-		var fingerprint := mesh_instance.mesh.resource_path
-		if fingerprint.is_empty():
-			fingerprint = "mesh_rid:%s" % str(mesh_instance.mesh.get_rid().get_id())
-		if not fingerprints.has(fingerprint):
-			fingerprints.append(fingerprint)
-	fingerprints.sort()
-	return "|".join(fingerprints)
+	return zone_residency._skinned_resource_fingerprint(branch)
 
 func _record_loading_metrics(metrics: Dictionary) -> void:
 	last_loading_metrics = metrics
@@ -1619,60 +1388,16 @@ func _cancel_owned_timers() -> void:
 	background_runtime_timer_pending = false
 
 func _quiesce_zone_runtime(root: Node) -> void:
-	for raw_player in root.find_children("*", "AnimationPlayer", true, false):
-		var animation_player := raw_player as AnimationPlayer
-		animation_player.stop(true)
-		animation_player.active = false
-	for raw_tree in root.find_children("*", "AnimationTree", true, false):
-		(raw_tree as AnimationTree).active = false
-	for raw_audio in root.find_children("*", "AudioStreamPlayer3D", true, false):
-		(raw_audio as AudioStreamPlayer3D).stop()
+	zone_residency._quiesce_zone_runtime(root)
 
 func _cache_route_zone(zone_id: String, root: Node3D, enemies: Array, signature: int, keep_visible: bool = false, disable_collision: bool = true, disable_process: bool = true) -> void:
-	if root == null or not is_instance_valid(root):
-		return
-	var existing = route_zone_cache.get(zone_id)
-	if existing != null and existing != root and is_instance_valid(existing):
-		_release_route_spatial_service(zone_id)
-		_retire_zone_root(existing)
-	_remove_root_from_route_cache(root)
-	root.visible = keep_visible
-	root.process_mode = Node.PROCESS_MODE_DISABLED if disable_process else Node.PROCESS_MODE_INHERIT
-	root.position = Vector3.ZERO if keep_visible else Vector3(0, -1000, 0)
-	root.set_meta("zone_resource_owner", "cached")
-	root.set_meta("zone_resource_id", zone_id)
-	var cached_collision_disabled := false
-	if keep_visible and disable_collision:
-		_set_zone_collision_enabled(root, false)
-		cached_collision_disabled = true
-	else:
-		# Moving the inactive zone away removes route interference while keeping
-		# its collision state intact. Re-enabling hundreds of cached colliders on
-		# the next arrival made warm transitions miss the browser budget.
-		cached_collision_disabled = false
-	root.set_meta("cached_collision_disabled", cached_collision_disabled)
-	root.set_meta("cached_process_disabled", disable_process)
-	route_zone_cache[zone_id] = root
-	route_enemy_cache[zone_id] = _valid_cached_enemies(enemies)
-	route_zone_signatures[zone_id] = signature
+	zone_residency._cache_route_zone(zone_id, root, enemies, signature, keep_visible, disable_collision, disable_process)
 
 func _cache_route_spatial_service(zone_id: String, service: Node) -> void:
-	if service == null or not is_instance_valid(service):
-		return
-	var existing: Node = route_spatial_cache.get(zone_id)
-	if existing != null and existing != service and is_instance_valid(existing):
-		existing.queue_free()
-	service.process_mode = Node.PROCESS_MODE_DISABLED
-	route_spatial_cache[zone_id] = service
+	zone_residency._cache_route_spatial_service(zone_id, service)
 
 func _release_route_spatial_service(zone_id: String) -> void:
-	var cached: Node = route_spatial_cache.get(zone_id)
-	route_spatial_cache.erase(zone_id)
-	if cached == null or not is_instance_valid(cached):
-		return
-	if cached == spatial_service or cached == greyfen_prewarm_spatial_service:
-		return
-	cached.queue_free()
+	zone_residency._release_route_spatial_service(zone_id, [spatial_service, greyfen_prewarm_spatial_service])
 
 func _release_active_spatial_service() -> void:
 	var current: Node = spatial_service
@@ -1693,84 +1418,22 @@ func _defer_cached_zone_collision_disable(zone_id: String) -> void:
 	)
 
 func _activate_cached_zone(zone_id: String) -> Node3D:
-	var cached_root = route_zone_cache.get(zone_id)
-	if cached_root == null or not is_instance_valid(cached_root):
-		return null
-	route_zone_cache.erase(zone_id)
-	cached_root.set_meta("zone_resource_owner", "active")
-	if bool(cached_root.get_meta("cached_process_disabled", true)):
-		cached_root.process_mode = Node.PROCESS_MODE_INHERIT
-	cached_root.position = Vector3.ZERO
-	if bool(cached_root.get_meta("cached_collision_disabled", false)):
-		_set_zone_collision_enabled(cached_root, true)
-	cached_root.set_meta("cached_collision_disabled", false)
-	cached_root.visible = true
-	return cached_root as Node3D
+	return zone_residency._activate_cached_zone(zone_id)
 
 func _remove_root_from_route_cache(root: Node) -> void:
-	for raw_id in route_zone_cache.keys().duplicate():
-		var id := str(raw_id)
-		if route_zone_cache.get(id) == root:
-			route_zone_cache.erase(id)
-			route_enemy_cache.erase(id)
-			route_zone_signatures.erase(id)
+	zone_residency._remove_root_from_route_cache(root)
 
 func _trim_route_zone_cache(preferred_ids: Array) -> void:
-	var retained: Array[String] = []
-	for raw_id in preferred_ids:
-		var id := str(raw_id)
-		if route_zone_cache.has(id) and not retained.has(id) and retained.size() < MAX_CACHED_ROUTE_ZONES:
-			retained.append(id)
-	for raw_id in route_zone_cache.keys().duplicate():
-		var id := str(raw_id)
-		if retained.has(id):
-			continue
-		var cached_root = route_zone_cache.get(id)
-		route_zone_cache.erase(id)
-		route_enemy_cache.erase(id)
-		route_zone_signatures.erase(id)
-		_release_route_spatial_service(id)
-		if is_instance_valid(cached_root):
-			_retire_zone_root(cached_root)
+	zone_residency._trim_route_zone_cache(preferred_ids)
 
 func _set_zone_collision_enabled(node: Node, enabled: bool) -> void:
-	var targets: Array = node.get_meta("zone_collision_targets", [])
-	if targets.is_empty():
-		targets = _collect_zone_collision_targets(node)
-		node.set_meta("zone_collision_targets", targets)
-	for target in targets:
-		if target == null or not is_instance_valid(target):
-			continue
-		_set_single_zone_collision_enabled(target, enabled)
+	zone_residency._set_zone_collision_enabled(node, enabled)
 
 func _collect_zone_collision_targets(root: Node) -> Array:
-	var targets: Array = []
-	var pending: Array[Node] = [root]
-	while not pending.is_empty():
-		var current: Node = pending.pop_back()
-		if current is NavigationRegion3D or current is CollisionObject3D:
-			targets.append(current)
-		for child in current.get_children():
-			pending.append(child)
-	return targets
+	return zone_residency._collect_zone_collision_targets(root)
 
 func _set_single_zone_collision_enabled(node: Node, enabled: bool) -> void:
-	if node is NavigationRegion3D:
-		(node as NavigationRegion3D).enabled = enabled
-	if node is CollisionObject3D:
-		var collision_object := node as CollisionObject3D
-		if not collision_object.has_meta("zone_collision_layer"):
-			collision_object.set_meta("zone_collision_layer", collision_object.collision_layer)
-			collision_object.set_meta("zone_collision_mask", collision_object.collision_mask)
-		collision_object.collision_layer = int(collision_object.get_meta("zone_collision_layer", 1)) if enabled else 0
-		collision_object.collision_mask = int(collision_object.get_meta("zone_collision_mask", 1)) if enabled else 0
-	if node is Area3D:
-		var area := node as Area3D
-		if not area.has_meta("zone_monitoring"):
-			area.set_meta("zone_monitoring", area.monitoring)
-			area.set_meta("zone_monitorable", area.monitorable)
-		area.monitoring = bool(area.get_meta("zone_monitoring", true)) if enabled else false
-		area.monitorable = bool(area.get_meta("zone_monitorable", true)) if enabled else false
+	zone_residency._set_single_zone_collision_enabled(node, enabled)
 
 func _schedule_zone_autosave() -> void:
 	var expected_zone: String = current_zone_id
@@ -1803,6 +1466,8 @@ func prepare_resource_shutdown() -> void:
 	if resource_shutdown_prepared:
 		return
 	resource_shutdown_prepared = true
+	dialogue_runtime_coordinator.release(player)
+	combat_vfx_coordinator.clear_oathfire_effects()
 	# Invalidate deferred frame continuations before releasing their scene-owned
 	# resources. A shutdown can otherwise leave a suspended GDScript state alive
 	# until process exit, even though the active route has already completed.
@@ -1811,12 +1476,14 @@ func prepare_resource_shutdown() -> void:
 	new_game_requested_while_preparing = false
 	startup_packs_waiting = false
 	opening_pack_waiting = false
+	opening_pack_mount_waiting = false
 	campaign_pack_waiting = false
 	opening_detail_pending = false
-	campaign_visual_prewarm_started = false
 	campaign_visual_prewarm_suspended = false
 	opening_detail_generation += 1
-	campaign_visual_prewarm_generation += 1
+	opening_boot_material_restore_generation += 1
+	opening_boot_material_restore_queue.clear()
+	_cancel_campaign_visual_prewarm()
 	_cancel_owned_timers()
 	if performance_budget_monitor != null:
 		performance_budget_monitor.suspend()
@@ -1847,24 +1514,7 @@ func finalize_resource_shutdown() -> void:
 	if camera_rig != null and is_instance_valid(camera_rig):
 		camera_rig.queue_free()
 	camera_rig = null
-	# Keep explicit ownership of every branch detached for shared skeletal
-	# resource anchoring. A detached branch is not guaranteed to be released by
-	# freeing its hidden owner during final tree teardown, so release the exact
-	# anchors first while their references are still known.
-	for raw_branch in skinned_resource_anchors.values():
-		var branch := raw_branch as Node
-		if branch != null and is_instance_valid(branch):
-			_release_zone_render_resources(branch)
-			branch.free()
-	skinned_resource_anchors.clear()
-	if retired_skinned_actor_pool != null and is_instance_valid(retired_skinned_actor_pool):
-		# This pool owns branches detached from retired zone roots. At this point
-		# prepare_resource_shutdown() has waited for every staged root to leave the
-		# renderer, so synchronous destruction is safe and prevents orphaned
-		# MeshInstance3D nodes from surviving outside the scene tree.
-		_release_zone_render_resources(retired_skinned_actor_pool)
-		retired_skinned_actor_pool.free()
-	retired_skinned_actor_pool = null
+	zone_residency.release_shared_anchors()
 	if asset_helper != null and asset_helper.has_method("clear_runtime_caches"):
 		asset_helper.clear_runtime_caches()
 	if world_materials != null and world_materials.has_method("clear_cache"):
@@ -1887,10 +1537,10 @@ func finalize_resource_shutdown() -> void:
 	visual_box_batch_data.clear()
 	terrain_patch_batch_data.clear()
 	house_batch_data.clear()
+	house_module_batch_data.clear()
 	material_cache.clear()
 	shared_box_mesh = null
-	retirement_material = null
-	retired_material_anchors.clear()
+	zone_residency.release_material_anchors()
 	# These nodes are global renderer/service owners rather than part of the
 	# retired zone hierarchy. Release them explicitly after staged scene disposal
 	# so a verifier or editor preview cannot leave their WorldEnvironment,
@@ -2039,6 +1689,7 @@ func _handle_interaction(area) -> void:
 		_handle_village_place(area.interaction_id)
 	elif area.interaction_type == "dialogue":
 		if area.interaction_id == "vargan_ledger_choice":
+			audio.play_event("record_page", 0.02)
 			quests.complete_evidence("main_blood_under_stone", "evidence_ledger_fragment")
 			quests.complete_objective("main_blood_under_stone", "recover_ledger")
 		var dialogue_data = dialogue.get_dialogue(area.dialogue_id)
@@ -2074,7 +1725,7 @@ func _handle_interaction(area) -> void:
 			dialogue_data = dialogue.get_dialogue(area.dialogue_id)
 			audio.set_music_state("shrine_anwen")
 			hud.toast("The cut bell rope runs beneath the graves. Anwen waits for proof.")
-			hud.set_guidance_hint("Inspect any two disturbed graves beside the chapel.", 6.0)
+			_show_current_objective_guidance(6.0)
 		if report_chosen and area.interaction_id == "sister_anwen":
 			audio.play_event("return_report", 0.02)
 			audio.play_voice("voice_sister_anwen_report_01")
@@ -2106,12 +1757,31 @@ func _handle_interaction(area) -> void:
 			return
 		if area.quest_id == "main_road_of_crows":
 			_handle_road_of_crows_clue(area)
+		elif area.interaction_id in ["sheepfold", "bandit_camp"]:
+			story_state.set_flag("black_dog_%s_inspected" % area.interaction_id, true)
+			_try_complete_black_dog_investigation()
+		elif area.interaction_id == "oren_charm_shrine":
+			story_state.set_flag("oren_charm_returned", true)
+			quests.complete_objective("side_childs_charm", "return_charm")
+		elif area.interaction_id.begins_with("memorial_candle_"):
+			var candle_name: String = str(area.interaction_id).trim_prefix("memorial_candle_")
+			story_state.set_flag("candle_%s_lit" % candle_name, true)
+			if bool(story_state.get_flag("candle_bram_lit", false)) and bool(story_state.get_flag("candle_sella_lit", false)) and bool(story_state.get_flag("candle_oren_lit", false)):
+				story_state.set_flag("three_candles_lit", true)
+			var candle_visual := area.get_node_or_null("MemorialCandleVisual") as Node3D
+			if candle_visual != null:
+				candle_visual.reparent(zone_root, true)
+				candle_visual.name = "LitMemorialCandle_%s" % candle_name
+				var flame := candle_visual.get_node_or_null("Flame") as MeshInstance3D
+				if flame != null:
+					flame.visible = true
+			quests.complete_objective("side_three_candles", "light_%s" % candle_name)
 		else:
 			quests.complete_objective(area.quest_id, area.objective_id)
 		if area.interaction_id == "tracks":
 			if quests.is_objective_done("main_road_of_crows", "fight_ghoulkin"):
 				hud.toast("The tracks change after the Ghoulkin falls: boots beside claws, both leading back toward Greyfen.")
-				hud.set_guidance_hint("Return to Greyfen. Report to Sister Anwen.", 5.5)
+				_show_current_objective_guidance(5.5)
 				audio.play_event("tracks_found", 0.02)
 				audio.play_voice("voice_player_return_report_01")
 				audio.set_music_state("return_report")
@@ -2129,14 +1799,16 @@ func _handle_interaction(area) -> void:
 			hud.toast("Oren's wooden crow has its name panel scratched away. Someone wanted the child forgotten.")
 		elif area.interaction_id == "chapel_names":
 			story_state.set_flag("chapel_names_read", true)
+			_try_complete_oren_thread_trace()
 			hud.toast("The chapel lists Bram and Sella. Oren's name was cut away, but the red thread still marks his place.")
-			hud.set_guidance_hint("Return to Wychwood. Speak Oren's name at the ritual stones.", 6.0)
+			_show_current_objective_guidance(6.0)
 			audio.play_event("reveal", 0.02)
 		elif area.interaction_id == "ritual_stones":
 			quests.complete_objective("main_teeth_in_rain", "name_the_dead")
 			story_state.set_flag("oren_name_spoken", true)
+			_try_complete_oren_thread_trace()
 			hud.toast("Kael speaks Oren's name. Something deeper in Wychwood answers.")
-			hud.set_guidance_hint("The deeper road is open. Find what carried Oren's memory.", 6.0)
+			_show_current_objective_guidance(6.0)
 			audio.play_event("reveal", 0.03)
 			if current_zone_id == "wychwood" and not _has_interactable("deep_wood_gate"):
 				var deeper_gate = _make_zone_gate("Enter deeper Wychwood", Vector3(10.8, 0, -13.2), "deep_wood", Vector3(0, 1, 12))
@@ -2149,25 +1821,42 @@ func _handle_interaction(area) -> void:
 		elif area.interaction_id == "massacre_iron":
 			quests.complete_objective("side_iron_remembers", "recover_iron")
 			hud.toast("The iron bears Vargan hammer marks beneath the soot.")
+		elif area.interaction_id == "rooks_false_road":
+			hud.toast("Rook's older road is still here. The newer waystone hides where the refugees were sent.")
+		elif area.interaction_id == "hidden_ash_measure":
+			story_state.set_flag("ash_measure_recovered", true)
+			hud.toast("The hidden measure weighs Greyfen's harvest against missing refugee wagons.")
+		elif area.interaction_id == "deserters_muster":
+			story_state.set_flag("deserters_muster_read", true)
+			hud.toast("The deserters signed their refusal beneath an order to erase the refugee names.")
 		elif area.interaction_id == "empty_grave_tracks":
 			quests.complete_objective("side_empty_grave", "follow_empty_grave")
+			if current_zone_id == "greyfen":
+				GreyfenSection.new().publish_returned_soldier(ZoneBuildContext.new(self, "greyfen"))
 			hud.toast("Bare footprints leave the grave and stop beside the old road.")
-			hud.set_guidance_hint("A returned soldier waits near Greyfen's eastern lane.", 5.0)
+			_show_current_objective_guidance(5.0)
+		elif area.interaction_id == "oren_charm_shrine":
+			hud.toast("Oren's name has a place now. The red thread no longer marks an absence.")
+		elif area.interaction_id.begins_with("memorial_candle_"):
+			hud.toast("A candle burns for %s. The road keeps a name." % area.interaction_id.trim_prefix("memorial_candle_").capitalize())
 		elif area.interaction_id == "bandit_camp":
 			hud.toast("Boot prints. Rope. A child's torn ribbon. Not a dog's work.")
+		elif area.interaction_id == "sheepfold":
+			hud.toast("Human boot prints leave the fold beside smaller paw marks. Follow both into Wychwood.")
 		elif area.interaction_id == "bitter_roots":
 			quests.complete_objective("side_bitter_roots", "collect_roots")
 		elif area.interaction_id == "sacrifice_roots":
 			hud.toast("The roots drink from old blood. Mira knew this place.")
 		elif area.interaction_id == "post_victory_token":
 			story_state.set_flag("road_token_recovered", true)
+			_try_complete_oren_thread_trace()
 			hud.toast("Oren's token is complete. Vargan binding wire is wound through the scratched name.")
-			hud.set_guidance_hint("Return to Greyfen. Decide who receives the token.", 6.0)
+			_show_current_objective_guidance(6.0)
 			audio.play_event("reveal", 0.02)
 		elif area.interaction_id == "chapel_door":
 			story_state.set_flag("crow_chapel_opened", true)
 			hud.toast("The chapel seal yields. The Crow Shrine inside is still bound to the erased names.")
-			hud.set_guidance_hint("Return to the shrine and decide what should happen to the covenant.", 6.0)
+			_show_current_objective_guidance(6.0)
 			_spawn_crow_shrine_choice()
 			_ensure_bell_eater()
 		elif area.interaction_id.begins_with("grave_"):
@@ -2181,6 +1870,8 @@ func _handle_interaction(area) -> void:
 				"vargan_gate_notice": hud.toast("The road was not lost. It was closed by order.")
 				"vargan_iron_binding": hud.toast("Iron wire, blackened at the twist. The same work as Oren's token.")
 		_mark_interaction_removed(area)
+		if area.interaction_id.begins_with("memorial_candle_"):
+			area.queue_free()
 		active_interactable = null
 		hud.set_prompt("")
 		area.queue_free()
@@ -2245,20 +1936,21 @@ func _handle_road_of_crows_clue(area) -> void:
 		"oren_token":
 			quests.complete_evidence("main_road_of_crows", "oren")
 			story_state.set_flag("road_evidence_oren", true)
+			_try_complete_oren_thread_trace()
 		"claw_marks":
 			quests.complete_evidence("main_road_of_crows", "vargan_wire")
 			story_state.set_flag("road_evidence_vargan_wire", true)
 		"tracks":
 			quests.complete_evidence("main_road_of_crows", "drag_marks")
 			story_state.set_flag("road_evidence_drag_marks", true)
-			if quests.is_objective_done("main_road_of_crows", "fight_ghoulkin"):
-				for evidence_id in ["bram", "sella", "oren", "vargan_wire"]:
-					quests.complete_evidence("main_road_of_crows", evidence_id)
 	if _road_evidence_count() >= 5 and not bool(story_state.get_flag("all_road_evidence", false)):
 		story_state.set_flag("all_road_evidence", true)
-		_make_all_evidence_safe_edge()
-		hud.toast("Every clue agrees: the pack followed the names, not the food. A safer edge of the clearing reveals itself.")
-		hud.set_guidance_hint("Use the marked edge when the creatures emerge.", 5.0)
+		if quests.is_objective_done("main_road_of_crows", "fight_ghoulkin"):
+			hud.toast("Every clue agrees: the pack followed the names, not the food.")
+		else:
+			_make_all_evidence_safe_edge()
+			hud.toast("Every clue agrees: the pack followed the names, not the food. A safer edge of the clearing reveals itself.")
+			hud.set_guidance_hint("Use the marked edge when the creatures emerge.", 5.0)
 
 func _road_evidence_count() -> int:
 	var count := 0
@@ -2333,7 +2025,20 @@ func _spawn_crow_shrine_choice() -> void:
 		return
 	if zone_root.find_child("crow_shrine_choice", true, false) != null:
 		return
-	_make_named_interactable("crow_shrine_choice", "dialogue", "Choose the Crow Shrine's fate", Vector3(6.5,0,-7.5), Color(0.3,0.38,0.3), Vector3(0.45,0.45,0.45))
+	_make_named_interactable("crow_shrine_choice", "dialogue", "Choose the Crow Shrine's fate", CemeterySection.CROW_SHRINE_INTERACTION_STAGE, Color(0.3,0.38,0.3), Vector3(0.45,0.45,0.45))
+
+func _restore_greyfen_cemetery_state() -> void:
+	if not quests.is_active("main_bell_beneath_greyfen"):
+		# Shrine choice completes the quest, not the undefeated encounter.
+		if bool(story_state.get_flag("crow_chapel_opened", false)):
+			_ensure_bell_eater()
+		return
+	_relocate_anwen_to_cemetery()
+	if _crow_shrine_choice_ready():
+		_spawn_crow_shrine_choice()
+		_ensure_bell_eater()
+	else:
+		_ensure_cemetery_ambush()
 
 func _relocate_anwen_to_cemetery() -> void:
 	if zone_root == null:
@@ -2341,7 +2046,7 @@ func _relocate_anwen_to_cemetery() -> void:
 	var anwen = zone_root.find_child("sister_anwen", true, false)
 	if anwen == null:
 		return
-	var requested_position := Vector3(11.0, 0.0, 4.8)
+	var requested_position: Vector3 = CemeterySection.ANWEN_CEMETERY_STAGE
 	var safe_position: Vector3 = Vector3(spatial_service.validate_position(requested_position, 0.85, spatial_service.bank_for(requested_position)))
 	# This is an authored flat cemetery stage. A generic downward ray can hit
 	# the nearby wall/roof collision and float Anwen above the graves.
@@ -2368,6 +2073,8 @@ func _handle_dialogue_action(action: Dictionary) -> void:
 		return
 	if type == "start_quest":
 		quests.start_quest(action.get("quest", ""))
+		if str(action.get("quest", "")) == "side_childs_charm":
+			_try_complete_oren_thread_trace(false)
 		if action.get("quest", "") == "main_road_of_crows":
 			audio.play_voice("voice_player_accept_contract_01")
 	elif type == "complete_objective":
@@ -2379,7 +2086,7 @@ func _handle_dialogue_action(action: Dictionary) -> void:
 				_make_clue("chapel_names", "Read the erased names in the chapel", Vector3(15.0,0,8.2), "main_teeth_in_rain", "read_chapel_names", Color(0.44,0.39,0.31))
 		if action.get("quest", "") == "main_road_of_crows" and action.get("objective", "") == "speak_anwen":
 			hud.show_status_cue("Road of Crows updated", "item")
-			hud.set_guidance_hint("Follow the old road: cart, clawed mud, black feathers.", 6.0)
+			_show_current_objective_guidance(6.0)
 	elif type == "give_ingredients":
 		inventory.add_ingredients(action.get("items", {}))
 		for id in action.get("sets_flags", {}):
@@ -2421,28 +2128,36 @@ func _handle_dialogue_action(action: Dictionary) -> void:
 		hud.toast(str(action.get("result", "Your choice will be remembered.")))
 		if action.get("sets_flags", {}).has("crow_shrine_state"):
 			hud.show_status_cue("The covenant changes", "victory")
-			hud.set_guidance_hint("Speak with Mira. Ask what the dead remember.", 6.0)
+			_show_current_objective_guidance(6.0)
 			if active_interactable != null and str(active_interactable.get("interaction_id")) == "crow_shrine_choice":
 				_mark_interaction_removed(active_interactable)
 				active_interactable.queue_free()
 				active_interactable = null
 		elif action.get("sets_flags", {}).has("bog_core_fate"):
 			hud.show_status_cue("Memory given a fate", "victory")
-			hud.set_guidance_hint("Act One complete. The recovered names point deeper into Greyfen.", 6.0)
+			_show_current_objective_guidance(6.0)
 			if active_interactable != null and str(active_interactable.get("interaction_id")) == "bog_core_choice":
 				_mark_interaction_removed(active_interactable)
 				active_interactable.queue_free()
 				active_interactable = null
 		elif action.get("sets_flags", {}).has("names_policy"):
 			hud.show_status_cue("The names have a new public life", "victory")
-			hud.set_guidance_hint("Follow the ash road to the old mill.", 6.0)
+			_show_current_objective_guidance(6.0)
 			_consume_story_choice_interactable("names_decision")
 		elif action.get("sets_flags", {}).has("mill_fate"):
 			hud.show_status_cue("The mill's record is settled", "victory")
-			hud.set_guidance_hint("Find Captain Senn on the bandit road.", 6.0)
+			_show_current_objective_guidance(6.0)
 			_consume_story_choice_interactable("miller_record")
+		elif action.get("sets_flags", {}).has("senn_fate"):
+			if not StoryActorPresence.remains("captain_senn", str(story_state.get_flag("senn_fate", ""))):
+				_consume_story_choice_interactable("captain_senn")
+		elif action.get("sets_flags", {}).has("confession_method") and current_zone_id == "assembly":
+			if not _has_interactable("gate_hart_glade"):
+				_make_zone_gate("Walk the reopened road", Vector3(7, 0, -14), "hart_glade", Vector3(0, 1, 12))
+			_show_current_objective_guidance(6.0)
 		if action.get("sets_flags", {}).has("halvern_fate"):
 			var halvern_outcome := str(action["sets_flags"]["halvern_fate"])
+			_publish_halvern_exit()
 			for boss in active_enemies:
 				if not is_instance_valid(boss) or boss.enemy_id != "halvern_boss":
 					continue
@@ -2450,11 +2165,13 @@ func _handle_dialogue_action(action: Dictionary) -> void:
 				if controller != null and controller.has_method("resolve_peaceful"):
 					controller.resolve_peaceful(halvern_outcome)
 				break
+			if not StoryActorPresence.remains("halvern", halvern_outcome):
+				_consume_story_choice_interactable("halvern")
 		if str(action.get("quest", "")) == "main_blood_under_stone" and str(action.get("objective", "")) == "ledger_choice":
 			story_state.set_flag("vargan_ledger_found", true)
 			story_state.set_flag("vargan_ledger_choice_made", true)
 			story_state.set_flag("record_hall_unlocked", true)
-			hud.set_guidance_hint("The record hall is no longer empty. Stand ready.", 5.0)
+			_show_current_objective_guidance(5.0)
 	elif type == "ending":
 		_complete_ending(action.get("ending", "expose"))
 		return
@@ -2463,8 +2180,37 @@ func _handle_dialogue_action(action: Dictionary) -> void:
 	get_tree().paused = false
 	hud.hide_menus()
 	_refresh_tracker()
-	if current_zone_id != "":
+	# Dialogue choices usually mutate state that is already reflected in-place.
+	# Rebuilding the same zone for those actions creates an avoidable Web
+	# lifecycle handoff and can leave control pending while the retired root is
+	# still being collected. Only quest starts and objective completions that can
+	# add gated world content need a composition rebuild.
+	var refresh_zone_after_action := _dialogue_action_requires_zone_rebuild(action)
+	if refresh_zone_after_action and current_zone_id != "":
 		_load_zone(current_zone_id, player.global_position)
+
+func _dialogue_action_requires_zone_rebuild(action: Dictionary) -> bool:
+	var action_type := str(action.get("type", ""))
+	if action_type == "story_choice":
+		# The ledger decision changes the active Record Hall composition: the
+		# haunting and its post-choice handoff are authored by the zone builder.
+		# Rebuild this one stateful choice so the new encounter appears without
+		# requiring the player to leave and re-enter the hall.
+		return str(action.get("quest", "")) == "main_blood_under_stone" \
+			and str(action.get("objective", "")) == "ledger_choice"
+	if action_type in ["give_ingredients", "resolve_side_quest"]:
+		return false
+	if action_type == "complete_objective":
+		# These two opening interactions update their visible state directly.
+		# Rebuilding them would retire the active Greyfen root for no spatial gain.
+		var quest_id := str(action.get("quest", ""))
+		var objective_id := str(action.get("objective", ""))
+		if quest_id == "main_road_of_crows" and objective_id == "speak_anwen":
+			return false
+		if quest_id == "main_teeth_in_rain" and objective_id == "speak_mira":
+			return false
+		return true
+	return action_type == "start_quest"
 
 func _dialogue_action_available(action: Dictionary) -> bool:
 	var type := str(action.get("type", ""))
@@ -2540,11 +2286,7 @@ func _on_launch_accepted() -> void:
 		call_deferred("_wait_for_startup_packs_then_prewarm")
 		return
 	if not greyfen_prewarm_started and not game_started:
-		greyfen_prewarm_started = true
-		# Do not include the heavy Greyfen build in Godot's initial Web
-		# Engine.startGame promise. The HTML shell and real menu are already
-		# visible; warm the route on the first deferred frame instead.
-		call_deferred("_prewarm_greyfen_after_menu_frame")
+		_begin_opening_prewarm()
 
 func _on_startup_pack_ready(_pack_id: String) -> void:
 	if game_started or runtime_packs == null:
@@ -2586,9 +2328,23 @@ func _begin_opening_prewarm() -> void:
 	if game_started or greyfen_prewarm_started:
 		return
 	greyfen_prewarm_started = true
-	# Wychwood and cemetery remain streamed. Their optional art pack is requested
-	# by the background lifecycle instead of competing with Greyfen's first
-	# controllable frame.
+	# Web mounts the opening pack after first control. These assets are requested
+	# by gameplay_base once that pack is ready; requesting them here fails boot.
+	if not OS.has_feature("web") and DisplayServer.get_name().to_lower() != "headless":
+		world_materials.prewarm_surfaces(["forest_ground", "cobblestone", "wet_mud", "medieval_brick", "plaster", "timber", "roof_tiles"], str(settings.settings.get("quality_preset", "balanced")))
+		var props_status: Error = asset_helper.request_resource_paths(CharacterPresentation.OPENING_OCCUPATION_PROP_PATHS)
+		if props_status != OK:
+			_opening_prepare_failed("Greyfen's opening props could not be prepared. Select New Game to retry.")
+			return
+		var named_roles: Array[String] = []
+		for actor_id in OPENING_NAMED_ACTOR_IDS:
+			named_roles.append(_role_for_interactable(actor_id))
+		var actors_status: Error = asset_helper.request_role_resources(named_roles)
+		if actors_status != OK:
+			_opening_prepare_failed("Greyfen's opening characters could not be prepared. Select New Game to retry.")
+			return
+	# Opening resources have mounted before this point on Web. Later character,
+	# monster and campaign packs remain independent of menu readiness.
 	print("LOADING: Greyfen prewarm begin")
 	call_deferred("_prewarm_greyfen_after_menu_frame")
 
@@ -2600,6 +2356,40 @@ func _opening_prepare_failed(message: String) -> void:
 		hud.set_new_game_ready(true)
 	if hud != null and hud.has_method("set_new_game_status"):
 		hud.set_new_game_status(message)
+	if hud != null and hud.has_method("set_boot_shell_cover_active"):
+		hud.set_boot_shell_cover_active(false)
+	_publish_web_opening_state("failed", message)
+
+func _abort_opening_prewarm(prewarm_root: Node3D, prewarm_service: Node, message: String) -> void:
+	opening_boot_material_restore_generation += 1
+	opening_boot_material_restore_queue.clear()
+	opening_well_mesh = null
+	if prewarm_root != null and is_instance_valid(prewarm_root):
+		_retire_zone_root(zone_root)
+	if zone_root == prewarm_root:
+		zone_root = null
+	if prewarm_service != null and is_instance_valid(prewarm_service):
+		prewarm_service.queue_free()
+	if spatial_service == prewarm_service:
+		spatial_service = null
+	greyfen_prewarm_spatial_service = null
+	if player != null and is_instance_valid(player):
+		player.queue_free()
+	player = null
+	if camera_rig != null and is_instance_valid(camera_rig):
+		camera_rig.queue_free()
+	camera_rig = null
+	_opening_prepare_failed(message)
+
+func _publish_web_opening_state(state: String, message: String = "") -> void:
+	if not OS.has_feature("web"):
+		return
+	var payload := JSON.stringify({
+		"state": state,
+		"message": message,
+		"timestamp_ms": Time.get_ticks_msec(),
+	})
+	JavaScriptBridge.eval("window.__ashenOathOpeningState = %s;" % payload, false)
 
 func _prewarm_greyfen_after_menu_frame() -> void:
 	# Start immediately after the launch shell is accepted. Deferring the first
@@ -2609,6 +2399,9 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 	# later New Game action deterministic without adding a second loading stall.
 	if game_started or zone_root != null or route_zone_cache.has("greyfen"):
 		return
+	# The opening_boot composition keeps architecture and crowd work deferred.
+	# Native can render the road and river under the shell; Web mounts their
+	# texture pack after control, so its detail stages retain that ownership.
 	var prewarm_started := Time.get_ticks_msec()
 	print("LOADING: Greyfen prewarm build_begin")
 	var phase_started := prewarm_started
@@ -2619,6 +2412,7 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 	spatial_service = prewarm_service
 	zone_root = Node3D.new()
 	zone_root.name = "greyfen"
+	zone_root.process_mode = Node.PROCESS_MODE_PAUSABLE
 	add_child(zone_root)
 	runtime_light_count = 0
 	tree_batch_data.clear()
@@ -2627,7 +2421,17 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 	visual_box_batch_data.clear()
 	terrain_patch_batch_data.clear()
 	house_batch_data.clear()
+	house_module_batch_data.clear()
 	environment_batches_flushed = false
+	var authored_layers := ZoneSceneCatalog.attach("greyfen", zone_root, ["gameplay"])
+	if not bool(authored_layers.get("ok", false)):
+		push_error("Greyfen authored core failed during prewarm: %s" % ", ".join(authored_layers.get("errors", [])))
+		_retire_zone_root(zone_root)
+		zone_root = null
+		prewarm_service.queue_free()
+		spatial_service = null
+		_opening_prepare_failed("Greyfen could not be prepared. Select New Game to retry.")
+		return
 	var prewarm_build := ZoneCompositionRouter.build_core(self, "greyfen", "opening_boot")
 	var build_ms := Time.get_ticks_msec() - phase_started
 	print("LOADING: Greyfen prewarm build_complete ms=%d ok=%s" % [build_ms, bool(prewarm_build.get("ok", false))])
@@ -2641,6 +2445,19 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 		return
 	var prewarm_root: Node3D = zone_root
 	phase_started = Time.get_ticks_msec()
+	if not OS.has_feature("web"):
+		for foundation_stage in ["opening_river_visual", "opening_terrain"]:
+			var foundation_result := ZoneCompositionRouter.build_core_detail_stage(self, "greyfen", foundation_stage)
+			if not bool(foundation_result.get("ok", false)):
+				push_error("Greyfen foundation prewarm failed at %s" % foundation_stage)
+				_retire_zone_root(prewarm_root)
+				zone_root = null
+				prewarm_service.queue_free()
+				spatial_service = null
+				_opening_prepare_failed("Greyfen could not be prepared. Select New Game to retry.")
+				return
+	for visual_bucket in range(OPENING_GAMEPLAY_VISUAL_BUCKETS):
+		ZoneCompositionRouter.build_core_detail_stage(self, "greyfen", "gameplay_visual_%d" % visual_bucket)
 	_flush_environment_batches()
 	_add_visual_100_layer("greyfen")
 	_apply_first_route_materials(zone_root)
@@ -2661,19 +2478,92 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 	# the same skinned materials and camera path used after New Game.
 	player.visible = true
 	player.set_transition_locked(true)
-	player.process_mode = Node.PROCESS_MODE_INHERIT
+	player.process_mode = Node.PROCESS_MODE_PAUSABLE
 	camera_rig.process_mode = Node.PROCESS_MODE_INHERIT
 	var gameplay_camera := camera_rig.find_child("Camera3D", true, false) as Camera3D
 	if gameplay_camera != null:
 		gameplay_camera.current = true
 	zone_root.visible = true
-	zone_root.process_mode = Node.PROCESS_MODE_INHERIT
+	zone_root.process_mode = Node.PROCESS_MODE_PAUSABLE
 	zone_root.position = Vector3.ZERO
-	# Publish the prepared scene as soon as its gameplay resources are valid. Do
-	# not await a forced full-scene render here: on Web/ANGLE that single frame
-	# can monopolize the browser for 18+ seconds. The menu continues rendering
-	# this visible, paused cache behind its controls, so shader/material work is
-	# amortized over ordinary menu frames instead of becoming a New Game gate.
+	# `_load_zone()` applies this profile immediately before the first gameplay
+	# draw. Render the same environment here under the HTML shell so WebGL does
+	# not compile Greyfen's real sky and lighting only after New Game is clicked.
+	if visual_director != null:
+		visual_director.apply_zone("greyfen", prewarm_root)
+		visual_director.set_opening_boot_budget(true)
+		prewarm_root.set_meta("opening_visual_profile_prewarmed", true)
+	_apply_web_opening_boot_material_budget(prewarm_root, player)
+	var was_paused := get_tree().paused
+	# A constructed scene is not render-ready: Compatibility compiles material
+	# programs synchronously on first use. Keep queued clicks pending until the
+	# real camera has rendered, rather than reporting that cost as warm travel.
+	if DisplayServer.get_name().to_lower() != "headless":
+		if hud != null and hud.has_method("set_new_game_status"):
+			hud.set_new_game_status("Preparing Greyfen's first view...")
+		# The menu pauses the tree, but the first gameplay frame evaluates Kael's
+		# skeleton, animation driver, camera, and physics together. Give that exact
+		# transition-locked state one covered frame so WebGL does not compile it
+		# after the player clicks New Game.
+		get_tree().paused = false
+		await get_tree().process_frame
+		await RenderingServer.frame_post_draw
+		if resource_shutdown_prepared or not is_instance_valid(prewarm_root):
+			get_tree().paused = was_paused
+			return
+		prewarm_root.set_meta("opening_first_frame_rendered", true)
+		prewarm_root.set_meta("opening_unpaused_frame_prewarmed", true)
+	# Complete first-use mesh and texture decoding under the menu cover. Doing
+	# this after control is handed over causes visible 40-70 ms hydration frames.
+	get_tree().paused = false
+	opening_well_mesh = load("res://assets_external/environment/village/GreyfenWell_Authored.res") as ArrayMesh
+	if opening_well_mesh == null or opening_well_mesh.get_surface_count() != 6:
+		get_tree().paused = was_paused
+		_abort_opening_prewarm(prewarm_root, prewarm_service, "Greyfen's authored well could not be prepared. Select New Game to retry.")
+		return
+	if DisplayServer.get_name().to_lower() != "headless":
+		var resource_deadline := prewarm_started + 12000
+		while Time.get_ticks_msec() < resource_deadline:
+			var surface_status: Error = world_materials.poll_prewarm()
+			var actor_status: Error = asset_helper.poll_role_resources()
+			if surface_status not in [OK, ERR_BUSY] or actor_status not in [OK, ERR_BUSY]:
+				get_tree().paused = was_paused
+				_abort_opening_prewarm(prewarm_root, prewarm_service, "Greyfen's authored resources could not be prepared. Select New Game to retry.")
+				return
+			if surface_status == OK and actor_status == OK:
+				break
+			await get_tree().process_frame
+	if DisplayServer.get_name().to_lower() != "headless" and (world_materials.poll_prewarm() != OK or asset_helper.poll_role_resources() != OK):
+		get_tree().paused = was_paused
+		_abort_opening_prewarm(prewarm_root, prewarm_service, "Greyfen's authored resources took too long to prepare. Select New Game to retry.")
+		return
+	if DisplayServer.get_name().to_lower() != "headless":
+		var covered_stages: Array[String] = ["gameplay_population", "gameplay_crowd_0", "gameplay_crowd_1"]
+		if not OS.has_feature("web"):
+			covered_stages.append_array([
+				"gameplay_place_0", "gameplay_place_1", "gameplay_place_2",
+				"gameplay_place_3", "gameplay_place_4", "opening_lighting",
+				"gameplay_common_table", "gameplay_barrel_board",
+				"gameplay_crowd_2", "gameplay_crowd_3", "gameplay_crowd_4",
+				"gameplay_crowd_5", "gameplay_crowd_6", "gameplay_crowd_7",
+				"gameplay_crowd_8", "gameplay_crowd_9",
+			])
+			covered_stages.append_array([
+				"village_house_0", "village_house_1", "village_house_2", "village_house_3",
+				"village_architectural_details_0", "village_architectural_details_1",
+				"village_architectural_details_2", "village_architectural_details_3",
+				"village_architectural_details_4",
+			])
+		for covered_stage in covered_stages:
+			var covered_result := ZoneCompositionRouter.build_core_detail_stage(self, "greyfen", covered_stage)
+			if not bool(covered_result.get("ok", false)):
+				get_tree().paused = was_paused
+				_abort_opening_prewarm(prewarm_root, prewarm_service, "Greyfen's opening scene could not be prepared. Select New Game to retry.")
+				return
+		_flush_environment_batches()
+		_clear_environment_batch_buffers()
+		await RenderingServer.frame_post_draw
+	get_tree().paused = was_paused
 	# New Game can activate Greyfen while this menu-covered prewarm is still
 	# finishing. Never let the background task overwrite the active zone or its
 	# spatial service after that handoff.
@@ -2699,6 +2589,15 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 		hud.set_new_game_ready(true)
 	if hud != null and hud.has_method("set_new_game_status"):
 		hud.set_new_game_status("Greyfen is ready.")
+	if hud != null and hud.has_method("set_boot_shell_cover_active"):
+		hud.set_boot_shell_cover_active(false)
+	# Keep the HTML shell over the canvas until the prepared Godot menu has
+	# completed one real draw. Publishing readiness in the same tick as the
+	# reveal lets the shell disappear onto an uncompiled black frame in WebGL.
+	await RenderingServer.frame_post_draw
+	await get_tree().process_frame
+	_publish_web_opening_state("ready", "Greyfen is ready.")
+	print("LOADING: opening_menu_render_ready")
 	print("LOADING: Greyfen prewarmed total=%dms build=%dms world=%dms player=%dms" % [
 		Time.get_ticks_msec() - prewarm_started, build_ms, world_finalize_ms, player_ms,
 	])
@@ -2706,15 +2605,103 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 		get_tree().paused = false
 		_start_new_game_world()
 
+func _apply_web_opening_boot_material_budget(world_root: Node, player_root: Node, force_for_test := false) -> void:
+	opening_boot_material_restore_generation += 1
+	opening_boot_material_restore_queue.clear()
+	if not force_for_test and not OS.has_feature("web"):
+		return
+	# Compatibility/ANGLE blocks the main thread while each lit spatial shader
+	# variant reports link completion. The menu-covered boot frame needs only the
+	# authored albedo and silhouette; restore the original materials after input
+	# is live, one renderer instance per frame.
+	for owner in [player_root, world_root]:
+		if owner == null or not is_instance_valid(owner):
+			continue
+		if owner is GeometryInstance3D:
+			_apply_opening_boot_material(owner as GeometryInstance3D)
+		for descendant in owner.find_children("*", "", true, false):
+			if descendant is GeometryInstance3D:
+				_apply_opening_boot_material(descendant as GeometryInstance3D)
+	if world_root != null and is_instance_valid(world_root):
+		world_root.set_meta("opening_boot_material_budget", true)
+		world_root.set_meta("opening_boot_material_count", opening_boot_material_restore_queue.size())
+
+func _apply_opening_boot_material(geometry: GeometryInstance3D) -> void:
+	if geometry == null or not is_instance_valid(geometry) or not geometry.visible:
+		return
+	var source_material: Material = geometry.material_override
+	if source_material == null and geometry is MeshInstance3D:
+		var mesh_instance := geometry as MeshInstance3D
+		if mesh_instance.mesh != null and mesh_instance.mesh.get_surface_count() > 0:
+			source_material = mesh_instance.get_active_material(0)
+	elif source_material == null and geometry is MultiMeshInstance3D:
+		var multimesh_instance := geometry as MultiMeshInstance3D
+		if multimesh_instance.multimesh != null and multimesh_instance.multimesh.mesh != null \
+				and multimesh_instance.multimesh.mesh.get_surface_count() > 0:
+			source_material = multimesh_instance.multimesh.mesh.surface_get_material(0)
+	if source_material == null:
+		return
+	var boot_material := StandardMaterial3D.new()
+	boot_material.resource_name = "OpeningBootUnshaded"
+	boot_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	boot_material.disable_receive_shadows = true
+	if source_material is BaseMaterial3D:
+		var source_base := source_material as BaseMaterial3D
+		var boot_color := source_base.albedo_color
+		boot_color.a = 1.0
+		boot_material.albedo_color = boot_color
+	# The covered boot frame needs one shader family, not every authored texture,
+	# transparency, culling, and vertex-color combination. Original materials are
+	# restored progressively after input is live.
+	boot_material.albedo_texture = null
+	boot_material.transparency = BaseMaterial3D.TRANSPARENCY_DISABLED
+	boot_material.cull_mode = BaseMaterial3D.CULL_BACK
+	boot_material.vertex_color_use_as_albedo = false
+	opening_boot_material_restore_queue.append({
+		"node": geometry,
+		"material_override": geometry.material_override,
+		"cast_shadow": geometry.cast_shadow,
+	})
+	geometry.material_override = boot_material
+	geometry.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+
+func _restore_opening_boot_material_entry(entry: Dictionary) -> void:
+	var geometry := entry.get("node") as GeometryInstance3D
+	if geometry == null or not is_instance_valid(geometry):
+		return
+	geometry.material_override = entry.get("material_override") as Material
+	geometry.cast_shadow = int(entry.get("cast_shadow", GeometryInstance3D.SHADOW_CASTING_SETTING_ON))
+
+func _restore_opening_boot_materials(generation: int) -> void:
+	var settle_timer := _create_owned_timer(OPENING_BOOT_MATERIAL_RESTORE_DELAY_SECONDS, true)
+	await settle_timer.timeout
+	while generation == opening_boot_material_restore_generation \
+			and not resource_shutdown_prepared \
+			and game_started \
+			and current_zone_id == "greyfen" \
+			and not opening_boot_material_restore_queue.is_empty():
+		var entry: Dictionary = opening_boot_material_restore_queue.pop_front()
+		_restore_opening_boot_material_entry(entry)
+		await get_tree().process_frame
+		var interval_timer := _create_owned_timer(OPENING_BOOT_MATERIAL_RESTORE_INTERVAL_SECONDS, true)
+		await interval_timer.timeout
+	if generation == opening_boot_material_restore_generation and opening_boot_material_restore_queue.is_empty():
+		if visual_director != null and visual_director.is_opening_boot_budget_active():
+			visual_director.set_opening_boot_budget(false)
+		if zone_root != null and is_instance_valid(zone_root):
+			zone_root.set_meta("opening_boot_materials_restored", true)
+		print("LOADING: opening_boot_materials_restored")
+
 func _run_opening_detail_stage(generation: int) -> void:
 	if resource_shutdown_prepared or generation != opening_detail_generation or not opening_detail_pending:
 		return
+	var requested_stage_index := opening_detail_stage_index
 	# call_deferred only queues another idle callback; several callbacks can still
 	# drain in one browser turn. Let the playable scene settle for a short idle
 	# window first, then yield a real frame between every decoration chunk so the
 	# browser can paint and accept movement before late scenery compiles.
 	var stage := OPENING_DETAIL_STAGES[opening_detail_stage_index] if opening_detail_stage_index < OPENING_DETAIL_STAGES.size() else ""
-	if stage == "gameplay":
+	if stage == "gameplay_base":
 		var gameplay_timer := _create_owned_timer(OPENING_GAMEPLAY_HYDRATE_DELAY_SECONDS, true)
 		await gameplay_timer.timeout
 	elif opening_detail_stage_index == 0:
@@ -2722,20 +2709,32 @@ func _run_opening_detail_stage(generation: int) -> void:
 		await initial_delay.timeout
 	else:
 		await get_tree().process_frame
-		var stage_delay := _create_owned_timer(0.1, true)
+		var stage_delay := _create_owned_timer(OPENING_DETAIL_STAGE_DELAY_SECONDS, true)
 		await stage_delay.timeout
 	if resource_shutdown_prepared or generation != opening_detail_generation or not opening_detail_pending:
 		return
 	if not game_started or current_zone_id != "greyfen" or zone_root == null or not is_instance_valid(zone_root):
 		opening_detail_pending = false
 		return
-	# Optional scenery should never compete with the first controllable view or
-	# with a player who is still reading the spawn composition. Wait until Kael
-	# has actually left the opening staging area, then build one small chunk at a
-	# time while the route is in use.
-	if player == null or not is_instance_valid(player) or player.global_position.distance_to(Vector3(0.0, 0.0, 9.8)) < OPENING_DETAIL_MIN_PLAYER_DISTANCE:
+	# First-hour landmarks belong to the active settlement, not a quest reward.
+	# Publish during idle windows even at spawn; the stage/frame budget above
+	# still separates work from the initial handoff and from moving actors.
+	if player == null or not is_instance_valid(player):
 		var retry_timer := _create_owned_timer(OPENING_DETAIL_RETRY_SECONDS, true)
 		await retry_timer.timeout
+		if generation == opening_detail_generation and opening_detail_pending:
+			call_deferred("_run_opening_detail_stage", generation)
+		return
+	# Every deferred visual/detail stage may reference opening-pack resources.
+	# Wait for the verified post-control mount instead of silently constructing
+	# fallback presentation from the root PCK.
+	if OS.has_feature("web") and runtime_packs != null and not runtime_packs.is_ready("opening"):
+		if runtime_packs.get_state("opening") == "failed":
+			push_error("Opening detail pack failed: %s" % runtime_packs.get_last_error("opening"))
+			opening_detail_pending = false
+			return
+		var pack_retry_timer := _create_owned_timer(0.25, true)
+		await pack_retry_timer.timeout
 		if generation == opening_detail_generation and opening_detail_pending:
 			call_deferred("_run_opening_detail_stage", generation)
 		return
@@ -2743,7 +2742,8 @@ func _run_opening_detail_stage(generation: int) -> void:
 	# opening route. Web/ANGLE can spend a long frame compiling imported scenery;
 	# waiting for an idle player keeps a bridge or gate crossing responsive while
 	# retaining the deferred presentation upgrade after the player stops.
-	if player.velocity.length_squared() > 0.04:
+	# Required actors and interactions cannot wait for an idle player indefinitely.
+	if not stage.begins_with("gameplay_") and player.velocity.length_squared() > 0.04:
 		var moving_retry_timer := _create_owned_timer(OPENING_DETAIL_RETRY_SECONDS, true)
 		await moving_retry_timer.timeout
 		if generation == opening_detail_generation and opening_detail_pending:
@@ -2755,24 +2755,133 @@ func _run_opening_detail_stage(generation: int) -> void:
 		_validate_zone_render_resources(zone_root)
 		print("LOADING: Greyfen deferred_detail complete")
 		return
+	var pending_resource_path := ""
+	if stage.begins_with("gameplay_crowd_"):
+		var crowd_index := int(stage.trim_prefix("gameplay_crowd_"))
+		if crowd_index < CharacterPresentation.OPENING_OCCUPATION_PROP_PATHS.size():
+			pending_resource_path = str(CharacterPresentation.OPENING_OCCUPATION_PROP_PATHS[crowd_index])
+	elif not OS.has_feature("web") and stage.begins_with("gameplay_"):
+		var actor_id := stage.trim_prefix("gameplay_")
+		if actor_id in OPENING_NAMED_ACTOR_IDS:
+			var actor_role := _role_for_interactable(actor_id)
+			pending_resource_path = str(asset_helper.database.get_asset_for_role(actor_role).get("path", ""))
+	if pending_resource_path != "":
+		var resource_status: Error = asset_helper.poll_role_resources()
+		if resource_status not in [OK, ERR_BUSY]:
+			push_error("Greyfen resource prewarm failed at %s: %s" % [stage, error_string(resource_status)])
+			opening_detail_pending = false
+			return
+		if not asset_helper.is_resource_cached(pending_resource_path):
+			if resource_status == OK:
+				push_error("Greyfen staged resource was not requested: %s" % pending_resource_path)
+				opening_detail_pending = false
+				return
+			var resource_retry_timer := _create_owned_timer(OPENING_DETAIL_STAGE_DELAY_SECONDS, true)
+			await resource_retry_timer.timeout
+			if generation == opening_detail_generation and opening_detail_pending:
+				call_deferred("_run_opening_detail_stage", generation)
+			return
+	if stage == "gameplay_place_0":
+		var well_material_status: Error = world_materials.poll_prewarm()
+		if well_material_status not in [OK, ERR_BUSY]:
+			push_error("Greyfen well material prewarm failed: %s" % error_string(well_material_status))
+			opening_detail_pending = false
+			return
+		if well_material_status == ERR_BUSY:
+			var well_retry_timer := _create_owned_timer(OPENING_DETAIL_STAGE_DELAY_SECONDS, true)
+			await well_retry_timer.timeout
+			if generation == opening_detail_generation and opening_detail_pending:
+				call_deferred("_run_opening_detail_stage", generation)
+			return
+	if stage == "opening_terrain":
+		var terrain_status: Error = world_materials.poll_prewarm()
+		if terrain_status not in [OK, ERR_BUSY]:
+			push_error("Greyfen terrain material prewarm failed: %s" % error_string(terrain_status))
+			opening_detail_pending = false
+			return
+		if terrain_status == ERR_BUSY:
+			var terrain_retry_timer := _create_owned_timer(OPENING_DETAIL_STAGE_DELAY_SECONDS, true)
+			await terrain_retry_timer.timeout
+			if generation == opening_detail_generation and opening_detail_pending:
+				call_deferred("_run_opening_detail_stage", generation)
+			return
+	if generation != opening_detail_generation or requested_stage_index != opening_detail_stage_index:
+		return
 	var started := Time.get_ticks_msec()
-	# Each stage gets a fresh batch buffer. Existing published MultiMeshes remain
-	# untouched, while late decoration is still grouped instead of creating one
+	if stage.begins_with("village_house_"):
+		var material_status: Error = world_materials.poll_prewarm()
+		var facade_status: Error = asset_helper.poll_role_resources()
+		if material_status not in [OK, ERR_BUSY] or facade_status not in [OK, ERR_BUSY]:
+			push_error("Greyfen architecture prewarm failed: materials=%s facades=%s" % [error_string(material_status), error_string(facade_status)])
+			opening_detail_pending = false
+			return
+		if material_status == ERR_BUSY or facade_status == ERR_BUSY:
+			call_deferred("_run_opening_detail_stage", generation)
+			return
+	# Each stage gets fresh buffers. Published MultiMeshes remain untouched,
+	# while late decoration is still grouped instead of creating one
 	# renderer instance per small prop.
 	environment_batches_flushed = false
+	var published_ids := {}
+	for child in zone_root.get_children():
+		published_ids[child.get_instance_id()] = true
 	var result := ZoneCompositionRouter.build_core_detail_stage(self, "greyfen", stage)
 	if not bool(result.get("ok", false)):
 		push_error("Greyfen deferred detail failed at %s: %s" % [stage, ", ".join(result.get("errors", []))])
 		opening_detail_pending = false
 		return
+	if stage == "gameplay_base":
+		world_materials.prewarm_surfaces(["forest_ground", "cobblestone", "wet_mud", "medieval_brick", "plaster", "timber", "roof_tiles"], str(settings.settings.get("quality_preset", "balanced")))
+		var props_status: Error = asset_helper.request_resource_paths(CharacterPresentation.OPENING_OCCUPATION_PROP_PATHS)
+		if props_status != OK:
+			push_error("Greyfen occupation prop prewarm request failed: %s" % error_string(props_status))
+			opening_detail_pending = false
+			return
+		if not OS.has_feature("web"):
+			var named_roles: Array[String] = []
+			for actor_id in OPENING_NAMED_ACTOR_IDS:
+				named_roles.append(_role_for_interactable(actor_id))
+			var actors_status: Error = asset_helper.request_role_resources(named_roles)
+			if actors_status != OK:
+				push_error("Greyfen named actor prewarm request failed: %s" % error_string(actors_status))
+				opening_detail_pending = false
+				return
 	_flush_environment_batches()
 	_clear_environment_batch_buffers()
 	environment_batches_flushed = true
+	var published_nodes: Array[Node] = []
+	for child in zone_root.get_children():
+		if not published_ids.has(child.get_instance_id()):
+			published_nodes.append(child)
+	if visual_director != null and not published_nodes.is_empty():
+		visual_director.refresh_zone_lighting(zone_root, published_nodes)
+	if stage in ["gameplay_base", "gameplay_place_0", "gameplay_place_1", "gameplay_place_2", "gameplay_place_3", "gameplay_place_4", "gameplay_side_clues", "gameplay_main_clues", "gameplay_gate_visual", "gameplay_route_markers", "gameplay_story"]:
+		_defer_opening_renderables(published_nodes)
+	if stage.begins_with("gameplay_"):
+		# Gameplay stages replace boot gates and publish actors. Rebuild focus from the
+		# published zone tree so no deferred frame can inspect those stale Areas.
+		active_interactable = null
+		interaction_candidates.clear()
+		interaction_area_cache.clear()
+		interaction_area_cache_ready = false
+		interaction_focus_dirty = true
+		interaction_focus_cache_valid = false
+		_schedule_deferred_visual_roles(zone_root)
 	opening_detail_stage_index += 1
 	print("LOADING: Greyfen deferred_detail stage=%s ms=%d" % [stage, Time.get_ticks_msec() - started])
 	# Yield between chunks so movement, focus, and audio get a normal frame even
 	# on Web/ANGLE. A generation token cancels the continuation on zone travel.
 	call_deferred("_run_opening_detail_stage", generation)
+
+func _defer_opening_renderables(published_nodes: Array[Node]) -> void:
+	var visual_index := 0
+	for published in published_nodes:
+		for descendant in published.find_children("*", "", true, false):
+			if not descendant is VisualInstance3D or not descendant.visible:
+				continue
+			descendant.visible = false
+			descendant.set_meta("opening_visual_bucket", visual_index % OPENING_GAMEPLAY_VISUAL_BUCKETS)
+			visual_index += 1
 
 func _complete_ending(ending: String) -> void:
 	var ending_id := str(ending)
@@ -2845,8 +2954,10 @@ func _show_ending_consequence(ending: String) -> void:
 
 func _on_player_blade_contact(contact: Dictionary) -> void:
 	var heavy := bool(contact.get("heavy", false))
-	audio.play_event("heavy" if heavy else "swing")
+	if bool(contact.get("first_sample", true)):
+		audio.play_event("heavy" if heavy else "swing")
 	var result: Dictionary = combat.resolve_player_blade_contact(player, active_enemies, contact, inventory.active_oil)
+	player.confirm_blade_contact(int(contact.get("attack_id", -1)), bool(result.get("hit", false)))
 	if bool(result.get("hit", false)):
 		var contact_source := str(result.get("source_tag", "")).to_lower()
 		var contact_color := Color(0.98, 0.78, 0.34) if contact_source != "moon_oil" else Color(0.66, 0.88, 1.0)
@@ -2893,7 +3004,7 @@ func _on_player_arrow(request: Dictionary) -> void:
 	var effect: Dictionary = arrow_def.get("effect", {})
 	var damage := float(effect.get("damage", 28.0))
 	var endpoint: Vector3 = origin + direction * float(request.get("range", 24.0))
-	var query := PhysicsRayQueryParameters3D.create(origin, endpoint)
+	var query := PhysicsRayQueryParameters3D.create(origin, endpoint, 1)
 	var arrow_exclusions: Array[RID] = [player.get_rid()]
 	for enemy in active_enemies:
 		if is_instance_valid(enemy):
@@ -2923,31 +3034,7 @@ func _on_player_arrow(request: Dictionary) -> void:
 		audio.play_event("swing", 0.02)
 
 func _make_arrow_trail(origin: Vector3, endpoint: Vector3, color: Color) -> void:
-	var length := origin.distance_to(endpoint)
-	if length <= 0.05:
-		return
-	var root := Node3D.new()
-	root.name = "ArrowFlightEffect"
-	root.add_to_group("arrow_runtime_effect")
-	zone_root.add_child(root)
-	root.global_position = origin.lerp(endpoint, 0.5)
-	root.look_at(endpoint, Vector3.UP)
-	var shaft := MeshInstance3D.new()
-	var shaft_mesh := CylinderMesh.new()
-	shaft_mesh.top_radius = 0.018
-	shaft_mesh.bottom_radius = 0.022
-	shaft_mesh.height = length
-	shaft_mesh.radial_segments = 6
-	shaft.mesh = shaft_mesh
-	shaft.rotation_degrees.x = 90.0
-	shaft.material_override = _oathfire_material(Color(color.r, color.g, color.b, 0.88), 1.1)
-	root.add_child(shaft)
-	root.scale = Vector3(0.12, 0.12, 0.12)
-	var tween := create_tween()
-	tween.tween_property(root, "scale", Vector3.ONE, 0.06)
-	tween.tween_interval(0.08)
-	tween.tween_property(root, "scale", Vector3(0.08, 0.08, 0.08), 0.12)
-	tween.tween_callback(root.queue_free)
+	combat_vfx_coordinator.make_arrow_trail(zone_root, origin, endpoint, color)
 
 func _on_player_beam_phase(phase: String) -> void:
 	match phase:
@@ -2972,7 +3059,7 @@ func _on_player_beam(charge_ratio: float, direction: Vector3) -> void:
 	var origin: Vector3 = player.get_oathfire_origin() if player.has_method("get_oathfire_origin") else player.global_position + Vector3(0, 1.12, 0) + locked_direction * 0.62
 	var beam_range: float = 12.0 + progression.effect_value("beam_range_bonus", 0.0)
 	var endpoint: Vector3 = origin + locked_direction * beam_range
-	var query = PhysicsRayQueryParameters3D.create(origin, endpoint)
+	var query = PhysicsRayQueryParameters3D.create(origin, endpoint, 1)
 	var beam_exclusions: Array[RID] = [player.get_rid()]
 	for enemy in active_enemies:
 		if is_instance_valid(enemy):
@@ -2995,7 +3082,6 @@ func _on_player_beam(charge_ratio: float, direction: Vector3) -> void:
 	var hits: Array = combat.resolve_oathfire_cast(active_enemies, cast)
 	set_meta("last_oathfire_cast", cast)
 	set_meta("last_oathfire_hit_count", hits.size())
-	audio.play_event("heavy", 0.03)
 	_make_oathfire_beam(origin, endpoint, charge_ratio, not _performance_mode())
 	CombatFeedback.beam_endpoint(zone_root, endpoint, locked_direction, not _performance_mode())
 	if camera_rig != null:
@@ -3011,70 +3097,10 @@ func _on_player_beam(charge_ratio: float, direction: Vector3) -> void:
 	hud.show_status_cue("Oathfire Beam", "item")
 
 func _make_oathfire_beam(origin: Vector3, endpoint: Vector3, charge_ratio: float, rich_effect: bool) -> void:
-	var length = origin.distance_to(endpoint)
-	if length <= 0.05:
-		return
-	var root = Node3D.new()
-	root.name = "OathfireBeamEffect"
-	root.add_to_group("oathfire_runtime_effect")
-	zone_root.add_child(root)
-	root.global_position = origin.lerp(endpoint, 0.5)
-	root.look_at(endpoint, Vector3.UP)
-	var core = MeshInstance3D.new()
-	var core_mesh = CylinderMesh.new()
-	core_mesh.top_radius = 0.18+charge_ratio*0.10
-	core_mesh.bottom_radius = 0.30+charge_ratio*0.14
-	core_mesh.height = length
-	core_mesh.radial_segments = 12
-	core.mesh = core_mesh
-	core.rotation_degrees.x = 90.0
-	core.name = "OathfireBeamCore"
-	core.material_override = _oathfire_material(Color(0.72, 0.96, 1.0, 0.96), 2.8)
-	root.add_child(core)
-	if rich_effect:
-		var aura = MeshInstance3D.new()
-		var aura_mesh = CylinderMesh.new()
-		aura_mesh.top_radius = 0.42+charge_ratio*0.16
-		aura_mesh.bottom_radius = 0.58+charge_ratio*0.20
-		aura_mesh.height = length*0.98
-		aura_mesh.radial_segments = 12
-		aura.mesh = aura_mesh
-		aura.rotation_degrees.x = 90.0
-		aura.name = "OathfireBeamAura"
-		aura.material_override = _oathfire_material(Color(0.16, 0.66, 1.0, 0.30), 1.5)
-		root.add_child(aura)
-		var inner = MeshInstance3D.new()
-		var inner_mesh = CylinderMesh.new()
-		inner_mesh.top_radius = 0.07 + charge_ratio * 0.04
-		inner_mesh.bottom_radius = 0.10 + charge_ratio * 0.05
-		inner_mesh.height = length * 1.01
-		inner_mesh.radial_segments = 10
-		inner.mesh = inner_mesh
-		inner.rotation_degrees.x = 90.0
-		inner.name = "OathfireBeamHotCore"
-		inner.material_override = _oathfire_material(Color(0.94, 1.0, 1.0, 1.0), 4.2)
-		root.add_child(inner)
-	root.scale = Vector3(0.04,0.04,0.08)
-	var tween = create_tween()
-	tween.tween_property(root,"scale",Vector3.ONE,0.09).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	tween.tween_interval(0.16)
-	tween.tween_property(root,"scale",Vector3(0.08,0.08,1.0),0.18)
-	tween.tween_callback(root.queue_free)
+	combat_vfx_coordinator.make_oathfire_beam(zone_root, origin, endpoint, charge_ratio, rich_effect)
 
 func _clear_oathfire_effects() -> void:
-	for effect in get_tree().get_nodes_in_group("oathfire_runtime_effect"):
-		if is_instance_valid(effect):
-			effect.queue_free()
-
-func _oathfire_material(color: Color, energy: float) -> StandardMaterial3D:
-	var material = StandardMaterial3D.new()
-	material.albedo_color = color
-	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	material.emission_enabled = true
-	material.emission = Color(color.r, color.g, color.b)
-	material.emission_energy_multiplier = energy
-	return material
+	combat_vfx_coordinator.clear_oathfire_effects()
 
 func _on_player_footstep() -> void:
 	if audio == null or player == null:
@@ -3089,6 +3115,8 @@ func _on_player_footstep() -> void:
 		surface = "mud"
 	elif current_zone_id == "hart_glade":
 		surface = "forest"
+	elif spatial_service != null and spatial_service.is_on_bridge(player.global_position):
+		surface = "wood"
 	audio.play_footstep(current_zone_id, on_road, surface)
 
 func _on_player_parried() -> void:
@@ -3187,7 +3215,7 @@ func _purchase_from_vendor(vendor_id: String, item_id: String, quantity: int = 1
 		audio.play_event("ui")
 
 func _on_enemy_died(enemy) -> void:
-	audio.play_event("death", 0.05)
+	audio.play_enemy_event(enemy.enemy_id, "death", enemy.global_position, player.global_position)
 	if camera_rig != null:
 		camera_rig.shake(0.09)
 	if zone_root != null and enemy != null:
@@ -3199,20 +3227,23 @@ func _on_enemy_died(enemy) -> void:
 			story_state.set_flag("cemetery_bell_silent", true)
 			hud.show_status_cue("The Bell-Eater is silent", "victory")
 			hud.toast("The chapel bell stops. Beneath the silence, the Crow Shrine waits for your answer.")
-			hud.set_guidance_hint("Choose what the Crow Shrine should remember.", 6.0)
+			_show_current_objective_guidance(6.0)
 		elif enemy.enemy_id == "rootbound_colossus":
 			story_state.set_flag("rootbound_colossus_defeated", true)
 			hud.show_status_cue("The roots release Greyfen", "victory")
 			hud.toast("The clearing opens around a heart of oathwood. The road remembers a new name.")
 		elif enemy.enemy_id == "ashwing":
 			story_state.set_flag("ashwing_defeated", true)
+			if current_zone_id == "old_mill" and not quests.is_objective_done("main_ash_at_the_mill", "mill_choice"):
+				_make_named_interactable("miller_record", "dialogue", "Read the miller's record", Vector3(-7.0,0,-7), Color(0.5,0.4,0.25))
 			hud.show_status_cue("Ashwing falls", "victory")
 			hud.toast("The mill roof catches the last ember, then goes dark. Something useful survived in the ash.")
 		elif enemy.enemy_id == "halvern_boss":
 			story_state.set_flag("halvern_fate", "defeated")
+			_publish_halvern_exit()
 			quests.complete_objective("main_last_witness", "break_halvern_guard")
 			hud.show_status_cue("The Gravebound Knight yields", "victory")
-			hud.set_guidance_hint("Decide whether Halvern's testimony should live.", 6.0)
+			_show_current_objective_guidance(6.0)
 		elif enemy.enemy_id == "white_hart_avatar":
 			var ending = pending_ending if pending_ending != "" else "kill"
 			pending_ending = ""
@@ -3223,7 +3254,7 @@ func _on_enemy_died(enemy) -> void:
 		story_state.set_flag("cemetery_ambush_cleared", true)
 		hud.hide_enemy()
 		hud.show_status_cue("The graves fall still", "victory")
-		hud.set_guidance_hint("Open the ruined Crow Chapel.", 5.0)
+		_show_current_objective_guidance(5.0)
 		hud.toast("The Ghoulkin carried grave soil beneath its nails. The chapel seal answers its death.")
 	elif current_zone_id == "wychwood" and enemy.enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute"]:
 		wychwood_pack_kills += 1
@@ -3244,7 +3275,7 @@ func _on_enemy_died(enemy) -> void:
 			audio.play_voice("voice_player_ghoulkin_death_01")
 			hud.hide_enemy()
 			hud.show_status_cue("Wychwood pack broken", "victory")
-			hud.set_guidance_hint("Inspect the tracks, then return to Greyfen.", 6.0)
+			_show_current_objective_guidance(6.0)
 			hud.toast("The Ghoulkin dies too far from its den. Something drew it to the road. Search the tracks.")
 			_make_post_ghoulkin_story_clue()
 	elif enemy.enemy_id == "bog_wretch":
@@ -3254,12 +3285,12 @@ func _on_enemy_died(enemy) -> void:
 			story_state.set_flag("bog_core_forced_open", true)
 		_make_named_interactable("bog_core_choice", "dialogue", "Choose the memory core's fate", enemy.global_position, Color(0.35, 0.58, 0.52), Vector3(0.4, 0.4, 0.4))
 		hud.show_status_cue("A memory remains", "victory")
-		hud.set_guidance_hint("Inspect the Bog Wretch's exposed memory core.", 5.0)
+		_show_current_objective_guidance(5.0)
 	elif enemy.enemy_id == "wychwood_stalker" and current_zone_id == "record_hall":
 		story_state.set_flag("castle_haunting_cleared", true)
 		quests.complete_objective("main_blood_under_stone", "survive_haunting")
 		hud.toast("The erased names settle. Edric waits beneath the Vargan seal.")
-		hud.set_guidance_hint("Demand Lord Edric's answer before descending.", 6.0)
+		_show_current_objective_guidance(6.0)
 		_load_zone("record_hall", player.global_position)
 	elif enemy.enemy_id == "gravebound_knight":
 		if current_zone_id == "undercroft":
@@ -3271,9 +3302,11 @@ func _on_enemy_died(enemy) -> void:
 			quests.complete_objective("main_soldier_without_banner", "senn_confrontation")
 			story_state.set_flag("senn_ready_to_testify", true)
 			hud.show_status_cue("Senn's guard breaks", "victory")
-			hud.set_guidance_hint("Captain Senn has lowered his blade. Hear his testimony.", 5.5)
-		elif not _has_living_enemy("bandit"):
-			quests.complete_objective("side_black_dog", "find_dog")
+			_show_current_objective_guidance(5.5)
+		elif current_zone_id == "wychwood" and quests.is_active("side_black_dog") and not _has_living_enemy("bandit"):
+			story_state.set_flag("black_dog_bandits_defeated", true)
+			_try_complete_black_dog_investigation()
+
 	elif current_zone_id == "old_mill" and bool(enemy.get_meta("ash_mill_enemy", false)):
 		var ash_enemy_alive := false
 		for candidate in active_enemies:
@@ -3283,16 +3316,15 @@ func _on_enemy_died(enemy) -> void:
 		if not ash_enemy_alive:
 			quests.complete_objective("main_ash_at_the_mill", "mill_encounter")
 			story_state.set_flag("ash_mill_cleared", true)
-			if not bool(story_state.get_flag("ashwing_spawned", false)) and enemy_defs.has("ashwing"):
-				story_state.set_flag("ashwing_spawned", true)
-				var ashwing := _spawn_enemy("ashwing", Vector3(0, 1.0, -9.0))
+			if not _has_living_enemy("ashwing") and not bool(story_state.get_flag("ashwing_defeated", false)) and enemy_defs.has("ashwing"):
+				var ashwing := _spawn_enemy("ashwing", Vector3(5.0, 1.0, -6.5))
 				if ashwing != null:
+					story_state.set_flag("ashwing_spawned", true)
 					ashwing.name = "AshwingCarrionDrake"
 					ashwing.leash_radius = 10.0
 					hud.toast("The mill roof groans. Ashwing drops through the smoke.")
-			_make_named_interactable("miller_record", "dialogue", "Read the miller's record", Vector3(-7.0,0,-7), Color(0.5,0.4,0.25))
 			hud.show_status_cue("The mill falls quiet", "victory")
-			hud.set_guidance_hint("Read the miller's ledger beside the broken wall.", 5.5)
+		_show_current_objective_guidance(5.5)
 	if enemy.health_component != null:
 		hud.show_enemy(enemy.display_name, 0.0, enemy.health_component.max_health)
 	var memory_rule := str(enemy.get_meta("memory_rule", ""))
@@ -3303,13 +3335,41 @@ func _on_enemy_died(enemy) -> void:
 		hud.toast("%s slain." % enemy.display_name)
 	save_manager.autosave(self)
 
+func _try_complete_black_dog_investigation() -> void:
+	if not quests.is_active("side_black_dog") or quests.is_objective_done("side_black_dog", "find_dog"):
+		return
+	if not bool(story_state.get_flag("black_dog_sheepfold_inspected", false)):
+		return
+	if not bool(story_state.get_flag("black_dog_bandit_camp_inspected", false)):
+		return
+	if not bool(story_state.get_flag("black_dog_bandits_defeated", false)):
+		return
+	quests.complete_objective("side_black_dog", "find_dog")
+	hud.toast("The bandits held the ribbon. The black dog drove them from the children, not toward them.")
+	_show_current_objective_guidance(5.0)
+
+func _try_complete_oren_thread_trace(publish_return := true) -> void:
+	if not quests.is_active("side_childs_charm") or quests.is_objective_done("side_childs_charm", "trace_thread"):
+		return
+	var found_oren := bool(story_state.get_flag("road_evidence_oren", false)) \
+		or bool(story_state.get_flag("road_token_recovered", false)) \
+		or bool(story_state.get_flag("oren_name_spoken", false))
+	if not found_oren or not bool(story_state.get_flag("chapel_names_read", false)):
+		return
+	quests.complete_objective("side_childs_charm", "trace_thread")
+	if publish_return and current_zone_id == "greyfen" and zone_root != null:
+		GreyfenSection.new().publish_oren_charm_return(ZoneBuildContext.new(self, "greyfen"))
+	hud.toast("The red thread from Oren's token matches his erased place in the chapel.")
+	_show_current_objective_guidance(5.0)
+
 func _on_enemy_damaged(enemy, current: float, maximum: float) -> void:
 	hud.show_enemy(enemy.display_name, current, maximum)
 	hud.show_status_cue("Enemy hit", "item")
-	audio.play_event_limited("stagger", 0.065, 0.06)
+	audio.play_enemy_event(enemy.enemy_id, "hit", enemy.global_position, player.global_position)
 
 func _on_enemy_windup_started(enemy) -> void:
-	audio.play_event_limited("enemy_windup", 0.28, 0.02)
+	if enemy != null and player != null:
+		audio.play_enemy_event(enemy.enemy_id, "windup", enemy.global_position, player.global_position)
 	if zone_root != null and enemy != null:
 		if bool(enemy.get("is_boss")):
 			CombatFeedback.boss_telegraph(zone_root, enemy.global_position, enemy.enemy_id)
@@ -3336,7 +3396,8 @@ func _on_enemy_attack_resolved(enemy, parried: bool, contact_position: Vector3) 
 		if enemy != null and enemy.enemy_id == "bog_wretch":
 			_record_bog_stagger(enemy, "parries")
 	else:
-		audio.play_event_limited("ghoulkin_lunge" if enemy != null and enemy.enemy_id == "ghoulkin" else "hit", 0.08, 0.04)
+		if enemy != null:
+			audio.play_enemy_event(enemy.enemy_id, "attack", contact_position, player.global_position)
 		if zone_root != null and enemy != null:
 			CombatFeedback.impact_burst(zone_root, contact_position, false, Color(0.85, 0.30, 0.12))
 	if enemy != null and enemy.health_component != null:
@@ -3350,7 +3411,7 @@ func _on_enemy_parry_window_opened(enemy: Node, duration: float) -> void:
 		if quests.is_active("main_last_witness"):
 			quests.complete_objective("main_last_witness", "break_halvern_guard")
 		hud.show_status_cue("Halvern's guard breaks", "parry")
-		hud.set_guidance_hint("Speak to Halvern before the testimony window closes.", maxf(duration, 2.5))
+		_show_current_objective_guidance(maxf(duration, 2.5))
 		audio.play_event_limited("parry", 0.16, 0.02)
 
 func _on_quest_completed(id: String) -> void:
@@ -3367,6 +3428,7 @@ func _on_quest_completed(id: String) -> void:
 		inventory.add_reward(reward)
 		hud.toast("Reward received for %s." % quests.quest_defs.get(id, {}).get("title", id))
 	save_manager.checkpoint(self)
+	save_manager.autosave(self)
 
 func _apply_progression_to_player() -> void:
 	if player != null and progression != null:
@@ -3478,7 +3540,7 @@ func save_world_state() -> Dictionary:
 		if controller != null and controller.has_method("save_state"):
 			boss_states[enemy.enemy_id] = controller.save_state()
 	return {
-		"removed_interactions": removed_interactions,
+		"removed_interactions": removed_interactions.duplicate(true),
 		"pending_ending": pending_ending,
 		"wychwood_pack_kills": wychwood_pack_kills,
 		"ghoulkin_kills": wychwood_pack_kills,
@@ -3487,10 +3549,10 @@ func save_world_state() -> Dictionary:
 	}
 
 func load_world_state(state: Dictionary) -> void:
-	removed_interactions = state.get("removed_interactions", {})
+	removed_interactions = state.get("removed_interactions", {}).duplicate(true) if typeof(state.get("removed_interactions", {})) == TYPE_DICTIONARY else {}
 	pending_ending = str(state.get("pending_ending", ""))
 	wychwood_pack_kills = int(state.get("wychwood_pack_kills", state.get("ghoulkin_kills", wychwood_pack_kills)))
-	boss_saved_states = state.get("boss_states", {}) if typeof(state.get("boss_states", {})) == TYPE_DICTIONARY else {}
+	boss_saved_states = state.get("boss_states", {}).duplicate(true) if typeof(state.get("boss_states", {})) == TYPE_DICTIONARY else {}
 	if day_night != null:
 		day_night.load_state(state.get("day_night", {}))
 
@@ -3507,6 +3569,8 @@ func _on_player_died() -> void:
 func _on_dialogue_closed_audio() -> void:
 	if audio != null:
 		audio.set_game_paused(false)
+	interaction_focus_dirty = true
+	interaction_focus_cache_valid = false
 
 func _pause_game() -> void:
 	if camera_rig != null and camera_rig.has_method("clear_target_lock"):
@@ -3601,15 +3665,11 @@ func _refresh_tracker() -> void:
 	# caches instead of forcing per-frame scans.
 	interaction_focus_dirty = true
 	compass_dirty = true
-	var tracker_text := "No objective in this area."
-	if zone_runtime_coordinator != null:
-		tracker_text = zone_runtime_coordinator.refresh_presentation()
-	elif quest_presentation != null and quest_presentation.has_method("get_objective_view_model"):
-		tracker_text = str(quest_presentation.get_objective_view_model().get("tracker_text", tracker_text))
-	else:
-		tracker_text = str(quests.get_tracker_text())
-	hud.set_tracker(tracker_text)
+	quest_hud_coordinator.refresh_tracker(hud, zone_runtime_coordinator.refresh_presentation if zone_runtime_coordinator != null else Callable())
 	_update_compass()
+
+func _show_current_objective_guidance(seconds: float = 5.0) -> void:
+	quest_hud_coordinator.show_guidance(hud, seconds)
 
 func _refresh_equipment_readout() -> void:
 	if hud == null or inventory == null:
@@ -3624,13 +3684,12 @@ func _update_tutorial_prompts() -> void:
 		return
 	if active_interactable != null and not bool(tutorial_flags.get("interact", false)):
 		tutorial_flags["interact"] = true
-		hud.toast("Press E to interact. In menus and dialogue, use the mouse pointer.")
 	if current_zone_id == "greyfen" and not bool(tutorial_flags.get("route", false)) and player.global_position.z < -8.0:
 		tutorial_flags["route"] = true
 		audio.play_event("cloth_wind", 0.03)
 		audio.set_music_state("wychwood_tension")
 		hud.toast("The village noise thins behind you. The old road keeps its own silence.")
-		hud.set_guidance_hint("The north road leaves Greyfen. Follow it into Wychwood.", 4.5)
+		_show_current_objective_guidance(4.5)
 	if current_zone_id == "greyfen" and not bool(tutorial_flags.get("shrine_audio", false)) and player.global_position.distance_to(Vector3(6.0, player.global_position.y, -7.0)) < 5.0:
 		tutorial_flags["shrine_audio"] = true
 		audio.set_music_state("shrine_anwen")
@@ -3649,6 +3708,7 @@ func _update_tutorial_prompts() -> void:
 		audio.play_event("ghoulkin_idle", 0.03)
 	if current_zone_id == "wychwood" \
 			and not bool(story_state.get_flag("wychwood_pack_cleared", false)) \
+			and player.global_position.z < 1.0 \
 			and _has_active_encounter_enemy() \
 			and not bool(tutorial_flags.get("combat", false)):
 		tutorial_flags["combat"] = true
@@ -3658,86 +3718,16 @@ func _update_tutorial_prompts() -> void:
 		hud.set_guidance_hint("Left click strike | Space dodge | Tap Q parry | Hold Q block", 6.0)
 
 func _update_compass() -> void:
-	if hud == null or player == null:
-		return
-	var zone_name: String = str(quest_presentation.get_zone_display_name(current_zone_id)) if quest_presentation != null else _zone_display_name(current_zone_id)
-	hud.set_compass("%s | %s" % [zone_name, _nearest_interactable_summary()])
-	compass_dirty = false
-	compass_cache_valid = true
-	last_compass_position = player.global_position
-	last_compass_zone = current_zone_id
-	last_compass_signature = _compass_state_signature()
+	quest_hud_coordinator.update_compass(hud, player, current_zone_id, interaction_area_cache if zone_root != null else [], _zone_display_name(current_zone_id))
 
 func _compass_state_signature() -> String:
-	if quest_presentation != null and quest_presentation.has_method("get_objective_view_model"):
-		var view: Dictionary = quest_presentation.get_objective_view_model()
-		return "%s|%s|%s|%s" % [
-			str(view.get("quest_id", "")),
-			str(view.get("objective_id", "")),
-			str(view.get("tracker_text", "")),
-			str(view.get("next_action", "")),
-		]
-	if quests != null:
-		var tracked_id: String = str(quests.get_tracked_quest()) if quests.has_method("get_tracked_quest") else ""
-		return "%s|%s" % [str(tracked_id), _tracked_objective_id(str(tracked_id))]
-	return ""
+	return quest_hud_coordinator.state_signature()
 
 func _compass_needs_refresh() -> bool:
-	if compass_dirty or not compass_cache_valid or player == null:
-		return true
-	if current_zone_id != last_compass_zone or _compass_state_signature() != last_compass_signature:
-		return true
-	return player.global_position.distance_squared_to(last_compass_position) >= 0.0625
+	return quest_hud_coordinator.needs_refresh(player, current_zone_id)
 
-func _nearest_interactable_summary() -> String:
-	if zone_root == null or player == null:
-		return "No marker"
-	var best_text = "No marker"
-	var best_score = 9999.0
-	var objective_view: Dictionary = quest_presentation.get_objective_view_model() if quest_presentation != null and quest_presentation.has_method("get_objective_view_model") else {}
-	var tracked_id: String = str(objective_view.get("quest_id", "")) if not objective_view.is_empty() else (quests.get_tracked_quest() if quests.has_method("get_tracked_quest") else "")
-	var tracked_objective: String = str(objective_view.get("objective_id", "")) if not objective_view.is_empty() else _tracked_objective_id(tracked_id)
-	var found_tracked_target := false
-	# Interaction areas are indexed once on zone activation. Scanning every
-	# direct child of the complete procedural zone from the compass timer caused
-	# periodic frame spikes and could miss nested gate/clue areas. Use the same
-	# authoritative cache as focus resolution instead.
-	for child in interaction_area_cache:
-		if child == null or not is_instance_valid(child) or not child.is_inside_tree():
-			continue
-		if not child.has_method("get_overlapping_bodies"):
-			continue
-		var interaction_id = child.get("interaction_id")
-		if interaction_id == null or str(interaction_id) == "":
-			continue
-		if not child.is_inside_tree():
-			continue
-		var dist = child.global_position.distance_to(player.global_position)
-		var score: float = float(dist)
-		var quest_id = child.get("quest_id")
-		var objective_id = child.get("objective_id")
-		if tracked_id != "" and quest_id != null and str(quest_id) == tracked_id:
-			if tracked_objective != "" and objective_id != null and str(objective_id) == tracked_objective:
-				score -= 120.0
-				found_tracked_target = true
-			else:
-				# Do not let later or optional quest markers contradict the tracked objective.
-				score += 50.0
-		elif quest_id != null and str(quest_id) != "" and quests.is_active(str(quest_id)):
-			score += 80.0
-		elif str(child.get("interaction_type")) == "dialogue":
-			score += 10.0
-		if tracked_id == "main_road_of_crows" and tracked_objective == "speak_anwen" and str(interaction_id) == "sister_anwen":
-			score -= 120.0
-			found_tracked_target = true
-		if str(child.get("interaction_type")) == "zone":
-			score -= 4.0
-		if score < best_score:
-			best_score = score
-			best_text = "%s %dm" % [child.get("prompt"), int(dist)]
-	if tracked_objective != "" and not found_tracked_target:
-		return quest_presentation.get_active_objective_text(tracked_id, tracked_objective) if quest_presentation != null else _tracked_objective_text(tracked_id, tracked_objective)
-	return best_text
+func _distance_to_tracked_interactable(objective_view: Dictionary) -> int:
+	return quest_hud_coordinator.objective_distance(objective_view, player, interaction_area_cache if zone_root != null else [])
 
 func _tracked_objective_id(quest_id: String) -> String:
 	if quest_id == "" or not quests.active.has(quest_id):
@@ -3762,31 +3752,51 @@ func _keep_player_in_world() -> void:
 		_recover_from_river(player, _river_center(current_zone_id), 3.4)
 		return
 	var half = _zone_half_extents(current_zone_id)
-	if player.global_position.y > -2.0 and abs(player.global_position.x) < half.x - 1.5 and abs(player.global_position.z) < half.y - 1.5:
-		last_safe_player_position = player.global_position
+	var inside_recovery_bounds: bool = player.global_position.y > -2.0 \
+		and abs(player.global_position.x) < half.x - 1.5 \
+		and abs(player.global_position.z) < half.y - 1.5
+	if inside_recovery_bounds:
+		# Broad bounds alone can remember a point inside a tree, wall, or prop and
+		# later restore Kael into that obstruction. Only the active spatial service
+		# may promote a live position to the recovery checkpoint.
+		if player.global_position.distance_squared_to(last_safe_player_position) >= 0.0625:
+			if spatial_service == null or spatial_service.is_walkable_position(
+					player.global_position, 0.55, spatial_service.bank_for(player.global_position)):
+				last_safe_player_position = player.global_position
 		return
 	if player.global_position.y < -8.0 or abs(player.global_position.x) > half.x + 4.0 or abs(player.global_position.z) > half.y + 4.0:
-		player.global_position = last_safe_player_position + Vector3(0, 1.2, 0)
+		var recovery: Vector3 = last_safe_player_position
+		if spatial_service != null:
+			var preferred_bank: int = spatial_service.bank_for(last_safe_player_position)
+			recovery = spatial_service.nearest_safe(player.global_position, preferred_bank)
+		player.global_position = recovery + Vector3(0, 1.2, 0)
 		player.velocity = Vector3.ZERO
+		last_safe_player_position = player.global_position
 		hud.toast("Kael catches himself before the dark takes him.")
 
 func _safe_loaded_position(zone: String, pos: Vector3) -> Vector3:
 	var river_z := _river_center(zone)
 	if spatial_service != null and spatial_service.zone_id == zone:
 		var active_candidate: Vector3 = spatial_service.validate_position(pos, 0.90, spatial_service.bank_for(pos))
-		if river_z < 900.0 and absf(active_candidate.x) <= 2.0 and absf(active_candidate.z - river_z) <= 2.25 and not spatial_service.is_river_excluded(active_candidate, 0.90):
+		if river_z < SpatialSurfaceContract.NO_RIVER and spatial_service.is_on_bridge(active_candidate, 0.90):
 			active_candidate.y = maxf(active_candidate.y, 0.95)
 			return active_candidate
-		return spatial_service.nearest_safe(active_candidate, spatial_service.bank_for(active_candidate))
+		var active_safe: Vector3 = spatial_service.nearest_safe(active_candidate, spatial_service.bank_for(active_candidate))
+		# Spatial services return a walkable surface point. Player transforms store
+		# the CharacterBody capsule origin, so every loaded position needs the same
+		# clearance already applied to bridge saves.
+		active_safe.y = maxf(active_safe.y, 0.95)
+		return active_safe
 	var validator = ZoneSpatialService.new()
 	validator.configure(zone, _river_center(zone), _zone_half_extents(zone))
 	var fallback_candidate: Vector3 = validator.validate_position(pos, 0.90, validator.bank_for(pos))
-	if river_z < 900.0 and absf(fallback_candidate.x) <= 2.0 and absf(fallback_candidate.z - river_z) <= 2.25 and not validator.is_river_excluded(fallback_candidate, 0.90):
+	if river_z < SpatialSurfaceContract.NO_RIVER and validator.is_on_bridge(fallback_candidate, 0.90):
 		fallback_candidate.y = maxf(fallback_candidate.y, 0.95)
 		validator.free()
 		return fallback_candidate
 	var safe := validator.nearest_safe(fallback_candidate, validator.bank_for(fallback_candidate))
 	validator.free()
+	safe.y = maxf(safe.y, 0.95)
 	return safe
 
 func validate_walkable_position(pos: Vector3) -> Vector3:
@@ -3811,15 +3821,11 @@ func _recover_from_river(body: Node, river_z: float, span: float) -> void:
 		hud.toast("The bank catches Kael before the current can take him.")
 
 func _river_center(zone: String = current_zone_id) -> float:
-	if zone == "greyfen":
-		return 4.5
-	if zone == "wychwood":
-		return 0.0
-	return 999.0
+	return SpatialSurfaceContract.river_center(zone)
 
 func _is_river_recovery_position(zone: String, pos: Vector3) -> bool:
 	var river_z := _river_center(zone)
-	if river_z > 900.0:
+	if river_z >= SpatialSurfaceContract.NO_RIVER:
 		return false
 	# The bridge deck occupies the river exclusion band by design. It is flush
 	# with the banks, so identify the legal crossing by the full bridge corridor
@@ -3832,68 +3838,36 @@ func _is_river_recovery_position(zone: String, pos: Vector3) -> bool:
 	if spatial_service != null and spatial_service.has_method("is_on_bridge"):
 		on_bridge_deck = spatial_service.is_on_bridge(pos, 0.0)
 	else:
-		on_bridge_deck = BridgeSurfaceContract.contains(pos, river_z, BridgeSurfaceContract.bridge_half_length(3.4), 0.0)
+		on_bridge_deck = SpatialSurfaceContract.is_on_default_bridge(zone, pos, 0.0)
 	if on_bridge_deck:
 		return false
-	return absf(pos.z-river_z) < 2.0 and (absf(pos.x) > 2.7 or pos.y < 0.12)
+	return SpatialSurfaceContract.is_river_excluded(zone, pos, -0.25)
 
 func _is_river_excluded(pos: Vector3, margin: float = 0.0) -> bool:
-	var river_z := _river_center()
-	return river_z < 900.0 and absf(pos.z-river_z) < 2.25 + margin
+	if spatial_service != null and spatial_service.zone_id == current_zone_id:
+		return spatial_service.is_river_excluded(pos, margin)
+	return SpatialSurfaceContract.is_river_excluded(current_zone_id, pos, margin)
 
 func river_safe_position(pos: Vector3, margin: float = 0.55) -> Vector3:
 	if spatial_service != null:
 		return spatial_service.validate_position(pos, margin)
-	if not _is_river_excluded(pos, margin):
-		return pos
-	var river_z := _river_center()
-	var side := -1.0 if pos.z <= river_z else 1.0
-	pos.z = river_z + side * (2.25 + margin)
-	return pos
+	var validator := ZoneSpatialService.new()
+	validator.configure(current_zone_id, _river_center(), _zone_half_extents(current_zone_id))
+	var result: Vector3 = validator.validate_position(pos, margin, validator.bank_for(pos))
+	validator.free()
+	return result
 
 func river_safe_path(points: Array, margin: float = 0.90) -> Array:
 	if spatial_service != null:
 		return spatial_service.validate_path(points, margin)
-	var sanitized: Array = []
-	if points.is_empty():
-		return sanitized
-	for point in points:
-		var safe_point: Vector3 = river_safe_position(point, margin)
-		if sanitized.is_empty():
-			sanitized.append(safe_point)
-			continue
-		var previous: Vector3 = sanitized.back()
-		var river_z := _river_center()
-		var crosses_banks := river_z < 900.0 and (previous.z-river_z) * (safe_point.z-river_z) < 0.0
-		if crosses_banks:
-			var north_z := river_z - (2.25 + margin)
-			var south_z := river_z + (2.25 + margin)
-			var entry_z := north_z if previous.z < river_z else south_z
-			var exit_z := south_z if previous.z < river_z else north_z
-			sanitized.append(Vector3(0.0, maxf(previous.y,0.55), entry_z))
-			sanitized.append(Vector3(0.0, 0.55, river_z))
-			sanitized.append(Vector3(0.0, maxf(safe_point.y,0.55), exit_z))
-		sanitized.append(safe_point)
+	var validator := ZoneSpatialService.new()
+	validator.configure(current_zone_id, _river_center(), _zone_half_extents(current_zone_id))
+	var sanitized: Array = validator.validate_path(points, margin)
+	validator.free()
 	return sanitized
 
 func get_zone_half_extents(zone_id: String) -> Vector2:
-	if zone_id == "wychwood":
-		return Vector2(22, 17)
-	if zone_id == "greyfen":
-		return Vector2(21, 17)
-	if zone_id == "bandit_road":
-		return Vector2(22, 19)
-	if zone_id in ["vargan_approach", "vargan_court"]:
-		return Vector2(23, 19)
-	if zone_id == "record_hall":
-		return Vector2(17, 15)
-	if zone_id == "undercroft":
-		return Vector2(18, 17)
-	if zone_id == "assembly":
-		return Vector2(21, 17)
-	if zone_id == "hart_glade":
-		return Vector2(22, 19)
-	return Vector2(24, 21)
+	return SpatialSurfaceContract.zone_half_extents(zone_id)
 
 func _zone_half_extents(zone_id: String) -> Vector2:
 	return get_zone_half_extents(zone_id)
@@ -3977,91 +3951,262 @@ func _make_invisible_wall(pos: Vector3, size: Vector3) -> void:
 	body.add_child(shape)
 
 func _make_greyfen_terrain_layers() -> void:
-	_make_terrain_patch("GreyfenVillageGreen", Vector3(-9.5, 0.012, -4.0), Vector3(11.5, 0.035, 8.0), Color(0.095, 0.145, 0.085))
-	_make_terrain_patch("GreyfenShrineRise", Vector3(6.0, 0.038, -7.0), Vector3(7.4, 0.08, 5.2), Color(0.105, 0.125, 0.095))
+	_finish_greyfen_ground_surfaces()
+	_finish_greyfen_paved_roads()
 	_make_terrain_patch("GreyfenCemeterySoil", Vector3(14.0, 0.028, 8.6), Vector3(8.0, 0.045, 5.0), Color(0.095, 0.090, 0.078))
-	_make_terrain_patch("GreyfenBlacksmithYard", Vector3(9.5, 0.026, 4.5), Vector3(7.0, 0.045, 5.2), Color(0.115, 0.095, 0.072))
-	for z in [-12.0, -8.0, -4.0, 0.0, 4.0, 8.0, 12.0]:
-		_make_terrain_patch("GreyfenRoadShoulder", Vector3(-3.4, 0.024, z), Vector3(1.2, 0.032, 2.6), Color(0.095, 0.105, 0.075))
-		_make_terrain_patch("GreyfenRoadShoulder", Vector3(3.4, 0.024, z), Vector3(1.2, 0.032, 2.6), Color(0.095, 0.105, 0.075))
 	_make_grass_tufts([
 		Vector3(-3.4, 0, -11.5), Vector3(3.1, 0, -10.7), Vector3(-3.6, 0, -7.5), Vector3(3.3, 0, -5.6),
 		Vector3(-3.8, 0, -1.4), Vector3(3.6, 0, 1.8), Vector3(-3.0, 0, 5.6), Vector3(3.7, 0, 7.9),
-		Vector3(5.2, 0, -8.8), Vector3(7.4, 0, -4.9), Vector3(11.9, 0, 7.4), Vector3(14.8, 0, 6.2)
+		Vector3(-3.2, 0, -9.5), Vector3(3.0, 0, -8.1), Vector3(-3.0, 0, -5.0), Vector3(3.2, 0, -3.0),
+		Vector3(-3.1, 0, 8.4), Vector3(3.2, 0, 9.0), Vector3(-3.3, 0, 11.2), Vector3(3.4, 0, 11.5),
+		Vector3(-3.5, 0, 13.6), Vector3(3.1, 0, 13.4), Vector3(5.2, 0, -8.8), Vector3(7.4, 0, -4.9),
+		Vector3(11.9, 0, 7.4), Vector3(14.8, 0, 6.2)
 	], Color(0.070, 0.145, 0.070))
-	_make_balanced_road_surface(true)
+
+func _finish_greyfen_ground_surfaces() -> void:
+	if zone_root.find_child("GreyfenGroundMerged", true, false) != null:
+		return
+	var combined := SurfaceTool.new()
+	combined.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var source_surfaces: Array[MeshInstance3D] = []
+	for ground_name in ["GroundNorthWest", "GroundNorthEast", "GroundSouthWest", "GroundSouthEast", "GroundCenterNorthVisual", "GroundCenterSouthVisual"]:
+		var ground := zone_root.find_child(ground_name, true, false)
+		if ground == null:
+			continue
+		var surface := ground as MeshInstance3D if ground is MeshInstance3D else ground.get_node_or_null("Surface") as MeshInstance3D
+		if surface == null:
+			continue
+		var origin: Vector3 = zone_root.to_local(surface.global_position)
+		var half_size: Vector3 = surface.scale * 0.5
+		var top: float = origin.y + half_size.y
+		var columns := maxi(2, ceili(half_size.x * 2.0 / 1.5))
+		var rows := maxi(2, ceili(half_size.z * 2.0 / 1.5))
+		for row in range(rows):
+			var z0 := lerpf(origin.z - half_size.z, origin.z + half_size.z, float(row) / float(rows))
+			var z1 := lerpf(origin.z - half_size.z, origin.z + half_size.z, float(row + 1) / float(rows))
+			# Crop only the visual ground. Its unchanged collision still owns the bank.
+			if ground_name in ["GroundNorthWest", "GroundNorthEast"]:
+				z1 = minf(z1, 4.5 - 2.02)
+			elif ground_name in ["GroundSouthWest", "GroundSouthEast"]:
+				z0 = maxf(z0, 4.5 + 2.02)
+			if z1 <= z0:
+				continue
+			for column in range(columns):
+				var x0 := lerpf(origin.x - half_size.x, origin.x + half_size.x, float(column) / float(columns))
+				var x1 := lerpf(origin.x - half_size.x, origin.x + half_size.x, float(column + 1) / float(columns))
+				for point in [Vector3(x0, top, z0), Vector3(x1, top, z0), Vector3(x0, top, z1), Vector3(x1, top, z0), Vector3(x1, top, z1), Vector3(x0, top, z1)]:
+					combined.set_normal(Vector3.UP)
+					combined.set_uv(Vector2(point.x, point.z))
+					combined.set_color(_greyfen_ground_tint(point))
+					combined.add_vertex(point)
+		source_surfaces.append(surface)
+	if source_surfaces.size() != 6:
+		push_error("Greyfen authored ground is incomplete: %d/6 surfaces" % source_surfaces.size())
+		return
+	_append_greyfen_river_banks(combined)
+	var ground_visual := MeshInstance3D.new()
+	ground_visual.name = "GreyfenGroundMerged"
+	ground_visual.mesh = combined.commit()
+	var ground_material := world_materials.get_material("forest_ground", str(settings.settings.get("quality_preset", "balanced")), Color.WHITE, 0.0, false).duplicate() as StandardMaterial3D
+	ground_material.resource_name = "GreyfenGroundBlended"
+	ground_material.vertex_color_use_as_albedo = true
+	ground_visual.material_override = ground_material
+	ground_visual.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	zone_root.add_child(ground_visual)
+	for surface in source_surfaces:
+		surface.visible = false
+		surface.queue_free()
+
+func _append_greyfen_river_banks(surface: SurfaceTool) -> void:
+	var bridge_half := BridgeSurfaceContract.HALF_WIDTH
+	var river := RiverSection.new()
+	for bank_side in [-1.0, 1.0]:
+		var land_z: float = 4.5 + bank_side * 2.02
+		for section in [[-21.0, -bridge_half + 0.08], [bridge_half - 0.08, 21.0]]:
+			var segments := maxi(12, ceili((float(section[1]) - float(section[0])) / 0.85))
+			for index in range(segments):
+				var x0 := lerpf(float(section[0]), float(section[1]), float(index) / float(segments))
+				var x1 := lerpf(float(section[0]), float(section[1]), float(index + 1) / float(segments))
+				var a := Vector3(x0, 0.006, land_z)
+				var b := Vector3(x1, 0.006, land_z)
+				var edge0 := river._water_channel_vertex(x0 / 42.0 + 0.5, 0.0 if bank_side < 0 else 1.0, 42.0, 3.4).z + 4.5
+				var edge1 := river._water_channel_vertex(x1 / 42.0 + 0.5, 0.0 if bank_side < 0 else 1.0, 42.0, 3.4).z + 4.5
+				# The lower edge stays under the lowest animated wave, not above it.
+				var c := Vector3(x0, -0.30, edge0 - bank_side * 0.06)
+				var d := Vector3(x1, -0.30, edge1 - bank_side * 0.06)
+				var triangles := [a, b, c, b, d, c] if bank_side < 0.0 else [a, c, b, b, c, d]
+				for point in triangles:
+					var shore_weight := clampf((0.006 - point.y) / 0.306, 0.0, 1.0)
+					var tint := _greyfen_ground_tint(point).lerp(Color(0.29, 0.41, 0.35), shore_weight)
+					surface.set_normal(Vector3.UP)
+					surface.set_uv(Vector2(point.x, point.z))
+					surface.set_color(tint)
+					surface.add_vertex(point)
+
+func _greyfen_ground_tint(point: Vector3) -> Color:
+	var tint := Color(0.42, 0.62, 0.40)
+	for region in [
+		[Vector2(-9.5, -4.0), Vector2(6.5, 5.0), Color(0.51, 0.48, 0.35)],
+		[Vector2(6.0, -7.0), Vector2(4.6, 3.5), Color(0.40, 0.57, 0.39)],
+		[Vector2(9.5, 4.5), Vector2(4.5, 3.7), Color(0.49, 0.44, 0.34)],
+		[Vector2(-5.4, 11.5), Vector2(3.4, 2.5), Color(0.52, 0.47, 0.35)],
+		[Vector2(7.0, 10.3), Vector2(2.8, 2.4), Color(0.49, 0.46, 0.35)],
+	]:
+		var offset := Vector2((point.x - region[0].x) / region[1].x, (point.z - region[0].y) / region[1].y)
+		tint = tint.lerp(region[2], 1.0 - smoothstep(0.60, 1.0, offset.length()))
+	var roadside := 1.0 - smoothstep(0.25, 1.55, absf(absf(point.x) - 3.25))
+	var span_weight := 0.0
+	for span in [Vector2(-13.5, -2.0), Vector2(2.0, 6.7), Vector2(11.0, 14.0)]:
+		span_weight = maxf(span_weight, smoothstep(0.0, 1.2, point.z - span.x) * smoothstep(0.0, 1.2, span.y - point.z))
+	return tint.lerp(Color(0.45, 0.58, 0.36), roadside * span_weight * 0.75)
+
+func _finish_greyfen_paved_roads() -> void:
+	for road_name in ["PavedRoadMain", "PavedRoadVillage", "PavedRoadCastle"]:
+		var road := zone_root.find_child(road_name, true, false) as MeshInstance3D
+		if road == null:
+			continue
+		var road_size := road.scale
+		road.mesh = _make_greyfen_road_surface(road_size, road.position)
+		road.scale = Vector3.ONE
+		var road_material := _road_material(true, Color(0.16, 0.13, 0.09)).duplicate() as StandardMaterial3D
+		road_material.vertex_color_use_as_albedo = true
+		road.material_override = road_material
+
+func _make_greyfen_road_surface(size: Vector3, origin: Vector3) -> ArrayMesh:
+	var along_z := size.z >= size.x
+	var length := size.z if along_z else size.x
+	var half_width := (size.x if along_z else size.z) * 0.5
+	var rows := maxi(4, ceili(length / 0.9))
+	var lateral := [-1.0, -0.65, 0.0, 0.65, 1.0]
+	var vertices := PackedVector3Array()
+	var normals := PackedVector3Array()
+	var colors := PackedColorArray()
+	var uvs := PackedVector2Array()
+	var indices := PackedInt32Array()
+	for row in range(rows + 1):
+		var forward := length * (float(row) / float(rows) - 0.5)
+		var bend := sin(forward * 0.51 + origin.x * 0.17) * 0.08
+		var shoulder := half_width - 0.13 + sin(forward * 1.37 + origin.z * 0.29) * 0.12
+		for column in range(lateral.size()):
+			var side := float(lateral[column])
+			var across := bend + side * (shoulder if absf(side) > 0.9 else half_width)
+			var point := Vector3(across, size.y * 0.5, forward) if along_z else Vector3(forward, size.y * 0.5, across)
+			vertices.append(point)
+			normals.append(Vector3.UP)
+			uvs.append(Vector2(origin.x + point.x, origin.z + point.z))
+			var edge_mix := 1.0 - smoothstep(0.62, 1.0, absf(side))
+			colors.append(Color(0.54, 0.58, 0.49).lerp(Color.WHITE, edge_mix))
+	for row in range(rows):
+		for column in range(lateral.size() - 1):
+			var a := row * lateral.size() + column
+			var b := a + 1
+			var c := a + lateral.size()
+			var d := c + 1
+			indices.append_array(PackedInt32Array([a, b, c, b, d, c]))
+	var arrays: Array = []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = vertices
+	arrays[Mesh.ARRAY_NORMAL] = normals
+	arrays[Mesh.ARRAY_COLOR] = colors
+	arrays[Mesh.ARRAY_TEX_UV] = uvs
+	arrays[Mesh.ARRAY_INDEX] = indices
+	var mesh := ArrayMesh.new()
+	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	return mesh
 
 func _make_wychwood_terrain_layers() -> void:
-	_make_terrain_patch("WychwoodWetRoad", Vector3(0, 0.028, 4.0), Vector3(5.2, 0.045, 22.0), Color(0.045, 0.055, 0.043))
-	_make_terrain_patch("WychwoodRootFloorLeft", Vector3(-7.0, 0.018, 1.0), Vector3(8.0, 0.04, 25.0), Color(0.035, 0.072, 0.045))
-	_make_terrain_patch("WychwoodRootFloorRight", Vector3(7.0, 0.018, 0.0), Vector3(8.0, 0.04, 25.0), Color(0.035, 0.068, 0.045))
-	_make_terrain_patch("WychwoodClearingMud", Vector3(0, 0.032, -6.5), Vector3(10.0, 0.05, 7.0), Color(0.035, 0.044, 0.036))
-	for z in [12.0, 8.0, 4.0, 0.0, -4.0, -8.0]:
-		_make_terrain_patch("WychwoodPathShoulder", Vector3(-3.0, 0.035, z), Vector3(1.0, 0.035, 2.6), Color(0.032, 0.060, 0.040))
-		_make_terrain_patch("WychwoodPathShoulder", Vector3(3.0, 0.035, z), Vector3(1.0, 0.035, 2.6), Color(0.032, 0.060, 0.040))
+	if not WychwoodTerrainPresentation.integrate(zone_root):
+		push_error("Wychwood walkable terrain could not be integrated")
+		return
 	_make_grass_tufts([
 		Vector3(-2.8, 0, 11.8), Vector3(2.6, 0, 10.5), Vector3(-3.1, 0, 7.2), Vector3(3.3, 0, 5.6),
 		Vector3(-3.4, 0, 2.0), Vector3(3.5, 0, -0.2), Vector3(-3.7, 0, -4.2), Vector3(3.4, 0, -6.1),
 		Vector3(-5.0, 0, -8.4), Vector3(5.3, 0, -9.0)
 	], Color(0.045, 0.115, 0.065))
-	_make_balanced_road_surface(false)
 
-func _make_balanced_road_surface(paved: bool) -> void:
-	if _performance_mode():
+func _make_wychwood_clearing_floor() -> void:
+	var surface := SurfaceTool.new()
+	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var center := Vector3(0, 0.059, -6.5)
+	var segments := 20
+	for index in segments:
+		var angle := TAU * float(index) / float(segments)
+		var next_angle := TAU * float(index + 1) / float(segments)
+		var radius := 0.88 + 0.12 * sin(float(index) * 2.17)
+		var next_radius := 0.88 + 0.12 * sin(float(index + 1) * 2.17)
+		var inner := center + Vector3(cos(angle) * 3.25 * radius, 0, sin(angle) * 2.35 * radius)
+		var inner_next := center + Vector3(cos(next_angle) * 3.25 * next_radius, 0, sin(next_angle) * 2.35 * next_radius)
+		var outer := center + Vector3(cos(angle) * 5.25 * radius, 0, sin(angle) * 3.75 * radius)
+		var outer_next := center + Vector3(cos(next_angle) * 5.25 * next_radius, 0, sin(next_angle) * 3.75 * next_radius)
+		for point in [[center, Color(0.52, 0.53, 0.47)], [inner_next, Color(0.68, 0.68, 0.57)], [inner, Color(0.68, 0.68, 0.57)], [inner, Color(0.68, 0.68, 0.57)], [inner_next, Color(0.68, 0.68, 0.57)], [outer_next, Color(0.91, 0.93, 0.83)], [inner, Color(0.68, 0.68, 0.57)], [outer_next, Color(0.91, 0.93, 0.83)], [outer, Color(0.91, 0.93, 0.83)]]:
+			surface.set_normal(Vector3.UP)
+			surface.set_color(point[1])
+			surface.set_uv(Vector2(point[0].x, point[0].z) * 0.55)
+			surface.add_vertex(point[0])
+	var floor := MeshInstance3D.new()
+	floor.name = "WychwoodClearingMud"
+	floor.mesh = surface.commit()
+	var material := world_materials.get_material("wet_mud", str(settings.settings.get("quality_preset", "balanced")), Color(0.30, 0.36, 0.29), 0.0, true).duplicate() as StandardMaterial3D
+	material.vertex_color_use_as_albedo = true
+	floor.material_override = material
+	floor.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	zone_root.add_child(floor)
+
+func _make_wychwood_winding_path() -> void:
+	if zone_root.find_child("WychwoodWindingPath", true, false) != null:
 		return
-	var batch = MultiMeshInstance3D.new()
-	batch.name = "BalancedPavedRoadDetail" if paved else "BalancedWychwoodRoadDetail"
-	# Rounded, low-profile wear keeps the road readable without the raised
-	# rectangular slabs that formed a checkerboard at gameplay distance.
-	var detail_mesh: Mesh
-	if paved:
-		var cobble := SphereMesh.new()
-		cobble.radius = 0.20
-		cobble.height = 0.035
-		cobble.radial_segments = 8
-		cobble.rings = 3
-		detail_mesh = cobble
-	else:
-		var shoulder := BoxMesh.new()
-		shoulder.size = Vector3(1.2, 0.012, 0.48)
-		detail_mesh = shoulder
-	var multimesh = MultiMesh.new()
-	multimesh.transform_format = MultiMesh.TRANSFORM_3D
-	multimesh.use_colors = paved
-	multimesh.mesh = detail_mesh
-	# Keep paving dense enough to read as a continuous staggered surface while
-	# retaining one MultiMesh draw and the same authored road footprint.
-	var rows = 36 if paved else 12
-	var columns = 4 if paved else 1
-	multimesh.instance_count = rows * columns
-	var index = 0
-	for row in range(rows):
-		for column in range(columns):
-			var row_offset := 0.10 if paved and row % 2 == 1 else 0.0
-			var x = (float(column) - 1.5) * 0.78 + row_offset + sin(float(row * 5 + column)) * 0.08 if paved else sin(float(row) * 1.7) * 0.55
-			var z = -12.4 + float(row) * (0.72 if paved else 2.05) + (sin(float(row) * 1.3) * 0.08 if paved else 0.0)
-			var yaw = sin(float(row * 7 + column * 3)) * 0.16 if paved else sin(float(row) * 0.8) * 0.16
-			var basis := Basis(Vector3.UP, yaw)
-			if paved:
-				basis = basis.scaled(Vector3(0.78 + float((row + column) % 3) * 0.08, 0.82, 0.72 + float((row * 2 + column) % 3) * 0.10))
-			multimesh.set_instance_transform(index, Transform3D(basis, Vector3(x, 0.058, z)))
-			if paved:
-				var shade := 0.74 + float((row + column * 2) % 4) * 0.035
-				multimesh.set_instance_color(index, Color(shade, shade * 0.94, shade * 0.84, 1.0))
-			index += 1
-	batch.multimesh = multimesh
-	var material: StandardMaterial3D
-	if paved:
-		material = StandardMaterial3D.new()
-		material.albedo_color = Color(0.34, 0.32, 0.28)
-		material.roughness = 0.94
-		material.vertex_color_use_as_albedo = true
-	else:
-		material = StandardMaterial3D.new()
-		material.albedo_color = Color(0.025, 0.034, 0.030)
-		material.roughness = 0.32
-	batch.material_override = material
-	zone_root.add_child(batch)
+	var mud_surface := SurfaceTool.new()
+	mud_surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var shoulder_surface := SurfaceTool.new()
+	shoulder_surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var river_edge := BridgeSurfaceContract.RIVER_HALF_SPAN
+	for span in [Vector2(-10.5, -river_edge), Vector2(river_edge, 16.5)]:
+		var rows := ceili((span.y - span.x) / 0.9)
+		for row in range(rows):
+			var z0 := lerpf(span.x, span.y, float(row) / float(rows))
+			var z1 := lerpf(span.x, span.y, float(row + 1) / float(rows))
+			var bridge_blend0 := 1.0 - smoothstep(river_edge, river_edge + 3.0, absf(z0))
+			var bridge_blend1 := 1.0 - smoothstep(river_edge, river_edge + 3.0, absf(z1))
+			var core0 := lerpf(1.26 + 0.16 * sin(z0 * 1.37) + 0.07 * sin(z0 * 2.59), 2.28, bridge_blend0)
+			var core1 := lerpf(1.26 + 0.16 * sin(z1 * 1.37) + 0.07 * sin(z1 * 2.59), 2.28, bridge_blend1)
+			var outer0 := maxf(3.48, core0 + 0.80) + 0.24 * sin(z0 * 1.41)
+			var outer1 := maxf(3.48, core1 + 0.80) + 0.24 * sin(z1 * 1.41)
+			var lateral0 := [-outer0, -core0, 0.0, core0, outer0]
+			var lateral1 := [-outer1, -core1, 0.0, core1, outer1]
+			for band in range(4):
+				var x00: float = _wychwood_path_center(z0) + float(lateral0[band])
+				var x01: float = _wychwood_path_center(z1) + float(lateral1[band])
+				var x10: float = _wychwood_path_center(z0) + float(lateral0[band + 1])
+				var x11: float = _wychwood_path_center(z1) + float(lateral1[band + 1])
+				var surface := mud_surface if band in [1, 2] else shoulder_surface
+				var left_color := Color(0.70, 0.73, 0.66) if band == 0 else Color(0.82, 0.84, 0.78) if band == 1 else Color(0.97, 0.98, 0.94) if band == 2 else Color(0.58, 0.62, 0.55)
+				var right_color := Color(0.58, 0.62, 0.55) if band == 0 else Color(0.97, 0.98, 0.94) if band == 1 else Color(0.82, 0.84, 0.78) if band == 2 else Color(0.70, 0.73, 0.66)
+				for vertex in [
+					[Vector3(x00, 0.057, z0), left_color], [Vector3(x10, 0.057, z0), right_color], [Vector3(x01, 0.057, z1), left_color],
+					[Vector3(x10, 0.057, z0), right_color], [Vector3(x11, 0.057, z1), right_color], [Vector3(x01, 0.057, z1), left_color],
+				]:
+					surface.set_normal(Vector3.UP)
+					surface.set_color(vertex[1])
+					surface.set_uv(Vector2(vertex[0].x, vertex[0].z) * 0.55)
+					surface.add_vertex(vertex[0])
+	var path := MeshInstance3D.new()
+	path.name = "WychwoodWindingPath"
+	var mesh := mud_surface.commit()
+	shoulder_surface.commit(mesh)
+	var mud_material := world_materials.get_material("wet_mud", str(settings.settings.get("quality_preset", "balanced")), Color(0.56, 0.50, 0.42), 0.20, true).duplicate() as StandardMaterial3D
+	mud_material.resource_name = "WychwoodWindingPathMud"
+	mud_material.roughness = 0.88
+	mud_material.vertex_color_use_as_albedo = true
+	mesh.surface_set_material(0, mud_material)
+	var shoulder_material := world_materials.get_material("forest_ground", str(settings.settings.get("quality_preset", "balanced")), Color(0.58, 0.62, 0.54), 0.0, true).duplicate() as StandardMaterial3D
+	shoulder_material.vertex_color_use_as_albedo = true
+	mesh.surface_set_material(1, shoulder_material)
+	path.mesh = mesh
+	path.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	zone_root.add_child(path)
+
+func _wychwood_path_center(z: float) -> float:
+	return sin(z * 0.28) * 0.62 * smoothstep(2.3, 7.0, absf(z))
 
 func _make_greyfen_path_edges() -> void:
 	var marker = Node3D.new()
@@ -4076,18 +4221,16 @@ func _make_wychwood_path_edges() -> void:
 	marker.name = "WychwoodPathEdgeComposition"
 	zone_root.add_child(marker)
 	for z in [12, 9, 6, 3, 0, -3, -6, -9]:
-		_make_path_stone(Vector3(-2.25 + randf_range(-0.18, 0.18), 0, z + randf_range(-0.25, 0.25)), 0.42)
-		_make_path_stone(Vector3(2.25 + randf_range(-0.18, 0.18), 0, z + randf_range(-0.25, 0.25)), 0.42)
 		_make_low_berm(Vector3(-4.25, 0, z), Vector3(1.4, 0.48, 2.2), Color(0.030, 0.060, 0.038))
 		_make_low_berm(Vector3(4.25, 0, z), Vector3(1.4, 0.48, 2.2), Color(0.030, 0.060, 0.038))
 
 func _make_terrain_patch(name: String, pos: Vector3, size: Vector3, color: Color) -> void:
 	var river_z := _river_center()
-	var river_min := river_z - 2.05
-	var river_max := river_z + 2.05
+	var river_min := river_z - BridgeSurfaceContract.RIVER_HALF_SPAN
+	var river_max := river_z + BridgeSurfaceContract.RIVER_HALF_SPAN
 	var patch_min := pos.z - size.z * 0.5
 	var patch_max := pos.z + size.z * 0.5
-	if river_z < 900.0 and patch_min < river_max and patch_max > river_min:
+	if river_z < SpatialSurfaceContract.NO_RIVER and patch_min < river_max and patch_max > river_min:
 		if patch_min < river_min:
 			var north_size := river_min - patch_min
 			_make_terrain_patch_raw("%s_NorthBank" % name, Vector3(pos.x,pos.y,patch_min+north_size*0.5), Vector3(size.x,size.y,north_size), color)
@@ -4101,7 +4244,7 @@ func _make_terrain_patch_raw(name: String, pos: Vector3, size: Vector3, color: C
 	var mesh = MeshInstance3D.new()
 	mesh.name = name
 	mesh.position = pos
-	mesh.rotation_degrees.y = randf_range(-2.0, 2.0)
+	mesh.rotation_degrees.y = 0.0 if current_zone_id == "wychwood" else randf_range(-2.0, 2.0)
 	zone_root.add_child(mesh)
 	terrain_patch_batch_data.append({"node":mesh,"size":size,"color":color,"material":_terrain_material(name,color)})
 
@@ -4123,15 +4266,41 @@ func _make_low_berm(pos: Vector3, size: Vector3, color: Color) -> void:
 	shape.shape = box
 	body.add_child(shape)
 	var mesh = MeshInstance3D.new()
-	mesh.mesh = shared_box_mesh
-	mesh.scale = size
-	mesh.material_override = world_materials.get_material("forest_ground", str(settings.settings.get("quality_preset", "balanced")), color.lightened(0.30), 0.0, true)
+	mesh.name = "RoundedEarthBerm"
+	var surface := SurfaceTool.new()
+	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var columns := 8
+	var rows := 10
+	var points: Array[Vector3] = []
+	for row in range(rows + 1):
+		for column in range(columns + 1):
+			var u := float(column) / columns * 2.0 - 1.0
+			var v := float(row) / rows * 2.0 - 1.0
+			var shoulder := pow(pow(absf(u), 4.0) + pow(absf(v), 4.0), 0.25)
+			var rise := 1.0 - smoothstep(0.40, 1.0, shoulder)
+			var irregularity := sin(u * 4.1 + pos.z) * sin(v * 3.2 + pos.x) * 0.07 * rise
+			var edge_x := 1.0 + 0.10 * sin(v * 3.1 + pos.z)
+			var edge_z := 1.0 + 0.09 * sin(u * 4.0 + pos.x)
+			points.append(Vector3(u * (size.x * 0.5 + 0.28) * edge_x, -size.y * 0.5 - 0.015 + size.y * (rise + irregularity), v * (size.z * 0.5 + 0.28) * edge_z))
+	for row in range(rows):
+		for column in range(columns):
+			var a := row * (columns + 1) + column
+			var b := a + 1
+			var c := a + columns + 1
+			var d := c + 1
+			for index in [a, b, c, b, d, c]:
+				var point := points[index]
+				surface.set_uv(Vector2(point.x + pos.x, point.z + pos.z))
+				surface.add_vertex(point)
+	surface.generate_normals()
+	mesh.mesh = surface.commit()
+	mesh.material_override = _terrain_material("WychwoodEarthBerm", color)
 	body.add_child(mesh)
 
 func _make_grass_tufts(points: Array, color: Color) -> void:
 	var safe_points: Array = []
 	for point in points:
-		if not _is_river_excluded(point,0.25):
+		if not _is_river_excluded(point,0.25) and (spatial_service == null or not spatial_service.is_reserved(point, 0.25)):
 			safe_points.append(point)
 	if safe_points.is_empty():
 		return
@@ -4170,8 +4339,6 @@ func _make_spawn_composition() -> void:
 	_make_light("SpawnCoolBackplate", Vector3(1.8, 3.5, 0.4), Color(0.30, 0.36, 0.50), 1.4)
 	_make_fog_sheet(Vector3(0, 0.8, 0.8), Vector3(10.0, 0.7, 3.2), Color(0.13, 0.15, 0.16, 0.07))
 	_make_fake_light_pool("SpawnLanternPool", Vector3(-2.55, 0.035, 5.6), Vector3(1.9, 0.025, 1.25), Color(0.42, 0.20, 0.075))
-	_make_visual_box("SpawnViewShadowLeft", Vector3(-4.0, 0.035, 4.6), Vector3(1.2, 0.025, 3.4), Color(0.055, 0.070, 0.055))
-	_make_visual_box("SpawnViewShadowRight", Vector3(4.0, 0.035, 3.9), Vector3(1.1, 0.025, 3.7), Color(0.055, 0.068, 0.055))
 	for pos in [Vector3(-3.1, 0, 4.2), Vector3(3.0, 0, 3.4), Vector3(-2.9, 0, 0.2), Vector3(2.9, 0, -1.5)]:
 		_make_path_stone(pos, 0.22)
 	_make_lantern_post(Vector3(-2.8, 0, 5.7), false, true)
@@ -4179,16 +4346,30 @@ func _make_spawn_composition() -> void:
 	_make_firewood_stack(Vector3(-5.1, 0, 5.2), 18.0)
 	_make_broken_fence_run(Vector3(4.7, 0, 5.8), false)
 
-func _make_greyfen_first_impression_dressing() -> void:
-	var marker = Node3D.new()
-	marker.name = "GreyfenFirstImpressionDressing"
-	marker.position = Vector3(0, 0, 0)
-	zone_root.add_child(marker)
-	_make_road_ruts()
-	_make_lantern_rhythm()
-	_make_shrine_approach()
-	_make_village_story_clusters()
-	_make_crow_silhouettes()
+func _make_greyfen_first_impression_dressing(stage: String = "") -> void:
+	var stages := ["ruts", "lanterns", "shrine", "story", "crows"]
+	if stage != "" and stage not in stages:
+		push_error("Unknown Greyfen first-impression stage: " + stage)
+		return
+	var marker := zone_root.find_child("GreyfenFirstImpressionDressing", true, false)
+	if marker == null:
+		marker = Node3D.new()
+		marker.name = "GreyfenFirstImpressionDressing"
+		zone_root.add_child(marker)
+	for part in stages:
+		if (stage != "" and stage != part) or bool(marker.get_meta("built_" + part, false)):
+			continue
+		match part:
+			"ruts": _make_road_ruts()
+			"lanterns": _make_lantern_rhythm()
+			"shrine": _make_shrine_approach()
+			"story": _make_village_story_clusters()
+			"crows": _make_crow_silhouettes()
+		marker.set_meta("built_" + part, true)
+	for part in stages:
+		if not bool(marker.get_meta("built_" + part, false)):
+			return
+	marker.set_meta("first_impression_complete", true)
 
 func _make_quality_greyfen_overhaul() -> void:
 	if str(settings.settings.get("quality_preset", "balanced")) != "quality":
@@ -4276,7 +4457,8 @@ func _make_lantern_post(pos: Vector3, shrine_style: bool, casts_light: bool) -> 
 		_make_light("SpawnWarmRead" if not shrine_style else "Shrine Beacon", pos + Vector3(0.45, 1.45, 0), glow_color, 0.9)
 
 func _make_fake_light_pool(name: String, pos: Vector3, size: Vector3, color: Color) -> void:
-	_make_visual_box(name, pos, size, color)
+	var pool := _make_visual_box(name, pos, size, color)
+	pool.set_meta("night_only_geometry", true)
 
 func _make_firewood_stack(pos: Vector3, yaw: float) -> void:
 	var root = Node3D.new()
@@ -4346,12 +4528,57 @@ func _make_shrine_candle(pos: Vector3) -> void:
 	zone_root.add_child(flame)
 
 func _make_hanging_cloth(pos: Vector3, size: Vector3, color: Color) -> void:
-	_make_visual_box("HangingCloth", pos, size, color)
+	var columns := 5
+	var rows := 3
+	var vertices := PackedVector3Array()
+	var normals := PackedVector3Array()
+	var uvs := PackedVector2Array()
+	var indices := PackedInt32Array()
+	for row in range(rows + 1):
+		var v := float(row) / float(rows)
+		for column in range(columns + 1):
+			var u := float(column) / float(columns)
+			var x := (u - 0.5) * size.x
+			var hem := (0.07 + 0.04 * sin(float(column) * 2.3)) * v * v
+			var y := (0.5 - v) * size.y + hem
+			var z := sin(u * PI * 4.0) * 0.055 + v * v * 0.035
+			vertices.append(Vector3(x, y, z))
+			normals.append(Vector3.BACK)
+			uvs.append(Vector2(u, v))
+	for row in range(rows):
+		for column in range(columns):
+			var a := row * (columns + 1) + column
+			var b := a + 1
+			var c := a + columns + 1
+			var d := c + 1
+			indices.append_array(PackedInt32Array([a, c, b, b, c, d]))
+	var arrays: Array = []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = vertices
+	arrays[Mesh.ARRAY_NORMAL] = normals
+	arrays[Mesh.ARRAY_TEX_UV] = uvs
+	arrays[Mesh.ARRAY_INDEX] = indices
+	var cloth_mesh := ArrayMesh.new()
+	cloth_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	var cloth := MeshInstance3D.new()
+	cloth.name = "HangingClothDrape_%d" % zone_root.get_child_count()
+	cloth.position = pos
+	cloth.mesh = cloth_mesh
+	var cloth_material := _mat(color).duplicate() as StandardMaterial3D
+	cloth_material.cull_mode = BaseMaterial3D.CULL_DISABLED
+	cloth_material.roughness = 0.96
+	cloth.material_override = cloth_material
+	zone_root.add_child(cloth)
 
 func _make_fake_fog_bank(pos: Vector3) -> void:
 	_make_visual_box("LowColdFogBank", pos + Vector3(0, 0.07, 0), Vector3(1.6, 0.10, 0.55), Color(0.105, 0.125, 0.118))
 
 func _make_crow_silhouettes() -> void:
+	# These sub-metre silhouettes share geometry; default spheres spend thousands
+	# of triangles on each wing despite occupying only a few gameplay pixels.
+	var silhouette_mesh := SphereMesh.new()
+	silhouette_mesh.radial_segments = 12
+	silhouette_mesh.rings = 7
 	var index := 0
 	for item in [
 		[Vector3(-8.5, 5.8, -11.5), -14.0],
@@ -4365,16 +4592,17 @@ func _make_crow_silhouettes() -> void:
 		root.set_meta("motion_phase", float(index) * 1.7)
 		root.set_meta("motion_amount", 4.0)
 		zone_root.add_child(root)
-		_add_crow_part(root, "CrowBody", SphereMesh.new(), Vector3(0, 0, 0), Vector3(0.18, 0.12, 0.30), Color(0.010, 0.010, 0.012))
-		_add_crow_part(root, "CrowHead", SphereMesh.new(), Vector3(0, 0.10, -0.22), Vector3(0.12, 0.11, 0.13), Color(0.016, 0.016, 0.018))
+		_add_crow_part(root, "CrowBody", silhouette_mesh, Vector3(0, 0, 0), Vector3(0.18, 0.12, 0.30), Color(0.010, 0.010, 0.012))
+		_add_crow_part(root, "CrowHead", silhouette_mesh, Vector3(0, 0.04, -0.13), Vector3(0.12, 0.11, 0.13), Color(0.016, 0.016, 0.018))
 		var beak_mesh := CylinderMesh.new()
 		beak_mesh.top_radius = 0.0
 		beak_mesh.bottom_radius = 0.055
 		beak_mesh.height = 0.16
-		_add_crow_part(root, "CrowBeak", beak_mesh, Vector3(0, 0.08, -0.36), Vector3(0.72, 0.72, 1.0), Color(0.15, 0.12, 0.08), Vector3(-90, 0, 0))
-		_add_crow_part(root, "CrowWingLeft", SphereMesh.new(), Vector3(-0.18, 0.0, -0.01), Vector3(0.30, 0.035, 0.13), Color(0.008, 0.008, 0.010), Vector3(0, 0, -18))
-		_add_crow_part(root, "CrowWingRight", SphereMesh.new(), Vector3(0.18, 0.0, -0.01), Vector3(0.30, 0.035, 0.13), Color(0.008, 0.008, 0.010), Vector3(0, 0, 18))
-		_add_crow_part(root, "CrowTail", SphereMesh.new(), Vector3(0, -0.02, 0.24), Vector3(0.12, 0.04, 0.24), Color(0.008, 0.008, 0.010), Vector3(18, 0, 0))
+		beak_mesh.radial_segments = 8
+		_add_crow_part(root, "CrowBeak", beak_mesh, Vector3(0, 0.04, -0.22), Vector3(0.72, 0.72, 1.0), Color(0.15, 0.12, 0.08), Vector3(-90, 0, 0))
+		_add_crow_part(root, "CrowWingLeft", silhouette_mesh, Vector3(-0.18, 0.0, -0.01), Vector3(0.30, 0.035, 0.13), Color(0.008, 0.008, 0.010), Vector3(0, 0, -18))
+		_add_crow_part(root, "CrowWingRight", silhouette_mesh, Vector3(0.18, 0.0, -0.01), Vector3(0.30, 0.035, 0.13), Color(0.008, 0.008, 0.010), Vector3(0, 0, 18))
+		_add_crow_part(root, "CrowTail", silhouette_mesh, Vector3(0, -0.02, 0.24), Vector3(0.12, 0.04, 0.24), Color(0.008, 0.008, 0.010), Vector3(18, 0, 0))
 		index += 1
 
 func _add_crow_part(parent: Node3D, name: String, mesh: Mesh, local_pos: Vector3, scale_value: Vector3, color: Color, rotation_degrees := Vector3.ZERO) -> MeshInstance3D:
@@ -4402,17 +4630,15 @@ func _make_visual_box(name: String, pos: Vector3, size: Vector3, color: Color) -
 	mesh_instance.set_meta("visual_name", name)
 	mesh_instance.position = pos
 	mesh_instance.visibility_range_end = 32.0
-	# Batched markers are removed during environment finalization, but they
-	# still spend at least one frame in the scene tree. Give them a valid
-	# fallback surface immediately so renderer cleanup cannot observe a null
-	# mesh/material while a zone is being assembled.
-	mesh_instance.mesh = shared_box_mesh
-	mesh_instance.material_override = _valid_material_or_fallback(null)
 	zone_root.add_child(mesh_instance)
 	if environment_batches_flushed:
+		mesh_instance.mesh = shared_box_mesh
 		mesh_instance.scale = size
 		mesh_instance.material_override = _mat(color)
 	else:
+		# A pending marker carries only a transform, not visible geometry. Binding
+		# a unit cube here creates disposable renderer work and can flash a wrong
+		# shape before the batch is published. Terrain markers follow this rule too.
 		visual_box_batch_data.append({"node":mesh_instance,"size":size,"color":color})
 	return mesh_instance
 
@@ -4437,7 +4663,7 @@ func _make_greyfen_road_of_crows_story_beats() -> void:
 	_make_black_feather_scatter("RoadCrowsShrineBlackFeathers", Vector3(5.25, 0.10, -6.25), 5, 0.65)
 	_make_broken_charm("RoadCrowsShrineSnappedToken", Vector3(5.65, 0.12, -6.75), -22.0)
 	_make_visual_box("RoadCrowsExtinguishedCandle", Vector3(6.55, 0.16, -6.35), Vector3(0.11, 0.28, 0.11), Color(0.075, 0.065, 0.055))
-	_make_visual_box("RoadCrowsGraveyardDisturbedSoil", Vector3(13.65, 0.065, 9.45), Vector3(1.65, 0.035, 0.85), Color(0.060, 0.044, 0.033))
+	CemeteryEvidencePresentation.add_disturbed_soil(zone_root, Vector3(13.65, 0.057, 9.45), world_materials.get_material("wet_mud", str(settings.settings.get("quality_preset", "balanced")), Color(0.43, 0.38, 0.31), 0.0, false))
 	_make_broken_charm("RoadCrowsGraveyardHalfBuriedCharm", Vector3(13.18, 0.13, 9.15), 14.0)
 	_make_black_feather_scatter("RoadCrowsGateThresholdFeathers", Vector3(-1.25, 0.10, -13.65), 5, 0.9)
 	_make_dark_track("RoadCrowsGateMudTrail", Vector3(0.0, 0.071, -13.15), Vector3(0.42, 0.022, 2.15), Color(0.040, 0.027, 0.020))
@@ -4478,7 +4704,7 @@ func _make_narrative_aftermath(zone_id: String) -> void:
 			_make_post_ghoulkin_story_clue()
 			_make_visual_box("WychwoodPackAshResidue", Vector3(0.0, 0.078, -7.0), Vector3(1.7, 0.018, 1.25), Color(0.045, 0.035, 0.032))
 			_make_visual_box("WychwoodPackBrokenBinding", Vector3(1.2, 0.115, -6.4), Vector3(0.55, 0.025, 0.08), Color(0.22, 0.16, 0.10))
-		if bool(story_state.get_flag("all_road_evidence", false)):
+		if bool(story_state.get_flag("all_road_evidence", false)) and not quests.is_objective_done("main_road_of_crows", "fight_ghoulkin"):
 			_make_all_evidence_safe_edge()
 		for evidence in [
 			["bram", Vector3(-2.0, 0.10, 7.4), Color(0.30, 0.18, 0.12)],
@@ -4521,6 +4747,15 @@ func _make_broken_charm(name: String, pos: Vector3, yaw: float) -> void:
 	_add_visual_box_child(root, "%sRedThread" % name, Vector3(0.0, 0.024, -0.12), Vector3(0.38, 0.020, 0.045), Color(0.30, 0.035, 0.028))
 
 func _make_dark_track(name: String, pos: Vector3, size: Vector3, color: Color) -> void:
+	if current_zone_id == "wychwood":
+		var trace := MeshInstance3D.new()
+		trace.name = name
+		trace.mesh = world_materials.make_organic_ground_patch(size, pos)
+		trace.position = pos
+		trace.material_override = world_materials.get_material("wet_mud", str(settings.settings.get("quality_preset", "balanced")), color.lightened(0.18), 0.0, false)
+		trace.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		zone_root.add_child(trace)
+		return
 	var track = _make_visual_box(name, pos, size, color)
 	track.rotation_degrees.y = randf_range(-8.0, 8.0)
 
@@ -4549,90 +4784,52 @@ func _make_stylized_house(pos: Vector3) -> void:
 	_make_prop_box("VillageWindow", pos + Vector3(1.15, 1.25, -1.56), Vector3(0.55, 0.45, 0.08), Color(0.86, 0.55, 0.22))
 
 func _make_village_house_dressed(pos: Vector3, yaw: float, node_name: String) -> void:
+	var house_variant := 0
+	match node_name:
+		"DressedVillageHouse_WestLane": house_variant = 1
+		"DressedVillageHouse_EastLane": house_variant = 2
+		"DressedVillageHouse_ShrineFrame": house_variant = 3
+	var mesh_path := "res://assets_external/environment/village/GreyfenHouse_Authored.res" if house_variant == 0 else "res://assets_external/environment/village/GreyfenHouse_Authored_%d.res" % house_variant
+	var authored_mesh := load(mesh_path) as ArrayMesh
+	if authored_mesh == null or authored_mesh.get_surface_count() != 6:
+		push_error("Required Greyfen house mesh is unavailable: " + node_name)
+		return
 	var root = Node3D.new()
 	root.name = node_name
 	root.add_to_group("first_route_house")
 	root.add_to_group("greyfen_house")
 	root.set_meta("visible_house", true)
+	root.set_meta("house_variant", house_variant)
 	root.position = pos
 	root.rotation_degrees.y = yaw
 	zone_root.add_child(root)
 	_make_house_collision(root)
-	var facade_variant: int = absi(node_name.hash()) % 3
-	var plaster_colors := [Color(0.32, 0.245, 0.17), Color(0.29, 0.265, 0.205), Color(0.33, 0.225, 0.16)]
-	var timber_colors := [Color(0.105, 0.055, 0.028), Color(0.085, 0.050, 0.032), Color(0.12, 0.062, 0.026)]
-	var plaster: Color = plaster_colors[facade_variant]
-	var timber: Color = timber_colors[facade_variant]
-	_add_house_box(root, "StoneFoundation", Vector3(0, 0.18, 0), Vector3(4.55, 0.36, 3.55), Color(0.28, 0.27, 0.24))
-	_add_house_box(root, "PlasteredWall", Vector3(0, 1.05, 0), Vector3(4.3, 2.1, 3.35), plaster)
-	_add_house_gables(root, plaster, timber)
-	var roof_color := Color(0.16, 0.072, 0.045) if facade_variant != 2 else Color(0.12, 0.082, 0.060)
-	if str(settings.settings.get("quality_preset", "balanced")) != "potato":
-		# Use a real two-plane gable rather than two intersecting boxes. This keeps
-		# the roof readable from the road and gives each house a grounded silhouette
-		# without adding a high-poly asset or collision complexity.
-		_add_house_gabled_roof(root, roof_color)
-		root.set_meta("roof_treatment", "authored_gabled_mesh")
-	else:
-		root.set_meta("roof_treatment", "potato_fallback_slope")
-		_add_house_box(root, "LeftRoofSlope", Vector3(-0.9, 2.42, 0), Vector3(2.55, 0.42, 3.95), Color(0.14, 0.055, 0.035), Vector3(0, 0, -13))
-		_add_house_box(root, "RightRoofSlope", Vector3(0.9, 2.42, 0), Vector3(2.55, 0.42, 3.95), Color(0.14, 0.055, 0.035), Vector3(0, 0, 13))
-	var chimney_x: float = -1.38 if facade_variant == 0 else 1.38
-	_add_house_box(root, "StoneChimney", Vector3(chimney_x, 2.63, 0.62), Vector3(0.48, 1.38, 0.48), Color(0.23, 0.22, 0.20))
-	_add_house_box(root, "ChimneyCap", Vector3(chimney_x, 3.31, 0.62), Vector3(0.62, 0.14, 0.62), Color(0.19, 0.18, 0.17))
-	_add_house_box(root, "FrontDoor", Vector3(0, 0.78, -1.72), Vector3(0.78, 1.28, 0.12), Color(0.10, 0.055, 0.030))
-	_add_house_box(root, "DoorStep", Vector3(0, 0.12, -1.98), Vector3(1.02, 0.22, 0.48), Color(0.28, 0.27, 0.24))
-	_add_house_box(root, "TimberLintel", Vector3(0, 1.53, -1.78), Vector3(1.05, 0.14, 0.12), Color(0.11, 0.065, 0.035))
-	for x in [-1.42, 1.42]:
-		_add_house_box(root, "FrontTimber", Vector3(x, 1.12, -1.78), Vector3(0.13, 1.85, 0.12), timber)
-		var window_x: float = x * 0.62
-		_add_house_box(root, "LitWindow", Vector3(window_x, 1.42, -1.80), Vector3(0.52, 0.38, 0.045), Color(0.95, 0.52, 0.18))
-		_add_house_box(root, "WindowShutter", Vector3(window_x - 0.37, 1.42, -1.84), Vector3(0.16, 0.48, 0.055), Color(0.12, 0.07, 0.035))
-		_add_house_box(root, "WindowShutter", Vector3(window_x + 0.37, 1.42, -1.84), Vector3(0.16, 0.48, 0.055), Color(0.12, 0.07, 0.035))
-		_add_house_box(root, "RearTimber", Vector3(x, 1.12, 1.78), Vector3(0.13, 1.85, 0.12), timber)
-		_add_house_box(root, "RearLitWindow", Vector3(window_x, 1.42, 1.80), Vector3(0.52, 0.38, 0.045), Color(0.88, 0.46, 0.15))
-		_add_house_box(root, "RearWindowShutter", Vector3(window_x - 0.37, 1.42, 1.84), Vector3(0.16, 0.48, 0.055), timber)
-		_add_house_box(root, "RearWindowShutter", Vector3(window_x + 0.37, 1.42, 1.84), Vector3(0.16, 0.48, 0.055), timber)
-	_add_house_box(root, "SideTimberLeft", Vector3(-2.18, 1.18, 0), Vector3(0.12, 1.75, 2.45), Color(0.11, 0.065, 0.035))
-	_add_house_box(root, "SideTimberRight", Vector3(2.18, 1.18, 0), Vector3(0.12, 1.75, 2.45), Color(0.11, 0.065, 0.035))
-	for side in [-1.0, 1.0]:
-		_add_house_box(root, "SideBeltTimber", Vector3(2.19 * side, 1.12, 0), Vector3(0.13, 0.12, 2.70), Color(0.10, 0.057, 0.03))
-		_add_house_box(root, "SideWindow", Vector3(2.20 * side, 1.42, 0.35), Vector3(0.055, 0.42, 0.58), Color(0.88, 0.48, 0.16))
-	_add_house_box(root, "WeatheredBaseCourse", Vector3(0, 0.42, -1.73), Vector3(4.22, 0.26, 0.08), Color(0.18, 0.18, 0.15))
-	_add_house_box(root, "RearWeatheredBaseCourse", Vector3(0, 0.42, 1.73), Vector3(4.22, 0.26, 0.08), Color(0.16, 0.17, 0.14))
-	_add_house_box(root, "FrontCrossBrace", Vector3(-1.43, 1.16, -1.85), Vector3(0.11, 1.42, 0.10), Color(0.10, 0.055, 0.03), Vector3(0, 0, -36))
-	_add_house_box(root, "FrontCrossBrace", Vector3(1.43, 1.16, -1.85), Vector3(0.11, 1.42, 0.10), Color(0.10, 0.055, 0.03), Vector3(0, 0, 36))
-	# Small structural details give the facade readable construction at the
-	# actual gameplay camera distance while remaining part of the static batch.
-	_add_house_box(root, "RoofEaveFront", Vector3(0, 2.12, -1.86), Vector3(4.62, 0.16, 0.18), roof_color)
-	_add_house_box(root, "RoofEaveRear", Vector3(0, 2.12, 1.86), Vector3(4.62, 0.16, 0.18), roof_color)
-	_add_house_box(root, "RoofRidgeCap", Vector3(0, 3.05, 0), Vector3(0.26, 0.16, 3.72), roof_color)
-	_add_house_box(root, "UpperGableWindow", Vector3(0, 2.62, -1.80), Vector3(0.42, 0.28, 0.055), Color(0.92, 0.50, 0.17))
-	_add_house_box(root, "UpperGableWindowFrame", Vector3(0, 2.62, -1.84), Vector3(0.08, 0.30, 0.07), timber)
-	_add_house_box(root, "DoorFrameLeft", Vector3(-0.48, 0.79, -1.80), Vector3(0.10, 1.42, 0.14), timber)
-	_add_house_box(root, "DoorFrameRight", Vector3(0.48, 0.79, -1.80), Vector3(0.10, 1.42, 0.14), timber)
-	_add_house_box(root, "DoorLatch", Vector3(0.24, 0.80, -1.88), Vector3(0.08, 0.10, 0.035), Color(0.48, 0.38, 0.20))
-	for x in [-1.42, 1.42]:
-		var mullion_x: float = x * 0.62
-		_add_house_box(root, "WindowMullionVertical", Vector3(mullion_x, 1.42, -1.85), Vector3(0.045, 0.40, 0.07), timber)
-		_add_house_box(root, "WindowMullionHorizontal", Vector3(mullion_x, 1.42, -1.85), Vector3(0.54, 0.045, 0.07), timber)
-	if str(settings.settings.get("quality_preset", "balanced")) != "potato":
-		_add_house_module(root, "greyfen_door_facade", Vector3(0.90, 0.90, 0.90), Vector3(-0.98, 0.02, -1.82), 0.0, "ModularDoorFacade")
-		_add_house_module(root, "greyfen_window_facade", Vector3(0.90, 0.90, 0.90), Vector3(1.04, 0.02, -1.82), 0.0, "ModularWindowFacade")
-		_add_house_module(root, "greyfen_chimney", Vector3(0.48, 0.58, 0.48), Vector3(chimney_x, 2.20, 0.62), 0.0, "ModularChimney")
-	if facade_variant == 0:
-		_add_house_box(root, "PorchCanopy", Vector3(0, 1.68, -2.05), Vector3(1.65, 0.14, 0.72), Color(0.12, 0.065, 0.032), Vector3(-8, 0, 0))
-		for x in [-0.72, 0.72]:
-			_add_house_box(root, "PorchPost", Vector3(x, 0.82, -2.30), Vector3(0.11, 1.55, 0.11), Color(0.09, 0.05, 0.025))
-	elif facade_variant == 1:
-		_add_house_box(root, "TradingAwning", Vector3(0.92, 1.36, -2.02), Vector3(1.45, 0.12, 0.74), Color(0.23, 0.12, 0.065), Vector3(-11, 0, 0))
-		_add_house_box(root, "SupplyShelf", Vector3(1.18, 0.48, -2.02), Vector3(1.30, 0.12, 0.42), Color(0.10, 0.055, 0.03))
-	else:
-		_add_house_box(root, "SideLeanToRoof", Vector3(-2.48, 1.34, 0.46), Vector3(1.04, 0.16, 2.20), Color(0.13, 0.06, 0.035), Vector3(0, 0, -12))
-		_add_house_box(root, "SideLeanToPost", Vector3(-2.82, 0.62, -0.36), Vector3(0.12, 1.22, 0.12), Color(0.09, 0.05, 0.025))
+	var house_visual := MeshInstance3D.new()
+	house_visual.name = "AuthoredHouse"
+	house_visual.mesh = authored_mesh
+	root.add_child(house_visual)
+	var authored_tints := {
+		"medieval_brick": Color(0.67, 0.65, 0.59),
+		"plaster": [Color(0.76, 0.70, 0.58), Color(0.65, 0.68, 0.62), Color(0.78, 0.64, 0.48), Color(0.71, 0.72, 0.68)][house_variant],
+		"timber": [Color(0.72, 0.57, 0.40), Color(0.62, 0.53, 0.43), Color(0.78, 0.54, 0.34), Color(0.53, 0.49, 0.43)][house_variant],
+		"roof_tiles": [Color(0.76, 0.47, 0.37), Color(0.63, 0.51, 0.46), Color(0.82, 0.52, 0.39), Color(0.60, 0.59, 0.57)][house_variant],
+		"glazing": Color(0.16, 0.22, 0.24),
+		"metal": Color(0.34, 0.34, 0.32),
+	}
+	var house_quality := str(settings.settings.get("quality_preset", "balanced"))
+	for surface_index in authored_mesh.get_surface_count():
+		var surface_name := authored_mesh.surface_get_name(surface_index)
+		if not authored_tints.has(surface_name):
+			push_error("Unknown authored Greyfen house surface: " + surface_name)
+			return
+		var material_role := surface_name if world_materials.SURFACES.has(surface_name) else "metal"
+		var surface_material: StandardMaterial3D = _mat(authored_tints[surface_name]) if surface_name == "glazing" else world_materials.get_material(material_role, house_quality, authored_tints[surface_name], 0.0, false)
+		house_visual.set_surface_override_material(surface_index, surface_material)
+	root.set_meta("roof_treatment", "authored_mesh")
+	return
 
 func _add_house_module(parent: Node3D, role_name: String, scale_value: Vector3, local_pos: Vector3, yaw: float, node_name: String) -> Node3D:
-	var module := _make_role_visual(role_name, "environment", scale_value)
+	var module: Node3D = _make_house_facade_module(role_name, scale_value) if role_name in ["greyfen_door_facade", "greyfen_window_facade", "greyfen_wall_facade", "greyfen_roof"] else _make_role_visual(role_name, "environment", scale_value)
 	if module == null:
 		return null
 	module.name = node_name
@@ -4640,9 +4837,58 @@ func _add_house_module(parent: Node3D, role_name: String, scale_value: Vector3, 
 	module.rotation_degrees.y = yaw
 	module.set_meta("world_001_module", true)
 	parent.add_child(module)
+	if role_name in ["greyfen_window_facade", "greyfen_wall_facade"] and module is MeshInstance3D:
+		var facade := module as MeshInstance3D
+		var batch_key := "%s_%s" % [role_name, parent.name]
+		if not house_module_batch_data.has(batch_key):
+			house_module_batch_data[batch_key] = {"mesh": facade.mesh, "transforms": []}
+		house_module_batch_data[batch_key].transforms.append(parent.transform * facade.transform)
+		facade.visible = false
 	return module
 
-func _add_house_gables(parent: Node3D, plaster: Color, timber: Color) -> void:
+func _make_house_facade_module(role_name: String, scale_value: Vector3) -> MeshInstance3D:
+	if asset_helper == null or asset_helper.database == null:
+		return null
+	var entry: Dictionary = asset_helper.database.get_asset_for_role(role_name)
+	var path := str(entry.get("path", ""))
+	var source: ArrayMesh = asset_helper.load_runtime_resource(path) as ArrayMesh
+	if source == null or source.get_surface_count() < 2:
+		push_error("Greyfen facade lost material-grouped mesh: " + role_name)
+		return null
+	var mesh := source.duplicate() as ArrayMesh
+	var quality := str(settings.settings.get("quality_preset", "balanced"))
+	for index in range(mesh.get_surface_count()):
+		var group := source.surface_get_name(index).to_lower()
+		var surface_id := ""
+		if group.contains("plaster"):
+			surface_id = "plaster"
+		elif group.contains("roundtiles"):
+			surface_id = "roof_tiles"
+		elif group.contains("wood"):
+			surface_id = "timber"
+		elif group.contains("brick") or group.contains("rock"):
+			surface_id = "medieval_brick"
+		if surface_id == "":
+			push_error("Unknown Greyfen facade material group: " + group)
+			return null
+		var tint := Color(0.48, 0.41, 0.34) if surface_id == "plaster" else Color.WHITE
+		mesh.surface_set_material(index, world_materials.get_material(surface_id, quality, tint, 0.0, true))
+	var module := MeshInstance3D.new()
+	module.mesh = mesh
+	var native_size := source.get_aabb().size
+	if native_size.x <= 0.001 or native_size.y <= 0.001 or native_size.z <= 0.001:
+		push_error("Greyfen module has invalid native bounds: " + role_name)
+		return null
+	var target_size: Vector3 = ENVIRONMENT_ROLE_NORMALIZED_SIZE.get(role_name, native_size)
+	module.scale = Vector3(
+		scale_value.x * target_size.x / native_size.x,
+		scale_value.y * target_size.y / native_size.y,
+		scale_value.z * target_size.z / native_size.z
+	)
+	module.set_meta("world_material_groups", mesh.get_surface_count())
+	return module
+
+func _add_house_gables(parent: Node3D, plaster: Color, timber: Color, authored_facades: bool) -> void:
 	var vertices := PackedVector3Array([
 		Vector3(-2.08, 2.08, -1.69), Vector3(2.08, 2.08, -1.69), Vector3(0.0, 3.18, -1.69),
 		Vector3(2.08, 2.08, 1.69), Vector3(-2.08, 2.08, 1.69), Vector3(0.0, 3.18, 1.69),
@@ -4667,8 +4913,9 @@ func _add_house_gables(parent: Node3D, plaster: Color, timber: Color) -> void:
 	gables.mesh = gable_mesh
 	gables.material_override = world_materials.get_material("plaster", str(settings.settings.get("quality_preset", "balanced")), plaster.lightened(0.48), 0.0, false)
 	parent.add_child(gables)
-	for z in [-1.72, 1.72]:
-		_add_house_box(parent, "GableKingPost", Vector3(0, 2.57, z), Vector3(0.13, 1.14, 0.10), timber)
+	if not authored_facades:
+		for z in [-1.72, 1.72]:
+			_add_house_box(parent, "GableKingPost", Vector3(0, 2.57, z), Vector3(0.13, 1.14, 0.10), timber)
 
 func _add_house_gabled_roof(parent: Node3D, color: Color) -> MeshInstance3D:
 	var width := 4.78
@@ -4731,11 +4978,13 @@ func _add_house_box(parent: Node3D, node_name: String, local_pos: Vector3, size:
 	parent.add_child(marker)
 	var lower := node_name.to_lower()
 	var surface := "plaster"
-	if lower.contains("window"):
+	if lower in ["litwindow", "rearlitwindow", "sidewindow", "uppergablewindow"]:
 		surface = "emissive_window"
+	elif lower == "glazedpane":
+		surface = "glazing"
 	elif lower.contains("roof") or lower.contains("awning") or lower.contains("canopy"):
 		surface = "roof_tiles"
-	elif lower.contains("timber") or lower.contains("door") or lower.contains("shutter") or lower.contains("post") or lower.contains("shelf"):
+	elif lower.contains("timber") or lower.contains("door") or lower.contains("window") or lower.contains("shutter") or lower.contains("post") or lower.contains("shelf"):
 		surface = "timber"
 	elif lower.contains("foundation") or lower.contains("stone") or lower.contains("step"):
 		surface = "medieval_brick"
@@ -4744,6 +4993,8 @@ func _add_house_box(parent: Node3D, node_name: String, local_pos: Vector3, size:
 		var material: Material
 		if surface == "emissive_window":
 			material = _emissive_mat(color, 0.7)
+		elif surface == "glazing":
+			material = _mat(color)
 		else:
 			material = world_materials.get_material(surface, str(settings.settings.get("quality_preset", "balanced")), Color.WHITE, 0.0, true).duplicate()
 			(material as StandardMaterial3D).vertex_color_use_as_albedo = true
@@ -4752,7 +5003,8 @@ func _add_house_box(parent: Node3D, node_name: String, local_pos: Vector3, size:
 	var basis := Basis.from_euler(rotation_radians).scaled(size)
 	var zone_transform: Transform3D = parent.transform * Transform3D(basis, local_pos)
 	house_batch_data[batch_key].transforms.append(zone_transform)
-	house_batch_data[batch_key].colors.append(Color.WHITE if surface == "emissive_window" else color.lightened(0.55))
+	var tint := color.lightened(0.20 if surface == "plaster" else 0.12)
+	house_batch_data[batch_key].colors.append(Color.WHITE if surface in ["emissive_window", "glazing"] else tint)
 	return marker
 
 func _make_house_collision(parent: Node3D) -> void:
@@ -4765,6 +5017,27 @@ func _make_house_collision(parent: Node3D) -> void:
 	shape.shape = box
 	shape.position.y = 1.2
 	body.add_child(shape)
+	# The authored roof rises above the solid wall box. A camera-only volume
+	# catches the orbit ray without widening the player's road collision.
+	var camera_roof := StaticBody3D.new()
+	camera_roof.name = "CameraRoofCollision"
+	camera_roof.collision_layer = 1 << 6
+	camera_roof.collision_mask = 0
+	parent.add_child(camera_roof)
+	var roof_shape := CollisionShape3D.new()
+	var roof_box := BoxShape3D.new()
+	roof_box.size = Vector3(5.0, 1.6, 4.2)
+	roof_shape.shape = roof_box
+	roof_shape.position.y = 3.2
+	camera_roof.add_child(roof_shape)
+	if int(parent.get_meta("house_variant", 0)) == 1:
+		for x in [-0.98, 0.98]:
+			var post := CollisionShape3D.new()
+			var post_box := BoxShape3D.new()
+			post_box.size = Vector3(0.12, 1.60, 0.12)
+			post.shape = post_box
+			post.position = Vector3(x, 0.95, -2.36)
+			body.add_child(post)
 
 func _add_lit_window(parent: Node3D, local_pos: Vector3) -> void:
 	var pane = MeshInstance3D.new()
@@ -4789,7 +5062,7 @@ func _make_village_dressing() -> void:
 		["barrel", Vector3(-4.0, 0, 3.4), 0.56, -8.0],
 		["barrel", Vector3(-4.8, 0, 4.1), 0.48, 15.0],
 		["crate", Vector3(-7.3, 0, 4.9), 0.64, 25.0],
-		["crate", Vector3(8.0, 0, 2.8), 0.72, -18.0],
+		["crate", Vector3(11.1, 0, -3.7), 0.72, -18.0],
 		["barrel", Vector3(10.7, 0, 2.9), 0.58, 18.0],
 		# Keep the return-to-Castle sightline clear. This rock used to sit on the
 		# diagonal from the Wychwood arrival to Greyfen's east exit and its imported
@@ -4813,15 +5086,17 @@ func _make_wychwood_gate_scene(pos: Vector3) -> void:
 
 func _make_wychwood_route_dressing() -> void:
 	for item in [
-		["forest_rock", Vector3(-2.8, 0, 9.0), 1.0, 8.0],
-		["forest_rock", Vector3(3.1, 0, 7.8), 0.8, -16.0],
-		["forest_rock", Vector3(-3.4, 0, 1.6), 1.1, 22.0],
-		["forest_rock", Vector3(3.7, 0, -1.7), 0.9, 0.0],
+		["forest_rock", Vector3(-4.6, 0, 9.0), 0.46, 8.0],
+		["forest_rock", Vector3(4.7, 0, 7.8), 0.40, -16.0],
+		["forest_rock", Vector3(-4.8, 0, 1.6), 0.52, 22.0],
+		["forest_rock", Vector3(4.9, 0, -1.7), 0.44, 0.0],
 		["barrel", Vector3(-5.2, 0, 8.2), 0.48, 0.0],
 		["crate", Vector3(-5.8, 0, 7.6), 0.56, 11.0]
 	]:
 		_make_loose_role(str(item[0]), item[1], Vector3.ONE * float(item[2]), float(item[3]))
-	for pos in [Vector3(-4.7, 0, 11.5), Vector3(4.6, 0, 10.5), Vector3(-4.8, 0, 5.5), Vector3(4.8, 0, 3.0), Vector3(-5.0, 0, -2.0), Vector3(4.8, 0, -4.8)]:
+	# Keep fallen trunks beyond the player/camera corridor. The previous east
+	# trunk at (4.6, 10.5) sat directly in the standard clue-route framing.
+	for pos in [Vector3(-7.0, 0, 11.5), Vector3(7.1, 0, 3.0), Vector3(-7.0, 0, -2.0), Vector3(7.1, 0, -4.8)]:
 		_make_deadfall(pos)
 	for pos in [Vector3(-8.4, 0, 12.5), Vector3(8.3, 0, 11.8), Vector3(-8.6, 0, 4.8), Vector3(8.5, 0, 1.2), Vector3(-8.8, 0, -5.4), Vector3(8.7, 0, -7.2)]:
 		_make_tree(pos)
@@ -4883,6 +5158,28 @@ func _make_loose_role(role_name: String, pos: Vector3, scale_value: Vector3, yaw
 			rock.position = safe_rock_position
 			rock.rotation_degrees.y = yaw
 			zone_root.add_child(rock)
+			if current_zone_id == "old_mill":
+				# Arena stones are visual dressing, not player obstacles. Their
+				# rendered bounds still need to keep the combat camera out of cover.
+				var rock_meshes := rock.find_children("*", "MeshInstance3D", true, false)
+				if rock is MeshInstance3D:
+					rock_meshes.append(rock)
+				for raw_mesh in rock_meshes:
+					var mesh := raw_mesh as MeshInstance3D
+					if mesh.mesh == null:
+						continue
+					var bounds := mesh.mesh.get_aabb()
+					var clearance := StaticBody3D.new()
+					clearance.name = "RockCameraClearance"
+					clearance.collision_layer = 1 << 6
+					clearance.collision_mask = 0
+					var collision := CollisionShape3D.new()
+					var shape := BoxShape3D.new()
+					shape.size = bounds.size
+					collision.shape = shape
+					collision.position = bounds.get_center()
+					clearance.add_child(collision)
+					mesh.add_child(clearance)
 			return rock
 		_make_rubble(pos)
 		return null
@@ -4933,12 +5230,34 @@ func _make_route_markers() -> void:
 		_make_light("RoadCandleGlow", pos + Vector3(0, 0.72, 0), Color(1.0, 0.45, 0.16), 0.8)
 
 func _make_shrine_scene(pos: Vector3) -> void:
-	_make_prop_box("ShrineBase", pos + Vector3(0, 0.15, 0), Vector3(2.0, 0.3, 1.4), Color(0.26, 0.25, 0.23))
-	_make_prop_box("ShrineStone", pos + Vector3(0, 0.95, -0.1), Vector3(0.55, 1.55, 0.32), Color(0.46, 0.45, 0.40))
-	_make_prop_box("ShrineGlow", pos + Vector3(0, 1.05, -0.29), Vector3(0.08, 0.6, 0.03), Color(0.68, 0.86, 0.70))
-	_make_prop_box("ShrineOfferings", pos + Vector3(-0.65, 0.36, -0.45), Vector3(0.52, 0.16, 0.34), Color(0.28, 0.18, 0.10))
-	_make_prop_box("ShrineCloth", pos + Vector3(0.58, 0.38, -0.42), Vector3(0.46, 0.08, 0.32), Color(0.36, 0.08, 0.07))
-	_make_loose_role("shrine", pos + Vector3(0, 0.15, -0.05), Vector3(1.45, 1.45, 1.45), 0.0)
+	var shrine_mesh := load("res://assets_external/environment/village/GreyfenShrine_Authored.res") as ArrayMesh
+	if shrine_mesh == null or shrine_mesh.get_surface_count() != 6:
+		push_error("Required authored Greyfen shrine is unavailable")
+		return
+	var shrine := MeshInstance3D.new()
+	shrine.name = "GreyfenAuthoredOathstone"
+	shrine.position = pos
+	shrine.mesh = shrine_mesh
+	zone_root.add_child(shrine)
+	var shrine_tints := {
+		"medieval_brick": Color(0.68, 0.68, 0.62),
+		"plaster": Color(0.70, 0.71, 0.66),
+		"timber": Color(0.37, 0.27, 0.19),
+		"roof_tiles": Color(0.39, 0.18, 0.17),
+		"glazing": Color(0.29, 0.56, 0.50),
+		"metal": Color(0.20, 0.28, 0.26),
+	}
+	var shrine_quality := str(settings.settings.get("quality_preset", "balanced"))
+	for surface_index in shrine_mesh.get_surface_count():
+		var surface_name := shrine_mesh.surface_get_name(surface_index)
+		if not shrine_tints.has(surface_name):
+			push_error("Unknown authored Greyfen shrine surface: " + surface_name)
+			return
+		var material_role := surface_name if world_materials.SURFACES.has(surface_name) else "metal"
+		var material: StandardMaterial3D = _mat(shrine_tints[surface_name]) if surface_name == "glazing" else world_materials.get_material(material_role, shrine_quality, shrine_tints[surface_name], 0.0, false)
+		shrine.set_surface_override_material(surface_index, material)
+	_make_collision_box("ShrinePlinth", pos + Vector3(0, 0.18, 0), Vector3(2.36, 0.36, 1.64))
+	_make_collision_box("ShrineOathstone", pos + Vector3(0, 0.96, 0), Vector3(0.88, 1.10, 0.62))
 	_make_loose_role("crate", pos + Vector3(-1.15, 0, -0.65), Vector3.ONE * 0.48, -12.0)
 	# Keep shrine dressing off the diagonal Greyfen-to-Castle approach. This
 	# barrel used to sit directly on the player-sized route after returning from
@@ -4948,15 +5267,49 @@ func _make_shrine_scene(pos: Vector3) -> void:
 	_make_world_prop_anchor("shrine", "shrine", pos, "crow_shrine_state")
 
 func _make_blacksmith_scene(pos: Vector3) -> void:
-	_make_prop_box("BlacksmithShop", pos + Vector3(0, 0.9, 1.2), Vector3(3.4, 1.8, 2.4), Color(0.20, 0.15, 0.11))
-	_make_prop_box("Forge", pos + Vector3(1.5, 0.55, -1.1), Vector3(1.0, 1.1, 0.75), Color(0.12, 0.11, 0.10))
-	_make_prop_box("ForgeCoal", pos + Vector3(1.5, 1.15, -1.1), Vector3(0.75, 0.12, 0.55), Color(0.95, 0.30, 0.08))
+	var forge_mesh := load("res://assets_external/environment/village/GreyfenForge_Authored.res") as ArrayMesh
+	if forge_mesh == null or forge_mesh.get_surface_count() != 6:
+		push_error("Required authored Greyfen forge is unavailable")
+		return
+	var shop := Node3D.new()
+	shop.name = "GreyfenBlacksmithStoneShop"
+	shop.position = pos
+	zone_root.add_child(shop)
+	var workshop := MeshInstance3D.new()
+	workshop.name = "BlacksmithAuthoredForge"
+	workshop.mesh = forge_mesh
+	shop.add_child(workshop)
+	var forge_tints := {
+		"medieval_brick": Color(0.66, 0.62, 0.55),
+		"plaster": Color(0.77, 0.69, 0.57),
+		"timber": Color(0.42, 0.31, 0.21),
+		"roof_tiles": Color(0.40, 0.26, 0.20),
+		"glazing": Color(0.16, 0.22, 0.24),
+		"metal": Color(0.30, 0.30, 0.29),
+	}
+	var forge_quality := str(settings.settings.get("quality_preset", "balanced"))
+	for surface_index in forge_mesh.get_surface_count():
+		var surface_name := forge_mesh.surface_get_name(surface_index)
+		if not forge_tints.has(surface_name):
+			push_error("Unknown authored Greyfen forge surface: " + surface_name)
+			return
+		var material_role := surface_name if world_materials.SURFACES.has(surface_name) else "metal"
+		var material: StandardMaterial3D = _mat(forge_tints[surface_name]) if surface_name == "glazing" else world_materials.get_material(material_role, forge_quality, forge_tints[surface_name], 0.0, false)
+		workshop.set_surface_override_material(surface_index, material)
+	_make_collision_box("BlacksmithRearWall", pos + Vector3(0, 1.27, 2.33), Vector3(3.4, 1.94, 0.20))
+	for side in [-1.0, 1.0]:
+		_make_collision_box("BlacksmithSideWall", pos + Vector3(side * 1.69, 1.27, 1.2), Vector3(0.20, 1.94, 2.4))
+	_make_collision_box("ForgeHearth", pos + Vector3(1.5, 0.30, -1.1), Vector3(0.96, 0.55, 0.88))
+	_make_collision_box("ForgeCoal", pos + Vector3(1.5, 0.38, -1.1), Vector3(0.62, 0.08, 0.48))
 	_make_light("ForgeLight", pos + Vector3(1.5, 1.5, -1.1), Color(1.0, 0.35, 0.12), 2.5)
-	var anvil = _make_role_visual("blacksmith_shop", "environment", Vector3(0.9, 0.9, 0.9))
-	if anvil != null:
-		anvil.position = pos + Vector3(-1.2, 0, -0.35)
-		zone_root.add_child(anvil)
-	_make_loose_role("crate", pos + Vector3(-2.2, 0, 0.35), Vector3.ONE * 0.62, 9.0)
+	var work := MeshInstance3D.new()
+	work.name = "BlacksmithFittedWork"
+	work.mesh = load("res://assets_external/environment/props/GreyfenForgeWork_Authored.res") as ArrayMesh
+	if work.mesh == null:
+		push_error("Greyfen requires its fitted anvil, workbench, stock and fuel")
+		work.free()
+		return
+	shop.add_child(work)
 	_make_loose_role("barrel", pos + Vector3(2.15, 0, 0.95), Vector3.ONE * 0.55, -20.0)
 	_make_torch(pos + Vector3(-1.8, 0, -1.2))
 	_make_world_prop_anchor("forge", "forge", pos + Vector3(1.5, 0.55, -1.1), "iron_fate")
@@ -4987,8 +5340,6 @@ func _make_monster_clearing(pos: Vector3) -> void:
 	marker.name = "FirstCombatReadabilityDressing"
 	marker.position = pos
 	zone_root.add_child(marker)
-	_make_road(pos + Vector3(0, 0.023, 0), Vector3(9.0, 0.045, 6.8), Color(0.045, 0.050, 0.042))
-	_make_combat_readability_marks(pos)
 	_make_light("ClearingColdSpot", pos + Vector3(0, 2.8, -0.4), Color(0.35, 0.48, 0.58), 2.4)
 	_make_light("ClearingRimLantern", pos + Vector3(-3.2, 1.9, 1.8), Color(0.9, 0.38, 0.14), 1.2)
 	_make_fog_sheet(pos + Vector3(0, 0.55, 0), Vector3(8, 1, 4.5), Color(0.18, 0.25, 0.22, 0.22))
@@ -5007,15 +5358,6 @@ func _make_monster_clearing(pos: Vector3) -> void:
 	_make_loose_role("barrel", pos + Vector3(-4.9, 0, 1.4), Vector3.ONE * 0.42, -8.0)
 	_make_torch(pos + Vector3(-4.2, 0, 2.1))
 
-func _make_combat_readability_marks(pos: Vector3) -> void:
-	_make_visual_box("CombatClearingCenterRead", pos + Vector3(0, 0.054, -0.1), Vector3(2.2, 0.018, 1.55), Color(0.070, 0.052, 0.038))
-	for x in [-2.9, 2.9]:
-		_make_visual_box("CombatLaneEdge", pos + Vector3(x, 0.056, -0.35), Vector3(0.18, 0.020, 4.6), Color(0.055, 0.070, 0.052))
-	for offset in [Vector3(-2.4, 0, -2.6), Vector3(2.4, 0, -2.6), Vector3(-2.6, 0, 1.9), Vector3(2.6, 0, 1.9)]:
-		_make_visual_box("CombatSafeFootingStone", pos + offset + Vector3(0, 0.062, 0), Vector3(0.72, 0.035, 0.40), Color(0.16, 0.14, 0.115))
-	for offset in [Vector3(-3.8, 0, -1.9), Vector3(3.8, 0, -1.6), Vector3(-3.8, 0, 1.6), Vector3(3.8, 0, 1.4)]:
-		_make_visual_box("CombatBoundaryRoot", pos + offset + Vector3(0, 0.14, 0), Vector3(1.15, 0.16, 0.18), Color(0.10, 0.060, 0.035))
-
 func _make_named_interactable(id: String, type: String, prompt: String, pos: Vector3, color: Color, scale_override: Vector3 = Vector3.ONE):
 	if _is_interaction_removed(id):
 		return null
@@ -5033,21 +5375,39 @@ func _make_named_interactable(id: String, type: String, prompt: String, pos: Vec
 		area.add_child(prop_component)
 		prop_component.configure(id, str(prop_spec.get("kind", "generic")), str(prop_spec.get("state_key", "")), "idle", story_state)
 	var role = _role_for_interactable(id)
-	if should_defer_character_role(role, id):
+	var presentation_id: String = {"witness_-7": "mira", "witness_-3": "rook", "witness_3": "sister_anwen"}.get(id, id)
+	if id in ["notice_board", "side_contracts"]:
+		# The supported notice-board assembly owns both visible notices. These
+		# areas own dialogue/focus, not a second capsule-shaped prop.
+		area.set_meta("external_world_prop", "notice_board")
+	elif id == "white_hart":
+		# The finale builder owns the visible witness; this area owns interaction only.
+		area.set_meta("external_character_visual", "WhiteHartWitnessDisplay")
+	elif type == "clue" and current_zone_id == "wychwood" and WychwoodEvidencePresentation.apply(area, id):
+		pass
+	elif type == "clue" and CemeteryEvidencePresentation.apply(area, id):
+		pass
+	elif CampaignRecordPresentation.apply(area, id):
+		pass
+	elif should_defer_character_role(role, id):
 		var marker := Node3D.new()
 		marker.name = "DeferredCharacterVisual_%s" % id
 		marker.set_meta("deferred_visual_role", role)
 		marker.set_meta("deferred_visual_category", "characters")
-		marker.set_meta("deferred_visual_actor_id", id)
+		marker.set_meta("deferred_visual_actor_id", presentation_id)
 		marker.set_meta("deferred_visual_scale", Vector3.ONE)
 		area.add_child(marker)
-		area.set_meta("character_variant_seed", id)
+		area.set_meta("character_variant_seed", presentation_id)
 	else:
 		var mapped = _make_role_visual(role, "characters", Vector3.ONE)
 		if mapped != null:
 			area.add_child(mapped)
-			area.set_meta("character_variant_seed", id)
-			_configure_npc_animation(mapped, id)
+			area.set_meta("character_variant_seed", presentation_id)
+			_configure_npc_animation(mapped, presentation_id)
+		elif id in ["assembly_choice", "witness_7"]:
+			_make_ledger_interaction_visual(area, Vector3.ONE)
+			var book := area.get_node("SealedCommandLedgerVisual") as Node3D
+			book.position.y = 0.83
 		elif id == "vargan_ledger_choice":
 			_make_ledger_interaction_visual(area, scale_override)
 		elif id == "post_victory_token":
@@ -5062,8 +5422,13 @@ func _make_named_interactable(id: String, type: String, prompt: String, pos: Vec
 			mesh.material_override = _mat(color)
 			area.add_child(mesh)
 	var has_character_role: bool = str(role) != ""
-	if type == "dialogue" and id != "notice_board" and has_character_role and not should_defer_character_role(role, id):
-		CharacterPresentation.apply_npc(area, id)
+	if type == "dialogue" and id not in ["notice_board", "white_hart"] and has_character_role and not should_defer_character_role(role, id):
+		CharacterPresentation.apply_npc(area, presentation_id)
+	if current_zone_id == "assembly" and id in ["witness_-7", "witness_-3", "witness_3"]:
+		# Testimony is focal staging, not a distant crowd LOD. The normal camera
+		# can sit beyond the generic villager cutoff even inside this small court.
+		for witness_mesh in area.find_children("*", "MeshInstance3D", true, false):
+			witness_mesh.visibility_range_end = maxf(witness_mesh.visibility_range_end, 32.0)
 	if type != "clue" and type != "herb" and id != "notice_board":
 		var label = Label3D.new()
 		label.name = "InteractionWorldLabel"
@@ -5079,7 +5444,7 @@ func _make_named_interactable(id: String, type: String, prompt: String, pos: Vec
 		area.add_child(label)
 	if type == "dialogue" and id != "notice_board" and has_character_role:
 		var ambient = NpcAmbient.new()
-		ambient.setup(id, player)
+		ambient.setup(presentation_id, player)
 		area.add_child(ambient)
 	_connect_interactable(area)
 	return area
@@ -5164,25 +5529,46 @@ func _make_village_place(id: String, type: String, prompt: String, pos: Vector3,
 		prop_component.name = "InteractiveWorldProp"
 		area.add_child(prop_component)
 		prop_component.configure(id, str(prop_spec.get("kind", "generic")), str(prop_spec.get("state_key", "")), "idle", story_state)
-	var table := MeshInstance3D.new()
-	table.name = "%s_VisibleProp" % id
-	var mesh := BoxMesh.new()
-	if type == "minigame":
+	var table: MeshInstance3D = null
+	var mesh: BoxMesh = null
+	if id in ["forge_corner", "tor_forge"]:
+		# The authored workshop is the visible prop for both interactions.
+		pass
+	elif id in ["common_table", "barrel_board", "mira_apothecary"]:
+		GreyfenSocialPresentation.apply(area, id)
+		if type == "minigame":
+			_make_board_game_staging(area, id, size)
+	else:
+		table = MeshInstance3D.new()
+		table.name = "%s_VisibleProp" % id
+		mesh = BoxMesh.new()
+	if table == null:
+		pass
+	elif id == "village_well":
+		table.position.y = 0.0
+	elif id == "shrine_prayer":
+		mesh.size = Vector3(size.x, 0.12, size.z)
+		table.position.y = 0.48
+		table.material_override = _mat(color.lightened(0.12))
+		var supports := _make_multimesh_batch("ShrineBenchSupports", shared_box_mesh, 2, _mat(color.darkened(0.12)))
+		supports.reparent(area, false)
+		for index in range(2):
+			var x := -size.x * 0.38 if index == 0 else size.x * 0.38
+			supports.multimesh.set_instance_transform(index, Transform3D(Basis.IDENTITY.scaled(Vector3(0.18, 0.42, size.z * 0.75)), Vector3(x, 0.21, 0.0)))
+	elif type == "minigame":
 		# A board-game table has visible legs, a thin worn top, two seats, and an
 		# opponent. It should read as a social place before the overlay opens.
 		mesh.size = Vector3(size.x, 0.16, size.z)
 		table.position.y = size.y
 		table.material_override = _mat(color.darkened(0.10))
+		var legs := _make_multimesh_batch("%s_TableLegs" % id, shared_box_mesh, 4, _mat(color.darkened(0.20)))
+		legs.reparent(area, false)
+		legs.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+		var leg_index := 0
 		for x in [-size.x * 0.38, size.x * 0.38]:
 			for z in [-size.z * 0.34, size.z * 0.34]:
-				var leg := MeshInstance3D.new()
-				leg.name = "%s_TableLeg" % id
-				var leg_mesh := BoxMesh.new()
-				leg_mesh.size = Vector3(0.14, size.y * 0.92, 0.14)
-				leg.mesh = leg_mesh
-				leg.position = Vector3(x, size.y * 0.46, z)
-				leg.material_override = _mat(color.darkened(0.20))
-				area.add_child(leg)
+				legs.multimesh.set_instance_transform(leg_index, Transform3D(Basis.IDENTITY.scaled(Vector3(0.14, size.y * 0.92, 0.14)), Vector3(x, size.y * 0.46, z)))
+				leg_index += 1
 		_make_board_game_staging(area, id, size)
 	elif type == "vendor":
 		# A shop needs to read as a place before the prompt appears: counter,
@@ -5199,31 +5585,26 @@ func _make_village_place(id: String, type: String, prompt: String, pos: Vector3,
 		canopy.position = Vector3(0.0, size.y + 1.55, 0.0)
 		canopy.material_override = _mat(color.lightened(0.12))
 		area.add_child(canopy)
-		for x in [-size.x * 0.42, size.x * 0.42]:
-			var post := MeshInstance3D.new()
-			post.name = "%s_CanopyPost" % id
-			var post_mesh := BoxMesh.new()
-			post_mesh.size = Vector3(0.10, 1.55, 0.10)
-			post.mesh = post_mesh
-			post.position = Vector3(x, size.y * 0.78, 0.0)
-			post.material_override = _mat(color.darkened(0.25))
-			area.add_child(post)
-		for x in [-size.x * 0.30, size.x * 0.30]:
-			var crate := MeshInstance3D.new()
-			crate.name = "%s_StockCrate" % id
-			var crate_mesh := BoxMesh.new()
-			crate_mesh.size = Vector3(0.36, 0.30, 0.36)
-			crate.mesh = crate_mesh
-			crate.position = Vector3(x, 0.18, size.z * 0.58)
-			crate.material_override = _mat(color.darkened(0.28))
-			area.add_child(crate)
+		var posts := _make_multimesh_batch("%s_CanopyPosts" % id, shared_box_mesh, 2, _mat(color.darkened(0.25)))
+		posts.reparent(area, false)
+		posts.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+		var crates := _make_multimesh_batch("%s_StockCrates" % id, shared_box_mesh, 2, _mat(color.darkened(0.28)))
+		crates.reparent(area, false)
+		crates.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+		for index in range(2):
+			var side := -1.0 if index == 0 else 1.0
+			posts.multimesh.set_instance_transform(index, Transform3D(Basis.IDENTITY.scaled(Vector3(0.10, 1.55, 0.10)), Vector3(side * size.x * 0.42, size.y * 0.78, 0.0)))
+			crates.multimesh.set_instance_transform(index, Transform3D(Basis.IDENTITY.scaled(Vector3(0.36, 0.30, 0.36)), Vector3(side * size.x * 0.30, 0.18, size.z * 0.58)))
 		_make_light("%s_ShopGlow" % id, pos + Vector3(0, 1.25, 0), color.lightened(0.18), 0.7)
 	else:
 		mesh.size = size
 		table.position.y = size.y * 0.5
 		table.material_override = _mat(color)
-	table.mesh = mesh
-	area.add_child(table)
+	if table != null:
+		table.mesh = mesh
+		area.add_child(table)
+	if id == "village_well":
+		_apply_greyfen_well_visual(table, pos)
 	var label := Label3D.new()
 	label.name = "InteractionWorldLabel"
 	label.text = prompt
@@ -5237,6 +5618,40 @@ func _make_village_place(id: String, type: String, prompt: String, pos: Vector3,
 	_connect_interactable(area)
 	return area
 
+func _apply_greyfen_well_visual(visual: MeshInstance3D, pos: Vector3) -> void:
+	var well_mesh := opening_well_mesh if opening_well_mesh != null else load("res://assets_external/environment/village/GreyfenWell_Authored.res") as ArrayMesh
+	if well_mesh == null or well_mesh.get_surface_count() != 6:
+		push_error("Required authored Greyfen well is unavailable")
+		return
+	visual.mesh = well_mesh
+	var well_tints := {
+		"medieval_brick": Color(0.69, 0.67, 0.61),
+		"plaster": Color(0.72, 0.72, 0.67),
+		"timber": Color(0.44, 0.33, 0.22),
+		"roof_tiles": Color(0.42, 0.24, 0.16),
+		"glazing": Color(0.10, 0.25, 0.29),
+		"metal": Color(0.24, 0.27, 0.27),
+	}
+	var well_quality := str(settings.settings.get("quality_preset", "balanced"))
+	for surface_index in well_mesh.get_surface_count():
+		var surface_name := well_mesh.surface_get_name(surface_index)
+		if not well_tints.has(surface_name):
+			push_error("Unknown authored Greyfen well surface: " + surface_name)
+			return
+		var material: StandardMaterial3D = _mat(well_tints[surface_name]) if surface_name == "glazing" else world_materials.get_material(surface_name, well_quality, well_tints[surface_name], 0.0, false)
+		visual.set_surface_override_material(surface_index, material)
+	var body := StaticBody3D.new()
+	body.name = "GreyfenWellBody"
+	body.position = pos + Vector3(0, 0.42, 0)
+	zone_root.add_child(body)
+	var collision := CollisionShape3D.new()
+	collision.name = "GreyfenWellCollision"
+	var cylinder := CylinderShape3D.new()
+	cylinder.radius = 0.87
+	cylinder.height = 0.84
+	collision.shape = cylinder
+	body.add_child(collision)
+
 func _make_board_game_staging(area: Node3D, id: String, size: Vector3) -> void:
 	var board_size := Vector2(size.x * 0.70, size.z * 0.68)
 	var board_back := MeshInstance3D.new()
@@ -5249,18 +5664,23 @@ func _make_board_game_staging(area: Node3D, id: String, size: Vector3) -> void:
 	area.add_child(board_back)
 	var columns := 3 if id == "common_table" else 6
 	var rows := columns
+	var square_size := Vector3(board_size.x / columns - 0.018, 0.018, board_size.y / rows - 0.018)
+	var square_batches: Array[MultiMeshInstance3D] = []
+	for parity in range(2):
+		var count := (columns * rows + 1) / 2 if parity == 0 else columns * rows / 2
+		var material := _mat(Color(0.38, 0.24, 0.12) if parity == 0 else Color(0.16, 0.095, 0.045))
+		var batch := _make_multimesh_batch("%s_BoardSquares_%d" % [id, parity], shared_box_mesh, int(count), material)
+		batch.reparent(area, false)
+		batch.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+		square_batches.append(batch)
+	var square_indices := [0, 0]
 	for row in range(rows):
 		for column in range(columns):
-			var square := MeshInstance3D.new()
-			square.name = "%s_BoardSquare_%d_%d" % [id, row, column]
-			var square_mesh := BoxMesh.new()
-			square_mesh.size = Vector3(board_size.x / columns - 0.018, 0.018, board_size.y / rows - 0.018)
-			square.mesh = square_mesh
 			var x := -board_size.x * 0.5 + board_size.x * (float(column) + 0.5) / float(columns)
 			var z := -board_size.y * 0.5 + board_size.y * (float(row) + 0.5) / float(rows)
-			square.position = Vector3(x, size.y + 0.14, z)
-			square.material_override = _mat(Color(0.38, 0.24, 0.12) if (row + column) % 2 == 0 else Color(0.16, 0.095, 0.045))
-			area.add_child(square)
+			var parity := (row + column) % 2
+			square_batches[parity].multimesh.set_instance_transform(square_indices[parity], Transform3D(Basis.IDENTITY.scaled(square_size), Vector3(x, size.y + 0.14, z)))
+			square_indices[parity] += 1
 			if id == "common_table" and (row + column) % 2 == 1 and row != 1:
 				var mark := MeshInstance3D.new()
 				mark.name = "%s_CarvedMark_%d_%d" % [id, row, column]
@@ -5273,10 +5693,36 @@ func _make_board_game_staging(area: Node3D, id: String, size: Vector3) -> void:
 				mark.position = Vector3(x, size.y + 0.18, z)
 				mark.material_override = _mat(Color(0.72, 0.48, 0.20) if row < 2 else Color(0.72, 0.68, 0.48))
 				area.add_child(mark)
-	_make_board_game_chair(area, Vector3(0.0, 0.0, size.z * 0.90), PI)
-	_make_board_game_chair(area, Vector3(0.0, 0.0, -size.z * 0.90), 0.0)
+	var chair_batch: MultiMeshInstance3D = null
+	if not bool(area.get_meta("authored_social_furniture", false)):
+		chair_batch = _make_multimesh_batch("%s_ChairParts" % id, shared_box_mesh, 4, _mat(Color(0.20, 0.12, 0.065)))
+		chair_batch.reparent(area, false)
+		chair_batch.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+	_make_board_game_chair(area, Vector3(0.0, 0.0, size.z * 0.90), PI, chair_batch, 0)
+	_make_board_game_chair(area, Vector3(0.0, 0.0, -size.z * 0.90), 0.0, chair_batch, 2)
 	var opponent_role := "rook_smuggler" if id == "common_table" else "blacksmith_tor"
 	var opponent_id := "board_rook" if id == "common_table" else "board_tor"
+	if should_defer_character_role(opponent_role, opponent_id):
+		var deferred_opponent := Node3D.new()
+		deferred_opponent.name = "%s_Opponent" % id
+		deferred_opponent.position = Vector3(0.0, 0.0, size.z * 0.92)
+		deferred_opponent.rotation_degrees.y = 180.0
+		area.add_child(deferred_opponent)
+		var marker := Node3D.new()
+		marker.name = "DeferredCharacterVisual_%s" % opponent_id
+		marker.set_meta("deferred_visual_role", opponent_role)
+		marker.set_meta("deferred_visual_category", "characters")
+		marker.set_meta("deferred_visual_actor_id", opponent_id)
+		marker.set_meta("deferred_visual_scale", Vector3.ONE)
+		deferred_opponent.add_child(marker)
+		var deferred_gesture := BoardGameOpponent.new()
+		deferred_gesture.name = "BoardGameOpponentController"
+		deferred_opponent.add_child(deferred_gesture)
+		deferred_gesture.configure(player, null)
+		var deferred_ambient := NpcAmbient.new()
+		deferred_ambient.setup("rook" if id == "common_table" else "blacksmith_tor", player)
+		deferred_opponent.add_child(deferred_ambient)
+		return
 	var opponent := _make_role_visual(opponent_role, "characters", Vector3.ONE)
 	if opponent == null:
 		return
@@ -5286,52 +5732,25 @@ func _make_board_game_staging(area: Node3D, id: String, size: Vector3) -> void:
 	area.add_child(opponent)
 	CharacterPresentation.apply_npc(opponent, opponent_id)
 	_configure_npc_animation(opponent, "board_rook" if id == "common_table" else "board_tor")
-	var gesture := Node3D.new()
-	gesture.name = "BoardGameBeckoningGesture"
-	gesture.position = Vector3(0.34, 1.18, -0.28)
-	var palm := MeshInstance3D.new()
-	var palm_mesh := BoxMesh.new()
-	palm_mesh.size = Vector3(0.16, 0.09, 0.08)
-	palm.mesh = palm_mesh
-	palm.material_override = _mat(Color(0.58, 0.39, 0.25))
-	gesture.add_child(palm)
-	var finger := MeshInstance3D.new()
-	var finger_mesh := BoxMesh.new()
-	finger_mesh.size = Vector3(0.18, 0.045, 0.045)
-	finger.mesh = finger_mesh
-	finger.position = Vector3(0.08, 0.04, -0.01)
-	finger.rotation_degrees.z = -18.0
-	finger.material_override = palm.material_override
-	gesture.add_child(finger)
-	opponent.add_child(gesture)
 	var gesture_controller := BoardGameOpponent.new()
 	gesture_controller.name = "BoardGameOpponentController"
 	opponent.add_child(gesture_controller)
-	gesture_controller.configure(player, gesture)
+	gesture_controller.configure(player, opponent.find_child("CharacterAnimationDriver", true, false))
 	var ambient := NpcAmbient.new()
 	ambient.setup("rook" if id == "common_table" else "blacksmith_tor", player)
 	opponent.add_child(ambient)
 
-func _make_board_game_chair(area: Node3D, position: Vector3, yaw: float) -> void:
+func _make_board_game_chair(area: Node3D, position: Vector3, yaw: float, batch: MultiMeshInstance3D, first_index: int) -> void:
 	var chair := Node3D.new()
 	chair.name = "BoardGameChair_North" if position.z < 0.0 else "BoardGameChair_South"
 	chair.position = position
 	chair.rotation.y = yaw
 	area.add_child(chair)
-	var seat := MeshInstance3D.new()
-	var seat_mesh := BoxMesh.new()
-	seat_mesh.size = Vector3(0.90, 0.14, 0.82)
-	seat.mesh = seat_mesh
-	seat.position.y = 0.62
-	seat.material_override = _mat(Color(0.20, 0.12, 0.065))
-	chair.add_child(seat)
-	var back := MeshInstance3D.new()
-	var back_mesh := BoxMesh.new()
-	back_mesh.size = Vector3(0.90, 0.90, 0.12)
-	back.mesh = back_mesh
-	back.position = Vector3(0.0, 1.02, 0.32)
-	back.material_override = seat.material_override
-	chair.add_child(back)
+	if batch == null:
+		return
+	var orientation := Basis(Vector3.UP, yaw)
+	batch.multimesh.set_instance_transform(first_index, Transform3D(orientation.scaled(Vector3(0.90, 0.14, 0.82)), position + orientation * Vector3(0.0, 0.62, 0.0)))
+	batch.multimesh.set_instance_transform(first_index + 1, Transform3D(orientation.scaled(Vector3(0.90, 0.90, 0.12)), position + orientation * Vector3(0.0, 1.02, 0.32)))
 
 func _world_prop_spec(id: String) -> Dictionary:
 	return {
@@ -5388,78 +5807,22 @@ func _configure_npc_animation(mapped: Node3D, id: String) -> void:
 	driver.set_update_rate_hz(npc_animation_rate)
 
 func _stage_dialogue_moment(area) -> void:
-	if player == null or area == null or not (area is Node3D):
+	if not (area is Node3D):
 		return
-	var npc = area as Node3D
-	dialogue_focus_actor = npc
-	# Dialogue pauses the tree immediately after this staging call. Put Kael in
-	# the same authored presentation state as the speaker before the pause so a
-	# freshly spawned player cannot render the imported setup/T-pose in the
-	# conversation frame.
-	var player_driver = player.get("animation_driver")
-	if player_driver != null and player_driver.has_method("set_dialogue_pose"):
-		player_driver.set_dialogue_pose(true)
-	if area.interaction_id == "sister_anwen":
-		npc.set_meta("dialogue_facing_lock", true)
-		var anwen_driver = npc.find_child("CharacterAnimationDriver", true, false)
-		if anwen_driver != null and anwen_driver.has_method("set_dialogue_pose"):
-			anwen_driver.set_dialogue_pose(true)
-	if player.has_method("face_target"):
-		player.face_target(npc.global_position)
-	_face_npc_toward_player(npc)
-	# Prevent close-range interaction from placing both bodies in the same
-	# screen position. A short, validated conversational step gives the camera
-	# two readable silhouettes without changing quest or interaction range.
-	var separation: float = player.global_position.distance_to(npc.global_position)
-	if separation < 1.35:
-		var staged_position: Vector3 = npc.global_position - npc.global_basis.z.normalized() * 1.75
-		if has_method("validate_walkable_position"):
-			staged_position = validate_walkable_position(staged_position)
-		player.global_position = staged_position + Vector3.UP
-		player.velocity = Vector3.ZERO
-		if player.has_method("face_target"):
-			player.face_target(npc.global_position)
-		_face_npc_toward_player(npc)
-	if camera_rig != null and camera_rig.has_method("frame_dialogue_target"):
-		camera_rig.frame_dialogue_target(npc)
+	dialogue_runtime_coordinator.stage(area, player, camera_rig, validate_walkable_position)
 
 func _on_dialogue_page_changed(_speaker: String, _speaker_id: String, _page_index: int, _total_pages: int) -> void:
-	# Dialogue is paused, so regular actor/camera processing is suspended. Reapply
-	# the same face-to-face contract whenever a new speaker turn is rendered so
-	# a multi-speaker exchange cannot drift after a page change or UI focus event.
-	if player == null or dialogue_focus_actor == null or not is_instance_valid(dialogue_focus_actor):
-		return
-	_face_npc_toward_player(dialogue_focus_actor)
-	if player.has_method("face_target"):
-		player.face_target(dialogue_focus_actor.global_position)
-	if camera_rig != null and camera_rig.has_method("frame_dialogue_target"):
-		camera_rig.frame_dialogue_target(dialogue_focus_actor)
+	dialogue_runtime_coordinator.refresh_page(player, camera_rig)
 
 func _face_npc_toward_player(npc: Node3D) -> void:
-	if npc == null or player == null:
-		return
-	var to_player: Vector3 = player.global_position - npc.global_position
-	to_player.y = 0.0
-	if to_player.length_squared() <= 0.01:
-		return
-	# All route-visible humanoids share the actor-facing -Z contract.
-	npc.rotation.y = atan2(-to_player.x, -to_player.z)
+	dialogue_runtime_coordinator.face_actor(npc, player)
 
 func _release_dialogue_facing() -> void:
 	audio.stop_voice()
-	dialogue_focus_actor = null
-	if player != null and is_instance_valid(player):
-		var player_driver = player.get("animation_driver")
-		if player_driver != null and player_driver.has_method("set_dialogue_pose"):
-			player_driver.set_dialogue_pose(false)
+	interaction_input_block_until_usec = Time.get_ticks_usec() + int(DIALOGUE_INTERACTION_GUARD_SECONDS * 1000000.0)
+	dialogue_runtime_coordinator.release(player)
 	if zone_root == null:
 		return
-	var anwen = zone_root.find_child("sister_anwen", true, false)
-	if anwen != null:
-		anwen.set_meta("dialogue_facing_lock", false)
-		var anwen_driver = anwen.find_child("CharacterAnimationDriver", true, false)
-		if anwen_driver != null and anwen_driver.has_method("set_dialogue_pose"):
-			anwen_driver.set_dialogue_pose(false)
 	if pending_anwen_relocation:
 		pending_anwen_relocation = false
 		_relocate_anwen_to_cemetery()
@@ -5578,24 +5941,29 @@ func _connect_interactable(area) -> void:
 	if area is Area3D and area not in interaction_area_cache:
 		interaction_area_cache.append(area as Area3D)
 	area.body_entered.connect(func(body: Node):
-		if body == player and not bool(area.get_meta("seamless_exterior_gate", false)) and area not in interaction_candidates:
+		if body == player and is_instance_valid(area) and not area.is_queued_for_deletion() and not bool(area.get_meta("seamless_exterior_gate", false)) and area not in interaction_candidates:
 			interaction_candidates.append(area)
 			interaction_focus_dirty = true
 	)
 	area.body_exited.connect(func(body: Node):
 		if body == player:
-			interaction_candidates.erase(area)
-			_set_interactable_label_visible(area,false)
-			if active_interactable == area:
+			_remove_interaction_candidate(area)
+			if is_instance_valid(area):
+				_set_interactable_label_visible(area,false)
+			if is_instance_valid(active_interactable) and is_instance_valid(area) and active_interactable == area:
 				active_interactable = null
 			interaction_focus_dirty = true
 	)
 
 func _update_interaction_focus() -> void:
 	_refresh_interaction_candidates()
-	for candidate in interaction_candidates.duplicate():
-		if candidate != null and is_instance_valid(candidate) and bool(candidate.get_meta("seamless_exterior_gate", false)):
-			interaction_candidates.erase(candidate)
+	for index in range(interaction_candidates.size() - 1, -1, -1):
+		var candidate = interaction_candidates[index]
+		if candidate == null or not is_instance_valid(candidate):
+			interaction_candidates.remove_at(index)
+			continue
+		if bool(candidate.get_meta("seamless_exterior_gate", false)):
+			interaction_candidates.remove_at(index)
 	var camera: Camera3D = get_viewport().get_camera_3d()
 	var best = zone_runtime_coordinator.choose_interaction(interaction_candidates, player, camera, Callable(self, "_interaction_target_valid")) if zone_runtime_coordinator != null else null
 	if active_interactable != best:
@@ -5638,12 +6006,20 @@ func _refresh_interaction_candidates() -> void:
 			if discovered != null and discovered.has_method("get_context_prompt") and discovered not in interaction_area_cache:
 				interaction_area_cache.append(discovered)
 		interaction_area_cache_ready = true
+	_prune_invalid_interaction_candidates()
 	# Area signals are authoritative during ordinary movement, but can be missed
 	# when a save, spawn, or zone arrival places Kael inside a trigger between
 	# physics ticks. A small bounded scan keeps prompts deterministic without
 	# walking the entire world or inventing a second focus system.
-	for candidate in interaction_area_cache:
-		if candidate == null or candidate.is_queued_for_deletion() or not candidate.has_method("get_context_prompt"):
+	for index in range(interaction_area_cache.size() - 1, -1, -1):
+		var candidate = interaction_area_cache[index]
+		if candidate == null or not is_instance_valid(candidate):
+			# Do not pass a freed object back to a typed Array[Area3D].
+			# remove_at(index) remains valid even after Godot has invalidated the
+			# object reference during deferred clue/zone teardown.
+			interaction_area_cache.remove_at(index)
+			continue
+		if candidate.is_queued_for_deletion() or not candidate.has_method("get_context_prompt"):
 			continue
 		if bool(candidate.get_meta("seamless_exterior_gate", false)):
 			continue
@@ -5658,65 +6034,41 @@ func _refresh_interaction_candidates() -> void:
 				continue
 			interaction_candidates.append(candidate)
 
+func _prune_invalid_interaction_candidates() -> void:
+	for index in range(interaction_candidates.size() - 1, -1, -1):
+		var candidate = interaction_candidates[index]
+		if candidate == null or not is_instance_valid(candidate):
+			interaction_candidates.remove_at(index)
+
+func _remove_interaction_candidate(area) -> void:
+	for index in range(interaction_candidates.size() - 1, -1, -1):
+		var candidate = interaction_candidates[index]
+		if candidate == null or not is_instance_valid(candidate):
+			interaction_candidates.remove_at(index)
+			continue
+		if area != null and is_instance_valid(area) and candidate == area:
+			interaction_candidates.remove_at(index)
+
 func _interaction_target_valid(area: Area3D) -> bool:
-	if player == null or area == null or not is_instance_valid(area):
-		return false
-	# Travel volumes sit inside authored gate/berm geometry. Camera rays can hit
-	# that framing even while Kael is correctly standing in the gate trigger.
-	if area.interaction_type == "zone":
-		return player.global_position.distance_to(area.global_position) <= 3.65
-	var camera := get_viewport().get_camera_3d()
-	var origin: Vector3 = camera.global_position if camera != null else player.global_position + Vector3.UP
-	# Aim dialogue focus at the speaker's torso instead of the trigger origin.
-	# Low trigger origins are frequently hidden behind benches, steps, or road
-	# dressing even when the speaker is clearly visible at conversation distance.
-	var target_height := 0.92 if area.interaction_type in ["clue", "herb", "village_place"] else 0.96
-	var targets: Array[Vector3] = [area.global_position + Vector3.UP * target_height]
-	if area.interaction_type == "dialogue":
-		targets.append(area.global_position + Vector3.UP * 1.30)
-	var target: Vector3 = targets[0]
-	var direction := origin.direction_to(target)
-	var forward: Vector3 = -camera.global_basis.z if camera != null else -player.global_basis.z
-	if forward.dot(direction) < 0.22:
-		return false
-	# Ground clues are intentionally readable through low road dressing and
-	# foliage. Their proximity/facing check remains strict; only the camera ray
-	# is skipped because the target is below the normal eye-line.
-	if area.interaction_type in ["clue", "herb", "village_place"]:
-		return true
-	for target_point in targets:
-		var query := PhysicsRayQueryParameters3D.create(origin, target_point)
-		query.exclude = [player.get_rid()]
-		query.collide_with_areas = false
-		query.collide_with_bodies = true
-		var hit := get_world_3d().direct_space_state.intersect_ray(query)
-		if hit.is_empty():
-			return true
-		# A named character's skinned body is the intended target, not an
-		# obstruction. At conversation distance the eye-line ray naturally lands
-		# on the speaker's own capsule or imported mesh. Accept only a collider
-		# spatially bound to this interaction; unrelated scenery still blocks focus.
-		var collider := hit.get("collider") as Node3D
-		if collider != null:
-			var current: Node = collider
-			while current != null:
-				if current == area or (current is Node3D and (current as Node3D).global_position.distance_to(area.global_position) <= 1.2):
-					return true
-				current = current.get_parent()
-	return false
+	return interaction_focus != null and interaction_focus.target_is_valid(area, player, get_viewport().get_camera_3d())
 
 func _set_interactable_label_visible(area: Node, visible: bool) -> void:
 	var label := area.find_child("InteractionWorldLabel", true, false) as Label3D
 	if label != null:
 		label.visible = visible
 
-func _spawn_enemy(id: String, pos: Vector3) -> Node:
+func _spawn_enemy(id: String, pos: Vector3, visual_role: String = "") -> Node:
 	if _boss_is_resolved(id):
 		return null
 	if active_enemies.size() >= 5:
 		return null
 	pos = river_safe_position(pos,1.2)
+	# Enemy roots use the same floor-origin contract as the player. Only
+	# explicitly airborne roles retain an authored vertical spawn offset.
+	if not CharacterRoleSpec.is_airborne(id):
+		pos.y = 0.0
 	var enemy = EnemyAI.new()
+	enemy.visual_role_override = visual_role
 	# Keep the actor hidden while imported surfaces are normalized and receive
 	# their validated overrides. Grounding still needs an in-tree transform.
 	enemy.visible = false
@@ -5762,6 +6114,7 @@ func _spawn_enemy(id: String, pos: Vector3) -> Node:
 	for peer in active_enemies:
 		if is_instance_valid(peer) and peer.has_method("set_encounter_peers"):
 			peer.set_encounter_peers(active_enemies)
+	_sync_camera_enemy_cache()
 	return enemy
 
 func _boss_is_resolved(id: String) -> bool:
@@ -5788,7 +6141,9 @@ func _ensure_bell_eater() -> void:
 	for enemy in active_enemies:
 		if is_instance_valid(enemy) and str(enemy.get_meta("boss_id", "")) == "bell_eater" and not enemy.dead:
 			return
-	var boss := _spawn_enemy("bell_eater", Vector3(15.4, 0.8, 8.8))
+	# The chapel shell is occupied scenery. Spawn the boss in the broad west
+	# cemetery approach so spatial recovery cannot relocate it outside its arena.
+	var boss := _spawn_enemy("bell_eater", Vector3(10.0, 0.8, 8.0))
 	if boss != null:
 		boss.name = "BellEaterEncounter"
 		boss.leash_radius = 9.0
@@ -5796,7 +6151,7 @@ func _ensure_bell_eater() -> void:
 		_evacuate_bell_eater_bystanders()
 		hud.show_status_cue("The Bell-Eater wakes", "danger")
 		hud.toast("The bell rings once beneath the chapel. Something large pulls against the graves.")
-		hud.set_guidance_hint("Defeat the Bell-Eater beneath the Crow Chapel.", 6.0)
+		_show_current_objective_guidance(6.0)
 		audio.play_event("boss", 0.02)
 
 func _evacuate_bell_eater_bystanders() -> void:
@@ -5858,6 +6213,7 @@ func _on_boss_checkpoint(controller: Node) -> void:
 
 func _on_boss_resolved(boss_id: String, outcome: String) -> void:
 	story_state.set_flag("boss_%s_outcome" % boss_id, outcome)
+	_apply_boss_resolution_contract(boss_id)
 	for candidate in active_enemies:
 		if not is_instance_valid(candidate) or str(candidate.enemy_id) != boss_id:
 			continue
@@ -5868,10 +6224,32 @@ func _on_boss_resolved(boss_id: String, outcome: String) -> void:
 	if save_manager != null and player != null and is_instance_valid(player) and not resource_shutdown_prepared:
 		save_manager.checkpoint(self)
 
+func _apply_boss_resolution_contract(boss_id: String) -> void:
+	var definition: Dictionary = boss_defs.get(boss_id, {})
+	if definition.is_empty():
+		return
+	var grant_key := "boss_reward_granted_%s" % boss_id
+	if not bool(story_state.get_flag(grant_key, false)):
+		var rewards: Variant = definition.get("rewards", [])
+		if typeof(rewards) == TYPE_ARRAY:
+			for reward_id in rewards:
+				var reward := str(reward_id).strip_edges()
+				if reward != "":
+					story_state.set_flag("boss_reward_%s" % reward, true)
+		story_state.set_flag(grant_key, true)
+	var aftermath := str(definition.get("aftermath_state", "")).strip_edges()
+	if aftermath != "":
+		story_state.set_flag(aftermath, true)
+
+func _publish_halvern_exit() -> void:
+	if current_zone_id == "undercroft" and str(story_state.get_flag("halvern_fate", "")) != "" and not _has_interactable("gate_assembly"):
+		_make_zone_gate("Return to Greyfen for the assembly", Vector3(6, 0, -14), "assembly", Vector3(0, 1, 12))
+
 func _on_boss_peaceful_resolution(boss_id: String, outcome: String, enemy: Node) -> void:
 	story_state.set_flag("boss_%s_outcome" % boss_id, outcome)
 	if boss_id == "halvern_boss":
 		story_state.set_flag("halvern_fate", "witness" if outcome in ["testimony", "release", "witness"] else outcome)
+		_publish_halvern_exit()
 		if current_zone_id == "undercroft":
 			quests.complete_objective("main_last_witness", "break_halvern_guard")
 			hud.show_status_cue("Halvern lowers his blade", "victory")
@@ -5971,20 +6349,25 @@ func _enemy_attack_token(enemy: Node, claim: bool) -> bool:
 		active_enemy_attacker = null
 	return true
 
-func _make_ground(pos: Vector3, size: Vector3, color: Color) -> void:
-	var body = StaticBody3D.new()
-	body.position = pos
-	zone_root.add_child(body)
-	var shape = CollisionShape3D.new()
-	var box = BoxShape3D.new()
-	box.size = size
-	shape.shape = box
-	body.add_child(shape)
-	var mesh = MeshInstance3D.new()
-	mesh.mesh = shared_box_mesh
-	mesh.scale = size
+func _make_ground(pos: Vector3, size: Vector3, color: Color, collision_enabled: bool = true) -> void:
+	var parent: Node3D = zone_root
+	if collision_enabled:
+		var body := StaticBody3D.new()
+		body.position = pos
+		zone_root.add_child(body)
+		var shape := CollisionShape3D.new()
+		var box := BoxShape3D.new()
+		box.size = size
+		shape.shape = box
+		body.add_child(shape)
+		parent = body
+	var mesh := MeshInstance3D.new()
+	mesh.mesh = world_materials.make_tiled_box(size, pos)
+	mesh.position = Vector3.ZERO if collision_enabled else pos
 	mesh.material_override = _terrain_material("CampaignGround", color)
-	body.add_child(mesh)
+	mesh.set_meta("split_ground_size", size)
+	mesh.set_meta("split_ground_origin", pos)
+	parent.add_child(mesh)
 
 func _make_split_ground(width: float, depth: float, river_z: float, river_span: float, color: Color, bridge_width: float = 0.0, bridge_length: float = 0.0, bridge_approach_length: float = 0.0) -> void:
 	var south_edge := river_z + river_span * 0.5
@@ -6006,28 +6389,29 @@ func _make_split_ground(width: float, depth: float, river_z: float, river_span: 
 		var north_corridor_end := river_z - support_half_length
 		var north_corridor_depth := maxf(north_corridor_end + depth * 0.5, 0.0)
 		if north_corridor_depth > 0.05:
-			_make_ground(Vector3(0.0,-0.08,-depth*0.5+north_corridor_depth*0.5), Vector3(bridge_width,0.16,north_corridor_depth), color)
+			# Keep the center-lane mesh visual-only. One continuous collision slab
+			# below removes the exposed vertical face at the bank/bridge seam.
+			_make_ground(Vector3(0.0,-0.08,-depth*0.5+north_corridor_depth*0.5), Vector3(bridge_width,0.16,north_corridor_depth), color, false)
 		var south_corridor_start := river_z + support_half_length
 		var south_corridor_depth := maxf(depth * 0.5 - south_corridor_start, 0.0)
 		if south_corridor_depth > 0.05:
-			_make_ground(Vector3(0.0,-0.08,south_corridor_start+south_corridor_depth*0.5), Vector3(bridge_width,0.16,south_corridor_depth), color)
-		_make_bridge_corridor_collision(bridge_width, river_z, bridge_length, bridge_approach_length)
+			_make_ground(Vector3(0.0,-0.08,south_corridor_start+south_corridor_depth*0.5), Vector3(bridge_width,0.16,south_corridor_depth), color, false)
+		_make_bridge_corridor_collision(bridge_width, river_z, bridge_length, bridge_approach_length, depth)
 		return
 	_make_ground(Vector3(0,-0.08,-depth*0.5+north_depth*0.5),Vector3(width,0.16,north_depth),color)
 	_make_ground(Vector3(0,-0.08,south_edge+south_depth*0.5),Vector3(width,0.16,south_depth),color)
 
-func _make_bridge_corridor_collision(bridge_width: float, river_z: float, bridge_length: float, approach_length: float) -> void:
+func _make_bridge_corridor_collision(bridge_width: float, river_z: float, bridge_length: float, approach_length: float, zone_depth: float) -> void:
 	var body := StaticBody3D.new()
 	body.name = "RiverBridgeContinuousSurface"
-	body.position = Vector3(0.0, 0.0, river_z)
+	# The visual bank meshes remain split around the water, but the center lane
+	# uses one continuous surface across both joins. This prevents a CharacterBody
+	# capsule from catching the coplanar vertical faces of touching floor boxes.
+	body.position = Vector3(0.0, 0.0, 0.0)
 	zone_root.add_child(body)
-	# Keep the gameplay surface perfectly flush with the authored bank ground.
-	# A single finite primitive has no concave edge or one-sided triangle seam
-	# for the CharacterBody capsule to catch on. Its length matches the visual
-	# bridge and both approach ramps instead of spanning the entire zone.
 	var collision := CollisionShape3D.new()
 	var shape := BoxShape3D.new()
-	var support_length := bridge_length + approach_length * 2.0
+	var support_length := maxf(zone_depth, bridge_length + approach_length * 2.0)
 	shape.size = Vector3(bridge_width, 0.20, support_length)
 	collision.position = Vector3(0.0, -0.10, 0.0)
 	collision.shape = shape
@@ -6043,6 +6427,11 @@ func _make_tree(pos: Vector3) -> void:
 	# Gate and bridge corridors are reserved before scenery is authored. Keep the
 	# original request out of those volumes instead of nudging it back into the
 	# player route with _route_safe_position().
+	# Greyfen's cemetery is a composed investigation site. The boundary wall
+	# and village cluster otherwise place full tree crowns over its bell and
+	# chapel, despite their trunks sitting outside the walkable court.
+	if current_zone_id == "greyfen" and pos.x > 10.0 and pos.z > 7.5 and pos.z < 18.0:
+		return
 	if spatial_service != null and spatial_service.is_reserved(pos, 1.35):
 		return
 	if _is_river_excluded(pos,1.5):
@@ -6052,6 +6441,13 @@ func _make_tree(pos: Vector3) -> void:
 		return
 	if _is_first_route_clearance(pos, 1.55):
 		return
+	if current_zone_id == "greyfen":
+		for house in get_tree().get_nodes_in_group("greyfen_house"):
+			if not zone_root.is_ancestor_of(house):
+				continue
+			var house_position: Vector3 = zone_root.to_local((house as Node3D).global_position)
+			if Vector2(pos.x, pos.z).distance_to(Vector2(house_position.x, house_position.z)) < 5.5:
+				return
 	var radius := randf_range(1.0, 1.35)
 	var height := randf_range(2.0, 2.7)
 	var yaw := randf_range(0.0, TAU)
@@ -6062,6 +6458,8 @@ func _make_tree(pos: Vector3) -> void:
 	var variant_selector := int(absf(pos.x * 17.0 + pos.z * 31.0))
 	if variant_selector % 4 == 0:
 		tree_role = "forest_tree_variant"
+	elif current_zone_id == "wychwood":
+		tree_role = "forest_tree_secondary"
 	tree_batch_data.append({
 		"trunk": Transform3D(Basis.IDENTITY, pos + Vector3(0, 0.9, 0)),
 		"crown": Transform3D(Basis.from_euler(Vector3(0, yaw, 0)).scaled(Vector3(radius, height, radius)), pos + Vector3(0, 2.35, 0)),
@@ -6105,43 +6503,67 @@ func _clear_environment_batch_buffers() -> void:
 	visual_box_batch_data.clear()
 	terrain_patch_batch_data.clear()
 	house_batch_data.clear()
+	house_module_batch_data.clear()
 
 func _flush_environment_batches() -> void:
 	var terrain_groups: Dictionary = {}
 	for item in terrain_patch_batch_data:
-		var color: Color = item.color
-		var terrain_key := "%d_%d_%d" % [int(color.r * 3.0), int(color.g * 3.0), int(color.b * 3.0)]
+		var terrain_key := str(item.material.get_instance_id())
 		if not terrain_groups.has(terrain_key):
 			terrain_groups[terrain_key] = {"material":item.material,"items":[]}
 		terrain_groups[terrain_key].items.append(item)
 	for terrain_key in terrain_groups:
 		var terrain_group: Dictionary = terrain_groups[terrain_key]
 		var terrain_items: Array = terrain_group.items
-		var terrain_batch := _make_multimesh_batch("TerrainPatchBatch_%s" % terrain_key, shared_box_mesh, terrain_items.size(), terrain_group.material)
+		var terrain_batch := MeshInstance3D.new()
+		terrain_batch.name = "TerrainPatchBatch_%s" % terrain_key
+		var surface := SurfaceTool.new()
 		for i in range(terrain_items.size()):
 			var marker: Node3D = terrain_items[i].node
 			var patch_size: Vector3 = terrain_items[i].size
-			terrain_batch.multimesh.set_instance_transform(i, Transform3D(marker.basis.scaled(patch_size), marker.position))
-			# This node is a build-only transform carrier; the MultiMesh now owns
-			# the rendered instance. Defer removal until the current scene-tree
+			var patch_mesh: ArrayMesh = world_materials.make_organic_ground_patch(patch_size, marker.position, marker.basis) if current_zone_id == "wychwood" else world_materials.make_tiled_ground_patch(patch_size, marker.position, marker.basis)
+			surface.append_from(patch_mesh, 0, marker.transform)
+			# This node is a build-only transform carrier; the merged mesh now owns
+			# its geometry. Defer removal until the current scene-tree
 			# notification finishes so RenderingServer can unregister the instance
 			# without leaving a detached renderer allocation.
 			marker.queue_free()
+		terrain_batch.mesh = surface.commit()
+		terrain_batch.material_override = terrain_group.material
+		zone_root.add_child(terrain_batch)
 	var visual_groups: Dictionary = {}
 	for item in visual_box_batch_data:
 		var color: Color = item.color
-		var visual_key := "%d_%d_%d" % [int(color.r * 3.0), int(color.g * 3.0), int(color.b * 3.0)]
+		var use_instance_colors: bool = current_zone_id != "record_hall"
+		var visual_key := "instance_colors" if use_instance_colors else color.to_html(true)
+		var night_only: bool = item.node.get_meta("night_only_geometry", false)
+		if night_only:
+			visual_key = "night_" + visual_key
 		if not visual_groups.has(visual_key):
-			visual_groups[visual_key] = {"material": _mat(color), "items": []}
+			var material: StandardMaterial3D
+			if use_instance_colors:
+				if not material_cache.has("detail_instance_colors"):
+					var shared_material := StandardMaterial3D.new()
+					shared_material.roughness = 0.9
+					shared_material.vertex_color_use_as_albedo = true
+					material_cache["detail_instance_colors"] = shared_material
+				material = material_cache["detail_instance_colors"]
+			else:
+				material = _mat(color)
+			visual_groups[visual_key] = {"material": material, "colors": use_instance_colors, "night_only": night_only, "items": []}
 		visual_groups[visual_key].items.append(item)
 	for visual_key in visual_groups:
 		var group: Dictionary = visual_groups[visual_key]
 		var items: Array = group.items
-		var detail_batch := _make_multimesh_batch("AuthoredDetailBatch_%s" % visual_key, shared_box_mesh, items.size(), group.material)
+		var detail_batch := _make_multimesh_batch("AuthoredDetailBatch_%s" % visual_key, shared_box_mesh, items.size(), group.material, group.colors)
+		if group.night_only:
+			detail_batch.set_meta("night_only_geometry", true)
 		for i in range(items.size()):
 			var marker: Node3D = items[i].node
 			var detail_size: Vector3 = items[i].size
 			detail_batch.multimesh.set_instance_transform(i, Transform3D(marker.basis.scaled(detail_size), marker.position))
+			if group.colors:
+				detail_batch.multimesh.set_instance_color(i, items[i].color)
 			# Like terrain markers, these nodes have no runtime purpose after the
 			# batched transform has been copied. Defer removal for the same
 			# scene-tree/renderer ownership reason as terrain markers.
@@ -6158,9 +6580,28 @@ func _flush_environment_batches() -> void:
 			house_group.material,
 			true
 		)
+		if str(house_key).begins_with("emissive_window:"):
+			house_batch.set_meta("night_window_material", house_group.material)
+			house_batch.set_meta("night_window_color", house_group.material.albedo_color)
 		for transform_index in range(house_transforms.size()):
 			house_batch.multimesh.set_instance_transform(transform_index, house_transforms[transform_index])
 			house_batch.multimesh.set_instance_color(transform_index, house_group.colors[transform_index])
+	for batch_key in house_module_batch_data:
+		var module_group: Dictionary = house_module_batch_data[batch_key]
+		var module_transforms: Array = module_group.transforms
+		if module_transforms.is_empty():
+			continue
+		var module_batch := _make_multimesh_batch(
+			"HouseModuleBatch_%s" % batch_key,
+			module_group.mesh,
+			module_transforms.size(),
+			null
+		)
+		# Preserve each imported material group rather than replacing the
+		# entire module with the generic static-batch material.
+		module_batch.material_override = null
+		for index in range(module_transforms.size()):
+			module_batch.multimesh.set_instance_transform(index, module_transforms[index])
 	for batch_key in prop_batch_data:
 		var entry: Dictionary = prop_batch_data[batch_key]
 		var transforms: Array = entry.get("transforms", [])
@@ -6223,6 +6664,8 @@ func _flush_authored_tree_assets() -> bool:
 		if preview == null:
 			return false
 		var mesh_nodes := preview.find_children("*", "MeshInstance3D", true, false)
+		if preview is MeshInstance3D:
+			mesh_nodes.push_front(preview)
 		var source_mesh: Mesh = null
 		var source_material: Material = null
 		for raw_node in mesh_nodes:
@@ -6231,22 +6674,42 @@ func _flush_authored_tree_assets() -> bool:
 				continue
 			source_mesh = source.mesh
 			source_material = source.material_override
-			if source_material == null and source_mesh.get_surface_count() > 0:
+			if source_material == null and source_mesh.get_surface_count() == 1:
 				source_material = source_mesh.surface_get_material(0)
 			break
 		preview.free()
 		if source_mesh == null:
 			return false
-		if source_material == null:
+		var source_bounds := source_mesh.get_aabb()
+		if source_bounds.size.y <= 0.001:
+			return false
+		var source_scale := 6.0 / source_bounds.size.y
+		var source_normalization := Transform3D(Basis.IDENTITY.scaled(Vector3.ONE * source_scale),
+			Vector3(0, -source_bounds.position.y * source_scale, 0))
+		if source_material == null and source_mesh.get_surface_count() == 1:
 			source_material = world_materials.get_material("forest_ground", str(settings.settings.get("quality_preset", "balanced")), Color(0.08, 0.18, 0.09), 0.0, false)
 		var trees := _make_multimesh_batch("AuthoredTreeBatch_%s" % str(role).replace(":", "_"), source_mesh, role_items.size(), source_material)
+		var camera_clearance := StaticBody3D.new()
+		camera_clearance.name = "TreeCameraClearance_%s" % str(role).replace(":", "_")
+		camera_clearance.collision_layer = 1 << 6
+		camera_clearance.collision_mask = 0
+		zone_root.add_child(camera_clearance)
 		for index in range(role_items.size()):
 			var item: Dictionary = role_items[index]
 			var tree_position: Vector3 = item.get("asset_position", Vector3.ZERO)
 			var tree_scale: Vector3 = item.get("asset_scale", Vector3.ONE)
 			var tree_yaw: float = float(item.get("asset_yaw", 0.0))
 			var basis := Basis.from_euler(Vector3(0.0, tree_yaw, 0.0)).scaled(tree_scale)
-			trees.multimesh.set_instance_transform(index, Transform3D(basis, tree_position))
+			var tree_transform := Transform3D(basis, tree_position) * source_normalization
+			trees.multimesh.set_instance_transform(index, tree_transform)
+			# The orbit must stop before the rendered crown, not only its narrow
+			# walking collider. This layer is shared with authored camera roofs.
+			var clearance_shape := CollisionShape3D.new()
+			var clearance_box := BoxShape3D.new()
+			clearance_box.size = source_bounds.size * tree_scale * source_scale
+			clearance_shape.shape = clearance_box
+			clearance_shape.transform = Transform3D(Basis(Vector3.UP, tree_yaw), tree_transform * source_bounds.get_center())
+			camera_clearance.add_child(clearance_shape)
 		created_batch = true
 	return created_batch
 
@@ -6265,7 +6728,7 @@ func _make_multimesh_batch(node_name: String, mesh: Mesh, count: int, material: 
 	batch.mesh = base_mesh
 	batch.instance_count = count
 	instance.multimesh = batch
-	instance.material_override = _valid_material_or_fallback(material)
+	instance.material_override = null if material == null and base_mesh.get_surface_count() > 1 else _valid_material_or_fallback(material)
 	instance.visibility_range_end = 58.0
 	if _compatibility_budget_mode():
 		# Static environment batches do not need individual shadow maps on the
@@ -6335,18 +6798,15 @@ func _validate_zone_render_resources(root: Node) -> Dictionary:
 			report.invalid_geometry_names.append(str(batch_instance.name))
 			continue
 		report.fallbacks_applied += _ensure_mesh_surface_materials(batch_instance.multimesh.mesh, fallback)
-		if batch_instance.material_override == null:
-			batch_instance.material_override = fallback
-			report.fallbacks_applied += 1
+		# Mesh-owned materials are valid without an instance override. Replacing
+		# them here destroys transparency/emission (including the star field).
 	root.set_meta("zone_render_resource_report", report)
 	return report
 
 func _make_road(pos: Vector3, size: Vector3, color: Color) -> void:
 	var mesh = MeshInstance3D.new()
 	mesh.name = "PavedRoad" if current_zone_id == "greyfen" else "MudRoad"
-	var cube = BoxMesh.new()
-	cube.size = size
-	mesh.mesh = cube
+	mesh.mesh = world_materials.make_tiled_ground_patch(size, pos)
 	mesh.position = pos
 	mesh.material_override = _road_material(current_zone_id == "greyfen", color)
 	zone_root.add_child(mesh)
@@ -6408,22 +6868,23 @@ func _make_gravestone(pos: Vector3) -> void:
 	_make_prop_box("GraveBase", pos + Vector3(0, 0.09, 0.34), Vector3(0.75, 0.16, 1.0), Color(0.11, 0.10, 0.09))
 	_make_prop_box("GraveMoss", pos + Vector3(0.08, 0.72, -0.095), Vector3(0.18, 0.20, 0.025), Color(0.09, 0.18, 0.08))
 
-func _make_cart(pos: Vector3) -> void:
+func _make_cart(pos: Vector3, include_visual: bool = true) -> void:
 	pos = river_safe_position(pos,1.0)
-	_make_prop_box("BrokenCartBed", pos + Vector3(0, 0.45, 0), Vector3(2.0, 0.28, 1.1), Color(0.17, 0.10, 0.055))
-	for x in [-0.78, 0.78]:
-		var wheel = MeshInstance3D.new()
-		var mesh = CylinderMesh.new()
-		mesh.top_radius = 0.35
-		mesh.bottom_radius = 0.35
-		mesh.height = 0.12
-		wheel.mesh = mesh
-		wheel.position = pos + Vector3(x, 0.35, -0.62)
-		wheel.rotation_degrees.z = 90
-		wheel.material_override = _mat(Color(0.07, 0.05, 0.035))
-		wheel.set_meta("world_prop_kind", "wheel")
-		wheel.set_meta("world_prop_id", "greyfen_cart_wheel")
-		zone_root.add_child(wheel)
+	if include_visual:
+		_make_prop_box("BrokenCartBed", pos + Vector3(0, 0.45, 0), Vector3(2.0, 0.28, 1.1), Color(0.17, 0.10, 0.055))
+		for x in [-0.78, 0.78]:
+			var wheel = MeshInstance3D.new()
+			var mesh = CylinderMesh.new()
+			mesh.top_radius = 0.35
+			mesh.bottom_radius = 0.35
+			mesh.height = 0.12
+			wheel.mesh = mesh
+			wheel.position = pos + Vector3(x, 0.35, -0.62)
+			wheel.rotation_degrees.z = 90
+			wheel.material_override = _mat(Color(0.07, 0.05, 0.035))
+			wheel.set_meta("world_prop_kind", "wheel")
+			wheel.set_meta("world_prop_id", "greyfen_cart_wheel")
+			zone_root.add_child(wheel)
 	_make_world_prop_anchor("cart", "cart", pos)
 
 func _make_world_prop_anchor(id: String, kind: String, pos: Vector3, state_key: String = "") -> Node3D:
@@ -6464,7 +6925,14 @@ func _make_pillar(pos: Vector3) -> void:
 	zone_root.add_child(pillar)
 
 func _make_rubble(pos: Vector3) -> void:
+	# Gate and bridge corridors are registered before scenery is authored. Rubble
+	# must honor those reservations before _route_safe_position() can move it into
+	# the lane, otherwise a decorative source point can become a hard blocker.
+	if spatial_service != null and spatial_service.is_reserved(pos, 0.95):
+		return
 	pos = _route_safe_position(pos, 3.8)
+	if spatial_service != null and spatial_service.is_reserved(pos, 0.95):
+		return
 	if _is_first_route_clearance(pos, 0.95):
 		return
 	for i in range(2):
@@ -6484,7 +6952,7 @@ func _make_torch(pos: Vector3) -> void:
 	flame.set_meta("world_prop_kind", "flame")
 	flame.set_meta("world_prop_id", "torch_flame")
 	zone_root.add_child(flame)
-	_make_light("TorchLight", pos + Vector3(0, 1.8, 0), Color(1.0, 0.45, 0.16), 1.45)
+	_make_light("BanditWarmLantern" if current_zone_id == "bandit_road" else "TorchLight", pos + Vector3(0, 1.8, 0), Color(1.0, 0.45, 0.16), 1.45)
 
 func _make_hit_spark(pos: Vector3, heavy: bool) -> void:
 	if zone_root == null:
@@ -6522,7 +6990,7 @@ func _make_fog_sheet(pos: Vector3, scale_value: Vector3, color: Color) -> void:
 	fog.material_override = material
 	zone_root.add_child(fog)
 
-func _make_prop_box(name: String, pos: Vector3, size: Vector3, color: Color) -> void:
+func _make_prop_box(name: String, pos: Vector3, size: Vector3, color: Color, render_geometry: bool = true) -> void:
 	var authored_prop_ids: Array = zone_root.get_meta("authored_prop_ids", [])
 	if name not in authored_prop_ids:
 		authored_prop_ids.append(name)
@@ -6530,7 +6998,7 @@ func _make_prop_box(name: String, pos: Vector3, size: Vector3, color: Color) -> 
 	# Authored cemetery landmarks are deliberately fitted against the chapel
 	# shell. Do not run them through actor recovery: nearby chapel geometry would
 	# relocate the prop and the reserved-route check would then discard it.
-	var preserve_authored_position := name in ["OssuarySealedDoor", "CemeteryCrowShrine"]
+	var preserve_authored_position := name in ["OssuarySealedDoor", "CemeteryCrowShrine", "GreyfenRiverShoreStone"]
 	if name not in ["NorthBerm","SouthBerm","WestBerm","EastBerm"] and not preserve_authored_position:
 		pos = river_safe_position(pos,size.z*0.5+0.15)
 	# Solid scenery must yield to registered route and gate clearances. This is
@@ -6547,7 +7015,8 @@ func _make_prop_box(name: String, pos: Vector3, size: Vector3, color: Color) -> 
 	# Torch and lantern posts are visual route dressing. Their tiny collision
 	# footprints create disproportionate capsule snags at diagonal approaches,
 	# especially where a player is following a validated sector edge lane.
-	var decorative_only := (size.y <= 0.28 and not _prop_requires_collision(lower)) \
+	var decorative_only := name == "GreyfenRiverShoreStone" \
+		or (size.y <= 0.28 and not _prop_requires_collision(lower)) \
 		or lower.contains("torch") or lower.contains("lantern")
 	var body: StaticBody3D = null
 	if not decorative_only and separate_body:
@@ -6570,6 +7039,15 @@ func _make_prop_box(name: String, pos: Vector3, size: Vector3, color: Color) -> 
 		if not separate_body:
 			shape.position = pos
 		body.add_child(shape)
+	if not render_geometry:
+		return
+	if current_zone_id == "wychwood" and separate_body and body != null:
+		var bank := MeshInstance3D.new()
+		bank.name = "WychwoodForestBerm"
+		bank.mesh = world_materials.make_forest_berm(size, pos)
+		bank.material_override = world_materials.get_material("forest_ground", str(settings.settings.get("quality_preset", "balanced")), Color(0.40, 0.48, 0.34), 0.0, false)
+		body.add_child(bank)
+		return
 	if lower.contains("glow") or lower.contains("window") or lower.contains("coal") or lower.contains("candle"):
 		var mesh := MeshInstance3D.new()
 		mesh.mesh = shared_box_mesh
@@ -6603,6 +7081,20 @@ func _make_prop_box(name: String, pos: Vector3, size: Vector3, color: Color) -> 
 		if not prop_batch_data.has(batch_key):
 			prop_batch_data[batch_key] = {"material": material, "transforms": []}
 		prop_batch_data[batch_key].transforms.append(Transform3D(Basis.IDENTITY.scaled(size), pos))
+
+func _make_collision_box(name: String, pos: Vector3, size: Vector3) -> void:
+	# Fitted modular art and collision must not both render as overlapping shells.
+	if prop_collision_body == null:
+		prop_collision_body = StaticBody3D.new()
+		prop_collision_body.name = "BatchedPropCollisions"
+		zone_root.add_child(prop_collision_body)
+	var shape := CollisionShape3D.new()
+	shape.name = "%sCollision" % name
+	var box := BoxShape3D.new()
+	box.size = size
+	shape.shape = box
+	shape.position = pos
+	prop_collision_body.add_child(shape)
 
 func _prop_requires_collision(lower_name: String) -> bool:
 	return lower_name.contains("wall") or lower_name.contains("fence") or lower_name.contains("rail") \
@@ -6684,19 +7176,30 @@ func _node_keyword_path(node: Node) -> String:
 	return combined
 
 func _mesh_needs_visible_fallback(mesh_instance: MeshInstance3D) -> bool:
-	if mesh_instance.material_override != null:
-		return _is_bad_white_material(mesh_instance.material_override)
 	if mesh_instance.mesh == null:
 		return true
-	var saw_material = false
 	for surface_index in range(mesh_instance.mesh.get_surface_count()):
-		var material = mesh_instance.mesh.surface_get_material(surface_index)
+		var material := mesh_instance.get_active_material(surface_index)
 		if material == null:
-			continue
-		saw_material = true
-		if _is_bad_white_material(material):
 			return true
-	return not saw_material
+		if _is_bad_white_material(material) and not _surface_has_authored_colors(mesh_instance.mesh, surface_index, material):
+			return true
+	return mesh_instance.mesh.get_surface_count() == 0
+
+func _surface_has_authored_colors(mesh: Mesh, surface_index: int, material: Material) -> bool:
+	if not material is StandardMaterial3D or not (material as StandardMaterial3D).vertex_color_use_as_albedo:
+		return false
+	var arrays := mesh.surface_get_arrays(surface_index)
+	if not arrays[Mesh.ARRAY_COLOR] is PackedColorArray:
+		return false
+	var colors: PackedColorArray = arrays[Mesh.ARRAY_COLOR]
+	if colors.size() != (arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array).size():
+		return false
+	# White albedo multiplies authored vertex colors; it is not missing paint.
+	for color in colors:
+		if color.r <= 0.85 or color.g <= 0.85 or color.b <= 0.85:
+			return true
+	return false
 
 func _is_bad_white_material(material: Material) -> bool:
 	if material == null:
@@ -6744,6 +7247,7 @@ func _role_for_interactable(id: String) -> String:
 		"widow_elna": "widow_elna",
 		"blacksmith_tor": "blacksmith_tor",
 		"farmer_toma": "generic_villager_01",
+		"returned_soldier": "castle_guard",
 		"edric": "castle_guard",
 		"vargan_gate_guard": "castle_guard",
 		"vargan_record_keeper": "castle_guard",
@@ -6754,7 +7258,10 @@ func _role_for_interactable(id: String) -> String:
 		"edric_campaign": "edric_campaign",
 		"captain_senn": "road_ranger",
 		"halvern": "castle_guard",
-		"white_hart": "white_hart_avatar"
+		"white_hart": "white_hart_avatar",
+		"witness_-7": "mira_herbalist",
+		"witness_-3": "rook_smuggler",
+		"witness_3": "sister_anwen"
 	}
 	return str(roles.get(id, ""))
 
@@ -6763,9 +7270,10 @@ func _visual_role_for_interactable(id: String) -> String:
 		"sister_anwen": "sister_anwen_human",
 		"mira": "mira_human",
 		"rook": "rook_human",
-		"widow_elna": "villager_hooded_human",
+		"widow_elna": "villager_female_human",
 		"blacksmith_tor": "villager_worker_human",
 		"farmer_toma": "villager_human",
+		"returned_soldier": "castle_guard_human",
 		"edric": "castle_guard_human",
 		"vargan_gate_guard": "castle_guard_human",
 		"vargan_record_keeper": "villager_worker_human",
@@ -6796,8 +7304,8 @@ func _make_role_visual(role_name: String, category: String, scale_value: Vector3
 		# their imported bounds have an explicit normalization contract.
 		var balanced_environment_roles := [
 			"greyfen_door_facade", "greyfen_window_facade", "greyfen_chimney",
-			"greyfen_roof",
-			"forest_tree", "forest_tree_variant", "forest_rock",
+			"greyfen_roof", "cart",
+			"forest_tree", "forest_tree_variant", "forest_tree_secondary", "forest_rock", "forest_bush",
 			"castle_wall", "castle_arch", "castle_roof", "castle_door",
 			"castle_bookcase", "castle_chair", "castle_bench", "castle_table",
 			"castle_weapon_stand", "castle_lantern",
@@ -6836,13 +7344,24 @@ func _make_role_visual(role_name: String, category: String, scale_value: Vector3
 		node.scale = scale_value
 	return node
 
+func _environment_role_scale(role_name: String, target_size: Vector3) -> Vector3:
+	var normalized_size: Vector3 = ENVIRONMENT_ROLE_NORMALIZED_SIZE.get(role_name, Vector3.ZERO)
+	if normalized_size == Vector3.ZERO:
+		push_error("No fitted environment bounds registered for role '%s'" % role_name)
+		return Vector3.ONE
+	return Vector3(
+		target_size.x / maxf(normalized_size.x, 0.001),
+		target_size.y / maxf(normalized_size.y, 0.001),
+		target_size.z / maxf(normalized_size.z, 0.001)
+	)
+
 func _visual_role_for_legacy_character(role_name: String) -> String:
 	var roles = {
 		"player_kael": "player_human",
 		"sister_anwen": "sister_anwen_human",
 		"mira_herbalist": "mira_human",
 		"rook_smuggler": "rook_human",
-		"widow_elna": "villager_hooded_human",
+		"widow_elna": "villager_female_human",
 		"blacksmith_tor": "villager_worker_human",
 		"generic_villager_01": "villager_human",
 		"lord_edric": "castle_guard_human",
@@ -6871,8 +7390,8 @@ func _make_light(name: String, pos: Vector3, color: Color, energy: float) -> voi
 	light.name = name
 	light.position = pos
 	light.light_color = color
-	light.light_energy = energy
-	light.omni_range = 14.0 if quality == "quality" or name in ["UndercroftNavigationFill", "UndercroftHalvernFill"] else 8.0
+	light.light_energy = energy * (1.38 if name == "BanditWarmLantern" else 1.0)
+	light.omni_range = 11.0 if name == "BanditWarmLantern" else (14.0 if quality == "quality" or current_zone_id == "record_hall" or name in ["UndercroftNavigationFill", "UndercroftHalvernFill"] else 8.0)
 	light.shadow_enabled = false
 	zone_root.add_child(light)
 	runtime_light_count += 1
@@ -6884,27 +7403,28 @@ func _compatibility_budget_mode() -> bool:
 	return settings == null or str(settings.settings.get("quality_preset", "balanced")) != "quality"
 
 func _keep_performance_light(name: String) -> bool:
-	return name in ["Village Warmth", "Shrine Beacon", "Wychwood Gate Lantern", "Moon Shaft", "Trail Threat", "ClearingColdSpot", "SpawnWarmRead", "LedgerTableLight", "RecordHallNavigationFill", "RecordHallEntryFill", "RecordHallArchiveFill", "HartWitnessLight", "UndercroftNavigationFill", "UndercroftHalvernFill"]
+	return name in ["Village Warmth", "Shrine Beacon", "Wychwood Gate Lantern", "Moon Shaft", "Trail Threat", "ClearingColdSpot", "SpawnWarmRead", "AshMillFacadeFill", "BanditWarmLantern", "LedgerTableLight", "RecordHallNavigationFill", "RecordHallEntryFill", "RecordHallArchiveFill", "HartWitnessLight", "HartAftermathLight", "UndercroftNavigationFill", "UndercroftHalvernFill"]
 
 func _build_global_environment() -> void:
 	visual_director = VisualDirector.new()
 	add_child(visual_director)
 
 func _mat(color: Color) -> StandardMaterial3D:
-	var record_hall_lift: bool = current_zone_id == "record_hall"
-	var key := "flat:%s:%s" % [color.to_html(true), "record" if record_hall_lift else "world"]
+	var interior_lift: bool = current_zone_id in ["record_hall", "undercroft", "old_mill"]
+	var key := "flat:%s:%s" % [color.to_html(true), current_zone_id if interior_lift else "world"]
 	if material_cache.has(key):
 		return material_cache[key]
 	var material = StandardMaterial3D.new()
 	material.albedo_color = color
 	material.roughness = 0.9
-	if record_hall_lift:
+	if interior_lift:
 		# Compatibility can leave upward-facing procedural archive surfaces
 		# unlit. A restrained self-lit lift preserves their authored color without
 		# turning the room into a flat white box.
 		material.emission_enabled = true
 		material.emission = color.lightened(0.18)
-		material.emission_energy_multiplier = 0.52
+		var lift_strength := 0.52 if current_zone_id == "record_hall" else (0.22 if current_zone_id == "old_mill" else 0.34)
+		material.emission_energy_multiplier = lift_strength
 	material_cache[key] = material
 	return material
 
@@ -6916,7 +7436,8 @@ func _terrain_material(name: String, color: Color) -> StandardMaterial3D:
 		if lower.contains("mud") or lower.contains("wet") or lower.contains("cemetery"):
 			surface = "wet_mud"
 			wetness = 0.72
-		return world_materials.get_material(surface, str(settings.settings.get("quality_preset", "balanced")), color.lightened(0.65), wetness, true)
+		var tint_lift := 0.34 if lower.begins_with("wychwood") or current_zone_id == "wychwood" else 0.65
+		return world_materials.get_material(surface, str(settings.settings.get("quality_preset", "balanced")), color.lightened(tint_lift), wetness, true)
 	var key = "terrain:%s:%s" % [name, color.to_html()]
 	if material_cache.has(key):
 		return material_cache[key]
@@ -6934,7 +7455,7 @@ func _terrain_material(name: String, color: Color) -> StandardMaterial3D:
 
 func _road_material(paved: bool, color: Color) -> StandardMaterial3D:
 	if world_materials != null:
-		var road_tint := Color(0.82, 0.80, 0.76) if paved else Color(0.38, 0.31, 0.22).lerp(color, 0.15)
+		var road_tint := Color(0.64, 0.61, 0.56) if paved else Color(0.38, 0.31, 0.22).lerp(color, 0.15)
 		return world_materials.get_material("cobblestone" if paved else "wet_mud", str(settings.settings.get("quality_preset", "balanced")), road_tint, 0.15 if paved else 0.78, true)
 	var key = "road:paved" if paved else "road:mud"
 	if material_cache.has(key):

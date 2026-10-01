@@ -1,28 +1,48 @@
 ﻿{
     "schema_version":  3,
-    "report_id":  "27a58e60353f4573af0e78f691a8b307",
+    "report_id":  "2827e47644cb437a936c40d15785bf46",
     "release_id":  "recovery-004",
-    "status":  "fail",
-    "started_at":  "2026-09-10T14:44:28.3898343Z",
-    "finished_at":  "2026-09-10T15:11:38.4674895Z",
-    "source_commit":  "5e9cc4c1fd0c1df4069f77aa3e95fbf2466d2883",
+    "status":  "partial-pass",
+    "started_at":  "2026-09-13T05:40:07.4834192Z",
+    "finished_at":  "2026-09-13T05:40:26.6235418Z",
+    "source_commit":  "5b530361a5aae8612626532287b5bd27d7b244b8",
     "source_branch":  "codex/masterpiece-rebuild",
-    "source_fingerprint":  "c377eb28d3251c3addd10deb7f7bbbeb565124d912507bf3b0399677c0dd7106",
+    "source_fingerprint":  "6467bf8127f0a51a5894bd6909b29d86d1c0d1635028b4840a1e7afb49116135",
     "verification_revision":  {
-                                  "source_commit":  "5e9cc4c1fd0c1df4069f77aa3e95fbf2466d2883",
-                                  "source_fingerprint":  "c377eb28d3251c3addd10deb7f7bbbeb565124d912507bf3b0399677c0dd7106",
-                                  "registry_sha256":  "4f7cf0357a099b93c2b4bc7d884fb772c0ce67165c722689042ecbbe4c05e710"
+                                  "source_commit":  "5b530361a5aae8612626532287b5bd27d7b244b8",
+                                  "source_fingerprint":  "6467bf8127f0a51a5894bd6909b29d86d1c0d1635028b4840a1e7afb49116135",
+                                  "registry_sha256":  "2adecb880a4278e00e1cbf75cbeeb474e9f681be73a73c09abb251709f6bff40"
                               },
     "git_status":  [
+                       " M outputs/AshenOathTheRoadBetweenCrowns/RECOVERY_004_IMPLEMENTATION_STATUS.md",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/export_presets.cfg",
                        " M outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_candidates.json",
-                       " M outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_manifest.json"
+                       " M outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_manifest.json",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/asset_spawn_helper.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/camera_controller.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/character_presentation.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/character_role_spec.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/combat_feedback.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/input_router.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/interaction_focus_service.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/player_controller.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/scripts/qa_browser_telemetry.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/build_runtime_packs.ps1",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002.gd",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_browser.mjs",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_recovery_004.py",
+                       " M outputs/AshenOathTheRoadBetweenCrowns/world_sector_manifest.json",
+                       "?? outputs/AshenOathTheRoadBetweenCrowns/tools/_probe_campaign_prewarm.gd",
+                       "?? outputs/AshenOathTheRoadBetweenCrowns/tools/_probe_greyfen_bridge_exit.gd",
+                       "?? outputs/AshenOathTheRoadBetweenCrowns/tools/_probe_wychwood_player_route.gd"
                    ],
-    "mode":  "full",
-    "requested_gate":  "",
+    "mode":  "targeted",
+    "requested_gate":  "verify_castle_vargan",
     "project":  "outputs/AshenOathTheRoadBetweenCrowns",
     "artifact":  {
                      "directory":  "D:\\Projects\\AshenOath\\outputs\\AshenOath_Web",
-                     "total_bytes":  72859610,
+                     "total_bytes":  73432006,
                      "files":  [
                                    {
                                        "path":  "index.audio.position.worklet.js",
@@ -37,7 +57,7 @@
                                    {
                                        "path":  "index.html",
                                        "bytes":  12603,
-                                       "sha256":  "5be6878a083eee94f6aa820f884c98d5c303e19a5b0b35d265e065311e9550a2"
+                                       "sha256":  "f13bce393f16a23f6795c46248640088408b522a22d5efc3bfd9fa6b7b9802bd"
                                    },
                                    {
                                        "path":  "index.js",
@@ -46,8 +66,8 @@
                                    },
                                    {
                                        "path":  "index.pck",
-                                       "bytes":  22783296,
-                                       "sha256":  "e1db5d76852b4f60eec45887e8eccbcc4a83392418a312c97aa73193ccfdf06a"
+                                       "bytes":  23137428,
+                                       "sha256":  "e2ca04bb412dd0c27f82a8a9361a0dec86f87529981bc4d56a81614acfd5aa4c"
                                    },
                                    {
                                        "path":  "index.png",
@@ -61,37 +81,37 @@
                                    },
                                    {
                                        "path":  "packs/audio.pck",
-                                       "bytes":  2752240,
-                                       "sha256":  "cb49defd226050d02f9031312b9aa2dfd657f79635c17cea96f5f1aaba8938d9"
+                                       "bytes":  2753088,
+                                       "sha256":  "b5e7ad6fb85033c88548dc32e3a1e9566fe644b88e728129ba9fced17c02f19e"
                                    },
                                    {
                                        "path":  "packs/campaign.pck",
-                                       "bytes":  1042664,
-                                       "sha256":  "52fbdff4df3304676204f797ae1bde86d733b2175f49e7ce37969e49053c2c1a"
+                                       "bytes":  1043048,
+                                       "sha256":  "d0962b00b2a9101d2673c211394e15b66daa7f6d43f64948d3565a3dad499028"
                                    },
                                    {
                                        "path":  "packs/characters.pck",
-                                       "bytes":  5817272,
-                                       "sha256":  "4ab107a7eaea963747eea8282f7f44976c33b713abf3a40288eac945f0dc3bab"
+                                       "bytes":  5818120,
+                                       "sha256":  "94f004fe9da4e067472a7193db3383df8ad53f5dd8a0c416017e7d7c7c638617"
                                    },
                                    {
                                        "path":  "packs/monsters.pck",
-                                       "bytes":  1318192,
-                                       "sha256":  "fddeb9e774b91c6ef762510a799b16cdc244f0e81db7985c63a0eb37a21db02e"
+                                       "bytes":  1532856,
+                                       "sha256":  "e51db408299bf73c84ae9640ea576027bdf2508cc2c518dffafa92c308784826"
                                    },
                                    {
                                        "path":  "packs/opening.pck",
-                                       "bytes":  1085204,
-                                       "sha256":  "040691ebb73f729e19d013f759d77c64d2abf54964b103df38074c9de4033370"
+                                       "bytes":  1086724,
+                                       "sha256":  "0ab76c0faaf798a160458515c4ce03e85b4d46774f1c3d2e6f0e0f5728627192"
                                    }
                                ],
-                     "pck_sha256":  "e1db5d76852b4f60eec45887e8eccbcc4a83392418a312c97aa73193ccfdf06a",
+                     "pck_sha256":  "e2ca04bb412dd0c27f82a8a9361a0dec86f87529981bc4d56a81614acfd5aa4c",
                      "max_bytes":  104857600
                  },
     "issue_registry":  {
                            "path":  "RECOVERY_004_ISSUE_REGISTRY.json",
                            "exists":  true,
-                           "sha256":  "4f7cf0357a099b93c2b4bc7d884fb772c0ce67165c722689042ecbbe4c05e710",
+                           "sha256":  "2adecb880a4278e00e1cbf75cbeeb474e9f681be73a73c09abb251709f6bff40",
                            "schema_version":  1,
                            "registry_id":  "ashen-oath-recovery-004",
                            "category_statuses":  [
@@ -179,12 +199,12 @@
                                  "status":  "in_progress"
                              }
                          ],
-    "failure":  "verify_web_002_browser reported status \u0027fail\u0027 despite exit code 0",
+    "failure":  "",
     "results":  [
                     {
                         "name":  "verify_security_001",
                         "status":  "pass",
-                        "duration_seconds":  1.25,
+                        "duration_seconds":  1.06,
                         "log":  "verify_security_001.log",
                         "warnings":  [
 
@@ -204,7 +224,7 @@
                     {
                         "name":  "verify_content_integrity",
                         "status":  "pass",
-                        "duration_seconds":  0.99,
+                        "duration_seconds":  1.06,
                         "log":  "verify_content_integrity.log",
                         "warnings":  [
 
@@ -214,7 +234,7 @@
                     {
                         "name":  "verify_runtime_required_components",
                         "status":  "pass",
-                        "duration_seconds":  1.6,
+                        "duration_seconds":  1.13,
                         "log":  "verify_runtime_required_components.log",
                         "warnings":  [
 
@@ -224,7 +244,7 @@
                     {
                         "name":  "verify_asset_001_files",
                         "status":  "pass",
-                        "duration_seconds":  1.77,
+                        "duration_seconds":  1.6,
                         "log":  "verify_asset_001_files.log",
                         "warnings":  [
 
@@ -234,7 +254,7 @@
                     {
                         "name":  "verify_prod_002",
                         "status":  "pass",
-                        "duration_seconds":  1.63,
+                        "duration_seconds":  1.4,
                         "log":  "verify_prod_002.log",
                         "warnings":  [
 
@@ -244,208 +264,8 @@
                     {
                         "name":  "verify_prod_003",
                         "status":  "pass",
-                        "duration_seconds":  0.99,
+                        "duration_seconds":  1.05,
                         "log":  "verify_prod_003.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_runtime_smoke",
-                        "status":  "pass",
-                        "duration_seconds":  3.67,
-                        "log":  "verify_runtime_smoke.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_runtime",
-                        "status":  "pass",
-                        "duration_seconds":  15.93,
-                        "log":  "verify_runtime.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_runtime_regressions",
-                        "status":  "pass",
-                        "duration_seconds":  12.41,
-                        "log":  "verify_runtime_regressions.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_zone_builder_integrity",
-                        "status":  "pass",
-                        "duration_seconds":  0.44,
-                        "log":  "verify_zone_builder_integrity.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_gate_transitions",
-                        "status":  "pass",
-                        "duration_seconds":  188.31,
-                        "log":  "verify_gate_transitions.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_engine_001",
-                        "status":  "pass",
-                        "duration_seconds":  7.93,
-                        "log":  "verify_engine_001.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_engine_003",
-                        "status":  "pass",
-                        "duration_seconds":  11.33,
-                        "log":  "verify_engine_003.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_engine_004",
-                        "status":  "pass",
-                        "duration_seconds":  11.98,
-                        "log":  "verify_engine_004.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_story_campaign",
-                        "status":  "pass",
-                        "duration_seconds":  8.54,
-                        "log":  "verify_story_campaign.log",
-                        "warnings":  [
-                                         "WARNING: ObjectDB instances leaked at exit (run with --verbose for details)."
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_quest_002",
-                        "status":  "pass",
-                        "duration_seconds":  17.64,
-                        "log":  "verify_quest_002.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_objective_view_model",
-                        "status":  "pass",
-                        "duration_seconds":  0.43,
-                        "log":  "verify_objective_view_model.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_save_001",
-                        "status":  "pass",
-                        "duration_seconds":  0.61,
-                        "log":  "verify_save_001.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_qa_002",
-                        "status":  "pass",
-                        "duration_seconds":  4.75,
-                        "log":  "verify_qa_002.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_art_001",
-                        "status":  "pass",
-                        "duration_seconds":  1.45,
-                        "log":  "verify_art_001.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_asset_001",
-                        "status":  "pass",
-                        "duration_seconds":  2.92,
-                        "log":  "verify_asset_001.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_character_real_001",
-                        "status":  "pass",
-                        "duration_seconds":  2.09,
-                        "log":  "verify_character_real_001.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_face_river_sun_001",
-                        "status":  "pass",
-                        "duration_seconds":  7.92,
-                        "log":  "verify_face_river_sun_001.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_motion_quality",
-                        "status":  "pass",
-                        "duration_seconds":  7.46,
-                        "log":  "verify_motion_quality.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_river_swimming",
-                        "status":  "pass",
-                        "duration_seconds":  31.99,
-                        "log":  "verify_river_swimming.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_greyfen_life",
-                        "status":  "pass",
-                        "duration_seconds":  10.79,
-                        "log":  "verify_greyfen_life.log",
                         "warnings":  [
 
                                      ],
@@ -454,682 +274,12 @@
                     {
                         "name":  "verify_castle_vargan",
                         "status":  "pass",
-                        "duration_seconds":  10.11,
+                        "duration_seconds":  10.27,
                         "log":  "verify_castle_vargan.log",
                         "warnings":  [
-                                         "WARNING: ObjectDB instances leaked at exit (run with --verbose for details)."
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_audio_runtime",
-                        "status":  "pass",
-                        "duration_seconds":  1.36,
-                        "log":  "verify_audio_runtime.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_audio_001",
-                        "status":  "pass",
-                        "duration_seconds":  8.39,
-                        "log":  "verify_audio_001.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_visible_quality",
-                        "status":  "pass",
-                        "duration_seconds":  10.96,
-                        "log":  "verify_visible_quality.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_recovery_002_foundation",
-                        "status":  "pass",
-                        "duration_seconds":  7.94,
-                        "log":  "verify_recovery_002_foundation.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_navigation_001",
-                        "status":  "pass",
-                        "duration_seconds":  7.96,
-                        "log":  "verify_navigation_001.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_char_001",
-                        "status":  "pass",
-                        "duration_seconds":  7.99,
-                        "log":  "verify_char_001.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_anim_001",
-                        "status":  "pass",
-                        "duration_seconds":  8.16,
-                        "log":  "verify_anim_001.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_combat_001",
-                        "status":  "pass",
-                        "duration_seconds":  8.19,
-                        "log":  "verify_combat_001.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_ai_001",
-                        "status":  "pass",
-                        "duration_seconds":  10.93,
-                        "log":  "verify_ai_001.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_oath_001",
-                        "status":  "pass",
-                        "duration_seconds":  8.29,
-                        "log":  "verify_oath_001.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_ui_001",
-                        "status":  "pass",
-                        "duration_seconds":  8.12,
-                        "log":  "verify_ui_001.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_input_001",
-                        "status":  "pass",
-                        "duration_seconds":  8.88,
-                        "log":  "verify_input_001.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_mobile_001",
-                        "status":  "pass",
-                        "duration_seconds":  8.5,
-                        "log":  "verify_mobile_001.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_world_001",
-                        "status":  "pass",
-                        "duration_seconds":  7.72,
-                        "log":  "verify_world_001.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_world_002",
-                        "status":  "pass",
-                        "duration_seconds":  8.11,
-                        "log":  "verify_world_002.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_world_003",
-                        "status":  "pass",
-                        "duration_seconds":  11.27,
-                        "log":  "verify_world_003.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_world_014",
-                        "status":  "pass",
-                        "duration_seconds":  10.67,
-                        "log":  "verify_world_014.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_zone_budgets",
-                        "status":  "pass",
-                        "duration_seconds":  13.72,
-                        "log":  "verify_zone_budgets.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_visual_003",
-                        "status":  "pass",
-                        "duration_seconds":  8.49,
-                        "log":  "verify_visual_003.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_visual_100",
-                        "status":  "pass",
-                        "duration_seconds":  7.91,
-                        "log":  "verify_visual_100.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_master_002",
-                        "status":  "pass",
-                        "duration_seconds":  7.94,
-                        "log":  "verify_master_002.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_master_003",
-                        "status":  "pass",
-                        "duration_seconds":  7.96,
-                        "log":  "verify_master_003.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_mat_001",
-                        "status":  "pass",
-                        "duration_seconds":  0.98,
-                        "log":  "verify_mat_001.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_char_002",
-                        "status":  "pass",
-                        "duration_seconds":  2.1,
-                        "log":  "verify_char_002.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_mon_001",
-                        "status":  "pass",
-                        "duration_seconds":  0.8,
-                        "log":  "verify_mon_001.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_vfx_001",
-                        "status":  "pass",
-                        "duration_seconds":  0.7,
-                        "log":  "verify_vfx_001.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_water_001",
-                        "status":  "pass",
-                        "duration_seconds":  9.05,
-                        "log":  "verify_water_001.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_gameplay_001",
-                        "status":  "pass",
-                        "duration_seconds":  0.43,
-                        "log":  "verify_gameplay_001.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_combat_002",
-                        "status":  "pass",
-                        "duration_seconds":  0.98,
-                        "log":  "verify_combat_002.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_ai_002",
-                        "status":  "pass",
-                        "duration_seconds":  0.41,
-                        "log":  "verify_ai_002.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_inv_001",
-                        "status":  "pass",
-                        "duration_seconds":  0.41,
-                        "log":  "verify_inv_001.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_dialogue_001",
-                        "status":  "pass",
-                        "duration_seconds":  0.43,
-                        "log":  "verify_dialogue_001.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_narr_001",
-                        "status":  "pass",
-                        "duration_seconds":  0.42,
-                        "log":  "verify_narr_001.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_world_004",
-                        "status":  "pass",
-                        "duration_seconds":  0.42,
-                        "log":  "verify_world_004.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_quest_003",
-                        "status":  "pass",
-                        "duration_seconds":  0.42,
-                        "log":  "verify_quest_003.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_world_005",
-                        "status":  "pass",
-                        "duration_seconds":  0.42,
-                        "log":  "verify_world_005.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_quest_004",
-                        "status":  "pass",
-                        "duration_seconds":  8.22,
-                        "log":  "verify_quest_004.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_world_006",
-                        "status":  "pass",
-                        "duration_seconds":  0.43,
-                        "log":  "verify_world_006.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_quest_005",
-                        "status":  "pass",
-                        "duration_seconds":  8.85,
-                        "log":  "verify_quest_005.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_boss_001",
-                        "status":  "pass",
-                        "duration_seconds":  8.16,
-                        "log":  "verify_boss_001.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_side_001",
-                        "status":  "pass",
-                        "duration_seconds":  28.72,
-                        "log":  "verify_side_001.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_quest_006",
-                        "status":  "pass",
-                        "duration_seconds":  7.8,
-                        "log":  "verify_quest_006.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_qa_004",
-                        "status":  "pass",
-                        "duration_seconds":  1.46,
-                        "log":  "verify_qa_004.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_perf_003",
-                        "status":  "pass",
-                        "duration_seconds":  0.42,
-                        "log":  "verify_perf_003.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_perf_001",
-                        "status":  "pass",
-                        "duration_seconds":  84.39,
-                        "log":  "verify_perf_001.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_qa_005",
-                        "status":  "pass",
-                        "duration_seconds":  1.85,
-                        "log":  "verify_qa_005.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "capture_slice_screenshots",
-                        "status":  "pass",
-                        "duration_seconds":  126.91,
-                        "log":  "capture_slice_screenshots.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "capture_anim_001",
-                        "status":  "pass",
-                        "duration_seconds":  11.56,
-                        "log":  "capture_anim_001.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "capture_world_001",
-                        "status":  "pass",
-                        "duration_seconds":  13.47,
-                        "log":  "capture_world_001.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "capture_world_002",
-                        "status":  "pass",
-                        "duration_seconds":  16.66,
-                        "log":  "capture_world_002.log",
-                        "warnings":  [
 
                                      ],
                         "failure":  ""
-                    },
-                    {
-                        "name":  "capture_world_003",
-                        "status":  "pass",
-                        "duration_seconds":  16.53,
-                        "log":  "capture_world_003.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "capture_world_004",
-                        "status":  "pass",
-                        "duration_seconds":  16,
-                        "log":  "capture_world_004.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "capture_world_005",
-                        "status":  "pass",
-                        "duration_seconds":  17.93,
-                        "log":  "capture_world_005.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "capture_world_006",
-                        "status":  "pass",
-                        "duration_seconds":  15.67,
-                        "log":  "capture_world_006.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "capture_boss_001",
-                        "status":  "pass",
-                        "duration_seconds":  12.65,
-                        "log":  "capture_boss_001.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_screenshot_qa_003",
-                        "status":  "pass",
-                        "duration_seconds":  2.11,
-                        "log":  "verify_screenshot_qa_003.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_qa_006",
-                        "status":  "pass",
-                        "duration_seconds":  2.24,
-                        "log":  "verify_qa_006.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_web_001",
-                        "status":  "pass",
-                        "duration_seconds":  1.05,
-                        "log":  "verify_web_001.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_web_002",
-                        "status":  "pass",
-                        "duration_seconds":  0.93,
-                        "log":  "verify_web_002.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "web_export",
-                        "status":  "pass",
-                        "duration_seconds":  203.89,
-                        "log":  "web_export.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_web_export",
-                        "status":  "pass",
-                        "duration_seconds":  1.38,
-                        "log":  "verify_web_export.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "packed_startup",
-                        "status":  "pass",
-                        "duration_seconds":  3.82,
-                        "log":  "packed_startup.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_web_browser",
-                        "status":  "pass",
-                        "duration_seconds":  131.35,
-                        "log":  "verify_web_browser.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "qa_web_export",
-                        "status":  "pass",
-                        "duration_seconds":  59.25,
-                        "log":  "qa_web_export.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_qa_002",
-                        "status":  "pass",
-                        "duration_seconds":  6.95,
-                        "log":  "verify_qa_002.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_mobile_browser",
-                        "status":  "pass",
-                        "duration_seconds":  108.34,
-                        "log":  "verify_mobile_browser.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  ""
-                    },
-                    {
-                        "name":  "verify_web_002_browser",
-                        "status":  "fail",
-                        "duration_seconds":  131.35,
-                        "log":  "verify_web_002_browser.log",
-                        "warnings":  [
-
-                                     ],
-                        "failure":  "verify_web_002_browser reported status \u0027fail\u0027 despite exit code 0"
                     }
                 ],
     "screenshots":  {

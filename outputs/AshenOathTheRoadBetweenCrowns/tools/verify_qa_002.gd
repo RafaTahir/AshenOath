@@ -68,8 +68,8 @@ func _verify_runtime_snapshot() -> void:
 			break
 		await process_frame
 	var telemetry_script := load(TELEMETRY) as GDScript
-	_check(telemetry_script != null, "QA telemetry script does not load")
-	if telemetry_script == null:
+	_check(telemetry_script != null and telemetry_script.can_instantiate(), "QA telemetry script does not load or has a parser error")
+	if telemetry_script == null or not telemetry_script.can_instantiate():
 		await _shutdown_game(game, null)
 		return
 	var telemetry: Node = telemetry_script.new()

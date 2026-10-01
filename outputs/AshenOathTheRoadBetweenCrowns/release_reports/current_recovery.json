@@ -1,0 +1,2207 @@
+{
+  "schema_version": 4,
+  "report_id": "114b172247e34667bfb96087966b1876",
+  "release_id": "recovery004-current-qa-observation",
+  "kind": "recovery_observation_not_release_acceptance",
+  "release_phase": "candidate",
+  "status": "partial-pass",
+  "started_at": "2026-09-28T15:54:45.536165+00:00",
+  "finished_at": "2026-09-28T15:54:45.536165+00:00",
+  "observed_at": "2026-09-28T15:54:45.536165+00:00",
+  "source_commit": "5b530361a5aae8612626532287b5bd27d7b244b8",
+  "source_branch": "codex/masterpiece-rebuild",
+  "source_fingerprint": "de3be3cdac0fd13dbb98226753ce12284f2cbb2ceae41c658db96d10852f2d64",
+  "runtime_content_fingerprint": "de3be3cdac0fd13dbb98226753ce12284f2cbb2ceae41c658db96d10852f2d64",
+  "test_harness_fingerprint": "312dd9b06814ac83b4fd742b66e5fb11eee3130c404e59f1dfacb4a1bf7be762",
+  "registry_fingerprint": "abbc7d4cc7ae4c67d2cbbe8bb9f43853a0e97465c08f8e8420041bba11d4280c",
+  "execution_fingerprint": "8ea4d63e6531d7cc68a7534048e792669f94944b3ace2ee271e4619852d47f74",
+  "verification_revision": {
+    "source_commit": "5b530361a5aae8612626532287b5bd27d7b244b8",
+    "runtime_content_fingerprint": "de3be3cdac0fd13dbb98226753ce12284f2cbb2ceae41c658db96d10852f2d64",
+    "test_harness_fingerprint": "312dd9b06814ac83b4fd742b66e5fb11eee3130c404e59f1dfacb4a1bf7be762",
+    "execution_fingerprint": "8ea4d63e6531d7cc68a7534048e792669f94944b3ace2ee271e4619852d47f74",
+    "registry_sha256": "abbc7d4cc7ae4c67d2cbbe8bb9f43853a0e97465c08f8e8420041bba11d4280c"
+  },
+  "registry_sha256": "abbc7d4cc7ae4c67d2cbbe8bb9f43853a0e97465c08f8e8420041bba11d4280c",
+  "dirty": true,
+  "git_status": [
+    "M .gitignore",
+    " M outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/qa_003_approval_manifest.json",
+    " M outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/ANIM_003_01_Kael_Idle.png",
+    " M outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/ANIM_003_02_Kael_Walk.png",
+    " M outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/ANIM_003_03_Kael_Run.png",
+    " M outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/ANIM_003_04_Kael_Light_Attack.png",
+    " M outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/ANIM_003_05_Kael_Parry.png",
+    " M outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/ANIM_003_06_Kael_Oathfire.png",
+    " M outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/ANIM_003_07_Shared_Presentation_Contact_Sheet.png",
+    " M outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/CHAR-RESTORE-001_A1_Kael.png",
+    " M outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/CHAR-RESTORE-001_A2_Anwen.png",
+    " M outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/CHAR-RESTORE-001_Crowd_Variation.png",
+    " M outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/CHAR-RESTORE-001_Dialogue_Anwen.png",
+    " M outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/CHAR-RESTORE-001_Gameplay_Anwen.png",
+    " M outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/CHAR-RESTORE-001_Gameplay_Kael.png",
+    " M outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/CHAR-RESTORE-001_Monster_Families.png",
+    " M outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/CHAR-RESTORE-001_Ranger_Senn.png",
+    " M outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/FACE_003_01_Kael_Native_Face.png",
+    " M outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/FACE_003_02_Anwen_Native_Face.png",
+    " M outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/FACE_003_03_Native_Face_Contact_Sheet.png",
+    " M outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/WORLD_012_01_Greyfen_Spawn_Street.png",
+    " M outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/WORLD_012_02_Greyfen_Shrine_Quarter.png",
+    " M outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/WORLD_012_03_Greyfen_Forge_Yard.png",
+    " M outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/screenshots/WORLD_012_04_Greyfen_River_Bridge.png",
+    " M outputs/AshenOathTheRoadBetweenCrowns/QA_003_SCREENSHOT_COMPARISON_AND_APPROVAL.md",
+    " M outputs/AshenOathTheRoadBetweenCrowns/QUEST_001_RESULT.md",
+    " M outputs/AshenOathTheRoadBetweenCrowns/RECOVERY_004_IMPLEMENTATION_STATUS.md",
+    " M outputs/AshenOathTheRoadBetweenCrowns/RECOVERY_004_ISSUE_REGISTRY.json",
+    " M outputs/AshenOathTheRoadBetweenCrowns/RUNTIME_001_RESULT.md",
+    " M outputs/AshenOathTheRoadBetweenCrowns/TRAV_001_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/T_Trim_Cloth_BaseColor.png.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/T_Trim_Cloth_Normal.png.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/T_Trim_Cloth_ORM.png.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/T_Trim_Furniture_BaseColor.png.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/T_Trim_Furniture_Normal.png.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/T_Trim_Furniture_ORM.png.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/T_Trim_Metal_BaseColor.png.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/T_Trim_Metal_Normal.png.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/T_Trim_Metal_ORM.png.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/T_Trim_Props_BaseColor.png.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/T_Trim_Props_Normal.png.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/T_Trim_Props_ORM.png.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/timber_albedo.jpg.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/wet_mud_albedo.jpg.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/ui/greyfen_menu_runtime.jpg.import",
+    " M outputs/AshenOathTheRoadBetweenCrowns/character_role_manifest.json",
+    " M outputs/AshenOathTheRoadBetweenCrowns/curated_runtime_assets.json",
+    " M outputs/AshenOathTheRoadBetweenCrowns/data/bosses.json",
+    " M outputs/AshenOathTheRoadBetweenCrowns/data/campaign_dialogue.json",
+    " M outputs/AshenOathTheRoadBetweenCrowns/data/dialogue.json",
+    " M outputs/AshenOathTheRoadBetweenCrowns/data/quests.json",
+    " M outputs/AshenOathTheRoadBetweenCrowns/export_presets.cfg",
+    " M outputs/AshenOathTheRoadBetweenCrowns/release_reports/latest.json",
+    " M outputs/AshenOathTheRoadBetweenCrowns/runtime_asset_manifest.json",
+    " M outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_candidates.json",
+    " M outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_manifest.json",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scenes/zones/greyfen_gameplay.tscn",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/asset_database.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/asset_spawn_helper.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/audio_manager.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/board_game_opponent.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/boss_encounter.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/camera_controller.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/character_animation_driver.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/character_animation_fusion.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/character_face_driver.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/character_identity_profile.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/character_presentation.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/character_role_spec.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/combat_feedback.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/combat_manager.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/enemy_ai.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/epilogue_resolver.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/greyfen_life_controller.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/health_component.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/hud.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/input_router.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/interactable.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/interaction_focus_service.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/inventory_manager.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/mobile_touch_controls.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/npc_ambient.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/objective_view_model.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/player_controller.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/progression_manager.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/qa_browser_telemetry.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/quest_beat_director.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/quest_manager.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/quest_presentation_state.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/river_motion_controller.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/runtime_asset_anchor.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/runtime_pack_manager.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/runtime_service_registry.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/save_manager.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/settings_manager.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/stamina_component.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/vendor_service.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/visual_director.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/world_material_library.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_budget.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_build_context.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_runtime_coordinator.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_scene_catalog.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_spatial_service.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_streaming_service.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/bandit_road_section.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/campaign_finale_section.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/campaign_wilderness_section.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/castle_vargan_section.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/cemetery_section.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/greyfen_section.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/river_section.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/wychwood_section.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/soul_character_role_manifest.json",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/build_runtime_packs.ps1",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/build_web_runtime_manifest.py",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/capture_anim_003.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/capture_boss_003.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/capture_boss_004.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/capture_boss_005.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/capture_boss_006.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/capture_char_009.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/capture_face_003.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/capture_life_001.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/capture_monster_audition.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/capture_monster_families.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/capture_slice_screenshots.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/capture_water_002.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/capture_world_012.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/capture_world_013.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/capture_world_014.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/gate_profiles.json",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/run_release_gate.ps1",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/run_ticket_gate.ps1",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/sync_runtime_pack_manifest.py",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/test_verify_screenshot_qa_003.py",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/update_universal_role_manifests.py",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_ai_001.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_ai_003.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_asset_001.py",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_asset_005.py",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_audio_001.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_audio_006.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_audio_repair_001.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_boot_003.py",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_boss_003.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_boss_004.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_boss_005.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_boss_006.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_boss_007.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_char_001.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_char_002.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_char_007.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_char_009.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_character_real_001.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_combat_001.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_engine_003.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_engine_005.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_face_003.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_gate_transitions.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_greyfen_life.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_hud_005.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_light_001.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_load_001.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_load_qa_002.py",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_mat_003.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_minigame_presentation.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_mobile_001.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_mon_002.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_motion_quality.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_navigation_001.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_oath_002.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_objective_view_model.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_perf_001.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_browser.mjs",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_005.py",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_006.py",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_quest_006.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_recovery_004.py",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_release_report.py",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_render_resources.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_river_swimming.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_runtime.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_runtime_asset_policy.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_runtime_required_components.py",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_screenshot_qa_003.py",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_seam_qa_001.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_side_001.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_ui_001.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_ui_002.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_water_001.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_water_002.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_web_browser.mjs",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_web_export.py",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_workflow_002.ps1",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_world_001.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_world_012.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_world_013.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_world_014.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_world_015.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/tools/verify_world_016.gd",
+    " M outputs/AshenOathTheRoadBetweenCrowns/visual_upgrade_manifest.json",
+    " M outputs/AshenOathTheRoadBetweenCrowns/web_boot_shell.html",
+    " M outputs/AshenOathTheRoadBetweenCrowns/world_sector_manifest.json",
+    " M outputs/AshenOathTheRoadBetweenCrowns/zone_scene_manifest.json",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/ACCESS_001_PAUSE_REPAIR_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/ACCESS_001_WEAPON_CONTEXT_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/AI_001_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/ARCH_001_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/ARCH_002_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/AUDIO_001_MIX_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/BOSS_001_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/CHAR_001_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/CHAR_002_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/COMBAT_001_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/MON_001_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/MON_001_STAG_SOURCE.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/OATH_001_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/PACK_002_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/PERF_001_BACKEND_CACHE_DISCRIMINANT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/PERF_001_CPU_WAIT_DISCRIMINANT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/PERF_001_FINAL_READINESS_DISCRIMINANT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/PERF_001_MESH_RESIDENCY_DISCRIMINANT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/PERF_001_STATIC_SURFACE_DISCRIMINANT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/PERF_001_STORAGE_CROSSOVER_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/PRES_001_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/PREWARM_001_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/QA_001_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/QA_003_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/RECOVERY_004_ATOMIC_STOP_20260927.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/RECOVERY_004_CURRENT_STATUS.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/SAVE_001_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/SCENE_001_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/STORY_001_ACTOR_AFTERMATH_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/STORY_001_ANWEN_REPLIES_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/STORY_001_CHOICE_COVERAGE.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/STORY_001_COMBINED_ROUTES_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/STORY_001_CONTINUOUS_ROUTE_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/STORY_001_EARLY_ALTERNATIVES_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/STORY_001_EDRIC_CHOICES_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/STORY_001_MAIN_ALTERNATIVES_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/STORY_001_REPORT_ALTERNATIVES_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/TRAV_002_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/UI_001_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/WEB_001_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_CEMETERY_PASS_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_CLOSURE_MATRIX.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_GREYFEN_FRAMING_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_LANDSCAPE_PASS_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_SOCIAL_PASS_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_WYCHWOOD_PASS_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_ARCHIVE_PASS_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_BANDIT_ROAD_COMPOSITION_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_FINALE_PASS_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_MILL_PASS_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_RECORD_COMPOSITION_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_UNDERCROFT_PASS_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_VARGAN_PASS_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_WILDS_PASS_RESULT.md",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets/audio/",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets/bosses/",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets/landscape/",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets/sky/",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/audio/authored/",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.bin",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.gltf",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.png",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.gltf",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.png",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Bandit_Tracker_Atlas.gltf",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Bandit_Tracker_Atlas.png",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Kael_A_Set_Atlas.bin",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Kael_A_Set_Atlas.gltf",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Kael_A_Set_Atlas.png",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/OPENING_CHARACTER_ASSEMBLY_MANIFEST.json",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Universal_Albedo_Atlas_512.json",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Universal_Albedo_Atlas_512.png",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Villager_Female_Atlas.bin",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Villager_Female_Atlas.gltf",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Villager_Female_Atlas.png",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Villager_Hooded_Atlas.bin",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Villager_Hooded_Atlas.gltf",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Villager_Hooded_Atlas.png",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Villager_Male_Atlas.bin",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Villager_Male_Atlas.png",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Villager_Worker_Atlas.bin",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Villager_Worker_Atlas.png",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/enemies/WhiteHart_Stag.glb",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/enemies/ultimate_monsters/",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/Campaign_bandit_road_Landscape.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/Campaign_burned_farmstead_Landscape.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/Campaign_deep_wood_Landscape.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/Campaign_marsh_crossing_Landscape.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/HartLandscape_Authored.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/HartWitnessStones_Authored.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/Wychwood_black_feathers_Evidence.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/Wychwood_claw_marks_Evidence.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/Wychwood_corpse_Evidence.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/Wychwood_oren_token_Evidence.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/Wychwood_tracks_Evidence.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/GreyfenSocial_barrel_board.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/GreyfenSocial_common_table.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/GreyfenSocial_mira_apothecary.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/RecordArchive_Authored.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/AshMill_Authored.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/AssemblyCourt_Authored.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Cemetery_bell_Authored.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Cemetery_bell_frame_Authored.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Cemetery_boundary_Authored.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Cemetery_chapel_Authored.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Cemetery_disturbed_soil_Authored.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Cemetery_grave_child_Authored.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Cemetery_grave_earth_Authored.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Cemetery_grave_harl_Authored.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Cemetery_grave_rows_Authored.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Cemetery_grave_soldier_Authored.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Cemetery_memory_window_Authored.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/FarmsteadEast_Authored.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/FarmsteadRuins_Authored.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/FarmsteadWest_Authored.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/GreyfenForge_Authored.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/GreyfenHouse_Authored.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/GreyfenHouse_Authored_1.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/GreyfenHouse_Authored_2.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/GreyfenHouse_Authored_3.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/GreyfenShrine_Authored.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/GreyfenWell_Authored.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/RoadCheckpoint_Authored.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/UndercroftVault_Authored.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Vargan_cistern_Authored.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Vargan_curtain_Authored.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Vargan_door_Authored.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Vargan_forge_Authored.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Vargan_gatehouse_Authored.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Vargan_keep_Authored.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Vargan_stable_Authored.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Vargan_tower_Authored.res",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/licenses/AshenOath_Greyfen_Menu_Artwork.txt",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/licenses/Quaternius_Ultimate_Animals_CC0.txt",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/licenses/Quaternius_Ultimate_Monsters_Mirror_CC0.txt",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/ui/greyfen_menu_concept.png",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/ui/greyfen_menu_runtime.jpg",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/release_reports/current_recovery.json",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/scenes/runtime/",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/scripts/cemetery_evidence_presentation.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/scripts/combat_vfx_coordinator.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/scripts/dialogue_runtime_coordinator.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/scripts/greyfen_social_presentation.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/scripts/prepared_audio_bank.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/scripts/production_observation_bridge.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/scripts/quest_hud_coordinator.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/scripts/spatial_surface_contract.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/scripts/story_actor_presence.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/scripts/world_landscape_presentation.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/scripts/wychwood_evidence_presentation.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_residency_service.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/campaign_wilds_presentation.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/build_ash_mill.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/build_assembly_court.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/build_authored_event_audio.ps1",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/build_bell_eater_bell.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/build_campaign_wilds.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/build_cemetery_architecture.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/build_cloud_volumes.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/build_greyfen_house.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/build_greyfen_social.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/build_hart_landscape.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/build_landscape_foundations.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/build_opening_character_assemblies.py",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/build_prepared_audio.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/build_record_archive.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/build_undercroft_vault.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/build_universal_character_atlas.py",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/build_vargan_architecture.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/build_white_hart.py",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/build_wychwood_evidence.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/capture_bandit_road_recovery.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/capture_hart_recovery.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/capture_pres_001.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/capture_ui_001_dialogue.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/capture_ui_001_menu.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/capture_visual_provenance.py",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/diagnose_greyfen_bank.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/diagnose_wychwood_slabs.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/generate_recovery_004_status.py",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/inspect_bridge_visual.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/inspect_cemetery_block_owner.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/inspect_enemy_attack_timeline.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/inspect_greyfen_house_bake.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/inspect_greyfen_hydration_owners.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/inspect_hart_source.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/inspect_world001_house_runtime.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/inspect_world_001_modules.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/inspect_world_013_camera.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/profile_greyfen_hydration_repeat.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/profile_greyfen_render_owners.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/profile_greyfen_update_cost.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/profile_opening_runtime.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/profile_render_categories.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/profile_wychwood_costs.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/release_identity.py",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/snapshot_recovery_status.py",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/test_qa_001_runner.ps1",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/test_recovery_registry.py",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/test_release_identity.py",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/test_runtime_production_policy.py",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/test_visual_capture_cache.ps1",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/test_visual_evidence.py",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/test_web_pack_completeness.py",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_access_binding_restore.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_access_context_real_input.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_access_weapon_context.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_animated_blade_contact.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_animation_rate_ownership.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_animation_retarget_cost.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_animation_timer_rate.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_anwen_reply_native.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_ash_mill.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_ashwing_attachment.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_audio_001_authored.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_audio_001_mix.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_audio_startup_cost.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_bandit_road_identity.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_bell_eater_harness.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_bell_route_native.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_blade_contact_distance.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_blade_strike_window.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_board_invitation.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_boss_resolution.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_boundary_stages.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_cached_materials.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_campaign_wilds_composition.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_capture_dressing.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_celestial_render.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_celestial_rendered_size.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_cemetery_architecture.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_cemetery_stages.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_character_spawn_cost.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_combat_vfx_coordinator.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_crow_geometry.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_current_ticket_release.py",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_deferred_greyfen_population.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_deferred_night_lighting.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_deferred_player_restore.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_detail_batch_publication.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_dialogue_runtime_coordinator.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_enemy_contact_bone.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_enemy_dormancy.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_enemy_posed_bounds.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_event_driven_life.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_event_driven_touch.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_finale_composition.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_focus_deadline.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_greyfen_framing.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_greyfen_horizon.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_greyfen_shore_ownership.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_greyfen_social.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_grouped_interaction_focus.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_halvern_equipment.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_hart_pending_reload.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_hart_stag.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_health_boundaries.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_house_build_cost.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_imported_obj.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_interaction_visibility.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_inventory_restore.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_landscape_foundations.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_material_override_render.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_material_prewarm_retirement.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_melee_driver_reach.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_menu_status_stability.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_moving_opening_hydration.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_npc_distance_visibility.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_opening_boot_material_budget.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_opening_detail_policy.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_opening_detail_runtime.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_opening_fast_click.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_opening_pack_readiness.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_opening_real_input_native.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_pack_dependencies.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_pack_http.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_pack_http.py",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_pack_retry.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_pack_transfer_cost.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_pack_validation_metadata.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_pack_wait_ownership.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_parry_requires_contact.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_paused_player_real_input.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_prepared_audio.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_pres_001.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_prewarm_001.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_progression_restore.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_001.py",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_bearing.test.mjs",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_combat.test.mjs",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_deadline.test.mjs",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_dialogue_mode.test.mjs",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_hold.test.mjs",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_observation.test.mjs",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_startup.test.mjs",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_transport.test.mjs",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_waypoints.test.mjs",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_quest_001_runtime.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_quest_completion_checkpoint.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_quest_hud_coordinator.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_quest_snapshot_isolation.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_quest_tracker_layout.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_record_archive.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_rendered_enemy_parry.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_ritual_gate_native.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_river_bank_faces.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_role_resource_prewarm.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_rootbound_identity.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_route_alignment.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_route_deadline.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_save_version_boundary.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_scene_001_opening_core.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_settings_roundtrip.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_shared_animation_playback.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_side_clue_focus.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_spat_001.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_spat_002.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_startup_snapshot_cost.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_story_actor_presence.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_story_aftermath_native.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_story_alternative_native.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_story_choice_save_evidence.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_story_clue_orders.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_story_combined_native.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_story_continuous_native.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_story_early_alternative_native.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_story_optional_clues_native.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_story_refusal_native.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_story_remainder_native.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_story_report_native.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_ticket_cache.ps1",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_undercroft_vault.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_vargan_architecture.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_web_bootstrap_pck.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_web_preset_parity.py",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_world_snapshot_isolation.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_written_interaction_prompt.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_wychwood_combat_native.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_wychwood_evidence.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_wychwood_path_render.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_wychwood_return_native.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_zone_pause_ownership.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/verify_zone_residency.gd",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/visual_evidence.py",
+    "?? outputs/AshenOathTheRoadBetweenCrowns/tools/webgl_startup_probe.js"
+  ],
+  "mode": "targeted-recovery-observation",
+  "requested_gate": "REL-TRUTH-001",
+  "project": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns",
+  "artifact": {
+    "directory": "D:\\Projects\\AshenOath\\outputs\\.release-gate\\AshenOath_QA",
+    "fingerprint": "faab6db870a8466e21d3dc4fb2d5b8a1656bd217f5cd2dee4ccfb5140b9cfe0a",
+    "total_bytes": 103915380,
+    "files": [
+      {
+        "path": "index.audio.position.worklet.js",
+        "bytes": 2973,
+        "sha256": "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8"
+      },
+      {
+        "path": "index.audio.worklet.js",
+        "bytes": 7298,
+        "sha256": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3"
+      },
+      {
+        "path": "index.html",
+        "bytes": 20841,
+        "sha256": "4161d05087e8672fd3beae585f0412bc223e69d68d79683ef38d7e2bd75814cb"
+      },
+      {
+        "path": "index.js",
+        "bytes": 315759,
+        "sha256": "e3f56ee40e6f84371053db06692cfac15e2c8659547b11c6b2dfa1996dabd981"
+      },
+      {
+        "path": "index.pck",
+        "bytes": 9745828,
+        "sha256": "fb22ff3b61b73772950d645503f1abf5c1b304928aace545b76c167383f5ccd5"
+      },
+      {
+        "path": "index.png",
+        "bytes": 21443,
+        "sha256": "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e"
+      },
+      {
+        "path": "index.wasm",
+        "bytes": 37700666,
+        "sha256": "26b61ce95247012ab3dca3ff51e96d1cdbff44ee91a8c20a83e150afca83f1b6"
+      },
+      {
+        "path": "packs/audio.pck",
+        "bytes": 2812048,
+        "sha256": "f538fb88ce5bdd1a3fdf556c1987af982514d8f71313a05cb17a4b4b7e04fce0"
+      },
+      {
+        "path": "packs/campaign.pck",
+        "bytes": 1109384,
+        "sha256": "79155f1229e9e9164a8ac6386de6bd7e0a0f54f360c5085578c67d4cc8992cc9"
+      },
+      {
+        "path": "packs/characters.pck",
+        "bytes": 25278732,
+        "sha256": "e02cbaad3e5f6918f8e6628535a94095a73f560662b9305c8634d70f6143a13f"
+      },
+      {
+        "path": "packs/monsters.pck",
+        "bytes": 7718964,
+        "sha256": "e2602d3bc0558d4ea22aff454f38578fca449e377765f98e3f2defe9536d3e90"
+      },
+      {
+        "path": "packs/opening.pck",
+        "bytes": 12731524,
+        "sha256": "8f9f17b9841960de937bce359a0d69cfca2a9b21042dbce331f743a108ba137c"
+      },
+      {
+        "path": "packs/quality_materials.pck",
+        "bytes": 6438204,
+        "sha256": "93264e70bf876b1676d090b7f69e25714646d9627ec6460977ab6a839e614138"
+      },
+      {
+        "path": "release_manifest.json",
+        "bytes": 5213,
+        "sha256": "a7924cf1479c9b1a531445c3f29635d23003ee60984c8899886102b877f638fd"
+      },
+      {
+        "path": "runtime_pack_manifest.json",
+        "bytes": 6503,
+        "sha256": "f758dddfbf305239d7717cb12330f0bc0651e6e685aba1257c2895d3a4fec673"
+      }
+    ],
+    "pck_sha256": "fb22ff3b61b73772950d645503f1abf5c1b304928aace545b76c167383f5ccd5",
+    "max_bytes": 104857600,
+    "source_alignment": "stale_after_runtime_source_change"
+  },
+  "issue_registry": {
+    "path": "RECOVERY_004_ISSUE_REGISTRY.json",
+    "exists": true,
+    "sha256": "abbc7d4cc7ae4c67d2cbbe8bb9f43853a0e97465c08f8e8420041bba11d4280c",
+    "schema_version": 1,
+    "registry_id": "ashen-oath-recovery-004",
+    "category_statuses": [
+      {
+        "id": "architecture_performance",
+        "severity": "blocker",
+        "status": "in_progress"
+      },
+      {
+        "id": "audio",
+        "severity": "medium",
+        "status": "functional_but_incomplete"
+      },
+      {
+        "id": "characters_npcs",
+        "severity": "high",
+        "status": "visually_rejected"
+      },
+      {
+        "id": "monsters_combat",
+        "severity": "high",
+        "status": "functional_but_incomplete"
+      },
+      {
+        "id": "release_integrity",
+        "severity": "blocker",
+        "status": "in_progress"
+      },
+      {
+        "id": "traversal_collision_zones",
+        "severity": "high",
+        "status": "functional_but_incomplete"
+      },
+      {
+        "id": "ui_story_input",
+        "severity": "medium",
+        "status": "in_progress"
+      },
+      {
+        "id": "world_presentation",
+        "severity": "high",
+        "status": "visually_rejected"
+      }
+    ],
+    "ticket_statuses": [
+      {
+        "id": "ACCESS-001",
+        "severity": "blocker",
+        "status": "pending"
+      },
+      {
+        "id": "AI-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "ARCH-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "ARCH-002",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "AUDIO-001",
+        "severity": "blocker",
+        "status": "pending"
+      },
+      {
+        "id": "BOSS-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "CERT-001",
+        "severity": "blocker",
+        "status": "pending"
+      },
+      {
+        "id": "CHAR-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "CHAR-002",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "COMBAT-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "LOAD-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "MON-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "OATH-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "PACK-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "PACK-002",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "PERF-001",
+        "severity": "blocker",
+        "status": "pending"
+      },
+      {
+        "id": "PRES-001",
+        "severity": "blocker",
+        "status": "pending"
+      },
+      {
+        "id": "PREWARM-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "QA-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "QA-002",
+        "severity": "blocker",
+        "status": "pending"
+      },
+      {
+        "id": "QA-003",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "QUEST-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "REL-TRUTH-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "RELEASE-001",
+        "severity": "blocker",
+        "status": "pending"
+      },
+      {
+        "id": "RES-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "RUNTIME-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "SAVE-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "SCENE-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "SPAT-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "SPAT-002",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "STORY-001",
+        "severity": "blocker",
+        "status": "pending"
+      },
+      {
+        "id": "TRAV-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "TRAV-002",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "UI-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "WEB-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "WORLD-001",
+        "severity": "blocker",
+        "status": "pending"
+      },
+      {
+        "id": "WORLD-002",
+        "severity": "blocker",
+        "status": "visually_rejected"
+      }
+    ]
+  },
+  "release_blockers": [
+    {
+      "id": "ACCESS-001",
+      "severity": "blocker",
+      "status": "pending"
+    },
+    {
+      "id": "AUDIO-001",
+      "severity": "blocker",
+      "status": "pending"
+    },
+    {
+      "id": "PERF-001",
+      "severity": "blocker",
+      "status": "pending"
+    },
+    {
+      "id": "PRES-001",
+      "severity": "blocker",
+      "status": "pending"
+    },
+    {
+      "id": "QA-002",
+      "severity": "blocker",
+      "status": "pending"
+    },
+    {
+      "id": "STORY-001",
+      "severity": "blocker",
+      "status": "pending"
+    },
+    {
+      "id": "WORLD-001",
+      "severity": "blocker",
+      "status": "pending"
+    },
+    {
+      "id": "WORLD-002",
+      "severity": "blocker",
+      "status": "visually_rejected"
+    }
+  ],
+  "results": [
+    {
+      "name": "ui001_chrome_allpages",
+      "status": "pass",
+      "log": "D:\\Temp\\AshenOath\\ui001_chrome_allpages.json",
+      "warnings": [],
+      "failure": ""
+    },
+    {
+      "name": "ui001_edge_allpages",
+      "status": "pass",
+      "log": "D:\\Temp\\AshenOath\\ui001_edge_allpages.json",
+      "warnings": [],
+      "failure": ""
+    },
+    {
+      "name": "save001_chrome_clicksave",
+      "status": "pass",
+      "log": "D:\\Temp\\AshenOath\\save001_chrome_clicksave.json",
+      "warnings": [],
+      "failure": ""
+    },
+    {
+      "name": "save001_edge_clicksave",
+      "status": "pass",
+      "log": "D:\\Temp\\AshenOath\\save001_edge_clicksave.json",
+      "warnings": [],
+      "failure": ""
+    },
+    {
+      "name": "save001_chrome_auto45",
+      "status": "pass",
+      "log": "D:\\Temp\\AshenOath\\save001_chrome_auto45.json",
+      "warnings": [],
+      "failure": ""
+    },
+    {
+      "name": "save001_edge_auto45",
+      "status": "pass",
+      "log": "D:\\Temp\\AshenOath\\save001_edge_auto45.json",
+      "warnings": [],
+      "failure": ""
+    }
+  ],
+  "screenshots": {},
+  "ticket_acceptance": {
+    "REL-TRUTH-001": "accepted",
+    "TRAV-001": "accepted",
+    "TRAV-002": "accepted",
+    "RUNTIME-001": "accepted",
+    "SPAT-001": "accepted",
+    "SPAT-002": "accepted",
+    "LOAD-001": "accepted",
+    "PACK-001": "accepted",
+    "SCENE-001": "accepted",
+    "PREWARM-001": "accepted",
+    "PACK-002": "accepted",
+    "WEB-001": "accepted",
+    "COMBAT-001": "accepted",
+    "OATH-001": "accepted",
+    "AI-001": "accepted",
+    "BOSS-001": "accepted",
+    "QUEST-001": "accepted",
+    "SAVE-001": "accepted",
+    "STORY-001": "pending",
+    "CHAR-001": "accepted",
+    "CHAR-002": "accepted",
+    "MON-001": "accepted",
+    "WORLD-001": "pending",
+    "WORLD-002": "visually_rejected",
+    "PRES-001": "pending",
+    "RES-001": "accepted",
+    "PERF-001": "pending",
+    "UI-001": "accepted",
+    "AUDIO-001": "pending",
+    "ACCESS-001": "pending",
+    "QA-001": "accepted",
+    "QA-002": "pending",
+    "QA-003": "accepted",
+    "ARCH-001": "accepted",
+    "ARCH-002": "accepted",
+    "CERT-001": "pending",
+    "RELEASE-001": "pending"
+  },
+  "partial_evidence": {
+    "WORLD-002-bandit-road-v4-visual-rejection": "2026-09-28: WORLD_002_BANDIT_ROAD_COMPOSITION_RESULT.md records retained closer camp and two Balanced-capped night lights with exact mesh/hash/collision alignment. Current native 1280x720 v4 day/night and actual-guard images under D:/Temp/AshenOath/bandit_road_art_retained_v4 and bandit_road_identity_retained_v4 exit0. Full route capsule sweep passes after tent moved off the diagonal approach. Day road remains broad/flat, night guards unreadable and both armed roles retain civilian peasant silhouettes. v3 black road patches and oversized bone-attached Quaternius armor were visually rejected and removed from runtime/export. No bandit-role approval or WORLD-002 acceptance; two source-backed treatments failed, so further prop tuning is parked. No Web export or production mutation.",
+    "PERF-001-vsync-pacing-rejected": "2026-09-28: D:/Temp/AshenOath/greyfen_frame_pacing_20260928.json records a same fully hydrated 253-draw native 720p off/on/off VSync diagnostic with 1% lows 29.07/27.62/28.26 FPS and averages near 37 FPS. Neither state meets unchanged 30 FPS low. This rejects VSync toggling as a sufficient fix; it does not identify GPU/driver ownership or constitute hardware acceptance. Temporary invalid triangle-census probe removed. No Web export or production mutation.",
+    "PERF-001-storage-crossover-rejected": "2026-09-28: PERF_001_STORAGE_CROSSOVER_RESULT.md records same-source native D/C cache-and-profile fixtures with byte-matched 114-file shader-cache seeds. D1/C1/D2/C2 all exit1 on unchanged FPS assertions with 253 settled draws; warm D/C prewarm 1768/1764ms and settled 1% low 21.60/20.92 FPS. Cold sequential difference is confounded by driver-global warming and not a causal SSD claim. Cache/profile relocation is insufficient, exact GPU/driver owner remains unknown, PERF pending. User approved temporary C fixture; command policy blocked cleanup, path recorded. No Web export/commit/push/deployment; formal27/37 unchanged.",
+    "PERF-001-static-script-discriminant": "2026-09-28: one native 1280x720 Compatibility A/B/A diagnostic at D:/Temp/AshenOath/greyfen_static_frame_20260928.json exits0 without active errors. All phases hold 253 draws and the complete Greyfen scene. Live/frozen/restored average FPS 39.37/52.86/44.52; 1% lows 26.12/27.23/27.26. Script polling affects average cost but cannot alone explain or fix the sub-30 low. Engine render/animation internals were not paused; no causal GPU versus cache conclusion or performance acceptance follows. Answered temporary probe removed. No Web export or production mutation; formal27/37 unchanged.",
+    "WORLD-001-earth-road-rejected": "2026-09-28: one same-camera Greyfen ground/road/ridge candidate captured four 1280x720 native images in .release-gate/world001_earth_road_20260928 and passed the horizon geometry unit. Visual review rejects its smooth tan strip road and still-obvious perimeter mound as an inadequate authored upgrade. Only this candidate's source edits were restored; cumulative earlier WORLD-001 work remains. No visual acceptance, Web export or production mutation; formal27/37 unchanged.",
+    "WORLD-002-bandit-road-20260928": "WORLD_002_BANDIT_ROAD_COMPOSITION_RESULT.md: two 1280x720 identical-camera graphical comparisons from copied genuine pre-Senn-fight Continue; retained candidate replaces green road, duplicate small towers and dark void with baked brown road, asymmetric timber checkpoint and far terrain. Exact resource/capsule route contract exits0. Actual Senn guards now instantiate two distinct 65-bone Universal variants with hand-bone swords and tracker buckler; the native identity probe, Halvern equipment and campaign wilds contract exit0, with close/gameplay images in D:/Temp/AshenOath/bandit_road_identity/. Visual review still rejects flat sparse night composition and peasant-like costumes; tracker resembles Kael. Bandit role approval is withheld and diagnostic warnings remain. Partial improvement only; WORLD-002 remains visually_rejected, PERF-001 native red, no Web export or production mutation.",
+    "RUNTIME-001-bandit-visual-rejected-current": "2026-09-28: two bandit-role warnings in full native campaign were investigated with a current-source graphical Continue from a byte-copy genuine pre-Senn-fight save. Both actual actors use Villager_Hooded_Atlas.gltf, each has a 65-bone skeleton and valid idle/walk/sprint/sword/death clips, but runtime policy marks fallback=true/approved=false because bandit has no authoritative acceptance entry. Current native 1280x720 saved-position, gameplay-distance and close day/night frames at D:/Temp/AshenOath/bandit_runtime_*.png were inspected; the two actors read as identical, unarmed-looking light-tunic civilians, not accepted hostile deserters. A manifest-only approval is rejected. Graphical probe owned exit0 with clean shutdown apart from the two declared warnings; answered probe removed, original saved fixture unchanged. Next: cohesive CC0 skinned deserter assembly, bone-attached equipment, adjacent variation and actual-spawn visual approval, then truthful runtime record. Existing RUNTIME-001 gate mechanism remains accepted, but this release role remains blocked. Formal27/37; no Web export/Git/production mutation.",
+    "STORY-001-all-evidence-report-current": "2026-09-28: optional_clues_v4.log under D:/Temp/AshenOath/story_continuous_20260928 exits0 with source/original-save hash guards. From the genuine post-fight Wychwood save, Kael physically inspects drag marks without ghost-crediting Oren, then crosses the bridge and inspects Oren. He physically returns to Greyfen, reports to Anwen, hands off to Bell Beneath Greyfen and manually saves all_road_evidence=true. All ten default side quest graphical real-input logs under D:/Temp/AshenOath end PASS with saved outcomes; exact list in STORY_001_CHOICE_COVERAGE.md. The native_v13 uninterrupted ten-chapter/Mercy result exercises only unchanged default clue behavior after the optional branch fix; no final current-source production-browser/full combination claim. STORY stays pending on higher-level production-player proof, gated by red native PERF-001. Formal27/37; no Web export or Git/production mutation.",
+    "STORY-001-clue-refusal-current": "2026-09-28: actual Road clue handler no longer auto-credits four uninspected clues after the drag marks. Focused Godot check exits0 over all120 five-clue orders after three-clue combat plus one pre-combat five-clue case, verifying truthful all-evidence reward and phase-appropriate hint; no ObjectDB/resource leaks. Current-source graphical optional_clues_v3.log exits0 from a byte-copy of a genuine post-fight Wychwood save: normal Continue, physical focus/E on drag marks, Oren remains uncredited, bridge traversal and normal focus/E on Oren award all five. request_refuse_v1.log exits0 after normal Greyfen board E/Escape and Save retain Bitter Roots availability; request_accept_v2.log exits0 after separate normal Continue from that exact refusal save, visible Bitter Roots action and Save make it active. First acceptance attempt failed test-driver range-edge drift and is not a pass. Source hashes/original saves preserved in D:/Temp/AshenOath/story_continuous_20260928. These are bounded native Story checks, not all combinations, final current-source uninterrupted campaign, browser, performance or release acceptance. STORY remains pending, formal27/37; no export/Git/production mutation.",
+    "STORY-001-uninterrupted-native-pass": "2026-09-28: native_v13/new-game-v13 source-frozen owned graphical Compatibility exit0 proves one uninterrupted real-input NewGame\u2192ten main chapters\u2192Mercy ending with five-enemy fight, bosses, vendor, actual zone travel/focus/E/dialogue, normal saves and eleven carried choices. Final authored Hart quest/final_covenant=mercy/final_choice_completed/ending=free, five cards and checkpoint pass. Stderr zero active errors/teardown leaks but two explicit diagnostic bandit-role fallback warnings: asset/release blocker, not approved role. Warm-cache native route only; clue-order/refusal/all side permutations and source-aligned browser/FPS/visual proofs still open. STORY remains pending, formal27/37. No export/Git/production mutation.",
+    "STORY-001-final-assertion-current": "2026-09-28: native_v12 actually traverses NewGame through ten chapters to Mercy, retains eleven choice flags, ending cards and normal checkpoint, but owned exit1 because top-level verifier reads nonexistent hart_covenant. Genuine saved checkpoint confirms completed Hart quest, authored final_covenant=mercy, final_choice_completed=true and ending=free. Additional final assertion corrected to require all four, not relaxed. V12 remains failed evidence. Next fresh native_v13/new-game-v13 source-frozen full route required for owned exit0; two diagnostic bandit role warnings remain asset/release blockers. STORY/FPS/browser/visual unaccepted;27/37 unchanged, no export/Git/production mutation.",
+    "STORY-001-uninterrupted-next": "2026-09-28: castle_remainder_v3 observes actual Edric/undercroft/Halvern/assembly/Hart/Mercy, eleven carried choices retained, native stderr clean. Wrapper FAIL after child completion: case-insensitive foreach entry collided with validated Entry parameter. Fixed sourceEntry; offline23 source identities and original-save hash match. Native child exit was not recorded; no invented exit0 or formal acceptance. Retain native route observations, do not repeat unaffected old branches. Next fresh source-frozen native_v12/new-game-v12 uninterrupted NewGame through Mercy with original bounds. Full STORY/browser/FPS/visual remain pending, bandit diagnostic role warnings remain release blockers;27/37 unchanged, production frozen.",
+    "STORY-001-castle-remainder-current": "2026-09-28: remainder_v1 failed from inappropriate post-return bridge fixture; entry validation now requires actual chapel departure. remainder_v2 uses genuine v11 autosave and passes Teeth/Bog/core, register/Rootbound/names, Tor supply, mill/Ashwing, Senn actual choice, Castle ledger/haunting/manual Save; fails Edric transient edge-focus after sprint drift atx3.55,z-11.10, nearby gate selected. Source Edric0,-10.5/gate6,-13; test approaches clear north aisle tox<1.5 before normal focus/E within original6s. Shared Castle leg runner reused by source-frozen castle_remainder_v3 from exact actual haunting manual save; in progress. Two declared diagnostic bandit-role fallback warnings remain asset/release blockers. No full NewGame/STORY/FPS/browser acceptance; count27/37, no export/Git/production mutation.",
+    "STORY-001-remainder-chain-current": "2026-09-28: native_v11 passes opening/Bell/summon, fails against identified batched rubble at11.41024,0.16,10.8937 on driver inner-south lane. Source proves authored west gate centredz8.29; shared driver exits west tox<9.4 before south, no scenery/collision/deadline edits. exit_west_gate_v4 exits0 from unchanged genuine v11 resolved save through actual west gate/road/bridge-centreline/Save; source stable and clean shutdown. Shared campaign leg runner supports explicitly resumed remainder_v1 from that actual normal save through remaining chapters; in progress, not NewGame/browser/FPS/ticket acceptance. Fresh uninterrupted NewGame follows only after remaining chain green. Current count27/37; no export/Git/production mutation.",
+    "STORY-001-continuous-route-current": "2026-09-28: STORY_001_CONTINUOUS_ROUTE_RESULT.md preserves native_v1-v10 failures and scoped proofs. Actual opening/five kills/report, Bell restoration/phase3/rewards/reload, ritual/DeepWood/Bog/core and chapel exit each have scoped real-input passes. Native_v9 axis oscillation is proven by292samples/149ticks/4976ms/maxgap44ms/floor-only contacts; shared predictive braking passes15 logic cases and exact-save exit_braking_v3 with original bounds. Native_v10 summon stalls at1.46m, the measured-contact driver class already exposed by42 actual blade sweeps (0 eligible at1.5m versus20 at1.1m). Shared held camera-vector approach/neutral strike with actual capsule clearance now covers ordinary melee helpers; logic reach4cases and parser pass. Uninstrumented source-frozen bell_shared_v5 exits0 from unchanged genuine v8 shrine save through boss/summon/exit/Save, clean shutdown. Redundant mill-clear/Senn-choice orchestration entries removed because preceding helpers already execute/assert those inputs. Answered probes removed; raw evidence/originals retained. Next fresh native_v11/new-game-v11 uninterrupted NewGame campaign. No whole STORY/browser/FPS acceptance, altered contact/damage/population/collision/deadlines or export/Git/production mutation;27/37 unchanged.",
+    "WORLD-002-record-composition-current": "2026-09-28: WORLD_002_RECORD_COMPOSITION_RESULT.md records coherent metre-UV masonry, consistent stone floor and twenty wider inward-facing native cabinets retaining120book groups/2surfaces/65170triangles,1251143bytes. Clean contract_v2 checks sources/license/manifest/export, material/UV and cabinet-route bounds; initial first-manifest-entry verifier failure preserved. Two current source-frozen native1280x720 day/night frames inspected with exact earlier camera transforms, visible floor/shelf improvement, means0.207429/0.179669. Physical genuine courtyard Continue/RecordHallE/save/Escape/courtreturn/arch/Approach/save exits0 cleanly with original unchanged. No world/actor/collision/quest removal, no controlled FPS inference. Transitions2187.5/2947.5/1227.3ms remain red. Full WORLD remains visually_rejected; sparse room/doors/broad campaign art/browser/performance open. Next independent STORY uninterrupted NewGame route; no export/commit/push/deployment,27/37unchanged.",
+    "PERF-001-angle-blob-cache-rejected": "2026-09-28: PERF_001_CPU_WAIT_DISCRIMINANT.md records one isolated shipped-ANGLE cache-control experiment. Cheap lit-mesh render exits0; baseline24 EGL files194982bytes, disabled0. Initial classifier failure preserved; baseline counted offline without repeat. Source-frozen full Greyfen exits1: hydration40.421/2.061 FPS, worst1166.552ms; settled46.614/28.331. Final1096nodes/253draws/127334primitives/83741203staticbytes. Full profile still has2 EGL files12286bytes and2 Intel files517628bytes; all driver-cache I/O is NOT ruled out. No canonical settings retained, no causal A/B claim, no unclassified renderer/shutdown error. Cache-toggle class exhausted after prior Godot-only failure. PERF parked; independent WORLD-002 composition next. No export/commit/push/deployment; formal27/37 unchanged.",
+    "STORY-001-combined-routes-current": "2026-09-28: STORY_001_COMBINED_ROUTES_RESULT.md and story_combined_20260928 prove two single-process resumed native Castle-to-ending combinations with source hashes and two clean owned exits 0. Actual Senn exile/hidden ledger/compelled Edric/released Halvern/Edric confession reaches Mercy; punishment/copied ledger/exposed Edric/destroyed Halvern/Kael confession reaches Ash through real final combat. Real Continue, movement/focus/E/dialogue, haunting, parries, all witness records, manual saves and earlier exact choices retained. Driver chapter prerequisites now check exact requested authored outcomes, preserving default checks and individual deadlines. No every-permutation/New Game/first-hour/refusal/full-side/visual/browser/FPS acceptance. Record Hall2030.0/1863.9ms, undercroft474.3/6120.4ms, Hart1943.0/1323.6ms remain red. Formal27/37 unchanged; no export or Git/production mutation.",
+    "STORY-001-anwen-replies-current": "2026-09-28: STORY_001_ANWEN_REPLIES_RESULT.md records terms/report first replies and two separate actual Continue/manual-save/Escape reloads in anwen_reply_v2_20260928. Four source-frozen clean owned exit-0 graphical runs use the genuine unchanged pre-response conversation checkpoint SHA256 fe5470991d0c2e322a721c683e84c5169ac51186d77cad6ba861a40dfd145604, real movement/focus/E/visible choices, exact flags/clamped values and no invented evidence. Initial raw JSON Dictionary mismatch is preserved; cheap serialization discriminant raw=false/normal StoryState load=true proves the checker-only numeric-type issue before the corrected matrix. Probe removed. Game/save/dialogue and deadlines unchanged. Combined/continuous/clue/refusal/browser/FPS proof remains open; formal27/37 unchanged, no export or production mutation.",
+    "STORY-001-actor-aftermath-current": "2026-09-28: STORY_001_ACTOR_AFTERMATH_RESULT.md records the shared exact presence policy for Senn exile/punished and Halvern released/destroyed, applied to live interaction retirement and both canonical builders. Four actual decisions/four separate reloads in story_actor_aftermath_20260928 and four older resolved/two retained witness Continue/manual-save/resume cases in story_actor_legacy_v2_20260928 pass with fourteen clean owned exits 0 and source-hash records. Genuine original saves unchanged. Four departure/two witness gameplay-camera captures inspected for actor presence, NOT final world/pose approval. Initial legacy verifier parser failure preserved, cheap corrected parser passes. Unknown/undecided/unrelated actors and testimony/witness bodies remain; no combat population, quest balance or save-schema reduction. Combined routes, full campaign/browser/performance and complete STORY acceptance remain open. Formal27/37 unchanged; production frozen.",
+    "STORY-001-opening-report-alternatives-current": "2026-09-28: STORY_001_REPORT_ALTERNATIVES_RESULT.md records public/retained reports using a genuine unchanged completed Wychwood return autosave. Physical bridge crossing, board/token approach, real mouse camera look, focus/E, conversation, exact clamped values, chapter handoff, actual Anwen relocation and Pause Save pass under story_report_choices_v2_20260928. Both separate normal Continue/manual-save/Escape-resume runs pass under story_report_reload_v3_20260928. Four owned clean exits 0. Failed keyboard turn and erroneous post-Save unpaused expectation are preserved harness history; no game/geometry change or deadline relaxation. Shared focus-deadline helper rejects expired/late/wrong/cooldown readiness and accepts timely focus in focus_deadline_20260928/focus.log, logic-only. No complete clue/refusal/continuous campaign, FPS, visual or browser acceptance. Formal27/37 unchanged; production frozen.",
+    "STORY-001-early-alternatives-current": "2026-09-28: STORY_001_EARLY_ALTERNATIVES_RESULT.md records seven real-input resumed native decisions and seven normal Continue/manual-save round trips: shrine disturbed/bound, Bog core preserved/returned, names withheld, ledger hidden/copied. D:/Temp/AshenOath/story_early_choices_v2_20260928 has fourteen clean owned exit-0 runs, source-frozen manifests and unchanged genuine pre-choice originals. Exact ledger exclusivity/haunting, oil reward and chapter handoff checked. First shrine readiness failure retained; shared test-only validity/cooldown wait fixes premature E without gameplay/collision changes. Additional consequences_v3.log exits 0 comparing all seventeen new main decisions and seventeen reloads against exact authored flags, StoryState-clamped values and item rewards. Offline comparison supplements, never replaces, graphical proof. Activation308.4-1537.1ms/reload264.2-5365.3ms retain timing blockers. No continuous/combined campaign, final actor staging, first-hour permutations, FPS, browser or full STORY acceptance. Formal27/37 unchanged, production frozen.",
+    "STORY-001-main-alternatives-current": "2026-09-28: STORY_001_MAIN_ALTERNATIVES_RESULT.md records eight genuine resumed-native decisions and eight normal Continue/manual-save round trips: Miller burned/exposed, Senn exile/punished, Halvern released/destroyed, assembly kael/edric. Sixteen owned exits 0 without active/shutdown errors. Wrappers byte-copy actual preserved backups, assert original SHA preservation and prerequisites; no flags/damage/teleport/handlers. Halvern checks boss outcome/reward/aftermath; assembly physically focuses the newly published Hart gate. Initial assembly-kael fails on reading table west edge x6.8; corrected test-only aisle x>5.5 with unchanged deadlines passes both choices/reloads. Failed evidence retained. No gameplay/collision change, FPS, continuous/combined campaign, final staging, screenshots, browser or full STORY acceptance. Activation1438.1-4782.6ms/reload484.5-3334.1ms retain transition blocker. Formal27/37 unchanged; no export/Git/production mutation. Next shrine/core/names/ledger native decisions, then uninterrupted/combined proof behind PERF.",
+    "STORY-001-edric-alternatives-current": "2026-09-28: STORY_001_EDRIC_CHOICES_RESULT.md binds genuine source and D:/Temp/AshenOath/story_edric_choices_20260928 evidence. Exposed and compelled pass actual Continue, physical east/north approach with real sprint under unchanged eight-second deadline, focused E/visible dialogue choice, quest advancement and pause-menu manual save. Separate exposed-reload/compelled-reload runs pass normal Continue and second manual save. Four owned exits 0, no active/shutdown errors. Sprint proof does not repair prior walking failure. Choice activation 1522.4/1467.3ms remains red; repeat reload 509.8/695.9ms is not cold acceptance. No flags/teleport/handler shortcut, no browser/FPS/full-campaign or whole STORY acceptance. Formal 27/37 unchanged; no Git/production mutation.",
+    "PERF-001-light-capacity-rejected": "2026-09-28: D:/Temp/AshenOath/perf_light_capacity_20260928 contains clean current 14-zone headless light ownership (maximum 4 local lights) and two rejected owned-exit-1 graphical candidates. Total8/per-object8: prewarm19396ms, hydration11.474/1.014, worst1302.543ms, settled44.086/29.546. Total8/per-object4: hydration19.784/0.827, worst1771.300ms, settled47.701/29.888. Actual lights/actors unchanged; no active renderer/resource/shutdown errors. Sequential runs are not causal paired improvement evidence. Neither setting retained; two-failure capacity experiment class exhausted. Invalid rebuilt-Greyfen hydration waits preserved, not accepted. No Web export, commit/push/deploy; formal27/37 unchanged. Next work must change abstraction or close independent release-critical dependencies rather than further capacity/object tuning.",
+    "PERF-001-worker-discriminant-current": "2026-09-28: PERF_001_CPU_WAIT_DISCRIMINANT.md records completed owned-exit-1 batched worker diagnostic. Observer mean/max 30.414/680.059ms disqualifies comparative FPS. Largest menu/gate intervals have completed or absent pending resources, heavy unnamed CPU and 1.87-20.00MB writes; named Godot resource workers are not dominant. Resource decoding is not supported as dominant in those intervals; driver/compiler ownership remains an inference. All start addresses returned zero. Next isolated native candidate reduces compiled total-light capacity from 32 to 8 while preserving per-object capacity and actual scene lights, contingent on full-zone ownership proof and graphical acceptance. No runtime integration, Web export, commit/push/deployment; formal 27/37 unchanged. Earlier CPU/cache/geometry evidence remains scoped and historical, not current acceptance.",
+    "PERF-001-cpu-wait-current": "2026-09-28: PERF_001_CPU_WAIT_DISCRIMINANT.md records source-bound Windows process/thread CPU versus actual frame wall times. Several 535-624ms stalls have only 16-47ms process CPU; other stalls involve substantial workers. Neither pure main-thread construction nor exclusive GPU ownership is established. The corrected isolated program-binary-cache-disabled run has owned exit 1: prewarm 20940ms, hydration 31.980/1.840 FPS, worst 1166.296ms, settled 46.454/30.840. ANGLE EGL caching remains active, so the test does not rule out all caching or driver waits. Initial missing-manifest and logical-thread-ID failures are preserved invalid diagnostics. A misleading September 27 report copy is explicitly rejected as stale; matching log metrics remain scoped. One clean read-only headless geometry census finds 156 distinct resources, 64 redundant base-array resources and 50166/198961 redundant vertices; base arrays alone do not approve LOD/material/skin equivalence. The next bounded candidate uses offline shared immutable character geometry, not late swapping after upload. No canonical rendering/settings/gameplay change or Web export; formal count remains 27/37.",
+    "AUDIO-001-native-mix-current": "2026-09-28: AUDIO_001_MIX_RESULT.md records actual positional landmark/enemy audio, original shared eight-active-cue ceiling, two-player ambience fades, pause/resume/stream retirement and owned -3dB look-ahead limiter. Nine deterministic CC0 recordings total 72822 bytes with source/archive/runtime lineage; decoded peak maximum -1.660953dBFS. Ghoulkin vocals restricted to declared creature roles; other enemies use recorded cloth/armor/contact, not claimed final vocals. audio001_authored_identity_20260928 and audio001_native_identity_20260928 logs exit 0 cleanly. Actual stereo pan RMS ratio ~1.69; paused PCM zero; normal mixed peak .719566, maximum-volume eight impacts .716694, family mix .167351; owned bus removed. Prior >full-scale peaks and fixture unused-service leak remain rejected history. No listening approval because audio input is unavailable; procedural score/remaining accents and real-input/browser unlock certification remain open. AUDIO pending. Current next closure dependency PERF-001 needs a new source-backed mechanism beyond rejected families; no export while native red. Formal 27/37; no Git/production mutation.",
+    "PRES-001-landscape-current": "2026-09-27: PRES_001_RESULT.md now records a shared 14116-byte/512-triangle far terrain and sourced CC0 61348-byte/2736-triangle stone pier. Final fitting closes Hart's exposed edge and places supports within the river span, not under banks. All six .release-gate/pres001_foundations_v2_20260927 images actually inspected; twelve source and six PNG hashes match. Five existing camera compositions plus one explicitly additional side view; staged art NOT player route. Geometry/material/metre UV/winding/outer bounds/idempotence and unchanged collider IDs/transforms pass cleanly. Initial low ridge/buried supports and fixture WAV shutdown leak/exact float comparison failures retained as failed history; corrected scope passes. Current native performance FAIL 45.730/29.147 settled, 37.816/2.958 hydration, worst 895.447ms, memory 83491711 bytes, 253 draws/127334 primitives. Not causal A/B performance evidence. PRES remains pending on shared PERF/certification; prior two distinct PERF implementation failures justify parking that dependency. Independent AUDIO-001 closure next; no export while native red, no Git/production mutation, formal 27/37.",
+    "PRES-001-sky-shore-current": "2026-09-27: PRES_001_RESULT.md records retained 156463-byte deterministic 3D cloud volumes, darker night/sky fog, fixed interior light direction/colour, tangent-space water normals and one Greyfen bank owner. Soil visual clipping removes the previously occluding plate; actual packed-core collider resource IDs/transforms remain exactly unchanged. Clean focused geometry/phase/history contracts and native celestial pixels pass (sun 25/moon 22 pixels). All 13 final source-bound 1280x720 .release-gate/pres001_review_final_20260927 frames actually inspected; baseline camera numeric delta <=2e-8. Staged art only, not real-input route. Cold capture fails unchanged 45s complete-Greyfen bound with 33814ms prewarm; explicit warm final 1639ms is not cold acceptance. Earlier native affected sample remains red 39.010/22.852 settled, 30.558/1.509 hydration, 1408.025ms worst; no current-source whole FPS claim. Wedge clouds, early false fixture PASS/leak and undersized billboard intermediate frames rejected; corrected clean evidence preserved. Exposed Wychwood/Hart lower-terrain gaps, foundations, broad WORLD art and native PERF still block full acceptance/export. Next coherent collision-neutral far-terrain/foundation composition, then cheap affected proof/current camera review. Formal 27/37; jobs exited; no commit/push/merge/export/deployment.",
+    "PERF-001-renderer-family-rejected": "2026-09-27: Renderer-only static shader adapter leaves source-role materials intact and rejects unsupported features. Corrected isolated fixture passes inspected 1280x720 image parity within one 8-bit colour step at unchanged 157 nodes/118 draws/39241 primitives; sequential draw timings are not causal evidence. Full-game shared_static_family_game_trial_20260927 binds 168 geometry/112 adapters/2 mesh copies/4 families cleanly, but boot 20717.619 ms and first-control 39.064 average/2.457 FPS low fail. First frames 1448.750/108.491 ms. Settled 50.933/35.615 passes only that window; New Game 333.438 ms, construction 240.755 ms, 272 draws/105819 primitives/85076864 static-memory bytes. Full-game parity deliberately not evaluated. Candidate rejected outside production; no adapter integration, Web export or acceptance. See PERF_001_MESH_RESIDENCY_DISCRIMINANT.md. PERF parked after distinct failed combined-contract hypotheses; independent next closure objective PRES-001 scene-level presentation. 27/37 accepted; all owned jobs exited.",
+    "PERF-001-single-final-publication-rejected": "2026-09-27: Native-only single_publication_candidate.gd outside production constructs all final stages without intermediate draws or temporary boot materials, then draws final references in batches in the existing gameplay context. Parse/clean runtime pass, but boot 20573.742 ms and first/settled 1% lows 7.643/19.489 fail; New Game 218.814 ms, 223 final meshes, 352.124 ms constructor, 870 zone descendants. Equivalence intentionally not evaluated/red, not a demonstrated parity failure or pass. Rejected before additional expensive parity/image runs; uncontrolled sequential cache/thermal conditions preclude causal comparisons. Two complete residency/publication hypotheses fail the complete contract; end scheduling/warmup family. No production code retained, all owned jobs exited, no export/commit/push/merge/deployment; formal 27/37. See PERF_001_MESH_RESIDENCY_DISCRIMINANT.md.",
+    "WORLD-001-greyfen-framing-current": "2026-09-27: WORLD_001_GREYFEN_FRAMING_RESULT.md retains two sourced distant-tree rings and continuous world-projected bridge timber. Corrected actual synchronized vertex bounds/grounding/material/density/idempotence/collision neutrality pass; first transform timing fixture and intrusive ring failures preserved. Four same-camera Greyfen and one Wychwood bridge 1280x720 frames actually inspected with hashes, bounded improvement only. Full art remains rejected for pale bank seams/coarse foreground/repetition/lighting depth. Native Greyfen 40.658 avg/27.042 low and hydration 19.184/1.188 remain red, worst 1188.992 ms; no performance attribution from uncontrolled sequential runs. Exact gameplay/physics unchanged, previous scoped real-input evidence retained. Formal 27/37; owned jobs exited, no Web/export/commit/push/merge/deployment. Next structural first-use/preparation ownership dependency, not another prop warmup.",
+    "PERF-001-neutral-material-family-rejected": "2026-09-27: Temporary native-only global white-albedo/zero-emission normalization candidate rejects effective static parity (157-node count preserved), boot 39402.246 ms and first-control low 4.739 FPS. game.gd _mesh_surface_material and imported-material repair use texture presence semantically, so early white sampling is not safely neutral. No material/shader rewrite retained in production source, no lowered threshold or repeat variant. See PERF_001_MESH_RESIDENCY_DISCRIMINANT.md and D:/Temp/AshenOath/static_scene_ownership_20260927/neutral_material_performance_report.json. Owned jobs exited; 27/37 unchanged. Continue WORLD-001 visual acceptance while preserving shared native performance blocker; no Web/export/commit/push/merge/deployment.",
+    "PERF-001-final-mesh-residency-candidate": "2026-09-27: Native same-context diagnostic outside production source passes exact 157-node static geometry/material/LOD/instance equivalence and retains all actors/collision. Actual first-eight-control-seconds 59.651 avg/31.040 low including 67.264 ms first frame, following sample 59.614/42.061, New Game 137.586 ms, memory ~84.2 MB. Combined candidate FAILS startup 28093.316 ms against unchanged 15000 ms hard ceiling; inherited initial prewarm 17829 ms. Separate preview-context variant rejected at 70.233 seconds; null-camera preliminary run invalid and preserved. No production code integrated, no full PERF acceptance. Fresh profile has 124 EGL and 15 SceneShaderGLES3 cache entries; compilation/cache ownership remains distinct from proven mesh graph identity effect. Next abstraction final shader-family preparation; no repeated per-object prewarm. Formal 27/37, no Web/export/commit/push/merge/deployment.",
+    "PERF-001-final-mesh-residency-discriminant": "2026-09-27: PERF_001_MESH_RESIDENCY_DISCRIMINANT.md records eight equivalent native Intel HD620 ANGLE static-scene trials at 1280x720/VSync off/cap60. New mesh graphs with resident materials wait 214.152/202.068 ms; resident meshes with new materials 14.954/13.604 ms; full resident graphs 6.874/7.083 ms. All retain 118 draws and pass geometry/material/LOD/instance equivalence with clean exit. Constructor ~10-13 ms. CPU-side post-draw timing, not GPU timers, absolute cold-cache proof or full-game FPS acceptance. Source validator is not duplicating valid resources. Complete-scene/final-resource residency candidate stays outside production source until full equivalence and strict first-control/native proof. Formal 27/37 unchanged; no Web/export/commit/push/merge/deployment.",
+    "WORLD-001-wychwood-framing-current": "2026-09-27: Follow-up in WORLD_001_WYCHWOOD_PASS_RESULT.md retains sourced threshold trees, shared bark/leaf distant depth layers and shaped boundary berms inside unchanged collider envelopes. Actual graphical WORLD-013 passes cleanly at 483 nodes/116 meshes/19 batches; all 32 actual distant bases stay outside bounds and threshold vertices outside the full-width route. Failed headless transform run is preserved, not retrospectively passed; graphical execution now mandatory in ticket/release runners, both parse cleanly. Four latest same-camera 1280x720 frames ending 204842 inspected and retained only as improvement; full visual REJECTED for coarse/sparse foreground, block-like props, flat lighting and absent combat population in staged art. Previous actual input clue/five-enemy/return report evidence remains valid for unchanged physics/interaction/story. Actual graphical activation 2034.3 ms remains red. Next shared WORLD-001 dependency: full-scene construction/publication performance discrimination, not another prop/prewarm loop. Formal count 27/37; no Web/export/commit/push/merge/deployment.",
+    "WORLD-001-wychwood-evidence-current": "2026-09-27: WORLD_001_WYCHWOOD_PASS_RESULT.md retains a coherent evidence/ground correction, not formal acceptance. Five baked static meshes total 400313 bytes / twelve surfaces; Bram uses complete preferred Universal male anatomy in normalized UAL2 Death01, no live skeleton or proxy limbs. Feathers/token/wire/tracks have distinct geometry. Irregular world-metre ground/trace footprints retain bank clipping and collision. Exact resource/source/license/export contracts and WORLD-013 actual integration pass cleanly at 481 nodes/113 meshes/20 batches. First winding failure is preserved and corrected. Four current native 1280x720 same-camera frames are inspected: retained bounded improvement, full visual REJECTED for sparse horizon/plain arch/boundary panels/coarse repetition; combat art fixture does not prove five visible enemies. world001_wychwood_real_input_20260927 passes actual keyboard New Game, physical movement, Anwen dialogue, three clues, all five kills, both bridge directions, return report and clean shutdown without story mutation or direct handlers. Integration cold 2052.3 ms and real travel Wychwood 4060.0/Greyfen 806.1 ms remain red against timing targets. No browser/FPS/export/release acceptance. Next WORLD-001: one coherent depth/threshold/boundary correction from reviewed cameras; reuse unaffected evidence. PERF red, formal count 27/37, no commit/push/merge/deploy.",
+    "WORLD-001-cemetery-architecture": "2026-09-27: Retained partial WORLD-001 cemetery correction, not acceptance; see WORLD_001_CEMETERY_PASS_RESULT.md. Eleven deterministic meshes total 135161 bytes / twenty surfaces; original four unchanged. River-safe collider transforms now own masonry/moss placement; horizontal soil XZ UVs, pointed subdued glazing and bell/cloth/iron memorials replace former proxies. Elna aliases now use the accepted female family. Actual complete builder passes cleanly at 849 nodes/193 meshes, resource identity and fitted-boundary checks pass. All four current native 1280x720 final images inspected; sparse horizon/simple court still block full art approval. Skin/LOD/compression diagnostic candidates do not change the frame and are not retained; actual camera projection/grounded geometry explain ambiguous occluded feet, not a proven renderer defect. First final shrine run FAIL is preserved; helper wrongly printed interaction PASS without a dialogue. Corrected current-visibility/guard wait and required dialogue-open assertion pass genuine copied-save keyboard Continue, physical chapel passage, focus/E, cleansed choice and clean shutdown in world001_cemetery_final_route_v2_20260927. No teleport, flag/save mutation or direct handler. Next WORLD-001 work: coherent Wychwood terrain/evidence pass. PERF remains red; no export/commit/push/merge/deployment. Formal count 27/37.",
+    "WORLD-001-landscape-and-dialogue-grounding": "2026-09-27: WORLD_001_LANDSCAPE_PASS_RESULT.md records a retained bounded scene pass, not full visual or performance acceptance. A source-backed cheap reproduction proves both RiverSection banks had 96 clockwise/back-facing triangles with 288 inverted normals each; corrected shared winding passes verify_river_bank_faces without any collision change. Settlement ground no longer reads as undifferentiated straw soil. A separated volumetric ridge trial was rejected for a visible notch; the shared three-band perimeter fixes corner continuity, remains outside physical bounds and passes the actual production builder's geometry unit contract. Four final native 1280x720 joined-landscape views were actually inspected and retained as partial composition evidence; sparse vegetation, roads/bank presentation and full opening acceptance remain pending. WORLD-012 logic passes cleanly. world001_landscape_input_20260927 proves keyboard New Game, physical bridge, Anwen focus/dialogue/quest advancement/close, but reveals Kael Y=1.002 during paused dialogue. The coordinator's unconditional UP offset is repaired using the existing SpatialSurfaceContract support query; unsupported or excessive-height steps retain the player position. Grounding unit and world001_dialogue_grounding_input_20260927 pass cleanly; actual paused Anwen dialogue now places Kael at Y=0.002. The conversation screenshot is inspected but its HUD obscures the feet, so it is not portrait/anatomical approval. The earlier red PERF-001 result remains a blocker; these later visual/grounding changes have no new full performance/browser/export acceptance.",
+    "WORLD-001-social-quarter": "2026-09-27: WORLD_001_SOCIAL_PASS_RESULT.md records a retained coherent furniture/market pass, not formal WORLD-001 acceptance. Existing CC0 native tables/chairs/stall/potion/bag sources bake deterministically into three two-surface meshes totaling 156038 bytes. Counter stock is grounded on the source-measured 0.7771 m surface. Explicit base ownership, source/runtime hashes, license, vertex/material/support and unchanged no-new-collision contracts pass world001_social_owned_20260927. Complete-dressing board/opponent/9-and-36-cell presentation passes world001_social_fit_20260927.verify_minigame_presentation. Codex inspected final same-camera Spawn/Table/Apothecary 1280x720 images against preserved baseline and retains this bounded improvement; flat ground, sparse banks/horizons, route composition and full art acceptance remain open. Current native targeted performance fails hydration 10.79/0.73 FPS over 13.619 seconds while settled Greyfen passes one sample 55.65/33.65 FPS, 263 draws, 99337 primitives and 83.5 MB. No whole performance, real-input campaign, browser or export acceptance is claimed; no Web export follows the red native gate.",
+    "ACCESS-001-weapon-context": "2026-09-27: ACCESS_001_WEAPON_CONTEXT_RESULT.md records retained controller and remapping repair, not full ticket acceptance. Device selection applies a profile once and preserves its first event; X cycles weapons, Y remains jump, bow LT no longer casts Oathfire and D-pad arrow selection no longer zooms. Exact legacy default profiles migrate while custom bindings survive; multi-key restores preserve all keys. All 31 actions are remappable. GUI activation no longer captures its initiating Enter and capture precedes GUI navigation. Glyph changes preserve ammo. Owned focused input/profile/accessibility contracts pass. Graphical access_context_graphical_v2 exits 0 with only the existing ANGLE advisory: visible New Game, actual bow aim, one RT shot and 24-to-23 ammo, repeated weapon switching, six visible pages, H assignment/reset, logical disconnect and Resume pass. Three 1280x720 changed views were actually inspected at input scope, not world-art approval. A later ammo-label change has direct isolated proof; no new final visual identity is claimed. Zero physical devices detected. Full browser/device certification remains pending behind native PERF-001; 27/37 accepted, no export/commit/push/merge/deploy.",
+    "WORLD-002-archive-current": "2026-09-27: WORLD_002_ARCHIVE_PASS_RESULT.md records a retained coherent pass using twenty grounded Quaternius cabinets, 120 shelf book groups and the same reading furniture baked into two surfaces (1134548 bytes, SHA-256 ddc3f75b2aa6937783d59350bd780ee42dfce18c3aefb76d6416191fce27486f). Grounded gameplay-camera before/after 1280x720 frames in .release-gate/world002_record_grounded and world002_record_archive_candidate show populated timber shelves, stone aisle and table-supported ledger pages. Historical airborne captures and failed first grounding candidate are rejected. Resource contract and deterministic rebake pass. world002_archive_ledger_v1.log passes genuine pre-choice Continue, physical aisle movement, focus/E, visible choice, haunting staging and pause-menu save with clean shutdown. No collision, actor, gate or quest changes. This is resumed native/partial visual evidence, not complete WORLD-002 acceptance; Castle, mill, undercroft and finale remain open. Record Hall activation 1576.7 ms fails PERF-001. No Web export while native-red.",
+    "STORY-001-shrine-current-input": "2026-09-27: arch002_opening_final_v1.log passes the actual current New Game/Anwen/Wychwood/clue/combat/report prefix and fails the later shrine approach on the chapel south pier. chapel_pier_route_v1.log shows northward threshold overshoot contacting the north pier. Source extents define the 1.14 m opening at z=8.29. The keyboard-only bounded alignment in chapel_pier_aligned_v2.log passes actual Continue from a copied genuine pre-chapel autosave, physical door/approach, shrine E/visible choice and cleansed outcome, with clean shutdown and no collision or deadline changes. This closes that driver approach gap at resumed-native scope, not uninterrupted campaign, permutation or browser acceptance.",
+    "ARCH-001-owned-runtime-extraction": "2026-09-27 historical intermediate record: focused native ownership/lifecycle and failed-transition regression passed before the final integrated player-input run. Superseded for ARCH-001 acceptance by accepted_evidence. Performance, current whole-gallery visual acceptance and browser/campaign certification remain unaccepted.",
+    "PERF-001-record-hall-foreground-rejected": "2026-09-27: edric_compelled_foreground_v1.log exits 1 with north approach z=-6.058782, unchanged eight-second limit, full input/control and clear physical path. Foregrounding the graphical harness did not fix the rendering stall; it remains retained as normal graphical execution policy. Combined with failed offscreen warmup and prior failed publication/baked-resource candidates, PERF-001 is parked with exact unresolved rendering/constructor ownership and timing blockers. No export while native-red. ARCH-001 dialogue ownership is the next independent closure objective; no ticket acceptance changes.",
+    "PERF-001-record-hall-warmup-rejected": "2026-09-27: edric_render_warmup_v1.log exits 1. Two 1280x720 shared-world offscreen views cost 95.8 ms, but the unchanged eight-second north approach timed out at z=-8.986 with floor-only contacts and clear forward ray. Record Hall activation was 5443.3 ms; Greyfen prewarm 24899 ms. Reject this candidate as a solution; diagnostic script removed, logs and fixture preserved. Prior shader-preparation inference remains a hypothesis. Native route harness now brings its window forward consistently with the performance harness; this is test execution correctness, not a gameplay/performance fix. No Web export or ticket acceptance.",
+    "PERF-001-record-hall-render-stall": "2026-09-27: edric_route_frame_profile.json frame 91 records 4679.848 ms inside pre/post draw, 0.541 ms before draw, draw calls 73->89, no pending retirement/opening hydration/campaign-role prewarm. Adjacent unique frames confirm the interval. Rendering-path work is implicated, but compile/upload/driver ownership remains unresolved. Repeated paused frame-251 rows are not independent timings. edric_frame_profile_v1.log passes strict native exposed-choice and manual-save input, not performance: activation 4455.4 ms and multi-second hitch remain red. Compelled/reload and whole STORY-001 acceptance remain pending.",
+    "QA-002-deadline-native-regression": "2026-09-27: tools/verify_route_deadline.gd inherits and invokes the actual movement helper. Expired-at-target and cleanup-only arrival are rejected; timely arrival passes. D:/Temp/AshenOath/route_deadline_regression_unrestricted.log exits 0 without errors. The sandboxed predecessor emitted a certificate-store error; same fixture outside sandbox clears it. Scope is native helper regression only, not graphical route/performance acceptance. STORY-001 and QA-002 remain pending.",
+    "QA-002-edric-deadline-rejection": "2026-09-27: edric_timing_v3.log is diagnostic only. Northward movement had 60 physics ticks/2.0 simulated seconds across 9146 ms, with uninterrupted input/control and scale 1.0. The old helper accepted post-deadline cleanup movement, so its PASS and downstream exposed-choice/save are not route acceptance. Strict helper now checks deadline after yield and latches success before cleanup; route_deadline_strict_parse.log passes, graphical regression pending. Temporary probe removed. Root-certificate-store error in graphical stderr remains explicit. Scheduling stall owner unresolved; physics settings unchanged.",
+    "STORY-001-iron-empty-alternatives": "2026-09-27: side_iron_weapon_v1.log and side_empty_anonymous_v1.log under D:/Temp/AshenOath pass graphical real-input Continue from genuine pre-clue backups, physical clue collection, return/focus, visible alternative dialogue, quest completion and manual save. side_iron_weapon_reload_v1.log and side_empty_anonymous_reload_v1.log separately pass Continue and second manual-save persistence of weapon and anonymous. All exit 0 with environmental ANGLE advisory only. Original fixtures remain untouched; no story mutation or teleport. These close the identified side-choice branch gaps, not continuous full campaign, all main-choice permutations, browser, performance or whole-ticket acceptance.",
+    "STORY-001-widow-comfort": "2026-09-26: D:/Temp/AshenOath/side_widow_comfort_v1.log passes real Continue from an unchanged pre-clue backup, physical bell collection, return to Elna, visible comfort choice and ordinary manual save. side_widow_comfort_reload_v1.log separately proves Continue and second manual save retain widow_truth=comforted. Both exit 0 with ANGLE advisory only. Reload activation 2532.3 ms remains a performance failure; no claim of full STORY-001 or browser acceptance.",
+    "STORY-001-black-dog-hidden": "2026-09-26: side_black_dog_hidden_v2.log and side_black_dog_hidden_reload_v1.log under D:/Temp/AshenOath pass actual Continue from a genuine investigated pre-choice backup, physical Toma approach, focused dialogue concealed report, manual save, then separate Continue/manual-save round trip retaining black_dog_fate=hidden. Exit 0 with environmental ANGLE advisory only. V1 failed the driver southward camera turn before dialogue and is not accepted. The corrected driver uses shortest-error arrow-key steering with unchanged facing tolerance; gameplay source is unchanged. This is partial native story evidence, not whole-ticket, performance or browser acceptance.",
+    "STORY-001-miller-public-and-mira-private": "2026-09-26 continuation: measure_live_exit_native_v2.log proves live Halvern gate publication and actual miller assembly choice without reload between resolution and travel; measure_public_reload_native_v1.log proves Continue/manual-save preservation. side_bitter_kept_native_v2.log proves actual Mira approach/private-truth choice/manual save; side_bitter_kept_reload_v1.log proves Continue and second manual save retain kept. All logs under D:/Temp/AshenOath, exit 0 with environmental ANGLE advisory only. Interrupted bitter v1 is not acceptance. Scope remains partial native STORY-001/QA-002; performance, browser and other permutations remain open.",
+    "WORLD-001": "Current-source native WORLD-012 and WORLD-013 fixtures pass but visual acceptance remains open. Wychwood path roughness and imported forest-tree bark/leaves with original LODs remain; rejected high-primitive normalized trees and barely legible clue ground props were removed. A grouped Greyfen road/window/ridge/cart trial failed gameplay-camera review and was removed. The four Greyfen houses now use baked Quaternius village kit walls, native windows/door, fitted gables, and compact roof in the existing six-surface runtime contract; WORLD-012 passes and fresh close/spawn images show better architecture, but road patches, sparse banks, and world composition remain rejected. Four baked meshes total about 0.75 MB. Compact-house native Greyfen performance still fails at 41.45/11.75 FPS hydration and 40.94/27.90 settled, around 90k primitives; distributed stage variance precludes assigning the low solely to houses. This is partial visual evidence, not WORLD-001 or PERF-001 acceptance. A second Wychwood composition using an imported cart, grouped clues, and hidden generic capsules passed WORLD-013 but failed identical-camera review (frame ending 193613): the cart read as an oversized dark frame and a clue as a black slab. That trial was removed; this and the earlier low-contrast ground evidence are two rejected visual approaches. WORLD-001 is parked until an authored scene-level composition pass can make the route and clues legible without prop-by-prop iteration. No Web/world visual approval is claimed; PERF-001 remains native-red.",
+    "PRES-001": "2026-09-24 native WATER-002 captures ending 124902: water shader flow and leaf/ribbon motion now run along the X-axis channel, foam is broken into shoreline patches, and an irregular single-draw water mesh replaces the straight plane. WychwoodRootArchCrown was identified as the camera occluder and near-camera culled without changing collision; a farther frame proves the arch still renders. WATER-001, graphical WATER-002, and WORLD-013 pass. Greyfen still has a hard bank/water seam and overall river/world composition is provisional; a combined slope/wetness/water-edge trial still left a pale straight shoreline in current 1280x720 Greyfen and produced no useful Wychwood improvement. It was removed after WATER-002 passed; six rejected frames are preserved outside the gallery. The next visual intervention must include the split-ground edge and full bank composition. No final visual or performance acceptance is claimed.",
+    "QA-003": "The screenshot gate, QA-006 verifier, and strict release-report validator now require an approved SHA-256 matching the exact newest PNG bytes. Six focused QA-003 tests pass, including missing and mismatched approval-hash rejection. All eleven historical August approvals currently fail the new gate and source freshness; no hash or review has been fabricated. Fresh current-source captures and Codex visual inspection remain mandatory, so QA-003 is pending.",
+    "REL-TRUTH-001": "Accepted current-state reporting contract. release_reports/current_recovery.json is machine-verified, source/artifact aligned, explicitly partial, and retains all current blockers; it is not release approval.",
+    "TRAV-001": "Accepted by TRAV_001_RESULT.md and the v108 exact production-preset evidence. Greyfen's bridge surface contract passes native lane coverage and production Chrome real-input traversal without jump, recovery, collision error, or mutable QA telemetry. The separately isolated Wychwood north-to-south return seam remains tracked by TRAV-002.",
+    "TRAV-002": "Accepted by TRAV_002_RESULT.md and three focused native gates. The fixed-frame river probe now stops on destination-bank arrival or a genuine bounded stall; reciprocal sector arrivals use matching destination lanes; and the authored Wychwood return road is represented as explicit approach legs rather than an impossible diagonal through the ritual clearing. Full production-browser campaign certification remains independently tracked by WEB-001 and CERT-001.",
+    "RUNTIME-001": "RUNTIME_001_RESULT.md and the current tools/verify_runtime_required_components.py run pass: 23 required components, 14 registered roles, and four explicit diagnostic-only boss/art candidates. Approved Ghoulkin, Bog Wretch, Gravebound Knight, and White Hart body records include canonical model, license, source URL, exact bytes, and SHA-256. Missing or silently substituted required assets remain fatal.",
+    "QUEST-001": "Accepted by QUEST_001_RESULT.md. Isolated and live Greyfen fixtures prove one selected quest/objective and next action across tracker, compass, interaction focus/prompt, quest-direction guidance, and save summary. Full campaign traversal and invalid-position save recovery remain independently tracked by STORY-001, SAVE-001, CERT-001, and RELEASE-001.",
+    "CHAR-001": "Accepted by CHAR_001_RESULT.md. Current native captures and focused fixtures prove the two hero assemblies, anatomy, faces, grounding, animation rig, sockets, staff ownership, and Anwen facing. Crowd diversity and monster-face acceptance remain separately tracked by CHAR-002 and MON-001.",
+    "COMBAT-001": "Accepted by COMBAT_001_RESULT.md. The final graphical fixtures enforce live hand-bone attachment, sampled finger alignment, measured light/heavy contact, wall occlusion, rendered parry timing, grounding, state release, and a non-duplicating outer-blade trail. Production URL certification remains independently owned by CERT-001 and RELEASE-001.",
+    "OATH-001": "Accepted by OATH_001_RESULT.md. The final graphical fixture makes live hand bones authoritative for charge origin and proves rendered charge/beam/impact alignment, locked direction, sheathing, two-hand pose, cancellation, redraw, and cleanup. Production URL certification remains independently owned by CERT-001 and RELEASE-001.",
+    "AI-001": "Accepted by AI_001_RESULT.md. Current graphical fixtures prove navigation-backed roles, 30 Hz behavior, obstacle collision, spacing, reservations, retreat, leash, perception, and skeleton contact without transform teleporting. Boss-specific and production URL certification remain independently owned by BOSS-001 and CERT-001.",
+    "MON-001": "Accepted by MON_001_RESULT.md. Fresh current-revision native evidence plus full FACE-003, MON-002, and CHARACTER-REAL gates prove story-distinct complete bodies, grounded animation, visible materials, native anatomy, and no undeclared primitive or cross-family fallback. Boss mechanics and environment composition remain independently owned by BOSS-001, WORLD-001, WORLD-002, and PRES-001.",
+    "BOSS-001": "Accepted again 2026-09-26 with the evidence recorded in accepted_evidence. All four reopened role-policy discrepancies are resolved without suppressing errors. Ashwing's pre-approval diagnostic warning is absent in ashwing_approved_native.log; its fresh graphical contract and reviewed phase images pass. No production or world-art acceptance is inferred. Prior unaffected mechanics and real-input boss-defeat evidence are retained.",
+    "PACK-001": "Accepted by the v94 exact-ownership artifact and cross-browser route. The pack graph remains under the deployment ceiling and unrelated content streams after first control without blocking Greyfen. Startup latency itself remains separately open under LOAD-001.",
+    "LOAD-001": "Accepted by the source-aligned v106 hardware cold/warm evidence. The startup path now reaches controllable Greyfen within cold and repeat budgets in Chrome and Edge, while verified opening content mounts only after first control. Broader opening-route and production-URL certification remain independently tracked by QA-002 and WEB-001.",
+    "SCENE-001": "Accepted by the v107 authored-core contract, native prewarm and physical Greyfen crossing proofs, exact export inclusion, and hardware Chrome opening route. Later decoration quality remains tracked by WORLD-001; the unrelated Wychwood return-collision failure remains tracked by TRAV-002 and does not invalidate the Greyfen packed-core contract.",
+    "PERF-001": "Native 1280x720 Balanced Greyfen remains red. Three source-aligned cold baseline runs yielded hydration average/1% low 50.79/15.14, 50.49/20.30, and 40.65/14.37 FPS; settled 45.08/28.13, 46.92/32.95, and 46.67/28.82. The verifier rejects cross-zone samples and records input/position/zone. A generic per-surface publisher failed three native runs (24.07, 11.16, 29.71 FPS hydration lows); hiding the parent during attachment also failed (25.91 hydration, 26.16 settled). The existing fully hydrated scene can be hidden and re-shown in 19.08 ms, while initial visible publication after disabled-viewport hydration cost 165.5/179.7 ms. A shared-world offscreen preview lowered the first main reveal to 31.64 ms when stopped before reveal, but complete hydration still failed at 20.33 FPS 1% low over 6.39 seconds; continuous dual rendering cost 496 draws. All diagnostic probes were removed. Settled controller isolation did not reproducibly implicate life, river, or VFX polling. New-resource creation/publication across world sections remains the leading contributor, but neither shader upload nor CPU construction is yet isolated as the sole cause. Next PERF-001 work must author stable reusable opening render resources and test the whole startup/control/hydration/settled window; no current-source Web/browser performance acceptance exists. A 2026-09-25 source-aligned native run with authored audio failed hydration at 52.84/13.20 FPS average/1% low over 274 frames while settled Greyfen passed one sample at 52.98/33.80. A temporary four-stage phase probe showed vegetation placement 0.93 ms plus batch flush 14.81 ms before a 36.31-ms frame, and gate build 14.31 ms before a 58.37-ms frame; the previous 69-ms vegetation outlier did not recur as tree-placement cost. The probe was removed. Construction/flush and first-visible publication both matter; no single-object shift is justified. The retained gate-reuse/staged-publication discriminant passed four of four native Greyfen hydration samples at 57.35/32.69, 57.66/30.25, 56.63/31.43, and 57.47/31.69 FPS; four A-B-A-B baseline controls failed 1% lows at 25.78, 28.24, 29.49, and 28.27 FPS. Final scene counts and warm New Game handoff were stable. Focused WORLD-012 and real-keyboard opening-detail checks pass. The initial gate-transition verifier failed because its obsolete launch press started New Game and consumed the cache. After correcting that and rejecting redirected route endpoints, a real player-sized Greyfen-to-Castle approach around the shrine, East Lane house, and forge passes the complete native gate circuit with 112 ms New Game handoff and clean shutdown (D:/Temp/AshenOath/perf_gate_reuse_gate_transitions_north_lane.log). The complete current-source native run passed Wychwood, Wychwood combat, Vargan Courtyard, Record Hall, Hart Glade, and settled Greyfen, but failed Greyfen visible hydration at 48.97/20.90 FPS with ten slow frames across gate visual, visual buckets, actors, and boundary (D:/Temp/AshenOath/perf_gate_reuse_full_native.log). One bounded probe observed a slow visual-bucket frame with zero pending actor loads, surface textures, and boot-material restores; the probe was removed. Threaded loading is not a necessary cause of all slow frames, and full-run performance remains red despite four targeted candidate passes. PERF-001 is parked pending a cost-controlled construction/publication design; hardware-browser and final release acceptance are unproven. No Web export follows.",
+    "CHAR-002": "Accepted by CHAR_002_RESULT.md. Fresh current-revision 1280x720 evidence plus focused runtime fixtures prove deterministic adjacent crowd variation, role-owned hair metadata, bone-attached occupation silhouettes, accepted scale/grounding, complete routine loops, and distance suspension/resumption. Monster-family identity remains independently tracked by MON-001.",
+    "RES-001": "Accepted lifecycle contract. D:/Temp/AshenOath/handoff_checkpoint/res001_startup_finalize_v86.log and res001_engine004_verbose_v86.log prove clean graphical startup shutdown plus repeated Greyfen/Wychwood/Vargan/Record Hall/return retirement with zero unclassified lifecycle diagnostics and zero retained cache/retirement/material-anchor ownership. The 2026-09-24 zone-budget owner inventory found and removed two hidden, null-material Greyfen forge proxy meshes; the clean 15-configuration budget rerun reports zero null-material surfaces.",
+    "SPAT-001": "Accepted shared spatial authority. The dedicated SPAT-001 verifier plus existing river and navigation gates pass; game fallbacks delegate to ZoneSpatialService/SpatialSurfaceContract, enemies and GreyfenLifeController consume the active service, and NpcAmbient has no horizontal movement authority.",
+    "SPAT-002": "Accepted spawn/save/recovery integration. Focused runtime, deferred restore, and navigation fixtures prove same-bank clear recovery for water, falls, invalid saves, arrivals, and actor relocation without retaining velocity or selecting occupied space.",
+    "ARCH-002": "2026-09-24 bounded source improvement: Greyfen's live recovery checkpoint no longer runs a capsule occupancy query every idle frame; it revalidates after at least 0.25 m of movement while river and out-of-bounds recovery remain checked every frame. SPAT-002 and the graphical opening forward/return bridge fixture pass. One native 720p Greyfen sample was 57.60 average / 28.57 FPS 1% low during hydration, still below the 30 FPS low gate; no isolated script-cost reduction or broader event-driven cleanup is claimed. ARCH-002 remains pending.",
+    "AUDIO-001": "2026-09-25 partial implementation: twelve license-traced compact OGG clips cover zone ambience and opening-world/collision accents, including a level-corrected Wychwood forest, crow, sword contact, forge, river, and Record Hall. Raw sources are outside the repo; required CC-BY credits are in game. Focused authored, legacy repair, and AUDIO-006 headless fixtures pass with clean import and shutdown. The current QA Web artifact predates these source assets; audible mix/loop quality, remaining synthetic cues/music, and browser audio unlock are not certified. AUDIO-001 remains pending, with native PERF-001 red and no new Web export authorized.",
+    "PREWARM-001": "Accepted by PREWARM_001_RESULT.md. Castle OBJ parsing is no longer global startup work: destination-adjacent role sets begin only from Bandit Road or Vargan Approach, execute one role per settled frame, and cancel by generation when the source zone changes. Focused cold and graphical fixtures remain below the 350 ms role/frame budget; broader production browser timing remains independently covered by accepted LOAD-001 and pending WEB-001.",
+    "PACK-002": "Accepted by PACK_002_RESULT.md. The v109 artifact has one generated, content-addressed identity across shell, source commit, root PCK, runtime sidecar, packs, dependencies, and cache key. Exact artifact verification, two deliberate mismatch rejections, restored verification, and packed startup pass. Production-preset browser route certification remains independently tracked by WEB-001.",
+    "QA-002": "Historical v94 Chrome/Edge opening-route reports are diagnostic, not final player-driven acceptance: the driver still used QA camera orientation and read-only QA route computation. The current driver turns the camera through actual ArrowLeft/ArrowRight input. D:/Temp/AshenOath/qa002_physical_camera_anwen_chrome_v2.json passes mouse New Game, movement, focus, real E, and Anwen dialogue with zero console/network errors. The same-artifact full-opening run D:/Temp/AshenOath/qa002_physical_camera_opening_chrome.json fails its five-second dialogue-open observation during an 18-second browser observation gap, despite a later failure screenshot showing the dialogue visibly open. No full-opening or campaign acceptance follows. The full-campaign driver still contains QA stage_gate/prepare_route state preparation; a normal --full-campaign invocation now fails closed with structured evidence at D:/Temp/AshenOath/qa002_full_campaign_fail_closed.json. Opt-in diagnostic preparation cannot return a passing report. Remove the state preparation and prove actual campaign interactions after native first-visible responsiveness is stable.",
+    "WEB-001": "Accepted by WEB_001_RESULT.md and the exact v110 production-preset evidence. Local hardware Chrome and Edge pass real New Game, physical bridge traversal, Anwen interaction, checkpoint reload, and Continue without mutable QA commands or browser errors. Live Vercel identity and full-campaign certification remain independently tracked by CERT-001 and RELEASE-001.",
+    "WORLD-002": "Historical partial Castle/mill/undercroft/Hart repairs and 2026-09-24 screenshots remain evidence, not acceptance. A current identical-camera Record Hall pass under .release-gate/world002_record_baseline and world002_record_candidate separates ceiling/wall materials, adds one batched five-bay vault-rib mesh, lightens the floor, and stages rear archive shelves. Current verify_world_005.gd and verify_castle_vargan.gd pass with clean logs. The room is more legible, but pale cabinets, sparse aisle, provisional haunting creature, Old Mill facade, undercroft, Hart depth, and broad Castle hierarchy still fail visual acceptance. The full current zone-budget gate fails independently in Greyfen at visible_skeletons=11 versus 10; Record Hall itself has 102 nodes, 19 meshes, 26 surfaces, four lights, and zero null materials. Earlier 15-zone budget and Record Hall/Hart FPS data are historical and not current-source acceptance. WORLD-002 remains visually_rejected pending authored asset and full real-route review."
+  },
+  "evidence_files": [
+    {
+      "path": "D:\\Temp\\AshenOath\\animation_timer_rate.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 202,
+      "sha256": "7105e787069bd910301a50cb044d94c2fbf27ed197d20876c1b9946148522d04",
+      "modified_at": "2026-09-15T20:20:27.736620+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\animation_timer_motion.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 8205,
+      "sha256": "fa0dfa7a3c34c5dbe9b1a921cd685ee20109defadbf252660959c3810ae4609f",
+      "modified_at": "2026-09-15T20:20:52.725108+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\prepared_audio_source_resolution.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 201,
+      "sha256": "1fde80436a0f5b0a9acf84c1a95286d5ff356838df7e5e6437522ecbdc7928fb",
+      "modified_at": "2026-09-15T20:22:37.868249+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\prepared_audio_runtime.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 277,
+      "sha256": "faf0a5ad64c3f3fcdbb7c0bb99cb6ca85cdc5b303c0d9006f06a5ea74b68a8a6",
+      "modified_at": "2026-09-15T20:16:14.611084+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\greyfen_timer_serial_perf.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 7505,
+      "sha256": "55d8498765f24a3cf673fb625cef0d28db7dd1edecd2cd730889bdf48c525f60",
+      "modified_at": "2026-09-15T20:23:14.204936+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\greyfen_crow_budget_perf.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 6789,
+      "sha256": "63f2ada7d04531e2c1b856e21fbd23bf32355d72e9da72889d0e79d8ff125140",
+      "modified_at": "2026-09-15T20:40:26.360478+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\greyfen_combined_readiness_perf.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 6437,
+      "sha256": "6746de59ad1ea6702f8fe96023b4fbaeef83486004caffb1d9df790dbc4d6313",
+      "modified_at": "2026-09-15T20:53:44.858340+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\material_headed_chrome.json",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 20050,
+      "sha256": "5555a3a7d3a6b86da2b18903619af4237f66f277fb82d8f527fb9c7d055163fb",
+      "modified_at": "2026-09-15T16:13:12.333419+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\moving_opening_hydration_cleanup.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 20521,
+      "sha256": "0c7bc0050d949a1611b5880a15aea31a4d82af5a4443571387c02568ddfb141c",
+      "modified_at": "2026-09-15T20:34:35.174456+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\material_prewarm_retirement_preloaded.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 3690,
+      "sha256": "64990e7b0cd979bf63bd7585432c20309749c3952a197a0de071714d6a05c16e",
+      "modified_at": "2026-09-15T20:37:08.472685+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\incremental_lighting.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 106,
+      "sha256": "bcd1c86c91307443e6e4597868611e48f499cc74d78ebc30ba5ac5a5aa3d30bd",
+      "modified_at": "2026-09-15T21:04:14.351230+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\incremental_lighting_game_parser.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 75,
+      "sha256": "b16651cbedbab0a7b519f9e5b498eea40cb33bfb72252e264a7f4c2412765d58",
+      "modified_at": "2026-09-15T21:10:25.934556+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\greyfen_incremental_lighting_perf.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 6670,
+      "sha256": "e637e30793cc62dfaf0a0aa26e309e7c82a392482d180a8d611e2eafce6d2bc4",
+      "modified_at": "2026-09-15T21:11:02.297554+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\night_pool_state.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 106,
+      "sha256": "bcd1c86c91307443e6e4597868611e48f499cc74d78ebc30ba5ac5a5aa3d30bd",
+      "modified_at": "2026-09-15T21:16:26.195658+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\night_pool_batch.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 895,
+      "sha256": "fa003bb70d81c6b1fc9560a365c4068e1cab39792fb208d695f98c1adaf8ab9d",
+      "modified_at": "2026-09-15T21:16:40.851027+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\night_pool_capture.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 5778,
+      "sha256": "84d233a17e3dc35ff1a2d49c95a457183aa71cb62c07ddbf05da2b4dc0967f0f",
+      "modified_at": "2026-09-15T21:17:21.879214+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\star_material_isolation.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 605,
+      "sha256": "143b30890e77a6bbf9e1ecfd6bcd1acd12f5467e34eaf7d5253daf53b4319adc",
+      "modified_at": "2026-09-15T21:24:57.803930+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\star_validator_regression.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 699,
+      "sha256": "cb95f5190201ec01acb38b9054685fc2a1c977b28181a7aab56af29f7415b4bb",
+      "modified_at": "2026-09-15T21:26:26.972847+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\sky_state_final.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 106,
+      "sha256": "bcd1c86c91307443e6e4597868611e48f499cc74d78ebc30ba5ac5a5aa3d30bd",
+      "modified_at": "2026-09-15T21:27:46.756828+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\sky_stars_final.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 696,
+      "sha256": "0c987a9958b26945bc648e26b14491dfe75a0940512ee67afa4b423705f45654",
+      "modified_at": "2026-09-15T21:27:55.828641+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\sky_final_capture.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 8115,
+      "sha256": "1f8124eacccbc1c65d1198627b1690053e4daacbded0bdac3a428dc168a53ac1",
+      "modified_at": "2026-09-15T21:28:19.390128+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\back_sword_parser.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 75,
+      "sha256": "b16651cbedbab0a7b519f9e5b498eea40cb33bfb72252e264a7f4c2412765d58",
+      "modified_at": "2026-09-15T21:32:26.251149+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\back_sword_capture.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 672,
+      "sha256": "0285cd00fb69ac15ead9da49dcaf62df48b449a518f87d8dc1af38fd71c653b7",
+      "modified_at": "2026-09-15T21:33:23.327503+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\back_sword_placement.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 705,
+      "sha256": "15011d0122e161f73c405592ce94de0bbdd5de3b9e00a7d3a24be15fda425860",
+      "modified_at": "2026-09-15T21:34:26.913890+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\guard_pose_capture.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 705,
+      "sha256": "122a64a1961ce1313624001e8d9b7ae56ff0426906ec354c0ae88a4e1e5809dc",
+      "modified_at": "2026-09-15T21:36:40.173985+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\guard_input_draw_capture.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 705,
+      "sha256": "3dac0c618fb8e310d2105fac618b37081d16afb04a39ed6882651ac0e6b7d336",
+      "modified_at": "2026-09-15T21:38:21.615933+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\blade_contact_distance.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 102,
+      "sha256": "38d4d4777b7d38f4f6ee0998d7b090fc911be9ce5157e5f456ae43200f6a6cae",
+      "modified_at": "2026-09-15T21:46:50.680535+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\blade_strike_window.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 99,
+      "sha256": "89d5490cd7f867b6d539270aa4e48bbf90a347e6943c9ee97944fcfe41603c62",
+      "modified_at": "2026-09-15T21:46:34.080628+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\blade_game_parser.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 73,
+      "sha256": "a9912b85473f126d3f4f63ec824170c828df3473a292f866dde86cafda5b66da",
+      "modified_at": "2026-09-15T21:46:48.064794+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\animated_blade_contact_settled.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 3777,
+      "sha256": "306092198651d8e77d7a96ed90321654aa103a64fdb10f2abc01ecbc8921dd86",
+      "modified_at": "2026-09-15T21:49:24.119469+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\animation_rate_ownership_final.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 465,
+      "sha256": "5396a8f2ef7d94155017548b3e4c926c135a1df776b7be7aeb46264b55a98643",
+      "modified_at": "2026-09-15T21:53:32.551804+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\animated_blade_final.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 3437,
+      "sha256": "47adb6836d5a3bedd167d9abe794f05d870c5a99a8eea6143035a89ee414150b",
+      "modified_at": "2026-09-15T21:53:59.917932+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\shared_animation_after_rate.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 105,
+      "sha256": "4f1c507efa0f97d449a385dcf77f96a69426843e343513a4ba8db4076cb4eb25",
+      "modified_at": "2026-09-15T21:55:12.605343+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\animation_timer_after_rate.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 203,
+      "sha256": "440c16916038d4418024650ff4d8deedb47fef05f31beac53f1e3982a8cdc9cd",
+      "modified_at": "2026-09-15T21:55:16.096725+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\animation_rate_steps.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 534,
+      "sha256": "15acf9d848adb23bea0d46282ec5be04aa93065246b08fe1d8790b60fa3e7f17",
+      "modified_at": "2026-09-15T21:56:05.975514+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\parry_requires_contact.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 102,
+      "sha256": "6841cc31ca5bbe3a5047c9d9b368f0d44f646e6d4464733c4c9d148352d990ab",
+      "modified_at": "2026-09-15T21:57:04.888017+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\enemy_contact_bone.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 98,
+      "sha256": "b4ef2bb99cd69d0f92ce04244c445492c5d328e9129b72a09ab1b461ffa25142",
+      "modified_at": "2026-09-15T21:59:00.580524+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\enemy_contact_probe_units_final.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 98,
+      "sha256": "b4ef2bb99cd69d0f92ce04244c445492c5d328e9129b72a09ab1b461ffa25142",
+      "modified_at": "2026-09-15T22:01:43.453061+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\enemy_attack_probe_corrected.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 2993,
+      "sha256": "275d88900e3457486b824f12b94670aad74bc67fc2a4deece3a9aa393a4c79b3",
+      "modified_at": "2026-09-15T22:01:19.408188+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\enemy_timed_contact_final.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 859,
+      "sha256": "b74199a3cc9c0e25b91977981e957142a167a061395e7dead4e68ebabfe261a2",
+      "modified_at": "2026-09-15T22:04:02.963857+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\parry_after_enemy_timing.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 102,
+      "sha256": "6841cc31ca5bbe3a5047c9d9b368f0d44f646e6d4464733c4c9d148352d990ab",
+      "modified_at": "2026-09-15T22:04:31.387762+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\enemy_contact_rate_matrix_final.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 1105,
+      "sha256": "86256165a52d1d3bb5b5870e6785f5775ba0e0ea2087e27acc1e5e55249ad414",
+      "modified_at": "2026-09-15T22:05:51.293291+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\rendered_enemy_parry_guard.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 1499,
+      "sha256": "9e228d3db72453c12f53ff44c0c920336a009f5023449736017f12553bd1a0a1",
+      "modified_at": "2026-09-15T22:07:49.991031+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\rendered_enemy_impact_settled.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 1499,
+      "sha256": "1b2467621f383907c359c1fc1731847fce81d41d86d96aca075e5b17195d43c8",
+      "modified_at": "2026-09-15T22:10:04.019889+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\enemy_cpu_grounded_matrix.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 1324,
+      "sha256": "a082ea18c5d04c117ff2b6137908a7bc6d3d8edbab4da87548a5ae3c9e5857de",
+      "modified_at": "2026-09-15T22:12:50.422972+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\enemy_cpu_gpu_bounds.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 1666,
+      "sha256": "ae0c4f3880809b06fccb9ae710682b5a5f94b89748cf62c2a3ca568c2f90672e",
+      "modified_at": "2026-09-15T22:13:10.050693+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\enemy_all_posed_bounds.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 8111,
+      "sha256": "8a5669c6b71a6e459ef5a95b1c4b8d140cf6d029d3b8683a22d332decd4465d9",
+      "modified_at": "2026-09-15T22:14:29.171311+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\held_guard_contact.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 1763,
+      "sha256": "2a7d0bf36ca567acfd249b8736de062da8498b78840712a49722994ec88d5a14",
+      "modified_at": "2026-09-15T22:15:49.432537+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\front_guard_contract.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 1762,
+      "sha256": "7dc1936184d8328558bb5b906160e87dd88f7f3c5e39b80de13774ef95fdbe27",
+      "modified_at": "2026-09-15T22:18:00.423443+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\guard_release_matrix.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 1937,
+      "sha256": "c9ea080f69c41bfed89bf8c768aeffba3ba38c45be9934ea5f7d88d9029f5970",
+      "modified_at": "2026-09-15T22:19:17.925611+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\dialogue_coordinator_native_v1.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 193,
+      "sha256": "4a23b72c3618356fb0cdddc8a1a2c7cdd71e2c9f281d966430fa14e2e75e76f0",
+      "modified_at": "2026-09-26T18:50:57.595542+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\combat_vfx_coordinator_native_v3.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 193,
+      "sha256": "1ba6a739bd5ed56a11121cd426fa31a3757adfd573a9c4a9961005dbfd61b8ef",
+      "modified_at": "2026-09-26T18:56:58.732382+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\combat_vfx_oath_render_v1.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 6110,
+      "sha256": "e73e6bd5e34cef0be16f2749cb49e061b20521b7916ec419241feeb6e0d5d251",
+      "modified_at": "2026-09-26T18:58:04.876036+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\interaction_visibility_native_v1.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 187,
+      "sha256": "2c5515437143a7c347c9fcb307f0a2d355b746c013aa542049bdba3f9932e9d9",
+      "modified_at": "2026-09-26T19:01:52.813812+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\architecture_anwen_focus_v2.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 5551,
+      "sha256": "6753543fd7edda699e4b84370aa1c72bdd6e443181d59c1b5e820810076faed6",
+      "modified_at": "2026-09-26T19:03:40.266621+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\quest_hud_coordinator_native_v1.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 196,
+      "sha256": "d47b40276803bd89ca581cdb66d66fc6492e41fe8674d4c3b32c8dee1313f3d5",
+      "modified_at": "2026-09-26T19:07:16.191295+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\architecture_objective_runtime_v1.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 1812,
+      "sha256": "36f1733953a9a2a865c879d50823859da9a559590fe925cce534f3b85294c8a3",
+      "modified_at": "2026-09-26T19:09:03.063146+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\architecture_residency_unit_v1.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 106,
+      "sha256": "6d0290c52242ecbef4f9c6de03e719dd45be98cb3e4a7729618ec276eb2af2e9",
+      "modified_at": "2026-09-26T19:18:32.697256+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\architecture_transition_parse_v2.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 75,
+      "sha256": "b16651cbedbab0a7b519f9e5b498eea40cb33bfb72252e264a7f4c2412765d58",
+      "modified_at": "2026-09-26T19:20:58.468724+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\architecture_lifecycle_v1.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 4834,
+      "sha256": "d9686bf47d2143f3d9bdb8a140356d140f7e632eeb5233c767e9ad746b746c45",
+      "modified_at": "2026-09-26T19:22:19.031389+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\architecture_rollback_before_v1.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 2483,
+      "sha256": "01ae2efd5fd154e8c32e7d9b01fe2946d674b65788742f3dfb37bbeb0c446c96",
+      "modified_at": "2026-09-26T19:23:48.153678+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\architecture_rollback_after_v2.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 2417,
+      "sha256": "83f4f6a1b6e9823c77b5116c181b9a99fc63c86b1cf8102d304413de5a19f410",
+      "modified_at": "2026-09-26T19:25:33.181163+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\architecture_opening_final_v1.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 10602,
+      "sha256": "281a2a45737f08712931babafc02f9d687e4ba4c9c38b1d8b6da990524be8fd0",
+      "modified_at": "2026-09-26T19:28:07.285865+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\arch002_touch_unit_context_v1.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 286,
+      "sha256": "1fb3cd46c8de40316299d3013476f445a72075df1d7a54995ff199f59eaa51e2",
+      "modified_at": "2026-09-26T19:49:56.382828+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\arch002_life_unit_final_v2.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 193,
+      "sha256": "de49783e5fd5daee308a5f094b511755d5278af4333acc1a5d8e05266614aa7e",
+      "modified_at": "2026-09-26T19:41:55.600013+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\arch002_life_logic_v1.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 8292,
+      "sha256": "592aee900d618e807e1cb5680fb5b8e655b6151a1fd4dd306fd4a6f68a8696f1",
+      "modified_at": "2026-09-26T19:42:41.550944+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\arch002_life_graphical_v1.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 4047,
+      "sha256": "03b1ce938fc0d063909ab0bb5d2c45882616e8e7f5015fb9db5856c2b99eeaf2",
+      "modified_at": "2026-09-26T19:39:05.973382+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\arch002_mobile_context_v2.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 2590,
+      "sha256": "de551a29021acda84f5c411f89a869c99214fdf851c9e4030461e83caf2396b8",
+      "modified_at": "2026-09-26T19:50:57.211243+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\arch002_opening_final_v1.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 10329,
+      "sha256": "2ee1764876c9ff1e72f4d492bd4113d91a0efe88e82d26ff2445d13332bd1c3d",
+      "modified_at": "2026-09-26T19:48:37.377732+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\edric_render_warmup_v1.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 1750,
+      "sha256": "93b9b5d952e79bcab1c845d7e12edcc602a19fb36dffdf56b6e0d2456412d7ce",
+      "modified_at": "2026-09-26T18:41:29.932829+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\edric_compelled_foreground_v1.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 1410,
+      "sha256": "5e7f5839e9e5e53a6d1adfceff62db882be4f6f4ee841ddae4a6db1e3deac1de",
+      "modified_at": "2026-09-26T18:45:53.767075+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\handoff_checkpoint\\load001_character_material_budget_native_v2.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 12686,
+      "sha256": "0693102235dc8ecdbfa7a9cf9d84937dc1af89bd77a5ea18831efd70c8cb6568",
+      "modified_at": "2026-09-16T08:29:30.387838+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\handoff_checkpoint\\res001_startup_finalize_v86.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 34644,
+      "sha256": "2c62e6995184d44697042acd70273357f32c0cb673027e6a644350be5d0026cb",
+      "modified_at": "2026-09-16T08:41:51.683959+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\handoff_checkpoint\\res001_engine004_verbose_v86.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 26762,
+      "sha256": "26a12865501d49983da74aae95855e0dc2421b8c38605efbbb20aa5ac53675b6",
+      "modified_at": "2026-09-16T08:42:42.692793+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\handoff_checkpoint\\spat001_contract_v2.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 100,
+      "sha256": "3d1b51c878b8ac86608a0921bc048a1fa12d0cea66c2d69e2cb89d7b5e778c29",
+      "modified_at": "2026-09-16T08:50:58.466173+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\handoff_checkpoint\\spat001_river.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 2801,
+      "sha256": "2592ada821484bedd97ff15c66f0ec891fed764aa746f2a30c9cb1b21cf0fb51",
+      "modified_at": "2026-09-16T08:48:34.542127+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\handoff_checkpoint\\spat001_navigation.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 2013,
+      "sha256": "8181285395cc8871566dd95a3ce02cc5ef584e0ed85e60c5578890977eb2bd1c",
+      "modified_at": "2026-09-16T08:48:38.306783+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\handoff_checkpoint\\spat002_recovery_v3.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 1391,
+      "sha256": "30c90aa92cbb48824513b8b0d204dcfb14030b468d0b998f9b830847fd0bb242",
+      "modified_at": "2026-09-16T08:54:44.708873+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\handoff_checkpoint\\spat002_deferred_restore.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 706,
+      "sha256": "24b0e54d3160b0dc2d742dd51a0a32de96a94a74877cf65647a658edb41fddbf",
+      "modified_at": "2026-09-16T08:55:02.987904+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\handoff_checkpoint\\spat002_navigation.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 2013,
+      "sha256": "84b35a627af950b7a44721a1c32a653f20b519c773f3b22482957944cfa82a78",
+      "modified_at": "2026-09-16T08:55:06.722689+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\recovery004_character_budget_v86\\chrome_opening_v86.json",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 67382,
+      "sha256": "3f84a98f84b274a4d43c98fe18823454a3a7812471bfa4a43f38c354ce7a8dd2",
+      "modified_at": "2026-09-16T08:33:24.119830+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\recovery004_catalog_v83\\edge_opening_v83.json",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 66021,
+      "sha256": "a7193311df74d8429a7f21817609d605beeff069f2339d882ef4223f4c431d22",
+      "modified_at": "2026-09-16T07:52:13.858812+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\ui001_chrome_allpages.json",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 10391,
+      "sha256": "5be37e21a48e6224d1a3a3b7e3949a6f5f912915f7d46cb735808dabfbacb1de",
+      "modified_at": "2026-09-24T13:12:16.071957+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\ui001_edge_allpages.json",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 10358,
+      "sha256": "e707af84e233ce6f4d3390a4022caa61e909ebaed41db453689a605f54ac4a1b",
+      "modified_at": "2026-09-24T13:13:55.189888+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\save001_chrome_clicksave.json",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 4433,
+      "sha256": "1d4e33dae470ce4396c4dd86ace2de946613bc55f13bbef161bf2a69cdb26f43",
+      "modified_at": "2026-09-24T13:47:21.631409+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\save001_edge_clicksave.json",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 4417,
+      "sha256": "ec8f715ba7b9210d8fd43be8ab2090e141ea29f56cb527f8ac086197ab9ddba8",
+      "modified_at": "2026-09-24T13:49:09.578254+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\save001_chrome_auto45.json",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 11028,
+      "sha256": "2ace9e52e78c16cd7ee5ffd2216f4bb484dccf4f16ead89e9a061344b5e2511e",
+      "modified_at": "2026-09-24T13:54:22.058344+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\save001_edge_auto45.json",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 11025,
+      "sha256": "97ad9c67a5febd2a498dc53021de7b3ed402db6f6b79927599b6b8b28ed007a8",
+      "modified_at": "2026-09-24T13:52:11.466127+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\perf_visible_discriminant_20260924.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 21588,
+      "sha256": "9223606116c0c86c99afb1da6ac72b1c157c4a1d4fc7cc50efbf4e6747de8d01",
+      "modified_at": "2026-09-24T13:24:43.854853+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\perf_viewport_discriminant_20260924.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 16910,
+      "sha256": "22232a4f8c09cd844066e18da580bd929728daf67c68c475f881d5ee4447796d",
+      "modified_at": "2026-09-24T13:23:50.340336+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\perf_visibility_revisit_20260924.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 8377,
+      "sha256": "f6ecfd390f4f55a9f77a7c76c1b8a008434a33eb57f658f1bc68a1b3b7e2879f",
+      "modified_at": "2026-09-24T15:26:20.971525+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\perf_offscreen_prewarm_20260924_v2.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 8277,
+      "sha256": "a005642d4ccd96292dd9f2ed66ae3fbb6bc76e295fa4661d421b98db9c581d89",
+      "modified_at": "2026-09-24T15:32:01.248783+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\perf_persistent_pool_first_native.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 22391,
+      "sha256": "f2dca1ba3e4f3683ac44185995058afe29a6d97ae080b11780759587ba4a5b6b",
+      "modified_at": "2026-09-24T16:03:49.760498+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\perf_gate_reuse_full_native.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 20968,
+      "sha256": "5b364ee5fb443cce59e875e4678d719e0d35e5416d63fcd0f357aac089fe9064",
+      "modified_at": "2026-09-24T18:28:41.272713+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\perf_current_draw_disabled_20260925.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 10430,
+      "sha256": "75b5af36dc3da2903fa9d8214848c04c61f4f502a0c9db05e22bba5b75faed9d",
+      "modified_at": "2026-09-24T19:08:34.204993+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\pres001_layer_owner_20260925.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 8932,
+      "sha256": "bc6f4c2ddcda6f2551df44ef2a9f56d24fb69580e9c00772af53994c03754336",
+      "modified_at": "2026-09-24T19:41:04.378136+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\pres001_layer_owner_20260925\\greyfen_bank_candidate.png",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 913366,
+      "sha256": "97161d38e8a793e56c66702d49d005dfaaded926520b485a19e32133f2951419",
+      "modified_at": "2026-09-24T19:48:44.242416+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\pres001_bank_candidate_water.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 3154,
+      "sha256": "ba1e2e968e73cca0893f7d69fe255d4a39a77b97e9084f90777bd32954bf20f6",
+      "modified_at": "2026-09-24T19:48:18.576552+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\pres001_bank_candidate_perf.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 10240,
+      "sha256": "1b3d38c46059bf2981bb6cfee6cec9ac9da6d1655981b151617e96786c97655f",
+      "modified_at": "2026-09-24T19:50:03.131605+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\perf_tree_batch_greyfen.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 10441,
+      "sha256": "0a9d674c21674c2a22b53908ff9e532a865b4b041b22f46c9548d92a6e3c5583",
+      "modified_at": "2026-09-24T19:58:02.577859+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\perf_publication_ab_a1.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 10616,
+      "sha256": "2307c4acf179e21cb6bb00643e4ee080fbbaab251127b4d790d1bdac0ba98ee3",
+      "modified_at": "2026-09-24T20:06:58.578149+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\perf_publication_ab_b1.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 11179,
+      "sha256": "d0166850f23275b322933e60df2f7f84e038912ea17942af639ca94127aa8ee3",
+      "modified_at": "2026-09-24T20:07:26.998824+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\perf_publication_ab_a2.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 10432,
+      "sha256": "abce98155e473ac39a352232cf13eb686e95841266bf8491bed60d1c94900c11",
+      "modified_at": "2026-09-24T20:07:51.007199+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\perf_publication_ab_b2.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 10612,
+      "sha256": "11d9cba539b492aff937fffd2a025d22bb124997d6fa02a09e033492a5777a46",
+      "modified_at": "2026-09-24T20:08:19.510820+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\opening_real_input_native_v8.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 8960,
+      "sha256": "77909f3d31db7b0837f4715b76f62b1b1458bc2dd863c443c000765199a76704",
+      "modified_at": "2026-09-24T20:45:24.717806+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\opening_real_input_native_v15.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 10009,
+      "sha256": "02775103e03c095f132e0c6a5e4da7d511eacd6b557c7fda7719c15956f54434",
+      "modified_at": "2026-09-24T21:21:16.012541+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\cemetery_continue_v6.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 3041,
+      "sha256": "90a2b0394d863acea6e4ca6737a8619d7a900e05a111a39b04c652edbd64110c",
+      "modified_at": "2026-09-24T21:34:57.053929+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\grouped_focus_unit_v2.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 108,
+      "sha256": "4959c311ed668edf5a038cf59c6ef35c33fffdafec44fa8d95fc211adc13f722",
+      "modified_at": "2026-09-24T21:32:00.786193+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\quest_focus_regression.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 1727,
+      "sha256": "71d25b2d23ecb4507ef2482f16bf63660c16fc5cfd9c7271c24c7d044417e34a",
+      "modified_at": "2026-09-24T21:35:27.565114+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\cemetery_stage_regression.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 381,
+      "sha256": "06895c1ba360a9b45f819ab70e2f78e8003c9d97b2e9a521d6d122e40ca9ab98",
+      "modified_at": "2026-09-24T21:35:31.267163+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\cemetery_ambush_native_v2.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 3196,
+      "sha256": "c41f23e6f8dac4dc4769d2d1099f67433d22bbb1474209efbb16d51a2d3abc9b",
+      "modified_at": "2026-09-24T21:41:59.206474+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\cemetery_chapel_native_v2.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 3023,
+      "sha256": "70d20fdc0f573ed977d0e0995dd45ebfc19fb84aeb119bdc8a50f864ad690f36",
+      "modified_at": "2026-09-24T21:44:46.166296+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\cemetery_shrine_native_v2.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 2347,
+      "sha256": "85075a212dff1659afc9660732e81fda8b11ea23ef3631f2dad05f032e7c2229",
+      "modified_at": "2026-09-24T21:47:42.687052+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\cemetery_shrine_input_v2.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 3762,
+      "sha256": "9bf377961b868e1254824ed7e921d43da39512e4f179f329926f1d6722f97af1",
+      "modified_at": "2026-09-24T21:57:37.550887+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\quest_completion_checkpoint_v2.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 110,
+      "sha256": "13dbf39d071c09462312c9570e69a42f0bff8965ed34d70c9794f7cd311bbbbb",
+      "modified_at": "2026-09-24T22:04:50.639693+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\cemetery_shrine_checkpoint_fixed.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 3760,
+      "sha256": "145813e2672bd4d3dc6cefef313fda4f4fd942b6f9367d327c66fd949da41c6b",
+      "modified_at": "2026-09-24T22:05:36.006547+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\teeth_mira_focus_diagnostic.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 3333,
+      "sha256": "8369cdb1367347ca569f0b31a3ca5a6bfb4d210f4e9024f5485fb5fc765cee33",
+      "modified_at": "2026-09-24T22:08:39.462364+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\teeth_chapel_native_v2.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 2879,
+      "sha256": "149c61059816a9c5f52bcfeed4f89334c958e86feb3dbe151c23db059265c834",
+      "modified_at": "2026-09-24T22:16:56.212358+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\anwen_dialogue_stage_v1.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 5723,
+      "sha256": "cd59bc7f2ffe847acba9ce415bf490e19073eedd226e5b40055de100441feb22",
+      "modified_at": "2026-09-24T22:14:00.444420+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\quest_runtime_after_mira.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 1728,
+      "sha256": "50c00e0eb9b9a1efc6526298239f6756c231ac3804f231645e94ae744f776b77",
+      "modified_at": "2026-09-24T22:17:25.219984+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\grouped_focus_after_mira.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 108,
+      "sha256": "4959c311ed668edf5a038cf59c6ef35c33fffdafec44fa8d95fc211adc13f722",
+      "modified_at": "2026-09-24T22:17:25.742890+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\opening_real_input_native_return_diag.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 8709,
+      "sha256": "a2cafb7da7e9caccff86f02a9d86cea4c46fec4df35dfa2588f27e7aa3fba19f",
+      "modified_at": "2026-09-24T20:38:56.915488+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\audio001_wood_verifier_clean.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 110,
+      "sha256": "d3dfc21a0e7185614b8c0d43354bec32c1bb66c661972fadd5be91fff6f64cd2",
+      "modified_at": "2026-09-24T19:19:45.786309+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\audio001_wood_graphical.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 510,
+      "sha256": "1168ab543d55d9fea4b2aad944eeced4fa8c06b633ff57b9aa49e18295e2e825",
+      "modified_at": "2026-09-24T19:20:14.241852+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\audio001_loop_import.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 29307,
+      "sha256": "39f123869a196e832bce96db81bdb907f50dffb61545eb9002096e7a2052dcfe",
+      "modified_at": "2026-09-24T19:28:20.962330+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\audio001_loop_runtime.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 110,
+      "sha256": "d3dfc21a0e7185614b8c0d43354bec32c1bb66c661972fadd5be91fff6f64cd2",
+      "modified_at": "2026-09-24T19:28:55.628376+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\audio001_loop_graphical.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 510,
+      "sha256": "1168ab543d55d9fea4b2aad944eeced4fa8c06b633ff57b9aa49e18295e2e825",
+      "modified_at": "2026-09-24T19:29:12.718881+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\audio001_loop_import_repeat.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 28188,
+      "sha256": "1d0303f59df6a2e663b8d5ff0ccd4872f2c6b7be5d5cff730f45e7e678e550fc",
+      "modified_at": "2026-09-24T19:30:04.252466+00:00"
+    },
+    {
+      "path": "D:\\Temp\\AshenOath\\world002_archive_capture_20260924.log",
+      "exists": true,
+      "acceptance": "not_inferred_from_file_presence",
+      "bytes": 3881,
+      "sha256": "ce839edc30bb5a7656925b04050bea484f7b012ef7296db8dbc7eb203fb08749",
+      "modified_at": "2026-09-24T15:55:14.710338+00:00"
+    }
+  ],
+  "native_greyfen_performance": {
+    "status": "failed_native_diagnostic_not_acceptance",
+    "current_full_native_log": "D:/Temp/AshenOath/perf_gate_reuse_full_native.log",
+    "current_full_greyfen_hydration_average_fps": 48.97,
+    "current_full_greyfen_hydration_one_percent_low_fps": 20.9,
+    "current_draw_disabled_log": "D:/Temp/AshenOath/perf_current_draw_disabled_20260925.log",
+    "current_draw_disabled_hydration_average_fps": 58.85,
+    "current_draw_disabled_hydration_one_percent_low_fps": 15.62,
+    "current_draw_disabled_draw_calls": 0,
+    "greyfen_bank_candidate_log": "D:/Temp/AshenOath/pres001_bank_candidate_perf.log",
+    "greyfen_bank_candidate_hydration_average_fps": 57.53,
+    "greyfen_bank_candidate_hydration_one_percent_low_fps": 29.95,
+    "greyfen_bank_candidate_status": "failed_targeted_native_not_acceptance",
+    "rejected_publication_ab_logs": [
+      "D:/Temp/AshenOath/perf_publication_ab_a1.log",
+      "D:/Temp/AshenOath/perf_publication_ab_b1.log",
+      "D:/Temp/AshenOath/perf_publication_ab_a2.log",
+      "D:/Temp/AshenOath/perf_publication_ab_b2.log"
+    ],
+    "visible_repeat_log": "D:/Temp/AshenOath/perf_visible_discriminant_20260924.log",
+    "viewport_discriminant_log": "D:/Temp/AshenOath/perf_viewport_discriminant_20260924.log",
+    "visibility_revisit_log": "D:/Temp/AshenOath/perf_visibility_revisit_20260924.log",
+    "offscreen_prewarm_log": "D:/Temp/AshenOath/perf_offscreen_prewarm_20260924_v2.log",
+    "persistent_batch_trial_log": "D:/Temp/AshenOath/perf_persistent_pool_first_native.log",
+    "visible_hydration_one_percent_low_fps": [
+      13.71,
+      22.62
+    ],
+    "first_visible_frame_ms_after_suspended_hydration": [
+      165.5,
+      179.7
+    ],
+    "stable_scene_revisit_first_visible_ms": 19.08,
+    "offscreen_prewarm_hydration_one_percent_low_fps": 20.33,
+    "persistent_batch_trial_one_percent_low_fps": [
+      11.55,
+      15.29
+    ]
+  },
+  "blockers": [
+    "STORY-001: Production-safe QA-002 browser traversal and final candidate performance are not accepted.",
+    "WORLD-001: The finite opening-scene punch list remains visually unaccepted.",
+    "WORLD-002: Bandit Road hostile identity/day terrain/night readability and explicit red campaign composition cells remain rejected.",
+    "PRES-001: Final affected visual review and shared performance/browser proof remain open.",
+    "PERF-001: Cold first-visible rendering recorded 1.04 FPS 1% low and a 1527 ms frame; CPU/wait/GPU/I/O ownership is not yet discriminated.",
+    "AUDIO-001: Listening approval and final real-input browser unlock/persistence evidence are missing.",
+    "ACCESS-001: Browser certification and available-device evidence are missing.",
+    "QA-002: The production-safe full-campaign driver, complete observer dataset, and Firefox transport are incomplete.",
+    "CERT-001: Eight pre-certification tickets are not accepted.",
+    "RELEASE-001: CERT-001 is incomplete; production remains intentionally frozen."
+  ],
+  "historical_release_report": "release_reports/latest.json",
+  "historical_report_policy": "Preserved unchanged; its previous partial-pass is not current release approval.",
+  "failure": "Release blocked by the current issue-registry snapshot; this report certifies evidence identity only.",
+  "next_action": "Capture one bounded low-overhead WPR CPU/GPU/I/O trace correlated to existing frame timestamps, then test one source-backed structural candidate."
+}

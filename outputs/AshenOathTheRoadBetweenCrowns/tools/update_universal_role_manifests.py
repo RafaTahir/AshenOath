@@ -9,10 +9,13 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-MALE = "res://assets_external/characters_universal/Male_Peasant.gltf"
-FEMALE = "res://assets_external/characters_universal/Female_Peasant.gltf"
-MALE_BIN = "res://assets_external/characters_universal/Male_Peasant.bin"
-FEMALE_BIN = "res://assets_external/characters_universal/Female_Peasant.bin"
+RUNTIME = "res://assets_external/characters_universal/runtime"
+KAEL = f"{RUNTIME}/Kael_A_Set_Atlas.gltf"
+ANWEN = f"{RUNTIME}/Anwen_A_Set_Atlas.gltf"
+MALE = f"{RUNTIME}/Villager_Male_Atlas.gltf"
+FEMALE = f"{RUNTIME}/Villager_Female_Atlas.gltf"
+WORKER = f"{RUNTIME}/Villager_Worker_Atlas.gltf"
+HOODED = f"{RUNTIME}/Villager_Hooded_Atlas.gltf"
 LICENSE = "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt"
 SOURCE_URL = "https://quaternius.com/packs/universalbasecharacters.html"
 
@@ -23,7 +26,7 @@ MALE_ROLES = {
     "villager_hooded", "villager", "guard", "traveler",
 }
 FEMALE_ROLES = {"mira_human", "villager_female_human", "mira_herbalist", "widow_elna", "generic_villager_02", "villager_female"}
-PROTECTED_ROLES = {"player_kael", "player_human", "sister_anwen", "sister_anwen_human", "kael", "anwen", "road_ranger", "road_ranger_human"}
+PROTECTED_ROLES = {"road_ranger", "road_ranger_human", "ranger"}
 
 
 def res_file(value: str) -> Path:
@@ -43,38 +46,27 @@ def artifact(path_value: str) -> dict:
     return {"path": path_value, "bytes": path.stat().st_size, "sha256": digest(path)}
 
 
+def assembly_files(model: str) -> list[str]:
+    stem = model.removesuffix(".gltf")
+    return [f"{stem}.bin", f"{stem}.png"]
+
+
 def variant_for(role: str) -> tuple[str, str, list[str]] | None:
     key = role.lower()
     if key in PROTECTED_ROLES:
         return None
+    if key in {"player_kael", "player_human", "kael"}:
+        return KAEL, "opening_single_material_a_set", assembly_files(KAEL)
+    if key in {"sister_anwen", "sister_anwen_human", "anwen"}:
+        return ANWEN, "opening_single_material_a_set", assembly_files(ANWEN)
     if key in FEMALE_ROLES or "female" in key:
-        return (
-            FEMALE,
-                "char_restore_004_unified_female_clothed",
-            [
-                "res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png",
-                "res://assets_external/characters_universal/T_Peasant_Normal_1K.png",
-                "res://assets_external/characters_universal/T_Peasant_ORM_1K.png",
-                "res://assets_external/characters_universal/T_Hair_2_BaseColor_1K.png",
-                "res://assets_external/characters_universal/T_Hair_2_Normal_1K.png",
-                "res://assets_external/characters_universal/T_Eye_Brown.png",
-                "res://assets_external/characters_universal/T_Eye_Normal.png",
-            ],
-        )
+        return FEMALE, "opening_single_material_crowd", assembly_files(FEMALE)
+    if "worker" in key or "guard" in key or "tor" in key:
+        return WORKER, "opening_single_material_crowd", assembly_files(WORKER)
+    if "hooded" in key or "rook" in key or "smuggler" in key or "traveler" in key:
+        return HOODED, "opening_single_material_crowd", assembly_files(HOODED)
     if key in MALE_ROLES or key.endswith("_male") or "guard" in key or "villager" in key or "rook" in key or "edric" in key or "tor" in key:
-        return (
-            MALE,
-            "char_restore_004_unified_male_clothed",
-            [
-                "res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png",
-                "res://assets_external/characters_universal/T_Peasant_Normal_1K.png",
-                "res://assets_external/characters_universal/T_Peasant_ORM_1K.png",
-                "res://assets_external/characters_universal/T_Hair_1_BaseColor_1K.png",
-                "res://assets_external/characters_universal/T_Hair_1_Normal_1K.png",
-                "res://assets_external/characters_universal/T_Eye_Brown.png",
-                "res://assets_external/characters_universal/T_Eye_Normal.png",
-            ],
-        )
+        return MALE, "opening_single_material_crowd", assembly_files(MALE)
     return None
 
 
@@ -140,7 +132,7 @@ def update_soul_manifest() -> None:
         entry["source_url"] = SOURCE_URL
         entry["license_file"] = LICENSE
         entry["sha256"] = artifact(model)["sha256"]
-        entry["runtime_artifacts"] = [artifact(model), artifact(MALE_BIN if model == MALE else FEMALE_BIN)] + [artifact(item) for item in maps]
+        entry["runtime_artifacts"] = [artifact(model)] + [artifact(item) for item in maps]
         entry["blocked_reason"] = ""
         entry["notes"] = "Complete clothed Universal body assembly with native facial anatomy, deterministic occupation palette, shared non-root-motion clips, and 1K maps."
     path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
@@ -150,7 +142,7 @@ def update_runtime_manifest() -> None:
     path = ROOT / "runtime_asset_manifest.json"
     data = json.loads(path.read_text(encoding="utf-8"))
     roles = data.get("roles", {})
-    for role in ("villager", "guard", "traveler"):
+    for role in ("kael", "anwen", "villager", "guard", "traveler"):
         entry = roles.get(role)
         choice = variant_for(role)
         if not isinstance(entry, dict) or choice is None:
@@ -158,13 +150,13 @@ def update_runtime_manifest() -> None:
         model, status, maps = choice
         entry["model"] = model
         entry["status"] = status
-        entry["runtime_files"] = [artifact(model), artifact(MALE_BIN)] + [artifact(item) for item in maps]
+        entry["runtime_files"] = [artifact(model)] + [artifact(item) for item in maps]
         entry["notes"] = "Complete clothed Universal body assembly with one shared skeleton, native face anatomy, deterministic palette variation, and 1K maps."
     path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
 
 
 def main() -> int:
-    for path_value in (MALE, FEMALE, MALE_BIN, FEMALE_BIN):
+    for path_value in (KAEL, ANWEN, MALE, FEMALE, WORKER, HOODED):
         if not res_file(path_value).is_file():
             raise FileNotFoundError(path_value)
     update_visual_manifest()

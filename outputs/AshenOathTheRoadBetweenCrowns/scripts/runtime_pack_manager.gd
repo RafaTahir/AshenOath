@@ -18,12 +18,12 @@ const MAX_DEPLOYMENT_BYTES := 104857600
 const MAX_RETRIES := 2
 const CHUNK_SIZE := 1024 * 1024
 const MAX_CONCURRENT_DOWNLOADS := 3
-# The root Web PCK owns the menu, managers, core zone builders, and the small
-# A-set hero/Anwen runtime layers. Heavy world art remains streamable, so a
-# cold browser never waits for a multi-megabyte opening archive before giving
-# the player control.
+# The root Web PCK owns the menu, managers, core builders, and the small A-set
+# hero/Anwen runtime layers. The shell verifies and copies the opening PCK into
+# Web memory after first control, avoiding download/decompression contention
+# with WebAssembly startup. Later campaign content remains independently streamed.
 const STARTUP_PACK_IDS: Array[String] = ["base"]
-const BACKGROUND_PACK_IDS: Array[String] = ["opening", "characters", "monsters", "audio", "campaign"]
+const BACKGROUND_PACK_IDS: Array[String] = ["opening", "quality_materials", "characters", "monsters", "audio", "campaign"]
 
 var manifest: Dictionary = {}
 var requests: Dictionary = {}
@@ -36,6 +36,7 @@ var downloaders: Dictionary = {}
 var active_downloads: Dictionary = {}
 var startup_requested := false
 var background_requested := false
+var scheduling_downloads := false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -47,6 +48,9 @@ func _downloader_for(id: String) -> HTTPRequest:
 	if downloader != null and is_instance_valid(downloader):
 		return downloader
 	downloader = HTTPRequest.new()
+	# Web Fetch has already decoded Content-Encoding before Godot receives
+	# the bytes. Native HTTPRequest still needs its ordinary gzip handling.
+	downloader.accept_gzip = not OS.has_feature("web")
 	downloader.name = "RuntimePackHTTPRequest_%s" % id
 	downloader.download_chunk_size = CHUNK_SIZE
 	add_child(downloader)
@@ -111,6 +115,18 @@ func is_ready(pack_id: String) -> bool:
 	var id := _normalise_id(pack_id)
 	return bool(mounted.get(id, false)) or get_state(id) == "ready"
 
+func get_web_preloaded_state(pack_id: String) -> String:
+	var id := _normalise_id(pack_id)
+	if not OS.has_feature("web") or id != "opening":
+		return ""
+	var raw_metadata := str(JavaScriptBridge.eval(
+		"JSON.stringify((window.__ashenOathPreloadedPacks || {}).opening || null)", true
+	))
+	var parsed: Variant = JSON.parse_string(raw_metadata)
+	if not parsed is Dictionary:
+		return ""
+	return str((parsed as Dictionary).get("state", ""))
+
 func has_embedded_content(pack_id: String) -> bool:
 	# Builder scripts can live in the root PCK even when the scene assets belong
 	# to an external pack. The generated manifest is the authority for Web
@@ -149,6 +165,34 @@ func request_background_packs() -> bool:
 			accepted = false
 	return accepted
 
+func required_zone_packs(zone_id: String) -> Array[String]:
+	var result: Array[String] = ["base", "opening"]
+	if zone_id != "greyfen":
+		result.append("monsters")
+	if zone_id not in ["greyfen", "wychwood", "cemetery", "ruins"]:
+		result.append_array(["characters", "campaign"])
+	return result
+
+func request_zone_packs(zone_id: String) -> bool:
+	var accepted := true
+	for id in required_zone_packs(zone_id):
+		if not request_pack(id):
+			accepted = false
+	return accepted
+
+func zone_packs_ready(zone_id: String) -> bool:
+	for id in required_zone_packs(zone_id):
+		if not is_ready(id):
+			return false
+	return true
+
+func zone_pack_failures(zone_id: String) -> Array[String]:
+	var failures: Array[String] = []
+	for id in required_zone_packs(zone_id):
+		if get_state(id) == "failed":
+			failures.append("%s: %s" % [id, get_last_error(id)])
+	return failures
+
 func startup_packs_ready() -> bool:
 	for id in STARTUP_PACK_IDS:
 		if not is_ready(id):
@@ -177,6 +221,48 @@ func request_pack(pack_id: String) -> bool:
 	var id := _normalise_id(pack_id)
 	if id == "":
 		return false
+	var order: Array[String] = []
+	var graph_error := _dependency_order(id, {}, order)
+	if graph_error != "":
+		_fail(id, graph_error)
+		return false
+	for required_id in order:
+		if not _queue_pack(required_id):
+			if required_id != id:
+				_fail(id, "Dependency %s failed: %s" % [required_id, get_last_error(required_id)])
+			return false
+	_start_pending_downloads()
+	return get_state(id) != "failed"
+
+func _dependency_order(id: String, marks: Dictionary, order: Array[String]) -> String:
+	if int(marks.get(id, 0)) == 1:
+		return "Runtime pack dependency cycle at %s" % id
+	if int(marks.get(id, 0)) == 2:
+		return ""
+	var pack := get_pack(id)
+	if pack.is_empty():
+		return "Unknown runtime pack dependency: %s" % id
+	var dependencies: Variant = pack.get("dependencies", [])
+	if not dependencies is Array:
+		return "Invalid dependencies for %s" % id
+	marks[id] = 1
+	for dependency in dependencies:
+		if not dependency is String or _normalise_id(dependency) == "":
+			return "Invalid dependency ID for %s" % id
+		var failure := _dependency_order(_normalise_id(dependency), marks, order)
+		if failure != "":
+			return failure
+	marks[id] = 2
+	order.append(id)
+	return ""
+
+func _dependencies_ready(id: String) -> bool:
+	for dependency in get_pack(id).get("dependencies", []):
+		if not is_ready(str(dependency)):
+			return false
+	return true
+
+func _queue_pack(id: String) -> bool:
 	if is_ready(id):
 		return true
 	var pack := get_pack(id)
@@ -185,32 +271,24 @@ func request_pack(pack_id: String) -> bool:
 		return false
 	if get_state(id) in ["queued", "downloading", "verifying", "mounting"]:
 		return true
-	var cache_path := _cache_path(id)
-	if FileAccess.file_exists(cache_path):
-		if _validate_artifact(id, cache_path, false).is_empty() and _mount_cached_pack(id, cache_path):
-			return true
-		_remove_file(cache_path)
 	var url := str(source_overrides.get(id, pack.get("url", ""))).strip_edges()
-	if url == "":
-		_mark_embedded_ready(id)
-		return true
-	# Desktop runs with every project resource available locally. Relative pack
-	# URLs are only meaningful beside a Web export; treating them as embedded
-	# keeps editor/headless tests deterministic while explicit HTTP overrides
-	# still exercise the download path.
-	if not OS.has_feature("web") and not url.begins_with("http://") and not url.begins_with("https://"):
-		_mark_embedded_ready(id)
-		return true
+	if url == "" and not has_embedded_content(id):
+		_fail(id, "External runtime pack has no download URL")
+		return false
+	var attempt := int(requests.get(id, {}).get("attempt", 0))
+	if get_state(id) == "failed":
+		if attempt >= MAX_RETRIES:
+			return false
+		attempt += 1
 	var request := {
 		"state": "queued",
 		"progress": 0.0,
 		"url": url,
-		"attempt": int(requests.get(id, {}).get("attempt", 0)),
-		"temp_path": cache_path + ".part",
+		"attempt": attempt,
+		"temp_path": _cache_path(id) + ".part",
 		"error": "",
 	}
 	requests[id] = request
-	_start_pending_downloads()
 	return true
 
 func retry_pack(pack_id: String) -> bool:
@@ -220,18 +298,23 @@ func retry_pack(pack_id: String) -> bool:
 		return request_pack(id)
 	var attempt := int(request.get("attempt", 0))
 	if attempt >= MAX_RETRIES:
-		_fail(id, "Retry limit reached")
 		return false
 	request["attempt"] = attempt + 1
-	request["state"] = "queued"
+	request["state"] = "retrying"
 	request["progress"] = 0.0
 	request["error"] = ""
 	requests[id] = request
-	_start_pending_downloads()
-	return true
+	# Reconstruct the request from the manifest. A failure may have happened
+	# before download metadata existed (for example during cache validation).
+	return request_pack(id)
 
 func mount_local_pack(pack_id: String, absolute_path: String) -> bool:
 	var id := _normalise_id(pack_id)
+	var order: Array[String] = []
+	var graph_error := _dependency_order(id, {}, order)
+	if graph_error != "" or not _dependencies_ready(id):
+		_fail(id, graph_error if graph_error != "" else "Runtime pack dependencies are not ready")
+		return false
 	if not FileAccess.file_exists(absolute_path):
 		_fail(id, "Missing local pack: %s" % absolute_path)
 		return false
@@ -251,8 +334,9 @@ func cancel_request(pack_id: String) -> void:
 	if request.is_empty() or get_state(id) == "ready":
 		return
 	var downloader := downloaders.get(id) as HTTPRequest
-	if active_downloads.has(id) and downloader != null:
-		downloader.cancel_request()
+	if active_downloads.has(id):
+		if downloader != null:
+			downloader.cancel_request()
 		active_downloads.erase(id)
 		if active_download_id == id:
 			active_download_id = _first_active_download_id()
@@ -265,37 +349,65 @@ func cancel_request(pack_id: String) -> void:
 	_start_pending_downloads()
 
 func clear_requests() -> void:
-	for id in active_downloads.keys().duplicate():
+	var was_scheduling := scheduling_downloads
+	scheduling_downloads = true
+	for id in requests.keys():
 		cancel_request(str(id))
 	requests.clear()
+	active_downloads.clear()
+	active_download_id = ""
 	startup_requested = false
 	background_requested = false
+	scheduling_downloads = was_scheduling
 
 func retire_unneeded_packs(keep_ids: Array[String]) -> void:
 	var keep: Dictionary = {}
 	for value in keep_ids:
 		keep[_normalise_id(str(value))] = true
+		var order: Array[String] = []
+		if _dependency_order(_normalise_id(value), {}, order) == "":
+			for dependency in order:
+				keep[dependency] = true
+	var was_scheduling := scheduling_downloads
+	scheduling_downloads = true
 	for value in requests.keys():
 		var id := str(value)
 		if keep.has(id) or mounted.get(id, false):
 			continue
 		cancel_request(id)
 		requests.erase(id)
+	scheduling_downloads = was_scheduling
+	_start_pending_downloads()
 
 func deployment_budget_ok(total_bytes: int) -> bool:
 	return total_bytes <= int(manifest.get("max_deployment_bytes", MAX_DEPLOYMENT_BYTES))
 
 func _start_pending_downloads() -> void:
+	if scheduling_downloads:
+		return
+	scheduling_downloads = true
 	while active_downloads.size() < MAX_CONCURRENT_DOWNLOADS:
 		var started := false
 		for value in requests.keys():
 			var id := str(value)
 			if get_state(id) == "queued":
+				var dependency_error := ""
+				for dependency in get_pack(id).get("dependencies", []):
+					if get_state(str(dependency)) in ["failed", "cancelled"]:
+						dependency_error = "Dependency %s is %s: %s" % [dependency, get_state(str(dependency)), get_last_error(str(dependency))]
+						break
+				if dependency_error != "":
+					_fail(id, dependency_error)
+					started = true
+					break
+				if not _dependencies_ready(id):
+					continue
 				_start_download(id)
 				started = true
 				break
 		if not started:
 			break
+	scheduling_downloads = false
 
 func _first_active_download_id() -> String:
 	for value in requests.keys():
@@ -305,9 +417,32 @@ func _first_active_download_id() -> String:
 	return ""
 
 func _start_download(id: String) -> void:
+	if not _dependencies_ready(id):
+		_fail(id, "Runtime pack dependencies are not ready")
+		return
 	var request: Dictionary = requests.get(id, {})
+	# Embedded content belongs to the running root, never to an old disk pack.
+	# Ignore any stale base cache rather than mounting extra obsolete resources.
+	if has_embedded_content(id) and str(request.get("url", "")) == "":
+		_mark_embedded_ready(id)
+		return
+	if OS.has_feature("web") and _try_mount_web_preloaded_pack(id):
+		return
+	var cache_path := _cache_path(id)
+	if FileAccess.file_exists(cache_path):
+		if _validate_artifact(id, cache_path, false).is_empty() and _mount_cached_pack(id, cache_path):
+			return
+		_remove_file(cache_path)
 	var url := _resolve_url(str(request.get("url", "")))
 	if url == "":
+		if has_embedded_content(id):
+			_mark_embedded_ready(id)
+		else:
+			_fail(id, "External runtime pack has no download URL")
+		return
+	# Native project resources are local; explicit HTTP overrides still exercise
+	# downloads. Neither native nor embedded content may bypass its dependencies.
+	if not OS.has_feature("web") and not url.begins_with("http://") and not url.begins_with("https://"):
 		_mark_embedded_ready(id)
 		return
 	var temp_path := str(request.get("temp_path", _cache_path(id) + ".part"))
@@ -335,6 +470,45 @@ func _start_download(id: String) -> void:
 	print("LOADING: %s downloading id=%s url=%s" % [_pack_log_label(id), id, url])
 	pack_progress.emit(id, 0.0)
 	_emit_startup_progress()
+
+func _try_mount_web_preloaded_pack(id: String) -> bool:
+	if id != "opening":
+		return false
+	var raw_metadata := str(JavaScriptBridge.eval(
+		"JSON.stringify((window.__ashenOathPreloadedPacks || {}).opening || null)", true
+	))
+	var parsed: Variant = JSON.parse_string(raw_metadata)
+	if not parsed is Dictionary:
+		return false
+	var metadata := parsed as Dictionary
+	if str(metadata.get("state", "")) != "preloaded":
+		return false
+	var pack := get_pack(id)
+	var expected_hash := str(pack.get("sha256", "")).to_lower()
+	var expected_bytes := int(pack.get("bytes", 0))
+	if str(metadata.get("sha256", "")).to_lower() != expected_hash \
+			or int(metadata.get("bytes", 0)) != expected_bytes \
+			or str(metadata.get("version", "")) != str(pack.get("version", "")):
+		return false
+	var path := str(metadata.get("path", ""))
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null:
+		return false
+	var magic := file.get_buffer(4)
+	var actual_bytes := file.get_length()
+	file.close()
+	if actual_bytes != expected_bytes or magic != PackedByteArray([71, 68, 80, 67]):
+		return false
+	var request: Dictionary = requests.get(id, {})
+	request["state"] = "mounting"
+	request["progress"] = 0.97
+	request["path"] = path
+	requests[id] = request
+	if not ProjectSettings.load_resource_pack(path, false):
+		return false
+	print("LOADING: startup_pack preloaded id=%s bytes=%d" % [id, actual_bytes])
+	_mark_mounted(id, path)
+	return true
 
 func _resolve_url(raw_url: String) -> String:
 	var url := raw_url.strip_edges()
@@ -382,7 +556,8 @@ func _on_download_completed(result: int, response_code: int, _headers: PackedStr
 		return
 	temp_file.store_buffer(body)
 	temp_file.close()
-	var validation := _validate_artifact(id, temp_path, true)
+	var verified_metadata: Dictionary = {}
+	var validation := _validate_artifact(id, temp_path, true, verified_metadata)
 	if not validation.is_empty():
 		_remove_file(temp_path)
 		_fail(id, validation)
@@ -398,8 +573,8 @@ func _on_download_completed(result: int, response_code: int, _headers: PackedStr
 	cache_index[id] = {
 		"version": str(get_pack(id).get("version", "dev")),
 		"path": cache_path,
-		"bytes": int(FileAccess.get_file_as_bytes(cache_path).size()),
-		"sha256": _sha256(cache_path),
+		"bytes": verified_metadata["bytes"],
+		"sha256": verified_metadata["sha256"],
 	}
 	_save_cache_index()
 	pack_cached.emit(id, cache_path)
@@ -436,7 +611,11 @@ func _mark_mounted(id: String, path: String) -> void:
 	_emit_startup_progress()
 
 func _fail(id: String, reason: String) -> void:
-	requests[id] = {"state": "failed", "progress": 0.0, "error": reason}
+	var request: Dictionary = requests.get(id, {}).duplicate()
+	request["state"] = "failed"
+	request["progress"] = 0.0
+	request["error"] = reason
+	requests[id] = request
 	pack_failed.emit(id, reason)
 	print("LOADING: %s error id=%s reason=%s" % [_pack_log_label(id), id, reason])
 	_emit_startup_progress()
@@ -455,6 +634,12 @@ func _cache_path(id: String) -> String:
 
 func _expected_bytes(id: String) -> int:
 	var pack := get_pack(id)
+	# An embedded pack is supplied by the current root PCK. Candidate metadata
+	# belongs to an external build and may legitimately describe a different
+	# artifact; using it here can reject a valid cache before the embedded path
+	# is selected. Streamed packs retain strict declared/candidate validation.
+	if str(pack.get("status", "")).begins_with("embedded"):
+		return 0
 	var declared := int(pack.get("bytes", 0))
 	if declared > 0:
 		return declared
@@ -462,28 +647,35 @@ func _expected_bytes(id: String) -> int:
 
 func _expected_hash(id: String) -> String:
 	var pack := get_pack(id)
+	if str(pack.get("status", "")).begins_with("embedded"):
+		return ""
 	var declared := str(pack.get("sha256", "")).strip_edges().to_lower()
 	if declared.length() == 64:
 		return declared
 	return str(pack.get("candidate_sha256", "")).strip_edges().to_lower()
 
-func _validate_artifact(id: String, path: String, check_magic: bool) -> String:
+func _validate_artifact(id: String, path: String, check_magic: bool, verified_metadata: Dictionary = {}) -> String:
 	if not FileAccess.file_exists(path):
 		return "Missing pack artifact: %s" % path
+	var expected_size := _expected_bytes(id)
+	var expected_hash := _expected_hash(id)
+	if not has_embedded_content(id) and (expected_size <= 0 or expected_hash.length() != 64):
+		return "Missing declared identity for external pack: %s" % id
 	var file := FileAccess.open(path, FileAccess.READ)
 	if file == null:
 		return "Unable to read pack artifact: %s" % path
 	var magic := file.get_buffer(4)
+	var actual_size := file.get_length()
 	file.close()
 	if check_magic and magic != PackedByteArray([71, 68, 80, 67]):
 		return "Invalid Godot PCK header for %s" % id
-	var expected_size := _expected_bytes(id)
-	var actual_size := int(FileAccess.get_file_as_bytes(path).size())
 	if expected_size > 0 and actual_size != expected_size:
 		return "Pack size mismatch for %s: %d != %d" % [id, actual_size, expected_size]
-	var expected_hash := _expected_hash(id)
-	if expected_hash != "" and _sha256(path) != expected_hash:
+	var actual_hash := _sha256(path)
+	if actual_hash == "" or (expected_hash != "" and actual_hash != expected_hash):
 		return "Pack SHA-256 mismatch for %s" % id
+	verified_metadata["bytes"] = actual_size
+	verified_metadata["sha256"] = actual_hash
 	return ""
 
 func _sha256(path: String) -> String:

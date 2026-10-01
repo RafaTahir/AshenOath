@@ -24,12 +24,15 @@ func _initialize() -> void:
 	root.add_child(game)
 	await process_frame
 	game.call("_new_game")
-	await _frames(4)
 	var director = game.visual_director
 	var clock = game.day_night
 	_check(director != null, "VisualDirector is missing")
 	_check(clock != null, "DayNightController is missing")
 	if director != null and clock != null:
+		var ready_deadline := Time.get_ticks_msec() + 10000
+		while (not game.game_started or director.opening_boot_budget_active) and Time.get_ticks_msec() < ready_deadline:
+			await process_frame
+		_check(game.game_started and not director.opening_boot_budget_active, "active sky did not leave the opening boot budget")
 		_verify_profiles(director)
 		_verify_phase_states(director, clock)
 		_verify_interior_states(director)
@@ -60,7 +63,7 @@ func _verify_phase_states(director: Node, clock: Node) -> void:
 		if phase == "day":
 			_check(director.sun_disc.visible, "sun is hidden during daytime")
 			_check(not director.moon_disc.visible and not director.star_field.visible, "night celestial objects remain visible by day")
-			_check(director.sky_backdrop.visible and bool(director.sky_backdrop.get_sky_state().get("clouds_visible", false)), "authored day clouds are hidden")
+			_check(director.cloud_layer.visible and _visible_children(director.cloud_layer) == 4, "active Balanced day clouds are hidden or miscounted")
 		elif phase == "night":
 			_check(not director.sun_disc.visible, "sun remains visible at night")
 			_check(director.moon_disc.visible and director.star_field.visible, "moon or stars are hidden at night")
@@ -72,10 +75,10 @@ func _verify_phase_states(director: Node, clock: Node) -> void:
 	for zone in OUTDOOR_ZONES:
 		director.apply_zone(zone, null)
 		clock.set_time(720.0, 2)
-		var day_colors: Dictionary = director.sky_backdrop.get_rendered_sky_colors()
+		var day_top: Color = director.authored_sky_material.sky_top_color
+		var day_horizon: Color = director.authored_sky_material.sky_horizon_color
 		clock.set_time(60.0, 2)
-		var night_colors: Dictionary = director.sky_backdrop.get_rendered_sky_colors()
-		_check(day_colors.get("top") != night_colors.get("top") or day_colors.get("horizon") != night_colors.get("horizon"), "%s day and night sky colors are identical" % zone)
+		_check(day_top != director.authored_sky_material.sky_top_color or day_horizon != director.authored_sky_material.sky_horizon_color, "%s day and night sky colors are identical" % zone)
 
 func _verify_interior_states(director: Node) -> void:
 	for zone in INTERIOR_ZONES:
@@ -104,11 +107,11 @@ func _verify_quality_density(game: Node, director: Node) -> void:
 	director.apply_zone("greyfen", null)
 	game.settings.set_quality_preset("balanced")
 	director.set_time(720.0, "day", 0)
-	_check(int(director.sky_backdrop.get_visible_cloud_count()) == 4, "Balanced authored cloud budget is incorrect")
+	_check(_visible_children(director.cloud_layer) == 4, "Balanced authored cloud budget is incorrect")
 	_check(director.star_field.multimesh.visible_instance_count == 62, "Balanced star budget is incorrect")
 	game.settings.set_quality_preset("potato")
 	director.set_time(60.0, "night", 0)
-	_check(int(director.sky_backdrop.get_visible_cloud_count()) == 2, "Potato authored cloud budget is incorrect")
+	_check(_visible_children(director.cloud_layer) == 2, "Potato authored cloud budget is incorrect")
 	_check(director.star_field.multimesh.visible_instance_count == 28, "Potato star budget is incorrect")
 	game.settings.set_quality_preset("balanced")
 

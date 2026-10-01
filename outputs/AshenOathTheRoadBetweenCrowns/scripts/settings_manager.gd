@@ -84,10 +84,10 @@ func apply() -> void:
 	_save_settings()
 	changed.emit(settings)
 
-func _load_settings() -> void:
-	if not FileAccess.file_exists(SETTINGS_PATH):
+func _load_settings(path: String = SETTINGS_PATH) -> void:
+	if not FileAccess.file_exists(path):
 		return
-	var file := FileAccess.open(SETTINGS_PATH, FileAccess.READ)
+	var file := FileAccess.open(path, FileAccess.READ)
 	if file == null:
 		return
 	var raw_settings := file.get_as_text()
@@ -104,9 +104,25 @@ func _load_settings() -> void:
 	if typeof(stored) != TYPE_DICTIONARY:
 		return
 	loaded_user_settings = true
+	restore_settings(stored)
+
+func restore_settings(stored: Dictionary) -> void:
 	for key in DEFAULT_SETTINGS:
-		if stored.has(key) and typeof(stored[key]) == typeof(DEFAULT_SETTINGS[key]):
-			settings[key] = stored[key]
+		if not stored.has(key):
+			continue
+		var value: Variant = stored[key]
+		var expected := typeof(DEFAULT_SETTINGS[key])
+		if expected in [TYPE_INT, TYPE_FLOAT]:
+			if typeof(value) not in [TYPE_INT, TYPE_FLOAT] or not is_finite(float(value)):
+				continue
+			if expected == TYPE_INT:
+				if float(value) != floorf(float(value)) or absf(float(value)) > 2147483647.0:
+					continue
+				settings[key] = int(value)
+			else:
+				settings[key] = float(value)
+		elif typeof(value) == expected:
+			settings[key] = value.duplicate(true) if expected == TYPE_DICTIONARY else value
 	settings["quality_preset"] = str(settings.get("quality_preset", "balanced")).to_lower()
 	if settings["quality_preset"] not in ["potato", "balanced", "quality"]:
 		settings["quality_preset"] = "balanced"

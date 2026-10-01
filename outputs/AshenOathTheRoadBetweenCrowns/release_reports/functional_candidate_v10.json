@@ -1,0 +1,1675 @@
+{
+  "schema_version": 4,
+  "report_id": "fee8194dac2a4dc9ade3db7217155702",
+  "release_id": "recovery-004",
+  "release_phase": "candidate",
+  "acceptance_profile": "functional_candidate",
+  "release_basis": "functionality-certified candidate",
+  "performance_certified": false,
+  "listening_reviewed": false,
+  "status": "pass",
+  "started_at": "2026-10-01T20:40:31.5574494Z",
+  "finished_at": "2026-10-01T20:41:12.9855971Z",
+  "source_commit": "5b530361a5aae8612626532287b5bd27d7b244b8",
+  "source_branch": "codex/masterpiece-rebuild",
+  "source_fingerprint": "d07c889741481e9eb85c5d81fa43884033be1c12464de2dc8eead2a0bac77a9c",
+  "runtime_content_fingerprint": "d07c889741481e9eb85c5d81fa43884033be1c12464de2dc8eead2a0bac77a9c",
+  "test_harness_fingerprint": "d279527aa9a68c37f14f88540fafed48caca64c37b8662e21519ec43a6a40af2",
+  "registry_fingerprint": "cf900ea9e09311c15881c61a4f343d8ba47a7021f401908018cba70771311e1a",
+  "execution_fingerprint": "1b9facb8a7d036151f457e5e4cdbfa015de5907df1d9feb0274af592ba8c2878",
+  "verification_revision": {
+    "source_commit": "5b530361a5aae8612626532287b5bd27d7b244b8",
+    "runtime_content_fingerprint": "d07c889741481e9eb85c5d81fa43884033be1c12464de2dc8eead2a0bac77a9c",
+    "test_harness_fingerprint": "d279527aa9a68c37f14f88540fafed48caca64c37b8662e21519ec43a6a40af2",
+    "registry_sha256": "cf900ea9e09311c15881c61a4f343d8ba47a7021f401908018cba70771311e1a",
+    "execution_fingerprint": "1b9facb8a7d036151f457e5e4cdbfa015de5907df1d9feb0274af592ba8c2878"
+  },
+  "git_status": [
+    "M  .gitignore",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/ACCESS_001_PAUSE_REPAIR_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/ACCESS_001_WEAPON_CONTEXT_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/AI_001_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/ARCH_001_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/ARCH_002_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/AUDIO_001_MIX_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/BOSS_001_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/CERT_001_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/CHAR_001_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/CHAR_002_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/COMBAT_001_RESULT.md",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/qa_003_approval_manifest.json",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/Export_Web_Build.bat",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/MON_001_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/MON_001_STAG_SOURCE.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/OATH_001_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/PACK_002_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/PERF_001_ANGLE_MATERIAL_DISCRIMINANT_20260930.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/PERF_001_ASYNC_CACHE_DISCRIMINANT_20260930.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/PERF_001_BACKEND_CACHE_DISCRIMINANT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/PERF_001_CPU_WAIT_DISCRIMINANT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/PERF_001_ENGINE_COMPARISON_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/PERF_001_FINAL_READINESS_DISCRIMINANT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/PERF_001_MATERIAL_OWNER_DISCRIMINANT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/PERF_001_MESH_RESIDENCY_DISCRIMINANT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/PERF_001_NO_3D_DISCRIMINANT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/PERF_001_PHASE_ATTRIBUTION_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/PERF_001_RENDER_TIMING_DISCRIMINANT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/PERF_001_SEPARATE_RENDER_THREAD_REJECTED_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/PERF_001_STACK_ATTRIBUTION_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/PERF_001_STATIC_SURFACE_DISCRIMINANT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/PERF_001_STORAGE_CROSSOVER_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/PERF_001_WPR_PREFLIGHT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/PERF_001_WPR_TRACE_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/PRES_001_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/PRES_001_WORLD_MIPMAPS_20260930.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/PREWARM_001_RESULT.md",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/PROJECT_STATE.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/QA_001_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/QA_002_AUDIO_UNLOCK_OBSERVATION_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/QA_002_BELL_EATER_BROWSER_SLICE.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/QA_002_BROWSER_FPS_GATE_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/QA_002_CANDIDATE_MATRIX_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/QA_002_CANDIDATE_OUTCOME_CONTRACT_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/QA_002_CHROMIUM_MEMORY_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/QA_002_FIREFOX_OBSERVABILITY_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/QA_002_FULL_CAMPAIGN_PREFLIGHT_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/QA_002_GATE_MUTATION_REMOVAL_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/QA_002_HEADLESS_RENDERER_PREFLIGHT_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/QA_002_MOBILE_BROWSER_SELECTOR_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/QA_002_PRODUCTION_OBSERVER_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/QA_002_REGISTER_BROWSER_SLICE.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/QA_002_RELEASE_MATRIX_WIRING_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/QA_003_RESULT.md",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/QA_003_SCREENSHOT_COMPARISON_AND_APPROVAL.md",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/QUEST_001_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/RECOVERY_004_ATOMIC_STOP_20260927.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/RECOVERY_004_CURRENT_STATUS.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/RECOVERY_004_FUNCTIONAL_CANDIDATE_RESULT.md",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/RECOVERY_004_IMPLEMENTATION_STATUS.md",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/RECOVERY_004_ISSUE_REGISTRY.json",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/RUNTIME_001_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/SAVE_001_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/SCENE_001_RESULT.md",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/SOUL_REBUILD_CONTEXT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/STORY_001_ACTOR_AFTERMATH_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/STORY_001_ANWEN_REPLIES_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/STORY_001_CHOICE_COVERAGE.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/STORY_001_COMBINED_ROUTES_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/STORY_001_CONTINUOUS_ROUTE_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/STORY_001_EARLY_ALTERNATIVES_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/STORY_001_EDRIC_CHOICES_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/STORY_001_MAIN_ALTERNATIVES_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/STORY_001_REPORT_ALTERNATIVES_RESULT.md",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/TRAV_001_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/TRAV_002_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/UI_001_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WEB_001_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_CEMETERY_COMPOSITION_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_CEMETERY_GLAZING_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_CEMETERY_PASS_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_CLOSURE_MATRIX.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_FRONTAGES_AND_FORGE_20260930.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_GHOULKIN_ASSET_AUDITION_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_GHOULKIN_ASSET_DECISION_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_GREYFEN_FRAMING_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_GREYFEN_FRONTIER_20260930.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_GREYFEN_SOCIAL_SQUARE_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_GROUNDED_GHOULKIN_20260930.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_HORROR_SOURCE_BLOCKED_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_HUMAN_GHOUL_CANDIDATE_REJECTED_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_INTEGRATED_TERRAIN_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_LANDSCAPE_PASS_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_LANDSCAPE_RING_REJECTED_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_NIGHTMARE_SOURCE_REJECTED_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_NORTH_BACKDROP_REJECTED_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_NORTH_HAMLET_REJECTED_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_NORTH_LANDSCAPE_REJECTED_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_NORTH_NEIGHBOR_PREVIEW_REJECTED_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_NORTH_ROAD_DEPTH_REJECTED_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_NORTH_THRESHOLD_REJECTED_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_SOCIAL_PASS_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_SURFACE_AND_CREEP_REJECTED_20260930.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_WYCHWOOD_COMPOSITION_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_WYCHWOOD_PASS_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_WYCHWOOD_PATH_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_001_ZOMBIE_KIT_REJECTED_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_ARCHIVE_PASS_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_BANDIT_FRONTIER_20260930.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_BANDIT_ROAD_CANDIDATE_REJECTED_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_BANDIT_ROAD_COMPOSITION_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_BANDIT_ROUTE_COMPOSITION_20260930.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_BANDIT_VERGE_REJECTED_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_BANDIT_WORN_ROAD_REJECTED_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_CLOSURE_MATRIX.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_ENCOUNTER_CIVIC_20260930.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_FINALE_PASS_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_HART_AFTERMATH_20260930.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_HART_WOODLAND_20260930.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_MILL_PASS_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_RECORDS_SERVICE_20261001.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_RECORD_COMPOSITION_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_RECORD_GROUNDED_20260930.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_RECORD_INTERIOR_READABILITY_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_RECORD_LIGHT_TRIAL_REJECTED_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_RECORD_MEMORIAL_20260930.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_RECORD_UPPER_ARCHIVE_REJECTED_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_RECORD_WITNESS_20260929.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_UNDERCROFT_AFTERMATH_20260930.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_UNDERCROFT_PASS_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_UNDERCROFT_REVIEW_20260930.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_VARGAN_PASS_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_WILDS_CONTEXT_20260930.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/WORLD_002_WILDS_PASS_RESULT.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets/audio/README.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets/audio/prepared_bank.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets/bosses/README.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets/bosses/bell_eater_bell.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets/landscape/SOURCE.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets/landscape/bridge_stone_pier.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets/landscape/far_terrain.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets/sky/SOURCE.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets/sky/cloud_0.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets/sky/cloud_1.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets/sky/cloud_2.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/audio/authored/SOURCES.md",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/audio/authored/candle_light.ogg",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/audio/authored/castle_wind.ogg",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/audio/authored/event_manifest.json",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/audio/authored/forest_twigs.ogg",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/audio/authored/forge_hammer.ogg",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/audio/authored/ghoul_attack.ogg",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/audio/authored/ghoul_breath.ogg",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/audio/authored/ghoul_death.ogg",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/audio/authored/ghoul_hit.ogg",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/audio/authored/greyfen_air.ogg",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/audio/authored/marsh_water.ogg",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/audio/authored/oathfire_charge.ogg",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/audio/authored/oathfire_release.ogg",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/audio/authored/potion_uncork.ogg",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/audio/authored/record_hall_air.ogg",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/audio/authored/record_page.ogg",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/audio/authored/river_current.ogg",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/audio/authored/sword_clash_heavy.ogg",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/audio/authored/sword_clash_light.ogg",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/audio/authored/sword_sheathe.ogg",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/audio/authored/village_crow.ogg",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/audio/authored/wood_step.ogg",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/audio/authored/wychwood_air.ogg",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.bin",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.gltf",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.png",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.bin",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.gltf",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.png",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Bandit_Tracker_Atlas.bin",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Bandit_Tracker_Atlas.gltf",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Bandit_Tracker_Atlas.png",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/GROUNDED_GHOULKIN_MANIFEST.json",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Ghoulkin_Authored_Atlas.bin",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Ghoulkin_Authored_Atlas.gltf",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Ghoulkin_Authored_Atlas.png",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Kael_A_Set_Atlas.bin",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Kael_A_Set_Atlas.gltf",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Kael_A_Set_Atlas.png",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/OPENING_CHARACTER_ASSEMBLY_MANIFEST.json",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Universal_Albedo_Atlas_512.json",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Universal_Albedo_Atlas_512.png",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Villager_Female_Atlas.bin",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Villager_Female_Atlas.gltf",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Villager_Female_Atlas.png",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Villager_Hooded_Atlas.bin",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Villager_Hooded_Atlas.gltf",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Villager_Hooded_Atlas.png",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Villager_Male_Atlas.bin",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Villager_Male_Atlas.png",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Villager_Worker_Atlas.bin",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/runtime/Villager_Worker_Atlas.png",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/enemies/WhiteHart_Stag.glb",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/enemies/ultimate_monsters/BlueDemon.gltf",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/enemies/ultimate_monsters/BlueDemon_Atlas_Monsters.png",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/enemies/ultimate_monsters/Creep.glb",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/enemies/ultimate_monsters/Creep_Creep_BaseColor.png",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/enemies/ultimate_monsters/Creep_Creep_Metallic-Creep_Roughness.png",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/enemies/ultimate_monsters/Creep_Creep_Normal_OpenGL.png",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/enemies/ultimate_monsters/Demon.gltf",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/enemies/ultimate_monsters/Demon_Atlas_Monsters.png",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/enemies/ultimate_monsters/Ghost.glb",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/enemies/ultimate_monsters/Ghost_Atlas_Monsters.png",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/enemies/ultimate_monsters/Orc.gltf",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/enemies/ultimate_monsters/Orc_Atlas_Monsters.png",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/BanditFrontier_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/Campaign_bandit_road_Landscape.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/Campaign_burned_farmstead_Landscape.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/Campaign_deep_wood_Landscape.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/Campaign_marsh_crossing_Landscape.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/GreyfenFrontier_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/HartAftermath_ash_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/HartAftermath_duty_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/HartAftermath_mercy_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/HartAftermath_witness_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/HartLandscape_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/HartWitnessStones_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/HartWoodland_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/Wychwood_black_feathers_Evidence.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/Wychwood_claw_marks_Evidence.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/Wychwood_corpse_Evidence.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/Wychwood_oren_token_Evidence.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/Wychwood_tracks_Evidence.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/CampaignRecord_mill_burned_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/CampaignRecord_mill_exposed_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/CampaignRecord_mill_pending_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/CampaignRecord_mill_preserved_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/CampaignRecord_register_mira_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/CampaignRecord_register_rook_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/GreyfenForgeWork_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/GreyfenSocial_barrel_board.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/GreyfenSocial_common_table.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/GreyfenSocial_mira_apothecary.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/RecordArchive_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/T_Trim_Cloth_BaseColor.png.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/T_Trim_Cloth_Normal.png.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/T_Trim_Cloth_ORM.png.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/T_Trim_Furniture_BaseColor.png.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/T_Trim_Furniture_Normal.png.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/T_Trim_Furniture_ORM.png.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/T_Trim_Metal_BaseColor.png.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/T_Trim_Metal_Normal.png.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/T_Trim_Metal_ORM.png.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/T_Trim_Props_BaseColor.png.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/T_Trim_Props_Normal.png.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/T_Trim_Props_ORM.png.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/record_witness_relief.jpg",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/AshMill_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/AssemblyCourt_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Cemetery_bell_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Cemetery_bell_frame_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Cemetery_boundary_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Cemetery_chapel_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Cemetery_disturbed_soil_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Cemetery_grave_child_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Cemetery_grave_earth_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Cemetery_grave_harl_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Cemetery_grave_rows_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Cemetery_grave_soldier_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Cemetery_memory_window_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/CourtyardService_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/FarmsteadEast_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/FarmsteadRuins_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/FarmsteadWest_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/GreyfenForge_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/GreyfenFrontages_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/GreyfenHouse_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/GreyfenHouse_Authored_1.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/GreyfenHouse_Authored_2.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/GreyfenHouse_Authored_3.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/GreyfenShrine_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/GreyfenWell_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/RoadCheckpoint_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/UndercroftVault_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Vargan_cistern_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Vargan_curtain_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Vargan_door_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Vargan_forge_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Vargan_gatehouse_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Vargan_keep_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Vargan_record_entry_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Vargan_stable_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Vargan_tower_Authored.res",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/licenses/AshenOath_Greyfen_Menu_Artwork.txt",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/licenses/Quaternius_Ultimate_Animals_CC0.txt",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/licenses/Quaternius_Ultimate_Monsters_Mirror_CC0.txt",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/cobblestone_albedo.jpg.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/cobblestone_normal.jpg.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/cobblestone_orm.jpg.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/forest_ground_albedo.jpg.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/forest_ground_normal.jpg.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/forest_ground_orm.jpg.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/medieval_brick_albedo.jpg.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/medieval_brick_normal.jpg.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/medieval_brick_orm.jpg.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/plaster_albedo.jpg.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/plaster_normal.jpg.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/plaster_orm.jpg.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/roof_tiles_albedo.jpg.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/roof_tiles_normal.jpg.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/roof_tiles_orm.jpg.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/timber_albedo.jpg.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/timber_normal.jpg.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/timber_orm.jpg.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/wet_mud_albedo.jpg.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/wet_mud_normal.jpg.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/wet_mud_orm.jpg.import",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/ui/greyfen_menu_concept.png",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/ui/greyfen_menu_runtime.jpg",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/assets_external/ui/greyfen_menu_runtime.jpg.import",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/character_role_manifest.json",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/curated_runtime_assets.json",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/data/bosses.json",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/data/campaign_dialogue.json",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/data/dialogue.json",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/data/quests.json",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/export_presets.cfg",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/monster_family_manifest.json",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/release_reports/current_recovery.json",
+    "AM outputs/AshenOathTheRoadBetweenCrowns/release_reports/functional_candidate_v10.json",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/approval_v10.json",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/audio_combat.stderr",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/audio_combat.stdout",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/audio_parry.stderr",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/audio_parry.stdout",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/audio_sync.stderr",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/audio_sync.stdout",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/bundle.json",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/chrome_opening_save_v10_functional_watchdog.json",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/edge_smoke_v10_lean.json",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/export_v10.log",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/firefox_smoke_v10_lean_persistence.json",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/native_main.stderr",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/native_main.stdout",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/native_v10_measurements.json",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/native_v10_measurements.stderr",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/native_v10_measurements.stdout",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/native_v10_owned_memory.json",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/packed_v10.stderr",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/packed_v10.stdout",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/qa002_lean_accepted.json",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/visual_v10.json",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/runtime_asset_manifest.json",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_candidates.json",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_manifest.json",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/scenes/runtime/greyfen_gameplay_core.tscn",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scenes/zones/greyfen_gameplay.tscn",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/asset_database.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/asset_spawn_helper.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/audio_manager.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/scripts/bandit_frontier.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/board_game_opponent.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/boss_encounter.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/camera_controller.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/scripts/campaign_record_presentation.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/scripts/cemetery_evidence_presentation.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/character_animation_driver.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/character_animation_fusion.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/character_face_driver.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/character_identity_profile.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/character_presentation.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/character_role_spec.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/combat_feedback.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/combat_manager.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/scripts/combat_vfx_coordinator.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/scripts/dialogue_runtime_coordinator.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/enemy_ai.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/epilogue_resolver.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/scripts/greyfen_frontier.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/greyfen_life_controller.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/scripts/greyfen_social_presentation.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/scripts/hart_woodland.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/health_component.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/hud.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/input_router.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/interactable.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/interaction_focus_service.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/inventory_manager.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/mobile_touch_controls.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/npc_ambient.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/objective_view_model.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/player_controller.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/scripts/prepared_audio_bank.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/scripts/production_observation_bridge.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/progression_manager.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/qa_browser_telemetry.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/quest_beat_director.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/scripts/quest_hud_coordinator.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/quest_manager.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/quest_presentation_state.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/river_motion_controller.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/runtime_asset_anchor.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/runtime_pack_manager.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/runtime_service_registry.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/save_manager.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/settings_manager.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/scripts/spatial_surface_contract.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/stamina_component.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/scripts/story_actor_presence.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/scripts/undercroft_memorial.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/vendor_service.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/visual_director.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/scripts/world_landscape_presentation.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/world_material_library.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/scripts/wychwood_evidence_presentation.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/scripts/wychwood_terrain_presentation.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_budget.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_build_context.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_residency_service.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_runtime_coordinator.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_scene_catalog.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_spatial_service.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_streaming_service.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/bandit_road_section.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/campaign_finale_section.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/campaign_wilderness_section.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/campaign_wilds_presentation.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/castle_vargan_section.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/cemetery_section.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/greyfen_section.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/river_section.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/wychwood_section.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/soul_character_role_manifest.json",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/build_ash_mill.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/build_assembly_court.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/build_authored_event_audio.ps1",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/build_bandit_frontier.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/build_bell_eater_bell.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/build_campaign_records.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/build_campaign_wilds.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/build_cemetery_architecture.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/build_cloud_volumes.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/build_courtyard_service.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/build_greyfen_forge_work.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/build_greyfen_frontages.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/build_greyfen_frontier.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/build_greyfen_house.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/build_greyfen_social.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/build_grounded_ghoulkin.py",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/build_hart_aftermath.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/build_hart_landscape.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/build_hart_woodland.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/build_landscape_foundations.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/build_opening_character_assemblies.py",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/build_prepared_audio.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/build_record_archive.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/build_runtime_packs.ps1",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/build_undercroft_vault.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/build_universal_character_atlas.py",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/build_vargan_architecture.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/build_web_runtime_manifest.py",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/build_white_hart.py",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/build_wychwood_evidence.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/capture_anim_003.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/capture_bandit_road_recovery.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/capture_boss_003.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/capture_boss_004.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/capture_boss_005.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/capture_boss_006.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/capture_campaign_contact.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/capture_campaign_records.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/capture_char_009.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/capture_face_003.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/capture_hart_recovery.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/capture_life_001.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/capture_monster_audition.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/capture_monster_families.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/capture_pres_001.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/capture_slice_screenshots.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/capture_ui_001_dialogue.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/capture_ui_001_menu.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/capture_visual_provenance.py",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/capture_water_002.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/capture_world_001.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/capture_world_012.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/capture_world_013.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/capture_world_014.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/chromium_renderer_memory.mjs",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/chromium_renderer_memory.test.mjs",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/collect_perf_001_trace.ps1",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/diagnose_greyfen_bank.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/diagnose_wychwood_slabs.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/firefox_audio_context_probe.js",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/firefox_content_memory.mjs",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/firefox_content_memory.test.mjs",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/gate_profiles.json",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/generate_recovery_004_status.py",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/inspect_bridge_visual.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/inspect_cemetery_block_owner.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/inspect_enemy_attack_timeline.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/inspect_greyfen_house_bake.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/inspect_greyfen_hydration_owners.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/inspect_hart_source.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/inspect_world001_house_runtime.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/inspect_world_001_modules.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/inspect_world_013_camera.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/package-lock.json",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/package.json",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/profile_greyfen_hydration_repeat.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/profile_greyfen_render_owners.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/profile_greyfen_update_cost.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/profile_opening_runtime.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/profile_render_categories.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/profile_wychwood_costs.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/qa_002_artifact_identity.mjs",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/qa_002_artifact_identity.test.mjs",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/qa_002_zone_performance.mjs",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/qa_002_zone_performance.test.mjs",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/release_identity.py",
+    "MM outputs/AshenOathTheRoadBetweenCrowns/tools/run_release_gate.ps1",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/run_ticket_gate.ps1",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/snapshot_recovery_status.py",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/sync_runtime_pack_manifest.py",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/test_qa_001_runner.ps1",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/test_recovery_registry.py",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/test_release_identity.py",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/test_release_qa002_resume.ps1",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/test_runtime_production_policy.py",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/test_verify_screenshot_qa_003.py",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/test_visual_capture_cache.ps1",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/test_visual_evidence.py",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/test_web_pack_completeness.py",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/update_universal_role_manifests.py",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_access_binding_restore.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_access_context_real_input.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_access_weapon_context.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_ai_001.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_ai_003.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_animated_blade_contact.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_animation_rate_ownership.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_animation_retarget_cost.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_animation_timer_rate.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_anwen_reply_native.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_ash_mill.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_ashwing_attachment.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_asset_001.py",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_asset_005.py",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_audio_001.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_audio_001_authored.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_audio_001_mix.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_audio_006.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_audio_repair_001.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_audio_startup_cost.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_bandit_assembly_render.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_bandit_road_identity.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_bell_eater_harness.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_bell_route_native.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_blade_contact_distance.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_blade_strike_window.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_board_invitation.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_boot_003.py",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_boss_003.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_boss_004.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_boss_005.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_boss_006.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_boss_007.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_boss_resolution.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_boundary_stages.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_cached_materials.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_campaign_records.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_campaign_wilds_composition.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_capture_dressing.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_castle_vargan.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_celestial_render.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_celestial_rendered_size.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_cemetery_architecture.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_cemetery_stages.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_char_001.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_char_002.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_char_007.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_char_009.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_character_real_001.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_character_spawn_cost.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_combat_001.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_combat_vfx_coordinator.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_courtyard_service.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_crow_geometry.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_current_ticket_release.py",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_deferred_greyfen_population.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_deferred_night_lighting.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_deferred_player_restore.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_detail_batch_publication.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_dialogue_runtime_coordinator.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_enemy_contact_bone.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_enemy_dormancy.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_enemy_posed_bounds.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_engine_003.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_engine_005.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_event_driven_life.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_event_driven_touch.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_face_003.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_finale_composition.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_focus_deadline.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_gate_transitions.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_greyfen_framing.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_greyfen_horizon.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_greyfen_life.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_greyfen_shore_ownership.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_greyfen_social.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_grouped_interaction_focus.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_halvern_equipment.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_hart_pending_reload.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_hart_stag.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_health_boundaries.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_house_build_cost.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_hud_005.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_imported_obj.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_interaction_visibility.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_inventory_restore.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_landscape_foundations.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_large_encounter_frame.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_light_001.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_load_001.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_load_qa_002.py",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_mat_003.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_material_override_render.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_material_prewarm_retirement.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_melee_driver_reach.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_menu_status_stability.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_minigame_presentation.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_mobile_001.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_mon_002.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_motion_quality.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_moving_opening_hydration.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_navigation_001.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_npc_distance_visibility.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_oath_002.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_objective_view_model.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_opening_boot_material_budget.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_opening_detail_policy.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_opening_detail_runtime.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_opening_fast_click.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_opening_pack_readiness.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_opening_real_input_native.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_pack_dependencies.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_pack_http.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_pack_http.py",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_pack_retry.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_pack_transfer_cost.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_pack_validation_metadata.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_pack_wait_ownership.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_packed_startup.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_parry_requires_contact.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_paused_player_real_input.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_perf_001.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_prepared_audio.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_pres_001.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_prewarm_001.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_progression_restore.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_prop_003.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_001.py",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_audio_unlock.test.mjs",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_bearing.test.mjs",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_bitter_roots_matrix.test.mjs",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_black_dog_matrix.test.mjs",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_browser.mjs",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_candidate.mjs",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_candidate.test.mjs",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_combat.test.mjs",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_deadline.test.mjs",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_dialogue_choice.test.mjs",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_dialogue_mode.test.mjs",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_firefox_transport.test.mjs",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_frame_low.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_greyfen_side_matrix.test.mjs",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_hold.test.mjs",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_late_side_matrix.test.mjs",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_named_dead_route.test.mjs",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_observation.test.mjs",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_production_mode.test.mjs",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_production_observer.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_report_matrix.test.mjs",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_startup.test.mjs",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_transport.test.mjs",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_waypoints.test.mjs",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_002_widow_matrix.test.mjs",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_005.py",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_qa_006.py",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_quest_001_runtime.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_quest_006.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_quest_completion_checkpoint.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_quest_hud_coordinator.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_quest_snapshot_isolation.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_quest_tracker_layout.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_record_archive.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_recovery_004.py",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_release_qa002_wiring.test.mjs",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_release_report.py",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_render_resources.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_rendered_enemy_parry.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_ritual_gate_native.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_river_bank_faces.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_river_swimming.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_role_resource_prewarm.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_rootbound_identity.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_route_alignment.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_route_deadline.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_runtime.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_runtime_asset_policy.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_runtime_required_components.py",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_save_version_boundary.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_scene_001_opening_core.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_screenshot_qa_003.py",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_seam_qa_001.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_settings_roundtrip.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_shared_animation_playback.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_side_001.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_side_clue_focus.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_spat_001.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_spat_002.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_startup_snapshot_cost.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_story_actor_presence.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_story_aftermath_native.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_story_alternative_native.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_story_choice_save_evidence.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_story_clue_orders.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_story_combined_native.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_story_continuous_native.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_story_early_alternative_native.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_story_optional_clues_native.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_story_refusal_native.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_story_remainder_native.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_story_report_native.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_target_001.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_ticket_cache.ps1",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_ui_001.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_ui_002.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_undercroft_vault.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_vargan_architecture.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_visible_quality.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_water_001.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_water_002.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_web_bootstrap_pck.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_web_browser.mjs",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_web_export.py",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_web_preset_parity.py",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_workflow_002.ps1",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_world_001.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_world_012.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_world_013.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_world_014.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_world_015.gd",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_world_016.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_world_snapshot_isolation.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_written_interaction_prompt.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_wychwood_combat_native.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_wychwood_evidence.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_wychwood_path_render.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_wychwood_return_native.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_zone_pause_ownership.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/verify_zone_residency.gd",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/visual_evidence.py",
+    "A  outputs/AshenOathTheRoadBetweenCrowns/tools/webgl_startup_probe.js",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/visual_upgrade_manifest.json",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/web_boot_shell.html",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/world_sector_manifest.json",
+    "M  outputs/AshenOathTheRoadBetweenCrowns/zone_scene_manifest.json",
+    "M  vercel.json",
+    "M  web/index.html",
+    "M  web/index.pck",
+    "M  web/index.wasm",
+    "M  web/packs/audio.pck",
+    "M  web/packs/campaign.pck",
+    "M  web/packs/characters.pck",
+    "M  web/packs/monsters.pck",
+    "M  web/packs/opening.pck",
+    "A  web/packs/quality_materials.pck",
+    "A  web/release_manifest.json",
+    "A  web/runtime_pack_manifest.json"
+  ],
+  "mode": "full",
+  "requested_gate": "",
+  "project": "outputs/AshenOathTheRoadBetweenCrowns",
+  "evidence_project": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns",
+  "artifact": {
+    "directory": "D:/Temp/AshenOath/functional_candidate_20261001/export_v10",
+    "fingerprint": "1c23706e7f6df65f01cb48dd804adc08cae15049c6090618d92c4f11099db0d6",
+    "total_bytes": 96042769,
+    "files": [
+      {
+        "path": "index.audio.position.worklet.js",
+        "bytes": 2973,
+        "sha256": "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8"
+      },
+      {
+        "path": "index.audio.worklet.js",
+        "bytes": 7298,
+        "sha256": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3"
+      },
+      {
+        "path": "index.html",
+        "bytes": 20842,
+        "sha256": "722f2774af6ed10162622f2aeb43b2ac18157796548f0ebc568fa89928723ae1"
+      },
+      {
+        "path": "index.js",
+        "bytes": 315759,
+        "sha256": "e3f56ee40e6f84371053db06692cfac15e2c8659547b11c6b2dfa1996dabd981"
+      },
+      {
+        "path": "index.pck",
+        "bytes": 14048548,
+        "sha256": "5ddd1873ae33a55354f046201a3c379b88466eb40f0bd1a9a0389280f3857067"
+      },
+      {
+        "path": "index.png",
+        "bytes": 21443,
+        "sha256": "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e"
+      },
+      {
+        "path": "index.wasm",
+        "bytes": 9382282,
+        "sha256": "b86a73db5739d710bfbaaad9c0877d8d9f61069723bb16e8252371da8a8c6a01"
+      },
+      {
+        "path": "packs/audio.pck",
+        "bytes": 3657256,
+        "sha256": "e8f0c37c8457f406b31478d51c96be027b812a6b0dd7680c304d96d411a0539c"
+      },
+      {
+        "path": "packs/campaign.pck",
+        "bytes": 1857324,
+        "sha256": "e0dd73fe4f17d92bcd77df8062581d9afbecec9c67f3129754bf65d2c7f49e8f"
+      },
+      {
+        "path": "packs/characters.pck",
+        "bytes": 34371320,
+        "sha256": "79071a6b1c7fa7ccf78a701776fb4aab18289c147d92ea545aa9021d6671a202"
+      },
+      {
+        "path": "packs/monsters.pck",
+        "bytes": 8932892,
+        "sha256": "f8f75d8651a27f6a73acf9607b7d98317028f669f833f31ef140e2c4acd2d15f"
+      },
+      {
+        "path": "packs/opening.pck",
+        "bytes": 15178476,
+        "sha256": "9c31e85bade268fe57294f24b747eb92dce6e38644fdebbfcdde9ab87ec7d742"
+      },
+      {
+        "path": "packs/quality_materials.pck",
+        "bytes": 8234476,
+        "sha256": "e4181288c03722d493501d28de9212b40e331a37ab15c2e5b80a15c60a851111"
+      },
+      {
+        "path": "release_manifest.json",
+        "bytes": 5375,
+        "sha256": "6eedd03ed4f0283d4c6cc37ca8c47bda1e751025b7d39b1c3e97390961a098a9"
+      },
+      {
+        "path": "runtime_pack_manifest.json",
+        "bytes": 6505,
+        "sha256": "bb2339748f914caffc9b1195e144499203b1dc8e473195929b4a1e307cc32772"
+      }
+    ],
+    "pck_sha256": "5ddd1873ae33a55354f046201a3c379b88466eb40f0bd1a9a0389280f3857067",
+    "export_provenance": {
+      "binding_origin": "preserved_v10_export_and_capture",
+      "rendering_inputs_sha256": "33d5f0ee182543ceb50209e5b659a1fa7b3ca953aefd7b872d987c7b0e90d65d",
+      "export_log": "D:/Projects/AshenOath/outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/export_v10.log",
+      "export_log_sha256": "2cc1807ed6f537a26d581959d091f51a2cd25d584ab1f4d7d6fefdcff419650a",
+      "runtime_content_fingerprint": "d07c889741481e9eb85c5d81fa43884033be1c12464de2dc8eead2a0bac77a9c",
+      "pck_sha256": "5ddd1873ae33a55354f046201a3c379b88466eb40f0bd1a9a0389280f3857067",
+      "files": [
+        {
+          "path": "index.audio.position.worklet.js",
+          "bytes": 2973,
+          "sha256": "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8"
+        },
+        {
+          "path": "index.audio.worklet.js",
+          "bytes": 7298,
+          "sha256": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3"
+        },
+        {
+          "path": "index.html",
+          "bytes": 20842,
+          "sha256": "722f2774af6ed10162622f2aeb43b2ac18157796548f0ebc568fa89928723ae1"
+        },
+        {
+          "path": "index.js",
+          "bytes": 315759,
+          "sha256": "e3f56ee40e6f84371053db06692cfac15e2c8659547b11c6b2dfa1996dabd981"
+        },
+        {
+          "path": "index.pck",
+          "bytes": 14048548,
+          "sha256": "5ddd1873ae33a55354f046201a3c379b88466eb40f0bd1a9a0389280f3857067"
+        },
+        {
+          "path": "index.png",
+          "bytes": 21443,
+          "sha256": "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e"
+        },
+        {
+          "path": "index.wasm",
+          "bytes": 9382282,
+          "sha256": "b86a73db5739d710bfbaaad9c0877d8d9f61069723bb16e8252371da8a8c6a01"
+        },
+        {
+          "path": "packs/audio.pck",
+          "bytes": 3657256,
+          "sha256": "e8f0c37c8457f406b31478d51c96be027b812a6b0dd7680c304d96d411a0539c"
+        },
+        {
+          "path": "packs/campaign.pck",
+          "bytes": 1857324,
+          "sha256": "e0dd73fe4f17d92bcd77df8062581d9afbecec9c67f3129754bf65d2c7f49e8f"
+        },
+        {
+          "path": "packs/characters.pck",
+          "bytes": 34371320,
+          "sha256": "79071a6b1c7fa7ccf78a701776fb4aab18289c147d92ea545aa9021d6671a202"
+        },
+        {
+          "path": "packs/monsters.pck",
+          "bytes": 8932892,
+          "sha256": "f8f75d8651a27f6a73acf9607b7d98317028f669f833f31ef140e2c4acd2d15f"
+        },
+        {
+          "path": "packs/opening.pck",
+          "bytes": 15178476,
+          "sha256": "9c31e85bade268fe57294f24b747eb92dce6e38644fdebbfcdde9ab87ec7d742"
+        },
+        {
+          "path": "packs/quality_materials.pck",
+          "bytes": 8234476,
+          "sha256": "e4181288c03722d493501d28de9212b40e331a37ab15c2e5b80a15c60a851111"
+        },
+        {
+          "path": "release_manifest.json",
+          "bytes": 5375,
+          "sha256": "6eedd03ed4f0283d4c6cc37ca8c47bda1e751025b7d39b1c3e97390961a098a9"
+        },
+        {
+          "path": "runtime_pack_manifest.json",
+          "bytes": 6505,
+          "sha256": "bb2339748f914caffc9b1195e144499203b1dc8e473195929b4a1e307cc32772"
+        }
+      ]
+    },
+    "max_bytes": 104857600
+  },
+  "issue_registry": {
+    "path": "RECOVERY_004_ISSUE_REGISTRY.json",
+    "exists": true,
+    "sha256": "cf900ea9e09311c15881c61a4f343d8ba47a7021f401908018cba70771311e1a",
+    "schema_version": 1,
+    "registry_id": "ashen-oath-recovery-004",
+    "category_statuses": [
+      {
+        "id": "release_integrity",
+        "severity": "blocker",
+        "status": "in_progress"
+      },
+      {
+        "id": "traversal_collision_zones",
+        "severity": "high",
+        "status": "functional_but_incomplete"
+      },
+      {
+        "id": "characters_npcs",
+        "severity": "high",
+        "status": "visually_rejected"
+      },
+      {
+        "id": "monsters_combat",
+        "severity": "high",
+        "status": "functional_but_incomplete"
+      },
+      {
+        "id": "world_presentation",
+        "severity": "high",
+        "status": "visually_rejected"
+      },
+      {
+        "id": "ui_story_input",
+        "severity": "medium",
+        "status": "in_progress"
+      },
+      {
+        "id": "audio",
+        "severity": "medium",
+        "status": "functional_but_incomplete"
+      },
+      {
+        "id": "architecture_performance",
+        "severity": "blocker",
+        "status": "in_progress"
+      }
+    ],
+    "ticket_statuses": [
+      {
+        "id": "REL-TRUTH-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "CHAR-002",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "MON-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "WORLD-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "WORLD-002",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "PRES-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "RES-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "PERF-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "UI-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "AUDIO-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "ACCESS-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "QA-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "QA-002",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "QA-003",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "ARCH-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "ARCH-002",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "CHAR-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "CERT-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "STORY-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "QUEST-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "TRAV-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "TRAV-002",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "RUNTIME-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "SPAT-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "SPAT-002",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "LOAD-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "PACK-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "SCENE-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "PREWARM-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "PACK-002",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "WEB-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "COMBAT-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "OATH-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "AI-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "BOSS-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "SAVE-001",
+        "severity": "blocker",
+        "status": "accepted"
+      },
+      {
+        "id": "RELEASE-001",
+        "severity": "blocker",
+        "status": "pending"
+      }
+    ]
+  },
+  "release_blockers": [],
+  "failure": "",
+  "required_gates": [
+    "functional_evidence",
+    "qa_002_candidate",
+    "verify_security_001",
+    "verify_web_export",
+    "verify_recovery_004"
+  ],
+  "results": [
+    {
+      "name": "functional_evidence",
+      "status": "pass",
+      "duration_seconds": 7.62,
+      "log": "runs/fee8194dac2a4dc9ade3db7217155702/functional_evidence.log",
+      "warnings": [],
+      "failure": "",
+      "assertions": [
+        "runner: owned child exited with code 0",
+        "runner: no release-blocking diagnostic remained in the gate log",
+        "verifier: no claim of exhaustive browser campaign, strict performance certification or listening approval"
+      ],
+      "runtime_phase": "runner_completed",
+      "process": {
+        "owner": "release-runner",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      "identities": {
+        "runtime_content": "d07c889741481e9eb85c5d81fa43884033be1c12464de2dc8eead2a0bac77a9c",
+        "test_harness": "d279527aa9a68c37f14f88540fafed48caca64c37b8662e21519ec43a6a40af2",
+        "registry": "cf900ea9e09311c15881c61a4f343d8ba47a7021f401908018cba70771311e1a",
+        "execution": "1b9facb8a7d036151f457e5e4cdbfa015de5907df1d9feb0274af592ba8c2878",
+        "artifact": "",
+        "gate": {
+          "protocol": "release-gate-v4",
+          "fingerprint": "79b3d1bdf63e70cacbc9b51eec0794a675e2436285e311318f5cfcc64f57bb9b",
+          "contract": {
+            "protocol": "release-gate-v4",
+            "name": "functional_evidence",
+            "executable": "C:/Users/User/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+            "arguments": [
+              "<project>/tools/verify_release_report.py",
+              "<project>",
+              "--check-functional-evidence",
+              "./release_reports/recovery004_v10_evidence/bundle.json"
+            ],
+            "dependencies": [
+              {
+                "path": "C:\\Users\\User\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+                "sha256": "dd5f8d19f6755d6491ee7c4bef2fe35ddd521334cc3ca3ed8fc93ebcadf135d0"
+              },
+              {
+                "path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\release_reports\\recovery004_v10_evidence\\bundle.json",
+                "sha256": "5cfff9f8c235462dd3a99837ad24745a10858bd96b746e28583dded3078dddce"
+              },
+              {
+                "path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\verify_release_report.py",
+                "sha256": "70bf1de69228709420e7211ad90b0825c4f13e0d30c41d05efa1fa0a29d275cb"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "qa_002_candidate",
+      "status": "pass",
+      "duration_seconds": 0.58,
+      "log": "runs/fee8194dac2a4dc9ade3db7217155702/qa_002_candidate.log",
+      "warnings": [],
+      "failure": "",
+      "assertions": [
+        "runner: owned child exited with code 0",
+        "runner: no release-blocking diagnostic remained in the gate log"
+      ],
+      "runtime_phase": "runner_completed",
+      "process": {
+        "owner": "release-runner",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      "identities": {
+        "runtime_content": "d07c889741481e9eb85c5d81fa43884033be1c12464de2dc8eead2a0bac77a9c",
+        "test_harness": "d279527aa9a68c37f14f88540fafed48caca64c37b8662e21519ec43a6a40af2",
+        "registry": "cf900ea9e09311c15881c61a4f343d8ba47a7021f401908018cba70771311e1a",
+        "execution": "1b9facb8a7d036151f457e5e4cdbfa015de5907df1d9feb0274af592ba8c2878",
+        "artifact": "1c23706e7f6df65f01cb48dd804adc08cae15049c6090618d92c4f11099db0d6",
+        "gate": {
+          "protocol": "release-gate-v4",
+          "fingerprint": "cdabba6ec066ff8eb9c3552c11f348fe7e0687bd606152f1c945db0e731b7269",
+          "contract": {
+            "protocol": "release-gate-v4",
+            "name": "qa_002_candidate",
+            "executable": "C:/Users/User/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe",
+            "arguments": [
+              "<project>/tools/verify_qa_002_candidate.mjs",
+              "--export",
+              "<web>",
+              "--output",
+              "<run>/qa_002_candidate.json",
+              "--acceptance-profile",
+              "functional_candidate",
+              "--report",
+              "D:/Projects/AshenOath/outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/chrome_opening_save_v10_functional_watchdog.json",
+              "--report",
+              "D:/Projects/AshenOath/outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/edge_smoke_v10_lean.json",
+              "--report",
+              "D:/Projects/AshenOath/outputs/AshenOathTheRoadBetweenCrowns/release_reports/recovery004_v10_evidence/firefox_smoke_v10_lean_persistence.json"
+            ],
+            "dependencies": [
+              {
+                "path": "C:\\Users\\User\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+                "sha256": "3602f2bb1a10f2cbab4c36886218a33c1ab3db87290e73b033c46c77147d0237"
+              },
+              {
+                "path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\release_reports\\recovery004_v10_evidence\\chrome_opening_save_v10_functional_watchdog.json",
+                "sha256": "ecad8af68dff6b3bff2d795595f58fbd39cd58449b766b1157ea2bb7082506ff"
+              },
+              {
+                "path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\release_reports\\recovery004_v10_evidence\\edge_smoke_v10_lean.json",
+                "sha256": "1b35397e6b0f00f916604a1cb74a395eedf7adc2923a3456902df52c567feca9"
+              },
+              {
+                "path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\release_reports\\recovery004_v10_evidence\\firefox_smoke_v10_lean_persistence.json",
+                "sha256": "fb20c2d38e42f0a1c8a66b6ffc8f3411736819a9d8e77ca903c1d135dcdf7f21"
+              },
+              {
+                "path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\verify_qa_002_candidate.mjs",
+                "sha256": "aaa42b79b52456ab5ce16001fd2da9cc254ec9b6cc339321ae6cc8f23cb8eee8"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "verify_security_001",
+      "status": "pass",
+      "duration_seconds": 0.15,
+      "log": "runs/fee8194dac2a4dc9ade3db7217155702/verify_security_001.log",
+      "warnings": [],
+      "failure": "",
+      "assertions": [
+        "runner: owned child exited with code 0",
+        "runner: no release-blocking diagnostic remained in the gate log"
+      ],
+      "runtime_phase": "runner_completed",
+      "process": {
+        "owner": "release-runner",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      "identities": {
+        "runtime_content": "d07c889741481e9eb85c5d81fa43884033be1c12464de2dc8eead2a0bac77a9c",
+        "test_harness": "d279527aa9a68c37f14f88540fafed48caca64c37b8662e21519ec43a6a40af2",
+        "registry": "cf900ea9e09311c15881c61a4f343d8ba47a7021f401908018cba70771311e1a",
+        "execution": "1b9facb8a7d036151f457e5e4cdbfa015de5907df1d9feb0274af592ba8c2878",
+        "artifact": "",
+        "gate": {
+          "protocol": "release-gate-v4",
+          "fingerprint": "85478a6eca4215765643f6028e90107c9cc3c625af8a0ec4257e8f199b8780c4",
+          "contract": {
+            "protocol": "release-gate-v4",
+            "name": "verify_security_001",
+            "executable": "C:/Users/User/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+            "arguments": [
+              "<project>/tools/verify_security_001.py",
+              "<project>"
+            ],
+            "dependencies": [
+              {
+                "path": "C:\\Users\\User\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+                "sha256": "dd5f8d19f6755d6491ee7c4bef2fe35ddd521334cc3ca3ed8fc93ebcadf135d0"
+              },
+              {
+                "path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\verify_security_001.py",
+                "sha256": "1c27fa9f265203f2b2a53916b955cd308c0b57dc4d169f83363a4719021cf2af"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "verify_web_export",
+      "status": "pass",
+      "duration_seconds": 1.7,
+      "log": "runs/fee8194dac2a4dc9ade3db7217155702/verify_web_export.log",
+      "warnings": [],
+      "failure": "",
+      "assertions": [
+        "runner: owned child exited with code 0",
+        "runner: no release-blocking diagnostic remained in the gate log"
+      ],
+      "runtime_phase": "runner_completed",
+      "process": {
+        "owner": "release-runner",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      "identities": {
+        "runtime_content": "d07c889741481e9eb85c5d81fa43884033be1c12464de2dc8eead2a0bac77a9c",
+        "test_harness": "d279527aa9a68c37f14f88540fafed48caca64c37b8662e21519ec43a6a40af2",
+        "registry": "cf900ea9e09311c15881c61a4f343d8ba47a7021f401908018cba70771311e1a",
+        "execution": "1b9facb8a7d036151f457e5e4cdbfa015de5907df1d9feb0274af592ba8c2878",
+        "artifact": "1c23706e7f6df65f01cb48dd804adc08cae15049c6090618d92c4f11099db0d6",
+        "gate": {
+          "protocol": "release-gate-v4",
+          "fingerprint": "df79ec1fb15ba8008a667d09286402814cdb88a6bbc70d8487f70045251bae67",
+          "contract": {
+            "protocol": "release-gate-v4",
+            "name": "verify_web_export",
+            "executable": "C:/Users/User/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+            "arguments": [
+              "<project>/tools/verify_web_export.py",
+              "<web>"
+            ],
+            "dependencies": [
+              {
+                "path": "C:\\Users\\User\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+                "sha256": "dd5f8d19f6755d6491ee7c4bef2fe35ddd521334cc3ca3ed8fc93ebcadf135d0"
+              },
+              {
+                "path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\verify_web_export.py",
+                "sha256": "09e065a08f94d59f5e6ff5707390e96c1c7507f0558a6bd990a37535048cc85b"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "verify_recovery_004",
+      "status": "pass",
+      "duration_seconds": 0.19,
+      "log": "runs/fee8194dac2a4dc9ade3db7217155702/verify_recovery_004.log",
+      "warnings": [],
+      "failure": "",
+      "assertions": [
+        "runner: owned child exited with code 0",
+        "runner: no release-blocking diagnostic remained in the gate log"
+      ],
+      "runtime_phase": "runner_completed",
+      "process": {
+        "owner": "release-runner",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      "identities": {
+        "runtime_content": "d07c889741481e9eb85c5d81fa43884033be1c12464de2dc8eead2a0bac77a9c",
+        "test_harness": "d279527aa9a68c37f14f88540fafed48caca64c37b8662e21519ec43a6a40af2",
+        "registry": "cf900ea9e09311c15881c61a4f343d8ba47a7021f401908018cba70771311e1a",
+        "execution": "1b9facb8a7d036151f457e5e4cdbfa015de5907df1d9feb0274af592ba8c2878",
+        "artifact": "",
+        "gate": {
+          "protocol": "release-gate-v4",
+          "fingerprint": "3114dab95e6000392a28ac8ac1afcacaccfd04d73a61dee4fd4ae688047f8c1d",
+          "contract": {
+            "protocol": "release-gate-v4",
+            "name": "verify_recovery_004",
+            "executable": "C:/Users/User/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+            "arguments": [
+              "<project>/tools/verify_recovery_004.py",
+              "<project>"
+            ],
+            "dependencies": [
+              {
+                "path": "C:\\Users\\User\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+                "sha256": "dd5f8d19f6755d6491ee7c4bef2fe35ddd521334cc3ca3ed8fc93ebcadf135d0"
+              },
+              {
+                "path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\verify_recovery_004.py",
+                "sha256": "69db34d54bea3bd159dbe41dee7260588c6fa5ca5334537354f906f899a7188d"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "verify_release_report",
+      "status": "pass",
+      "duration_seconds": 24.09,
+      "log": "runs/fee8194dac2a4dc9ade3db7217155702/verify_release_report.log",
+      "warnings": [],
+      "failure": "",
+      "assertions": [
+        "runner: owned child exited with code 0",
+        "runner: no release-blocking diagnostic remained in the gate log"
+      ],
+      "runtime_phase": "runner_completed",
+      "process": {
+        "owner": "release-runner",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      "identities": {
+        "runtime_content": "d07c889741481e9eb85c5d81fa43884033be1c12464de2dc8eead2a0bac77a9c",
+        "test_harness": "d279527aa9a68c37f14f88540fafed48caca64c37b8662e21519ec43a6a40af2",
+        "registry": "cf900ea9e09311c15881c61a4f343d8ba47a7021f401908018cba70771311e1a",
+        "execution": "1b9facb8a7d036151f457e5e4cdbfa015de5907df1d9feb0274af592ba8c2878",
+        "artifact": "",
+        "gate": {
+          "protocol": "release-gate-v4",
+          "fingerprint": "dc0e1f676f17d074a57a8452f868cc6414ac1421ca38ea3717ab16cba65027fc",
+          "contract": {
+            "protocol": "release-gate-v4",
+            "name": "verify_release_report",
+            "executable": "C:/Users/User/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+            "arguments": [
+              "<project>/tools/verify_release_report.py",
+              "<project>",
+              "--report",
+              "<run>/certification_input.json",
+              "--strict",
+              "--acceptance-profile",
+              "functional_candidate"
+            ],
+            "dependencies": [
+              {
+                "path": "C:\\Users\\User\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+                "sha256": "dd5f8d19f6755d6491ee7c4bef2fe35ddd521334cc3ca3ed8fc93ebcadf135d0"
+              },
+              {
+                "path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\verify_release_report.py",
+                "sha256": "70bf1de69228709420e7211ad90b0825c4f13e0d30c41d05efa1fa0a29d275cb"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "screenshots": {
+    "greyfen_spawn": {
+      "status": "approved",
+      "image": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_01_greyfen_spawn_2026-10-01_235123.png",
+      "message": "approved",
+      "metrics": {
+        "mean_luminance": 82.101,
+        "max_channel_variance": 1910.161,
+        "dark_ratio": 0.00099,
+        "bright_ratio": 0.00021
+      }
+    },
+    "anwen_dialogue": {
+      "status": "approved",
+      "image": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_05_sister_anwen_dialogue_2026-10-01_235123.png",
+      "message": "approved",
+      "metrics": {
+        "mean_luminance": 66.713,
+        "max_channel_variance": 3194.103,
+        "dark_ratio": 0.00391,
+        "bright_ratio": 0.00204
+      }
+    },
+    "greyfen_river_bridge": {
+      "status": "approved",
+      "image": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_70_greyfen_river_bridge_2026-10-01_235123.png",
+      "message": "approved",
+      "metrics": {
+        "mean_luminance": 80.577,
+        "max_channel_variance": 1826.672,
+        "dark_ratio": 0.00139,
+        "bright_ratio": 0.00021
+      }
+    },
+    "wychwood_combat": {
+      "status": "approved",
+      "image": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_10_combat_clearing_2026-10-01_235123.png",
+      "message": "approved",
+      "metrics": {
+        "mean_luminance": 47.558,
+        "max_channel_variance": 467.115,
+        "dark_ratio": 0.00794,
+        "bright_ratio": 0.00021
+      }
+    },
+    "sword_ready": {
+      "status": "approved",
+      "image": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_15_player_sword_ready_2026-10-01_235123.png",
+      "message": "approved",
+      "metrics": {
+        "mean_luminance": 73.188,
+        "max_channel_variance": 2044.822,
+        "dark_ratio": 0.00428,
+        "bright_ratio": 0.00021
+      }
+    },
+    "light_attack": {
+      "status": "approved",
+      "image": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_13_player_light_attack_arc_2026-10-01_235123.png",
+      "message": "approved",
+      "metrics": {
+        "mean_luminance": 72.643,
+        "max_channel_variance": 2157.14,
+        "dark_ratio": 0.00446,
+        "bright_ratio": 0.00021
+      }
+    },
+    "heavy_attack": {
+      "status": "approved",
+      "image": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_14_player_heavy_attack_arc_2026-10-01_235123.png",
+      "message": "approved",
+      "metrics": {
+        "mean_luminance": 72.593,
+        "max_channel_variance": 2158.307,
+        "dark_ratio": 0.00411,
+        "bright_ratio": 0.00021
+      }
+    },
+    "blade_contact": {
+      "status": "approved",
+      "image": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_73_combat_001_blade_contact_2026-10-01_235123.png",
+      "message": "approved",
+      "metrics": {
+        "mean_luminance": 54.949,
+        "max_channel_variance": 1417.693,
+        "dark_ratio": 0.00801,
+        "bright_ratio": 0.00021
+      }
+    },
+    "vargan_approach": {
+      "status": "approved",
+      "image": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_36_vargan_approach_2026-10-01_235123.png",
+      "message": "approved",
+      "metrics": {
+        "mean_luminance": 84.609,
+        "max_channel_variance": 640.45,
+        "dark_ratio": 0.00145,
+        "bright_ratio": 0.00021
+      }
+    },
+    "record_hall": {
+      "status": "approved",
+      "image": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_38_record_hall_2026-10-01_235123.png",
+      "message": "approved",
+      "metrics": {
+        "mean_luminance": 52.661,
+        "max_channel_variance": 1652.843,
+        "dark_ratio": 0.13327,
+        "bright_ratio": 0.00021
+      }
+    },
+    "hart_glade": {
+      "status": "approved",
+      "image": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\screenshots\\Capture_41_white_hart_glade_2026-10-01_235123.png",
+      "message": "approved",
+      "metrics": {
+        "mean_luminance": 53.826,
+        "max_channel_variance": 600.933,
+        "dark_ratio": 0.00303,
+        "bright_ratio": 0.00021
+      }
+    }
+  }
+}

@@ -276,28 +276,7 @@ func _inside_route_corridor(zone_id: String, pos: Vector3) -> bool:
 	return false
 
 func _mesh_has_bad_material(mesh_instance: MeshInstance3D) -> bool:
-	if mesh_instance.material_override != null:
-		return _is_bad_white_material(mesh_instance.material_override)
-	if mesh_instance.mesh == null:
-		return true
-	var saw_material = false
-	for surface_index in range(mesh_instance.mesh.get_surface_count()):
-		var material = mesh_instance.mesh.surface_get_material(surface_index)
-		if material == null:
-			continue
-		saw_material = true
-		if _is_bad_white_material(material):
-			return true
-	return not saw_material
-
-func _is_bad_white_material(material: Material) -> bool:
-	if material == null:
-		return true
-	if material is StandardMaterial3D:
-		var standard = material as StandardMaterial3D
-		var color = standard.albedo_color
-		return standard.albedo_texture == null and color.r > 0.85 and color.g > 0.85 and color.b > 0.85
-	return false
+	return game._mesh_needs_visible_fallback(mesh_instance)
 
 func _approx_size(node: Node) -> Vector3:
 	if node is MeshInstance3D:

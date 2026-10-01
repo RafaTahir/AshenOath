@@ -3,13 +3,21 @@ param(
     [switch]$SkipPerformance,
     [switch]$SkipScreenshots,
     [switch]$Strict,
-[switch]$VerboseOutput,
-[string]$Only = "",
-[string]$ResumeFrom = "",
-[int]$TimeoutSeconds = 240
+    [switch]$VerboseOutput,
+    [string]$Only = "",
+    [string]$ResumeFrom = "",
+    [string]$FunctionalEvidence = "",
+    [ValidateSet("candidate", "release", "final")]
+    [string]$ReleasePhase = "candidate",
+    [ValidateSet("strict", "functional_candidate")]
+    [string]$AcceptanceProfile = "strict",
+    [int]$TimeoutSeconds = 240
 )
 
 $ErrorActionPreference = "Stop"
+$FunctionalCandidate = $AcceptanceProfile -eq "functional_candidate"
+$CampaignBrowser = if ($FunctionalCandidate) { "chrome" } else { "all" }
+$EnforceBrowserPerformance = if ($FunctionalCandidate) { "false" } else { "true" }
 $PSNativeCommandUseErrorActionPreference = $false
 $Project = Split-Path -Parent $PSScriptRoot
 $RepoRoot = Resolve-Path (Join-Path $Project "..\..")
@@ -33,67 +41,156 @@ if ([string]::IsNullOrWhiteSpace($GodotGraphical)) {
 $Python = "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe"
 $Node = "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe"
 $Web = Join-Path (Split-Path -Parent $Project) "AshenOath_Web"
-$QAWeb = Join-Path (Split-Path -Parent $Project) ".release-gate\AshenOath_QA"
+if ($FunctionalEvidence) {
+    if (-not $FunctionalCandidate -or -not $SkipExport -or -not $SkipPerformance -or -not $SkipScreenshots) {
+        throw "Preserved evidence aggregation requires functional_candidate and all three Skip switches"
+    }
+    $EvidenceBundle = Get-Content -LiteralPath $FunctionalEvidence -Raw | ConvertFrom-Json
+    $Web = [string]$EvidenceBundle.artifact_directory
+}
 $Logs = Join-Path $Project ".release-gate"
-# The full-campaign browser gate runs clean Chrome and Edge sessions
-# sequentially. Each session has its own bounded route timeout; this outer
-# budget must cover both sessions without treating a valid run as a hang.
-$BrowserRouteTimeoutSeconds = 1800
+# The full campaign can take 45 minutes per browser. Keep the owned-process
+# timeout longer than one route; the driver retains its own per-browser bound.
+$BrowserRouteTimeoutSeconds = 3600
 $ReportDirectory = Join-Path $Project "release_reports"
 $ReportPath = Join-Path $ReportDirectory "latest.json"
-$ContentReportPath = Join-Path $Logs "content_integrity.json"
+if ($FunctionalEvidence) { $ReportPath = Join-Path $ReportDirectory "functional_candidate_v10.json" }
 $StartedAt = Get-Date
 $Results = [System.Collections.Generic.List[object]]::new()
 $ReportId = [guid]::NewGuid().ToString("N")
+$RunDirectory = Join-Path $Logs ("runs\{0}" -f $ReportId)
+$ContentReportPath = Join-Path $RunDirectory "content_integrity.json"
 New-Item -ItemType Directory -Force -Path $Logs | Out-Null
 New-Item -ItemType Directory -Force -Path $ReportDirectory | Out-Null
-New-Item -ItemType Directory -Force -Path $QAWeb | Out-Null
+New-Item -ItemType Directory -Force -Path $RunDirectory | Out-Null
 $IsResume = -not [string]::IsNullOrWhiteSpace($ResumeFrom)
 $webTailResume = $IsResume -and $ResumeFrom -eq "verify_web_002_browser"
 $mobileTailResume = $IsResume -and $ResumeFrom -eq "verify_mobile_browser"
+$previousReport = $null
+$CurrentRuntimeFingerprint = ""
+$CurrentHarnessFingerprint = ""
+$CurrentRegistryFingerprint = ""
+$CurrentArtifactFingerprint = ""
+$ExecutionFingerprint = ""
+$RequiredGateNames = @()
+$FileHashCache = @{}
+$CurrentGateIdentity = $null
+$Qa002BranchRoutes = @(
+    @{ slug = "opening_save_continue"; flag = "opening-save-continue" },
+    @{ slug = "ending_matrix"; flag = "ending-matrix" },
+    @{ slug = "shrine_matrix"; flag = "shrine-matrix" },
+    @{ slug = "report_matrix"; flag = "report-matrix" },
+    @{ slug = "ledger_matrix"; flag = "ledger-matrix" },
+    @{ slug = "edric_matrix"; flag = "edric-matrix" },
+    @{ slug = "mill_matrix"; flag = "mill-matrix" },
+    @{ slug = "senn_matrix"; flag = "senn-matrix" },
+    @{ slug = "widow_matrix"; flag = "widow-matrix" },
+    @{ slug = "iron_matrix"; flag = "iron-matrix" },
+    @{ slug = "returned_soldier_matrix"; flag = "returned-soldier-matrix" },
+    @{ slug = "bitter_roots_matrix"; flag = "bitter-roots-matrix" },
+    @{ slug = "black_dog_matrix"; flag = "black-dog-matrix" },
+    @{ slug = "named_dead_route"; flag = "named-dead-matrix" },
+    @{ slug = "rooks_map_matrix"; flag = "rooks-map-matrix" },
+    @{ slug = "millers_measure_matrix"; flag = "millers-measure-matrix" },
+    @{ slug = "bannerless_matrix"; flag = "bannerless-matrix" }
+)
 
-if ($IsResume) {
-    if (-not (Test-Path -LiteralPath $ReportPath)) {
-        throw "Cannot resume without an existing release report: $ReportPath"
+function Get-StringSha256([string]$Value) {
+    $bytes = [Text.Encoding]::UTF8.GetBytes($Value)
+    $sha = [Security.Cryptography.SHA256]::Create()
+    try {
+        return ([BitConverter]::ToString($sha.ComputeHash($bytes))).Replace("-", "").ToLowerInvariant()
+    } finally {
+        $sha.Dispose()
     }
-    $previousReport = Get-Content -LiteralPath $ReportPath -Raw | ConvertFrom-Json
-	$currentHead = (git -C $RepoRoot rev-parse HEAD).Trim()
-    if ($previousReport.source_commit -ne $currentHead) {
-		$changedSinceReport = @(git -C $RepoRoot diff --name-only "$($previousReport.source_commit)..$currentHead")
-        $unsafeResumeChanges = @($changedSinceReport | Where-Object {
-            $_ -notmatch '^outputs/AshenOathTheRoadBetweenCrowns/tools/' -and
-            $_ -notmatch '^outputs/AshenOathTheRoadBetweenCrowns/.*\.md$' -and
-            -not (
-                $ResumeFrom -in @("verify_web_001", "web_export") -and
-                $_ -eq 'outputs/AshenOathTheRoadBetweenCrowns/export_presets.cfg'
-            )
+}
+
+function Test-GateUsesArtifact([string]$Name) {
+    return $Name -in @("web_export", "verify_web_export", "packed_startup", "verify_web_browser", "verify_mobile_browser", "verify_web_002_browser", "verify_web_002_mobile", "qa_002_candidate") -or
+        $Name.StartsWith("qa_002_branch_", [StringComparison]::Ordinal)
+}
+
+function Get-LogReference([string]$Log) {
+    $fullLog = [IO.Path]::GetFullPath($Log)
+    $fullRoot = [IO.Path]::GetFullPath($Logs).TrimEnd('\')
+    if ($fullLog.StartsWith($fullRoot + '\', [StringComparison]::OrdinalIgnoreCase)) {
+        return $fullLog.Substring($fullRoot.Length + 1).Replace('\', '/')
+    }
+    return $fullLog
+}
+
+function Get-CachedFileSha256([string]$Path) {
+    $resolved = (Resolve-Path -LiteralPath $Path).Path
+    if (-not $FileHashCache.ContainsKey($resolved)) {
+        $stream = [IO.File]::OpenRead($resolved)
+        $sha = [Security.Cryptography.SHA256]::Create()
+        try {
+            $FileHashCache[$resolved] = ([BitConverter]::ToString($sha.ComputeHash($stream))).Replace("-", "").ToLowerInvariant()
+        } finally {
+            $stream.Dispose()
+            $sha.Dispose()
+        }
+    }
+    return [string]$FileHashCache[$resolved]
+}
+
+function Get-NormalizedGateValue([string]$Value) {
+    foreach ($mapping in @(
+        @($RunDirectory, "<run>"),
+        @($Web, "<web>"),
+        @($Project, "<project>"),
+        @($RepoRoot, "<repo>")
+    )) {
+        if (-not [string]::IsNullOrWhiteSpace([string]$mapping[0])) {
+            $Value = $Value.Replace([string]$mapping[0], [string]$mapping[1])
+        }
+    }
+    return $Value.Replace('\', '/')
+}
+
+function Get-GateIdentity([string]$Name, [string]$Executable, [string[]]$Arguments) {
+    $dependencies = [System.Collections.Generic.List[object]]::new()
+    $candidates = [System.Collections.Generic.List[string]]::new()
+    if (Test-Path -LiteralPath $Executable -PathType Leaf) { $candidates.Add((Resolve-Path -LiteralPath $Executable).Path) }
+    foreach ($argument in $Arguments) {
+        $candidate = [string]$argument
+        if ($candidate -match '^tools[/\\]') { $candidate = Join-Path $Project $candidate }
+        if (Test-Path -LiteralPath $candidate -PathType Leaf) {
+            $resolved = (Resolve-Path -LiteralPath $candidate).Path
+            if (-not $resolved.StartsWith($RunDirectory, [StringComparison]::OrdinalIgnoreCase)) {
+                $candidates.Add($resolved)
+            }
+        }
+    }
+    foreach ($candidate in @($candidates | Sort-Object -Unique)) {
+        $dependencies.Add([ordered]@{
+            path = $candidate
+            sha256 = Get-CachedFileSha256 $candidate
         })
-        if ($unsafeResumeChanges.Count -gt 0) {
-            throw "Cannot resume release after runtime/source changes: $($unsafeResumeChanges -join ', ')"
-        }
-        Write-Host "RELEASE RESUME: verifier/document-only changes accepted: $($changedSinceReport -join ', ')"
     }
-    $resumeFound = $false
-    foreach ($result in $previousReport.results) {
-        if ($result.name -eq $ResumeFrom) {
-            $resumeFound = $true
-            break
-        }
-        if ($result.status -ne "pass") {
-            throw "Cannot preserve non-passing gate before resume point: $($result.name)"
-        }
-        $Results.Add([ordered]@{
-            name = [string]$result.name
-            status = "pass"
-            duration_seconds = [double]$result.duration_seconds
-            log = [string]$result.log
-            warnings = @($result.warnings)
-            failure = ""
-        })
+    $contract = [ordered]@{
+        protocol = "release-gate-v4"
+        name = $Name
+        executable = Get-NormalizedGateValue $Executable
+        arguments = @($Arguments | ForEach-Object { Get-NormalizedGateValue ([string]$_) })
+        dependencies = @($dependencies)
     }
-    if (-not $resumeFound) {
-        throw "Resume gate was not found in the previous release report: $ResumeFrom"
+    return [ordered]@{
+        protocol = "release-gate-v4"
+        fingerprint = Get-StringSha256 ($contract | ConvertTo-Json -Depth 6 -Compress)
+        contract = $contract
     }
+}
+
+function Test-PreservedGateIdentity($GateIdentity) {
+    if ($null -eq $GateIdentity -or [string]$GateIdentity.protocol -ne "release-gate-v4") { return $false }
+    if ($null -eq $GateIdentity.contract -or @($GateIdentity.contract.dependencies).Count -eq 0) { return $false }
+    foreach ($dependency in @($GateIdentity.contract.dependencies)) {
+        $path = [string]$dependency.path
+        if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { return $false }
+        if ((Get-CachedFileSha256 $path) -ne [string]$dependency.sha256) { return $false }
+    }
+    return $true
 }
 
 function Add-Result(
@@ -102,15 +199,54 @@ function Add-Result(
     [double]$Seconds,
     [string]$Log,
     [string[]]$Warnings = @(),
-    [string]$Failure = ""
+    [string]$Failure = "",
+    [int]$ExitCode = 0,
+    [bool]$TimedOut = $false
 ) {
+    $lines = if (Test-Path -LiteralPath $Log) { @(Get-Content -LiteralPath $Log) } else { @() }
+    $phase = if ($Status -eq "pass") { "runner_completed" } else { "runner_failed" }
+    $assertions = [System.Collections.Generic.List[string]]::new()
+    if ($Status -eq "pass") {
+        $assertions.Add("runner: owned child exited with code 0")
+        $assertions.Add("runner: no release-blocking diagnostic remained in the gate log")
+    } elseif (-not [string]::IsNullOrWhiteSpace($Failure)) {
+        $assertions.Add("runner: failed - $Failure")
+    }
+    $allWarnings = [System.Collections.Generic.List[string]]::new()
+    foreach ($warning in $Warnings) { $allWarnings.Add($warning) }
+    foreach ($line in $lines) {
+        if ($line -match 'VERIFIER_PHASE:\s*([A-Za-z_]+)') {
+            $phase = $Matches[1].ToLowerInvariant()
+        }
+        if ($line -match '^(?:ASSERTION|CHECK):\s*(.+)$') {
+            $assertions.Add("verifier: " + $Matches[1].Trim())
+        }
+        if ($line -match '^\s*WARN(?:ING)?:\s*(.+)$') {
+            $allWarnings.Add($Matches[1].Trim())
+        }
+    }
     $Results.Add([ordered]@{
         name = $Name
         status = $Status
         duration_seconds = [math]::Round($Seconds, 2)
-        log = [IO.Path]::GetFileName($Log)
-        warnings = @($Warnings)
+        log = Get-LogReference $Log
+        warnings = @($allWarnings)
         failure = $Failure
+        assertions = @($assertions)
+        runtime_phase = $phase
+        process = [ordered]@{
+            owner = "release-runner"
+            exit_code = $ExitCode
+            timed_out = $TimedOut
+        }
+        identities = [ordered]@{
+            runtime_content = $CurrentRuntimeFingerprint
+            test_harness = $CurrentHarnessFingerprint
+            registry = $CurrentRegistryFingerprint
+            execution = $ExecutionFingerprint
+            artifact = $(if (Test-GateUsesArtifact $Name) { $CurrentArtifactFingerprint } else { "" })
+            gate = $CurrentGateIdentity
+        }
     })
 }
 
@@ -131,61 +267,168 @@ function Get-ArtifactSnapshot {
         }
     }
     $pck = $records | Where-Object { $_.path -eq "index.pck" } | Select-Object -First 1
+    $provenance = $null
+    $provenancePath = Join-Path $RunDirectory "web_export_source.json"
+    if (Test-Path -LiteralPath $provenancePath) {
+        try { $provenance = Get-Content -LiteralPath $provenancePath -Raw | ConvertFrom-Json } catch {}
+    } elseif ($null -ne $previousReport -and $null -ne $previousReport.artifact.export_provenance) {
+        $provenance = $previousReport.artifact.export_provenance
+    } else {
+        $legacyProvenancePath = Join-Path $Logs "web_export_source.json"
+        if (Test-Path -LiteralPath $legacyProvenancePath) {
+            try { $provenance = Get-Content -LiteralPath $legacyProvenancePath -Raw | ConvertFrom-Json } catch {}
+        }
+    }
+    $artifactIdentityInput = [Text.StringBuilder]::new()
+    foreach ($record in $records) {
+        [void]$artifactIdentityInput.Append([string]$record.path).Append([char]0)
+        [void]$artifactIdentityInput.Append([string]$record.bytes).Append([char]0)
+        [void]$artifactIdentityInput.Append([string]$record.sha256).Append([char]0)
+    }
+    $artifactIdentity = Get-StringSha256 $artifactIdentityInput.ToString()
     return [ordered]@{
         directory = $Web
+        fingerprint = $artifactIdentity
         total_bytes = $totalBytes
         files = @($records)
         pck_sha256 = if ($null -ne $pck) { [string]$pck.sha256 } else { "" }
+        export_provenance = $provenance
         max_bytes = 104857600
     }
 }
 
+function Write-WebExportProvenance {
+    $artifact = Get-ArtifactSnapshot
+    if (-not $artifact.pck_sha256) { throw "Cannot bind Web export without index.pck" }
+    $script:CurrentArtifactFingerprint = [string]$artifact.fingerprint
+    [ordered]@{
+        runtime_content_fingerprint = $CurrentRuntimeFingerprint
+        source_fingerprint = $CurrentRuntimeFingerprint
+        pck_sha256 = $artifact.pck_sha256
+        files = @($artifact.files)
+    } | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath (Join-Path $RunDirectory "web_export_source.json") -Encoding utf8
+}
+
 function Get-SourceFingerprint {
-    # Keep this contract byte-for-byte aligned with verify_release_report.py:
-    # relative path, NUL, and the lowercase hexadecimal SHA-256 of each runtime
-    # input. Hex is used because Windows PowerShell 5 lacks FromHexString.
-    $entries = [System.Collections.Generic.List[object]]::new()
-    foreach ($root in @((Join-Path $Project "scripts"), (Join-Path $Project "scenes"), (Join-Path $Project "data"))) {
-        if (-not (Test-Path -LiteralPath $root)) { continue }
-        foreach ($file in Get-ChildItem -LiteralPath $root -Recurse -File | Where-Object { $_.Extension.ToLowerInvariant() -in @('.gd','.tscn','.json') } | Sort-Object FullName) {
-            $relative = $file.FullName.Substring($Project.Length + 1).Replace('\','/')
-            $digest = (Get-FileHash -LiteralPath $file.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
-            $entries.Add([pscustomobject]@{ Path = $relative; Digest = $digest })
+    # Use the verifier's implementation so release creation and validation
+    # cannot diverge on path ordering or runtime asset inclusion.
+    $value = & $Python (Join-Path $Project "tools\verify_release_report.py") $Project --print-source-fingerprint
+    if ($LASTEXITCODE -ne 0 -or $value -notmatch '^[a-f0-9]{64}$') {
+        throw "Could not calculate the release source fingerprint"
+    }
+    return [string]$value
+}
+
+function Initialize-ReleaseIdentities {
+    $identityJson = & $Python (Join-Path $Project "tools\release_identity.py") $Project --runtime --harness --registry --artifact $Web --json
+    if ($LASTEXITCODE -ne 0) { throw "Could not calculate independent release identities" }
+    try { $identity = $identityJson | ConvertFrom-Json } catch { throw "Release identity output was malformed: $($_.Exception.Message)" }
+    foreach ($property in @("runtime_content", "test_harness", "registry")) {
+        if ([string]$identity.$property -notmatch '^[a-f0-9]{64}$') { throw "Release identity '$property' is invalid" }
+    }
+    $script:CurrentRuntimeFingerprint = [string]$identity.runtime_content
+    $script:CurrentHarnessFingerprint = [string]$identity.test_harness
+    $script:CurrentRegistryFingerprint = [string]$identity.registry
+    $script:CurrentArtifactFingerprint = [string]$identity.artifact.fingerprint
+    $executionRecord = [ordered]@{
+        protocol = "release-gate-v4"
+        release_phase = $ReleasePhase
+        acceptance_profile = $AcceptanceProfile
+        strict = [bool]$Strict
+        skip_export = [bool]$SkipExport
+        skip_performance = [bool]$SkipPerformance
+        skip_screenshots = [bool]$SkipScreenshots
+        only = $Only
+        evidence_bundle = $FunctionalEvidence
+        timeout_seconds = $TimeoutSeconds
+        browser_timeout_seconds = $BrowserRouteTimeoutSeconds
+    }
+    $script:ExecutionFingerprint = Get-StringSha256 ($executionRecord | ConvertTo-Json -Compress)
+}
+
+function Refresh-ArtifactIdentity {
+    $artifact = Get-ArtifactSnapshot
+    $script:CurrentArtifactFingerprint = [string]$artifact.fingerprint
+    foreach ($result in $Results) {
+        if ([string]$result.name -eq "web_export" -and $null -ne $result.identities) {
+            $result.identities.artifact = $CurrentArtifactFingerprint
         }
     }
-    foreach ($relative in @(
-        "project.godot",
-        "export_presets.cfg",
-        "runtime_asset_manifest.json",
-        "curated_runtime_assets.json",
-        "character_role_manifest.json",
-        "soul_character_role_manifest.json",
-        "runtime_pack_manifest.json",
-        "runtime_pack_candidates.json",
-        "web_boot_shell.html",
-        "RECOVERY_004_ISSUE_REGISTRY.json"
-    )) {
-        $candidate = Join-Path $Project $relative
-        if (Test-Path -LiteralPath $candidate) {
-            $entries.Add([pscustomobject]@{ Path = $relative; Digest = (Get-FileHash -LiteralPath $candidate -Algorithm SHA256).Hash.ToLowerInvariant() })
+}
+
+function Import-ResumeResults {
+    if (-not $IsResume) { return }
+    if (-not (Test-Path -LiteralPath $ReportPath)) {
+        throw "Cannot resume without an existing release report: $ReportPath"
+    }
+    $script:previousReport = Get-Content -LiteralPath $ReportPath -Raw | ConvertFrom-Json
+    if ([string]$previousReport.release_phase -ne $ReleasePhase) {
+        $candidatePromotion = [string]$previousReport.release_phase -eq "candidate" -and
+            $ReleasePhase -eq "release" -and [string]$previousReport.status -eq "pass" -and
+            $ResumeFrom -eq "verify_release_report"
+        if (-not $candidatePromotion) {
+            throw "Cannot resume a '$($previousReport.release_phase)' report as '$ReleasePhase'"
+        }
+        if (@(Get-ReleaseWorktreeStatus).Count -ne 0) {
+            throw "Cannot promote candidate evidence from a dirty worktree"
+        }
+        $priorNames = @($previousReport.results | ForEach-Object { [string]$_.name })
+        if ($null -eq $previousReport.required_gates -or @($previousReport.required_gates).Count -eq 0 -or
+            @($priorNames | Group-Object | Where-Object { $_.Count -gt 1 }).Count -ne 0) {
+            throw "Cannot promote candidate evidence without a complete unique gate set"
+        }
+        foreach ($required in @($previousReport.required_gates)) {
+            if ([string]$required -notin $priorNames) {
+                throw "Cannot promote candidate evidence missing gate: $required"
+            }
         }
     }
-    $sha = [System.Security.Cryptography.SHA256]::Create()
-    $stream = [System.IO.MemoryStream]::new()
-    $encoding = [System.Text.Encoding]::UTF8
-    try {
-        foreach ($entry in ($entries | Sort-Object Path)) {
-            $pathBytes = $encoding.GetBytes([string]$entry.Path)
-            $digestBytes = $encoding.GetBytes([string]$entry.Digest)
-            $stream.Write($pathBytes, 0, $pathBytes.Length)
-            $stream.WriteByte(0)
-            $stream.Write($digestBytes, 0, $digestBytes.Length)
+    $resumeFound = $false
+    foreach ($result in @($previousReport.results)) {
+        if ([string]$result.name -eq $ResumeFrom) {
+            $resumeFound = $true
+            break
         }
-        return ([BitConverter]::ToString($sha.ComputeHash($stream.ToArray()))).Replace('-','').ToLowerInvariant()
-    } finally {
-        $stream.Dispose()
-        $sha.Dispose()
+        if ([string]$result.status -ne "pass") {
+            throw "Cannot preserve non-passing gate before resume point: $($result.name)"
+        }
+        if ($null -eq $result.process -or [string]$result.process.owner -ne "release-runner" -or [int]$result.process.exit_code -ne 0 -or [bool]$result.process.timed_out) {
+            throw "Cannot preserve gate without a successful owned-process result: $($result.name)"
+        }
+        if ($null -eq $result.identities) {
+            throw "Cannot preserve legacy gate without input identities: $($result.name)"
+        }
+        if ([string]$result.identities.runtime_content -ne $CurrentRuntimeFingerprint) {
+            throw "Cannot preserve stale runtime evidence: $($result.name)"
+        }
+        if (-not (Test-PreservedGateIdentity $result.identities.gate)) {
+            throw "Cannot preserve stale or incomplete gate-harness evidence: $($result.name)"
+        }
+        if ([string]$result.identities.execution -ne $ExecutionFingerprint) {
+            throw "Cannot preserve evidence from a different execution configuration: $($result.name)"
+        }
+        $recordedArtifact = [string]$result.identities.artifact
+        if (-not [string]::IsNullOrWhiteSpace($recordedArtifact) -and $recordedArtifact -ne $CurrentArtifactFingerprint) {
+            throw "Cannot preserve stale artifact evidence: $($result.name)"
+        }
+        $Results.Add([ordered]@{
+            name = [string]$result.name
+            status = "pass"
+            duration_seconds = [double]$result.duration_seconds
+            log = [string]$result.log
+            warnings = @($result.warnings)
+            failure = ""
+            assertions = @($result.assertions)
+            runtime_phase = [string]$result.runtime_phase
+            process = $result.process
+            identities = $result.identities
+            resumed = $true
+        })
     }
+    if (-not $resumeFound) {
+        throw "Resume gate was not found in the previous release report: $ResumeFrom"
+    }
+    Write-Host "RELEASE RESUME: preserved $($Results.Count) input-identical owned gate result(s)"
 }
 
 function Get-ReleaseWorktreeStatus {
@@ -201,22 +444,38 @@ function Get-ReleaseWorktreeStatus {
     })
 }
 
-function Get-BlockingIssueSnapshot {
+function Get-CurrentTicketStatuses($Registry) {
+    $acceptance = $Registry.current_program.acceptance
+    if ($null -eq $acceptance -or @($acceptance.PSObject.Properties).Count -eq 0) {
+        throw "Current recovery ticket acceptance map is missing"
+    }
+    foreach ($entry in $acceptance.PSObject.Properties) {
+        if ($entry.Value -isnot [string] -or [string]::IsNullOrWhiteSpace($entry.Name)) {
+            throw "Current recovery ticket acceptance map is malformed"
+        }
+        [ordered]@{ id = $entry.Name; severity = "blocker"; status = $entry.Value }
+    }
+}
+
+function Get-BlockingIssueSnapshot([string]$Phase = $ReleasePhase) {
     $registryPath = Join-Path $Project "RECOVERY_004_ISSUE_REGISTRY.json"
     if (-not (Test-Path -LiteralPath $registryPath -PathType Leaf)) {
         return @([ordered]@{ id = "RECOVERY-004-REGISTRY"; severity = "blocker"; status = "missing" })
     }
     try {
         $registry = Get-Content -LiteralPath $registryPath -Raw | ConvertFrom-Json
-        return @($registry.categories | Where-Object {
-            $_.status -ne "verified" -and $_.status -ne "deferred"
-        } | ForEach-Object {
-            [ordered]@{
-                id = [string]$_.id
-                severity = [string]$_.severity
-                status = [string]$_.status
-            }
-        })
+        $tickets = @(Get-CurrentTicketStatuses $registry)
+        $excluded = switch ($Phase) {
+            "candidate" { @("CERT-001", "RELEASE-001") }
+            "release" { @("RELEASE-001") }
+            "final" { @() }
+            default { throw "Unknown release phase: $Phase" }
+        }
+        # Historical category health remains in the report for context. The
+        # canonical 37-ticket acceptance map alone owns current release blocks.
+        return @($tickets | Where-Object {
+            $_.status -ne "accepted" -and $_.id -notin $excluded
+        } | Sort-Object id)
     } catch {
         return @([ordered]@{ id = "RECOVERY-004-REGISTRY"; severity = "blocker"; status = "unreadable" })
     }
@@ -250,6 +509,7 @@ function Get-IssueRegistrySnapshot {
             schema_version = [int]$registry.schema_version
             registry_id = [string]$registry.registry_id
             category_statuses = @($categoryStatuses)
+            ticket_statuses = @(Get-CurrentTicketStatuses $registry | Sort-Object id)
         }
     } catch {
         return [ordered]@{
@@ -265,7 +525,7 @@ function Get-IssueRegistrySnapshot {
 }
 
 function Get-ScreenshotEvidence {
-    $capturePath = Join-Path $Logs "qa_003_milestone_report.json"
+    $capturePath = Join-Path $RunDirectory "qa_003_milestone_report.json"
     $evidence = [ordered]@{}
     if (-not (Test-Path -LiteralPath $capturePath -PathType Leaf)) {
         return $evidence
@@ -299,29 +559,44 @@ function Write-ReleaseReport([string]$Status, [string]$Failure = "") {
     $gitStatus = @()
     try { $gitStatus = @(Get-ReleaseWorktreeStatus) } catch {}
     $screenshotEvidence = Get-ScreenshotEvidence
+    $artifact = Get-ArtifactSnapshot
+    $registry = Get-IssueRegistrySnapshot
     $report = [ordered]@{
-        schema_version = 3
+        schema_version = 4
         report_id = $ReportId
         release_id = if ($env:ASHENOATH_RELEASE_ID) { $env:ASHENOATH_RELEASE_ID } else { "recovery-004" }
+        release_phase = $ReleasePhase
+        acceptance_profile = $AcceptanceProfile
+        release_basis = if ($FunctionalCandidate) { "functionality-certified candidate" } else { "strict" }
+        performance_certified = -not $FunctionalCandidate
+        listening_reviewed = $false
         status = $Status
         started_at = $StartedAt.ToUniversalTime().ToString("o")
         finished_at = (Get-Date).ToUniversalTime().ToString("o")
         source_commit = $head
         source_branch = $branch
-        source_fingerprint = Get-SourceFingerprint
+        source_fingerprint = $CurrentRuntimeFingerprint
+        runtime_content_fingerprint = $CurrentRuntimeFingerprint
+        test_harness_fingerprint = $CurrentHarnessFingerprint
+        registry_fingerprint = $CurrentRegistryFingerprint
+        execution_fingerprint = $ExecutionFingerprint
         verification_revision = [ordered]@{
             source_commit = $head
-            source_fingerprint = Get-SourceFingerprint
-            registry_sha256 = [string](Get-IssueRegistrySnapshot).sha256
+            runtime_content_fingerprint = $CurrentRuntimeFingerprint
+            test_harness_fingerprint = $CurrentHarnessFingerprint
+            registry_sha256 = [string]$registry.sha256
+            execution_fingerprint = $ExecutionFingerprint
         }
         git_status = $gitStatus
         mode = $(if ([string]::IsNullOrWhiteSpace($Only)) { "full" } else { "targeted" })
         requested_gate = $Only
         project = "outputs/AshenOathTheRoadBetweenCrowns"
-        artifact = Get-ArtifactSnapshot
-        issue_registry = Get-IssueRegistrySnapshot
-        release_blockers = Get-BlockingIssueSnapshot
+        evidence_project = $Project
+        artifact = $artifact
+        issue_registry = $registry
+        release_blockers = @(Get-BlockingIssueSnapshot $ReleasePhase)
         failure = $Failure
+        required_gates = @($RequiredGateNames)
         results = @($Results)
         screenshots = $screenshotEvidence
     }
@@ -360,61 +635,47 @@ function Invoke-ManagedProcess(
 ) {
     Remove-Item -LiteralPath $StdoutPath, $StderrPath -Force -ErrorAction SilentlyContinue
     $effectiveTimeoutSeconds = if ($TimeoutOverride -gt 0) { $TimeoutOverride } else { $TimeoutSeconds }
-    if ([IO.Path]::GetFileName($Executable) -match '^Godot_.*_console\.exe$') {
-        # Capture the console build through an owned Process handle. Invoking
-        # it with PowerShell's call operator can surface Godot's shutdown
-        # diagnostics as a terminating native-command error after the verifier
-        # has already passed. An explicit redirected handle keeps stdout and
-        # stderr in the gate log so shutdown classification remains reliable.
-        $startInfo = [Diagnostics.ProcessStartInfo]::new()
-        $startInfo.FileName = $Executable
-        $startInfo.Arguments = ConvertTo-ArgumentLine $Arguments
-        $startInfo.UseShellExecute = $false
-        $startInfo.CreateNoWindow = $true
-        $startInfo.RedirectStandardOutput = $true
-        $startInfo.RedirectStandardError = $true
-        $process = [Diagnostics.Process]::new()
-        $process.StartInfo = $startInfo
-        try {
-            [void]$process.Start()
-            $stdoutTask = $process.StandardOutput.ReadToEndAsync()
-            $stderrTask = $process.StandardError.ReadToEndAsync()
-            $completed = $process.WaitForExit($effectiveTimeoutSeconds * 1000)
-            if (-not $completed) {
-                Stop-IsolatedProcess $process
-            }
-            $stdout = $stdoutTask.GetAwaiter().GetResult()
-            $stderr = $stderrTask.GetAwaiter().GetResult()
-            [IO.File]::WriteAllText($StdoutPath, $stdout)
-            [IO.File]::WriteAllText($StderrPath, $stderr)
-            $exitCode = if ($completed) { [int]$process.ExitCode } else { 124 }
-        } finally {
-            $process.Dispose()
-        }
-        return [pscustomobject]@{
-            ExitCode = $exitCode
-            TimedOut = -not $completed
-        }
-    }
     $launchExecutable = $Executable
     $argumentLine = ConvertTo-ArgumentLine $Arguments
     if ([IO.Path]::GetExtension($Executable).ToLowerInvariant() -eq ".bat") {
         $launchExecutable = $env:ComSpec
         $argumentLine = '/d /s /c "' + $Executable + '" ' + $argumentLine
     }
-    $process = Start-Process -FilePath $launchExecutable -ArgumentList $argumentLine `
-        -RedirectStandardOutput $StdoutPath -RedirectStandardError $StderrPath -PassThru
-    $completed = $process.WaitForExit($effectiveTimeoutSeconds * 1000)
-    $timedOut = -not $completed
-    if ($timedOut) {
-        Stop-IsolatedProcess $process
-        $exitCode = 124
-    } else {
-        $exitCode = [int]$process.ExitCode
+    # Own the process handle for every gate. Start-Process -PassThru can expose
+    # a blank ExitCode on Windows even after WaitForExit, masking failures.
+    $startInfo = [Diagnostics.ProcessStartInfo]::new()
+    $startInfo.FileName = $launchExecutable
+    $startInfo.Arguments = $argumentLine
+    $startInfo.UseShellExecute = $false
+    $startInfo.CreateNoWindow = $true
+    $startInfo.RedirectStandardOutput = $true
+    $startInfo.RedirectStandardError = $true
+    $process = [Diagnostics.Process]::new()
+    $process.StartInfo = $startInfo
+    try {
+        [void]$process.Start()
+        $stdoutTask = $process.StandardOutput.ReadToEndAsync()
+        $stderrTask = $process.StandardError.ReadToEndAsync()
+        $completed = $process.WaitForExit($effectiveTimeoutSeconds * 1000)
+        if (-not $completed) {
+            Stop-IsolatedProcess $process
+        }
+        # A child can inherit stdout/stderr after its parent exits. Never let
+        # such a helper hold the release runner past the bounded capture wait.
+        $stdoutReady = $stdoutTask.Wait(3000)
+        $stderrReady = $stderrTask.Wait(3000)
+        $streamsReady = $stdoutReady -and $stderrReady
+        $stdout = if ($stdoutReady) { $stdoutTask.GetAwaiter().GetResult() } else { "ERROR: owned process stdout remained open after exit`r`n" }
+        $stderr = if ($stderrReady) { $stderrTask.GetAwaiter().GetResult() } else { "ERROR: owned process stderr remained open after exit`r`n" }
+        [IO.File]::WriteAllText($StdoutPath, $stdout)
+        [IO.File]::WriteAllText($StderrPath, $stderr)
+        $exitCode = if ($completed -and $streamsReady) { [int]$process.ExitCode } else { 124 }
+    } finally {
+        $process.Dispose()
     }
     return [pscustomobject]@{
         ExitCode = $exitCode
-        TimedOut = $timedOut
+        TimedOut = -not ($completed -and $streamsReady)
     }
 }
 
@@ -424,7 +685,8 @@ function Invoke-ExternalGate(
     [string[]]$Arguments,
     [int]$TimeoutOverride = 0
 ) {
-    $log = Join-Path $Logs "$Name.log"
+    $script:CurrentGateIdentity = Get-GateIdentity $Name $Executable $Arguments
+    $log = Join-Path $RunDirectory "$Name.log"
     $timer = [System.Diagnostics.Stopwatch]::StartNew()
     $stdoutPath = "$log.stdout.tmp"
     $stderrPath = "$log.stderr.tmp"
@@ -439,16 +701,26 @@ function Invoke-ExternalGate(
     if ($managed.TimedOut) {
         $timeoutLabel = if ($TimeoutOverride -gt 0) { $TimeoutOverride } else { $TimeoutSeconds }
         $failure = "$Name timed out after $timeoutLabel seconds"
-        Add-Result $Name "fail" $timer.Elapsed.TotalSeconds $log @() $failure
+        Add-Result $Name "fail" $timer.Elapsed.TotalSeconds $log @() $failure $exitCode $true
         if (-not $VerboseOutput) { Get-Content -LiteralPath $log -Tail 40 }
         throw "$failure. Full log: $log"
     }
     if ($exitCode -ne 0) {
         $failure = "$Name failed with exit code $exitCode"
-        Add-Result $Name "fail" $timer.Elapsed.TotalSeconds $log @() $failure
+        Add-Result $Name "fail" $timer.Elapsed.TotalSeconds $log @() $failure $exitCode
         if (-not $VerboseOutput) { Get-Content -LiteralPath $log -Tail 40 }
         throw $failure
     }
+	$blockingLine = @(Get-Content -LiteralPath $log | Where-Object {
+		$_ -match 'SCRIPT ERROR|Parse Error|Compile Error|Failed to load|Cannot open|ERROR:|VERIFIER:\s*FAIL|ASSERTION FAILED|Assertion failed|Parameter "material" is null|RID allocations .* leaked at exit|ObjectDB instances leaked at exit|Condition .* is true' -and
+		$_ -notmatch '^\s*\+\s+CategoryInfo|FullyQualifiedErrorId.*NativeCommandError'
+	} | Select-Object -First 1)
+	if ($blockingLine.Count -gt 0) {
+		$failure = "$Name emitted a release-blocking error: $($blockingLine[0])"
+		Add-Result $Name "fail" $timer.Elapsed.TotalSeconds $log @() $failure $exitCode
+		if (-not $VerboseOutput) { Get-Content -LiteralPath $log -Tail 40 }
+		throw $failure
+	}
 	# Gates write structured reports in addition to their process exit code.
 	# Treat a missing, malformed, or non-pass report as a failure even if a
 	# wrapper or native process masks the child's exit status. Both spellings
@@ -461,7 +733,7 @@ function Invoke-ExternalGate(
 		$reportFile = [string]$Arguments[$reportArgIndex + 1]
 		if (-not (Test-Path -LiteralPath $reportFile)) {
 			$failure = "$Name completed without its structured report: $reportFile"
-			Add-Result $Name "fail" $timer.Elapsed.TotalSeconds $log @() $failure
+			Add-Result $Name "fail" $timer.Elapsed.TotalSeconds $log @() $failure $exitCode
 			if (-not $VerboseOutput) { Get-Content -LiteralPath $log -Tail 40 }
 			throw $failure
 		}
@@ -477,24 +749,24 @@ function Invoke-ExternalGate(
 		}
 		if ($null -ne $reportParseError) {
 			$failure = "$Name produced an unreadable structured report: $reportParseError"
-			Add-Result $Name "fail" $timer.Elapsed.TotalSeconds $log @() $failure
+			Add-Result $Name "fail" $timer.Elapsed.TotalSeconds $log @() $failure $exitCode
 			if (-not $VerboseOutput) { Get-Content -LiteralPath $log -Tail 40 }
 			throw $failure
 		}
 		if ($null -eq $reportStatus -or [string]::IsNullOrWhiteSpace($reportStatus)) {
 			$failure = "$Name produced a structured report without a status: $reportFile"
-			Add-Result $Name "fail" $timer.Elapsed.TotalSeconds $log @() $failure
+			Add-Result $Name "fail" $timer.Elapsed.TotalSeconds $log @() $failure $exitCode
 			if (-not $VerboseOutput) { Get-Content -LiteralPath $log -Tail 40 }
 			throw $failure
 		}
 		if ($reportStatus -ne "pass") {
 			$failure = "$Name reported status '$reportStatus' despite exit code 0"
-			Add-Result $Name "fail" $timer.Elapsed.TotalSeconds $log @() $failure
+			Add-Result $Name "fail" $timer.Elapsed.TotalSeconds $log @() $failure $exitCode
 			if (-not $VerboseOutput) { Get-Content -LiteralPath $log -Tail 40 }
 			throw $failure
 		}
 	}
-    Add-Result $Name "pass" $timer.Elapsed.TotalSeconds $log
+    Add-Result $Name "pass" $timer.Elapsed.TotalSeconds $log @() "" $exitCode
     Write-Host ("RELEASE GATE {0}: PASS ({1:n1}s)" -f $Name, $timer.Elapsed.TotalSeconds)
 }
 
@@ -535,7 +807,8 @@ function Invoke-CapturedProcess(
 function Invoke-GodotGate([string]$Name, [string[]]$Arguments, [string]$Executable = "") {
 	$Runner = $Godot
 	if (-not [string]::IsNullOrWhiteSpace($Executable)) { $Runner = $Executable }
-    $log = Join-Path $Logs "$Name.log"
+    $script:CurrentGateIdentity = Get-GateIdentity $Name $Runner $Arguments
+    $log = Join-Path $RunDirectory "$Name.log"
     $timer = [System.Diagnostics.Stopwatch]::StartNew()
     if (-not [string]::IsNullOrWhiteSpace($Executable)) {
         $exitCode = Invoke-CapturedProcess $Runner $Arguments $log
@@ -553,7 +826,7 @@ function Invoke-GodotGate([string]$Name, [string[]]$Arguments, [string]$Executab
     $timer.Stop()
     if ($exitCode -ne 0) {
         $failure = "$Name failed with exit code $exitCode"
-        Add-Result $Name "fail" $timer.Elapsed.TotalSeconds $log @() $failure
+        Add-Result $Name "fail" $timer.Elapsed.TotalSeconds $log @() $failure $exitCode ($exitCode -eq 124)
         if (-not $VerboseOutput) { Get-Content -LiteralPath $log -Tail 40 }
         throw $failure
     }
@@ -567,18 +840,15 @@ function Invoke-GodotGate([string]$Name, [string[]]$Arguments, [string]$Executab
     }
     if ($passIndex -lt 0) {
         $failure = "$Name produced no verifier pass marker"
-        Add-Result $Name "fail" $timer.Elapsed.TotalSeconds $log @() $failure
+        Add-Result $Name "fail" $timer.Elapsed.TotalSeconds $log @() $failure $exitCode
         if (-not $VerboseOutput -and (Test-Path -LiteralPath $log)) { Get-Content -LiteralPath $log -Tail 40 }
         throw $failure
     }
     $warnings = [System.Collections.Generic.List[string]]::new()
     $fatal = [System.Collections.Generic.List[string]]::new()
-	# Runtime diagnostics are fatal until a verifier explicitly enters its
-	# shutdown phase. This prevents a test from printing PASS early and hiding a
-	# real active-render failure, while allowing the known Godot 4.6.3
-	# Compatibility allocator messages emitted after all owned nodes have been
-	# retired. Verifiers that use this classification must print the phase
-	# marker immediately before cleanup and print their final PASS afterwards.
+	# The phase marker is retained for diagnostics, but it never turns a
+	# resource or renderer error into a passing result. A teardown allowlist
+	# requires an exact, separately reviewed engine signature; none is approved.
 	$shutdownIndex = -1
 	for ($index = 0; $index -lt $lines.Count; $index++) {
 		if ($lines[$index] -match 'VERIFIER_PHASE:\s*SHUTDOWN') {
@@ -586,17 +856,12 @@ function Invoke-GodotGate([string]$Name, [string[]]$Arguments, [string]$Executab
 			break
 		}
 	}
-	$shutdownResourcePattern = 'Parameter "material" is null|RID allocations .* leaked at exit|Pages in use exist at exit|resources still in use at exit|Buffer with GL ID .* leaked|shaders of type .* never freed|ObjectDB instances leaked at exit|Leaked instance dependency|did not call instance_notify_deleted|Orphan .* at exit'
 	$activeResourcePattern = 'Parameter "material" is null|RID allocations .* leaked at exit|Pages in use exist at exit|resources still in use at exit|Buffer with GL ID .* leaked|shaders of type .* never freed|ObjectDB instances leaked at exit|Leaked instance dependency|did not call instance_notify_deleted|Orphan .* at exit|Condition .* is true'
     $fatalPattern = 'SCRIPT ERROR|Parse Error|Compile Error|Failed to load|Cannot open|ERROR:|VERIFIER:\s*FAIL|ASSERTION FAILED|Assertion failed'
     for ($index = 0; $index -lt $lines.Count; $index++) {
         $line = $lines[$index]
-		if ($line -match $shutdownResourcePattern) {
-			if ($shutdownIndex -ge 0 -and $index -gt $shutdownIndex) {
-				$warnings.Add($line.Trim())
-			} else {
-				$fatal.Add($line.Trim())
-			}
+		if ($line -match $activeResourcePattern) {
+			$fatal.Add($line.Trim())
 			continue
 		}
 		if ($line -notmatch $fatalPattern) { continue }
@@ -610,34 +875,123 @@ function Invoke-GodotGate([string]$Name, [string[]]$Arguments, [string]$Executab
     }
     if ($fatal.Count -gt 0) {
         $failure = "$Name emitted a release-blocking error: $($fatal[0])"
-        Add-Result $Name "fail" $timer.Elapsed.TotalSeconds $log @($warnings) $failure
+        Add-Result $Name "fail" $timer.Elapsed.TotalSeconds $log @($warnings) $failure $exitCode
         if (-not $VerboseOutput) { Get-Content -LiteralPath $log -Tail 40 }
         throw $failure
     }
-    Add-Result $Name "pass" $timer.Elapsed.TotalSeconds $log @($warnings)
+    Add-Result $Name "pass" $timer.Elapsed.TotalSeconds $log @($warnings) "" $exitCode
     Write-Host ("RELEASE GATE {0}: PASS ({1:n1}s)" -f $Name, $timer.Elapsed.TotalSeconds)
 }
 
-function Sync-QAWebPacks {
-    $sourcePackDirectory = Join-Path $Web "packs"
-    if (-not (Test-Path -LiteralPath $sourcePackDirectory)) {
-        throw "Verified Web export is missing runtime packs: $sourcePackDirectory"
+function Get-QA002RouteReport([string]$GateName, [string]$FileName) {
+    $result = @($Results | Where-Object { [string]$_.name -eq $GateName } | Select-Object -Last 1)
+    if ($result.Count -ne 1 -or [string]$result[0].status -ne "pass") {
+        throw "Missing passing QA-002 route gate: $GateName"
     }
-    $qaPackDirectory = Join-Path $QAWeb "packs"
-    New-Item -ItemType Directory -Force -Path $qaPackDirectory | Out-Null
-    foreach ($packName in @("opening", "campaign", "characters", "monsters", "audio")) {
-        $sourcePack = Join-Path $sourcePackDirectory "$packName.pck"
-        if (-not (Test-Path -LiteralPath $sourcePack)) {
-            throw "Verified Web export is missing runtime pack: $sourcePack"
+    $log = [string]$result[0].log
+    $logPath = if ([IO.Path]::IsPathRooted($log)) { $log } else { Join-Path $Logs $log }
+    $routeReport = Join-Path (Split-Path -Parent $logPath) $FileName
+    if (-not (Test-Path -LiteralPath $routeReport -PathType Leaf)) {
+        throw "Missing QA-002 route report for $GateName`: $routeReport"
+    }
+    return $routeReport
+}
+
+function Invoke-QA002BranchMatrix {
+    $routeReports = [System.Collections.Generic.List[string]]::new()
+    $routeReports.Add((Get-QA002RouteReport "verify_web_002_browser" "web_002_browser.json"))
+    foreach ($route in $(if ($FunctionalCandidate) { @() } else { $Qa002BranchRoutes })) {
+        $gateName = "qa_002_branch_$($route.slug)"
+        if (-not @($Results | Where-Object { [string]$_.name -eq $gateName }).Count) {
+            $reportFile = Join-Path $RunDirectory "qa_002_$($route.slug).json"
+            Invoke-ExternalGate $gateName $Node @(
+                (Join-Path $Project "tools\verify_qa_002_browser.mjs"),
+                "--export", $Web,
+                "--browser", "chrome",
+                "--renderer", "hardware",
+                "--acceptance-profile", $AcceptanceProfile,
+                "--production-observer", "true",
+                "--$($route.flag)", "true",
+                "--report", $reportFile
+            ) -TimeoutOverride $BrowserRouteTimeoutSeconds
         }
-        Copy-Item -LiteralPath $sourcePack -Destination (Join-Path $qaPackDirectory "$packName.pck") -Force
+        $routeReports.Add((Get-QA002RouteReport $gateName "qa_002_$($route.slug).json"))
     }
+    if ($FunctionalCandidate) {
+        foreach ($compatibilityBrowser in @("edge", "firefox")) {
+            $gateName = "qa_002_branch_$($compatibilityBrowser)_smoke"
+            $reportFileName = "qa_002_$($compatibilityBrowser)_smoke.json"
+            if (-not @($Results | Where-Object { [string]$_.name -eq $gateName }).Count) {
+                Invoke-ExternalGate $gateName $Node @(
+                    (Join-Path $Project "tools\verify_qa_002_browser.mjs"),
+                    "--export", $Web, "--browser", $compatibilityBrowser,
+                    "--renderer", "hardware", "--acceptance-profile", $AcceptanceProfile,
+                    "--production-observer", "true", "--browser-smoke", "true",
+                    "--report", (Join-Path $RunDirectory $reportFileName)
+                ) -TimeoutOverride $BrowserRouteTimeoutSeconds
+            }
+            $routeReports.Add((Get-QA002RouteReport $gateName $reportFileName))
+        }
+    }
+    $candidateArguments = [System.Collections.Generic.List[string]]::new()
+    $candidateArguments.Add((Join-Path $Project "tools\verify_qa_002_candidate.mjs"))
+    $candidateArguments.Add("--export")
+    $candidateArguments.Add($Web)
+    $candidateArguments.Add("--acceptance-profile")
+    $candidateArguments.Add($AcceptanceProfile)
+    $candidateArguments.Add("--output")
+    $candidateArguments.Add((Join-Path $RunDirectory "qa_002_candidate.json"))
+    foreach ($routeReport in $routeReports) {
+        $candidateArguments.Add("--report")
+        $candidateArguments.Add($routeReport)
+    }
+    Invoke-ExternalGate "qa_002_candidate" $Node $candidateArguments.ToArray()
 }
 
 try {
     if (!(Test-Path -LiteralPath $Godot)) { throw "Godot 4.6.3 console binary not found: $Godot" }
     if (!(Test-Path -LiteralPath $Python)) { throw "Bundled Python not found: $Python" }
     if (!(Test-Path -LiteralPath $Node)) { throw "Bundled Node.js not found: $Node" }
+    Initialize-ReleaseIdentities
+    Import-ResumeResults
+
+    if ($FunctionalEvidence) {
+        $script:RequiredGateNames = @("functional_evidence", "qa_002_candidate", "verify_security_001", "verify_web_export", "verify_recovery_004")
+        Invoke-ExternalGate "functional_evidence" $Python @(
+            (Join-Path $Project "tools\verify_release_report.py"), $Project,
+            "--check-functional-evidence", $FunctionalEvidence
+        )
+        $candidateArguments = @((Join-Path $Project "tools\verify_qa_002_candidate.mjs"),
+            "--export", $Web, "--output", (Join-Path $RunDirectory "qa_002_candidate.json"),
+            "--acceptance-profile", $AcceptanceProfile)
+        foreach ($browserReport in @($EvidenceBundle.browser_reports)) { $candidateArguments += @("--report", [string]$browserReport) }
+        Invoke-ExternalGate "qa_002_candidate" $Node $candidateArguments
+        Invoke-ExternalGate "verify_security_001" $Python @((Join-Path $Project "tools\verify_security_001.py"), $Project)
+        Invoke-ExternalGate "verify_web_export" $Python @((Join-Path $Project "tools\verify_web_export.py"), $Web)
+        Invoke-ExternalGate "verify_recovery_004" $Python @((Join-Path $Project "tools\verify_recovery_004.py"), $Project)
+        Copy-Item -LiteralPath ([string]$EvidenceBundle.visual_report) -Destination (Join-Path $RunDirectory "qa_003_milestone_report.json")
+        $artifact = Get-ArtifactSnapshot
+        # This binds a preserved export; it does not invent an export-time snapshot.
+        [ordered]@{
+            binding_origin = "preserved_v10_export_and_capture"
+            rendering_inputs_sha256 = [string]$EvidenceBundle.rendering_inputs_sha256
+            export_log = [string]$EvidenceBundle.export_log
+            export_log_sha256 = Get-CachedFileSha256 ([string]$EvidenceBundle.export_log)
+            runtime_content_fingerprint = $CurrentRuntimeFingerprint
+            pck_sha256 = $artifact.pck_sha256
+            files = @($artifact.files)
+        } | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath (Join-Path $RunDirectory "web_export_source.json") -Encoding utf8
+        Write-ReleaseReport "pass"
+        $certificationInput = Join-Path $RunDirectory "certification_input.json"
+        Copy-Item -LiteralPath $ReportPath -Destination $certificationInput
+        Invoke-ExternalGate "verify_release_report" $Python @(
+            (Join-Path $Project "tools\verify_release_report.py"), $Project,
+            "--report", $certificationInput, "--strict", "--acceptance-profile", $AcceptanceProfile
+        )
+        Write-ReleaseReport "pass"
+        Write-Host "CERT-001: PASS - preserved V10 evidence aggregated; no campaign replay or export"
+        exit 0
+    }
 
     if (-not $IsResume) {
         Invoke-ExternalGate "verify_security_001" $Python @(
@@ -648,6 +1002,18 @@ try {
             (Join-Path $Project "tools\verify_recovery_004.py"),
             $Project
         )
+        Invoke-ExternalGate "verify_pack_http" $Python @(
+            (Join-Path $Project "tools\verify_pack_http.py"),
+            "--godot", $Godot, "--project", $Project,
+            "--report", (Join-Path $RunDirectory "pack_http.json")
+        )
+        Invoke-ExternalGate "verify_qa_001" $Python @(
+            (Join-Path $Project "tools\verify_qa_001.py"),
+            $Project
+        )
+        Invoke-ExternalGate "verify_current_ticket_release" $Python @(
+            (Join-Path $Project "tools\verify_current_ticket_release.py")
+        )
         Invoke-ExternalGate "verify_content_integrity" $Python @(
             (Join-Path $Project "tools\verify_content_integrity.py"),
             $Project,
@@ -657,8 +1023,9 @@ try {
         Invoke-ExternalGate "verify_runtime_required_components" $Python @(
             (Join-Path $Project "tools\verify_runtime_required_components.py"),
             $Project,
+            "--production",
             "--json-report",
-            (Join-Path $Logs "runtime_required_components.json")
+            (Join-Path $RunDirectory "runtime_required_components.json")
         )
         Invoke-ExternalGate "verify_asset_001_files" $Python @(
             (Join-Path $Project "tools\verify_asset_001.py")
@@ -675,8 +1042,35 @@ try {
     }
 
     $verifiers = @(
+        "verify_enemy_dormancy.gd",
+        "verify_hart_stag.gd",
+        "verify_hart_pending_reload.gd",
+        "verify_boss_resolution.gd",
+        "verify_health_boundaries.gd",
+        "verify_deferred_player_restore.gd",
+        "verify_world_snapshot_isolation.gd",
+        "verify_quest_snapshot_isolation.gd",
+        "verify_progression_restore.gd",
+        "verify_pack_wait_ownership.gd",
+        "verify_save_version_boundary.gd",
+        "verify_settings_roundtrip.gd",
+        "verify_inventory_restore.gd",
         "verify_runtime_smoke.gd", "verify_runtime.gd", "verify_runtime_regressions.gd", "verify_zone_builder_integrity.gd", "verify_gate_transitions.gd", "verify_engine_001.gd", "verify_engine_003.gd", "verify_engine_004.gd", "verify_story_campaign.gd", "verify_quest_002.gd", "verify_objective_view_model.gd", "verify_save_001.gd", "verify_qa_002.gd", "verify_art_001.gd", "verify_asset_001.gd", "verify_character_real_001.gd", "verify_face_river_sun_001.gd",
-        "verify_motion_quality.gd", "verify_river_swimming.gd", "verify_greyfen_life.gd",
+        "verify_motion_quality.gd", "verify_river_swimming.gd", "verify_river_bank_faces.gd", "verify_greyfen_life.gd",
+        "verify_event_driven_touch.gd", "verify_event_driven_life.gd",
+        "verify_dialogue_runtime_coordinator.gd", "verify_combat_vfx_coordinator.gd",
+        "verify_interaction_visibility.gd", "verify_quest_hud_coordinator.gd", "verify_zone_residency.gd",
+        "verify_record_archive.gd", "verify_greyfen_social.gd", "verify_greyfen_horizon.gd", "verify_cemetery_architecture.gd", "verify_minigame_presentation.gd",
+        "verify_vargan_architecture.gd",
+        "verify_ash_mill.gd",
+        "verify_undercroft_vault.gd",
+        "verify_finale_composition.gd",
+        "verify_campaign_wilds_composition.gd",
+        "verify_paused_player_real_input.gd",
+        "verify_zone_pause_ownership.gd",
+        "verify_access_weapon_context.gd",
+        "verify_access_binding_restore.gd",
+        "verify_access_context_real_input.gd",
 		"verify_castle_vargan.gd", "verify_audio_runtime.gd", "verify_audio_001.gd", "verify_visible_quality.gd",
 		"verify_recovery_002_foundation.gd", "verify_navigation_001.gd", "verify_char_001.gd", "verify_anim_001.gd", "verify_combat_001.gd", "verify_ai_001.gd", "verify_oath_001.gd", "verify_ui_001.gd", "verify_input_001.gd", "verify_mobile_001.gd", "verify_world_001.gd", "verify_world_002.gd", "verify_world_003.gd", "verify_world_014.gd", "verify_zone_budgets.gd",
         "verify_visual_003.gd", "verify_visual_100.gd", "verify_master_002.gd", "verify_master_003.gd",
@@ -687,7 +1081,7 @@ try {
         "verify_perf_003.gd"
     )
     $verifierNames = @($verifiers | ForEach-Object { [IO.Path]::GetFileNameWithoutExtension($_) })
-    $qa005ManifestPath = Join-Path $Logs "qa_005_inputs.json"
+    $qa005ManifestPath = Join-Path $RunDirectory "qa_005_inputs.json"
     $resumeFromVerifier = $IsResume -and ($verifierNames -contains $ResumeFrom)
     $resumeFromPerformance = $IsResume -and $ResumeFrom -eq "verify_perf_001"
     $screenshotGates = @(
@@ -701,6 +1095,29 @@ try {
         "capture_world_006",
         "capture_boss_001"
     )
+    $requiredGateNames = @(
+        "verify_security_001", "verify_recovery_004", "verify_pack_http", "verify_qa_001",
+        "verify_current_ticket_release", "verify_content_integrity", "verify_runtime_required_components",
+        "verify_asset_001_files", "verify_prod_002", "verify_prod_003"
+    )
+    $requiredGateNames += $verifierNames
+    $requiredGateNames += @("verify_perf_001", "verify_qa_005")
+    foreach ($captureName in $screenshotGates) {
+        $requiredGateNames += @("$captureName.provenance_begin", $captureName, "$captureName.provenance_finish")
+    }
+    $requiredGateNames += @(
+        "verify_screenshot_qa_003", "verify_qa_006", "verify_web_001", "verify_web_002",
+        "web_export", "verify_web_export", "packed_startup", "verify_web_browser",
+        "verify_mobile_browser", "verify_web_002_browser", "verify_web_002_mobile"
+    )
+    if (-not $FunctionalCandidate) {
+        $requiredGateNames += @($Qa002BranchRoutes | ForEach-Object { "qa_002_branch_$($_.slug)" })
+    }
+    $requiredGateNames += "qa_002_candidate"
+    if ($FunctionalCandidate) {
+        $requiredGateNames = @($requiredGateNames | Where-Object { $_ -ne "verify_web_002_mobile" })
+        $requiredGateNames += @("qa_002_branch_edge_smoke", "qa_002_branch_firefox_smoke")
+    }
     $resumeFromScreenshot = $IsResume -and ($screenshotGates -contains $ResumeFrom)
     if (-not $IsResume -or $resumeFromVerifier) {
         $resumeVerifierReached = -not $IsResume
@@ -711,7 +1128,11 @@ try {
                 $resumeVerifierReached = $true
             }
             if (-not [string]::IsNullOrWhiteSpace($Only) -and $name -ne $Only) { continue }
-            Invoke-GodotGate $name @("--headless", "--path", $Project, "--script", "tools/$verifier")
+            if ($name -in @("verify_paused_player_real_input", "verify_access_context_real_input", "verify_world_013")) {
+                Invoke-GodotGate $name @("--path", $Project, "--rendering-method", "gl_compatibility", "--script", "tools/$verifier")
+            } else {
+                Invoke-GodotGate $name @("--headless", "--path", $Project, "--script", "tools/$verifier")
+            }
         }
     }
 
@@ -721,10 +1142,10 @@ try {
 		}
         Invoke-GodotGate "verify_perf_001" @(
             "--path", $Project, "--rendering-method", "gl_compatibility",
-            "--script", "tools/verify_perf_001.gd"
+            "--script", "tools/verify_perf_001.gd", "--", "--acceptance-profile=$AcceptanceProfile"
         ) $GodotGraphical
     }
-    if (-not $IsResume -and [string]::IsNullOrWhiteSpace($Only)) {
+    if ((-not $IsResume -or $resumeFromVerifier -or $resumeFromPerformance) -and [string]::IsNullOrWhiteSpace($Only)) {
         $qa005Logs = @($verifierNames + "verify_perf_001" | ForEach-Object { "$_.log" })
         $qa005Manifest = [ordered]@{
             schema_version = 1
@@ -742,7 +1163,7 @@ try {
             (Join-Path $Project "tools\verify_qa_005.py"),
             $Project,
             "--run-manifest", $qa005ManifestPath,
-            "--report", (Join-Path $Logs "qa_005_report.json")
+            "--report", (Join-Path $RunDirectory "qa_005_report.json")
         )
         Invoke-ExternalGate "verify_qa_005" $Python $qaArguments
     }
@@ -753,9 +1174,20 @@ try {
                 if ($captureName -ne $ResumeFrom) { continue }
                 $captureReached = $true
             }
+            $captureSession = Join-Path $RunDirectory "$captureName.capture-session.json"
+            Invoke-ExternalGate "$captureName.provenance_begin" $Python @(
+                (Join-Path $Project "tools\capture_visual_provenance.py"),
+                "begin", $Project, "--session", $captureSession, "--gate", $captureName
+            )
             Invoke-GodotGate $captureName @(
                 "--path", $Project, "--rendering-method", "gl_compatibility",
                 "--script", "tools/$captureName.gd"
+            )
+            # This is unreachable after a failed/timeout capture. Never bind an
+            # old gallery file merely because a renderer command was attempted.
+            Invoke-ExternalGate "$captureName.provenance_finish" $Python @(
+                (Join-Path $Project "tools\capture_visual_provenance.py"),
+                "finish", $Project, "--session", $captureSession
             )
         }
         $runtimeRoots = @(
@@ -782,12 +1214,12 @@ try {
             (Join-Path $Project "tools\verify_screenshot_qa_003.py"),
             $Project,
             "--mode", "milestone",
-            "--report", (Join-Path $Logs "qa_003_milestone_report.json")
+            "--report", (Join-Path $RunDirectory "qa_003_milestone_report.json")
         )
         Invoke-ExternalGate "verify_qa_006" $Python @(
             (Join-Path $Project "tools\verify_qa_006.py"),
             $Project,
-            "--report", (Join-Path $Logs "qa_006_report.json")
+            "--report", (Join-Path $RunDirectory "qa_006_report.json")
         )
     }
 
@@ -802,107 +1234,127 @@ try {
             $Project
         )
         Invoke-ExternalGate "web_export" (Join-Path $Project "Export_Web_Build.bat") @()
+        Refresh-ArtifactIdentity
         Invoke-ExternalGate "verify_web_export" $Python @(
             (Join-Path $Project "tools\verify_web_export.py"), $Web,
-            "--json-report", (Join-Path $Logs "web_export.json")
+            "--json-report", (Join-Path $RunDirectory "web_export.json")
         )
+        Write-WebExportProvenance
         $pack = Join-Path $Web "index.pck"
         Invoke-GodotGate "packed_startup" @(
-            # The exported folder is an artifact, not a Godot project. Start the
-            # packed game with the source project context so remapped resources
-            # and the PCK are resolved consistently in CI and locally.
-            "--headless", "--path", $Project, "--main-pack", $pack,
-            "--script", "tools/verify_packed_startup.gd"
+            # Isolate the artifact: source files must not rescue missing exports.
+            "--headless", "--path", $Web, "--main-pack", $pack,
+            "--script", (Join-Path $Project "tools\verify_packed_startup.gd")
         )
         Invoke-ExternalGate "verify_web_browser" $Node @(
             (Join-Path $Project "tools\verify_web_browser.mjs"),
             "--export", $Web,
-            "--report", (Join-Path $Logs "web_browser.json")
-        )
-        Invoke-ExternalGate "qa_web_export" $Godot @(
-            "--headless", "--path", $Project, "--export-release", "Web QA Browser"
-        )
-        Sync-QAWebPacks
-        Invoke-ExternalGate "verify_qa_002" $Godot @(
-            "--headless", "--path", $Project, "--script", "tools/verify_qa_002.gd"
+            "--report", (Join-Path $RunDirectory "web_browser.json")
         )
         Invoke-ExternalGate "verify_mobile_browser" $Node @(
             (Join-Path $Project "tools\verify_web_browser.mjs"),
             "--export", $Web,
-            "--report", (Join-Path $Logs "mobile_browser.json"),
+            "--report", (Join-Path $RunDirectory "mobile_browser.json"),
             "--mobile", "true"
         )
         Invoke-ExternalGate "verify_web_002_browser" $Node @(
             (Join-Path $Project "tools\verify_qa_002_browser.mjs"),
-            "--export", $QAWeb,
-            "--browser", "all",
-            "--full-campaign", "true",
-            "--report", (Join-Path $Logs "web_002_browser.json")
+			"--export", $Web,
+            "--browser", $CampaignBrowser,
+            "--renderer", "hardware",
+            $(if ($FunctionalCandidate) { "--opening-save-continue" } else { "--full-campaign" }), "true",
+			"--enforce-performance", $EnforceBrowserPerformance,
+			"--acceptance-profile", $AcceptanceProfile,
+			"--production-observer", "true",
+            "--report", (Join-Path $RunDirectory "web_002_browser.json")
         ) -TimeoutOverride $BrowserRouteTimeoutSeconds
-        Invoke-ExternalGate "verify_web_002_mobile" $Node @(
+        if (-not $FunctionalCandidate) { Invoke-ExternalGate "verify_web_002_mobile" $Node @(
             (Join-Path $Project "tools\verify_qa_002_browser.mjs"),
-            "--export", $QAWeb,
-            "--browser", "all",
+			"--export", $Web,
+            "--browser", "chromium",
+            "--renderer", "hardware",
             "--full-campaign", "true",
+			"--production-observer", "true",
             "--mobile", "true",
-            "--report", (Join-Path $Logs "web_002_mobile.json")
-        ) -TimeoutOverride $BrowserRouteTimeoutSeconds
+            "--report", (Join-Path $RunDirectory "web_002_mobile.json")
+        ) -TimeoutOverride $BrowserRouteTimeoutSeconds }
     }
 	if ([string]::IsNullOrWhiteSpace($Only) -and -not $SkipExport -and $webTailResume) {
-		# The package and all preceding browser gates are already recorded in the
-		# release report. Resume only the failed full-campaign browser gate and
-		# its mobile companion against the verified QA export.
-		Sync-QAWebPacks
+		# Preserve input-identical gates and use the verified production export.
 		Invoke-ExternalGate "verify_web_002_browser" $Node @(
 			(Join-Path $Project "tools\verify_qa_002_browser.mjs"),
-			"--export", $QAWeb,
-			"--browser", "all",
-			"--full-campaign", "true",
-			"--report", (Join-Path $Logs "web_002_browser.json")
+			"--export", $Web,
+			"--browser", $CampaignBrowser,
+			"--renderer", "hardware",
+			$(if ($FunctionalCandidate) { "--opening-save-continue" } else { "--full-campaign" }), "true",
+			"--enforce-performance", $EnforceBrowserPerformance,
+			"--acceptance-profile", $AcceptanceProfile,
+			"--production-observer", "true",
+			"--report", (Join-Path $RunDirectory "web_002_browser.json")
 		) -TimeoutOverride $BrowserRouteTimeoutSeconds
-		Invoke-ExternalGate "verify_web_002_mobile" $Node @(
+		if (-not $FunctionalCandidate) { Invoke-ExternalGate "verify_web_002_mobile" $Node @(
 			(Join-Path $Project "tools\verify_qa_002_browser.mjs"),
-			"--export", $QAWeb,
-			"--browser", "all",
-			"--full-campaign", "true",
+			"--export", $Web,
+			"--browser", "chromium",
+			"--renderer", "hardware",
+			$(if ($FunctionalCandidate) { "--opening-save-continue" } else { "--full-campaign" }), "true",
+			"--production-observer", "true",
 			"--mobile", "true",
-			"--report", (Join-Path $Logs "web_002_mobile.json")
-		) -TimeoutOverride $BrowserRouteTimeoutSeconds
+			"--report", (Join-Path $RunDirectory "web_002_mobile.json")
+		) -TimeoutOverride $BrowserRouteTimeoutSeconds }
 	}
 	if ([string]::IsNullOrWhiteSpace($Only) -and -not $SkipExport -and $mobileTailResume) {
 		# Desktop Web and export gates already passed in the prior report. Resume
-		# at the corrected mobile smoke gate, then continue through the campaign
-		# browser checks against the existing verified QA export.
+		# browser checks against those same production bytes.
 		Invoke-ExternalGate "verify_mobile_browser" $Node @(
 			(Join-Path $Project "tools\verify_web_browser.mjs"),
 			"--export", $Web,
-			"--report", (Join-Path $Logs "mobile_browser.json"),
+			"--report", (Join-Path $RunDirectory "mobile_browser.json"),
 			"--mobile", "true"
 		)
 		Invoke-ExternalGate "verify_web_002_browser" $Node @(
 			(Join-Path $Project "tools\verify_qa_002_browser.mjs"),
-			"--export", $QAWeb,
-			"--browser", "all",
+			"--export", $Web,
+			"--browser", $CampaignBrowser,
+			"--renderer", "hardware",
 			"--full-campaign", "true",
-			"--report", (Join-Path $Logs "web_002_browser.json")
+			"--enforce-performance", $EnforceBrowserPerformance,
+			"--acceptance-profile", $AcceptanceProfile,
+			"--production-observer", "true",
+			"--report", (Join-Path $RunDirectory "web_002_browser.json")
 		) -TimeoutOverride $BrowserRouteTimeoutSeconds
-		Invoke-ExternalGate "verify_web_002_mobile" $Node @(
+		if (-not $FunctionalCandidate) { Invoke-ExternalGate "verify_web_002_mobile" $Node @(
 			(Join-Path $Project "tools\verify_qa_002_browser.mjs"),
-			"--export", $QAWeb,
-			"--browser", "all",
+			"--export", $Web,
+			"--browser", "chromium",
+			"--renderer", "hardware",
 			"--full-campaign", "true",
+			"--production-observer", "true",
 			"--mobile", "true",
-			"--report", (Join-Path $Logs "web_002_mobile.json")
-		) -TimeoutOverride $BrowserRouteTimeoutSeconds
+			"--report", (Join-Path $RunDirectory "web_002_mobile.json")
+		) -TimeoutOverride $BrowserRouteTimeoutSeconds }
 	}
-    # A skipped or resumed run is evidence for the requested slice only.
-    # Never label it as a complete release pass when mandatory stages did not run.
-    $hasSkippedStages = $SkipExport -or $SkipPerformance -or $SkipScreenshots -or $IsResume
-    $isCompleteReleaseRun = [string]::IsNullOrWhiteSpace($Only) -and -not $hasSkippedStages
-    $blockingIssues = @(Get-BlockingIssueSnapshot)
+    $resumeFromQa002Matrix = $IsResume -and ($ResumeFrom -eq "qa_002_candidate" -or $ResumeFrom.StartsWith("qa_002_branch_", [StringComparison]::Ordinal))
+    if ([string]::IsNullOrWhiteSpace($Only) -and -not $SkipExport -and
+        (-not $IsResume -or $webTailResume -or $mobileTailResume -or $resumeFromQa002Matrix)) {
+        Invoke-QA002BranchMatrix
+    }
+    $hasSkippedStages = $SkipExport -or $SkipPerformance -or $SkipScreenshots
+    $resultNames = @($Results | ForEach-Object { [string]$_.name })
+    $missingGates = @($requiredGateNames | Where-Object { $_ -notin $resultNames })
+    $duplicateGates = @($resultNames | Group-Object | Where-Object { $_.Count -gt 1 } | ForEach-Object { $_.Name })
+    $isCompleteReleaseRun = [string]::IsNullOrWhiteSpace($Only) -and -not $hasSkippedStages -and $missingGates.Count -eq 0 -and $duplicateGates.Count -eq 0
+    if ([string]::IsNullOrWhiteSpace($Only) -and -not $hasSkippedStages -and ($missingGates.Count -gt 0 -or $duplicateGates.Count -gt 0)) {
+        $failure = "Release evidence set is incomplete"
+        if ($missingGates.Count -gt 0) { $failure += "; missing: $($missingGates -join ', ')" }
+        if ($duplicateGates.Count -gt 0) { $failure += "; duplicate: $($duplicateGates -join ', ')" }
+        Write-ReleaseReport "fail" $failure
+        throw $failure
+    }
+    $blockingIssues = @(Get-BlockingIssueSnapshot $ReleasePhase)
     if ($isCompleteReleaseRun -and $blockingIssues.Count -gt 0) {
         $blockerSummary = ($blockingIssues | ForEach-Object {
-            "%s=%s" -f [string]$_.id, [string]$_.status
+            "{0}={1}" -f [string]$_.id, [string]$_.status
         }) -join ", "
         $failure = "Release blocked by unresolved issue registry entries: $blockerSummary"
         Write-ReleaseReport "fail" $failure
@@ -916,7 +1368,7 @@ try {
             (Join-Path $Project "tools\verify_release_report.py"),
             $Project,
             "--report", $ReportPath,
-            "--strict"
+            "--strict", "--acceptance-profile", $AcceptanceProfile
         )
         Write-ReleaseReport "pass"
     }

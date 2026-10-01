@@ -24,8 +24,24 @@ func _initialize() -> void:
 		var area = game.zone_root.find_child(interaction, true, false)
 		if area != null:
 			game.call("_handle_interaction", area)
+	check(not game.quests.is_objective_done("side_black_dog", "find_dog"), "Sheepfold alone bypassed the Black Dog encounter")
+	# This verifier checks quest structure, not player traversal. Suppress the
+	# unrelated opening pack so its five slots do not prevent the side bandits.
+	game.quests.complete_objective("main_road_of_crows", "fight_ghoulkin")
 	game.call("_load_zone", "wychwood", Vector3(0, 1, 10))
 	await settle(3)
+	var camp = game.zone_root.find_child("bandit_camp", true, false)
+	check(camp != null, "Black Dog camp evidence is missing")
+	if camp != null:
+		game.call("_handle_interaction", camp)
+	check(not game.quests.is_objective_done("side_black_dog", "find_dog"), "Camp evidence alone bypassed the Black Dog bandits")
+	var bandits := 0
+	for enemy in game.active_enemies.duplicate():
+		if is_instance_valid(enemy) and enemy.enemy_id == "bandit" and not enemy.dead:
+			bandits += 1
+			enemy.apply_damage(9999.0, "side_contract_test")
+	check(bandits == 2, "Black Dog encounter did not stage two bandits")
+	check(game.quests.is_objective_done("side_black_dog", "find_dog"), "Black Dog investigation did not finish after evidence and bandits")
 	var roots = game.zone_root.find_child("bitter_roots", true, false)
 	check(roots != null, "Bitter Roots world interaction is missing")
 	if roots != null:
@@ -61,6 +77,16 @@ func _initialize() -> void:
 	check(str(game.story_state.get_flag("black_dog_fate", "")) != "", "Black Dog consequence missing")
 	check(str(game.story_state.get_flag("returned_soldier_fate", "")) != "", "Returned soldier consequence missing")
 	print("SIDE-001 VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
+	print("VERIFIER_PHASE: SHUTDOWN")
+	if game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+	for _frame in range(game.ZONE_RETIRE_FRAMES + 4):
+		await process_frame
+	root.remove_child(game)
+	game.free()
+	RenderingServer.force_sync()
+	for _frame in range(8):
+		await process_frame
 	quit(0 if failures == 0 else 1)
 
 func settle(count: int) -> void:

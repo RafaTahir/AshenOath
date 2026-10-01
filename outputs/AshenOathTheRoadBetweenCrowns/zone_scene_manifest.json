@@ -1,12 +1,12 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "program": "SCENE-001",
-  "policy": "authored_layers_are_optional_until_collision_and_save_gates_pass",
+  "policy": "opening_gameplay_core_is_authoritative_and_root_resident;decoration_remains_streamed",
   "zones": {
     "greyfen": {
-      "gameplay": "res://scenes/zones/greyfen_gameplay.tscn",
+      "gameplay": "res://scenes/runtime/greyfen_gameplay_core.tscn",
       "decoration": "res://scenes/zones/greyfen_decoration.tscn",
-      "status": "authored_layer"
+      "status": "authored_gameplay_core"
     },
     "wychwood": {
       "gameplay": "res://scenes/zones/wychwood_gameplay.tscn",

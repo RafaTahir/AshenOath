@@ -15,23 +15,25 @@ func _initialize() -> void:
 		game.quests.start_quest(quest_id)
 	for objective_id in ["reach_mill", "inspect_millstones", "mill_encounter"]:
 		game.quests.complete_objective(quest_id, objective_id)
-	game.story_state.set_flag("ashwing_spawned", false)
+	game.story_state.set_flag("ashwing_spawned", true)
 	game.story_state.set_flag("ashwing_defeated", false)
 	game.call("_load_zone", "old_mill", Vector3(0, 0, 12))
 	await _frames(16)
 	var boss = _find_boss(game, "ashwing")
-	_check(boss != null, "Ashwing did not spawn after the ash-bound mill encounter")
+	_check(_count_living_boss(game, "ashwing") == 1, "Undefeated Ashwing did not restore exactly once after a saved spawn")
 	if boss != null:
 		_check(bool(boss.get("is_boss")), "Ashwing is not marked as a boss")
 		_check(boss.has_method("setup") and boss.has_method("apply_damage"), "Ashwing lost its runtime actor contract")
 		_check(boss.find_child("BossEncounterController", true, false) != null, "Ashwing controller is missing")
 		_check(boss.find_child("AshwingBurntHarness", true, false) != null, "Ashwing burnt harness is missing")
 		_check(boss.find_child("AshwingAshCore", true, false) != null, "Ashwing ash core is missing")
-		_check(boss.find_child("AshwingScorchedWingRootLeft", true, false) != null and boss.find_child("AshwingScorchedWingRootRight", true, false) != null, "Ashwing scorched wing roots are incomplete")
+		var socket := boss.find_child("AshwingHarnessSocket", true, false) as BoneAttachment3D
+		_check(socket != null and socket.bone_name == "Body", "Ashwing equipment must follow its imported Body bone")
+		_check(boss.find_child("AshwingScorchedWingRootLeft", true, false) == null and boss.find_child("AshwingScorchedWingRootRight", true, false) == null, "Ashwing still has detached proxy wing roots")
 		_check(boss.find_child("CharacterAnimationDriver", true, false) != null, "Ashwing animation driver is missing")
-		game.player.global_position = Vector3(0, 1.0, -5.8)
+		game.player.global_position = Vector3(5.0, 1.0, -3.3)
 		game.player.velocity = Vector3.ZERO
-		boss.global_position = Vector3(0, 1.0, -9.0)
+		boss.global_position = Vector3(5.0, 1.0, -6.5)
 		boss.windup_time = 1.0
 		game.call("_on_player_beam", 1.0, Vector3(0, 0, -1))
 		await _frames(2)
@@ -61,6 +63,9 @@ func _initialize() -> void:
 		boss.apply_damage(9999.0, "boss_verifier")
 		await _frames(6)
 		_check(bool(game.story_state.get_flag("ashwing_defeated", false)), "Ashwing aftermath flag was not saved")
+		_check(bool(game.story_state.get_flag("boss_reward_drake_ash", false)), "Ashwing ash reward was not persisted")
+		_check(bool(game.story_state.get_flag("boss_reward_mill_seal", false)), "Ashwing mill-seal reward was not persisted")
+		_check(bool(game.story_state.get_flag("mill_roof_broken", false)), "Ashwing declared aftermath was not persisted")
 		game.call("_load_zone", "old_mill", Vector3(0, 0, 12))
 		await _frames(16)
 		_check(_find_living_boss(game, "ashwing") == null, "Defeated Ashwing respawned")
@@ -80,6 +85,13 @@ func _find_boss(game: Node, id: String) -> Node:
 
 func _find_living_boss(game: Node, id: String) -> Node:
 	return _find_boss(game, id)
+
+func _count_living_boss(game: Node, id: String) -> int:
+	var count := 0
+	for enemy in game.active_enemies:
+		if is_instance_valid(enemy) and str(enemy.get("enemy_id")) == id and not bool(enemy.get("dead")):
+			count += 1
+	return count
 
 func _frames(count: int) -> void:
 	for _index in range(count):

@@ -3,6 +3,13 @@ extends RefCounted
 const CharacterVisualContract = preload("res://scripts/character_visual_contract.gd")
 const CharacterIdentityProfile = preload("res://scripts/character_identity_profile.gd")
 const CLERIC_STAFF_PATH := "res://assets_external/characters/Cleric_Staff.fbx"
+const CLERIC_STAFF_TEXTURE_PATH := "res://assets_external/characters/Cleric_Staff_Texture.png"
+const OPENING_OCCUPATION_PROP_PATHS := [
+	"res://assets_external/environment/props/Bucket_Wooden_1.fbx",
+	"res://assets_external/environment/props/Book_Simplified_Single.fbx",
+	CLERIC_STAFF_PATH,
+	"res://assets_external/environment/props/Axe_Bronze.fbx",
+]
 
 class WorldOrientedEquipment extends Node3D:
 	var actor: Node3D
@@ -53,6 +60,7 @@ static func apply_npc(owner: Node3D, role_id: String, include_ground_shadow: boo
 		# when the role does not use them so a villager cannot inherit a staff or
 		# sword merely because it shares the same compact source family.
 		_set_native_role_equipment_visible(owner, role)
+		_add_occupation_equipment(owner, role)
 		if role in ["sister_anwen", "sister_anwen_human"]:
 			# The imported female source can carry a root-authored Cleric_Staff.
 			# Hide that duplicate and use one compact staff on the validated hand
@@ -67,6 +75,64 @@ static func apply_npc(owner: Node3D, role_id: String, include_ground_shadow: boo
 	# geometry. Keep the shadow only and let the asset acceptance gate reject the
 	# role until a complete shared-rig replacement is installed.
 	owner.set_meta("character_overlay_contract", "disabled")
+
+static func _add_occupation_equipment(owner: Node3D, role: String) -> void:
+	var definitions := {
+		"walker_well": {
+			"path": OPENING_OCCUPATION_PROP_PATHS[0],
+			"hand": "left", "scale": 0.96,
+			"position": Vector3(0.14, -0.16, 0.04), "rotation": Vector3(0.0, 25.0, 0.0),
+		},
+		"walker_board": {
+			"path": OPENING_OCCUPATION_PROP_PATHS[1],
+			"hand": "left", "scale": 1.28,
+			"position": Vector3(0.12, -0.10, 0.05), "rotation": Vector3(0.0, 90.0, 90.0),
+		},
+		"shrine_pilgrim": {
+			"path": OPENING_OCCUPATION_PROP_PATHS[2],
+			"hand": "left", "scale": 0.27,
+			"position": Vector3(0.18, -0.28, 0.02), "rotation": Vector3(180.0, 0.0, 0.0),
+		},
+		"forge_helper": {
+			"path": OPENING_OCCUPATION_PROP_PATHS[3],
+			"hand": "right", "scale": 0.68,
+			"position": Vector3(0.08, -0.06, 0.04), "rotation": Vector3(0.0, 0.0, 90.0),
+		},
+	}
+	var definition: Dictionary = definitions.get(role, {})
+	if definition.is_empty() or owner.find_child("OccupationEquipment", true, false) != null:
+		return
+	var skeleton := _find_skeleton(owner)
+	if skeleton == null:
+		return
+	var aliases: Array[String] = []
+	if str(definition.get("hand", "left")) == "left":
+		aliases.assign(["LeftHand", "Hand.L", "hand_l", "left_hand"])
+	else:
+		aliases.assign(["RightHand", "Hand.R", "hand_r", "right_hand"])
+	var hand_index := _find_bone_index(skeleton, aliases)
+	if hand_index < 0:
+		return
+	var attachment := BoneAttachment3D.new()
+	attachment.name = "OccupationEquipmentSocket"
+	attachment.bone_idx = hand_index
+	attachment.bone_name = skeleton.get_bone_name(hand_index)
+	skeleton.add_child(attachment)
+	var equipment := Node3D.new()
+	equipment.name = "OccupationEquipment"
+	equipment.position = definition.get("position", Vector3.ZERO)
+	equipment.rotation_degrees = definition.get("rotation", Vector3.ZERO)
+	attachment.add_child(equipment)
+	var prop := _instantiate_prop(str(definition.get("path", "")))
+	if prop == null:
+		attachment.queue_free()
+		return
+	prop.name = "OccupationProp_%s" % role
+	prop.scale = Vector3.ONE * float(definition.get("scale", 1.0))
+	if str(definition.get("path", "")) == CLERIC_STAFF_PATH:
+		_apply_staff_materials(prop)
+	equipment.add_child(prop)
+	owner.set_meta("character_occupation_equipment", role)
 
 static func _copy_identity_contract(owner: Node3D, visual_target: Node3D, role: String) -> void:
 	# Interactable wrappers own the collision and prompt, while the imported
@@ -118,7 +184,8 @@ static func apply_enemy(owner: Node3D, scale_value: Vector3 = Vector3(0.78, 0.01
 	if _has_skeleton(owner):
 		CharacterVisualContract.remove_proxy_anatomy(owner)
 		var enemy_role = str(owner.get("enemy_id")) if owner.get("enemy_id") != null else "ghoulkin"
-		CharacterIdentityProfile.apply(owner, enemy_role, _variant_seed(owner, enemy_role))
+		if enemy_role != "white_hart_avatar":
+			CharacterIdentityProfile.apply(owner, enemy_role, _variant_seed(owner, enemy_role))
 		return
 	# No root-mounted monster anatomy. A non-skeletal enemy is a temporary
 	# fallback and must remain visibly honest rather than wearing fake limbs.
@@ -193,6 +260,7 @@ static func _add_anwen_staff(owner: Node3D) -> void:
 		# keep the imported source's origin under the validated socket.
 		modeled_staff.scale = Vector3.ONE * 0.27
 		modeled_staff.position = Vector3(0.0, -0.28, 0.0)
+		_apply_staff_materials(modeled_staff)
 		equipment.add_child(modeled_staff)
 		return
 	# A missing staff source is an explicit runtime warning, not a fabricated
@@ -212,6 +280,24 @@ static func _instantiate_prop(path: String) -> Node3D:
 		mesh_instance.mesh = resource as Mesh
 		return mesh_instance
 	return null
+
+static func _apply_staff_materials(root: Node3D) -> void:
+	# The FBX material is not consistently preserved by the Compatibility
+	# importer. Assign the shipped staff atlas explicitly so the hand-held prop
+	# cannot become a white untextured pole in the browser.
+	var texture := ResourceLoader.load(CLERIC_STAFF_TEXTURE_PATH) as Texture2D
+	for raw_mesh in root.find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := raw_mesh as MeshInstance3D
+		if mesh_instance == null or mesh_instance.mesh == null:
+			continue
+		for surface_index in range(mesh_instance.mesh.get_surface_count()):
+			var material := StandardMaterial3D.new()
+			material.albedo_texture = texture
+			material.albedo_color = Color.WHITE
+			material.roughness = 0.76
+			material.metallic = 0.04
+			material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+			mesh_instance.set_surface_override_material(surface_index, material)
 
 static func _add_castle_role_equipment(owner: Node3D, role: String) -> void:
 	var castle_role := role.to_lower()

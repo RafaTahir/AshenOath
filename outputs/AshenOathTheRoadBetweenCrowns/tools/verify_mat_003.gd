@@ -10,7 +10,40 @@ const QUALITIES := ["potato", "balanced", "quality"]
 
 var failures: Array[String] = []
 
+func _verify_world_uvs() -> void:
+	for origin in [Vector3.ZERO, Vector3(0, 0, 34)]:
+		var size := Vector3(5.2, 0.05, 34)
+		var mesh := MaterialLibrary.make_tiled_box(size, origin)
+		_assert(mesh.get_aabb().size.is_equal_approx(size), "Tiled box changed visible extents")
+		var arrays := mesh.surface_get_arrays(0)
+		var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
+		var normals: PackedVector3Array = arrays[Mesh.ARRAY_NORMAL]
+		var uvs: PackedVector2Array = arrays[Mesh.ARRAY_TEX_UV]
+		for index in vertices.size():
+			if normals[index].y > 0.5:
+				var world: Vector3 = vertices[index] + origin
+				_assert(uvs[index].is_equal_approx(Vector2(world.x, world.z)), "Ground UVs stretch or lose world alignment")
+		var patch := MaterialLibrary.make_tiled_ground_patch(size, origin)
+		var patch_arrays := patch.surface_get_arrays(0)
+		var patch_vertices: PackedVector3Array = patch_arrays[Mesh.ARRAY_VERTEX]
+		var patch_uvs: PackedVector2Array = patch_arrays[Mesh.ARRAY_TEX_UV]
+		var indices: PackedInt32Array = patch_arrays[Mesh.ARRAY_INDEX]
+		_assert(indices.size() >= 3, "Ground patch has no visible triangles")
+		for index in patch_vertices.size():
+			_assert(is_equal_approx(patch_vertices[index].y, size.y * 0.5), "Ground patch sank below the box top")
+			var world: Vector3 = patch_vertices[index] + origin
+			_assert(patch_uvs[index].is_equal_approx(Vector2(world.x, world.z)), "Ground patch lost world-aligned UVs")
+		if indices.size() >= 3:
+			var edge_a: Vector3 = patch_vertices[indices[1]] - patch_vertices[indices[0]]
+			var edge_b: Vector3 = patch_vertices[indices[2]] - patch_vertices[indices[0]]
+			_assert(edge_a.cross(edge_b).y < 0.0, "Ground patch has the wrong front-face winding")
+
 func _initialize() -> void:
+	_verify_world_uvs()
+	_verify_lightweight_dependencies()
+	_verify_world_mipmaps()
+	if DisplayServer.get_name().to_lower() != "headless":
+		await _verify_scalar_roughness_pixels()
 	var library = MaterialLibrary.new()
 	root.add_child(library)
 	await process_frame
@@ -29,6 +62,11 @@ func _initialize() -> void:
 			_assert(material != null, "%s/%s did not create a material" % [surface_id, quality])
 			if material == null:
 				continue
+			if quality != "quality":
+				_assert(material.roughness_texture == null, "Lightweight material unexpectedly uses ORM")
+				_assert(material.roughness_texture_channel == BaseMaterial3D.TEXTURE_CHANNEL_RED, "Scalar roughness creates an unnecessary shader variant")
+			elif str(profile.get("stem", "")) != "":
+				_assert(material.roughness_texture != null and material.roughness_texture_channel == BaseMaterial3D.TEXTURE_CHANNEL_GREEN, "Quality lost packed roughness")
 			var contract: Dictionary = library.material_contract(surface_id, quality)
 			_assert(str(contract.get("id", "")) == surface_id, "%s contract normalized incorrectly" % surface_id)
 			if kind == "pbr":
@@ -74,3 +112,65 @@ func _assert(condition: bool, message: String) -> void:
 		return
 	failures.append(message)
 	push_error(message)
+
+func _verify_lightweight_dependencies() -> void:
+	var library = MaterialLibrary.new()
+	for quality in ["balanced", "potato"]:
+		for surface_id in EXPECTED_SURFACES:
+			library.get_material(surface_id, quality)
+	for path in library.texture_cache:
+		_assert(not str(path).contains("_orm") and not str(path).contains("_normal"), "Lightweight tier loaded unused PBR texture: %s" % path)
+	library.free()
+
+func _verify_world_mipmaps() -> void:
+	for surface_id in MaterialLibrary.PBR_SURFACE_IDS:
+		for channel in ["albedo", "normal", "orm"]:
+			var path := "%s%s_%s.jpg" % [MaterialLibrary.ROOT, surface_id, channel]
+			var texture := load(path) as Texture2D
+			_assert(texture != null, "Missing world texture: " + path)
+			if texture == null:
+				continue
+			var image := texture.get_image()
+			_assert(image != null and image.has_mipmaps(), "World texture lacks imported mip chain: " + path)
+			var source := Image.new()
+			_assert(source.load_jpg_from_buffer(FileAccess.get_file_as_bytes(path)) == OK, "World texture source cannot decode: " + path)
+			var settings := ConfigFile.new()
+			_assert(settings.load(path + ".import") == OK, "World texture import policy is missing: " + path)
+			var limit := int(settings.get_value("params", "process/size_limit", 0))
+			var expected := source.get_size()
+			if limit > 0 and maxi(expected.x, expected.y) > limit:
+				expected = Vector2i(Vector2(expected) * float(limit) / maxi(expected.x, expected.y))
+			_assert(Vector2i(texture.get_size()) == expected, "World texture dimensions differ from its authored import policy: " + path)
+
+func _verify_scalar_roughness_pixels() -> void:
+	var library = MaterialLibrary.new()
+	var viewport := SubViewport.new()
+	viewport.size = Vector2i(128, 128)
+	viewport.own_world_3d = true
+	root.add_child(viewport)
+	var camera := Camera3D.new()
+	camera.position = Vector3(0, 0, 2)
+	viewport.add_child(camera)
+	camera.current = true
+	var light := DirectionalLight3D.new()
+	light.rotation_degrees = Vector3(-25, -30, 0)
+	viewport.add_child(light)
+	var sphere := MeshInstance3D.new()
+	sphere.mesh = SphereMesh.new()
+	viewport.add_child(sphere)
+	var optimized: StandardMaterial3D = library.get_material("plaster", "balanced", Color(0.7, 0.6, 0.5))
+	var previous := optimized.duplicate() as StandardMaterial3D
+	previous.roughness_texture_channel = BaseMaterial3D.TEXTURE_CHANNEL_GREEN
+	sphere.material_override = previous
+	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	await RenderingServer.frame_post_draw
+	var before := viewport.get_texture().get_image()
+	sphere.material_override = optimized
+	await RenderingServer.frame_post_draw
+	var after := viewport.get_texture().get_image()
+	_assert(before.get_data() == after.get_data(), "Scalar roughness channel change altered rendered pixels")
+	_assert(after.get_pixel(64, 64) != after.get_pixel(0, 0), "Material comparison rendered no visible sphere")
+	print("MAT-003 SCALAR ROUGHNESS PIXELS: compared 128x128 before/after (not world visual approval)")
+	viewport.queue_free()
+	library.free()
+	await process_frame

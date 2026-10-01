@@ -1,0 +1,44 @@
+{
+  "ticket": "QA-002",
+  "status": "accepted",
+  "acceptance_profile": "functional_candidate",
+  "complete_qa_002_acceptance": true,
+  "performance_certified": false,
+  "listening_reviewed": false,
+  "target_misses": [
+    "Chrome:opening_save_continue_partial: runtime private-memory upper bound 594.1 MB exceeds 450 MB",
+    "Chrome:opening_save_continue_partial: Chrome runtime memory 594.1 MB exceeds the below-450 MB limit",
+    "Chrome:opening_save_continue_partial: cold_new_game navigation to control: 18616 ms exceeds 15000 ms",
+    "Chrome:opening_save_continue_partial: Prewarmed New Game: 1606 ms exceeds 750 ms",
+    "Chrome:opening_save_continue_partial: warm_continue navigation to control: 23566 ms exceeds 7000 ms",
+    "Chrome:opening_save_continue_partial: Continue: 11919 ms exceeds 750 ms",
+    "Edge:browser_compatibility_smoke: runtime private-memory upper bound 753 MB exceeds 450 MB",
+    "Edge:browser_compatibility_smoke: Edge runtime memory 753 MB exceeds the below-450 MB limit",
+    "Edge:browser_compatibility_smoke: cold_new_game navigation to control: 17269 ms exceeds 15000 ms",
+    "Edge:browser_compatibility_smoke: warm_continue navigation to control: 56688 ms exceeds 7000 ms",
+    "Edge:browser_compatibility_smoke: Continue: 34455 ms exceeds 750 ms",
+    "Firefox:browser_compatibility_smoke: runtime private-memory upper bound 1586.7 MB exceeds 450 MB",
+    "Firefox:browser_compatibility_smoke: Firefox runtime memory 1586.7 MB exceeds the below-450 MB limit",
+    "Firefox:browser_compatibility_smoke: cold_new_game navigation to control: 29419 ms exceeds 15000 ms",
+    "Firefox:browser_compatibility_smoke: Prewarmed New Game: 5530 ms exceeds 750 ms",
+    "Firefox:browser_compatibility_smoke: warm_continue navigation to control: 72866 ms exceeds 7000 ms",
+    "Firefox:browser_compatibility_smoke: Continue: 22956 ms exceeds 750 ms"
+  ],
+  "browser_certification_scope": "lean_functional_smoke",
+  "exhaustive_browser_campaign_certified": false,
+  "artifact_fingerprint": "2159ebc1b37f5fe1cccfe7bb507c37144babab916984a890d9cc278f9df32f5a",
+  "artifact_bytes": 96042769,
+  "browser_scopes": [
+    "Chrome:opening_save_continue_partial",
+    "Edge:browser_compatibility_smoke",
+    "Firefox:browser_compatibility_smoke"
+  ],
+  "limitations": [
+    "Numerical performance targets are not certified.",
+    "Mix is not listening-reviewed.",
+    "Exhaustive autonomous browser campaign, boss and ending coverage was intentionally removed from release scope; it did not pass.",
+    "Unchanged native story/branch evidence is reused at its proven dependency scope.",
+    "Edge and Firefox have startup/input/save smoke coverage only.",
+    "Unavailable physical controllers are untested."
+  ]
+}

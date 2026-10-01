@@ -65,8 +65,17 @@ static func _village_card(story_state) -> String:
 		["mira_truth", "Mira's roots"],
 		["black_dog_fate", "Toma's guardian"],
 		["returned_soldier_fate", "the returned soldier"],
+		["oren_charm_returned", "Oren's charm"],
+		["three_candles_lit", "Bram, Sella, and Oren's candles"],
+		["rook_map_fate", "Rook's road"],
+		["ash_measure_fate", "the miller's measure"],
+		["bannerless_fate", "the bannerless soldiers"],
 	]:
 		var value := str(story_state.get_flag(pair[0], ""))
+		if pair[0] == "oren_charm_returned":
+			value = "returned to his named grave" if bool(story_state.get_flag(pair[0], false)) else ""
+		elif pair[0] == "three_candles_lit":
+			value = "lit along the cemetery road" if bool(story_state.get_flag(pair[0], false)) else ""
 		if value != "":
 			outcomes.append("%s: %s" % [pair[1], value])
 	if outcomes.is_empty():

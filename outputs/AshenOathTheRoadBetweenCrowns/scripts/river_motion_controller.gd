@@ -38,8 +38,9 @@ func _physics_process(delta: float) -> void:
 	if leaves != null and leaves.multimesh != null:
 		for index in range(leaf_origins.size()):
 			var origin := leaf_origins[index]
-			var drift := fposmod(origin.z - center_z + flow_time * (0.18 + float(index % 3) * 0.035) + span * 0.5, span) - span * 0.5
-			var position := Vector3(origin.x + sin(flow_time * 0.9 + float(index)) * 0.035, origin.y + sin(flow_time * 1.35 + float(index) * 0.7) * 0.018, center_z + drift)
+			var flow_width := width * 0.80
+			var drift := fposmod(origin.x + flow_width * 0.5 + flow_time * (0.45 + float(index % 3) * 0.07), flow_width) - flow_width * 0.5
+			var position := Vector3(drift, origin.y + sin(flow_time * 1.35 + float(index) * 0.7) * 0.018, origin.z + sin(flow_time * 0.9 + float(index)) * 0.035)
 			var transform := Transform3D(Basis(Vector3.UP, flow_time * (0.55 + float(index % 4) * 0.08)).scaled(Vector3.ONE), position)
 			leaves.multimesh.set_instance_transform(index, transform)
 	for index in range(ripples.size()):
@@ -56,7 +57,7 @@ func _physics_process(delta: float) -> void:
 		var ribbon := current_ribbons[index]
 		if not is_instance_valid(ribbon):
 			continue
-		ribbon.position.z = center_z - span * 0.30 + fposmod(flow_time * (0.16 + float(index) * 0.035) + float(index) * 1.9, span * 0.60)
+		ribbon.position.x = -width * 0.32 + fposmod(flow_time * (0.55 + float(index) * 0.08) + float(index) * width * 0.22, width * 0.64)
 		if current_ribbon_multimesh != null:
 			var ribbon_size := current_ribbon_sizes[index]
 			var ribbon_basis := Basis.IDENTITY.scaled(Vector3(ribbon_size.x, 1.0, ribbon_size.y))
@@ -71,7 +72,7 @@ func _build_dressing() -> void:
 	current_ribbon_sizes.clear()
 	var leaf_mesh := QuadMesh.new()
 	leaf_mesh.size = Vector2(0.20, 0.10)
-	leaf_mesh.orientation = PlaneMesh.FACE_Z
+	leaf_mesh.orientation = PlaneMesh.FACE_Y
 	var leaf_material := StandardMaterial3D.new()
 	leaf_material.albedo_color = Color(0.16, 0.23, 0.10, 0.94)
 	leaf_material.roughness = 0.72
@@ -152,8 +153,8 @@ func _build_dressing() -> void:
 	for index in range(3):
 		var ribbon := Node3D.new()
 		ribbon.name = "RiverCurrentRibbon_%02d" % index
-		var ribbon_size := Vector2(width * (0.58 + float(index) * 0.08), span * 0.22)
-		ribbon.position = Vector3(0.0, -0.185, center_z - span * 0.30 + float(index) * 2.1)
+		var ribbon_size := Vector2(width * (0.11 + float(index) * 0.01), span * 0.10)
+		ribbon.position = Vector3(-width * 0.32 + float(index) * width * 0.22, -0.185, center_z + (float(index) - 1.0) * span * 0.17)
 		add_child(ribbon)
 		current_ribbons.append(ribbon)
 		current_ribbon_sizes.append(ribbon_size)

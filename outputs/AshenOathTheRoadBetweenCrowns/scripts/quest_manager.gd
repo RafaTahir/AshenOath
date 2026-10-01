@@ -7,12 +7,13 @@ signal quest_completed(id: String)
 var quest_defs = {}
 var active = {}
 var completed = {}
-var unlocked = {
+const STARTING_UNLOCKS = {
 	"main_road_of_crows": true, "side_widows_bell": true, "side_iron_remembers": true,
 	"side_bitter_roots": true, "side_black_dog": true, "side_empty_grave": true,
 	"side_childs_charm": true, "side_soldiers_debt": true, "side_millers_measure": true,
 	"side_rooks_map": true, "side_three_candles": true
 }
+var unlocked = STARTING_UNLOCKS.duplicate()
 var world_flags = {}
 var tracked_quest_id := ""
 var tracked_quest_is_manual := false
@@ -23,6 +24,11 @@ const IMPLEMENTED_SIDE_QUESTS := {
 	"side_bitter_roots": true,
 	"side_black_dog": true,
 	"side_empty_grave": true,
+	"side_childs_charm": true,
+	"side_three_candles": true,
+	"side_rooks_map": true,
+	"side_millers_measure": true,
+	"side_soldiers_debt": true,
 }
 
 func load_quests(path: String) -> void:
@@ -224,7 +230,7 @@ func set_tracked_quest_for_zone(zone_id: String) -> void:
 		return
 	tracked_quest_is_manual = false
 	var preferences := {
-		"greyfen":["main_bell_beneath_greyfen","main_road_of_crows"],
+		"greyfen":["main_bell_beneath_greyfen","main_road_of_crows","main_teeth_in_rain","main_names_they_burned"],
 		"wychwood":["main_road_of_crows","main_teeth_in_rain"],
 		"deep_wood":["main_teeth_in_rain","main_names_they_burned"],
 		"old_mill":["main_ash_at_the_mill"],
@@ -272,17 +278,19 @@ func _try_complete_quest(id: String) -> void:
 	for next_id in quest_defs[id].get("unlocks", []):
 		unlocked[next_id] = true
 	message.emit("Quest complete: %s" % quest_defs[id].get("title", id))
-	quest_completed.emit(id)
 	if str(quest_defs[id].get("type", "")) == "main":
 		for next_id in quest_defs[id].get("unlocks", []):
 			start_quest(str(next_id))
+	# Completion listeners may checkpoint synchronously. Publish only after the
+	# next main objective is active so that checkpoint is resumable.
+	quest_completed.emit(id)
 
 func save_state() -> Dictionary:
 	return {
-		"active": active,
-		"completed": completed,
-		"unlocked": unlocked,
-		"world_flags": world_flags,
+		"active": active.duplicate(true),
+		"completed": completed.duplicate(true),
+		"unlocked": unlocked.duplicate(true),
+		"world_flags": world_flags.duplicate(true),
 		"tracked_quest_id": tracked_quest_id,
 		"tracked_quest_is_manual": tracked_quest_is_manual,
 		"tracker_context_zone": tracker_context_zone
@@ -291,13 +299,16 @@ func save_state() -> Dictionary:
 func load_state(state: Dictionary) -> void:
 	active = _sanitize_active(state.get("active", {}))
 	completed = _sanitize_id_map(state.get("completed", {}), true)
+	for id in completed:
+		active.erase(id)
 	var loaded_unlocked := _sanitize_id_map(state.get("unlocked", {}), false)
+	unlocked = STARTING_UNLOCKS.duplicate()
 	for id in loaded_unlocked:
 		unlocked[id] = loaded_unlocked[id]
 	var loaded_flags: Variant = state.get("world_flags", {})
 	world_flags = loaded_flags.duplicate(true) if typeof(loaded_flags) == TYPE_DICTIONARY else {}
 	tracked_quest_id = str(state.get("tracked_quest_id", ""))
-	tracked_quest_is_manual = bool(state.get("tracked_quest_is_manual", false))
+	tracked_quest_is_manual = _saved_true(state.get("tracked_quest_is_manual", false))
 	tracker_context_zone = str(state.get("tracker_context_zone", "")).strip_edges().to_lower()
 	if not active.has(tracked_quest_id):
 		tracked_quest_id = _first_main_active()
@@ -315,7 +326,7 @@ func _sanitize_id_map(raw: Variant, completed_map: bool) -> Dictionary:
 			continue
 		var value: Variant = raw[raw_id]
 		if completed_map:
-			if bool(value):
+			if _saved_true(value):
 				result[id] = true
 		elif typeof(value) == TYPE_BOOL:
 			result[id] = value
@@ -340,20 +351,20 @@ func _sanitize_active(raw: Variant) -> Dictionary:
 		var legacy_chapel_progress := false
 		if legacy_chapel_missing:
 			for progress_id in ["name_the_dead", "fight_bog_wretch", "bog_core_choice"]:
-				if bool(saved_objectives.get(progress_id, {}).get("done", false)):
+				if _saved_true(saved_objectives.get(progress_id, {}).get("done", false)):
 					legacy_chapel_progress = true
 					break
 		for definition in quest_defs[id].get("objectives", []):
 			var runtime_objective: Dictionary = definition.duplicate(true)
 			var definition_id := str(definition.get("id", ""))
 			var saved_objective: Dictionary = saved_objectives.get(definition_id, {})
-			runtime_objective["done"] = bool(saved_objective.get("done", false))
+			runtime_objective["done"] = _saved_true(saved_objective.get("done", false))
 			if legacy_chapel_missing and definition_id == "read_chapel_names":
 				# The objective was added after older saves were written. Preserve
 				# already-earned later progress without inventing a new choice.
 				runtime_objective["done"] = legacy_chapel_progress
 			if saved_objective.has("optional_satisfied"):
-				runtime_objective["optional_satisfied"] = bool(saved_objective.optional_satisfied)
+				runtime_objective["optional_satisfied"] = _saved_true(saved_objective.optional_satisfied)
 			objectives.append(runtime_objective)
 		result[id] = {"objectives": objectives}
 	return result
@@ -363,6 +374,9 @@ func _first_main_active() -> String:
 		if quest_defs.has(id) and str(quest_defs[id].get("type", "")) == "main":
 			return str(id)
 	return str(active.keys()[0]) if not active.is_empty() else ""
+
+func _saved_true(value: Variant) -> bool:
+	return typeof(value) == TYPE_BOOL and value == true
 
 func _migrate_teeth_in_rain() -> void:
 	if not active.has("main_teeth_in_rain") or not quest_defs.has("main_teeth_in_rain"):

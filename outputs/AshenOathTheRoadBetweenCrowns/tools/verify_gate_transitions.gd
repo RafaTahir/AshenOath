@@ -15,11 +15,13 @@ func _initialize() -> void:
 		return
 	var game = scene.instantiate()
 	root.add_child(game)
+	_verify_reciprocal_arrival_lanes()
 	await _settle(6)
-	if game.hud != null and game.hud.has_method("restore_input_focus"):
-		game.hud.restore_input_focus()
-	await _send_action("ui_accept")
-	await _settle(4)
+	if game.hud != null and str(game.hud.get("active_menu")) == "launch":
+		if game.hud.has_method("restore_input_focus"):
+			game.hud.restore_input_focus()
+		await _send_action("ui_accept")
+		await _settle(4)
 	if game.hud != null and game.hud.has_method("restore_input_focus"):
 		game.hud.restore_input_focus()
 	await _wait_for_opening_ready(game)
@@ -68,13 +70,17 @@ func _wait_for_opening_ready(game) -> void:
 	# Prewarming is intentionally hidden behind the menu. Do not fold that cold
 	# work into the warm New Game handoff measurement, but do keep a hard bound so
 	# a stuck pack/build path cannot make this verifier wait forever.
-	for _frame in range(900):
+	var started_ms := Time.get_ticks_msec()
+	while Time.get_ticks_msec() - started_ms <= 15000:
 		var ready := game.hud != null and bool(game.hud.get("new_game_ready"))
 		var cached: bool = game.route_zone_cache.has("greyfen")
 		if ready and cached:
 			return
 		await process_frame
-	check(false, "Greyfen did not become ready behind the menu within 15 seconds")
+	check(false, "Greyfen did not become ready behind the menu within 15 seconds; menu=%s started=%s cached=%s" % [
+		str(game.hud.get("active_menu")) if game.hud != null else "missing",
+		str(game.game_started), str(game.route_zone_cache.has("greyfen")),
+	])
 
 func use_gate(game, target: String) -> void:
 	var source := WorldSectorManifest.canonical(str(game.current_zone_id))
@@ -127,14 +133,22 @@ func use_seamless_boundary(game, source: String, target: String) -> void:
 	var outward := _edge_outward(str(edge.get("id", "")))
 	var lane := float(edge.get("lane", 0.0))
 	var edge_position := _edge_position(str(edge.get("id", "")), lane, bounds)
-	var far_position: Vector3 = game.player.global_position
 	var near_position := edge_position + Vector3.UP * 0.95
-	var seamless_corridor_clear := _corridor_clear(game, far_position, near_position)
-	check(seamless_corridor_clear, "%s seamless approach has a player-sized collision blocker" % target)
-	if not seamless_corridor_clear:
-		return
-	if not await _walk_player_to(game, near_position):
-		return
+	# Some authored sectors intentionally bend their road around clues, arena
+	# dressing, or terrain. Audit the declared road legs instead of requiring an
+	# empty diagonal across the whole zone.
+	var approach_points: Array[Vector3] = []
+	for raw_point in edge.get("approach", []):
+		if raw_point is Array and raw_point.size() >= 3:
+			approach_points.append(Vector3(float(raw_point[0]), float(raw_point[1]), float(raw_point[2])))
+	approach_points.append(near_position)
+	for approach_point in approach_points:
+		var seamless_corridor_clear := _corridor_clear(game, game.player.global_position, approach_point)
+		check(seamless_corridor_clear, "%s seamless approach leg to %s has a player-sized collision blocker" % [target, approach_point])
+		if not seamless_corridor_clear:
+			return
+		if not await _walk_player_to(game, approach_point):
+			return
 	var yaw := atan2(-outward.x, -outward.z)
 	if game.camera_rig != null:
 		game.camera_rig.yaw = yaw
@@ -184,6 +198,36 @@ func _edge_position(edge_id: String, lane: float, bounds: Vector2) -> Vector3:
 		"east": return Vector3(bounds.x - edge_clearance, 0.95, lane)
 	return Vector3(lane, 0.95, 0.0)
 
+func _verify_reciprocal_arrival_lanes() -> void:
+	for source in WorldSectorManifest.all_ids():
+		for source_edge_id in WorldSectorManifest.open_edges(str(source)).keys():
+			var source_edge: Dictionary = WorldSectorManifest.open_edges(str(source)).get(source_edge_id, {})
+			var target := WorldSectorManifest.canonical(str(source_edge.get("target", "")))
+			var reciprocal := WorldSectorManifest.edge_between(target, str(source))
+			if reciprocal.is_empty():
+				continue
+			var raw_arrival: Array = source_edge.get("arrival", [])
+			check(raw_arrival.size() >= 3, "%s %s edge has no destination arrival" % [source, source_edge_id])
+			if raw_arrival.size() < 3:
+				continue
+			var arrival := Vector3(float(raw_arrival[0]), float(raw_arrival[1]), float(raw_arrival[2]))
+			var target_edge_id := str(reciprocal.get("id", ""))
+			var target_lane := float(reciprocal.get("lane", 0.0))
+			var raw_trigger: Array = reciprocal.get("trigger", [])
+			if raw_trigger.size() >= 3:
+				var trigger := Vector3(float(raw_trigger[0]), float(raw_trigger[1]), float(raw_trigger[2]))
+				var trigger_radius := maxf(float(reciprocal.get("trigger_radius", 1.35)), 1.35)
+				check(Vector2(arrival.x - trigger.x, arrival.z - trigger.z).length() > trigger_radius + 0.50, "%s to %s arrival overlaps target trigger" % [source, target])
+			match target_edge_id:
+				"north":
+					check(absf(arrival.x - target_lane) < 0.05 and arrival.z < 0.0, "%s to %s arrival misses target north lane" % [source, target])
+				"south":
+					check(absf(arrival.x - target_lane) < 0.05 and arrival.z > 0.0, "%s to %s arrival misses target south lane" % [source, target])
+				"west":
+					check(absf(arrival.z - target_lane) < 0.05 and arrival.x < 0.0, "%s to %s arrival misses target west lane" % [source, target])
+				"east":
+					check(absf(arrival.z - target_lane) < 0.05 and arrival.x > 0.0, "%s to %s arrival misses target east lane" % [source, target])
+
 func _corridor_clear(game: Node, start: Vector3, destination: Vector3) -> bool:
 	var shape := CapsuleShape3D.new()
 	shape.radius = 0.52
@@ -192,6 +236,9 @@ func _corridor_clear(game: Node, start: Vector3, destination: Vector3) -> bool:
 	if game.spatial_service != null and game.spatial_service.has_method("build_route"):
 		var built: Array = game.spatial_service.build_route(start, destination, 0.52)
 		if built.is_empty():
+			return false
+		if Vector2(built.back().x - destination.x, built.back().z - destination.z).length() > 0.5:
+			print("GATE ROUTE REDIRECT: start=%s requested=%s built=%s" % [start, destination, built])
 			return false
 		route = built
 	for leg_index in range(route.size() - 1):
@@ -254,6 +301,9 @@ func _walk_player_to(game, target: Vector3) -> bool:
 	if game.spatial_service != null and game.spatial_service.has_method("build_route"):
 		var built: Array = game.spatial_service.build_route(game.player.global_position, target, 0.52)
 		if not built.is_empty():
+			if Vector2(built.back().x - target.x, built.back().z - target.z).length() > 0.5:
+				check(false, "Route to %s redirected to %s" % [target, built.back()])
+				return false
 			route = built
 	for raw_point in route:
 		var point: Vector3 = raw_point
@@ -281,7 +331,9 @@ func _walk_player_to(game, target: Vector3) -> bool:
 			check(false, "Player could not physically reach route waypoint %s" % str(point))
 			return false
 	Input.action_release("move_forward")
-	return true
+	var final_delta := Vector2(game.player.global_position.x - target.x, game.player.global_position.z - target.z).length()
+	check(final_delta <= 0.85, "Player stopped %.2f m from requested waypoint %s" % [final_delta, target])
+	return final_delta <= 0.85
 
 func _send_action(action: String) -> void:
 	var down := InputEventAction.new()

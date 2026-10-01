@@ -33,6 +33,7 @@ var _combat_focus_refresh := 0.0
 var _cached_combat_focus: Node3D
 var _enemy_cache: Array[Node3D] = []
 var _enemy_cache_refresh := 0.0
+var _enemy_cache_authoritative := false
 var _locked_combat_target: Node3D
 var _target_lock_marker: MeshInstance3D
 var _target_switch_cooldown := 0.0
@@ -40,6 +41,8 @@ var _target_switch_axis_latched := false
 var _target_obscured_time := 0.0
 var _collision_refresh := 0.0
 var _cached_collision_position := Vector3.ZERO
+var _last_large_subject: Node3D
+var _large_subject_linger := 0.0
 
 signal target_lock_changed(target: Node3D, locked: bool)
 
@@ -64,6 +67,17 @@ func setup(follow_target: Node3D, source: Node = null) -> void:
 func set_zone(zone_id: String) -> void:
 	current_zone_id = zone_id
 	_initialized = false
+
+func set_enemy_candidates(candidates: Array) -> void:
+	# game.gd owns the active encounter list. Binding it here avoids repeatedly
+	# walking every scene-tree enemy group while preserving the legacy scan for
+	# camera consumers that do not provide an explicit list.
+	_enemy_cache.clear()
+	for candidate in candidates:
+		if is_instance_valid(candidate) and candidate is Node3D:
+			_enemy_cache.append(candidate as Node3D)
+	_enemy_cache_authoritative = true
+	_enemy_cache_refresh = 0.25
 
 func _input(event: InputEvent) -> void:
 	if target == null or get_tree().paused:
@@ -105,10 +119,11 @@ func _process(delta: float) -> void:
 	_apply_keyboard_camera(delta)
 	_update_response_state(delta)
 	_update_target_lock(delta)
-	_enemy_cache_refresh -= delta
-	if _enemy_cache_refresh <= 0.0:
-		_enemy_cache_refresh = 0.25
-		_refresh_enemy_cache()
+	if not _enemy_cache_authoritative:
+		_enemy_cache_refresh -= delta
+		if _enemy_cache_refresh <= 0.0:
+			_enemy_cache_refresh = 0.25
+			_refresh_enemy_cache()
 	var velocity = _target_velocity()
 	var flat_speed = Vector2(velocity.x, velocity.z).length()
 	var sprinting := _action_pressed("run") and flat_speed > 3.5
@@ -116,12 +131,20 @@ func _process(delta: float) -> void:
 	if _combat_focus_refresh <= 0.0 or not is_instance_valid(_cached_combat_focus):
 		_combat_focus_refresh = 0.10
 		_cached_combat_focus = _nearest_combat_focus()
-	var combat_focus: Node3D = _locked_combat_target if _is_valid_combat_target(_locked_combat_target) else _cached_combat_focus
+	var combat_focus: Node3D = _locked_combat_target if is_instance_valid(_locked_combat_target) and _is_valid_combat_target(_locked_combat_target) else _cached_combat_focus
 	var target_distance = maxf(MIN_ZOOM_DISTANCE, distance - 0.75) if combat_focus != null else distance
 	var target_height = 2.25 if combat_focus != null else height
 	var shoulder = -0.55 if combat_focus != null else -0.82
 	var look_ahead = 2.35 if combat_focus != null else 3.45
 	var target_fov = 65.0 if combat_focus != null else 63.0
+	var subject_height := _combat_subject_height(combat_focus)
+	_large_subject_linger = maxf(0.0, _large_subject_linger - delta)
+	if subject_height > 2.6:
+		_last_large_subject = combat_focus
+		_large_subject_linger = 1.5
+	var framing_subject := combat_focus
+	if framing_subject == null and _large_subject_linger > 0.0 and is_instance_valid(_last_large_subject) and bool(_last_large_subject.get("dead")):
+		framing_subject = _last_large_subject
 	if current_zone_id == "wychwood":
 		if target.global_position.z > 4.5:
 			target_distance = minf(target_distance, 6.4)
@@ -136,12 +159,20 @@ func _process(delta: float) -> void:
 	_collision_refresh -= delta
 	if _collision_refresh <= 0.0:
 		_collision_refresh = 1.0 / 30.0
-		_cached_collision_position = _collide_camera(target_pos, desired)
+		_cached_collision_position = _resolve_encounter_orbit(target_pos, desired, framing_subject) if _combat_subject_height(framing_subject) > 2.6 else _collide_camera(target_pos, desired)
 	desired = _cached_collision_position
+	# A browser pointer warp can deliver one large vertical mouse delta and push
+	# pitch to its lower view limit. Keep the follow camera above Kael's grounded
+	# root so the renderer cannot place it beneath a bridge/terrain support plane.
+	desired.y = maxf(desired.y, target.global_position.y + 0.55)
 	var natural_look = target_pos + Basis(Vector3.UP, yaw) * Vector3(0.55, -0.08, -look_ahead)
 	var focus = _environment_focus(combat_focus)
 	if focus.weight > 0.0:
 		natural_look = natural_look.lerp(focus.point, focus.weight)
+	if _combat_subject_height(framing_subject) > 2.6:
+		var encounter_frame := _large_encounter_frame(desired, framing_subject)
+		natural_look = encounter_frame.point
+		target_fov = encounter_frame.fov
 	var shake = Vector3.ZERO
 	if shake_amount > 0.001:
 		shake = Vector3(randf_range(-shake_amount, shake_amount), randf_range(-shake_amount, shake_amount), 0.0)
@@ -155,7 +186,15 @@ func _process(delta: float) -> void:
 	_smoothed_anchor = _smoothed_anchor.lerp(target_pos, _smooth_weight(delta, 8.0))
 	_smoothed_look = _smoothed_look.lerp(natural_look, _smooth_weight(delta, 6.6))
 	global_position = global_position.lerp(_smoothed_anchor, _smooth_weight(delta, 10.0))
-	camera.global_position = camera.global_position.lerp(desired + shake, _smooth_weight(delta, 9.2))
+	var smoothed_position := camera.global_position.lerp(desired + shake, _smooth_weight(delta, 9.2))
+	camera.global_position = _publish_encounter_position(target_pos, smoothed_position, desired, framing_subject) if _combat_subject_height(framing_subject) > 2.6 else _collide_camera(target_pos, smoothed_position)
+	if _combat_subject_height(framing_subject) > 2.6:
+		# Collision and smoothing can shorten the orbit after the desired fit.
+		# Fit from the published position and widen immediately, shrinking smoothly.
+		var published_frame := _large_encounter_frame(camera.global_position, framing_subject)
+		_smoothed_look = published_frame.point
+		target_fov = published_frame.fov
+		camera.fov = maxf(camera.fov, target_fov)
 	_idle_time += delta
 	var idle_breath = Vector3.ZERO
 	if flat_speed < 0.25 and combat_focus == null:
@@ -182,6 +221,7 @@ func frame_dialogue_target(dialogue_target: Node3D) -> void:
 	var orbit := Basis(Vector3.UP, yaw) * Basis(Vector3.RIGHT, pitch)
 	var desired := anchor + orbit * Vector3(-0.30, 0.0, 3.15)
 	desired = _collide_camera(anchor, desired)
+	desired.y = maxf(desired.y, target.global_position.y + 0.55)
 	_smoothed_anchor = anchor
 	_smoothed_look = midpoint
 	_cached_collision_position = desired
@@ -205,7 +245,9 @@ func _collide_camera(from_pos: Vector3, desired: Vector3) -> Vector3:
 	# sections the orbit ray can end slightly below the support plane; clamping
 	# to that hit puts the camera inside the road and fills the frame with blur.
 	# Vertical walls and props still shorten the orbit normally.
-	if normal.y > 0.65:
+	var collider := hit.get("collider") as CollisionObject3D
+	var camera_only := collider != null and (collider.collision_layer & (1 << 6)) != 0
+	if normal.y > 0.65 and not camera_only:
 		return desired
 	return hit_pos + normal * 0.25
 
@@ -222,7 +264,7 @@ func get_flat_right() -> Vector3:
 func _apply_keyboard_camera(delta: float) -> void:
 	if _action_just_pressed("target_lock"):
 		if _locked_combat_target == null:
-			_set_locked_combat_target(_cached_combat_focus if _is_valid_combat_target(_cached_combat_focus) else _nearest_combat_focus())
+			_set_locked_combat_target(_cached_combat_focus if is_instance_valid(_cached_combat_focus) and _is_valid_combat_target(_cached_combat_focus) else _nearest_combat_focus())
 		else:
 			_clear_locked_combat_target()
 	if _locked_combat_target != null:
@@ -244,6 +286,10 @@ func _apply_keyboard_camera(delta: float) -> void:
 	var zoom_axis: float = input_source.action_axis("camera_zoom_in", "camera_zoom_out") \
 		if input_source != null and input_source.has_method("action_axis") \
 		else Input.get_axis("camera_zoom_in", "camera_zoom_out")
+	if target != null and target.has_method("get_weapon_mode") and target.get_weapon_mode() == "bow" \
+			and input_source != null and str(input_source.get("active_device")) == "gamepad" \
+			and input_source.is_action_pressed("cycle_arrow"):
+		zoom_axis = 0.0
 	if absf(zoom_axis) > 0.01:
 		adjust_zoom(zoom_axis * 3.4 * delta)
 
@@ -277,6 +323,8 @@ func _action_just_pressed(action: StringName) -> bool:
 
 func _update_target_lock(delta: float) -> void:
 	_target_switch_cooldown = maxf(_target_switch_cooldown - delta, 0.0)
+	if _locked_combat_target != null and not is_instance_valid(_locked_combat_target):
+		_clear_locked_combat_target()
 	if _locked_combat_target != null:
 		if not _is_target_alive_in_range(_locked_combat_target):
 			_clear_locked_combat_target()
@@ -322,7 +370,7 @@ func _target_is_visible(candidate: Node3D) -> bool:
 	var origins := [target.global_position + Vector3.UP * 1.05, target.global_position + Vector3.UP * 1.48]
 	var endpoints := [candidate.global_position + Vector3.UP * 0.88, candidate.global_position + Vector3.UP * 1.42]
 	for index in range(origins.size()):
-		var query := PhysicsRayQueryParameters3D.create(origins[index], endpoints[index])
+		var query := PhysicsRayQueryParameters3D.create(origins[index], endpoints[index], 1)
 		query.exclude = _target_query_exclusions(candidate)
 		query.collide_with_areas = false
 		if get_world_3d().direct_space_state.intersect_ray(query).is_empty():
@@ -404,9 +452,11 @@ func _clear_locked_combat_target() -> void:
 	if _target_lock_marker != null and is_instance_valid(_target_lock_marker):
 		_target_lock_marker.queue_free()
 	_target_lock_marker = null
-	if _locked_combat_target != null:
+	if is_instance_valid(_locked_combat_target):
 		target_lock_changed.emit(_locked_combat_target, false)
 	_locked_combat_target = null
+	if not is_instance_valid(_cached_combat_focus):
+		_cached_combat_focus = null
 	_target_obscured_time = 0.0
 	_target_switch_axis_latched = false
 
@@ -425,7 +475,7 @@ func _soft_frame_locked_target(combat_target: Node3D, delta: float) -> void:
 	yaw = lerp_angle(yaw, desired_yaw, _smooth_weight(delta, 3.8))
 
 func get_locked_combat_target() -> Node3D:
-	return _locked_combat_target if _is_target_alive_in_range(_locked_combat_target) else null
+	return _locked_combat_target if is_instance_valid(_locked_combat_target) and _is_target_alive_in_range(_locked_combat_target) else null
 
 func clear_target_lock() -> void:
 	_clear_locked_combat_target()
@@ -479,6 +529,8 @@ func _nearest_combat_focus() -> Node3D:
 	return null
 
 func _refresh_enemy_cache() -> void:
+	if _enemy_cache_authoritative:
+		return
 	_enemy_cache.clear()
 	for node in get_tree().get_nodes_in_group("enemies"):
 		if is_instance_valid(node) and node is Node3D:
@@ -486,8 +538,9 @@ func _refresh_enemy_cache() -> void:
 
 func _environment_focus(combat_focus: Node3D) -> Dictionary:
 	if combat_focus != null:
+		var subject_height := _combat_subject_height(combat_focus)
 		return {
-			"point": (target.global_position + combat_focus.global_position) * 0.5 + Vector3(0, 1.05, 0),
+			"point": (target.global_position + combat_focus.global_position) * 0.5 + Vector3(0, subject_height * 0.5 if subject_height > 2.6 else 1.05, 0),
 			"weight": 0.58,
 		}
 	var player_pos = target.global_position
@@ -504,3 +557,89 @@ func _environment_focus(combat_focus: Node3D) -> Dictionary:
 		if player_pos.z <= 2.0:
 			return {"point": Vector3(0.0, 1.25, -9.2), "weight": 0.28}
 	return {"point": Vector3.ZERO, "weight": 0.0}
+
+func _combat_subject_height(combat_focus: Node3D) -> float:
+	return float(combat_focus.get_meta("camera_subject_height", 1.9)) if is_instance_valid(combat_focus) else 1.9
+
+func _large_encounter_frame(camera_position: Vector3, subject: Node3D) -> Dictionary:
+	var points: Array[Vector3] = []
+	var player_bounds := AABB(Vector3(-0.32, 0, -0.32), Vector3(0.64, 1.78, 0.64))
+	for index in range(8):
+		points.append(target.global_position + player_bounds.get_endpoint(index))
+	var bounds: AABB = subject.get_meta("camera_subject_bounds", AABB())
+	if bounds.size != Vector3.ZERO:
+		for index in range(8):
+			points.append(subject.global_transform * bounds.get_endpoint(index))
+	else:
+		points.append(subject.global_position)
+		points.append(subject.global_position + Vector3.UP * _combat_subject_height(subject))
+	var centre := Vector3.ZERO
+	for point in points:
+		centre += point
+	centre /= points.size()
+	var forward := centre - camera_position
+	forward.y = 0.0
+	forward = forward.normalized()
+	var minimum_angle := INF
+	var maximum_angle := -INF
+	for point in points:
+		var offset: Vector3 = point - camera_position
+		var depth := maxf(0.1, offset.dot(forward))
+		var angle := atan2(offset.y, depth)
+		minimum_angle = minf(minimum_angle, angle)
+		maximum_angle = maxf(maximum_angle, angle)
+	var centre_angle := (minimum_angle + maximum_angle) * 0.5
+	var direction := forward * cos(centre_angle) + Vector3.UP * sin(centre_angle)
+	var right := forward.cross(Vector3.UP)
+	var up := right.cross(direction)
+	var aspect := maxf(1.0, get_viewport().get_visible_rect().size.aspect())
+	var half_angle := 0.0
+	for point in points:
+		var offset := point - camera_position
+		var depth := maxf(0.01, offset.dot(direction))
+		half_angle = maxf(half_angle, atan2(absf(offset.dot(up)), depth))
+		half_angle = maxf(half_angle, atan2(absf(offset.dot(right)) / aspect, depth))
+	var required_fov := rad_to_deg(half_angle) * 2.0 + 8.0
+	return {"point": camera_position + direction * 5.0, "fov": clampf(required_fov, 65.0, 90.0), "required_fov": required_fov}
+
+func _resolve_encounter_orbit(anchor: Vector3, desired: Vector3, subject: Node3D) -> Vector3:
+	var best := _collide_camera(anchor, desired)
+	var best_frame := _large_encounter_frame(best, subject)
+	var bounds: AABB = subject.get_meta("camera_subject_bounds", AABB())
+	var separation := target.global_position - subject.global_position
+	separation.y = 0.0
+	var close_overlap := bounds.size != Vector3.ZERO and separation.length() < maxf(absf(bounds.position.z), absf(bounds.end.z))
+	if best_frame.required_fov <= 90.0 and not close_overlap and not _player_view_obstructed(best):
+		return best
+	# Keep authored vegetation and player collisions intact. A large creature
+	# needs a clear flank orbit rather than a camera squeezed into its anatomy.
+	for degrees in [30.0, -30.0, 60.0, -60.0, 90.0, -90.0]:
+		var candidate := anchor + Basis(Vector3.UP, deg_to_rad(degrees)) * (desired - anchor)
+		candidate = _collide_camera(anchor, candidate)
+		var candidate_frame := _large_encounter_frame(candidate, subject)
+		if candidate_frame.required_fov <= 90.0 and not _player_view_obstructed(candidate):
+			return candidate
+		if candidate_frame.required_fov < best_frame.required_fov:
+			best = candidate
+			best_frame = candidate_frame
+		if best_frame.required_fov <= 90.0 and not _player_view_obstructed(best):
+			break
+	return best
+
+func _player_view_obstructed(camera_position: Vector3) -> bool:
+	var space := get_world_3d().direct_space_state
+	var body := AABB(Vector3(-0.32, 0.2, -0.32), Vector3(0.64, 1.5, 0.64))
+	for index in range(8):
+		var point := target.global_position + body.get_endpoint(index)
+		var query := PhysicsRayQueryParameters3D.create(camera_position, point, 1 | (1 << 6))
+		query.exclude = [target]
+		query.hit_from_inside = true
+		if not space.intersect_ray(query).is_empty():
+			return true
+	return false
+
+func _publish_encounter_position(anchor: Vector3, smoothed: Vector3, resolved: Vector3, subject: Node3D) -> Vector3:
+	var published := _collide_camera(anchor, smoothed)
+	# A clear interpolation can still crop the foreground body beyond the FOV cap.
+	var frame := _large_encounter_frame(published, subject)
+	return resolved if frame.required_fov > 90.0 or _player_view_obstructed(published) else published

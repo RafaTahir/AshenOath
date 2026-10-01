@@ -1,0 +1,2271 @@
+{
+  "schema_version": 1,
+  "acceptance_profile": "functional_candidate",
+  "release_basis": "functionality-certified candidate; numerical targets not certified",
+  "listening_reviewed": false,
+  "ticket": "QA-002",
+  "status": "pass",
+  "observation_mode": "production_read_only",
+  "route_scope": "browser_compatibility_smoke",
+  "complete_qa_002_acceptance": false,
+  "export_dir": "D:\\Temp\\AshenOath\\functional_candidate_20261001\\export_v10",
+  "artifact": {
+    "fingerprint": "2159ebc1b37f5fe1cccfe7bb507c37144babab916984a890d9cc278f9df32f5a",
+    "total_bytes": 96042769,
+    "files": [
+      {
+        "path": "index.audio.position.worklet.js",
+        "bytes": 2973,
+        "sha256": "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8"
+      },
+      {
+        "path": "index.audio.worklet.js",
+        "bytes": 7298,
+        "sha256": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3"
+      },
+      {
+        "path": "index.html",
+        "bytes": 20842,
+        "sha256": "722f2774af6ed10162622f2aeb43b2ac18157796548f0ebc568fa89928723ae1"
+      },
+      {
+        "path": "index.js",
+        "bytes": 315759,
+        "sha256": "e3f56ee40e6f84371053db06692cfac15e2c8659547b11c6b2dfa1996dabd981"
+      },
+      {
+        "path": "index.pck",
+        "bytes": 14048548,
+        "sha256": "5ddd1873ae33a55354f046201a3c379b88466eb40f0bd1a9a0389280f3857067"
+      },
+      {
+        "path": "index.png",
+        "bytes": 21443,
+        "sha256": "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e"
+      },
+      {
+        "path": "index.wasm",
+        "bytes": 9382282,
+        "sha256": "b86a73db5739d710bfbaaad9c0877d8d9f61069723bb16e8252371da8a8c6a01"
+      },
+      {
+        "path": "packs/audio.pck",
+        "bytes": 3657256,
+        "sha256": "e8f0c37c8457f406b31478d51c96be027b812a6b0dd7680c304d96d411a0539c"
+      },
+      {
+        "path": "packs/campaign.pck",
+        "bytes": 1857324,
+        "sha256": "e0dd73fe4f17d92bcd77df8062581d9afbecec9c67f3129754bf65d2c7f49e8f"
+      },
+      {
+        "path": "packs/characters.pck",
+        "bytes": 34371320,
+        "sha256": "79071a6b1c7fa7ccf78a701776fb4aab18289c147d92ea545aa9021d6671a202"
+      },
+      {
+        "path": "packs/monsters.pck",
+        "bytes": 8932892,
+        "sha256": "f8f75d8651a27f6a73acf9607b7d98317028f669f833f31ef140e2c4acd2d15f"
+      },
+      {
+        "path": "packs/opening.pck",
+        "bytes": 15178476,
+        "sha256": "9c31e85bade268fe57294f24b747eb92dce6e38644fdebbfcdde9ab87ec7d742"
+      },
+      {
+        "path": "packs/quality_materials.pck",
+        "bytes": 8234476,
+        "sha256": "e4181288c03722d493501d28de9212b40e331a37ab15c2e5b80a15c60a851111"
+      },
+      {
+        "path": "release_manifest.json",
+        "bytes": 5375,
+        "sha256": "6eedd03ed4f0283d4c6cc37ca8c47bda1e751025b7d39b1c3e97390961a098a9"
+      },
+      {
+        "path": "runtime_pack_manifest.json",
+        "bytes": 6505,
+        "sha256": "bb2339748f914caffc9b1195e144499203b1dc8e473195929b4a1e307cc32772"
+      }
+    ]
+  },
+  "qa_temp_root": "D:\\Temp\\AshenOath",
+  "browsers": [
+    {
+      "browser": "Firefox",
+      "status": "pass",
+      "acceptance_profile": "functional_candidate",
+      "performance_certified": false,
+      "target_misses": [
+        "Firefox runtime memory 1586.7 MB exceeds the below-450 MB limit",
+        "cold_new_game navigation to control: 29419 ms exceeds 15000 ms",
+        "Prewarmed New Game: 5530 ms exceeds 750 ms",
+        "warm_continue navigation to control: 72866 ms exceeds 7000 ms",
+        "Continue: 22956 ms exceeds 750 ms"
+      ],
+      "listening_reviewed": false,
+      "observation_mode": "production_read_only",
+      "route_scope": "browser_compatibility_smoke",
+      "startup_timings": {
+        "navigation_started_ms": 1790885607302,
+        "diagnostic_only": false,
+        "click_started_ms": 1790885631191,
+        "control_observed_ms": 1790885636721,
+        "click_to_control_ms": 5530,
+        "navigation_to_control_ms": 29419,
+        "opening_detail_ready_ms": 1790885664233
+      },
+      "startup_runs": [
+        {
+          "navigation_started_ms": 1790885607302,
+          "diagnostic_only": false,
+          "click_started_ms": 1790885631191,
+          "control_observed_ms": 1790885636721,
+          "click_to_control_ms": 5530,
+          "navigation_to_control_ms": 29419
+        },
+        {
+          "kind": "warm_continue",
+          "navigation_started_ms": 1790885754422,
+          "click_started_ms": 1790885804332,
+          "control_observed_ms": 1790885827288,
+          "navigation_to_control_ms": 72866,
+          "click_to_control_ms": 22956,
+          "diagnostic_only": false
+        }
+      ],
+      "renderer_mode": "hardware",
+      "presentation_mode": "headed",
+      "renderer": {
+        "renderer": "ANGLE (Intel, Intel(R) HD Graphics 400 Direct3D11 vs_5_0 ps_5_0), or similar",
+        "unmasked_renderer": "ANGLE (Intel, Intel(R) HD Graphics 400 Direct3D11 vs_5_0 ps_5_0), or similar",
+        "vendor": "Google Inc. (Intel)"
+      },
+      "elapsed_ms": 240261,
+      "transport": {
+        "methods": {
+          "Page.enable": {
+            "sent": 1,
+            "completed": 1,
+            "failed": 0,
+            "total_ms": 1,
+            "max_ms": 1
+          },
+          "Log.enable": {
+            "sent": 1,
+            "completed": 1,
+            "failed": 0,
+            "total_ms": 0,
+            "max_ms": 0
+          },
+          "Network.enable": {
+            "sent": 1,
+            "completed": 1,
+            "failed": 0,
+            "total_ms": 0,
+            "max_ms": 0
+          },
+          "Performance.enable": {
+            "sent": 1,
+            "completed": 1,
+            "failed": 0,
+            "total_ms": 0,
+            "max_ms": 0
+          },
+          "Emulation.setDeviceMetricsOverride": {
+            "sent": 1,
+            "completed": 1,
+            "failed": 0,
+            "total_ms": 19,
+            "max_ms": 19
+          },
+          "Page.navigate": {
+            "sent": 3,
+            "completed": 3,
+            "failed": 0,
+            "total_ms": 614,
+            "max_ms": 275
+          },
+          "Runtime.enable": {
+            "sent": 1,
+            "completed": 1,
+            "failed": 0,
+            "total_ms": 0,
+            "max_ms": 0
+          },
+          "Runtime.addBinding": {
+            "sent": 1,
+            "completed": 1,
+            "failed": 0,
+            "total_ms": 0,
+            "max_ms": 0
+          },
+          "Page.bringToFront": {
+            "sent": 6,
+            "completed": 6,
+            "failed": 0,
+            "total_ms": 28,
+            "max_ms": 8
+          },
+          "Runtime.evaluate": {
+            "sent": 107,
+            "completed": 107,
+            "failed": 3,
+            "total_ms": 34881,
+            "max_ms": 9833
+          },
+          "Emulation.setFocusEmulationEnabled": {
+            "sent": 1,
+            "completed": 1,
+            "failed": 0,
+            "total_ms": 0,
+            "max_ms": 0
+          },
+          "Input.dispatchMouseEvent": {
+            "sent": 6,
+            "completed": 6,
+            "failed": 0,
+            "total_ms": 1759,
+            "max_ms": 763
+          },
+          "Input.dispatchKeyEvent": {
+            "sent": 19,
+            "completed": 19,
+            "failed": 0,
+            "total_ms": 1213,
+            "max_ms": 114
+          },
+          "Performance.getMetrics": {
+            "sent": 1,
+            "completed": 1,
+            "failed": 0,
+            "total_ms": 0,
+            "max_ms": 0
+          },
+          "Page.captureScreenshot": {
+            "sent": 1,
+            "completed": 1,
+            "failed": 0,
+            "total_ms": 424,
+            "max_ms": 424
+          }
+        },
+        "observations": {
+          "count": 0,
+          "first_at_ms": 0,
+          "last_at_ms": 0,
+          "max_gap_ms": 0
+        },
+        "pending_requests": 0
+      },
+      "checkpoints": [
+        {
+          "event": "scenario_start",
+          "scenario": "compatibility-smoke",
+          "zone": "greyfen"
+        },
+        {
+          "event": "browser_keyboard_movement",
+          "distance": 1.085203306154309
+        },
+        {
+          "event": "manual_save_created",
+          "zone": "greyfen"
+        },
+        {
+          "event": "opening_continue_restored",
+          "zone": "greyfen",
+          "stage": "startup"
+        },
+        {
+          "event": "browser_save_durable",
+          "zone": "greyfen"
+        },
+        {
+          "event": "browser_continue_input",
+          "zone": "greyfen"
+        }
+      ],
+      "console_errors": [],
+      "console_warnings": [],
+      "network_failures": [],
+      "network_timeline": [
+        {
+          "request_id": "1",
+          "received_bytes": 0,
+          "url": "data:text/html,<body></body>",
+          "started": 1790885607.261,
+          "status": 200,
+          "response_at": 1790885607.264,
+          "from_cache": false,
+          "finished": 1790885607.265
+        },
+        {
+          "request_id": "2",
+          "received_bytes": 0,
+          "url": "http://127.0.0.1:54454/index.html?observe=1&v=qa002-firefox-1790885600459&scenario=compatibility-smoke-1790885607302",
+          "started": 1790885607.334,
+          "status": 200,
+          "response_at": 1790885607.352,
+          "from_cache": false,
+          "finished": 1790885607.37
+        },
+        {
+          "request_id": "3",
+          "received_bytes": 0,
+          "url": "http://127.0.0.1:54454/index.js",
+          "started": 1790885607.456,
+          "status": 200,
+          "response_at": 1790885607.487,
+          "from_cache": false,
+          "finished": 1790885607.489
+        },
+        {
+          "request_id": "4",
+          "received_bytes": 0,
+          "url": "http://127.0.0.1:54454/favicon.ico",
+          "started": 1790885607.593,
+          "status": 204,
+          "response_at": 1790885607.871,
+          "from_cache": false,
+          "finished": 1790885607.877
+        },
+        {
+          "request_id": "5",
+          "received_bytes": 0,
+          "url": "http://127.0.0.1:54454/index.wasm",
+          "started": 1790885607.609,
+          "status": 200,
+          "response_at": 1790885607.654,
+          "from_cache": false,
+          "finished": 1790885608.676
+        },
+        {
+          "request_id": "6",
+          "received_bytes": 0,
+          "url": "http://127.0.0.1:54454/index.pck",
+          "started": 1790885607.843,
+          "status": 200,
+          "response_at": 1790885608.95,
+          "from_cache": false,
+          "finished": 1790885609.284
+        },
+        {
+          "request_id": "7",
+          "received_bytes": 0,
+          "url": "http://127.0.0.1:54454/index.audio.position.worklet.js",
+          "started": 1790885620.564,
+          "status": 200,
+          "response_at": 1790885620.635,
+          "from_cache": false,
+          "finished": 1790885620.639
+        },
+        {
+          "request_id": "8",
+          "received_bytes": 0,
+          "url": "http://127.0.0.1:54454/index.audio.worklet.js",
+          "started": 1790885620.62,
+          "status": 200,
+          "response_at": 1790885620.663,
+          "from_cache": false,
+          "finished": 1790885620.684
+        },
+        {
+          "request_id": "9",
+          "received_bytes": 0,
+          "url": "http://127.0.0.1:54454/release_manifest.json",
+          "started": 1790885631.426,
+          "status": 200,
+          "response_at": 1790885631.433,
+          "from_cache": false,
+          "finished": 1790885631.435
+        },
+        {
+          "request_id": "10",
+          "received_bytes": 0,
+          "url": "http://127.0.0.1:54454/runtime_pack_manifest.json",
+          "started": 1790885632.079,
+          "status": 200,
+          "response_at": 1790885632.092,
+          "from_cache": false,
+          "finished": 1790885632.093
+        },
+        {
+          "request_id": "11",
+          "received_bytes": 0,
+          "url": "http://127.0.0.1:54454/packs/opening.pck?sha256=9c31e85bade268fe57294f24b747eb92dce6e38644fdebbfcdde9ab87ec7d742",
+          "started": 1790885636.05,
+          "status": 200,
+          "response_at": 1790885636.067,
+          "from_cache": false,
+          "finished": 1790885636.338
+        },
+        {
+          "request_id": "12",
+          "received_bytes": 0,
+          "url": "http://127.0.0.1:54454/packs/characters.pck?sha256=79071a6b1c7fa7ccf78a701776fb4aab18289c147d92ea545aa9021d6671a202",
+          "started": 1790885640.525,
+          "status": 200,
+          "response_at": 1790885640.532,
+          "from_cache": false,
+          "finished": 1790885648.828
+        },
+        {
+          "request_id": "13",
+          "received_bytes": 0,
+          "url": "http://127.0.0.1:54454/index.html?observe=1&v=qa002-firefox-1790885600459&resume=1790885754422",
+          "started": 1790885754.493,
+          "status": 200,
+          "response_at": 1790885754.517,
+          "from_cache": false,
+          "finished": 1790885754.566
+        },
+        {
+          "request_id": "14",
+          "received_bytes": 0,
+          "url": "http://127.0.0.1:54454/index.js",
+          "started": 1790885754.619,
+          "status": 200,
+          "response_at": 1790885754.622,
+          "from_cache": false,
+          "finished": 1790885754.625
+        },
+        {
+          "request_id": "15",
+          "received_bytes": 0,
+          "url": "http://127.0.0.1:54454/favicon.ico",
+          "started": 1790885754.663,
+          "status": 204,
+          "response_at": 1790885754.676,
+          "from_cache": false,
+          "finished": 1790885754.678
+        },
+        {
+          "request_id": "16",
+          "received_bytes": 0,
+          "url": "http://127.0.0.1:54454/index.wasm",
+          "started": 1790885754.692,
+          "status": 200,
+          "response_at": 1790885761.218,
+          "from_cache": false,
+          "finished": 1790885761.546
+        },
+        {
+          "request_id": "17",
+          "received_bytes": 0,
+          "url": "http://127.0.0.1:54454/index.pck",
+          "started": 1790885761.293,
+          "status": 200,
+          "response_at": 1790885761.879,
+          "from_cache": false,
+          "finished": 1790885762.072
+        },
+        {
+          "request_id": "18",
+          "received_bytes": 0,
+          "url": "http://127.0.0.1:54454/index.audio.position.worklet.js",
+          "started": 1790885774.091,
+          "status": 200,
+          "response_at": 1790885774.126,
+          "from_cache": false,
+          "finished": 1790885774.126
+        },
+        {
+          "request_id": "19",
+          "received_bytes": 0,
+          "url": "http://127.0.0.1:54454/index.audio.worklet.js",
+          "started": 1790885774.093,
+          "status": 200,
+          "response_at": 1790885774.126,
+          "from_cache": false,
+          "finished": 1790885774.128
+        },
+        {
+          "request_id": "20",
+          "received_bytes": 0,
+          "url": "http://127.0.0.1:54454/packs/opening.pck?sha256=9c31e85bade268fe57294f24b747eb92dce6e38644fdebbfcdde9ab87ec7d742",
+          "started": 1790885804.463,
+          "status": 200,
+          "response_at": 1790885804.492,
+          "from_cache": false,
+          "finished": 1790885805.183
+        }
+      ],
+      "js_heap_mb": null,
+      "runtime_memory_mb": 1586.7,
+      "memory_method": "isolated_content_process_private_upper_bound",
+      "firefox_process_memory": {
+        "method": "isolated_content_process_private_upper_bound",
+        "content_private_mb": 1586.7,
+        "content_process_count": 9,
+        "owned_process_private_mb": 1815.3,
+        "owned_process_count": 11
+      },
+      "chromium_process_memory": null,
+      "runtime_resources": [
+        {
+          "name": "http://127.0.0.1:54454/index.js",
+          "bytes": 79473
+        },
+        {
+          "name": "http://127.0.0.1:54454/index.wasm",
+          "bytes": 9382582
+        },
+        {
+          "name": "http://127.0.0.1:54454/index.pck",
+          "bytes": 12942135
+        }
+      ],
+      "loading_timeline": [
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: startup_pack_ready source=signal id=base"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen prewarm begin"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: web_menu_ready opening_prewarm_hidden=true"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: runtime ready total=229ms environment=19ms services=142ms"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen prewarm build_begin"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen prewarm build_complete ms=10 ok=true"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: opening_menu_render_ready"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen prewarmed total=3213ms build=10ms world=3ms player=329ms"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: shell opening_ready"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: new_game_handoff prewarmed=true cached_zones=1"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: new_game_stage=cache_clear elapsed=4.0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: handoff_phase=hide_menu_begin"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: handoff_phase=hide_menu_end"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: handoff_phase=quest_begin"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: handoff_phase=quest_end"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: new_game_stage=state_ready elapsed=9.0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: new_game_stage=zone_dispatch elapsed=10.0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: handoff_phase=load_zone_begin"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: zone_begin id=greyfen prewarm=true cached=false"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: cached_zone_activated id=greyfen valid=true"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: zone_stage=cache_activated elapsed=13.0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "ZONE_COMPOSITION: id=greyfen reused=true visible=true position=(0.0, 0.0, 0.0)"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: zone_stage=systems_synced elapsed=18.0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: zone_stage=visual_applied elapsed=19.0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: zone_stage=render_validation_deferred elapsed=39.0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: zone_stage=budget_ready elapsed=40.0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: handoff_phase=unlock_begin"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: handoff_phase=unlock_end"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: zone=greyfen playable_ms=41.0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: handoff_phase=hide_loading_begin"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: handoff_phase=hide_loading_end"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: handoff_phase=before_seamless"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: handoff_phase=after_seamless"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: handoff_phase=after_autosave"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: handoff_phase=load_zone_end"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: new_game_stage=ready elapsed=45.0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: new_game_stage=zone_return elapsed=45.0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_runtime_complete ms=0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: zone_stage=runtime_finalized zone=greyfen navigation=false ms=0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: startup_pack preloaded id=opening bytes=15178476"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: background_pack mounted id=opening"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_base ms=630"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: background_pack downloading id=characters url=http://127.0.0.1:54454/packs/characters.pck?sha256=79071a6b1c7fa7ccf78a701776fb4aab18289c147d92ea545aa9021d6671a202"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_place_0 ms=2"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: opening_boot_materials_restored"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_place_1 ms=0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_place_2 ms=1"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_place_3 ms=0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_place_4 ms=1"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_side_clues ms=1"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_main_clues ms=2"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_gate_links ms=1"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_gate_visual ms=2"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_route_markers ms=4"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_story ms=7"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_visual_0 ms=0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_visual_1 ms=0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_visual_2 ms=0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_visual_3 ms=1"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_visual_4 ms=0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_visual_5 ms=0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_visual_6 ms=0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_visual_7 ms=0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_visual_8 ms=0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_visual_9 ms=0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_visual_10 ms=0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_visual_11 ms=0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_visual_12 ms=0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_visual_13 ms=0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_visual_14 ms=0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_visual_15 ms=0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: background_pack mounted id=characters"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_mira ms=1"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_rook ms=1"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_widow_elna ms=0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_blacksmith_tor ms=0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_farmer_toma ms=1"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_population ms=4"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_common_table ms=3"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_barrel_board ms=1"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_crowd_0 ms=0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_crowd_1 ms=1"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_crowd_2 ms=0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_crowd_3 ms=2"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_crowd_4 ms=2"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_crowd_5 ms=0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_crowd_6 ms=0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_crowd_7 ms=0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_crowd_8 ms=2"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_crowd_9 ms=0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=opening_river_visual ms=24"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=opening_terrain ms=78"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=opening_lighting ms=1"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=opening_spawn ms=14"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=village_house_0 ms=2"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=village_house_1 ms=6"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=village_house_2 ms=6"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=village_house_3 ms=2"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=village_architectural_details_0 ms=7"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=village_architectural_details_1 ms=14"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=village_architectural_details_2 ms=17"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=village_architectural_details_3 ms=1"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=village_architectural_details_4 ms=18"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=boundary_horizon ms=19"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=boundary_vegetation ms=25"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=boundary_lights ms=2"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=boundary_north_south_fences ms=6"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=boundary_side_fences ms=3"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=landmark_board ms=7"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=landmark_shrine ms=3"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=landmark_blacksmith ms=10"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=landmark_cemetery_approach ms=6"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=landmark_cemetery_boundary ms=23"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=landmark_cemetery_graves ms=3"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=landmark_cemetery_chapel ms=14"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=landmark_cemetery_bell ms=9"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=landmark_cemetery_edges ms=23"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=landmark_cemetery_presentation_bell ms=1"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=landmark_cemetery_presentation_chapel ms=1"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=landmark_cemetery_presentation_graves ms=1"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=landmark_cemetery_presentation_roost ms=1"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=landmark_cemetery_presentation_states ms=0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=landmark_cart_road ms=1"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=village_dressing ms=2"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=village_first_impression_ruts ms=1"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=village_first_impression_lanterns ms=10"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=village_first_impression_shrine ms=3"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=village_first_impression_story ms=4"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=village_first_impression_crows ms=2"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=village_quality ms=0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=trees ms=2"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=aftermath ms=1"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail complete"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: startup_pack_ready source=signal id=base"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen prewarm begin"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: web_menu_ready opening_prewarm_hidden=true"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: runtime ready total=190ms environment=20ms services=111ms"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen prewarm build_begin"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen prewarm build_complete ms=8 ok=true"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: opening_menu_render_ready"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: Greyfen prewarmed total=3383ms build=8ms world=3ms player=300ms"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: shell opening_ready"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: background_pack downloading id=opening url=http://127.0.0.1:54454/packs/opening.pck?sha256=9c31e85bade268fe57294f24b747eb92dce6e38644fdebbfcdde9ab87ec7d742"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: background_pack mounted id=opening"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: zone_begin id=greyfen prewarm=true cached=false"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "ZONE_COMPOSITION: id=greyfen reused=false visible=true position=(0.0, 0.0, 0.0)"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: zone_stage=systems_synced elapsed=642.0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: zone_stage=visual_applied elapsed=646.0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: zone_stage=render_validation_deferred elapsed=666.0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: zone_stage=budget_ready elapsed=666.0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: handoff_phase=unlock_begin"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: handoff_phase=unlock_end"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: zone=greyfen playable_ms=669.0"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: handoff_phase=hide_loading_begin"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: handoff_phase=hide_loading_end"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: handoff_phase=before_seamless"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: handoff_phase=after_seamless"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: handoff_phase=after_autosave"
+        },
+        {
+          "timestamp": 0,
+          "type": "log",
+          "text": "LOADING: zone_stage=runtime_finalized zone=greyfen navigation=false ms=0"
+        }
+      ],
+      "console_messages": [
+        {
+          "type": "log",
+          "text": "LOADING: opening_boot_materials_restored"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_place_1 ms=0"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_place_2 ms=1"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_place_3 ms=0"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_place_4 ms=1"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_side_clues ms=1"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_main_clues ms=2"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_gate_links ms=1"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_gate_visual ms=2"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_route_markers ms=4"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_story ms=7"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_visual_0 ms=0"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_visual_1 ms=0"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_visual_2 ms=0"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_visual_3 ms=1"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_visual_4 ms=0"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_visual_5 ms=0"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_visual_6 ms=0"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_visual_7 ms=0"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_visual_8 ms=0"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_visual_9 ms=0"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_visual_10 ms=0"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_visual_11 ms=0"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_visual_12 ms=0"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_visual_13 ms=0"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_visual_14 ms=0"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_visual_15 ms=0"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: background_pack mounted id=characters"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_mira ms=1"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_rook ms=1"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_widow_elna ms=0"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_blacksmith_tor ms=0"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_farmer_toma ms=1"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_population ms=4"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_common_table ms=3"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_barrel_board ms=1"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_crowd_0 ms=0"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_crowd_1 ms=1"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_crowd_2 ms=0"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_crowd_3 ms=2"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_crowd_4 ms=2"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_crowd_5 ms=0"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_crowd_6 ms=0"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_crowd_7 ms=0"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_crowd_8 ms=2"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=gameplay_crowd_9 ms=0"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=opening_river_visual ms=24"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=opening_terrain ms=78"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=opening_lighting ms=1"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=opening_spawn ms=14"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=village_house_0 ms=2"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=village_house_1 ms=6"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=village_house_2 ms=6"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=village_house_3 ms=2"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=village_architectural_details_0 ms=7"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=village_architectural_details_1 ms=14"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=village_architectural_details_2 ms=17"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=village_architectural_details_3 ms=1"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=village_architectural_details_4 ms=18"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=boundary_horizon ms=19"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=boundary_vegetation ms=25"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=boundary_lights ms=2"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=boundary_north_south_fences ms=6"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=boundary_side_fences ms=3"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=landmark_board ms=7"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=landmark_shrine ms=3"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=landmark_blacksmith ms=10"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=landmark_cemetery_approach ms=6"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=landmark_cemetery_boundary ms=23"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=landmark_cemetery_graves ms=3"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=landmark_cemetery_chapel ms=14"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=landmark_cemetery_bell ms=9"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=landmark_cemetery_edges ms=23"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=landmark_cemetery_presentation_bell ms=1"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=landmark_cemetery_presentation_chapel ms=1"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=landmark_cemetery_presentation_graves ms=1"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=landmark_cemetery_presentation_roost ms=1"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=landmark_cemetery_presentation_states ms=0"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=landmark_cart_road ms=1"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=village_dressing ms=2"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=village_first_impression_ruts ms=1"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=village_first_impression_lanterns ms=10"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=village_first_impression_shrine ms=3"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=village_first_impression_story ms=4"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=village_first_impression_crows ms=2"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=village_quality ms=0"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=trees ms=2"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail stage=aftermath ms=1"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen deferred_detail complete"
+        },
+        {
+          "type": "log",
+          "text": "Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org"
+        },
+        {
+          "type": "log",
+          "text": "OpenGL API OpenGL ES 3.0 (WebGL 2.0) - Compatibility - Using Device: Mozilla - ANGLE (Intel, Intel(R) HD Graphics 400 Direct3D11 vs_5_0 ps_5_0), or similar"
+        },
+        {
+          "type": "log",
+          "text": "Build configuration: Emscripten 4.0.20, single-threaded, no GDExtension support."
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack_ready source=signal id=base"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen prewarm begin"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: web_menu_ready opening_prewarm_hidden=true"
+        },
+        {
+          "type": "log",
+          "text": "AUDIO: music_state_main_menu"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: runtime ready total=190ms environment=20ms services=111ms"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen prewarm build_begin"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen prewarm build_complete ms=8 ok=true"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: opening_menu_render_ready"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen prewarmed total=3383ms build=8ms world=3ms player=300ms"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: shell opening_ready"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: background_pack downloading id=opening url=http://127.0.0.1:54454/packs/opening.pck?sha256=9c31e85bade268fe57294f24b747eb92dce6e38644fdebbfcdde9ab87ec7d742"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: background_pack mounted id=opening"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_begin id=greyfen prewarm=true cached=false"
+        },
+        {
+          "type": "log",
+          "text": "ZONE_COMPOSITION: id=greyfen reused=false visible=true position=(0.0, 0.0, 0.0)"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=systems_synced elapsed=642.0"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=visual_applied elapsed=646.0"
+        },
+        {
+          "type": "log",
+          "text": "AUDIO: music_state_greyfen_explore"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=render_validation_deferred elapsed=666.0"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=budget_ready elapsed=666.0"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: handoff_phase=unlock_begin"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: handoff_phase=unlock_end"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone=greyfen playable_ms=669.0"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: handoff_phase=hide_loading_begin"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: handoff_phase=hide_loading_end"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: handoff_phase=before_seamless"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: handoff_phase=after_seamless"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: handoff_phase=after_autosave"
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=runtime_finalized zone=greyfen navigation=false ms=0"
+        }
+      ],
+      "audio_context_timeline": [],
+      "audio_unlock": "not_observed",
+      "final_screenshot": "D:\\Temp\\AshenOath\\functional_candidate_20261001\\firefox_smoke_v10_lean_persistence_firefox_final.png",
+      "final_telemetry": {
+        "audio": {
+          "master_db": -1.41162145137787,
+          "music_playing": true,
+          "music_state": "greyfen_explore",
+          "muted": false
+        },
+        "bosses": [],
+        "camera": {
+          "locked_target_id": "",
+          "locked_target_position": {},
+          "pitch": -0.19,
+          "yaw": 0
+        },
+        "dialogue": {
+          "actions": [],
+          "focused_action": -1,
+          "page": 0,
+          "pages": 0,
+          "speaker": "",
+          "text": "",
+          "visible": false
+        },
+        "enemies": [],
+        "focus": {},
+        "gates": [
+          {
+            "distance": 25.0844135284424,
+            "id": "gate_wychwood",
+            "position": {
+              "x": 0,
+              "y": 0,
+              "z": -15.1999998092651
+            },
+            "prompt": "To Wychwood",
+            "target": "wychwood",
+            "type": "zone"
+          },
+          {
+            "distance": 26.2465381622314,
+            "id": "gate_deep_wood",
+            "position": {
+              "x": -18,
+              "y": 0,
+              "z": -10
+            },
+            "prompt": "The long road",
+            "target": "deep_wood",
+            "type": "zone"
+          },
+          {
+            "distance": 20.8374671936035,
+            "id": "gate_vargan_approach",
+            "position": {
+              "x": 17.5,
+              "y": 0,
+              "z": 0
+            },
+            "prompt": "Road to Castle Vargan",
+            "target": "vargan_approach",
+            "type": "zone"
+          }
+        ],
+        "input": {
+          "connected_joypads": [],
+          "context": "gameplay",
+          "device": "keyboard_mouse",
+          "gamepad_id": 0
+        },
+        "interactions": [
+          {
+            "distance": 5.70563173294067,
+            "id": "notice_board",
+            "position": {
+              "x": 4.40000009536743,
+              "y": 0,
+              "z": 12.1000003814697
+            },
+            "prompt": "Read notice board",
+            "target": "",
+            "type": "dialogue"
+          },
+          {
+            "distance": 15.1409339904785,
+            "id": "sister_anwen",
+            "position": {
+              "x": 2,
+              "y": 0,
+              "z": -5
+            },
+            "prompt": "Talk to Sister Anwen",
+            "target": "",
+            "type": "dialogue"
+          },
+          {
+            "distance": 6.30903291702271,
+            "id": "side_contracts",
+            "position": {
+              "x": 5.05000019073486,
+              "y": 0,
+              "z": 12.1000003814697
+            },
+            "prompt": "Read village requests",
+            "target": "",
+            "type": "dialogue"
+          },
+          {
+            "distance": 11.8946666717529,
+            "id": "mira",
+            "position": {
+              "x": -6.83165884017944,
+              "y": 0,
+              "z": -0.412172108888626
+            },
+            "prompt": "Talk to Mira Fen",
+            "target": "",
+            "type": "dialogue"
+          },
+          {
+            "distance": 3.6315381526947,
+            "id": "rook",
+            "position": {
+              "x": -4.22287607192993,
+              "y": -0.00323386513628066,
+              "z": 8.52022933959961
+            },
+            "prompt": "Talk to Rook",
+            "target": "",
+            "type": "dialogue"
+          },
+          {
+            "distance": 14.0446319580078,
+            "id": "widow_elna",
+            "position": {
+              "x": 13,
+              "y": 0,
+              "z": 7.55000019073486
+            },
+            "prompt": "Talk to Widow Elna",
+            "target": "",
+            "type": "dialogue"
+          },
+          {
+            "distance": 13.8383903503418,
+            "id": "blacksmith_tor",
+            "position": {
+              "x": 9.5,
+              "y": 0,
+              "z": 0.686083197593689
+            },
+            "prompt": "Talk to Blacksmith Tor",
+            "target": "",
+            "type": "dialogue"
+          },
+          {
+            "distance": 23.591609954834,
+            "id": "farmer_toma",
+            "position": {
+              "x": 10.6999998092651,
+              "y": 0,
+              "z": -10.6999998092651
+            },
+            "prompt": "Talk to Farmer Toma",
+            "target": "",
+            "type": "dialogue"
+          },
+          {
+            "distance": 12.5950498580933,
+            "id": "village_well",
+            "position": {
+              "x": -8,
+              "y": 0,
+              "z": -0.5
+            },
+            "prompt": "Draw from the village well",
+            "target": "",
+            "type": "village_place"
+          },
+          {
+            "distance": 16.2174701690674,
+            "id": "forge_corner",
+            "position": {
+              "x": 11,
+              "y": 0,
+              "z": -1.20000004768372
+            },
+            "prompt": "Inspect Tor's old iron",
+            "target": "",
+            "type": "village_place"
+          },
+          {
+            "distance": 15.0189142227173,
+            "id": "tor_forge",
+            "position": {
+              "x": 10.1999998092651,
+              "y": 0,
+              "z": -0.300000011920929
+            },
+            "prompt": "Buy arrows and gear from Tor",
+            "target": "",
+            "type": "vendor"
+          },
+          {
+            "distance": 11.9679489135742,
+            "id": "mira_apothecary",
+            "position": {
+              "x": -5.40000009536743,
+              "y": 0,
+              "z": -1.20000004768372
+            },
+            "prompt": "Buy remedies from Mira",
+            "target": "",
+            "type": "vendor"
+          },
+          {
+            "distance": 18.3465423583984,
+            "id": "shrine_prayer",
+            "position": {
+              "x": 8,
+              "y": 0,
+              "z": -6.19999980926514
+            },
+            "prompt": "Sit at the shrine bench",
+            "target": "",
+            "type": "village_place"
+          },
+          {
+            "distance": 4.83172512054443,
+            "id": "common_table",
+            "position": {
+              "x": -5.40000009536743,
+              "y": 0,
+              "z": 11.5
+            },
+            "prompt": "Play Three Marks with Rook",
+            "target": "",
+            "type": "minigame"
+          },
+          {
+            "distance": 7.86349964141846,
+            "id": "barrel_board",
+            "position": {
+              "x": 7,
+              "y": 0,
+              "z": 10.3000001907349
+            },
+            "prompt": "Play Greyfen Draughts with Tor",
+            "target": "",
+            "type": "minigame"
+          },
+          {
+            "distance": 13.2562818527222,
+            "id": "grave_harl",
+            "position": {
+              "x": 12.1999998092651,
+              "y": 0,
+              "z": 7.55000019073486
+            },
+            "prompt": "Inspect Harl's disturbed grave",
+            "target": "",
+            "type": "clue"
+          },
+          {
+            "distance": 14.8553647994995,
+            "id": "grave_child",
+            "position": {
+              "x": 14,
+              "y": 0,
+              "z": 10.1999998092651
+            },
+            "prompt": "Inspect the nameless child's grave",
+            "target": "",
+            "type": "clue"
+          },
+          {
+            "distance": 17.2087860107422,
+            "id": "grave_soldier",
+            "position": {
+              "x": 16.2000007629395,
+              "y": 0,
+              "z": 7.55000019073486
+            },
+            "prompt": "Inspect the empty soldier's grave",
+            "target": "",
+            "type": "clue"
+          },
+          {
+            "distance": 17.253324508667,
+            "id": "chapel_door",
+            "position": {
+              "x": 16.2999992370605,
+              "y": 0,
+              "z": 8
+            },
+            "prompt": "Open the ruined Crow Chapel",
+            "target": "",
+            "type": "clue"
+          }
+        ],
+        "inventory": {
+          "active_oil": "",
+          "coin": 15,
+          "ingredients": {
+            "ash_salt": 2,
+            "bitterleaf": 2,
+            "grave_moss": 1,
+            "mooncap": 1,
+            "redroot": 2,
+            "scrap_iron": 1,
+            "sparkstone": 1
+          },
+          "items": {
+            "ash_bomb": 1,
+            "ashfire_arrow": 0,
+            "bitterleaf_tonic": 1,
+            "bodkin_arrow": 0,
+            "iron_trap": 0,
+            "moon_oil": 0,
+            "redroot_potion": 3,
+            "rot_oil": 0,
+            "standard_arrow": 24
+          }
+        },
+        "mouse_mode": 0,
+        "new_game_ready": true,
+        "paused": false,
+        "performance": {
+          "average_fps": 34.6014191802929,
+          "one_percent_low_fps": 14.4230769230769,
+          "samples": 486,
+          "zone": "greyfen"
+        },
+        "player": {
+          "attack_cooldown": 0,
+          "bow_aiming": false,
+          "can_control": true,
+          "dead": false,
+          "facing_yaw": 0,
+          "health": 125,
+          "on_floor": true,
+          "on_wall": false,
+          "position": {
+            "x": -0.85166209936142,
+            "y": 0.0326839797198772,
+            "z": 9.8699312210083
+          },
+          "selected_arrow": "standard_arrow",
+          "stamina": 100,
+          "velocity": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "weapon_mode": "sword"
+        },
+        "quests": {
+          "active": [
+            "main_road_of_crows"
+          ],
+          "bell_active": false,
+          "completed": [],
+          "evidence_ready": false,
+          "fight_complete": false,
+          "objectives": {
+            "main_road_of_crows": "speak_anwen"
+          },
+          "objectives_done": {
+            "main_road_of_crows": []
+          },
+          "road_complete": false,
+          "tracked": "main_road_of_crows",
+          "tracker_text": "Road of Crows\n- Speak with Sister Anwen at the shrine.",
+          "world_flags": {}
+        },
+        "read_only": true,
+        "ready": true,
+        "runtime_packs": {
+          "audio": {
+            "error": "",
+            "progress": 0,
+            "state": ""
+          },
+          "campaign": {
+            "error": "",
+            "progress": 0,
+            "state": ""
+          },
+          "characters": {
+            "error": "",
+            "progress": 0,
+            "state": ""
+          },
+          "monsters": {
+            "error": "",
+            "progress": 0,
+            "state": ""
+          },
+          "opening": {
+            "error": "",
+            "progress": 1,
+            "state": "ready"
+          },
+          "quality_materials": {
+            "error": "",
+            "progress": 0,
+            "state": ""
+          }
+        },
+        "save_exists": true,
+        "saves": {
+          "autosave": true,
+          "checkpoint": true,
+          "manual": true
+        },
+        "schema_version": 2,
+        "settings": {
+          "camera_shake": 1,
+          "custom_bindings": {},
+          "fullscreen": false,
+          "gamepad_deadzone": 0.16,
+          "gamepad_invert_x": false,
+          "gamepad_invert_y": false,
+          "high_contrast": false,
+          "master_volume": 0.85,
+          "quality_preset": "balanced",
+          "reduced_motion": false,
+          "subtitle_scale": 1
+        },
+        "story": {
+          "flags": {},
+          "values": {
+            "anwen_trust": 0,
+            "greyfen_fear": 0,
+            "hart_debt": 0
+          }
+        },
+        "timestamp_ms": 73043,
+        "transition_pending": false,
+        "ui": {
+          "active_menu": "",
+          "buttons": [],
+          "focused_control": "",
+          "inventory_visible": false,
+          "loading_visible": false,
+          "viewport": {
+            "x": 1280,
+            "y": 720
+          }
+        },
+        "zone": "greyfen",
+        "zone_load_request_pending": false
+      },
+      "performance_by_zone": {
+        "greyfen": {
+          "samples": 600,
+          "min_average_fps": 28.9316712504911,
+          "min_one_percent_low_fps": 11.968085106383
+        }
+      },
+      "profile_dir": "D:\\Temp\\AshenOath\\ashen-oath-qa002-firefox-1790885600450",
+      "devtools_port": 0,
+      "transport_protocol": "webdriver_bidi",
+      "browser_stderr": "",
+      "route_limitations": [
+        "Castle Vargan Approach has no direct Greyfen return gate; QA returns Record Hall to Courtyard to Approach.",
+        "Deep Woods returns through Wychwood because its authored back gate targets Wychwood."
+      ]
+    }
+  ]
+}

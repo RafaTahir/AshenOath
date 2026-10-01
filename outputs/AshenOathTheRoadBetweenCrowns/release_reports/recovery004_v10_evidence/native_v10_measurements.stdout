@@ -1,0 +1,220 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+OpenGL API OpenGL ES 3.0 (ANGLE 2.1.1 git hash: aaebda1c5a40) - Compatibility - Using Device: Google Inc. (Intel) - ANGLE (Intel, Intel(R) HD Graphics 620 (0x00005916) Direct3D11 vs_5_0 ps_5_0, D3D11-31.0.101.2130)
+
+LOADING: Greyfen prewarm begin
+AUDIO: music_state_main_menu
+LOADING: runtime ready total=218ms environment=44ms services=115ms
+LOADING: Greyfen prewarm build_begin
+LOADING: Greyfen prewarm build_complete ms=712 ok=true
+LOADING: new_game_handoff prewarmed=true cached_zones=1
+LOADING: new_game_stage=cache_clear elapsed=0.3
+LOADING: handoff_phase=hide_menu_begin
+LOADING: handoff_phase=hide_menu_end
+LOADING: handoff_phase=quest_begin
+LOADING: handoff_phase=quest_end
+LOADING: new_game_stage=state_ready elapsed=7.1
+LOADING: new_game_stage=zone_dispatch elapsed=7.3
+LOADING: handoff_phase=load_zone_begin
+LOADING: zone_begin id=greyfen prewarm=true cached=false
+LOADING: cached_zone_activated id=greyfen valid=true
+LOADING: zone_stage=cache_activated elapsed=7.8
+ZONE_COMPOSITION: id=greyfen reused=true visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=13.6
+LOADING: zone_stage=visual_applied elapsed=15.3
+AUDIO: music_state_greyfen_explore
+LOADING: zone_stage=render_validation_deferred elapsed=17.9
+LOADING: zone_stage=budget_ready elapsed=18.1
+LOADING: handoff_phase=unlock_begin
+LOADING: handoff_phase=unlock_end
+LOADING: zone=greyfen playable_ms=18.3
+LOADING: handoff_phase=hide_loading_begin
+LOADING: handoff_phase=hide_loading_end
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: handoff_phase=load_zone_end
+LOADING: new_game_stage=ready elapsed=18.8
+LOADING: new_game_stage=zone_return elapsed=18.8
+LOADING: Greyfen deferred_detail stage=gameplay_base ms=1
+LOADING: Greyfen deferred_runtime_complete ms=8
+LOADING: opening_menu_render_ready
+LOADING: Greyfen prewarmed total=4158ms build=712ms world=194ms player=133ms
+LOADING: Greyfen deferred_detail stage=gameplay_place_0 ms=1
+LOADING: zone_stage=runtime_finalized zone=greyfen navigation=false ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_place_1 ms=1
+LOADING: opening_boot_materials_restored
+LOADING: Greyfen deferred_detail stage=gameplay_place_2 ms=2
+LOADING: Greyfen deferred_detail stage=gameplay_place_3 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_place_4 ms=2
+LOADING: Greyfen deferred_detail stage=gameplay_side_clues ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_main_clues ms=4
+LOADING: Greyfen deferred_detail stage=gameplay_gate_links ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_gate_visual ms=3
+LOADING: Greyfen deferred_detail stage=gameplay_route_markers ms=5
+LOADING: Greyfen deferred_detail stage=gameplay_story ms=7
+LOADING: Greyfen deferred_detail stage=gameplay_visual_0 ms=3
+LOADING: Greyfen deferred_detail stage=gameplay_visual_1 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_visual_2 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_visual_3 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_visual_4 ms=0
+LOADING: Greyfen deferred_detail stage=gameplay_visual_5 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_visual_6 ms=0
+LOADING: Greyfen deferred_detail stage=gameplay_visual_7 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_visual_8 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_visual_9 ms=2
+LOADING: Greyfen deferred_detail stage=gameplay_visual_10 ms=0
+LOADING: Greyfen deferred_detail stage=gameplay_visual_11 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_visual_12 ms=2
+LOADING: Greyfen deferred_detail stage=gameplay_visual_13 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_visual_14 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_visual_15 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_mira ms=6
+LOADING: Greyfen deferred_detail stage=gameplay_rook ms=6
+LOADING: Greyfen deferred_detail stage=gameplay_widow_elna ms=6
+LOADING: Greyfen deferred_detail stage=gameplay_blacksmith_tor ms=7
+LOADING: Greyfen deferred_detail stage=gameplay_farmer_toma ms=6
+LOADING: Greyfen deferred_detail stage=gameplay_population ms=8
+LOADING: Greyfen deferred_detail stage=gameplay_common_table ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_barrel_board ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_0 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_1 ms=2
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_2 ms=2
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_3 ms=3
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_4 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_5 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_6 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_7 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_8 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_9 ms=1
+LOADING: Greyfen deferred_detail stage=opening_river_visual ms=1
+LOADING: Greyfen deferred_detail stage=opening_terrain ms=0
+LOADING: Greyfen deferred_detail stage=opening_lighting ms=0
+LOADING: Greyfen deferred_detail stage=opening_spawn ms=9
+LOADING: Greyfen deferred_detail stage=village_house_0 ms=0
+LOADING: Greyfen deferred_detail stage=village_house_1 ms=0
+LOADING: Greyfen deferred_detail stage=village_house_2 ms=0
+LOADING: Greyfen deferred_detail stage=village_house_3 ms=1
+LOADING: Greyfen deferred_detail stage=village_architectural_details_0 ms=0
+LOADING: Greyfen deferred_detail stage=village_architectural_details_1 ms=1
+LOADING: Greyfen deferred_detail stage=village_architectural_details_2 ms=0
+LOADING: Greyfen deferred_detail stage=village_architectural_details_3 ms=1
+LOADING: Greyfen deferred_detail stage=village_architectural_details_4 ms=0
+LOADING: Greyfen deferred_detail stage=boundary_horizon ms=50
+LOADING: Greyfen deferred_detail stage=boundary_vegetation ms=56
+LOADING: Greyfen deferred_detail stage=boundary_lights ms=2
+LOADING: Greyfen deferred_detail stage=boundary_north_south_fences ms=2
+LOADING: Greyfen deferred_detail stage=boundary_side_fences ms=1
+LOADING: Greyfen deferred_detail stage=landmark_board ms=0
+LOADING: Greyfen deferred_detail stage=landmark_shrine ms=16
+LOADING: Greyfen deferred_detail stage=landmark_blacksmith ms=20
+LOADING: Greyfen deferred_detail stage=landmark_cemetery_approach ms=3
+LOADING: Greyfen deferred_detail stage=landmark_cemetery_boundary ms=4
+LOADING: Greyfen deferred_detail stage=landmark_cemetery_graves ms=10
+LOADING: Greyfen deferred_detail stage=landmark_cemetery_chapel ms=4
+LOADING: Greyfen deferred_detail stage=landmark_cemetery_bell ms=2
+LOADING: Greyfen deferred_detail stage=landmark_cemetery_edges ms=32
+LOADING: Greyfen deferred_detail stage=landmark_cemetery_presentation_bell ms=1
+LOADING: Greyfen deferred_detail stage=landmark_cemetery_presentation_chapel ms=1
+LOADING: Greyfen deferred_detail stage=landmark_cemetery_presentation_graves ms=1
+LOADING: Greyfen deferred_detail stage=landmark_cemetery_presentation_roost ms=1
+LOADING: Greyfen deferred_detail stage=landmark_cemetery_presentation_states ms=1
+LOADING: Greyfen deferred_detail stage=landmark_cart_road ms=1
+LOADING: Greyfen deferred_detail stage=village_dressing ms=2
+LOADING: Greyfen deferred_detail stage=village_first_impression_ruts ms=0
+LOADING: Greyfen deferred_detail stage=village_first_impression_lanterns ms=4
+LOADING: Greyfen deferred_detail stage=village_first_impression_shrine ms=5
+LOADING: Greyfen deferred_detail stage=village_first_impression_story ms=12
+LOADING: Greyfen deferred_detail stage=village_first_impression_crows ms=2
+LOADING: Greyfen deferred_detail stage=village_quality ms=1
+LOADING: Greyfen deferred_detail stage=trees ms=1
+LOADING: Greyfen deferred_detail stage=aftermath ms=0
+LOADING: Greyfen deferred_detail complete
+PERF_001 greyfen_hydration {"average_fps":49.8748659277798,"frames":279,"one_percent_low_fps":10.146275471379,"slow_frame_count":7,"slow_frames":[{"draw_calls":123,"frame_ms":140.268,"nodes":694,"physics_ms":0.898,"primitives":70470,"process_ms":85.309,"stage_after":"gameplay_place_2","stage_before":"gameplay_place_2"},{"draw_calls":185,"frame_ms":81.287,"nodes":946,"physics_ms":1.948,"primitives":119434,"process_ms":29.069,"stage_after":"landmark_cemetery_approach","stage_before":"landmark_blacksmith"},{"draw_calls":161,"frame_ms":74.12,"nodes":874,"physics_ms":1.948,"primitives":109877,"process_ms":29.069,"stage_after":"boundary_lights","stage_before":"boundary_vegetation"},{"draw_calls":125,"frame_ms":71.611,"nodes":705,"physics_ms":0.898,"primitives":70550,"process_ms":85.309,"stage_after":"gameplay_route_markers","stage_before":"gameplay_gate_visual"},{"draw_calls":157,"frame_ms":61.997,"nodes":853,"physics_ms":1.948,"primitives":91143,"process_ms":29.069,"stage_after":"boundary_vegetation","stage_before":"boundary_horizon"},{"draw_calls":196,"frame_ms":42.48,"nodes":1012,"physics_ms":1.948,"primitives":129172,"process_ms":29.069,"stage_after":"landmark_cemetery_presentation_bell","stage_before":"landmark_cemetery_edges"},{"draw_calls":175,"frame_ms":33.695,"nodes":935,"physics_ms":1.948,"primitives":110646,"process_ms":29.069,"stage_after":"landmark_blacksmith","stage_before":"landmark_shrine"}],"worst_frame_ms":140.268}
+PERFORMANCE_TARGET_MISS: Greyfen post-control hydration 1% low 10.1 is below 30.0
+PERF_001 greyfen {"average_fps":46.0370749414961,"draw_calls":250,"end_state":{"held_keys":{},"movement_input":[0.0,0.0],"position":[0.0,0.00109370425343513,9.80000019073486],"seam":{"active_sector_ids":["greyfen","wychwood","deep_wood","vargan_approach"],"current_sector":"greyfen","discovered_count":1,"failed_transition_count":0,"last_world_position":[0.0,1.0,9.80000019073486],"pending_transition":{},"previous_sector":"","transition_count":0},"velocity":[0.0,0.0,0.0],"zone":"greyfen"},"escaped_state":{},"frames":369,"nodes":1118,"one_percent_low_fps":35.1219169542274,"primitives":138394,"slow_frame_count":0,"slow_frame_indices":[],"slow_frame_samples":[],"start_state":{"held_keys":{},"movement_input":[0.0,0.0],"position":[0.0,0.00109370425343513,9.80000019073486],"seam":{"active_sector_ids":["greyfen","wychwood","deep_wood","vargan_approach"],"current_sector":"greyfen","discovered_count":1,"failed_transition_count":0,"last_world_position":[0.0,1.0,9.80000019073486],"pending_transition":{},"previous_sector":"","transition_count":0},"velocity":[0.0,0.0,0.0],"zone":"greyfen"},"static_memory_bytes":82066952}
+LOADING: zone_begin id=wychwood prewarm=false cached=false
+ZONE_COMPOSITION: id=wychwood reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=887.7
+LOADING: zone_stage=visual_applied elapsed=889.9
+LOADING: zone_stage=render_validation_deferred elapsed=891.9
+LOADING: zone_stage=budget_ready elapsed=892.0
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+AUDIO: music_state_wychwood_tension
+LOADING: zone=wychwood playable_ms=1152.0
+LOADING: zone_stage=runtime_finalized zone=wychwood navigation=true ms=1
+PERFORMANCE_TARGET_MISS: wychwood cold transition exceeded 900 ms
+PERF_001 wychwood {"average_fps":50.8519322922139,"draw_calls":167,"end_state":{"held_keys":{},"movement_input":[0.0,0.0],"position":[0.0,0.00020173192024231,8.0],"seam":{"active_sector_ids":["wychwood","greyfen","deep_wood"],"current_sector":"wychwood","discovered_count":2,"failed_transition_count":0,"last_world_position":[0.0,0.00020173192024231,48.0],"pending_transition":{},"previous_sector":"greyfen","transition_count":0},"velocity":[0.0,0.0,0.0],"zone":"wychwood"},"escaped_state":{},"frames":407,"nodes":1665,"one_percent_low_fps":14.1029799596655,"primitives":162473,"slow_frame_count":1,"slow_frame_indices":[308],"slow_frame_samples":[{"draw_calls":167,"frame_ms":242.935,"nodes":1665,"physics_process_ms":1.699,"primitives":162473,"process_ms":24.052}],"start_state":{"held_keys":{},"movement_input":[0.0,0.0],"position":[0.0,0.00020173192024231,8.0],"seam":{"active_sector_ids":["wychwood","greyfen","deep_wood"],"current_sector":"wychwood","discovered_count":2,"failed_transition_count":0,"last_world_position":[0.0,1.0,48.0],"pending_transition":{},"previous_sector":"greyfen","transition_count":0},"velocity":[0.0,0.0,0.0],"zone":"wychwood"},"static_memory_bytes":93161460}
+PERFORMANCE_TARGET_MISS: wychwood 1% low 14.1 is below 30.0
+AUDIO: music_state_ghoulkin_combat
+PERF_001 wychwood_combat {"average_fps":51.8334360634566,"draw_calls":135,"end_state":{"held_keys":{},"movement_input":[0.0,0.0],"position":[0.0,0.00999997556209564,-3.5],"seam":{"active_sector_ids":["wychwood","greyfen","deep_wood"],"current_sector":"wychwood","discovered_count":2,"failed_transition_count":0,"last_world_position":[0.0,0.00020173192024231,48.0],"pending_transition":{},"previous_sector":"greyfen","transition_count":0},"velocity":[0.0,0.0,0.0],"zone":"wychwood"},"escaped_state":{},"frames":415,"nodes":1682,"one_percent_low_fps":38.0929162412958,"primitives":113068,"slow_frame_count":0,"slow_frame_indices":[],"slow_frame_samples":[],"start_state":{"held_keys":{},"movement_input":[0.0,0.0],"position":[0.0,0.00999997556209564,-3.5],"seam":{"active_sector_ids":["wychwood","greyfen","deep_wood"],"current_sector":"wychwood","discovered_count":2,"failed_transition_count":0,"last_world_position":[0.0,0.00020173192024231,48.0],"pending_transition":{},"previous_sector":"greyfen","transition_count":0},"velocity":[0.0,0.0,0.0],"zone":"wychwood"},"static_memory_bytes":93451680}
+LOADING: zone_begin id=vargan_court prewarm=false cached=false
+ZONE_COMPOSITION: id=vargan_court reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=326.5
+LOADING: zone_stage=visual_applied elapsed=327.5
+LOADING: zone_stage=render_validation_deferred elapsed=329.0
+LOADING: zone_stage=budget_ready elapsed=329.1
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: zone=vargan_court playable_ms=376.5
+LOADING: zone_stage=runtime_finalized zone=vargan_court navigation=true ms=1
+AUDIO: music_state_castle_silence
+PERF_001 vargan_court {"average_fps":60.0088004590111,"draw_calls":118,"end_state":{"held_keys":{},"movement_input":[0.0,0.0],"position":[0.0,0.00020173192024231,8.0],"seam":{"active_sector_ids":["vargan_court","vargan_approach","record_hall"],"current_sector":"vargan_court","discovered_count":3,"failed_transition_count":0,"last_world_position":[48.0,0.176666602492332,288.0],"pending_transition":{},"previous_sector":"wychwood","transition_count":0},"velocity":[0.0,0.0,0.0],"zone":"vargan_court"},"escaped_state":{},"frames":481,"nodes":1128,"one_percent_low_fps":48.6741170515167,"primitives":92273,"slow_frame_count":0,"slow_frame_indices":[],"slow_frame_samples":[],"start_state":{"held_keys":{},"movement_input":[0.0,0.0],"position":[0.0,0.00020173192024231,8.0],"seam":{"active_sector_ids":["vargan_court","vargan_approach","record_hall"],"current_sector":"vargan_court","discovered_count":3,"failed_transition_count":0,"last_world_position":[48.0,0.176666602492332,288.0],"pending_transition":{},"previous_sector":"wychwood","transition_count":0},"velocity":[0.0,0.0,0.0],"zone":"vargan_court"},"static_memory_bytes":94245577}
+LOADING: zone_begin id=record_hall prewarm=false cached=false
+ZONE_COMPOSITION: id=record_hall reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=23.5
+LOADING: zone_stage=visual_applied elapsed=24.1
+LOADING: zone_stage=render_validation_deferred elapsed=24.7
+LOADING: zone_stage=budget_ready elapsed=24.8
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: zone=record_hall playable_ms=71.0
+LOADING: zone_stage=runtime_finalized zone=record_hall navigation=true ms=0
+AUDIO: music_state_record_hall
+PERF_001 record_hall {"average_fps":59.9996607087793,"draw_calls":76,"end_state":{"held_keys":{},"movement_input":[0.0,0.0],"position":[0.0,0.00020173192024231,8.0],"seam":{"active_sector_ids":["record_hall","vargan_court","undercroft"],"current_sector":"record_hall","discovered_count":4,"failed_transition_count":0,"last_world_position":[48.0,0.176666602492332,328.0],"pending_transition":{},"previous_sector":"vargan_court","transition_count":0},"velocity":[0.0,0.0,0.0],"zone":"record_hall"},"escaped_state":{},"frames":481,"nodes":679,"one_percent_low_fps":53.7726920760561,"primitives":82366,"slow_frame_count":0,"slow_frame_indices":[],"slow_frame_samples":[],"start_state":{"held_keys":{},"movement_input":[0.0,0.0],"position":[0.0,0.00020173192024231,8.0],"seam":{"active_sector_ids":["record_hall","vargan_court","undercroft"],"current_sector":"record_hall","discovered_count":4,"failed_transition_count":0,"last_world_position":[48.0,0.176666602492332,328.0],"pending_transition":{},"previous_sector":"vargan_court","transition_count":0},"velocity":[0.0,0.0,0.0],"zone":"record_hall"},"static_memory_bytes":85680281}
+LOADING: zone_begin id=hart_glade prewarm=false cached=false
+ZONE_COMPOSITION: id=hart_glade reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=77.6
+LOADING: zone_stage=visual_applied elapsed=78.6
+LOADING: zone_stage=render_validation_deferred elapsed=79.6
+LOADING: zone_stage=budget_ready elapsed=79.7
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: zone=hart_glade playable_ms=197.5
+LOADING: zone_stage=runtime_finalized zone=hart_glade navigation=true ms=0
+AUDIO: music_state_hart_glade
+PERF_001 hart_glade {"average_fps":60.0017025483098,"draw_calls":66,"end_state":{"held_keys":{},"movement_input":[0.0,0.0],"position":[0.0,0.00020173192024231,8.0],"seam":{"active_sector_ids":["hart_glade","assembly"],"current_sector":"hart_glade","discovered_count":5,"failed_transition_count":0,"last_world_position":[48.0,0.176666602492332,448.0],"pending_transition":{},"previous_sector":"record_hall","transition_count":0},"velocity":[0.0,0.0,0.0],"zone":"hart_glade"},"escaped_state":{},"frames":480,"nodes":548,"one_percent_low_fps":55.1888562661427,"primitives":53008,"slow_frame_count":0,"slow_frame_indices":[],"slow_frame_samples":[],"start_state":{"held_keys":{},"movement_input":[0.0,0.0],"position":[0.0,0.00020173192024231,8.0],"seam":{"active_sector_ids":["hart_glade","assembly"],"current_sector":"hart_glade","discovered_count":5,"failed_transition_count":0,"last_world_position":[48.0,0.176666602492332,448.0],"pending_transition":{},"previous_sector":"record_hall","transition_count":0},"velocity":[0.0,0.0,0.0],"zone":"hart_glade"},"static_memory_bytes":84033361}
+LOADING: zone_begin id=greyfen prewarm=false cached=false
+ZONE_COMPOSITION: id=greyfen reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=257.8
+LOADING: zone_stage=visual_applied elapsed=261.6
+AUDIO: music_state_greyfen_explore
+LOADING: zone_stage=render_validation_deferred elapsed=265.8
+LOADING: zone_stage=budget_ready elapsed=265.9
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: zone=greyfen playable_ms=406.7
+LOADING: zone_stage=runtime_finalized zone=greyfen navigation=true ms=0
+AUDIO: music_state_wychwood_tension
+LOADING: zone_begin id=hart_glade prewarm=false cached=true
+LOADING: cached_zone_activated id=hart_glade valid=true
+LOADING: zone_stage=cache_activated elapsed=5.6
+ZONE_COMPOSITION: id=hart_glade reused=true visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=6.7
+LOADING: zone_stage=visual_applied elapsed=7.4
+LOADING: zone_stage=render_validation_deferred elapsed=8.2
+LOADING: zone_stage=budget_ready elapsed=8.3
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: zone=hart_glade playable_ms=20.3
+PERFORMANCE_TARGET_MISS: warm return exceeded 350 ms
+PERF-001 SAMPLE: PASS (full)
+VERIFIER_PHASE: SHUTDOWN
+PERF-001 VERIFIER: PASS
+

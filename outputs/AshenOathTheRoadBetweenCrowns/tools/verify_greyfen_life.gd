@@ -10,7 +10,16 @@ func _initialize() -> void:
 	root.add_child(game)
 	await process_frame
 	game.call("_new_game")
-	await _settle(4)
+	var detail_deadline := Time.get_ticks_msec() + 30000
+	while Time.get_ticks_msec() < detail_deadline:
+		if game.game_started and game.zone_root != null and bool(game.zone_root.get_meta("opening_detail_complete", false)):
+			break
+		await process_frame
+	if not game.game_started or game.zone_root == null or not bool(game.zone_root.get_meta("opening_detail_complete", false)):
+		push_error("Greyfen life did not finish hydrating within 30 seconds")
+		quit(1)
+		return
+	await _settle(2)
 	check(game.current_zone_id == "greyfen","New Game did not load Greyfen")
 	var life = game.zone_root.find_child("GreyfenLifeController",true,false)
 	check(life != null,"Greyfen life controller is missing")
@@ -18,6 +27,14 @@ func _initialize() -> void:
 		check(life.actor_count() >= 7,"Balanced Greyfen needs four ambient plus three named routine actors")
 		for id in ["walker_well","walker_board","shrine_pilgrim","forge_helper"]:
 			check(id in life.routine_ids(),"Missing routine: %s" % id)
+		for entry in life.actors:
+			if str(entry.id) != "walker_well":
+				continue
+			var routine: Node3D = entry.node
+			game.player.global_position = routine.global_position + Vector3(0, 1, 1)
+			life._process(0.25)
+			check(routine.visible, "Balanced hides a nearby authored villager")
+			break
 		check(life.AMBIENT_LINES.size() >= 8,"Ambient dialogue pool is too small")
 		for line_id in ["greyfen_road_quiet","greyfen_bell_dawn","greyfen_shrine_voice","greyfen_anwen_sleep"]:
 			check(life.AMBIENT_LINES.has(line_id),"Missing ambient line ID: %s" % line_id)
@@ -57,6 +74,15 @@ func _initialize() -> void:
 	await _settle(3)
 	life = game.zone_root.find_child("GreyfenLifeController",true,false)
 	check(life != null and life.actor_count() >= 7,"Potato Greyfen lost required routine actors")
+	if life != null:
+		for entry in life.actors:
+			if str(entry.id) != "walker_well":
+				continue
+			var routine: Node3D = entry.node
+			game.player.global_position = routine.global_position + Vector3(0, 1, 1)
+			life._process(0.25)
+			check(routine.visible, "Potato hides a nearby authored villager")
+			break
 	check(game.zone_root.find_child("common_table",true,false) != null and game.zone_root.find_child("barrel_board",true,false) != null,"Potato mode removed minigames")
 
 	var result_code := 0 if failures == 0 else 1

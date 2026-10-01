@@ -4,6 +4,10 @@ var failures: Array[String] = []
 var tested_game: Node = null
 
 func _initialize() -> void:
+	create_timer(60.0).timeout.connect(func():
+		push_error("Motion verifier exceeded 60-second deadline")
+		quit(1)
+	)
 	var manifest := JSON.parse_string(FileAccess.get_file_as_string("res://visual_upgrade_manifest.json")) as Dictionary
 	for role in ["player_human", "sister_anwen_human", "rook_human", "villager_human"]:
 		var path := str(manifest.get("roles", {}).get("characters", {}).get(role, {}).get("path", ""))
@@ -24,7 +28,7 @@ func _initialize() -> void:
 	if player == null:
 		_finish(); return
 	_assert(player.animation_driver != null and player.animation_driver.is_valid(), "player has no valid skeletal animation driver")
-	_assert(player.left_leg_proxy == null, "player still exposes proxy-box animation")
+	_assert(player.find_children("*LegProxy*", "MeshInstance3D", true, false).is_empty(), "player still exposes proxy-box animation")
 	_assert(bool(player.get("sword_sheathed")), "player sword is not sheathed on exploration spawn")
 	_assert(player.sheathed_sword_visual != null, "player back scabbard is missing")
 	if player.animation_driver != null:

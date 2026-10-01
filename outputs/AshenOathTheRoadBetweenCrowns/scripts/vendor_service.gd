@@ -86,7 +86,8 @@ func save_state() -> Dictionary:
 	return {"emergency_refill_claimed": emergency_refill_claimed}
 
 func load_state(state: Dictionary) -> void:
-	emergency_refill_claimed = bool(state.get("emergency_refill_claimed", false))
+	var claimed: Variant = state.get("emergency_refill_claimed", false)
+	emergency_refill_claimed = typeof(claimed) == TYPE_BOOL and claimed
 
 func _entry_unlocked(entry: Dictionary, story_state, quests) -> bool:
 	var flag_id := str(entry.get("requires_flag", ""))

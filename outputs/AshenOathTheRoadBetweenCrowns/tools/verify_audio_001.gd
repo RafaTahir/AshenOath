@@ -16,6 +16,14 @@ func _initialize() -> void:
 	for event_name in ["step_road","step_forest","step_mud","swing","heavy","light_hit","heavy_hit","block","parry","oathfire_sheathe","cloth_wind","village_life","menu_hover","menu_click"]:
 		check(game.audio.has_recorded_event(event_name),"Recorded audio missing for %s" % event_name)
 		check(game.audio.call("_event_stream",event_name) is AudioStream,"Recorded event %s cannot resolve a stream" % event_name)
+	game.audio.play_event_limited("menu_click", 0.05)
+	var cooldown_expiry: int = game.audio.event_cooldowns.get("menu_click", 0)
+	check(cooldown_expiry > Time.get_ticks_usec(), "Event cooldown did not record an absolute expiry")
+	game.audio.play_event_limited("menu_click", 0.05)
+	check(int(game.audio.event_cooldowns.get("menu_click", 0)) == cooldown_expiry, "Repeated cue reset an active cooldown")
+	await create_timer(0.07).timeout
+	game.audio.play_event_limited("menu_click", 0.05)
+	check(int(game.audio.event_cooldowns.get("menu_click", 0)) > cooldown_expiry, "Expired cue could not play again")
 
 	var camera = game.camera_rig
 	var initial_zoom: float = camera.get_zoom_distance()

@@ -1,14 +1,14 @@
 extends RefCounted
 class_name ZoneSceneCatalog
 
-## Resolves small authored gameplay/decoration layers without replacing the
-## current procedural builder. The layers are deliberately lightweight markers
-## until their visual, collision, and save contracts are approved.
+## Resolves authored gameplay and decoration layers. Opening gameplay geometry
+## is root-resident so the first controllable frame does not depend on a deferred
+## runtime pack; noncritical decoration remains in the opening pack.
 
 const MANIFEST_PATH := "res://zone_scene_manifest.json"
 const FALLBACK_PATHS := {
 	"greyfen": {
-		"gameplay": "res://scenes/zones/greyfen_gameplay.tscn",
+		"gameplay": "res://scenes/runtime/greyfen_gameplay_core.tscn",
 		"decoration": "res://scenes/zones/greyfen_decoration.tscn",
 	},
 	"wychwood": {
@@ -21,7 +21,7 @@ const FALLBACK_PATHS := {
 	},
 }
 
-static func attach(zone_id: String, parent: Node3D) -> Dictionary:
+static func attach(zone_id: String, parent: Node3D, requested_layers: Array[String] = ["gameplay", "decoration"]) -> Dictionary:
 	var result := {"ok": true, "zone": zone_id, "attached": [], "errors": []}
 	if parent == null or not is_instance_valid(parent):
 		result.ok = false
@@ -30,9 +30,13 @@ static func attach(zone_id: String, parent: Node3D) -> Dictionary:
 	var zone := _zone_record(zone_id)
 	if zone.is_empty():
 		return result
-	for layer in ["gameplay", "decoration"]:
+	for layer in requested_layers:
 		var path := str(zone.get(layer, ""))
 		if path == "":
+			continue
+		var existing := _find_attached_source(parent, path)
+		if existing != null:
+			result.attached.append(layer)
 			continue
 		# Scene layers are part of the opening pack. Dynamic loading keeps them
 		# out of the initial menu PCK while preserving the authored layer API.
@@ -50,6 +54,12 @@ static func attach(zone_id: String, parent: Node3D) -> Dictionary:
 		parent.add_child(instance)
 		result.attached.append(layer)
 	return result
+
+static func _find_attached_source(parent: Node, path: String) -> Node:
+	for child in parent.get_children():
+		if str(child.get_meta("zone_layer_source", "")) == path:
+			return child
+	return null
 
 static func _zone_record(zone_id: String) -> Dictionary:
 	var fallback: Dictionary = FALLBACK_PATHS.get(zone_id.strip_edges().to_lower(), {})

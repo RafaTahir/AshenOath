@@ -1,0 +1,20 @@
+Quaternius Ultimate Monsters
+Original source: https://quaternius.com/packs/ultimatemonsters.html
+Original public folder: https://drive.google.com/drive/folders/18m4KpzpEzhC9wl7jzr6dUc0N8Jozr79C
+License: CC0 1.0 Universal (Public Domain Dedication)
+
+The original page identifies 50 fully animated monsters in FBX, OBJ, Blend,
+and glTF formats and marks the pack CC0. Google Drive throttled the selected
+files during recovery, so the self-contained glTF/GLB candidates were recovered
+unchanged from public repositories that record the same creator, source pack,
+and CC0 license:
+
+- Demon.gltf, BlueDemon.gltf, Orc.gltf, Creep.glb
+  Mirror: https://github.com/yerdaulet-damir/liminal
+  Manifest: client/public/assets-manifest.json
+- Ghost.glb
+  Mirror: https://github.com/ilrein/warptracker
+  Manifest: ASSETS.md
+
+These files are audition candidates. Runtime approval requires Godot import,
+animation, material, silhouette, performance, and gameplay evidence.

@@ -1,0 +1,38 @@
+{
+  "role": "ghoulkin_creature",
+  "state": "authored_geometry_build_only",
+  "source": "res://assets_external/characters_universal/Superhero_Male_FullBody.gltf",
+  "source_sha256": "e7fcea214ecf8855afbf910b50de6f9c7d1decfb71ca28bad8a4481452dafeb4",
+  "license": "CC0 1.0",
+  "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
+  "changes": [
+    "bone-local gaunt anatomy",
+    "continuous forward curl",
+    "elongated native fingers",
+    "skinned torn burial shroud",
+    "scarred ash skin atlas"
+  ],
+  "bones": 65,
+  "source_vertices": 8483,
+  "triangles": 14570,
+  "materials": 1,
+  "surfaces": 1,
+  "textures": [
+    1024,
+    1024
+  ],
+  "files": {
+    "Ghoulkin_Authored_Atlas.gltf": {
+      "bytes": 31132,
+      "sha256": "168490fbb67bf51ce191e33293aad466b41809aba9296cc7ecf5970b2cc80e37"
+    },
+    "Ghoulkin_Authored_Atlas.bin": {
+      "bytes": 629268,
+      "sha256": "5b18095d65632e0bd1afcf4e2076340c16b7724025985fe638aed42e177ed8d2"
+    },
+    "Ghoulkin_Authored_Atlas.png": {
+      "bytes": 210490,
+      "sha256": "ffac5b43fa7564216f6ecc0c8543e47506282c87fe798812a1078ad46f6a5932"
+    }
+  }
+}

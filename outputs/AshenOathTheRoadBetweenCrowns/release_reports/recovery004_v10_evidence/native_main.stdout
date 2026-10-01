@@ -1,0 +1,743 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+OpenGL API OpenGL ES 3.0 (ANGLE 2.1.1 git hash: aaebda1c5a40) - Compatibility - Using Device: Google Inc. (Intel) - ANGLE (Intel, Intel(R) HD Graphics 620 (0x00005916) Direct3D11 vs_5_0 ps_5_0, D3D11-31.0.101.2130)
+
+LOADING: Greyfen prewarm begin
+AUDIO: music_state_main_menu
+LOADING: runtime ready total=179ms environment=12ms services=84ms
+LOADING: Greyfen prewarm build_begin
+LOADING: Greyfen prewarm build_complete ms=548 ok=true
+LOADING: new_game_handoff prewarmed=true cached_zones=1
+LOADING: new_game_stage=cache_clear elapsed=10.0
+LOADING: handoff_phase=hide_menu_begin
+LOADING: handoff_phase=hide_menu_end
+LOADING: handoff_phase=quest_begin
+LOADING: handoff_phase=quest_end
+LOADING: new_game_stage=state_ready elapsed=49.2
+LOADING: new_game_stage=zone_dispatch elapsed=54.2
+LOADING: handoff_phase=load_zone_begin
+LOADING: zone_begin id=greyfen prewarm=true cached=false
+LOADING: cached_zone_activated id=greyfen valid=true
+LOADING: zone_stage=cache_activated elapsed=74.2
+ZONE_COMPOSITION: id=greyfen reused=true visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=87.2
+LOADING: zone_stage=visual_applied elapsed=99.8
+AUDIO: music_state_greyfen_explore
+LOADING: zone_stage=render_validation_deferred elapsed=129.2
+LOADING: zone_stage=budget_ready elapsed=137.3
+LOADING: handoff_phase=unlock_begin
+LOADING: handoff_phase=unlock_end
+LOADING: zone=greyfen playable_ms=157.1
+LOADING: handoff_phase=hide_loading_begin
+LOADING: handoff_phase=hide_loading_end
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: handoff_phase=load_zone_end
+LOADING: new_game_stage=ready elapsed=191.4
+LOADING: new_game_stage=zone_return elapsed=191.4
+LOADING: opening_menu_render_ready
+LOADING: Greyfen prewarmed total=4324ms build=548ms world=82ms player=265ms
+LOADING: Greyfen deferred_runtime_complete ms=2
+LOADING: zone_stage=runtime_finalized zone=greyfen navigation=false ms=0
+REAL_INPUT menu_to_greyfen=PASS position=(0.0, 0.6, 9.8)
+LOADING: Greyfen deferred_detail stage=gameplay_base ms=7
+LOADING: Greyfen deferred_detail stage=gameplay_place_0 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_place_1 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_place_2 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_place_3 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_place_4 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_side_clues ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_main_clues ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_gate_links ms=0
+LOADING: Greyfen deferred_detail stage=gameplay_gate_visual ms=2
+LOADING: Greyfen deferred_detail stage=gameplay_route_markers ms=4
+LOADING: Greyfen deferred_detail stage=gameplay_story ms=6
+LOADING: opening_boot_materials_restored
+LOADING: Greyfen deferred_detail stage=gameplay_visual_0 ms=3
+LOADING: Greyfen deferred_detail stage=gameplay_visual_1 ms=1
+REAL_INPUT bridge_south_lip=PASS position=(0.0, 0.032753, 5.686666)
+LOADING: Greyfen deferred_detail stage=gameplay_visual_2 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_visual_3 ms=2
+LOADING: Greyfen deferred_detail stage=gameplay_visual_4 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_visual_5 ms=2
+LOADING: Greyfen deferred_detail stage=gameplay_visual_6 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_visual_7 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_visual_8 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_visual_9 ms=0
+LOADING: Greyfen deferred_detail stage=gameplay_visual_10 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_visual_11 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_visual_12 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_visual_13 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_visual_14 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_visual_15 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_mira ms=6
+LOADING: Greyfen deferred_detail stage=gameplay_rook ms=9
+LOADING: Greyfen deferred_detail stage=gameplay_widow_elna ms=10
+LOADING: Greyfen deferred_detail stage=gameplay_blacksmith_tor ms=10
+LOADING: Greyfen deferred_detail stage=gameplay_farmer_toma ms=10
+LOADING: Greyfen deferred_detail stage=gameplay_population ms=7
+LOADING: Greyfen deferred_detail stage=gameplay_common_table ms=2
+LOADING: Greyfen deferred_detail stage=gameplay_barrel_board ms=2
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_0 ms=1
+REAL_INPUT bridge_north_bank=PASS position=(0.0, 0.032753, 1.29444)
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_1 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_2 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_3 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_4 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_5 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_6 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_7 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_8 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_9 ms=1
+REAL_INPUT anwen_lane=PASS position=(0.0, 0.032753, -3.664448)
+REAL_INPUT anwen_offset=PASS position=(1.846667, 0.032753, -3.835559)
+REAL_INPUT anwen_dialogue=PASS position=(1.771533, 0.002, -3.264977)
+REAL_INPUT anwen_conversation_closed=PASS
+REAL_INPUT north_road_center=PASS position=(0.163173, 0.032753, -3.501713)
+AUDIO: music_state_wychwood_tension
+LOADING: zone_begin id=wychwood prewarm=false cached=false
+ZONE_COMPOSITION: id=wychwood reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=580.9
+LOADING: zone_stage=visual_applied elapsed=588.5
+LOADING: zone_stage=render_validation_deferred elapsed=594.0
+LOADING: zone_stage=budget_ready elapsed=598.8
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: zone_stage=runtime_finalized zone=wychwood navigation=true ms=2
+LOADING: zone=wychwood playable_ms=1124.6
+REAL_INPUT greyfen_to_wychwood=PASS position=(0.0, 0.86, 13.0)
+REAL_INPUT wychwood_first_layby=PASS position=(0.355103, 0.032753, 10.49274)
+REAL_INPUT bram_ledger_offset=PASS position=(-0.916167, 0.032753, 10.19102)
+REAL_INPUT bram_ledger=PASS position=(-1.043257, 0.032742, 10.19102)
+REAL_INPUT black_feathers_offset=PASS position=(1.014556, 0.032753, 10.48695)
+REAL_INPUT black_feathers_layby=PASS position=(1.375457, 0.032753, 8.76623)
+REAL_INPUT sella=PASS position=(1.375457, 0.032742, 8.63914)
+REAL_INPUT claw_marks_offset=PASS position=(-0.907083, 0.032753, 8.313623)
+REAL_INPUT claw_marks_layby=PASS position=(-0.950532, 0.032753, 7.042355)
+REAL_INPUT vargan_wire=PASS position=(-0.950532, 0.032742, 6.915265)
+REAL_INPUT wychwood_bridge_centerline=PASS position=(-0.016352, 0.032753, 7.063223)
+AUDIO: music_state_ghoulkin_combat
+REAL_INPUT wychwood_north_bank=PASS position=(1.454247, 0.032753, -3.084753)
+REAL_INPUT wychwood_clearing=PASS position=(1.661391, 0.032753, -4.742425)
+REAL_INPUT combat_progress kills=0 health=125.0 position=(1.661391, 0.032753, -4.742425)
+REAL_INPUT combat_progress kills=1 health=125.0 position=(1.045552, 0.032743, -3.091224)
+REAL_INPUT combat_progress kills=2 health=121.0 position=(0.807622, 0.032661, -6.083001)
+REAL_INPUT combat_progress kills=3 health=121.0 position=(-2.014006, 0.032678, -5.979108)
+REAL_INPUT combat_progress kills=4 health=121.0 position=(1.097263, 0.032743, -6.928632)
+AUDIO: music_cue_victory_return_cue
+AUDIO: music_state_return_report
+REAL_INPUT five_enemy_fight=PASS kills=5 health=114.0
+REAL_INPUT wychwood_return_centerline=PASS position=(0.059402, 0.032753, -10.09451)
+LOADING: zone_begin id=greyfen prewarm=false cached=false
+ZONE_COMPOSITION: id=greyfen reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=280.1
+LOADING: zone_stage=visual_applied elapsed=288.7
+AUDIO: music_state_greyfen_explore
+LOADING: zone_stage=render_validation_deferred elapsed=301.1
+LOADING: zone_stage=budget_ready elapsed=304.8
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: zone_stage=runtime_finalized zone=greyfen navigation=true ms=1
+LOADING: zone=greyfen playable_ms=489.7
+REAL_INPUT wychwood_to_greyfen=PASS position=(0.001691, 0.916667, -12.98111)
+REAL_INPUT anwen_report_north_approach=PASS position=(0.216422, 0.032752, -3.261594)
+REAL_INPUT anwen_report_offset=PASS position=(1.836094, 0.032753, -3.245642)
+AUDIO: music_state_return_report
+REAL_INPUT anwen_report=PASS road_complete=true bell_active=true anwen_position=(9.4, 0.02, 7.6) pending_relocation=false dialogue_visible=false
+REAL_INPUT cemetery_bridge_centerline=PASS position=(0.239068, 0.032753, -3.424866)
+REAL_INPUT cemetery_south_bank=PASS position=(-1.105785, 0.032752, 9.401557)
+REAL_INPUT cemetery_gate_lane=PASS position=(9.30988, 0.032753, 10.42155)
+REAL_INPUT cemetery_anwen_approach=PASS position=(9.626615, 0.032753, 8.581767)
+AUDIO: music_state_shrine_anwen
+REAL_INPUT cemetery_anwen=PASS position=(9.793591, 0.002, 9.305164)
+REAL_INPUT harl_pier_clearance=PASS position=(9.517649, 0.032753, 8.272157)
+REAL_INPUT harl_grave_lane=PASS position=(11.30038, 0.032752, 8.055685)
+REAL_INPUT harl_grave=PASS position=(11.42167, 0.032739, 8.056046)
+REAL_INPUT soldier_grave_south=PASS position=(11.647, 0.032752, 8.972062)
+REAL_INPUT soldier_grave_lane=PASS position=(14.00517, 0.032753, 8.503745)
+REAL_INPUT soldier_grave=PASS position=(14.11529, 0.029476, 8.5494)
+REAL_INPUT cemetery_grave_truth=PASS position=(14.11529, 0.029476, 8.5494)
+REAL_INPUT cemetery_ambusher_spawn=PASS position=(14.22889, -0.061042, 7.862766)
+REAL_INPUT cemetery_ambush=PASS player=(14.11529, 0.029476, 8.5494) health=110.0
+REAL_INPUT chapel_door_approach=PASS position=(14.13418, 0.032284, 8.567676)
+REAL_INPUT chapel_door=PASS position=(14.13418, 0.032284, 8.567676)
+REAL_INPUT chapel_open=PASS player=(14.13418, 0.032284, 8.567676) shrine=(16.35, 0.24, 7.7) boss=(10.25852, -0.146751, 8.342598)
+REAL_INPUT crow_shrine_entrance=PASS position=(14.12947, 0.032652, 8.292121)
+REAL_INPUT crow_shrine_west_approach=PASS position=(15.52274, 0.032753, 8.27563)
+REAL_INPUT crow_shrine_choice=PASS
+REAL_INPUT crow_shrine_choice=PASS state=cleansed
+REAL_INPUT continuous_leg=_fight_bell_eater_real_input zone=greyfen
+REAL_INPUT crow_shrine_entrance=PASS position=(14.98027, 0.032734, 8.268965)
+REAL_INPUT bell_chapel_doorway=PASS position=(13.40794, 0.032753, 8.334208)
+AUDIO: music_state_boss_bell_eater
+REAL_INPUT bell_eater_fight=PASS health=71.5 phase=3 rewards=true aftermath=true position=(11.37986, 0.032154, 8.398252)
+REAL_INPUT bell_summons_cleared=PASS defeated=1 health=71.5
+REAL_INPUT continuous_leg=_continue_teeth_in_rain zone=greyfen
+REAL_INPUT teeth_checkpoint=PASS choice=cleansed position=(10.03466, 0.03275, 8.987783)
+REAL_INPUT crow_shrine_entrance=PASS position=(10.03879, 0.032743, 8.257792)
+REAL_INPUT chapel_west_doorway_exit=PASS position=(13.14875, 0.032743, 8.274295)
+REAL_INPUT cemetery_west_gate_exit=PASS position=(9.148798, 0.032753, 8.252487)
+REAL_INPUT cemetery_exit_lane=PASS position=(8.966852, 0.032752, 10.5759)
+REAL_INPUT bridge_return_centerline=PASS position=(0.093539, 0.032753, 10.58073)
+REAL_INPUT village_north_bank=PASS position=(-0.026833, 0.032753, 0.574191)
+REAL_INPUT mira_west_lane=PASS position=(-6.066691, 0.032753, 0.373)
+REAL_INPUT mira_frontage=PASS position=(-6.233078, 0.030306, -0.703655)
+REAL_INPUT mira_teeth_briefing=PASS position=(-6.233078, 0.030306, -0.703655)
+REAL_INPUT speak_mira=PASS position=(-6.233078, 0.030306, -0.703655)
+REAL_INPUT mira_to_bridge_lane=PASS position=(-6.212749, 0.032752, 0.694848)
+REAL_INPUT mira_to_bridge_centerline=PASS position=(-0.05998, 0.032753, 0.66068)
+REAL_INPUT chapel_south_bank=PASS position=(0.239458, 0.032752, 10.15042)
+REAL_INPUT chapel_names_east_lane=PASS position=(14.62974, 0.032753, 10.16286)
+REAL_INPUT chapel_names_approach=PASS position=(14.7486, 0.032752, 10.14397)
+REAL_INPUT chapel_names=PASS position=(14.77414, 0.032409, 10.14397)
+REAL_INPUT read_chapel_names=PASS position=(14.77414, 0.032409, 10.14397)
+REAL_INPUT chapel_to_south_road=PASS position=(14.77948, 0.032752, 10.46365)
+REAL_INPUT chapel_to_bridge_centerline=PASS position=(0.135063, 0.032753, 10.44524)
+REAL_INPUT chapel_to_north_bank=PASS position=(-0.169725, 0.032753, 0.552833)
+LOADING: zone_begin id=wychwood prewarm=false cached=false
+ZONE_COMPOSITION: id=wychwood reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=117.3
+LOADING: zone_stage=visual_applied elapsed=123.1
+LOADING: zone_stage=render_validation_deferred elapsed=128.6
+LOADING: zone_stage=budget_ready elapsed=132.5
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: zone_stage=runtime_finalized zone=wychwood navigation=true ms=0
+LOADING: zone=wychwood playable_ms=233.5
+REAL_INPUT teeth_greyfen_to_wychwood=PASS position=(-0.001573, 0.916667, 12.98111)
+AUDIO: music_state_wychwood_tension
+REAL_INPUT teeth_wychwood_bridge_north=PASS position=(-0.226539, 0.032753, -3.030709)
+REAL_INPUT ritual_stones_east_path=PASS position=(7.51267, 0.032753, -3.305615)
+REAL_INPUT ritual_stones_approach=PASS position=(7.581486, 0.032753, -10.93158)
+REAL_INPUT ritual_stones=PASS position=(7.581486, 0.032743, -11.06155)
+REAL_INPUT name_the_dead=PASS position=(7.581486, 0.032743, -11.06155)
+REAL_INPUT ritual_stones_departure_lane=PASS position=(7.592185, 0.032752, -10.35657)
+REAL_INPUT deep_wood_gate_east_path=PASS position=(10.45525, 0.032751, -10.34353)
+LOADING: zone_begin id=deep_wood prewarm=false cached=false
+ZONE_COMPOSITION: id=deep_wood reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=328.4
+LOADING: zone_stage=visual_applied elapsed=332.7
+LOADING: zone_stage=render_validation_deferred elapsed=337.3
+LOADING: zone_stage=budget_ready elapsed=340.9
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: zone_stage=runtime_finalized zone=deep_wood navigation=true ms=2
+LOADING: zone=deep_wood playable_ms=390.1
+REAL_INPUT bog_wretch_arrival=PASS player=(-7.0, 0.95, 11.0) enemy=(0.0, -0.068229, -8.0)
+AUDIO: music_state_deep_wood
+REAL_INPUT bog_arena_centerline=PASS position=(-0.28062, 0.032753, 10.90406)
+REAL_INPUT bog_arena_approach=PASS position=(-0.309347, 0.032753, -3.747888)
+REAL_INPUT bog_ash_weakness=PASS enemy_health=35.0
+REAL_INPUT bog_wretch_fight=PASS health=116.5 position=(-0.202346, 0.02942, -4.611609)
+REAL_INPUT bog_core_choice=PASS position=(-0.348296, 0.002, -3.576787)
+REAL_INPUT bog_core_choice=PASS fate=destroyed
+REAL_INPUT continuous_leg=_continue_names_they_burned zone=deep_wood
+REAL_INPUT names_checkpoint=PASS position=(-0.348296, 0.002, -3.576787) fate=destroyed
+REAL_INPUT deep_wood_return_south=PASS position=(-0.251565, 0.032752, 11.15408)
+REAL_INPUT deep_wood_return_west=PASS position=(-6.744774, 0.032753, 11.24711)
+LOADING: zone_begin id=wychwood prewarm=false cached=false
+ZONE_COMPOSITION: id=wychwood reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=120.7
+LOADING: zone_stage=visual_applied elapsed=126.2
+LOADING: zone_stage=render_validation_deferred elapsed=132.9
+LOADING: zone_stage=budget_ready elapsed=136.7
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: zone_stage=runtime_finalized zone=wychwood navigation=true ms=0
+LOADING: zone=wychwood playable_ms=249.5
+REAL_INPUT names_deepwood_to_wychwood=PASS position=(10.8, 0.946667, -10.5)
+AUDIO: music_state_wychwood_tension
+REAL_INPUT wychwood_return_north_bank=PASS position=(10.84582, 0.032752, -3.552715)
+REAL_INPUT wychwood_return_centerline=PASS position=(0.046035, 0.032753, -3.431545)
+LOADING: zone_begin id=greyfen prewarm=false cached=false
+ZONE_COMPOSITION: id=greyfen reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=238.0
+LOADING: zone_stage=visual_applied elapsed=248.1
+AUDIO: music_state_greyfen_explore
+LOADING: zone_stage=render_validation_deferred elapsed=260.0
+LOADING: zone_stage=budget_ready elapsed=263.9
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: zone_stage=runtime_finalized zone=greyfen navigation=true ms=0
+LOADING: zone=greyfen playable_ms=381.9
+REAL_INPUT names_wychwood_to_greyfen=PASS position=(0.0, 0.946667, -13.0)
+REAL_INPUT register_anwen_south_road=PASS position=(0.056932, 0.032752, -4.357268)
+AUDIO: music_state_shrine_anwen
+REAL_INPUT register_anwen_east_lane=PASS position=(4.283555, 0.032753, -4.333888)
+REAL_INPUT register_anwen_approach=PASS position=(4.402439, 0.032752, -4.352777)
+REAL_INPUT register_anwen=PASS position=(4.42799, 0.032409, -4.352777)
+REAL_INPUT fragment_anwen=PASS position=(4.42799, 0.032409, -4.352777)
+REAL_INPUT register_tor_center_road=PASS position=(0.087984, 0.032753, -4.323137)
+REAL_INPUT register_tor_south_road=PASS position=(-0.046339, 0.032752, 1.545231)
+REAL_INPUT register_tor_east_lane=PASS position=(8.486866, 0.032753, 1.540452)
+REAL_INPUT register_tor_approach=PASS position=(8.601207, 0.032754, 1.535579)
+REAL_INPUT register_tor=PASS position=(8.619658, 0.029852, 1.540943)
+REAL_INPUT fragment_tor=PASS position=(8.619658, 0.029852, 1.540943)
+REAL_INPUT register_west_centerline=PASS position=(0.086397, 0.032753, 1.597999)
+REAL_INPUT register_west_road=PASS position=(-0.158796, 0.032753, -9.995105)
+LOADING: zone_begin id=deep_wood prewarm=false cached=false
+ZONE_COMPOSITION: id=deep_wood reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=36.2
+LOADING: zone_stage=visual_applied elapsed=40.8
+LOADING: zone_stage=render_validation_deferred elapsed=45.5
+LOADING: zone_stage=budget_ready elapsed=49.4
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: zone=deep_wood playable_ms=93.6
+REAL_INPUT register_greyfen_to_deep_wood=PASS position=(-7.0, 0.95, 11.0)
+REAL_INPUT register_deep_wood_arrival=PASS position=(-7.0, 0.95, 11.0)
+LOADING: zone_stage=runtime_finalized zone=deep_wood navigation=true ms=1
+AUDIO: music_state_deep_wood
+REAL_INPUT register_deep_wood_east_lane=PASS position=(2.213147, 0.032753, 10.9385)
+REAL_INPUT register_deep_wood_north_road=PASS position=(2.24054, 0.032753, -11.30772)
+REAL_INPUT register_deep_wood_north_gate_lane=PASS position=(7.260448, 0.032753, -11.50995)
+LOADING: zone_begin id=old_mill prewarm=false cached=false
+ZONE_COMPOSITION: id=old_mill reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=43.0
+LOADING: zone_stage=visual_applied elapsed=47.7
+LOADING: zone_stage=render_validation_deferred elapsed=52.3
+LOADING: zone_stage=budget_ready elapsed=56.2
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: zone=old_mill playable_ms=107.8
+REAL_INPUT register_deep_wood_to_mill=PASS position=(-7.0, 0.95, 11.0)
+REAL_INPUT register_mill_arrival=PASS position=(-7.0, 0.95, 11.0)
+LOADING: zone_stage=runtime_finalized zone=old_mill navigation=true ms=3
+AUDIO: music_state_ash_mill
+REAL_INPUT register_mill_east_lane=PASS position=(3.459787, 0.032753, 10.93035)
+REAL_INPUT register_mill_north_road=PASS position=(3.487179, 0.032753, -11.31587)
+REAL_INPUT register_mill_north_gate_lane=PASS position=(7.260448, 0.032753, -11.50995)
+LOADING: zone_begin id=burned_farmstead prewarm=false cached=false
+ZONE_COMPOSITION: id=burned_farmstead reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=30.7
+LOADING: zone_stage=visual_applied elapsed=34.9
+LOADING: zone_stage=render_validation_deferred elapsed=39.3
+LOADING: zone_stage=budget_ready elapsed=43.9
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: zone=burned_farmstead playable_ms=87.7
+REAL_INPUT register_mill_to_farmstead=PASS position=(-7.0, 0.946667, 11.0)
+REAL_INPUT register_farmstead_arrival=PASS position=(-7.0, 0.946667, 11.0)
+LOADING: zone_stage=runtime_finalized zone=burned_farmstead navigation=true ms=0
+REAL_INPUT register_farmstead_center_road=PASS position=(-2.773413, 0.032753, 10.9711)
+REAL_INPUT register_farmstead_north_road=PASS position=(-2.70676, 0.032753, -5.268573)
+REAL_INPUT register_rook_approach=PASS position=(-4.440063, 0.032753, -5.430041)
+REAL_INPUT register_rook=PASS position=(-4.506727, 0.029422, -5.430041)
+REAL_INPUT fragment_rook=PASS position=(-4.506727, 0.029422, -5.430041)
+REAL_INPUT reconstruct_register=PASS
+REAL_INPUT register_farmstead_return_lane=PASS position=(-2.206771, 0.032753, -5.446343)
+REAL_INPUT register_farmstead_return_road=PASS position=(-1.928851, 0.032752, 11.13408)
+REAL_INPUT register_farmstead_return_gate_lane=PASS position=(-7.288754, 0.032753, 11.2197)
+LOADING: zone_begin id=old_mill prewarm=false cached=false
+ZONE_COMPOSITION: id=old_mill reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=27.8
+LOADING: zone_stage=visual_applied elapsed=32.4
+LOADING: zone_stage=render_validation_deferred elapsed=37.0
+LOADING: zone_stage=budget_ready elapsed=42.1
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: zone=old_mill playable_ms=79.1
+REAL_INPUT register_farmstead_to_mill=PASS position=(7.0, 0.95, -11.0)
+REAL_INPUT register_mill_return=PASS position=(7.0, 0.95, -11.0)
+LOADING: zone_stage=runtime_finalized zone=old_mill navigation=true ms=1
+REAL_INPUT register_mill_autosave=PASS zone=old_mill reconstructed=true
+REAL_INPUT continuous_leg=_return_register_to_deep_wood zone=old_mill
+REAL_INPUT register_mill_south_lane=PASS position=(3.000072, 0.032753, -10.97258)
+REAL_INPUT register_mill_south_road=PASS position=(2.972111, 0.032752, 11.15654)
+REAL_INPUT register_mill_south_gate_lane=PASS position=(-7.26102, 0.032753, 11.27402)
+LOADING: zone_begin id=deep_wood prewarm=false cached=false
+ZONE_COMPOSITION: id=deep_wood reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=334.7
+LOADING: zone_stage=visual_applied elapsed=339.2
+LOADING: zone_stage=render_validation_deferred elapsed=343.8
+LOADING: zone_stage=budget_ready elapsed=347.5
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: zone_stage=runtime_finalized zone=deep_wood navigation=true ms=0
+LOADING: zone=deep_wood playable_ms=1080.7
+REAL_INPUT register_mill_to_deep_wood=PASS position=(7.0, 0.946667, -11.0)
+REAL_INPUT register_rootbound_arrival=PASS position=(7.0, 0.946667, -11.0)
+REAL_INPUT rootbound_quest_handoff=PASS position=(7.0, 0.946667, -11.0) enemy=(0.19118, -0.188191, -10.51366)
+AUDIO: music_state_deep_wood
+REAL_INPUT rootbound_autosave=PASS zone=deep_wood
+REAL_INPUT continuous_leg=_fight_rootbound_real_input zone=deep_wood
+REAL_INPUT rootbound_stage=PASS enemy=(0.726483, -0.188213, -10.55189) continue_fixture=false
+AUDIO: music_state_boss_rootbound_colossus
+REAL_INPUT rootbound_combat_observation arrows_used=22 boss_health=0.0/320.0 player_health=71.6 potions=1 player=(7.0, 0.000202, -11.0) boss=(4.5524, -0.188201, -10.76124)
+REAL_INPUT rootbound_potion_input requests=1 consumed=1 not_exercised=false
+REAL_INPUT rootbound_defeat=PASS
+REAL_INPUT continuous_leg=_return_from_rootbound zone=deep_wood
+REAL_INPUT rootbound_return_center=PASS position=(1.952317, 0.032753, -9.536172)
+REAL_INPUT rootbound_return_south_road=PASS position=(1.40099, 0.032752, 11.20269)
+REAL_INPUT rootbound_return_wychwood_lane=PASS position=(-7.24424, 0.032753, 11.09371)
+LOADING: zone_begin id=wychwood prewarm=false cached=false
+ZONE_COMPOSITION: id=wychwood reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=146.1
+LOADING: zone_stage=visual_applied elapsed=151.6
+LOADING: zone_stage=render_validation_deferred elapsed=157.4
+LOADING: zone_stage=budget_ready elapsed=161.3
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: zone_stage=runtime_finalized zone=wychwood navigation=true ms=0
+LOADING: zone=wychwood playable_ms=291.2
+REAL_INPUT rootbound_return_wychwood=PASS position=(10.8, 0.946667, -10.5)
+REAL_INPUT rootbound_wychwood_arrival=PASS position=(10.8, 0.946667, -10.5)
+AUDIO: music_state_wychwood_tension
+REAL_INPUT names_return_wychwood_north_bank=PASS position=(10.66991, 0.032752, -3.553727)
+REAL_INPUT names_return_wychwood_bridge_lane=PASS position=(0.098255, 0.032753, -3.698475)
+LOADING: zone_begin id=greyfen prewarm=false cached=false
+ZONE_COMPOSITION: id=greyfen reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=241.8
+LOADING: zone_stage=visual_applied elapsed=250.7
+AUDIO: music_state_greyfen_explore
+LOADING: zone_stage=render_validation_deferred elapsed=262.5
+LOADING: zone_stage=budget_ready elapsed=266.4
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: zone_stage=runtime_finalized zone=greyfen navigation=true ms=1
+LOADING: zone=greyfen playable_ms=410.5
+REAL_INPUT names_return_greyfen=PASS position=(0.0, 0.946667, -13.0)
+REAL_INPUT names_greyfen_arrival=PASS position=(0.0, 0.946667, -13.0)
+REAL_INPUT names_decision_south_road=PASS position=(-0.161552, 0.032752, -4.358531)
+REAL_INPUT names_decision_approach=PASS position=(4.631038, 0.032753, -4.219457)
+REAL_INPUT names_decision=PASS
+REAL_INPUT names_decision_complete=PASS policy=published ash_at_mill_active=true
+REAL_INPUT continuous_leg=_prepare_for_ash_mill zone=greyfen
+REAL_INPUT ash_shop_center_road=PASS position=(0.103354, 0.032753, -3.264388)
+REAL_INPUT ash_shop_north_road=PASS position=(-0.062065, 0.032753, -4.544374)
+REAL_INPUT ash_shop_front_lane=PASS position=(10.28448, 0.032753, -4.659289)
+REAL_INPUT ash_shop_front_approach=PASS position=(10.42898, 0.032752, 0.361392)
+REAL_INPUT tor_supply_before_purchase=PASS arrows=5 coin=15 emergency_used=true
+REAL_INPUT tor_paid_arrows=PASS arrows=20 coin=0 purchases=15
+REAL_INPUT ash_depart_forge_front=PASS position=(10.45739, 0.032753, -4.50774)
+REAL_INPUT ash_depart_center_road=PASS position=(0.110884, 0.032753, -4.735033)
+REAL_INPUT ash_depart_west_road=PASS position=(-0.03243, 0.032753, -9.981616)
+LOADING: zone_begin id=deep_wood prewarm=false cached=false
+ZONE_COMPOSITION: id=deep_wood reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=36.2
+LOADING: zone_stage=visual_applied elapsed=40.5
+LOADING: zone_stage=render_validation_deferred elapsed=45.3
+LOADING: zone_stage=budget_ready elapsed=49.2
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: zone=deep_wood playable_ms=92.7
+REAL_INPUT ash_depart_deep_wood=PASS position=(-7.0, 0.946667, 11.0)
+REAL_INPUT ash_deep_wood_arrival=PASS position=(-7.0, 0.946667, 11.0)
+LOADING: zone_stage=runtime_finalized zone=deep_wood navigation=true ms=0
+AUDIO: music_state_deep_wood
+REAL_INPUT ash_supply_autosave=PASS zone=deep_wood arrows=20
+REAL_INPUT continuous_leg=_travel_to_ash_mill zone=deep_wood
+REAL_INPUT ash_deep_wood_east_lane=PASS position=(2.213201, 0.032753, 11.0524)
+REAL_INPUT ash_deep_wood_north_road=PASS position=(2.507462, 0.032753, -11.30723)
+REAL_INPUT ash_deep_wood_north_gate_lane=PASS position=(7.300731, 0.032753, -11.45308)
+LOADING: zone_begin id=old_mill prewarm=false cached=false
+ZONE_COMPOSITION: id=old_mill reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=70.7
+LOADING: zone_stage=visual_applied elapsed=75.7
+LOADING: zone_stage=render_validation_deferred elapsed=81.3
+LOADING: zone_stage=budget_ready elapsed=86.2
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: zone_stage=runtime_finalized zone=old_mill navigation=true ms=0
+LOADING: zone=old_mill playable_ms=145.5
+REAL_INPUT ash_deep_wood_to_mill=PASS position=(-7.0, 0.95, 11.0)
+REAL_INPUT ash_mill_arrival=PASS position=(-7.0, 0.95, 11.0)
+AUDIO: music_state_ash_mill
+REAL_INPUT ash_mill_autosave=PASS reach_mill=true arrows=20
+REAL_INPUT continuous_leg=_inspect_ash_millstones zone=old_mill
+REAL_INPUT ash_mill_front_lane=PASS position=(-4.926691, 0.032753, 11.01263)
+REAL_INPUT ash_mill_front_approach=PASS position=(-4.679827, 0.032753, -2.847152)
+REAL_INPUT ash_millstones=PASS position=(-4.679827, 0.032743, -2.977146)
+REAL_INPUT ash_millstones_clue=PASS position=(-4.679827, 0.032743, -2.977146)
+REAL_INPUT ash_mill_cleared=PASS ashwing_count=1 player_health=108.6
+REAL_INPUT ashwing_handoff_manual_save=PASS zone=old_mill
+REAL_INPUT continuous_leg=_fight_ashwing_real_input zone=old_mill
+REAL_INPUT ashwing_reload=PASS boss=(4.808603, 0.84, -6.347055) arrows=20 health=108.6
+REAL_INPUT ashwing_south_frontage=PASS position=(-5.933975, 0.032727, 2.255561)
+REAL_INPUT ashwing_clear_east_yard=PASS position=(1.578935, 0.032753, 2.339331)
+REAL_INPUT ashwing_oathfire_observation hits=0 boss_health=300.0
+AUDIO: music_state_boss_ashwing
+REAL_INPUT ashwing_combat_observation arrows_used=17 boss_health=0.0 player_health=108.6 potions=0 player=(1.708915, 0.032743, 2.339331) boss=(5.629208, -0.117972, 3.093945)
+REAL_INPUT ashwing_defeat=PASS
+REAL_INPUT ash_record_front_lane=PASS position=(-7.049915, 0.032753, 2.190214)
+REAL_INPUT ash_record_approach=PASS position=(-7.12471, 0.032753, -3.848984)
+REAL_INPUT ash_mill_ledger=PASS
+REAL_INPUT ash_mill_choice=PASS fate=preserved soldier_active=true
+REAL_INPUT soldier_handoff_manual_save=PASS zone=old_mill fate=preserved
+REAL_INPUT continuous_leg=_travel_to_bandit_road zone=old_mill
+REAL_INPUT soldier_mill_front_clearance=PASS position=(-7.237484, 0.032752, -1.195164)
+REAL_INPUT soldier_mill_east_lane=PASS position=(3.441032, 0.032753, -0.723185)
+REAL_INPUT soldier_mill_north_road=PASS position=(4.019652, 0.032753, -11.28844)
+REAL_INPUT soldier_mill_north_gate_lane=PASS position=(7.224022, 0.032753, -11.34266)
+LOADING: zone_begin id=burned_farmstead prewarm=false cached=false
+ZONE_COMPOSITION: id=burned_farmstead reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=27.7
+LOADING: zone_stage=visual_applied elapsed=32.2
+LOADING: zone_stage=render_validation_deferred elapsed=37.0
+LOADING: zone_stage=budget_ready elapsed=40.8
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: zone=burned_farmstead playable_ms=79.6
+REAL_INPUT soldier_mill_to_farmstead=PASS position=(-7.0, 0.95, 11.0)
+REAL_INPUT soldier_farmstead_arrival=PASS position=(-7.0, 0.95, 11.0)
+LOADING: zone_stage=runtime_finalized zone=burned_farmstead navigation=true ms=1
+AUDIO: music_state_ash_mill
+REAL_INPUT soldier_farmstead_east_lane=PASS position=(2.206331, 0.032753, 11.37203)
+REAL_INPUT soldier_farmstead_north_road=PASS position=(3.26453, 0.032753, -11.3104)
+REAL_INPUT soldier_farmstead_north_gate_lane=PASS position=(7.261613, 0.032753, -11.33324)
+LOADING: zone_begin id=marsh_crossing prewarm=false cached=false
+ZONE_COMPOSITION: id=marsh_crossing reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=47.9
+LOADING: zone_stage=visual_applied elapsed=52.4
+LOADING: zone_stage=render_validation_deferred elapsed=58.3
+LOADING: zone_stage=budget_ready elapsed=62.0
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: zone_stage=runtime_finalized zone=marsh_crossing navigation=true ms=0
+LOADING: zone=marsh_crossing playable_ms=2924.4
+REAL_INPUT soldier_farmstead_to_marsh=PASS position=(0.0, 0.946667, 13.0)
+REAL_INPUT soldier_marsh_arrival=PASS position=(0.0, 0.946667, 13.0)
+AUDIO: music_state_marsh_crossing
+REAL_INPUT soldier_marsh_boardwalk=PASS position=(0.968099, 0.032753, -11.26785)
+LOADING: zone_begin id=bandit_road prewarm=false cached=false
+ZONE_COMPOSITION: id=bandit_road reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=1802.1
+LOADING: zone_stage=visual_applied elapsed=1807.4
+LOADING: zone_stage=render_validation_deferred elapsed=1813.7
+LOADING: zone_stage=budget_ready elapsed=1818.4
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: zone_stage=runtime_finalized zone=bandit_road navigation=true ms=1
+LOADING: zone=bandit_road playable_ms=2247.6
+LOADING: campaign_visual_prewarm begin zone=bandit_road roles=4
+REAL_INPUT soldier_marsh_to_bandit_road=PASS position=(-7.0, 0.87, 13.0)
+REAL_INPUT soldier_bandit_road_arrival=PASS position=(-7.0, 0.87, 13.0)
+AUDIO: music_state_bandit_road
+REAL_INPUT soldier_road_autosave=PASS zone=bandit_road mill_fate=preserved
+REAL_INPUT soldier_road_manual_save=PASS zone=bandit_road
+REAL_INPUT continuous_leg=_fight_senn_guard zone=bandit_road
+REAL_INPUT senn_guard_reload=PASS guards=2 position=(-7.0, 0.000209, 13.0)
+REAL_INPUT senn_road_center=PASS position=(-0.285048, 0.032753, 13.27342)
+REAL_INPUT senn_road_approach=PASS position=(0.333904, 0.032753, 1.688969)
+REAL_INPUT senn_guard_defeat=PASS player_health=94.6
+REAL_INPUT senn_dialogue_front_lane=PASS position=(7.075881, 0.032753, -2.214254)
+REAL_INPUT senn_dialogue_approach=PASS position=(7.222548, 0.03275, -2.380903)
+REAL_INPUT senn_testimony=PASS
+REAL_INPUT senn_testimony_choice=PASS fate=testimony blood_under_stone_active=true
+REAL_INPUT castle_handoff_manual_save=PASS zone=bandit_road fate=testimony
+REAL_INPUT continuous_leg=_travel_to_castle_approach zone=bandit_road
+LOADING: campaign_visual_prewarm role=castle_wall ms=11.0 missing=false
+LOADING: campaign_visual_prewarm role=castle_arch ms=8.0 missing=false
+LOADING: campaign_visual_prewarm role=castle_roof ms=26.6 missing=false
+LOADING: campaign_visual_prewarm role=castle_lantern ms=20.8 missing=false
+LOADING: campaign_visual_prewarm complete zone=bandit_road
+REAL_INPUT castle_road_clear_tent_lane=PASS position=(5.385877, 0.032753, -2.38273)
+REAL_INPUT castle_road_north_of_tent=PASS position=(5.222891, 0.032753, -11.70939)
+REAL_INPUT castle_road_vargan_trigger_lane=PASS position=(7.182896, 0.032753, -11.87899)
+LOADING: zone_begin id=vargan_approach prewarm=false cached=false
+ZONE_COMPOSITION: id=vargan_approach reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=53.4
+LOADING: zone_stage=visual_applied elapsed=58.6
+LOADING: zone_stage=render_validation_deferred elapsed=63.9
+LOADING: zone_stage=budget_ready elapsed=68.4
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: zone=vargan_approach playable_ms=127.2
+LOADING: campaign_visual_prewarm begin zone=vargan_approach roles=5
+LOADING: zone_stage=runtime_finalized zone=vargan_approach navigation=true ms=1
+REAL_INPUT castle_road_to_vargan_approach=PASS position=(-16.0, 0.95, 16.0)
+REAL_INPUT castle_approach_arrival=PASS position=(-16.0, 0.95, 16.0)
+AUDIO: music_state_castle_silence
+REAL_INPUT castle_approach_autosave=PASS zone=vargan_approach
+REAL_INPUT castle_approach_manual_save=PASS zone=vargan_approach
+REAL_INPUT castle_mile_marker_lane=PASS position=(-3.61336, 0.032753, 16.01122)
+REAL_INPUT castle_mile_marker_approach=PASS position=(-3.43646, 0.032753, 9.291256)
+REAL_INPUT castle_mile_marker=PASS position=(-3.43646, 0.032743, 9.161255)
+REAL_INPUT castle_cart_south_lane=PASS position=(-3.430975, 0.032753, 3.23458)
+REAL_INPUT castle_cart_approach=PASS position=(5.555692, 0.032753, 3.07129)
+REAL_INPUT castle_supply_cart=PASS position=(5.685692, 0.032743, 3.07129)
+REAL_INPUT castle_gate_center_lane=PASS position=(0.212357, 0.032753, 3.066212)
+REAL_INPUT castle_courtyard_door_approach=PASS position=(0.051699, 0.032753, -8.867128)
+LOADING: zone_begin id=vargan_court prewarm=false cached=false
+ZONE_COMPOSITION: id=vargan_court reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=39.6
+LOADING: zone_stage=visual_applied elapsed=44.2
+LOADING: zone_stage=render_validation_deferred elapsed=50.2
+LOADING: zone_stage=budget_ready elapsed=54.2
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: zone=vargan_court playable_ms=98.3
+LOADING: zone_stage=runtime_finalized zone=vargan_court navigation=true ms=0
+REAL_INPUT castle_courtyard_door=PASS position=(0.0, 0.86, 12.0)
+REAL_INPUT castle_courtyard_arrival=PASS position=(0.0, 0.86, 12.0)
+REAL_INPUT castle_guard_approach=PASS position=(-0.018889, 0.666667, 11.9999)
+REAL_INPUT castle_gate_guard=PASS position=(-0.018889, 0.000202, 11.9999)
+REAL_INPUT castle_notice_approach=PASS position=(1.689323, 0.032753, 11.29009)
+REAL_INPUT castle_gate_notice=PASS position=(1.819194, 0.032743, 11.29009)
+REAL_INPUT castle_three_clues=PASS court=true guard=true evidence_ready=true
+REAL_INPUT castle_evidence_manual_save=PASS zone=vargan_court
+REAL_INPUT record_hall_center_lane=PASS position=(0.199712, 0.032753, 11.24001)
+REAL_INPUT record_hall_door_approach=PASS position=(0.632918, 0.032753, -10.88498)
+LOADING: zone_begin id=record_hall prewarm=false cached=false
+ZONE_COMPOSITION: id=record_hall reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=36.8
+LOADING: zone_stage=visual_applied elapsed=42.2
+LOADING: zone_stage=render_validation_deferred elapsed=46.6
+LOADING: zone_stage=budget_ready elapsed=50.3
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: zone=record_hall playable_ms=142.6
+LOADING: zone_stage=runtime_finalized zone=record_hall navigation=true ms=1
+REAL_INPUT record_hall_door=PASS position=(0.0, 0.916667, 12.0)
+REAL_INPUT record_hall_arrival=PASS position=(0.0, 0.916667, 12.0)
+AUDIO: music_state_record_hall
+REAL_INPUT record_hall_manual_save=PASS zone=record_hall
+REAL_INPUT record_ledger_approach=PASS position=(0.460152, 0.032753, -4.460485)
+LOADING: zone_begin id=record_hall prewarm=false cached=false
+ZONE_COMPOSITION: id=record_hall reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=65.4
+LOADING: zone_stage=visual_applied elapsed=69.7
+LOADING: zone_stage=render_validation_deferred elapsed=74.4
+LOADING: zone_stage=budget_ready elapsed=79.5
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: zone_stage=runtime_finalized zone=record_hall navigation=true ms=1
+LOADING: zone=record_hall playable_ms=138.1
+REAL_INPUT record_ledger_choice=PASS
+REAL_INPUT record_hall_after_ledger=PASS position=(0.460152, 0.776667, -4.460485)
+REAL_INPUT record_ledger_haunting_staged=PASS choice=vargan_ledger_taken_openly
+REAL_INPUT record_ledger_manual_save=PASS zone=record_hall
+REAL_INPUT record_haunting_reload=PASS player=(0.460152, 0.176667, -4.460485) enemy=(1.069437, -0.056793, -1.834725) health=94.6
+LOADING: zone_begin id=record_hall prewarm=false cached=false
+ZONE_COMPOSITION: id=record_hall reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=24.6
+LOADING: zone_stage=visual_applied elapsed=28.8
+LOADING: zone_stage=render_validation_deferred elapsed=33.2
+LOADING: zone_stage=budget_ready elapsed=38.2
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: zone=record_hall playable_ms=93.0
+REAL_INPUT record_hall_after_haunting=PASS position=(1.561792, 0.946667, -3.420027)
+REAL_INPUT record_haunting_defeat=PASS health=94.6
+LOADING: zone_stage=runtime_finalized zone=record_hall navigation=true ms=0
+REAL_INPUT record_haunting_manual_save=PASS zone=record_hall
+REAL_INPUT edric_east_of_archive_tables=PASS position=(3.52163, 0.032753, -3.390379)
+REAL_INPUT edric_north_of_ledger_table_sprint=PASS position=(3.855528, 0.032313, -10.67634)
+REAL_INPUT edric_conversation_approach=PASS position=(1.215764, 0.032753, -11.24939)
+REAL_INPUT edric_testimony=PASS
+REAL_INPUT edric_testimony=PASS stance=cooperate last_witness_active=true
+REAL_INPUT edric_manual_save=PASS zone=record_hall stance=cooperate
+REAL_INPUT undercroft_door_east_lane=PASS position=(5.652437, 0.032753, -11.23313)
+REAL_INPUT undercroft_door_approach=PASS position=(5.771325, 0.032752, -11.25202)
+LOADING: zone_begin id=undercroft prewarm=false cached=false
+ZONE_COMPOSITION: id=undercroft reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=112.7
+LOADING: zone_stage=visual_applied elapsed=118.0
+LOADING: zone_stage=render_validation_deferred elapsed=123.4
+LOADING: zone_stage=budget_ready elapsed=128.0
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: zone_stage=runtime_finalized zone=undercroft navigation=true ms=0
+LOADING: zone=undercroft playable_ms=171.2
+REAL_INPUT undercroft_arrival=PASS position=(0.0, 0.916667, 12.0)
+AUDIO: music_state_undercroft
+REAL_INPUT undercroft_manual_save=PASS zone=undercroft
+REAL_INPUT halvern_reload=PASS player=(0.0, 0.666667, 12.0) boss=(0.0, -0.089688, -5.5)
+REAL_INPUT halvern_duel_approach=PASS position=(0.041807, 0.032753, -0.046601)
+REAL_INPUT halvern_guard_parry=PASS attempts=2 health=94.6
+REAL_INPUT halvern_parry_manual_save=PASS zone=undercroft
+REAL_INPUT halvern_post_parry_state=PASS player=(0.041807, 0.032743, -0.176599) boss=(0.030047, -0.089164, -1.972136)
+REAL_INPUT halvern_witness_east_lane=PASS position=(5.855108, 0.032753, -0.156082)
+REAL_INPUT halvern_witness_north_lane=PASS position=(6.052932, 0.032753, -8.236037)
+REAL_INPUT halvern_witness_approach=PASS position=(3.186281, 0.032753, -8.416052)
+REAL_INPUT halvern_witness_choice=PASS
+REAL_INPUT halvern_witness_choice=PASS fate=witness crowns_active=true
+REAL_INPUT halvern_witness_manual_save=PASS zone=undercroft
+REAL_INPUT assembly_gate_east_lane=PASS position=(5.809603, 0.032753, -8.405565)
+REAL_INPUT assembly_gate_approach=PASS position=(5.98877, 0.032753, -10.93222)
+LOADING: zone_begin id=assembly prewarm=false cached=false
+ZONE_COMPOSITION: id=assembly reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=41.9
+LOADING: zone_stage=visual_applied elapsed=46.4
+LOADING: zone_stage=render_validation_deferred elapsed=50.8
+LOADING: zone_stage=budget_ready elapsed=54.3
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: zone=assembly playable_ms=108.8
+LOADING: zone_stage=runtime_finalized zone=assembly navigation=true ms=0
+REAL_INPUT assembly_arrival=PASS position=(0.0, 0.946667, 12.0)
+AUDIO: music_state_assembly
+REAL_INPUT assembly_manual_save=PASS zone=assembly
+ASSEMBLY_WITNESS id=witness_-7 position=(-8.0, 0.0, -3.5) visible=true skeletons=1 meshes=2
+ASSEMBLY_WITNESS id=witness_-3 position=(-4.0, 0.0, -3.5) visible=true skeletons=1 meshes=2
+ASSEMBLY_WITNESS id=witness_3 position=(4.0, 0.0, -3.5) visible=true skeletons=1 meshes=3
+ASSEMBLY_WITNESS id=witness_7 position=(8.0, 0.0, -3.5) visible=true skeletons=0 meshes=3
+REAL_INPUT assembly_testimony_front_aisle=PASS position=(0.04958, 0.032753, -1.746588)
+REAL_INPUT testimony_witness_3=PASS position=(4.276221, 0.032753, -1.885409)
+REAL_INPUT hear_witness_3=PASS position=(4.406219, 0.032743, -1.885409)
+REAL_INPUT testimony_witness_-3=PASS position=(-4.238272, 0.032753, -1.684082)
+REAL_INPUT hear_witness_-3=PASS position=(-4.368183, 0.032743, -1.684082)
+REAL_INPUT testimony_witness_-7=PASS position=(-8.254097, 0.032753, -1.767609)
+REAL_INPUT hear_witness_-7=PASS position=(-8.384027, 0.032743, -1.767609)
+REAL_INPUT testimony_witness_7=PASS position=(8.219294, 0.032753, -1.784909)
+REAL_INPUT hear_witness_7=PASS position=(8.439295, 0.032743, -1.784909)
+REAL_INPUT assembly_records_centre=PASS position=(-0.20615, 0.032753, -1.6333)
+REAL_INPUT assembly_witness_records_approach=PASS position=(-0.365247, 0.032753, -2.119933)
+REAL_INPUT assembly_witness_records=PASS position=(-0.365247, 0.032743, -2.249883)
+REAL_INPUT assembly_dais_east_lane=PASS position=(5.787223, 0.032753, -2.358737)
+REAL_INPUT assembly_dais_north_lane=PASS position=(5.853313, 0.032753, -8.737847)
+REAL_INPUT assembly_choice_approach=PASS position=(3.100343, 0.032753, -8.866134)
+REAL_INPUT assembly_public_testimony=PASS
+REAL_INPUT assembly_testimony_choice=PASS confession=witnesses hart_active=true
+REAL_INPUT assembly_testimony_manual_save=PASS zone=assembly
+REAL_INPUT hart_gate_east_lane=PASS position=(6.970121, 0.032753, -8.815144)
+REAL_INPUT hart_gate_approach=PASS position=(7.163254, 0.032753, -10.88834)
+REAL_INPUT hart_gate_live_after_assembly=PASS
+REAL_INPUT hart_road_east_lane=PASS position=(7.182143, 0.032747, -11.02721)
+REAL_INPUT hart_road_gate_approach=PASS position=(7.183522, 0.032743, -11.09053)
+LOADING: zone_begin id=hart_glade prewarm=false cached=false
+ZONE_COMPOSITION: id=hart_glade reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=63.1
+LOADING: zone_stage=visual_applied elapsed=68.5
+LOADING: zone_stage=render_validation_deferred elapsed=74.2
+LOADING: zone_stage=budget_ready elapsed=78.7
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: zone=hart_glade playable_ms=128.0
+LOADING: zone_stage=runtime_finalized zone=hart_glade navigation=true ms=1
+REAL_INPUT hart_glade_arrival=PASS position=(0.0, 0.946667, 12.0)
+AUDIO: music_state_hart_glade
+REAL_INPUT hart_glade_manual_save=PASS zone=hart_glade
+REAL_INPUT hart_witness_approach=PASS position=(0.219178, 0.032753, -5.825379)
+REAL_INPUT hart_mercy_ending=PASS cards=5
+REAL_INPUT hart_mercy_checkpoint=PASS zone=hart_glade
+REAL_INPUT combined_story=PASS single_process=true start_leg=0 end=actual_ending choices={ "anwen_response": "evidence", "evidence_report": "private", "crow_shrine_state": "cleansed", "bog_core_fate": "destroyed", "names_policy": "published", "mill_fate": "preserved", "senn_fate": "testimony", "vargan_ledger_taken_openly": true, "edric_stance": "cooperate", "halvern_fate": "witness", "confession_method": "witnesses" }
+REAL_INPUT continuous_campaign=PASS new_game=true single_process=true chapters=10 ending=mercy no_bypass=true
+VERIFIER_PHASE: SHUTDOWN
+OPENING REAL INPUT NATIVE: PASS

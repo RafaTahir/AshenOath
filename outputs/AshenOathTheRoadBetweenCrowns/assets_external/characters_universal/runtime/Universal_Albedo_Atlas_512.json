@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "atlas": "Universal_Albedo_Atlas_512.png",
+  "size": [
+    2048,
+    1024
+  ],
+  "tile_size": 512,
+  "padding": 8,
+  "entries": {
+    "T_Peasant_BaseColor_1K.png": {
+      "offset": [
+        0.00390625,
+        0.0078125
+      ],
+      "scale": [
+        0.2421875,
+        0.484375
+      ],
+      "source_sha256": "404460677f67b0d1056f02f0d5e30111f54d431825f7ea007c9c61aa8782ea7b"
+    },
+    "T_Regular_Male_Dark_BaseColor_1K.png": {
+      "offset": [
+        0.25390625,
+        0.0078125
+      ],
+      "scale": [
+        0.2421875,
+        0.484375
+      ],
+      "source_sha256": "5fa68220cb2bb859eb8603c305d4d839d00fc40ca464d1f4969d380fa363e555"
+    },
+    "T_Superhero_Male_Dark_1K.png": {
+      "offset": [
+        0.50390625,
+        0.0078125
+      ],
+      "scale": [
+        0.2421875,
+        0.484375
+      ],
+      "source_sha256": "f19c5c8d05712b29144286afb0ca9e9044cfc784037916cfa1fa984f5f556ec2"
+    },
+    "T_Superhero_Female_Dark_BaseColor_1K.png": {
+      "offset": [
+        0.75390625,
+        0.0078125
+      ],
+      "scale": [
+        0.2421875,
+        0.484375
+      ],
+      "source_sha256": "0bc1a13140f5ade7ba9f1b2c79444642bfbc7be196fd6a2562c3ca503dc44187"
+    },
+    "T_Hair_1_BaseColor_1K.png": {
+      "offset": [
+        0.00390625,
+        0.5078125
+      ],
+      "scale": [
+        0.2421875,
+        0.484375
+      ],
+      "source_sha256": "55f89ff98f76333d7c0d5342dbd69d1a780f42807c8de93616bfd016764d8d29"
+    },
+    "T_Hair_2_BaseColor_1K.png": {
+      "offset": [
+        0.25390625,
+        0.5078125
+      ],
+      "scale": [
+        0.2421875,
+        0.484375
+      ],
+      "source_sha256": "0bd98683ccc20c371cee6a0175aae5e07a8eb516ba309aaad125ad34260133bc"
+    },
+    "T_Eye_Brown.png": {
+      "offset": [
+        0.50390625,
+        0.5078125
+      ],
+      "scale": [
+        0.2421875,
+        0.484375
+      ],
+      "source_sha256": "d08e3356a83211bc6ca21fe3a8e39f4b5c1a3b8f85457fc2c0fb57be09935025"
+    }
+  }
+}

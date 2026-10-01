@@ -1,0 +1,197 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+OpenGL API OpenGL ES 3.0 (ANGLE 2.1.1 git hash: aaebda1c5a40) - Compatibility - Using Device: Google Inc. (Intel) - ANGLE (Intel, Intel(R) HD Graphics 620 (0x00005916) Direct3D11 vs_5_0 ps_5_0, D3D11-31.0.101.2130)
+
+LOADING: Greyfen prewarm begin
+AUDIO: music_state_main_menu
+LOADING: runtime ready total=1159ms environment=258ms services=653ms
+LOADING: Greyfen prewarm build_begin
+LOADING: Greyfen prewarm build_complete ms=1389 ok=true
+LOADING: new_game_handoff prewarmed=true cached_zones=1
+LOADING: new_game_stage=cache_clear elapsed=8.4
+LOADING: handoff_phase=hide_menu_begin
+LOADING: handoff_phase=hide_menu_end
+LOADING: handoff_phase=quest_begin
+LOADING: handoff_phase=quest_end
+LOADING: new_game_stage=state_ready elapsed=64.3
+LOADING: new_game_stage=zone_dispatch elapsed=69.2
+LOADING: handoff_phase=load_zone_begin
+LOADING: zone_begin id=greyfen prewarm=true cached=false
+LOADING: cached_zone_activated id=greyfen valid=true
+LOADING: zone_stage=cache_activated elapsed=86.4
+ZONE_COMPOSITION: id=greyfen reused=true visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=112.0
+LOADING: zone_stage=visual_applied elapsed=133.6
+AUDIO: music_state_greyfen_explore
+LOADING: zone_stage=render_validation_deferred elapsed=148.2
+LOADING: zone_stage=budget_ready elapsed=151.8
+LOADING: handoff_phase=unlock_begin
+LOADING: handoff_phase=unlock_end
+LOADING: zone=greyfen playable_ms=164.1
+LOADING: handoff_phase=hide_loading_begin
+LOADING: handoff_phase=hide_loading_end
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: handoff_phase=load_zone_end
+LOADING: new_game_stage=ready elapsed=198.8
+LOADING: new_game_stage=zone_return elapsed=198.8
+LOADING: opening_menu_render_ready
+LOADING: Greyfen prewarmed total=33534ms build=1389ms world=236ms player=252ms
+LOADING: Greyfen deferred_runtime_complete ms=36
+LOADING: zone_stage=runtime_finalized zone=greyfen navigation=false ms=0
+LOADING: Greyfen deferred_detail stage=gameplay_base ms=10
+LOADING: Greyfen deferred_detail stage=gameplay_place_0 ms=2
+LOADING: Greyfen deferred_detail stage=gameplay_place_1 ms=2
+LOADING: Greyfen deferred_detail stage=gameplay_place_2 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_place_3 ms=2
+LOADING: Greyfen deferred_detail stage=gameplay_place_4 ms=5
+LOADING: Greyfen deferred_detail stage=gameplay_side_clues ms=2
+LOADING: Greyfen deferred_detail stage=gameplay_main_clues ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_gate_links ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_gate_visual ms=4
+LOADING: opening_boot_materials_restored
+LOADING: Greyfen deferred_detail stage=gameplay_route_markers ms=3
+LOADING: Greyfen deferred_detail stage=gameplay_story ms=4
+LOADING: Greyfen deferred_detail stage=gameplay_visual_0 ms=3
+LOADING: Greyfen deferred_detail stage=gameplay_visual_1 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_visual_2 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_visual_3 ms=4
+LOADING: Greyfen deferred_detail stage=gameplay_visual_4 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_visual_5 ms=2
+LOADING: Greyfen deferred_detail stage=gameplay_visual_6 ms=2
+LOADING: Greyfen deferred_detail stage=gameplay_visual_7 ms=2
+LOADING: Greyfen deferred_detail stage=gameplay_visual_8 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_visual_9 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_visual_10 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_visual_11 ms=3
+LOADING: Greyfen deferred_detail stage=gameplay_visual_12 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_visual_13 ms=2
+LOADING: Greyfen deferred_detail stage=gameplay_visual_14 ms=2
+LOADING: Greyfen deferred_detail stage=gameplay_visual_15 ms=2
+LOADING: Greyfen deferred_detail stage=gameplay_mira ms=12
+LOADING: Greyfen deferred_detail stage=gameplay_rook ms=12
+LOADING: Greyfen deferred_detail stage=gameplay_widow_elna ms=19
+LOADING: Greyfen deferred_detail stage=gameplay_blacksmith_tor ms=14
+LOADING: Greyfen deferred_detail stage=gameplay_farmer_toma ms=13
+LOADING: Greyfen deferred_detail stage=gameplay_population ms=40
+LOADING: Greyfen deferred_detail stage=gameplay_common_table ms=3
+LOADING: Greyfen deferred_detail stage=gameplay_barrel_board ms=4
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_0 ms=3
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_1 ms=2
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_2 ms=4
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_3 ms=3
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_4 ms=1
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_5 ms=2
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_6 ms=3
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_7 ms=3
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_8 ms=3
+LOADING: Greyfen deferred_detail stage=gameplay_crowd_9 ms=4
+LOADING: Greyfen deferred_detail stage=opening_river_visual ms=1
+LOADING: Greyfen deferred_detail stage=opening_terrain ms=0
+LOADING: Greyfen deferred_detail stage=opening_lighting ms=0
+LOADING: Greyfen deferred_detail stage=opening_spawn ms=9
+LOADING: Greyfen deferred_detail stage=village_house_0 ms=0
+LOADING: Greyfen deferred_detail stage=village_house_1 ms=1
+LOADING: Greyfen deferred_detail stage=village_house_2 ms=1
+LOADING: Greyfen deferred_detail stage=village_house_3 ms=0
+LOADING: Greyfen deferred_detail stage=village_architectural_details_0 ms=1
+LOADING: Greyfen deferred_detail stage=village_architectural_details_1 ms=0
+LOADING: Greyfen deferred_detail stage=village_architectural_details_2 ms=1
+LOADING: Greyfen deferred_detail stage=village_architectural_details_3 ms=1
+LOADING: Greyfen deferred_detail stage=village_architectural_details_4 ms=1
+LOADING: Greyfen deferred_detail stage=boundary_horizon ms=77
+LOADING: Greyfen deferred_detail stage=boundary_vegetation ms=147
+LOADING: Greyfen deferred_detail stage=boundary_lights ms=5
+LOADING: Greyfen deferred_detail stage=boundary_north_south_fences ms=5
+LOADING: Greyfen deferred_detail stage=boundary_side_fences ms=3
+LOADING: Greyfen deferred_detail stage=landmark_board ms=1
+LOADING: Greyfen deferred_detail stage=landmark_shrine ms=45
+LOADING: Greyfen deferred_detail stage=landmark_blacksmith ms=102
+LOADING: Greyfen deferred_detail stage=landmark_cemetery_approach ms=4
+LOADING: Greyfen deferred_detail stage=landmark_cemetery_boundary ms=16
+LOADING: Greyfen deferred_detail stage=landmark_cemetery_graves ms=14
+LOADING: Greyfen deferred_detail stage=landmark_cemetery_chapel ms=15
+LOADING: Greyfen deferred_detail stage=landmark_cemetery_bell ms=11
+LOADING: Greyfen deferred_detail stage=landmark_cemetery_edges ms=29
+LOADING: Greyfen deferred_detail stage=landmark_cemetery_presentation_bell ms=4
+LOADING: Greyfen deferred_detail stage=landmark_cemetery_presentation_chapel ms=2
+LOADING: Greyfen deferred_detail stage=landmark_cemetery_presentation_graves ms=2
+LOADING: Greyfen deferred_detail stage=landmark_cemetery_presentation_roost ms=6
+LOADING: Greyfen deferred_detail stage=landmark_cemetery_presentation_states ms=5
+LOADING: Greyfen deferred_detail stage=landmark_cart_road ms=3
+LOADING: Greyfen deferred_detail stage=village_dressing ms=3
+LOADING: Greyfen deferred_detail stage=village_first_impression_ruts ms=1
+LOADING: Greyfen deferred_detail stage=village_first_impression_lanterns ms=10
+LOADING: Greyfen deferred_detail stage=village_first_impression_shrine ms=16
+LOADING: Greyfen deferred_detail stage=village_first_impression_story ms=19
+LOADING: Greyfen deferred_detail stage=village_first_impression_crows ms=8
+LOADING: Greyfen deferred_detail stage=village_quality ms=0
+LOADING: Greyfen deferred_detail stage=trees ms=1
+LOADING: Greyfen deferred_detail stage=aftermath ms=2
+LOADING: Greyfen deferred_detail complete
+REAL_INPUT audio_scope_readiness_wait_ms=17990 startup_acceptance=false
+REAL_INPUT menu_to_greyfen=PASS position=(0.0, 0.001094, 9.8)
+REAL_INPUT bridge_south_lip=PASS position=(0.0, 0.032753, 5.62)
+REAL_INPUT bridge_north_bank=PASS position=(0.0, 0.032751, 1.149997)
+REAL_INPUT anwen_lane=PASS position=(0.0, 0.032753, -3.670002)
+REAL_INPUT anwen_offset=PASS position=(1.913334, 0.032753, -3.756668)
+REAL_INPUT anwen_dialogue=PASS position=(1.878312, 0.002, -3.254236)
+REAL_INPUT anwen_conversation_closed=PASS
+REAL_INPUT north_road_center=PASS position=(0.148545, 0.032753, -3.388211)
+AUDIO: music_state_wychwood_tension
+LOADING: zone_begin id=wychwood prewarm=false cached=false
+ZONE_COMPOSITION: id=wychwood reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=1164.3
+LOADING: zone_stage=visual_applied elapsed=1170.2
+LOADING: zone_stage=render_validation_deferred elapsed=1177.5
+LOADING: zone_stage=budget_ready elapsed=1181.2
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: zone_stage=runtime_finalized zone=wychwood navigation=true ms=2
+LOADING: zone=wychwood playable_ms=3897.2
+REAL_INPUT greyfen_to_wychwood=PASS position=(0.0, 0.86, 13.0)
+REAL_INPUT wychwood_first_layby=PASS position=(0.181258, 0.032753, 10.59188)
+REAL_INPUT bram_ledger_offset=PASS position=(-0.983215, 0.032753, 10.35882)
+REAL_INPUT bram_ledger=PASS position=(-1.112392, 0.032743, 10.35882)
+REAL_INPUT black_feathers_offset=PASS position=(1.022945, 0.032753, 10.51644)
+REAL_INPUT black_feathers_layby=PASS position=(1.219119, 0.032753, 8.786669)
+REAL_INPUT sella=PASS position=(1.219119, 0.032743, 8.657491)
+REAL_INPUT claw_marks_offset=PASS position=(-0.962884, 0.032753, 8.491989)
+REAL_INPUT claw_marks_layby=PASS position=(-1.049373, 0.032753, 6.921949)
+REAL_INPUT vargan_wire=PASS position=(-1.049373, 0.032743, 6.859164)
+REAL_INPUT wychwood_bridge_centerline=PASS position=(-0.004913, 0.032753, 6.742676)
+AUDIO: music_state_ghoulkin_combat
+REAL_INPUT wychwood_north_bank=PASS position=(-1.318609, 0.032753, -3.034563)
+REAL_INPUT wychwood_clearing=PASS position=(-1.581741, 0.032753, -4.798266)
+REAL_INPUT combat_progress kills=0 health=125.0 position=(-1.581741, 0.032753, -4.798266)
+REAL_INPUT combat_progress kills=1 health=121.0 position=(0.145491, 0.029619, -2.878157)
+REAL_INPUT combat_progress kills=2 health=117.0 position=(-0.504952, 0.029891, -7.203797)
+REAL_INPUT combat_progress kills=3 health=112.0 position=(-2.72331, 0.032793, -6.944314)
+REAL_INPUT combat_progress kills=4 health=107.0 position=(1.459723, 0.032718, -7.474994)
+AUDIO: music_cue_victory_return_cue
+AUDIO: music_state_return_report
+REAL_INPUT five_enemy_fight=PASS kills=5 health=100.0
+REAL_INPUT combat_audio_sync=PASS {"attack":5,"death":5,"hit":19,"parry":0,"windup":9}
+REAL_INPUT wychwood_return_centerline=PASS position=(0.05683, 0.032753, -11.1333)
+LOADING: zone_begin id=greyfen prewarm=false cached=false
+ZONE_COMPOSITION: id=greyfen reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=367.5
+LOADING: zone_stage=visual_applied elapsed=384.6
+AUDIO: music_state_greyfen_explore
+LOADING: zone_stage=render_validation_deferred elapsed=404.0
+LOADING: zone_stage=budget_ready elapsed=409.1
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: zone_stage=runtime_finalized zone=greyfen navigation=true ms=1
+LOADING: zone=greyfen playable_ms=725.0
+REAL_INPUT wychwood_to_greyfen_boundary=PASS position=(0.0, 0.946667, -13.0)
+REAL_INPUT wychwood_to_greyfen=PASS position=(0.0, 0.946667, -13.0)
+REAL_INPUT anwen_report_north_approach=PASS position=(-0.378005, 0.032752, -3.208177)
+REAL_INPUT anwen_report_offset=PASS position=(1.807246, 0.032753, -3.074977)
+AUDIO: music_state_return_report
+REAL_INPUT anwen_report=PASS road_complete=true bell_active=true anwen_position=(9.4, 0.02, 7.6) pending_relocation=false dialogue_visible=false
+REAL_INPUT wychwood_affected_route=PASS new_game=true clues=3 enemies=5 bridges=both return_report=true
+VERIFIER_PHASE: SHUTDOWN
+OPENING REAL INPUT NATIVE: PASS

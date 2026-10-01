@@ -1,0 +1,258 @@
+[gd_scene load_steps=16 format=3]
+
+[sub_resource type="StandardMaterial3D" id="Material_ground"]
+albedo_color = Color(0.16, 0.18, 0.13, 1)
+roughness = 0.96
+
+[sub_resource type="StandardMaterial3D" id="Material_road"]
+albedo_color = Color(0.155, 0.125, 0.083, 1)
+roughness = 0.92
+
+[sub_resource type="StandardMaterial3D" id="Material_berm"]
+albedo_color = Color(0.09, 0.12, 0.08, 1)
+roughness = 1.0
+
+[sub_resource type="BoxMesh" id="Mesh_unit"]
+
+[sub_resource type="BoxShape3D" id="Shape_ground_side"]
+size = Vector3(18.3, 0.16, 19.8)
+
+[sub_resource type="BoxShape3D" id="Shape_ground_south"]
+size = Vector3(18.3, 0.16, 10.8)
+
+[sub_resource type="BoxShape3D" id="Shape_bridge_corridor"]
+size = Vector3(5.4, 0.2, 34)
+
+[sub_resource type="BoxShape3D" id="Shape_north_berm"]
+size = Vector3(16, 1.8, 1.2)
+
+[sub_resource type="BoxShape3D" id="Shape_south_berm"]
+size = Vector3(42, 1.8, 1.2)
+
+[sub_resource type="BoxShape3D" id="Shape_west_short"]
+size = Vector3(1.2, 1.8, 3.8)
+
+[sub_resource type="BoxShape3D" id="Shape_west_long"]
+size = Vector3(1.2, 1.8, 23.8)
+
+[sub_resource type="BoxShape3D" id="Shape_east_berm"]
+size = Vector3(1.2, 1.8, 13.2)
+
+[sub_resource type="BoxShape3D" id="Shape_north_wall"]
+size = Vector3(16, 3.2, 0.4)
+
+[sub_resource type="BoxShape3D" id="Shape_south_wall"]
+size = Vector3(42, 3.2, 0.4)
+
+[sub_resource type="BoxShape3D" id="Shape_west_short_wall"]
+size = Vector3(0.4, 3.2, 3.8)
+
+[sub_resource type="BoxShape3D" id="Shape_west_long_wall"]
+size = Vector3(0.4, 3.2, 23.8)
+
+[sub_resource type="BoxShape3D" id="Shape_east_wall"]
+size = Vector3(0.4, 3.2, 13.2)
+
+[node name="GreyfenGameplayCore" type="Node3D"]
+metadata/authored_gameplay_core = true
+metadata/ground_contract_count = 1
+metadata/bounds_contract_count = 1
+metadata/ticket = "SCENE-001"
+metadata/river_center_z = 4.5
+metadata/river_span = 3.4
+
+[node name="GroundNorthWest" type="StaticBody3D" parent="."]
+position = Vector3(-11.85, -0.08, -7.1)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GroundNorthWest"]
+shape = SubResource("Shape_ground_side")
+[node name="Surface" type="MeshInstance3D" parent="GroundNorthWest"]
+scale = Vector3(18.3, 0.16, 19.8)
+mesh = SubResource("Mesh_unit")
+material_override = SubResource("Material_ground")
+
+[node name="GroundNorthEast" type="StaticBody3D" parent="."]
+position = Vector3(11.85, -0.08, -7.1)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GroundNorthEast"]
+shape = SubResource("Shape_ground_side")
+[node name="Surface" type="MeshInstance3D" parent="GroundNorthEast"]
+scale = Vector3(18.3, 0.16, 19.8)
+mesh = SubResource("Mesh_unit")
+material_override = SubResource("Material_ground")
+
+[node name="GroundSouthWest" type="StaticBody3D" parent="."]
+position = Vector3(-11.85, -0.08, 11.6)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GroundSouthWest"]
+shape = SubResource("Shape_ground_south")
+[node name="Surface" type="MeshInstance3D" parent="GroundSouthWest"]
+scale = Vector3(18.3, 0.16, 10.8)
+mesh = SubResource("Mesh_unit")
+material_override = SubResource("Material_ground")
+
+[node name="GroundSouthEast" type="StaticBody3D" parent="."]
+position = Vector3(11.85, -0.08, 11.6)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GroundSouthEast"]
+shape = SubResource("Shape_ground_south")
+[node name="Surface" type="MeshInstance3D" parent="GroundSouthEast"]
+scale = Vector3(18.3, 0.16, 10.8)
+mesh = SubResource("Mesh_unit")
+material_override = SubResource("Material_ground")
+
+[node name="GroundCenterNorthVisual" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.08, -8.65)
+scale = Vector3(5.4, 0.16, 16.7)
+mesh = SubResource("Mesh_unit")
+material_override = SubResource("Material_ground")
+
+[node name="GroundCenterSouthVisual" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.08, 13.15)
+scale = Vector3(5.4, 0.16, 7.7)
+mesh = SubResource("Mesh_unit")
+material_override = SubResource("Material_ground")
+
+[node name="RiverBridgeContinuousSurface" type="StaticBody3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RiverBridgeContinuousSurface"]
+position = Vector3(0, -0.1, 0)
+shape = SubResource("Shape_bridge_corridor")
+
+[node name="PavedRoadMain" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.018, 0)
+scale = Vector3(4.2, 0.04, 30)
+mesh = SubResource("Mesh_unit")
+material_override = SubResource("Material_road")
+
+[node name="PavedRoadVillage" type="MeshInstance3D" parent="."]
+position = Vector3(-5, 0.02, 9)
+scale = Vector3(14, 0.04, 3)
+mesh = SubResource("Mesh_unit")
+material_override = SubResource("Material_road")
+
+[node name="PavedRoadCastle" type="MeshInstance3D" parent="."]
+position = Vector3(15.2, 0.022, 0)
+scale = Vector3(8.8, 0.045, 3.4)
+mesh = SubResource("Mesh_unit")
+material_override = SubResource("Material_road")
+
+[node name="NorthBermWest" type="StaticBody3D" parent="."]
+position = Vector3(-13, 0.9, -17)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NorthBermWest"]
+shape = SubResource("Shape_north_berm")
+[node name="Surface" type="MeshInstance3D" parent="NorthBermWest"]
+visible = false
+scale = Vector3(16, 1.8, 1.2)
+mesh = SubResource("Mesh_unit")
+material_override = SubResource("Material_berm")
+
+[node name="NorthBermEast" type="StaticBody3D" parent="."]
+position = Vector3(13, 0.9, -17)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NorthBermEast"]
+shape = SubResource("Shape_north_berm")
+[node name="Surface" type="MeshInstance3D" parent="NorthBermEast"]
+visible = false
+scale = Vector3(16, 1.8, 1.2)
+mesh = SubResource("Mesh_unit")
+material_override = SubResource("Material_berm")
+
+[node name="SouthBerm" type="StaticBody3D" parent="."]
+position = Vector3(0, 0.9, 17)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SouthBerm"]
+shape = SubResource("Shape_south_berm")
+[node name="Surface" type="MeshInstance3D" parent="SouthBerm"]
+visible = false
+scale = Vector3(42, 1.8, 1.2)
+mesh = SubResource("Mesh_unit")
+material_override = SubResource("Material_berm")
+
+[node name="WestBermNorth" type="StaticBody3D" parent="."]
+position = Vector3(-21, 0.9, -15.1)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WestBermNorth"]
+shape = SubResource("Shape_west_short")
+[node name="Surface" type="MeshInstance3D" parent="WestBermNorth"]
+visible = false
+scale = Vector3(1.2, 1.8, 3.8)
+mesh = SubResource("Mesh_unit")
+material_override = SubResource("Material_berm")
+
+[node name="WestBermSouth" type="StaticBody3D" parent="."]
+position = Vector3(-21, 0.9, 5.1)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WestBermSouth"]
+shape = SubResource("Shape_west_long")
+[node name="Surface" type="MeshInstance3D" parent="WestBermSouth"]
+visible = false
+scale = Vector3(1.2, 1.8, 23.8)
+mesh = SubResource("Mesh_unit")
+material_override = SubResource("Material_berm")
+
+[node name="EastBermNorth" type="StaticBody3D" parent="."]
+position = Vector3(21, 0.9, -10.4)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EastBermNorth"]
+shape = SubResource("Shape_east_berm")
+[node name="Surface" type="MeshInstance3D" parent="EastBermNorth"]
+visible = false
+scale = Vector3(1.2, 1.8, 13.2)
+mesh = SubResource("Mesh_unit")
+material_override = SubResource("Material_berm")
+
+[node name="EastBermSouth" type="StaticBody3D" parent="."]
+position = Vector3(21, 0.9, 10.4)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EastBermSouth"]
+shape = SubResource("Shape_east_berm")
+[node name="Surface" type="MeshInstance3D" parent="EastBermSouth"]
+visible = false
+scale = Vector3(1.2, 1.8, 13.2)
+mesh = SubResource("Mesh_unit")
+material_override = SubResource("Material_berm")
+
+[node name="WorldBoundaryNorthWest" type="StaticBody3D" parent="."]
+position = Vector3(-13, 1.6, -17.65)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WorldBoundaryNorthWest"]
+shape = SubResource("Shape_north_wall")
+
+[node name="WorldBoundaryNorthEast" type="StaticBody3D" parent="."]
+position = Vector3(13, 1.6, -17.65)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WorldBoundaryNorthEast"]
+shape = SubResource("Shape_north_wall")
+
+[node name="WorldBoundarySouth" type="StaticBody3D" parent="."]
+position = Vector3(0, 1.6, 17.65)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WorldBoundarySouth"]
+shape = SubResource("Shape_south_wall")
+
+[node name="WorldBoundaryWestNorth" type="StaticBody3D" parent="."]
+position = Vector3(-21.65, 1.6, -15.1)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WorldBoundaryWestNorth"]
+shape = SubResource("Shape_west_short_wall")
+
+[node name="WorldBoundaryWestSouth" type="StaticBody3D" parent="."]
+position = Vector3(-21.65, 1.6, 5.1)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WorldBoundaryWestSouth"]
+shape = SubResource("Shape_west_long_wall")
+
+[node name="WorldBoundaryEastNorth" type="StaticBody3D" parent="."]
+position = Vector3(21.65, 1.6, -10.4)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WorldBoundaryEastNorth"]
+shape = SubResource("Shape_east_wall")
+
+[node name="WorldBoundaryEastSouth" type="StaticBody3D" parent="."]
+position = Vector3(21.65, 1.6, 10.4)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WorldBoundaryEastSouth"]
+shape = SubResource("Shape_east_wall")
+
+[node name="SpawnAnchor" type="Marker3D" parent="."]
+position = Vector3(0, 0, 7)
+
+[node name="ShrineApproachAnchor" type="Marker3D" parent="."]
+
+[node name="AnwenAnchor" type="Marker3D" parent="."]
+position = Vector3(2, 0, -5)
+
+[node name="WychwoodGateAnchor" type="Marker3D" parent="."]
+position = Vector3(0, 0, -15.2)
+
+[node name="DeepWoodGateAnchor" type="Marker3D" parent="."]
+position = Vector3(-18, 0, -10)
+
+[node name="CastleGateAnchor" type="Marker3D" parent="."]
+position = Vector3(17.5, 0, 0)
+
+[node name="RiverBridgeAnchor" type="Marker3D" parent="."]
+position = Vector3(0, 0, 4.5)

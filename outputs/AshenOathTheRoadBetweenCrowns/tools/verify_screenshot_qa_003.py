@@ -4,12 +4,15 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
+
+from visual_evidence import capture_identity_error, needs_input_digest, rendering_inputs_sha256, review_error
 
 try:
     from PIL import Image, ImageChops, ImageStat
@@ -146,6 +149,17 @@ def mean_absolute_difference(current: Path, baseline: Path) -> float:
         return sum(ImageStat.Stat(difference).mean) / 3.0
 
 
+def approved_image_hash(view: dict[str, Any], image: Path) -> str | None:
+    """Bind a visual approval to the exact PNG bytes that were inspected."""
+    expected = view.get("approved_sha256")
+    if not isinstance(expected, str) or len(expected) != 64 or any(char not in "0123456789abcdef" for char in expected):
+        return "approved view requires a lowercase approved_sha256"
+    actual = hashlib.sha256(image.read_bytes()).hexdigest()
+    if actual != expected:
+        return "image bytes changed since visual approval"
+    return None
+
+
 def selected_views(manifest: dict[str, Any], requested: str | None) -> list[dict[str, Any]]:
     by_id = {view.get("id"): view for view in manifest["views"]}
     if requested is None:
@@ -166,6 +180,7 @@ def verify_view(
     mode: str,
     dry_run: bool,
     codex_visual_review: bool,
+    current_rendering_digest: str | None = None,
 ) -> CheckResult:
     view_id = view.get("id")
     pattern = view.get("current_glob")
@@ -183,18 +198,29 @@ def verify_view(
     image = newest_match(gallery, pattern)
     if image is None:
         return CheckResult(view_id, "fail" if required else "warn", message=f"no image matches {pattern}")
+    if status == "approved":
+        hash_error = approved_image_hash(view, image)
+        if hash_error:
+            return CheckResult(view_id, "fail", str(image), hash_error)
     if runtime_change_reason:
         return CheckResult(view_id, "fail", str(image), runtime_change_reason)
     if status == "rejected":
-        return CheckResult(view_id, "fail", str(image), "human reviewer rejected this view")
-    if mode == "milestone" and required and status != "approved" and not codex_visual_review:
+        return CheckResult(view_id, "fail", str(image), "reviewer rejected this view")
+    if mode == "milestone" and required and status != "approved":
         return CheckResult(view_id, "fail", str(image), "mandatory milestone view lacks approval")
     if dry_run:
-        return CheckResult(view_id, "pass", str(image), "resolved; approval policy satisfied")
-    if not has_capture_revision and newest_runtime_source and image.stat().st_mtime_ns < newest_runtime_source.stat().st_mtime_ns:
-        return CheckResult(view_id, "fail", str(image), f"stale against {newest_runtime_source.relative_to(gallery.parent.parent)}")
-    if codex_visual_review and newest_runtime_source and image.stat().st_mtime_ns < newest_runtime_source.stat().st_mtime_ns:
-        return CheckResult(view_id, "fail", str(image), f"Codex review image predates current source: {newest_runtime_source.name}")
+        return CheckResult(view_id, "plan", str(image), "dry run only; freshness, pixels and visual acceptance are not verified")
+    if status == "approved":
+        semantic_error = review_error(view)
+        if semantic_error:
+            return CheckResult(view_id, "fail", str(image), semantic_error)
+    if not current_rendering_digest:
+        return CheckResult(view_id, "fail", str(image), "current rendering-input identity is missing")
+    identity_error = capture_identity_error(image, current_rendering_digest)
+    if identity_error:
+        return CheckResult(view_id, "fail", str(image), identity_error)
+    # Matching capture-time content, not copied/touched filesystem timestamps,
+    # determines whether an inspected frame still represents the current inputs.
 
     expected_size = view.get("expected_size")
     try:
@@ -233,7 +259,7 @@ def verify_view(
         if difference > float(threshold):
             return CheckResult(view_id, "fail", str(image), f"difference {difference:.4f} exceeds {threshold}", metrics)
 
-    message = "approved" if status == "approved" else ("Codex visual review" if codex_visual_review else "pending human review")
+    message = "approved" if status == "approved" else "pending visual review"
     return CheckResult(view_id, "pass", str(image), message, metrics)
 
 
@@ -257,6 +283,7 @@ def main() -> int:
     capture_revision = manifest.get("capture_source_revision")
     codex_visual_review = str(manifest.get("policy", {}).get("visual_review", "human")).lower() == "codex"
     runtime_change_reason = runtime_changed_since(project, manifest)
+    current_rendering_digest = rendering_inputs_sha256(project) if not args.dry_run and needs_input_digest(gallery, views) else None
     results = [
         verify_view(
             view,
@@ -267,6 +294,7 @@ def main() -> int:
             args.mode,
             args.dry_run,
             codex_visual_review,
+            current_rendering_digest,
         )
         for view in views
     ]
@@ -281,7 +309,8 @@ def main() -> int:
         "manifest": str(manifest_path),
         "capture_source_revision": capture_revision,
         "newest_runtime_source": str(newest_source) if newest_source else None,
-        "status": "fail" if failures else "pass",
+        "status": "fail" if failures else ("plan" if args.dry_run else "pass"),
+        "rendering_inputs_sha256": current_rendering_digest,
         "results": [result.__dict__ for result in results],
     }
     if args.report:
@@ -289,7 +318,10 @@ def main() -> int:
         args.report.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     if failures:
         return 1
-    print(f"QA-003: PASS - {len(results)} view(s) accepted for {args.mode} mode")
+    if args.dry_run:
+        print(f"QA-003: PLAN - {len(results)} view(s) resolved; no capture or visual acceptance")
+    else:
+        print(f"QA-003: PASS - {len(results)} view(s) checked for {args.mode} mode")
     return 0
 
 

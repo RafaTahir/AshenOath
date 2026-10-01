@@ -23,8 +23,12 @@ func _verify_river(game, zone_id: String) -> void:
 	check(river != null, "%s river is missing" % zone_id)
 	if river == null:
 		return
-	check(river.find_child("NorthBankSlope", true, false) != null, "%s north bank is not integrated" % zone_id)
-	check(river.find_child("SouthBankSlope", true, false) != null, "%s south bank is not integrated" % zone_id)
+	for bank_name in ["NorthBankSlope", "SouthBankSlope"]:
+		var bank := river.find_child(bank_name, true, false) as MeshInstance3D
+		check(bank != null and bank.mesh is ArrayMesh and bank.mesh.get_surface_count() > 0, "%s %s lacks rendered geometry" % [zone_id, bank_name])
+		if bank != null:
+			var material := bank.material_override as StandardMaterial3D
+			check(material != null and material.albedo_texture != null, "%s %s lacks the bank material" % [zone_id, bank_name])
 	check(_count_named(river, "BridgeStoneFoundation") == 4, "%s bridge lacks four foundations" % zone_id)
 	var audio := river.find_child("RiverCurrentAudio", true, false) as AudioStreamPlayer3D
 	check(audio != null and audio.stream is AudioStreamWAV, "%s river lacks spatial current audio" % zone_id)

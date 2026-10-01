@@ -4,7 +4,7 @@ signal changed
 signal message(text: String)
 
 var item_defs = {}
-var items = {
+const STARTING_ITEMS = {
 	"redroot_potion": 3,
 	"bitterleaf_tonic": 1,
 	"ash_bomb": 1,
@@ -15,7 +15,7 @@ var items = {
 	"bodkin_arrow": 0,
 	"ashfire_arrow": 0
 }
-var ingredients = {
+const STARTING_INGREDIENTS = {
 	"redroot": 2,
 	"bitterleaf": 2,
 	"mooncap": 1,
@@ -24,8 +24,11 @@ var ingredients = {
 	"grave_moss": 1,
 	"scrap_iron": 1
 }
+const STARTING_COIN := 15
+var items: Dictionary = STARTING_ITEMS.duplicate(true)
+var ingredients: Dictionary = STARTING_INGREDIENTS.duplicate(true)
 var active_oil = ""
-var coin = 15
+var coin = STARTING_COIN
 const ITEM_TYPE_ORDER := ["ammo", "potion", "bomb", "oil", "trap"]
 
 func load_items(path: String) -> void:
@@ -154,25 +157,41 @@ func get_item_name(id: String) -> String:
 
 func save_state() -> Dictionary:
 	return {
-		"items": items,
-		"ingredients": ingredients,
+		"items": items.duplicate(true),
+		"ingredients": ingredients.duplicate(true),
 		"active_oil": active_oil,
 		"coin": coin
 	}
 
 func load_state(state: Dictionary) -> void:
+	# Missing legacy fields use the same defaults as a fresh load, never the
+	# inventory belonging to the session that this save is replacing.
+	items = STARTING_ITEMS.duplicate(true)
+	ingredients = STARTING_INGREDIENTS.duplicate(true)
 	var saved_items = state.get("items", {})
 	if typeof(saved_items) == TYPE_DICTIONARY:
 		for id in saved_items.keys():
-			items[id] = max(0, int(saved_items[id]))
+			if typeof(id) != TYPE_STRING:
+				continue
+			var quantity := _restore_quantity(saved_items[id])
+			items[id] = mini(quantity, get_ammo_cap(id)) if get_item_type(id) == "ammo" else quantity
 	var saved_ingredients = state.get("ingredients", {})
 	if typeof(saved_ingredients) == TYPE_DICTIONARY:
 		for id in saved_ingredients.keys():
-			ingredients[id] = max(0, int(saved_ingredients[id]))
+			if typeof(id) == TYPE_STRING:
+				ingredients[id] = _restore_quantity(saved_ingredients[id])
 	var saved_oil := str(state.get("active_oil", ""))
 	active_oil = saved_oil if get_item_type(saved_oil) == "oil" and int(items.get(saved_oil, 0)) > 0 else ""
-	coin = int(state.get("coin", coin))
+	coin = _restore_quantity(state.get("coin", STARTING_COIN))
 	changed.emit()
+
+func _restore_quantity(value: Variant) -> int:
+	if typeof(value) not in [TYPE_INT, TYPE_FLOAT]:
+		return 0
+	var number := float(value)
+	if not is_finite(number) or number != floorf(number):
+		return 0
+	return int(clampf(number, 0.0, 2147483647.0))
 
 func _read_json(path: String):
 	if not FileAccess.file_exists(path):
@@ -182,8 +201,8 @@ func _read_json(path: String):
 	var parsed = JSON.parse_string(file.get_as_text())
 	return parsed if parsed != null else {}
 func reset_starting_loadout() -> void:
-	items = {"redroot_potion": 3, "bitterleaf_tonic": 1, "ash_bomb": 1, "moon_oil": 0, "rot_oil": 0, "iron_trap": 0, "standard_arrow": 24, "bodkin_arrow": 0, "ashfire_arrow": 0}
-	ingredients = {"redroot": 2, "bitterleaf": 2, "mooncap": 1, "ash_salt": 2, "sparkstone": 1, "grave_moss": 1, "scrap_iron": 1}
+	items = STARTING_ITEMS.duplicate(true)
+	ingredients = STARTING_INGREDIENTS.duplicate(true)
 	active_oil = ""
-	coin = 15
+	coin = STARTING_COIN
 	changed.emit()

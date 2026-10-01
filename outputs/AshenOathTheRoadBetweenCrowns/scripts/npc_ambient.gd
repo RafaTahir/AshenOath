@@ -15,7 +15,7 @@ var planted_yaw_offset = 0.0
 var animation_driver
 var face_driver
 var far_tick_accumulator := 0.0
-var distance_hidden := false
+var focus_refresh_remaining := 0.0
 
 func setup(id: String, target: Node3D = null) -> void:
 	role_id = id
@@ -61,30 +61,24 @@ func _process(delta: float) -> void:
 	if parent_3d == null:
 		return
 	if role_id == "sister_anwen" and bool(parent_3d.get_meta("dialogue_facing_lock", false)):
+		_set_animation_suspended(false)
 		if animation_driver != null and animation_driver.has_method("set_dialogue_pose"):
 			animation_driver.set_dialogue_pose(true)
 		return
 	if animation_driver != null and animation_driver.has_method("set_dialogue_pose"):
 		animation_driver.set_dialogue_pose(false)
-	if focus_target == null:
-		var players = get_tree().get_nodes_in_group("player")
-		if not players.is_empty() and players[0] is Node3D:
-			focus_target = players[0]
-	var render_distance := _render_distance()
-	if focus_target != null and parent_3d.global_position.distance_to(focus_target.global_position) > render_distance * 0.72:
-		var distance: float = parent_3d.global_position.distance_to(focus_target.global_position)
-		_set_distance_visible(parent_3d, distance <= render_distance)
-		if animation_driver != null and animation_driver.has_method("set_distance_suspended"):
-			animation_driver.set_distance_suspended(true)
-		if face_driver != null and face_driver.has_method("set_distance_suspended"):
-			face_driver.set_distance_suspended(true)
+	if not is_instance_valid(focus_target):
+		focus_target = null
+		focus_refresh_remaining -= delta
+		if focus_refresh_remaining <= 0.0:
+			focus_refresh_remaining = 0.75
+			focus_target = get_tree().get_first_node_in_group("player") as Node3D
+	# Distant actors retain their rendered body; only ambient animation sleeps.
+	if focus_target != null and parent_3d.global_position.distance_to(focus_target.global_position) > _animation_distance():
+		_set_animation_suspended(true)
 		return
 	else:
-		_set_distance_visible(parent_3d, true)
-		if animation_driver != null and animation_driver.has_method("set_distance_suspended"):
-			animation_driver.set_distance_suspended(false)
-		if face_driver != null and face_driver.has_method("set_distance_suspended"):
-			face_driver.set_distance_suspended(false)
+		_set_animation_suspended(false)
 		far_tick_accumulator = 0.0
 	phase += delta * (0.48 if role_id == "sister_anwen" else 0.62)
 	var target_yaw = base_yaw + planted_yaw_offset + sin(phase * 0.38) * sway_amount
@@ -107,17 +101,14 @@ func _process(delta: float) -> void:
 	parent_3d.rotation_degrees.y = lerp_angle(deg_to_rad(parent_3d.rotation_degrees.y), deg_to_rad(target_yaw), turn_weight * delta) * 180.0 / PI
 	parent_3d.position.y = base_y + sin(phase) * bob_amount + sin(phase * 0.37) * breathe_amount
 
-func _render_distance() -> float:
+func _animation_distance() -> float:
 	if role_id == "sister_anwen":
-		return 18.0
+		return 18.0 * 0.72
 	if role_id == "rook":
-		return 6.5
-	return 7.0
+		return 6.5 * 0.72
+	return 7.0 * 0.72
 
-func _set_distance_visible(parent_3d: Node3D, value: bool) -> void:
-	if distance_hidden == not value:
-		return
-	distance_hidden = not value
-	for geometry in parent_3d.find_children("*", "GeometryInstance3D", true, false):
-		if not str(geometry.name).contains("InteractionWorldLabel"):
-			geometry.visible = value
+func _set_animation_suspended(value: bool) -> void:
+	for driver in [animation_driver, face_driver]:
+		if is_instance_valid(driver) and driver.has_method("set_distance_suspended"):
+			driver.set_distance_suspended(value)

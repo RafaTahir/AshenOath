@@ -12,14 +12,32 @@ static func clear_runtime_caches() -> void:
 	for raw_pool in _impact_pools.values():
 		for raw_root in raw_pool:
 			if raw_root != null and is_instance_valid(raw_root):
-				raw_root.free()
+				_free_feedback_node(raw_root)
 	_impact_pools.clear()
 	for raw_ring in _ground_ring_pool:
 		if raw_ring != null and is_instance_valid(raw_ring):
-			raw_ring.free()
+			_free_feedback_node(raw_ring)
 	_ground_ring_pool.clear()
 	_mesh_cache.clear()
 	_material_cache.clear()
+
+static func _free_feedback_node(node: Node) -> void:
+	if node == null or not is_instance_valid(node):
+		return
+	for child in node.get_children().duplicate():
+		_free_feedback_node(child)
+	if node is MeshInstance3D:
+		var mesh_instance := node as MeshInstance3D
+		if mesh_instance.mesh != null:
+			for surface_index in range(mesh_instance.mesh.get_surface_count()):
+				mesh_instance.set_surface_override_material(surface_index, null)
+		mesh_instance.material_override = null
+		mesh_instance.mesh = null
+	elif node is MultiMeshInstance3D:
+		var batch := node as MultiMeshInstance3D
+		batch.material_override = null
+		batch.multimesh = null
+	node.free()
 
 static func impact_burst(parent: Node3D, pos: Vector3, heavy: bool, color: Color = Color(1.0, 0.66, 0.24)) -> void:
 	if parent == null:

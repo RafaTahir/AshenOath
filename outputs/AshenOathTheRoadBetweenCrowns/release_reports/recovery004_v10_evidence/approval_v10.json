@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "status": "pass",
+  "required_views": 11,
+  "failures": [],
+  "manifest": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\Development_Gallery\\qa_003_approval_manifest.json",
+  "rendering_inputs_sha256": "33d5f0ee182543ceb50209e5b659a1fa7b3ca953aefd7b872d987c7b0e90d65d",
+  "capture_identity_check": "checked"
+}

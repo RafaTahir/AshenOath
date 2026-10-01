@@ -50,15 +50,16 @@ var sword_trail_visual: MeshInstance3D
 var rig_sword_visual: Node3D
 var sword_attachment: BoneAttachment3D
 var sword_equipment_pivot: Node3D
+var guard_arm_ik: SkeletonIK3D
+var guard_arm_applied := false
+var sword_grip_bones: Dictionary = {}
+var sword_grip_base_rotations: Dictionary = {}
+var sword_grip_applied_rotations: Dictionary = {}
+var sword_grip_pose_applied := false
 var slash_arc_root: Node3D
 var slash_arc_primary: MeshInstance3D
 var slash_arc_secondary: MeshInstance3D
 var slash_arc_spark: MeshInstance3D
-var left_arm_proxy: MeshInstance3D
-var right_arm_proxy: MeshInstance3D
-var left_leg_proxy: MeshInstance3D
-var right_leg_proxy: MeshInstance3D
-var cloak_motion_proxy: MeshInstance3D
 var asset_helper
 var animation_driver
 var move_phase = 0.0
@@ -71,6 +72,7 @@ var pending_attack_radius := 0.0
 var pending_attack_heavy := false
 var attack_sequence_id := 0
 var attack_contact_emitted := false
+var previous_contact_progress := 0.0
 var previous_blade_base := Vector3.ZERO
 var previous_blade_tip := Vector3.ZERO
 var visual_previous_blade_base := Vector3.ZERO
@@ -92,6 +94,9 @@ var beam_left_hand_glow: MeshInstance3D
 var beam_right_hand_glow: MeshInstance3D
 var beam_left_hand_socket: BoneAttachment3D
 var beam_right_hand_socket: BoneAttachment3D
+var beam_left_arm_ik: SkeletonIK3D
+var beam_right_arm_ik: SkeletonIK3D
+var beam_arm_pose_applied := false
 var sheathed_sword_visual: Node3D
 var beam_cast_state := ""
 var beam_state_time := 0.0
@@ -146,6 +151,8 @@ var step_up_cooldown = 0.0
 var progression
 
 func _ready() -> void:
+	# Game remains active for menus and loading; gameplay and its children pause.
+	process_mode = Node.PROCESS_MODE_PAUSABLE
 	add_to_group("player")
 	health_component = HealthComponent.new()
 	stamina_component = StaminaComponent.new()
@@ -358,7 +365,11 @@ func _handle_movement(delta: float) -> void:
 		elif move_dir.length() > 0.1 and beam_cast_state == "" and not intentional_backpedal:
 			var target_yaw = atan2(-move_dir.x, -move_dir.z)
 			rotation.y = lerp_angle(rotation.y, target_yaw, 1.0 - exp(-turn_speed * delta))
-		movement_state = "run" if is_running else ("backward" if input_vec.y > 0.15 else ("strafe" if abs(input_vec.x) > 0.55 else ("walk" if move_dir.length() > 0.1 else "idle")))
+		# Keep backward running as its own locomotion state. Collapsing it into
+		# `run` made the imported forward gait play while the controller moved
+		# away from its facing, which was especially obvious on keyboard release
+		# and at the first animation tick.
+		movement_state = ("run_back" if intentional_backpedal else "run") if is_running else ("backward" if intentional_backpedal else ("strafe" if abs(input_vec.x) > 0.55 else ("walk" if move_dir.length() > 0.1 else "idle")))
 		if _action_just_pressed("jump"):
 			try_jump()
 		if _action_just_pressed("dodge") and not beam_charging:
@@ -372,6 +383,35 @@ func _handle_movement(delta: float) -> void:
 	move_and_slide()
 	_update_ground_adaptation(delta)
 	_animate_visuals(delta, move_dir, input_vec.length() > 0.1)
+
+func _face_attack_direction() -> void:
+	var input_vec := _movement_input()
+	# S is intentional backpedaling. Preserve the current facing for that
+	# input while allowing attack edges to honor the same-frame travel direction.
+	if input_vec.y > 0.15:
+		return
+	var forward := Vector3.FORWARD
+	var right := Vector3.RIGHT
+	if camera_controller != null:
+		forward = camera_controller.get_flat_forward()
+		right = camera_controller.get_flat_right()
+	var move_dir := (right * input_vec.x + forward * -input_vec.y).normalized()
+	if move_dir.length_squared() <= 0.01:
+		# A locked attack has a live combat target even when Kael is standing
+		# still. Face that target at the attack edge so the hand-driven blade
+		# sweep and the visible lock-on direction agree.
+		if camera_controller != null and camera_controller.has_method("get_locked_combat_target"):
+			var locked_target: Node3D = camera_controller.get_locked_combat_target()
+			if locked_target != null and is_instance_valid(locked_target):
+				var target_offset := locked_target.global_position - global_position
+				target_offset.y = 0.0
+				if target_offset.length_squared() > 0.01:
+					rotation.y = atan2(-target_offset.x, -target_offset.z)
+		return
+	# Combat input is evaluated before movement in the physics tick. Apply the
+	# same target yaw immediately at the attack edge so the blade starts from
+	# the direction the player is visibly moving toward.
+	rotation.y = atan2(-move_dir.x, -move_dir.z)
 
 func try_jump() -> bool:
 	if not can_control or not is_on_floor() or beam_charging or attack_anim_time > 0.0 or dodge_time > 0.0:
@@ -387,7 +427,7 @@ func _try_step_up(move_dir: Vector3) -> void:
 	if step_up_cooldown > 0.0 or move_dir.length() < 0.1 or not is_on_floor() or not is_on_wall():
 		return
 	var probe = global_position + move_dir * 0.46
-	var query = PhysicsRayQueryParameters3D.create(probe + Vector3.UP * 0.42, probe - Vector3.UP * 0.08)
+	var query = PhysicsRayQueryParameters3D.create(probe + Vector3.UP * 0.42, probe - Vector3.UP * 0.08, 1)
 	query.exclude = [get_rid()]
 	query.collide_with_areas = false
 	var hit = get_world_3d().direct_space_state.intersect_ray(query)
@@ -425,7 +465,7 @@ func _update_ground_adaptation(delta: float) -> void:
 func _sample_foot_offset(side: float, delta: float, current: float) -> float:
 	var local_probe = global_transform.basis.x * side + global_transform.basis.z * 0.04
 	var start = global_position + local_probe + Vector3.UP * 0.42
-	var query = PhysicsRayQueryParameters3D.create(start, start - Vector3.UP * 0.72)
+	var query = PhysicsRayQueryParameters3D.create(start, start - Vector3.UP * 0.72, 1)
 	query.exclude = [get_rid()]
 	query.collide_with_areas = false
 	var hit = get_world_3d().direct_space_state.intersect_ray(query)
@@ -435,13 +475,22 @@ func _sample_foot_offset(side: float, delta: float, current: float) -> float:
 	return lerp(current, target, 1.0 - exp(-12.0 * delta))
 
 func _handle_combat_input() -> void:
+	if _action_just_pressed("weapon_cycle"):
+		_set_weapon_mode("bow" if weapon_mode == "sword" else "sword")
 	if _action_just_pressed("weapon_bow"):
 		_set_weapon_mode("bow")
 	if _action_just_pressed("weapon_sword"):
 		_set_weapon_mode("sword")
+	if beam_cast_state == BEAM_STATE_IDLE:
+		if _action_just_pressed("use_potion"):
+			potion_requested.emit()
+		if _action_just_pressed("throw_bomb"):
+			bomb_requested.emit()
 	if weapon_mode == "bow":
 		_handle_bow_input()
-		if _action_just_pressed("oathfire_beam"):
+		# LT is bow aim in this weapon context, not an Oathfire cast. A separately
+		# bound Oathfire press (for example keyboard C) still cancels into sword.
+		if _action_just_pressed("oathfire_beam") and not _action_just_pressed("aim_bow"):
 			_set_weapon_mode("sword")
 			_handle_beam_input()
 		return
@@ -450,6 +499,8 @@ func _handle_combat_input() -> void:
 		return
 	var light_pressed := _action_just_pressed("light_attack")
 	var heavy_pressed := _action_just_pressed("heavy_attack")
+	if light_pressed or heavy_pressed:
+		_face_attack_direction()
 	if light_pressed or heavy_pressed or _action_just_pressed("block"):
 		_draw_sword_for_combat()
 	if attack_cooldown > 0.0:
@@ -463,26 +514,24 @@ func _handle_combat_input() -> void:
 		buffered_attack = ""
 		attack_buffer_time = 0.0
 	if light_pressed:
+		_face_attack_direction()
 		attack_cooldown = 0.38
 		attack_anim_time = 0.34
 		attack_anim_heavy = false
 		if animation_driver != null:
-			animation_driver.trigger_action("attack_light", 1.22, 0.06)
+			animation_driver.trigger_action("attack_light", 1.22, 0.06, false, attack_anim_time)
 		_begin_blade_attack(get_blade_attack_damage(false), 2.0, false)
 	elif heavy_pressed:
+		_face_attack_direction()
 		if stamina_component.spend(22.0):
 			attack_cooldown = 0.7
 			attack_anim_time = 0.52
 			attack_anim_heavy = true
 			if animation_driver != null:
-				animation_driver.trigger_action("attack_heavy", 0.76, 0.08)
+				animation_driver.trigger_action("attack_heavy", 0.76, 0.08, false, attack_anim_time)
 			_begin_blade_attack(get_blade_attack_damage(true), 2.25, true)
 		else:
 			stamina_exhausted.emit("heavy attack")
-	if _action_just_pressed("use_potion"):
-		potion_requested.emit()
-	if _action_just_pressed("throw_bomb"):
-		bomb_requested.emit()
 	if _action_just_pressed("block"):
 		parry_window = get_parry_window_duration()
 		if animation_driver != null:
@@ -565,6 +614,7 @@ func get_arrow_origin() -> Vector3:
 func _begin_blade_attack(damage: float, radius: float, heavy: bool) -> void:
 	attack_sequence_id += 1
 	attack_contact_emitted = false
+	previous_contact_progress = 0.0
 	pending_attack_damage = damage
 	pending_attack_radius = radius
 	pending_attack_heavy = heavy
@@ -584,27 +634,43 @@ func _update_blade_contact() -> void:
 	var blade_tip: Vector3 = segment.get("tip", Vector3.ZERO)
 	var duration: float = 0.52 if pending_attack_heavy else 0.34
 	var progress: float = clampf(1.0 - attack_anim_time / duration, 0.0, 1.0)
-	var contact_phase: float = 0.46 if pending_attack_heavy else 0.35
-	if not attack_contact_emitted and progress >= contact_phase:
+	if progress <= previous_contact_progress:
+		return
+	var strike_start := 0.30 if pending_attack_heavy else 0.18
+	var strike_end := 0.64 if pending_attack_heavy else 0.42
+	if progress >= strike_start and previous_contact_progress < strike_end:
+		# Clip the measured frame sweep to the damaging part of the animation.
+		var span := progress - previous_contact_progress
+		var from_weight := clampf((strike_start - previous_contact_progress) / span, 0.0, 1.0)
+		var to_weight := clampf((strike_end - previous_contact_progress) / span, 0.0, 1.0)
+		var first_sample := not attack_contact_emitted
 		attack_contact_emitted = true
 		blade_contact_requested.emit({
 			"attack_id": attack_sequence_id,
-			"base": blade_base,
-			"tip": blade_tip,
-			"previous_base": previous_blade_base,
-			"previous_tip": previous_blade_tip,
+			"base": previous_blade_base.lerp(blade_base, to_weight),
+			"tip": previous_blade_tip.lerp(blade_tip, to_weight),
+			"previous_base": previous_blade_base.lerp(blade_base, from_weight),
+			"previous_tip": previous_blade_tip.lerp(blade_tip, from_weight),
 			"damage": pending_attack_damage,
 			"reach": pending_attack_radius,
 			"heavy": pending_attack_heavy,
 			"contact_phase": progress,
 			"sweep_length": maxf(previous_blade_tip.distance_to(blade_tip), previous_blade_base.distance_to(blade_base)),
 			"blade_direction": (blade_tip - blade_base).normalized() if blade_tip.distance_to(blade_base) > 0.001 else Vector3.ZERO,
-			"allow_forward_fallback": true
+			"first_sample": first_sample,
+			"final_sample": progress >= strike_end
 		})
+	if progress >= strike_end:
 		pending_attack_damage = 0.0
 		pending_attack_radius = 0.0
+	previous_contact_progress = progress
 	previous_blade_base = blade_base
 	previous_blade_tip = blade_tip
+
+func confirm_blade_contact(attack_id: int, hit: bool) -> void:
+	if hit and attack_id == attack_sequence_id:
+		pending_attack_damage = 0.0
+		pending_attack_radius = 0.0
 
 func get_parry_window_duration() -> float:
 	return 0.30
@@ -832,10 +898,19 @@ func get_oathfire_state() -> Dictionary:
 	}
 
 func get_oathfire_origin() -> Vector3:
-	var left: Vector3 = beam_left_hand_glow.global_position if beam_left_hand_glow != null else global_position + Vector3(-0.16, 1.28, -0.48)
-	var right: Vector3 = beam_right_hand_glow.global_position if beam_right_hand_glow != null else global_position + Vector3(0.16, 1.28, -0.48)
+	var left := _live_oathfire_hand_origin(beam_left_hand_socket, beam_left_hand_glow, global_position + Vector3(-0.16, 1.28, -0.48))
+	var right := _live_oathfire_hand_origin(beam_right_hand_socket, beam_right_hand_glow, global_position + Vector3(0.16, 1.28, -0.48))
 	var direction: Vector3 = beam_locked_direction if beam_locked_direction.length_squared() > 0.5 else -global_transform.basis.z.normalized()
 	return left.lerp(right, 0.5) + direction * 0.24
+
+func _live_oathfire_hand_origin(socket: BoneAttachment3D, glow: MeshInstance3D, fallback: Vector3) -> Vector3:
+	if socket != null:
+		var skeleton := socket.get_parent() as Skeleton3D
+		if skeleton != null and socket.bone_idx >= 0:
+			return (skeleton.global_transform * skeleton.get_bone_global_pose(socket.bone_idx)).origin
+	if glow != null:
+		return glow.global_position
+	return fallback
 
 func _update_beam_charge_visual() -> void:
 	if beam_charge_visual == null:
@@ -843,14 +918,14 @@ func _update_beam_charge_visual() -> void:
 	beam_charge_visual.visible = true
 	var ratio: float = beam_pending_ratio if beam_cast_state == "releasing" else clampf(beam_charge_time / 1.25, 0.0, 1.0)
 	var pulse: float = 1.0 + sin(Time.get_ticks_msec() * 0.018) * 0.07
-	beam_charge_visual.scale = Vector3.ONE * lerpf(0.12, 0.42, ratio) * pulse
+	beam_charge_visual.scale = Vector3.ONE * lerpf(0.08, 0.28, ratio) * pulse
 	beam_charge_visual.global_position = get_oathfire_origin()
 	if beam_left_hand_glow != null:
 		beam_left_hand_glow.visible = true
-		beam_left_hand_glow.scale = Vector3.ONE * lerpf(0.65, 1.25, ratio)
+		beam_left_hand_glow.scale = Vector3.ONE * lerpf(0.55, 0.95, ratio)
 	if beam_right_hand_glow != null:
 		beam_right_hand_glow.visible = true
-		beam_right_hand_glow.scale = Vector3.ONE * lerpf(0.65, 1.25, ratio)
+		beam_right_hand_glow.scale = Vector3.ONE * lerpf(0.55, 0.95, ratio)
 
 func _hide_beam_charge_visuals() -> void:
 	for glow in [beam_charge_visual, beam_left_hand_glow, beam_right_hand_glow]:
@@ -880,10 +955,10 @@ func take_damage(amount: float) -> bool:
 		return false
 	if parry_window > 0.0 and stamina_component.spend(10.0):
 		parry_window = 0.0
-		hurt_flash_time = 0.08
-		hurt_react_time = 0.14
+		hurt_flash_time = 0.0
+		hurt_react_time = 0.0
 		if animation_driver != null:
-			animation_driver.trigger_action("hit")
+			animation_driver.trigger_action("parry", 1.0, 0.04, true)
 		parried.emit()
 		return true
 	if is_blocking() and stamina_component.spend(12.0):
@@ -956,9 +1031,44 @@ func _add_beam_charge_visual() -> void:
 	var skeleton := _find_skeleton(visual_root)
 	beam_left_hand_glow = _make_oathfire_hand("OathfireLeftHand", skeleton, ["LeftHand", "Hand.L", "Fist.L", "FistL", "lefthand", "leftwrist"], Vector3(-0.28, 1.22, -0.42))
 	beam_right_hand_glow = _make_oathfire_hand("OathfireRightHand", skeleton, ["RightHand", "Hand.R", "Weapon.R", "WeaponR", "Fist.R", "FistR", "righthand", "rightwrist"], Vector3(0.28, 1.22, -0.42))
+	if skeleton != null:
+		beam_left_arm_ik = _make_arm_pose_ik(skeleton, "OathfireLeftArmPose", &"upperarm_l", &"hand_l")
+		beam_right_arm_ik = _make_arm_pose_ik(skeleton, "OathfireRightArmPose", &"upperarm_r", &"hand_r")
 	_build_sheathed_sword()
 	_build_bow_visual()
 	_ensure_equipment_loadout()
+
+func _make_arm_pose_ik(skeleton: Skeleton3D, node_name: String, root_bone: StringName, tip_bone: StringName) -> SkeletonIK3D:
+	if skeleton.find_bone(root_bone) < 0 or skeleton.find_bone(tip_bone) < 0:
+		return null
+	var solver := SkeletonIK3D.new()
+	solver.name = node_name
+	solver.root_bone = root_bone
+	solver.tip_bone = tip_bone
+	solver.override_tip_basis = false
+	solver.max_iterations = 12
+	skeleton.add_child(solver)
+	return solver
+
+func _update_oathfire_arm_pose() -> void:
+	var enabled := beam_cast_state in [BEAM_STATE_CHARGING, BEAM_STATE_RELEASING]
+	if enabled and beam_left_arm_ik != null and beam_right_arm_ik != null:
+		var forward := -global_basis.z.normalized()
+		var right := global_basis.x.normalized()
+		var center := global_position + Vector3.UP * 1.18 + forward * 0.43
+		beam_left_arm_ik.target = Transform3D(Basis.IDENTITY, center - right * 0.12)
+		beam_right_arm_ik.target = Transform3D(Basis.IDENTITY, center + right * 0.12)
+		beam_left_arm_ik.influence = 1.0
+		beam_right_arm_ik.influence = 1.0
+		beam_left_arm_ik.start(true)
+		beam_right_arm_ik.start(true)
+		beam_arm_pose_applied = true
+	elif beam_arm_pose_applied:
+		if beam_left_arm_ik != null:
+			beam_left_arm_ik.stop()
+		if beam_right_arm_ik != null:
+			beam_right_arm_ik.stop()
+		beam_arm_pose_applied = false
 
 func _make_oathfire_hand(node_name: String, skeleton: Skeleton3D, aliases: Array[String], fallback_position: Vector3) -> MeshInstance3D:
 	var glow := MeshInstance3D.new()
@@ -1124,42 +1234,59 @@ func _build_sheathed_sword() -> void:
 	sheathed_sword_visual = Node3D.new()
 	sheathed_sword_visual.name = "KaelBackScabbard"
 	socket_parent.add_child(sheathed_sword_visual)
-	sheathed_sword_visual.position = Vector3(0.05, -0.05, -0.28) if socket_parent != visual_root else Vector3(0.10, 1.42, 0.30)
+	sheathed_sword_visual.position = Vector3(0.05, 0.27, -0.28) if socket_parent != visual_root else Vector3(0.10, 1.42, 0.30)
 	sheathed_sword_visual.rotation_degrees = Vector3(-10, 0, -32)
-	sheathed_sword_visual.scale = Vector3.ONE * 0.70
+	sheathed_sword_visual.scale = Vector3.ONE
+	# Reuse the drawn weapon's authored geometry and units. The sheath covers
+	# its blade, leaving the actual guard/grip visible above the shoulder.
+	if not _attach_modeled_sword(sheathed_sword_visual):
+		push_error("Back sword source could not be loaded: " + MODELED_SWORD_PATH)
 	var scabbard := MeshInstance3D.new()
 	scabbard.name = "OathbladeScabbardBody"
-	var scabbard_mesh := CylinderMesh.new()
-	scabbard_mesh.top_radius = 0.075
-	scabbard_mesh.bottom_radius = 0.055
-	scabbard_mesh.height = 0.78
-	scabbard_mesh.radial_segments = 8
-	scabbard.mesh = scabbard_mesh
-	scabbard.position = Vector3(0.0, -0.49, 0.0)
-	scabbard.material_override = _mat(Color(0.16, 0.075, 0.035))
+	scabbard.mesh = _build_scabbard_mesh()
+	scabbard.material_override = _mat(Color(0.075, 0.065, 0.055))
 	sheathed_sword_visual.add_child(scabbard)
 	var throat := MeshInstance3D.new()
 	throat.name = "OathbladeScabbardThroat"
 	var throat_mesh := CylinderMesh.new()
-	throat_mesh.top_radius = 0.095
-	throat_mesh.bottom_radius = 0.095
-	throat_mesh.height = 0.075
+	throat_mesh.top_radius = 1.0
+	throat_mesh.bottom_radius = 1.0
+	throat_mesh.height = 0.035
 	throat_mesh.radial_segments = 8
 	throat.mesh = throat_mesh
-	throat.position = Vector3(0.0, -0.055, 0.0)
+	throat.scale = Vector3(0.061, 1.0, 0.026)
+	throat.position = Vector3(0.0, -0.065, 0.0)
 	throat.material_override = _metal_mat(Color(0.42, 0.30, 0.16))
 	sheathed_sword_visual.add_child(throat)
 	var cap := MeshInstance3D.new()
 	cap.name = "OathbladeScabbardCap"
 	var cap_mesh := SphereMesh.new()
-	cap_mesh.radius = 0.065
-	cap_mesh.height = 0.10
+	cap_mesh.radius = 0.025
+	cap_mesh.height = 0.05
 	cap_mesh.radial_segments = 8
+	cap_mesh.rings = 3
 	cap.mesh = cap_mesh
-	cap.position = Vector3(0.0, -0.96, 0.0)
+	cap.scale.z = 0.65
+	cap.position = Vector3(0.0, -0.835, 0.0)
 	cap.material_override = _metal_mat(Color(0.34, 0.24, 0.14))
 	sheathed_sword_visual.add_child(cap)
 	sheathed_sword_visual.visible = false
+
+func _build_scabbard_mesh() -> ArrayMesh:
+	var surface := SurfaceTool.new()
+	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var section := [Vector2(-0.75, -1), Vector2(0.75, -1), Vector2(1, -0.65), Vector2(1, 0.65), Vector2(0.75, 1), Vector2(-0.75, 1), Vector2(-1, 0.65), Vector2(-1, -0.65)]
+	var profiles := [Vector3(0.058, -0.065, 0.024), Vector3(0.048, -0.68, 0.021), Vector3(0.020, -0.835, 0.016)]
+	for ring in range(profiles.size() - 1):
+		for side in range(section.size()):
+			var next := (side + 1) % section.size()
+			var a: Vector3 = profiles[ring]
+			var b: Vector3 = profiles[ring + 1]
+			var vertices := [Vector3(section[side].x * a.x, a.y, section[side].y * a.z), Vector3(section[next].x * a.x, a.y, section[next].y * a.z), Vector3(section[next].x * b.x, b.y, section[next].y * b.z), Vector3(section[side].x * b.x, b.y, section[side].y * b.z)]
+			for index in [0, 2, 1, 0, 3, 2]:
+				surface.add_vertex(vertices[index])
+	surface.generate_normals()
+	return surface.commit()
 
 func _try_build_mapped_body() -> bool:
 	asset_helper = AssetSpawnHelper.new()
@@ -1279,6 +1406,14 @@ func _attach_rig_sword(mapped: Node3D) -> Node3D:
 	attachment.bone_name = skeleton.get_bone_name(hand_index)
 	skeleton.add_child(attachment)
 	sword_attachment = attachment
+	if skeleton.find_bone("upperarm_r") >= 0 and skeleton.get_bone_name(hand_index) == "hand_r":
+		guard_arm_ik = SkeletonIK3D.new()
+		guard_arm_ik.name = "GuardArmPose"
+		guard_arm_ik.root_bone = &"upperarm_r"
+		guard_arm_ik.tip_bone = &"hand_r"
+		guard_arm_ik.override_tip_basis = false
+		guard_arm_ik.max_iterations = 12
+		skeleton.add_child(guard_arm_ik)
 	var equipment_space := _create_equipment_space(attachment, "KaelSwordEquipmentSpace")
 	sword_equipment_pivot = Node3D.new()
 	sword_equipment_pivot.name = "KaelSwordGripPivot"
@@ -1437,9 +1572,33 @@ func _build_oathblade_mesh() -> ImmediateMesh:
 func _update_sword_equipment_pose(windup: float, strike: float, recovery: float, heavy: bool, attacking: bool) -> void:
 	if sword_equipment_pivot == null or sword_attachment == null:
 		return
+	var skeleton := sword_attachment.get_parent() as Skeleton3D
+	var native_grip := skeleton != null and sword_attachment.bone_name == &"hand_r"
+	var grip_allowed := native_grip and can_control and not transition_locked and not sword_sheathed and beam_cast_state == "" and weapon_mode == "sword"
+	_update_sword_hand_grip(skeleton, grip_allowed)
+	if guard_arm_ik != null:
+		var guard_allowed := can_control and not transition_locked and not attacking and not sword_sheathed and beam_cast_state == "" and weapon_mode == "sword"
+		var weight := clampf(block_pose_weight, 0.0, 1.0) if guard_allowed else 0.0
+		if parry_window > 0.0 and guard_allowed:
+			weight = 1.0
+		if weight > 0.01:
+			guard_arm_ik.target = Transform3D(Basis.IDENTITY, global_position + Vector3.UP * 1.12 + global_basis.x.normalized() * 0.28 - global_basis.z.normalized() * 0.34)
+			guard_arm_ik.influence = weight
+			guard_arm_ik.start(true)
+			guard_arm_applied = true
+		elif guard_arm_applied:
+			guard_arm_ik.stop()
+			guard_arm_applied = false
 	var forward := -global_transform.basis.z.normalized()
 	var right := global_transform.basis.x.normalized()
-	var hand_basis := sword_attachment.global_transform.basis.orthonormalized()
+	# BoneAttachment3D publishes its transform after the skeleton update. Reading
+	# its global transform here leaves equipment one animation frame behind the
+	# hand during fast strikes. Derive the live hand frame from the skeleton pose
+	# directly, then express the weapon in the attachment's next local space.
+	var hand_world := sword_attachment.global_transform
+	if skeleton != null and sword_attachment.bone_idx >= 0:
+		hand_world = skeleton.global_transform * skeleton.get_bone_global_pose(sword_attachment.bone_idx)
+	var hand_basis := hand_world.basis.orthonormalized()
 	if not sword_grip_calibrated and absf(hand_basis.determinant()) > 0.1:
 		# Universal characters use different bind-pose hand axes across imported
 		# revisions. Record the correction in hand-local space once, then let the
@@ -1452,6 +1611,10 @@ func _update_sword_equipment_pose(windup: float, strike: float, recovery: float,
 	# chest. The attack states still own the full swing arc below.
 	var idle_direction := (Vector3.DOWN * 0.78 + right * 0.54).normalized()
 	var blade_direction := idle_direction
+	if not attacking:
+		var guard_weight := 1.0 if parry_window > 0.0 else clampf(block_pose_weight, 0.0, 1.0)
+		var guard_direction := (Vector3.UP * 0.90 + forward * 0.42 - right * 0.18).normalized()
+		blade_direction = idle_direction.slerp(guard_direction, guard_weight)
 	if attacking:
 		var windup_direction: Vector3
 		var strike_direction: Vector3
@@ -1475,8 +1638,72 @@ func _update_sword_equipment_pose(windup: float, strike: float, recovery: float,
 	var direction_correction := Quaternion(current_blade_direction, blade_direction)
 	var blade_basis := (Basis(direction_correction) * hand_weapon_basis).orthonormalized()
 	var hand_offset := hand_basis * Vector3(0.018, 0.012, 0.0)
-	var hand_position := sword_attachment.global_position + hand_offset
-	sword_equipment_pivot.global_transform = Transform3D(blade_basis, hand_position)
+	var hand_position := hand_world.origin + hand_offset
+	if grip_allowed:
+		# Anchor the hilt inside the curled native fingers on every axis. Ignoring
+		# the blade-axis component preserved nominal reach but left the sword
+		# visibly floating away from the hand during attack clips. Contact markers
+		# share this pivot, so rendered and physical reach remain identical.
+		var grip_center := _sword_grip_center_world(skeleton)
+		var provisional := Transform3D(blade_basis, hand_position)
+		var local_grip := provisional.affine_inverse() * grip_center
+		hand_position += blade_basis * local_grip
+	var desired_world := Transform3D(blade_basis, hand_position)
+	var equipment_space := sword_equipment_pivot.get_parent() as Node3D
+	if equipment_space != null and equipment_space.get_parent() == sword_attachment:
+		var expected_parent_world := hand_world * equipment_space.transform
+		sword_equipment_pivot.transform = expected_parent_world.affine_inverse() * desired_world
+	else:
+		sword_equipment_pivot.global_transform = desired_world
+
+func _sword_grip_center_world(skeleton: Skeleton3D) -> Vector3:
+	var center := Vector3.ZERO
+	var count := 0
+	for bone_name in ["index_02_r", "middle_02_r", "ring_02_r", "pinky_02_r"]:
+		var bone_index := skeleton.find_bone(bone_name)
+		if bone_index >= 0:
+			center += (skeleton.global_transform * skeleton.get_bone_global_pose(bone_index)).origin
+			count += 1
+	return center / float(count) if count > 0 else sword_attachment.global_position
+
+func _update_sword_hand_grip(skeleton: Skeleton3D, enabled: bool) -> void:
+	if skeleton == null:
+		return
+	if sword_grip_bones.is_empty():
+		for finger in ["index", "middle", "ring", "pinky"]:
+			for joint in [2, 3]:
+				var bone_name := "%s_0%s_r" % [finger, joint]
+				var bone_index := skeleton.find_bone(bone_name)
+				if bone_index >= 0:
+					sword_grip_bones[bone_index] = Quaternion(Vector3.RIGHT, 0.70)
+		for joint in [2, 3]:
+			var bone_name := "thumb_0%s_r" % joint
+			var bone_index := skeleton.find_bone(bone_name)
+			if bone_index >= 0:
+				sword_grip_bones[bone_index] = Quaternion(Vector3.FORWARD, -0.35)
+	if sword_grip_bones.is_empty():
+		return
+	var changed := false
+	for bone_index in sword_grip_bones:
+		var current := skeleton.get_bone_pose_rotation(bone_index)
+		var base := current
+		if sword_grip_pose_applied and sword_grip_applied_rotations.has(bone_index) and current.is_equal_approx(sword_grip_applied_rotations[bone_index]):
+			base = sword_grip_base_rotations.get(bone_index, current)
+		if enabled:
+			var applied: Quaternion = (base * (sword_grip_bones[bone_index] as Quaternion)).normalized()
+			sword_grip_base_rotations[bone_index] = base
+			sword_grip_applied_rotations[bone_index] = applied
+			skeleton.set_bone_pose_rotation(bone_index, applied)
+			changed = true
+		elif sword_grip_pose_applied and current.is_equal_approx(sword_grip_applied_rotations.get(bone_index, current)):
+			skeleton.set_bone_pose_rotation(bone_index, base)
+			changed = true
+	sword_grip_pose_applied = enabled
+	if not enabled:
+		sword_grip_base_rotations.clear()
+		sword_grip_applied_rotations.clear()
+	if changed:
+		skeleton.force_update_all_bone_transforms()
 
 func _make_sword_readable(sword: Node3D) -> void:
 	var blade_material := _metal_mat(Color(0.72, 0.78, 0.82))
@@ -1644,13 +1871,6 @@ func _add_weapon_visuals(local_pos: Vector3) -> void:
 func _weapon_ready_pose() -> Vector3:
 	return Vector3(18, 0, 8)
 
-func _add_motion_proxy_parts() -> void:
-	left_arm_proxy = _add_proxy_box("left_motion_arm", Vector3(-0.43, 1.16, -0.04), Vector3(0.12, 0.64, 0.13), Color(0.10, 0.11, 0.10))
-	right_arm_proxy = _add_proxy_box("right_weapon_arm", Vector3(0.43, 1.13, -0.04), Vector3(0.12, 0.58, 0.13), Color(0.11, 0.10, 0.085))
-	left_leg_proxy = _add_proxy_box("left_motion_leg", Vector3(-0.16, 0.52, -0.01), Vector3(0.14, 0.70, 0.14), Color(0.075, 0.070, 0.065))
-	right_leg_proxy = _add_proxy_box("right_motion_leg", Vector3(0.16, 0.52, -0.01), Vector3(0.14, 0.70, 0.14), Color(0.075, 0.070, 0.065))
-	cloak_motion_proxy = _add_proxy_box("cloak_motion_read", Vector3(0.0, 0.98, 0.26), Vector3(0.68, 0.98, 0.12), Color(0.055, 0.065, 0.055))
-
 func _add_slash_arc_visuals() -> void:
 	slash_arc_root = Node3D.new()
 	slash_arc_root.name = "visible_sword_slash_arc_root"
@@ -1672,21 +1892,10 @@ func _add_slash_panel(node_name: String, local_pos: Vector3, size: Vector3, colo
 	slash_arc_root.add_child(panel)
 	return panel
 
-func _add_proxy_box(node_name: String, local_pos: Vector3, size: Vector3, color: Color) -> MeshInstance3D:
-	var proxy = MeshInstance3D.new()
-	proxy.name = node_name
-	var mesh = BoxMesh.new()
-	mesh.size = size
-	proxy.mesh = mesh
-	proxy.position = local_pos
-	proxy.material_override = _mat(color)
-	visual_root.add_child(proxy)
-	return proxy
-
 func _animate_visuals(delta: float, move_dir: Vector3, moving: bool) -> void:
 	if visual_root == null:
 		return
-	var running = movement_state == "run" or (_action_pressed("run") and moving)
+	var running = movement_state in ["run", "run_back"] or (_action_pressed("run") and moving)
 	if animation_driver != null and animation_driver.is_valid():
 		animation_driver.set_locomotion(Vector2(velocity.x, velocity.z).length() / max(run_speed, 0.1), move_dir, is_on_floor())
 		animation_driver.advance_external(delta)
@@ -1702,9 +1911,9 @@ func _animate_visuals(delta: float, move_dir: Vector3, moving: bool) -> void:
 	var speed_factor = clamp(Vector2(velocity.x, velocity.z).length() / max(run_speed, 0.1), 0.0, 1.0)
 	movement_blend = lerp(movement_blend, speed_factor, 1.0 - exp(-10.0 * delta))
 	strafe_blend = lerp(strafe_blend, 1.0 if movement_state == "strafe" else 0.0, 1.0 - exp(-9.0 * delta))
-	backward_blend = lerp(backward_blend, 1.0 if movement_state == "backward" else 0.0, 1.0 - exp(-9.0 * delta))
+	backward_blend = lerp(backward_blend, 1.0 if movement_state in ["backward", "run_back"] else 0.0, 1.0 - exp(-9.0 * delta))
 	grounded_weight = lerp(grounded_weight, movement_blend, 1.0 - exp(-8.0 * delta))
-	block_pose_weight = lerp(block_pose_weight, 1.0 if is_blocking() else 0.0, 14.0 * delta)
+	block_pose_weight = lerp(block_pose_weight, 1.0 if is_blocking() else 0.0, 1.0 - exp(-14.0 * delta))
 	var dodge_weight = clamp(dodge_time / 0.30, 0.0, 1.0)
 	var hurt_weight = clamp(hurt_react_time / 0.20, 0.0, 1.0)
 	var combat_swing_weight = 0.0
@@ -1766,7 +1975,12 @@ func _animate_visuals(delta: float, move_dir: Vector3, moving: bool) -> void:
 		visual_root.rotation_degrees.y = lerp(visual_root.rotation_degrees.y, 0.0, 12.0 * delta)
 		if slash_arc_root != null:
 			slash_arc_root.visible = false
-	_animate_motion_proxies(delta, moving, movement_blend, dodge_weight, hurt_weight, block_pose_weight, combat_windup_weight, combat_swing_weight)
+	_update_oathfire_arm_pose()
+	# Arm IK changes the hand pose after the regular beam-state tick. Refresh the
+	# charge from the live bones now so the sphere, eventual beam origin, and
+	# rendered hands cannot diverge by one animation frame.
+	if beam_cast_state in [BEAM_STATE_CHARGING, BEAM_STATE_RELEASING]:
+		_update_beam_charge_visual()
 	if body_visual != null:
 		var mat = body_visual.material_override as StandardMaterial3D
 		if mat != null:
@@ -1776,7 +1990,7 @@ func _on_animation_locomotion_step(_side: StringName) -> void:
 	# Animation contact is authoritative for rigged bodies. Gate it against
 	# actual movement so a blocked actor cannot produce a stream of footsteps
 	# while its clip is still blending out.
-	if movement_state not in ["walk", "backward", "strafe", "run"]:
+	if movement_state not in ["walk", "backward", "strafe", "run", "run_back"]:
 		return
 	if not is_on_floor() or Vector2(velocity.x, velocity.z).length() < 0.18:
 		return
@@ -1793,34 +2007,6 @@ func _update_distance_footsteps(delta: float, running: bool) -> void:
 	while footstep_distance >= step_distance:
 		footstep_distance -= step_distance
 		footstep.emit()
-
-func _animate_motion_proxies(delta: float, moving: bool, speed_factor: float, dodge_weight: float, hurt_weight: float, block_weight: float, windup_weight: float, swing_weight: float) -> void:
-	var gait = sin(move_phase)
-	var stride = clamp(speed_factor * 1.25, 0.0, 1.0)
-	var idle_weight = 1.0 - stride
-	var idle_breath = sin(move_phase * 0.72)
-	var arm_amount = (68.0 if movement_state == "run" else 52.0) * stride
-	var leg_amount = (62.0 if movement_state == "run" else 48.0) * stride
-	var strafe_twist = strafe_blend * sign(velocity.x) * 18.0
-	var backward_sign = lerp(1.0, -0.72, backward_blend)
-	if left_arm_proxy != null:
-		left_arm_proxy.rotation_degrees.x = lerp(left_arm_proxy.rotation_degrees.x, -gait * arm_amount * backward_sign - 12.0 * block_weight + 10.0 * hurt_weight + idle_breath * 4.0 * idle_weight, 12.0 * delta)
-		left_arm_proxy.rotation_degrees.z = lerp(left_arm_proxy.rotation_degrees.z, -10.0 - 12.0 * block_weight - 14.0 * swing_weight, 12.0 * delta)
-	if right_arm_proxy != null:
-		right_arm_proxy.rotation_degrees.x = lerp(right_arm_proxy.rotation_degrees.x, gait * arm_amount * 0.60 * backward_sign - 34.0 * windup_weight - 54.0 * swing_weight - 20.0 * block_weight, 13.0 * delta)
-		right_arm_proxy.rotation_degrees.z = lerp(right_arm_proxy.rotation_degrees.z, 12.0 + 38.0 * swing_weight + 12.0 * block_weight, 13.0 * delta)
-	if left_leg_proxy != null:
-		left_leg_proxy.rotation_degrees.x = lerp(left_leg_proxy.rotation_degrees.x, gait * leg_amount * backward_sign - 24.0 * dodge_weight - 16.0 * jump_pose_weight, 13.0 * delta)
-		left_leg_proxy.rotation_degrees.z = lerp(left_leg_proxy.rotation_degrees.z, strafe_twist, 11.0 * delta)
-		left_leg_proxy.position.y = lerp(left_leg_proxy.position.y, 0.52 + left_foot_ground_offset + max(0.0, -gait) * 0.10 * stride + 0.08 * jump_pose_weight, 14.0 * delta)
-	if right_leg_proxy != null:
-		right_leg_proxy.rotation_degrees.x = lerp(right_leg_proxy.rotation_degrees.x, -gait * leg_amount * backward_sign - 24.0 * dodge_weight + 16.0 * jump_pose_weight, 13.0 * delta)
-		right_leg_proxy.rotation_degrees.z = lerp(right_leg_proxy.rotation_degrees.z, strafe_twist, 11.0 * delta)
-		right_leg_proxy.position.y = lerp(right_leg_proxy.position.y, 0.52 + right_foot_ground_offset + max(0.0, gait) * 0.10 * stride + 0.08 * jump_pose_weight, 14.0 * delta)
-	if cloak_motion_proxy != null:
-		var cloak_sway = (9.0 * gait * stride) + 15.0 * dodge_weight + strafe_twist * 0.35
-		cloak_motion_proxy.rotation_degrees.x = lerp(cloak_motion_proxy.rotation_degrees.x, -5.0 - 10.0 * stride - 10.0 * jump_pose_weight + 15.0 * dodge_weight + 11.0 * swing_weight + 2.0 * idle_breath * idle_weight, 9.0 * delta)
-		cloak_motion_proxy.rotation_degrees.z = lerp(cloak_motion_proxy.rotation_degrees.z, cloak_sway, 9.0 * delta)
 
 func _animate_slash_arc(strike: float, strike_arc: float, recovery: float, heavy: bool) -> void:
 	if slash_arc_root == null:
@@ -1859,19 +2045,23 @@ func _build_blade_ribbon(old_base: Vector3, old_tip: Vector3, blade_base: Vector
 	var camera := get_viewport().get_camera_3d()
 	if camera != null:
 		width_axis = camera.global_transform.basis.x.normalized()
-	var width := width_axis * 0.028
+	var width := width_axis * 0.012
+	# A full base-to-tip sweep renders the previous blade as a second floating
+	# sword. Keep the effect on the outer third of the measured blade instead:
+	# it still follows both authored base/tip transforms, but reads as a tapered
+	# contact arc rather than duplicate weapon geometry.
+	var old_inner := old_base.lerp(old_tip, 0.68)
+	var current_inner := blade_base.lerp(blade_tip, 0.68)
 	ribbon.surface_begin(Mesh.PRIMITIVE_TRIANGLES)
-	# Build two thin screen-facing strips around the measured blade sweep. This
-	# keeps the slash readable when the real sword moves almost edge-on to the
-	# camera, while preserving the actual blade base/tip path.
+	# Build two thin screen-facing strips around the measured outer-blade sweep.
 	for side in [-1.0, 1.0]:
 		var offset: Vector3 = width * side
-		ribbon.surface_add_vertex(old_base + offset)
+		ribbon.surface_add_vertex(old_inner + offset)
 		ribbon.surface_add_vertex(old_tip + offset)
 		ribbon.surface_add_vertex(blade_tip + offset)
-		ribbon.surface_add_vertex(old_base + offset)
+		ribbon.surface_add_vertex(old_inner + offset)
 		ribbon.surface_add_vertex(blade_tip + offset)
-		ribbon.surface_add_vertex(blade_base + offset)
+		ribbon.surface_add_vertex(current_inner + offset)
 	ribbon.surface_end()
 	return ribbon
 

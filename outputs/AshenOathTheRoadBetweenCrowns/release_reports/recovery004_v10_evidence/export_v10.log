@@ -1,0 +1,685 @@
+PACK MANIFEST: PASS - synced 7 pack records from D:\Temp\AshenOath\functional_candidate_20261001\packs_v7\runtime_pack_candidates.json
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+[   0% ] [90m[1mfirst_scan_filesystem[22m | Started Project initialization (5 steps)[39m[0m
+[   0% ] [90m[1mfirst_scan_filesystem[22m | Scanning file structure...[39m[0m
+[  16% ] [90m[1mfirst_scan_filesystem[22m | Loading global class names...[39m[0m
+[  33% ] [90m[1mfirst_scan_filesystem[22m | Verifying GDExtensions...[39m[0m
+[  50% ] [90m[1mfirst_scan_filesystem[22m | Creating autoload scripts...[39m[0m
+[  66% ] [90m[1mfirst_scan_filesystem[22m | Initializing plugins...[39m[0m
+[  83% ] [90m[1mfirst_scan_filesystem[22m | Starting file scan...[39m[0m
+[92m[ DONE ][39m [1mfirst_scan_filesystem[22m
+[0m
+[   0% ] [90m[1mupdate_scripts_classes[22m | Started Registering global classes... (2 steps)[39m[0m
+[   0% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  33% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[92m[ DONE ][39m [1mupdate_scripts_classes[22m
+[0m
+[   0% ] [90m[1m_update_scan_actions[22m | Started Scanning actions... (338 steps)[39m[0m
+[   0% ] [90m[1m_update_scan_actions[22m | Bush_Common.gltf[39m[0m
+[   0% ] [90m[1m_update_scan_actions[22m | Bush_Common_Flowers.gltf[39m[0m
+[   0% ] [90m[1m_update_scan_actions[22m | Clover_1.gltf[39m[0m
+[   0% ] [90m[1m_update_scan_actions[22m | Clover_2.gltf[39m[0m
+[   1% ] [90m[1m_update_scan_actions[22m | CommonTree_1.gltf[39m[0m
+[   1% ] [90m[1m_update_scan_actions[22m | CommonTree_2.gltf[39m[0m
+[   1% ] [90m[1m_update_scan_actions[22m | CommonTree_3.gltf[39m[0m
+[   2% ] [90m[1m_update_scan_actions[22m | CommonTree_4.gltf[39m[0m
+[   2% ] [90m[1m_update_scan_actions[22m | CommonTree_5.gltf[39m[0m
+[   2% ] [90m[1m_update_scan_actions[22m | DeadTree_1.gltf[39m[0m
+[   2% ] [90m[1m_update_scan_actions[22m | DeadTree_2.gltf[39m[0m
+[   3% ] [90m[1m_update_scan_actions[22m | DeadTree_3.gltf[39m[0m
+[   3% ] [90m[1m_update_scan_actions[22m | DeadTree_4.gltf[39m[0m
+[   3% ] [90m[1m_update_scan_actions[22m | DeadTree_5.gltf[39m[0m
+[   4% ] [90m[1m_update_scan_actions[22m | Fern_1.gltf[39m[0m
+[   4% ] [90m[1m_update_scan_actions[22m | Flower_3_Group.gltf[39m[0m
+[   4% ] [90m[1m_update_scan_actions[22m | Flower_3_Single.gltf[39m[0m
+[   5% ] [90m[1m_update_scan_actions[22m | Flower_4_Group.gltf[39m[0m
+[   5% ] [90m[1m_update_scan_actions[22m | Flower_4_Single.gltf[39m[0m
+[   5% ] [90m[1m_update_scan_actions[22m | Grass_Common_Short.gltf[39m[0m
+[   5% ] [90m[1m_update_scan_actions[22m | Grass_Common_Tall.gltf[39m[0m
+[   6% ] [90m[1m_update_scan_actions[22m | Grass_Wispy_Short.gltf[39m[0m
+[   6% ] [90m[1m_update_scan_actions[22m | Grass_Wispy_Tall.gltf[39m[0m
+[   6% ] [90m[1m_update_scan_actions[22m | Mushroom_Common.gltf[39m[0m
+[   7% ] [90m[1m_update_scan_actions[22m | Mushroom_Laetiporus.gltf[39m[0m
+[   7% ] [90m[1m_update_scan_actions[22m | Pebble_Round_1.gltf[39m[0m
+[   7% ] [90m[1m_update_scan_actions[22m | Pebble_Round_2.gltf[39m[0m
+[   7% ] [90m[1m_update_scan_actions[22m | Pebble_Round_3.gltf[39m[0m
+[   8% ] [90m[1m_update_scan_actions[22m | Pebble_Round_4.gltf[39m[0m
+[   8% ] [90m[1m_update_scan_actions[22m | Pebble_Round_5.gltf[39m[0m
+[   8% ] [90m[1m_update_scan_actions[22m | Pebble_Square_1.gltf[39m[0m
+[   9% ] [90m[1m_update_scan_actions[22m | Pebble_Square_2.gltf[39m[0m
+[   9% ] [90m[1m_update_scan_actions[22m | Pebble_Square_3.gltf[39m[0m
+[   9% ] [90m[1m_update_scan_actions[22m | Pebble_Square_4.gltf[39m[0m
+[  10% ] [90m[1m_update_scan_actions[22m | Pebble_Square_5.gltf[39m[0m
+[  10% ] [90m[1m_update_scan_actions[22m | Pebble_Square_6.gltf[39m[0m
+[  10% ] [90m[1m_update_scan_actions[22m | Petal_1.gltf[39m[0m
+[  10% ] [90m[1m_update_scan_actions[22m | Petal_2.gltf[39m[0m
+[  11% ] [90m[1m_update_scan_actions[22m | Petal_3.gltf[39m[0m
+[  11% ] [90m[1m_update_scan_actions[22m | Petal_4.gltf[39m[0m
+[  11% ] [90m[1m_update_scan_actions[22m | Petal_5.gltf[39m[0m
+[  12% ] [90m[1m_update_scan_actions[22m | Pine_1.gltf[39m[0m
+[  12% ] [90m[1m_update_scan_actions[22m | Pine_2.gltf[39m[0m
+[  12% ] [90m[1m_update_scan_actions[22m | Pine_3.gltf[39m[0m
+[  12% ] [90m[1m_update_scan_actions[22m | Pine_4.gltf[39m[0m
+[  13% ] [90m[1m_update_scan_actions[22m | Pine_5.gltf[39m[0m
+[  13% ] [90m[1m_update_scan_actions[22m | Plant_1.gltf[39m[0m
+[  13% ] [90m[1m_update_scan_actions[22m | Plant_1_Big.gltf[39m[0m
+[  14% ] [90m[1m_update_scan_actions[22m | Plant_7.gltf[39m[0m
+[  14% ] [90m[1m_update_scan_actions[22m | Plant_7_Big.gltf[39m[0m
+[  14% ] [90m[1m_update_scan_actions[22m | RockPath_Round_Small_1.gltf[39m[0m
+[  15% ] [90m[1m_update_scan_actions[22m | RockPath_Round_Small_2.gltf[39m[0m
+[  15% ] [90m[1m_update_scan_actions[22m | RockPath_Round_Small_3.gltf[39m[0m
+[  15% ] [90m[1m_update_scan_actions[22m | RockPath_Round_Thin.gltf[39m[0m
+[  15% ] [90m[1m_update_scan_actions[22m | RockPath_Round_Wide.gltf[39m[0m
+[  16% ] [90m[1m_update_scan_actions[22m | RockPath_Square_Small_1.gltf[39m[0m
+[  16% ] [90m[1m_update_scan_actions[22m | RockPath_Square_Small_2.gltf[39m[0m
+[  16% ] [90m[1m_update_scan_actions[22m | RockPath_Square_Small_3.gltf[39m[0m
+[  17% ] [90m[1m_update_scan_actions[22m | RockPath_Square_Thin.gltf[39m[0m
+[  17% ] [90m[1m_update_scan_actions[22m | RockPath_Square_Wide.gltf[39m[0m
+[  17% ] [90m[1m_update_scan_actions[22m | Rock_Medium_1.gltf[39m[0m
+[  17% ] [90m[1m_update_scan_actions[22m | Rock_Medium_2.gltf[39m[0m
+[  18% ] [90m[1m_update_scan_actions[22m | Rock_Medium_3.gltf[39m[0m
+[  18% ] [90m[1m_update_scan_actions[22m | TwistedTree_1.gltf[39m[0m
+[  18% ] [90m[1m_update_scan_actions[22m | TwistedTree_2.gltf[39m[0m
+[  19% ] [90m[1m_update_scan_actions[22m | TwistedTree_3.gltf[39m[0m
+[  19% ] [90m[1m_update_scan_actions[22m | TwistedTree_4.gltf[39m[0m
+[  19% ] [90m[1m_update_scan_actions[22m | TwistedTree_5.gltf[39m[0m
+[  20% ] [90m[1m_update_scan_actions[22m | Anvil.gltf[39m[0m
+[  20% ] [90m[1m_update_scan_actions[22m | Anvil_Log.gltf[39m[0m
+[  20% ] [90m[1m_update_scan_actions[22m | Axe_Bronze.gltf[39m[0m
+[  20% ] [90m[1m_update_scan_actions[22m | Bag.gltf[39m[0m
+[  21% ] [90m[1m_update_scan_actions[22m | Banner_1.gltf[39m[0m
+[  21% ] [90m[1m_update_scan_actions[22m | Banner_1_Cloth.gltf[39m[0m
+[  21% ] [90m[1m_update_scan_actions[22m | Banner_2.gltf[39m[0m
+[  22% ] [90m[1m_update_scan_actions[22m | Banner_2_Cloth.gltf[39m[0m
+[  22% ] [90m[1m_update_scan_actions[22m | Barrel.gltf[39m[0m
+[  22% ] [90m[1m_update_scan_actions[22m | Barrel_Apples.gltf[39m[0m
+[  23% ] [90m[1m_update_scan_actions[22m | Barrel_Holder.gltf[39m[0m
+[  23% ] [90m[1m_update_scan_actions[22m | Bed_Twin1.gltf[39m[0m
+[  23% ] [90m[1m_update_scan_actions[22m | Bed_Twin2.gltf[39m[0m
+[  23% ] [90m[1m_update_scan_actions[22m | Bench.gltf[39m[0m
+[  24% ] [90m[1m_update_scan_actions[22m | Bookcase_2.gltf[39m[0m
+[  24% ] [90m[1m_update_scan_actions[22m | BookGroup_Medium_1.gltf[39m[0m
+[  24% ] [90m[1m_update_scan_actions[22m | BookGroup_Medium_2.gltf[39m[0m
+[  25% ] [90m[1m_update_scan_actions[22m | BookGroup_Medium_3.gltf[39m[0m
+[  25% ] [90m[1m_update_scan_actions[22m | BookGroup_Small_1.gltf[39m[0m
+[  25% ] [90m[1m_update_scan_actions[22m | BookGroup_Small_2.gltf[39m[0m
+[  25% ] [90m[1m_update_scan_actions[22m | BookGroup_Small_3.gltf[39m[0m
+[  26% ] [90m[1m_update_scan_actions[22m | BookStand.gltf[39m[0m
+[  26% ] [90m[1m_update_scan_actions[22m | Book_5.gltf[39m[0m
+[  26% ] [90m[1m_update_scan_actions[22m | Book_7.gltf[39m[0m
+[  27% ] [90m[1m_update_scan_actions[22m | Book_Simplified_Single.gltf[39m[0m
+[  27% ] [90m[1m_update_scan_actions[22m | Book_Stack_1.gltf[39m[0m
+[  27% ] [90m[1m_update_scan_actions[22m | Book_Stack_2.gltf[39m[0m
+[  28% ] [90m[1m_update_scan_actions[22m | Bottle_1.gltf[39m[0m
+[  28% ] [90m[1m_update_scan_actions[22m | Bucket_Metal.gltf[39m[0m
+[  28% ] [90m[1m_update_scan_actions[22m | Bucket_Wooden_1.gltf[39m[0m
+[  28% ] [90m[1m_update_scan_actions[22m | Cabinet.gltf[39m[0m
+[  29% ] [90m[1m_update_scan_actions[22m | Cage_Small.gltf[39m[0m
+[  29% ] [90m[1m_update_scan_actions[22m | CandleStick.gltf[39m[0m
+[  29% ] [90m[1m_update_scan_actions[22m | CandleStick_Stand.gltf[39m[0m
+[  30% ] [90m[1m_update_scan_actions[22m | CandleStick_Triple.gltf[39m[0m
+[  30% ] [90m[1m_update_scan_actions[22m | Candle_1.gltf[39m[0m
+[  30% ] [90m[1m_update_scan_actions[22m | Candle_2.gltf[39m[0m
+[  30% ] [90m[1m_update_scan_actions[22m | Carrot.gltf[39m[0m
+[  31% ] [90m[1m_update_scan_actions[22m | Cauldron.gltf[39m[0m
+[  31% ] [90m[1m_update_scan_actions[22m | Chain_Coil.gltf[39m[0m
+[  31% ] [90m[1m_update_scan_actions[22m | Chair_1.gltf[39m[0m
+[  32% ] [90m[1m_update_scan_actions[22m | Chalice.gltf[39m[0m
+[  32% ] [90m[1m_update_scan_actions[22m | Chandelier.gltf[39m[0m
+[  32% ] [90m[1m_update_scan_actions[22m | Chest_Wood.gltf[39m[0m
+[  33% ] [90m[1m_update_scan_actions[22m | Coin.gltf[39m[0m
+[  33% ] [90m[1m_update_scan_actions[22m | Coin_Pile.gltf[39m[0m
+[  33% ] [90m[1m_update_scan_actions[22m | Coin_Pile_2.gltf[39m[0m
+[  33% ] [90m[1m_update_scan_actions[22m | Crate_Metal.gltf[39m[0m
+[  34% ] [90m[1m_update_scan_actions[22m | Crate_Wooden.gltf[39m[0m
+[  34% ] [90m[1m_update_scan_actions[22m | Dummy.gltf[39m[0m
+[  34% ] [90m[1m_update_scan_actions[22m | FarmCrate_Apple.gltf[39m[0m
+[  35% ] [90m[1m_update_scan_actions[22m | FarmCrate_Carrot.gltf[39m[0m
+[  35% ] [90m[1m_update_scan_actions[22m | FarmCrate_Empty.gltf[39m[0m
+[  35% ] [90m[1m_update_scan_actions[22m | Key_Gold.gltf[39m[0m
+[  35% ] [90m[1m_update_scan_actions[22m | Key_Metal.gltf[39m[0m
+[  36% ] [90m[1m_update_scan_actions[22m | Lantern_Wall.gltf[39m[0m
+[  36% ] [90m[1m_update_scan_actions[22m | Mug.gltf[39m[0m
+[  36% ] [90m[1m_update_scan_actions[22m | Nightstand_Shelf.gltf[39m[0m
+[  37% ] [90m[1m_update_scan_actions[22m | Peg_Rack.gltf[39m[0m
+[  37% ] [90m[1m_update_scan_actions[22m | Pickaxe_Bronze.gltf[39m[0m
+[  37% ] [90m[1m_update_scan_actions[22m | Potion_1.gltf[39m[0m
+[  38% ] [90m[1m_update_scan_actions[22m | Potion_2.gltf[39m[0m
+[  38% ] [90m[1m_update_scan_actions[22m | Potion_4.gltf[39m[0m
+[  38% ] [90m[1m_update_scan_actions[22m | Pot_1.gltf[39m[0m
+[  38% ] [90m[1m_update_scan_actions[22m | Pot_1_Lid.gltf[39m[0m
+[  39% ] [90m[1m_update_scan_actions[22m | Pouch_Large.gltf[39m[0m
+[  39% ] [90m[1m_update_scan_actions[22m | Rope_1.gltf[39m[0m
+[  39% ] [90m[1m_update_scan_actions[22m | Rope_2.gltf[39m[0m
+[  40% ] [90m[1m_update_scan_actions[22m | Rope_3.gltf[39m[0m
+[  40% ] [90m[1m_update_scan_actions[22m | Scroll_1.gltf[39m[0m
+[  40% ] [90m[1m_update_scan_actions[22m | Scroll_2.gltf[39m[0m
+[  41% ] [90m[1m_update_scan_actions[22m | Shelf_Arch.gltf[39m[0m
+[  41% ] [90m[1m_update_scan_actions[22m | Shelf_Simple.gltf[39m[0m
+[  41% ] [90m[1m_update_scan_actions[22m | Shelf_Small_Bottles.gltf[39m[0m
+[  41% ] [90m[1m_update_scan_actions[22m | Shield_Wooden.gltf[39m[0m
+[  42% ] [90m[1m_update_scan_actions[22m | SmallBottle.gltf[39m[0m
+[  42% ] [90m[1m_update_scan_actions[22m | SmallBottles_1.gltf[39m[0m
+[  42% ] [90m[1m_update_scan_actions[22m | Stall_Cart_Empty.gltf[39m[0m
+[  43% ] [90m[1m_update_scan_actions[22m | Stall_Empty.gltf[39m[0m
+[  43% ] [90m[1m_update_scan_actions[22m | Stool.gltf[39m[0m
+[  43% ] [90m[1m_update_scan_actions[22m | Sword_Bronze.gltf[39m[0m
+[  43% ] [90m[1m_update_scan_actions[22m | Table_Fork.gltf[39m[0m
+[  44% ] [90m[1m_update_scan_actions[22m | Table_Knife.gltf[39m[0m
+[  44% ] [90m[1m_update_scan_actions[22m | Table_Large.gltf[39m[0m
+[  44% ] [90m[1m_update_scan_actions[22m | Table_Plate.gltf[39m[0m
+[  45% ] [90m[1m_update_scan_actions[22m | Table_Spoon.gltf[39m[0m
+[  45% ] [90m[1m_update_scan_actions[22m | Torch_Metal.gltf[39m[0m
+[  45% ] [90m[1m_update_scan_actions[22m | Vase_2.gltf[39m[0m
+[  46% ] [90m[1m_update_scan_actions[22m | Vase_4.gltf[39m[0m
+[  46% ] [90m[1m_update_scan_actions[22m | Vase_Rubble_Medium.gltf[39m[0m
+[  46% ] [90m[1m_update_scan_actions[22m | WeaponStand.gltf[39m[0m
+[  46% ] [90m[1m_update_scan_actions[22m | Whetstone.gltf[39m[0m
+[  47% ] [90m[1m_update_scan_actions[22m | Workbench.gltf[39m[0m
+[  47% ] [90m[1m_update_scan_actions[22m | Workbench_Drawers.gltf[39m[0m
+[  47% ] [90m[1m_update_scan_actions[22m | Balcony_Cross_Corner.gltf[39m[0m
+[  48% ] [90m[1m_update_scan_actions[22m | Balcony_Cross_Straight.gltf[39m[0m
+[  48% ] [90m[1m_update_scan_actions[22m | Balcony_Simple_Corner.gltf[39m[0m
+[  48% ] [90m[1m_update_scan_actions[22m | Balcony_Simple_Straight.gltf[39m[0m
+[  48% ] [90m[1m_update_scan_actions[22m | Corner_ExteriorWide_Brick.gltf[39m[0m
+[  49% ] [90m[1m_update_scan_actions[22m | Corner_ExteriorWide_Wood.gltf[39m[0m
+[  49% ] [90m[1m_update_scan_actions[22m | Corner_Exterior_Brick.gltf[39m[0m
+[  49% ] [90m[1m_update_scan_actions[22m | Corner_Exterior_TopDown.gltf[39m[0m
+[  50% ] [90m[1m_update_scan_actions[22m | Corner_Exterior_TopOnly.gltf[39m[0m
+[  50% ] [90m[1m_update_scan_actions[22m | Corner_Exterior_Wood.gltf[39m[0m
+[  50% ] [90m[1m_update_scan_actions[22m | Corner_Interior_Big.gltf[39m[0m
+[  51% ] [90m[1m_update_scan_actions[22m | Corner_Interior_Small.gltf[39m[0m
+[  51% ] [90m[1m_update_scan_actions[22m | DoorFrame_Flat_Brick.gltf[39m[0m
+[  51% ] [90m[1m_update_scan_actions[22m | DoorFrame_Flat_WoodDark.gltf[39m[0m
+[  51% ] [90m[1m_update_scan_actions[22m | DoorFrame_Round_Brick.gltf[39m[0m
+[  52% ] [90m[1m_update_scan_actions[22m | DoorFrame_Round_WoodDark.gltf[39m[0m
+[  52% ] [90m[1m_update_scan_actions[22m | Door_1_Flat.gltf[39m[0m
+[  52% ] [90m[1m_update_scan_actions[22m | Door_1_Round.gltf[39m[0m
+[  53% ] [90m[1m_update_scan_actions[22m | Door_2_Flat.gltf[39m[0m
+[  53% ] [90m[1m_update_scan_actions[22m | Door_2_Round.gltf[39m[0m
+[  53% ] [90m[1m_update_scan_actions[22m | Door_4_Flat.gltf[39m[0m
+[  53% ] [90m[1m_update_scan_actions[22m | Door_4_Round.gltf[39m[0m
+[  54% ] [90m[1m_update_scan_actions[22m | Door_8_Flat.gltf[39m[0m
+[  54% ] [90m[1m_update_scan_actions[22m | Door_8_Round.gltf[39m[0m
+[  54% ] [90m[1m_update_scan_actions[22m | Floor_Brick.gltf[39m[0m
+[  55% ] [90m[1m_update_scan_actions[22m | Floor_RedBrick.gltf[39m[0m
+[  55% ] [90m[1m_update_scan_actions[22m | Floor_UnevenBrick.gltf[39m[0m
+[  55% ] [90m[1m_update_scan_actions[22m | Floor_WoodDark.gltf[39m[0m
+[  56% ] [90m[1m_update_scan_actions[22m | Floor_WoodDark_Half1.gltf[39m[0m
+[  56% ] [90m[1m_update_scan_actions[22m | Floor_WoodDark_Half2.gltf[39m[0m
+[  56% ] [90m[1m_update_scan_actions[22m | Floor_WoodDark_Half3.gltf[39m[0m
+[  56% ] [90m[1m_update_scan_actions[22m | Floor_WoodDark_OverhangCorner2.gltf[39m[0m
+[  57% ] [90m[1m_update_scan_actions[22m | Floor_WoodDark_OverhangCorner.gltf[39m[0m
+[  57% ] [90m[1m_update_scan_actions[22m | Floor_WoodLight.gltf[39m[0m
+[  57% ] [90m[1m_update_scan_actions[22m | Floor_WoodLight_OverhangCorner2.gltf[39m[0m
+[  58% ] [90m[1m_update_scan_actions[22m | Floor_WoodLight_OverhangCorner.gltf[39m[0m
+[  58% ] [90m[1m_update_scan_actions[22m | HoleCover_90Angle.gltf[39m[0m
+[  58% ] [90m[1m_update_scan_actions[22m | HoleCover_90Half.gltf[39m[0m
+[  58% ] [90m[1m_update_scan_actions[22m | HoleCover_90Stairs.gltf[39m[0m
+[  59% ] [90m[1m_update_scan_actions[22m | HoleCover_Straight.gltf[39m[0m
+[  59% ] [90m[1m_update_scan_actions[22m | HoleCover_StraightHalf.gltf[39m[0m
+[  59% ] [90m[1m_update_scan_actions[22m | Overhang_Plaster_Corner.gltf[39m[0m
+[  60% ] [90m[1m_update_scan_actions[22m | Overhang_Plaster_Corner_Front.gltf[39m[0m
+[  60% ] [90m[1m_update_scan_actions[22m | Overhang_Plaster_Long.gltf[39m[0m
+[  60% ] [90m[1m_update_scan_actions[22m | Overhang_Plaster_Short.gltf[39m[0m
+[  61% ] [90m[1m_update_scan_actions[22m | Overhang_RoofIncline_Plaster.gltf[39m[0m
+[  61% ] [90m[1m_update_scan_actions[22m | Overhang_RoofIncline_UnevenBricks.gltf[39m[0m
+[  61% ] [90m[1m_update_scan_actions[22m | Overhang_Roof_Plaster.gltf[39m[0m
+[  61% ] [90m[1m_update_scan_actions[22m | Overhang_Roof_UnevenBricks.gltf[39m[0m
+[  62% ] [90m[1m_update_scan_actions[22m | Overhang_Side_Plaster_Long_L.gltf[39m[0m
+[  62% ] [90m[1m_update_scan_actions[22m | Overhang_Side_Plaster_Long_R.gltf[39m[0m
+[  62% ] [90m[1m_update_scan_actions[22m | Overhang_Side_Plaster_Short_L.gltf[39m[0m
+[  63% ] [90m[1m_update_scan_actions[22m | Overhang_Side_Plaster_Short_R.gltf[39m[0m
+[  63% ] [90m[1m_update_scan_actions[22m | Overhang_Side_UnevenBrick_Long_L.gltf[39m[0m
+[  63% ] [90m[1m_update_scan_actions[22m | Overhang_Side_UnevenBrick_Long_R.gltf[39m[0m
+[  64% ] [90m[1m_update_scan_actions[22m | Overhang_Side_UnevenBrick_Short_L.gltf[39m[0m
+[  64% ] [90m[1m_update_scan_actions[22m | Overhang_Side_UnevenBrick_Short_R.gltf[39m[0m
+[  64% ] [90m[1m_update_scan_actions[22m | Overhang_UnevenBrick_Corner.gltf[39m[0m
+[  64% ] [90m[1m_update_scan_actions[22m | Overhang_UnevenBrick_Corner_Front.gltf[39m[0m
+[  65% ] [90m[1m_update_scan_actions[22m | Overhang_UnevenBrick_Long.gltf[39m[0m
+[  65% ] [90m[1m_update_scan_actions[22m | Overhang_UnevenBrick_Short.gltf[39m[0m
+[  65% ] [90m[1m_update_scan_actions[22m | Prop_Brick1.gltf[39m[0m
+[  66% ] [90m[1m_update_scan_actions[22m | Prop_Brick2.gltf[39m[0m
+[  66% ] [90m[1m_update_scan_actions[22m | Prop_Brick3.gltf[39m[0m
+[  66% ] [90m[1m_update_scan_actions[22m | Prop_Brick4.gltf[39m[0m
+[  66% ] [90m[1m_update_scan_actions[22m | Prop_Chimney2.gltf[39m[0m
+[  67% ] [90m[1m_update_scan_actions[22m | Prop_Chimney.gltf[39m[0m
+[  67% ] [90m[1m_update_scan_actions[22m | Prop_Crate.gltf[39m[0m
+[  67% ] [90m[1m_update_scan_actions[22m | Prop_ExteriorBorder_Corner.gltf[39m[0m
+[  68% ] [90m[1m_update_scan_actions[22m | Prop_ExteriorBorder_Straight1.gltf[39m[0m
+[  68% ] [90m[1m_update_scan_actions[22m | Prop_ExteriorBorder_Straight2.gltf[39m[0m
+[  68% ] [90m[1m_update_scan_actions[22m | Prop_MetalFence_Ornament.gltf[39m[0m
+[  69% ] [90m[1m_update_scan_actions[22m | Prop_MetalFence_Simple.gltf[39m[0m
+[  69% ] [90m[1m_update_scan_actions[22m | Prop_Support.gltf[39m[0m
+[  69% ] [90m[1m_update_scan_actions[22m | Prop_Vine1.gltf[39m[0m
+[  69% ] [90m[1m_update_scan_actions[22m | Prop_Vine2.gltf[39m[0m
+[  70% ] [90m[1m_update_scan_actions[22m | Prop_Vine4.gltf[39m[0m
+[  70% ] [90m[1m_update_scan_actions[22m | Prop_Vine5.gltf[39m[0m
+[  70% ] [90m[1m_update_scan_actions[22m | Prop_Vine6.gltf[39m[0m
+[  71% ] [90m[1m_update_scan_actions[22m | Prop_Vine9.gltf[39m[0m
+[  71% ] [90m[1m_update_scan_actions[22m | Prop_Wagon.gltf[39m[0m
+[  71% ] [90m[1m_update_scan_actions[22m | Prop_WoodenFence_Extension1.gltf[39m[0m
+[  71% ] [90m[1m_update_scan_actions[22m | Prop_WoodenFence_Extension2.gltf[39m[0m
+[  72% ] [90m[1m_update_scan_actions[22m | Prop_WoodenFence_Single.gltf[39m[0m
+[  72% ] [90m[1m_update_scan_actions[22m | Roof_2x4_RoundTile.gltf[39m[0m
+[  72% ] [90m[1m_update_scan_actions[22m | Roof_Dormer_RoundTile.gltf[39m[0m
+[  73% ] [90m[1m_update_scan_actions[22m | Roof_FrontSupports.gltf[39m[0m
+[  73% ] [90m[1m_update_scan_actions[22m | Roof_Front_Brick2.gltf[39m[0m
+[  73% ] [90m[1m_update_scan_actions[22m | Roof_Front_Brick4.gltf[39m[0m
+[  74% ] [90m[1m_update_scan_actions[22m | Roof_Front_Brick4_Half_L.gltf[39m[0m
+[  74% ] [90m[1m_update_scan_actions[22m | Roof_Front_Brick4_Half_R.gltf[39m[0m
+[  74% ] [90m[1m_update_scan_actions[22m | Roof_Front_Brick6.gltf[39m[0m
+[  74% ] [90m[1m_update_scan_actions[22m | Roof_Front_Brick6_Half_L.gltf[39m[0m
+[  75% ] [90m[1m_update_scan_actions[22m | Roof_Front_Brick6_Half_R.gltf[39m[0m
+[  75% ] [90m[1m_update_scan_actions[22m | Roof_Front_Brick8.gltf[39m[0m
+[  75% ] [90m[1m_update_scan_actions[22m | Roof_Front_Brick8_Half_L.gltf[39m[0m
+[  76% ] [90m[1m_update_scan_actions[22m | Roof_Front_Brick8_Half_R.gltf[39m[0m
+[  76% ] [90m[1m_update_scan_actions[22m | Roof_Log.gltf[39m[0m
+[  76% ] [90m[1m_update_scan_actions[22m | Roof_Modular_RoundTiles.gltf[39m[0m
+[  76% ] [90m[1m_update_scan_actions[22m | Roof_RoundTiles_4x4.gltf[39m[0m
+[  77% ] [90m[1m_update_scan_actions[22m | Roof_RoundTiles_4x6.gltf[39m[0m
+[  77% ] [90m[1m_update_scan_actions[22m | Roof_RoundTiles_4x8.gltf[39m[0m
+[  77% ] [90m[1m_update_scan_actions[22m | Roof_RoundTiles_6x4.gltf[39m[0m
+[  78% ] [90m[1m_update_scan_actions[22m | Roof_RoundTiles_6x6.gltf[39m[0m
+[  78% ] [90m[1m_update_scan_actions[22m | Roof_RoundTiles_6x8.gltf[39m[0m
+[  78% ] [90m[1m_update_scan_actions[22m | Roof_RoundTiles_6x10.gltf[39m[0m
+[  79% ] [90m[1m_update_scan_actions[22m | Roof_RoundTiles_6x12.gltf[39m[0m
+[  79% ] [90m[1m_update_scan_actions[22m | Roof_RoundTiles_6x14.gltf[39m[0m
+[  79% ] [90m[1m_update_scan_actions[22m | Roof_RoundTiles_8x8.gltf[39m[0m
+[  79% ] [90m[1m_update_scan_actions[22m | Roof_RoundTiles_8x10.gltf[39m[0m
+[  80% ] [90m[1m_update_scan_actions[22m | Roof_RoundTiles_8x12.gltf[39m[0m
+[  80% ] [90m[1m_update_scan_actions[22m | Roof_RoundTiles_8x14.gltf[39m[0m
+[  80% ] [90m[1m_update_scan_actions[22m | Roof_RoundTile_2x1.gltf[39m[0m
+[  81% ] [90m[1m_update_scan_actions[22m | Roof_RoundTile_2x1_Long.gltf[39m[0m
+[  81% ] [90m[1m_update_scan_actions[22m | Roof_Support2.gltf[39m[0m
+[  81% ] [90m[1m_update_scan_actions[22m | Roof_Tower_RoundTiles.gltf[39m[0m
+[  82% ] [90m[1m_update_scan_actions[22m | Roof_Wooden_2x1.gltf[39m[0m
+[  82% ] [90m[1m_update_scan_actions[22m | Roof_Wooden_2x1_Center.gltf[39m[0m
+[  82% ] [90m[1m_update_scan_actions[22m | Roof_Wooden_2x1_Center_Mirror.gltf[39m[0m
+[  82% ] [90m[1m_update_scan_actions[22m | Roof_Wooden_2x1_Corner.gltf[39m[0m
+[  83% ] [90m[1m_update_scan_actions[22m | Roof_Wooden_2x1_L.gltf[39m[0m
+[  83% ] [90m[1m_update_scan_actions[22m | Roof_Wooden_2x1_Middle.gltf[39m[0m
+[  83% ] [90m[1m_update_scan_actions[22m | Roof_Wooden_2x1_R.gltf[39m[0m
+[  84% ] [90m[1m_update_scan_actions[22m | Stairs_Exterior_NoFirstStep.gltf[39m[0m
+[  84% ] [90m[1m_update_scan_actions[22m | Stairs_Exterior_Platform45.gltf[39m[0m
+[  84% ] [90m[1m_update_scan_actions[22m | Stairs_Exterior_Platform45Clean.gltf[39m[0m
+[  84% ] [90m[1m_update_scan_actions[22m | Stairs_Exterior_Platform.gltf[39m[0m
+[  85% ] [90m[1m_update_scan_actions[22m | Stairs_Exterior_PlatformU.gltf[39m[0m
+[  85% ] [90m[1m_update_scan_actions[22m | Stairs_Exterior_SidePlatform.gltf[39m[0m
+[  85% ] [90m[1m_update_scan_actions[22m | Stairs_Exterior_Sides45.gltf[39m[0m
+[  86% ] [90m[1m_update_scan_actions[22m | Stairs_Exterior_Sides.gltf[39m[0m
+[  86% ] [90m[1m_update_scan_actions[22m | Stairs_Exterior_SidesU.gltf[39m[0m
+[  86% ] [90m[1m_update_scan_actions[22m | Stairs_Exterior_SingleSide.gltf[39m[0m
+[  87% ] [90m[1m_update_scan_actions[22m | Stairs_Exterior_SingleSideThick.gltf[39m[0m
+[  87% ] [90m[1m_update_scan_actions[22m | Stairs_Exterior_Straight.gltf[39m[0m
+[  87% ] [90m[1m_update_scan_actions[22m | Stairs_Exterior_Straight_Center.gltf[39m[0m
+[  87% ] [90m[1m_update_scan_actions[22m | Stairs_Exterior_Straight_L.gltf[39m[0m
+[  88% ] [90m[1m_update_scan_actions[22m | Stairs_Exterior_Straight_R.gltf[39m[0m
+[  88% ] [90m[1m_update_scan_actions[22m | Stair_Interior_Rails.gltf[39m[0m
+[  88% ] [90m[1m_update_scan_actions[22m | Stair_Interior_Simple.gltf[39m[0m
+[  89% ] [90m[1m_update_scan_actions[22m | Stair_Interior_Solid.gltf[39m[0m
+[  89% ] [90m[1m_update_scan_actions[22m | Stair_Interior_SolidExtended.gltf[39m[0m
+[  89% ] [90m[1m_update_scan_actions[22m | Wall_Arch.gltf[39m[0m
+[  89% ] [90m[1m_update_scan_actions[22m | Wall_BottomCover.gltf[39m[0m
+[  90% ] [90m[1m_update_scan_actions[22m | Wall_Plaster_Door_Flat.gltf[39m[0m
+[  90% ] [90m[1m_update_scan_actions[22m | Wall_Plaster_Door_Round.gltf[39m[0m
+[  90% ] [90m[1m_update_scan_actions[22m | Wall_Plaster_Door_RoundInset.gltf[39m[0m
+[  91% ] [90m[1m_update_scan_actions[22m | Wall_Plaster_Straight.gltf[39m[0m
+[  91% ] [90m[1m_update_scan_actions[22m | Wall_Plaster_Straight_Base.gltf[39m[0m
+[  91% ] [90m[1m_update_scan_actions[22m | Wall_Plaster_Straight_L.gltf[39m[0m
+[  92% ] [90m[1m_update_scan_actions[22m | Wall_Plaster_Straight_R.gltf[39m[0m
+[  92% ] [90m[1m_update_scan_actions[22m | Wall_Plaster_Window_Thin_Round.gltf[39m[0m
+[  92% ] [90m[1m_update_scan_actions[22m | Wall_Plaster_Window_Wide_Flat2.gltf[39m[0m
+[  92% ] [90m[1m_update_scan_actions[22m | Wall_Plaster_Window_Wide_Flat.gltf[39m[0m
+[  93% ] [90m[1m_update_scan_actions[22m | Wall_Plaster_Window_Wide_Round.gltf[39m[0m
+[  93% ] [90m[1m_update_scan_actions[22m | Wall_Plaster_WoodGrid.gltf[39m[0m
+[  93% ] [90m[1m_update_scan_actions[22m | Wall_UnevenBrick_Door_Flat.gltf[39m[0m
+[  94% ] [90m[1m_update_scan_actions[22m | Wall_UnevenBrick_Door_Round.gltf[39m[0m
+[  94% ] [90m[1m_update_scan_actions[22m | Wall_UnevenBrick_Straight.gltf[39m[0m
+[  94% ] [90m[1m_update_scan_actions[22m | Wall_UnevenBrick_Window_Thin_Round.gltf[39m[0m
+[  94% ] [90m[1m_update_scan_actions[22m | Wall_UnevenBrick_Window_Wide_Flat.gltf[39m[0m
+[  95% ] [90m[1m_update_scan_actions[22m | Wall_UnevenBrick_Window_Wide_Round.gltf[39m[0m
+[  95% ] [90m[1m_update_scan_actions[22m | WindowShutters_Thin_Flat_Closed.gltf[39m[0m
+[  95% ] [90m[1m_update_scan_actions[22m | WindowShutters_Thin_Flat_Open.gltf[39m[0m
+[  96% ] [90m[1m_update_scan_actions[22m | WindowShutters_Thin_Round_Closed.gltf[39m[0m
+[  96% ] [90m[1m_update_scan_actions[22m | WindowShutters_Thin_Round_Open.gltf[39m[0m
+[  96% ] [90m[1m_update_scan_actions[22m | WindowShutters_Wide_Flat_Closed.gltf[39m[0m
+[  97% ] [90m[1m_update_scan_actions[22m | WindowShutters_Wide_Flat_Open.gltf[39m[0m
+[  97% ] [90m[1m_update_scan_actions[22m | WindowShutters_Wide_Round_Closed.gltf[39m[0m
+[  97% ] [90m[1m_update_scan_actions[22m | WindowShutters_Wide_Round_Open.gltf[39m[0m
+[  97% ] [90m[1m_update_scan_actions[22m | Window_Roof_Thin.gltf[39m[0m
+[  98% ] [90m[1m_update_scan_actions[22m | Window_Roof_Wide.gltf[39m[0m
+[  98% ] [90m[1m_update_scan_actions[22m | Window_Thin_Flat1.gltf[39m[0m
+[  98% ] [90m[1m_update_scan_actions[22m | Window_Thin_Round1.gltf[39m[0m
+[  99% ] [90m[1m_update_scan_actions[22m | Window_Wide_Flat1.gltf[39m[0m
+[  99% ] [90m[1m_update_scan_actions[22m | Window_Wide_Round1.gltf[39m[0m
+[92m[ DONE ][39m [1m_update_scan_actions[22m
+[0m
+[   0% ] [90m[1msavepack[22m | Started Packing (102 steps)[39m[0m
+[   1% ] [90m[1msavepack[22m | Storing File: res://.godot/exported/133200997/export-3ad5c15c4f3250da0cc7c1af1770d85f-main.scn[39m[0m
+[   1% ] [90m[1msavepack[22m | Storing File: res://scripts/game.gdc[39m[0m
+[   2% ] [90m[1msavepack[22m | Storing File: res://assets/bosses/bell_eater_bell.res[39m[0m
+[   2% ] [90m[1msavepack[22m | Storing File: res://scripts/world_vfx_controller.gdc[39m[0m
+[   3% ] [90m[1msavepack[22m | Storing File: res://runtime_asset_manifest.json[39m[0m
+[   3% ] [90m[1msavepack[22m | Storing File: res://runtime_pack_manifest.json[39m[0m
+[   4% ] [90m[1msavepack[22m | Storing File: res://assets/audio/prepared_bank.res[39m[0m
+[   4% ] [90m[1msavepack[22m | Storing File: res://scripts/prepared_audio_bank.gdc[39m[0m
+[   5% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/Sword.fbx-d5461dd92c4f9ccf42313f2257014964.scn[39m[0m
+[   5% ] [90m[1msavepack[22m | Storing File: res://assets_external/characters/Sword.fbx.import[39m[0m
+[   5% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/Cleric_Staff.fbx-773e3f7b3246a255ca47785b60727628.scn[39m[0m
+[   5% ] [90m[1msavepack[22m | Storing File: res://assets_external/characters/Cleric_Staff.fbx.import[39m[0m
+[   6% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/Cleric_Staff_Texture.png-7d1292ccbc6a8b871f7818753d696dca.ctex[39m[0m
+[   6% ] [90m[1msavepack[22m | Storing File: res://assets_external/characters/Cleric_Staff_Texture.png.import[39m[0m
+[   6% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/Kael_A_Set_Atlas.gltf-4069966b79a2f5553d24c5cb62e6b0e1.scn[39m[0m
+[   6% ] [90m[1msavepack[22m | Storing File: res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.gltf.import[39m[0m
+[   7% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/Kael_A_Set_Atlas.png-829518c3b4982ce9396c7f616b315516.ctex[39m[0m
+[   7% ] [90m[1msavepack[22m | Storing File: res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.png.import[39m[0m
+[   7% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/Anwen_A_Set_Atlas.gltf-a963925af0ee148f16f92c663ffa1d22.scn[39m[0m
+[   7% ] [90m[1msavepack[22m | Storing File: res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.gltf.import[39m[0m
+[   8% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/Anwen_A_Set_Atlas.png-d6c9ecc536d99f898cae019e1dd7cea8.ctex[39m[0m
+[   8% ] [90m[1msavepack[22m | Storing File: res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.png.import[39m[0m
+[   8% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/Ranger_Bow.fbx-b27b647e58f8aa7e4181716da4485a63.scn[39m[0m
+[   8% ] [90m[1msavepack[22m | Storing File: res://assets_external/characters/Ranger_Bow.fbx.import[39m[0m
+[   9% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/Ranger_Arrow.fbx-05e8db3692da65f7da66f84a38834f5c.scn[39m[0m
+[   9% ] [90m[1msavepack[22m | Storing File: res://assets_external/characters/Ranger_Arrow.fbx.import[39m[0m
+[   9% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/greyfen_menu_runtime.jpg-b6edf9578803ffd2e5a3b869c4acfbb7.ctex[39m[0m
+[   9% ] [90m[1msavepack[22m | Storing File: res://assets_external/ui/greyfen_menu_runtime.jpg.import[39m[0m
+[  10% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/village/GreyfenWell_Authored.res[39m[0m
+[  10% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/timber_albedo.jpg-14047637d2654fd07ab9f0f488888bfb.ctex[39m[0m
+[  10% ] [90m[1msavepack[22m | Storing File: res://assets_external/textures/runtime/timber_albedo.jpg.import[39m[0m
+[  11% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/wet_mud_albedo.jpg-0946d32e1ec3809ec2e30533d540e6b0.ctex[39m[0m
+[  11% ] [90m[1msavepack[22m | Storing File: res://assets_external/textures/runtime/wet_mud_albedo.jpg.import[39m[0m
+[  11% ] [90m[1msavepack[22m | Storing File: res://scripts/visual_director.gdc[39m[0m
+[  12% ] [90m[1msavepack[22m | Storing File: res://scripts/world_landscape_presentation.gdc[39m[0m
+[  12% ] [90m[1msavepack[22m | Storing File: res://scripts/zones/river_section.gdc[39m[0m
+[  13% ] [90m[1msavepack[22m | Storing File: res://scripts/zones/campaign_finale_section.gdc[39m[0m
+[  13% ] [90m[1msavepack[22m | Storing File: res://scripts/zones/campaign_wilderness_section.gdc[39m[0m
+[  14% ] [90m[1msavepack[22m | Storing File: res://scripts/zones/campaign_wilds_presentation.gdc[39m[0m
+[  14% ] [90m[1msavepack[22m | Storing File: res://scripts/zones/castle_vargan_section.gdc[39m[0m
+[  15% ] [90m[1msavepack[22m | Storing File: res://scripts/undercroft_memorial.gdc[39m[0m
+[  16% ] [90m[1msavepack[22m | Storing File: res://character_role_manifest.json[39m[0m
+[  16% ] [90m[1msavepack[22m | Storing File: res://curated_runtime_assets.json[39m[0m
+[  17% ] [90m[1msavepack[22m | Storing File: res://soul_character_foundation.json[39m[0m
+[  17% ] [90m[1msavepack[22m | Storing File: res://soul_character_role_manifest.json[39m[0m
+[  18% ] [90m[1msavepack[22m | Storing File: res://visual_upgrade_manifest.json[39m[0m
+[  18% ] [90m[1msavepack[22m | Storing File: res://voice_production_manifest.json[39m[0m
+[  19% ] [90m[1msavepack[22m | Storing File: res://world_sector_manifest.json[39m[0m
+[  19% ] [90m[1msavepack[22m | Storing File: res://zone_scene_manifest.json[39m[0m
+[  20% ] [90m[1msavepack[22m | Storing File: res://zone_streaming_topology.json[39m[0m
+[  20% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/icon.svg-7c8e6dfe2213e2029f33175ecfc9166b.ctex[39m[0m
+[  20% ] [90m[1msavepack[22m | Storing File: res://assets/icons/icon.svg.import[39m[0m
+[  21% ] [90m[1msavepack[22m | Storing File: res://assets/landscape/bridge_stone_pier.res[39m[0m
+[  21% ] [90m[1msavepack[22m | Storing File: res://assets/landscape/far_terrain.res[39m[0m
+[  22% ] [90m[1msavepack[22m | Storing File: res://assets/sky/cloud_0.res[39m[0m
+[  22% ] [90m[1msavepack[22m | Storing File: res://assets/sky/cloud_1.res[39m[0m
+[  23% ] [90m[1msavepack[22m | Storing File: res://assets/sky/cloud_2.res[39m[0m
+[  23% ] [90m[1msavepack[22m | Storing File: res://.godot/exported/133200997/export-6b7c16ac4eaaffe9a77e7b40e792fbb3-AnimationLibrary_Godot_Opening.res[39m[0m
+[  24% ] [90m[1msavepack[22m | Storing File: res://scripts/zones/wychwood_section.gdc[39m[0m
+[  24% ] [90m[1msavepack[22m | Storing File: res://scripts/zones/ruins_section.gdc[39m[0m
+[  25% ] [90m[1msavepack[22m | Storing File: res://scripts/zones/greyfen_section.gdc[39m[0m
+[  25% ] [90m[1msavepack[22m | Storing File: res://scripts/zones/cemetery_section.gdc[39m[0m
+[  26% ] [90m[1msavepack[22m | Storing File: res://scripts/zones/campaign_section.gdc[39m[0m
+[  26% ] [90m[1msavepack[22m | Storing File: res://scripts/zones/bandit_road_section.gdc[39m[0m
+[  27% ] [90m[1msavepack[22m | Storing File: res://scripts/zone_streaming_service.gdc[39m[0m
+[  27% ] [90m[1msavepack[22m | Storing File: res://scripts/zone_spatial_service.gdc[39m[0m
+[  28% ] [90m[1msavepack[22m | Storing File: res://scripts/zone_scene_catalog.gdc[39m[0m
+[  28% ] [90m[1msavepack[22m | Storing File: res://scripts/zone_runtime_coordinator.gdc[39m[0m
+[  29% ] [90m[1msavepack[22m | Storing File: res://scripts/zone_residency_service.gdc[39m[0m
+[  30% ] [90m[1msavepack[22m | Storing File: res://scripts/zone_composition_router.gdc[39m[0m
+[  30% ] [90m[1msavepack[22m | Storing File: res://scripts/zone_build_context.gdc[39m[0m
+[  31% ] [90m[1msavepack[22m | Storing File: res://scripts/zone_budget.gdc[39m[0m
+[  31% ] [90m[1msavepack[22m | Storing File: res://scripts/wychwood_terrain_presentation.gdc[39m[0m
+[  32% ] [90m[1msavepack[22m | Storing File: res://scripts/wychwood_evidence_presentation.gdc[39m[0m
+[  32% ] [90m[1msavepack[22m | Storing File: res://scripts/world_visual_upgrade.gdc[39m[0m
+[  33% ] [90m[1msavepack[22m | Storing File: res://scripts/world_sector_manifest.gdc[39m[0m
+[  33% ] [90m[1msavepack[22m | Storing File: res://scripts/world_prop_controller.gdc[39m[0m
+[  33% ] [90m[1msavepack[22m | Storing File: res://scripts/world_motion_controller.gdc[39m[0m
+[  33% ] [90m[1msavepack[22m | Storing File: res://scripts/world_material_library.gdc[39m[0m
+[  34% ] [90m[1msavepack[22m | Storing File: res://scripts/vendor_service.gdc[39m[0m
+[  34% ] [90m[1msavepack[22m | Storing File: res://scripts/surface_feedback_manager.gdc[39m[0m
+[  35% ] [90m[1msavepack[22m | Storing File: res://scripts/story_state.gdc[39m[0m
+[  35% ] [90m[1msavepack[22m | Storing File: res://scripts/story_actor_presence.gdc[39m[0m
+[  36% ] [90m[1msavepack[22m | Storing File: res://scripts/stamina_component.gdc[39m[0m
+[  36% ] [90m[1msavepack[22m | Storing File: res://scripts/spatial_surface_contract.gdc[39m[0m
+[  37% ] [90m[1msavepack[22m | Storing File: res://scripts/sky_backdrop.gdc[39m[0m
+[  37% ] [90m[1msavepack[22m | Storing File: res://scripts/settings_manager.gdc[39m[0m
+[  38% ] [90m[1msavepack[22m | Storing File: res://scripts/seamless_world_service.gdc[39m[0m
+[  38% ] [90m[1msavepack[22m | Storing File: res://scripts/save_manager.gdc[39m[0m
+[  39% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/forest/BanditFrontier_Authored.res[39m[0m
+[  39% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/forest/Campaign_bandit_road_Landscape.res[39m[0m
+[  40% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/forest/Campaign_burned_farmstead_Landscape.res[39m[0m
+[  40% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/forest/Campaign_deep_wood_Landscape.res[39m[0m
+[  41% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/forest/Campaign_marsh_crossing_Landscape.res[39m[0m
+[  41% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/forest/GreyfenFrontier_Authored.res[39m[0m
+[  42% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/forest/HartLandscape_Authored.res[39m[0m
+[  43% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/forest/HartWitnessStones_Authored.res[39m[0m
+[  43% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/forest/HartWoodland_Authored.res[39m[0m
+[  44% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/forest/Wychwood_black_feathers_Evidence.res[39m[0m
+[  44% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/forest/Wychwood_claw_marks_Evidence.res[39m[0m
+[  45% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/forest/Wychwood_corpse_Evidence.res[39m[0m
+[  45% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/forest/Wychwood_oren_token_Evidence.res[39m[0m
+[  46% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/forest/Wychwood_tracks_Evidence.res[39m[0m
+[  46% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/props/GreyfenForgeWork_Authored.res[39m[0m
+[  47% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/props/GreyfenSocial_barrel_board.res[39m[0m
+[  47% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/props/GreyfenSocial_common_table.res[39m[0m
+[  48% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/props/GreyfenSocial_mira_apothecary.res[39m[0m
+[  48% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/props/RecordArchive_Authored.res[39m[0m
+[  49% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/record_witness_relief.jpg-a29604012551bab51afaddc7f0b4c168.ctex[39m[0m
+[  49% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/props/record_witness_relief.jpg.import[39m[0m
+[  49% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/village/AshMill_Authored.res[39m[0m
+[  50% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/village/AssemblyCourt_Authored.res[39m[0m
+[  50% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/village/Cemetery_bell_Authored.res[39m[0m
+[  51% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/village/Cemetery_bell_frame_Authored.res[39m[0m
+[  51% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/village/Cemetery_boundary_Authored.res[39m[0m
+[  52% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/village/Cemetery_chapel_Authored.res[39m[0m
+[  52% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/village/Cemetery_disturbed_soil_Authored.res[39m[0m
+[  53% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/village/Cemetery_grave_child_Authored.res[39m[0m
+[  53% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/village/Cemetery_grave_earth_Authored.res[39m[0m
+[  54% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/village/Cemetery_grave_harl_Authored.res[39m[0m
+[  54% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/village/Cemetery_grave_rows_Authored.res[39m[0m
+[  55% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/village/Cemetery_grave_soldier_Authored.res[39m[0m
+[  55% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/village/Cemetery_memory_window_Authored.res[39m[0m
+[  56% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/village/FarmsteadEast_Authored.res[39m[0m
+[  56% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/village/FarmsteadWest_Authored.res[39m[0m
+[  57% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/village/GreyfenFrontages_Authored.res[39m[0m
+[  58% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/village/RoadCheckpoint_Authored.res[39m[0m
+[  58% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/village/UndercroftVault_Authored.res[39m[0m
+[  59% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/village/Vargan_cistern_Authored.res[39m[0m
+[  59% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/village/Vargan_curtain_Authored.res[39m[0m
+[  60% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/village/Vargan_door_Authored.res[39m[0m
+[  60% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/village/Vargan_forge_Authored.res[39m[0m
+[  61% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/village/Vargan_gatehouse_Authored.res[39m[0m
+[  61% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/village/Vargan_keep_Authored.res[39m[0m
+[  62% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/village/Vargan_record_entry_Authored.res[39m[0m
+[  62% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/village/Vargan_stable_Authored.res[39m[0m
+[  63% ] [90m[1msavepack[22m | Storing File: res://assets_external/environment/village/Vargan_tower_Authored.res[39m[0m
+[  63% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/button_brown.png-dd217619632f06b1384640a8e6f724dd.ctex[39m[0m
+[  63% ] [90m[1msavepack[22m | Storing File: res://assets_external/ui/button_brown.png.import[39m[0m
+[  64% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/panel_brown.png-e2466a17af1d19ceb00e8d105ad99fb5.ctex[39m[0m
+[  64% ] [90m[1msavepack[22m | Storing File: res://assets_external/ui/panel_brown.png.import[39m[0m
+[  64% ] [90m[1msavepack[22m | Storing File: res://data/bosses.json[39m[0m
+[  65% ] [90m[1msavepack[22m | Storing File: res://data/campaign_dialogue.json[39m[0m
+[  65% ] [90m[1msavepack[22m | Storing File: res://data/dialogue.json[39m[0m
+[  66% ] [90m[1msavepack[22m | Storing File: res://data/enemies.json[39m[0m
+[  66% ] [90m[1msavepack[22m | Storing File: res://data/items.json[39m[0m
+[  66% ] [90m[1msavepack[22m | Storing File: res://data/quests.json[39m[0m
+[  66% ] [90m[1msavepack[22m | Storing File: res://data/upgrades.json[39m[0m
+[  67% ] [90m[1msavepack[22m | Storing File: res://data/vendors.json[39m[0m
+[  67% ] [90m[1msavepack[22m | Storing File: res://.godot/exported/133200997/export-8e66cbce96c352871908db3d5e96cfa9-greyfen_gameplay_core.scn[39m[0m
+[  68% ] [90m[1msavepack[22m | Storing File: res://scripts/asset_database.gdc[39m[0m
+[  68% ] [90m[1msavepack[22m | Storing File: res://scripts/asset_spawn_helper.gdc[39m[0m
+[  69% ] [90m[1msavepack[22m | Storing File: res://scripts/audio_manager.gdc[39m[0m
+[  69% ] [90m[1msavepack[22m | Storing File: res://scripts/bandit_frontier.gdc[39m[0m
+[  70% ] [90m[1msavepack[22m | Storing File: res://scripts/board_game_opponent.gdc[39m[0m
+[  71% ] [90m[1msavepack[22m | Storing File: res://scripts/boss_encounter.gdc[39m[0m
+[  71% ] [90m[1msavepack[22m | Storing File: res://scripts/bridge_surface_contract.gdc[39m[0m
+[  72% ] [90m[1msavepack[22m | Storing File: res://scripts/camera_controller.gdc[39m[0m
+[  72% ] [90m[1msavepack[22m | Storing File: res://scripts/campaign_record_presentation.gdc[39m[0m
+[  73% ] [90m[1msavepack[22m | Storing File: res://scripts/castle_patrol.gdc[39m[0m
+[  73% ] [90m[1msavepack[22m | Storing File: res://scripts/cemetery_evidence_presentation.gdc[39m[0m
+[  74% ] [90m[1msavepack[22m | Storing File: res://scripts/character_animation_driver.gdc[39m[0m
+[  74% ] [90m[1msavepack[22m | Storing File: res://scripts/character_animation_fusion.gdc[39m[0m
+[  75% ] [90m[1msavepack[22m | Storing File: res://scripts/character_face_driver.gdc[39m[0m
+[  75% ] [90m[1msavepack[22m | Storing File: res://scripts/character_identity_profile.gdc[39m[0m
+[  76% ] [90m[1msavepack[22m | Storing File: res://scripts/character_presentation.gdc[39m[0m
+[  76% ] [90m[1msavepack[22m | Storing File: res://scripts/character_role_contract.gdc[39m[0m
+[  77% ] [90m[1msavepack[22m | Storing File: res://scripts/character_role_spec.gdc[39m[0m
+[  77% ] [90m[1msavepack[22m | Storing File: res://scripts/character_visual_contract.gdc[39m[0m
+[  78% ] [90m[1msavepack[22m | Storing File: res://scripts/combat_feedback.gdc[39m[0m
+[  78% ] [90m[1msavepack[22m | Storing File: res://scripts/combat_manager.gdc[39m[0m
+[  79% ] [90m[1msavepack[22m | Storing File: res://scripts/combat_vfx_coordinator.gdc[39m[0m
+[  79% ] [90m[1msavepack[22m | Storing File: res://scripts/crafting_manager.gdc[39m[0m
+[  80% ] [90m[1msavepack[22m | Storing File: res://scripts/day_night_controller.gdc[39m[0m
+[  80% ] [90m[1msavepack[22m | Storing File: res://scripts/dialogue_manager.gdc[39m[0m
+[  81% ] [90m[1msavepack[22m | Storing File: res://scripts/dialogue_runtime_coordinator.gdc[39m[0m
+[  81% ] [90m[1msavepack[22m | Storing File: res://scripts/enemy_ai.gdc[39m[0m
+[  82% ] [90m[1msavepack[22m | Storing File: res://scripts/epilogue_resolver.gdc[39m[0m
+[  82% ] [90m[1msavepack[22m | Storing File: res://scripts/equipment_loadout.gdc[39m[0m
+[  83% ] [90m[1msavepack[22m | Storing File: res://scripts/gamepad_profile.gdc[39m[0m
+[  83% ] [90m[1msavepack[22m | Storing File: res://scripts/greyfen_frontier.gdc[39m[0m
+[  84% ] [90m[1msavepack[22m | Storing File: res://scripts/greyfen_life_controller.gdc[39m[0m
+[  85% ] [90m[1msavepack[22m | Storing File: res://scripts/greyfen_social_presentation.gdc[39m[0m
+[  85% ] [90m[1msavepack[22m | Storing File: res://scripts/hart_woodland.gdc[39m[0m
+[  86% ] [90m[1msavepack[22m | Storing File: res://scripts/health_component.gdc[39m[0m
+[  86% ] [90m[1msavepack[22m | Storing File: res://scripts/hud.gdc[39m[0m
+[  87% ] [90m[1msavepack[22m | Storing File: res://scripts/input_router.gdc[39m[0m
+[  87% ] [90m[1msavepack[22m | Storing File: res://scripts/interactable.gdc[39m[0m
+[  88% ] [90m[1msavepack[22m | Storing File: res://scripts/interaction_focus_service.gdc[39m[0m
+[  88% ] [90m[1msavepack[22m | Storing File: res://scripts/interactive_world_prop.gdc[39m[0m
+[  89% ] [90m[1msavepack[22m | Storing File: res://scripts/inventory_manager.gdc[39m[0m
+[  89% ] [90m[1msavepack[22m | Storing File: res://scripts/minigame_manager.gdc[39m[0m
+[  90% ] [90m[1msavepack[22m | Storing File: res://scripts/mobile_touch_controls.gdc[39m[0m
+[  90% ] [90m[1msavepack[22m | Storing File: res://scripts/npc_ambient.gdc[39m[0m
+[  91% ] [90m[1msavepack[22m | Storing File: res://scripts/oath_gate_portal.gdc[39m[0m
+[  91% ] [90m[1msavepack[22m | Storing File: res://scripts/objective_view_model.gdc[39m[0m
+[  92% ] [90m[1msavepack[22m | Storing File: res://scripts/opening_soundscape.gdc[39m[0m
+[  92% ] [90m[1msavepack[22m | Storing File: res://scripts/performance_budget_monitor.gdc[39m[0m
+[  93% ] [90m[1msavepack[22m | Storing File: res://scripts/player_controller.gdc[39m[0m
+[  93% ] [90m[1msavepack[22m | Storing File: res://scripts/production_observation_bridge.gdc[39m[0m
+[  94% ] [90m[1msavepack[22m | Storing File: res://scripts/progression_manager.gdc[39m[0m
+[  94% ] [90m[1msavepack[22m | Storing File: res://scripts/runtime_service_registry.gdc[39m[0m
+[  95% ] [90m[1msavepack[22m | Storing File: res://scripts/quest_beat_director.gdc[39m[0m
+[  95% ] [90m[1msavepack[22m | Storing File: res://scripts/quest_hud_coordinator.gdc[39m[0m
+[  96% ] [90m[1msavepack[22m | Storing File: res://scripts/quest_manager.gdc[39m[0m
+[  96% ] [90m[1msavepack[22m | Storing File: res://scripts/quest_presentation_state.gdc[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://scripts/river_motion_controller.gdc[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://scripts/runtime_actor_factory.gdc[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/runtime_pack_manager.gdc[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scenes/main.tscn.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/game.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/world_vfx_controller.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/prepared_audio_bank.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/visual_director.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/world_landscape_presentation.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/zones/river_section.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/zones/campaign_finale_section.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/zones/campaign_wilderness_section.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/zones/campaign_wilds_presentation.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/zones/castle_vargan_section.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/undercroft_memorial.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://assets_external/animations/AnimationLibrary_Godot_Opening.tres.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/zones/wychwood_section.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/zones/ruins_section.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/zones/greyfen_section.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/zones/cemetery_section.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/zones/campaign_section.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/zones/bandit_road_section.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/zone_streaming_service.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/zone_spatial_service.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/zone_scene_catalog.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/zone_runtime_coordinator.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/zone_residency_service.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/zone_composition_router.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/zone_build_context.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/zone_budget.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/wychwood_terrain_presentation.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/wychwood_evidence_presentation.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/world_visual_upgrade.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/world_sector_manifest.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/world_prop_controller.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/world_motion_controller.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/world_material_library.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/vendor_service.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/surface_feedback_manager.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/story_state.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/story_actor_presence.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/stamina_component.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/spatial_surface_contract.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/sky_backdrop.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/settings_manager.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/seamless_world_service.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/save_manager.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scenes/runtime/greyfen_gameplay_core.tscn.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/asset_database.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/asset_spawn_helper.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/audio_manager.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/bandit_frontier.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/board_game_opponent.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/boss_encounter.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/bridge_surface_contract.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/camera_controller.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/campaign_record_presentation.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/castle_patrol.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/cemetery_evidence_presentation.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/character_animation_driver.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/character_animation_fusion.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/character_face_driver.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/character_identity_profile.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/character_presentation.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/character_role_contract.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/character_role_spec.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/character_visual_contract.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/combat_feedback.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/combat_manager.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/combat_vfx_coordinator.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/crafting_manager.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/day_night_controller.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/dialogue_manager.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/dialogue_runtime_coordinator.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/enemy_ai.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/epilogue_resolver.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/equipment_loadout.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/gamepad_profile.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/greyfen_frontier.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/greyfen_life_controller.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/greyfen_social_presentation.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/hart_woodland.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/health_component.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/hud.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/input_router.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/interactable.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/interaction_focus_service.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/interactive_world_prop.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/inventory_manager.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/minigame_manager.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/mobile_touch_controls.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/npc_ambient.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/oath_gate_portal.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/objective_view_model.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/opening_soundscape.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/performance_budget_monitor.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/player_controller.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/production_observation_bridge.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/progression_manager.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/runtime_service_registry.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/quest_beat_director.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/quest_hud_coordinator.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/quest_manager.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/quest_presentation_state.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/river_motion_controller.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/runtime_actor_factory.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://scripts/runtime_pack_manager.gd.remap[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://.godot/global_script_class_cache.cfg[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://assets/icons/icon.svg[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://.godot/uid_cache.bin[39m[0m
+[  98% ] [90m[1msavepack[22m | Storing File: res://project.binary[39m[0m
+[92m[ DONE ][39m [1msavepack[22m
+[0m
+WEB RELEASE MANIFEST: PASS (14 artifacts, 91.6 MB, PCK 5ddd1873ae33a55354f046201a3c379b88466eb40f0bd1a9a0389280f3857067)
+WEB EXPORT: PASS - 15 files, 91.6 MB, PCK 13.4 MB
+WEB EXPORT PCK SHA256: 5ddd1873ae33a55354f046201a3c379b88466eb40f0bd1a9a0389280f3857067
+
+Web build ready:
+D:\Temp\AshenOath\functional_candidate_20261001\export_v10
+Upload the contents of this folder to Vercel, Netlify, Cloudflare Pages, or itch.io.

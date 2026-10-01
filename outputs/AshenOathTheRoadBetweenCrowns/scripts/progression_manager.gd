@@ -99,14 +99,25 @@ func save_state() -> Dictionary:
 	}
 
 func load_state(state: Dictionary) -> void:
-	marks = clampi(int(state.get("marks", 0)), 0, 99)
+	var saved_marks: Variant = state.get("marks", 0)
+	marks = 0
+	if typeof(saved_marks) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(saved_marks)) and float(saved_marks) == floorf(float(saved_marks)):
+		marks = int(clampf(float(saved_marks), 0.0, 99.0))
 	unlocked.clear()
 	var loaded_unlocked: Dictionary = state.get("unlocked", {}) if typeof(state.get("unlocked", {})) == TYPE_DICTIONARY else {}
 	for id in ordered_upgrade_ids():
-		if not bool(loaded_unlocked.get(id, false)):
+		if not _saved_true(loaded_unlocked.get(id, false)):
 			continue
 		var required := str(definitions[id].get("requires", ""))
 		if required == "" or bool(unlocked.get(required, false)):
 			unlocked[id] = true
-	rewarded_quests = state.get("rewarded_quests", {}).duplicate(true) if typeof(state.get("rewarded_quests", {})) == TYPE_DICTIONARY else {}
+	rewarded_quests = {}
+	var rewards: Variant = state.get("rewarded_quests", {})
+	if typeof(rewards) == TYPE_DICTIONARY:
+		for id in rewards:
+			if typeof(id) == TYPE_STRING and _saved_true(rewards[id]):
+				rewarded_quests[id] = true
 	changed.emit()
+
+func _saved_true(value: Variant) -> bool:
+	return typeof(value) == TYPE_BOOL and value == true

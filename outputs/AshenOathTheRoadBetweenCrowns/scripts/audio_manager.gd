@@ -1,12 +1,31 @@
 extends Node
 
+const PREPARED_AUDIO = preload("res://assets/audio/prepared_bank.res")
+# Disabled only by the deterministic offline bank builder and equivalence test.
+var use_prepared_audio := true
+
 var sounds = {}
 var recorded_variants = {}
 var voices = {}
 var voice_texts = {}
 var music = {}
 var ambient_streams = {}
+const AUTHORED_AMBIENCE := {
+	"greyfen": "greyfen_air.ogg",
+	"wychwood": "wychwood_air.ogg",
+	"deep_wood": "wychwood_air.ogg",
+	"marsh_crossing": "marsh_water.ogg",
+	"cemetery": "castle_wind.ogg",
+	"chapel": "castle_wind.ogg",
+	"vargan_approach": "castle_wind.ogg",
+	"vargan_court": "castle_wind.ogg",
+	"record_hall": "record_hall_air.ogg",
+	"undercroft": "record_hall_air.ogg",
+	"assembly": "castle_wind.ogg",
+	"hart_glade": "wychwood_air.ogg",
+}
 var bus_name = "Master"
+var cue_bus_name := ""
 var ambient_player: AudioStreamPlayer
 var music_player: AudioStreamPlayer
 var voice_player: AudioStreamPlayer
@@ -18,6 +37,10 @@ var music_state = ""
 var _voice_queue: Array = []
 var master_volume_linear = 0.85
 var transient_players: Array[AudioStreamPlayer] = []
+var spatial_players: Array[AudioStreamPlayer3D] = []
+var active_cue_order: Array[Node] = []
+var ambient_players: Array[AudioStreamPlayer] = []
+var ambient_transition_tween: Tween
 var transient_pool_cursor := 0
 var music_transition_generation := 0
 var music_transition_tween: Tween
@@ -25,6 +48,7 @@ var ambient_accents_enabled := true
 var game_paused := false
 var event_cooldowns: Dictionary = {}
 const TRANSIENT_POOL_SIZE := 8
+const SPATIAL_POOL_SIZE := 4
 const MUSIC_GROUP := "ashen_oath_music_players"
 const WORLD_AUDIO_EVENTS := [
 	"step", "step_road", "step_forest", "step_mud", "step_stone", "step_wood",
@@ -35,7 +59,7 @@ const WORLD_AUDIO_EVENTS := [
 	"oathfire_sheathe", "oathfire_charge", "oathfire_release", "village_life",
 	"village_crow", "cloth_wind", "wychwood_drop", "wychwood_tension",
 	"river_current", "forge_hammer", "forest_breath", "stone_room",
-	"portal_ash", "portal_ready", "portal_travel", "portal_error"
+	"portal_ash", "portal_ready", "portal_travel", "portal_error", "record_page"
 ]
 var opening_soundscape_zone := ""
 var opening_soundscape_listener: Node3D
@@ -49,8 +73,6 @@ var runtime_file_assets_available := true
 var owned_timers: Array[Timer] = []
 
 func _process(delta: float) -> void:
-	for event_name in event_cooldowns.keys():
-		event_cooldowns[event_name] = maxf(float(event_cooldowns[event_name]) - delta, 0.0)
 	if ambient_player != null and ambient_player.stream != null and not ambient_player.playing:
 		if not game_paused:
 			ambient_player.play()
@@ -77,10 +99,18 @@ func _ready() -> void:
 	# cannot affect the first frame.
 	_build_menu_library()
 	_build_music_state("main_menu")
+	cue_bus_name = "AshenCues_%d" % get_instance_id()
+	var cue_bus_index := AudioServer.get_bus_count()
+	AudioServer.add_bus(cue_bus_index)
+	AudioServer.set_bus_name(cue_bus_index, cue_bus_name)
+	AudioServer.set_bus_send(cue_bus_index, bus_name)
+	var cue_limiter := AudioEffectHardLimiter.new()
+	cue_limiter.ceiling_db = -3.0
+	AudioServer.add_bus_effect(cue_bus_index, cue_limiter)
 	for index in range(TRANSIENT_POOL_SIZE):
 		var pooled := AudioStreamPlayer.new()
 		pooled.name = "TransientCue%02d" % index
-		pooled.bus = bus_name
+		pooled.bus = cue_bus_name
 		add_child(pooled)
 		transient_players.append(pooled)
 	set_master_volume(master_volume_linear)
@@ -120,7 +150,21 @@ func prewarm_campaign_music() -> void:
 	]:
 		_build_music_state(state_id)
 
+func prewarm_music_state(state_id: String) -> void:
+	# A region can prepare one predictable encounter cue while its arrival is
+	# still transition-locked. This keeps lazy stream synthesis out of the
+	# first combat frame without pulling the complete campaign music table into
+	# startup memory.
+	var normalized := state_id.strip_edges().to_lower()
+	if normalized.is_empty() or music.has(normalized):
+		return
+	_build_music_state(normalized)
+
 func _build_menu_library() -> void:
+	if use_prepared_audio:
+		for id in ["ui", "menu_hover", "menu_click"]:
+			sounds[id] = PREPARED_AUDIO.cues[id]
+		return
 	sounds["ui"] = _tone(660.0, 0.055, 0.20)
 	sounds["menu_hover"] = _tone_mix([392.0, 588.0], 0.060, 0.085, 32.0, 0.006)
 	sounds["menu_click"] = _tone_mix([196.0, 392.0, 587.0], 0.110, 0.105, 24.0, 0.010)
@@ -131,12 +175,24 @@ func _exit_tree() -> void:
 	_cancel_owned_timers()
 	if music_transition_tween != null and music_transition_tween.is_valid():
 		music_transition_tween.kill()
+	if ambient_transition_tween != null and ambient_transition_tween.is_valid():
+		ambient_transition_tween.kill()
 	for player in transient_players:
 		_release_player(player)
+	for player in spatial_players:
+		_release_player(player)
+	for player in ambient_players:
+		_release_player(player)
+	for player in get_children():
+		if player is AudioStreamPlayer and player.is_in_group(MUSIC_GROUP):
+			_release_player(player)
 	_release_player(ambient_player)
 	_release_player(music_player)
 	_release_player(voice_player)
 	transient_players.clear()
+	spatial_players.clear()
+	active_cue_order.clear()
+	ambient_players.clear()
 	ambient_player = null
 	music_player = null
 	voice_player = null
@@ -147,6 +203,9 @@ func _exit_tree() -> void:
 	voice_texts.clear()
 	music.clear()
 	ambient_streams.clear()
+	var cue_bus_index := AudioServer.get_bus_index(cue_bus_name)
+	if cue_bus_index > 0:
+		AudioServer.remove_bus(cue_bus_index)
 
 func _create_owned_timer(seconds: float, ignore_time_scale: bool = false) -> Timer:
 	var timer := Timer.new()
@@ -171,7 +230,7 @@ func _cancel_owned_timers() -> void:
 			timer.queue_free()
 	owned_timers.clear()
 
-func _release_player(player: AudioStreamPlayer) -> void:
+func _release_player(player: Node) -> void:
 	if player == null or not is_instance_valid(player):
 		return
 	player.stop()
@@ -213,13 +272,13 @@ func set_game_paused(paused: bool) -> void:
 		# Environmental and combat one-shots belong to the world timeline. Stop
 		# them at the pause edge so a menu/dialogue cannot finish with a stale hit,
 		# forge, or river cue after the player resumes.
-		for player in transient_players:
-			if player != null and is_instance_valid(player):
-				player.stop()
-	if ambient_player != null:
-		ambient_player.stream_paused = paused
-	if music_player != null:
-		music_player.stream_paused = paused
+		_stop_transient_cues()
+	for player in ambient_players:
+		if is_instance_valid(player):
+			player.stream_paused = paused
+	for player in get_tree().get_nodes_in_group(MUSIC_GROUP):
+		if is_instance_valid(player) and player.get_parent() == self:
+			player.stream_paused = paused
 
 func prewarm_opening_audio() -> void:
 	refresh_runtime_assets()
@@ -228,7 +287,7 @@ func prewarm_opening_audio() -> void:
 			_build_music_state(state_id)
 	for zone_id in ["greyfen", "wychwood"]:
 		if not ambient_streams.has(zone_id):
-			ambient_streams[zone_id] = _build_ambient_stream(zone_id)
+			ambient_streams[zone_id] = _ambient_stream(zone_id)
 
 func refresh_runtime_assets() -> void:
 	# The recorded audio pack can mount after AudioManager._ready(). Rebuild
@@ -242,6 +301,11 @@ func refresh_runtime_assets() -> void:
 	voice_library_ready = false
 	_build_recorded_library()
 	_build_voice_library()
+	ambient_streams.clear()
+	if ambient_player != null and current_ambient_zone != "":
+		var active_stream := _ambient_stream(current_ambient_zone)
+		if active_stream != ambient_player.stream:
+			_crossfade_ambient(current_ambient_zone, active_stream)
 
 func set_runtime_file_assets_available(available: bool) -> void:
 	if runtime_file_assets_available == available and available:
@@ -265,26 +329,88 @@ func _play_event_internal(event_name: String, pitch_variation: float, volume_sca
 	player.volume_db = _volume_for(event_name) + linear_to_db(clampf(volume_scale, 0.05, 1.0)) + randf_range(-1.2, 0.8)
 	player.pitch_scale = 1.0 + randf_range(-pitch_variation, pitch_variation)
 	player.play()
+	_track_cue(player)
 
 func play_event_limited(event_name: String, cooldown_seconds: float, pitch_variation: float = 0.06) -> void:
-	var remaining := float(event_cooldowns.get(event_name, 0.0))
-	if remaining > 0.0:
+	var now := Time.get_ticks_usec()
+	if now < int(event_cooldowns.get(event_name, 0)):
 		return
-	event_cooldowns[event_name] = maxf(cooldown_seconds, 0.0)
+	event_cooldowns[event_name] = now + int(maxf(cooldown_seconds, 0.0) * 1000000.0)
 	play_event(event_name, pitch_variation)
 
 func play_spatial_event(event_name: String, source_position: Vector3, listener_position: Vector3, max_distance: float = 16.0, cooldown_seconds: float = 5.0, pitch_variation: float = 0.05) -> void:
-	if max_distance <= 0.0:
+	if max_distance <= 0.0 or game_paused:
 		return
 	var distance := source_position.distance_to(listener_position)
 	if distance > max_distance:
 		return
-	var remaining := float(event_cooldowns.get(event_name, 0.0))
-	if remaining > 0.0:
+	var now := Time.get_ticks_usec()
+	if now < int(event_cooldowns.get(event_name, 0)):
 		return
-	event_cooldowns[event_name] = maxf(cooldown_seconds, 0.0)
+	var stream := _event_stream(event_name)
+	if stream == null:
+		return
+	event_cooldowns[event_name] = now + int(maxf(cooldown_seconds, 0.0) * 1000000.0)
 	var attenuation := clampf(1.0 - distance / max_distance, 0.14, 1.0)
-	_play_event_internal(event_name, pitch_variation, attenuation)
+	var player := _available_spatial_player()
+	player.global_position = source_position
+	player.stream = stream
+	# Keep Kael-relative range/gain while the real camera listener supplies pan.
+	player.volume_db = _volume_for(event_name) + linear_to_db(attenuation)
+	player.pitch_scale = 1.0 + randf_range(-pitch_variation, pitch_variation)
+	player.play()
+	_track_cue(player)
+
+func enemy_event_name(enemy_id: String, phase: String) -> String:
+	if enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute", "bell_eater"]:
+		return {"windup": "enemy_windup", "hit": "stagger", "death": "death", "attack": "ghoulkin_lunge"}.get(phase, "")
+	if enemy_id == "rootbound_colossus":
+		return {"windup": "wychwood_drop", "hit": "heavy_hit", "death": "wychwood_drop", "attack": "heavy_hit"}.get(phase, "")
+	# Until an approved voice exists, armor, cloth and contact carry the event;
+	# human, drake and Hart opponents must not inherit a Ghoulkin vocal.
+	return {"windup": "cloth_wind", "hit": "light_hit", "death": "village_life", "attack": "light_hit"}.get(phase, "")
+
+func play_enemy_event(enemy_id: String, phase: String, source_position: Vector3, listener_position: Vector3) -> void:
+	var event_name := enemy_event_name(enemy_id, phase)
+	if event_name.is_empty():
+		return
+	var cooldown := 0.28 if phase == "windup" else 0.065
+	play_spatial_event(event_name, source_position, listener_position, 18.0, cooldown, 0.02)
+
+func _available_spatial_player() -> AudioStreamPlayer3D:
+	for player in spatial_players:
+		if not player.playing:
+			return player
+	if spatial_players.size() < SPATIAL_POOL_SIZE:
+		var player := AudioStreamPlayer3D.new()
+		player.name = "LandmarkCue%02d" % spatial_players.size()
+		player.bus = cue_bus_name
+		player.attenuation_model = AudioStreamPlayer3D.ATTENUATION_DISABLED
+		player.attenuation_filter_cutoff_hz = 20500.0
+		add_child(player)
+		spatial_players.append(player)
+		return player
+	var oldest := spatial_players[0]
+	for active in active_cue_order:
+		if active is AudioStreamPlayer3D:
+			oldest = active
+			break
+	oldest.stop()
+	return oldest
+
+func _track_cue(player: Node) -> void:
+	active_cue_order.erase(player)
+	active_cue_order = active_cue_order.filter(func(cue: Node) -> bool: return is_instance_valid(cue) and cue.playing)
+	active_cue_order.append(player)
+	if active_cue_order.size() > TRANSIENT_POOL_SIZE:
+		active_cue_order.pop_front().stop()
+
+func _stop_transient_cues() -> void:
+	for player in transient_players:
+		player.stop()
+	for player in spatial_players:
+		player.stop()
+	active_cue_order.clear()
 
 func has_opening_soundscape(zone_id: String) -> bool:
 	return not _opening_soundscape_profile(zone_id).is_empty()
@@ -478,6 +604,7 @@ func set_music_state(state_id: String) -> void:
 	incoming.add_to_group(MUSIC_GROUP)
 	add_child(incoming)
 	incoming.play()
+	incoming.stream_paused = game_paused
 	music_player = incoming
 	var generation := music_transition_generation
 	music_transition_tween = create_tween()
@@ -489,22 +616,22 @@ func set_music_state(state_id: String) -> void:
 			if generation != music_transition_generation:
 				return
 			if is_instance_valid(previous) and previous != music_player:
-				previous.stop()
+				_release_player(previous)
 				previous.queue_free()
 		)
 
 func _cleanup_stale_music_players(keep: AudioStreamPlayer) -> void:
 	for node in get_tree().get_nodes_in_group(MUSIC_GROUP):
-		if node == keep:
+		if node == keep or node.get_parent() != self:
 			continue
 		if node is AudioStreamPlayer and is_instance_valid(node):
-			(node as AudioStreamPlayer).stop()
+			_release_player(node)
 			node.queue_free()
 
 func music_player_count() -> int:
 	var count := 0
 	for node in get_tree().get_nodes_in_group(MUSIC_GROUP):
-		if node is AudioStreamPlayer and is_instance_valid(node):
+		if node is AudioStreamPlayer and is_instance_valid(node) and node.get_parent() == self:
 			count += 1
 	return count
 
@@ -548,26 +675,51 @@ func play_footstep(zone_id: String, on_road: bool, surface: String = "") -> void
 	play_event_limited(event_name, 0.055, 0.11)
 
 func play_ambient(zone_id: String) -> void:
-	stop_zone_audio()
+	var stream := _ambient_stream(zone_id)
+	if current_ambient_zone == zone_id and ambient_player != null and ambient_player.stream == stream:
+		return
+	_stop_transient_cues()
 	stop_voice()
-	if ambient_player == null:
-		ambient_player = AudioStreamPlayer.new()
-		ambient_player.bus = bus_name
-		add_child(ambient_player)
-	var stream = _ambient_stream(zone_id)
+	_crossfade_ambient(zone_id, stream)
+
+func _crossfade_ambient(zone_id: String, stream: AudioStream) -> void:
+	if ambient_transition_tween != null and ambient_transition_tween.is_valid():
+		ambient_transition_tween.kill()
+	var previous := ambient_player
+	for old in ambient_players.duplicate():
+		if old != previous:
+			_release_player(old)
+			old.queue_free()
+			ambient_players.erase(old)
+	var incoming := AudioStreamPlayer.new()
+	incoming.name = "RegionAmbience_" + zone_id
+	incoming.bus = bus_name
+	incoming.stream = stream
+	incoming.volume_db = -52.0
+	add_child(incoming)
+	ambient_players.append(incoming)
+	ambient_player = incoming
 	current_ambient_zone = zone_id
 	ambient_accent_time = randf_range(3.5, 7.0)
-	ambient_player.stop()
-	ambient_player.stream = stream
-	ambient_player.volume_db = -30.0 if zone_id == "greyfen" else -26.5
-	ambient_player.play()
+	incoming.play()
+	incoming.stream_paused = game_paused
+	ambient_transition_tween = create_tween().set_parallel(true)
+	ambient_transition_tween.tween_property(incoming, "volume_db", -30.0 if zone_id == "greyfen" else -26.5, 0.85)
+	if is_instance_valid(previous):
+		ambient_transition_tween.tween_property(previous, "volume_db", -52.0, 0.72)
+		ambient_transition_tween.chain().tween_callback(func():
+			if is_instance_valid(previous) and previous != ambient_player:
+				_release_player(previous)
+				ambient_players.erase(previous)
+				previous.queue_free()
+		)
 
 func stop_zone_audio() -> void:
-	for player in transient_players:
-		if is_instance_valid(player):
-			player.stop()
-	if ambient_player != null:
-		ambient_player.stop()
+	_stop_transient_cues()
+	if ambient_transition_tween != null and ambient_transition_tween.is_valid():
+		ambient_transition_tween.kill()
+	for player in ambient_players:
+		_release_player(player)
 	event_cooldowns.clear()
 
 func _play_next_voice() -> void:
@@ -584,6 +736,9 @@ func _build_library() -> void:
 	if generated_library_ready:
 		return
 	generated_library_ready = true
+	if use_prepared_audio:
+		sounds.merge(PREPARED_AUDIO.cues, true)
+		return
 	sounds["ui"] = _tone(660.0, 0.055, 0.20)
 	sounds["menu_hover"] = _tone_mix([392.0, 588.0], 0.060, 0.085, 32.0, 0.006)
 	sounds["menu_click"] = _tone_mix([196.0, 392.0, 587.0], 0.110, 0.105, 24.0, 0.010)
@@ -645,6 +800,7 @@ func _build_recorded_library() -> void:
 	recorded_variants["step_road"] = _load_streams(root_path, ["footstep00.ogg","footstep01.ogg","footstep02.ogg","footstep03.ogg"])
 	recorded_variants["step_forest"] = _load_streams(root_path, ["footstep04.ogg","footstep05.ogg","footstep06.ogg"])
 	recorded_variants["step_mud"] = _load_streams(root_path, ["footstep07.ogg","footstep08.ogg","footstep09.ogg"])
+	recorded_variants["step_stone"] = _load_streams(root_path, ["footstep00.ogg","footstep01.ogg","footstep02.ogg","footstep03.ogg"])
 	recorded_variants["swing"] = _load_streams(root_path, ["knifeSlice.ogg","knifeSlice2.ogg"])
 	recorded_variants["heavy"] = _load_streams(root_path, ["drawKnife2.ogg","drawKnife3.ogg"])
 	recorded_variants["light_hit"] = _load_streams(root_path, ["metalClick.ogg","metalPot2.ogg"])
@@ -654,6 +810,33 @@ func _build_recorded_library() -> void:
 	recorded_variants["oathfire_sheathe"] = _load_streams(root_path, ["drawKnife1.ogg"])
 	recorded_variants["cloth_wind"] = _load_streams(root_path, ["cloth1.ogg","cloth2.ogg","cloth3.ogg"])
 	recorded_variants["village_life"] = _load_streams(root_path, ["creak1.ogg","creak2.ogg"])
+	var authored := "res://assets_external/audio/authored/"
+	var wood_step := _load_audio_stream(authored + "wood_step.ogg")
+	if wood_step != null:
+		recorded_variants["step_wood"] = [wood_step]
+	for mapping in [
+		["light_hit", "sword_clash_light.ogg"],
+		["heavy_hit", "sword_clash_heavy.ogg"],
+		["parry", "sword_clash_light.ogg"],
+		["oathfire_sheathe", "sword_sheathe.ogg"],
+		["forge_hammer", "forge_hammer.ogg"],
+		["river_current", "river_current.ogg"],
+		["record_page", "record_page.ogg"],
+		["village_crow", "village_crow.ogg"],
+		["ghoulkin_idle", "ghoul_breath.ogg"],
+		["enemy_windup", "ghoul_breath.ogg"],
+		["ghoulkin_lunge", "ghoul_attack.ogg"],
+		["stagger", "ghoul_hit.ogg"],
+		["death", "ghoul_death.ogg"],
+		["oathfire_charge", "oathfire_charge.ogg"],
+		["oathfire_release", "oathfire_release.ogg"],
+		["shrine_candle", "candle_light.ogg"],
+		["potion", "potion_uncork.ogg"],
+		["wychwood_drop", "forest_twigs.ogg"],
+	]:
+		var recorded := _load_audio_stream(authored + str(mapping[1]))
+		if recorded != null:
+			recorded_variants[str(mapping[0])] = [recorded]
 	var ui_hover := _load_audio_stream("res://assets_external/audio/ui/rollover2.wav")
 	var ui_click := _load_audio_stream("res://assets_external/audio/ui/click3.wav")
 	if ui_hover != null:
@@ -746,6 +929,10 @@ func _build_music_library() -> void:
 		_build_music_state(state_id)
 
 func _build_music_state(state_id: String) -> void:
+	if use_prepared_audio:
+		if PREPARED_AUDIO.music.has(state_id):
+			music[state_id] = PREPARED_AUDIO.music[state_id]
+		return
 	match state_id:
 		"main_menu": music[state_id] = _music_loop([55.0, 82.0, 110.0, 165.0], 6.4, 0.050, 0.016)
 		"greyfen_explore": music[state_id] = _music_loop([73.0, 110.0, 146.0], 6.0, 0.060, 0.012)
@@ -768,12 +955,19 @@ func _build_music_state(state_id: String) -> void:
 		"boss_halvern_boss": music[state_id] = _music_loop([61.0, 91.0, 122.0, 183.0], 4.4, 0.088, 0.012)
 		"boss_white_hart_avatar": music[state_id] = _music_loop([55.0, 82.0, 110.0, 165.0], 5.0, 0.082, 0.020)
 
-func _ambient_stream(zone_id: String) -> AudioStreamWAV:
+func _ambient_stream(zone_id: String) -> AudioStream:
 	if not ambient_streams.has(zone_id):
-		ambient_streams[zone_id] = _build_ambient_stream(zone_id)
-	return ambient_streams[zone_id] as AudioStreamWAV
+		var stream: AudioStream = null
+		if runtime_file_assets_available and AUTHORED_AMBIENCE.has(zone_id):
+			stream = _load_audio_stream("res://assets_external/audio/authored/" + str(AUTHORED_AMBIENCE[zone_id]))
+			if stream is AudioStreamOggVorbis:
+				(stream as AudioStreamOggVorbis).loop = true
+		ambient_streams[zone_id] = stream if stream != null else _build_ambient_stream(zone_id)
+	return ambient_streams[zone_id] as AudioStream
 
 func _build_ambient_stream(zone_id: String) -> AudioStreamWAV:
+	if use_prepared_audio:
+		return PREPARED_AUDIO.ambience.get(zone_id, PREPARED_AUDIO.ambience["default"])
 	if zone_id == "greyfen":
 		return _ambient_mix([86.0, 146.0, 213.0], 2.6, 0.026, 0.0)
 	if zone_id == "wychwood":
@@ -805,6 +999,8 @@ func _volume_for(event_name: String) -> float:
 		return -21.0
 	if event_name in ["river_current", "forge_hammer", "portal_ash"]:
 		return -19.5
+	if event_name == "record_page":
+		return -21.0
 	if event_name == "shrine_bell":
 		return -18.0
 	if event_name in ["portal_ready", "portal_travel", "portal_error"]:
@@ -895,7 +1091,7 @@ func _play_ambient_accent() -> void:
 	if current_ambient_zone == "greyfen":
 		var roll = randf()
 		if roll > 0.72:
-			play_event("village_crow", 0.08)
+			play_event_limited("village_crow", 14.0, 0.08)
 		elif roll > 0.38:
 			play_event("village_life", 0.05)
 		else:

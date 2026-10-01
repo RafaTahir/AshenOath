@@ -1,6 +1,7 @@
 extends Node3D
 
 const BridgeSurfaceContract = preload("res://scripts/bridge_surface_contract.gd")
+const SpatialSurfaceContract = preload("res://scripts/spatial_surface_contract.gd")
 const RIVER_HALF_SPAN := BridgeSurfaceContract.RIVER_HALF_SPAN
 const DEFAULT_BRIDGE_HALF_WIDTH := BridgeSurfaceContract.HALF_WIDTH
 
@@ -16,6 +17,7 @@ var gates: Dictionary = {}
 var player_body: CollisionObject3D
 var navigation_region: NavigationRegion3D
 var navigation_map: RID
+var probe_shapes: Dictionary = {}
 
 func _exit_tree() -> void:
 	if navigation_map.is_valid():
@@ -24,8 +26,9 @@ func _exit_tree() -> void:
 
 func configure(id: String, river_z: float, extents: Vector2) -> void:
 	zone_id = id
-	river_center = river_z
-	half_extents = extents
+	var authored_river := SpatialSurfaceContract.river_center(id)
+	river_center = authored_river if authored_river < SpatialSurfaceContract.NO_RIVER else river_z
+	half_extents = SpatialSurfaceContract.zone_half_extents(id) if SpatialSurfaceContract.ZONE_HALF_EXTENTS.has(id) else extents
 	player_body = null
 	reserved_corridors.clear()
 	exclusions.clear()
@@ -33,6 +36,7 @@ func configure(id: String, river_z: float, extents: Vector2) -> void:
 	recovery_anchors.clear()
 	bridges.clear()
 	gates.clear()
+	probe_shapes.clear()
 	_register_zone_defaults()
 
 func set_player_body(body: CollisionObject3D) -> void:
@@ -286,9 +290,7 @@ func is_position_occupied(position: Vector3, radius: float, height: float) -> bo
 func _is_position_occupied_with_ignore(position: Vector3, radius: float, height: float, ignore_body: CollisionObject3D) -> bool:
 	if not is_inside_tree() or get_world_3d() == null:
 		return false
-	var shape := CapsuleShape3D.new()
-	shape.radius = radius
-	shape.height = maxf(height, radius * 2.0)
+	var shape := _get_probe_shape(radius, height)
 	var query := PhysicsShapeQueryParameters3D.new()
 	query.shape = shape
 	# `position` is an actor/root ground point, while CapsuleShape3D's transform
@@ -310,12 +312,28 @@ func _is_position_occupied_with_ignore(position: Vector3, radius: float, height:
 		excluded_rids.append(player_body.get_rid())
 	if ignore_body != null and is_instance_valid(ignore_body) and not excluded_rids.has(ignore_body.get_rid()):
 		excluded_rids.append(ignore_body.get_rid())
-	for actor in get_tree().get_nodes_in_group("player"):
-		var grouped_player := actor as CollisionObject3D
+	# The owning game binds the player body before any live occupancy query. Only
+	# fall back to a group lookup for standalone tools or an early construction
+	# frame; normal gameplay must not allocate a group array per probe.
+	if player_body == null or not is_instance_valid(player_body):
+		var grouped_player := get_tree().get_first_node_in_group("player") as CollisionObject3D
 		if grouped_player != null and not excluded_rids.has(grouped_player.get_rid()):
 			excluded_rids.append(grouped_player.get_rid())
 	query.exclude = excluded_rids
 	return not get_world_3d().direct_space_state.intersect_shape(query, 1).is_empty()
+
+func _get_probe_shape(radius: float, height: float) -> CapsuleShape3D:
+	var normalized_radius := maxf(radius, 0.01)
+	var normalized_height := maxf(height, normalized_radius * 2.0)
+	var key := "%0.4f:%0.4f" % [normalized_radius, normalized_height]
+	var cached = probe_shapes.get(key)
+	if cached is CapsuleShape3D:
+		return cached as CapsuleShape3D
+	var shape := CapsuleShape3D.new()
+	shape.radius = normalized_radius
+	shape.height = normalized_height
+	probe_shapes[key] = shape
+	return shape
 
 func _nearest_spawn(position: Vector3, preferred_bank: int = 0) -> Vector3:
 	var valid := safe_spawns.filter(func(spawn): return preferred_bank == 0 or bank_for(spawn) == preferred_bank)

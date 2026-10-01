@@ -67,11 +67,16 @@ def _line_values(section: str, key: str) -> list[str]:
 
 
 def _is_exported(resource_path: str, preset_text: str) -> bool:
-    """Check exact/pattern inclusion within one of the Web pack presets."""
+    """Check exact/pattern inclusion within a production Web or pack preset."""
     export_token = resource_path.removeprefix("res://")
     for section in _preset_sections(preset_text):
-        includes = _line_values(section, "include_filter") + _line_values(section, "export_files")
-        excludes = _line_values(section, "exclude_filter")
+        if not re.search(r'(?m)^name="(?:Web Browser|Runtime Pack [^"]+)"$', section):
+            continue
+        includes = [
+            item.removeprefix("res://")
+            for item in _line_values(section, "include_filter") + _line_values(section, "export_files")
+        ]
+        excludes = [item.removeprefix("res://") for item in _line_values(section, "exclude_filter")]
         if any(item == export_token or fnmatch.fnmatch(export_token, item) for item in includes):
             if not any(fnmatch.fnmatch(export_token, item) for item in excludes):
                 return True

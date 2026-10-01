@@ -1,0 +1,29 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+OpenGL API OpenGL ES 3.0 (ANGLE 2.1.1 git hash: aaebda1c5a40) - Compatibility - Using Device: Google Inc. (Intel) - ANGLE (Intel, Intel(R) HD Graphics 620 (0x00005916) Direct3D11 vs_5_0 ps_5_0, D3D11-31.0.101.2130)
+
+LOADING: Greyfen prewarm begin
+AUDIO: music_state_main_menu
+LOADING: runtime ready total=1117ms environment=236ms services=652ms
+LOADING: Greyfen prewarm build_begin
+LOADING: Greyfen prewarm build_complete ms=1288 ok=true
+LOADING: opening_menu_render_ready
+LOADING: Greyfen prewarmed total=27402ms build=1288ms world=276ms player=286ms
+LOADING: zone_begin id=undercroft prewarm=false cached=false
+ZONE_COMPOSITION: id=undercroft reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=1656.6
+LOADING: zone_stage=visual_applied elapsed=1661.7
+LOADING: zone_stage=render_validation_deferred elapsed=1668.7
+LOADING: zone_stage=budget_ready elapsed=1673.7
+LOADING: handoff_phase=before_seamless
+LOADING: handoff_phase=after_seamless
+LOADING: handoff_phase=after_autosave
+LOADING: zone_stage=runtime_finalized zone=undercroft navigation=true ms=33
+LOADING: zone=undercroft playable_ms=12190.2
+REAL_INPUT halvern_reload=PASS player=(0.0, 0.87, 12.0) boss=(0.0, -0.089688, -5.5)
+AUDIO: music_state_undercroft
+REAL_INPUT halvern_duel_approach=PASS position=(0.0, 0.032751, -0.156659)
+REAL_INPUT halvern_guard_parry=PASS attempts=2 health=110.1
+REAL_INPUT parry_audio_sync=PASS {"attack":0,"death":0,"hit":0,"parry":1,"windup":1}
+REAL_INPUT halvern_parry_manual_save=PASS zone=undercroft
+VERIFIER_PHASE: SHUTDOWN
+OPENING REAL INPUT NATIVE: PASS

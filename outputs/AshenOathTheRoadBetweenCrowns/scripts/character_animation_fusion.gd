@@ -7,13 +7,14 @@ extends RefCounted
 
 const ANIMATION_LIBRARY_PATH := "res://assets_external/animations/AnimationLibrary_Godot_Opening.tres"
 
-static func attach_shared_library(root: Node3D) -> AnimationPlayer:
+static func attach_shared_library(root: Node3D, source_resource: Resource = null, prepared_libraries: Dictionary = {}) -> AnimationPlayer:
 	if root == null:
 		return null
 	# The opening library is a direct AnimationLibrary resource extracted from
 	# the authored GLB. Loading the resource avoids instantiating its unused
 	# mannequin scene while preserving the same retargeting contract.
-	var source_resource := ResourceLoader.load(ANIMATION_LIBRARY_PATH)
+	if source_resource == null:
+		source_resource = ResourceLoader.load(ANIMATION_LIBRARY_PATH)
 	var source_library := source_resource as AnimationLibrary
 	var source_scene: Node3D = null
 	if source_library == null:
@@ -47,8 +48,17 @@ static func attach_shared_library(root: Node3D) -> AnimationPlayer:
 				rig_root.add_child(target)
 			if target.has_animation_library(""):
 				target.remove_animation_library("")
-			var retargeted_library := source_library.duplicate(true) as AnimationLibrary
-			_retarget_library(retargeted_library, rig_root, target_skeleton)
+			# Clips are immutable after preparation; each AnimationPlayer still owns
+			# its independent clock, blend state and track bindings. No actor or
+			# skeleton reference is retained by this helper-owned resource cache.
+			var skeleton_path := _relative_path(rig_root, target_skeleton) if target_skeleton != null else ""
+			var source_variants: Dictionary = prepared_libraries.get(source_library, {})
+			var retargeted_library: AnimationLibrary = source_variants.get(skeleton_path)
+			if retargeted_library == null:
+				retargeted_library = source_library.duplicate(true) as AnimationLibrary
+				_retarget_library(retargeted_library, rig_root, target_skeleton)
+				source_variants[skeleton_path] = retargeted_library
+				prepared_libraries[source_library] = source_variants
 			target.add_animation_library("", retargeted_library)
 		if first_target == null:
 			first_target = target
@@ -64,13 +74,16 @@ static func _retarget_library(library: AnimationLibrary, target_root: Node3D, ta
 	if library == null or target_root == null or target_skeleton == null:
 		return
 	var skeleton_path := _relative_path(target_root, target_skeleton)
+	# Clips repeat the same bone names. Resolve each once per library without
+	# sharing mutable animations or retaining actor resources in a global cache.
+	var bone_names: Dictionary = {}
 	for animation_name in library.get_animation_list():
 		var animation := library.get_animation(animation_name)
 		if animation == null:
 			continue
-		_retarget_animation(animation, skeleton_path)
+		_retarget_animation(animation, skeleton_path, bone_names)
 
-static func _retarget_animation(animation: Animation, skeleton_path: String) -> void:
+static func _retarget_animation(animation: Animation, skeleton_path: String, bone_names: Dictionary = {}) -> void:
 	var remove_tracks: Array[int] = []
 	for track_index in range(animation.get_track_count()):
 		var track_path := str(animation.track_get_path(track_index))
@@ -83,7 +96,9 @@ static func _retarget_animation(animation: Animation, skeleton_path: String) -> 
 			# would reintroduce sliding and double movement.
 			remove_tracks.append(track_index)
 			continue
-		var target_bone := _target_bone_name(source_bone)
+		if not bone_names.has(source_bone):
+			bone_names[source_bone] = _target_bone_name(source_bone)
+		var target_bone: String = bone_names[source_bone]
 		if target_bone == "":
 			remove_tracks.append(track_index)
 			continue

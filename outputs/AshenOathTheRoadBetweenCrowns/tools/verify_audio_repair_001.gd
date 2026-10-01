@@ -35,9 +35,15 @@ func _initialize() -> void:
 	check(game_source.contains("set_game_paused(true)"), "Gameplay pause hook is missing")
 	var registry_source := FileAccess.get_file_as_string("res://scripts/runtime_service_registry.gd")
 	check(registry_source.contains("_on_dialogue_closed_audio"), "Dialogue close does not resume world audio")
+	audio.stop_zone_audio()
+	audio.stop_voice()
+	root.remove_child(audio)
+	audio.free()
+	for _frame in range(6):
+		await process_frame
+	RenderingServer.force_sync()
+	OS.delay_msec(180)
 	print("AUDIO-REPAIR-001 VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
-	audio.queue_free()
-	await process_frame
 	quit(0 if failures == 0 else 1)
 
 func check(condition: bool, message: String) -> void:

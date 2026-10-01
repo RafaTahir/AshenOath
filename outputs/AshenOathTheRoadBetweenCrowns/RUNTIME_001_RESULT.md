@@ -19,8 +19,8 @@ release tooling cannot mistake the current prototype visual for approval.
   - Emits one warning per blocked role, keeps missing required assets fatal,
     and avoids silent primitive fallback for characters and enemies.
 - `runtime_asset_manifest.json`
-  - Declares `fallback_mode: none` for six approved runtime roles and
-    `diagnostic_only` for the five blocked monster roles.
+  - Declares `fallback_mode: none` for approved runtime roles and
+    `diagnostic_only` only for the four remaining boss/art candidates.
   - Declares fatal missing/unregistered policy rules.
 - `tools/verify_runtime_required_components.py`
   - Validates the fallback-mode and fatal-policy rules.
@@ -36,7 +36,7 @@ release tooling cannot mistake the current prototype visual for approval.
 ## Verification
 
 - Editor/parser scan: PASS, exit code 0.
-- `RUNTIME-001` component policy: PASS (23 components, 11 roles, 5 explicit
+- `RUNTIME-001` component policy: PASS (23 components, 14 roles, 4 explicit
   visual fallbacks).
 - `ASSET-005`: PASS (6 approved runtime roles, 5 explicit fallbacks).
 - Native runtime asset policy: PASS.
@@ -45,9 +45,9 @@ release tooling cannot mistake the current prototype visual for approval.
 - Render-resource scan: PASS; no active renderer, null-material, RID, ObjectDB,
   or shutdown error matched in the check output.
 
-The native policy verifier intentionally prints one warning for the blocked
-Ghoulkin fallback. That warning is evidence of a release-blocking visual
-fallback, not approval of the monster asset.
+The regular Ghoulkin, Bog Wretch, Gravebound Knight, and White Hart body roles
+now resolve through approved runtime assets with exact license and hash data.
+The four remaining diagnostic roles stay explicit and release-visible.
 
 ## Screenshots
 
@@ -57,8 +57,8 @@ scope and does not close the blocked monster visual gate.
 
 ## Limitations and remaining blockers
 
-- Ghoulkin, Bog Wretch, Gravebound Knight, Ashwing, and White Hart remain
-  explicitly diagnostic-only fallbacks pending their visual acceptance work.
+- Bell-Eater, Rootbound, Ashwing, and Halvern remain explicit visual/boss
+  candidates pending final encounter acceptance.
 - The broader visual, campaign, browser, performance, and production release
   gates remain open.
 - No Web export, browser acceptance run, tracked `web/` update, push, or

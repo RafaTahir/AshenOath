@@ -12,10 +12,10 @@ func _initialize() -> void:
 	await process_frame
 	check(hud.get_window().content_scale_size == Vector2i(1920, 1080), "Menu canvas is not responsive 1080p")
 	check(_contains_label(hud.menu_layer, "ASHEN OATH"), "Menu title is missing")
-	check(_contains_label(hud.menu_layer, "SOUL REBUILD"), "Menu build identity is stale")
+	check(_contains_label(hud.menu_layer, hud.MENU_BUILD_LABEL), "Menu does not render its declared build identity")
 	for label in ["New Game", "Continue", "Controls", "Settings", "Credits", "Quit"]:
 		check(_button(hud.menu_layer, label) != null, "Main menu action is missing: %s" % label)
-	check("SOUL REBUILD" in hud.MENU_BUILD_LABEL and "NATIVE 720P" in hud.MENU_BUILD_LABEL, "Menu build identity is stale")
+	check("RECOVERY-004" in hud.MENU_BUILD_LABEL and "PRE-ALPHA" in hud.MENU_BUILD_LABEL and "NATIVE 720P" in hud.MENU_BUILD_LABEL and not "RELEASE-003" in hud.MENU_BUILD_LABEL, "Menu build identity is stale")
 	hud.show_exit_notice()
 	check(_contains_label(hud.menu_layer, "cannot close a browser tab"), "Browser-safe exit notice is missing")
 	hud.hide_menus()

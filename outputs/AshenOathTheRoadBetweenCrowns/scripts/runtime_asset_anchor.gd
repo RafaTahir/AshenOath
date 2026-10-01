@@ -5,13 +5,14 @@ extends Node
 ## in the root PCK so the first playable Greyfen frame cannot race a streamed
 ## character pack. Larger role variants remain streamed.
 
-# These three small opening façade meshes are dependencies of Greyfen's first
+# These small opening facade meshes are dependencies of Greyfen's first
 # frame. Keeping them anchored in the root PCK prevents a streamed-pack race
 # from creating a primitive placeholder while the opening pack warms in the
 # background.
 const OPENING_CRITICAL_ENVIRONMENT = [
 	preload("res://assets_external/environment/village/Wall_Plaster_Door_Flat.obj"),
 	preload("res://assets_external/environment/village/Wall_Plaster_Window_Wide_Flat.obj"),
+	preload("res://assets_external/environment/village/Wall_Plaster_Straight_Base.obj"),
 	preload("res://assets_external/environment/village/Prop_Chimney.obj"),
 ]
 
@@ -21,13 +22,8 @@ const OPENING_CRITICAL_ENVIRONMENT = [
 # the menu or publish the first playable frame. Ranger and later variants stay
 # in the streamed character pack.
 const OPENING_CRITICAL_CHARACTERS = [
-	preload("res://assets_external/characters_universal/Male_Peasant.gltf"),
-	preload("res://assets_external/characters_universal/Female_Peasant.gltf"),
-	preload("res://assets_external/characters_universal/Male_Head.gltf"),
-	preload("res://assets_external/characters_universal/Female_Head.gltf"),
-	preload("res://assets_external/characters_universal/Hair_Buns.gltf"),
-	preload("res://assets_external/characters_universal/Hair_Buzzed.gltf"),
-	preload("res://assets_external/characters_universal/Hair_SimpleParted.gltf"),
+	preload("res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.gltf"),
+	preload("res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.gltf"),
 ]
 
 # The Universal bodies share this neutral, non-root-motion library. It is

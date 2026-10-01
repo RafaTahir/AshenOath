@@ -8,7 +8,8 @@ if defined GODOT_BIN (
 if not exist "%GODOT%" set "GODOT=C:\Users\User\Downloads\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe"
 set "PYTHON=C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe"
 set "PROJECT_DIR=%~dp0."
-set "OUT_DIR=%~dp0..\AshenOath_Web"
+set "OUT_DIR=%ASHEN_OATH_WEB_DIRECTORY%"
+if not defined OUT_DIR set "OUT_DIR=%~dp0..\AshenOath_Web"
 
 if not exist "%GODOT%" (
   echo Godot 4.6.3 console executable was not found at:
@@ -24,7 +25,7 @@ if not exist "%PYTHON%" (
 set "PACK_DIR=%ASHEN_OATH_PACK_DIRECTORY%"
 if not defined PACK_DIR set "PACK_DIR=%PROJECT_DIR%\.release-gate\runtime-packs"
 set "MISSING_PACK="
-for %%P in (opening campaign characters monsters audio) do (
+for %%P in (opening campaign characters monsters audio quality_materials) do (
   if not exist "%PACK_DIR%\%%P.pck" set "MISSING_PACK=1"
 )
 rem Rebuild packs by default so an export cannot silently reuse stale source content.
@@ -45,7 +46,11 @@ if not exist "%PACK_DIR%\runtime_pack_candidates.json" (
 "%PYTHON%" "%PROJECT_DIR%\tools\sync_runtime_pack_manifest.py" "%PROJECT_DIR%\runtime_pack_manifest.json" "%PACK_DIR%\runtime_pack_candidates.json"
 if errorlevel 1 exit /b %errorlevel%
 
-if exist "%OUT_DIR%" rmdir /s /q "%OUT_DIR%"
+rem An existing candidate must never be removed by the export command.
+if exist "%OUT_DIR%\index.pck" (
+  echo Output already contains a candidate. Choose a fresh ASHEN_OATH_WEB_DIRECTORY.
+  exit /b 1
+)
 mkdir "%OUT_DIR%"
 
 rem Export the embedded PCK only after external pack hashes are synchronized.
@@ -53,10 +58,14 @@ rem Export the embedded PCK only after external pack hashes are synchronized.
 if errorlevel 1 exit /b %errorlevel%
 
 if not exist "%OUT_DIR%\packs" mkdir "%OUT_DIR%\packs"
-for %%P in (opening campaign characters monsters audio) do (
+for %%P in (opening campaign characters monsters audio quality_materials) do (
   copy /Y "%PACK_DIR%\%%P.pck" "%OUT_DIR%\packs\%%P.pck" >nul
   if errorlevel 1 exit /b %errorlevel%
 )
+copy /Y "%PROJECT_DIR%\runtime_pack_manifest.json" "%OUT_DIR%\runtime_pack_manifest.json" >nul
+if errorlevel 1 exit /b %errorlevel%
+"%PYTHON%" "%PROJECT_DIR%\tools\build_web_runtime_manifest.py" "%OUT_DIR%" --runtime-pack-manifest "%PROJECT_DIR%\runtime_pack_manifest.json" --compress-wasm
+if errorlevel 1 exit /b %errorlevel%
 
 "%PYTHON%" "%PROJECT_DIR%\tools\verify_web_export.py" "%OUT_DIR%"
 if errorlevel 1 exit /b %errorlevel%

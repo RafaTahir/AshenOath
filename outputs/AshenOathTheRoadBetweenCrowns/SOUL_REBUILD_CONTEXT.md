@@ -1,5 +1,11 @@
 # Ashen Oath Soul-Rebuild Context
 
+## Current Recovery Release Basis - 2026-10-02
+
+Recovery-004 certification is accepted at **36/37**, with exact V10 promotion/live verification remaining. This is a **functionality-certified candidate**, not original numerical-performance certification or a new artistic upgrade. Existing A-set identities, Ranger, characters, monsters, worlds, story, equipment and audio are preserved. No new asset direction is authorized by release certification.
+
+The latest explicit browser scope is lean functional smoke: Chrome opening/combat/bridge and durable save/settings/input proof; Edge/Firefox startup/input/save. Exhaustive bot campaign/endings were omitted, not passed. Retained native evidence remains scoped. Performance misses, unreviewed listening and unavailable physical-controller tests remain disclosed. Use the registry's `latest_closure` and current report rather than historical next-action instructions below.
+
 ## Current Worktree Truth - 2026-09-11
 
 The latest native checkpoint closes the previously observed route blockers.

@@ -234,10 +234,28 @@ def check_runtime_policy_rules(manifest: dict[str, Any], errors: list[str]) -> N
             errors.append(f"blocked role {role_id} must have fallback_mode diagnostic_only")
 
 
+def check_production_roles(manifest: dict[str, Any], errors: list[str]) -> None:
+    """Diagnostic fallback is useful locally, but never certifies a release."""
+    roles = manifest.get("roles", {})
+    if not isinstance(roles, dict) or not roles:
+        errors.append("production requires a nonempty runtime role manifest")
+        return
+    for role_id, role in roles.items():
+        if not isinstance(role, dict):
+            errors.append(f"production role {role_id} must be an object")
+            continue
+        if role.get("approved") is not True or role.get("export_eligible") is not True:
+            errors.append(f"production role {role_id} is not approved for export")
+        if role.get("fallback_mode") != "none":
+            errors.append(f"production role {role_id} must not use diagnostic fallback")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("project", nargs="?", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument("--json-report", type=Path)
+    parser.add_argument("--production", action="store_true",
+                        help="Reject every unapproved or diagnostic-only runtime role")
     args = parser.parse_args()
     project = args.project.resolve()
     errors: list[str] = []
@@ -258,6 +276,8 @@ def main() -> int:
     check_curated_roles(project, curated_manifest, errors)
     check_runtime_policy_contract(project, errors)
     check_runtime_policy_rules(runtime_manifest, errors)
+    if args.production:
+        check_production_roles(runtime_manifest, errors)
 
     export_text = (project / "export_presets.cfg").read_text(encoding="utf-8", errors="replace") if (project / "export_presets.cfg").is_file() else ""
     if "assets_external/downloads/*" not in export_text or "assets_external/raw/*" not in export_text:
@@ -280,6 +300,7 @@ def main() -> int:
 
     report = {
         "ticket": "RUNTIME-001",
+        "scope": "production" if args.production else "development_contract",
         "status": "pass" if not errors else "fail",
         "required_files": len(REQUIRED_FILES),
         "runtime_roles": len(roles) if isinstance(roles, dict) else 0,

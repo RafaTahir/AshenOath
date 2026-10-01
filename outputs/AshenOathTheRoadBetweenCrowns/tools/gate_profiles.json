@@ -1,17 +1,304 @@
 {
   "profiles": {
+    "cemetery_architecture": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/cemetery_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/cemetery_evidence_presentation.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Cemetery_*_Authored.res",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/build_cemetery_architecture.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_cemetery_architecture.gd"
+      ],
+      "gates": ["verify_cemetery_architecture", "verify_cemetery_stages", "verify_world_014"]
+    },
+    "greyfen_landscape": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/greyfen_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_greyfen_horizon.gd"
+      ],
+      "gates": ["verify_greyfen_horizon", "verify_world_012", "verify_river_bank_faces"]
+    },
+    "river_presentation": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/river_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_river_bank_faces.gd"
+      ],
+      "gates": ["verify_river_bank_faces"]
+    },
+    "greyfen_social": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/greyfen_social_presentation.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/build_greyfen_social.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_greyfen_social.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/GreyfenSocial_*.res"
+      ],
+      "gates": ["verify_greyfen_social", "verify_minigame_presentation"]
+    },
+    "weapon_input": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/input_router.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/player_controller.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/camera_controller.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/hud.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_access_weapon_context.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_access_binding_restore.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_access_context_real_input.gd"
+      ],
+      "gates": ["verify_access_weapon_context", "verify_access_binding_restore", "verify_access_context_real_input"]
+    },
+    "pause_input": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/player_controller.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_runtime_coordinator.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zone_residency_service.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_paused_player_real_input.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_zone_pause_ownership.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_opening_real_input_native.gd"
+      ],
+      "gates": ["verify_zone_pause_ownership", "verify_paused_player_real_input"]
+    },
+    "campaign_wilds": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/build_campaign_wilds.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_campaign_wilds_composition.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/campaign_wilds_presentation.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/campaign_wilderness_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/bandit_road_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/Campaign_*_Landscape.res",
+        "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Farmstead*Authored.res",
+        "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/RoadCheckpoint_Authored.res"
+      ],
+      "gates": ["verify_campaign_wilds_composition"]
+    },
+    "finale_composition": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/build_assembly_court.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/build_hart_landscape.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_finale_composition.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/campaign_finale_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/AssemblyCourt_Authored.res",
+        "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/Hart*Authored.res"
+      ],
+      "gates": ["verify_finale_composition"]
+    },
+    "undercroft_vault": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/build_undercroft_vault.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_undercroft_vault.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/campaign_finale_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/UndercroftVault_Authored.res"
+      ],
+      "gates": ["verify_undercroft_vault"]
+    },
+    "ash_mill": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/build_ash_mill.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_ash_mill.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/campaign_wilderness_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/AshMill_Authored.res"
+      ],
+      "gates": ["verify_ash_mill"]
+    },
+    "vargan_architecture": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/build_vargan_architecture.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_vargan_architecture.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/Vargan_*_Authored.res"
+      ],
+      "gates": ["verify_vargan_architecture"]
+    },
+    "record_archive": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/build_record_archive.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_record_archive.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/RecordArchive_Authored.res"
+      ],
+      "gates": ["verify_record_archive"]
+    },
+    "menu_status_runtime": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/hud.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_menu_status_stability.gd"
+      ],
+      "gates": ["verify_menu_status_stability"]
+    },
+    "written_interaction_runtime": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/interactable.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_written_interaction_prompt.gd"
+      ],
+      "gates": ["verify_written_interaction_prompt"]
+    },
+    "deferred_lighting_runtime": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/visual_director.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_deferred_night_lighting.gd"
+      ],
+      "gates": ["verify_deferred_night_lighting", "verify_opening_detail_policy"]
+    },
+    "opening_hydration_runtime": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_moving_opening_hydration.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_material_prewarm_retirement.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/world_material_library.gd"
+      ],
+      "gates": ["verify_moving_opening_hydration", "verify_material_prewarm_retirement"]
+    },
+    "predictive_prewarm": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/asset_spawn_helper.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_prewarm_001.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_opening_fast_click.gd"
+      ],
+      "gates": ["verify_prewarm_001", "verify_load_001", "verify_opening_fast_click"]
+    },
+    "animation_timer_runtime": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_animation_driver.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_animation_timer_rate.gd"
+      ],
+      "gates": ["verify_animation_timer_rate", "verify_motion_quality"]
+    },
+    "prepared_audio_runtime": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/audio_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/prepared_audio_bank.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/assets/audio/*",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/build_prepared_audio.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_prepared_audio.gd"
+      ],
+      "gates": ["verify_prepared_audio", "verify_audio_runtime"]
+    },
+    "material_override_runtime": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/asset_spawn_helper.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_cached_materials.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_material_override_render.gd"
+      ],
+      "gates": ["verify_cached_materials", "verify_material_override_render"]
+    },
+    "boundary_runtime": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/greyfen_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_boundary_stages.gd"
+      ],
+      "gates": ["verify_boundary_stages"]
+    },
+    "npc_visibility_runtime": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/npc_ambient.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_npc_distance_visibility.gd"
+      ],
+      "gates": ["verify_npc_distance_visibility"]
+    },
+    "board_presentation_runtime": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/board_game_opponent.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_board_invitation.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_minigame_presentation.gd"
+      ],
+      "gates": ["verify_board_invitation", "verify_minigame_presentation"]
+    },
+    "shared_resource_runtime": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/asset_spawn_helper.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_animation_fusion.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_cached_materials.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_role_resource_prewarm.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_shared_animation_playback.gd"
+      ],
+      "gates": ["verify_cached_materials", "verify_role_resource_prewarm", "verify_shared_animation_playback"]
+    },
+    "detail_batch_runtime": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_detail_batch_publication.gd"
+      ],
+      "gates": ["verify_detail_batch_publication", "verify_cemetery_stages"]
+    },
+    "quest_restore": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/progression_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_progression_restore.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/quest_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_quest_snapshot_isolation.gd"
+      ],
+      "gates": ["verify_quest_snapshot_isolation", "verify_progression_restore"]
+    },
+    "health_runtime": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/stamina_component.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/health_component.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_health_boundaries.gd"
+      ],
+      "gates": ["verify_health_boundaries", "verify_boss_resolution", "verify_hart_pending_reload", "verify_deferred_player_restore", "verify_world_snapshot_isolation"]
+    },
+    "hart_runtime": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/boss_encounter.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_hart_pending_reload.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_animation_driver.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/asset_spawn_helper.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_role_spec.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_presentation.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/enemy_ai.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/campaign_finale_section.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/assets_external/enemies/WhiteHart_Stag.glb",
+        "outputs/AshenOathTheRoadBetweenCrowns/*manifest.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_hart_stag.gd"
+      ],
+      "gates": ["verify_hart_stag", "verify_hart_pending_reload", "verify_boss_resolution"]
+    },
+    "inventory_runtime": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/inventory_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/vendor_service.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/save_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/items.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/vendors.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_inventory_restore.gd"
+      ],
+      "gates": ["verify_inventory_restore"]
+    },
+    "settings_runtime": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/settings_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_settings_roundtrip.gd"
+      ],
+      "gates": ["verify_settings_roundtrip"]
+    },
+    "pack_runtime": {
+      "patterns": [
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_pack_wait_ownership.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/scripts/runtime_pack_manager.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_pack_retry.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_pack_dependencies.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_pack_http.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_pack_http.py",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_opening_pack_readiness.gd"
+      ],
+      "gates": ["verify_pack_retry", "verify_pack_dependencies", "verify_pack_http", "verify_opening_pack_readiness", "verify_stream_003", "verify_pack_wait_ownership", "verify_deferred_player_restore"]
+    },
     "combat": {
       "patterns": [
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/player_controller.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/combat_*.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/enemy_ai.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/data/enemies.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_enemy_dormancy.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_oath_002.gd"
       ],
       "gates": [
         "verify_motion_quality",
         "verify_combat_001",
         "verify_ai_001",
+        "verify_enemy_dormancy",
         "verify_oath_001",
         "verify_oath_002"
       ]
@@ -208,6 +495,7 @@
       ],
       "gates": [
         "verify_mobile_001",
+        "verify_event_driven_touch",
         "verify_input_001",
         "verify_ui_001",
         "web_export",
@@ -256,15 +544,20 @@
         "verify_visible_quality"
       ]
     },
-    "world_013": {
-      "patterns": [
+      "world_013": {
+        "patterns": [
+          "outputs/AshenOathTheRoadBetweenCrowns/scripts/wychwood_evidence_presentation.gd",
+          "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/Wychwood_*_Evidence.res",
+          "outputs/AshenOathTheRoadBetweenCrowns/tools/build_wychwood_evidence.gd",
+          "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_wychwood_evidence.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/wychwood_section.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_world_013.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/tools/capture_world_013.gd"
       ],
       "gates": [
-        "verify_world_002",
-        "verify_world_013",
+          "verify_world_002",
+          "verify_wychwood_evidence",
+          "verify_world_013",
         "verify_river_swimming",
         "verify_navigation_001",
         "verify_zone_budgets",
@@ -554,6 +847,7 @@
         "verify_motion_quality",
         "verify_anim_003",
         "verify_face_003",
+        "verify_event_driven_life",
         "verify_greyfen_life"
       ]
     },
@@ -1140,6 +1434,11 @@
 		"verify_engine_003",
       "verify_engine_004",
       "verify_engine_005",
+      "verify_dialogue_runtime_coordinator",
+      "verify_combat_vfx_coordinator",
+      "verify_interaction_visibility",
+      "verify_quest_hud_coordinator",
+      "verify_zone_residency",
       "verify_runtime_required_components",
       "verify_runtime_asset_policy"
       ]
@@ -1152,11 +1451,13 @@
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/quest_presentation_state.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/scripts/game.gd",
         "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_save_001.gd",
-        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_save_003.gd"
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_save_003.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_save_version_boundary.gd"
       ],
       "gates": [
         "verify_save_001",
         "verify_save_003",
+        "verify_save_version_boundary",
         "verify_runtime_regressions"
       ]
     },

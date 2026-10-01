@@ -43,6 +43,7 @@ func _initialize() -> void:
 	check(active_count == 1, "Wychwood reveal must activate one enemy, not a five-enemy pileup")
 	for enemy in game.active_enemies:
 		enemy.set_encounter_active(true)
+	await _verify_paused_encounter(game)
 	var smallest_spacing := INF
 	var maximum_attackers := 0
 	for _frame in range(90):
@@ -115,6 +116,28 @@ func _initialize() -> void:
 	var result_code := 0 if failures == 0 else 1
 	await _finish(game)
 	quit(result_code)
+
+func _verify_paused_encounter(game: Node) -> void:
+	# System fixture only: real menu/input proof belongs to the graphical gate.
+	var states: Array[Dictionary] = []
+	var health: float = game.player.health_component.health
+	paused = true
+	for enemy in game.active_enemies:
+		states.append({"position": enemy.global_position, "velocity": enemy.velocity,
+			"cooldown": enemy.attack_cooldown, "pending": enemy.pending_attack_time,
+			"windup": enemy.windup_time, "animation": enemy.anim_phase})
+		check(not enemy.can_process(), "%s ignores paused world ownership" % enemy.display_name)
+	for _frame in range(20):
+		await physics_frame
+		await process_frame
+	for index in range(game.active_enemies.size()):
+		var enemy = game.active_enemies[index]
+		var state := states[index]
+		check(enemy.global_position.is_equal_approx(state.position) and enemy.velocity.is_equal_approx(state.velocity), "%s moved during pause" % enemy.display_name)
+		check(is_equal_approx(enemy.attack_cooldown, state.cooldown) and is_equal_approx(enemy.pending_attack_time, state.pending) and is_equal_approx(enemy.windup_time, state.windup), "%s advanced attack during pause" % enemy.display_name)
+		check(is_equal_approx(enemy.anim_phase, state.animation), "%s advanced animation during pause" % enemy.display_name)
+	check(is_equal_approx(game.player.health_component.health, health), "Paused encounter damaged Kael")
+	paused = false
 
 func settle(count: int) -> void:
 	for _index in range(count):

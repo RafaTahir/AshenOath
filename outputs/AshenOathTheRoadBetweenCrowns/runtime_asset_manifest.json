@@ -36,9 +36,11 @@
       "id": "quaternius_modular_character_outfits_fantasy",
       "url": "https://quaternius.com/packs/modularcharacteroutfitsfantasy.html",
       "license": "CC0 1.0",
-      "status": "runtime_selected_ranger_only",
+      "status": "runtime_selected_ranger_and_bandit_candidates",
       "runtime_roles": [
-        "road_ranger_human"
+        "road_ranger_human",
+        "bandit_deserter",
+        "bandit_tracker"
       ]
     },
     {
@@ -47,7 +49,9 @@
       "license": "CC0 1.0",
       "status": "runtime_selected_shared_library",
       "runtime_roles": [
-        "road_ranger_human"
+        "road_ranger_human",
+        "bandit_deserter",
+        "bandit_tracker"
       ]
     },
     {
@@ -65,7 +69,7 @@
       "id": "quaternius_ultimate_monsters",
       "url": "https://quaternius.com/packs/ultimatemonsters.html",
       "license": "CC0 1.0",
-      "status": "source_locked_pending_selected_download",
+      "status": "selected_runtime_candidates_pending_acceptance",
       "runtime_roles": [
         "ghoulkin",
         "bell_eater",
@@ -92,6 +96,46 @@
     }
   ],
   "roles": {
+    "bandit_deserter": {
+      "display_name": "Road Deserter",
+      "family": "human_enemy",
+      "source_pack": "quaternius_modular_character_outfits_fantasy",
+      "status": "approved_runtime",
+      "approved": true,
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "model": "res://assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.gltf",
+      "source_url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
+      "license_file": "res://assets_external/licenses/Quaternius_Modular_Character_Outfits_Fantasy_CC0.txt",
+      "animation_source": "res://assets_external/animations/AnimationLibrary_Godot_Opening.tres",
+      "target_height_m": 1.75,
+      "runtime_files": [
+        {"path": "res://assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.gltf", "bytes": 30867, "sha256": "93869760db4a8568c4a221806aa86be1bd159c8fb830f076904b502f3010d1ec"},
+        {"path": "res://assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.bin", "bytes": 1989016, "sha256": "015173382bfbff2178c9d15f0c3e1d2a704b7039a38bbb0be0113683e9561e5d"},
+        {"path": "res://assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.png", "bytes": 2037323, "sha256": "f22a8f798bb7232386805add6ac58db0cf506702eac6a61ab4cdfa1c202ce686"}
+      ],
+      "approval_evidence": "WORLD_002_BANDIT_FRONTIER_20260930.md; native body/animation, real-input guard defeat and testimony, gameplay-distance day/night and earned-aftermath review. Final campaign/browser/performance certification remains separate."
+    },
+    "bandit_tracker": {
+      "display_name": "Road Tracker",
+      "family": "human_enemy",
+      "source_pack": "quaternius_modular_character_outfits_fantasy",
+      "status": "approved_runtime",
+      "approved": true,
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "model": "res://assets_external/characters_universal/runtime/Bandit_Tracker_Atlas.gltf",
+      "source_url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
+      "license_file": "res://assets_external/licenses/Quaternius_Modular_Character_Outfits_Fantasy_CC0.txt",
+      "animation_source": "res://assets_external/animations/AnimationLibrary_Godot_Opening.tres",
+      "target_height_m": 1.70,
+      "runtime_files": [
+        {"path": "res://assets_external/characters_universal/runtime/Bandit_Tracker_Atlas.gltf", "bytes": 30655, "sha256": "0e3f198c5cec76838ed0bcb2b65482d246762e767e392b2447a99ad1b325b681"},
+        {"path": "res://assets_external/characters_universal/runtime/Bandit_Tracker_Atlas.bin", "bytes": 1933248, "sha256": "f8814d0ac031aa1eb8ec95d69661bd663485c05d0a14b48cfcbf86404a74c80b"},
+        {"path": "res://assets_external/characters_universal/runtime/Bandit_Tracker_Atlas.png", "bytes": 2038174, "sha256": "17760978251d0b979c6b0c543ba956ae69d77eb8da39a7c8cc0c5a6acd1bc8c7"}
+      ],
+      "approval_evidence": "WORLD_002_BANDIT_FRONTIER_20260930.md; native body/animation, real-input guard defeat and testimony, gameplay-distance day/night and earned-aftermath review. Final campaign/browser/performance certification remains separate."
+    },
     "road_ranger_human": {
       "display_name": "Captain Senn",
       "family": "human",
@@ -150,193 +194,118 @@
       ],
       "animation_source": "res://assets_external/animations/AnimationLibrary_Godot_Opening.tres"
     },
+    "halvern": {
+      "display_name": "Halvern, Gravebound Knight",
+      "family": "human_boss",
+      "source_pack": "quaternius_modular_character_outfits_fantasy",
+      "status": "reviewed_complete_body_and_hand_weapon_20260926",
+      "approved": true,
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "model": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf",
+      "source_url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
+      "license_file": "res://assets_external/licenses/Quaternius_Modular_Character_Outfits_Fantasy_CC0.txt",
+      "animation_source": "res://assets_external/animations/AnimationLibrary_Godot_Opening.tres",
+      "runtime_files": [
+        {"path": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf", "bytes": 54079, "sha256": "8eea71448ca41108589c7d13e9261de92b7068df8166b6e54bf29e6f1e530dbe"},
+        {"path": "res://assets_external/characters_ranger/Male_Ranger_Runtime.bin", "bytes": 1746884, "sha256": "5bbb0d42cb324c6c27ce00417e68a876d92978f07d161f83590f0d7c0570eff6"},
+        {"path": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png", "bytes": 840454, "sha256": "220dd4fabbfecce9847e876e2e2b02327315c08aac096d4648b62d5c53716c90"},
+        {"path": "res://assets_external/characters_ranger/T_Ranger_Normal_1K.png", "bytes": 940081, "sha256": "a4daa2410b007ad9fe7e15ac7ecc1e579ab08aafa3725ba3f158c5a24c68b540"},
+        {"path": "res://assets_external/characters_ranger/T_Ranger_ORM_1K.png", "bytes": 786403, "sha256": "76cfba43d6748a79a7ea26184415e4810731f6e4b207c3c84a6b1a084b49bd9f"},
+        {"path": "res://assets_external/characters/Sword.fbx", "bytes": 30540, "sha256": "6318f52dd847cc9c5ca4136a92acc08fe38276261a0ade8a1ada42d9ba88f0ea"}
+      ],
+      "visual_evidence": "Development_Gallery/screenshots/BOSS-006_01_Halvern_TheGate_20260926_132908.png",
+      "blocked_reason": ""
+    },
     "kael": {
       "display_name": "Kael",
       "family": "human",
       "source_pack": "quaternius_universal_base_characters",
-      "status": "approved_runtime",
+      "status": "opening_single_material_a_set",
       "approved": true,
       "export_eligible": true,
       "fallback_mode": "none",
-      "model": "res://assets_external/characters_universal/Male_Peasant.gltf",
+      "model": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.gltf",
       "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
       "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
       "runtime_files": [
         {
-          "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
-          "bytes": 34843,
-          "sha256": "731676abc53ef4cf4e74ac61a85f4294d2255588fa659c6bbd9d5b3a1c0aaff6"
+          "path": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.gltf",
+          "bytes": 30477,
+          "sha256": "76b9abd7664a1a230f74501d03e6388553ab933732d4e1ab66c399a34286f276"
         },
         {
-          "path": "res://assets_external/characters_universal/Male_Peasant.bin",
-          "bytes": 674764,
-          "sha256": "e46bde795f7b69b351d322d7a5628e07131cfb48ed0afe366293f1b3f530433c"
+          "path": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.bin",
+          "bytes": 1171216,
+          "sha256": "d808c177751183950b609ce6d7dcba3544d08bc9c653d06e22f6ff0075040926"
         },
         {
-          "path": "res://assets_external/characters_universal/Male_Head.gltf",
-          "bytes": 40570,
-          "sha256": "e49ed6b260dd28353c7b22178f0aee354d3b3def02ae701265490938131ae6f4"
-        },
-        {
-          "path": "res://assets_external/characters_universal/Male_Head.bin",
-          "bytes": 737452,
-          "sha256": "28ea9c1544535a542140180cf3af1a4000ecc35e0dd191f8687cc5a61beb8872"
-        },
-        {
-          "path": "res://assets_external/characters_universal/Hair_SimpleParted.gltf",
-          "bytes": 24639,
-          "sha256": "451e578936425522bbe23fcc92d9fc25da23ad5a681d952aae0c149189bef062"
-        },
-        {
-          "path": "res://assets_external/characters_universal/Hair_SimpleParted.bin",
-          "bytes": 51332,
-          "sha256": "ecd7c81959f3985d6254458a440daaaa18a8bfbb1dbe111c68a04a72374d54db"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png",
-          "bytes": 655637,
-          "sha256": "404460677f67b0d1056f02f0d5e30111f54d431825f7ea007c9c61aa8782ea7b"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Peasant_Normal_1K.png",
-          "bytes": 890240,
-          "sha256": "e821600a279520cb6c6f68ed66011608038ddd94d101dbeb92fe94ecc99f9339"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Peasant_ORM_1K.png",
-          "bytes": 648791,
-          "sha256": "97e11d88919a5fc4258b2809ec2ee2364f469687e6010bf14f14c55233ed972e"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Eye_Brown.png",
-          "bytes": 35958,
-          "sha256": "d08e3356a83211bc6ca21fe3a8e39f4b5c1a3b8f85457fc2c0fb57be09935025"
+          "path": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.png",
+          "bytes": 1231404,
+          "sha256": "c9494c06134cc2e7dff2558307efe49e677b9a35127dfbdd70f5315ae9ea3101"
         }
       ],
-      "blocked_reason": ""
+      "blocked_reason": "",
+      "notes": "Complete clothed Universal body assembly with one shared skeleton, native face anatomy, deterministic palette variation, and 1K maps."
     },
     "anwen": {
       "display_name": "Sister Anwen",
       "family": "human",
       "source_pack": "quaternius_universal_base_characters",
-      "status": "approved_runtime",
+      "status": "opening_single_material_a_set",
       "approved": true,
       "export_eligible": true,
       "fallback_mode": "none",
-      "model": "res://assets_external/characters_universal/Female_Peasant.gltf",
+      "model": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.gltf",
       "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
       "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
       "runtime_files": [
         {
-          "path": "res://assets_external/characters_universal/Female_Peasant.gltf",
-          "bytes": 31461,
-          "sha256": "eea58d4539638cee1270fe0bf7d4d59a5878eb71e5aac6cb1c907531ad248fcb"
+          "path": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.gltf",
+          "bytes": 31257,
+          "sha256": "bc18388f80f73a739c996efa963565dc283d1491d1006643cc3ee0f3bf05587c"
         },
         {
-          "path": "res://assets_external/characters_universal/Female_Peasant.bin",
-          "bytes": 658600,
-          "sha256": "40eccaa2bd545c893142ef7dca0866ea8f20df3a86c67c5615024bc4fe546e83"
+          "path": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.bin",
+          "bytes": 1440748,
+          "sha256": "b4e8b543a3dd8510d097f6c63af461c6b61f2a3ed62f64748e09a7f556d989f9"
         },
         {
-          "path": "res://assets_external/characters_universal/Female_Head.gltf",
-          "bytes": 41414,
-          "sha256": "44794328bed68f79e6ada8b9ba08c1f26d7172d2a61ae7092bbda7df68ed2df3"
-        },
-        {
-          "path": "res://assets_external/characters_universal/Female_Head.bin",
-          "bytes": 1008748,
-          "sha256": "894ed1f35302980c7a43f9eb726cf22f3874a081e6dae53bbdc85fc6549ca51e"
-        },
-        {
-          "path": "res://assets_external/characters_universal/Hair_Buns.gltf",
-          "bytes": 25358,
-          "sha256": "16c66a1c15c53439b8ddf51573f27cb73d7cf72e02c1d4fcdb7b1bd4c50cbec8"
-        },
-        {
-          "path": "res://assets_external/characters_universal/Hair_Buns.bin",
-          "bytes": 205916,
-          "sha256": "811606cc84f0bfdefa2e6f1396f3d94c35138308a96d78a4f447b2e7dfc6ed6c"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png",
-          "bytes": 655637,
-          "sha256": "404460677f67b0d1056f02f0d5e30111f54d431825f7ea007c9c61aa8782ea7b"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Peasant_Normal_1K.png",
-          "bytes": 890240,
-          "sha256": "e821600a279520cb6c6f68ed66011608038ddd94d101dbeb92fe94ecc99f9339"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Peasant_ORM_1K.png",
-          "bytes": 648791,
-          "sha256": "97e11d88919a5fc4258b2809ec2ee2364f469687e6010bf14f14c55233ed972e"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Eye_Brown.png",
-          "bytes": 35958,
-          "sha256": "d08e3356a83211bc6ca21fe3a8e39f4b5c1a3b8f85457fc2c0fb57be09935025"
+          "path": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.png",
+          "bytes": 1207791,
+          "sha256": "36a470db2bda34b853ebfd57307ecc86af0ba198067a9285fc1b33e95b29632d"
         }
       ],
-      "blocked_reason": ""
+      "blocked_reason": "",
+      "notes": "Complete clothed Universal body assembly with one shared skeleton, native face anatomy, deterministic palette variation, and 1K maps."
     },
     "villager": {
       "display_name": "Greyfen villager",
       "family": "human",
       "source_pack": "quaternius_universal_base_characters",
-      "status": "char_restore_004_unified_male_clothed",
+      "status": "opening_single_material_crowd",
       "approved": true,
       "export_eligible": true,
       "fallback_mode": "none",
-      "model": "res://assets_external/characters_universal/Male_Peasant.gltf",
+      "model": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf",
       "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
       "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
       "model_family": "res://assets_external/characters_universal/{Male_Peasant,Female_Peasant}_and_native_head_hair.gltf",
       "runtime_files": [
         {
-          "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
-          "bytes": 34843,
-          "sha256": "731676abc53ef4cf4e74ac61a85f4294d2255588fa659c6bbd9d5b3a1c0aaff6"
+          "path": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf",
+          "bytes": 30510,
+          "sha256": "7039f60e180bcf8c1d699790e5cc578ef8d287e26e878ce4f7495d0549c36544"
         },
         {
-          "path": "res://assets_external/characters_universal/Male_Peasant.bin",
-          "bytes": 674764,
-          "sha256": "e46bde795f7b69b351d322d7a5628e07131cfb48ed0afe366293f1b3f530433c"
+          "path": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.bin",
+          "bytes": 1171216,
+          "sha256": "d808c177751183950b609ce6d7dcba3544d08bc9c653d06e22f6ff0075040926"
         },
         {
-          "path": "res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png",
-          "bytes": 655637,
-          "sha256": "404460677f67b0d1056f02f0d5e30111f54d431825f7ea007c9c61aa8782ea7b"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Peasant_Normal_1K.png",
-          "bytes": 890240,
-          "sha256": "e821600a279520cb6c6f68ed66011608038ddd94d101dbeb92fe94ecc99f9339"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Peasant_ORM_1K.png",
-          "bytes": 648791,
-          "sha256": "97e11d88919a5fc4258b2809ec2ee2364f469687e6010bf14f14c55233ed972e"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Hair_1_BaseColor_1K.png",
-          "bytes": 646770,
-          "sha256": "55f89ff98f76333d7c0d5342dbd69d1a780f42807c8de93616bfd016764d8d29"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Hair_1_Normal_1K.png",
-          "bytes": 1196137,
-          "sha256": "4121d112782a2867373f14bf310d886a2aa13b6ddcc4bfa4821dff84d72540ba"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Eye_Brown.png",
-          "bytes": 35958,
-          "sha256": "d08e3356a83211bc6ca21fe3a8e39f4b5c1a3b8f85457fc2c0fb57be09935025"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Eye_Normal.png",
-          "bytes": 15099,
-          "sha256": "9ed61f7726a54fe346a78b9e5a18905d8e2b88f86235d97f53cd207a26f3f8c7"
+          "path": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.png",
+          "bytes": 1250672,
+          "sha256": "608c6c6acc4987dcfe92c01589131d9981e2e9711e78e093295640fb1e17518d"
         }
       ],
       "blocked_reason": "",
@@ -346,58 +315,28 @@
       "display_name": "Vargan guard",
       "family": "human",
       "source_pack": "quaternius_universal_base_characters",
-      "status": "char_restore_004_unified_male_clothed",
+      "status": "opening_single_material_crowd",
       "approved": true,
       "export_eligible": true,
       "fallback_mode": "none",
-      "model": "res://assets_external/characters_universal/Male_Peasant.gltf",
+      "model": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf",
       "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
       "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
       "runtime_files": [
         {
-          "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
-          "bytes": 34843,
-          "sha256": "731676abc53ef4cf4e74ac61a85f4294d2255588fa659c6bbd9d5b3a1c0aaff6"
+          "path": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf",
+          "bytes": 30516,
+          "sha256": "c98bfbee092140937e2907535a8beb2d3aa1e5185f9313f9b5a880a1f1291afe"
         },
         {
-          "path": "res://assets_external/characters_universal/Male_Peasant.bin",
-          "bytes": 674764,
-          "sha256": "e46bde795f7b69b351d322d7a5628e07131cfb48ed0afe366293f1b3f530433c"
+          "path": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.bin",
+          "bytes": 1150432,
+          "sha256": "42eda764ce432ec2cc96adeab7453f2676d1be764c9f032e125664c73ce4ce1d"
         },
         {
-          "path": "res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png",
-          "bytes": 655637,
-          "sha256": "404460677f67b0d1056f02f0d5e30111f54d431825f7ea007c9c61aa8782ea7b"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Peasant_Normal_1K.png",
-          "bytes": 890240,
-          "sha256": "e821600a279520cb6c6f68ed66011608038ddd94d101dbeb92fe94ecc99f9339"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Peasant_ORM_1K.png",
-          "bytes": 648791,
-          "sha256": "97e11d88919a5fc4258b2809ec2ee2364f469687e6010bf14f14c55233ed972e"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Hair_1_BaseColor_1K.png",
-          "bytes": 646770,
-          "sha256": "55f89ff98f76333d7c0d5342dbd69d1a780f42807c8de93616bfd016764d8d29"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Hair_1_Normal_1K.png",
-          "bytes": 1196137,
-          "sha256": "4121d112782a2867373f14bf310d886a2aa13b6ddcc4bfa4821dff84d72540ba"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Eye_Brown.png",
-          "bytes": 35958,
-          "sha256": "d08e3356a83211bc6ca21fe3a8e39f4b5c1a3b8f85457fc2c0fb57be09935025"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Eye_Normal.png",
-          "bytes": 15099,
-          "sha256": "9ed61f7726a54fe346a78b9e5a18905d8e2b88f86235d97f53cd207a26f3f8c7"
+          "path": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.png",
+          "bytes": 1241900,
+          "sha256": "920aaef0d1ee27e63c15bedb68a307c893fc417ab6494e90b854e58cbd7f79d7"
         }
       ],
       "blocked_reason": "",
@@ -407,58 +346,28 @@
       "display_name": "Road traveler",
       "family": "human",
       "source_pack": "quaternius_universal_base_characters",
-      "status": "char_restore_004_unified_male_clothed",
+      "status": "opening_single_material_crowd",
       "approved": true,
       "export_eligible": true,
       "fallback_mode": "none",
-      "model": "res://assets_external/characters_universal/Male_Peasant.gltf",
+      "model": "res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.gltf",
       "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
       "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
       "runtime_files": [
         {
-          "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
-          "bytes": 34843,
-          "sha256": "731676abc53ef4cf4e74ac61a85f4294d2255588fa659c6bbd9d5b3a1c0aaff6"
+          "path": "res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.gltf",
+          "bytes": 30516,
+          "sha256": "34fc435ac57da9bbeaa59854340bd298e74b821eb13157694c7cf38c0149d815"
         },
         {
-          "path": "res://assets_external/characters_universal/Male_Peasant.bin",
-          "bytes": 674764,
-          "sha256": "e46bde795f7b69b351d322d7a5628e07131cfb48ed0afe366293f1b3f530433c"
+          "path": "res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.bin",
+          "bytes": 1150432,
+          "sha256": "42eda764ce432ec2cc96adeab7453f2676d1be764c9f032e125664c73ce4ce1d"
         },
         {
-          "path": "res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png",
-          "bytes": 655637,
-          "sha256": "404460677f67b0d1056f02f0d5e30111f54d431825f7ea007c9c61aa8782ea7b"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Peasant_Normal_1K.png",
-          "bytes": 890240,
-          "sha256": "e821600a279520cb6c6f68ed66011608038ddd94d101dbeb92fe94ecc99f9339"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Peasant_ORM_1K.png",
-          "bytes": 648791,
-          "sha256": "97e11d88919a5fc4258b2809ec2ee2364f469687e6010bf14f14c55233ed972e"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Hair_1_BaseColor_1K.png",
-          "bytes": 646770,
-          "sha256": "55f89ff98f76333d7c0d5342dbd69d1a780f42807c8de93616bfd016764d8d29"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Hair_1_Normal_1K.png",
-          "bytes": 1196137,
-          "sha256": "4121d112782a2867373f14bf310d886a2aa13b6ddcc4bfa4821dff84d72540ba"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Eye_Brown.png",
-          "bytes": 35958,
-          "sha256": "d08e3356a83211bc6ca21fe3a8e39f4b5c1a3b8f85457fc2c0fb57be09935025"
-        },
-        {
-          "path": "res://assets_external/characters_universal/T_Eye_Normal.png",
-          "bytes": 15099,
-          "sha256": "9ed61f7726a54fe346a78b9e5a18905d8e2b88f86235d97f53cd207a26f3f8c7"
+          "path": "res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.png",
+          "bytes": 1249644,
+          "sha256": "06641f7bfa0ab6fb90e0aa07e64da1899d7d185b3859f255759c80102c85f80c"
         }
       ],
       "blocked_reason": "",
@@ -467,59 +376,915 @@
     "ghoulkin": {
       "display_name": "Ghoulkin family",
       "family": "monster",
-      "source_pack": "quaternius_lowpoly_animated_monsters",
-      "status": "blocked_fallback",
-      "approved": false,
-      "export_eligible": false,
-      "fallback_mode": "diagnostic_only",
-      "fallback": "res://assets_external/enemies/Skeleton.fbx",
-      "blocked_reason": "Retained Skeleton family is runtime-valid; bespoke cursed-human family visual approval remains a later gate."
+      "source_pack": "quaternius_universal_base_characters_and_ultimate_monsters",
+      "status": "reviewed_native_grounded_body_20260930",
+      "approved": true,
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "model": "res://assets_external/characters_universal/runtime/Ghoulkin_Authored_Atlas.gltf",
+      "model_family": "Project-authored grounded Universal Ghoulkin with retained Demon/Orc/BlueDemon tactical variants",
+      "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
+      "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
+      "additional_license_files": ["res://assets_external/licenses/Quaternius_Ultimate_Monsters_Mirror_CC0.txt"],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/characters_universal/runtime/Ghoulkin_Authored_Atlas.gltf",
+          "bytes": 31132,
+          "sha256": "168490fbb67bf51ce191e33293aad466b41809aba9296cc7ecf5970b2cc80e37"
+        },
+        {
+          "path": "res://assets_external/characters_universal/runtime/Ghoulkin_Authored_Atlas.bin",
+          "bytes": 629268,
+          "sha256": "5b18095d65632e0bd1afcf4e2076340c16b7724025985fe638aed42e177ed8d2"
+        },
+        {
+          "path": "res://assets_external/characters_universal/runtime/Ghoulkin_Authored_Atlas.png",
+          "bytes": 210490,
+          "sha256": "ffac5b43fa7564216f6ecc0c8543e47506282c87fe798812a1078ad46f6a5932"
+        },
+        {
+          "path": "res://assets_external/enemies/ultimate_monsters/Demon.gltf",
+          "bytes": 1264925,
+          "sha256": "9ce361b41a0e80d42a70f6325169b9c70a6e3304b8d856b8344a2b7f185067af"
+        },
+        {
+          "path": "res://assets_external/enemies/ultimate_monsters/Orc.gltf",
+          "bytes": 1280189,
+          "sha256": "e61a37f8d9b2eee28928bdfad2c55e0798cc0a212e925cc5dcc66b243526c1a3"
+        },
+        {
+          "path": "res://assets_external/enemies/ultimate_monsters/BlueDemon.gltf",
+          "bytes": 1190068,
+          "sha256": "9eb899fc619dff9a973669e0962452990c8ec44d4501dd41fe4f4fe5afd631f4"
+        }
+      ],
+      "blocked_reason": "",
+      "notes": "The base Ghoulkin is a connected project-authored cursed-human reviewed in the established day/night cameras and an actual five-enemy fight. Existing Demon/Orc/BlueDemon variants are unchanged. The full return run failed at Greyfen transition locking; this role approval does not imply complete opening, performance or browser acceptance."
+    },
+    "bell_eater": {
+      "display_name": "The Bell-Eater",
+      "family": "monster_boss",
+      "source_pack": "quaternius_ultimate_monsters",
+      "status": "reviewed_native_body_and_bone_harness_20260926",
+      "approved": true,
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "model": "res://assets_external/enemies/ultimate_monsters/BlueDemon.gltf",
+      "source_url": "https://quaternius.com/packs/ultimatemonsters.html",
+      "license_file": "res://assets_external/licenses/Quaternius_Ultimate_Monsters_Mirror_CC0.txt",
+      "runtime_files": [
+        {"path": "res://assets_external/enemies/ultimate_monsters/BlueDemon.gltf", "bytes": 1190068, "sha256": "9eb899fc619dff9a973669e0962452990c8ec44d4501dd41fe4f4fe5afd631f4"},
+        {"path": "res://assets/bosses/bell_eater_bell.res", "bytes": 83249, "sha256": "5bf54340a822d8536b70bd2c292dc4ad2e069b39c52cef3bb9ccd5091ebb4e48"}
+      ],
+      "visual_evidence": "Development_Gallery/screenshots/BOSS-003_01_BellEater_Harnessed_20260926_134249.png",
+      "notes": "Original project-authored hollow bell is built by tools/build_bell_eater_bell.gd and follows Torso. Imported anatomy is unchanged; no proxy eyes, jaws, teeth or horns are added. Three-phase images reviewed; environment acceptance remains separate.",
+      "blocked_reason": ""
+    },
+    "rootbound_colossus": {
+      "display_name": "Rootbound Colossus",
+      "family": "monster_boss",
+      "source_pack": "quaternius_ultimate_monsters",
+      "status": "reviewed_native_body_and_chest_wound_20260926",
+      "approved": true,
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "model": "res://assets_external/enemies/ultimate_monsters/Creep.glb",
+      "source_url": "https://quaternius.com/packs/ultimatemonsters.html",
+      "license_file": "res://assets_external/licenses/Quaternius_Ultimate_Monsters_Mirror_CC0.txt",
+      "runtime_files": [
+        {"path": "res://assets_external/enemies/ultimate_monsters/Creep.glb", "bytes": 5766984, "sha256": "8abe19342e4cc60d569c863e6954ec147847289502ac807d42bb288a0c9d71ec"}
+      ],
+      "visual_evidence": "Development_Gallery/screenshots/BOSS-004_03_Rootbound_ExposedHeart_20260926_143330.png",
+      "notes": "Complete imported anatomy and corrected forward axis. Chest-bone wound is fitted against skinned mesh vertices; no duplicate root arms, feet, mantle or crown. Three phase captures reviewed; world composition remains unaccepted separately.",
+      "blocked_reason": ""
     },
     "bog_wretch": {
       "display_name": "Bog Wretch",
       "family": "monster",
       "source_pack": "quaternius_lowpoly_animated_monsters",
-      "status": "blocked_fallback",
-      "approved": false,
-      "export_eligible": false,
-      "fallback_mode": "diagnostic_only",
-      "fallback": "res://assets_external/enemies/Slime.fbx",
-      "blocked_reason": "Retained Slime family is runtime-valid; final swamp material and visual approval remain a later gate."
+      "status": "approved_runtime",
+      "approved": true,
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "model": "res://assets_external/enemies/Slime.fbx",
+      "source_url": "https://opengameart.org/content/animated-monsters-pack",
+      "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
+      "runtime_files": [
+        {
+          "path": "res://assets_external/enemies/Slime.fbx",
+          "bytes": 338940,
+          "sha256": "7f5e9dd33fd800344984ada5a0db855f2eabd6f2ee1e501bdb35d81aa3791df8"
+        }
+      ],
+      "blocked_reason": ""
     },
     "gravebound_knight": {
       "display_name": "Gravebound Knight",
       "family": "monster",
       "source_pack": "quaternius_lowpoly_animated_monsters",
-      "status": "blocked_fallback",
-      "approved": false,
-      "export_eligible": false,
-      "fallback_mode": "diagnostic_only",
-      "fallback": "res://assets_external/characters/KnightCharacter.fbx",
-      "blocked_reason": "Retained Knight family is runtime-valid; final Gravebound armor and visual approval remain a later gate."
+      "status": "approved_runtime",
+      "approved": true,
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "model": "res://assets_external/enemies/Skeleton.fbx",
+      "source_url": "https://opengameart.org/content/animated-monsters-pack",
+      "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
+      "runtime_files": [
+        {
+          "path": "res://assets_external/enemies/Skeleton.fbx",
+          "bytes": 433820,
+          "sha256": "be0a5992b677e563c6c9601e76fdcb9d50e91c195aebb1eb70604fbfe8fb26d5"
+        }
+      ],
+      "blocked_reason": ""
     },
     "ashwing": {
       "display_name": "Ashwing Carrion Drake",
       "family": "monster",
-      "source_pack": "quaternius_ultimate_monsters",
-      "status": "blocked_fallback",
-      "approved": false,
-      "export_eligible": false,
-      "fallback_mode": "diagnostic_only",
-      "fallback": "res://assets_external/enemies/Dragon.fbx",
-      "blocked_reason": "The current dragon is an interim silhouette; final drake materials and flight presentation remain open."
+      "source_pack": "quaternius_lowpoly_animated_monsters",
+      "status": "reviewed_native_dragon_bone_equipment_20260926",
+      "approved": true,
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "model": "res://assets_external/enemies/Dragon.fbx",
+      "source_url": "https://opengameart.org/content/animated-monsters-pack",
+      "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
+      "runtime_files": [
+        {"path": "res://assets_external/enemies/Dragon.fbx", "bytes": 879004, "sha256": "31a334a1c5918b4f4480cd5f6c542b3aea9b8f00a70aeb7feefd7f70528780cc"}
+      ],
+      "visual_evidence": "Development_Gallery/screenshots/BOSS-005_03_Ashwing_BreakingPerch_20260926_144009.png",
+      "notes": "Retained complete stylized dragon with Body-bone equipment and restrained three-phase emission. Current phase images and graphical interruption/checkpoint/reward/aftermath/no-respawn contract pass. East-yard combat space is clear; surrounding mill world art remains separately unaccepted.",
+      "blocked_reason": ""
     },
     "white_hart": {
       "display_name": "The White Hart",
       "family": "monster",
       "source_pack": "quaternius_ultimate_animated_animals",
-      "status": "blocked_fallback",
-      "approved": false,
-      "export_eligible": false,
-      "fallback_mode": "diagnostic_only",
-      "fallback": "res://assets_external/enemies/Wolf.fbx",
-      "blocked_reason": "The wolf-derived Hart is a functional fallback; the final antlered witness asset and visual evidence remain open."
+      "status": "approved_runtime_body",
+      "approved": true,
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "model": "res://assets_external/enemies/WhiteHart_Stag.glb",
+      "source_url": "https://quaternius.com/packs/ultimateanimatedanimals.html",
+      "license_file": "res://assets_external/licenses/Quaternius_Ultimate_Animals_CC0.txt",
+      "runtime_files": [
+        {
+          "path": "res://assets_external/enemies/WhiteHart_Stag.glb",
+          "bytes": 2044528,
+          "sha256": "6da8ff2a2a1c8cb467c3e2b8838b2a9128ad90ade3dc3d5ee81b3dea5e764de5"
+        }
+      ],
+      "blocked_reason": ""
     }
   },
+  "authored_environment_derivatives": [
+    {
+      "id": "courtyard_service_ground_and_supplies",
+      "status": "native_camera_reviewed_pending_full_campaign_acceptance",
+      "path": "res://assets_external/environment/village/CourtyardService_Authored.res",
+      "bytes": 204106,
+      "sha256": "5e5f30bba77235179fb9559d96f67d571a11341669c33b67e73e23ce01bbbf2c",
+      "source_pack": "Quaternius Fantasy Props MegaKit / original service paving",
+      "license": "CC0 1.0 / original project geometry",
+      "build_tool": "res://tools/build_courtyard_service.gd",
+      "pack_owner": "campaign",
+      "source_hashes_embedded": true,
+      "surfaces": 2,
+      "triangles": 11594
+    },
+    {
+      "id": "campaign_record_mill_burned",
+      "status": "native_camera_reviewed_pending_full_campaign_acceptance",
+      "path": "res://assets_external/environment/props/CampaignRecord_mill_burned_Authored.res",
+      "bytes": 61929,
+      "sha256": "4a68e67d1a90e9fa50dd7872dad2276c10214413a0ffceec86ab8ea2c8f078ed",
+      "source_pack": "Quaternius Fantasy Props MegaKit",
+      "license": "CC0 1.0",
+      "build_tool": "res://tools/build_campaign_records.gd",
+      "pack_owner": "campaign",
+      "source_hashes_embedded": true,
+      "surfaces": 2
+    },
+    {
+      "id": "campaign_record_mill_exposed",
+      "status": "native_camera_reviewed_pending_full_campaign_acceptance",
+      "path": "res://assets_external/environment/props/CampaignRecord_mill_exposed_Authored.res",
+      "bytes": 111660,
+      "sha256": "20f61e8786b3476038f91e6de1258aeb1e566e0e2bb3bb05d14ac77be1fd71f9",
+      "source_pack": "Quaternius Fantasy Props MegaKit",
+      "license": "CC0 1.0",
+      "build_tool": "res://tools/build_campaign_records.gd",
+      "pack_owner": "campaign",
+      "source_hashes_embedded": true,
+      "surfaces": 2
+    },
+    {
+      "id": "campaign_record_mill_pending",
+      "status": "native_candidate_pending_visual_review",
+      "path": "res://assets_external/environment/props/CampaignRecord_mill_pending_Authored.res",
+      "bytes": 61923,
+      "sha256": "8cd1fe23a2ac352f5e771b73895630abbd3278c7c1dc5f18339b6f53c10a35dc",
+      "source_pack": "Quaternius Fantasy Props MegaKit",
+      "license": "CC0 1.0",
+      "build_tool": "res://tools/build_campaign_records.gd",
+      "pack_owner": "campaign",
+      "source_hashes_embedded": true,
+      "surfaces": 2
+    },
+    {
+      "id": "campaign_record_mill_preserved",
+      "status": "native_camera_reviewed_pending_full_campaign_acceptance",
+      "path": "res://assets_external/environment/props/CampaignRecord_mill_preserved_Authored.res",
+      "bytes": 52355,
+      "sha256": "fc62f6369fa6aca30a77106b2e76430e4f1ca17afc046e44d78ae5421028adf5",
+      "source_pack": "Quaternius Fantasy Props MegaKit",
+      "license": "CC0 1.0",
+      "build_tool": "res://tools/build_campaign_records.gd",
+      "pack_owner": "campaign",
+      "source_hashes_embedded": true,
+      "surfaces": 2
+    },
+    {
+      "id": "campaign_record_register_mira",
+      "status": "native_camera_reviewed_pending_full_campaign_acceptance",
+      "path": "res://assets_external/environment/props/CampaignRecord_register_mira_Authored.res",
+      "bytes": 50766,
+      "sha256": "5a302d3dbe5bab9e9ffd56eefe0698ff3ff24c96a39e0019038220f6953ffade",
+      "source_pack": "Quaternius Fantasy Props MegaKit",
+      "license": "CC0 1.0",
+      "build_tool": "res://tools/build_campaign_records.gd",
+      "pack_owner": "campaign",
+      "source_hashes_embedded": true,
+      "surfaces": 2
+    },
+    {
+      "id": "campaign_record_register_rook",
+      "status": "native_camera_reviewed_pending_full_campaign_acceptance",
+      "path": "res://assets_external/environment/props/CampaignRecord_register_rook_Authored.res",
+      "bytes": 61936,
+      "sha256": "c3264301ce5b6cbcfc9f94fb8e09efd9f6480c2c6b28aabd200a8ded0cda5dd7",
+      "source_pack": "Quaternius Fantasy Props MegaKit",
+      "license": "CC0 1.0",
+      "build_tool": "res://tools/build_campaign_records.gd",
+      "pack_owner": "campaign",
+      "source_hashes_embedded": true,
+      "surfaces": 2
+    },
+    {
+      "id": "greyfen_fitted_forge_work",
+      "status": "accepted_native_fitted_work_composition",
+      "path": "res://assets_external/environment/props/GreyfenForgeWork_Authored.res",
+      "bytes": 101590,
+      "sha256": "94394c5b829bbd98c78e110840b1e6f9bfa21893b90bfcdc6842ed2358e89414",
+      "source_pack": "Quaternius Fantasy Props MegaKit; original fuel geometry",
+      "license": "CC0 1.0 / project-original fuel",
+      "license_file": "res://assets_external/licenses/quaternius_fantasy_props_megakit/License_Standard.txt",
+      "build_tool": "res://tools/build_greyfen_forge_work.gd",
+      "pack_owner": "base",
+      "surfaces": 2,
+      "triangles": 8310,
+      "notes": "Anvil on fitted log, supported table/axe, weapon stock, quench bucket and inset embers. Existing physical collision and light count retained."
+    },
+    {
+      "id": "greyfen_adjoining_landscape",
+      "status": "accepted_native_boundary_and_cemetery_visual_scope",
+      "path": "res://assets_external/environment/forest/GreyfenFrontier_Authored.res",
+      "bytes": 40831,
+      "sha256": "fd9ac033b74f7655ac70817939bfdb82873bed631fdefe143f399b8cea74b086",
+      "source_pack": "Original Ashen Oath adjoining landscape geometry; existing licensed runtime textures",
+      "license": "Project-original geometry",
+      "build_tool": "res://tools/build_greyfen_frontier.gd",
+      "pack_owner": "base",
+      "surfaces": 2,
+      "triangles": 3464,
+      "notes": "Physical floor and collision unchanged. Full route, performance and final browser acceptance remain pending."
+    },
+    {
+      "id": "greyfen_fitted_frontages",
+      "status": "accepted_native_street_and_work_surface_review",
+      "path": "res://assets_external/environment/village/GreyfenFrontages_Authored.res",
+      "bytes": 5756,
+      "sha256": "221ffe768161d6d40bbbac87881bdadc31417b7c88224066e1dec082e2719eca",
+      "source_pack": "Original Ashen Oath street/frontage/drainage geometry; existing licensed runtime textures",
+      "license": "Project-original geometry",
+      "build_tool": "res://tools/build_greyfen_frontages.gd",
+      "pack_owner": "base",
+      "surfaces": 3,
+      "triangles": 168
+    },
+    {
+      "id": "far_terrain_ridges",
+      "status": "native_contract_pending_visual_review",
+      "path": "res://assets/landscape/far_terrain.res",
+      "bytes": 14116,
+      "sha256": "a4ce6a79b96cc2ca6f0ebc4d2c1d1f123d789e0fce36cb09e72f2893e379d2f1",
+      "source_pack": "Original Ashen Oath geometry",
+      "license": "Project-original geometry",
+      "build_tool": "res://tools/build_landscape_foundations.gd",
+      "pack_owner": "base",
+      "surfaces": 1,
+      "triangles": 512
+    },
+    {
+      "id": "bridge_stone_foundation",
+      "status": "native_contract_pending_visual_review",
+      "path": "res://assets/landscape/bridge_stone_pier.res",
+      "bytes": 61348,
+      "sha256": "0b59bf819501358590adae1dda481403d8fd2bd89ca4fe9509b1ff07fc66979b",
+      "source_pack": "Quaternius Stylized Nature MegaKit",
+      "source_path": "res://assets_external/environment/forest/Rock_Medium_1.obj",
+      "license": "CC0-1.0",
+      "license_file": "res://assets_external/licenses/quaternius_stylized_nature_megakit/License_Standard.txt",
+      "build_tool": "res://tools/build_landscape_foundations.gd",
+      "pack_owner": "base",
+      "surfaces": 1,
+      "triangles": 2736
+    },
+    {
+      "id": "sky_cloud_volume_0",
+      "status": "native_candidate_pending_environment_acceptance",
+      "path": "res://assets/sky/cloud_0.res",
+      "bytes": 51253,
+      "sha256": "bd695b581249b66f8837e74883b560e5ab5848c8e7c296a1aef75a6d7b0713c6",
+      "source_pack": "Original Ashen Oath geometry",
+      "license": "Project-original geometry",
+      "build_tool": "res://tools/build_cloud_volumes.gd",
+      "pack_owner": "base",
+      "surfaces": 1,
+      "triangles": 2701
+    },
+    {
+      "id": "sky_cloud_volume_1",
+      "status": "native_candidate_pending_environment_acceptance",
+      "path": "res://assets/sky/cloud_1.res",
+      "bytes": 52325,
+      "sha256": "878c0cc656978dd35b82df861cb4d1209a289b29b03689125982eb379f507aee",
+      "source_pack": "Original Ashen Oath geometry",
+      "license": "Project-original geometry",
+      "build_tool": "res://tools/build_cloud_volumes.gd",
+      "pack_owner": "base",
+      "surfaces": 1,
+      "triangles": 2740
+    },
+    {
+      "id": "sky_cloud_volume_2",
+      "status": "native_candidate_pending_environment_acceptance",
+      "path": "res://assets/sky/cloud_2.res",
+      "bytes": 52885,
+      "sha256": "b9cc21c07fe0ef6fc46642a0701e048433567342ba57853bb9df9af993d9d7bc",
+      "source_pack": "Original Ashen Oath geometry",
+      "license": "Project-original geometry",
+      "build_tool": "res://tools/build_cloud_volumes.gd",
+      "pack_owner": "base",
+      "surfaces": 1,
+      "triangles": 2781
+    },
+    {
+      "id": "wychwood_evidence_corpse",
+      "status": "native_contract_pending_visual_review",
+      "path": "res://assets_external/environment/forest/Wychwood_corpse_Evidence.res",
+      "bytes": 375134,
+      "sha256": "2cfd4932c2a0c2fc5d66a047dc32cbfce325650c6169c0d64eba26bf8b91711d",
+      "source_pack": "Quaternius Universal Base Characters and project-original evidence",
+      "pack_owner": "opening",
+      "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
+      "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt"
+    },
+    {
+      "id": "wychwood_evidence_black_feathers",
+      "status": "native_contract_pending_visual_review",
+      "path": "res://assets_external/environment/forest/Wychwood_black_feathers_Evidence.res",
+      "bytes": 7123,
+      "sha256": "8c1ff56d4d04f2505d9c3163d8c4daf7d9dc476016cfafa7ca5666409b872b88",
+      "source_pack": "Quaternius Universal Base Characters and project-original evidence",
+      "pack_owner": "opening",
+      "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
+      "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt"
+    },
+    {
+      "id": "wychwood_evidence_oren_token",
+      "status": "native_contract_pending_visual_review",
+      "path": "res://assets_external/environment/forest/Wychwood_oren_token_Evidence.res",
+      "bytes": 5980,
+      "sha256": "e7973711f844698addad371e390edfedad0d073088089f2416dc9a5b5d2ff02e",
+      "source_pack": "Quaternius Universal Base Characters and project-original evidence",
+      "pack_owner": "opening",
+      "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
+      "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt"
+    },
+    {
+      "id": "wychwood_evidence_claw_marks",
+      "status": "native_contract_pending_visual_review",
+      "path": "res://assets_external/environment/forest/Wychwood_claw_marks_Evidence.res",
+      "bytes": 5884,
+      "sha256": "95d597a30a3cb1634f00aa81c5ba0ed00293521e5fcc61fa4a9ea474c207107a",
+      "source_pack": "Quaternius Universal Base Characters and project-original evidence",
+      "pack_owner": "opening",
+      "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
+      "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt"
+    },
+    {
+      "id": "wychwood_evidence_tracks",
+      "status": "native_contract_pending_visual_review",
+      "path": "res://assets_external/environment/forest/Wychwood_tracks_Evidence.res",
+      "bytes": 6192,
+      "sha256": "b716dc99a195c840df8fa79b67d11128a39685554b84b59fca70102e6e6c8e67",
+      "source_pack": "Quaternius Universal Base Characters and project-original evidence",
+      "pack_owner": "opening",
+      "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
+      "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt"
+    },
+    {
+      "id": "cemetery_boundary",
+      "status": "native_contract_pending_visual_review",
+      "path": "res://assets_external/environment/village/Cemetery_boundary_Authored.res",
+      "bytes": 8956,
+      "sha256": "88c3e6a4269a3f55c10b765c0930093a6baaed84ebf99033d67ebe6a842b7919",
+      "source_pack": "Quaternius Medieval Village MegaKit",
+      "license": "CC0 1.0",
+      "build_tool": "res://tools/build_cemetery_architecture.gd",
+      "pack_owner": "base",
+      "surfaces": 4,
+      "triangles": 560,
+      "license_file": "res://assets_external/licenses/quaternius_medieval_village_megakit/License_Standard.txt"
+    },
+    {
+      "id": "cemetery_grave_earth",
+      "status": "native_contract_pending_visual_review",
+      "path": "res://assets_external/environment/village/Cemetery_grave_earth_Authored.res",
+      "bytes": 4654,
+      "sha256": "c301e22415d544d30de48172dbf1b76a455e28368b6399d852db9fe2bb4e5555",
+      "source_pack": "Original Ashen Oath assembly",
+      "license": "Project-original geometry",
+      "build_tool": "res://tools/build_cemetery_architecture.gd",
+      "pack_owner": "base",
+      "surfaces": 1,
+      "triangles": 96
+    },
+    {
+      "id": "cemetery_memory_window",
+      "status": "native_contract_pending_visual_review",
+      "path": "res://assets_external/environment/village/Cemetery_memory_window_Authored.res",
+      "bytes": 3951,
+      "sha256": "4e367df24b379415d3187320af5897222117591c0bf63a67e71e7382edf7a852",
+      "source_pack": "Original Ashen Oath assembly",
+      "license": "Project-original geometry",
+      "build_tool": "res://tools/build_cemetery_architecture.gd",
+      "pack_owner": "base",
+      "surfaces": 2,
+      "triangles": 118
+    },
+    {
+      "id": "cemetery_grave_harl",
+      "status": "native_contract_pending_visual_review",
+      "path": "res://assets_external/environment/village/Cemetery_grave_harl_Authored.res",
+      "bytes": 11727,
+      "sha256": "6f447730ebe5efe2c15c9a26de19fe36ad27d3b7cc72a79bd8135de086485911",
+      "source_pack": "Original Ashen Oath assembly",
+      "license": "Project-original geometry",
+      "build_tool": "res://tools/build_cemetery_architecture.gd",
+      "pack_owner": "base",
+      "surfaces": 2,
+      "triangles": 444
+    },
+    {
+      "id": "cemetery_grave_child",
+      "status": "native_contract_pending_visual_review",
+      "path": "res://assets_external/environment/village/Cemetery_grave_child_Authored.res",
+      "bytes": 2845,
+      "sha256": "721efccae7c0c6cac5c8acb9969b7d83a390133a0f1c657b67eeb562a30b3e3a",
+      "source_pack": "Original Ashen Oath assembly",
+      "license": "Project-original geometry",
+      "build_tool": "res://tools/build_cemetery_architecture.gd",
+      "pack_owner": "base",
+      "surfaces": 2,
+      "triangles": 60
+    },
+    {
+      "id": "cemetery_grave_soldier",
+      "status": "native_contract_pending_visual_review",
+      "path": "res://assets_external/environment/village/Cemetery_grave_soldier_Authored.res",
+      "bytes": 2591,
+      "sha256": "520ad176937e7b496c660b18dab6837695482e95d428dda690c378d4b30a7431",
+      "source_pack": "Original Ashen Oath assembly",
+      "license": "Project-original geometry",
+      "build_tool": "res://tools/build_cemetery_architecture.gd",
+      "pack_owner": "base",
+      "surfaces": 2,
+      "triangles": 36
+    },
+    {
+      "id": "cemetery_disturbed_soil",
+      "status": "native_contract_pending_visual_review",
+      "path": "res://assets_external/environment/village/Cemetery_disturbed_soil_Authored.res",
+      "bytes": 2569,
+      "sha256": "de39aafeee1181bf47c3d61388ec17cd1708f1808d33d288e50f02bd7aeaeb61",
+      "source_pack": "Original Ashen Oath assembly",
+      "license": "Project-original geometry",
+      "build_tool": "res://tools/build_cemetery_architecture.gd",
+      "pack_owner": "base",
+      "surfaces": 1,
+      "triangles": 16
+    },
+    {
+      "id": "cemetery_chapel",
+      "status": "native_contract_pending_visual_review",
+      "path": "res://assets_external/environment/village/Cemetery_chapel_Authored.res",
+      "bytes": 48230,
+      "sha256": "44625271685283e72968e06e1478fedad809c47f4ee343f01880fc9bb6d41c31",
+      "source_pack": "Quaternius Medieval Village MegaKit",
+      "license": "CC0 1.0",
+      "license_file": "res://assets_external/licenses/quaternius_medieval_village_megakit/License_Standard.txt",
+      "build_tool": "res://tools/build_cemetery_architecture.gd",
+      "pack_owner": "base",
+      "surfaces": 3,
+      "triangles": 2900
+    },
+    {
+      "id": "cemetery_bell_frame",
+      "status": "native_contract_pending_visual_review",
+      "path": "res://assets_external/environment/village/Cemetery_bell_frame_Authored.res",
+      "bytes": 33402,
+      "sha256": "707f91233bf63604ab16a2df4c71776ac764025cb504240d20c21aa6f7f7720f",
+      "source_pack": "Quaternius Medieval Village MegaKit",
+      "license": "CC0 1.0",
+      "license_file": "res://assets_external/licenses/quaternius_medieval_village_megakit/License_Standard.txt",
+      "build_tool": "res://tools/build_cemetery_architecture.gd",
+      "pack_owner": "base",
+      "surfaces": 2,
+      "triangles": 2064
+    },
+    {
+      "id": "cemetery_bell",
+      "status": "native_contract_pending_visual_review",
+      "path": "res://assets_external/environment/village/Cemetery_bell_Authored.res",
+      "bytes": 11687,
+      "sha256": "912e02155db2e782301fc32b67507414f9474971fe5ff7b0453180b2a3d18506",
+      "source_pack": "Original Ashen Oath assembly",
+      "license": "Project-original geometry",
+      "build_tool": "res://tools/build_cemetery_architecture.gd",
+      "pack_owner": "base",
+      "surfaces": 1,
+      "triangles": 432
+    },
+    {
+      "id": "cemetery_grave_rows",
+      "status": "native_contract_pending_visual_review",
+      "path": "res://assets_external/environment/village/Cemetery_grave_rows_Authored.res",
+      "bytes": 6703,
+      "sha256": "2906609dfdae7132ea4ad5aa1940dfbc53618f36ae80e59fc7b9046d4385b3eb",
+      "source_pack": "Original Ashen Oath assembly",
+      "license": "Project-original geometry",
+      "build_tool": "res://tools/build_cemetery_architecture.gd",
+      "pack_owner": "base",
+      "surfaces": 1,
+      "triangles": 216
+    },
+    {
+      "id": "greyfen_social_common_table",
+      "status": "native_camera_reviewed_pending_opening_acceptance",
+      "path": "res://assets_external/environment/props/GreyfenSocial_common_table.res",
+      "bytes": 36480,
+      "sha256": "5240659de4f45f69800eaf669f268e46c82b9d94dd5f1f9c23741eab61c787b3",
+      "source_pack": "Quaternius Fantasy Props MegaKit",
+      "license": "CC0 1.0",
+      "license_file": "res://assets_external/licenses/quaternius_fantasy_props_megakit/License_Standard.txt",
+      "build_tool": "res://tools/build_greyfen_social.gd",
+      "pack_owner": "base",
+      "source_files": ["Table_Large.obj", "Chair_1.obj"],
+      "surfaces": 2,
+      "triangles": 1978
+    },
+    {
+      "id": "greyfen_social_barrel_board",
+      "status": "native_camera_reviewed_pending_opening_acceptance",
+      "path": "res://assets_external/environment/props/GreyfenSocial_barrel_board.res",
+      "bytes": 36504,
+      "sha256": "fbefb200179ae35912f8d2656c1a567f0e899a699f47bdf62738732b4a15c27c",
+      "source_pack": "Quaternius Fantasy Props MegaKit",
+      "license": "CC0 1.0",
+      "license_file": "res://assets_external/licenses/quaternius_fantasy_props_megakit/License_Standard.txt",
+      "build_tool": "res://tools/build_greyfen_social.gd",
+      "pack_owner": "base",
+      "source_files": ["Table_Large.obj", "Chair_1.obj"],
+      "surfaces": 2,
+      "triangles": 1978
+    },
+    {
+      "id": "greyfen_social_mira_apothecary",
+      "status": "native_camera_reviewed_pending_opening_acceptance",
+      "path": "res://assets_external/environment/props/GreyfenSocial_mira_apothecary.res",
+      "bytes": 83054,
+      "sha256": "36b075f451b862be2a0fb939b69eceb40d2c52d2bf1b6fe113feae64b3d19b07",
+      "source_pack": "Quaternius Fantasy Props MegaKit",
+      "license": "CC0 1.0",
+      "license_file": "res://assets_external/licenses/quaternius_fantasy_props_megakit/License_Standard.txt",
+      "build_tool": "res://tools/build_greyfen_social.gd",
+      "pack_owner": "base",
+      "source_files": ["Stall_Empty.obj", "Potion_1.obj", "Potion_2.obj", "Bag.obj"],
+      "surfaces": 2,
+      "triangles": 4618
+    },
+    {
+      "id": "deep_wood_landscape",
+      "status": "native_candidate_pending_camera_route_acceptance",
+      "path": "res://assets_external/environment/forest/Campaign_deep_wood_Landscape.res",
+      "bytes": 3998,
+      "sha256": "e506395d20a2d0448c68930cd0a80596cb3a55237762ab74227748481d3b7dca",
+      "source_pack": "Original Ashen Oath geometry",
+      "license": "Original project mesh; retained CC0 runtime surface textures",
+      "build_tool": "res://tools/build_campaign_wilds.gd",
+      "pack_owner": "campaign",
+      "surfaces": 2,
+      "triangles": 144
+    },
+    {
+      "id": "farmstead_landscape",
+      "status": "native_candidate_pending_camera_route_acceptance",
+      "path": "res://assets_external/environment/forest/Campaign_burned_farmstead_Landscape.res",
+      "bytes": 6909,
+      "sha256": "1c5bc5a71efc4a5bbae8963f126331dea1bb2d466c44b62ee80dd8ed32ae05f9",
+      "source_pack": "Original Ashen Oath geometry",
+      "license": "Original project mesh; retained CC0 runtime surface textures",
+      "build_tool": "res://tools/build_campaign_wilds.gd",
+      "pack_owner": "campaign",
+      "surfaces": 3,
+      "triangles": 304
+    },
+    {
+      "id": "marsh_landscape",
+      "status": "native_candidate_pending_camera_route_acceptance",
+      "path": "res://assets_external/environment/forest/Campaign_marsh_crossing_Landscape.res",
+      "bytes": 23761,
+      "sha256": "fb6374cdf48eac17e5c08fe788536ed38ab71a09e7630fa6c10d1ac1ac9c6a7d",
+      "source_pack": "Original Ashen Oath geometry",
+      "license": "Original project mesh; retained CC0 runtime surface textures",
+      "build_tool": "res://tools/build_campaign_wilds.gd",
+      "pack_owner": "campaign",
+      "surfaces": 5,
+      "triangles": 1354
+    },
+    {
+    "id": "bandit_road_landscape",
+      "status": "native_candidate_pending_camera_route_acceptance",
+      "path": "res://assets_external/environment/forest/Campaign_bandit_road_Landscape.res",
+    "bytes": 13950,
+    "sha256": "b540b31cfe7baaa7af821ef698f13ad378d252be433b80e8e096bd2bd9a78f3c",
+      "source_pack": "Original Ashen Oath geometry",
+      "license": "Original project mesh; retained CC0 runtime surface textures",
+      "build_tool": "res://tools/build_campaign_wilds.gd",
+      "pack_owner": "campaign",
+    "surfaces": 2,
+    "triangles": 768
+    },
+    {
+      "id": "farmstead_west",
+      "status": "native_candidate_pending_camera_route_acceptance",
+      "path": "res://assets_external/environment/village/FarmsteadWest_Authored.res",
+      "bytes": 29589,
+      "sha256": "3f3ce16db27effa4f2415ceecd7a46d00b6b9d983c30991800d71d08668266b2",
+      "source_pack": "Quaternius Medieval Village / Fantasy Props MegaKits and original project geometry",
+      "license": "CC0 1.0 / original project geometry",
+      "license_file": "res://assets_external/licenses/quaternius_medieval_village_megakit/License_Standard.txt",
+      "source_hashes_embedded": true,
+      "build_tool": "res://tools/build_campaign_wilds.gd",
+      "pack_owner": "campaign",
+      "surfaces": 2,
+      "triangles": 1876
+    },
+    {
+      "id": "farmstead_east",
+      "status": "native_candidate_pending_camera_route_acceptance",
+      "path": "res://assets_external/environment/village/FarmsteadEast_Authored.res",
+      "bytes": 29186,
+      "sha256": "a139aa3f1065476d40a10a232327a5e733d03a34de310ace787ed70dc858f39c",
+      "source_pack": "Quaternius Medieval Village / Fantasy Props MegaKits and original project geometry",
+      "license": "CC0 1.0 / original project geometry",
+      "license_file": "res://assets_external/licenses/quaternius_medieval_village_megakit/License_Standard.txt",
+      "source_hashes_embedded": true,
+      "build_tool": "res://tools/build_campaign_wilds.gd",
+      "pack_owner": "campaign",
+      "surfaces": 2,
+      "triangles": 1864
+    },
+    {
+    "id": "road_checkpoint",
+      "status": "native_candidate_pending_camera_route_acceptance",
+      "path": "res://assets_external/environment/village/RoadCheckpoint_Authored.res",
+    "bytes": 45789,
+    "sha256": "30c914365a831201d1abbfe4af2d24eabc30858f61fad50fdcf3e28e71a6cdae",
+      "source_pack": "Original Ashen Oath geometry / Quaternius Medieval Village and Fantasy Props MegaKits",
+      "license": "CC0 1.0 / original project geometry",
+      "license_file": "res://assets_external/licenses/quaternius_medieval_village_megakit/License_Standard.txt",
+      "source_hashes_embedded": true,
+      "build_tool": "res://tools/build_campaign_wilds.gd",
+      "pack_owner": "campaign",
+      "surfaces": 4,
+    "triangles": 3334
+    },
+    {
+      "id": "record_hall_archive",
+      "status": "native_camera_reviewed_pending_full_campaign_acceptance",
+      "path": "res://assets_external/environment/props/RecordArchive_Authored.res",
+      "bytes": 1251143,
+      "sha256": "a46e34a572782c122aef8547caf1fd3e714d128ca35927399d06fa0f88aa39d4",
+      "source_pack": "Quaternius Fantasy Props MegaKit",
+      "license": "CC0 1.0",
+      "license_file": "res://assets_external/licenses/quaternius_fantasy_props_megakit/License_Standard.txt",
+      "build_tool": "res://tools/build_record_archive.gd",
+      "pack_owner": "campaign",
+      "source_files": ["Bookcase_2.obj", "Chair_1.obj", "Table_Large.obj", "BookGroup_Small_1.obj", "BookGroup_Small_2.obj", "Book_Stack_1.obj"],
+      "surfaces": 2,
+      "triangles": 65170
+    },
+    {
+      "id": "record_hall_witness_relief",
+      "status": "native_camera_reviewed_pending_full_campaign_acceptance",
+      "path": "res://assets_external/environment/props/record_witness_relief.jpg",
+      "bytes": 305503,
+      "sha256": "265677e37490c6d8b72a90758cdcaece07c8f8e56ec2bb5ecc1b271e4747423d",
+      "source_pack": "Original Ashen Oath generated artwork",
+      "license": "Original project artwork; no third-party asset source",
+      "pack_owner": "campaign"
+    },
+    {
+      "id": "ash_mill_architecture",
+      "status": "native_camera_reviewed_pending_full_campaign_acceptance",
+      "path": "res://assets_external/environment/village/AshMill_Authored.res",
+      "bytes": 59294,
+      "sha256": "9fecc6ce7ab506676d87e4278f24f02bde81d2817c5866bc56e61893ecae2e69",
+      "source_pack": "Quaternius Medieval Village MegaKit and original abandoned wheel assembly",
+      "license": "CC0 1.0 / original project geometry",
+      "license_file": "res://assets_external/licenses/quaternius_medieval_village_megakit/License_Standard.txt",
+      "build_tool": "res://tools/build_ash_mill.gd",
+      "pack_owner": "campaign",
+      "source_hashes_embedded": true,
+      "surfaces": 2,
+      "triangles": 4271
+    },
+    {
+      "id": "undercroft_vault",
+      "status": "native_camera_reviewed_pending_full_campaign_acceptance",
+      "path": "res://assets_external/environment/village/UndercroftVault_Authored.res",
+      "bytes": 45145,
+      "sha256": "30d390d85e1cda811e8a59feabedf29205c0c9f6c3ea792ca1aae6505c0086b4",
+      "source_pack": "Original Ashen Oath architectural geometry",
+      "license": "Original project mesh; retained CC0 runtime surface textures",
+      "build_tool": "res://tools/build_undercroft_vault.gd",
+      "pack_owner": "campaign",
+      "surfaces": 2,
+      "triangles": 3172,
+      "collision_surface": 0,
+      "tomb_count": 4
+    },
+    {
+      "id": "assembly_court",
+      "status": "native_camera_reviewed_pending_full_campaign_acceptance",
+      "path": "res://assets_external/environment/village/AssemblyCourt_Authored.res",
+      "bytes": 468929,
+      "sha256": "24e6b3adcfca10565563ba78cd7f5c359714571ee1e2b1c3d3f157095d2bf442",
+      "source_pack": "Quaternius Medieval Village and Fantasy Props MegaKits",
+      "license": "CC0 1.0",
+      "license_file": "res://assets_external/licenses/quaternius_medieval_village_megakit/License_Standard.txt",
+      "build_tool": "res://tools/build_assembly_court.gd",
+      "pack_owner": "campaign",
+      "surfaces": 2,
+      "triangles": 30406,
+      "source_hashes_embedded": true,
+      "house_count": 4,
+      "bench_count": 4,
+      "table_count": 3
+    },
+    {
+      "id": "hart_landscape",
+      "status": "native_camera_reviewed_pending_full_campaign_acceptance",
+      "path": "res://assets_external/environment/forest/HartLandscape_Authored.res",
+      "bytes": 4680,
+      "sha256": "41e86d6f87a332a1a4d8c5380378ea8b68e847ad000aea2e52003f6c9cc91e92",
+      "source_pack": "Original Ashen Oath landscape and witness stones",
+      "license": "Original project mesh; retained CC0 runtime surface textures",
+      "build_tool": "res://tools/build_hart_landscape.gd",
+      "pack_owner": "campaign",
+      "surfaces": 2,
+      "triangles": 204
+    },
+    {
+      "id": "hart_witness_stones",
+      "status": "native_camera_reviewed_pending_full_campaign_acceptance",
+      "path": "res://assets_external/environment/forest/HartWitnessStones_Authored.res",
+      "bytes": 2082,
+      "sha256": "2d8e26ba93ed95e962d553e1151220f0cf876e8708e575e4329edaef561836bc",
+      "source_pack": "Original Ashen Oath witness stones",
+      "license": "Original project mesh; retained CC0 runtime surface textures",
+      "build_tool": "res://tools/build_hart_landscape.gd",
+      "pack_owner": "campaign",
+      "surfaces": 1,
+      "triangles": 32
+    },
+    {
+      "id": "bandit_adjoining_frontier",
+      "status": "accepted_native_ground_forest_and_day_night_aftermath_scope",
+      "path": "res://assets_external/environment/forest/BanditFrontier_Authored.res",
+      "bytes": 29216,
+      "sha256": "25acd9093488889891a4b5d2f46f77d4545abcb63a9590643cf9c80d32ccbc3f",
+      "source_pack": "Original adjoining ground/use lanes; retained Quaternius TwistedTree_2 stand",
+      "license": "Original project mesh; CC0 retained forest source and runtime surface textures",
+      "build_tool": "res://tools/build_bandit_frontier.gd",
+      "pack_owner": "campaign",
+      "surfaces": 2,
+      "triangles": 1680,
+      "approval_evidence": "WORLD_002_BANDIT_FRONTIER_20260930.md"
+    },
+    {
+      "id": "hart_fitted_woodland",
+      "status": "accepted_native_woodland_frame_depth_and_day_night_scope",
+      "path": "res://assets_external/environment/forest/HartWoodland_Authored.res",
+      "bytes": 55293,
+      "sha256": "26cb52dc8248328a0bead4fb0629ee0638eb964b71ba79570ccdb12717a8525f",
+      "source_pack": "Original adjoining woodland ground; Quaternius Stylized Nature MegaKit Fern_1 and retained TwistedTree_2",
+      "license": "Original project ground; CC0 1.0 nature meshes and retained runtime textures",
+      "license_file": "res://assets_external/licenses/quaternius_stylized_nature_megakit/License_Standard.txt",
+      "build_tool": "res://tools/build_hart_woodland.gd",
+      "pack_owner": "campaign",
+      "surfaces": 2,
+      "triangles": 2432,
+      "source_hashes_embedded": true
+    },
+    {
+      "id": "hart_aftermath_witness",
+      "status": "native_state_reviewed_pending_full_scene_campaign_acceptance",
+      "path": "res://assets_external/environment/forest/HartAftermath_witness_Authored.res",
+      "bytes": 3617,
+      "sha256": "0ad8ca711a831fe3dbab622b733473e6ad1149cde8fd2030b4546d6ccf6354d1",
+      "source_pack": "Original Ashen Oath consequential witness garden",
+      "license": "Original project mesh; retained CC0 runtime surface textures",
+      "build_tool": "res://tools/build_hart_aftermath.gd",
+      "pack_owner": "campaign",
+      "surfaces": 2,
+      "triangles": 108
+    },
+    {
+      "id": "hart_aftermath_mercy",
+      "status": "native_state_reviewed_pending_full_scene_campaign_acceptance",
+      "path": "res://assets_external/environment/forest/HartAftermath_mercy_Authored.res",
+      "bytes": 5941,
+      "sha256": "af91f589c7479abce053ea10d48449c3854186d8506dcd9bf075658dac946546",
+      "source_pack": "Original Ashen Oath consequential witness garden",
+      "license": "Original project mesh; retained CC0 runtime surface textures",
+      "build_tool": "res://tools/build_hart_aftermath.gd",
+      "pack_owner": "campaign",
+      "surfaces": 2,
+      "triangles": 180
+    },
+    {
+      "id": "hart_aftermath_duty",
+      "status": "native_state_reviewed_pending_full_scene_campaign_acceptance",
+      "path": "res://assets_external/environment/forest/HartAftermath_duty_Authored.res",
+      "bytes": 18333,
+      "sha256": "8585e0782d721a72f57e9d7b9a0cadf9c1ec035fb33de393e233ce22f0a8672d",
+      "source_pack": "Original Ashen Oath consequential witness garden",
+      "license": "Original project mesh; retained CC0 runtime surface textures",
+      "build_tool": "res://tools/build_hart_aftermath.gd",
+      "pack_owner": "campaign",
+      "surfaces": 2,
+      "triangles": 2412
+    },
+    {
+      "id": "hart_aftermath_ash",
+      "status": "native_state_reviewed_pending_full_scene_campaign_acceptance",
+      "path": "res://assets_external/environment/forest/HartAftermath_ash_Authored.res",
+      "bytes": 4182,
+      "sha256": "6faabbf4bef316ad7efc7f477c78322a08ad36bd09ab9c3bbdf57c81f2c5971c",
+      "source_pack": "Original Ashen Oath consequential witness garden",
+      "license": "Original project mesh; retained CC0 runtime surface textures",
+      "build_tool": "res://tools/build_hart_aftermath.gd",
+      "pack_owner": "campaign",
+      "surfaces": 2,
+      "triangles": 108
+    },
+    {
+      "id": "vargan_architecture",
+      "status": "native_camera_reviewed_pending_full_campaign_acceptance",
+      "source_pack": "Quaternius Medieval Village MegaKit",
+      "license": "CC0 1.0",
+      "license_file": "res://assets_external/licenses/quaternius_medieval_village_megakit/License_Standard.txt",
+      "build_tool": "res://tools/build_vargan_architecture.gd",
+      "pack_owner": "campaign",
+      "surfaces_per_asset": 2,
+      "source_hashes_embedded": true,
+      "assets": [
+        {"variant": "gatehouse", "path": "res://assets_external/environment/village/Vargan_gatehouse_Authored.res", "bytes": 48963, "triangles": 3672, "sha256": "a0616ca275238e4d0b3d5e7368fc59dea99ac9eb0e14f66a5a5a720d8edfe42f"},
+        {"variant": "tower", "path": "res://assets_external/environment/village/Vargan_tower_Authored.res", "bytes": 19519, "triangles": 1444, "sha256": "552dd69390e088f9e72534146952e05a2c76ef1781a299ba1fab112a7ee222db"},
+        {"variant": "keep", "path": "res://assets_external/environment/village/Vargan_keep_Authored.res", "bytes": 27053, "triangles": 2092, "sha256": "429438daf3529d394f95a6e77b5314b17ee382df49a5b2cf9f9d41b09e444c7e"},
+        {"variant": "curtain", "path": "res://assets_external/environment/village/Vargan_curtain_Authored.res", "bytes": 6875, "triangles": 356, "sha256": "3cb9a84c6818e5bbb0a21f8ed54547265c9d9bf1c2a12552eaf580ef748e31e9"},
+        {"variant": "stable", "path": "res://assets_external/environment/village/Vargan_stable_Authored.res", "bytes": 103068, "triangles": 6440, "sha256": "7b782ee651f7d182dd6a7a3dea07693513cbea50ebc66156256600134bc0fe44"},
+        {"variant": "cistern", "path": "res://assets_external/environment/village/Vargan_cistern_Authored.res", "bytes": 6059, "triangles": 284, "sha256": "cf69c45dbe8fea475470e83368a8a790471ed2fc4f9bb7fb5433723bf0e86db2"},
+        {"variant": "door", "path": "res://assets_external/environment/village/Vargan_door_Authored.res", "bytes": 9460, "triangles": 482, "sha256": "e8b8715a9905e98ec3f1a1ad25b2f4007c3341482f42909ace5526a5d0351b7c"},
+        {"variant": "forge", "path": "res://assets_external/environment/village/Vargan_forge_Authored.res", "bytes": 73560, "triangles": 4698, "sha256": "b8b42f2abc87a309c9524e92ab890a3689c9d1506b5b394e853293acb981c707"},
+        {"variant": "record_entry", "path": "res://assets_external/environment/village/Vargan_record_entry_Authored.res", "bytes": 86402, "triangles": 5426, "sha256": "552fe55901a81e26a93d6a376f93033ea48369ae6d08884efbb97e3d02e50437"}
+      ]
+    }
+  ],
   "quarantine": [
     {
       "pattern": "assets_external/enemies/quaternius_lowpoly_animated_monsters__*",

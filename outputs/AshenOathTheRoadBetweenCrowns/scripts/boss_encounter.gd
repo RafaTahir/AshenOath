@@ -75,6 +75,8 @@ func resolve_peaceful(next_outcome: String) -> bool:
 		return false
 	enemy.set_meta("peaceful_resolution", outcome)
 	enemy.set_meta("boss_resolved", true)
+	if enemy.has_method("set_encounter_active"):
+		enemy.set_encounter_active(false)
 	resolution_emitted = false
 	if host != null and host.has_method("_on_boss_peaceful_resolution"):
 		host._on_boss_peaceful_resolution(boss_id, outcome, enemy)
@@ -120,11 +122,14 @@ func save_state() -> Dictionary:
 	}
 
 func load_state(data: Dictionary) -> void:
-	phase = maxi(1, int(data.get("phase", phase)))
-	checkpoint = maxi(phase, int(data.get("checkpoint", phase)))
+	phase = _saved_phase(data.get("phase", phase), phase)
+	checkpoint = maxi(phase, _saved_phase(data.get("checkpoint", phase), phase))
 	outcome = str(data.get("outcome", outcome))
 	resolution_emitted = false
-	checkpoint_health_ratio = clampf(float(data.get("checkpoint_health_ratio", _phase_health_ratio(phase))), 0.0, 1.0)
+	var ratio: Variant = data.get("checkpoint_health_ratio", _phase_health_ratio(phase))
+	checkpoint_health_ratio = _phase_health_ratio(phase)
+	if typeof(ratio) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(ratio)):
+		checkpoint_health_ratio = clampf(float(ratio), 0.0, 1.0)
 	if enemy != null:
 		enemy.set_meta("boss_phase", phase)
 		enemy.set_meta("called_ghoulkin", bool(data.get("called_ghoulkin", enemy.get_meta("called_ghoulkin", false))))
@@ -144,12 +149,21 @@ func load_state(data: Dictionary) -> void:
 		if health != null and is_instance_valid(health) and health.has_method("load_state") and typeof(saved_health) == TYPE_DICTIONARY and not saved_health.is_empty():
 			health.load_state(saved_health)
 		elif health != null and is_instance_valid(health) and health.has_method("load_state") and outcome == "":
-			var restored_ratio := _phase_health_ratio(phase)
+			var restored_ratio := checkpoint_health_ratio
 			health.load_state({"health": health.max_health * restored_ratio, "max_health": health.max_health, "dead": false})
 
 func current_telegraph() -> String:
 	var phase_data := phase_definition()
 	return str(phase_data.get("telegraph", ""))
+
+func _saved_phase(value: Variant, fallback: int) -> int:
+	var count := maxi(1, (definition.get("phases", []) as Array).size())
+	if typeof(value) not in [TYPE_INT, TYPE_FLOAT]:
+		return clampi(fallback, 1, count)
+	var number := float(value)
+	if not is_finite(number) or number != floorf(number):
+		return clampi(fallback, 1, count)
+	return int(clampf(number, 1.0, float(count)))
 
 func phase_definition() -> Dictionary:
 	var phases: Array = definition.get("phases", [])

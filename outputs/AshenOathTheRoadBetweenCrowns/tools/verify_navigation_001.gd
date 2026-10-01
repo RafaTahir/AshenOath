@@ -12,7 +12,15 @@ func _initialize() -> void:
 	root.add_child(game)
 	await process_frame
 	game.call("_new_game")
-	await _settle(8)
+	var detail_deadline := Time.get_ticks_msec() + 30000
+	while Time.get_ticks_msec() < detail_deadline:
+		if game.game_started and game.zone_root != null and bool(game.zone_root.get_meta("opening_detail_complete", false)):
+			break
+		await process_frame
+	if not game.game_started or game.zone_root == null or not bool(game.zone_root.get_meta("opening_detail_complete", false)):
+		push_error("Greyfen navigation population did not finish hydrating within 30 seconds")
+		quit(1)
+		return
 	await _verify_zone(game, "greyfen", Vector3(0, 0.9, 12.5), Vector3(0, 0.9, -12.5))
 	var life = game.zone_root.find_child("GreyfenLifeController", true, false)
 	check(life != null and life.actor_count() >= 7, "Greyfen must retain seven routed actors")

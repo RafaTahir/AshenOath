@@ -1,0 +1,14 @@
+Ashen Oath Greyfen menu artwork
+
+Project-specific image generated with the built-in Codex image tool from the
+project's own Greyfen gameplay screenshot. No third-party image, logo, or
+franchise reference was supplied. This is illustrative menu art, not a claim
+that the playable world matches the painting.
+
+Runtime file: assets_external/ui/greyfen_menu_concept.png
+SHA-256: b96195ebe078aee2d80b12c975fc6605599cf2cab7f768107aec7c6f6a98b49e
+Source reference: D:/Temp/AshenOath/opening_detail_balanced_spawn.png
+Generated: 2026-09-24
+
+Prompt summary: render the same Greyfen village street and bridge as a
+grounded stylized dark-fantasy dusk backdrop, without text or UI.

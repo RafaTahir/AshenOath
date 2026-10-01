@@ -31,6 +31,7 @@ func _initialize() -> void:
 		print("RENDER RESOURCE VERIFIER: FAIL (%d)" % failures.size())
 	for failure in failures:
 		push_error(failure)
+	print("VERIFIER_PHASE: SHUTDOWN")
 	if game.has_method("prepare_resource_shutdown"):
 		game.prepare_resource_shutdown()
 	for _frame in range(game.ZONE_RETIRE_FRAMES + 4):

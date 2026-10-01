@@ -42,6 +42,7 @@ func _initialize() -> void:
 			var hair_source: String = str(visual.get_meta("character_hair_path", ""))
 			check(not body_role.is_empty(), "%s has no body role" % str(entry.get("id", "routine")))
 			check(not identity.is_empty(), "%s has no deterministic identity" % str(entry.get("id", "routine")))
+			check(str(visual.get_meta("character_occupation_equipment", "")) == str(entry.get("id", "")), "%s has no matching bone-attached occupation prop" % str(entry.get("id", "routine")))
 			check(not hair_source.is_empty(), "%s has no authored hair source" % str(entry.get("id", "routine")))
 			check(body_role != previous_body, "adjacent crowd actors repeat the same body role")
 			previous_body = body_role

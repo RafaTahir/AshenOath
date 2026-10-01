@@ -14,6 +14,7 @@ const STATES := [
 var capture_camera: Camera3D
 var captures: Array[Image] = []
 var failures := 0
+var equipment_only := false
 
 func _initialize() -> void:
 	if DisplayServer.get_name().to_lower() == "headless":
@@ -21,8 +22,15 @@ func _initialize() -> void:
 		quit(1)
 		return
 	root.size = Vector2i(1280, 720)
+	equipment_only = "--equipment-only" in OS.get_cmdline_user_args()
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(OUTPUT_DIR))
 	await _warm_renderer()
+	if equipment_only:
+		for spec in [STATES[0], STATES[1], STATES[4]]:
+			await _capture_state(str(spec.state), float(spec.fraction), "equipment_" + str(spec.state))
+		print("EQUIPMENT CAPTURE: ", "PASS" if failures == 0 else "FAIL")
+		quit(0 if failures == 0 else 1)
+		return
 	for spec in STATES:
 		await _capture_state(str(spec.state), float(spec.fraction), str(spec.name))
 	_make_contact_sheet()
@@ -44,11 +52,21 @@ func _capture_state(state: String, fraction: float, file_name: String) -> void:
 	if state == "beam_cast":
 		player.call("_set_sword_sheathed", true)
 		player.rotation_degrees.y = -22.0
+		player.beam_cast_state = "charging"
+		player.beam_charging = true
+		player.beam_charge_time = 1.05
 	elif state in ["attack_light", "attack_heavy", "parry"]:
 		# Combat proof must show the same drawn state that real attack input
 		# selects. Otherwise the body pose is valid but the sword is hidden in its
 		# back scabbard, making the screenshot falsely appear weaponless.
-		player.call("_set_sword_sheathed", false)
+		if state != "parry":
+			player.call("_set_sword_sheathed", false)
+		if state == "parry":
+			# Native action/controller proof; not a browser key-input route.
+			Input.action_press("block")
+			player._handle_combat_input()
+			if player.parry_window <= 0.0 or player.sword_sheathed:
+				failures += 1
 	var clip: StringName = driver.get_clip_for_state(state)
 	var animation_player := driver.get_animation_player() as AnimationPlayer
 	if clip == StringName() or animation_player == null:
@@ -76,7 +94,23 @@ func _capture_state(state: String, fraction: float, file_name: String) -> void:
 		player.call("_update_sword_equipment_pose", 0.0, 0.58, 0.0, true, true)
 	else:
 		player.call("_update_sword_equipment_pose", 0.0, 0.0, 0.0, false, false)
+	if state == "beam_cast":
+		player.call("_update_oathfire_arm_pose")
+		await process_frame
+		player.call("_update_beam_charge_visual")
 	_frame_player(player)
+	if equipment_only:
+		capture_camera.look_at_from_position(Vector3(2.2, 1.6, 3.4), Vector3(0, 1.05, 0))
+		var back = player.sheathed_sword_visual
+		var drawn: bool = state == "parry"
+		if back.visible == drawn or player.rig_sword_visual.visible != drawn:
+			failures += 1
+		if back.find_child("OathbladeModeledMesh", true, false) == null:
+			failures += 1
+		if drawn:
+			var segment: Dictionary = player.get_blade_world_segment()
+			if segment.tip.y <= segment.base.y + 0.35 or player.sword_equipment_pivot.global_position.distance_to(player.sword_attachment.global_position) > 0.05:
+				failures += 1
 	await _frames(8)
 	var image := root.get_texture().get_image()
 	if image == null or image.get_size() != Vector2i(1280, 720) or not _is_nonblank(image):
@@ -84,8 +118,14 @@ func _capture_state(state: String, fraction: float, file_name: String) -> void:
 		stage.queue_free()
 		await _frames(5)
 		return
-	image.save_png(ProjectSettings.globalize_path("%s/%s.png" % [OUTPUT_DIR, file_name]))
+	var capture_path := "D:/Temp/AshenOath/%s_%s.png" % [file_name, int(Time.get_unix_time_from_system())] if equipment_only else ProjectSettings.globalize_path("%s/%s.png" % [OUTPUT_DIR, file_name])
+	image.save_png(capture_path)
+	print("ANIMATION CAPTURE: ", capture_path)
 	captures.append(image.duplicate())
+	if state == "parry":
+		Input.action_release("block")
+	if equipment_only and player.asset_helper != null:
+		player.asset_helper.clear_runtime_caches()
 	stage.queue_free()
 	await _frames(6)
 

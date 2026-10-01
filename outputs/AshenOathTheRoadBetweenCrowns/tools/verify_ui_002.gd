@@ -11,9 +11,14 @@ func _initialize() -> void:
 	hud.show_main_menu()
 	await process_frame
 	check(hud.active_menu == "main", "Main menu state is not authoritative")
-	check(hud.get_window().content_scale_size == Vector2i(1920, 1080), "Menu canvas is not native 1080p")
-	for label in ["New Game", "Continue", "Controls", "Settings", "Credits", "Return to Launch Screen"]:
+	check(hud.menu_layer.size == Vector2(1920, 1080), "Menu layout is not authored 1080p")
+	check(hud.get_window().content_scale_size == Vector2i(1280, 720), "Menu resized the shared 3D render target")
+	check(hud.menu_layer.scale.is_equal_approx(Vector2(2.0 / 3.0, 2.0 / 3.0)), "Menu coordinate transform does not fit native 720p")
+	for label in ["New Game", "Continue", "Controls", "Settings", "Credits", "Quit"]:
 		check(_button(hud.menu_layer, label) != null, "Main menu action is missing: %s" % label)
+	check(_button(hud.menu_layer, "Return to Launch Screen") == null, "Main menu still returns to the redundant launch gate")
+	var main_scroll := hud.menu_layer.find_child("MenuScroll", true, false) as ScrollContainer
+	check(main_scroll != null and not main_scroll.get_v_scroll_bar().visible, "Main menu actions require scrolling at 1080p")
 	check(_contains_label(hud.menu_layer, "Continue source:") or _contains_label(hud.menu_layer, "No journey has been saved"), "Continue state has no readable save status")
 	hud.show_pause_menu()
 	await process_frame

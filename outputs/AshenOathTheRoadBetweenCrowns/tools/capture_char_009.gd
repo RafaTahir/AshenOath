@@ -17,10 +17,10 @@ func _initialize() -> void:
 	await process_frame
 	var stage := _create_stage()
 	var specs := [
-		["villager_human", "generic_villager_01", -2.3],
-		["villager_female_human", "generic_villager_02", -0.8],
-		["villager_worker_human", "farmer_toma", 0.8],
-		["villager_hooded_human", "widow_elna", 2.3]
+		["villager_human", "walker_well", -1.85],
+		["villager_female_human", "shrine_pilgrim", -0.62],
+		["villager_worker_human", "forge_helper", 0.62],
+		["villager_hooded_human", "walker_board", 1.85]
 	]
 	for item in specs:
 		var actor := Node3D.new()
@@ -49,13 +49,13 @@ func _create_stage() -> Node3D:
 	environment.background_color = Color("151a1a")
 	environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
 	environment.ambient_light_color = Color("bcb4a6")
-	environment.ambient_light_energy = 1.05
+	environment.ambient_light_energy = 1.20
 	world.environment = environment
 	result.add_child(world)
 	var key := DirectionalLight3D.new()
 	key.rotation_degrees = Vector3(-30, -26, 0)
 	key.light_color = Color("ffe0bd")
-	key.light_energy = 1.70
+	key.light_energy = 1.95
 	result.add_child(key)
 	var ground := MeshInstance3D.new()
 	var plane := PlaneMesh.new()
@@ -68,7 +68,7 @@ func _create_stage() -> Node3D:
 	result.add_child(ground)
 	var camera := Camera3D.new()
 	# Face the crowd so the evidence shows facial and outfit variation.
-	camera.position = Vector3(0, 1.40, -6.4)
+	camera.position = Vector3(0, 1.36, -5.15)
 	camera.look_at_from_position(camera.position, Vector3(0, 0.98, 0), Vector3.UP)
 	camera.fov = 42.0
 	camera.current = true

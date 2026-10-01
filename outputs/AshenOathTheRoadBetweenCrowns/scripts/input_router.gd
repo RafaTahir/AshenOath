@@ -80,8 +80,7 @@ const GAMEPAD_BUTTON_BINDINGS := {
 	"open_inventory": JOY_BUTTON_BACK,
 	"pause": JOY_BUTTON_START,
 	"target_lock": JOY_BUTTON_RIGHT_STICK,
-	"weapon_sword": JOY_BUTTON_Y,
-	"weapon_bow": JOY_BUTTON_X,
+	"weapon_cycle": JOY_BUTTON_X,
 	"cycle_arrow": JOY_BUTTON_DPAD_UP,
 }
 
@@ -146,8 +145,9 @@ const GAMEPAD_LABELS := {
 	"target_lock": "R3",
 	"target_next": "Right Stick Left/Right",
 	"target_previous": "Right Stick Left/Right",
-	"weapon_sword": "Y",
-	"weapon_bow": "X",
+	"weapon_cycle": "X",
+	"weapon_sword": "Unbound",
+	"weapon_bow": "Unbound",
 	"cycle_arrow": "D-Pad Up",
 }
 
@@ -188,9 +188,13 @@ var virtual_move := Vector2.ZERO
 var virtual_look := Vector2.ZERO
 var _virtual_actions: Dictionary = {}
 var _keyboard_pressed: Dictionary = {}
+var _mouse_pressed: Dictionary = {}
+var _mouse_just_pressed: Dictionary = {}
+var _mouse_just_released: Dictionary = {}
 var keyboard_labels: Dictionary = KEYBOARD_LABELS.duplicate()
 var input_context := CONTEXT_MENU
 var last_disconnected_gamepad_id := -1
+var _profile_device_id := -1
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -239,6 +243,9 @@ func install_default_actions() -> void:
 func apply_settings(current: Dictionary) -> void:
 	settings_ref = current
 	gamepad_profiles = current.get("gamepad_profiles", {}).duplicate(true) if typeof(current.get("gamepad_profiles", {})) == TYPE_DICTIONARY else {}
+	var migrated_weapon_defaults := _migrate_legacy_weapon_defaults()
+	if migrated_weapon_defaults:
+		settings_ref["gamepad_profiles"] = gamepad_profiles.duplicate(true)
 	gamepad_look_sensitivity = clampf(float(current.get("gamepad_look_sensitivity", 1.0)), 0.55, 1.55)
 	gamepad_deadzone = clampf(float(current.get("gamepad_deadzone", 0.16)), 0.05, 0.35)
 	gamepad_invert_x = bool(current.get("gamepad_invert_x", false))
@@ -250,6 +257,8 @@ func apply_settings(current: Dictionary) -> void:
 	_apply_saved_global_bindings(current.get("custom_bindings", {}))
 	_apply_active_gamepad_profile()
 	_refresh_gamepad_profile()
+	if migrated_weapon_defaults:
+		_persist_settings()
 
 func set_settings_manager(manager: Node) -> void:
 	settings_manager = manager
@@ -352,23 +361,57 @@ func _input(event: InputEvent) -> void:
 		# is still held. Retain the raw key state so movement and held actions do
 		# not stop after the first captured frame.
 		if key_event.keycode > 0:
-			_keyboard_pressed[key_event.keycode] = key_event.pressed
+			_keyboard_pressed[_normalize_browser_keycode(key_event.keycode)] = key_event.pressed
 		if key_event.physical_keycode > 0:
-			_keyboard_pressed[key_event.physical_keycode] = key_event.pressed
+			_keyboard_pressed[_normalize_browser_keycode(key_event.physical_keycode)] = key_event.pressed
 		if key_event.pressed and not key_event.echo:
 			_set_device(DEVICE_KEYBOARD_MOUSE)
 	elif event is InputEventJoypadButton and event.pressed:
-		active_gamepad_id = maxi(event.device, 0)
-		_set_gamepad(active_gamepad_id)
+		if _set_gamepad(maxi(event.device, 0)):
+			_restore_profile_switch_event(event)
 		_set_device(DEVICE_GAMEPAD)
 	elif event is InputEventJoypadMotion and absf(event.axis_value) > maxf(gamepad_deadzone * 0.5, 0.06):
-		active_gamepad_id = maxi(event.device, 0)
-		_set_gamepad(active_gamepad_id)
+		if _set_gamepad(maxi(event.device, 0)):
+			_restore_profile_switch_event(event)
 		_set_device(DEVICE_GAMEPAD)
 	elif event is InputEventMouseButton and event.pressed:
+		var mouse_event := event as InputEventMouseButton
+		var button := int(mouse_event.button_index)
+		# A Web pointer-lock or focus handoff can drop mouse-up while the next
+		# physical mouse-down still arrives. Treat every delivered mouse-down as
+		# a fresh edge; real mouse holds do not emit repeated mouse-down events,
+		# while this also re-arms the action after a lost release.
+		_mouse_just_pressed[button] = Time.get_ticks_msec()
+		_mouse_pressed[button] = true
 		_set_device(DEVICE_KEYBOARD_MOUSE)
+	elif event is InputEventMouseButton:
+		var mouse_event := event as InputEventMouseButton
+		var button := int(mouse_event.button_index)
+		_mouse_pressed.erase(button)
+		_mouse_just_released[button] = Time.get_ticks_msec()
 	elif event is InputEventMouseMotion and event.relative.length_squared() > 9.0:
 		_set_device(DEVICE_KEYBOARD_MOUSE)
+
+func _normalize_browser_keycode(code: int) -> int:
+	# Chromium/Edge Web exports can surface DOM arrow virtual-key values (37-40)
+	# instead of Godot's extended Key constants. WASD is unaffected, but camera
+	# actions otherwise miss the InputMap entry while the same physical key is
+	# visibly held. Normalize only the browser-compatible navigation values.
+	match code:
+		37:
+			return KEY_LEFT
+		38:
+			return KEY_UP
+		39:
+			return KEY_RIGHT
+		40:
+			return KEY_DOWN
+		33:
+			return KEY_PAGEUP
+		34:
+			return KEY_PAGEDOWN
+		_:
+			return code
 
 func movement_vector() -> Vector2:
 	var physical := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
@@ -389,6 +432,21 @@ func movement_vector() -> Vector2:
 
 func look_vector() -> Vector2:
 	var physical := Input.get_vector("camera_left", "camera_right", "camera_up", "camera_down")
+	# Chromium can drop the Input singleton's held-key state while the Web
+	# canvas owns pointer capture. Movement already merges the retained raw
+	# keyboard state; camera look must use the same path or browser route tools
+	# can rotate the camera visually without the gameplay camera receiving it.
+	var raw_keyboard := Vector2.ZERO
+	if _raw_action_pressed(&"camera_left"):
+		raw_keyboard.x -= 1.0
+	if _raw_action_pressed(&"camera_right"):
+		raw_keyboard.x += 1.0
+	if _raw_action_pressed(&"camera_up"):
+		raw_keyboard.y -= 1.0
+	if _raw_action_pressed(&"camera_down"):
+		raw_keyboard.y += 1.0
+	if raw_keyboard.length_squared() > physical.length_squared():
+		physical = raw_keyboard.limit_length(1.0)
 	if active_device == DEVICE_GAMEPAD:
 		physical = _shape_stick(physical, gamepad_deadzone, true)
 	var selected := physical if physical.length_squared() >= virtual_look.length_squared() else virtual_look
@@ -417,7 +475,7 @@ func _shape_stick(value: Vector2, deadzone: float, apply_inversion: bool) -> Vec
 func is_action_pressed(action: StringName) -> bool:
 	if active_device == DEVICE_TOUCH and action == &"run" and virtual_move.length() > 0.82:
 		return true
-	return Input.is_action_pressed(action) or _raw_action_pressed(action)
+	return Input.is_action_pressed(action) or _raw_action_pressed(action) or _raw_mouse_action_pressed(action)
 
 func _raw_action_pressed(action: StringName) -> bool:
 	if not InputMap.has_action(action):
@@ -426,9 +484,11 @@ func _raw_action_pressed(action: StringName) -> bool:
 		if not event is InputEventKey:
 			continue
 		var key_event := event as InputEventKey
-		if key_event.keycode > 0 and bool(_keyboard_pressed.get(key_event.keycode, false)):
+		var keycode := _normalize_browser_keycode(key_event.keycode)
+		if keycode > 0 and bool(_keyboard_pressed.get(keycode, false)):
 			return true
-		if key_event.physical_keycode > 0 and bool(_keyboard_pressed.get(key_event.physical_keycode, false)):
+		var physical_keycode := _normalize_browser_keycode(key_event.physical_keycode)
+		if physical_keycode > 0 and bool(_keyboard_pressed.get(physical_keycode, false)):
 			return true
 	return false
 
@@ -436,10 +496,39 @@ func debug_keyboard_state() -> Dictionary:
 	return _keyboard_pressed.duplicate()
 
 func is_action_just_pressed(action: StringName) -> bool:
-	return Input.is_action_just_pressed(action)
+	var builtin := Input.is_action_just_pressed(action)
+	var queued := _consume_mouse_edge(action, _mouse_just_pressed)
+	return builtin or queued
 
 func is_action_just_released(action: StringName) -> bool:
-	return Input.is_action_just_released(action)
+	var builtin := Input.is_action_just_released(action)
+	var queued := _consume_mouse_edge(action, _mouse_just_released)
+	return builtin or queued
+
+func _raw_mouse_action_pressed(action: StringName) -> bool:
+	if not InputMap.has_action(action):
+		return false
+	for event in InputMap.action_get_events(action):
+		if event is InputEventMouseButton and bool(_mouse_pressed.get(int(event.button_index), false)):
+			return true
+	return false
+
+func _consume_mouse_edge(action: StringName, edges: Dictionary) -> bool:
+	if not InputMap.has_action(action):
+		return false
+	var now := Time.get_ticks_msec()
+	for event in InputMap.action_get_events(action):
+		if not event is InputEventMouseButton:
+			continue
+		var button := int(event.button_index)
+		var stamp := int(edges.get(button, -1))
+		if stamp < 0:
+			continue
+		edges.erase(button)
+		# Web input can arrive between sparse physics frames. Keep an edge only
+		# briefly so a delayed click is delivered once without becoming stale.
+		return now - stamp <= 500
+	return false
 
 func action_axis(negative: StringName, positive: StringName) -> float:
 	return Input.get_axis(negative, positive)
@@ -597,6 +686,7 @@ func _on_joy_connection_changed(device: int, connected: bool) -> void:
 	var remaining := Input.get_connected_joypads()
 	if remaining.is_empty():
 		clear_virtual_input()
+		_profile_device_id = -1
 		last_disconnected_gamepad_id = device
 		active_gamepad_name = ""
 		active_gamepad_family = "generic"
@@ -620,12 +710,25 @@ func get_disconnect_state() -> Dictionary:
 		"context": input_context,
 	}
 
-func _set_gamepad(device: int) -> void:
+func _set_gamepad(device: int) -> bool:
+	var selected_id := maxi(device, 0)
+	var detected_name := Input.get_joy_name(selected_id)
+	if _profile_device_id == selected_id and active_gamepad_name == detected_name:
+		return false
 	active_gamepad_id = maxi(device, 0)
-	active_gamepad_name = Input.get_joy_name(active_gamepad_id)
+	_profile_device_id = active_gamepad_id
+	active_gamepad_name = detected_name
 	active_gamepad_family = GamepadProfile.family_for_name(active_gamepad_name)
 	_apply_active_gamepad_profile()
 	_refresh_gamepad_profile()
+	return true
+
+func _restore_profile_switch_event(event: InputEvent) -> void:
+	# Replacing InputMap events clears their action state. Preserve the physical
+	# event that selected a different controller, without replaying GUI input.
+	for action in InputMap.get_actions():
+		if event.is_action_pressed(action):
+			Input.action_press(action, event.get_action_strength(action))
 
 func _capture_default_bindings() -> void:
 	default_bindings.clear()
@@ -655,12 +758,36 @@ func _apply_saved_global_bindings(saved: Variant) -> void:
 		var records = saved[action]
 		if typeof(records) != TYPE_ARRAY or not InputMap.has_action(str(action)):
 			continue
+		var restored_types := {}
 		for record in records:
 			var event := _deserialize_event(record)
 			if event == null or event is InputEventJoypadButton or event is InputEventJoypadMotion:
 				continue
-			_erase_bindings_of_type(str(action), _binding_type(event))
+			var event_type := _binding_type(event)
+			if not restored_types.has(event_type):
+				_erase_bindings_of_type(str(action), event_type)
+				restored_types[event_type] = true
 			_add_event_once(str(action), event)
+
+func _migrate_legacy_weapon_defaults() -> bool:
+	var migrated := false
+	for profile_id in gamepad_profiles:
+		var profile: Variant = gamepad_profiles[profile_id]
+		if not profile is Dictionary or not profile.get("bindings") is Dictionary:
+			continue
+		var bindings: Dictionary = profile["bindings"]
+		if bindings.has("weapon_cycle"):
+			continue
+		var old_sword := [{"type": "joy_button", "button": JOY_BUTTON_Y}]
+		var old_bow := [{"type": "joy_button", "button": JOY_BUTTON_X}]
+		if bindings.get("weapon_sword") != old_sword or bindings.get("weapon_bow") != old_bow:
+			continue
+		# Only migrate the known old default pair; explicit custom bindings remain.
+		bindings["weapon_sword"] = []
+		bindings["weapon_bow"] = []
+		bindings["weapon_cycle"] = old_bow
+		migrated = true
+	return migrated
 
 func _apply_active_gamepad_profile() -> void:
 	_restore_default_gamepad_bindings()

@@ -25,14 +25,23 @@ func _initialize() -> void:
 	game.story_state.set_flag("halvern_fate", "")
 	game.story_state.set_flag("halvern_guard_broken", false)
 	game.call("_load_zone", "undercroft", Vector3(0, 1, 12))
-	await _frames(16)
-	var boss = _find_boss(game, "halvern_boss")
+	var dressing_ready := await _wait_for_undercroft_dressing(game)
+	var boss = _find_boss(game, "halvern_boss") if dressing_ready else null
 	if boss == null:
 		failures += 1
 		push_error("Halvern was not available for capture")
 	else:
+		# Freeze the whole fixture, not just one physics callback: the runtime
+		# visibility manager otherwise reactivates Halvern during camera settling.
+		game.process_mode = Node.PROCESS_MODE_PAUSABLE
+		paused = true
+		var socket := boss.find_child("HalvernSwordSocket", true, false) as BoneAttachment3D
+		var sword := boss.find_child("HalvernAuthoredSword", true, false) as Node3D
+		if socket == null or sword == null or not socket.is_ancestor_of(sword) or socket.bone_name != "hand_r":
+			failures += 1
+			push_error("Halvern sword is not attached to the required hand bone")
 		boss.set_physics_process(false)
-		boss.global_position = Vector3(0, 1.0, -5.5)
+		boss.global_position = _floor_position(game, boss, Vector3(0, 0, -5.5))
 		await _capture(game, boss, "BOSS-006_01_Halvern_TheGate", Vector3(0, 1.0, -3.2), 0.0)
 		game.player.global_position = Vector3(0, 1.0, -3.4)
 		game.player.parry_window = game.player.get_parry_window_duration()
@@ -48,6 +57,8 @@ func _initialize() -> void:
 		await _capture(game, boss, "BOSS-006_03_Halvern_TheRefusal", Vector3(0, 1.0, -3.2), 0.0)
 	print("BOSS-006 SCREENSHOTS: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
 	if game.has_method("prepare_resource_shutdown"):
+		paused = false
+		game.process_mode = Node.PROCESS_MODE_ALWAYS
 		game.prepare_resource_shutdown()
 		await _frames(int(game.ZONE_RETIRE_FRAMES) + 4)
 	game.queue_free()
@@ -61,11 +72,15 @@ func _find_boss(game: Node, id: String) -> Node:
 	return null
 
 func _capture(game: Node, boss: Node, stem: String, position: Vector3, yaw: float) -> void:
-	game.player.global_position = position
+	paused = false
+	game.player.global_position = _floor_position(game, boss, position)
 	game.player.velocity = Vector3.ZERO
 	boss.look_at(game.player.global_position + Vector3.UP * 0.9, Vector3.UP)
 	game.camera_rig.yaw = yaw
 	game.camera_rig.pitch = -0.14
+	game.camera_rig._initialized = false
+	game.camera_rig._process(1.0 / 60.0)
+	paused = true
 	game.hud.set_guidance_hint("")
 	game.set_process(false)
 	game.active_interactable = null
@@ -97,6 +112,28 @@ func _capture(game: Node, boss: Node, stem: String, position: Vector3, yaw: floa
 	image.save_png(ProjectSettings.globalize_path(path))
 	print("CAPTURED %s" % path)
 
+func _floor_position(game: Node, boss: Node, position: Vector3) -> Vector3:
+	var query := PhysicsRayQueryParameters3D.create(
+		Vector3(position.x, 4.0, position.z), Vector3(position.x, -3.0, position.z), 1)
+	query.exclude = [game.player.get_rid(), boss.get_rid()]
+	var hit: Dictionary = game.player.get_world_3d().direct_space_state.intersect_ray(query)
+	if hit.is_empty():
+		failures += 1
+		push_error("Halvern capture has no physical floor at %s" % position)
+		return position
+	return (hit.position as Vector3) + Vector3.UP * 0.03
+
 func _frames(count: int) -> void:
 	for _index in range(count):
 		await process_frame
+
+func _wait_for_undercroft_dressing(game: Node) -> bool:
+	var deadline := Time.get_ticks_msec() + 10000
+	while Time.get_ticks_msec() < deadline:
+		if str(game.current_zone_id) == "undercroft" and game.zone_root != null and is_instance_valid(game.zone_root):
+			var markers: Array[Node] = game.zone_root.find_children("DeferredVisualRole_*", "", true, false)
+			if markers.is_empty() and not bool(game.zone_root.get_meta("deferred_visual_roles_pending", false)):
+				return true
+		await process_frame
+	push_error("Undercroft visual dressing did not complete within 10 seconds; active=%s" % str(game.current_zone_id))
+	return false

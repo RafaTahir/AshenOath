@@ -16,6 +16,7 @@ const HUMAN_ROLES := [
 	"player", "player_kael", "player_human", "kael", "sister_anwen", "sister_anwen_human", "anwen",
 	"mira_human", "mira_herbalist", "rook_human", "rook_smuggler", "villager_human", "villager_female_human",
 	"villager_worker_human", "villager_hooded_human", "castle_guard_human", "road_ranger_human",
+	"bandit", "bandit_deserter", "bandit_tracker",
 	"generic_villager_01", "generic_villager_02", "castle_guard", "road_ranger", "lord_edric", "edric"
 ]
 const MONSTER_ROLES := [
@@ -31,6 +32,7 @@ static func apply(root: Node, role_id: String, variant_seed: String = "") -> Dic
 	var recipe := _recipe_for(role, profile, resolved_seed)
 	var surfaces := 0
 	var face_surfaces := 0
+	var prebaked_identity := _contains_prebaked_identity(root)
 	for mesh in root.find_children("*", "MeshInstance3D", true, false):
 		if mesh.mesh == null or (mesh.skin == null and mesh.skeleton == NodePath("")) or str(mesh.name).to_lower().contains("shadow"):
 			continue
@@ -41,12 +43,13 @@ static func apply(root: Node, role_id: String, variant_seed: String = "") -> Dic
 			var surface_name := str(mesh.mesh.surface_get_name(index)).to_lower() if mesh.mesh is ArrayMesh else ""
 			var material_name := str(source.resource_name).to_lower() if source != null else ""
 			var token := "%s %s %s" % [str(mesh.name).to_lower(), surface_name, material_name]
-			mesh.set_surface_override_material(index, _identity_material(
-				source,
-				_color_for(token, role, profile),
-				role_is_monster_role(role),
-				_wash_strength(token, role)
-			))
+			if not prebaked_identity:
+				mesh.set_surface_override_material(index, _identity_material(
+					source,
+					_color_for(token, role, profile),
+					role_is_monster_role(role),
+					_wash_strength(token, role)
+				))
 			surfaces += 1
 			if token.contains("head") or token.contains("skin") or token.contains("eyes") or token.contains("hair") or token.contains("skull") or token.contains("jaw") or token.contains("mouth") or token.contains("teeth"):
 				face_surfaces += 1
@@ -54,6 +57,7 @@ static func apply(root: Node, role_id: String, variant_seed: String = "") -> Dic
 	root.set_meta("character_variant_seed", resolved_seed)
 	root.set_meta("character_variant_recipe", recipe)
 	root.set_meta("character_identity_surfaces", surfaces)
+	root.set_meta("character_identity_material_mode", "prebaked_atlas" if prebaked_identity else "runtime_palette")
 	_apply_bounded_variant_scale(root, role, resolved_seed)
 	# Identity is now carried by the imported mesh materials. Earlier passes
 	# attached jaw, hair, eye and clothing primitives to the skeleton; those
@@ -79,6 +83,14 @@ static func apply(root: Node, role_id: String, variant_seed: String = "") -> Dic
 		face_driver.configure(root as Node3D, role)
 		root.set_meta("character_face_contract", face_driver.get_contract_report())
 	return {"role": role, "surfaces": surfaces, "face_surfaces": face_surfaces}
+
+static func _contains_prebaked_identity(root: Node) -> bool:
+	if bool(root.get_meta("character_prebaked_identity", false)):
+		return true
+	for child in root.get_children():
+		if _contains_prebaked_identity(child):
+			return true
+	return false
 
 static func _has_native_face_material(root: Node) -> bool:
 	var matches := 0

@@ -13,6 +13,49 @@ func _initialize() -> void:
 	await process_frame
 	game.call("_new_game")
 	await _frames(10)
+	var detail_deadline := Time.get_ticks_msec() + 120000
+	while game.opening_detail_pending and Time.get_ticks_msec() < detail_deadline:
+		await process_frame
+	_check(not game.opening_detail_pending, "opening prop assembly did not finish")
+	if game.opening_detail_pending:
+		game.queue_free()
+		await process_frame
+		_finish()
+		return
+	var board := game.zone_root.find_child("notice_board", true, false) as Node3D
+	var requests := game.zone_root.find_child("side_contracts", true, false) as Node3D
+	_check(board != null and requests != null, "notice-board interactions are missing")
+	if board != null and requests != null:
+		_check(board.get_meta("external_world_prop", "") == "notice_board", "notice board has no visible prop owner")
+		_check(requests.get_meta("external_world_prop", "") == "notice_board", "requests have no visible prop owner")
+		for area in [board, requests]:
+			_check(area.find_children("*", "MeshInstance3D", true, false).is_empty(), "notice-board interaction draws an orphaned proxy")
+		var backing := game.zone_root.find_child("NoticeBoardCollision", true, false) as CollisionShape3D
+		_check(backing != null, "notice papers have no physical backing board")
+		var post_count: int = 0
+		for shape in game.zone_root.find_children("*", "CollisionShape3D", true, false):
+			if not shape.shape is BoxShape3D or shape.shape.size.distance_to(Vector3(0.16, 1.4, 0.16)) > 0.02:
+				continue
+			for offset in [-0.55, 0.55]:
+				if shape.global_position.distance_to(board.global_position + Vector3(offset, 0.7, 0)) < 0.02:
+					post_count += 1
+		_check(post_count == 2, "notice board must have both supported posts")
+		if backing != null:
+			_check(backing.global_position.distance_to(board.global_position + Vector3(0, 1.25, 0)) < 0.02, "notice-board backing was relocated away from its papers")
+			var rendered_backing := false
+			for batch in game.zone_root.find_children("*", "MultiMeshInstance3D", true, false):
+				if batch.multimesh == null or batch.multimesh.mesh == null:
+					continue
+				for index in batch.multimesh.instance_count:
+					var transform: Transform3D = batch.global_transform * batch.multimesh.get_instance_transform(index)
+					if transform.origin.distance_to(backing.global_position) < 0.02 and transform.basis.get_scale().distance_to(Vector3(1.55, 0.9, 0.12)) < 0.02:
+						rendered_backing = true
+			_check(rendered_backing, "notice-board backing collision has no corresponding rendered surface")
+	if "--notice-board-only" in OS.get_cmdline_user_args():
+		game.queue_free()
+		await process_frame
+		_finish()
+		return
 	var controller = game.world_props
 	_check(controller != null, "WorldPropController is not installed")
 	if controller == null:

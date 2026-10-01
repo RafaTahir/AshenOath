@@ -38,9 +38,11 @@ func _initialize() -> void:
 		_check(game.player != null and is_instance_valid(game.player), "player was not activated")
 		_check(not bool(game.hud.loading_armed), "Warm New Game handoff still armed the loading overlay")
 		_check(game.hud.loading_layer == null or not bool(game.hud.loading_layer.visible), "Warm New Game handoff displayed the loading overlay")
-		# The full gameplay stage is intentionally delayed by less than one second;
-		# wait for that stage and prove the first objective's speaker appears.
-		var hydrated := await _wait_for_node("sister_anwen", 3.0)
+		if game.runtime_packs != null and game.runtime_packs.has_method("get_state"):
+			_check(str(game.runtime_packs.get_state("characters")) == "", "New Game requested the character pack before first control")
+		# The full gameplay stage is intentionally delayed for eight seconds so the
+		# browser can accept input before imported actor subtrees are attached.
+		var hydrated := await _wait_for_node("sister_anwen", 12.0)
 		_check(hydrated, "opening gameplay hydration did not add Sister Anwen")
 		_check(game.opening_detail_pending, "opening detail pipeline was not retained for post-handoff hydration")
 	_prepare_shutdown()

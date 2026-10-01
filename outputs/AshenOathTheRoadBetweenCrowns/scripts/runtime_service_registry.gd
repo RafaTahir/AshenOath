@@ -106,7 +106,7 @@ func configure(owner: Node) -> void:
 	input_router.install_default_actions()
 	input_router.set_settings_manager(settings)
 	input_router.apply_settings(settings.settings)
-	interaction_focus.setup(quests)
+	interaction_focus.setup(quests, quest_presentation)
 	hud.set_input_source(input_router)
 	minigames.setup(input_router)
 	mobile_touch.setup(input_router, hud, settings.settings)
@@ -159,8 +159,14 @@ func configure(owner: Node) -> void:
 	hud.quit_requested.connect(Callable(owner, "_handle_quit_request"))
 	hud.continue_requested.connect(func():
 		audio.play_event("ui")
-		if not save_manager.load_game(owner):
-			save_manager.load_game(owner, save_manager.AUTOSAVE_PATH)
+		# Keep Continue's load order identical to the menu's advertised source.
+		# A fresh New Game creates a safe checkpoint before any manual/autosave;
+		# omitting it left an enabled Continue button that could never resume.
+		save_manager.load_first_available(owner, [
+			save_manager.SAVE_PATH,
+			save_manager.AUTOSAVE_PATH,
+			save_manager.CHECKPOINT_PATH,
+		])
 	)
 	hud.save_requested.connect(func():
 		audio.play_event("ui")
@@ -180,7 +186,7 @@ func configure(owner: Node) -> void:
 	)
 	hud.vendor_purchase_requested.connect(func(vendor_id: String, item_id: String, quantity: int):
 		owner.call("_purchase_from_vendor", vendor_id, item_id, quantity)
-		hud.show_vendor(vendor_id, vendor_service, inventory, quests, story_state)
+		hud.call_deferred("show_vendor", vendor_id, vendor_service, inventory, quests, story_state)
 	)
 	hud.resume_requested.connect(Callable(owner, "_resume_game"))
 	hud.settings_requested.connect(Callable(owner, "_handle_setting"))

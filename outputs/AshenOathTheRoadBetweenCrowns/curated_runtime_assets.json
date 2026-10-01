@@ -5,80 +5,80 @@
   "roles": {
     "characters": {
       "player_kael": {
-        "status": "char_restore_001_a_set",
-        "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
+        "status": "opening_single_material_a_set",
+        "path": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.gltf",
         "source_pack": "Quaternius Universal Base Characters",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
-        "notes": "A1 Kael identity: Universal male peasant body composed with native male head and simple-parted hair, grey-haired hunter palette, shared animation and bone equipment."
+        "notes": "Complete clothed Universal body assembly with deterministic identity recipe and one shared skeleton."
       },
       "sister_anwen": {
-        "status": "char_restore_001_a_set",
-        "path": "res://assets_external/characters_universal/Female_Peasant.gltf",
+        "status": "opening_single_material_a_set",
+        "path": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.gltf",
         "source_pack": "Quaternius Universal Base Characters",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
-        "notes": "A2 Anwen identity: Universal female peasant body composed with native female head and buns, grey-haired cleric palette, shared animation and bone staff."
+        "notes": "Complete clothed Universal body assembly with deterministic identity recipe and one shared skeleton."
       },
       "mira_herbalist": {
-        "status": "char_restore_004_unified_female_clothed",
-        "path": "res://assets_external/characters_universal/Female_Peasant.gltf",
+        "status": "opening_single_material_crowd",
+        "path": "res://assets_external/characters_universal/runtime/Villager_Female_Atlas.gltf",
         "source_pack": "Quaternius Universal Base Characters",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
         "notes": "Complete clothed Universal body assembly with deterministic identity recipe and one shared skeleton."
       },
       "rook_smuggler": {
-        "status": "char_restore_004_unified_male_clothed",
-        "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
+        "status": "opening_single_material_crowd",
+        "path": "res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.gltf",
         "source_pack": "Quaternius Universal Base Characters",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
         "notes": "Complete clothed Universal body assembly with deterministic identity recipe and one shared skeleton."
       },
       "widow_elna": {
-        "status": "char_restore_004_unified_female_clothed",
-        "path": "res://assets_external/characters_universal/Female_Peasant.gltf",
+        "status": "opening_single_material_crowd",
+        "path": "res://assets_external/characters_universal/runtime/Villager_Female_Atlas.gltf",
         "source_pack": "Quaternius Universal Base Characters",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
         "notes": "Complete clothed Universal body assembly with deterministic identity recipe and one shared skeleton."
       },
       "blacksmith_tor": {
-        "status": "char_restore_004_unified_male_clothed",
-        "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
+        "status": "opening_single_material_crowd",
+        "path": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf",
         "source_pack": "Quaternius Universal Base Characters",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
         "notes": "Complete clothed Universal body assembly with deterministic identity recipe and one shared skeleton."
       },
       "generic_villager_01": {
-        "status": "char_restore_004_unified_male_clothed",
-        "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
+        "status": "opening_single_material_crowd",
+        "path": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf",
         "source_pack": "Quaternius Universal Base Characters",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
         "notes": "Complete clothed Universal body assembly with deterministic identity recipe and one shared skeleton."
       },
       "generic_villager_02": {
-        "status": "char_restore_004_unified_female_clothed",
-        "path": "res://assets_external/characters_universal/Female_Peasant.gltf",
+        "status": "opening_single_material_crowd",
+        "path": "res://assets_external/characters_universal/runtime/Villager_Female_Atlas.gltf",
         "source_pack": "Quaternius Universal Base Characters",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
         "notes": "Complete clothed Universal body assembly with deterministic identity recipe and one shared skeleton."
       },
       "lord_edric": {
-        "status": "char_restore_004_unified_male_clothed",
-        "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
+        "status": "opening_single_material_crowd",
+        "path": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf",
         "source_pack": "Quaternius Universal Base Characters",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
         "notes": "Complete clothed Universal body assembly with deterministic identity recipe and one shared skeleton."
       },
       "castle_guard": {
-        "status": "char_restore_004_unified_male_clothed",
-        "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
+        "status": "opening_single_material_crowd",
+        "path": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf",
         "source_pack": "Quaternius Universal Base Characters",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
@@ -93,70 +93,72 @@
         "notes": "Complete skinned Ranger source with shared UAL2 animation library and optimized 1K runtime maps."
       },
       "player_human": {
-        "status": "char_restore_001_a_set",
-        "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
+        "status": "opening_single_material_a_set",
+        "path": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.gltf",
         "source_pack": "Quaternius Universal Base Characters",
         "license": "CC0 1.0",
-        "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt"
+        "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
+        "notes": "Complete clothed Universal body assembly with deterministic identity recipe and one shared skeleton."
       },
       "sister_anwen_human": {
-        "status": "char_restore_001_a_set",
-        "path": "res://assets_external/characters_universal/Female_Peasant.gltf",
+        "status": "opening_single_material_a_set",
+        "path": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.gltf",
         "source_pack": "Quaternius Universal Base Characters",
         "license": "CC0 1.0",
-        "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt"
+        "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
+        "notes": "Complete clothed Universal body assembly with deterministic identity recipe and one shared skeleton."
       },
       "mira_human": {
-        "status": "char_restore_004_unified_female_clothed",
-        "path": "res://assets_external/characters_universal/Female_Peasant.gltf",
+        "status": "opening_single_material_crowd",
+        "path": "res://assets_external/characters_universal/runtime/Villager_Female_Atlas.gltf",
         "source_pack": "Quaternius Universal Base Characters",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
         "notes": "Complete clothed Universal body assembly with deterministic identity recipe and one shared skeleton."
       },
       "rook_human": {
-        "status": "char_restore_004_unified_male_clothed",
-        "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
+        "status": "opening_single_material_crowd",
+        "path": "res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.gltf",
         "source_pack": "Quaternius Universal Base Characters",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
         "notes": "Complete clothed Universal body assembly with deterministic identity recipe and one shared skeleton."
       },
       "villager_human": {
-        "status": "char_restore_004_unified_male_clothed",
-        "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
+        "status": "opening_single_material_crowd",
+        "path": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf",
         "source_pack": "Quaternius Universal Base Characters",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
         "notes": "Complete clothed Universal body assembly with deterministic identity recipe and one shared skeleton."
       },
       "villager_female_human": {
-        "status": "char_restore_004_unified_female_clothed",
-        "path": "res://assets_external/characters_universal/Female_Peasant.gltf",
+        "status": "opening_single_material_crowd",
+        "path": "res://assets_external/characters_universal/runtime/Villager_Female_Atlas.gltf",
         "source_pack": "Quaternius Universal Base Characters",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
         "notes": "Complete clothed Universal body assembly with deterministic identity recipe and one shared skeleton."
       },
       "villager_worker_human": {
-        "status": "char_restore_004_unified_male_clothed",
-        "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
+        "status": "opening_single_material_crowd",
+        "path": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf",
         "source_pack": "Quaternius Universal Base Characters",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
         "notes": "Complete clothed Universal body assembly with deterministic identity recipe and one shared skeleton."
       },
       "villager_hooded_human": {
-        "status": "char_restore_004_unified_male_clothed",
-        "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
+        "status": "opening_single_material_crowd",
+        "path": "res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.gltf",
         "source_pack": "Quaternius Universal Base Characters",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
         "notes": "Complete clothed Universal body assembly with deterministic identity recipe and one shared skeleton."
       },
       "castle_guard_human": {
-        "status": "char_restore_004_unified_male_clothed",
-        "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
+        "status": "opening_single_material_crowd",
+        "path": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf",
         "source_pack": "Quaternius Universal Base Characters",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
@@ -168,16 +170,24 @@
         "source_pack": "Quaternius Modular Character Outfits: Fantasy",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/Quaternius_Modular_Character_Outfits_Fantasy_CC0.txt"
+      },
+      "halvern_boss": {
+        "status": "boss_006_complete_shared_body_candidate",
+        "path": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf",
+        "source_pack": "Quaternius Modular Character Outfits: Fantasy",
+        "license": "CC0 1.0",
+        "license_file": "res://assets_external/licenses/Quaternius_Modular_Character_Outfits_Fantasy_CC0.txt",
+        "notes": "Complete Ranger-derived body for Halvern; authored materials and a grave-seal effect replace proxy armor."
       }
     },
     "enemies": {
       "ghoulkin": {
-        "status": "char_restore_001_skeleton_family",
-        "path": "res://assets_external/enemies/Skeleton.fbx",
-        "source_pack": "Quaternius Animated Monsters",
+        "status": "mon_002_runtime_approved",
+        "path": "res://assets_external/enemies/ultimate_monsters/Ghost.glb",
+        "source_pack": "Quaternius Ultimate Monsters",
         "license": "CC0 1.0",
-        "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
-        "notes": "Retained articulated Skeleton source with role-specific cursed-remains material and behavior profile."
+        "license_file": "res://assets_external/licenses/Quaternius_Ultimate_Monsters_Mirror_CC0.txt",
+        "notes": "Hooded skull-faced Ghost approved for the base Ghoulkin identity after animation, grounding, tactical-route, and gameplay-distance visual checks."
       },
       "ghoulkin_skeleton": {
         "status": "mon_002_verified_runtime",
@@ -188,20 +198,28 @@
         "notes": "Complete animated skeleton body with authored skull, ribs, hands, feet, and five imported locomotion/combat clips. Used as the Wychwood cursed-remains family source while the Ultimate Monsters download remains quota-blocked."
       },
       "wychwood_stalker_creature": {
-        "status": "mon_002_connected_skeleton_stalker",
-        "path": "res://assets_external/enemies/Skeleton.fbx",
-        "source_pack": "Quaternius Animated Monsters",
+        "status": "mon_002_runtime_approved",
+        "path": "res://assets_external/enemies/ultimate_monsters/Demon.gltf",
+        "source_pack": "Quaternius Ultimate Monsters",
         "license": "CC0 1.0",
-        "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
-        "notes": "Connected animated Skeleton body used for the Wychwood Stalker role; ash-green material, lean scale, Skeleton attack clips, and flanker behavior carry the distinction."
+        "license_file": "res://assets_external/licenses/Quaternius_Ultimate_Monsters_Mirror_CC0.txt",
+        "notes": "Lean horned Demon approved for the Stalker after animation, grounding, tactical-route, and gameplay-distance visual checks."
       },
       "wychwood_raider_creature": {
-        "status": "mon_002_connected_skeleton_raider",
-        "path": "res://assets_external/enemies/Skeleton.fbx",
-        "source_pack": "Quaternius Animated Monsters",
+        "status": "mon_002_runtime_approved",
+        "path": "res://assets_external/enemies/ultimate_monsters/Orc.gltf",
+        "source_pack": "Quaternius Ultimate Monsters",
         "license": "CC0 1.0",
-        "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
-        "notes": "Connected animated Skeleton body used for the Wychwood Raider role; compact scale, ash-bone material, Skeleton attack clips, and feint behavior carry the distinction."
+        "license_file": "res://assets_external/licenses/Quaternius_Ultimate_Monsters_Mirror_CC0.txt",
+        "notes": "Armed Orc approved for the Raider after animation, grounding, tactical-route, and gameplay-distance visual checks."
+      },
+      "wychwood_brute_creature": {
+        "status": "mon_002_runtime_approved",
+        "path": "res://assets_external/enemies/ultimate_monsters/BlueDemon.gltf",
+        "source_pack": "Quaternius Ultimate Monsters",
+        "license": "CC0 1.0",
+        "license_file": "res://assets_external/licenses/Quaternius_Ultimate_Monsters_Mirror_CC0.txt",
+        "notes": "Broad horned Blue Demon approved for the Brute after animation, grounding, tactical-route, and gameplay-distance visual checks."
       },
       "bog_wretch": {
         "status": "mon_002_distinct_slime_wretch",
@@ -212,33 +230,33 @@
         "notes": "Slime source with swamp palette, pooling animation, and Bog Wretch behavior profile."
       },
       "gravebound_knight": {
-        "status": "mon_002_distinct_knight_family",
-        "path": "res://assets_external/characters/KnightCharacter.fbx",
+        "status": "mon_002_validated_skeletal_knight_family",
+        "path": "res://assets_external/enemies/Skeleton.fbx",
         "source_pack": "Quaternius Animated Monsters",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
-        "notes": "Knight source with iron/ash palette, sword stance, and Gravebound behavior profile."
+        "notes": "Validated connected Skeleton source replaces the faceless gray Knight fallback and uses the Gravebound iron/ash behavior profile."
       },
       "wychwood_stalker": {
-        "status": "char_restore_001_skeleton_family",
-        "path": "res://assets_external/enemies/Skeleton.fbx",
-        "source_pack": "Quaternius Animated Monsters",
+        "status": "mon_002_runtime_alias",
+        "path": "res://assets_external/enemies/ultimate_monsters/Demon.gltf",
+        "source_pack": "Quaternius Ultimate Monsters",
         "license": "CC0 1.0",
-        "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt"
+        "license_file": "res://assets_external/licenses/Quaternius_Ultimate_Monsters_Mirror_CC0.txt"
       },
       "wychwood_raider": {
-        "status": "char_restore_001_skeleton_family",
-        "path": "res://assets_external/enemies/Skeleton.fbx",
-        "source_pack": "Quaternius Animated Monsters",
+        "status": "mon_002_runtime_alias",
+        "path": "res://assets_external/enemies/ultimate_monsters/Orc.gltf",
+        "source_pack": "Quaternius Ultimate Monsters",
         "license": "CC0 1.0",
-        "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt"
+        "license_file": "res://assets_external/licenses/Quaternius_Ultimate_Monsters_Mirror_CC0.txt"
       },
       "wychwood_brute": {
-        "status": "char_restore_001_skeleton_family",
-        "path": "res://assets_external/enemies/Skeleton.fbx",
-        "source_pack": "Quaternius Animated Monsters",
+        "status": "mon_002_runtime_alias",
+        "path": "res://assets_external/enemies/ultimate_monsters/BlueDemon.gltf",
+        "source_pack": "Quaternius Ultimate Monsters",
         "license": "CC0 1.0",
-        "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt"
+        "license_file": "res://assets_external/licenses/Quaternius_Ultimate_Monsters_Mirror_CC0.txt"
       },
       "ashwing": {
         "status": "mon_002_interim_dragon_mesh",
@@ -250,18 +268,32 @@
       },
       "white_hart_avatar": {
         "status": "mon_002_connected_animal_runtime",
-        "path": "res://assets_external/enemies/Wolf.fbx",
+        "path": "res://assets_external/enemies/WhiteHart_Stag.glb",
         "source_pack": "Quaternius Animated Animals",
         "license": "CC0 1.0",
-        "license_file": "res://assets_external/licenses/Quaternius_Animated_Animals_CC0.txt",
-        "notes": "Connected animated wolf base with a head-bone spectral antler crown for the White Hart witness presentation."
+        "license_file": "res://assets_external/licenses/Quaternius_Ultimate_Animals_CC0.txt",
+        "notes": "Native antlered stag candidate; complete encounter and visual acceptance pending."
       },
       "bandit": {
-        "status": "char_restore_001_universal_male",
-        "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
-        "source_pack": "Quaternius Universal Base Characters",
+        "status": "world_002_graphically_reviewed_candidate",
+        "path": "res://assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.gltf",
+        "source_pack": "Quaternius Universal Base Characters and Modular Character Outfits: Fantasy",
         "license": "CC0 1.0",
-        "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt"
+        "license_file": "res://assets_external/licenses/Quaternius_Modular_Character_Outfits_Fantasy_CC0.txt"
+      },
+      "bandit_deserter": {
+        "status": "approved_runtime",
+        "path": "res://assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.gltf",
+        "source_pack": "Quaternius Universal Base Characters and Modular Character Outfits: Fantasy",
+        "license": "CC0 1.0",
+        "license_file": "res://assets_external/licenses/Quaternius_Modular_Character_Outfits_Fantasy_CC0.txt"
+      },
+      "bandit_tracker": {
+        "status": "approved_runtime",
+        "path": "res://assets_external/characters_universal/runtime/Bandit_Tracker_Atlas.gltf",
+        "source_pack": "Quaternius Universal Base Characters and Modular Character Outfits: Fantasy",
+        "license": "CC0 1.0",
+        "license_file": "res://assets_external/licenses/Quaternius_Modular_Character_Outfits_Fantasy_CC0.txt"
       }
     },
     "environment": {
@@ -282,6 +314,13 @@
       "greyfen_window_facade": {
         "status": "selected_component",
         "path": "res://assets_external/environment/village/Wall_Plaster_Window_Wide_Flat.obj",
+        "source_pack": "Quaternius Medieval Village MegaKit",
+        "license": "CC0 1.0",
+        "license_file": "res://assets_external/licenses/quaternius_medieval_village_megakit/License_Standard.txt"
+      },
+      "greyfen_wall_facade": {
+        "status": "selected_component",
+        "path": "res://assets_external/environment/village/Wall_Plaster_Straight_Base.obj",
         "source_pack": "Quaternius Medieval Village MegaKit",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/quaternius_medieval_village_megakit/License_Standard.txt"
@@ -344,12 +383,28 @@
         "license_file": "res://assets_external/licenses/quaternius_stylized_nature_megakit/License_Standard.txt",
         "notes": "Alternate twisted broad-leaf silhouette used sparingly to break repeated forest walls while preserving the same asset family."
       },
+      "forest_tree_secondary": {
+        "status": "selected_component",
+        "path": "res://assets_external/environment/forest/CommonTree_5.obj",
+        "source_pack": "Quaternius Stylized Nature MegaKit",
+        "license": "CC0 1.0",
+        "license_file": "res://assets_external/licenses/quaternius_stylized_nature_megakit/License_Standard.txt",
+        "notes": "Lower-cost Wychwood background tree; twisted variant and witness landmarks retain the haunted silhouette."
+      },
       "forest_rock": {
         "status": "selected_component",
         "path": "res://assets_external/environment/forest/Rock_Medium_1.obj",
         "source_pack": "Quaternius Stylized Nature MegaKit",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/quaternius_stylized_nature_megakit/License_Standard.txt"
+      },
+      "forest_path_rock": {
+        "status": "selected_component",
+        "path": "res://assets_external/environment/forest/RockPath_Round_Small_1.obj",
+        "source_pack": "Quaternius Stylized Nature MegaKit",
+        "license": "CC0 1.0",
+        "license_file": "res://assets_external/licenses/quaternius_stylized_nature_megakit/License_Standard.txt",
+        "texture": "res://assets_external/environment/forest/PathRocks_Diffuse.png"
       },
       "forest_bush": {
         "status": "selected_component",

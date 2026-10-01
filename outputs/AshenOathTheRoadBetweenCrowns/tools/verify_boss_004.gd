@@ -15,18 +15,18 @@ func _initialize() -> void:
 		game.quests.start_quest(quest_id)
 	for objective_id in ["fragment_anwen", "fragment_rook", "fragment_tor", "fragment_mira", "reconstruct_register"]:
 		game.quests.complete_objective(quest_id, objective_id)
-	game.story_state.set_flag("rootbound_colossus_spawned", false)
+	game.story_state.set_flag("rootbound_colossus_spawned", true)
 	game.call("_load_zone", "deep_wood", Vector3(0, 0, 12))
 	await _frames(12)
 	var boss = _find_boss(game, "rootbound_colossus")
-	_check(boss != null, "Rootbound Colossus did not spawn after register reconstruction")
+	_check(_count_living_boss(game, "rootbound_colossus") == 1, "Undefeated Rootbound did not restore exactly once after a saved spawn")
 	if boss != null:
 		_check(bool(boss.get("is_boss")), "Rootbound Colossus is not marked as a boss")
 		_check(boss.has_method("setup") and boss.has_method("apply_damage"), "Rootbound spawn lost its runtime actor contract")
 		_check(boss.find_child("BossEncounterController", true, false) != null, "Rootbound controller is missing")
-		_check(boss.find_child("RootboundBarkHarness", true, false) != null, "Rootbound bark harness is missing")
+		_check(boss.find_child("RootboundHeartSocket", true, false) is BoneAttachment3D, "Rootbound heart is not bone-attached")
 		_check(boss.find_child("RootboundHeart", true, false) != null, "Rootbound exposed heart is missing")
-		_check(boss.find_child("RootboundRootArmLeft", true, false) != null and boss.find_child("RootboundRootArmRight", true, false) != null, "Rootbound root arms are incomplete")
+		_check(boss.find_child("RootboundRootArmLeft", true, false) == null and boss.find_child("RootboundRootArmRight", true, false) == null, "Rootbound still has duplicate proxy arms")
 		var controller: Node = boss.get_node_or_null("BossEncounterController")
 		var maximum: float = boss.health_component.max_health
 		boss.apply_damage(maximum * 0.40, "boss_verifier")
@@ -47,6 +47,8 @@ func _initialize() -> void:
 		boss.apply_damage(9999.0, "boss_verifier")
 		await _frames(6)
 		_check(bool(game.story_state.get_flag("rootbound_colossus_defeated", false)), "Rootbound aftermath flag was not saved")
+		_check(bool(game.story_state.get_flag("boss_reward_oathwood_core", false)), "Rootbound reward was not persisted")
+		_check(bool(game.story_state.get_flag("deep_wood_roots_cleared", false)), "Rootbound declared aftermath was not persisted")
 		game.call("_load_zone", "deep_wood", Vector3(0, 0, 12))
 		await _frames(12)
 		_check(_find_living_boss(game, "rootbound_colossus") == null, "Defeated Rootbound respawned")
@@ -67,6 +69,13 @@ func _find_boss(game: Node, id: String) -> Node:
 func _find_living_boss(game: Node, id: String) -> Node:
 	var boss := _find_boss(game, id)
 	return boss if boss != null and not bool(boss.get("dead")) else null
+
+func _count_living_boss(game: Node, id: String) -> int:
+	var count := 0
+	for enemy in game.active_enemies:
+		if is_instance_valid(enemy) and str(enemy.get("enemy_id")) == id and not bool(enemy.get("dead")):
+			count += 1
+	return count
 
 func _frames(count: int) -> void:
 	for _index in range(count):

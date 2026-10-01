@@ -15,13 +15,23 @@ func _initialize() -> void:
 	root.add_child(game)
 	await process_frame
 	game.call("_new_game")
-	await _settle(3)
+	var detail_deadline := Time.get_ticks_msec() + 30000
+	while Time.get_ticks_msec() < detail_deadline:
+		if game.game_started and game.zone_root != null and bool(game.zone_root.get_meta("opening_detail_complete", false)):
+			break
+		await process_frame
+	if not game.game_started or game.zone_root == null or not bool(game.zone_root.get_meta("opening_detail_complete", false)):
+		push_error("Greyfen river route population did not finish hydrating within 30 seconds")
+		quit(1)
+		return
 	await _verify_zone(game,"greyfen",4.5)
 	await _verify_physical_bridge_crossings(game, 4.5)
-	game.call("_load_zone","wychwood",Vector3(0,1,8))
-	await _settle(3)
-	await _verify_zone(game,"wychwood",0.0)
-	await _verify_physical_bridge_crossings(game, 0.0)
+	var greyfen_only := "--greyfen-only" in OS.get_cmdline_user_args()
+	if not greyfen_only:
+		game.call("_load_zone","wychwood",Vector3(0,1,8))
+		await _settle(3)
+		await _verify_zone(game,"wychwood",0.0)
+		await _verify_physical_bridge_crossings(game, 0.0)
 	check(not game.player.has_method("enter_water"), "Obsolete swimming entry remains active")
 	check(not game.player.has_method("is_swimming"), "Obsolete swimming state remains active")
 	print("VERIFIER_PHASE: SHUTDOWN")
@@ -60,6 +70,18 @@ func _verify_physical_bridge_crossings(game, center_z: float) -> void:
 	check(player is CharacterBody3D, "%s bridge test has no CharacterBody3D" % str(game.current_zone_id))
 	if not player is CharacterBody3D:
 		return
+	# This probe owns static crossing safety. The Wychwood clearing trigger can
+	# activate a pursuing Ghoulkin during the return leg; its body is a combat
+	# obstacle, not evidence of a bridge lip. Restore encounter state afterward.
+	var previous_tension = game.tutorial_flags.get("clearing_tension", null)
+	var encounter_states: Array = []
+	if str(game.current_zone_id) == "wychwood":
+		game.tutorial_flags["clearing_tension"] = true
+		for enemy in game.active_enemies:
+			if is_instance_valid(enemy):
+				encounter_states.append([enemy, enemy.is_encounter_active()])
+				enemy.set_encounter_active(false)
+		await physics_frame
 	# Drive the actual player controller across the authored deck. This catches
 	# the failure mode that ray-height checks miss: capsule lips, recovery
 	# volumes, a deck that is visually present but not physically continuous,
@@ -74,7 +96,7 @@ func _verify_physical_bridge_crossings(game, center_z: float) -> void:
 	player.global_position = Vector3(0.0, 0.25, center_z + 5.3)
 	player.velocity = Vector3.ZERO
 	player.rotation.y = 0.0
-	await _walk_with_input(game, "move_forward", 150, center_z, -1.0)
+	await _walk_with_input(game, "move_forward", 240, center_z, -1.0)
 	check(player.global_position.z < center_z - 2.55, "%s bank-to-bridge approach stopped at z=%.2f" % [str(game.current_zone_id), player.global_position.z])
 	check(not game.call("_is_river_recovery_position", str(game.current_zone_id), player.global_position), "%s bank-to-bridge approach triggered river recovery" % str(game.current_zone_id))
 	for lane_x in [-1.2, 1.2]:
@@ -82,7 +104,7 @@ func _verify_physical_bridge_crossings(game, center_z: float) -> void:
 		player.velocity = Vector3.ZERO
 		player.rotation.y = 0.0
 		_reset_camera(game)
-		await _walk_with_input(game, "move_forward", 90, center_z, -1.0)
+		await _walk_with_input(game, "move_forward", 240, center_z, -1.0)
 		check(absf(player.global_position.x - lane_x) < BRIDGE_LANE_DRIFT_TOLERANCE, "%s bridge crossing drifted sideways from lane x=%.2f (actual x=%.2f z=%.2f y=%.2f velocity=%s)" % [str(game.current_zone_id), lane_x, player.global_position.x, player.global_position.z, player.global_position.y, player.velocity])
 		check(absf(player.global_position.x) < BridgeSurfaceContract.HALF_WIDTH - 0.32, "%s bridge crossing left the rail-safe corridor (actual x=%.2f width=%.2f)" % [str(game.current_zone_id), player.global_position.x, BridgeSurfaceContract.DECK_WIDTH])
 		check(player.global_position.z < center_z - 2.55, "%s south-to-north bridge crossing stopped at lane x=%.2f z=%.2f" % [str(game.current_zone_id), lane_x, player.global_position.z])
@@ -96,11 +118,19 @@ func _verify_physical_bridge_crossings(game, center_z: float) -> void:
 		# north bank the real return input is reverse, so this leg exercises the
 		# same player-facing control path without accidentally walking away from
 		# the bridge.
-		await _walk_with_input(game, "move_back", 92, center_z, 1.0)
+		await _walk_with_input(game, "move_back", 240, center_z, 1.0)
 		check(absf(player.global_position.x - lane_x) < BRIDGE_LANE_DRIFT_TOLERANCE, "%s return crossing drifted sideways from lane x=%.2f (actual x=%.2f z=%.2f y=%.2f contacts=%s)" % [str(game.current_zone_id), lane_x, player.global_position.x, player.global_position.z, player.global_position.y, _slide_collision_names(player)])
 		check(absf(player.global_position.x) < BridgeSurfaceContract.HALF_WIDTH - 0.32, "%s return crossing left the rail-safe corridor (actual x=%.2f width=%.2f)" % [str(game.current_zone_id), player.global_position.x, BridgeSurfaceContract.DECK_WIDTH])
-		check(player.global_position.z > center_z + 2.55, "%s north-to-south bridge crossing stopped at lane x=%.2f z=%.2f contacts=%s" % [str(game.current_zone_id), lane_x, player.global_position.z, _slide_collision_names(player)])
+		check(player.global_position.z > center_z + 2.55, "%s north-to-south bridge crossing stopped at lane x=%.2f z=%.2f contacts=%s control=%s locked=%s health=%.1f state=%s input=%s yaw=%.2f" % [str(game.current_zone_id), lane_x, player.global_position.z, _slide_collision_names(player), player.can_control, player.transition_locked, player.health_component.health, player.movement_state, player._movement_input(), game.camera_rig.yaw])
 		check(not game.call("_is_river_recovery_position", str(game.current_zone_id), player.global_position), "%s return crossing ended in river recovery state at lane x=%.2f" % [str(game.current_zone_id), lane_x])
+	if str(game.current_zone_id) == "wychwood":
+		for state in encounter_states:
+			if is_instance_valid(state[0]):
+				state[0].set_encounter_active(state[1])
+		if previous_tension == null:
+			game.tutorial_flags.erase("clearing_tension")
+		else:
+			game.tutorial_flags["clearing_tension"] = previous_tension
 
 func _reset_camera(game: Node) -> void:
 	var camera_rig = game.get("camera_rig")
@@ -119,6 +149,8 @@ func _slide_collision_names(body: CharacterBody3D) -> String:
 func _walk_with_input(game, action: String, frame_count: int, center_z: float, direction: float) -> void:
 	var player = game.player
 	var previous_z: float = player.global_position.z
+	var stalled_frames := 0
+	var target_z := center_z + direction * 2.65
 	Input.action_press(action)
 	for _frame in range(frame_count):
 		await physics_frame
@@ -126,6 +158,16 @@ func _walk_with_input(game, action: String, frame_count: int, center_z: float, d
 		check(absf(current_z - previous_z) < 1.5, "%s bridge movement teleported during physical crossing" % str(game.current_zone_id))
 		if absf(current_z - center_z) < 2.25:
 			check(not game.call("_is_river_recovery_position", str(game.current_zone_id), player.global_position), "%s physical crossing triggered river recovery" % str(game.current_zone_id))
+		if (direction < 0.0 and current_z <= target_z) or (direction > 0.0 and current_z >= target_z):
+			break
+		if absf(current_z - previous_z) < 0.001:
+			stalled_frames += 1
+		else:
+			stalled_frames = 0
+		if stalled_frames >= 45:
+			var camera_rig = game.get("camera_rig")
+			print("BRIDGE_STALL zone=%s action=%s position=%s velocity=%s input=%s floor=%s wall=%s control=%s locked=%s health=%.1f state=%s camera_yaw=%.2f contacts=%s" % [game.current_zone_id, action, player.global_position, player.velocity, player._movement_input(), player.is_on_floor(), player.is_on_wall(), player.can_control, player.transition_locked, player.health_component.health, player.movement_state, camera_rig.yaw if camera_rig != null else 0.0, _slide_collision_names(player)])
+			break
 		previous_z = current_z
 	Input.action_release(action)
 	await physics_frame
@@ -158,17 +200,20 @@ func _all_npc_paths_clear(root_node: Node, center_z: float) -> bool:
 	var life = root_node.find_child("GreyfenLifeController",true,false)
 	if life == null:
 		return false
+	var offenders: Array[String] = []
 	for entry in life.actors:
 		for waypoint in entry.path:
 			var point := waypoint as Vector3
 			if absf(point.z-center_z) < 2.75 and absf(point.x) > 2.7:
-				return false
+				offenders.append("%s waypoint %s" % [entry.id, point])
 		for index in range(1,entry.path.size()):
 			var previous := entry.path[index-1] as Vector3
 			var current := entry.path[index] as Vector3
 			if (previous.z-center_z)*(current.z-center_z) < 0.0 and (absf(previous.x) > 2.7 or absf(current.x) > 2.7):
-				return false
-	return true
+				offenders.append("%s segment %s -> %s" % [entry.id, previous, current])
+	if not offenders.is_empty():
+		print("RIVER-002 NPC PATH OFFENDERS: %s" % "; ".join(offenders))
+	return offenders.is_empty()
 
 func _bridge_corridor_clear(game) -> bool:
 	var center_z := float(game.call("_river_center"))

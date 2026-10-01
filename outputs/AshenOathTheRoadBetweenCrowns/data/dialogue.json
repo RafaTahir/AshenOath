@@ -118,8 +118,7 @@
           "Mira: I asked it for a name. It gave me the smell of wet wheat.",
           "Kael: That was not permission to keep asking.",
           "Mira: No. It was a reason."
-        ],
-        "actions": []
+        ]
       },
       {
         "priority": 35,
@@ -129,9 +128,6 @@
           "Mira: I tested names on plants grown in grave soil. I told myself medicine made the knowing useful.",
           "Kael: Useful is not clean.",
           "Mira: No. Read the chapel register. Then speak Oren's name where the road turns wet."
-        ],
-        "actions": [
-          {"label": "I will read the chapel register.", "type": "complete_objective", "quest": "main_teeth_in_rain", "objective": "speak_mira", "sets_flags": {"mira_teeth_briefed": true}}
         ]
       },
       {
@@ -142,18 +138,17 @@
           "Mira: I tested names on plants grown in grave soil. I told myself medicine made the knowing useful.",
           "Kael: Useful is not clean.",
           "Mira: No. Read the chapel register. Take Moon Oil if you want the thing beneath those stones to show what it remembers."
-        ],
-        "actions": [
-          {"label": "I will read the chapel register.", "type": "complete_objective", "quest": "main_teeth_in_rain", "objective": "speak_mira", "sets_flags": {"mira_teeth_briefed": true}},
-          {"label": "Give me what Moon Oil needs.", "type": "give_ingredients", "items": {"mooncap": 1}, "sets_flags": {"teeth_supplies_taken": true}}
         ]
       }
     ],
     "actions": [
+      {"label": "I will read the chapel register.", "type": "complete_objective", "quest": "main_teeth_in_rain", "objective": "speak_mira", "conditions": {"quest_active": "main_teeth_in_rain", "objectives_not_done": [{"quest": "main_teeth_in_rain", "id": "speak_mira"}]}, "sets_flags": {"mira_teeth_briefed": true}},
+      {"label": "Give me what Moon Oil needs.", "type": "give_ingredients", "items": {"mooncap": 1}, "conditions": {"quest_active": "main_teeth_in_rain", "teeth_supplies_taken": false}, "sets_flags": {"teeth_supplies_taken": true}},
       {"label": "Start Bitter Roots", "type": "start_quest", "quest": "side_bitter_roots", "conditions": {"quest_available": "side_bitter_roots"}},
       {"label": "I found the roots.", "type": "complete_objective", "quest": "side_bitter_roots", "objective": "collect_roots", "conditions": {"quest_active": "side_bitter_roots", "objectives_not_done": [{"quest": "side_bitter_roots", "id": "collect_roots"}]}},
       {"label": "Keep the truth between us.", "type": "story_choice", "quest": "side_bitter_roots", "objective": "mira_choice", "conditions": {"quest_active": "side_bitter_roots", "objectives_done": [{"quest": "side_bitter_roots", "id": "collect_roots"}], "objectives_not_done": [{"quest": "side_bitter_roots", "id": "mira_choice"}]}, "sets_flags": {"mira_truth": "kept"}, "result": "Mira keeps working, but no longer meets your eyes."},
-      {"label": "Greyfen deserves the truth.", "type": "story_choice", "quest": "side_bitter_roots", "objective": "mira_choice", "conditions": {"quest_active": "side_bitter_roots", "objectives_done": [{"quest": "side_bitter_roots", "id": "collect_roots"}], "objectives_not_done": [{"quest": "side_bitter_roots", "id": "mira_choice"}]}, "sets_flags": {"mira_truth": "confessed"}, "adjusts_values": {"greyfen_fear": 1}, "result": "Mira agrees to name what feeds the roots."}
+      {"label": "Greyfen deserves the truth.", "type": "story_choice", "quest": "side_bitter_roots", "objective": "mira_choice", "conditions": {"quest_active": "side_bitter_roots", "objectives_done": [{"quest": "side_bitter_roots", "id": "collect_roots"}], "objectives_not_done": [{"quest": "side_bitter_roots", "id": "mira_choice"}]}, "sets_flags": {"mira_truth": "confessed"}, "adjusts_values": {"greyfen_fear": 1}, "result": "Mira agrees to name what feeds the roots."},
+      {"label": "Use the miller's measure to treat the sick.", "type": "story_choice", "quest": "side_millers_measure", "objective": "ash_choice", "conditions": {"quest_active": "side_millers_measure", "objectives_done": [{"quest": "side_millers_measure", "id": "weigh_ash"}], "objectives_not_done": [{"quest": "side_millers_measure", "id": "ash_choice"}]}, "sets_flags": {"ash_measure_fate": "healer"}, "adjusts_values": {"anwen_trust": 1}, "result": "Mira keeps the figures beside the names of those the ash harmed."}
     ]
   },
   "edric": {
@@ -175,7 +170,11 @@
       "It bends twice where it should run straight. I checked. Then I decided I preferred being alive.",
       "A boy found black feathers under his pillow after the second death. His mother burned the whole bed."
     ],
-    "actions": [{"label": "Ask what he carried.", "type": "give_ingredients", "conditions": {"rook_supplies_taken": false}, "items": {"ash_salt": 1, "sparkstone": 1}, "sets_flags": {"rook_supplies_taken": true}}]
+    "actions": [
+      {"label": "Ask what he carried.", "type": "give_ingredients", "conditions": {"rook_supplies_taken": false}, "items": {"ash_salt": 1, "sparkstone": 1}, "sets_flags": {"rook_supplies_taken": true}},
+      {"label": "Keep the older road on the map.", "type": "story_choice", "quest": "side_rooks_map", "objective": "map_choice", "conditions": {"quest_active": "side_rooks_map", "objectives_done": [{"quest": "side_rooks_map", "id": "walk_false_road"}], "objectives_not_done": [{"quest": "side_rooks_map", "id": "map_choice"}]}, "sets_flags": {"rook_map_fate": "preserved"}, "adjusts_values": {"anwen_trust": 1}, "result": "Rook redraws the refugee road beside the false waystone."},
+      {"label": "Destroy the map before Vargan can use it.", "type": "story_choice", "quest": "side_rooks_map", "objective": "map_choice", "conditions": {"quest_active": "side_rooks_map", "objectives_done": [{"quest": "side_rooks_map", "id": "walk_false_road"}], "objectives_not_done": [{"quest": "side_rooks_map", "id": "map_choice"}]}, "sets_flags": {"rook_map_fate": "destroyed"}, "adjusts_values": {"hart_debt": 1}, "result": "The safe road vanishes with the ink. Rook remembers it alone."}
+    ]
   },
   "widow_elna": {
     "name": "Widow Elna",
@@ -215,9 +214,9 @@
     ],
     "actions": [
       {"label": "Accept The Black Dog Contract", "type": "start_quest", "quest": "side_black_dog", "conditions": {"quest_available": "side_black_dog"}},
-      {"label": "I followed the sheepfold tracks.", "type": "complete_objective", "quest": "side_black_dog", "objective": "find_dog", "conditions": {"quest_active": "side_black_dog", "objectives_not_done": [{"quest": "side_black_dog", "id": "find_dog"}]}},
       {"label": "The guardian protected the children.", "type": "story_choice", "quest": "side_black_dog", "objective": "dog_choice", "conditions": {"quest_active": "side_black_dog", "objectives_done": [{"quest": "side_black_dog", "id": "find_dog"}], "objectives_not_done": [{"quest": "side_black_dog", "id": "dog_choice"}]}, "sets_flags": {"black_dog_fate": "spared"}, "adjusts_values": {"anwen_trust": 1}, "result": "Toma looks toward the fold and lowers his knife."},
-      {"label": "Tell them it fled.", "type": "story_choice", "quest": "side_black_dog", "objective": "dog_choice", "conditions": {"quest_active": "side_black_dog", "objectives_done": [{"quest": "side_black_dog", "id": "find_dog"}], "objectives_not_done": [{"quest": "side_black_dog", "id": "dog_choice"}]}, "sets_flags": {"black_dog_fate": "hidden"}, "result": "Greyfen accepts the easier story."}
+      {"label": "Tell them it fled.", "type": "story_choice", "quest": "side_black_dog", "objective": "dog_choice", "conditions": {"quest_active": "side_black_dog", "objectives_done": [{"quest": "side_black_dog", "id": "find_dog"}], "objectives_not_done": [{"quest": "side_black_dog", "id": "dog_choice"}]}, "sets_flags": {"black_dog_fate": "hidden"}, "result": "Greyfen accepts the easier story."},
+      {"label": "Show the farmer what the mill weighed.", "type": "story_choice", "quest": "side_millers_measure", "objective": "ash_choice", "conditions": {"quest_active": "side_millers_measure", "objectives_done": [{"quest": "side_millers_measure", "id": "weigh_ash"}], "objectives_not_done": [{"quest": "side_millers_measure", "id": "ash_choice"}]}, "sets_flags": {"ash_measure_fate": "farmer"}, "adjusts_values": {"greyfen_fear": 1}, "result": "Toma stops spreading the ash and warns the other farms."}
     ]
   },
   "returned_soldier": {

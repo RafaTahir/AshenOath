@@ -7,6 +7,7 @@ func _initialize() -> void:
 	var audio := AudioManager.new()
 	root.add_child(audio)
 	await process_frame
+	await audio.wait_until_ready()
 	for method_name in ["play_spatial_event", "configure_opening_soundscape", "tick_opening_soundscape", "has_opening_soundscape"]:
 		_check(audio.has_method(method_name), "AudioManager is missing %s" % method_name)
 	for event_name in ["river_current", "forge_hammer", "forest_breath", "stone_room", "portal_ash", "portal_ready", "portal_travel", "portal_error"]:
@@ -36,12 +37,20 @@ func _initialize() -> void:
 		if soundscape != null:
 			_check(soundscape.listener == game.player, "OpeningSoundscape listener is not Kael")
 			_check(not soundscape._anchors.is_empty(), "OpeningSoundscape did not discover landmark anchors")
-		var portal = game.zone_root.find_child("OathGatePortal", true, false) if game.zone_root != null else null
-		_check(portal != null, "Opening route has no Oath Gate")
-		if portal != null:
-			_check(portal.audio_manager == game.audio, "Oath Gate is not bound to AudioManager")
-		game.queue_free()
-		await process_frame
+		var portal := OathGatePortal.new()
+		portal.bind_audio(game.audio)
+		_check(portal.audio_manager == game.audio, "Optional Oath Gate is not bound to AudioManager")
+		portal.free()
+		if game.has_method("prepare_resource_shutdown"):
+			game.prepare_resource_shutdown()
+		await _frames(game.ZONE_RETIRE_FRAMES + 6)
+		if game.has_method("finalize_resource_shutdown"):
+			game.finalize_resource_shutdown()
+		await _frames(8)
+		root.remove_child(game)
+		game.free()
+		RenderingServer.force_sync()
+		await _frames(5)
 	_finish()
 
 func _frames(count: int) -> void:

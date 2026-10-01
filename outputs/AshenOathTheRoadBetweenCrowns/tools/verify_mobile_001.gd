@@ -24,7 +24,7 @@ func _initialize() -> void:
 	touch.set_force_touch_for_test(true)
 	game.call("_new_game")
 	await _settle(8)
-	touch._process(0.0)
+	_check(not touch.is_processing(), "Touch layout still polls idle frames")
 	_check(touch.visible, "touch controls are not visible during gameplay")
 	_check(not touch.rotate_required, "native 1280x720 landscape incorrectly requires rotation")
 	_verify_layout(touch.get_layout_snapshot())
@@ -32,13 +32,18 @@ func _initialize() -> void:
 	await _verify_touch_hud(game.hud, router)
 
 	game.hud.show_pause_menu()
-	await process_frame
-	touch._process(0.0)
+	await _settle(2)
 	_check(not touch.visible, "touch controls remain over the pause menu")
 	game.hud.hide_menus()
-	await process_frame
-	touch._process(0.0)
+	await _settle(2)
 	_check(touch.visible, "touch controls do not return after closing menus")
+	touch._begin_touch(30, touch._move_center() + Vector2(0, -68))
+	game.minigames.open_game("tic_tac_toe")
+	await _settle(2)
+	_check(not touch.visible and router.movement_vector().is_zero_approx(), "Minigame retained touch controls or movement")
+	game.minigames.close_game()
+	await _settle(2)
+	_check(touch.visible, "Touch controls did not return after minigame close")
 
 	touch._release_all()
 	await _finish(game)

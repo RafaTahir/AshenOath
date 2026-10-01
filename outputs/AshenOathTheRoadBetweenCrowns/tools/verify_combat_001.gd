@@ -106,7 +106,12 @@ func _initialize() -> void:
 			parry_state.resolved = parried
 			parry_state.position = position
 		)
-		enemy.global_position = player.global_position + Vector3(0, 0, -1.0)
+		# This assertion owns direct contact resolution, not animation reach. Keep
+		# the attacker inside its authored contact envelope and seed the current
+		# trace explicitly; the rendered fixture separately advances the complete
+		# windup/strike animation through real block input.
+		enemy.global_position = player.global_position + Vector3(0, 0, -0.55)
+		enemy.attack_trace_start = enemy.global_position + Vector3(0, 0.9, 0)
 		player.parry_window = 0.24
 		enemy.call("_resolve_attack")
 		check(bool(parry_state.resolved), "Timed parry did not resolve through enemy contact")

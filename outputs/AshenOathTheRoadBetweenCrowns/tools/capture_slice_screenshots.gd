@@ -16,6 +16,10 @@ func _initialize() -> void:
 		return
 	output_dir = ProjectSettings.globalize_path("res://verification_screenshots")
 	gallery_dir = ProjectSettings.globalize_path("res://Development_Gallery/screenshots")
+	for argument in OS.get_cmdline_user_args():
+		if argument.begins_with("--candidate-dir=res://.release-gate/"):
+			output_dir = ProjectSettings.globalize_path(argument.trim_prefix("--candidate-dir="))
+			gallery_dir = output_dir
 	gallery_timestamp = _timestamp_for_file()
 	DirAccess.make_dir_recursive_absolute(output_dir)
 	DirAccess.make_dir_recursive_absolute(gallery_dir)
@@ -28,8 +32,34 @@ func _initialize() -> void:
 	capture_game = game
 	root.add_child(game)
 	await process_frame
+	game.call("_on_launch_accepted")
+	var prewarm_deadline := Time.get_ticks_msec() + 30000
+	while not game.route_zone_cache.has("greyfen") and Time.get_ticks_msec() < prewarm_deadline:
+		await process_frame
+	if not game.route_zone_cache.has("greyfen"):
+		push_error("Greyfen did not prewarm before screenshot startup")
+		await _shutdown_capture_game(game)
+		quit(1)
+		return
 	game.call("_new_game")
+	await _wait_for_zone_ready(game)
 	await _settle_frames(8)
+	if "--campaign-wilds-only" in OS.get_cmdline_user_args():
+		# Composition fixtures only; never substitute for player-route acceptance.
+		for view in [
+			["31_deeper_wychwood", "deep_wood", Vector3(0, 1, 6)],
+			["33_burned_farmstead", "burned_farmstead", Vector3(0, 1, 6)],
+			["34_marsh_crossing", "marsh_crossing", Vector3(0, 1, 8)],
+			["35_bandit_road", "bandit_road", Vector3(0, 1, 6)],
+		]:
+			if not await _capture(game, view[0], view[2], view[1], view[2]):
+				await _shutdown_capture_game(game)
+				quit(1)
+				return
+		print("CAMPAIGN WILDS CAPTURE: PASS (staged visual evidence only)")
+		await _shutdown_capture_game(game)
+		quit(0)
+		return
 	if "--river-only" in OS.get_cmdline_user_args():
 		await _capture(game, "73_river_forced_recovery_proof", Vector3(8, -0.5, 4.5), "greyfen", Vector3(8, -0.5, 4.5), 0.35)
 		print("RIVER-ONLY CAPTURE: PASS")
@@ -78,18 +108,66 @@ func _initialize() -> void:
 		game.quests.active.clear()
 		game.quests.unlocked["main_blood_under_stone"] = true
 		game.quests.start_quest("main_blood_under_stone")
-		await _capture(game, "38_record_hall", Vector3(0, 1, 6), "record_hall", Vector3(0, 1, 6))
-		game.story_state.set_flag("vargan_ledger_choice_made", true)
-		await _capture(game, "57_castle_record_hall_haunting", Vector3(0, 1, 7), "record_hall", Vector3(0, 1, 7))
+		if not await _capture(game, "38_record_hall", Vector3(0, 1, 6), "record_hall", Vector3(0, 1, 6)):
+			await _shutdown_capture_game(game)
+			quit(1)
+			return
+		if "--record-diagnostic" in OS.get_cmdline_user_args():
+			await _capture_record_hall_visibility_diagnostic(game)
+		if not _stage_record_hall_haunting(game):
+			await _shutdown_capture_game(game)
+			quit(1)
+			return
+		if not await _capture(game, "57_castle_record_hall_haunting", Vector3(0, 1, 7), "record_hall", Vector3(0, 1, 7)):
+			await _shutdown_capture_game(game)
+			quit(1)
+			return
 		print("RECORD-HALL CAPTURE: PASS")
 		await _shutdown_capture_game(game)
 		quit(0)
 		return
+	if "--campaign-world-only" in OS.get_cmdline_user_args() or "--vargan-world-only" in OS.get_cmdline_user_args() or "--mill-world-only" in OS.get_cmdline_user_args() or "--undercroft-world-only" in OS.get_cmdline_user_args() or "--assembly-world-only" in OS.get_cmdline_user_args() or "--finale-outdoors-only" in OS.get_cmdline_user_args():
+		# Staged visual fixtures only; route acceptance belongs to the input driver.
+		for view in [
+			["32_ash_mill", "old_mill", Vector3(0, 1, 3)],
+			["36_vargan_approach", "vargan_approach", Vector3(0, 1, 7)],
+			["37_vargan_court", "vargan_court", Vector3(0, 1, 6)],
+			["39_undercroft", "undercroft", Vector3(0, 1, 6)],
+			["40_greyfen_assembly", "assembly", Vector3(0, 1, 6)],
+			["41_white_hart_glade", "hart_glade", Vector3(0, 1, 6)],
+		]:
+			if "--vargan-world-only" in OS.get_cmdline_user_args() and view[1] not in ["vargan_approach", "vargan_court"]:
+				continue
+			if "--mill-world-only" in OS.get_cmdline_user_args() and view[1] != "old_mill":
+				continue
+			if "--undercroft-world-only" in OS.get_cmdline_user_args() and view[1] != "undercroft":
+				continue
+			if "--assembly-world-only" in OS.get_cmdline_user_args() and view[1] != "assembly":
+				continue
+			if "--finale-outdoors-only" in OS.get_cmdline_user_args() and view[1] not in ["assembly", "hart_glade"]:
+				continue
+			if not await _capture(game, view[0], view[2], view[1], view[2]):
+				await _shutdown_capture_game(game)
+				quit(1)
+				return
+		print("CAMPAIGN WORLD CAPTURE: PASS (staged visual evidence only)")
+		await _shutdown_capture_game(game)
+		quit(0)
+		return
 	if "--required-only" in OS.get_cmdline_user_args():
-		await _capture(game, "01_greyfen_spawn", Vector3(0, 1, 7), "greyfen", Vector3(0, 1, 7))
+		if not await _capture(game, "01_greyfen_spawn", Vector3(0, 1, 7), "greyfen", Vector3(0, 1, 7)):
+			await _shutdown_capture_game(game)
+			quit(1)
+			return
 		await _capture_dialogue(game, "05_sister_anwen_dialogue", Vector3(3.2, 1, -5.0))
-		await _capture(game, "70_greyfen_river_bridge", Vector3(0, 1, 7.5), "greyfen", Vector3(0, 1, 7.5))
-		await _capture(game, "10_combat_clearing", Vector3(0, 1, -5), "wychwood", Vector3(0, 1, -5))
+		for view in [
+			["70_greyfen_river_bridge", "greyfen", Vector3(0, 1, 7.5)],
+			["10_combat_clearing", "wychwood", Vector3(0, 1, -5)],
+		]:
+			if not await _capture(game, view[0], view[2], view[1], view[2]):
+				await _shutdown_capture_game(game)
+				quit(1)
+				return
 		await _capture_player_motion_state(game, "15_player_sword_ready", "idle")
 		await _capture_player_motion_state(game, "13_player_light_attack_arc", "light")
 		await _capture_player_motion_state(game, "14_player_heavy_attack_arc", "heavy")
@@ -97,14 +175,23 @@ func _initialize() -> void:
 		game.quests.active.clear()
 		game.quests.unlocked["main_blood_under_stone"] = true
 		game.quests.start_quest("main_blood_under_stone")
-		await _capture(game, "36_vargan_approach", Vector3(0, 1, 11), "vargan_approach", Vector3(0, 1, 11))
-		await _capture(game, "38_record_hall", Vector3(0, 1, 6), "record_hall", Vector3(0, 1, 6))
+		for view in [
+			["36_vargan_approach", "vargan_approach", Vector3(0, 1, 11)],
+			["38_record_hall", "record_hall", Vector3(0, 1, 6)],
+		]:
+			if not await _capture(game, view[0], view[2], view[1], view[2]):
+				await _shutdown_capture_game(game)
+				quit(1)
+				return
 		# Stage the finale frame with its own active quest so the compass and
 		# tracker describe the same next action instead of inheriting Castle data.
 		game.quests.active.clear()
 		game.quests.unlocked["main_hart_remembers"] = true
 		game.quests.start_quest("main_hart_remembers")
-		await _capture(game, "41_white_hart_glade", Vector3(0, 1, 6), "hart_glade", Vector3(0, 1, 6))
+		if not await _capture(game, "41_white_hart_glade", Vector3(0, 1, 6), "hart_glade", Vector3(0, 1, 6)):
+			await _shutdown_capture_game(game)
+			quit(1)
+			return
 		print("REQUIRED VISUAL CAPTURE: PASS - eleven mandatory views refreshed")
 		await _shutdown_capture_game(game)
 		quit(0)
@@ -188,7 +275,10 @@ func _initialize() -> void:
 	await _capture(game, "54_castle_gatehouse_evidence", Vector3(3.8,1,8.5), "vargan_court", Vector3(3.8,1,8.5), -0.25)
 	await _capture(game, "55_castle_record_hall", Vector3(0,1,9), "record_hall", Vector3(0,1,9))
 	await _capture_castle_interaction(game, "56_castle_ledger_choice", "record_hall", "vargan_ledger_choice", Vector3(0,1,-5.8))
-	game.story_state.set_flag("vargan_ledger_choice_made", true)
+	if not _stage_record_hall_haunting(game):
+		await _shutdown_capture_game(game)
+		quit(1)
+		return
 	await _capture(game, "57_castle_record_hall_haunting", Vector3(0,1,7), "record_hall", Vector3(0,1,7))
 	print("SCREENSHOT CAPTURE: PASS - route and Record Hall frames validated")
 	await _capture(game, "58_castle_view_to_old_road", Vector3(0,1,0), "vargan_approach", Vector3(0,1,0), PI)
@@ -219,19 +309,50 @@ func _shutdown_capture_game(game: Node) -> void:
 	RenderingServer.force_sync()
 	await _settle_frames(24)
 
-func _capture(game, file_name: String, player_pos: Vector3, zone_id: String, spawn_pos: Vector3, camera_yaw: float = 0.0) -> void:
+func _stage_record_hall_haunting(game: Node) -> bool:
+	const QUEST := "main_blood_under_stone"
+	if not game.quests.is_active(QUEST):
+		game.quests.unlocked[QUEST] = true
+		if not game.quests.start_quest(QUEST):
+			push_error("Record Hall capture could not start its quest")
+			return false
+	for objective_id in [
+		"reach_castle", "speak_guard", "enter_courtyard",
+		"evidence_mile_marker", "evidence_supply_cart", "evidence_gate_notice",
+		"locate_record_hall", "recover_ledger", "ledger_choice",
+	]:
+		if not game.quests.is_objective_done(QUEST, objective_id):
+			if not game.quests.complete_objective(QUEST, objective_id):
+				push_error("Record Hall capture could not stage " + objective_id)
+				return false
+	game.story_state.set_flag("vargan_ledger_choice_made", true)
+	game.quests.set_tracked_quest_for_zone("record_hall")
+	if game.quests.get_active_objective_id(QUEST) != "survive_haunting":
+		push_error("Record Hall capture objective is not the haunting")
+		return false
+	return true
+
+func _capture(game, file_name: String, player_pos: Vector3, zone_id: String, spawn_pos: Vector3, camera_yaw: float = 0.0) -> bool:
 	game.call("_load_zone", zone_id, spawn_pos)
 	await _wait_for_zone_ready(game)
+	if str(game.current_zone_id) != zone_id or game.zone_root == null or not is_instance_valid(game.zone_root):
+		push_error("capture destination failed: requested=%s active=%s file=%s" % [zone_id, str(game.current_zone_id), file_name])
+		return false
+	if not await _wait_for_zone_dressing(game, zone_id):
+		return false
 	# Validate after the destination zone is active. Validating before the load
 	# uses the previous zone's river and exclusion rules and makes safe captures
 	# look like drift or recovery failures.
 	if not file_name.contains("forced_recovery") and game.has_method("validate_walkable_position"):
-		player_pos = game.validate_walkable_position(player_pos) + Vector3.UP
-	# Campaign builders expose a zero-height walkable plane while the player
-	# capsule is grounded at 0.95 m. Keep screenshot placement on that same
-	# validated support plane instead of allowing the capture override to fall
-	# through the floor before the frame is read.
-	player_pos.y = maxf(player_pos.y, 0.95)
+		player_pos = game.validate_walkable_position(player_pos)
+		# Spatial validation preserves requested Y; find the actual supporting floor.
+		var floor_query := PhysicsRayQueryParameters3D.create(player_pos + Vector3.UP * 2.0, player_pos + Vector3.DOWN * 4.0, 1, [game.player.get_rid()])
+		floor_query.collide_with_areas = false
+		var floor_hit: Dictionary = game.player.get_world_3d().direct_space_state.intersect_ray(floor_query)
+		if floor_hit.is_empty() or (floor_hit.normal as Vector3).y < 0.7:
+			push_error("World capture has no walkable support: %s position=%s" % [file_name, player_pos])
+			return false
+		player_pos = (floor_hit.position as Vector3) + Vector3.UP * 0.05
 	game.player.global_position = player_pos
 	game.player.velocity = Vector3.ZERO
 	_stabilize_player_capture_pose(game.player)
@@ -239,7 +360,11 @@ func _capture(game, file_name: String, player_pos: Vector3, zone_id: String, spa
 		game.camera_rig.yaw = camera_yaw
 		game.camera_rig.pitch = -0.2
 	await _settle_frames(12)
+	if not file_name.contains("forced_recovery") and not game.player.is_on_floor():
+		push_error("World capture is not grounded: %s position=%s" % [file_name, game.player.global_position])
+		return false
 	_clear_transient_overlays(game)
+	await RenderingServer.frame_post_draw
 	print("CAPTURE_STATE: %s zone=%s player=%s visible=%s camera=%s" % [file_name, str(game.current_zone_id), str(game.player.global_position), str(game.player.visible), str(game.camera_rig.camera.global_position if game.camera_rig != null and game.camera_rig.camera != null else Vector3.ZERO)])
 	if file_name == "73_river_forced_recovery_proof":
 		print("RIVER-ONLY POSITION: %s" % str(game.player.global_position))
@@ -247,10 +372,50 @@ func _capture(game, file_name: String, player_pos: Vector3, zone_id: String, spa
 	var image = root.get_viewport().get_texture().get_image()
 	if image == null:
 		push_error("viewport screenshot capture returned no image")
-		quit(1)
-		return
+		return false
 	_assert_image_quality(image, file_name)
 	_save_image(image, file_name)
+	return true
+
+func _wait_for_zone_dressing(game: Node, zone_id: String) -> bool:
+	var deadline := Time.get_ticks_msec() + 10000
+	while Time.get_ticks_msec() < deadline:
+		if str(game.current_zone_id) != zone_id or game.zone_root == null or not is_instance_valid(game.zone_root):
+			push_error("Capture changed zones while waiting for visual dressing: " + zone_id)
+			return false
+		var markers: Array[Node] = game.zone_root.find_children("DeferredVisualRole_*", "", true, false)
+		var staged_opening: bool = zone_id == "greyfen" and str(game.zone_root.get_meta("opening_build_profile", "")) in ["opening_fast", "opening_boot"]
+		var opening_complete: bool = not staged_opening or bool(game.zone_root.get_meta("opening_detail_complete", false))
+		if opening_complete and markers.is_empty() and not bool(game.zone_root.get_meta("deferred_visual_roles_pending", false)):
+			return true
+		await process_frame
+	push_error("Zone visual dressing did not finish within 10 seconds: " + zone_id)
+	return false
+
+func _capture_record_hall_visibility_diagnostic(game: Node) -> void:
+	for profile in [
+		["vault_rib", Color(0.24, 0.19, 0.14)],
+		["door_arch", Color(0.29, 0.22, 0.15)],
+		["side_wall", Color(0.16, 0.135, 0.11)],
+	]:
+		var owner_name: String = profile[0]
+		var batch_name := "AuthoredDetailBatch_%s" % (profile[1] as Color).to_html(true)
+		var owners: Array[Node] = game.zone_root.find_children(batch_name, "MultiMeshInstance3D", true, false)
+		if owners.is_empty():
+			push_error("Record Hall batch missing for diagnostic: " + batch_name)
+			quit(1)
+			return
+		for owner in owners:
+			(owner as MultiMeshInstance3D).visible = false
+		await _settle_frames(4)
+		await RenderingServer.frame_post_draw
+		var image := root.get_viewport().get_texture().get_image()
+		var path := "D:/Temp/AshenOath/record_hall_without_%s.png" % owner_name.to_snake_case()
+		image.save_png(path)
+		print("RECORD-HALL VISIBILITY DIAGNOSTIC: %s nodes=%d" % [path, owners.size()])
+		for owner in owners:
+			(owner as MultiMeshInstance3D).visible = true
+		await _settle_frames(2)
 
 func _clear_transient_overlays(game) -> void:
 	var hud: Node = game.get("hud") as Node
@@ -264,19 +429,27 @@ func _clear_transient_overlays(game) -> void:
 func _capture_dialogue(game, file_name: String, player_pos: Vector3) -> void:
 	game.call("_load_zone", "greyfen", player_pos)
 	await _wait_for_zone_ready(game)
-	game.player.global_position = player_pos
-	game.player.velocity = Vector3.ZERO
-	_stabilize_player_capture_pose(game.player)
+	if not await _wait_for_zone_dressing(game, "greyfen"):
+		quit(1)
+		return
 	var sister = _find_child_named(game.zone_root, "sister_anwen")
 	if sister == null:
 		push_error("dialogue capture could not find Sister Anwen")
 		quit(1)
 		return
-	game.call("_handle_interaction", sister)
-	if game.camera_rig != null:
-		game.camera_rig.yaw = 0.0
-		game.camera_rig.pitch = -0.18
+	game.player.global_position = game.validate_walkable_position(sister.global_position + Vector3(0.0, 0.5, 2.2))
+	game.player.velocity = Vector3.ZERO
+	if not await _settle_capture_on_floor(game.player):
+		return
+	_stabilize_player_capture_pose(game.player)
+	game.player.face_target(sister.global_position)
 	await _settle_frames(12)
+	game.call("_handle_interaction", sister)
+	await _settle_frames(12)
+	if not game.hud.dialogue_layer.visible or not game.camera_rig.camera.is_position_in_frustum(sister.global_position + Vector3.UP * 1.4):
+		push_error("Anwen dialogue capture must show the actual speaker and open dialogue")
+		quit(1)
+		return
 	var image = root.get_viewport().get_texture().get_image()
 	if image == null:
 		push_error("dialogue viewport screenshot capture returned no image")
@@ -284,8 +457,8 @@ func _capture_dialogue(game, file_name: String, player_pos: Vector3) -> void:
 		return
 	_assert_image_quality(image, file_name)
 	_save_image(image, file_name)
-	game.get_tree().paused = false
-	game.hud.hide_menus()
+	if game.hud.call("_close_dialogue_surface"):
+		game.hud.dialogue_closed.emit()
 
 func _capture_anwen_approach(game, file_name: String) -> void:
 	game.call("_load_zone", "greyfen", Vector3(3.2, 1, -2.6))
@@ -451,15 +624,16 @@ func _capture_blade_contact(game, file_name: String) -> void:
 	game.player.global_position = Vector3(0, 1, -4.0)
 	game.player.velocity = Vector3.ZERO
 	game.player.set_physics_process(true)
-	await _settle_frames(3)
+	if not await _settle_capture_on_floor(game.player):
+		return
 	game.player.set_physics_process(false)
-	_reset_combat_capture_pose(game.player)
+	_stabilize_player_capture_pose(game.player)
 	_clear_transient_overlays(game)
 	game.player.set_physics_process(false)
 	game.player.attack_anim_time = 0.34
 	game.player.attack_anim_heavy = false
 	if game.player.animation_driver != null:
-		game.player.animation_driver.trigger_action("attack_light", 1.22, 0.0)
+		game.player.animation_driver.trigger_action("attack_light", 1.22, 0.0, false, 0.34)
 	game.player.call("_begin_blade_attack", 24.0, 2.0, false)
 	for _frame in range(8):
 		game.player.attack_anim_time = max(float(game.player.attack_anim_time) - 0.016, 0.0)
@@ -482,7 +656,7 @@ func _capture_blade_contact(game, file_name: String) -> void:
 		game.camera_rig.set_process(false)
 		var camera: Camera3D = game.camera_rig.camera
 		camera.look_at_from_position(
-			game.player.global_position + Vector3(2.8, 1.75, 3.0),
+			game.player.global_position + Vector3(3.5, 1.75, 0.3),
 			game.player.global_position + Vector3(0.0, 1.05, -0.55),
 			Vector3.UP
 		)
@@ -497,12 +671,19 @@ func _capture_player_motion_state(game, file_name: String, state: String) -> voi
 	# Greyfen's river exclusion band and produces an overhead bridge shot.
 	game.call("_load_zone", "greyfen", Vector3(0, 1, 8.0))
 	await _wait_for_zone_ready(game)
+	if not await _wait_for_zone_dressing(game, "greyfen"):
+		quit(1)
+		return
 	game.player.global_position = Vector3(0, 1, 8.0)
 	game.player.velocity = Vector3.ZERO if state == "idle" else Vector3(0, 0, -4.0)
 	game.player.set_physics_process(true)
-	await _settle_frames(3)
+	if not await _settle_capture_on_floor(game.player):
+		return
 	game.player.set_physics_process(false)
-	_reset_combat_capture_pose(game.player)
+	_stabilize_player_capture_pose(game.player)
+	if state in ["idle", "light", "heavy"]:
+		game.player.velocity = Vector3.ZERO
+		game.player.movement_state = "idle"
 	_clear_transient_overlays(game)
 	game.player.move_phase = PI * 0.5 if state == "walk" else 0.0
 	if game.camera_rig != null:
@@ -511,12 +692,12 @@ func _capture_player_motion_state(game, file_name: String, state: String) -> voi
 	if state == "light":
 		game.player.attack_anim_time = 0.34
 		game.player.attack_anim_heavy = false
-		game.player.animation_driver.trigger_action("attack_light", 1.22, 0.0)
+		game.player.animation_driver.trigger_action("attack_light", 1.22, 0.0, false, 0.34)
 		game.player.call("_begin_blade_attack", 24.0, 2.0, false)
 	elif state == "heavy":
 		game.player.attack_anim_time = 0.52
 		game.player.attack_anim_heavy = true
-		game.player.animation_driver.trigger_action("attack_heavy", 0.76, 0.0)
+		game.player.animation_driver.trigger_action("attack_heavy", 0.76, 0.0, false, 0.52)
 		game.player.call("_begin_blade_attack", 42.0, 2.25, true)
 	elif state == "run":
 		game.player.velocity = Vector3(0, 0, -5.2)
@@ -563,7 +744,7 @@ func _capture_player_motion_state(game, file_name: String, state: String) -> voi
 		# from the initial spawn while the runtime controller is disabled.
 		game.player.animation_driver.set_locomotion(0.0, Vector3.ZERO, true)
 		await _settle_frames(3)
-	if state in ["light", "heavy"] and game.camera_rig != null:
+	if state in ["idle", "light", "heavy"] and game.camera_rig != null:
 		game.camera_rig.set_process(false)
 		var camera: Camera3D = game.camera_rig.camera
 		camera.look_at_from_position(
@@ -798,6 +979,16 @@ func _wait_for_zone_ready(game: Node, max_frames: int = 90) -> void:
 func _settle_frames(count: int) -> void:
 	for i in range(count):
 		await process_frame
+
+func _settle_capture_on_floor(actor: CharacterBody3D) -> bool:
+	actor.set_physics_process(true)
+	for _frame in range(180):
+		await physics_frame
+		if actor.is_on_floor() and absf(actor.velocity.y) < 0.2:
+			return true
+	push_error("Staged visual actor did not reach a supporting floor")
+	quit(1)
+	return false
 
 func _assert_capture_safe(game, expected_pos: Vector3, file_name: String) -> void:
 	var actual: Vector3 = game.player.global_position

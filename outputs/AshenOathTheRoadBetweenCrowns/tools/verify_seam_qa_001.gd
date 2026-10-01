@@ -20,6 +20,10 @@ func _run() -> void:
 	await _wait_for_zone(game, "greyfen")
 	_check(game.seamless_world != null, "seam service was not installed")
 	_check(game.current_zone_id == "greyfen", "New Game did not start in Greyfen")
+	var castle_bounds := Vector2(23.0, 19.0)
+	_check(WorldSectorManifest.edge_for_position("vargan_approach", Vector3(-16.0, 0.9, 16.0), castle_bounds).is_empty(), "Castle arrival immediately triggers the return edge")
+	_check(WorldSectorManifest.edge_for_position("vargan_approach", Vector3(-7.0, 0.9, 16.0), castle_bounds).is_empty(), "Castle inward approach triggers the return edge")
+	_check(str(WorldSectorManifest.edge_for_position("vargan_approach", Vector3(-22.3, 0.9, 16.0), castle_bounds).get("target", "")) == "bandit_road", "Castle west boundary no longer permits the return route")
 
 	var outward := [
 		["greyfen", "north", "wychwood"],
