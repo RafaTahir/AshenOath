@@ -10,6 +10,8 @@ signal journal_requested
 signal launch_accepted
 signal quit_requested
 signal settings_requested(action: String)
+signal audio_mix_requested(channel: String, value: float)
+signal revisit_covenant_requested
 signal action_selected(action: Dictionary)
 signal craft_requested(item_id: String)
 signal item_use_requested(item_id: String)
@@ -26,6 +28,7 @@ const GAMEPLAY_SIZE = Vector2i(1280, 720)
 const SAVE_PATH = "user://ashen_oath_save.json"
 const AUTOSAVE_PATH = "user://ashen_oath_autosave.json"
 const CHECKPOINT_PATH = "user://ashen_oath_checkpoint.json"
+const StoryJournalPresenter = preload("res://scripts/story_journal.gd")
 
 var health_bar: ProgressBar
 var stamina_bar: ProgressBar
@@ -51,6 +54,7 @@ var dialogue_layer: PanelContainer
 var dialogue_title: Label
 var dialogue_text: RichTextLabel
 var dialogue_actions: VBoxContainer
+var dialogue_choices_scroll: ScrollContainer
 var dialogue_page_label: Label
 var inventory_layer: PanelContainer
 var inventory_text: RichTextLabel
@@ -87,6 +91,7 @@ var last_arrow_type := "Standard"
 var toasts_suppressed := false
 var reduced_motion := false
 var high_contrast := false
+var story_text_scale := 1.0
 var new_game_ready := true
 var new_game_status := "Greyfen is ready."
 var new_game_status_label: Label
@@ -213,7 +218,7 @@ func show_settings_menu(back_target: String = "pause", requested_page: int = -1)
 	_set_ui_pointer("settings")
 	_clear_menu()
 	menu_layer.visible = true
-	var box = _menu_box("Settings", "Display & Controls", "tune the lantern")
+	var box = _menu_box("Settings", "Play, Sound & Controls", "tune the lantern")
 	box.set_meta("compact_buttons", true)
 	var s = _current_settings()
 	var entries := _settings_entries(s)
@@ -225,7 +230,25 @@ func show_settings_menu(back_target: String = "pause", requested_page: int = -1)
 	for index in range(first_entry, last_entry):
 		var entry: Dictionary = entries[index]
 		var action := str(entry.get("action", ""))
-		if action == "":
+		if entry.has("mix_channel"):
+			var volume_label := Label.new()
+			volume_label.text = str(entry.label)
+			volume_label.add_theme_font_size_override("font_size", 18)
+			box.add_child(volume_label)
+			var slider := HSlider.new()
+			slider.min_value = 0.0
+			slider.max_value = 1.0
+			slider.step = 0.05
+			slider.value = float(entry.get("value", 1.0))
+			slider.custom_minimum_size = Vector2(320, 28)
+			slider.focus_mode = Control.FOCUS_ALL
+			slider.tooltip_text = "Use Left and Right to adjust; zero mutes this channel."
+			slider.value_changed.connect(func(value: float, channel = str(entry.mix_channel), heading = volume_label):
+				heading.text = "%s Volume  %d%%" % [channel.capitalize(), int(round(value * 100.0))]
+				audio_mix_requested.emit(channel, value)
+			)
+			box.add_child(slider)
+		elif action == "":
 			_add_menu_text(box, str(entry.get("label", "")))
 		else:
 			_add_menu_button(box, str(entry.get("label", "")), func(setting_action = action): settings_requested.emit(setting_action))
@@ -236,6 +259,8 @@ func show_settings_menu(back_target: String = "pause", requested_page: int = -1)
 
 func _settings_entries(s: Dictionary) -> Array:
 	return [
+		{"label": "Difficulty        %s" % str(s.get("difficulty", "standard")).capitalize(), "action": "difficulty"},
+		{"label": "Story: gentler damage and wider parries. Standard: original balance. Veteran: less room for mistakes. Endings remain available in every profile.", "action": ""},
 		{"label": "Visual Preset     %s" % str(s.get("quality_preset", "balanced")).capitalize(), "action": "visual_preset"},
 		{"label": "3D Resolution     Native 720p (fixed for Web stability)", "action": ""},
 		{"label": "Shadows           %s" % _shadow_label(int(s.get("shadow_quality", 1))), "action": "shadows"},
@@ -246,6 +271,10 @@ func _settings_entries(s: Dictionary) -> Array:
 		{"label": "Touch Look        %s" % _controller_sensitivity_label(float(s.get("touch_look_sensitivity", 1.0))), "action": "touch_sensitivity"},
 		{"label": "Invert Y Axis     %s" % _on_off(bool(s.get("invert_y", false))), "action": "invert_y"},
 		{"label": "Master Volume     %d%%" % int(round(float(s.get("master_volume", 0.85)) * 100.0)), "action": "volume"},
+		{"label": "Music Volume      %d%%" % int(round(float(s.get("music_volume", 0.8)) * 100.0)), "mix_channel": "music", "value": float(s.get("music_volume", 0.8))},
+		{"label": "Effects Volume    %d%%" % int(round(float(s.get("sfx_volume", 1.0)) * 100.0)), "mix_channel": "sfx", "value": float(s.get("sfx_volume", 1.0))},
+		{"label": "Voice Volume      %d%%" % int(round(float(s.get("voice_volume", 1.0)) * 100.0)), "mix_channel": "voice", "value": float(s.get("voice_volume", 1.0))},
+		{"label": "Pause on Focus Loss  %s" % _on_off(bool(s.get("pause_on_focus_loss", true))), "action": "focus_pause"},
 		{"label": "VSync             %s" % _on_off(bool(s.get("vsync", true))), "action": "vsync"},
 		{"label": "Fullscreen        %s" % _on_off(bool(s.get("fullscreen", false))), "action": "fullscreen"},
 		{"label": "Subtitle Size     %d%%" % int(round(float(s.get("subtitle_scale", 1.0)) * 100.0)), "action": "subtitle_scale"},
@@ -642,8 +671,20 @@ func _render_dialogue_page() -> void:
 		return
 	var actions: Array = dialogue_session_data.get("actions",[])
 	for action in actions:
+		var committing := str(action.get("type", "")) in ["story_choice", "ending", "final_choice"]
+		var preview := StoryJournalPresenter.decision_preview(action) if committing else ""
+		if preview != "":
+			var stakes := Label.new()
+			stakes.text = "On commitment: " + preview
+			stakes.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			stakes.custom_minimum_size = Vector2(720, 0)
+			stakes.add_theme_font_size_override("font_size", int(round(18.0 * story_text_scale)))
+			stakes.add_theme_constant_override("outline_size", 4 if high_contrast else 2)
+			stakes.add_theme_color_override("font_outline_color", Color.BLACK)
+			dialogue_actions.add_child(stakes)
 		var button = Button.new()
-		button.text = action.get("label", "Continue")
+		button.text = ("Commit: " if committing else "") + str(action.get("label", "Continue"))
+		button.tooltip_text = preview
 		button.process_mode = Node.PROCESS_MODE_ALWAYS
 		button.focus_mode = Control.FOCUS_ALL
 		button.action_mode = BaseButton.ACTION_MODE_BUTTON_PRESS
@@ -655,6 +696,8 @@ func _render_dialogue_page() -> void:
 			action_selected.emit(action_data)
 		)
 		dialogue_actions.add_child(button)
+	if dialogue_choices_scroll != null:
+		dialogue_choices_scroll.custom_minimum_size.y = 154.0 if actions.size() > 2 else 96.0
 	if actions.is_empty():
 		_add_dialogue_close()
 	_focus_after_rebuild(dialogue_actions)
@@ -666,7 +709,7 @@ func show_inventory(inventory, quests, story_state = null, progression = null) -
 	if inventory.active_oil != "":
 		oil_name = inventory.get_item_name(inventory.active_oil)
 	var summary: Dictionary = inventory.get_preparation_summary()
-	var text = "PREPARATION\nCoin: %d\nBlade Oil: %s\nPotions: %d  Bombs: %d  Traps: %d\n\nPACK\n" % [
+	var text = StoryJournalPresenter.build_from_state(quests, story_state) + "\n\nPREPARATION\nCoin: %d\nBlade Oil: %s\nPotions: %d  Bombs: %d  Traps: %d\n\nPACK\n" % [
 		inventory.coin, oil_name, summary.potions, summary.bombs, summary.traps
 	]
 	for id in inventory.ordered_item_ids():
@@ -772,7 +815,9 @@ func show_vendor(vendor_id: String, vendor_service, inventory, quests = null, st
 		var cap := int(entry.get("cap", 999))
 		var price := int(entry.get("price", 0))
 		text += "- %s  %d/%d  |  %d coin\n  %s\n" % [item_name, owned, cap, price, str(inventory.item_defs.get(item_id, {}).get("description", ""))]
-	text += "\nTor's reserve policy: returning to Greyfen with fewer than five arrows earns one free emergency bundle."
+		if str(entry.get("supply_note", "")) != "":
+			text += "  Supply: %s\n" % entry.supply_note
+	text += "\nBasic arrows and medicine stay available after restitution. Ask for the emergency reserve when you have none."
 	inventory_text.text = text
 	for child in craft_buttons.get_children():
 		craft_buttons.remove_child(child)
@@ -794,6 +839,13 @@ func show_vendor(vendor_id: String, vendor_service, inventory, quests = null, st
 		_style_button(refill)
 		refill.pressed.connect(func(): vendor_purchase_requested.emit(vendor_id, "__emergency_arrows__", 1))
 		craft_buttons.add_child(refill)
+	if vendor_id == "mira_apothecary" and int(inventory.items.get("redroot_potion", 0)) == 0:
+		var care := Button.new()
+		care.text = "Ask Mira for emergency medicine"
+		care.disabled = bool(vendor_service.emergency_healing_claimed)
+		_style_button(care)
+		care.pressed.connect(func(): vendor_purchase_requested.emit(vendor_id, "__emergency_healing__", 1))
+		craft_buttons.add_child(care)
 	var close := Button.new()
 	close.text = "Close"
 	_style_button(close)
@@ -810,10 +862,24 @@ func show_ending(title: String, body: String) -> void:
 	_clear_menu()
 	menu_layer.visible = true
 	var box = _menu_box(title)
+	_add_menu_button(box, "Walk the road home", func(): resume_requested.emit())
+	if FileAccess.file_exists("user://ashen_oath_before_covenant.json"):
+		_add_menu_button(box, "Return to before the covenant", func(): revisit_covenant_requested.emit())
+	var aftermath_scroll := ScrollContainer.new()
+	aftermath_scroll.custom_minimum_size = Vector2(0, 260)
+	aftermath_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	aftermath_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	aftermath_scroll.follow_focus = true
+	box.add_child(aftermath_scroll)
 	var label = Label.new()
 	label.text = body
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	box.add_child(label)
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.add_theme_font_size_override("font_size", int(round(18.0 * story_text_scale)))
+	label.add_theme_constant_override("outline_size", 4 if high_contrast else 0)
+	label.add_theme_color_override("font_outline_color", Color.BLACK)
+	label.focus_mode = Control.FOCUS_ALL
+	aftermath_scroll.add_child(label)
 	_add_menu_button(box, "Return to Main Menu", func(): show_main_menu())
 	_add_menu_button(box, "Return to Launch Screen", show_launch_screen)
 
@@ -1038,8 +1104,14 @@ func _build_dialogue() -> void:
 	dialogue_actions = VBoxContainer.new()
 	dialogue_actions.name = "DialogueChoices"
 	dialogue_actions.process_mode = Node.PROCESS_MODE_ALWAYS
-	dialogue_actions.add_theme_constant_override("separation", 5)
-	box.add_child(dialogue_actions)
+	dialogue_actions.add_theme_constant_override("separation", 8)
+	dialogue_choices_scroll = ScrollContainer.new()
+	dialogue_choices_scroll.custom_minimum_size = Vector2(0, 96)
+	dialogue_choices_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	dialogue_choices_scroll.follow_focus = true
+	dialogue_actions.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	box.add_child(dialogue_choices_scroll)
+	dialogue_choices_scroll.add_child(dialogue_actions)
 
 func _build_inventory() -> void:
 	inventory_layer = PanelContainer.new()
@@ -1048,9 +1120,14 @@ func _build_inventory() -> void:
 	inventory_layer.visible = false
 	add_child(inventory_layer)
 	var columns = HBoxContainer.new()
+	columns.add_theme_constant_override("separation", 24)
 	inventory_layer.add_child(columns)
 	inventory_text = RichTextLabel.new()
 	inventory_text.custom_minimum_size = Vector2(560, 520)
+	inventory_text.scroll_active = true
+	inventory_text.focus_mode = Control.FOCUS_ALL
+	inventory_text.add_theme_constant_override("line_separation", 5)
+	inventory_text.add_theme_font_size_override("normal_font_size", 17)
 	columns.add_child(inventory_text)
 	var actions_scroll := ScrollContainer.new()
 	actions_scroll.name = "PreparationActionsScroll"
@@ -1280,6 +1357,9 @@ func apply_accessibility(current: Dictionary) -> void:
 	reduced_motion = bool(current.get("reduced_motion", false))
 	high_contrast = bool(current.get("high_contrast", false))
 	var subtitle_scale := clampf(float(current.get("subtitle_scale", 1.0)), 0.9, 1.2)
+	story_text_scale = subtitle_scale
+	if inventory_text != null:
+		inventory_text.add_theme_font_size_override("normal_font_size", int(round(17.0 * story_text_scale)))
 	if dialogue_text != null:
 		dialogue_text.add_theme_font_size_override("normal_font_size", int(round(24.0 * subtitle_scale)))
 		dialogue_text.add_theme_font_size_override("bold_font_size", int(round(26.0 * subtitle_scale)))

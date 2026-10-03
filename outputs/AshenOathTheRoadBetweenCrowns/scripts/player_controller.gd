@@ -36,6 +36,7 @@ var dodge_time = 0.0
 var dodge_dir = Vector3.ZERO
 var can_control = true
 var transition_locked := false
+var difficulty_profile: Dictionary = {"incoming_damage_multiplier": 1.0, "parry_window": 0.30, "dodge_cost_modifier": 0.0, "attack_buffer": 0.18}
 var camera_controller
 var input_source: Node
 var health_component
@@ -310,7 +311,15 @@ func _progression_value(effect_id: String, fallback: float) -> float:
 	return progression.effect_value(effect_id, fallback) if progression != null else fallback
 
 func get_dodge_stamina_cost() -> float:
-	return maxf(1.0, 28.0 - _progression_value("dodge_cost_reduction", 0.0))
+	return maxf(1.0, 28.0 + float(difficulty_profile.get("dodge_cost_modifier", 0.0)) - _progression_value("dodge_cost_reduction", 0.0))
+
+func apply_difficulty_profile(profile: Dictionary) -> void:
+	difficulty_profile = {
+		"incoming_damage_multiplier": clampf(float(profile.get("incoming_damage_multiplier", 1.0)), 0.25, 2.0),
+		"parry_window": clampf(float(profile.get("parry_window", 0.30)), 0.15, 0.50),
+		"dodge_cost_modifier": clampf(float(profile.get("dodge_cost_modifier", 0.0)), -10.0, 10.0),
+		"attack_buffer": clampf(float(profile.get("attack_buffer", 0.18)), 0.10, 0.30),
+	}
 
 func get_oathfire_stamina_cost() -> float:
 	return maxf(1.0, 40.0 - _progression_value("beam_cost_reduction", 0.0))
@@ -709,10 +718,10 @@ func confirm_blade_contact(attack_id: int, hit: bool) -> void:
 		pending_attack_radius = 0.0
 
 func get_parry_window_duration() -> float:
-	return 0.30
+	return float(difficulty_profile.get("parry_window", 0.30))
 
 func get_attack_buffer_duration() -> float:
-	return 0.18
+	return float(difficulty_profile.get("attack_buffer", 0.18))
 
 func get_blade_world_segment() -> Dictionary:
 	if blade_base_marker != null and blade_tip_marker != null and is_instance_valid(blade_base_marker) and is_instance_valid(blade_tip_marker):
@@ -987,6 +996,7 @@ func is_blocking() -> bool:
 	return _action_pressed("block") and stamina_component.stamina > 8.0
 
 func take_damage(amount: float) -> bool:
+	amount *= float(difficulty_profile.get("incoming_damage_multiplier", 1.0))
 	if dodge_time > 0.0:
 		return false
 	if parry_window > 0.0 and stamina_component.spend(10.0):

@@ -1,22 +1,567 @@
 {
-  "main_road_of_crows":{"title":"Road of Crows","type":"main","objectives":[{"id":"speak_anwen","text":"Speak with Sister Anwen at the shrine."},{"id":"bram","text":"Identify Bram by the cart ledger.","group":"road_evidence","required_count":3,"optional":true},{"id":"sella","text":"Identify Sella by the red-thread feathers.","group":"road_evidence","required_count":3,"optional":true},{"id":"oren","text":"Identify Oren by the child's shrine token.","group":"road_evidence","required_count":3,"optional":true},{"id":"vargan_wire","text":"Recover the Vargan binding wire.","group":"road_evidence","required_count":3,"optional":true},{"id":"drag_marks","text":"Read the deliberate drag marks.","group":"road_evidence","required_count":3,"optional":true},{"id":"evidence_ready","text":"Piece together what happened on the road.","tracker_text":"Investigate the Wychwood road","group":"road_evidence","required_count":3},{"id":"fight_ghoulkin","text":"Survive the five creatures in the clearing."},{"id":"return_village","text":"Choose how to report the evidence in Greyfen."}],"unlocks":["main_bell_beneath_greyfen"]},
-  "main_bell_beneath_greyfen":{"title":"Bell Beneath Greyfen","type":"main","objectives":[{"id":"meet_anwen_gate","text":"Meet Anwen at the cemetery gate."},{"id":"grave_harl","text":"Inspect Harl's disturbed grave.","group":"grave_evidence","required_count":2,"optional":true},{"id":"grave_child","text":"Inspect the nameless child's grave.","group":"grave_evidence","required_count":2,"optional":true},{"id":"grave_soldier","text":"Inspect the soldier's empty grave.","group":"grave_evidence","required_count":2,"optional":true},{"id":"grave_truth","text":"Follow the graves toward the chapel.","tracker_text":"Inspect the disturbed graves","group":"grave_evidence","required_count":2},{"id":"cemetery_ambush","text":"Survive what rises between the graves."},{"id":"open_chapel","text":"Open the ruined Crow Chapel."},{"id":"crow_shrine_choice","text":"Cleanse, disturb, or bind the Crow Shrine."}],"unlocks":["main_teeth_in_rain"]},
-  "main_teeth_in_rain":{"title":"Teeth in the Rain","type":"main","objectives":[{"id":"speak_mira","text":"Ask Mira what the dead remember."},{"id":"read_chapel_names","text":"Read the erased names in the Crow Chapel."},{"id":"craft_moon_oil","text":"Prepare Moon Oil for the deeper road.","optional":true},{"id":"name_the_dead","text":"Speak Oren's name at the ritual stones."},{"id":"fight_bog_wretch","text":"Defeat the Bog Wretch in deeper Wychwood."},{"id":"bog_core_choice","text":"Choose the fate of its memory core."}],"unlocks":["main_names_they_burned"]},
-  "main_names_they_burned":{"title":"The Names They Burned","type":"main","objectives":[{"id":"fragment_anwen","text":"Recover Anwen's register fragment.","group":"register","required_count":3,"optional":true},{"id":"fragment_rook","text":"Recover Rook's register fragment.","group":"register","required_count":3,"optional":true},{"id":"fragment_tor","text":"Recover Tor's register fragment.","group":"register","required_count":3,"optional":true},{"id":"fragment_mira","text":"Recover Mira's register fragment.","group":"register","required_count":3,"optional":true},{"id":"reconstruct_register","text":"Reconstruct the refugee register.","group":"register","required_count":3},{"id":"names_choice","text":"Publish the names or reserve their power."}],"unlocks":["main_ash_at_the_mill"]},
-  "main_ash_at_the_mill":{"title":"Ash at the Mill","type":"main","objectives":[{"id":"reach_mill","text":"Reach the abandoned mill."},{"id":"inspect_millstones","text":"Learn what Greyfen ground into its fields."},{"id":"mill_encounter","text":"Clear the ash-bound mill."},{"id":"mill_choice","text":"Burn, preserve, or expose the mill records."}],"unlocks":["main_soldier_without_banner"]},
-  "main_soldier_without_banner":{"title":"A Soldier Without a Banner","type":"main","objectives":[{"id":"reach_bandit_road","text":"Find Captain Senn on the bandit road."},{"id":"senn_confrontation","text":"Break Senn's guard or win his surrender."},{"id":"senn_choice","text":"Choose punishment, testimony, or exile."}],"unlocks":["main_blood_under_stone"]},
-  "main_blood_under_stone":{"title":"Blood Under Stone","type":"main","objectives":[{"id":"reach_castle","text":"Follow the old military road to Castle Vargan."},{"id":"speak_guard","text":"Learn why the outer gate remains guarded."},{"id":"enter_courtyard","text":"Enter Castle Vargan's outer courtyard."},{"id":"evidence_mile_marker","text":"Inspect the Vargan mile marker.","group":"castle_evidence","required_count":3,"optional":true},{"id":"evidence_supply_cart","text":"Inspect the broken military cart.","group":"castle_evidence","required_count":3,"optional":true},{"id":"evidence_gate_notice","text":"Read the official road-closure notice.","group":"castle_evidence","required_count":3,"optional":true},{"id":"evidence_iron_binding","text":"Compare the blackened Vargan binding wire.","group":"castle_evidence","required_count":3,"optional":true},{"id":"evidence_ledger_fragment","text":"Find the names cut from the command ledger.","group":"castle_evidence","required_count":3,"optional":true},{"id":"castle_evidence_ready","text":"Piece together House Vargan's control of the road.","group":"castle_evidence","required_count":3},{"id":"locate_record_hall","text":"Locate the sealed record hall."},{"id":"recover_ledger","text":"Examine the sealed command ledger."},{"id":"ledger_choice","text":"Decide what to do with the ledger fragment."},{"id":"survive_haunting","text":"Survive what the erased names awakened."},{"id":"last_witness_hook","text":"Descend beneath Vargan stone to find the last witness."}],"unlocks":["main_last_witness"]},
-  "main_last_witness":{"title":"The Last Witness","type":"main","objectives":[{"id":"reach_undercroft","text":"Enter the Vargan undercroft."},{"id":"break_halvern_guard","text":"Force the Gravebound Knight to yield."},{"id":"halvern_choice","text":"Free, question, or destroy Halvern."}],"unlocks":["main_crowns_without_mercy"]},
-  "main_crowns_without_mercy":{"title":"Crowns Without Mercy","type":"main","objectives":[{"id":"gather_witnesses","text":"Gather witnesses or their surviving records."},{"id":"greyfen_assembly","text":"Open Greyfen's assembly."},{"id":"confession_choice","text":"Decide how the truth will be spoken."}],"unlocks":["main_hart_remembers"]},
-  "main_hart_remembers":{"title":"The Hart Remembers","type":"main","objectives":[{"id":"enter_glade","text":"Walk the reopened road to the White Hart."},{"id":"hear_testimony","text":"Hear the living and the dead."},{"id":"final_choice","text":"Choose Witness, Mercy, Duty, or Ash."}],"unlocks":[]},
-  "side_widows_bell":{"title":"A Widow's Bell","type":"side","objectives":[{"id":"find_bell","text":"Find why Harl's grave bell rings."},{"id":"widow_choice","text":"Give Elna truth or comfort."}],"unlocks":[]},
-  "side_iron_remembers":{"title":"Iron Remembers","type":"side","objectives":[{"id":"recover_iron","text":"Recover massacre iron from the chapel."},{"id":"tor_choice","text":"Let Tor forge witness or weapon."}],"unlocks":[]},
-  "side_bitter_roots":{"title":"Bitter Roots","type":"side","objectives":[{"id":"collect_roots","text":"Gather roots from the ash-rich soil."},{"id":"mira_choice","text":"Confront Mira with what feeds them."}],"unlocks":[]},
-  "side_black_dog":{"title":"The Black Dog Contract","type":"side","objectives":[{"id":"find_dog","text":"Follow the sheepfold tracks."},{"id":"dog_choice","text":"Spare the guardian or sell the lie."}],"unlocks":[]},
-  "side_empty_grave":{"title":"The Man Who Walked Home","type":"side","objectives":[{"id":"follow_empty_grave","text":"Follow the footprints from an empty grave."},{"id":"walker_choice","text":"Name the returned soldier."}],"unlocks":[]},
-  "side_childs_charm":{"title":"Oren's Red Thread","type":"side","objectives":[{"id":"trace_thread","text":"Follow Oren's thread from Wychwood to the chapel."},{"id":"return_charm","text":"Place his charm where he can be named."}],"unlocks":[]},
-  "side_soldiers_debt":{"title":"The Bannerless","type":"side","objectives":[{"id":"find_deserters","text":"Find Senn's abandoned soldiers."},{"id":"debt_choice","text":"Choose who carries their testimony."}],"unlocks":[]},
-  "side_millers_measure":{"title":"A Measure of Ash","type":"side","objectives":[{"id":"weigh_ash","text":"Recover the miller's hidden measure."},{"id":"ash_choice","text":"Give it to farmer, healer, or assembly."}],"unlocks":[]},
-  "side_rooks_map":{"title":"The Road That Bends","type":"side","objectives":[{"id":"walk_false_road","text":"Test Rook's impossible map."},{"id":"map_choice","text":"Keep or destroy the road's memory."}],"unlocks":[]},
-  "side_three_candles":{"title":"Three Candles Unlit","type":"side","objectives":[{"id":"light_bram","text":"Identify Bram and light his candle."},{"id":"light_sella","text":"Identify Sella and light her candle."},{"id":"light_oren","text":"Name Oren and light his candle."}],"unlocks":[]}
+  "main_road_of_crows": {
+    "title": "Road of Crows",
+    "type": "main",
+    "objectives": [
+      {
+        "id": "speak_anwen",
+        "text": "Hear Anwen's account of the missing travelers."
+      },
+      {
+        "id": "bram",
+        "text": "Identify Bram by the cart ledger.",
+        "group": "road_evidence",
+        "required_count": 3,
+        "optional": true
+      },
+      {
+        "id": "sella",
+        "text": "Identify Sella by the red-thread feathers.",
+        "group": "road_evidence",
+        "required_count": 3,
+        "optional": true
+      },
+      {
+        "id": "oren",
+        "text": "Identify Oren by the child's shrine token.",
+        "group": "road_evidence",
+        "required_count": 3,
+        "optional": true
+      },
+      {
+        "id": "vargan_wire",
+        "text": "Recover the Vargan binding wire.",
+        "group": "road_evidence",
+        "required_count": 3,
+        "optional": true
+      },
+      {
+        "id": "drag_marks",
+        "text": "Read the deliberate drag marks.",
+        "group": "road_evidence",
+        "required_count": 3,
+        "optional": true
+      },
+      {
+        "id": "evidence_ready",
+        "text": "Find why the missing travelers carried old tokens.",
+        "tracker_text": "Investigate the travelers' last journey",
+        "group": "road_evidence",
+        "required_count": 3
+      },
+      {
+        "id": "fight_ghoulkin",
+        "text": "Recover the travelers' belongings from the clearing."
+      },
+      {
+        "id": "return_village",
+        "text": "Return with the account. Decide who receives the evidence."
+      }
+    ],
+    "unlocks": [
+      "main_bell_beneath_greyfen"
+    ],
+    "story_depth": "main"
+  },
+  "main_bell_beneath_greyfen": {
+    "title": "Bell Beneath Greyfen",
+    "type": "main",
+    "objectives": [
+      {
+        "id": "meet_anwen_gate",
+        "text": "Meet Anwen at the cemetery gate."
+      },
+      {
+        "id": "grave_harl",
+        "text": "Inspect Harl's disturbed grave.",
+        "group": "grave_evidence",
+        "required_count": 2,
+        "optional": true
+      },
+      {
+        "id": "grave_child",
+        "text": "Inspect the nameless child's grave.",
+        "group": "grave_evidence",
+        "required_count": 2,
+        "optional": true
+      },
+      {
+        "id": "grave_soldier",
+        "text": "Inspect the soldier's empty grave.",
+        "group": "grave_evidence",
+        "required_count": 2,
+        "optional": true
+      },
+      {
+        "id": "grave_truth",
+        "text": "Learn what the disturbed graves are carrying.",
+        "tracker_text": "Read the disturbed graves",
+        "group": "grave_evidence",
+        "required_count": 2
+      },
+      {
+        "id": "cemetery_ambush",
+        "text": "Survive what rises between the graves."
+      },
+      {
+        "id": "open_chapel",
+        "text": "Open the sealed chapel with Anwen."
+      },
+      {
+        "id": "crow_shrine_choice",
+        "text": "Choose what the shrine will contain, release, or redirect."
+      }
+    ],
+    "unlocks": [
+      "main_teeth_in_rain"
+    ],
+    "story_depth": "main"
+  },
+  "main_teeth_in_rain": {
+    "title": "Teeth in the Rain",
+    "type": "main",
+    "objectives": [
+      {
+        "id": "speak_mira",
+        "text": "Ask Mira how a restored name changes a memory."
+      },
+      {
+        "id": "read_chapel_names",
+        "text": "Read the erased names in the Crow Chapel."
+      },
+      {
+        "id": "craft_moon_oil",
+        "text": "Prepare Moon Oil for the deeper road.",
+        "optional": true
+      },
+      {
+        "id": "name_the_dead",
+        "text": "Speak Oren's name at the stones and watch the response."
+      },
+      {
+        "id": "fight_bog_wretch",
+        "text": "Defeat the Bog Wretch in deeper Wychwood."
+      },
+      {
+        "id": "bog_core_choice",
+        "text": "Decide how to settle the fragment the Wretch carried."
+      }
+    ],
+    "unlocks": [
+      "main_names_they_burned"
+    ],
+    "story_depth": "main"
+  },
+  "main_names_they_burned": {
+    "title": "The Names They Burned",
+    "type": "main",
+    "objectives": [
+      {
+        "id": "fragment_anwen",
+        "text": "Recover Anwen's register fragment.",
+        "group": "register",
+        "required_count": 3,
+        "optional": true
+      },
+      {
+        "id": "fragment_rook",
+        "text": "Recover Rook's register fragment.",
+        "group": "register",
+        "required_count": 3,
+        "optional": true
+      },
+      {
+        "id": "fragment_tor",
+        "text": "Recover Tor's register fragment.",
+        "group": "register",
+        "required_count": 3,
+        "optional": true
+      },
+      {
+        "id": "fragment_mira",
+        "text": "Recover Mira's register fragment.",
+        "group": "register",
+        "required_count": 3,
+        "optional": true
+      },
+      {
+        "id": "reconstruct_register",
+        "text": "Reconstruct the sanctuary promise and the recovered names.",
+        "group": "register",
+        "required_count": 3
+      },
+      {
+        "id": "names_choice",
+        "text": "Share the account now or prepare protected copies for the assembly."
+      }
+    ],
+    "unlocks": [
+      "main_ash_at_the_mill"
+    ],
+    "story_depth": "main"
+  },
+  "main_ash_at_the_mill": {
+    "title": "Ash at the Mill",
+    "type": "main",
+    "objectives": [
+      {
+        "id": "reach_mill",
+        "text": "Reach the mill that supplies Greyfen."
+      },
+      {
+        "id": "inspect_millstones",
+        "text": "Compare the ash measure with the missing wagons."
+      },
+      {
+        "id": "mill_encounter",
+        "text": "Protect the working route from the ash-bound threat."
+      },
+      {
+        "id": "mill_choice",
+        "text": "Keep the evidence and choose how Greyfen receives flour."
+      }
+    ],
+    "unlocks": [
+      "main_soldier_without_banner"
+    ],
+    "story_depth": "main"
+  },
+  "main_soldier_without_banner": {
+    "title": "A Soldier Without a Banner",
+    "type": "main",
+    "objectives": [
+      {
+        "id": "reach_bandit_road",
+        "text": "Find Captain Senn on the bandit road."
+      },
+      {
+        "id": "senn_confrontation",
+        "text": "Obtain Senn's surrender or overcome his guard."
+      },
+      {
+        "id": "senn_choice",
+        "text": "Resolve Senn's accountability and preserve his account."
+      }
+    ],
+    "unlocks": [
+      "main_blood_under_stone"
+    ],
+    "story_depth": "main"
+  },
+  "main_blood_under_stone": {
+    "title": "Blood Under Stone",
+    "type": "main",
+    "objectives": [
+      {
+        "id": "reach_castle",
+        "text": "Follow the old military road to Castle Vargan."
+      },
+      {
+        "id": "speak_guard",
+        "text": "Learn why the outer gate remains guarded."
+      },
+      {
+        "id": "enter_courtyard",
+        "text": "Enter Castle Vargan's outer courtyard."
+      },
+      {
+        "id": "evidence_mile_marker",
+        "text": "Inspect the Vargan mile marker.",
+        "group": "castle_evidence",
+        "required_count": 3,
+        "optional": true
+      },
+      {
+        "id": "evidence_supply_cart",
+        "text": "Inspect the broken military cart.",
+        "group": "castle_evidence",
+        "required_count": 3,
+        "optional": true
+      },
+      {
+        "id": "evidence_gate_notice",
+        "text": "Read the official road-closure notice.",
+        "group": "castle_evidence",
+        "required_count": 3,
+        "optional": true
+      },
+      {
+        "id": "evidence_iron_binding",
+        "text": "Compare the blackened Vargan binding wire.",
+        "group": "castle_evidence",
+        "required_count": 3,
+        "optional": true
+      },
+      {
+        "id": "evidence_ledger_fragment",
+        "text": "Find the names cut from the command ledger.",
+        "group": "castle_evidence",
+        "required_count": 3,
+        "optional": true
+      },
+      {
+        "id": "castle_evidence_ready",
+        "text": "Piece together House Vargan's control of the road.",
+        "group": "castle_evidence",
+        "required_count": 3
+      },
+      {
+        "id": "locate_record_hall",
+        "text": "Locate the sealed record hall."
+      },
+      {
+        "id": "recover_ledger",
+        "text": "Read the command beside the refugee register."
+      },
+      {
+        "id": "ledger_choice",
+        "text": "Keep a credible copy of the command and decide how to leave with it."
+      },
+      {
+        "id": "survive_haunting",
+        "text": "Survive what the erased names awakened."
+      },
+      {
+        "id": "last_witness_hook",
+        "text": "Confront Edric's renewal and follow the record to Halvern."
+      }
+    ],
+    "unlocks": [
+      "main_last_witness"
+    ],
+    "story_depth": "main"
+  },
+  "main_last_witness": {
+    "title": "The Last Witness",
+    "type": "main",
+    "objectives": [
+      {
+        "id": "reach_undercroft",
+        "text": "Enter the Vargan undercroft."
+      },
+      {
+        "id": "break_halvern_guard",
+        "text": "Hear the refusal caught inside Halvern's grave oath."
+      },
+      {
+        "id": "halvern_choice",
+        "text": "Keep the command proof and resolve the bounded memory."
+      }
+    ],
+    "unlocks": [
+      "main_crowns_without_mercy"
+    ],
+    "story_depth": "main"
+  },
+  "main_crowns_without_mercy": {
+    "title": "Crowns Without Mercy",
+    "type": "main",
+    "objectives": [
+      {
+        "id": "gather_witnesses",
+        "text": "Prepare willing speakers and records from those absent."
+      },
+      {
+        "id": "greyfen_assembly",
+        "text": "Open the assembly with aid independent of testimony."
+      },
+      {
+        "id": "confession_choice",
+        "text": "Stop the coerced renewal and decide how the account is heard."
+      }
+    ],
+    "unlocks": [
+      "main_hart_remembers"
+    ],
+    "story_depth": "main"
+  },
+  "main_hart_remembers": {
+    "title": "The Hart Remembers",
+    "type": "main",
+    "objectives": [
+      {
+        "id": "enter_glade",
+        "text": "Walk the reopened road to the White Hart."
+      },
+      {
+        "id": "hear_testimony",
+        "text": "Hear the Hart. Understand the cost of each freely chosen resolution."
+      },
+      {
+        "id": "final_choice",
+        "text": "Enact Witness, Mercy, Duty, or Ash."
+      }
+    ],
+    "unlocks": [],
+    "story_depth": "main"
+  },
+  "side_widows_bell": {
+    "title": "A Widow's Bell",
+    "type": "side",
+    "objectives": [
+      {
+        "id": "find_bell",
+        "text": "Find why Harl's grave bell rings."
+      },
+      {
+        "id": "widow_choice",
+        "text": "Give Elna the account and respect her choice of participation."
+      }
+    ],
+    "unlocks": [],
+    "story_depth": "deep"
+  },
+  "side_iron_remembers": {
+    "title": "Iron Remembers",
+    "type": "side",
+    "objectives": [
+      {
+        "id": "recover_iron",
+        "text": "Recover massacre iron from the chapel."
+      },
+      {
+        "id": "tor_choice",
+        "text": "Choose disclosure, replacement, or surrender of the marked stock."
+      }
+    ],
+    "unlocks": [],
+    "story_depth": "deep"
+  },
+  "side_bitter_roots": {
+    "title": "Bitter Roots",
+    "type": "side",
+    "objectives": [
+      {
+        "id": "collect_roots",
+        "text": "Gather the marked roots and examine the fever treatment."
+      },
+      {
+        "id": "study_roots",
+        "text": "Examine the ash bed separately from the treatment decision.",
+        "optional": true
+      },
+      {
+        "id": "mira_choice",
+        "text": "Agree a treatment plan with disclosure and a practical alternative."
+      }
+    ],
+    "unlocks": [],
+    "story_depth": "deep"
+  },
+  "side_black_dog": {
+    "title": "The Black Dog Contract",
+    "type": "side",
+    "objectives": [
+      {
+        "id": "find_dog",
+        "text": "Compare guardian tracks with the people who attacked the fold."
+      },
+      {
+        "id": "dog_choice",
+        "text": "Relocate, supervise, or end the dangerous protection fragment."
+      }
+    ],
+    "unlocks": [],
+    "story_depth": "deep"
+  },
+  "side_empty_grave": {
+    "title": "The Man Who Walked Home",
+    "type": "side",
+    "objectives": [
+      {
+        "id": "follow_empty_grave",
+        "text": "Follow the footprints from an empty grave."
+      },
+      {
+        "id": "walker_choice",
+        "text": "Settle Len's repeated watch and preserve its name."
+      }
+    ],
+    "unlocks": [],
+    "story_depth": "interlude"
+  },
+  "side_childs_charm": {
+    "title": "Oren's Red Thread",
+    "type": "side",
+    "objectives": [
+      {
+        "id": "trace_thread",
+        "text": "Follow Oren's thread from Wychwood to the chapel."
+      },
+      {
+        "id": "return_charm",
+        "text": "Place his charm where he can be named."
+      }
+    ],
+    "unlocks": [],
+    "story_depth": "interlude"
+  },
+  "side_soldiers_debt": {
+    "title": "The Bannerless",
+    "type": "side",
+    "objectives": [
+      {
+        "id": "find_deserters",
+        "text": "Find Senn's abandoned soldiers."
+      },
+      {
+        "id": "debt_choice",
+        "text": "Carry the soldiers' refusal with public or protected identities."
+      }
+    ],
+    "unlocks": [],
+    "story_depth": "deep"
+  },
+  "side_millers_measure": {
+    "title": "A Measure of Ash",
+    "type": "side",
+    "objectives": [
+      {
+        "id": "weigh_ash",
+        "text": "Recover the miller's hidden measure."
+      },
+      {
+        "id": "ash_choice",
+        "text": "Give the true measure to people who can act on it."
+      }
+    ],
+    "unlocks": [],
+    "story_depth": "interlude"
+  },
+  "side_rooks_map": {
+    "title": "The Road That Bends",
+    "type": "side",
+    "objectives": [
+      {
+        "id": "walk_false_road",
+        "text": "Test Rook's impossible map."
+      },
+      {
+        "id": "map_choice",
+        "text": "Keep the route useful without deciding Rook's consent for him."
+      }
+    ],
+    "unlocks": [],
+    "story_depth": "deep"
+  },
+  "side_three_candles": {
+    "title": "Three Candles Unlit",
+    "type": "side",
+    "objectives": [
+      {
+        "id": "light_bram",
+        "text": "Identify Bram and light his candle."
+      },
+      {
+        "id": "light_sella",
+        "text": "Identify Sella and light her candle."
+      },
+      {
+        "id": "light_oren",
+        "text": "Name Oren and light his candle."
+      }
+    ],
+    "unlocks": [],
+    "story_depth": "interlude"
+  }
 }

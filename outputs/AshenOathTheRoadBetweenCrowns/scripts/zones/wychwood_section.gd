@@ -572,7 +572,9 @@ func _build_gameplay_content(context: ZoneBuildContext) -> void:
 	if context.is_quest_active("side_black_dog") and not bool(context.get_story_flag("black_dog_bandit_camp_inspected", false)):
 		context.make_clue("bandit_camp", "Inspect bandit camp", Vector3(-12, 0, -12), "side_black_dog", "find_dog", Color(0.30, 0.18, 0.10))
 	context.make_clue("bitter_roots", "Collect bitter roots", Vector3(8, 0, -7.8), "side_bitter_roots", "collect_roots", Color(0.46, 0.22, 0.16))
-	context.make_clue("sacrifice_roots", "Study sacrifice roots", Vector3(10, 0, -9.2), "side_bitter_roots", "mira_choice", Color(0.38, 0.16, 0.13))
+	# Inspecting the bed supplies evidence. Mira's treatment is a separate,
+	# explicit conversation choice and must never finish on this interaction.
+	context.make_clue("sacrifice_roots", "Study the sacrifice-root bed", Vector3(10, 0, -9.2), "side_bitter_roots", "study_roots", Color(0.38, 0.16, 0.13))
 	context.make_herb("mooncap", Vector3(-7, 0, -6), Color(0.58, 0.65, 0.86))
 	context.make_herb("redroot", Vector3(-10, 0, -2), Color(0.55, 0.12, 0.11))
 	context.make_herb("grave_moss", Vector3(5, 0, -13), Color(0.24, 0.42, 0.24))

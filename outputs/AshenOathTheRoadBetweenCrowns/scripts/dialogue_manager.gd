@@ -27,7 +27,7 @@ func get_dialogue(id: String) -> Dictionary:
 	var candidates: Array = base.get("variants", [])
 	candidates.sort_custom(func(a, b): return int(a.get("priority", 0)) > int(b.get("priority", 0)))
 	for variant in candidates:
-		if story_state == null or story_state.matches(variant.get("conditions", {})):
+		if _conditions_match(variant.get("conditions", {})):
 			for key in variant:
 				if key not in ["conditions", "priority"]:
 					base[key] = variant[key]

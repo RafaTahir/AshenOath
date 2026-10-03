@@ -3,7 +3,7 @@
     "name": "Keen Edge",
     "branch": "blade",
     "tier": 1,
-    "description": "Blade attacks deal 10% more damage.",
+    "description": "Maintain the hunter's edge: blade attacks deal 10% more damage. Preparation helps; it cannot decide whose account is true.",
     "effects": {"blade_damage_multiplier": 1.10}
   },
   "measured_riposte": {
@@ -11,7 +11,7 @@
     "branch": "blade",
     "tier": 2,
     "requires": "keen_edge",
-    "description": "A successful parry restores 15 stamina.",
+    "description": "Recover your breath after a clean read: a successful parry restores 15 stamina. Useful when you need an opening rather than a killing blow.",
     "effects": {"parry_stamina_restore": 15.0}
   },
   "fell_weight": {
@@ -19,14 +19,14 @@
     "branch": "blade",
     "tier": 3,
     "requires": "measured_riposte",
-    "description": "Heavy attacks deal a further 20% damage.",
+    "description": "Commit to a deliberate strike: heavy attacks gain a 20% damage multiplier in addition to your blade practice. Their stamina cost still applies.",
     "effects": {"heavy_damage_multiplier": 1.20}
   },
   "hardened_vow": {
     "name": "Hardened Vow",
     "branch": "survival",
     "tier": 1,
-    "description": "Maximum health increases by 20.",
+    "description": "Learn to stay on your feet: maximum health increases by 20. This grants room to recover from a mistake, not immunity.",
     "effects": {"max_health_bonus": 20.0}
   },
   "sure_step": {
@@ -34,7 +34,7 @@
     "branch": "survival",
     "tier": 2,
     "requires": "hardened_vow",
-    "description": "Dodging costs 5 less stamina.",
+    "description": "Keep a reserve for the next attack: dodging costs 5 less stamina. Step clear of a telegraph instead of trading blows.",
     "effects": {"dodge_cost_reduction": 5.0}
   },
   "redroot_lore": {
@@ -42,14 +42,14 @@
     "branch": "survival",
     "tier": 3,
     "requires": "sure_step",
-    "description": "Redroot Potions restore 15 additional health.",
+    "description": "Make each remedy count: Redroot Potions restore 15 additional health. This applies to purchased and crafted potions alike.",
     "effects": {"potion_heal_bonus": 15.0}
   },
   "kindled_core": {
     "name": "Kindled Core",
     "branch": "oathfire",
     "tier": 1,
-    "description": "Oathfire costs 10 less stamina.",
+    "description": "Control the flame's demand: Oathfire costs 10 less stamina. Keep enough breath to defend after using it.",
     "effects": {"beam_cost_reduction": 10.0}
   },
   "far_reach": {
@@ -57,7 +57,7 @@
     "branch": "oathfire",
     "tier": 2,
     "requires": "kindled_core",
-    "description": "Oathfire range increases by 2 metres.",
+    "description": "Work from a safer distance: Oathfire range increases by 2 metres. Clear sight and a readable opening still matter.",
     "effects": {"beam_range_bonus": 2.0}
   },
   "ashen_flow": {
@@ -65,7 +65,7 @@
     "branch": "oathfire",
     "tier": 3,
     "requires": "far_reach",
-    "description": "Oathfire cooldown is reduced by 1 second.",
+    "description": "Recover the flame sooner: Oathfire cooldown is reduced by 1 second. Its range and stamina rules remain in force.",
     "effects": {"beam_cooldown_reduction": 1.0}
   }
 }

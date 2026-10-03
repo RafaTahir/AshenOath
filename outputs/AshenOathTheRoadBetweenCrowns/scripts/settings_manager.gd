@@ -27,6 +27,11 @@ const DEFAULT_SETTINGS := {
 	"touch_look_sensitivity": 1.0,
 	"invert_y": false,
 	"master_volume": 0.85,
+	"music_volume": 0.8,
+	"sfx_volume": 1.0,
+	"voice_volume": 1.0,
+	"difficulty": "standard",
+	"pause_on_focus_loss": true,
 	"subtitle_scale": 1.0,
 	"camera_shake": 1.0,
 	"reduced_motion": false,
@@ -137,6 +142,11 @@ func restore_settings(stored: Dictionary) -> void:
 	if settings["touch_controls"] not in ["auto", "on", "off"]:
 		settings["touch_controls"] = "auto"
 	settings["master_volume"] = clampf(float(settings["master_volume"]), 0.0, 1.0)
+	for channel in ["music", "sfx", "voice"]:
+		settings[channel + "_volume"] = clampf(float(settings[channel + "_volume"]), 0.0, 1.0)
+	settings["difficulty"] = str(settings.get("difficulty", "standard")).to_lower()
+	if settings["difficulty"] not in ["story", "standard", "veteran"]:
+		settings["difficulty"] = "standard"
 	settings["subtitle_scale"] = clampf(float(settings["subtitle_scale"]), 0.9, 1.2)
 	settings["camera_shake"] = clampf(float(settings["camera_shake"]), 0.0, 1.0)
 	settings["shadow_quality"] = clampi(int(settings["shadow_quality"]), 0, 2)
@@ -314,6 +324,28 @@ func cycle_master_volume() -> void:
 func cycle_subtitle_scale() -> void:
 	settings["subtitle_scale"] = _cycle_float(float(settings["subtitle_scale"]), [0.9, 1.0, 1.2])
 	apply()
+
+func set_mix_level(channel: String, value: float) -> void:
+	if channel not in ["music", "sfx", "voice"] or not is_finite(value):
+		return
+	settings[channel + "_volume"] = clampf(value, 0.0, 1.0)
+	apply()
+
+func cycle_difficulty() -> void:
+	var profiles := ["story", "standard", "veteran"]
+	var index := profiles.find(str(settings.get("difficulty", "standard")))
+	settings["difficulty"] = profiles[(index + 1) % profiles.size()]
+	apply()
+
+func toggle_pause_on_focus_loss() -> void:
+	settings["pause_on_focus_loss"] = not bool(settings.get("pause_on_focus_loss", true))
+	apply()
+
+func get_difficulty_profile() -> Dictionary:
+	match str(settings.get("difficulty", "standard")):
+		"story": return {"incoming_damage_multiplier": 0.60, "parry_window": 0.42, "dodge_cost_modifier": -6.0, "attack_buffer": 0.24}
+		"veteran": return {"incoming_damage_multiplier": 1.25, "parry_window": 0.23, "dodge_cost_modifier": 3.0, "attack_buffer": 0.18}
+		_: return {"incoming_damage_multiplier": 1.0, "parry_window": 0.30, "dodge_cost_modifier": 0.0, "attack_buffer": 0.18}
 
 func cycle_camera_shake() -> void:
 	settings["camera_shake"] = _cycle_float(float(settings["camera_shake"]), [0.0, 0.5, 1.0])

@@ -1,247 +1,1565 @@
 {
   "notice_board": {
     "name": "Greyfen Notice Board",
-    "greeting": "A rain-stiff contract hangs beneath a rusted nail. A prayer charm has been pressed into the wood beside it.",
+    "greeting": "Three missing on the north road. Bram Kett. Sella Vey. Her son Oren.",
     "lines": [
-      "Missing: Bram Kett, Sella Vey, and Oren Vey. Their cart returned empty from the old road.",
-      "Black feathers were found in the blood. Sister Anwen keeps the names and pays for proof."
+      "Payment for an account of the missing and proof of what took them. Names held at the Crow Shrine.",
+      "A second hand has added: Bram did not abandon a cart while someone needed it. Ask who closed the road."
     ],
     "variants": [
       {
-        "priority": 40,
-        "conditions": {"evidence_report": "public"},
-        "greeting": "The contract is pinned beneath a strip of black cloth. Someone has written the three names in a steadier hand.",
+        "priority": 50,
+        "conditions": {
+          "renewal_stopped": true
+        },
+        "greeting": "The order beside the contract has been crossed through. The names remain.",
         "lines": [
-          "The village has read the evidence. No one has taken the notice down.",
-          "A fresh mark beneath the names points east, toward the cemetery."
+          "Kael: The grain is no longer being held against a signature. Keeping it moving will take more than words."
         ],
         "actions": []
       },
       {
-        "priority": 35,
-        "conditions": {"evidence_report": "private"},
-        "greeting": "The board still carries the old contract, but the public report was never posted.",
-        "lines": ["Anwen kept the evidence close. The road's next bell will not be a village announcement."],
+        "priority": 40,
+        "conditions": {
+          "renewal_announced": true
+        },
+        "greeting": "A Vargan notice covers half the old contract.",
+        "lines": [
+          "Protected households must attend the renewal. Grain allotments will be recorded beside their assent.",
+          "Kael: Hunger does not make an oath freely given."
+        ],
         "actions": []
       },
       {
-        "priority": 35,
-        "conditions": {"evidence_report": "retained"},
-        "greeting": "The contract remains unchanged. Only the nail beside it is new.",
-        "lines": ["Kael kept the token. The board offers no comfort and no answer."],
+        "priority": 30,
+        "conditions": {
+          "evidence_report": "public"
+        },
+        "greeting": "Oren's token hangs below the contract. Someone has tied a dry scrap of cloth over it.",
+        "lines": [
+          "Kael: They have not taken it down. Somebody is afraid enough to cover it and kind enough to keep it dry."
+        ],
+        "actions": []
+      },
+      {
+        "priority": 30,
+        "conditions": {
+          "evidence_report": "private"
+        },
+        "greeting": "A small note has been added: anyone who saw Bram's cart should speak to Anwen.",
+        "lines": [
+          "Kael: A private account can still invite a second witness."
+        ],
+        "actions": []
+      },
+      {
+        "priority": 30,
+        "conditions": {
+          "evidence_report": "retained"
+        },
+        "greeting": "The payment remains unclaimed. Beneath it, three empty places for names.",
+        "lines": [
+          "Kael: Keeping the token is not the same as keeping them safe."
+        ],
         "actions": []
       }
     ],
-    "actions": [{"label": "Accept Road of Crows", "type": "start_quest", "quest": "main_road_of_crows"}]
+    "actions": [
+      {
+        "label": "I will find what happened to Bram, Sella, and Oren.",
+        "type": "start_quest",
+        "quest": "main_road_of_crows"
+      }
+    ],
+    "voice": [],
+    "content_version": 2
   },
   "sister_anwen": {
     "name": "Sister Anwen",
-    "greeting": "You came about the road notice.",
+    "greeting": "Mind the cup on the step. The man from the south road needs it more than I need a clean floor.",
     "lines": [
-      "Bram drove the cart. Sella took her boy, Oren. She left his coat here. Said they'd be back before rain.",
-      "He carved a wooden crow while she prayed. Kept asking me if a bird could forget the way home.",
-      "If you find red thread tied around black feathers, don't cut it. I tied that thread myself.",
-      "Kael: You knew that before the contract was posted.",
-      "Sister Anwen: Yes. Bring me what the road left, and I will tell you why."
+      "Kael: I read the road notice. Three missing.",
+      "Anwen: Bram drove. Sella had Oren beside her. He left his coat here because the sun was out.",
+      "Anwen: They found old wooden tokens where the road was being repaired. Sella asked me to read one. I did.",
+      "Kael: What happened when you read it?",
+      "Anwen: The candles went out. I sent them away while I found a rite I thought would keep them safe.",
+      "Anwen: If you find red thread around black feathers, keep it intact. I tied it. I owe you that much before you go."
     ],
     "variants": [
       {
-        "priority": 30,
-        "conditions": {"bell_gate_met": true},
-        "greeting": "The bell rope was cut last winter. It still rang three times after your report.",
+        "priority": 90,
+        "conditions": {
+          "renewal_stopped": true
+        },
+        "greeting": "I have put the grain list beside the burial book. No one has to sign one to receive the other.",
         "lines": [
-          "Sister Anwen: Once means burial. Twice means a name restored.",
-          "Kael: And three?",
-          "Sister Anwen: I do not know. That is the first clean answer I have given you. Check the disturbed graves."
-        ],
-        "actions": []
+          "Anwen: I could call that a beginning. It is mostly a table and two people willing to sit at it.",
+          "Kael: Beginnings usually look smaller when somebody is doing the work."
+        ]
       },
       {
-        "priority": 20,
-        "conditions": {"evidence_report": "private"},
-        "greeting": "Anwen knows Oren's token before Kael opens his hand.",
+        "priority": 85,
+        "conditions": {
+          "witness_consent_anwen": "refused"
+        },
+        "greeting": "I will give you the register. I am not agreeing to stand in a rite you threatened me into.",
         "lines": [
-          "Kael: You know it.",
-          "Anwen: I know the carving.",
-          "Kael: That is not what I said.",
-          "Anwen: No. Oren was not the first child given that token."
-        ],
-        "actions": []
+          "Kael: The record can speak to facts. It cannot make your promise for you.",
+          "Anwen: Then you do understand the difference."
+        ]
       },
       {
-        "priority": 20,
-        "conditions": {"evidence_report": "public"},
-        "greeting": "The token is already pinned beneath the contract. Anwen does not look at it.",
+        "priority": 80,
+        "conditions": {
+          "renewal_announced": true
+        },
+        "greeting": "Edric wants my hand on the new seal. He has already counted the households that cannot afford to refuse.",
         "lines": [
-          "Anwen: You gave Greyfen the truth before giving it time to choose courage.",
-          "Kael: Courage chosen after warning is only obedience.",
-          "Anwen: Then we will learn what fear chooses."
-        ],
-        "actions": []
+          "Anwen: The old rite borrowed consent from frightened people. That is why it keeps breaking.",
+          "Kael: Can the Hart be released without making everyone here swear?",
+          "Anwen: Yes. Someone must freely keep the recovered account. One person can begin. More people can share the work."
+        ]
       },
       {
-        "priority": 20,
-        "conditions": {"evidence_report": "retained"},
-        "greeting": "Anwen watches Kael's closed hand.",
+        "priority": 50,
+        "conditions": {
+          "bell_gate_met": true
+        },
+        "greeting": "Three strokes. A burial, a restored name, and a promise that has stopped holding.",
         "lines": [
-          "Anwen: You found something.",
-          "Kael: I found reasons to keep looking.",
-          "Anwen: Keep them close. Greyfen has practiced taking things from the dead."
+          "Anwen: I cut the rope last winter. A novice heard an erased name and walked into the sealed chapel. I found him too late.",
+          "Kael: You closed it again.",
+          "Anwen: Yes. I told myself I was buying time. The graves will show what that time cost."
         ],
-        "actions": []
+        "actions": [
+          {
+            "label": "I'll stay until the people carrying this can speak safely.",
+            "type": "story_choice",
+            "sets_flags": {
+              "kael_pledge": "protect"
+            },
+            "result": "Kael: I cannot promise nobody gets hurt. I can promise I will not take the coin and leave you to it.",
+            "conditions": {
+              "flag_unset": "kael_pledge"
+            }
+          },
+          {
+            "label": "I'll stay. We keep a record nobody can close again.",
+            "type": "story_choice",
+            "sets_flags": {
+              "kael_pledge": "account"
+            },
+            "result": "Kael: Copies, names, living witnesses. Not another secret that depends on one person.",
+            "conditions": {
+              "flag_unset": "kael_pledge"
+            }
+          },
+          {
+            "label": "I'll stay, but you tell me what you are asking me to carry.",
+            "type": "story_choice",
+            "sets_flags": {
+              "kael_pledge": "stay"
+            },
+            "result": "Anwen: That is fair. I should have asked before I put the token in your hand.",
+            "conditions": {
+              "flag_unset": "kael_pledge"
+            }
+          }
+        ]
+      },
+      {
+        "priority": 40,
+        "conditions": {
+          "evidence_report": "private"
+        },
+        "greeting": "That is Oren's carving. Turn it over. The older name is beneath his paint.",
+        "lines": [
+          "Kael: You sent them out carrying something the shrine had erased.",
+          "Anwen: I thought new burial thread would quiet it. Someone bound it again with Vargan wire.",
+          "Kael: The pack is dead. The people hiding this are alive.",
+          "Anwen: Take your payment if you must. I need help I have no right to order."
+        ],
+        "actions": [
+          {
+            "label": "I'll stay until the people carrying this can speak safely.",
+            "type": "story_choice",
+            "sets_flags": {
+              "kael_pledge": "protect"
+            },
+            "result": "Kael: I cannot promise nobody gets hurt. I can promise I will not take the coin and leave you to it.",
+            "conditions": {
+              "flag_unset": "kael_pledge"
+            }
+          },
+          {
+            "label": "I'll stay. We keep a record nobody can close again.",
+            "type": "story_choice",
+            "sets_flags": {
+              "kael_pledge": "account"
+            },
+            "result": "Kael: Copies, names, living witnesses. Not another secret that depends on one person.",
+            "conditions": {
+              "flag_unset": "kael_pledge"
+            }
+          },
+          {
+            "label": "I'll stay, but you tell me what you are asking me to carry.",
+            "type": "story_choice",
+            "sets_flags": {
+              "kael_pledge": "stay"
+            },
+            "result": "Anwen: That is fair. I should have asked before I put the token in your hand.",
+            "conditions": {
+              "flag_unset": "kael_pledge"
+            }
+          }
+        ]
+      },
+      {
+        "priority": 40,
+        "conditions": {
+          "evidence_report": "public"
+        },
+        "greeting": "I saw the token on the board. Rook has moved his bedding from the window.",
+        "lines": [
+          "Kael: People needed to know what was on their road.",
+          "Anwen: Yes. And the people who can explain it need a way to survive being known.",
+          "Kael: Then we do both. I will not leave the second part to a notice."
+        ],
+        "actions": [
+          {
+            "label": "I'll stay until the people carrying this can speak safely.",
+            "type": "story_choice",
+            "sets_flags": {
+              "kael_pledge": "protect"
+            },
+            "result": "Kael: I cannot promise nobody gets hurt. I can promise I will not take the coin and leave you to it.",
+            "conditions": {
+              "flag_unset": "kael_pledge"
+            }
+          },
+          {
+            "label": "I'll stay. We keep a record nobody can close again.",
+            "type": "story_choice",
+            "sets_flags": {
+              "kael_pledge": "account"
+            },
+            "result": "Kael: Copies, names, living witnesses. Not another secret that depends on one person.",
+            "conditions": {
+              "flag_unset": "kael_pledge"
+            }
+          },
+          {
+            "label": "I'll stay, but you tell me what you are asking me to carry.",
+            "type": "story_choice",
+            "sets_flags": {
+              "kael_pledge": "stay"
+            },
+            "result": "Anwen: That is fair. I should have asked before I put the token in your hand.",
+            "conditions": {
+              "flag_unset": "kael_pledge"
+            }
+          }
+        ]
+      },
+      {
+        "priority": 40,
+        "conditions": {
+          "evidence_report": "retained"
+        },
+        "greeting": "Keep your hand closed if you need to. I recognize the shape through your glove.",
+        "lines": [
+          "Anwen: Oren painted over a refugee's token. Sella wanted the first name restored.",
+          "Kael: Someone alive tried to take it from the pack.",
+          "Anwen: Then leaving now would leave a witness carrying something dangerous. I am asking you to stay."
+        ],
+        "actions": [
+          {
+            "label": "I'll stay until the people carrying this can speak safely.",
+            "type": "story_choice",
+            "sets_flags": {
+              "kael_pledge": "protect"
+            },
+            "result": "Kael: I cannot promise nobody gets hurt. I can promise I will not take the coin and leave you to it.",
+            "conditions": {
+              "flag_unset": "kael_pledge"
+            }
+          },
+          {
+            "label": "I'll stay. We keep a record nobody can close again.",
+            "type": "story_choice",
+            "sets_flags": {
+              "kael_pledge": "account"
+            },
+            "result": "Kael: Copies, names, living witnesses. Not another secret that depends on one person.",
+            "conditions": {
+              "flag_unset": "kael_pledge"
+            }
+          },
+          {
+            "label": "I'll stay, but you tell me what you are asking me to carry.",
+            "type": "story_choice",
+            "sets_flags": {
+              "kael_pledge": "stay"
+            },
+            "result": "Anwen: That is fair. I should have asked before I put the token in your hand.",
+            "conditions": {
+              "flag_unset": "kael_pledge"
+            }
+          }
+        ]
       }
     ],
     "voice": [],
     "actions": [
-      {"label": "I'll bring back evidence.", "type": "story_choice", "conditions": {"flag_unset": "anwen_response"}, "sets_flags": {"anwen_response": "evidence"}, "adjusts_values": {"anwen_trust": 1}, "result": "Anwen nods once. 'Then bring back what the road tried to hide.'"},
-      {"label": "You can explain when I return.", "type": "story_choice", "conditions": {"flag_unset": "anwen_response"}, "sets_flags": {"anwen_response": "terms"}, "result": "Kael leaves the silence between them intact. Anwen looks relieved, then ashamed of it."},
-      {"label": "If the shrine is involved, I report it.", "type": "story_choice", "conditions": {"flag_unset": "anwen_response"}, "sets_flags": {"anwen_response": "report"}, "adjusts_values": {"greyfen_fear": 1}, "result": "Anwen's hand tightens around the prayer cord. 'Then do not let fear choose the wording.'"},
-      {"label": "I will inspect the corpse.", "type": "complete_objective", "quest": "main_road_of_crows", "objective": "speak_anwen"}
-    ]
+      {
+        "label": "I'll bring back evidence.",
+        "type": "story_choice",
+        "conditions": {
+          "flag_unset": "anwen_response"
+        },
+        "sets_flags": {
+          "anwen_response": "evidence"
+        },
+        "adjusts_values": {
+          "anwen_trust": 1
+        },
+        "result": "Anwen nods once. 'Then bring back what the road tried to hide.'",
+        "preview": "Anwen nods once. 'Then bring back what the road tried to hide.'",
+        "cost": "This records an explicit promise or practical action. A record cannot supply someone else's consent."
+      },
+      {
+        "label": "You can explain when I return.",
+        "type": "story_choice",
+        "conditions": {
+          "flag_unset": "anwen_response"
+        },
+        "sets_flags": {
+          "anwen_response": "terms"
+        },
+        "result": "Kael leaves the silence between them intact. Anwen looks relieved, then ashamed of it.",
+        "preview": "Kael leaves the silence between them intact. Anwen looks relieved, then ashamed of it.",
+        "cost": "This records an explicit promise or practical action. A record cannot supply someone else's consent."
+      },
+      {
+        "label": "If the shrine is involved, I report it.",
+        "type": "story_choice",
+        "conditions": {
+          "flag_unset": "anwen_response"
+        },
+        "sets_flags": {
+          "anwen_response": "report"
+        },
+        "adjusts_values": {},
+        "result": "Anwen's hand tightens around the prayer cord. 'Then do not let fear choose the wording.'",
+        "preview": "Anwen's hand tightens around the prayer cord. 'Then do not let fear choose the wording.'",
+        "cost": "This records an explicit promise or practical action. A record cannot supply someone else's consent."
+      },
+      {
+        "label": "I will follow the cart. Keep his coat here.",
+        "type": "complete_objective",
+        "quest": "main_road_of_crows",
+        "objective": "speak_anwen"
+      },
+      {
+        "label": "Will you speak for your own part, without the seal?",
+        "type": "story_choice",
+        "sets_flags": {
+          "witness_consent_anwen": "voluntary"
+        },
+        "result": "The decision is recorded. Nobody else can make it for Anwen.",
+        "conditions": {
+          "renewal_announced": true,
+          "flag_unset": "witness_consent_anwen"
+        },
+        "preview": "The decision is recorded. Nobody else can make it for Anwen.",
+        "cost": "This records an explicit promise or practical action. A record cannot supply someone else's consent."
+      },
+      {
+        "label": "Give me the book. I will not demand your oath.",
+        "type": "story_choice",
+        "sets_flags": {
+          "witness_consent_anwen": "refused"
+        },
+        "result": "The decision is recorded. Nobody else can make it for Anwen.",
+        "conditions": {
+          "renewal_announced": true,
+          "flag_unset": "witness_consent_anwen"
+        },
+        "preview": "The decision is recorded. Nobody else can make it for Anwen.",
+        "cost": "This records an explicit promise or practical action. A record cannot supply someone else's consent."
+      }
+    ],
+    "content_version": 2
   },
   "mira": {
     "name": "Mira Fen",
-    "greeting": "Keep the door open. People trust medicine less when the healer whispers.",
+    "greeting": "Hold the door. Elna is bringing broth, and I have both hands occupied.",
     "lines": [
-      "Sella bought salve for Oren's hands. Too many hours carving that little crow.",
-      "I can mend a cut. Getting this village to tell the truth is harder."
+      "Mira: Toma's daughter has a fever. The draught works. The roots it needs grow in the old ash beds.",
+      "Kael: Does Toma know where it comes from?",
+      "Mira: He knows I can bring the fever down. I have let him think that was the only fact that mattered.",
+      "Mira: Sella bought salve for Oren's hands. Too much carving. I have one jar she never collected."
     ],
     "variants": [
       {
+        "priority": 90,
+        "conditions": {
+          "mira_truth": "destroyed"
+        },
+        "greeting": "The clean roots take longer to steep. I keep a cold cloth ready between doses.",
+        "lines": [
+          "Mira: You did not make the fever disappear by closing the ash bed.",
+          "Kael: No. Who needs help while the new treatment catches up?",
+          "Mira: Toma. He has not slept. Bring him the broth before it cools."
+        ]
+      },
+      {
+        "priority": 90,
+        "conditions": {
+          "mira_truth": "confessed"
+        },
+        "greeting": "The jars have their source written on them now. Two families refused. Three asked questions.",
+        "lines": [
+          "Mira: I treated all five. Consent would mean little if refusal meant I stopped caring.",
+          "Kael: What will you say at the assembly?",
+          "Mira: What I used. What I withheld. What I am changing."
+        ]
+      },
+      {
+        "priority": 90,
+        "conditions": {
+          "mira_truth": "kept"
+        },
+        "greeting": "The fever broke. Toma thanked me. I let him.",
+        "lines": [
+          "Mira: There is your immediate result. A child is breathing easier.",
+          "Kael: And the part he still cannot choose?",
+          "Mira: Still here. Under the label I have not written."
+        ]
+      },
+      {
+        "priority": 60,
+        "conditions": {
+          "bog_core_fate": "preserved"
+        },
+        "greeting": "The wrapped core shifts toward the names in the book, not toward my instruments.",
+        "lines": [
+          "Mira: It is a memory, not a patient who can answer me. I will not call a useful response permission.",
+          "Kael: Study what is already exposed. Do not open another name without asking the family."
+        ]
+      },
+      {
+        "priority": 45,
+        "conditions": {
+          "teeth_supplies_taken": true
+        },
+        "greeting": "Say Oren's name at the old stones. Watch the roots before you move closer.",
+        "lines": [
+          "Mira: The oil shows where the memory is caught. It does not decide what you should do with it.",
+          "Kael: And breaking the vessel?",
+          "Mira: Stops that shape. The memory goes somewhere else. We can defend ourselves without pretending the aftermath is nothing."
+        ]
+      },
+      {
         "priority": 40,
-        "conditions": {"bog_core_fate": "preserved"},
-        "greeting": "The core is quieter in grave cloth. Not silent.",
+        "conditions": {
+          "teeth_in_rain_available": true
+        },
+        "greeting": "The chapel register and the roots turned toward the same name.",
         "lines": [
-          "Mira: I asked it for a name. It gave me the smell of wet wheat.",
-          "Kael: That was not permission to keep asking.",
-          "Mira: No. It was a reason."
-        ]
-      },
-      {
-        "priority": 35,
-        "conditions": {"teeth_supplies_taken": true},
-        "greeting": "The roots turned when I said Oren's name. Not toward me. Toward the old stones.",
-        "lines": [
-          "Mira: I tested names on plants grown in grave soil. I told myself medicine made the knowing useful.",
-          "Kael: Useful is not clean.",
-          "Mira: No. Read the chapel register. Then speak Oren's name where the road turns wet."
-        ]
-      },
-      {
-        "priority": 30,
-        "conditions": {"teeth_in_rain_available": true},
-        "greeting": "The roots turned when I said Oren's name. Not toward me. Toward the old stones.",
-        "lines": [
-          "Mira: I tested names on plants grown in grave soil. I told myself medicine made the knowing useful.",
-          "Kael: Useful is not clean.",
-          "Mira: No. Read the chapel register. Take Moon Oil if you want the thing beneath those stones to show what it remembers."
+          "Mira: Oren restored a name on his token. The road's concealment could not keep it disordered afterward.",
+          "Kael: That brought the creatures?",
+          "Mira: The tokens drew them. The failed binding left the memory loose. Read the register before you face what took it."
         ]
       }
     ],
     "actions": [
-      {"label": "I will read the chapel register.", "type": "complete_objective", "quest": "main_teeth_in_rain", "objective": "speak_mira", "conditions": {"quest_active": "main_teeth_in_rain", "objectives_not_done": [{"quest": "main_teeth_in_rain", "id": "speak_mira"}]}, "sets_flags": {"mira_teeth_briefed": true}},
-      {"label": "Give me what Moon Oil needs.", "type": "give_ingredients", "items": {"mooncap": 1}, "conditions": {"quest_active": "main_teeth_in_rain", "teeth_supplies_taken": false}, "sets_flags": {"teeth_supplies_taken": true}},
-      {"label": "Start Bitter Roots", "type": "start_quest", "quest": "side_bitter_roots", "conditions": {"quest_available": "side_bitter_roots"}},
-      {"label": "I found the roots.", "type": "complete_objective", "quest": "side_bitter_roots", "objective": "collect_roots", "conditions": {"quest_active": "side_bitter_roots", "objectives_not_done": [{"quest": "side_bitter_roots", "id": "collect_roots"}]}},
-      {"label": "Keep the truth between us.", "type": "story_choice", "quest": "side_bitter_roots", "objective": "mira_choice", "conditions": {"quest_active": "side_bitter_roots", "objectives_done": [{"quest": "side_bitter_roots", "id": "collect_roots"}], "objectives_not_done": [{"quest": "side_bitter_roots", "id": "mira_choice"}]}, "sets_flags": {"mira_truth": "kept"}, "result": "Mira keeps working, but no longer meets your eyes."},
-      {"label": "Greyfen deserves the truth.", "type": "story_choice", "quest": "side_bitter_roots", "objective": "mira_choice", "conditions": {"quest_active": "side_bitter_roots", "objectives_done": [{"quest": "side_bitter_roots", "id": "collect_roots"}], "objectives_not_done": [{"quest": "side_bitter_roots", "id": "mira_choice"}]}, "sets_flags": {"mira_truth": "confessed"}, "adjusts_values": {"greyfen_fear": 1}, "result": "Mira agrees to name what feeds the roots."},
-      {"label": "Use the miller's measure to treat the sick.", "type": "story_choice", "quest": "side_millers_measure", "objective": "ash_choice", "conditions": {"quest_active": "side_millers_measure", "objectives_done": [{"quest": "side_millers_measure", "id": "weigh_ash"}], "objectives_not_done": [{"quest": "side_millers_measure", "id": "ash_choice"}]}, "sets_flags": {"ash_measure_fate": "healer"}, "adjusts_values": {"anwen_trust": 1}, "result": "Mira keeps the figures beside the names of those the ash harmed."}
-    ]
+      {
+        "label": "I will read the chapel register.",
+        "type": "complete_objective",
+        "quest": "main_teeth_in_rain",
+        "objective": "speak_mira",
+        "conditions": {
+          "quest_active": "main_teeth_in_rain",
+          "objectives_not_done": [
+            {
+              "quest": "main_teeth_in_rain",
+              "id": "speak_mira"
+            }
+          ]
+        },
+        "sets_flags": {
+          "mira_teeth_briefed": true
+        }
+      },
+      {
+        "label": "Give me what Moon Oil needs.",
+        "type": "give_ingredients",
+        "items": {
+          "mooncap": 1
+        },
+        "conditions": {
+          "quest_active": "main_teeth_in_rain",
+          "teeth_supplies_taken": false
+        },
+        "sets_flags": {
+          "teeth_supplies_taken": true
+        }
+      },
+      {
+        "label": "Show me what the fever draught needs.",
+        "type": "start_quest",
+        "quest": "side_bitter_roots",
+        "conditions": {
+          "quest_available": "side_bitter_roots"
+        }
+      },
+      {
+        "label": "I brought the roots from the marked bed.",
+        "type": "complete_objective",
+        "quest": "side_bitter_roots",
+        "objective": "collect_roots",
+        "conditions": {
+          "quest_active": "side_bitter_roots",
+          "objectives_not_done": [
+            {
+              "quest": "side_bitter_roots",
+              "id": "collect_roots"
+            }
+          ],
+          "bitter_roots_collected": true
+        }
+      },
+      {
+        "label": "Keep treating quietly until there is an alternative.",
+        "type": "story_choice",
+        "quest": "side_bitter_roots",
+        "objective": "mira_choice",
+        "conditions": {
+          "quest_active": "side_bitter_roots",
+          "objectives_done": [
+            {
+              "quest": "side_bitter_roots",
+              "id": "collect_roots"
+            }
+          ],
+          "objectives_not_done": [
+            {
+              "quest": "side_bitter_roots",
+              "id": "mira_choice"
+            }
+          ]
+        },
+        "sets_flags": {
+          "mira_truth": "kept",
+          "mira_truth_known": true,
+          "mira_treatment": "private",
+          "witness_consent_mira": "refused"
+        },
+        "result": "Mira keeps the ash bed open. The fever falls, but families cannot choose a treatment whose origin remains hidden.",
+        "preview": "Mira keeps the ash bed open. The fever falls, but families cannot choose a treatment whose origin remains hidden.",
+        "cost": "Alternative treatment is slower. Continued ash use needs families who can freely refuse it."
+      },
+      {
+        "label": "Explain the source. Offer each family another treatment.",
+        "type": "story_choice",
+        "quest": "side_bitter_roots",
+        "objective": "mira_choice",
+        "conditions": {
+          "quest_active": "side_bitter_roots",
+          "objectives_done": [
+            {
+              "quest": "side_bitter_roots",
+              "id": "collect_roots"
+            }
+          ],
+          "objectives_not_done": [
+            {
+              "quest": "side_bitter_roots",
+              "id": "mira_choice"
+            }
+          ]
+        },
+        "sets_flags": {
+          "mira_truth": "confessed",
+          "mira_truth_known": true,
+          "mira_treatment": "consented",
+          "witness_consent_mira": "voluntary"
+        },
+        "adjusts_values": {
+          "greyfen_fear": 1
+        },
+        "result": "Mira labels the ash draught and sets clean-root doses beside it. The treatment is slower for those who refuse, and care continues. Mira freely agrees to explain her own actions at the assembly.",
+        "preview": "Mira labels the ash draught and sets clean-root doses beside it. The treatment is slower for those who refuse, and care continues. Mira freely agrees to explain her own actions at the assembly.",
+        "cost": "Alternative treatment is slower. Continued ash use needs families who can freely refuse it."
+      },
+      {
+        "label": "Use the miller's measure to treat the sick.",
+        "type": "story_choice",
+        "quest": "side_millers_measure",
+        "objective": "ash_choice",
+        "conditions": {
+          "quest_active": "side_millers_measure",
+          "objectives_done": [
+            {
+              "quest": "side_millers_measure",
+              "id": "weigh_ash"
+            }
+          ],
+          "objectives_not_done": [
+            {
+              "quest": "side_millers_measure",
+              "id": "ash_choice"
+            }
+          ]
+        },
+        "sets_flags": {
+          "ash_measure_fate": "healer"
+        },
+        "adjusts_values": {
+          "anwen_trust": 1
+        },
+        "result": "Mira keeps the figures beside the names of those the ash harmed.",
+        "preview": "Mira keeps the figures beside the names of those the ash harmed.",
+        "cost": "This records an explicit promise or practical action. A record cannot supply someone else's consent."
+      },
+      {
+        "label": "Close the ash bed. Use clean roots and accept the delay.",
+        "type": "story_choice",
+        "sets_flags": {
+          "mira_truth": "destroyed",
+          "mira_treatment": "replacement",
+          "mira_truth_known": true,
+          "witness_consent_mira": "voluntary"
+        },
+        "result": "Mira closes the old bed and prepares clean roots. Toma stays through the slower treatment; nobody calls the extra waiting harmless. Mira freely agrees to explain her own actions at the assembly.",
+        "quest": "side_bitter_roots",
+        "objective": "mira_choice",
+        "conditions": {
+          "quest_active": "side_bitter_roots",
+          "objectives_not_done": [
+            {
+              "quest": "side_bitter_roots",
+              "id": "mira_choice"
+            }
+          ],
+          "objectives_done": [
+            {
+              "quest": "side_bitter_roots",
+              "id": "collect_roots"
+            }
+          ]
+        },
+        "preview": "Mira closes the old bed and prepares clean roots. Toma stays through the slower treatment; nobody calls the extra waiting harmless. Mira freely agrees to explain her own actions at the assembly.",
+        "cost": "Alternative treatment is slower. Continued ash use needs families who can freely refuse it."
+      },
+      {
+        "label": "Will you freely speak to your own use of the ash?",
+        "type": "story_choice",
+        "sets_flags": {
+          "witness_consent_mira": "voluntary"
+        },
+        "result": "The decision is recorded. Nobody else can make it for Mira.",
+        "conditions": {
+          "renewal_announced": true,
+          "flag_unset": "witness_consent_mira"
+        },
+        "preview": "The decision is recorded. Nobody else can make it for Mira.",
+        "cost": "This records an explicit promise or practical action. A record cannot supply someone else's consent."
+      },
+      {
+        "label": "Give me your written findings. I will not ask you for an oath.",
+        "type": "story_choice",
+        "sets_flags": {
+          "witness_consent_mira": "refused"
+        },
+        "result": "The decision is recorded. Nobody else can make it for Mira.",
+        "conditions": {
+          "renewal_announced": true,
+          "flag_unset": "witness_consent_mira"
+        },
+        "preview": "The decision is recorded. Nobody else can make it for Mira.",
+        "cost": "This records an explicit promise or practical action. A record cannot supply someone else's consent."
+      }
+    ],
+    "voice": [],
+    "content_version": 2
   },
   "edric": {
     "name": "Lord Edric Vargan",
-    "greeting": "My family paid for Greyfen's walls. Remember that before you spit at my boots.",
+    "greeting": "The south granary is open. Tell the guard the sick household goes first.",
     "lines": [
-      "Yes, the signet is Vargan work. No, I did not spill that blood.",
-      "The ruins still keep our records. If guilt has a shape, you will find it under stone."
+      "Kael: Your seal was wrapped around a child's token.",
+      "Edric: My men were sent to contain a breach. They came back with empty hands and fewer men.",
+      "Edric: I have grain for Greyfen. I do not have a road that will carry it safely.",
+      "Kael: And the people who know why?",
+      "Edric: Bring their account to the castle. I will show you what another winter requires."
     ],
     "actions": [
-      {"label": "Start Blood Under Stone", "type": "start_quest", "quest": "main_blood_under_stone"},
-      {"label": "I have reached your walls.", "type": "complete_objective", "quest": "main_blood_under_stone", "objective": "reach_castle"}
+      {
+        "label": "I will bring the road evidence to your record hall.",
+        "type": "start_quest",
+        "quest": "main_blood_under_stone"
+      },
+      {
+        "label": "Your gate is open. Now show me the records.",
+        "type": "complete_objective",
+        "quest": "main_blood_under_stone",
+        "objective": "reach_castle"
+      }
+    ],
+    "voice": [],
+    "content_version": 2,
+    "variants": [
+      {
+        "priority": 60,
+        "conditions": {
+          "renewal_stopped": true
+        },
+        "greeting": "The carts will move without a household seal. I have given the order.",
+        "lines": [
+          "Edric: My guards can keep a road open. They cannot make the people on it believe me.",
+          "Kael: Begin with the first job. The second takes longer."
+        ]
+      },
+      {
+        "priority": 40,
+        "conditions": {
+          "renewal_announced": true
+        },
+        "greeting": "You have read the renewal order. You have not watched a hungry house divide its last loaf.",
+        "lines": [
+          "Kael: I have watched people be told safety was inside a gate they could not enter.",
+          "Edric: Then come to the record hall. Argue where the figures are."
+        ]
+      }
     ]
   },
   "rook": {
     "name": "Rook",
-    "greeting": "You want the old road? Watch the crows, not the mud.",
+    "greeting": "You got the cart moving? Good. I was about to sell him a very expensive push.",
     "lines": [
-      "It bends twice where it should run straight. I checked. Then I decided I preferred being alive.",
-      "Bram wouldn't leave a wheel in a rut, let alone a child on the road. Whatever you find, remember that."
+      "Rook: Bram fixed my axle twice. Charged me once. Claimed he could not afford to be seen with a grateful smuggler.",
+      "Kael: You knew the other two?",
+      "Rook: Sella asked about the old road. Oren asked whether the crows paid me to follow them.",
+      "Rook: The road bends where the old waystone says it should not. I have a map. I also have a room somebody can find."
     ],
     "actions": [
-      {"label": "Ask what he carried.", "type": "give_ingredients", "conditions": {"rook_supplies_taken": false}, "items": {"ash_salt": 1, "sparkstone": 1}, "sets_flags": {"rook_supplies_taken": true}},
-      {"label": "Keep the older road on the map.", "type": "story_choice", "quest": "side_rooks_map", "objective": "map_choice", "conditions": {"quest_active": "side_rooks_map", "objectives_done": [{"quest": "side_rooks_map", "id": "walk_false_road"}], "objectives_not_done": [{"quest": "side_rooks_map", "id": "map_choice"}]}, "sets_flags": {"rook_map_fate": "preserved"}, "adjusts_values": {"anwen_trust": 1}, "result": "Rook redraws the refugee road beside the false waystone."},
-      {"label": "Destroy the map before Vargan can use it.", "type": "story_choice", "quest": "side_rooks_map", "objective": "map_choice", "conditions": {"quest_active": "side_rooks_map", "objectives_done": [{"quest": "side_rooks_map", "id": "walk_false_road"}], "objectives_not_done": [{"quest": "side_rooks_map", "id": "map_choice"}]}, "sets_flags": {"rook_map_fate": "destroyed"}, "adjusts_values": {"hart_debt": 1}, "result": "The safe road vanishes with the ink. Rook remembers it alone."}
+      {
+        "label": "Ask what he carried.",
+        "type": "give_ingredients",
+        "conditions": {
+          "rook_supplies_taken": false
+        },
+        "items": {
+          "ash_salt": 1,
+          "sparkstone": 1
+        },
+        "sets_flags": {
+          "rook_supplies_taken": true
+        }
+      },
+      {
+        "label": "Copy the route. Keep the families' homes private.",
+        "type": "story_choice",
+        "quest": "side_rooks_map",
+        "objective": "map_choice",
+        "conditions": {
+          "quest_active": "side_rooks_map",
+          "objectives_done": [
+            {
+              "quest": "side_rooks_map",
+              "id": "walk_false_road"
+            }
+          ],
+          "objectives_not_done": [
+            {
+              "quest": "side_rooks_map",
+              "id": "map_choice"
+            }
+          ]
+        },
+        "sets_flags": {
+          "rook_map_fate": "preserved",
+          "rook_disclosure": "protected",
+          "witness_consent_rook": "voluntary"
+        },
+        "adjusts_values": {
+          "anwen_trust": 1
+        },
+        "result": "Rook marks a usable road without family addresses. He agrees to speak to the route under protection.",
+        "preview": "Rook marks a usable road without family addresses. He agrees to speak to the route under protection.",
+        "cost": "A public route can endanger marked families; a destroyed map cannot help the next traveler."
+      },
+      {
+        "label": "Destroy the map. Keep the route between us.",
+        "type": "story_choice",
+        "quest": "side_rooks_map",
+        "objective": "map_choice",
+        "conditions": {
+          "quest_active": "side_rooks_map",
+          "objectives_done": [
+            {
+              "quest": "side_rooks_map",
+              "id": "walk_false_road"
+            }
+          ],
+          "objectives_not_done": [
+            {
+              "quest": "side_rooks_map",
+              "id": "map_choice"
+            }
+          ]
+        },
+        "sets_flags": {
+          "rook_map_fate": "destroyed",
+          "rook_disclosure": "erased",
+          "witness_consent_rook": "refused"
+        },
+        "adjusts_values": {
+          "hart_debt": 1
+        },
+        "result": "The paper burns. The road remains in Rook's memory, but no stranger can follow a copy now.",
+        "preview": "The paper burns. The road remains in Rook's memory, but no stranger can follow a copy now.",
+        "cost": "A public route can endanger marked families; a destroyed map cannot help the next traveler."
+      },
+      {
+        "label": "Publish the marked map so everyone can challenge Vargan.",
+        "type": "story_choice",
+        "sets_flags": {
+          "rook_map_fate": "preserved",
+          "rook_disclosure": "public",
+          "witness_consent_rook": "refused"
+        },
+        "result": "The route becomes public evidence. Rook takes his bedding from the window; he did not consent to exposing his family.",
+        "quest": "side_rooks_map",
+        "objective": "map_choice",
+        "conditions": {
+          "quest_active": "side_rooks_map",
+          "objectives_not_done": [
+            {
+              "quest": "side_rooks_map",
+              "id": "map_choice"
+            }
+          ],
+          "objectives_done": [
+            {
+              "quest": "side_rooks_map",
+              "id": "walk_false_road"
+            }
+          ]
+        },
+        "adjusts_values": {
+          "greyfen_fear": 1
+        },
+        "preview": "The route becomes public evidence. Rook takes his bedding from the window; he did not consent to exposing his family.",
+        "cost": "A public route can endanger marked families; a destroyed map cannot help the next traveler."
+      }
+    ],
+    "voice": [],
+    "content_version": 2,
+    "variants": [
+      {
+        "priority": 90,
+        "conditions": {
+          "rook_disclosure": "public"
+        },
+        "greeting": "They copied the map with my family mark still on it. A guard came to my door.",
+        "lines": [
+          "Rook: You needed a witness. You got a target as well.",
+          "Kael: I will keep a way out open.",
+          "Rook: That was meant to be the promise before you put my name up."
+        ]
+      },
+      {
+        "priority": 90,
+        "conditions": {
+          "rook_disclosure": "protected"
+        },
+        "greeting": "I copied the route without the houses. The families know who has the original.",
+        "lines": [
+          "Rook: I will tell the assembly what I saw. They do not need my grandmother's bedroom to believe it.",
+          "Kael: You choose what is yours to share.",
+          "Rook: There. A sentence I could get used to."
+        ]
+      },
+      {
+        "priority": 90,
+        "conditions": {
+          "rook_disclosure": "erased"
+        },
+        "greeting": "I can still walk the route. I will not make another map for you.",
+        "lines": [
+          "Rook: Destroying the copy kept Vargan from using it. It kept the next refugee from using it too.",
+          "Kael: I can carry the route in the record without your family mark.",
+          "Rook: Then learn it properly."
+        ]
+      },
+      {
+        "priority": 60,
+        "conditions": {
+          "renewal_announced": true
+        },
+        "greeting": "The guard asked where my grandmother lived. Said he was checking who deserved protection.",
+        "lines": [
+          "Rook: My family kept names because the shrine would not. That does not make us willing to be nailed to a board.",
+          "Kael: I promised to stay with the people carrying this.",
+          "Rook: Then stay where they can reach you. The false waystone is a good start."
+        ]
+      }
     ]
   },
   "widow_elna": {
     "name": "Widow Elna",
-    "greeting": "The bell rings at dusk. My Harl is dead, but he still calls.",
+    "greeting": "Harl used to warm my shoes by the fire. Burned one once. Hid it for a week.",
     "lines": [
-      "Find why the cemetery bell rings. Bring me cruelty or kindness, but bring me an answer."
+      "Elna: You can know that and still hear what I ask next.",
+      "Elna: His grave bell rings with the rope cut. He helped close Greyfen's gate in the war. I told our children he held it for their safety.",
+      "Kael: Did he ever speak about the people outside?",
+      "Elna: He would stop setting the table when it rained. Find what he left. Do not decide for me that love makes me unable to hear it."
     ],
     "actions": [
-      {"label": "Accept A Widow's Bell", "type": "start_quest", "quest": "side_widows_bell", "conditions": {"quest_available": "side_widows_bell"}},
-      {"label": "I found Harl's bell.", "type": "complete_objective", "quest": "side_widows_bell", "objective": "find_bell", "conditions": {"quest_active": "side_widows_bell", "objectives_not_done": [{"quest": "side_widows_bell", "id": "find_bell"}]}},
-      {"label": "He was calling for a witness.", "type": "story_choice", "quest": "side_widows_bell", "objective": "widow_choice", "conditions": {"quest_active": "side_widows_bell", "objectives_done": [{"quest": "side_widows_bell", "id": "find_bell"}], "objectives_not_done": [{"quest": "side_widows_bell", "id": "widow_choice"}]}, "sets_flags": {"widow_truth": "told"}, "adjusts_values": {"anwen_trust": 1}, "result": "Elna rings the bell once, then cuts its cord."},
-      {"label": "The wind caught an old cord.", "type": "story_choice", "quest": "side_widows_bell", "objective": "widow_choice", "conditions": {"quest_active": "side_widows_bell", "objectives_done": [{"quest": "side_widows_bell", "id": "find_bell"}], "objectives_not_done": [{"quest": "side_widows_bell", "id": "widow_choice"}]}, "sets_flags": {"widow_truth": "comforted"}, "result": "Elna nods. She knows a kindness when she hears one."}
+      {
+        "label": "I will hear what the bell is carrying.",
+        "type": "start_quest",
+        "quest": "side_widows_bell",
+        "conditions": {
+          "quest_available": "side_widows_bell"
+        }
+      },
+      {
+        "label": "I found Harl's bell.",
+        "type": "complete_objective",
+        "quest": "side_widows_bell",
+        "objective": "find_bell",
+        "conditions": {
+          "quest_active": "side_widows_bell",
+          "objectives_not_done": [
+            {
+              "quest": "side_widows_bell",
+              "id": "find_bell"
+            }
+          ]
+        }
+      },
+      {
+        "label": "Give Elna the whole account, and let her decide to speak.",
+        "type": "story_choice",
+        "quest": "side_widows_bell",
+        "objective": "widow_choice",
+        "conditions": {
+          "quest_active": "side_widows_bell",
+          "objectives_done": [
+            {
+              "quest": "side_widows_bell",
+              "id": "find_bell"
+            }
+          ],
+          "objectives_not_done": [
+            {
+              "quest": "side_widows_bell",
+              "id": "widow_choice"
+            }
+          ]
+        },
+        "sets_flags": {
+          "widow_truth": "told",
+          "witness_consent_elna": "voluntary"
+        },
+        "adjusts_values": {
+          "anwen_trust": 1
+        },
+        "result": "Elna names his kindness and the people he shut outside. She chooses to give the assembly what she knows.",
+        "preview": "Elna names his kindness and the people he shut outside. She chooses to give the assembly what she knows.",
+        "cost": "The act remains recorded; Elna decides whether her grief becomes public."
+      },
+      {
+        "label": "Offer the gentler account. Leave the evidence with her.",
+        "type": "story_choice",
+        "quest": "side_widows_bell",
+        "objective": "widow_choice",
+        "conditions": {
+          "quest_active": "side_widows_bell",
+          "objectives_done": [
+            {
+              "quest": "side_widows_bell",
+              "id": "find_bell"
+            }
+          ],
+          "objectives_not_done": [
+            {
+              "quest": "side_widows_bell",
+              "id": "widow_choice"
+            }
+          ]
+        },
+        "sets_flags": {
+          "widow_truth": "comforted",
+          "witness_consent_elna": "refused"
+        },
+        "result": "Elna receives the bell and the written record. She declines a public account; the act itself stays documented.",
+        "preview": "Elna receives the bell and the written record. She declines a public account; the act itself stays documented.",
+        "cost": "The act remains recorded; Elna decides whether her grief becomes public."
+      },
+      {
+        "label": "Tell her everything privately. Keep her grief out of the square.",
+        "type": "story_choice",
+        "sets_flags": {
+          "widow_truth": "private",
+          "witness_consent_elna": "refused"
+        },
+        "result": "Elna accepts Harl's record for the family. His act remains evidence; her grief is not pledged to the assembly.",
+        "quest": "side_widows_bell",
+        "objective": "widow_choice",
+        "conditions": {
+          "quest_active": "side_widows_bell",
+          "objectives_not_done": [
+            {
+              "quest": "side_widows_bell",
+              "id": "widow_choice"
+            }
+          ],
+          "objectives_done": [
+            {
+              "quest": "side_widows_bell",
+              "id": "find_bell"
+            }
+          ]
+        },
+        "preview": "Elna accepts Harl's record for the family. His act remains evidence; her grief is not pledged to the assembly.",
+        "cost": "The act remains recorded; Elna decides whether her grief becomes public."
+      }
+    ],
+    "voice": [],
+    "content_version": 2,
+    "variants": [
+      {
+        "priority": 80,
+        "conditions": {
+          "widow_truth": "told"
+        },
+        "greeting": "I told the children he loved us. Then I told them who stood outside the gate.",
+        "lines": [
+          "Elna: My daughter asked if both were true. I said yes.",
+          "Kael: Will you speak at the assembly?",
+          "Elna: About what I know. His victims do not need me performing my grief over their names."
+        ]
+      },
+      {
+        "priority": 80,
+        "conditions": {
+          "widow_truth": "comforted"
+        },
+        "greeting": "I put the bell in the drawer. It is quieter in there.",
+        "lines": [
+          "Elna: You offered me a gentler account. I heard what you left out.",
+          "Kael: The record remains.",
+          "Elna: Then leave it where the children can find it when they ask."
+        ]
+      },
+      {
+        "priority": 80,
+        "conditions": {
+          "widow_truth": "private"
+        },
+        "greeting": "The children have the account. I will not read it in the square.",
+        "lines": [
+          "Elna: You may name what Harl did. You may not use my kitchen as proof I have forgiven it.",
+          "Kael: Your grief stays yours."
+        ]
+      }
     ]
   },
   "blacksmith_tor": {
     "name": "Blacksmith Tor",
-    "greeting": "Let me see the blade. No, keep hold of it. I trust the steel.",
+    "greeting": "Keep the scrap. I can spare a hinge more easily than another cart stuck outside.",
     "lines": [
-      "If you mean to trap whatever is out there, take scrap. Better the iron snaps than your leg.",
-      "I heard the cemetery bell last night. The rope has been cut since winter."
+      "Tor: The forge still runs. If the road goes, every household will want a latch before they want a sword.",
+      "Kael: There are letters ground off this iron.",
+      "Tor: Refugee marks. I recognized them years ago. Told myself metal did not care who used it next.",
+      "Tor: Some of it is holding doors shut against the rain. You want it back, tell me what we put in its place."
     ],
     "actions": [
-      {"label": "Take scrap iron.", "type": "give_ingredients", "conditions": {"tor_scrap_taken": false}, "items": {"scrap_iron": 2}, "sets_flags": {"tor_scrap_taken": true}},
-      {"label": "Accept Iron Remembers.", "type": "start_quest", "quest": "side_iron_remembers", "conditions": {"quest_available": "side_iron_remembers"}},
-      {"label": "I recovered iron from the chapel.", "type": "complete_objective", "quest": "side_iron_remembers", "objective": "recover_iron", "conditions": {"quest_active": "side_iron_remembers", "objectives_not_done": [{"quest": "side_iron_remembers", "id": "recover_iron"}]}},
-      {"label": "Forge the victims' names into a memorial.", "type": "story_choice", "quest": "side_iron_remembers", "objective": "tor_choice", "conditions": {"quest_active": "side_iron_remembers", "objectives_done": [{"quest": "side_iron_remembers", "id": "recover_iron"}], "objectives_not_done": [{"quest": "side_iron_remembers", "id": "tor_choice"}]}, "sets_flags": {"iron_fate": "memorial"}, "adjusts_values": {"anwen_trust": 1}, "result": "Tor stamps each recovered name into warm iron."},
-      {"label": "Forge it into a weapon.", "type": "story_choice", "quest": "side_iron_remembers", "objective": "tor_choice", "conditions": {"quest_active": "side_iron_remembers", "objectives_done": [{"quest": "side_iron_remembers", "id": "recover_iron"}], "objectives_not_done": [{"quest": "side_iron_remembers", "id": "tor_choice"}]}, "sets_flags": {"iron_fate": "weapon"}, "adjusts_values": {"hart_debt": 1}, "result": "Tor folds the witness into an edge."}
+      {
+        "label": "Take scrap iron.",
+        "type": "give_ingredients",
+        "conditions": {
+          "tor_scrap_taken": false
+        },
+        "items": {
+          "scrap_iron": 2
+        },
+        "sets_flags": {
+          "tor_scrap_taken": true
+        }
+      },
+      {
+        "label": "Show me the marks that survived grinding.",
+        "type": "start_quest",
+        "quest": "side_iron_remembers",
+        "conditions": {
+          "quest_available": "side_iron_remembers"
+        }
+      },
+      {
+        "label": "I recovered iron from the chapel.",
+        "type": "complete_objective",
+        "quest": "side_iron_remembers",
+        "objective": "recover_iron",
+        "conditions": {
+          "quest_active": "side_iron_remembers",
+          "objectives_not_done": [
+            {
+              "quest": "side_iron_remembers",
+              "id": "recover_iron"
+            }
+          ]
+        }
+      },
+      {
+        "label": "Replace the useful iron gradually. Make named memorial work.",
+        "type": "story_choice",
+        "quest": "side_iron_remembers",
+        "objective": "tor_choice",
+        "conditions": {
+          "quest_active": "side_iron_remembers",
+          "objectives_done": [
+            {
+              "quest": "side_iron_remembers",
+              "id": "recover_iron"
+            }
+          ],
+          "objectives_not_done": [
+            {
+              "quest": "side_iron_remembers",
+              "id": "tor_choice"
+            }
+          ]
+        },
+        "sets_flags": {
+          "iron_fate": "memorial",
+          "witness_consent_tor": "voluntary"
+        },
+        "adjusts_values": {
+          "anwen_trust": 1
+        },
+        "result": "Tor begins replacement before dismantling working objects. Memorial nails carry the recovered names; his forge remains open.",
+        "preview": "Tor begins replacement before dismantling working objects. Memorial nails carry the recovered names; his forge remains open.",
+        "cost": "Restitution takes stock and labor; useful objects still need replacement."
+      },
+      {
+        "label": "Keep the tools in use. Disclose their source and fund replacement.",
+        "type": "story_choice",
+        "quest": "side_iron_remembers",
+        "objective": "tor_choice",
+        "conditions": {
+          "quest_active": "side_iron_remembers",
+          "objectives_done": [
+            {
+              "quest": "side_iron_remembers",
+              "id": "recover_iron"
+            }
+          ],
+          "objectives_not_done": [
+            {
+              "quest": "side_iron_remembers",
+              "id": "tor_choice"
+            }
+          ]
+        },
+        "sets_flags": {
+          "iron_fate": "tools",
+          "witness_consent_tor": "voluntary"
+        },
+        "adjusts_values": {
+          "hart_debt": 1
+        },
+        "result": "Tor leaves the marks visible and posts the source above his prices. The useful stock stays in working hands.",
+        "preview": "Tor leaves the marks visible and posts the source above his prices. The useful stock stays in working hands.",
+        "cost": "Restitution takes stock and labor; useful objects still need replacement."
+      },
+      {
+        "label": "Surrender the marked stock. Let the families decide its use.",
+        "type": "story_choice",
+        "sets_flags": {
+          "iron_fate": "surrendered",
+          "witness_consent_tor": "voluntary"
+        },
+        "result": "Tor hands over the stock and his account. He keeps the forge running on ordinary scrap while the disputed iron stays intact.",
+        "quest": "side_iron_remembers",
+        "objective": "tor_choice",
+        "conditions": {
+          "quest_active": "side_iron_remembers",
+          "objectives_not_done": [
+            {
+              "quest": "side_iron_remembers",
+              "id": "tor_choice"
+            }
+          ],
+          "objectives_done": [
+            {
+              "quest": "side_iron_remembers",
+              "id": "recover_iron"
+            }
+          ]
+        },
+        "preview": "Tor hands over the stock and his account. He keeps the forge running on ordinary scrap while the disputed iron stays intact.",
+        "cost": "Restitution takes stock and labor; useful objects still need replacement."
+      }
+    ],
+    "voice": [],
+    "content_version": 2,
+    "variants": [
+      {
+        "priority": 80,
+        "conditions": {
+          "iron_fate": "memorial"
+        },
+        "greeting": "The new nails carry the names where a hammer will not strike them away.",
+        "lines": [
+          "Tor: I am replacing one working piece at a time. Elna still has a door while I make the marker.",
+          "Kael: What did it cost?",
+          "Tor: Two contracts. A late night. Less than grinding those letters off cost somebody else."
+        ]
+      },
+      {
+        "priority": 80,
+        "conditions": {
+          "iron_fate": "tools"
+        },
+        "greeting": "The refugee marks face outward now. Nobody buys this stock without being told.",
+        "lines": [
+          "Tor: The tools stay useful. A share of each sale goes to replacement iron and the road record.",
+          "Kael: You will say that publicly?",
+          "Tor: I already wrote it above the price."
+        ]
+      },
+      {
+        "priority": 80,
+        "conditions": {
+          "iron_fate": "surrendered"
+        },
+        "greeting": "The marked stock is on the table, with the forge accounts beside it.",
+        "lines": [
+          "Tor: Anwen will keep it until the families decide. I work from new scrap now.",
+          "Kael: Is the forge closing?",
+          "Tor: Not if you stop talking and help carry the clean iron."
+        ]
+      }
     ]
   },
   "farmer_toma": {
     "name": "Farmer Toma",
-    "greeting": "It took three sheep and one child screaming before anyone believed me.",
+    "greeting": "She is asleep. Speak low. Mira finally got the fever down.",
     "lines": [
-      "Nobody speaks near the shrine after dusk. Not since Anwen washed blood from the altar stones.",
-      "They say a black dog is killing stock. I say no dog opens a latch and leaves boot prints.",
-      "Find what hunts the fold. Bring proof, not village gossip."
+      "Toma: My daughter was outside when the bandits came. The thing at the fold put itself between her and a blade.",
+      "Kael: And the missing sheep?",
+      "Toma: I fed it. Then I hid it. It started taking from the next field and I kept telling myself gratitude was different from a danger.",
+      "Toma: Read the boot marks with the tracks. I want the whole cause found, even the part that is mine."
     ],
     "actions": [
-      {"label": "Accept The Black Dog Contract", "type": "start_quest", "quest": "side_black_dog", "conditions": {"quest_available": "side_black_dog"}},
-      {"label": "The guardian protected the children.", "type": "story_choice", "quest": "side_black_dog", "objective": "dog_choice", "conditions": {"quest_active": "side_black_dog", "objectives_done": [{"quest": "side_black_dog", "id": "find_dog"}], "objectives_not_done": [{"quest": "side_black_dog", "id": "dog_choice"}]}, "sets_flags": {"black_dog_fate": "spared"}, "adjusts_values": {"anwen_trust": 1}, "result": "Toma looks toward the fold and lowers his knife."},
-      {"label": "Tell them it fled.", "type": "story_choice", "quest": "side_black_dog", "objective": "dog_choice", "conditions": {"quest_active": "side_black_dog", "objectives_done": [{"quest": "side_black_dog", "id": "find_dog"}], "objectives_not_done": [{"quest": "side_black_dog", "id": "dog_choice"}]}, "sets_flags": {"black_dog_fate": "hidden"}, "result": "Greyfen accepts the easier story."},
-      {"label": "Show the farmer what the mill weighed.", "type": "story_choice", "quest": "side_millers_measure", "objective": "ash_choice", "conditions": {"quest_active": "side_millers_measure", "objectives_done": [{"quest": "side_millers_measure", "id": "weigh_ash"}], "objectives_not_done": [{"quest": "side_millers_measure", "id": "ash_choice"}]}, "sets_flags": {"ash_measure_fate": "farmer"}, "adjusts_values": {"greyfen_fear": 1}, "result": "Toma stops spreading the ash and warns the other farms."}
+      {
+        "label": "I will compare the tracks and the bandits' camp.",
+        "type": "start_quest",
+        "quest": "side_black_dog",
+        "conditions": {
+          "quest_available": "side_black_dog"
+        }
+      },
+      {
+        "label": "Move its protection path beyond the farms. Warn the neighbors.",
+        "type": "story_choice",
+        "quest": "side_black_dog",
+        "objective": "dog_choice",
+        "conditions": {
+          "quest_active": "side_black_dog",
+          "objectives_done": [
+            {
+              "quest": "side_black_dog",
+              "id": "find_dog"
+            }
+          ],
+          "objectives_not_done": [
+            {
+              "quest": "side_black_dog",
+              "id": "dog_choice"
+            }
+          ]
+        },
+        "sets_flags": {
+          "black_dog_fate": "spared",
+          "guardian_plan": "relocated"
+        },
+        "adjusts_values": {
+          "anwen_trust": 1
+        },
+        "result": "Toma marks the outer boundary and moves the feeding place. The guardian survives beyond the fields; its danger is acknowledged.",
+        "preview": "Toma marks the outer boundary and moves the feeding place. The guardian survives beyond the fields; its danger is acknowledged.",
+        "cost": "Protection carries danger; ending the fragment loses the guard it offered."
+      },
+      {
+        "label": "Keep it at the fold under a disclosed village watch.",
+        "type": "story_choice",
+        "quest": "side_black_dog",
+        "objective": "dog_choice",
+        "conditions": {
+          "quest_active": "side_black_dog",
+          "objectives_done": [
+            {
+              "quest": "side_black_dog",
+              "id": "find_dog"
+            }
+          ],
+          "objectives_not_done": [
+            {
+              "quest": "side_black_dog",
+              "id": "dog_choice"
+            }
+          ]
+        },
+        "sets_flags": {
+          "black_dog_fate": "spared",
+          "guardian_plan": "supervised"
+        },
+        "result": "Toma tells the neighbors and organizes a watch. Protection remains, but the village can withdraw its agreement.",
+        "preview": "Toma tells the neighbors and organizes a watch. Protection remains, but the village can withdraw its agreement.",
+        "cost": "Protection carries danger; ending the fragment loses the guard it offered."
+      },
+      {
+        "label": "Show the farmer what the mill weighed.",
+        "type": "story_choice",
+        "quest": "side_millers_measure",
+        "objective": "ash_choice",
+        "conditions": {
+          "quest_active": "side_millers_measure",
+          "objectives_done": [
+            {
+              "quest": "side_millers_measure",
+              "id": "weigh_ash"
+            }
+          ],
+          "objectives_not_done": [
+            {
+              "quest": "side_millers_measure",
+              "id": "ash_choice"
+            }
+          ]
+        },
+        "sets_flags": {
+          "ash_measure_fate": "farmer"
+        },
+        "adjusts_values": {
+          "greyfen_fear": 1
+        },
+        "result": "Toma stops spreading the ash and warns the other farms.",
+        "preview": "Toma stops spreading the ash and warns the other farms.",
+        "cost": "This records an explicit promise or practical action. A record cannot supply someone else's consent."
+      },
+      {
+        "label": "End the dangerous guardian. Record why it protected her.",
+        "type": "story_choice",
+        "sets_flags": {
+          "black_dog_fate": "killed",
+          "guardian_plan": "killed"
+        },
+        "result": "The protection fragment is put to rest. Toma names the people it saved and the livestock his secrecy cost.",
+        "quest": "side_black_dog",
+        "objective": "dog_choice",
+        "conditions": {
+          "quest_active": "side_black_dog",
+          "objectives_not_done": [
+            {
+              "quest": "side_black_dog",
+              "id": "dog_choice"
+            }
+          ],
+          "objectives_done": [
+            {
+              "quest": "side_black_dog",
+              "id": "find_dog"
+            }
+          ]
+        },
+        "preview": "The protection fragment is put to rest. Toma names the people it saved and the livestock his secrecy cost.",
+        "cost": "Protection carries danger; ending the fragment loses the guard it offered."
+      }
+    ],
+    "voice": [],
+    "content_version": 2,
+    "variants": [
+      {
+        "priority": 80,
+        "conditions": {
+          "guardian_plan": "relocated"
+        },
+        "greeting": "The outer boundary is marked. My daughter knows the posts mean stop.",
+        "lines": [
+          "Toma: The creature follows the old protection path beyond the fields. I warned the neighbors this time.",
+          "Kael: A boundary only works if everyone knows where it is."
+        ]
+      },
+      {
+        "priority": 80,
+        "conditions": {
+          "guardian_plan": "supervised"
+        },
+        "greeting": "There is a watch at the fold and a warning on every gate.",
+        "lines": [
+          "Toma: I do not call it harmless. I call the neighbors before I feed it.",
+          "Kael: They get to change their minds.",
+          "Toma: Yes. Even when I wish they would not."
+        ]
+      },
+      {
+        "priority": 80,
+        "conditions": {
+          "guardian_plan": "killed"
+        },
+        "greeting": "The fold is quiet. She keeps asking why the thing that protected her had to die.",
+        "lines": [
+          "Toma: I told her about the sheep. And that I hid it until there were no easy choices left.",
+          "Kael: Keep its protection in the account too."
+        ]
+      },
+      {
+        "priority": 75,
+        "conditions": {
+          "black_dog_fate": "hidden"
+        },
+        "greeting": "The neighbors stopped asking. That is not the same as the danger ending.",
+        "lines": [
+          "Toma: I heard it at the next field last night. I will not tell you I was surprised."
+        ]
+      }
     ]
   },
   "returned_soldier": {
     "name": "The Returned Soldier",
-    "greeting": "The grave is empty because I climbed out before they finished my name.",
+    "greeting": "Hold the gate. Hold the gate. The lantern is on the wrong side.",
     "lines": [
-      "I remember the road. I do not remember whether the man who walked it deserves to keep breathing."
+      "Kael: You are repeating one night. Can you tell me your name?",
+      "The Returned Soldier: Len. Mother left the lantern. Hold the gate.",
+      "Kael: A fragment caught in an empty grave. Not a man who knows what happened afterward.",
+      "The Returned Soldier: Len. The lantern is on the wrong side."
     ],
     "actions": [
-      {"label": "Your name belongs among the witnesses.", "type": "story_choice", "quest": "side_empty_grave", "objective": "walker_choice", "conditions": {"quest_active": "side_empty_grave", "objectives_done": [{"quest": "side_empty_grave", "id": "follow_empty_grave"}], "objectives_not_done": [{"quest": "side_empty_grave", "id": "walker_choice"}]}, "sets_flags": {"returned_soldier_fate": "named"}, "adjusts_values": {"anwen_trust": 1}, "result": "He gives Kael his name and agrees to stand before Greyfen."},
-      {"label": "Keep the name. Leave the grave empty.", "type": "story_choice", "quest": "side_empty_grave", "objective": "walker_choice", "conditions": {"quest_active": "side_empty_grave", "objectives_done": [{"quest": "side_empty_grave", "id": "follow_empty_grave"}], "objectives_not_done": [{"quest": "side_empty_grave", "id": "walker_choice"}]}, "sets_flags": {"returned_soldier_fate": "anonymous"}, "result": "He leaves before dawn, owing Greyfen nothing."}
-    ]
+      {
+        "label": "Record Len's name. Let the repeated watch end.",
+        "type": "story_choice",
+        "quest": "side_empty_grave",
+        "objective": "walker_choice",
+        "conditions": {
+          "quest_active": "side_empty_grave",
+          "objectives_done": [
+            {
+              "quest": "side_empty_grave",
+              "id": "follow_empty_grave"
+            }
+          ],
+          "objectives_not_done": [
+            {
+              "quest": "side_empty_grave",
+              "id": "walker_choice"
+            }
+          ]
+        },
+        "sets_flags": {
+          "returned_soldier_fate": "named",
+          "returned_soldier_is_fragment": true
+        },
+        "adjusts_values": {
+          "anwen_trust": 1
+        },
+        "result": "The lantern memory goes still. Len's name is entered beside the gate account; the fragment offers no new oath.",
+        "preview": "The lantern memory goes still. Len's name is entered beside the gate account; the fragment offers no new oath.",
+        "cost": "This records an explicit promise or practical action. A record cannot supply someone else's consent."
+      },
+      {
+        "label": "Settle the fragment privately. Preserve the name in the book.",
+        "type": "story_choice",
+        "quest": "side_empty_grave",
+        "objective": "walker_choice",
+        "conditions": {
+          "quest_active": "side_empty_grave",
+          "objectives_done": [
+            {
+              "quest": "side_empty_grave",
+              "id": "follow_empty_grave"
+            }
+          ],
+          "objectives_not_done": [
+            {
+              "quest": "side_empty_grave",
+              "id": "walker_choice"
+            }
+          ]
+        },
+        "sets_flags": {
+          "returned_soldier_fate": "anonymous",
+          "returned_soldier_is_fragment": true
+        },
+        "result": "The grave settles. Len's name remains in the recovered record without a public spectacle.",
+        "preview": "The grave settles. Len's name remains in the recovered record without a public spectacle.",
+        "cost": "This records an explicit promise or practical action. A record cannot supply someone else's consent."
+      }
+    ],
+    "voice": [],
+    "content_version": 2,
+    "variants": []
   },
   "white_hart": {
     "name": "The White Hart",
-    "greeting": "You walk on promises buried under your kind's roads.",
+    "greeting": "You have kept the account where a living hand can reach it. That is something the old oath would not allow.",
     "lines": [
-      "Kill me, and the village breathes while the wood turns to ash.",
-      "Free me, and truth will have teeth.",
-      "Bind me, and you inherit the old sin.",
-      "Expose them, and let human hands answer human crimes."
+      "Kael: The grain condition is broken. No one standing here has to promise you anything to eat.",
+      "The White Hart: I remember the gate shut. I remember the road hidden. I remember the soldiers entering. I will not tell you those were one man's act.",
+      "Kael: The copies survive. I will freely keep what we have recovered. I cannot swear for the people who refused.",
+      "The White Hart: One willing keeper of an account is enough to begin. Others may share that work. None may be given it by force.",
+      "The White Hart: Make the account public and I will leave its judgment with you. Release me quietly and preserve the record without opening every private memory.",
+      "The White Hart: Or carry the unresolved binding yourself. Or destroy me and lose what no copy holds.",
+      "Kael: Releasing you does not erase the house's crime. Protecting a family does not protect Edric from the record.",
+      "The White Hart: Then choose whose work begins when mine ends."
     ],
+    "voice_direction": "Ancient and patient, never theatrical.",
+    "presentation": {
+      "framing": "ritual_witness",
+      "speaker_focus": "actor",
+      "subtitle_cps": 13,
+      "reaction_pause": 0.55
+    },
     "actions": [
-      {"label": "Start The Hart Remembers", "type": "start_quest", "quest": "main_hart_remembers"},
-      {"label": "Kill the White Hart", "type": "ending", "ending": "kill"},
-      {"label": "Free the White Hart", "type": "ending", "ending": "free"},
-      {"label": "Bind the White Hart Again", "type": "ending", "ending": "bind"},
-      {"label": "Expose House Vargan", "type": "ending", "ending": "expose"}
-    ]
+      {
+        "label": "Witness — make the account public; stay to preserve it.",
+        "type": "ending",
+        "ending": "expose",
+        "preview": "Release the Hart through public acknowledgment and Kael's willing work to preserve the record.",
+        "cost": "Lost privilege, trade pressure, and the ongoing labor of restitution. Fewer allies mean more work for Kael."
+      },
+      {
+        "label": "Mercy — release the Hart; safeguard names and private memories.",
+        "type": "ending",
+        "ending": "free",
+        "preview": "Release the Hart while protecting private memories; institutional crimes remain on record.",
+        "cost": "A protected circle must preserve the truth; partial public acknowledgment leaves unresolved grievances."
+      },
+      {
+        "label": "Duty — freely carry the unresolved binding myself.",
+        "type": "ending",
+        "ending": "bind",
+        "preview": "Kael willingly carries the continuing binding. No other person is pledged.",
+        "cost": "Kael loses freedom and rest. The village gains time while the injustice remains unfinished."
+      },
+      {
+        "label": "Ash — destroy the Hart; keep the human record and face the loss.",
+        "type": "ending",
+        "ending": "kill",
+        "preview": "Destroy the complete witness by combat; the copied human record survives.",
+        "cost": "Irreplaceable memories are lost. Dispersal harms the land and future harvests."
+      }
+    ],
+    "voice": [],
+    "content_version": 2,
+    "variants": []
   }
 }

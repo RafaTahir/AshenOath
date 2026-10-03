@@ -1,6 +1,7 @@
 extends Node
 
-const CURRENT_VERSION := 9
+const CURRENT_VERSION := 10
+const PRE_COVENANT_PATH := "user://ashen_oath_before_covenant.json"
 const SAVE_PATH := "user://ashen_oath_save.json"
 const AUTOSAVE_PATH := "user://ashen_oath_autosave.json"
 const CHECKPOINT_PATH := "user://ashen_oath_checkpoint.json"
@@ -41,6 +42,7 @@ func load_game(game, path: String = SAVE_PATH) -> bool:
 			return false
 		result = backup_result
 		recovered_backup = true
+	_preserve_legacy_slot(result)
 	game.load_save_state(result.data)
 	message.emit("Recovered the previous save backup." if recovered_backup else "Game loaded.")
 	return true
@@ -80,6 +82,7 @@ func load_first_available(game, paths: Array) -> bool:
 				return false
 			recovered_backup = bool(result.get("ok", false))
 		if bool(result.get("ok", false)):
+			_preserve_legacy_slot(result)
 			game.load_save_state(result.data)
 			message.emit("Recovered a checkpoint backup." if recovered_backup else "Checkpoint loaded.")
 			return true
@@ -106,8 +109,10 @@ func migrate_save_data(raw_data: Dictionary) -> Dictionary:
 	_sanitize_dictionary_fields(data.inventory, ["items", "ingredients"])
 	var refill: Variant = data.vendors.get("emergency_refill_claimed", false)
 	data.vendors["emergency_refill_claimed"] = typeof(refill) == TYPE_BOOL and refill
-	_sanitize_dictionary_fields(data.quests, ["active", "completed", "unlocked", "world_flags"])
-	_sanitize_dictionary_fields(data.story_state, ["flags", "values"])
+	var medicine: Variant = data.vendors.get("emergency_healing_claimed", false)
+	data.vendors["emergency_healing_claimed"] = typeof(medicine) == TYPE_BOOL and medicine
+	_sanitize_dictionary_fields(data.quests, ["active", "completed", "unlocked", "world_flags", "evidence_history"])
+	_sanitize_dictionary_fields(data.story_state, ["flags", "values", "evidence"])
 	_sanitize_dictionary_fields(data.progression, ["unlocked", "rewarded_quests"])
 	_sanitize_dictionary_fields(data.world_state, ["removed_interactions", "day_night"])
 	if not data.has("quest_presentation") or typeof(data.get("quest_presentation")) != TYPE_DICTIONARY:
@@ -147,7 +152,9 @@ func migrate_save_data(raw_data: Dictionary) -> Dictionary:
 	data["player_stamina"] = _normalize_stamina(data.player_stamina)
 	data["settings"] = _sanitize_settings(data.settings)
 	data["saved_at_utc"] = str(data.get("saved_at_utc", Time.get_datetime_string_from_system(true)))
-	data["migrated_from_version"] = source_version
+	data["migrated_from_version"] = int(raw_data.get("migrated_from_version", source_version))
+	if source_version < 10:
+		_migrate_story_campaign(data)
 	return data
 
 func backup_path(path: String) -> String:
@@ -333,7 +340,7 @@ func _sanitize_settings(state: Dictionary) -> Dictionary:
 		"gamepad_vibration", "gamepad_rumble_strength", "gamepad_profiles", "custom_bindings",
 		"touch_controls", "touch_look_sensitivity",
 		"invert_y", "master_volume", "subtitle_scale", "camera_shake", "reduced_motion",
-		"high_contrast", "control_preset",
+		"high_contrast", "control_preset", "difficulty", "pause_on_focus_loss", "music_volume", "sfx_volume", "voice_volume",
 	]
 	var result: Dictionary = {}
 	for key in allowed:
@@ -343,13 +350,13 @@ func _sanitize_settings(state: Dictionary) -> Dictionary:
 		if key in ["gamepad_profiles", "custom_bindings"]:
 			if typeof(value) == TYPE_DICTIONARY:
 				result[key] = value.duplicate(true)
-		elif key in ["vsync", "fullscreen", "potato_mode", "invert_y", "gamepad_invert_x", "gamepad_invert_y", "gamepad_vibration", "reduced_motion", "high_contrast"]:
+		elif key in ["vsync", "fullscreen", "potato_mode", "invert_y", "gamepad_invert_x", "gamepad_invert_y", "gamepad_vibration", "reduced_motion", "high_contrast", "pause_on_focus_loss"]:
 			if typeof(value) == TYPE_BOOL:
 				result[key] = value
 		elif key in ["shadow_quality", "foliage_density", "visual_density", "target_fps"]:
 			if typeof(value) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(value)) and absf(float(value)) <= 2147483647.0:
 				result[key] = int(value)
-		elif key in ["quality_preset", "touch_controls", "control_preset"]:
+		elif key in ["quality_preset", "touch_controls", "control_preset", "difficulty"]:
 			if typeof(value) == TYPE_STRING:
 				result[key] = value
 		elif typeof(value) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(value)):
@@ -366,7 +373,9 @@ func _sanitize_bool_map(value: Variant) -> Dictionary:
 	return result
 
 func _normalize_ending(value: String) -> String:
-	return value if value in ["", "witness", "mercy", "duty", "ash"] else ""
+	var aliases := {"witness": "expose", "mercy": "free", "duty": "bind", "ash": "kill"}
+	value = str(aliases.get(value, value))
+	return value if value in ["", "expose", "free", "bind", "kill"] else ""
 
 func _legacy_road_complete(quests: Dictionary) -> bool:
 	var completed = quests.get("completed", {})
@@ -390,3 +399,32 @@ func _remove_if_present(path: String) -> void:
 func _remove_absolute_if_present(path: String) -> void:
 	if FileAccess.file_exists(path):
 		DirAccess.remove_absolute(path)
+
+func _preserve_legacy_slot(result: Dictionary) -> void:
+	var data: Dictionary = result.get("data", {})
+	if int(data.get("migrated_from_version", CURRENT_VERSION)) >= CURRENT_VERSION:
+		return
+	var path := str(result.get("path", ""))
+	if path == "" or not FileAccess.file_exists(path):
+		return
+	var original := path + ".before-story-overhaul"
+	if not FileAccess.file_exists(original):
+		DirAccess.copy_absolute(ProjectSettings.globalize_path(path), ProjectSettings.globalize_path(original))
+
+func _migrate_story_campaign(data: Dictionary) -> void:
+	var state: Dictionary = data.story_state
+	var flags: Dictionary = state.get("flags", {})
+	# A completed objective cannot establish consent or an unrecorded choice.
+	# Preserve old outcomes as history; missing fields remain explicitly unknown.
+	if _legacy_road_complete(data.quests) and str(flags.get("evidence_report", "")) == "":
+		flags["legacy_report_choice_required"] = true
+	if str(flags.get("confession_method", "")) != "":
+		flags["renewal_stopped"] = true
+	if not bool(flags.get("final_choice_completed", false)):
+		var pending := str(data.world_state.get("pending_ending", ""))
+		if pending in ["bind", "expose", "free"]:
+			flags["covenant_ritual_started"] = true
+			flags["covenant_ritual_step"] = int(flags.get("covenant_ritual_step", 0))
+	state["flags"] = flags
+	state["version"] = 2
+	data["story_state"] = state

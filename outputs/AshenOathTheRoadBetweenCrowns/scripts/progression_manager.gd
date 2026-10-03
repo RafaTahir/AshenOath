@@ -5,6 +5,7 @@ signal message(text: String)
 
 const DEFINITIONS_PATH := "res://data/upgrades.json"
 const BRANCH_ORDER := ["blade", "survival", "oathfire"]
+const MASTERY_MARK_LIMIT := 9
 
 var definitions: Dictionary = {}
 var marks := 0
@@ -22,8 +23,11 @@ func award_for_quest(quest_id: String, quest_type: String) -> bool:
 	if quest_id == "" or quest_type != "main" or bool(rewarded_quests.get(quest_id, false)):
 		return false
 	rewarded_quests[quest_id] = true
-	marks += 1
-	message.emit("Oath Mark earned. Choose an upgrade in the journal.")
+	if _learned_count() + marks < MASTERY_MARK_LIMIT:
+		marks += 1
+		message.emit("Oath Mark earned. Choose an upgrade in the journal.")
+	else:
+		message.emit("The road's training is complete. Your final promise is a choice, not another upgrade.")
 	changed.emit()
 	return true
 
@@ -35,7 +39,8 @@ func reconcile_completed_quests(quest_definitions: Dictionary, completed_quests:
 		if str(quest_definitions.get(quest_id, {}).get("type", "")) != "main":
 			continue
 		rewarded_quests[quest_id] = true
-		marks += 1
+		if _learned_count() + marks < MASTERY_MARK_LIMIT:
+			marks += 1
 		awarded += 1
 	if awarded > 0:
 		changed.emit()
@@ -80,7 +85,8 @@ func ordered_upgrade_ids() -> Array[String]:
 	return result
 
 func get_summary_text() -> String:
-	var text := "OATH MARKS: %d\n" % marks
+	var text := "OATH MARKS: %d  |  PRACTICES LEARNED: %d / %d\n" % [marks, _learned_count(), MASTERY_MARK_LIMIT]
+	text += "Mastery: the first nine chapter milestones can teach every practice. Choose what helps now; no branch locks out another. The final oath gives no spare mark.\n"
 	for branch in BRANCH_ORDER:
 		text += "\n%s\n" % branch.capitalize()
 		for id in ordered_upgrade_ids():
@@ -117,7 +123,16 @@ func load_state(state: Dictionary) -> void:
 		for id in rewards:
 			if typeof(id) == TYPE_STRING and _saved_true(rewards[id]):
 				rewarded_quests[id] = true
+	# Preserve all legacy practices; retire only marks that have no remaining use.
+	marks = mini(marks, maxi(MASTERY_MARK_LIMIT - _learned_count(), 0))
 	changed.emit()
+
+func _learned_count() -> int:
+	var count := 0
+	for id in unlocked:
+		if bool(unlocked[id]) and definitions.has(id):
+			count += 1
+	return count
 
 func _saved_true(value: Variant) -> bool:
 	return typeof(value) == TYPE_BOOL and value == true

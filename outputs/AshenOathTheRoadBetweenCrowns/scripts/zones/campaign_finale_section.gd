@@ -111,8 +111,12 @@ func _build_assembly(context: ZoneBuildContext) -> void:
 	_marker(context, "assembly", "AuthoredGreyfenAssembly")
 	_make_undercroft_stone_box(context, "AssemblyDais", Vector3(0, 0.045, -8.5), Vector3(10, 0.014, 5), "medieval_brick", Color(0.71, 0.69, 0.61))
 	_make_assembly_court(context)
-	for witness in [["witness_-7", -8.0], ["witness_-3", -4.0], ["witness_3", 4.0], ["witness_7", 8.0]]:
-		context.make_named_interactable(witness[0], "dialogue", "Hear testimony" if witness[0] != "witness_7" else "Read the witness record", Vector3(witness[1], 0, -3.5), Color(0.27, 0.25, 0.22))
+	# The record always supplies the primary route's evidence. A person standing
+	# before the village is an additional voluntary act, not a renamed flag.
+	for witness in [["witness_-7", -8.0, "mira"], ["witness_-3", -4.0, "rook"], ["witness_3", 4.0, "anwen"]]:
+		if str(context.get_story_flag("witness_consent_" + str(witness[2]), "")) == "voluntary":
+			context.make_named_interactable(witness[0], "dialogue", "Hear %s's willing testimony" % str(witness[2]).capitalize(), Vector3(witness[1], 0, -3.5), Color(0.27, 0.25, 0.22))
+	context.make_named_interactable("witness_7", "dialogue", "Read the witnesses' written record", Vector3(8.0, 0, -3.5), Color(0.27, 0.25, 0.22))
 	for position in [Vector3(-6, 0, -10), Vector3(6, 0, -10), Vector3(-7, 0, 8), Vector3(7, 0, 8)]:
 		context.make_torch(position)
 	context.make_clue("witnesses_ready", "Gather witnesses and records", Vector3(0, 0, -4.5), "main_crowns_without_mercy", "gather_witnesses", Color(0.42, 0.36, 0.26))
@@ -148,12 +152,15 @@ func _build_hart_glade(context: ZoneBuildContext) -> void:
 		_make_hart_witness(context)
 		context.make_light("HartWitnessLight", Vector3(0, 6, -9), Color(0.62, 0.86, 0.75), 4.2)
 		context.make_named_interactable("white_hart", "dialogue", "Stand before the White Hart", Vector3(0, 0, -9), Color(0.78, 0.80, 0.68), Vector3(0.42, 0.72, 0.42))
-	elif covenant in ["duty", "ash"] and not bool(context.get_story_flag("final_choice_completed", false)):
+	elif covenant == "ash" and not bool(context.get_story_flag("final_choice_completed", false)):
 		_make_hart_grove(context)
 		var boss = context.spawn_enemy("white_hart_avatar", Vector3(0, 0.8, -7))
 		if boss != null:
 			boss.name = "WhiteHartFinalEncounter"
 			boss.leash_radius = 10.0
+	elif not bool(context.get_story_flag("final_choice_completed", false)):
+		_make_hart_grove(context)
+		_make_hart_witness(context)
 	else:
 		_make_hart_aftermath(context, covenant)
 	context.make_zone_gate("Return to Greyfen's assembly", Vector3(-7, 0, 16), "assembly", Vector3(0, 1, -12))

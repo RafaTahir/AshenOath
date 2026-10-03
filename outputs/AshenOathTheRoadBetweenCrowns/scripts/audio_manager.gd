@@ -26,6 +26,11 @@ const AUTHORED_AMBIENCE := {
 }
 var bus_name = "Master"
 var cue_bus_name := ""
+var music_bus_name := ""
+var voice_bus_name := ""
+var narrative_revision := "road-renewal-1"
+var approved_voice_revisions: Dictionary = {}
+var mix_levels: Dictionary = {"music": 0.8, "sfx": 1.0, "voice": 1.0}
 var ambient_player: AudioStreamPlayer
 var music_player: AudioStreamPlayer
 var voice_player: AudioStreamPlayer
@@ -107,6 +112,9 @@ func _ready() -> void:
 	var cue_limiter := AudioEffectHardLimiter.new()
 	cue_limiter.ceiling_db = -3.0
 	AudioServer.add_bus_effect(cue_bus_index, cue_limiter)
+	music_bus_name = _create_mix_bus("Music")
+	voice_bus_name = _create_mix_bus("Voice")
+	apply_mix_settings({})
 	for index in range(TRANSIENT_POOL_SIZE):
 		var pooled := AudioStreamPlayer.new()
 		pooled.name = "TransientCue%02d" % index
@@ -206,6 +214,45 @@ func _exit_tree() -> void:
 	var cue_bus_index := AudioServer.get_bus_index(cue_bus_name)
 	if cue_bus_index > 0:
 		AudioServer.remove_bus(cue_bus_index)
+	for owned_bus in [music_bus_name, voice_bus_name]:
+		var index := AudioServer.get_bus_index(owned_bus)
+		if index > 0:
+			AudioServer.remove_bus(index)
+
+func _create_mix_bus(label: String) -> String:
+	var name := "Ashen%s_%d" % [label, get_instance_id()]
+	var index := AudioServer.get_bus_count()
+	AudioServer.add_bus(index)
+	AudioServer.set_bus_name(index, name)
+	AudioServer.set_bus_send(index, bus_name)
+	return name
+
+func apply_mix_settings(current: Dictionary) -> void:
+	for channel in ["music", "sfx", "voice"]:
+		mix_levels[channel] = clampf(float(current.get(channel + "_volume", mix_levels[channel])), 0.0, 1.0)
+		var target_bus := str({"music":music_bus_name, "sfx":cue_bus_name, "voice":voice_bus_name}[channel])
+		var index := AudioServer.get_bus_index(target_bus)
+		if index >= 0:
+			var level := float(mix_levels[channel])
+			AudioServer.set_bus_mute(index, level <= 0.001)
+			AudioServer.set_bus_volume_db(index, linear_to_db(maxf(level, 0.001)))
+
+func set_narrative_revision(revision: String) -> void:
+	if narrative_revision != revision:
+		stop_voice()
+	narrative_revision = revision
+	browser_voice_fallback_enabled = false
+
+func set_story_context(state, zone_id: String) -> void:
+	if state == null:
+		return
+	var ending := str(state.get_flag("final_covenant", ""))
+	if ending != "" and zone_id in ["greyfen", "hart_glade", "assembly"]:
+		set_music_state(str({"expose":"assembly", "free":"hart_glade", "bind":"shrine_anwen", "kill":"castle_silence"}.get(ending, "return_report")))
+	elif zone_id == "greyfen" and bool(state.get_flag("renewal_announced", false)):
+		set_music_state("greyfen_explore" if bool(state.get_flag("assembly_relief_ready", false)) else "shrine_anwen")
+	elif zone_id == "record_hall":
+		set_music_state("record_hall")
 
 func _create_owned_timer(seconds: float, ignore_time_scale: bool = false) -> Timer:
 	var timer := Timer.new()
@@ -515,7 +562,7 @@ func _event_stream(event_name: String) -> AudioStream:
 	return sounds.get(event_name) as AudioStream
 
 func has_voice(voice_id: String) -> bool:
-	return voices.has(voice_id)
+	return _has_production_voice(voice_id)
 
 func play_voice(voice_id: String) -> void:
 	stop_voice()
@@ -526,10 +573,10 @@ func play_voice(voice_id: String) -> void:
 		return
 
 func _play_voice_now(voice_id: String) -> void:
-	if not voices.has(voice_id):
+	if not _has_production_voice(voice_id):
 		return
 	voice_player = AudioStreamPlayer.new()
-	voice_player.bus = bus_name
+	voice_player.bus = voice_bus_name if voice_bus_name != "" else bus_name
 	voice_player.stream = voices[voice_id]
 	voice_player.volume_db = _volume_for("voice")
 	add_child(voice_player)
@@ -560,13 +607,17 @@ func play_voice_sequence(voice_ids: Array) -> void:
 		_speak_text(text_parts, str(voice_ids[0]) if voice_ids.size() > 0 else "voice_sequence")
 
 func set_browser_voice_fallback_enabled(enabled: bool) -> void:
-	browser_voice_fallback_enabled = enabled
+	# Revised dialogue is subtitle-first until an explicitly matching performance exists.
+	browser_voice_fallback_enabled = enabled and narrative_revision == ""
 
 func _has_production_voice(voice_id: String) -> bool:
 	if not voices.has(voice_id):
 		return false
 	var stream := voices[voice_id] as AudioStream
 	if stream == null:
+		return false
+	var revision := str(stream.get_meta("narrative_revision", approved_voice_revisions.get(voice_id, "")))
+	if narrative_revision != "" and revision != narrative_revision:
 		return false
 	if development_voice_stubs_enabled:
 		return true
@@ -598,7 +649,7 @@ func set_music_state(state_id: String) -> void:
 	var previous := music_player
 	var incoming := AudioStreamPlayer.new()
 	incoming.name = "CampaignMusic_%s" % state_id
-	incoming.bus = bus_name
+	incoming.bus = music_bus_name if music_bus_name != "" else bus_name
 	incoming.stream = music[state_id]
 	incoming.volume_db = -52.0
 	incoming.add_to_group(MUSIC_GROUP)
@@ -693,7 +744,7 @@ func _crossfade_ambient(zone_id: String, stream: AudioStream) -> void:
 			ambient_players.erase(old)
 	var incoming := AudioStreamPlayer.new()
 	incoming.name = "RegionAmbience_" + zone_id
-	incoming.bus = bus_name
+	incoming.bus = cue_bus_name if cue_bus_name != "" else bus_name
 	incoming.stream = stream
 	incoming.volume_db = -52.0
 	add_child(incoming)
@@ -867,6 +918,25 @@ func _build_voice_library() -> void:
 	if voice_library_ready:
 		return
 	voice_library_ready = true
+	approved_voice_revisions.clear()
+	if FileAccess.file_exists("res://voice_production_manifest.json"):
+		var manifest = JSON.parse_string(FileAccess.get_file_as_string("res://voice_production_manifest.json"))
+		if typeof(manifest) == TYPE_DICTIONARY:
+			var entries = manifest.get("lines", [])
+			if typeof(entries) == TYPE_ARRAY:
+				for entry in entries:
+					if typeof(entry) == TYPE_DICTIONARY:
+						approved_voice_revisions[str(entry.get("id", ""))] = str(entry.get("narrative_revision", ""))
+						_register_revised_voice_entry(str(entry.get("id", "")), entry)
+			elif typeof(entries) == TYPE_DICTIONARY:
+				for id in entries:
+					if typeof(entries[id]) == TYPE_DICTIONARY:
+						approved_voice_revisions[str(id)] = str(entries[id].get("narrative_revision", ""))
+						_register_revised_voice_entry(str(id), entries[id])
+	if narrative_revision != "":
+		# The revised campaign has no generated voice stand-in. Missing or old
+		# performances leave the authoritative subtitles in place.
+		return
 	voice_texts["voice_sister_anwen_test"] = "Sister Anwen: The road remembers every oath broken upon it."
 	voice_texts["voice_player_test"] = "Player: Then I will hear what the dead have to say."
 	voice_texts["voice_sister_anwen_greeting_01"] = "Keep your blade low in Greyfen, hunter. Fear already has hands around every throat here."
@@ -923,6 +993,19 @@ func _load_scratch_voice_library() -> void:
 				stream.set_meta("scratch_voice_path", path)
 				stream.set_meta("scratch_voice", true)
 				voices[voice_id] = stream
+
+func _register_revised_voice_entry(id: String, entry: Dictionary) -> void:
+	if id == "" or str(entry.get("narrative_revision", "")) != narrative_revision:
+		return
+	if not bool(entry.get("human_reviewed", false)) or str(entry.get("status", "")) in ["scratch", "draft", "generated"]:
+		return
+	var path := str(entry.get("path", entry.get("audio_path", "")))
+	if not path.begins_with("res://") or not FileAccess.file_exists(path):
+		return
+	var stream := _load_audio_stream(path)
+	if stream != null:
+		stream.set_meta("narrative_revision", narrative_revision)
+		voices[id] = stream
 
 func _build_music_library() -> void:
 	for state_id in ["main_menu", "greyfen_explore", "shrine_anwen", "wychwood_tension", "ghoulkin_combat", "return_report", "castle_silence", "deep_wood", "ash_mill", "marsh_crossing", "bandit_road", "record_hall", "undercroft", "assembly", "hart_glade", "boss_bell_eater", "boss_rootbound_colossus", "boss_ashwing", "boss_halvern_boss", "boss_white_hart_avatar"]:

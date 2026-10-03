@@ -5,6 +5,7 @@ class_name QuestBeatDirector
 ## this service turns the active objective into one consistent staging cue.
 
 signal beat_changed(beat: Dictionary)
+const StoryJournalPresenter = preload("res://scripts/story_journal.gd")
 
 const BEATS := {
 	"main_road_of_crows": {
@@ -59,14 +60,14 @@ const BEATS := {
 		"halvern_choice": {"stage":"vargan_undercroft_testimony", "cue":"The knight can be freed, questioned, or left to the grave he chose.", "next":"Choose Halvern's fate."},
 	},
 	"main_crowns_without_mercy": {
-		"gather_witnesses": {"stage":"witness_route", "cue":"A confession needs more than one surviving voice.", "next":"Gather witnesses or their surviving records."},
+		"gather_witnesses": {"stage":"witness_route", "cue":"Records establish facts. Only a freely chosen account makes a willing witness.", "next":"Invite willing witnesses or preserve their records."},
 		"greyfen_assembly": {"stage":"greyfen_assembly", "cue":"Greyfen has to hear the names together, not as scattered rumors.", "next":"Open Greyfen's assembly.", "compass":"Greyfen"},
 		"confession_choice": {"stage":"greyfen_assembly_choice", "cue":"The assembly is listening. Kael must decide how much truth to carry forward.", "next":"Decide how the truth will be spoken."},
 	},
 	"main_hart_remembers": {
 		"enter_glade": {"stage":"white_hart_road", "cue":"The reopened road ends where the witness was bound.", "next":"Walk the reopened road to the White Hart.", "compass":"Hart Glade"},
-		"hear_testimony": {"stage":"white_hart_glade", "cue":"The road has reopened to its oldest witness.", "next":"Hear what the living and the dead remember."},
-		"final_choice": {"stage":"white_hart_glade", "cue":"Kael's final oath will decide what survives the truth.", "next":"Choose Witness, Mercy, Duty, or Ash."},
+		"hear_testimony": {"stage":"white_hart_glade", "cue":"The Hart holds the complete account. Human records remain the living's responsibility.", "next":"Hear the Hart's account and ask what each resolution costs."},
+		"final_choice": {"stage":"white_hart_glade", "cue":"All four intentions remain possible. Kael can accept his own burden; he cannot pledge another person without consent.", "next":"Choose Witness, Mercy, Duty, or Ash; then carry out the resolution."},
 	},
 }
 
@@ -97,6 +98,14 @@ func refresh() -> Dictionary:
 		current_beat["quest_id"] = tracked
 		current_beat["objective_id"] = objective_id
 		current_beat["zone_id"] = zone_id
+		var chapter := StoryJournalPresenter.active_chapter(quest_manager)
+		if not chapter.is_empty():
+			current_beat["question"] = str(chapter.get("question", ""))
+			current_beat["stakes"] = str(chapter.get("stakes", ""))
+		if tracked == "main_hart_remembers" and story_state != null:
+			var intention := str(story_state.get_flag("pending_hart_ending", story_state.get_flag("final_intention", "")))
+			if intention != "" and not bool(story_state.get_flag("final_choice_completed", false)):
+				current_beat["cue"] = "The intention is chosen. Complete the resolution in the glade; the outcome is not yet settled."
 	beat_changed.emit(current_beat)
 	return current_beat.duplicate(true)
 

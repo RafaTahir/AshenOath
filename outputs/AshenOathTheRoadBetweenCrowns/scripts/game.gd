@@ -6,6 +6,9 @@ const WychwoodEvidencePresentation = preload("res://scripts/wychwood_evidence_pr
 const CampaignRecordPresentation = preload("res://scripts/campaign_record_presentation.gd")
 const WychwoodTerrainPresentation = preload("res://scripts/wychwood_terrain_presentation.gd")
 const StoryActorPresence = preload("res://scripts/story_actor_presence.gd")
+const StoryDecisionCoordinator = preload("res://scripts/story_decision_coordinator.gd")
+const StoryWorldDirector = preload("res://scripts/story_world_director.gd")
+const CovenantResolution = preload("res://scripts/covenant_resolution.gd")
 
 const BridgeSurfaceContract = preload("res://scripts/bridge_surface_contract.gd")
 const SpatialSurfaceContract = preload("res://scripts/spatial_surface_contract.gd")
@@ -95,6 +98,9 @@ var wychwood_pack_kills = 0
 var game_started = false
 var paused_by_menu = true
 var pending_ending = ""
+var story_action_in_progress := false
+var story_save_pending := false
+var story_recap_pending := false
 var pending_player_restore: Dictionary = {}
 var zone_pack_request_serial := 0
 var removed_interactions = {}
@@ -481,6 +487,8 @@ func _setup_runtime() -> void:
 	runtime_packs = services["runtime_packs"]
 	quest_hud_coordinator.configure(quest_presentation, quests)
 	runtime_services.configure(self)
+	hud.audio_mix_requested.connect(settings.set_mix_level)
+	hud.revisit_covenant_requested.connect(func(): save_manager.load_game(self, save_manager.PRE_COVENANT_PATH))
 	zone_runtime_coordinator = ZoneRuntimeCoordinator.new(self)
 	zone_runtime_coordinator.configure(quest_presentation, quest_beats, interaction_focus, quests)
 	seamless_world = SeamlessWorldService.new()
@@ -911,6 +919,7 @@ func load_save_state(data: Dictionary) -> void:
 	if int(data.get("version", 0)) < 3 and quests.is_completed("main_road_of_crows"):
 		story_state.set_flag("legacy_report_choice_required", true)
 	load_world_state(data.get("world_state", {}))
+	story_recap_pending = true
 	var zone = str(data.get("world_sector", data.get("zone", "greyfen")))
 	var pos_array: Array = data.get("player_position", [0, 1, 7])
 	var pos = Vector3(float(pos_array[0]), float(pos_array[1]), float(pos_array[2]))
@@ -1010,6 +1019,7 @@ func _apply_zone_audio(zone_id: String) -> void:
 		return
 	audio.play_ambient(zone_id)
 	audio.set_music_state(audio.music_state_for_zone(zone_id))
+	audio.set_story_context(story_state, zone_id)
 	if zone_id == "greyfen":
 		audio.play_event("shrine_hum", 0.01)
 
@@ -1269,6 +1279,9 @@ func _finish_zone_runtime_finalize(zone_id: String, root: Node3D, service: Node,
 	for enemy in enemies:
 		if is_instance_valid(enemy):
 			_validate_zone_render_resources(enemy)
+	StoryWorldDirector.decorate(self, root, zone_id)
+	CovenantResolution.restore(self)
+	_persist_story_action()
 	print("LOADING: zone_stage=runtime_finalized zone=%s navigation=%s ms=%d" % [zone_id, navigation_pending, Time.get_ticks_msec() - started])
 
 func _finish_prewarmed_greyfen_runtime() -> void:
@@ -1640,6 +1653,8 @@ func _add_visual_100_layer(zone_id: String) -> void:
 	world_vfx.configure(zone_id, quality)
 
 func _install_world_prop_controller(zone_id: String) -> void:
+	StoryWorldDirector.decorate(self, zone_root, zone_id)
+	CovenantResolution.restore(self)
 	if zone_root == null or not is_instance_valid(zone_root):
 		world_props = null
 		return
@@ -1653,6 +1668,12 @@ func _install_world_prop_controller(zone_id: String) -> void:
 	world_props.configure(zone_root, zone_id, str(settings.settings.get("quality_preset", "balanced")), story_state, audio)
 
 func _install_opening_soundscape(zone_id: String) -> void:
+	StoryWorldDirector.decorate(self, zone_root, zone_id)
+	CovenantResolution.restore(self)
+	call_deferred("_persist_story_action")
+	call_deferred("_finish_covenant_if_ready")
+	if audio != null:
+		audio.set_story_context(story_state, zone_id)
 	if zone_root == null or not is_instance_valid(zone_root) or audio == null:
 		return
 	var soundscape := zone_root.find_child("OpeningSoundscape", true, false) as OpeningSoundscape
@@ -1671,6 +1692,9 @@ func _handle_interaction(area) -> void:
 		world_prop_component.activate()
 	if world_vfx != null and is_instance_valid(world_vfx) and area is Node3D:
 		world_vfx.pulse_interaction((area as Node3D).global_position)
+	if area.interaction_type == "covenant":
+		CovenantResolution.activate(self, area)
+		return
 	if area.interaction_type == "minigame":
 		minigames.open_game("tic_tac_toe" if area.interaction_id == "common_table" else "draughts")
 	elif area.interaction_type == "vendor":
@@ -1692,25 +1716,7 @@ func _handle_interaction(area) -> void:
 		var report_chosen := false
 		if _road_ready_to_report() and area.interaction_id in ["sister_anwen", "notice_board", "retain_evidence"]:
 			report_chosen = true
-			var report_method: String = str({"sister_anwen":"private", "notice_board":"public", "retain_evidence":"retained"}[area.interaction_id])
-			var legacy_report := _legacy_report_choice_required()
-			story_state.set_flag("evidence_report", report_method)
-			if legacy_report:
-				# A migrated completed Road of Crows save must choose its report method
-				# before the cemetery handoff is restored; never infer the old choice.
-				story_state.set_flag("legacy_report_choice_required", false)
-			story_state.set_flag("cemetery_bell_rung", true)
-			story_state.adjust_value("anwen_trust", 1 if report_method == "private" else (-1 if report_method == "public" else 0))
-			story_state.adjust_value("greyfen_fear", 1 if report_method == "public" else 0)
-			quests.complete_objective("main_road_of_crows", "return_village")
-			if legacy_report and not quests.is_active("main_bell_beneath_greyfen") and not quests.is_completed("main_bell_beneath_greyfen"):
-				quests.unlocked["main_bell_beneath_greyfen"] = true
-				quests.start_quest("main_bell_beneath_greyfen")
-			dialogue_data = dialogue.get_dialogue(area.dialogue_id)
-			if area.interaction_id == "sister_anwen":
-				pending_anwen_relocation = true
-			else:
-				_relocate_anwen_to_cemetery()
+			dialogue_data = dialogue.get_dialogue("report_decision")
 		if area.interaction_id == "sister_anwen" and not bool(tutorial_flags.get("anwen_talked", false)):
 			tutorial_flags["anwen_talked"] = true
 			quests.complete_objective("main_road_of_crows", "speak_anwen")
@@ -1771,8 +1777,11 @@ func _handle_interaction(area) -> void:
 				if flame != null:
 					flame.visible = true
 			quests.complete_objective("side_three_candles", "light_%s" % candle_name)
+		elif area.interaction_id == "sacrifice_roots":
+			story_state.set_flag("mira_garden_inspected", true)
 		else:
-			quests.complete_objective(area.quest_id, area.objective_id)
+			quests.complete_evidence(area.quest_id, area.objective_id)
+		story_state.record_evidence(str(area.interaction_id), {"zone": current_zone_id, "kind": "fact", "title": str(area.prompt)})
 		if area.interaction_id == "tracks":
 			if quests.is_objective_done("main_road_of_crows", "fight_ghoulkin"):
 				hud.toast("The tracks change after the Ghoulkin falls: boots beside claws, both leading back toward Greyfen.")
@@ -1840,6 +1849,7 @@ func _handle_interaction(area) -> void:
 			hud.toast("Human boot prints leave the fold beside smaller paw marks. Follow both into Wychwood.")
 		elif area.interaction_id == "bitter_roots":
 			quests.complete_objective("side_bitter_roots", "collect_roots")
+			story_state.set_flag("bitter_roots_collected", true)
 		elif area.interaction_id == "sacrifice_roots":
 			hud.toast("The roots drink from old blood. Mira knew this place.")
 		elif area.interaction_id == "post_victory_token":
@@ -1864,6 +1874,9 @@ func _handle_interaction(area) -> void:
 				"vargan_supply_cart": hud.toast("Army weights and refugee canvas. Soldiers moved this cargo after the road closed.")
 				"vargan_gate_notice": hud.toast("The road was not lost. It was closed by order.")
 				"vargan_iron_binding": hud.toast("Iron wire, blackened at the twist. The same work as Oren's token.")
+		StoryWorldDirector.refresh(self)
+		story_save_pending = true
+		call_deferred("_persist_story_action")
 		_mark_interaction_removed(area)
 		if area.interaction_id.begins_with("memorial_candle_"):
 			area.queue_free()
@@ -2051,6 +2064,49 @@ func _relocate_anwen_to_cemetery() -> void:
 	_face_npc_toward_player(anwen)
 
 func _handle_dialogue_action(action: Dictionary) -> void:
+	if not _dialogue_action_available(action):
+		_apply_dialogue_action(action)
+		return
+	var transaction := StoryDecisionCoordinator.new()
+	transaction.begin(self)
+	_apply_dialogue_action(action)
+	transaction.finish(self, action)
+
+func _finish_story_action(action: Dictionary) -> void:
+	if not game_started or resource_shutdown_prepared:
+		return
+	if action.get("sets_flags", {}).has("evidence_report"):
+		story_state.set_flag("cemetery_bell_rung", true)
+		story_state.set_flag("legacy_report_choice_required", false)
+		_relocate_anwen_to_cemetery()
+	if action.get("sets_flags", {}).has("mira_truth"):
+		story_state.set_flag("mira_truth_known", true)
+	if action.get("sets_flags", {}).has("confession_method"):
+		story_state.set_flag("renewal_stopped", true)
+	StoryWorldDirector.refresh(self)
+	_refresh_tracker()
+	if audio != null and not _story_has_active_combat():
+		audio.set_story_context(story_state, current_zone_id)
+	story_save_pending = true
+	call_deferred("_persist_story_action")
+
+func _persist_story_action() -> void:
+	if not story_save_pending or resource_shutdown_prepared or not game_started:
+		return
+	if zone_transition_pending or zone_load_request_pending or not pending_player_restore.is_empty():
+		return
+	story_save_pending = false
+	save_manager.checkpoint(self)
+	save_manager.autosave(self)
+
+func _story_has_active_combat() -> bool:
+	for enemy in active_enemies:
+		if is_instance_valid(enemy) and not enemy.dead and player != null:
+			if enemy.global_position.distance_squared_to(player.global_position) < 100.0:
+				return true
+	return false
+
+func _apply_dialogue_action(action: Dictionary) -> void:
 	# Dialogue action buttons emit their choice before the game receives it. The
 	# close button already restores these states, so action buttons must do the
 	# same before applying quest/story mutations or the world stays paused.
@@ -2107,7 +2163,7 @@ func _handle_dialogue_action(action: Dictionary) -> void:
 		# replayed through a stale dialogue node or a saved interaction prompt.
 		var choice_quest_id := str(action.get("quest", ""))
 		var choice_objective_id := str(action.get("objective", ""))
-		if choice_quest_id != "" and choice_objective_id != "" and quests.is_objective_done(choice_quest_id, choice_objective_id):
+		if choice_quest_id != "" and choice_objective_id != "" and quests.is_objective_done(choice_quest_id, choice_objective_id) and not (choice_quest_id == "main_road_of_crows" and _legacy_report_choice_required()):
 			hud.toast("That decision has already been made.")
 			return
 		for id in action.get("sets_flags", {}):
@@ -2115,9 +2171,9 @@ func _handle_dialogue_action(action: Dictionary) -> void:
 		for id in action.get("adjusts_values", {}):
 			story_state.adjust_value(str(id), int(action["adjusts_values"][id]))
 		if action.has("quest") and action.has("objective"):
-			quests.complete_objective(str(action["quest"]), str(action["objective"]))
+			quests.complete_choice(str(action["quest"]), str(action["objective"]))
 		for completion in action.get("completes", []):
-			quests.complete_objective(str(completion.get("quest", "")), str(completion.get("objective", "")))
+			quests.complete_choice(str(completion.get("quest", "")), str(completion.get("objective", "")))
 		for item_id in action.get("gives_items", {}):
 			inventory.add_item(str(item_id), int(action["gives_items"][item_id]))
 		hud.toast(str(action.get("result", "Your choice will be remembered.")))
@@ -2208,6 +2264,8 @@ func _dialogue_action_requires_zone_rebuild(action: Dictionary) -> bool:
 	return action_type == "start_quest"
 
 func _dialogue_action_available(action: Dictionary) -> bool:
+	if not dialogue._conditions_match(action.get("conditions", {})):
+		return false
 	var type := str(action.get("type", ""))
 	var quest_id := str(action.get("quest", ""))
 	var objective_id := str(action.get("objective", ""))
@@ -2218,6 +2276,8 @@ func _dialogue_action_available(action: Dictionary) -> bool:
 	if type == "resolve_side_quest":
 		return quest_id != "" and quests.is_active(quest_id) and _quest_required_objectives_done(quest_id)
 	if type == "story_choice" and quest_id != "" and objective_id != "":
+		if quest_id == "main_road_of_crows" and objective_id == "return_village" and _legacy_report_choice_required():
+			return true
 		if not quests.is_active(quest_id) or quests.is_objective_done(quest_id, objective_id):
 			return false
 		return _story_choice_prerequisites_done(quest_id, objective_id)
@@ -2245,7 +2305,6 @@ func _story_choice_prerequisites_done(quest_id: String, choice_id: String) -> bo
 		if not quests.is_objective_done(quest_id, objective_id):
 			return false
 	return found_choice
-	save_manager.autosave(self)
 
 func _on_launch_accepted() -> void:
 	if startup_packs_waiting or greyfen_prewarm_started or game_started:
@@ -2942,70 +3001,70 @@ func _complete_ending(ending: String) -> void:
 	var ending_id := str(ending)
 	if ending_id not in ["expose", "free", "bind", "kill"]:
 		hud.toast("The covenant offers no such answer.")
-		get_tree().paused = false
-		hud.hide_menus()
 		return
-	# The final covenant is immutable. This guard covers stale dialogue nodes,
-	# reloads, and browser double-activation after the ending has resolved.
 	if str(story_state.get_flag("final_covenant", "")) != "" or bool(story_state.get_flag("final_choice_completed", false)):
 		hud.toast("The covenant has already been chosen.")
-		get_tree().paused = false
-		hud.hide_menus()
 		return
 	if not quests.is_active("main_hart_remembers") or str(story_state.get_flag("confession_method", "")) == "":
 		hud.toast("The Hart will not answer until Greyfen has heard the testimony.")
-		get_tree().paused = false
-		hud.hide_menus()
 		return
-	var witnesses: Array[String] = []
-	if str(story_state.get_flag("halvern_fate", "")) == "witness":
-		witnesses.append("halvern")
-	if str(story_state.get_flag("edric_stance", "")) in ["cooperate", "compelled"]:
-		witnesses.append("edric")
-	if int(story_state.values.get("anwen_trust", 0)) >= 0:
-		witnesses.append("anwen")
-	if witnesses.is_empty():
-		witnesses.append("kael")
+	# Preserve the last freely revisitable moment in its own slot.
+	save_manager.save_game(self, save_manager.PRE_COVENANT_PATH, "The moment before the covenant has been saved.")
+	var witnesses: Array[String] = ["kael"]
+	for witness in ["anwen", "rook", "mira", "edric", "halvern", "senn"]:
+		if str(story_state.get_flag("witness_consent_" + witness, "")) == "voluntary":
+			witnesses.append(witness)
 	story_state.set_flag("final_witnesses", witnesses)
+	story_state.set_flag("final_covenant", {"expose":"witness", "free":"mercy", "bind":"duty", "kill":"ash"}[ending_id])
 	quests.world_flags["ending"] = ending_id
-	story_state.set_flag("final_covenant", {"expose":"witness", "free":"mercy", "bind":"duty", "kill":"ash"}.get(ending_id, ending_id))
 	quests.complete_objective("main_hart_remembers", "hear_testimony")
-	if ending_id == "kill" or ending_id == "bind":
-		pending_ending = ending_id
-		active_interactable = null
-		hud.set_prompt("")
-		hud.hide_menus()
-		get_tree().paused = false
-		_remove_interactable("white_hart")
-		if zone_root != null and is_instance_valid(zone_root):
-			var witness_display := zone_root.find_child("WhiteHartWitnessDisplay", true, false)
-			if witness_display != null:
-				witness_display.queue_free()
-		if not _has_living_enemy("white_hart_avatar"):
-			var hart_boss = _spawn_enemy("white_hart_avatar", Vector3(0, 0.8, -7))
-			if hart_boss != null:
-				hart_boss.name = "WhiteHartFinalEncounter"
-				hart_boss.leash_radius = 10.0
-		audio.play_event("boss", 0.02)
-		hud.toast("The White Hart answers with antler, root, and light.")
+	if ending_id != "kill":
+		CovenantResolution.begin(self, ending_id)
 		return
-	_show_ending_consequence(ending_id)
+	pending_ending = ending_id
+	story_state.set_flag("human_records_preserved", true)
+	active_interactable = null
+	hud.set_prompt("")
+	hud.hide_menus()
+	get_tree().paused = false
+	audio.set_game_paused(false)
+	_remove_interactable("white_hart")
+	if zone_root != null and is_instance_valid(zone_root):
+		var witness_display := zone_root.find_child("WhiteHartWitnessDisplay", true, false)
+		if witness_display != null:
+			witness_display.queue_free()
+	if not _has_living_enemy("white_hart_avatar"):
+		var hart_boss = _spawn_enemy("white_hart_avatar", Vector3(0, 0.8, -7))
+		if hart_boss != null:
+			hart_boss.name = "WhiteHartFinalEncounter"
+			hart_boss.leash_radius = 10.0
+	audio.play_event("boss", 0.02)
+	hud.toast("The human record is safe. The Hart rises to defend the covenant.")
 
 func _show_ending_consequence(ending: String) -> void:
+	if bool(story_state.get_flag("final_choice_completed", false)):
+		return
+	story_action_in_progress = true
+	story_state.begin_change()
+	quests.begin_change()
 	quests.world_flags["ending"] = ending
-	quests.complete_objective("main_hart_remembers", "final_choice")
-	# This flag is separate from the covenant value so boss resolution and
-	# cached-zone rebuilds can distinguish a chosen outcome from a pending one.
 	story_state.set_flag("final_choice_completed", true)
+	story_state.set_flag("covenant_ritual_ready", false)
+	story_state.set_flag("renewal_stopped", true)
 	pending_ending = ""
-	var title = "The Road Between Crowns"
+	quests.complete_choice("main_hart_remembers", "final_choice")
 	var cards: Array[String] = EpilogueResolver.resolve(ending, story_state)
 	story_state.set_flag("epilogue_cards", cards)
-	var body := "\n\n".join(cards)
+	quests.end_change()
+	story_state.end_change()
+	story_action_in_progress = false
+	StoryWorldDirector.refresh(self)
+	audio.set_story_context(story_state, current_zone_id)
 	audio.set_game_paused(true)
 	get_tree().paused = true
-	hud.show_ending(title, body)
-	save_manager.checkpoint(self)
+	hud.show_ending("The Road Between Crowns", "\n\n".join(cards))
+	story_save_pending = true
+	call_deferred("_persist_story_action")
 
 func _on_player_blade_contact(contact: Dictionary) -> void:
 	var heavy := bool(contact.get("heavy", false))
@@ -3262,14 +3321,16 @@ func _purchase_from_vendor(vendor_id: String, item_id: String, quantity: int = 1
 	var result: Dictionary
 	if item_id == "__emergency_arrows__":
 		result = vendor_service.claim_emergency_arrow_refill(vendor_id, inventory)
+	elif item_id == "__emergency_healing__":
+		result = vendor_service.claim_emergency_healing_refill(vendor_id, inventory)
 	else:
 		result = vendor_service.buy(vendor_id, item_id, quantity, inventory, story_state, quests)
+	audio.play_event("ui")
 	if bool(result.get("ok", false)):
-		audio.play_event("ui")
 		_refresh_equipment_readout()
 		hud.show_status_cue(str(result.get("message", "Purchase complete.")), "item")
-	else:
-		audio.play_event("ui")
+		story_save_pending = true
+		call_deferred("_persist_story_action")
 
 func _on_enemy_died(enemy) -> void:
 	audio.play_enemy_event(enemy.enemy_id, "death", enemy.global_position, player.global_position)
@@ -3484,8 +3545,9 @@ func _on_quest_completed(id: String) -> void:
 	if not reward.is_empty():
 		inventory.add_reward(reward)
 		hud.toast("Reward received for %s." % quests.quest_defs.get(id, {}).get("title", id))
-	save_manager.checkpoint(self)
-	save_manager.autosave(self)
+	if not story_action_in_progress:
+		story_save_pending = true
+		call_deferred("_persist_story_action")
 
 func _apply_progression_to_player() -> void:
 	if player != null and progression != null:
@@ -3628,6 +3690,18 @@ func _on_dialogue_closed_audio() -> void:
 		audio.set_game_paused(false)
 	interaction_focus_dirty = true
 	interaction_focus_cache_valid = false
+	call_deferred("_finish_covenant_if_ready")
+
+func _finish_covenant_if_ready() -> void:
+	CovenantResolution.finish_if_ready(self)
+	if story_recap_pending:
+		story_recap_pending = false
+		hud.toast(preload("res://scripts/story_journal.gd").recap(self), 12.0)
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_APPLICATION_FOCUS_OUT and game_started and settings != null:
+		if bool(settings.settings.get("pause_on_focus_loss", true)) and not get_tree().paused:
+			_pause_game()
 
 func _pause_game() -> void:
 	if camera_rig != null and camera_rig.has_method("clear_target_lock"):
@@ -3650,6 +3724,10 @@ func _resume_game() -> void:
 		input_router.set_gameplay_context()
 	audio.play_event("ui")
 	hud.hide_menus()
+	if bool(story_state.get_flag("final_choice_completed", false)) and current_zone_id == "hart_glade":
+		story_state.set_flag("aftermath_returned", true)
+		story_save_pending = true
+		_load_zone_after_runtime_pack("greyfen", Vector3(0, 1, 9.8))
 
 func _handle_setting(action: String) -> void:
 	audio.play_event("ui")
@@ -3692,6 +3770,10 @@ func _handle_setting(action: String) -> void:
 		settings.toggle_high_contrast()
 	elif action == "control_preset":
 		settings.cycle_control_preset()
+	elif action == "difficulty":
+		settings.cycle_difficulty()
+	elif action == "focus_pause":
+		settings.toggle_pause_on_focus_loss()
 	if action != "visual_preset":
 		hud.toast("Settings updated.")
 	hud.show_settings_menu(hud.controls_back_target)
@@ -3707,9 +3789,12 @@ func _apply_runtime_settings(current_settings: Dictionary) -> void:
 		performance_budget_monitor.quality = str(current_settings.get("quality_preset", "balanced"))
 	if audio != null:
 		audio.set_master_volume(float(current_settings.get("master_volume", 0.85)))
+		audio.apply_mix_settings(current_settings)
 		audio.set_ambient_accents_enabled(str(current_settings.get("quality_preset", "balanced")) == "quality")
 	if hud != null:
 		hud.apply_accessibility(current_settings)
+	if player != null and is_instance_valid(player):
+		player.apply_difficulty_profile(settings.get_difficulty_profile())
 	if camera_rig != null:
 		camera_rig.apply_settings(
 			float(current_settings.get("mouse_sensitivity", 0.003)),
@@ -6174,6 +6259,7 @@ func _spawn_enemy(id: String, pos: Vector3, visual_role: String = "") -> Node:
 		if boss_controller.has_signal("resolved"):
 			boss_controller.connect("resolved", Callable(self, "_on_boss_resolved"))
 	active_enemies.append(enemy)
+	preload("res://scripts/story_encounter_director.gd").apply(self, enemy)
 	for peer in active_enemies:
 		if is_instance_valid(peer) and peer.has_method("set_encounter_peers"):
 			peer.set_encounter_peers(active_enemies)

@@ -9,12 +9,14 @@ signal message(text: String)
 
 var definitions: Dictionary = {}
 var emergency_refill_claimed := false
+var emergency_healing_claimed := false
 
 func load_vendors(path: String) -> void:
 	definitions = _read_json(path)
 
 func reset_state() -> void:
 	emergency_refill_claimed = false
+	emergency_healing_claimed = false
 	changed.emit()
 
 func get_vendor(vendor_id: String) -> Dictionary:
@@ -37,8 +39,52 @@ func list_stock(vendor_id: String, inventory, story_state = null, quests = null)
 		entry["owned"] = int(inventory.items.get(item_id, 0))
 		entry["price"] = maxi(int(entry.get("price", 0)), 0)
 		entry["cap"] = maxi(int(entry.get("cap", 999)), 1)
+		_apply_story_supply(vendor_id, entry, story_state)
 		result.append(entry)
 	return result
+
+func _apply_story_supply(vendor_id: String, entry: Dictionary, state) -> void:
+	if state == null:
+		return
+	var item_id := str(entry.get("item_id", ""))
+	var price := int(entry["price"])
+	var iron := str(state.get_flag("iron_fate", ""))
+	var treatment := str(state.get_flag("mira_treatment", ""))
+	var truth := str(state.get_flag("mira_truth", ""))
+	var mill := str(state.get_flag("mill_operation", ""))
+	var reason := ""
+	if vendor_id == "tor_forge":
+		if iron == "memorial" and item_id == "iron_trap":
+			price -= 2
+			reason = "Tor's replacement work leaves prepared trap parts."
+		elif iron == "tools" and item_id in ["standard_arrow", "bodkin_arrow"]:
+			price -= 1
+			reason = "Acknowledged village tools support ordinary repair and arrows."
+		elif iron == "surrendered":
+			if item_id == "standard_arrow":
+				price = 1
+				reason = "The village reserve keeps ordinary arrows available."
+			elif item_id in ["bodkin_arrow", "ashfire_arrow", "iron_trap"]:
+				price += 1
+				reason = "Shared stock takes extra labor; ordinary arrows remain affordable."
+	if vendor_id == "mira_apothecary" and item_id in ["redroot_potion", "bitterleaf_tonic"]:
+		if truth == "confessed" or treatment == "consented":
+			price -= 1
+			reason = "Disclosed treatment and agreed assistance support the dispensary."
+		elif truth == "destroyed" or treatment == "replacement":
+			price += 1
+			reason = "Replacement medicine needs more gathering; basic care stays available."
+		if mill == "closed":
+			price += 1
+			reason += " Relief supplies replace the closed mill."
+		elif mill == "restitution":
+			price -= 1
+			reason += " Mill restitution helps pay for care."
+		elif mill == "supervised":
+			reason += " Supervised supplies keep basic medicine in circulation."
+	# Consequences alter preparation within a bounded range; essentials never vanish.
+	entry["price"] = clampi(price, 1, maxi(int(entry["price"]) + 2, 1))
+	entry["supply_note"] = reason.strip_edges()
 
 func buy(vendor_id: String, item_id: String, quantity: int, inventory, story_state = null, quests = null) -> Dictionary:
 	quantity = clampi(quantity, 1, 99)
@@ -83,16 +129,32 @@ func claim_emergency_arrow_refill(vendor_id: String, inventory) -> Dictionary:
 	return {"ok": true, "item_id": "standard_arrow", "quantity": amount, "price": 0, "message": text}
 
 func save_state() -> Dictionary:
-	return {"emergency_refill_claimed": emergency_refill_claimed}
+	return {"emergency_refill_claimed": emergency_refill_claimed, "emergency_healing_claimed": emergency_healing_claimed}
 
 func load_state(state: Dictionary) -> void:
 	var claimed: Variant = state.get("emergency_refill_claimed", false)
 	emergency_refill_claimed = typeof(claimed) == TYPE_BOOL and claimed
+	var healing: Variant = state.get("emergency_healing_claimed", false)
+	emergency_healing_claimed = typeof(healing) == TYPE_BOOL and healing
+
+func claim_emergency_healing_refill(vendor_id: String, inventory) -> Dictionary:
+	if vendor_id != "mira_apothecary" or emergency_healing_claimed or int(inventory.items.get("redroot_potion", 0)) > 0:
+		return _fail("Mira's emergency medicine is for a traveler with no remedy left.")
+	emergency_healing_claimed = true
+	inventory.add_item("redroot_potion", 2)
+	var text := "Mira gives you two replacement remedies. Basic care is not a reward for agreeing with her."
+	message.emit(text)
+	changed.emit()
+	return {"ok": true, "item_id": "redroot_potion", "quantity": 2, "price": 0, "message": text}
 
 func _entry_unlocked(entry: Dictionary, story_state, quests) -> bool:
 	var flag_id := str(entry.get("requires_flag", ""))
-	if flag_id != "" and (story_state == null or not bool(story_state.get_flag(flag_id, false))):
-		return false
+	if flag_id != "":
+		var known := story_state != null and bool(story_state.get_flag(flag_id, false))
+		if flag_id == "mira_truth_known" and story_state != null:
+			known = known or str(story_state.get_flag("mira_truth", "")) != ""
+		if not known:
+			return false
 	var quest_id := str(entry.get("requires_quest", ""))
 	if quest_id != "" and (quests == null or not (quests.is_active(quest_id) or quests.is_completed(quest_id))):
 		return false

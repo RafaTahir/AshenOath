@@ -4,6 +4,11 @@ signal changed
 signal message(text: String)
 signal quest_completed(id: String)
 
+var _change_depth := 0
+var _change_pending := false
+var _completed_pending: Array[String] = []
+var _choice_depth := 0
+var evidence_history: Dictionary = {}
 var quest_defs = {}
 var active = {}
 var completed = {}
@@ -56,10 +61,12 @@ func start_quest(id: String) -> bool:
 	if not tracked_quest_is_manual and (tracked_quest_id == "" or str(quest_defs[id].get("type", "")) == "main"):
 		tracked_quest_id = id
 	message.emit("Quest started: %s" % quest_defs[id].get("title", id))
-	changed.emit()
+	_emit_changed()
 	return true
 
 func complete_objective(quest_id: String, objective_id: String) -> bool:
+	if is_choice_objective(quest_id, objective_id) and _choice_depth == 0:
+		return false
 	if not active.has(quest_id):
 		return false
 	var objectives: Array = active[quest_id]["objectives"]
@@ -73,12 +80,57 @@ func complete_objective(quest_id: String, objective_id: String) -> bool:
 			message.emit("Objective complete: %s" % objective["text"])
 			_update_evidence_groups(quest_id)
 			_try_complete_quest(quest_id)
-			changed.emit()
+			_emit_changed()
 			return true
 	return false
 
 func complete_evidence(quest_id: String, evidence_id: String) -> bool:
+	if is_choice_objective(quest_id, evidence_id):
+		return false
+	evidence_history["%s:%s" % [quest_id, evidence_id]] = true
 	return complete_objective(quest_id, evidence_id)
+
+func complete_choice(quest_id: String, objective_id: String) -> bool:
+	_choice_depth += 1
+	var completed_now := complete_objective(quest_id, objective_id)
+	_choice_depth -= 1
+	return completed_now
+
+func is_choice_objective(quest_id: String, objective_id: String) -> bool:
+	if objective_id.ends_with("_choice") or objective_id in ["final_choice", "return_village"]:
+		return true
+	for objective in quest_defs.get(quest_id, {}).get("objectives", []):
+		if str(objective.get("id", "")) == objective_id:
+			return str(objective.get("kind", "")) == "choice"
+	return false
+
+func begin_change() -> void:
+	_change_depth += 1
+
+func end_change() -> void:
+	_change_depth = maxi(0, _change_depth - 1)
+	if _change_depth > 0:
+		return
+	var completed_now: Array[String] = _completed_pending.duplicate()
+	_completed_pending.clear()
+	for id in completed_now:
+		quest_completed.emit(id)
+	if _change_pending:
+		_change_pending = false
+		changed.emit()
+
+func _emit_changed() -> void:
+	if _change_depth > 0:
+		_change_pending = true
+	else:
+		changed.emit()
+
+func _emit_completed(id: String) -> void:
+	if _change_depth > 0:
+		if id not in _completed_pending:
+			_completed_pending.append(id)
+	else:
+		quest_completed.emit(id)
 
 func _update_evidence_groups(quest_id: String) -> void:
 	if not active.has(quest_id): return
@@ -189,7 +241,7 @@ func set_tracked_quest(id: String) -> bool:
 		return false
 	tracked_quest_id = id
 	tracked_quest_is_manual = true
-	changed.emit()
+	_emit_changed()
 	return true
 
 func clear_tracked_quest() -> void:
@@ -197,7 +249,7 @@ func clear_tracked_quest() -> void:
 	tracked_quest_id = ""
 	tracked_quest_is_manual = false
 	if had_state:
-		changed.emit()
+		_emit_changed()
 
 func get_tracked_quest() -> String:
 	return tracked_quest_id if active.has(tracked_quest_id) else ""
@@ -226,7 +278,7 @@ func get_active_objective_id(quest_id: String) -> String:
 func set_tracked_quest_for_zone(zone_id: String) -> void:
 	tracker_context_zone = zone_id
 	if tracked_quest_is_manual and active.has(tracked_quest_id):
-		changed.emit()
+		_emit_changed()
 		return
 	tracked_quest_is_manual = false
 	var preferences := {
@@ -247,10 +299,10 @@ func set_tracked_quest_for_zone(zone_id: String) -> void:
 	for id in preferences.get(zone_id, []):
 		if active.has(id):
 			tracked_quest_id = id
-			changed.emit()
+			_emit_changed()
 			return
 	tracked_quest_id = ""
-	changed.emit()
+	_emit_changed()
 
 func get_journal_text() -> String:
 	var text = "ACTIVE QUESTS\n"
@@ -283,11 +335,12 @@ func _try_complete_quest(id: String) -> void:
 			start_quest(str(next_id))
 	# Completion listeners may checkpoint synchronously. Publish only after the
 	# next main objective is active so that checkpoint is resumable.
-	quest_completed.emit(id)
+	_emit_completed(id)
 
 func save_state() -> Dictionary:
 	return {
 		"active": active.duplicate(true),
+		"evidence_history": evidence_history.duplicate(true),
 		"completed": completed.duplicate(true),
 		"unlocked": unlocked.duplicate(true),
 		"world_flags": world_flags.duplicate(true),
@@ -297,6 +350,12 @@ func save_state() -> Dictionary:
 	}
 
 func load_state(state: Dictionary) -> void:
+	_change_depth = 0
+	_change_pending = false
+	_choice_depth = 0
+	_completed_pending.clear()
+	var recorded_evidence: Variant = state.get("evidence_history", {})
+	evidence_history = recorded_evidence.duplicate(true) if recorded_evidence is Dictionary else {}
 	active = _sanitize_active(state.get("active", {}))
 	completed = _sanitize_id_map(state.get("completed", {}), true)
 	for id in completed:
@@ -314,7 +373,7 @@ func load_state(state: Dictionary) -> void:
 		tracked_quest_id = _first_main_active()
 		tracked_quest_is_manual = false
 	_migrate_teeth_in_rain()
-	changed.emit()
+	_emit_changed()
 
 func _sanitize_id_map(raw: Variant, completed_map: bool) -> Dictionary:
 	if typeof(raw) != TYPE_DICTIONARY:

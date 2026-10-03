@@ -689,13 +689,17 @@ func _release_attack_token() -> void:
 		attack_gate.call(self, false)
 
 func _windup_duration() -> float:
+	var preparation = get_node_or_null("StoryEncounterPreparation")
+	var reading_bonus := 0.0
+	if preparation != null and preparation.has_method("preparation_windup_bonus"):
+		reading_bonus = float(preparation.preparation_windup_bonus())
 	if is_boss:
-		return {"white_hart_avatar":0.44, "bell_eater":0.78, "rootbound_colossus":0.92, "ashwing":0.64, "halvern_boss":0.48}.get(enemy_id, 0.60)
+		return float({"white_hart_avatar":0.44, "bell_eater":0.78, "rootbound_colossus":0.92, "ashwing":0.64, "halvern_boss":0.48}.get(enemy_id, 0.60)) + reading_bonus
 	if enemy_id == "wychwood_brute":
 		return 0.72
 	if enemy_id == "ghoulkin" or enemy_id == "wychwood_stalker" or enemy_id == "wychwood_raider":
 		return 0.46
-	return 0.34
+	return 0.34 + reading_bonus
 
 func _attack_cooldown() -> float:
 	if is_boss:
