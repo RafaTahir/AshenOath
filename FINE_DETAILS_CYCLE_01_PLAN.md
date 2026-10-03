@@ -71,3 +71,5 @@ The scoped code and content changes are implemented, their interfaces are integr
 - Browser shell implementation completed in source; export remains pending alongside HUD/input completion.
 - HUD/menu and input/focus implementation completed. HUD owns bounded screen memory, save drafts/results, reading position, wrapped controls and notice priority; input owns frame snapshots, release barriers, explicit availability and stable focus. All planned root interfaces are integrated.
 - Production packaging and publication are next. No tests, verification or review pass has been performed.
+- Production import initially reported an uninferred boolean in `input_router.gd`; an explicit `bool` declaration was committed as `a600e3a`. Import then completed and the full pack/Web export proceeded from that revision.
+- Production package completed: `story-20261003T112909Z-a600e3a0d5d9`, candidate `.release-gate/fine-details-02`. Push and deployment follow.
