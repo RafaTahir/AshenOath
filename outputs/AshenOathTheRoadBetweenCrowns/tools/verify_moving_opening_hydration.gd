@@ -9,13 +9,17 @@ func _run() -> void:
 	var game = load("res://scenes/main.tscn").instantiate()
 	root.add_child(game)
 	await process_frame
+	game.new_game_start_pending = true
 	game._on_launch_accepted()
-	var deadline := Time.get_ticks_msec() + 30000
+	var deadline := Time.get_ticks_msec() + 90000
 	while not game.route_zone_cache.has("greyfen") and Time.get_ticks_msec() < deadline:
 		await process_frame
 	if not game.route_zone_cache.has("greyfen"):
 		failure = "Opening cache unavailable"
 	else:
+		var prepared: Node3D = game.route_zone_cache["greyfen"]
+		if not prepared.get_meta("opening_presentation_ready", false) or not game._opening_presentation_present(prepared):
+			failure = "Greyfen cache published before essential scenery"
 		game._new_game()
 		deadline = Time.get_ticks_msec() + 30000
 		while (game.player == null or not game.game_started) and Time.get_ticks_msec() < deadline:
@@ -27,18 +31,27 @@ func _run() -> void:
 			# moving into another zone while required content is being published.
 			game.player.set_physics_process(false)
 			game.player.velocity = Vector3(1, 0, 0)
-			var scenery_boundary: int = game.OPENING_DETAIL_STAGES.find("opening_river_visual")
 			deadline = Time.get_ticks_msec() + 30000
-			while game.opening_detail_stage_index < scenery_boundary and Time.get_ticks_msec() < deadline:
+			# Cancel and resume the scheduler as a cached-zone return does.
+			game.opening_detail_generation += 1
+			game.opening_detail_stage_index = 0
+			game.call_deferred("_run_opening_detail_stage", game.opening_detail_generation)
+			while not game.zone_root.get_meta("opening_detail_complete", false) and Time.get_ticks_msec() < deadline:
 				await process_frame
-			if game.opening_detail_stage_index != scenery_boundary:
-				failure = "Moving player starved gameplay hydration: stage=%s" % game.opening_detail_stage_index
+			if not game.zone_root.get_meta("opening_detail_complete", false):
+				failure = "Moving player starved scenery hydration: stage=%s" % game.opening_detail_stage_index
 			for actor_id in ["mira", "rook", "widow_elna", "blacksmith_tor", "farmer_toma", "common_table", "barrel_board"]:
 				if game.zone_root.find_children(actor_id, "", true, false).size() != 1:
 					failure = "Required interaction missing or duplicated: " + actor_id
-			await create_timer(0.4).timeout
-			if failure == "" and game.opening_detail_stage_index != scenery_boundary:
-				failure = "Scenery movement safeguard was lost"
+			var count: int = game.zone_root.get_child_count()
+			game.opening_detail_pending = true
+			game.opening_detail_stage_index = 0
+			game.opening_detail_generation += 1
+			game.call_deferred("_run_opening_detail_stage", game.opening_detail_generation)
+			while game.opening_detail_pending:
+				await process_frame
+			if game.zone_root.get_child_count() != count:
+				failure = "Resuming completed scenery duplicated zone children"
 	game.prepare_resource_shutdown()
 	for frame in range(12):
 		await process_frame

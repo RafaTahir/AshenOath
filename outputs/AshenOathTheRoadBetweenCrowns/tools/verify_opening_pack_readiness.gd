@@ -3,12 +3,12 @@ extends SceneTree
 func _initialize() -> void:
 	var manager = load("res://scripts/runtime_pack_manager.gd").new()
 	manager.requests = {"base": {"state": "ready", "progress": 1.0}}
-	if not manager.startup_packs_ready():
-		_fail(manager, "Base must permit minimal opening prewarm")
+	if manager.startup_packs_ready():
+		_fail(manager, "Base alone must not publish a bare Greyfen")
 		return
 	manager.requests["opening"] = {"state": "failed", "error": "fixture missing pack"}
-	if not manager.startup_pack_failures().is_empty():
-		_fail(manager, "Deferred opening failure incorrectly blocks startup")
+	if manager.startup_pack_failures().size() != 1:
+		_fail(manager, "Opening failure must expose the startup retry state")
 		return
 	if manager.zone_packs_ready("greyfen"):
 		_fail(manager, "Greyfen detail/travel permits a missing opening pack")

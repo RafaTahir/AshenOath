@@ -30,8 +30,9 @@ func _run() -> void:
 	root.add_child(game)
 	await process_frame
 	game.settings.set_quality_preset(quality)
+	game.new_game_start_pending = true
 	game.call("_on_launch_accepted")
-	var deadline := Time.get_ticks_msec() + 30000
+	var deadline := Time.get_ticks_msec() + 90000
 	while not game.route_zone_cache.has("greyfen") and Time.get_ticks_msec() < deadline:
 		await process_frame
 	if not game.route_zone_cache.has("greyfen"):
@@ -39,9 +40,11 @@ func _run() -> void:
 	else:
 		var boot_gate_ids := {}
 		var cached_root := game.route_zone_cache["greyfen"] as Node3D
+		if not cached_root.get_meta("opening_presentation_ready", false) or not game._opening_presentation_present(cached_root):
+			failure = "First control was offered before Greyfen scenery was ready"
 		for target in ["wychwood", "deep_wood", "vargan_approach"]:
 			var gate := cached_root.find_child("gate_%s" % target, true, false) as Area3D
-			if gate == null or not bool(gate.get_meta("opening_boot_gate", false)):
+			if gate == null or bool(gate.get_meta("opening_boot_gate", false)):
 				failure = "Missing prewarmed Greyfen gate: " + target
 				break
 			boot_gate_ids[target] = gate.get_instance_id()

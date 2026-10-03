@@ -128,6 +128,17 @@ func _process(delta: float) -> void:
 	_apply_keyboard_camera(delta)
 	_update_response_state(delta)
 	_update_target_lock(delta)
+	_update_view(delta)
+
+func prepare_view() -> void:
+	# Position the real camera under the menu without enabling gameplay input.
+	if target == null or camera == null:
+		return
+	_initialized = false
+	_collision_refresh = 0.0
+	_update_view(0.0)
+
+func _update_view(delta: float) -> void:
 	if not _enemy_cache_authoritative:
 		_enemy_cache_refresh -= delta
 		if _enemy_cache_refresh <= 0.0:

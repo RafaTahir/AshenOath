@@ -20,6 +20,7 @@ const persistenceSmoke = Boolean(args["persistence-smoke"]);
 const manualSave = Boolean(args["manual-save"]);
 const checkpointWaitMs = Number(args["checkpoint-wait-ms"] || 45000);
 const uiAcceptance = Boolean(args["ui-acceptance"]);
+const openingPresence = Boolean(args["opening-presence"]);
 const QA_TEMP_ROOT = "D:\\Temp\\AshenOath";
 mkdirSync(QA_TEMP_ROOT, { recursive: true });
 // Hardware WebGL is the release acceptance path. Software remains available
@@ -565,7 +566,7 @@ async function testBrowser(name, executable) {
     // deliver a canvas pointer event on the first compact-menu frame.
     const newGameRequestedAt = Date.now();
     await dispatchPrimaryActivation(cdp, menuInputPoint);
-    if (!uiAcceptance) await dispatchFocusedMenuActivation(cdp);
+    if (!uiAcceptance && !openingPresence) await dispatchFocusedMenuActivation(cdp);
     await waitFor(async () => consoleLines().some((line) =>
       line.includes("LOADING: Greyfen prewarmed total=")
       || line.includes("LOADING: Greyfen prewarm deferred for Web")
@@ -574,7 +575,7 @@ async function testBrowser(name, executable) {
     });
     const queuedNewGame = consoleLines().some((line) => line.includes("LOADING: new_game_stage="));
     if (!queuedNewGame) {
-      if (uiAcceptance) throw new Error(`${name} New Game mouse click did not queue the start`);
+      if (uiAcceptance || openingPresence) throw new Error(`${name} New Game mouse click did not queue the start`);
       if (!mobileMode) {
         await cdp.send("Input.dispatchMouseEvent", { type: "mouseMoved", x: menuInputPoint.x, y: menuInputPoint.y, button: "none" });
       }
@@ -596,6 +597,12 @@ async function testBrowser(name, executable) {
     // bridge traversal, screenshots, and diagnostics after gameplay started.
     const newGameAcceptedAt = Date.now();
     const newGameWallClockMs = newGameAcceptedAt - newGameRequestedAt;
+    let openingScreenshotPath = null;
+    if (openingPresence) {
+      const firstView = await captureViewportScreenshot(cdp, `${name} Greyfen first control`);
+      openingScreenshotPath = reportPath.replace(/\.json$/i, `_first_control_${name.toLowerCase()}.png`);
+      writeFileSync(openingScreenshotPath, Buffer.from(firstView.data, "base64"));
+    }
     if (mobileMode) {
       await waitFor(async () => {
         const logs = cdp.events.filter((event) => event.method === "Runtime.consoleAPICalled")
@@ -914,6 +921,7 @@ async function testBrowser(name, executable) {
       persistence_smoke: persistenceResult,
       ui_acceptance: uiEvidence,
       screenshot: screenshotPath,
+      opening_first_control_screenshot: openingScreenshotPath,
       screenshot_capture_mode: screenshot.capture_mode,
       profile_dir: profile,
     };

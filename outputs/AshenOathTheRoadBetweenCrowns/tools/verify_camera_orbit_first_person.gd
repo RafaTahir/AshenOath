@@ -101,6 +101,11 @@ func _run() -> void:
 		landmark.material_override = material
 		stage.add_child(landmark)
 	await physics_frame
+	router.set_context("menu")
+	controller.prepare_view()
+	_check(controller.camera.global_position.distance_to(player.global_position) > 4.0, "Covered prewarm camera was left at the origin")
+	_check(not router.is_gameplay_context(), "Preparing the view enabled gameplay input")
+	router.set_context("gameplay")
 	await _settle()
 	await _capture("third-person")
 

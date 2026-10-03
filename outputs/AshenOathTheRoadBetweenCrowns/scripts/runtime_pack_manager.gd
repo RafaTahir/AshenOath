@@ -18,12 +18,10 @@ const MAX_DEPLOYMENT_BYTES := 104857600
 const MAX_RETRIES := 2
 const CHUNK_SIZE := 1024 * 1024
 const MAX_CONCURRENT_DOWNLOADS := 3
-# The root Web PCK owns the menu, managers, core builders, and the small A-set
-# hero/Anwen runtime layers. The shell verifies and copies the opening PCK into
-# Web memory after first control, avoiding download/decompression contention
-# with WebAssembly startup. Later campaign content remains independently streamed.
-const STARTUP_PACK_IDS: Array[String] = ["base"]
-const BACKGROUND_PACK_IDS: Array[String] = ["opening", "quality_materials", "characters", "monsters", "audio", "campaign"]
+# Greyfen's geometry and materials must mount before its covered preparation.
+# Campaign content remains independent of the first playable settlement.
+const STARTUP_PACK_IDS: Array[String] = ["base", "opening"]
+const BACKGROUND_PACK_IDS: Array[String] = ["quality_materials", "characters", "monsters", "audio", "campaign"]
 
 var manifest: Dictionary = {}
 var requests: Dictionary = {}
@@ -145,10 +143,12 @@ func is_cached(pack_id: String) -> bool:
 func get_cache_path(pack_id: String) -> String:
 	return _cache_path(_normalise_id(pack_id))
 
-func request_startup_packs() -> bool:
+func request_startup_packs(retry_failed := false) -> bool:
 	startup_requested = true
 	var accepted := true
 	for id in STARTUP_PACK_IDS:
+		if retry_failed and get_state(id) == "failed":
+			requests.erase(id)
 		if not request_pack(id):
 			accepted = false
 	_emit_startup_progress()
