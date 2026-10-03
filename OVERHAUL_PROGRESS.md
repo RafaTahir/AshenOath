@@ -33,8 +33,12 @@ Original checkout and its untracked artifacts are retained at D:/Projects/AshenO
 - Story state and saves: decision/evidence separation, batched decision publication, schema 10, legacy-slot preservation, and pre-covenant save implemented.
 - World staging and aftermath: event-driven story compositions, voluntary witness staging, three peaceful covenant rituals, Ash confrontation, and return to Greyfen implemented.
 - Player experience: journal, decision previews, individual epilogues, evidence-earned combat opportunities, supply consequences, emergency medicine, nine-practice progression, difficulty, audio mix, and focus-loss pause implemented.
-- Export: production compilation and packaging underway from source commit 069fde3.
-- Push/deployment: pending.
+- Export: completed production import, seven pack exports, Web export, runtime manifests and WASM transport compression from source commit 85a80d0. Final build identity: `story-20261003T101232Z-85a80d0794e2`.
+- Push/deployment: publishing the generated `web` files to GitHub main and the existing Ashen Oath production project.
+
+## Interrupted-build recovery
+
+Vercel was linked to the existing `rafaeitahir-5792s-projects/ashenoath` project after device authentication. Six compiler-reported type declarations were made explicit. The original asset downloader had omitted model companion files: 675 existing-source companions were restored, and 934 author-local texture references were normalized in 244 restored materials. The downloader now retains `.bin` and `.mtl`. An optional legacy `Chest_Wood.mtl` could not be recovered because its original archive URL returns 404; production import and export completed without it. Build execution now inhibits automatic system sleep for its own duration and releases that request on exit.
 
 ## Release limits
 
