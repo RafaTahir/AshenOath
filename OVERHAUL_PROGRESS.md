@@ -34,7 +34,9 @@ Original checkout and its untracked artifacts are retained at D:/Projects/AshenO
 - World staging and aftermath: event-driven story compositions, voluntary witness staging, three peaceful covenant rituals, Ash confrontation, and return to Greyfen implemented.
 - Player experience: journal, decision previews, individual epilogues, evidence-earned combat opportunities, supply consequences, emergency medicine, nine-practice progression, difficulty, audio mix, and focus-loss pause implemented.
 - Export: completed production import, seven pack exports, Web export, runtime manifests and WASM transport compression from source commit 85a80d0. Final build identity: `story-20261003T101232Z-85a80d0794e2`.
-- Push/deployment: publishing the generated `web` files to GitHub main and the existing Ashen Oath production project.
+- Push/deployment: published to GitHub `main` and `codex/story-centered-overhaul`. Production application commit: `55633a5` (game export commit: `4d18a11`). Vercel deployment command completed with `status: ok`, `readyState: READY`, and the production alias `https://ashenoath.vercel.app`.
+
+Production deployment: `dpl_9DKbrtv61oZVYfk5pQ6h5mXwkUiX`, `https://ashenoath-6yzh9ysh9-rafaeitahir-5792s-projects.vercel.app`. The initial CLI upload omitted `web` due to an overly broad ignore pattern; that filter was corrected, committed and pushed before the successful 82.5 MB upload. No post-deployment request, browser session, test or gameplay verification was performed.
 
 ## Interrupted-build recovery
 
