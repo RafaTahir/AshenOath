@@ -41,6 +41,8 @@ var input_source: Node
 var health_component
 var stamina_component
 var visual_root: Node3D
+var _camera_close_view := false
+var _camera_body_shadows: Dictionary = {}
 var body_visual: MeshInstance3D
 var body_base_color := Color(0.24, 0.27, 0.25)
 var weapon_root: Node3D
@@ -217,6 +219,36 @@ func bind_inventory(value) -> void:
 func get_weapon_mode() -> String:
 	return weapon_mode
 
+func get_camera_eye_height() -> float:
+	return CharacterRoleSpec.target_height("player_human", 1.78) * 0.91
+
+func set_camera_close_view(enabled: bool) -> void:
+	if _camera_close_view == enabled:
+		return
+	_camera_close_view = enabled
+	if enabled:
+		_cache_camera_body(visual_root)
+	for geometry: GeometryInstance3D in _camera_body_shadows:
+		if is_instance_valid(geometry):
+			geometry.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY if enabled else _camera_body_shadows[geometry]
+	if not enabled:
+		_camera_body_shadows.clear()
+
+func _cache_camera_body(node: Node) -> void:
+	if node == null:
+		return
+	# Keep hand equipment and effects without drawing the inside of the head,
+	# hair, clothing, scabbard or quiver over the camera. Shadows still render.
+	if node == rig_sword_visual or node == weapon_root or node == bow_visual or node == slash_arc_root or node == beam_left_hand_glow or node == beam_right_hand_glow:
+		return
+	if node is GeometryInstance3D:
+		_camera_body_shadows[node] = node.cast_shadow
+	for child in node.get_children():
+		_cache_camera_body(child)
+
+func _uses_first_person_camera() -> bool:
+	return camera_controller != null and camera_controller.has_method("is_first_person") and camera_controller.is_first_person()
+
 func get_selected_arrow_id() -> String:
 	return selected_arrow_id
 
@@ -357,7 +389,7 @@ func _handle_movement(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, target_velocity.x, response * delta)
 		velocity.z = move_toward(velocity.z, target_velocity.z, response * delta)
 		var intentional_backpedal := input_vec.y > 0.15
-		if bow_aiming and camera_controller != null:
+		if (bow_aiming or _uses_first_person_camera()) and camera_controller != null and beam_cast_state == "":
 			var aim_forward: Vector3 = camera_controller.get_flat_forward()
 			if aim_forward.length_squared() > 0.5:
 				var aim_yaw := atan2(-aim_forward.x, -aim_forward.z)
@@ -385,6 +417,10 @@ func _handle_movement(delta: float) -> void:
 	_animate_visuals(delta, move_dir, input_vec.length() > 0.1)
 
 func _face_attack_direction() -> void:
+	if _uses_first_person_camera():
+		var view_forward: Vector3 = camera_controller.get_flat_forward()
+		rotation.y = atan2(-view_forward.x, -view_forward.z)
+		return
 	var input_vec := _movement_input()
 	# S is intentional backpedaling. Preserve the current facing for that
 	# input while allowing attack edges to honor the same-frame travel direction.

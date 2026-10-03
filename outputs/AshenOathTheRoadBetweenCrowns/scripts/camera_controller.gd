@@ -6,9 +6,11 @@ var yaw = 0.0
 var pitch = -0.19
 var sensitivity = 0.003
 var distance = 6.8
-const MIN_ZOOM_DISTANCE := 3.2
+const MIN_ZOOM_DISTANCE := 0.0
 const MAX_ZOOM_DISTANCE := 9.2
 const ZOOM_STEP := 0.65
+const CLOSE_VIEW_DISTANCE := 1.6
+const FIRST_PERSON_DISTANCE := 0.05
 const TARGET_MAX_DISTANCE := 12.0
 const TARGET_OBSTRUCTION_GRACE := 0.42
 var height = 2.1
@@ -43,6 +45,7 @@ var _collision_refresh := 0.0
 var _cached_collision_position := Vector3.ZERO
 var _last_large_subject: Node3D
 var _large_subject_linger := 0.0
+var _manual_orbit := false
 
 signal target_lock_changed(target: Node3D, locked: bool)
 
@@ -53,6 +56,7 @@ func setup(follow_target: Node3D, source: Node = null) -> void:
 	camera.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 	camera.current = true
 	camera.fov = 63.0
+	camera.near = 0.05
 	add_child(camera)
 	_initialized = false
 	# Do not request Web pointer lock during camera construction. The browser
@@ -80,17 +84,9 @@ func set_enemy_candidates(candidates: Array) -> void:
 	_enemy_cache_refresh = 0.25
 
 func _input(event: InputEvent) -> void:
-	if target == null or get_tree().paused:
+	if target == null or get_tree().paused or not _gameplay_camera_active():
 		return
 	if event is InputEventMouseButton and event.pressed:
-		if event.button_index == MOUSE_BUTTON_WHEEL_UP and _locked_combat_target != null:
-			_cycle_combat_target(1)
-			get_viewport().set_input_as_handled()
-			return
-		if event.button_index == MOUSE_BUTTON_WHEEL_DOWN and _locked_combat_target != null:
-			_cycle_combat_target(-1)
-			get_viewport().set_input_as_handled()
-			return
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
 			adjust_zoom(-ZOOM_STEP)
 			get_viewport().set_input_as_handled()
@@ -104,17 +100,30 @@ func _input(event: InputEvent) -> void:
 		# A motion event is not a browser user gesture. Requesting pointer lock
 		# here produces a rejected Promise on Web after menus release the mouse.
 		# A real mouse-button event above remains the capture path.
-		_apply_mouse_motion(event.relative)
+		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+			_apply_mouse_motion(event.screen_relative)
+
+func _gameplay_camera_active() -> bool:
+	return input_source == null or not input_source.has_method("is_gameplay_context") or input_source.is_gameplay_context()
+
+func _begin_manual_orbit() -> void:
+	_manual_orbit = true
+	_clear_locked_combat_target()
+
+func _clamp_pitch(value: float) -> float:
+	var close_weight := 1.0 - smoothstep(0.0, CLOSE_VIEW_DISTANCE, distance)
+	return clampf(value, lerpf(-0.75, -1.45, close_weight), lerpf(0.45, 1.45, close_weight))
 
 func _apply_mouse_motion(relative: Vector2) -> void:
 	if relative.length_squared() <= 0.0:
 		return
-	yaw -= relative.x * sensitivity
+	_begin_manual_orbit()
+	yaw = wrapf(yaw - relative.x * sensitivity, -PI, PI)
 	var y_direction = 1.0 if invert_y else -1.0
-	pitch = clamp(pitch + relative.y * sensitivity * y_direction, -0.75, 0.45)
+	pitch = _clamp_pitch(pitch + relative.y * sensitivity * y_direction)
 
 func _process(delta: float) -> void:
-	if target == null or get_tree().paused:
+	if target == null or get_tree().paused or not _gameplay_camera_active():
 		return
 	_apply_keyboard_camera(delta)
 	_update_response_state(delta)
@@ -132,7 +141,8 @@ func _process(delta: float) -> void:
 		_combat_focus_refresh = 0.10
 		_cached_combat_focus = _nearest_combat_focus()
 	var combat_focus: Node3D = _locked_combat_target if is_instance_valid(_locked_combat_target) and _is_valid_combat_target(_locked_combat_target) else _cached_combat_focus
-	var target_distance = maxf(MIN_ZOOM_DISTANCE, distance - 0.75) if combat_focus != null else distance
+	var close_weight := 1.0 - smoothstep(0.0, CLOSE_VIEW_DISTANCE, distance)
+	var target_distance = maxf(MIN_ZOOM_DISTANCE, distance - 0.75 * (1.0 - close_weight)) if combat_focus != null else distance
 	var target_height = 2.25 if combat_focus != null else height
 	var shoulder = -0.55 if combat_focus != null else -0.82
 	var look_ahead = 2.35 if combat_focus != null else 3.45
@@ -145,6 +155,8 @@ func _process(delta: float) -> void:
 	var framing_subject := combat_focus
 	if framing_subject == null and _large_subject_linger > 0.0 and is_instance_valid(_last_large_subject) and bool(_last_large_subject.get("dead")):
 		framing_subject = _last_large_subject
+	if _manual_orbit or close_weight > 0.0:
+		framing_subject = null
 	if current_zone_id == "wychwood":
 		if target.global_position.z > 4.5:
 			target_distance = minf(target_distance, 6.4)
@@ -153,22 +165,26 @@ func _process(delta: float) -> void:
 			shoulder = -0.48
 	if sprinting:
 		target_fov = max(target_fov, 66.5)
+	var eye_height := float(target.get_camera_eye_height()) if target.has_method("get_camera_eye_height") else 1.62
+	target_height = lerpf(target_height, eye_height, close_weight)
+	shoulder *= 1.0 - close_weight
 	var target_pos = target.global_position + Vector3(0, target_height, 0)
 	var orbit = Basis(Vector3.UP, yaw) * Basis(Vector3.RIGHT, pitch)
-	var desired = target_pos + orbit * Vector3(shoulder + _dodge_response * 0.12, _landing_response * 0.08, target_distance)
+	var desired = target_pos + orbit * Vector3(shoulder + _dodge_response * 0.12 * (1.0 - close_weight), _landing_response * 0.08 * (1.0 - close_weight), target_distance)
 	_collision_refresh -= delta
 	if _collision_refresh <= 0.0:
 		_collision_refresh = 1.0 / 30.0
 		_cached_collision_position = _resolve_encounter_orbit(target_pos, desired, framing_subject) if _combat_subject_height(framing_subject) > 2.6 else _collide_camera(target_pos, desired)
-	desired = _cached_collision_position
+	desired = target_pos if is_first_person() else _cached_collision_position
 	# A browser pointer warp can deliver one large vertical mouse delta and push
 	# pitch to its lower view limit. Keep the follow camera above Kael's grounded
 	# root so the renderer cannot place it beneath a bridge/terrain support plane.
 	desired.y = maxf(desired.y, target.global_position.y + 0.55)
 	var natural_look = target_pos + Basis(Vector3.UP, yaw) * Vector3(0.55, -0.08, -look_ahead)
 	var focus = _environment_focus(combat_focus)
-	if focus.weight > 0.0:
+	if focus.weight > 0.0 and not _manual_orbit and close_weight <= 0.0:
 		natural_look = natural_look.lerp(focus.point, focus.weight)
+	natural_look = natural_look.lerp(desired - orbit.z * 5.0, close_weight)
 	if _combat_subject_height(framing_subject) > 2.6:
 		var encounter_frame := _large_encounter_frame(desired, framing_subject)
 		natural_look = encounter_frame.point
@@ -187,7 +203,15 @@ func _process(delta: float) -> void:
 	_smoothed_look = _smoothed_look.lerp(natural_look, _smooth_weight(delta, 6.6))
 	global_position = global_position.lerp(_smoothed_anchor, _smooth_weight(delta, 10.0))
 	var smoothed_position := camera.global_position.lerp(desired + shake, _smooth_weight(delta, 9.2))
-	camera.global_position = _publish_encounter_position(target_pos, smoothed_position, desired, framing_subject) if _combat_subject_height(framing_subject) > 2.6 else _collide_camera(target_pos, smoothed_position)
+	if is_first_person():
+		# Follow the capsule, not the lagged orbit or animated head bone.
+		camera.global_position = target_pos
+		_smoothed_look = natural_look
+	else:
+		camera.global_position = _publish_encounter_position(target_pos, smoothed_position, desired, framing_subject) if _combat_subject_height(framing_subject) > 2.6 else _collide_camera(target_pos, smoothed_position)
+	if target.has_method("set_camera_close_view"):
+		var eye_position: Vector3 = target.global_position + Vector3.UP * eye_height
+		target.set_camera_close_view(camera.global_position.distance_to(eye_position) < 0.85)
 	if _combat_subject_height(framing_subject) > 2.6:
 		# Collision and smoothing can shorten the orbit after the desired fit.
 		# Fit from the published position and widen immediately, shrinking smoothly.
@@ -197,7 +221,7 @@ func _process(delta: float) -> void:
 		camera.fov = maxf(camera.fov, target_fov)
 	_idle_time += delta
 	var idle_breath = Vector3.ZERO
-	if flat_speed < 0.25 and combat_focus == null:
+	if flat_speed < 0.25 and combat_focus == null and not is_first_person():
 		idle_breath.y = sin(_idle_time * 1.35) * 0.018
 	camera.look_at(_smoothed_look + idle_breath, Vector3.UP)
 	camera.fov = lerp(camera.fov, target_fov + _fov_kick, _smooth_weight(delta, 5.0))
@@ -206,6 +230,8 @@ func _process(delta: float) -> void:
 func frame_dialogue_target(dialogue_target: Node3D) -> void:
 	if target == null or camera == null or dialogue_target == null or not is_instance_valid(dialogue_target):
 		return
+	if target.has_method("set_camera_close_view"):
+		target.set_camera_close_view(false)
 	var flat_to_target := dialogue_target.global_position - target.global_position
 	flat_to_target.y = 0.0
 	if flat_to_target.length_squared() < 0.04:
@@ -232,6 +258,8 @@ func frame_dialogue_target(dialogue_target: Node3D) -> void:
 	_initialized = true
 
 func _collide_camera(from_pos: Vector3, desired: Vector3) -> Vector3:
+	if from_pos.distance_squared_to(desired) < 0.000001:
+		return desired
 	var space_state: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
 	var query := PhysicsRayQueryParameters3D.create(from_pos, desired)
 	query.exclude = [target]
@@ -277,12 +305,14 @@ func _apply_keyboard_camera(delta: float) -> void:
 	var tilt := look.y
 	# A hard horizontal stick deflection is a target-cycle gesture while
 	# locked. Smaller corrections still retain the free camera fallback.
-	var cycling_target := _locked_combat_target != null and absf(turn) >= 0.78
+	var cycling_target := _locked_combat_target != null and absf(turn) >= 0.78 and not is_first_person()
 	if abs(turn) > 0.01 and not cycling_target:
-		yaw -= turn * keyboard_turn_speed * delta
+		_begin_manual_orbit()
+		yaw = wrapf(yaw - turn * keyboard_turn_speed * delta, -PI, PI)
 	if abs(tilt) > 0.01:
+		_begin_manual_orbit()
 		var y_direction = -1.0 if invert_y else 1.0
-		pitch = clamp(pitch - tilt * keyboard_turn_speed * 0.55 * delta * y_direction, -0.75, 0.45)
+		pitch = _clamp_pitch(pitch - tilt * keyboard_turn_speed * 0.55 * delta * y_direction)
 	var zoom_axis: float = input_source.action_axis("camera_zoom_in", "camera_zoom_out") \
 		if input_source != null and input_source.has_method("action_axis") \
 		else Input.get_axis("camera_zoom_in", "camera_zoom_out")
@@ -295,6 +325,17 @@ func _apply_keyboard_camera(delta: float) -> void:
 
 func adjust_zoom(amount: float) -> void:
 	distance = clampf(distance + amount, MIN_ZOOM_DISTANCE, MAX_ZOOM_DISTANCE)
+	pitch = _clamp_pitch(pitch)
+	_collision_refresh = 0.0
+	if distance < CLOSE_VIEW_DISTANCE:
+		_begin_manual_orbit()
+
+func is_first_person() -> bool:
+	return distance <= FIRST_PERSON_DISTANCE
+
+func _exit_tree() -> void:
+	if is_instance_valid(target) and target.has_method("set_camera_close_view"):
+		target.set_camera_close_view(false)
 
 func get_zoom_distance() -> float:
 	return distance
@@ -331,7 +372,8 @@ func _update_target_lock(delta: float) -> void:
 		elif _target_is_visible(_locked_combat_target):
 			_target_obscured_time = 0.0
 			_set_target_marker_visible(true)
-			_soft_frame_locked_target(_locked_combat_target, delta)
+			if not is_first_person():
+				_soft_frame_locked_target(_locked_combat_target, delta)
 		else:
 			# Keep the target through a brief tree/actor occlusion. A sustained
 			# obstruction returns control to the normal free camera.
@@ -425,6 +467,7 @@ func _set_locked_combat_target(value: Node3D) -> void:
 		_clear_locked_combat_target()
 		return
 	_locked_combat_target = value
+	_manual_orbit = false
 	_cached_combat_focus = value
 	_target_obscured_time = 0.0
 	if _target_lock_marker != null and is_instance_valid(_target_lock_marker):

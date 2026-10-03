@@ -366,6 +366,11 @@ func _input(event: InputEvent) -> void:
 			_keyboard_pressed[_normalize_browser_keycode(key_event.physical_keycode)] = key_event.pressed
 		if key_event.pressed and not key_event.echo:
 			_set_device(DEVICE_KEYBOARD_MOUSE)
+			if is_gameplay_context() and not get_tree().paused:
+				for action in ["move_forward", "move_back", "move_left", "move_right", "camera_left", "camera_right", "camera_up", "camera_down"]:
+					if key_event.is_action_pressed(action):
+						capture_pointer(true)
+						break
 	elif event is InputEventJoypadButton and event.pressed:
 		if _set_gamepad(maxi(event.device, 0)):
 			_restore_profile_switch_event(event)
@@ -643,11 +648,11 @@ func show_pointer() -> void:
 		_web_pointer_capture_block_until = Time.get_ticks_msec() + 350
 	_set_pointer_mode(Input.MOUSE_MODE_VISIBLE)
 
-func capture_pointer() -> void:
+func capture_pointer(keyboard_gesture: bool = false) -> void:
 	if active_device == DEVICE_TOUCH:
 		show_pointer()
 		return
-	if OS.has_feature("web") and Time.get_ticks_msec() < _web_pointer_capture_block_until:
+	if OS.has_feature("web") and not keyboard_gesture and Time.get_ticks_msec() < _web_pointer_capture_block_until:
 		return
 	_set_pointer_mode(Input.MOUSE_MODE_CAPTURED)
 
@@ -660,7 +665,7 @@ func restore_gameplay_pointer() -> void:
 	elif OS.has_feature("web"):
 		# Browsers only grant pointer lock inside a direct user gesture. Dialogue
 		# and menu callbacks may finish after that event has propagated, so leave
-		# the pointer visible until CameraController receives the next real click.
+		# the pointer visible until the next gameplay key or real mouse click.
 		show_pointer()
 	else:
 		capture_pointer()
