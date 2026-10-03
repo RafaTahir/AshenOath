@@ -1,6 +1,8 @@
 extends Node
 
 const ObjectiveViewModelContract = preload("res://scripts/objective_view_model.gd")
+const RouteCatalog = preload("res://scripts/story_route_catalog.gd")
+const StoryActivities = preload("res://scripts/story_activity_director.gd")
 
 ## Single presentation-facing view of quest state.
 ## QuestManager remains authoritative for progression; this node owns the
@@ -24,24 +26,15 @@ const ZONE_LABELS := {
 	"ruins": "Old Ruins",
 }
 
-# A completed finale quest still needs a clear route home. This is a system
-# objective rather than a quest mutation, so it remains available after the
-# ending choice without reopening or altering story state.
-const ZONE_FALLBACK_OBJECTIVES := {
-	"hart_glade": {
-		"title": "RETURN ROUTE",
-		"text": "Follow the road to Greyfen's assembly",
-		"next": "Follow the road to Greyfen's assembly",
-	},
-}
-
 var quest_manager: Node
 var quest_beats: Node
+var story_state: Node
 var zone_id := "greyfen"
 
-func setup(manager: Node, beats: Node = null) -> void:
+func setup(manager: Node, beats: Node = null, state: Node = null) -> void:
 	quest_manager = manager
 	quest_beats = beats
+	story_state = state
 
 func set_zone(id: String) -> void:
 	zone_id = id.strip_edges().to_lower()
@@ -89,39 +82,68 @@ func get_objective_view_model() -> Dictionary:
 	var view := ObjectiveViewModelContract.new()
 	view.zone_id = zone_id
 	view.zone_name = get_zone_display_name()
-	if quest_manager == null:
-		view.tracker_text = "No objective in this area."
-		view.compass_text = "Explore %s" % view.zone_name
-		view.save_summary = _build_save_summary(view)
-		return view.to_dictionary()
-	view.quest_id = get_tracked_quest()
-	view.objective_id = get_active_objective_id(view.quest_id)
-	view.objective_text = get_active_objective_text(view.quest_id, view.objective_id)
-	if view.quest_id != "" and quest_manager.quest_defs.has(view.quest_id):
-		view.quest_title = str(quest_manager.quest_defs[view.quest_id].get("title", view.quest_id))
-	var compass_destination := view.zone_name
-	if quest_beats != null and quest_beats.has_method("get_current_beat"):
-		var beat: Dictionary = quest_beats.get_current_beat()
-		if str(beat.get("quest_id", "")) == view.quest_id and str(beat.get("objective_id", "")) == view.objective_id:
-			view.next_action = str(beat.get("next", "")).trim_suffix(".")
-			compass_destination = str(beat.get("compass", compass_destination))
-	view.tracker_text = _build_tracker_text(view)
-	view.contextual_text = view.next_action if view.next_action != "" else view.objective_text
-	if view.tracker_text == "All tracked objectives complete.":
-		view.contextual_text = ""
+	var continuation: Dictionary = RouteCatalog.ending_continuation(story_state, zone_id)
+	if not continuation.is_empty():
+		view.objective_id = str(continuation.get("id", ""))
+		view.quest_title = str(continuation.get("title", "THE ROAD HOME"))
+		view.objective_text = str(continuation.get("action", ""))
+		view.next_action = view.objective_text
+		_apply_route(view, continuation)
+		view.tracker_text = "%s\n- %s" % [view.quest_title, view.next_action]
+	elif quest_manager != null:
+		view.quest_id = _presentation_quest_id()
+		view.objective_id = get_active_objective_id(view.quest_id)
+		if view.quest_id != "":
+			view.objective_text = get_active_objective_text(view.quest_id, view.objective_id)
+			view.quest_title = str(quest_manager.quest_defs.get(view.quest_id, {}).get("title", view.quest_id))
+		if quest_beats != null and quest_beats.has_method("get_current_beat"):
+			var beat: Dictionary = quest_beats.get_current_beat()
+			if str(beat.get("quest_id", "")) == view.quest_id and str(beat.get("objective_id", "")) == view.objective_id:
+				view.next_action = str(beat.get("next", "")).trim_suffix(".")
+		var route: Dictionary = RouteCatalog.for_objective(view.quest_id, view.objective_id, story_state, quest_manager, zone_id)
+		_apply_route(view, route)
+		if route.has("next_action"):
+			view.next_action = str(route["next_action"])
+		view.tracker_text = _build_tracker_text(view)
 	if view.objective_id == "":
-		var fallback: Dictionary = ZONE_FALLBACK_OBJECTIVES.get(zone_id, {})
-		if not fallback.is_empty():
-			view.quest_id = ""
-			view.quest_title = str(fallback.get("title", "RETURN ROUTE"))
-			view.objective_id = "return_to_assembly"
-			view.objective_text = str(fallback.get("text", "Follow the road home"))
-			view.next_action = str(fallback.get("next", view.objective_text))
-			view.tracker_text = "%s\n- %s" % [view.quest_title, view.next_action]
-			view.contextual_text = view.next_action
-	view.compass_text = compass_destination
+		view.quest_title = "THE OPEN ROAD"
+		view.next_action = "Explore %s or choose a known promise in the journal" % view.zone_name
+		view.route_hint = "Marked wayposts remember the roads you have walked."
+		view.guidance_scope = "exploration"
+		view.tracker_text = "%s\n- %s" % [view.quest_title, view.next_action]
+	view.contextual_text = view.next_action if view.next_action != "" else view.objective_text
+	view.compass_text = view.destination_name if view.destination_name != "" else view.zone_name
 	view.save_summary = _build_save_summary(view)
 	return view.to_dictionary()
+
+func get_navigation_view_model() -> Dictionary:
+	var result := get_objective_view_model()
+	result["nearby_work"] = StoryActivities.get_started_work(story_state, zone_id)
+	return result
+
+func _presentation_quest_id() -> String:
+	var tracked: String = get_tracked_quest()
+	if tracked != "" or quest_manager == null:
+		return tracked
+	# Automatic zone tracking may clear its selection on a connecting road.
+	# Keep the ongoing promise visible without changing the player's selection.
+	for id in quest_manager.active:
+		if str(quest_manager.quest_defs.get(id, {}).get("type", "")) == "main":
+			return str(id)
+	return ""
+
+func _apply_route(view: ObjectiveViewModelContract, route: Dictionary) -> void:
+	view.destination_zone = str(route.get("destination_zone", ""))
+	view.destination_name = str(route.get("destination_name", ""))
+	view.target_ids.clear()
+	for target_id in route.get("target_ids", []):
+		view.target_ids.append(str(target_id))
+	view.route_hint = str(route.get("route_hint", ""))
+	view.purpose = str(route.get("purpose", ""))
+	view.pinpoint = bool(route.get("pinpoint", false))
+	view.guidance_scope = str(route.get("guidance_scope", "local"))
+	if view.guidance_scope != "aftermath" and view.destination_zone != "" and view.destination_zone != zone_id:
+		view.guidance_scope = "destination"
 
 func _build_save_summary(view: ObjectiveViewModelContract) -> Dictionary:
 	return {

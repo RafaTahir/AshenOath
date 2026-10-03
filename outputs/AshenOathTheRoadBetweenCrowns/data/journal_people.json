@@ -1,0 +1,133 @@
+{
+  "schema": 1,
+  "people": [
+    {
+      "id": "kael", "title": "Kael", "aliases": ["player", "kael", "the_hunter"],
+      "body": "The hunter following Greyfen's road. His own promises cannot stand in for another person's agreement.",
+      "known_any": [{"flag": "kael_pledge"}, {"flag": "kael_confessed"}, {"flag": "evidence_report"}],
+      "facts": [{"gate": {"flag": "kael_confessed", "value": true}, "body": "Kael has admitted abandoning an escort and not returning. Giving that account does not erase what he did; what he chooses to do now remains his responsibility."}],
+      "promises": [
+        {"gate": {"flag": "kael_pledge", "value": "protect"}, "body": "Promise: remain while the people carrying the account need protection. Kael did not promise that nobody could be hurt."},
+        {"gate": {"flag": "kael_pledge", "value": "account"}, "body": "Promise: stay and preserve a record that cannot simply be closed again."},
+        {"gate": {"flag": "kael_pledge", "value": "stay"}, "body": "Promise: remain with the road's living consequences. Kael chose his own part without pledging the households around him."},
+        {"gate": {"flag": "aftermath_work_promised", "value": true}, "body": "After the covenant, Kael took a place at the workbench. The next day's labor is now part of his promise."}
+      ],
+      "decision_flags": ["confession_method"]
+    },
+    {
+      "id": "anwen", "title": "Sister Anwen", "aliases": ["sister_anwen", "anwen", "anwen_campaign"],
+      "body": "Greyfen's shrine keeper. The people who come to her need care as well as an account of the road.",
+      "known_any": [{"flag": "evidence_report"}, {"flag": "crow_shrine_state"}, {"flag": "witness_consent_anwen"}, {"flag": "bell_gate_met"}],
+      "consent_flag": "witness_consent_anwen",
+      "facts": [
+        {"gate": {"quest": "main_road_of_crows", "objective": "sella"}, "body": "The red-thread feathers connect Anwen's containment rite to Sella's journey. They establish a connection, not permission to give Anwen's future testimony."},
+        {"gate": {"flag": "bell_gate_met", "value": true}, "body": "Anwen's account continues at the cemetery gate. The disturbed graves offer further evidence to inspect."},
+        {"gate": {"flag": "renewal_stopped", "value": true}, "body": "The grain list is no longer a pledge sheet. Care and food remain separate from any invitation to speak."}
+      ],
+      "decision_flags": ["crow_shrine_state"]
+    },
+    {
+      "id": "rook", "title": "Rook", "aliases": ["rook", "rook_smuggler", "rook_campaign"],
+      "body": "A traveler and trader who knows Greyfen's road and the people who use it.",
+      "known_any": [{"flag": "rook_disclosure"}, {"flag": "witness_consent_rook"}, {"flag": "cart_helped"}],
+      "consent_flag": "witness_consent_rook",
+      "facts": [{"gate": {"flag": "cart_helped", "value": true}, "body": "Kael carried the flour clear of Rook's cart. The kitchen received it and the cart could be moved."}],
+      "decision_flags": ["rook_disclosure", "names_policy"]
+    },
+    {
+      "id": "mira", "title": "Mira Fen", "aliases": ["mira", "mira_fen", "mira_herbalist", "mira_campaign"],
+      "body": "Greyfen's herbalist. People come to her when practical care cannot wait.",
+      "known_any": [{"flag": "mira_truth"}, {"flag": "bog_core_fate"}, {"flag": "witness_consent_mira"}],
+      "consent_flag": "witness_consent_mira",
+      "facts": [{"gate": {"flag": "mira_garden_inspected", "value": true}, "body": "Kael inspected the garden. An inspected ingredient is evidence about the treatment, not a decision about what the families must accept."}],
+      "decision_flags": ["mira_truth", "bog_core_fate"]
+    },
+    {
+      "id": "tor", "title": "Blacksmith Tor", "aliases": ["tor", "blacksmith_tor", "tor_campaign"],
+      "body": "The village blacksmith. A working hinge or a sound road matters to households as much as a weapon does.",
+      "known_any": [{"flag": "iron_fate"}, {"flag": "witness_consent_tor"}, {"flag": "road_repaired"}],
+      "consent_flag": "witness_consent_tor",
+      "facts": [{"gate": {"flag": "road_repaired", "value": true}, "body": "Kael cleared the drain and seated the boards while Tor drove the last peg. The kitchen cart can use the repaired road."}],
+      "decision_flags": ["iron_fate"]
+    },
+    {
+      "id": "elna", "title": "Widow Elna", "aliases": ["elna", "widow_elna"],
+      "body": "Elna remembers Harl as someone she loved. Her grief is hers to share, and kindness remembered does not settle the questions about his actions.",
+      "known_any": [{"flag": "widow_truth"}, {"flag": "witness_consent_elna"}],
+      "consent_flag": "witness_consent_elna",
+      "decision_flags": ["widow_truth"]
+    },
+    {
+      "id": "toma", "title": "Farmer Toma", "aliases": ["toma", "farmer_toma"],
+      "body": "A Greyfen farmer and a father. His family's safety and his neighbors' safety are connected.",
+      "known_any": [{"flag": "guardian_plan"}],
+      "decision_flags": ["guardian_plan"]
+    },
+    {
+      "id": "senn", "title": "Captain Senn", "aliases": ["senn", "captain_senn"],
+      "body": "The captain whose men hold the bandit road. Kael has heard his voice in the account.",
+      "known_any": [{"flag": "senn_fate"}, {"flag": "witness_consent_senn"}],
+      "consent_flag": "witness_consent_senn",
+      "unavailable_flag": "senn_fate", "unavailable_values": ["exile", "punished"],
+      "unavailable_body": "Senn is no longer present to offer a living oath. The retained account remains evidence, not a promise made on his behalf.",
+      "decision_flags": ["senn_fate"],
+      "facts": [{"gate": {"flag": "senn_guards_stood_down", "value": true}, "body": "Senn's soldiers lowered their weapons and surrendered the road. That act did not absolve their conduct or make anybody a consenting witness."}]
+    },
+    {
+      "id": "halvern", "title": "Sir Halvern", "aliases": ["halvern", "sir_halvern"],
+      "unidentified_aliases": ["gravebound_knight", "the_gravebound_knight"],
+      "unidentified_title": "The Gravebound Knight", "unidentified_body": "Kael has heard the armored witness's voice. This record has not yet established the witness's name.",
+      "body": "The witness beneath Vargan, returning to the same road and the same order.",
+      "known_any": [{"flag": "halvern_fate"}],
+      "facts": [{"gate": {"flag": "halvern_is_fragment", "value": true}, "body": "Halvern's memory is bounded by what he experienced. It cannot supply knowledge of events that followed his death."}],
+      "promises": [
+        {"gate": {"flag": "halvern_fate", "value": "witness"}, "body": "Recorded choice: Halvern's bounded account has been kept. A dead witness's memory is not the consent of a living household."},
+        {"gate": {"flag": "halvern_fate", "value": "released"}, "body": "Recorded choice: Halvern was released. The recovered command proof remains available without requiring his continued captivity."},
+        {"gate": {"flag": "halvern_fate", "value": "destroyed"}, "body": "Recorded choice: Halvern's binding was destroyed. The recovered human proof survives; no new promise can be taken from him."}
+      ]
+    },
+    {
+      "id": "edric", "title": "Lord Edric Vargan", "aliases": ["edric", "lord_edric", "lord_edric_vargan", "edric_campaign", "edric_castle"],
+      "body": "Vargan's lord. His decisions shape the road, the court and the village's supplies.",
+      "known_any": [{"flag": "edric_stance"}, {"flag": "witness_consent_edric"}],
+      "consent_flag": "witness_consent_edric",
+      "decision_flags": ["edric_stance"],
+      "facts": [{"gate": {"flag": "renewal_announced", "value": true}, "body": "Edric's renewal notice made support conditional on assent. Hunger does not turn those terms into a freely given promise."}]
+    },
+    {
+      "id": "vale", "title": "Record Keeper Vale", "aliases": ["vale", "record_keeper_vale", "vargan_record_keeper"],
+      "body": "The keeper of Vargan's records, encountered through the archive's account.",
+      "known_any": [],
+      "facts": [{"gate": {"flag": "command_proof_recovered", "value": true}, "body": "The command proof has been recovered. It can establish the order without borrowing consent from the person who kept it."}]
+    },
+    {
+      "id": "merrow", "title": "Steward Merrow", "aliases": ["merrow", "steward_merrow", "vargan_steward"],
+      "body": "Vargan's steward, arranging sacks and petitions in the court's daily business.",
+      "known_any": []
+    },
+    {
+      "id": "white_hart", "title": "The White Hart", "aliases": ["white_hart", "the_white_hart"],
+      "body": "The presence at the end of the reopened road, asking Kael to answer for what he carries.",
+      "known_any": [{"flag": "final_covenant"}],
+      "promises": [{"gate": {"flag": "final_choice_completed", "value": true}, "body": "The chosen resolution has been carried out. Its result does not erase the human records or the living people's responsibilities."}]
+    },
+    {
+      "id": "bram", "title": "Bram Kett", "aliases": [],
+      "body": "One of the missing travelers. His belongings have given Kael a trace of the person behind the contract's name.",
+      "known_any": [{"evidence": "bram"}, {"quest": "main_road_of_crows", "objective": "bram"}],
+      "facts": [{"gate": {"any": [{"evidence": "bram"}, {"quest": "main_road_of_crows", "objective": "bram"}]}, "body": "The marked tool and repairs place Bram with the cart. He did not simply abandon it."}]
+    },
+    {
+      "id": "sella", "title": "Sella Vey", "aliases": [],
+      "body": "One of the missing travelers, accompanied by her son Oren. Her account must be recovered from what survives of the journey.",
+      "known_any": [{"evidence": "sella"}, {"quest": "main_road_of_crows", "objective": "sella"}],
+      "facts": [{"gate": {"any": [{"evidence": "sella"}, {"quest": "main_road_of_crows", "objective": "sella"}]}, "body": "The red-thread feathers link her journey to the shrine's attempted containment."}]
+    },
+    {
+      "id": "oren", "title": "Oren Vey", "aliases": [],
+      "body": "Sella's son, missing from the road with her and Bram. A recovered object is a trace of his life, not permission to expose every part of it.",
+      "known_any": [{"evidence": "oren"}, {"quest": "main_road_of_crows", "objective": "oren"}, {"flag": "bog_core_fate"}],
+      "decision_flags": ["bog_core_fate"]
+    }
+  ]
+}

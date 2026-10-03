@@ -5206,6 +5206,588 @@
       "speaker": "",
       "context": "items.standard_arrow"
     },
+    "journal_people.people.anwen.body": {
+      "source": "Greyfen's shrine keeper. The people who come to her need care as well as an account of the road.",
+      "text": "Greyfen's shrine keeper. The people who come to her need care as well as an account of the road.",
+      "speaker": "",
+      "context": "journal_people.people.anwen"
+    },
+    "journal_people.people.anwen.facts.0.body": {
+      "source": "The red-thread feathers connect Anwen's containment rite to Sella's journey. They establish a connection, not permission to give Anwen's future testimony.",
+      "text": "The red-thread feathers connect Anwen's containment rite to Sella's journey. They establish a connection, not permission to give Anwen's future testimony.",
+      "speaker": "",
+      "context": "journal_people.people.anwen.facts.0"
+    },
+    "journal_people.people.anwen.facts.1.body": {
+      "source": "Anwen's account continues at the cemetery gate. The disturbed graves offer further evidence to inspect.",
+      "text": "Anwen's account continues at the cemetery gate. The disturbed graves offer further evidence to inspect.",
+      "speaker": "",
+      "context": "journal_people.people.anwen.facts.1"
+    },
+    "journal_people.people.anwen.facts.2.body": {
+      "source": "The grain list is no longer a pledge sheet. Care and food remain separate from any invitation to speak.",
+      "text": "The grain list is no longer a pledge sheet. Care and food remain separate from any invitation to speak.",
+      "speaker": "",
+      "context": "journal_people.people.anwen.facts.2"
+    },
+    "journal_people.people.anwen.title": {
+      "source": "Sister Anwen",
+      "text": "Sister Anwen",
+      "speaker": "",
+      "context": "journal_people.people.anwen"
+    },
+    "journal_people.people.bram.body": {
+      "source": "One of the missing travelers. His belongings have given Kael a trace of the person behind the contract's name.",
+      "text": "One of the missing travelers. His belongings have given Kael a trace of the person behind the contract's name.",
+      "speaker": "",
+      "context": "journal_people.people.bram"
+    },
+    "journal_people.people.bram.facts.0.body": {
+      "source": "The marked tool and repairs place Bram with the cart. He did not simply abandon it.",
+      "text": "The marked tool and repairs place Bram with the cart. He did not simply abandon it.",
+      "speaker": "",
+      "context": "journal_people.people.bram.facts.0"
+    },
+    "journal_people.people.bram.title": {
+      "source": "Bram Kett",
+      "text": "Bram Kett",
+      "speaker": "",
+      "context": "journal_people.people.bram"
+    },
+    "journal_people.people.edric.body": {
+      "source": "Vargan's lord. His decisions shape the road, the court and the village's supplies.",
+      "text": "Vargan's lord. His decisions shape the road, the court and the village's supplies.",
+      "speaker": "",
+      "context": "journal_people.people.edric"
+    },
+    "journal_people.people.edric.facts.0.body": {
+      "source": "Edric's renewal notice made support conditional on assent. Hunger does not turn those terms into a freely given promise.",
+      "text": "Edric's renewal notice made support conditional on assent. Hunger does not turn those terms into a freely given promise.",
+      "speaker": "",
+      "context": "journal_people.people.edric.facts.0"
+    },
+    "journal_people.people.edric.title": {
+      "source": "Lord Edric Vargan",
+      "text": "Lord Edric Vargan",
+      "speaker": "",
+      "context": "journal_people.people.edric"
+    },
+    "journal_people.people.elna.body": {
+      "source": "Elna remembers Harl as someone she loved. Her grief is hers to share, and kindness remembered does not settle the questions about his actions.",
+      "text": "Elna remembers Harl as someone she loved. Her grief is hers to share, and kindness remembered does not settle the questions about his actions.",
+      "speaker": "",
+      "context": "journal_people.people.elna"
+    },
+    "journal_people.people.elna.title": {
+      "source": "Widow Elna",
+      "text": "Widow Elna",
+      "speaker": "",
+      "context": "journal_people.people.elna"
+    },
+    "journal_people.people.halvern.body": {
+      "source": "The witness beneath Vargan, returning to the same road and the same order.",
+      "text": "The witness beneath Vargan, returning to the same road and the same order.",
+      "speaker": "",
+      "context": "journal_people.people.halvern"
+    },
+    "journal_people.people.halvern.facts.0.body": {
+      "source": "Halvern's memory is bounded by what he experienced. It cannot supply knowledge of events that followed his death.",
+      "text": "Halvern's memory is bounded by what he experienced. It cannot supply knowledge of events that followed his death.",
+      "speaker": "",
+      "context": "journal_people.people.halvern.facts.0"
+    },
+    "journal_people.people.halvern.promises.0.body": {
+      "source": "Recorded choice: Halvern's bounded account has been kept. A dead witness's memory is not the consent of a living household.",
+      "text": "Recorded choice: Halvern's bounded account has been kept. A dead witness's memory is not the consent of a living household.",
+      "speaker": "",
+      "context": "journal_people.people.halvern.promises.0"
+    },
+    "journal_people.people.halvern.promises.1.body": {
+      "source": "Recorded choice: Halvern was released. The recovered command proof remains available without requiring his continued captivity.",
+      "text": "Recorded choice: Halvern was released. The recovered command proof remains available without requiring his continued captivity.",
+      "speaker": "",
+      "context": "journal_people.people.halvern.promises.1"
+    },
+    "journal_people.people.halvern.promises.2.body": {
+      "source": "Recorded choice: Halvern's binding was destroyed. The recovered human proof survives; no new promise can be taken from him.",
+      "text": "Recorded choice: Halvern's binding was destroyed. The recovered human proof survives; no new promise can be taken from him.",
+      "speaker": "",
+      "context": "journal_people.people.halvern.promises.2"
+    },
+    "journal_people.people.halvern.title": {
+      "source": "Sir Halvern",
+      "text": "Sir Halvern",
+      "speaker": "",
+      "context": "journal_people.people.halvern"
+    },
+    "journal_people.people.kael.body": {
+      "source": "The hunter following Greyfen's road. His own promises cannot stand in for another person's agreement.",
+      "text": "The hunter following Greyfen's road. His own promises cannot stand in for another person's agreement.",
+      "speaker": "",
+      "context": "journal_people.people.kael"
+    },
+    "journal_people.people.kael.facts.0.body": {
+      "source": "Kael has admitted abandoning an escort and not returning. Giving that account does not erase what he did; what he chooses to do now remains his responsibility.",
+      "text": "Kael has admitted abandoning an escort and not returning. Giving that account does not erase what he did; what he chooses to do now remains his responsibility.",
+      "speaker": "",
+      "context": "journal_people.people.kael.facts.0"
+    },
+    "journal_people.people.kael.promises.0.body": {
+      "source": "Promise: remain while the people carrying the account need protection. Kael did not promise that nobody could be hurt.",
+      "text": "Promise: remain while the people carrying the account need protection. Kael did not promise that nobody could be hurt.",
+      "speaker": "",
+      "context": "journal_people.people.kael.promises.0"
+    },
+    "journal_people.people.kael.promises.1.body": {
+      "source": "Promise: stay and preserve a record that cannot simply be closed again.",
+      "text": "Promise: stay and preserve a record that cannot simply be closed again.",
+      "speaker": "",
+      "context": "journal_people.people.kael.promises.1"
+    },
+    "journal_people.people.kael.promises.2.body": {
+      "source": "Promise: remain with the road's living consequences. Kael chose his own part without pledging the households around him.",
+      "text": "Promise: remain with the road's living consequences. Kael chose his own part without pledging the households around him.",
+      "speaker": "",
+      "context": "journal_people.people.kael.promises.2"
+    },
+    "journal_people.people.kael.promises.3.body": {
+      "source": "After the covenant, Kael took a place at the workbench. The next day's labor is now part of his promise.",
+      "text": "After the covenant, Kael took a place at the workbench. The next day's labor is now part of his promise.",
+      "speaker": "",
+      "context": "journal_people.people.kael.promises.3"
+    },
+    "journal_people.people.kael.title": {
+      "source": "Kael",
+      "text": "Kael",
+      "speaker": "",
+      "context": "journal_people.people.kael"
+    },
+    "journal_people.people.merrow.body": {
+      "source": "Vargan's steward, arranging sacks and petitions in the court's daily business.",
+      "text": "Vargan's steward, arranging sacks and petitions in the court's daily business.",
+      "speaker": "",
+      "context": "journal_people.people.merrow"
+    },
+    "journal_people.people.merrow.title": {
+      "source": "Steward Merrow",
+      "text": "Steward Merrow",
+      "speaker": "",
+      "context": "journal_people.people.merrow"
+    },
+    "journal_people.people.mira.body": {
+      "source": "Greyfen's herbalist. People come to her when practical care cannot wait.",
+      "text": "Greyfen's herbalist. People come to her when practical care cannot wait.",
+      "speaker": "",
+      "context": "journal_people.people.mira"
+    },
+    "journal_people.people.mira.facts.0.body": {
+      "source": "Kael inspected the garden. An inspected ingredient is evidence about the treatment, not a decision about what the families must accept.",
+      "text": "Kael inspected the garden. An inspected ingredient is evidence about the treatment, not a decision about what the families must accept.",
+      "speaker": "",
+      "context": "journal_people.people.mira.facts.0"
+    },
+    "journal_people.people.mira.title": {
+      "source": "Mira Fen",
+      "text": "Mira Fen",
+      "speaker": "",
+      "context": "journal_people.people.mira"
+    },
+    "journal_people.people.oren.body": {
+      "source": "Sella's son, missing from the road with her and Bram. A recovered object is a trace of his life, not permission to expose every part of it.",
+      "text": "Sella's son, missing from the road with her and Bram. A recovered object is a trace of his life, not permission to expose every part of it.",
+      "speaker": "",
+      "context": "journal_people.people.oren"
+    },
+    "journal_people.people.oren.title": {
+      "source": "Oren Vey",
+      "text": "Oren Vey",
+      "speaker": "",
+      "context": "journal_people.people.oren"
+    },
+    "journal_people.people.rook.body": {
+      "source": "A traveler and trader who knows Greyfen's road and the people who use it.",
+      "text": "A traveler and trader who knows Greyfen's road and the people who use it.",
+      "speaker": "",
+      "context": "journal_people.people.rook"
+    },
+    "journal_people.people.rook.facts.0.body": {
+      "source": "Kael carried the flour clear of Rook's cart. The kitchen received it and the cart could be moved.",
+      "text": "Kael carried the flour clear of Rook's cart. The kitchen received it and the cart could be moved.",
+      "speaker": "",
+      "context": "journal_people.people.rook.facts.0"
+    },
+    "journal_people.people.rook.title": {
+      "source": "Rook",
+      "text": "Rook",
+      "speaker": "",
+      "context": "journal_people.people.rook"
+    },
+    "journal_people.people.sella.body": {
+      "source": "One of the missing travelers, accompanied by her son Oren. Her account must be recovered from what survives of the journey.",
+      "text": "One of the missing travelers, accompanied by her son Oren. Her account must be recovered from what survives of the journey.",
+      "speaker": "",
+      "context": "journal_people.people.sella"
+    },
+    "journal_people.people.sella.facts.0.body": {
+      "source": "The red-thread feathers link her journey to the shrine's attempted containment.",
+      "text": "The red-thread feathers link her journey to the shrine's attempted containment.",
+      "speaker": "",
+      "context": "journal_people.people.sella.facts.0"
+    },
+    "journal_people.people.sella.title": {
+      "source": "Sella Vey",
+      "text": "Sella Vey",
+      "speaker": "",
+      "context": "journal_people.people.sella"
+    },
+    "journal_people.people.senn.body": {
+      "source": "The captain whose men hold the bandit road. Kael has heard his voice in the account.",
+      "text": "The captain whose men hold the bandit road. Kael has heard his voice in the account.",
+      "speaker": "",
+      "context": "journal_people.people.senn"
+    },
+    "journal_people.people.senn.facts.0.body": {
+      "source": "Senn's soldiers lowered their weapons and surrendered the road. That act did not absolve their conduct or make anybody a consenting witness.",
+      "text": "Senn's soldiers lowered their weapons and surrendered the road. That act did not absolve their conduct or make anybody a consenting witness.",
+      "speaker": "",
+      "context": "journal_people.people.senn.facts.0"
+    },
+    "journal_people.people.senn.title": {
+      "source": "Captain Senn",
+      "text": "Captain Senn",
+      "speaker": "",
+      "context": "journal_people.people.senn"
+    },
+    "journal_people.people.toma.body": {
+      "source": "A Greyfen farmer and a father. His family's safety and his neighbors' safety are connected.",
+      "text": "A Greyfen farmer and a father. His family's safety and his neighbors' safety are connected.",
+      "speaker": "",
+      "context": "journal_people.people.toma"
+    },
+    "journal_people.people.toma.title": {
+      "source": "Farmer Toma",
+      "text": "Farmer Toma",
+      "speaker": "",
+      "context": "journal_people.people.toma"
+    },
+    "journal_people.people.tor.body": {
+      "source": "The village blacksmith. A working hinge or a sound road matters to households as much as a weapon does.",
+      "text": "The village blacksmith. A working hinge or a sound road matters to households as much as a weapon does.",
+      "speaker": "",
+      "context": "journal_people.people.tor"
+    },
+    "journal_people.people.tor.facts.0.body": {
+      "source": "Kael cleared the drain and seated the boards while Tor drove the last peg. The kitchen cart can use the repaired road.",
+      "text": "Kael cleared the drain and seated the boards while Tor drove the last peg. The kitchen cart can use the repaired road.",
+      "speaker": "",
+      "context": "journal_people.people.tor.facts.0"
+    },
+    "journal_people.people.tor.title": {
+      "source": "Blacksmith Tor",
+      "text": "Blacksmith Tor",
+      "speaker": "",
+      "context": "journal_people.people.tor"
+    },
+    "journal_people.people.vale.body": {
+      "source": "The keeper of Vargan's records, encountered through the archive's account.",
+      "text": "The keeper of Vargan's records, encountered through the archive's account.",
+      "speaker": "",
+      "context": "journal_people.people.vale"
+    },
+    "journal_people.people.vale.facts.0.body": {
+      "source": "The command proof has been recovered. It can establish the order without borrowing consent from the person who kept it.",
+      "text": "The command proof has been recovered. It can establish the order without borrowing consent from the person who kept it.",
+      "speaker": "",
+      "context": "journal_people.people.vale.facts.0"
+    },
+    "journal_people.people.vale.title": {
+      "source": "Record Keeper Vale",
+      "text": "Record Keeper Vale",
+      "speaker": "",
+      "context": "journal_people.people.vale"
+    },
+    "journal_people.people.white_hart.body": {
+      "source": "The presence at the end of the reopened road, asking Kael to answer for what he carries.",
+      "text": "The presence at the end of the reopened road, asking Kael to answer for what he carries.",
+      "speaker": "",
+      "context": "journal_people.people.white_hart"
+    },
+    "journal_people.people.white_hart.promises.0.body": {
+      "source": "The chosen resolution has been carried out. Its result does not erase the human records or the living people's responsibilities.",
+      "text": "The chosen resolution has been carried out. Its result does not erase the human records or the living people's responsibilities.",
+      "speaker": "",
+      "context": "journal_people.people.white_hart.promises.0"
+    },
+    "journal_people.people.white_hart.title": {
+      "source": "The White Hart",
+      "text": "The White Hart",
+      "speaker": "",
+      "context": "journal_people.people.white_hart"
+    },
+    "journal_work.work.aftermath_names.stages.0.body": {
+      "source": "Completed: the account returned to Greyfen. Anwen and the people of the village can hear what the chosen resolution requires of the living.",
+      "text": "Completed: the account returned to Greyfen. Anwen and the people of the village can hear what the chosen resolution requires of the living.",
+      "speaker": "",
+      "context": "journal_work.work.aftermath_names.stages.0"
+    },
+    "journal_work.work.aftermath_names.stages.1.body": {
+      "source": "Return to the names with Anwen in Greyfen. The covenant has been resolved; the people affected still need their account brought home.",
+      "text": "Return to the names with Anwen in Greyfen. The covenant has been resolved; the people affected still need their account brought home.",
+      "speaker": "",
+      "context": "journal_work.work.aftermath_names.stages.1"
+    },
+    "journal_work.work.aftermath_names.title": {
+      "source": "Bring the names home",
+      "text": "Bring the names home",
+      "speaker": "",
+      "context": "journal_work.work.aftermath_names"
+    },
+    "journal_work.work.aftermath_road.stages.0.body": {
+      "source": "Completed: Kael met the road beyond the kitchen. The outcome stands, and known places remain open to revisit.",
+      "text": "Completed: Kael met the road beyond the kitchen. The outcome stands, and known places remain open to revisit.",
+      "speaker": "",
+      "context": "journal_work.work.aftermath_road.stages.0"
+    },
+    "journal_work.work.aftermath_road.stages.1.body": {
+      "source": "Walk to the road beyond the common kitchen. Take in what this journey has changed before deciding where to go next.",
+      "text": "Walk to the road beyond the common kitchen. Take in what this journey has changed before deciding where to go next.",
+      "speaker": "",
+      "context": "journal_work.work.aftermath_road.stages.1"
+    },
+    "journal_work.work.aftermath_road.title": {
+      "source": "Walk the road home",
+      "text": "Walk the road home",
+      "speaker": "",
+      "context": "journal_work.work.aftermath_road"
+    },
+    "journal_work.work.aftermath_work.stages.0.body": {
+      "source": "Promised and begun: Kael took a place with Tor and Rook at the workbench. The practical rebuilding belongs to the people who choose to share it.",
+      "text": "Promised and begun: Kael took a place with Tor and Rook at the workbench. The practical rebuilding belongs to the people who choose to share it.",
+      "speaker": "",
+      "context": "journal_work.work.aftermath_work.stages.0"
+    },
+    "journal_work.work.aftermath_work.stages.1.body": {
+      "source": "Join Tor and Rook at the workbench. Hear what tomorrow requires, then take responsibility for Kael's part.",
+      "text": "Join Tor and Rook at the workbench. Hear what tomorrow requires, then take responsibility for Kael's part.",
+      "speaker": "",
+      "context": "journal_work.work.aftermath_work.stages.1"
+    },
+    "journal_work.work.aftermath_work.title": {
+      "source": "The next day's work",
+      "text": "The next day's work",
+      "speaker": "",
+      "context": "journal_work.work.aftermath_work"
+    },
+    "journal_work.work.bell_rope.stages.0.body": {
+      "source": "Completed: the bell rope was released. Its warning can still be remembered without treating every silence as safety.",
+      "text": "Completed: the bell rope was released. Its warning can still be remembered without treating every silence as safety.",
+      "speaker": "",
+      "context": "journal_work.work.bell_rope.stages.0"
+    },
+    "journal_work.work.bell_rope.stages.1.body": {
+      "source": "Known: Kael learned the bell's rhythm. Read the raised clapper as well as the sound, and use the marked rope when the encounter permits it.",
+      "text": "Known: Kael learned the bell's rhythm. Read the raised clapper as well as the sound, and use the marked rope when the encounter permits it.",
+      "speaker": "",
+      "context": "journal_work.work.bell_rope.stages.1"
+    },
+    "journal_work.work.bell_rope.title": {
+      "source": "The bell's pull",
+      "text": "The bell's pull",
+      "speaker": "",
+      "context": "journal_work.work.bell_rope"
+    },
+    "journal_work.work.household_relief.body": {
+      "source": "The household relief task is known. The full delivery result has not been recorded.",
+      "text": "The household relief task is known. The full delivery result has not been recorded.",
+      "speaker": "",
+      "context": "journal_work.work.household_relief"
+    },
+    "journal_work.work.household_relief.stages.0.body": {
+      "source": "Completed: both households received their shares in person. Receiving food did not require an oath or a promise to speak.",
+      "text": "Completed: both households received their shares in person. Receiving food did not require an oath or a promise to speak.",
+      "speaker": "",
+      "context": "journal_work.work.household_relief.stages.0"
+    },
+    "journal_work.work.household_relief.stages.1.body": {
+      "source": "The west household's delivery is recorded. Carry the remaining share to the east doorstep marked by a linen basket.",
+      "text": "The west household's delivery is recorded. Carry the remaining share to the east doorstep marked by a linen basket.",
+      "speaker": "",
+      "context": "journal_work.work.household_relief.stages.1"
+    },
+    "journal_work.work.household_relief.stages.2.body": {
+      "source": "The east household's delivery is recorded. Carry the remaining share to the west doorstep marked by a linen basket.",
+      "text": "The east household's delivery is recorded. Carry the remaining share to the west doorstep marked by a linen basket.",
+      "speaker": "",
+      "context": "journal_work.work.household_relief.stages.2"
+    },
+    "journal_work.work.household_relief.stages.3.body": {
+      "source": "In hand: deliver the two shares to the west and east doorsteps with linen baskets. The help remains available without signatures.",
+      "text": "In hand: deliver the two shares to the west and east doorsteps with linen baskets. The help remains available without signatures.",
+      "speaker": "",
+      "context": "journal_work.work.household_relief.stages.3"
+    },
+    "journal_work.work.household_relief.title": {
+      "source": "Two household shares",
+      "text": "Two household shares",
+      "speaker": "",
+      "context": "journal_work.work.household_relief"
+    },
+    "journal_work.work.kitchen_cart.body": {
+      "source": "Kael has begun helping with the kitchen cart. The delivery's result has not been recorded.",
+      "text": "Kael has begun helping with the kitchen cart. The delivery's result has not been recorded.",
+      "speaker": "",
+      "context": "journal_work.work.kitchen_cart"
+    },
+    "journal_work.work.kitchen_cart.stages.0.body": {
+      "source": "Completed: flour reached the common kitchen, and Rook could move the emptied cart. Three households received supper.",
+      "text": "Completed: flour reached the common kitchen, and Rook could move the emptied cart. Three households received supper.",
+      "speaker": "",
+      "context": "journal_work.work.kitchen_cart.stages.0"
+    },
+    "journal_work.work.kitchen_cart.stages.1.body": {
+      "source": "In hand: carry the flour to the common kitchen table beside the well. Rook is holding the cart while Kael makes room to move it.",
+      "text": "In hand: carry the flour to the common kitchen table beside the well. Rook is holding the cart while Kael makes room to move it.",
+      "speaker": "",
+      "context": "journal_work.work.kitchen_cart.stages.1"
+    },
+    "journal_work.work.kitchen_cart.title": {
+      "source": "Flour for the common kitchen",
+      "text": "Flour for the common kitchen",
+      "speaker": "",
+      "context": "journal_work.work.kitchen_cart"
+    },
+    "journal_work.work.mill_damage.stages.0.body": {
+      "source": "Recorded result: the fire was contained. This does not decide the fate of the accounts or the terms on which milling continues.",
+      "text": "Recorded result: the fire was contained. This does not decide the fate of the accounts or the terms on which milling continues.",
+      "speaker": "",
+      "context": "journal_work.work.mill_damage.stages.0"
+    },
+    "journal_work.work.mill_damage.stages.1.body": {
+      "source": "Recorded result: fire scorched the mill. Repairs will take material and labor; the damage itself does not determine anyone's consent.",
+      "text": "Recorded result: fire scorched the mill. Repairs will take material and labor; the damage itself does not determine anyone's consent.",
+      "speaker": "",
+      "context": "journal_work.work.mill_damage.stages.1"
+    },
+    "journal_work.work.mill_damage.title": {
+      "source": "What the mill encounter left behind",
+      "text": "What the mill encounter left behind",
+      "speaker": "",
+      "context": "journal_work.work.mill_damage"
+    },
+    "journal_work.work.mill_records.stages.0.body": {
+      "source": "Preserved: the wage chest is above the floodline. The workers' shares can be proved regardless of the mill's operational future.",
+      "text": "Preserved: the wage chest is above the floodline. The workers' shares can be proved regardless of the mill's operational future.",
+      "speaker": "",
+      "context": "journal_work.work.mill_records.stages.0"
+    },
+    "journal_work.work.mill_records.title": {
+      "source": "The workers' wage chest",
+      "text": "The workers' wage chest",
+      "speaker": "",
+      "context": "journal_work.work.mill_records"
+    },
+    "journal_work.work.mill_smoke.stages.0.body": {
+      "source": "Recorded consequence: workers breathed too much smoke and need care. Reaching the yard does not make the exposure harmless.",
+      "text": "Recorded consequence: workers breathed too much smoke and need care. Reaching the yard does not make the exposure harmless.",
+      "speaker": "",
+      "context": "journal_work.work.mill_smoke.stages.0"
+    },
+    "journal_work.work.mill_smoke.title": {
+      "source": "Care after the smoke",
+      "text": "Care after the smoke",
+      "speaker": "",
+      "context": "journal_work.work.mill_smoke"
+    },
+    "journal_work.work.mill_workers.body": {
+      "source": "The workers' exit is known. Whether they reached safety has not been recorded.",
+      "text": "The workers' exit is known. Whether they reached safety has not been recorded.",
+      "speaker": "",
+      "context": "journal_work.work.mill_workers"
+    },
+    "journal_work.work.mill_workers.stages.0.body": {
+      "source": "Completed: both workers reached clean air in the south yard. They can bring their wage accounts to Greyfen themselves.",
+      "text": "Completed: both workers reached clean air in the south yard. They can bring their wage accounts to Greyfen themselves.",
+      "speaker": "",
+      "context": "journal_work.work.mill_workers.stages.0"
+    },
+    "journal_work.work.mill_workers.stages.1.body": {
+      "source": "Under way: lead the workers through the cleared channel toward the south yard. Stay within a few paces; they stop when left behind.",
+      "text": "Under way: lead the workers through the cleared channel toward the south yard. Stay within a few paces; they stop when left behind.",
+      "speaker": "",
+      "context": "journal_work.work.mill_workers.stages.1"
+    },
+    "journal_work.work.mill_workers.stages.2.body": {
+      "source": "The sluice has cleared a route. Call the workers into the channel and stay with them until they reach clean air.",
+      "text": "The sluice has cleared a route. Call the workers into the channel and stay with them until they reach clean air.",
+      "speaker": "",
+      "context": "journal_work.work.mill_workers.stages.2"
+    },
+    "journal_work.work.mill_workers.title": {
+      "source": "The mill workers' way out",
+      "text": "The mill workers' way out",
+      "speaker": "",
+      "context": "journal_work.work.mill_workers"
+    },
+    "journal_work.work.road_drain.body": {
+      "source": "The drain and boards need attention. Their repair has not been recorded.",
+      "text": "The drain and boards need attention. Their repair has not been recorded.",
+      "speaker": "",
+      "context": "journal_work.work.road_drain"
+    },
+    "journal_work.work.road_drain.stages.0.body": {
+      "source": "Completed: the drain is clear and the boards are seated. Tor drove the final peg; the kitchen cart has a usable road.",
+      "text": "Completed: the drain is clear and the boards are seated. Tor drove the final peg; the kitchen cart has a usable road.",
+      "speaker": "",
+      "context": "journal_work.work.road_drain.stages.0"
+    },
+    "journal_work.work.road_drain.stages.1.body": {
+      "source": "In hand: take Tor's spade to the blocked drain beside the loose boards. Clear the water before settling the road surface.",
+      "text": "In hand: take Tor's spade to the blocked drain beside the loose boards. Clear the water before settling the road surface.",
+      "speaker": "",
+      "context": "journal_work.work.road_drain.stages.1"
+    },
+    "journal_work.work.road_drain.title": {
+      "source": "A road the kitchen cart can use",
+      "text": "A road the kitchen cart can use",
+      "speaker": "",
+      "context": "journal_work.work.road_drain"
+    },
+    "journal_work.work.root_ground.stages.0.body": {
+      "source": "Completed: two marked roots were redirected, opening the ground again. The landscape changed without making another person's promise for them.",
+      "text": "Completed: two marked roots were redirected, opening the ground again. The landscape changed without making another person's promise for them.",
+      "speaker": "",
+      "context": "journal_work.work.root_ground.stages.0"
+    },
+    "journal_work.work.root_ground.title": {
+      "source": "Ground released from the binding",
+      "text": "Ground released from the binding",
+      "speaker": "",
+      "context": "journal_work.work.root_ground"
+    },
+    "journal_work.work.root_record.stages.0.body": {
+      "source": "Recovered: fragments of the damaged name-board were kept. Several names survive; its complete account was lost in the confrontation.",
+      "text": "Recovered: fragments of the damaged name-board were kept. Several names survive; its complete account was lost in the confrontation.",
+      "speaker": "",
+      "context": "journal_work.work.root_record.stages.0"
+    },
+    "journal_work.work.root_record.stages.1.body": {
+      "source": "Protected: the name-board was lifted into dry cloth before the roots could consume its account.",
+      "text": "Protected: the name-board was lifted into dry cloth before the roots could consume its account.",
+      "speaker": "",
+      "context": "journal_work.work.root_record.stages.1"
+    },
+    "journal_work.work.root_record.stages.2.body": {
+      "source": "The name-board was damaged. Return to the disturbed roots and recover what can still be read. A missing recovery record does not establish that nothing survived.",
+      "text": "The name-board was damaged. Return to the disturbed roots and recover what can still be read. A missing recovery record does not establish that nothing survived.",
+      "speaker": "",
+      "context": "journal_work.work.root_record.stages.2"
+    },
+    "journal_work.work.root_record.title": {
+      "source": "The name-board in the roots",
+      "text": "The name-board in the roots",
+      "speaker": "",
+      "context": "journal_work.work.root_record"
+    },
     "quests.main_ash_at_the_mill.objectives.inspect_millstones.text": {
       "source": "Compare the ash measure with the missing wagons.",
       "text": "Compare the ash measure with the missing wagons.",

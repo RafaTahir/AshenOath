@@ -6,6 +6,7 @@ class_name QuestBeatDirector
 
 signal beat_changed(beat: Dictionary)
 const StoryJournalPresenter = preload("res://scripts/story_journal.gd")
+const RouteCatalog = preload("res://scripts/story_route_catalog.gd")
 
 const BEATS := {
 	"main_road_of_crows": {
@@ -98,6 +99,10 @@ func refresh() -> Dictionary:
 		current_beat["quest_id"] = tracked
 		current_beat["objective_id"] = objective_id
 		current_beat["zone_id"] = zone_id
+		var route: Dictionary = RouteCatalog.for_objective(tracked, objective_id, story_state, quest_manager, zone_id)
+		current_beat.merge(route, true)
+		if route.has("next_action"):
+			current_beat["next"] = str(route["next_action"])
 		var chapter := StoryJournalPresenter.active_chapter(quest_manager)
 		if not chapter.is_empty():
 			current_beat["question"] = str(chapter.get("question", ""))

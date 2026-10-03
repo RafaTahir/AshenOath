@@ -15,6 +15,13 @@ var next_action := ""
 var tracker_text := ""
 var contextual_text := ""
 var compass_text := ""
+var destination_zone := ""
+var destination_name := ""
+var target_ids: Array[String] = []
+var guidance_scope := "exploration"
+var route_hint := ""
+var purpose := ""
+var pinpoint := false
 var save_summary: Dictionary = {}
 
 func to_dictionary() -> Dictionary:
@@ -29,5 +36,12 @@ func to_dictionary() -> Dictionary:
 		"tracker_text": tracker_text,
 		"contextual_text": contextual_text,
 		"compass_text": compass_text,
+		"destination_zone": destination_zone,
+		"destination_name": destination_name,
+		"target_ids": target_ids.duplicate(),
+		"guidance_scope": guidance_scope,
+		"route_hint": route_hint,
+		"purpose": purpose,
+		"pinpoint": pinpoint,
 		"save_summary": save_summary.duplicate(true),
 	}

@@ -36,9 +36,9 @@ Original checkout and its untracked artifacts are retained at D:/Projects/AshenO
 - World staging and aftermath: event-driven story compositions, voluntary witness staging, three peaceful covenant rituals, Ash confrontation, physical village work, encounter counterplay, and three return activities per ending implemented.
 - Player experience: journal, decision previews, epilogues after return scenes, evidence-earned combat opportunities, supplies, emergency medicine, nine-practice progression, difficulty, audio mix, save library, isolated replay, conversation history and accessibility controls implemented.
 - Presentation: character keepsakes and speaking/listening performances, 335 generated exact-text voice clips, seven story motifs and an illustrated chapter atlas included in the second production package.
-- Latest export: source `e04faa67c124`, build `story-20261003T105555Z-e04faa67c124`, packaged commit `f0cdc09`.
-- Latest push/deployment: both authorized GitHub branches updated; Vercel deployment `dpl_2VrkF1PdFeBzJUphz6UQoU8jYzuw` returned `status: ok`, `readyState: READY`, and alias `https://ashenoath.vercel.app`.
-- Active work: `FINE_DETAILS_CYCLE_01_PLAN.md` is being implemented. The continuing goal remains active.
+- Latest export: source `a600e3a0d5d9`, build `story-20261003T112909Z-a600e3a0d5d9`, packaged commit `5cc787f`.
+- Latest push/deployment: both authorized GitHub branches updated; Vercel deployment `dpl_6Xz2GWt1oXjDxkDyxpPoTAofTyeC` returned `status: ok`, `readyState: READY`, and alias `https://ashenoath.vercel.app`.
+- Active work: cycle 01 is published; cycle 02 is being planned around story guidance, People & Promises journal continuity, calm HUD presentation and discovered routes. The continuing goal remains active.
 
 Production deployment: `dpl_9DKbrtv61oZVYfk5pQ6h5mXwkUiX`, `https://ashenoath-6yzh9ysh9-rafaeitahir-5792s-projects.vercel.app`. The initial CLI upload omitted `web` due to an overly broad ignore pattern; that filter was corrected, committed and pushed before the successful 82.5 MB upload. No post-deployment request, browser session, test or gameplay verification was performed.
 
@@ -71,3 +71,9 @@ Published package commit `f0cdc09` to both GitHub branches. Vercel reported `REA
 The written plan `FINE_DETAILS_CYCLE_01_PLAN.md` was created before implementation. Source changes now include bounded menu navigation memory, restored journal/shop focus and scroll, retained save drafts, local save-operation feedback, preserved dialogue History position and voice pause, readable wrapped controls, prioritized notices, structured binding-aware prompts, stable interaction selection, explicit availability and input release barriers. Browser startup has quieter presentation, optional Crow Flight, truthful download/preparation stages, focused recovery actions and foreground input handoff. New-journey metadata is initialized only at the accepted world handoff. Production packaging follows; continuous work remains active.
 
 Cycle 01 production packaging completed from source `a600e3a0d5d9`: build `story-20261003T112909Z-a600e3a0d5d9`, candidate `.release-gate/fine-details-02`. One compiler-reported input boolean was declared explicitly after the initial import. All production packs and the Web export were then generated. Publication is next; no tests or verification were run.
+
+Cycle 01 package commit `5cc787f` was pushed to both authorized branches. Vercel deployment `dpl_6Xz2GWt1oXjDxkDyxpPoTAofTyeC` returned `READY`, at `https://ashenoath-125sso8sn-rafaeitahir-5792s-projects.vercel.app`, aliased to `https://ashenoath.vercel.app`. Uploaded package: 86.0 MB. No post-deployment checks were performed. Planning for cycle 02 began immediately after this publication.
+
+## Fine details cycle 02
+
+`FINE_DETAILS_CYCLE_02_PLAN.md` was written before implementation. Work is active on a structured People & Promises journal, persistent return recap, discovered evidence and unfinished work, steady HUD information bands, quiet resource/notice presentation, explicit objective destinations and discovered-waypost guidance. Root is integrating first-encounter discovery at the actual dialogue page, deferred persistence after reading, shared story context and source-language catalogs. No testing, verification or approval gate has been added.

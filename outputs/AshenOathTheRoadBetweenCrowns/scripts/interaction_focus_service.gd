@@ -99,6 +99,7 @@ func choose(candidates: Array, player: Node3D, camera: Camera3D, validator: Call
 	var tracked_id := str(objective_view.get("quest_id", "")) if not objective_view.is_empty() else (str(quest_manager.get_tracked_quest()) if quest_manager != null and quest_manager.has_method("get_tracked_quest") else "")
 	var tracked_objective := str(objective_view.get("objective_id", "")) if not objective_view.is_empty() else _tracked_objective_id(tracked_id)
 	var grouped_targets := _unfinished_group_members(tracked_id, tracked_objective)
+	var authored_targets: Array = objective_view.get("target_ids", [])
 	for candidate in candidates.duplicate():
 		if not _available(candidate):
 			continue
@@ -130,7 +131,9 @@ func choose(candidates: Array, player: Node3D, camera: Camera3D, validator: Call
 		var priority := 0.0
 		var quest_id := str(candidate.get("quest_id"))
 		var objective_id := str(candidate.get("objective_id"))
-		if tracked_id != "" and quest_id == tracked_id:
+		if str(candidate.get("interaction_id")) in authored_targets:
+			priority += 0.42
+		elif tracked_id != "" and quest_id == tracked_id:
 			if tracked_objective != "" and (objective_id == tracked_objective or grouped_targets.has(objective_id)):
 				priority += 0.42
 		if interaction_type == "dialogue":
@@ -139,9 +142,9 @@ func choose(candidates: Array, player: Node3D, camera: Camera3D, validator: Call
 			priority += 0.12
 		elif interaction_type == "zone":
 			priority += 0.08
-		if tracked_id == "main_road_of_crows" and tracked_objective == "speak_anwen" and str(candidate.get("interaction_id")) == "sister_anwen":
+		if authored_targets.is_empty() and tracked_id == "main_road_of_crows" and tracked_objective == "speak_anwen" and str(candidate.get("interaction_id")) == "sister_anwen":
 			priority += 0.42
-		if tracked_id == "main_teeth_in_rain" and tracked_objective == "speak_mira" and str(candidate.get("interaction_id")) == "mira":
+		if authored_targets.is_empty() and tracked_id == "main_teeth_in_rain" and tracked_objective == "speak_mira" and str(candidate.get("interaction_id")) == "mira":
 			priority += 0.42
 		var score := facing * 2.4 - distance * 0.60 + priority
 		scores[candidate] = score

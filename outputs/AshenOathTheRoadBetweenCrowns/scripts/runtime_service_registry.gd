@@ -95,7 +95,7 @@ func configure(owner: Node) -> void:
 
 	hud.process_mode = Node.PROCESS_MODE_ALWAYS
 	quests.load_quests("res://data/quests.json")
-	quest_presentation.setup(quests, quest_beats)
+	quest_presentation.setup(quests, quest_beats, story_state)
 	quest_beats.setup(quests, story_state)
 	dialogue.load_dialogue("res://data/dialogue.json")
 	dialogue.load_dialogue("res://data/campaign_dialogue.json")
@@ -136,6 +136,7 @@ func configure(owner: Node) -> void:
 	input_router.input_context_changed.connect(Callable(owner, "_on_input_context_changed"))
 	input_router.transient_input_reset.connect(Callable(owner, "_on_transient_input_reset"))
 	story_state.changed.connect(Callable(owner, "_invalidate_interaction_prompt"))
+	story_state.changed.connect(Callable(owner, "_queue_story_guidance_refresh"))
 	input_router.gamepad_profile_changed.connect(func(profile: Dictionary):
 		hud.set_input_device(input_router.active_device)
 		if hud.has_method("set_gamepad_profile"):

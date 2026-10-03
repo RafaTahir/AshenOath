@@ -100,6 +100,7 @@ var paused_by_menu = true
 var pending_ending = ""
 var story_action_in_progress := false
 var story_save_pending := false
+var story_guidance_refresh_pending := false
 var story_recap_pending := false
 var pending_player_restore: Dictionary = {}
 var zone_pack_request_serial := 0
@@ -3798,6 +3799,9 @@ func _on_player_died() -> void:
 	hud.show_death_screen("The road keeps its dead.\n\nLoad Last Checkpoint returns Kael to the last safe contract marker with quest progress preserved.")
 
 func _on_dialogue_closed_audio() -> void:
+	# First encounters are collected as their pages are read. Persist them when
+	# the reading surface closes, keeping disk writes out of voice/page handoff.
+	call_deferred("_persist_story_action")
 	if bool(story_state.get_flag("aftermath_epilogue_pending", false)):
 		story_state.set_flag("aftermath_epilogue_pending", false)
 		call_deferred("_show_completed_epilogue")
@@ -3930,6 +3934,19 @@ func _apply_runtime_settings(current_settings: Dictionary) -> void:
 		visual_director.apply_settings(current_settings)
 		visual_director.sun.shadow_enabled = int(current_settings.get("shadow_quality", 1)) > 0
 		visual_director.sun.directional_shadow_max_distance = 42.0
+
+func _queue_story_guidance_refresh() -> void:
+	compass_dirty = true
+	if story_guidance_refresh_pending:
+		return
+	story_guidance_refresh_pending = true
+	call_deferred("_apply_story_guidance_refresh")
+
+func _apply_story_guidance_refresh() -> void:
+	story_guidance_refresh_pending = false
+	if resource_shutdown_prepared or hud == null or quest_hud_coordinator == null:
+		return
+	_refresh_tracker()
 
 func _refresh_tracker() -> void:
 	# Quest changes can alter both the preferred interaction target and the
@@ -6090,6 +6107,14 @@ func _stage_dialogue_moment(area) -> void:
 	dialogue_runtime_coordinator.stage(area, player, camera_rig, validate_walkable_position)
 
 func _on_dialogue_page_changed(_speaker: String, _speaker_id: String, _page_index: int, _total_pages: int) -> void:
+	var encounter: Dictionary = preload("res://scripts/story_journal.gd").encounter_record(_speaker_id, current_zone_id)
+	if not encounter.is_empty():
+		var encounter_id: String = str(encounter.get("id", ""))
+		if encounter_id != "" and not story_state.has_evidence(encounter_id):
+			# Record only the speaker whose words are currently displayed. Later
+			# participants remain undiscovered until their own page is reached.
+			story_state.record_evidence(encounter_id, encounter.get("entry", {}))
+			story_save_pending = true
 	dialogue_runtime_coordinator.refresh_page(player, camera_rig)
 	if audio != null:
 		audio.set_dialogue_active(true)

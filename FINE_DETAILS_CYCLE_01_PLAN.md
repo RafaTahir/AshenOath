@@ -73,3 +73,4 @@ The scoped code and content changes are implemented, their interfaces are integr
 - Production packaging and publication are next. No tests, verification or review pass has been performed.
 - Production import initially reported an uninferred boolean in `input_router.gd`; an explicit `bool` declaration was committed as `a600e3a`. Import then completed and the full pack/Web export proceeded from that revision.
 - Production package completed: `story-20261003T112909Z-a600e3a0d5d9`, candidate `.release-gate/fine-details-02`. Push and deployment follow.
+- Published as package commit `5cc787f` to GitHub `main` and `codex/story-centered-overhaul`. Vercel deployment `dpl_6Xz2GWt1oXjDxkDyxpPoTAofTyeC` returned `READY`, URL `https://ashenoath-125sso8sn-rafaeitahir-5792s-projects.vercel.app`, alias `https://ashenoath.vercel.app`. No post-deployment checks were performed. This implementation cycle is published; the continuing goal remains active.

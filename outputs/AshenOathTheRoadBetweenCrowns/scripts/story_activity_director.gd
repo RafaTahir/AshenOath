@@ -48,8 +48,9 @@ static func travel(game, action: Dictionary) -> void:
 	if not WAYPOINTS.has(destination) or not bool(game.story_state.get_flag("waypost_" + destination, false)):
 		game.hud.toast("Walk this road once before using its waypost.")
 		return
-	if not _travel_open(game) or _danger_near(game):
-		game.hud.toast("Finish the encounter before taking the road.")
+	var unavailable_reason: String = _travel_unavailable_reason(game)
+	if unavailable_reason != "":
+		game.hud.toast(unavailable_reason)
 		return
 	game.get_tree().paused = false
 	game.audio.set_game_paused(false)
@@ -57,6 +58,65 @@ static func travel(game, action: Dictionary) -> void:
 	game.active_interactable = null
 	game._load_zone_after_runtime_pack(destination, WAYPOINTS[destination][1])
 	game.story_save_pending = true
+
+static func get_started_work(state, zone_id: String) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	if state == null:
+		return result
+	if zone_id == "greyfen":
+		if bool(state.get_flag("cart_sack_carried", false)) and not bool(state.get_flag("cart_helped", false)):
+			result.append({"id":"cart_flour", "title":"Carry the flour to the common kitchen", "action":"Set Rook's flour on the kitchen table beside the well", "target_ids":["cart_kitchen_delivery"], "destination_zone":"greyfen"})
+		if bool(state.get_flag("relief_shares_carried", false)) and not bool(state.get_flag("relief_deliveries_completed", false)):
+			var households: Array[String] = []
+			var targets: Array[String] = []
+			if not bool(state.get_flag("relief_west_delivered", false)):
+				households.append("western")
+				targets.append("relief_house_west")
+			if not bool(state.get_flag("relief_east_delivered", false)):
+				households.append("eastern")
+				targets.append("relief_house_east")
+			if not targets.is_empty():
+				result.append({"id":"household_shares", "title":"Deliver the waiting household shares", "action":"Leave shares at the %s linen baskets" % " and ".join(households), "target_ids":targets, "destination_zone":"greyfen"})
+		if bool(state.get_flag("road_tools_taken", false)) and not bool(state.get_flag("road_repaired", false)):
+			result.append({"id":"road_drain", "title":"Clear the drain with Tor's spade", "action":"Clear the blocked drain beside the loose road boards", "target_ids":["road_drain_work"], "destination_zone":"greyfen"})
+	elif zone_id == "old_mill" and not bool(state.get_flag("mill_workers_rescued", false)):
+		if bool(state.get_flag("mill_escort_started", false)):
+			result.append({"id":"mill_workers", "title":"Stay with the workers to the south yard", "action":"Keep within a few paces so the workers can follow the escape channel", "target_ids":[], "destination_zone":"old_mill"})
+		elif bool(state.get_flag("mill_escape_route_open", false)):
+			result.append({"id":"mill_workers", "title":"Call the workers to the open channel", "action":"Return to the waiting workers and lead them to clean air", "target_ids":["mill_workers"], "destination_zone":"old_mill"})
+	return result
+
+static func get_waypost_model(game) -> Dictionary:
+	var routes: Array[Dictionary] = []
+	if game == null or game.story_state == null:
+		return {"current_zone":"", "routes":routes, "available":false, "reason":"The road is still settling."}
+	var current_zone: String = str(game.current_zone_id)
+	var reason: String = _travel_unavailable_reason(game)
+	var has_return := false
+	for raw_destination in WAYPOINTS:
+		var destination: String = str(raw_destination)
+		if not bool(game.story_state.get_flag("waypost_" + destination, false)):
+			continue
+		var here: bool = destination == current_zone
+		var work: Array[Dictionary] = get_started_work(game.story_state, destination)
+		var available: bool = not here and reason == ""
+		if not here:
+			has_return = true
+		routes.append({"destination":destination, "name":str(WAYPOINTS[destination][0]), "current":here, "available":available, "reason":"You are here" if here else reason, "work_count":work.size(), "status":"Here" if here else "Available" if available else "Remembered"})
+	if reason == "" and not has_return:
+		reason = "No other waypost is marked yet. Read the signs on the roads you visit."
+	return {"current_zone":current_zone, "routes":routes, "available":reason == "" and has_return, "reason":reason}
+
+static func _travel_unavailable_reason(game) -> String:
+	if game.player == null or game.zone_transition_in_progress:
+		return "The road is still settling. Finish arriving before travelling."
+	if str(game.pending_ending) != "":
+		return "Carry out the chosen covenant before leaving the glade."
+	if not _travel_open(game):
+		return "Safe return routes open after the Deep Wood account is settled. Your marked wayposts are kept."
+	if _danger_near(game):
+		return "Finish the nearby encounter before travelling. Your marked roads are kept."
+	return ""
 
 static func _travel_open(game) -> bool:
 	return bool(game.story_state.get_flag("rootbound_colossus_defeated", false)) or str(game.story_state.get_flag("names_policy", "")) != "" or bool(game.story_state.get_flag("final_choice_completed", false))
@@ -128,7 +188,7 @@ func activate(id: String) -> void:
 	match id:
 		"story_waypost":
 			if not _flag("waypost_" + zone):
-				_commit({"waypost_" + zone: true}, "The waypost is marked in your journal. You can return here after the Deep Wood account is settled.")
+				_commit({"waypost_" + zone: true}, "This waypost is remembered. The sign now lists the roads you have marked.")
 			_open_waypost()
 		"greyfen_cart_work":
 			if _flag("cart_helped"):
@@ -223,22 +283,25 @@ func activate(id: String) -> void:
 	refresh()
 
 func _open_waypost() -> void:
-	if not _travel_open(host):
-		host.hud.toast("Rook will mark safe return routes after the Deep Wood account is settled. This waypost is now remembered.")
-		return
-	if _danger_near(host):
-		host.hud.toast("There is danger on this stretch. Finish the encounter before travelling.")
-		return
+	var model: Dictionary = get_waypost_model(host)
 	var actions: Array = []
-	for destination in WAYPOINTS:
-		if destination != zone and _flag("waypost_" + str(destination)):
-			actions.append({"type": "story_travel", "label": "Travel to " + str(WAYPOINTS[destination][0]), "destination": destination, "preview": "Follow a road you have already walked. Your story choices and unfinished local work are kept."})
-	if actions.is_empty():
-		host.hud.toast("No other waypost has been marked yet. Mark the signs at Greyfen and the roads you visit.")
-		return
+	var lines: Array[String] = ["The roads already marked:"]
+	for route in model.get("routes", []):
+		var destination: String = str(route.get("destination", ""))
+		var label: String = str(route.get("name", ""))
+		var work_count: int = int(route.get("work_count", 0))
+		var work_note: String = " | %d unfinished task%s" % [work_count, "" if work_count == 1 else "s"] if work_count > 0 else ""
+		lines.append("%s: %s%s" % [str(route.get("status", "Remembered")), label, work_note])
+		if bool(route.get("available", false)):
+			var preview := "Follow a road you have already walked. Your choices and unfinished work are kept."
+			if work_count > 0:
+				preview += " %d task%s you began wait here." % [work_count, "" if work_count == 1 else "s"]
+			actions.append({"type":"story_travel", "label":"Return to " + label, "destination":destination, "preview":preview})
+	var reason: String = str(model.get("reason", ""))
+	lines.append(reason if reason != "" else "Choose a remembered road. There is no need to retrace every empty mile.")
 	host.get_tree().paused = true
 	host.audio.set_game_paused(true)
-	host.hud.show_dialogue({"name":"The roads already walked", "pages":[{"speaker":"Kael", "text":"I know where this road leads. There is no need to retrace every empty mile."}], "actions":actions})
+	host.hud.show_dialogue({"name":"The roads already walked", "pages":[{"speaker":"The waypost", "speaker_id":"narrator", "text":"\n\n".join(lines)}], "actions":actions})
 
 func _scene(id: String) -> void:
 	var content: Dictionary = host.dialogue.get_dialogue(id)

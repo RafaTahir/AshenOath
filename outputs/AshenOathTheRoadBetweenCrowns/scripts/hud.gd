@@ -126,6 +126,32 @@ var new_game_status_label: Label
 var hud_root: Control
 var tracker_back: Control
 var compass_back: Control
+var tracker_title_label: Label
+var tracker_caption_label: Label
+var tracker_footer_label: Label
+var tracker_route_label: Label
+var tracker_work_label: Label
+var vitals_back: ColorRect
+var vitals_box: VBoxContainer
+var vitals_warning_label: Label
+var supplies_grid: GridContainer
+var supply_labels: Dictionary = {}
+var supply_counts: Dictionary = {}
+var notice_category_label: Label
+var notice_back: ColorRect
+var prompt_back: ColorRect
+var _navigation_model: Dictionary = {}
+var _tracker_source := ""
+var _attention_remaining := 0.0
+var _hint_remaining := 0.0
+var _status_remaining := 0.0
+var _status_kind := "neutral"
+var _status_priority := 0
+var _bar_tweens: Dictionary = {}
+var _bar_name_labels: Array[Label] = []
+var _journal_section_id := "return"
+var _journal_context: Dictionary = {}
+var inventory_notice_label: Label
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -134,11 +160,14 @@ func _ready() -> void:
 	_build_dialogue()
 	_build_inventory()
 	_build_loading_layer()
+	for surface: Control in [menu_layer, dialogue_layer, inventory_layer, loading_layer]:
+		surface.visibility_changed.connect(_on_hud_surface_visibility_changed)
 	_apply_theme()
 	apply_accessibility(_current_settings())
 	if not get_viewport().size_changed.is_connected(_on_viewport_resized):
 		get_viewport().size_changed.connect(_on_viewport_resized)
 	_apply_hud_layout()
+	_on_hud_surface_visibility_changed()
 	_update_process_policy()
 
 func _process(delta: float) -> void:
@@ -150,21 +179,65 @@ func _process(delta: float) -> void:
 		if loading_elapsed >= 0.75:
 			loading_layer.visible = true
 			_update_process_policy()
-	var health_ratio = last_health / max(last_health_max, 1.0)
-	if health_ratio <= 0.28 and not reduced_motion and not flash_reduction:
-		var pulse = 0.86 + 0.14 * sin(Time.get_ticks_msec() * 0.008)
-		health_bar.modulate = Color(1.0, pulse, pulse, 1.0)
-	elif health_bar.modulate != Color.WHITE:
-		health_bar.modulate = Color.WHITE
+	if _attention_remaining > 0.0:
+		_attention_remaining = maxf(0.0, _attention_remaining - delta)
+		if _attention_remaining <= 0.0:
+			_refresh_resource_attention()
+	if _hint_remaining > 0.0:
+		_hint_remaining = maxf(0.0, _hint_remaining - delta)
+		if _hint_remaining <= 0.0:
+			raw_hint = ""
+			hint_label.visible = false
+	if _status_remaining > 0.0:
+		_status_remaining = maxf(0.0, _status_remaining - delta)
+		if _status_remaining <= 0.0:
+			status_label.visible = false
+	_update_process_policy()
 
 func _update_process_policy() -> void:
 	if health_bar == null:
 		return
-	var pulse_active := last_health / maxf(last_health_max, 1.0) <= 0.28 and not reduced_motion and not flash_reduction
 	var loading_delay_active := loading_armed and loading_layer != null and not loading_layer.visible
-	if not pulse_active and health_bar.modulate != Color.WHITE:
-		health_bar.modulate = Color.WHITE
-	set_process(pulse_active or loading_delay_active or notices.has_pending() or not _notice_active.is_empty())
+	set_process(loading_delay_active or notices.has_pending() or not _notice_active.is_empty() or _attention_remaining > 0.0 or _hint_remaining > 0.0 or _status_remaining > 0.0)
+
+func _gameplay_surface_blocked() -> bool:
+	return loading_armed or _dialogue_review_open or (menu_layer != null and menu_layer.visible) or (dialogue_layer != null and dialogue_layer.visible) or (inventory_layer != null and inventory_layer.visible)
+
+func _on_hud_surface_visibility_changed() -> void:
+	if hud_root == null:
+		return
+	var blocked := _gameplay_surface_blocked()
+	hud_root.visible = not blocked
+	if blocked:
+		raw_hint = ""
+		_hint_remaining = 0.0
+		_status_remaining = 0.0
+		hint_label.visible = false
+		status_label.visible = false
+		if hint_tween != null and hint_tween.is_valid():
+			hint_tween.kill()
+		if status_tween != null and status_tween.is_valid():
+			status_tween.kill()
+	else:
+		prompt_label.visible = raw_prompt != ""
+		prompt_back.visible = prompt_label.visible
+	_present_notice()
+	_update_process_policy()
+
+func _draw_resource_attention(seconds: float = 4.0) -> void:
+	_attention_remaining = maxf(_attention_remaining, seconds)
+	_refresh_resource_attention()
+	_update_process_policy()
+
+func _refresh_resource_attention() -> void:
+	if vitals_back == null or vitals_warning_label == null:
+		return
+	var low_health := last_health > 0.0 and last_health / maxf(last_health_max, 1.0) <= 0.28
+	var spent := last_stamina <= 0.0
+	vitals_warning_label.text = "Low health · stamina spent" if low_health and spent else ("Low health" if low_health else ("Stamina spent — let it recover" if spent else ""))
+	var emphasized := _attention_remaining > 0.0 or low_health or spent
+	vitals_back.color = Color(0.018, 0.016, 0.014, 0.94 if high_contrast else (0.76 if emphasized else 0.54))
+	vitals_warning_label.add_theme_color_override("font_color", Color(1.0, 0.88, 0.68) if high_contrast else Color(0.96, 0.74, 0.50))
 
 func show_main_menu() -> void:
 	active_menu = "main"
@@ -472,6 +545,7 @@ func arm_loading(text: String = "Following the road...") -> void:
 	if loading_message != null:
 		loading_message.text = text
 	loading_layer.visible = false
+	_on_hud_surface_visibility_changed()
 	_update_process_policy()
 
 func hide_loading() -> void:
@@ -479,6 +553,7 @@ func hide_loading() -> void:
 	loading_elapsed = 0.0
 	if loading_layer != null:
 		loading_layer.visible = false
+	_on_hud_surface_visibility_changed()
 	_update_process_policy()
 
 func _build_loading_layer() -> void:
@@ -532,9 +607,11 @@ func update_health(current: float, maximum: float) -> void:
 	health_value_label.text = "%d / %d" % [int(round(current)), int(round(maximum))]
 	if current < previous:
 		_flash_bar(health_bar, Color(1.0, 0.32, 0.22))
-		show_status_cue("Blood lost", "hurt")
+		_draw_resource_attention(5.0)
 	elif current > previous:
 		_flash_bar(health_bar, Color(0.78, 0.24, 0.16))
+		_draw_resource_attention(3.0)
+	_refresh_resource_attention()
 	_update_process_policy()
 
 func update_stamina(current: float, maximum: float) -> void:
@@ -546,6 +623,8 @@ func update_stamina(current: float, maximum: float) -> void:
 	stamina_value_label.text = "%d / %d" % [int(round(current)), int(round(maximum))]
 	if current < previous - 5.0:
 		_flash_bar(stamina_bar, Color(1.0, 0.75, 0.22))
+		_draw_resource_attention(3.0)
+	_refresh_resource_attention()
 
 func show_enemy(name: String, current: float, maximum: float) -> void:
 	enemy_label.text = "Target: %s" % name
@@ -556,7 +635,7 @@ func show_enemy(name: String, current: float, maximum: float) -> void:
 	enemy_label.visible = current > 0.0
 	enemy_value_label.visible = current > 0.0
 	if current > 0.0:
-		_flash_bar(enemy_bar, Color(0.95, 0.62, 0.22))
+		_draw_resource_attention(4.0)
 		if enemy_hide_tween != null and enemy_hide_tween.is_running():
 			enemy_hide_tween.kill()
 		enemy_hide_tween = create_tween()
@@ -571,7 +650,7 @@ func hide_enemy() -> void:
 func set_target_lock_status(enemy_name: String, distance: float) -> void:
 	if target_status_label == null:
 		return
-	target_status_label.text = "LOCKED | %s | %.1fm" % [enemy_name, distance]
+	target_status_label.text = "Locked · %s · %d m" % [enemy_name, int(round(distance))]
 	target_status_label.visible = true
 
 func clear_target_lock_status() -> void:
@@ -586,7 +665,9 @@ func set_prompt(text: String) -> void:
 	elif clean.begins_with("E - "):
 		clean = "[E]  " + clean.trim_prefix("E - ")
 	prompt_label.text = clean
-	prompt_label.visible = raw_prompt != "" and not dialogue_layer.visible
+	prompt_label.visible = raw_prompt != "" and not _gameplay_surface_blocked()
+	if prompt_back != null:
+		prompt_back.visible = prompt_label.visible
 
 func set_interaction_prompt(model: Dictionary) -> void:
 	_interaction_prompt_model = model.duplicate(true)
@@ -609,21 +690,57 @@ func set_interaction_prompt(model: Dictionary) -> void:
 	set_prompt("%s%s%s" % ["[" + binding + "] " if binding != "" else "", verb, " " + subject if subject != "" else ""])
 
 func set_tracker(text: String) -> void:
-	tracker_label.text = _format_tracker_text(text)
-	_fit_tracker_height.call_deferred()
+	_tracker_source = text
+	_refresh_story_focus()
+
+func set_navigation_model(model: Dictionary) -> void:
+	if model == _navigation_model:
+		return
+	_navigation_model = model.duplicate(true)
+	_refresh_story_focus()
+
+func _refresh_story_focus() -> void:
+	if tracker_title_label == null:
+		return
+	var formatted := _format_tracker_text(_tracker_source)
+	var lines: PackedStringArray = formatted.split("\n", false)
+	tracker_title_label.text = str(lines[0]) if not lines.is_empty() else "The road ahead"
+	var action := str(_navigation_model.get("action", ""))
+	if action == "":
+		action = str(lines[1]) if lines.size() > 1 else "Consult your journal for the next known lead."
+	tracker_label.text = action
+	tracker_label.tooltip_text = action
+	tracker_caption_label.text = "Next step"
+	tracker_footer_label.text = "%s Journal · people and promises" % _action_label("open_inventory")
+	var route := str(_navigation_model.get("route_hint", ""))
+	var distance := int(_navigation_model.get("distance_m", -1))
+	var scope := str(_navigation_model.get("scope", "exploration"))
+	if distance >= 0 and scope in ["local", "aftermath"]:
+		route = "%d m%s" % [distance, " · " + route if route != "" else " to the next step"]
+	tracker_route_label.text = route
+	var purpose := str(_navigation_model.get("purpose", ""))
+	tracker_route_label.tooltip_text = route + ("\n" + purpose if purpose != "" else "")
+	var work_lines: Array[String] = []
+	var work: Array = _navigation_model.get("nearby_work", [])
+	for index in range(mini(work.size(), 2)):
+		var entry: Dictionary = work[index] if typeof(work[index]) == TYPE_DICTIONARY else {}
+		var title := str(entry.get("title", ""))
+		if title != "":
+			work_lines.append(title)
+	tracker_work_label.text = "Nearby: " + " · ".join(work_lines) if not work_lines.is_empty() else ""
+	var primary := str(_navigation_model.get("primary", ""))
+	if primary != "":
+		compass_label.text = primary
+	tracker_back.visible = action != ""
 
 func _fit_tracker_height() -> void:
-	if not is_instance_valid(tracker_label) or not is_instance_valid(tracker_back):
-		return
-	var text_height := tracker_label.get_line_count() * tracker_label.get_line_height()
-	tracker_label.size.y = maxf(56.0, float(text_height) + 16.0)
-	tracker_back.size.y = tracker_label.size.y + 14.0
-	for accent in tracker_back.get_children():
-		if accent is ColorRect:
-			accent.size.y = tracker_back.size.y
+	# The story card owns a reserved reading region; changing objectives never
+	# moves guidance or neighbouring controls.
+	_apply_hud_layout()
 
 func set_compass(text: String) -> void:
-	compass_label.text = text.replace(" | ", "   •   ")
+	if _navigation_model.is_empty():
+		compass_label.text = text.replace(" | ", "   ·   ")
 
 func toast(text: String, seconds: float = 2.15) -> void:
 	post_notice(text, "info", seconds, "")
@@ -644,7 +761,7 @@ func post_notice(text: String, category: String = "info", duration: float = 3.0,
 
 func _advance_notices(delta: float) -> void:
 	var reading := dialogue_layer != null and (dialogue_layer.visible or _dialogue_review_open)
-	var menu_open := menu_layer != null and menu_layer.visible
+	var menu_open := (menu_layer != null and menu_layer.visible) or (inventory_layer != null and inventory_layer.visible)
 	if menu_open and str(_notice_active.get("category", "")) == "combat":
 		_notice_active.clear()
 	if reading:
@@ -652,6 +769,10 @@ func _advance_notices(delta: float) -> void:
 			_notice_active.clear()
 		if toast_label != null:
 			toast_label.visible = false
+		if notice_back != null:
+			notice_back.visible = false
+		if notice_category_label != null:
+			notice_category_label.visible = false
 		return
 	if toasts_suppressed and not _notice_active.is_empty() and str(_notice_active.get("category", "")) not in ["error", "unavailable"]:
 		return
@@ -670,11 +791,21 @@ func _present_notice() -> void:
 	if toast_label == null:
 		return
 	var text := str(_notice_active.get("text", ""))
-	var menu_open := menu_layer != null and menu_layer.visible
+	var menu_open := (menu_layer != null and menu_layer.visible) or (inventory_layer != null and inventory_layer.visible)
 	var reading := dialogue_layer != null and (dialogue_layer.visible or _dialogue_review_open)
-	toast_label.visible = text != "" and not menu_open and not reading and not toasts_suppressed
+	var may_show := not toasts_suppressed or str(_notice_active.get("category", "")) in ["error", "unavailable"]
+	toast_label.visible = text != "" and not menu_open and not reading and may_show
 	toast_label.text = text
 	toast_label.modulate = Color.WHITE
+	if notice_category_label != null:
+		var category := str(_notice_active.get("category", "info"))
+		notice_category_label.text = str({"story":"Story", "inventory":"Supplies", "save":"Saved", "error":"Unable to complete", "unavailable":"Unavailable", "combat":"In the fight", "info":"On the road"}.get(category, "On the road"))
+		notice_category_label.visible = toast_label.visible
+	if notice_back != null:
+		notice_back.visible = toast_label.visible
+	if inventory_notice_label != null:
+		inventory_notice_label.text = text if inventory_layer.visible and not reading else ""
+		inventory_notice_label.tooltip_text = text
 	if is_instance_valid(_menu_notice):
 		_menu_notice.text = text
 		_menu_notice.visible = text != "" and not reading
@@ -686,51 +817,52 @@ func set_toasts_suppressed(suppressed: bool) -> void:
 	_update_process_policy()
 
 func set_guidance_hint(text: String, seconds: float = 4.5) -> void:
-	raw_hint = text
+	raw_hint = "" if _gameplay_surface_blocked() else text
 	hint_label.text = _format_input_text(text)
-	hint_label.visible = text != ""
+	hint_label.visible = raw_hint != ""
 	hint_label.modulate = Color(1, 1, 1, 1)
 	if hint_tween != null and hint_tween.is_running():
 		hint_tween.kill()
-	if text == "":
-		return
-	hint_tween = create_tween()
-	hint_tween.tween_interval(seconds)
-	hint_tween.tween_property(hint_label, "modulate:a", 0.0, 0.3)
-	hint_tween.tween_callback(func():
-		hint_label.visible = false
-		hint_label.modulate = Color(1, 1, 1, 1)
-	)
+	_hint_remaining = maxf(seconds, 2.2) if raw_hint != "" else 0.0
+	_update_process_policy()
 
 func show_status_cue(text: String, kind: String = "neutral") -> void:
+	if _gameplay_surface_blocked() or text.strip_edges() == "":
+		return
+	var priority := int({"neutral":0, "hurt":1, "item":2, "block":2, "stamina":3, "parry":3, "danger":4, "victory":4}.get(kind, 1))
+	if _status_remaining > 0.7 and priority < _status_priority:
+		return
+	if _status_remaining > 0.0 and status_label.text == text and kind == _status_kind:
+		return
+	_status_kind = kind
+	_status_priority = priority
+	_status_remaining = 1.8 if priority >= 3 else 1.35
 	status_label.text = text
 	status_label.visible = true
 	status_label.modulate = _status_color(kind)
 	if status_tween != null and status_tween.is_running():
 		status_tween.kill()
-	status_tween = create_tween()
-	status_tween.tween_interval(1.0)
-	status_tween.tween_property(status_label, "modulate:a", 0.0, 0.2)
-	status_tween.tween_callback(func():
-		status_label.visible = false
-		status_label.modulate = Color(1, 1, 1, 1)
-	)
+	_draw_resource_attention(3.0)
 
 func update_equipment(potions: int, bombs: int, oil_name: String, arrow_count: int = -1, arrow_type: String = "Standard") -> void:
+	var supplies_changed := potions != last_potions or bombs != last_bombs or arrow_count != last_arrow_count or oil_name != last_oil_name
 	last_potions = potions
 	last_bombs = bombs
 	last_oil_name = oil_name
 	last_arrow_count = arrow_count
 	last_arrow_type = arrow_type
 	var oil_text = oil_name if oil_name != "" else "No oil"
-	var arrow_text := ""
-	if arrow_count >= 0:
-		arrow_text = "   Bow %s x%d" % [arrow_type, arrow_count]
-	# Keep the quick-read compact at 720p; the second line prevents supply text
-	# from pushing beyond the vitals column on narrow gameplay viewports.
-	equipment_label.text = "%s Redroot x%d   %s Ash Bomb x%d\nOil: %s%s" % [
-		_action_label("use_potion"), potions, _action_label("throw_bomb"), bombs, oil_text, arrow_text
-	]
+	equipment_label.text = "Oil: " + oil_text
+	equipment_label.tooltip_text = "Active blade oil: " + oil_text
+	if supply_labels.has("potions"):
+		(supply_labels["potions"] as Label).text = "%s Redroot" % _action_label("use_potion")
+		(supply_labels["bombs"] as Label).text = "%s Ash Bomb" % _action_label("throw_bomb")
+		(supply_labels["arrows"] as Label).text = "Arrows · " + arrow_type
+		(supply_counts["potions"] as Label).text = str(maxi(potions, 0))
+		(supply_counts["bombs"] as Label).text = str(maxi(bombs, 0))
+		(supply_counts["arrows"] as Label).text = str(arrow_count) if arrow_count >= 0 else "—"
+	if supplies_changed:
+		_draw_resource_attention(3.5)
 
 func mark_stamina_exhausted() -> void:
 	_flash_bar(stamina_bar, Color(1.0, 0.32, 0.16))
@@ -832,10 +964,13 @@ func _render_dialogue_page() -> void:
 		_add_dialogue_close()
 	_focus_after_rebuild(dialogue_actions)
 
-func show_inventory(inventory, quests, story_state = null, progression = null) -> void:
+func show_inventory(inventory, quests, story_state = null, progression = null, requested_section: String = "") -> void:
 	_capture_inventory_state()
-	_inventory_screen = "journal"
+	if requested_section != "":
+		_journal_section_id = requested_section
+	_inventory_screen = "journal:" + _journal_section_id
 	_inventory_generation += 1
+	_journal_context = {"inventory":inventory, "quests":quests, "state":story_state, "progression":progression}
 	_set_ui_pointer("journal")
 	inventory_layer.visible = true
 	_show_journal_art(quests, story_state)
@@ -843,7 +978,7 @@ func show_inventory(inventory, quests, story_state = null, progression = null) -
 	if inventory.active_oil != "":
 		oil_name = inventory.get_item_name(inventory.active_oil)
 	var summary: Dictionary = inventory.get_preparation_summary()
-	var text = StoryJournalPresenter.build_from_state(quests, story_state) + "\n\nPREPARATION\nCoin: %d\nBlade Oil: %s\nPotions: %d  Bombs: %d  Traps: %d\n\nPACK\n" % [
+	var text = "Coin: %d\nBlade Oil: %s\nPotions: %d  Bombs: %d  Traps: %d\n\nPACK\n" % [
 		inventory.coin, oil_name, summary.potions, summary.bombs, summary.traps
 	]
 	for id in inventory.ordered_item_ids():
@@ -873,29 +1008,82 @@ func show_inventory(inventory, quests, story_state = null, progression = null) -
 			", ".join(parts),
 			" [READY]" if bool(status.craftable) else ""
 		]
-	text += "\n\n%s" % quests.get_journal_text()
 	text += "\n\nBESTIARY\n"
 	text += "Ghoulkin — Fast cursed remains. Parry the lunge; Moon Oil bites deep.\n"
 	if quests.is_completed("main_teeth_in_rain") or quests.is_active("main_teeth_in_rain"):
 		text += "Bog Wretch — Rot-bound memory given flesh. Ash Bombs break its approach.\n"
 	if quests.is_completed("main_blood_under_stone") or quests.is_active("main_blood_under_stone"):
 		text += "Gravebound Knight — A disciplined witness. Read the windup; do not trade blows.\n"
-	if story_state != null:
-		text += _physical_story_journal(story_state)
-		text += "\nCONSEQUENCES\n"
-		var trust := int(story_state.values.get("anwen_trust", 0))
-		var fear := int(story_state.values.get("greyfen_fear", 0))
-		var debt := int(story_state.values.get("hart_debt", 0))
-		text += "Anwen %s.\n" % ("trusts Kael with what the shrine concealed" if trust > 0 else ("guards her words around Kael" if trust < 0 else "has not decided what Kael will do with the truth"))
-		text += "Greyfen %s.\n" % ("is close to panic" if fear >= 4 else ("whispers about the reopened road" if fear > 0 else "still believes its old silence will hold"))
-		text += "The White Hart %s.\n" % ("is owed a reckoning" if debt > 1 else ("has felt Kael disturb the covenant" if debt != 0 else "has not yet named its price"))
 	if progression != null:
 		text += "\n\nPROGRESSION\n%s" % progression.get_summary_text()
-	inventory_text.text = text
+	var zone_id := str(get_parent().get("current_zone_id")) if get_parent() != null else ""
+	var sections: Array[Dictionary] = StoryJournalPresenter.sections(quests, story_state, zone_id)
+	for section: Dictionary in sections:
+		if str(section.get("id", "")) == "preparation":
+			var entries: Array = section.get("entries", [])
+			entries.append({"id":"kit_and_skills", "title":"Kit and skills", "body":text})
+			section["entries"] = entries
+	sections.append({"id":"quest_record", "title":"Quest Record", "body":str(quests.get_journal_text()), "entries":[]})
+	var current_section: Dictionary = {}
+	for section: Dictionary in sections:
+		if str(section.get("id", "")) == _journal_section_id:
+			current_section = section
+	if current_section.is_empty() and not sections.is_empty():
+		current_section = sections[0]
+		_journal_section_id = str(current_section.get("id", "return"))
+		_inventory_screen = "journal:" + _journal_section_id
+	var reading := str(current_section.get("title", "Journal")).to_upper() + "\n\n" + str(current_section.get("body", ""))
+	var paragraph_by_entry: Dictionary = {}
+	var section_entries: Array = current_section.get("entries", [])
+	for raw_entry: Variant in section_entries:
+		if typeof(raw_entry) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = raw_entry
+		reading += "\n\n"
+		paragraph_by_entry[str(entry.get("id", ""))] = reading.count("\n")
+		reading += str(entry.get("title", "")) + "\n" + str(entry.get("body", ""))
+	inventory_text.text = reading
 	for child in craft_buttons.get_children():
 		craft_buttons.remove_child(child)
 		child.queue_free()
-	for id in inventory.ordered_item_ids():
+	var contents_label := Label.new()
+	contents_label.text = "JOURNAL"
+	contents_label.add_theme_font_size_override("font_size", 13)
+	craft_buttons.add_child(contents_label)
+	for section: Dictionary in sections:
+		var section_id := str(section.get("id", ""))
+		var section_button := Button.new()
+		section_button.text = str(section.get("title", ""))
+		section_button.toggle_mode = true
+		section_button.button_pressed = section_id == _journal_section_id
+		section_button.set_meta("navigation_key", "section:" + section_id)
+		_style_button(section_button)
+		section_button.pressed.connect(func(id_value = section_id, selected_button = section_button):
+			selected_button.button_pressed = true
+			_open_journal_section(str(id_value))
+		)
+		craft_buttons.add_child(section_button)
+	if not section_entries.is_empty():
+		var entry_heading := Label.new()
+		entry_heading.text = "IN THIS SECTION"
+		entry_heading.add_theme_font_size_override("font_size", 12)
+		craft_buttons.add_child(entry_heading)
+	for raw_entry: Variant in section_entries:
+		if typeof(raw_entry) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = raw_entry
+		var entry_id := str(entry.get("id", ""))
+		var entry_button := Button.new()
+		entry_button.text = str(entry.get("title", "Read entry"))
+		entry_button.set_meta("navigation_key", "entry:" + entry_id)
+		_style_button(entry_button)
+		entry_button.pressed.connect(func(paragraph = int(paragraph_by_entry.get(entry_id, 0))):
+			inventory_text.scroll_to_paragraph(int(paragraph))
+			inventory_text.grab_focus()
+		)
+		craft_buttons.add_child(entry_button)
+	var item_ids: Array = inventory.ordered_item_ids() if _journal_section_id == "preparation" else []
+	for id in item_ids:
 		var button = Button.new()
 		button.set_meta("navigation_key", "craft:" + str(id))
 		var recipe: Dictionary = inventory.recipe_status(id)
@@ -907,7 +1095,7 @@ func show_inventory(inventory, quests, story_state = null, progression = null) -
 		_style_button(button)
 		button.pressed.connect(func(item_id = id): craft_requested.emit(item_id))
 		craft_buttons.add_child(button)
-	for id in inventory.ordered_item_ids():
+	for id in item_ids:
 		if int(inventory.items[id]) <= 0:
 			continue
 		var use_button = Button.new()
@@ -917,7 +1105,7 @@ func show_inventory(inventory, quests, story_state = null, progression = null) -
 		_style_button(use_button)
 		use_button.pressed.connect(func(item_id = id): item_use_requested.emit(item_id))
 		craft_buttons.add_child(use_button)
-	if progression != null:
+	if progression != null and _journal_section_id == "preparation":
 		for id in progression.ordered_upgrade_ids():
 			if not progression.can_unlock(id):
 				continue
@@ -938,6 +1126,11 @@ func show_inventory(inventory, quests, story_state = null, progression = null) -
 	)
 	craft_buttons.add_child(close)
 	call_deferred("_restore_inventory_state", _inventory_screen, _inventory_generation)
+
+func _open_journal_section(section_id: String) -> void:
+	if _journal_context.is_empty() or section_id == _journal_section_id:
+		return
+	show_inventory(_journal_context.get("inventory"), _journal_context.get("quests"), _journal_context.get("state"), _journal_context.get("progression"), section_id)
 
 func show_vendor(vendor_id: String, vendor_service, inventory, quests = null, story_state = null) -> void:
 	_capture_inventory_state()
@@ -1050,21 +1243,24 @@ func _build_hud() -> void:
 	hud_root = Control.new()
 	var root := hud_root
 	root.set_anchors_preset(Control.PRESET_FULL_RECT)
+	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(root)
 	var shade = ColorRect.new()
 	shade.set_anchors_preset(Control.PRESET_FULL_RECT)
 	shade.color = Color(0.02, 0.018, 0.015, 0.08)
 	root.add_child(shade)
 	var bars_back = ColorRect.new()
+	vitals_back = bars_back
 	bars_back.name = "VitalsBackdrop"
 	bars_back.position = Vector2(16, 16)
-	bars_back.size = Vector2(230, 82)
+	bars_back.size = Vector2(288, 170)
 	bars_back.color = Color(0.018, 0.016, 0.014, 0.62)
 	root.add_child(bars_back)
-	_add_hud_accent(bars_back, Vector2.ZERO, Vector2(3, 82))
+	_add_hud_accent(bars_back, Vector2.ZERO, Vector2(3, 170))
 	var bars = VBoxContainer.new()
+	vitals_box = bars
 	bars.position = Vector2(23, 20)
-	bars.custom_minimum_size = Vector2(214, 72)
+	bars.custom_minimum_size = Vector2(272, 150)
 	bars.add_theme_constant_override("separation", 2)
 	root.add_child(bars)
 	health_bar = ProgressBar.new()
@@ -1079,12 +1275,35 @@ func _build_hud() -> void:
 	stamina_bar.show_percentage = false
 	stamina_value_label = Label.new()
 	bars.add_child(_labeled_bar("Stamina", stamina_bar, stamina_value_label))
+	vitals_warning_label = Label.new()
+	vitals_warning_label.name = "ResourceCondition"
+	vitals_warning_label.custom_minimum_size = Vector2(272, 20)
+	vitals_warning_label.add_theme_font_size_override("font_size", 12)
+	bars.add_child(vitals_warning_label)
+	supplies_grid = GridContainer.new()
+	supplies_grid.columns = 2
+	supplies_grid.add_theme_constant_override("h_separation", 10)
+	supplies_grid.add_theme_constant_override("v_separation", 1)
+	bars.add_child(supplies_grid)
+	for id: String in ["potions", "bombs", "arrows"]:
+		var item_label := Label.new()
+		item_label.custom_minimum_size = Vector2(214, 18)
+		item_label.clip_text = true
+		item_label.add_theme_font_size_override("font_size", 12)
+		supplies_grid.add_child(item_label)
+		var count_label := Label.new()
+		count_label.custom_minimum_size = Vector2(38, 18)
+		count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		count_label.add_theme_font_size_override("font_size", 12)
+		supplies_grid.add_child(count_label)
+		supply_labels[id] = item_label
+		supply_counts[id] = count_label
 	equipment_label = Label.new()
 	equipment_label.name = "EquipmentQuickRead"
-	equipment_label.text = "[R] Redroot x0   [F] Ash Bomb x0\nOil: No oil"
+	equipment_label.text = "Oil: No oil"
 	equipment_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	equipment_label.clip_text = true
-	equipment_label.custom_minimum_size = Vector2(214, 30)
+	equipment_label.custom_minimum_size = Vector2(272, 20)
 	equipment_label.add_theme_font_size_override("font_size", 12)
 	bars.add_child(equipment_label)
 	enemy_label = Label.new()
@@ -1113,27 +1332,46 @@ func _build_hud() -> void:
 	target_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	target_status_label.visible = false
 	root.add_child(target_status_label)
+	prompt_back = ColorRect.new()
+	prompt_back.name = "InteractionPromptBackdrop"
+	prompt_back.color = Color(0.018, 0.016, 0.014, 0.72)
+	prompt_back.visible = false
+	root.add_child(prompt_back)
 	prompt_label = Label.new()
 	prompt_label.name = "InteractionPrompt"
 	prompt_label.position = Vector2(390, 660)
 	prompt_label.size = Vector2(500, 30)
 	prompt_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	prompt_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	prompt_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	prompt_label.max_lines_visible = 2
+	prompt_label.clip_text = true
 	prompt_label.visible = false
 	root.add_child(prompt_label)
 	tracker_back = ColorRect.new()
 	tracker_back.name = "QuestTrackerBackdrop"
 	tracker_back.position = Vector2(980, 14)
-	tracker_back.size = Vector2(284, 70)
+	tracker_back.size = Vector2(304, 224)
 	tracker_back.color = Color(0.018, 0.016, 0.014, 0.62)
 	root.add_child(tracker_back)
-	_add_hud_accent(tracker_back, Vector2(281, 0), Vector2(3, 70))
+	_add_hud_accent(tracker_back, Vector2(301, 0), Vector2(3, 224))
+	tracker_title_label = _hud_label(root, "StoryChapter", 12)
+	tracker_title_label.max_lines_visible = 1
+	tracker_caption_label = _hud_label(root, "NextStepCaption", 12)
+	tracker_caption_label.text = "Next step"
 	tracker_label = Label.new()
 	tracker_label.name = "QuestTrackerObjective"
 	tracker_label.position = Vector2(990, 20)
 	tracker_label.size = Vector2(258, 56)
 	tracker_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	tracker_label.clip_text = true
+	tracker_label.max_lines_visible = 3
 	root.add_child(tracker_label)
+	tracker_route_label = _hud_label(root, "StoryRouteHint", 12)
+	tracker_route_label.max_lines_visible = 2
+	tracker_work_label = _hud_label(root, "NearbyStoryWork", 12)
+	tracker_work_label.max_lines_visible = 2
+	tracker_footer_label = _hud_label(root, "JournalBinding", 12)
 	compass_back = ColorRect.new()
 	compass_back.name = "CompassBackdrop"
 	compass_back.position = Vector2(430, 14)
@@ -1147,10 +1385,19 @@ func _build_hud() -> void:
 	compass_label.size = Vector2(420, 24)
 	compass_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	root.add_child(compass_label)
+	notice_back = ColorRect.new()
+	notice_back.name = "NoticeBackdrop"
+	notice_back.color = Color(0.018, 0.016, 0.014, 0.74)
+	notice_back.visible = false
+	root.add_child(notice_back)
+	notice_category_label = _hud_label(root, "NoticeCategory", 12)
+	notice_category_label.visible = false
 	toast_label = Label.new()
 	toast_label.position = Vector2(22, 626)
 	toast_label.size = Vector2(420, 84)
 	toast_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	toast_label.clip_text = true
+	toast_label.max_lines_visible = 3
 	toast_label.visible = false
 	root.add_child(toast_label)
 	hint_label = Label.new()
@@ -1158,6 +1405,9 @@ func _build_hud() -> void:
 	hint_label.position = Vector2(430, 82)
 	hint_label.size = Vector2(420, 30)
 	hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	hint_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	hint_label.max_lines_visible = 2
+	hint_label.clip_text = true
 	hint_label.visible = false
 	root.add_child(hint_label)
 	status_label = Label.new()
@@ -1167,6 +1417,21 @@ func _build_hud() -> void:
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	status_label.visible = false
 	root.add_child(status_label)
+	for node: Node in root.get_children():
+		if node is Control:
+			(node as Control).mouse_filter = Control.MOUSE_FILTER_IGNORE
+	update_equipment(0, 0, "", -1)
+	_refresh_story_focus()
+
+func _hud_label(parent: Node, node_name: String, font_size: int) -> Label:
+	var label := Label.new()
+	label.name = node_name
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.clip_text = true
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	label.add_theme_font_size_override("font_size", font_size)
+	parent.add_child(label)
+	return label
 
 func _on_viewport_resized() -> void:
 	call_deferred("_apply_hud_layout")
@@ -1178,31 +1443,67 @@ func _apply_hud_layout() -> void:
 	if viewport_size.x < 320.0 or viewport_size.y < 240.0:
 		return
 	var center_x := viewport_size.x * 0.5
+	var compact := viewport_size.x < 1050.0
+	var card_x := maxf(viewport_size.x - 320.0, 12.0)
 	if tracker_back != null:
-		tracker_back.position = Vector2(maxf(viewport_size.x - 300.0, 12.0), 14.0)
+		tracker_back.position = Vector2(card_x, 14.0)
 	if tracker_label != null:
-		tracker_label.position = Vector2(maxf(viewport_size.x - 290.0, 24.0), 20.0)
+		tracker_title_label.position = Vector2(card_x + 12.0, 24.0)
+		tracker_title_label.size = Vector2(278, 20)
+		tracker_caption_label.position = Vector2(card_x + 12.0, 50.0)
+		tracker_caption_label.size = Vector2(278, 18)
+		tracker_label.position = Vector2(card_x + 12.0, 72.0)
+		tracker_label.size = Vector2(278, 62)
+		tracker_route_label.position = Vector2(card_x + 12.0, 139.0)
+		tracker_route_label.size = Vector2(278, 34)
+		tracker_work_label.position = Vector2(card_x + 12.0, 177.0)
+		tracker_work_label.size = Vector2(278, 34)
+		tracker_footer_label.position = Vector2(card_x + 12.0, 213.0)
+		tracker_footer_label.size = Vector2(278, 20)
+	var location_y := 244.0 if compact else 16.0
+	var target_y := location_y + 30.0
 	if compass_back != null:
-		compass_back.position = Vector2(center_x - 210.0, 14.0)
+		compass_back.position = Vector2(center_x - 182.0, location_y - 2.0)
+		compass_back.size = Vector2(364, 27)
 	if compass_label != null:
-		compass_label.position = Vector2(center_x - 210.0, 15.0)
+		compass_label.position = Vector2(center_x - 174.0, location_y)
+		compass_label.size = Vector2(348, 22)
 	if enemy_label != null:
-		enemy_label.position = Vector2(center_x - 166.0, 44.0)
+		enemy_label.position = Vector2(center_x - 172.0, target_y)
+		enemy_label.size = Vector2(344, 22)
+		enemy_label.clip_text = true
 	if enemy_bar != null:
-		enemy_bar.position = Vector2(center_x - 140.0, 75.0)
+		enemy_bar.position = Vector2(center_x - 150.0, target_y + 27.0)
+		enemy_bar.size = Vector2(226, 16)
 	if enemy_value_label != null:
-		enemy_value_label.position = Vector2(center_x + 172.0, 71.0)
+		enemy_value_label.position = Vector2(center_x + 84.0, target_y + 24.0)
+		enemy_value_label.size = Vector2(72, 22)
+		enemy_value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	if target_status_label != null:
-		target_status_label.position = Vector2(center_x - 166.0, 98.0)
+		target_status_label.position = Vector2(center_x - 172.0, target_y + 51.0)
+		target_status_label.size = Vector2(344, 22)
+		target_status_label.clip_text = true
 	if prompt_label != null:
-		prompt_label.position = Vector2(center_x - 250.0, maxf(viewport_size.y - 60.0, 170.0))
+		var prompt_width := minf(520.0, viewport_size.x - 56.0)
+		prompt_label.position = Vector2(center_x - prompt_width * 0.5, maxf(viewport_size.y - 76.0, 170.0))
+		prompt_label.size = Vector2(prompt_width, 48)
+		prompt_back.position = prompt_label.position - Vector2(10, 4)
+		prompt_back.size = prompt_label.size + Vector2(20, 8)
 	if hint_label != null:
-		hint_label.position = Vector2(center_x - 210.0, 82.0)
+		hint_label.position = Vector2(center_x - 186.0, target_y + 80.0)
+		hint_label.size = Vector2(372, 48)
 	if status_label != null:
-		status_label.position = Vector2(center_x - 170.0, maxf(viewport_size.y - 118.0, 220.0))
+		status_label.position = Vector2(center_x - 190.0, maxf(viewport_size.y - 122.0, 220.0))
+		status_label.size = Vector2(380, 28)
 	if toast_label != null:
-		toast_label.position = Vector2(22.0, maxf(viewport_size.y - 152.0, 170.0))
-		toast_label.size.x = minf(420.0, viewport_size.x - 44.0)
+		var notice_y := maxf(viewport_size.y - 168.0, 190.0)
+		var notice_width := minf(328.0, viewport_size.x - 44.0)
+		notice_back.position = Vector2(16, notice_y)
+		notice_back.size = Vector2(notice_width + 12.0, 128)
+		notice_category_label.position = Vector2(26, notice_y + 10.0)
+		notice_category_label.size = Vector2(notice_width - 8.0, 20)
+		toast_label.position = Vector2(26.0, notice_y + 37.0)
+		toast_label.size = Vector2(notice_width - 8.0, 80)
 	if dialogue_layer != null:
 		var width := minf(940.0, maxf(600.0, viewport_size.x - 80.0))
 		var reading_height := clampf(105.0 * story_text_scale, 90.0, maxf(120.0, viewport_size.y * 0.28))
@@ -1290,16 +1591,24 @@ func _build_inventory() -> void:
 	journal_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	columns.add_child(journal_column)
 	journal_art = TextureRect.new()
-	journal_art.custom_minimum_size = Vector2(560, 112)
+	journal_art.custom_minimum_size = Vector2(560, 84)
 	journal_art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	journal_art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	journal_art.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	journal_art.visible = false
 	journal_column.add_child(journal_art)
+	inventory_notice_label = Label.new()
+	inventory_notice_label.name = "JournalOperationStatus"
+	inventory_notice_label.custom_minimum_size = Vector2(560, 36)
+	inventory_notice_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	inventory_notice_label.max_lines_visible = 2
+	inventory_notice_label.clip_text = true
+	inventory_notice_label.add_theme_font_size_override("font_size", 12)
+	journal_column.add_child(inventory_notice_label)
 	inventory_text = RichTextLabel.new()
 	inventory_text.set_meta("navigation_key", "journal_text")
 	inventory_text.set_meta("navigation_scroll", "journal_text")
-	inventory_text.custom_minimum_size = Vector2(560, 396)
+	inventory_text.custom_minimum_size = Vector2(560, 388)
 	inventory_text.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	inventory_text.scroll_active = true
 	inventory_text.focus_mode = Control.FOCUS_ALL
@@ -1324,13 +1633,15 @@ func _labeled_bar(label_text: String, bar: ProgressBar, value_label: Label) -> H
 	var row = HBoxContainer.new()
 	var label = Label.new()
 	label.text = label_text
-	label.custom_minimum_size = Vector2(48, 18)
+	label.custom_minimum_size = Vector2(58, 20)
+	label.add_theme_font_size_override("font_size", 12)
+	_bar_name_labels.append(label)
 	row.add_child(label)
-	bar.custom_minimum_size = Vector2(112, 16)
+	bar.custom_minimum_size = Vector2(122, 16)
 	row.add_child(bar)
 	value_label.text = "%d / %d" % [int(bar.value), int(bar.max_value)]
 	value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	value_label.custom_minimum_size = Vector2(54, 20)
+	value_label.custom_minimum_size = Vector2(72, 20)
 	value_label.add_theme_font_size_override("font_size", 12)
 	row.add_child(value_label)
 	return row
@@ -1584,19 +1895,47 @@ func apply_accessibility(current: Dictionary) -> void:
 	if inventory_text != null:
 		inventory_text.add_theme_font_size_override("normal_font_size", int(round(17.0 * story_text_scale)))
 		if journal_art != null:
-			journal_art.custom_minimum_size.y = 84.0 if story_text_scale > 1.2 else 112.0
-			inventory_text.custom_minimum_size.y = 520.0 - journal_art.custom_minimum_size.y - 12.0
+			journal_art.custom_minimum_size.y = 64.0 if story_text_scale > 1.2 else 84.0
+			inventory_text.custom_minimum_size.y = 520.0 - journal_art.custom_minimum_size.y - 48.0
 	if dialogue_text != null:
 		dialogue_title.visible = subtitle_speaker_names
 		_style_panel(dialogue_layer, Color(0.045, 0.04, 0.035, clampf(float(current.get("subtitle_background_opacity", 0.92)), 0.25, 1.0)), Color(0.44, 0.32, 0.18, 0.92))
 		dialogue_text.add_theme_font_size_override("normal_font_size", int(round(24.0 * subtitle_scale)))
 		dialogue_text.add_theme_font_size_override("bold_font_size", int(round(26.0 * subtitle_scale)))
 		dialogue_text.custom_minimum_size.y = 78.0 if subtitle_scale <= 1.0 else 116.0
-	for label in [tracker_label, compass_label, prompt_label, hint_label, toast_label]:
+	for label: Label in _hud_text_labels():
 		if label == null:
 			continue
 		label.add_theme_constant_override("outline_size", 5 if high_contrast else (4 if label == compass_label else 2))
 		label.add_theme_color_override("font_outline_color", Color.BLACK if high_contrast else Color(0.01, 0.01, 0.01, 0.78))
+		label.add_theme_color_override("font_color", Color(0.98, 0.96, 0.88) if high_contrast else Color(0.86, 0.83, 0.74))
+	if reduced_motion or flash_reduction:
+		for raw: Variant in _bar_tweens.values():
+			var tween := raw as Tween
+			if tween != null and tween.is_valid():
+				tween.kill()
+		_bar_tweens.clear()
+		for bar: ProgressBar in [health_bar, stamina_bar, enemy_bar]:
+			bar.modulate = Color.WHITE
+		for tween: Tween in [hint_tween, status_tween, toast_tween]:
+			if tween != null and tween.is_valid():
+				tween.kill()
+		hint_label.modulate = Color.WHITE
+		status_label.modulate = _status_color(_status_kind)
+	if tracker_back != null:
+		(tracker_back as ColorRect).color = Color(0.018, 0.016, 0.014, 0.94 if high_contrast else 0.70)
+	if prompt_back != null:
+		prompt_back.color = Color(0.018, 0.016, 0.014, 0.95 if high_contrast else 0.72)
+	if notice_back != null:
+		notice_back.color = Color(0.018, 0.016, 0.014, 0.96 if high_contrast else 0.78)
+	if compass_back != null:
+		compass_back.visible = high_contrast
+		(compass_back as ColorRect).color = Color(0.018, 0.016, 0.014, 0.95)
+	for bar: ProgressBar in [health_bar, stamina_bar, enemy_bar]:
+		var fill := bar.get_theme_stylebox("fill") as StyleBoxFlat
+		if fill != null:
+			fill.bg_color = (Color(0.84, 0.40, 0.30) if high_contrast else Color(0.52, 0.11, 0.08)) if bar != stamina_bar else (Color(0.91, 0.77, 0.42) if high_contrast else Color(0.72, 0.54, 0.18))
+	_refresh_resource_attention()
 	_update_process_policy()
 	call_deferred("_apply_hud_layout")
 
@@ -1610,6 +1949,7 @@ func set_input_device(device: String) -> void:
 	if raw_hint != "":
 		hint_label.text = _format_input_text(raw_hint)
 	update_equipment(last_potions, last_bombs, last_oil_name, last_arrow_count, last_arrow_type)
+	_refresh_story_focus()
 
 func _action_label(action: String) -> String:
 	if input_source != null and input_source.has_method("action_label"):
@@ -1903,7 +2243,7 @@ func _apply_theme() -> void:
 		fill.bg_color = Color(0.52, 0.11, 0.08) if bar == health_bar or bar == enemy_bar else Color(0.72, 0.54, 0.18)
 		bar.add_theme_stylebox_override("background", bg)
 		bar.add_theme_stylebox_override("fill", fill)
-	for label in [enemy_label, enemy_value_label, target_status_label, prompt_label, tracker_label, compass_label, toast_label, hint_label, status_label, equipment_label, health_value_label, stamina_value_label]:
+	for label: Label in _hud_text_labels():
 		label.add_theme_color_override("font_color", Color(0.86, 0.81, 0.69))
 		label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.85))
 		label.add_theme_constant_override("shadow_offset_x", 2)
@@ -1917,6 +2257,15 @@ func _apply_theme() -> void:
 	status_label.add_theme_font_size_override("font_size", 16)
 	_style_panel(dialogue_layer, Color(0.045, 0.04, 0.035, 0.96), Color(0.44, 0.32, 0.18, 0.92))
 	_style_panel(inventory_layer, Color(0.045, 0.04, 0.035, 0.97), Color(0.44, 0.32, 0.18, 0.92))
+
+func _hud_text_labels() -> Array[Label]:
+	var labels: Array[Label] = [enemy_label, enemy_value_label, target_status_label, prompt_label, tracker_label, compass_label, toast_label, hint_label, status_label, equipment_label, health_value_label, stamina_value_label, tracker_title_label, tracker_caption_label, tracker_route_label, tracker_work_label, tracker_footer_label, vitals_warning_label, notice_category_label, inventory_notice_label]
+	labels.append_array(_bar_name_labels)
+	for raw: Variant in supply_labels.values():
+		labels.append(raw as Label)
+	for raw: Variant in supply_counts.values():
+		labels.append(raw as Label)
+	return labels
 
 func _format_tracker_text(text: String) -> String:
 	if text == "":
@@ -1942,11 +2291,17 @@ func _objective_with_verb(objective: String) -> String:
 func _flash_bar(bar: ProgressBar, color: Color) -> void:
 	if flash_reduction or reduced_motion:
 		return
+	var previous := _bar_tweens.get(bar) as Tween
+	if previous != null and previous.is_valid():
+		previous.kill()
 	bar.modulate = color
 	var tween = create_tween()
+	_bar_tweens[bar] = tween
 	tween.tween_property(bar, "modulate", Color.WHITE, 0.18)
 
 func _status_color(kind: String) -> Color:
+	if high_contrast:
+		return Color(1.0, 0.96, 0.84)
 	if kind == "parry":
 		return Color(0.66, 0.88, 1.0, 1.0)
 	if kind == "block" or kind == "stamina":
@@ -2054,37 +2409,6 @@ func get_current_dialogue_page() -> Dictionary:
 		return {}
 	var page: Variant = dialogue_pages[dialogue_page_index]
 	return page.duplicate(true) if typeof(page) == TYPE_DICTIONARY else {"speaker": dialogue_title.text, "text": str(page)}
-
-func _physical_story_journal(state) -> String:
-	var lines: Array[String] = []
-	var facts := {
-		"mill_workers_rescued": "Mill workers reached safety with Kael's escort.",
-		"mill_records_saved": "The mill records were carried clear of the fire.",
-		"root_testimony_protected": "The roots' testimony was protected during the confrontation.",
-		"root_testimony_recovered": "Kael recovered the testimony after the roots were damaged.",
-		"root_landscape_released": "Two roots were redirected, opening the ground again.",
-		"bell_rhythm_learned": "Kael learned the bell's rhythm; its warning can be read as well as heard.",
-		"bell_rope_released": "The bell rope was released.",
-		"relief_deliveries_completed": "Both households received their relief supplies in person.",
-		"aftermath_names_returned": "The recovered names were returned to Greyfen.",
-		"aftermath_work_promised": "Kael promised to take part in the work that follows.",
-		"aftermath_walk_completed": "Kael walked the road home and saw the covenant's consequences."
-	}
-	for flag in facts:
-		if bool(state.get_flag(flag, false)):
-			lines.append(str(facts[flag]))
-	var damage := str(state.get_flag("mill_damage_state", ""))
-	if damage != "":
-		lines.append("The mill fire was contained." if damage == "contained" else "The mill bears fire damage; recovery will take material and labor.")
-	if int(state.get_flag("mill_smoke_exposure", 0)) >= 3:
-		lines.append("Workers inhaled too much smoke during the rescue and need care.")
-	if bool(state.get_flag("root_testimony_damaged", false)) and not bool(state.get_flag("root_testimony_recovered", false)):
-		lines.append("The roots' testimony was damaged. Search the disturbed ground for a recoverable record.")
-	if bool(state.get_flag("assembly_relief_ready", false)) and not bool(state.get_flag("relief_deliveries_completed", false)):
-		lines.append("Relief supplies are ready; the two households still need their deliveries.")
-	if bool(state.get_flag("final_choice_completed", false)) and not bool(state.get_flag("aftermath_walk_completed", false)):
-		lines.append("Return to Greyfen: hear the households, return the names and decide what work Kael will share.")
-	return "\nWORK THAT CHANGED THE ROAD\n" + "\n".join(lines) + "\n" if not lines.is_empty() else ""
 
 func save_text_history() -> Array:
 	return text_history.save_state()

@@ -1,0 +1,108 @@
+{
+  "schema": 1,
+  "work": [
+    {
+      "id": "kitchen_cart", "title": "Flour for the common kitchen", "zone": "greyfen",
+      "body": "Kael has begun helping with the kitchen cart. The delivery's result has not been recorded.",
+      "known_any": [{"flag": "cart_sack_carried", "value": true}, {"flag": "cart_helped", "value": true}],
+      "stages": [
+        {"gate": {"flag": "cart_helped", "value": true}, "status": "completed", "body": "Completed: flour reached the common kitchen, and Rook could move the emptied cart. Three households received supper."},
+        {"gate": {"flag": "cart_sack_carried", "value": true}, "status": "open", "body": "In hand: carry the flour to the common kitchen table beside the well. Rook is holding the cart while Kael makes room to move it."}
+      ]
+    },
+    {
+      "id": "road_drain", "title": "A road the kitchen cart can use", "zone": "greyfen",
+      "body": "The drain and boards need attention. Their repair has not been recorded.",
+      "known_any": [{"flag": "road_tools_taken", "value": true}, {"flag": "road_repaired", "value": true}],
+      "stages": [
+        {"gate": {"flag": "road_repaired", "value": true}, "status": "completed", "body": "Completed: the drain is clear and the boards are seated. Tor drove the final peg; the kitchen cart has a usable road."},
+        {"gate": {"flag": "road_tools_taken", "value": true}, "status": "open", "body": "In hand: take Tor's spade to the blocked drain beside the loose boards. Clear the water before settling the road surface."}
+      ]
+    },
+    {
+      "id": "household_relief", "title": "Two household shares", "zone": "greyfen",
+      "body": "The household relief task is known. The full delivery result has not been recorded.",
+      "known_any": [{"flag": "relief_shares_carried", "value": true}, {"flag": "relief_west_delivered", "value": true}, {"flag": "relief_east_delivered", "value": true}, {"flag": "relief_deliveries_completed", "value": true}],
+      "stages": [
+        {"gate": {"flag": "relief_deliveries_completed", "value": true}, "status": "completed", "body": "Completed: both households received their shares in person. Receiving food did not require an oath or a promise to speak."},
+        {"gate": {"all": [{"flag": "relief_shares_carried", "value": true}, {"flag": "relief_west_delivered", "value": true}]}, "status": "open", "body": "The west household's delivery is recorded. Carry the remaining share to the east doorstep marked by a linen basket."},
+        {"gate": {"all": [{"flag": "relief_shares_carried", "value": true}, {"flag": "relief_east_delivered", "value": true}]}, "status": "open", "body": "The east household's delivery is recorded. Carry the remaining share to the west doorstep marked by a linen basket."},
+        {"gate": {"flag": "relief_shares_carried", "value": true}, "status": "open", "body": "In hand: deliver the two shares to the west and east doorsteps with linen baskets. The help remains available without signatures."}
+      ]
+    },
+    {
+      "id": "mill_workers", "title": "The mill workers' way out", "zone": "old_mill",
+      "body": "The workers' exit is known. Whether they reached safety has not been recorded.",
+      "known_any": [{"flag": "mill_escape_route_open", "value": true}, {"flag": "mill_escort_started", "value": true}, {"flag": "mill_workers_rescued", "value": true}],
+      "stages": [
+        {"gate": {"flag": "mill_workers_rescued", "value": true}, "status": "completed", "body": "Completed: both workers reached clean air in the south yard. They can bring their wage accounts to Greyfen themselves."},
+        {"gate": {"flag": "mill_escort_started", "value": true}, "status": "open", "body": "Under way: lead the workers through the cleared channel toward the south yard. Stay within a few paces; they stop when left behind."},
+        {"gate": {"flag": "mill_escape_route_open", "value": true}, "status": "open", "body": "The sluice has cleared a route. Call the workers into the channel and stay with them until they reach clean air."}
+      ]
+    },
+    {
+      "id": "mill_records", "title": "The workers' wage chest", "zone": "old_mill",
+      "known_any": [{"flag": "mill_records_saved", "value": true}],
+      "stages": [{"gate": {"flag": "mill_records_saved", "value": true}, "status": "completed", "body": "Preserved: the wage chest is above the floodline. The workers' shares can be proved regardless of the mill's operational future."}]
+    },
+    {
+      "id": "mill_damage", "title": "What the mill encounter left behind", "zone": "old_mill",
+      "known_any": [{"flag": "mill_damage_state"}],
+      "stages": [
+        {"gate": {"flag": "mill_damage_state", "value": "contained"}, "status": "recorded", "body": "Recorded result: the fire was contained. This does not decide the fate of the accounts or the terms on which milling continues."},
+        {"gate": {"flag": "mill_damage_state", "value": "scorched"}, "status": "recorded", "body": "Recorded result: fire scorched the mill. Repairs will take material and labor; the damage itself does not determine anyone's consent."}
+      ]
+    },
+    {
+      "id": "mill_smoke", "title": "Care after the smoke", "zone": "old_mill",
+      "known_any": [{"flag": "mill_smoke_exposure", "min": 3}],
+      "stages": [{"gate": {"flag": "mill_smoke_exposure", "min": 3}, "status": "recorded", "body": "Recorded consequence: workers breathed too much smoke and need care. Reaching the yard does not make the exposure harmless."}]
+    },
+    {
+      "id": "root_record", "title": "The name-board in the roots", "zone": "deep_wood",
+      "known_any": [{"flag": "root_testimony_protected", "value": true}, {"flag": "root_testimony_damaged", "value": true}, {"flag": "root_testimony_recovered", "value": true}],
+      "stages": [
+        {"gate": {"flag": "root_testimony_recovered", "value": true}, "status": "completed", "body": "Recovered: fragments of the damaged name-board were kept. Several names survive; its complete account was lost in the confrontation."},
+        {"gate": {"flag": "root_testimony_protected", "value": true}, "status": "completed", "body": "Protected: the name-board was lifted into dry cloth before the roots could consume its account."},
+        {"gate": {"flag": "root_testimony_damaged", "value": true}, "status": "open", "body": "The name-board was damaged. Return to the disturbed roots and recover what can still be read. A missing recovery record does not establish that nothing survived."}
+      ]
+    },
+    {
+      "id": "root_ground", "title": "Ground released from the binding", "zone": "deep_wood",
+      "known_any": [{"flag": "root_landscape_released", "value": true}],
+      "stages": [{"gate": {"flag": "root_landscape_released", "value": true}, "status": "completed", "body": "Completed: two marked roots were redirected, opening the ground again. The landscape changed without making another person's promise for them."}]
+    },
+    {
+      "id": "bell_rope", "title": "The bell's pull", "zone": "cemetery",
+      "known_any": [{"flag": "bell_rhythm_learned", "value": true}, {"flag": "bell_rope_released", "value": true}],
+      "stages": [
+        {"gate": {"flag": "bell_rope_released", "value": true}, "status": "completed", "body": "Completed: the bell rope was released. Its warning can still be remembered without treating every silence as safety."},
+        {"gate": {"flag": "bell_rhythm_learned", "value": true}, "status": "open", "body": "Known: Kael learned the bell's rhythm. Read the raised clapper as well as the sound, and use the marked rope when the encounter permits it."}
+      ]
+    },
+    {
+      "id": "aftermath_names", "title": "Bring the names home", "zone": "greyfen",
+      "known_any": [{"flag": "final_choice_completed", "value": true}],
+      "stages": [
+        {"gate": {"flag": "aftermath_names_returned", "value": true}, "status": "completed", "body": "Completed: the account returned to Greyfen. Anwen and the people of the village can hear what the chosen resolution requires of the living."},
+        {"gate": {"flag": "final_choice_completed", "value": true}, "status": "open", "body": "Return to the names with Anwen in Greyfen. The covenant has been resolved; the people affected still need their account brought home."}
+      ]
+    },
+    {
+      "id": "aftermath_work", "title": "The next day's work", "zone": "greyfen",
+      "known_any": [{"flag": "aftermath_names_returned", "value": true}, {"flag": "aftermath_work_promised", "value": true}],
+      "stages": [
+        {"gate": {"flag": "aftermath_work_promised", "value": true}, "status": "completed", "body": "Promised and begun: Kael took a place with Tor and Rook at the workbench. The practical rebuilding belongs to the people who choose to share it."},
+        {"gate": {"flag": "aftermath_names_returned", "value": true}, "status": "open", "body": "Join Tor and Rook at the workbench. Hear what tomorrow requires, then take responsibility for Kael's part."}
+      ]
+    },
+    {
+      "id": "aftermath_road", "title": "Walk the road home", "zone": "greyfen",
+      "known_any": [{"flag": "aftermath_work_promised", "value": true}, {"flag": "aftermath_walk_completed", "value": true}],
+      "stages": [
+        {"gate": {"flag": "aftermath_walk_completed", "value": true}, "status": "completed", "body": "Completed: Kael met the road beyond the kitchen. The outcome stands, and known places remain open to revisit."},
+        {"gate": {"flag": "aftermath_work_promised", "value": true}, "status": "open", "body": "Walk to the road beyond the common kitchen. Take in what this journey has changed before deciding where to go next."}
+      ]
+    }
+  ]
+}
