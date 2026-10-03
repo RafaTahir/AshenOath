@@ -40,3 +40,19 @@ func has_pending() -> bool:
 
 func priority(category: String) -> int:
 	return int(PRIORITY.get(category, 30))
+
+func retire_journey(new_timeline: bool) -> void:
+	for index: int in range(pending.size() - 1, -1, -1):
+		if is_journey_transient(pending[index], new_timeline):
+			pending.remove_at(index)
+
+static func is_journey_transient(notice: Dictionary, new_timeline: bool) -> bool:
+	var category: String = str(notice.get("category", ""))
+	var key: String = str(notice.get("key", ""))
+	if category in ["error", "save"]:
+		return false
+	if new_timeline:
+		return true
+	if key.begins_with("decision:"):
+		return false
+	return category in ["combat", "info"] or key.begins_with("arrival:") or key.begins_with("guidance:") or key.begins_with("zone:")

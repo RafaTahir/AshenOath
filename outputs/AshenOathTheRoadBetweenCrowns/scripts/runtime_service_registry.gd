@@ -102,6 +102,9 @@ func configure(owner: Node) -> void:
 	dialogue.load_dialogue("res://data/interaction_scenes.json")
 	dialogue.setup(story_state, quests)
 	inventory.load_items("res://data/items.json")
+	save_manager.set_summary_definitions(quests.quest_defs, inventory.item_defs)
+	save_manager.load_prepared_requested.connect(Callable(owner, "_on_prepared_journey_load"))
+	save_manager.library_changed.connect(Callable(owner, "_queue_journey_models_refresh"))
 	vendor_service.load_vendors("res://data/vendors.json")
 	crafting.setup(inventory, quests, story_state)
 	hud.set_preparation_services(crafting)
@@ -167,15 +170,14 @@ func configure(owner: Node) -> void:
 	hud.quit_requested.connect(Callable(owner, "_handle_quit_request"))
 	hud.continue_requested.connect(func():
 		audio.play_event("ui")
-		# Keep Continue's load order identical to the menu's advertised source.
-		# A fresh New Game creates a safe checkpoint before any manual/autosave;
-		# omitting it left an enabled Continue button that could never resume.
-		save_manager.load_first_available(owner, [
-			save_manager.SAVE_PATH,
-			save_manager.AUTOSAVE_PATH,
-			save_manager.CHECKPOINT_PATH,
-		])
+		# Compatibility signal; current cards emit their exact stored selection.
+		var model: Dictionary = save_manager.continue_model()
+		if bool(model.get("available", false)):
+			save_manager.request_load(model.get("selection", {}))
 	)
+	hud.journey_load_requested.connect(Callable(owner, "_request_journey_load"))
+	hud.journey_load_cancel_requested.connect(Callable(owner, "_cancel_journey_load"))
+	hud.journal_section_requested.connect(Callable(owner, "_open_journal_section"))
 	hud.save_requested.connect(func():
 		audio.play_event("ui")
 		save_manager.save_game(owner)
@@ -243,6 +245,7 @@ func configure(owner: Node) -> void:
 	minigames.closed.connect(func(): hud.toast("The village carries on."))
 	settings.apply()
 	owner.call("_apply_runtime_settings", settings.settings)
+	owner.call_deferred("_refresh_journey_models")
 
 func get_service(id: String):
 	return services.get(id)

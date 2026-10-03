@@ -102,7 +102,10 @@ var story_action_in_progress := false
 var story_save_pending := false
 var preparation_action_in_progress := false
 var story_guidance_refresh_pending := false
-var story_recap_pending := false
+var journey_continuity := preload("res://scripts/journey_continuity_coordinator.gd").new()
+var journey_loading := preload("res://scripts/journey_load_runtime.gd").new()
+var journey_arrival_generation := 0
+var journey_models_refresh_pending := false
 var pending_player_restore: Dictionary = {}
 var zone_pack_request_serial := 0
 var removed_interactions = {}
@@ -416,6 +419,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		_show_preparation_menu()
 
 func _request_pause_or_back(event: InputEvent) -> void:
+	if _journey_load_pending():
+		if event.is_action_pressed("pause") and not event.is_echo():
+			get_viewport().set_input_as_handled()
+			_cancel_journey_load()
+		return
 	if input_router == null or not input_router.accept_event(event, &"pause", input_router.get_context()):
 		return
 	get_viewport().set_input_as_handled()
@@ -471,20 +479,28 @@ func _begin_gameplay_handoff(reason: String) -> void:
 	_invalidate_interaction_prompt()
 
 func _finish_gameplay_handoff() -> void:
+	journey_loading.try_finish(self)
 	if input_router == null or input_router.get_context() != "transition":
+		_publish_journey_arrival()
 		return
 	if not game_started or get_tree().paused or not is_instance_valid(player):
 		return
 	if zone_transition_pending or zone_load_request_pending or opening_pack_waiting or campaign_pack_waiting:
 		return
+	if _journey_load_pending():
+		return
 	input_router.begin_context("gameplay")
 	_invalidate_interaction_prompt()
+	_publish_journey_arrival()
 
 func _process(delta: float) -> void:
 	if not game_started or player == null or get_tree().paused:
 		return
 	if zone_transition_pending:
 		_advance_zone_transition()
+		return
+	if _journey_load_pending():
+		journey_loading.try_finish(self)
 		return
 	if seamless_world != null and seamless_world.update_player(player, current_zone_id, delta):
 		return
@@ -568,7 +584,7 @@ func _setup_runtime() -> void:
 	boss_defs = _read_json("res://data/bosses.json")
 
 func _new_game() -> void:
-	if game_started or zone_transition_pending or zone_load_request_pending:
+	if game_started or zone_transition_pending or zone_load_request_pending or _journey_load_pending():
 		return
 	zone_pack_request_serial += 1
 	opening_pack_waiting = false
@@ -685,6 +701,7 @@ func _perform_requested_zone_load() -> void:
 	_load_zone_after_runtime_pack(destination, arrival)
 
 func _load_zone_after_runtime_pack(zone_id: String, spawn_pos: Vector3) -> void:
+	journey_loading.begin_arrival(self, "travel", zone_id)
 	_begin_gameplay_handoff("zone_travel")
 	if runtime_packs != null:
 		runtime_packs.quality_preset = str(settings.settings.get("quality_preset", "balanced"))
@@ -738,11 +755,7 @@ func _wait_for_campaign_pack(zone_id: String, spawn_pos: Vector3, request_serial
 		if runtime_packs != null and not runtime_packs.zone_pack_failures(zone_id).is_empty():
 			break
 	campaign_pack_waiting = false
-	if hud != null and hud.has_method("hide_loading"):
-		hud.hide_loading()
-	if hud != null:
-		hud.toast("The road pack could not be prepared. Please retry.")
-	_recover_failed_pack_load()
+	_recover_failed_pack_load("The road pack could not be prepared. Your current location remains open; use the crossing to retry.")
 
 func _wait_for_opening_pack(zone_id: String, spawn_pos: Vector3, request_serial: int) -> void:
 	for _frame in range(900):
@@ -758,15 +771,12 @@ func _wait_for_opening_pack(zone_id: String, spawn_pos: Vector3, request_serial:
 		if runtime_packs != null and not runtime_packs.zone_pack_failures(zone_id).is_empty():
 			break
 	opening_pack_waiting = false
-	if hud != null and hud.has_method("hide_loading"):
-		hud.hide_loading()
-	if hud != null:
-		hud.toast("The opening pack could not be prepared. Please retry.")
-	_recover_failed_pack_load()
+	_recover_failed_pack_load("The opening pack could not be prepared. Your current location remains open; use the crossing to retry.")
 
-func _recover_failed_pack_load() -> void:
+func _recover_failed_pack_load(reason: String = "The destination could not load. Please retry.") -> void:
 	# No destination was constructed: the current world must remain resident.
 	zone_pack_request_serial += 1
+	journey_arrival_generation = 0
 	opening_pack_waiting = false
 	campaign_pack_waiting = false
 	pending_player_restore.clear()
@@ -785,7 +795,7 @@ func _recover_failed_pack_load() -> void:
 			hud.show_main_menu()
 	if hud != null:
 		hud.hide_loading()
-		hud.toast("The destination could not load. Please retry.")
+		hud.post_notice(reason, "error", 5.5, "destination_download")
 	_finish_gameplay_handoff()
 
 func _zone_requires_campaign_pack(zone_id: String) -> bool:
@@ -870,6 +880,7 @@ func _start_new_game_world() -> void:
 		route_zone_signatures["greyfen"] = _zone_state_signature()
 	print("LOADING: new_game_stage=zone_dispatch elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
 	print("LOADING: handoff_phase=load_zone_begin")
+	journey_loading.begin_arrival(self, "new_journey", "greyfen")
 	_load_zone("greyfen", Vector3(0, 1, 9.8))
 	print("LOADING: handoff_phase=load_zone_end")
 	if not opening_boot_material_restore_queue.is_empty() \
@@ -884,7 +895,6 @@ func _start_new_game_world() -> void:
 	# request-to-control duration rather than the reset transition clock.
 	print("LOADING: new_game_stage=zone_return elapsed=%.1f" % new_game_elapsed_ms)
 	new_game_started_usec = 0
-	hud.toast("Greyfen whispers about the old road. Sister Anwen is waiting at the shrine.")
 	_refresh_tracker()
 	_show_current_objective_guidance(5.5)
 	_refresh_equipment_readout()
@@ -944,6 +954,9 @@ func _schedule_opening_save(generation: int) -> void:
 		return
 	if resource_shutdown_prepared or player == null or not is_instance_valid(player):
 		return
+	if _journey_load_pending():
+		call_deferred("_schedule_opening_save", generation)
+		return
 	# Save the current state rather than a stale Greyfen-only snapshot. If the
 	# player reaches another supported zone during the delay, the normal autosave
 	# path still owns that transition and this checkpoint remains a safe fallback.
@@ -951,6 +964,8 @@ func _schedule_opening_save(generation: int) -> void:
 	opening_checkpoint_pending = false
 
 func load_save_state(data: Dictionary) -> void:
+	# Direct payload callers retain the same preparation boundary as file-backed
+	# selections. SaveManager owns identity/history for ordinary UI loads.
 	var migrated_data: Dictionary = data
 	if save_manager != null and save_manager.has_method("migrate_save_data"):
 		migrated_data = save_manager.migrate_save_data(data)
@@ -958,14 +973,22 @@ func load_save_state(data: Dictionary) -> void:
 			if hud != null:
 				hud.toast("This save belongs to a newer version of Ashen Oath.")
 			return
-	data = migrated_data
+	_on_prepared_journey_load({
+		"ok": true, "request_id": "direct:%d" % Time.get_ticks_usec(),
+		"data": migrated_data, "summary": {}, "source": {"direct_data": true}
+	})
+
+func _apply_loaded_journey(data: Dictionary) -> void:
 	_begin_gameplay_handoff("load_journey")
 	if not game_started:
 		_discard_menu_opening()
 	new_game_start_pending = false
+	opening_save_generation += 1
 	opening_checkpoint_pending = false
+	story_save_pending = false
 	_clear_route_zone_cache()
 	game_started = true
+	paused_by_menu = false
 	if audio != null:
 		audio.set_game_paused(false)
 	get_tree().paused = false
@@ -989,7 +1012,6 @@ func load_save_state(data: Dictionary) -> void:
 	if int(data.get("version", 0)) < 3 and quests.is_completed("main_road_of_crows"):
 		story_state.set_flag("legacy_report_choice_required", true)
 	load_world_state(data.get("world_state", {}))
-	story_recap_pending = true
 	var zone = str(data.get("world_sector", data.get("zone", "greyfen")))
 	var pos_array: Array = data.get("player_position", [0, 1, 7])
 	var pos = Vector3(float(pos_array[0]), float(pos_array[1]), float(pos_array[2]))
@@ -1008,6 +1030,44 @@ func load_save_state(data: Dictionary) -> void:
 	_load_zone_after_runtime_pack(zone, pos)
 	_refresh_tracker()
 	_refresh_equipment_readout()
+	call_deferred("_finish_gameplay_handoff")
+
+func _journey_load_pending() -> bool:
+	return journey_loading.pending(self)
+
+func _on_prepared_journey_load(prepared: Dictionary) -> void:
+	journey_loading.request(self, prepared)
+
+func _cancel_journey_load() -> void:
+	journey_loading.cancel(self)
+
+func _publish_journey_arrival() -> void:
+	journey_loading.publish_arrival(self)
+
+func _queue_journey_models_refresh() -> void:
+	if journey_models_refresh_pending:
+		return
+	journey_models_refresh_pending = true
+	call_deferred("_refresh_journey_models")
+
+func _refresh_journey_models() -> void:
+	journey_models_refresh_pending = false
+	if hud == null or save_manager == null or resource_shutdown_prepared:
+		return
+	var current: Dictionary = {}
+	if game_started:
+		current = preload("res://scripts/story_journal.gd").recap_model(quests, story_state, str(current_zone_id))
+	hud.set_journey_models({"continue": save_manager.continue_model(), "recovery": save_manager.checkpoint_model(), "current": current})
+
+func _request_journey_load(selection: Dictionary) -> void:
+	audio.play_event("ui")
+	save_manager.request_load(selection)
+
+func _open_journal_section(section_id: String) -> void:
+	if _journey_load_pending():
+		return
+	_update_preparation_context()
+	hud.show_inventory(inventory, quests, story_state, progression, section_id)
 
 func _apply_pending_player_restore() -> void:
 	if pending_player_restore.is_empty() or player == null or not is_instance_valid(player):
@@ -1545,6 +1605,7 @@ func _clear_route_zone_cache(preserve_root: Node3D = null) -> void:
 		_release_route_spatial_service(str(raw_id))
 
 func prepare_resource_shutdown() -> void:
+	journey_loading.cancel(self, "", false, true)
 	if resource_shutdown_prepared:
 		return
 	resource_shutdown_prepared = true
@@ -2185,6 +2246,8 @@ func _finish_story_action(action: Dictionary) -> void:
 
 func _persist_story_action() -> void:
 	if not story_save_pending or resource_shutdown_prepared or not game_started:
+		return
+	if _journey_load_pending():
 		return
 	if zone_transition_pending or zone_load_request_pending or not pending_player_restore.is_empty():
 		return
@@ -3893,7 +3956,9 @@ func _on_player_died() -> void:
 	audio.play_event("hurt")
 	audio.set_game_paused(true)
 	get_tree().paused = true
-	hud.show_death_screen("The road keeps its dead.\n\nLoad Last Checkpoint returns Kael to the last safe contract marker with quest progress preserved.")
+	hud.clear_journey_transients(false)
+	_refresh_journey_models()
+	hud.show_death_screen("The road keeps its dead.\n\nChoose a recorded journey to return to its saved story state.")
 
 func _on_dialogue_closed_audio() -> void:
 	# First encounters are collected as their pages are read. Persist them when
@@ -3913,9 +3978,7 @@ func _finish_covenant_if_ready() -> void:
 	if bool(story_state.get_flag("aftermath_epilogue_pending", false)):
 		story_state.set_flag("aftermath_epilogue_pending", false)
 		call_deferred("_show_completed_epilogue")
-	if story_recap_pending:
-		story_recap_pending = false
-		hud.toast(preload("res://scripts/story_journal.gd").recap(self), 12.0)
+	_publish_journey_arrival()
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT and input_router != null:
@@ -3927,6 +3990,8 @@ func _notification(what: int) -> void:
 			_pause_game()
 
 func _pause_game() -> void:
+	if _journey_load_pending():
+		return
 	if camera_rig != null and camera_rig.has_method("clear_target_lock"):
 		camera_rig.clear_target_lock()
 	if hud != null and hud.has_method("clear_target_lock_status"):
@@ -3937,9 +4002,12 @@ func _pause_game() -> void:
 	if input_router != null and input_router.has_method("set_context"):
 		input_router.set_context("pause")
 	audio.play_event("ui")
+	_refresh_journey_models()
 	hud.show_pause_menu()
 
 func _resume_game() -> void:
+	if _journey_load_pending():
+		return
 	audio.set_game_paused(false)
 	get_tree().paused = false
 	paused_by_menu = false
@@ -3947,6 +4015,7 @@ func _resume_game() -> void:
 		input_router.set_gameplay_context()
 	audio.play_event("ui")
 	hud.hide_menus()
+	_publish_journey_arrival()
 	if bool(story_state.get_flag("final_choice_completed", false)) and current_zone_id == "hart_glade":
 		story_state.set_flag("aftermath_returned", true)
 		story_save_pending = true

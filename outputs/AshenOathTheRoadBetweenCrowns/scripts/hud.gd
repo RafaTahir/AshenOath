@@ -22,6 +22,9 @@ signal dialogue_review_changed(open: bool)
 signal dialogue_page_changed(speaker: String, speaker_id: String, page_index: int, total_pages: int)
 signal menu_hovered
 signal menu_clicked
+signal journey_load_requested(selection: Dictionary)
+signal journey_load_cancel_requested
+signal journal_section_requested(section_id: String)
 
 const MENU_BUILD_LABEL = "ASHEN OATH · THE ROAD BETWEEN CROWNS"
 const MENU_SIZE = Vector2(1920.0, 1080.0)
@@ -36,6 +39,7 @@ const NavigationState = preload("res://scripts/hud_navigation_state.gd")
 const NoticeQueue = preload("res://scripts/hud_notice_queue.gd")
 const PreparationViewModel = preload("res://scripts/preparation_view_model.gd")
 const PreparationPanel = preload("res://scripts/preparation_panel.gd")
+const JourneyMenuPanel = preload("res://scripts/journey_menu_panel.gd")
 var navigation = NavigationState.new()
 var notices = NoticeQueue.new()
 var _rendered_screen := ""
@@ -165,6 +169,18 @@ var _decision_selected_key := ""
 var _dialogue_pending_button: Button
 var _dialogue_pending_source := ""
 var _dialogue_press_position := Vector2.ZERO
+var _journey_models: Dictionary = {}
+var _journey_card: RichTextLabel
+var _journey_card_kind := ""
+var _journey_primary_button: Button
+var _journey_load_active := false
+var _journey_load_applying := false
+var _journey_load_origin: Dictionary = {}
+var _journey_load_focus: Control
+var _journey_cancel_button: Button
+var _journey_return_pending: Dictionary = {}
+var _journey_return_last_id := ""
+var _save_slot_notice: Label
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -221,6 +237,8 @@ func _on_hud_surface_visibility_changed() -> void:
 		return
 	var blocked := _gameplay_surface_blocked()
 	hud_root.visible = not blocked
+	if not blocked:
+		call_deferred("_present_pending_journey_return")
 	if blocked:
 		raw_hint = ""
 		_hint_remaining = 0.0
@@ -252,25 +270,204 @@ func _refresh_resource_attention() -> void:
 	vitals_back.color = Color(0.018, 0.016, 0.014, 0.94 if high_contrast else (0.76 if emphasized else 0.54))
 	vitals_warning_label.add_theme_color_override("font_color", Color(1.0, 0.88, 0.68) if high_contrast else Color(0.96, 0.74, 0.50))
 
+func set_journey_models(models: Dictionary) -> void:
+	for key: Variant in models.keys():
+		_journey_models[str(key)] = models[key]
+	_refresh_journey_card()
+	if is_instance_valid(_journey_primary_button):
+		var kind: String = str(_journey_primary_button.get_meta("journey_model_kind", ""))
+		if kind in ["continue", "recovery"]:
+			var model: Dictionary = _journey_models.get(kind, {})
+			_update_journey_load_button(_journey_primary_button, model, JourneyMenuPanel.load_label(model, kind == "recovery"))
+
+func _refresh_journey_card() -> void:
+	if not is_instance_valid(_journey_card) or _journey_card_kind == "":
+		return
+	var model: Dictionary = _journey_models.get(_journey_card_kind, {})
+	_set_journey_card_text(JourneyMenuPanel.card(model, _journey_card_kind == "current"))
+
+func _set_journey_card_text(text: String) -> void:
+	if not is_instance_valid(_journey_card):
+		return
+	_journey_card.visible = true
+	if _journey_card.text == text:
+		return
+	var scroll: float = _journey_card.get_v_scroll_bar().value
+	_journey_card.text = text
+	_journey_card.get_v_scroll_bar().set_deferred("value", scroll)
+
+func _show_journey_card(kind: String) -> void:
+	_journey_card_kind = kind
+	_refresh_journey_card()
+
+func _add_journey_load_button(box: VBoxContainer, label: String, model: Dictionary, key: String) -> Button:
+	var button: Button = _add_menu_button(box, label, func(): _request_journey_selection(key), not bool(model.get("available", false)), key)
+	button.action_mode = BaseButton.ACTION_MODE_BUTTON_RELEASE
+	button.set_meta("journey_selection", Dictionary(model.get("selection", {})).duplicate(true))
+	return button
+
+func _request_journey_selection(key: String) -> void:
+	if _journey_load_active:
+		return
+	for raw: Node in menu_layer.find_children("*", "Button", true, false):
+		var button: Button = raw as Button
+		if str(button.get_meta("navigation_key", "")) != key or button.disabled:
+			continue
+		var selection: Dictionary = button.get_meta("journey_selection", {})
+		if not selection.is_empty():
+			journey_load_requested.emit(selection.duplicate(true))
+		return
+
+func _update_journey_load_button(button: Button, model: Dictionary, label: String) -> void:
+	button.disabled = not bool(model.get("available", false))
+	button.set_meta("journey_selection", Dictionary(model.get("selection", {})).duplicate(true))
+	button.text = label
+	button.tooltip_text = label
+	var row: Label = button.get_node_or_null("MenuButtonText") as Label
+	if row != null:
+		row.text = label
+		row.add_theme_color_override("font_color", Color(0.62, 0.60, 0.55) if button.disabled else (Color.WHITE if high_contrast else Color(0.91, 0.85, 0.72)))
+
+func _add_journey_recovery_options(box: VBoxContainer, model: Dictionary) -> void:
+	if bool(model.get("available", false)):
+		return
+	var recovery: Array = model.get("recovery", [])
+	for index: int in range(mini(recovery.size(), 2)):
+		var option: Dictionary = recovery[index]
+		if not bool(option.get("available", false)):
+			continue
+		var summary: Dictionary = option.get("summary", {})
+		_add_journey_load_button(box, "Recovery: " + str(summary.get("title", "Recorded journey")), option, "recovery_option:%d" % index)
+
+func begin_journey_load(model: Dictionary) -> void:
+	if not _journey_load_active:
+		_capture_menu_state()
+		_capture_inventory_state()
+		if dialogue_layer.visible:
+			_capture_dialogue_reading_state()
+		_journey_load_origin = {"menu":menu_layer.visible, "dialogue":dialogue_layer.visible, "inventory":inventory_layer.visible}
+		_journey_load_focus = get_viewport().gui_get_focus_owner()
+	_journey_load_active = true
+	_journey_load_applying = false
+	_cancel_dialogue_press()
+	menu_layer.visible = false
+	dialogue_layer.visible = false
+	inventory_layer.visible = false
+	var summary: Dictionary = model.get("summary", {})
+	var title: String = str(summary.get("title", "Saved journey"))
+	var place: String = str(summary.get("place", ""))
+	loading_message.text = "Preparing " + title + ("\n" + place if place != "" else "") + "\nYour current journey remains in place until the road is ready."
+	loading_armed = true
+	loading_elapsed = 0.0
+	loading_layer.mouse_filter = Control.MOUSE_FILTER_STOP
+	loading_layer.visible = true
+	_journey_cancel_button.visible = true
+	_journey_cancel_button.disabled = false
+	_journey_cancel_button.grab_focus()
+	_on_hud_surface_visibility_changed()
+	_update_process_policy()
+
+func end_journey_load(success: bool, reason: String = "") -> void:
+	if not _journey_load_active:
+		if reason != "":
+			post_notice(reason, "save" if success else "error", 6.0, "journey_load_result")
+		return
+	_journey_load_active = false
+	_journey_load_applying = false
+	_journey_cancel_button.visible = false
+	loading_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hide_loading()
+	if not success:
+		menu_layer.visible = bool(_journey_load_origin.get("menu", false))
+		dialogue_layer.visible = bool(_journey_load_origin.get("dialogue", false))
+		inventory_layer.visible = bool(_journey_load_origin.get("inventory", false))
+		if is_instance_valid(_journey_load_focus) and _journey_load_focus.is_visible_in_tree():
+			_journey_load_focus.call_deferred("grab_focus")
+		elif menu_layer.visible:
+			call_deferred("_restore_menu_state", _rendered_screen, _screen_generation)
+		if reason != "":
+			post_notice(reason, "error", 6.0, "journey_load_result")
+	_journey_load_origin.clear()
+	_journey_load_focus = null
+	_on_hud_surface_visibility_changed()
+
+func _cancel_journey_load() -> void:
+	if not _journey_load_active or _journey_load_applying or _journey_cancel_button.disabled:
+		return
+	_journey_cancel_button.disabled = true
+	journey_load_cancel_requested.emit()
+
+func set_journey_load_applying() -> void:
+	if not _journey_load_active:
+		return
+	_journey_load_applying = true
+	_journey_cancel_button.disabled = true
+	_journey_cancel_button.visible = false
+	loading_message.text = "Returning to the recorded journey…\nPlacing Kael on the road."
+
+func present_journey_return(model: Dictionary) -> void:
+	var id: String = str(model.get("id", ""))
+	if id == "" or id == _journey_return_last_id:
+		return
+	_journey_return_last_id = id
+	_journey_return_pending = model.duplicate(true) if bool(model.get("announce", true)) else {}
+	call_deferred("_present_pending_journey_return")
+
+func _present_pending_journey_return() -> void:
+	if _journey_return_pending.is_empty() or _gameplay_surface_blocked():
+		return
+	var model: Dictionary = _journey_return_pending
+	_journey_return_pending = {}
+	var current: Dictionary = _journey_models.get("current", {})
+	var next_action: String = str(_navigation_model.get("action", current.get("next_action", model.get("next_action", ""))))
+	var title: String = str(model.get("title", "Back on the road"))
+	post_notice(title + ("\n" + next_action if next_action != "" else ""), "story", 6.0, "arrival:" + str(model.get("id", "")))
+
+func clear_journey_transients(new_timeline: bool) -> void:
+	_cancel_dialogue_press()
+	_journey_return_pending.clear()
+	if new_timeline:
+		_journey_return_last_id = ""
+		_preparation_results.clear()
+		_slot_operation_results.clear()
+	raw_prompt = ""
+	raw_hint = ""
+	_interaction_prompt_model.clear()
+	_hint_remaining = 0.0
+	_status_remaining = 0.0
+	prompt_label.visible = false
+	prompt_back.visible = false
+	hint_label.visible = false
+	status_label.visible = false
+	enemy_label.visible = false
+	enemy_bar.visible = false
+	enemy_value_label.visible = false
+	target_status_label.visible = false
+	notices.retire_journey(new_timeline)
+	if NoticeQueue.is_journey_transient(_notice_active, new_timeline):
+		_notice_active.clear()
+		_notice_remaining = 0.0
+	_present_notice()
+	_update_process_policy()
 func show_main_menu() -> void:
 	active_menu = "main"
 	_set_internal_canvas(Vector2i(MENU_SIZE))
 	_set_ui_pointer("menu")
 	_clear_menu()
 	menu_layer.visible = true
-	var box = _menu_box("ASHEN OATH", "The Road Between Crowns", "contracts | curses | consequences", 680.0)
-	_add_menu_text(box, "Greyfen waits under ash and oath-light.")
-	_add_menu_button(box, "New Game", func(): new_game_requested.emit())
+	var box: VBoxContainer = _menu_box("ASHEN OATH", "The Road Between Crowns", "contracts | curses | consequences", 680.0)
+	_show_journey_card("continue")
+	var model: Dictionary = _journey_models.get("continue", {})
+	_journey_primary_button = _add_journey_load_button(box, JourneyMenuPanel.load_label(model), model, "continue")
+	_journey_primary_button.set_meta("journey_model_kind", "continue")
+	_add_journey_recovery_options(box, model)
+	_add_menu_button(box, "New Journey", func(): new_game_requested.emit(), false, "new_journey")
 	new_game_status_label = _add_menu_text(box, new_game_status)
-	_add_menu_button(box, "Continue", func(): continue_requested.emit(), not _has_continue_save())
-	_add_menu_button(box, "Saved Journeys", func(): show_save_library("main"))
-	_add_menu_text(box, _save_status_text())
+	_add_menu_button(box, "Saved Journeys", func(): show_save_library("main"), false, "saved_journeys")
 	_add_menu_button(box, "Controls", func(): show_controls_menu("main"))
 	_add_menu_button(box, "Settings", func(): show_settings_menu("main"))
 	_add_menu_button(box, "Credits", func(): show_credits_menu())
 	_add_menu_button(box, "Quit", func(): quit_requested.emit())
-	call_deferred("_focus_first_enabled", menu_layer)
-
 func set_new_game_ready(value: bool) -> void:
 	if new_game_ready == value:
 		return
@@ -293,7 +490,7 @@ func set_boot_shell_cover_active(active: bool) -> void:
 		menu_layer.visible = false
 	elif active_menu == "main":
 		menu_layer.visible = true
-		call_deferred("_focus_first_enabled", menu_layer)
+		call_deferred("_restore_menu_state", _rendered_screen, _screen_generation)
 
 func show_launch_screen() -> void:
 	active_menu = "launch"
@@ -318,16 +515,17 @@ func show_pause_menu() -> void:
 	_set_ui_pointer("pause")
 	_clear_menu()
 	menu_layer.visible = true
-	var box = _menu_box("Paused", "", "the road holds its breath")
-	_add_menu_button(box, "Resume", func(): resume_requested.emit())
-	_add_menu_button(box, "Quick Save", func(): save_requested.emit())
-	_add_menu_button(box, "Saved Journeys", func(): show_save_library("pause"))
+	var box: VBoxContainer = _menu_box("Paused", "", "the road holds its breath")
+	_show_journey_card("current")
+	_add_menu_button(box, "Resume", func(): resume_requested.emit(), false, "resume")
+	_add_menu_button(box, "On Return", func(): journal_section_requested.emit("return"), false, "on_return")
+	_add_menu_button(box, "Quick Save", func(): save_requested.emit(), false, "quick_save")
+	_add_menu_button(box, "Saved Journeys", func(): show_save_library("pause"), false, "saved_journeys")
 	_add_menu_button(box, "Journal & Preparation", func(): journal_requested.emit())
 	_add_menu_button(box, "Conversation History", func(): show_text_history("pause"))
 	_add_menu_button(box, "Settings", func(): show_settings_menu())
 	_add_menu_button(box, "Controls", func(): show_controls_menu("pause"))
 	_add_menu_button(box, "Main Menu", func(): show_main_menu())
-
 func show_settings_menu(back_target: String = "pause", requested_page: int = -1) -> void:
 	active_menu = "settings"
 	_set_internal_canvas(Vector2i(MENU_SIZE))
@@ -557,12 +755,15 @@ func arm_loading(text: String = "Following the road...") -> void:
 	loading_armed = true
 	loading_elapsed = 0.0
 	if loading_message != null:
-		loading_message.text = text
-	loading_layer.visible = false
+		if not _journey_load_active:
+			loading_message.text = text
+	loading_layer.visible = _journey_load_active
 	_on_hud_surface_visibility_changed()
 	_update_process_policy()
 
 func hide_loading() -> void:
+	if _journey_load_active:
+		return
 	loading_armed = false
 	loading_elapsed = 0.0
 	if loading_layer != null:
@@ -585,18 +786,32 @@ func _build_loading_layer() -> void:
 	var card := PanelContainer.new()
 	card.name = "RoadCard"
 	card.set_anchors_preset(Control.PRESET_CENTER_TOP)
-	card.position = Vector2(-210, 34)
-	card.size = Vector2(420, 62)
+	card.position = Vector2(-260, 34)
+	card.custom_minimum_size = Vector2(520, 62)
+	card.size = Vector2(520, 62)
 	card.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	loading_layer.add_child(card)
+	_style_panel(card, Color(0.025, 0.025, 0.022, 0.97), Color(0.58, 0.42, 0.20, 0.86))
+	var content: VBoxContainer = VBoxContainer.new()
+	content.add_theme_constant_override("separation", 12)
+	card.add_child(content)
 	loading_message = Label.new()
 	loading_message.name = "Message"
 	loading_message.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	loading_message.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	loading_message.add_theme_font_size_override("font_size", 18)
 	loading_message.add_theme_color_override("font_color", Color(0.88, 0.76, 0.54))
+	loading_message.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	loading_message.custom_minimum_size = Vector2(460, 40)
 	loading_message.text = "Following the road..."
-	card.add_child(loading_message)
+	content.add_child(loading_message)
+	_journey_cancel_button = Button.new()
+	_journey_cancel_button.text = "Cancel and Return"
+	_journey_cancel_button.action_mode = BaseButton.ACTION_MODE_BUTTON_RELEASE
+	_style_button(_journey_cancel_button)
+	_journey_cancel_button.pressed.connect(_cancel_journey_load)
+	_journey_cancel_button.visible = false
+	content.add_child(_journey_cancel_button)
 
 func _set_internal_canvas(size: Vector2i) -> void:
 	var window := get_window()
@@ -1298,18 +1513,20 @@ func show_ending(title: String, body: String) -> void:
 
 func show_death_screen(body: String) -> void:
 	active_menu = "death"
+	_set_internal_canvas(Vector2i(MENU_SIZE))
 	_set_ui_pointer("death")
 	_clear_menu()
 	menu_layer.visible = true
-	var box = _menu_box("Kael Falls")
-	var label = Label.new()
-	label.text = body
-	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	box.add_child(label)
-	_add_menu_button(box, "Load Last Checkpoint", func(): load_checkpoint_requested.emit())
-	_add_menu_button(box, "Begin Again", func(): new_game_requested.emit())
+	var box: VBoxContainer = _menu_box("Kael Falls", "A recorded road remains", "return to the journey")
+	_show_journey_card("recovery")
+	var model: Dictionary = _journey_models.get("recovery", {})
+	_add_menu_text(box, body if body != "" else "Loading returns the story and supplies recorded in this save. Changes made afterward are not included.")
+	_journey_primary_button = _add_journey_load_button(box, JourneyMenuPanel.load_label(model, true), model, "recover_journey")
+	_journey_primary_button.set_meta("journey_model_kind", "recovery")
+	_add_journey_recovery_options(box, model)
+	_add_menu_button(box, "Saved Journeys", func(): show_save_library("death"), false, "saved_journeys")
+	_add_menu_button(box, "Begin a New Journey", func(): new_game_requested.emit(), false, "new_journey")
 	_add_menu_button(box, "Return to Main Menu", func(): show_main_menu())
-
 func _build_hud() -> void:
 	hud_root = Control.new()
 	var root := hud_root
@@ -1741,6 +1958,10 @@ func _labeled_bar(label_text: String, bar: ProgressBar, value_label: Label) -> H
 func _clear_menu() -> void:
 	_capture_menu_state()
 	_menu_notice = null
+	_journey_card = null
+	_journey_card_kind = ""
+	_journey_primary_button = null
+	_save_slot_notice = null
 	new_game_status_label = null
 	for child in menu_layer.get_children():
 		menu_layer.remove_child(child)
@@ -1779,13 +2000,14 @@ func _menu_box(title: String, subtitle: String = "", omen_text: String = "", hei
 	title_stack.add_theme_constant_override("separation", 14)
 	shell.add_child(title_stack)
 	var title_spacer = Control.new()
-	title_spacer.custom_minimum_size = Vector2(1, 54.0 if compact else 142.0)
+	var journey_surface: bool = active_menu in ["main", "pause", "death", "save_slot"]
+	title_spacer.custom_minimum_size = Vector2(1, (12.0 if compact else 48.0) if journey_surface else (54.0 if compact else 142.0))
 	title_stack.add_child(title_spacer)
 	var title_label = Label.new()
 	title_label.text = title
 	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	title_label.add_theme_font_size_override("font_size", 56 if compact else 92)
+	title_label.add_theme_font_size_override("font_size", (48 if compact else 64) if journey_surface else (56 if compact else 92))
 	title_label.add_theme_color_override("font_color", Color(0.93, 0.78, 0.47))
 	title_label.add_theme_color_override("font_shadow_color", Color(0.0, 0.0, 0.0, 0.92))
 	title_label.add_theme_constant_override("shadow_offset_x", 3)
@@ -1805,6 +2027,25 @@ func _menu_box(title: String, subtitle: String = "", omen_text: String = "", hei
 		omen.add_theme_font_size_override("font_size", 12 if compact else 16)
 		omen.add_theme_color_override("font_color", Color(0.56, 0.50, 0.40))
 		title_stack.add_child(omen)
+	_journey_card = RichTextLabel.new()
+	_journey_card.name = "JourneyContextCard"
+	_journey_card.set_meta("navigation_key", "journey_card")
+	_journey_card.set_meta("navigation_scroll", "journey_card")
+	_journey_card.focus_mode = Control.FOCUS_ALL
+	_journey_card.custom_minimum_size = Vector2(280, 200 if compact else 270)
+	_journey_card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_journey_card.scroll_active = true
+	_journey_card.fit_content = false
+	_journey_card.add_theme_font_size_override("normal_font_size", int((17.0 if compact else 21.0) * minf(story_text_scale, 1.25)))
+	_journey_card.add_theme_constant_override("line_separation", 4)
+	_journey_card.add_theme_color_override("default_color", Color.WHITE if high_contrast else Color(0.89, 0.84, 0.72))
+	var card_focus: StyleBoxFlat = StyleBoxFlat.new()
+	card_focus.bg_color = Color(0, 0, 0, 0)
+	card_focus.border_color = Color.WHITE if high_contrast else Color(1.0, 0.86, 0.52)
+	card_focus.set_border_width_all(3)
+	_journey_card.add_theme_stylebox_override("focus", card_focus)
+	_journey_card.visible = false
+	title_stack.add_child(_journey_card)
 	_menu_notice = Label.new()
 	_menu_notice.name = "MenuOperationStatus"
 	_menu_notice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -1863,7 +2104,7 @@ func _build_menu_background() -> void:
 	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	menu_layer.add_child(shade)
 
-func _add_menu_button(box: VBoxContainer, text: String, callback: Callable, disabled: bool = false, focus_key: String = "") -> void:
+func _add_menu_button(box: VBoxContainer, text: String, callback: Callable, disabled: bool = false, focus_key: String = "") -> Button:
 	var is_first_button := true
 	for child in box.get_children():
 		if child is Button:
@@ -1883,6 +2124,7 @@ func _add_menu_button(box: VBoxContainer, text: String, callback: Callable, disa
 	_style_button(button)
 	button.add_theme_font_size_override("font_size", int(box.get_meta("menu_font_size", 23)))
 	var row_label := Label.new()
+	row_label.name = "MenuButtonText"
 	row_label.text = text
 	row_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	row_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
@@ -1918,6 +2160,7 @@ func _add_menu_button(box: VBoxContainer, text: String, callback: Callable, disa
 		callback.call()
 	)
 	box.add_child(button)
+	return button
 
 func _add_menu_text(box: VBoxContainer, text: String) -> Label:
 	var label = Label.new()
@@ -1959,6 +2202,10 @@ func set_gamepad_profile(profile: Dictionary) -> void:
 			show_remap_menu(remap_back_target, remap_page)
 
 func restore_input_focus() -> void:
+	if _journey_load_active:
+		if not _journey_load_applying:
+			_journey_cancel_button.grab_focus()
+		return
 	if dialogue_layer != null and dialogue_layer.visible:
 		_restore_dialogue_reading_state()
 		return
@@ -2139,6 +2386,11 @@ func _focus_first_enabled(container: Node) -> void:
 			return
 
 func _input(event: InputEvent) -> void:
+	if _journey_load_active:
+		if event.is_action_pressed("ui_cancel"):
+			_cancel_journey_load()
+			get_viewport().set_input_as_handled()
+		return
 	if _capture_remap_input(event):
 		return
 	if dialogue_layer == null or not dialogue_layer.visible:
@@ -2304,6 +2556,10 @@ func _capture_remap_input(event: InputEvent) -> bool:
 func _unhandled_input(event: InputEvent) -> void:
 	if not event.is_action_pressed("ui_cancel"):
 		return
+	if _journey_load_active:
+		_cancel_journey_load()
+		get_viewport().set_input_as_handled()
+		return
 	if input_source != null and input_source.has_method("accept_event") and not input_source.accept_event(event, "ui_cancel", input_source.get_context()):
 		get_viewport().set_input_as_handled()
 		return
@@ -2311,6 +2567,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 func request_back() -> bool:
+	if _journey_load_active:
+		_cancel_journey_load()
+		return true
 	if remap_waiting:
 		remap_waiting = false
 		post_notice("Binding cancelled.", "info", 2.5, "binding")
@@ -2354,17 +2613,12 @@ func _sensitivity_label(value: float) -> String:
 	return "Medium"
 
 func _has_continue_save() -> bool:
-	return FileAccess.file_exists(SAVE_PATH) or FileAccess.file_exists(AUTOSAVE_PATH) or FileAccess.file_exists(CHECKPOINT_PATH)
+	var model: Dictionary = _journey_models.get("continue", {})
+	return bool(model.get("available", false))
 
 func _save_status_text() -> String:
-	if FileAccess.file_exists(SAVE_PATH):
-		return "Continue source: manual save"
-	if FileAccess.file_exists(AUTOSAVE_PATH):
-		return "Continue source: latest autosave"
-	if FileAccess.file_exists(CHECKPOINT_PATH):
-		return "Continue source: safe checkpoint"
-	return "No journey has been saved on this device."
-
+	var model: Dictionary = _journey_models.get("continue", {})
+	return str(model.get("reason", "No recorded journey is available."))
 func _return_from_controls() -> void:
 	_return_to_parent()
 
@@ -2575,8 +2829,15 @@ func _capture_menu_state() -> void:
 
 func _restore_menu_state(key: String, generation: int) -> void:
 	await get_tree().process_frame
-	if generation != _screen_generation or key != _rendered_screen or not is_instance_valid(menu_layer) or not menu_layer.visible:
+	if _journey_load_active or generation != _screen_generation or key != _rendered_screen or not is_instance_valid(menu_layer) or not menu_layer.visible:
 		return
+	var state: Dictionary = navigation.screens.get(key, {})
+	if str(state.get("focus", "")) == "":
+		match active_menu:
+			"main": state["focus"] = "continue" if bool(Dictionary(_journey_models.get("continue", {})).get("available", false)) else "new_journey"
+			"pause": state["focus"] = "resume"
+			"death": state["focus"] = "recover_journey" if bool(Dictionary(_journey_models.get("recovery", {})).get("available", false)) else "saved_journeys"
+		navigation.screens[key] = state
 	if _dialogue_review_open:
 		var reader := menu_layer.find_child("HistoryReader", true, false) as RichTextLabel
 		if reader != null and not navigation.screens.get(key, {}).has("scrolls"):
@@ -2599,6 +2860,7 @@ func _open_screen(key: String) -> void:
 		"gameplay": resume_requested.emit()
 		"main": show_main_menu()
 		"pause": show_pause_menu()
+		"death": show_death_screen("")
 		"controls": show_controls_menu(controls_back_target)
 		"settings": show_settings_menu(controls_back_target, page)
 		"remap": show_remap_menu(remap_back_target, page)
@@ -2639,6 +2901,8 @@ func _on_save_operation_finished(slot_id: String, operation: String, success: bo
 				field.text = str(slot.title)
 	if active_menu != "save_slot" or selected_slot != slot_id:
 		post_notice(text, "save" if success else "error", 5.0, "save_operation:" + operation + ":" + slot_id)
+	elif is_instance_valid(_save_slot_notice):
+		_save_slot_notice.text = text
 	if success and operation == "import" and active_menu == "save_import":
 		_return_after_import = true
 	_refresh_save_library()
@@ -2651,35 +2915,27 @@ func show_save_library(back_target: String = "pause", requested_page: int = 0) -
 	_set_ui_pointer("pause")
 	_clear_menu()
 	menu_layer.visible = true
-	var box := _menu_box("Saved Journeys", "The road you remember", "manual saves and protected checkpoints")
+	var box: VBoxContainer = _menu_box("Saved Journeys", "The road you remember", "manual saves and protected checkpoints")
 	box.set_meta("compact_buttons", true)
 	var service = _save_service()
 	if service == null:
 		_add_menu_text(box, "Save storage is preparing.")
+		_add_menu_button(box, "Back", _return_from_library)
 		return
 	var slots: Array = service.list_slots()
-	var pages := maxi(1, ceili(float(slots.size()) / 4.0))
+	var pages: int = maxi(1, ceili(float(slots.size()) / 4.0))
 	library_page = clampi(requested_page, 0, pages - 1)
-	_add_menu_text(box, "Page %d of %d. Browser saves belong to this browser and device. Export a JSON copy to keep or move a journey." % [library_page + 1, pages])
-	for index in range(library_page * 4, mini(slots.size(), library_page * 4 + 4)):
+	_add_menu_text(box, "Page %d of %d. Open a journey to read its recorded promise and next step." % [library_page + 1, pages])
+	for index: int in range(library_page * 4, mini(slots.size(), library_page * 4 + 4)):
 		var slot: Dictionary = slots[index]
-		var summary := str(slot.title)
-		if bool(slot.valid):
-			summary += "\n%s · %s%s" % [slot.zone, str(slot.saved_at).replace("T", " "), " · replay" if bool(slot.replay) else ""]
-		else:
-			summary += " — unreadable" if bool(slot.exists) else " — empty"
-		_add_menu_button(box, summary, func(id = str(slot.id)): show_save_slot(id), false, "slot:" + str(slot.id))
-	_add_menu_button(box, "Previous Page", func(): show_save_library(library_back_target, library_page - 1), library_page <= 0)
-	_add_menu_button(box, "Next Page", func(): show_save_library(library_back_target, library_page + 1), library_page >= pages - 1)
-	_add_menu_button(box, "Import a Save File", func():
-		service.request_import_file()
-		if not service.library_changed.is_connected(_refresh_save_library):
-			service.library_changed.connect(_refresh_save_library)
-	)
+		_add_menu_button(box, JourneyMenuPanel.slot_row(slot), func(id: String = str(slot.get("id", ""))): show_save_slot(id), false, "slot:" + str(slot.get("id", "")))
+	_add_menu_button(box, "Previous Page", func(): show_save_library(library_back_target, library_page - 1), library_page <= 0, "previous_page")
+	_add_menu_button(box, "Next Page", func(): show_save_library(library_back_target, library_page + 1), library_page >= pages - 1, "next_page")
+	_add_menu_text(box, "Browser saves belong to this browser and device. Export a JSON copy to keep or move a journey.")
+	_add_menu_button(box, "Import a Save File", func(): service.request_import_file(), false, "import_file")
 	_add_menu_button(box, "Paste a Save", show_save_import)
 	_add_menu_button(box, "Chapter Replay", show_chapter_replays, service.chapter_replays().is_empty())
 	_add_menu_button(box, "Back", _return_from_library)
-
 func _refresh_save_library() -> void:
 	if _library_refresh_pending:
 		return
@@ -2702,50 +2958,42 @@ func show_save_slot(slot_id: String) -> void:
 	_clear_menu()
 	var service = _save_service()
 	var slot: Dictionary = {}
-	for candidate in service.list_slots():
-		if str(candidate.id) == slot_id:
+	for candidate: Dictionary in service.list_slots():
+		if str(candidate.get("id", "")) == slot_id:
 			slot = candidate
 	if slot.is_empty():
 		show_save_library(library_back_target, library_page)
 		return
-	var box := _menu_box(str(slot.title), str(slot.zone) if bool(slot.valid) else "Empty journey", "save library")
+	var box: VBoxContainer = _menu_box(str(slot.get("title", "Journey")), JourneyMenuPanel.status_text(str(slot.get("status", "empty"))), "recorded journey")
 	box.set_meta("compact_buttons", true)
-	var title := LineEdit.new()
-	title.text = str(slot.title)
-	title.name = "SaveSlotName"
-	_register_field(title, "slot_name", str(slot.title))
-	title.max_length = 48
-	title.placeholder_text = "Name this journey"
-	title.custom_minimum_size = Vector2(320, 44)
-	title.focus_mode = Control.FOCUS_ALL
-	title.editable = not bool(slot.protected)
-	box.add_child(title)
-	if bool(slot.valid):
-		_add_menu_text(box, "Saved %s UTC" % str(slot.saved_at).replace("T", " "))
-	if _slot_operation_results.has(slot_id):
-		_add_menu_text(box, str(_slot_operation_results[slot_id]))
-	_add_menu_button(box, "Load This Journey", func():
-		if service.load_slot(get_parent(), slot_id):
-			hide_menus()
-	, not bool(slot.valid))
-	if not bool(slot.protected):
+	_set_journey_card_text(JourneyMenuPanel.card(slot))
+	var title: LineEdit = LineEdit.new()
+	if not bool(slot.get("protected", false)):
+		title.text = str(slot.get("title", "Journey"))
+		title.name = "SaveSlotName"
+		_register_field(title, "slot_name", title.text)
+		title.max_length = 48
+		title.placeholder_text = "Name this journey"
+		title.custom_minimum_size = Vector2(320, 52)
+		title.focus_mode = Control.FOCUS_ALL
+		box.add_child(title)
+	else:
+		title.queue_free()
+	_save_slot_notice = _add_menu_text(box, str(_slot_operation_results.get(slot_id, "")))
+	_save_slot_notice.custom_minimum_size.y = 62.0
+	_add_journey_load_button(box, "Load Previous Copy" if str(slot.get("status", "")) == "recoverable" else "Load This Journey", slot, "load_slot:" + slot_id)
+	_add_journey_recovery_options(box, slot)
+	if not bool(slot.get("protected", false)):
 		var can_save: bool = get_parent().get("game_started") == true and is_instance_valid(get_parent().get("player"))
-		_add_menu_button(box, "Replace With Current Journey" if bool(slot.exists) else "Save Current Journey Here", func(): service.save_named(get_parent(), slot_id, title.text), not can_save, "save_current")
-		_add_menu_button(box, "Rename", func():
-			service.rename_slot(slot_id, title.text)
-		, not bool(slot.valid))
-		_add_menu_button(box, "Restore Previous Slot Copy", func():
-			service.restore_previous_slot(slot_id)
-		, not service.has_previous_slot(slot_id))
-		_add_menu_button(box, "Import File Into This Slot", func():
-			service.request_import_file(slot_id)
-			if not service.library_changed.is_connected(_refresh_save_library):
-				service.library_changed.connect(_refresh_save_library)
-		)
-	_add_menu_button(box, "Export This Journey", func(): service.export_slot(slot_id), not bool(slot.valid))
-	_add_menu_text(box, "Replacing or importing into this manual save retains its previous copy. Export a copy first to keep more than one earlier version. Automatic checkpoints cannot be overwritten from this menu.")
+		_add_menu_button(box, "Replace With Current Journey" if bool(slot.get("exists", false)) else "Save Current Journey Here", func(): service.save_named(get_parent(), slot_id, title.text), not can_save, "save_current")
+		_add_menu_button(box, "Rename", func(): service.rename_slot(slot_id, title.text), not bool(slot.get("valid", false)), "rename")
+		_add_menu_button(box, "Restore Previous Slot Copy", func(): service.restore_previous_slot(slot_id), not bool(slot.get("backup_available", false)), "restore_previous")
+		_add_menu_button(box, "Import File Into This Slot", func(): service.request_import_file(slot_id), false, "import_slot")
+		_add_menu_text(box, "Replacing or importing here retains the previous slot copy. Export first to keep more than one earlier version.")
+	else:
+		_add_menu_text(box, "This protected record can be loaded or exported. The game manages when it is written.")
+	_add_menu_button(box, "Export This Journey", func(): service.export_slot(slot_id), not bool(slot.get("valid", false)), "export_slot")
 	_add_menu_button(box, "Back", func(): show_save_library(library_back_target, library_page))
-
 func show_save_import() -> void:
 	active_menu = "save_import"
 	_clear_menu()
@@ -2765,15 +3013,13 @@ func show_save_import() -> void:
 func show_chapter_replays() -> void:
 	active_menu = "chapter_replay"
 	_clear_menu()
-	var box := _menu_box("Return to a Chapter", "A copied journey", "your completed outcome is preserved")
-	_add_menu_text(box, "Replay begins from the first checkpoint recorded in each chapter of this journey. Replay autosaves and decisions use separate files. Manual saves can preserve a replay as a new journey.")
-	for chapter in _save_service().chapter_replays():
-		_add_menu_button(box, str(chapter.title), func(id = str(chapter.id)):
-			if _save_service().replay_chapter(get_parent(), id):
-				hide_menus()
-		)
+	var box: VBoxContainer = _menu_box("Return to a Chapter", "A copied journey", "your completed outcome is preserved")
+	_add_menu_text(box, "Replay begins from a recorded chapter checkpoint. It uses separate automatic saves; a manual save can preserve it as another journey.")
+	for chapter: Dictionary in _save_service().chapter_replays():
+		_add_journey_load_button(box, JourneyMenuPanel.slot_row(chapter), chapter, "replay:" + str(chapter.get("id", "")))
+		if not bool(chapter.get("available", false)):
+			_add_menu_text(box, str(chapter.get("reason", "This chapter record is unavailable.")))
 	_add_menu_button(box, "Back", func(): show_save_library(library_back_target, library_page))
-
 func _return_from_library() -> void:
 	_return_to_parent()
 

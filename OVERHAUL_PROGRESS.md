@@ -36,9 +36,9 @@ Original checkout and its untracked artifacts are retained at D:/Projects/AshenO
 - World staging and aftermath: event-driven story compositions, voluntary witness staging, three peaceful covenant rituals, Ash confrontation, physical village work, encounter counterplay, and three return activities per ending implemented.
 - Player experience: journal, decision previews, epilogues after return scenes, evidence-earned combat opportunities, supplies, emergency medicine, nine-practice progression, difficulty, audio mix, save library, isolated replay, conversation history and accessibility controls implemented.
 - Presentation: character keepsakes and speaking/listening performances, 335 generated exact-text voice clips, seven story motifs and an illustrated chapter atlas included in the second production package.
-- Latest export: source `3eb2b311fb04`, build `story-20261003T120649Z-3eb2b311fb04`, packaged commit `c6c3ab5`.
-- Latest push/deployment: both authorized GitHub branches updated; Vercel deployment `dpl_Bpu9dVkLn9H9VwMi6adEqcaJdNfY` returned `status: ok`, `readyState: READY`, and alias `https://ashenoath.vercel.app`.
-- Active work: cycle 02 is published; cycle 03 is being planned around equipment and supply preparation, deliberate story choices and automated publication. The continuing goal remains active.
+- Latest export: source `7912479abe20`, build `story-20261003T124352Z-7912479abe20`, packaged commit `7634f08`.
+- Latest push/deployment: both authorized GitHub branches updated; Vercel deployment `dpl_rstRtgGDvV7FVwPyqqWpiM8z4coL` returned `status: ok`, `readyState: READY`, and alias `https://ashenoath.vercel.app`.
+- Active work: cycle 03 is published; cycle 04 is being planned around journey continuity, Continue/save presentation, recovery and arrival guidance. The continuing goal remains active.
 
 Production deployment: `dpl_9DKbrtv61oZVYfk5pQ6h5mXwkUiX`, `https://ashenoath-6yzh9ysh9-rafaeitahir-5792s-projects.vercel.app`. The initial CLI upload omitted `web` due to an overly broad ignore pattern; that filter was corrected, committed and pushed before the successful 82.5 MB upload. No post-deployment request, browser session, test or gameplay verification was performed.
 
@@ -89,3 +89,11 @@ The plan `FINE_DETAILS_CYCLE_03_PLAN.md` was written before implementation. Acti
 Cycle 03 source implementation is integrated. Preparation uses authoritative item and quote models, supports selected arrows/coatings, protects full health/stamina remedies, retains local results and preserves menu position. Decision details expose current commitments and known facts; History records accepted receipts, with covenant selection distinguished from enactment. The production builder now supports `-Publish` for generated artifacts, both GitHub branches and the existing Vercel project. Source commit and production packaging follow; no tests or verification were run.
 
 Cycle 03 production compilation/export completed from `7912479abe20`, build `story-20261003T124352Z-7912479abe20`, candidate `.release-gate/fine-details-cycle03-01`. The new publication stage stopped on an incorrect allowlisted music-manifest path; that tooling path was corrected. Publication continues from the existing completed package without repeating the game build.
+
+Cycle 03 package `7634f08` was pushed to both authorized branches. Vercel deployment `dpl_rstRtgGDvV7FVwPyqqWpiM8z4coL` returned `READY`, URL `https://ashenoath-psi6c5bj5-rafaeitahir-5792s-projects.vercel.app`, aliased to `https://ashenoath.vercel.app`. The CLI uploaded 86.2 MB. The existing package was published after the script-path correction, without rerunning the game export. No post-deployment checks were performed. Cycle 04 planning follows immediately.
+
+## Fine details cycle 04
+
+`FINE_DETAILS_CYCLE_04_PLAN.md` was written before implementation. Work covers exact Continue/save selections, recorded journey summaries, stable legacy metadata, recovery sources, staged destination preparation and concise arrival guidance. Root has wired the transient coordinator and runtime handoff, input/cancellation boundaries, incoming-state application after content readiness, actual player-ready completion, shared menu models and single travel-failure messages. Save-model and HUD packages are being completed. No tests or verification were run.
+
+Cycle 04 source is integrated, including the exact-selection save model, stable resume pointer, recorded-resource/time summaries, canonical destination validation, pending-load write gate, content-ready acceptance, completed-player handoff, preserved loading menu/focus, contextual recovery and persistent return cards. No spoken dialogue changed. Production compilation and publication follow.

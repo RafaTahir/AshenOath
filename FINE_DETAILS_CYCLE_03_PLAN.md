@@ -57,6 +57,8 @@ The implementation milestone is integrated source and completed production publi
 
 ## Execution record
 
+- Published package `7634f08` to both authorized branches. Vercel returned `READY` for `dpl_rstRtgGDvV7FVwPyqqWpiM8z4coL`, aliased to `https://ashenoath.vercel.app`. Cycle 04 planning follows; the continuing goal remains active.
+
 - Written after independent source-context planning for preparation, HUD and decisions, before implementation.
 - Final integration contracts: `PreparationViewModel.item_detail(item_id, inventory, progression, context, state, quests)`; `resolved_effect(item_id, inventory, progression)`; `crafting.quote/craft_result`; `vendor_service.quote/buy` and existing reserve methods; `progression.upgrade_status/unlock_result`. Standard results carry `ok`, `operation`, `item_id`, `quantity`, `spent`, `remaining`, `message` and `reason`.
 - HUD contracts are `set_preparation_context(snapshot)`, `set_preparation_services(crafting)`, `show_preparation_result(result) -> bool`, and `show_decision_result(receipt)`. Existing action signals are retained, including `item_use_requested` for selecting ammunition. The model snapshot has `health`, `max_health`, `stamina`, `max_stamina`, `weapon_mode`, `selected_arrow_id` and `zone_id`.
