@@ -100,6 +100,7 @@ func configure(owner: Node) -> void:
 	dialogue.load_dialogue("res://data/dialogue.json")
 	dialogue.load_dialogue("res://data/campaign_dialogue.json")
 	dialogue.load_dialogue("res://data/interaction_scenes.json")
+	dialogue.load_conversation_topics("res://data/conversation_topics.json")
 	dialogue.setup(story_state, quests)
 	inventory.load_items("res://data/items.json")
 	save_manager.set_summary_definitions(quests.quest_defs, inventory.item_defs)
@@ -203,6 +204,8 @@ func configure(owner: Node) -> void:
 	hud.dialogue_closed.connect(Callable(owner, "_release_dialogue_facing"))
 	hud.dialogue_closed.connect(Callable(owner, "_on_dialogue_closed_audio"))
 	hud.dialogue_page_changed.connect(Callable(owner, "_on_dialogue_page_changed"))
+	hud.dialogue_topic_requested.connect(Callable(owner, "_on_dialogue_topic_requested"))
+	hud.dialogue_speech_interrupted.connect(audio.stop_voice)
 	hud.dialogue_review_changed.connect(audio.set_dialogue_review_paused)
 	hud.craft_requested.connect(func(item_id: String):
 		owner.call("_craft_preparation_item", item_id)

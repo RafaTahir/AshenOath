@@ -84,6 +84,11 @@ def main():
         path = GAME / "data" / source
         if path.exists():
             entries.update(json.loads(path.read_text(encoding="utf-8-sig")))
+    topics_path = GAME / "data" / "conversation_topics.json"
+    if args.all_scenes and topics_path.exists():
+        catalog = json.loads(topics_path.read_text(encoding="utf-8-sig"))
+        for topic in catalog.get("topics", []):
+            entries["conversation_topic:" + topic["id"]] = topic
     lines, seen = [], set()
     for scene_id, base in entries.items():
         if not args.all_scenes and scene_id not in KEY_SCENES and not scene_id.startswith("witness_"):
@@ -115,7 +120,11 @@ def main():
                     if ramp:
                         samples[:ramp] *= np.linspace(0, 1, ramp)
                         samples[-ramp:] *= np.linspace(1, 0, ramp)
-                    sf.write(clip, samples, rate, format="OGG", subtype="VORBIS")
+                    # Interrupted production must not leave a partial file at
+                    # the exact-text cache key used by later resumed builds.
+                    partial_clip = clip.with_suffix(".ogg.partial")
+                    sf.write(partial_clip, samples, rate, format="OGG", subtype="VORBIS")
+                    partial_clip.replace(clip)
                     print(f"Voiced {scene_id}: {who} ({len(lines)+1})", flush=True)
                 lines.append({"id":"story_" + key[:20], "speaker_id":who, "text":text, "text_sha256":hashlib.sha256(text.encode("utf-8")).hexdigest(), "page_key":key, "narrative_revision":REVISION, "path":"res://" + clip.relative_to(GAME).as_posix(), "scene":scene_id, "production_mode":"generated", "human_reviewed":False, "review_status":"not_performed_user_requested", "status":"generated_current", "voice_model":"en_GB-vctk-medium", "model_speaker":speaker})
     manifest = {"ticket":"VOICE-STORY-002", "status":"generated_current_unreviewed", "narrative_revision":REVISION, "authoritative_delivery":"subtitles", "allow_generated_current_recordings":True, "human_reviewed":False, "review_status":"not_performed_user_requested", "production_mode":"generated", "source":"Piper 1.4.1; VCTK medium multi-speaker model", "source_url":MODEL_BASE, "attribution":"VCTK corpus: CSTR, University of Edinburgh, Junichi Yamagishi, Christophe Veaux and Kirsten MacDonald. Model card and attribution retained in docs/audio/VCTK_MODEL_CARD.txt.", "pronunciation":PRONUNCIATION, "roles":{role:{"model_speaker":value[0], "length_scale":value[1]} for role,value in ROLE_PROFILES.items()}, "lines":lines}

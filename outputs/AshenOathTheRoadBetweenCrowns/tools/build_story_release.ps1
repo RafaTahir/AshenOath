@@ -4,6 +4,7 @@ param(
     [string]$GodotPath = "C:\Users\User\.cache\codex-runtimes\godot-4.6.3\Godot_v4.6.3-stable_win64_console.exe",
     [string]$PythonPath = "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe",
     [switch]$SkipWebCopy,
+    [switch]$BuildVoices,
     [switch]$Publish,
     [string]$PublishMessage = ""
 )
@@ -100,6 +101,9 @@ public static class AshenOathBuildPower {
 try {
 Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "build_source_catalog.py")) "source-catalog"
 Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "build_story_score.py")) "story-score"
+if ($BuildVoices) {
+    Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "build_story_voices.py"), "--all-scenes") "story-voices"
+}
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--editor", "--import") "import"
 
 # Opening and campaign packs carry zone scripts and base carries scripts/data.
@@ -214,6 +218,14 @@ if ($Publish) {
         "outputs/AshenOathTheRoadBetweenCrowns/story_score_manifest.json",
         "outputs/AshenOathTheRoadBetweenCrowns/assets_external/audio/story_score"
     )
+    if ($BuildVoices) {
+        $GeneratedPaths += @(
+            "outputs/AshenOathTheRoadBetweenCrowns/voice_production_manifest.json",
+            "outputs/AshenOathTheRoadBetweenCrowns/assets_external/audio/voices/story",
+            "outputs/AshenOathTheRoadBetweenCrowns/docs/audio/VOICE_PRODUCTION.md",
+            "outputs/AshenOathTheRoadBetweenCrowns/docs/audio/VCTK_MODEL_CARD.txt"
+        )
+    }
     if (-not $PublishMessage) { $PublishMessage = "Publish story build $BuildId" }
     Invoke-PublishProcess $GitPath ($GitArguments + @("add", "--") + $GeneratedPaths) "git-artifacts"
     Invoke-PublishProcess $GitPath ($GitArguments + @("commit", "--only", "-m", $PublishMessage, "--") + $GeneratedPaths) "git-package"

@@ -25,6 +25,8 @@ signal menu_clicked
 signal journey_load_requested(selection: Dictionary)
 signal journey_load_cancel_requested
 signal journal_section_requested(section_id: String)
+signal dialogue_topic_requested(context_id: String, topic_id: String, revision_key: String)
+signal dialogue_speech_interrupted
 
 const MENU_BUILD_LABEL = "ASHEN OATH · THE ROAD BETWEEN CROWNS"
 const MENU_SIZE = Vector2(1920.0, 1080.0)
@@ -40,6 +42,7 @@ const NoticeQueue = preload("res://scripts/hud_notice_queue.gd")
 const PreparationViewModel = preload("res://scripts/preparation_view_model.gd")
 const PreparationPanel = preload("res://scripts/preparation_panel.gd")
 const JourneyMenuPanel = preload("res://scripts/journey_menu_panel.gd")
+const DialogueTopicNavigation = preload("res://scripts/dialogue_topic_navigation.gd")
 var navigation = NavigationState.new()
 var notices = NoticeQueue.new()
 var _rendered_screen := ""
@@ -181,6 +184,8 @@ var _journey_cancel_button: Button
 var _journey_return_pending: Dictionary = {}
 var _journey_return_last_id := ""
 var _save_slot_notice: Label
+var _topic_navigation = DialogueTopicNavigation.new()
+var _dialogue_view_generation := 0
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -727,6 +732,8 @@ func show_exit_notice() -> void:
 	_add_menu_button(box, "Back to Menu", func(): show_main_menu())
 
 func hide_menus() -> void:
+	_topic_navigation.reset()
+	_dialogue_view_generation += 1
 	_cancel_dialogue_press()
 	_capture_menu_state()
 	_capture_inventory_state()
@@ -1099,7 +1106,186 @@ func mark_stamina_exhausted() -> void:
 	_flash_bar(stamina_bar, Color(1.0, 0.32, 0.16))
 	show_status_cue("Stamina spent", "stamina")
 
+func get_dialogue_topic_seen_keys() -> Array[String]:
+	return DialogueTopicNavigation.seen_keys(text_history.entries)
+
+func _has_optional_topics() -> bool:
+	var rows: Array = dialogue_session_data.get("optional_topics", [])
+	return str(dialogue_session_data.get("topic_context_id", "")) != "" and not rows.is_empty()
+
+func _open_dialogue_topics() -> void:
+	if str(_topic_navigation.mode) == "primary":
+		_capture_dialogue_reading_state()
+		var detail: Dictionary = {"key":_decision_selected_key, "text":_decision_details.text, "visible":_decision_details.visible}
+		_topic_navigation.remember_primary(dialogue_session_data, dialogue_pages, dialogue_page_index, _dialogue_reading_state, detail)
+	if _topic_navigation.primary.is_empty():
+		return
+	dialogue_speech_interrupted.emit()
+	_cancel_dialogue_press()
+	_topic_navigation.mode = "list"
+	_topic_navigation.requested_id = ""
+	_topic_navigation.requested_revision = ""
+	_render_dialogue_topic_list()
+
+func _render_dialogue_topic_list() -> void:
+	_dialogue_view_generation += 1
+	_dialogue_reading_state.clear()
+	_decision_selected_key = ""
+	_decision_details.visible = false
+	var primary: Dictionary = _topic_navigation.primary.get("session", {})
+	dialogue_title.text = str(primary.get("name", "Conversation")) + " — Ask more"
+	dialogue_title.visible = true
+	dialogue_page_label.text = "Optional conversation"
+	dialogue_text.text = "Ask about what has already happened."
+	if str(_topic_navigation.list_message) != "":
+		dialogue_text.text += "\n\n" + str(_topic_navigation.list_message)
+	for child in dialogue_actions.get_children():
+		dialogue_actions.remove_child(child)
+		child.queue_free()
+	var seen: Array[String] = get_dialogue_topic_seen_keys()
+	var rows: Array = _topic_navigation.rows()
+	for raw: Variant in rows:
+		if not raw is Dictionary:
+			continue
+		var row: Dictionary = raw
+		var id: String = str(row.get("id", ""))
+		if id == "":
+			continue
+		var recorded: bool = seen.has(str(row.get("history_key", "")))
+		var label: String = str(row.get("title", "Ask a question")) + ("\nIn History" if recorded else "")
+		var button: Button = _add_topic_navigation_button(label, "topic:" + id, func(topic: Dictionary = row): _request_dialogue_topic(topic))
+		button.focus_entered.connect(func(topic: Dictionary = row): _show_dialogue_topic_summary(topic))
+		button.mouse_entered.connect(func(topic: Dictionary = row): _show_dialogue_topic_summary(topic))
+	_add_topic_navigation_button("Back to Conversation", "topics_back", _return_to_primary_dialogue)
+	dialogue_choices_scroll.custom_minimum_size.y = 180.0 if rows.size() > 2 else 154.0
+	call_deferred("_restore_topic_list_reading", _dialogue_view_generation)
+	call_deferred("_apply_hud_layout")
+
+func _show_dialogue_topic_summary(row: Dictionary) -> void:
+	if str(_topic_navigation.mode) != "list":
+		return
+	var text: String = str(row.get("title", "")) + "\n\n" + str(row.get("summary", ""))
+	if str(_topic_navigation.list_message) != "":
+		text += "\n\n" + str(_topic_navigation.list_message)
+	if dialogue_text.text != text:
+		dialogue_text.text = text
+		dialogue_text.scroll_to_line(0)
+
+func _request_dialogue_topic(row: Dictionary) -> void:
+	if str(_topic_navigation.mode) != "list" or str(_topic_navigation.requested_id) != "":
+		return
+	_capture_dialogue_reading_state()
+	_topic_navigation.list_reading = _dialogue_reading_state.duplicate(true)
+	_topic_navigation.requested_id = str(row.get("id", ""))
+	_topic_navigation.requested_revision = str(row.get("revision_key", ""))
+	_topic_navigation.list_message = ""
+	dialogue_speech_interrupted.emit()
+	dialogue_topic_requested.emit(str(_topic_navigation.context_id()), str(_topic_navigation.requested_id), str(_topic_navigation.requested_revision))
+
+func show_dialogue_topic(scene: Dictionary) -> void:
+	if str(_topic_navigation.mode) != "list" or _topic_navigation.primary.is_empty():
+		return
+	if str(scene.get("topic_context_id", "")) != str(_topic_navigation.context_id()):
+		return
+	if str(scene.get("topic_id", "")) != str(_topic_navigation.requested_id) or str(scene.get("topic_revision", "")) != str(_topic_navigation.requested_revision):
+		return
+	if not bool(scene.get("read_only", false)):
+		dialogue_topic_unavailable(str(_topic_navigation.context_id()))
+		return
+	var pages: Array = []
+	for raw: Variant in scene.get("pages", []):
+		if raw is Dictionary and str(raw.get("text", "")).strip_edges() != "":
+			var page: Dictionary = raw.duplicate(true)
+			page["read_only"] = true
+			pages.append(page)
+	if pages.is_empty():
+		dialogue_topic_unavailable(str(_topic_navigation.context_id()))
+		return
+	var topic_title: String = "Ask more"
+	for raw: Variant in _topic_navigation.rows():
+		if raw is Dictionary and str(raw.get("id", "")) == str(scene.get("topic_id", "")):
+			topic_title = str(raw.get("title", topic_title))
+	# The visible topic heading separates a repeated line from the preceding
+	# conversation, so displayed page IDs remain represented in History.
+	text_history.record("Ask more", topic_title, "topic", str(scene.get("topic_history_key", "")) + ":heading")
+	dialogue_speech_interrupted.emit()
+	_cancel_dialogue_press()
+	_topic_navigation.mode = "topic"
+	dialogue_session_data = scene.duplicate(true)
+	dialogue_session_data["actions"] = []
+	dialogue_pages = pages
+	dialogue_page_index = 0
+	_render_dialogue_page()
+
+func dialogue_topic_unavailable(context_id: String) -> void:
+	if str(_topic_navigation.mode) != "list" or context_id != str(_topic_navigation.context_id()):
+		return
+	var available_rows: Array = []
+	for raw: Variant in _topic_navigation.rows():
+		if raw is Dictionary and str(raw.get("id", "")) != str(_topic_navigation.requested_id):
+			available_rows.append(raw)
+	var session: Dictionary = _topic_navigation.primary.get("session", {})
+	session["optional_topics"] = available_rows
+	_topic_navigation.primary["session"] = session
+	_topic_navigation.requested_id = ""
+	_topic_navigation.requested_revision = ""
+	_topic_navigation.list_message = "That topic is no longer available in this conversation."
+	_render_dialogue_topic_list()
+
+func _return_to_primary_dialogue() -> void:
+	if _topic_navigation.primary.is_empty():
+		return
+	var snapshot: Dictionary = _topic_navigation.primary.duplicate(true)
+	dialogue_speech_interrupted.emit()
+	_cancel_dialogue_press()
+	_topic_navigation.reset()
+	dialogue_session_data = snapshot.get("session", {})
+	dialogue_pages = snapshot.get("pages", [])
+	dialogue_page_index = int(snapshot.get("page", 0))
+	_render_dialogue_page(false, false, false)
+	var detail: Dictionary = snapshot.get("detail", {})
+	_decision_selected_key = str(detail.get("key", ""))
+	_decision_details.text = str(detail.get("text", ""))
+	_decision_details.visible = bool(detail.get("visible", false))
+	_dialogue_reading_state = Dictionary(snapshot.get("reading", {})).duplicate(true)
+	call_deferred("_restore_primary_topic_return", _dialogue_view_generation)
+	call_deferred("_apply_hud_layout")
+
+func _restore_primary_topic_return(generation: int) -> void:
+	await get_tree().process_frame
+	if generation == _dialogue_view_generation and str(_topic_navigation.mode) == "primary" and dialogue_layer.visible:
+		_restore_dialogue_reading_state()
+
+func _restore_topic_list_reading(generation: int) -> void:
+	await get_tree().process_frame
+	if generation != _dialogue_view_generation or str(_topic_navigation.mode) != "list" or not dialogue_layer.visible:
+		return
+	var reading: Dictionary = _topic_navigation.list_reading
+	var focus_key: String = str(reading.get("focus", ""))
+	var restored: bool = false
+	for control: Control in _dialogue_focus_controls():
+		if str(control.get_meta("dialogue_focus_key", "")) == focus_key:
+			control.grab_focus()
+			restored = true
+			break
+	if not restored:
+		_focus_first_enabled(dialogue_actions)
+	dialogue_choices_scroll.scroll_vertical = int(reading.get("choices_scroll", 0))
+	dialogue_text.get_v_scroll_bar().value = float(reading.get("subtitle_scroll", 0.0))
+
+func _add_topic_navigation_button(label: String, key: String, callback: Callable) -> Button:
+	var button: Button = Button.new()
+	button.text = label
+	button.set_meta("dialogue_focus_key", key)
+	button.process_mode = Node.PROCESS_MODE_ALWAYS
+	button.focus_mode = Control.FOCUS_ALL
+	button.action_mode = BaseButton.ACTION_MODE_BUTTON_RELEASE
+	_style_button(button)
+	button.pressed.connect(callback)
+	dialogue_actions.add_child(button)
+	return button
 func show_dialogue(data: Dictionary) -> void:
+	_topic_navigation.reset()
 	if _dialogue_review_open:
 		_dialogue_review_open = false
 		dialogue_review_changed.emit(false)
@@ -1123,7 +1309,8 @@ func show_dialogue(data: Dictionary) -> void:
 	dialogue_page_index = 0
 	_render_dialogue_page()
 
-func _render_dialogue_page() -> void:
+func _render_dialogue_page(record_history: bool = true, announce_page: bool = true, focus_page: bool = true) -> void:
+	_dialogue_view_generation += 1
 	_dialogue_reading_state.clear()
 	_cancel_dialogue_press()
 	_decision_selected_key = ""
@@ -1140,27 +1327,33 @@ func _render_dialogue_page() -> void:
 		dialogue_title.text = page_speaker
 		dialogue_text.text = str(page)
 	dialogue_title.visible = subtitle_speaker_names
-	text_history.record(page_speaker, dialogue_text.get_parsed_text(), "speech", str(page.get("text_id", "")) if page is Dictionary else "")
-	dialogue_page_label.text = "%02d / %02d" % [dialogue_page_index + 1, dialogue_pages.size()]
-	dialogue_page_changed.emit(page_speaker, page_speaker_id, dialogue_page_index, dialogue_pages.size())
+	if record_history:
+		text_history.record(page_speaker, dialogue_text.get_parsed_text(), "speech", str(page.get("text_id", "")) if page is Dictionary else "")
+	var reading_topic: bool = str(_topic_navigation.mode) == "topic"
+	dialogue_page_label.text = ("Topic · " if reading_topic else "") + "%02d / %02d" % [dialogue_page_index + 1, dialogue_pages.size()]
+	if announce_page:
+		dialogue_page_changed.emit(page_speaker, page_speaker_id, dialogue_page_index, dialogue_pages.size())
 	for child in dialogue_actions.get_children():
 		dialogue_actions.remove_child(child)
 		child.queue_free()
 	if dialogue_page_index < dialogue_pages.size() - 1:
-		var advance: Button = Button.new()
-		advance.text = "Continue"
-		advance.set_meta("dialogue_focus_key", "continue")
-		advance.process_mode = Node.PROCESS_MODE_ALWAYS
-		advance.focus_mode = Control.FOCUS_ALL
-		advance.action_mode = BaseButton.ACTION_MODE_BUTTON_RELEASE
-		_style_button(advance)
-		advance.pressed.connect(func():
+		_add_topic_navigation_button("Continue", "continue", func():
 			dialogue_page_index += 1
 			_render_dialogue_page()
 		)
-		dialogue_actions.add_child(advance)
-		dialogue_choices_scroll.custom_minimum_size.y = 96.0
-		_focus_after_rebuild(dialogue_actions)
+		if reading_topic:
+			_add_topic_navigation_button("Back to Topics", "topic_back", _open_dialogue_topics)
+		dialogue_choices_scroll.custom_minimum_size.y = 128.0 if reading_topic else 96.0
+		if focus_page:
+			_focus_after_rebuild(dialogue_actions)
+		call_deferred("_apply_hud_layout")
+		return
+	if reading_topic:
+		_add_topic_navigation_button("Back to Topics", "topic_back", _open_dialogue_topics)
+		_add_topic_navigation_button("Back to Conversation", "topics_back", _return_to_primary_dialogue)
+		dialogue_choices_scroll.custom_minimum_size.y = 128.0
+		if focus_page:
+			_focus_after_rebuild(dialogue_actions)
 		call_deferred("_apply_hud_layout")
 		return
 	var actions: Array = dialogue_session_data.get("actions", [])
@@ -1197,16 +1390,18 @@ func _render_dialogue_page() -> void:
 			action_selected.emit(action_data)
 		)
 		dialogue_actions.add_child(button)
-	dialogue_choices_scroll.custom_minimum_size.y = 154.0 if actions.size() > 2 else 112.0
 	if actions.is_empty():
 		_add_dialogue_close()
+	if _has_optional_topics():
+		_add_topic_navigation_button("Ask more", "ask_more", _open_dialogue_topics)
+	dialogue_choices_scroll.custom_minimum_size.y = 154.0 if dialogue_actions.get_child_count() > 2 else 112.0
 	if not first_decision.is_empty():
 		_show_decision_detail(first_decision)
-		call_deferred("_focus_decision_reader", dialogue_page_index)
-	else:
+		if focus_page:
+			call_deferred("_focus_decision_reader", dialogue_page_index, _dialogue_view_generation)
+	elif focus_page:
 		_focus_after_rebuild(dialogue_actions)
 	call_deferred("_apply_hud_layout")
-
 func _show_decision_detail(model: Dictionary) -> void:
 	if _decision_details == null or model.is_empty():
 		return
@@ -1218,9 +1413,9 @@ func _show_decision_detail(model: Dictionary) -> void:
 	_decision_details.visible = true
 	_decision_details.scroll_to_line(0)
 
-func _focus_decision_reader(page_index: int) -> void:
+func _focus_decision_reader(page_index: int, generation: int = -1) -> void:
 	await get_tree().process_frame
-	if dialogue_layer.visible and dialogue_page_index == page_index and _decision_details.visible:
+	if (generation < 0 or generation == _dialogue_view_generation) and dialogue_layer.visible and dialogue_page_index == page_index and _decision_details.visible:
 		_decision_details.grab_focus()
 
 func show_decision_result(receipt: Dictionary) -> void:
@@ -2579,6 +2774,12 @@ func request_back() -> bool:
 	if active_menu == "text_history":
 		_return_from_history()
 		return true
+	if dialogue_layer != null and dialogue_layer.visible and str(_topic_navigation.mode) == "topic":
+		_open_dialogue_topics()
+		return true
+	if dialogue_layer != null and dialogue_layer.visible and str(_topic_navigation.mode) == "list":
+		_return_to_primary_dialogue()
+		return true
 	if dialogue_layer != null and dialogue_layer.visible:
 		if not _close_dialogue_surface():
 			return true
@@ -2871,6 +3072,8 @@ func _open_screen(key: String) -> void:
 		_: show_pause_menu()
 
 func get_current_dialogue_page() -> Dictionary:
+	if str(_topic_navigation.mode) == "list":
+		return {}
 	if dialogue_page_index < 0 or dialogue_page_index >= dialogue_pages.size():
 		return {}
 	var page: Variant = dialogue_pages[dialogue_page_index]

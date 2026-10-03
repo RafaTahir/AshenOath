@@ -1874,6 +1874,10 @@ func _handle_interaction(area) -> void:
 			hud.toast("Anwen goes still at the feathers. 'Then it was called here,' she says, and will say no more.")
 		_set_interactable_label_visible(area, false)
 		_stage_dialogue_moment(area)
+		var topic_context_id: String = dialogue_runtime_coordinator.bind_topic_context(str(area.interaction_id), current_zone_id)
+		if not topic_context_id.is_empty():
+			dialogue_data["topic_context_id"] = topic_context_id
+			dialogue_data["optional_topics"] = dialogue.get_conversation_topics(str(area.interaction_id), current_zone_id, hud.get_dialogue_topic_seen_keys())
 		preload("res://scripts/story_performance.gd").begin(area, player, dialogue_data, story_state)
 		audio.set_dialogue_active(true)
 		audio.set_game_paused(true)
@@ -6273,7 +6277,13 @@ func _stage_dialogue_moment(area) -> void:
 	dialogue_runtime_coordinator.stage(area, player, camera_rig, validate_walkable_position)
 
 func _on_dialogue_page_changed(_speaker: String, _speaker_id: String, _page_index: int, _total_pages: int) -> void:
-	var encounter: Dictionary = preload("res://scripts/story_journal.gd").encounter_record(_speaker_id, current_zone_id)
+	var page: Dictionary = hud.get_current_dialogue_page()
+	var read_only: bool = bool(page.get("read_only", false))
+	# Optional questions enter the existing reading history, without registering
+	# new story evidence or changing a person's commitments. Persist on close.
+	if read_only:
+		story_save_pending = true
+	var encounter: Dictionary = {} if read_only else preload("res://scripts/story_journal.gd").encounter_record(_speaker_id, current_zone_id)
 	if not encounter.is_empty():
 		var encounter_id: String = str(encounter.get("id", ""))
 		if encounter_id != "" and not story_state.has_evidence(encounter_id):
@@ -6284,8 +6294,22 @@ func _on_dialogue_page_changed(_speaker: String, _speaker_id: String, _page_inde
 	dialogue_runtime_coordinator.refresh_page(player, camera_rig)
 	if audio != null:
 		audio.set_dialogue_active(true)
-		audio.play_dialogue_page(hud.get_current_dialogue_page())
-	preload("res://scripts/story_performance.gd").page(dialogue_runtime_coordinator.get_focus_actor(), hud.get_current_dialogue_page())
+		audio.play_dialogue_page(page)
+	preload("res://scripts/story_performance.gd").page(dialogue_runtime_coordinator.get_focus_actor(), page)
+
+func _on_dialogue_topic_requested(context_id: String, topic_id: String, revision_key: String) -> void:
+	# A reading request never re-enters interaction or action dispatch. Resolve
+	# against the still-present speaker and current knowledge at selection time.
+	var context: Dictionary = dialogue_runtime_coordinator.get_topic_context(context_id)
+	if resource_shutdown_prepared or _journey_load_pending() or context.is_empty() or str(context.get("zone_id", "")) != current_zone_id:
+		hud.dialogue_topic_unavailable(context_id)
+		return
+	var topic: Dictionary = dialogue.get_conversation_topic(topic_id, str(context.get("actor_id", "")), current_zone_id, revision_key)
+	if topic.is_empty():
+		hud.dialogue_topic_unavailable(context_id)
+		return
+	topic["topic_context_id"] = context_id
+	hud.show_dialogue_topic(topic)
 
 func _face_npc_toward_player(npc: Node3D) -> void:
 	dialogue_runtime_coordinator.face_actor(npc, player)

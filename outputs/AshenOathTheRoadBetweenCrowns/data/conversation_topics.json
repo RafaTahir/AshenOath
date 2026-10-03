@@ -1,0 +1,344 @@
+{
+  "version": 1,
+  "topics": [
+    {
+      "id": "anwen_orens_coat",
+      "revision": "1",
+      "actor_ids": ["sister_anwen"],
+      "speaker_id": "sister_anwen",
+      "name": "Anwen",
+      "title": "Oren's coat",
+      "summary": "Ask about the coat Oren left behind.",
+      "conditions": {"final_choice_completed": true, "aftermath_names_returned": true},
+      "known_evidence": [],
+      "require_variant": false,
+      "lines": [
+        {"speaker": "Kael", "speaker_id": "player", "text": "You still have Oren's coat."},
+        {"speaker": "Anwen", "speaker_id": "sister_anwen", "text": "The cuff is stiff with mud. I keep folding that part underneath."},
+        {"speaker": "Kael", "speaker_id": "player", "text": "What happens if you wash it?"},
+        {"speaker": "Anwen", "speaker_id": "sister_anwen", "text": "Then it's a clean coat. I know that, but I keep behaving as if I'll have sent him away a second time."}
+      ],
+      "variants": []
+    },
+    {
+      "id": "anwen_basket_handles",
+      "revision": "1",
+      "actor_ids": ["sister_anwen"],
+      "speaker_id": "sister_anwen",
+      "name": "Anwen",
+      "title": "The basket handles",
+      "summary": "Talk about the baskets returned from the household deliveries.",
+      "conditions": {"relief_deliveries_completed": true, "renewal_stopped": true},
+      "known_evidence": [],
+      "require_variant": false,
+      "lines": [
+        {"speaker": "Kael", "speaker_id": "player", "text": "You kept the empty baskets?"},
+        {"speaker": "Anwen", "speaker_id": "sister_anwen", "text": "For the next meals. One handle's nearly through, and the woman who carried it apologized to me."},
+        {"speaker": "Kael", "speaker_id": "player", "text": "For the handle?"},
+        {"speaker": "Anwen", "speaker_id": "sister_anwen", "text": "For needing the basket. I started explaining why she needn't, then I fetched some twine."}
+      ],
+      "variants": []
+    },
+    {
+      "id": "mira_medicine_labels",
+      "revision": "1",
+      "actor_ids": ["mira"],
+      "speaker_id": "mira",
+      "name": "Mira",
+      "title": "The labels in your hand",
+      "summary": "Ask about the labels on Mira's medicines.",
+      "conditions": {},
+      "known_evidence": [],
+      "require_variant": true,
+      "lines": [],
+      "variants": [
+        {
+          "id": "confessed",
+          "priority": 10,
+          "conditions": {"mira_truth": "confessed"},
+          "known_evidence": [],
+          "lines": [
+            {"speaker": "Kael", "speaker_id": "player", "text": "You've rewritten the labels."},
+            {"speaker": "Mira", "speaker_id": "mira", "text": "The first ones were tidy and small. Especially the word ash."},
+            {"speaker": "Kael", "speaker_id": "player", "text": "Too small to read?"},
+            {"speaker": "Mira", "speaker_id": "mira", "text": "No, small enough for me to hope they wouldn't. These are less tidy."}
+          ]
+        },
+        {
+          "id": "kept",
+          "priority": 10,
+          "conditions": {"mira_truth": "kept"},
+          "known_evidence": [],
+          "lines": [
+            {"speaker": "Kael", "speaker_id": "player", "text": "New labels?"},
+            {"speaker": "Mira", "speaker_id": "mira", "text": "For the clean roots. I found room to write every steeping time."},
+            {"speaker": "Kael", "speaker_id": "player", "text": "And the other jar?"},
+            {"speaker": "Mira", "speaker_id": "mira", "text": "Still the old label. I keep finding very necessary work on the other side of the table."}
+          ]
+        },
+        {
+          "id": "destroyed",
+          "priority": 10,
+          "conditions": {"mira_truth": "destroyed"},
+          "known_evidence": [],
+          "lines": [
+            {"speaker": "Kael", "speaker_id": "player", "text": "You reached for that empty space."},
+            {"speaker": "Mira", "speaker_id": "mira", "text": "The old jar stood there for years. My hand gets ahead of me."},
+            {"speaker": "Kael", "speaker_id": "player", "text": "What brings it back?"},
+            {"speaker": "Mira", "speaker_id": "mira", "text": "The kettle; the clean roots need longer, so I watch them. Waiting turns out to be part of treating someone."}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rook_bram_axle",
+      "revision": "1",
+      "actor_ids": ["rook"],
+      "speaker_id": "rook",
+      "name": "Rook",
+      "title": "What Bram charged",
+      "summary": "Remember the man who used to repair Rook's cart.",
+      "conditions": {"cart_helped": true},
+      "known_evidence": [],
+      "require_variant": false,
+      "lines": [
+        {"speaker": "Kael", "speaker_id": "player", "text": "Bram charged you for only one axle."},
+        {"speaker": "Rook", "speaker_id": "rook", "text": "The second repair was free if I held the wheel and stopped advising him."},
+        {"speaker": "Kael", "speaker_id": "player", "text": "Did you manage both?"},
+        {"speaker": "Rook", "speaker_id": "rook", "text": "The wheel stayed up. He took what victories he could."}
+      ],
+      "variants": []
+    },
+    {
+      "id": "rook_road_questions",
+      "revision": "1",
+      "actor_ids": ["rook"],
+      "speaker_id": "rook",
+      "name": "Rook",
+      "title": "Can I still ask about the road?",
+      "summary": "Ask what Rook is comfortable discussing now.",
+      "conditions": {},
+      "known_evidence": [],
+      "require_variant": true,
+      "lines": [],
+      "variants": [
+        {
+          "id": "protected",
+          "priority": 10,
+          "conditions": {"rook_disclosure": "protected"},
+          "known_evidence": [],
+          "lines": [
+            {"speaker": "Kael", "speaker_id": "player", "text": "Can I still ask about the road?"},
+            {"speaker": "Rook", "speaker_id": "rook", "text": "You can ask. If I say a place stays off the page, it stays off."},
+            {"speaker": "Kael", "speaker_id": "player", "text": "Even when the route passes it?"},
+            {"speaker": "Rook", "speaker_id": "rook", "text": "Especially then. A road goes past a great many doors it hasn't been invited through."}
+          ]
+        },
+        {
+          "id": "public",
+          "priority": 10,
+          "conditions": {"rook_disclosure": "public"},
+          "known_evidence": [],
+          "lines": [
+            {"speaker": "Kael", "speaker_id": "player", "text": "Can I still ask about the road?"},
+            {"speaker": "Rook", "speaker_id": "rook", "text": "Here, where I can see who's coming."},
+            {"speaker": "Kael", "speaker_id": "player", "text": "You used to answer with a joke."},
+            {"speaker": "Rook", "speaker_id": "rook", "text": "I still have them. I'm saving the good ones for a room that doesn't feel like an address you've handed out."}
+          ]
+        },
+        {
+          "id": "erased",
+          "priority": 10,
+          "conditions": {"rook_disclosure": "erased"},
+          "known_evidence": [],
+          "lines": [
+            {"speaker": "Kael", "speaker_id": "player", "text": "Can I still ask about the road?"},
+            {"speaker": "Rook", "speaker_id": "rook", "text": "Ask where it goes. Don't ask me to draw the houses back in."},
+            {"speaker": "Kael", "speaker_id": "player", "text": "You remember them all?"},
+            {"speaker": "Rook", "speaker_id": "rook", "text": "The doors, mostly, and which ones opened. A blank sheet doesn't make that a blank part of my life."}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tor_grinding_stone",
+      "revision": "1",
+      "actor_ids": ["blacksmith_tor"],
+      "speaker_id": "tor",
+      "name": "Tor",
+      "title": "The grinding stone",
+      "summary": "Ask about the tool Tor used on the old iron.",
+      "conditions": {},
+      "known_evidence": [],
+      "require_variant": true,
+      "lines": [],
+      "variants": [
+        {
+          "id": "memorial",
+          "priority": 10,
+          "conditions": {"iron_fate": "memorial"},
+          "known_evidence": [],
+          "lines": [
+            {"speaker": "Kael", "speaker_id": "player", "text": "What did you use to grind the marks away?"},
+            {"speaker": "Tor", "speaker_id": "tor", "text": "That stone. Still cuts."},
+            {"speaker": "Kael", "speaker_id": "player", "text": "Why keep it beside the named work?"},
+            {"speaker": "Tor", "speaker_id": "tor", "text": "So I have to reach past it. I said 'still useful' about the iron, too, and I don't want the words coming out before I've thought."}
+          ]
+        },
+        {
+          "id": "tools",
+          "priority": 10,
+          "conditions": {"iron_fate": "tools"},
+          "known_evidence": [],
+          "lines": [
+            {"speaker": "Kael", "speaker_id": "player", "text": "What did you use to grind the marks away?"},
+            {"speaker": "Tor", "speaker_id": "tor", "text": "That stone. Still cuts."},
+            {"speaker": "Kael", "speaker_id": "player", "text": "You still use it?"},
+            {"speaker": "Tor", "speaker_id": "tor", "text": "On an edge, not on a name. I can remember the difference without pretending I need a different stone."}
+          ]
+        },
+        {
+          "id": "surrendered",
+          "priority": 10,
+          "conditions": {"iron_fate": "surrendered"},
+          "known_evidence": [],
+          "lines": [
+            {"speaker": "Kael", "speaker_id": "player", "text": "What did you use to grind the marks away?"},
+            {"speaker": "Tor", "speaker_id": "tor", "text": "That stone. It wasn't in the bundle I handed over."},
+            {"speaker": "Kael", "speaker_id": "player", "text": "Forgotten?"},
+            {"speaker": "Tor", "speaker_id": "tor", "text": "No, the families decide what happens to their iron. This bit is mine to remember."}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tor_hammer_grip",
+      "revision": "1",
+      "actor_ids": ["blacksmith_tor"],
+      "speaker_id": "tor",
+      "name": "Tor",
+      "title": "How I held the hammer",
+      "summary": "Ask what Tor noticed during the road repair.",
+      "conditions": {"road_repaired": true},
+      "known_evidence": [],
+      "require_variant": false,
+      "lines": [
+        {"speaker": "Kael", "speaker_id": "player", "text": "What was wrong with my grip?"},
+        {"speaker": "Tor", "speaker_id": "tor", "text": "You held the hammer as if the board might answer back."},
+        {"speaker": "Kael", "speaker_id": "player", "text": "I've worked with worse company."},
+        {"speaker": "Tor", "speaker_id": "tor", "text": "Board's better company if you loosen your thumb. Head does the striking."}
+      ],
+      "variants": []
+    },
+    {
+      "id": "edric_seal_in_hand",
+      "revision": "1",
+      "actor_ids": ["edric_castle", "edric_campaign"],
+      "speaker_id": "edric",
+      "name": "Edric",
+      "title": "The seal in your hand",
+      "summary": "Ask Edric about a familiar habit now that the renewal has stopped.",
+      "conditions": {"renewal_stopped": true},
+      "known_evidence": [],
+      "require_variant": true,
+      "lines": [],
+      "variants": [
+        {
+          "id": "cooperate",
+          "priority": 10,
+          "conditions": {"edric_stance": "cooperate"},
+          "known_evidence": [],
+          "lines": [
+            {"speaker": "Kael", "speaker_id": "player", "text": "You keep turning the seal in your hand."},
+            {"speaker": "Edric", "speaker_id": "edric", "text": "I used to do that while someone gave me a number. It made an answer wait until I was ready for it."},
+            {"speaker": "Kael", "speaker_id": "player", "text": "Does it help now?"},
+            {"speaker": "Edric", "speaker_id": "edric", "text": "No, I'm discovering how long a silence can be when nobody has to fill it for me."}
+          ]
+        },
+        {
+          "id": "exposed",
+          "priority": 10,
+          "conditions": {"edric_stance": "exposed"},
+          "known_evidence": [],
+          "lines": [
+            {"speaker": "Kael", "speaker_id": "player", "text": "You still have the seal."},
+            {"speaker": "Edric", "speaker_id": "edric", "text": "You have the ledger. Must I empty my pockets for this conversation?"},
+            {"speaker": "Kael", "speaker_id": "player", "text": "I asked about the seal."},
+            {"speaker": "Edric", "speaker_id": "edric", "text": "It used to mean people waited for my answer. Now they watch for what I'll try to keep."}
+          ]
+        },
+        {
+          "id": "compelled",
+          "priority": 10,
+          "conditions": {"edric_stance": "compelled"},
+          "known_evidence": [],
+          "lines": [
+            {"speaker": "Kael", "speaker_id": "player", "text": "You've rubbed the edge of the seal smooth."},
+            {"speaker": "Edric", "speaker_id": "edric", "text": "It was smooth before you arrived."},
+            {"speaker": "Kael", "speaker_id": "player", "text": "I didn't notice."},
+            {"speaker": "Edric", "speaker_id": "edric", "text": "You were occupied with getting an answer out of me. This one, at least, I can give without your help."}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "senn_reading_refusal",
+      "revision": "1",
+      "actor_ids": ["captain_senn"],
+      "speaker_id": "senn",
+      "name": "Senn",
+      "title": "Reading their refusal",
+      "summary": "Ask Senn what he heard in the deserters' written refusal.",
+      "conditions": {"senn_fate": "testimony"},
+      "known_evidence": [],
+      "require_variant": true,
+      "lines": [],
+      "variants": [
+        {
+          "id": "testimony",
+          "priority": 10,
+          "conditions": {"bannerless_fate": "testimony"},
+          "known_evidence": [],
+          "lines": [
+            {"speaker": "Kael", "speaker_id": "player", "text": "You read their refusal?"},
+            {"speaker": "Senn", "speaker_id": "senn", "text": "Twice. First I looked for a sentence someone must have put in their mouths."},
+            {"speaker": "Kael", "speaker_id": "player", "text": "And the second?"},
+            {"speaker": "Senn", "speaker_id": "senn", "text": "I recognized the way they complain. I used to interrupt before they reached the point."}
+          ]
+        },
+        {
+          "id": "shielded",
+          "priority": 10,
+          "conditions": {"bannerless_fate": "shielded"},
+          "known_evidence": [],
+          "lines": [
+            {"speaker": "Kael", "speaker_id": "player", "text": "You read their refusal?"},
+            {"speaker": "Senn", "speaker_id": "senn", "text": "The copy with the homes left out. I noticed the gaps before I listened to the words."},
+            {"speaker": "Kael", "speaker_id": "player", "text": "Did the gaps change what they said?"},
+            {"speaker": "Senn", "speaker_id": "senn", "text": "No, they just left me fewer places to look instead."}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "halvern_preserved_words",
+      "revision": "1",
+      "actor_ids": ["halvern"],
+      "speaker_id": "halvern",
+      "name": "Halvern",
+      "title": "Let the words rest",
+      "summary": "Stay a moment with the preserved sanctuary memory.",
+      "conditions": {"halvern_fate": "witness", "halvern_is_fragment": true, "command_proof_recovered": true},
+      "known_evidence": [],
+      "require_variant": false,
+      "lines": [
+        {"speaker": "Kael", "speaker_id": "player", "text": "The sanctuary order is copied. You don't have to give it again."},
+        {"speaker": "Halvern", "speaker_id": "halvern", "text": "Sanctuary under the Vargan seal."},
+        {"speaker": "Kael", "speaker_id": "player", "text": "I have that line."},
+        {"speaker": "Halvern", "speaker_id": "halvern", "text": "Do not close it. There are still people on the road."},
+        {"speaker": "Kael", "speaker_id": "player", "text": "I hear you."}
+      ],
+      "variants": []
+    }
+  ]
+}

@@ -62,6 +62,8 @@ This cycle completes when source is integrated and the production package is pub
 
 ## Execution record
 
+- Published package `cda02e1` and tooling fix `9c38c69` to both branches. Vercel returned `READY` for `dpl_8BNgf6ffoxZLoV7MabPN6ASmz28o`, aliased to `https://ashenoath.vercel.app`. The continuing objective remains active; cycle 05 planning follows.
+
 - Written before code changes after separate save-model, HUD and lifecycle planning.
 - Lifecycle helper: `JourneyContinuityCoordinator.stage_restore(prepared, origin) -> int`, `restore_request()`, `claim_restore(generation)`, `cancel_restore(generation, reason)`, `finish_restore(generation)`, `begin_arrival(reason, target_zone, context) -> int`, and `take_arrival(generation, actual_zone, objective_view, recap)`. It is transient and data-only; SaveManager retains identity/history and root owns runtime-pack waiting/state application.
 - Arrival fields are `id`, `context_id`, `reason`, `title`, `body`, `zone_name`, `next_action`, `destination_name`, `journal_section` and `announce`. Root consumes a cue once after actual player readiness. Same-zone refreshes remain quiet; ordinary travel announces only a useful changed story step.

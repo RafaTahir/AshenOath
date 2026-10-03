@@ -3,11 +3,15 @@ extends RefCounted
 
 var _focus_actor: WeakRef
 var _locked_actor: WeakRef
+var _topic_generation: int = 0
+var _topic_context: Dictionary = {}
 
 func get_focus_actor() -> Node3D:
 	return _focus_actor.get_ref() as Node3D if _focus_actor != null else null
 
 func stage(area: Node3D, player: Node3D, camera_rig: Node, validate_position: Callable) -> void:
+	_invalidate_topic_context()
+	_focus_actor = null
 	if not is_instance_valid(player) or not is_instance_valid(area):
 		return
 	_focus_actor = weakref(area)
@@ -33,6 +37,35 @@ func stage(area: Node3D, player: Node3D, camera_rig: Node, validate_position: Ca
 			player.set("velocity", Vector3.ZERO)
 			_face_pair(area, player)
 	_frame_camera(camera_rig, area)
+
+func bind_topic_context(actor_id: String, zone_id: String) -> String:
+	_invalidate_topic_context()
+	var actor: Node3D = get_focus_actor()
+	if actor_id == "" or zone_id == "" or not _topic_actor_available(actor, actor_id):
+		return ""
+	var context_id: String = "conversation:%d:%d" % [_topic_generation, actor.get_instance_id()]
+	_topic_context = {"context_id": context_id, "actor_id": actor_id, "zone_id": zone_id}
+	return context_id
+
+func get_topic_context(context_id: String) -> Dictionary:
+	if context_id == "" or str(_topic_context.get("context_id", "")) != context_id:
+		return {}
+	var actor: Node3D = get_focus_actor()
+	if not _topic_actor_available(actor, str(_topic_context.get("actor_id", ""))):
+		_invalidate_topic_context()
+		return {}
+	return _topic_context.duplicate(true)
+
+func _topic_actor_available(actor: Node3D, actor_id: String) -> bool:
+	if not is_instance_valid(actor) or actor.is_queued_for_deletion() or not actor.is_inside_tree() or not actor.is_visible_in_tree():
+		return false
+	if not actor.has_method("is_interaction_enabled") or not bool(actor.call("is_interaction_enabled")):
+		return false
+	return str(actor.get("interaction_id")) == actor_id and str(actor.get("interaction_type")) == "dialogue"
+
+func _invalidate_topic_context() -> void:
+	_topic_generation += 1
+	_topic_context.clear()
 
 func _supported_step(player: Node3D, candidate: Vector3) -> Variant:
 	var world := player.get_world_3d()
@@ -63,6 +96,7 @@ func face_actor(actor: Node3D, player: Node3D) -> void:
 		actor.rotation.y = atan2(-to_player.x, -to_player.z)
 
 func release(player: Node3D) -> void:
+	_invalidate_topic_context()
 	_focus_actor = null
 	_set_player_pose(player, false)
 	var actor := _locked_actor.get_ref() as Node3D if _locked_actor != null else null

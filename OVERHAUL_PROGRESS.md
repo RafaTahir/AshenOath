@@ -36,9 +36,9 @@ Original checkout and its untracked artifacts are retained at D:/Projects/AshenO
 - World staging and aftermath: event-driven story compositions, voluntary witness staging, three peaceful covenant rituals, Ash confrontation, physical village work, encounter counterplay, and three return activities per ending implemented.
 - Player experience: journal, decision previews, epilogues after return scenes, evidence-earned combat opportunities, supplies, emergency medicine, nine-practice progression, difficulty, audio mix, save library, isolated replay, conversation history and accessibility controls implemented.
 - Presentation: character keepsakes and speaking/listening performances, 335 generated exact-text voice clips, seven story motifs and an illustrated chapter atlas included in the second production package.
-- Latest export: source `7912479abe20`, build `story-20261003T124352Z-7912479abe20`, packaged commit `7634f08`.
-- Latest push/deployment: both authorized GitHub branches updated; Vercel deployment `dpl_rstRtgGDvV7FVwPyqqWpiM8z4coL` returned `status: ok`, `readyState: READY`, and alias `https://ashenoath.vercel.app`.
-- Active work: cycle 03 is published; cycle 04 is being planned around journey continuity, Continue/save presentation, recovery and arrival guidance. The continuing goal remains active.
+- Latest export: source `e11e1de24966`, build `story-20261003T132623Z-e11e1de24966`, packaged commit `cda02e1`, followed by publication tooling fix `9c38c69`.
+- Latest push/deployment: both authorized GitHub branches updated; Vercel deployment `dpl_8BNgf6ffoxZLoV7MabPN6ASmz28o` returned `status: ok`, `readyState: READY`, and alias `https://ashenoath.vercel.app`.
+- Active work: cycle 04 is published; cycle 05 is implementing optional character conversations responding to existing decisions and completed practical work. The continuing goal remains active.
 
 Production deployment: `dpl_9DKbrtv61oZVYfk5pQ6h5mXwkUiX`, `https://ashenoath-6yzh9ysh9-rafaeitahir-5792s-projects.vercel.app`. The initial CLI upload omitted `web` due to an overly broad ignore pattern; that filter was corrected, committed and pushed before the successful 82.5 MB upload. No post-deployment request, browser session, test or gameplay verification was performed.
 
@@ -99,3 +99,11 @@ Cycle 03 package `7634f08` was pushed to both authorized branches. Vercel deploy
 Cycle 04 source is integrated, including the exact-selection save model, stable resume pointer, recorded-resource/time summaries, canonical destination validation, pending-load write gate, content-ready acceptance, completed-player handoff, preserved loading menu/focus, contextual recovery and persistent return cards. No spoken dialogue changed. Production compilation and publication follow.
 
 Cycle 04 production package completed from `e11e1de24966`, build `story-20261003T132623Z-e11e1de24966`, candidate `.release-gate/fine-details-cycle04-02`, after fixing a compiler-reported missing parenthesis in the journey menu helper. The release command committed `cda02e1` and pushed both branches. Its Vercel invocation stopped on Windows command-tail quoting; the invocation was corrected, and deployment continues without repeating the completed game export.
+
+Cycle 04 package `cda02e1` and publication fix `9c38c69` were pushed to both branches. Vercel deployment `dpl_8BNgf6ffoxZLoV7MabPN6ASmz28o` returned `READY`, URL `https://ashenoath-l2niyix3s-rafaeitahir-5792s-projects.vercel.app`, aliased to `https://ashenoath.vercel.app`. Upload: 86.2 MB. No game export was repeated for the publication-only fix, and no post-deployment checks were performed. Cycle 05 planning begins with optional character responses to existing story outcomes and aid.
+
+## Fine details cycle 05
+
+`FINE_DETAILS_CYCLE_05_PLAN.md` was written before source edits. Implementation adds ten optional personal conversation topics with explicit existing-outcome gates, current-speaker presence, revision-bound History markers, and a bounded return path to the original story choices. Root has connected fresh read-only resolution, voice interruption on reading navigation and History persistence on close without topic evidence writes. The source catalog and exact-text voice collection now include topic variants; `-BuildVoices` brings voice generation and its artifact publication into the production pipeline. Writing, runtime and HUD implementation are in progress. No tests or verification are being run.
+
+Cycle 05 source is integrated: all ten topics, gated variants, staged-speaker context, read-only resolution, same-layer topic reading, parent conversation restoration, History-derived badges and controller/keyboard Back paths. Existing voice revision and exact speaker/text cache keys remain compatible. The production build now writes new clips atomically before packaging. Source commit, voice generation and publication follow.

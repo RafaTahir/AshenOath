@@ -8,7 +8,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-FILES = ["dialogue", "campaign_dialogue", "interaction_scenes", "quests", "story_campaign", "journal_people", "journal_work", "preparation_notes", "decision_contexts", "items", "upgrades", "vendors", "epilogues"]
+FILES = ["dialogue", "campaign_dialogue", "interaction_scenes", "conversation_topics", "quests", "story_campaign", "journal_people", "journal_work", "preparation_notes", "decision_contexts", "items", "upgrades", "vendors", "epilogues"]
 TEXT_FIELDS = {"text", "name", "title", "description", "label", "greeting", "fallback_text", "result", "cost", "question", "stakes", "summary", "body", "subtitle", "intent", "promise", "player_intent", "preview", "immediate_result", "long_term_result", "journal_entry", "commitment", "uncertainty", "follow_through"}
 STRINGS = {}
 
