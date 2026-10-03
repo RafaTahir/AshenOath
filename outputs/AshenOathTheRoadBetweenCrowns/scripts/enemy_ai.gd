@@ -158,6 +158,11 @@ func set_encounter_peers(peers: Array) -> void:
 func _physics_process(delta: float) -> void:
 	if dead or player == null:
 		return
+	if bool(get_meta("story_surrender_protected", false)):
+		velocity = Vector3.ZERO
+		if animation_driver != null:
+			animation_driver.set_locomotion(0.0, Vector3.ZERO, true)
+		return
 	var early_distance: float = player.global_position.distance_to(global_position)
 	if early_distance > sense_range + 1.0 and pending_attack_time <= 0.0 and stagger_time <= 0.0 and is_on_floor():
 		far_tick_accumulator += delta
@@ -316,9 +321,12 @@ func _validated_step_direction(direction: Vector3, target: Vector3, step_distanc
 	return rerouted if spatial_service.validate_segment(global_position, reroute_position, 0.50) else Vector3.ZERO
 
 func apply_damage(amount: float, source_tag: String = "") -> void:
-	if dead or not encounter_active:
+	if dead or not encounter_active or bool(get_meta("story_surrender_protected", false)):
 		return
 	var final_damage = amount
+	var story_encounter := get_node_or_null("StoryEncounterPreparation")
+	if story_encounter != null and story_encounter.has_method("incoming_damage_multiplier"):
+		final_damage *= float(story_encounter.incoming_damage_multiplier(source_tag))
 	if parry_exposed_time > 0.0:
 		final_damage += 8.0
 		parry_exposed_time = 0.0
@@ -413,6 +421,11 @@ func _resolve_attack() -> void:
 	last_attack_contact = Geometry3D.get_closest_point_to_segment(player_contact, sweep_start, sweep_end)
 	var boss_attack := _boss_attack_id()
 	var special_radius := _boss_attack_radius(boss_attack)
+	var story_encounter := get_node_or_null("StoryEncounterPreparation")
+	if story_encounter != null and story_encounter.has_method("blocks_attack") and story_encounter.blocks_attack(boss_attack):
+		attack_recovery_time = maxf(attack_recovery_time, 0.9)
+		special_attack_resolved.emit(self, boss_attack, attack_trace_end, special_radius, 0.0, false)
+		return
 	var special_contact := is_boss and boss_attack != "" and _special_attack_hits_player(boss_attack, special_radius)
 	var melee_contact := player_contact.distance_to(last_attack_contact) <= contact_radius and _has_attack_line()
 	if not melee_contact and not special_contact:

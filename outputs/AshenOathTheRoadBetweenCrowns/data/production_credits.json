@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "sections": [
+    {
+      "title": "Generated dialogue performances",
+      "body": "Revised campaign speech was generated with Piper using the en_GB-vctk-medium voice model. These are synthetic performances, not recordings by a cast. No human listening or performance review has been performed.\n\nThe model uses the VCTK corpus, distributed through the University of Edinburgh DataShare under Creative Commons Attribution 4.0 International (CC BY 4.0). The model card notes fine-tuning from the U.S. English lessac medium voice.\n\nPiper is a GPL-licensed build-time tool. The game distributes generated audio and provenance; it does not distribute the inference engine or voice model.",
+      "links": [
+        {"label": "VCTK dataset and attribution", "url": "https://datashare.ed.ac.uk/handle/10283/3443"},
+        {"label": "CC BY 4.0 license", "url": "https://creativecommons.org/licenses/by/4.0/"},
+        {"label": "Piper VCTK medium model and model card", "url": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_GB/vctk/medium"}
+      ]
+    },
+    {
+      "title": "Generated journal illustrations",
+      "body": "The four chapter illustrations in the journal atlas were created with OpenAI image generation for Ashen Oath. Story text and interface labels remain runtime text, separate from the illustrations.",
+      "links": []
+    }
+  ]
+}

@@ -1,5 +1,7 @@
 extends Node
 
+const StoryHeadModifier = preload("res://scripts/story_head_modifier.gd")
+
 ## Lightweight native-face presentation layer.
 ## It only animates imported eye meshes that already belong to the character
 ## asset. It never creates face cards, eye boxes, hair meshes, or other anatomy.
@@ -21,6 +23,9 @@ var update_timer: Timer
 var update_interval := 0.12
 var distance_suspended := false
 var focus_refresh_remaining := 0.0
+var expression := "neutral"
+var head_modifier: StoryHeadModifier
+var base_brow_rotations: Dictionary = {}
 
 const NATIVE_MONSTER_ROLES := [
 	"ghoulkin",
@@ -43,6 +48,7 @@ func configure(root: Node3D, role: String) -> bool:
 	brow_meshes.clear()
 	base_eye_scales.clear()
 	base_eye_positions.clear()
+	base_brow_rotations.clear()
 	native_face_surface_count = 0
 	focus_refresh_remaining = 0.0
 	var approved_complete_family := (
@@ -69,6 +75,19 @@ func configure(root: Node3D, role: String) -> bool:
 			base_eye_positions[mesh] = mesh.position
 		elif token.contains("brow"):
 			brow_meshes.append(mesh)
+			base_brow_rotations[mesh] = mesh.rotation
+	var skeleton := root.find_child("Skeleton3D", true, false) as Skeleton3D
+	if skeleton == null:
+		for candidate in root.find_children("*", "Skeleton3D", true, false):
+			skeleton = candidate as Skeleton3D
+			break
+	if skeleton != null and role_id not in NATIVE_MONSTER_ROLES:
+		head_modifier = skeleton.get_node_or_null("StoryHeadModifier") as StoryHeadModifier
+		if head_modifier == null:
+			head_modifier = StoryHeadModifier.new()
+			head_modifier.name = "StoryHeadModifier"
+			skeleton.add_child(head_modifier)
+		head_modifier.configure(skeleton)
 	valid = not eye_meshes.is_empty() or native_face_surface_count > 0
 	next_blink = 1.8 + float(absi(role_id.hash()) % 180) / 100.0
 	update_interval = 0.10 if role_id in ["sister_anwen", "mira", "rook"] else 0.12
@@ -128,10 +147,14 @@ func _on_update_timer_timeout() -> void:
 
 func set_distance_suspended(suspended: bool) -> void:
 	distance_suspended = suspended
+	if head_modifier != null:
+		head_modifier.active = not suspended
 	if update_timer != null:
 		update_timer.paused = suspended
 
 func _apply_eye_look() -> void:
+	if head_modifier != null:
+		head_modifier.look_yaw = -look_offset * 0.24
 	for mesh in eye_meshes:
 		if not is_instance_valid(mesh):
 			continue
@@ -161,3 +184,20 @@ func get_contract_report() -> Dictionary:
 func set_focus_target(target: Node3D) -> void:
 	focus_target = target
 	focus_refresh_remaining = 0.75
+
+func set_expression(value: String) -> void:
+	expression = value
+	if head_modifier != null:
+		head_modifier.set_expression(value)
+	# Imported brow meshes can express a subtle attitude; connected-face rigs
+	# use the native head pose above rather than synthetic replacement anatomy.
+	var brow_tilt := float({"stern":0.06, "concerned":-0.045, "grieving":-0.035, "wry":0.025}.get(value, 0.0))
+	for index in range(brow_meshes.size()):
+		var brow := brow_meshes[index]
+		if is_instance_valid(brow):
+			var base: Vector3 = base_brow_rotations.get(brow, Vector3.ZERO)
+			brow.rotation = base + Vector3(0, 0, brow_tilt * (-1.0 if index % 2 == 0 else 1.0))
+
+func play_story_gesture(kind: String) -> void:
+	if head_modifier != null:
+		head_modifier.gesture(kind)

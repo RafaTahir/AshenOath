@@ -4,6 +4,7 @@ static var _mesh_cache: Dictionary = {}
 static var _material_cache: Dictionary = {}
 static var _impact_pools: Dictionary = {}
 static var _ground_ring_pool: Array = []
+static var reduce_flashes := false
 
 static func clear_runtime_caches() -> void:
 	# Feedback pools are static because combat effects are reused between hits,
@@ -40,7 +41,7 @@ static func _free_feedback_node(node: Node) -> void:
 	node.free()
 
 static func impact_burst(parent: Node3D, pos: Vector3, heavy: bool, color: Color = Color(1.0, 0.66, 0.24)) -> void:
-	if parent == null:
+	if parent == null or reduce_flashes:
 		return
 	var key := "heavy" if heavy else "normal"
 	var root: Node3D = _acquire_impact_root(parent, key)
@@ -72,8 +73,12 @@ static func ground_ring(parent: Node3D, pos: Vector3, color: Color, radius: floa
 	ring.material_override = _mat(color, 0.84)
 	ring.visible = true
 	var tween = ring.create_tween()
-	tween.tween_property(ring, "scale", Vector3(radius * 1.6, 0.014, radius * 1.6), life)
-	tween.parallel().tween_property(ring, "position:y", ring.position.y + 0.01, life)
+	if reduce_flashes:
+		ring.material_override = _steady_material(color)
+		tween.tween_interval(maxf(life, 0.30))
+	else:
+		tween.tween_property(ring, "scale", Vector3(radius * 1.6, 0.014, radius * 1.6), life)
+		tween.parallel().tween_property(ring, "position:y", ring.position.y + 0.01, life)
 	tween.tween_callback(func(): _release_ground_ring(ring))
 
 static func beam_endpoint(parent: Node3D, pos: Vector3, direction: Vector3, rich: bool = true) -> void:
@@ -84,11 +89,12 @@ static func beam_endpoint(parent: Node3D, pos: Vector3, direction: Vector3, rich
 	root.set_meta("visual_name", "OathfireImpactEndpoint")
 	root.position = parent.to_local(pos)
 	parent.add_child(root)
-	var flare := MeshInstance3D.new()
-	flare.name = "OathfireEndpointFlare"
-	flare.mesh = _cached_sphere_mesh("beam_flare_rich" if rich else "beam_flare_potato", 0.16 if rich else 0.10)
-	flare.material_override = _emissive(Color(0.70, 0.96, 1.0), 2.2)
-	root.add_child(flare)
+	if not reduce_flashes:
+		var flare := MeshInstance3D.new()
+		flare.name = "OathfireEndpointFlare"
+		flare.mesh = _cached_sphere_mesh("beam_flare_rich" if rich else "beam_flare_potato", 0.16 if rich else 0.10)
+		flare.material_override = _emissive(Color(0.70, 0.96, 1.0), 2.2)
+		root.add_child(flare)
 	var ring := MeshInstance3D.new()
 	ring.name = "OathfireEndpointRing"
 	ring.mesh = _cached_torus_mesh("beam_ring_rich" if rich else "beam_ring_potato", 0.15 if rich else 0.10, 0.23 if rich else 0.16, 8, 18)
@@ -98,7 +104,10 @@ static func beam_endpoint(parent: Node3D, pos: Vector3, direction: Vector3, rich
 	if direction.length_squared() > 0.01:
 		root.look_at(root.global_position + direction.normalized(), Vector3.UP)
 	var tween := root.create_tween()
-	tween.tween_property(root, "scale", Vector3.ONE * (1.65 if rich else 1.30), 0.16)
+	if reduce_flashes:
+		tween.tween_interval(0.36)
+	else:
+		tween.tween_property(root, "scale", Vector3.ONE * (1.65 if rich else 1.30), 0.16)
 	tween.tween_callback(root.queue_free)
 
 static func block_flash(parent: Node3D, pos: Vector3, parry: bool, contact_override: Vector3 = Vector3.ZERO) -> void:
@@ -114,7 +123,11 @@ static func block_flash(parent: Node3D, pos: Vector3, parry: bool, contact_overr
 	flash.material_override = _emissive(Color(0.75, 0.88, 1.0) if parry else Color(0.95, 0.68, 0.24), 1.35 if parry else 0.85)
 	parent.add_child(flash)
 	var tween = flash.create_tween()
-	tween.tween_property(flash, "scale", Vector3.ONE * (1.45 if parry else 1.18), 0.11)
+	if reduce_flashes:
+		flash.name = "ParryContactCue" if parry else "BlockContactCue"
+		tween.tween_interval(0.30)
+	else:
+		tween.tween_property(flash, "scale", Vector3.ONE * (1.45 if parry else 1.18), 0.11)
 	tween.tween_callback(flash.queue_free)
 
 static func weapon_contact(parent: Node3D, base: Vector3, tip: Vector3, point: Vector3, heavy: bool, color: Color = Color(0.96, 0.78, 0.36), previous_base: Vector3 = Vector3.ZERO, previous_tip: Vector3 = Vector3.ZERO) -> void:
@@ -136,7 +149,7 @@ static func weapon_contact(parent: Node3D, base: Vector3, tip: Vector3, point: V
 	root.add_child(flash)
 	flash.look_at(root.global_position + direction, Vector3.UP)
 	var has_sweep := previous_tip.length_squared() > 0.0001 and previous_tip.distance_to(tip) > 0.015
-	if has_sweep:
+	if has_sweep and not reduce_flashes:
 		var sweep := MeshInstance3D.new()
 		sweep.name = "BladeSweepRibbon"
 		var sweep_mesh := ImmediateMesh.new()
@@ -168,7 +181,11 @@ static func weapon_contact(parent: Node3D, base: Vector3, tip: Vector3, point: V
 	ring.material_override = _emissive(color.lightened(0.18), 1.2)
 	root.add_child(ring)
 	var tween := root.create_tween()
-	tween.tween_property(root, "scale", Vector3.ONE * (1.42 if heavy else 1.18), 0.12)
+	if reduce_flashes:
+		flash.visible = false
+		tween.tween_interval(0.30)
+	else:
+		tween.tween_property(root, "scale", Vector3.ONE * (1.42 if heavy else 1.18), 0.12)
 	tween.tween_callback(root.queue_free)
 
 static func warning_marker(parent: Node3D, target: Node3D) -> MeshInstance3D:
@@ -291,7 +308,10 @@ static func boss_telegraph(parent: Node3D, pos: Vector3, boss_id: String) -> voi
 	wedge.material_override = _emissive(color.lightened(0.12), 0.72)
 	root.add_child(wedge)
 	var tween := root.create_tween()
-	tween.tween_property(root, "scale", Vector3.ONE * 1.55, 0.22)
+	if reduce_flashes:
+		tween.tween_interval(0.35)
+	else:
+		tween.tween_property(root, "scale", Vector3.ONE * 1.55, 0.22)
 	tween.tween_callback(root.queue_free)
 
 static func boss_attack_release(parent: Node3D, pos: Vector3, direction: Vector3, attack_id: String, radius: float, parried: bool) -> void:
@@ -366,10 +386,15 @@ static func boss_attack_release(parent: Node3D, pos: Vector3, direction: Vector3
 		heart.material_override = _emissive(color, 1.25)
 		root.add_child(heart)
 	var tween := root.create_tween()
-	tween.tween_property(root, "scale", Vector3.ONE * (1.18 if parried else 1.45), 0.20)
+	if reduce_flashes:
+		tween.tween_interval(0.35)
+	else:
+		tween.tween_property(root, "scale", Vector3.ONE * (1.18 if parried else 1.45), 0.20)
 	tween.tween_callback(root.queue_free)
 
 static func _emissive(color: Color, energy: float) -> StandardMaterial3D:
+	if reduce_flashes:
+		return _steady_material(color)
 	var key := "emissive:%s:%.3f" % [color.to_html(false), energy]
 	var cached = _material_cache.get(key)
 	if cached is StandardMaterial3D:
@@ -380,6 +405,27 @@ static func _emissive(color: Color, energy: float) -> StandardMaterial3D:
 	material.emission = color
 	material.emission_energy_multiplier = energy
 	material.roughness = 0.7
+	_material_cache[key] = material
+	return material
+
+static func _steady_material(color: Color) -> StandardMaterial3D:
+	# Preserve colour and geometry as attack information while removing the
+	# emissive surge. Separate cache keys let the setting change immediately
+	# for new effects without mutating materials shared by existing instances.
+	var calm := color
+	var brightness := maxf(calm.r, maxf(calm.g, calm.b))
+	if brightness > 0.50:
+		calm = Color(calm.r, calm.g, calm.b) * (0.50 / brightness)
+	calm.a = 1.0
+	var key := "steady:%s" % calm.to_html(false)
+	var cached = _material_cache.get(key)
+	if cached is StandardMaterial3D:
+		return cached as StandardMaterial3D
+	var material := StandardMaterial3D.new()
+	material.albedo_color = calm
+	material.emission_enabled = false
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	material.roughness = 1.0
 	_material_cache[key] = material
 	return material
 

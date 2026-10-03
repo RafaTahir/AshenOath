@@ -1,6 +1,7 @@
 extends RefCounted
 
 const CharacterFaceDriver = preload("res://scripts/character_face_driver.gd")
+const StoryCastProfile = preload("res://scripts/story_cast_profile.gd")
 
 const KAEL := {
 	"skin": Color("a9785f"), "hair": Color("77756f"), "eyes": Color("171412"),
@@ -29,6 +30,11 @@ static func apply(root: Node, role_id: String, variant_seed: String = "") -> Dic
 	var role := role_id.to_lower()
 	var resolved_seed := variant_seed if not variant_seed.is_empty() else role
 	var profile := _profile_for(role, resolved_seed)
+	var cast := StoryCastProfile.get_profile(role, resolved_seed)
+	if not cast.is_empty():
+		profile = profile.duplicate()
+		for channel in ["primary", "secondary", "skin", "hair"]:
+			profile[channel] = Color(str(cast[channel]))
 	var recipe := _recipe_for(role, profile, resolved_seed)
 	var surfaces := 0
 	var face_surfaces := 0
@@ -56,6 +62,9 @@ static func apply(root: Node, role_id: String, variant_seed: String = "") -> Dic
 	root.set_meta("character_identity_profile", role)
 	root.set_meta("character_variant_seed", resolved_seed)
 	root.set_meta("character_variant_recipe", recipe)
+	if not cast.is_empty():
+		root.set_meta("story_cast_identity", str(cast.id))
+		root.set_meta("story_cast_profile", cast)
 	root.set_meta("character_identity_surfaces", surfaces)
 	root.set_meta("character_identity_material_mode", "prebaked_atlas" if prebaked_identity else "runtime_palette")
 	_apply_bounded_variant_scale(root, role, resolved_seed)
@@ -81,6 +90,7 @@ static func apply(root: Node, role_id: String, variant_seed: String = "") -> Dic
 			face_driver.name = "CharacterFaceDriver"
 			root.add_child(face_driver)
 		face_driver.configure(root as Node3D, role)
+		face_driver.set_expression(str(cast.get("expression", "neutral")))
 		root.set_meta("character_face_contract", face_driver.get_contract_report())
 	return {"role": role, "surfaces": surfaces, "face_surfaces": face_surfaces}
 
@@ -233,6 +243,10 @@ static func _apply_bounded_variant_scale(root: Node, role: String, variant_seed:
 	# without producing giant actors or invalidating grounded origins.
 	var width := 0.95 + float(seed % 11) * 0.01
 	var depth := 0.95 + float(int(seed / 11) % 11) * 0.01
+	var cast := StoryCastProfile.get_profile(role, variant_seed)
+	if not cast.is_empty():
+		width = float(cast.get("width", width))
+		depth = float(cast.get("depth", depth))
 	var node_root := root as Node3D
 	if node_root == null:
 		return

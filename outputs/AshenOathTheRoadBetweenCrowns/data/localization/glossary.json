@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "source_locale": "en",
+  "notes": "Editorial pronunciation guide for consistent performances. These are production choices, not claims of real-language etymology. Preserve distinctions between testimony, inference, consent and a committed decision.",
+  "terms": [
+    {"term": "Ashen Oath", "pronunciation": "ASH-en ohth", "context": "Game title. Keep the title consistent across menus and credits."},
+    {"term": "Kael", "pronunciation": "KAYL", "context": "Player character. A survivor of retreat who chooses to safeguard testimony."},
+    {"term": "Greyfen", "pronunciation": "GRAY-fen", "context": "Village; home, work and relationships before any abstract political symbol."},
+    {"term": "Anwen", "pronunciation": "AN-wen", "context": "Shrine keeper. Responsibility does not erase her fear."},
+    {"term": "Rook", "pronunciation": "ROOK", "context": "Witness and mapmaker; do not translate as an unnamed bird when used as a person's name."},
+    {"term": "Mira", "pronunciation": "MEER-ah", "context": "Healer whose obligations and boundaries matter."},
+    {"term": "Tor", "pronunciation": "TOR", "context": "Craftsperson whose work carries a history."},
+    {"term": "Elna", "pronunciation": "ELL-nah", "context": "A mourner; privacy must remain distinct from destroying evidence."},
+    {"term": "Toma", "pronunciation": "TOH-mah", "context": "Village child; plain concrete language rather than an adult philosopher's voice."},
+    {"term": "Senn", "pronunciation": "SEN", "context": "Connected to the road's hidden record."},
+    {"term": "Edric", "pronunciation": "ED-rik", "context": "Authority who uses order and provision to defend coercion."},
+    {"term": "Halvern", "pronunciation": "HAL-vern", "context": "Soldier and implicated witness."},
+    {"term": "Wychwood", "pronunciation": "WITCH-wood", "context": "The wood and its living memory."},
+    {"term": "Vargan", "pronunciation": "VAR-gan", "context": "Seat of authority, court and record keeping."},
+    {"term": "White Hart", "pronunciation": "white HART", "context": "Covenant-bound keeper of denied memory. Hart means stag, not heart."},
+    {"term": "covenant", "pronunciation": "KUV-eh-nant", "context": "A binding agreement whose coerced renewal is the present conflict. Never substitute freely given consent when the text says compelled."},
+    {"term": "Witness", "context": "Ending: public accountability, with consent governing testimony."},
+    {"term": "Mercy", "context": "Ending: privacy for victims while retaining accountability for perpetrators."},
+    {"term": "Duty", "context": "Ending: freely borne shared stewardship. Not inherited coercion."},
+    {"term": "Ash", "context": "Ending: destroy the Hart; recovered human records survive."}
+  ],
+  "layout_guidance": {"expansion_allowance": "Allow 40 percent longer strings; use wrapping and scrolling rather than smaller critical text.", "speaker_labels": "Names are separate runtime controls and can be shown independently.", "timing": "Dialogue remains player advanced. Voice length must never force a choice or remove text.", "font_coverage": "English source currently uses the bundled runtime fallback. Ship and license required glyph coverage before offering any additional language.", "images": "Keep mandatory story text outside raster art."}
+}

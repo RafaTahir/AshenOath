@@ -18,7 +18,9 @@ const WATCHED_FLAGS := [
 	"rook_map_fate", "guardian_plan", "confession_method", "assembly_relief_ready",
 	"witness_consent_rook", "witness_consent_anwen", "witness_consent_edric", "witness_consent_mira",
 	"final_covenant", "final_choice_completed", "rootbound_colossus_defeated",
-	"ashwing_defeated", "halvern_fate", "senn_fate"
+	"ashwing_defeated", "halvern_fate", "senn_fate", "mill_ventilation_open",
+	"mill_workers_rescued", "mill_records_saved", "mill_smoke_exposure",
+	"mill_damage_state", "root_landscape_released", "root_testimony_protected", "root_testimony_damaged", "aftermath_names_returned", "aftermath_work_promised"
 ]
 
 static var _unit_box: BoxMesh
@@ -27,6 +29,7 @@ static var _unit_sack: CylinderMesh
 static func decorate(game, root: Node3D, zone_id: String) -> void:
 	if root == null or not is_instance_valid(root) or game.story_state == null:
 		return
+	load("res://scripts/story_activity_director.gd").install(game, root, zone_id)
 	if zone_id in ["assembly", "hart_glade"] and root == game.zone_root:
 		_sync_willing_witnesses(game, root, zone_id)
 	var layer := root.get_node_or_null(LAYER_NAME) as Node3D
@@ -94,7 +97,7 @@ static func _install_interactions(game, parent: Node3D, zone: String) -> void:
 
 static func _interaction(game, parent: Node3D, id: String, prompt: String, pos: Vector3) -> void:
 	var area = InteractableScript.new()
-	area.setup(id, "dialogue", prompt)
+	area.setup(id, "story_activity" if id in ["greyfen_cart_work", "greyfen_road_work", "greyfen_relief_board"] else "dialogue", prompt)
 	area.position = pos
 	area.build_collision(1.05)
 	area.set_meta("story_world_interaction", true)
@@ -299,9 +302,27 @@ static func _deep_wood(game, parent: Node3D) -> void:
 		_label(parent, "RookRoadPromise", "A ROAD FOR THE LIVING\nRook's marked return", Vector3(3.6, 1.7, 7.4), GREEN)
 	if bool(_flag(game, "rootbound_colossus_defeated", false)):
 		_notice(game, parent, Vector3(-5.5, 0, -8.0), "THE MEMORY IS STILL\nThe road can be walked")
+		for index in range(5):
+			var released := bool(_flag(game, "root_landscape_released", false))
+			_box(game, parent, "ReleasedRootGrowth", Vector3(-2.0 + float(index), 0.08, -8.0), Vector3(0.16, 0.20 if released else 0.07, 0.18), GREEN if released else TIMBER)
+		_label(parent, "NameBoardAftermath", "THE NAME-BOARD IS KEPT WHOLE" if bool(_flag(game, "root_testimony_protected", false)) else "FRAGMENTS REMAIN / THE COPIED REGISTER SURVIVES", Vector3(-2.6, 1.2, -6.7))
 
 static func _mill(game, parent: Node3D) -> void:
 	var operation := str(_flag(game, "mill_operation"))
+	if bool(_flag(game, "mill_ventilation_open", false)):
+		for index in range(6):
+			_box(game, parent, "OpenedMillEscapeChannel", Vector3(-1.65, 0.038, -0.8 + float(index) * 1.1), Vector3(0.5, 0.028, 0.92), Color(0.21, 0.37, 0.40))
+		_box(game, parent, "RaisedSluiceGate", Vector3(-1.8, 1.0, -0.4), Vector3(0.7, 0.45, 0.10), TIMBER)
+	if bool(_flag(game, "mill_records_saved", false)):
+		_box(game, parent, "SavedWageChest", Vector3(-2.8, 0.65, -4.0), Vector3(0.62, 0.44, 0.42), TIMBER)
+		_box(game, parent, "ProtectedWagePages", Vector3(-2.8, 0.89, -4.0), Vector3(0.45, 0.03, 0.32), PAPER)
+	if bool(_flag(game, "mill_workers_rescued", false)):
+		_notice(game, parent, Vector3(-3.5, 0, 7.5), "WORKERS REACHED CLEAN AIR\n" + ("Mira treats the smoke in their lungs" if int(_flag(game, "mill_smoke_exposure", 0)) >= 3 else "Their wage accounts travel to Greyfen"), GREEN)
+	if str(_flag(game, "mill_damage_state")) == "scorched":
+		for index in range(4):
+			_box(game, parent, "BurnedMillRoofFragment", Vector3(3.2 + float(index) * 0.55, 0.08, -3.0), Vector3(0.34, 0.12, 0.86), Color(0.12, 0.09, 0.075), float(index) * 18.0)
+	elif str(_flag(game, "mill_damage_state")) == "contained":
+		_notice(game, parent, Vector3(2.7, 0, 2.3), "CHANNEL KEPT CLEAR\nLower mill stores survived", GREEN)
 	_table(game, parent, Vector3(-2.0, 0, 2.5))
 	if operation in ["supervised", "restitution"]:
 		for index in range(4):
@@ -345,7 +366,7 @@ static func _undercroft(game, parent: Node3D) -> void:
 		_notice(game, parent, Vector3(-4.2, 0, 8.0), "KAEL'S ACCOUNT\nThe hunter names his own debt")
 	var fate := str(_flag(game, "halvern_fate"))
 	if fate != "":
-		_notice(game, parent, Vector3(4.2, 0, 8.0), "HALVERN'S PLACE\n" + {"witness": "He chose to walk with the living", "released": "Released from the oath", "destroyed": "No voice can be compelled from the dead"}.get(fate, "His answer is recorded"))
+		_notice(game, parent, Vector3(4.2, 0, 8.0), "HALVERN'S PLACE\n" + {"witness": "The bounded memory preserves his refusal", "released": "Released after the refusal was copied", "destroyed": "The command survives; the surrounding memory is lost"}.get(fate, "His answer is recorded"))
 
 static func _assembly(game, parent: Node3D) -> void:
 	var stopped := bool(_flag(game, "renewal_stopped", false))

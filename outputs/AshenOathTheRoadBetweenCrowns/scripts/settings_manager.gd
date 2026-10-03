@@ -33,6 +33,13 @@ const DEFAULT_SETTINGS := {
 	"difficulty": "standard",
 	"pause_on_focus_loss": true,
 	"subtitle_scale": 1.0,
+	"subtitle_background_opacity": 0.92,
+	"subtitle_speaker_names": true,
+	"flash_reduction": false,
+	"targeting_assist": true,
+	"block_mode": "hold",
+	"sprint_mode": "hold",
+	"text_locale": "en",
 	"camera_shake": 1.0,
 	"reduced_motion": false,
 	"high_contrast": false,
@@ -147,7 +154,12 @@ func restore_settings(stored: Dictionary) -> void:
 	settings["difficulty"] = str(settings.get("difficulty", "standard")).to_lower()
 	if settings["difficulty"] not in ["story", "standard", "veteran"]:
 		settings["difficulty"] = "standard"
-	settings["subtitle_scale"] = clampf(float(settings["subtitle_scale"]), 0.9, 1.2)
+	settings["subtitle_scale"] = clampf(float(settings["subtitle_scale"]), 0.9, 1.5)
+	settings["subtitle_background_opacity"] = clampf(float(settings.get("subtitle_background_opacity", 0.92)), 0.25, 1.0)
+	for key in ["block_mode", "sprint_mode"]:
+		if str(settings.get(key, "hold")) not in ["hold", "toggle"]:
+			settings[key] = "hold"
+	settings["text_locale"] = "en"
 	settings["camera_shake"] = clampf(float(settings["camera_shake"]), 0.0, 1.0)
 	settings["shadow_quality"] = clampi(int(settings["shadow_quality"]), 0, 2)
 	settings["potato_mode"] = settings["quality_preset"] == "potato"
@@ -322,8 +334,21 @@ func cycle_master_volume() -> void:
 	apply()
 
 func cycle_subtitle_scale() -> void:
-	settings["subtitle_scale"] = _cycle_float(float(settings["subtitle_scale"]), [0.9, 1.0, 1.2])
+	settings["subtitle_scale"] = _cycle_float(float(settings["subtitle_scale"]), [0.9, 1.0, 1.2, 1.35, 1.5])
 	apply()
+
+func cycle_accessibility(action: String) -> bool:
+	match action:
+		"subtitle_background_opacity":
+			settings[action] = _cycle_float(float(settings.get(action, 0.92)), [0.25, 0.55, 0.75, 0.92, 1.0])
+		"subtitle_speaker_names", "flash_reduction", "targeting_assist":
+			settings[action] = not bool(settings.get(action, false))
+		"block_mode", "sprint_mode":
+			settings[action] = "toggle" if str(settings.get(action, "hold")) == "hold" else "hold"
+		_:
+			return false
+	apply()
+	return true
 
 func set_mix_level(channel: String, value: float) -> void:
 	if channel not in ["music", "sfx", "voice"] or not is_finite(value):

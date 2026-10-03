@@ -1,0 +1,352 @@
+{
+  "revision": "road-renewal-1",
+  "production_mode": "original_procedural_composition",
+  "human_listening_review": "not_performed_user_requested",
+  "source": "tools/build_story_score.py",
+  "license": "Ashen Oath original project composition",
+  "sample_rate": 16000,
+  "duration_seconds": 16.0,
+  "motif": "D-A-C-E; endings alter resolution and silence",
+  "tracks": {
+    "story_road": {
+      "path": "res://assets_external/audio/story_score/story_road.wav",
+      "tempo": 60,
+      "bed": [
+        50,
+        57
+      ],
+      "events": [
+        [
+          0,
+          62,
+          1.2,
+          "plucked",
+          0.5
+        ],
+        [
+          2,
+          69,
+          0.9,
+          "plucked",
+          0.4
+        ],
+        [
+          3.5,
+          72,
+          1.2,
+          "plucked",
+          0.32
+        ],
+        [
+          6,
+          64,
+          1.1,
+          "plucked",
+          0.35
+        ],
+        [
+          9,
+          62,
+          2,
+          "plucked",
+          0.37
+        ],
+        [
+          11,
+          57,
+          2,
+          "plucked",
+          0.27
+        ]
+      ]
+    },
+    "story_names": {
+      "path": "res://assets_external/audio/story_score/story_names.wav",
+      "tempo": 56,
+      "bed": [
+        50,
+        53
+      ],
+      "events": [
+        [
+          0,
+          74,
+          2,
+          "bell",
+          0.32
+        ],
+        [
+          3,
+          69,
+          2,
+          "bell",
+          0.25
+        ],
+        [
+          6,
+          72,
+          1.5,
+          "bell",
+          0.27
+        ],
+        [
+          8,
+          76,
+          2,
+          "bell",
+          0.25
+        ],
+        [
+          11,
+          74,
+          2,
+          "bell",
+          0.2
+        ]
+      ]
+    },
+    "story_renewal": {
+      "path": "res://assets_external/audio/story_score/story_renewal.wav",
+      "tempo": 66,
+      "bed": [
+        38,
+        45,
+        51
+      ],
+      "events": [
+        [
+          0,
+          50,
+          0.8,
+          "plucked",
+          0.36
+        ],
+        [
+          1.5,
+          57,
+          0.8,
+          "plucked",
+          0.28
+        ],
+        [
+          3,
+          60,
+          1,
+          "bell",
+          0.24
+        ],
+        [
+          5,
+          64,
+          1,
+          "plucked",
+          0.27
+        ],
+        [
+          7.5,
+          50,
+          0.8,
+          "plucked",
+          0.36
+        ],
+        [
+          9,
+          57,
+          0.8,
+          "plucked",
+          0.24
+        ],
+        [
+          11,
+          63,
+          2,
+          "bell",
+          0.22
+        ]
+      ]
+    },
+    "ending_witness": {
+      "path": "res://assets_external/audio/story_score/ending_witness.wav",
+      "tempo": 60,
+      "bed": [
+        50,
+        57,
+        66
+      ],
+      "events": [
+        [
+          0,
+          62,
+          1.4,
+          "plucked",
+          0.46
+        ],
+        [
+          2,
+          69,
+          1,
+          "plucked",
+          0.37
+        ],
+        [
+          4,
+          72,
+          1.2,
+          "bell",
+          0.23
+        ],
+        [
+          6,
+          76,
+          1.4,
+          "plucked",
+          0.35
+        ],
+        [
+          8,
+          74,
+          2,
+          "bell",
+          0.28
+        ],
+        [
+          11,
+          66,
+          2,
+          "plucked",
+          0.3
+        ]
+      ]
+    },
+    "ending_mercy": {
+      "path": "res://assets_external/audio/story_score/ending_mercy.wav",
+      "tempo": 54,
+      "bed": [
+        48,
+        55,
+        62
+      ],
+      "events": [
+        [
+          0,
+          62,
+          2,
+          "plucked",
+          0.33
+        ],
+        [
+          3,
+          69,
+          2,
+          "plucked",
+          0.28
+        ],
+        [
+          6,
+          72,
+          2,
+          "bell",
+          0.19
+        ],
+        [
+          9,
+          67,
+          2,
+          "plucked",
+          0.25
+        ]
+      ]
+    },
+    "ending_duty": {
+      "path": "res://assets_external/audio/story_score/ending_duty.wav",
+      "tempo": 60,
+      "bed": [
+        38,
+        45,
+        50
+      ],
+      "events": [
+        [
+          0,
+          62,
+          1.6,
+          "plucked",
+          0.38
+        ],
+        [
+          2,
+          69,
+          1.2,
+          "plucked",
+          0.29
+        ],
+        [
+          4,
+          72,
+          1.6,
+          "bell",
+          0.2
+        ],
+        [
+          6,
+          64,
+          1.6,
+          "plucked",
+          0.31
+        ],
+        [
+          8,
+          62,
+          1.6,
+          "plucked",
+          0.35
+        ],
+        [
+          10,
+          57,
+          2,
+          "plucked",
+          0.26
+        ]
+      ]
+    },
+    "ending_ash": {
+      "path": "res://assets_external/audio/story_score/ending_ash.wav",
+      "tempo": 58,
+      "bed": [
+        38,
+        50
+      ],
+      "events": [
+        [
+          0,
+          62,
+          1.8,
+          "plucked",
+          0.28
+        ],
+        [
+          2.5,
+          69,
+          1.4,
+          "plucked",
+          0.2
+        ],
+        [
+          5,
+          72,
+          2,
+          "bell",
+          0.16
+        ],
+        [
+          9,
+          62,
+          1.8,
+          "plucked",
+          0.13
+        ]
+      ]
+    }
+  }
+}

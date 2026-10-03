@@ -61,7 +61,11 @@ func _on_enemy_died(_actor: Node) -> void:
 	_emit_resolved()
 
 func can_peaceful_resolve() -> bool:
-	return outcome == "" and bool(definition.get("peaceful_resolution", false))
+	if outcome != "" or not bool(definition.get("peaceful_resolution", false)):
+		return false
+	if boss_id == "halvern_boss" and host != null:
+		return bool(host.story_state.get_flag("halvern_guard_broken", false)) or bool(host.story_state.get_flag("command_proof_recovered", false)) or bool(host.story_state.get_flag("halvern_surrender_protected", false))
+	return true
 
 func resolve_peaceful(next_outcome: String) -> bool:
 	if not can_peaceful_resolve() or enemy == null or bool(enemy.get("dead")):

@@ -30,7 +30,7 @@ func make_arrow_trail(parent: Node3D, origin: Vector3, endpoint: Vector3, color:
 	tween.tween_property(effect, "scale", Vector3(0.08, 0.08, 0.08), 0.12)
 	tween.tween_callback(effect.queue_free)
 
-func make_oathfire_beam(parent: Node3D, origin: Vector3, endpoint: Vector3, charge_ratio: float, rich_effect: bool) -> void:
+func make_oathfire_beam(parent: Node3D, origin: Vector3, endpoint: Vector3, charge_ratio: float, rich_effect: bool, reduce_flashes: bool = false) -> void:
 	var length := origin.distance_to(endpoint)
 	if not is_instance_valid(parent) or length <= 0.05:
 		return
@@ -51,9 +51,10 @@ func make_oathfire_beam(parent: Node3D, origin: Vector3, endpoint: Vector3, char
 	core.mesh = core_mesh
 	core.rotation_degrees.x = 90.0
 	core.name = "OathfireBeamCore"
-	core.material_override = _material(Color(0.72, 0.96, 1.0, 0.96), 2.8)
+	var beam_material := _material(Color(0.18, 0.42, 0.50, 0.0), 0.0) if reduce_flashes else _material(Color(0.72, 0.96, 1.0, 0.96), 2.8)
+	core.material_override = beam_material
 	effect.add_child(core)
-	if rich_effect:
+	if rich_effect and not reduce_flashes:
 		var aura := MeshInstance3D.new()
 		var aura_mesh := CylinderMesh.new()
 		aura_mesh.top_radius = 0.42 + charge_ratio * 0.16
@@ -76,6 +77,16 @@ func make_oathfire_beam(parent: Node3D, origin: Vector3, endpoint: Vector3, char
 		inner.name = "OathfireBeamHotCore"
 		inner.material_override = _material(Color(0.94, 1.0, 1.0, 1.0), 4.2)
 		effect.add_child(inner)
+	if reduce_flashes:
+		# A steady coloured volume communicates the same cast direction/range.
+		# It does not expand from a bright flash or contain a white-hot core.
+		effect.scale = Vector3.ONE
+		var steady_tween := effect.create_tween()
+		steady_tween.tween_property(beam_material, "albedo_color:a", 0.70, 0.14)
+		steady_tween.tween_interval(0.16)
+		steady_tween.tween_property(beam_material, "albedo_color:a", 0.0, 0.24)
+		steady_tween.tween_callback(effect.queue_free)
+		return
 	effect.scale = Vector3(0.04, 0.04, 0.08)
 	# Bind the animation to its effect so zone retirement cancels it as well.
 	var tween := effect.create_tween()
@@ -106,7 +117,7 @@ func _material(color: Color, energy: float) -> StandardMaterial3D:
 	material.albedo_color = color
 	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	material.emission_enabled = true
+	material.emission_enabled = energy > 0.0
 	material.emission = Color(color.r, color.g, color.b)
 	material.emission_energy_multiplier = energy
 	return material

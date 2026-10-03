@@ -2,6 +2,7 @@ extends RefCounted
 
 const CharacterVisualContract = preload("res://scripts/character_visual_contract.gd")
 const CharacterIdentityProfile = preload("res://scripts/character_identity_profile.gd")
+const StoryWardrobe = preload("res://scripts/story_wardrobe.gd")
 const CLERIC_STAFF_PATH := "res://assets_external/characters/Cleric_Staff.fbx"
 const CLERIC_STAFF_TEXTURE_PATH := "res://assets_external/characters/Cleric_Staff_Texture.png"
 const OPENING_OCCUPATION_PROP_PATHS := [
@@ -27,6 +28,7 @@ static func apply_player(owner: Node3D, visual_root: Node3D) -> void:
 	if _has_skeleton(visual_root):
 		CharacterVisualContract.remove_proxy_anatomy(visual_root)
 		CharacterIdentityProfile.apply(visual_root, "player_kael", "kael")
+		StoryWardrobe.attach(visual_root, "player_kael", "kael")
 		return
 	# A non-skeletal asset is an emergency fallback only. Do not decorate it with
 	# root-mounted anatomy: those parts drift, inflate the neck, and desync from
@@ -46,6 +48,7 @@ static func apply_npc(owner: Node3D, role_id: String, include_ground_shadow: boo
 			CharacterIdentityProfile.apply(visual_target, role_id.to_lower(), _variant_seed(owner, role_id))
 		if visual_target != owner:
 			_copy_identity_contract(owner, visual_target, role_id.to_lower())
+		StoryWardrobe.attach(visual_target, role_id.to_lower(), _variant_seed(owner, role_id))
 		return
 	owner.set_meta("character_presentation_applied", true)
 	if include_ground_shadow:
@@ -54,6 +57,7 @@ static func apply_npc(owner: Node3D, role_id: String, include_ground_shadow: boo
 	if _has_skeleton(visual_target):
 		CharacterVisualContract.remove_proxy_anatomy(visual_target)
 		CharacterIdentityProfile.apply(visual_target, role, _variant_seed(owner, role))
+		StoryWardrobe.attach(visual_target, role, _variant_seed(owner, role))
 		if visual_target != owner:
 			_copy_identity_contract(owner, visual_target, role)
 		# The selected GLTFs are complete authored bodies. Hide native held props
@@ -149,7 +153,7 @@ static func _copy_identity_contract(owner: Node3D, visual_target: Node3D, role: 
 		"character_rig_layer_count",
 		"character_role_contract",
 		"character_variant_seed",
-		"character_variant_recipe"
+		"character_variant_recipe", "story_cast_identity", "story_cast_profile"
 	]:
 		if visual_target.has_meta(key):
 			owner.set_meta(key, visual_target.get_meta(key))

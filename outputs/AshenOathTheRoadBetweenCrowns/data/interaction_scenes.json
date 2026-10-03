@@ -1,0 +1,72 @@
+{
+  "soldiers_stand_down": {
+    "name":"The soldiers at the road", "greeting":"The nearest soldier lets his sword point fall into the mud. The other watches Senn before doing the same.",
+    "lines":["Soldier: He said Greyfen would leave us hungry if we stopped taking what passed.", "Kael: I cannot promise nobody will ask what you took. I can promise supper is not a reward for obeying him.", "Soldier: And if we speak?", "Kael: Then you speak for yourselves. Lowering a weapon does not sign your name to anyone else's account.", "The road clears. Senn remains beside the table, without a line of men between his answers and the people he hurt."], "actions":[]
+  },
+  "work_cart_finish": {
+    "name": "Rook",
+    "greeting": "Mind the corner. That sack has already had a worse journey than either of us.",
+    "lines": ["Kael: The wheel will need lifting before it can turn.", "Rook: It will. The flour needed feeding to people before it needed feeding to mud.", "A woman at the kitchen opens the sack and measures three small shares. She keeps the string for mending.", "Rook: There. Something went where we said it would. I could get used to that."],
+    "actions": []
+  },
+  "work_cart_return": {"name":"Rook", "greeting":"The kitchen has the flour. The cart is lighter.", "lines":["Rook: I've told them you did the heavy bit. Don't make me a liar by offering to do it all again."], "actions":[]},
+  "work_road_finish": {
+    "name": "Tor",
+    "greeting": "Leave the peg proud. Someone will need to pull it out when the next flood comes.",
+    "lines": ["Kael: You expect it to fail?", "Tor: I expect someone to repair it. A thing can be well made without being the last thing anyone ever makes.", "Water threads through the cleared drain. Rook's empty wheel crosses the boards without sinking.", "Tor: There. A road ought to carry the person using it. Start with that."], "actions":[]
+  },
+  "work_road_return": {"name":"Tor", "greeting":"Water's still moving. Boards are still holding.", "lines":["Tor: If you're looking for praise, ask the wheel. It made the most noise about it before."], "actions":[]},
+  "work_relief_finish": {
+    "name":"The common kitchen", "greeting":"The two empty baskets return together.",
+    "lines":["Mira: Did anyone ask what they had to promise?", "Kael: One woman did.", "Mira: And?", "Kael: I told her the basket was not a contract.", "Mira: Tell her again tomorrow. People don't learn that sort of thing in one meal."], "actions":[]
+  },
+  "work_relief_return": {"name":"The common kitchen", "greeting":"The household shares have been delivered.", "lines":["Names in the ledger mark who has eaten. They do not mark who owes obedience."], "actions":[]},
+  "aftermath_names_witness": {
+    "name":"Anwen", "greeting":"I thought writing them where everyone could see would make my hands stop shaking.",
+    "lines":["Kael: It made you begin.", "Anwen: Bram. Sella. Oren. I have practiced saying the names of the dead more often than I have spoken to the people who miss them.", "A man waiting at the wall asks who will pay for the land his mother was refused. Anwen puts his question beneath the names instead of sending him away.", "Anwen: We cannot promise every answer today.", "Kael: We can promise this question will still be here tomorrow.", "Anwen leaves room on the board. The public account is no longer a ceremony that ends when the bell stops.", "Anwen: Tor has begun measuring timber. Rook is arguing about who gets the first load. Go help them make this more than my handwriting."], "actions":[]
+  },
+  "aftermath_names_mercy": {
+    "name":"Anwen", "greeting":"This copy names the offices, the orders and those who gave them. This other book belongs to the families.",
+    "lines":["Kael: Who can open it?", "Anwen: The people whose lives it holds. They may let someone else read. They may refuse.", "A woman returns a sealed page. She asks Anwen to keep her son's name and destroy the account of his last fear. Anwen asks once whether she is certain, then follows her instruction.", "Kael: Edric's order stays on the wall.", "Anwen: Yes. His privacy was never the thing we were protecting.", "For the first time, the bell can mourn someone without claiming everything that happened to them.", "Anwen: The living still need timber and flour. Tor is at the bench. There is a world outside these books."], "actions":[]
+  },
+  "aftermath_names_duty": {
+    "name":"Anwen", "greeting":"The silence held through the night. I kept waking to make sure.",
+    "lines":["Kael: I felt the road when I woke. Not words. Weight.", "Anwen: Then we write the limits now, while people are grateful enough to forget them. You did not accept every order anyone might give you.", "She writes that the keeping is Kael's choice. No child inherits it. No shortage can compel another keeper. The old command remains beside it, uncensored.", "Kael: If I cannot keep it?", "Anwen: We meet again. We tell the truth about the cost. We do not turn your promise into an excuse to stop thinking.", "Kael reads the lines before signing. The tremor in his hand is his own.", "Anwen: Tor has a repair for you. Something ordinary. Let him do it."], "actions":[]
+  },
+  "aftermath_names_ash": {
+    "name":"Anwen", "greeting":"Nothing answered when I rang the bell.",
+    "lines":["Kael: Were you hoping it would?", "Anwen: I don't know. That is the honest answer today.", "The copied command and the household register lie on her table. Human hands saved them before the glade burned. Their evidence has not become less true because its witness is gone.", "Anwen: There are things we can no longer ask. We must mark those gaps instead of filling them with convenient answers.", "A father passing the table says his child slept without hearing voices. Anwen listens until he has finished.", "Kael: We keep what remains. And answer for what we chose.", "Anwen: Tor needs another pair of hands. The next repair cannot wait for us to feel certain."], "actions":[]
+  },
+  "aftermath_work_witness": {
+    "name":"Tor and Rook", "greeting":"Tor lays a damaged hinge on the bench. Rook lays three incompatible requests beside it.",
+    "lines":["Rook: The west field wants its gate. The kitchen wants its cart. The chapel wants a board large enough to accuse the whole county.", "Tor: The chapel can have the offcuts.", "Kael holds the hinge while Tor drives out its old pin. The iron bears the same stamp as the weapon that brought him here.", "Kael: Who decides whose repair comes first?", "Rook: Today? The people standing here. Tomorrow we'll need something better than whoever shouts loudest.", "Tor: Put that on Anwen's board.", "The first repair is small enough to finish. Beyond it lies work no ending could have finished for them."], "actions":[]
+  },
+  "aftermath_work_mercy": {
+    "name":"Tor and Rook", "greeting":"Rook has tied a strip of plain linen around a basket with no name on it.",
+    "lines":["Kael: Where does that go?", "Rook: To someone who asked me not to tell everyone where it goes.", "Tor: You can still count the flour without counting the family's grief.", "Kael steadies a plank against Tor's bench. Together they cut a lid for the basket; Rook folds the linen beneath it so the rain cannot reach the meal.", "Rook: Keeping a confidence used to mean hiding my own part. I'll have to learn the difference.", "Kael: Ask whose safety the silence serves.", "Rook takes the basket through the square openly. Its destination remains the recipient's business."], "actions":[]
+  },
+  "aftermath_work_duty": {
+    "name":"Tor and Rook", "greeting":"Tor reaches for Kael's worn strap before asking about the glade.",
+    "lines":["Tor: Sit. If you're going to stand watch, you can at least stop this buckle cutting your shoulder.", "Kael: There are other repairs.", "Tor: This is one of them.", "Rook lays out the roads that still need walking. He marks a place for Kael to rest and a name beside each delivery. None of those names is entered as a new keeper.", "Rook: Help isn't the same thing as taking your oath. We can carry supper without carrying the Hart.", "Kael holds the leather while Tor stitches. For a little while, his chosen burden fits beside someone else's ordinary skill.", "Tor: Come back before it splits again. That is a request, not a sacred duty."], "actions":[]
+  },
+  "aftermath_work_ash": {
+    "name":"Tor and Rook", "greeting":"There is ash in the grain sack's folded seam. Rook brushes it into his palm before opening the flour.",
+    "lines":["Rook: It got everywhere. Doesn't mean everything is ruined.", "Tor: No. Doesn't mean it didn't cost anything either.", "Kael helps separate the scorched boards from the sound ones. One will become a shelf. Another breaks under his hand and is set aside.", "Kael: I cannot put it back.", "Tor: I didn't ask you to. Hold this end.", "They finish one repair without deciding what the whole choice meant. In the kitchen, someone laughs at an ordinary mistake.", "Rook: Listen. I missed that. We can miss what was lost and still be glad to hear it."], "actions":[]
+  },
+  "aftermath_road_witness": {
+    "name":"The road beyond Greyfen", "greeting":"The notice at the village edge carries the first names, the first claims, and a time for the next meeting.",
+    "lines":["Kael: A public promise has a place people can return to.", "Some will come to demand restitution. Some will come to defend what they have. The account will need witnesses after the extraordinary witness is gone.", "Rook: Will you be here when they arrive?", "Kael: I said I would keep it.", "He takes the road back toward the kitchen. This time, returning is part of the oath.", "Your campaign outcome is kept. Greyfen and the discovered roads remain open for unfinished conversations and work."], "actions":[]
+  },
+  "aftermath_road_mercy": {
+    "name":"The road beyond Greyfen", "greeting":"A strip of linen moves beside the road. It carries no confession and names no debtor.",
+    "lines":["Kael: They asked for a marker. Nothing more.", "Rook: Then it can be nothing more.", "The released memories do not arrive to correct the village's version of itself. People must preserve the records, challenge the convenient lie, and let one another keep what was never owed to a crowd.", "Kael turns toward the kitchen. There are names he will speak there, and names he will wait to be invited to speak.", "No one mistakes the work ahead for permission to bind the dead again.", "Your campaign outcome is kept. Greyfen and the discovered roads remain open for unfinished conversations and work."], "actions":[]
+  },
+  "aftermath_road_duty": {
+    "name":"The road beyond Greyfen", "greeting":"At the village edge, Kael feels where the old road bends even with his eyes closed.",
+    "lines":["Rook: How far does it follow you?", "Kael: I will have to learn.", "Rook: Then don't answer for all the years today.", "The boundary is quieter. The injustice it covered has not been repaired by one man's willingness to stand here. The written account waits in Greyfen, where other people can begin their own work.", "Kael opens his eyes. His oath has limits. His life must still have room inside them.", "Your campaign outcome is kept. Greyfen and the discovered roads remain open for unfinished conversations and work."], "actions":[]
+  },
+  "aftermath_road_ash": {
+    "name":"The road beyond Greyfen", "greeting":"Wind crosses the road without forming a voice. A patch of earth where oathgrass grew is bare.",
+    "lines":["Kael kneels and presses a seed into the ordinary soil. He cannot make it take root by promising.", "Rook: Will it grow?", "Kael: We can water it. We can come back.", "The destroyed witness cannot answer the questions no one thought to ask. The human record can still accuse the powerful. The living can still choose what they owe each other.", "Kael stands. The quiet is relief, and it is absence. He carries both toward Greyfen.", "Your campaign outcome is kept. Greyfen and the discovered roads remain open for unfinished conversations and work."], "actions":[]
+  }
+}

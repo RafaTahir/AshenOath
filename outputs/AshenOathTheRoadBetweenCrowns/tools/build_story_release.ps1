@@ -77,6 +77,8 @@ public static class AshenOathBuildPower {
 '@
 [AshenOathBuildPower]::SetThreadExecutionState([uint32]2147483649) | Out-Null
 try {
+Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "build_source_catalog.py")) "source-catalog"
+Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "build_story_score.py")) "story-score"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--editor", "--import") "import"
 
 # Opening and campaign packs carry zone scripts and base carries scripts/data.

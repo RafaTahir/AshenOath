@@ -488,7 +488,7 @@ func _setup_runtime() -> void:
 	quest_hud_coordinator.configure(quest_presentation, quests)
 	runtime_services.configure(self)
 	hud.audio_mix_requested.connect(settings.set_mix_level)
-	hud.revisit_covenant_requested.connect(func(): save_manager.load_game(self, save_manager.PRE_COVENANT_PATH))
+	hud.revisit_covenant_requested.connect(func(): save_manager.load_pre_covenant(self))
 	zone_runtime_coordinator = ZoneRuntimeCoordinator.new(self)
 	zone_runtime_coordinator.configure(quest_presentation, quest_beats, interaction_focus, quests)
 	seamless_world = SeamlessWorldService.new()
@@ -505,6 +505,8 @@ func _setup_runtime() -> void:
 	boss_defs = _read_json("res://data/bosses.json")
 
 func _new_game() -> void:
+	save_manager.begin_new_journey()
+	hud.load_text_history([])
 	zone_pack_request_serial += 1
 	opening_pack_waiting = false
 	campaign_pack_waiting = false
@@ -1685,6 +1687,9 @@ func _install_opening_soundscape(zone_id: String) -> void:
 	soundscape.configure(zone_root, zone_id, player, audio, quality)
 
 func _handle_interaction(area) -> void:
+	if area != null and area.interaction_type == "story_activity":
+		preload("res://scripts/story_activity_director.gd").handle(self, area)
+		return
 	if world_props != null and area != null and area.has_meta("world_prop_id"):
 		world_props.activate_prop(str(area.get_meta("world_prop_id", "")))
 	var world_prop_component := area.find_child("InteractiveWorldProp", true, false) as InteractiveWorldProp if area != null else null
@@ -1736,6 +1741,8 @@ func _handle_interaction(area) -> void:
 			hud.toast("Anwen goes still at the feathers. 'Then it was called here,' she says, and will say no more.")
 		_set_interactable_label_visible(area, false)
 		_stage_dialogue_moment(area)
+		preload("res://scripts/story_performance.gd").begin(area, player, dialogue_data, story_state)
+		audio.set_dialogue_active(true)
 		audio.set_game_paused(true)
 		get_tree().paused = true
 		hud.show_dialogue(dialogue_data)
@@ -2064,9 +2071,19 @@ func _relocate_anwen_to_cemetery() -> void:
 	_face_npc_toward_player(anwen)
 
 func _handle_dialogue_action(action: Dictionary) -> void:
+	if str(action.get("type", "")) == "story_travel":
+		preload("res://scripts/story_activity_director.gd").travel(self, action)
+		return
 	if not _dialogue_action_available(action):
 		_apply_dialogue_action(action)
 		return
+	if str(action.get("type", "")) == "story_choice":
+		var choice_id := str(action.get("choice_id", "%s:%s" % [action.get("quest", ""), action.get("objective", "")]))
+		if choice_id == ":":
+			var effect_keys: Array = action.get("sets_flags", {}).keys()
+			effect_keys.sort()
+			choice_id = "promise:" + ",".join(effect_keys)
+		save_manager.predecision(self, choice_id)
 	var transaction := StoryDecisionCoordinator.new()
 	transaction.begin(self)
 	_apply_dialogue_action(action)
@@ -2264,6 +2281,10 @@ func _dialogue_action_requires_zone_rebuild(action: Dictionary) -> bool:
 	return action_type == "start_quest"
 
 func _dialogue_action_available(action: Dictionary) -> bool:
+	if action.get("sets_flags", {}).has("halvern_fate"):
+		var yielding := bool(story_state.get_flag("halvern_guard_broken", false)) or bool(story_state.get_flag("command_proof_recovered", false)) or bool(story_state.get_flag("halvern_surrender_protected", false)) or str(story_state.get_flag("halvern_fate", "")) == "defeated"
+		if not yielding:
+			return false
 	if not dialogue._conditions_match(action.get("conditions", {})):
 		return false
 	var type := str(action.get("type", ""))
@@ -3062,7 +3083,21 @@ func _show_ending_consequence(ending: String) -> void:
 	audio.set_story_context(story_state, current_zone_id)
 	audio.set_game_paused(true)
 	get_tree().paused = true
-	hud.show_ending("The Road Between Crowns", "\n\n".join(cards))
+	hud.show_ending("The covenant is made", "The Hart has answered. The road behind you leads to Greyfen.\n\nReturn to the people who must live with this decision. There is still work to do, and lives to hear before this account is closed.")
+	story_save_pending = true
+	call_deferred("_persist_story_action")
+
+func _show_completed_epilogue() -> void:
+	if not bool(story_state.get_flag("final_choice_completed", false)):
+		return
+	var ending := str(quests.world_flags.get("ending", "expose"))
+	var cards: Array[String] = EpilogueResolver.resolve(ending, story_state)
+	story_state.set_flag("epilogue_cards", cards)
+	story_state.set_flag("epilogue_presented", true)
+	audio.set_dialogue_active(false)
+	audio.set_game_paused(true)
+	get_tree().paused = true
+	hud.show_ending("The lives that continue", "\n\n".join(cards))
 	story_save_pending = true
 	call_deferred("_persist_story_action")
 
@@ -3213,7 +3248,8 @@ func _on_player_beam(charge_ratio: float, direction: Vector3) -> void:
 	hud.show_status_cue("Oathfire Beam", "item")
 
 func _make_oathfire_beam(origin: Vector3, endpoint: Vector3, charge_ratio: float, rich_effect: bool) -> void:
-	combat_vfx_coordinator.make_oathfire_beam(zone_root, origin, endpoint, charge_ratio, rich_effect)
+	var reduce_flashes := bool(settings.settings.get("flash_reduction", false))
+	combat_vfx_coordinator.make_oathfire_beam(zone_root, origin, endpoint, charge_ratio, rich_effect, reduce_flashes)
 
 func _clear_oathfire_effects() -> void:
 	combat_vfx_coordinator.clear_oathfire_effects()
@@ -3686,6 +3722,9 @@ func _on_player_died() -> void:
 	hud.show_death_screen("The road keeps its dead.\n\nLoad Last Checkpoint returns Kael to the last safe contract marker with quest progress preserved.")
 
 func _on_dialogue_closed_audio() -> void:
+	if bool(story_state.get_flag("aftermath_epilogue_pending", false)):
+		story_state.set_flag("aftermath_epilogue_pending", false)
+		call_deferred("_show_completed_epilogue")
 	if audio != null:
 		audio.set_game_paused(false)
 	interaction_focus_dirty = true
@@ -3694,6 +3733,9 @@ func _on_dialogue_closed_audio() -> void:
 
 func _finish_covenant_if_ready() -> void:
 	CovenantResolution.finish_if_ready(self)
+	if bool(story_state.get_flag("aftermath_epilogue_pending", false)):
+		story_state.set_flag("aftermath_epilogue_pending", false)
+		call_deferred("_show_completed_epilogue")
 	if story_recap_pending:
 		story_recap_pending = false
 		hud.toast(preload("res://scripts/story_journal.gd").recap(self), 12.0)
@@ -3779,6 +3821,7 @@ func _handle_setting(action: String) -> void:
 	hud.show_settings_menu(hud.controls_back_target)
 
 func _apply_runtime_settings(current_settings: Dictionary) -> void:
+	CombatFeedback.reduce_flashes = bool(current_settings.get("flash_reduction", false))
 	if runtime_packs != null:
 		var preset := str(current_settings.get("quality_preset", "balanced"))
 		var changed: bool = runtime_packs.quality_preset != preset
@@ -3801,6 +3844,7 @@ func _apply_runtime_settings(current_settings: Dictionary) -> void:
 			bool(current_settings.get("invert_y", false)),
 			float(current_settings.get("gamepad_look_sensitivity", 1.0))
 		)
+		camera_rig.apply_accessibility(current_settings)
 		camera_rig.shake_decay = 1000.0 if float(current_settings.get("camera_shake", 1.0)) <= 0.0 else 6.0 / maxf(float(current_settings.get("camera_shake", 1.0)), 0.5)
 	if visual_director != null and visual_director.sun != null:
 		visual_director.apply_settings(current_settings)
@@ -5961,12 +6005,18 @@ func _stage_dialogue_moment(area) -> void:
 
 func _on_dialogue_page_changed(_speaker: String, _speaker_id: String, _page_index: int, _total_pages: int) -> void:
 	dialogue_runtime_coordinator.refresh_page(player, camera_rig)
+	if audio != null:
+		audio.set_dialogue_active(true)
+		audio.play_dialogue_page(hud.get_current_dialogue_page())
+	preload("res://scripts/story_performance.gd").page(dialogue_runtime_coordinator.get_focus_actor(), hud.get_current_dialogue_page())
 
 func _face_npc_toward_player(npc: Node3D) -> void:
 	dialogue_runtime_coordinator.face_actor(npc, player)
 
 func _release_dialogue_facing() -> void:
 	audio.stop_voice()
+	audio.set_dialogue_active(false)
+	preload("res://scripts/story_performance.gd").finish(dialogue_runtime_coordinator.get_focus_actor())
 	interaction_input_block_until_usec = Time.get_ticks_usec() + int(DIALOGUE_INTERACTION_GUARD_SECONDS * 1000000.0)
 	dialogue_runtime_coordinator.release(player)
 	if zone_root == null:

@@ -195,6 +195,9 @@ var keyboard_labels: Dictionary = KEYBOARD_LABELS.duplicate()
 var input_context := CONTEXT_MENU
 var last_disconnected_gamepad_id := -1
 var _profile_device_id := -1
+var _toggle_modes: Dictionary = {}
+var _toggle_actions: Dictionary = {}
+var _toggle_physical_down: Dictionary = {}
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -242,6 +245,8 @@ func install_default_actions() -> void:
 
 func apply_settings(current: Dictionary) -> void:
 	settings_ref = current
+	_toggle_modes = {"block": str(current.get("block_mode", "hold")), "run": str(current.get("sprint_mode", "hold"))}
+	reset_toggle_actions()
 	gamepad_profiles = current.get("gamepad_profiles", {}).duplicate(true) if typeof(current.get("gamepad_profiles", {})) == TYPE_DICTIONARY else {}
 	var migrated_weapon_defaults := _migrate_legacy_weapon_defaults()
 	if migrated_weapon_defaults:
@@ -276,6 +281,7 @@ func set_context(context: String) -> void:
 	else:
 		show_pointer()
 	if changed:
+		reset_toggle_actions()
 		input_context_changed.emit(input_context)
 
 func set_gameplay_context() -> void:
@@ -480,7 +486,27 @@ func _shape_stick(value: Vector2, deadzone: float, apply_inversion: bool) -> Vec
 func is_action_pressed(action: StringName) -> bool:
 	if active_device == DEVICE_TOUCH and action == &"run" and virtual_move.length() > 0.82:
 		return true
-	return Input.is_action_pressed(action) or _raw_action_pressed(action) or _raw_mouse_action_pressed(action)
+	var held := Input.is_action_pressed(action) or _raw_action_pressed(action) or _raw_mouse_action_pressed(action)
+	if str(_toggle_modes.get(str(action), "hold")) == "toggle" and is_gameplay_context():
+		var was_down := bool(_toggle_physical_down.get(str(action), false))
+		if held and not was_down:
+			_toggle_actions[str(action)] = not bool(_toggle_actions.get(str(action), false))
+		_toggle_physical_down[str(action)] = held
+		if action == &"run" and movement_vector().length_squared() < 0.01:
+			_toggle_actions[str(action)] = false
+		return bool(_toggle_actions.get(str(action), false))
+	return held
+
+func reset_toggle_actions() -> void:
+	_toggle_actions.clear()
+	_toggle_physical_down.clear()
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
+		reset_toggle_actions()
+		clear_virtual_input()
+		_keyboard_pressed.clear()
+		_mouse_pressed.clear()
 
 func _raw_action_pressed(action: StringName) -> bool:
 	if not InputMap.has_action(action):

@@ -99,6 +99,7 @@ func configure(owner: Node) -> void:
 	quest_beats.setup(quests, story_state)
 	dialogue.load_dialogue("res://data/dialogue.json")
 	dialogue.load_dialogue("res://data/campaign_dialogue.json")
+	dialogue.load_dialogue("res://data/interaction_scenes.json")
 	dialogue.setup(story_state, quests)
 	inventory.load_items("res://data/items.json")
 	vendor_service.load_vendors("res://data/vendors.json")

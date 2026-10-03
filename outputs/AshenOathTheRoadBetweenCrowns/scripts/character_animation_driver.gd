@@ -15,6 +15,9 @@ const STATE_ALIASES := {
 	"jump": ["jump", "jumpidle", "run"],
 	"work": ["work", "interact", "idle", "idlesword"],
 	"dialogue": ["dialogue", "talk", "interact", "idle", "idlesword"],
+	"story_offer": ["interact", "talk", "dialogue"],
+	"story_explain": ["talk", "dialogue", "interact"],
+	"story_listen": ["idle", "idlesword", "idleweapon"],
 	"windup": ["windup", "attack", "punch"],
 	"attack": ["attack", "swordslash", "punch"],
 	"attack_light": ["swordslash", "attack", "punch"],
@@ -32,6 +35,8 @@ const ACTION_PRIORITY := {
 	"jump": 1,
 	"dialogue": 1,
 	"work": 1,
+	"story_offer": 1,
+	"story_explain": 1,
 	"dodge": 2,
 	"attack": 3,
 	"attack_light": 3,
@@ -75,6 +80,8 @@ var last_locomotion_state := StringName()
 var last_locomotion_phase := -1.0
 var locomotion_phase_distance := 0.0
 var locomotion_step_index := 0
+var story_gesture_remaining := 0.0
+var story_dialogue_active := false
 
 func _ready() -> void:
 	# Imported actors are configured before their visual root is parented. Defer
@@ -159,6 +166,11 @@ func advance_external(delta: float) -> void:
 func _advance_animation(delta: float) -> void:
 	if animation_player == null or distance_suspended:
 		return
+	if story_gesture_remaining > 0.0:
+		story_gesture_remaining = maxf(story_gesture_remaining - delta, 0.0)
+		if story_gesture_remaining <= 0.0 and story_dialogue_active:
+			stop_action()
+			set_dialogue_pose(true)
 	if manual_update_interval > 0.0:
 		manual_update_accumulator += delta
 		if manual_update_accumulator < manual_update_interval:
@@ -330,6 +342,7 @@ func stop_action(recover_state: String = "idle", blend_time: float = 0.10) -> vo
 	_play_state(recover_state, clampf(blend_time, 0.0, 0.25))
 
 func set_dialogue_pose(active: bool) -> void:
+	story_dialogue_active = active
 	if dead or not is_valid():
 		return
 	if active:
@@ -345,6 +358,35 @@ func set_dialogue_pose(active: bool) -> void:
 			presentation_state = ""
 			current_state = ""
 			_play_state("idle", 0.12)
+
+func play_story_gesture(kind: String, pace: float = 0.9) -> void:
+	if not story_dialogue_active or dead or kind not in ["offer", "explain"]:
+		return
+	if trigger_action("story_" + kind, pace, 0.18):
+		# A shared Interact clip may be looping. A bounded gesture returns to
+		# attentive stillness rather than repeatedly handing over an empty object.
+		story_gesture_remaining = 1.8 / maxf(pace, 0.5)
+
+func stop_story_gesture() -> void:
+	story_dialogue_active = false
+	story_gesture_remaining = 0.0
+	stop_action()
+	presentation_state = ""
+	current_state = ""
+	_play_state("idle", 0.18)
+
+func set_story_listening(listening: bool) -> void:
+	if dead or not story_dialogue_active:
+		return
+	story_gesture_remaining = 0.0
+	stop_action()
+	if listening:
+		presentation_state = "story_listen"
+		current_state = ""
+		_play_state("story_listen", 0.20)
+	else:
+		presentation_state = ""
+		set_dialogue_pose(true)
 
 func set_working(active: bool) -> void:
 	if dead or not is_valid():
@@ -514,7 +556,11 @@ func _on_animation_finished(_animation: StringName) -> void:
 	action_elapsed = 0.0
 	current_state = ""
 	action_finished.emit(finished_state)
-	_play_state("idle", 0.10)
+	if story_dialogue_active and finished_state.begins_with("story_"):
+		story_gesture_remaining = 0.0
+		set_dialogue_pose(true)
+	else:
+		_play_state("idle", 0.10)
 
 func _find_type(root: Node, type_name: String) -> Node:
 	if root.is_class(type_name):

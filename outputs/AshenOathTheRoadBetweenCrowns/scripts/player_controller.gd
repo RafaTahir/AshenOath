@@ -442,6 +442,10 @@ func _face_attack_direction() -> void:
 		right = camera_controller.get_flat_right()
 	var move_dir := (right * input_vec.x + forward * -input_vec.y).normalized()
 	if move_dir.length_squared() <= 0.01:
+		if camera_controller != null and camera_controller.has_method("assist_attack_direction"):
+			var assisted: Vector3 = camera_controller.assist_attack_direction(global_position, -global_basis.z, 4.0)
+			if assisted.length_squared() > 0.01:
+				rotation.y = atan2(-assisted.x, -assisted.z)
 		# A locked attack has a live combat target even when Kael is standing
 		# still. Face that target at the attack edge so the hand-driven blade
 		# sweep and the visible lock-on direction agree.

@@ -22,13 +22,22 @@ signal dialogue_page_changed(speaker: String, speaker_id: String, page_index: in
 signal menu_hovered
 signal menu_clicked
 
-const MENU_BUILD_LABEL = "RECOVERY-004 ROADMAP MILESTONE | PRE-ALPHA | NATIVE 720P | ASHENOATH.VERCEL.APP"
+const MENU_BUILD_LABEL = "ASHEN OATH · THE ROAD BETWEEN CROWNS"
 const MENU_SIZE = Vector2(1920.0, 1080.0)
 const GAMEPLAY_SIZE = Vector2i(1280, 720)
 const SAVE_PATH = "user://ashen_oath_save.json"
 const AUTOSAVE_PATH = "user://ashen_oath_autosave.json"
 const CHECKPOINT_PATH = "user://ashen_oath_checkpoint.json"
 const StoryJournalPresenter = preload("res://scripts/story_journal.gd")
+const DialogueHistory = preload("res://scripts/dialogue_history.gd")
+const SourceText = preload("res://scripts/source_text.gd")
+var text_history = DialogueHistory.new()
+var library_page := 0
+var library_back_target := "pause"
+var selected_slot := ""
+var subtitle_speaker_names := true
+var flash_reduction := false
+var journal_art: TextureRect
 
 var health_bar: ProgressBar
 var stamina_bar: ProgressBar
@@ -106,6 +115,7 @@ func _ready() -> void:
 	_build_inventory()
 	_build_loading_layer()
 	_apply_theme()
+	apply_accessibility(_current_settings())
 	if not get_viewport().size_changed.is_connected(_on_viewport_resized):
 		get_viewport().size_changed.connect(_on_viewport_resized)
 	_apply_hud_layout()
@@ -120,7 +130,7 @@ func _process(delta: float) -> void:
 			loading_layer.visible = true
 			_update_process_policy()
 	var health_ratio = last_health / max(last_health_max, 1.0)
-	if health_ratio <= 0.28 and not reduced_motion:
+	if health_ratio <= 0.28 and not reduced_motion and not flash_reduction:
 		var pulse = 0.86 + 0.14 * sin(Time.get_ticks_msec() * 0.008)
 		health_bar.modulate = Color(1.0, pulse, pulse, 1.0)
 	elif health_bar.modulate != Color.WHITE:
@@ -129,7 +139,7 @@ func _process(delta: float) -> void:
 func _update_process_policy() -> void:
 	if health_bar == null:
 		return
-	var pulse_active := last_health / maxf(last_health_max, 1.0) <= 0.28 and not reduced_motion
+	var pulse_active := last_health / maxf(last_health_max, 1.0) <= 0.28 and not reduced_motion and not flash_reduction
 	var loading_delay_active := loading_armed and loading_layer != null and not loading_layer.visible
 	if not pulse_active and health_bar.modulate != Color.WHITE:
 		health_bar.modulate = Color.WHITE
@@ -146,6 +156,7 @@ func show_main_menu() -> void:
 	_add_menu_button(box, "New Game", func(): new_game_requested.emit())
 	new_game_status_label = _add_menu_text(box, new_game_status)
 	_add_menu_button(box, "Continue", func(): continue_requested.emit(), not _has_continue_save())
+	_add_menu_button(box, "Saved Journeys", func(): show_save_library("main"))
 	_add_menu_text(box, _save_status_text())
 	_add_menu_button(box, "Controls", func(): show_controls_menu("main"))
 	_add_menu_button(box, "Settings", func(): show_settings_menu("main"))
@@ -202,9 +213,10 @@ func show_pause_menu() -> void:
 	menu_layer.visible = true
 	var box = _menu_box("Paused", "", "the road holds its breath")
 	_add_menu_button(box, "Resume", func(): resume_requested.emit())
-	_add_menu_button(box, "Save", func(): save_requested.emit())
-	_add_menu_button(box, "Load", func(): load_requested.emit())
+	_add_menu_button(box, "Quick Save", func(): save_requested.emit())
+	_add_menu_button(box, "Saved Journeys", func(): show_save_library("pause"))
 	_add_menu_button(box, "Journal & Preparation", func(): journal_requested.emit())
+	_add_menu_button(box, "Conversation History", func(): show_text_history("pause"))
 	_add_menu_button(box, "Settings", func(): show_settings_menu())
 	_add_menu_button(box, "Controls", func(): show_controls_menu("pause"))
 	_add_menu_button(box, "Main Menu", func(): show_main_menu())
@@ -251,7 +263,13 @@ func show_settings_menu(back_target: String = "pause", requested_page: int = -1)
 		elif action == "":
 			_add_menu_text(box, str(entry.get("label", "")))
 		else:
-			_add_menu_button(box, str(entry.get("label", "")), func(setting_action = action): settings_requested.emit(setting_action))
+			_add_menu_button(box, str(entry.get("label", "")), func(setting_action = action):
+				var manager = get_tree().root.find_child("Settings", true, false)
+				if manager != null and manager.has_method("cycle_accessibility") and manager.cycle_accessibility(setting_action):
+					show_settings_menu(controls_back_target, settings_page)
+				else:
+					settings_requested.emit(setting_action)
+			)
 	if page_count > 1:
 		_add_menu_button(box, "Previous Page", func(): show_settings_menu(controls_back_target, settings_page - 1), settings_page <= 0)
 		_add_menu_button(box, "Next Page", func(): show_settings_menu(controls_back_target, settings_page + 1), settings_page >= page_count - 1)
@@ -278,6 +296,12 @@ func _settings_entries(s: Dictionary) -> Array:
 		{"label": "VSync             %s" % _on_off(bool(s.get("vsync", true))), "action": "vsync"},
 		{"label": "Fullscreen        %s" % _on_off(bool(s.get("fullscreen", false))), "action": "fullscreen"},
 		{"label": "Subtitle Size     %d%%" % int(round(float(s.get("subtitle_scale", 1.0)) * 100.0)), "action": "subtitle_scale"},
+		{"label": "Subtitle Background  %d%%" % int(round(float(s.get("subtitle_background_opacity", 0.92)) * 100.0)), "action": "subtitle_background_opacity"},
+		{"label": "Speaker Names     %s" % _on_off(bool(s.get("subtitle_speaker_names", true))), "action": "subtitle_speaker_names"},
+		{"label": "Block             %s" % str(s.get("block_mode", "hold")).capitalize(), "action": "block_mode"},
+		{"label": "Sprint            %s" % str(s.get("sprint_mode", "hold")).capitalize(), "action": "sprint_mode"},
+		{"label": "Target Assistance %s" % _on_off(bool(s.get("targeting_assist", true))), "action": "targeting_assist"},
+		{"label": "Reduce Flashes    %s" % _on_off(bool(s.get("flash_reduction", false))), "action": "flash_reduction"},
 		{"label": "Camera Shake      %d%%" % int(round(float(s.get("camera_shake", 1.0)) * 100.0)), "action": "camera_shake"},
 		{"label": "Reduced Motion    %s" % _on_off(bool(s.get("reduced_motion", false))), "action": "reduced_motion"},
 		{"label": "High Contrast     %s" % _on_off(bool(s.get("high_contrast", false))), "action": "high_contrast"},
@@ -368,8 +392,18 @@ func show_credits_menu() -> void:
 	_clear_menu()
 	menu_layer.visible = true
 	var box = _menu_box("Credits", "", "made under an ashen moon")
-	_add_menu_text(box, "Ashen Oath vertical slice.\nExternal art/audio/UI assets are tracked under assets_external/licenses.\nPublish public builds with those license notes included.")
+	_add_menu_text(box, "Ashen Oath: The Road Between Crowns\nA game by RafaTahir.\nExternal art/audio/UI asset credits are distributed with the game under assets_external/licenses.")
 	_add_menu_text(box, "Yo Frankie! ambience by Blender Foundation (CC-BY 3.0).\nDark Ambience Loop by Iwan Gabovitch, qubodup.net (CC-BY 3.0).")
+	var production_credits: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/production_credits.json")) if FileAccess.file_exists("res://data/production_credits.json") else {}
+	if typeof(production_credits) == TYPE_DICTIONARY:
+		for section in production_credits.get("sections", []):
+			if typeof(section) != TYPE_DICTIONARY:
+				continue
+			_add_menu_text(box, "%s\n%s" % [str(section.get("title", "")), str(section.get("body", ""))])
+			for link in section.get("links", []):
+				if typeof(link) == TYPE_DICTIONARY:
+					_add_menu_button(box, str(link.get("label", "Source")), func(url = str(link.get("url", ""))): OS.shell_open(url))
+	_add_menu_button(box, "Report a Problem", func(): show_problem_report("main"))
 	_add_menu_button(box, "Back", func(): show_main_menu())
 
 func show_exit_notice() -> void:
@@ -645,10 +679,12 @@ func _render_dialogue_page() -> void:
 		page_speaker = str(page.get("speaker", dialogue_session_data.get("name", "Unknown")))
 		page_speaker_id = str(page.get("speaker_id", ""))
 		dialogue_title.text = page_speaker
-		dialogue_text.text = str(page.get("text", "..."))
+		dialogue_text.text = SourceText.localize(str(page.get("text", "...")))
 	else:
 		dialogue_title.text = page_speaker
 		dialogue_text.text = str(page)
+	dialogue_title.visible = subtitle_speaker_names
+	text_history.record(page_speaker, dialogue_text.get_parsed_text(), "speech", str(page.get("text_id", "")) if typeof(page) == TYPE_DICTIONARY else "")
 	if dialogue_page_label != null:
 		dialogue_page_label.text = "%02d / %02d" % [dialogue_page_index + 1, dialogue_pages.size()]
 	dialogue_page_changed.emit(page_speaker, page_speaker_id, dialogue_page_index, dialogue_pages.size())
@@ -692,6 +728,8 @@ func _render_dialogue_page() -> void:
 		button.pressed.connect(func(action_data = action):
 			if not _close_dialogue_surface():
 				return
+			var is_commitment := str(action_data.get("type", "")) in ["story_choice", "ending", "final_choice"]
+			text_history.record("Kael — committed choice" if is_commitment else "Kael", str(action_data.get("label", "Continue")), "choice" if is_commitment else "question", str(action_data.get("choice_id", "")))
 			dialogue_closed.emit()
 			action_selected.emit(action_data)
 		)
@@ -705,6 +743,7 @@ func _render_dialogue_page() -> void:
 func show_inventory(inventory, quests, story_state = null, progression = null) -> void:
 	_set_ui_pointer("journal")
 	inventory_layer.visible = true
+	_show_journal_art(quests, story_state)
 	var oil_name = "None"
 	if inventory.active_oil != "":
 		oil_name = inventory.get_item_name(inventory.active_oil)
@@ -747,6 +786,7 @@ func show_inventory(inventory, quests, story_state = null, progression = null) -
 	if quests.is_completed("main_blood_under_stone") or quests.is_active("main_blood_under_stone"):
 		text += "Gravebound Knight — A disciplined witness. Read the windup; do not trade blows.\n"
 	if story_state != null:
+		text += _physical_story_journal(story_state)
 		text += "\nCONSEQUENCES\n"
 		var trust := int(story_state.values.get("anwen_trust", 0))
 		var fear := int(story_state.values.get("greyfen_fear", 0))
@@ -803,6 +843,8 @@ func show_inventory(inventory, quests, story_state = null, progression = null) -
 func show_vendor(vendor_id: String, vendor_service, inventory, quests = null, story_state = null) -> void:
 	_set_ui_pointer("journal")
 	inventory_layer.visible = true
+	if journal_art != null:
+		journal_art.visible = false
 	var vendor: Dictionary = vendor_service.get_vendor(vendor_id)
 	var vendor_name := str(vendor.get("name", "Vendor"))
 	var vendor_subtitle := str(vendor.get("subtitle", "A practical Greyfen exchange."))
@@ -1090,6 +1132,11 @@ func _build_dialogue() -> void:
 	dialogue_page_label.add_theme_font_size_override("font_size", 12)
 	dialogue_page_label.add_theme_color_override("font_color", Color(0.62, 0.54, 0.40))
 	heading.add_child(dialogue_page_label)
+	var history_button := Button.new()
+	history_button.text = "History"
+	history_button.focus_mode = Control.FOCUS_ALL
+	history_button.pressed.connect(func(): show_text_history("dialogue"))
+	heading.add_child(history_button)
 	var rule := ColorRect.new()
 	rule.name = "DialogueGoldRule"
 	rule.custom_minimum_size = Vector2(0, 2)
@@ -1122,13 +1169,25 @@ func _build_inventory() -> void:
 	var columns = HBoxContainer.new()
 	columns.add_theme_constant_override("separation", 24)
 	inventory_layer.add_child(columns)
+	var journal_column := VBoxContainer.new()
+	journal_column.custom_minimum_size = Vector2(560, 520)
+	journal_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	columns.add_child(journal_column)
+	journal_art = TextureRect.new()
+	journal_art.custom_minimum_size = Vector2(560, 112)
+	journal_art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	journal_art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	journal_art.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	journal_art.visible = false
+	journal_column.add_child(journal_art)
 	inventory_text = RichTextLabel.new()
-	inventory_text.custom_minimum_size = Vector2(560, 520)
+	inventory_text.custom_minimum_size = Vector2(560, 396)
+	inventory_text.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	inventory_text.scroll_active = true
 	inventory_text.focus_mode = Control.FOCUS_ALL
 	inventory_text.add_theme_constant_override("line_separation", 5)
 	inventory_text.add_theme_font_size_override("normal_font_size", 17)
-	columns.add_child(inventory_text)
+	journal_column.add_child(inventory_text)
 	var actions_scroll := ScrollContainer.new()
 	actions_scroll.name = "PreparationActionsScroll"
 	actions_scroll.custom_minimum_size = Vector2(320, 520)
@@ -1355,14 +1414,19 @@ func _set_gameplay_pointer() -> void:
 
 func apply_accessibility(current: Dictionary) -> void:
 	reduced_motion = bool(current.get("reduced_motion", false))
+	flash_reduction = bool(current.get("flash_reduction", false))
+	subtitle_speaker_names = bool(current.get("subtitle_speaker_names", true))
 	high_contrast = bool(current.get("high_contrast", false))
-	var subtitle_scale := clampf(float(current.get("subtitle_scale", 1.0)), 0.9, 1.2)
+	var subtitle_scale := clampf(float(current.get("subtitle_scale", 1.0)), 0.9, 1.5)
 	story_text_scale = subtitle_scale
 	if inventory_text != null:
 		inventory_text.add_theme_font_size_override("normal_font_size", int(round(17.0 * story_text_scale)))
 	if dialogue_text != null:
+		dialogue_title.visible = subtitle_speaker_names
+		_style_panel(dialogue_layer, Color(0.045, 0.04, 0.035, clampf(float(current.get("subtitle_background_opacity", 0.92)), 0.25, 1.0)), Color(0.44, 0.32, 0.18, 0.92))
 		dialogue_text.add_theme_font_size_override("normal_font_size", int(round(24.0 * subtitle_scale)))
 		dialogue_text.add_theme_font_size_override("bold_font_size", int(round(26.0 * subtitle_scale)))
+		dialogue_text.custom_minimum_size.y = 78.0 if subtitle_scale <= 1.0 else 116.0
 	for label in [tracker_label, compass_label, prompt_label, hint_label, toast_label]:
 		if label == null:
 			continue
@@ -1541,6 +1605,15 @@ func _unhandled_input(event: InputEvent) -> void:
 		_return_from_remap()
 	elif active_menu == "credits":
 		show_main_menu()
+	elif active_menu == "text_history":
+		_return_from_history()
+	elif active_menu in ["save_library", "save_slot", "save_import", "chapter_replay", "text_history", "problem_report"]:
+		if active_menu in ["save_slot", "save_import", "chapter_replay"]:
+			show_save_library(library_back_target, library_page)
+		elif library_back_target == "main":
+			show_main_menu()
+		else:
+			show_pause_menu()
 	elif active_menu == "pause":
 		resume_requested.emit()
 	else:
@@ -1657,6 +1730,8 @@ func _objective_with_verb(objective: String) -> String:
 	return objective
 
 func _flash_bar(bar: ProgressBar, color: Color) -> void:
+	if flash_reduction or reduced_motion:
+		return
 	bar.modulate = color
 	var tween = create_tween()
 	tween.tween_property(bar, "modulate", Color.WHITE, 0.18)
@@ -1696,6 +1771,264 @@ func _add_hud_accent(parent: Control, position: Vector2, size: Vector2) -> void:
 	accent.size = size
 	accent.color = Color(0.62, 0.42, 0.18, 0.88)
 	parent.add_child(accent)
+
+func get_current_dialogue_page() -> Dictionary:
+	if dialogue_page_index < 0 or dialogue_page_index >= dialogue_pages.size():
+		return {}
+	var page: Variant = dialogue_pages[dialogue_page_index]
+	return page.duplicate(true) if typeof(page) == TYPE_DICTIONARY else {"speaker": dialogue_title.text, "text": str(page)}
+
+func _physical_story_journal(state) -> String:
+	var lines: Array[String] = []
+	var facts := {
+		"mill_workers_rescued": "Mill workers reached safety with Kael's escort.",
+		"mill_records_saved": "The mill records were carried clear of the fire.",
+		"root_testimony_protected": "The roots' testimony was protected during the confrontation.",
+		"root_testimony_recovered": "Kael recovered the testimony after the roots were damaged.",
+		"root_landscape_released": "Two roots were redirected, opening the ground again.",
+		"bell_rhythm_learned": "Kael learned the bell's rhythm; its warning can be read as well as heard.",
+		"bell_rope_released": "The bell rope was released.",
+		"relief_deliveries_completed": "Both households received their relief supplies in person.",
+		"aftermath_names_returned": "The recovered names were returned to Greyfen.",
+		"aftermath_work_promised": "Kael promised to take part in the work that follows.",
+		"aftermath_walk_completed": "Kael walked the road home and saw the covenant's consequences."
+	}
+	for flag in facts:
+		if bool(state.get_flag(flag, false)):
+			lines.append(str(facts[flag]))
+	var damage := str(state.get_flag("mill_damage_state", ""))
+	if damage != "":
+		lines.append("The mill fire was contained." if damage == "contained" else "The mill bears fire damage; recovery will take material and labor.")
+	if int(state.get_flag("mill_smoke_exposure", 0)) >= 3:
+		lines.append("Workers inhaled too much smoke during the rescue and need care.")
+	if bool(state.get_flag("root_testimony_damaged", false)) and not bool(state.get_flag("root_testimony_recovered", false)):
+		lines.append("The roots' testimony was damaged. Search the disturbed ground for a recoverable record.")
+	if bool(state.get_flag("assembly_relief_ready", false)) and not bool(state.get_flag("relief_deliveries_completed", false)):
+		lines.append("Relief supplies are ready; the two households still need their deliveries.")
+	if bool(state.get_flag("final_choice_completed", false)) and not bool(state.get_flag("aftermath_walk_completed", false)):
+		lines.append("Return to Greyfen: hear the households, return the names and decide what work Kael will share.")
+	return "\nWORK THAT CHANGED THE ROAD\n" + "\n".join(lines) + "\n" if not lines.is_empty() else ""
+
+func save_text_history() -> Array:
+	return text_history.save_state()
+
+func load_text_history(raw: Variant) -> void:
+	text_history.load_state(raw)
+
+func _save_service():
+	return get_parent().get("save_manager")
+
+func show_save_library(back_target: String = "pause", requested_page: int = 0) -> void:
+	library_back_target = back_target
+	active_menu = "save_library"
+	_set_internal_canvas(Vector2i(MENU_SIZE))
+	_set_ui_pointer("pause")
+	_clear_menu()
+	menu_layer.visible = true
+	var box := _menu_box("Saved Journeys", "The road you remember", "manual saves and protected checkpoints")
+	box.set_meta("compact_buttons", true)
+	var service = _save_service()
+	if service == null:
+		_add_menu_text(box, "Save storage is preparing.")
+		return
+	var slots: Array = service.list_slots()
+	var pages := maxi(1, ceili(float(slots.size()) / 4.0))
+	library_page = clampi(requested_page, 0, pages - 1)
+	_add_menu_text(box, "Page %d of %d. Browser saves belong to this browser and device. Export a JSON copy to keep or move a journey." % [library_page + 1, pages])
+	for index in range(library_page * 4, mini(slots.size(), library_page * 4 + 4)):
+		var slot: Dictionary = slots[index]
+		var summary := str(slot.title)
+		if bool(slot.valid):
+			summary += "\n%s · %s%s" % [slot.zone, str(slot.saved_at).replace("T", " "), " · replay" if bool(slot.replay) else ""]
+		else:
+			summary += " — unreadable" if bool(slot.exists) else " — empty"
+		_add_menu_button(box, summary, func(id = str(slot.id)): show_save_slot(id))
+	_add_menu_button(box, "Previous Page", func(): show_save_library(library_back_target, library_page - 1), library_page <= 0)
+	_add_menu_button(box, "Next Page", func(): show_save_library(library_back_target, library_page + 1), library_page >= pages - 1)
+	_add_menu_button(box, "Import a Save File", func():
+		service.request_import_file()
+		if not service.library_changed.is_connected(_refresh_save_library):
+			service.library_changed.connect(_refresh_save_library)
+	)
+	_add_menu_button(box, "Paste a Save", show_save_import)
+	_add_menu_button(box, "Chapter Replay", show_chapter_replays, service.chapter_replays().is_empty())
+	_add_menu_button(box, "Back", _return_from_library)
+
+func _refresh_save_library() -> void:
+	if active_menu == "save_library":
+		show_save_library(library_back_target, library_page)
+	elif active_menu == "save_slot":
+		show_save_slot(selected_slot)
+
+func show_save_slot(slot_id: String) -> void:
+	selected_slot = slot_id
+	active_menu = "save_slot"
+	_clear_menu()
+	var service = _save_service()
+	var slot: Dictionary = {}
+	for candidate in service.list_slots():
+		if str(candidate.id) == slot_id:
+			slot = candidate
+	if slot.is_empty():
+		show_save_library(library_back_target, library_page)
+		return
+	var box := _menu_box(str(slot.title), str(slot.zone) if bool(slot.valid) else "Empty journey", "save library")
+	box.set_meta("compact_buttons", true)
+	var title := LineEdit.new()
+	title.text = str(slot.title)
+	title.max_length = 48
+	title.placeholder_text = "Name this journey"
+	title.custom_minimum_size = Vector2(320, 44)
+	title.focus_mode = Control.FOCUS_ALL
+	title.editable = not bool(slot.protected)
+	box.add_child(title)
+	if bool(slot.valid):
+		_add_menu_text(box, "Saved %s UTC" % str(slot.saved_at).replace("T", " "))
+	_add_menu_button(box, "Load This Journey", func():
+		if service.load_slot(get_parent(), slot_id):
+			hide_menus()
+	, not bool(slot.valid))
+	if not bool(slot.protected):
+		var can_save := get_parent().get("game_started") == true and is_instance_valid(get_parent().get("player"))
+		_add_menu_button(box, "Replace With Current Journey" if bool(slot.exists) else "Save Current Journey Here", func():
+			if service.save_named(get_parent(), slot_id, title.text):
+				show_save_slot(slot_id)
+		, not can_save)
+		_add_menu_button(box, "Rename", func():
+			if service.rename_slot(slot_id, title.text):
+				show_save_slot(slot_id)
+		, not bool(slot.valid))
+		_add_menu_button(box, "Restore Previous Slot Copy", func():
+			if service.restore_previous_slot(slot_id):
+				show_save_slot(slot_id)
+		, not service.has_previous_slot(slot_id))
+		_add_menu_button(box, "Import File Into This Slot", func():
+			service.request_import_file(slot_id)
+			if not service.library_changed.is_connected(_refresh_save_library):
+				service.library_changed.connect(_refresh_save_library)
+		)
+	_add_menu_button(box, "Export This Journey", func(): service.export_slot(slot_id), not bool(slot.valid))
+	_add_menu_text(box, "Replacing or importing into this manual save retains its previous copy. Export a copy first to keep more than one earlier version. Automatic checkpoints cannot be overwritten from this menu.")
+	_add_menu_button(box, "Back", func(): show_save_library(library_back_target, library_page))
+
+func show_save_import() -> void:
+	active_menu = "save_import"
+	_clear_menu()
+	var box := _menu_box("Import a Journey", "Paste an exported JSON save", "imports use an empty manual slot")
+	_add_menu_text(box, "Paste the complete save below. The game checks its format and location before creating a new slot. Existing journeys stay in place.")
+	var input := TextEdit.new()
+	input.custom_minimum_size = Vector2(340, 280)
+	input.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
+	input.placeholder_text = "Paste Ashen Oath save JSON"
+	box.add_child(input)
+	_add_menu_button(box, "Import Into an Empty Slot", func():
+		if _save_service().import_save_text(input.text):
+			show_save_library(library_back_target, 0)
+	)
+	_add_menu_button(box, "Back", func(): show_save_library(library_back_target, library_page))
+
+func show_chapter_replays() -> void:
+	active_menu = "chapter_replay"
+	_clear_menu()
+	var box := _menu_box("Return to a Chapter", "A copied journey", "your completed outcome is preserved")
+	_add_menu_text(box, "Replay begins from the first checkpoint recorded in each chapter of this journey. Replay autosaves and decisions use separate files. Manual saves can preserve a replay as a new journey.")
+	for chapter in _save_service().chapter_replays():
+		_add_menu_button(box, str(chapter.title), func(id = str(chapter.id)):
+			if _save_service().replay_chapter(get_parent(), id):
+				hide_menus()
+		)
+	_add_menu_button(box, "Back", func(): show_save_library(library_back_target, library_page))
+
+func _return_from_library() -> void:
+	if library_back_target == "main":
+		show_main_menu()
+	else:
+		show_pause_menu()
+
+func show_text_history(back_target: String = "pause") -> void:
+	library_back_target = back_target
+	active_menu = "text_history"
+	dialogue_layer.visible = false
+	_set_internal_canvas(Vector2i(MENU_SIZE))
+	_set_ui_pointer("pause")
+	_clear_menu()
+	menu_layer.visible = true
+	var box := _menu_box("Conversation History", "Words and promises", "most recent 400 entries")
+	var log := RichTextLabel.new()
+	log.text = text_history.text()
+	log.bbcode_enabled = false
+	log.custom_minimum_size = Vector2(340, 410)
+	log.add_theme_font_size_override("normal_font_size", int(20 * story_text_scale))
+	log.focus_mode = Control.FOCUS_ALL
+	log.scroll_active = true
+	log.scroll_following = true
+	box.add_child(log)
+	_add_menu_button(box, "Back to Conversation" if back_target == "dialogue" else "Back", _return_from_history)
+
+func _return_from_history() -> void:
+	if library_back_target == "dialogue":
+		menu_layer.visible = false
+		active_menu = ""
+		_set_internal_canvas(GAMEPLAY_SIZE)
+		_set_ui_pointer("dialogue")
+		dialogue_layer.visible = true
+		_focus_after_rebuild(dialogue_actions)
+	else:
+		_return_from_library()
+
+func _show_journal_art(quests, state) -> void:
+	if journal_art == null:
+		return
+	var path := "res://assets/ui/story_chapters_atlas.png"
+	if not ResourceLoader.exists(path):
+		journal_art.visible = false
+		return
+	var image := load(path) as Texture2D
+	if image == null:
+		return
+	var cell := 0
+	if state != null and (bool(state.get_flag("final_choice_completed", false)) or quests.is_active("main_hart_remembers")):
+		cell = 3
+	elif quests.is_completed("main_names_they_burned"):
+		cell = 2
+	elif quests.is_completed("main_road_of_crows"):
+		cell = 1
+	var atlas := AtlasTexture.new()
+	atlas.atlas = image
+	atlas.region = Rect2(float(cell % 2) * image.get_width() / 2.0, floorf(float(cell) / 2.0) * image.get_height() / 2.0, image.get_width() / 2.0, image.get_height() / 2.0)
+	journal_art.texture = atlas
+	journal_art.visible = true
+
+func show_problem_report(back_target: String = "pause") -> void:
+	library_back_target = back_target
+	active_menu = "problem_report"
+	_clear_menu()
+	var box := _menu_box("Report a Problem", "Keep a useful record", "nothing is sent automatically")
+	_add_menu_text(box, "Describe what happened, what you expected, and the last choice you made. Download the report and share it with the project when you choose. Export a save separately if it helps reproduce the problem.")
+	var description := TextEdit.new()
+	description.custom_minimum_size = Vector2(340, 240)
+	description.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
+	description.placeholder_text = "What happened?"
+	box.add_child(description)
+	_add_menu_button(box, "Download Problem Report", func(): _download_problem_report(description.text))
+	_add_menu_button(box, "Back", _return_from_library)
+
+func _download_problem_report(description: String) -> void:
+	var game = get_parent()
+	var report := {"game": "Ashen Oath", "created_utc": Time.get_datetime_string_from_system(true), "description": description.left(16000), "zone": str(game.get("current_zone_id")), "engine": Engine.get_version_info().get("string", ""), "platform": OS.get_name(), "input": input_device, "settings": _current_settings().duplicate(true)}
+	report.settings.erase("gamepad_profiles")
+	report.settings.erase("custom_bindings")
+	var content := JSON.stringify(report, "\t")
+	if OS.has_feature("web"):
+		JavaScriptBridge.download_buffer(content.to_utf8_buffer(), "ashen-oath-problem-report.json", "application/json")
+		toast("Problem report download requested. Nothing was sent.")
+	else:
+		var path := "user://ashen-oath-problem-report.json"
+		var output := FileAccess.open(path, FileAccess.WRITE)
+		if output != null:
+			output.store_string(content)
+			output.close()
+			toast("Report saved to " + ProjectSettings.globalize_path(path))
 
 func _style_button(button: Button) -> void:
 	var normal = StyleBoxFlat.new()

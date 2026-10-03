@@ -19,6 +19,8 @@ var shake_amount = 0.0
 var shake_decay = 6.0
 var keyboard_turn_speed = 2.2
 var invert_y = false
+var targeting_assist := true
+var reduce_flashes := false
 var gamepad_look_sensitivity := 1.0
 var current_zone_id = "greyfen"
 
@@ -291,6 +293,8 @@ func _collide_camera(from_pos: Vector3, desired: Vector3) -> Vector3:
 	return hit_pos + normal * 0.25
 
 func shake(amount: float) -> void:
+	if reduce_flashes:
+		return
 	shake_amount = max(shake_amount, amount)
 	_fov_kick = max(_fov_kick, amount * 4.8)
 
@@ -359,6 +363,33 @@ func apply_settings(mouse_sensitivity: float, use_invert_y: bool, controller_sen
 	sensitivity = mouse_sensitivity
 	invert_y = use_invert_y
 	gamepad_look_sensitivity = controller_sensitivity
+
+func apply_accessibility(values: Dictionary) -> void:
+	targeting_assist = bool(values.get("targeting_assist", true))
+	reduce_flashes = bool(values.get("flash_reduction", false))
+	if reduce_flashes or bool(values.get("reduced_motion", false)):
+		shake_amount = 0.0
+		_fov_kick = 0.0
+
+func assist_attack_direction(origin: Vector3, forward: Vector3, reach: float = 4.0) -> Vector3:
+	if not targeting_assist or forward.length_squared() < 0.5:
+		return forward
+	var selected: Node3D = get_locked_combat_target()
+	if selected == null:
+		selected = _cached_combat_focus if is_instance_valid(_cached_combat_focus) else null
+	if selected == null or not _is_valid_combat_target(selected):
+		return forward
+	var offset: Vector3 = selected.global_position - origin
+	offset.y = 0.0
+	var flat_forward := Vector3(forward.x, 0.0, forward.z).normalized()
+	if offset.length_squared() < 0.04 or offset.length() > reach:
+		return forward
+	var desired := offset.normalized()
+	if flat_forward.dot(desired) < cos(deg_to_rad(18.0)):
+		return forward
+	# Assistance only steadies an already intended target inside a narrow cone.
+	# It never acquires a hidden target or overrides a turn away from a foe.
+	return flat_forward.slerp(desired, 0.55).normalized()
 
 func _look_input() -> Vector2:
 	if input_source != null and input_source.has_method("look_vector"):

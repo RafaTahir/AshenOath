@@ -6,6 +6,8 @@ Plan: C:/Users/User/Documents/Codex/AshenOath/plans/2026-10-03-ashen-oath-story-
 
 2026-10-03: User approved keeping the core identity with a major rewrite, then requested implementation, no testing or verification, followed by push and deployment. This explicitly replaces plan and skill test/review gates for this execution. Compilation/export remains necessary to create the release. No QA, smoke, browser, screenshot, lint or gameplay verification will run. Changed work is untested.
 
+The user subsequently directed continuous autonomous work until explicitly stopped: finish the current story implementation and publish, then write and execute successive improvement plans focused on interactions, HUD, navigation and fine visual details. Intermediate releases do not complete this objective. Routine edits, commands, publishing and implementation decisions are already authorized. Platform access restrictions remain applicable; reuse existing permissions rather than adding conversational approval gates.
+
 ## Workspace
 
 Worktree: C:/Users/User/Documents/Codex/AshenOath/build
@@ -44,4 +46,18 @@ Vercel was linked to the existing `rafaeitahir-5792s-projects/ashenoath` project
 
 ## Release limits
 
-No tests, QA, gameplay sessions, screenshots, performance measurements, verification or review pass were run, as requested. Compilation/export diagnostics are handled only to produce deployable artifacts. Standard combat values are preserved unless an explicitly discovered preparation opportunity applies. Revised dialogue is presented through subtitles: existing voice lines are suppressed until a matching performance is authored. Runtime asset reuse and new staging do not constitute a complete replacement of every art or audio asset. The longer art-production, localization, playtime and measured quality targets in the master plan are not claimed as achieved by this release.
+No tests, QA, gameplay sessions, screenshots, performance measurements, verification or review pass were run, as requested. Compilation/export diagnostics are handled only to produce deployable artifacts. The first release presented revised dialogue through subtitles and suppressed stale recordings. The subsequent package adds generated exact-text voices; neither vocal performance nor the final game has been reviewed. Runtime asset reuse and new staging do not constitute a replacement of every asset. Localization preparation is implemented for English; translated languages and measured playtime or quality targets are not claimed.
+
+## Continuing story package
+
+Implementation added after the first production release:
+
+- Environmental encounter actions: Bell-Eater shelter rhythm and named rope, Rootbound root redirection and testimony recovery, Ashwing sluice/worker escort/records/perch, protected Halvern surrender, and Senn's evidence-or-relief stand-down.
+- Physical story work: carried grain, household deliveries, drainage repair, mill aid, discovered wayposts and Vargan shortcut. Each covenant has three return activities; individual epilogues follow that return.
+- Six named manual saves, import/export with recoverable replacement backups, protected decision checkpoints, isolated chapter replay and persistent conversation history.
+- Subtitle size/opacity/speaker labels, block and sprint toggles, bounded targeting assistance and reduced-flash effects.
+- Ten character presentation profiles with keepsakes and speaking/listening performances; seven original generated musical motifs with dialogue ducking.
+- Newly synthesized dialogue tied to exact speaker/text hashes, retained voice-model attribution, and generated illustrated chapter headers.
+- English source catalog/glossary and downloadable local problem reports. Production export includes the catalog, chapter atlas, motif manifest and external audio resources.
+
+These changes are being packaged for the next authorized push and production deployment. They are implementation work, not test or quality certification. After publication, the next fine-detail cycle must start with a written plan before code changes.
