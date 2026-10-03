@@ -3,7 +3,7 @@
     "name": "Redroot Potion",
     "type": "potion",
     "icon": "res://assets/icons/redroot_potion.svg",
-    "description": "A bitter draught that restores health over several breaths.",
+    "description": "A bitter draught that restores health immediately.",
     "recipe": {"redroot": 2, "bitterleaf": 1},
     "effect": {"heal": 45}
   },
@@ -13,7 +13,7 @@
     "icon": "res://assets/icons/bitterleaf_tonic.svg",
     "description": "Sharp tonic that restores stamina.",
     "recipe": {"bitterleaf": 2},
-    "effect": {"stamina": 45}
+    "effect": {"stamina": 55}
   },
   "ash_bomb": {
     "name": "Ash Bomb",

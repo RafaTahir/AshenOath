@@ -34,6 +34,8 @@ const DialogueHistory = preload("res://scripts/dialogue_history.gd")
 const SourceText = preload("res://scripts/source_text.gd")
 const NavigationState = preload("res://scripts/hud_navigation_state.gd")
 const NoticeQueue = preload("res://scripts/hud_notice_queue.gd")
+const PreparationViewModel = preload("res://scripts/preparation_view_model.gd")
+const PreparationPanel = preload("res://scripts/preparation_panel.gd")
 var navigation = NavigationState.new()
 var notices = NoticeQueue.new()
 var _rendered_screen := ""
@@ -152,6 +154,17 @@ var _bar_name_labels: Array[Label] = []
 var _journal_section_id := "return"
 var _journal_context: Dictionary = {}
 var inventory_notice_label: Label
+var _preparation_actions: HBoxContainer
+var _preparation_context: Dictionary = {}
+var _preparation_services: Object
+var _preparation_selection: Dictionary = {}
+var _preparation_results: Dictionary = {}
+var _vendor_context: Dictionary = {}
+var _decision_details: RichTextLabel
+var _decision_selected_key := ""
+var _dialogue_pending_button: Button
+var _dialogue_pending_source := ""
+var _dialogue_press_position := Vector2.ZERO
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -516,6 +529,7 @@ func show_exit_notice() -> void:
 	_add_menu_button(box, "Back to Menu", func(): show_main_menu())
 
 func hide_menus() -> void:
+	_cancel_dialogue_press()
 	_capture_menu_state()
 	_capture_inventory_state()
 	if _dialogue_review_open:
@@ -806,6 +820,8 @@ func _present_notice() -> void:
 	if inventory_notice_label != null:
 		inventory_notice_label.text = text if inventory_layer.visible and not reading else ""
 		inventory_notice_label.tooltip_text = text
+		if inventory_layer.visible and not reading and str(_notice_active.get("category", "")) not in ["error", "unavailable"]:
+			_present_preparation_notice()
 	if is_instance_valid(_menu_notice):
 		_menu_notice.text = text
 		_menu_notice.visible = text != "" and not reading
@@ -894,10 +910,13 @@ func show_dialogue(data: Dictionary) -> void:
 
 func _render_dialogue_page() -> void:
 	_dialogue_reading_state.clear()
-	var page = dialogue_pages[dialogue_page_index]
-	var page_speaker := str(dialogue_session_data.get("name", "Unknown"))
-	var page_speaker_id := ""
-	if typeof(page) == TYPE_DICTIONARY:
+	_cancel_dialogue_press()
+	_decision_selected_key = ""
+	_decision_details.visible = false
+	var page: Variant = dialogue_pages[dialogue_page_index]
+	var page_speaker: String = str(dialogue_session_data.get("name", "Unknown"))
+	var page_speaker_id: String = ""
+	if page is Dictionary:
 		page_speaker = str(page.get("speaker", dialogue_session_data.get("name", "Unknown")))
 		page_speaker_id = str(page.get("speaker_id", ""))
 		dialogue_title.text = page_speaker
@@ -906,63 +925,144 @@ func _render_dialogue_page() -> void:
 		dialogue_title.text = page_speaker
 		dialogue_text.text = str(page)
 	dialogue_title.visible = subtitle_speaker_names
-	text_history.record(page_speaker, dialogue_text.get_parsed_text(), "speech", str(page.get("text_id", "")) if typeof(page) == TYPE_DICTIONARY else "")
-	if dialogue_page_label != null:
-		dialogue_page_label.text = "%02d / %02d" % [dialogue_page_index + 1, dialogue_pages.size()]
+	text_history.record(page_speaker, dialogue_text.get_parsed_text(), "speech", str(page.get("text_id", "")) if page is Dictionary else "")
+	dialogue_page_label.text = "%02d / %02d" % [dialogue_page_index + 1, dialogue_pages.size()]
 	dialogue_page_changed.emit(page_speaker, page_speaker_id, dialogue_page_index, dialogue_pages.size())
 	for child in dialogue_actions.get_children():
 		dialogue_actions.remove_child(child)
 		child.queue_free()
-	if dialogue_page_index < dialogue_pages.size()-1:
-		var advance := Button.new()
+	if dialogue_page_index < dialogue_pages.size() - 1:
+		var advance: Button = Button.new()
 		advance.text = "Continue"
 		advance.set_meta("dialogue_focus_key", "continue")
 		advance.process_mode = Node.PROCESS_MODE_ALWAYS
 		advance.focus_mode = Control.FOCUS_ALL
-		advance.action_mode = BaseButton.ACTION_MODE_BUTTON_PRESS
+		advance.action_mode = BaseButton.ACTION_MODE_BUTTON_RELEASE
 		_style_button(advance)
 		advance.pressed.connect(func():
 			dialogue_page_index += 1
 			_render_dialogue_page()
 		)
 		dialogue_actions.add_child(advance)
+		dialogue_choices_scroll.custom_minimum_size.y = 96.0
 		_focus_after_rebuild(dialogue_actions)
+		call_deferred("_apply_hud_layout")
 		return
-	var actions: Array = dialogue_session_data.get("actions",[])
-	for action in actions:
-		var committing := str(action.get("type", "")) in ["story_choice", "ending", "final_choice"]
-		var preview := StoryJournalPresenter.decision_preview(action) if committing else ""
-		if preview != "":
-			var stakes := Label.new()
-			stakes.text = "On commitment: " + preview
-			stakes.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-			stakes.custom_minimum_size = Vector2(720, 0)
-			stakes.add_theme_font_size_override("font_size", int(round(18.0 * story_text_scale)))
-			stakes.add_theme_constant_override("outline_size", 4 if high_contrast else 2)
-			stakes.add_theme_color_override("font_outline_color", Color.BLACK)
-			dialogue_actions.add_child(stakes)
-		var button = Button.new()
-		button.set_meta("dialogue_focus_key", "action:" + str(action.get("choice_id", action.get("label", "continue"))))
+	var actions: Array = dialogue_session_data.get("actions", [])
+	var first_decision: Dictionary = {}
+	for raw_action: Variant in actions:
+		if not raw_action is Dictionary:
+			continue
+		var action: Dictionary = raw_action
+		var model: Dictionary = action.get("decision_model", {})
+		var committing: bool = not model.is_empty() or str(action.get("type", "")) in ["story_choice", "ending", "final_choice", "resolve_side_quest"]
+		if committing and model.is_empty():
+			model = {"label":str(action.get("label", "This choice")), "commitment":StoryJournalPresenter.decision_preview(action), "available":true}
+		if committing and first_decision.is_empty():
+			first_decision = model
+		var button: Button = Button.new()
+		var choice_key: String = str(model.get("option_key", action.get("choice_id", action.get("label", "continue"))))
+		button.set_meta("dialogue_focus_key", "action:" + choice_key)
 		button.text = ("Commit: " if committing else "") + str(action.get("label", "Continue"))
-		button.tooltip_text = preview
+		button.tooltip_text = PreparationPanel.decision_text(model) if committing else button.text
+		button.disabled = not bool(model.get("available", true))
 		button.process_mode = Node.PROCESS_MODE_ALWAYS
 		button.focus_mode = Control.FOCUS_ALL
-		button.action_mode = BaseButton.ACTION_MODE_BUTTON_PRESS
+		button.action_mode = BaseButton.ACTION_MODE_BUTTON_RELEASE
 		_style_button(button)
-		button.pressed.connect(func(action_data = action):
+		if committing:
+			button.focus_entered.connect(func(detail: Dictionary = model): _show_decision_detail(detail))
+			button.mouse_entered.connect(func(detail: Dictionary = model): _show_decision_detail(detail))
+		button.pressed.connect(func(action_data: Dictionary = action, is_commitment: bool = committing):
 			if not _close_dialogue_surface():
 				return
-			var is_commitment := str(action_data.get("type", "")) in ["story_choice", "ending", "final_choice"]
-			text_history.record("Kael — committed choice" if is_commitment else "Kael", str(action_data.get("label", "Continue")), "choice" if is_commitment else "question", str(action_data.get("choice_id", "")))
+			if not is_commitment:
+				text_history.record("Kael", str(action_data.get("label", "Continue")), "question", str(action_data.get("choice_id", "")))
 			dialogue_closed.emit()
 			action_selected.emit(action_data)
 		)
 		dialogue_actions.add_child(button)
-	if dialogue_choices_scroll != null:
-		dialogue_choices_scroll.custom_minimum_size.y = 154.0 if actions.size() > 2 else 96.0
+	dialogue_choices_scroll.custom_minimum_size.y = 154.0 if actions.size() > 2 else 112.0
 	if actions.is_empty():
 		_add_dialogue_close()
-	_focus_after_rebuild(dialogue_actions)
+	if not first_decision.is_empty():
+		_show_decision_detail(first_decision)
+		call_deferred("_focus_decision_reader", dialogue_page_index)
+	else:
+		_focus_after_rebuild(dialogue_actions)
+	call_deferred("_apply_hud_layout")
+
+func _show_decision_detail(model: Dictionary) -> void:
+	if _decision_details == null or model.is_empty():
+		return
+	var key: String = str(model.get("option_key", model.get("label", "")))
+	if key == _decision_selected_key and _decision_details.visible:
+		return
+	_decision_selected_key = key
+	_decision_details.text = "BEFORE YOU COMMIT\n" + PreparationPanel.decision_text(model)
+	_decision_details.visible = true
+	_decision_details.scroll_to_line(0)
+
+func _focus_decision_reader(page_index: int) -> void:
+	await get_tree().process_frame
+	if dialogue_layer.visible and dialogue_page_index == page_index and _decision_details.visible:
+		_decision_details.grab_focus()
+
+func show_decision_result(receipt: Dictionary) -> void:
+	var receipt_id: String = str(receipt.get("id", ""))
+	if receipt_id == "":
+		return
+	var source_id: String = "decision:" + receipt_id + ":" + str(receipt.get("stage", "recorded"))
+	for raw: Variant in text_history.entries:
+		if raw is Dictionary and str(raw.get("source_id", "")) == source_id:
+			return
+	var title: String = str(receipt.get("title", "Commitment recorded"))
+	var body: String = str(receipt.get("body", ""))
+	var next_action: String = str(receipt.get("next_action", ""))
+	var recorded: String = title + "\n" + body
+	if next_action != "":
+		recorded += "\nNext: " + next_action
+	text_history.record("Kael — recorded decision", recorded, "choice", source_id)
+	post_notice(title + ("\n" + body if body != "" else ""), "story", 6.0, source_id)
+func set_preparation_context(snapshot: Dictionary) -> void:
+	_preparation_context = snapshot.duplicate(true)
+
+func set_preparation_services(crafting) -> void:
+	_preparation_services = crafting
+
+func preparation_screen_key() -> String:
+	return _inventory_screen if inventory_layer != null and inventory_layer.visible else ""
+
+func show_preparation_result(result: Dictionary) -> bool:
+	if preparation_screen_key() != "journal:preparation" and not preparation_screen_key().begins_with("vendor:"):
+		return false
+	_preparation_results[_inventory_screen] = result.duplicate(true)
+	_present_preparation_notice()
+	return true
+
+func _present_preparation_notice() -> void:
+	if inventory_notice_label == null:
+		return
+	var result: Dictionary = _preparation_results.get(_inventory_screen, {})
+	if result.is_empty():
+		return
+	inventory_notice_label.text = ("Done: " if bool(result.get("ok", false)) else "Unavailable: ") + str(result.get("message", ""))
+	inventory_notice_label.tooltip_text = inventory_notice_label.text
+	inventory_notice_label.add_theme_color_override("font_color", Color(0.98, 0.96, 0.88) if high_contrast else Color(0.91, 0.84, 0.68))
+
+func _prepare_inventory_surface(preparation: bool) -> void:
+	for child in _preparation_actions.get_children():
+		_preparation_actions.remove_child(child)
+		child.queue_free()
+	_preparation_actions.visible = preparation
+	inventory_text.custom_minimum_size.y = 320.0 if preparation else 388.0
+	if preparation and journal_art != null:
+		journal_art.visible = false
+	inventory_notice_label.text = ""
+	_present_preparation_notice()
+	for child in craft_buttons.get_children():
+		craft_buttons.remove_child(child)
+		child.queue_free()
 
 func show_inventory(inventory, quests, story_state = null, progression = null, requested_section: String = "") -> void:
 	_capture_inventory_state()
@@ -974,55 +1074,10 @@ func show_inventory(inventory, quests, story_state = null, progression = null, r
 	_set_ui_pointer("journal")
 	inventory_layer.visible = true
 	_show_journal_art(quests, story_state)
-	var oil_name = "None"
-	if inventory.active_oil != "":
-		oil_name = inventory.get_item_name(inventory.active_oil)
-	var summary: Dictionary = inventory.get_preparation_summary()
-	var text = "Coin: %d\nBlade Oil: %s\nPotions: %d  Bombs: %d  Traps: %d\n\nPACK\n" % [
-		inventory.coin, oil_name, summary.potions, summary.bombs, summary.traps
-	]
-	for id in inventory.ordered_item_ids():
-		var definition: Dictionary = inventory.item_defs.get(id, {})
-		text += "- %s x%d — %s\n" % [
-			inventory.get_item_name(id),
-			int(inventory.items.get(id, 0)),
-			str(definition.get("description", ""))
-		]
-	text += "\nIngredients\n"
-	var ingredient_ids: Array = inventory.ingredients.keys()
-	ingredient_ids.sort()
-	for id in ingredient_ids:
-		text += "- %s x%d\n" % [id.capitalize(), int(inventory.ingredients[id])]
-	text += "\nRECIPES\n"
-	for id in inventory.ordered_item_ids():
-		var status: Dictionary = inventory.recipe_status(id)
-		var parts: Array[String] = []
-		for ingredient in status.required.keys():
-			parts.append("%s %d/%d" % [
-				str(ingredient).capitalize(),
-				int(inventory.ingredients.get(ingredient, 0)),
-				int(status.required[ingredient])
-			])
-		text += "- %s: %s%s\n" % [
-			inventory.get_item_name(id),
-			", ".join(parts),
-			" [READY]" if bool(status.craftable) else ""
-		]
-	text += "\n\nBESTIARY\n"
-	text += "Ghoulkin — Fast cursed remains. Parry the lunge; Moon Oil bites deep.\n"
-	if quests.is_completed("main_teeth_in_rain") or quests.is_active("main_teeth_in_rain"):
-		text += "Bog Wretch — Rot-bound memory given flesh. Ash Bombs break its approach.\n"
-	if quests.is_completed("main_blood_under_stone") or quests.is_active("main_blood_under_stone"):
-		text += "Gravebound Knight — A disciplined witness. Read the windup; do not trade blows.\n"
-	if progression != null:
-		text += "\n\nPROGRESSION\n%s" % progression.get_summary_text()
-	var zone_id := str(get_parent().get("current_zone_id")) if get_parent() != null else ""
+	var zone_id: String = str(_preparation_context.get("zone_id", ""))
+	if zone_id == "" and get_parent() != null:
+		zone_id = str(get_parent().get("current_zone_id"))
 	var sections: Array[Dictionary] = StoryJournalPresenter.sections(quests, story_state, zone_id)
-	for section: Dictionary in sections:
-		if str(section.get("id", "")) == "preparation":
-			var entries: Array = section.get("entries", [])
-			entries.append({"id":"kit_and_skills", "title":"Kit and skills", "body":text})
-			section["entries"] = entries
 	sections.append({"id":"quest_record", "title":"Quest Record", "body":str(quests.get_journal_text()), "entries":[]})
 	var current_section: Dictionary = {}
 	for section: Dictionary in sections:
@@ -1032,100 +1087,111 @@ func show_inventory(inventory, quests, story_state = null, progression = null, r
 		current_section = sections[0]
 		_journal_section_id = str(current_section.get("id", "return"))
 		_inventory_screen = "journal:" + _journal_section_id
-	var reading := str(current_section.get("title", "Journal")).to_upper() + "\n\n" + str(current_section.get("body", ""))
-	var paragraph_by_entry: Dictionary = {}
+	var preparing: bool = _journal_section_id == "preparation"
+	_prepare_inventory_surface(preparing)
 	var section_entries: Array = current_section.get("entries", [])
+	var reading: String = str(current_section.get("title", "Journal")).to_upper() + "\n\n" + str(current_section.get("body", ""))
+	var paragraph_by_entry: Dictionary = {}
 	for raw_entry: Variant in section_entries:
-		if typeof(raw_entry) != TYPE_DICTIONARY:
+		if not raw_entry is Dictionary:
 			continue
 		var entry: Dictionary = raw_entry
 		reading += "\n\n"
 		paragraph_by_entry[str(entry.get("id", ""))] = reading.count("\n")
 		reading += str(entry.get("title", "")) + "\n" + str(entry.get("body", ""))
-	inventory_text.text = reading
-	for child in craft_buttons.get_children():
-		craft_buttons.remove_child(child)
-		child.queue_free()
-	var contents_label := Label.new()
-	contents_label.text = "JOURNAL"
-	contents_label.add_theme_font_size_override("font_size", 13)
-	craft_buttons.add_child(contents_label)
+	if preparing:
+		_build_preparation_content(inventory, progression, story_state, quests, reading)
+	else:
+		inventory_text.text = reading
+	_add_preparation_heading("JOURNAL")
 	for section: Dictionary in sections:
-		var section_id := str(section.get("id", ""))
-		var section_button := Button.new()
-		section_button.text = str(section.get("title", ""))
+		var section_id: String = str(section.get("id", ""))
+		var section_button: Button = _preparation_button(str(section.get("title", "")), "section:" + section_id, craft_buttons)
 		section_button.toggle_mode = true
 		section_button.button_pressed = section_id == _journal_section_id
-		section_button.set_meta("navigation_key", "section:" + section_id)
-		_style_button(section_button)
-		section_button.pressed.connect(func(id_value = section_id, selected_button = section_button):
-			selected_button.button_pressed = true
-			_open_journal_section(str(id_value))
-		)
-		craft_buttons.add_child(section_button)
-	if not section_entries.is_empty():
-		var entry_heading := Label.new()
-		entry_heading.text = "IN THIS SECTION"
-		entry_heading.add_theme_font_size_override("font_size", 12)
-		craft_buttons.add_child(entry_heading)
-	for raw_entry: Variant in section_entries:
-		if typeof(raw_entry) != TYPE_DICTIONARY:
-			continue
-		var entry: Dictionary = raw_entry
-		var entry_id := str(entry.get("id", ""))
-		var entry_button := Button.new()
-		entry_button.text = str(entry.get("title", "Read entry"))
-		entry_button.set_meta("navigation_key", "entry:" + entry_id)
-		_style_button(entry_button)
-		entry_button.pressed.connect(func(paragraph = int(paragraph_by_entry.get(entry_id, 0))):
-			inventory_text.scroll_to_paragraph(int(paragraph))
-			inventory_text.grab_focus()
-		)
-		craft_buttons.add_child(entry_button)
-	var item_ids: Array = inventory.ordered_item_ids() if _journal_section_id == "preparation" else []
-	for id in item_ids:
-		var button = Button.new()
-		button.set_meta("navigation_key", "craft:" + str(id))
-		var recipe: Dictionary = inventory.recipe_status(id)
-		button.text = "Craft %s%s" % [
-			inventory.get_item_name(id),
-			"" if bool(recipe.craftable) else " — ingredients needed"
-		]
-		button.disabled = not inventory.can_craft(id)
-		_style_button(button)
-		button.pressed.connect(func(item_id = id): craft_requested.emit(item_id))
-		craft_buttons.add_child(button)
-	for id in item_ids:
-		if int(inventory.items[id]) <= 0:
-			continue
-		var use_button = Button.new()
-		use_button.set_meta("navigation_key", "use:" + str(id))
-		var verb := "Apply" if inventory.get_item_type(id) == "oil" else ("Set" if inventory.get_item_type(id) == "trap" else "Use")
-		use_button.text = "%s %s" % [verb, inventory.get_item_name(id)]
-		_style_button(use_button)
-		use_button.pressed.connect(func(item_id = id): item_use_requested.emit(item_id))
-		craft_buttons.add_child(use_button)
-	if progression != null and _journal_section_id == "preparation":
-		for id in progression.ordered_upgrade_ids():
-			if not progression.can_unlock(id):
+		section_button.pressed.connect(func(id_value: String = section_id): _open_journal_section(id_value))
+	if not preparing and not section_entries.is_empty():
+		_add_preparation_heading("IN THIS SECTION")
+		for raw_entry: Variant in section_entries:
+			if not raw_entry is Dictionary:
 				continue
-			var upgrade_button := Button.new()
-			upgrade_button.set_meta("navigation_key", "upgrade:" + str(id))
-			upgrade_button.text = "Learn %s — 1 Mark" % progression.definitions[id].get("name", id)
-			_style_button(upgrade_button)
-			upgrade_button.pressed.connect(func(upgrade_id = id): upgrade_requested.emit(upgrade_id))
-			craft_buttons.add_child(upgrade_button)
-	var close = Button.new()
-	close.text = "Close"
-	close.set_meta("navigation_key", "close")
-	_style_button(close)
-	close.pressed.connect(func():
-		dialogue_closed.emit()
-		hide_menus()
-		resume_requested.emit()
-	)
-	craft_buttons.add_child(close)
+			var entry: Dictionary = raw_entry
+			var entry_id: String = str(entry.get("id", ""))
+			var entry_button: Button = _preparation_button(str(entry.get("title", "Read entry")), "entry:" + entry_id, craft_buttons)
+			entry_button.pressed.connect(func(paragraph: int = int(paragraph_by_entry.get(entry_id, 0))):
+				inventory_text.scroll_to_paragraph(paragraph)
+				inventory_text.grab_focus()
+			)
+	_add_preparation_close()
 	call_deferred("_restore_inventory_state", _inventory_screen, _inventory_generation)
+
+func _build_preparation_content(inventory, progression, story_state, quests, notes: String) -> void:
+	var ids: Array = inventory.ordered_item_ids()
+	var selection: Dictionary = _preparation_selection.get(_inventory_screen, {})
+	if selection.is_empty() and not ids.is_empty():
+		selection = {"kind":"item", "id":str(ids[0])}
+		_preparation_selection[_inventory_screen] = selection
+	var kind: String = str(selection.get("kind", "notes"))
+	var selected_id: String = str(selection.get("id", ""))
+	var heading: String = "PREPARATION\nCoin: %d\n\n" % int(inventory.coin)
+	if kind == "item" and inventory.item_defs.has(selected_id):
+		var detail: Dictionary = PreparationViewModel.item_detail(selected_id, inventory, progression, _preparation_context, story_state, quests)
+		inventory_text.text = heading + PreparationPanel.item_text(detail)
+		var actions: Array = detail.get("actions", [])
+		for raw: Variant in actions:
+			if not raw is Dictionary:
+				continue
+			var action: Dictionary = raw
+			var operation: String = str(action.get("id", "use"))
+			var button: Button = _preparation_button(str(action.get("verb", "Use")), "action:" + operation + ":" + selected_id, _preparation_actions, bool(action.get("available", false)))
+			button.tooltip_text = str(action.get("reason", button.text))
+			button.pressed.connect(func(item_id: String = selected_id): item_use_requested.emit(item_id))
+		var recipe: Dictionary = inventory.recipe_status(selected_id)
+		var requirements: Dictionary = recipe.get("required", {})
+		if not requirements.is_empty() and _preparation_services != null:
+			var quote: Dictionary = _preparation_services.call("quote", selected_id)
+			inventory_text.text += "\n" + PreparationPanel.craft_text(quote)
+			var craft_button: Button = _preparation_button("Craft %d" % int(quote.get("output_quantity", 1)), "action:craft:" + selected_id, _preparation_actions, bool(quote.get("ok", false)))
+			craft_button.pressed.connect(func(item_id: String = selected_id): craft_requested.emit(item_id))
+	elif kind == "upgrade" and progression != null:
+		var upgrade: Dictionary = progression.upgrade_status(selected_id)
+		inventory_text.text = heading + PreparationPanel.practice_text(upgrade)
+		var learn: Button = _preparation_button("Already learned" if bool(upgrade.get("learned", false)) else "Learn · %d Mark%s" % [int(upgrade.get("cost", 1)), "s" if int(upgrade.get("cost", 1)) != 1 else ""], "action:upgrade:" + selected_id, _preparation_actions, bool(upgrade.get("available", false)))
+		learn.pressed.connect(func(upgrade_id: String = selected_id): upgrade_requested.emit(upgrade_id))
+	else:
+		inventory_text.text = notes
+	_add_preparation_heading("YOUR KIT")
+	for raw_id: Variant in ids:
+		var item_id: String = str(raw_id)
+		var item_button: Button = _preparation_button("%s · %d" % [inventory.get_item_name(item_id), int(inventory.items.get(item_id, 0))], "item:" + item_id, craft_buttons)
+		item_button.toggle_mode = true
+		item_button.button_pressed = kind == "item" and selected_id == item_id
+		item_button.pressed.connect(func(id_value: String = item_id): _select_preparation_entry("item", id_value))
+	if progression != null:
+		_add_preparation_heading("PRACTICE")
+		for raw_id: Variant in progression.ordered_upgrade_ids():
+			var upgrade_id: String = str(raw_id)
+			var upgrade: Dictionary = progression.upgrade_status(upgrade_id)
+			var practice_button: Button = _preparation_button(str(upgrade.get("title", upgrade_id)) + (" · Learned" if bool(upgrade.get("learned", false)) else ""), "upgrade:" + upgrade_id, craft_buttons)
+			practice_button.toggle_mode = true
+			practice_button.button_pressed = kind == "upgrade" and selected_id == upgrade_id
+			practice_button.pressed.connect(func(id_value: String = upgrade_id): _select_preparation_entry("upgrade", id_value))
+	var notes_button: Button = _preparation_button("Preparation notes", "notes", craft_buttons)
+	notes_button.pressed.connect(func(): _select_preparation_entry("notes", ""))
+
+func _select_preparation_entry(kind: String, id: String) -> void:
+	_preparation_selection[_inventory_screen] = {"kind":kind, "id":id}
+	_preparation_results.erase(_inventory_screen)
+	if _inventory_screen.begins_with("vendor:"):
+		show_vendor(str(_vendor_context.get("id", "")), _vendor_context.get("service"), _vendor_context.get("inventory"), _vendor_context.get("quests"), _vendor_context.get("state"))
+	else:
+		show_inventory(_journal_context.get("inventory"), _journal_context.get("quests"), _journal_context.get("state"), _journal_context.get("progression"), _journal_section_id)
+	inventory_text.scroll_to_line(0)
+	var memory: Dictionary = navigation.screens.get(_inventory_screen, {})
+	var scrolls: Dictionary = memory.get("scrolls", {})
+	scrolls["journal_text"] = 0
+	memory["scrolls"] = scrolls
+	navigation.screens[_inventory_screen] = memory
 
 func _open_journal_section(section_id: String) -> void:
 	if _journal_context.is_empty() or section_id == _journal_section_id:
@@ -1136,68 +1202,73 @@ func show_vendor(vendor_id: String, vendor_service, inventory, quests = null, st
 	_capture_inventory_state()
 	_inventory_screen = "vendor:" + vendor_id
 	_inventory_generation += 1
+	_vendor_context = {"id":vendor_id, "service":vendor_service, "inventory":inventory, "quests":quests, "state":story_state}
 	_set_ui_pointer("journal")
 	inventory_layer.visible = true
-	if journal_art != null:
-		journal_art.visible = false
+	_prepare_inventory_surface(true)
 	var vendor: Dictionary = vendor_service.get_vendor(vendor_id)
-	var vendor_name := str(vendor.get("name", "Vendor"))
-	var vendor_subtitle := str(vendor.get("subtitle", "A practical Greyfen exchange."))
-	var text := "%s\n%s\n\nCoin: %d\n\nSTOCK\n" % [vendor_name.to_upper(), vendor_subtitle, int(inventory.coin)]
+	var heading: String = "%s\n%s\nCoin: %d\n\n" % [str(vendor.get("name", "Vendor")).to_upper(), str(vendor.get("subtitle", "")), int(inventory.coin)]
 	var stock: Array[Dictionary] = vendor_service.list_stock(vendor_id, inventory, story_state, quests)
-	for entry in stock:
-		var item_id := str(entry.get("item_id", ""))
-		var item_name: String = str(inventory.get_item_name(item_id))
-		var owned := int(entry.get("owned", 0))
-		var cap := int(entry.get("cap", 999))
-		var price := int(entry.get("price", 0))
-		text += "- %s  %d/%d  |  %d coin\n  %s\n" % [item_name, owned, cap, price, str(inventory.item_defs.get(item_id, {}).get("description", ""))]
-		if str(entry.get("supply_note", "")) != "":
-			text += "  Supply: %s\n" % entry.supply_note
-	text += "\nBasic arrows and medicine stay available after restitution. Ask for the emergency reserve when you have none."
-	inventory_text.text = text
-	for child in craft_buttons.get_children():
-		craft_buttons.remove_child(child)
-		child.queue_free()
-	for entry in stock:
-		var item_id := str(entry.get("item_id", ""))
-		var owned := int(entry.get("owned", 0))
-		var cap := int(entry.get("cap", 999))
-		var price := int(entry.get("price", 0))
-		var buy_button := Button.new()
-		buy_button.set_meta("navigation_key", "buy:" + item_id)
-		buy_button.text = "Buy %s — %d coin" % [inventory.get_item_name(item_id), price]
-		buy_button.disabled = owned >= cap or int(inventory.coin) < price
-		_style_button(buy_button)
-		buy_button.pressed.connect(func(id = item_id): vendor_purchase_requested.emit(vendor_id, id, 1))
-		craft_buttons.add_child(buy_button)
-	if vendor_id == "tor_forge" and int(inventory.items.get("standard_arrow", 0)) < 5:
-		var refill := Button.new()
-		refill.set_meta("navigation_key", "emergency_arrows")
-		refill.text = "Claim Tor's free emergency arrows"
-		_style_button(refill)
-		refill.pressed.connect(func(): vendor_purchase_requested.emit(vendor_id, "__emergency_arrows__", 1))
-		craft_buttons.add_child(refill)
-	if vendor_id == "mira_apothecary" and int(inventory.items.get("redroot_potion", 0)) == 0:
-		var care := Button.new()
-		care.set_meta("navigation_key", "emergency_medicine")
-		care.text = "Ask Mira for emergency medicine"
-		care.disabled = bool(vendor_service.emergency_healing_claimed)
-		_style_button(care)
-		care.pressed.connect(func(): vendor_purchase_requested.emit(vendor_id, "__emergency_healing__", 1))
-		craft_buttons.add_child(care)
-	var close := Button.new()
-	close.text = "Close"
-	close.set_meta("navigation_key", "close")
-	_style_button(close)
+	var request_ids: Array[String] = []
+	for entry: Dictionary in stock:
+		request_ids.append(str(entry.get("item_id", "")))
+	if vendor_id == "tor_forge":
+		request_ids.append("__emergency_arrows__")
+	elif vendor_id == "mira_apothecary":
+		request_ids.append("__emergency_healing__")
+	var selection: Dictionary = _preparation_selection.get(_inventory_screen, {})
+	var selected_id: String = str(selection.get("id", ""))
+	if not request_ids.has(selected_id) and not request_ids.is_empty():
+		selected_id = request_ids[0]
+		_preparation_selection[_inventory_screen] = {"kind":"item", "id":selected_id}
+	inventory_text.text = heading + "Choose a supply to see its purpose, cost and availability."
+	if selected_id != "":
+		var quote: Dictionary = vendor_service.quote(vendor_id, selected_id, 1, inventory, story_state, quests)
+		var received_id: String = str(quote.get("item_id", selected_id))
+		var preparation_progression: Variant = _journal_context.get("progression")
+		if get_parent() != null:
+			preparation_progression = get_parent().get("progression")
+		var detail: Dictionary = PreparationViewModel.item_detail(received_id, inventory, preparation_progression, _preparation_context, story_state, quests)
+		detail["actions"] = []
+		inventory_text.text = heading + PreparationPanel.item_text(detail) + "\n" + PreparationPanel.purchase_text(quote)
+		var emergency: bool = selected_id.begins_with("__emergency")
+		var buy: Button = _preparation_button("Claim emergency reserve" if emergency else "Buy %d · %d coin" % [int(quote.get("quantity", 1)), int(quote.get("total_price", 0))], "action:buy:" + selected_id, _preparation_actions, bool(quote.get("ok", false)))
+		buy.pressed.connect(func(id_value: String = selected_id): vendor_purchase_requested.emit(vendor_id, id_value, 1))
+	_add_preparation_heading("AVAILABLE SUPPLIES")
+	for request_id: String in request_ids:
+		var title: String = "Emergency arrows" if request_id == "__emergency_arrows__" else ("Emergency medicine" if request_id == "__emergency_healing__" else str(inventory.get_item_name(request_id)))
+		var entry_button: Button = _preparation_button(title, "item:" + request_id, craft_buttons)
+		entry_button.toggle_mode = true
+		entry_button.button_pressed = selected_id == request_id
+		entry_button.pressed.connect(func(id_value: String = request_id): _select_preparation_entry("item", id_value))
+	_add_preparation_close()
+	call_deferred("_restore_inventory_state", _inventory_screen, _inventory_generation)
+
+func _add_preparation_heading(text: String) -> void:
+	var heading: Label = Label.new()
+	heading.text = text
+	heading.add_theme_font_size_override("font_size", int(round(13.0 * story_text_scale)))
+	heading.add_theme_color_override("font_color", Color(0.98, 0.96, 0.88) if high_contrast else Color(0.85, 0.77, 0.62))
+	craft_buttons.add_child(heading)
+
+func _preparation_button(text: String, key: String, parent: Container, available: bool = true) -> Button:
+	var button: Button = Button.new()
+	button.text = text
+	button.disabled = not available
+	button.action_mode = BaseButton.ACTION_MODE_BUTTON_RELEASE
+	button.set_meta("navigation_key", key)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_style_button(button)
+	parent.add_child(button)
+	return button
+
+func _add_preparation_close() -> void:
+	var close: Button = _preparation_button("Close", "close", craft_buttons)
 	close.pressed.connect(func():
 		dialogue_closed.emit()
 		hide_menus()
 		resume_requested.emit()
 	)
-	craft_buttons.add_child(close)
-	call_deferred("_restore_inventory_state", _inventory_screen, _inventory_generation)
-
 func show_ending(title: String, body: String) -> void:
 	active_menu = "ending"
 	_set_ui_pointer("menu")
@@ -1508,7 +1579,11 @@ func _apply_hud_layout() -> void:
 		var width := minf(940.0, maxf(600.0, viewport_size.x - 80.0))
 		var reading_height := clampf(105.0 * story_text_scale, 90.0, maxf(120.0, viewport_size.y * 0.28))
 		dialogue_text.custom_minimum_size = Vector2(width - 56.0, reading_height)
-		dialogue_layer.size = Vector2(width, reading_height + dialogue_choices_scroll.custom_minimum_size.y + 108.0)
+		var decision_height: float = 0.0
+		if _decision_details != null and _decision_details.visible:
+			decision_height = clampf(130.0 * story_text_scale, 130.0, 180.0)
+			_decision_details.custom_minimum_size = Vector2(width - 56.0, decision_height)
+		dialogue_layer.size = Vector2(width, reading_height + decision_height + dialogue_choices_scroll.custom_minimum_size.y + 108.0)
 		dialogue_layer.position = Vector2(maxf((viewport_size.x - width) * 0.5, 20.0), maxf(viewport_size.y - dialogue_layer.size.y - 34.0, 70.0))
 	if inventory_layer != null:
 		inventory_layer.position = Vector2(maxf((viewport_size.x - 996.0) * 0.5, 20.0), maxf((viewport_size.y - 584.0) * 0.5, 20.0))
@@ -1565,6 +1640,17 @@ func _build_dialogue() -> void:
 	dialogue_text.fit_content = false
 	dialogue_text.custom_minimum_size = Vector2(784, 78)
 	box.add_child(dialogue_text)
+	_decision_details = RichTextLabel.new()
+	_decision_details.name = "KnownDecisionStakes"
+	_decision_details.focus_mode = Control.FOCUS_ALL
+	_decision_details.set_meta("dialogue_focus_key", "decision_details")
+	_decision_details.custom_minimum_size = Vector2(784, 130)
+	_decision_details.scroll_active = true
+	_decision_details.fit_content = false
+	_decision_details.add_theme_font_size_override("normal_font_size", 18)
+	_decision_details.add_theme_constant_override("line_separation", 4)
+	_decision_details.visible = false
+	box.add_child(_decision_details)
 	dialogue_actions = VBoxContainer.new()
 	dialogue_actions.name = "DialogueChoices"
 	dialogue_actions.process_mode = Node.PROCESS_MODE_ALWAYS
@@ -1615,6 +1701,12 @@ func _build_inventory() -> void:
 	inventory_text.add_theme_constant_override("line_separation", 5)
 	inventory_text.add_theme_font_size_override("normal_font_size", 17)
 	journal_column.add_child(inventory_text)
+	_preparation_actions = HBoxContainer.new()
+	_preparation_actions.name = "SelectedSupplyActions"
+	_preparation_actions.add_theme_constant_override("separation", 12)
+	_preparation_actions.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_preparation_actions.visible = false
+	journal_column.add_child(_preparation_actions)
 	var actions_scroll := ScrollContainer.new()
 	actions_scroll.name = "PreparationActionsScroll"
 	actions_scroll.set_meta("navigation_scroll", "journal_actions")
@@ -1903,6 +1995,20 @@ func apply_accessibility(current: Dictionary) -> void:
 		dialogue_text.add_theme_font_size_override("normal_font_size", int(round(24.0 * subtitle_scale)))
 		dialogue_text.add_theme_font_size_override("bold_font_size", int(round(26.0 * subtitle_scale)))
 		dialogue_text.custom_minimum_size.y = 78.0 if subtitle_scale <= 1.0 else 116.0
+	if _decision_details != null:
+		_decision_details.add_theme_font_size_override("normal_font_size", int(round(18.0 * story_text_scale)))
+		_decision_details.add_theme_color_override("default_color", Color(0.98, 0.96, 0.88) if high_contrast else Color(0.88, 0.82, 0.70))
+	var reader_focus: StyleBoxFlat = StyleBoxFlat.new()
+	reader_focus.bg_color = Color(0, 0, 0, 0)
+	reader_focus.border_color = Color.WHITE if high_contrast else Color(1.0, 0.86, 0.52)
+	reader_focus.set_border_width_all(3)
+	for reader: RichTextLabel in [inventory_text, _decision_details]:
+		if reader != null:
+			reader.add_theme_stylebox_override("focus", reader_focus)
+	if inventory_text != null:
+		inventory_text.add_theme_color_override("default_color", Color(0.98, 0.96, 0.88) if high_contrast else Color(0.88, 0.82, 0.70))
+		if _preparation_actions != null and _preparation_actions.visible:
+			inventory_text.custom_minimum_size.y = 320.0
 	for label: Label in _hud_text_labels():
 		if label == null:
 			continue
@@ -2036,59 +2142,124 @@ func _input(event: InputEvent) -> void:
 	if _capture_remap_input(event):
 		return
 	if dialogue_layer == null or not dialogue_layer.visible:
+		_cancel_dialogue_press()
 		return
+	var focused_control: Control = get_viewport().gui_get_focus_owner()
+	var reader_focused: bool = focused_control == dialogue_text or focused_control == _decision_details
+	var navigation_direction: int = 0
+	var leave_reader: bool = false
 	if event is InputEventKey:
-		var navigation_key := event as InputEventKey
-		var navigation_code := navigation_key.keycode if navigation_key.keycode != KEY_NONE else navigation_key.physical_keycode
-		if navigation_key.pressed and not navigation_key.echo and navigation_code in [KEY_TAB, KEY_UP, KEY_DOWN]:
-			if get_viewport().gui_get_focus_owner() == dialogue_text and navigation_code != KEY_TAB:
-				return
-			var buttons: Array[Control] = _dialogue_focus_controls()
-			if buttons.size() > 1:
-				var focused_button := get_viewport().gui_get_focus_owner()
-				var current_index := buttons.find(focused_button)
-				var direction := -1 if navigation_code == KEY_UP or (navigation_code == KEY_TAB and navigation_key.shift_pressed) else 1
-				var next_index := posmod(current_index + direction, buttons.size())
-				get_viewport().set_input_as_handled()
-				buttons[next_index].grab_focus()
-				return
-	var accepted := event.is_action_pressed("ui_accept")
-	var pointer_button: Button
-	if event is InputEventKey:
-		var key_event := event as InputEventKey
-		# Browser backends can populate either the logical or physical key field.
-		# Accept both so a focused dialogue button remains usable while the tree is paused.
-		accepted = key_event.pressed and not key_event.echo and (
-			key_event.keycode in [KEY_ENTER, KEY_KP_ENTER, KEY_SPACE]
-			or key_event.physical_keycode in [KEY_ENTER, KEY_KP_ENTER, KEY_SPACE]
-		)
-	elif event is InputEventMouseButton:
-		var mouse_event := event as InputEventMouseButton
-		if mouse_event.pressed and mouse_event.button_index == MOUSE_BUTTON_LEFT and dialogue_actions != null:
-			# Press activation remains reliable on paused Web frames, but the
-			# pointer's actual button must win over unrelated keyboard focus.
-			for child in _dialogue_focus_controls():
-				if child is Button and not child.is_queued_for_deletion() and not child.disabled and _dialogue_pointer_hits(child, mouse_event.position):
-					pointer_button = child
+		var key_event: InputEventKey = event as InputEventKey
+		var code: int = key_event.keycode if key_event.keycode != KEY_NONE else key_event.physical_keycode
+		if key_event.pressed and not key_event.echo:
+			if code == KEY_TAB:
+				navigation_direction = -1 if key_event.shift_pressed else 1
+			elif code in [KEY_UP, KEY_DOWN] and not reader_focused:
+				navigation_direction = -1 if code == KEY_UP else 1
+			elif code == KEY_RIGHT and reader_focused:
+				leave_reader = true
+	elif event is InputEventJoypadButton or event is InputEventJoypadMotion:
+		if event.is_action_pressed("ui_right") and reader_focused:
+			leave_reader = true
+		elif not reader_focused and event.is_action_pressed("ui_up"):
+			navigation_direction = -1
+		elif not reader_focused and event.is_action_pressed("ui_down"):
+			navigation_direction = 1
+	if leave_reader:
+		_cancel_dialogue_press()
+		_focus_first_enabled(dialogue_actions)
+		get_viewport().set_input_as_handled()
+		return
+	if navigation_direction != 0:
+		_cancel_dialogue_press()
+		var controls: Array[Control] = _dialogue_focus_controls()
+		if not controls.is_empty():
+			var next_index: int = posmod(controls.find(focused_control) + navigation_direction, controls.size())
+			controls[next_index].grab_focus()
+		get_viewport().set_input_as_handled()
+		return
+	if event is InputEventScreenDrag:
+		if _dialogue_pending_source.begins_with("touch:") and (event as InputEventScreenDrag).position.distance_to(_dialogue_press_position) > 12.0:
+			_cancel_dialogue_press()
+		return
+	if event is InputEventMouseMotion:
+		if _dialogue_pending_source == "mouse" and (event as InputEventMouseMotion).position.distance_to(_dialogue_press_position) > 12.0:
+			_cancel_dialogue_press()
+		return
+	var source: String = ""
+	var pressed: bool = false
+	var pointer: bool = false
+	var point: Vector2 = Vector2.ZERO
+	if event is InputEventMouseButton:
+		var mouse: InputEventMouseButton = event as InputEventMouseButton
+		if mouse.button_index != MOUSE_BUTTON_LEFT:
+			return
+		source = "mouse"
+		pressed = mouse.pressed
+		pointer = true
+		point = mouse.position
+	elif event is InputEventScreenTouch:
+		var touch: InputEventScreenTouch = event as InputEventScreenTouch
+		source = "touch:%d" % touch.index
+		pressed = touch.pressed
+		pointer = true
+		point = touch.position
+		if touch.canceled:
+			_cancel_dialogue_press()
+			return
+	elif event is InputEventKey:
+		var key: InputEventKey = event as InputEventKey
+		var code: int = key.keycode if key.keycode != KEY_NONE else key.physical_keycode
+		if code not in [KEY_ENTER, KEY_KP_ENTER, KEY_SPACE]:
+			return
+		if key.echo:
+			get_viewport().set_input_as_handled()
+			return
+		source = "key:%d" % code
+		pressed = key.pressed
+	elif event.is_action("ui_accept"):
+		source = "accept:%d" % event.device
+		pressed = event.is_pressed()
+	else:
+		return
+	if pressed:
+		if not pointer and input_source != null and input_source.has_method("accept_event") and not input_source.accept_event(event, "ui_accept", input_source.get_context()):
+			get_viewport().set_input_as_handled()
+			return
+		var candidate: Button
+		if pointer:
+			for control: Control in _dialogue_focus_controls():
+				if control is Button and _dialogue_pointer_hits(control as Button, point):
+					candidate = control as Button
 					break
-			accepted = pointer_button != null
-	if not accepted:
+		elif focused_control is Button and dialogue_layer.is_ancestor_of(focused_control):
+			candidate = focused_control as Button
+		if candidate != null and not candidate.disabled:
+			_cancel_dialogue_press()
+			candidate.grab_focus()
+			_dialogue_pending_button = candidate
+			_dialogue_pending_source = source
+			_dialogue_press_position = point
+			get_viewport().set_input_as_handled()
+		elif not pointer:
+			get_viewport().set_input_as_handled()
 		return
-	if not event is InputEventMouseButton and input_source != null and input_source.has_method("accept_event") and not input_source.accept_event(event, "ui_accept", input_source.get_context()):
-		get_viewport().set_input_as_handled()
+	if source != _dialogue_pending_source:
 		return
-	var focused := pointer_button if pointer_button != null else get_viewport().gui_get_focus_owner()
-	if focused == dialogue_text:
+	var target: Button = _dialogue_pending_button
+	_cancel_dialogue_press()
+	get_viewport().set_input_as_handled()
+	if not is_instance_valid(target) or target.disabled or not target.is_visible_in_tree() or not dialogue_layer.is_ancestor_of(target):
 		return
-	if not (focused is Button) or (focused as Button).disabled or not dialogue_layer.is_ancestor_of(focused):
-		var fallback_button := _focused_dialogue_button()
-		if fallback_button != null:
-			fallback_button.grab_focus()
-		focused = get_viewport().gui_get_focus_owner()
-	if focused is Button and not (focused as Button).disabled:
-		get_viewport().set_input_as_handled()
-		(focused as Button).pressed.emit()
+	if pointer and not _dialogue_pointer_hits(target, point):
+		return
+	if not pointer and get_viewport().gui_get_focus_owner() != target:
+		return
+	target.pressed.emit()
 
+func _cancel_dialogue_press() -> void:
+	_dialogue_pending_button = null
+	_dialogue_pending_source = ""
 func _dialogue_pointer_hits(button: Button, point: Vector2) -> bool:
 	if not button.get_global_rect().has_point(point):
 		return false
@@ -2344,7 +2515,40 @@ func _capture_inventory_state() -> void:
 func _restore_inventory_state(key: String, generation: int) -> void:
 	await get_tree().process_frame
 	if generation == _inventory_generation and key == _inventory_screen and inventory_layer.visible:
+		var controls: Array[Control] = []
+		_collect_inventory_focus(inventory_layer, controls)
+		var state: Dictionary = navigation.screens.get(key, {})
+		var desired: String = str(state.get("focus", ""))
+		var desired_available: bool = false
+		var current_selection: Dictionary = _preparation_selection.get(key, {})
+		var selection_key: String = str(current_selection.get("kind", "item")) + ":" + str(current_selection.get("id", ""))
+		for control: Control in controls:
+			if str(control.get_meta("navigation_key", "")) == desired:
+				desired_available = true
+			if str(control.get_meta("navigation_key", "")) == selection_key:
+				inventory_text.focus_neighbor_right = inventory_text.get_path_to(control)
+		if desired.begins_with("action:") and not desired_available:
+			var selection: Dictionary = _preparation_selection.get(key, {})
+			state["focus"] = str(selection.get("kind", "item")) + ":" + str(selection.get("id", ""))
+			navigation.screens[key] = state
+		for index: int in range(controls.size()):
+			var control: Control = controls[index]
+			control.focus_next = control.get_path_to(controls[(index + 1) % controls.size()])
+			control.focus_previous = control.get_path_to(controls[posmod(index - 1, controls.size())])
+			if control != inventory_text:
+				control.focus_neighbor_top = control.focus_previous
+				control.focus_neighbor_bottom = control.focus_next
+				control.focus_neighbor_left = control.get_path_to(inventory_text)
 		navigation.restore(key, inventory_layer)
+
+func _collect_inventory_focus(node: Node, controls: Array[Control]) -> void:
+	for child in node.get_children():
+		if child.is_queued_for_deletion():
+			continue
+		if child is Control and child.is_visible_in_tree() and child.focus_mode != Control.FOCUS_NONE and child.has_meta("navigation_key"):
+			if not (child is BaseButton and child.disabled):
+				controls.append(child as Control)
+		_collect_inventory_focus(child, controls)
 
 func _screen_key() -> String:
 	match active_menu:
@@ -2617,12 +2821,14 @@ func _return_from_history() -> void:
 func _capture_dialogue_reading_state() -> void:
 	var focused := get_viewport().gui_get_focus_owner()
 	_dialogue_reading_state = {"page": dialogue_page_index, "subtitle_scroll": dialogue_text.get_v_scroll_bar().value, "choices_scroll": dialogue_choices_scroll.scroll_vertical, "focus": str(focused.get_meta("dialogue_focus_key", "history")) if focused != null else "history"}
+	_dialogue_reading_state["decision_scroll"] = _decision_details.get_v_scroll_bar().value
 
 func _restore_dialogue_reading_state() -> void:
 	if not dialogue_layer.visible:
 		return
 	if not _dialogue_reading_state.is_empty() and int(_dialogue_reading_state.get("page", -1)) == dialogue_page_index:
 		dialogue_text.get_v_scroll_bar().value = float(_dialogue_reading_state.get("subtitle_scroll", 0.0))
+		_decision_details.get_v_scroll_bar().value = float(_dialogue_reading_state.get("decision_scroll", 0.0))
 		dialogue_choices_scroll.scroll_vertical = int(_dialogue_reading_state.get("choices_scroll", 0))
 		for control in _dialogue_focus_controls():
 			if str(control.get_meta("dialogue_focus_key", "")) == str(_dialogue_reading_state.get("focus", "")):
@@ -2636,6 +2842,8 @@ func _dialogue_focus_controls() -> Array[Control]:
 		controls.append(_dialogue_history_button)
 	if is_instance_valid(dialogue_text) and dialogue_text.is_visible_in_tree():
 		controls.append(dialogue_text)
+	if is_instance_valid(_decision_details) and _decision_details.is_visible_in_tree():
+		controls.append(_decision_details)
 	for child in dialogue_actions.get_children():
 		if child is Button and not child.is_queued_for_deletion() and not child.disabled and child.is_visible_in_tree():
 			controls.append(child)
@@ -2700,7 +2908,8 @@ func _style_button(button: Button) -> void:
 	if button.text != "" and not button.has_meta("wrapped_label"):
 		var label := Label.new()
 		label.text = button.text
-		button.tooltip_text = button.text
+		if button.tooltip_text == "":
+			button.tooltip_text = button.text
 		button.clip_text = true
 		button.set_meta("wrapped_label", true)
 		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART

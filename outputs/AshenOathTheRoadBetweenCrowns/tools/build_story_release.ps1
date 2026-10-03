@@ -3,16 +3,20 @@ param(
     [string]$BuildId = "",
     [string]$GodotPath = "C:\Users\User\.cache\codex-runtimes\godot-4.6.3\Godot_v4.6.3-stable_win64_console.exe",
     [string]$PythonPath = "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe",
-    [switch]$SkipWebCopy
+    [switch]$SkipWebCopy,
+    [switch]$Publish,
+    [string]$PublishMessage = ""
 )
 
-# Packaging only: import, production exports, content identities and transport
-# compression. No QA preset, verifier, browser, test, commit or deployment.
+# Production packaging by default. The explicit -Publish option also commits
+# generated artifacts, pushes the authorized branches and deploys to Vercel.
+# Neither mode invokes tests, QA, review tools, browsers or post-deploy requests.
 $ErrorActionPreference = "Stop"
 $ProjectRoot = [System.IO.Path]::GetFullPath((Split-Path -Parent $PSScriptRoot))
 $RepositoryRoot = [System.IO.Path]::GetFullPath((Split-Path -Parent (Split-Path -Parent $ProjectRoot)))
 $GeneratedRoot = Join-Path $RepositoryRoot ".release-gate"
 $WebRoot = Join-Path $RepositoryRoot "web"
+if ($Publish -and $SkipWebCopy) { throw "-Publish requires the generated web transport to be copied." }
 
 function Assert-Within([string]$Path, [string]$Root) {
     $resolved = [System.IO.Path]::GetFullPath($Path)
@@ -40,6 +44,22 @@ function Invoke-BuildProcess([string]$Executable, [string[]]$Arguments, [string]
     }
     if ($process.ExitCode -ne 0) {
         throw "$LogName build failed with exit $($process.ExitCode). Build logs: $stdout ; $stderr"
+    }
+}
+
+function Invoke-PublishProcess([string]$Executable, [string[]]$Arguments, [string]$LogName) {
+    $quoted = @($Arguments | ForEach-Object { '"' + $_.Replace('"', '\"') + '"' })
+    $stdout = Join-Path $LogRoot ($LogName + ".stdout.log")
+    $stderr = Join-Path $LogRoot ($LogName + ".stderr.log")
+    Write-Host ("Publishing: {0}" -f $LogName)
+    $process = Start-Process -FilePath $Executable -ArgumentList ($quoted -join ' ') -WorkingDirectory $RepositoryRoot -WindowStyle Hidden -Wait -PassThru -RedirectStandardOutput $stdout -RedirectStandardError $stderr
+    foreach ($log in @($stdout, $stderr)) {
+        if (Test-Path -LiteralPath $log) {
+            Get-Content -LiteralPath $log | ForEach-Object { Write-Host $_ }
+        }
+    }
+    if ($process.ExitCode -ne 0) {
+        throw "$LogName failed with exit $($process.ExitCode). Completed stages and artifacts are retained. Logs: $stdout ; $stderr"
     }
 }
 
@@ -179,7 +199,51 @@ if (-not $SkipWebCopy) {
 }
 Write-Host "Story build packaged: $ExportRoot"
 Write-Host "Build identity: $BuildId ; source revision: $SourceCommit"
-Write-Host "This command did not run tests, QA, browsers, commits or deployment."
+if ($Publish) {
+    $GitPath = (Get-Command git -CommandType Application | Select-Object -First 1).Source
+    $NoHooks = Join-Path $RepositoryRoot "work/no-hooks"
+    New-Item -ItemType Directory -Force -Path $NoHooks | Out-Null
+    $GitArguments = @("-C", $RepositoryRoot, "-c", "core.hooksPath=$NoHooks")
+    # Only build-owned artifacts enter this commit. --only preserves unrelated
+    # staging instead of silently publishing someone else's pending source work.
+    $GeneratedPaths = @(
+        "web",
+        "outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_manifest.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/localization/en.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/data/story_score_manifest.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/assets_external/audio/story_score"
+    )
+    if (-not $PublishMessage) { $PublishMessage = "Publish story build $BuildId" }
+    Invoke-PublishProcess $GitPath ($GitArguments + @("add", "--") + $GeneratedPaths) "git-artifacts"
+    Invoke-PublishProcess $GitPath ($GitArguments + @("commit", "--only", "-m", $PublishMessage, "--") + $GeneratedPaths) "git-package"
+    $PackageCommit = (& $GitPath -C $RepositoryRoot rev-parse HEAD).Trim()
+    if ($LASTEXITCODE -ne 0) { throw "The packaged revision could not be recorded." }
+    $ReceiptPath = Join-Path $OutputDirectory "publication.json"
+    $Publication = [ordered]@{
+        build_id = $BuildId
+        source_revision = $SourceCommit
+        package_revision = $PackageCommit
+        phase = "packaged"
+        production_url = "https://ashenoath.vercel.app"
+        log_directory = $LogRoot
+        updated_at_utc = (Get-Date).ToUniversalTime().ToString("o")
+    }
+    function Save-PublicationReceipt {
+        $Publication.updated_at_utc = (Get-Date).ToUniversalTime().ToString("o")
+        [System.IO.File]::WriteAllText($ReceiptPath, (($Publication | ConvertTo-Json -Depth 5) + [Environment]::NewLine), [System.Text.UTF8Encoding]::new($false))
+    }
+    Save-PublicationReceipt
+    Invoke-PublishProcess $GitPath ($GitArguments + @("push", "origin", "HEAD:main", "HEAD:codex/story-centered-overhaul")) "git-push"
+    $Publication.phase = "pushed"
+    Save-PublicationReceipt
+    Invoke-PublishProcess $env:ComSpec @("/d", "/c", "npx vercel --prod --yes") "vercel-production"
+    $Publication.phase = "deployed"
+    Save-PublicationReceipt
+    Write-Host "Publication completed: $ReceiptPath"
+} else {
+    Write-Host "Packaging completed; publication was not requested."
+}
+Write-Host "This command did not run tests, QA, review tools, browsers or post-deployment requests."
 } finally {
     [AshenOathBuildPower]::SetThreadExecutionState([uint32]2147483648) | Out-Null
 }

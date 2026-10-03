@@ -86,47 +86,107 @@ func _apply_story_supply(vendor_id: String, entry: Dictionary, state) -> void:
 	entry["price"] = clampi(price, 1, maxi(int(entry["price"]) + 2, 1))
 	entry["supply_note"] = reason.strip_edges()
 
-func buy(vendor_id: String, item_id: String, quantity: int, inventory, story_state = null, quests = null) -> Dictionary:
-	quantity = clampi(quantity, 1, 99)
+func quote(vendor_id: String, item_id: String, quantity: int, inventory, story_state = null, quests = null) -> Dictionary:
+	var result: Dictionary = {"ok": false, "reason": "", "item_id": item_id, "requested_quantity": quantity, "quantity": 0, "unit_price": 0, "total_price": 0, "owned": 0, "after": 0, "cap": 0, "coin_after": int(inventory.coin), "supply_note": "", "message": ""}
+	if item_id in ["__emergency_arrows__", "__emergency_healing__"]:
+		return _reserve_quote(vendor_id, item_id, inventory, result)
 	var stock_entry: Dictionary = {}
 	for entry in list_stock(vendor_id, inventory, story_state, quests):
 		if str(entry.get("item_id", "")) == item_id:
 			stock_entry = entry
 			break
 	if stock_entry.is_empty():
-		return _fail("That item is not available here.")
-	var owned := int(inventory.items.get(item_id, 0))
-	var cap := int(stock_entry.get("cap", 999))
+		return _quote_failure(result, "That item is not available here.")
+	var owned: int = int(inventory.items.get(item_id, 0))
+	var cap: int = int(stock_entry.get("cap", 999))
+	if str(inventory.get_item_type(item_id)) == "ammo":
+		var ammo_cap: int = int(inventory.get_ammo_cap(item_id))
+		if ammo_cap > 0:
+			cap = mini(cap, ammo_cap)
+	var unit_price: int = int(stock_entry.get("price", 0))
+	result["owned"] = owned
+	result["after"] = owned
+	result["cap"] = cap
+	result["unit_price"] = unit_price
+	result["supply_note"] = str(stock_entry.get("supply_note", ""))
+	if quantity <= 0:
+		return _quote_failure(result, "Choose at least one item.")
 	if owned >= cap:
-		return _fail("You cannot carry more of %s." % inventory.get_item_name(item_id))
-	quantity = mini(quantity, cap - owned)
-	var price := int(stock_entry.get("price", 0)) * quantity
-	if int(inventory.coin) < price:
-		return _fail("You need %d more coin." % (price - int(inventory.coin)))
+		return _quote_failure(result, "You cannot carry more of %s." % inventory.get_item_name(item_id))
+	var accepted: int = mini(mini(quantity, 99), cap - owned)
+	var total: int = unit_price * accepted
+	result["quantity"] = accepted
+	result["total_price"] = total
+	if int(inventory.coin) < total:
+		return _quote_failure(result, "You need %d more coin for %d." % [total - int(inventory.coin), accepted])
+	result["ok"] = true
+	result["after"] = owned + accepted
+	result["coin_after"] = int(inventory.coin) - total
+	result["message"] = "%s x%d costs %d coin. You will carry %d and have %d coin left." % [inventory.get_item_name(item_id), accepted, total, owned + accepted, int(result.coin_after)]
+	if accepted != quantity:
+		result["message"] = str(result.message) + " The quantity is limited to what you can carry in this exchange."
+	return result
+
+func _reserve_quote(vendor_id: String, request_id: String, inventory, result: Dictionary) -> Dictionary:
+	var is_arrows: bool = request_id == "__emergency_arrows__"
+	var item_id: String = "standard_arrow" if is_arrows else "redroot_potion"
+	var owned: int = int(inventory.items.get(item_id, 0))
+	result["item_id"] = item_id
+	result["request_id"] = request_id
+	result["owned"] = owned
+	result["after"] = owned
+	result["cap"] = int(inventory.get_ammo_cap(item_id)) if is_arrows else 8
+	result["supply_note"] = "One emergency reserve, free of charge."
+	if (is_arrows and vendor_id != "tor_forge") or (not is_arrows and vendor_id != "mira_apothecary"):
+		return _quote_failure(result, "That emergency reserve is not offered here.")
+	if (is_arrows and emergency_refill_claimed) or (not is_arrows and emergency_healing_claimed):
+		return _quote_failure(result, "You have already received this emergency reserve.")
+	if is_arrows and owned >= 5:
+		return _quote_failure(result, "Tor keeps this reserve for a traveler carrying fewer than five ordinary arrows.")
+	if not is_arrows and owned > 0:
+		return _quote_failure(result, "Mira's emergency medicine is for a traveler with no Redroot Potion left.")
+	var amount: int = mini(5 - owned, maxi(int(result.cap) - owned, 0)) if is_arrows else 2
+	if amount <= 0:
+		return _quote_failure(result, "You cannot carry this reserve.")
+	result["ok"] = true
+	result["quantity"] = amount
+	result["after"] = owned + amount
+	result["message"] = "Receive %s x%d for no coin. This uses the one emergency reserve." % [inventory.get_item_name(item_id), amount]
+	return result
+
+func _quote_failure(result: Dictionary, reason: String) -> Dictionary:
+	result["ok"] = false
+	result["reason"] = reason
+	result["message"] = reason
+	return result
+
+func buy(vendor_id: String, item_id: String, quantity: int, inventory, story_state = null, quests = null) -> Dictionary:
+	# The displayed quote is advisory; rederive the authoritative quote now.
+	var current: Dictionary = quote(vendor_id, item_id, quantity, inventory, story_state, quests)
+	var reserve: bool = item_id in ["__emergency_arrows__", "__emergency_healing__"]
+	var operation: String = "reserve" if reserve else "buy"
+	if not bool(current.get("ok", false)):
+		return _fail(str(current.get("reason", "This purchase is unavailable.")), str(current.get("item_id", item_id)), operation)
+	var received_id: String = str(current.item_id)
+	var received: int = int(current.quantity)
+	var price: int = int(current.total_price)
+	if item_id == "__emergency_arrows__":
+		emergency_refill_claimed = true
+	elif item_id == "__emergency_healing__":
+		emergency_healing_claimed = true
 	inventory.coin -= price
-	inventory.add_item(item_id, quantity)
-	var display_name: String = str(inventory.get_item_name(item_id))
-	var text := "Bought %s x%d for %d coin." % [display_name, quantity, price]
+	inventory.add_item(received_id, received)
+	var text: String = "Bought %s x%d for %d coin. You have %d coin left." % [inventory.get_item_name(received_id), received, price, int(inventory.coin)]
+	if reserve:
+		text = "Received %s x%d from the free emergency reserve." % [inventory.get_item_name(received_id), received]
 	message.emit(text)
-	purchase_completed.emit(vendor_id, item_id, quantity)
+	if not reserve:
+		purchase_completed.emit(vendor_id, received_id, received)
 	changed.emit()
-	return {"ok": true, "item_id": item_id, "quantity": quantity, "price": price, "message": text}
+	return {"ok": true, "operation": operation, "item_id": received_id, "quantity": received, "price": price, "spent": {"coin": price}, "remaining": {"coin": int(inventory.coin), "items": inventory.items.duplicate(true)}, "reason": "", "message": text}
 
 func claim_emergency_arrow_refill(vendor_id: String, inventory) -> Dictionary:
-	if vendor_id != "tor_forge":
-		return _fail("The forge has no free reserve arrows.")
-	var owned := int(inventory.items.get("standard_arrow", 0))
-	if emergency_refill_claimed or owned >= 5:
-		return _fail("Tor has no free reserve arrows for you right now.")
-	var amount := mini(5 - owned, 24 - owned)
-	if amount <= 0:
-		return _fail("Your arrow bundle is already full.")
-	emergency_refill_claimed = true
-	inventory.add_item("standard_arrow", amount)
-	var text := "Tor presses reserve arrows into your hand. No charge."
-	message.emit(text)
-	changed.emit()
-	return {"ok": true, "item_id": "standard_arrow", "quantity": amount, "price": 0, "message": text}
+	return buy(vendor_id, "__emergency_arrows__", 1, inventory)
 
 func save_state() -> Dictionary:
 	return {"emergency_refill_claimed": emergency_refill_claimed, "emergency_healing_claimed": emergency_healing_claimed}
@@ -138,14 +198,7 @@ func load_state(state: Dictionary) -> void:
 	emergency_healing_claimed = typeof(healing) == TYPE_BOOL and healing
 
 func claim_emergency_healing_refill(vendor_id: String, inventory) -> Dictionary:
-	if vendor_id != "mira_apothecary" or emergency_healing_claimed or int(inventory.items.get("redroot_potion", 0)) > 0:
-		return _fail("Mira's emergency medicine is for a traveler with no remedy left.")
-	emergency_healing_claimed = true
-	inventory.add_item("redroot_potion", 2)
-	var text := "Mira gives you two replacement remedies. Basic care is not a reward for agreeing with her."
-	message.emit(text)
-	changed.emit()
-	return {"ok": true, "item_id": "redroot_potion", "quantity": 2, "price": 0, "message": text}
+	return buy(vendor_id, "__emergency_healing__", 1, inventory)
 
 func _entry_unlocked(entry: Dictionary, story_state, quests) -> bool:
 	var flag_id := str(entry.get("requires_flag", ""))
@@ -160,9 +213,9 @@ func _entry_unlocked(entry: Dictionary, story_state, quests) -> bool:
 		return false
 	return true
 
-func _fail(text: String) -> Dictionary:
+func _fail(text: String, item_id: String = "", operation: String = "buy") -> Dictionary:
 	message.emit(text)
-	return {"ok": false, "message": text}
+	return {"ok": false, "operation": operation, "item_id": item_id, "quantity": 0, "spent": {}, "remaining": {}, "reason": text, "message": text}
 
 func _read_json(path: String) -> Dictionary:
 	if not FileAccess.file_exists(path):

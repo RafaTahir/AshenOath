@@ -100,6 +100,7 @@ var paused_by_menu = true
 var pending_ending = ""
 var story_action_in_progress := false
 var story_save_pending := false
+var preparation_action_in_progress := false
 var story_guidance_refresh_pending := false
 var story_recap_pending := false
 var pending_player_restore: Dictionary = {}
@@ -412,7 +413,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		audio.set_game_paused(true)
 		get_tree().paused = true
-		hud.show_inventory(inventory, quests, story_state, progression)
+		_show_preparation_menu()
 
 func _request_pause_or_back(event: InputEvent) -> void:
 	if input_router == null or not input_router.accept_event(event, &"pause", input_router.get_context()):
@@ -1778,6 +1779,7 @@ func _handle_interaction(area) -> void:
 			return
 		audio.set_game_paused(true)
 		get_tree().paused = true
+		_update_preparation_context()
 		hud.show_vendor(area.interaction_id, vendor_service, inventory, quests, story_state)
 	elif area.interaction_type == "village_place":
 		_handle_village_place(area.interaction_id)
@@ -2156,8 +2158,8 @@ func _handle_dialogue_action(action: Dictionary) -> void:
 		save_manager.predecision(self, choice_id)
 	var transaction := StoryDecisionCoordinator.new()
 	transaction.begin(self)
-	_apply_dialogue_action(action)
-	transaction.finish(self, action)
+	var applied: bool = _apply_dialogue_action(action)
+	transaction.finish(self, action, applied)
 
 func _finish_story_action(action: Dictionary) -> void:
 	if not game_started or resource_shutdown_prepared:
@@ -2172,6 +2174,10 @@ func _finish_story_action(action: Dictionary) -> void:
 		story_state.set_flag("renewal_stopped", true)
 	StoryWorldDirector.refresh(self)
 	_refresh_tracker()
+	if str(action.get("type", "")) in ["story_choice", "resolve_side_quest", "ending"]:
+		var receipt: Dictionary = preload("res://scripts/story_choice_presenter.gd").receipt(action, story_state, quests, current_zone_id)
+		if not receipt.is_empty():
+			hud.show_decision_result(receipt)
 	if audio != null and not _story_has_active_combat():
 		audio.set_story_context(story_state, current_zone_id)
 	story_save_pending = true
@@ -2193,7 +2199,7 @@ func _story_has_active_combat() -> bool:
 				return true
 	return false
 
-func _apply_dialogue_action(action: Dictionary) -> void:
+func _apply_dialogue_action(action: Dictionary) -> bool:
 	# Dialogue action buttons emit their choice before the game receives it. The
 	# close button already restores these states, so action buttons must do the
 	# same before applying quest/story mutations or the world stays paused.
@@ -2208,7 +2214,7 @@ func _apply_dialogue_action(action: Dictionary) -> void:
 	if not _dialogue_action_available(action):
 		hud.toast("That part of the story is not ready yet.")
 		_refresh_tracker()
-		return
+		return false
 	if type == "start_quest":
 		quests.start_quest(action.get("quest", ""))
 		if str(action.get("quest", "")) == "side_childs_charm":
@@ -2236,14 +2242,15 @@ func _apply_dialogue_action(action: Dictionary) -> void:
 			for objective in quests.active[side_id]["objectives"].duplicate(true):
 				quests.complete_objective(side_id, str(objective["id"]))
 			story_state.set_flag("%s_outcome" % side_id, str(action.get("outcome", "resolved")))
-			hud.toast(str(action.get("result", "Greyfen will remember what you chose.")))
+		else:
+			return false
 	elif type == "story_choice":
 		if action.get("sets_flags", {}).has("crow_shrine_state") and str(story_state.get_flag("crow_shrine_state", "")) != "":
 			hud.toast("The Crow Shrine has already answered Kael's choice.")
-			return
+			return false
 		if action.get("sets_flags", {}).has("bog_core_fate") and str(story_state.get_flag("bog_core_fate", "")) != "":
 			hud.toast("The memory core has already been given a fate.")
-			return
+			return false
 		# Every consequential story choice is one-shot. The flag guard above
 		# covers legacy one-off choices with custom wording; the objective guard
 		# keeps names, mill, testimony, ledger, and ending decisions from being
@@ -2252,7 +2259,7 @@ func _apply_dialogue_action(action: Dictionary) -> void:
 		var choice_objective_id := str(action.get("objective", ""))
 		if choice_quest_id != "" and choice_objective_id != "" and quests.is_objective_done(choice_quest_id, choice_objective_id) and not (choice_quest_id == "main_road_of_crows" and _legacy_report_choice_required()):
 			hud.toast("That decision has already been made.")
-			return
+			return false
 		for id in action.get("sets_flags", {}):
 			story_state.set_flag(str(id), action["sets_flags"][id])
 		for id in action.get("adjusts_values", {}):
@@ -2263,7 +2270,6 @@ func _apply_dialogue_action(action: Dictionary) -> void:
 			quests.complete_choice(str(completion.get("quest", "")), str(completion.get("objective", "")))
 		for item_id in action.get("gives_items", {}):
 			inventory.add_item(str(item_id), int(action["gives_items"][item_id]))
-		hud.toast(str(action.get("result", "Your choice will be remembered.")))
 		if action.get("sets_flags", {}).has("crow_shrine_state"):
 			hud.show_status_cue("The covenant changes", "victory")
 			_show_current_objective_guidance(6.0)
@@ -2311,8 +2317,9 @@ func _apply_dialogue_action(action: Dictionary) -> void:
 			story_state.set_flag("record_hall_unlocked", true)
 			_show_current_objective_guidance(5.0)
 	elif type == "ending":
-		_complete_ending(action.get("ending", "expose"))
-		return
+		return _complete_ending(action.get("ending", "expose"))
+	else:
+		return false
 	if audio != null:
 		audio.set_game_paused(false)
 	get_tree().paused = false
@@ -2326,6 +2333,7 @@ func _apply_dialogue_action(action: Dictionary) -> void:
 	var refresh_zone_after_action := _dialogue_action_requires_zone_rebuild(action)
 	if refresh_zone_after_action and current_zone_id != "":
 		_load_zone(current_zone_id, player.global_position)
+	return true
 
 func _dialogue_action_requires_zone_rebuild(action: Dictionary) -> bool:
 	var action_type := str(action.get("type", ""))
@@ -3088,17 +3096,17 @@ func _defer_opening_renderables(published_nodes: Array[Node]) -> void:
 			descendant.set_meta("opening_visual_bucket", visual_index % OPENING_GAMEPLAY_VISUAL_BUCKETS)
 			visual_index += 1
 
-func _complete_ending(ending: String) -> void:
+func _complete_ending(ending: String) -> bool:
 	var ending_id := str(ending)
 	if ending_id not in ["expose", "free", "bind", "kill"]:
 		hud.toast("The covenant offers no such answer.")
-		return
+		return false
 	if str(story_state.get_flag("final_covenant", "")) != "" or bool(story_state.get_flag("final_choice_completed", false)):
 		hud.toast("The covenant has already been chosen.")
-		return
+		return false
 	if not quests.is_active("main_hart_remembers") or str(story_state.get_flag("confession_method", "")) == "":
 		hud.toast("The Hart will not answer until Greyfen has heard the testimony.")
-		return
+		return false
 	# Preserve the last freely revisitable moment in its own slot.
 	save_manager.save_game(self, save_manager.PRE_COVENANT_PATH, "The moment before the covenant has been saved.")
 	var witnesses: Array[String] = ["kael"]
@@ -3111,7 +3119,7 @@ func _complete_ending(ending: String) -> void:
 	quests.complete_objective("main_hart_remembers", "hear_testimony")
 	if ending_id != "kill":
 		CovenantResolution.begin(self, ending_id)
-		return
+		return true
 	pending_ending = ending_id
 	story_state.set_flag("human_records_preserved", true)
 	active_interactable = null
@@ -3131,6 +3139,7 @@ func _complete_ending(ending: String) -> void:
 			hart_boss.leash_radius = 10.0
 	audio.play_event("boss", 0.02)
 	hud.toast("The human record is safe. The Hart rises to defend the covenant.")
+	return true
 
 func _show_ending_consequence(ending: String) -> void:
 	if bool(story_state.get_flag("final_choice_completed", false)):
@@ -3375,68 +3384,156 @@ func _on_player_stamina_exhausted(_action: String) -> void:
 	hud.set_guidance_hint("Breath is spent. Back away, then strike.", 2.8)
 
 func _use_potion() -> void:
-	if inventory.consume("redroot_potion"):
-		player.health_component.heal(45.0 + progression.effect_value("potion_heal_bonus", 0.0))
-		audio.play_event("potion")
-		hud.show_status_cue("Redroot used", "item")
-		hud.toast("Redroot warms the blood.")
-		_refresh_equipment_readout()
-	else:
-		hud.show_status_cue("No Redroot", "hurt")
+	_use_quick_item("redroot_potion")
 
 func _throw_bomb() -> void:
-	if inventory.consume("ash_bomb"):
+	_use_quick_item("ash_bomb")
+
+func _use_inventory_item(item_id: String) -> Dictionary:
+	if player == null or not is_instance_valid(player) or inventory == null:
+		return _preparation_item_result(item_id, false, "Kael must be on the road to prepare this item.")
+	var item_name: String = inventory.get_item_name(item_id)
+	if not inventory.can_consume(item_id):
+		return _preparation_item_result(item_id, false, "No %s left." % item_name)
+	if inventory.get_item_type(item_id) == "ammo":
+		if player.get_selected_arrow_id() == item_id:
+			return _preparation_item_result(item_id, false, "%s is already selected." % item_name, "select")
+		var selected: bool = player.select_arrow(item_id)
+		return _preparation_item_result(item_id, selected, "%s selected for the next shot." % item_name if selected else "These arrows cannot be selected.", "select")
+	if inventory.get_item_type(item_id) == "oil":
+		if str(inventory.active_oil) == item_id:
+			return _preparation_item_result(item_id, false, "%s already coats the blade." % item_name, "apply")
+		var applied: bool = inventory.apply_oil(item_id)
+		return _preparation_item_result(item_id, applied, "%s coats the blade." % item_name if applied else "The coating could not be applied.", "apply")
+	var effect: Dictionary = preload("res://scripts/preparation_view_model.gd").resolved_effect(item_id, inventory, progression)
+	if item_id == "redroot_potion":
+		var missing_health: float = maxf(0.0, player.health_component.max_health - player.health_component.health)
+		if missing_health <= 0.0:
+			return _preparation_item_result(item_id, false, "Health is full. Redroot remains in your pack.")
+		if not inventory.consume(item_id):
+			return _preparation_item_result(item_id, false, "No Redroot remains.")
+		var restored: float = minf(missing_health, float(effect.get("heal", 45.0)))
+		player.health_component.heal(restored)
+		audio.play_event("potion")
+		return _preparation_item_result(item_id, true, "Redroot restored %s health." % str(snappedf(restored, 0.1)), "use", 1)
+	if item_id == "bitterleaf_tonic":
+		var missing_stamina: float = maxf(0.0, player.stamina_component.max_stamina - player.stamina_component.stamina)
+		if missing_stamina <= 0.0:
+			return _preparation_item_result(item_id, false, "Stamina is full. Bitterleaf remains in your pack.")
+		if not inventory.consume(item_id):
+			return _preparation_item_result(item_id, false, "No Bitterleaf remains.")
+		var restored: float = minf(missing_stamina, float(effect.get("stamina", 55.0)))
+		player.stamina_component.restore(restored)
+		audio.play_event("potion")
+		return _preparation_item_result(item_id, true, "Bitterleaf restored %s stamina." % str(snappedf(restored, 0.1)), "use", 1)
+	if item_id == "ash_bomb":
+		if not inventory.consume(item_id):
+			return _preparation_item_result(item_id, false, "No Ash Bomb remains.")
 		audio.play_event("bomb")
 		if camera_rig != null:
 			camera_rig.shake(0.12)
-		combat.throw_bomb(player, active_enemies, 45.0)
+		combat.throw_bomb(player, active_enemies, float(effect.get("damage", 45.0)))
 		for enemy in active_enemies:
 			if is_instance_valid(enemy) and not enemy.dead and enemy.enemy_id == "bog_wretch" and enemy.global_position.distance_to(player.global_position) <= 6.5:
 				_expose_bog_core(enemy, "Ash Bomb")
-		hud.show_status_cue("Ash Bomb thrown", "item")
-		_refresh_equipment_readout()
-	else:
-		hud.show_status_cue("No Ash Bomb", "hurt")
+		return _preparation_item_result(item_id, true, "Ash Bomb thrown.", "use", 1)
+	if item_id == "iron_trap":
+		if not inventory.consume(item_id):
+			return _preparation_item_result(item_id, false, "No Iron Trap remains.")
+		combat.place_trap(player, active_enemies)
+		return _preparation_item_result(item_id, true, "Iron Trap set at your feet.", "use", 1)
+	return _preparation_item_result(item_id, false, "This item has no preparation action.")
 
-func _use_inventory_item(item_id: String) -> void:
-	if item_id == "redroot_potion":
-		_use_potion()
-	elif item_id == "bitterleaf_tonic":
-		if inventory.consume("bitterleaf_tonic"):
-			player.stamina_component.restore(55.0)
-			audio.play_event("potion")
-			hud.show_status_cue("Bitterleaf used", "item")
-			hud.toast("Bitterleaf clears the lungs.")
-	elif item_id == "ash_bomb":
-		_throw_bomb()
-	elif item_id == "moon_oil" or item_id == "rot_oil":
-		if not inventory.apply_oil(item_id):
-			return
+func _preparation_item_result(item_id: String, ok: bool, message: String, operation: String = "use", consumed: int = 0) -> Dictionary:
+	return {
+		"ok": ok, "operation": operation, "item_id": item_id,
+		"quantity": consumed, "message": message, "reason": "" if ok else message,
+		"spent": {"items": {item_id: consumed}} if consumed > 0 else {},
+		"remaining": {"items": inventory.items.duplicate(true), "coin": int(inventory.coin)} if inventory != null else {}
+	}
+
+func _update_preparation_context() -> void:
+	var snapshot: Dictionary = {"zone_id": current_zone_id}
+	if player != null and is_instance_valid(player):
+		snapshot.merge({
+			"health": float(player.health_component.health), "max_health": float(player.health_component.max_health),
+			"stamina": float(player.stamina_component.stamina), "max_stamina": float(player.stamina_component.max_stamina),
+			"weapon_mode": str(player.get_weapon_mode()), "selected_arrow_id": str(player.get_selected_arrow_id())
+		})
+	hud.set_preparation_context(snapshot)
+
+func _show_preparation_menu() -> void:
+	_update_preparation_context()
+	hud.show_inventory(inventory, quests, story_state, progression)
+
+func _craft_preparation_item(item_id: String) -> void:
+	preparation_action_in_progress = true
+	var result: Dictionary = crafting.craft_result(item_id)
+	preparation_action_in_progress = false
+	_finish_preparation_operation(result)
+
+func _use_preparation_item(item_id: String) -> void:
+	preparation_action_in_progress = true
+	var result: Dictionary = _use_inventory_item(item_id)
+	preparation_action_in_progress = false
+	_finish_preparation_operation(result)
+
+func _learn_preparation_practice(upgrade_id: String) -> void:
+	preparation_action_in_progress = true
+	var result: Dictionary = progression.unlock_result(upgrade_id)
+	preparation_action_in_progress = false
+	if bool(result.get("ok", false)):
+		_apply_progression_to_player()
+	_finish_preparation_operation(result)
+
+func _use_quick_item(item_id: String) -> void:
+	preparation_action_in_progress = true
+	var result: Dictionary = _use_inventory_item(item_id)
+	preparation_action_in_progress = false
+	var ok: bool = bool(result.get("ok", false))
+	hud.post_notice(str(result.get("message", "")), "inventory" if ok else "error", 3.5, "quick:" + item_id)
+	if ok:
 		_refresh_equipment_readout()
-		hud.show_status_cue("Oil applied", "item")
-		hud.toast("%s slicks the blade." % inventory.get_item_name(item_id))
-	elif item_id == "iron_trap":
-		if inventory.consume("iron_trap"):
-			combat.place_trap(player, active_enemies)
-			hud.show_status_cue("Iron Trap set", "item")
-			_refresh_equipment_readout()
+		story_save_pending = true
+		call_deferred("_persist_story_action")
+
+func _finish_preparation_operation(result: Dictionary, vendor_id: String = "") -> void:
+	if bool(result.get("ok", false)):
+		_refresh_equipment_readout()
+		story_save_pending = true
+		call_deferred("_persist_story_action")
+	# Let the currently pressed control finish its event before rebuilding it.
+	var screen_key: String = hud.preparation_screen_key()
+	call_deferred("_refresh_preparation_after_operation", result, vendor_id, screen_key)
+
+func _refresh_preparation_after_operation(result: Dictionary, vendor_id: String, screen_key: String) -> void:
+	if resource_shutdown_prepared or hud == null:
+		return
+	if screen_key == "" or hud.preparation_screen_key() != screen_key:
+		hud.post_notice(str(result.get("message", result.get("reason", ""))), "inventory" if bool(result.get("ok", false)) else "error", 3.5)
+		return
+	_update_preparation_context()
+	if vendor_id == "":
+		hud.show_inventory(inventory, quests, story_state, progression)
+	else:
+		hud.show_vendor(vendor_id, vendor_service, inventory, quests, story_state)
+	if not hud.show_preparation_result(result):
+		hud.post_notice(str(result.get("message", result.get("reason", ""))), "inventory" if bool(result.get("ok", false)) else "error", 3.5)
 
 func _purchase_from_vendor(vendor_id: String, item_id: String, quantity: int = 1) -> void:
 	if vendor_service == null:
 		return
 	var result: Dictionary
+	preparation_action_in_progress = true
 	if item_id == "__emergency_arrows__":
 		result = vendor_service.claim_emergency_arrow_refill(vendor_id, inventory)
 	elif item_id == "__emergency_healing__":
 		result = vendor_service.claim_emergency_healing_refill(vendor_id, inventory)
 	else:
 		result = vendor_service.buy(vendor_id, item_id, quantity, inventory, story_state, quests)
+	preparation_action_in_progress = false
 	audio.play_event("ui")
-	if bool(result.get("ok", false)):
-		_refresh_equipment_readout()
-		hud.show_status_cue(str(result.get("message", "Purchase complete.")), "item")
-		story_save_pending = true
-		call_deferred("_persist_story_action")
+	_finish_preparation_operation(result, vendor_id)
 
 func _on_enemy_died(enemy) -> void:
 	audio.play_enemy_event(enemy.enemy_id, "death", enemy.global_position, player.global_position)

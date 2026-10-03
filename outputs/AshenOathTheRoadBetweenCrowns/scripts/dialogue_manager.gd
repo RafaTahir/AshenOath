@@ -1,5 +1,7 @@
 extends Node
 
+const StoryChoicePresenter = preload("res://scripts/story_choice_presenter.gd")
+
 var dialogues = {}
 var story_state
 var quest_manager
@@ -33,6 +35,7 @@ func get_dialogue(id: String) -> Dictionary:
 					base[key] = variant[key]
 			break
 	base.erase("variants")
+	base["scene_id"] = id
 	# Subtitles remain authoritative when a voice clip is absent, muted, or
 	# blocked by browser audio policy. Keep the fallback in the resolved entry.
 	base["fallback_text"] = str(base.get("fallback_text", base.get("greeting", "...")))
@@ -44,6 +47,8 @@ func get_dialogue(id: String) -> Dictionary:
 			if not quest_manager.is_runtime_content_ready(str(action.get("quest", ""))):
 				continue
 		if _conditions_match(action.get("conditions", {})):
+			if StoryChoicePresenter.is_commitment(action):
+				action["decision_model"] = StoryChoicePresenter.describe(action, story_state, quest_manager, id)
 			visible_actions.append(action)
 	base["actions"] = visible_actions
 	base["pages"] = _build_pages(base)

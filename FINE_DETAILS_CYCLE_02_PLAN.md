@@ -62,6 +62,8 @@ This cycle's implementation milestone consists of integrated source, completed p
 
 ## Execution record
 
+- Published package `c6c3ab5` to both authorized branches. Vercel returned `READY` for `dpl_Bpu9dVkLn9H9VwMi6adEqcaJdNfY`, aliased to `https://ashenoath.vercel.app`. Cycle 03 planning follows; the continuing goal remains active.
+
 - Plan written before code changes, following independent source-context planning for journal, HUD and routes.
 - Implementation started under the ownership and interface contracts above.
 - Root now records first speaker encounters on actual page display, defers their existing save persistence until dialogue closes, supplies story state to quest presentation, and includes the two new catalogs in source-language generation.

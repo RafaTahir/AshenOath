@@ -1,0 +1,185 @@
+{
+  "version": 1,
+  "contexts": {
+    "main_road_of_crows:return_village": {
+      "title": "Who receives the road's account",
+      "evidence": ["bram", "sella", "oren", "vargan_wire", "drag_marks"],
+      "uncertainty": "These traces do not establish every person's part in what happened.",
+      "follow_through": "Kael stays with the investigation. A report does not promise anyone else's participation.",
+      "options": [
+        {"when_flags": {"evidence_report": "private"}, "commitment": "Give Anwen the token privately and commit to protecting people who choose to speak.", "cost": "The wider village will not yet have the same account."},
+        {"when_flags": {"evidence_report": "public"}, "commitment": "Put the recovered evidence before Greyfen and commit to protecting its witnesses.", "cost": "Public disclosure makes the account harder to contain and may expose its bearers."},
+        {"when_flags": {"evidence_report": "retained"}, "commitment": "Keep the original token, make protected copies, and remain responsible for the investigation.", "cost": "Keeping the original with Kael delays a wider public account."}
+      ]
+    },
+    "main_bell_beneath_greyfen:crow_shrine_choice": {
+      "title": "What the shrine will hold",
+      "evidence": ["grave_harl", "grave_child", "grave_soldier"],
+      "uncertainty": "Quiet at the chapel would not prove that the debt has ended.",
+      "options": [
+        {"when_flags": {"crow_shrine_state": "cleansed"}, "commitment": "Clean the rite and record that its danger shifts toward the wood.", "cost": "Containment moves; the underlying account remains unsettled."},
+        {"when_flags": {"crow_shrine_state": "disturbed"}, "commitment": "Open the shrine's memory while keeping the gathered names intact.", "cost": "Greyfen will hear the bell and the account can no longer stay quietly sealed."},
+        {"when_flags": {"crow_shrine_state": "bound"}, "commitment": "Hold the seal for now and record its limits.", "cost": "This buys a temporary quiet. It does not settle what the shrine concealed."}
+      ]
+    },
+    "main_teeth_in_rain:bog_core_choice": {
+      "title": "The limits of a recovered memory",
+      "evidence": ["oren", "chapel_names", "crisis_cause"],
+      "facts": [
+        {"id": "chapel_names", "title": "Oren's name on the chapel wall", "text": "The erased chapel names include Oren. His recovered name can be spoken without treating a memory fragment as the whole person.", "kind": "observed", "source": "Erased Crow Chapel names", "gate": {"quest": "main_teeth_in_rain", "objective": "read_chapel_names"}}
+      ],
+      "uncertainty": "The fragment cannot answer every question about the road or give consent for the child it remembers.",
+      "options": [
+        {"when_flags": {"bog_core_fate": "destroyed"}, "commitment": "End the vessel by destroying the exposed memory core.", "cost": "The memory held in this vessel disperses; it cannot be kept here for further study."},
+        {"when_flags": {"bog_core_fate": "preserved"}, "commitment": "Keep the exposed fragment for bounded study with Mira.", "cost": "Keeping a fragment creates a continuing duty to limit how it is used."},
+        {"when_flags": {"bog_core_fate": "returned"}, "commitment": "Settle the fragment beneath Oren's named grave.", "cost": "Its intimate memory will not become material for public study."}
+      ]
+    },
+    "main_names_they_burned:names_choice": {
+      "title": "How the recovered names become known",
+      "evidence": ["refugee_register", "crisis_cause", "renewal_order"],
+      "facts": [
+        {"id": "refugee_register", "title": "The reconstructed register", "text": "The recovered pages restore the refugee names. Family addresses can be separated from the public account.", "kind": "observed", "source": "Surviving refugee register pages", "gate": {"quest": "main_names_they_burned", "objective": "reconstruct_register"}}
+      ],
+      "uncertainty": "A correct record cannot promise how every household will respond to its publication.",
+      "options": [
+        {"when_flags": {"names_policy": "published"}, "commitment": "Publish the recovered names and order while removing family addresses.", "cost": "Public challenge puts pressure on the people carrying the account, even with addresses protected."},
+        {"when_flags": {"names_policy": "withheld"}, "commitment": "Keep separate protected copies and warn affected households before the assembly.", "cost": "The public order remains unchallenged during the delay."}
+      ]
+    },
+    "main_ash_at_the_mill:mill_choice": {
+      "title": "Food, work, and the mill's account",
+      "evidence": ["mill_accounts", "mill_worker_account", "saved_wage_chest"],
+      "facts": [
+        {"id": "mill_worker_account", "title": "Workers reached the south yard", "text": "The rescued workers reached clean air and can keep their own wage accounts.", "kind": "testimony", "source": "Workers brought out through the escape channel", "gate": {"flag": "mill_workers_rescued", "value": true}},
+        {"id": "saved_wage_chest", "title": "Wage records above the waterline", "text": "The wage chest has been moved out of the channel's reach. Household shares remain documented.", "kind": "observed", "source": "The rescued mill wage chest", "gate": {"flag": "mill_records_saved", "value": true}}
+      ],
+      "uncertainty": "A decision about the mill's operation does not establish whether its workers or loose records were rescued.",
+      "follow_through": "Worker rescue and household deliveries are recorded separately from this operating decision.",
+      "options": [
+        {"when_flags": {"mill_operation": "closed"}, "commitment": "Close the tainted channels, preserve the ledger, and divide relief reserves.", "cost": "Workers lose shifts while the village relies on carried reserve grain."},
+        {"when_flags": {"mill_operation": "supervised"}, "commitment": "Keep supervised milling after making a signed copy of the contaminated working sheet.", "cost": "Contamination risk remains while separate clean channels are prepared."},
+        {"when_flags": {"mill_operation": "restitution"}, "commitment": "Post copied accounts and begin clean repairs with restitution for affected households.", "cost": "Clean materials and labor must go into repair before the promise can be sustained."}
+      ]
+    },
+    "main_soldier_without_banner:senn_choice": {
+      "title": "Senn's accountability",
+      "evidence": ["deserters_muster", "senn_account"],
+      "facts": [
+        {"id": "deserters_muster", "title": "The abandoned soldiers' record", "text": "The hidden muster records the soldiers Senn left behind. Their refusal is distinct from his account.", "kind": "observed", "source": "Hidden checkpoint muster roll", "gate": {"quest": "side_soldiers_debt", "objective": "find_deserters"}}
+      ],
+      "uncertainty": "An admission establishes a person's account; it does not excuse the road killings or supply another person's consent.",
+      "options": [
+        {"when_flags": {"senn_fate": "testimony"}, "commitment": "Accept Senn's surrender under custody and his freely offered testimony.", "cost": "Custody requires protection and continuing accountability; surrender is not permission for another attack."},
+        {"when_flags": {"senn_fate": "exile"}, "commitment": "Keep the written account, disarm the camp, and permit Senn to leave.", "cost": "Senn leaves without a living oath to appear. His written account remains."},
+        {"when_flags": {"senn_fate": "punished"}, "commitment": "Execute Senn for the road killings while retaining the documented account.", "cost": "His future testimony ends with his life."}
+      ]
+    },
+    "main_blood_under_stone:speak_guard": {
+      "title": "At the guarded gate",
+      "evidence": ["vargan_wire", "senn_account"],
+      "cost": "",
+      "options": [
+        {"when_flags": {"castle_access_granted": true}, "commitment": "Present yourself as the bearer of testimony from the old road.", "follow_through": "Continue into the courtyard and follow the written order."}
+      ]
+    },
+    "main_blood_under_stone:ledger_choice": {
+      "title": "Keeping a credible command record",
+      "evidence": ["recovered_command", "vargan_wire", "senn_account"],
+      "facts": [
+        {"id": "recovered_command", "title": "The command beside the register", "text": "The command ledger can be compared with the refugee register. A credible copy can survive a decision about the original.", "kind": "observed", "source": "Vargan record hall ledger", "gate": {"quest": "main_blood_under_stone", "objective": "recover_ledger"}}
+      ],
+      "uncertainty": "Possessing the command proves what was written. It cannot make its authors or heirs willing witnesses.",
+      "options": [
+        {"when_flags": {"vargan_ledger_taken_openly": true}, "commitment": "Take the original fragment openly and keep a copy of its command.", "cost": "Removing the fragment openly draws the guards' suspicion."},
+        {"when_flags": {"vargan_ledger_hidden": true}, "commitment": "Conceal the fragment while keeping a credible copy of the command.", "cost": "The original leaves the archive without a public account of its removal."},
+        {"when_flags": {"vargan_ledger_left_copied": true}, "commitment": "Keep a signed copy and leave the original available in the record hall.", "cost": "Kael carries the copy; the original remains under the castle's control."}
+      ]
+    },
+    "main_blood_under_stone:last_witness_hook": {
+      "title": "Edric's answer to the renewal",
+      "evidence": ["command_proof", "renewal_order", "mill_accounts"],
+      "uncertainty": "A public hearing still has to reckon with the account. Protecting a hearing does not protect a title from accountability.",
+      "options": [
+        {"when_flags": {"edric_stance": "cooperate"}, "commitment": "Protect Edric's hearing while accepting his voluntary agreement to testify and release grain without signatures.", "cost": "His title and accounts remain subject to the public hearing."},
+        {"when_flags": {"edric_stance": "exposed"}, "commitment": "Expose the ledger and challenge Edric's power to require household signatures.", "cost": "Edric refuses a personal oath. The proof must stand without pretending he agrees."},
+        {"when_flags": {"edric_stance": "compelled"}, "commitment": "Compel Edric's admission and preserve it as evidence of concealment.", "cost": "Words obtained under pressure do not count as a freely given responsibility."}
+      ]
+    },
+    "main_last_witness:halvern_choice": {
+      "title": "A refusal with limits",
+      "evidence": ["command_proof", "halvern_guard_open"],
+      "facts": [
+        {"id": "halvern_guard_open", "title": "A hearing earned", "text": "Halvern's guard has yielded. An opening for his account does not make the bound memory complete.", "kind": "observed", "source": "The undercroft hearing", "gate": {"flag": "halvern_guard_broken", "value": true}}
+      ],
+      "uncertainty": "Halvern's fragment holds a bounded refusal. It cannot answer every question about what followed.",
+      "options": [
+        {"when_flags": {"halvern_fate": "witness"}, "commitment": "Preserve Halvern's refusal as testimony without demanding another oath.", "cost": "The exhausted fragment remains bound; its presence does not restore all its memory."},
+        {"when_flags": {"halvern_fate": "released"}, "commitment": "Record the refusal, then release the exhausted memory.", "cost": "The copy preserves the refusal, not everything the departing fragment held."},
+        {"when_flags": {"halvern_fate": "destroyed"}, "commitment": "Keep the copied order and end the remaining grave binding.", "cost": "The remaining fragment ends. Its unrecorded memories cannot be retained in the copy."}
+      ]
+    },
+    "main_crowns_without_mercy:confession_choice": {
+      "title": "What the assembly asks of people",
+      "evidence": ["renewal_order", "command_proof", "kael_confession"],
+      "uncertainty": "Attendance, food, and a completed account cannot establish a household's consent.",
+      "follow_through": "The ration condition ends. Participation in the hearing remains separate from receiving help.",
+      "options": [
+        {"when_flags": {"confession_method": "witnesses"}, "commitment": "Release the grain and invite only those who choose to give their account.", "cost": "Refusals must be accepted; the hearing cannot demand a voice in exchange for supper."},
+        {"when_flags": {"confession_method": "kael"}, "commitment": "Break the ration condition and read the copied account in Kael's own name.", "cost": "Kael accepts responsibility for preserving and carrying what he reads."},
+        {"when_flags": {"confession_method": "edric"}, "commitment": "Break the ration condition and make Edric answer from the ledger.", "cost": "His compelled answer remains evidence, not a willing oath."}
+      ]
+    },
+    "final_covenant": {
+      "title": "The intention Kael will carry out",
+      "evidence": ["command_proof", "kael_confession", "renewal_stopped"],
+      "uncertainty": "The living still have work to do. Choosing an intention does not complete its enactment or settle every grievance.",
+      "options": [
+        {"ending": "expose", "commitment": "Choose Witness: make the account public and accept the work of preserving it.", "cost": "Restitution and an open account demand continuing work; choosing this cannot promise who will help.", "follow_through": "Lay the ledger, speak the recovered names, and speak of Kael's retreat at the marked places."},
+        {"ending": "free", "commitment": "Choose Mercy: release the Hart while protecting the public record and private family memories.", "cost": "The living must preserve the record after releasing its bound witness.", "follow_through": "Return the family tokens, keep the public record, and untie the witness at the marked places."},
+        {"ending": "bind", "commitment": "Choose Duty: Kael freely accepts the unresolved binding in his own name.", "cost": "Kael gives up freedom and rest. His choice cannot pledge a child or another keeper.", "follow_through": "Set down the badge, name the limits of the promise, and take the willing burden."},
+        {"ending": "kill", "commitment": "Choose Ash: confront the Hart to end the binding while preserving the human record.", "cost": "Ending the vessel gives up the memories only it holds; the land bears their dispersal.", "follow_through": "Face the Hart in the glade. The confrontation must be completed before the outcome is settled."}
+      ]
+    },
+    "side_widows_bell:widow_choice": {
+      "title": "Elna's account and participation",
+      "evidence": ["grave_harl"],
+      "uncertainty": "Knowing why the bell rang cannot decide whether Elna wants her grief made public."
+    },
+    "side_iron_remembers:tor_choice": {
+      "title": "The forge's responsibility",
+      "evidence": ["vargan_wire", "command_proof"],
+      "uncertainty": "Settling the marked stock does not decide whether Tor gives a public oath."
+    },
+    "side_bitter_roots:mira_choice": {
+      "title": "A treatment people can choose",
+      "evidence": ["crisis_cause", "mill_accounts"],
+      "uncertainty": "A useful treatment does not establish a family's informed agreement to its source."
+    },
+    "side_black_dog:dog_choice": {
+      "title": "Protection at the fold",
+      "evidence": [],
+      "uncertainty": "Calling a fragment protective does not make its danger to the fold disappear."
+    },
+    "side_empty_grave:walker_choice": {
+      "title": "A repeated watch",
+      "evidence": ["grave_soldier"],
+      "uncertainty": "A repeated memory cannot supply everything the living man once knew."
+    },
+    "side_soldiers_debt:debt_choice": {
+      "title": "The soldiers' refusal",
+      "evidence": ["senn_account"],
+      "uncertainty": "Carrying a signed refusal does not authorize exposing a protected identity."
+    },
+    "side_millers_measure:ash_choice": {
+      "title": "Where the true measure can help",
+      "evidence": ["mill_accounts"],
+      "uncertainty": "Placing the account in useful hands does not complete every repair or delivery."
+    },
+    "side_rooks_map:map_choice": {
+      "title": "A useful road and a personal account",
+      "evidence": [],
+      "uncertainty": "Keeping a route useful does not decide whether Rook speaks publicly."
+    }
+  }
+}

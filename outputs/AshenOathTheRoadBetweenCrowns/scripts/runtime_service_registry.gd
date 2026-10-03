@@ -104,6 +104,7 @@ func configure(owner: Node) -> void:
 	inventory.load_items("res://data/items.json")
 	vendor_service.load_vendors("res://data/vendors.json")
 	crafting.setup(inventory, quests, story_state)
+	hud.set_preparation_services(crafting)
 	input_router.install_default_actions()
 	input_router.set_settings_manager(settings)
 	input_router.apply_settings(settings.settings)
@@ -189,11 +190,10 @@ func configure(owner: Node) -> void:
 	)
 	hud.journal_requested.connect(func():
 		audio.play_event("ui")
-		hud.show_inventory(inventory, quests, story_state, progression)
+		owner.call("_show_preparation_menu")
 	)
 	hud.vendor_purchase_requested.connect(func(vendor_id: String, item_id: String, quantity: int):
 		owner.call("_purchase_from_vendor", vendor_id, item_id, quantity)
-		hud.call_deferred("show_vendor", vendor_id, vendor_service, inventory, quests, story_state)
 	)
 	hud.resume_requested.connect(Callable(owner, "_resume_game"))
 	hud.settings_requested.connect(Callable(owner, "_handle_setting"))
@@ -203,32 +203,36 @@ func configure(owner: Node) -> void:
 	hud.dialogue_page_changed.connect(Callable(owner, "_on_dialogue_page_changed"))
 	hud.dialogue_review_changed.connect(audio.set_dialogue_review_paused)
 	hud.craft_requested.connect(func(item_id: String):
-		crafting.craft(item_id)
-		hud.show_inventory(inventory, quests, story_state, progression)
+		owner.call("_craft_preparation_item", item_id)
 	)
 	hud.item_use_requested.connect(func(item_id: String):
-		owner.call("_use_inventory_item", item_id)
-		hud.show_inventory(inventory, quests, story_state, progression)
+		owner.call("_use_preparation_item", item_id)
 	)
 	hud.upgrade_requested.connect(func(upgrade_id: String):
-		if progression.unlock(upgrade_id):
-			owner.call("_apply_progression_to_player")
-			save_manager.autosave(owner)
-		hud.show_inventory(inventory, quests, story_state, progression)
+		owner.call("_learn_preparation_practice", upgrade_id)
 	)
 	quests.changed.connect(Callable(owner, "_refresh_tracker"))
 	quests.message.connect(func(text: String): hud.post_notice(text, "story", 5.5, text))
 	quests.message.connect(func(_text: String): audio.play_event("quest"))
 	quests.quest_completed.connect(Callable(owner, "_on_quest_completed"))
-	inventory.message.connect(func(text: String): hud.post_notice(text, "inventory", 3.5, text))
+	inventory.message.connect(func(text: String):
+		if not bool(owner.get("preparation_action_in_progress")):
+			hud.post_notice(text, "inventory", 3.5, text)
+	)
 	inventory.changed.connect(Callable(owner, "_refresh_equipment_readout"))
-	vendor_service.message.connect(func(text: String): hud.post_notice(text, "inventory", 3.5, text))
+	vendor_service.message.connect(func(text: String):
+		if not bool(owner.get("preparation_action_in_progress")):
+			hud.post_notice(text, "inventory", 3.5, text)
+	)
 	vendor_service.changed.connect(Callable(owner, "_refresh_equipment_readout"))
 	save_manager.message.connect(func(text: String):
 		var failed: bool = "failed" in text.to_lower() or "no valid" in text.to_lower() or "could not" in text.to_lower()
 		hud.post_notice(text, "error" if failed else "save", 5.5 if failed else 2.5, text)
 	)
-	progression.message.connect(Callable(hud, "toast"))
+	progression.message.connect(func(text: String):
+		if not bool(owner.get("preparation_action_in_progress")):
+			hud.post_notice(text, "inventory", 3.5, text)
+	)
 	combat.message.connect(func(text: String): hud.post_notice(text, "combat", 2.5, text))
 	combat.enemy_hit.connect(func(name: String, amount: float):
 		hud.show_status_cue("Hit: %d" % int(amount), "item")

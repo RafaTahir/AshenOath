@@ -58,13 +58,7 @@ func add_reward(reward: Dictionary) -> void:
 	changed.emit()
 
 func can_craft(id: String) -> bool:
-	if not item_defs.has(id):
-		return false
-	var recipe: Dictionary = item_defs[id].get("recipe", {})
-	for ingredient in recipe.keys():
-		if int(ingredients.get(ingredient, 0)) < int(recipe[ingredient]):
-			return false
-	return true
+	return bool(recipe_status(id).get("craftable", false))
 
 func can_consume(id: String) -> bool:
 	return item_defs.has(id) and int(items.get(id, 0)) > 0
@@ -114,10 +108,26 @@ func recipe_status(id: String) -> Dictionary:
 		var shortage := int(required[ingredient]) - int(ingredients.get(ingredient, 0))
 		if shortage > 0:
 			missing[ingredient] = shortage
+	var has_recipe: bool = item_defs.has(id) and not required.is_empty()
+	var cap: int = get_ammo_cap(id) if get_item_type(id) == "ammo" else 0
+	var full: bool = cap > 0 and int(items.get(id, 0)) >= cap
+	var reason: String = ""
+	if not has_recipe:
+		reason = "There is no field recipe for this item."
+	elif full:
+		reason = "You cannot carry another %s." % get_item_name(id)
+	elif not missing.is_empty():
+		var names: Array[String] = []
+		for ingredient in missing:
+			names.append("%d %s" % [int(missing[ingredient]), str(ingredient).replace("_", " ")])
+		reason = "You still need %s." % ", ".join(names)
 	return {
 		"required": required.duplicate(true),
 		"missing": missing,
-		"craftable": not required.is_empty() and missing.is_empty()
+		"has_recipe": has_recipe,
+		"capacity": cap,
+		"reason": reason,
+		"craftable": has_recipe and missing.is_empty() and not full
 	}
 
 func get_preparation_summary() -> Dictionary:
@@ -134,15 +144,20 @@ func get_preparation_summary() -> Dictionary:
 	}
 
 func craft(id: String) -> bool:
-	if not can_craft(id):
-		message.emit("Missing ingredients for %s." % item_defs.get(id, {}).get("name", id))
-		return false
-	var recipe: Dictionary = item_defs[id].get("recipe", {})
+	var result: Dictionary = craft_result(id)
+	message.emit(str(result.get("message", "")))
+	return bool(result.get("ok", false))
+
+func craft_result(id: String) -> Dictionary:
+	var status: Dictionary = recipe_status(id)
+	if not bool(status.get("craftable", false)):
+		var reason: String = str(status.get("reason", "This item cannot be crafted."))
+		return {"ok": false, "operation": "craft", "item_id": id, "quantity": 0, "spent": {}, "remaining": {}, "reason": reason, "message": reason}
+	var recipe: Dictionary = status.get("required", {})
 	for ingredient in recipe.keys():
 		ingredients[ingredient] = int(ingredients.get(ingredient, 0)) - int(recipe[ingredient])
 	add_item(id, 1)
-	message.emit("Crafted %s." % item_defs[id].get("name", id))
-	return true
+	return {"ok": true, "operation": "craft", "item_id": id, "quantity": 1, "spent": {"ingredients": recipe.duplicate(true)}, "remaining": {"items": items.duplicate(true), "ingredients": ingredients.duplicate(true)}, "reason": "", "message": "Crafted %s. You now carry %d." % [get_item_name(id), int(items.get(id, 0))]}
 
 func consume(id: String) -> bool:
 	if not can_consume(id):

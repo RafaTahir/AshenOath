@@ -47,19 +47,38 @@ func reconcile_completed_quests(quest_definitions: Dictionary, completed_quests:
 	return awarded
 
 func can_unlock(id: String) -> bool:
-	if marks <= 0 or not definitions.has(id) or bool(unlocked.get(id, false)):
-		return false
-	var required := str(definitions[id].get("requires", ""))
-	return required == "" or bool(unlocked.get(required, false))
+	return bool(upgrade_status(id).get("available", false))
+
+func upgrade_status(id: String) -> Dictionary:
+	var definition: Dictionary = definitions.get(id, {})
+	var required: String = str(definition.get("requires", ""))
+	var required_name: String = str(definitions.get(required, {}).get("name", required))
+	var learned: bool = has_upgrade(id)
+	var reason: String = ""
+	if definition.is_empty():
+		reason = "This practice is unavailable."
+	elif learned:
+		reason = "You have already learned this practice."
+	elif required != "" and not has_upgrade(required):
+		reason = "Learn %s first." % required_name
+	elif marks < 1:
+		reason = "You need one unspent Oath Mark."
+	var available: bool = reason == ""
+	return {"id": id, "title": str(definition.get("name", id)), "body": str(definition.get("description", "")), "learned": learned, "available": available, "reason": reason, "cost": 1, "marks_after": marks - 1 if available else marks, "prerequisite_id": required, "prerequisite_name": required_name}
 
 func unlock(id: String) -> bool:
-	if not can_unlock(id):
-		return false
+	var result: Dictionary = unlock_result(id)
+	message.emit(str(result.get("message", "")))
+	return bool(result.get("ok", false))
+
+func unlock_result(id: String) -> Dictionary:
+	var status: Dictionary = upgrade_status(id)
+	if not bool(status.get("available", false)):
+		return {"ok": false, "operation": "learn", "item_id": id, "quantity": 0, "spent": {}, "remaining": {"marks": marks}, "reason": str(status.reason), "message": str(status.reason)}
 	unlocked[id] = true
 	marks -= 1
-	message.emit("%s learned." % definitions[id].get("name", id))
 	changed.emit()
-	return true
+	return {"ok": true, "operation": "learn", "item_id": id, "quantity": 1, "spent": {"marks": 1}, "remaining": {"marks": marks}, "reason": "", "message": "%s learned. %d Oath Marks remain." % [str(status.title), marks]}
 
 func has_upgrade(id: String) -> bool:
 	return bool(unlocked.get(id, false))

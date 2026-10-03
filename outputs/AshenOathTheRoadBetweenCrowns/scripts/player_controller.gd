@@ -277,6 +277,14 @@ func _uses_first_person_camera() -> bool:
 func get_selected_arrow_id() -> String:
 	return selected_arrow_id
 
+func select_arrow(item_id: String) -> bool:
+	if inventory_ref == null or inventory_ref.get_item_type(item_id) != "ammo" or int(inventory_ref.items.get(item_id, 0)) <= 0:
+		return false
+	selected_arrow_id = item_id
+	if equipment_loadout != null:
+		equipment_loadout.set_selected_arrow(item_id)
+	return true
+
 func get_selected_arrow_count() -> int:
 	return int(inventory_ref.items.get(selected_arrow_id, 0)) if inventory_ref != null else 0
 

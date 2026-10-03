@@ -1,0 +1,60 @@
+{
+  "schema": 1,
+  "items": {
+    "redroot_potion": {
+      "body": "A remedy to recover after an injury. Drinking uses one potion; it restores health immediately, up to your current maximum.",
+      "effects": []
+    },
+    "bitterleaf_tonic": {
+      "body": "A remedy for spent breath. Drinking uses one tonic; it restores stamina immediately, up to your current maximum.",
+      "effects": []
+    },
+    "ash_bomb": {
+      "body": "Throw a burst of hot ash at enemies close to Kael. Throwing uses one bomb immediately, including when no enemy is within reach.",
+      "effects": [{"id": "reach", "title": "Reach", "text": "Affects nearby enemies within 6 metres."}]
+    },
+    "moon_oil": {
+      "body": "Select a blade coating suited to spirit weaknesses. The coating remains selected until replaced; applying it does not spend a bottle.",
+      "effects": [{"id": "coating", "title": "Blade coating", "text": "Gives blade contacts the spirit tag. Its effect depends on the target's weakness."}]
+    },
+    "rot_oil": {
+      "body": "Select a blade coating suited to undead weaknesses. The coating remains selected until replaced; applying it does not spend a bottle.",
+      "effects": [{"id": "coating", "title": "Blade coating", "text": "Gives blade contacts the undead tag. Its effect depends on the target's weakness."}]
+    },
+    "iron_trap": {
+      "body": "Use a sprung iron jaw to interrupt a nearby enemy's approach. Setting a trap spends one immediately, including when no enemy is close enough to catch.",
+      "effects": [{"id": "reach", "title": "Use", "text": "Best used with an enemy close to Kael; it does not place a permanent trap on the road."}]
+    },
+    "standard_arrow": {
+      "body": "An ordinary hunting arrow. Selecting a bundle does not spend an arrow; releasing a bow shot spends one. Arrows are replenished through supplies and shops, not field crafting.",
+      "effects": []
+    },
+    "bodkin_arrow": {
+      "body": "A heavier iron-headed shot, carried in a smaller bundle. Selecting it does not spend an arrow; releasing a bow shot spends one. The comparison below is base impact damage before a target's response.",
+      "effects": []
+    },
+    "ashfire_arrow": {
+      "body": "An arrow wrapped with an ember-bright head. Selecting it does not spend an arrow; releasing a bow shot spends one. The comparison below is base impact damage before a target's response.",
+      "effects": []
+    }
+  },
+  "known_use": [
+    {
+      "id": "restored_bog_account",
+      "item_ids": ["moon_oil", "ash_bomb"],
+      "title": "The name you restored",
+      "body": "The chapel names and ritual stones give time to read the Bog Wretch's approach. Moon Oil and clean interruptions can expose its memory. Preparation offers an opening; no purchase is required to decide how to answer the account.",
+      "requires_all": [
+        {"evidence": "chapel_names", "quest": "main_teeth_in_rain", "objective": "read_chapel_names"},
+        {"evidence": "ritual_stones", "quest": "main_teeth_in_rain", "objective": "name_the_dead"}
+      ]
+    },
+    {
+      "id": "mira_refined_formula",
+      "item_ids": ["moon_oil"],
+      "title": "Mira's refined formula",
+      "body": "Your learned formula returns one mooncap after a successful craft. You still need the full recipe in hand to begin; the quote shows both the required ingredients and the return.",
+      "requires_flag": "moon_oil_mastery"
+    }
+  ]
+}
