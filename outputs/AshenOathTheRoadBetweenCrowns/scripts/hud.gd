@@ -512,7 +512,7 @@ func _fit_tracker_height() -> void:
 func set_compass(text: String) -> void:
 	compass_label.text = text.replace(" | ", "   •   ")
 
-func toast(text: String) -> void:
+func toast(text: String, seconds: float = 2.15) -> void:
 	if toasts_suppressed or dialogue_layer.visible:
 		return
 	toast_label.text = text
@@ -521,7 +521,7 @@ func toast(text: String) -> void:
 		toast_tween.kill()
 	toast_label.modulate = Color(1, 1, 1, 1)
 	toast_tween = create_tween()
-	toast_tween.tween_interval(2.15)
+	toast_tween.tween_interval(clampf(seconds, 2.15, 8.0))
 	toast_tween.tween_property(toast_label, "modulate:a", 0.0, 0.25)
 	toast_tween.tween_callback(func():
 		toast_label.visible = false
@@ -933,7 +933,8 @@ func _build_hud() -> void:
 	root.add_child(compass_label)
 	toast_label = Label.new()
 	toast_label.position = Vector2(22, 626)
-	toast_label.size = Vector2(520, 34)
+	toast_label.size = Vector2(420, 84)
+	toast_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	toast_label.visible = false
 	root.add_child(toast_label)
 	hint_label = Label.new()
@@ -984,7 +985,8 @@ func _apply_hud_layout() -> void:
 	if status_label != null:
 		status_label.position = Vector2(center_x - 170.0, maxf(viewport_size.y - 118.0, 220.0))
 	if toast_label != null:
-		toast_label.position = Vector2(22.0, maxf(viewport_size.y - 94.0, 170.0))
+		toast_label.position = Vector2(22.0, maxf(viewport_size.y - 152.0, 170.0))
+		toast_label.size.x = minf(420.0, viewport_size.x - 44.0)
 	if dialogue_layer != null:
 		dialogue_layer.position = Vector2(maxf((viewport_size.x - 840.0) * 0.5, 20.0), maxf(viewport_size.y - dialogue_layer.size.y - 34.0, 110.0))
 	if inventory_layer != null:

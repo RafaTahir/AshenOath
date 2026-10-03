@@ -13,7 +13,7 @@ const AMBIENT_LINES := {
 	"greyfen_woods_stare":"Don't stare at the woods. It stares back.",
 	"greyfen_forge_night":"Tor worked the forge through the night.",
 	"greyfen_well_iron":"Water tastes of iron again.",
-	"greyfen_cart_light":"Cart came back lighter than it left.",
+	"greyfen_cart_light":"Bram always brought the empty baskets back. Not this time.",
 	"greyfen_roots_bitter":"Mira says the roots are bitter this year.",
 	"greyfen_north_smoke":"No smoke from the north road.",
 	"greyfen_keep_working":"We keep working. What else is there?"
@@ -39,6 +39,13 @@ const ROUTINE_PROFILES := {
 	"blacksmith_tor": {"occupation": "blacksmith", "activity": "forge", "activity_seconds": 3.6, "line": "greyfen_forge_night"},
 	"mira": {"occupation": "herbalist", "activity": "herb_stall", "activity_seconds": 3.0, "line": "greyfen_roots_bitter"},
 	"rook": {"occupation": "road watcher", "activity": "notice_board", "activity_seconds": 2.2, "line": "greyfen_crows_fat"}
+}
+
+const OCCUPATION_LINES := {
+	"walker_well": "Sella left her washing on the line. I brought it in before the rain.",
+	"walker_board": "Bram lent me his cart every harvest. Never asked for a coin.",
+	"shrine_pilgrim": "Oren carved that wooden crow himself. Anwen kept telling him to mind his fingers.",
+	"forge_helper": "Tor repaired Bram's axle yesterday. He still has the payment laid aside."
 }
 
 var host: Node
@@ -192,14 +199,13 @@ func _enroll_named_npcs() -> void:
 func _update_actor(entry: Dictionary, delta: float) -> void:
 	var node: Node3D = entry.node
 	if not is_instance_valid(node): return
+	if bool(node.get_meta("dialogue_facing_lock", false)):
+		return
 	# Major encounters temporarily own their arena. The game restores this
 	# marker after the encounter so named villagers do not walk through a boss
 	# fight or re-enter its collision space while the player is engaged.
 	if bool(node.get_meta("bell_eater_evacuated", false)):
 		_set_motion(entry, 0.0)
-		return
-	if bool(entry.get("activity_active", false)):
-		_update_activity(entry, delta)
 		return
 	var distance_to_player := node.global_position.distance_to(player.global_position)
 	if distance_to_player < 2.1:
@@ -208,8 +214,10 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 		_set_motion(entry,0.0)
 		if line_cooldown <= 0.0 and not bool(entry.named):
 			line_cooldown = 8.0
-			var lines: Array = AMBIENT_LINES.values()
-			host.hud.toast(str(lines[rng.randi_range(0,lines.size()-1)]))
+			host.hud.toast(_line_for_actor(entry))
+		return
+	if bool(entry.get("activity_active", false)):
+		_update_activity(entry, delta)
 		return
 	if float(entry.pause) > 0.0:
 		entry.pause = float(entry.pause) - delta
@@ -307,10 +315,14 @@ func _set_activity_pose(entry: Dictionary, active: bool) -> void:
 		return
 	var activity := str(entry.profile.get("activity", "idle"))
 	if active:
-		if activity == "notice_board" or activity == "lookout":
+		if activity == "notice_board" or activity == "lookout" or bool(entry.get("quiet_after_report", false)):
+			if driver.has_method("set_working"):
+				driver.set_working(false)
 			if driver.has_method("set_dialogue_pose"):
 				driver.set_dialogue_pose(true)
 		else:
+			if driver.has_method("set_dialogue_pose"):
+				driver.set_dialogue_pose(false)
 			if driver.has_method("set_working"):
 				driver.set_working(true)
 	else:
@@ -357,9 +369,26 @@ func _sync_story_state(force: bool) -> void:
 		reaction += "_bell_rung"
 	for entry in actors:
 		entry.story_reaction = reaction
+		# Consequences change work and attention, never reserved route coordinates.
+		entry.quiet_after_report = (report == "public" and str(entry.id) in ["forge_helper", "blacksmith_tor"]) \
+			or (report == "private" and str(entry.id) == "shrine_pilgrim")
+		var base_profile: Dictionary = ROUTINE_PROFILES.get(str(entry.id), entry.profile)
+		entry.profile = base_profile.duplicate(true)
+		if report != "":
+			entry.profile.activity_seconds = float(base_profile.get("activity_seconds", 2.0)) * 1.8
 		var node: Node3D = entry.node
 		if is_instance_valid(node):
 			node.set_meta("life_story_reaction", reaction)
+			if bool(entry.get("activity_active", false)):
+				_set_activity_pose(entry, true)
+
+func _line_for_actor(entry: Dictionary) -> String:
+	var reaction := str(entry.get("story_reaction", "baseline"))
+	for report in ["private", "public", "retained"]:
+		if reaction.begins_with("reported_" + report):
+			var lines: Array = POST_REPORT_LINES[report]
+			return str(lines[int(entry.get("activity_cycles", 0)) % lines.size()])
+	return str(OCCUPATION_LINES.get(str(entry.id), AMBIENT_LINES.get(str(entry.profile.get("line", "")), AMBIENT_LINES.greyfen_keep_working)))
 
 func get_routine_snapshot() -> Array:
 	var snapshot: Array = []
@@ -419,7 +448,8 @@ func _set_motion(entry: Dictionary, speed: float, direction: Vector3 = Vector3.Z
 		if driver.has_method("set_dialogue_pose"):
 			driver.set_dialogue_pose(false)
 		# Routine speeds are walking pace; this ratio also controls clip cadence.
-		if speed <= 0.01 and str(entry.id) == "forge_helper" and driver.has_method("set_working"):
+		var player_nearby: bool = is_instance_valid(player) and entry.node.global_position.distance_to(player.global_position) < 2.1
+		if speed <= 0.01 and str(entry.id) == "forge_helper" and not bool(entry.get("quiet_after_report", false)) and not player_nearby and driver.has_method("set_working"):
 			driver.set_working(true)
 		else:
 			if driver.has_method("set_working"):

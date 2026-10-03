@@ -12,7 +12,7 @@ func stage(area: Node3D, player: Node3D, camera_rig: Node, validate_position: Ca
 		return
 	_focus_actor = weakref(area)
 	_set_player_pose(player, true)
-	if str(area.get("interaction_id")) == "sister_anwen":
+	if area.find_child("CharacterAnimationDriver", true, false) != null:
 		_locked_actor = weakref(area)
 		_set_speaker_pose(area, true)
 	_face_pair(area, player)
@@ -89,5 +89,7 @@ func _set_player_pose(player: Node3D, active: bool) -> void:
 func _set_speaker_pose(actor: Node3D, active: bool) -> void:
 	actor.set_meta("dialogue_facing_lock", active)
 	var driver := actor.find_child("CharacterAnimationDriver", true, false)
+	if active and driver != null and driver.has_method("set_working"):
+		driver.set_working(false)
 	if driver != null and driver.has_method("set_dialogue_pose"):
 		driver.set_dialogue_pose(active)

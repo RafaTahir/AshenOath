@@ -65,7 +65,7 @@ static func _build_patch(size: Vector3, origin: Vector3) -> ArrayMesh:
 	return surface.commit()
 
 static func _ground_tint(x: float, z: float) -> Color:
-	var base := Color(0.96, 0.98, 0.94)
+	var base := Color(0.87, 0.94, 0.88)
 	var center := sin(z * 0.28) * 0.62 * smoothstep(2.3, 7.0, absf(z))
 	var edge_noise := 0.16 * sin(z * 1.37) + 0.08 * sin(z * 2.59)
 	var path := 0.0
@@ -78,5 +78,7 @@ static func _ground_tint(x: float, z: float) -> Color:
 	if x >= 0.7 and x <= 11.4:
 		layby = (1.0 - smoothstep(0.75, 2.05, absf(z - layby_z))) * smoothstep(0.7, 2.2, x)
 	var wear := maxf(path * 0.72, maxf(clearing * 0.78, layby * 0.64))
-	var earth := Color(0.48, 0.51, 0.43)
+	# Pale worn earth separates the occupied clearing and clue route from the
+	# cooler forest floor without new geometry, lights or collision changes.
+	var earth := Color(0.86, 0.71, 0.51)
 	return base.lerp(earth, wear)

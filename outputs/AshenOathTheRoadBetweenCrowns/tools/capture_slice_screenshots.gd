@@ -44,6 +44,29 @@ func _initialize() -> void:
 	game.call("_new_game")
 	await _wait_for_zone_ready(game)
 	await _settle_frames(8)
+	if "--opening-presence-only" in OS.get_cmdline_user_args():
+		# Composition capture waits for complete art, not a performance pass.
+		var dressing_deadline := Time.get_ticks_msec() + 60000
+		while game.zone_root != null and not bool(game.zone_root.get_meta("opening_detail_complete", false)) and Time.get_ticks_msec() < dressing_deadline:
+			await process_frame
+		if game.zone_root == null or not bool(game.zone_root.get_meta("opening_detail_complete", false)):
+			push_error("Opening presence capture did not receive the complete scene")
+			await _shutdown_capture_game(game)
+			quit(1)
+			return
+		for view in [
+			["01_greyfen_spawn", "greyfen", Vector3(0, 1, 7)],
+			["opening_wychwood_approach", "wychwood", Vector3(0, 1, 12.5)],
+			["10_combat_clearing", "wychwood", Vector3(0, 1, -5)],
+		]:
+			if not await _capture(game, view[0], view[2], view[1], view[2]):
+				await _shutdown_capture_game(game)
+				quit(1)
+				return
+		print("OPENING PRESENCE CAPTURE: PASS (staged visual evidence, not route acceptance)")
+		await _shutdown_capture_game(game)
+		quit(0)
+		return
 	if "--campaign-wilds-only" in OS.get_cmdline_user_args():
 		# Composition fixtures only; never substitute for player-route acceptance.
 		for view in [

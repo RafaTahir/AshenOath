@@ -38,8 +38,9 @@
     "name": "Sister Anwen",
     "greeting": "You came about the road notice.",
     "lines": [
-      "Bram drove. Sella walked beside him. Oren was her son. He was twelve.",
-      "If you find black feathers tied in red thread, leave them intact. The thread came from this shrine.",
+      "Bram drove the cart. Sella took her boy, Oren. She left his coat here. Said they'd be back before rain.",
+      "He carved a wooden crow while she prayed. Kept asking me if a bird could forget the way home.",
+      "If you find red thread tied around black feathers, don't cut it. I tied that thread myself.",
       "Kael: You knew that before the contract was posted.",
       "Sister Anwen: Yes. Bring me what the road left, and I will tell you why."
     ],
@@ -90,11 +91,7 @@
         "actions": []
       }
     ],
-    "voice": [
-      "voice_sister_anwen_greeting_01",
-      "voice_sister_anwen_road_warning_01",
-      "voice_sister_anwen_wychwood_warning_01"
-    ],
+    "voice": [],
     "actions": [
       {"label": "I'll bring back evidence.", "type": "story_choice", "conditions": {"flag_unset": "anwen_response"}, "sets_flags": {"anwen_response": "evidence"}, "adjusts_values": {"anwen_trust": 1}, "result": "Anwen nods once. 'Then bring back what the road tried to hide.'"},
       {"label": "You can explain when I return.", "type": "story_choice", "conditions": {"flag_unset": "anwen_response"}, "sets_flags": {"anwen_response": "terms"}, "result": "Kael leaves the silence between them intact. Anwen looks relieved, then ashamed of it."},
@@ -106,8 +103,8 @@
     "name": "Mira Fen",
     "greeting": "Keep the door open. People trust medicine less when the healer whispers.",
     "lines": [
-      "I can dress a wound and tell you what poisoned it.",
-      "I cannot make Greyfen honest about either."
+      "Sella bought salve for Oren's hands. Too many hours carving that little crow.",
+      "I can mend a cut. Getting this village to tell the truth is harder."
     ],
     "variants": [
       {
@@ -168,7 +165,7 @@
     "greeting": "You want the old road? Watch the crows, not the mud.",
     "lines": [
       "It bends twice where it should run straight. I checked. Then I decided I preferred being alive.",
-      "A boy found black feathers under his pillow after the second death. His mother burned the whole bed."
+      "Bram wouldn't leave a wheel in a rut, let alone a child on the road. Whatever you find, remember that."
     ],
     "actions": [
       {"label": "Ask what he carried.", "type": "give_ingredients", "conditions": {"rook_supplies_taken": false}, "items": {"ash_salt": 1, "sparkstone": 1}, "sets_flags": {"rook_supplies_taken": true}},

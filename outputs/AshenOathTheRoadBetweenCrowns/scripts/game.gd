@@ -1786,17 +1786,17 @@ func _handle_interaction(area) -> void:
 				audio.play_voice("voice_player_return_report_01")
 				audio.set_music_state("return_report")
 			else:
-				hud.toast("Dragged tracks run beside boot prints. Something was led here, not merely hunting.")
+				hud.toast("The tracks pass untouched food and lead toward the tokens. These things are following names, not hunger.", 5.5)
 				audio.play_voice("voice_player_clue_observation_01")
 			audio.play_event("reveal", 0.02)
 		elif area.interaction_id == "corpse":
-			hud.toast("Old blood in the mud. The body was searched after death, carefully, by human hands.")
+			hud.toast("Bram's ledger. A page of debts, all crossed out. His hand still grips the cart brake.", 5.5)
 		elif area.interaction_id == "claw_marks":
-			hud.toast("The claw marks are real, but they cut over wagon ruts. The beast came after the cart stopped.")
+			hud.toast("Vargan binding wire. Someone fastened a name to these creatures, then tried to burn it off.", 5.5)
 		elif area.interaction_id == "black_feathers":
-			hud.toast("Sella's pilgrim bead is tied in shrine-red burial thread. It was prepared before she died.")
+			hud.toast("Sella's red thread. The knot is Anwen's. The feathers were tied here, not scattered by a bird.", 5.5)
 		elif area.interaction_id == "oren_token":
-			hud.toast("Oren's wooden crow has its name panel scratched away. Someone wanted the child forgotten.")
+			hud.toast("Oren's wooden crow. The wings are worn smooth; only his name has been scraped away.", 5.5)
 		elif area.interaction_id == "chapel_names":
 			story_state.set_flag("chapel_names_read", true)
 			_try_complete_oren_thread_trace()
@@ -2326,6 +2326,18 @@ func _wait_for_startup_packs_then_prewarm() -> void:
 
 func _begin_opening_prewarm() -> void:
 	if game_started or greyfen_prewarm_started:
+		return
+	# A returning player needs the saved world, not a disposable New Game world.
+	# Explicit New Game still takes the normal queued/prewarmed path.
+	if not new_game_start_pending and hud != null and hud._has_continue_save():
+		hud.set_new_game_status("Continue your saved journey, or begin a new one.")
+		hud.set_boot_shell_cover_active(false)
+		if OS.has_feature("web"):
+			# Saved journeys skip world prewarm, but still need the rendered menu
+			# handoff that releases the HTML loading cover.
+			await RenderingServer.frame_post_draw
+			await get_tree().process_frame
+			_publish_web_opening_state("ready", "Continue your saved journey, or begin a new one.")
 		return
 	greyfen_prewarm_started = true
 	# Web mounts the opening pack after first control. These assets are requested
@@ -2971,7 +2983,9 @@ func _on_player_blade_contact(contact: Dictionary) -> void:
 			result.get("previous_base", Vector3.ZERO),
 			result.get("previous_tip", Vector3.ZERO)
 		)
-		audio.play_event_limited("heavy_hit" if heavy else "light_hit", 0.045, 0.04)
+		audio.play_spatial_event("heavy_hit" if heavy else "light_hit",
+			result.get("contact_point", result.get("point", player.global_position)),
+			player.global_position, 16.0, 0.045, 0.04)
 		if input_router != null:
 			input_router.rumble(0.16 if heavy else 0.09, 0.30 if heavy else 0.20, 0.07)
 		if camera_rig != null:

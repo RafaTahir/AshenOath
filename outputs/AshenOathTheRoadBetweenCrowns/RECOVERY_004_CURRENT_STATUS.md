@@ -1,5 +1,14 @@
 # Recovery-004 Current Closure Status
 
+## Post-Release Opening Pass - Locally Verified 2026-10-03
+
+- Recovery-004 remains **37/37 accepted under the previously approved functional-candidate scope**. Its V10 production certificate is historical evidence for V10, not certification of the current dirty source.
+- Current work: the user-authorized first-20-minutes opening improvement pass, working label `OPENING-PRESENCE-001`; this is not an additional Recovery-004 ticket. **No new ticket accepted.**
+- Native earned Save/Continue, New Game with an existing save, physical footsteps/attacks/Oathfire/pause, all five Wychwood enemies, 19 spatial blade contacts, bridge return and Anwen report pass. Personal clue text now survives the interaction and fits the 720p HUD.
+- Chrome's first local run completed the opening/fight/report/settings/Save but exposed a returning-player boot-cover GAME regression. The saved-menu rendered handoff is repaired. Replacement production-preset artifact: D:/Temp/AshenOath/opening_presence/web_handoff_20261003, root PCK 7566f68a43dad7fd4da9fb7520d5ef7fd746772cb20dee9a5ae0e069c528cb09; 15 files / 90,538,219 bytes. Chrome and Edge startup/input/durable Save/Continue smokes pass without console or network errors. Prior completed route evidence is partial and dependency-scoped, not silently converted into a passing overall run.
+- Source/tooling/screenshots remain uncommitted. This bounded local pass is complete; no broader creative-roadmap completion or new performance certification is claimed. Loading/memory target misses remain documented. Tracked web/ and Vercel are unchanged. No commit, push, merge, deployment, reset, revert or stash was performed. Test processes exited and successful browser profiles were cleaned.
+- Current evidence and exact next action: `OPENING_PRESENCE_CHECKPOINT.md`; detailed scoped results: `OPENING_PRESENCE_001_RESULT.md`.
+
 ## Current - 2026-10-02
 
 - Accepted: **37/37**, canonical current acceptance map and `latest_closure` in the registry.

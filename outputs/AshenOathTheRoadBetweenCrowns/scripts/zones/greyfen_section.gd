@@ -270,32 +270,37 @@ func _build_horizon_ridges(context: ZoneBuildContext) -> void:
 func _build_horizon_forest(context: ZoneBuildContext) -> void:
 	if context.zone_root.find_child("GreyfenHorizonForest", true, false) != null:
 		return
-	var source := context.forest_tree_mesh("res://assets_external/environment/forest/TwistedTree_2.obj")
-	if source == null or source.get_surface_count() != 2:
-		push_error("Greyfen horizon requires the approved bark/leaf tree mesh")
-		return
 	var layer := Node3D.new()
 	layer.name = "GreyfenHorizonForest"
 	context.add_node(layer)
 	var count := 24 if context.quality_preset() == "potato" else 40
 	var positions: Array[Vector3] = GreyfenFrontier.tree_positions(count)
-	var bounds := source.get_aabb()
-	var bottom_center := bounds.position + Vector3(bounds.size.x * 0.5, 0.0, bounds.size.z * 0.5)
-	var multimesh := MultiMesh.new()
-	multimesh.transform_format = MultiMesh.TRANSFORM_3D
-	multimesh.mesh = source
-	multimesh.instance_count = positions.size()
-	var batch := MultiMeshInstance3D.new()
-	batch.name = "GreyfenDistantTreeBatch"
-	batch.multimesh = multimesh
-	batch.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	batch.visibility_range_end = 72.0
-	layer.add_child(batch)
-	for index in positions.size():
-		var height := 8.8 + float(index % 5) * 0.62
-		var scale_factor := height / maxf(bounds.size.y, 0.01)
-		var basis := Basis(Vector3.UP, float(index) * 1.71).scaled(Vector3.ONE * scale_factor)
-		multimesh.set_instance_transform(index, Transform3D(basis, positions[index] - basis * bottom_center))
+	# Two existing species share the same grounded, non-colliding placements.
+	# Uneven crowns frame the road valley instead of repeating a level tree wall.
+	var species := ["TwistedTree_2.obj", "CommonTree_5.obj"]
+	for species_index in species.size():
+		var source := context.forest_tree_mesh("res://assets_external/environment/forest/" + species[species_index])
+		if source == null or source.get_surface_count() != 2:
+			push_error("Greyfen horizon requires the approved bark/leaf tree mesh")
+			return
+		var bounds := source.get_aabb()
+		var bottom_center := bounds.position + Vector3(bounds.size.x * 0.5, 0.0, bounds.size.z * 0.5)
+		var multimesh := MultiMesh.new()
+		multimesh.transform_format = MultiMesh.TRANSFORM_3D
+		multimesh.mesh = source
+		multimesh.instance_count = count / 2
+		var batch := MultiMeshInstance3D.new()
+		batch.name = "GreyfenDistantTreeBatch" if species_index == 0 else "GreyfenDistantBroadleafBatch"
+		batch.multimesh = multimesh
+		batch.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		batch.visibility_range_end = 72.0
+		layer.add_child(batch)
+		for local_index in multimesh.instance_count:
+			var index := local_index * 2 + species_index
+			var height := 7.2 + float((index * 3) % 7) * 0.85
+			var scale_factor := height / maxf(bounds.size.y, 0.01)
+			var basis := Basis(Vector3.UP, float(index) * 1.71).scaled(Vector3(0.82, 1.0, 0.88) * scale_factor)
+			multimesh.set_instance_transform(local_index, Transform3D(basis, positions[index] - basis * bottom_center))
 
 func _add_horizon_ridge(parent: Node3D, node_name: String, position: Vector3, width: float, height: float, color: Color, yaw: float) -> void:
 	var vertices := PackedVector3Array()

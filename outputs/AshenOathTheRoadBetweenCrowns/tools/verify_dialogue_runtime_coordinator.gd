@@ -4,8 +4,11 @@ const Coordinator = preload("res://scripts/dialogue_runtime_coordinator.gd")
 
 class PoseDriver extends Node:
 	var in_dialogue := false
+	var working := false
 	func set_dialogue_pose(active: bool) -> void:
 		in_dialogue = active
+	func set_working(active: bool) -> void:
+		working = active
 
 class PlayerFixture extends CharacterBody3D:
 	var animation_driver := PoseDriver.new()
@@ -71,6 +74,13 @@ func _run() -> void:
 	coordinator.release(player)
 	_check(coordinator.get_focus_actor() == null and not actor.get_meta("dialogue_facing_lock", true), "Close left a focus reference or Anwen lock")
 	_check(not player.animation_driver.in_dialogue and not actor.animation_driver.in_dialogue, "Close left a dialogue animation pose")
+	actor.interaction_id = "blacksmith_tor"
+	actor.animation_driver.working = true
+	coordinator.stage(actor, player, camera, Callable())
+	_check(actor.animation_driver.in_dialogue and not actor.animation_driver.working, "Working NPC did not put aside work to speak")
+	_check(actor.get_meta("dialogue_facing_lock", false), "Non-Anwen speaker was not locked")
+	coordinator.release(player)
+	_check(not actor.animation_driver.in_dialogue and not actor.get_meta("dialogue_facing_lock", true), "Non-Anwen speaker remained locked after dialogue")
 	floor_body.position.y = 0.20
 	await physics_frame
 	await physics_frame
