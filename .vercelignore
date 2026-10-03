@@ -1,0 +1,5 @@
+# Deploy only the exported game and hosting configuration.
+*
+!web/
+!web/**
+!vercel.json

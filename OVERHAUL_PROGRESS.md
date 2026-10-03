@@ -29,10 +29,13 @@ Original checkout and its untracked artifacts are retained at D:/Projects/AshenO
 
 ## Work status
 
-- Workspace created; implementation in progress.
-- Narrative content: in progress.
-- Story state and saves: in progress.
-- World staging and aftermath: in progress.
-- Player experience: in progress.
-- Export: pending.
+- Narrative content: main campaign and side-story rewrites implemented; stable quest/action identities retained.
+- Story state and saves: decision/evidence separation, batched decision publication, schema 10, legacy-slot preservation, and pre-covenant save implemented.
+- World staging and aftermath: event-driven story compositions, voluntary witness staging, three peaceful covenant rituals, Ash confrontation, and return to Greyfen implemented.
+- Player experience: journal, decision previews, individual epilogues, evidence-earned combat opportunities, supply consequences, emergency medicine, nine-practice progression, difficulty, audio mix, and focus-loss pause implemented.
+- Export: production compilation and packaging underway from source commit 069fde3.
 - Push/deployment: pending.
+
+## Release limits
+
+No tests, QA, gameplay sessions, screenshots, performance measurements, verification or review pass were run, as requested. Compilation/export diagnostics are handled only to produce deployable artifacts. Standard combat values are preserved unless an explicitly discovered preparation opportunity applies. Revised dialogue is presented through subtitles: existing voice lines are suppressed until a matching performance is authored. Runtime asset reuse and new staging do not constitute a complete replacement of every art or audio asset. The longer art-production, localization, playtime and measured quality targets in the master plan are not claimed as achieved by this release.

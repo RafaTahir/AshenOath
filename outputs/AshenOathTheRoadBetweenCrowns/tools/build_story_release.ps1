@@ -65,6 +65,18 @@ foreach ($directory in @($ExportRoot, $PackRoot, $LogRoot)) {
     New-Item -ItemType Directory -Force -Path $directory | Out-Null
 }
 
+# Keep the system awake only while this build process is active. Closing the
+# laptop lid or a manual sleep request remains under the user's control.
+Add-Type -TypeDefinition @'
+using System;
+using System.Runtime.InteropServices;
+public static class AshenOathBuildPower {
+    [DllImport("kernel32.dll")]
+    public static extern uint SetThreadExecutionState(uint flags);
+}
+'@
+[AshenOathBuildPower]::SetThreadExecutionState([uint32]2147483649) | Out-Null
+try {
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--editor", "--import") "import"
 
 # Opening and campaign packs carry zone scripts and base carries scripts/data.
@@ -166,3 +178,6 @@ if (-not $SkipWebCopy) {
 Write-Host "Story build packaged: $ExportRoot"
 Write-Host "Build identity: $BuildId ; source revision: $SourceCommit"
 Write-Host "This command did not run tests, QA, browsers, commits or deployment."
+} finally {
+    [AshenOathBuildPower]::SetThreadExecutionState([uint32]2147483648) | Out-Null
+}

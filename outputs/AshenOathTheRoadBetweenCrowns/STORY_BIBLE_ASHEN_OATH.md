@@ -1,80 +1,76 @@
-# Ashen Oath: The Road Between Crowns
+# Ashen Oath: The Road Between Crowns — revised story bible
 
 ## Identity
 
-- **Genre:** Third-person dark-fantasy action RPG with investigation, combat, and consequence-led quests.
-- **Length target:** 8-12 hours.
-- **Tone:** Intimate, restrained, suspicious, mournful, and occasionally warm. Grim without delighting in cruelty.
-- **Player fantasy:** Be the person who stays to witness what everyone else survived by forgetting.
+A regional dark-fantasy action RPG about broken promises, denied witnesses, and the work that follows confession. Main-route target: 6–8 hours; full campaign with optional lives: 8–12. These are authoring targets, not measured duration.
 
-## Core Premise
+The player fantasy is to be the person who stays after discovering what others survived by forgetting. Greyfen must be useful, generous, frightened, and culpable at once. People are larger than their secrets. Monster hunts expose decisions, but people still need food, care, shelter, and an ordinary conversation afterward.
 
-During the War of Three Crowns, House Vargan promised sanctuary to refugees and defeated soldiers on the Greyfen road. Greyfen barred its gate rather than share a failing winter store. Shrine keepers invoked an old covenant with the White Hart to turn the road from sight. Vargan soldiers killed the people trapped between castle and village.
+## The crime
 
-The bodies were burned without names. Their ash fed Greyfen's fields; their iron became hinges, ploughs, and bells. The Hart, unable to prevent a crime hidden under its covenant, was bound beneath the road as the only witness that could not be bribed or frightened.
+Thirty-two years before the present, during the War of Three Crowns, House Vargan promised sanctuary to refugees and defeated soldiers. Greyfen barred its gate to protect dwindling stores. Shrine keepers asked the White Hart to hide the road under a promise that no blood would be shed there. Vargan soldiers closed the military retreat and killed the people between the gates.
 
-Now the binding is failing. Ghoulkin are not resurrected victims. They are scavenged bodies animated by scraps of denied memory. They gather around names, tokens, and objects that can testify.
+The bodies were burned without names. Ash fed fields and medicine beds. Stolen iron became tools, hinges, bells, and working stock. The institutions then kept separate records, so every account appeared insufficient without the others. Their successors inherited useful things and repeatedly chose concealment.
 
-Kael is an oath-bound hunter from a dying order. Years earlier he obeyed a lawful retreat and left civilians behind. Greyfen forces him to answer the question he has avoided: when duty protects a lie, what remains of an oath?
+The Hart freely agreed to the no-blood condition, not to the massacre. Its promise was violated. Later resealing redirected the resulting debt through frightened or coerced keepers instead of fulfilling the sanctuary promise. The difference between a frightened person's own decision and an agreement extracted by a threat must remain explicit: fear alone is not proof of coercion, but making food or safety conditional on assent is.
 
-## Emotional Promise
+## Why now
 
-Every monster hunt exposes a human decision. Every truth has a cost paid by someone still alive. The player is not asked to choose good or evil, but to decide who must bear truth, who deserves mercy, and whether survival excuses silence.
+Recent repairs exposed a cache of old name tokens in the road. Bram Kett, Sella Vey, and her twelve-year-old son Oren carried recovered objects toward the shrine. Oren painted a crow over one token and restored the older name beneath the paint. Anwen read a recovered name and tried to contain its memory with burial thread, then sent the travelers away while she searched for a safer rite.
 
-## Themes
+The restored name strained the concealment that kept memory disordered. Ghoulkin gathered around the testimony. The containment failed. Vargan's recovery patrol arrived afterward, added binding wire, and tried to reclaim the objects. The attack was not an order from a secret mastermind: loose memory, inadequate containment, and a current policy of reclamation formed a discoverable chain.
 
-- A broken promise remains binding to those who trusted it.
-- Institutions distribute guilt until nobody feels responsible.
-- Mercy without truth can become another form of concealment.
-- Memory can restore dignity or become a weapon.
-- Obedience is not innocence.
-- Communities are capable of love and cowardice at the same time.
+The damaged repair, token, thread, wire, registers, and patrol orders corroborate different parts. No single clue should claim more than it establishes.
 
-## Central Mystery
+## Present conflict
 
-The apparent question is why monsters have returned to the road. The real question is why they carry Greyfen objects, shrine thread, and Vargan wire. The final answer is not that one villain caused the massacre. The village barred the gate, the shrine hid the road, Vargan gave the order, and later generations chose stability over confession.
+Road failure interrupts grain and threatens people who carry testimony. Edric proposes a renewal covenant, pairing grain allotments with household assent. His supplies are real. His competence can protect people. His proposed agreement is coerced, and therefore unstable. A signature obtained by withholding food cannot bind its owner legitimately.
 
-## Main Conflict
+At the assembly, the ration condition is removed before testimony is invited. Cooperative Edric can withdraw it himself; otherwise Kael challenges the seal and brings the records forward. Refusing a ritual or public appearance never forfeits grain, care, or safe departure. The crisis advances at authored chapter milestones, not an unseen wall-clock timer.
 
-The Hart's binding is breaking as buried names resurface. If released without preparation, it will force memories into every person touched by Greyfen's prosperity, causing panic and violence. If rebound, the victims remain unnamed. If destroyed, the supernatural threat ends while the founding lie survives. Kael must gather enough testimony to create a fourth possibility: human confession strong enough to release the witness without surrendering judgment to it.
+## Kael
 
-## Supernatural Rules
+Kael is thirty-eight, an oath-bound hunter from a dying order. Eight years earlier he obeyed a lawful retreat and abandoned civilians his company had promised to escort. His report said the road could not be held and omitted that he never returned. He was not responsible for Greyfen's original crime and has no hidden chosen-one connection to it.
 
-1. The dead do not return as complete personalities. Memory adheres to bodies, places, iron, ash, and names.
-2. A spoken true name stabilizes memory. An erased or false name makes it predatory.
-3. The White Hart cannot lie, but it remembers without proportion or mercy.
-4. Oaths create force only when freely witnessed. Coerced promises create unstable bindings.
-5. Shrine rites redirect spiritual debt; they cannot erase it.
-6. Monster remains retain evidence after death. Combat never replaces investigation.
-7. Destroying a vessel disperses memory into nearby land and people.
+The initial contract is bounded: account for Bram, Sella, and Oren. On returning, Kael freely promises to stay, safeguard testimony, and help its living carriers face foreseeable danger. The player chooses his terms: protection, a durable account, or staying to understand the burden. These are not promises that nobody can be hurt.
 
-## Moral Rules
+At Halvern's bounded refusal, Kael admits his own failure. The assembly repeats that admission where it can cost his standing. His confession does not command anyone else's. Staying is his defined character commitment; the player shapes why, how, and which cost he accepts.
 
-- No major faction is secretly innocent.
-- Consequences must affect named people, not abstract morality points.
-- Truth is not automatically kind; concealment is not automatically merciful.
-- Refusing a choice is itself a choice with a visible result.
-- The game never labels choices good, evil, correct, or canonical.
-- Endings judge consistency and cost, not a hidden score threshold alone.
+## Memory and consent rules
 
-## Moment-To-Moment Play
+1. Ghoulkin are scavenged animal and human vessels animated by incomplete denied memory. They are not complete resurrected victims.
+2. A true name stabilizes a particular fragment. It is not a universal spell.
+3. The White Hart is the only complete supernatural witness. It cannot lie, but complete recollection does not supply proportion, forgiveness, or consent.
+4. Halvern retains the sanctuary order, his refusal, and his execution. He cannot know Edric's later acts. Len, the returned soldier, repeats a gate-and-lantern fragment; he cannot become a voluntary living witness.
+5. Freely witnessed promises create force. Coerced admissions can establish facts but cannot supply magical consent. Documents cannot promise for their owners.
+6. Shrine rites redirect debt, not erase it. Destroying a vessel ends its shape and disperses memory into nearby land. Ordinary defensive combat has no hidden morality penalty.
+7. Special destruction of irreplaceable testimony is signposted. Copies preserve recovered facts, never everything the destroyed witness knew.
+8. Protection enables voluntary participation only while refusal leaves food, care, and a safe exit available.
 
-The player talks to villagers, compares contradictions, follows environmental evidence, prepares oils or traps, fights creatures, examines aftermaths, chooses what to report, and returns to changed people and places. The repeated loop is:
+## Four resolutions
 
-`rumor -> testimony -> route -> clues -> preparation -> encounter -> aftermath -> report -> visible consequence`
+All four remain reachable with guaranteed main-path records and Kael's freely accepted responsibility. Optional willing witnesses share work and reduce specific burdens; they do not unlock a hidden correct ending. Kael cannot swear for Greyfen.
 
-## Distinctive Qualities
+**Witness:** the Hart accepts public acknowledgment and a freely offered commitment to preserve the account. It leaves human judgment with humans. Greyfen loses old privileges and must repair trade and institutions. With little support, Kael stays to carry more of that work.
 
-- Monsters behave as damaged testimony rather than random wildlife.
-- Investigation changes combat staging and rewards attention before violence.
-- Reporting is a playable phase with consequences, not a quest-complete button.
-- Side quests alter main-story testimony, access, and ending support.
-- Greyfen remains worth saving even after the player learns what founded it.
+**Mercy:** the Hart accepts release with the recovered record safeguarded through consented rites. Private victim memories, vulnerable family identities, and homes are not broadcast. Institutional wrongdoing and proven perpetrators remain recorded. A smaller circle bears the work; partial public acknowledgment can leave future grievance.
 
-## Narrative Guardrails
+**Duty:** Kael freely carries the unresolved binding. The containment rite is defended, not won by killing the Hart. The record remains accessible. Greyfen gains time, while Kael loses freedom and rest and restitution remains unfinished.
 
-The story must never become a chosen-one prophecy, a simple noble conspiracy, a morality-meter optimization exercise, or a sequence of lore documents. The Hart must not become a benevolent forest deity. Anwen must not become a cryptic exposition device. Edric must not be absolved because he inherited the crime. Kael's guilt must inform his choices without making the story solely about him.
+**Ash:** Kael destroys the Hart by force. Immediate supernatural pressure ends, but dispersed memory harms land and future harvests and the complete account is lost. Recovered human records survive. Restitution may continue; the choice does not automatically make Kael dishonest.
 
-## Dialogue Standard
+## Timeline
 
-Ordinary turns contain one to three sentences. People interrupt themselves, evade, remember physical details, and misunderstand each other. Poetic lines are reserved for the Hart, ritual speech, or moments earned by plain conversation. Every line must reveal character, alter trust, deliver actionable information, or move the scene.
+- 32 years ago: sanctuary, closed gates, concealment, massacre; Halvern executed. Senn, now fifty-four, was a twenty-two-year-old officer.
+- 8 years ago: Kael's unrelated escort and retreat.
+- 6 years ago: Edric, now forty-three, found and suppressed the command ledger.
+- Last winter: a novice died after an uncontrolled memory in the chapel; Anwen cut the bell rope and resealed it. Harl died after years of keeping his gate role private; Elna preserved a kinder war account for the family.
+- Present: repairs expose tokens; attempted containment fails; recovery patrols reclaim objects; Edric announces renewal; Kael stays.
+
+Anwen is forty-six; her guilt is present concealment, not having personally ordered the original rite. Rook is twenty-nine and carries inherited family testimony. Their ages must never turn into knowledge of events they could not have witnessed.
+
+## Voice and authoring authority
+
+Ordinary turns contain one to three sentences. Use concrete objects, objections, care, remembered details, and silence. Kael asks practical questions; Anwen corrects herself; Mira distinguishes useful from consented; Rook jokes until someone makes him a target; Edric becomes plain when control fails. Elevated language belongs mostly to the Hart and rites.
+
+Version-two playable text lives in `data/dialogue.json` and `data/campaign_dialogue.json`. `data/story_campaign.json` supplies questions, evidence provenance, decisions, and ending costs. Quest/objective identifiers are migration anchors. Old recordings must not be treated as authoritative for rewritten lines.

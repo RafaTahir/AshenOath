@@ -1,90 +1,52 @@
-# Choice And Consequence System Plan
+# Authored choice and consequence — version two
 
-## Design
+## Storage and meaning
 
-Use explicit flags for authored outcomes plus three bounded integers. Do not build a branching graph or generalized reputation framework.
+Keep explicit flags and the bounded `anwen_trust`, `greyfen_fear`, and `hart_debt` values. Values influence presentation and pressure, never silently choose a final ending. Quest completion and evidence discovery remain separate from irreversible decisions. Inspecting a clue cannot consent to its treatment.
 
-- `anwen_trust`: -3 to 3. Controls candor, shrine access, and finale participation.
-- `greyfen_fear`: 0 to 6. Controls ambient dialogue, crowd stability, lights/doors, and encounter pressure.
-- `hart_debt`: -3 to 6. Measures how much memory has been redirected, exploited, or restored.
+Playable actions use existing `story_choice`, `start_quest`, `complete_objective`, ingredient, and `ending` types. Major decisions have `preview`, `cost`, and `result`. The intended action must be understandable before it commits. Dialogue variants use existing all-of conditions and authored priorities; no generalized branching graph is required.
 
-Values modify presentation and available methods; they never silently determine an ending. Final endings remain explicit player choices whose costs depend on prior state.
+## Main choices and ownership
 
-## Ten Major Choices
+| Decision | Canonical flags | Facts that must survive |
+| --- | --- | --- |
+| Opening report | `evidence_report=private/public/retained`; `kael_pledge=protect/account/stay`; `cemetery_bell_rung=true`; `legacy_report_choice_required=false` | Explicit `return_village` action, not auto-commit on touching an NPC or board |
+| Shrine | `crow_shrine_state=cleansed/disturbed/bound`; `covenant_rules_known=true` | Each method redirects, releases, or temporarily contains; none erases debt |
+| Bog fragment | `bog_core_fate=destroyed/preserved/returned`; `crisis_cause_known=true`; `mira_truth_known=true` | Formula access survives every choice; destroyed fragments disperse memory |
+| Names | `names_policy=published/withheld`; `renewal_announced=true`; `crisis_cause_known=true`; `protected_family_addresses=true` | Recovered names are distinct from family addresses and consent |
+| Mill | `mill_operation=closed/supervised/restitution`; legacy `mill_fate=preserved/burned/exposed`; `mill_records_preserved=true` | `burned` refers to replacing a contaminated working sheet after copying; command and signed evidence survive |
+| Senn | `senn_fate=testimony/exile/punished`; `senn_account_recovered=true`; `witness_consent_senn=voluntary/refused` | Testimony means custody with freely given account; punished remains execution, not renamed imprisonment |
+| Edric | `edric_stance=cooperate/exposed/compelled`; `witness_consent_edric=voluntary/refused/compelled`; `renewal_announced=true` | Compelled admissions establish facts only; protection cannot retain immunity for the title |
+| Ledger | Existing open/hidden/left-copied flags plus `command_ledger_copied=true`; `command_proof_recovered=true` | A credible command copy is guaranteed |
+| Halvern | `halvern_fate=witness/released/destroyed`; `halvern_is_fragment=true`; `kael_confessed=true`; `command_proof_recovered=true` | Preserved fragments are not voluntary living ritual support |
+| Assembly | `confession_method=witnesses/kael/edric`; `renewal_stopped=true`; `assembly_relief_ready=true`; `kael_confessed=true` | Remove ration condition first. Compelling Edric sets his consent to compelled. Other routes retain explicit prior consent |
+| Finale | Existing ending IDs `expose/free/bind/kill`; `final_covenant=witness/mercy/duty/ash` | Each is an explicit resolution with no optional-witness gate or hidden substitution |
 
-| Flag | Options | Immediate Result | Later Echo |
-| --- | --- | --- | --- |
-| `evidence_report` | private / public / retained | Anwen or board reaction | Shrine access, public fear, token leverage |
-| `crow_shrine_state` | cleansed / disturbed / bound | Shrine appearance and blessing | Hart debt, chapel memories, enemy staging |
-| `bog_core_fate` | destroyed / studied / buried | Mira reaction | Medicine supply, Wretch variant, debt |
-| `names_policy` | publish / withhold_until_safe | Public notices or hidden register | Crowd stability and finale testimony |
-| `mill_fate` | closed / cleansed / warned_open | Mill props and food dialogue | Rations, prices, civilian support |
-| `senn_fate` | witness / imprisoned / killed | Camp aftermath | Castle route and testimony strength |
-| `edric_stance` | cooperate / expose / compel | Guard and castle state | Edric finale participation |
-| `halvern_fate` | freed / questioned / bound / destroyed | Knight aftermath | Ledger credibility and debt |
-| `confession_method` | voluntary / immediate / coerced | Assembly tone | Final witness composition |
-| `final_covenant` | witness / mercy / duty / ash | Ending transformation | Epilogue |
+## Optional lives
 
-## Twenty Minor Choices
+| Story | Explicit outcomes | Consent and concrete result |
+| --- | --- | --- |
+| Bitter Roots | `mira_truth=kept/confessed/destroyed`; `mira_treatment=private/consented/replacement`; `mira_truth_known=true` | Families can refuse and still receive care. Mira separately chooses her own assembly account. `bitter_roots_collected` gates the collection hand-in; `study_roots` is optional inspection |
+| Iron Remembers | `iron_fate=memorial/tools/surrendered` | Tor voluntarily speaks while gradual replacement or ordinary scrap keeps essential preparation available |
+| The Road That Bends | `rook_map_fate=preserved/destroyed`; `rook_disclosure=protected/public/erased` | Protected route copies set consent voluntary; public family marks or destroyed map set consent refused |
+| A Widow's Bell | `widow_truth=told/comforted/private` | Elna chooses voluntary public account or refusal. Her husband's act remains documented in all routes |
+| Black Dog | `black_dog_fate=spared/killed`; `guardian_plan=relocated/supervised/killed` | Boundary, disclosed watch, or settled protection fragment; legacy hidden saves remain concealment, never automatically supervised |
+| The Bannerless | Existing `bannerless_fate=testimony/shielded/assembly` | Refusal record corroborates the order; protected homes are not evidence withheld from accountability |
 
-1. Accept the Road contract from the board or directly from Anwen.
-2. Pay Rook for a rumor or earn it through a clue.
-3. Return Bram's tool to his family or keep it as evidence.
-4. Speak Oren's scratched name aloud or preserve uncertainty.
-5. Use Iron Trap preparation or enter the clearing immediately.
-6. Tell Elna the full truth, a merciful account, or let Harl's token speak.
-7. Light the first memorial candle or leave it dark.
-8. Give Mira the Bog core or retain it.
-9. Disclose Mira's garden or permit regulated use.
-10. Ask Tor to make memorial nails or practical tools.
-11. Melt a named iron object or preserve it.
-12. Kill, relocate, or tolerate Toma's Stalker.
-13. Give Oren's charm to Rook, shrine, or family.
-14. Copy Rook's map for Anwen or keep it private.
-15. Heal the wounded levy or interrogate him untreated.
-16. Enter Senn's camp by trap, challenge, or hidden route.
-17. Return Halvern's sword to the crypt or carry it publicly.
-18. Protect Anwen during the assembly or force her to stand alone.
-19. Offer Edric a protected confession or demand immediate surrender.
-20. Place Kael's old oath badge among the memorial names or keep it.
+Four interludes keep existing IDs: the returned soldier, Oren's thread, the ash measure, and three candles. `returned_soldier_is_fragment=true` prevents presenting his record as a living promise.
 
-## Storage Shape
+## Practical work
 
-Later implementation adds this optional save block:
+`cart_helped`, `road_repaired`, and `assembly_relief_ready` record explicit help. `mill_distribution` is read-only after the main mill choice; it cannot overwrite a committed operation. Public proclamation may set `renewal_announced`; reading the renewal record supplies an explanation, never a signature.
 
-```json
-{
-  "story_state": {
-    "version": 1,
-    "flags": {"evidence_report": "private"},
-    "values": {"anwen_trust": 0, "greyfen_fear": 0, "hart_debt": 0}
-  }
-}
-```
+## Consent contract
 
-Quest completion and clue discovery remain in existing quest state. Only consequential decisions belong in `story_state`. Cosmetic motion is not saved.
+`witness_consent_*` records voluntary, compelled, or refused; absent flags remain unknown. Rook's protected voluntary participation is represented as `witness_consent_rook=voluntary` plus `rook_disclosure=protected`. Confession, disclosure, ancestry, a collected object, and an NPC's physical presence are not interchangeable with consent.
 
-## Dialogue Conditions
+The guaranteed records plus Kael's willingness support every finale method. Optional volunteers share its work and specific costs. Coerced or absent people can contribute known documentary facts but never a borrowed oath. Mercy protects private victim memories and families, not perpetrator immunity. Ash destroys the complete supernatural witness, not already recovered human records.
 
-Dialogue variants support simple all-of predicates only: required flags, excluded flags, objective done, quest active/completed, item present, and minimum/maximum value. Resolution chooses the most specific valid variant, then falls back to the base text. No nested boolean expression language.
+## Migration
 
-## Visible Consequences
+Existing quest/objective IDs remain anchors. Keep unknown decisions unknown. Do not infer consent from completed objectives or old labels. Older `mill_fate` alone cannot reconstruct `mill_operation`. The one-time explicit report records the actual present choice. Old `iron_fate=weapon`, `black_dog_fate=hidden`, and historic values retain their old meaning until an authored recap permits a new decision.
 
-- Public fear closes shutters, reduces night foot traffic, and adds guard/fire props.
-- Shrine state changes candles, smoke, color, and Anwen staging.
-- Published names appear on notice board and memorial markers.
-- Mill and forge choices replace working/broken/restitution dressing.
-- Enemy choices leave corpses, cleared residue, or altered future spawn sets.
-- NPCs relocate to cemetery, assembly, castle, or glade based on explicit flags.
-
-## Explosion Control
-
-- Each quest owns at most one major flag and two minor reactions.
-- Later dialogue reacts to categories, not every historical combination.
-- Three values select tone and pressure; explicit flags select facts.
-- Optional witnesses contribute interchangeable testimony strength while retaining unique epilogues.
-- Every unavailable NPC has a document/token fallback.
-
-## Save Compatibility
-
-Missing `story_state` creates version 1 with neutral values. Existing completed objectives seed only facts that are unambiguous: completed first encounter sets `road_pack_defeated`; it does not guess an evidence choice. Old saves receive a one-time report choice when next speaking to Anwen.
+`data/story_campaign.json` supplies the journal's chapter questions, evidence with source/kind/gate, decisions, and ending costs. Evidence gate is either `{quest, objective}` or `{flag, value}`; unknown evidence is withheld rather than described as discovered.

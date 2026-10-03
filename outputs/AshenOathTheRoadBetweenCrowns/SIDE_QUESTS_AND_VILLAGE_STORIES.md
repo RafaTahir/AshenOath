@@ -1,51 +1,27 @@
-# Side Quests And Village Stories
+# Six deep stories and four interludes
 
-Each quest changes a later line, witness, preparation, or visible world state. Existing systems and enemies are reused.
+## Deep stories
 
-## 1. `side_widows_bell` — A Widow's Bell
+**A Widow's Bell:** Elna first remembers the man she loved, including his small ridiculous failures. The gate fragment establishes Harl's act without becoming a complete husband. Full public account, a gentler account with preserved evidence, or privately telling everything lets her control participation. Return to a changed bell and a family that has heard something specific.
 
-Elna says Harl died protecting travelers. His grave is empty because he helped bar Greyfen's gate and fled before dying alone. Recover his gravebound memory. Tell Elna the full truth, a merciful account, or let Harl speak through his token. Flags affect Elna's finale testimony and the bell's tone. Reward: Bitterleaf Tonic plus cemetery safe rest.
+**Iron Remembers:** Tor's marked stock still serves doors, carts, and tools. Gradual replacement makes memorial work without dismantling shelter; disclosed use keeps tools and funds replacement; surrender gives families the stock while ordinary scrap keeps the forge alive. Follow the chosen process back to a useful object and a public account.
 
-## 2. `side_iron_remembers` — Iron Remembers
+**Bitter Roots:** begin with Toma's feverish daughter. Gather ordinary roots, inspect the ash bed separately, then negotiate a treatment. Private continuation works now but denies informed choice; disclosure offers clean-root alternatives even to those refusing ash; closure accepts slower treatment and continued care. Mira's own freely offered account is distinct from family consent. Garden inspection never completes `mira_choice`.
 
-Tor discovers his best inherited iron came from refugee weapons. Trace three Greyfen objects made from it. He can melt them into memorial nails, keep the tools in use, or surrender his forge. The choice changes forge visuals, crafting prices, and Tor's willingness to testify. Reward: cheaper Iron Traps or stronger Rot Oil.
+**The Black Dog Contract:** compare boot marks, bandit attack, and the damaged protection path. Toma's child was saved; neighboring sheep were lost because he concealed the danger. Relocate it beyond marked boundaries, maintain disclosed supervision with withdrawal possible, or settle it while recording both its protection and losses. Do not make it an articulate friendly resurrected person.
 
-## 3. `side_bitter_roots` — Bitter Roots
+**The Road That Bends:** share practical action with Rook, walk a false marker against his inherited route, then choose its circulation. A protected usable copy can earn voluntary testimony. Public family marks are exposure without consent. Destroying the map also removes future travelers' aid. Return to the map and Rook's changed willingness to be reached.
 
-Mira's medicine grows well because the soil contains human ash. Collect roots, find her private test bed, and decide whether she may continue under consent, destroy it, or disclose it publicly. Changes potion supply, Mira trust, and Act II testimony. Reward: Moon Oil and potion discount, with different moral cost.
+**The Bannerless:** corroborate Senn through soldiers' signed refusal and the people affected by present raids. Carry testimony openly, shield homes, or read the refusal at assembly. An unavailable Senn never blocks the record. Refusal shows a possible choice; it does not absolve what the soldiers did earlier.
 
-## 4. `side_black_dog` — The Black Dog Contract
+## Interludes
 
-Toma secretly feeds a Wychwood Stalker because it once led his daughter away from bandits. Investigate the fold and camp. Kill, trap and relocate, or leave the creature under Toma's care. Changes a later forest encounter and Toma's honesty. Reward: Iron Trap and alternate Wychwood passage.
+**The Man Who Walked Home:** Len repeats a gate and lantern memory. Name and settle it publicly or privately while preserving the account. He cannot supply living ritual consent.
 
-## 5. `side_empty_grave` — The Man Who Walked Home
+**Oren's Red Thread:** return his belonging to a named place. Keep grief a deliberate action, not another lore quota. The account distinguishes Oren's new painting from the older restored name.
 
-A grave is empty, yet muddy footprints end at a locked house. The corpse returned to retrieve the name token its family hid. Return the token, burn the body, or preserve it for Anwen. Changes grave state and supplies a name fragment. Reward: Grave Moss and reduced Ghoulkin aggression near the cemetery.
+**A Measure of Ash:** the true weight can go to farmer, healer, or assembly. Each person has a concrete use; it complements the operational mill decision without replacing it.
 
-## 6. `side_childs_charm` — Oren's Red Thread
+**Three Candles Unlit:** light Bram's, Sella's, and Oren's candles after understanding whom they remember. The payoff is three remembered people and a maintained place, not bonus consent.
 
-Trace the child's scratched token from the first clearing to three villagers who each deny knowing it. Learn Oren was born among the refugees' descendants. Give the charm to Rook, place it at the shrine, or return it to Oren's surviving aunt. Changes Rook trust and finale memorials. Reward: Ash Bomb and a reliable testimony fragment.
-
-## 7. `side_soldiers_debt` — The Bannerless
-
-A wounded bandit was once a Vargan levy. Heal and question him, trade him to Edric, or leave him to Greyfen judgment. He can reveal a castle route or become a hostile reinforcement. Reward: route access or coin plus fear increase.
-
-## 8. `side_millers_measure` — A Measure of Ash
-
-The miller has been diluting flour to hide pale grave ash. Determine whether he acted from greed or fear of famine. Close the mill, expose him, or organize rationing. Changes food props, villager dialogue, and Act III crowd stability. Reward: village support rather than coin.
-
-## 9. `side_rooks_map` — The Road That Bends
-
-Rook owns a map stitched from survivor testimony. Recover a missing piece from Wychwood without leading monsters back to him. Copy it for Anwen, keep it private, or give it to Edric. Changes road markers and who controls the castle approach. Reward: reduced travel encounters and Rook testimony.
-
-## 10. `side_three_candles` — Three Candles Unlit
-
-Three Greyfen households refuse to light memorial candles. Each has a different reason: shame, denial, and fear of attracting the dead. Resolve them by truth, practical aid, or coercion. The number lit changes shrine appearance, Anwen trust, and finale stability. Reward: shrine blessing duration.
-
-## Side-Quest Fail-Safes
-
-- Refusal never blocks a main quest.
-- Required evidence has an alternate source in a main-path location.
-- Dead or unavailable NPCs leave notes, tokens, or relocated witnesses.
-- Choices set explicit flags once; repeat interaction becomes an aftermath conversation.
-- Rewards are granted only after the visible consequence is applied.
+Stable IDs stay in `data/quests.json`. `story_depth` distinguishes six substantial stories from four interludes. Every optional outcome changes perspective, support, or a place; no optional story gates understanding or any of the four finale intentions.

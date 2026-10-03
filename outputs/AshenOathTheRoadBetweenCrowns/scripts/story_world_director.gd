@@ -246,7 +246,7 @@ static func _mira(game, parent: Node3D) -> void:
 	var tone := GREEN if treatment != "replacement" else LINEN
 	for index in range(3):
 		_box(game, parent, "MiraTreatmentPot", Vector3(-7.5 + float(index) * 0.32, 0.9, -1.65), Vector3(0.16, 0.2, 0.16), tone)
-	var heading := {"private": "MIRA'S TREATMENT\nNames kept in confidence", "consented": "MIRA'S TREATMENT\nPatients chose disclosure", "replacement": "MIRA'S NEW REMEDY\nNo sacrifice roots"}.get(treatment, "MIRA'S TREATMENT")
+	var heading: String = {"private": "MIRA'S TREATMENT\nNames kept in confidence", "consented": "MIRA'S TREATMENT\nPatients chose disclosure", "replacement": "MIRA'S NEW REMEDY\nNo sacrifice roots"}.get(treatment, "MIRA'S TREATMENT")
 	_label(parent, "MiraTreatmentNotice", heading, Vector3(-7.1, 1.8, -1.6), tone)
 
 static func _tor(game, parent: Node3D) -> void:
@@ -269,7 +269,7 @@ static func _tor(game, parent: Node3D) -> void:
 static func _rook(game, parent: Node3D) -> void:
 	var disclosure := str(_flag(game, "rook_disclosure"))
 	if disclosure == "": return
-	var text := {"protected": "ROOK'S SHELTERED ROUTE\nNo names on the public map", "public": "ROOK'S PUBLIC ROUTE\nWalked with his permission", "erased": "ROOK'S MAP WITHDRAWN\nThe false road is closed"}.get(disclosure, "ROOK'S ROUTE")
+	var text: String = {"protected": "ROOK'S SHELTERED ROUTE\nNo names on the public map", "public": "ROOK'S PUBLIC ROUTE\nWalked with his permission", "erased": "ROOK'S MAP WITHDRAWN\nThe false road is closed"}.get(disclosure, "ROOK'S ROUTE")
 	_notice(game, parent, Vector3(-9.0, 0, 7.0), text, GREEN if disclosure == "protected" else PAPER)
 
 static func _guardian(game, parent: Node3D) -> void:

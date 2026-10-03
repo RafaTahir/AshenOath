@@ -1,74 +1,35 @@
-# Full Game Story Arc
+# Revised full campaign arc
 
-## Prologue: The Road of Crows
+## Act I — a contract becomes a promise
 
-- **Objective:** Identify three missing travelers, survive the first Ghoulkin pack, and report what the road carried back.
-- **Location:** Greyfen, old road, first Wychwood clearing.
-- **NPCs:** Kael, Anwen, Rook, Mira, Tor.
-- **Enemies:** Two Ghoulkin, Stalker, Raider, Brute.
-- **Reveal:** The creatures collect identifying objects and carry shrine thread and Vargan wire.
-- **Choice:** Give Anwen all evidence, report it publicly, or retain the scratched token.
-- **Consequence:** Anwen trust, Greyfen fear, and access to shrine records.
-- **Gameplay:** Optional testimony, order-independent clues, staged combat, aftermath inspection, return report.
-- **Assets:** Existing village, road, characters, enemies, clues, token prop.
-- **Complexity:** Medium. This expands the working slice rather than adding a zone.
+**Road of Crows:** Kael helps a living driver through Greyfen's threshold before accepting the missing-traveler account. Bram's repair, Sella's shrine thread, Oren's token, drag marks, and Vargan wire answer different questions. Preparation changes the clearing. An explicit return decision gives the token privately, publicly, or retains it with copies. Kael promises to stay; the bell answers.
 
-## Act I: What Greyfen Buried
+**Bell Beneath Greyfen:** graves carry fragments rather than returned people. Anwen admits the novice's death and her resealing. The chapel offers redirected danger, released memory, or temporary containment. Each is a method with a cost, not an innocence test.
 
-- **Objective:** Follow the ringing cemetery bell and learn why true names alter the dead.
-- **Locations:** Cemetery, ruined Crow Chapel, old mill yard, shallow Wychwood.
-- **NPCs:** Anwen, Elna, Mira, Tor, Toma.
-- **Enemies:** Ghoulkin, Bog Wretch, one Gravebound apparition.
-- **Reveal:** The shrine deliberately removed names from burial rites; Greyfen iron contains material taken from the dead.
-- **Choice:** Cleanse the Crow Shrine, disturb it to recover memory, or leave it bound.
-- **Consequence:** Shrine appearance, blessing/curse state, encounter behavior, and Anwen's willingness to confess.
-- **Gameplay:** Bell timing, grave clues, chapel opening, Moon Oil preparation, ambush, altered tracks.
-- **Assets:** Existing cemetery kit, graves, shrine, bell; small chapel-door and register-fragment props.
-- **Complexity:** Medium.
+**Teeth in the Rain:** the Wretch's bounded fragment demonstrates naming. The oil exposes a binding but does not decide how it should be treated. Destroy, study within limits, or settle Oren's memory privately. All retain access to the oil formula. The evidence chain establishes why the road failed now.
 
-## Act II: The Price of Survival
+## Act II — people must eat while truth travels
 
-- **Objective:** Reconstruct the refugee register and trace how Greyfen profited from the massacre.
-- **Locations:** Deeper Wychwood, burned farmstead, marsh crossing, old mill interior, bandit road.
-- **NPCs:** Rook, Mira, Toma, Tor, survivor-bandit Captain Senn represented with the existing bandit rig.
-- **Enemies:** Bandits, Stalkers, Bog Wretch, Ghoulkin variants using current behavior.
-- **Reveal:** Rook descends from a survivor. Mira knowingly grows medicine in ash-laced soil. Tor's inherited iron stock came from the massacre site.
-- **Choice:** Publish recovered names immediately or use them first to weaken the supernatural binding.
-- **Consequence:** Panic or secrecy, vendor/help states, road hostility, and which villagers later testify.
-- **Gameplay:** Household investigations, optional theft or persuasion, crafting, route choices, human encounter with surrender state.
-- **Assets:** Recombined village interiors, forest, mill machinery props, marsh planes, bandit camp.
-- **Complexity:** Medium-high, delivered as separate compact spaces.
+**The Names They Burned:** separated household fragments reconstruct the sanctuary promise. Rook removes homes from the copy before handing it over. Publish names and the order now or prepare protected copies and warnings before the assembly. Both keep the record; neither silently pledges Rook. Edric's ration-backed renewal becomes a present threat.
 
-## Act III: Blood Under Stone
+**Ash at the Mill:** the measure connects ash totals to missing wagons. Protect a route through the encounter and retain signed evidence. Close tainted channels and use reserves; continue limited supervised operation; or begin clean repair and restitution. `mill_operation` records this practical method separately from the legacy ledger outcome `mill_fate`. Even the replacement of a contaminated working sheet happens after a signed copy is kept.
 
-- **Objective:** Enter Castle Vargan, recover the command ledger, and decide how Edric will answer for continued concealment.
-- **Locations:** Castle approach, outer court, ruined record hall, undercroft.
-- **NPCs:** Edric, Anwen, Rook, Gravebound Knight Captain Ors Halvern.
-- **Enemies:** Gravebound Knight, bandits/guards, Wychwood creatures drawn to the ledger.
-- **Reveal:** Edric did not order the massacre, but found proof years ago and suppressed it to preserve Greyfen and his house. Halvern refused the original order and was executed.
-- **Choice:** Accept Edric's cooperation, expose him without protection, or compel testimony through the recovered ledger.
-- **Consequence:** Castle access, village defenses, final allies, and whether Edric speaks voluntarily.
-- **Gameplay:** Ruin exploration, inscription puzzle through interactables, Rot Oil preparation, boss encounter with dialogue interruption.
-- **Assets:** Existing ruins and knight; modular walls, ledger, broken banners, court dressing.
-- **Complexity:** High but bounded to two authored castle spaces.
+**A Soldier Without a Banner:** Senn admits original participation and faces his present raids. Surrender under custody and voluntary testimony, disarmed exile with a written account, or execution with surviving documentary proof remain explicit choices. Deserter testimony is evidence of refusal, not absolution for earlier conduct.
 
-## Finale: The Hart Remembers
+## Act III — the emergency repeats the crime
 
-- **Objective:** Open the old road, assemble witnesses, and resolve the covenant.
-- **Location:** White Hart Glade layered over the original massacre road.
-- **NPCs:** Hart, Anwen, Edric, optional Rook/Mira/Tor/Elna/Toma witnesses.
-- **Enemy:** White Hart Avatar only if negotiation collapses or the player chooses destruction.
-- **Reveal:** The Hart was bound by mutually witnessed consent from frightened leaders; no single stolen key can undo it. A new public witness can replace the old hidden covenant.
-- **Choice:** Witness, Mercy, Duty, or Ash.
-- **Gameplay:** Consequence-dependent approach, spoken names, optional final combat, multi-party dialogue, visible road transformation.
-- **Assets:** Existing Hart and glade-compatible forest; memorial markers and road-state variants.
-- **Complexity:** High narrative complexity, modest technical scope.
+**Blood Under Stone:** compare evidence at Vargan, obtain the command copy, and confront Edric's six years of suppression. His grain is real, his household condition is coercive. Protected voluntary cooperation withdraws his seal; exposure challenges his authority without fabricating consent; compulsion obtains facts only. Original and copy are distinguished so every method retains indispensable proof.
 
-## Epilogue States
+**The Last Witness:** Halvern is the last witness to the military command, not a second complete witness. His memory ends at refusal and execution. Kael confesses his own retreat before deciding whether to keep, settle, or destroy the remaining fragment. The order has been copied in all routes. No ending depends on preserving him.
 
-- **Witness:** Names are carved along the reopened road. Greyfen loses status and trade but becomes honest enough to endure.
-- **Mercy:** The Hart is free and selected names remain private. Families heal unevenly; the hidden debt may return.
-- **Duty:** Kael or Anwen becomes the new keeper. Greyfen survives, but a living person carries the burden deliberately.
-- **Ash:** The Hart dies. Monsters fade, fields fail slowly, and Greyfen teaches a cleaner lie.
+## Assembly and finale
 
-NPC cards resolve from explicit flags: Anwen trust, Elna truth, Mira exposure, Tor restitution, Toma confession, Rook ancestry, Edric testimony, Halvern fate, shrine state, and published names.
+**Crowns Without Mercy:** separate aid from assent. Stop the unstable renewal before inviting speech. Earlier voluntary Edric can remove the grain condition; otherwise Kael challenges it and carries the copied proof. Invite only willing speakers, carry the account himself, or compel Edric's evidentiary admission. Food and safe departure remain available to those who refuse. Kael's admission is public and cannot purchase anyone else's promise.
+
+**The Hart Remembers:** approach through changed places, hear the only complete witness, and understand four costs. Kael's own uncoerced work plus main-path proof suffices. Optional willing people share work. Witness and Mercy are releases the Hart explicitly accepts; Duty is voluntary containment; Ash is destruction by force. Recovered human proof survives each outcome.
+
+## Epilogue intent
+
+Resolve people as lives continuing: what Anwen makes available, what Rook can share safely, whose treatment Mira continues, how Tor replaces working iron, what Elna tells her family, and what boundaries Toma maintains. Do not print raw values. Privacy does not erase wrongdoing. Publicity does not guarantee safety. Scattered memory and missing livelihood must have human consequences, not merely a sky-color change.
+
+Stable chapter IDs, objective IDs, scene anchors, and evidence fallback routes are retained. The separately coordinated `side_bitter_roots:study_roots` inspection is optional and never chooses a treatment outcome.

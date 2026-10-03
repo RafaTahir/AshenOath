@@ -38,14 +38,14 @@ static func _greyfen_card(state) -> String:
 
 static func _anwen_card(state) -> String:
 	var shrine := _flag(state, "crow_shrine_state")
-	var remedy := {"cleansed":"She tends the unbound shrine without asking it to hide the road again.", "disturbed":"She works among the disturbed stones, separating what can be repaired from what must remain visible.", "bound":"She marks the limits of the surviving rite and refuses to treat it as absolution."}.get(shrine, "She keeps the shrine record open; what was never decided is left unresolved.")
+	var remedy: String = {"cleansed":"She tends the unbound shrine without asking it to hide the road again.", "disturbed":"She works among the disturbed stones, separating what can be repaired from what must remain visible.", "bound":"She marks the limits of the surviving rite and refuses to treat it as absolution."}.get(shrine, "She keeps the shrine record open; what was never decided is left unresolved.")
 	return "SISTER ANWEN\nAnwen's care does not undo her concealment. " + remedy + " " + _participation(state, "anwen")
 
 static func _vargan_card(state) -> String:
 	var stance := _flag(state, "edric_stance")
-	var edric := {"cooperate":"Edric surrenders the command record to guarded custody. Cooperation buys him no ownership over a family's silence.", "exposed":"Edric's title no longer shelters the proven orders. He must answer for them before people he once excluded.", "compelled":"Edric speaks under compulsion. His words cannot replace corroboration or become a willing pledge."}.get(stance, "The recovered orders remain evidence even where Edric's own account is absent.")
+	var edric: String = {"cooperate":"Edric surrenders the command record to guarded custody. Cooperation buys him no ownership over a family's silence.", "exposed":"Edric's title no longer shelters the proven orders. He must answer for them before people he once excluded.", "compelled":"Edric speaks under compulsion. His words cannot replace corroboration or become a willing pledge."}.get(stance, "The recovered orders remain evidence even where Edric's own account is absent.")
 	var halvern := _flag(state, "halvern_fate")
-	var knight := {"witness":"Halvern's bounded memory of refusal is preserved beside the orders it contradicts.", "released":"Halvern is released from his repetition; the account recovered before his departure remains.", "release":"Halvern is released from his repetition; the recovered account remains.", "destroyed":"Halvern's remaining memory is lost. No later account can pretend that he agreed to its use.", "defeated":"The knight's guard was broken. Without a recorded final decision, his release or consent is not assumed."}.get(halvern, "Halvern's fate remains unrecorded; the gaps in his account are not filled with certainty.")
+	var knight: String = {"witness":"Halvern's bounded memory of refusal is preserved beside the orders it contradicts.", "released":"Halvern is released from his repetition; the account recovered before his departure remains.", "release":"Halvern is released from his repetition; the recovered account remains.", "destroyed":"Halvern's remaining memory is lost. No later account can pretend that he agreed to its use.", "defeated":"The knight's guard was broken. Without a recorded final decision, his release or consent is not assumed."}.get(halvern, "Halvern's fate remains unrecorded; the gaps in his account are not filled with certainty.")
 	return "HOUSE VARGAN\n" + edric + " " + knight
 
 static func _participation(state, actor: String) -> String:
@@ -62,7 +62,7 @@ static func _person_card(actor: String, state) -> String:
 		"elna":
 			var outcome := _flag(state, "widow_truth")
 			if outcome == "": return ""
-			var body := {"told":"Elna learns what Harl did at the gate. She keeps a memory of the man she loved beside the account of the harm he helped cause.", "comforted":"Elna receives the gentler account Kael chose. Its silence remains his responsibility; grief does not turn an omission into truth.", "private":"Elna hears the recovered memory in private. The proof of the gate stays on record; her grief is not offered as a public performance.", "token":"Elna hears the recovered memory without Kael arranging its answer. She decides what to carry home."}.get(outcome, "Elna keeps the bell and decides how its story belongs in her own life.")
+			var body: String = {"told":"Elna learns what Harl did at the gate. She keeps a memory of the man she loved beside the account of the harm he helped cause.", "comforted":"Elna receives the gentler account Kael chose. Its silence remains his responsibility; grief does not turn an omission into truth.", "private":"Elna hears the recovered memory in private. The proof of the gate stays on record; her grief is not offered as a public performance.", "token":"Elna hears the recovered memory without Kael arranging its answer. She decides what to carry home."}.get(outcome, "Elna keeps the bell and decides how its story belongs in her own life.")
 			return "ELNA\n" + body + " " + _participation(state, "elna")
 		"tor":
 			var outcome := _flag(state, "iron_fate")

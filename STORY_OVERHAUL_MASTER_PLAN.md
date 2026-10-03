@@ -1,7 +1,7 @@
 # Ashen Oath Story Centered Overhaul Master Plan
 
 **Date:** 3 October 2026  
-**Status:** Proposed creative direction and delivery roadmap for review  
+**Status:** Approved direction; implementation and publication authorized. See OVERHAUL_PROGRESS.md for shipped scope and deferred production targets.  
 **Project:** Ashen Oath: The Road Between Crowns  
 **Repository:** `D:\Projects\AshenOath`  
 **Game root:** `outputs/AshenOathTheRoadBetweenCrowns/`

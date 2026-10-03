@@ -1,67 +1,28 @@
-# Ashen Oath Story Implementation Context Brief
+# Ashen Oath — version-two implementation context
 
-## Direction
+## Active direction
 
-Ashen Oath is an 8-12 hour dark-fantasy action RPG about broken promises, denied witnesses, and inherited guilt. Writing is restrained, playable, and human. The Witcher 3 is a quest-design benchmark only; do not copy its IP.
+Preserve Greyfen, Kael, Anwen, the White Hart, inherited institutional guilt, and monsters as denied testimony. The revised campaign puts a present ration-backed renewal in conflict with freely witnessed responsibility. Core subtitle/dialogue data is version two. Main-route target is 6–8 hours and full route 8–12, not measured duration.
 
-## Main Mystery
+## Present cause
 
-House Vargan promised sanctuary during the War of Three Crowns. Greyfen barred its gate, the shrine hid the road through a White Hart covenant, and Vargan soldiers killed those trapped between them. Bodies were burned without names; their ash and iron built modern Greyfen. The bound Hart is the only complete witness. Ghoulkin are bodies animated by fragments of erased memory.
+Road repairs expose tokens; Oren restores an older name; Anwen's containment fails; Ghoulkin gather the testimony; Vargan recovery patrols reclaim it. Edric proposes renewed concealment with grain conditional on assent. The assembly removes that condition before voluntary speech.
 
-## Protagonist
+## Character and canon anchors
 
-Kael is a defined but steerable oath-bound hunter. He once obeyed a retreat order that abandoned civilians. His four possible orientations are Witness, Mercy, Duty, and Ash. He speaks concretely and avoids theatrical toughness.
+Kael's unrelated escort failure was eight years ago. He freely stays after returning with the missing travelers' account. Halvern and returned Len are limited fragments. The Hart remains the only complete supernatural witness. Documents establish facts, never somebody else's consent. Mercy protects vulnerable private memories, not institutional wrongdoing. Duty is willing stewardship. Ash destroys the Hart, not recovered human evidence.
 
-## Current Playable Spine
+## Authoring sources
 
-Greyfen -> Sister Anwen -> Wychwood clues -> five-enemy Ghoulkin clearing -> aftermath -> Greyfen report. The next section is the cemetery and Ruined Crow Chapel.
+- `data/dialogue.json`, `data/campaign_dialogue.json`: playable turns, conditions, previews, costs, actions.
+- `data/quests.json`: stable IDs, revised objectives, six deep optional stories and four interludes.
+- `data/story_campaign.json`: chapter questions, evidence provenance/gates, decision outcomes, four ending costs.
+- `STORY_BIBLE_ASHEN_OATH.md`, `STORY_ARC_FULL_GAME.md`, `CHARACTER_ARCS.md`, `CHOICE_AND_CONSEQUENCE_SYSTEM_PLAN.md`: revised authority.
 
-## Existing Cast
+## Integration flags
 
-Anwen, Mira, Rook, Edric, Elna, Tor, Toma, White Hart, villagers. Use existing enemies: Ghoulkin pack, Bog Wretch, Gravebound Knight, Bandit, Hart Avatar.
+`report_decision` explicitly commits `return_village`. Preserve existing legacy report values and record `kael_pledge` and `cemetery_bell_rung`. `mill_operation=closed/supervised/restitution` is separate from ledger `mill_fate`. `witness_consent_*` supplies voluntary/refused/compelled facts; protected Rook is voluntary with `rook_disclosure=protected`. `kael_confessed`, `command_proof_recovered`, `renewal_announced`, and `renewal_stopped` establish main-path progress. Unknown historic choices stay unknown.
 
-## Choice Rules
+## Scope
 
-- Explicit major flags plus `anwen_trust`, `greyfen_fear`, and `hart_debt`.
-- No generalized branching engine.
-- Every quest changes a relationship, encounter, preparation, or place.
-- Investigation changes combat but missing optional clues never blocks progression.
-- Every major quest includes aftermath and reporting.
-- Final endings remain explicit choices, not hidden score results.
-
-## Human Voice Rules
-
-- One to three sentences per ordinary turn.
-- Use objections, corrections, remembered details, and silence instead of exposition.
-- Anwen self-edits; Mira speaks clinically; Rook jokes when afraid; Edric becomes plain when control fails.
-- Voice main-path and payoff lines first. Subtitles remain authoritative.
-- Scratch/generated speech requires human review and is not automatically final.
-
-## Main Quest Order
-
-1. Road of Crows
-2. Bell Beneath Greyfen
-3. Teeth in the Rain
-4. The Names They Burned
-5. Ash at the Mill
-6. A Soldier Without a Banner
-7. Blood Under Stone
-8. The Last Witness
-9. Crowns Without Mercy
-10. The Hart Remembers
-
-## Immediate Ticket Order
-
-`NARR-003 -> QUEST-001 -> DIALOGUE-001 -> CHOICE-001 -> WORLD-001 -> NPC-001 -> ENEMY-002 -> WORLD-002 -> AUDIO-003 -> CINEMATIC-001 -> SAVE-002 -> QA-001`
-
-## Technical Constraints
-
-Reuse objective progression, dialogue actions, world flags, inventory/crafting, NPC staging, enemy spawn/leash, audio, save/load, and cemetery helper. Keep the Web build and Potato Mode safe. Add only small legal assets when a procedural or existing asset cannot carry the story.
-
-## Credit-Saving Instruction
-
-Future Codex tasks read this brief, the active ticket, and only the directly relevant design document. Do not scan the repository, reread historical phase files, or load the full asset manifest unless the ticket requires it.
-
-## Deployment Instruction
-
-Planning-only tickets do not deploy. Implementation tickets follow the repository workflow unless the user explicitly writes `DO NOT DEPLOY`. STORY-ARCH-001 itself is documentation-only and must not be exported, committed, pushed, or deployed.
+Reuse existing authored regions, objectives, actors, enemies, crafting, world flags, and save system. Read the active brief and directly relevant source, not all historical reports or asset manifests. Rewritten speech must not silently use old recordings with different content. Current user instruction is implementation without tests, verification, or review; exports, push, and deployment are handled by the root task.

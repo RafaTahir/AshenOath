@@ -77,3 +77,5 @@ outputs/AshenOath_Web_Slim/
 !outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/*_orm.jpg.import
 !web/
 !web/**
+.vercel
+.env*
