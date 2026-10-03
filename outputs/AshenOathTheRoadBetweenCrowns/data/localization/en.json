@@ -2962,6 +2962,12 @@
       "speaker": "",
       "context": "decision_contexts.contexts.final_covenant"
     },
+    "decision_contexts.contexts.main_ash_at_the_mill:mill_choice.facts.mill_worker_account.source": {
+      "source": "Workers brought out through the escape channel",
+      "text": "Workers brought out through the escape channel",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_ash_at_the_mill:mill_choice.facts.mill_worker_account"
+    },
     "decision_contexts.contexts.main_ash_at_the_mill:mill_choice.facts.mill_worker_account.text": {
       "source": "The rescued workers reached clean air and can keep their own wage accounts.",
       "text": "The rescued workers reached clean air and can keep their own wage accounts.",
@@ -2973,6 +2979,12 @@
       "text": "Workers reached the south yard",
       "speaker": "",
       "context": "decision_contexts.contexts.main_ash_at_the_mill:mill_choice.facts.mill_worker_account"
+    },
+    "decision_contexts.contexts.main_ash_at_the_mill:mill_choice.facts.saved_wage_chest.source": {
+      "source": "The rescued mill wage chest",
+      "text": "The rescued mill wage chest",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_ash_at_the_mill:mill_choice.facts.saved_wage_chest"
     },
     "decision_contexts.contexts.main_ash_at_the_mill:mill_choice.facts.saved_wage_chest.text": {
       "source": "The wage chest has been moved out of the channel's reach. Household shares remain documented.",
@@ -3136,6 +3148,12 @@
       "speaker": "",
       "context": "decision_contexts.contexts.main_blood_under_stone:last_witness_hook"
     },
+    "decision_contexts.contexts.main_blood_under_stone:ledger_choice.facts.recovered_command.source": {
+      "source": "Vargan record hall ledger",
+      "text": "Vargan record hall ledger",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_blood_under_stone:ledger_choice.facts.recovered_command"
+    },
     "decision_contexts.contexts.main_blood_under_stone:ledger_choice.facts.recovered_command.text": {
       "source": "The command ledger can be compared with the refugee register. A credible copy can survive a decision about the original.",
       "text": "The command ledger can be compared with the refugee register. A credible copy can survive a decision about the original.",
@@ -3268,6 +3286,12 @@
       "speaker": "",
       "context": "decision_contexts.contexts.main_crowns_without_mercy:confession_choice"
     },
+    "decision_contexts.contexts.main_last_witness:halvern_choice.facts.halvern_guard_open.source": {
+      "source": "The undercroft hearing",
+      "text": "The undercroft hearing",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_last_witness:halvern_choice.facts.halvern_guard_open"
+    },
     "decision_contexts.contexts.main_last_witness:halvern_choice.facts.halvern_guard_open.text": {
       "source": "Halvern's guard has yielded. An opening for his account does not make the bound memory complete.",
       "text": "Halvern's guard has yielded. An opening for his account does not make the bound memory complete.",
@@ -3327,6 +3351,12 @@
       "text": "Halvern's fragment holds a bounded refusal. It cannot answer every question about what followed.",
       "speaker": "",
       "context": "decision_contexts.contexts.main_last_witness:halvern_choice"
+    },
+    "decision_contexts.contexts.main_names_they_burned:names_choice.facts.refugee_register.source": {
+      "source": "Surviving refugee register pages",
+      "text": "Surviving refugee register pages",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_names_they_burned:names_choice.facts.refugee_register"
     },
     "decision_contexts.contexts.main_names_they_burned:names_choice.facts.refugee_register.text": {
       "source": "The recovered pages restore the refugee names. Family addresses can be separated from the public account.",
@@ -3430,6 +3460,12 @@
       "speaker": "",
       "context": "decision_contexts.contexts.main_road_of_crows:return_village"
     },
+    "decision_contexts.contexts.main_soldier_without_banner:senn_choice.facts.deserters_muster.source": {
+      "source": "Hidden checkpoint muster roll",
+      "text": "Hidden checkpoint muster roll",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_soldier_without_banner:senn_choice.facts.deserters_muster"
+    },
     "decision_contexts.contexts.main_soldier_without_banner:senn_choice.facts.deserters_muster.text": {
       "source": "The hidden muster records the soldiers Senn left behind. Their refusal is distinct from his account.",
       "text": "The hidden muster records the soldiers Senn left behind. Their refusal is distinct from his account.",
@@ -3489,6 +3525,12 @@
       "text": "An admission establishes a person's account; it does not excuse the road killings or supply another person's consent.",
       "speaker": "",
       "context": "decision_contexts.contexts.main_soldier_without_banner:senn_choice"
+    },
+    "decision_contexts.contexts.main_teeth_in_rain:bog_core_choice.facts.chapel_names.source": {
+      "source": "Erased Crow Chapel names",
+      "text": "Erased Crow Chapel names",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_teeth_in_rain:bog_core_choice.facts.chapel_names"
     },
     "decision_contexts.contexts.main_teeth_in_rain:bog_core_choice.facts.chapel_names.text": {
       "source": "The erased chapel names include Oren. His recovered name can be spoken without treating a memory fragment as the whole person.",
@@ -6616,6 +6658,534 @@
       "speaker": "",
       "context": "items.standard_arrow"
     },
+    "journal_evidence_details.details.bram.sections.limits.body": {
+      "source": "The tool, brake and ledger preserve parts of his last work. They do not show the whole attack or identify the hand that began it.",
+      "text": "The tool, brake and ledger preserve parts of his last work. They do not show the whole attack or identify the hand that began it.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.bram.sections.limits"
+    },
+    "journal_evidence_details.details.bram.sections.limits.title": {
+      "source": "Limits of this record",
+      "text": "Limits of this record",
+      "speaker": "",
+      "context": "journal_evidence_details.details.bram.sections.limits"
+    },
+    "journal_evidence_details.details.bram.sections.reading.body": {
+      "source": "Bram stayed with the damaged wagon. An account that says he simply abandoned it leaves out the work visible here.",
+      "text": "Bram stayed with the damaged wagon. An account that says he simply abandoned it leaves out the work visible here.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.bram.sections.reading"
+    },
+    "journal_evidence_details.details.bram.sections.reading.title": {
+      "source": "What the cart establishes",
+      "text": "What the cart establishes",
+      "speaker": "",
+      "context": "journal_evidence_details.details.bram.sections.reading"
+    },
+    "journal_evidence_details.details.bram.sections.record.body": {
+      "source": "Bram's marked tool and the repair traces place him beside the cart. His ledger holds a page of crossed-out debts; his hand still grips the brake.",
+      "text": "Bram's marked tool and the repair traces place him beside the cart. His ledger holds a page of crossed-out debts; his hand still grips the brake.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.bram.sections.record"
+    },
+    "journal_evidence_details.details.bram.sections.record.title": {
+      "source": "At the damaged axle",
+      "text": "At the damaged axle",
+      "speaker": "",
+      "context": "journal_evidence_details.details.bram.sections.record"
+    },
+    "journal_evidence_details.details.bram.source": {
+      "source": "Cart tool and ledger",
+      "text": "Cart tool and ledger",
+      "speaker": "",
+      "context": "journal_evidence_details.details.bram"
+    },
+    "journal_evidence_details.details.command_proof.sections.bounded_account.body": {
+      "source": "Halvern recalls the promise of sanctuary, his refusal to close the road, and his execution. His memory ends there. It cannot testify about Edric's later decisions, and preserving it does not create a consenting living witness.",
+      "text": "Halvern recalls the promise of sanctuary, his refusal to close the road, and his execution. His memory ends there. It cannot testify about Edric's later decisions, and preserving it does not create a consenting living witness.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.command_proof.sections.bounded_account"
+    },
+    "journal_evidence_details.details.command_proof.sections.bounded_account.title": {
+      "source": "Halvern's retained account",
+      "text": "Halvern's retained account",
+      "speaker": "",
+      "context": "journal_evidence_details.details.command_proof.sections.bounded_account"
+    },
+    "journal_evidence_details.details.command_proof.sections.limits.body": {
+      "source": "A copied order establishes its written terms. It cannot supply every later memory or make a present person assent to a replacement oath.",
+      "text": "A copied order establishes its written terms. It cannot supply every later memory or make a present person assent to a replacement oath.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.command_proof.sections.limits"
+    },
+    "journal_evidence_details.details.command_proof.sections.limits.title": {
+      "source": "Limits of this record",
+      "text": "Limits of this record",
+      "speaker": "",
+      "context": "journal_evidence_details.details.command_proof.sections.limits"
+    },
+    "journal_evidence_details.details.command_proof.sections.reading.body": {
+      "source": "The command and register connect the people promised refuge to the actions taken against them. Distinct entries preserve distinct parts in that sequence; keeping them together makes the account harder to reduce to a single excuse.",
+      "text": "The command and register connect the people promised refuge to the actions taken against them. Distinct entries preserve distinct parts in that sequence; keeping them together makes the account harder to reduce to a single excuse.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.command_proof.sections.reading"
+    },
+    "journal_evidence_details.details.command_proof.sections.reading.title": {
+      "source": "Orders and names together",
+      "text": "Orders and names together",
+      "speaker": "",
+      "context": "journal_evidence_details.details.command_proof.sections.reading"
+    },
+    "journal_evidence_details.details.command_proof.sections.record.body": {
+      "source": "The ledger records sanctuary promised under a Vargan seal, the road closed, and refugee wagons transferred to shrine custody. The columns are written by different hands. The register preserves names separately from the command.",
+      "text": "The ledger records sanctuary promised under a Vargan seal, the road closed, and refugee wagons transferred to shrine custody. The columns are written by different hands. The register preserves names separately from the command.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.command_proof.sections.record"
+    },
+    "journal_evidence_details.details.command_proof.sections.record.title": {
+      "source": "The copied command",
+      "text": "The copied command",
+      "speaker": "",
+      "context": "journal_evidence_details.details.command_proof.sections.record"
+    },
+    "journal_evidence_details.details.command_proof.source": {
+      "source": "Copied command ledger",
+      "text": "Copied command ledger",
+      "speaker": "",
+      "context": "journal_evidence_details.details.command_proof"
+    },
+    "journal_evidence_details.details.drag_marks.sections.limits.body": {
+      "source": "A pattern of movement supports that reading. It does not give the creatures' own account, or establish who directed every movement.",
+      "text": "A pattern of movement supports that reading. It does not give the creatures' own account, or establish who directed every movement.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.drag_marks.sections.limits"
+    },
+    "journal_evidence_details.details.drag_marks.sections.limits.title": {
+      "source": "Limits of this record",
+      "text": "Limits of this record",
+      "speaker": "",
+      "context": "journal_evidence_details.details.drag_marks.sections.limits"
+    },
+    "journal_evidence_details.details.drag_marks.sections.reading.body": {
+      "source": "Kael takes this selection to mean that the creatures were gathering testimony. Hunger does not explain why these objects mattered more than the food.",
+      "text": "Kael takes this selection to mean that the creatures were gathering testimony. Hunger does not explain why these objects mattered more than the food.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.drag_marks.sections.reading"
+    },
+    "journal_evidence_details.details.drag_marks.sections.reading.title": {
+      "source": "Kael's reading of the tracks",
+      "text": "Kael's reading of the tracks",
+      "speaker": "",
+      "context": "journal_evidence_details.details.drag_marks.sections.reading"
+    },
+    "journal_evidence_details.details.drag_marks.sections.record.body": {
+      "source": "The drag marks pass untouched food sacks and follow the belongings that carry names. The supplies were available; they were left behind.",
+      "text": "The drag marks pass untouched food sacks and follow the belongings that carry names. The supplies were available; they were left behind.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.drag_marks.sections.record"
+    },
+    "journal_evidence_details.details.drag_marks.sections.record.title": {
+      "source": "What the tracks pass",
+      "text": "What the tracks pass",
+      "speaker": "",
+      "context": "journal_evidence_details.details.drag_marks.sections.record"
+    },
+    "journal_evidence_details.details.drag_marks.source": {
+      "source": "Tracks at the clearing approach",
+      "text": "Tracks at the clearing approach",
+      "speaker": "",
+      "context": "journal_evidence_details.details.drag_marks"
+    },
+    "journal_evidence_details.details.grave_child.sections.limits.body": {
+      "source": "The thread does not establish the child's name. Similar material elsewhere cannot fill that absence without a further recorded connection.",
+      "text": "The thread does not establish the child's name. Similar material elsewhere cannot fill that absence without a further recorded connection.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.grave_child.sections.limits"
+    },
+    "journal_evidence_details.details.grave_child.sections.limits.title": {
+      "source": "Limits of this record",
+      "text": "Limits of this record",
+      "speaker": "",
+      "context": "journal_evidence_details.details.grave_child.sections.limits"
+    },
+    "journal_evidence_details.details.grave_child.sections.reading.body": {
+      "source": "The thread connects the burial rites to the work of keeping memory disordered. The grave holds evidence of concealment as well as loss.",
+      "text": "The thread connects the burial rites to the work of keeping memory disordered. The grave holds evidence of concealment as well as loss.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.grave_child.sections.reading"
+    },
+    "journal_evidence_details.details.grave_child.sections.reading.title": {
+      "source": "A rite that concealed",
+      "text": "A rite that concealed",
+      "speaker": "",
+      "context": "journal_evidence_details.details.grave_child.sections.reading"
+    },
+    "journal_evidence_details.details.grave_child.sections.record.body": {
+      "source": "Shrine thread is tied from within the unnamed grave. The binding is part of the burial, not merely something dropped beside it.",
+      "text": "Shrine thread is tied from within the unnamed grave. The binding is part of the burial, not merely something dropped beside it.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.grave_child.sections.record"
+    },
+    "journal_evidence_details.details.grave_child.sections.record.title": {
+      "source": "Thread beneath the earth",
+      "text": "Thread beneath the earth",
+      "speaker": "",
+      "context": "journal_evidence_details.details.grave_child.sections.record"
+    },
+    "journal_evidence_details.details.grave_child.source": {
+      "source": "The unnamed child's grave",
+      "text": "The unnamed child's grave",
+      "speaker": "",
+      "context": "journal_evidence_details.details.grave_child"
+    },
+    "journal_evidence_details.details.grave_harl.sections.limits.body": {
+      "source": "A retained act cannot restore an intact husband or decide what his widow must make public. The account and her participation remain separate.",
+      "text": "A retained act cannot restore an intact husband or decide what his widow must make public. The account and her participation remain separate.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.grave_harl.sections.limits"
+    },
+    "journal_evidence_details.details.grave_harl.sections.limits.title": {
+      "source": "Limits of this record",
+      "text": "Limits of this record",
+      "speaker": "",
+      "context": "journal_evidence_details.details.grave_harl.sections.limits"
+    },
+    "journal_evidence_details.details.grave_harl.sections.reading.body": {
+      "source": "The surviving account concerns a gate. It preserves that part of Harl's past without returning the whole man who lived beyond it.",
+      "text": "The surviving account concerns a gate. It preserves that part of Harl's past without returning the whole man who lived beyond it.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.grave_harl.sections.reading"
+    },
+    "journal_evidence_details.details.grave_harl.sections.reading.title": {
+      "source": "The memory the bell carries",
+      "text": "The memory the bell carries",
+      "speaker": "",
+      "context": "journal_evidence_details.details.grave_harl.sections.reading"
+    },
+    "journal_evidence_details.details.grave_harl.sections.record.body": {
+      "source": "Road mud lies within Harl's disturbed burial. What belongs to the road has entered the place where Greyfen laid him to rest.",
+      "text": "Road mud lies within Harl's disturbed burial. What belongs to the road has entered the place where Greyfen laid him to rest.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.grave_harl.sections.record"
+    },
+    "journal_evidence_details.details.grave_harl.sections.record.title": {
+      "source": "Road mud inside the grave",
+      "text": "Road mud inside the grave",
+      "speaker": "",
+      "context": "journal_evidence_details.details.grave_harl.sections.record"
+    },
+    "journal_evidence_details.details.grave_harl.source": {
+      "source": "Harl's disturbed grave",
+      "text": "Harl's disturbed grave",
+      "speaker": "",
+      "context": "journal_evidence_details.details.grave_harl"
+    },
+    "journal_evidence_details.details.grave_soldier.sections.limits.body": {
+      "source": "An object cannot answer on a person's behalf. Any surviving watch fragment may preserve a fact; that does not make it a living witness able to consent to a new oath.",
+      "text": "An object cannot answer on a person's behalf. Any surviving watch fragment may preserve a fact; that does not make it a living witness able to consent to a new oath.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.grave_soldier.sections.limits"
+    },
+    "journal_evidence_details.details.grave_soldier.sections.limits.title": {
+      "source": "Limits of this record",
+      "text": "Limits of this record",
+      "speaker": "",
+      "context": "journal_evidence_details.details.grave_soldier.sections.limits"
+    },
+    "journal_evidence_details.details.grave_soldier.sections.reading.body": {
+      "source": "The workmanship connects the grave to Vargan. The mark identifies that connection more securely than it identifies every person involved.",
+      "text": "The workmanship connects the grave to Vargan. The mark identifies that connection more securely than it identifies every person involved.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.grave_soldier.sections.reading"
+    },
+    "journal_evidence_details.details.grave_soldier.sections.reading.title": {
+      "source": "An institutional mark",
+      "text": "An institutional mark",
+      "speaker": "",
+      "context": "journal_evidence_details.details.grave_soldier.sections.reading"
+    },
+    "journal_evidence_details.details.grave_soldier.sections.record.body": {
+      "source": "The soldier's grave is empty. A buckle carrying Vargan work remains within it.",
+      "text": "The soldier's grave is empty. A buckle carrying Vargan work remains within it.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.grave_soldier.sections.record"
+    },
+    "journal_evidence_details.details.grave_soldier.sections.record.title": {
+      "source": "The buckle left behind",
+      "text": "The buckle left behind",
+      "speaker": "",
+      "context": "journal_evidence_details.details.grave_soldier.sections.record"
+    },
+    "journal_evidence_details.details.grave_soldier.source": {
+      "source": "The empty soldier's grave",
+      "text": "The empty soldier's grave",
+      "speaker": "",
+      "context": "journal_evidence_details.details.grave_soldier"
+    },
+    "journal_evidence_details.details.mill_accounts.sections.limits.body": {
+      "source": "Useful flour does not erase the source recorded here. The ledger also does not make the households receiving it responsible for choosing what was ground into the system.",
+      "text": "Useful flour does not erase the source recorded here. The ledger also does not make the households receiving it responsible for choosing what was ground into the system.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.mill_accounts.sections.limits"
+    },
+    "journal_evidence_details.details.mill_accounts.sections.limits.title": {
+      "source": "Limits of this record",
+      "text": "Limits of this record",
+      "speaker": "",
+      "context": "journal_evidence_details.details.mill_accounts.sections.limits"
+    },
+    "journal_evidence_details.details.mill_accounts.sections.record.body": {
+      "source": "The mill's weights match the missing refugee wagons. Its account connects what was taken from those wagons to machinery that still supplies Greyfen's households.",
+      "text": "The mill's weights match the missing refugee wagons. Its account connects what was taken from those wagons to machinery that still supplies Greyfen's households.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.mill_accounts.sections.record"
+    },
+    "journal_evidence_details.details.mill_accounts.sections.record.title": {
+      "source": "The missing weight",
+      "text": "The missing weight",
+      "speaker": "",
+      "context": "journal_evidence_details.details.mill_accounts.sections.record"
+    },
+    "journal_evidence_details.details.mill_accounts.sections.relevance.body": {
+      "source": "The account can be preserved while the mill's future is decided. Evidence about its past and a way to feed the living both need attention; one cannot do the other's work.",
+      "text": "The account can be preserved while the mill's future is decided. Evidence about its past and a way to feed the living both need attention; one cannot do the other's work.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.mill_accounts.sections.relevance"
+    },
+    "journal_evidence_details.details.mill_accounts.sections.relevance.title": {
+      "source": "The record and the machinery",
+      "text": "The record and the machinery",
+      "speaker": "",
+      "context": "journal_evidence_details.details.mill_accounts.sections.relevance"
+    },
+    "journal_evidence_details.details.mill_accounts.source": {
+      "source": "Mill measure and ledger",
+      "text": "Mill measure and ledger",
+      "speaker": "",
+      "context": "journal_evidence_details.details.mill_accounts"
+    },
+    "journal_evidence_details.details.oren.sections.limits.body": {
+      "source": "The token cannot supply the whole account of Oren's death. It also cannot, by itself, give a name to another unnamed burial.",
+      "text": "The token cannot supply the whole account of Oren's death. It also cannot, by itself, give a name to another unnamed burial.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.oren.sections.limits"
+    },
+    "journal_evidence_details.details.oren.sections.limits.title": {
+      "source": "Limits of this record",
+      "text": "Limits of this record",
+      "speaker": "",
+      "context": "journal_evidence_details.details.oren.sections.limits"
+    },
+    "journal_evidence_details.details.oren.sections.reading.body": {
+      "source": "Wear preserves the trace of a familiar possession; the altered name points to deliberate interference with what it remembers. Those are different parts of the same object.",
+      "text": "Wear preserves the trace of a familiar possession; the altered name points to deliberate interference with what it remembers. Those are different parts of the same object.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.oren.sections.reading"
+    },
+    "journal_evidence_details.details.oren.sections.reading.title": {
+      "source": "An object carried and altered",
+      "text": "An object carried and altered",
+      "speaker": "",
+      "context": "journal_evidence_details.details.oren.sections.reading"
+    },
+    "journal_evidence_details.details.oren.sections.record.body": {
+      "source": "The wooden crow's wings are worn smooth. Its name has been scraped away, and the painted crow covers an older name token. The marks follow work on the name rather than damage across the whole object.",
+      "text": "The wooden crow's wings are worn smooth. Its name has been scraped away, and the painted crow covers an older name token. The marks follow work on the name rather than damage across the whole object.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.oren.sections.record"
+    },
+    "journal_evidence_details.details.oren.sections.record.title": {
+      "source": "A name beneath the paint",
+      "text": "A name beneath the paint",
+      "speaker": "",
+      "context": "journal_evidence_details.details.oren.sections.record"
+    },
+    "journal_evidence_details.details.oren.source": {
+      "source": "Oren's wooden crow and the altered token",
+      "text": "Oren's wooden crow and the altered token",
+      "speaker": "",
+      "context": "journal_evidence_details.details.oren"
+    },
+    "journal_evidence_details.details.renewal_order.sections.condition_removed.body": {
+      "source": "The ration condition was removed at the assembly. Refusing participation no longer forfeits food or a safe way out. The original proclamation remains evidence of the condition that was challenged.",
+      "text": "The ration condition was removed at the assembly. Refusing participation no longer forfeits food or a safe way out. The original proclamation remains evidence of the condition that was challenged.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.renewal_order.sections.condition_removed"
+    },
+    "journal_evidence_details.details.renewal_order.sections.condition_removed.title": {
+      "source": "The recorded change",
+      "text": "The recorded change",
+      "speaker": "",
+      "context": "journal_evidence_details.details.renewal_order.sections.condition_removed"
+    },
+    "journal_evidence_details.details.renewal_order.sections.limits.body": {
+      "source": "The proclamation records what the order demanded. It does not record each household's wishes or allow anyone to supply their consent.",
+      "text": "The proclamation records what the order demanded. It does not record each household's wishes or allow anyone to supply their consent.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.renewal_order.sections.limits"
+    },
+    "journal_evidence_details.details.renewal_order.sections.limits.title": {
+      "source": "Limits of this record",
+      "text": "Limits of this record",
+      "speaker": "",
+      "context": "journal_evidence_details.details.renewal_order.sections.limits"
+    },
+    "journal_evidence_details.details.renewal_order.sections.reading.body": {
+      "source": "Kael reads the adjoining entries as a condition on food. A household that must agree to keep its allotment cannot give a freely witnessed oath through that requirement.",
+      "text": "Kael reads the adjoining entries as a condition on food. A household that must agree to keep its allotment cannot give a freely witnessed oath through that requirement.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.renewal_order.sections.reading"
+    },
+    "journal_evidence_details.details.renewal_order.sections.reading.title": {
+      "source": "What that condition asks",
+      "text": "What that condition asks",
+      "speaker": "",
+      "context": "journal_evidence_details.details.renewal_order.sections.reading"
+    },
+    "journal_evidence_details.details.renewal_order.sections.record.body": {
+      "source": "Edric's renewal order required supported households to attend and witness the seal. Grain allotments were to be entered beside their assent.",
+      "text": "Edric's renewal order required supported households to attend and witness the seal. Grain allotments were to be entered beside their assent.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.renewal_order.sections.record"
+    },
+    "journal_evidence_details.details.renewal_order.sections.record.title": {
+      "source": "Allotments beside assent",
+      "text": "Allotments beside assent",
+      "speaker": "",
+      "context": "journal_evidence_details.details.renewal_order.sections.record"
+    },
+    "journal_evidence_details.details.renewal_order.source": {
+      "source": "Renewal proclamation",
+      "text": "Renewal proclamation",
+      "speaker": "",
+      "context": "journal_evidence_details.details.renewal_order"
+    },
+    "journal_evidence_details.details.sella.sections.limits.body": {
+      "source": "Recognizing the knot does not explain every action that followed it. The thread alone cannot establish what each person intended or understood.",
+      "text": "Recognizing the knot does not explain every action that followed it. The thread alone cannot establish what each person intended or understood.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.sella.sections.limits"
+    },
+    "journal_evidence_details.details.sella.sections.limits.title": {
+      "source": "Limits of this record",
+      "text": "Limits of this record",
+      "speaker": "",
+      "context": "journal_evidence_details.details.sella.sections.limits"
+    },
+    "journal_evidence_details.details.sella.sections.reading.body": {
+      "source": "The thread connects the roadside objects to the shrine's attempt at containment. It is a trace of human work within what happened on the road.",
+      "text": "The thread connects the roadside objects to the shrine's attempt at containment. It is a trace of human work within what happened on the road.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.sella.sections.reading"
+    },
+    "journal_evidence_details.details.sella.sections.reading.title": {
+      "source": "The shrine's part",
+      "text": "The shrine's part",
+      "speaker": "",
+      "context": "journal_evidence_details.details.sella.sections.reading"
+    },
+    "journal_evidence_details.details.sella.sections.record.body": {
+      "source": "Sella's feathers are bound with red thread. The knot is Anwen's; these feathers were tied here, rather than scattered by a bird.",
+      "text": "Sella's feathers are bound with red thread. The knot is Anwen's; these feathers were tied here, rather than scattered by a bird.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.sella.sections.record"
+    },
+    "journal_evidence_details.details.sella.sections.record.title": {
+      "source": "Thread tied by hand",
+      "text": "Thread tied by hand",
+      "speaker": "",
+      "context": "journal_evidence_details.details.sella.sections.record"
+    },
+    "journal_evidence_details.details.sella.source": {
+      "source": "Red-thread feathers",
+      "text": "Red-thread feathers",
+      "speaker": "",
+      "context": "journal_evidence_details.details.sella"
+    },
+    "journal_evidence_details.details.senn_account.sections.limits.body": {
+      "source": "This is Senn's account of his own part. It cannot supply every other person's motives, excuse the people hurt by his raids, or grant permission to speak for those who followed him.",
+      "text": "This is Senn's account of his own part. It cannot supply every other person's motives, excuse the people hurt by his raids, or grant permission to speak for those who followed him.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.senn_account.sections.limits"
+    },
+    "journal_evidence_details.details.senn_account.sections.limits.title": {
+      "source": "Limits of this record",
+      "text": "Limits of this record",
+      "speaker": "",
+      "context": "journal_evidence_details.details.senn_account.sections.limits"
+    },
+    "journal_evidence_details.details.senn_account.sections.record.body": {
+      "source": "Senn says that Halvern refused to close the military retreat and was hanged. Senn then carried out the closure himself. He also acknowledges turning the old grievance into an excuse for present raids.",
+      "text": "Senn says that Halvern refused to close the military retreat and was hanged. Senn then carried out the closure himself. He also acknowledges turning the old grievance into an excuse for present raids.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.senn_account.sections.record"
+    },
+    "journal_evidence_details.details.senn_account.sections.record.title": {
+      "source": "What Senn admits",
+      "text": "What Senn admits",
+      "speaker": "",
+      "context": "journal_evidence_details.details.senn_account.sections.record"
+    },
+    "journal_evidence_details.details.senn_account.sections.relevance.body": {
+      "source": "His admission can be considered alongside other recovered records. Keeping that account does not settle his accountability or promise his future participation.",
+      "text": "His admission can be considered alongside other recovered records. Keeping that account does not settle his accountability or promise his future participation.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.senn_account.sections.relevance"
+    },
+    "journal_evidence_details.details.senn_account.sections.relevance.title": {
+      "source": "An admission that remains evidence",
+      "text": "An admission that remains evidence",
+      "speaker": "",
+      "context": "journal_evidence_details.details.senn_account.sections.relevance"
+    },
+    "journal_evidence_details.details.senn_account.source": {
+      "source": "Senn's recorded admission",
+      "text": "Senn's recorded admission",
+      "speaker": "",
+      "context": "journal_evidence_details.details.senn_account"
+    },
+    "journal_evidence_details.details.vargan_wire.sections.limits.body": {
+      "source": "This wire is not proof that Edric ordered the original attack. Evidence of later containment cannot settle that separate question on its own.",
+      "text": "This wire is not proof that Edric ordered the original attack. Evidence of later containment cannot settle that separate question on its own.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.vargan_wire.sections.limits"
+    },
+    "journal_evidence_details.details.vargan_wire.sections.limits.title": {
+      "source": "Limits of this record",
+      "text": "Limits of this record",
+      "speaker": "",
+      "context": "journal_evidence_details.details.vargan_wire.sections.limits"
+    },
+    "journal_evidence_details.details.vargan_wire.sections.reading.body": {
+      "source": "The wire links the aftermath to Vargan's recovery patrol. The later attempt to contain the objects belongs in the account alongside the attack itself.",
+      "text": "The wire links the aftermath to Vargan's recovery patrol. The later attempt to contain the objects belongs in the account alongside the attack itself.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.vargan_wire.sections.reading"
+    },
+    "journal_evidence_details.details.vargan_wire.sections.reading.title": {
+      "source": "The recovery patrol's trace",
+      "text": "The recovery patrol's trace",
+      "speaker": "",
+      "context": "journal_evidence_details.details.vargan_wire.sections.reading"
+    },
+    "journal_evidence_details.details.vargan_wire.sections.record.body": {
+      "source": "Vargan wire is wrapped around the token. The blackened binding shows another attempt to fasten the name and then remove it.",
+      "text": "Vargan wire is wrapped around the token. The blackened binding shows another attempt to fasten the name and then remove it.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.vargan_wire.sections.record"
+    },
+    "journal_evidence_details.details.vargan_wire.sections.record.title": {
+      "source": "A second binding",
+      "text": "A second binding",
+      "speaker": "",
+      "context": "journal_evidence_details.details.vargan_wire.sections.record"
+    },
+    "journal_evidence_details.details.vargan_wire.source": {
+      "source": "Blackened Vargan binding wire",
+      "text": "Blackened Vargan binding wire",
+      "speaker": "",
+      "context": "journal_evidence_details.details.vargan_wire"
+    },
     "journal_people.people.anwen.body": {
       "source": "Greyfen's shrine keeper. The people who come to her need care as well as an account of the road.",
       "text": "Greyfen's shrine keeper. The people who come to her need care as well as an account of the road.",
@@ -8920,6 +9490,12 @@
       "speaker": "",
       "context": "story_campaign.endings.kill"
     },
+    "story_campaign.evidence.bram.source": {
+      "source": "Cart tool and ledger",
+      "text": "Cart tool and ledger",
+      "speaker": "",
+      "context": "story_campaign.evidence.bram"
+    },
     "story_campaign.evidence.bram.text": {
       "source": "Bram's marked tool and the repair traces place him at the damaged axle. He did not simply abandon the wagon.",
       "text": "Bram's marked tool and the repair traces place him at the damaged axle. He did not simply abandon the wagon.",
@@ -8931,6 +9507,12 @@
       "text": "Bram stayed with the cart",
       "speaker": "",
       "context": "story_campaign.evidence.bram"
+    },
+    "story_campaign.evidence.command_proof.source": {
+      "source": "Copied command ledger and bounded refusal",
+      "text": "Copied command ledger and bounded refusal",
+      "speaker": "",
+      "context": "story_campaign.evidence.command_proof"
     },
     "story_campaign.evidence.command_proof.text": {
       "source": "The command and register establish sanctuary promised under a Vargan seal, Greyfen's closed gate, shrine concealment, and the military order.",
@@ -8944,6 +9526,12 @@
       "speaker": "",
       "context": "story_campaign.evidence.command_proof"
     },
+    "story_campaign.evidence.crisis_cause.source": {
+      "source": "Anwen, Mira, and the restored token",
+      "text": "Anwen, Mira, and the restored token",
+      "speaker": "",
+      "context": "story_campaign.evidence.crisis_cause"
+    },
     "story_campaign.evidence.crisis_cause.text": {
       "source": "Recent repairs uncovered tokens. A restored name strained concealment, failed shrine containment left memory loose, and Vargan tried to reclaim the objects.",
       "text": "Recent repairs uncovered tokens. A restored name strained concealment, failed shrine containment left memory loose, and Vargan tried to reclaim the objects.",
@@ -8955,6 +9543,12 @@
       "text": "Why this road failed now",
       "speaker": "",
       "context": "story_campaign.evidence.crisis_cause"
+    },
+    "story_campaign.evidence.drag_marks.source": {
+      "source": "Clearing approach",
+      "text": "Clearing approach",
+      "speaker": "",
+      "context": "story_campaign.evidence.drag_marks"
     },
     "story_campaign.evidence.drag_marks.text": {
       "source": "Drag marks leave food sacks and follow identity-bearing objects. The creatures gathered testimony.",
@@ -8968,6 +9562,12 @@
       "speaker": "",
       "context": "story_campaign.evidence.drag_marks"
     },
+    "story_campaign.evidence.grave_child.source": {
+      "source": "Child's grave",
+      "text": "Child's grave",
+      "speaker": "",
+      "context": "story_campaign.evidence.grave_child"
+    },
     "story_campaign.evidence.grave_child.text": {
       "source": "The unnamed grave has shrine thread tied from within. Burial rites were keeping memory disordered.",
       "text": "The unnamed grave has shrine thread tied from within. Burial rites were keeping memory disordered.",
@@ -8979,6 +9579,12 @@
       "text": "Thread under the earth",
       "speaker": "",
       "context": "story_campaign.evidence.grave_child"
+    },
+    "story_campaign.evidence.grave_harl.source": {
+      "source": "Harl's grave",
+      "text": "Harl's grave",
+      "speaker": "",
+      "context": "story_campaign.evidence.grave_harl"
     },
     "story_campaign.evidence.grave_harl.text": {
       "source": "Road mud lies inside Harl's disturbed grave. The bell carries a gate memory rather than an intact returned husband.",
@@ -8992,6 +9598,12 @@
       "speaker": "",
       "context": "story_campaign.evidence.grave_harl"
     },
+    "story_campaign.evidence.grave_soldier.source": {
+      "source": "Empty soldier's grave",
+      "text": "Empty soldier's grave",
+      "speaker": "",
+      "context": "story_campaign.evidence.grave_soldier"
+    },
     "story_campaign.evidence.grave_soldier.text": {
       "source": "The empty soldier's grave holds Vargan work. A limited watch fragment can carry a fact without becoming a consenting living witness.",
       "text": "The empty soldier's grave holds Vargan work. A limited watch fragment can carry a fact without becoming a consenting living witness.",
@@ -9003,6 +9615,12 @@
       "text": "A Vargan buckle",
       "speaker": "",
       "context": "story_campaign.evidence.grave_soldier"
+    },
+    "story_campaign.evidence.kael_confession.source": {
+      "source": "Kael's own account",
+      "text": "Kael's own account",
+      "speaker": "",
+      "context": "story_campaign.evidence.kael_confession"
     },
     "story_campaign.evidence.kael_confession.text": {
       "source": "Kael admits obeying a retreat that abandoned civilians he had promised to escort. He left his failure out of the report and never went back.",
@@ -9016,6 +9634,12 @@
       "speaker": "",
       "context": "story_campaign.evidence.kael_confession"
     },
+    "story_campaign.evidence.mill_accounts.source": {
+      "source": "Mill measure and ledger",
+      "text": "Mill measure and ledger",
+      "speaker": "",
+      "context": "story_campaign.evidence.mill_accounts"
+    },
     "story_campaign.evidence.mill_accounts.text": {
       "source": "The mill's weights match the missing refugee wagons. Its channels still support innocent households; the account survives decisions about continued operation.",
       "text": "The mill's weights match the missing refugee wagons. Its channels still support innocent households; the account survives decisions about continued operation.",
@@ -9027,6 +9651,12 @@
       "text": "Useful ash and stolen weight",
       "speaker": "",
       "context": "story_campaign.evidence.mill_accounts"
+    },
+    "story_campaign.evidence.oren.source": {
+      "source": "Child's token",
+      "text": "Child's token",
+      "speaker": "",
+      "context": "story_campaign.evidence.oren"
     },
     "story_campaign.evidence.oren.text": {
       "source": "Oren's painted crow covers an older name token. Its scratch marks follow restoration rather than random damage.",
@@ -9040,6 +9670,12 @@
       "speaker": "",
       "context": "story_campaign.evidence.oren"
     },
+    "story_campaign.evidence.renewal_order.source": {
+      "source": "Renewal proclamation",
+      "text": "Renewal proclamation",
+      "speaker": "",
+      "context": "story_campaign.evidence.renewal_order"
+    },
     "story_campaign.evidence.renewal_order.text": {
       "source": "Edric's current order places grain allotments beside household assent. A ration condition cannot create a freely witnessed oath.",
       "text": "Edric's current order places grain allotments beside household assent. A ration condition cannot create a freely witnessed oath.",
@@ -9051,6 +9687,12 @@
       "text": "Grain beside assent",
       "speaker": "",
       "context": "story_campaign.evidence.renewal_order"
+    },
+    "story_campaign.evidence.renewal_stopped.source": {
+      "source": "Assembly grain list",
+      "text": "Assembly grain list",
+      "speaker": "",
+      "context": "story_campaign.evidence.renewal_stopped"
     },
     "story_campaign.evidence.renewal_stopped.text": {
       "source": "The ration condition is removed at the assembly. Household refusal no longer forfeits food or a safe way out.",
@@ -9064,6 +9706,12 @@
       "speaker": "",
       "context": "story_campaign.evidence.renewal_stopped"
     },
+    "story_campaign.evidence.sella.source": {
+      "source": "Red-thread feathers",
+      "text": "Red-thread feathers",
+      "speaker": "",
+      "context": "story_campaign.evidence.sella"
+    },
     "story_campaign.evidence.sella.text": {
       "source": "Sella's feathers carry thread Anwen identifies as hers. The shrine attempted containment before the attack.",
       "text": "Sella's feathers carry thread Anwen identifies as hers. The shrine attempted containment before the attack.",
@@ -9076,6 +9724,12 @@
       "speaker": "",
       "context": "story_campaign.evidence.sella"
     },
+    "story_campaign.evidence.senn_account.source": {
+      "source": "Senn's signed account",
+      "text": "Senn's signed account",
+      "speaker": "",
+      "context": "story_campaign.evidence.senn_account"
+    },
     "story_campaign.evidence.senn_account.text": {
       "source": "Senn says he closed the military retreat after Halvern refused. The admission establishes his role without excusing present raids.",
       "text": "Senn says he closed the military retreat after Halvern refused. The admission establishes his role without excusing present raids.",
@@ -9087,6 +9741,12 @@
       "text": "The officer who closed the road",
       "speaker": "",
       "context": "story_campaign.evidence.senn_account"
+    },
+    "story_campaign.evidence.vargan_wire.source": {
+      "source": "Binding wire",
+      "text": "Binding wire",
+      "speaker": "",
+      "context": "story_campaign.evidence.vargan_wire"
     },
     "story_campaign.evidence.vargan_wire.text": {
       "source": "Vargan binding wire is wrapped around the token. It links the aftermath to a recovery patrol, not proof that Edric ordered the original attack.",
