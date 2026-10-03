@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "program": "SOUL-REBUILD",
-  "release_id": "greyfen-f625f5923ce3",
+  "release_id": "startup-fcf094cf9b80",
   "artifact_policy": "external_runtime_packs",
   "candidate_manifest": "res://runtime_pack_candidates.json",
   "pack_presets": {
@@ -168,8 +168,8 @@
       "cache_key": "1e8c110517705e0af80f40d4625ce05b07ecdd78eb626a3801cde9cebd38b523"
     }
   },
-  "build_id": "dev-59ca38939769",
-  "generated_from_commit": "f625f5923ce3ce140f375da99197885805d27e48",
+  "build_id": "startup-fcf094cf9b80",
+  "generated_from_commit": "fcf094cf9b80c8aa02e294bedd7eb3f1cfba9d2e",
   "generated_at_utc": "2026-10-03T00:00:00Z",
   "total_bytes": 66725008,
   "source_dirty": false

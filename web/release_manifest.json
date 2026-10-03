@@ -1,24 +1,24 @@
 {
   "schema_version": 2,
   "project": "Ashen Oath",
-  "build_id": "greyfen-f625f5923ce3",
+  "build_id": "startup-fcf094cf9b80",
   "source": {
-    "git_commit": "f625f5923ce3ce140f375da99197885805d27e48",
+    "git_commit": "fcf094cf9b80c8aa02e294bedd7eb3f1cfba9d2e",
     "dirty": false
   },
-  "generated_at_utc": "2026-10-03T02:53:15.305257Z",
-  "compatibility_key": "f66a404eca644b7e753266a483c7b28249b19bbcf4173f75d2b7fee70dbc23a2",
+  "generated_at_utc": "2026-10-03T04:03:49.268524Z",
+  "compatibility_key": "f0653cf1c7bc8badfdd03e125396295a504bfaa6e7e489c883219d6c22c2c370",
   "runtime_pack_manifest": {
     "path": "runtime_pack_manifest.json",
-    "bytes": 6496,
-    "sha256": "45dae9516a9f8fe3c290ae2eb7f89fb946d5cfd7fa464dac8f13ae63c1ae8b4e"
+    "bytes": 6499,
+    "sha256": "6540dab6b0d771e0df2453779b3e38f8b27fe93a5bc2292aeb90885477a5e88b"
   },
   "root_pck": {
     "path": "index.pck",
-    "bytes": 14054132,
-    "sha256": "0feab7f4d523618c133f7da323537aca55bccc5a9e83de1a23900592a12639ef"
+    "bytes": 14057380,
+    "sha256": "4b81aacb9f57f778040fa64b40cb62a4aafcf23e3388f0de176ac5ebd2bfe5cc"
   },
-  "artifacts_total_bytes": 90536241,
+  "artifacts_total_bytes": 90540368,
   "artifacts": [
     {
       "path": "index.audio.position.worklet.js",
@@ -32,8 +32,8 @@
     },
     {
       "path": "index.html",
-      "bytes": 20850,
-      "sha256": "97a9aecf29abe2cfc69f77779ba708f131ceb66e3775447254a8bf2a29ee99ef"
+      "bytes": 21726,
+      "sha256": "2d654934a2ed8744e908bed19dc9e233bdd72774d0f02ca965b5885a6bda163e"
     },
     {
       "path": "index.js",
@@ -42,8 +42,8 @@
     },
     {
       "path": "index.pck",
-      "bytes": 14054132,
-      "sha256": "0feab7f4d523618c133f7da323537aca55bccc5a9e83de1a23900592a12639ef"
+      "bytes": 14057380,
+      "sha256": "4b81aacb9f57f778040fa64b40cb62a4aafcf23e3388f0de176ac5ebd2bfe5cc"
     },
     {
       "path": "index.png",
@@ -90,8 +90,8 @@
     },
     {
       "path": "runtime_pack_manifest.json",
-      "bytes": 6496,
-      "sha256": "45dae9516a9f8fe3c290ae2eb7f89fb946d5cfd7fa464dac8f13ae63c1ae8b4e"
+      "bytes": 6499,
+      "sha256": "6540dab6b0d771e0df2453779b3e38f8b27fe93a5bc2292aeb90885477a5e88b"
     }
   ],
   "packs": [
