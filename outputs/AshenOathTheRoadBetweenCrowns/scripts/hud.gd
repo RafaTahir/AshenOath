@@ -18,6 +18,7 @@ signal item_use_requested(item_id: String)
 signal vendor_purchase_requested(vendor_id: String, item_id: String, quantity: int)
 signal upgrade_requested(upgrade_id: String)
 signal dialogue_closed
+signal dialogue_review_changed(open: bool)
 signal dialogue_page_changed(speaker: String, speaker_id: String, page_index: int, total_pages: int)
 signal menu_hovered
 signal menu_clicked
@@ -31,6 +32,24 @@ const CHECKPOINT_PATH = "user://ashen_oath_checkpoint.json"
 const StoryJournalPresenter = preload("res://scripts/story_journal.gd")
 const DialogueHistory = preload("res://scripts/dialogue_history.gd")
 const SourceText = preload("res://scripts/source_text.gd")
+const NavigationState = preload("res://scripts/hud_navigation_state.gd")
+const NoticeQueue = preload("res://scripts/hud_notice_queue.gd")
+var navigation = NavigationState.new()
+var notices = NoticeQueue.new()
+var _rendered_screen := ""
+var _screen_generation := 0
+var _dialogue_review_open := false
+var _dialogue_reading_state: Dictionary = {}
+var _dialogue_history_button: Button
+var _menu_notice: Label
+var _notice_active: Dictionary = {}
+var _notice_remaining := 0.0
+var _slot_operation_results: Dictionary = {}
+var _library_refresh_pending := false
+var _return_after_import := false
+var _interaction_prompt_model: Dictionary = {}
+var _inventory_screen := "journal"
+var _inventory_generation := 0
 var text_history = DialogueHistory.new()
 var library_page := 0
 var library_back_target := "pause"
@@ -109,6 +128,7 @@ var tracker_back: Control
 var compass_back: Control
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	_build_hud()
 	_build_menu_layer()
 	_build_dialogue()
@@ -124,6 +144,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if health_bar == null:
 		return
+	_advance_notices(delta)
 	if loading_armed and loading_layer != null and not loading_layer.visible:
 		loading_elapsed += delta
 		if loading_elapsed >= 0.75:
@@ -143,7 +164,7 @@ func _update_process_policy() -> void:
 	var loading_delay_active := loading_armed and loading_layer != null and not loading_layer.visible
 	if not pulse_active and health_bar.modulate != Color.WHITE:
 		health_bar.modulate = Color.WHITE
-	set_process(pulse_active or loading_delay_active)
+	set_process(pulse_active or loading_delay_active or notices.has_pending() or not _notice_active.is_empty())
 
 func show_main_menu() -> void:
 	active_menu = "main"
@@ -248,6 +269,7 @@ func show_settings_menu(back_target: String = "pause", requested_page: int = -1)
 			volume_label.add_theme_font_size_override("font_size", 18)
 			box.add_child(volume_label)
 			var slider := HSlider.new()
+			slider.set_meta("navigation_key", "mix:" + str(entry.mix_channel))
 			slider.min_value = 0.0
 			slider.max_value = 1.0
 			slider.step = 0.05
@@ -269,7 +291,7 @@ func show_settings_menu(back_target: String = "pause", requested_page: int = -1)
 					show_settings_menu(controls_back_target, settings_page)
 				else:
 					settings_requested.emit(setting_action)
-			)
+			, false, "setting:" + action)
 	if page_count > 1:
 		_add_menu_button(box, "Previous Page", func(): show_settings_menu(controls_back_target, settings_page - 1), settings_page <= 0)
 		_add_menu_button(box, "Next Page", func(): show_settings_menu(controls_back_target, settings_page + 1), settings_page >= page_count - 1)
@@ -315,7 +337,13 @@ func show_controls_menu(back_target: String = "main") -> void:
 	_clear_menu()
 	menu_layer.visible = true
 	var box = _menu_box("Controls", "", "blade | breath | road")
-	if input_device == "gamepad":
+	if input_source != null and input_source.has_method("describe_action"):
+		var instructions: Array[String] = []
+		for action in ["interact", "run", "block", "dodge", "jump", "light_attack", "heavy_attack", "aim_bow", "oathfire_beam", "use_potion", "throw_bomb", "open_inventory", "pause"]:
+			var descriptor: Dictionary = input_source.describe_action(action)
+			instructions.append("%s: %s" % [str(action).replace("_", " ").capitalize(), str(descriptor.get("instruction", descriptor.get("binding", "Unbound")))])
+		_add_menu_text(box, "Move with the movement keys, left stick or touch pad; look with the mouse, right stick or touch look area.\n\n" + "\n".join(instructions))
+	elif input_device == "gamepad":
 		_add_menu_text(box, "Left Stick move | Right Stick look | D-Pad Up/Down zoom\nL3 run | B dodge | Y jump | X switch sword/bow\nRB light attack | RT heavy attack / fire bow | LT aim bow\nSword: hold LT Oathfire | Tap/Hold LB parry or block | A interact\nBow: D-Pad Up cycle arrows | D-Pad Left potion | D-Pad Right bomb | View journal | Menu pause")
 	elif input_device == "touch":
 		_add_menu_text(box, "Left thumb move | Drag right side to look\nStrike / Heavy attack | Dodge | Jump\nHold Guard to block or parry | Hold Oath to charge Oathfire\nUse interacts | Potion heals | Pause opens the menu\nLandscape orientation is required during gameplay")
@@ -352,7 +380,7 @@ func show_remap_menu(back_target: String = "main", requested_page: int = -1) -> 
 		var action := str(actions[index])
 		var label := action.replace("_", " ").capitalize()
 		var binding := _binding_display(action)
-		_add_menu_button(box, "%s     %s" % [label, binding], func(selected = action): _begin_remap(selected))
+		_add_menu_button(box, "%s     %s" % [label, binding], func(selected = action): _begin_remap(selected), false, "binding:" + action)
 	if page_count > 1:
 		_add_menu_button(box, "Previous Page", func(): show_remap_menu(remap_back_target, remap_page - 1), remap_page <= 0)
 		_add_menu_button(box, "Next Page", func(): show_remap_menu(remap_back_target, remap_page + 1), remap_page >= page_count - 1)
@@ -380,10 +408,7 @@ func _binding_display(action: String) -> String:
 
 func _return_from_remap() -> void:
 	remap_waiting = false
-	if remap_back_target == "pause":
-		show_pause_menu()
-	else:
-		show_controls_menu(remap_back_target)
+	_return_to_parent()
 
 func show_credits_menu() -> void:
 	active_menu = "credits"
@@ -403,7 +428,7 @@ func show_credits_menu() -> void:
 			for link in section.get("links", []):
 				if typeof(link) == TYPE_DICTIONARY:
 					_add_menu_button(box, str(link.get("label", "Source")), func(url = str(link.get("url", ""))): OS.shell_open(url))
-	_add_menu_button(box, "Report a Problem", func(): show_problem_report("main"))
+	_add_menu_button(box, "Report a Problem", func(): show_problem_report("credits"))
 	_add_menu_button(box, "Back", func(): show_main_menu())
 
 func show_exit_notice() -> void:
@@ -418,6 +443,11 @@ func show_exit_notice() -> void:
 	_add_menu_button(box, "Back to Menu", func(): show_main_menu())
 
 func hide_menus() -> void:
+	_capture_menu_state()
+	_capture_inventory_state()
+	if _dialogue_review_open:
+		_dialogue_review_open = false
+		dialogue_review_changed.emit(false)
 	active_menu = ""
 	_set_internal_canvas(GAMEPLAY_SIZE)
 	if input_source != null and input_source.has_method("clear_focus"):
@@ -558,6 +588,26 @@ func set_prompt(text: String) -> void:
 	prompt_label.text = clean
 	prompt_label.visible = raw_prompt != "" and not dialogue_layer.visible
 
+func set_interaction_prompt(model: Dictionary) -> void:
+	_interaction_prompt_model = model.duplicate(true)
+	if model.is_empty():
+		set_prompt("")
+		return
+	var fallback := str(model.get("fallback_text", model.get("fallback", model.get("text", ""))))
+	if not bool(model.get("available", true)):
+		set_prompt(fallback if fallback != "" else str(model.get("subject", "")))
+		return
+	var binding := str(model.get("binding", ""))
+	if input_source != null and input_source.has_method("describe_action"):
+		var descriptor: Dictionary = input_source.describe_action("interact")
+		binding = str(descriptor.get("binding", binding))
+	var verb := str(model.get("verb", ""))
+	var subject := str(model.get("subject", ""))
+	if verb == "":
+		set_prompt(fallback)
+		return
+	set_prompt("%s%s%s" % ["[" + binding + "] " if binding != "" else "", verb, " " + subject if subject != "" else ""])
+
 func set_tracker(text: String) -> void:
 	tracker_label.text = _format_tracker_text(text)
 	_fit_tracker_height.call_deferred()
@@ -576,29 +626,64 @@ func set_compass(text: String) -> void:
 	compass_label.text = text.replace(" | ", "   •   ")
 
 func toast(text: String, seconds: float = 2.15) -> void:
-	if toasts_suppressed or dialogue_layer.visible:
+	post_notice(text, "info", seconds, "")
+
+func post_notice(text: String, category: String = "info", duration: float = 3.0, dedupe_key: String = "") -> void:
+	var key := dedupe_key if dedupe_key != "" else category + ":" + text.strip_edges()
+	if not _notice_active.is_empty() and str(_notice_active.get("key", "")) == key:
+		_notice_active["text"] = text
+		_notice_remaining = maxf(_notice_remaining, duration)
+		_present_notice()
 		return
+	if not _notice_active.is_empty() and notices.priority(category) > int(_notice_active.get("priority", 0)):
+		notices.push(str(_notice_active.text), str(_notice_active.category), _notice_remaining, str(_notice_active.key))
+		_notice_active.clear()
+	notices.push(text, category, duration, key)
+	_advance_notices(0.0)
+	_update_process_policy()
+
+func _advance_notices(delta: float) -> void:
+	var reading := dialogue_layer != null and (dialogue_layer.visible or _dialogue_review_open)
+	var menu_open := menu_layer != null and menu_layer.visible
+	if menu_open and str(_notice_active.get("category", "")) == "combat":
+		_notice_active.clear()
+	if reading:
+		if str(_notice_active.get("category", "")) == "combat":
+			_notice_active.clear()
+		if toast_label != null:
+			toast_label.visible = false
+		return
+	if toasts_suppressed and not _notice_active.is_empty() and str(_notice_active.get("category", "")) not in ["error", "unavailable"]:
+		return
+	if not _notice_active.is_empty():
+		_notice_remaining -= delta
+		if _notice_remaining <= 0.0:
+			_notice_active.clear()
+	if _notice_active.is_empty():
+		_notice_active = notices.take(false, toasts_suppressed, menu_open)
+		if not _notice_active.is_empty():
+			_notice_remaining = float(_notice_active.duration)
+	_present_notice()
+	_update_process_policy()
+
+func _present_notice() -> void:
+	if toast_label == null:
+		return
+	var text := str(_notice_active.get("text", ""))
+	var menu_open := menu_layer != null and menu_layer.visible
+	var reading := dialogue_layer != null and (dialogue_layer.visible or _dialogue_review_open)
+	toast_label.visible = text != "" and not menu_open and not reading and not toasts_suppressed
 	toast_label.text = text
-	toast_label.visible = true
-	if toast_tween != null and toast_tween.is_running():
-		toast_tween.kill()
-	toast_label.modulate = Color(1, 1, 1, 1)
-	toast_tween = create_tween()
-	toast_tween.tween_interval(clampf(seconds, 2.15, 8.0))
-	toast_tween.tween_property(toast_label, "modulate:a", 0.0, 0.25)
-	toast_tween.tween_callback(func():
-		toast_label.visible = false
-		toast_label.modulate = Color(1, 1, 1, 1)
-	)
+	toast_label.modulate = Color.WHITE
+	if is_instance_valid(_menu_notice):
+		_menu_notice.text = text
+		_menu_notice.visible = text != "" and not reading
+		_menu_notice.add_theme_color_override("font_color", Color(1.0, 0.78, 0.53) if str(_notice_active.get("category", "")) in ["error", "unavailable"] else Color(0.86, 0.83, 0.70))
 
 func set_toasts_suppressed(suppressed: bool) -> void:
 	toasts_suppressed = suppressed
-	if not suppressed or toast_label == null:
-		return
-	if toast_tween != null and toast_tween.is_running():
-		toast_tween.kill()
-	toast_label.visible = false
-	toast_label.modulate = Color(1, 1, 1, 1)
+	_present_notice()
+	_update_process_policy()
 
 func set_guidance_hint(text: String, seconds: float = 4.5) -> void:
 	raw_hint = text
@@ -652,6 +737,10 @@ func mark_stamina_exhausted() -> void:
 	show_status_cue("Stamina spent", "stamina")
 
 func show_dialogue(data: Dictionary) -> void:
+	if _dialogue_review_open:
+		_dialogue_review_open = false
+		dialogue_review_changed.emit(false)
+	_dialogue_reading_state.clear()
 	_set_ui_pointer("dialogue")
 	dialogue_closing = false
 	dialogue_layer.visible = true
@@ -672,6 +761,7 @@ func show_dialogue(data: Dictionary) -> void:
 	_render_dialogue_page()
 
 func _render_dialogue_page() -> void:
+	_dialogue_reading_state.clear()
 	var page = dialogue_pages[dialogue_page_index]
 	var page_speaker := str(dialogue_session_data.get("name", "Unknown"))
 	var page_speaker_id := ""
@@ -694,6 +784,7 @@ func _render_dialogue_page() -> void:
 	if dialogue_page_index < dialogue_pages.size()-1:
 		var advance := Button.new()
 		advance.text = "Continue"
+		advance.set_meta("dialogue_focus_key", "continue")
 		advance.process_mode = Node.PROCESS_MODE_ALWAYS
 		advance.focus_mode = Control.FOCUS_ALL
 		advance.action_mode = BaseButton.ACTION_MODE_BUTTON_PRESS
@@ -719,6 +810,7 @@ func _render_dialogue_page() -> void:
 			stakes.add_theme_color_override("font_outline_color", Color.BLACK)
 			dialogue_actions.add_child(stakes)
 		var button = Button.new()
+		button.set_meta("dialogue_focus_key", "action:" + str(action.get("choice_id", action.get("label", "continue"))))
 		button.text = ("Commit: " if committing else "") + str(action.get("label", "Continue"))
 		button.tooltip_text = preview
 		button.process_mode = Node.PROCESS_MODE_ALWAYS
@@ -741,6 +833,9 @@ func _render_dialogue_page() -> void:
 	_focus_after_rebuild(dialogue_actions)
 
 func show_inventory(inventory, quests, story_state = null, progression = null) -> void:
+	_capture_inventory_state()
+	_inventory_screen = "journal"
+	_inventory_generation += 1
 	_set_ui_pointer("journal")
 	inventory_layer.visible = true
 	_show_journal_art(quests, story_state)
@@ -802,6 +897,7 @@ func show_inventory(inventory, quests, story_state = null, progression = null) -
 		child.queue_free()
 	for id in inventory.ordered_item_ids():
 		var button = Button.new()
+		button.set_meta("navigation_key", "craft:" + str(id))
 		var recipe: Dictionary = inventory.recipe_status(id)
 		button.text = "Craft %s%s" % [
 			inventory.get_item_name(id),
@@ -815,6 +911,7 @@ func show_inventory(inventory, quests, story_state = null, progression = null) -
 		if int(inventory.items[id]) <= 0:
 			continue
 		var use_button = Button.new()
+		use_button.set_meta("navigation_key", "use:" + str(id))
 		var verb := "Apply" if inventory.get_item_type(id) == "oil" else ("Set" if inventory.get_item_type(id) == "trap" else "Use")
 		use_button.text = "%s %s" % [verb, inventory.get_item_name(id)]
 		_style_button(use_button)
@@ -825,22 +922,27 @@ func show_inventory(inventory, quests, story_state = null, progression = null) -
 			if not progression.can_unlock(id):
 				continue
 			var upgrade_button := Button.new()
+			upgrade_button.set_meta("navigation_key", "upgrade:" + str(id))
 			upgrade_button.text = "Learn %s — 1 Mark" % progression.definitions[id].get("name", id)
 			_style_button(upgrade_button)
 			upgrade_button.pressed.connect(func(upgrade_id = id): upgrade_requested.emit(upgrade_id))
 			craft_buttons.add_child(upgrade_button)
 	var close = Button.new()
 	close.text = "Close"
+	close.set_meta("navigation_key", "close")
 	_style_button(close)
 	close.pressed.connect(func():
 		dialogue_closed.emit()
-		get_tree().paused = false
 		hide_menus()
+		resume_requested.emit()
 	)
 	craft_buttons.add_child(close)
-	_focus_after_rebuild(craft_buttons)
+	call_deferred("_restore_inventory_state", _inventory_screen, _inventory_generation)
 
 func show_vendor(vendor_id: String, vendor_service, inventory, quests = null, story_state = null) -> void:
+	_capture_inventory_state()
+	_inventory_screen = "vendor:" + vendor_id
+	_inventory_generation += 1
 	_set_ui_pointer("journal")
 	inventory_layer.visible = true
 	if journal_art != null:
@@ -870,6 +972,7 @@ func show_vendor(vendor_id: String, vendor_service, inventory, quests = null, st
 		var cap := int(entry.get("cap", 999))
 		var price := int(entry.get("price", 0))
 		var buy_button := Button.new()
+		buy_button.set_meta("navigation_key", "buy:" + item_id)
 		buy_button.text = "Buy %s — %d coin" % [inventory.get_item_name(item_id), price]
 		buy_button.disabled = owned >= cap or int(inventory.coin) < price
 		_style_button(buy_button)
@@ -877,12 +980,14 @@ func show_vendor(vendor_id: String, vendor_service, inventory, quests = null, st
 		craft_buttons.add_child(buy_button)
 	if vendor_id == "tor_forge" and int(inventory.items.get("standard_arrow", 0)) < 5:
 		var refill := Button.new()
+		refill.set_meta("navigation_key", "emergency_arrows")
 		refill.text = "Claim Tor's free emergency arrows"
 		_style_button(refill)
 		refill.pressed.connect(func(): vendor_purchase_requested.emit(vendor_id, "__emergency_arrows__", 1))
 		craft_buttons.add_child(refill)
 	if vendor_id == "mira_apothecary" and int(inventory.items.get("redroot_potion", 0)) == 0:
 		var care := Button.new()
+		care.set_meta("navigation_key", "emergency_medicine")
 		care.text = "Ask Mira for emergency medicine"
 		care.disabled = bool(vendor_service.emergency_healing_claimed)
 		_style_button(care)
@@ -890,16 +995,18 @@ func show_vendor(vendor_id: String, vendor_service, inventory, quests = null, st
 		craft_buttons.add_child(care)
 	var close := Button.new()
 	close.text = "Close"
+	close.set_meta("navigation_key", "close")
 	_style_button(close)
 	close.pressed.connect(func():
 		dialogue_closed.emit()
-		get_tree().paused = false
 		hide_menus()
+		resume_requested.emit()
 	)
 	craft_buttons.add_child(close)
-	_focus_after_rebuild(craft_buttons)
+	call_deferred("_restore_inventory_state", _inventory_screen, _inventory_generation)
 
 func show_ending(title: String, body: String) -> void:
+	active_menu = "ending"
 	_set_ui_pointer("menu")
 	_clear_menu()
 	menu_layer.visible = true
@@ -926,6 +1033,7 @@ func show_ending(title: String, body: String) -> void:
 	_add_menu_button(box, "Return to Launch Screen", show_launch_screen)
 
 func show_death_screen(body: String) -> void:
+	active_menu = "death"
 	_set_ui_pointer("death")
 	_clear_menu()
 	menu_layer.visible = true
@@ -1096,7 +1204,11 @@ func _apply_hud_layout() -> void:
 		toast_label.position = Vector2(22.0, maxf(viewport_size.y - 152.0, 170.0))
 		toast_label.size.x = minf(420.0, viewport_size.x - 44.0)
 	if dialogue_layer != null:
-		dialogue_layer.position = Vector2(maxf((viewport_size.x - 840.0) * 0.5, 20.0), maxf(viewport_size.y - dialogue_layer.size.y - 34.0, 110.0))
+		var width := minf(940.0, maxf(600.0, viewport_size.x - 80.0))
+		var reading_height := clampf(105.0 * story_text_scale, 90.0, maxf(120.0, viewport_size.y * 0.28))
+		dialogue_text.custom_minimum_size = Vector2(width - 56.0, reading_height)
+		dialogue_layer.size = Vector2(width, reading_height + dialogue_choices_scroll.custom_minimum_size.y + 108.0)
+		dialogue_layer.position = Vector2(maxf((viewport_size.x - width) * 0.5, 20.0), maxf(viewport_size.y - dialogue_layer.size.y - 34.0, 70.0))
 	if inventory_layer != null:
 		inventory_layer.position = Vector2(maxf((viewport_size.x - 996.0) * 0.5, 20.0), maxf((viewport_size.y - 584.0) * 0.5, 20.0))
 
@@ -1132,11 +1244,12 @@ func _build_dialogue() -> void:
 	dialogue_page_label.add_theme_font_size_override("font_size", 12)
 	dialogue_page_label.add_theme_color_override("font_color", Color(0.62, 0.54, 0.40))
 	heading.add_child(dialogue_page_label)
-	var history_button := Button.new()
-	history_button.text = "History"
-	history_button.focus_mode = Control.FOCUS_ALL
-	history_button.pressed.connect(func(): show_text_history("dialogue"))
-	heading.add_child(history_button)
+	_dialogue_history_button = Button.new()
+	_dialogue_history_button.text = "History"
+	_dialogue_history_button.set_meta("dialogue_focus_key", "history")
+	_dialogue_history_button.focus_mode = Control.FOCUS_ALL
+	_dialogue_history_button.pressed.connect(func(): show_text_history("dialogue"))
+	heading.add_child(_dialogue_history_button)
 	var rule := ColorRect.new()
 	rule.name = "DialogueGoldRule"
 	rule.custom_minimum_size = Vector2(0, 2)
@@ -1145,6 +1258,9 @@ func _build_dialogue() -> void:
 	dialogue_text = RichTextLabel.new()
 	dialogue_text.name = "DialogueSubtitleText"
 	dialogue_text.bbcode_enabled = true
+	dialogue_text.focus_mode = Control.FOCUS_ALL
+	dialogue_text.set_meta("dialogue_focus_key", "text")
+	dialogue_text.scroll_active = true
 	dialogue_text.fit_content = false
 	dialogue_text.custom_minimum_size = Vector2(784, 78)
 	box.add_child(dialogue_text)
@@ -1181,6 +1297,8 @@ func _build_inventory() -> void:
 	journal_art.visible = false
 	journal_column.add_child(journal_art)
 	inventory_text = RichTextLabel.new()
+	inventory_text.set_meta("navigation_key", "journal_text")
+	inventory_text.set_meta("navigation_scroll", "journal_text")
 	inventory_text.custom_minimum_size = Vector2(560, 396)
 	inventory_text.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	inventory_text.scroll_active = true
@@ -1190,6 +1308,7 @@ func _build_inventory() -> void:
 	journal_column.add_child(inventory_text)
 	var actions_scroll := ScrollContainer.new()
 	actions_scroll.name = "PreparationActionsScroll"
+	actions_scroll.set_meta("navigation_scroll", "journal_actions")
 	actions_scroll.custom_minimum_size = Vector2(320, 520)
 	actions_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	actions_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -1217,11 +1336,18 @@ func _labeled_bar(label_text: String, bar: ProgressBar, value_label: Label) -> H
 	return row
 
 func _clear_menu() -> void:
+	_capture_menu_state()
+	_menu_notice = null
 	new_game_status_label = null
 	for child in menu_layer.get_children():
+		menu_layer.remove_child(child)
 		child.queue_free()
 
 func _menu_box(title: String, subtitle: String = "", omen_text: String = "", height_limit: float = 760.0) -> VBoxContainer:
+	_rendered_screen = _screen_key()
+	_screen_generation += 1
+	navigation.set_parent(_rendered_screen, _screen_parent())
+	call_deferred("_restore_menu_state", _rendered_screen, _screen_generation)
 	var viewport_size := _menu_viewport_size()
 	var compact := viewport_size.y <= 800.0 or viewport_size.x <= 1366.0
 	var horizontal_margin := clampf(viewport_size.x * 0.055, 24.0, 112.0)
@@ -1276,6 +1402,14 @@ func _menu_box(title: String, subtitle: String = "", omen_text: String = "", hei
 		omen.add_theme_font_size_override("font_size", 12 if compact else 16)
 		omen.add_theme_color_override("font_color", Color(0.56, 0.50, 0.40))
 		title_stack.add_child(omen)
+	_menu_notice = Label.new()
+	_menu_notice.name = "MenuOperationStatus"
+	_menu_notice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_menu_notice.add_theme_font_size_override("font_size", int(21.0 * minf(story_text_scale, 1.2)))
+	_menu_notice.custom_minimum_size = Vector2(280, 72)
+	_menu_notice.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_stack.add_child(_menu_notice)
+	_present_notice()
 	var title_fill = Control.new()
 	title_fill.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	title_stack.add_child(title_fill)
@@ -1292,6 +1426,8 @@ func _menu_box(title: String, subtitle: String = "", omen_text: String = "", hei
 	shell.add_child(panel)
 	var scroll := ScrollContainer.new()
 	scroll.name = "MenuScroll"
+	scroll.set_meta("navigation_scroll", "menu")
+	scroll.follow_focus = true
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1324,14 +1460,16 @@ func _build_menu_background() -> void:
 	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	menu_layer.add_child(shade)
 
-func _add_menu_button(box: VBoxContainer, text: String, callback: Callable, disabled: bool = false) -> void:
+func _add_menu_button(box: VBoxContainer, text: String, callback: Callable, disabled: bool = false, focus_key: String = "") -> void:
 	var is_first_button := true
 	for child in box.get_children():
 		if child is Button:
 			is_first_button = false
 			break
 	var button = Button.new()
-	button.text = text
+	button.text = ""
+	button.tooltip_text = text
+	button.set_meta("navigation_key", focus_key if focus_key != "" else text.split("\n", false)[0].strip_edges())
 	button.disabled = disabled
 	button.process_mode = Node.PROCESS_MODE_ALWAYS
 	button.focus_mode = Control.FOCUS_ALL
@@ -1341,6 +1479,28 @@ func _add_menu_button(box: VBoxContainer, text: String, callback: Callable, disa
 	button.custom_minimum_size = Vector2(float(box.get_meta("menu_button_width", 510.0)), float(box.get_meta("menu_button_height", 62.0)))
 	_style_button(button)
 	button.add_theme_font_size_override("font_size", int(box.get_meta("menu_font_size", 23)))
+	var row_label := Label.new()
+	row_label.text = text
+	row_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	row_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	row_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	row_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row_label.add_theme_font_size_override("font_size", int(float(box.get_meta("menu_font_size", 23)) * minf(story_text_scale, 1.25)))
+	row_label.add_theme_color_override("font_color", Color(0.49, 0.47, 0.42) if disabled else Color(0.91, 0.85, 0.72))
+	row_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	row_label.offset_left = 16
+	row_label.offset_right = -16
+	row_label.offset_top = 12
+	row_label.offset_bottom = -12
+	button.add_child(row_label)
+	button.text = text
+	button.clip_text = true
+	button.set_meta("wrapped_label", true)
+	_hide_native_button_text(button)
+	button.resized.connect(func():
+		var row_height := maxi(1, row_label.get_line_count()) * row_label.get_line_height() + 24
+		button.custom_minimum_size.y = maxf(float(box.get_meta("menu_button_height", 62.0)), float(row_height))
+	)
 	button.mouse_entered.connect(func():
 		if not button.disabled:
 			menu_hovered.emit()
@@ -1350,12 +1510,11 @@ func _add_menu_button(box: VBoxContainer, text: String, callback: Callable, disa
 			menu_hovered.emit()
 	)
 	button.pressed.connect(func():
+		_capture_menu_state()
 		menu_clicked.emit()
 		callback.call()
 	)
 	box.add_child(button)
-	if is_first_button and not disabled:
-		button.call_deferred("grab_focus")
 
 func _add_menu_text(box: VBoxContainer, text: String) -> Label:
 	var label = Label.new()
@@ -1363,9 +1522,9 @@ func _add_menu_text(box: VBoxContainer, text: String) -> Label:
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	label.custom_minimum_size = Vector2(float(box.get_meta("menu_button_width", 510.0)), 0.0)
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	label.add_theme_color_override("font_color", Color(0.72, 0.66, 0.54))
-	label.add_theme_font_size_override("font_size", 16 if bool(box.get_meta("compact_buttons", false)) else 20)
+	label.add_theme_font_size_override("font_size", int((17.0 if bool(box.get_meta("compact_buttons", false)) else 20.0) * minf(story_text_scale, 1.25)))
 	box.add_child(label)
 	return label
 
@@ -1397,8 +1556,11 @@ func set_gamepad_profile(profile: Dictionary) -> void:
 			show_remap_menu(remap_back_target, remap_page)
 
 func restore_input_focus() -> void:
+	if dialogue_layer != null and dialogue_layer.visible:
+		_restore_dialogue_reading_state()
+		return
 	if menu_layer != null and menu_layer.visible and input_source != null and input_source.has_method("focus_first_enabled"):
-		input_source.focus_first_enabled(menu_layer)
+		navigation.restore(_rendered_screen, menu_layer)
 
 func _set_ui_pointer(context: String = "menu") -> void:
 	if input_source != null and input_source.has_method("set_ui_context"):
@@ -1421,6 +1583,9 @@ func apply_accessibility(current: Dictionary) -> void:
 	story_text_scale = subtitle_scale
 	if inventory_text != null:
 		inventory_text.add_theme_font_size_override("normal_font_size", int(round(17.0 * story_text_scale)))
+		if journal_art != null:
+			journal_art.custom_minimum_size.y = 84.0 if story_text_scale > 1.2 else 112.0
+			inventory_text.custom_minimum_size.y = 520.0 - journal_art.custom_minimum_size.y - 12.0
 	if dialogue_text != null:
 		dialogue_title.visible = subtitle_speaker_names
 		_style_panel(dialogue_layer, Color(0.045, 0.04, 0.035, clampf(float(current.get("subtitle_background_opacity", 0.92)), 0.25, 1.0)), Color(0.44, 0.32, 0.18, 0.92))
@@ -1433,11 +1598,15 @@ func apply_accessibility(current: Dictionary) -> void:
 		label.add_theme_constant_override("outline_size", 5 if high_contrast else (4 if label == compass_label else 2))
 		label.add_theme_color_override("font_outline_color", Color.BLACK if high_contrast else Color(0.01, 0.01, 0.01, 0.78))
 	_update_process_policy()
+	call_deferred("_apply_hud_layout")
 
 func set_input_device(device: String) -> void:
 	input_device = device if device in ["keyboard_mouse", "gamepad", "touch"] else "keyboard_mouse"
 	if raw_prompt != "":
-		set_prompt(raw_prompt)
+		if not _interaction_prompt_model.is_empty():
+			set_interaction_prompt(_interaction_prompt_model)
+		else:
+			set_prompt(raw_prompt)
 	if raw_hint != "":
 		hint_label.text = _format_input_text(raw_hint)
 	update_equipment(last_potions, last_bombs, last_oil_name, last_arrow_count, last_arrow_type)
@@ -1448,6 +1617,27 @@ func _action_label(action: String) -> String:
 	return "[%s]" % action.capitalize()
 
 func _format_input_text(text: String) -> String:
+	if input_source != null and input_source.has_method("describe_action"):
+		var block: Dictionary = input_source.describe_action("block")
+		var guard_verb := "Toggle" if str(block.get("mode", "hold")) == "toggle" else "Hold"
+		var replacements := {
+			"Left click": _action_label("light_attack"),
+			"Left mouse": _action_label("light_attack"),
+			"Right mouse": _action_label("heavy_attack"),
+			"Space": _action_label("dodge"),
+			"Tap Q": "Press " + _action_label("block"),
+			"Hold Q": guard_verb + " " + _action_label("block"),
+			"Hold C": "Hold " + _action_label("oathfire_beam"),
+			"Press E": ("Tap " if input_device == "touch" else "Press ") + _action_label("interact")
+		}
+		var contextual_text := text
+		for phrase in replacements:
+			contextual_text = contextual_text.replace(str(phrase), str(replacements[phrase]))
+		if contextual_text.begins_with("E - "):
+			contextual_text = _action_label("interact") + " " + contextual_text.trim_prefix("E - ")
+		elif contextual_text.begins_with("E  "):
+			contextual_text = _action_label("interact") + " " + contextual_text.trim_prefix("E  ")
+		return contextual_text
 	if input_device == "touch":
 		var touch_text := text
 		touch_text = touch_text.replace("Left click", "[Strike]")
@@ -1511,10 +1701,9 @@ func _input(event: InputEvent) -> void:
 		var navigation_key := event as InputEventKey
 		var navigation_code := navigation_key.keycode if navigation_key.keycode != KEY_NONE else navigation_key.physical_keycode
 		if navigation_key.pressed and not navigation_key.echo and navigation_code in [KEY_TAB, KEY_UP, KEY_DOWN]:
-			var buttons: Array[Button] = []
-			for child in dialogue_actions.get_children():
-				if child is Button and not child.is_queued_for_deletion() and not child.disabled:
-					buttons.append(child)
+			if get_viewport().gui_get_focus_owner() == dialogue_text and navigation_code != KEY_TAB:
+				return
+			var buttons: Array[Control] = _dialogue_focus_controls()
 			if buttons.size() > 1:
 				var focused_button := get_viewport().gui_get_focus_owner()
 				var current_index := buttons.find(focused_button)
@@ -1538,22 +1727,37 @@ func _input(event: InputEvent) -> void:
 		if mouse_event.pressed and mouse_event.button_index == MOUSE_BUTTON_LEFT and dialogue_actions != null:
 			# Press activation remains reliable on paused Web frames, but the
 			# pointer's actual button must win over unrelated keyboard focus.
-			for child in dialogue_actions.get_children():
-				if child is Button and not child.is_queued_for_deletion() and not child.disabled and child.get_global_rect().has_point(mouse_event.position):
+			for child in _dialogue_focus_controls():
+				if child is Button and not child.is_queued_for_deletion() and not child.disabled and _dialogue_pointer_hits(child, mouse_event.position):
 					pointer_button = child
 					break
 			accepted = pointer_button != null
 	if not accepted:
 		return
+	if not event is InputEventMouseButton and input_source != null and input_source.has_method("accept_event") and not input_source.accept_event(event, "ui_accept", input_source.get_context()):
+		get_viewport().set_input_as_handled()
+		return
 	var focused := pointer_button if pointer_button != null else get_viewport().gui_get_focus_owner()
-	if not (focused is Button) or (focused as Button).disabled or not dialogue_actions.is_ancestor_of(focused):
+	if focused == dialogue_text:
+		return
+	if not (focused is Button) or (focused as Button).disabled or not dialogue_layer.is_ancestor_of(focused):
 		var fallback_button := _focused_dialogue_button()
 		if fallback_button != null:
 			fallback_button.grab_focus()
 		focused = get_viewport().gui_get_focus_owner()
 	if focused is Button and not (focused as Button).disabled:
-		(focused as Button).pressed.emit()
 		get_viewport().set_input_as_handled()
+		(focused as Button).pressed.emit()
+
+func _dialogue_pointer_hits(button: Button, point: Vector2) -> bool:
+	if not button.get_global_rect().has_point(point):
+		return false
+	var ancestor := button.get_parent()
+	while ancestor != null and ancestor != dialogue_layer:
+		if ancestor is Control and ancestor.clip_contents and not ancestor.get_global_rect().has_point(point):
+			return false
+		ancestor = ancestor.get_parent()
+	return true
 
 func _capture_remap_input(event: InputEvent) -> bool:
 	# Capture before GUI navigation consumes arrows, accept keys or clicks.
@@ -1580,45 +1784,50 @@ func _capture_remap_input(event: InputEvent) -> bool:
 				var conflict := str(result.get("conflict", ""))
 				toast("Binding saved%s." % ("; swapped %s" % conflict if conflict != "" else ""))
 			else:
-				toast("That input cannot be assigned.")
+				post_notice(str(result.get("message", "That input cannot be assigned.")), "unavailable", 5.0, "binding")
 			show_remap_menu(remap_back_target, remap_page)
 			get_viewport().set_input_as_handled()
 			return true
 	return false
 
 func _unhandled_input(event: InputEvent) -> void:
-	if dialogue_layer != null and dialogue_layer.visible and event.is_action_pressed("ui_accept"):
-		return
 	if not event.is_action_pressed("ui_cancel"):
 		return
+	if input_source != null and input_source.has_method("accept_event") and not input_source.accept_event(event, "ui_cancel", input_source.get_context()):
+		get_viewport().set_input_as_handled()
+		return
+	if request_back():
+		get_viewport().set_input_as_handled()
+
+func request_back() -> bool:
+	if remap_waiting:
+		remap_waiting = false
+		post_notice("Binding cancelled.", "info", 2.5, "binding")
+		return true
+	if active_menu in ["death", "ending", "launch"]:
+		return true
+	if active_menu == "text_history":
+		_return_from_history()
+		return true
 	if dialogue_layer != null and dialogue_layer.visible:
 		if not _close_dialogue_surface():
-			return
+			return true
 		dialogue_closed.emit()
+		return true
 	elif inventory_layer != null and inventory_layer.visible:
 		dialogue_closed.emit()
-		get_tree().paused = false
 		hide_menus()
-	elif active_menu in ["settings", "controls"]:
-		_return_from_controls()
-	elif active_menu == "remap":
-		_return_from_remap()
-	elif active_menu == "credits":
-		show_main_menu()
-	elif active_menu == "text_history":
-		_return_from_history()
-	elif active_menu in ["save_library", "save_slot", "save_import", "chapter_replay", "text_history", "problem_report"]:
-		if active_menu in ["save_slot", "save_import", "chapter_replay"]:
-			show_save_library(library_back_target, library_page)
-		elif library_back_target == "main":
-			show_main_menu()
-		else:
-			show_pause_menu()
+		resume_requested.emit()
+		return true
 	elif active_menu == "pause":
 		resume_requested.emit()
-	else:
-		return
-	get_viewport().set_input_as_handled()
+		return true
+	elif active_menu == "main":
+		return true
+	elif active_menu != "":
+		_return_to_parent()
+		return true
+	return false
 
 func _on_off(value: bool) -> String:
 	return "On" if value else "Off"
@@ -1646,14 +1855,12 @@ func _save_status_text() -> String:
 	return "No journey has been saved on this device."
 
 func _return_from_controls() -> void:
-	if controls_back_target == "pause":
-		show_pause_menu()
-	else:
-		show_main_menu()
+	_return_to_parent()
 
 func _add_dialogue_close() -> void:
 	var close = Button.new()
 	close.text = "Close"
+	close.set_meta("dialogue_focus_key", "close")
 	close.process_mode = Node.PROCESS_MODE_ALWAYS
 	close.focus_mode = Control.FOCUS_ALL
 	close.action_mode = BaseButton.ACTION_MODE_BUTTON_PRESS
@@ -1666,6 +1873,9 @@ func _add_dialogue_close() -> void:
 	dialogue_actions.add_child(close)
 
 func _close_dialogue_surface() -> bool:
+	if _dialogue_review_open:
+		_dialogue_review_open = false
+		dialogue_review_changed.emit(false)
 	# Hide the surface before notifying game logic so a delayed browser event
 	# cannot activate a stale button while the zone is being rebuilt.
 	if dialogue_closing or dialogue_layer == null or not dialogue_layer.visible:
@@ -1772,6 +1982,73 @@ func _add_hud_accent(parent: Control, position: Vector2, size: Vector2) -> void:
 	accent.color = Color(0.62, 0.42, 0.18, 0.88)
 	parent.add_child(accent)
 
+func _capture_inventory_state() -> void:
+	if is_instance_valid(inventory_layer) and inventory_layer.visible:
+		navigation.capture(_inventory_screen, "gameplay", inventory_layer)
+
+func _restore_inventory_state(key: String, generation: int) -> void:
+	await get_tree().process_frame
+	if generation == _inventory_generation and key == _inventory_screen and inventory_layer.visible:
+		navigation.restore(key, inventory_layer)
+
+func _screen_key() -> String:
+	match active_menu:
+		"settings": return "settings:%d" % settings_page
+		"remap": return "remap:%d" % remap_page
+		"save_library": return "save_library:%d" % library_page
+		"save_slot": return "save_slot:" + selected_slot
+		_: return active_menu
+
+func _screen_parent() -> String:
+	match active_menu:
+		"settings", "controls": return controls_back_target
+		"remap": return "controls"
+		"save_library": return library_back_target
+		"save_slot", "save_import", "chapter_replay": return "save_library:%d" % library_page
+		"text_history", "problem_report": return library_back_target
+		"credits", "quit": return "main"
+		"pause": return "gameplay"
+		_: return "main"
+
+func _capture_menu_state() -> void:
+	if is_instance_valid(menu_layer) and _rendered_screen != "":
+		navigation.capture(_rendered_screen, navigation.parent_of(_rendered_screen, _screen_parent()), menu_layer)
+
+func _restore_menu_state(key: String, generation: int) -> void:
+	await get_tree().process_frame
+	if generation != _screen_generation or key != _rendered_screen or not is_instance_valid(menu_layer) or not menu_layer.visible:
+		return
+	if _dialogue_review_open:
+		var reader := menu_layer.find_child("HistoryReader", true, false) as RichTextLabel
+		if reader != null and not navigation.screens.get(key, {}).has("scrolls"):
+			reader.get_v_scroll_bar().value = reader.get_v_scroll_bar().max_value
+	navigation.restore(key, menu_layer)
+
+func _register_field(control: Control, field_key: String, fallback: String) -> void:
+	control.set_meta("navigation_key", "field:" + field_key)
+	control.set_meta("navigation_draft", field_key)
+	control.set("text", navigation.draft(_rendered_screen, field_key, fallback))
+
+func _return_to_parent() -> void:
+	_capture_menu_state()
+	_open_screen(navigation.parent_of(_rendered_screen, _screen_parent()))
+
+func _open_screen(key: String) -> void:
+	var parts := key.split(":", true, 1)
+	var page := int(parts[1]) if parts.size() > 1 and parts[1].is_valid_int() else 0
+	match parts[0]:
+		"gameplay": resume_requested.emit()
+		"main": show_main_menu()
+		"pause": show_pause_menu()
+		"controls": show_controls_menu(controls_back_target)
+		"settings": show_settings_menu(controls_back_target, page)
+		"remap": show_remap_menu(remap_back_target, page)
+		"credits": show_credits_menu()
+		"save_library": show_save_library(library_back_target, page)
+		"save_slot": show_save_slot(parts[1] if parts.size() > 1 else selected_slot)
+		"dialogue": _return_from_history()
+		_: show_pause_menu()
+
 func get_current_dialogue_page() -> Dictionary:
 	if dialogue_page_index < 0 or dialogue_page_index >= dialogue_pages.size():
 		return {}
@@ -1816,10 +2093,31 @@ func load_text_history(raw: Variant) -> void:
 	text_history.load_state(raw)
 
 func _save_service():
-	return get_parent().get("save_manager")
+	var service = get_parent().get("save_manager")
+	if service != null:
+		if not service.library_changed.is_connected(_refresh_save_library):
+			service.library_changed.connect(_refresh_save_library)
+		if service.has_signal("operation_finished") and not service.operation_finished.is_connected(_on_save_operation_finished):
+			service.operation_finished.connect(_on_save_operation_finished)
+	return service
+
+func _on_save_operation_finished(slot_id: String, operation: String, success: bool, text: String) -> void:
+	if slot_id != "":
+		_slot_operation_results[slot_id] = text
+	if success and operation in ["import", "restore"] and active_menu == "save_slot" and selected_slot == slot_id:
+		var field := menu_layer.find_child("SaveSlotName", true, false) as LineEdit
+		for slot in _save_service().list_slots():
+			if str(slot.id) == slot_id and field != null:
+				field.text = str(slot.title)
+	if active_menu != "save_slot" or selected_slot != slot_id:
+		post_notice(text, "save" if success else "error", 5.0, "save_operation:" + operation + ":" + slot_id)
+	if success and operation == "import" and active_menu == "save_import":
+		_return_after_import = true
+	_refresh_save_library()
 
 func show_save_library(back_target: String = "pause", requested_page: int = 0) -> void:
 	library_back_target = back_target
+	library_page = maxi(0, requested_page)
 	active_menu = "save_library"
 	_set_internal_canvas(Vector2i(MENU_SIZE))
 	_set_ui_pointer("pause")
@@ -1842,7 +2140,7 @@ func show_save_library(back_target: String = "pause", requested_page: int = 0) -
 			summary += "\n%s · %s%s" % [slot.zone, str(slot.saved_at).replace("T", " "), " · replay" if bool(slot.replay) else ""]
 		else:
 			summary += " — unreadable" if bool(slot.exists) else " — empty"
-		_add_menu_button(box, summary, func(id = str(slot.id)): show_save_slot(id))
+		_add_menu_button(box, summary, func(id = str(slot.id)): show_save_slot(id), false, "slot:" + str(slot.id))
 	_add_menu_button(box, "Previous Page", func(): show_save_library(library_back_target, library_page - 1), library_page <= 0)
 	_add_menu_button(box, "Next Page", func(): show_save_library(library_back_target, library_page + 1), library_page >= pages - 1)
 	_add_menu_button(box, "Import a Save File", func():
@@ -1855,7 +2153,17 @@ func show_save_library(back_target: String = "pause", requested_page: int = 0) -
 	_add_menu_button(box, "Back", _return_from_library)
 
 func _refresh_save_library() -> void:
-	if active_menu == "save_library":
+	if _library_refresh_pending:
+		return
+	_library_refresh_pending = true
+	call_deferred("_flush_library_refresh")
+
+func _flush_library_refresh() -> void:
+	_library_refresh_pending = false
+	if _return_after_import:
+		_return_after_import = false
+		show_save_library(library_back_target, 0)
+	elif active_menu == "save_library":
 		show_save_library(library_back_target, library_page)
 	elif active_menu == "save_slot":
 		show_save_slot(selected_slot)
@@ -1876,6 +2184,8 @@ func show_save_slot(slot_id: String) -> void:
 	box.set_meta("compact_buttons", true)
 	var title := LineEdit.new()
 	title.text = str(slot.title)
+	title.name = "SaveSlotName"
+	_register_field(title, "slot_name", str(slot.title))
 	title.max_length = 48
 	title.placeholder_text = "Name this journey"
 	title.custom_minimum_size = Vector2(320, 44)
@@ -1884,23 +2194,20 @@ func show_save_slot(slot_id: String) -> void:
 	box.add_child(title)
 	if bool(slot.valid):
 		_add_menu_text(box, "Saved %s UTC" % str(slot.saved_at).replace("T", " "))
+	if _slot_operation_results.has(slot_id):
+		_add_menu_text(box, str(_slot_operation_results[slot_id]))
 	_add_menu_button(box, "Load This Journey", func():
 		if service.load_slot(get_parent(), slot_id):
 			hide_menus()
 	, not bool(slot.valid))
 	if not bool(slot.protected):
 		var can_save: bool = get_parent().get("game_started") == true and is_instance_valid(get_parent().get("player"))
-		_add_menu_button(box, "Replace With Current Journey" if bool(slot.exists) else "Save Current Journey Here", func():
-			if service.save_named(get_parent(), slot_id, title.text):
-				show_save_slot(slot_id)
-		, not can_save)
+		_add_menu_button(box, "Replace With Current Journey" if bool(slot.exists) else "Save Current Journey Here", func(): service.save_named(get_parent(), slot_id, title.text), not can_save, "save_current")
 		_add_menu_button(box, "Rename", func():
-			if service.rename_slot(slot_id, title.text):
-				show_save_slot(slot_id)
+			service.rename_slot(slot_id, title.text)
 		, not bool(slot.valid))
 		_add_menu_button(box, "Restore Previous Slot Copy", func():
-			if service.restore_previous_slot(slot_id):
-				show_save_slot(slot_id)
+			service.restore_previous_slot(slot_id)
 		, not service.has_previous_slot(slot_id))
 		_add_menu_button(box, "Import File Into This Slot", func():
 			service.request_import_file(slot_id)
@@ -1920,10 +2227,10 @@ func show_save_import() -> void:
 	input.custom_minimum_size = Vector2(340, 280)
 	input.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
 	input.placeholder_text = "Paste Ashen Oath save JSON"
+	_register_field(input, "import_json", "")
 	box.add_child(input)
 	_add_menu_button(box, "Import Into an Empty Slot", func():
-		if _save_service().import_save_text(input.text):
-			show_save_library(library_back_target, 0)
+		_save_service().import_save_text(input.text)
 	)
 	_add_menu_button(box, "Back", func(): show_save_library(library_back_target, library_page))
 
@@ -1940,12 +2247,13 @@ func show_chapter_replays() -> void:
 	_add_menu_button(box, "Back", func(): show_save_library(library_back_target, library_page))
 
 func _return_from_library() -> void:
-	if library_back_target == "main":
-		show_main_menu()
-	else:
-		show_pause_menu()
+	_return_to_parent()
 
 func show_text_history(back_target: String = "pause") -> void:
+	if back_target == "dialogue":
+		_capture_dialogue_reading_state()
+		_dialogue_review_open = true
+		dialogue_review_changed.emit(true)
 	library_back_target = back_target
 	active_menu = "text_history"
 	dialogue_layer.visible = false
@@ -1955,26 +2263,59 @@ func show_text_history(back_target: String = "pause") -> void:
 	menu_layer.visible = true
 	var box := _menu_box("Conversation History", "Words and promises", "most recent 400 entries")
 	var log := RichTextLabel.new()
+	log.name = "HistoryReader"
+	log.set_meta("navigation_key", "history_text")
+	log.set_meta("navigation_scroll", "history_text")
 	log.text = text_history.text()
 	log.bbcode_enabled = false
 	log.custom_minimum_size = Vector2(340, 410)
 	log.add_theme_font_size_override("normal_font_size", int(20 * story_text_scale))
 	log.focus_mode = Control.FOCUS_ALL
 	log.scroll_active = true
-	log.scroll_following = true
+	log.scroll_following = false
 	box.add_child(log)
 	_add_menu_button(box, "Back to Conversation" if back_target == "dialogue" else "Back", _return_from_history)
 
 func _return_from_history() -> void:
+	_capture_menu_state()
 	if library_back_target == "dialogue":
 		menu_layer.visible = false
 		active_menu = ""
 		_set_internal_canvas(GAMEPLAY_SIZE)
 		_set_ui_pointer("dialogue")
 		dialogue_layer.visible = true
-		_focus_after_rebuild(dialogue_actions)
+		_dialogue_review_open = false
+		dialogue_review_changed.emit(false)
+		call_deferred("_restore_dialogue_reading_state")
 	else:
 		_return_from_library()
+
+func _capture_dialogue_reading_state() -> void:
+	var focused := get_viewport().gui_get_focus_owner()
+	_dialogue_reading_state = {"page": dialogue_page_index, "subtitle_scroll": dialogue_text.get_v_scroll_bar().value, "choices_scroll": dialogue_choices_scroll.scroll_vertical, "focus": str(focused.get_meta("dialogue_focus_key", "history")) if focused != null else "history"}
+
+func _restore_dialogue_reading_state() -> void:
+	if not dialogue_layer.visible:
+		return
+	if not _dialogue_reading_state.is_empty() and int(_dialogue_reading_state.get("page", -1)) == dialogue_page_index:
+		dialogue_text.get_v_scroll_bar().value = float(_dialogue_reading_state.get("subtitle_scroll", 0.0))
+		dialogue_choices_scroll.scroll_vertical = int(_dialogue_reading_state.get("choices_scroll", 0))
+		for control in _dialogue_focus_controls():
+			if str(control.get_meta("dialogue_focus_key", "")) == str(_dialogue_reading_state.get("focus", "")):
+				control.grab_focus()
+				return
+	_focus_first_enabled(dialogue_actions)
+
+func _dialogue_focus_controls() -> Array[Control]:
+	var controls: Array[Control] = []
+	if is_instance_valid(_dialogue_history_button) and _dialogue_history_button.is_visible_in_tree():
+		controls.append(_dialogue_history_button)
+	if is_instance_valid(dialogue_text) and dialogue_text.is_visible_in_tree():
+		controls.append(dialogue_text)
+	for child in dialogue_actions.get_children():
+		if child is Button and not child.is_queued_for_deletion() and not child.disabled and child.is_visible_in_tree():
+			controls.append(child)
+	return controls
 
 func _show_journal_art(quests, state) -> void:
 	if journal_art == null:
@@ -2009,6 +2350,7 @@ func show_problem_report(back_target: String = "pause") -> void:
 	description.custom_minimum_size = Vector2(340, 240)
 	description.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
 	description.placeholder_text = "What happened?"
+	_register_field(description, "problem_description", "")
 	box.add_child(description)
 	_add_menu_button(box, "Download Problem Report", func(): _download_problem_report(description.text))
 	_add_menu_button(box, "Back", _return_from_library)
@@ -2031,6 +2373,27 @@ func _download_problem_report(description: String) -> void:
 			toast("Report saved to " + ProjectSettings.globalize_path(path))
 
 func _style_button(button: Button) -> void:
+	if button.text != "" and not button.has_meta("wrapped_label"):
+		var label := Label.new()
+		label.text = button.text
+		button.tooltip_text = button.text
+		button.clip_text = true
+		button.set_meta("wrapped_label", true)
+		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		label.add_theme_font_size_override("font_size", int(22.0 * minf(story_text_scale, 1.2)))
+		label.add_theme_color_override("font_color", Color(0.50, 0.48, 0.43) if button.disabled else Color(0.94, 0.89, 0.77))
+		label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		label.offset_left = 16
+		label.offset_right = -16
+		label.offset_top = 10
+		label.offset_bottom = -10
+		button.custom_minimum_size.y = maxf(button.custom_minimum_size.y, 52.0)
+		button.add_child(label)
+		button.resized.connect(func():
+			button.custom_minimum_size.y = maxf(52.0, float(maxi(1, label.get_line_count()) * label.get_line_height() + 20))
+		)
 	var normal = StyleBoxFlat.new()
 	normal.bg_color = Color(0.055, 0.046, 0.037, 0.72)
 	normal.border_color = Color(0.50, 0.37, 0.19, 0.82)
@@ -2071,7 +2434,15 @@ func _style_button(button: Button) -> void:
 	disabled.corner_radius_bottom_right = 3
 	button.add_theme_stylebox_override("normal", normal)
 	button.add_theme_stylebox_override("hover", hover)
-	button.add_theme_stylebox_override("focus", hover)
+	var focus := StyleBoxFlat.new()
+	focus.bg_color = Color(0, 0, 0, 0)
+	focus.border_color = Color.WHITE if high_contrast else Color(1.0, 0.86, 0.52)
+	focus.set_border_width_all(3)
+	focus.expand_margin_left = 2
+	focus.expand_margin_right = 2
+	focus.expand_margin_top = 2
+	focus.expand_margin_bottom = 2
+	button.add_theme_stylebox_override("focus", focus)
 	button.add_theme_stylebox_override("pressed", pressed)
 	button.add_theme_stylebox_override("disabled", disabled)
 	button.add_theme_color_override("font_color", Color(0.86, 0.78, 0.60))
@@ -2082,3 +2453,11 @@ func _style_button(button: Button) -> void:
 	button.add_theme_font_size_override("font_size", 23)
 	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	button.focus_mode = Control.FOCUS_ALL
+	if button.has_meta("wrapped_label"):
+		_hide_native_button_text(button)
+
+func _hide_native_button_text(button: Button) -> void:
+	# Keep the actual Button text for accessible names and existing callers.
+	# Its wrapped child label owns only the visual presentation.
+	for color_key in ["font_color", "font_hover_color", "font_focus_color", "font_pressed_color", "font_disabled_color", "font_hover_pressed_color"]:
+		button.add_theme_color_override(color_key, Color(0, 0, 0, 0))

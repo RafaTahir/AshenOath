@@ -172,6 +172,10 @@ func _ready() -> void:
 	was_on_floor = is_on_floor()
 
 func _physics_process(delta: float) -> void:
+	if input_source != null and input_source.has_method("is_gameplay_context") and not input_source.is_gameplay_context():
+		velocity.x = 0.0
+		velocity.z = 0.0
+		return
 	attack_cooldown = max(attack_cooldown - delta, 0.0)
 	beam_cooldown = max(beam_cooldown - delta, 0.0)
 	attack_anim_time = max(attack_anim_time - delta, 0.0)
@@ -211,6 +215,26 @@ func set_transition_locked(locked: bool) -> void:
 		velocity = Vector3.ZERO
 	elif health_component == null or health_component.health > 0.0:
 		can_control = true
+
+func cancel_buffered_input(reason: String = "context") -> void:
+	buffered_attack = ""
+	attack_buffer_time = 0.0
+	pending_attack_damage = 0.0
+	pending_attack_radius = 0.0
+	attack_contact_emitted = true
+	attack_anim_time = 0.0
+	parry_window = 0.0
+	bow_aiming = false
+	bow_draw_time = 0.0
+	dodge_time = 0.0
+	velocity.x = 0.0
+	velocity.z = 0.0
+	if beam_cast_state != BEAM_STATE_IDLE or beam_charging:
+		cancel_beam_charge(reason)
+	elif animation_driver != null and animation_driver.has_method("stop_action"):
+		animation_driver.stop_action("idle", 0.12)
+	if slash_arc_root != null:
+		slash_arc_root.visible = false
 
 func bind_inventory(value) -> void:
 	inventory_ref = value

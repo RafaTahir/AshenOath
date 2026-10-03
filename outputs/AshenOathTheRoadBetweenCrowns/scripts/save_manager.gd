@@ -17,6 +17,7 @@ const RELEASED_ZONES := [
 
 signal message(text: String)
 signal library_changed
+signal operation_finished(slot_id: String, operation: String, success: bool, text: String)
 
 var replay_session := false
 var journey_id := ""
@@ -491,14 +492,14 @@ func _slot_summary(slot_id: String, fallback_title: String, protected_slot: bool
 
 func save_named(game, slot_id: String, title: String) -> bool:
 	if not slot_id.begins_with("manual_") or slot_path(slot_id).is_empty() or _is_game_shutting_down(game) or not _has_valid_player(game):
-		message.emit("Start or load a journey before creating a manual save.")
+		operation_finished.emit(slot_id, "save", false, "Start or load a journey before creating a manual save.")
 		return false
 	var data := _build_save_data(game)
 	data["slot_name"] = _safe_slot_name(title)
 	if not _write_atomic(slot_path(slot_id), data):
-		message.emit("The save could not be written. The previous copy is preserved.")
+		operation_finished.emit(slot_id, "save", false, "The save could not be written. The previous copy is preserved.")
 		return false
-	message.emit("Saved: " + str(data.slot_name))
+	operation_finished.emit(slot_id, "save", true, "Saved: " + str(data.slot_name))
 	library_changed.emit()
 	return true
 
@@ -507,9 +508,11 @@ func rename_slot(slot_id: String, title: String) -> bool:
 		return false
 	var result := _read_slot(slot_path(slot_id))
 	if not bool(result.get("ok", false)):
+		operation_finished.emit(slot_id, "rename", false, "The slot could not be read; its name is unchanged.")
 		return false
 	result.data["slot_name"] = _safe_slot_name(title)
 	var saved := _write_atomic(slot_path(slot_id), result.data)
+	operation_finished.emit(slot_id, "rename", saved, "Journey renamed." if saved else "The new name could not be saved.")
 	if saved:
 		library_changed.emit()
 	return saved
@@ -523,11 +526,11 @@ func restore_previous_slot(slot_id: String) -> bool:
 	var path := slot_path(slot_id)
 	var previous := _read_slot(backup_path(path))
 	if not bool(previous.get("ok", false)):
-		message.emit("The previous copy cannot be read. The current save remains in place.")
+		operation_finished.emit(slot_id, "restore", false, "The previous copy cannot be read. The current save remains in place.")
 		return false
 	var restored := _write_atomic(path, previous.data)
+	operation_finished.emit(slot_id, "restore", restored, "Previous slot copy restored. The displaced copy is now its backup." if restored else "The previous copy could not be restored.")
 	if restored:
-		message.emit("Previous slot copy restored. The displaced copy is now its backup.")
 		library_changed.emit()
 	return restored
 
@@ -549,23 +552,23 @@ func export_slot(slot_id: String) -> bool:
 		return false
 	var result := _read_slot(path)
 	if not bool(result.get("ok", false)):
-		message.emit("There is no readable save to export in this slot.")
+		operation_finished.emit(slot_id, "export", false, "There is no readable save to export in this slot.")
 		return false
 	var content := JSON.stringify({"format": "ashen-oath-save", "format_version": 1, "save": result.data}, "\t")
 	var filename := "ashen-oath-%s-%d.json" % [slot_id, int(Time.get_unix_time_from_system())]
 	if OS.has_feature("web"):
 		JavaScriptBridge.download_buffer(content.to_utf8_buffer(), filename, "application/json")
-		message.emit("Save download requested. Keep the JSON file to restore this journey.")
+		operation_finished.emit(slot_id, "export", true, "Save download requested. Keep the JSON file to restore this journey.")
 	else:
 		DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("user://exports"))
 		var export_path := "user://exports/" + filename
 		var output := FileAccess.open(export_path, FileAccess.WRITE)
 		if output == null:
-			message.emit("Could not create the export file.")
+			operation_finished.emit(slot_id, "export", false, "Could not create the export file.")
 			return false
 		output.store_string(content)
 		output.close()
-		message.emit("Exported to " + ProjectSettings.globalize_path(export_path))
+		operation_finished.emit(slot_id, "export", true, "Exported to " + ProjectSettings.globalize_path(export_path))
 	return true
 
 func request_import_file(target_slot: String = "") -> void:
@@ -588,7 +591,7 @@ func request_import_file(target_slot: String = "") -> void:
 	_import_dialog.file_selected.connect(func(path: String):
 		var file := FileAccess.open(path, FileAccess.READ)
 		if file == null or file.get_length() > MAX_IMPORT_BYTES:
-			message.emit("Choose a readable Ashen Oath JSON save below 2 MB.")
+			operation_finished.emit(target_slot, "import", false, "Choose a readable Ashen Oath JSON save below 2 MB.")
 			return
 		import_save_text(file.get_as_text(), target_slot)
 	)
@@ -599,32 +602,32 @@ func _on_browser_import(arguments: Array) -> void:
 	if arguments.size() < 2:
 		return
 	if str(arguments[1]) != "":
-		message.emit(str(arguments[1]))
+		operation_finished.emit(_browser_import_slot, "import", false, str(arguments[1]))
 		return
 	import_save_text(str(arguments[0]), _browser_import_slot)
 	_browser_import_slot = ""
 
 func import_save_text(content: String, target_slot: String = "") -> bool:
 	if content.to_utf8_buffer().size() > MAX_IMPORT_BYTES:
-		message.emit("The save is larger than the 2 MB import limit.")
+		operation_finished.emit(target_slot, "import", false, "The save is larger than the 2 MB import limit.")
 		return false
 	var parser := JSON.new()
 	if parser.parse(content) != OK or typeof(parser.data) != TYPE_DICTIONARY:
-		message.emit("Choose an Ashen Oath JSON save. This file could not be read.")
+		operation_finished.emit(target_slot, "import", false, "Choose an Ashen Oath JSON save. This file could not be read.")
 		return false
 	var raw: Dictionary = parser.data
 	if raw.has("format"):
 		if str(raw.get("format", "")) != "ashen-oath-save" or typeof(raw.get("save")) != TYPE_DICTIONARY:
-			message.emit("This file is not an Ashen Oath save export.")
+			operation_finished.emit(target_slot, "import", false, "This file is not an Ashen Oath save export.")
 			return false
 		raw = raw.save
 	var error := _import_error(raw)
 	if error != "":
-		message.emit(error)
+		operation_finished.emit(target_slot, "import", false, error)
 		return false
 	var destination := target_slot
 	if destination != "" and (not destination.begins_with("manual_") or slot_path(destination).is_empty()):
-		message.emit("Choose a manual slot for an import.")
+		operation_finished.emit(target_slot, "import", false, "Choose a manual slot for an import.")
 		return false
 	if destination.is_empty():
 		for number in range(1, MANUAL_SLOT_COUNT + 1):
@@ -633,15 +636,15 @@ func import_save_text(content: String, target_slot: String = "") -> bool:
 				destination = candidate
 				break
 	if destination.is_empty():
-		message.emit("All six manual slots are occupied. Choose a slot and use Import File Into This Slot; its previous copy will remain recoverable.")
+		operation_finished.emit(target_slot, "import", false, "All six manual slots are occupied. Choose a slot and use Import File Into This Slot; its previous copy will remain recoverable.")
 		return false
 	var data := migrate_save_data(raw)
 	data["slot_name"] = _safe_slot_name(str(raw.get("slot_name", "Imported journey")))
 	data["replay_session"] = false
 	if not _write_atomic(slot_path(destination), data):
-		message.emit("The import could not be saved. Existing journeys are unchanged.")
+		operation_finished.emit(destination, "import", false, "The import could not be saved. Existing journeys are unchanged.")
 		return false
-	message.emit("Imported into %s. Select the slot to load it." % destination.replace("_", " ").capitalize())
+	operation_finished.emit(destination, "import", true, "Imported into %s. Select the slot to load it." % destination.replace("_", " ").capitalize())
 	library_changed.emit()
 	return true
 

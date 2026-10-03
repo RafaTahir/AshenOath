@@ -6,18 +6,49 @@ extends Node
 var quest_manager: Node
 var quest_presentation: Node
 var last_focus: Node
+var pending_focus: Node
+var pending_since_msec := 0
+const FOCUS_DWELL_MSEC := 150
+const SWITCH_ADVANTAGE := 0.32
+
+func reset() -> void:
+	last_focus = null
+	pending_focus = null
+	pending_since_msec = 0
+
+func forget(area: Node) -> void:
+	if area == last_focus:
+		last_focus = null
+	if area == pending_focus:
+		pending_focus = null
+		pending_since_msec = 0
+
+func needs_refresh() -> bool:
+	return is_instance_valid(pending_focus) or (is_instance_valid(last_focus) and not _available(last_focus))
+
+func _available(area: Node) -> bool:
+	if not is_instance_valid(area) or not area.is_inside_tree() or area.is_queued_for_deletion():
+		return false
+	if area.has_method("is_interaction_enabled"):
+		return bool(area.is_interaction_enabled())
+	return area is Node3D and (area as Node3D).is_visible_in_tree()
+
+func _reach(area: Node) -> float:
+	return 3.6 if str(area.get("interaction_type")) in ["zone", "dialogue"] else 2.8
 
 func setup(manager: Node, presentation: Node = null) -> void:
 	quest_manager = manager
 	quest_presentation = presentation
 
 func target_is_valid(area: Area3D, player: CharacterBody3D, camera: Camera3D) -> bool:
-	if not is_instance_valid(player) or not is_instance_valid(area):
+	if not is_instance_valid(player) or not _available(area):
+		return false
+	if player.global_position.distance_to(area.global_position) > _reach(area):
 		return false
 	var kind := str(area.get("interaction_type"))
 	# Authored travel framing must not occlude the non-blocking travel volume.
 	if kind == "zone":
-		return player.global_position.distance_to(area.global_position) <= 3.65
+		return true
 	var origin := camera.global_position if camera != null else player.global_position + Vector3.UP
 	var target_height := 0.92 if kind in ["clue", "herb", "village_place"] else 0.96
 	var targets: Array[Vector3] = [area.global_position + Vector3.UP * target_height]
@@ -57,17 +88,19 @@ func target_is_valid(area: Area3D, player: CharacterBody3D, camera: Camera3D) ->
 
 func choose(candidates: Array, player: Node3D, camera: Camera3D, validator: Callable) -> Node:
 	if player == null:
-		last_focus = null
+		reset()
 		return null
 	var best: Node = null
 	var best_score := -999.0
+	var scores: Dictionary = {}
 	var forward: Vector3 = -camera.global_basis.z if camera != null else -player.global_basis.z
+	var view_origin: Vector3 = camera.global_position if camera != null else player.global_position + Vector3.UP
 	var objective_view: Dictionary = quest_presentation.get_objective_view_model() if quest_presentation != null and quest_presentation.has_method("get_objective_view_model") else {}
 	var tracked_id := str(objective_view.get("quest_id", "")) if not objective_view.is_empty() else (str(quest_manager.get_tracked_quest()) if quest_manager != null and quest_manager.has_method("get_tracked_quest") else "")
 	var tracked_objective := str(objective_view.get("objective_id", "")) if not objective_view.is_empty() else _tracked_objective_id(tracked_id)
 	var grouped_targets := _unfinished_group_members(tracked_id, tracked_objective)
 	for candidate in candidates.duplicate():
-		if candidate == null or not is_instance_valid(candidate) or not candidate.is_inside_tree() or candidate.is_queued_for_deletion():
+		if not _available(candidate):
 			continue
 		var interaction_type := str(candidate.get("interaction_type"))
 		var offset: Vector3 = candidate.global_position - player.global_position
@@ -75,10 +108,10 @@ func choose(candidates: Array, player: Node3D, camera: Camera3D, validator: Call
 		# Conversation targets need a little more room than small props. This
 		# keeps a speaker focusable from a natural shoulder-camera distance while
 		# leaving clue, vendor, and scenery ranges unchanged.
-		var focus_range := 3.6 if interaction_type in ["zone", "dialogue"] else 2.8
-		if distance > focus_range or distance < 0.01:
+		var focus_range := _reach(candidate)
+		if distance > focus_range:
 			continue
-		var facing := forward.dot(offset.normalized())
+		var facing := forward.dot(view_origin.direction_to(candidate.global_position + Vector3.UP * 0.96))
 		# Dialogue has a target-specific eye-line validator in game.gd. Requiring
 		# this service's separate trigger-origin angle as well can reject a speaker
 		# who is visibly centered at conversation distance, especially with a
@@ -99,25 +132,39 @@ func choose(candidates: Array, player: Node3D, camera: Camera3D, validator: Call
 		var objective_id := str(candidate.get("objective_id"))
 		if tracked_id != "" and quest_id == tracked_id:
 			if tracked_objective != "" and (objective_id == tracked_objective or grouped_targets.has(objective_id)):
-				priority += 120.0
-			else:
-				priority -= 50.0
+				priority += 0.42
 		if interaction_type == "dialogue":
-			priority += 0.18
+			priority += 0.10
 		elif interaction_type == "clue" and quest_manager != null and quest_manager.has_method("is_active") and quest_manager.is_active(quest_id):
-			priority += 0.45
+			priority += 0.12
 		elif interaction_type == "zone":
-			priority += 1.25
+			priority += 0.08
 		if tracked_id == "main_road_of_crows" and tracked_objective == "speak_anwen" and str(candidate.get("interaction_id")) == "sister_anwen":
-			priority += 120.0
+			priority += 0.42
 		if tracked_id == "main_teeth_in_rain" and tracked_objective == "speak_mira" and str(candidate.get("interaction_id")) == "mira":
-			priority += 120.0
-		var score := 100.0 - distance if interaction_type == "zone" else facing * 2.2 - distance * 0.42 + priority
+			priority += 0.42
+		var score := facing * 2.4 - distance * 0.60 + priority
+		scores[candidate] = score
 		if score > best_score:
 			best_score = score
 			best = candidate
-	last_focus = best
-	return best
+	# Invalid targets disappear immediately. A valid focused object survives
+	# tiny camera changes while a clearly better target settles into view.
+	if not is_instance_valid(last_focus) or not scores.has(last_focus):
+		last_focus = best
+		pending_focus = null
+		return last_focus
+	if best == last_focus or best == null or best_score < float(scores[last_focus]) + SWITCH_ADVANTAGE:
+		pending_focus = null
+		return last_focus
+	var now := Time.get_ticks_msec()
+	if pending_focus != best:
+		pending_focus = best
+		pending_since_msec = now
+	elif now - pending_since_msec >= FOCUS_DWELL_MSEC:
+		last_focus = best
+		pending_focus = null
+	return last_focus
 
 func _unfinished_group_members(quest_id: String, objective_id: String) -> Dictionary:
 	var members := {}

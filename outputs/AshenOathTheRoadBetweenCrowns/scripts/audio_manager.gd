@@ -77,6 +77,7 @@ var audio_bootstrap_started := false
 var runtime_file_assets_available := true
 var owned_timers: Array[Timer] = []
 var dialogue_active := false
+var dialogue_review_paused := false
 var dialogue_duck := 0.0
 var revised_voice_entries: Dictionary = {}
 var dialogue_voice_keys: Dictionary = {}
@@ -98,7 +99,7 @@ func _process(delta: float) -> void:
 	if music_player != null and music_player.stream != null and not music_player.playing:
 		if not game_paused or dialogue_active:
 			music_player.play()
-	if voice_player != null and not voice_player.playing and not _voice_queue.is_empty():
+	if not dialogue_review_paused and voice_player != null and not voice_player.playing and not _voice_queue.is_empty():
 		_play_next_voice()
 	if game_paused or current_ambient_zone == "" or not ambient_accents_enabled:
 		return
@@ -266,6 +267,13 @@ func set_dialogue_active(active: bool) -> void:
 	if not active:
 		stop_voice()
 	set_game_paused(game_paused)
+
+func set_dialogue_review_paused(review_open: bool) -> void:
+	# Keep the same stream and playback position while the player consults
+	# earlier words. Closing History must not trigger a new page performance.
+	dialogue_review_paused = review_open and dialogue_active
+	if voice_player != null and is_instance_valid(voice_player):
+		voice_player.stream_paused = dialogue_review_paused
 
 func play_dialogue_page(page: Dictionary) -> void:
 	stop_voice()
@@ -697,6 +705,7 @@ func _has_production_voice(voice_id: String) -> bool:
 	return not bool(stream.get_meta("development_voice_stub", false)) and not bool(stream.get_meta("scratch_voice", false))
 
 func stop_voice() -> void:
+	dialogue_review_paused = false
 	_voice_queue.clear()
 	_stop_browser_speech()
 	if voice_player != null:

@@ -33,10 +33,12 @@ Original checkout and its untracked artifacts are retained at D:/Projects/AshenO
 
 - Narrative content: main campaign and side-story rewrites implemented; stable quest/action identities retained.
 - Story state and saves: decision/evidence separation, batched decision publication, schema 10, legacy-slot preservation, and pre-covenant save implemented.
-- World staging and aftermath: event-driven story compositions, voluntary witness staging, three peaceful covenant rituals, Ash confrontation, and return to Greyfen implemented.
-- Player experience: journal, decision previews, individual epilogues, evidence-earned combat opportunities, supply consequences, emergency medicine, nine-practice progression, difficulty, audio mix, and focus-loss pause implemented.
-- Export: completed production import, seven pack exports, Web export, runtime manifests and WASM transport compression from source commit 85a80d0. Final build identity: `story-20261003T101232Z-85a80d0794e2`.
-- Push/deployment: published to GitHub `main` and `codex/story-centered-overhaul`. Production application commit: `55633a5` (game export commit: `4d18a11`). Vercel deployment command completed with `status: ok`, `readyState: READY`, and the production alias `https://ashenoath.vercel.app`.
+- World staging and aftermath: event-driven story compositions, voluntary witness staging, three peaceful covenant rituals, Ash confrontation, physical village work, encounter counterplay, and three return activities per ending implemented.
+- Player experience: journal, decision previews, epilogues after return scenes, evidence-earned combat opportunities, supplies, emergency medicine, nine-practice progression, difficulty, audio mix, save library, isolated replay, conversation history and accessibility controls implemented.
+- Presentation: character keepsakes and speaking/listening performances, 335 generated exact-text voice clips, seven story motifs and an illustrated chapter atlas included in the second production package.
+- Latest export: source `e04faa67c124`, build `story-20261003T105555Z-e04faa67c124`, packaged commit `f0cdc09`.
+- Latest push/deployment: both authorized GitHub branches updated; Vercel deployment `dpl_2VrkF1PdFeBzJUphz6UQoU8jYzuw` returned `status: ok`, `readyState: READY`, and alias `https://ashenoath.vercel.app`.
+- Active work: `FINE_DETAILS_CYCLE_01_PLAN.md` is being implemented. The continuing goal remains active.
 
 Production deployment: `dpl_9DKbrtv61oZVYfk5pQ6h5mXwkUiX`, `https://ashenoath-6yzh9ysh9-rafaeitahir-5792s-projects.vercel.app`. The initial CLI upload omitted `web` due to an overly broad ignore pattern; that filter was corrected, committed and pushed before the successful 82.5 MB upload. No post-deployment request, browser session, test or gameplay verification was performed.
 
@@ -61,3 +63,9 @@ Implementation added after the first production release:
 - English source catalog/glossary and downloadable local problem reports. Production export includes the catalog, chapter atlas, motif manifest and external audio resources.
 
 Production import, all seven runtime packs and the Web export completed for source revision `e04faa67c124`, build `story-20261003T105555Z-e04faa67c124`, candidate `.release-gate/story-complete-02`. The initial import reported two dynamic boolean inference errors; explicit declarations addressed those compiler diagnostics. There are 335 exact-text generated voice clips in the active manifest. Push and production deployment follow this packaged candidate. This records implementation and packaging, not test or quality certification. After publication, the next fine-detail cycle starts with a written plan before code changes.
+
+Published package commit `f0cdc09` to both GitHub branches. Vercel reported `READY` for deployment `dpl_2VrkF1PdFeBzJUphz6UQoU8jYzuw`, URL `https://ashenoath-cqcz80kq6-rafaeitahir-5792s-projects.vercel.app`, aliased to `https://ashenoath.vercel.app`. The deployment uploaded 85.9 MB and exited successfully. No post-deployment verification was run. Continuous work remains active; next cycle is planning fine interaction, HUD, menu and browser-entry details.
+
+## Fine details cycle 01
+
+The written plan `FINE_DETAILS_CYCLE_01_PLAN.md` was created before implementation. Source changes now include bounded menu navigation memory, restored journal/shop focus and scroll, retained save drafts, local save-operation feedback, preserved dialogue History position and voice pause, readable wrapped controls, prioritized notices, structured binding-aware prompts, stable interaction selection, explicit availability and input release barriers. Browser startup has quieter presentation, optional Crow Flight, truthful download/preparation stages, focused recovery actions and foreground input handoff. New-journey metadata is initialized only at the accepted world handoff. Production packaging follows; continuous work remains active.

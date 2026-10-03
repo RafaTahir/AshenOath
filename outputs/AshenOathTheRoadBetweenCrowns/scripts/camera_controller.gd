@@ -34,6 +34,7 @@ var _previous_on_floor = true
 var _fov_kick = 0.0
 var _idle_time = 0.0
 var _combat_focus_refresh := 0.0
+var _camera_edge_seen: Dictionary = {}
 var _cached_combat_focus: Node3D
 var _enemy_cache: Array[Node3D] = []
 var _enemy_cache_refresh := 0.0
@@ -95,6 +96,12 @@ func _input(event: InputEvent) -> void:
 			return
 		if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 			adjust_zoom(ZOOM_STEP)
+			get_viewport().set_input_as_handled()
+			return
+		if Input.mouse_mode != Input.MOUSE_MODE_CAPTURED and event.button_index in [MOUSE_BUTTON_LEFT, MOUSE_BUTTON_RIGHT]:
+			if input_source != null and input_source.has_method("guard_event_until_release"):
+				input_source.guard_event_until_release(event, "pointer_capture")
+			_capture_pointer()
 			get_viewport().set_input_as_handled()
 			return
 		_capture_pointer()
@@ -401,7 +408,13 @@ func _look_input() -> Vector2:
 
 func _action_just_pressed(action: StringName) -> bool:
 	if input_source != null and input_source.has_method("is_action_just_pressed"):
-		return input_source.is_action_just_pressed(action)
+		if not input_source.is_action_just_pressed(action):
+			return false
+		var frame := Engine.get_physics_frames()
+		if int(_camera_edge_seen.get(str(action), -1)) == frame:
+			return false
+		_camera_edge_seen[str(action)] = frame
+		return true
 	return Input.is_action_just_pressed(action)
 
 func _update_target_lock(delta: float) -> void:

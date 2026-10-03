@@ -37,6 +37,8 @@ func setup(router: Node, hud_node: CanvasLayer, settings: Dictionary) -> void:
 	hud = hud_node
 	if not input_router.input_context_changed.is_connected(_on_input_context_changed):
 		input_router.input_context_changed.connect(_on_input_context_changed)
+	if input_router.has_signal("transient_input_reset") and not input_router.transient_input_reset.is_connected(_on_transient_input_reset):
+		input_router.transient_input_reset.connect(_on_transient_input_reset)
 	for layer in [hud.menu_layer, hud.dialogue_layer, hud.inventory_layer]:
 		if layer != null and not layer.visibility_changed.is_connected(_queue_visibility_refresh):
 			layer.visibility_changed.connect(_queue_visibility_refresh)
@@ -66,6 +68,8 @@ func is_touch_enabled() -> bool:
 func is_gameplay_visible() -> bool:
 	if not is_touch_enabled() or hud == null or get_tree().paused:
 		return false
+	if input_router != null and not input_router.is_gameplay_context():
+		return false
 	var menus_hidden: bool = hud.menu_layer != null and not hud.menu_layer.visible
 	var dialogue_hidden: bool = hud.dialogue_layer != null and not hud.dialogue_layer.visible
 	var inventory_hidden: bool = hud.inventory_layer != null and not hud.inventory_layer.visible
@@ -81,8 +85,13 @@ func _queue_visibility_refresh() -> void:
 	_visibility_refresh_pending = true
 	call_deferred("_refresh_visibility")
 
-func _on_input_context_changed(_context: String) -> void:
+func _on_input_context_changed(context: String) -> void:
+	if context != "gameplay":
+		_release_all()
 	_queue_visibility_refresh()
+
+func _on_transient_input_reset(_reason: String) -> void:
+	_release_all()
 
 func _refresh_visibility() -> void:
 	_visibility_refresh_pending = false
@@ -102,9 +111,15 @@ func _notification(what: int) -> void:
 	if what == NOTIFICATION_RESIZED:
 		_update_layout()
 		_queue_visibility_refresh()
+	elif what == NOTIFICATION_APPLICATION_FOCUS_OUT:
+		_release_all()
 
 func _input(event: InputEvent) -> void:
-	if not visible or rotate_required or input_router == null:
+	if event is InputEventScreenTouch and not event.pressed:
+		if event.index == move_touch or event.index == look_touch or action_touches.has(event.index):
+			_end_touch(event.index)
+		return
+	if not visible or rotate_required or input_router == null or not input_router.is_gameplay_context():
 		return
 	if event is InputEventScreenTouch:
 		if event.pressed:
@@ -241,10 +256,15 @@ func _draw() -> void:
 	for action in action_centers:
 		var center: Vector2 = action_centers[action]
 		var radius: float = action_radii[action]
-		var pressed: bool = action in action_touches.values()
+		var descriptor: Dictionary = input_router.describe_action(str(action)) if input_router != null and input_router.has_method("describe_action") else {}
+		var toggle := str(descriptor.get("mode", "hold")) == "toggle"
+		var pressed: bool = action in action_touches.values() or (toggle and bool(descriptor.get("active", false)))
 		draw_circle(center, radius, Color(0.40, 0.12, 0.08, 0.84) if pressed else Color(0.04, 0.045, 0.05, 0.64))
 		draw_arc(center, radius, 0.0, TAU, 40, Color(0.86, 0.70, 0.44, 0.80), 2.0)
-		_draw_centered_label(center, str(labels[action]), 13 if action != "pause" else 19)
+		var caption := str(labels[action])
+		if toggle and bool(descriptor.get("active", false)):
+			caption += " ON"
+		_draw_centered_label(center, caption, 13 if action != "pause" else 19)
 
 func _draw_centered_label(center: Vector2, text: String, font_size: int) -> void:
 	var font := ThemeDB.fallback_font

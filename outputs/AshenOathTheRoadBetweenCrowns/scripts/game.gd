@@ -397,25 +397,86 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if minigames != null and minigames.is_open():
 		return
-	if event.is_action_pressed("pause"):
-		if get_tree().paused:
-			_resume_game()
-		else:
-			_pause_game()
-	elif event.is_action_pressed("interact") and active_interactable != null and not get_tree().paused:
-		# A Web key event can arrive after a dialogue closes. Ignore that delayed
-		# copy briefly so the interaction that opened the conversation cannot reopen
-		# the same speaker and strand the player on the route.
-		if Time.get_ticks_usec() < interaction_input_block_until_usec:
-			return
-		if _interaction_target_valid(active_interactable):
-			_handle_interaction(active_interactable)
+	if event.is_action_pressed("pause") and not event.is_echo():
+		_request_pause_or_back(event)
+	elif not get_tree().paused and input_router.accept_event(event, &"interact", "gameplay"):
+		# Dispatch the same target whose prompt was visible for this fresh press.
+		var focused_target: Area3D = active_interactable as Area3D if is_instance_valid(active_interactable) else null
+		get_viewport().set_input_as_handled()
+		if is_instance_valid(focused_target) and _interaction_target_valid(focused_target):
+			_handle_interaction(focused_target)
 		else:
 			hud.set_guidance_hint("Face the object and move into clear view.", 2.0)
-	elif event.is_action_pressed("open_inventory") and not get_tree().paused:
+	elif not get_tree().paused and input_router.accept_event(event, &"open_inventory", "gameplay"):
+		get_viewport().set_input_as_handled()
 		audio.set_game_paused(true)
 		get_tree().paused = true
 		hud.show_inventory(inventory, quests, story_state, progression)
+
+func _request_pause_or_back(event: InputEvent) -> void:
+	if input_router == null or not input_router.accept_event(event, &"pause", input_router.get_context()):
+		return
+	get_viewport().set_input_as_handled()
+	if zone_transition_pending or zone_load_request_pending or opening_pack_waiting or campaign_pack_waiting:
+		return
+	if get_tree().paused or not input_router.is_gameplay_context():
+		# The active surface owns Back. Death, ending and transition screens must
+		# never reach generic Resume merely because the tree happens to be paused.
+		hud.request_back()
+		return
+	_pause_game()
+
+func _invalidate_interaction_prompt() -> void:
+	interaction_focus_dirty = true
+	interaction_focus_cache_valid = false
+	_publish_interaction_prompt()
+
+func _publish_interaction_prompt() -> void:
+	if hud == null:
+		return
+	if input_router == null or not input_router.is_gameplay_context() or get_tree().paused \
+			or not is_instance_valid(active_interactable) or not _interaction_target_valid(active_interactable):
+		hud.set_interaction_prompt({"available": false})
+		return
+	var prompt_model: Dictionary = active_interactable.get_prompt_model() if active_interactable.has_method("get_prompt_model") else {"text": active_interactable.get_context_prompt()}
+	prompt_model["target_id"] = str(active_interactable.interaction_id)
+	prompt_model["binding"] = input_router.action_label("interact")
+	prompt_model["available"] = true
+	hud.set_interaction_prompt(prompt_model)
+
+func _on_input_context_changed(_context: String) -> void:
+	if is_instance_valid(player) and player.has_method("cancel_buffered_input"):
+		player.cancel_buffered_input("context_change")
+	if interaction_focus != null:
+		interaction_focus.reset()
+	if is_instance_valid(active_interactable):
+		_set_interactable_label_visible(active_interactable, false)
+	active_interactable = null
+	_invalidate_interaction_prompt()
+
+func _on_transient_input_reset(reason: String) -> void:
+	if is_instance_valid(player) and player.has_method("cancel_buffered_input"):
+		player.cancel_buffered_input(reason)
+	_invalidate_interaction_prompt()
+
+func _begin_gameplay_handoff(reason: String) -> void:
+	if input_router != null:
+		input_router.suspend_gameplay(reason)
+	if is_instance_valid(player) and player.has_method("cancel_buffered_input"):
+		player.cancel_buffered_input(reason)
+	if interaction_focus != null:
+		interaction_focus.reset()
+	_invalidate_interaction_prompt()
+
+func _finish_gameplay_handoff() -> void:
+	if input_router == null or input_router.get_context() != "transition":
+		return
+	if not game_started or get_tree().paused or not is_instance_valid(player):
+		return
+	if zone_transition_pending or zone_load_request_pending or opening_pack_waiting or campaign_pack_waiting:
+		return
+	input_router.begin_context("gameplay")
+	_invalidate_interaction_prompt()
 
 func _process(delta: float) -> void:
 	if not game_started or player == null or get_tree().paused:
@@ -505,14 +566,12 @@ func _setup_runtime() -> void:
 	boss_defs = _read_json("res://data/bosses.json")
 
 func _new_game() -> void:
-	save_manager.begin_new_journey()
-	hud.load_text_history([])
+	if game_started or zone_transition_pending or zone_load_request_pending:
+		return
 	zone_pack_request_serial += 1
 	opening_pack_waiting = false
 	campaign_pack_waiting = false
 	pending_player_restore.clear()
-	if zone_transition_pending or zone_load_request_pending:
-		return
 	# Start the player-facing timer at the first New Game request, including the
 	# queued cold-pack/prewarm path. The old branch left this at zero until the
 	# cache was ready, which made the measured handoff look like a stale prior
@@ -624,6 +683,7 @@ func _perform_requested_zone_load() -> void:
 	_load_zone_after_runtime_pack(destination, arrival)
 
 func _load_zone_after_runtime_pack(zone_id: String, spawn_pos: Vector3) -> void:
+	_begin_gameplay_handoff("zone_travel")
 	if runtime_packs != null:
 		runtime_packs.quality_preset = str(settings.settings.get("quality_preset", "balanced"))
 	zone_pack_request_serial += 1
@@ -724,6 +784,7 @@ func _recover_failed_pack_load() -> void:
 	if hud != null:
 		hud.hide_loading()
 		hud.toast("The destination could not load. Please retry.")
+	_finish_gameplay_handoff()
 
 func _zone_requires_campaign_pack(zone_id: String) -> bool:
 	return zone_id in [
@@ -743,6 +804,10 @@ func _start_new_game_world() -> void:
 	if prepared_root == null or not bool(prepared_root.get_meta("opening_presentation_ready", false)):
 		return
 	new_game_start_pending = false
+	# Identity and reading history belong to the accepted world handoff, not a
+	# request that can remain queued while files or the first view are prepared.
+	save_manager.begin_new_journey()
+	hud.load_text_history([])
 	if hud != null and hud.has_method("set_new_game_ready"):
 		hud.set_new_game_ready(true)
 	if hud != null and hud.has_method("set_new_game_status"):
@@ -892,6 +957,7 @@ func load_save_state(data: Dictionary) -> void:
 				hud.toast("This save belongs to a newer version of Ashen Oath.")
 			return
 	data = migrated_data
+	_begin_gameplay_handoff("load_journey")
 	if not game_started:
 		_discard_menu_opening()
 	new_game_start_pending = false
@@ -1011,10 +1077,13 @@ func _bind_spatial_player_body() -> void:
 			service.set_player_body(body)
 
 func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
+	_begin_gameplay_handoff("zone_activation")
 	zone_runtime_coordinator.load_zone(zone_id, spawn_pos)
+	_finish_gameplay_handoff()
 
 func _advance_zone_transition() -> void:
 	zone_runtime_coordinator.advance_transition()
+	_finish_gameplay_handoff()
 
 func _apply_zone_audio(zone_id: String) -> void:
 	if audio == null or zone_id == "":
@@ -3532,7 +3601,7 @@ func _on_enemy_windup_started(enemy) -> void:
 	if enemy != null and enemy.health_component != null:
 		hud.show_enemy(enemy.display_name, enemy.health_component.health, enemy.health_component.max_health)
 	if current_zone_id == "wychwood" and not bool(tutorial_flags.get("block_hint_done", false)):
-		hud.set_guidance_hint("Tap Q at the lunge to parry. Hold Q to block.", 4.2)
+		hud.set_guidance_hint(_guard_tutorial_hint(), 4.2)
 
 func _on_enemy_attack_resolved(enemy, parried: bool, contact_position: Vector3) -> void:
 	if parried:
@@ -3663,6 +3732,9 @@ func _remove_interactable(id: String) -> void:
 		return
 	for child in zone_root.get_children():
 		if child.get("interaction_id") == id:
+			if child.has_method("set_interaction_enabled"):
+				child.set_interaction_enabled(false)
+			_remove_interaction_candidate(child)
 			child.queue_free()
 
 func _consume_story_choice_interactable(id: String) -> void:
@@ -3682,6 +3754,10 @@ func _has_interactable(id: String) -> bool:
 
 func _mark_interaction_removed(area) -> void:
 	removed_interactions["%s:%s" % [current_zone_id, area.interaction_id]] = true
+	if area.has_method("set_interaction_enabled"):
+		area.set_interaction_enabled(false)
+	_remove_interaction_candidate(area)
+	_invalidate_interaction_prompt()
 
 func _is_interaction_removed(id: String) -> bool:
 	return bool(removed_interactions.get("%s:%s" % [current_zone_id, id], false))
@@ -3741,6 +3817,10 @@ func _finish_covenant_if_ready() -> void:
 		hud.toast(preload("res://scripts/story_journal.gd").recap(self), 12.0)
 
 func _notification(what: int) -> void:
+	if what == NOTIFICATION_APPLICATION_FOCUS_OUT and input_router != null:
+		input_router.reset_transient_input("focus_lost")
+		if is_instance_valid(player) and player.has_method("cancel_buffered_input"):
+			player.cancel_buffered_input("focus_lost")
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT and game_started and settings != null:
 		if bool(settings.settings.get("pause_on_focus_loss", true)) and not get_tree().paused:
 			_pause_game()
@@ -3871,6 +3951,10 @@ func _refresh_equipment_readout() -> void:
 		oil_name = inventory.get_item_name(inventory.active_oil)
 	hud.update_equipment(int(inventory.items.get("redroot_potion", 0)), int(inventory.items.get("ash_bomb", 0)), oil_name, int(inventory.items.get("standard_arrow", 0)), "Standard")
 
+func _guard_tutorial_hint() -> String:
+	var guard: Dictionary = input_router.describe_action("block") if input_router != null else {}
+	return "Begin guarding as the lunge lands to parry. %s." % str(guard.get("instruction", "Use your guard control to block")).trim_suffix(".")
+
 func _update_tutorial_prompts() -> void:
 	if player == null:
 		return
@@ -3907,7 +3991,9 @@ func _update_tutorial_prompts() -> void:
 		audio.set_music_state("ghoulkin_combat")
 		audio.play_event("wychwood_tension", 0.01)
 		hud.toast("Survive the Ghoulkin.")
-		hud.set_guidance_hint("Left click strike | Space dodge | Tap Q parry | Hold Q block", 6.0)
+		var strike_binding: String = input_router.action_label("light_attack") if input_router != null else "Attack"
+		var dodge_binding: String = input_router.action_label("dodge") if input_router != null else "Dodge"
+		hud.set_guidance_hint("%s strike | %s dodge\n%s" % [strike_binding, dodge_binding, _guard_tutorial_hint()], 6.0)
 
 func _update_compass() -> void:
 	quest_hud_coordinator.update_compass(hud, player, current_zone_id, interaction_area_cache if zone_root != null else [], _zone_display_name(current_zone_id))
@@ -6171,10 +6257,7 @@ func _update_interaction_focus() -> void:
 		compass_dirty = true
 		if active_interactable != null:
 			_set_interactable_label_visible(active_interactable,true)
-	if active_interactable != null:
-		hud.set_prompt("E  %s" % active_interactable.get_context_prompt())
-	else:
-		hud.set_prompt("")
+	_publish_interaction_prompt()
 	interaction_focus_dirty = false
 	interaction_focus_cache_valid = true
 	last_focus_position = player.global_position
@@ -6184,7 +6267,9 @@ func _update_interaction_focus() -> void:
 func _interaction_focus_needs_refresh() -> bool:
 	if player == null or interaction_focus_dirty or not interaction_focus_cache_valid:
 		return true
-	if active_interactable != null and (not is_instance_valid(active_interactable) or not active_interactable.is_inside_tree()):
+	if interaction_focus != null and interaction_focus.needs_refresh():
+		return true
+	if active_interactable != null and (not is_instance_valid(active_interactable) or not _interaction_target_valid(active_interactable)):
 		return true
 	if player.global_position.distance_squared_to(last_focus_position) >= 0.0064:
 		return true
@@ -6219,6 +6304,8 @@ func _refresh_interaction_candidates() -> void:
 			continue
 		if candidate.is_queued_for_deletion() or not candidate.has_method("get_context_prompt"):
 			continue
+		if not candidate.is_visible_in_tree() or (candidate.has_method("is_interaction_enabled") and not candidate.is_interaction_enabled()):
+			continue
 		if bool(candidate.get_meta("seamless_exterior_gate", false)):
 			continue
 		var candidate_type := str(candidate.get("interaction_type"))
@@ -6239,6 +6326,8 @@ func _prune_invalid_interaction_candidates() -> void:
 			interaction_candidates.remove_at(index)
 
 func _remove_interaction_candidate(area) -> void:
+	if interaction_focus != null:
+		interaction_focus.forget(area)
 	for index in range(interaction_candidates.size() - 1, -1, -1):
 		var candidate = interaction_candidates[index]
 		if candidate == null or not is_instance_valid(candidate):

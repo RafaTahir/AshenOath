@@ -117,11 +117,7 @@ func refresh() -> void:
 			"root_testimony": enabled = not _flag("root_testimony_protected") and not _flag("root_testimony_recovered")
 			"senn_guard_stand_down": enabled = not _flag("senn_guards_stood_down") and host.quests.is_active("main_soldier_without_banner") and not host.quests.is_objective_done("main_soldier_without_banner", "senn_confrontation")
 		area.visible = enabled
-		area.monitoring = enabled
-		area.monitorable = enabled
-		for child in area.get_children():
-			if child is CollisionShape3D:
-				child.set_deferred("disabled", not enabled)
+		area.set_interaction_enabled(enabled)
 		if not enabled:
 			host._remove_interaction_candidate(area)
 	if worker_group != null:

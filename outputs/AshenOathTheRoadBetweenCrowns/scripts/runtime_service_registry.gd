@@ -130,7 +130,12 @@ func configure(owner: Node) -> void:
 	input_router.device_changed.connect(func(_device: String):
 		hud.set_input_device(input_router.active_device)
 		owner.call("_refresh_equipment_readout")
+		owner.call("_invalidate_interaction_prompt")
 	)
+	input_router.bindings_changed.connect(func(_bindings: Dictionary): owner.call("_invalidate_interaction_prompt"))
+	input_router.input_context_changed.connect(Callable(owner, "_on_input_context_changed"))
+	input_router.transient_input_reset.connect(Callable(owner, "_on_transient_input_reset"))
+	story_state.changed.connect(Callable(owner, "_invalidate_interaction_prompt"))
 	input_router.gamepad_profile_changed.connect(func(profile: Dictionary):
 		hud.set_input_device(input_router.active_device)
 		if hud.has_method("set_gamepad_profile"):
@@ -195,6 +200,7 @@ func configure(owner: Node) -> void:
 	hud.dialogue_closed.connect(Callable(owner, "_release_dialogue_facing"))
 	hud.dialogue_closed.connect(Callable(owner, "_on_dialogue_closed_audio"))
 	hud.dialogue_page_changed.connect(Callable(owner, "_on_dialogue_page_changed"))
+	hud.dialogue_review_changed.connect(audio.set_dialogue_review_paused)
 	hud.craft_requested.connect(func(item_id: String):
 		crafting.craft(item_id)
 		hud.show_inventory(inventory, quests, story_state, progression)
@@ -210,16 +216,19 @@ func configure(owner: Node) -> void:
 		hud.show_inventory(inventory, quests, story_state, progression)
 	)
 	quests.changed.connect(Callable(owner, "_refresh_tracker"))
-	quests.message.connect(Callable(hud, "toast"))
+	quests.message.connect(func(text: String): hud.post_notice(text, "story", 5.5, text))
 	quests.message.connect(func(_text: String): audio.play_event("quest"))
 	quests.quest_completed.connect(Callable(owner, "_on_quest_completed"))
-	inventory.message.connect(Callable(hud, "toast"))
+	inventory.message.connect(func(text: String): hud.post_notice(text, "inventory", 3.5, text))
 	inventory.changed.connect(Callable(owner, "_refresh_equipment_readout"))
-	vendor_service.message.connect(Callable(hud, "toast"))
+	vendor_service.message.connect(func(text: String): hud.post_notice(text, "inventory", 3.5, text))
 	vendor_service.changed.connect(Callable(owner, "_refresh_equipment_readout"))
-	save_manager.message.connect(Callable(hud, "toast"))
+	save_manager.message.connect(func(text: String):
+		var failed: bool = "failed" in text.to_lower() or "no valid" in text.to_lower() or "could not" in text.to_lower()
+		hud.post_notice(text, "error" if failed else "save", 5.5 if failed else 2.5, text)
+	)
 	progression.message.connect(Callable(hud, "toast"))
-	combat.message.connect(Callable(hud, "toast"))
+	combat.message.connect(func(text: String): hud.post_notice(text, "combat", 2.5, text))
 	combat.enemy_hit.connect(func(name: String, amount: float):
 		hud.show_status_cue("Hit: %d" % int(amount), "item")
 		owner.call("_hitstop", 0.045)
