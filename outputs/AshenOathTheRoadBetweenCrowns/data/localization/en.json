@@ -2236,6 +2236,774 @@
       "speaker": "",
       "context": "campaign_dialogue.witness_7"
     },
+    "decision_contexts.contexts.final_covenant.options.0.commitment": {
+      "source": "Choose Witness: make the account public and accept the work of preserving it.",
+      "text": "Choose Witness: make the account public and accept the work of preserving it.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.final_covenant.options.0"
+    },
+    "decision_contexts.contexts.final_covenant.options.0.cost": {
+      "source": "Restitution and an open account demand continuing work; choosing this cannot promise who will help.",
+      "text": "Restitution and an open account demand continuing work; choosing this cannot promise who will help.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.final_covenant.options.0"
+    },
+    "decision_contexts.contexts.final_covenant.options.0.follow_through": {
+      "source": "Lay the ledger, speak the recovered names, and speak of Kael's retreat at the marked places.",
+      "text": "Lay the ledger, speak the recovered names, and speak of Kael's retreat at the marked places.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.final_covenant.options.0"
+    },
+    "decision_contexts.contexts.final_covenant.options.1.commitment": {
+      "source": "Choose Mercy: release the Hart while protecting the public record and private family memories.",
+      "text": "Choose Mercy: release the Hart while protecting the public record and private family memories.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.final_covenant.options.1"
+    },
+    "decision_contexts.contexts.final_covenant.options.1.cost": {
+      "source": "The living must preserve the record after releasing its bound witness.",
+      "text": "The living must preserve the record after releasing its bound witness.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.final_covenant.options.1"
+    },
+    "decision_contexts.contexts.final_covenant.options.1.follow_through": {
+      "source": "Return the family tokens, keep the public record, and untie the witness at the marked places.",
+      "text": "Return the family tokens, keep the public record, and untie the witness at the marked places.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.final_covenant.options.1"
+    },
+    "decision_contexts.contexts.final_covenant.options.2.commitment": {
+      "source": "Choose Duty: Kael freely accepts the unresolved binding in his own name.",
+      "text": "Choose Duty: Kael freely accepts the unresolved binding in his own name.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.final_covenant.options.2"
+    },
+    "decision_contexts.contexts.final_covenant.options.2.cost": {
+      "source": "Kael gives up freedom and rest. His choice cannot pledge a child or another keeper.",
+      "text": "Kael gives up freedom and rest. His choice cannot pledge a child or another keeper.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.final_covenant.options.2"
+    },
+    "decision_contexts.contexts.final_covenant.options.2.follow_through": {
+      "source": "Set down the badge, name the limits of the promise, and take the willing burden.",
+      "text": "Set down the badge, name the limits of the promise, and take the willing burden.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.final_covenant.options.2"
+    },
+    "decision_contexts.contexts.final_covenant.options.3.commitment": {
+      "source": "Choose Ash: confront the Hart to end the binding while preserving the human record.",
+      "text": "Choose Ash: confront the Hart to end the binding while preserving the human record.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.final_covenant.options.3"
+    },
+    "decision_contexts.contexts.final_covenant.options.3.cost": {
+      "source": "Ending the vessel gives up the memories only it holds; the land bears their dispersal.",
+      "text": "Ending the vessel gives up the memories only it holds; the land bears their dispersal.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.final_covenant.options.3"
+    },
+    "decision_contexts.contexts.final_covenant.options.3.follow_through": {
+      "source": "Face the Hart in the glade. The confrontation must be completed before the outcome is settled.",
+      "text": "Face the Hart in the glade. The confrontation must be completed before the outcome is settled.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.final_covenant.options.3"
+    },
+    "decision_contexts.contexts.final_covenant.title": {
+      "source": "The intention Kael will carry out",
+      "text": "The intention Kael will carry out",
+      "speaker": "",
+      "context": "decision_contexts.contexts.final_covenant"
+    },
+    "decision_contexts.contexts.final_covenant.uncertainty": {
+      "source": "The living still have work to do. Choosing an intention does not complete its enactment or settle every grievance.",
+      "text": "The living still have work to do. Choosing an intention does not complete its enactment or settle every grievance.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.final_covenant"
+    },
+    "decision_contexts.contexts.main_ash_at_the_mill:mill_choice.facts.mill_worker_account.text": {
+      "source": "The rescued workers reached clean air and can keep their own wage accounts.",
+      "text": "The rescued workers reached clean air and can keep their own wage accounts.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_ash_at_the_mill:mill_choice.facts.mill_worker_account"
+    },
+    "decision_contexts.contexts.main_ash_at_the_mill:mill_choice.facts.mill_worker_account.title": {
+      "source": "Workers reached the south yard",
+      "text": "Workers reached the south yard",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_ash_at_the_mill:mill_choice.facts.mill_worker_account"
+    },
+    "decision_contexts.contexts.main_ash_at_the_mill:mill_choice.facts.saved_wage_chest.text": {
+      "source": "The wage chest has been moved out of the channel's reach. Household shares remain documented.",
+      "text": "The wage chest has been moved out of the channel's reach. Household shares remain documented.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_ash_at_the_mill:mill_choice.facts.saved_wage_chest"
+    },
+    "decision_contexts.contexts.main_ash_at_the_mill:mill_choice.facts.saved_wage_chest.title": {
+      "source": "Wage records above the waterline",
+      "text": "Wage records above the waterline",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_ash_at_the_mill:mill_choice.facts.saved_wage_chest"
+    },
+    "decision_contexts.contexts.main_ash_at_the_mill:mill_choice.follow_through": {
+      "source": "Worker rescue and household deliveries are recorded separately from this operating decision.",
+      "text": "Worker rescue and household deliveries are recorded separately from this operating decision.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_ash_at_the_mill:mill_choice"
+    },
+    "decision_contexts.contexts.main_ash_at_the_mill:mill_choice.options.0.commitment": {
+      "source": "Close the tainted channels, preserve the ledger, and divide relief reserves.",
+      "text": "Close the tainted channels, preserve the ledger, and divide relief reserves.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_ash_at_the_mill:mill_choice.options.0"
+    },
+    "decision_contexts.contexts.main_ash_at_the_mill:mill_choice.options.0.cost": {
+      "source": "Workers lose shifts while the village relies on carried reserve grain.",
+      "text": "Workers lose shifts while the village relies on carried reserve grain.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_ash_at_the_mill:mill_choice.options.0"
+    },
+    "decision_contexts.contexts.main_ash_at_the_mill:mill_choice.options.1.commitment": {
+      "source": "Keep supervised milling after making a signed copy of the contaminated working sheet.",
+      "text": "Keep supervised milling after making a signed copy of the contaminated working sheet.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_ash_at_the_mill:mill_choice.options.1"
+    },
+    "decision_contexts.contexts.main_ash_at_the_mill:mill_choice.options.1.cost": {
+      "source": "Contamination risk remains while separate clean channels are prepared.",
+      "text": "Contamination risk remains while separate clean channels are prepared.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_ash_at_the_mill:mill_choice.options.1"
+    },
+    "decision_contexts.contexts.main_ash_at_the_mill:mill_choice.options.2.commitment": {
+      "source": "Post copied accounts and begin clean repairs with restitution for affected households.",
+      "text": "Post copied accounts and begin clean repairs with restitution for affected households.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_ash_at_the_mill:mill_choice.options.2"
+    },
+    "decision_contexts.contexts.main_ash_at_the_mill:mill_choice.options.2.cost": {
+      "source": "Clean materials and labor must go into repair before the promise can be sustained.",
+      "text": "Clean materials and labor must go into repair before the promise can be sustained.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_ash_at_the_mill:mill_choice.options.2"
+    },
+    "decision_contexts.contexts.main_ash_at_the_mill:mill_choice.title": {
+      "source": "Food, work, and the mill's account",
+      "text": "Food, work, and the mill's account",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_ash_at_the_mill:mill_choice"
+    },
+    "decision_contexts.contexts.main_ash_at_the_mill:mill_choice.uncertainty": {
+      "source": "A decision about the mill's operation does not establish whether its workers or loose records were rescued.",
+      "text": "A decision about the mill's operation does not establish whether its workers or loose records were rescued.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_ash_at_the_mill:mill_choice"
+    },
+    "decision_contexts.contexts.main_bell_beneath_greyfen:crow_shrine_choice.options.0.commitment": {
+      "source": "Clean the rite and record that its danger shifts toward the wood.",
+      "text": "Clean the rite and record that its danger shifts toward the wood.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_bell_beneath_greyfen:crow_shrine_choice.options.0"
+    },
+    "decision_contexts.contexts.main_bell_beneath_greyfen:crow_shrine_choice.options.0.cost": {
+      "source": "Containment moves; the underlying account remains unsettled.",
+      "text": "Containment moves; the underlying account remains unsettled.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_bell_beneath_greyfen:crow_shrine_choice.options.0"
+    },
+    "decision_contexts.contexts.main_bell_beneath_greyfen:crow_shrine_choice.options.1.commitment": {
+      "source": "Open the shrine's memory while keeping the gathered names intact.",
+      "text": "Open the shrine's memory while keeping the gathered names intact.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_bell_beneath_greyfen:crow_shrine_choice.options.1"
+    },
+    "decision_contexts.contexts.main_bell_beneath_greyfen:crow_shrine_choice.options.1.cost": {
+      "source": "Greyfen will hear the bell and the account can no longer stay quietly sealed.",
+      "text": "Greyfen will hear the bell and the account can no longer stay quietly sealed.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_bell_beneath_greyfen:crow_shrine_choice.options.1"
+    },
+    "decision_contexts.contexts.main_bell_beneath_greyfen:crow_shrine_choice.options.2.commitment": {
+      "source": "Hold the seal for now and record its limits.",
+      "text": "Hold the seal for now and record its limits.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_bell_beneath_greyfen:crow_shrine_choice.options.2"
+    },
+    "decision_contexts.contexts.main_bell_beneath_greyfen:crow_shrine_choice.options.2.cost": {
+      "source": "This buys a temporary quiet. It does not settle what the shrine concealed.",
+      "text": "This buys a temporary quiet. It does not settle what the shrine concealed.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_bell_beneath_greyfen:crow_shrine_choice.options.2"
+    },
+    "decision_contexts.contexts.main_bell_beneath_greyfen:crow_shrine_choice.title": {
+      "source": "What the shrine will hold",
+      "text": "What the shrine will hold",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_bell_beneath_greyfen:crow_shrine_choice"
+    },
+    "decision_contexts.contexts.main_bell_beneath_greyfen:crow_shrine_choice.uncertainty": {
+      "source": "Quiet at the chapel would not prove that the debt has ended.",
+      "text": "Quiet at the chapel would not prove that the debt has ended.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_bell_beneath_greyfen:crow_shrine_choice"
+    },
+    "decision_contexts.contexts.main_blood_under_stone:last_witness_hook.options.0.commitment": {
+      "source": "Protect Edric's hearing while accepting his voluntary agreement to testify and release grain without signatures.",
+      "text": "Protect Edric's hearing while accepting his voluntary agreement to testify and release grain without signatures.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_blood_under_stone:last_witness_hook.options.0"
+    },
+    "decision_contexts.contexts.main_blood_under_stone:last_witness_hook.options.0.cost": {
+      "source": "His title and accounts remain subject to the public hearing.",
+      "text": "His title and accounts remain subject to the public hearing.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_blood_under_stone:last_witness_hook.options.0"
+    },
+    "decision_contexts.contexts.main_blood_under_stone:last_witness_hook.options.1.commitment": {
+      "source": "Expose the ledger and challenge Edric's power to require household signatures.",
+      "text": "Expose the ledger and challenge Edric's power to require household signatures.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_blood_under_stone:last_witness_hook.options.1"
+    },
+    "decision_contexts.contexts.main_blood_under_stone:last_witness_hook.options.1.cost": {
+      "source": "Edric refuses a personal oath. The proof must stand without pretending he agrees.",
+      "text": "Edric refuses a personal oath. The proof must stand without pretending he agrees.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_blood_under_stone:last_witness_hook.options.1"
+    },
+    "decision_contexts.contexts.main_blood_under_stone:last_witness_hook.options.2.commitment": {
+      "source": "Compel Edric's admission and preserve it as evidence of concealment.",
+      "text": "Compel Edric's admission and preserve it as evidence of concealment.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_blood_under_stone:last_witness_hook.options.2"
+    },
+    "decision_contexts.contexts.main_blood_under_stone:last_witness_hook.options.2.cost": {
+      "source": "Words obtained under pressure do not count as a freely given responsibility.",
+      "text": "Words obtained under pressure do not count as a freely given responsibility.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_blood_under_stone:last_witness_hook.options.2"
+    },
+    "decision_contexts.contexts.main_blood_under_stone:last_witness_hook.title": {
+      "source": "Edric's answer to the renewal",
+      "text": "Edric's answer to the renewal",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_blood_under_stone:last_witness_hook"
+    },
+    "decision_contexts.contexts.main_blood_under_stone:last_witness_hook.uncertainty": {
+      "source": "A public hearing still has to reckon with the account. Protecting a hearing does not protect a title from accountability.",
+      "text": "A public hearing still has to reckon with the account. Protecting a hearing does not protect a title from accountability.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_blood_under_stone:last_witness_hook"
+    },
+    "decision_contexts.contexts.main_blood_under_stone:ledger_choice.facts.recovered_command.text": {
+      "source": "The command ledger can be compared with the refugee register. A credible copy can survive a decision about the original.",
+      "text": "The command ledger can be compared with the refugee register. A credible copy can survive a decision about the original.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_blood_under_stone:ledger_choice.facts.recovered_command"
+    },
+    "decision_contexts.contexts.main_blood_under_stone:ledger_choice.facts.recovered_command.title": {
+      "source": "The command beside the register",
+      "text": "The command beside the register",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_blood_under_stone:ledger_choice.facts.recovered_command"
+    },
+    "decision_contexts.contexts.main_blood_under_stone:ledger_choice.options.0.commitment": {
+      "source": "Take the original fragment openly and keep a copy of its command.",
+      "text": "Take the original fragment openly and keep a copy of its command.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_blood_under_stone:ledger_choice.options.0"
+    },
+    "decision_contexts.contexts.main_blood_under_stone:ledger_choice.options.0.cost": {
+      "source": "Removing the fragment openly draws the guards' suspicion.",
+      "text": "Removing the fragment openly draws the guards' suspicion.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_blood_under_stone:ledger_choice.options.0"
+    },
+    "decision_contexts.contexts.main_blood_under_stone:ledger_choice.options.1.commitment": {
+      "source": "Conceal the fragment while keeping a credible copy of the command.",
+      "text": "Conceal the fragment while keeping a credible copy of the command.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_blood_under_stone:ledger_choice.options.1"
+    },
+    "decision_contexts.contexts.main_blood_under_stone:ledger_choice.options.1.cost": {
+      "source": "The original leaves the archive without a public account of its removal.",
+      "text": "The original leaves the archive without a public account of its removal.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_blood_under_stone:ledger_choice.options.1"
+    },
+    "decision_contexts.contexts.main_blood_under_stone:ledger_choice.options.2.commitment": {
+      "source": "Keep a signed copy and leave the original available in the record hall.",
+      "text": "Keep a signed copy and leave the original available in the record hall.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_blood_under_stone:ledger_choice.options.2"
+    },
+    "decision_contexts.contexts.main_blood_under_stone:ledger_choice.options.2.cost": {
+      "source": "Kael carries the copy; the original remains under the castle's control.",
+      "text": "Kael carries the copy; the original remains under the castle's control.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_blood_under_stone:ledger_choice.options.2"
+    },
+    "decision_contexts.contexts.main_blood_under_stone:ledger_choice.title": {
+      "source": "Keeping a credible command record",
+      "text": "Keeping a credible command record",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_blood_under_stone:ledger_choice"
+    },
+    "decision_contexts.contexts.main_blood_under_stone:ledger_choice.uncertainty": {
+      "source": "Possessing the command proves what was written. It cannot make its authors or heirs willing witnesses.",
+      "text": "Possessing the command proves what was written. It cannot make its authors or heirs willing witnesses.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_blood_under_stone:ledger_choice"
+    },
+    "decision_contexts.contexts.main_blood_under_stone:speak_guard.options.0.commitment": {
+      "source": "Present yourself as the bearer of testimony from the old road.",
+      "text": "Present yourself as the bearer of testimony from the old road.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_blood_under_stone:speak_guard.options.0"
+    },
+    "decision_contexts.contexts.main_blood_under_stone:speak_guard.options.0.follow_through": {
+      "source": "Continue into the courtyard and follow the written order.",
+      "text": "Continue into the courtyard and follow the written order.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_blood_under_stone:speak_guard.options.0"
+    },
+    "decision_contexts.contexts.main_blood_under_stone:speak_guard.title": {
+      "source": "At the guarded gate",
+      "text": "At the guarded gate",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_blood_under_stone:speak_guard"
+    },
+    "decision_contexts.contexts.main_crowns_without_mercy:confession_choice.follow_through": {
+      "source": "The ration condition ends. Participation in the hearing remains separate from receiving help.",
+      "text": "The ration condition ends. Participation in the hearing remains separate from receiving help.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_crowns_without_mercy:confession_choice"
+    },
+    "decision_contexts.contexts.main_crowns_without_mercy:confession_choice.options.0.commitment": {
+      "source": "Release the grain and invite only those who choose to give their account.",
+      "text": "Release the grain and invite only those who choose to give their account.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_crowns_without_mercy:confession_choice.options.0"
+    },
+    "decision_contexts.contexts.main_crowns_without_mercy:confession_choice.options.0.cost": {
+      "source": "Refusals must be accepted; the hearing cannot demand a voice in exchange for supper.",
+      "text": "Refusals must be accepted; the hearing cannot demand a voice in exchange for supper.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_crowns_without_mercy:confession_choice.options.0"
+    },
+    "decision_contexts.contexts.main_crowns_without_mercy:confession_choice.options.1.commitment": {
+      "source": "Break the ration condition and read the copied account in Kael's own name.",
+      "text": "Break the ration condition and read the copied account in Kael's own name.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_crowns_without_mercy:confession_choice.options.1"
+    },
+    "decision_contexts.contexts.main_crowns_without_mercy:confession_choice.options.1.cost": {
+      "source": "Kael accepts responsibility for preserving and carrying what he reads.",
+      "text": "Kael accepts responsibility for preserving and carrying what he reads.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_crowns_without_mercy:confession_choice.options.1"
+    },
+    "decision_contexts.contexts.main_crowns_without_mercy:confession_choice.options.2.commitment": {
+      "source": "Break the ration condition and make Edric answer from the ledger.",
+      "text": "Break the ration condition and make Edric answer from the ledger.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_crowns_without_mercy:confession_choice.options.2"
+    },
+    "decision_contexts.contexts.main_crowns_without_mercy:confession_choice.options.2.cost": {
+      "source": "His compelled answer remains evidence, not a willing oath.",
+      "text": "His compelled answer remains evidence, not a willing oath.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_crowns_without_mercy:confession_choice.options.2"
+    },
+    "decision_contexts.contexts.main_crowns_without_mercy:confession_choice.title": {
+      "source": "What the assembly asks of people",
+      "text": "What the assembly asks of people",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_crowns_without_mercy:confession_choice"
+    },
+    "decision_contexts.contexts.main_crowns_without_mercy:confession_choice.uncertainty": {
+      "source": "Attendance, food, and a completed account cannot establish a household's consent.",
+      "text": "Attendance, food, and a completed account cannot establish a household's consent.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_crowns_without_mercy:confession_choice"
+    },
+    "decision_contexts.contexts.main_last_witness:halvern_choice.facts.halvern_guard_open.text": {
+      "source": "Halvern's guard has yielded. An opening for his account does not make the bound memory complete.",
+      "text": "Halvern's guard has yielded. An opening for his account does not make the bound memory complete.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_last_witness:halvern_choice.facts.halvern_guard_open"
+    },
+    "decision_contexts.contexts.main_last_witness:halvern_choice.facts.halvern_guard_open.title": {
+      "source": "A hearing earned",
+      "text": "A hearing earned",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_last_witness:halvern_choice.facts.halvern_guard_open"
+    },
+    "decision_contexts.contexts.main_last_witness:halvern_choice.options.0.commitment": {
+      "source": "Preserve Halvern's refusal as testimony without demanding another oath.",
+      "text": "Preserve Halvern's refusal as testimony without demanding another oath.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_last_witness:halvern_choice.options.0"
+    },
+    "decision_contexts.contexts.main_last_witness:halvern_choice.options.0.cost": {
+      "source": "The exhausted fragment remains bound; its presence does not restore all its memory.",
+      "text": "The exhausted fragment remains bound; its presence does not restore all its memory.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_last_witness:halvern_choice.options.0"
+    },
+    "decision_contexts.contexts.main_last_witness:halvern_choice.options.1.commitment": {
+      "source": "Record the refusal, then release the exhausted memory.",
+      "text": "Record the refusal, then release the exhausted memory.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_last_witness:halvern_choice.options.1"
+    },
+    "decision_contexts.contexts.main_last_witness:halvern_choice.options.1.cost": {
+      "source": "The copy preserves the refusal, not everything the departing fragment held.",
+      "text": "The copy preserves the refusal, not everything the departing fragment held.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_last_witness:halvern_choice.options.1"
+    },
+    "decision_contexts.contexts.main_last_witness:halvern_choice.options.2.commitment": {
+      "source": "Keep the copied order and end the remaining grave binding.",
+      "text": "Keep the copied order and end the remaining grave binding.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_last_witness:halvern_choice.options.2"
+    },
+    "decision_contexts.contexts.main_last_witness:halvern_choice.options.2.cost": {
+      "source": "The remaining fragment ends. Its unrecorded memories cannot be retained in the copy.",
+      "text": "The remaining fragment ends. Its unrecorded memories cannot be retained in the copy.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_last_witness:halvern_choice.options.2"
+    },
+    "decision_contexts.contexts.main_last_witness:halvern_choice.title": {
+      "source": "A refusal with limits",
+      "text": "A refusal with limits",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_last_witness:halvern_choice"
+    },
+    "decision_contexts.contexts.main_last_witness:halvern_choice.uncertainty": {
+      "source": "Halvern's fragment holds a bounded refusal. It cannot answer every question about what followed.",
+      "text": "Halvern's fragment holds a bounded refusal. It cannot answer every question about what followed.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_last_witness:halvern_choice"
+    },
+    "decision_contexts.contexts.main_names_they_burned:names_choice.facts.refugee_register.text": {
+      "source": "The recovered pages restore the refugee names. Family addresses can be separated from the public account.",
+      "text": "The recovered pages restore the refugee names. Family addresses can be separated from the public account.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_names_they_burned:names_choice.facts.refugee_register"
+    },
+    "decision_contexts.contexts.main_names_they_burned:names_choice.facts.refugee_register.title": {
+      "source": "The reconstructed register",
+      "text": "The reconstructed register",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_names_they_burned:names_choice.facts.refugee_register"
+    },
+    "decision_contexts.contexts.main_names_they_burned:names_choice.options.0.commitment": {
+      "source": "Publish the recovered names and order while removing family addresses.",
+      "text": "Publish the recovered names and order while removing family addresses.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_names_they_burned:names_choice.options.0"
+    },
+    "decision_contexts.contexts.main_names_they_burned:names_choice.options.0.cost": {
+      "source": "Public challenge puts pressure on the people carrying the account, even with addresses protected.",
+      "text": "Public challenge puts pressure on the people carrying the account, even with addresses protected.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_names_they_burned:names_choice.options.0"
+    },
+    "decision_contexts.contexts.main_names_they_burned:names_choice.options.1.commitment": {
+      "source": "Keep separate protected copies and warn affected households before the assembly.",
+      "text": "Keep separate protected copies and warn affected households before the assembly.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_names_they_burned:names_choice.options.1"
+    },
+    "decision_contexts.contexts.main_names_they_burned:names_choice.options.1.cost": {
+      "source": "The public order remains unchallenged during the delay.",
+      "text": "The public order remains unchallenged during the delay.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_names_they_burned:names_choice.options.1"
+    },
+    "decision_contexts.contexts.main_names_they_burned:names_choice.title": {
+      "source": "How the recovered names become known",
+      "text": "How the recovered names become known",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_names_they_burned:names_choice"
+    },
+    "decision_contexts.contexts.main_names_they_burned:names_choice.uncertainty": {
+      "source": "A correct record cannot promise how every household will respond to its publication.",
+      "text": "A correct record cannot promise how every household will respond to its publication.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_names_they_burned:names_choice"
+    },
+    "decision_contexts.contexts.main_road_of_crows:return_village.follow_through": {
+      "source": "Kael stays with the investigation. A report does not promise anyone else's participation.",
+      "text": "Kael stays with the investigation. A report does not promise anyone else's participation.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_road_of_crows:return_village"
+    },
+    "decision_contexts.contexts.main_road_of_crows:return_village.options.0.commitment": {
+      "source": "Give Anwen the token privately and commit to protecting people who choose to speak.",
+      "text": "Give Anwen the token privately and commit to protecting people who choose to speak.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_road_of_crows:return_village.options.0"
+    },
+    "decision_contexts.contexts.main_road_of_crows:return_village.options.0.cost": {
+      "source": "The wider village will not yet have the same account.",
+      "text": "The wider village will not yet have the same account.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_road_of_crows:return_village.options.0"
+    },
+    "decision_contexts.contexts.main_road_of_crows:return_village.options.1.commitment": {
+      "source": "Put the recovered evidence before Greyfen and commit to protecting its witnesses.",
+      "text": "Put the recovered evidence before Greyfen and commit to protecting its witnesses.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_road_of_crows:return_village.options.1"
+    },
+    "decision_contexts.contexts.main_road_of_crows:return_village.options.1.cost": {
+      "source": "Public disclosure makes the account harder to contain and may expose its bearers.",
+      "text": "Public disclosure makes the account harder to contain and may expose its bearers.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_road_of_crows:return_village.options.1"
+    },
+    "decision_contexts.contexts.main_road_of_crows:return_village.options.2.commitment": {
+      "source": "Keep the original token, make protected copies, and remain responsible for the investigation.",
+      "text": "Keep the original token, make protected copies, and remain responsible for the investigation.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_road_of_crows:return_village.options.2"
+    },
+    "decision_contexts.contexts.main_road_of_crows:return_village.options.2.cost": {
+      "source": "Keeping the original with Kael delays a wider public account.",
+      "text": "Keeping the original with Kael delays a wider public account.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_road_of_crows:return_village.options.2"
+    },
+    "decision_contexts.contexts.main_road_of_crows:return_village.title": {
+      "source": "Who receives the road's account",
+      "text": "Who receives the road's account",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_road_of_crows:return_village"
+    },
+    "decision_contexts.contexts.main_road_of_crows:return_village.uncertainty": {
+      "source": "These traces do not establish every person's part in what happened.",
+      "text": "These traces do not establish every person's part in what happened.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_road_of_crows:return_village"
+    },
+    "decision_contexts.contexts.main_soldier_without_banner:senn_choice.facts.deserters_muster.text": {
+      "source": "The hidden muster records the soldiers Senn left behind. Their refusal is distinct from his account.",
+      "text": "The hidden muster records the soldiers Senn left behind. Their refusal is distinct from his account.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_soldier_without_banner:senn_choice.facts.deserters_muster"
+    },
+    "decision_contexts.contexts.main_soldier_without_banner:senn_choice.facts.deserters_muster.title": {
+      "source": "The abandoned soldiers' record",
+      "text": "The abandoned soldiers' record",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_soldier_without_banner:senn_choice.facts.deserters_muster"
+    },
+    "decision_contexts.contexts.main_soldier_without_banner:senn_choice.options.0.commitment": {
+      "source": "Accept Senn's surrender under custody and his freely offered testimony.",
+      "text": "Accept Senn's surrender under custody and his freely offered testimony.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_soldier_without_banner:senn_choice.options.0"
+    },
+    "decision_contexts.contexts.main_soldier_without_banner:senn_choice.options.0.cost": {
+      "source": "Custody requires protection and continuing accountability; surrender is not permission for another attack.",
+      "text": "Custody requires protection and continuing accountability; surrender is not permission for another attack.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_soldier_without_banner:senn_choice.options.0"
+    },
+    "decision_contexts.contexts.main_soldier_without_banner:senn_choice.options.1.commitment": {
+      "source": "Keep the written account, disarm the camp, and permit Senn to leave.",
+      "text": "Keep the written account, disarm the camp, and permit Senn to leave.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_soldier_without_banner:senn_choice.options.1"
+    },
+    "decision_contexts.contexts.main_soldier_without_banner:senn_choice.options.1.cost": {
+      "source": "Senn leaves without a living oath to appear. His written account remains.",
+      "text": "Senn leaves without a living oath to appear. His written account remains.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_soldier_without_banner:senn_choice.options.1"
+    },
+    "decision_contexts.contexts.main_soldier_without_banner:senn_choice.options.2.commitment": {
+      "source": "Execute Senn for the road killings while retaining the documented account.",
+      "text": "Execute Senn for the road killings while retaining the documented account.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_soldier_without_banner:senn_choice.options.2"
+    },
+    "decision_contexts.contexts.main_soldier_without_banner:senn_choice.options.2.cost": {
+      "source": "His future testimony ends with his life.",
+      "text": "His future testimony ends with his life.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_soldier_without_banner:senn_choice.options.2"
+    },
+    "decision_contexts.contexts.main_soldier_without_banner:senn_choice.title": {
+      "source": "Senn's accountability",
+      "text": "Senn's accountability",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_soldier_without_banner:senn_choice"
+    },
+    "decision_contexts.contexts.main_soldier_without_banner:senn_choice.uncertainty": {
+      "source": "An admission establishes a person's account; it does not excuse the road killings or supply another person's consent.",
+      "text": "An admission establishes a person's account; it does not excuse the road killings or supply another person's consent.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_soldier_without_banner:senn_choice"
+    },
+    "decision_contexts.contexts.main_teeth_in_rain:bog_core_choice.facts.chapel_names.text": {
+      "source": "The erased chapel names include Oren. His recovered name can be spoken without treating a memory fragment as the whole person.",
+      "text": "The erased chapel names include Oren. His recovered name can be spoken without treating a memory fragment as the whole person.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_teeth_in_rain:bog_core_choice.facts.chapel_names"
+    },
+    "decision_contexts.contexts.main_teeth_in_rain:bog_core_choice.facts.chapel_names.title": {
+      "source": "Oren's name on the chapel wall",
+      "text": "Oren's name on the chapel wall",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_teeth_in_rain:bog_core_choice.facts.chapel_names"
+    },
+    "decision_contexts.contexts.main_teeth_in_rain:bog_core_choice.options.0.commitment": {
+      "source": "End the vessel by destroying the exposed memory core.",
+      "text": "End the vessel by destroying the exposed memory core.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_teeth_in_rain:bog_core_choice.options.0"
+    },
+    "decision_contexts.contexts.main_teeth_in_rain:bog_core_choice.options.0.cost": {
+      "source": "The memory held in this vessel disperses; it cannot be kept here for further study.",
+      "text": "The memory held in this vessel disperses; it cannot be kept here for further study.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_teeth_in_rain:bog_core_choice.options.0"
+    },
+    "decision_contexts.contexts.main_teeth_in_rain:bog_core_choice.options.1.commitment": {
+      "source": "Keep the exposed fragment for bounded study with Mira.",
+      "text": "Keep the exposed fragment for bounded study with Mira.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_teeth_in_rain:bog_core_choice.options.1"
+    },
+    "decision_contexts.contexts.main_teeth_in_rain:bog_core_choice.options.1.cost": {
+      "source": "Keeping a fragment creates a continuing duty to limit how it is used.",
+      "text": "Keeping a fragment creates a continuing duty to limit how it is used.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_teeth_in_rain:bog_core_choice.options.1"
+    },
+    "decision_contexts.contexts.main_teeth_in_rain:bog_core_choice.options.2.commitment": {
+      "source": "Settle the fragment beneath Oren's named grave.",
+      "text": "Settle the fragment beneath Oren's named grave.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_teeth_in_rain:bog_core_choice.options.2"
+    },
+    "decision_contexts.contexts.main_teeth_in_rain:bog_core_choice.options.2.cost": {
+      "source": "Its intimate memory will not become material for public study.",
+      "text": "Its intimate memory will not become material for public study.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_teeth_in_rain:bog_core_choice.options.2"
+    },
+    "decision_contexts.contexts.main_teeth_in_rain:bog_core_choice.title": {
+      "source": "The limits of a recovered memory",
+      "text": "The limits of a recovered memory",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_teeth_in_rain:bog_core_choice"
+    },
+    "decision_contexts.contexts.main_teeth_in_rain:bog_core_choice.uncertainty": {
+      "source": "The fragment cannot answer every question about the road or give consent for the child it remembers.",
+      "text": "The fragment cannot answer every question about the road or give consent for the child it remembers.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.main_teeth_in_rain:bog_core_choice"
+    },
+    "decision_contexts.contexts.side_bitter_roots:mira_choice.title": {
+      "source": "A treatment people can choose",
+      "text": "A treatment people can choose",
+      "speaker": "",
+      "context": "decision_contexts.contexts.side_bitter_roots:mira_choice"
+    },
+    "decision_contexts.contexts.side_bitter_roots:mira_choice.uncertainty": {
+      "source": "A useful treatment does not establish a family's informed agreement to its source.",
+      "text": "A useful treatment does not establish a family's informed agreement to its source.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.side_bitter_roots:mira_choice"
+    },
+    "decision_contexts.contexts.side_black_dog:dog_choice.title": {
+      "source": "Protection at the fold",
+      "text": "Protection at the fold",
+      "speaker": "",
+      "context": "decision_contexts.contexts.side_black_dog:dog_choice"
+    },
+    "decision_contexts.contexts.side_black_dog:dog_choice.uncertainty": {
+      "source": "Calling a fragment protective does not make its danger to the fold disappear.",
+      "text": "Calling a fragment protective does not make its danger to the fold disappear.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.side_black_dog:dog_choice"
+    },
+    "decision_contexts.contexts.side_empty_grave:walker_choice.title": {
+      "source": "A repeated watch",
+      "text": "A repeated watch",
+      "speaker": "",
+      "context": "decision_contexts.contexts.side_empty_grave:walker_choice"
+    },
+    "decision_contexts.contexts.side_empty_grave:walker_choice.uncertainty": {
+      "source": "A repeated memory cannot supply everything the living man once knew.",
+      "text": "A repeated memory cannot supply everything the living man once knew.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.side_empty_grave:walker_choice"
+    },
+    "decision_contexts.contexts.side_iron_remembers:tor_choice.title": {
+      "source": "The forge's responsibility",
+      "text": "The forge's responsibility",
+      "speaker": "",
+      "context": "decision_contexts.contexts.side_iron_remembers:tor_choice"
+    },
+    "decision_contexts.contexts.side_iron_remembers:tor_choice.uncertainty": {
+      "source": "Settling the marked stock does not decide whether Tor gives a public oath.",
+      "text": "Settling the marked stock does not decide whether Tor gives a public oath.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.side_iron_remembers:tor_choice"
+    },
+    "decision_contexts.contexts.side_millers_measure:ash_choice.title": {
+      "source": "Where the true measure can help",
+      "text": "Where the true measure can help",
+      "speaker": "",
+      "context": "decision_contexts.contexts.side_millers_measure:ash_choice"
+    },
+    "decision_contexts.contexts.side_millers_measure:ash_choice.uncertainty": {
+      "source": "Placing the account in useful hands does not complete every repair or delivery.",
+      "text": "Placing the account in useful hands does not complete every repair or delivery.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.side_millers_measure:ash_choice"
+    },
+    "decision_contexts.contexts.side_rooks_map:map_choice.title": {
+      "source": "A useful road and a personal account",
+      "text": "A useful road and a personal account",
+      "speaker": "",
+      "context": "decision_contexts.contexts.side_rooks_map:map_choice"
+    },
+    "decision_contexts.contexts.side_rooks_map:map_choice.uncertainty": {
+      "source": "Keeping a route useful does not decide whether Rook speaks publicly.",
+      "text": "Keeping a route useful does not decide whether Rook speaks publicly.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.side_rooks_map:map_choice"
+    },
+    "decision_contexts.contexts.side_soldiers_debt:debt_choice.title": {
+      "source": "The soldiers' refusal",
+      "text": "The soldiers' refusal",
+      "speaker": "",
+      "context": "decision_contexts.contexts.side_soldiers_debt:debt_choice"
+    },
+    "decision_contexts.contexts.side_soldiers_debt:debt_choice.uncertainty": {
+      "source": "Carrying a signed refusal does not authorize exposing a protected identity.",
+      "text": "Carrying a signed refusal does not authorize exposing a protected identity.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.side_soldiers_debt:debt_choice"
+    },
+    "decision_contexts.contexts.side_widows_bell:widow_choice.title": {
+      "source": "Elna's account and participation",
+      "text": "Elna's account and participation",
+      "speaker": "",
+      "context": "decision_contexts.contexts.side_widows_bell:widow_choice"
+    },
+    "decision_contexts.contexts.side_widows_bell:widow_choice.uncertainty": {
+      "source": "Knowing why the bell rang cannot decide whether Elna wants her grief made public.",
+      "text": "Knowing why the bell rang cannot decide whether Elna wants her grief made public.",
+      "speaker": "",
+      "context": "decision_contexts.contexts.side_widows_bell:widow_choice"
+    },
     "dialogue.blacksmith_tor.actions.0.label": {
       "source": "Take scrap iron.",
       "text": "Take scrap iron.",
@@ -5171,8 +5939,8 @@
       "context": "items.moon_oil"
     },
     "items.redroot_potion.description": {
-      "source": "A bitter draught that restores health over several breaths.",
-      "text": "A bitter draught that restores health over several breaths.",
+      "source": "A bitter draught that restores health immediately.",
+      "text": "A bitter draught that restores health immediately.",
       "speaker": "",
       "context": "items.redroot_potion"
     },
@@ -5787,6 +6555,132 @@
       "text": "The name-board in the roots",
       "speaker": "",
       "context": "journal_work.work.root_record"
+    },
+    "preparation_notes.items.ash_bomb.body": {
+      "source": "Throw a burst of hot ash at enemies close to Kael. Throwing uses one bomb immediately, including when no enemy is within reach.",
+      "text": "Throw a burst of hot ash at enemies close to Kael. Throwing uses one bomb immediately, including when no enemy is within reach.",
+      "speaker": "",
+      "context": "preparation_notes.items.ash_bomb"
+    },
+    "preparation_notes.items.ash_bomb.effects.reach.text": {
+      "source": "Affects nearby enemies within 6 metres.",
+      "text": "Affects nearby enemies within 6 metres.",
+      "speaker": "",
+      "context": "preparation_notes.items.ash_bomb.effects.reach"
+    },
+    "preparation_notes.items.ash_bomb.effects.reach.title": {
+      "source": "Reach",
+      "text": "Reach",
+      "speaker": "",
+      "context": "preparation_notes.items.ash_bomb.effects.reach"
+    },
+    "preparation_notes.items.ashfire_arrow.body": {
+      "source": "An arrow wrapped with an ember-bright head. Selecting it does not spend an arrow; releasing a bow shot spends one. The comparison below is base impact damage before a target's response.",
+      "text": "An arrow wrapped with an ember-bright head. Selecting it does not spend an arrow; releasing a bow shot spends one. The comparison below is base impact damage before a target's response.",
+      "speaker": "",
+      "context": "preparation_notes.items.ashfire_arrow"
+    },
+    "preparation_notes.items.bitterleaf_tonic.body": {
+      "source": "A remedy for spent breath. Drinking uses one tonic; it restores stamina immediately, up to your current maximum.",
+      "text": "A remedy for spent breath. Drinking uses one tonic; it restores stamina immediately, up to your current maximum.",
+      "speaker": "",
+      "context": "preparation_notes.items.bitterleaf_tonic"
+    },
+    "preparation_notes.items.bodkin_arrow.body": {
+      "source": "A heavier iron-headed shot, carried in a smaller bundle. Selecting it does not spend an arrow; releasing a bow shot spends one. The comparison below is base impact damage before a target's response.",
+      "text": "A heavier iron-headed shot, carried in a smaller bundle. Selecting it does not spend an arrow; releasing a bow shot spends one. The comparison below is base impact damage before a target's response.",
+      "speaker": "",
+      "context": "preparation_notes.items.bodkin_arrow"
+    },
+    "preparation_notes.items.iron_trap.body": {
+      "source": "Use a sprung iron jaw to interrupt a nearby enemy's approach. Setting a trap spends one immediately, including when no enemy is close enough to catch.",
+      "text": "Use a sprung iron jaw to interrupt a nearby enemy's approach. Setting a trap spends one immediately, including when no enemy is close enough to catch.",
+      "speaker": "",
+      "context": "preparation_notes.items.iron_trap"
+    },
+    "preparation_notes.items.iron_trap.effects.reach.text": {
+      "source": "Best used with an enemy close to Kael; it does not place a permanent trap on the road.",
+      "text": "Best used with an enemy close to Kael; it does not place a permanent trap on the road.",
+      "speaker": "",
+      "context": "preparation_notes.items.iron_trap.effects.reach"
+    },
+    "preparation_notes.items.iron_trap.effects.reach.title": {
+      "source": "Use",
+      "text": "Use",
+      "speaker": "",
+      "context": "preparation_notes.items.iron_trap.effects.reach"
+    },
+    "preparation_notes.items.moon_oil.body": {
+      "source": "Select a blade coating suited to spirit weaknesses. The coating remains selected until replaced; applying it does not spend a bottle.",
+      "text": "Select a blade coating suited to spirit weaknesses. The coating remains selected until replaced; applying it does not spend a bottle.",
+      "speaker": "",
+      "context": "preparation_notes.items.moon_oil"
+    },
+    "preparation_notes.items.moon_oil.effects.coating.text": {
+      "source": "Gives blade contacts the spirit tag. Its effect depends on the target's weakness.",
+      "text": "Gives blade contacts the spirit tag. Its effect depends on the target's weakness.",
+      "speaker": "",
+      "context": "preparation_notes.items.moon_oil.effects.coating"
+    },
+    "preparation_notes.items.moon_oil.effects.coating.title": {
+      "source": "Blade coating",
+      "text": "Blade coating",
+      "speaker": "",
+      "context": "preparation_notes.items.moon_oil.effects.coating"
+    },
+    "preparation_notes.items.redroot_potion.body": {
+      "source": "A remedy to recover after an injury. Drinking uses one potion; it restores health immediately, up to your current maximum.",
+      "text": "A remedy to recover after an injury. Drinking uses one potion; it restores health immediately, up to your current maximum.",
+      "speaker": "",
+      "context": "preparation_notes.items.redroot_potion"
+    },
+    "preparation_notes.items.rot_oil.body": {
+      "source": "Select a blade coating suited to undead weaknesses. The coating remains selected until replaced; applying it does not spend a bottle.",
+      "text": "Select a blade coating suited to undead weaknesses. The coating remains selected until replaced; applying it does not spend a bottle.",
+      "speaker": "",
+      "context": "preparation_notes.items.rot_oil"
+    },
+    "preparation_notes.items.rot_oil.effects.coating.text": {
+      "source": "Gives blade contacts the undead tag. Its effect depends on the target's weakness.",
+      "text": "Gives blade contacts the undead tag. Its effect depends on the target's weakness.",
+      "speaker": "",
+      "context": "preparation_notes.items.rot_oil.effects.coating"
+    },
+    "preparation_notes.items.rot_oil.effects.coating.title": {
+      "source": "Blade coating",
+      "text": "Blade coating",
+      "speaker": "",
+      "context": "preparation_notes.items.rot_oil.effects.coating"
+    },
+    "preparation_notes.items.standard_arrow.body": {
+      "source": "An ordinary hunting arrow. Selecting a bundle does not spend an arrow; releasing a bow shot spends one. Arrows are replenished through supplies and shops, not field crafting.",
+      "text": "An ordinary hunting arrow. Selecting a bundle does not spend an arrow; releasing a bow shot spends one. Arrows are replenished through supplies and shops, not field crafting.",
+      "speaker": "",
+      "context": "preparation_notes.items.standard_arrow"
+    },
+    "preparation_notes.known_use.mira_refined_formula.body": {
+      "source": "Your learned formula returns one mooncap after a successful craft. You still need the full recipe in hand to begin; the quote shows both the required ingredients and the return.",
+      "text": "Your learned formula returns one mooncap after a successful craft. You still need the full recipe in hand to begin; the quote shows both the required ingredients and the return.",
+      "speaker": "",
+      "context": "preparation_notes.known_use.mira_refined_formula"
+    },
+    "preparation_notes.known_use.mira_refined_formula.title": {
+      "source": "Mira's refined formula",
+      "text": "Mira's refined formula",
+      "speaker": "",
+      "context": "preparation_notes.known_use.mira_refined_formula"
+    },
+    "preparation_notes.known_use.restored_bog_account.body": {
+      "source": "The chapel names and ritual stones give time to read the Bog Wretch's approach. Moon Oil and clean interruptions can expose its memory. Preparation offers an opening; no purchase is required to decide how to answer the account.",
+      "text": "The chapel names and ritual stones give time to read the Bog Wretch's approach. Moon Oil and clean interruptions can expose its memory. Preparation offers an opening; no purchase is required to decide how to answer the account.",
+      "speaker": "",
+      "context": "preparation_notes.known_use.restored_bog_account"
+    },
+    "preparation_notes.known_use.restored_bog_account.title": {
+      "source": "The name you restored",
+      "text": "The name you restored",
+      "speaker": "",
+      "context": "preparation_notes.known_use.restored_bog_account"
     },
     "quests.main_ash_at_the_mill.objectives.inspect_millstones.text": {
       "source": "Compare the ash measure with the missing wagons.",

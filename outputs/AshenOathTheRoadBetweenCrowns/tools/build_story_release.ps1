@@ -210,7 +210,7 @@ if ($Publish) {
         "web",
         "outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_manifest.json",
         "outputs/AshenOathTheRoadBetweenCrowns/data/localization/en.json",
-        "outputs/AshenOathTheRoadBetweenCrowns/data/story_score_manifest.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/story_score_manifest.json",
         "outputs/AshenOathTheRoadBetweenCrowns/assets_external/audio/story_score"
     )
     if (-not $PublishMessage) { $PublishMessage = "Publish story build $BuildId" }
