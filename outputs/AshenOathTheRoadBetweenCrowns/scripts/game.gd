@@ -1609,6 +1609,10 @@ func prepare_resource_shutdown() -> void:
 	if resource_shutdown_prepared:
 		return
 	resource_shutdown_prepared = true
+	if is_instance_valid(runtime_services):
+		var display_bridge: Node = runtime_services.get_service("display_metrics")
+		if is_instance_valid(display_bridge):
+			display_bridge.call("shutdown")
 	dialogue_runtime_coordinator.release(player)
 	combat_vfx_coordinator.clear_oathfire_effects()
 	# Invalidate deferred frame continuations before releasing their scene-owned
@@ -3993,6 +3997,16 @@ func _notification(what: int) -> void:
 		if bool(settings.settings.get("pause_on_focus_loss", true)) and not get_tree().paused:
 			_pause_game()
 
+func _on_touch_layout_unavailable(reason: String) -> void:
+	if hud != null:
+		hud.set_touch_layout_reason(reason)
+	if reason.is_empty() or resource_shutdown_prepared or not game_started or _journey_load_pending():
+		return
+	# A layout change must not leave a running fight behind unavailable touch
+	# controls. Existing Pause retains the journey and exposes the way back.
+	if not get_tree().paused:
+		_pause_game()
+
 func _pause_game() -> void:
 	if _journey_load_pending():
 		return
@@ -4011,6 +4025,12 @@ func _pause_game() -> void:
 
 func _resume_game() -> void:
 	if _journey_load_pending():
+		return
+	var touch_reason: String = mobile_touch.gameplay_layout_reason() if mobile_touch != null else ""
+	hud.set_touch_layout_reason(touch_reason)
+	if not touch_reason.is_empty():
+		if not get_tree().paused or hud.active_menu != "pause":
+			_pause_game()
 		return
 	audio.set_game_paused(false)
 	get_tree().paused = false

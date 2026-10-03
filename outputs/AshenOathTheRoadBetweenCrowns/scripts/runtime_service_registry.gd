@@ -23,11 +23,12 @@ const InteractionFocusService = preload("res://scripts/interaction_focus_service
 const MobileTouchControls = preload("res://scripts/mobile_touch_controls.gd")
 const ZoneStreamingService = preload("res://scripts/zone_streaming_service.gd")
 const RuntimePackManager = preload("res://scripts/runtime_pack_manager.gd")
+const DisplayMetricsBridge = preload("res://scripts/display_metrics_bridge.gd")
 
 const REQUIRED_SERVICES := [
 	"story_state", "quests", "quest_presentation", "quest_beats", "dialogue", "inventory", "vendor_service", "crafting", "combat",
 	"save_manager", "settings", "world_materials", "day_night", "audio",
-	"asset_helper", "hud", "minigames", "progression", "input_router", "interaction_focus", "mobile_touch", "zone_streaming", "runtime_packs"
+	"asset_helper", "hud", "minigames", "progression", "input_router", "interaction_focus", "mobile_touch", "zone_streaming", "runtime_packs", "display_metrics"
 ]
 
 var services: Dictionary = {}
@@ -59,6 +60,7 @@ func create_services() -> Dictionary:
 		"mobile_touch": MobileTouchControls.new(),
 		"zone_streaming": ZoneStreamingService.new(),
 		"runtime_packs": RuntimePackManager.new(),
+		"display_metrics": DisplayMetricsBridge.new(),
 	}
 	for id in REQUIRED_SERVICES:
 		var service: Node = services[id]
@@ -116,6 +118,8 @@ func configure(owner: Node) -> void:
 	hud.set_input_source(input_router)
 	minigames.setup(input_router)
 	mobile_touch.setup(input_router, hud, settings.settings)
+	mobile_touch.gameplay_layout_unavailable.connect(Callable(owner, "_on_touch_layout_unavailable"))
+	mobile_touch.gameplay_layout_reason_changed.connect(hud.set_touch_layout_reason)
 	zone_streaming.setup(owner)
 	# The base manager is embedded in the main PCK. On Web, begin the verified
 	# opening downloads immediately so the menu and Crow Flight can cover the
@@ -150,7 +154,8 @@ func configure(owner: Node) -> void:
 	)
 	input_router.gamepad_disconnected.connect(func(_device_id: int):
 		hud.set_input_device(input_router.active_device)
-		hud.toast("Controller disconnected. Keyboard and mouse input is ready.")
+		var fallback_hint: String = "Touch the screen to use touch controls, or use a keyboard and mouse." if mobile_touch.is_touch_enabled() else "Keyboard and mouse input is ready."
+		hud.toast("Controller disconnected. " + fallback_hint)
 		hud.restore_input_focus()
 	)
 
@@ -248,6 +253,8 @@ func configure(owner: Node) -> void:
 	minigames.closed.connect(func(): hud.toast("The village carries on."))
 	settings.apply()
 	owner.call("_apply_runtime_settings", settings.settings)
+	services["display_metrics"].setup(hud, mobile_touch)
+	hud.set_touch_layout_reason(mobile_touch.gameplay_layout_reason())
 	owner.call_deferred("_refresh_journey_models")
 
 func get_service(id: String):

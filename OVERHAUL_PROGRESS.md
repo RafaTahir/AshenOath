@@ -36,9 +36,9 @@ Original checkout and its untracked artifacts are retained at D:/Projects/AshenO
 - World staging and aftermath: event-driven story compositions, voluntary witness staging, three peaceful covenant rituals, Ash confrontation, physical village work, encounter counterplay, and three return activities per ending implemented.
 - Player experience: journal, decision previews, epilogues after return scenes, evidence-earned combat opportunities, supplies, emergency medicine, nine-practice progression, difficulty, audio mix, save library, isolated replay, conversation history and accessibility controls implemented.
 - Presentation: character keepsakes and speaking/listening performances, 406 generated exact-text voice clips, seven story motifs and an illustrated chapter atlas are included in the current production package.
-- Latest export: source `cd05d25f52a1`, build `story-20261003T140746Z-cd05d25f52a1`, packaged commit `d31d19c`.
-- Latest push/deployment: both authorized GitHub branches updated; Vercel deployment `dpl_Hd5jZ7BhQi8rpL9NupUKrVVx7KbH` returned `status: ok`, `readyState: READY`, and alias `https://ashenoath.vercel.app`.
-- Active work: cycle 05 is published; cycle 06 planning concerns discovered-evidence reading and journal navigation. The continuing goal remains active.
+- Latest export: source `9b9f0ca33cd6`, build `story-20261003T143831Z-9b9f0ca33cd6`, packaged commit `62692a9`.
+- Latest push/deployment: both authorized GitHub branches updated; Vercel deployment `dpl_C5sh21nAQzAEiwoz1xJ2NRqoDCK8` returned `status: ok`, `readyState: READY`, and alias `https://ashenoath.vercel.app`.
+- Active work: cycle 07 source implementation is complete; final production packaging and publication remain. The user's latest direction ends the work after this release, its push/deployment and a consolidated change list. No further cycle will start.
 
 Production deployment: `dpl_9DKbrtv61oZVYfk5pQ6h5mXwkUiX`, `https://ashenoath-6yzh9ysh9-rafaeitahir-5792s-projects.vercel.app`. The initial CLI upload omitted `web` due to an overly broad ignore pattern; that filter was corrected, committed and pushed before the successful 82.5 MB upload. No post-deployment request, browser session, test or gameplay verification was performed.
 
@@ -115,3 +115,15 @@ Cycle 05 source `cd05d25f52a1` produced build `story-20261003T140746Z-cd05d25f52
 `FINE_DETAILS_CYCLE_06_PLAN.md` was written before implementation. Work adds a selected Evidence reader, discovered-kind filters, twelve authored record details, honest provenance, links to known related journal entries and bounded return navigation. The read-only model preserves existing discovery gates and existing quest tracking. Root added the new catalog and source attribution field to English extraction. No spoken dialogue changes, tests or verification are part of this pass.
 
 Cycle 06 source is integrated. The HUD now renders a discovered Evidence list and selected reader with populated kind filters, labeled provenance and accounts, current known relevance and related journal links. Reading positions survive list/detail/related transitions and ordinary reopening, with a bounded return trail that resets when the timeline changes. Existing preparation, save and dialogue surfaces remain on their prior paths. Production compilation and publication follow.
+
+Cycle 06 source `9b9f0ca33cd6` produced build `story-20261003T143831Z-9b9f0ca33cd6`, candidate `.release-gate/fine-details-cycle06-01`. Godot import, all seven runtime packs and Web export completed. The same `-Publish` invocation committed package `62692a9`, pushed both branches and deployed successfully. Vercel deployment `dpl_C5sh21nAQzAEiwoz1xJ2NRqoDCK8` returned `READY`, URL `https://ashenoath-iwhfb09h6-rafaeitahir-5792s-projects.vercel.app`, aliased to `https://ashenoath.vercel.app`; upload 87.9 MB. No tests or post-deployment checks were performed. Cycle 07 planning follows.
+
+## Fine details cycle 07
+
+`FINE_DETAILS_CYCLE_07_PLAN.md` was written before source edits. Implementation covers a shared display-aware layout policy, in-place HUD/menu/dialogue/journal reflow, safe touch geometry and finger ownership, and source-aware input-device changes. Root has implemented the event-driven browser/native display bridge, initial delivery after setup and explicit shutdown. The browser shell publishes actual canvas dimensions and safe/visible insets while retaining the fixed game render configuration. No new spoken content, tests, previews or verification are part of this pass.
+
+Cycle 07 source is integrated. The HUD uses shared actual-display metrics, compact journal panes, persistent navigation, scrollable preparation/dialogue/menu bodies, and live reading/focus/edit retention. Touch controls use safe geometry and explicit finger ownership, source-aware input handoff and automatic Pause when touch combat space becomes unusable; recovery requires ordinary player Resume. Critical vitals and prompts account for the touch-control area. Final production compilation, export, push and deployment follow.
+
+## Final delivery scope
+
+The user's latest instruction replaces indefinite refinement with a finite endpoint: finish the current written scope, push and deploy, list all changes, then stop. Completion refers to the implemented story package and seven refinement cycles, not an independently measured quality score or every aspirational target in the original master plan. `FINAL_DELIVERY_CHANGELOG.md` consolidates the delivered changes and records the final publication result. No cycle 08 is planned.

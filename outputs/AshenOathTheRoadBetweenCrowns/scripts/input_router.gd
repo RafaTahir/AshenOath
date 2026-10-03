@@ -187,6 +187,7 @@ var default_bindings: Dictionary = {}
 var gamepad_profiles: Dictionary = {}
 var virtual_move := Vector2.ZERO
 var virtual_look := Vector2.ZERO
+var _pending_virtual_look := Vector2.ZERO
 var _virtual_actions: Dictionary = {}
 var _keyboard_pressed: Dictionary = {}
 var _mouse_pressed: Dictionary = {}
@@ -309,6 +310,8 @@ func begin_context(context: String, opening_event: InputEvent = null) -> void:
 func accept_event(event: InputEvent, action: StringName, context: String) -> bool:
 	if event == null or input_context != context or not InputMap.has_action(action):
 		return false
+	if _is_emulated_mouse(event):
+		return false
 	if event is InputEventKey and event.echo:
 		return false
 	if not event.is_action_pressed(action) or _awaiting_release.has(str(action)):
@@ -346,6 +349,8 @@ func _guard_event(event: InputEvent, reason: String) -> void:
 			_awaiting_release[str(action)] = reason
 
 func guard_event_until_release(event: InputEvent, reason: String = "pointer_capture") -> void:
+	if _is_emulated_mouse(event):
+		return
 	_guard_event(event, reason)
 	for action in InputMap.get_actions():
 		if event.is_action_pressed(action):
@@ -436,6 +441,16 @@ func format_binding(event: InputEvent) -> String:
 	return "Unbound"
 
 func _input(event: InputEvent) -> void:
+	# Touch-generated mouse events still reach Godot's native GUI controls.
+	# They are not another physical device or a second combat press.
+	if _is_emulated_mouse(event):
+		return
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			_set_device(DEVICE_TOUCH)
+		return
+	if event is InputEventScreenDrag:
+		return
 	if event is InputEventKey:
 		var key_event := event as InputEventKey
 		# Web pointer capture can clear Godot's action cache while a physical key
@@ -456,7 +471,7 @@ func _input(event: InputEvent) -> void:
 		if _set_gamepad(maxi(event.device, 0)):
 			_restore_profile_switch_event(event)
 		_set_device(DEVICE_GAMEPAD)
-	elif event is InputEventJoypadMotion and absf(event.axis_value) > maxf(gamepad_deadzone * 0.5, 0.06):
+	elif event is InputEventJoypadMotion and absf(event.axis_value) > maxf(gamepad_deadzone, 0.16):
 		if _set_gamepad(maxi(event.device, 0)):
 			_restore_profile_switch_event(event)
 		_set_device(DEVICE_GAMEPAD)
@@ -479,6 +494,18 @@ func _input(event: InputEvent) -> void:
 		_set_device(DEVICE_KEYBOARD_MOUSE)
 	_track_action_event(event)
 
+func _is_emulated_mouse(event: InputEvent) -> bool:
+	return (event is InputEventMouseButton or event is InputEventMouseMotion) and event.device == -1
+
+func _event_matches_active_device(event: InputEvent) -> bool:
+	if event is InputEventAction:
+		return true
+	if event is InputEventJoypadButton or event is InputEventJoypadMotion:
+		return active_device == DEVICE_GAMEPAD
+	if event is InputEventKey or event is InputEventMouseButton:
+		return active_device == DEVICE_KEYBOARD_MOUSE and not _is_emulated_mouse(event)
+	return false
+
 func _track_action_event(event: InputEvent) -> void:
 	if event is InputEventMouseMotion or event is InputEventScreenDrag:
 		return
@@ -490,8 +517,9 @@ func _track_action_event(event: InputEvent) -> void:
 			_event_down.erase(action)
 			if _awaiting_release.erase(action):
 				continue
-			_pending_released[action] = now
-		elif event.is_action_pressed(raw_action) and not echo:
+			if _event_matches_active_device(event):
+				_pending_released[action] = now
+		elif event.is_action_pressed(raw_action) and not echo and _event_matches_active_device(event):
 			var repeated_axis := event is InputEventJoypadMotion and bool(_event_down.get(action, false))
 			_event_down[action] = true
 			# After a focus loss, a new mouse/key down is proof of a fresh
@@ -533,6 +561,8 @@ func _normalize_browser_keycode(code: int) -> int:
 func movement_vector() -> Vector2:
 	if not is_gameplay_context():
 		return Vector2.ZERO
+	if active_device == DEVICE_TOUCH:
+		return virtual_move
 	var physical := Vector2(_action_strength("move_right") - _action_strength("move_left"), _action_strength("move_back") - _action_strength("move_forward")).limit_length(1.0)
 	var raw_keyboard := Vector2.ZERO
 	if not _awaiting_release.has("move_left") and _raw_action_pressed(&"move_left"):
@@ -552,6 +582,9 @@ func movement_vector() -> Vector2:
 func look_vector() -> Vector2:
 	if not is_gameplay_context():
 		return Vector2.ZERO
+	if active_device == DEVICE_TOUCH:
+		_ensure_action_snapshot()
+		return virtual_look
 	var physical := Vector2(_action_strength("camera_right") - _action_strength("camera_left"), _action_strength("camera_down") - _action_strength("camera_up")).limit_length(1.0)
 	# Chromium can drop the Input singleton's held-key state while the Web
 	# canvas owns pointer capture. Movement already merges the retained raw
@@ -600,7 +633,28 @@ func is_action_pressed(action: StringName) -> bool:
 func _physical_action_held(action: StringName) -> bool:
 	if not InputMap.has_action(action):
 		return false
+	if active_device == DEVICE_TOUCH:
+		return bool(_virtual_actions.get(action, false))
 	return Input.is_action_pressed(action) or _raw_action_pressed(action) or _raw_mouse_action_pressed(action) or bool(_virtual_actions.get(action, false))
+
+func _hardware_action_held(action: StringName) -> bool:
+	if _raw_action_pressed(action) or _raw_mouse_action_pressed(action):
+		return true
+	if not InputMap.has_action(action):
+		return false
+	for binding: InputEvent in InputMap.action_get_events(action):
+		if not (binding is InputEventJoypadButton or binding is InputEventJoypadMotion):
+			continue
+		for device: int in Input.get_connected_joypads():
+			if binding.device >= 0 and binding.device != device:
+				continue
+			if binding is InputEventJoypadButton and Input.is_joy_button_pressed(device, binding.button_index):
+				return true
+			if binding is InputEventJoypadMotion:
+				var value: float = Input.get_joy_axis(device, binding.axis)
+				if value * signf(binding.axis_value) > maxf(gamepad_deadzone, InputMap.action_get_deadzone(action)):
+					return true
+	return false
 
 func _action_strength(action: StringName) -> float:
 	if not InputMap.has_action(action) or _awaiting_release.has(str(action)):
@@ -613,14 +667,17 @@ func _ensure_action_snapshot() -> void:
 		return
 	_snapshot_frame = frame
 	_action_snapshot.clear()
+	virtual_look = _pending_virtual_look.limit_length(1.0)
+	_pending_virtual_look = Vector2.ZERO
 	var now := Time.get_ticks_msec()
 	for raw_action in InputMap.get_actions():
 		var action := str(raw_action)
 		var allowed := action.begins_with("ui_") or is_gameplay_context()
 		var guarded := _awaiting_release.has(action) or (_suppressed_frame == frame and not action.begins_with("ui_"))
 		var held := _physical_action_held(raw_action) and allowed and not guarded
-		var pressed := (Input.is_action_just_pressed(raw_action) or now - int(_pending_pressed.get(action, -1000)) <= 500) and allowed and not guarded
-		var released := (Input.is_action_just_released(raw_action) or now - int(_pending_released.get(action, -1000)) <= 500) and allowed and not guarded
+		var singleton_edges: bool = active_device != DEVICE_TOUCH
+		var pressed: bool = ((singleton_edges and Input.is_action_just_pressed(raw_action)) or now - int(_pending_pressed.get(action, -1000)) <= 500) and allowed and not guarded
+		var released: bool = ((singleton_edges and Input.is_action_just_released(raw_action)) or now - int(_pending_released.get(action, -1000)) <= 500) and allowed and not guarded
 		if str(_toggle_modes.get(action, "hold")) == "toggle" and is_gameplay_context():
 			var previous := bool(_toggle_actions.get(action, false))
 			if pressed:
@@ -798,18 +855,24 @@ func _replace_physical_event(action: String, event_type, code: int) -> void:
 func set_virtual_axes(move_axis: Vector2, look_axis: Vector2) -> void:
 	if not is_gameplay_context():
 		virtual_move = Vector2.ZERO
-		virtual_look = Vector2.ZERO
+		clear_virtual_look()
 		return
 	if move_axis.length_squared() > 0.01 or look_axis.length_squared() > 0.01:
 		_set_device(DEVICE_TOUCH)
 	virtual_move = move_axis.limit_length(1.0)
-	virtual_look = look_axis.limit_length(1.0)
+	_pending_virtual_look = (_pending_virtual_look + look_axis).limit_length(1.0)
+
+func clear_virtual_look() -> void:
+	virtual_look = Vector2.ZERO
+	_pending_virtual_look = Vector2.ZERO
 
 func set_virtual_action(action: StringName, pressed: bool) -> void:
 	if pressed and not is_gameplay_context():
 		return
 	if pressed:
 		_set_device(DEVICE_TOUCH)
+		if bool(_virtual_actions.get(action, false)):
+			return
 		_virtual_actions[action] = true
 		var action_event := InputEventAction.new()
 		action_event.action = action
@@ -823,12 +886,19 @@ func set_virtual_action(action: StringName, pressed: bool) -> void:
 
 func clear_virtual_input() -> void:
 	virtual_move = Vector2.ZERO
-	virtual_look = Vector2.ZERO
+	clear_virtual_look()
 	for action in _virtual_actions.keys():
-		Input.action_release(action)
-		_awaiting_release.erase(str(action))
-		_event_down.erase(str(action))
+		# Cancelling a screen finger must not release a real held controller or
+		# keyboard binding which happens to serve the same semantic action.
+		if not _hardware_action_held(StringName(action)):
+			Input.action_release(action)
+			_awaiting_release.erase(str(action))
+			_event_down.erase(str(action))
+		_pending_pressed.erase(str(action))
+		_pending_released.erase(str(action))
 	_virtual_actions.clear()
+	_action_snapshot.clear()
+	_snapshot_frame = -1
 
 func activate_touch() -> void:
 	_set_device(DEVICE_TOUCH)
@@ -876,7 +946,6 @@ func rumble(weak: float, strong: float, duration: float = 0.12) -> void:
 func _on_joy_connection_changed(device: int, connected: bool) -> void:
 	if connected:
 		_set_gamepad(device)
-		_set_device(DEVICE_GAMEPAD)
 		return
 	if device != active_gamepad_id:
 		return
@@ -1238,6 +1307,8 @@ func _set_device(device: String) -> void:
 		return
 	reset_transient_input("device_changed")
 	active_device = device
+	if active_device == DEVICE_TOUCH:
+		show_pointer()
 	device_changed.emit(active_device)
 
 func _set_pointer_mode(mode: int) -> void:

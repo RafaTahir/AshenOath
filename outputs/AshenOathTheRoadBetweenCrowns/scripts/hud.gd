@@ -44,6 +44,9 @@ const PreparationPanel = preload("res://scripts/preparation_panel.gd")
 const JourneyMenuPanel = preload("res://scripts/journey_menu_panel.gd")
 const DialogueTopicNavigation = preload("res://scripts/dialogue_topic_navigation.gd")
 const JournalEvidenceNavigation = preload("res://scripts/journal_evidence_navigation.gd")
+const HudLayoutPolicy = preload("res://scripts/hud_layout_policy.gd")
+const HudReflowState = preload("res://scripts/hud_reflow_state.gd")
+const MobileTouchLayout = preload("res://scripts/mobile_touch_layout.gd")
 var navigation = NavigationState.new()
 var notices = NoticeQueue.new()
 var _rendered_screen := ""
@@ -162,7 +165,7 @@ var _bar_name_labels: Array[Label] = []
 var _journal_section_id := "return"
 var _journal_context: Dictionary = {}
 var inventory_notice_label: Label
-var _preparation_actions: HBoxContainer
+var _preparation_actions: BoxContainer
 var _preparation_context: Dictionary = {}
 var _preparation_services: Object
 var _preparation_selection: Dictionary = {}
@@ -192,6 +195,39 @@ var _evidence_position_key := ""
 var _evidence_reference_section := ""
 var _evidence_reference_entry := ""
 
+var _display_metrics: Dictionary = {}
+var _layout_policy: Dictionary = {}
+var _layout_pending := false
+var _layout_applying := false
+var _layout_generation := 0
+var _dialogue_header: HBoxContainer
+var _dialogue_back_button: Button
+var _dialogue_body_scroll: ScrollContainer
+var _dialogue_body: VBoxContainer
+var _inventory_root: VBoxContainer
+var _inventory_columns: HBoxContainer
+var _journal_column: VBoxContainer
+var _journal_actions_scroll: ScrollContainer
+var _preparation_actions_scroll: ScrollContainer
+var _inventory_footer: GridContainer
+var _inventory_read_button: Button
+var _inventory_entries_button: Button
+var _inventory_close_button: Button
+var _inventory_panes: Dictionary = {}
+var _inventory_pane_states: Dictionary = {}
+var _menu_frame: Control
+var _menu_shell: HBoxContainer
+var _menu_title_stack: VBoxContainer
+var _menu_title_label: Label
+var _menu_title_spacer: Control
+var _menu_panel: PanelContainer
+var _menu_scroll: ScrollContainer
+var _menu_content: VBoxContainer
+var _menu_footer: HBoxContainer
+var _menu_back_button: Button
+var _loading_card: PanelContainer
+var _touch_layout_reason := ""
+var _touch_reason_label: Label
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_build_hud()
@@ -438,6 +474,8 @@ func clear_journey_transients(new_timeline: bool) -> void:
 	_journey_return_pending.clear()
 	if new_timeline:
 		_evidence_navigation.reset()
+		_inventory_panes.clear()
+		_inventory_pane_states.clear()
 		_evidence_position_key = ""
 		_evidence_reference_section = ""
 		_evidence_reference_entry = ""
@@ -523,6 +561,21 @@ func show_launch_screen() -> void:
 	)
 	call_deferred("_focus_first_enabled", menu_layer)
 
+func set_touch_layout_reason(reason: String) -> void:
+	_touch_layout_reason = reason.strip_edges()
+	if active_menu != "pause":
+		return
+	if is_instance_valid(_touch_reason_label):
+		_touch_reason_label.text = _touch_layout_reason
+		_touch_reason_label.visible = _touch_layout_reason != ""
+	if is_instance_valid(_menu_back_button):
+		_menu_back_button.disabled = _touch_layout_reason != ""
+	if is_instance_valid(_menu_content):
+		for child: Node in _menu_content.get_children():
+			if child is Button and str(child.get_meta("navigation_key", "")) == "resume":
+				(child as Button).disabled = _touch_layout_reason != ""
+	_queue_responsive_layout()
+
 func show_pause_menu() -> void:
 	active_menu = "pause"
 	_set_internal_canvas(Vector2i(MENU_SIZE))
@@ -531,7 +584,10 @@ func show_pause_menu() -> void:
 	menu_layer.visible = true
 	var box: VBoxContainer = _menu_box("Paused", "", "the road holds its breath")
 	_show_journey_card("current")
-	_add_menu_button(box, "Resume", func(): resume_requested.emit(), false, "resume")
+	_add_menu_button(box, "Resume", func(): resume_requested.emit(), _touch_layout_reason != "", "resume")
+	_touch_reason_label = _add_menu_text(box, _touch_layout_reason)
+	_touch_reason_label.visible = _touch_layout_reason != ""
+	_menu_back_button.disabled = _touch_layout_reason != ""
 	_add_menu_button(box, "On Return", func(): journal_section_requested.emit("return"), false, "on_return")
 	_add_menu_button(box, "Quick Save", func(): save_requested.emit(), false, "quick_save")
 	_add_menu_button(box, "Saved Journeys", func(): show_save_library("pause"), false, "saved_journeys")
@@ -800,6 +856,7 @@ func _build_loading_layer() -> void:
 	shade.color = Color(0.008, 0.010, 0.012, 0.28)
 	loading_layer.add_child(shade)
 	var card := PanelContainer.new()
+	_loading_card = card
 	card.name = "RoadCard"
 	card.set_anchors_preset(Control.PRESET_CENTER_TOP)
 	card.position = Vector2(-260, 34)
@@ -829,20 +886,17 @@ func _build_loading_layer() -> void:
 	_journey_cancel_button.visible = false
 	content.add_child(_journey_cancel_button)
 
-func _set_internal_canvas(size: Vector2i) -> void:
-	var window := get_window()
+func _set_internal_canvas(_requested_size: Vector2i) -> void:
+	var window: Window = get_window()
 	if window == null:
 		return
-	# UI coordinates must not reallocate the shared 3D render target. Preserve
-	# the desktop's authored menu layout through its Control transform instead.
 	if window.content_scale_size != GAMEPLAY_SIZE:
 		window.content_scale_size = GAMEPLAY_SIZE
 	if menu_layer != null:
-		var layout_size := GAMEPLAY_SIZE if OS.has_feature("web") else size
 		menu_layer.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
-		menu_layer.size = Vector2(layout_size)
-		menu_layer.scale = Vector2(GAMEPLAY_SIZE) / Vector2(layout_size)
-
+		menu_layer.size = Vector2(GAMEPLAY_SIZE)
+		menu_layer.scale = Vector2.ONE
+	_queue_responsive_layout()
 func update_health(current: float, maximum: float) -> void:
 	var previous = last_health
 	last_health = current
@@ -1280,6 +1334,7 @@ func _restore_topic_list_reading(generation: int) -> void:
 	if not restored:
 		_focus_first_enabled(dialogue_actions)
 	dialogue_choices_scroll.scroll_vertical = int(reading.get("choices_scroll", 0))
+	_dialogue_body_scroll.scroll_vertical = int(reading.get("body_scroll", 0))
 	dialogue_text.get_v_scroll_bar().value = float(reading.get("subtitle_scroll", 0.0))
 
 func _add_topic_navigation_button(label: String, key: String, callback: Callable) -> Button:
@@ -1319,6 +1374,9 @@ func show_dialogue(data: Dictionary) -> void:
 	_render_dialogue_page()
 
 func _render_dialogue_page(record_history: bool = true, announce_page: bool = true, focus_page: bool = true) -> void:
+	if focus_page:
+		_dialogue_body_scroll.scroll_vertical = 0
+		dialogue_text.scroll_to_line(0)
 	_dialogue_view_generation += 1
 	_dialogue_reading_state.clear()
 	_cancel_dialogue_press()
@@ -1474,7 +1532,7 @@ func _prepare_inventory_surface(preparation: bool) -> void:
 		_preparation_actions.remove_child(child)
 		child.queue_free()
 	_preparation_actions.visible = preparation
-	inventory_text.custom_minimum_size.y = 320.0 if preparation else 388.0
+	inventory_text.custom_minimum_size.y = 0.0
 	if preparation and journal_art != null:
 		journal_art.visible = false
 	inventory_notice_label.text = ""
@@ -1565,6 +1623,7 @@ func show_inventory(inventory, quests, story_state = null, progression = null, r
 			var entry_id: String = str(entry.get("id", ""))
 			var entry_button: Button = _preparation_button(str(entry.get("title", "Read entry")), "entry:" + entry_id, craft_buttons)
 			entry_button.pressed.connect(func(paragraph: int = int(paragraph_by_entry.get(entry_id, 0))):
+				_set_inventory_pane("reader")
 				inventory_text.scroll_to_paragraph(paragraph)
 				inventory_text.grab_focus()
 			)
@@ -1574,6 +1633,7 @@ func show_inventory(inventory, quests, story_state = null, progression = null, r
 		if memory.is_empty():
 			memory = {"focus":"journal_text" if linked or str(_evidence_navigation.selected_id) != "" else "evidence_filter:" + str(_evidence_navigation.filter_id), "index":0, "scrolls":{"journal_text":0, "journal_actions":0}}
 		navigation.screens[_inventory_screen] = memory
+	_queue_responsive_layout()
 	call_deferred("_restore_inventory_state", _inventory_screen, _inventory_generation)
 func _journal_zone_id() -> String:
 	var zone_id: String = str(_preparation_context.get("zone_id", ""))
@@ -1695,6 +1755,7 @@ func _add_evidence_return_controls() -> void:
 	list_button.pressed.connect(_show_evidence_list)
 
 func _select_evidence_filter(filter_id: String) -> void:
+	_inventory_panes["journal:evidence"] = "entries"
 	_capture_inventory_state()
 	_evidence_navigation.filter_id = filter_id
 	_evidence_navigation.selected_id = ""
@@ -1704,6 +1765,7 @@ func _select_evidence_filter(filter_id: String) -> void:
 	_refresh_evidence_journal("evidence")
 
 func _select_evidence_entry(entry_id: String) -> void:
+	_inventory_panes["journal:evidence"] = "reader"
 	var detail: Dictionary = StoryJournalPresenter.evidence_detail(entry_id, _journal_context.get("quests"), _journal_context.get("state"), _journal_zone_id())
 	if detail.is_empty():
 		return
@@ -1714,6 +1776,7 @@ func _select_evidence_entry(entry_id: String) -> void:
 	_refresh_evidence_journal("evidence")
 
 func _show_evidence_list() -> void:
+	_inventory_panes["journal:evidence"] = "entries"
 	_capture_inventory_state()
 	_evidence_navigation.selected_id = ""
 	_evidence_navigation.clear_returns()
@@ -1722,6 +1785,8 @@ func _show_evidence_list() -> void:
 	_refresh_evidence_journal("evidence")
 
 func _refresh_evidence_journal(section_id: String) -> void:
+	if section_id != "evidence" or str(_evidence_navigation.selected_id) != "":
+		_inventory_panes["journal:" + section_id] = "reader"
 	show_inventory(_journal_context.get("inventory"), _journal_context.get("quests"), _journal_context.get("state"), _journal_context.get("progression"), section_id)
 
 func _resolve_evidence_reference(link: Dictionary, sections: Array = []) -> Dictionary:
@@ -1781,7 +1846,7 @@ func _evidence_focus_target() -> String:
 	return "evidence_filter:" + str(_evidence_navigation.filter_id)
 
 func _handle_evidence_direction(event: InputEvent) -> bool:
-	if _evidence_position_key == "" or not is_instance_valid(inventory_layer) or not inventory_layer.visible or not _inventory_screen.begins_with("journal:"):
+	if bool(_layout_policy.get("compact", false)) or _evidence_position_key == "" or not is_instance_valid(inventory_layer) or not inventory_layer.visible or not _inventory_screen.begins_with("journal:"):
 		return false
 	var direction: int = 0
 	if event is InputEventKey:
@@ -1822,6 +1887,27 @@ func _handle_evidence_direction(event: InputEvent) -> bool:
 			fallback.grab_focus()
 			get_viewport().set_input_as_handled()
 			return true
+	return false
+
+func _handle_compact_journal_direction(event: InputEvent) -> bool:
+	if not bool(_layout_policy.get("compact", false)) or not inventory_layer.visible:
+		return false
+	var direction: int = 0
+	if event is InputEventKey:
+		var key: InputEventKey = event as InputEventKey
+		var code: int = key.keycode if key.keycode != KEY_NONE else key.physical_keycode
+		if key.pressed and not key.echo:
+			direction = -1 if code == KEY_LEFT else (1 if code == KEY_RIGHT else 0)
+	elif event is InputEventJoypadButton or event is InputEventJoypadMotion:
+		if event.is_action_pressed("ui_left"):
+			direction = -1
+		elif event.is_action_pressed("ui_right"):
+			direction = 1
+	var pane: String = str(_inventory_panes.get(_inventory_screen, "reader"))
+	if (direction < 0 and pane == "reader") or (direction > 0 and pane == "entries"):
+		_set_inventory_pane("entries" if direction < 0 else "reader", true)
+		get_viewport().set_input_as_handled()
+		return true
 	return false
 
 func _build_preparation_content(inventory, progression, story_state, quests, notes: String) -> void:
@@ -1879,6 +1965,7 @@ func _build_preparation_content(inventory, progression, story_state, quests, not
 	notes_button.pressed.connect(func(): _select_preparation_entry("notes", ""))
 
 func _select_preparation_entry(kind: String, id: String) -> void:
+	_inventory_panes[_inventory_screen] = "reader"
 	_preparation_selection[_inventory_screen] = {"kind":kind, "id":id}
 	_preparation_results.erase(_inventory_screen)
 	if _inventory_screen.begins_with("vendor:"):
@@ -1893,6 +1980,7 @@ func _select_preparation_entry(kind: String, id: String) -> void:
 	navigation.screens[_inventory_screen] = memory
 
 func _open_journal_section(section_id: String) -> void:
+	_inventory_panes["journal:" + section_id] = "entries" if section_id == "evidence" and str(_evidence_navigation.selected_id) == "" else "reader"
 	if _journal_context.is_empty() or (section_id == _journal_section_id and _evidence_reference_entry == ""):
 		return
 	_capture_inventory_state()
@@ -1945,6 +2033,7 @@ func show_vendor(vendor_id: String, vendor_service, inventory, quests = null, st
 		entry_button.button_pressed = selected_id == request_id
 		entry_button.pressed.connect(func(id_value: String = request_id): _select_preparation_entry("item", id_value))
 	_add_preparation_close()
+	_queue_responsive_layout()
 	call_deferred("_restore_inventory_state", _inventory_screen, _inventory_generation)
 
 func _add_preparation_heading(text: String) -> void:
@@ -2209,90 +2298,428 @@ func _hud_label(parent: Node, node_name: String, font_size: int) -> Label:
 	parent.add_child(label)
 	return label
 
+func set_display_metrics(metrics: Dictionary) -> void:
+	_display_metrics = metrics.duplicate()
+	_queue_responsive_layout()
+
 func _on_viewport_resized() -> void:
-	call_deferred("_apply_hud_layout")
+	_queue_responsive_layout()
 
 func _apply_hud_layout() -> void:
-	if hud_root == null or get_viewport() == null:
-		return
-	var viewport_size := get_viewport().get_visible_rect().size
-	if viewport_size.x < 320.0 or viewport_size.y < 240.0:
-		return
-	var center_x := viewport_size.x * 0.5
-	var compact := viewport_size.x < 1050.0
-	var card_x := maxf(viewport_size.x - 320.0, 12.0)
-	if tracker_back != null:
-		tracker_back.position = Vector2(card_x, 14.0)
-	if tracker_label != null:
-		tracker_title_label.position = Vector2(card_x + 12.0, 24.0)
-		tracker_title_label.size = Vector2(278, 20)
-		tracker_caption_label.position = Vector2(card_x + 12.0, 50.0)
-		tracker_caption_label.size = Vector2(278, 18)
-		tracker_label.position = Vector2(card_x + 12.0, 72.0)
-		tracker_label.size = Vector2(278, 62)
-		tracker_route_label.position = Vector2(card_x + 12.0, 139.0)
-		tracker_route_label.size = Vector2(278, 34)
-		tracker_work_label.position = Vector2(card_x + 12.0, 177.0)
-		tracker_work_label.size = Vector2(278, 34)
-		tracker_footer_label.position = Vector2(card_x + 12.0, 213.0)
-		tracker_footer_label.size = Vector2(278, 20)
-	var location_y := 244.0 if compact else 16.0
-	var target_y := location_y + 30.0
-	if compass_back != null:
-		compass_back.position = Vector2(center_x - 182.0, location_y - 2.0)
-		compass_back.size = Vector2(364, 27)
-	if compass_label != null:
-		compass_label.position = Vector2(center_x - 174.0, location_y)
-		compass_label.size = Vector2(348, 22)
-	if enemy_label != null:
-		enemy_label.position = Vector2(center_x - 172.0, target_y)
-		enemy_label.size = Vector2(344, 22)
-		enemy_label.clip_text = true
-	if enemy_bar != null:
-		enemy_bar.position = Vector2(center_x - 150.0, target_y + 27.0)
-		enemy_bar.size = Vector2(226, 16)
-	if enemy_value_label != null:
-		enemy_value_label.position = Vector2(center_x + 84.0, target_y + 24.0)
-		enemy_value_label.size = Vector2(72, 22)
-		enemy_value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	if target_status_label != null:
-		target_status_label.position = Vector2(center_x - 172.0, target_y + 51.0)
-		target_status_label.size = Vector2(344, 22)
-		target_status_label.clip_text = true
-	if prompt_label != null:
-		var prompt_width := minf(520.0, viewport_size.x - 56.0)
-		prompt_label.position = Vector2(center_x - prompt_width * 0.5, maxf(viewport_size.y - 76.0, 170.0))
-		prompt_label.size = Vector2(prompt_width, 48)
-		prompt_back.position = prompt_label.position - Vector2(10, 4)
-		prompt_back.size = prompt_label.size + Vector2(20, 8)
-	if hint_label != null:
-		hint_label.position = Vector2(center_x - 186.0, target_y + 80.0)
-		hint_label.size = Vector2(372, 48)
-	if status_label != null:
-		status_label.position = Vector2(center_x - 190.0, maxf(viewport_size.y - 122.0, 220.0))
-		status_label.size = Vector2(380, 28)
-	if toast_label != null:
-		var notice_y := maxf(viewport_size.y - 168.0, 190.0)
-		var notice_width := minf(328.0, viewport_size.x - 44.0)
-		notice_back.position = Vector2(16, notice_y)
-		notice_back.size = Vector2(notice_width + 12.0, 128)
-		notice_category_label.position = Vector2(26, notice_y + 10.0)
-		notice_category_label.size = Vector2(notice_width - 8.0, 20)
-		toast_label.position = Vector2(26.0, notice_y + 37.0)
-		toast_label.size = Vector2(notice_width - 8.0, 80)
-	if dialogue_layer != null:
-		var width := minf(940.0, maxf(600.0, viewport_size.x - 80.0))
-		var reading_height := clampf(105.0 * story_text_scale, 90.0, maxf(120.0, viewport_size.y * 0.28))
-		dialogue_text.custom_minimum_size = Vector2(width - 56.0, reading_height)
-		var decision_height: float = 0.0
-		if _decision_details != null and _decision_details.visible:
-			decision_height = clampf(130.0 * story_text_scale, 130.0, 180.0)
-			_decision_details.custom_minimum_size = Vector2(width - 56.0, decision_height)
-		dialogue_layer.size = Vector2(width, reading_height + decision_height + dialogue_choices_scroll.custom_minimum_size.y + 108.0)
-		dialogue_layer.position = Vector2(maxf((viewport_size.x - width) * 0.5, 20.0), maxf(viewport_size.y - dialogue_layer.size.y - 34.0, 70.0))
-	if inventory_layer != null:
-		inventory_layer.position = Vector2(maxf((viewport_size.x - 996.0) * 0.5, 20.0), maxf((viewport_size.y - 584.0) * 0.5, 20.0))
+	_queue_responsive_layout()
 
+func _queue_responsive_layout() -> void:
+	if _layout_pending or _layout_applying:
+		return
+	_layout_pending = true
+	call_deferred("_apply_responsive_layout")
+
+func _responsive_surface_key() -> String:
+	if _journey_load_active:
+		return "loading:" + str(_journey_load_applying)
+	if is_instance_valid(menu_layer) and menu_layer.visible:
+		return "menu:%s:%d" % [_rendered_screen, _screen_generation]
+	if is_instance_valid(inventory_layer) and inventory_layer.visible:
+		return "inventory:%s:%d" % [_inventory_screen, _inventory_generation]
+	if is_instance_valid(dialogue_layer) and dialogue_layer.visible:
+		return "dialogue:%d:%d:%s" % [_dialogue_view_generation, dialogue_page_index, str(_topic_navigation.mode)]
+	return "gameplay"
+
+func _apply_responsive_layout() -> void:
+	_layout_pending = false
+	if not is_inside_tree() or not is_instance_valid(inventory_layer):
+		return
+	var display: Dictionary = _display_metrics
+	if display.is_empty():
+		var window: Window = get_window()
+		var window_size: Vector2 = Vector2(window.size) if window != null else Vector2(GAMEPLAY_SIZE)
+		display = {"width":window_size.x, "height":window_size.y, "coarse_pointer":input_device == "touch"}
+	var policy: Dictionary = HudLayoutPolicy.resolve(Vector2(GAMEPLAY_SIZE), display, story_text_scale, input_device)
+	if not bool(policy.get("valid", false)):
+		return
+	var snapshot: Dictionary = HudReflowState.capture(self)
+	var surface_key: String = _responsive_surface_key()
+	_layout_generation += 1
+	var generation: int = _layout_generation
+	_layout_applying = true
+	_layout_policy = policy
+	_cancel_dialogue_press()
+	if is_instance_valid(menu_layer):
+		menu_layer.scale = Vector2.ONE
+		menu_layer.size = Vector2(GAMEPLAY_SIZE)
+	var fonts: Dictionary = policy.get("fonts", {})
+	for surface: Control in [dialogue_layer, inventory_layer, menu_layer, loading_layer]:
+		if is_instance_valid(surface):
+			_apply_responsive_typography(surface, fonts, float(policy.button_min_height), float(policy.unit_scale))
+	_apply_responsive_journal(policy)
+	_apply_responsive_dialogue(policy)
+	_apply_responsive_menu(policy)
+	_apply_responsive_loading(policy)
+	_apply_responsive_gameplay(policy)
+	_wire_responsive_inventory_focus()
+	_layout_applying = false
+	call_deferred("_restore_reflow_state", snapshot, generation, surface_key)
+
+func _restore_reflow_state(snapshot: Dictionary, generation: int, surface_key: String) -> void:
+	await get_tree().process_frame
+	if generation != _layout_generation or surface_key != _responsive_surface_key():
+		return
+	var restored: bool = HudReflowState.restore(snapshot, self)
+	if restored:
+		return
+	if inventory_layer.visible:
+		if bool(_layout_policy.get("compact", false)) and str(_inventory_panes.get(_inventory_screen, "reader")) == "entries":
+			_focus_first_enabled(craft_buttons)
+		else:
+			inventory_text.grab_focus()
+	elif dialogue_layer.visible:
+		_dialogue_history_button.grab_focus()
+	elif menu_layer.visible and _rendered_screen != "":
+		navigation.restore(_rendered_screen, menu_layer)
+
+func _apply_responsive_typography(node: Node, fonts: Dictionary, button_height: float, unit: float) -> void:
+	if node is Control:
+		var control: Control = node as Control
+		var role: String = str(control.get_meta("layout_font_role", "body"))
+		if node is Button:
+			role = str(control.get_meta("layout_font_role", "button"))
+		var font_size: int = int(fonts.get(role, fonts.get("body", 20)))
+		if node is RichTextLabel:
+			var reader: RichTextLabel = node as RichTextLabel
+			reader.add_theme_font_size_override("normal_font_size", font_size)
+			reader.add_theme_font_size_override("bold_font_size", int(fonts.get("subtitle_bold", font_size)) if role == "subtitle" else font_size)
+			reader.add_theme_constant_override("line_separation", int(round(4.0 * unit)))
+			reader.custom_minimum_size.x = 0.0
+		elif node is Label or node is LineEdit or node is TextEdit or node is Button:
+			control.add_theme_font_size_override("font_size", font_size)
+			control.custom_minimum_size.x = 0.0
+		if node is Button:
+			var button: Button = node as Button
+			button.set_meta("layout_button_height", button_height)
+			button.set_meta("layout_button_padding", 20.0 * unit)
+			button.custom_minimum_size.y = button_height
+			for child: Node in button.get_children():
+				if child is Label:
+					var label: Label = child as Label
+					label.set_meta("layout_font_role", role)
+					label.add_theme_color_override("font_color", Color(0.50, 0.48, 0.43) if button.disabled else (Color.WHITE if high_contrast else Color(0.94, 0.89, 0.77)))
+					label.offset_left = 12.0 * unit
+					label.offset_right = -12.0 * unit
+					label.offset_top = 10.0 * unit
+					label.offset_bottom = -10.0 * unit
+		elif node is LineEdit:
+			control.custom_minimum_size.y = button_height
+		elif node is TextEdit:
+			control.custom_minimum_size.y = maxf(button_height * 2.0, 140.0 * unit)
+		if node is Slider:
+			control.custom_minimum_size.x = 0.0
+			control.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			control.custom_minimum_size.y = maxf(32.0 * unit, button_height * 0.75)
+	for child: Node in node.get_children():
+		if not child.is_queued_for_deletion():
+			_apply_responsive_typography(child, fonts, button_height, unit)
+
+func _set_responsive_panel_padding(panel: PanelContainer, padding: float) -> void:
+	var source: StyleBox = panel.get_theme_stylebox("panel")
+	if source == null:
+		return
+	var style: StyleBox = source.duplicate() as StyleBox
+	style.content_margin_left = padding
+	style.content_margin_right = padding
+	style.content_margin_top = padding
+	style.content_margin_bottom = padding
+	panel.add_theme_stylebox_override("panel", style)
+
+func _apply_responsive_journal(policy: Dictionary) -> void:
+	var model: Dictionary = policy.journal
+	var frame: Rect2 = model.frame
+	var compact: bool = bool(model.compact)
+	var gap: float = float(policy.gap)
+	var pane: String = str(_inventory_panes.get(_inventory_screen, "reader"))
+	if not _inventory_panes.has(_inventory_screen):
+		pane = "entries" if _journal_section_id == "evidence" and str(_evidence_navigation.selected_id) == "" and _inventory_screen.begins_with("journal:") else "reader"
+		_inventory_panes[_inventory_screen] = pane
+	_set_responsive_panel_padding(inventory_layer, float(policy.padding))
+	inventory_layer.custom_minimum_size = Vector2.ZERO
+	inventory_layer.position = frame.position
+	inventory_layer.size = frame.size
+	_inventory_root.add_theme_constant_override("separation", int(round(gap)))
+	_inventory_columns.add_theme_constant_override("separation", int(round(gap)))
+	_inventory_columns.custom_minimum_size = Vector2(0.0, float(model.content_height))
+	_journal_column.visible = not compact or pane == "reader"
+	_journal_actions_scroll.visible = not compact or pane == "entries"
+	_journal_column.custom_minimum_size = Vector2.ZERO
+	_journal_column.add_theme_constant_override("separation", int(round(gap)))
+	_journal_actions_scroll.custom_minimum_size = Vector2(float(model.sidebar_width) if not compact else 0.0, 0.0)
+	_journal_actions_scroll.size_flags_horizontal = Control.SIZE_FILL if not compact else Control.SIZE_EXPAND_FILL
+	craft_buttons.custom_minimum_size = Vector2.ZERO
+	craft_buttons.add_theme_constant_override("separation", int(round(gap)))
+	journal_art.custom_minimum_size = Vector2(0.0, float(model.art_height))
+	journal_art.visible = float(model.art_height) > 0.0 and journal_art.texture != null and not _preparation_actions.visible and _evidence_position_key == ""
+	inventory_notice_label.custom_minimum_size = Vector2(0.0, float(model.notice_height))
+	var has_actions: bool = _preparation_actions.visible and _preparation_actions.get_child_count() > 0
+	var action_height: float = minf(float(model.reader_height), maxf(float(policy.button_min_height), float(model.action_height))) if has_actions else 0.0
+	_preparation_actions_scroll.visible = has_actions
+	_preparation_actions_scroll.custom_minimum_size = Vector2(0.0, action_height)
+	_preparation_actions.add_theme_constant_override("separation", int(round(gap)))
+	inventory_text.custom_minimum_size = Vector2(0.0, maxf(0.0, float(model.reader_height) - action_height - (gap if has_actions else 0.0)))
+	_inventory_footer.columns = 2 if int(model.footer_rows) > 1 else 3
+	_inventory_footer.add_theme_constant_override("h_separation", int(round(gap)))
+	_inventory_footer.add_theme_constant_override("v_separation", int(round(gap)))
+	_inventory_footer.custom_minimum_size = Vector2(0.0, float(model.footer_height))
+	_inventory_read_button.visible = compact
+	_inventory_entries_button.visible = compact
+	_inventory_read_button.button_pressed = pane == "reader"
+	_inventory_entries_button.button_pressed = pane == "entries"
+	_inventory_close_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	for child: Node in craft_buttons.get_children():
+		if child is GridContainer:
+			(child as GridContainer).columns = 1 if compact else 2
+
+func _set_inventory_pane(pane: String, focus_content: bool = false) -> void:
+	if pane not in ["reader", "entries"]:
+		return
+	_capture_inventory_state()
+	var previous: String = str(_inventory_panes.get(_inventory_screen, "reader"))
+	var previous_root: Control = _journal_column if previous == "reader" else _journal_actions_scroll
+	_inventory_pane_states[_inventory_pane_state_key(previous)] = HudReflowState.capture(previous_root)
+	_inventory_panes[_inventory_screen] = pane
+	_queue_responsive_layout()
+	if focus_content:
+		call_deferred("_focus_inventory_pane", pane, _inventory_generation)
+
+func _focus_inventory_pane(pane: String, generation: int) -> void:
+	await get_tree().process_frame
+	if not inventory_layer.visible or generation != _inventory_generation:
+		return
+	if pane == "reader":
+		inventory_text.grab_focus()
+	else:
+		_focus_first_enabled(craft_buttons)
+	var pane_root: Control = _journal_column if pane == "reader" else _journal_actions_scroll
+	var snapshot: Dictionary = _inventory_pane_states.get(_inventory_pane_state_key(pane), {})
+	if not snapshot.is_empty():
+		HudReflowState.restore(snapshot, pane_root)
+
+func _inventory_pane_state_key(pane: String) -> String:
+	var selection: Dictionary = _preparation_selection.get(_inventory_screen, {})
+	var reading_key: String = _evidence_position_key if _evidence_position_key != "" else str(selection.get("kind", "")) + ":" + str(selection.get("id", ""))
+	return _inventory_screen + ":" + pane + ":" + (reading_key if pane == "reader" else "list")
+
+func _close_inventory() -> void:
+	dialogue_closed.emit()
+	hide_menus()
+	resume_requested.emit()
+
+func _wire_responsive_inventory_focus() -> void:
+	if not inventory_layer.visible:
+		return
+	var controls: Array[Control] = []
+	_collect_inventory_focus(inventory_layer, controls)
+	if controls.is_empty():
+		return
+	for index: int in range(controls.size()):
+		var control: Control = controls[index]
+		control.focus_next = control.get_path_to(controls[(index + 1) % controls.size()])
+		control.focus_previous = control.get_path_to(controls[posmod(index - 1, controls.size())])
+		if control != inventory_text:
+			control.focus_neighbor_top = control.focus_previous
+			control.focus_neighbor_bottom = control.focus_next
+			control.focus_neighbor_left = NodePath() if bool(_layout_policy.get("compact", false)) else control.get_path_to(inventory_text)
+
+func _apply_responsive_dialogue(policy: Dictionary) -> void:
+	var model: Dictionary = HudLayoutPolicy.dialogue_layout(policy, _decision_details.visible, dialogue_actions.get_child_count())
+	var frame: Rect2 = model.frame
+	var gap: float = float(model.gap)
+	var outer_scroll: bool = bool(model.outer_scroll)
+	_set_responsive_panel_padding(dialogue_layer, float(model.padding))
+	dialogue_layer.custom_minimum_size = Vector2.ZERO
+	dialogue_layer.position = frame.position
+	dialogue_layer.size = frame.size
+	_dialogue_header.custom_minimum_size = Vector2(0.0, float(model.header_height))
+	_dialogue_header.add_theme_constant_override("separation", int(round(gap * 0.5)))
+	_dialogue_body.add_theme_constant_override("separation", int(round(gap)))
+	_dialogue_body_scroll.custom_minimum_size = Vector2(0.0, float(model.body_height))
+	_dialogue_body_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO if outer_scroll else ScrollContainer.SCROLL_MODE_DISABLED
+	dialogue_text.custom_minimum_size = Vector2(0.0, float(model.reader_height))
+	_decision_details.custom_minimum_size = Vector2(0.0, float(model.stakes_height))
+	dialogue_choices_scroll.custom_minimum_size = Vector2(0.0, float(model.choices_height))
+	dialogue_actions.add_theme_constant_override("separation", int(round(gap)))
+	_dialogue_back_button.text = "Back" if str(_topic_navigation.mode) != "primary" else "Close"
+	dialogue_title.tooltip_text = dialogue_title.text
+
+func _apply_responsive_menu(policy: Dictionary) -> void:
+	if not is_instance_valid(_menu_frame) or not is_instance_valid(_menu_content):
+		return
+	var model: Dictionary = policy.menu
+	var compact: bool = bool(model.compact)
+	var frame: Rect2 = model.frame
+	var gap: float = float(policy.gap)
+	var padding: float = float(policy.padding)
+	_menu_frame.position = frame.position
+	_menu_frame.size = frame.size
+	_menu_shell.add_theme_constant_override("separation", int(round(gap)))
+	_menu_title_stack.add_theme_constant_override("separation", int(round(gap)))
+	_menu_content.add_theme_constant_override("separation", int(round(gap)))
+	_menu_content.custom_minimum_size = Vector2.ZERO
+	_menu_title_stack.custom_minimum_size = Vector2.ZERO
+	_menu_title_spacer.visible = not compact
+	_menu_title_spacer.custom_minimum_size.y = 24.0 * float(policy.unit_scale)
+	if compact and _menu_title_stack.get_parent() != _menu_content:
+		_menu_title_stack.reparent(_menu_content)
+		_menu_content.move_child(_menu_title_stack, 0)
+	elif not compact and _menu_title_stack.get_parent() != _menu_shell:
+		_menu_title_stack.reparent(_menu_shell)
+		_menu_shell.move_child(_menu_title_stack, 0)
+	_menu_title_stack.size_flags_vertical = Control.SIZE_FILL if compact else Control.SIZE_EXPAND_FILL
+	_menu_title_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_menu_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL if compact else Control.SIZE_FILL
+	_menu_panel.custom_minimum_size = Vector2(0.0 if compact else float(model.panel_width), 0.0)
+	_menu_shell.custom_minimum_size.y = maxf(0.0, frame.size.y - (float(model.footer_height) + gap if _menu_footer.visible else 0.0))
+	_set_responsive_panel_padding(_menu_panel, padding)
+	_menu_content.set_meta("menu_button_width", 0.0)
+	_menu_content.set_meta("menu_button_height", float(policy.button_min_height))
+	_menu_content.set_meta("menu_font_size", int(Dictionary(policy.fonts).get("button", 20)))
+	_menu_content.set_meta("compact_buttons", compact)
+	_menu_footer.custom_minimum_size.y = float(model.footer_height)
+	_menu_footer.add_theme_constant_override("separation", int(round(gap)))
+	_menu_notice.custom_minimum_size = Vector2.ZERO
+	_menu_notice.visible = _menu_notice.text != ""
+	if is_instance_valid(_journey_card):
+		_journey_card.custom_minimum_size = Vector2(0.0, minf(180.0 * float(policy.unit_scale), maxf(float(policy.button_min_height), frame.size.y * (0.3 if compact else 0.45))))
+	for child: Node in _menu_content.get_children():
+		if child is RichTextLabel:
+			(child as RichTextLabel).custom_minimum_size.y = maxf(float(policy.button_min_height) * 2.0, minf(360.0 * float(policy.unit_scale), frame.size.y * 0.5))
+
+func _apply_responsive_loading(policy: Dictionary) -> void:
+	if not is_instance_valid(_loading_card):
+		_loading_card = loading_layer.get_node_or_null("RoadCard") as PanelContainer
+	if not is_instance_valid(_loading_card):
+		return
+	var model: Dictionary = policy.loading
+	var frame: Rect2 = model.frame
+	_loading_card.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+	_set_responsive_panel_padding(_loading_card, float(policy.padding))
+	_loading_card.custom_minimum_size = Vector2.ZERO
+	_loading_card.position = frame.position
+	_loading_card.size = frame.size
+	loading_message.custom_minimum_size = Vector2.ZERO
+	loading_message.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	loading_message.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_journey_cancel_button.custom_minimum_size.y = float(policy.button_min_height)
+
+func _apply_responsive_gameplay(policy: Dictionary) -> void:
+	var safe: Rect2 = policy.safe_rect
+	var unit: float = float(policy.unit_scale)
+	var compact: bool = bool(policy.compact)
+	var gap: float = float(policy.gap)
+	var fonts: Dictionary = policy.fonts
+	var touch: bool = input_device == "touch"
+	var touch_model: Dictionary = MobileTouchLayout.build(Vector2(GAMEPLAY_SIZE), _display_metrics) if touch else {}
+	var reserved_bottom: float = float(touch_model.get("bottom_reserved_display", 0.0)) * unit
+	var left: float = safe.position.x + gap
+	var right: float = safe.end.x - gap
+	var top: float = safe.position.y + gap
+	var bottom: float = safe.end.y - gap
+	var center: float = safe.get_center().x
+	var card_width: float = minf(290.0 * unit, maxf(0.0, (safe.size.x - gap * 3.0) * 0.5))
+	vitals_box.position = Vector2(left + 6.0 * unit, top + 4.0 * unit)
+	vitals_box.custom_minimum_size = Vector2.ZERO
+	vitals_box.size = Vector2(maxf(0.0, card_width - 12.0 * unit), 0.0)
+	supplies_grid.visible = not compact
+	equipment_label.visible = not compact
+	for child: Node in vitals_box.get_children():
+		if child is HBoxContainer:
+			var row: HBoxContainer = child as HBoxContainer
+			row.add_theme_constant_override("separation", int(round(4.0 * unit)))
+			for item: Node in row.get_children():
+				if item is Label:
+					(item as Label).add_theme_font_size_override("font_size", int(fonts.caption))
+					(item as Label).custom_minimum_size = Vector2(64.0 * unit, 24.0 * unit)
+				elif item is ProgressBar:
+					(item as ProgressBar).custom_minimum_size = Vector2(0.0, 14.0 * unit)
+					(item as ProgressBar).size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	vitals_warning_label.add_theme_font_size_override("font_size", int(fonts.caption))
+	vitals_warning_label.custom_minimum_size = Vector2(0.0, 24.0 * unit)
+	vitals_warning_label.clip_text = true
+	vitals_back.position = Vector2(left, top)
+	vitals_back.size = Vector2(card_width, (84.0 if compact else 194.0) * unit)
+	var tracker_y: float = top + (64.0 * unit if touch else 0.0)
+	var tracker_x: float = right - card_width
+	var tracker_height: float = (106.0 if compact else 250.0) * unit
+	if touch and reserved_bottom > 0.0:
+		tracker_height = minf(tracker_height, maxf(0.0, safe.end.y - reserved_bottom - tracker_y - 4.0 * unit))
+	tracker_back.position = Vector2(tracker_x, tracker_y)
+	tracker_back.size = Vector2(card_width, tracker_height)
+	tracker_title_label.visible = not (compact and touch)
+	tracker_title_label.position = Vector2(tracker_x + 10.0 * unit, tracker_y + 6.0 * unit)
+	tracker_title_label.size = Vector2(card_width - 20.0 * unit, 24.0 * unit)
+	tracker_title_label.add_theme_font_size_override("font_size", int(fonts.caption))
+	tracker_label.position = Vector2(tracker_x + 10.0 * unit, tracker_y + (4.0 if compact and touch else 32.0) * unit)
+	tracker_label.size = Vector2(card_width - 20.0 * unit, maxf(0.0, tracker_height - (8.0 if compact and touch else 38.0) * unit))
+	tracker_label.add_theme_font_size_override("font_size", int(fonts.body))
+	var detail_labels: Array[Label] = [tracker_caption_label, tracker_route_label, tracker_work_label, tracker_footer_label]
+	for index: int in range(detail_labels.size()):
+		var label: Label = detail_labels[index]
+		label.visible = not compact
+		label.add_theme_font_size_override("font_size", int(fonts.caption))
+		label.position = Vector2(tracker_x + 10.0 * unit, tracker_y + (106.0 + index * 34.0) * unit)
+		label.size = Vector2(card_width - 20.0 * unit, 34.0 * unit)
+	var middle_width: float = minf(360.0 * unit, maxf(0.0, safe.size.x - card_width * 2.0 - gap * 4.0))
+	var location_y: float = top if not compact else top + 94.0 * unit
+	if compact:
+		middle_width = minf(300.0 * unit, safe.size.x - gap * 2.0)
+	var center_channel: float = maxf(0.0, safe.size.x - reserved_bottom * 2.0 - gap * 2.0) if touch and reserved_bottom > 0.0 else safe.size.x - gap * 2.0
+	if touch and reserved_bottom > 0.0:
+		middle_width = minf(middle_width, center_channel)
+	compass_label.position = Vector2(center - middle_width * 0.5, location_y)
+	compass_label.size = Vector2(middle_width, 26.0 * unit)
+	compass_label.clip_text = true
+	compass_label.add_theme_font_size_override("font_size", int(fonts.caption))
+	compass_back.position = compass_label.position - Vector2(4.0, 2.0) * unit
+	compass_back.size = compass_label.size + Vector2(8.0, 4.0) * unit
+	var target_y: float = location_y + 30.0 * unit
+	for label: Label in [enemy_label, target_status_label]:
+		label.add_theme_font_size_override("font_size", int(fonts.caption))
+		label.size = Vector2(middle_width, 24.0 * unit)
+	enemy_label.position = Vector2(center - middle_width * 0.5, target_y)
+	enemy_bar.position = Vector2(center - middle_width * 0.5, target_y + 26.0 * unit)
+	enemy_bar.size = Vector2(maxf(0.0, middle_width - 72.0 * unit), 14.0 * unit)
+	enemy_value_label.position = Vector2(center + middle_width * 0.5 - 72.0 * unit, target_y + 22.0 * unit)
+	enemy_value_label.size = Vector2(72.0 * unit, 24.0 * unit)
+	enemy_value_label.add_theme_font_size_override("font_size", int(fonts.caption))
+	target_status_label.position = Vector2(center - middle_width * 0.5, target_y + 44.0 * unit)
+	var prompt_width: float = minf(520.0 * unit, safe.size.x - gap * 2.0)
+	if touch:
+		prompt_width = minf(prompt_width, center_channel)
+	prompt_label.position = Vector2(center - prompt_width * 0.5, bottom - 64.0 * unit)
+	prompt_label.size = Vector2(prompt_width, 56.0 * unit)
+	prompt_label.add_theme_font_size_override("font_size", int(fonts.body))
+	prompt_back.position = prompt_label.position - Vector2(6.0, 4.0) * unit
+	prompt_back.size = prompt_label.size + Vector2(12.0, 8.0) * unit
+	var status_width: float = minf(380.0 * unit, center_channel)
+	status_label.position = Vector2(center - status_width * 0.5, bottom - 100.0 * unit)
+	status_label.size = Vector2(status_width, 28.0 * unit)
+	status_label.clip_text = true
+	status_label.add_theme_font_size_override("font_size", int(fonts.caption))
+	hint_label.position = Vector2(center - 180.0 * unit, target_y + 72.0 * unit)
+	hint_label.size = Vector2(360.0 * unit, 56.0 * unit)
+	hint_label.add_theme_font_size_override("font_size", int(fonts.caption))
+	var notice_width: float = minf(340.0 * unit, safe.size.x - gap * 2.0)
+	var notice_y: float = bottom - 144.0 * unit
+	var notice_x: float = left
+	if touch and reserved_bottom > 0.0:
+		notice_width = minf(notice_width, center_channel)
+		notice_x = center - notice_width * 0.5
+		notice_y = bottom - 238.0 * unit
+	notice_back.position = Vector2(notice_x, notice_y)
+	notice_back.size = Vector2(notice_width, 128.0 * unit)
+	notice_category_label.position = Vector2(notice_x + 10.0 * unit, notice_y + 8.0 * unit)
+	notice_category_label.size = Vector2(notice_width - 20.0 * unit, 24.0 * unit)
+	notice_category_label.add_theme_font_size_override("font_size", int(fonts.caption))
+	toast_label.position = Vector2(notice_x + 10.0 * unit, notice_y + 34.0 * unit)
+	toast_label.size = Vector2(notice_width - 20.0 * unit, 84.0 * unit)
+	toast_label.add_theme_font_size_override("font_size", int(fonts.body))
 func _build_menu_layer() -> void:
 	menu_layer = Control.new()
 	menu_layer.process_mode = Node.PROCESS_MODE_ALWAYS
@@ -2304,128 +2731,155 @@ func _build_dialogue() -> void:
 	dialogue_layer = PanelContainer.new()
 	dialogue_layer.name = "DialogueLowerThird"
 	dialogue_layer.process_mode = Node.PROCESS_MODE_ALWAYS
-	dialogue_layer.position = Vector2(220, 474)
-	dialogue_layer.size = Vector2(840, 212)
 	dialogue_layer.visible = false
 	add_child(dialogue_layer)
-	dialogue_layer.resized.connect(_on_viewport_resized)
-	var box = VBoxContainer.new()
+	var box: VBoxContainer = VBoxContainer.new()
 	box.add_theme_constant_override("separation", 8)
 	dialogue_layer.add_child(box)
-	var heading := HBoxContainer.new()
-	box.add_child(heading)
+	_dialogue_header = HBoxContainer.new()
+	box.add_child(_dialogue_header)
 	dialogue_title = Label.new()
 	dialogue_title.name = "DialogueSpeakerName"
-	dialogue_title.add_theme_font_size_override("font_size", 22)
+	dialogue_title.set_meta("layout_font_role", "heading")
+	dialogue_title.clip_text = true
 	dialogue_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	heading.add_child(dialogue_title)
+	_dialogue_header.add_child(dialogue_title)
 	dialogue_page_label = Label.new()
 	dialogue_page_label.name = "DialoguePageCounter"
+	dialogue_page_label.set_meta("layout_font_role", "caption")
 	dialogue_page_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	dialogue_page_label.add_theme_font_size_override("font_size", 12)
 	dialogue_page_label.add_theme_color_override("font_color", Color(0.62, 0.54, 0.40))
-	heading.add_child(dialogue_page_label)
+	_dialogue_header.add_child(dialogue_page_label)
 	_dialogue_history_button = Button.new()
 	_dialogue_history_button.text = "History"
 	_dialogue_history_button.set_meta("dialogue_focus_key", "history")
+	_dialogue_history_button.set_meta("layout_font_role", "caption")
 	_dialogue_history_button.focus_mode = Control.FOCUS_ALL
+	_dialogue_history_button.action_mode = BaseButton.ACTION_MODE_BUTTON_RELEASE
 	_dialogue_history_button.pressed.connect(func(): show_text_history("dialogue"))
-	heading.add_child(_dialogue_history_button)
-	var rule := ColorRect.new()
+	_dialogue_header.add_child(_dialogue_history_button)
+	_dialogue_back_button = Button.new()
+	_dialogue_back_button.text = "Back"
+	_dialogue_back_button.set_meta("dialogue_focus_key", "back")
+	_dialogue_back_button.set_meta("layout_font_role", "caption")
+	_dialogue_back_button.focus_mode = Control.FOCUS_ALL
+	_dialogue_back_button.action_mode = BaseButton.ACTION_MODE_BUTTON_RELEASE
+	_dialogue_back_button.pressed.connect(request_back)
+	_dialogue_header.add_child(_dialogue_back_button)
+	_dialogue_body_scroll = ScrollContainer.new()
+	_dialogue_body_scroll.name = "ConversationBodyScroll"
+	_dialogue_body_scroll.set_meta("navigation_scroll", "dialogue_body")
+	_dialogue_body_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_dialogue_body_scroll.follow_focus = true
+	_dialogue_body_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	box.add_child(_dialogue_body_scroll)
+	_dialogue_body = VBoxContainer.new()
+	_dialogue_body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_dialogue_body.add_theme_constant_override("separation", 8)
+	_dialogue_body_scroll.add_child(_dialogue_body)
+	var rule: ColorRect = ColorRect.new()
 	rule.name = "DialogueGoldRule"
 	rule.custom_minimum_size = Vector2(0, 2)
 	rule.color = Color(0.58, 0.40, 0.18, 0.82)
-	box.add_child(rule)
+	_dialogue_body.add_child(rule)
 	dialogue_text = RichTextLabel.new()
 	dialogue_text.name = "DialogueSubtitleText"
+	dialogue_text.set_meta("layout_font_role", "subtitle")
 	dialogue_text.bbcode_enabled = true
 	dialogue_text.focus_mode = Control.FOCUS_ALL
 	dialogue_text.set_meta("dialogue_focus_key", "text")
 	dialogue_text.scroll_active = true
 	dialogue_text.fit_content = false
-	dialogue_text.custom_minimum_size = Vector2(784, 78)
-	box.add_child(dialogue_text)
+	_dialogue_body.add_child(dialogue_text)
 	_decision_details = RichTextLabel.new()
 	_decision_details.name = "KnownDecisionStakes"
+	_decision_details.set_meta("layout_font_role", "body")
 	_decision_details.focus_mode = Control.FOCUS_ALL
 	_decision_details.set_meta("dialogue_focus_key", "decision_details")
-	_decision_details.custom_minimum_size = Vector2(784, 130)
 	_decision_details.scroll_active = true
 	_decision_details.fit_content = false
-	_decision_details.add_theme_font_size_override("normal_font_size", 18)
 	_decision_details.add_theme_constant_override("line_separation", 4)
 	_decision_details.visible = false
-	box.add_child(_decision_details)
+	_dialogue_body.add_child(_decision_details)
 	dialogue_actions = VBoxContainer.new()
 	dialogue_actions.name = "DialogueChoices"
 	dialogue_actions.process_mode = Node.PROCESS_MODE_ALWAYS
 	dialogue_actions.add_theme_constant_override("separation", 8)
 	dialogue_choices_scroll = ScrollContainer.new()
-	dialogue_choices_scroll.custom_minimum_size = Vector2(0, 96)
 	dialogue_choices_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	dialogue_choices_scroll.follow_focus = true
 	dialogue_actions.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	box.add_child(dialogue_choices_scroll)
+	_dialogue_body.add_child(dialogue_choices_scroll)
 	dialogue_choices_scroll.add_child(dialogue_actions)
 
 func _build_inventory() -> void:
 	inventory_layer = PanelContainer.new()
-	inventory_layer.position = Vector2(142, 68)
-	inventory_layer.size = Vector2(996, 584)
 	inventory_layer.visible = false
 	add_child(inventory_layer)
-	var columns = HBoxContainer.new()
-	columns.add_theme_constant_override("separation", 24)
-	inventory_layer.add_child(columns)
-	var journal_column := VBoxContainer.new()
-	journal_column.custom_minimum_size = Vector2(560, 520)
-	journal_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	columns.add_child(journal_column)
+	_inventory_root = VBoxContainer.new()
+	inventory_layer.add_child(_inventory_root)
+	_inventory_columns = HBoxContainer.new()
+	_inventory_columns.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_inventory_root.add_child(_inventory_columns)
+	_journal_column = VBoxContainer.new()
+	_journal_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_journal_column.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_inventory_columns.add_child(_journal_column)
 	journal_art = TextureRect.new()
-	journal_art.custom_minimum_size = Vector2(560, 84)
 	journal_art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	journal_art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	journal_art.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	journal_art.visible = false
-	journal_column.add_child(journal_art)
+	_journal_column.add_child(journal_art)
 	inventory_notice_label = Label.new()
 	inventory_notice_label.name = "JournalOperationStatus"
-	inventory_notice_label.custom_minimum_size = Vector2(560, 36)
+	inventory_notice_label.set_meta("layout_font_role", "caption")
 	inventory_notice_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	inventory_notice_label.max_lines_visible = 2
 	inventory_notice_label.clip_text = true
-	inventory_notice_label.add_theme_font_size_override("font_size", 12)
-	journal_column.add_child(inventory_notice_label)
+	_journal_column.add_child(inventory_notice_label)
 	inventory_text = RichTextLabel.new()
 	inventory_text.set_meta("navigation_key", "journal_text")
 	inventory_text.set_meta("navigation_scroll", "journal_text")
-	inventory_text.custom_minimum_size = Vector2(560, 388)
+	inventory_text.set_meta("layout_font_role", "body")
 	inventory_text.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	inventory_text.scroll_active = true
 	inventory_text.focus_mode = Control.FOCUS_ALL
 	inventory_text.add_theme_constant_override("line_separation", 5)
-	inventory_text.add_theme_font_size_override("normal_font_size", 17)
-	journal_column.add_child(inventory_text)
-	_preparation_actions = HBoxContainer.new()
+	_journal_column.add_child(inventory_text)
+	_preparation_actions_scroll = ScrollContainer.new()
+	_preparation_actions_scroll.name = "SelectedSupplyActionScroll"
+	_preparation_actions_scroll.set_meta("navigation_scroll", "selected_actions")
+	_preparation_actions_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_preparation_actions_scroll.follow_focus = true
+	_journal_column.add_child(_preparation_actions_scroll)
+	_preparation_actions = VBoxContainer.new()
 	_preparation_actions.name = "SelectedSupplyActions"
-	_preparation_actions.add_theme_constant_override("separation", 12)
 	_preparation_actions.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_preparation_actions.visible = false
-	journal_column.add_child(_preparation_actions)
-	var actions_scroll := ScrollContainer.new()
-	actions_scroll.name = "PreparationActionsScroll"
-	actions_scroll.set_meta("navigation_scroll", "journal_actions")
-	actions_scroll.custom_minimum_size = Vector2(320, 520)
-	actions_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	actions_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	actions_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
-	actions_scroll.follow_focus = true
-	columns.add_child(actions_scroll)
+	_preparation_actions_scroll.add_child(_preparation_actions)
+	_journal_actions_scroll = ScrollContainer.new()
+	_journal_actions_scroll.name = "PreparationActionsScroll"
+	_journal_actions_scroll.set_meta("navigation_scroll", "journal_actions")
+	_journal_actions_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_journal_actions_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_journal_actions_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_journal_actions_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	_journal_actions_scroll.follow_focus = true
+	_inventory_columns.add_child(_journal_actions_scroll)
 	craft_buttons = VBoxContainer.new()
-	craft_buttons.custom_minimum_size = Vector2(320, 0)
 	craft_buttons.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	actions_scroll.add_child(craft_buttons)
-
+	_journal_actions_scroll.add_child(craft_buttons)
+	_inventory_footer = GridContainer.new()
+	_inventory_root.add_child(_inventory_footer)
+	_inventory_read_button = _preparation_button("Read", "journal_pane:reader", _inventory_footer)
+	_inventory_read_button.toggle_mode = true
+	_inventory_read_button.pressed.connect(func(): _set_inventory_pane("reader", true))
+	_inventory_entries_button = _preparation_button("Entries", "journal_pane:entries", _inventory_footer)
+	_inventory_entries_button.toggle_mode = true
+	_inventory_entries_button.pressed.connect(func(): _set_inventory_pane("entries", true))
+	_inventory_close_button = _preparation_button("Close", "journal_close", _inventory_footer)
+	_inventory_close_button.pressed.connect(_close_inventory)
 func _labeled_bar(label_text: String, bar: ProgressBar, value_label: Label) -> HBoxContainer:
 	var row = HBoxContainer.new()
 	var label = Label.new()
@@ -2445,6 +2899,7 @@ func _labeled_bar(label_text: String, bar: ProgressBar, value_label: Label) -> H
 
 func _clear_menu() -> void:
 	_capture_menu_state()
+	_touch_reason_label = null
 	_menu_notice = null
 	_journey_card = null
 	_journey_card_kind = ""
@@ -2455,76 +2910,59 @@ func _clear_menu() -> void:
 		menu_layer.remove_child(child)
 		child.queue_free()
 
-func _menu_box(title: String, subtitle: String = "", omen_text: String = "", height_limit: float = 760.0) -> VBoxContainer:
+func _menu_box(title: String, subtitle: String = "", omen_text: String = "", _height_limit: float = 760.0) -> VBoxContainer:
 	_rendered_screen = _screen_key()
 	_screen_generation += 1
 	navigation.set_parent(_rendered_screen, _screen_parent())
 	call_deferred("_restore_menu_state", _rendered_screen, _screen_generation)
-	var viewport_size := _menu_viewport_size()
-	var compact := viewport_size.y <= 800.0 or viewport_size.x <= 1366.0
-	var horizontal_margin := clampf(viewport_size.x * 0.055, 24.0, 112.0)
-	var vertical_margin := clampf(viewport_size.y * 0.060, 24.0, 72.0)
-	var shell_separation := 30.0 if compact else 84.0
-	var panel_width := clampf(viewport_size.x * 0.42, 420.0, 570.0)
-	# Give ordinary menus enough vertical breathing room to show their full
-	# action list at 1080p. Long settings/remap pages still use the same
-	# container's scrollbar when the available viewport is shorter.
-	var panel_height := minf(height_limit, maxf(260.0, viewport_size.y - vertical_margin * 2.0))
-	var content_width := maxf(panel_width - 56.0, 320.0)
 	_build_menu_background()
-	var margin = MarginContainer.new()
-	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
-	margin.add_theme_constant_override("margin_left", int(horizontal_margin))
-	margin.add_theme_constant_override("margin_top", int(vertical_margin))
-	margin.add_theme_constant_override("margin_right", int(horizontal_margin))
-	margin.add_theme_constant_override("margin_bottom", int(vertical_margin))
-	menu_layer.add_child(margin)
-	var shell = HBoxContainer.new()
-	shell.add_theme_constant_override("separation", int(shell_separation))
-	margin.add_child(shell)
-	var title_stack = VBoxContainer.new()
-	title_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title_stack.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	title_stack.add_theme_constant_override("separation", 14)
-	shell.add_child(title_stack)
-	var title_spacer = Control.new()
-	var journey_surface: bool = active_menu in ["main", "pause", "death", "save_slot"]
-	title_spacer.custom_minimum_size = Vector2(1, (12.0 if compact else 48.0) if journey_surface else (54.0 if compact else 142.0))
-	title_stack.add_child(title_spacer)
-	var title_label = Label.new()
-	title_label.text = title
-	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	title_label.add_theme_font_size_override("font_size", (48 if compact else 64) if journey_surface else (56 if compact else 92))
-	title_label.add_theme_color_override("font_color", Color(0.93, 0.78, 0.47))
-	title_label.add_theme_color_override("font_shadow_color", Color(0.0, 0.0, 0.0, 0.92))
-	title_label.add_theme_constant_override("shadow_offset_x", 3)
-	title_label.add_theme_constant_override("shadow_offset_y", 4)
-	title_stack.add_child(title_label)
+	_menu_frame = Control.new()
+	_menu_frame.name = "ResponsiveMenuFrame"
+	menu_layer.add_child(_menu_frame)
+	var frame_box: VBoxContainer = VBoxContainer.new()
+	frame_box.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_menu_frame.add_child(frame_box)
+	_menu_shell = HBoxContainer.new()
+	_menu_shell.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	frame_box.add_child(_menu_shell)
+	_menu_title_stack = VBoxContainer.new()
+	_menu_title_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_menu_title_stack.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_menu_shell.add_child(_menu_title_stack)
+	_menu_title_spacer = Control.new()
+	_menu_title_stack.add_child(_menu_title_spacer)
+	_menu_title_label = Label.new()
+	_menu_title_label.text = title
+	_menu_title_label.set_meta("layout_font_role", "title")
+	_menu_title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_menu_title_label.add_theme_color_override("font_color", Color(0.93, 0.78, 0.47))
+	_menu_title_label.add_theme_color_override("font_shadow_color", Color(0.0, 0.0, 0.0, 0.92))
+	_menu_title_label.add_theme_constant_override("shadow_offset_x", 3)
+	_menu_title_label.add_theme_constant_override("shadow_offset_y", 4)
+	_menu_title_stack.add_child(_menu_title_label)
 	if subtitle != "":
-		var subtitle_label = Label.new()
+		var subtitle_label: Label = Label.new()
 		subtitle_label.text = subtitle
-		subtitle_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+		subtitle_label.set_meta("layout_font_role", "caption")
 		subtitle_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		subtitle_label.add_theme_font_size_override("font_size", 22 if compact else 34)
 		subtitle_label.add_theme_color_override("font_color", Color(0.78, 0.70, 0.56))
-		title_stack.add_child(subtitle_label)
+		_menu_title_stack.add_child(subtitle_label)
 	if omen_text != "":
-		var omen = Label.new()
+		var omen: Label = Label.new()
 		omen.text = omen_text.to_upper()
-		omen.add_theme_font_size_override("font_size", 12 if compact else 16)
+		omen.set_meta("layout_font_role", "caption")
+		omen.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		omen.add_theme_color_override("font_color", Color(0.56, 0.50, 0.40))
-		title_stack.add_child(omen)
+		_menu_title_stack.add_child(omen)
 	_journey_card = RichTextLabel.new()
 	_journey_card.name = "JourneyContextCard"
 	_journey_card.set_meta("navigation_key", "journey_card")
 	_journey_card.set_meta("navigation_scroll", "journey_card")
+	_journey_card.set_meta("layout_font_role", "body")
 	_journey_card.focus_mode = Control.FOCUS_ALL
-	_journey_card.custom_minimum_size = Vector2(280, 200 if compact else 270)
 	_journey_card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_journey_card.scroll_active = true
 	_journey_card.fit_content = false
-	_journey_card.add_theme_font_size_override("normal_font_size", int((17.0 if compact else 21.0) * minf(story_text_scale, 1.25)))
 	_journey_card.add_theme_constant_override("line_separation", 4)
 	_journey_card.add_theme_color_override("default_color", Color.WHITE if high_contrast else Color(0.89, 0.84, 0.72))
 	var card_focus: StyleBoxFlat = StyleBoxFlat.new()
@@ -2533,50 +2971,55 @@ func _menu_box(title: String, subtitle: String = "", omen_text: String = "", hei
 	card_focus.set_border_width_all(3)
 	_journey_card.add_theme_stylebox_override("focus", card_focus)
 	_journey_card.visible = false
-	title_stack.add_child(_journey_card)
+	_menu_title_stack.add_child(_journey_card)
 	_menu_notice = Label.new()
 	_menu_notice.name = "MenuOperationStatus"
+	_menu_notice.set_meta("layout_font_role", "caption")
 	_menu_notice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_menu_notice.add_theme_font_size_override("font_size", int(21.0 * minf(story_text_scale, 1.2)))
-	_menu_notice.custom_minimum_size = Vector2(280, 72)
 	_menu_notice.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title_stack.add_child(_menu_notice)
+	_menu_title_stack.add_child(_menu_notice)
 	_present_notice()
-	var title_fill = Control.new()
-	title_fill.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	title_stack.add_child(title_fill)
-	var build = Label.new()
+	var build: Label = Label.new()
 	build.text = MENU_BUILD_LABEL
+	build.set_meta("layout_font_role", "caption")
 	build.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	build.add_theme_font_size_override("font_size", 10 if compact else 15)
 	build.add_theme_color_override("font_color", Color(0.50, 0.46, 0.38))
-	title_stack.add_child(build)
-	var panel = PanelContainer.new()
-	panel.custom_minimum_size = Vector2(panel_width, panel_height)
-	panel.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	_style_panel(panel, Color(0.030, 0.026, 0.022, 0.88), Color(0.58, 0.42, 0.20, 0.86))
-	shell.add_child(panel)
-	var scroll := ScrollContainer.new()
-	scroll.name = "MenuScroll"
-	scroll.set_meta("navigation_scroll", "menu")
-	scroll.follow_focus = true
-	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
-	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	panel.add_child(scroll)
-	var box := VBoxContainer.new()
-	box.name = "MenuContent"
-	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	box.custom_minimum_size = Vector2(content_width, 0.0)
-	box.set_meta("compact_buttons", compact)
-	box.set_meta("menu_button_width", content_width)
-	box.set_meta("menu_button_height", 46.0 if compact else 62.0)
-	box.set_meta("menu_font_size", 18 if compact else 23)
-	box.add_theme_constant_override("separation", 10 if compact else 14)
-	scroll.add_child(box)
-	return box
-
+	_menu_title_stack.add_child(build)
+	_menu_panel = PanelContainer.new()
+	_menu_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_menu_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_style_panel(_menu_panel, Color(0.030, 0.026, 0.022, 0.88), Color(0.58, 0.42, 0.20, 0.86))
+	_menu_shell.add_child(_menu_panel)
+	_menu_scroll = ScrollContainer.new()
+	_menu_scroll.name = "MenuScroll"
+	_menu_scroll.set_meta("navigation_scroll", "menu")
+	_menu_scroll.follow_focus = true
+	_menu_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_menu_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	_menu_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_menu_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_menu_panel.add_child(_menu_scroll)
+	_menu_content = VBoxContainer.new()
+	_menu_content.name = "MenuContent"
+	_menu_content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_menu_content.set_meta("compact_buttons", true)
+	_menu_content.set_meta("menu_button_width", 0.0)
+	_menu_content.set_meta("menu_button_height", 48.0)
+	_menu_content.set_meta("menu_font_size", 20)
+	_menu_scroll.add_child(_menu_content)
+	_menu_footer = HBoxContainer.new()
+	frame_box.add_child(_menu_footer)
+	_menu_back_button = Button.new()
+	_menu_back_button.set_meta("navigation_key", "surface_back")
+	_menu_back_button.text = "Resume" if active_menu == "pause" else "Back"
+	_menu_back_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_menu_back_button.action_mode = BaseButton.ACTION_MODE_BUTTON_RELEASE
+	_style_button(_menu_back_button)
+	_menu_back_button.pressed.connect(request_back)
+	_menu_footer.add_child(_menu_back_button)
+	_menu_footer.visible = active_menu not in ["main", "launch", "death", "ending", ""]
+	_queue_responsive_layout()
+	return _menu_content
 func _build_menu_background() -> void:
 	var backdrop := TextureRect.new()
 	backdrop.name = "GreyfenMenuBackdrop"
@@ -2607,7 +3050,7 @@ func _add_menu_button(box: VBoxContainer, text: String, callback: Callable, disa
 	button.focus_mode = Control.FOCUS_ALL
 	button.mouse_filter = Control.MOUSE_FILTER_STOP
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	button.action_mode = BaseButton.ACTION_MODE_BUTTON_PRESS
+	button.action_mode = BaseButton.ACTION_MODE_BUTTON_RELEASE
 	button.custom_minimum_size = Vector2(float(box.get_meta("menu_button_width", 510.0)), float(box.get_meta("menu_button_height", 62.0)))
 	_style_button(button)
 	button.add_theme_font_size_override("font_size", int(box.get_meta("menu_font_size", 23)))
@@ -2631,8 +3074,8 @@ func _add_menu_button(box: VBoxContainer, text: String, callback: Callable, disa
 	button.set_meta("wrapped_label", true)
 	_hide_native_button_text(button)
 	button.resized.connect(func():
-		var row_height := maxi(1, row_label.get_line_count()) * row_label.get_line_height() + 24
-		button.custom_minimum_size.y = maxf(float(box.get_meta("menu_button_height", 62.0)), float(row_height))
+		var row_height: float = float(maxi(1, row_label.get_line_count()) * row_label.get_line_height()) + float(button.get_meta("layout_button_padding", 24.0))
+		button.custom_minimum_size.y = maxf(float(button.get_meta("layout_button_height", box.get_meta("menu_button_height", 62.0))), row_height)
 	)
 	button.mouse_entered.connect(func():
 		if not button.disabled:
@@ -2782,6 +3225,7 @@ func apply_accessibility(current: Dictionary) -> void:
 
 func set_input_device(device: String) -> void:
 	input_device = device if device in ["keyboard_mouse", "gamepad", "touch"] else "keyboard_mouse"
+	_queue_responsive_layout()
 	if raw_prompt != "":
 		if not _interaction_prompt_model.is_empty():
 			set_interaction_prompt(_interaction_prompt_model)
@@ -2880,6 +3324,8 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 		return
 	if _capture_remap_input(event):
+		return
+	if _handle_compact_journal_direction(event):
 		return
 	if _handle_evidence_direction(event):
 		return
@@ -3083,9 +3529,10 @@ func request_back() -> bool:
 	elif inventory_layer != null and inventory_layer.visible:
 		if _back_from_evidence_reading():
 			return true
-		dialogue_closed.emit()
-		hide_menus()
-		resume_requested.emit()
+		if bool(_layout_policy.get("compact", false)) and str(_inventory_panes.get(_inventory_screen, "reader")) == "reader":
+			_set_inventory_pane("entries", true)
+			return true
+		_close_inventory()
 		return true
 	elif active_menu == "pause":
 		resume_requested.emit()
@@ -3096,7 +3543,6 @@ func request_back() -> bool:
 		_return_to_parent()
 		return true
 	return false
-
 func _on_off(value: bool) -> String:
 	return "On" if value else "Off"
 
@@ -3571,6 +4017,7 @@ func _capture_dialogue_reading_state() -> void:
 	var focused := get_viewport().gui_get_focus_owner()
 	_dialogue_reading_state = {"page": dialogue_page_index, "subtitle_scroll": dialogue_text.get_v_scroll_bar().value, "choices_scroll": dialogue_choices_scroll.scroll_vertical, "focus": str(focused.get_meta("dialogue_focus_key", "history")) if focused != null else "history"}
 	_dialogue_reading_state["decision_scroll"] = _decision_details.get_v_scroll_bar().value
+	_dialogue_reading_state["body_scroll"] = _dialogue_body_scroll.scroll_vertical
 
 func _restore_dialogue_reading_state() -> void:
 	if not dialogue_layer.visible:
@@ -3579,6 +4026,7 @@ func _restore_dialogue_reading_state() -> void:
 		dialogue_text.get_v_scroll_bar().value = float(_dialogue_reading_state.get("subtitle_scroll", 0.0))
 		_decision_details.get_v_scroll_bar().value = float(_dialogue_reading_state.get("decision_scroll", 0.0))
 		dialogue_choices_scroll.scroll_vertical = int(_dialogue_reading_state.get("choices_scroll", 0))
+		_dialogue_body_scroll.scroll_vertical = int(_dialogue_reading_state.get("body_scroll", 0))
 		for control in _dialogue_focus_controls():
 			if str(control.get_meta("dialogue_focus_key", "")) == str(_dialogue_reading_state.get("focus", "")):
 				control.grab_focus()
@@ -3589,6 +4037,8 @@ func _dialogue_focus_controls() -> Array[Control]:
 	var controls: Array[Control] = []
 	if is_instance_valid(_dialogue_history_button) and _dialogue_history_button.is_visible_in_tree():
 		controls.append(_dialogue_history_button)
+	if is_instance_valid(_dialogue_back_button) and _dialogue_back_button.is_visible_in_tree():
+		controls.append(_dialogue_back_button)
 	if is_instance_valid(dialogue_text) and dialogue_text.is_visible_in_tree():
 		controls.append(dialogue_text)
 	if is_instance_valid(_decision_details) and _decision_details.is_visible_in_tree():
@@ -3674,7 +4124,7 @@ func _style_button(button: Button) -> void:
 		button.custom_minimum_size.y = maxf(button.custom_minimum_size.y, 52.0)
 		button.add_child(label)
 		button.resized.connect(func():
-			button.custom_minimum_size.y = maxf(52.0, float(maxi(1, label.get_line_count()) * label.get_line_height() + 20))
+			button.custom_minimum_size.y = maxf(float(button.get_meta("layout_button_height", 52.0)), float(maxi(1, label.get_line_count()) * label.get_line_height()) + float(button.get_meta("layout_button_padding", 20.0)))
 		)
 	var normal = StyleBoxFlat.new()
 	normal.bg_color = Color(0.055, 0.046, 0.037, 0.72)
