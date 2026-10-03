@@ -17,7 +17,14 @@
 - Graphical camera orbit, first person and menu-covered preparation: PASS.
 - Native screenshot inspected: `D:/Temp/AshenOath/opening_detail_balanced_spawn.png`.
 - Native logs: `D:/Temp/AshenOath/greyfen-loading-{native,detail,camera}.log`.
-- Web export, fresh Chrome and deployment: pending final artifact below.
+- Production Web export: PASS, 14 artifacts, 86.3 MiB. Existing content-addressed packs are unchanged.
+- Fresh hardware Chrome: PASS, 1280x720 WebGL2, real mouse-only New Game, first-control scenery capture, keyboard bridge crossing, no console errors. Engine readiness measured 18,421 ms; the visible-menu click occurred 57,966 ms after navigation; prewarmed New Game took 111.7 ms. Cold preparation is still slow, but no longer exposes a bare playable landscape. These are separate measurements, not a claim that total cold startup meets the historical target.
+- Browser fixture corrected for the covered menu and current observer vector/interaction schema. The terminal boolean flag parser also now treats an unvalued final flag as true.
+- Source checkpoint: `f625f5923ce3ce140f375da99197885805d27e48`.
+- Root PCK SHA-256: `0feab7f4d523618c133f7da323537aca55bccc5a9e83de1a23900592a12639ef`.
+- Build ID: `greyfen-f625f5923ce3`.
+- Browser evidence: `release_reports/greyfen_loading_fix_20261003/chrome-final.json` and matching first-control capture.
+- Deployment: pending publication and live identity/smoke confirmation.
 
 No art, story, save format or performance acceptance changes. A cold load must now finish essential scenery before control; this fix does not claim to eliminate download or shader preparation time. Extra population and small dressing still finish in bounded stages after control, even while moving.
 

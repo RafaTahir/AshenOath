@@ -5,7 +5,7 @@ import { spawn, spawnSync } from "node:child_process";
 import { gzipSync, gunzipSync } from "node:zlib";
 
 const args = Object.fromEntries(process.argv.slice(2).map((value, index, all) =>
-  value.startsWith("--") ? [value.slice(2), all[index + 1]?.startsWith("--") ? true : all[index + 1]] : []
+  value.startsWith("--") ? [value.slice(2), !all[index + 1] || all[index + 1].startsWith("--") ? true : all[index + 1]] : []
 ).filter(([key]) => key));
 const exportDir = resolve(args.export || "../AshenOath_Web");
 const targetUrl = args.url ? String(args.url) : "";
@@ -522,6 +522,13 @@ async function testBrowser(name, executable) {
     }, `${name} Godot runtime readiness`).catch((error) => {
       throw new Error(`${error.message}; console=${JSON.stringify(consoleLines().slice(-20))}; network=${JSON.stringify(networkLines())}`);
     });
+    if (openingPresence) {
+      await waitFor(async () => cdp.evaluate(`(() => {
+        const opening = window.__ashenOathOpeningState;
+        if (opening?.state === "failed") throw new Error(opening.message || "Greyfen preparation failed");
+        return opening?.state === "ready" && document.querySelector("#boot")?.classList.contains("hidden");
+      })()`), `${name} visible New Game menu`);
+    }
     // Keep a diagnostic of the actual compact menu geometry. This is useful
     // when a browser delivers a healthy canvas but misses a player click;
     // it is written beside the report and never enters the game export.
@@ -644,7 +651,7 @@ async function testBrowser(name, executable) {
         const state = window.__ashenOathReadOnlyObservation;
         return state?.read_only && state?.zone === "greyfen" && state?.player?.can_control ? state : null;
       })()`), `${name} read-only production observation`);
-      const startZ = Number(before.player.position[2]);
+      const startZ = Number(before.player.position.z);
       if (!Number.isFinite(startZ) || startZ < 7.0) {
         throw new Error(`${name} bridge proof started outside the Greyfen south approach: z=${startZ}`);
       }
@@ -655,7 +662,7 @@ async function testBrowser(name, executable) {
       try {
         after = await waitFor(async () => cdp.evaluate(`(() => {
           const state = window.__ashenOathReadOnlyObservation;
-          const z = Number(state?.player?.position?.[2]);
+          const z = Number(state?.player?.position?.z);
           return state?.read_only && state?.zone === "greyfen" && z < 1.95 ? state : null;
         })()`), `${name} physical Greyfen bridge crossing`, 15000);
       } finally {
@@ -689,7 +696,7 @@ async function testBrowser(name, executable) {
         focused = await waitFor(async () => cdp.evaluate(`(() => {
           const state = window.__ashenOathReadOnlyObservation;
           return state?.read_only && state?.zone === "greyfen"
-            && state?.focus?.name === "sister_anwen" ? state : null;
+            && state?.focus?.id === "sister_anwen" ? state : null;
         })()`), `${name} physical Sister Anwen focus`, 15000);
       } finally {
         await keyUp("w", "KeyW", 87).catch(() => {});
@@ -720,7 +727,7 @@ async function testBrowser(name, executable) {
         input: "KeyW + KeyE + Enter",
         start_position: beforeInteraction?.player?.position || null,
         focus_position: focused?.player?.position || null,
-        focus_name: focused?.focus?.name || null,
+        focus_name: focused?.focus?.id || null,
         dialogue_paused: Boolean(dialogue?.paused),
         pages_advanced: dialoguePages,
         control_restored: Boolean(afterDialogue?.player?.can_control),
