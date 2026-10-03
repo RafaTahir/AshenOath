@@ -482,7 +482,7 @@ func _input(event: InputEvent) -> void:
 func _track_action_event(event: InputEvent) -> void:
 	if event is InputEventMouseMotion or event is InputEventScreenDrag:
 		return
-	var echo := event is InputEventKey and event.echo
+	var echo: bool = event is InputEventKey and event.echo
 	var now := Time.get_ticks_msec()
 	for raw_action in InputMap.get_actions():
 		var action := str(raw_action)
