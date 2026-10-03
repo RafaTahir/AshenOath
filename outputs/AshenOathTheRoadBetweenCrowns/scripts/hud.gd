@@ -233,7 +233,7 @@ func _refresh_resource_attention() -> void:
 	if vitals_back == null or vitals_warning_label == null:
 		return
 	var low_health := last_health > 0.0 and last_health / maxf(last_health_max, 1.0) <= 0.28
-	var spent := last_stamina <= 0.0
+	var spent: bool = last_stamina <= 0.0
 	vitals_warning_label.text = "Low health · stamina spent" if low_health and spent else ("Low health" if low_health else ("Stamina spent — let it recover" if spent else ""))
 	var emphasized := _attention_remaining > 0.0 or low_health or spent
 	vitals_back.color = Color(0.018, 0.016, 0.014, 0.94 if high_contrast else (0.76 if emphasized else 0.54))
