@@ -24,13 +24,15 @@
 - Root PCK SHA-256: `0feab7f4d523618c133f7da323537aca55bccc5a9e83de1a23900592a12639ef`.
 - Build ID: `greyfen-f625f5923ce3`.
 - Browser evidence: `release_reports/greyfen_loading_fix_20261003/chrome-final.json` and matching first-control capture.
-- Deployment: pending publication and live identity/smoke confirmation.
+- Deployment: `3f5e4b3` pushed to development and main, published by Vercel. All 14 live artifact SHA-256 hashes match the local release manifest, including the root PCK and all six content packs.
+- Live fresh hardware Chrome: PASS at `https://ashenoath.vercel.app/?v=greyfen-loading-3f5e4b3`; mouse New Game, first-control village capture, keyboard bridge crossing, Anwen focus/dialogue (six pages), control restored, no console errors. Engine readiness 12,758 ms; visible-menu click at 42,987 ms after navigation; prewarmed New Game 82.6 ms. Cold preparation remains a disclosed limitation.
+- Live evidence: `release_reports/greyfen_loading_fix_20261003/production.json` and `production_first_control_chrome.png`. Temporary browser profiles were created under `D:/Temp/AshenOath` and cleaned by the smoke runner.
 
 No art, story, save format or performance acceptance changes. A cold load must now finish essential scenery before control; this fix does not claim to eliminate download or shader preparation time. Extra population and small dressing still finish in bounded stages after control, even while moving.
 
 ## Running Steps
 
-Production after publication: open `https://ashenoath.vercel.app/?v=greyfen-loading-fix`, click New Game, then walk across the bridge. The buildings, roads and river must be present at first control.
+Production: open `https://ashenoath.vercel.app/?v=greyfen-loading-3f5e4b3`, click New Game, then walk across the bridge. The buildings, roads and river are present at first control.
 
 Native reproduction from `D:/Projects/AshenOath/outputs/AshenOathTheRoadBetweenCrowns`:
 

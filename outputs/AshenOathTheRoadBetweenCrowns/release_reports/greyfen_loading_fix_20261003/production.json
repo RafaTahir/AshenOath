@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "status": "pass",
+  "mode": "desktop",
+  "target_url": "https://ashenoath.vercel.app/?v=greyfen-loading-3f5e4b3",
+  "export_dir": "D:\\Projects\\AshenOath\\web",
+  "qa_temp_root": "D:\\Temp\\AshenOath",
+  "browsers": [
+    {
+      "browser": "Chrome",
+      "mode": "desktop",
+      "status": "pass",
+      "total_startup_ms": 76706,
+      "engine_ready_ms": 12758,
+      "new_game_ready_ms": 82.6,
+      "new_game_wall_clock_ms": 205,
+      "new_game_requested_ms": 42987,
+      "canvas": {
+        "ready": true,
+        "reason": "dimensions",
+        "width": 1280,
+        "height": 720,
+        "clientWidth": 1280,
+        "clientHeight": 720,
+        "webgl": 2,
+        "body": "ASHEN OATH\nTHE ROAD BETWEEN CROWNS\nGuide the witness through the branches while Greyfen wakes behind the veil.\nRuntime ready. Preparing Greyfen's first view...\nFLAP THE CROW\nSpace, click, tap, or gamepad A to flap. This small game remains available while Ashen Oath loads.\nGREYFEN-F625F5923CE3 | PACK"
+      },
+      "js_heap_mb": 12.8,
+      "process_tree_mb": 1652.6,
+      "runtime_logs": [
+        "LOADING: startup_pack downloading id=opening url=https://ashenoath.vercel.app/packs/opening.pck?sha256=694c4fcc27effdf19fe150cf2264ec6767055c28b19eb3b37fc316390f378a04",
+        "LOADING: startup_pack_ready source=signal id=opening",
+        "LOADING: Greyfen prewarm begin",
+        "LOADING: startup_pack mounted id=opening",
+        "LOADING: Greyfen prewarm build_begin",
+        "LOADING: Greyfen prewarm build_complete ms=27 ok=true",
+        "LOADING: Greyfen prewarmed total=22241ms build=27ms world=4ms player=262ms",
+        "LOADING: new_game_handoff prewarmed=true cached_zones=1",
+        "LOADING: new_game_stage=cache_clear elapsed=4.4",
+        "LOADING: new_game_stage=state_ready elapsed=14.2",
+        "LOADING: new_game_stage=zone_dispatch elapsed=15.1",
+        "LOADING: zone_begin id=greyfen prewarm=true cached=false",
+        "LOADING: zone_stage=cache_activated elapsed=19.2",
+        "ZONE_COMPOSITION: id=greyfen reused=true visible=true position=(0.0, 0.0, 0.0)",
+        "LOADING: zone_stage=systems_synced elapsed=29.3",
+        "LOADING: zone_stage=visual_applied elapsed=33.9",
+        "LOADING: zone_stage=render_validation_deferred elapsed=69.4",
+        "LOADING: zone_stage=budget_ready elapsed=70.5",
+        "LOADING: new_game_stage=ready elapsed=82.6",
+        "LOADING: new_game_stage=zone_return elapsed=82.6",
+        "LOADING: Greyfen deferred_runtime_complete ms=3",
+        "LOADING: zone_stage=runtime_finalized zone=greyfen navigation=false ms=1",
+        "LOADING: Greyfen deferred_detail stage=gameplay_base ms=2",
+        "LOADING: Greyfen deferred_detail stage=gameplay_side_clues ms=0",
+        "LOADING: Greyfen deferred_detail stage=gameplay_main_clues ms=2",
+        "LOADING: Greyfen deferred_detail stage=gameplay_story ms=8",
+        "LOADING: Greyfen deferred_detail stage=gameplay_visual_0 ms=1",
+        "LOADING: Greyfen deferred_detail stage=gameplay_visual_1 ms=0",
+        "LOADING: Greyfen deferred_detail stage=gameplay_visual_2 ms=0",
+        "LOADING: Greyfen deferred_detail stage=gameplay_visual_3 ms=0",
+        "LOADING: Greyfen deferred_detail stage=gameplay_visual_4 ms=1",
+        "LOADING: Greyfen deferred_detail stage=gameplay_visual_5 ms=0",
+        "LOADING: Greyfen deferred_detail stage=gameplay_visual_6 ms=0",
+        "LOADING: Greyfen deferred_detail stage=gameplay_visual_7 ms=1",
+        "LOADING: Greyfen deferred_detail stage=gameplay_visual_8 ms=0",
+        "LOADING: Greyfen deferred_detail stage=gameplay_visual_9 ms=1",
+        "LOADING: Greyfen deferred_detail stage=gameplay_visual_10 ms=1",
+        "LOADING: Greyfen deferred_detail stage=gameplay_visual_11 ms=1",
+        "LOADING: Greyfen deferred_detail stage=gameplay_visual_12 ms=0",
+        "LOADING: Greyfen deferred_detail stage=gameplay_visual_13 ms=0",
+        "LOADING: Greyfen deferred_detail stage=gameplay_visual_14 ms=0",
+        "LOADING: Greyfen deferred_detail stage=gameplay_visual_15 ms=0",
+        "LOADING: Greyfen deferred_detail stage=gameplay_mira ms=0",
+        "LOADING: Greyfen deferred_detail stage=gameplay_rook ms=1",
+        "LOADING: Greyfen deferred_detail stage=gameplay_widow_elna ms=0",
+        "LOADING: Greyfen deferred_detail stage=gameplay_blacksmith_tor ms=0",
+        "LOADING: Greyfen deferred_detail stage=gameplay_farmer_toma ms=10",
+        "LOADING: Greyfen deferred_detail stage=gameplay_common_table ms=2",
+        "LOADING: Greyfen deferred_detail stage=gameplay_barrel_board ms=2",
+        "LOADING: Greyfen deferred_detail stage=gameplay_crowd_2 ms=4",
+        "LOADING: Greyfen deferred_detail stage=gameplay_crowd_3 ms=1",
+        "LOADING: Greyfen deferred_detail stage=gameplay_crowd_4 ms=0",
+        "LOADING: Greyfen deferred_detail stage=gameplay_crowd_5 ms=1",
+        "LOADING: Greyfen deferred_detail stage=gameplay_crowd_6 ms=2",
+        "LOADING: Greyfen deferred_detail stage=gameplay_crowd_7 ms=0",
+        "LOADING: Greyfen deferred_detail stage=gameplay_crowd_8 ms=0",
+        "LOADING: Greyfen deferred_detail stage=gameplay_crowd_9 ms=2",
+        "LOADING: Greyfen deferred_detail stage=village_dressing ms=4",
+        "LOADING: Greyfen deferred_detail stage=village_first_impression_ruts ms=0",
+        "LOADING: Greyfen deferred_detail stage=village_first_impression_lanterns ms=4",
+        "LOADING: Greyfen deferred_detail stage=village_first_impression_shrine ms=6",
+        "LOADING: Greyfen deferred_detail stage=village_first_impression_story ms=5",
+        "LOADING: Greyfen deferred_detail stage=village_first_impression_crows ms=1",
+        "LOADING: Greyfen deferred_detail stage=village_quality ms=2",
+        "LOADING: Greyfen deferred_detail stage=trees ms=1",
+        "LOADING: Greyfen deferred_detail stage=aftermath ms=1",
+        "LOADING: Greyfen deferred_detail complete"
+      ],
+      "resources": [
+        {
+          "name": "https://ashenoath.vercel.app/index.js",
+          "bytes": 82947
+        },
+        {
+          "name": "https://ashenoath.vercel.app/index.wasm",
+          "bytes": 9382582
+        },
+        {
+          "name": "https://ashenoath.vercel.app/index.pck",
+          "bytes": 12883904
+        }
+      ],
+      "console_errors": [],
+      "bridge_crossing": {
+        "input": "KeyW",
+        "start_position": {
+          "x": 0,
+          "y": 0.00109370425343513,
+          "z": 9.80000019073486
+        },
+        "end_position": {
+          "x": 0,
+          "y": 0.0327533148229122,
+          "z": 1.80999636650085
+        },
+        "zone": "greyfen",
+        "on_floor": true,
+        "read_only_observation": true
+      },
+      "interaction_smoke": {
+        "input": "KeyW + KeyE + Enter",
+        "start_position": {
+          "x": 0,
+          "y": 0.0327533148229122,
+          "z": 1.80999636650085
+        },
+        "focus_position": {
+          "x": 0,
+          "y": 0.0327533110976219,
+          "z": -2.39000368118286
+        },
+        "focus_name": "sister_anwen",
+        "dialogue_paused": true,
+        "pages_advanced": 6,
+        "control_restored": true,
+        "read_only_observation": true
+      },
+      "persistence_smoke": null,
+      "ui_acceptance": null,
+      "screenshot": "D:\\Temp\\AshenOath\\greyfen-loading-smoke\\production_chrome.png",
+      "opening_first_control_screenshot": "D:\\Temp\\AshenOath\\greyfen-loading-smoke\\production_first_control_chrome.png",
+      "screenshot_capture_mode": "surface",
+      "profile_dir": "D:\\Temp\\AshenOath\\ashen-oath-web001-chrome-1790996733231"
+    }
+  ]
+}
