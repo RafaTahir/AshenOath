@@ -1,0 +1,163 @@
+{
+  "version": 1,
+  "details": [
+    {
+      "id": "bram",
+      "source": "Cart tool and ledger",
+      "record_ids": ["corpse"],
+      "related_ids": ["sella", "oren", "drag_marks"],
+      "related_quests": ["main_road_of_crows"],
+      "related_entries": [{"section_id": "people", "entry_id": "person:bram"}],
+      "sections": [
+        {"id": "record", "kind": "observation", "title": "At the damaged axle", "body": "Bram's marked tool and the repair traces place him beside the cart. His ledger holds a page of crossed-out debts; his hand still grips the brake."},
+        {"id": "reading", "kind": "interpretation", "title": "What the cart establishes", "body": "Bram stayed with the damaged wagon. An account that says he simply abandoned it leaves out the work visible here."},
+        {"id": "limits", "kind": "limit", "title": "Limits of this record", "body": "The tool, brake and ledger preserve parts of his last work. They do not show the whole attack or identify the hand that began it."}
+      ]
+    },
+    {
+      "id": "sella",
+      "source": "Red-thread feathers",
+      "record_ids": ["black_feathers"],
+      "related_ids": ["oren", "vargan_wire", "grave_child"],
+      "related_quests": ["main_road_of_crows"],
+      "related_entries": [{"section_id": "people", "entry_id": "person:sella"}, {"section_id": "people", "entry_id": "person:anwen"}],
+      "sections": [
+        {"id": "record", "kind": "observation", "title": "Thread tied by hand", "body": "Sella's feathers are bound with red thread. The knot is Anwen's; these feathers were tied here, rather than scattered by a bird."},
+        {"id": "reading", "kind": "interpretation", "title": "The shrine's part", "body": "The thread connects the roadside objects to the shrine's attempt at containment. It is a trace of human work within what happened on the road."},
+        {"id": "limits", "kind": "limit", "title": "Limits of this record", "body": "Recognizing the knot does not explain every action that followed it. The thread alone cannot establish what each person intended or understood."}
+      ]
+    },
+    {
+      "id": "oren",
+      "source": "Oren's wooden crow and the altered token",
+      "record_ids": ["oren_token"],
+      "related_ids": ["sella", "drag_marks", "vargan_wire"],
+      "related_quests": ["main_road_of_crows", "main_teeth_in_rain"],
+      "related_entries": [{"section_id": "people", "entry_id": "person:oren"}],
+      "sections": [
+        {"id": "record", "kind": "observation", "title": "A name beneath the paint", "body": "The wooden crow's wings are worn smooth. Its name has been scraped away, and the painted crow covers an older name token. The marks follow work on the name rather than damage across the whole object."},
+        {"id": "reading", "kind": "interpretation", "title": "An object carried and altered", "body": "Wear preserves the trace of a familiar possession; the altered name points to deliberate interference with what it remembers. Those are different parts of the same object."},
+        {"id": "limits", "kind": "limit", "title": "Limits of this record", "body": "The token cannot supply the whole account of Oren's death. It also cannot, by itself, give a name to another unnamed burial."}
+      ]
+    },
+    {
+      "id": "vargan_wire",
+      "source": "Blackened Vargan binding wire",
+      "record_ids": ["claw_marks"],
+      "related_ids": ["oren", "sella", "command_proof"],
+      "related_quests": ["main_road_of_crows", "main_blood_under_stone"],
+      "related_entries": [],
+      "sections": [
+        {"id": "record", "kind": "observation", "title": "A second binding", "body": "Vargan wire is wrapped around the token. The blackened binding shows another attempt to fasten the name and then remove it."},
+        {"id": "reading", "kind": "interpretation", "title": "The recovery patrol's trace", "body": "The wire links the aftermath to Vargan's recovery patrol. The later attempt to contain the objects belongs in the account alongside the attack itself."},
+        {"id": "limits", "kind": "limit", "title": "Limits of this record", "body": "This wire is not proof that Edric ordered the original attack. Evidence of later containment cannot settle that separate question on its own."}
+      ]
+    },
+    {
+      "id": "drag_marks",
+      "source": "Tracks at the clearing approach",
+      "record_ids": ["tracks"],
+      "related_ids": ["bram", "sella", "oren"],
+      "related_quests": ["main_road_of_crows"],
+      "related_entries": [],
+      "sections": [
+        {"id": "record", "kind": "observation", "title": "What the tracks pass", "body": "The drag marks pass untouched food sacks and follow the belongings that carry names. The supplies were available; they were left behind."},
+        {"id": "reading", "kind": "interpretation", "title": "Kael's reading of the tracks", "body": "Kael takes this selection to mean that the creatures were gathering testimony. Hunger does not explain why these objects mattered more than the food."},
+        {"id": "limits", "kind": "limit", "title": "Limits of this record", "body": "A pattern of movement supports that reading. It does not give the creatures' own account, or establish who directed every movement."}
+      ]
+    },
+    {
+      "id": "grave_harl",
+      "source": "Harl's disturbed grave",
+      "record_ids": ["grave_harl"],
+      "related_ids": ["grave_child", "grave_soldier"],
+      "related_quests": ["main_bell_beneath_greyfen", "side_widows_bell"],
+      "related_entries": [{"section_id": "preparation", "entry_id": "preparation:bell"}],
+      "sections": [
+        {"id": "record", "kind": "observation", "title": "Road mud inside the grave", "body": "Road mud lies within Harl's disturbed burial. What belongs to the road has entered the place where Greyfen laid him to rest."},
+        {"id": "reading", "kind": "interpretation", "title": "The memory the bell carries", "body": "The surviving account concerns a gate. It preserves that part of Harl's past without returning the whole man who lived beyond it."},
+        {"id": "limits", "kind": "limit", "title": "Limits of this record", "body": "A retained act cannot restore an intact husband or decide what his widow must make public. The account and her participation remain separate."}
+      ]
+    },
+    {
+      "id": "grave_child",
+      "source": "The unnamed child's grave",
+      "record_ids": ["grave_child"],
+      "related_ids": ["sella", "grave_harl", "grave_soldier"],
+      "related_quests": ["main_bell_beneath_greyfen"],
+      "related_entries": [{"section_id": "preparation", "entry_id": "preparation:bell"}],
+      "sections": [
+        {"id": "record", "kind": "observation", "title": "Thread beneath the earth", "body": "Shrine thread is tied from within the unnamed grave. The binding is part of the burial, not merely something dropped beside it."},
+        {"id": "reading", "kind": "interpretation", "title": "A rite that concealed", "body": "The thread connects the burial rites to the work of keeping memory disordered. The grave holds evidence of concealment as well as loss."},
+        {"id": "limits", "kind": "limit", "title": "Limits of this record", "body": "The thread does not establish the child's name. Similar material elsewhere cannot fill that absence without a further recorded connection."}
+      ]
+    },
+    {
+      "id": "grave_soldier",
+      "source": "The empty soldier's grave",
+      "record_ids": ["grave_soldier"],
+      "related_ids": ["grave_harl", "grave_child", "vargan_wire"],
+      "related_quests": ["main_bell_beneath_greyfen", "side_empty_grave"],
+      "related_entries": [{"section_id": "preparation", "entry_id": "preparation:bell"}],
+      "sections": [
+        {"id": "record", "kind": "observation", "title": "The buckle left behind", "body": "The soldier's grave is empty. A buckle carrying Vargan work remains within it."},
+        {"id": "reading", "kind": "interpretation", "title": "An institutional mark", "body": "The workmanship connects the grave to Vargan. The mark identifies that connection more securely than it identifies every person involved."},
+        {"id": "limits", "kind": "limit", "title": "Limits of this record", "body": "An object cannot answer on a person's behalf. Any surviving watch fragment may preserve a fact; that does not make it a living witness able to consent to a new oath."}
+      ]
+    },
+    {
+      "id": "mill_accounts",
+      "source": "Mill measure and ledger",
+      "record_ids": ["millstones"],
+      "related_ids": ["command_proof", "renewal_order"],
+      "related_quests": ["main_ash_at_the_mill"],
+      "related_entries": [{"section_id": "preparation", "entry_id": "preparation:ashwing"}],
+      "sections": [
+        {"id": "record", "kind": "observation", "title": "The missing weight", "body": "The mill's weights match the missing refugee wagons. Its account connects what was taken from those wagons to machinery that still supplies Greyfen's households."},
+        {"id": "limits", "kind": "limit", "title": "Limits of this record", "body": "Useful flour does not erase the source recorded here. The ledger also does not make the households receiving it responsible for choosing what was ground into the system."},
+        {"id": "relevance", "kind": "relevance", "title": "The record and the machinery", "body": "The account can be preserved while the mill's future is decided. Evidence about its past and a way to feed the living both need attention; one cannot do the other's work."}
+      ]
+    },
+    {
+      "id": "senn_account",
+      "source": "Senn's recorded admission",
+      "record_ids": [],
+      "related_ids": ["command_proof", "renewal_order"],
+      "related_quests": ["main_soldier_without_banner", "main_blood_under_stone"],
+      "related_entries": [{"section_id": "people", "entry_id": "person:senn"}],
+      "sections": [
+        {"id": "record", "kind": "testimony", "title": "What Senn admits", "body": "Senn says that Halvern refused to close the military retreat and was hanged. Senn then carried out the closure himself. He also acknowledges turning the old grievance into an excuse for present raids."},
+        {"id": "limits", "kind": "limit", "title": "Limits of this record", "body": "This is Senn's account of his own part. It cannot supply every other person's motives, excuse the people hurt by his raids, or grant permission to speak for those who followed him."},
+        {"id": "relevance", "kind": "relevance", "title": "An admission that remains evidence", "body": "His admission can be considered alongside other recovered records. Keeping that account does not settle his accountability or promise his future participation."}
+      ]
+    },
+    {
+      "id": "command_proof",
+      "source": "Copied command ledger",
+      "record_ids": [],
+      "related_ids": ["vargan_wire", "mill_accounts", "senn_account", "renewal_order"],
+      "related_quests": ["main_blood_under_stone", "main_last_witness", "main_crowns_without_mercy"],
+      "related_entries": [{"section_id": "people", "entry_id": "person:edric"}, {"section_id": "people", "entry_id": "person:halvern"}, {"section_id": "preparation", "entry_id": "preparation:halvern"}],
+      "sections": [
+        {"id": "record", "kind": "observation", "title": "The copied command", "body": "The ledger records sanctuary promised under a Vargan seal, the road closed, and refugee wagons transferred to shrine custody. The columns are written by different hands. The register preserves names separately from the command."},
+        {"id": "reading", "kind": "interpretation", "title": "Orders and names together", "body": "The command and register connect the people promised refuge to the actions taken against them. Distinct entries preserve distinct parts in that sequence; keeping them together makes the account harder to reduce to a single excuse."},
+        {"id": "limits", "kind": "limit", "title": "Limits of this record", "body": "A copied order establishes its written terms. It cannot supply every later memory or make a present person assent to a replacement oath."},
+        {"id": "bounded_account", "kind": "testimony", "title": "Halvern's retained account", "body": "Halvern recalls the promise of sanctuary, his refusal to close the road, and his execution. His memory ends there. It cannot testify about Edric's later decisions, and preserving it does not create a consenting living witness.", "gate": {"flag": "halvern_is_fragment", "value": true}}
+      ]
+    },
+    {
+      "id": "renewal_order",
+      "source": "Renewal proclamation",
+      "record_ids": [],
+      "related_ids": ["command_proof", "mill_accounts", "renewal_stopped"],
+      "related_quests": ["main_crowns_without_mercy"],
+      "related_entries": [{"section_id": "people", "entry_id": "person:edric"}],
+      "sections": [
+        {"id": "record", "kind": "observation", "title": "Allotments beside assent", "body": "Edric's renewal order required supported households to attend and witness the seal. Grain allotments were to be entered beside their assent."},
+        {"id": "reading", "kind": "interpretation", "title": "What that condition asks", "body": "Kael reads the adjoining entries as a condition on food. A household that must agree to keep its allotment cannot give a freely witnessed oath through that requirement."},
+        {"id": "limits", "kind": "limit", "title": "Limits of this record", "body": "The proclamation records what the order demanded. It does not record each household's wishes or allow anyone to supply their consent."},
+        {"id": "condition_removed", "kind": "relevance", "title": "The recorded change", "body": "The ration condition was removed at the assembly. Refusing participation no longer forfeits food or a safe way out. The original proclamation remains evidence of the condition that was challenged.", "gate": {"flag": "renewal_stopped", "value": true}}
+      ]
+    }
+  ]
+}

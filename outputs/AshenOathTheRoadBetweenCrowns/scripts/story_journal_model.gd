@@ -5,8 +5,10 @@ extends RefCounted
 const Routes = preload("res://scripts/story_route_catalog.gd")
 const PEOPLE_PATH := "res://data/journal_people.json"
 const WORK_PATH := "res://data/journal_work.json"
+const EVIDENCE_DETAILS_PATH := "res://data/journal_evidence_details.json"
 static var _people_data: Dictionary = {}
 static var _work_data: Dictionary = {}
+static var _evidence_details_data: Dictionary = {}
 
 static func _catalog(path: String) -> Dictionary:
 	if not FileAccess.file_exists(path):
@@ -23,6 +25,13 @@ static func work_catalog() -> Dictionary:
 	if _work_data.is_empty():
 		_work_data = _catalog(WORK_PATH)
 	return _work_data
+
+static func evidence_details_catalog() -> Dictionary:
+	if _evidence_details_data.is_empty():
+		var loaded: Dictionary = _catalog(EVIDENCE_DETAILS_PATH)
+		if int(loaded.get("version", 0)) == 1:
+			_evidence_details_data = loaded
+	return _evidence_details_data
 
 static func encounter_record(speaker_id: String, zone_id: String) -> Dictionary:
 	var normalized: String = speaker_id.strip_edges().to_lower().replace("'", "").replace(" ", "_").replace("-", "_")
@@ -49,7 +58,7 @@ static func sections(campaign: Dictionary, quests, state, zone_id: String) -> Ar
 	if not covenant.is_empty():
 		returns.append(covenant)
 	var people: Array[Dictionary] = _people_entries(campaign, quests, state)
-	var evidence: Array[Dictionary] = _evidence_entries(campaign, quests, state)
+	var evidence: Array[Dictionary] = _evidence_entries(campaign, quests, state, zone_id)
 	var work: Array[Dictionary] = _work_entries(quests, state, zone_id)
 	var preparation: Array[Dictionary] = _preparation_entries(quests, state)
 	return [
@@ -193,16 +202,209 @@ static func _resolved_outcomes(campaign: Dictionary, state) -> Array[Dictionary]
 				entries.append({"id": str(decision.get("id", flag)), "flag": flag, "title": str(outcome.get("label", value)), "body": str(outcome.get("result", "The choice is recorded."))})
 	return entries
 
-static func _evidence_entries(campaign: Dictionary, quests, state) -> Array[Dictionary]:
+static func evidence_model(campaign: Dictionary, quests, state, zone_id: String = "") -> Dictionary:
+	var entries: Array[Dictionary] = _evidence_entries(campaign, quests, state, zone_id)
+	var filters: Array[Dictionary] = [{"id": "all", "label": "All records", "count": entries.size()}]
+	for kind: String in ["observed", "testimony", "inference"]:
+		var count: int = 0
+		for entry: Dictionary in entries:
+			if str(entry.get("kind", "")) == kind:
+				count += 1
+		if count > 0:
+			filters.append({"id": kind, "label": _evidence_kind_label(kind), "count": count})
+	return {
+		"body": "Select a recorded account to read its source, interpretation and limits. Related reading contains only what this journey has already uncovered." if not entries.is_empty() else "No evidence has been recorded. Inspect what the road leaves behind and hear the people who know it.",
+		"entries": entries,
+		"filters": filters
+	}
+
+static func evidence_detail(campaign: Dictionary, entry_id: String, quests, state, zone_id: String = "") -> Dictionary:
+	if entry_id == "":
+		return {}
+	var stable_id: String = entry_id if entry_id.begins_with("evidence:") else "evidence:" + entry_id
+	for entry: Dictionary in _evidence_entries(campaign, quests, state, zone_id):
+		if str(entry.get("id", "")) == stable_id:
+			return entry
+	return {}
+
+static func _evidence_kind_label(kind: String) -> String:
+	return str({"observed": "Observation", "testimony": "Testimony", "inference": "Inference"}.get(kind, "Record"))
+
+static func _evidence_entries(campaign: Dictionary, quests, state, zone_id: String = "") -> Array[Dictionary]:
 	var entries: Array[Dictionary] = []
-	for kind in ["observed", "testimony", "inference"]:
-		for evidence in campaign.get("evidence", []):
+	var authored_by_id: Dictionary = {}
+	var raw_details: Variant = evidence_details_catalog().get("details", [])
+	if raw_details is Array:
+		for raw_detail: Variant in raw_details:
+			if raw_detail is Dictionary and str(raw_detail.get("id", "")) != "":
+				authored_by_id[str(raw_detail.get("id", ""))] = raw_detail
+	for kind: String in ["observed", "testimony", "inference"]:
+		for raw_evidence: Variant in campaign.get("evidence", []):
+			if not raw_evidence is Dictionary:
+				continue
+			var evidence: Dictionary = raw_evidence
+			# Detail prose, provenance aliases and related quests are presentation
+			# only. They never broaden the established discovery predicate.
 			if str(evidence.get("kind", "observed")) != kind or not _discovered(evidence, quests, state):
 				continue
-			var label: String = str({"observed": "Observation", "testimony": "Testimony", "inference": "Kael's inference"}[kind])
-			var place: String = _zone_name(str(evidence.get("zone", "")))
-			entries.append({"id": "evidence:" + str(evidence.get("id", "")), "title": label + " — " + str(evidence.get("title", "Record")), "body": "%s\n\nSource: %s%s" % [str(evidence.get("text", "")), str(evidence.get("source", "Kael's observation")), "\nRecorded place: " + place if place != "" else ""], "kind": kind, "zone": str(evidence.get("zone", ""))})
+			var id: String = str(evidence.get("id", ""))
+			if id == "":
+				continue
+			var authored: Dictionary = authored_by_id.get(id, {})
+			var blocks: Array[Dictionary] = _evidence_blocks(authored, quests, state)
+			var recorded_text: String = str(evidence.get("text", "")) if authored.is_empty() else ""
+			var compact: String = recorded_text
+			for block: Dictionary in blocks:
+				if str(block.get("kind", "")) in ["observation", "testimony"]:
+					compact = str(block.get("body", ""))
+					break
+			if compact == "":
+				compact = "This record is known; no further account is recorded here."
+			var source: String = str(authored.get("source", evidence.get("source", ""))).strip_edges()
+			var provenance: Dictionary = _evidence_provenance(evidence, authored, state)
+			var place: String = str(provenance.get("place", ""))
+			var place_label: String = str(provenance.get("place_label", ""))
+			var body: String = compact
+			if source != "":
+				body += "\n\nSource: " + source
+			if place != "":
+				body += "\n" + place_label + ": " + place
+			entries.append({
+				"id": "evidence:" + id,
+				"detail_id": "evidence:" + id,
+				"title": str(evidence.get("title", "Record")),
+				"body": body,
+				"kind": kind,
+				"kind_label": _evidence_kind_label(kind),
+				"source": source,
+				"place": place,
+				"place_label": place_label,
+				"zone": str(provenance.get("zone", "")),
+				"recorded_text": recorded_text,
+				"text_label": "Recorded account",
+				"blocks": blocks,
+				"known_relevance": _evidence_known_lead(authored, quests, state, zone_id),
+				"links": []
+			})
+	var visible: Dictionary = {"evidence": {}, "people": {}, "preparation": {}}
+	for entry: Dictionary in entries:
+		visible["evidence"][str(entry.get("id", ""))] = str(entry.get("title", "Record"))
+	for entry: Dictionary in _people_entries(campaign, quests, state):
+		visible["people"][str(entry.get("id", ""))] = str(entry.get("title", "Person"))
+	for entry: Dictionary in _preparation_entries(quests, state):
+		visible["preparation"][str(entry.get("id", ""))] = str(entry.get("title", "Preparation"))
+	for entry: Dictionary in entries:
+		var id: String = str(entry.get("id", "")).trim_prefix("evidence:")
+		entry["links"] = _evidence_links(authored_by_id.get(id, {}), visible, str(entry.get("id", "")))
 	return entries
+
+static func _evidence_blocks(authored: Dictionary, quests, state) -> Array[Dictionary]:
+	var blocks: Array[Dictionary] = []
+	var raw_sections: Variant = authored.get("sections", [])
+	if not raw_sections is Array:
+		return blocks
+	for raw_section: Variant in raw_sections:
+		if not raw_section is Dictionary:
+			continue
+		var section: Dictionary = raw_section
+		var kind: String = str(section.get("kind", ""))
+		if kind not in ["observation", "testimony", "interpretation", "limit", "relevance"]:
+			continue
+		if section.has("gate") and not _gate(section.get("gate", {}), quests, state):
+			continue
+		var body: String = str(section.get("body", "")).strip_edges()
+		if body == "":
+			continue
+		var fallback_title: String = str({"observation": "Recorded observation", "testimony": "Recorded account", "interpretation": "Kael's interpretation", "limit": "Limits of this record", "relevance": "Known relevance"}[kind])
+		blocks.append({"id": str(section.get("id", "block_%d" % blocks.size())), "kind": kind, "title": str(section.get("title", fallback_title)), "body": body})
+	return blocks
+
+static func _evidence_provenance(evidence: Dictionary, authored: Dictionary, state) -> Dictionary:
+	var record_ids: Array[String] = [str(evidence.get("id", ""))]
+	var raw_ids: Variant = authored.get("record_ids", [])
+	if raw_ids is Array:
+		for raw_id: Variant in raw_ids:
+			if raw_id is String and str(raw_id) != "" and not record_ids.has(str(raw_id)):
+				record_ids.append(str(raw_id))
+	var ledger: Variant = state.get("evidence") if state != null else {}
+	if ledger is Dictionary:
+		for record_id: String in record_ids:
+			var raw_record: Variant = ledger.get(record_id, {})
+			if not raw_record is Dictionary:
+				continue
+			var recorded_zone: String = str(raw_record.get("zone", "")).strip_edges()
+			if recorded_zone != "":
+				return {"zone": recorded_zone, "place": Routes.zone_name(recorded_zone), "place_label": "Recorded at"}
+	var associated_zone: String = str(evidence.get("zone", "")).strip_edges()
+	return {"zone": associated_zone, "place": Routes.zone_name(associated_zone) if associated_zone != "" else "", "place_label": "Associated place" if associated_zone != "" else ""}
+
+static func _evidence_links(authored: Dictionary, visible: Dictionary, current_id: String) -> Array[Dictionary]:
+	var candidates: Array[Dictionary] = []
+	var raw_related: Variant = authored.get("related_ids", [])
+	if raw_related is Array:
+		for raw_id: Variant in raw_related:
+			if raw_id is String and str(raw_id) != "":
+				var id: String = str(raw_id)
+				candidates.append({"section_id": "evidence", "entry_id": id if id.begins_with("evidence:") else "evidence:" + id})
+	var raw_entries: Variant = authored.get("related_entries", [])
+	if raw_entries is Array:
+		for raw_entry: Variant in raw_entries:
+			if raw_entry is Dictionary and str(raw_entry.get("section_id", "")) in ["people", "preparation"]:
+				candidates.append(raw_entry)
+	var links: Array[Dictionary] = []
+	var added: Dictionary = {}
+	for candidate: Dictionary in candidates:
+		var section_id: String = str(candidate.get("section_id", ""))
+		var entry_id: String = str(candidate.get("entry_id", ""))
+		var available: Dictionary = visible.get(section_id, {})
+		var link_key: String = section_id + "/" + entry_id
+		if entry_id == current_id or not available.has(entry_id) or added.has(link_key):
+			continue
+		added[link_key] = true
+		links.append({"section_id": section_id, "entry_id": entry_id, "label": str(available.get(entry_id, ""))})
+	return links
+
+static func _evidence_known_lead(authored: Dictionary, quests, state, zone_id: String) -> Array[Dictionary]:
+	var leads: Array[Dictionary] = []
+	var related: Variant = authored.get("related_quests", [])
+	if quests == null or not related is Array:
+		return leads
+	var candidates: Array[String] = []
+	var tracked_id: String = str(quests.get_tracked_quest())
+	if tracked_id != "" and related.has(tracked_id):
+		candidates.append(tracked_id)
+	for raw_id: Variant in related:
+		if raw_id is String and str(raw_id) != "" and not candidates.has(str(raw_id)):
+			candidates.append(str(raw_id))
+	for quest_id: String in candidates:
+		if not bool(quests.is_active(quest_id)):
+			continue
+		var objective_id: String = str(quests.get_active_objective_id(quest_id))
+		if objective_id == "":
+			continue
+		var definition: Dictionary = quests.quest_defs.get(quest_id, {})
+		var objective: Dictionary = {}
+		for raw_objective: Variant in definition.get("objectives", []):
+			if raw_objective is Dictionary and str(raw_objective.get("id", "")) == objective_id:
+				objective = raw_objective
+				break
+		var action: String = str(objective.get("text", "")).strip_edges()
+		if action == "":
+			continue
+		# A grouped evidence step must not select a missing sub-record for the
+		# journal reader. Its already-visible objective is sufficient context.
+		var grouped: bool = str(objective.get("group", "")) != "" or int(objective.get("required_count", 0)) > 0
+		var route: Dictionary = {} if grouped else Routes.for_objective(quest_id, objective_id, state, quests, zone_id)
+		var body: String = str(route.get("next_action", action))
+		var destination: String = str(route.get("destination_name", ""))
+		var hint: String = str(route.get("route_hint", ""))
+		if destination != "":
+			body += "\nWhere: " + destination
+		if hint != "" and hint != body:
+			body += "\n" + hint
+		leads.append({"id": "quest:%s:%s" % [quest_id, objective_id], "title": "Current known lead — " + str(definition.get("title", "The current task")), "body": body})
+		break
+	return leads
 
 static func _work_entries(quests, state, zone_id: String) -> Array[Dictionary]:
 	var open_entries: Array[Dictionary] = []

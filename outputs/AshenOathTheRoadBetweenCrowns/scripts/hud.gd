@@ -43,6 +43,7 @@ const PreparationViewModel = preload("res://scripts/preparation_view_model.gd")
 const PreparationPanel = preload("res://scripts/preparation_panel.gd")
 const JourneyMenuPanel = preload("res://scripts/journey_menu_panel.gd")
 const DialogueTopicNavigation = preload("res://scripts/dialogue_topic_navigation.gd")
+const JournalEvidenceNavigation = preload("res://scripts/journal_evidence_navigation.gd")
 var navigation = NavigationState.new()
 var notices = NoticeQueue.new()
 var _rendered_screen := ""
@@ -186,6 +187,10 @@ var _journey_return_last_id := ""
 var _save_slot_notice: Label
 var _topic_navigation = DialogueTopicNavigation.new()
 var _dialogue_view_generation := 0
+var _evidence_navigation = JournalEvidenceNavigation.new()
+var _evidence_position_key := ""
+var _evidence_reference_section := ""
+var _evidence_reference_entry := ""
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -432,6 +437,10 @@ func clear_journey_transients(new_timeline: bool) -> void:
 	_cancel_dialogue_press()
 	_journey_return_pending.clear()
 	if new_timeline:
+		_evidence_navigation.reset()
+		_evidence_position_key = ""
+		_evidence_reference_section = ""
+		_evidence_reference_entry = ""
 		_journey_return_last_id = ""
 		_preparation_results.clear()
 		_slot_operation_results.clear()
@@ -1478,15 +1487,17 @@ func show_inventory(inventory, quests, story_state = null, progression = null, r
 	_capture_inventory_state()
 	if requested_section != "":
 		_journal_section_id = requested_section
+		if requested_section not in ["evidence", _evidence_reference_section]:
+			_evidence_reference_section = ""
+			_evidence_reference_entry = ""
+			_evidence_navigation.clear_returns()
 	_inventory_screen = "journal:" + _journal_section_id
 	_inventory_generation += 1
 	_journal_context = {"inventory":inventory, "quests":quests, "state":story_state, "progression":progression}
 	_set_ui_pointer("journal")
 	inventory_layer.visible = true
 	_show_journal_art(quests, story_state)
-	var zone_id: String = str(_preparation_context.get("zone_id", ""))
-	if zone_id == "" and get_parent() != null:
-		zone_id = str(get_parent().get("current_zone_id"))
+	var zone_id: String = _journal_zone_id()
 	var sections: Array[Dictionary] = StoryJournalPresenter.sections(quests, story_state, zone_id)
 	sections.append({"id":"quest_record", "title":"Quest Record", "body":str(quests.get_journal_text()), "entries":[]})
 	var current_section: Dictionary = {}
@@ -1498,7 +1509,16 @@ func show_inventory(inventory, quests, story_state = null, progression = null, r
 		_journal_section_id = str(current_section.get("id", "return"))
 		_inventory_screen = "journal:" + _journal_section_id
 	var preparing: bool = _journal_section_id == "preparation"
-	_prepare_inventory_surface(preparing)
+	var evidence: bool = _journal_section_id == "evidence"
+	var reference: Dictionary = {}
+	if _evidence_reference_section == _journal_section_id and _evidence_reference_entry != "":
+		reference = _journal_entry_from_sections(sections, _evidence_reference_section, _evidence_reference_entry)
+		if reference.is_empty():
+			_evidence_reference_section = ""
+			_evidence_reference_entry = ""
+			_evidence_navigation.clear_returns()
+	var linked: bool = not reference.is_empty()
+	_prepare_inventory_surface(preparing or evidence or linked)
 	var section_entries: Array = current_section.get("entries", [])
 	var reading: String = str(current_section.get("title", "Journal")).to_upper() + "\n\n" + str(current_section.get("body", ""))
 	var paragraph_by_entry: Dictionary = {}
@@ -1509,18 +1529,34 @@ func show_inventory(inventory, quests, story_state = null, progression = null, r
 		reading += "\n\n"
 		paragraph_by_entry[str(entry.get("id", ""))] = reading.count("\n")
 		reading += str(entry.get("title", "")) + "\n" + str(entry.get("body", ""))
-	if preparing:
+	_evidence_position_key = ""
+	if linked:
+		inventory_text.text = str(current_section.get("title", "Journal")).to_upper() + "\n\n" + str(reference.get("title", "")) + "\n\n" + str(reference.get("body", ""))
+		_evidence_position_key = "reference:" + _evidence_reference_section + ":" + _evidence_reference_entry
+		_add_evidence_return_controls()
+	elif preparing:
 		_build_preparation_content(inventory, progression, story_state, quests, reading)
-	else:
+	elif not evidence:
 		inventory_text.text = reading
 	_add_preparation_heading("JOURNAL")
+	var section_parent: Container = craft_buttons
+	if evidence or linked:
+		var section_grid: GridContainer = GridContainer.new()
+		section_grid.columns = 2
+		section_grid.add_theme_constant_override("h_separation", 8)
+		section_grid.add_theme_constant_override("v_separation", 8)
+		section_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		craft_buttons.add_child(section_grid)
+		section_parent = section_grid
 	for section: Dictionary in sections:
 		var section_id: String = str(section.get("id", ""))
-		var section_button: Button = _preparation_button(str(section.get("title", "")), "section:" + section_id, craft_buttons)
+		var section_button: Button = _preparation_button(str(section.get("title", "")), "section:" + section_id, section_parent)
 		section_button.toggle_mode = true
 		section_button.button_pressed = section_id == _journal_section_id
 		section_button.pressed.connect(func(id_value: String = section_id): _open_journal_section(id_value))
-	if not preparing and not section_entries.is_empty():
+	if evidence:
+		_build_evidence_content(quests, story_state, zone_id, sections)
+	elif not preparing and not linked and not section_entries.is_empty():
 		_add_preparation_heading("IN THIS SECTION")
 		for raw_entry: Variant in section_entries:
 			if not raw_entry is Dictionary:
@@ -1533,7 +1569,260 @@ func show_inventory(inventory, quests, story_state = null, progression = null, r
 				inventory_text.grab_focus()
 			)
 	_add_preparation_close()
+	if _evidence_position_key != "":
+		var memory: Dictionary = _evidence_navigation.position(_evidence_position_key)
+		if memory.is_empty():
+			memory = {"focus":"journal_text" if linked or str(_evidence_navigation.selected_id) != "" else "evidence_filter:" + str(_evidence_navigation.filter_id), "index":0, "scrolls":{"journal_text":0, "journal_actions":0}}
+		navigation.screens[_inventory_screen] = memory
 	call_deferred("_restore_inventory_state", _inventory_screen, _inventory_generation)
+func _journal_zone_id() -> String:
+	var zone_id: String = str(_preparation_context.get("zone_id", ""))
+	if get_parent() != null:
+		zone_id = str(get_parent().get("current_zone_id"))
+	return zone_id
+
+func _journal_entry_from_sections(sections: Array, section_id: String, entry_id: String) -> Dictionary:
+	for raw_section: Variant in sections:
+		if not raw_section is Dictionary or str(raw_section.get("id", "")) != section_id:
+			continue
+		for raw_entry: Variant in raw_section.get("entries", []):
+			if raw_entry is Dictionary and str(raw_entry.get("id", "")) == entry_id:
+				return raw_entry
+	return {}
+
+func _build_evidence_content(quests, state, zone_id: String, sections: Array) -> void:
+	var model: Dictionary = StoryJournalPresenter.evidence_model(quests, state, zone_id)
+	var entries: Array = model.get("entries", [])
+	var filters: Array = model.get("filters", [])
+	var filter_found: bool = false
+	for raw: Variant in filters:
+		if raw is Dictionary and str(raw.get("id", "")) == str(_evidence_navigation.filter_id):
+			filter_found = true
+	if not filter_found:
+		_evidence_navigation.filter_id = "all"
+	var detail: Dictionary = {}
+	if str(_evidence_navigation.selected_id) != "":
+		detail = StoryJournalPresenter.evidence_detail(str(_evidence_navigation.selected_id), quests, state, zone_id)
+		if detail.is_empty():
+			_evidence_navigation.selected_id = ""
+	var filtered: Array[Dictionary] = []
+	for raw: Variant in entries:
+		if raw is Dictionary and (str(_evidence_navigation.filter_id) == "all" or str(raw.get("kind", "")) == str(_evidence_navigation.filter_id)):
+			filtered.append(raw)
+	if detail.is_empty():
+		_evidence_position_key = "list:" + str(_evidence_navigation.filter_id)
+		inventory_text.text = "EVIDENCE\n\n" + str(model.get("body", ""))
+		inventory_text.text += "\n\n%d recorded · %d shown\n\nSelect a record to read its source, account and known relevance." % [entries.size(), filtered.size()]
+		if filtered.is_empty() and not entries.is_empty():
+			inventory_text.text += "\n\nNo recorded accounts match this filter. Choose All records to return to the full list."
+		_preparation_actions.visible = bool(_evidence_navigation.has_return())
+		if _evidence_navigation.has_return():
+			_add_evidence_return_controls()
+	else:
+		_evidence_position_key = "record:" + str(detail.get("id", ""))
+		inventory_text.text = _evidence_detail_text(detail)
+		_add_evidence_return_controls()
+		var links: Array = detail.get("links", [])
+		var heading_added: bool = false
+		for raw: Variant in links:
+			if not raw is Dictionary:
+				continue
+			var link: Dictionary = raw
+			var target: Dictionary = _resolve_evidence_reference(link, sections)
+			if target.is_empty():
+				continue
+			if not heading_added:
+				_add_preparation_heading("RELATED JOURNAL ENTRIES")
+				heading_added = true
+			var link_key: String = str(link.get("section_id", "")) + ":" + str(link.get("entry_id", ""))
+			var button: Button = _preparation_button(str(link.get("label", target.get("title", "Read entry"))), "evidence_link:" + link_key, craft_buttons)
+			button.pressed.connect(func(reference: Dictionary = link): _open_evidence_reference(reference))
+	_add_preparation_heading("RECORDED ACCOUNTS · %d" % entries.size())
+	var filter_grid: GridContainer = GridContainer.new()
+	filter_grid.columns = 2
+	filter_grid.add_theme_constant_override("h_separation", 8)
+	filter_grid.add_theme_constant_override("v_separation", 8)
+	filter_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	craft_buttons.add_child(filter_grid)
+	for raw: Variant in filters:
+		if not raw is Dictionary:
+			continue
+		var filter: Dictionary = raw
+		var id: String = str(filter.get("id", "all"))
+		var button: Button = _preparation_button("%s · %d" % [str(filter.get("label", "All records")), int(filter.get("count", 0))], "evidence_filter:" + id, filter_grid)
+		button.toggle_mode = true
+		button.button_pressed = id == str(_evidence_navigation.filter_id)
+		button.pressed.connect(func(filter_id: String = id): _select_evidence_filter(filter_id))
+	for entry: Dictionary in filtered:
+		var id: String = str(entry.get("id", ""))
+		var place: String = str(entry.get("place", ""))
+		var text: String = str(entry.get("title", "Record")) + "\n" + str(entry.get("kind_label", "Account")) + (" · " + place if place != "" else "")
+		var button: Button = _preparation_button(text, "evidence_entry:" + id, craft_buttons)
+		button.toggle_mode = true
+		button.button_pressed = id == str(_evidence_navigation.selected_id)
+		button.pressed.connect(func(entry_id: String = id): _select_evidence_entry(entry_id))
+
+func _evidence_detail_text(detail: Dictionary) -> String:
+	var lines: Array[String] = [str(detail.get("title", "Record")).to_upper(), str(detail.get("kind_label", "Account"))]
+	var source: String = str(detail.get("source", ""))
+	var place: String = str(detail.get("place", ""))
+	if source != "":
+		lines.append("Source: " + source)
+	if place != "":
+		lines.append(str(detail.get("place_label", "Associated place")) + ": " + place)
+	var recorded_text: String = str(detail.get("recorded_text", ""))
+	if recorded_text != "":
+		lines.append("\n" + str(detail.get("text_label", "Recorded account")) + "\n" + recorded_text)
+	for raw: Variant in detail.get("blocks", []):
+		if not raw is Dictionary or str(raw.get("body", "")) == "":
+			continue
+		var kind: String = str(raw.get("kind", ""))
+		var label: String = str({"observation":"Observation", "testimony":"Testimony", "interpretation":"Interpretation", "limit":"Limit of the record", "relevance":"Known relevance"}.get(kind, "Recorded account"))
+		var title: String = str(raw.get("title", ""))
+		lines.append("\n" + label + (" — " + title if title != "" and title != label else "") + "\n" + str(raw.get("body", "")))
+	var relevance: Array = detail.get("known_relevance", [])
+	for raw: Variant in relevance.slice(0, 1):
+		if raw is Dictionary:
+			lines.append("\n" + str(raw.get("title", "Current known lead")) + "\n" + str(raw.get("body", "")))
+	return "\n".join(lines)
+
+func _add_evidence_return_controls() -> void:
+	_preparation_actions.visible = true
+	if _evidence_navigation.has_return():
+		var back: Button = _preparation_button("Back", "evidence_back", _preparation_actions)
+		back.pressed.connect(func(): _back_from_evidence_reading())
+	var list_button: Button = _preparation_button("Back to Evidence", "evidence_list", _preparation_actions)
+	list_button.pressed.connect(_show_evidence_list)
+
+func _select_evidence_filter(filter_id: String) -> void:
+	_capture_inventory_state()
+	_evidence_navigation.filter_id = filter_id
+	_evidence_navigation.selected_id = ""
+	_evidence_navigation.clear_returns()
+	_evidence_reference_section = ""
+	_evidence_reference_entry = ""
+	_refresh_evidence_journal("evidence")
+
+func _select_evidence_entry(entry_id: String) -> void:
+	var detail: Dictionary = StoryJournalPresenter.evidence_detail(entry_id, _journal_context.get("quests"), _journal_context.get("state"), _journal_zone_id())
+	if detail.is_empty():
+		return
+	_capture_inventory_state()
+	_evidence_navigation.selected_id = str(detail.get("id", entry_id))
+	_evidence_reference_section = ""
+	_evidence_reference_entry = ""
+	_refresh_evidence_journal("evidence")
+
+func _show_evidence_list() -> void:
+	_capture_inventory_state()
+	_evidence_navigation.selected_id = ""
+	_evidence_navigation.clear_returns()
+	_evidence_reference_section = ""
+	_evidence_reference_entry = ""
+	_refresh_evidence_journal("evidence")
+
+func _refresh_evidence_journal(section_id: String) -> void:
+	show_inventory(_journal_context.get("inventory"), _journal_context.get("quests"), _journal_context.get("state"), _journal_context.get("progression"), section_id)
+
+func _resolve_evidence_reference(link: Dictionary, sections: Array = []) -> Dictionary:
+	var section_id: String = str(link.get("section_id", ""))
+	var entry_id: String = str(link.get("entry_id", ""))
+	if section_id not in ["evidence", "people", "preparation"] or entry_id == "":
+		return {}
+	if section_id == "evidence":
+		return StoryJournalPresenter.evidence_detail(entry_id, _journal_context.get("quests"), _journal_context.get("state"), _journal_zone_id())
+	if sections.is_empty():
+		sections = StoryJournalPresenter.sections(_journal_context.get("quests"), _journal_context.get("state"), _journal_zone_id())
+	return _journal_entry_from_sections(sections, section_id, entry_id)
+
+func _open_evidence_reference(link: Dictionary) -> void:
+	var target: Dictionary = _resolve_evidence_reference(link)
+	if target.is_empty():
+		return
+	_capture_inventory_state()
+	_evidence_navigation.push_return({"section_id":_journal_section_id, "entry_id":str(_evidence_navigation.selected_id) if _journal_section_id == "evidence" else _evidence_reference_entry, "filter_id":str(_evidence_navigation.filter_id), "position_key":_evidence_position_key})
+	var section_id: String = str(link.get("section_id", ""))
+	var entry_id: String = str(target.get("id", link.get("entry_id", "")))
+	if section_id == "evidence":
+		_evidence_navigation.selected_id = entry_id
+		_evidence_navigation.filter_id = "all"
+		_evidence_reference_section = ""
+		_evidence_reference_entry = ""
+	else:
+		_evidence_reference_section = section_id
+		_evidence_reference_entry = entry_id
+	_refresh_evidence_journal(section_id)
+
+func _back_from_evidence_reading() -> bool:
+	if not _inventory_screen.begins_with("journal:"):
+		return false
+	_capture_inventory_state()
+	while _evidence_navigation.has_return():
+		var origin: Dictionary = _evidence_navigation.pop_return()
+		var section_id: String = str(origin.get("section_id", "evidence"))
+		var entry_id: String = str(origin.get("entry_id", ""))
+		if entry_id != "" and _resolve_evidence_reference({"section_id":section_id, "entry_id":entry_id}).is_empty():
+			continue
+		_evidence_navigation.filter_id = str(origin.get("filter_id", "all"))
+		_evidence_navigation.selected_id = entry_id if section_id == "evidence" else ""
+		_evidence_reference_section = section_id if section_id != "evidence" else ""
+		_evidence_reference_entry = entry_id if section_id != "evidence" else ""
+		_refresh_evidence_journal(section_id)
+		return true
+	if (_journal_section_id == "evidence" and str(_evidence_navigation.selected_id) != "") or _evidence_reference_entry != "":
+		_show_evidence_list()
+		return true
+	return false
+func _evidence_focus_target() -> String:
+	if _evidence_reference_entry != "":
+		return "evidence_back" if _evidence_navigation.has_return() else "evidence_list"
+	if str(_evidence_navigation.selected_id) != "":
+		return "evidence_entry:" + str(_evidence_navigation.selected_id)
+	return "evidence_filter:" + str(_evidence_navigation.filter_id)
+
+func _handle_evidence_direction(event: InputEvent) -> bool:
+	if _evidence_position_key == "" or not is_instance_valid(inventory_layer) or not inventory_layer.visible or not _inventory_screen.begins_with("journal:"):
+		return false
+	var direction: int = 0
+	if event is InputEventKey:
+		var key_event: InputEventKey = event as InputEventKey
+		var code: int = key_event.keycode if key_event.keycode != KEY_NONE else key_event.physical_keycode
+		if key_event.pressed and not key_event.echo:
+			if code == KEY_LEFT:
+				direction = -1
+			elif code == KEY_RIGHT:
+				direction = 1
+	elif event is InputEventJoypadButton or event is InputEventJoypadMotion:
+		if event.is_action_pressed("ui_left"):
+			direction = -1
+		elif event.is_action_pressed("ui_right"):
+			direction = 1
+	if direction == 0:
+		return false
+	var focused: Control = get_viewport().gui_get_focus_owner()
+	if direction < 0 and focused != inventory_text and focused != null and inventory_layer.is_ancestor_of(focused):
+		inventory_text.grab_focus()
+		get_viewport().set_input_as_handled()
+		return true
+	if direction > 0 and focused == inventory_text:
+		var controls: Array[Control] = []
+		_collect_inventory_focus(inventory_layer, controls)
+		var target_key: String = _evidence_focus_target()
+		var fallback_key: String = "evidence_filter:" + str(_evidence_navigation.filter_id)
+		var fallback: Control = null
+		for control: Control in controls:
+			var control_key: String = str(control.get_meta("navigation_key", ""))
+			if control_key == target_key:
+				control.grab_focus()
+				get_viewport().set_input_as_handled()
+				return true
+			if control_key == fallback_key:
+				fallback = control
+		if fallback != null:
+			fallback.grab_focus()
+			get_viewport().set_input_as_handled()
+			return true
+	return false
 
 func _build_preparation_content(inventory, progression, story_state, quests, notes: String) -> void:
 	var ids: Array = inventory.ordered_item_ids()
@@ -1604,12 +1893,16 @@ func _select_preparation_entry(kind: String, id: String) -> void:
 	navigation.screens[_inventory_screen] = memory
 
 func _open_journal_section(section_id: String) -> void:
-	if _journal_context.is_empty() or section_id == _journal_section_id:
+	if _journal_context.is_empty() or (section_id == _journal_section_id and _evidence_reference_entry == ""):
 		return
+	_capture_inventory_state()
+	_evidence_navigation.clear_returns()
+	_evidence_reference_section = ""
+	_evidence_reference_entry = ""
 	show_inventory(_journal_context.get("inventory"), _journal_context.get("quests"), _journal_context.get("state"), _journal_context.get("progression"), section_id)
-
 func show_vendor(vendor_id: String, vendor_service, inventory, quests = null, story_state = null) -> void:
 	_capture_inventory_state()
+	_evidence_position_key = ""
 	_inventory_screen = "vendor:" + vendor_id
 	_inventory_generation += 1
 	_vendor_context = {"id":vendor_id, "service":vendor_service, "inventory":inventory, "quests":quests, "state":story_state}
@@ -2588,6 +2881,8 @@ func _input(event: InputEvent) -> void:
 		return
 	if _capture_remap_input(event):
 		return
+	if _handle_evidence_direction(event):
+		return
 	if dialogue_layer == null or not dialogue_layer.visible:
 		_cancel_dialogue_press()
 		return
@@ -2786,6 +3081,8 @@ func request_back() -> bool:
 		dialogue_closed.emit()
 		return true
 	elif inventory_layer != null and inventory_layer.visible:
+		if _back_from_evidence_reading():
+			return true
 		dialogue_closed.emit()
 		hide_menus()
 		resume_requested.emit()
@@ -2966,7 +3263,8 @@ func _add_hud_accent(parent: Control, position: Vector2, size: Vector2) -> void:
 func _capture_inventory_state() -> void:
 	if is_instance_valid(inventory_layer) and inventory_layer.visible:
 		navigation.capture(_inventory_screen, "gameplay", inventory_layer)
-
+		if _evidence_position_key != "" and _inventory_screen.begins_with("journal:"):
+			_evidence_navigation.remember(_evidence_position_key, navigation.screens.get(_inventory_screen, {}))
 func _restore_inventory_state(key: String, generation: int) -> void:
 	await get_tree().process_frame
 	if generation == _inventory_generation and key == _inventory_screen and inventory_layer.visible:
@@ -2977,6 +3275,8 @@ func _restore_inventory_state(key: String, generation: int) -> void:
 		var desired_available: bool = false
 		var current_selection: Dictionary = _preparation_selection.get(key, {})
 		var selection_key: String = str(current_selection.get("kind", "item")) + ":" + str(current_selection.get("id", ""))
+		if _evidence_position_key != "":
+			selection_key = _evidence_focus_target()
 		for control: Control in controls:
 			if str(control.get_meta("navigation_key", "")) == desired:
 				desired_available = true

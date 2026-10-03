@@ -26,6 +26,12 @@ static func recap(game) -> String:
 static func sections(quests, state, zone_id: String = "") -> Array[Dictionary]:
 	return Model.sections(campaign(), quests, state, zone_id)
 
+static func evidence_model(quests, state, zone_id: String = "") -> Dictionary:
+	return Model.evidence_model(campaign(), quests, state, zone_id)
+
+static func evidence_detail(entry_id: String, quests, state, zone_id: String = "") -> Dictionary:
+	return Model.evidence_detail(campaign(), entry_id, quests, state, zone_id)
+
 static func recap_model(quests, state, zone_id: String = "") -> Dictionary:
 	return Model.recap_model(campaign(), quests, state, zone_id)
 
