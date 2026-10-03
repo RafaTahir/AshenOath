@@ -1,24 +1,24 @@
 {
   "schema_version": 2,
   "project": "Ashen Oath",
-  "build_id": "dev-59ca38939769",
+  "build_id": "camera-dd8ea318017a",
   "source": {
-    "git_commit": "59ca3893976976069390bf79c4f7a02dbd41d198",
-    "dirty": true
+    "git_commit": "dd8ea318017a9fdaaaa11d001403a0653dce45ea",
+    "dirty": false
   },
-  "generated_at_utc": "2026-10-02T20:31:53.494750Z",
-  "compatibility_key": "2c029884a04a2676bf6d82d8cdc0a591ebc642cf390d86c934064dd9d80860cf",
+  "generated_at_utc": "2026-10-03T02:01:42.940734Z",
+  "compatibility_key": "7c096374b8bfc219092005ee7e8f277035ef39ed068927c9201a39d855ccea65",
   "runtime_pack_manifest": {
     "path": "runtime_pack_manifest.json",
-    "bytes": 6501,
-    "sha256": "35177f36350dc6c101ef960f9fe1d73543ee98a296c68c3b6be8e003027a082c"
+    "bytes": 6505,
+    "sha256": "316922276a6d47af9f5ed8c65ef326618d2d879cdfee13960f5395423d17135f"
   },
   "root_pck": {
     "path": "index.pck",
-    "bytes": 14050740,
-    "sha256": "7566f68a43dad7fd4da9fb7520d5ef7fd746772cb20dee9a5ae0e069c528cb09"
+    "bytes": 14053476,
+    "sha256": "db1f399f17fabb481996d61b2ee0460b014200c1e2823867c907380728ce9af9"
   },
-  "artifacts_total_bytes": 90532846,
+  "artifacts_total_bytes": 90535592,
   "artifacts": [
     {
       "path": "index.audio.position.worklet.js",
@@ -32,8 +32,8 @@
     },
     {
       "path": "index.html",
-      "bytes": 20842,
-      "sha256": "c1e71b4a78ff1c22c7b887442772693dde5189bc9c1d403597ed1d1d0cc7b91b"
+      "bytes": 20848,
+      "sha256": "b033e083cdd1b2835f847f4dfdd3995c772bda55536335ad28884d9af9187c11"
     },
     {
       "path": "index.js",
@@ -42,8 +42,8 @@
     },
     {
       "path": "index.pck",
-      "bytes": 14050740,
-      "sha256": "7566f68a43dad7fd4da9fb7520d5ef7fd746772cb20dee9a5ae0e069c528cb09"
+      "bytes": 14053476,
+      "sha256": "db1f399f17fabb481996d61b2ee0460b014200c1e2823867c907380728ce9af9"
     },
     {
       "path": "index.png",
@@ -90,8 +90,8 @@
     },
     {
       "path": "runtime_pack_manifest.json",
-      "bytes": 6501,
-      "sha256": "35177f36350dc6c101ef960f9fe1d73543ee98a296c68c3b6be8e003027a082c"
+      "bytes": 6505,
+      "sha256": "316922276a6d47af9f5ed8c65ef326618d2d879cdfee13960f5395423d17135f"
     }
   ],
   "packs": [

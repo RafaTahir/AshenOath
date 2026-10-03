@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "program": "SOUL-REBUILD",
-  "release_id": "dev-59ca38939769",
+  "release_id": "camera-dd8ea318017a",
   "artifact_policy": "external_runtime_packs",
   "candidate_manifest": "res://runtime_pack_candidates.json",
   "pack_presets": {
@@ -169,8 +169,8 @@
     }
   },
   "build_id": "dev-59ca38939769",
-  "generated_from_commit": "59ca3893976976069390bf79c4f7a02dbd41d198",
+  "generated_from_commit": "dd8ea318017a9fdaaaa11d001403a0653dce45ea",
   "generated_at_utc": "2026-10-02T20:31:28.681054Z",
   "total_bytes": 66725008,
-  "source_dirty": true
+  "source_dirty": false
 }
