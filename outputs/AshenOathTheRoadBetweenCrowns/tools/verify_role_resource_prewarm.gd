@@ -29,6 +29,9 @@ func run() -> void:
 	passed = passed and helper.request_role_resources(["door"]) == OK
 	passed = passed and helper.pending_role_resources.is_empty()
 	passed = passed and helper.load_runtime_resource(PATH) == cached
+	helper.resource_prewarm_error = "prior timeout"
+	helper.begin_resource_attempt()
+	passed = passed and helper.resource_prewarm_error.is_empty() and helper.load_runtime_resource(PATH) == cached
 	helper.clear_runtime_caches()
 	passed = passed and helper.resource_cache.is_empty()
 	passed = passed and helper.request_role_resources(["door"]) == OK

@@ -15,6 +15,20 @@ var pending_role_resources: Dictionary = {}
 var prepared_animation_libraries: Dictionary = {}
 var runtime_role_diagnostics: Dictionary = {}
 var _reported_blocked_roles: Dictionary = {}
+var resource_prewarm_error := ""
+
+func begin_resource_attempt() -> void:
+	resource_prewarm_error = ""
+	for path in pending_role_resources.keys():
+		var status := ResourceLoader.load_threaded_get_status(path)
+		if status == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+			pending_role_resources[path] = Time.get_ticks_msec()
+		else:
+			if status == ResourceLoader.THREAD_LOAD_LOADED:
+				var resource := ResourceLoader.load_threaded_get(path)
+				if resource != null:
+					resource_cache[path] = resource
+			pending_role_resources.erase(path)
 
 func request_role_resources(role_names: Array) -> Error:
 	_ensure_database()
@@ -29,11 +43,13 @@ func request_resource_paths(paths: Array) -> Error:
 	for raw_path in paths:
 		var path := str(raw_path)
 		if path.is_empty() or not ResourceLoader.exists(path):
+			resource_prewarm_error = path + ": resource not found"
 			return ERR_FILE_NOT_FOUND
 		if resource_cache.has(path) or pending_role_resources.has(path):
 			continue
 		var error := ResourceLoader.load_threaded_request(path)
 		if error != OK:
+			resource_prewarm_error = "%s: %s" % [path, error_string(error)]
 			return error
 		pending_role_resources[path] = Time.get_ticks_msec()
 	return OK
@@ -48,12 +64,15 @@ func poll_role_resources(timeout_msec: int = 20000) -> Error:
 			var resource := ResourceLoader.load_threaded_get(path)
 			pending_role_resources.erase(path)
 			if resource == null:
+				resource_prewarm_error = path + ": decoded resource is null"
 				return ERR_CANT_OPEN
 			resource_cache[path] = resource
 		elif status != ResourceLoader.THREAD_LOAD_IN_PROGRESS:
 			pending_role_resources.erase(path)
+			resource_prewarm_error = "%s: threaded load status %d" % [path, status]
 			return ERR_CANT_OPEN
 		elif Time.get_ticks_msec() - int(pending_role_resources[path]) > timeout_msec:
+			resource_prewarm_error = path + ": resource request timed out"
 			return ERR_TIMEOUT
 	return OK if pending_role_resources.is_empty() else ERR_BUSY
 
@@ -458,7 +477,12 @@ func _load_cached_resource(path: String):
 		return resource_cache[path]
 	if not ResourceLoader.exists(path):
 		return null
-	var resource = ResourceLoader.load(path)
+	var resource: Resource
+	if pending_role_resources.has(path):
+		resource = ResourceLoader.load_threaded_get(path)
+		pending_role_resources.erase(path)
+	else:
+		resource = ResourceLoader.load(path)
 	if resource != null:
 		resource_cache[path] = resource
 	return resource

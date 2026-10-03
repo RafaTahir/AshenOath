@@ -28,6 +28,17 @@ var texture_cache: Dictionary = {}
 var fallback_material: StandardMaterial3D
 var pending_textures: Dictionary = {}
 var prewarm_failed := false
+var prewarm_error := ""
+
+func begin_prewarm_attempt() -> void:
+	# Keep valid decoded textures, but never let a prior failure poison Retry.
+	poll_prewarm()
+	prewarm_failed = false
+	prewarm_error = ""
+	for file_name in texture_cache.keys():
+		if texture_cache[file_name] == null:
+			texture_cache.erase(file_name)
+			material_cache.clear()
 
 func prewarm_surfaces(surface_ids: Array, quality: String) -> void:
 	for surface_id in surface_ids:
@@ -42,7 +53,7 @@ func prewarm_surfaces(surface_ids: Array, quality: String) -> void:
 			var error := ResourceLoader.load_threaded_request(ROOT + file_name)
 			if error != OK:
 				prewarm_failed = true
-				push_error("Material prewarm failed: " + file_name)
+				prewarm_error = "%s: %s" % [ROOT + file_name, error_string(error)]
 			else:
 				pending_textures[file_name] = true
 
@@ -52,11 +63,15 @@ func poll_prewarm() -> Error:
 		var status := ResourceLoader.load_threaded_get_status(path)
 		if status == ResourceLoader.THREAD_LOAD_LOADED:
 			var texture := ResourceLoader.load_threaded_get(path) as Texture2D
-			texture_cache[file_name] = texture
+			if texture != null:
+				texture_cache[file_name] = texture
+			else:
+				prewarm_error = path + ": decoded texture is null"
 			prewarm_failed = prewarm_failed or texture == null
 			pending_textures.erase(file_name)
 		elif status != ResourceLoader.THREAD_LOAD_IN_PROGRESS:
 			prewarm_failed = true
+			prewarm_error = "%s: threaded load status %d" % [path, status]
 			pending_textures.erase(file_name)
 	if prewarm_failed:
 		return ERR_CANT_OPEN
@@ -330,6 +345,7 @@ func clear_cache() -> void:
 		ResourceLoader.load_threaded_get(ROOT + file_name)
 	pending_textures.clear()
 	prewarm_failed = false
+	prewarm_error = ""
 	material_cache.clear()
 	texture_cache.clear()
 	fallback_material = null
@@ -346,7 +362,8 @@ func _texture_file(file_name: String) -> Texture2D:
 		return texture_cache[file_name]
 	var path := ROOT + file_name
 	var texture := load(path) as Texture2D if ResourceLoader.exists(path) else null
-	texture_cache[file_name] = texture
+	if texture != null:
+		texture_cache[file_name] = texture
 	return texture
 
 func _apply_surface_flags(material: StandardMaterial3D, kind: String, surface_id: String, quality: String) -> void:

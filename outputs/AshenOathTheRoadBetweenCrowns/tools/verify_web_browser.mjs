@@ -21,6 +21,7 @@ const manualSave = Boolean(args["manual-save"]);
 const checkpointWaitMs = Number(args["checkpoint-wait-ms"] || 45000);
 const uiAcceptance = Boolean(args["ui-acceptance"]);
 const openingPresence = Boolean(args["opening-presence"]);
+const qualityStartup = Boolean(args["quality-startup"]);
 const QA_TEMP_ROOT = "D:\\Temp\\AshenOath";
 mkdirSync(QA_TEMP_ROOT, { recursive: true });
 // Hardware WebGL is the release acceptance path. Software remains available
@@ -329,7 +330,7 @@ async function testBrowser(name, executable) {
   const profile = join(QA_TEMP_ROOT, `ashen-oath-web001-${mobileMode ? "mobile-" : ""}${name.toLowerCase()}-${Date.now()}`);
   mkdirSync(profile, { recursive: true });
   const baseUrl = targetUrl || `http://127.0.0.1:${port}/index.html?v=${mobileMode ? "mobile001" : "web001"}-${name.toLowerCase()}${mobileMode ? "&touch=1" : ""}`;
-  const url = bridgeCrossing || interactionSmoke || persistenceSmoke
+  const url = bridgeCrossing || interactionSmoke || persistenceSmoke || qualityStartup
     ? `${baseUrl}${baseUrl.includes("?") ? "&" : "?"}observe=1`
     : baseUrl;
   const browserArgs = [
@@ -539,6 +540,57 @@ async function testBrowser(name, executable) {
     writeFileSync(menuScreenshotPath, Buffer.from(menuScreenshot.data, "base64"));
     let settingsScreenshotPath = null;
     const settingsPageScreenshots = [];
+    let qualityEvidence = null;
+    if (qualityStartup) {
+      const clickButton = async (prefix) => {
+        const point = await waitFor(async () => cdp.evaluate(`(() => {
+          const ui = window.__ashenOathReadOnlyObservation?.ui;
+          const button = ui?.buttons?.find(b => b.enabled && b.text.startsWith(${JSON.stringify(prefix)}));
+          if (!button) return null;
+          return {x: (button.position.x + button.size.x / 2) * ${viewportWidth} / ui.viewport.x,
+            y: (button.position.y + button.size.y / 2) * ${viewportHeight} / ui.viewport.y};
+        })()`), `${name} ${prefix} button`);
+        await dispatchPrimaryActivation(cdp, point);
+      };
+      await clickButton("Settings");
+      await clickButton("Visual Preset");
+      await waitFor(async () => cdp.evaluate(`window.__ashenOathReadOnlyObservation?.ui?.buttons?.some(b => b.text.startsWith("Visual Preset") && b.text.includes("Quality"))`), `${name} Quality selected`);
+      // Read durable storage, then restart normally. Never inject preferences.
+      await waitFor(async () => {
+        const response = await cdp.send("Runtime.evaluate", {
+          expression: `new Promise(resolve => {
+            const request = indexedDB.open('/userfs');
+            request.onupgradeneeded = () => request.transaction.abort();
+            request.onerror = () => resolve(false);
+            request.onsuccess = () => {
+              const db = request.result;
+              const tx = db.transaction('FILE_DATA', 'readonly');
+              let saved = false;
+              tx.oncomplete = () => { db.close(); resolve(saved); };
+              const store = tx.objectStore('FILE_DATA');
+              store.getAllKeys().onsuccess = e => {
+                const key = e.target.result.find(k => String(k).endsWith('/ashen_oath_settings.json'));
+                if (key) store.get(key).onsuccess = e => {
+                  saved = JSON.parse(new TextDecoder().decode(e.target.result.contents)).quality_preset === 'quality';
+                };
+              };
+            };
+          })`, awaitPromise: true, returnByValue: true,
+        });
+        return response.result?.value === true;
+      }, `${name} durable Quality preference`);
+      await waitFor(async () => cdp.evaluate(`window.__ashenOathOpeningState?.state === "ready"`), `${name} changed-preset preparation`);
+      const savedUrl = `${url}&saved-quality=1`;
+      const reloadStarted = Date.now();
+      await cdp.evaluate(`setTimeout(() => { location.href = ${JSON.stringify(savedUrl)}; }, 0); true`);
+      await waitFor(async () => cdp.evaluate(`location.href === ${JSON.stringify(savedUrl)} && window.__ashenOathOpeningState?.state === "ready" && document.querySelector('#boot')?.classList.contains('hidden')`), `${name} persisted Quality startup`);
+      const state = await cdp.evaluate(`window.__ashenOathReadOnlyObservation`);
+      if (state.runtime_packs.quality_materials.state !== "ready") {
+        throw new Error(`${name} saved Quality started without its texture pack`);
+      }
+      qualityEvidence = { persisted_preset: "quality", reload_to_menu_ms: Date.now() - reloadStarted,
+        quality_pack_mounted: true, input: "mouse settings then normal reload" };
+    }
     if (uiAcceptance) {
       if (mobileMode) throw new Error("UI acceptance requires the desktop viewport");
       await dispatchPrimaryActivation(cdp, { x: menuInputPoint.x, y: viewportHeight * (361 / 720) });
@@ -871,6 +923,7 @@ async function testBrowser(name, executable) {
         warm_menu_screenshot: warmMenuScreenshotPath,
         read_only_observation: true,
       };
+      if (qualityStartup && continued.settings.quality_preset !== "quality") throw new Error(`${name} Continue lost Quality settings`);
     }
     const errorEvents = cdp.events.filter((event) =>
       event.method === "Runtime.exceptionThrown"
@@ -927,6 +980,7 @@ async function testBrowser(name, executable) {
       interaction_smoke: interactionResult,
       persistence_smoke: persistenceResult,
       ui_acceptance: uiEvidence,
+      quality_startup: qualityEvidence,
       screenshot: screenshotPath,
       opening_first_control_screenshot: openingScreenshotPath,
       screenshot_capture_mode: screenshot.capture_mode,

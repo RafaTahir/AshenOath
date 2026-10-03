@@ -168,6 +168,8 @@ var requested_zone_spawn := Vector3.ZERO
 var campaign_pack_waiting := false
 var opening_pack_waiting := false
 var greyfen_prewarm_started := false
+var opening_prepare_generation := 0
+const OPENING_BUILD_SLICE_USEC := 8000
 var startup_packs_waiting := false
 var startup_prepare_failed := false
 var new_game_requested_while_preparing := false
@@ -612,6 +614,8 @@ func _perform_requested_zone_load() -> void:
 	_load_zone_after_runtime_pack(destination, arrival)
 
 func _load_zone_after_runtime_pack(zone_id: String, spawn_pos: Vector3) -> void:
+	if runtime_packs != null:
+		runtime_packs.quality_preset = str(settings.settings.get("quality_preset", "balanced"))
 	zone_pack_request_serial += 1
 	opening_pack_waiting = false
 	campaign_pack_waiting = false
@@ -878,6 +882,9 @@ func load_save_state(data: Dictionary) -> void:
 				hud.toast("This save belongs to a newer version of Ashen Oath.")
 			return
 	data = migrated_data
+	if not game_started:
+		_discard_menu_opening()
+	new_game_start_pending = false
 	opening_checkpoint_pending = false
 	_clear_route_zone_cache()
 	game_started = true
@@ -2241,9 +2248,15 @@ func _story_choice_prerequisites_done(quest_id: String, choice_id: String) -> bo
 	save_manager.autosave(self)
 
 func _on_launch_accepted() -> void:
+	if startup_packs_waiting or greyfen_prewarm_started or game_started:
+		return
+	opening_prepare_generation += 1
+	if runtime_packs != null:
+		runtime_packs.quality_preset = str(settings.settings.get("quality_preset", "balanced"))
 	audio.play_event("ui", 0.0)
 	var retry_failed := startup_prepare_failed
 	startup_prepare_failed = false
+	_publish_web_opening_state("preparing", "Preparing Greyfen...")
 	if hud != null and hud.has_method("set_new_game_status"):
 		hud.set_new_game_status("Greyfen is waking. New Game remains available while it prepares.")
 	# Keep the same menu-covered prewarm on Web and desktop. The HTML shell is
@@ -2272,13 +2285,13 @@ func _on_launch_accepted() -> void:
 		call_deferred("_begin_opening_prewarm_if_ready")
 		# Cached Web packs can complete synchronously. The signal path handles
 		# asynchronous downloads without depending on a paused-tree frame.
-		call_deferred("_wait_for_startup_packs_then_prewarm")
+		call_deferred("_wait_for_startup_packs_then_prewarm", opening_prepare_generation)
 		return
 	if not greyfen_prewarm_started and not game_started:
 		_begin_opening_prewarm()
 
 func _on_startup_pack_ready(_pack_id: String) -> void:
-	if game_started or runtime_packs == null:
+	if game_started or startup_prepare_failed or not startup_packs_waiting or runtime_packs == null:
 		return
 	if not runtime_packs.startup_packs_ready():
 		return
@@ -2294,10 +2307,10 @@ func _begin_opening_prewarm_if_ready() -> void:
 		startup_packs_waiting = false
 		_begin_opening_prewarm()
 
-func _wait_for_startup_packs_then_prewarm() -> void:
+func _wait_for_startup_packs_then_prewarm(generation: int) -> void:
 	var deadline := Time.get_ticks_msec() + 120000
 	while Time.get_ticks_msec() < deadline:
-		if resource_shutdown_prepared or game_started:
+		if not _opening_attempt_current(generation):
 			return
 		if runtime_packs != null and runtime_packs.has_method("startup_packs_ready") and runtime_packs.startup_packs_ready():
 			startup_packs_waiting = false
@@ -2317,21 +2330,28 @@ func _wait_for_startup_packs_then_prewarm() -> void:
 	_opening_prepare_failed("Opening content took too long to prepare. Select New Game to retry.")
 
 func _begin_opening_prewarm() -> void:
-	if game_started or greyfen_prewarm_started:
+	if game_started or greyfen_prewarm_started or route_zone_cache.has("greyfen"):
 		return
 	# A returning player needs the saved world, not a disposable New Game world.
 	# Explicit New Game still takes the normal queued/prewarmed path.
 	if not new_game_start_pending and hud != null and hud._has_continue_save():
+		var generation := opening_prepare_generation
 		hud.set_new_game_status("Continue your saved journey, or begin a new one.")
 		hud.set_boot_shell_cover_active(false)
 		if OS.has_feature("web"):
 			# Saved journeys skip world prewarm, but still need the rendered menu
 			# handoff that releases the HTML loading cover.
 			await RenderingServer.frame_post_draw
+			if not _opening_attempt_current(generation):
+				return
 			await get_tree().process_frame
+			if not _opening_attempt_current(generation):
+				return
 			_publish_web_opening_state("ready", "Continue your saved journey, or begin a new one.")
 		return
 	greyfen_prewarm_started = true
+	world_materials.begin_prewarm_attempt()
+	asset_helper.begin_resource_attempt()
 	# Both platforms now own the opening pack before requesting its resources.
 	if DisplayServer.get_name().to_lower() != "headless":
 		world_materials.prewarm_surfaces(["forest_ground", "cobblestone", "wet_mud", "medieval_brick", "plaster", "timber", "roof_tiles"], str(settings.settings.get("quality_preset", "balanced")))
@@ -2350,9 +2370,47 @@ func _begin_opening_prewarm() -> void:
 	# Opening resources have mounted before this point on Web. Later character,
 	# monster and campaign packs remain independent of menu readiness.
 	print("LOADING: Greyfen prewarm begin")
-	call_deferred("_prewarm_greyfen_after_menu_frame")
+	call_deferred("_prepare_opening_resources", opening_prepare_generation)
+
+func _opening_attempt_current(generation: int) -> bool:
+	return generation == opening_prepare_generation and not resource_shutdown_prepared and not game_started
+
+func _prepare_opening_resources(generation: int) -> void:
+	if not _opening_attempt_current(generation):
+		return
+	# Poll before drawing the world: first-use rendering must not consume the
+	# asset request timeout or obscure which resource actually failed.
+	if DisplayServer.get_name().to_lower() != "headless":
+		var deadline := Time.get_ticks_msec() + 30000
+		while _opening_attempt_current(generation):
+			var surfaces: Error = world_materials.poll_prewarm()
+			var actors: Error = asset_helper.poll_role_resources(30000)
+			if surfaces == OK and actors == OK:
+				break
+			if surfaces not in [OK, ERR_BUSY] or actors not in [OK, ERR_BUSY] or Time.get_ticks_msec() >= deadline:
+				print("LOADING: opening_resource_failure materials=%s actors=%s" % [world_materials.prewarm_error, asset_helper.resource_prewarm_error])
+				_opening_prepare_failed("Greyfen's authored resources could not be prepared. Select New Game to retry.")
+				return
+			await get_tree().process_frame
+	if _opening_attempt_current(generation):
+		_prewarm_greyfen_after_menu_frame(generation)
+
+func _discard_menu_opening() -> void:
+	opening_prepare_generation += 1
+	_clear_route_zone_cache()
+	_abort_opening_prewarm(zone_root, greyfen_prewarm_spatial_service, "Preparing Greyfen...")
+
+func _restart_menu_opening() -> void:
+	if game_started:
+		return
+	_discard_menu_opening()
+	var generation := opening_prepare_generation
+	await get_tree().process_frame
+	if _opening_attempt_current(generation):
+		_on_launch_accepted()
 
 func _opening_prepare_failed(message: String) -> void:
+	opening_prepare_generation += 1
 	startup_packs_waiting = false
 	greyfen_prewarm_started = false
 	startup_prepare_failed = true
@@ -2395,7 +2453,11 @@ func _publish_web_opening_state(state: String, message: String = "") -> void:
 	})
 	JavaScriptBridge.eval("window.__ashenOathOpeningState = %s;" % payload, false)
 
-func _prewarm_greyfen_after_menu_frame() -> void:
+func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
+	if generation < 0:
+		generation = opening_prepare_generation
+	if not _opening_attempt_current(generation):
+		return
 	# Start immediately after the launch shell is accepted. Deferring the first
 	# build frame allowed a fast test click (and a fast human click) to race the
 	# prewarm and fall back to a cold Greyfen build. The launch/menu presentation
@@ -2499,9 +2561,10 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 		# after the player clicks New Game.
 		get_tree().paused = false
 		await get_tree().process_frame
+		if not _opening_attempt_current(generation):
+			return
 		await RenderingServer.frame_post_draw
-		if resource_shutdown_prepared or not is_instance_valid(prewarm_root):
-			get_tree().paused = was_paused
+		if not _opening_attempt_current(generation) or not is_instance_valid(prewarm_root):
 			return
 		prewarm_root.set_meta("opening_unpaused_frame_prewarmed", true)
 	# Complete first-use mesh and texture decoding under the menu cover. Doing
@@ -2512,27 +2575,11 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 		get_tree().paused = was_paused
 		_abort_opening_prewarm(prewarm_root, prewarm_service, "Greyfen's authored well could not be prepared. Select New Game to retry.")
 		return
-	if DisplayServer.get_name().to_lower() != "headless":
-		var resource_deadline := Time.get_ticks_msec() + 30000
-		while Time.get_ticks_msec() < resource_deadline:
-			var surface_status: Error = world_materials.poll_prewarm()
-			var actor_status: Error = asset_helper.poll_role_resources()
-			if surface_status not in [OK, ERR_BUSY] or actor_status not in [OK, ERR_BUSY]:
-				get_tree().paused = was_paused
-				_abort_opening_prewarm(prewarm_root, prewarm_service, "Greyfen's authored resources could not be prepared. Select New Game to retry.")
-				return
-			if surface_status == OK and actor_status == OK:
-				break
-			await get_tree().process_frame
-	if DisplayServer.get_name().to_lower() != "headless" and (world_materials.poll_prewarm() != OK or asset_helper.poll_role_resources() != OK):
-		get_tree().paused = was_paused
-		_abort_opening_prewarm(prewarm_root, prewarm_service, "Greyfen's authored resources took too long to prepare. Select New Game to retry.")
-		return
+	var slice_started := Time.get_ticks_usec()
 	for covered_stage in OPENING_DETAIL_STAGES:
 		if not _opening_stage_required_before_control(covered_stage):
 			continue
-		if resource_shutdown_prepared or not is_instance_valid(prewarm_root):
-			get_tree().paused = was_paused
+		if not _opening_attempt_current(generation) or not is_instance_valid(prewarm_root):
 			return
 		environment_batches_flushed = false
 		var covered_result := ZoneCompositionRouter.build_core_detail_stage(self, "greyfen", covered_stage)
@@ -2544,9 +2591,11 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 		_clear_environment_batch_buffers()
 		environment_batches_flushed = true
 		_record_opening_stage(prewarm_root, covered_stage)
-		await get_tree().process_frame
-		if DisplayServer.get_name().to_lower() != "headless":
-			await RenderingServer.frame_post_draw
+		if Time.get_ticks_usec() - slice_started >= OPENING_BUILD_SLICE_USEC:
+			await get_tree().process_frame
+			slice_started = Time.get_ticks_usec()
+	if not _opening_attempt_current(generation):
+		return
 	if not _opening_presentation_present(prewarm_root):
 		get_tree().paused = was_paused
 		_abort_opening_prewarm(prewarm_root, prewarm_service, "Greyfen's scenery is incomplete. Select New Game to retry.")
@@ -2556,7 +2605,11 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 	camera_rig.prepare_view()
 	if DisplayServer.get_name().to_lower() != "headless":
 		await get_tree().process_frame
+		if not _opening_attempt_current(generation):
+			return
 		await RenderingServer.frame_post_draw
+		if not _opening_attempt_current(generation):
+			return
 		prewarm_root.set_meta("opening_first_frame_rendered", true)
 	prewarm_root.set_meta("opening_presentation_ready", true)
 	get_tree().paused = was_paused
@@ -2591,7 +2644,12 @@ func _prewarm_greyfen_after_menu_frame() -> void:
 	# completed one real draw. Publishing readiness in the same tick as the
 	# reveal lets the shell disappear onto an uncompiled black frame in WebGL.
 	await RenderingServer.frame_post_draw
+	if not _opening_attempt_current(generation):
+		return
 	await get_tree().process_frame
+	if not _opening_attempt_current(generation):
+		return
+	greyfen_prewarm_started = false
 	_publish_web_opening_state("ready", "Greyfen is ready.")
 	print("LOADING: opening_menu_render_ready")
 	print("LOADING: Greyfen prewarmed total=%dms build=%dms world=%dms player=%dms" % [
@@ -3609,7 +3667,7 @@ func _handle_setting(action: String) -> void:
 		var preset = settings.cycle_quality_preset()
 		hud.toast("Visual preset: %s" % preset.capitalize())
 		if game_started and player != null:
-			_load_zone(current_zone_id, player.global_position)
+			_load_zone_after_runtime_pack(current_zone_id, player.global_position)
 	elif action == "mouse_sensitivity":
 		settings.cycle_mouse_sensitivity()
 	elif action == "gamepad_sensitivity":
@@ -3639,6 +3697,12 @@ func _handle_setting(action: String) -> void:
 	hud.show_settings_menu(hud.controls_back_target)
 
 func _apply_runtime_settings(current_settings: Dictionary) -> void:
+	if runtime_packs != null:
+		var preset := str(current_settings.get("quality_preset", "balanced"))
+		var changed: bool = runtime_packs.quality_preset != preset
+		runtime_packs.quality_preset = preset
+		if changed and not game_started and (greyfen_prewarm_started or startup_packs_waiting or route_zone_cache.has("greyfen")):
+			_restart_menu_opening()
 	if performance_budget_monitor != null:
 		performance_budget_monitor.quality = str(current_settings.get("quality_preset", "balanced"))
 	if audio != null:

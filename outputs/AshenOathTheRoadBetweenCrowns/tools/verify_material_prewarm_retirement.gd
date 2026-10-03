@@ -24,6 +24,21 @@ func _run() -> void:
 		status = library.poll_prewarm()
 	if status != OK or library.texture_cache.size() != 4:
 		failure = "Retired owner could not prewarm again"
+	var cached_texture = library.texture_cache.get("timber_albedo.jpg")
+	# Reproduce the old sticky failure/null cache without emitting fake engine errors.
+	library.prewarm_failed = true
+	library.prewarm_error = "previous attempt"
+	library.texture_cache["timber_normal.jpg"] = null
+	library.begin_prewarm_attempt()
+	library.prewarm_surfaces(["timber"], "quality")
+	deadline = Time.get_ticks_msec() + 10000
+	status = library.poll_prewarm()
+	while status == ERR_BUSY and Time.get_ticks_msec() < deadline:
+		await process_frame
+		status = library.poll_prewarm()
+	if status != OK or library.texture_cache.get("timber_normal.jpg") == null or library.texture_cache.get("timber_albedo.jpg") != cached_texture:
+		failure = "Retry failed to recover Quality while retaining valid textures"
+	cached_texture = null
 	library.clear_cache()
 	library.clear_cache()
 	library.queue_free()

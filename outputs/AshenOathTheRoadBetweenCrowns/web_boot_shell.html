@@ -94,14 +94,18 @@
           .map((value) => value.toString(16).padStart(2, '0')).join('');
       }
       async function prefetchOpeningPack() {
+        const controller = new AbortController();
+        const timeout = window.setTimeout(() => controller.abort(), 90000);
+        window.__ashenOathPreloadedPacks.opening = { state: 'loading' };
+        let packCache = null, packUrl = '';
         try {
-          const releaseResponse = await fetch('release_manifest.json', { cache: 'no-cache' });
+          const releaseResponse = await fetch('release_manifest.json', { cache: 'no-cache', signal: controller.signal });
           if (!releaseResponse.ok) throw new Error(`release manifest HTTP ${releaseResponse.status}`);
           const release = await releaseResponse.json();
           if (String(release?.build_id || '') !== SHELL_BUILD_ID) {
             throw new Error(`shell build ${SHELL_BUILD_ID} != release ${release?.build_id || 'missing'}`);
           }
-          const manifestResponse = await fetch('runtime_pack_manifest.json', { cache: 'no-cache' });
+          const manifestResponse = await fetch('runtime_pack_manifest.json', { cache: 'no-cache', signal: controller.signal });
           if (!manifestResponse.ok) throw new Error(`runtime pack manifest HTTP ${manifestResponse.status}`);
           const manifestPayload = await manifestResponse.arrayBuffer();
           const manifestDigest = await sha256Hex(manifestPayload);
@@ -118,21 +122,20 @@
           });
           const opening = manifest?.packs?.opening;
           if (!opening?.url) throw new Error('runtime pack manifest has no opening pack URL');
-          const packUrl = new URL(opening.url, window.location.href).href;
+          packUrl = new URL(opening.url, window.location.href).href;
           setBootState(bootMetrics.state, { opening_prefetch_state: 'loading' });
           let packResponse = null;
           if ('caches' in window) {
             const cacheKey = String(release?.compatibility_key || manifestDigest).slice(0, 24);
-            const packCache = await caches.open(`ashenoath-runtime-packs-${cacheKey}`);
+            packCache = await caches.open(`ashenoath-runtime-packs-${cacheKey}`);
             packResponse = await packCache.match(packUrl);
             if (!packResponse) {
-              const downloaded = await fetch(packUrl, { cache: 'no-cache' });
+              const downloaded = await fetch(packUrl, { cache: 'no-cache', signal: controller.signal });
               if (!downloaded.ok) throw new Error(`opening pack HTTP ${downloaded.status}`);
-              await packCache.put(packUrl, downloaded.clone());
               packResponse = downloaded;
             }
           } else {
-            packResponse = await fetch(packUrl, { cache: 'force-cache' });
+            packResponse = await fetch(packUrl, { cache: 'force-cache', signal: controller.signal });
           }
           if (!packResponse.ok) throw new Error(`opening pack HTTP ${packResponse.status}`);
           const payload = await packResponse.arrayBuffer();
@@ -144,6 +147,8 @@
           if (digest !== String(opening.sha256).toLowerCase()) {
             throw new Error(`opening pack SHA-256 ${digest} != ${opening.sha256}`);
           }
+          // Cache only verified bytes. Quota failures must not discard a valid pack.
+          if (packCache) await packCache.put(packUrl, new Response(payload)).catch(() => {});
           const preload = {
             state: 'verified',
             path: '/opening.pck',
@@ -159,6 +164,7 @@
           });
           return { ...preload, payload };
         } catch (error) {
+          if (packCache && packUrl) await packCache.delete(packUrl).catch(() => {});
           // Godot retains authoritative retry, hash verification, and error UI.
           // A shell prefetch failure must not prevent the engine from starting.
           setBootState(bootMetrics.state, {
@@ -167,13 +173,16 @@
           });
           window.__ashenOathPreloadedPacks.opening = { state: 'failed', error: String(error) };
           return null;
+        } finally {
+          window.clearTimeout(timeout);
         }
       }
+      let openingFetchPromise = null;
       let openingPreloadPromise = null;
       async function mountOpeningPackAfterReady() {
         if (openingPreloadPromise) return openingPreloadPromise;
         openingPreloadPromise = (async () => {
-          const openingPreload = await prefetchOpeningPack();
+          const openingPreload = await (openingFetchPromise || (openingFetchPromise = prefetchOpeningPack()));
           if (!openingPreload) {
             window.dispatchEvent(new CustomEvent('ashenoath-opening-pack', { detail: { state: 'failed' } }));
             return null;
@@ -182,6 +191,7 @@
             if (!engineBooted || !engine) throw new Error('engine is not ready for opening pack mount');
             engine.copyToFS(openingPreload.path, openingPreload.payload);
             const { payload, ...metadata } = openingPreload;
+            openingFetchPromise = null;
             window.__ashenOathPreloadedPacks.opening = { ...metadata, state: 'preloaded' };
             setBootState(bootMetrics.state, { opening_prefetch_state: 'preloaded' });
             window.dispatchEvent(new CustomEvent('ashenoath-opening-pack', {
@@ -264,6 +274,8 @@
         bootMetrics.engine_start_ms = performance.now();
         performance.mark('ashen-oath-engine-start');
         setBootState('engine_starting');
+        openingPreloadPromise = null;
+        openingFetchPromise = prefetchOpeningPack();
         let engineLoadPromise = null;
         try {
           engine = new Engine(GODOT_CONFIG);
@@ -282,6 +294,7 @@
         setBootState('loading');
         engine.startGame({ onProgress: (current, total) => { const ratio = current > 0 && total > 0 ? current / total : 0; const visibleRatio = Math.min(0.92, ratio); bootMetrics.progress_samples += 1; progress.style.width = `${Math.round(visibleRatio * 100)}%`; setStatus(ratio >= 1 ? 'Runtime files are ready. Preparing Greyfen...' : (ratio > 0 ? `Opening the road... ${Math.round(visibleRatio * 100)}%` : 'Opening the road...')); } }).then(() => {
           engineBooted = true;
+          void mountOpeningPackAfterReady();
           bootMetrics.engine_ready_ms = performance.now();
           performance.mark('ashen-oath-engine-ready');
           setBootState('opening_preparing', { engine_ready_elapsed_ms: Math.round(bootMetrics.engine_ready_ms - bootMetrics.engine_start_ms) });

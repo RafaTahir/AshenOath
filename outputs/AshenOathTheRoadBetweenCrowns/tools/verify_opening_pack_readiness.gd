@@ -14,6 +14,24 @@ func _initialize() -> void:
 		_fail(manager, "Greyfen detail/travel permits a missing opening pack")
 		return
 	manager.requests["opening"] = {"state": "ready", "progress": 1.0}
+	manager.quality_preset = "quality"
+	if manager.startup_packs_ready() or manager.zone_packs_ready("greyfen"):
+		_fail(manager, "Saved Quality permits unmounted PBR textures")
+		return
+	manager.requests["quality_materials"] = {"state": "failed", "error": "fixture"}
+	if manager.startup_pack_failures().size() != 1:
+		_fail(manager, "Quality download failure must be retryable")
+		return
+	manager.quality_preset = "balanced"
+	if not manager.startup_pack_failures().is_empty():
+		_fail(manager, "Balanced was poisoned by an unrelated Quality failure")
+		return
+	manager.quality_preset = "quality"
+	manager.requests["quality_materials"] = {"state": "ready", "progress": 1.0}
+	if not manager.startup_packs_ready() or not manager.zone_packs_ready("greyfen"):
+		_fail(manager, "Mounted Quality content was rejected")
+		return
+	manager.quality_preset = "balanced"
 	if not manager.startup_packs_ready():
 		_fail(manager, "Opening and base must allow prewarm without campaign")
 		return

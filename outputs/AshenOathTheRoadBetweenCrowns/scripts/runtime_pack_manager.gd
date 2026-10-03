@@ -35,6 +35,14 @@ var active_downloads: Dictionary = {}
 var startup_requested := false
 var background_requested := false
 var scheduling_downloads := false
+var quality_preset := "balanced"
+var web_preload_wait_started := 0
+
+func required_startup_packs() -> Array[String]:
+	var ids: Array[String] = STARTUP_PACK_IDS.duplicate()
+	if quality_preset == "quality":
+		ids.append("quality_materials")
+	return ids
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -146,7 +154,7 @@ func get_cache_path(pack_id: String) -> String:
 func request_startup_packs(retry_failed := false) -> bool:
 	startup_requested = true
 	var accepted := true
-	for id in STARTUP_PACK_IDS:
+	for id in required_startup_packs():
 		if retry_failed and get_state(id) == "failed":
 			requests.erase(id)
 		if not request_pack(id):
@@ -166,7 +174,7 @@ func request_background_packs() -> bool:
 	return accepted
 
 func required_zone_packs(zone_id: String) -> Array[String]:
-	var result: Array[String] = ["base", "opening"]
+	var result: Array[String] = required_startup_packs()
 	if zone_id != "greyfen":
 		result.append("monsters")
 	if zone_id not in ["greyfen", "wychwood", "cemetery", "ruins"]:
@@ -194,23 +202,23 @@ func zone_pack_failures(zone_id: String) -> Array[String]:
 	return failures
 
 func startup_packs_ready() -> bool:
-	for id in STARTUP_PACK_IDS:
+	for id in required_startup_packs():
 		if not is_ready(id):
 			return false
 	return true
 
 func startup_pack_failures() -> Array[String]:
 	var failures: Array[String] = []
-	for id in STARTUP_PACK_IDS:
+	for id in required_startup_packs():
 		if get_state(id) == "failed":
 			failures.append("%s: %s" % [id, get_last_error(id)])
 	return failures
 
 func startup_pack_progress() -> float:
 	var total := 0.0
-	for id in STARTUP_PACK_IDS:
+	for id in required_startup_packs():
 		total += get_progress(id)
-	return total / float(STARTUP_PACK_IDS.size())
+	return total / float(required_startup_packs().size())
 
 func set_pack_source(pack_id: String, url: String) -> void:
 	var id := _normalise_id(pack_id)
@@ -269,7 +277,7 @@ func _queue_pack(id: String) -> bool:
 	if pack.is_empty():
 		_fail(id, "Unknown runtime pack")
 		return false
-	if get_state(id) in ["queued", "downloading", "verifying", "mounting"]:
+	if get_state(id) in ["queued", "shell_loading", "downloading", "verifying", "mounting"]:
 		return true
 	var url := str(source_overrides.get(id, pack.get("url", ""))).strip_edges()
 	if url == "" and not has_embedded_content(id):
@@ -427,6 +435,12 @@ func _start_download(id: String) -> void:
 		_mark_embedded_ready(id)
 		return
 	if OS.has_feature("web") and _try_mount_web_preloaded_pack(id):
+		return
+	if OS.has_feature("web") and id == "opening" and get_web_preloaded_state(id) in ["loading", "verified"]:
+		# Join the shell's verified fetch; do not download the same pack twice.
+		web_preload_wait_started = Time.get_ticks_msec()
+		request["state"] = "shell_loading"
+		requests[id] = request
 		return
 	var cache_path := _cache_path(id)
 	if FileAccess.file_exists(cache_path):
@@ -698,6 +712,13 @@ func _remove_file(path: String) -> void:
 	DirAccess.remove_absolute(path)
 
 func _process(_delta: float) -> void:
+	if OS.has_feature("web") and get_state("opening") == "shell_loading":
+		var state := get_web_preloaded_state("opening")
+		if state not in ["loading", "verified"]:
+			requests["opening"]["state"] = "queued"
+			_start_pending_downloads()
+		elif Time.get_ticks_msec() - web_preload_wait_started > 120000:
+			_fail("opening", "Opening download timed out; select New Game to retry")
 	if active_downloads.is_empty():
 		return
 	for value in active_downloads.keys():
