@@ -1,5 +1,13 @@
-# Deploy only the exported game and hosting configuration.
-*
-!web/
-!web/**
-!vercel.json
+# Keep the exported web directory available to Vercel's static build.
+outputs
+outputs/**
+work
+work/**
+.release-gate
+.release-gate/**
+.git
+.git/**
+.vercel
+.vercel/**
+.env*
+*.md
