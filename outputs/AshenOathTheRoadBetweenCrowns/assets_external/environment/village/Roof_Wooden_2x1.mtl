@@ -8,9 +8,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd C:/Users/Usuario/Desktop/Work/Blender/_FreeModels/_Unfinished/Medieval Village/Textures/T_WoodTrim_BaseColor.png
-map_Ns C:/Users/Usuario/Desktop/Work/Blender/_FreeModels/_Unfinished/Medieval Village/Textures/T_WoodTrim_Roughness.png
-map_Bump -bm 1.000000 C:/Users/Usuario/Desktop/Work/Blender/_FreeModels/_Unfinished/Medieval Village/Textures/T_WoodTrim_Normal.png
+map_Kd T_WoodTrim_BaseColor.png
+map_Ns T_WoodTrim_Roughness.png
+map_Bump -bm 1.000000 T_WoodTrim_Normal.png
 
 newmtl MI_WoodTrim_Wear
 Ka 1.000000 1.000000 1.000000
@@ -19,6 +19,6 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd C:/Users/Usuario/Desktop/Work/Blender/_FreeModels/_Unfinished/Medieval Village/Textures/T_WoodTrim_BaseColor.png
-map_Ns C:/Users/Usuario/Desktop/Work/Blender/_FreeModels/_Unfinished/Medieval Village/Textures/T_WoodTrim_Roughness.png
-map_Bump -bm 1.000000 C:/Users/Usuario/Desktop/Work/Blender/_FreeModels/_Unfinished/Medieval Village/Textures/T_WoodTrim_Normal.png
+map_Kd T_WoodTrim_BaseColor.png
+map_Ns T_WoodTrim_Roughness.png
+map_Bump -bm 1.000000 T_WoodTrim_Normal.png

@@ -27,7 +27,7 @@ from pipeline_common import (
     safe_name,
 )
 
-USEFUL_EXTS = MODEL_EXTS | TEXTURE_EXTS | AUDIO_EXTS | {".txt", ".md", ".pdf", ".rtf"}
+USEFUL_EXTS = MODEL_EXTS | TEXTURE_EXTS | AUDIO_EXTS | {".bin", ".mtl", ".txt", ".md", ".pdf", ".rtf"}
 DOWNLOAD_EXTS = {".zip", ".7z", ".rar"} | MODEL_EXTS | TEXTURE_EXTS | AUDIO_EXTS
 PLACEHOLDER = "PASTE_DIRECT_DOWNLOAD_URL_HERE"
 DEFAULT_TIMEOUT = 60
