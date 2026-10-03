@@ -40,7 +40,7 @@ static func slot_row(slot: Dictionary) -> String:
 	var source_label: String = str(slot.get("source_label", ""))
 	if source_label != "" and source_label != str(slot.get("title", "")):
 		lines.append(source_label)
-	lines.append(status_text(str(slot.get("status", "ready" if bool(slot.get("valid", false)) else "empty")))
+	lines.append(status_text(str(slot.get("status", "ready" if bool(slot.get("valid", false)) else "empty"))))
 	var place: String = str(summary.get("place", slot.get("zone", "")))
 	var chapter: String = str(summary.get("chapter", ""))
 	if place != "" or chapter != "":
