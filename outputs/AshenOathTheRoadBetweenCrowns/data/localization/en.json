@@ -124,11 +124,71 @@
       "speaker": "",
       "context": "campaign_dialogue.assembly_choice.actions.4"
     },
+    "campaign_dialogue.assembly_choice.greeting": {
+      "source": "Edric's grain list lies beside the new seal. Some households have already signed because their sacks are empty.",
+      "text": "Edric's grain list lies beside the new seal. Some households have already signed because their sacks are empty.",
+      "speaker": "",
+      "context": "campaign_dialogue.assembly_choice"
+    },
+    "campaign_dialogue.assembly_choice.lines.0": {
+      "source": "Anwen: The wax will not hold. They agreed to eat, Edric. They did not agree to carry the road.",
+      "text": "Anwen: The wax will not hold. They agreed to eat, Edric. They did not agree to carry the road.",
+      "speaker": "",
+      "context": "campaign_dialogue.assembly_choice.lines"
+    },
+    "campaign_dialogue.assembly_choice.lines.1": {
+      "source": "Kael: I left civilians on a road after promising escort. I called it a retreat in my report. That part of my report was a lie.",
+      "text": "Kael: I left civilians on a road after promising escort. I called it a retreat in my report. That part of my report was a lie.",
+      "speaker": "",
+      "context": "campaign_dialogue.assembly_choice.lines"
+    },
+    "campaign_dialogue.assembly_choice.lines.2": {
+      "source": "Rook: Then do not ask us to sign yours because you finally stayed.",
+      "text": "Rook: Then do not ask us to sign yours because you finally stayed.",
+      "speaker": "",
+      "context": "campaign_dialogue.assembly_choice.lines"
+    },
+    "campaign_dialogue.assembly_choice.lines.3": {
+      "source": "Kael: I will not. The copies establish what happened. Each of you decides whether to offer more.",
+      "text": "Kael: I will not. The copies establish what happened. Each of you decides whether to offer more.",
+      "speaker": "",
+      "context": "campaign_dialogue.assembly_choice.lines"
+    },
+    "campaign_dialogue.assembly_choice.lines.4": {
+      "source": "Anwen: Break the grain condition before you touch the seal. Otherwise the rite only learns a new way to threaten us.",
+      "text": "Anwen: Break the grain condition before you touch the seal. Otherwise the rite only learns a new way to threaten us.",
+      "speaker": "",
+      "context": "campaign_dialogue.assembly_choice.lines"
+    },
     "campaign_dialogue.assembly_choice.name": {
       "source": "Greyfen Assembly",
       "text": "Greyfen Assembly",
       "speaker": "",
       "context": "campaign_dialogue.assembly_choice"
+    },
+    "campaign_dialogue.assembly_choice.variants.0.greeting": {
+      "source": "Edric removes his seal from the grain list in front of the waiting households.",
+      "text": "Edric removes his seal from the grain list in front of the waiting households.",
+      "speaker": "",
+      "context": "campaign_dialogue.assembly_choice.variants.0"
+    },
+    "campaign_dialogue.assembly_choice.variants.0.lines.0": {
+      "source": "Edric: Every household receives its allotment. No signature. My account comes afterward.",
+      "text": "Edric: Every household receives its allotment. No signature. My account comes afterward.",
+      "speaker": "",
+      "context": "campaign_dialogue.assembly_choice.variants.0.lines"
+    },
+    "campaign_dialogue.assembly_choice.variants.0.lines.1": {
+      "source": "Kael: I left people behind under a retreat order. I stayed away and called it duty. That is my account before I ask for yours.",
+      "text": "Kael: I left people behind under a retreat order. I stayed away and called it duty. That is my account before I ask for yours.",
+      "speaker": "",
+      "context": "campaign_dialogue.assembly_choice.variants.0.lines"
+    },
+    "campaign_dialogue.assembly_choice.variants.0.lines.2": {
+      "source": "Rook: Then give people time to decide. A hand raised in relief is not an oath.",
+      "text": "Rook: Then give people time to decide. A hand raised in relief is not an oath.",
+      "speaker": "",
+      "context": "campaign_dialogue.assembly_choice.variants.0.lines"
     },
     "campaign_dialogue.bog_core_choice.actions.0.cost": {
       "source": "This records an explicit promise or practical action. A record cannot supply someone else's consent.",
@@ -202,11 +262,71 @@
       "speaker": "",
       "context": "campaign_dialogue.bog_core_choice.actions.2"
     },
+    "campaign_dialogue.bog_core_choice.greeting": {
+      "source": "The root knot tightens around a small painted crow. One frightened moment keeps moving through it.",
+      "text": "The root knot tightens around a small painted crow. One frightened moment keeps moving through it.",
+      "speaker": "",
+      "context": "campaign_dialogue.bog_core_choice"
+    },
+    "campaign_dialogue.bog_core_choice.lines.0": {
+      "source": "Mira: Oren said the name. Something opened. This is not him returned to answer us.",
+      "text": "Mira: Oren said the name. Something opened. This is not him returned to answer us.",
+      "speaker": "",
+      "context": "campaign_dialogue.bog_core_choice.lines"
+    },
+    "campaign_dialogue.bog_core_choice.lines.1": {
+      "source": "Kael: If we break it?",
+      "text": "Kael: If we break it?",
+      "speaker": "",
+      "context": "campaign_dialogue.bog_core_choice.lines"
+    },
+    "campaign_dialogue.bog_core_choice.lines.2": {
+      "source": "Mira: This vessel stops. Its memory disperses. If we keep it, we must stop treating every reaction as an invitation.",
+      "text": "Mira: This vessel stops. Its memory disperses. If we keep it, we must stop treating every reaction as an invitation.",
+      "speaker": "",
+      "context": "campaign_dialogue.bog_core_choice.lines"
+    },
+    "campaign_dialogue.bog_core_choice.lines.3": {
+      "source": "Kael: Or return the fragment where his name can hold it.",
+      "text": "Kael: Or return the fragment where his name can hold it.",
+      "speaker": "",
+      "context": "campaign_dialogue.bog_core_choice.lines"
+    },
+    "campaign_dialogue.bog_core_choice.lines.4": {
+      "source": "Mira: Yes. I can refine the oil whichever way you choose. I will not price a formula against a child's memory.",
+      "text": "Mira: Yes. I can refine the oil whichever way you choose. I will not price a formula against a child's memory.",
+      "speaker": "",
+      "context": "campaign_dialogue.bog_core_choice.lines"
+    },
     "campaign_dialogue.bog_core_choice.name": {
       "source": "The Bog Wretch's Memory",
       "text": "The Bog Wretch's Memory",
       "speaker": "",
       "context": "campaign_dialogue.bog_core_choice"
+    },
+    "campaign_dialogue.bog_core_choice.variants.0.greeting": {
+      "source": "The Moon Oil reveals a groove beneath the new paint. Oren had restored the first name on the old token.",
+      "text": "The Moon Oil reveals a groove beneath the new paint. Oren had restored the first name on the old token.",
+      "speaker": "",
+      "context": "campaign_dialogue.bog_core_choice.variants.0"
+    },
+    "campaign_dialogue.bog_core_choice.variants.0.lines.0": {
+      "source": "Mira: The creatures gathered what the road could no longer hide. The wire came later.",
+      "text": "Mira: The creatures gathered what the road could no longer hide. The wire came later.",
+      "speaker": "",
+      "context": "campaign_dialogue.bog_core_choice.variants.0.lines"
+    },
+    "campaign_dialogue.bog_core_choice.variants.0.lines.1": {
+      "source": "Kael: Vargan tried to contain the evidence.",
+      "text": "Kael: Vargan tried to contain the evidence.",
+      "speaker": "",
+      "context": "campaign_dialogue.bog_core_choice.variants.0.lines"
+    },
+    "campaign_dialogue.bog_core_choice.variants.0.lines.2": {
+      "source": "Mira: Keep that fact. This fragment cannot tell us everything that happened.",
+      "text": "Mira: Keep that fact. This fragment cannot tell us everything that happened.",
+      "speaker": "",
+      "context": "campaign_dialogue.bog_core_choice.variants.0.lines"
     },
     "campaign_dialogue.captain_senn.actions.0.cost": {
       "source": "Custody needs protection; exile removes a living witness; execution destroys future testimony.",
@@ -334,11 +454,83 @@
       "speaker": "",
       "context": "campaign_dialogue.captain_senn.actions.5"
     },
+    "campaign_dialogue.captain_senn.greeting": {
+      "source": "Put the sword down far enough that my men can see what surrender looks like.",
+      "text": "Put the sword down far enough that my men can see what surrender looks like.",
+      "speaker": "",
+      "context": "campaign_dialogue.captain_senn"
+    },
+    "campaign_dialogue.captain_senn.lines.0": {
+      "source": "Senn: I was on that road in the war. Young enough to call an order the whole explanation.",
+      "text": "Senn: I was on that road in the war. Young enough to call an order the whole explanation.",
+      "speaker": "",
+      "context": "campaign_dialogue.captain_senn.lines"
+    },
+    "campaign_dialogue.captain_senn.lines.1": {
+      "source": "Senn: Halvern refused to close the retreat. They hanged him. I closed it after him.",
+      "text": "Senn: Halvern refused to close the retreat. They hanged him. I closed it after him.",
+      "speaker": "",
+      "context": "campaign_dialogue.captain_senn.lines"
+    },
+    "campaign_dialogue.captain_senn.lines.2": {
+      "source": "Kael: Now you take grain from travelers and call it repayment.",
+      "text": "Kael: Now you take grain from travelers and call it repayment.",
+      "speaker": "",
+      "context": "campaign_dialogue.captain_senn.lines"
+    },
+    "campaign_dialogue.captain_senn.lines.3": {
+      "source": "Senn: I said their houses owed ours. It became an excuse before I stopped needing it.",
+      "text": "Senn: I said their houses owed ours. It became an excuse before I stopped needing it.",
+      "speaker": "",
+      "context": "campaign_dialogue.captain_senn.lines"
+    },
+    "campaign_dialogue.captain_senn.lines.4": {
+      "source": "Kael: You can give testimony. You still answer for the people hurt this week.",
+      "text": "Kael: You can give testimony. You still answer for the people hurt this week.",
+      "speaker": "",
+      "context": "campaign_dialogue.captain_senn.lines"
+    },
     "campaign_dialogue.captain_senn.name": {
       "source": "Captain Senn",
       "text": "Captain Senn",
       "speaker": "",
       "context": "campaign_dialogue.captain_senn"
+    },
+    "campaign_dialogue.captain_senn.variants.0.greeting": {
+      "source": "My men have the custody terms. No levy can take their children for what I ordered.",
+      "text": "My men have the custody terms. No levy can take their children for what I ordered.",
+      "speaker": "",
+      "context": "campaign_dialogue.captain_senn.variants.0"
+    },
+    "campaign_dialogue.captain_senn.variants.0.lines.0": {
+      "source": "Senn: I will speak. I am not asking the account to wipe the road clean.",
+      "text": "Senn: I will speak. I am not asking the account to wipe the road clean.",
+      "speaker": "",
+      "context": "campaign_dialogue.captain_senn.variants.0.lines"
+    },
+    "campaign_dialogue.captain_senn.variants.0.lines.1": {
+      "source": "Kael: Then sign the part you know. Leave the rest for the people who lived it.",
+      "text": "Kael: Then sign the part you know. Leave the rest for the people who lived it.",
+      "speaker": "",
+      "context": "campaign_dialogue.captain_senn.variants.0.lines"
+    },
+    "campaign_dialogue.captain_senn.variants.1.greeting": {
+      "source": "The camp is packing. The signed account stays with you.",
+      "text": "The camp is packing. The signed account stays with you.",
+      "speaker": "",
+      "context": "campaign_dialogue.captain_senn.variants.1"
+    },
+    "campaign_dialogue.captain_senn.variants.1.lines.0": {
+      "source": "Senn: My men leave their blades for the grain they took.",
+      "text": "Senn: My men leave their blades for the grain they took.",
+      "speaker": "",
+      "context": "campaign_dialogue.captain_senn.variants.1.lines"
+    },
+    "campaign_dialogue.captain_senn.variants.1.lines.1": {
+      "source": "Kael: Leaving does not make the missing travelers someone else's problem.",
+      "text": "Kael: Leaving does not make the missing travelers someone else's problem.",
+      "speaker": "",
+      "context": "campaign_dialogue.captain_senn.variants.1.lines"
     },
     "campaign_dialogue.crow_shrine_choice.actions.0.cost": {
       "source": "This records an explicit promise or practical action. A record cannot supply someone else's consent.",
@@ -411,6 +603,36 @@
       "text": "The seal holds temporarily. Kael marks its weakness instead of calling the silence a cure.",
       "speaker": "",
       "context": "campaign_dialogue.crow_shrine_choice.actions.2"
+    },
+    "campaign_dialogue.crow_shrine_choice.greeting": {
+      "source": "The red thread pulls tight toward the sealed road. Anwen cuts her own prayer cord before touching it.",
+      "text": "The red thread pulls tight toward the sealed road. Anwen cuts her own prayer cord before touching it.",
+      "speaker": "",
+      "context": "campaign_dialogue.crow_shrine_choice"
+    },
+    "campaign_dialogue.crow_shrine_choice.lines.0": {
+      "source": "Anwen: I used to say the shrine kept the dead quiet. It kept their names apart.",
+      "text": "Anwen: I used to say the shrine kept the dead quiet. It kept their names apart.",
+      "speaker": "",
+      "context": "campaign_dialogue.crow_shrine_choice.lines"
+    },
+    "campaign_dialogue.crow_shrine_choice.lines.1": {
+      "source": "Kael: What does each way cost?",
+      "text": "Kael: What does each way cost?",
+      "speaker": "",
+      "context": "campaign_dialogue.crow_shrine_choice.lines"
+    },
+    "campaign_dialogue.crow_shrine_choice.lines.2": {
+      "source": "Anwen: Clean the rite and the danger moves out toward the wood. Open it and memory enters this place. Hold it shut and the next repair may tear it again.",
+      "text": "Anwen: Clean the rite and the danger moves out toward the wood. Open it and memory enters this place. Hold it shut and the next repair may tear it again.",
+      "speaker": "",
+      "context": "campaign_dialogue.crow_shrine_choice.lines"
+    },
+    "campaign_dialogue.crow_shrine_choice.lines.3": {
+      "source": "Anwen: None of those asks the dead what they wanted. A living witness can freely take the work of keeping their account. Not the right to make them disappear.",
+      "text": "Anwen: None of those asks the dead what they wanted. A living witness can freely take the work of keeping their account. Not the right to make them disappear.",
+      "speaker": "",
+      "context": "campaign_dialogue.crow_shrine_choice.lines"
     },
     "campaign_dialogue.crow_shrine_choice.name": {
       "source": "The Crow Shrine",
@@ -490,11 +712,119 @@
       "speaker": "",
       "context": "campaign_dialogue.edric_campaign.actions.2"
     },
+    "campaign_dialogue.edric_campaign.greeting": {
+      "source": "The grain you saw outside is real. So is the road that killed the people sent to clear it.",
+      "text": "The grain you saw outside is real. So is the road that killed the people sent to clear it.",
+      "speaker": "",
+      "context": "campaign_dialogue.edric_campaign"
+    },
+    "campaign_dialogue.edric_campaign.lines.0": {
+      "source": "Edric: I found the command ledger six years ago. I sealed it. I was afraid of what the houses here would become without Vargan protection.",
+      "text": "Edric: I found the command ledger six years ago. I sealed it. I was afraid of what the houses here would become without Vargan protection.",
+      "speaker": "",
+      "context": "campaign_dialogue.edric_campaign.lines"
+    },
+    "campaign_dialogue.edric_campaign.lines.1": {
+      "source": "Kael: You inherited the crime. Keeping its proof hidden was your choice.",
+      "text": "Kael: You inherited the crime. Keeping its proof hidden was your choice.",
+      "speaker": "",
+      "context": "campaign_dialogue.edric_campaign.lines"
+    },
+    "campaign_dialogue.edric_campaign.lines.2": {
+      "source": "Edric: Yes. The renewal is my choice too. I need households to witness the seal before the grain moves.",
+      "text": "Edric: Yes. The renewal is my choice too. I need households to witness the seal before the grain moves.",
+      "speaker": "",
+      "context": "campaign_dialogue.edric_campaign.lines"
+    },
+    "campaign_dialogue.edric_campaign.lines.3": {
+      "source": "Kael: People who must sign to feed their children cannot give you a free oath.",
+      "text": "Kael: People who must sign to feed their children cannot give you a free oath.",
+      "speaker": "",
+      "context": "campaign_dialogue.edric_campaign.lines"
+    },
+    "campaign_dialogue.edric_campaign.lines.4": {
+      "source": "Edric: Then give me another way to get those carts through. Do not give me a principle and leave before winter.",
+      "text": "Edric: Then give me another way to get those carts through. Do not give me a principle and leave before winter.",
+      "speaker": "",
+      "context": "campaign_dialogue.edric_campaign.lines"
+    },
     "campaign_dialogue.edric_campaign.name": {
       "source": "Lord Edric Vargan",
       "text": "Lord Edric Vargan",
       "speaker": "",
       "context": "campaign_dialogue.edric_campaign"
+    },
+    "campaign_dialogue.edric_campaign.variants.0.greeting": {
+      "source": "I have withdrawn the household signatures. My officers have the same order.",
+      "text": "I have withdrawn the household signatures. My officers have the same order.",
+      "speaker": "",
+      "context": "campaign_dialogue.edric_campaign.variants.0"
+    },
+    "campaign_dialogue.edric_campaign.variants.0.lines.0": {
+      "source": "Edric: I will testify without my seal. I will supply the road under the assembly's account.",
+      "text": "Edric: I will testify without my seal. I will supply the road under the assembly's account.",
+      "speaker": "",
+      "context": "campaign_dialogue.edric_campaign.variants.0.lines"
+    },
+    "campaign_dialogue.edric_campaign.variants.0.lines.1": {
+      "source": "Kael: Your title?",
+      "text": "Kael: Your title?",
+      "speaker": "",
+      "context": "campaign_dialogue.edric_campaign.variants.0.lines"
+    },
+    "campaign_dialogue.edric_campaign.variants.0.lines.2": {
+      "source": "Edric: Not mine to shelter behind after this.",
+      "text": "Edric: Not mine to shelter behind after this.",
+      "speaker": "",
+      "context": "campaign_dialogue.edric_campaign.variants.0.lines"
+    },
+    "campaign_dialogue.edric_campaign.variants.1.greeting": {
+      "source": "I will say what you make me say. Do not dress it as consent.",
+      "text": "I will say what you make me say. Do not dress it as consent.",
+      "speaker": "",
+      "context": "campaign_dialogue.edric_campaign.variants.1"
+    },
+    "campaign_dialogue.edric_campaign.variants.1.lines.0": {
+      "source": "Kael: Your ledger is evidence. Your threatened words are not a new covenant.",
+      "text": "Kael: Your ledger is evidence. Your threatened words are not a new covenant.",
+      "speaker": "",
+      "context": "campaign_dialogue.edric_campaign.variants.1.lines"
+    },
+    "campaign_dialogue.edric_campaign.variants.1.lines.1": {
+      "source": "Edric: At least we agree on the shape of what you are doing.",
+      "text": "Edric: At least we agree on the shape of what you are doing.",
+      "speaker": "",
+      "context": "campaign_dialogue.edric_campaign.variants.1.lines"
+    },
+    "campaign_dialogue.edric_castle.greeting": {
+      "source": "Sit if your leg is hurting. Then tell me exactly what you found.",
+      "text": "Sit if your leg is hurting. Then tell me exactly what you found.",
+      "speaker": "",
+      "context": "campaign_dialogue.edric_castle"
+    },
+    "campaign_dialogue.edric_castle.lines.0": {
+      "source": "Kael: Your soldiers reclaimed the tokens after the road repairs.",
+      "text": "Kael: Your soldiers reclaimed the tokens after the road repairs.",
+      "speaker": "",
+      "context": "campaign_dialogue.edric_castle.lines"
+    },
+    "campaign_dialogue.edric_castle.lines.1": {
+      "source": "Edric: I ordered containment. The repairs had exposed a cache the shrine could no longer quiet.",
+      "text": "Edric: I ordered containment. The repairs had exposed a cache the shrine could no longer quiet.",
+      "speaker": "",
+      "context": "campaign_dialogue.edric_castle.lines"
+    },
+    "campaign_dialogue.edric_castle.lines.2": {
+      "source": "Kael: You also kept the ledger closed for six years.",
+      "text": "Kael: You also kept the ledger closed for six years.",
+      "speaker": "",
+      "context": "campaign_dialogue.edric_castle.lines"
+    },
+    "campaign_dialogue.edric_castle.lines.3": {
+      "source": "Edric: Yes. Before you ask the next question, know that I have no smaller word for that.",
+      "text": "Edric: Yes. Before you ask the next question, know that I have no smaller word for that.",
+      "speaker": "",
+      "context": "campaign_dialogue.edric_castle.lines"
     },
     "campaign_dialogue.edric_castle.name": {
       "source": "Lord Edric Vargan",
@@ -526,11 +856,41 @@
       "speaker": "",
       "context": "campaign_dialogue.edric_proclamation.actions.0"
     },
+    "campaign_dialogue.edric_proclamation.greeting": {
+      "source": "By order of Lord Edric Vargan: grain protection is to be restored under a renewed road covenant.",
+      "text": "By order of Lord Edric Vargan: grain protection is to be restored under a renewed road covenant.",
+      "speaker": "",
+      "context": "campaign_dialogue.edric_proclamation"
+    },
+    "campaign_dialogue.edric_proclamation.lines.0": {
+      "source": "Each supported household must attend and witness the seal. Allotments will be entered beside its assent.",
+      "text": "Each supported household must attend and witness the seal. Allotments will be entered beside its assent.",
+      "speaker": "",
+      "context": "campaign_dialogue.edric_proclamation.lines"
+    },
+    "campaign_dialogue.edric_proclamation.lines.1": {
+      "source": "Kael: An order can move grain. It cannot make a hungry person's oath free.",
+      "text": "Kael: An order can move grain. It cannot make a hungry person's oath free.",
+      "speaker": "",
+      "context": "campaign_dialogue.edric_proclamation.lines"
+    },
     "campaign_dialogue.edric_proclamation.name": {
       "source": "Edric Proclamation",
       "text": "Edric Proclamation",
       "speaker": "",
       "context": "campaign_dialogue.edric_proclamation"
+    },
+    "campaign_dialogue.edric_proclamation.variants.0.greeting": {
+      "source": "The household assent column has been struck from the order.",
+      "text": "The household assent column has been struck from the order.",
+      "speaker": "",
+      "context": "campaign_dialogue.edric_proclamation.variants.0"
+    },
+    "campaign_dialogue.edric_proclamation.variants.0.lines.0": {
+      "source": "Grain allotments remain. The account of the road is kept separately.",
+      "text": "Grain allotments remain. The account of the road is kept separately.",
+      "speaker": "",
+      "context": "campaign_dialogue.edric_proclamation.variants.0.lines"
     },
     "campaign_dialogue.greyfen_cart_work.actions.0.cost": {
       "source": "This records an explicit promise or practical action. A record cannot supply someone else's consent.",
@@ -556,11 +916,47 @@
       "speaker": "",
       "context": "campaign_dialogue.greyfen_cart_work.actions.0"
     },
+    "campaign_dialogue.greyfen_cart_work.greeting": {
+      "source": "The wheel has sunk to its hub. Rook braces the cart while the driver tries not to fall against it.",
+      "text": "The wheel has sunk to its hub. Rook braces the cart while the driver tries not to fall against it.",
+      "speaker": "",
+      "context": "campaign_dialogue.greyfen_cart_work"
+    },
+    "campaign_dialogue.greyfen_cart_work.lines.0": {
+      "source": "Rook: If you are hunting something expensive, consider this wheel. It has eaten my entire morning.",
+      "text": "Rook: If you are hunting something expensive, consider this wheel. It has eaten my entire morning.",
+      "speaker": "",
+      "context": "campaign_dialogue.greyfen_cart_work.lines"
+    },
+    "campaign_dialogue.greyfen_cart_work.lines.1": {
+      "source": "Kael: Move your hand from the spoke. I will take the weight.",
+      "text": "Kael: Move your hand from the spoke. I will take the weight.",
+      "speaker": "",
+      "context": "campaign_dialogue.greyfen_cart_work.lines"
+    },
+    "campaign_dialogue.greyfen_cart_work.lines.2": {
+      "source": "Rook: Then Anwen gets the driver, and the sacks get through the gate. In that order.",
+      "text": "Rook: Then Anwen gets the driver, and the sacks get through the gate. In that order.",
+      "speaker": "",
+      "context": "campaign_dialogue.greyfen_cart_work.lines"
+    },
     "campaign_dialogue.greyfen_cart_work.name": {
       "source": "Rook",
       "text": "Rook",
       "speaker": "",
       "context": "campaign_dialogue.greyfen_cart_work"
+    },
+    "campaign_dialogue.greyfen_cart_work.variants.0.greeting": {
+      "source": "The cart stands on dry boards. The driver has Anwen's cup between both hands.",
+      "text": "The cart stands on dry boards. The driver has Anwen's cup between both hands.",
+      "speaker": "",
+      "context": "campaign_dialogue.greyfen_cart_work.variants.0"
+    },
+    "campaign_dialogue.greyfen_cart_work.variants.0.lines.0": {
+      "source": "Rook: Grain inside. Person inside. A profitable morning by standards I have apparently lowered.",
+      "text": "Rook: Grain inside. Person inside. A profitable morning by standards I have apparently lowered.",
+      "speaker": "",
+      "context": "campaign_dialogue.greyfen_cart_work.variants.0.lines"
     },
     "campaign_dialogue.greyfen_relief_board.actions.0.cost": {
       "source": "This records an explicit promise or practical action. A record cannot supply someone else's consent.",
@@ -586,11 +982,41 @@
       "speaker": "",
       "context": "campaign_dialogue.greyfen_relief_board.actions.0"
     },
+    "campaign_dialogue.greyfen_relief_board.greeting": {
+      "source": "Anwen has left spaces for grain, medicine, clean iron, and a safe bed.",
+      "text": "Anwen has left spaces for grain, medicine, clean iron, and a safe bed.",
+      "speaker": "",
+      "context": "campaign_dialogue.greyfen_relief_board"
+    },
+    "campaign_dialogue.greyfen_relief_board.lines.0": {
+      "source": "Anwen: You may put your hand to one of those without agreeing to stand before the Hart.",
+      "text": "Anwen: You may put your hand to one of those without agreeing to stand before the Hart.",
+      "speaker": "",
+      "context": "campaign_dialogue.greyfen_relief_board.lines"
+    },
+    "campaign_dialogue.greyfen_relief_board.lines.1": {
+      "source": "Kael: Then keep the names of helpers away from the renewal seal.",
+      "text": "Kael: Then keep the names of helpers away from the renewal seal.",
+      "speaker": "",
+      "context": "campaign_dialogue.greyfen_relief_board.lines"
+    },
     "campaign_dialogue.greyfen_relief_board.name": {
       "source": "Greyfen Relief Board",
       "text": "Greyfen Relief Board",
       "speaker": "",
       "context": "campaign_dialogue.greyfen_relief_board"
+    },
+    "campaign_dialogue.greyfen_relief_board.variants.0.greeting": {
+      "source": "Grain sacks and clean cloth sit beside the assembly. The way out remains clear.",
+      "text": "Grain sacks and clean cloth sit beside the assembly. The way out remains clear.",
+      "speaker": "",
+      "context": "campaign_dialogue.greyfen_relief_board.variants.0"
+    },
+    "campaign_dialogue.greyfen_relief_board.variants.0.lines.0": {
+      "source": "Kael: Practical help before an oath. Nobody has to become evidence to receive it.",
+      "text": "Kael: Practical help before an oath. Nobody has to become evidence to receive it.",
+      "speaker": "",
+      "context": "campaign_dialogue.greyfen_relief_board.variants.0.lines"
     },
     "campaign_dialogue.greyfen_road_work.actions.0.cost": {
       "source": "This records an explicit promise or practical action. A record cannot supply someone else's consent.",
@@ -616,11 +1042,41 @@
       "speaker": "",
       "context": "campaign_dialogue.greyfen_road_work.actions.0"
     },
+    "campaign_dialogue.greyfen_road_work.greeting": {
+      "source": "Rain has opened the repaired strip where Bram found the old tokens.",
+      "text": "Rain has opened the repaired strip where Bram found the old tokens.",
+      "speaker": "",
+      "context": "campaign_dialogue.greyfen_road_work"
+    },
+    "campaign_dialogue.greyfen_road_work.lines.0": {
+      "source": "Tor: Put the clean boards over the rut. Leave the marked pieces where we can read them.",
+      "text": "Tor: Put the clean boards over the rut. Leave the marked pieces where we can read them.",
+      "speaker": "",
+      "context": "campaign_dialogue.greyfen_road_work.lines"
+    },
+    "campaign_dialogue.greyfen_road_work.lines.1": {
+      "source": "Kael: Repair the route without burying what it exposed.",
+      "text": "Kael: Repair the route without burying what it exposed.",
+      "speaker": "",
+      "context": "campaign_dialogue.greyfen_road_work.lines"
+    },
     "campaign_dialogue.greyfen_road_work.name": {
       "source": "Greyfen Road Work",
       "text": "Greyfen Road Work",
       "speaker": "",
       "context": "campaign_dialogue.greyfen_road_work"
+    },
+    "campaign_dialogue.greyfen_road_work.variants.0.greeting": {
+      "source": "Clean boards span the rut. The marked fragments lie beside the warning post.",
+      "text": "Clean boards span the rut. The marked fragments lie beside the warning post.",
+      "speaker": "",
+      "context": "campaign_dialogue.greyfen_road_work.variants.0"
+    },
+    "campaign_dialogue.greyfen_road_work.variants.0.lines.0": {
+      "source": "Kael: People can pass here. The evidence has not gone back under their wheels.",
+      "text": "Kael: People can pass here. The evidence has not gone back under their wheels.",
+      "speaker": "",
+      "context": "campaign_dialogue.greyfen_road_work.variants.0.lines"
     },
     "campaign_dialogue.halvern.actions.0.cost": {
       "source": "Copies preserve the refusal, not every memory the fragment carries.",
@@ -694,17 +1150,119 @@
       "speaker": "",
       "context": "campaign_dialogue.halvern.actions.2"
     },
+    "campaign_dialogue.halvern.greeting": {
+      "source": "Do not close it. There are still people on the road.",
+      "text": "Do not close it. There are still people on the road.",
+      "speaker": "",
+      "context": "campaign_dialogue.halvern"
+    },
+    "campaign_dialogue.halvern.lines.0": {
+      "source": "Halvern: Sanctuary under the Vargan seal. Those were the words. They came because of the words.",
+      "text": "Halvern: Sanctuary under the Vargan seal. Those were the words. They came because of the words.",
+      "speaker": "",
+      "context": "campaign_dialogue.halvern.lines"
+    },
+    "campaign_dialogue.halvern.lines.1": {
+      "source": "Kael: What happened after you refused?",
+      "text": "Kael: What happened after you refused?",
+      "speaker": "",
+      "context": "campaign_dialogue.halvern.lines"
+    },
+    "campaign_dialogue.halvern.lines.2": {
+      "source": "Halvern: Rope. The yard. Dawn. Do not close it.",
+      "text": "Halvern: Rope. The yard. Dawn. Do not close it.",
+      "speaker": "",
+      "context": "campaign_dialogue.halvern.lines"
+    },
+    "campaign_dialogue.halvern.lines.3": {
+      "source": "Kael: You cannot tell me about Edric. Your memory ends here.",
+      "text": "Kael: You cannot tell me about Edric. Your memory ends here.",
+      "speaker": "",
+      "context": "campaign_dialogue.halvern.lines"
+    },
+    "campaign_dialogue.halvern.lines.4": {
+      "source": "Kael: I was ordered to retreat from another road. There were people we had promised to escort. I went.",
+      "text": "Kael: I was ordered to retreat from another road. There were people we had promised to escort. I went.",
+      "speaker": "",
+      "context": "campaign_dialogue.halvern.lines"
+    },
+    "campaign_dialogue.halvern.lines.5": {
+      "source": "Kael: I wrote that we could not hold. I left out that I never went back.",
+      "text": "Kael: I wrote that we could not hold. I left out that I never went back.",
+      "speaker": "",
+      "context": "campaign_dialogue.halvern.lines"
+    },
+    "campaign_dialogue.halvern.lines.6": {
+      "source": "Halvern: There are still people on the road.",
+      "text": "Halvern: There are still people on the road.",
+      "speaker": "",
+      "context": "campaign_dialogue.halvern.lines"
+    },
     "campaign_dialogue.halvern.name": {
       "source": "Sir Halvern",
       "text": "Sir Halvern",
       "speaker": "",
       "context": "campaign_dialogue.halvern"
     },
+    "campaign_dialogue.mill_distribution.greeting": {
+      "source": "Clean reserve sacks stand apart from the mill's working channel.",
+      "text": "Clean reserve sacks stand apart from the mill's working channel.",
+      "speaker": "",
+      "context": "campaign_dialogue.mill_distribution"
+    },
+    "campaign_dialogue.mill_distribution.lines.0": {
+      "source": "Mira: A short ration is a cost. So is using tainted machinery. The ledger does not make either disappear.",
+      "text": "Mira: A short ration is a cost. So is using tainted machinery. The ledger does not make either disappear.",
+      "speaker": "",
+      "context": "campaign_dialogue.mill_distribution.lines"
+    },
+    "campaign_dialogue.mill_distribution.lines.1": {
+      "source": "Kael: Keep the record whatever method gets the flour through.",
+      "text": "Kael: Keep the record whatever method gets the flour through.",
+      "speaker": "",
+      "context": "campaign_dialogue.mill_distribution.lines"
+    },
     "campaign_dialogue.mill_distribution.name": {
       "source": "Mill Distribution",
       "text": "Mill Distribution",
       "speaker": "",
       "context": "campaign_dialogue.mill_distribution"
+    },
+    "campaign_dialogue.mill_distribution.variants.0.greeting": {
+      "source": "The tainted channel is closed. Reserve sacks are divided by household need.",
+      "text": "The tainted channel is closed. Reserve sacks are divided by household need.",
+      "speaker": "",
+      "context": "campaign_dialogue.mill_distribution.variants.0"
+    },
+    "campaign_dialogue.mill_distribution.variants.0.lines.0": {
+      "source": "Mira: Clean repair takes time. For now, these sacks are what keeps the closure from becoming another barred gate.",
+      "text": "Mira: Clean repair takes time. For now, these sacks are what keeps the closure from becoming another barred gate.",
+      "speaker": "",
+      "context": "campaign_dialogue.mill_distribution.variants.0.lines"
+    },
+    "campaign_dialogue.mill_distribution.variants.1.greeting": {
+      "source": "The limited run is watched. Contaminated stock is stacked separately.",
+      "text": "The limited run is watched. Contaminated stock is stacked separately.",
+      "speaker": "",
+      "context": "campaign_dialogue.mill_distribution.variants.1"
+    },
+    "campaign_dialogue.mill_distribution.variants.1.lines.0": {
+      "source": "Mira: It gets flour through today. It does not settle what went into the channels or the work of replacing them.",
+      "text": "Mira: It gets flour through today. It does not settle what went into the channels or the work of replacing them.",
+      "speaker": "",
+      "context": "campaign_dialogue.mill_distribution.variants.1.lines"
+    },
+    "campaign_dialogue.mill_distribution.variants.2.greeting": {
+      "source": "Clean repairs have begun. The first replacement sacks go to affected households.",
+      "text": "Clean repairs have begun. The first replacement sacks go to affected households.",
+      "speaker": "",
+      "context": "campaign_dialogue.mill_distribution.variants.2"
+    },
+    "campaign_dialogue.mill_distribution.variants.2.lines.0": {
+      "source": "Kael: The accounts stay public. Repair is work that people can return to see.",
+      "text": "Kael: The accounts stay public. Repair is work that people can return to see.",
+      "speaker": "",
+      "context": "campaign_dialogue.mill_distribution.variants.2.lines"
     },
     "campaign_dialogue.miller_record.actions.0.cost": {
       "source": "Closure uses reserves; supervision retains contamination risk; restitution takes clean materials and labor.",
@@ -778,6 +1336,36 @@
       "speaker": "",
       "context": "campaign_dialogue.miller_record.actions.2"
     },
+    "campaign_dialogue.miller_record.greeting": {
+      "source": "The measure is hollow under its mark. The short weight has been feeding the same households for years.",
+      "text": "The measure is hollow under its mark. The short weight has been feeding the same households for years.",
+      "speaker": "",
+      "context": "campaign_dialogue.miller_record"
+    },
+    "campaign_dialogue.miller_record.lines.0": {
+      "source": "Kael: The ledger counts ash as fertilizer. The wagon totals match the refugee register.",
+      "text": "Kael: The ledger counts ash as fertilizer. The wagon totals match the refugee register.",
+      "speaker": "",
+      "context": "campaign_dialogue.miller_record.lines"
+    },
+    "campaign_dialogue.miller_record.lines.1": {
+      "source": "Mira: Closing the mill stops the tainted channels. It also stops the flour coming through them.",
+      "text": "Mira: Closing the mill stops the tainted channels. It also stops the flour coming through them.",
+      "speaker": "",
+      "context": "campaign_dialogue.miller_record.lines"
+    },
+    "campaign_dialogue.miller_record.lines.2": {
+      "source": "Kael: The record leaves with us whatever we do to the machinery.",
+      "text": "Kael: The record leaves with us whatever we do to the machinery.",
+      "speaker": "",
+      "context": "campaign_dialogue.miller_record.lines"
+    },
+    "campaign_dialogue.miller_record.lines.3": {
+      "source": "Mira: Good. Now decide how we feed the people who did not choose what was ground here.",
+      "text": "Mira: Good. Now decide how we feed the people who did not choose what was ground here.",
+      "speaker": "",
+      "context": "campaign_dialogue.miller_record.lines"
+    },
     "campaign_dialogue.miller_record.name": {
       "source": "Miller's Ledger",
       "text": "Miller's Ledger",
@@ -832,11 +1420,65 @@
       "speaker": "",
       "context": "campaign_dialogue.names_decision.actions.1"
     },
+    "campaign_dialogue.names_decision.greeting": {
+      "source": "Rook puts a clean sheet over the family addresses before he hands you the register.",
+      "text": "Rook puts a clean sheet over the family addresses before he hands you the register.",
+      "speaker": "",
+      "context": "campaign_dialogue.names_decision"
+    },
+    "campaign_dialogue.names_decision.lines.0": {
+      "source": "Rook: The people who died can be named. Where their grandchildren sleep is not the same fact.",
+      "text": "Rook: The people who died can be named. Where their grandchildren sleep is not the same fact.",
+      "speaker": "",
+      "context": "campaign_dialogue.names_decision.lines"
+    },
+    "campaign_dialogue.names_decision.lines.1": {
+      "source": "Anwen: Bram found the tokens in the repaired road. Sella brought one for a burial reading. Oren restored the first name beneath his paint.",
+      "text": "Anwen: Bram found the tokens in the repaired road. Sella brought one for a burial reading. Oren restored the first name beneath his paint.",
+      "speaker": "",
+      "context": "campaign_dialogue.names_decision.lines"
+    },
+    "campaign_dialogue.names_decision.lines.2": {
+      "source": "Kael: The name loosened what the hidden road had kept disordered.",
+      "text": "Kael: The name loosened what the hidden road had kept disordered.",
+      "speaker": "",
+      "context": "campaign_dialogue.names_decision.lines"
+    },
+    "campaign_dialogue.names_decision.lines.3": {
+      "source": "Anwen: And my thread failed to contain it. Vargan's men came afterward for the tokens.",
+      "text": "Anwen: And my thread failed to contain it. Vargan's men came afterward for the tokens.",
+      "speaker": "",
+      "context": "campaign_dialogue.names_decision.lines"
+    },
+    "campaign_dialogue.names_decision.lines.4": {
+      "source": "Rook: Now Edric wants those households at a renewal. No signature, no grain. Your copies will reach them before his guards do.",
+      "text": "Rook: Now Edric wants those households at a renewal. No signature, no grain. Your copies will reach them before his guards do.",
+      "speaker": "",
+      "context": "campaign_dialogue.names_decision.lines"
+    },
     "campaign_dialogue.names_decision.name": {
       "source": "The Refugee Register",
       "text": "The Refugee Register",
       "speaker": "",
       "context": "campaign_dialogue.names_decision"
+    },
+    "campaign_dialogue.renewal_record.greeting": {
+      "source": "The old covenant hid a road. The proposed renewal would have hidden an account.",
+      "text": "The old covenant hid a road. The proposed renewal would have hidden an account.",
+      "speaker": "",
+      "context": "campaign_dialogue.renewal_record"
+    },
+    "campaign_dialogue.renewal_record.lines.0": {
+      "source": "The victims trusted a promise of sanctuary. The witnesses to concealment were frightened into agreement.",
+      "text": "The victims trusted a promise of sanctuary. The witnesses to concealment were frightened into agreement.",
+      "speaker": "",
+      "context": "campaign_dialogue.renewal_record.lines"
+    },
+    "campaign_dialogue.renewal_record.lines.1": {
+      "source": "Kael: Copies prove the crime. A new promise must belong to the person who makes it. No ration list can lend somebody else's consent.",
+      "text": "Kael: Copies prove the crime. A new promise must belong to the person who makes it. No ration list can lend somebody else's consent.",
+      "speaker": "",
+      "context": "campaign_dialogue.renewal_record.lines"
     },
     "campaign_dialogue.renewal_record.name": {
       "source": "Renewal Record",
@@ -916,11 +1558,59 @@
       "speaker": "",
       "context": "campaign_dialogue.report_decision.actions.2"
     },
+    "campaign_dialogue.report_decision.greeting": {
+      "source": "Anwen puts three empty cups beside the coat Oren left. Rook waits by the door.",
+      "text": "Anwen puts three empty cups beside the coat Oren left. Rook waits by the door.",
+      "speaker": "",
+      "context": "campaign_dialogue.report_decision"
+    },
+    "campaign_dialogue.report_decision.lines.0": {
+      "source": "Kael: The creatures gathered their belongings. Someone alive bound the token afterward and tried to remove it.",
+      "text": "Kael: The creatures gathered their belongings. Someone alive bound the token afterward and tried to remove it.",
+      "speaker": "",
+      "context": "campaign_dialogue.report_decision.lines"
+    },
+    "campaign_dialogue.report_decision.lines.1": {
+      "source": "Anwen: I recognize the old carving. You can give it to me, show the village, or keep it while we make copies.",
+      "text": "Anwen: I recognize the old carving. You can give it to me, show the village, or keep it while we make copies.",
+      "speaker": "",
+      "context": "campaign_dialogue.report_decision.lines"
+    },
+    "campaign_dialogue.report_decision.lines.2": {
+      "source": "Rook: If you show it, show the people behind it a way to stay safe as well.",
+      "text": "Rook: If you show it, show the people behind it a way to stay safe as well.",
+      "speaker": "",
+      "context": "campaign_dialogue.report_decision.lines"
+    },
+    "campaign_dialogue.report_decision.lines.3": {
+      "source": "Kael: I will stay. The payment ends the hunt. It does not settle what I now know.",
+      "text": "Kael: I will stay. The payment ends the hunt. It does not settle what I now know.",
+      "speaker": "",
+      "context": "campaign_dialogue.report_decision.lines"
+    },
     "campaign_dialogue.report_decision.name": {
       "source": "Sister Anwen",
       "text": "Sister Anwen",
       "speaker": "",
       "context": "campaign_dialogue.report_decision"
+    },
+    "campaign_dialogue.retain_evidence.greeting": {
+      "source": "A thumb-sized crow. Fresh paint above a name cut into older wood.",
+      "text": "A thumb-sized crow. Fresh paint above a name cut into older wood.",
+      "speaker": "",
+      "context": "campaign_dialogue.retain_evidence"
+    },
+    "campaign_dialogue.retain_evidence.lines.0": {
+      "source": "Kael: Oren was making something someone had erased readable again.",
+      "text": "Kael: Oren was making something someone had erased readable again.",
+      "speaker": "",
+      "context": "campaign_dialogue.retain_evidence.lines"
+    },
+    "campaign_dialogue.retain_evidence.lines.1": {
+      "source": "Kael: Keeping this close gives me time. It also leaves everyone else waiting for an account.",
+      "text": "Kael: Keeping this close gives me time. It also leaves everyone else waiting for an account.",
+      "speaker": "",
+      "context": "campaign_dialogue.retain_evidence.lines"
     },
     "campaign_dialogue.retain_evidence.name": {
       "source": "Oren's Token",
@@ -988,6 +1678,24 @@
       "speaker": "",
       "context": "campaign_dialogue.side_contracts.actions.9"
     },
+    "campaign_dialogue.side_contracts.greeting": {
+      "source": "Elna has pinned a bell cord here. Tor has weighted a note with a bent hinge. Mira's paper smells of roots.",
+      "text": "Elna has pinned a bell cord here. Tor has weighted a note with a bent hinge. Mira's paper smells of roots.",
+      "speaker": "",
+      "context": "campaign_dialogue.side_contracts"
+    },
+    "campaign_dialogue.side_contracts.lines.0": {
+      "source": "Some ask for payment. Some ask that you knock quietly. Rook's note has a road drawn on the back.",
+      "text": "Some ask for payment. Some ask that you knock quietly. Rook's note has a road drawn on the back.",
+      "speaker": "",
+      "context": "campaign_dialogue.side_contracts.lines"
+    },
+    "campaign_dialogue.side_contracts.lines.1": {
+      "source": "Kael: People to return to. Not just work to finish.",
+      "text": "Kael: People to return to. Not just work to finish.",
+      "speaker": "",
+      "context": "campaign_dialogue.side_contracts.lines"
+    },
     "campaign_dialogue.side_contracts.name": {
       "source": "Greyfen's Smaller Miseries",
       "text": "Greyfen's Smaller Miseries",
@@ -1018,11 +1726,47 @@
       "speaker": "",
       "context": "campaign_dialogue.vargan_gate_guard.actions.0"
     },
+    "campaign_dialogue.vargan_gate_guard.greeting": {
+      "source": "Keep the lane clear. That cart is carrying grain, not reinforcements.",
+      "text": "Keep the lane clear. That cart is carrying grain, not reinforcements.",
+      "speaker": "",
+      "context": "campaign_dialogue.vargan_gate_guard"
+    },
+    "campaign_dialogue.vargan_gate_guard.lines.0": {
+      "source": "Kael: I carry an account from Greyfen's road.",
+      "text": "Kael: I carry an account from Greyfen's road.",
+      "speaker": "",
+      "context": "campaign_dialogue.vargan_gate_guard.lines"
+    },
+    "campaign_dialogue.vargan_gate_guard.lines.1": {
+      "source": "Guard: The steward wants every token brought inside. People argue less over a missing thing when no one can show it.",
+      "text": "Guard: The steward wants every token brought inside. People argue less over a missing thing when no one can show it.",
+      "speaker": "",
+      "context": "campaign_dialogue.vargan_gate_guard.lines"
+    },
+    "campaign_dialogue.vargan_gate_guard.lines.2": {
+      "source": "Kael: Then you had better let me show it.",
+      "text": "Kael: Then you had better let me show it.",
+      "speaker": "",
+      "context": "campaign_dialogue.vargan_gate_guard.lines"
+    },
     "campaign_dialogue.vargan_gate_guard.name": {
       "source": "Vargan Gate Guard",
       "text": "Vargan Gate Guard",
       "speaker": "",
       "context": "campaign_dialogue.vargan_gate_guard"
+    },
+    "campaign_dialogue.vargan_gate_guard.variants.0.greeting": {
+      "source": "The steward says a seal was broken. I can see why he is frightened.",
+      "text": "The steward says a seal was broken. I can see why he is frightened.",
+      "speaker": "",
+      "context": "campaign_dialogue.vargan_gate_guard.variants.0"
+    },
+    "campaign_dialogue.vargan_gate_guard.variants.0.lines.0": {
+      "source": "Guard: You may still leave by the gate. The road must carry people as well as orders.",
+      "text": "Guard: You may still leave by the gate. The road must carry people as well as orders.",
+      "speaker": "",
+      "context": "campaign_dialogue.vargan_gate_guard.variants.0.lines"
     },
     "campaign_dialogue.vargan_ledger_choice.actions.0.cost": {
       "source": "This records an explicit promise or practical action. A record cannot supply someone else's consent.",
@@ -1096,11 +1840,47 @@
       "speaker": "",
       "context": "campaign_dialogue.vargan_ledger_choice.actions.2"
     },
+    "campaign_dialogue.vargan_ledger_choice.greeting": {
+      "source": "Sanctuary promised. Road closed. Refugee wagons transferred to shrine custody. Three columns written by three different hands.",
+      "text": "Sanctuary promised. Road closed. Refugee wagons transferred to shrine custody. Three columns written by three different hands.",
+      "speaker": "",
+      "context": "campaign_dialogue.vargan_ledger_choice"
+    },
+    "campaign_dialogue.vargan_ledger_choice.lines.0": {
+      "source": "Kael: The command survived without the names. The register has the names without the command.",
+      "text": "Kael: The command survived without the names. The register has the names without the command.",
+      "speaker": "",
+      "context": "campaign_dialogue.vargan_ledger_choice.lines"
+    },
+    "campaign_dialogue.vargan_ledger_choice.lines.1": {
+      "source": "Kael: Together they establish who did what. Copy the page before any choice about its seal.",
+      "text": "Kael: Together they establish who did what. Copy the page before any choice about its seal.",
+      "speaker": "",
+      "context": "campaign_dialogue.vargan_ledger_choice.lines"
+    },
     "campaign_dialogue.vargan_ledger_choice.name": {
       "source": "The Sealed Command Ledger",
       "text": "The Sealed Command Ledger",
       "speaker": "",
       "context": "campaign_dialogue.vargan_ledger_choice"
+    },
+    "campaign_dialogue.vargan_patrol.greeting": {
+      "source": "We were sent for the painted tokens after the creatures gathered. Two men did not come back.",
+      "text": "We were sent for the painted tokens after the creatures gathered. Two men did not come back.",
+      "speaker": "",
+      "context": "campaign_dialogue.vargan_patrol"
+    },
+    "campaign_dialogue.vargan_patrol.lines.0": {
+      "source": "Kael: Did your orders include scratching out their names?",
+      "text": "Kael: Did your orders include scratching out their names?",
+      "speaker": "",
+      "context": "campaign_dialogue.vargan_patrol.lines"
+    },
+    "campaign_dialogue.vargan_patrol.lines.1": {
+      "source": "Guard: Contain the breach. Bring back every object. The paper did not say what to do when a child's name made the wire shake.",
+      "text": "Guard: Contain the breach. Bring back every object. The paper did not say what to do when a child's name made the wire shake.",
+      "speaker": "",
+      "context": "campaign_dialogue.vargan_patrol.lines"
     },
     "campaign_dialogue.vargan_patrol.name": {
       "source": "Vargan Patrol Guard",
@@ -1108,11 +1888,47 @@
       "speaker": "",
       "context": "campaign_dialogue.vargan_patrol"
     },
+    "campaign_dialogue.vargan_record_keeper.greeting": {
+      "source": "I have laid the uncut page under the lamp. You may read it. I have waited too long to say that.",
+      "text": "I have laid the uncut page under the lamp. You may read it. I have waited too long to say that.",
+      "speaker": "",
+      "context": "campaign_dialogue.vargan_record_keeper"
+    },
+    "campaign_dialogue.vargan_record_keeper.lines.0": {
+      "source": "Vale: Sanctuary was promised under the Vargan seal. The closure order followed on the same day.",
+      "text": "Vale: Sanctuary was promised under the Vargan seal. The closure order followed on the same day.",
+      "speaker": "",
+      "context": "campaign_dialogue.vargan_record_keeper.lines"
+    },
+    "campaign_dialogue.vargan_record_keeper.lines.1": {
+      "source": "Kael: You kept both?",
+      "text": "Kael: You kept both?",
+      "speaker": "",
+      "context": "campaign_dialogue.vargan_record_keeper.lines"
+    },
+    "campaign_dialogue.vargan_record_keeper.lines.2": {
+      "source": "Vale: I kept them and let the steward keep people from reading them. I will sign that fact.",
+      "text": "Vale: I kept them and let the steward keep people from reading them. I will sign that fact.",
+      "speaker": "",
+      "context": "campaign_dialogue.vargan_record_keeper.lines"
+    },
     "campaign_dialogue.vargan_record_keeper.name": {
       "source": "Record Keeper Vale",
       "text": "Record Keeper Vale",
       "speaker": "",
       "context": "campaign_dialogue.vargan_record_keeper"
+    },
+    "campaign_dialogue.vargan_servant.greeting": {
+      "source": "I set an extra place when the grain drivers are late. It does not get them here, but it keeps someone expecting them.",
+      "text": "I set an extra place when the grain drivers are late. It does not get them here, but it keeps someone expecting them.",
+      "speaker": "",
+      "context": "campaign_dialogue.vargan_servant"
+    },
+    "campaign_dialogue.vargan_servant.lines.0": {
+      "source": "The archive lamps answer names cut from the old books. Start with the marks along the shelf. Not every answer has a voice.",
+      "text": "The archive lamps answer names cut from the old books. Start with the marks along the shelf. Not every answer has a voice.",
+      "speaker": "",
+      "context": "campaign_dialogue.vargan_servant.lines"
     },
     "campaign_dialogue.vargan_servant.name": {
       "source": "Tired Castle Servant",
@@ -1120,11 +1936,47 @@
       "speaker": "",
       "context": "campaign_dialogue.vargan_servant"
     },
+    "campaign_dialogue.vargan_steward.greeting": {
+      "source": "The empty sacks go left. The petitions go right. Do not mix them.",
+      "text": "The empty sacks go left. The petitions go right. Do not mix them.",
+      "speaker": "",
+      "context": "campaign_dialogue.vargan_steward"
+    },
+    "campaign_dialogue.vargan_steward.lines.0": {
+      "source": "Kael: Why are household signatures beside grain allotments?",
+      "text": "Kael: Why are household signatures beside grain allotments?",
+      "speaker": "",
+      "context": "campaign_dialogue.vargan_steward.lines"
+    },
+    "campaign_dialogue.vargan_steward.lines.1": {
+      "source": "Merrow: A supported household witnesses the renewal. Those are the terms.",
+      "text": "Merrow: A supported household witnesses the renewal. Those are the terms.",
+      "speaker": "",
+      "context": "campaign_dialogue.vargan_steward.lines"
+    },
+    "campaign_dialogue.vargan_steward.lines.2": {
+      "source": "Kael: Terms offered to someone hungry do not make a free promise.",
+      "text": "Kael: Terms offered to someone hungry do not make a free promise.",
+      "speaker": "",
+      "context": "campaign_dialogue.vargan_steward.lines"
+    },
     "campaign_dialogue.vargan_steward.name": {
       "source": "Steward Merrow",
       "text": "Steward Merrow",
       "speaker": "",
       "context": "campaign_dialogue.vargan_steward"
+    },
+    "campaign_dialogue.village_stories.greeting": {
+      "source": "A bell on a windowsill. New nails beside an old hinge. Roots laid out beneath labeled jars.",
+      "text": "A bell on a windowsill. New nails beside an old hinge. Roots laid out beneath labeled jars.",
+      "speaker": "",
+      "context": "campaign_dialogue.village_stories"
+    },
+    "campaign_dialogue.village_stories.lines.0": {
+      "source": "Kael: What matters is whether I returned after asking them to change.",
+      "text": "Kael: What matters is whether I returned after asking them to change.",
+      "speaker": "",
+      "context": "campaign_dialogue.village_stories.lines"
     },
     "campaign_dialogue.village_stories.name": {
       "source": "The Lives Beside the Road",
@@ -1204,11 +2056,83 @@
       "speaker": "",
       "context": "campaign_dialogue.white_hart.actions.3"
     },
+    "campaign_dialogue.white_hart.greeting": {
+      "source": "You have kept the account where a living hand can reach it. That is something the old oath would not allow.",
+      "text": "You have kept the account where a living hand can reach it. That is something the old oath would not allow.",
+      "speaker": "",
+      "context": "campaign_dialogue.white_hart"
+    },
+    "campaign_dialogue.white_hart.lines.0": {
+      "source": "Kael: The grain condition is broken. No one standing here has to promise you anything to eat.",
+      "text": "Kael: The grain condition is broken. No one standing here has to promise you anything to eat.",
+      "speaker": "",
+      "context": "campaign_dialogue.white_hart.lines"
+    },
+    "campaign_dialogue.white_hart.lines.1": {
+      "source": "The White Hart: I remember the gate shut. I remember the road hidden. I remember the soldiers entering. I will not tell you those were one man's act.",
+      "text": "The White Hart: I remember the gate shut. I remember the road hidden. I remember the soldiers entering. I will not tell you those were one man's act.",
+      "speaker": "",
+      "context": "campaign_dialogue.white_hart.lines"
+    },
+    "campaign_dialogue.white_hart.lines.2": {
+      "source": "Kael: The copies survive. I will freely keep what we have recovered. I cannot swear for the people who refused.",
+      "text": "Kael: The copies survive. I will freely keep what we have recovered. I cannot swear for the people who refused.",
+      "speaker": "",
+      "context": "campaign_dialogue.white_hart.lines"
+    },
+    "campaign_dialogue.white_hart.lines.3": {
+      "source": "The White Hart: One willing keeper of an account is enough to begin. Others may share that work. None may be given it by force.",
+      "text": "The White Hart: One willing keeper of an account is enough to begin. Others may share that work. None may be given it by force.",
+      "speaker": "",
+      "context": "campaign_dialogue.white_hart.lines"
+    },
+    "campaign_dialogue.white_hart.lines.4": {
+      "source": "The White Hart: Make the account public and I will leave its judgment with you. Release me quietly and preserve the record without opening every private memory.",
+      "text": "The White Hart: Make the account public and I will leave its judgment with you. Release me quietly and preserve the record without opening every private memory.",
+      "speaker": "",
+      "context": "campaign_dialogue.white_hart.lines"
+    },
+    "campaign_dialogue.white_hart.lines.5": {
+      "source": "The White Hart: Or carry the unresolved binding yourself. Or destroy me and lose what no copy holds.",
+      "text": "The White Hart: Or carry the unresolved binding yourself. Or destroy me and lose what no copy holds.",
+      "speaker": "",
+      "context": "campaign_dialogue.white_hart.lines"
+    },
+    "campaign_dialogue.white_hart.lines.6": {
+      "source": "Kael: Releasing you does not erase the house's crime. Protecting a family does not protect Edric from the record.",
+      "text": "Kael: Releasing you does not erase the house's crime. Protecting a family does not protect Edric from the record.",
+      "speaker": "",
+      "context": "campaign_dialogue.white_hart.lines"
+    },
+    "campaign_dialogue.white_hart.lines.7": {
+      "source": "The White Hart: Then choose whose work begins when mine ends.",
+      "text": "The White Hart: Then choose whose work begins when mine ends.",
+      "speaker": "",
+      "context": "campaign_dialogue.white_hart.lines"
+    },
     "campaign_dialogue.white_hart.name": {
       "source": "The White Hart",
       "text": "The White Hart",
       "speaker": "",
       "context": "campaign_dialogue.white_hart"
+    },
+    "campaign_dialogue.witness_-3.greeting": {
+      "source": "I can tell you where the road ran. I have removed the family homes from the copy.",
+      "text": "I can tell you where the road ran. I have removed the family homes from the copy.",
+      "speaker": "",
+      "context": "campaign_dialogue.witness_-3"
+    },
+    "campaign_dialogue.witness_-3.lines.0": {
+      "source": "Rook: My grandmother kept these names. She did not leave me permission to hand you every private part of her life.",
+      "text": "Rook: My grandmother kept these names. She did not leave me permission to hand you every private part of her life.",
+      "speaker": "",
+      "context": "campaign_dialogue.witness_-3.lines"
+    },
+    "campaign_dialogue.witness_-3.lines.1": {
+      "source": "Rook: The road is evidence. The addresses are not.",
+      "text": "Rook: The road is evidence. The addresses are not.",
+      "speaker": "",
+      "context": "campaign_dialogue.witness_-3.lines"
     },
     "campaign_dialogue.witness_-3.name": {
       "source": "Rook",
@@ -1216,17 +2140,95 @@
       "speaker": "",
       "context": "campaign_dialogue.witness_-3"
     },
+    "campaign_dialogue.witness_-3.variants.0.greeting": {
+      "source": "You have the route. You do not have my promise to stand in a rite.",
+      "text": "You have the route. You do not have my promise to stand in a rite.",
+      "speaker": "",
+      "context": "campaign_dialogue.witness_-3.variants.0"
+    },
+    "campaign_dialogue.witness_-3.variants.0.lines.0": {
+      "source": "Rook: A record is not a person agreeing. Keep that straight.",
+      "text": "Rook: A record is not a person agreeing. Keep that straight.",
+      "speaker": "",
+      "context": "campaign_dialogue.witness_-3.variants.0.lines"
+    },
+    "campaign_dialogue.witness_-7.greeting": {
+      "source": "I grew the medicine in the ash bed. Families were not told.",
+      "text": "I grew the medicine in the ash bed. Families were not told.",
+      "speaker": "",
+      "context": "campaign_dialogue.witness_-7"
+    },
+    "campaign_dialogue.witness_-7.lines.0": {
+      "source": "Mira: Some choose it now. Others choose the clean roots. I still treat them.",
+      "text": "Mira: Some choose it now. Others choose the clean roots. I still treat them.",
+      "speaker": "",
+      "context": "campaign_dialogue.witness_-7.lines"
+    },
+    "campaign_dialogue.witness_-7.lines.1": {
+      "source": "Mira: The cure was real. So was the choice I kept from them.",
+      "text": "Mira: The cure was real. So was the choice I kept from them.",
+      "speaker": "",
+      "context": "campaign_dialogue.witness_-7.lines"
+    },
     "campaign_dialogue.witness_-7.name": {
       "source": "Mira Fen",
       "text": "Mira Fen",
       "speaker": "",
       "context": "campaign_dialogue.witness_-7"
     },
+    "campaign_dialogue.witness_-7.variants.0.greeting": {
+      "source": "The ash bed is closed. I will explain why the replacement takes longer.",
+      "text": "The ash bed is closed. I will explain why the replacement takes longer.",
+      "speaker": "",
+      "context": "campaign_dialogue.witness_-7.variants.0"
+    },
+    "campaign_dialogue.witness_-7.variants.0.lines.0": {
+      "source": "Mira: There will be shortages. I will not hide them behind a clean label.",
+      "text": "Mira: There will be shortages. I will not hide them behind a clean label.",
+      "speaker": "",
+      "context": "campaign_dialogue.witness_-7.variants.0.lines"
+    },
+    "campaign_dialogue.witness_3.greeting": {
+      "source": "I resealed the book after the novice died. Every year afterward I called it care.",
+      "text": "I resealed the book after the novice died. Every year afterward I called it care.",
+      "speaker": "",
+      "context": "campaign_dialogue.witness_3"
+    },
+    "campaign_dialogue.witness_3.lines.0": {
+      "source": "Anwen: I was afraid. That explains what I did. It does not give the unnamed people back their years.",
+      "text": "Anwen: I was afraid. That explains what I did. It does not give the unnamed people back their years.",
+      "speaker": "",
+      "context": "campaign_dialogue.witness_3.lines"
+    },
+    "campaign_dialogue.witness_3.lines.1": {
+      "source": "Anwen: My confession is my own. No household has to follow it to receive grain.",
+      "text": "Anwen: My confession is my own. No household has to follow it to receive grain.",
+      "speaker": "",
+      "context": "campaign_dialogue.witness_3.lines"
+    },
     "campaign_dialogue.witness_3.name": {
       "source": "Sister Anwen",
       "text": "Sister Anwen",
       "speaker": "",
       "context": "campaign_dialogue.witness_3"
+    },
+    "campaign_dialogue.witness_7.greeting": {
+      "source": "Bram Kett. Sella Vey. Oren Vey. The older name beneath the painted crow.",
+      "text": "Bram Kett. Sella Vey. Oren Vey. The older name beneath the painted crow.",
+      "speaker": "",
+      "context": "campaign_dialogue.witness_7"
+    },
+    "campaign_dialogue.witness_7.lines.0": {
+      "source": "Kael: These pages establish what we recovered. They do not promise for the people who could not come.",
+      "text": "Kael: These pages establish what we recovered. They do not promise for the people who could not come.",
+      "speaker": "",
+      "context": "campaign_dialogue.witness_7.lines"
+    },
+    "campaign_dialogue.witness_7.lines.1": {
+      "source": "Kael: Leave room for what the Hart knows that our copies do not.",
+      "text": "Kael: Leave room for what the Hart knows that our copies do not.",
+      "speaker": "",
+      "context": "campaign_dialogue.witness_7.lines"
     },
     "campaign_dialogue.witness_7.name": {
       "source": "The Record",
@@ -1324,11 +2326,113 @@
       "speaker": "",
       "context": "dialogue.blacksmith_tor.actions.5"
     },
+    "dialogue.blacksmith_tor.greeting": {
+      "source": "Keep the scrap. I can spare a hinge more easily than another cart stuck outside.",
+      "text": "Keep the scrap. I can spare a hinge more easily than another cart stuck outside.",
+      "speaker": "",
+      "context": "dialogue.blacksmith_tor"
+    },
+    "dialogue.blacksmith_tor.lines.0": {
+      "source": "Tor: The forge still runs. If the road goes, every household will want a latch before they want a sword.",
+      "text": "Tor: The forge still runs. If the road goes, every household will want a latch before they want a sword.",
+      "speaker": "",
+      "context": "dialogue.blacksmith_tor.lines"
+    },
+    "dialogue.blacksmith_tor.lines.1": {
+      "source": "Kael: There are letters ground off this iron.",
+      "text": "Kael: There are letters ground off this iron.",
+      "speaker": "",
+      "context": "dialogue.blacksmith_tor.lines"
+    },
+    "dialogue.blacksmith_tor.lines.2": {
+      "source": "Tor: Refugee marks. I recognized them years ago. Told myself metal did not care who used it next.",
+      "text": "Tor: Refugee marks. I recognized them years ago. Told myself metal did not care who used it next.",
+      "speaker": "",
+      "context": "dialogue.blacksmith_tor.lines"
+    },
+    "dialogue.blacksmith_tor.lines.3": {
+      "source": "Tor: Some of it is holding doors shut against the rain. You want it back, tell me what we put in its place.",
+      "text": "Tor: Some of it is holding doors shut against the rain. You want it back, tell me what we put in its place.",
+      "speaker": "",
+      "context": "dialogue.blacksmith_tor.lines"
+    },
     "dialogue.blacksmith_tor.name": {
       "source": "Blacksmith Tor",
       "text": "Blacksmith Tor",
       "speaker": "",
       "context": "dialogue.blacksmith_tor"
+    },
+    "dialogue.blacksmith_tor.variants.0.greeting": {
+      "source": "The new nails carry the names where a hammer will not strike them away.",
+      "text": "The new nails carry the names where a hammer will not strike them away.",
+      "speaker": "",
+      "context": "dialogue.blacksmith_tor.variants.0"
+    },
+    "dialogue.blacksmith_tor.variants.0.lines.0": {
+      "source": "Tor: I am replacing one working piece at a time. Elna still has a door while I make the marker.",
+      "text": "Tor: I am replacing one working piece at a time. Elna still has a door while I make the marker.",
+      "speaker": "",
+      "context": "dialogue.blacksmith_tor.variants.0.lines"
+    },
+    "dialogue.blacksmith_tor.variants.0.lines.1": {
+      "source": "Kael: What did it cost?",
+      "text": "Kael: What did it cost?",
+      "speaker": "",
+      "context": "dialogue.blacksmith_tor.variants.0.lines"
+    },
+    "dialogue.blacksmith_tor.variants.0.lines.2": {
+      "source": "Tor: Two contracts. A late night. Less than grinding those letters off cost somebody else.",
+      "text": "Tor: Two contracts. A late night. Less than grinding those letters off cost somebody else.",
+      "speaker": "",
+      "context": "dialogue.blacksmith_tor.variants.0.lines"
+    },
+    "dialogue.blacksmith_tor.variants.1.greeting": {
+      "source": "The refugee marks face outward now. Nobody buys this stock without being told.",
+      "text": "The refugee marks face outward now. Nobody buys this stock without being told.",
+      "speaker": "",
+      "context": "dialogue.blacksmith_tor.variants.1"
+    },
+    "dialogue.blacksmith_tor.variants.1.lines.0": {
+      "source": "Tor: The tools stay useful. A share of each sale goes to replacement iron and the road record.",
+      "text": "Tor: The tools stay useful. A share of each sale goes to replacement iron and the road record.",
+      "speaker": "",
+      "context": "dialogue.blacksmith_tor.variants.1.lines"
+    },
+    "dialogue.blacksmith_tor.variants.1.lines.1": {
+      "source": "Kael: You will say that publicly?",
+      "text": "Kael: You will say that publicly?",
+      "speaker": "",
+      "context": "dialogue.blacksmith_tor.variants.1.lines"
+    },
+    "dialogue.blacksmith_tor.variants.1.lines.2": {
+      "source": "Tor: I already wrote it above the price.",
+      "text": "Tor: I already wrote it above the price.",
+      "speaker": "",
+      "context": "dialogue.blacksmith_tor.variants.1.lines"
+    },
+    "dialogue.blacksmith_tor.variants.2.greeting": {
+      "source": "The marked stock is on the table, with the forge accounts beside it.",
+      "text": "The marked stock is on the table, with the forge accounts beside it.",
+      "speaker": "",
+      "context": "dialogue.blacksmith_tor.variants.2"
+    },
+    "dialogue.blacksmith_tor.variants.2.lines.0": {
+      "source": "Tor: Anwen will keep it until the families decide. I work from new scrap now.",
+      "text": "Tor: Anwen will keep it until the families decide. I work from new scrap now.",
+      "speaker": "",
+      "context": "dialogue.blacksmith_tor.variants.2.lines"
+    },
+    "dialogue.blacksmith_tor.variants.2.lines.1": {
+      "source": "Kael: Is the forge closing?",
+      "text": "Kael: Is the forge closing?",
+      "speaker": "",
+      "context": "dialogue.blacksmith_tor.variants.2.lines"
+    },
+    "dialogue.blacksmith_tor.variants.2.lines.2": {
+      "source": "Tor: Not if you stop talking and help carry the clean iron.",
+      "text": "Tor: Not if you stop talking and help carry the clean iron.",
+      "speaker": "",
+      "context": "dialogue.blacksmith_tor.variants.2.lines"
     },
     "dialogue.edric.actions.0.label": {
       "source": "I will bring the road evidence to your record hall.",
@@ -1342,11 +2446,83 @@
       "speaker": "",
       "context": "dialogue.edric.actions.1"
     },
+    "dialogue.edric.greeting": {
+      "source": "The south granary is open. Tell the guard the sick household goes first.",
+      "text": "The south granary is open. Tell the guard the sick household goes first.",
+      "speaker": "",
+      "context": "dialogue.edric"
+    },
+    "dialogue.edric.lines.0": {
+      "source": "Kael: Your seal was wrapped around a child's token.",
+      "text": "Kael: Your seal was wrapped around a child's token.",
+      "speaker": "",
+      "context": "dialogue.edric.lines"
+    },
+    "dialogue.edric.lines.1": {
+      "source": "Edric: My men were sent to contain a breach. They came back with empty hands and fewer men.",
+      "text": "Edric: My men were sent to contain a breach. They came back with empty hands and fewer men.",
+      "speaker": "",
+      "context": "dialogue.edric.lines"
+    },
+    "dialogue.edric.lines.2": {
+      "source": "Edric: I have grain for Greyfen. I do not have a road that will carry it safely.",
+      "text": "Edric: I have grain for Greyfen. I do not have a road that will carry it safely.",
+      "speaker": "",
+      "context": "dialogue.edric.lines"
+    },
+    "dialogue.edric.lines.3": {
+      "source": "Kael: And the people who know why?",
+      "text": "Kael: And the people who know why?",
+      "speaker": "",
+      "context": "dialogue.edric.lines"
+    },
+    "dialogue.edric.lines.4": {
+      "source": "Edric: Bring their account to the castle. I will show you what another winter requires.",
+      "text": "Edric: Bring their account to the castle. I will show you what another winter requires.",
+      "speaker": "",
+      "context": "dialogue.edric.lines"
+    },
     "dialogue.edric.name": {
       "source": "Lord Edric Vargan",
       "text": "Lord Edric Vargan",
       "speaker": "",
       "context": "dialogue.edric"
+    },
+    "dialogue.edric.variants.0.greeting": {
+      "source": "The carts will move without a household seal. I have given the order.",
+      "text": "The carts will move without a household seal. I have given the order.",
+      "speaker": "",
+      "context": "dialogue.edric.variants.0"
+    },
+    "dialogue.edric.variants.0.lines.0": {
+      "source": "Edric: My guards can keep a road open. They cannot make the people on it believe me.",
+      "text": "Edric: My guards can keep a road open. They cannot make the people on it believe me.",
+      "speaker": "",
+      "context": "dialogue.edric.variants.0.lines"
+    },
+    "dialogue.edric.variants.0.lines.1": {
+      "source": "Kael: Begin with the first job. The second takes longer.",
+      "text": "Kael: Begin with the first job. The second takes longer.",
+      "speaker": "",
+      "context": "dialogue.edric.variants.0.lines"
+    },
+    "dialogue.edric.variants.1.greeting": {
+      "source": "You have read the renewal order. You have not watched a hungry house divide its last loaf.",
+      "text": "You have read the renewal order. You have not watched a hungry house divide its last loaf.",
+      "speaker": "",
+      "context": "dialogue.edric.variants.1"
+    },
+    "dialogue.edric.variants.1.lines.0": {
+      "source": "Kael: I have watched people be told safety was inside a gate they could not enter.",
+      "text": "Kael: I have watched people be told safety was inside a gate they could not enter.",
+      "speaker": "",
+      "context": "dialogue.edric.variants.1.lines"
+    },
+    "dialogue.edric.variants.1.lines.1": {
+      "source": "Edric: Then come to the record hall. Argue where the figures are.",
+      "text": "Edric: Then come to the record hall. Argue where the figures are.",
+      "speaker": "",
+      "context": "dialogue.edric.variants.1.lines"
     },
     "dialogue.farmer_toma.actions.0.label": {
       "source": "I will compare the tracks and the bandits' camp.",
@@ -1450,11 +2626,113 @@
       "speaker": "",
       "context": "dialogue.farmer_toma.actions.4"
     },
+    "dialogue.farmer_toma.greeting": {
+      "source": "She is asleep. Speak low. Mira finally got the fever down.",
+      "text": "She is asleep. Speak low. Mira finally got the fever down.",
+      "speaker": "",
+      "context": "dialogue.farmer_toma"
+    },
+    "dialogue.farmer_toma.lines.0": {
+      "source": "Toma: My daughter was outside when the bandits came. The thing at the fold put itself between her and a blade.",
+      "text": "Toma: My daughter was outside when the bandits came. The thing at the fold put itself between her and a blade.",
+      "speaker": "",
+      "context": "dialogue.farmer_toma.lines"
+    },
+    "dialogue.farmer_toma.lines.1": {
+      "source": "Kael: And the missing sheep?",
+      "text": "Kael: And the missing sheep?",
+      "speaker": "",
+      "context": "dialogue.farmer_toma.lines"
+    },
+    "dialogue.farmer_toma.lines.2": {
+      "source": "Toma: I fed it. Then I hid it. It started taking from the next field and I kept telling myself gratitude was different from a danger.",
+      "text": "Toma: I fed it. Then I hid it. It started taking from the next field and I kept telling myself gratitude was different from a danger.",
+      "speaker": "",
+      "context": "dialogue.farmer_toma.lines"
+    },
+    "dialogue.farmer_toma.lines.3": {
+      "source": "Toma: Read the boot marks with the tracks. I want the whole cause found, even the part that is mine.",
+      "text": "Toma: Read the boot marks with the tracks. I want the whole cause found, even the part that is mine.",
+      "speaker": "",
+      "context": "dialogue.farmer_toma.lines"
+    },
     "dialogue.farmer_toma.name": {
       "source": "Farmer Toma",
       "text": "Farmer Toma",
       "speaker": "",
       "context": "dialogue.farmer_toma"
+    },
+    "dialogue.farmer_toma.variants.0.greeting": {
+      "source": "The outer boundary is marked. My daughter knows the posts mean stop.",
+      "text": "The outer boundary is marked. My daughter knows the posts mean stop.",
+      "speaker": "",
+      "context": "dialogue.farmer_toma.variants.0"
+    },
+    "dialogue.farmer_toma.variants.0.lines.0": {
+      "source": "Toma: The creature follows the old protection path beyond the fields. I warned the neighbors this time.",
+      "text": "Toma: The creature follows the old protection path beyond the fields. I warned the neighbors this time.",
+      "speaker": "",
+      "context": "dialogue.farmer_toma.variants.0.lines"
+    },
+    "dialogue.farmer_toma.variants.0.lines.1": {
+      "source": "Kael: A boundary only works if everyone knows where it is.",
+      "text": "Kael: A boundary only works if everyone knows where it is.",
+      "speaker": "",
+      "context": "dialogue.farmer_toma.variants.0.lines"
+    },
+    "dialogue.farmer_toma.variants.1.greeting": {
+      "source": "There is a watch at the fold and a warning on every gate.",
+      "text": "There is a watch at the fold and a warning on every gate.",
+      "speaker": "",
+      "context": "dialogue.farmer_toma.variants.1"
+    },
+    "dialogue.farmer_toma.variants.1.lines.0": {
+      "source": "Toma: I do not call it harmless. I call the neighbors before I feed it.",
+      "text": "Toma: I do not call it harmless. I call the neighbors before I feed it.",
+      "speaker": "",
+      "context": "dialogue.farmer_toma.variants.1.lines"
+    },
+    "dialogue.farmer_toma.variants.1.lines.1": {
+      "source": "Kael: They get to change their minds.",
+      "text": "Kael: They get to change their minds.",
+      "speaker": "",
+      "context": "dialogue.farmer_toma.variants.1.lines"
+    },
+    "dialogue.farmer_toma.variants.1.lines.2": {
+      "source": "Toma: Yes. Even when I wish they would not.",
+      "text": "Toma: Yes. Even when I wish they would not.",
+      "speaker": "",
+      "context": "dialogue.farmer_toma.variants.1.lines"
+    },
+    "dialogue.farmer_toma.variants.2.greeting": {
+      "source": "The fold is quiet. She keeps asking why the thing that protected her had to die.",
+      "text": "The fold is quiet. She keeps asking why the thing that protected her had to die.",
+      "speaker": "",
+      "context": "dialogue.farmer_toma.variants.2"
+    },
+    "dialogue.farmer_toma.variants.2.lines.0": {
+      "source": "Toma: I told her about the sheep. And that I hid it until there were no easy choices left.",
+      "text": "Toma: I told her about the sheep. And that I hid it until there were no easy choices left.",
+      "speaker": "",
+      "context": "dialogue.farmer_toma.variants.2.lines"
+    },
+    "dialogue.farmer_toma.variants.2.lines.1": {
+      "source": "Kael: Keep its protection in the account too.",
+      "text": "Kael: Keep its protection in the account too.",
+      "speaker": "",
+      "context": "dialogue.farmer_toma.variants.2.lines"
+    },
+    "dialogue.farmer_toma.variants.3.greeting": {
+      "source": "The neighbors stopped asking. That is not the same as the danger ending.",
+      "text": "The neighbors stopped asking. That is not the same as the danger ending.",
+      "speaker": "",
+      "context": "dialogue.farmer_toma.variants.3"
+    },
+    "dialogue.farmer_toma.variants.3.lines.0": {
+      "source": "Toma: I heard it at the next field last night. I will not tell you I was surprised.",
+      "text": "Toma: I heard it at the next field last night. I will not tell you I was surprised.",
+      "speaker": "",
+      "context": "dialogue.farmer_toma.variants.3.lines"
     },
     "dialogue.mira.actions.0.label": {
       "source": "I will read the chapel register.",
@@ -1624,11 +2902,179 @@
       "speaker": "",
       "context": "dialogue.mira.actions.9"
     },
+    "dialogue.mira.greeting": {
+      "source": "Hold the door. Elna is bringing broth, and I have both hands occupied.",
+      "text": "Hold the door. Elna is bringing broth, and I have both hands occupied.",
+      "speaker": "",
+      "context": "dialogue.mira"
+    },
+    "dialogue.mira.lines.0": {
+      "source": "Mira: Toma's daughter has a fever. The draught works. The roots it needs grow in the old ash beds.",
+      "text": "Mira: Toma's daughter has a fever. The draught works. The roots it needs grow in the old ash beds.",
+      "speaker": "",
+      "context": "dialogue.mira.lines"
+    },
+    "dialogue.mira.lines.1": {
+      "source": "Kael: Does Toma know where it comes from?",
+      "text": "Kael: Does Toma know where it comes from?",
+      "speaker": "",
+      "context": "dialogue.mira.lines"
+    },
+    "dialogue.mira.lines.2": {
+      "source": "Mira: He knows I can bring the fever down. I have let him think that was the only fact that mattered.",
+      "text": "Mira: He knows I can bring the fever down. I have let him think that was the only fact that mattered.",
+      "speaker": "",
+      "context": "dialogue.mira.lines"
+    },
+    "dialogue.mira.lines.3": {
+      "source": "Mira: Sella bought salve for Oren's hands. Too much carving. I have one jar she never collected.",
+      "text": "Mira: Sella bought salve for Oren's hands. Too much carving. I have one jar she never collected.",
+      "speaker": "",
+      "context": "dialogue.mira.lines"
+    },
     "dialogue.mira.name": {
       "source": "Mira Fen",
       "text": "Mira Fen",
       "speaker": "",
       "context": "dialogue.mira"
+    },
+    "dialogue.mira.variants.0.greeting": {
+      "source": "The clean roots take longer to steep. I keep a cold cloth ready between doses.",
+      "text": "The clean roots take longer to steep. I keep a cold cloth ready between doses.",
+      "speaker": "",
+      "context": "dialogue.mira.variants.0"
+    },
+    "dialogue.mira.variants.0.lines.0": {
+      "source": "Mira: You did not make the fever disappear by closing the ash bed.",
+      "text": "Mira: You did not make the fever disappear by closing the ash bed.",
+      "speaker": "",
+      "context": "dialogue.mira.variants.0.lines"
+    },
+    "dialogue.mira.variants.0.lines.1": {
+      "source": "Kael: No. Who needs help while the new treatment catches up?",
+      "text": "Kael: No. Who needs help while the new treatment catches up?",
+      "speaker": "",
+      "context": "dialogue.mira.variants.0.lines"
+    },
+    "dialogue.mira.variants.0.lines.2": {
+      "source": "Mira: Toma. He has not slept. Bring him the broth before it cools.",
+      "text": "Mira: Toma. He has not slept. Bring him the broth before it cools.",
+      "speaker": "",
+      "context": "dialogue.mira.variants.0.lines"
+    },
+    "dialogue.mira.variants.1.greeting": {
+      "source": "The jars have their source written on them now. Two families refused. Three asked questions.",
+      "text": "The jars have their source written on them now. Two families refused. Three asked questions.",
+      "speaker": "",
+      "context": "dialogue.mira.variants.1"
+    },
+    "dialogue.mira.variants.1.lines.0": {
+      "source": "Mira: I treated all five. Consent would mean little if refusal meant I stopped caring.",
+      "text": "Mira: I treated all five. Consent would mean little if refusal meant I stopped caring.",
+      "speaker": "",
+      "context": "dialogue.mira.variants.1.lines"
+    },
+    "dialogue.mira.variants.1.lines.1": {
+      "source": "Kael: What will you say at the assembly?",
+      "text": "Kael: What will you say at the assembly?",
+      "speaker": "",
+      "context": "dialogue.mira.variants.1.lines"
+    },
+    "dialogue.mira.variants.1.lines.2": {
+      "source": "Mira: What I used. What I withheld. What I am changing.",
+      "text": "Mira: What I used. What I withheld. What I am changing.",
+      "speaker": "",
+      "context": "dialogue.mira.variants.1.lines"
+    },
+    "dialogue.mira.variants.2.greeting": {
+      "source": "The fever broke. Toma thanked me. I let him.",
+      "text": "The fever broke. Toma thanked me. I let him.",
+      "speaker": "",
+      "context": "dialogue.mira.variants.2"
+    },
+    "dialogue.mira.variants.2.lines.0": {
+      "source": "Mira: There is your immediate result. A child is breathing easier.",
+      "text": "Mira: There is your immediate result. A child is breathing easier.",
+      "speaker": "",
+      "context": "dialogue.mira.variants.2.lines"
+    },
+    "dialogue.mira.variants.2.lines.1": {
+      "source": "Kael: And the part he still cannot choose?",
+      "text": "Kael: And the part he still cannot choose?",
+      "speaker": "",
+      "context": "dialogue.mira.variants.2.lines"
+    },
+    "dialogue.mira.variants.2.lines.2": {
+      "source": "Mira: Still here. Under the label I have not written.",
+      "text": "Mira: Still here. Under the label I have not written.",
+      "speaker": "",
+      "context": "dialogue.mira.variants.2.lines"
+    },
+    "dialogue.mira.variants.3.greeting": {
+      "source": "The wrapped core shifts toward the names in the book, not toward my instruments.",
+      "text": "The wrapped core shifts toward the names in the book, not toward my instruments.",
+      "speaker": "",
+      "context": "dialogue.mira.variants.3"
+    },
+    "dialogue.mira.variants.3.lines.0": {
+      "source": "Mira: It is a memory, not a patient who can answer me. I will not call a useful response permission.",
+      "text": "Mira: It is a memory, not a patient who can answer me. I will not call a useful response permission.",
+      "speaker": "",
+      "context": "dialogue.mira.variants.3.lines"
+    },
+    "dialogue.mira.variants.3.lines.1": {
+      "source": "Kael: Study what is already exposed. Do not open another name without asking the family.",
+      "text": "Kael: Study what is already exposed. Do not open another name without asking the family.",
+      "speaker": "",
+      "context": "dialogue.mira.variants.3.lines"
+    },
+    "dialogue.mira.variants.4.greeting": {
+      "source": "Say Oren's name at the old stones. Watch the roots before you move closer.",
+      "text": "Say Oren's name at the old stones. Watch the roots before you move closer.",
+      "speaker": "",
+      "context": "dialogue.mira.variants.4"
+    },
+    "dialogue.mira.variants.4.lines.0": {
+      "source": "Mira: The oil shows where the memory is caught. It does not decide what you should do with it.",
+      "text": "Mira: The oil shows where the memory is caught. It does not decide what you should do with it.",
+      "speaker": "",
+      "context": "dialogue.mira.variants.4.lines"
+    },
+    "dialogue.mira.variants.4.lines.1": {
+      "source": "Kael: And breaking the vessel?",
+      "text": "Kael: And breaking the vessel?",
+      "speaker": "",
+      "context": "dialogue.mira.variants.4.lines"
+    },
+    "dialogue.mira.variants.4.lines.2": {
+      "source": "Mira: Stops that shape. The memory goes somewhere else. We can defend ourselves without pretending the aftermath is nothing.",
+      "text": "Mira: Stops that shape. The memory goes somewhere else. We can defend ourselves without pretending the aftermath is nothing.",
+      "speaker": "",
+      "context": "dialogue.mira.variants.4.lines"
+    },
+    "dialogue.mira.variants.5.greeting": {
+      "source": "The chapel register and the roots turned toward the same name.",
+      "text": "The chapel register and the roots turned toward the same name.",
+      "speaker": "",
+      "context": "dialogue.mira.variants.5"
+    },
+    "dialogue.mira.variants.5.lines.0": {
+      "source": "Mira: Oren restored a name on his token. The road's concealment could not keep it disordered afterward.",
+      "text": "Mira: Oren restored a name on his token. The road's concealment could not keep it disordered afterward.",
+      "speaker": "",
+      "context": "dialogue.mira.variants.5.lines"
+    },
+    "dialogue.mira.variants.5.lines.1": {
+      "source": "Kael: That brought the creatures?",
+      "text": "Kael: That brought the creatures?",
+      "speaker": "",
+      "context": "dialogue.mira.variants.5.lines"
+    },
+    "dialogue.mira.variants.5.lines.2": {
+      "source": "Mira: The tokens drew them. The failed binding left the memory loose. Read the register before you face what took it.",
+      "text": "Mira: The tokens drew them. The failed binding left the memory loose. Read the register before you face what took it.",
+      "speaker": "",
+      "context": "dialogue.mira.variants.5.lines"
     },
     "dialogue.notice_board.actions.0.label": {
       "source": "I will find what happened to Bram, Sella, and Oren.",
@@ -1636,11 +3082,95 @@
       "speaker": "",
       "context": "dialogue.notice_board.actions.0"
     },
+    "dialogue.notice_board.greeting": {
+      "source": "Three missing on the north road. Bram Kett. Sella Vey. Her son Oren.",
+      "text": "Three missing on the north road. Bram Kett. Sella Vey. Her son Oren.",
+      "speaker": "",
+      "context": "dialogue.notice_board"
+    },
+    "dialogue.notice_board.lines.0": {
+      "source": "Payment for an account of the missing and proof of what took them. Names held at the Crow Shrine.",
+      "text": "Payment for an account of the missing and proof of what took them. Names held at the Crow Shrine.",
+      "speaker": "",
+      "context": "dialogue.notice_board.lines"
+    },
+    "dialogue.notice_board.lines.1": {
+      "source": "A second hand has added: Bram did not abandon a cart while someone needed it. Ask who closed the road.",
+      "text": "A second hand has added: Bram did not abandon a cart while someone needed it. Ask who closed the road.",
+      "speaker": "",
+      "context": "dialogue.notice_board.lines"
+    },
     "dialogue.notice_board.name": {
       "source": "Greyfen Notice Board",
       "text": "Greyfen Notice Board",
       "speaker": "",
       "context": "dialogue.notice_board"
+    },
+    "dialogue.notice_board.variants.0.greeting": {
+      "source": "The order beside the contract has been crossed through. The names remain.",
+      "text": "The order beside the contract has been crossed through. The names remain.",
+      "speaker": "",
+      "context": "dialogue.notice_board.variants.0"
+    },
+    "dialogue.notice_board.variants.0.lines.0": {
+      "source": "Kael: The grain is no longer being held against a signature. Keeping it moving will take more than words.",
+      "text": "Kael: The grain is no longer being held against a signature. Keeping it moving will take more than words.",
+      "speaker": "",
+      "context": "dialogue.notice_board.variants.0.lines"
+    },
+    "dialogue.notice_board.variants.1.greeting": {
+      "source": "A Vargan notice covers half the old contract.",
+      "text": "A Vargan notice covers half the old contract.",
+      "speaker": "",
+      "context": "dialogue.notice_board.variants.1"
+    },
+    "dialogue.notice_board.variants.1.lines.0": {
+      "source": "Protected households must attend the renewal. Grain allotments will be recorded beside their assent.",
+      "text": "Protected households must attend the renewal. Grain allotments will be recorded beside their assent.",
+      "speaker": "",
+      "context": "dialogue.notice_board.variants.1.lines"
+    },
+    "dialogue.notice_board.variants.1.lines.1": {
+      "source": "Kael: Hunger does not make an oath freely given.",
+      "text": "Kael: Hunger does not make an oath freely given.",
+      "speaker": "",
+      "context": "dialogue.notice_board.variants.1.lines"
+    },
+    "dialogue.notice_board.variants.2.greeting": {
+      "source": "Oren's token hangs below the contract. Someone has tied a dry scrap of cloth over it.",
+      "text": "Oren's token hangs below the contract. Someone has tied a dry scrap of cloth over it.",
+      "speaker": "",
+      "context": "dialogue.notice_board.variants.2"
+    },
+    "dialogue.notice_board.variants.2.lines.0": {
+      "source": "Kael: They have not taken it down. Somebody is afraid enough to cover it and kind enough to keep it dry.",
+      "text": "Kael: They have not taken it down. Somebody is afraid enough to cover it and kind enough to keep it dry.",
+      "speaker": "",
+      "context": "dialogue.notice_board.variants.2.lines"
+    },
+    "dialogue.notice_board.variants.3.greeting": {
+      "source": "A small note has been added: anyone who saw Bram's cart should speak to Anwen.",
+      "text": "A small note has been added: anyone who saw Bram's cart should speak to Anwen.",
+      "speaker": "",
+      "context": "dialogue.notice_board.variants.3"
+    },
+    "dialogue.notice_board.variants.3.lines.0": {
+      "source": "Kael: A private account can still invite a second witness.",
+      "text": "Kael: A private account can still invite a second witness.",
+      "speaker": "",
+      "context": "dialogue.notice_board.variants.3.lines"
+    },
+    "dialogue.notice_board.variants.4.greeting": {
+      "source": "The payment remains unclaimed. Beneath it, three empty places for names.",
+      "text": "The payment remains unclaimed. Beneath it, three empty places for names.",
+      "speaker": "",
+      "context": "dialogue.notice_board.variants.4"
+    },
+    "dialogue.notice_board.variants.4.lines.0": {
+      "source": "Kael: Keeping the token is not the same as keeping them safe.",
+      "text": "Kael: Keeping the token is not the same as keeping them safe.",
+      "speaker": "",
+      "context": "dialogue.notice_board.variants.4.lines"
     },
     "dialogue.returned_soldier.actions.0.cost": {
       "source": "This records an explicit promise or practical action. A record cannot supply someone else's consent.",
@@ -1689,6 +3219,36 @@
       "text": "The grave settles. Len's name remains in the recovered record without a public spectacle.",
       "speaker": "",
       "context": "dialogue.returned_soldier.actions.1"
+    },
+    "dialogue.returned_soldier.greeting": {
+      "source": "Hold the gate. Hold the gate. The lantern is on the wrong side.",
+      "text": "Hold the gate. Hold the gate. The lantern is on the wrong side.",
+      "speaker": "",
+      "context": "dialogue.returned_soldier"
+    },
+    "dialogue.returned_soldier.lines.0": {
+      "source": "Kael: You are repeating one night. Can you tell me your name?",
+      "text": "Kael: You are repeating one night. Can you tell me your name?",
+      "speaker": "",
+      "context": "dialogue.returned_soldier.lines"
+    },
+    "dialogue.returned_soldier.lines.1": {
+      "source": "The Returned Soldier: Len. Mother left the lantern. Hold the gate.",
+      "text": "The Returned Soldier: Len. Mother left the lantern. Hold the gate.",
+      "speaker": "",
+      "context": "dialogue.returned_soldier.lines"
+    },
+    "dialogue.returned_soldier.lines.2": {
+      "source": "Kael: A fragment caught in an empty grave. Not a man who knows what happened afterward.",
+      "text": "Kael: A fragment caught in an empty grave. Not a man who knows what happened afterward.",
+      "speaker": "",
+      "context": "dialogue.returned_soldier.lines"
+    },
+    "dialogue.returned_soldier.lines.3": {
+      "source": "The Returned Soldier: Len. The lantern is on the wrong side.",
+      "text": "The Returned Soldier: Len. The lantern is on the wrong side.",
+      "speaker": "",
+      "context": "dialogue.returned_soldier.lines"
     },
     "dialogue.returned_soldier.name": {
       "source": "The Returned Soldier",
@@ -1774,11 +3334,137 @@
       "speaker": "",
       "context": "dialogue.rook.actions.3"
     },
+    "dialogue.rook.greeting": {
+      "source": "You got the cart moving? Good. I was about to sell him a very expensive push.",
+      "text": "You got the cart moving? Good. I was about to sell him a very expensive push.",
+      "speaker": "",
+      "context": "dialogue.rook"
+    },
+    "dialogue.rook.lines.0": {
+      "source": "Rook: Bram fixed my axle twice. Charged me once. Claimed he could not afford to be seen with a grateful smuggler.",
+      "text": "Rook: Bram fixed my axle twice. Charged me once. Claimed he could not afford to be seen with a grateful smuggler.",
+      "speaker": "",
+      "context": "dialogue.rook.lines"
+    },
+    "dialogue.rook.lines.1": {
+      "source": "Kael: You knew the other two?",
+      "text": "Kael: You knew the other two?",
+      "speaker": "",
+      "context": "dialogue.rook.lines"
+    },
+    "dialogue.rook.lines.2": {
+      "source": "Rook: Sella asked about the old road. Oren asked whether the crows paid me to follow them.",
+      "text": "Rook: Sella asked about the old road. Oren asked whether the crows paid me to follow them.",
+      "speaker": "",
+      "context": "dialogue.rook.lines"
+    },
+    "dialogue.rook.lines.3": {
+      "source": "Rook: The road bends where the old waystone says it should not. I have a map. I also have a room somebody can find.",
+      "text": "Rook: The road bends where the old waystone says it should not. I have a map. I also have a room somebody can find.",
+      "speaker": "",
+      "context": "dialogue.rook.lines"
+    },
     "dialogue.rook.name": {
       "source": "Rook",
       "text": "Rook",
       "speaker": "",
       "context": "dialogue.rook"
+    },
+    "dialogue.rook.variants.0.greeting": {
+      "source": "They copied the map with my family mark still on it. A guard came to my door.",
+      "text": "They copied the map with my family mark still on it. A guard came to my door.",
+      "speaker": "",
+      "context": "dialogue.rook.variants.0"
+    },
+    "dialogue.rook.variants.0.lines.0": {
+      "source": "Rook: You needed a witness. You got a target as well.",
+      "text": "Rook: You needed a witness. You got a target as well.",
+      "speaker": "",
+      "context": "dialogue.rook.variants.0.lines"
+    },
+    "dialogue.rook.variants.0.lines.1": {
+      "source": "Kael: I will keep a way out open.",
+      "text": "Kael: I will keep a way out open.",
+      "speaker": "",
+      "context": "dialogue.rook.variants.0.lines"
+    },
+    "dialogue.rook.variants.0.lines.2": {
+      "source": "Rook: That was meant to be the promise before you put my name up.",
+      "text": "Rook: That was meant to be the promise before you put my name up.",
+      "speaker": "",
+      "context": "dialogue.rook.variants.0.lines"
+    },
+    "dialogue.rook.variants.1.greeting": {
+      "source": "I copied the route without the houses. The families know who has the original.",
+      "text": "I copied the route without the houses. The families know who has the original.",
+      "speaker": "",
+      "context": "dialogue.rook.variants.1"
+    },
+    "dialogue.rook.variants.1.lines.0": {
+      "source": "Rook: I will tell the assembly what I saw. They do not need my grandmother's bedroom to believe it.",
+      "text": "Rook: I will tell the assembly what I saw. They do not need my grandmother's bedroom to believe it.",
+      "speaker": "",
+      "context": "dialogue.rook.variants.1.lines"
+    },
+    "dialogue.rook.variants.1.lines.1": {
+      "source": "Kael: You choose what is yours to share.",
+      "text": "Kael: You choose what is yours to share.",
+      "speaker": "",
+      "context": "dialogue.rook.variants.1.lines"
+    },
+    "dialogue.rook.variants.1.lines.2": {
+      "source": "Rook: There. A sentence I could get used to.",
+      "text": "Rook: There. A sentence I could get used to.",
+      "speaker": "",
+      "context": "dialogue.rook.variants.1.lines"
+    },
+    "dialogue.rook.variants.2.greeting": {
+      "source": "I can still walk the route. I will not make another map for you.",
+      "text": "I can still walk the route. I will not make another map for you.",
+      "speaker": "",
+      "context": "dialogue.rook.variants.2"
+    },
+    "dialogue.rook.variants.2.lines.0": {
+      "source": "Rook: Destroying the copy kept Vargan from using it. It kept the next refugee from using it too.",
+      "text": "Rook: Destroying the copy kept Vargan from using it. It kept the next refugee from using it too.",
+      "speaker": "",
+      "context": "dialogue.rook.variants.2.lines"
+    },
+    "dialogue.rook.variants.2.lines.1": {
+      "source": "Kael: I can carry the route in the record without your family mark.",
+      "text": "Kael: I can carry the route in the record without your family mark.",
+      "speaker": "",
+      "context": "dialogue.rook.variants.2.lines"
+    },
+    "dialogue.rook.variants.2.lines.2": {
+      "source": "Rook: Then learn it properly.",
+      "text": "Rook: Then learn it properly.",
+      "speaker": "",
+      "context": "dialogue.rook.variants.2.lines"
+    },
+    "dialogue.rook.variants.3.greeting": {
+      "source": "The guard asked where my grandmother lived. Said he was checking who deserved protection.",
+      "text": "The guard asked where my grandmother lived. Said he was checking who deserved protection.",
+      "speaker": "",
+      "context": "dialogue.rook.variants.3"
+    },
+    "dialogue.rook.variants.3.lines.0": {
+      "source": "Rook: My family kept names because the shrine would not. That does not make us willing to be nailed to a board.",
+      "text": "Rook: My family kept names because the shrine would not. That does not make us willing to be nailed to a board.",
+      "speaker": "",
+      "context": "dialogue.rook.variants.3.lines"
+    },
+    "dialogue.rook.variants.3.lines.1": {
+      "source": "Kael: I promised to stay with the people carrying this.",
+      "text": "Kael: I promised to stay with the people carrying this.",
+      "speaker": "",
+      "context": "dialogue.rook.variants.3.lines"
+    },
+    "dialogue.rook.variants.3.lines.2": {
+      "source": "Rook: Then stay where they can reach you. The false waystone is a good start.",
+      "text": "Rook: Then stay where they can reach you. The false waystone is a good start.",
+      "speaker": "",
+      "context": "dialogue.rook.variants.3.lines"
     },
     "dialogue.sister_anwen.actions.0.cost": {
       "source": "This records an explicit promise or practical action. A record cannot supply someone else's consent.",
@@ -1906,11 +3592,113 @@
       "speaker": "",
       "context": "dialogue.sister_anwen.actions.5"
     },
+    "dialogue.sister_anwen.greeting": {
+      "source": "Mind the cup on the step. The man from the south road needs it more than I need a clean floor.",
+      "text": "Mind the cup on the step. The man from the south road needs it more than I need a clean floor.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen"
+    },
+    "dialogue.sister_anwen.lines.0": {
+      "source": "Kael: I read the road notice. Three missing.",
+      "text": "Kael: I read the road notice. Three missing.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.lines"
+    },
+    "dialogue.sister_anwen.lines.1": {
+      "source": "Anwen: Bram drove. Sella had Oren beside her. He left his coat here because the sun was out.",
+      "text": "Anwen: Bram drove. Sella had Oren beside her. He left his coat here because the sun was out.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.lines"
+    },
+    "dialogue.sister_anwen.lines.2": {
+      "source": "Anwen: They found old wooden tokens where the road was being repaired. Sella asked me to read one. I did.",
+      "text": "Anwen: They found old wooden tokens where the road was being repaired. Sella asked me to read one. I did.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.lines"
+    },
+    "dialogue.sister_anwen.lines.3": {
+      "source": "Kael: What happened when you read it?",
+      "text": "Kael: What happened when you read it?",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.lines"
+    },
+    "dialogue.sister_anwen.lines.4": {
+      "source": "Anwen: The candles went out. I sent them away while I found a rite I thought would keep them safe.",
+      "text": "Anwen: The candles went out. I sent them away while I found a rite I thought would keep them safe.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.lines"
+    },
+    "dialogue.sister_anwen.lines.5": {
+      "source": "Anwen: If you find red thread around black feathers, keep it intact. I tied it. I owe you that much before you go.",
+      "text": "Anwen: If you find red thread around black feathers, keep it intact. I tied it. I owe you that much before you go.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.lines"
+    },
     "dialogue.sister_anwen.name": {
       "source": "Sister Anwen",
       "text": "Sister Anwen",
       "speaker": "",
       "context": "dialogue.sister_anwen"
+    },
+    "dialogue.sister_anwen.variants.0.greeting": {
+      "source": "I have put the grain list beside the burial book. No one has to sign one to receive the other.",
+      "text": "I have put the grain list beside the burial book. No one has to sign one to receive the other.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.0"
+    },
+    "dialogue.sister_anwen.variants.0.lines.0": {
+      "source": "Anwen: I could call that a beginning. It is mostly a table and two people willing to sit at it.",
+      "text": "Anwen: I could call that a beginning. It is mostly a table and two people willing to sit at it.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.0.lines"
+    },
+    "dialogue.sister_anwen.variants.0.lines.1": {
+      "source": "Kael: Beginnings usually look smaller when somebody is doing the work.",
+      "text": "Kael: Beginnings usually look smaller when somebody is doing the work.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.0.lines"
+    },
+    "dialogue.sister_anwen.variants.1.greeting": {
+      "source": "I will give you the register. I am not agreeing to stand in a rite you threatened me into.",
+      "text": "I will give you the register. I am not agreeing to stand in a rite you threatened me into.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.1"
+    },
+    "dialogue.sister_anwen.variants.1.lines.0": {
+      "source": "Kael: The record can speak to facts. It cannot make your promise for you.",
+      "text": "Kael: The record can speak to facts. It cannot make your promise for you.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.1.lines"
+    },
+    "dialogue.sister_anwen.variants.1.lines.1": {
+      "source": "Anwen: Then you do understand the difference.",
+      "text": "Anwen: Then you do understand the difference.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.1.lines"
+    },
+    "dialogue.sister_anwen.variants.2.greeting": {
+      "source": "Edric wants my hand on the new seal. He has already counted the households that cannot afford to refuse.",
+      "text": "Edric wants my hand on the new seal. He has already counted the households that cannot afford to refuse.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.2"
+    },
+    "dialogue.sister_anwen.variants.2.lines.0": {
+      "source": "Anwen: The old rite borrowed consent from frightened people. That is why it keeps breaking.",
+      "text": "Anwen: The old rite borrowed consent from frightened people. That is why it keeps breaking.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.2.lines"
+    },
+    "dialogue.sister_anwen.variants.2.lines.1": {
+      "source": "Kael: Can the Hart be released without making everyone here swear?",
+      "text": "Kael: Can the Hart be released without making everyone here swear?",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.2.lines"
+    },
+    "dialogue.sister_anwen.variants.2.lines.2": {
+      "source": "Anwen: Yes. Someone must freely keep the recovered account. One person can begin. More people can share the work.",
+      "text": "Anwen: Yes. Someone must freely keep the recovered account. One person can begin. More people can share the work.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.2.lines"
     },
     "dialogue.sister_anwen.variants.3.actions.0.label": {
       "source": "I'll stay until the people carrying this can speak safely.",
@@ -1948,6 +3736,30 @@
       "speaker": "",
       "context": "dialogue.sister_anwen.variants.3.actions.2"
     },
+    "dialogue.sister_anwen.variants.3.greeting": {
+      "source": "Three strokes. A burial, a restored name, and a promise that has stopped holding.",
+      "text": "Three strokes. A burial, a restored name, and a promise that has stopped holding.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.3"
+    },
+    "dialogue.sister_anwen.variants.3.lines.0": {
+      "source": "Anwen: I cut the rope last winter. A novice heard an erased name and walked into the sealed chapel. I found him too late.",
+      "text": "Anwen: I cut the rope last winter. A novice heard an erased name and walked into the sealed chapel. I found him too late.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.3.lines"
+    },
+    "dialogue.sister_anwen.variants.3.lines.1": {
+      "source": "Kael: You closed it again.",
+      "text": "Kael: You closed it again.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.3.lines"
+    },
+    "dialogue.sister_anwen.variants.3.lines.2": {
+      "source": "Anwen: Yes. I told myself I was buying time. The graves will show what that time cost.",
+      "text": "Anwen: Yes. I told myself I was buying time. The graves will show what that time cost.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.3.lines"
+    },
     "dialogue.sister_anwen.variants.4.actions.0.label": {
       "source": "I'll stay until the people carrying this can speak safely.",
       "text": "I'll stay until the people carrying this can speak safely.",
@@ -1983,6 +3795,36 @@
       "text": "Anwen: That is fair. I should have asked before I put the token in your hand.",
       "speaker": "",
       "context": "dialogue.sister_anwen.variants.4.actions.2"
+    },
+    "dialogue.sister_anwen.variants.4.greeting": {
+      "source": "That is Oren's carving. Turn it over. The older name is beneath his paint.",
+      "text": "That is Oren's carving. Turn it over. The older name is beneath his paint.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.4"
+    },
+    "dialogue.sister_anwen.variants.4.lines.0": {
+      "source": "Kael: You sent them out carrying something the shrine had erased.",
+      "text": "Kael: You sent them out carrying something the shrine had erased.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.4.lines"
+    },
+    "dialogue.sister_anwen.variants.4.lines.1": {
+      "source": "Anwen: I thought new burial thread would quiet it. Someone bound it again with Vargan wire.",
+      "text": "Anwen: I thought new burial thread would quiet it. Someone bound it again with Vargan wire.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.4.lines"
+    },
+    "dialogue.sister_anwen.variants.4.lines.2": {
+      "source": "Kael: The pack is dead. The people hiding this are alive.",
+      "text": "Kael: The pack is dead. The people hiding this are alive.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.4.lines"
+    },
+    "dialogue.sister_anwen.variants.4.lines.3": {
+      "source": "Anwen: Take your payment if you must. I need help I have no right to order.",
+      "text": "Anwen: Take your payment if you must. I need help I have no right to order.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.4.lines"
     },
     "dialogue.sister_anwen.variants.5.actions.0.label": {
       "source": "I'll stay until the people carrying this can speak safely.",
@@ -2020,6 +3862,30 @@
       "speaker": "",
       "context": "dialogue.sister_anwen.variants.5.actions.2"
     },
+    "dialogue.sister_anwen.variants.5.greeting": {
+      "source": "I saw the token on the board. Rook has moved his bedding from the window.",
+      "text": "I saw the token on the board. Rook has moved his bedding from the window.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.5"
+    },
+    "dialogue.sister_anwen.variants.5.lines.0": {
+      "source": "Kael: People needed to know what was on their road.",
+      "text": "Kael: People needed to know what was on their road.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.5.lines"
+    },
+    "dialogue.sister_anwen.variants.5.lines.1": {
+      "source": "Anwen: Yes. And the people who can explain it need a way to survive being known.",
+      "text": "Anwen: Yes. And the people who can explain it need a way to survive being known.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.5.lines"
+    },
+    "dialogue.sister_anwen.variants.5.lines.2": {
+      "source": "Kael: Then we do both. I will not leave the second part to a notice.",
+      "text": "Kael: Then we do both. I will not leave the second part to a notice.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.5.lines"
+    },
     "dialogue.sister_anwen.variants.6.actions.0.label": {
       "source": "I'll stay until the people carrying this can speak safely.",
       "text": "I'll stay until the people carrying this can speak safely.",
@@ -2055,6 +3921,30 @@
       "text": "Anwen: That is fair. I should have asked before I put the token in your hand.",
       "speaker": "",
       "context": "dialogue.sister_anwen.variants.6.actions.2"
+    },
+    "dialogue.sister_anwen.variants.6.greeting": {
+      "source": "Keep your hand closed if you need to. I recognize the shape through your glove.",
+      "text": "Keep your hand closed if you need to. I recognize the shape through your glove.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.6"
+    },
+    "dialogue.sister_anwen.variants.6.lines.0": {
+      "source": "Anwen: Oren painted over a refugee's token. Sella wanted the first name restored.",
+      "text": "Anwen: Oren painted over a refugee's token. Sella wanted the first name restored.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.6.lines"
+    },
+    "dialogue.sister_anwen.variants.6.lines.1": {
+      "source": "Kael: Someone alive tried to take it from the pack.",
+      "text": "Kael: Someone alive tried to take it from the pack.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.6.lines"
+    },
+    "dialogue.sister_anwen.variants.6.lines.2": {
+      "source": "Anwen: Then leaving now would leave a witness carrying something dangerous. I am asking you to stay.",
+      "text": "Anwen: Then leaving now would leave a witness carrying something dangerous. I am asking you to stay.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.6.lines"
     },
     "dialogue.white_hart.actions.0.cost": {
       "source": "Lost privilege, trade pressure, and the ongoing labor of restitution. Fewer allies mean more work for Kael.",
@@ -2127,6 +4017,60 @@
       "text": "Destroy the complete witness by combat; the copied human record survives.",
       "speaker": "",
       "context": "dialogue.white_hart.actions.3"
+    },
+    "dialogue.white_hart.greeting": {
+      "source": "You have kept the account where a living hand can reach it. That is something the old oath would not allow.",
+      "text": "You have kept the account where a living hand can reach it. That is something the old oath would not allow.",
+      "speaker": "",
+      "context": "dialogue.white_hart"
+    },
+    "dialogue.white_hart.lines.0": {
+      "source": "Kael: The grain condition is broken. No one standing here has to promise you anything to eat.",
+      "text": "Kael: The grain condition is broken. No one standing here has to promise you anything to eat.",
+      "speaker": "",
+      "context": "dialogue.white_hart.lines"
+    },
+    "dialogue.white_hart.lines.1": {
+      "source": "The White Hart: I remember the gate shut. I remember the road hidden. I remember the soldiers entering. I will not tell you those were one man's act.",
+      "text": "The White Hart: I remember the gate shut. I remember the road hidden. I remember the soldiers entering. I will not tell you those were one man's act.",
+      "speaker": "",
+      "context": "dialogue.white_hart.lines"
+    },
+    "dialogue.white_hart.lines.2": {
+      "source": "Kael: The copies survive. I will freely keep what we have recovered. I cannot swear for the people who refused.",
+      "text": "Kael: The copies survive. I will freely keep what we have recovered. I cannot swear for the people who refused.",
+      "speaker": "",
+      "context": "dialogue.white_hart.lines"
+    },
+    "dialogue.white_hart.lines.3": {
+      "source": "The White Hart: One willing keeper of an account is enough to begin. Others may share that work. None may be given it by force.",
+      "text": "The White Hart: One willing keeper of an account is enough to begin. Others may share that work. None may be given it by force.",
+      "speaker": "",
+      "context": "dialogue.white_hart.lines"
+    },
+    "dialogue.white_hart.lines.4": {
+      "source": "The White Hart: Make the account public and I will leave its judgment with you. Release me quietly and preserve the record without opening every private memory.",
+      "text": "The White Hart: Make the account public and I will leave its judgment with you. Release me quietly and preserve the record without opening every private memory.",
+      "speaker": "",
+      "context": "dialogue.white_hart.lines"
+    },
+    "dialogue.white_hart.lines.5": {
+      "source": "The White Hart: Or carry the unresolved binding yourself. Or destroy me and lose what no copy holds.",
+      "text": "The White Hart: Or carry the unresolved binding yourself. Or destroy me and lose what no copy holds.",
+      "speaker": "",
+      "context": "dialogue.white_hart.lines"
+    },
+    "dialogue.white_hart.lines.6": {
+      "source": "Kael: Releasing you does not erase the house's crime. Protecting a family does not protect Edric from the record.",
+      "text": "Kael: Releasing you does not erase the house's crime. Protecting a family does not protect Edric from the record.",
+      "speaker": "",
+      "context": "dialogue.white_hart.lines"
+    },
+    "dialogue.white_hart.lines.7": {
+      "source": "The White Hart: Then choose whose work begins when mine ends.",
+      "text": "The White Hart: Then choose whose work begins when mine ends.",
+      "speaker": "",
+      "context": "dialogue.white_hart.lines"
     },
     "dialogue.white_hart.name": {
       "source": "The White Hart",
@@ -2218,11 +4162,941 @@
       "speaker": "",
       "context": "dialogue.widow_elna.actions.4"
     },
+    "dialogue.widow_elna.greeting": {
+      "source": "Harl used to warm my shoes by the fire. Burned one once. Hid it for a week.",
+      "text": "Harl used to warm my shoes by the fire. Burned one once. Hid it for a week.",
+      "speaker": "",
+      "context": "dialogue.widow_elna"
+    },
+    "dialogue.widow_elna.lines.0": {
+      "source": "Elna: You can know that and still hear what I ask next.",
+      "text": "Elna: You can know that and still hear what I ask next.",
+      "speaker": "",
+      "context": "dialogue.widow_elna.lines"
+    },
+    "dialogue.widow_elna.lines.1": {
+      "source": "Elna: His grave bell rings with the rope cut. He helped close Greyfen's gate in the war. I told our children he held it for their safety.",
+      "text": "Elna: His grave bell rings with the rope cut. He helped close Greyfen's gate in the war. I told our children he held it for their safety.",
+      "speaker": "",
+      "context": "dialogue.widow_elna.lines"
+    },
+    "dialogue.widow_elna.lines.2": {
+      "source": "Kael: Did he ever speak about the people outside?",
+      "text": "Kael: Did he ever speak about the people outside?",
+      "speaker": "",
+      "context": "dialogue.widow_elna.lines"
+    },
+    "dialogue.widow_elna.lines.3": {
+      "source": "Elna: He would stop setting the table when it rained. Find what he left. Do not decide for me that love makes me unable to hear it.",
+      "text": "Elna: He would stop setting the table when it rained. Find what he left. Do not decide for me that love makes me unable to hear it.",
+      "speaker": "",
+      "context": "dialogue.widow_elna.lines"
+    },
     "dialogue.widow_elna.name": {
       "source": "Widow Elna",
       "text": "Widow Elna",
       "speaker": "",
       "context": "dialogue.widow_elna"
+    },
+    "dialogue.widow_elna.variants.0.greeting": {
+      "source": "I told the children he loved us. Then I told them who stood outside the gate.",
+      "text": "I told the children he loved us. Then I told them who stood outside the gate.",
+      "speaker": "",
+      "context": "dialogue.widow_elna.variants.0"
+    },
+    "dialogue.widow_elna.variants.0.lines.0": {
+      "source": "Elna: My daughter asked if both were true. I said yes.",
+      "text": "Elna: My daughter asked if both were true. I said yes.",
+      "speaker": "",
+      "context": "dialogue.widow_elna.variants.0.lines"
+    },
+    "dialogue.widow_elna.variants.0.lines.1": {
+      "source": "Kael: Will you speak at the assembly?",
+      "text": "Kael: Will you speak at the assembly?",
+      "speaker": "",
+      "context": "dialogue.widow_elna.variants.0.lines"
+    },
+    "dialogue.widow_elna.variants.0.lines.2": {
+      "source": "Elna: About what I know. His victims do not need me performing my grief over their names.",
+      "text": "Elna: About what I know. His victims do not need me performing my grief over their names.",
+      "speaker": "",
+      "context": "dialogue.widow_elna.variants.0.lines"
+    },
+    "dialogue.widow_elna.variants.1.greeting": {
+      "source": "I put the bell in the drawer. It is quieter in there.",
+      "text": "I put the bell in the drawer. It is quieter in there.",
+      "speaker": "",
+      "context": "dialogue.widow_elna.variants.1"
+    },
+    "dialogue.widow_elna.variants.1.lines.0": {
+      "source": "Elna: You offered me a gentler account. I heard what you left out.",
+      "text": "Elna: You offered me a gentler account. I heard what you left out.",
+      "speaker": "",
+      "context": "dialogue.widow_elna.variants.1.lines"
+    },
+    "dialogue.widow_elna.variants.1.lines.1": {
+      "source": "Kael: The record remains.",
+      "text": "Kael: The record remains.",
+      "speaker": "",
+      "context": "dialogue.widow_elna.variants.1.lines"
+    },
+    "dialogue.widow_elna.variants.1.lines.2": {
+      "source": "Elna: Then leave it where the children can find it when they ask.",
+      "text": "Elna: Then leave it where the children can find it when they ask.",
+      "speaker": "",
+      "context": "dialogue.widow_elna.variants.1.lines"
+    },
+    "dialogue.widow_elna.variants.2.greeting": {
+      "source": "The children have the account. I will not read it in the square.",
+      "text": "The children have the account. I will not read it in the square.",
+      "speaker": "",
+      "context": "dialogue.widow_elna.variants.2"
+    },
+    "dialogue.widow_elna.variants.2.lines.0": {
+      "source": "Elna: You may name what Harl did. You may not use my kitchen as proof I have forgiven it.",
+      "text": "Elna: You may name what Harl did. You may not use my kitchen as proof I have forgiven it.",
+      "speaker": "",
+      "context": "dialogue.widow_elna.variants.2.lines"
+    },
+    "dialogue.widow_elna.variants.2.lines.1": {
+      "source": "Kael: Your grief stays yours.",
+      "text": "Kael: Your grief stays yours.",
+      "speaker": "",
+      "context": "dialogue.widow_elna.variants.2.lines"
+    },
+    "interaction_scenes.aftermath_names_ash.greeting": {
+      "source": "Nothing answered when I rang the bell.",
+      "text": "Nothing answered when I rang the bell.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_ash"
+    },
+    "interaction_scenes.aftermath_names_ash.lines.0": {
+      "source": "Kael: Were you hoping it would?",
+      "text": "Kael: Were you hoping it would?",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_ash.lines"
+    },
+    "interaction_scenes.aftermath_names_ash.lines.1": {
+      "source": "Anwen: I don't know. That is the honest answer today.",
+      "text": "Anwen: I don't know. That is the honest answer today.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_ash.lines"
+    },
+    "interaction_scenes.aftermath_names_ash.lines.2": {
+      "source": "The copied command and the household register lie on her table. Human hands saved them before the glade burned. Their evidence has not become less true because its witness is gone.",
+      "text": "The copied command and the household register lie on her table. Human hands saved them before the glade burned. Their evidence has not become less true because its witness is gone.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_ash.lines"
+    },
+    "interaction_scenes.aftermath_names_ash.lines.3": {
+      "source": "Anwen: There are things we can no longer ask. We must mark those gaps instead of filling them with convenient answers.",
+      "text": "Anwen: There are things we can no longer ask. We must mark those gaps instead of filling them with convenient answers.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_ash.lines"
+    },
+    "interaction_scenes.aftermath_names_ash.lines.4": {
+      "source": "A father passing the table says his child slept without hearing voices. Anwen listens until he has finished.",
+      "text": "A father passing the table says his child slept without hearing voices. Anwen listens until he has finished.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_ash.lines"
+    },
+    "interaction_scenes.aftermath_names_ash.lines.5": {
+      "source": "Kael: We keep what remains. And answer for what we chose.",
+      "text": "Kael: We keep what remains. And answer for what we chose.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_ash.lines"
+    },
+    "interaction_scenes.aftermath_names_ash.lines.6": {
+      "source": "Anwen: Tor needs another pair of hands. The next repair cannot wait for us to feel certain.",
+      "text": "Anwen: Tor needs another pair of hands. The next repair cannot wait for us to feel certain.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_ash.lines"
+    },
+    "interaction_scenes.aftermath_names_ash.name": {
+      "source": "Anwen",
+      "text": "Anwen",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_ash"
+    },
+    "interaction_scenes.aftermath_names_duty.greeting": {
+      "source": "The silence held through the night. I kept waking to make sure.",
+      "text": "The silence held through the night. I kept waking to make sure.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_duty"
+    },
+    "interaction_scenes.aftermath_names_duty.lines.0": {
+      "source": "Kael: I felt the road when I woke. Not words. Weight.",
+      "text": "Kael: I felt the road when I woke. Not words. Weight.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_duty.lines"
+    },
+    "interaction_scenes.aftermath_names_duty.lines.1": {
+      "source": "Anwen: Then we write the limits now, while people are grateful enough to forget them. You did not accept every order anyone might give you.",
+      "text": "Anwen: Then we write the limits now, while people are grateful enough to forget them. You did not accept every order anyone might give you.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_duty.lines"
+    },
+    "interaction_scenes.aftermath_names_duty.lines.2": {
+      "source": "She writes that the keeping is Kael's choice. No child inherits it. No shortage can compel another keeper. The old command remains beside it, uncensored.",
+      "text": "She writes that the keeping is Kael's choice. No child inherits it. No shortage can compel another keeper. The old command remains beside it, uncensored.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_duty.lines"
+    },
+    "interaction_scenes.aftermath_names_duty.lines.3": {
+      "source": "Kael: If I cannot keep it?",
+      "text": "Kael: If I cannot keep it?",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_duty.lines"
+    },
+    "interaction_scenes.aftermath_names_duty.lines.4": {
+      "source": "Anwen: We meet again. We tell the truth about the cost. We do not turn your promise into an excuse to stop thinking.",
+      "text": "Anwen: We meet again. We tell the truth about the cost. We do not turn your promise into an excuse to stop thinking.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_duty.lines"
+    },
+    "interaction_scenes.aftermath_names_duty.lines.5": {
+      "source": "Kael reads the lines before signing. The tremor in his hand is his own.",
+      "text": "Kael reads the lines before signing. The tremor in his hand is his own.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_duty.lines"
+    },
+    "interaction_scenes.aftermath_names_duty.lines.6": {
+      "source": "Anwen: Tor has a repair for you. Something ordinary. Let him do it.",
+      "text": "Anwen: Tor has a repair for you. Something ordinary. Let him do it.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_duty.lines"
+    },
+    "interaction_scenes.aftermath_names_duty.name": {
+      "source": "Anwen",
+      "text": "Anwen",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_duty"
+    },
+    "interaction_scenes.aftermath_names_mercy.greeting": {
+      "source": "This copy names the offices, the orders and those who gave them. This other book belongs to the families.",
+      "text": "This copy names the offices, the orders and those who gave them. This other book belongs to the families.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_mercy"
+    },
+    "interaction_scenes.aftermath_names_mercy.lines.0": {
+      "source": "Kael: Who can open it?",
+      "text": "Kael: Who can open it?",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_mercy.lines"
+    },
+    "interaction_scenes.aftermath_names_mercy.lines.1": {
+      "source": "Anwen: The people whose lives it holds. They may let someone else read. They may refuse.",
+      "text": "Anwen: The people whose lives it holds. They may let someone else read. They may refuse.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_mercy.lines"
+    },
+    "interaction_scenes.aftermath_names_mercy.lines.2": {
+      "source": "A woman returns a sealed page. She asks Anwen to keep her son's name and destroy the account of his last fear. Anwen asks once whether she is certain, then follows her instruction.",
+      "text": "A woman returns a sealed page. She asks Anwen to keep her son's name and destroy the account of his last fear. Anwen asks once whether she is certain, then follows her instruction.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_mercy.lines"
+    },
+    "interaction_scenes.aftermath_names_mercy.lines.3": {
+      "source": "Kael: Edric's order stays on the wall.",
+      "text": "Kael: Edric's order stays on the wall.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_mercy.lines"
+    },
+    "interaction_scenes.aftermath_names_mercy.lines.4": {
+      "source": "Anwen: Yes. His privacy was never the thing we were protecting.",
+      "text": "Anwen: Yes. His privacy was never the thing we were protecting.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_mercy.lines"
+    },
+    "interaction_scenes.aftermath_names_mercy.lines.5": {
+      "source": "For the first time, the bell can mourn someone without claiming everything that happened to them.",
+      "text": "For the first time, the bell can mourn someone without claiming everything that happened to them.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_mercy.lines"
+    },
+    "interaction_scenes.aftermath_names_mercy.lines.6": {
+      "source": "Anwen: The living still need timber and flour. Tor is at the bench. There is a world outside these books.",
+      "text": "Anwen: The living still need timber and flour. Tor is at the bench. There is a world outside these books.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_mercy.lines"
+    },
+    "interaction_scenes.aftermath_names_mercy.name": {
+      "source": "Anwen",
+      "text": "Anwen",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_mercy"
+    },
+    "interaction_scenes.aftermath_names_witness.greeting": {
+      "source": "I thought writing them where everyone could see would make my hands stop shaking.",
+      "text": "I thought writing them where everyone could see would make my hands stop shaking.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_witness"
+    },
+    "interaction_scenes.aftermath_names_witness.lines.0": {
+      "source": "Kael: It made you begin.",
+      "text": "Kael: It made you begin.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_witness.lines"
+    },
+    "interaction_scenes.aftermath_names_witness.lines.1": {
+      "source": "Anwen: Bram. Sella. Oren. I have practiced saying the names of the dead more often than I have spoken to the people who miss them.",
+      "text": "Anwen: Bram. Sella. Oren. I have practiced saying the names of the dead more often than I have spoken to the people who miss them.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_witness.lines"
+    },
+    "interaction_scenes.aftermath_names_witness.lines.2": {
+      "source": "A man waiting at the wall asks who will pay for the land his mother was refused. Anwen puts his question beneath the names instead of sending him away.",
+      "text": "A man waiting at the wall asks who will pay for the land his mother was refused. Anwen puts his question beneath the names instead of sending him away.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_witness.lines"
+    },
+    "interaction_scenes.aftermath_names_witness.lines.3": {
+      "source": "Anwen: We cannot promise every answer today.",
+      "text": "Anwen: We cannot promise every answer today.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_witness.lines"
+    },
+    "interaction_scenes.aftermath_names_witness.lines.4": {
+      "source": "Kael: We can promise this question will still be here tomorrow.",
+      "text": "Kael: We can promise this question will still be here tomorrow.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_witness.lines"
+    },
+    "interaction_scenes.aftermath_names_witness.lines.5": {
+      "source": "Anwen leaves room on the board. The public account is no longer a ceremony that ends when the bell stops.",
+      "text": "Anwen leaves room on the board. The public account is no longer a ceremony that ends when the bell stops.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_witness.lines"
+    },
+    "interaction_scenes.aftermath_names_witness.lines.6": {
+      "source": "Anwen: Tor has begun measuring timber. Rook is arguing about who gets the first load. Go help them make this more than my handwriting.",
+      "text": "Anwen: Tor has begun measuring timber. Rook is arguing about who gets the first load. Go help them make this more than my handwriting.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_witness.lines"
+    },
+    "interaction_scenes.aftermath_names_witness.name": {
+      "source": "Anwen",
+      "text": "Anwen",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_witness"
+    },
+    "interaction_scenes.aftermath_road_ash.greeting": {
+      "source": "Wind crosses the road without forming a voice. A patch of earth where oathgrass grew is bare.",
+      "text": "Wind crosses the road without forming a voice. A patch of earth where oathgrass grew is bare.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_ash"
+    },
+    "interaction_scenes.aftermath_road_ash.lines.0": {
+      "source": "Kael kneels and presses a seed into the ordinary soil. He cannot make it take root by promising.",
+      "text": "Kael kneels and presses a seed into the ordinary soil. He cannot make it take root by promising.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_ash.lines"
+    },
+    "interaction_scenes.aftermath_road_ash.lines.1": {
+      "source": "Rook: Will it grow?",
+      "text": "Rook: Will it grow?",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_ash.lines"
+    },
+    "interaction_scenes.aftermath_road_ash.lines.2": {
+      "source": "Kael: We can water it. We can come back.",
+      "text": "Kael: We can water it. We can come back.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_ash.lines"
+    },
+    "interaction_scenes.aftermath_road_ash.lines.3": {
+      "source": "The destroyed witness cannot answer the questions no one thought to ask. The human record can still accuse the powerful. The living can still choose what they owe each other.",
+      "text": "The destroyed witness cannot answer the questions no one thought to ask. The human record can still accuse the powerful. The living can still choose what they owe each other.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_ash.lines"
+    },
+    "interaction_scenes.aftermath_road_ash.lines.4": {
+      "source": "Kael stands. The quiet is relief, and it is absence. He carries both toward Greyfen.",
+      "text": "Kael stands. The quiet is relief, and it is absence. He carries both toward Greyfen.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_ash.lines"
+    },
+    "interaction_scenes.aftermath_road_ash.lines.5": {
+      "source": "Your campaign outcome is kept. Greyfen and the discovered roads remain open for unfinished conversations and work.",
+      "text": "Your campaign outcome is kept. Greyfen and the discovered roads remain open for unfinished conversations and work.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_ash.lines"
+    },
+    "interaction_scenes.aftermath_road_ash.name": {
+      "source": "The road beyond Greyfen",
+      "text": "The road beyond Greyfen",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_ash"
+    },
+    "interaction_scenes.aftermath_road_duty.greeting": {
+      "source": "At the village edge, Kael feels where the old road bends even with his eyes closed.",
+      "text": "At the village edge, Kael feels where the old road bends even with his eyes closed.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_duty"
+    },
+    "interaction_scenes.aftermath_road_duty.lines.0": {
+      "source": "Rook: How far does it follow you?",
+      "text": "Rook: How far does it follow you?",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_duty.lines"
+    },
+    "interaction_scenes.aftermath_road_duty.lines.1": {
+      "source": "Kael: I will have to learn.",
+      "text": "Kael: I will have to learn.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_duty.lines"
+    },
+    "interaction_scenes.aftermath_road_duty.lines.2": {
+      "source": "Rook: Then don't answer for all the years today.",
+      "text": "Rook: Then don't answer for all the years today.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_duty.lines"
+    },
+    "interaction_scenes.aftermath_road_duty.lines.3": {
+      "source": "The boundary is quieter. The injustice it covered has not been repaired by one man's willingness to stand here. The written account waits in Greyfen, where other people can begin their own work.",
+      "text": "The boundary is quieter. The injustice it covered has not been repaired by one man's willingness to stand here. The written account waits in Greyfen, where other people can begin their own work.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_duty.lines"
+    },
+    "interaction_scenes.aftermath_road_duty.lines.4": {
+      "source": "Kael opens his eyes. His oath has limits. His life must still have room inside them.",
+      "text": "Kael opens his eyes. His oath has limits. His life must still have room inside them.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_duty.lines"
+    },
+    "interaction_scenes.aftermath_road_duty.lines.5": {
+      "source": "Your campaign outcome is kept. Greyfen and the discovered roads remain open for unfinished conversations and work.",
+      "text": "Your campaign outcome is kept. Greyfen and the discovered roads remain open for unfinished conversations and work.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_duty.lines"
+    },
+    "interaction_scenes.aftermath_road_duty.name": {
+      "source": "The road beyond Greyfen",
+      "text": "The road beyond Greyfen",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_duty"
+    },
+    "interaction_scenes.aftermath_road_mercy.greeting": {
+      "source": "A strip of linen moves beside the road. It carries no confession and names no debtor.",
+      "text": "A strip of linen moves beside the road. It carries no confession and names no debtor.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_mercy"
+    },
+    "interaction_scenes.aftermath_road_mercy.lines.0": {
+      "source": "Kael: They asked for a marker. Nothing more.",
+      "text": "Kael: They asked for a marker. Nothing more.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_mercy.lines"
+    },
+    "interaction_scenes.aftermath_road_mercy.lines.1": {
+      "source": "Rook: Then it can be nothing more.",
+      "text": "Rook: Then it can be nothing more.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_mercy.lines"
+    },
+    "interaction_scenes.aftermath_road_mercy.lines.2": {
+      "source": "The released memories do not arrive to correct the village's version of itself. People must preserve the records, challenge the convenient lie, and let one another keep what was never owed to a crowd.",
+      "text": "The released memories do not arrive to correct the village's version of itself. People must preserve the records, challenge the convenient lie, and let one another keep what was never owed to a crowd.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_mercy.lines"
+    },
+    "interaction_scenes.aftermath_road_mercy.lines.3": {
+      "source": "Kael turns toward the kitchen. There are names he will speak there, and names he will wait to be invited to speak.",
+      "text": "Kael turns toward the kitchen. There are names he will speak there, and names he will wait to be invited to speak.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_mercy.lines"
+    },
+    "interaction_scenes.aftermath_road_mercy.lines.4": {
+      "source": "No one mistakes the work ahead for permission to bind the dead again.",
+      "text": "No one mistakes the work ahead for permission to bind the dead again.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_mercy.lines"
+    },
+    "interaction_scenes.aftermath_road_mercy.lines.5": {
+      "source": "Your campaign outcome is kept. Greyfen and the discovered roads remain open for unfinished conversations and work.",
+      "text": "Your campaign outcome is kept. Greyfen and the discovered roads remain open for unfinished conversations and work.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_mercy.lines"
+    },
+    "interaction_scenes.aftermath_road_mercy.name": {
+      "source": "The road beyond Greyfen",
+      "text": "The road beyond Greyfen",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_mercy"
+    },
+    "interaction_scenes.aftermath_road_witness.greeting": {
+      "source": "The notice at the village edge carries the first names, the first claims, and a time for the next meeting.",
+      "text": "The notice at the village edge carries the first names, the first claims, and a time for the next meeting.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_witness"
+    },
+    "interaction_scenes.aftermath_road_witness.lines.0": {
+      "source": "Kael: A public promise has a place people can return to.",
+      "text": "Kael: A public promise has a place people can return to.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_witness.lines"
+    },
+    "interaction_scenes.aftermath_road_witness.lines.1": {
+      "source": "Some will come to demand restitution. Some will come to defend what they have. The account will need witnesses after the extraordinary witness is gone.",
+      "text": "Some will come to demand restitution. Some will come to defend what they have. The account will need witnesses after the extraordinary witness is gone.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_witness.lines"
+    },
+    "interaction_scenes.aftermath_road_witness.lines.2": {
+      "source": "Rook: Will you be here when they arrive?",
+      "text": "Rook: Will you be here when they arrive?",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_witness.lines"
+    },
+    "interaction_scenes.aftermath_road_witness.lines.3": {
+      "source": "Kael: I said I would keep it.",
+      "text": "Kael: I said I would keep it.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_witness.lines"
+    },
+    "interaction_scenes.aftermath_road_witness.lines.4": {
+      "source": "He takes the road back toward the kitchen. This time, returning is part of the oath.",
+      "text": "He takes the road back toward the kitchen. This time, returning is part of the oath.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_witness.lines"
+    },
+    "interaction_scenes.aftermath_road_witness.lines.5": {
+      "source": "Your campaign outcome is kept. Greyfen and the discovered roads remain open for unfinished conversations and work.",
+      "text": "Your campaign outcome is kept. Greyfen and the discovered roads remain open for unfinished conversations and work.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_witness.lines"
+    },
+    "interaction_scenes.aftermath_road_witness.name": {
+      "source": "The road beyond Greyfen",
+      "text": "The road beyond Greyfen",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_witness"
+    },
+    "interaction_scenes.aftermath_work_ash.greeting": {
+      "source": "There is ash in the grain sack's folded seam. Rook brushes it into his palm before opening the flour.",
+      "text": "There is ash in the grain sack's folded seam. Rook brushes it into his palm before opening the flour.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_ash"
+    },
+    "interaction_scenes.aftermath_work_ash.lines.0": {
+      "source": "Rook: It got everywhere. Doesn't mean everything is ruined.",
+      "text": "Rook: It got everywhere. Doesn't mean everything is ruined.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_ash.lines"
+    },
+    "interaction_scenes.aftermath_work_ash.lines.1": {
+      "source": "Tor: No. Doesn't mean it didn't cost anything either.",
+      "text": "Tor: No. Doesn't mean it didn't cost anything either.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_ash.lines"
+    },
+    "interaction_scenes.aftermath_work_ash.lines.2": {
+      "source": "Kael helps separate the scorched boards from the sound ones. One will become a shelf. Another breaks under his hand and is set aside.",
+      "text": "Kael helps separate the scorched boards from the sound ones. One will become a shelf. Another breaks under his hand and is set aside.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_ash.lines"
+    },
+    "interaction_scenes.aftermath_work_ash.lines.3": {
+      "source": "Kael: I cannot put it back.",
+      "text": "Kael: I cannot put it back.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_ash.lines"
+    },
+    "interaction_scenes.aftermath_work_ash.lines.4": {
+      "source": "Tor: I didn't ask you to. Hold this end.",
+      "text": "Tor: I didn't ask you to. Hold this end.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_ash.lines"
+    },
+    "interaction_scenes.aftermath_work_ash.lines.5": {
+      "source": "They finish one repair without deciding what the whole choice meant. In the kitchen, someone laughs at an ordinary mistake.",
+      "text": "They finish one repair without deciding what the whole choice meant. In the kitchen, someone laughs at an ordinary mistake.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_ash.lines"
+    },
+    "interaction_scenes.aftermath_work_ash.lines.6": {
+      "source": "Rook: Listen. I missed that. We can miss what was lost and still be glad to hear it.",
+      "text": "Rook: Listen. I missed that. We can miss what was lost and still be glad to hear it.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_ash.lines"
+    },
+    "interaction_scenes.aftermath_work_ash.name": {
+      "source": "Tor and Rook",
+      "text": "Tor and Rook",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_ash"
+    },
+    "interaction_scenes.aftermath_work_duty.greeting": {
+      "source": "Tor reaches for Kael's worn strap before asking about the glade.",
+      "text": "Tor reaches for Kael's worn strap before asking about the glade.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_duty"
+    },
+    "interaction_scenes.aftermath_work_duty.lines.0": {
+      "source": "Tor: Sit. If you're going to stand watch, you can at least stop this buckle cutting your shoulder.",
+      "text": "Tor: Sit. If you're going to stand watch, you can at least stop this buckle cutting your shoulder.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_duty.lines"
+    },
+    "interaction_scenes.aftermath_work_duty.lines.1": {
+      "source": "Kael: There are other repairs.",
+      "text": "Kael: There are other repairs.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_duty.lines"
+    },
+    "interaction_scenes.aftermath_work_duty.lines.2": {
+      "source": "Tor: This is one of them.",
+      "text": "Tor: This is one of them.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_duty.lines"
+    },
+    "interaction_scenes.aftermath_work_duty.lines.3": {
+      "source": "Rook lays out the roads that still need walking. He marks a place for Kael to rest and a name beside each delivery. None of those names is entered as a new keeper.",
+      "text": "Rook lays out the roads that still need walking. He marks a place for Kael to rest and a name beside each delivery. None of those names is entered as a new keeper.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_duty.lines"
+    },
+    "interaction_scenes.aftermath_work_duty.lines.4": {
+      "source": "Rook: Help isn't the same thing as taking your oath. We can carry supper without carrying the Hart.",
+      "text": "Rook: Help isn't the same thing as taking your oath. We can carry supper without carrying the Hart.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_duty.lines"
+    },
+    "interaction_scenes.aftermath_work_duty.lines.5": {
+      "source": "Kael holds the leather while Tor stitches. For a little while, his chosen burden fits beside someone else's ordinary skill.",
+      "text": "Kael holds the leather while Tor stitches. For a little while, his chosen burden fits beside someone else's ordinary skill.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_duty.lines"
+    },
+    "interaction_scenes.aftermath_work_duty.lines.6": {
+      "source": "Tor: Come back before it splits again. That is a request, not a sacred duty.",
+      "text": "Tor: Come back before it splits again. That is a request, not a sacred duty.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_duty.lines"
+    },
+    "interaction_scenes.aftermath_work_duty.name": {
+      "source": "Tor and Rook",
+      "text": "Tor and Rook",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_duty"
+    },
+    "interaction_scenes.aftermath_work_mercy.greeting": {
+      "source": "Rook has tied a strip of plain linen around a basket with no name on it.",
+      "text": "Rook has tied a strip of plain linen around a basket with no name on it.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_mercy"
+    },
+    "interaction_scenes.aftermath_work_mercy.lines.0": {
+      "source": "Kael: Where does that go?",
+      "text": "Kael: Where does that go?",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_mercy.lines"
+    },
+    "interaction_scenes.aftermath_work_mercy.lines.1": {
+      "source": "Rook: To someone who asked me not to tell everyone where it goes.",
+      "text": "Rook: To someone who asked me not to tell everyone where it goes.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_mercy.lines"
+    },
+    "interaction_scenes.aftermath_work_mercy.lines.2": {
+      "source": "Tor: You can still count the flour without counting the family's grief.",
+      "text": "Tor: You can still count the flour without counting the family's grief.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_mercy.lines"
+    },
+    "interaction_scenes.aftermath_work_mercy.lines.3": {
+      "source": "Kael steadies a plank against Tor's bench. Together they cut a lid for the basket; Rook folds the linen beneath it so the rain cannot reach the meal.",
+      "text": "Kael steadies a plank against Tor's bench. Together they cut a lid for the basket; Rook folds the linen beneath it so the rain cannot reach the meal.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_mercy.lines"
+    },
+    "interaction_scenes.aftermath_work_mercy.lines.4": {
+      "source": "Rook: Keeping a confidence used to mean hiding my own part. I'll have to learn the difference.",
+      "text": "Rook: Keeping a confidence used to mean hiding my own part. I'll have to learn the difference.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_mercy.lines"
+    },
+    "interaction_scenes.aftermath_work_mercy.lines.5": {
+      "source": "Kael: Ask whose safety the silence serves.",
+      "text": "Kael: Ask whose safety the silence serves.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_mercy.lines"
+    },
+    "interaction_scenes.aftermath_work_mercy.lines.6": {
+      "source": "Rook takes the basket through the square openly. Its destination remains the recipient's business.",
+      "text": "Rook takes the basket through the square openly. Its destination remains the recipient's business.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_mercy.lines"
+    },
+    "interaction_scenes.aftermath_work_mercy.name": {
+      "source": "Tor and Rook",
+      "text": "Tor and Rook",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_mercy"
+    },
+    "interaction_scenes.aftermath_work_witness.greeting": {
+      "source": "Tor lays a damaged hinge on the bench. Rook lays three incompatible requests beside it.",
+      "text": "Tor lays a damaged hinge on the bench. Rook lays three incompatible requests beside it.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_witness"
+    },
+    "interaction_scenes.aftermath_work_witness.lines.0": {
+      "source": "Rook: The west field wants its gate. The kitchen wants its cart. The chapel wants a board large enough to accuse the whole county.",
+      "text": "Rook: The west field wants its gate. The kitchen wants its cart. The chapel wants a board large enough to accuse the whole county.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_witness.lines"
+    },
+    "interaction_scenes.aftermath_work_witness.lines.1": {
+      "source": "Tor: The chapel can have the offcuts.",
+      "text": "Tor: The chapel can have the offcuts.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_witness.lines"
+    },
+    "interaction_scenes.aftermath_work_witness.lines.2": {
+      "source": "Kael holds the hinge while Tor drives out its old pin. The iron bears the same stamp as the weapon that brought him here.",
+      "text": "Kael holds the hinge while Tor drives out its old pin. The iron bears the same stamp as the weapon that brought him here.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_witness.lines"
+    },
+    "interaction_scenes.aftermath_work_witness.lines.3": {
+      "source": "Kael: Who decides whose repair comes first?",
+      "text": "Kael: Who decides whose repair comes first?",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_witness.lines"
+    },
+    "interaction_scenes.aftermath_work_witness.lines.4": {
+      "source": "Rook: Today? The people standing here. Tomorrow we'll need something better than whoever shouts loudest.",
+      "text": "Rook: Today? The people standing here. Tomorrow we'll need something better than whoever shouts loudest.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_witness.lines"
+    },
+    "interaction_scenes.aftermath_work_witness.lines.5": {
+      "source": "Tor: Put that on Anwen's board.",
+      "text": "Tor: Put that on Anwen's board.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_witness.lines"
+    },
+    "interaction_scenes.aftermath_work_witness.lines.6": {
+      "source": "The first repair is small enough to finish. Beyond it lies work no ending could have finished for them.",
+      "text": "The first repair is small enough to finish. Beyond it lies work no ending could have finished for them.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_witness.lines"
+    },
+    "interaction_scenes.aftermath_work_witness.name": {
+      "source": "Tor and Rook",
+      "text": "Tor and Rook",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_witness"
+    },
+    "interaction_scenes.soldiers_stand_down.greeting": {
+      "source": "The nearest soldier lets his sword point fall into the mud. The other watches Senn before doing the same.",
+      "text": "The nearest soldier lets his sword point fall into the mud. The other watches Senn before doing the same.",
+      "speaker": "",
+      "context": "interaction_scenes.soldiers_stand_down"
+    },
+    "interaction_scenes.soldiers_stand_down.lines.0": {
+      "source": "Soldier: He said Greyfen would leave us hungry if we stopped taking what passed.",
+      "text": "Soldier: He said Greyfen would leave us hungry if we stopped taking what passed.",
+      "speaker": "",
+      "context": "interaction_scenes.soldiers_stand_down.lines"
+    },
+    "interaction_scenes.soldiers_stand_down.lines.1": {
+      "source": "Kael: I cannot promise nobody will ask what you took. I can promise supper is not a reward for obeying him.",
+      "text": "Kael: I cannot promise nobody will ask what you took. I can promise supper is not a reward for obeying him.",
+      "speaker": "",
+      "context": "interaction_scenes.soldiers_stand_down.lines"
+    },
+    "interaction_scenes.soldiers_stand_down.lines.2": {
+      "source": "Soldier: And if we speak?",
+      "text": "Soldier: And if we speak?",
+      "speaker": "",
+      "context": "interaction_scenes.soldiers_stand_down.lines"
+    },
+    "interaction_scenes.soldiers_stand_down.lines.3": {
+      "source": "Kael: Then you speak for yourselves. Lowering a weapon does not sign your name to anyone else's account.",
+      "text": "Kael: Then you speak for yourselves. Lowering a weapon does not sign your name to anyone else's account.",
+      "speaker": "",
+      "context": "interaction_scenes.soldiers_stand_down.lines"
+    },
+    "interaction_scenes.soldiers_stand_down.lines.4": {
+      "source": "The road clears. Senn remains beside the table, without a line of men between his answers and the people he hurt.",
+      "text": "The road clears. Senn remains beside the table, without a line of men between his answers and the people he hurt.",
+      "speaker": "",
+      "context": "interaction_scenes.soldiers_stand_down.lines"
+    },
+    "interaction_scenes.soldiers_stand_down.name": {
+      "source": "The soldiers at the road",
+      "text": "The soldiers at the road",
+      "speaker": "",
+      "context": "interaction_scenes.soldiers_stand_down"
+    },
+    "interaction_scenes.work_cart_finish.greeting": {
+      "source": "Mind the corner. That sack has already had a worse journey than either of us.",
+      "text": "Mind the corner. That sack has already had a worse journey than either of us.",
+      "speaker": "",
+      "context": "interaction_scenes.work_cart_finish"
+    },
+    "interaction_scenes.work_cart_finish.lines.0": {
+      "source": "Kael: The wheel will need lifting before it can turn.",
+      "text": "Kael: The wheel will need lifting before it can turn.",
+      "speaker": "",
+      "context": "interaction_scenes.work_cart_finish.lines"
+    },
+    "interaction_scenes.work_cart_finish.lines.1": {
+      "source": "Rook: It will. The flour needed feeding to people before it needed feeding to mud.",
+      "text": "Rook: It will. The flour needed feeding to people before it needed feeding to mud.",
+      "speaker": "",
+      "context": "interaction_scenes.work_cart_finish.lines"
+    },
+    "interaction_scenes.work_cart_finish.lines.2": {
+      "source": "A woman at the kitchen opens the sack and measures three small shares. She keeps the string for mending.",
+      "text": "A woman at the kitchen opens the sack and measures three small shares. She keeps the string for mending.",
+      "speaker": "",
+      "context": "interaction_scenes.work_cart_finish.lines"
+    },
+    "interaction_scenes.work_cart_finish.lines.3": {
+      "source": "Rook: There. Something went where we said it would. I could get used to that.",
+      "text": "Rook: There. Something went where we said it would. I could get used to that.",
+      "speaker": "",
+      "context": "interaction_scenes.work_cart_finish.lines"
+    },
+    "interaction_scenes.work_cart_finish.name": {
+      "source": "Rook",
+      "text": "Rook",
+      "speaker": "",
+      "context": "interaction_scenes.work_cart_finish"
+    },
+    "interaction_scenes.work_cart_return.greeting": {
+      "source": "The kitchen has the flour. The cart is lighter.",
+      "text": "The kitchen has the flour. The cart is lighter.",
+      "speaker": "",
+      "context": "interaction_scenes.work_cart_return"
+    },
+    "interaction_scenes.work_cart_return.lines.0": {
+      "source": "Rook: I've told them you did the heavy bit. Don't make me a liar by offering to do it all again.",
+      "text": "Rook: I've told them you did the heavy bit. Don't make me a liar by offering to do it all again.",
+      "speaker": "",
+      "context": "interaction_scenes.work_cart_return.lines"
+    },
+    "interaction_scenes.work_cart_return.name": {
+      "source": "Rook",
+      "text": "Rook",
+      "speaker": "",
+      "context": "interaction_scenes.work_cart_return"
+    },
+    "interaction_scenes.work_relief_finish.greeting": {
+      "source": "The two empty baskets return together.",
+      "text": "The two empty baskets return together.",
+      "speaker": "",
+      "context": "interaction_scenes.work_relief_finish"
+    },
+    "interaction_scenes.work_relief_finish.lines.0": {
+      "source": "Mira: Did anyone ask what they had to promise?",
+      "text": "Mira: Did anyone ask what they had to promise?",
+      "speaker": "",
+      "context": "interaction_scenes.work_relief_finish.lines"
+    },
+    "interaction_scenes.work_relief_finish.lines.1": {
+      "source": "Kael: One woman did.",
+      "text": "Kael: One woman did.",
+      "speaker": "",
+      "context": "interaction_scenes.work_relief_finish.lines"
+    },
+    "interaction_scenes.work_relief_finish.lines.2": {
+      "source": "Mira: And?",
+      "text": "Mira: And?",
+      "speaker": "",
+      "context": "interaction_scenes.work_relief_finish.lines"
+    },
+    "interaction_scenes.work_relief_finish.lines.3": {
+      "source": "Kael: I told her the basket was not a contract.",
+      "text": "Kael: I told her the basket was not a contract.",
+      "speaker": "",
+      "context": "interaction_scenes.work_relief_finish.lines"
+    },
+    "interaction_scenes.work_relief_finish.lines.4": {
+      "source": "Mira: Tell her again tomorrow. People don't learn that sort of thing in one meal.",
+      "text": "Mira: Tell her again tomorrow. People don't learn that sort of thing in one meal.",
+      "speaker": "",
+      "context": "interaction_scenes.work_relief_finish.lines"
+    },
+    "interaction_scenes.work_relief_finish.name": {
+      "source": "The common kitchen",
+      "text": "The common kitchen",
+      "speaker": "",
+      "context": "interaction_scenes.work_relief_finish"
+    },
+    "interaction_scenes.work_relief_return.greeting": {
+      "source": "The household shares have been delivered.",
+      "text": "The household shares have been delivered.",
+      "speaker": "",
+      "context": "interaction_scenes.work_relief_return"
+    },
+    "interaction_scenes.work_relief_return.lines.0": {
+      "source": "Names in the ledger mark who has eaten. They do not mark who owes obedience.",
+      "text": "Names in the ledger mark who has eaten. They do not mark who owes obedience.",
+      "speaker": "",
+      "context": "interaction_scenes.work_relief_return.lines"
+    },
+    "interaction_scenes.work_relief_return.name": {
+      "source": "The common kitchen",
+      "text": "The common kitchen",
+      "speaker": "",
+      "context": "interaction_scenes.work_relief_return"
+    },
+    "interaction_scenes.work_road_finish.greeting": {
+      "source": "Leave the peg proud. Someone will need to pull it out when the next flood comes.",
+      "text": "Leave the peg proud. Someone will need to pull it out when the next flood comes.",
+      "speaker": "",
+      "context": "interaction_scenes.work_road_finish"
+    },
+    "interaction_scenes.work_road_finish.lines.0": {
+      "source": "Kael: You expect it to fail?",
+      "text": "Kael: You expect it to fail?",
+      "speaker": "",
+      "context": "interaction_scenes.work_road_finish.lines"
+    },
+    "interaction_scenes.work_road_finish.lines.1": {
+      "source": "Tor: I expect someone to repair it. A thing can be well made without being the last thing anyone ever makes.",
+      "text": "Tor: I expect someone to repair it. A thing can be well made without being the last thing anyone ever makes.",
+      "speaker": "",
+      "context": "interaction_scenes.work_road_finish.lines"
+    },
+    "interaction_scenes.work_road_finish.lines.2": {
+      "source": "Water threads through the cleared drain. Rook's empty wheel crosses the boards without sinking.",
+      "text": "Water threads through the cleared drain. Rook's empty wheel crosses the boards without sinking.",
+      "speaker": "",
+      "context": "interaction_scenes.work_road_finish.lines"
+    },
+    "interaction_scenes.work_road_finish.lines.3": {
+      "source": "Tor: There. A road ought to carry the person using it. Start with that.",
+      "text": "Tor: There. A road ought to carry the person using it. Start with that.",
+      "speaker": "",
+      "context": "interaction_scenes.work_road_finish.lines"
+    },
+    "interaction_scenes.work_road_finish.name": {
+      "source": "Tor",
+      "text": "Tor",
+      "speaker": "",
+      "context": "interaction_scenes.work_road_finish"
+    },
+    "interaction_scenes.work_road_return.greeting": {
+      "source": "Water's still moving. Boards are still holding.",
+      "text": "Water's still moving. Boards are still holding.",
+      "speaker": "",
+      "context": "interaction_scenes.work_road_return"
+    },
+    "interaction_scenes.work_road_return.lines.0": {
+      "source": "Tor: If you're looking for praise, ask the wheel. It made the most noise about it before.",
+      "text": "Tor: If you're looking for praise, ask the wheel. It made the most noise about it before.",
+      "speaker": "",
+      "context": "interaction_scenes.work_road_return.lines"
+    },
+    "interaction_scenes.work_road_return.name": {
+      "source": "Tor",
+      "text": "Tor",
+      "speaker": "",
+      "context": "interaction_scenes.work_road_return"
     },
     "items.ash_bomb.description": {
       "source": "A clay bomb packed with ash-salt and sparkstone.",

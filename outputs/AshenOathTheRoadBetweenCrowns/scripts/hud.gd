@@ -1889,7 +1889,7 @@ func show_save_slot(slot_id: String) -> void:
 			hide_menus()
 	, not bool(slot.valid))
 	if not bool(slot.protected):
-		var can_save := get_parent().get("game_started") == true and is_instance_valid(get_parent().get("player"))
+		var can_save: bool = get_parent().get("game_started") == true and is_instance_valid(get_parent().get("player"))
 		_add_menu_button(box, "Replace With Current Journey" if bool(slot.exists) else "Save Current Journey Here", func():
 			if service.save_named(get_parent(), slot_id, title.text):
 				show_save_slot(slot_id)

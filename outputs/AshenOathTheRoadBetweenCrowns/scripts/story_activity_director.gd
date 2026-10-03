@@ -199,7 +199,7 @@ func activate(id: String) -> void:
 				_commit({"vargan_service_passage_known": true}, "The documented service passage leads directly to the record hall.")
 				host._load_zone_after_runtime_pack("record_hall", Vector3(0, 1, 11))
 		"senn_guard_stand_down":
-			var knows_deserters := host.story_state.has_evidence("deserters_muster") or bool(host.quests.evidence_history.get("side_soldiers_debt:find_deserters", false))
+			var knows_deserters: bool = host.story_state.has_evidence("deserters_muster") or bool(host.quests.evidence_history.get("side_soldiers_debt:find_deserters", false))
 			if not knows_deserters and not _flag("relief_deliveries_completed"):
 				host.hud.toast("They do not trust another promise. Read their hidden muster roll nearby, or bring proof that Greyfen is feeding households without demanding obedience.")
 			elif not host.quests.is_objective_done("main_soldier_without_banner", "senn_confrontation"):
