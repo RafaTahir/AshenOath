@@ -47,12 +47,13 @@ function Invoke-BuildProcess([string]$Executable, [string[]]$Arguments, [string]
     }
 }
 
-function Invoke-PublishProcess([string]$Executable, [string[]]$Arguments, [string]$LogName) {
+function Invoke-PublishProcess([string]$Executable, [string[]]$Arguments, [string]$LogName, [string]$CommandLine = "") {
     $quoted = @($Arguments | ForEach-Object { '"' + $_.Replace('"', '\"') + '"' })
+    $argumentLine = if ($CommandLine) { $CommandLine } else { $quoted -join ' ' }
     $stdout = Join-Path $LogRoot ($LogName + ".stdout.log")
     $stderr = Join-Path $LogRoot ($LogName + ".stderr.log")
     Write-Host ("Publishing: {0}" -f $LogName)
-    $process = Start-Process -FilePath $Executable -ArgumentList ($quoted -join ' ') -WorkingDirectory $RepositoryRoot -WindowStyle Hidden -Wait -PassThru -RedirectStandardOutput $stdout -RedirectStandardError $stderr
+    $process = Start-Process -FilePath $Executable -ArgumentList $argumentLine -WorkingDirectory $RepositoryRoot -WindowStyle Hidden -Wait -PassThru -RedirectStandardOutput $stdout -RedirectStandardError $stderr
     foreach ($log in @($stdout, $stderr)) {
         if (Test-Path -LiteralPath $log) {
             Get-Content -LiteralPath $log | ForEach-Object { Write-Host $_ }
@@ -236,7 +237,9 @@ if ($Publish) {
     Invoke-PublishProcess $GitPath ($GitArguments + @("push", "origin", "HEAD:main", "HEAD:codex/story-centered-overhaul")) "git-push"
     $Publication.phase = "pushed"
     Save-PublicationReceipt
-    Invoke-PublishProcess $env:ComSpec @("/d", "/c", "npx vercel --prod --yes") "vercel-production"
+    # cmd.exe parses its command tail itself; CRT-style quoting every switch
+    # and the entire tail turns the command name into a quoted literal.
+    Invoke-PublishProcess -Executable $env:ComSpec -Arguments @() -LogName "vercel-production" -CommandLine '/d /s /c "npx vercel --prod --yes"'
     $Publication.phase = "deployed"
     Save-PublicationReceipt
     Write-Host "Publication completed: $ReceiptPath"
