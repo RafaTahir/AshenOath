@@ -1,24 +1,24 @@
 {
   "schema_version": 2,
   "project": "Ashen Oath",
-  "build_id": "story-20261003T124352Z-7912479abe20",
+  "build_id": "story-20261003T132623Z-e11e1de24966",
   "source": {
-    "git_commit": "7912479abe20de4324706c937e7de9de5f9936ff",
+    "git_commit": "e11e1de249664bfe4d2ce78806d92f08818a9796",
     "dirty": true
   },
-  "generated_at_utc": "2026-10-03T12:47:44.517680Z",
-  "compatibility_key": "8683a2d599e6b5f75349d7690aa8b23049030d305ea752233e8633d6384f24d3",
+  "generated_at_utc": "2026-10-03T13:28:32.371551Z",
+  "compatibility_key": "fc523a7b0d4febcea79552bdb50ec6dc8f7b7f705aed5749532917c77693bfcf",
   "runtime_pack_manifest": {
     "path": "runtime_pack_manifest.json",
     "bytes": 6678,
-    "sha256": "b3b14415b0ecba8cf7a0f19836dac53d4c402b9df0e59ba51a21f1cf5417f5e5"
+    "sha256": "59e3d8069578f65178fc06643784b4071d629873066cab2a6bdcc01578735092"
   },
   "root_pck": {
     "path": "index.pck",
-    "bytes": 17734304,
-    "sha256": "ddffaa6350b95212a788364955fe2c97fdaebd4fc3480a0dfdc06382ffa1005c"
+    "bytes": 17776700,
+    "sha256": "f1c0ebcb4b47f2eecba70d4eb362786302eeb75db485cddb5286886e91b97bda"
   },
-  "artifacts_total_bytes": 100109544,
+  "artifacts_total_bytes": 100154436,
   "artifacts": [
     {
       "path": "index.audio.position.worklet.js",
@@ -33,7 +33,7 @@
     {
       "path": "index.html",
       "bytes": 38251,
-      "sha256": "11813014c58ededd0f6362c1d63a369aee2504b3d112a7bad924e966b210699c"
+      "sha256": "b0dd3a0e340f0ea040f58750fe3cb53908e5e91797c04b90c7b92b3820d4b77d"
     },
     {
       "path": "index.js",
@@ -42,8 +42,8 @@
     },
     {
       "path": "index.pck",
-      "bytes": 17734304,
-      "sha256": "ddffaa6350b95212a788364955fe2c97fdaebd4fc3480a0dfdc06382ffa1005c"
+      "bytes": 17776700,
+      "sha256": "f1c0ebcb4b47f2eecba70d4eb362786302eeb75db485cddb5286886e91b97bda"
     },
     {
       "path": "index.png",
@@ -60,38 +60,38 @@
     },
     {
       "path": "packs/audio.pck",
-      "bytes": 12313924,
-      "sha256": "5d31ecc5d3a0cb719f78ec059b3de764a291931da7bd7641493973d712781139"
+      "bytes": 12314340,
+      "sha256": "50632b792e2b6aa4ee13a7ca7cfeb8fc85dfa0a53b9604e0069d8b9d8b96d939"
     },
     {
       "path": "packs/campaign.pck",
-      "bytes": 1021308,
-      "sha256": "132806632412fd1e7fd46c66461d8d1538439454bc24ae4288fe1d140b23d826"
+      "bytes": 1021724,
+      "sha256": "37ae7846ec149d75fb1c9a036b3482f69a5bd530f8068e233c51ac45ea575ee3"
     },
     {
       "path": "packs/characters.pck",
-      "bytes": 30491816,
-      "sha256": "2685a6c8608c65bc6080b2373389c0cae4d29c2fe61cc14907471eec24fa2fa0"
+      "bytes": 30492232,
+      "sha256": "f00ab22015e732d44227890cfddc1d55ae9a6e40e78227429d918221a6ce1829"
     },
     {
       "path": "packs/monsters.pck",
-      "bytes": 7031820,
-      "sha256": "c30fdbb4128a884e13577102c18d9f07477818ab0a9acd74473763b3e13a3936"
+      "bytes": 7032236,
+      "sha256": "ddbf92199d4936d023b85a656dde40212302faf3d23b8d20d42fdde8969f458f"
     },
     {
       "path": "packs/opening.pck",
-      "bytes": 14343564,
-      "sha256": "ef63fb949743cea9cd6ff764707f1bbf567d7254bf342344d03feed54bf3a5da"
+      "bytes": 14343980,
+      "sha256": "132451a39245c56eb2db4d94b8bd1733986c924ab3e4d67f498b730cef641947"
     },
     {
       "path": "packs/quality_materials.pck",
-      "bytes": 7398124,
-      "sha256": "ed4732f3070bf7a772f6557a313b1570d44c456001e7bc459e58d1f361bccc5d"
+      "bytes": 7398540,
+      "sha256": "9d072e82122a745af5256f4221941f2903067a40f4cd828f397d40d0f396c0ac"
     },
     {
       "path": "runtime_pack_manifest.json",
       "bytes": 6678,
-      "sha256": "b3b14415b0ecba8cf7a0f19836dac53d4c402b9df0e59ba51a21f1cf5417f5e5"
+      "sha256": "59e3d8069578f65178fc06643784b4071d629873066cab2a6bdcc01578735092"
     }
   ],
   "packs": [
@@ -105,9 +105,9 @@
     },
     {
       "id": "opening",
-      "url": "packs/opening.pck?sha256=ef63fb949743cea9cd6ff764707f1bbf567d7254bf342344d03feed54bf3a5da",
-      "bytes": 14343564,
-      "sha256": "ef63fb949743cea9cd6ff764707f1bbf567d7254bf342344d03feed54bf3a5da",
+      "url": "packs/opening.pck?sha256=132451a39245c56eb2db4d94b8bd1733986c924ab3e4d67f498b730cef641947",
+      "bytes": 14343980,
+      "sha256": "132451a39245c56eb2db4d94b8bd1733986c924ab3e4d67f498b730cef641947",
       "dependencies": [
         "base"
       ],
@@ -115,9 +115,9 @@
     },
     {
       "id": "campaign",
-      "url": "packs/campaign.pck?sha256=132806632412fd1e7fd46c66461d8d1538439454bc24ae4288fe1d140b23d826",
-      "bytes": 1021308,
-      "sha256": "132806632412fd1e7fd46c66461d8d1538439454bc24ae4288fe1d140b23d826",
+      "url": "packs/campaign.pck?sha256=37ae7846ec149d75fb1c9a036b3482f69a5bd530f8068e233c51ac45ea575ee3",
+      "bytes": 1021724,
+      "sha256": "37ae7846ec149d75fb1c9a036b3482f69a5bd530f8068e233c51ac45ea575ee3",
       "dependencies": [
         "base",
         "opening"
@@ -126,9 +126,9 @@
     },
     {
       "id": "characters",
-      "url": "packs/characters.pck?sha256=2685a6c8608c65bc6080b2373389c0cae4d29c2fe61cc14907471eec24fa2fa0",
-      "bytes": 30491816,
-      "sha256": "2685a6c8608c65bc6080b2373389c0cae4d29c2fe61cc14907471eec24fa2fa0",
+      "url": "packs/characters.pck?sha256=f00ab22015e732d44227890cfddc1d55ae9a6e40e78227429d918221a6ce1829",
+      "bytes": 30492232,
+      "sha256": "f00ab22015e732d44227890cfddc1d55ae9a6e40e78227429d918221a6ce1829",
       "dependencies": [
         "base",
         "opening"
@@ -137,9 +137,9 @@
     },
     {
       "id": "monsters",
-      "url": "packs/monsters.pck?sha256=c30fdbb4128a884e13577102c18d9f07477818ab0a9acd74473763b3e13a3936",
-      "bytes": 7031820,
-      "sha256": "c30fdbb4128a884e13577102c18d9f07477818ab0a9acd74473763b3e13a3936",
+      "url": "packs/monsters.pck?sha256=ddbf92199d4936d023b85a656dde40212302faf3d23b8d20d42fdde8969f458f",
+      "bytes": 7032236,
+      "sha256": "ddbf92199d4936d023b85a656dde40212302faf3d23b8d20d42fdde8969f458f",
       "dependencies": [
         "base"
       ],
@@ -147,9 +147,9 @@
     },
     {
       "id": "audio",
-      "url": "packs/audio.pck?sha256=5d31ecc5d3a0cb719f78ec059b3de764a291931da7bd7641493973d712781139",
-      "bytes": 12313924,
-      "sha256": "5d31ecc5d3a0cb719f78ec059b3de764a291931da7bd7641493973d712781139",
+      "url": "packs/audio.pck?sha256=50632b792e2b6aa4ee13a7ca7cfeb8fc85dfa0a53b9604e0069d8b9d8b96d939",
+      "bytes": 12314340,
+      "sha256": "50632b792e2b6aa4ee13a7ca7cfeb8fc85dfa0a53b9604e0069d8b9d8b96d939",
       "dependencies": [
         "base"
       ],
@@ -157,9 +157,9 @@
     },
     {
       "id": "quality_materials",
-      "url": "packs/quality_materials.pck?sha256=ed4732f3070bf7a772f6557a313b1570d44c456001e7bc459e58d1f361bccc5d",
-      "bytes": 7398124,
-      "sha256": "ed4732f3070bf7a772f6557a313b1570d44c456001e7bc459e58d1f361bccc5d",
+      "url": "packs/quality_materials.pck?sha256=9d072e82122a745af5256f4221941f2903067a40f4cd828f397d40d0f396c0ac",
+      "bytes": 7398540,
+      "sha256": "9d072e82122a745af5256f4221941f2903067a40f4cd828f397d40d0f396c0ac",
       "dependencies": [
         "base",
         "opening"
