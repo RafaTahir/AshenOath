@@ -33,7 +33,7 @@ const DEFAULT_SETTINGS := {
 	"difficulty": "standard",
 	"pause_on_focus_loss": true,
 	"subtitle_scale": 1.0,
-	"subtitle_background_opacity": 0.92,
+	"subtitle_background_opacity": 0.55,
 	"subtitle_speaker_names": true,
 	"flash_reduction": false,
 	"targeting_assist": true,
@@ -155,7 +155,7 @@ func restore_settings(stored: Dictionary) -> void:
 	if settings["difficulty"] not in ["story", "standard", "veteran"]:
 		settings["difficulty"] = "standard"
 	settings["subtitle_scale"] = clampf(float(settings["subtitle_scale"]), 0.9, 1.5)
-	settings["subtitle_background_opacity"] = clampf(float(settings.get("subtitle_background_opacity", 0.92)), 0.25, 1.0)
+	settings["subtitle_background_opacity"] = clampf(float(settings.get("subtitle_background_opacity", 0.55)), 0.0, 1.0)
 	for key in ["block_mode", "sprint_mode"]:
 		if str(settings.get(key, "hold")) not in ["hold", "toggle"]:
 			settings[key] = "hold"
@@ -340,7 +340,7 @@ func cycle_subtitle_scale() -> void:
 func cycle_accessibility(action: String) -> bool:
 	match action:
 		"subtitle_background_opacity":
-			settings[action] = _cycle_float(float(settings.get(action, 0.92)), [0.25, 0.55, 0.75, 0.92, 1.0])
+			settings[action] = _cycle_float(float(settings.get(action, 0.55)), [0.0, 0.25, 0.55, 0.75, 0.92, 1.0])
 		"subtitle_speaker_names", "flash_reduction", "targeting_assist":
 			settings[action] = not bool(settings.get(action, false))
 		"block_mode", "sprint_mode":

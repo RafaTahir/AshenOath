@@ -78,28 +78,28 @@ static func resolve(canvas_size: Vector2, display: Dictionary, text_scale: float
 	metrics["dialogue"] = dialogue_layout(metrics, false, 1)
 	return metrics
 
-static func dialogue_layout(metrics: Dictionary, has_stakes: bool, action_count: int) -> Dictionary:
+static func dialogue_layout(metrics: Dictionary, has_stakes: bool, action_count: int, subtitle_lines: int = 2) -> Dictionary:
 	var safe: Rect2 = metrics.get("safe_rect", Rect2(Vector2.ZERO, FALLBACK_CANVAS))
 	var unit: float = maxf(0.0001, float(metrics.get("unit_scale", 1.0)))
 	var scale: float = float(metrics.get("text_scale", 1.0))
-	var padding: float = float(metrics.get("padding", 16.0 * unit))
+	var padding: float = 10.0 * unit
 	var margin: float = float(metrics.get("margin", 12.0 * unit))
-	var gap: float = float(metrics.get("gap", 12.0 * unit))
+	var gap: float = 6.0 * unit
 	var button: float = float(metrics.get("button_min_height", 48.0 * unit))
 	var fonts: Dictionary = metrics.get("fonts", {})
 	var subtitle_font: float = float(fonts.get("subtitle", 24.0 * unit))
 	var body_font: float = float(fonts.get("body", 20.0 * unit))
 	var heading_font: float = float(fonts.get("heading", 26.0 * unit))
 	var header: float = maxf(button, ceilf(heading_font * 1.25))
-	var reader_min: float = 3.0 * ceilf(subtitle_font * 1.35) + 8.0 * unit
+	var reader_min: float = float(clampi(subtitle_lines, 2, 4)) * ceilf(subtitle_font * 1.35) + 4.0 * unit
 	var stakes_min: float = 2.0 * ceilf(body_font * 1.35) + 8.0 * unit if has_stakes else 0.0
-	var reader: float = maxf(reader_min, 140.0 * scale * unit)
-	var stakes: float = maxf(stakes_min, 116.0 * scale * unit) if has_stakes else 0.0
+	var reader: float = reader_min
+	var stakes: float = maxf(stakes_min, 90.0 * scale * unit) if has_stakes else 0.0
 	var rows: int = clampi(action_count, 1, 3)
 	var choices: float = button * rows + gap * (rows - 1)
 	var chrome: float = padding * 2.0 + header + gap * (3.0 if has_stakes else 2.0)
 	var desired_height: float = chrome + reader + stakes + choices
-	var frame: Rect2 = _frame(safe, Vector2(1120.0 * unit, desired_height), margin, true)
+	var frame: Rect2 = _frame(safe, Vector2(860.0 * unit, desired_height), margin, true)
 	var available: float = maxf(0.0, frame.size.y - chrome)
 	var outer_scroll: bool = available < reader_min + stakes_min + button
 	if not outer_scroll:

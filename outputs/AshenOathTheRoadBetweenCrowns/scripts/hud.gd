@@ -111,6 +111,7 @@ var last_stamina_max = 100.0
 var hint_tween: Tween
 var status_tween: Tween
 var toast_tween: Tween
+var _subtitle_tween: Tween
 var enemy_hide_tween: Tween
 var dialogue_pages: Array = []
 var dialogue_page_index := 0
@@ -685,7 +686,7 @@ func _settings_entries(s: Dictionary) -> Array:
 		{"label": "VSync             %s" % _on_off(bool(s.get("vsync", true))), "action": "vsync"},
 		{"label": "Fullscreen        %s" % _on_off(bool(s.get("fullscreen", false))), "action": "fullscreen"},
 		{"label": "Subtitle Size     %d%%" % int(round(float(s.get("subtitle_scale", 1.0)) * 100.0)), "action": "subtitle_scale"},
-		{"label": "Subtitle Background  %d%%" % int(round(float(s.get("subtitle_background_opacity", 0.92)) * 100.0)), "action": "subtitle_background_opacity"},
+		{"label": "Subtitle Shade  %d%%" % int(round(float(s.get("subtitle_background_opacity", 0.55)) * 100.0)), "action": "subtitle_background_opacity"},
 		{"label": "Speaker Names     %s" % _on_off(bool(s.get("subtitle_speaker_names", true))), "action": "subtitle_speaker_names"},
 		{"label": "Block             %s" % str(s.get("block_mode", "hold")).capitalize(), "action": "block_mode"},
 		{"label": "Sprint            %s" % str(s.get("sprint_mode", "hold")).capitalize(), "action": "sprint_mode"},
@@ -1108,13 +1109,19 @@ func _present_notice() -> void:
 	var may_show := not toasts_suppressed or str(_notice_active.get("category", "")) in ["error", "unavailable"]
 	toast_label.visible = text != "" and not menu_open and not reading and may_show
 	toast_label.text = text
-	toast_label.modulate = Color.WHITE
+	var notice_alpha := 1.0
+	if not reduced_motion and not flash_reduction and not _notice_active.is_empty():
+		var duration := float(_notice_active.get("duration", 2.2))
+		notice_alpha = minf(smoothstep(0.0, 0.20, duration - _notice_remaining), smoothstep(0.0, 0.30, _notice_remaining))
+	toast_label.modulate = Color(1, 1, 1, notice_alpha)
 	if notice_category_label != null:
 		var category := str(_notice_active.get("category", "info"))
 		notice_category_label.text = str({"story":"Story", "inventory":"Supplies", "save":"Saved", "error":"Unable to complete", "unavailable":"Unavailable", "combat":"In the fight", "info":"On the road"}.get(category, "On the road"))
 		notice_category_label.visible = toast_label.visible
+		notice_category_label.modulate.a = notice_alpha
 	if notice_back != null:
 		notice_back.visible = toast_label.visible
+		notice_back.modulate.a = notice_alpha
 	if inventory_notice_label != null:
 		inventory_notice_label.text = text if inventory_layer.visible and not reading else ""
 		inventory_notice_label.tooltip_text = text
@@ -1391,6 +1398,19 @@ func show_dialogue(data: Dictionary) -> void:
 	dialogue_page_index = 0
 	_render_dialogue_page()
 
+func _reveal_subtitle() -> void:
+	if _subtitle_tween != null:
+		_subtitle_tween.kill()
+	dialogue_text.modulate = Color.WHITE
+	dialogue_title.modulate = Color.WHITE
+	if reduced_motion or flash_reduction: return
+	dialogue_text.modulate.a = 0.0
+	dialogue_title.modulate.a = 0.0
+	_subtitle_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_parallel(true)
+	_subtitle_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	_subtitle_tween.tween_property(dialogue_text, "modulate:a", 1.0, 0.15)
+	_subtitle_tween.tween_property(dialogue_title, "modulate:a", 1.0, 0.15)
+
 func _render_dialogue_page(record_history: bool = true, announce_page: bool = true, focus_page: bool = true) -> void:
 	if focus_page:
 		_dialogue_body_scroll.scroll_vertical = 0
@@ -1415,7 +1435,10 @@ func _render_dialogue_page(record_history: bool = true, announce_page: bool = tr
 	if record_history:
 		text_history.record(page_speaker, dialogue_text.get_parsed_text(), "speech", str(page.get("text_id", "")) if page is Dictionary else "")
 	var reading_topic: bool = str(_topic_navigation.mode) == "topic"
-	dialogue_page_label.text = ("Topic · " if reading_topic else "") + "%02d / %02d" % [dialogue_page_index + 1, dialogue_pages.size()]
+	dialogue_page_label.text = "%d / %d" % [dialogue_page_index + 1, dialogue_pages.size()]
+	dialogue_page_label.visible = false
+	if announce_page:
+		_reveal_subtitle()
 	if announce_page:
 		dialogue_page_changed.emit(page_speaker, page_speaker_id, dialogue_page_index, dialogue_pages.size())
 	for child in dialogue_actions.get_children():
@@ -2526,7 +2549,10 @@ func _wire_responsive_inventory_focus() -> void:
 			control.focus_neighbor_left = NodePath() if bool(_layout_policy.get("compact", false)) else control.get_path_to(inventory_text)
 
 func _apply_responsive_dialogue(policy: Dictionary) -> void:
-	var model: Dictionary = HudLayoutPolicy.dialogue_layout(policy, _decision_details.visible, dialogue_actions.get_child_count())
+	var initial: Dictionary = HudLayoutPolicy.dialogue_layout(policy, _decision_details.visible, dialogue_actions.get_child_count())
+	var fonts: Dictionary = policy.fonts
+	var line_count := HudVisualStyle.subtitle_lines(dialogue_text.get_parsed_text(), dialogue_text.get_theme_font("normal_font"), int(fonts.subtitle), float(initial.content_width))
+	var model: Dictionary = HudLayoutPolicy.dialogue_layout(policy, _decision_details.visible, dialogue_actions.get_child_count(), line_count)
 	var frame: Rect2 = model.frame
 	var gap: float = float(model.gap)
 	var outer_scroll: bool = bool(model.outer_scroll)
@@ -2537,6 +2563,7 @@ func _apply_responsive_dialogue(policy: Dictionary) -> void:
 	_dialogue_header.custom_minimum_size = Vector2(0.0, float(model.header_height))
 	_dialogue_header.add_theme_constant_override("separation", int(round(gap * 0.5)))
 	_dialogue_body.add_theme_constant_override("separation", int(round(gap)))
+	(dialogue_layer.get_child(0) as VBoxContainer).add_theme_constant_override("separation", int(round(gap)))
 	_dialogue_body_scroll.custom_minimum_size = Vector2(0.0, float(model.body_height))
 	_dialogue_body_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO if outer_scroll else ScrollContainer.SCROLL_MODE_DISABLED
 	dialogue_text.custom_minimum_size = Vector2(0.0, float(model.reader_height))
@@ -2545,6 +2572,10 @@ func _apply_responsive_dialogue(policy: Dictionary) -> void:
 	dialogue_actions.add_theme_constant_override("separation", int(round(gap)))
 	_dialogue_back_button.text = "Back" if str(_topic_navigation.mode) != "primary" else "Close"
 	dialogue_title.tooltip_text = dialogue_title.text
+	for button: Button in [_dialogue_history_button, _dialogue_back_button]:
+		HudVisualStyle.dialogue_choice(button, high_contrast)
+	for child in dialogue_actions.get_children():
+		if child is Button: HudVisualStyle.dialogue_choice(child, high_contrast)
 
 func _apply_responsive_menu(policy: Dictionary) -> void:
 	if not is_instance_valid(_menu_frame) or not is_instance_valid(_menu_content):
@@ -2798,7 +2829,7 @@ func _build_dialogue() -> void:
 	box.add_child(_dialogue_header)
 	dialogue_title = Label.new()
 	dialogue_title.name = "DialogueSpeakerName"
-	dialogue_title.set_meta("layout_font_role", "heading")
+	dialogue_title.set_meta("layout_font_role", "caption")
 	dialogue_title.clip_text = true
 	dialogue_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_dialogue_header.add_child(dialogue_title)
@@ -2835,15 +2866,15 @@ func _build_dialogue() -> void:
 	_dialogue_body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_dialogue_body.add_theme_constant_override("separation", 8)
 	_dialogue_body_scroll.add_child(_dialogue_body)
-	var rule: ColorRect = ColorRect.new()
-	rule.name = "DialogueGoldRule"
-	rule.custom_minimum_size = Vector2(0, 2)
-	rule.color = Color(0.58, 0.40, 0.18, 0.82)
-	_dialogue_body.add_child(rule)
 	dialogue_text = RichTextLabel.new()
 	dialogue_text.name = "DialogueSubtitleText"
 	dialogue_text.set_meta("layout_font_role", "subtitle")
 	dialogue_text.bbcode_enabled = true
+	dialogue_text.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	dialogue_text.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.95))
+	dialogue_text.add_theme_color_override("font_outline_color", Color(0, 0, 0, 0.85))
+	dialogue_text.add_theme_constant_override("outline_size", 2)
+	dialogue_text.add_theme_constant_override("shadow_offset_y", 2)
 	dialogue_text.focus_mode = Control.FOCUS_ALL
 	dialogue_text.set_meta("dialogue_focus_key", "text")
 	dialogue_text.scroll_active = true
@@ -3227,7 +3258,7 @@ func apply_accessibility(current: Dictionary) -> void:
 			inventory_text.custom_minimum_size.y = 520.0 - journal_art.custom_minimum_size.y - 48.0
 	if dialogue_text != null:
 		dialogue_title.visible = subtitle_speaker_names
-		_style_panel(dialogue_layer, Color(0.045, 0.04, 0.035, clampf(float(current.get("subtitle_background_opacity", 0.92)), 0.25, 1.0)), Color(0.44, 0.32, 0.18, 0.92))
+		dialogue_layer.add_theme_stylebox_override("panel", HudVisualStyle.dialogue_panel(high_contrast, clampf(float(current.get("subtitle_background_opacity", 0.55)), 0.0, 1.0)))
 		dialogue_text.add_theme_font_size_override("normal_font_size", int(round(24.0 * subtitle_scale)))
 		dialogue_text.add_theme_font_size_override("bold_font_size", int(round(26.0 * subtitle_scale)))
 		dialogue_text.custom_minimum_size.y = 78.0 if subtitle_scale <= 1.0 else 116.0
@@ -3259,10 +3290,12 @@ func apply_accessibility(current: Dictionary) -> void:
 		_bar_tweens.clear()
 		for bar: ProgressBar in [health_bar, stamina_bar, enemy_bar]:
 			bar.modulate = Color.WHITE
-		for tween: Tween in [hint_tween, status_tween, toast_tween]:
+		for tween: Tween in [hint_tween, status_tween, toast_tween, _subtitle_tween]:
 			if tween != null and tween.is_valid():
 				tween.kill()
 		hint_label.modulate = Color.WHITE
+		dialogue_text.modulate = Color.WHITE
+		dialogue_title.modulate = Color.WHITE
 		status_label.modulate = _status_color(_status_kind)
 	if tracker_back != null:
 		(tracker_back as ColorRect).color = Color(0.018, 0.016, 0.014, 0.94 if high_contrast else 0.70)
@@ -3676,7 +3709,7 @@ func _apply_hud_visual_identity() -> void:
 	for id: String in _quick_icons:
 		(_quick_icons[id] as Control).call("configure", id, high_contrast)
 	var settings: Dictionary = _current_settings()
-	var opacity: float = clampf(float(settings.get("subtitle_background_opacity", 0.92)), 0.25, 1.0)
+	var opacity: float = clampf(float(settings.get("subtitle_background_opacity", 0.55)), 0.0, 1.0)
 	dialogue_layer.add_theme_stylebox_override("panel", HudVisualStyle.dialogue_panel(high_contrast, opacity))
 	dialogue_title.add_theme_color_override("font_color", Color.WHITE if high_contrast else HudVisualStyle.GOLD)
 	dialogue_text.add_theme_color_override("default_color", Color.WHITE if high_contrast else HudVisualStyle.IVORY)
@@ -3701,8 +3734,8 @@ func _apply_hud_visual_colors() -> void:
 	vitals_back.color = Color(0.008, 0.012, 0.015, 0.94 if high_contrast else (0.12 if _attention_remaining > 0.0 or danger else 0.0))
 	(tracker_back as ColorRect).color = Color(0.008, 0.012, 0.015, 0.93 if high_contrast else 0.0)
 	(compass_back as ColorRect).color = Color(0.008, 0.012, 0.015, 0.94 if high_contrast else 0.0)
-	prompt_back.color = Color(0.008, 0.012, 0.015, 0.95 if high_contrast else 0.24)
-	notice_back.color = Color(0.008, 0.012, 0.015, 0.94 if high_contrast else 0.18)
+	prompt_back.color = Color(0.008, 0.012, 0.015, 0.95 if high_contrast else 0.0)
+	notice_back.color = Color(0.008, 0.012, 0.015, 0.94 if high_contrast else 0.0)
 	_quest_rule.color = Color.WHITE if high_contrast else Color(0.66, 0.59, 0.38, 0.62)
 func _hud_text_labels() -> Array[Label]:
 	var labels: Array[Label] = [enemy_label, enemy_value_label, target_status_label, prompt_label, tracker_label, compass_label, toast_label, hint_label, status_label, equipment_label, health_value_label, stamina_value_label, tracker_title_label, tracker_caption_label, tracker_route_label, tracker_work_label, tracker_footer_label, vitals_warning_label, notice_category_label, inventory_notice_label]
@@ -4274,6 +4307,7 @@ func _style_button(button: Button) -> void:
 			choice_style.corner_radius_bottom_left = 0
 			choice_style.corner_radius_bottom_right = 0
 			button.add_theme_stylebox_override(key, choice_style)
+		HudVisualStyle.dialogue_choice(button, high_contrast)
 	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	button.focus_mode = Control.FOCUS_ALL
 	if button.has_meta("wrapped_label"):
