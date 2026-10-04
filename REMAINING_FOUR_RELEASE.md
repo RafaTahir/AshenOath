@@ -38,4 +38,15 @@ Use the existing Godot 4.6.3 pipeline, regenerate affected animation/audio/sourc
 - Enemies follow the player only during the early part of a bounded windup, then commit. Misses now incur recovery too, with slower heavy creatures and quicker duelists. Story preparation bonuses apply consistently. Confirmed blade hits receive short unscaled-time hit emphasis, overlapping timers cannot end a newer hit pause, and Reduced Motion disables it. Routine missed swings no longer spam text.
 - Public exits receive close-range destination signs, with the next available road toward the manually tracked objective highlighted. A brief route reminder appears only after sustained wandering without progress and is throttled for two minutes. Nearby approaches queue destination packs asynchronously after the first eight seconds of control; menus, danger and transitions suspend this work. No hidden clue positions are revealed and no hidden scenes are instantiated.
 
-Publication receipt will be recorded after the production command completes. These changes have not been tested or visually reviewed, as requested; no claim of measured performance or verified animation quality is made.
+These changes have not been tested or visually reviewed, as requested; no claim of measured performance or verified animation quality is made.
+
+## Publication receipt — 4 October 2026
+
+- Source revision: `b03fe2da5f95feac8f6c757af37dbe1d6f8fd7b3`.
+- Build identity: `story-20261004T074623Z-b03fe2da5f95`.
+- Generated release commit: `4cbfbc6`, pushed to `main` and `codex/story-centered-overhaul`.
+- Production import, directional animation baking, all seven runtime packs, and Web export completed through `build_story_release.ps1 -BuildVoices -Publish`.
+- Vercel deployment: `dpl_EdkCCDBxYHM15uLRWKdxooTtfQeD`. Deployment command returned `READY` and aliased `https://ashenoath.vercel.app`.
+- Deployment URL: `https://ashenoath-8zwhyxv3p-rafaeitahir-5792s-projects.vercel.app`.
+- Local publication receipt: `.release-gate/remaining-four-01/publication.json`.
+- No tests, verification, gameplay launches, visual review, performance measurements or post-deployment probes were run.
