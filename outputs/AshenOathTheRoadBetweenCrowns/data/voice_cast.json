@@ -15,7 +15,7 @@
     "white_hart": {"voices":{"bf_isabella":0.70,"af_nicole":0.30},"lang":"en-gb","speed":0.96,"direction":"Patient and intimate; no echo, pitch shifting or monster filter."},
     "len": {"voices":{"am_puck":0.65,"am_michael":0.35},"lang":"en-us","speed":0.97,"direction":"A lost soldier, vulnerable beneath repeated orders."},
     "merrow": {"voices":{"bm_fable":0.55,"bm_george":0.45},"lang":"en-gb","speed":1.03,"direction":"Efficient bureaucracy, uncomfortably close to ordinary conversation."},
-    "vale": {"voices":{"bm_fable":0.30,"bm_lewis":0.70},"lang":"en-gb","speed":0.99,"direction":"Careful, precise; a keeper finally willing to speak."},
+    "vale": {"voices":{"bm_fable":0.65,"am_michael":0.35},"lang":"en-gb","speed":0.99,"direction":"Careful, precise; a keeper finally willing to speak."},
     "guard": {"voices":{"am_fenrir":0.55,"bm_george":0.45},"lang":"en-gb","speed":1.04,"direction":"Working guard, direct rather than threatening."},
     "patrol_guard": {"voices":{"bm_fable":0.25,"am_michael":0.75},"lang":"en-gb","speed":1.00,"direction":"Wary witness, unsettled by the orders received."},
     "servant": {"voices":{"af_bella":0.65,"af_heart":0.35},"lang":"en-us","speed":0.98,"direction":"Tired hospitality with a little remaining warmth."},
