@@ -150,6 +150,7 @@ def main():
     parser.add_argument("--runtime", type=Path, default=REPO / "work/natural-voice-runtime")
     parser.add_argument("--models", type=Path, default=REPO / "work/natural-voice-models")
     parser.add_argument("--all-scenes", action="store_true", help="Compatibility flag; full cast is always produced")
+    parser.add_argument("--dialogue-only", action="store_true", help="Finish dialogue while leaving village remarks pending")
     parser.add_argument("--finalize-existing", action="store_true", help="Publish completed upgrades and retain earlier recordings without further synthesis")
     args = parser.parse_args()
     sys.path.insert(0, str(args.runtime))
@@ -191,6 +192,9 @@ def main():
         key = hashlib.sha256((who + "|" + text).encode("utf-8")).hexdigest()
         if key in seen: continue
         seen.add(key)
+        if args.dialogue_only and scene.startswith("ambient:"):
+            pending.append({"scene":scene, "speaker_id":who, "page_key":key})
+            continue
         profile = cast[role]
         speed = delivery_speed(profile, text, scene, direction)
         spoken = text.replace("—", ", ").replace("…", "... ")
@@ -200,6 +204,9 @@ def main():
         recipe_hash = hashlib.sha256(json.dumps(recipe, sort_keys=True).encode("utf-8")).hexdigest()
         stamp = recipe_cache / (key + ".txt")
         clip = output / (key + ".ogg")
+        if clip.exists() and stamp.exists() and stamp.read_text(encoding="utf-8") == recipe_hash and previous_lines.get(key, {}).get("render_recipe_sha256") == recipe_hash:
+            lines.append(previous_lines[key])
+            continue
         if not clip.exists() or not stamp.exists() or stamp.read_text(encoding="utf-8") != recipe_hash:
             if args.finalize_existing:
                 if key in previous_lines and clip.exists() and not stamp.exists():
@@ -239,7 +246,7 @@ def main():
         "pronunciation":PRONUNCIATION, "roles":cast, "lines":lines}
     manifest["retained_previous_recordings"] = retained
     manifest["pending_recordings"] = pending
-    manifest["publication_mode"] = "completed_upgrades_with_existing_fallbacks" if args.finalize_existing else "full_cast"
+    manifest["publication_mode"] = "completed_upgrades_with_existing_fallbacks" if args.finalize_existing else ("dialogue_complete" if args.dialogue_only else "full_cast")
     if retained:
         manifest["source"] += "; retained Piper VCTK recordings for unfinished replacements"
         manifest["attribution"] += " Retained Piper/VCTK performances retain their original provenance and VCTK attribution."
@@ -252,7 +259,7 @@ def main():
     (credits / "VOICE_PRODUCTION.md").write_text(
         "# Natural cast production\n\nKokoro-82M v1.0 full-precision synthesis replaces the previous Piper performances. "
         "These are generated voices, not a human cast or cloned actor performances. No listening review, gameplay test, or verification was run, as requested. "
-        "Written notices and narration stay text-led. Dialogue, optional conversation topics, supporting characters and nearby village speech are included.\n\n"
+        "Written notices and narration stay text-led. Dialogue, optional conversation topics and supporting characters are included; pending village remarks remain caption-led.\n\n"
         "Cast recipes in `data/voice_cast.json` preserve identity using fixed model voice blends. Cadence is adjusted conservatively for intimate scenes. "
         "Character direction notes guide casting and cadence; Kokoro does not interpret free-form emotional acting prompts. "
         "Outer-silence trimming, bounded mastering gain and short click ramps preserve internal pauses and dynamics. "
@@ -260,7 +267,7 @@ def main():
         "The model and inference dependencies stay under ignored work directories. Only compressed audio, recipes and provenance ship. "
         "Kokoro's Apache-2.0 model card, license and voice table are retained here. The old VCTK attribution remains for historical provenance.\n\n"
         f"Published {len(lines)} exact-text performances: {len(lines) - retained} Kokoro upgrades and {retained} retained earlier recordings. "
-        f"{len(pending)} additional recordings remain unproduced. The user requested immediate completion before full-cast rendering finished.\n\n"
+        f"{len(pending)} additional recordings remain unproduced and are outside this publication's scope.\n\n"
         f"| Cast role | Clips |\n|---|---:|\n{summary}\n", encoding="utf-8")
     print(f"Voice publication: {len(lines) - retained} Kokoro upgrades, {retained} retained recordings, {len(pending)} pending; {sum(count > 0 for count in counts.values())} voiced cast roles", flush=True)
 

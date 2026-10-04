@@ -36,3 +36,7 @@ These remain synthetic recordings. The task includes no listening review or game
 - [kokoro-onnx inference implementation](https://github.com/thewh1teagle/kokoro-onnx)
 
 The model author notes limitations at very short and long utterance lengths. Whole dialogue pages retain surrounding sentence context; the inference library splits text at its model limit. Voice presets and casting are selected from documented capabilities, without an audition under the user's no-verification constraint.
+
+## Dialogue completion follow-up
+
+Finish the remaining 91 dialogue replacements using unchanged Kokoro cast recipes. Reuse completed recordings and their baked envelopes. The 189 village remarks remain outside this release. Run production packaging, push and deploy without tests or listening checks.

@@ -6,6 +6,7 @@ param(
     [switch]$SkipWebCopy,
     [switch]$BuildVoices,
     [switch]$FinalizeExistingVoices,
+    [switch]$DialogueVoicesOnly,
     [switch]$Publish,
     [string]$PublishMessage = ""
 )
@@ -105,6 +106,7 @@ Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "build_story_score.py
 if ($BuildVoices) {
     $VoiceArguments = @((Join-Path $PSScriptRoot "build_story_voices.py"), "--all-scenes")
     if ($FinalizeExistingVoices) { $VoiceArguments += "--finalize-existing" }
+    if ($DialogueVoicesOnly) { $VoiceArguments += "--dialogue-only" }
     Invoke-BuildProcess $PythonPath $VoiceArguments "story-voices"
 }
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--editor", "--import") "import"
