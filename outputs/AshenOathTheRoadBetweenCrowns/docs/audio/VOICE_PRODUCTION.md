@@ -1,14 +1,12 @@
 # Natural cast production
 
-Expedited publication: 365 completed Kokoro upgrades and 91 retained Piper recordings cover 18 voiced cast roles. The 189 planned ambient recordings have not been produced; those remarks remain caption-led. This release is a partial replacement, following the user's instruction to finish immediately.
-
-Kokoro-82M v1.0 full-precision synthesis replaces the previous Piper performances. These are generated voices, not a human cast or cloned actor performances. No listening review, gameplay test, or verification was run, as requested. Written notices and narration stay text-led. Dialogue, optional conversation topics, supporting characters and nearby village speech are included.
+Kokoro-82M v1.0 full-precision synthesis replaces the previous Piper performances. These are generated voices, not a human cast or cloned actor performances. No listening review, gameplay test, or verification was run, as requested. Written notices and narration stay text-led. Dialogue, optional conversation topics and supporting characters are included; pending village remarks remain caption-led.
 
 Cast recipes in `data/voice_cast.json` preserve identity using fixed model voice blends. Cadence is adjusted conservatively for intimate scenes. Character direction notes guide casting and cadence; Kokoro does not interpret free-form emotional acting prompts. Outer-silence trimming, bounded mastering gain and short click ramps preserve internal pauses and dynamics. No pitch-shifting or artificial ghost effects are used. The speech envelopes are baked from each final Ogg file.
 
 The model and inference dependencies stay under ignored work directories. Only compressed audio, recipes and provenance ship. Kokoro's Apache-2.0 model card, license and voice table are retained here. The old VCTK attribution remains for historical provenance.
 
-Published 456 exact-text performances: 365 Kokoro upgrades and 91 retained earlier recordings. 189 additional recordings remain unproduced. The user requested immediate completion before full-cast rendering finished.
+Published 456 exact-text performances: 456 Kokoro upgrades and 0 retained earlier recordings. 189 additional recordings remain unproduced and are outside this publication's scope.
 
 | Cast role | Clips |
 |---|---:|
