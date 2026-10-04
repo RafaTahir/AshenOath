@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "program": "SOUL-REBUILD",
-  "release_id": "story-20261004T140957Z-41a84180dcc6",
+  "release_id": "story-20261004T143037Z-7e1dab3298e2",
   "artifact_policy": "external_runtime_packs",
   "candidate_manifest": "res://runtime_pack_candidates.json",
   "pack_presets": {
@@ -15,7 +15,7 @@
   "max_deployment_bytes": 104857600,
   "packs": {
     "base": {
-      "version": "story-20261004T140957Z-41a84180dcc6",
+      "version": "story-20261004T143037Z-7e1dab3298e2",
       "url": "",
       "sha256": "",
       "bytes": 0,
@@ -24,8 +24,8 @@
       "preload_priority": 0,
       "status": "embedded_current_pck",
       "candidate_artifact": "base.pck",
-      "candidate_bytes": 13148244,
-      "candidate_sha256": "b9df67fe0cee099f78713110533a84a2361bd4c202bc1f013c9d7be568a939fd",
+      "candidate_bytes": 13148420,
+      "candidate_sha256": "1513cd0c9523c7923ca929d80c5c3d7e1d54f708b5bfb94fb80b27d7501488c0",
       "contents": [
         "menu",
         "managers",
@@ -34,14 +34,14 @@
       ],
       "embedded_artifact": "index.pck",
       "embedded_source_artifact": "base.pck",
-      "embedded_source_bytes": 13148244,
-      "embedded_source_sha256": "b9df67fe0cee099f78713110533a84a2361bd4c202bc1f013c9d7be568a939fd",
+      "embedded_source_bytes": 13148420,
+      "embedded_source_sha256": "1513cd0c9523c7923ca929d80c5c3d7e1d54f708b5bfb94fb80b27d7501488c0",
       "embedded_source_kind": "standalone_pack_candidate"
     },
     "opening": {
-      "version": "story-20261004T140957Z-41a84180dcc6",
-      "url": "packs/opening.pck?sha256=6183f3da4b770296a38a85bb2d7cce30a7c01aecdd2c1d2d459785fce3ca4be5",
-      "sha256": "6183f3da4b770296a38a85bb2d7cce30a7c01aecdd2c1d2d459785fce3ca4be5",
+      "version": "story-20261004T143037Z-7e1dab3298e2",
+      "url": "packs/opening.pck?sha256=240502757afef58cb824eaaafb5b911edbc5d8dd4b148aaa3438b0e08e7cef37",
+      "sha256": "240502757afef58cb824eaaafb5b911edbc5d8dd4b148aaa3438b0e08e7cef37",
       "bytes": 14355164,
       "entry_scene": "res://scenes/zones/greyfen_gameplay.tscn",
       "dependencies": [
@@ -51,17 +51,17 @@
       "status": "streamed_web_candidate",
       "candidate_artifact": "opening.pck",
       "candidate_bytes": 14355164,
-      "candidate_sha256": "6183f3da4b770296a38a85bb2d7cce30a7c01aecdd2c1d2d459785fce3ca4be5",
+      "candidate_sha256": "240502757afef58cb824eaaafb5b911edbc5d8dd4b148aaa3438b0e08e7cef37",
       "contents": [
         "greyfen",
         "wychwood",
         "cemetery",
         "opening_actors"
       ],
-      "cache_key": "6183f3da4b770296a38a85bb2d7cce30a7c01aecdd2c1d2d459785fce3ca4be5"
+      "cache_key": "240502757afef58cb824eaaafb5b911edbc5d8dd4b148aaa3438b0e08e7cef37"
     },
     "campaign": {
-      "version": "story-20261004T140957Z-41a84180dcc6",
+      "version": "story-20261004T143037Z-7e1dab3298e2",
       "url": "packs/campaign.pck?sha256=ce44e1cde7a6bb430be60bd4f13cf0c31bd5ff1f24035d744817884512f5bfb2",
       "sha256": "ce44e1cde7a6bb430be60bd4f13cf0c31bd5ff1f24035d744817884512f5bfb2",
       "bytes": 1032908,
@@ -84,7 +84,7 @@
       "cache_key": "ce44e1cde7a6bb430be60bd4f13cf0c31bd5ff1f24035d744817884512f5bfb2"
     },
     "characters": {
-      "version": "story-20261004T140957Z-41a84180dcc6",
+      "version": "story-20261004T143037Z-7e1dab3298e2",
       "url": "packs/characters.pck?sha256=173673328a70490eee93d1b0972ea128113c3c9b8de461c8d031273f7db46bad",
       "sha256": "173673328a70490eee93d1b0972ea128113c3c9b8de461c8d031273f7db46bad",
       "bytes": 30503416,
@@ -105,7 +105,7 @@
       "cache_key": "173673328a70490eee93d1b0972ea128113c3c9b8de461c8d031273f7db46bad"
     },
     "monsters": {
-      "version": "story-20261004T140957Z-41a84180dcc6",
+      "version": "story-20261004T143037Z-7e1dab3298e2",
       "url": "packs/monsters.pck?sha256=7c5d185d4205f9222d0cd47c86bfad52d8d0748d74c179fd9d37139a98ceb3a2",
       "sha256": "7c5d185d4205f9222d0cd47c86bfad52d8d0748d74c179fd9d37139a98ceb3a2",
       "bytes": 7043420,
@@ -126,7 +126,7 @@
       "cache_key": "7c5d185d4205f9222d0cd47c86bfad52d8d0748d74c179fd9d37139a98ceb3a2"
     },
     "audio": {
-      "version": "story-20261004T140957Z-41a84180dcc6",
+      "version": "story-20261004T143037Z-7e1dab3298e2",
       "url": "packs/audio.pck?sha256=f6d998fcb47b7126b61485600accfc77a5c21f6cd8fbd320f9925a9c6b808132",
       "sha256": "f6d998fcb47b7126b61485600accfc77a5c21f6cd8fbd320f9925a9c6b808132",
       "bytes": 14164028,
@@ -147,7 +147,7 @@
       "cache_key": "f6d998fcb47b7126b61485600accfc77a5c21f6cd8fbd320f9925a9c6b808132"
     },
     "quality_materials": {
-      "version": "story-20261004T140957Z-41a84180dcc6",
+      "version": "story-20261004T143037Z-7e1dab3298e2",
       "url": "packs/quality_materials.pck?sha256=9f64cb6fa513da09c411585cd246bedf04b05b18e521aa8e41666c19430d4723",
       "sha256": "9f64cb6fa513da09c411585cd246bedf04b05b18e521aa8e41666c19430d4723",
       "bytes": 7409724,
@@ -168,9 +168,9 @@
       "cache_key": "9f64cb6fa513da09c411585cd246bedf04b05b18e521aa8e41666c19430d4723"
     }
   },
-  "build_id": "story-20261004T140957Z-41a84180dcc6",
-  "generated_from_commit": "41a84180dcc6f48bb8c213b67ef50b6e39eb8993",
-  "generated_at_utc": "2026-10-04T14:13:50.922401Z",
+  "build_id": "story-20261004T143037Z-7e1dab3298e2",
+  "generated_from_commit": "7e1dab3298e287e18da626a2a96749064a9fa4c1",
+  "generated_at_utc": "2026-10-04T14:34:37.527083Z",
   "total_bytes": 74508660,
   "source_dirty": true
 }
