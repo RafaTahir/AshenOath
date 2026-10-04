@@ -2,12 +2,37 @@ extends SkeletonModifier3D
 
 ## Bounded visual-only leg reach. Collision, movement and authored airborne
 ## poses remain authoritative. Supported surfaces use the existing contract.
-var actor: CharacterBody3D
+var actor: Node3D
+var motion_driver: Node
+var viewer: Node3D
+var proximity_clock := 0.0
+var nearby := true
+var excluded_bodies: Array[RID] = []
 var legs: Array[Dictionary] = []
 var sample_clock := 0.0
 
-func configure(body: CharacterBody3D, skeleton: Skeleton3D) -> void:
+static func install_npc(body: Node3D, driver: Node) -> void:
+	var skeleton: Skeleton3D = driver.get_skeleton()
+	if skeleton == null or skeleton.get_node_or_null("GroundedFeet") != null: return
+	# Only compatible humanoids receive this solver. Animal and other authored
+	# rigs keep their own anatomy; seated actors opt out at their spawn site.
+	for bone: String in ["thigh_l", "calf_l", "foot_l", "thigh_r", "calf_r", "foot_r"]:
+		if skeleton.find_bone(bone) < 0: return
+	var modifier := load("res://scripts/grounded_feet_modifier.gd").new()
+	modifier.name = "GroundedFeet"
+	skeleton.add_child(modifier)
+	modifier.configure(body, skeleton, driver)
+
+func configure(body: Node3D, skeleton: Skeleton3D, driver: Node = null) -> void:
 	actor = body
+	motion_driver = driver if driver != null else body.find_child("CharacterAnimationDriver", true, false)
+	legs.clear()
+	excluded_bodies.clear()
+	var ancestor: Node = body
+	while ancestor != null:
+		if ancestor is CollisionObject3D:
+			excluded_bodies.append(ancestor.get_rid())
+		ancestor = ancestor.get_parent()
 	for side: String in ["l", "r"]:
 		var hip := skeleton.find_bone("thigh_" + side)
 		var knee := skeleton.find_bone("calf_" + side)
@@ -18,12 +43,22 @@ func configure(body: CharacterBody3D, skeleton: Skeleton3D) -> void:
 func _process_modification() -> void:
 	var skeleton := get_skeleton()
 	if skeleton == null or not is_instance_valid(actor): return
-	var driver: Node = actor.get("animation_driver") as Node
-	var can_plant: bool = actor.is_on_floor() and (driver == null or not bool(driver.call("has_active_action")))
 	var delta := minf(get_process_delta_time(), 0.05)
+	var physical_actor := actor as CharacterBody3D
+	if physical_actor == null:
+		proximity_clock -= delta
+		if proximity_clock <= 0.0:
+			proximity_clock = 0.5
+			if not is_instance_valid(viewer):
+				viewer = get_tree().get_first_node_in_group("player") as Node3D
+			nearby = is_instance_valid(viewer) and actor.global_position.distance_squared_to(viewer.global_position) < 144.0
+	var supported: bool = physical_actor.is_on_floor() if physical_actor != null else true
+	var can_plant: bool = supported and nearby and actor.is_visible_in_tree()
+	if is_instance_valid(motion_driver):
+		can_plant = can_plant and bool(motion_driver.get("grounded")) and not bool(motion_driver.get("distance_suspended")) and not bool(motion_driver.get("dead")) and not motion_driver.has_active_action()
 	sample_clock -= delta
 	var sample := sample_clock <= 0.0
-	if sample: sample_clock = 1.0 / 30.0
+	if sample: sample_clock = 1.0 / (30.0 if physical_actor != null else 20.0)
 	for leg: Dictionary in legs:
 		var foot := world_position(skeleton, int(leg.foot))
 		if not can_plant:
@@ -31,8 +66,7 @@ func _process_modification() -> void:
 			leg.offset = 0.0
 			continue
 		elif sample:
-			var excluded: Array[RID] = [actor.get_rid()]
-			var hit: Dictionary = SpatialSurfaceContract.support_hit(actor.get_world_3d().direct_space_state, foot + Vector3.UP * 0.30, foot - Vector3.UP * 0.48, excluded)
+			var hit: Dictionary = SpatialSurfaceContract.support_hit(actor.get_world_3d().direct_space_state, foot + Vector3.UP * 0.30, foot - Vector3.UP * 0.48, excluded_bodies)
 			leg.wanted = 0.0
 			if not hit.is_empty():
 				var sole_height := 0.095

@@ -6319,6 +6319,8 @@ func _configure_npc_animation(mapped: Node3D, id: String) -> void:
 	driver.name = "CharacterAnimationDriver"
 	mapped.add_child(driver)
 	driver.configure(mapped, clips)
+	if id not in ["board_rook", "board_tor"]:
+		load("res://scripts/grounded_feet_modifier.gd").install_npc(mapped, driver)
 	# Non-player rigs do not own physics or combat timing. Drive them through a
 	# phase-staggered manual clock so imported skin evaluation cannot wake every
 	# skeleton on every rendered frame. The player and active enemies retain

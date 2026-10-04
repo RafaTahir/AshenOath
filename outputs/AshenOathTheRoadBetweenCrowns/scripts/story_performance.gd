@@ -67,7 +67,7 @@ func present_page(entry: Dictionary) -> void:
 		var emotion := str(direction.get("emotion" if speaking else "listener_emotion", entry.get("emotion", profile.get("expression", "neutral"))))
 		if emotion != "":
 			face.set_expression(emotion)
-	pending_gesture = str(direction.get("gesture", "")) if speaking else ("remember" if str(direction.get("emotion", "")) == "grieving" else "")
+	pending_gesture = str(direction.get("gesture", "")) if speaking else str(direction.get("listener_gesture", "remember" if str(direction.get("emotion", "")) == "grieving" else ""))
 	next_beat = elapsed + float(direction.get("reaction_delay", 0.18))
 
 func start(target: Node3D, player: Node3D, state) -> void:

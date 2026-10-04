@@ -169,6 +169,8 @@ func _conversation_topic_scene(resolved: Dictionary) -> Dictionary:
 		var pause_after: float = maxf(float(line.get("pause_after", 0.0)), 0.0)
 		if pause_after > 0.0:
 			page["pause_after"] = pause_after
+		page["scene_id"] = "conversation_topic/" + revision_key
+		page["performance"] = load("res://scripts/story_scene_direction.gd").for_topic(topic_id, str(resolved.get("selected_variant_id", "base")), page, pages.size(), raw_lines.size())
 		pages.append(page)
 	if pages.is_empty():
 		return {}

@@ -620,6 +620,7 @@ func _make_skeletal_villager(parent: Node3D, role_id: String, index: int, scale_
 	elif family.contains("monk"):
 		clips["work"] = "Idle"
 	driver.configure(mapped, clips)
+	load("res://scripts/grounded_feet_modifier.gd").install_npc(mapped, driver)
 	driver.set_update_rate_hz(30.0)
 	if OS.get_environment("ASHEN_PROFILE_GREYFEN_ACTORS") == "1":
 		print("GREYFEN_VISUAL_PROFILE id=%s role=%s asset_ms=%.2f presentation_ms=%.2f driver_ms=%.2f" % [
