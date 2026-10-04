@@ -25,6 +25,8 @@ Each recording is mastered with bounded gain and short edge ramps, retaining int
 
 The user subsequently requested immediate completion because of an approaching usage limit. Full-cast synthesis was stopped after the completed batch. This release publishes completed Kokoro upgrades and retains existing Piper recordings for unfinished dialogue replacements. Unproduced village speech stays caption-led. The full-cast build remains available for a later continuation; the production manifest records retained and pending recordings explicitly.
 
+The production finalizer assembled 365 Kokoro upgrades and 91 retained Piper recordings across 18 speaking roles. All 189 pending recordings are the planned village remarks. Ten generated narration takes were excluded from the spoken-dialogue manifest.
+
 These remain synthetic recordings. The task includes no listening review or gameplay verification, so no claim of human-actor quality or verified pronunciation is made. No human voice was cloned. The game needs no speech-service credentials or inference model at runtime.
 
 ## Research
