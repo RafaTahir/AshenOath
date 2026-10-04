@@ -16,6 +16,14 @@ var animation_driver
 var face_driver
 var far_tick_accumulator := 0.0
 var focus_refresh_remaining := 0.0
+var desired_yaw := 0.0
+var previous_position := Vector3.ZERO
+var externally_moving := false
+var ambient_suspended := false
+var animation_update_hz := -1.0
+
+const ATTENTION_ARC := 48.0
+const ATTENTION_TURN_RATE := 1.1
 
 func setup(id: String, target: Node3D = null) -> void:
 	role_id = id
@@ -40,10 +48,14 @@ func setup(id: String, target: Node3D = null) -> void:
 		breathe_amount = 0.006
 
 func _ready() -> void:
-	var parent_3d = get_parent() as Node3D
-	if parent_3d != null:
-		base_y = parent_3d.position.y
-		base_yaw = parent_3d.rotation_degrees.y
+	var parent_3d: Node3D = get_parent() as Node3D
+	if parent_3d == null:
+		set_process(false)
+		return
+	base_y = parent_3d.position.y
+	base_yaw = parent_3d.rotation_degrees.y
+	desired_yaw = parent_3d.rotation.y
+	previous_position = parent_3d.global_position
 	phase = randf() * TAU
 	planted_yaw_offset = randf_range(-7.0, 7.0)
 	animation_driver = parent_3d.find_child("CharacterAnimationDriver", true, false)
@@ -52,19 +64,44 @@ func _ready() -> void:
 		animation_driver.set_locomotion(0.0, Vector3.ZERO, true)
 
 func _process(delta: float) -> void:
-	far_tick_accumulator += delta
-	if far_tick_accumulator < 0.10:
-		return
-	delta = far_tick_accumulator
-	far_tick_accumulator = 0.0
-	var parent_3d = get_parent() as Node3D
+	var parent_3d: Node3D = get_parent() as Node3D
 	if parent_3d == null:
 		return
-	if role_id == "sister_anwen" and bool(parent_3d.get_meta("dialogue_facing_lock", false)):
-		_set_animation_suspended(false)
-		if animation_driver != null and animation_driver.has_method("set_dialogue_pose"):
-			animation_driver.set_dialogue_pose(true)
+	var displacement: Vector3 = parent_3d.global_position - previous_position
+	previous_position = parent_3d.global_position
+	var moved: bool = displacement.length_squared() > 0.000001
+	# A route, escort or dialogue controller owns its actor's pose completely.
+	# Observed translation also protects callers which predate the owner marker.
+	if not str(parent_3d.get_meta("locomotion_owner", "")).is_empty() or moved:
+		externally_moving = true
+		base_yaw = parent_3d.rotation_degrees.y
+		desired_yaw = parent_3d.rotation.y
 		return
+	if externally_moving:
+		externally_moving = false
+		base_yaw = parent_3d.rotation_degrees.y
+		desired_yaw = parent_3d.rotation.y
+	if bool(parent_3d.get_meta("dialogue_facing_lock", false)):
+		_set_animation_suspended(false)
+		_set_animation_update_rate(30.0)
+		desired_yaw = parent_3d.rotation.y
+		return
+	# Keep target lookup and distance decisions sparse, while nearby attention
+	# turns are continuous and bounded independently of render frame duration.
+	far_tick_accumulator += delta
+	if far_tick_accumulator >= 0.10:
+		_update_attention(parent_3d, far_tick_accumulator)
+		far_tick_accumulator = 0.0
+	if ambient_suspended:
+		return
+	var turn_error: float = wrapf(desired_yaw - parent_3d.rotation.y, -PI, PI)
+	var eased_step: float = turn_error * (1.0 - exp(-turn_speed * minf(delta, 0.05)))
+	var turn_limit: float = ATTENTION_TURN_RATE * minf(delta, 0.05)
+	parent_3d.rotation.y += clampf(eased_step, -turn_limit, turn_limit)
+	# Breathing belongs to the skeletal idle clip. Never move the grounded actor
+	# root or its collision/interaction anchor up and down for ambient breathing.
+
+func _update_attention(parent_3d: Node3D, delta: float) -> void:
 	if animation_driver != null and animation_driver.has_method("set_dialogue_pose"):
 		animation_driver.set_dialogue_pose(false)
 	if not is_instance_valid(focus_target):
@@ -79,27 +116,28 @@ func _process(delta: float) -> void:
 		return
 	else:
 		_set_animation_suspended(false)
-		far_tick_accumulator = 0.0
+	var focus_distance: float = parent_3d.global_position.distance_to(focus_target.global_position) if focus_target != null else INF
+	_set_animation_update_rate(30.0 if focus_distance <= focus_radius else 15.0)
 	phase += delta * (0.48 if role_id == "sister_anwen" else 0.62)
-	var target_yaw = base_yaw + planted_yaw_offset + sin(phase * 0.38) * sway_amount
+	var home_yaw: float = deg_to_rad(base_yaw)
+	var target_yaw: float = home_yaw + deg_to_rad(planted_yaw_offset)
 	if focus_target != null:
-		var to_target = focus_target.global_position - parent_3d.global_position
+		var to_target: Vector3 = focus_target.global_position - parent_3d.global_position
 		to_target.y = 0.0
 		if to_target.length() <= focus_radius and to_target.length() > 0.2:
 			attention_hold = 2.25 if role_id == "sister_anwen" else 0.9
-			# All route-visible humanoids share the actor-facing -Z contract.
-			target_yaw = rad_to_deg(atan2(-to_target.x, -to_target.z))
-		elif role_id == "sister_anwen":
-			target_yaw = base_yaw + sin(phase * 0.22) * 0.45
+			# Most parents are -Z actor wrappers. Direct imported visuals retain
+			# their +Z source convention and the factory's authored half-turn.
+			var source_positive_z: bool = bool(parent_3d.get_meta("source_forward_positive_z", false))
+			var player_yaw: float = atan2(to_target.x, to_target.z) if source_positive_z else atan2(-to_target.x, -to_target.z)
+			var home_offset: float = wrapf(player_yaw - home_yaw, -PI, PI)
+			# Someone walking behind a stationary worker must not swivel that
+			# worker through a full half-turn. Dialogue has its own facing owner.
+			target_yaw = home_yaw + clampf(home_offset, -deg_to_rad(ATTENTION_ARC), deg_to_rad(ATTENTION_ARC))
+		elif attention_hold > 0.0:
+			target_yaw = desired_yaw
 	attention_hold = max(attention_hold - delta, 0.0)
-	var turn_weight = turn_speed * (1.2 if attention_hold > 0.0 else 0.65)
-	# Anwen is a conversation anchor, not a passerby. Once Kael enters her
-	# focus radius she should settle to a readable player-facing pose within a
-	# few frames, rather than visibly looking past him during approach.
-	if role_id == "sister_anwen" and attention_hold > 0.0:
-		turn_weight = 8.5
-	parent_3d.rotation_degrees.y = lerp_angle(deg_to_rad(parent_3d.rotation_degrees.y), deg_to_rad(target_yaw), turn_weight * delta) * 180.0 / PI
-	parent_3d.position.y = base_y + sin(phase) * bob_amount + sin(phase * 0.37) * breathe_amount
+	desired_yaw = target_yaw
 
 func _animation_distance() -> float:
 	if role_id == "sister_anwen":
@@ -109,6 +147,14 @@ func _animation_distance() -> float:
 	return 7.0 * 0.72
 
 func _set_animation_suspended(value: bool) -> void:
+	ambient_suspended = value
 	for driver in [animation_driver, face_driver]:
 		if is_instance_valid(driver) and driver.has_method("set_distance_suspended"):
 			driver.set_distance_suspended(value)
+
+func _set_animation_update_rate(hz: float) -> void:
+	if is_equal_approx(animation_update_hz, hz):
+		return
+	if is_instance_valid(animation_driver) and animation_driver.has_method("set_update_rate_hz"):
+		animation_driver.set_update_rate_hz(hz)
+		animation_update_hz = hz

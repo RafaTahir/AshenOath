@@ -17,6 +17,9 @@ var worker_group: Node3D
 var escort_target := Vector3(-1.5, 0, 8.0)
 var escort_tick := 0.0
 var worker_drivers: Array[Node] = []
+var worker_bodies: Array[Node3D] = []
+var escort_speed := 0.0
+var escort_waiting_for_player := false
 
 static func install(game, root: Node3D, zone_id: String) -> void:
 	if root == null or root != game.zone_root:
@@ -331,24 +334,32 @@ func _physics_process(delta: float) -> void:
 	if host == null or host.current_zone_id != zone or host.player == null:
 		return
 	escort_tick += delta
-	if escort_tick < 0.1:
-		return
-	var step := escort_tick
-	escort_tick = 0.0
-	_refresh_carried_bundle()
+	if escort_tick >= 0.1:
+		escort_tick = 0.0
+		_refresh_carried_bundle()
 	if zone != "old_mill" or worker_group == null or not _flag("mill_escort_started") or _flag("mill_workers_rescued"):
-		_worker_motion(0.0)
+		escort_speed = 0.0
+		_worker_motion(Vector3.ZERO, delta)
 		return
-	if worker_group.global_position.distance_to(host.player.global_position) > 6.5:
-		_worker_motion(0.0)
-		return
-	_worker_motion(0.48)
-	worker_group.position = worker_group.position.move_toward(escort_target, step * 1.55)
+	var player_distance: float = worker_group.global_position.distance_to(host.player.global_position)
+	if player_distance > 6.5:
+		escort_waiting_for_player = true
+	elif player_distance < 5.5:
+		escort_waiting_for_player = false
+	var offset: Vector3 = escort_target - worker_group.position
+	offset.y = 0.0
+	var distance: float = offset.length()
+	var desired_speed: float = 0.0 if escort_waiting_for_player else minf(1.55, sqrt(2.0 * 3.6 * maxf(distance - 0.10, 0.0)))
+	escort_speed = move_toward(escort_speed, desired_speed, (3.6 if desired_speed < escort_speed else 2.8) * delta)
+	var before: Vector3 = worker_group.global_position
+	worker_group.position += offset.normalized() * minf(escort_speed * delta, distance)
+	_worker_motion((worker_group.global_position - before) / maxf(delta, 0.001), delta)
 	if worker_group.position.distance_to(escort_target) <= 0.2:
 		_commit({"mill_workers_rescued": true, "mill_escort_started": false, "mill_escort_progress": 1.0}, "Both workers reach clean air. They will bring their own wage accounts to Greyfen.")
 		host.story_state.record_evidence("mill_worker_account", {"kind":"testimony", "zone":zone, "title":"The mill workers reached the south yard alive"})
 		refresh()
-		_worker_motion(0.0)
+		escort_speed = 0.0
+		_worker_motion(Vector3.ZERO, delta)
 	else:
 		# Lightweight progress for ordinary autosaves; no disk write every frame.
 		var progress := clampf(1.0 - worker_group.position.distance_to(escort_target) / 10.5, 0.0, 0.98)
@@ -363,12 +374,22 @@ func _build_workers(root: Node3D) -> void:
 	for index in range(2):
 		var worker = host._make_role_visual("generic_villager_01" if index == 0 else "vargan_servant", "characters", Vector3.ONE)
 		if worker != null:
-			worker.position = Vector3(float(index) * 0.7, 0, 0)
-			worker.rotation.y = PI
-			worker_group.add_child(worker)
+			# Actor facing belongs to a wrapper. Keep the imported body's grounding
+			# and source-forward correction intact beneath it.
+			var body := Node3D.new()
+			body.name = "MillWorkerBody%d" % index
+			body.position = Vector3(float(index) * 0.7, 0, 0)
+			var route_direction: Vector3 = (escort_target - start).normalized()
+			body.rotation.y = atan2(-route_direction.x, -route_direction.z)
+			body.set_meta("locomotion_owner", "mill_escort")
+			worker.set_meta("locomotion_owner", "mill_escort")
+			worker_group.add_child(body)
+			body.add_child(worker)
+			worker_bodies.append(body)
 			host._configure_npc_animation(worker, "mill_worker_%d" % index)
 			var driver = worker.get_node_or_null("CharacterAnimationDriver")
 			if driver != null:
+				driver.set_update_rate_hz(30.0)
 				worker_drivers.append(driver)
 			continue
 		var torso := MeshInstance3D.new()
@@ -389,11 +410,16 @@ func _build_workers(root: Node3D) -> void:
 		worker_group.add_child(head)
 	_label(worker_group, "MILL WORKERS\nStay nearby to lead them to clean air", Vector3(0.35, 2.05, 0))
 
-func _worker_motion(speed: float) -> void:
+func _worker_motion(world_velocity: Vector3, delta: float = 0.016667) -> void:
+	if world_velocity.length_squared() > 0.001:
+		var wanted_yaw: float = atan2(-world_velocity.x, -world_velocity.z)
+		for body: Node3D in worker_bodies:
+			if is_instance_valid(body):
+				body.global_rotation.y = lerp_angle(body.global_rotation.y, wanted_yaw, 1.0 - exp(-7.0 * delta))
 	for driver in worker_drivers:
 		if is_instance_valid(driver):
 			driver.set_distance_suspended(_flag("mill_workers_rescued"))
-			driver.set_locomotion(speed, Vector3.FORWARD, true)
+			driver.set_locomotion_motion(world_velocity, true)
 
 func _refresh_carried_bundle() -> void:
 	var carried := _flag("cart_sack_carried") or _flag("relief_shares_carried")

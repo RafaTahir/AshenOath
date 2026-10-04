@@ -10,6 +10,8 @@ const STATE_ALIASES := {
 	"walk": ["walk", "walking"],
 	"walk_back": ["walkback", "backwalk", "walk", "walking"],
 	"strafe": ["strafe", "walk", "walking"],
+	"strafe_left": ["walkleft", "strafeleft", "runleft", "strafe", "walk"],
+	"strafe_right": ["walkright", "straferight", "runright", "strafe", "walk"],
 	"run": ["run", "running", "sprint"],
 	"run_back": ["runback", "backrun", "run", "running", "sprint"],
 	"jump": ["jump", "jumpidle", "run"],
@@ -47,6 +49,13 @@ const ACTION_PRIORITY := {
 	"death": 100,
 }
 const LOOPING_ACTIONS := {"beam_cast": true}
+const LOCOMOTION_STATES := ["walk", "walk_back", "strafe", "strafe_left", "strafe_right", "run", "run_back"]
+# Per full left/right cycle at the reference adult height. These are explicit
+# authoring calibrations, not claims of measured root motion: the supplied
+# in-place library does not carry travel distance. Roles can tune either value.
+const REFERENCE_HEIGHT_M := 1.72
+const WALK_CYCLE_DISTANCE_M := 1.45
+const RUN_CYCLE_DISTANCE_M := 3.20
 
 var character_root: Node3D
 var animation_player: AnimationPlayer
@@ -54,6 +63,7 @@ var animation_players: Array[AnimationPlayer] = []
 var skeleton: Skeleton3D
 var clip_map: Dictionary = {}
 var resolved_clip_map: Dictionary = {}
+var authored_directional_clips: Dictionary = {}
 var contract_errors: Array[String] = []
 var current_state := ""
 var action_active := false
@@ -68,6 +78,9 @@ var manual_tick_timer: Timer
 var current_direction := Vector3.ZERO
 var current_local_direction := Vector3.ZERO
 var requested_speed_ratio := 0.0
+var current_speed_mps := 0.0
+var physical_motion_available := false
+var locomotion_height_scale := 1.0
 var grounded := true
 var locomotion_state := "idle"
 var presentation_state := ""
@@ -92,6 +105,7 @@ func configure(root: Node3D, clips: Dictionary) -> bool:
 	character_root = root
 	clip_map = clips.duplicate()
 	resolved_clip_map.clear()
+	authored_directional_clips.clear()
 	contract_errors.clear()
 	animation_players.clear()
 	current_state = ""
@@ -101,6 +115,10 @@ func configure(root: Node3D, clips: Dictionary) -> bool:
 	current_direction = Vector3.ZERO
 	current_local_direction = Vector3.ZERO
 	requested_speed_ratio = 0.0
+	current_speed_mps = 0.0
+	physical_motion_available = false
+	var role_spec: Dictionary = root.get_meta("character_role_spec", {})
+	locomotion_height_scale = clampf(float(role_spec.get("height", REFERENCE_HEIGHT_M)) / REFERENCE_HEIGHT_M, 0.65, 1.80)
 	grounded = true
 	locomotion_state = "idle"
 	action_elapsed = 0.0
@@ -265,40 +283,87 @@ func _start_manual_tick(stagger_first_tick := false) -> void:
 	manual_tick_timer.start(maxf(delay, 0.02))
 
 func set_locomotion(speed_ratio: float, _direction: Vector3, grounded: bool) -> void:
+	# Compatibility for role controllers which still supply a normalized ratio.
+	# Do not guess metres/second from the magnitude of their direction argument:
+	# legacy callers use both unit directions and velocities here.
+	physical_motion_available = false
+	current_speed_mps = 0.0
+	_update_locomotion(speed_ratio, _direction, grounded)
+
+func set_locomotion_motion(world_velocity: Vector3, grounded: bool, reference_speed: float = 5.3) -> void:
+	# The owner supplies achieved travel after collision/path movement. Animation
+	# never moves the actor and does not keep stepping into a blocked wall.
+	var horizontal_velocity := Vector3(world_velocity.x, 0.0, world_velocity.z)
+	physical_motion_available = true
+	current_speed_mps = horizontal_velocity.length()
+	_update_locomotion(current_speed_mps / maxf(reference_speed, 0.1), horizontal_velocity, grounded)
+
+func _update_locomotion(speed_ratio: float, world_direction: Vector3, on_ground: bool) -> void:
 	requested_speed_ratio = clampf(speed_ratio, 0.0, 1.35)
-	current_direction = _direction
-	self.grounded = grounded
-	if character_root != null and _direction.length_squared() > 0.002:
-		current_local_direction = character_root.global_transform.basis.inverse() * _direction
+	grounded = on_ground
+	current_direction = Vector3(world_direction.x, 0.0, world_direction.z)
+	current_direction = current_direction.normalized() if current_direction.length_squared() > 0.0001 else Vector3.ZERO
+	var visible_forward := get_visible_forward()
+	if visible_forward.length_squared() > 0.5 and current_direction != Vector3.ZERO:
+		# Construct a horizontal, unit-length facing frame. Imported scale, root
+		# pitch/roll and the source +Z convention cannot alter direction thresholds.
+		var visible_right := visible_forward.cross(Vector3.UP).normalized()
+		current_local_direction = Vector3(current_direction.dot(visible_right), 0.0, -current_direction.dot(visible_forward))
 	else:
 		current_local_direction = Vector3.ZERO
 	if not is_valid() or dead or action_active or presentation_state != "":
 		return
-	var source_forward_positive_z := character_root != null and bool(character_root.get_meta("source_forward_positive_z", false))
-	var moving_backwards := current_local_direction.z > 0.35 if not source_forward_positive_z else current_local_direction.z < -0.35
+	var previously_moving: bool = locomotion_state in LOCOMOTION_STATES
+	var is_moving: bool = current_speed_mps > (0.045 if previously_moving else 0.08) if physical_motion_available else requested_speed_ratio > (0.035 if previously_moving else 0.05)
+	var was_backwards: bool = locomotion_state in ["walk_back", "run_back"]
+	var moving_backwards: bool = current_local_direction.z > (0.18 if was_backwards else 0.42)
+	var was_lateral: bool = locomotion_state in ["strafe", "strafe_left", "strafe_right"]
+	var lateral_ratio: float = 1.05 if was_lateral else 1.30
+	var moving_laterally: bool = absf(current_local_direction.x) > absf(current_local_direction.z) * lateral_ratio
+	var was_running: bool = locomotion_state in ["run", "run_back"]
+	var run_threshold: float = (1.80 if was_running else 2.05) * locomotion_height_scale
+	var wants_running: bool = current_speed_mps > run_threshold if physical_motion_available else requested_speed_ratio > (0.66 if was_running else 0.74)
 	var state := "idle"
-	if not grounded:
+	if not on_ground:
 		state = "jump"
-	elif speed_ratio > 0.72:
-		state = "run_back" if moving_backwards else "run"
-	elif speed_ratio > 0.05:
-		if absf(current_local_direction.x) > absf(current_local_direction.z) * 1.15:
-			state = "strafe"
+	elif is_moving:
+		if moving_laterally:
+			var lateral_state: String = "strafe_left" if current_local_direction.x < 0.0 else "strafe_right"
+			state = lateral_state if _authored_directional_clip(lateral_state) != StringName() else "strafe"
+		elif moving_backwards:
+			# Do not turn a missing backward sprint into frantic reverse Sprint.
+			# A role with an actual backward run may still use its authored gait.
+			state = "run_back" if wants_running and _authored_directional_clip("run_back") != StringName() else "walk_back"
 		else:
-			if moving_backwards:
-				state = "walk_back"
-			else:
-				state = "walk"
+			state = "run" if wants_running and _clip_for("run") != StringName() else "walk"
 	locomotion_state = state
-	if state == "walk":
-		target_playback_scale = clampf(speed_ratio / 0.58, 0.68, 1.22)
+	if physical_motion_available and state in LOCOMOTION_STATES:
+		target_playback_scale = _physical_gait_playback_scale(state)
+	elif state in ["walk", "strafe", "strafe_left", "strafe_right"]:
+		target_playback_scale = clampf(requested_speed_ratio / 0.58, 0.30, 1.40)
 	elif state == "walk_back":
-		target_playback_scale = clampf(speed_ratio / 0.46, 0.68, 1.16)
+		target_playback_scale = clampf(requested_speed_ratio / 0.46, 0.30, 1.40)
 	elif state in ["run", "run_back"]:
-		target_playback_scale = clampf(0.88 + (speed_ratio - 0.72) * 0.85, 0.88, 1.20)
+		target_playback_scale = clampf(0.88 + (requested_speed_ratio - 0.72) * 0.85, 0.70, 1.45)
 	else:
 		target_playback_scale = 1.0
-	_play_state(state, 0.14)
+	_play_state(state, 0.16)
+
+func _physical_gait_playback_scale(state: String) -> float:
+	var clip: StringName = _clip_for(state)
+	if clip == StringName() or not animation_player.has_animation(clip):
+		return 1.0
+	var animation: Animation = animation_player.get_animation(clip)
+	var key := _clip_key(str(clip))
+	var running_clip: bool = key.contains("run") or key.contains("sprint") or key.contains("jog")
+	var cycle_distance: float = RUN_CYCLE_DISTANCE_M if running_clip else WALK_CYCLE_DISTANCE_M
+	var calibration_key: String = "run_cycle_distance_m" if running_clip else "walk_cycle_distance_m"
+	cycle_distance = float(character_root.get_meta(calibration_key, cycle_distance)) * locomotion_height_scale
+	var playback: float = current_speed_mps * maxf(animation.length, 0.01) / maxf(cycle_distance, 0.20)
+	# Slow villagers can use genuinely slow cadence. Upper limits protect a
+	# missing directional gait from extreme leg cycling; physical travel stays
+	# with the controller. Retreat is deliberately a smaller, bounded walk.
+	return clampf(playback, 0.12, 1.50 if state == "walk_back" else 1.65)
 
 func trigger_action(action_name: String, playback_scale: float = 1.0, blend_time: float = 0.10, force: bool = false, duration: float = 0.0) -> bool:
 	if not is_valid() or dead:
@@ -445,6 +510,9 @@ func get_contract_report() -> Dictionary:
 		"locomotion_state": locomotion_state,
 		"presentation_state": presentation_state,
 		"requested_speed_ratio": requested_speed_ratio,
+		"speed_mps": current_speed_mps,
+		"physical_motion_available": physical_motion_available,
+		"locomotion_height_scale": locomotion_height_scale,
 		"grounded": grounded,
 		"current_direction": current_direction,
 		"current_local_direction": current_local_direction,
@@ -482,21 +550,53 @@ func _play_state(state: String, blend: float) -> void:
 		clip = _clip_for("idle")
 	if clip == StringName():
 		return
+	var previous_state: String = current_state
+	var previous_clip: StringName = StringName(animation_player.current_animation)
+	var preserve_phase: bool = previous_state in LOCOMOTION_STATES and state in LOCOMOTION_STATES and animation_player.is_playing()
+	var normalized_phase := -1.0
+	if preserve_phase and animation_player.has_animation(previous_clip):
+		var previous_animation: Animation = animation_player.get_animation(previous_clip)
+		if previous_animation.length > 0.0:
+			normalized_phase = fposmod(animation_player.current_animation_position / previous_animation.length, 1.0)
+			if previous_clip != clip:
+				# Preserve cycle frequency while the new physical cadence settles.
+				current_playback_scale *= animation_player.get_animation(clip).length / previous_animation.length
 	current_state = state
-	last_locomotion_clip = StringName()
-	last_locomotion_state = StringName()
-	last_locomotion_phase = -1.0
-	locomotion_phase_distance = 0.0
-	_play_clip_all(clip, blend, _playback_direction_for_state(state))
+	var playback_direction: float = _playback_direction_for_state(state)
+	if preserve_phase and previous_clip == clip:
+		# Walk, lateral fallback and backstep can share one authored clip. Keep
+		# its exact pose, including on a playback-direction reversal. Calling
+		# play()/seek(0) here caused a repeated foot snap during turns.
+		for player in animation_players:
+			player.speed_scale = current_playback_scale * playback_direction
+	else:
+		if state in LOCOMOTION_STATES and not preserve_phase:
+			current_playback_scale = target_playback_scale
+		_play_clip_all(clip, blend, playback_direction, normalized_phase)
+	if preserve_phase and normalized_phase >= 0.0:
+		last_locomotion_clip = clip
+		last_locomotion_state = StringName(state)
+		last_locomotion_phase = normalized_phase
+	else:
+		last_locomotion_clip = StringName()
+		last_locomotion_state = StringName()
+		last_locomotion_phase = -1.0
+		locomotion_phase_distance = 0.0
 
 func _clip_for(state: String) -> StringName:
 	if resolved_clip_map.has(state):
 		return StringName(resolved_clip_map[state])
-	return _resolve_clip(state, str(clip_map.get(state, "")))
+	var clip: StringName = _resolve_clip(state, str(clip_map.get(state, "")))
+	resolved_clip_map[state] = clip
+	return clip
 
 func _resolve_clip(state: String, requested: String) -> StringName:
 	if animation_player == null:
 		return StringName()
+	if state in ["walk_back", "run_back", "strafe_left", "strafe_right"]:
+		var directional_clip: StringName = _authored_directional_clip(state)
+		if directional_clip != StringName():
+			return directional_clip
 	var keys: Array[String] = []
 	var wanted_key := _clip_key(requested)
 	if not wanted_key.is_empty():
@@ -524,14 +624,42 @@ func _resolve_clip(state: String, requested: String) -> StringName:
 	return StringName()
 
 func _locomotion_candidate_allowed(state: String, candidate_key: String) -> bool:
-	if state not in ["walk", "walk_back", "strafe", "run", "run_back"]:
+	if state not in LOCOMOTION_STATES:
 		return true
 	# These clips are useful for special enemies or carried-object animation,
 	# but they visibly collapse a human gait when used as general locomotion.
 	for banned in ["zombie", "carry", "limp", "crawl", "stagger", "attack", "sword", "hit"]:
 		if candidate_key.contains(banned):
 			return false
+	if state in ["walk", "run"]:
+		for directional_word in ["back", "reverse", "strafe", "left", "right"]:
+			if candidate_key.contains(directional_word):
+				return false
 	return true
+
+func _authored_directional_clip(state: String) -> StringName:
+	if authored_directional_clips.has(state):
+		return StringName(authored_directional_clips[state])
+	if animation_player == null:
+		return StringName()
+	var direction_keys: Array[String] = []
+	match state:
+		"walk_back":
+			direction_keys.assign(["walkback", "backwalk", "backwardwalk", "walkreverse", "runback", "backrun"])
+		"run_back":
+			direction_keys.assign(["runback", "backrun", "backwardrun", "runreverse"])
+		"strafe_left":
+			direction_keys.assign(["walkleft", "strafeleft", "leftstrafe", "runleft"])
+		"strafe_right":
+			direction_keys.assign(["walkright", "straferight", "rightstrafe", "runright"])
+	for direction_key in direction_keys:
+		for candidate in animation_player.get_animation_list():
+			var candidate_key: String = _clip_key(str(candidate))
+			if candidate_key.contains(direction_key) and _locomotion_candidate_allowed(state, candidate_key):
+				authored_directional_clips[state] = candidate
+				return candidate
+	authored_directional_clips[state] = StringName()
+	return StringName()
 
 func _clip_key(value: String) -> String:
 	return value.to_lower().replace("characterarmature", "").replace("humanarmature", "").replace("human armature", "").replace("|", "").replace("_", "").replace("-", "").replace(" ", "")
@@ -577,12 +705,14 @@ func _collect_animation_players(root: Node) -> void:
 	for child in root.get_children():
 		_collect_animation_players(child)
 
-func _play_clip_all(clip: StringName, blend: float, playback_direction: float = 1.0) -> void:
+func _play_clip_all(clip: StringName, blend: float, playback_direction: float = 1.0, normalized_phase: float = -1.0) -> void:
 	for player in animation_players:
 		if player.has_animation(clip):
 			player.speed_scale = current_playback_scale * playback_direction
 			player.play(clip, blend, 1.0, playback_direction < 0.0)
-			player.seek(player.get_animation(clip).length if playback_direction < 0.0 else 0.0, true)
+			var clip_length: float = player.get_animation(clip).length
+			var position: float = normalized_phase * clip_length if normalized_phase >= 0.0 else (clip_length if playback_direction < 0.0 else 0.0)
+			player.seek(position, true)
 			# Sample the first pose immediately. This is required for manual players,
 			# but is also important for a newly spawned actor that can be paused for
 			# dialogue or capture before its first idle callback.
@@ -594,20 +724,13 @@ func _playback_direction_for_state(state: String) -> float:
 	var resolved_clip := _clip_for(state)
 	if resolved_clip == StringName():
 		return 1.0
-	# Prefer an authored reverse clip. If the role did not provide an explicit
-	# reverse mapping and resolution fell through to the forward gait alias,
-	# reverse playback so the feet travel with the actor instead of visibly
-	# walking forward while the physics moves in reverse. This also covers crowd
-	# roles whose compact map intentionally contains only walk/run clips.
-	var requested := str(clip_map.get(state, "")).strip_edges()
-	if requested.is_empty():
-		return -1.0
-	var requested_key := _clip_key(requested)
-	var resolved_key := _clip_key(str(resolved_clip))
-	return 1.0 if resolved_key == requested_key or resolved_key.ends_with(requested_key) else -1.0
+	# An explicit walk_back:Walk mapping is still a forward fallback. Identify
+	# the actual authored directional clip, not equality with a role-map alias.
+	var authored_clip: StringName = _authored_directional_clip(state)
+	return 1.0 if authored_clip != StringName() and resolved_clip == authored_clip else -1.0
 
 func _emit_locomotion_step_events() -> void:
-	if animation_player == null or action_active or current_state not in ["walk", "walk_back", "strafe", "run", "run_back"]:
+	if animation_player == null or action_active or current_state not in LOCOMOTION_STATES:
 		last_locomotion_clip = StringName()
 		last_locomotion_state = StringName()
 		last_locomotion_phase = -1.0

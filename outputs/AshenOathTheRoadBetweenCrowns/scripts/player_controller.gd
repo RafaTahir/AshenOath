@@ -21,6 +21,7 @@ const CharacterPresentation = preload("res://scripts/character_presentation.gd")
 const CharacterRoleSpec = preload("res://scripts/character_role_spec.gd")
 const CharacterAnimationDriver = preload("res://scripts/character_animation_driver.gd")
 const EquipmentLoadout = preload("res://scripts/equipment_loadout.gd")
+const BACKPEDAL_MAX_SPEED := 1.45
 
 var walk_speed = 3.4
 var run_speed = 5.3
@@ -67,6 +68,7 @@ var asset_helper
 var animation_driver
 var move_phase = 0.0
 var footstep_distance = 0.0
+var locomotion_velocity := Vector3.ZERO
 var animation_step_signal_bound := false
 var attack_anim_time = 0.0
 var attack_anim_heavy = false
@@ -175,6 +177,7 @@ func _physics_process(delta: float) -> void:
 	if input_source != null and input_source.has_method("is_gameplay_context") and not input_source.is_gameplay_context():
 		velocity.x = 0.0
 		velocity.z = 0.0
+		locomotion_velocity = Vector3.ZERO
 		return
 	attack_cooldown = max(attack_cooldown - delta, 0.0)
 	beam_cooldown = max(beam_cooldown - delta, 0.0)
@@ -191,7 +194,8 @@ func _physics_process(delta: float) -> void:
 	_update_sword_combat_state(delta)
 	if transition_locked:
 		velocity = Vector3.ZERO
-		_animate_visuals(delta, Vector3.ZERO, false)
+		locomotion_velocity = Vector3.ZERO
+		_animate_visuals(delta)
 		_update_blade_contact()
 		return
 	if not can_control:
@@ -199,7 +203,8 @@ func _physics_process(delta: float) -> void:
 		velocity.z = move_toward(velocity.z, 0.0, 20.0 * delta)
 		_apply_gravity(delta)
 		move_and_slide()
-		_animate_visuals(delta, Vector3.ZERO, false)
+		_capture_locomotion_motion()
+		_animate_visuals(delta)
 		_update_blade_contact()
 		return
 	_handle_combat_input()
@@ -213,6 +218,7 @@ func set_transition_locked(locked: bool) -> void:
 	if locked:
 		can_control = false
 		velocity = Vector3.ZERO
+		locomotion_velocity = Vector3.ZERO
 	elif health_component == null or health_component.health > 0.0:
 		can_control = true
 
@@ -229,6 +235,7 @@ func cancel_buffered_input(reason: String = "context") -> void:
 	dodge_time = 0.0
 	velocity.x = 0.0
 	velocity.z = 0.0
+	locomotion_velocity = Vector3.ZERO
 	if beam_cast_state != BEAM_STATE_IDLE or beam_charging:
 		cancel_beam_charge(reason)
 	elif animation_driver != null and animation_driver.has_method("stop_action"):
@@ -399,50 +406,67 @@ func _action_just_released(action: StringName) -> bool:
 	return Input.is_action_just_released(action)
 
 func _handle_movement(delta: float) -> void:
-	var input_vec := _movement_input()
-	var forward = Vector3.FORWARD
-	var right = Vector3.RIGHT
+	var input_vec: Vector2 = _movement_input()
+	var forward: Vector3 = Vector3.FORWARD
+	var right: Vector3 = Vector3.RIGHT
 	if camera_controller != null:
 		forward = camera_controller.get_flat_forward()
 		right = camera_controller.get_flat_right()
-	var move_dir = (right * input_vec.x + forward * -input_vec.y).normalized()
+	var move_dir: Vector3 = (right * input_vec.x + forward * -input_vec.y).normalized()
 	if dodge_time > 0.0:
 		dodge_time -= delta
-		var dodge_ratio = clamp(dodge_time / 0.30, 0.0, 1.0)
-		var dodge_velocity = dodge_speed * (0.62 + 0.38 * sin(dodge_ratio * PI))
+		var dodge_ratio: float = clampf(dodge_time / 0.30, 0.0, 1.0)
+		var dodge_velocity: float = dodge_speed * (0.62 + 0.38 * sin(dodge_ratio * PI))
 		velocity.x = dodge_dir.x * dodge_velocity
 		velocity.z = dodge_dir.z * dodge_velocity
 		movement_state = "dodge"
 	else:
-		var wants_run := _action_pressed("run") and input_vec.length() > 0.1
-		var is_running = wants_run and stamina_component.spend(10.0 * delta)
-		var speed = run_speed if is_running else walk_speed
+		var wants_run: bool = _action_pressed("run") and input_vec.length() > 0.1
+		var is_running: bool = wants_run and stamina_component.spend(10.0 * delta)
+		var aim_facing: bool = (bow_aiming or _uses_first_person_camera()) and camera_controller != null
+		var backward_input: bool = input_vec.y > 0.15
+		# Walking away remains a deliberate, short backward stride. Sprinting
+		# away in the free camera turns into a forward run; a held aim or cast
+		# retains its facing and can never accelerate the reverse gait.
+		var intentional_backpedal: bool = backward_input and (not is_running or aim_facing or beam_cast_state != "")
+		var speed: float = run_speed if is_running else walk_speed
 		if bow_aiming:
 			speed *= 0.42
-		if input_vec.y > 0.15:
-			speed *= 0.68
 		if beam_cast_state != "":
 			speed *= 0.4
-		var target_velocity = move_dir * speed
-		var response = run_acceleration if is_running else acceleration
-		if move_dir.length() <= 0.1:
-			response = deceleration
-		velocity.x = move_toward(velocity.x, target_velocity.x, response * delta)
-		velocity.z = move_toward(velocity.z, target_velocity.z, response * delta)
-		var intentional_backpedal := input_vec.y > 0.15
-		if (bow_aiming or _uses_first_person_camera()) and camera_controller != null and beam_cast_state == "":
+		if intentional_backpedal:
+			speed = minf(speed, BACKPEDAL_MAX_SPEED)
+		if aim_facing and beam_cast_state == "":
 			var aim_forward: Vector3 = camera_controller.get_flat_forward()
 			if aim_forward.length_squared() > 0.5:
-				var aim_yaw := atan2(-aim_forward.x, -aim_forward.z)
+				var aim_yaw: float = atan2(-aim_forward.x, -aim_forward.z)
 				rotation.y = lerp_angle(rotation.y, aim_yaw, 1.0 - exp(-turn_speed * delta))
-		elif move_dir.length() > 0.1 and beam_cast_state == "" and not intentional_backpedal:
-			var target_yaw = atan2(-move_dir.x, -move_dir.z)
+		elif move_dir.length_squared() > 0.01 and beam_cast_state == "":
+			# Facing follows intent; the feet below follow achieved movement. Using
+			# old forward inertia here would spin Kael around on the first W-to-S
+			# frame. Keeping the old yaw instead made orbiting backpedals sideways.
+			var facing_direction: Vector3 = -move_dir if intentional_backpedal else move_dir
+			var target_yaw: float = atan2(-facing_direction.x, -facing_direction.z)
 			rotation.y = lerp_angle(rotation.y, target_yaw, 1.0 - exp(-turn_speed * delta))
-		# Keep backward running as its own locomotion state. Collapsing it into
-		# `run` made the imported forward gait play while the controller moved
-		# away from its facing, which was especially obvious on keyboard release
-		# and at the first animation tick.
-		movement_state = ("run_back" if intentional_backpedal else "run") if is_running else ("backward" if intentional_backpedal else ("strafe" if abs(input_vec.x) > 0.55 else ("walk" if move_dir.length() > 0.1 else "idle")))
+		var target_velocity: Vector3 = move_dir * speed
+		var response: float = run_acceleration if is_running else acceleration
+		if move_dir.length_squared() <= 0.01:
+			response = deceleration
+		elif not aim_facing and not intentional_backpedal and beam_cast_state == "" and is_on_floor():
+			# Brake the old stride through a sharp free turn, then build the new
+			# stride as the body catches up. The desired speed and input direction
+			# remain unchanged, including all stamina and combat speed modifiers.
+			var body_forward: Vector3 = -global_basis.z
+			body_forward.y = 0.0
+			var alignment: float = clampf(body_forward.normalized().dot(move_dir), 0.0, 1.0)
+			var planar_velocity: Vector3 = Vector3(velocity.x, 0.0, velocity.z)
+			if planar_velocity.length_squared() > 0.04 and planar_velocity.normalized().dot(move_dir) < 0.35:
+				planar_velocity = planar_velocity.move_toward(Vector3.ZERO, deceleration * delta)
+				velocity.x = planar_velocity.x
+				velocity.z = planar_velocity.z
+			response *= lerpf(0.18, 1.0, smoothstep(0.0, 0.90, alignment))
+		velocity.x = move_toward(velocity.x, target_velocity.x, response * delta)
+		velocity.z = move_toward(velocity.z, target_velocity.z, response * delta)
 		if _action_just_pressed("jump"):
 			try_jump()
 		if _action_just_pressed("dodge") and not beam_charging:
@@ -454,8 +478,35 @@ func _handle_movement(delta: float) -> void:
 	_try_step_up(move_dir)
 	_apply_gravity(delta)
 	move_and_slide()
+	_capture_locomotion_motion()
 	_update_ground_adaptation(delta)
-	_animate_visuals(delta, move_dir, input_vec.length() > 0.1)
+	_animate_visuals(delta)
+
+func _capture_locomotion_motion() -> void:
+	# Collision sliding, acceleration, dodges and the final coasting step all
+	# have one movement sample. Desired input is never used as a gait direction.
+	var achieved_velocity: Vector3 = get_real_velocity()
+	locomotion_velocity = Vector3(achieved_velocity.x, 0.0, achieved_velocity.z)
+
+func _update_locomotion_state() -> void:
+	if dodge_time > 0.0:
+		movement_state = "dodge"
+		return
+	if not is_on_floor():
+		movement_state = "jump"
+		return
+	var horizontal_speed: float = locomotion_velocity.length()
+	if horizontal_speed < 0.15:
+		movement_state = "idle"
+		return
+	var local_velocity: Vector3 = global_basis.orthonormalized().inverse() * locomotion_velocity
+	var backwards: bool = local_velocity.z > horizontal_speed * 0.30
+	if horizontal_speed > walk_speed * 1.04:
+		movement_state = "run_back" if backwards else "run"
+	elif absf(local_velocity.x) > absf(local_velocity.z) * 1.15:
+		movement_state = "strafe"
+	else:
+		movement_state = "backward" if backwards else "walk"
 
 func _face_attack_direction() -> void:
 	if _uses_first_person_camera():
@@ -463,8 +514,8 @@ func _face_attack_direction() -> void:
 		rotation.y = atan2(-view_forward.x, -view_forward.z)
 		return
 	var input_vec := _movement_input()
-	# S is intentional backpedaling. Preserve the current facing for that
-	# input while allowing attack edges to honor the same-frame travel direction.
+	# Backward input preserves established facing at the attack edge. The
+	# movement controller owns any free-camera sprint turn on this frame.
 	if input_vec.y > 0.15:
 		return
 	var forward := Vector3.FORWARD
@@ -1974,23 +2025,32 @@ func _add_slash_panel(node_name: String, local_pos: Vector3, size: Vector3, colo
 	slash_arc_root.add_child(panel)
 	return panel
 
-func _animate_visuals(delta: float, move_dir: Vector3, moving: bool) -> void:
+func _animate_visuals(delta: float) -> void:
 	if visual_root == null:
 		return
-	var running = movement_state in ["run", "run_back"] or (_action_pressed("run") and moving)
-	if animation_driver != null and animation_driver.is_valid():
-		animation_driver.set_locomotion(Vector2(velocity.x, velocity.z).length() / max(run_speed, 0.1), move_dir, is_on_floor())
+	_update_locomotion_state()
+	var horizontal_speed: float = locomotion_velocity.length()
+	var moving: bool = horizontal_speed > 0.15
+	var running: bool = movement_state in ["run", "run_back"]
+	var rigged_motion: bool = animation_driver != null and animation_driver.is_valid()
+	if rigged_motion:
+		if animation_driver.has_method("set_locomotion_motion"):
+			animation_driver.set_locomotion_motion(locomotion_velocity, is_on_floor(), run_speed)
+		else:
+			animation_driver.set_locomotion(horizontal_speed / maxf(run_speed, 0.1), locomotion_velocity.normalized(), is_on_floor())
 		animation_driver.advance_external(delta)
 		if movement_state == "dodge" and animation_driver.current_state != "dodge":
 			animation_driver.trigger_action("dodge")
 	if moving:
-		move_phase += delta * (8.7 if running else 6.2)
+		# The fallback body's small weight shift advances with distance too;
+		# imported rigs own their own continuous foot-contact phase.
+		move_phase += delta * horizontal_speed * (8.7 / maxf(run_speed, 0.1) if running else 6.2 / maxf(walk_speed, 0.1))
 		if not animation_step_signal_bound:
 			_update_distance_footsteps(delta, running)
 	else:
 		move_phase += delta * 1.45
 		footstep_distance = 0.0
-	var speed_factor = clamp(Vector2(velocity.x, velocity.z).length() / max(run_speed, 0.1), 0.0, 1.0)
+	var speed_factor: float = clampf(horizontal_speed / maxf(run_speed, 0.1), 0.0, 1.0)
 	movement_blend = lerp(movement_blend, speed_factor, 1.0 - exp(-10.0 * delta))
 	strafe_blend = lerp(strafe_blend, 1.0 if movement_state == "strafe" else 0.0, 1.0 - exp(-9.0 * delta))
 	backward_blend = lerp(backward_blend, 1.0 if movement_state in ["backward", "run_back"] else 0.0, 1.0 - exp(-9.0 * delta))
@@ -2000,20 +2060,27 @@ func _animate_visuals(delta: float, move_dir: Vector3, moving: bool) -> void:
 	var hurt_weight = clamp(hurt_react_time / 0.20, 0.0, 1.0)
 	var combat_swing_weight = 0.0
 	var combat_windup_weight = 0.0
-	var bob = 0.030 * sin(move_phase) * grounded_weight if moving else 0.009 * sin(move_phase)
-	var idle_breath = sin(move_phase * 0.72) * (1.0 - grounded_weight)
-	var pelvis_offset = (left_foot_ground_offset + right_foot_ground_offset) * 0.22
-	visual_root.position.y = bob + pelvis_offset - 0.018 * grounded_weight - 0.030 * hurt_weight - 0.10 * landing_compression
-	var lateral_lean = clamp(-velocity.dot(global_transform.basis.x) * 0.22, -1.5, 1.5)
-	var local_normal = global_transform.basis.inverse() * smoothed_ground_normal
-	var slope_pitch = rad_to_deg(atan2(local_normal.z, max(local_normal.y, 0.25)))
-	var slope_roll = -rad_to_deg(atan2(local_normal.x, max(local_normal.y, 0.25)))
-	var forward_lean = (-3.5 if running else -2.3) * grounded_weight if moving else 0.9 * idle_breath
-	forward_lean += slope_pitch * 0.45 + 8.0 * jump_pose_weight - 11.0 * landing_compression
+	# Walk/Sprint clips already move the pelvis and shoulders. A second full
+	# bob/roll on the entire rig made feet float and the torso rock like a prop.
+	var additive_gait_weight: float = 0.16 if rigged_motion else 1.0
+	var bob: float = (0.030 * sin(move_phase) * grounded_weight if moving else 0.009 * sin(move_phase)) * additive_gait_weight
+	var idle_breath: float = sin(move_phase * 0.72) * (1.0 - grounded_weight) * additive_gait_weight
+	var pelvis_offset: float = (left_foot_ground_offset + right_foot_ground_offset) * 0.22
+	visual_root.position.y = bob + pelvis_offset - 0.018 * grounded_weight * additive_gait_weight - 0.030 * hurt_weight - 0.10 * landing_compression
+	var body_basis: Basis = global_basis.orthonormalized()
+	var local_velocity: Vector3 = body_basis.inverse() * locomotion_velocity
+	var lateral_lean: float = clampf(-local_velocity.x * (0.10 if rigged_motion else 0.22), -1.5, 1.5)
+	var local_normal: Vector3 = body_basis.inverse() * smoothed_ground_normal
+	var slope_pitch: float = rad_to_deg(atan2(local_normal.z, maxf(local_normal.y, 0.25)))
+	var slope_roll: float = -rad_to_deg(atan2(local_normal.x, maxf(local_normal.y, 0.25)))
+	var signed_forward_weight: float = clampf(-local_velocity.z / maxf(horizontal_speed, 0.15), -1.0, 1.0)
+	var forward_lean: float = (-3.5 if running else -2.3) * grounded_weight * signed_forward_weight * additive_gait_weight if moving else 0.9 * idle_breath
+	forward_lean += slope_pitch * (0.26 if rigged_motion else 0.45) + 8.0 * jump_pose_weight - 11.0 * landing_compression
 	forward_lean += -7.0 * dodge_weight + 5.0 * hurt_weight - 3.5 * block_pose_weight
-	var root_z = lateral_lean + slope_roll * 0.35 + 0.65 * sin(move_phase) * grounded_weight + 9.0 * dodge_weight * sign(dodge_dir.x) - 3.0 * block_pose_weight
-	visual_root.rotation_degrees.z = lerp(visual_root.rotation_degrees.z, root_z, 9.0 * delta)
-	visual_root.rotation_degrees.x = lerp(visual_root.rotation_degrees.x, forward_lean, 9.0 * delta)
+	var local_dodge: Vector3 = body_basis.inverse() * dodge_dir
+	var root_z: float = lateral_lean + slope_roll * (0.22 if rigged_motion else 0.35) + 0.65 * sin(move_phase) * grounded_weight * additive_gait_weight + 9.0 * dodge_weight * signf(local_dodge.x) - 3.0 * block_pose_weight
+	visual_root.rotation_degrees.z = lerpf(visual_root.rotation_degrees.z, root_z, 1.0 - exp(-9.0 * delta))
+	visual_root.rotation_degrees.x = lerpf(visual_root.rotation_degrees.x, forward_lean, 1.0 - exp(-9.0 * delta))
 	if attack_anim_time > 0.0:
 		var duration = 0.52 if attack_anim_heavy else 0.34
 		var t = 1.0 - attack_anim_time / duration
@@ -2074,14 +2141,14 @@ func _on_animation_locomotion_step(_side: StringName) -> void:
 	# while its clip is still blending out.
 	if movement_state not in ["walk", "backward", "strafe", "run", "run_back"]:
 		return
-	if not is_on_floor() or Vector2(velocity.x, velocity.z).length() < 0.18:
+	if not is_on_floor() or locomotion_velocity.length() < 0.18:
 		return
 	footstep.emit()
 
 func _update_distance_footsteps(delta: float, running: bool) -> void:
 	if not is_on_floor():
 		return
-	var horizontal_speed := Vector2(velocity.x, velocity.z).length()
+	var horizontal_speed: float = locomotion_velocity.length()
 	if horizontal_speed < 0.18:
 		return
 	footstep_distance += horizontal_speed * delta

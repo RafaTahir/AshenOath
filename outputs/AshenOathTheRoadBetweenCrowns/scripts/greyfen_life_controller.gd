@@ -4,6 +4,12 @@ const CharacterPresentation = preload("res://scripts/character_presentation.gd")
 const AssetSpawnHelper = preload("res://scripts/asset_spawn_helper.gd")
 const CharacterAnimationDriver = preload("res://scripts/character_animation_driver.gd")
 
+const WALK_ACCELERATION := 1.65
+const WALK_BRAKING := 2.8
+const ARRIVAL_DISTANCE := 0.065
+const ROUTE_TURN_RATE := 2.65
+const ATTENTION_TURN_RATE := 1.65
+
 const AMBIENT_LINES := {
 	"greyfen_road_quiet":"Road's quiet today. That's worse.",
 	"greyfen_bell_dawn":"Bell rang before dawn. Nobody touched it.",
@@ -69,10 +75,8 @@ const CROWD_IDENTITIES := [
 ]
 
 func _simulation_hz() -> float:
-	# Background villagers remain visible and keep their authored routines, but
-	# an 8 Hz simulation avoids stacking seven navigation/animation updates on a
-	# single Compatibility-renderer frame. Named dialogue actors still receive
-	# the higher presentation rate below.
+	# Story, distance and hydration decisions are cheap background ticks. Visible
+	# bodies move each frame independently of this decision frequency.
 	return 15.0 if quality == "quality" else 8.0
 
 func configure(game: Node, quality_preset: String) -> void:
@@ -110,31 +114,41 @@ func routine_ids() -> Array:
 func _process(delta: float) -> void:
 	if host == null or player == null or get_tree().paused or not bool(host.get("game_started")): return
 	simulation_tick_accumulator += delta
-	if simulation_tick_accumulator < 1.0 / _simulation_hz():
-		return
-	delta = simulation_tick_accumulator
-	simulation_tick_accumulator = 0.0
+	var decision_tick: bool = simulation_tick_accumulator >= 1.0 / _simulation_hz()
+	if decision_tick:
+		simulation_tick_accumulator = 0.0
 	line_cooldown = max(line_cooldown - delta, 0.0)
-	if story_dirty:
+	if decision_tick and story_dirty:
 		_sync_story_state(false)
 	for entry in actors:
 		var actor_node: Node3D = entry.node
-		if entry.driver == null and is_instance_valid(actor_node):
-			var hydrated_driver = actor_node.find_child("CharacterAnimationDriver", true, false)
-			if hydrated_driver != null:
-				entry.driver = hydrated_driver
-		var render_distance := 8.0 if quality == "potato" else (18.0 if quality == "quality" else 16.0)
-		var was_distant := bool(entry.get("distance_suspended", false))
-		var distance_limit := render_distance - 0.8 if was_distant else render_distance + 0.8
-		var distant := is_instance_valid(actor_node) and actor_node.global_position.distance_to(player.global_position) > distance_limit
-		if is_instance_valid(actor_node) and distant != was_distant:
-			actor_node.visible = not distant
-			var driver = entry.driver
-			if driver != null and driver.has_method("set_distance_suspended"):
-				driver.set_distance_suspended(distant)
-			entry.distance_suspended = distant
-		if not distant:
-			_update_actor(entry, delta)
+		if not is_instance_valid(actor_node):
+			continue
+		if decision_tick:
+			if entry.driver == null:
+				var hydrated_driver: Node = actor_node.find_child("CharacterAnimationDriver", true, false)
+				if hydrated_driver != null:
+					entry.driver = hydrated_driver
+			var render_distance: float = 8.0 if quality == "potato" else (18.0 if quality == "quality" else 16.0)
+			var was_distant: bool = bool(entry.get("distance_suspended", false))
+			var distance_limit: float = render_distance - 0.8 if was_distant else render_distance + 0.8
+			var distance_to_player: float = actor_node.global_position.distance_to(player.global_position)
+			var distant: bool = distance_to_player > distance_limit
+			var driver: Node = entry.driver
+			if distant != was_distant:
+				actor_node.visible = not distant
+				if driver != null and driver.has_method("set_distance_suspended"):
+					driver.set_distance_suspended(distant)
+				entry.distance_suspended = distant
+				entry.motion_speed = 0.0
+			if not distant and driver != null and driver.has_method("set_update_rate_hz"):
+				var animation_hz: float = 30.0 if distance_to_player < 7.0 else (20.0 if quality == "quality" else 15.0)
+				if not is_equal_approx(float(entry.get("animation_hz", 0.0)), animation_hz):
+					driver.set_update_rate_hz(animation_hz)
+					entry.animation_hz = animation_hz
+		if not bool(entry.get("distance_suspended", false)):
+			# A stalled render frame must not launch a villager across an anchor.
+			_update_actor(entry, minf(delta, 0.05))
 
 func build_population_member(index: int) -> void:
 	_build_population(index, 1)
@@ -196,24 +210,28 @@ func _enroll_named_npcs() -> void:
 		actors.append(entry)
 		_configure_agent(entry)
 		if entry.driver != null and entry.driver.has_method("set_update_rate_hz"):
-			entry.driver.set_update_rate_hz(16.0 if quality == "quality" else 8.0)
+			entry.driver.set_update_rate_hz(30.0)
 
 func _update_actor(entry: Dictionary, delta: float) -> void:
 	var node: Node3D = entry.node
 	if not is_instance_valid(node): return
 	if bool(node.get_meta("dialogue_facing_lock", false)):
+		entry.motion_speed = 0.0
+		entry.travel_direction = Vector3.ZERO
 		return
 	# Major encounters temporarily own their arena. The game restores this
 	# marker after the encounter so named villagers do not walk through a boss
 	# fight or re-enter its collision space while the player is engaged.
 	if bool(node.get_meta("bell_eater_evacuated", false)):
+		entry.motion_speed = 0.0
 		_set_motion(entry, 0.0)
 		return
 	var distance_to_player := node.global_position.distance_to(player.global_position)
 	if distance_to_player < 2.1:
 		entry.pause = max(float(entry.pause), 1.2)
-		_face(node, player.global_position, delta)
-		_set_motion(entry,0.0)
+		_brake_actor(entry, delta)
+		if float(entry.motion_speed) < 0.05:
+			_face(node, player.global_position, delta)
 		if line_cooldown <= 0.0 and not bool(entry.named):
 			line_cooldown = 8.0
 			host.hud.toast(_line_for_actor(entry))
@@ -223,26 +241,29 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 		return
 	if float(entry.pause) > 0.0:
 		entry.pause = float(entry.pause) - delta
-		_set_motion(entry,0.0)
+		_brake_actor(entry, delta)
 		return
 	if entry.path.is_empty():
-		_set_motion(entry, 0.0)
+		_brake_actor(entry, delta)
 		return
 	entry.target = int(entry.target) % entry.path.size()
-	var final_target: Vector3 = host.validate_walkable_position(entry.path[int(entry.target)])
 	if entry.route.is_empty():
+		var final_target: Vector3 = host.validate_walkable_position(entry.path[int(entry.target)])
 		var route_key := int(entry.target)
 		var cached_routes: Dictionary = entry.get("routes", {})
 		entry.route = cached_routes.get(route_key, [final_target]).duplicate()
 		entry.route_index = 1 if entry.route.size() > 1 else 0
 		_set_agent_target(entry)
 	if entry.route.is_empty():
-		_set_motion(entry, 0.0)
+		_brake_actor(entry, delta)
 		return
 	var target: Vector3 = entry.route[int(entry.route_index)]
 	var offset := target - node.global_position
 	offset.y = 0.0
-	if node.global_position.distance_to(target) < 0.28:
+	var distance: float = offset.length()
+	if distance <= ARRIVAL_DISTANCE + 0.015 and float(entry.motion_speed) < 0.12:
+		entry.motion_speed = 0.0
+		_set_motion(entry, 0.0)
 		entry.route_index = int(entry.route_index) + 1
 		if int(entry.route_index) < entry.route.size():
 			_set_agent_target(entry)
@@ -251,18 +272,49 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 		entry.target = (int(entry.target) + 1) % entry.path.size()
 		_begin_activity(entry)
 		return
-	var direction := offset.normalized()
-	var next_position := node.global_position + direction * minf(float(entry.speed) * delta, offset.length())
-	if spatial_service != null and not spatial_service.validate_runtime_segment(node.global_position, next_position, 0.58):
-		entry.route = []
-		entry.pause = 0.5
+	var direction: Vector3 = offset.normalized()
+	var wanted_yaw: float = atan2(-direction.x, -direction.z)
+	var turn_error: float = absf(wrapf(wanted_yaw - node.rotation.y, -PI, PI))
+	# Arrive and plant the feet before a sharp corner. Translating sideways
+	# while spinning through a half-turn would defeat the facing improvement.
+	if turn_error > deg_to_rad(65.0) and float(entry.motion_speed) > 0.05:
+		_brake_actor(entry, delta)
+		return
+	_face(node, node.global_position + direction, delta, true)
+	turn_error = absf(wrapf(wanted_yaw - node.rotation.y, -PI, PI))
+	var turn_pace: float = clampf((deg_to_rad(65.0) - turn_error) / deg_to_rad(48.0), 0.0, 1.0)
+	var arrival_pace: float = sqrt(2.0 * WALK_BRAKING * maxf(distance - ARRIVAL_DISTANCE, 0.0))
+	var desired_speed: float = minf(float(entry.speed) * turn_pace, arrival_pace)
+	var current_speed: float = float(entry.motion_speed)
+	var rate: float = WALK_ACCELERATION if desired_speed > current_speed else WALK_BRAKING
+	entry.motion_speed = move_toward(current_speed, desired_speed, rate * delta)
+	entry.travel_direction = direction
+	_move_actor(entry, direction, float(entry.motion_speed), delta, maxf(distance - ARRIVAL_DISTANCE, 0.0))
+
+func _brake_actor(entry: Dictionary, delta: float) -> void:
+	entry.motion_speed = move_toward(float(entry.get("motion_speed", 0.0)), 0.0, WALK_BRAKING * delta)
+	var direction: Vector3 = entry.get("travel_direction", Vector3.ZERO)
+	_move_actor(entry, direction, float(entry.motion_speed), delta)
+
+func _move_actor(entry: Dictionary, direction: Vector3, speed: float, delta: float, remaining_distance: float = INF) -> void:
+	var node: Node3D = entry.node
+	var start: Vector3 = node.global_position
+	var step: float = minf(speed * delta, remaining_distance)
+	if direction.length_squared() < 0.001 or step <= 0.00001:
+		entry.motion_speed = 0.0
 		_set_motion(entry, 0.0)
 		return
-	node.global_position = next_position
-	# Route segments are authoritative: snap the visual yaw at each waypoint so
-	# the locomotion clip never spends a visible step facing away from travel.
-	_face(node,node.global_position + direction,delta,true)
-	_set_motion(entry,float(entry.speed),direction)
+	var destination: Vector3 = start + direction * step
+	if spatial_service != null and not spatial_service.validate_runtime_segment(start, destination, 0.58):
+		entry.route = []
+		entry.pause = 0.5
+		entry.motion_speed = 0.0
+		_set_motion(entry, 0.0)
+		return
+	node.global_position = destination
+	var achieved_velocity: Vector3 = (node.global_position - start) / maxf(delta, 0.001)
+	achieved_velocity.y = 0.0
+	_set_motion(entry, achieved_velocity.length(), achieved_velocity.normalized())
 
 func _make_entry(id: String, node: Node3D, path: Array, speed: float, driver: Node, named: bool) -> Dictionary:
 	var profile: Dictionary = ROUTINE_PROFILES.get(id, {"occupation": "villager", "activity": "idle", "activity_seconds": 2.0, "line": "greyfen_keep_working"})
@@ -272,8 +324,9 @@ func _make_entry(id: String, node: Node3D, path: Array, speed: float, driver: No
 		"phase": rng.randf() * TAU, "base_y": node.position.y, "route": [],
 		"route_index": 0, "profile": profile.duplicate(true), "activity_active": false,
 		"activity_elapsed": 0.0, "activity_cycles": 0, "life_state": "walking",
-		"story_reaction": "baseline"
+		"story_reaction": "baseline", "motion_speed": 0.0, "travel_direction": Vector3.ZERO
 	}
+	node.set_meta("locomotion_owner", "greyfen_life")
 	node.set_meta("life_ticket", "LIFE-001")
 	node.set_meta("life_routine", id)
 	node.set_meta("life_occupation", str(profile.get("occupation", "villager")))
@@ -285,6 +338,8 @@ func _begin_activity(entry: Dictionary) -> void:
 	var node: Node3D = entry.node
 	var profile: Dictionary = entry.profile
 	entry.activity_active = true
+	entry.motion_speed = 0.0
+	entry.travel_direction = Vector3.ZERO
 	entry.activity_elapsed = 0.0
 	entry.activity_cycles = int(entry.activity_cycles) + 1
 	entry.life_state = "working:%s" % str(profile.get("activity", "idle"))
@@ -449,25 +504,28 @@ func _set_motion(entry: Dictionary, speed: float, direction: Vector3 = Vector3.Z
 			driver.set_working(false)
 		if driver.has_method("set_dialogue_pose"):
 			driver.set_dialogue_pose(false)
-		# Routine speeds are walking pace; this ratio also controls clip cadence.
+		# Report the distance actually covered. The shared driver owns gait and
+		# cadence in metres per second, including the slow named work routines.
 		var player_nearby: bool = is_instance_valid(player) and entry.node.global_position.distance_to(player.global_position) < 2.1
 		if speed <= 0.01 and str(entry.id) == "forge_helper" and not bool(entry.get("quiet_after_report", false)) and not player_nearby and driver.has_method("set_working"):
 			driver.set_working(true)
 		else:
 			if driver.has_method("set_working"):
 				driver.set_working(false)
-			driver.set_locomotion(clampf(speed / 2.0,0.0,0.70),direction,true)
+			if driver.has_method("set_locomotion_motion"):
+				driver.set_locomotion_motion(direction * speed, true)
+			else:
+				driver.set_locomotion(clampf(speed / 2.0,0.0,0.70),direction,true)
 	entry.phase = float(entry.phase) + get_process_delta_time() * (0.8 + speed * 1.7)
 
-func _face(node: Node3D, target: Vector3, delta: float, snap_to_route: bool = false) -> void:
+func _face(node: Node3D, target: Vector3, delta: float, walking: bool = false) -> void:
 	var offset := target - node.global_position
 	offset.y = 0.0
 	if offset.length() < 0.05: return
 	var wanted := atan2(-offset.x,-offset.z)
-	if snap_to_route:
-		node.rotation.y = wanted
-		return
-	node.rotation.y = lerp_angle(node.rotation.y,wanted,min(delta*3.0,1.0))
+	var turn_error: float = wrapf(wanted - node.rotation.y, -PI, PI)
+	var turn_limit: float = (ROUTE_TURN_RATE if walking else ATTENTION_TURN_RATE) * delta
+	node.rotation.y += clampf(turn_error, -turn_limit, turn_limit)
 
 func _make_skeletal_villager(parent: Node3D, role_id: String, index: int, scale_value: float):
 	var role_cycle := [
@@ -528,7 +586,7 @@ func _make_skeletal_villager(parent: Node3D, role_id: String, index: int, scale_
 	elif family.contains("monk"):
 		clips["work"] = "Idle"
 	driver.configure(mapped, clips)
-	driver.set_update_rate_hz(16.0 if quality == "quality" else 8.0)
+	driver.set_update_rate_hz(30.0)
 	if OS.get_environment("ASHEN_PROFILE_GREYFEN_ACTORS") == "1":
 		print("GREYFEN_VISUAL_PROFILE id=%s role=%s asset_ms=%.2f presentation_ms=%.2f driver_ms=%.2f" % [
 			role_id, role, load_ms, presentation_ms,
