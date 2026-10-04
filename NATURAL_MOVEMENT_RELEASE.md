@@ -27,10 +27,28 @@ The active in-place clips do not contain source ground-travel measurements. Phys
 
 ## Single verification pass
 
-Reserved, not yet run. Root will execute one graphical Godot fixture session after source integration and production compilation. It will exercise real controllers and imported rigs across forward travel, camera-relative backward/diagonal movement, sharp turns, backward sprint turnaround, stopping and NPC waypoint/attention movement. The same session will emit metrics and time-separated rendered frames. Reading its report and viewing those frames constitutes the one verification pass; there will be no baseline execution or second run.
+Completed once: `tools/verify_natural_motion_once.gd`, graphical Godot 4.6.3 Compatibility/ANGLE, exit 0, **12 cases passed in 71.629 seconds**. Real controllers and imported rigs ran on an isolated collision floor. There was no baseline session or repeat execution. Windows launcher attempts failed before Godot started (duplicate PATH environment entries and command quoting); the corrected direct invocation started the one actual session.
 
-Production import/export and responding to compiler diagnostics produce the release artifacts. They are not additional gameplay test passes. No general regression suite, browser playthrough or post-deployment verification is planned.
+The session recorded four time-separated frames per case, contact sheets, skeletal poses, facing, achieved velocity, cadence and footsteps under `work/natural-motion-once/`. The report is `report.json`. Recorded retreat, camera-orbit retreat, diagonal retreat, turning, backward-sprint turnaround, NPC waypoint and ambient contact sheets were inspected as part of the same pass.
+
+| Case | Recorded result |
+| --- | --- |
+| Forward and left/right free turns | Settled at 3.40 m/s, facing/travel dot 1.00 |
+| Stale-yaw, camera-orbit, diagonal and first-person retreat | Settled at 1.45 m/s, facing/travel dot -1.00 |
+| Backward sprint turnaround | Settled at 5.30 m/s facing travel, dot 1.00 |
+| Release/coast | Stopped after 0.22 m; final gait idle |
+| Collision | Actual movement stopped at the wall; final gait idle |
+| Greyfen waypoints | 3.61 m traveled, two arrival activities, real skeletal movement and three foot contacts |
+| Ambient attention | Zero root displacement or vertical bob; zero walking contacts |
+
+The NPC image overlay displays a placeholder zero velocity; actual NPC velocity is measured after rendering and recorded in the JSON samples. Those samples settled near 1.05 m/s along the route. The isolated fixture does not establish full-campaign behavior, slope handling, combat aiming or a perfect foot-lock solution. No new gameplay edits were needed after this pass.
+
+Production import/export produced the release artifacts and completed successfully. It was not an additional gameplay test pass. No general regression suite, browser playthrough or post-deployment verification was run.
 
 ## Publication
 
-Implementation and the single verification are in progress. Final source, package, report outcome and Vercel response will be recorded here.
+- Production source: `76b09ff0a822a03646563fbd9cd84ac0d92e2bba`.
+- Build: `story-20261004T041224Z-76b09ff0a822`.
+- Candidate: `.release-gate/natural-motion-01` (all seven asset packs and Web export regenerated).
+- Packaging succeeded; previous generated Web artifacts are retained in that candidate's `previous-web` directory.
+- GitHub push and Vercel production publication are the remaining release steps.
