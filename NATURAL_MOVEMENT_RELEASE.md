@@ -51,4 +51,8 @@ Production import/export produced the release artifacts and completed successful
 - Build: `story-20261004T041224Z-76b09ff0a822`.
 - Candidate: `.release-gate/natural-motion-01` (all seven asset packs and Web export regenerated).
 - Packaging succeeded; previous generated Web artifacts are retained in that candidate's `previous-web` directory.
-- GitHub push and Vercel production publication are the remaining release steps.
+- Packaged release commit: `ef96aa6`, pushed successfully to `main` and `codex/story-centered-overhaul` on `github.com/RafaTahir/AshenOath`.
+- Vercel returned `READY` for production deployment `dpl_993q4RdWCzw7PwBMpSMSQMScvzRK` and aliased it to <https://ashenoath.vercel.app>.
+- Deployment URL: <https://ashenoath-pf8fq78t9-rafaeitahir-5792s-projects.vercel.app>.
+- The restricted deployment attempt returned `Not authorized`; the same authorized command succeeded using the existing saved login outside the restricted environment. No login change or relinking was needed.
+- Completion evidence is the successful Git push and Vercel CLI deployment response. No post-deployment browser, HTTP probe or gameplay verification was performed.
