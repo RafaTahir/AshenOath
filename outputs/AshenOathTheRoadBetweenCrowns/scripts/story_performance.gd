@@ -70,6 +70,18 @@ func present_page(entry: Dictionary) -> void:
 	delivery_active = false
 	var id := str(profile.get("id", ""))
 	speaking = speaker != "narrator" and (speaker == "player" if id == "kael" else (id != "" and speaker.contains(id)))
+	if not speaking and id != "kael" and actor.has_method("is_interaction_enabled"):
+		var actor_id := str(actor.get("interaction_id"))
+		var supporting_speakers: Dictionary = {
+			"vargan_gate_guard":["vargan_gate_guard", "guard"],
+			"vargan_patrol":["vargan_patrol_guard", "guard"],
+			"vargan_steward":["steward_merrow", "merrow"],
+			"vargan_servant":["tired_castle_servant", "servant"],
+			"vargan_record_keeper":["record_keeper_vale", "vale"],
+			"returned_soldier":["the_returned_soldier", "len"],
+			"white_hart":["white_hart"]
+		}
+		speaking = speaker in supporting_speakers.get(actor_id, [])
 	var direction: Dictionary = entry.get("performance", {})
 	if driver != null:
 		driver.set_story_listening(true)

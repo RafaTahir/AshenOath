@@ -3,11 +3,11 @@
   "sections": [
     {
       "title": "Generated dialogue performances",
-      "body": "Revised campaign speech was generated with Piper using the en_GB-vctk-medium voice model. These are synthetic performances, not recordings by a cast. No human listening or performance review has been performed.\n\nThe model uses the VCTK corpus, distributed through the University of Edinburgh DataShare under Creative Commons Attribution 4.0 International (CC BY 4.0). The model card notes fine-tuning from the U.S. English lessac medium voice.\n\nPiper is a GPL-licensed build-time tool. The game distributes generated audio and provenance; it does not distribute the inference engine or voice model.",
+      "body": "Character speech is generated with the full-precision Kokoro-82M v1.0 model, using a consistent voice recipe for each member of the cast. These are synthetic performances, not recordings by a human cast or cloned actor voices. No human listening or performance review has been performed.\n\nKokoro model weights by hexgrad are licensed under Apache 2.0. The kokoro-onnx inference runtime by thewh1teagle is MIT licensed. Speech generation and its dependencies are build-time tools; the game distributes compressed recordings and provenance, not the model or inference runtime.\n\nEarlier Piper/VCTK attribution remains in the production documentation for historical provenance.",
       "links": [
-        {"label": "VCTK dataset and attribution", "url": "https://datashare.ed.ac.uk/handle/10283/3443"},
-        {"label": "CC BY 4.0 license", "url": "https://creativecommons.org/licenses/by/4.0/"},
-        {"label": "Piper VCTK medium model and model card", "url": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_GB/vctk/medium"}
+        {"label": "Kokoro model and attribution", "url": "https://huggingface.co/hexgrad/Kokoro-82M"},
+        {"label": "Apache 2.0 license", "url": "https://www.apache.org/licenses/LICENSE-2.0"},
+        {"label": "kokoro-onnx build-time runtime", "url": "https://github.com/thewh1teagle/kokoro-onnx"}
       ]
     },
     {

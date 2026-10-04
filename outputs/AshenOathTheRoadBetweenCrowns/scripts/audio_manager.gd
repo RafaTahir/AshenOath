@@ -34,6 +34,10 @@ var mix_levels: Dictionary = {"music": 0.8, "sfx": 1.0, "voice": 1.0}
 var ambient_player: AudioStreamPlayer
 var music_player: AudioStreamPlayer
 var voice_player: AudioStreamPlayer
+var nearby_voice_player: AudioStreamPlayer3D
+var nearby_voice_actor: WeakRef
+var nearby_voice_face: Node
+var nearby_voice_entry: Dictionary = {}
 var browser_voice_fallback_enabled := false
 var development_voice_stubs_enabled := false
 var current_ambient_zone = ""
@@ -88,7 +92,8 @@ const STORY_SCORE_PATH := "res://assets_external/audio/story_score/"
 const STORY_SCORE_STATES := ["story_road", "story_names", "story_renewal", "ending_witness", "ending_mercy", "ending_duty", "ending_ash"]
 
 func _process(delta: float) -> void:
-	var duck_target := 1.0 if dialogue_active or (voice_player != null and voice_player.playing) else 0.0
+	_update_nearby_voice()
+	var duck_target := 1.0 if dialogue_active or (voice_player != null and voice_player.playing) else (0.45 if is_instance_valid(nearby_voice_player) else 0.0)
 	var previous_duck := dialogue_duck
 	dialogue_duck = move_toward(dialogue_duck, duck_target, delta * (6.0 if duck_target > dialogue_duck else 1.8))
 	if not is_equal_approx(previous_duck, dialogue_duck):
@@ -293,10 +298,17 @@ func play_dialogue_page(page: Dictionary) -> void:
 	# left over from the previous campaign or a different speaker.
 	if str(entry.get("text", "")).strip_edges() != text or str(entry.get("speaker_id", "")).strip_edges() != speaker:
 		return
+	if _prepare_revised_voice(id):
+		_play_voice_now(id)
+
+func _prepare_revised_voice(id: String) -> bool:
+	if not revised_voice_entries.has(id) or not runtime_file_assets_available:
+		return false
+	var entry: Dictionary = revised_voice_entries[id]
 	if not voices.has(id):
 		var stream := _load_audio_stream(str(entry.get("path", entry.get("audio_path", ""))))
 		if stream == null:
-			return
+			return false
 		stream.set_meta("narrative_revision", narrative_revision)
 		stream.set_meta("production_mode", str(entry.get("production_mode", "recorded")))
 		voices[id] = stream
@@ -305,7 +317,48 @@ func play_dialogue_page(page: Dictionary) -> void:
 			var retired: String = revised_voice_cache_order.pop_front()
 			if retired != id:
 				voices.erase(retired)
-	_play_voice_now(id)
+	return _has_production_voice(id)
+
+func play_nearby_speech(speaker: String, text: String, actor: Node3D) -> float:
+	if dialogue_active or game_paused or is_instance_valid(nearby_voice_player) or (is_instance_valid(voice_player) and voice_player.playing) or not is_instance_valid(actor):
+		return 0.0
+	var id := str(dialogue_voice_keys.get((speaker + "|" + text.strip_edges()).sha256_text(), ""))
+	if not _prepare_revised_voice(id): return 0.0
+	nearby_voice_entry = revised_voice_entries[id]
+	nearby_voice_actor = weakref(actor)
+	nearby_voice_face = actor.find_child("CharacterFaceDriver", true, false)
+	nearby_voice_player = AudioStreamPlayer3D.new()
+	nearby_voice_player.bus = voice_bus_name if voice_bus_name != "" else bus_name
+	nearby_voice_player.stream = voices[id]
+	nearby_voice_player.volume_db = _volume_for("voice") - 3.0
+	nearby_voice_player.unit_size = 3.0
+	nearby_voice_player.max_distance = 11.0
+	add_child(nearby_voice_player)
+	nearby_voice_player.global_position = actor.global_position + Vector3.UP * 1.5
+	nearby_voice_player.finished.connect(_stop_nearby_voice)
+	nearby_voice_player.play()
+	return float(nearby_voice_entry.get("duration_seconds", 0.0))
+
+func _update_nearby_voice() -> void:
+	if not is_instance_valid(nearby_voice_player): return
+	var actor := nearby_voice_actor.get_ref() as Node3D if nearby_voice_actor != null else null
+	if not is_instance_valid(actor) or not actor.is_visible_in_tree() or dialogue_active:
+		_stop_nearby_voice()
+		return
+	nearby_voice_player.stream_paused = game_paused
+	nearby_voice_player.global_position = actor.global_position + Vector3.UP * 1.5
+	if is_instance_valid(nearby_voice_face):
+		nearby_voice_face.set_speech_amount(0.0 if game_paused else _speech_amplitude(nearby_voice_entry, nearby_voice_player.get_playback_position()))
+
+func _stop_nearby_voice() -> void:
+	if is_instance_valid(nearby_voice_face): nearby_voice_face.set_speech_amount(0.0)
+	nearby_voice_face = null
+	nearby_voice_actor = null
+	nearby_voice_entry = {}
+	if is_instance_valid(nearby_voice_player):
+		nearby_voice_player.stop()
+		nearby_voice_player.queue_free()
+	nearby_voice_player = null
 
 func set_narrative_revision(revision: String) -> void:
 	if narrative_revision != revision:
@@ -660,10 +713,12 @@ func _play_voice_now(voice_id: String) -> void:
 	voice_player.set_meta("voice_id", voice_id)
 	voice_player.volume_db = _volume_for("voice")
 	add_child(voice_player)
-	voice_player.finished.connect(func():
-		if voice_player != null:
-			voice_player.queue_free()
-			voice_player = null
+	var started_player := voice_player
+	started_player.finished.connect(func():
+		# A retiring recording must never free the next speaker's player.
+		if voice_player != started_player: return
+		started_player.queue_free()
+		voice_player = null
 		if not _voice_queue.is_empty():
 			_play_next_voice()
 	)
@@ -711,22 +766,32 @@ func get_dialogue_delivery() -> Dictionary:
 	if not is_instance_valid(voice_player) or not voice_player.playing:
 		return {"playing": false, "amplitude": 0.0}
 	var entry: Dictionary = revised_voice_entries.get(str(voice_player.get_meta("voice_id", "")), {})
+	return {"playing": true, "speaker_id": str(entry.get("speaker_id", "")), "amplitude": _speech_amplitude(entry, voice_player.get_playback_position())}
+
+func _speech_amplitude(entry: Dictionary, position_seconds: float) -> float:
 	var envelope: Array = entry.get("speech_envelope", [])
-	var cursor: float = voice_player.get_playback_position() * float(entry.get("speech_envelope_hz", 30.0))
+	var cursor: float = position_seconds * float(entry.get("speech_envelope_hz", 30.0))
 	var amplitude := 0.0
 	if not envelope.is_empty():
 		var index := clampi(int(cursor), 0, envelope.size() - 1)
 		amplitude = lerpf(float(envelope[index]), float(envelope[mini(index + 1, envelope.size() - 1)]), fmod(cursor, 1.0))
-	return {"playing": true, "speaker_id": str(entry.get("speaker_id", "")), "amplitude": amplitude}
+	return amplitude
 
 func stop_voice() -> void:
+	_stop_nearby_voice()
 	dialogue_review_paused = false
 	_voice_queue.clear()
 	_stop_browser_speech()
 	if voice_player != null:
-		voice_player.stop()
-		voice_player.queue_free()
+		var retiring := voice_player
 		voice_player = null
+		if retiring.playing and not retiring.stream_paused:
+			var release := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+			release.tween_property(retiring, "volume_db", -60.0, 0.035)
+			release.tween_callback(retiring.queue_free)
+		else:
+			retiring.stop()
+			retiring.queue_free()
 
 func set_music_state(state_id: String) -> void:
 	if story_music_override != "" and state_id in ["greyfen_explore", "shrine_anwen", "return_report", "castle_silence", "record_hall", "assembly", "hart_glade"]:
@@ -1191,7 +1256,7 @@ func _build_ambient_stream(zone_id: String) -> AudioStreamWAV:
 
 func _volume_for(event_name: String) -> float:
 	if event_name == "voice":
-		return -13.0
+		return -5.0
 	if event_name.begins_with("step"):
 		return -19.0
 	if event_name == "ui":

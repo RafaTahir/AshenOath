@@ -243,7 +243,12 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 			line_cooldown = 15.0
 			entry.bark_cooldown = 75.0
 			entry.greeted_on_approach = true
-			host.hud.toast("%s: %s" % [str(entry.profile.get("occupation", "Villager")).capitalize(), _line_for_actor(entry)], 5.5)
+			var remark := _line_for_actor(entry)
+			var speech_duration := 0.0
+			if host.audio != null:
+				speech_duration = float(host.audio.play_nearby_speech(str(entry.id), remark, node))
+			line_cooldown = maxf(line_cooldown, speech_duration + 4.0)
+			host.hud.toast("%s: %s" % [str(entry.profile.get("occupation", "Villager")).capitalize(), remark], maxf(5.5, speech_duration + 0.3))
 		return
 	if bool(entry.get("activity_active", false)):
 		_update_activity(entry, delta)

@@ -225,6 +225,9 @@ if ($Publish) {
             "outputs/AshenOathTheRoadBetweenCrowns/voice_production_manifest.json",
             "outputs/AshenOathTheRoadBetweenCrowns/assets_external/audio/voices/story",
             "outputs/AshenOathTheRoadBetweenCrowns/docs/audio/VOICE_PRODUCTION.md",
+            "outputs/AshenOathTheRoadBetweenCrowns/docs/audio/KOKORO_MODEL_CARD.md",
+            "outputs/AshenOathTheRoadBetweenCrowns/docs/audio/KOKORO_VOICES.md",
+            "outputs/AshenOathTheRoadBetweenCrowns/docs/audio/KOKORO_LICENSE.txt",
             "outputs/AshenOathTheRoadBetweenCrowns/docs/audio/VCTK_MODEL_CARD.txt"
         )
     }
