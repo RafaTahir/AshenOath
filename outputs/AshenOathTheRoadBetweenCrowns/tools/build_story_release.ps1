@@ -5,6 +5,7 @@ param(
     [string]$PythonPath = "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe",
     [switch]$SkipWebCopy,
     [switch]$BuildVoices,
+    [switch]$FinalizeExistingVoices,
     [switch]$Publish,
     [string]$PublishMessage = ""
 )
@@ -102,7 +103,9 @@ try {
 Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "build_source_catalog.py")) "source-catalog"
 Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "build_story_score.py")) "story-score"
 if ($BuildVoices) {
-    Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "build_story_voices.py"), "--all-scenes") "story-voices"
+    $VoiceArguments = @((Join-Path $PSScriptRoot "build_story_voices.py"), "--all-scenes")
+    if ($FinalizeExistingVoices) { $VoiceArguments += "--finalize-existing" }
+    Invoke-BuildProcess $PythonPath $VoiceArguments "story-voices"
 }
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--editor", "--import") "import"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_directional_gaits.gd")) "directional-gaits"

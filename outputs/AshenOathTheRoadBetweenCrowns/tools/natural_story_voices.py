@@ -150,6 +150,7 @@ def main():
     parser.add_argument("--runtime", type=Path, default=REPO / "work/natural-voice-runtime")
     parser.add_argument("--models", type=Path, default=REPO / "work/natural-voice-models")
     parser.add_argument("--all-scenes", action="store_true", help="Compatibility flag; full cast is always produced")
+    parser.add_argument("--finalize-existing", action="store_true", help="Publish completed upgrades and retain earlier recordings without further synthesis")
     args = parser.parse_args()
     sys.path.insert(0, str(args.runtime))
     import numpy as np
@@ -169,14 +170,21 @@ def main():
     options = ort.SessionOptions()
     options.intra_op_num_threads = min(6, max(1, (os.cpu_count() or 4) // 2))
     options.inter_op_num_threads = 1
-    session = ort.InferenceSession(str(args.models / MODEL), sess_options=options, providers=["CPUExecutionProvider"])
-    engine = Kokoro.from_session(session, str(args.models / VOICES))
-    styles = {role: sum(engine.get_voice_style(name) * weight for name, weight in profile["voices"].items()) / sum(profile["voices"].values()) for role, profile in cast.items()}
+    engine = None
+    styles = {}
+    if not args.finalize_existing:
+        session = ort.InferenceSession(str(args.models / MODEL), sess_options=options, providers=["CPUExecutionProvider"])
+        engine = Kokoro.from_session(session, str(args.models / VOICES))
+        styles = {role: sum(engine.get_voice_style(name) * weight for name, weight in profile["voices"].items()) / sum(profile["voices"].values()) for role, profile in cast.items()}
     output = GAME / "assets_external/audio/voices/story"
     output.mkdir(parents=True, exist_ok=True)
     recipe_cache = args.models / "render-recipes"
     recipe_cache.mkdir(parents=True, exist_ok=True)
     lines, seen = [], set()
+    prior_path = GAME / "voice_production_manifest.json"
+    prior = json.loads(prior_path.read_text(encoding="utf-8-sig")) if prior_path.exists() else {}
+    previous_lines = {line["page_key"]:line for line in prior.get("lines", [])}
+    retained, pending = 0, []
     scheduled = list(utterances(cast))
     print(f"Producing full cast: {len({(who, text) for _, who, text, _, _ in scheduled})} exact-text recordings", flush=True)
     for scene, who, text, role, direction in scheduled:
@@ -193,6 +201,16 @@ def main():
         stamp = recipe_cache / (key + ".txt")
         clip = output / (key + ".ogg")
         if not clip.exists() or not stamp.exists() or stamp.read_text(encoding="utf-8") != recipe_hash:
+            if args.finalize_existing:
+                if key in previous_lines and clip.exists() and not stamp.exists():
+                    existing = dict(previous_lines[key])
+                    existing["cast_role"] = role
+                    existing["retained_previous_performance"] = True
+                    lines.append(existing)
+                    retained += 1
+                else:
+                    pending.append({"scene":scene, "speaker_id":who, "page_key":key})
+                continue
             samples, rate = engine.create(spoken, voice=styles[role], speed=speed, lang=profile["lang"])
             samples = master(samples, rate, np)
             partial = clip.with_suffix(".ogg.partial")
@@ -219,6 +237,12 @@ def main():
         "source":"Kokoro-82M v1.0 full precision; kokoro-onnx 0.6.1", "source_url":"https://huggingface.co/hexgrad/Kokoro-82M",
         "attribution":"Kokoro by hexgrad, Apache-2.0 model weights. kokoro-onnx by thewh1teagle, MIT build-time runtime.",
         "pronunciation":PRONUNCIATION, "roles":cast, "lines":lines}
+    manifest["retained_previous_recordings"] = retained
+    manifest["pending_recordings"] = pending
+    manifest["publication_mode"] = "completed_upgrades_with_existing_fallbacks" if args.finalize_existing else "full_cast"
+    if retained:
+        manifest["source"] += "; retained Piper VCTK recordings for unfinished replacements"
+        manifest["attribution"] += " Retained Piper/VCTK performances retain their original provenance and VCTK attribution."
     manifest_path = GAME / "voice_production_manifest.json"
     temporary = manifest_path.with_suffix(".json.partial")
     temporary.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
@@ -235,8 +259,10 @@ def main():
         "No pitch-shifting or artificial ghost effects are used. The speech envelopes are baked from each final Ogg file.\n\n"
         "The model and inference dependencies stay under ignored work directories. Only compressed audio, recipes and provenance ship. "
         "Kokoro's Apache-2.0 model card, license and voice table are retained here. The old VCTK attribution remains for historical provenance.\n\n"
-        f"Produced {len(lines)} exact-text performances.\n\n| Cast role | Clips |\n|---|---:|\n{summary}\n", encoding="utf-8")
-    print(f"Produced complete voice manifest: {len(lines)} performances across {sum(count > 0 for count in counts.values())} cast roles", flush=True)
+        f"Published {len(lines)} exact-text performances: {len(lines) - retained} Kokoro upgrades and {retained} retained earlier recordings. "
+        f"{len(pending)} additional recordings remain unproduced. The user requested immediate completion before full-cast rendering finished.\n\n"
+        f"| Cast role | Clips |\n|---|---:|\n{summary}\n", encoding="utf-8")
+    print(f"Voice publication: {len(lines) - retained} Kokoro upgrades, {retained} retained recordings, {len(pending)} pending; {sum(count > 0 for count in counts.values())} voiced cast roles", flush=True)
 
 if __name__ == "__main__":
     main()
