@@ -1,5 +1,7 @@
 # Ashen Oath — final delivery changelog
 
+Subsequent release: the user later requested a Witcher-inspired HUD redesign. That additional work is now pushed and deployed; its complete changes and release identity are recorded in [Witcher-inspired HUD release](WITCHER_INSPIRED_HUD.md). The story-overhaul delivery recorded below remains its original historical release.
+
 Date: 4 October 2026  
 Game: **Ashen Oath: The Road Between Crowns**  
 Repository: [RafaTahir/AshenOath](https://github.com/RafaTahir/AshenOath)  
