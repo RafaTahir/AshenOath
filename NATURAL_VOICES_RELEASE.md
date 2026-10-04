@@ -18,6 +18,7 @@ Each recording is mastered with bounded gain and short edge ramps, retaining int
 - Dialogue interrupts nearby chatter. World pauses suspend it; hidden or removed speakers release it.
 - Nearby captions remain visible for the recording's duration. Music ducks gently beneath chatter and more strongly during conversation.
 - Supporting characters participate in the same voice-timed speaking/listening system as the principal cast.
+- Ten stage directions in work and aftermath conversations are explicitly assigned to narration, so characters do not read descriptions of their own actions aloud.
 - Updated in-game credits and retained model provenance identify the generated performances honestly.
 
 ## Limits
