@@ -10,3 +10,10 @@ Implemented for the NPC improvement request, retaining the user's instruction to
 - Deferred character presentation is picked up by ambient controllers. Nearby actors retain animation farther from the player, and distant village bodies remain visible when their animation is suspended. Inactive cached villages do not continue their life simulation.
 
 Existing synthetic voice recordings remain synthetic and have not received a listening review. No gameplay testing, visual verification, or post-deployment probing was performed. The production pipeline compiles and packages the application for deployment.
+
+## Publication
+
+- Source: `7e1dab3298e287e18da626a2a96749064a9fa4c1`.
+- Packaged release: `7a0f184`, build `story-20261004T143037Z-7e1dab3298e2`.
+- Pushed to `main` and `codex/story-centered-overhaul`.
+- Vercel returned `READY` for deployment `dpl_Batr69qfReXbz2UTD55VXajYH6jE` and aliased it to https://ashenoath.vercel.app.
