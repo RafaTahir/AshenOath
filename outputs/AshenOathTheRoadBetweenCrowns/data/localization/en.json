@@ -5093,122 +5093,68 @@
       "context": "dialogue.sister_anwen"
     },
     "dialogue.sister_anwen.variants.0.greeting": {
-      "source": "I have put the grain list beside the burial book. No one has to sign one to receive the other.",
-      "text": "I have put the grain list beside the burial book. No one has to sign one to receive the other.",
+      "source": "Thank you for the water. Now, the three who have not come home.",
+      "text": "Thank you for the water. Now, the three who have not come home.",
       "speaker": "",
       "context": "dialogue.sister_anwen.variants.0"
     },
-    "dialogue.sister_anwen.variants.0.lines.0": {
-      "source": "Anwen: I could call that a beginning. It is mostly a table and two people willing to sit at it.",
-      "text": "Anwen: I could call that a beginning. It is mostly a table and two people willing to sit at it.",
-      "speaker": "",
-      "context": "dialogue.sister_anwen.variants.0.lines"
-    },
-    "dialogue.sister_anwen.variants.0.lines.1": {
-      "source": "Kael: Beginnings usually look smaller when somebody is doing the work.",
-      "text": "Kael: Beginnings usually look smaller when somebody is doing the work.",
-      "speaker": "",
-      "context": "dialogue.sister_anwen.variants.0.lines"
-    },
     "dialogue.sister_anwen.variants.1.greeting": {
-      "source": "I will give you the register. I am not agreeing to stand in a rite you threatened me into.",
-      "text": "I will give you the register. I am not agreeing to stand in a rite you threatened me into.",
+      "source": "I have put the grain list beside the burial book. No one has to sign one to receive the other.",
+      "text": "I have put the grain list beside the burial book. No one has to sign one to receive the other.",
       "speaker": "",
       "context": "dialogue.sister_anwen.variants.1"
     },
     "dialogue.sister_anwen.variants.1.lines.0": {
-      "source": "Kael: The record can speak to facts. It cannot make your promise for you.",
-      "text": "Kael: The record can speak to facts. It cannot make your promise for you.",
+      "source": "Anwen: I could call that a beginning. It is mostly a table and two people willing to sit at it.",
+      "text": "Anwen: I could call that a beginning. It is mostly a table and two people willing to sit at it.",
       "speaker": "",
       "context": "dialogue.sister_anwen.variants.1.lines"
     },
     "dialogue.sister_anwen.variants.1.lines.1": {
-      "source": "Anwen: Then you do understand the difference.",
-      "text": "Anwen: Then you do understand the difference.",
+      "source": "Kael: Beginnings usually look smaller when somebody is doing the work.",
+      "text": "Kael: Beginnings usually look smaller when somebody is doing the work.",
       "speaker": "",
       "context": "dialogue.sister_anwen.variants.1.lines"
     },
     "dialogue.sister_anwen.variants.2.greeting": {
-      "source": "Edric wants my hand on the new seal. He has already counted the households that cannot afford to refuse.",
-      "text": "Edric wants my hand on the new seal. He has already counted the households that cannot afford to refuse.",
+      "source": "I will give you the register. I am not agreeing to stand in a rite you threatened me into.",
+      "text": "I will give you the register. I am not agreeing to stand in a rite you threatened me into.",
       "speaker": "",
       "context": "dialogue.sister_anwen.variants.2"
     },
     "dialogue.sister_anwen.variants.2.lines.0": {
-      "source": "Anwen: The old rite borrowed consent from frightened people. That is why it keeps breaking.",
-      "text": "Anwen: The old rite borrowed consent from frightened people. That is why it keeps breaking.",
+      "source": "Kael: The record can speak to facts. It cannot make your promise for you.",
+      "text": "Kael: The record can speak to facts. It cannot make your promise for you.",
       "speaker": "",
       "context": "dialogue.sister_anwen.variants.2.lines"
     },
     "dialogue.sister_anwen.variants.2.lines.1": {
-      "source": "Kael: Can the Hart be released without making everyone here swear?",
-      "text": "Kael: Can the Hart be released without making everyone here swear?",
+      "source": "Anwen: Then you do understand the difference.",
+      "text": "Anwen: Then you do understand the difference.",
       "speaker": "",
       "context": "dialogue.sister_anwen.variants.2.lines"
-    },
-    "dialogue.sister_anwen.variants.2.lines.2": {
-      "source": "Anwen: Yes. Someone must freely keep the recovered account. One person can begin. More people can share the work.",
-      "text": "Anwen: Yes. Someone must freely keep the recovered account. One person can begin. More people can share the work.",
-      "speaker": "",
-      "context": "dialogue.sister_anwen.variants.2.lines"
-    },
-    "dialogue.sister_anwen.variants.3.actions.0.label": {
-      "source": "I'll stay until the people carrying this can speak safely.",
-      "text": "I'll stay until the people carrying this can speak safely.",
-      "speaker": "",
-      "context": "dialogue.sister_anwen.variants.3.actions.0"
-    },
-    "dialogue.sister_anwen.variants.3.actions.0.result": {
-      "source": "Kael: I cannot promise nobody gets hurt. I can promise I will not take the coin and leave you to it.",
-      "text": "Kael: I cannot promise nobody gets hurt. I can promise I will not take the coin and leave you to it.",
-      "speaker": "",
-      "context": "dialogue.sister_anwen.variants.3.actions.0"
-    },
-    "dialogue.sister_anwen.variants.3.actions.1.label": {
-      "source": "I'll stay. We keep a record nobody can close again.",
-      "text": "I'll stay. We keep a record nobody can close again.",
-      "speaker": "",
-      "context": "dialogue.sister_anwen.variants.3.actions.1"
-    },
-    "dialogue.sister_anwen.variants.3.actions.1.result": {
-      "source": "Kael: Copies, names, living witnesses. Not another secret that depends on one person.",
-      "text": "Kael: Copies, names, living witnesses. Not another secret that depends on one person.",
-      "speaker": "",
-      "context": "dialogue.sister_anwen.variants.3.actions.1"
-    },
-    "dialogue.sister_anwen.variants.3.actions.2.label": {
-      "source": "I'll stay, but you tell me what you are asking me to carry.",
-      "text": "I'll stay, but you tell me what you are asking me to carry.",
-      "speaker": "",
-      "context": "dialogue.sister_anwen.variants.3.actions.2"
-    },
-    "dialogue.sister_anwen.variants.3.actions.2.result": {
-      "source": "Anwen: That is fair. I should have asked before I put the token in your hand.",
-      "text": "Anwen: That is fair. I should have asked before I put the token in your hand.",
-      "speaker": "",
-      "context": "dialogue.sister_anwen.variants.3.actions.2"
     },
     "dialogue.sister_anwen.variants.3.greeting": {
-      "source": "Three strokes. A burial, a restored name, and a promise that has stopped holding.",
-      "text": "Three strokes. A burial, a restored name, and a promise that has stopped holding.",
+      "source": "Edric wants my hand on the new seal. He has already counted the households that cannot afford to refuse.",
+      "text": "Edric wants my hand on the new seal. He has already counted the households that cannot afford to refuse.",
       "speaker": "",
       "context": "dialogue.sister_anwen.variants.3"
     },
     "dialogue.sister_anwen.variants.3.lines.0": {
-      "source": "Anwen: I cut the rope last winter. A novice heard an erased name and walked into the sealed chapel. I found him too late.",
-      "text": "Anwen: I cut the rope last winter. A novice heard an erased name and walked into the sealed chapel. I found him too late.",
+      "source": "Anwen: The old rite borrowed consent from frightened people. That is why it keeps breaking.",
+      "text": "Anwen: The old rite borrowed consent from frightened people. That is why it keeps breaking.",
       "speaker": "",
       "context": "dialogue.sister_anwen.variants.3.lines"
     },
     "dialogue.sister_anwen.variants.3.lines.1": {
-      "source": "Kael: You closed it again.",
-      "text": "Kael: You closed it again.",
+      "source": "Kael: Can the Hart be released without making everyone here swear?",
+      "text": "Kael: Can the Hart be released without making everyone here swear?",
       "speaker": "",
       "context": "dialogue.sister_anwen.variants.3.lines"
     },
     "dialogue.sister_anwen.variants.3.lines.2": {
-      "source": "Anwen: Yes. I told myself I was buying time. The graves will show what that time cost.",
-      "text": "Anwen: Yes. I told myself I was buying time. The graves will show what that time cost.",
+      "source": "Anwen: Yes. Someone must freely keep the recovered account. One person can begin. More people can share the work.",
+      "text": "Anwen: Yes. Someone must freely keep the recovered account. One person can begin. More people can share the work.",
       "speaker": "",
       "context": "dialogue.sister_anwen.variants.3.lines"
     },
@@ -5249,32 +5195,26 @@
       "context": "dialogue.sister_anwen.variants.4.actions.2"
     },
     "dialogue.sister_anwen.variants.4.greeting": {
-      "source": "That is Oren's carving. Turn it over. The older name is beneath his paint.",
-      "text": "That is Oren's carving. Turn it over. The older name is beneath his paint.",
+      "source": "Three strokes. A burial, a restored name, and a promise that has stopped holding.",
+      "text": "Three strokes. A burial, a restored name, and a promise that has stopped holding.",
       "speaker": "",
       "context": "dialogue.sister_anwen.variants.4"
     },
     "dialogue.sister_anwen.variants.4.lines.0": {
-      "source": "Kael: You sent them out carrying something the shrine had erased.",
-      "text": "Kael: You sent them out carrying something the shrine had erased.",
+      "source": "Anwen: I cut the rope last winter. A novice heard an erased name and walked into the sealed chapel. I found him too late.",
+      "text": "Anwen: I cut the rope last winter. A novice heard an erased name and walked into the sealed chapel. I found him too late.",
       "speaker": "",
       "context": "dialogue.sister_anwen.variants.4.lines"
     },
     "dialogue.sister_anwen.variants.4.lines.1": {
-      "source": "Anwen: I thought new burial thread would quiet it. Someone bound it again with Vargan wire.",
-      "text": "Anwen: I thought new burial thread would quiet it. Someone bound it again with Vargan wire.",
+      "source": "Kael: You closed it again.",
+      "text": "Kael: You closed it again.",
       "speaker": "",
       "context": "dialogue.sister_anwen.variants.4.lines"
     },
     "dialogue.sister_anwen.variants.4.lines.2": {
-      "source": "Kael: The pack is dead. The people hiding this are alive.",
-      "text": "Kael: The pack is dead. The people hiding this are alive.",
-      "speaker": "",
-      "context": "dialogue.sister_anwen.variants.4.lines"
-    },
-    "dialogue.sister_anwen.variants.4.lines.3": {
-      "source": "Anwen: Take your payment if you must. I need help I have no right to order.",
-      "text": "Anwen: Take your payment if you must. I need help I have no right to order.",
+      "source": "Anwen: Yes. I told myself I was buying time. The graves will show what that time cost.",
+      "text": "Anwen: Yes. I told myself I was buying time. The graves will show what that time cost.",
       "speaker": "",
       "context": "dialogue.sister_anwen.variants.4.lines"
     },
@@ -5315,26 +5255,32 @@
       "context": "dialogue.sister_anwen.variants.5.actions.2"
     },
     "dialogue.sister_anwen.variants.5.greeting": {
-      "source": "I saw the token on the board. Rook has moved his bedding from the window.",
-      "text": "I saw the token on the board. Rook has moved his bedding from the window.",
+      "source": "That is Oren's carving. Turn it over. The older name is beneath his paint.",
+      "text": "That is Oren's carving. Turn it over. The older name is beneath his paint.",
       "speaker": "",
       "context": "dialogue.sister_anwen.variants.5"
     },
     "dialogue.sister_anwen.variants.5.lines.0": {
-      "source": "Kael: People needed to know what was on their road.",
-      "text": "Kael: People needed to know what was on their road.",
+      "source": "Kael: You sent them out carrying something the shrine had erased.",
+      "text": "Kael: You sent them out carrying something the shrine had erased.",
       "speaker": "",
       "context": "dialogue.sister_anwen.variants.5.lines"
     },
     "dialogue.sister_anwen.variants.5.lines.1": {
-      "source": "Anwen: Yes. And the people who can explain it need a way to survive being known.",
-      "text": "Anwen: Yes. And the people who can explain it need a way to survive being known.",
+      "source": "Anwen: I thought new burial thread would quiet it. Someone bound it again with Vargan wire.",
+      "text": "Anwen: I thought new burial thread would quiet it. Someone bound it again with Vargan wire.",
       "speaker": "",
       "context": "dialogue.sister_anwen.variants.5.lines"
     },
     "dialogue.sister_anwen.variants.5.lines.2": {
-      "source": "Kael: Then we do both. I will not leave the second part to a notice.",
-      "text": "Kael: Then we do both. I will not leave the second part to a notice.",
+      "source": "Kael: The pack is dead. The people hiding this are alive.",
+      "text": "Kael: The pack is dead. The people hiding this are alive.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.5.lines"
+    },
+    "dialogue.sister_anwen.variants.5.lines.3": {
+      "source": "Anwen: Take your payment if you must. I need help I have no right to order.",
+      "text": "Anwen: Take your payment if you must. I need help I have no right to order.",
       "speaker": "",
       "context": "dialogue.sister_anwen.variants.5.lines"
     },
@@ -5375,28 +5321,88 @@
       "context": "dialogue.sister_anwen.variants.6.actions.2"
     },
     "dialogue.sister_anwen.variants.6.greeting": {
-      "source": "Keep your hand closed if you need to. I recognize the shape through your glove.",
-      "text": "Keep your hand closed if you need to. I recognize the shape through your glove.",
+      "source": "I saw the token on the board. Rook has moved his bedding from the window.",
+      "text": "I saw the token on the board. Rook has moved his bedding from the window.",
       "speaker": "",
       "context": "dialogue.sister_anwen.variants.6"
     },
     "dialogue.sister_anwen.variants.6.lines.0": {
-      "source": "Anwen: Oren painted over a refugee's token. Sella wanted the first name restored.",
-      "text": "Anwen: Oren painted over a refugee's token. Sella wanted the first name restored.",
+      "source": "Kael: People needed to know what was on their road.",
+      "text": "Kael: People needed to know what was on their road.",
       "speaker": "",
       "context": "dialogue.sister_anwen.variants.6.lines"
     },
     "dialogue.sister_anwen.variants.6.lines.1": {
-      "source": "Kael: Someone alive tried to take it from the pack.",
-      "text": "Kael: Someone alive tried to take it from the pack.",
+      "source": "Anwen: Yes. And the people who can explain it need a way to survive being known.",
+      "text": "Anwen: Yes. And the people who can explain it need a way to survive being known.",
       "speaker": "",
       "context": "dialogue.sister_anwen.variants.6.lines"
     },
     "dialogue.sister_anwen.variants.6.lines.2": {
+      "source": "Kael: Then we do both. I will not leave the second part to a notice.",
+      "text": "Kael: Then we do both. I will not leave the second part to a notice.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.6.lines"
+    },
+    "dialogue.sister_anwen.variants.7.actions.0.label": {
+      "source": "I'll stay until the people carrying this can speak safely.",
+      "text": "I'll stay until the people carrying this can speak safely.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.7.actions.0"
+    },
+    "dialogue.sister_anwen.variants.7.actions.0.result": {
+      "source": "Kael: I cannot promise nobody gets hurt. I can promise I will not take the coin and leave you to it.",
+      "text": "Kael: I cannot promise nobody gets hurt. I can promise I will not take the coin and leave you to it.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.7.actions.0"
+    },
+    "dialogue.sister_anwen.variants.7.actions.1.label": {
+      "source": "I'll stay. We keep a record nobody can close again.",
+      "text": "I'll stay. We keep a record nobody can close again.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.7.actions.1"
+    },
+    "dialogue.sister_anwen.variants.7.actions.1.result": {
+      "source": "Kael: Copies, names, living witnesses. Not another secret that depends on one person.",
+      "text": "Kael: Copies, names, living witnesses. Not another secret that depends on one person.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.7.actions.1"
+    },
+    "dialogue.sister_anwen.variants.7.actions.2.label": {
+      "source": "I'll stay, but you tell me what you are asking me to carry.",
+      "text": "I'll stay, but you tell me what you are asking me to carry.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.7.actions.2"
+    },
+    "dialogue.sister_anwen.variants.7.actions.2.result": {
+      "source": "Anwen: That is fair. I should have asked before I put the token in your hand.",
+      "text": "Anwen: That is fair. I should have asked before I put the token in your hand.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.7.actions.2"
+    },
+    "dialogue.sister_anwen.variants.7.greeting": {
+      "source": "Keep your hand closed if you need to. I recognize the shape through your glove.",
+      "text": "Keep your hand closed if you need to. I recognize the shape through your glove.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.7"
+    },
+    "dialogue.sister_anwen.variants.7.lines.0": {
+      "source": "Anwen: Oren painted over a refugee's token. Sella wanted the first name restored.",
+      "text": "Anwen: Oren painted over a refugee's token. Sella wanted the first name restored.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.7.lines"
+    },
+    "dialogue.sister_anwen.variants.7.lines.1": {
+      "source": "Kael: Someone alive tried to take it from the pack.",
+      "text": "Kael: Someone alive tried to take it from the pack.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.7.lines"
+    },
+    "dialogue.sister_anwen.variants.7.lines.2": {
       "source": "Anwen: Then leaving now would leave a witness carrying something dangerous. I am asking you to stay.",
       "text": "Anwen: Then leaving now would leave a witness carrying something dangerous. I am asking you to stay.",
       "speaker": "",
-      "context": "dialogue.sister_anwen.variants.6.lines"
+      "context": "dialogue.sister_anwen.variants.7.lines"
     },
     "dialogue.white_hart.actions.0.cost": {
       "source": "Lost privilege, trade pressure, and the ongoing labor of restitution. Fewer allies mean more work for Kael.",
@@ -6339,6 +6345,144 @@
       "text": "Tor and Rook",
       "speaker": "",
       "context": "interaction_scenes.aftermath_work_witness"
+    },
+    "interaction_scenes.opening_care_coat.greeting": {
+      "source": "That is Oren's. Leave the pockets turned in; he keeps things in them.",
+      "text": "That is Oren's. Leave the pockets turned in; he keeps things in them.",
+      "speaker": "",
+      "context": "interaction_scenes.opening_care_coat"
+    },
+    "interaction_scenes.opening_care_coat.lines.0.text": {
+      "source": "The small coat is heavier at one cuff. Three crooked red stitches hold a tear shut. Kael folds the sleeve beneath it, clear of the wet edge.",
+      "text": "The small coat is heavier at one cuff. Three crooked red stitches hold a tear shut. Kael folds the sleeve beneath it, clear of the wet edge.",
+      "speaker": "Narrator",
+      "context": "interaction_scenes.opening_care_coat.lines.0"
+    },
+    "interaction_scenes.opening_care_coat.lines.1": {
+      "source": "Kael: Did you mend this?",
+      "text": "Kael: Did you mend this?",
+      "speaker": "",
+      "context": "interaction_scenes.opening_care_coat.lines"
+    },
+    "interaction_scenes.opening_care_coat.lines.2": {
+      "source": "Anwen: He did. I threaded the needle. He would not let me do the rest.",
+      "text": "Anwen: He did. I threaded the needle. He would not let me do the rest.",
+      "speaker": "",
+      "context": "interaction_scenes.opening_care_coat.lines"
+    },
+    "interaction_scenes.opening_care_coat.lines.3": {
+      "source": "Anwen: Bram drove the cart. Sella took Oren beside her. He left this because the sun was out.",
+      "text": "Anwen: Bram drove the cart. Sella took Oren beside her. He left this because the sun was out.",
+      "speaker": "",
+      "context": "interaction_scenes.opening_care_coat.lines"
+    },
+    "interaction_scenes.opening_care_coat.lines.4.text": {
+      "source": "Anwen leaves room on the bench beside the coat. She has not put it away.",
+      "text": "Anwen leaves room on the bench beside the coat. She has not put it away.",
+      "speaker": "Narrator",
+      "context": "interaction_scenes.opening_care_coat.lines.4"
+    },
+    "interaction_scenes.opening_care_coat.name": {
+      "source": "Anwen",
+      "text": "Anwen",
+      "speaker": "",
+      "context": "interaction_scenes.opening_care_coat"
+    },
+    "interaction_scenes.opening_care_invitation.actions.0.label": {
+      "source": "I'll help here for a moment.",
+      "text": "I'll help here for a moment.",
+      "speaker": "",
+      "context": "interaction_scenes.opening_care_invitation.actions.0"
+    },
+    "interaction_scenes.opening_care_invitation.actions.1.label": {
+      "source": "Tell me about the missing travelers.",
+      "text": "Tell me about the missing travelers.",
+      "speaker": "",
+      "context": "interaction_scenes.opening_care_invitation.actions.1"
+    },
+    "interaction_scenes.opening_care_invitation.greeting": {
+      "source": "A moment, hunter. The man behind that screen cannot reach his water.",
+      "text": "A moment, hunter. The man behind that screen cannot reach his water.",
+      "speaker": "",
+      "context": "interaction_scenes.opening_care_invitation"
+    },
+    "interaction_scenes.opening_care_invitation.lines.0": {
+      "source": "Anwen: The cup is on the step. Leave it on the linen by his hand, if you would.",
+      "text": "Anwen: The cup is on the step. Leave it on the linen by his hand, if you would.",
+      "speaker": "",
+      "context": "interaction_scenes.opening_care_invitation.lines"
+    },
+    "interaction_scenes.opening_care_invitation.lines.1": {
+      "source": "Anwen: And that little coat on the bench belongs under the shelf. Oren will complain if I let the rain into his pockets.",
+      "text": "Anwen: And that little coat on the bench belongs under the shelf. Oren will complain if I let the rain into his pockets.",
+      "speaker": "",
+      "context": "interaction_scenes.opening_care_invitation.lines"
+    },
+    "interaction_scenes.opening_care_invitation.name": {
+      "source": "Anwen",
+      "text": "Anwen",
+      "speaker": "",
+      "context": "interaction_scenes.opening_care_invitation"
+    },
+    "interaction_scenes.opening_care_invitation.variants.0.greeting": {
+      "source": "Thank you for the water. He has stopped trying to stand.",
+      "text": "Thank you for the water. He has stopped trying to stand.",
+      "speaker": "",
+      "context": "interaction_scenes.opening_care_invitation.variants.0"
+    },
+    "interaction_scenes.opening_care_invitation.variants.0.lines.0": {
+      "source": "Anwen: Would you move that little coat under the shelf? Oren left it here this morning. He said he would be too hot.",
+      "text": "Anwen: Would you move that little coat under the shelf? Oren left it here this morning. He said he would be too hot.",
+      "speaker": "",
+      "context": "interaction_scenes.opening_care_invitation.variants.0.lines"
+    },
+    "interaction_scenes.opening_care_invitation.variants.1.greeting": {
+      "source": "You found a dry place for his coat. Thank you.",
+      "text": "You found a dry place for his coat. Thank you.",
+      "speaker": "",
+      "context": "interaction_scenes.opening_care_invitation.variants.1"
+    },
+    "interaction_scenes.opening_care_invitation.variants.1.lines.0": {
+      "source": "Anwen: The man behind the screen needs the cup on the step. Leave it on the linen by his hand, if you would.",
+      "text": "Anwen: The man behind the screen needs the cup on the step. Leave it on the linen by his hand, if you would.",
+      "speaker": "",
+      "context": "interaction_scenes.opening_care_invitation.variants.1.lines"
+    },
+    "interaction_scenes.opening_care_water.greeting": {
+      "source": "There. Close enough that he need not ask again.",
+      "text": "There. Close enough that he need not ask again.",
+      "speaker": "",
+      "context": "interaction_scenes.opening_care_water"
+    },
+    "interaction_scenes.opening_care_water.lines.0.text": {
+      "source": "A hand comes beneath the screen. It steadies the cup against the wood before lifting it.",
+      "text": "A hand comes beneath the screen. It steadies the cup against the wood before lifting it.",
+      "speaker": "Narrator",
+      "context": "interaction_scenes.opening_care_water.lines.0"
+    },
+    "interaction_scenes.opening_care_water.lines.1": {
+      "source": "Kael: Was he with the missing cart?",
+      "text": "Kael: Was he with the missing cart?",
+      "speaker": "",
+      "context": "interaction_scenes.opening_care_water.lines"
+    },
+    "interaction_scenes.opening_care_water.lines.2": {
+      "source": "Anwen: No. A fall on the south road. Not every hurt here is a sign, Kael. Some people only need water.",
+      "text": "Anwen: No. A fall on the south road. Not every hurt here is a sign, Kael. Some people only need water.",
+      "speaker": "",
+      "context": "interaction_scenes.opening_care_water.lines"
+    },
+    "interaction_scenes.opening_care_water.lines.3.text": {
+      "source": "The cup comes back to the linen. For a moment, the breathing behind the screen is easier.",
+      "text": "The cup comes back to the linen. For a moment, the breathing behind the screen is easier.",
+      "speaker": "Narrator",
+      "context": "interaction_scenes.opening_care_water.lines.3"
+    },
+    "interaction_scenes.opening_care_water.name": {
+      "source": "Anwen",
+      "text": "Anwen",
+      "speaker": "",
+      "context": "interaction_scenes.opening_care_water"
     },
     "interaction_scenes.soldiers_stand_down.greeting": {
       "source": "The nearest soldier lets his sword point fall into the mud. The other watches Senn before doing the same.",
@@ -7707,6 +7851,48 @@
       "text": "The mill workers' way out",
       "speaker": "",
       "context": "journal_work.work.mill_workers"
+    },
+    "journal_work.work.opening_coat.body": {
+      "source": "Oren left his coat with Anwen because the sun was out.",
+      "text": "Oren left his coat with Anwen because the sun was out.",
+      "speaker": "",
+      "context": "journal_work.work.opening_coat"
+    },
+    "journal_work.work.opening_coat.stages.0.body": {
+      "source": "Kael folded Oren's coat beneath the shelf. The child mended its torn cuff himself after Anwen threaded the needle. The coat remains on her bench, waiting for him.",
+      "text": "Kael folded Oren's coat beneath the shelf. The child mended its torn cuff himself after Anwen threaded the needle. The coat remains on her bench, waiting for him.",
+      "speaker": "",
+      "context": "journal_work.work.opening_coat.stages.0"
+    },
+    "journal_work.work.opening_coat.title": {
+      "source": "Oren's mended sleeve",
+      "text": "Oren's mended sleeve",
+      "speaker": "",
+      "context": "journal_work.work.opening_coat"
+    },
+    "journal_work.work.opening_water.body": {
+      "source": "Anwen keeps water for an injured traveler behind the screen beside her.",
+      "text": "Anwen keeps water for an injured traveler behind the screen beside her.",
+      "speaker": "",
+      "context": "journal_work.work.opening_water"
+    },
+    "journal_work.work.opening_water.stages.0.body": {
+      "source": "Kael left the water within reach. The traveler was hurt in a fall on the south road; this was a small act of care, not evidence about the missing cart.",
+      "text": "Kael left the water within reach. The traveler was hurt in a fall on the south road; this was a small act of care, not evidence about the missing cart.",
+      "speaker": "",
+      "context": "journal_work.work.opening_water.stages.0"
+    },
+    "journal_work.work.opening_water.stages.1.body": {
+      "source": "Leave the cup on the linen-covered tray beside Anwen's privacy screen in Greyfen.",
+      "text": "Leave the cup on the linen-covered tray beside Anwen's privacy screen in Greyfen.",
+      "speaker": "",
+      "context": "journal_work.work.opening_water.stages.1"
+    },
+    "journal_work.work.opening_water.title": {
+      "source": "A cup within reach",
+      "text": "A cup within reach",
+      "speaker": "",
+      "context": "journal_work.work.opening_water"
     },
     "journal_work.work.road_drain.body": {
       "source": "The drain and boards need attention. Their repair has not been recorded.",
