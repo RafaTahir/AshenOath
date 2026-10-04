@@ -1,24 +1,24 @@
 {
   "schema_version": 2,
   "project": "Ashen Oath",
-  "build_id": "story-20261004T074623Z-b03fe2da5f95",
+  "build_id": "story-20261004T134714Z-d6a44938d3a0",
   "source": {
-    "git_commit": "b03fe2da5f95feac8f6c757af37dbe1d6f8fd7b3",
+    "git_commit": "d6a44938d3a0c6f297407f688be1be74ee3a41a0",
     "dirty": true
   },
-  "generated_at_utc": "2026-10-04T07:48:31.491204Z",
-  "compatibility_key": "648592da728394b027bde3c96e0327204d7e23f569fb9a8a4008abd87cac4050",
+  "generated_at_utc": "2026-10-04T13:52:31.193232Z",
+  "compatibility_key": "649d0e3cc6882568832c6727e522ca6a2db65216d183ccfc521e70dfa0021f9b",
   "runtime_pack_manifest": {
     "path": "runtime_pack_manifest.json",
     "bytes": 6678,
-    "sha256": "e6ad9fef2dd6543ddd00e8bbf4d37b4ae75b4593100bffc2734e7f857fd240ea"
+    "sha256": "f7df5d74794940f30c41fdcc9b43ccbbe4aa6ebf5b15d16602840654be53aa27"
   },
   "root_pck": {
     "path": "index.pck",
-    "bytes": 18164692,
-    "sha256": "98886b453ddb632547259d4354d8327c50daf5c17b0d1f37dfb2044d9ef30197"
+    "bytes": 18167028,
+    "sha256": "0795bcead82d94d0c0ebc333f43ad01a20cca4ad80939cf2f80bd92ecc33c7f2"
   },
-  "artifacts_total_bytes": 102451966,
+  "artifacts_total_bytes": 102454302,
   "artifacts": [
     {
       "path": "index.audio.position.worklet.js",
@@ -33,7 +33,7 @@
     {
       "path": "index.html",
       "bytes": 42181,
-      "sha256": "6f8b626336bc97b07f03a810b5eb6bf4478f86cb69a2c2dda0153723d0ec806b"
+      "sha256": "5db1a39a16f92a8528e08ddfb12740279fb0f84ca7fc59ae6180f5827fa81c34"
     },
     {
       "path": "index.js",
@@ -42,8 +42,8 @@
     },
     {
       "path": "index.pck",
-      "bytes": 18164692,
-      "sha256": "98886b453ddb632547259d4354d8327c50daf5c17b0d1f37dfb2044d9ef30197"
+      "bytes": 18167028,
+      "sha256": "0795bcead82d94d0c0ebc333f43ad01a20cca4ad80939cf2f80bd92ecc33c7f2"
     },
     {
       "path": "index.png",
@@ -81,7 +81,7 @@
     {
       "path": "packs/opening.pck",
       "bytes": 14355164,
-      "sha256": "b728ca18bb9d81d0b302775a4e7863879852be07bb59ec9f892b88f4961dde16"
+      "sha256": "ec39871ca7b7b92fc962c388166bdbc8055de1e243adebb704f4c17f5b62cd20"
     },
     {
       "path": "packs/quality_materials.pck",
@@ -91,7 +91,7 @@
     {
       "path": "runtime_pack_manifest.json",
       "bytes": 6678,
-      "sha256": "e6ad9fef2dd6543ddd00e8bbf4d37b4ae75b4593100bffc2734e7f857fd240ea"
+      "sha256": "f7df5d74794940f30c41fdcc9b43ccbbe4aa6ebf5b15d16602840654be53aa27"
     }
   ],
   "packs": [
@@ -105,9 +105,9 @@
     },
     {
       "id": "opening",
-      "url": "packs/opening.pck?sha256=b728ca18bb9d81d0b302775a4e7863879852be07bb59ec9f892b88f4961dde16",
+      "url": "packs/opening.pck?sha256=ec39871ca7b7b92fc962c388166bdbc8055de1e243adebb704f4c17f5b62cd20",
       "bytes": 14355164,
-      "sha256": "b728ca18bb9d81d0b302775a4e7863879852be07bb59ec9f892b88f4961dde16",
+      "sha256": "ec39871ca7b7b92fc962c388166bdbc8055de1e243adebb704f4c17f5b62cd20",
       "dependencies": [
         "base"
       ],
