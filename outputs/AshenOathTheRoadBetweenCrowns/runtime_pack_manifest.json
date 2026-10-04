@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "program": "SOUL-REBUILD",
-  "release_id": "story-20261004T071402Z-5e11ed6c5fad",
+  "release_id": "story-20261004T074623Z-b03fe2da5f95",
   "artifact_policy": "external_runtime_packs",
   "candidate_manifest": "res://runtime_pack_candidates.json",
   "pack_presets": {
@@ -15,7 +15,7 @@
   "max_deployment_bytes": 104857600,
   "packs": {
     "base": {
-      "version": "story-20261004T071402Z-5e11ed6c5fad",
+      "version": "story-20261004T074623Z-b03fe2da5f95",
       "url": "",
       "sha256": "",
       "bytes": 0,
@@ -24,8 +24,8 @@
       "preload_priority": 0,
       "status": "embedded_current_pck",
       "candidate_artifact": "base.pck",
-      "candidate_bytes": 13093348,
-      "candidate_sha256": "dc0d3d894263c53bacb7b2ab730414dd6809d53207623569b096950eccfca7de",
+      "candidate_bytes": 13147620,
+      "candidate_sha256": "41212715eced8cb1b844c5fcae8412e05c6665c89f5c58c5990ecc2de5cd434b",
       "contents": [
         "menu",
         "managers",
@@ -34,15 +34,15 @@
       ],
       "embedded_artifact": "index.pck",
       "embedded_source_artifact": "base.pck",
-      "embedded_source_bytes": 13093348,
-      "embedded_source_sha256": "dc0d3d894263c53bacb7b2ab730414dd6809d53207623569b096950eccfca7de",
+      "embedded_source_bytes": 13147620,
+      "embedded_source_sha256": "41212715eced8cb1b844c5fcae8412e05c6665c89f5c58c5990ecc2de5cd434b",
       "embedded_source_kind": "standalone_pack_candidate"
     },
     "opening": {
-      "version": "story-20261004T071402Z-5e11ed6c5fad",
-      "url": "packs/opening.pck?sha256=93169b5516916e50d7f2967862c52651691d60a8e5f66bd0bb3b67fdc65b09df",
-      "sha256": "93169b5516916e50d7f2967862c52651691d60a8e5f66bd0bb3b67fdc65b09df",
-      "bytes": 14354908,
+      "version": "story-20261004T074623Z-b03fe2da5f95",
+      "url": "packs/opening.pck?sha256=b728ca18bb9d81d0b302775a4e7863879852be07bb59ec9f892b88f4961dde16",
+      "sha256": "b728ca18bb9d81d0b302775a4e7863879852be07bb59ec9f892b88f4961dde16",
+      "bytes": 14355164,
       "entry_scene": "res://scenes/zones/greyfen_gameplay.tscn",
       "dependencies": [
         "base"
@@ -50,21 +50,21 @@
       "preload_priority": 10,
       "status": "streamed_web_candidate",
       "candidate_artifact": "opening.pck",
-      "candidate_bytes": 14354908,
-      "candidate_sha256": "93169b5516916e50d7f2967862c52651691d60a8e5f66bd0bb3b67fdc65b09df",
+      "candidate_bytes": 14355164,
+      "candidate_sha256": "b728ca18bb9d81d0b302775a4e7863879852be07bb59ec9f892b88f4961dde16",
       "contents": [
         "greyfen",
         "wychwood",
         "cemetery",
         "opening_actors"
       ],
-      "cache_key": "93169b5516916e50d7f2967862c52651691d60a8e5f66bd0bb3b67fdc65b09df"
+      "cache_key": "b728ca18bb9d81d0b302775a4e7863879852be07bb59ec9f892b88f4961dde16"
     },
     "campaign": {
-      "version": "story-20261004T071402Z-5e11ed6c5fad",
-      "url": "packs/campaign.pck?sha256=1676aac24523414ae7d84281c671d591a6bf97338623939a30ac0ae56586e082",
-      "sha256": "1676aac24523414ae7d84281c671d591a6bf97338623939a30ac0ae56586e082",
-      "bytes": 1032652,
+      "version": "story-20261004T074623Z-b03fe2da5f95",
+      "url": "packs/campaign.pck?sha256=ce44e1cde7a6bb430be60bd4f13cf0c31bd5ff1f24035d744817884512f5bfb2",
+      "sha256": "ce44e1cde7a6bb430be60bd4f13cf0c31bd5ff1f24035d744817884512f5bfb2",
+      "bytes": 1032908,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -73,21 +73,21 @@
       "preload_priority": 20,
       "status": "streamed_web_candidate",
       "candidate_artifact": "campaign.pck",
-      "candidate_bytes": 1032652,
-      "candidate_sha256": "1676aac24523414ae7d84281c671d591a6bf97338623939a30ac0ae56586e082",
+      "candidate_bytes": 1032908,
+      "candidate_sha256": "ce44e1cde7a6bb430be60bd4f13cf0c31bd5ff1f24035d744817884512f5bfb2",
       "contents": [
         "deep_woods",
         "long_road",
         "castle",
         "finale"
       ],
-      "cache_key": "1676aac24523414ae7d84281c671d591a6bf97338623939a30ac0ae56586e082"
+      "cache_key": "ce44e1cde7a6bb430be60bd4f13cf0c31bd5ff1f24035d744817884512f5bfb2"
     },
     "characters": {
-      "version": "story-20261004T071402Z-5e11ed6c5fad",
-      "url": "packs/characters.pck?sha256=840e767c51b75e1b26182f1d3ef03807c5b49ec3e7f4735a4750f4fbfbb24432",
-      "sha256": "840e767c51b75e1b26182f1d3ef03807c5b49ec3e7f4735a4750f4fbfbb24432",
-      "bytes": 30503160,
+      "version": "story-20261004T074623Z-b03fe2da5f95",
+      "url": "packs/characters.pck?sha256=173673328a70490eee93d1b0972ea128113c3c9b8de461c8d031273f7db46bad",
+      "sha256": "173673328a70490eee93d1b0972ea128113c3c9b8de461c8d031273f7db46bad",
+      "bytes": 30503416,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -96,19 +96,19 @@
       "preload_priority": 30,
       "status": "streamed_web_candidate",
       "candidate_artifact": "characters.pck",
-      "candidate_bytes": 30503160,
-      "candidate_sha256": "840e767c51b75e1b26182f1d3ef03807c5b49ec3e7f4735a4750f4fbfbb24432",
+      "candidate_bytes": 30503416,
+      "candidate_sha256": "173673328a70490eee93d1b0972ea128113c3c9b8de461c8d031273f7db46bad",
       "contents": [
         "ranger_runtime",
         "universal_crowd_runtime"
       ],
-      "cache_key": "840e767c51b75e1b26182f1d3ef03807c5b49ec3e7f4735a4750f4fbfbb24432"
+      "cache_key": "173673328a70490eee93d1b0972ea128113c3c9b8de461c8d031273f7db46bad"
     },
     "monsters": {
-      "version": "story-20261004T071402Z-5e11ed6c5fad",
-      "url": "packs/monsters.pck?sha256=e19bcb78e897b89d4d6c6e31ba14db35ddc9f0fcc5234a961aa3116092cd5eff",
-      "sha256": "e19bcb78e897b89d4d6c6e31ba14db35ddc9f0fcc5234a961aa3116092cd5eff",
-      "bytes": 7043164,
+      "version": "story-20261004T074623Z-b03fe2da5f95",
+      "url": "packs/monsters.pck?sha256=7c5d185d4205f9222d0cd47c86bfad52d8d0748d74c179fd9d37139a98ceb3a2",
+      "sha256": "7c5d185d4205f9222d0cd47c86bfad52d8d0748d74c179fd9d37139a98ceb3a2",
+      "bytes": 7043420,
       "entry_scene": "",
       "dependencies": [
         "base"
@@ -116,20 +116,20 @@
       "preload_priority": 40,
       "status": "streamed_web_candidate",
       "candidate_artifact": "monsters.pck",
-      "candidate_bytes": 7043164,
-      "candidate_sha256": "e19bcb78e897b89d4d6c6e31ba14db35ddc9f0fcc5234a961aa3116092cd5eff",
+      "candidate_bytes": 7043420,
+      "candidate_sha256": "7c5d185d4205f9222d0cd47c86bfad52d8d0748d74c179fd9d37139a98ceb3a2",
       "contents": [
         "monster_families",
         "bosses",
         "animals"
       ],
-      "cache_key": "e19bcb78e897b89d4d6c6e31ba14db35ddc9f0fcc5234a961aa3116092cd5eff"
+      "cache_key": "7c5d185d4205f9222d0cd47c86bfad52d8d0748d74c179fd9d37139a98ceb3a2"
     },
     "audio": {
-      "version": "story-20261004T071402Z-5e11ed6c5fad",
-      "url": "packs/audio.pck?sha256=0ca168e459068ff069e710ad4ff11d2968705a5741b12dcf2153ac22d3f2e7d8",
-      "sha256": "0ca168e459068ff069e710ad4ff11d2968705a5741b12dcf2153ac22d3f2e7d8",
-      "bytes": 14163772,
+      "version": "story-20261004T074623Z-b03fe2da5f95",
+      "url": "packs/audio.pck?sha256=f6d998fcb47b7126b61485600accfc77a5c21f6cd8fbd320f9925a9c6b808132",
+      "sha256": "f6d998fcb47b7126b61485600accfc77a5c21f6cd8fbd320f9925a9c6b808132",
+      "bytes": 14164028,
       "entry_scene": "",
       "dependencies": [
         "base"
@@ -137,20 +137,20 @@
       "preload_priority": 50,
       "status": "streamed_web_candidate",
       "candidate_artifact": "audio.pck",
-      "candidate_bytes": 14163772,
-      "candidate_sha256": "0ca168e459068ff069e710ad4ff11d2968705a5741b12dcf2153ac22d3f2e7d8",
+      "candidate_bytes": 14164028,
+      "candidate_sha256": "f6d998fcb47b7126b61485600accfc77a5c21f6cd8fbd320f9925a9c6b808132",
       "contents": [
         "ambience",
         "combat_cues",
         "voice_fallbacks"
       ],
-      "cache_key": "0ca168e459068ff069e710ad4ff11d2968705a5741b12dcf2153ac22d3f2e7d8"
+      "cache_key": "f6d998fcb47b7126b61485600accfc77a5c21f6cd8fbd320f9925a9c6b808132"
     },
     "quality_materials": {
-      "version": "story-20261004T071402Z-5e11ed6c5fad",
-      "url": "packs/quality_materials.pck?sha256=92ea6c327d52e9e865c7511f915bd82dc1ca2f275259d3751866d797fdf77bf2",
-      "sha256": "92ea6c327d52e9e865c7511f915bd82dc1ca2f275259d3751866d797fdf77bf2",
-      "bytes": 7409468,
+      "version": "story-20261004T074623Z-b03fe2da5f95",
+      "url": "packs/quality_materials.pck?sha256=9f64cb6fa513da09c411585cd246bedf04b05b18e521aa8e41666c19430d4723",
+      "sha256": "9f64cb6fa513da09c411585cd246bedf04b05b18e521aa8e41666c19430d4723",
+      "bytes": 7409724,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -159,18 +159,18 @@
       "preload_priority": 60,
       "status": "streamed_web_candidate",
       "candidate_artifact": "quality_materials.pck",
-      "candidate_bytes": 7409468,
-      "candidate_sha256": "92ea6c327d52e9e865c7511f915bd82dc1ca2f275259d3751866d797fdf77bf2",
+      "candidate_bytes": 7409724,
+      "candidate_sha256": "9f64cb6fa513da09c411585cd246bedf04b05b18e521aa8e41666c19430d4723",
       "contents": [
         "opening_normal_maps",
         "opening_orm_maps"
       ],
-      "cache_key": "92ea6c327d52e9e865c7511f915bd82dc1ca2f275259d3751866d797fdf77bf2"
+      "cache_key": "9f64cb6fa513da09c411585cd246bedf04b05b18e521aa8e41666c19430d4723"
     }
   },
-  "build_id": "story-20261004T071402Z-5e11ed6c5fad",
-  "generated_from_commit": "5e11ed6c5fad808075cc7e0b520677a91a1f9cf5",
-  "generated_at_utc": "2026-10-04T07:15:51.847680Z",
-  "total_bytes": 74507124,
+  "build_id": "story-20261004T074623Z-b03fe2da5f95",
+  "generated_from_commit": "b03fe2da5f95feac8f6c757af37dbe1d6f8fd7b3",
+  "generated_at_utc": "2026-10-04T07:48:09.743831Z",
+  "total_bytes": 74508660,
   "source_dirty": true
 }
