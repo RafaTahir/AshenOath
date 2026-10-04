@@ -87,6 +87,11 @@
     ],
     "variants": [
       {
+        "priority": 1,
+        "conditions": {"opening_cup_delivered": true},
+        "greeting": "Thank you for the water. Now, the three who have not come home."
+      },
+      {
         "priority": 90,
         "conditions": {
           "renewal_stopped": true

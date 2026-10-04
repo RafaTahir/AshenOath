@@ -14,4 +14,8 @@ No tests, gameplay sessions, screenshots, QA, verification or post-deployment pr
 
 ## Status
 
-Implementation in progress. Remaining requested improvements after this release: convincing character performances; deeper everyday village consequences; precise, weighty, readable combat; smoother navigation and journey flow.
+Source implemented: physical cup pickup/delivery and coat sheltering, an optional invitation with direct access to Anwen's existing account, response-aware greetings, persistent care records and an Oren-token callback. Existing saves do not opt into the new introduction. Cup carrying is reconstructed from saved flags when returning to Greyfen. No investigation objective, evidence threshold or resource reward was added.
+
+The first production attempt generated 420 exact-text voice clips, then Godot exited with a native access-violation status after asset import/editor-layout completion. No script compiler diagnostic was reported by that invocation. Its artifacts/logs are retained in `.release-gate/playable-opening-01`; publication was not reached. The final package will include the delivery-aware Anwen greeting as well.
+
+Remaining requested improvements after this release: convincing character performances; deeper everyday village consequences; precise, weighty, readable combat; smoother navigation and journey flow.
