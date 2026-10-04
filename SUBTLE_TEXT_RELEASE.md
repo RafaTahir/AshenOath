@@ -21,3 +21,12 @@ This is original presentation informed by those principles; no proprietary UI as
 - Offer Subtitle Shade from 0% through 100%, defaulting to 55% for new settings. Existing saved opacity values are preserved.
 
 Only production import/export and deployment are authorized here. No tests, visual previews, gameplay launches, verification or post-deployment requests will be run. Publication receipt follows the deployment command's result.
+
+## Publication — 4 October 2026
+
+- Source revision: `41a84180dcc6f48bb8c213b67ef50b6e39eb8993`.
+- Build: `story-20261004T140957Z-41a84180dcc6`; packaged commit: `a0d0a6f`.
+- All production packs and Web export completed; both `main` and `codex/story-centered-overhaul` were pushed.
+- Vercel returned `READY`: `dpl_FZrffNdZHuBjmiiutTib3i1f84sy`, aliased to `https://ashenoath.vercel.app`.
+- Deployment URL: `https://ashenoath-65512ho8n-rafaeitahir-5792s-projects.vercel.app`.
+- No tests, gameplay launches, visual verification or post-deployment probes were run. Research used external reference materials only.
