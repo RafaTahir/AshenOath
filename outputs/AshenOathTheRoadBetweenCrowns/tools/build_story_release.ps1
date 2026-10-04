@@ -105,6 +105,7 @@ if ($BuildVoices) {
     Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "build_story_voices.py"), "--all-scenes") "story-voices"
 }
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--editor", "--import") "import"
+Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_directional_gaits.gd")) "directional-gaits"
 
 # Opening and campaign packs carry zone scripts and base carries scripts/data.
 # They must never be reused from an earlier release: load_resource_pack can
@@ -216,6 +217,7 @@ if ($Publish) {
         "outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_manifest.json",
         "outputs/AshenOathTheRoadBetweenCrowns/data/localization/en.json",
         "outputs/AshenOathTheRoadBetweenCrowns/story_score_manifest.json",
+        "outputs/AshenOathTheRoadBetweenCrowns/assets_external/animations/AnimationLibrary_Godot_Opening.tres",
         "outputs/AshenOathTheRoadBetweenCrowns/assets_external/audio/story_score"
     )
     if ($BuildVoices) {

@@ -357,6 +357,7 @@ func _physical_gait_playback_scale(state: String) -> float:
 	var key := _clip_key(str(clip))
 	var running_clip: bool = key.contains("run") or key.contains("sprint") or key.contains("jog")
 	var cycle_distance: float = RUN_CYCLE_DISTANCE_M if running_clip else WALK_CYCLE_DISTANCE_M
+	cycle_distance = float(animation.get_meta("cycle_distance_m", cycle_distance))
 	var calibration_key: String = "run_cycle_distance_m" if running_clip else "walk_cycle_distance_m"
 	cycle_distance = float(character_root.get_meta(calibration_key, cycle_distance)) * locomotion_height_scale
 	var playback: float = current_speed_mps * maxf(animation.length, 0.01) / maxf(cycle_distance, 0.20)

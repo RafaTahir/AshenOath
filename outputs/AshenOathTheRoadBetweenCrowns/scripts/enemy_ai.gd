@@ -45,6 +45,7 @@ var anim_phase = 0.0
 var windup_time = 0.0
 var hit_flash_time = 0.0
 var pending_attack_time = 0.0
+var attack_windup_total := 0.0
 var stagger_time = 0.0
 var home_position = Vector3.ZERO
 var leash_radius = 14.0
@@ -262,6 +263,7 @@ func _physics_process(delta: float) -> void:
 			attack_cooldown = _attack_cooldown()
 			windup_time = _windup_duration()
 			pending_attack_time = windup_time
+			attack_windup_total = windup_time
 			if animation_driver != null:
 				_start_attack_animation()
 			attack_trace_start = _attack_contact_point()
@@ -395,6 +397,15 @@ func stagger(seconds: float = 0.7) -> void:
 func _tick_pending_attack(delta: float) -> void:
 	if pending_attack_time <= 0.0:
 		return
+	# Read the opponent early, then commit. A late dodge can leave the blade
+	# behind instead of being followed by an instantaneous full-body swivel.
+	if is_instance_valid(player) and pending_attack_time > attack_windup_total * 0.45:
+		var offset: Vector3 = player.global_position - global_position
+		offset.y = 0.0
+		if offset.length_squared() > 0.01:
+			var desired_yaw := atan2(-offset.x, -offset.z)
+			var turn_rate := 1.25 if enemy_id in ["wychwood_brute", "rootbound_colossus", "bell_eater"] else 2.1
+			rotation.y += clampf(wrapf(desired_yaw - rotation.y, -PI, PI), -turn_rate * delta, turn_rate * delta)
 	if animation_driver != null:
 		animation_driver.advance_external(minf(delta, pending_attack_time))
 	pending_attack_time = maxf(0.0, pending_attack_time - delta)
@@ -408,6 +419,8 @@ func _resolve_attack() -> void:
 	_release_attack_token()
 	if dead or player == null or not player.has_method("take_damage"):
 		return
+	# Recovery belongs to the attempted swing, including a successful dodge.
+	attack_recovery_time = maxf(attack_recovery_time, _strike_recovery())
 	attack_trace_end = _attack_contact_point()
 	var player_contact: Vector3 = player.global_position + Vector3(0.0, 1.0, 0.0)
 	# A verifier, a scripted boss beat, or a restored save can resolve an
@@ -436,7 +449,6 @@ func _resolve_attack() -> void:
 		return
 	var applied_damage: float = damage * (0.72 if special_contact and not melee_contact else 1.0)
 	var parried: bool = bool(player.take_damage(applied_damage))
-	attack_recovery_time = 0.22 if enemy_id == "ghoulkin" else 0.16
 	var contact_position := last_attack_contact
 	attack_resolved.emit(self, parried, contact_position)
 	if is_boss and boss_attack != "":
@@ -447,6 +459,13 @@ func _resolve_attack() -> void:
 		if is_boss:
 			set_meta("last_parried", true)
 			parry_window_opened.emit(self, 1.15)
+
+func _strike_recovery() -> float:
+	if enemy_id in ["wychwood_brute", "rootbound_colossus", "bell_eater"]:
+		return 0.65
+	if enemy_id in ["halvern_boss", "wychwood_stalker"]:
+		return 0.34
+	return 0.48 if is_boss else 0.42
 
 func _start_attack_animation() -> void:
 	var clip: StringName = animation_driver.get_clip_for_state("windup")
@@ -709,9 +728,9 @@ func _windup_duration() -> float:
 	if is_boss:
 		return float({"white_hart_avatar":0.44, "bell_eater":0.78, "rootbound_colossus":0.92, "ashwing":0.64, "halvern_boss":0.48}.get(enemy_id, 0.60)) + reading_bonus
 	if enemy_id == "wychwood_brute":
-		return 0.72
+		return 0.72 + reading_bonus
 	if enemy_id == "ghoulkin" or enemy_id == "wychwood_stalker" or enemy_id == "wychwood_raider":
-		return 0.46
+		return 0.46 + reading_bonus
 	return 0.34 + reading_bonus
 
 func _attack_cooldown() -> float:

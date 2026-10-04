@@ -219,6 +219,10 @@ func get_dialogue(id: String) -> Dictionary:
 			visible_actions.append(action)
 	base["actions"] = visible_actions
 	base["pages"] = _build_pages(base)
+	for page_index: int in range(base["pages"].size()):
+		var page: Dictionary = base["pages"][page_index]
+		page["scene_id"] = id
+		page["performance"] = preload("res://scripts/story_scene_direction.gd").for_page(id, page, page_index)
 	return base
 
 func _build_pages(data: Dictionary) -> Array:

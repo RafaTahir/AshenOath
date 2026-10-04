@@ -80,12 +80,15 @@ func _supported_step(player: Node3D, candidate: Vector3) -> Variant:
 		return null
 	return Vector3(candidate.x, float(hit.position.y) + 0.002, candidate.z)
 
-func refresh_page(player: Node3D, camera_rig: Node) -> void:
+func refresh_page(player: Node3D, camera_rig: Node, page: Dictionary = {}) -> void:
 	var actor := get_focus_actor()
 	if not is_instance_valid(player) or not is_instance_valid(actor):
 		return
 	_face_pair(actor, player)
-	_frame_camera(camera_rig, actor)
+	if camera_rig != null and camera_rig.has_method("frame_dialogue_beat"):
+		camera_rig.call("frame_dialogue_beat", actor, str(page.get("speaker_id", "")), str(page.get("performance", {}).get("framing", "speaker")))
+	else:
+		_frame_camera(camera_rig, actor)
 
 func face_actor(actor: Node3D, player: Node3D) -> void:
 	if not is_instance_valid(actor) or not is_instance_valid(player):

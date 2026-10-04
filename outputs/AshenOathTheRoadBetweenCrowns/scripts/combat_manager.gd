@@ -57,7 +57,6 @@ func resolve_player_blade_contact(player: Node3D, enemies: Array, contact: Dicti
 			"blade_direction": blade_direction,
 		}
 		if bool(contact.get("final_sample", true)):
-			message.emit("Your blade cuts only mist.")
 			contact_missed.emit(miss)
 		return miss
 	var resolved: Dictionary = candidates[0]

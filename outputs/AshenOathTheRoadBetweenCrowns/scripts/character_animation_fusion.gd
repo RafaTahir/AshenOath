@@ -97,7 +97,7 @@ static func _retarget_animation(animation: Animation, skeleton_path: String, bon
 			remove_tracks.append(track_index)
 			continue
 		if not bone_names.has(source_bone):
-			bone_names[source_bone] = _target_bone_name(source_bone)
+			bone_names[source_bone] = source_bone if bool(animation.get_meta("universal_rest_baked", false)) else _target_bone_name(source_bone)
 		var target_bone: String = bone_names[source_bone]
 		if target_bone == "":
 			remove_tracks.append(track_index)

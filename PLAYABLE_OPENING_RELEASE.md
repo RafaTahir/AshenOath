@@ -19,3 +19,7 @@ Source implemented: physical cup pickup/delivery and coat sheltering, an optiona
 The first production attempt generated 420 exact-text voice clips, then Godot exited with a native access-violation status after asset import/editor-layout completion. No script compiler diagnostic was reported by that invocation. Its artifacts/logs are retained in `.release-gate/playable-opening-01`; publication was not reached. The final package will include the delivery-aware Anwen greeting as well.
 
 Remaining requested improvements after this release: convincing character performances; deeper everyday village consequences; precise, weighty, readable combat; smoother navigation and journey flow.
+
+## Publication
+
+Completed: source `5e11ed6c5fad808075cc7e0b520677a91a1f9cf5`, build `story-20261004T071402Z-5e11ed6c5fad`, package `0d1a167`. Both authorized GitHub branches were pushed. Vercel returned `READY` for `dpl_D9FJFJrtngBefEApNyCXn44Kq1dK`, aliased to https://ashenoath.vercel.app. The package contains 421 exact-text voice clips. No tests or verification were run. The user subsequently requested implementation of the remaining four improvements in the same session.

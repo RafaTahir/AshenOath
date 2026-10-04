@@ -30,6 +30,7 @@ static func decorate(game, root: Node3D, zone_id: String) -> void:
 	if root == null or not is_instance_valid(root) or game.story_state == null:
 		return
 	load("res://scripts/story_activity_director.gd").install(game, root, zone_id)
+	load("res://scripts/journey_flow_director.gd").install(game, root, zone_id)
 	if zone_id in ["assembly", "hart_glade"] and root == game.zone_root:
 		_sync_willing_witnesses(game, root, zone_id)
 	var layer := root.get_node_or_null(LAYER_NAME) as Node3D
@@ -226,6 +227,7 @@ static func _greyfen(game, parent: Node3D) -> void:
 		_box(game, parent, "EmptyKitchenBowl", Vector3(-4.4, 0.84, 0.9), Vector3(0.4, 0.12, 0.35), STONE)
 	_label(parent, "ReliefKitchen", "COMMON KITCHEN\nFood reserved for tonight" if relief else "COMMON KITCHEN\nThree households still waiting", Vector3(-4.4, 1.8, 1.0))
 	_mira(game, parent)
+	_greyfen_daily_consequences(game, parent)
 	_tor(game, parent)
 	_rook(game, parent)
 	_guardian(game, parent)
@@ -241,6 +243,26 @@ static func _greyfen(game, parent: Node3D) -> void:
 	var names := str(_flag(game, "names_policy"))
 	if names != "":
 		_notice(game, parent, Vector3(7.8, 0, -4.5), "NAMES RETURNED\nBram / Sella / Oren" if names == "published" else "NAMES IN SAFE KEEPING\nHousehold visits begin")
+
+static func _greyfen_daily_consequences(game, parent: Node3D) -> void:
+	var operation := str(_flag(game, "mill_operation"))
+	if operation == "closed":
+		for index in range(3):
+			_sack(game, parent, Vector3(-5.5, 0.03, 1.8 + float(index) * 0.45))
+		_notice(game, parent, Vector3(-3.3, 0, 0.9), "RESERVE GRAIN\nHousehold measures / mill closed")
+	elif operation == "supervised":
+		_notice(game, parent, Vector3(-3.3, 0, 0.9), "MILL WORKING SHEET\nSupervised batches / risks recorded")
+	elif operation == "restitution":
+		for index in range(4):
+			_box(game, parent, "CleanMillRepairTimber", Vector3(8.0, 0.12 + float(index) * 0.10, 2.9), Vector3(1.65, 0.08, 0.22), TIMBER)
+		_notice(game, parent, Vector3(-3.3, 0, 0.9), "MILL REPAIR ACCOUNTS\nClean channels / restitution owed")
+	if bool(_flag(game, "assembly_relief_ready", false)):
+		for x in [-9.0, 7.3]:
+			_box(game, parent, "ReturnedHouseholdBowl", Vector3(x, 0.18, 3.5), Vector3(0.35, 0.12, 0.32), STONE)
+	if bool(_flag(game, "final_choice_completed", false)):
+		var covenant := str(_flag(game, "final_covenant"))
+		var headings := {"witness":"COPIES FOR EVERY HOUSEHOLD", "mercy":"NO HOUSEHOLD OWES A CHILD", "duty":"KAEL BEARS THE OATH", "ash":"THE BINDING IS ENDED"}
+		_notice(game, parent, Vector3(2.6, 0, -4.6), str(headings.get(covenant, "THE NAMES REMAIN")) + "\nTomorrow's work is ours")
 
 static func _mira(game, parent: Node3D) -> void:
 	var treatment := str(_flag(game, "mira_treatment"))

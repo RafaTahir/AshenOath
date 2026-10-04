@@ -3887,6 +3887,7 @@ func _update_target_lock_hud() -> void:
 	hud.set_target_lock_status(display_name if display_name != "" else "Enemy", player.global_position.distance_to(target_actor.global_position))
 
 func _on_combat_impact(pos: Vector3, heavy: bool) -> void:
+	_hitstop(0.055 if heavy else 0.032)
 	if audio != null:
 		audio.play_event("heavy_hit" if heavy else "light_hit", 0.04)
 	if camera_rig != null:
@@ -3895,10 +3896,25 @@ func _on_combat_impact(pos: Vector3, heavy: bool) -> void:
 	if zone_root != null:
 		CombatFeedback.ground_ring(zone_root, pos, Color(0.54, 0.36, 0.16), 0.42 if heavy else 0.30, 0.12)
 
+var _hitstop_generation := 0
+var _hitstop_restore_scale := 1.0
+
 func _hitstop(seconds: float) -> void:
+	if get_tree().paused or zone_transition_pending:
+		return
+	if settings != null and bool(settings.settings.get("reduced_motion", false)):
+		return
+	if not is_equal_approx(Engine.time_scale, 0.18):
+		_hitstop_restore_scale = Engine.time_scale
+	_hitstop_generation += 1
+	var generation := _hitstop_generation
 	Engine.time_scale = 0.18
 	var timer := _create_owned_timer(seconds, true)
-	timer.timeout.connect(func(): Engine.time_scale = 1.0)
+	timer.process_mode = Node.PROCESS_MODE_ALWAYS
+	timer.timeout.connect(func():
+		if generation == _hitstop_generation:
+			Engine.time_scale = _hitstop_restore_scale
+	)
 
 func _has_living_enemy(enemy_id: String) -> bool:
 	for enemy in active_enemies:
@@ -6333,7 +6349,7 @@ func _on_dialogue_page_changed(_speaker: String, _speaker_id: String, _page_inde
 			# participants remain undiscovered until their own page is reached.
 			story_state.record_evidence(encounter_id, encounter.get("entry", {}))
 			story_save_pending = true
-	dialogue_runtime_coordinator.refresh_page(player, camera_rig)
+	dialogue_runtime_coordinator.refresh_page(player, camera_rig, page)
 	if audio != null:
 		audio.set_dialogue_active(true)
 		audio.play_dialogue_page(page)

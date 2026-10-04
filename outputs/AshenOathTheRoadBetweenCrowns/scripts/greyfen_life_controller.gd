@@ -3,6 +3,7 @@ extends Node
 const CharacterPresentation = preload("res://scripts/character_presentation.gd")
 const AssetSpawnHelper = preload("res://scripts/asset_spawn_helper.gd")
 const CharacterAnimationDriver = preload("res://scripts/character_animation_driver.gd")
+const ConsequenceRoutines = preload("res://scripts/village_consequence_routines.gd")
 
 const WALK_ACCELERATION := 1.65
 const WALK_BRAKING := 2.8
@@ -226,6 +227,8 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 		entry.motion_speed = 0.0
 		_set_motion(entry, 0.0)
 		return
+	if not bool(entry.get("activity_active", false)) and float(entry.get("motion_speed", 0.0)) < 0.05:
+		_apply_pending_routine(entry)
 	var distance_to_player := node.global_position.distance_to(player.global_position)
 	if distance_to_player < 2.1:
 		entry.pause = max(float(entry.pause), 1.2)
@@ -320,6 +323,7 @@ func _make_entry(id: String, node: Node3D, path: Array, speed: float, driver: No
 	var profile: Dictionary = ROUTINE_PROFILES.get(id, {"occupation": "villager", "activity": "idle", "activity_seconds": 2.0, "line": "greyfen_keep_working"})
 	var entry := {
 		"id": id, "node": node, "path": path, "target": 1, "speed": speed,
+		"base_path": path.duplicate(), "pending_routine": {},
 		"pause": rng.randf_range(0.0, 0.25), "driver": driver, "named": named,
 		"phase": rng.randf() * TAU, "base_y": node.position.y, "route": [],
 		"route_index": 0, "profile": profile.duplicate(true), "activity_active": false,
@@ -365,6 +369,26 @@ func _end_activity(entry: Dictionary) -> void:
 	entry.route_index = 0
 	entry.node.set_meta("life_state", "walking")
 	_set_activity_pose(entry, false)
+	_apply_pending_routine(entry)
+
+func _apply_pending_routine(entry: Dictionary) -> void:
+	var pending: Dictionary = entry.get("pending_routine", {})
+	if pending.is_empty(): return
+	entry.pending_routine = {}
+	entry.profile = pending.profile
+	entry.consequence_line = str(pending.get("line", ""))
+	entry.node.set_meta("life_occupation", str(entry.profile.get("occupation", "villager")))
+	if bool(entry.named): return
+	var next_path: Array = pending.path
+	if next_path == entry.path: return
+	entry.path = host.river_safe_path(next_path, 0.9)
+	entry.target = 0
+	_precompute_routes(entry)
+	# The first leg begins where the person actually stopped, not where the
+	# new loop's last anchor happens to be. No teleport or stale route splice.
+	var destination: Vector3 = host.validate_walkable_position(entry.path[0])
+	entry.route = spatial_service.build_route(entry.node.global_position, destination, 0.72) if spatial_service != null else [destination]
+	entry.route_index = 1 if entry.route.size() > 1 else 0
 
 func _set_activity_pose(entry: Dictionary, active: bool) -> void:
 	var driver = entry.driver
@@ -396,6 +420,9 @@ func _activity_anchor(entry: Dictionary) -> Vector3:
 			return board.global_position + Vector3(0, 0, -1.2)
 	var anchors := {
 		"well": Vector3(-8.0, 0.0, -1.0),
+		"kitchen": Vector3(-4.4, 0.0, 0.9),
+		"drain": Vector3(2.8, 0.0, 7.1),
+		"relief": Vector3(-9.0, 0.0, 3.5),
 		"notice_board": Vector3(4.4, 0.0, 10.9),
 		"shrine": Vector3(5.8, 0.0, -7.0),
 		"forge": Vector3(9.0, 0.0, -1.0),
@@ -415,7 +442,7 @@ func _sync_story_state(force: bool) -> void:
 	var state = host.get("story_state")
 	var report := str(state.get_flag("evidence_report", "")) if state != null and state.has_method("get_flag") else ""
 	var bell := bool(state.get_flag("cemetery_bell_rung", false)) if state != null and state.has_method("get_flag") else false
-	var signature := "%s|%s" % [report, str(bell)]
+	var signature := "%s|%s|%s" % [report, str(bell), ConsequenceRoutines.signature(state)]
 	if not force and signature == story_signature:
 		return
 	story_signature = signature
@@ -426,13 +453,18 @@ func _sync_story_state(force: bool) -> void:
 		reaction += "_bell_rung"
 	for entry in actors:
 		entry.story_reaction = reaction
-		# Consequences change work and attention, never reserved route coordinates.
+		# Named characters retain their reserved routes. Ambient workers change
+		# assignments only after planting their feet or finishing an activity.
 		entry.quiet_after_report = (report == "public" and str(entry.id) in ["forge_helper", "blacksmith_tor"]) \
 			or (report == "private" and str(entry.id) == "shrine_pilgrim")
 		var base_profile: Dictionary = ROUTINE_PROFILES.get(str(entry.id), entry.profile)
-		entry.profile = base_profile.duplicate(true)
+		var next_profile := base_profile.duplicate(true)
 		if report != "":
-			entry.profile.activity_seconds = float(base_profile.get("activity_seconds", 2.0)) * 1.8
+			next_profile.activity_seconds = float(base_profile.get("activity_seconds", 2.0)) * 1.8
+		var outcome := ConsequenceRoutines.for_actor(str(entry.id), state)
+		for key in ["activity", "occupation", "activity_seconds"]:
+			if outcome.has(key): next_profile[key] = outcome[key]
+		entry.pending_routine = {"profile":next_profile, "path":outcome.get("path", entry.base_path).duplicate(), "line":outcome.get("line", "")}
 		var node: Node3D = entry.node
 		if is_instance_valid(node):
 			node.set_meta("life_story_reaction", reaction)
@@ -440,6 +472,8 @@ func _sync_story_state(force: bool) -> void:
 				_set_activity_pose(entry, true)
 
 func _line_for_actor(entry: Dictionary) -> String:
+	var consequence_line := str(entry.get("consequence_line", ""))
+	if consequence_line != "": return consequence_line
 	var reaction := str(entry.get("story_reaction", "baseline"))
 	for report in ["private", "public", "retained"]:
 		if reaction.begins_with("reported_" + report):

@@ -49,6 +49,7 @@ var _cached_collision_position := Vector3.ZERO
 var _last_large_subject: Node3D
 var _large_subject_linger := 0.0
 var _manual_orbit := false
+var _dialogue_tween: Tween
 
 signal target_lock_changed(target: Node3D, locked: bool)
 
@@ -134,6 +135,9 @@ func _apply_mouse_motion(relative: Vector2) -> void:
 func _process(delta: float) -> void:
 	if target == null or get_tree().paused or not _gameplay_camera_active():
 		return
+	if _dialogue_tween != null:
+		_dialogue_tween.kill()
+		_dialogue_tween = null
 	_apply_keyboard_camera(delta)
 	_update_response_state(delta)
 	_update_target_lock(delta)
@@ -277,6 +281,40 @@ func frame_dialogue_target(dialogue_target: Node3D) -> void:
 	camera.fov = 58.0
 	_initialized = true
 
+func frame_dialogue_beat(actor: Node3D, speaker_id: String, framing: String) -> void:
+	if not is_instance_valid(target) or not is_instance_valid(actor) or camera == null: return
+	if _reduced_story_motion:
+		# Keep the established two-person composition through page changes.
+		return
+	var axis := actor.global_position - target.global_position
+	axis.y = 0.0
+	if axis.length_squared() < 0.04: return
+	axis = axis.normalized()
+	var side := axis.cross(Vector3.UP).normalized()
+	var player_speaks := speaker_id == "player"
+	var focus := (target.global_position if player_speaks else actor.global_position) + Vector3.UP * 1.30
+	var view_axis := axis if player_speaks else -axis
+	var distance_to_face := 2.65 if framing == "close" else 3.10
+	if framing == "two_shot":
+		focus = (target.global_position + actor.global_position) * 0.5 + Vector3.UP * 1.10
+		view_axis = -axis
+		distance_to_face = 3.6
+	# Both reverse angles stay on the same side of the line between actors.
+	var desired := _collide_camera(focus, focus + view_axis * distance_to_face + side * 0.90 + Vector3.UP * 0.40)
+	desired.y = maxf(desired.y, target.global_position.y + 0.55)
+	if _dialogue_tween != null: _dialogue_tween.kill()
+	_dialogue_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_parallel(true)
+	_dialogue_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	_dialogue_tween.tween_property(camera, "global_position", desired, 0.32)
+	_dialogue_tween.tween_method(_look_at_dialogue_point, _smoothed_look, focus, 0.32)
+	_dialogue_tween.tween_property(camera, "fov", 51.0 if framing == "close" else 58.0, 0.32)
+	_smoothed_look = focus
+	_cached_collision_position = desired
+
+func _look_at_dialogue_point(point: Vector3) -> void:
+	if camera.global_position.distance_squared_to(point) > 0.01:
+		camera.look_at(point, Vector3.UP)
+
 func _collide_camera(from_pos: Vector3, desired: Vector3) -> Vector3:
 	if from_pos.distance_squared_to(desired) < 0.000001:
 		return desired
@@ -371,7 +409,10 @@ func apply_settings(mouse_sensitivity: float, use_invert_y: bool, controller_sen
 	invert_y = use_invert_y
 	gamepad_look_sensitivity = controller_sensitivity
 
+var _reduced_story_motion := false
+
 func apply_accessibility(values: Dictionary) -> void:
+	_reduced_story_motion = bool(values.get("reduced_motion", false))
 	targeting_assist = bool(values.get("targeting_assist", true))
 	reduce_flashes = bool(values.get("flash_reduction", false))
 	if reduce_flashes or bool(values.get("reduced_motion", false)):

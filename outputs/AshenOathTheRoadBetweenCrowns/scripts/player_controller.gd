@@ -1463,6 +1463,12 @@ func _try_build_mapped_body() -> bool:
 	else:
 		animation_driver.set_update_rate_hz(30.0)
 		animation_driver.set_external_tick(true)
+		var foot_rig: Skeleton3D = animation_driver.get_skeleton()
+		if foot_rig != null and foot_rig.get_node_or_null("GroundedFeet") == null:
+			var grounding := preload("res://scripts/grounded_feet_modifier.gd").new()
+			grounding.name = "GroundedFeet"
+			foot_rig.add_child(grounding)
+			grounding.configure(self, foot_rig)
 		if animation_driver.has_signal("locomotion_step") and not animation_driver.locomotion_step.is_connected(_on_animation_locomotion_step):
 			animation_driver.locomotion_step.connect(_on_animation_locomotion_step)
 			animation_step_signal_bound = true
