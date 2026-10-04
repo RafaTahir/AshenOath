@@ -3,6 +3,7 @@ extends RefCounted
 
 const SectorManifest = preload("res://scripts/world_sector_manifest.gd")
 const RouteCatalog = preload("res://scripts/story_route_catalog.gd")
+const BridgeContract = preload("res://scripts/bridge_surface_contract.gd")
 
 var presentation: Node
 var quests: Node
@@ -11,6 +12,130 @@ var cache_valid := false
 var last_position := Vector3.ZERO
 var last_zone := ""
 var last_signature := ""
+var _dial_geometry_key := ""
+var _dial_geometry: Dictionary = {}
+
+func reset_navigation_dial(hud: Node) -> void:
+	_dial_geometry_key = ""
+	_dial_geometry.clear()
+	if is_instance_valid(hud) and hud.has_method("set_world_navigation"):
+		hud.call("set_world_navigation", {})
+
+func update_navigation_dial(hud: Node, player: Node3D, zone_id: String, candidates: Array, spatial_source: Node, zone_root: Node3D = null) -> void:
+	if not is_instance_valid(hud) or not hud.has_method("set_world_navigation"):
+		return
+	if not is_instance_valid(player) or not player.is_inside_tree() or zone_id == "":
+		reset_navigation_dial(hud)
+		return
+	var local_position: Vector3 = zone_root.to_local(player.global_position) if is_instance_valid(zone_root) else player.global_position
+	var forward: Vector3 = -player.global_basis.z
+	if is_instance_valid(zone_root):
+		forward = zone_root.global_basis.inverse() * forward
+	var snapshot: Dictionary = _navigation_dial_geometry(zone_id, spatial_source, zone_root).duplicate(true)
+	snapshot["zone_id"] = zone_id
+	snapshot["zone_label"] = RouteCatalog.zone_name(zone_id)
+	snapshot["player_xz"] = Vector2(local_position.x, local_position.z)
+	snapshot["player_forward"] = Vector2(forward.x, forward.z).normalized()
+	snapshot["radius_m"] = 22.0
+	snapshot["markers"] = _navigation_dial_markers(_view(), player, zone_id, candidates, zone_root)
+	hud.call("set_world_navigation", snapshot)
+
+func _navigation_dial_geometry(zone_id: String, spatial_source: Node, zone_root: Node3D) -> Dictionary:
+	if not is_instance_valid(spatial_source) or str(spatial_source.get("zone_id")) != zone_id:
+		return {"bounds": Rect2(), "terrain": []}
+	var half_extents: Vector2 = spatial_source.get("half_extents")
+	var river_center: float = float(spatial_source.get("river_center"))
+	var bridges: Dictionary = spatial_source.get("bridges")
+	var exclusions: Array = spatial_source.get("exclusions")
+	var corridors: Array = spatial_source.get("reserved_corridors")
+	var root_id: int = zone_root.get_instance_id() if is_instance_valid(zone_root) else 0
+	var key: String = "%s:%d:%d:%s:%s:%d:%d:%d" % [zone_id, spatial_source.get_instance_id(), root_id, str(half_extents), str(river_center), bridges.size(), exclusions.size(), corridors.size()]
+	if key == _dial_geometry_key:
+		return _dial_geometry
+	var bounds: Rect2 = Rect2(-half_extents, half_extents * 2.0)
+	var terrain: Array[Dictionary] = []
+	if half_extents.x > 0.0 and half_extents.y > 0.0:
+		terrain.append({"kind": "ground", "points": _dial_rect_points(bounds)})
+	# These IDs explicitly describe authored road approaches. Spawn cushions,
+	# combat clearances and generic recovery corridors are not map roads.
+	for raw_corridor: Variant in corridors:
+		if not raw_corridor is Dictionary:
+			continue
+		if str(raw_corridor.get("id", "")) not in ["main_road", "spawn_to_wychwood", "long_road_approach", "vargan_boundary_approach"]:
+			continue
+		var road_center: Vector3 = raw_corridor.get("center", Vector3.ZERO)
+		var road_half: Vector2 = raw_corridor.get("half_size", Vector2.ZERO)
+		terrain.append({"kind": "road", "points": _dial_rect_points(Rect2(Vector2(road_center.x, road_center.z) - road_half, road_half * 2.0))})
+	if river_center < 900.0:
+		var river_half: float = float(BridgeContract.RIVER_HALF_SPAN)
+		terrain.append({"kind": "water", "points": _dial_rect_points(Rect2(Vector2(-half_extents.x, river_center - river_half), Vector2(half_extents.x * 2.0, river_half * 2.0)))})
+	for raw_bridge: Variant in bridges.values():
+		if not raw_bridge is Dictionary:
+			continue
+		var bank_a: Vector3 = raw_bridge.get("bank_a", Vector3.ZERO)
+		var bank_b: Vector3 = raw_bridge.get("bank_b", Vector3.ZERO)
+		var bridge_center: Vector2 = Vector2((bank_a.x + bank_b.x) * 0.5, float(raw_bridge.get("center_z", (bank_a.z + bank_b.z) * 0.5)))
+		var bridge_half: Vector2 = Vector2(float(raw_bridge.get("half_width", 0.0)), float(raw_bridge.get("half_length", absf(bank_a.z - bank_b.z) * 0.5)))
+		terrain.append({"kind": "bridge", "points": _dial_rect_points(Rect2(bridge_center - bridge_half, bridge_half * 2.0))})
+	for raw_exclusion: Variant in exclusions:
+		if not raw_exclusion is Dictionary:
+			continue
+		var center: Vector3 = raw_exclusion.get("center", Vector3.ZERO)
+		var half_size: Vector2 = raw_exclusion.get("half_size", Vector2.ZERO)
+		terrain.append({"kind": "obstacle", "points": _dial_rect_points(Rect2(Vector2(center.x, center.z) - half_size, half_size * 2.0))})
+	_dial_geometry_key = key
+	_dial_geometry = {"bounds": bounds, "terrain": terrain}
+	return _dial_geometry
+
+func _dial_rect_points(rect: Rect2) -> PackedVector2Array:
+	return PackedVector2Array([rect.position, Vector2(rect.end.x, rect.position.y), rect.end, Vector2(rect.position.x, rect.end.y)])
+
+func _navigation_dial_markers(view: Dictionary, player: Node3D, zone_id: String, candidates: Array, zone_root: Node3D) -> Array[Dictionary]:
+	var markers: Array[Dictionary] = []
+	if str(view.get("zone_id", zone_id)) != zone_id:
+		return markers
+	var destination: String = str(view.get("destination_zone", ""))
+	var selected: Node3D = null
+	var nearest: float = INF
+	var kind: String = "objective"
+	if destination == "" or destination == zone_id:
+		if not bool(view.get("pinpoint", false)):
+			return markers
+		var target_ids: Array = view.get("target_ids", [])
+		for candidate: Variant in candidates:
+			if not _dial_candidate_eligible(candidate, zone_root) or str(candidate.get("interaction_id")) not in target_ids:
+				continue
+			var distance: float = candidate.global_position.distance_squared_to(player.global_position)
+			if distance < nearest:
+				nearest = distance
+				selected = candidate
+	else:
+		kind = "passage"
+		var best_steps: int = 999
+		for candidate: Variant in candidates:
+			if not _dial_candidate_eligible(candidate, zone_root) or str(candidate.get("interaction_type")) != "zone":
+				continue
+			var target_zone: String = str(candidate.get("zone_target"))
+			if target_zone == "":
+				continue
+			var steps: int = _steps_to(target_zone, destination, zone_id)
+			var distance: float = candidate.global_position.distance_squared_to(player.global_position)
+			if steps >= 0 and (steps < best_steps or (steps == best_steps and distance < nearest)):
+				best_steps = steps
+				nearest = distance
+				selected = candidate
+	if not is_instance_valid(selected):
+		return markers
+	var position: Vector3 = zone_root.to_local(selected.global_position) if is_instance_valid(zone_root) else selected.global_position
+	markers.append({"id": str(selected.get("interaction_id")), "kind": kind, "position": Vector2(position.x, position.z), "label": str(selected.call("get_context_prompt"))})
+	return markers
+
+func _dial_candidate_eligible(candidate: Variant, zone_root: Node3D) -> bool:
+	if not _eligible(candidate):
+		return false
+	if bool(candidate.get_meta("seamless_exterior_gate", false)) or str(candidate.get("interaction_type")) == "blocked_zone":
+		return false
+	return not is_instance_valid(zone_root) or zone_root.is_ancestor_of(candidate)
 
 func configure(view_source: Node, quest_manager: Node) -> void:
 	presentation = view_source

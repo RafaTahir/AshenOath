@@ -313,6 +313,7 @@ func _opening_presentation_present(root: Node3D) -> bool:
 var interaction_focus_cooldown := 0.0
 var interaction_input_block_until_usec := 0
 var compass_refresh_cooldown := 0.0
+var navigation_dial_refresh_cooldown := 0.0
 var tutorial_refresh_cooldown := 0.0
 var target_status_refresh_cooldown := 0.0
 var interaction_focus_dirty := true
@@ -470,6 +471,9 @@ func _on_transient_input_reset(reason: String) -> void:
 	_invalidate_interaction_prompt()
 
 func _begin_gameplay_handoff(reason: String) -> void:
+	if quest_hud_coordinator != null:
+		quest_hud_coordinator.reset_navigation_dial(hud)
+	navigation_dial_refresh_cooldown = 0.0
 	if input_router != null:
 		input_router.suspend_gameplay(reason)
 	if is_instance_valid(player) and player.has_method("cancel_buffered_input"):
@@ -518,6 +522,10 @@ func _process(delta: float) -> void:
 	if target_status_refresh_cooldown <= 0.0:
 		target_status_refresh_cooldown = 0.10
 		_update_target_lock_hud()
+	navigation_dial_refresh_cooldown -= delta
+	if navigation_dial_refresh_cooldown <= 0.0:
+		navigation_dial_refresh_cooldown = 0.10
+		quest_hud_coordinator.update_navigation_dial(hud, player, current_zone_id, interaction_area_cache if zone_root != null else [], spatial_service, zone_root)
 	autosave_cooldown = max(autosave_cooldown - delta, 0.0)
 	if autosave_cooldown <= 0.0:
 		autosave_cooldown = 180.0

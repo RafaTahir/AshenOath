@@ -47,6 +47,9 @@ const JournalEvidenceNavigation = preload("res://scripts/journal_evidence_naviga
 const HudLayoutPolicy = preload("res://scripts/hud_layout_policy.gd")
 const HudReflowState = preload("res://scripts/hud_reflow_state.gd")
 const MobileTouchLayout = preload("res://scripts/mobile_touch_layout.gd")
+const HudVisualStyle = preload("res://scripts/hud_visual_style.gd")
+const HudEmblem = preload("res://scripts/hud_emblem.gd")
+const HudNavigationDial = preload("res://scripts/hud_navigation_dial.gd")
 var navigation = NavigationState.new()
 var notices = NoticeQueue.new()
 var _rendered_screen := ""
@@ -228,6 +231,16 @@ var _menu_back_button: Button
 var _loading_card: PanelContainer
 var _touch_layout_reason := ""
 var _touch_reason_label: Label
+var _hart_emblem: Control
+var _navigation_dial: Control
+var _world_clock_label: Label
+var _world_clock_text := ""
+var _quick_slots: Dictionary = {}
+var _quick_bindings: Dictionary = {}
+var _quick_icons: Dictionary = {}
+var _gameplay_bindings: Label
+var _quest_rule: ColorRect
+var _quest_marker: Label
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_build_hud()
@@ -313,7 +326,7 @@ func _refresh_resource_attention() -> void:
 	var spent: bool = last_stamina <= 0.0
 	vitals_warning_label.text = "Low health · stamina spent" if low_health and spent else ("Low health" if low_health else ("Stamina spent — let it recover" if spent else ""))
 	var emphasized := _attention_remaining > 0.0 or low_health or spent
-	vitals_back.color = Color(0.018, 0.016, 0.014, 0.94 if high_contrast else (0.76 if emphasized else 0.54))
+	vitals_back.color = Color(0.008, 0.012, 0.015, 0.94 if high_contrast else (0.12 if emphasized else 0.0))
 	vitals_warning_label.add_theme_color_override("font_color", Color(1.0, 0.88, 0.68) if high_contrast else Color(0.96, 0.74, 0.50))
 
 func set_journey_models(models: Dictionary) -> void:
@@ -1003,14 +1016,14 @@ func _refresh_story_focus() -> void:
 		return
 	var formatted := _format_tracker_text(_tracker_source)
 	var lines: PackedStringArray = formatted.split("\n", false)
-	tracker_title_label.text = str(lines[0]) if not lines.is_empty() else "The road ahead"
+	tracker_title_label.text = str(lines[0]).to_upper() if not lines.is_empty() else "THE ROAD AHEAD"
 	var action := str(_navigation_model.get("action", ""))
 	if action == "":
 		action = str(lines[1]) if lines.size() > 1 else "Consult your journal for the next known lead."
 	tracker_label.text = action
 	tracker_label.tooltip_text = action
 	tracker_caption_label.text = "Next step"
-	tracker_footer_label.text = "%s Journal · people and promises" % _action_label("open_inventory")
+	tracker_footer_label.text = "%s  JOURNAL" % _action_label("open_inventory")
 	var route := str(_navigation_model.get("route_hint", ""))
 	var distance := int(_navigation_model.get("distance_m", -1))
 	var scope := str(_navigation_model.get("scope", "exploration"))
@@ -1156,9 +1169,14 @@ func update_equipment(potions: int, bombs: int, oil_name: String, arrow_count: i
 	equipment_label.text = "Oil: " + oil_text
 	equipment_label.tooltip_text = "Active blade oil: " + oil_text
 	if supply_labels.has("potions"):
-		(supply_labels["potions"] as Label).text = "%s Redroot" % _action_label("use_potion")
-		(supply_labels["bombs"] as Label).text = "%s Ash Bomb" % _action_label("throw_bomb")
-		(supply_labels["arrows"] as Label).text = "Arrows · " + arrow_type
+		(supply_labels["potions"] as Label).text = "Redroot"
+		(supply_labels["bombs"] as Label).text = "Ash Bomb"
+		(supply_labels["arrows"] as Label).text = arrow_type
+		(supply_labels["arrows"] as Label).tooltip_text = arrow_type + " arrows"
+		(_quick_bindings["potions"] as Label).text = _action_label("use_potion")
+		(_quick_bindings["bombs"] as Label).text = _action_label("throw_bomb")
+		(_quick_bindings["arrows"] as Label).text = _action_label("fire_bow")
+		_gameplay_bindings.text = "%s  Strike\n%s  Guard\n%s  Dodge\n%s  Journal" % [_action_label("light_attack"), _action_label("block"), _action_label("dodge"), _action_label("open_inventory")]
 		(supply_counts["potions"] as Label).text = str(maxi(potions, 0))
 		(supply_counts["bombs"] as Label).text = str(maxi(bombs, 0))
 		(supply_counts["arrows"] as Label).text = str(arrow_count) if arrow_count >= 0 else "—"
@@ -2106,188 +2124,168 @@ func show_death_screen(body: String) -> void:
 	_add_menu_button(box, "Return to Main Menu", func(): show_main_menu())
 func _build_hud() -> void:
 	hud_root = Control.new()
-	var root := hud_root
-	root.set_anchors_preset(Control.PRESET_FULL_RECT)
-	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(root)
-	var shade = ColorRect.new()
-	shade.set_anchors_preset(Control.PRESET_FULL_RECT)
-	shade.color = Color(0.02, 0.018, 0.015, 0.08)
-	root.add_child(shade)
-	var bars_back = ColorRect.new()
-	vitals_back = bars_back
-	bars_back.name = "VitalsBackdrop"
-	bars_back.position = Vector2(16, 16)
-	bars_back.size = Vector2(288, 170)
-	bars_back.color = Color(0.018, 0.016, 0.014, 0.62)
-	root.add_child(bars_back)
-	_add_hud_accent(bars_back, Vector2.ZERO, Vector2(3, 170))
-	var bars = VBoxContainer.new()
-	vitals_box = bars
-	bars.position = Vector2(23, 20)
-	bars.custom_minimum_size = Vector2(272, 150)
-	bars.add_theme_constant_override("separation", 2)
-	root.add_child(bars)
+	hud_root.set_anchors_preset(Control.PRESET_FULL_RECT)
+	hud_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(hud_root)
+	vitals_back = ColorRect.new()
+	vitals_back.name = "VitalityShadow"
+	vitals_back.color = Color(0.01, 0.012, 0.014, 0.0)
+	hud_root.add_child(vitals_back)
+	vitals_box = VBoxContainer.new()
+	vitals_box.visible = false
+	hud_root.add_child(vitals_box)
+	_hart_emblem = HudEmblem.new()
+	_hart_emblem.name = "HartMedallion"
+	_hart_emblem.call("configure", "hart", high_contrast)
+	hud_root.add_child(_hart_emblem)
 	health_bar = ProgressBar.new()
+	health_bar.name = "BloodRibbon"
 	health_bar.max_value = 125
 	health_bar.value = 125
 	health_bar.show_percentage = false
-	health_value_label = Label.new()
-	bars.add_child(_labeled_bar("Blood", health_bar, health_value_label))
+	hud_root.add_child(health_bar)
 	stamina_bar = ProgressBar.new()
+	stamina_bar.name = "StaminaRibbon"
 	stamina_bar.max_value = 100
 	stamina_bar.value = 100
 	stamina_bar.show_percentage = false
-	stamina_value_label = Label.new()
-	bars.add_child(_labeled_bar("Stamina", stamina_bar, stamina_value_label))
-	vitals_warning_label = Label.new()
-	vitals_warning_label.name = "ResourceCondition"
-	vitals_warning_label.custom_minimum_size = Vector2(272, 20)
-	vitals_warning_label.add_theme_font_size_override("font_size", 12)
-	bars.add_child(vitals_warning_label)
+	hud_root.add_child(stamina_bar)
+	health_value_label = _hud_label(hud_root, "BloodValue", 16)
+	health_value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	stamina_value_label = _hud_label(hud_root, "StaminaValue", 16)
+	stamina_value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	var blood_name: Label = _hud_label(hud_root, "BloodCaption", 16)
+	blood_name.text = "BLOOD"
+	var stamina_name: Label = _hud_label(hud_root, "StaminaCaption", 16)
+	stamina_name.text = "STAMINA"
+	_bar_name_labels = [blood_name, stamina_name]
+	vitals_warning_label = _hud_label(hud_root, "ResourceCondition", 16)
+	vitals_warning_label.max_lines_visible = 1
 	supplies_grid = GridContainer.new()
-	supplies_grid.columns = 2
-	supplies_grid.add_theme_constant_override("h_separation", 10)
-	supplies_grid.add_theme_constant_override("v_separation", 1)
-	bars.add_child(supplies_grid)
+	supplies_grid.name = "QuickSupplies"
+	supplies_grid.columns = 3
+	hud_root.add_child(supplies_grid)
 	for id: String in ["potions", "bombs", "arrows"]:
-		var item_label := Label.new()
-		item_label.custom_minimum_size = Vector2(214, 18)
-		item_label.clip_text = true
-		item_label.add_theme_font_size_override("font_size", 12)
-		supplies_grid.add_child(item_label)
-		var count_label := Label.new()
-		count_label.custom_minimum_size = Vector2(38, 18)
-		count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-		count_label.add_theme_font_size_override("font_size", 12)
-		supplies_grid.add_child(count_label)
-		supply_labels[id] = item_label
-		supply_counts[id] = count_label
-	equipment_label = Label.new()
-	equipment_label.name = "EquipmentQuickRead"
-	equipment_label.text = "Oil: No oil"
-	equipment_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	equipment_label.clip_text = true
-	equipment_label.custom_minimum_size = Vector2(272, 20)
-	equipment_label.add_theme_font_size_override("font_size", 12)
-	bars.add_child(equipment_label)
-	enemy_label = Label.new()
-	enemy_label.name = "EnemyFocusLabel"
-	enemy_label.position = Vector2(474, 44)
-	enemy_label.size = Vector2(334, 22)
+		var slot: Control = Control.new()
+		slot.name = id.capitalize() + "QuickSlot"
+		slot.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		supplies_grid.add_child(slot)
+		_quick_slots[id] = slot
+		var icon: Control = HudEmblem.new()
+		icon.call("configure", id, high_contrast)
+		slot.add_child(icon)
+		_quick_icons[id] = icon
+		var count: Label = _hud_label(slot, id + "Count", 18)
+		count.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		supply_counts[id] = count
+		var item: Label = _hud_label(slot, id + "Name", 16)
+		item.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		item.max_lines_visible = 1
+		supply_labels[id] = item
+		var binding: Label = _hud_label(slot, id + "Binding", 16)
+		binding.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		binding.max_lines_visible = 2
+		_quick_bindings[id] = binding
+	equipment_label = _hud_label(hud_root, "ActiveBladeOil", 16)
+	equipment_label.max_lines_visible = 1
+	_gameplay_bindings = _hud_label(hud_root, "CurrentControlHints", 16)
+	_gameplay_bindings.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_gameplay_bindings.max_lines_visible = 4
+	_navigation_dial = HudNavigationDial.new()
+	_navigation_dial.name = "RoadNavigator"
+	_navigation_dial.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hud_root.add_child(_navigation_dial)
+	_world_clock_label = _hud_label(hud_root, "WorldClock", 16)
+	_world_clock_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_world_clock_label.max_lines_visible = 1
+	_world_clock_label.text = _world_clock_text
+	tracker_back = ColorRect.new()
+	tracker_back.name = "ObjectiveShadow"
+	(tracker_back as ColorRect).color = Color(0.01, 0.012, 0.014, 0.0)
+	hud_root.add_child(tracker_back)
+	tracker_title_label = _hud_label(hud_root, "TrackedStoryTitle", 18)
+	tracker_title_label.max_lines_visible = 2
+	tracker_caption_label = _hud_label(hud_root, "NextStepCaption", 16)
+	tracker_caption_label.visible = false
+	_quest_rule = ColorRect.new()
+	_quest_rule.color = Color(0.69, 0.61, 0.4, 0.62)
+	hud_root.add_child(_quest_rule)
+	_quest_marker = _hud_label(hud_root, "ObjectiveMarker", 16)
+	_quest_marker.text = "◆"
+	tracker_label = _hud_label(hud_root, "QuestTrackerObjective", 20)
+	tracker_label.max_lines_visible = 3
+	tracker_route_label = _hud_label(hud_root, "StoryRouteHint", 16)
+	tracker_route_label.max_lines_visible = 2
+	tracker_work_label = _hud_label(hud_root, "NearbyStoryWork", 16)
+	tracker_work_label.max_lines_visible = 2
+	tracker_footer_label = _hud_label(hud_root, "JournalBinding", 16)
+	tracker_footer_label.max_lines_visible = 1
+	compass_back = ColorRect.new()
+	compass_back.color = Color(0.01, 0.012, 0.014, 0.0)
+	hud_root.add_child(compass_back)
+	compass_label = _hud_label(hud_root, "CurrentLocation", 16)
+	compass_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	compass_label.max_lines_visible = 1
+	enemy_label = _hud_label(hud_root, "EnemyFocusLabel", 18)
 	enemy_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	enemy_label.max_lines_visible = 1
 	enemy_label.visible = false
-	root.add_child(enemy_label)
 	enemy_bar = ProgressBar.new()
-	enemy_bar.name = "EnemyFocusHealth"
-	enemy_bar.position = Vector2(500, 75)
-	enemy_bar.size = Vector2(280, 16)
+	enemy_bar.name = "EnemyVitalityRibbon"
 	enemy_bar.show_percentage = false
 	enemy_bar.visible = false
-	root.add_child(enemy_bar)
-	enemy_value_label = Label.new()
-	enemy_value_label.position = Vector2(812, 71)
-	enemy_value_label.size = Vector2(90, 24)
+	hud_root.add_child(enemy_bar)
+	enemy_value_label = _hud_label(hud_root, "EnemyVitalityValue", 16)
+	enemy_value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	enemy_value_label.visible = false
-	root.add_child(enemy_value_label)
-	target_status_label = Label.new()
-	target_status_label.name = "TargetLockStatus"
-	target_status_label.position = Vector2(474, 98)
-	target_status_label.size = Vector2(334, 20)
+	target_status_label = _hud_label(hud_root, "TargetLockStatus", 16)
 	target_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	target_status_label.visible = false
-	root.add_child(target_status_label)
 	prompt_back = ColorRect.new()
-	prompt_back.name = "InteractionPromptBackdrop"
-	prompt_back.color = Color(0.018, 0.016, 0.014, 0.72)
+	prompt_back.name = "InteractionShadow"
+	prompt_back.color = Color(0.01, 0.012, 0.014, 0.24)
 	prompt_back.visible = false
-	root.add_child(prompt_back)
-	prompt_label = Label.new()
-	prompt_label.name = "InteractionPrompt"
-	prompt_label.position = Vector2(390, 660)
-	prompt_label.size = Vector2(500, 30)
+	hud_root.add_child(prompt_back)
+	prompt_label = _hud_label(hud_root, "InteractionPrompt", 20)
 	prompt_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	prompt_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	prompt_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	prompt_label.max_lines_visible = 2
-	prompt_label.clip_text = true
 	prompt_label.visible = false
-	root.add_child(prompt_label)
-	tracker_back = ColorRect.new()
-	tracker_back.name = "QuestTrackerBackdrop"
-	tracker_back.position = Vector2(980, 14)
-	tracker_back.size = Vector2(304, 224)
-	tracker_back.color = Color(0.018, 0.016, 0.014, 0.62)
-	root.add_child(tracker_back)
-	_add_hud_accent(tracker_back, Vector2(301, 0), Vector2(3, 224))
-	tracker_title_label = _hud_label(root, "StoryChapter", 12)
-	tracker_title_label.max_lines_visible = 1
-	tracker_caption_label = _hud_label(root, "NextStepCaption", 12)
-	tracker_caption_label.text = "Next step"
-	tracker_label = Label.new()
-	tracker_label.name = "QuestTrackerObjective"
-	tracker_label.position = Vector2(990, 20)
-	tracker_label.size = Vector2(258, 56)
-	tracker_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	tracker_label.clip_text = true
-	tracker_label.max_lines_visible = 3
-	root.add_child(tracker_label)
-	tracker_route_label = _hud_label(root, "StoryRouteHint", 12)
-	tracker_route_label.max_lines_visible = 2
-	tracker_work_label = _hud_label(root, "NearbyStoryWork", 12)
-	tracker_work_label.max_lines_visible = 2
-	tracker_footer_label = _hud_label(root, "JournalBinding", 12)
-	compass_back = ColorRect.new()
-	compass_back.name = "CompassBackdrop"
-	compass_back.position = Vector2(430, 14)
-	compass_back.size = Vector2(420, 26)
-	compass_back.color = Color(0.018, 0.016, 0.014, 0.46)
-	compass_back.visible = false
-	root.add_child(compass_back)
-	compass_label = Label.new()
-	compass_label.name = "LocationAndObjectiveCompass"
-	compass_label.position = Vector2(430, 15)
-	compass_label.size = Vector2(420, 24)
-	compass_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	root.add_child(compass_label)
 	notice_back = ColorRect.new()
-	notice_back.name = "NoticeBackdrop"
-	notice_back.color = Color(0.018, 0.016, 0.014, 0.74)
+	notice_back.name = "NoticeShadow"
+	notice_back.color = Color(0.01, 0.012, 0.014, 0.2)
 	notice_back.visible = false
-	root.add_child(notice_back)
-	notice_category_label = _hud_label(root, "NoticeCategory", 12)
+	hud_root.add_child(notice_back)
+	notice_category_label = _hud_label(hud_root, "NoticeCategory", 16)
 	notice_category_label.visible = false
-	toast_label = Label.new()
-	toast_label.position = Vector2(22, 626)
-	toast_label.size = Vector2(420, 84)
-	toast_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	toast_label.clip_text = true
+	toast_label = _hud_label(hud_root, "StoryNotice", 20)
 	toast_label.max_lines_visible = 3
 	toast_label.visible = false
-	root.add_child(toast_label)
-	hint_label = Label.new()
-	hint_label.name = "ContextualCombatHint"
-	hint_label.position = Vector2(430, 82)
-	hint_label.size = Vector2(420, 30)
+	hint_label = _hud_label(hud_root, "ContextualCombatHint", 16)
 	hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	hint_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	hint_label.max_lines_visible = 2
-	hint_label.clip_text = true
 	hint_label.visible = false
-	root.add_child(hint_label)
-	status_label = Label.new()
-	status_label.name = "CombatStatusCue"
-	status_label.position = Vector2(470, 602)
-	status_label.size = Vector2(340, 26)
+	status_label = _hud_label(hud_root, "CombatStatusCue", 18)
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	status_label.visible = false
-	root.add_child(status_label)
-	for node: Node in root.get_children():
+	for node: Node in hud_root.get_children():
 		if node is Control:
 			(node as Control).mouse_filter = Control.MOUSE_FILTER_IGNORE
 	update_equipment(0, 0, "", -1)
 	_refresh_story_focus()
 
+func set_world_navigation(snapshot: Dictionary) -> void:
+	if is_instance_valid(_navigation_dial):
+		_navigation_dial.call("set_snapshot", snapshot)
+
+func set_world_clock(minutes: float, phase: String, _day_count: int = 0) -> void:
+	var clock_minutes: int = posmod(int(floor(minutes)), 1440)
+	var text: String = "%02d:%02d · %s" % [floori(float(clock_minutes) / 60.0), clock_minutes % 60, phase.capitalize()]
+	if text == _world_clock_text:
+		return
+	_world_clock_text = text
+	if is_instance_valid(_world_clock_label):
+		_world_clock_label.text = text
 func _hud_label(parent: Node, node_name: String, font_size: int) -> Label:
 	var label := Label.new()
 	label.name = node_name
@@ -2610,6 +2608,7 @@ func _apply_responsive_loading(policy: Dictionary) -> void:
 
 func _apply_responsive_gameplay(policy: Dictionary) -> void:
 	var safe: Rect2 = policy.safe_rect
+	var usable: Vector2 = policy.display_usable_size
 	var unit: float = float(policy.unit_scale)
 	var compact: bool = bool(policy.compact)
 	var gap: float = float(policy.gap)
@@ -2617,109 +2616,168 @@ func _apply_responsive_gameplay(policy: Dictionary) -> void:
 	var touch: bool = input_device == "touch"
 	var touch_model: Dictionary = MobileTouchLayout.build(Vector2(GAMEPLAY_SIZE), _display_metrics) if touch else {}
 	var reserved_bottom: float = float(touch_model.get("bottom_reserved_display", 0.0)) * unit
-	var left: float = safe.position.x + gap
-	var right: float = safe.end.x - gap
-	var top: float = safe.position.y + gap
-	var bottom: float = safe.end.y - gap
+	var margin: float = (12.0 if compact else 24.0) * unit
+	var left: float = safe.position.x + margin
+	var right: float = safe.end.x - margin
+	var top: float = safe.position.y + margin
+	var bottom: float = safe.end.y - margin
 	var center: float = safe.get_center().x
-	var card_width: float = minf(290.0 * unit, maxf(0.0, (safe.size.x - gap * 3.0) * 0.5))
-	vitals_box.position = Vector2(left + 6.0 * unit, top + 4.0 * unit)
-	vitals_box.custom_minimum_size = Vector2.ZERO
-	vitals_box.size = Vector2(maxf(0.0, card_width - 12.0 * unit), 0.0)
-	supplies_grid.visible = not compact
-	equipment_label.visible = not compact
-	for child: Node in vitals_box.get_children():
-		if child is HBoxContainer:
-			var row: HBoxContainer = child as HBoxContainer
-			row.add_theme_constant_override("separation", int(round(4.0 * unit)))
-			for item: Node in row.get_children():
-				if item is Label:
-					(item as Label).add_theme_font_size_override("font_size", int(fonts.caption))
-					(item as Label).custom_minimum_size = Vector2(64.0 * unit, 24.0 * unit)
-				elif item is ProgressBar:
-					(item as ProgressBar).custom_minimum_size = Vector2(0.0, 14.0 * unit)
-					(item as ProgressBar).size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	vitals_warning_label.add_theme_font_size_override("font_size", int(fonts.caption))
-	vitals_warning_label.custom_minimum_size = Vector2(0.0, 24.0 * unit)
-	vitals_warning_label.clip_text = true
-	vitals_back.position = Vector2(left, top)
-	vitals_back.size = Vector2(card_width, (84.0 if compact else 194.0) * unit)
-	var tracker_y: float = top + (64.0 * unit if touch else 0.0)
-	var tracker_x: float = right - card_width
-	var tracker_height: float = (106.0 if compact else 250.0) * unit
-	if touch and reserved_bottom > 0.0:
-		tracker_height = minf(tracker_height, maxf(0.0, safe.end.y - reserved_bottom - tracker_y - 4.0 * unit))
-	tracker_back.position = Vector2(tracker_x, tracker_y)
-	tracker_back.size = Vector2(card_width, tracker_height)
-	tracker_title_label.visible = not (compact and touch)
-	tracker_title_label.position = Vector2(tracker_x + 10.0 * unit, tracker_y + 6.0 * unit)
-	tracker_title_label.size = Vector2(card_width - 20.0 * unit, 24.0 * unit)
-	tracker_title_label.add_theme_font_size_override("font_size", int(fonts.caption))
-	tracker_label.position = Vector2(tracker_x + 10.0 * unit, tracker_y + (4.0 if compact and touch else 32.0) * unit)
-	tracker_label.size = Vector2(card_width - 20.0 * unit, maxf(0.0, tracker_height - (8.0 if compact and touch else 38.0) * unit))
-	tracker_label.add_theme_font_size_override("font_size", int(fonts.body))
-	var detail_labels: Array[Label] = [tracker_caption_label, tracker_route_label, tracker_work_label, tracker_footer_label]
-	for index: int in range(detail_labels.size()):
-		var label: Label = detail_labels[index]
-		label.visible = not compact
+	var center_channel: float = maxf(0.0, safe.size.x - reserved_bottom * 2.0 - gap * 2.0) if touch and reserved_bottom > 0.0 else safe.size.x - margin * 2.0
+	var crest_size: float = (62.0 if compact else 84.0) * unit
+	var vitals_width: float = minf(470.0 * unit, safe.size.x * (0.48 if compact else 0.42))
+	var bar_left: float = left + crest_size * 0.79
+	var bar_width: float = maxf(0.0, vitals_width - crest_size * 0.79)
+	_hart_emblem.position = Vector2(left, top + 4.0 * unit)
+	_hart_emblem.size = Vector2.ONE * crest_size
+	health_bar.position = Vector2(bar_left, top + 25.0 * unit)
+	health_bar.size = Vector2(bar_width, (21.0 if compact else 25.0) * unit)
+	stamina_bar.position = Vector2(bar_left + 3.0 * unit, top + 56.0 * unit)
+	stamina_bar.size = Vector2(maxf(0.0, bar_width * 0.79 - 3.0 * unit), 9.0 * unit)
+	for label: Label in [health_value_label, stamina_value_label, vitals_warning_label]:
 		label.add_theme_font_size_override("font_size", int(fonts.caption))
-		label.position = Vector2(tracker_x + 10.0 * unit, tracker_y + (106.0 + index * 34.0) * unit)
-		label.size = Vector2(card_width - 20.0 * unit, 34.0 * unit)
-	var middle_width: float = minf(360.0 * unit, maxf(0.0, safe.size.x - card_width * 2.0 - gap * 4.0))
-	var location_y: float = top if not compact else top + 94.0 * unit
-	if compact:
-		middle_width = minf(300.0 * unit, safe.size.x - gap * 2.0)
-	var center_channel: float = maxf(0.0, safe.size.x - reserved_bottom * 2.0 - gap * 2.0) if touch and reserved_bottom > 0.0 else safe.size.x - gap * 2.0
-	if touch and reserved_bottom > 0.0:
-		middle_width = minf(middle_width, center_channel)
-	compass_label.position = Vector2(center - middle_width * 0.5, location_y)
-	compass_label.size = Vector2(middle_width, 26.0 * unit)
-	compass_label.clip_text = true
+	health_value_label.position = Vector2(bar_left, top + 2.0 * unit)
+	health_value_label.size = Vector2(bar_width - 16.0 * unit, 23.0 * unit)
+	stamina_value_label.position = Vector2(bar_left + bar_width * 0.73, top + 48.0 * unit)
+	stamina_value_label.size = Vector2(bar_width * 0.27, 23.0 * unit)
+	_bar_name_labels[0].position = Vector2(bar_left + 3.0 * unit, top + 2.0 * unit)
+	_bar_name_labels[0].size = Vector2(bar_width * 0.46, 23.0 * unit)
+	_bar_name_labels[0].visible = bar_width >= 190.0 * float(policy.text_scale) * unit
+	_bar_name_labels[1].position = Vector2(bar_left + 3.0 * unit, top + 70.0 * unit)
+	_bar_name_labels[1].size = Vector2(bar_width, 23.0 * unit)
+	for label: Label in _bar_name_labels:
+		label.add_theme_font_size_override("font_size", int(fonts.caption))
+	_bar_name_labels[1].visible = not compact
+	vitals_warning_label.position = Vector2(left + 4.0 * unit, top + (77.0 if compact else 100.0) * unit)
+	vitals_warning_label.size = Vector2(vitals_width, 25.0 * unit)
+	vitals_warning_label.custom_minimum_size = Vector2.ZERO
+	vitals_back.position = Vector2(left - 5.0 * unit, top - 3.0 * unit)
+	vitals_back.size = Vector2(vitals_width + 10.0 * unit, (102.0 if compact else 122.0) * unit)
+	var dial_visible: bool = usable.x >= 820.0 and usable.y >= 500.0
+	var dial_size: float = (146.0 if compact else 174.0) * unit
+	var dial_top: float = top + (66.0 if touch else 22.0) * unit
+	_navigation_dial.visible = dial_visible
+	_navigation_dial.position = Vector2(right - dial_size, dial_top)
+	_navigation_dial.size = Vector2.ONE * dial_size
+	_world_clock_label.visible = dial_visible
+	_world_clock_label.position = Vector2(right - 230.0 * unit, dial_top - 24.0 * unit)
+	_world_clock_label.size = Vector2(230.0 * unit, 24.0 * unit)
+	_world_clock_label.add_theme_font_size_override("font_size", int(fonts.caption))
+	var quest_width: float = minf((290.0 if compact else 308.0) * unit, safe.size.x * (0.45 if compact else 0.30))
+	var quest_x: float = right - quest_width
+	var location_y: float = dial_top + dial_size + 3.0 * unit
+	compass_label.visible = dial_visible
+	compass_label.position = Vector2(quest_x, location_y)
+	compass_label.size = Vector2(quest_width, 26.0 * unit)
 	compass_label.add_theme_font_size_override("font_size", int(fonts.caption))
-	compass_back.position = compass_label.position - Vector2(4.0, 2.0) * unit
-	compass_back.size = compass_label.size + Vector2(8.0, 4.0) * unit
-	var target_y: float = location_y + 30.0 * unit
-	for label: Label in [enemy_label, target_status_label]:
+	compass_back.position = compass_label.position - Vector2(4, 2) * unit
+	compass_back.size = compass_label.size + Vector2(8, 4) * unit
+	compass_back.visible = high_contrast and dial_visible
+	var quest_y: float = location_y + 34.0 * unit if dial_visible else top + (66.0 if touch else 0.0) * unit
+	var room_below: float = maxf(0.0, (safe.end.y - reserved_bottom - gap if touch else bottom - 136.0 * unit) - quest_y)
+	var title_height: float = (42.0 if not compact else 25.0) * unit
+	var show_title: bool = not (touch and compact and room_below < 95.0 * unit)
+	tracker_title_label.visible = show_title
+	tracker_title_label.position = Vector2(quest_x, quest_y)
+	tracker_title_label.size = Vector2(quest_width, title_height)
+	tracker_title_label.add_theme_font_size_override("font_size", int(fonts.body))
+	tracker_caption_label.visible = false
+	_quest_rule.visible = show_title
+	_quest_rule.position = Vector2(quest_x, quest_y + title_height + 2.0 * unit)
+	_quest_rule.size = Vector2(minf(90.0 * unit, quest_width), maxf(1.0, unit))
+	var action_y: float = quest_y + title_height + 13.0 * unit if show_title else quest_y
+	var action_height: float = minf((78.0 if not compact else 66.0) * unit, maxf(32.0 * unit, room_below - (action_y - quest_y)))
+	_quest_marker.position = Vector2(quest_x - 2.0 * unit, action_y + 2.0 * unit)
+	_quest_marker.size = Vector2(20.0 * unit, 24.0 * unit)
+	_quest_marker.add_theme_font_size_override("font_size", int(fonts.caption))
+	tracker_label.position = Vector2(quest_x + 22.0 * unit, action_y)
+	tracker_label.size = Vector2(maxf(0.0, quest_width - 22.0 * unit), action_height)
+	tracker_label.add_theme_font_size_override("font_size", int(fonts.body))
+	var route_y: float = action_y + action_height + 5.0 * unit
+	tracker_route_label.position = Vector2(quest_x + 22.0 * unit, route_y)
+	tracker_route_label.size = Vector2(quest_width - 22.0 * unit, 42.0 * unit)
+	tracker_route_label.visible = not compact and route_y + 42.0 * unit <= quest_y + room_below
+	tracker_work_label.position = Vector2(quest_x + 22.0 * unit, route_y + 44.0 * unit)
+	tracker_work_label.size = Vector2(quest_width - 22.0 * unit, 38.0 * unit)
+	tracker_work_label.visible = not compact and route_y + 82.0 * unit <= quest_y + room_below
+	tracker_footer_label.position = Vector2(quest_x + 22.0 * unit, route_y + 86.0 * unit)
+	tracker_footer_label.size = Vector2(quest_width - 22.0 * unit, 24.0 * unit)
+	tracker_footer_label.visible = not compact and not touch
+	for label: Label in [tracker_route_label, tracker_work_label, tracker_footer_label]:
 		label.add_theme_font_size_override("font_size", int(fonts.caption))
-		label.size = Vector2(middle_width, 24.0 * unit)
-	enemy_label.position = Vector2(center - middle_width * 0.5, target_y)
-	enemy_bar.position = Vector2(center - middle_width * 0.5, target_y + 26.0 * unit)
-	enemy_bar.size = Vector2(maxf(0.0, middle_width - 72.0 * unit), 14.0 * unit)
-	enemy_value_label.position = Vector2(center + middle_width * 0.5 - 72.0 * unit, target_y + 22.0 * unit)
-	enemy_value_label.size = Vector2(72.0 * unit, 24.0 * unit)
+	tracker_back.position = Vector2(quest_x - 8.0 * unit, quest_y - 6.0 * unit)
+	tracker_back.size = Vector2(quest_width + 16.0 * unit, minf(room_below, (258.0 if not compact else 118.0) * unit))
+	var slot_width: float = (86.0 if compact else 94.0) * unit
+	var slot_height: float = 116.0 * unit
+	var slots_visible: bool = not (touch and compact)
+	supplies_grid.visible = slots_visible
+	supplies_grid.position = Vector2(left, bottom - reserved_bottom - slot_height - (gap if touch else 0.0))
+	supplies_grid.add_theme_constant_override("h_separation", int(round(8.0 * unit)))
+	supplies_grid.size = Vector2(slot_width * 3.0 + 16.0 * unit, slot_height)
+	for id: String in ["potions", "bombs", "arrows"]:
+		var slot: Control = _quick_slots[id]
+		slot.custom_minimum_size = Vector2(slot_width, slot_height)
+		var icon: Control = _quick_icons[id]
+		icon.position = Vector2((slot_width - 62.0 * unit) * 0.5, 0.0)
+		icon.size = Vector2.ONE * 62.0 * unit
+		var count: Label = supply_counts[id]
+		count.position = Vector2(slot_width * 0.48, 3.0 * unit)
+		count.size = Vector2(slot_width * 0.48, 24.0 * unit)
+		count.add_theme_font_size_override("font_size", int(fonts.body))
+		var name_label: Label = supply_labels[id]
+		name_label.position = Vector2(0, 62.0 * unit)
+		name_label.size = Vector2(slot_width, 23.0 * unit)
+		name_label.add_theme_font_size_override("font_size", int(fonts.caption))
+		var key: Label = _quick_bindings[id]
+		key.position = Vector2(0, 86.0 * unit)
+		key.size = Vector2(slot_width, 30.0 * unit)
+		key.add_theme_font_size_override("font_size", int(fonts.caption))
+	equipment_label.visible = slots_visible
+	equipment_label.position = Vector2(left + 6.0 * unit, supplies_grid.position.y - 28.0 * unit)
+	equipment_label.size = Vector2(supplies_grid.size.x, 24.0 * unit)
+	equipment_label.add_theme_font_size_override("font_size", int(fonts.caption))
+	_gameplay_bindings.visible = not touch
+	_gameplay_bindings.position = Vector2(right - 290.0 * unit, bottom - (90.0 if not compact else 48.0) * unit)
+	_gameplay_bindings.size = Vector2(290.0 * unit, (90.0 if not compact else 48.0) * unit)
+	_gameplay_bindings.max_lines_visible = 4 if not compact else 2
+	_gameplay_bindings.add_theme_font_size_override("font_size", int(fonts.caption))
+	var enemy_width: float = minf(320.0 * unit, center_channel if touch else safe.size.x * 0.37)
+	var target_y: float = top + (150.0 if touch and compact else (110.0 if compact else 8.0)) * unit
+	enemy_label.position = Vector2(center - enemy_width * 0.5, target_y)
+	enemy_label.size = Vector2(enemy_width, 25.0 * unit)
+	enemy_label.add_theme_font_size_override("font_size", int(fonts.body))
+	enemy_bar.position = Vector2(center - enemy_width * 0.5, target_y + 29.0 * unit)
+	enemy_bar.size = Vector2(enemy_width - 72.0 * unit, 10.0 * unit)
+	enemy_value_label.position = Vector2(center + enemy_width * 0.5 - 68.0 * unit, target_y + 23.0 * unit)
+	enemy_value_label.size = Vector2(68.0 * unit, 24.0 * unit)
 	enemy_value_label.add_theme_font_size_override("font_size", int(fonts.caption))
-	target_status_label.position = Vector2(center - middle_width * 0.5, target_y + 44.0 * unit)
-	var prompt_width: float = minf(520.0 * unit, safe.size.x - gap * 2.0)
-	if touch:
-		prompt_width = minf(prompt_width, center_channel)
-	prompt_label.position = Vector2(center - prompt_width * 0.5, bottom - 64.0 * unit)
-	prompt_label.size = Vector2(prompt_width, 56.0 * unit)
+	target_status_label.position = Vector2(center - enemy_width * 0.5, target_y + 47.0 * unit)
+	target_status_label.size = Vector2(enemy_width, 24.0 * unit)
+	target_status_label.add_theme_font_size_override("font_size", int(fonts.caption))
+	var prompt_width: float = minf(430.0 * unit, center_channel)
+	prompt_label.position = Vector2(center - prompt_width * 0.5, bottom - 69.0 * unit)
+	prompt_label.size = Vector2(prompt_width, 55.0 * unit)
 	prompt_label.add_theme_font_size_override("font_size", int(fonts.body))
-	prompt_back.position = prompt_label.position - Vector2(6.0, 4.0) * unit
-	prompt_back.size = prompt_label.size + Vector2(12.0, 8.0) * unit
-	var status_width: float = minf(380.0 * unit, center_channel)
-	status_label.position = Vector2(center - status_width * 0.5, bottom - 100.0 * unit)
+	prompt_back.position = prompt_label.position - Vector2(6, 2) * unit
+	prompt_back.size = prompt_label.size + Vector2(12, 4) * unit
+	var status_width: float = minf(360.0 * unit, center_channel)
+	status_label.position = Vector2(center - status_width * 0.5, bottom - 106.0 * unit)
 	status_label.size = Vector2(status_width, 28.0 * unit)
-	status_label.clip_text = true
 	status_label.add_theme_font_size_override("font_size", int(fonts.caption))
-	hint_label.position = Vector2(center - 180.0 * unit, target_y + 72.0 * unit)
-	hint_label.size = Vector2(360.0 * unit, 56.0 * unit)
+	hint_label.position = Vector2(center - status_width * 0.5, target_y + 77.0 * unit)
+	hint_label.size = Vector2(status_width, 48.0 * unit)
 	hint_label.add_theme_font_size_override("font_size", int(fonts.caption))
-	var notice_width: float = minf(340.0 * unit, safe.size.x - gap * 2.0)
-	var notice_y: float = bottom - 144.0 * unit
-	var notice_x: float = left
-	if touch and reserved_bottom > 0.0:
-		notice_width = minf(notice_width, center_channel)
-		notice_x = center - notice_width * 0.5
-		notice_y = bottom - 238.0 * unit
-	notice_back.position = Vector2(notice_x, notice_y)
-	notice_back.size = Vector2(notice_width, 128.0 * unit)
-	notice_category_label.position = Vector2(notice_x + 10.0 * unit, notice_y + 8.0 * unit)
-	notice_category_label.size = Vector2(notice_width - 20.0 * unit, 24.0 * unit)
+	var notice_width: float = minf(330.0 * unit, center_channel if touch else safe.size.x - margin * 2.0)
+	var notice_x: float = center - notice_width * 0.5 if touch else left
+	var notice_y: float = bottom - 250.0 * unit if touch else supplies_grid.position.y - 166.0 * unit
+	notice_back.position = Vector2(notice_x - 6.0 * unit, notice_y - 4.0 * unit)
+	notice_back.size = Vector2(notice_width + 12.0 * unit, 122.0 * unit)
+	notice_category_label.position = Vector2(notice_x, notice_y)
+	notice_category_label.size = Vector2(notice_width, 24.0 * unit)
 	notice_category_label.add_theme_font_size_override("font_size", int(fonts.caption))
-	toast_label.position = Vector2(notice_x + 10.0 * unit, notice_y + 34.0 * unit)
-	toast_label.size = Vector2(notice_width - 20.0 * unit, 84.0 * unit)
+	toast_label.position = Vector2(notice_x, notice_y + 28.0 * unit)
+	toast_label.size = Vector2(notice_width, 85.0 * unit)
 	toast_label.add_theme_font_size_override("font_size", int(fonts.body))
+	_apply_hud_visual_colors()
 func _build_menu_layer() -> void:
 	menu_layer = Control.new()
 	menu_layer.process_mode = Node.PROCESS_MODE_ALWAYS
@@ -3219,6 +3277,7 @@ func apply_accessibility(current: Dictionary) -> void:
 		var fill := bar.get_theme_stylebox("fill") as StyleBoxFlat
 		if fill != null:
 			fill.bg_color = (Color(0.84, 0.40, 0.30) if high_contrast else Color(0.52, 0.11, 0.08)) if bar != stamina_bar else (Color(0.91, 0.77, 0.42) if high_contrast else Color(0.72, 0.54, 0.18))
+	_apply_hud_visual_identity()
 	_refresh_resource_attention()
 	_update_process_policy()
 	call_deferred("_apply_hud_layout")
@@ -3603,33 +3662,52 @@ func _focused_dialogue_button() -> Button:
 	return null
 
 func _apply_theme() -> void:
-	for bar in [health_bar, stamina_bar, enemy_bar]:
-		var bg = StyleBoxFlat.new()
-		bg.bg_color = Color(0.035, 0.032, 0.028, 0.88)
-		bg.border_color = Color(0.35, 0.30, 0.22)
-		bg.set_border_width_all(1)
-		var fill = StyleBoxFlat.new()
-		fill.bg_color = Color(0.52, 0.11, 0.08) if bar == health_bar or bar == enemy_bar else Color(0.72, 0.54, 0.18)
-		bar.add_theme_stylebox_override("background", bg)
-		bar.add_theme_stylebox_override("fill", fill)
-	for label: Label in _hud_text_labels():
-		label.add_theme_color_override("font_color", Color(0.86, 0.81, 0.69))
-		label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.85))
-		label.add_theme_constant_override("shadow_offset_x", 2)
-		label.add_theme_constant_override("shadow_offset_y", 2)
-	tracker_label.add_theme_font_size_override("font_size", 15)
-	compass_label.add_theme_font_size_override("font_size", 16)
-	target_status_label.add_theme_font_size_override("font_size", 13)
-	toast_label.add_theme_font_size_override("font_size", 17)
-	prompt_label.add_theme_font_size_override("font_size", 18)
-	hint_label.add_theme_font_size_override("font_size", 15)
-	status_label.add_theme_font_size_override("font_size", 16)
-	_style_panel(dialogue_layer, Color(0.045, 0.04, 0.035, 0.96), Color(0.44, 0.32, 0.18, 0.92))
-	_style_panel(inventory_layer, Color(0.045, 0.04, 0.035, 0.97), Color(0.44, 0.32, 0.18, 0.92))
+	_apply_hud_visual_identity()
+	_style_panel(inventory_layer, Color(0.035, 0.038, 0.04, 0.97), Color(0.49, 0.47, 0.39, 0.75))
 
+func _apply_hud_visual_identity() -> void:
+	HudVisualStyle.apply_bar(health_bar, "blood", high_contrast)
+	HudVisualStyle.apply_bar(stamina_bar, "stamina", high_contrast)
+	HudVisualStyle.apply_bar(enemy_bar, "enemy", high_contrast)
+	if is_instance_valid(_hart_emblem):
+		_hart_emblem.call("configure", "hart", high_contrast)
+	if is_instance_valid(_navigation_dial):
+		_navigation_dial.call("set_high_contrast", high_contrast)
+	for id: String in _quick_icons:
+		(_quick_icons[id] as Control).call("configure", id, high_contrast)
+	var settings: Dictionary = _current_settings()
+	var opacity: float = clampf(float(settings.get("subtitle_background_opacity", 0.92)), 0.25, 1.0)
+	dialogue_layer.add_theme_stylebox_override("panel", HudVisualStyle.dialogue_panel(high_contrast, opacity))
+	dialogue_title.add_theme_color_override("font_color", Color.WHITE if high_contrast else HudVisualStyle.GOLD)
+	dialogue_text.add_theme_color_override("default_color", Color.WHITE if high_contrast else HudVisualStyle.IVORY)
+	_dialogue_history_button.add_theme_color_override("font_color", Color.WHITE if high_contrast else HudVisualStyle.MUTED)
+	_dialogue_back_button.add_theme_color_override("font_color", Color.WHITE if high_contrast else HudVisualStyle.MUTED)
+	_apply_hud_visual_colors()
+
+func _apply_hud_visual_colors() -> void:
+	for label: Label in _hud_text_labels():
+		HudVisualStyle.label_color(label, HudVisualStyle.IVORY, high_contrast)
+	for label: Label in [tracker_title_label, _quest_marker, notice_category_label]:
+		HudVisualStyle.label_color(label, HudVisualStyle.GOLD, high_contrast)
+	for label: Label in [tracker_route_label, tracker_work_label, tracker_footer_label, compass_label, _world_clock_label, _gameplay_bindings, equipment_label, stamina_value_label]:
+		HudVisualStyle.label_color(label, HudVisualStyle.MUTED, high_contrast)
+	for label: Label in _bar_name_labels:
+		HudVisualStyle.label_color(label, HudVisualStyle.SILVER, high_contrast)
+	for raw: Variant in _quick_bindings.values():
+		HudVisualStyle.label_color(raw as Label, HudVisualStyle.MUTED, high_contrast)
+	var danger: bool = last_health > 0.0 and float(last_health) / maxf(float(last_health_max), 1.0) <= 0.28
+	HudVisualStyle.label_color(vitals_warning_label, Color("edb397") if danger else HudVisualStyle.GOLD, high_contrast)
+	status_label.add_theme_color_override("font_color", _status_color(_status_kind))
+	vitals_back.color = Color(0.008, 0.012, 0.015, 0.94 if high_contrast else (0.12 if _attention_remaining > 0.0 or danger else 0.0))
+	(tracker_back as ColorRect).color = Color(0.008, 0.012, 0.015, 0.93 if high_contrast else 0.0)
+	(compass_back as ColorRect).color = Color(0.008, 0.012, 0.015, 0.94 if high_contrast else 0.0)
+	prompt_back.color = Color(0.008, 0.012, 0.015, 0.95 if high_contrast else 0.24)
+	notice_back.color = Color(0.008, 0.012, 0.015, 0.94 if high_contrast else 0.18)
+	_quest_rule.color = Color.WHITE if high_contrast else Color(0.66, 0.59, 0.38, 0.62)
 func _hud_text_labels() -> Array[Label]:
 	var labels: Array[Label] = [enemy_label, enemy_value_label, target_status_label, prompt_label, tracker_label, compass_label, toast_label, hint_label, status_label, equipment_label, health_value_label, stamina_value_label, tracker_title_label, tracker_caption_label, tracker_route_label, tracker_work_label, tracker_footer_label, vitals_warning_label, notice_category_label, inventory_notice_label]
 	labels.append_array(_bar_name_labels)
+	labels.append_array([_world_clock_label, _gameplay_bindings, _quest_marker])
 	for raw: Variant in supply_labels.values():
 		labels.append(raw as Label)
 	for raw: Variant in supply_counts.values():
@@ -4183,6 +4261,19 @@ func _style_button(button: Button) -> void:
 	button.add_theme_color_override("font_pressed_color", Color(1.0, 0.74, 0.36))
 	button.add_theme_color_override("font_disabled_color", Color(0.42, 0.39, 0.34))
 	button.add_theme_font_size_override("font_size", 23)
+	if button.has_meta("dialogue_focus_key"):
+		for key: String in ["normal", "hover", "pressed", "disabled"]:
+			var choice_style: StyleBoxFlat = (button.get_theme_stylebox(key).duplicate() as StyleBoxFlat)
+			choice_style.bg_color = Color(0.028, 0.032, 0.035, 0.9 if high_contrast else (0.76 if key in ["hover", "pressed"] else 0.32))
+			choice_style.border_color = Color.WHITE if high_contrast else HudVisualStyle.GOLD
+			choice_style.set_border_width_all(0)
+			choice_style.border_width_left = 3 if key in ["hover", "pressed"] else 0
+			choice_style.border_width_bottom = 1
+			choice_style.corner_radius_top_left = 0
+			choice_style.corner_radius_top_right = 0
+			choice_style.corner_radius_bottom_left = 0
+			choice_style.corner_radius_bottom_right = 0
+			button.add_theme_stylebox_override(key, choice_style)
 	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	button.focus_mode = Control.FOCUS_ALL
 	if button.has_meta("wrapped_label"):

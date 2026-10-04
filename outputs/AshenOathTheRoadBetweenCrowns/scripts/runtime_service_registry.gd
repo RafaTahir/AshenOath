@@ -160,10 +160,12 @@ func configure(owner: Node) -> void:
 	)
 
 	day_night.time_changed.connect(func(minutes: float, phase: String, count: int):
+		hud.set_world_clock(minutes, phase, count)
 		var director = owner.get("visual_director")
 		if director != null:
 			director.set_time(minutes, phase, count)
 	)
+	hud.set_world_clock(day_night.get_time(), day_night.current_phase, day_night.day_count)
 	settings.changed.connect(func(current: Dictionary):
 		input_router.apply_settings(current)
 		mobile_touch.apply_settings(current)
