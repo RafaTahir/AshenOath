@@ -18,10 +18,10 @@ static func install_npc(body: Node3D, driver: Node) -> void:
 	# rigs keep their own anatomy; seated actors opt out at their spawn site.
 	for bone: String in ["thigh_l", "calf_l", "foot_l", "thigh_r", "calf_r", "foot_r"]:
 		if skeleton.find_bone(bone) < 0: return
-	var modifier := load("res://scripts/grounded_feet_modifier.gd").new()
+	var modifier: SkeletonModifier3D = load("res://scripts/grounded_feet_modifier.gd").new()
 	modifier.name = "GroundedFeet"
 	skeleton.add_child(modifier)
-	modifier.configure(body, skeleton, driver)
+	modifier.call("configure", body, skeleton, driver)
 
 func configure(body: Node3D, skeleton: Skeleton3D, driver: Node = null) -> void:
 	actor = body
