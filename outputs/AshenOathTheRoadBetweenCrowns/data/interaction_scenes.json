@@ -1,4 +1,43 @@
 {
+  "opening_care_invitation": {
+    "name": "Anwen",
+    "greeting": "A moment, hunter. The man behind that screen cannot reach his water.",
+    "lines": [
+      "Anwen: The cup is on the step. Leave it on the linen by his hand, if you would.",
+      "Anwen: And that little coat on the bench belongs under the shelf. Oren will complain if I let the rain into his pockets."
+    ],
+    "variants": [
+      {"priority": 20, "conditions": {"opening_cup_delivered": true}, "greeting": "Thank you for the water. He has stopped trying to stand.", "lines": ["Anwen: Would you move that little coat under the shelf? Oren left it here this morning. He said he would be too hot."]},
+      {"priority": 10, "conditions": {"opening_coat_sheltered": true}, "greeting": "You found a dry place for his coat. Thank you.", "lines": ["Anwen: The man behind the screen needs the cup on the step. Leave it on the linen by his hand, if you would."]}
+    ],
+    "actions": [
+      {"type": "opening_care_resume", "label": "I'll help here for a moment."},
+      {"type": "opening_care_account", "label": "Tell me about the missing travelers."}
+    ]
+  },
+  "opening_care_water": {
+    "name": "Anwen",
+    "greeting": "There. Close enough that he need not ask again.",
+    "lines": [
+      {"speaker": "Narrator", "speaker_id": "narrator", "text": "A hand comes beneath the screen. It steadies the cup against the wood before lifting it."},
+      "Kael: Was he with the missing cart?",
+      "Anwen: No. A fall on the south road. Not every hurt here is a sign, Kael. Some people only need water.",
+      {"speaker": "Narrator", "speaker_id": "narrator", "text": "The cup comes back to the linen. For a moment, the breathing behind the screen is easier."}
+    ],
+    "actions": []
+  },
+  "opening_care_coat": {
+    "name": "Anwen",
+    "greeting": "That is Oren's. Leave the pockets turned in; he keeps things in them.",
+    "lines": [
+      {"speaker": "Narrator", "speaker_id": "narrator", "text": "The small coat is heavier at one cuff. Three crooked red stitches hold a tear shut. Kael folds the sleeve beneath it, clear of the wet edge."},
+      "Kael: Did you mend this?",
+      "Anwen: He did. I threaded the needle. He would not let me do the rest.",
+      "Anwen: Bram drove the cart. Sella took Oren beside her. He left this because the sun was out.",
+      {"speaker": "Narrator", "speaker_id": "narrator", "text": "Anwen leaves room on the bench beside the coat. She has not put it away."}
+    ],
+    "actions": []
+  },
   "soldiers_stand_down": {
     "name":"The soldiers at the road", "greeting":"The nearest soldier lets his sword point fall into the mud. The other watches Senn before doing the same.",
     "lines":["Soldier: He said Greyfen would leave us hungry if we stopped taking what passed.", "Kael: I cannot promise nobody will ask what you took. I can promise supper is not a reward for obeying him.", "Soldier: And if we speak?", "Kael: Then you speak for yourselves. Lowering a weapon does not sign your name to anyone else's account.", "The road clears. Senn remains beside the table, without a line of men between his answers and the people he hurt."], "actions":[]

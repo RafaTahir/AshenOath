@@ -875,6 +875,7 @@ func _start_new_game_world() -> void:
 	print("LOADING: handoff_phase=hide_menu_end")
 	print("LOADING: handoff_phase=quest_begin")
 	quests.start_quest("main_road_of_crows")
+	story_state.set_flag("opening_care_enabled", true)
 	print("LOADING: handoff_phase=quest_end")
 	# The opening is now playable. Remaining packs must not delay New Game or
 	# the first quest interaction. In particular, do not start the character-pack
@@ -1857,6 +1858,8 @@ func _handle_interaction(area) -> void:
 	elif area.interaction_type == "village_place":
 		_handle_village_place(area.interaction_id)
 	elif area.interaction_type == "dialogue":
+		if area.interaction_id == "sister_anwen" and preload("res://scripts/opening_care_scene.gd").introduce(self, area):
+			return
 		if area.interaction_id == "vargan_ledger_choice":
 			audio.play_event("record_page", 0.02)
 			quests.complete_evidence("main_blood_under_stone", "evidence_ledger_fragment")
@@ -2100,6 +2103,9 @@ func _handle_road_of_crows_clue(area) -> void:
 		"oren_token":
 			quests.complete_evidence("main_road_of_crows", "oren")
 			story_state.set_flag("road_evidence_oren", true)
+			if bool(story_state.get_flag("opening_coat_sheltered", false)) and not bool(story_state.get_flag("opening_coat_recalled", false)):
+				story_state.set_flag("opening_coat_recalled", true)
+				hud.set_guidance_hint("His coat is still on Anwen's bench. Someone mended the sleeve expecting him home.", 10.0)
 			_try_complete_oren_thread_trace()
 		"claw_marks":
 			quests.complete_evidence("main_road_of_crows", "vargan_wire")
@@ -2294,7 +2300,15 @@ func _apply_dialogue_action(action: Dictionary) -> bool:
 		hud.toast("That part of the story is not ready yet.")
 		_refresh_tracker()
 		return false
-	if type == "start_quest":
+	if type == "opening_care_account":
+		var opening_anwen := zone_root.find_child("sister_anwen", true, false) as Node3D
+		if current_zone_id == "greyfen" and opening_anwen != null:
+			story_state.set_flag("opening_care_introduced", true)
+			call_deferred("_handle_interaction", opening_anwen)
+	elif type == "opening_care_resume":
+		var care_hint := "Oren's coat is on the bench. Anwen can tell you about the road whenever you are ready." if bool(story_state.get_flag("opening_cup_delivered", false)) else "The cup is on the low step. Anwen can tell you about the road whenever you are ready."
+		hud.set_guidance_hint(care_hint, 8.0)
+	elif type == "start_quest":
 		quests.start_quest(action.get("quest", ""))
 		if str(action.get("quest", "")) == "side_childs_charm":
 			_try_complete_oren_thread_trace(false)

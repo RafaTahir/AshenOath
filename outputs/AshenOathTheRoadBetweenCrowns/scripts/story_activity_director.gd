@@ -33,8 +33,15 @@ static func install(game, root: Node3D, zone_id: String) -> void:
 		root.add_child(director)
 		director._build(root)
 	director.refresh()
+	if zone_id == "greyfen":
+		preload("res://scripts/opening_care_scene.gd").install(game, root)
 
 static func handle(game, area) -> void:
+	if str(area.interaction_id).begins_with("opening_"):
+		var opening: Node = game.zone_root.get_node_or_null("OpeningCareScene")
+		if opening != null:
+			opening.activate(str(area.interaction_id))
+		return
 	if area.has_meta("story_encounter_owner"):
 		var actor = instance_from_id(int(area.get_meta("story_encounter_owner")))
 		if actor != null and is_instance_valid(actor):
@@ -67,6 +74,8 @@ static func get_started_work(state, zone_id: String) -> Array[Dictionary]:
 	if state == null:
 		return result
 	if zone_id == "greyfen":
+		if bool(state.get_flag("opening_cup_carried", false)) and not bool(state.get_flag("opening_cup_delivered", false)):
+			result.append({"id":"opening_water", "title":"Water for the injured traveler", "action":"Leave the cup on the linen-covered tray beside Anwen's privacy screen", "target_ids":["opening_cup_deliver"], "destination_zone":"greyfen"})
 		if bool(state.get_flag("cart_sack_carried", false)) and not bool(state.get_flag("cart_helped", false)):
 			result.append({"id":"cart_flour", "title":"Carry the flour to the common kitchen", "action":"Set Rook's flour on the kitchen table beside the well", "target_ids":["cart_kitchen_delivery"], "destination_zone":"greyfen"})
 		if bool(state.get_flag("relief_shares_carried", false)) and not bool(state.get_flag("relief_deliveries_completed", false)):

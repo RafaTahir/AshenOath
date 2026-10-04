@@ -2,6 +2,23 @@
   "schema": 1,
   "work": [
     {
+      "id": "opening_water", "title": "A cup within reach", "zone": "greyfen",
+      "body": "Anwen keeps water for an injured traveler behind the screen beside her.",
+      "known_any": [{"flag": "opening_cup_carried", "value": true}, {"flag": "opening_cup_delivered", "value": true}],
+      "stages": [
+        {"gate": {"flag": "opening_cup_delivered", "value": true}, "status": "completed", "body": "Kael left the water within reach. The traveler was hurt in a fall on the south road; this was a small act of care, not evidence about the missing cart."},
+        {"gate": {"flag": "opening_cup_carried", "value": true}, "status": "open", "body": "Leave the cup on the linen-covered tray beside Anwen's privacy screen in Greyfen."}
+      ]
+    },
+    {
+      "id": "opening_coat", "title": "Oren's mended sleeve", "zone": "greyfen",
+      "body": "Oren left his coat with Anwen because the sun was out.",
+      "known_any": [{"flag": "opening_coat_sheltered", "value": true}],
+      "stages": [
+        {"gate": {"flag": "opening_coat_sheltered", "value": true}, "status": "completed", "body": "Kael folded Oren's coat beneath the shelf. The child mended its torn cuff himself after Anwen threaded the needle. The coat remains on her bench, waiting for him."}
+      ]
+    },
+    {
       "id": "kitchen_cart", "title": "Flour for the common kitchen", "zone": "greyfen",
       "body": "Kael has begun helping with the kitchen cart. The delivery's result has not been recorded.",
       "known_any": [{"flag": "cart_sack_carried", "value": true}, {"flag": "cart_helped", "value": true}],
