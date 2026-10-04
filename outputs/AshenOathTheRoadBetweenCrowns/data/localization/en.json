@@ -5740,11 +5740,11 @@
       "speaker": "",
       "context": "interaction_scenes.aftermath_names_ash.lines"
     },
-    "interaction_scenes.aftermath_names_ash.lines.2": {
+    "interaction_scenes.aftermath_names_ash.lines.2.text": {
       "source": "The copied command and the household register lie on her table. Human hands saved them before the glade burned. Their evidence has not become less true because its witness is gone.",
       "text": "The copied command and the household register lie on her table. Human hands saved them before the glade burned. Their evidence has not become less true because its witness is gone.",
-      "speaker": "",
-      "context": "interaction_scenes.aftermath_names_ash.lines"
+      "speaker": "Narrator",
+      "context": "interaction_scenes.aftermath_names_ash.lines.2"
     },
     "interaction_scenes.aftermath_names_ash.lines.3": {
       "source": "Anwen: There are things we can no longer ask. We must mark those gaps instead of filling them with convenient answers.",
@@ -5752,11 +5752,11 @@
       "speaker": "",
       "context": "interaction_scenes.aftermath_names_ash.lines"
     },
-    "interaction_scenes.aftermath_names_ash.lines.4": {
+    "interaction_scenes.aftermath_names_ash.lines.4.text": {
       "source": "A father passing the table says his child slept without hearing voices. Anwen listens until he has finished.",
       "text": "A father passing the table says his child slept without hearing voices. Anwen listens until he has finished.",
-      "speaker": "",
-      "context": "interaction_scenes.aftermath_names_ash.lines"
+      "speaker": "Narrator",
+      "context": "interaction_scenes.aftermath_names_ash.lines.4"
     },
     "interaction_scenes.aftermath_names_ash.lines.5": {
       "source": "Kael: We keep what remains. And answer for what we chose.",
@@ -5794,11 +5794,11 @@
       "speaker": "",
       "context": "interaction_scenes.aftermath_names_duty.lines"
     },
-    "interaction_scenes.aftermath_names_duty.lines.2": {
+    "interaction_scenes.aftermath_names_duty.lines.2.text": {
       "source": "She writes that the keeping is Kael's choice. No child inherits it. No shortage can compel another keeper. The old command remains beside it, uncensored.",
       "text": "She writes that the keeping is Kael's choice. No child inherits it. No shortage can compel another keeper. The old command remains beside it, uncensored.",
-      "speaker": "",
-      "context": "interaction_scenes.aftermath_names_duty.lines"
+      "speaker": "Narrator",
+      "context": "interaction_scenes.aftermath_names_duty.lines.2"
     },
     "interaction_scenes.aftermath_names_duty.lines.3": {
       "source": "Kael: If I cannot keep it?",
@@ -5812,11 +5812,11 @@
       "speaker": "",
       "context": "interaction_scenes.aftermath_names_duty.lines"
     },
-    "interaction_scenes.aftermath_names_duty.lines.5": {
+    "interaction_scenes.aftermath_names_duty.lines.5.text": {
       "source": "Kael reads the lines before signing. The tremor in his hand is his own.",
       "text": "Kael reads the lines before signing. The tremor in his hand is his own.",
-      "speaker": "",
-      "context": "interaction_scenes.aftermath_names_duty.lines"
+      "speaker": "Narrator",
+      "context": "interaction_scenes.aftermath_names_duty.lines.5"
     },
     "interaction_scenes.aftermath_names_duty.lines.6": {
       "source": "Anwen: Tor has a repair for you. Something ordinary. Let him do it.",
@@ -5848,11 +5848,11 @@
       "speaker": "",
       "context": "interaction_scenes.aftermath_names_mercy.lines"
     },
-    "interaction_scenes.aftermath_names_mercy.lines.2": {
+    "interaction_scenes.aftermath_names_mercy.lines.2.text": {
       "source": "A woman returns a sealed page. She asks Anwen to keep her son's name and destroy the account of his last fear. Anwen asks once whether she is certain, then follows her instruction.",
       "text": "A woman returns a sealed page. She asks Anwen to keep her son's name and destroy the account of his last fear. Anwen asks once whether she is certain, then follows her instruction.",
-      "speaker": "",
-      "context": "interaction_scenes.aftermath_names_mercy.lines"
+      "speaker": "Narrator",
+      "context": "interaction_scenes.aftermath_names_mercy.lines.2"
     },
     "interaction_scenes.aftermath_names_mercy.lines.3": {
       "source": "Kael: Edric's order stays on the wall.",
@@ -5866,11 +5866,11 @@
       "speaker": "",
       "context": "interaction_scenes.aftermath_names_mercy.lines"
     },
-    "interaction_scenes.aftermath_names_mercy.lines.5": {
+    "interaction_scenes.aftermath_names_mercy.lines.5.text": {
       "source": "For the first time, the bell can mourn someone without claiming everything that happened to them.",
       "text": "For the first time, the bell can mourn someone without claiming everything that happened to them.",
-      "speaker": "",
-      "context": "interaction_scenes.aftermath_names_mercy.lines"
+      "speaker": "Narrator",
+      "context": "interaction_scenes.aftermath_names_mercy.lines.5"
     },
     "interaction_scenes.aftermath_names_mercy.lines.6": {
       "source": "Anwen: The living still need timber and flour. Tor is at the bench. There is a world outside these books.",
@@ -5902,11 +5902,11 @@
       "speaker": "",
       "context": "interaction_scenes.aftermath_names_witness.lines"
     },
-    "interaction_scenes.aftermath_names_witness.lines.2": {
+    "interaction_scenes.aftermath_names_witness.lines.2.text": {
       "source": "A man waiting at the wall asks who will pay for the land his mother was refused. Anwen puts his question beneath the names instead of sending him away.",
       "text": "A man waiting at the wall asks who will pay for the land his mother was refused. Anwen puts his question beneath the names instead of sending him away.",
-      "speaker": "",
-      "context": "interaction_scenes.aftermath_names_witness.lines"
+      "speaker": "Narrator",
+      "context": "interaction_scenes.aftermath_names_witness.lines.2"
     },
     "interaction_scenes.aftermath_names_witness.lines.3": {
       "source": "Anwen: We cannot promise every answer today.",
@@ -5920,11 +5920,11 @@
       "speaker": "",
       "context": "interaction_scenes.aftermath_names_witness.lines"
     },
-    "interaction_scenes.aftermath_names_witness.lines.5": {
+    "interaction_scenes.aftermath_names_witness.lines.5.text": {
       "source": "Anwen leaves room on the board. The public account is no longer a ceremony that ends when the bell stops.",
       "text": "Anwen leaves room on the board. The public account is no longer a ceremony that ends when the bell stops.",
-      "speaker": "",
-      "context": "interaction_scenes.aftermath_names_witness.lines"
+      "speaker": "Narrator",
+      "context": "interaction_scenes.aftermath_names_witness.lines.5"
     },
     "interaction_scenes.aftermath_names_witness.lines.6": {
       "source": "Anwen: Tor has begun measuring timber. Rook is arguing about who gets the first load. Go help them make this more than my handwriting.",
@@ -6544,11 +6544,11 @@
       "speaker": "",
       "context": "interaction_scenes.work_cart_finish.lines"
     },
-    "interaction_scenes.work_cart_finish.lines.2": {
+    "interaction_scenes.work_cart_finish.lines.2.text": {
       "source": "A woman at the kitchen opens the sack and measures three small shares. She keeps the string for mending.",
       "text": "A woman at the kitchen opens the sack and measures three small shares. She keeps the string for mending.",
-      "speaker": "",
-      "context": "interaction_scenes.work_cart_finish.lines"
+      "speaker": "Narrator",
+      "context": "interaction_scenes.work_cart_finish.lines.2"
     },
     "interaction_scenes.work_cart_finish.lines.3": {
       "source": "Rook: There. Something went where we said it would. I could get used to that.",
@@ -6658,11 +6658,11 @@
       "speaker": "",
       "context": "interaction_scenes.work_road_finish.lines"
     },
-    "interaction_scenes.work_road_finish.lines.2": {
+    "interaction_scenes.work_road_finish.lines.2.text": {
       "source": "Water threads through the cleared drain. Rook's empty wheel crosses the boards without sinking.",
       "text": "Water threads through the cleared drain. Rook's empty wheel crosses the boards without sinking.",
-      "speaker": "",
-      "context": "interaction_scenes.work_road_finish.lines"
+      "speaker": "Narrator",
+      "context": "interaction_scenes.work_road_finish.lines.2"
     },
     "interaction_scenes.work_road_finish.lines.3": {
       "source": "Tor: There. A road ought to carry the person using it. Start with that.",
