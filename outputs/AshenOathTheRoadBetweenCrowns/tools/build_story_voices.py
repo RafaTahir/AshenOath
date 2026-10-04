@@ -128,6 +128,16 @@ def main():
                     print(f"Voiced {scene_id}: {who} ({len(lines)+1})", flush=True)
                 lines.append({"id":"story_" + key[:20], "speaker_id":who, "text":text, "text_sha256":hashlib.sha256(text.encode("utf-8")).hexdigest(), "page_key":key, "narrative_revision":REVISION, "path":"res://" + clip.relative_to(GAME).as_posix(), "scene":scene_id, "production_mode":"generated", "human_reviewed":False, "review_status":"not_performed_user_requested", "status":"generated_current", "voice_model":"en_GB-vctk-medium", "model_speaker":speaker})
     manifest = {"ticket":"VOICE-STORY-002", "status":"generated_current_unreviewed", "narrative_revision":REVISION, "authoritative_delivery":"subtitles", "allow_generated_current_recordings":True, "human_reviewed":False, "review_status":"not_performed_user_requested", "production_mode":"generated", "source":"Piper 1.4.1; VCTK medium multi-speaker model", "source_url":MODEL_BASE, "attribution":"VCTK corpus: CSTR, University of Edinburgh, Junichi Yamagishi, Christophe Veaux and Kirsten MacDonald. Model card and attribution retained in docs/audio/VCTK_MODEL_CARD.txt.", "pronunciation":PRONUNCIATION, "roles":{role:{"model_speaker":value[0], "length_scale":value[1]} for role,value in ROLE_PROFILES.items()}, "lines":lines}
+    # Bake delivery motion from the actual recording, including its silences.
+    for line in lines:
+        samples, rate = sf.read(GAME / line["path"].removeprefix("res://"), dtype="float32", always_2d=True)
+        mono = samples.mean(axis=1)
+        hop = max(1, int(rate / 30))
+        rms = np.array([float(np.sqrt(np.mean(mono[i:i + hop] ** 2))) for i in range(0, len(mono), hop)])
+        reference = max(float(np.percentile(rms, 95)), 0.01) if len(rms) else 0.01
+        line["speech_envelope_hz"] = rate / hop
+        line["speech_envelope"] = np.round(np.clip((rms - 0.008) / reference, 0, 1), 3).tolist()
+        line["duration_seconds"] = len(mono) / rate
     (GAME / "voice_production_manifest.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     (credits / "VOICE_PRODUCTION.md").write_text("# Current campaign voice production\n\nThese clips are newly generated from the revised campaign text using Piper and the VCTK model. They are synthetic performances, not recordings by a cast, and have not received a listening or human-performance review under the user's no-verification instruction. Each clip is tied to the exact speaker and displayed text with a page hash. Mismatched or absent pages remain subtitle-led. Advancing a page interrupts its clip; speech never auto-selects a decision.\n\nThe inference engine and model remain build-time dependencies under the ignored work directory. Only generated compressed clips and their provenance are shipped. Model-card attribution is included alongside this document.\n", encoding="utf-8")
     print(f"Generated campaign voice manifest: {len(lines)} exact-text clips", flush=True)

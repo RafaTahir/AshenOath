@@ -102,6 +102,12 @@ func _process(delta: float) -> void:
 	# root or its collision/interaction anchor up and down for ambient breathing.
 
 func _update_attention(parent_3d: Node3D, delta: float) -> void:
+	# Presentation can arrive after the interaction anchor has entered the tree.
+	if not is_instance_valid(animation_driver):
+		animation_driver = parent_3d.find_child("CharacterAnimationDriver", true, false)
+		animation_update_hz = -1.0
+	if not is_instance_valid(face_driver):
+		face_driver = parent_3d.find_child("CharacterFaceDriver", true, false)
 	if animation_driver != null and animation_driver.has_method("set_dialogue_pose"):
 		animation_driver.set_dialogue_pose(false)
 	if not is_instance_valid(focus_target):
@@ -133,7 +139,9 @@ func _update_attention(parent_3d: Node3D, delta: float) -> void:
 			var home_offset: float = wrapf(player_yaw - home_yaw, -PI, PI)
 			# Someone walking behind a stationary worker must not swivel that
 			# worker through a full half-turn. Dialogue has its own facing owner.
-			target_yaw = home_yaw + clampf(home_offset, -deg_to_rad(ATTENTION_ARC), deg_to_rad(ATTENTION_ARC))
+			# Small attention shifts belong to the eyes and head. Keep feet at
+			# the work station; active dialogue owns deliberate whole-body turns.
+			target_yaw = home_yaw + clampf(home_offset * 0.15, -deg_to_rad(8.0), deg_to_rad(8.0))
 		elif attention_hold > 0.0:
 			target_yaw = desired_yaw
 	attention_hold = max(attention_hold - delta, 0.0)
@@ -141,10 +149,8 @@ func _update_attention(parent_3d: Node3D, delta: float) -> void:
 
 func _animation_distance() -> float:
 	if role_id == "sister_anwen":
-		return 18.0 * 0.72
-	if role_id == "rook":
-		return 6.5 * 0.72
-	return 7.0 * 0.72
+		return 20.0
+	return 16.0
 
 func _set_animation_suspended(value: bool) -> void:
 	ambient_suspended = value

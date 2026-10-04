@@ -657,6 +657,7 @@ func _play_voice_now(voice_id: String) -> void:
 	voice_player = AudioStreamPlayer.new()
 	voice_player.bus = voice_bus_name if voice_bus_name != "" else bus_name
 	voice_player.stream = voices[voice_id]
+	voice_player.set_meta("voice_id", voice_id)
 	voice_player.volume_db = _volume_for("voice")
 	add_child(voice_player)
 	voice_player.finished.connect(func():
@@ -703,6 +704,20 @@ func _has_production_voice(voice_id: String) -> bool:
 	# Scratch WAVs and generated tone placeholders are development material. Do
 	# not silently ship them as if they were finished acting.
 	return not bool(stream.get_meta("development_voice_stub", false)) and not bool(stream.get_meta("scratch_voice", false))
+
+func get_dialogue_delivery() -> Dictionary:
+	if dialogue_review_paused:
+		return {"playing": false, "paused": true, "amplitude": 0.0}
+	if not is_instance_valid(voice_player) or not voice_player.playing:
+		return {"playing": false, "amplitude": 0.0}
+	var entry: Dictionary = revised_voice_entries.get(str(voice_player.get_meta("voice_id", "")), {})
+	var envelope: Array = entry.get("speech_envelope", [])
+	var cursor: float = voice_player.get_playback_position() * float(entry.get("speech_envelope_hz", 30.0))
+	var amplitude := 0.0
+	if not envelope.is_empty():
+		var index := clampi(int(cursor), 0, envelope.size() - 1)
+		amplitude = lerpf(float(envelope[index]), float(envelope[mini(index + 1, envelope.size() - 1)]), fmod(cursor, 1.0))
+	return {"playing": true, "speaker_id": str(entry.get("speaker_id", "")), "amplitude": amplitude}
 
 func stop_voice() -> void:
 	dialogue_review_paused = false

@@ -5,11 +5,12 @@ var _focus_actor: WeakRef
 var _locked_actor: WeakRef
 var _topic_generation: int = 0
 var _topic_context: Dictionary = {}
+var _turns: Array[Tween] = []
 
 func get_focus_actor() -> Node3D:
 	return _focus_actor.get_ref() as Node3D if _focus_actor != null else null
 
-func stage(area: Node3D, player: Node3D, camera_rig: Node, validate_position: Callable) -> void:
+func stage(area: Node3D, player: Node3D, camera_rig: Node, _validate_position: Callable) -> void:
 	_invalidate_topic_context()
 	_focus_actor = null
 	if not is_instance_valid(player) or not is_instance_valid(area):
@@ -20,22 +21,9 @@ func stage(area: Node3D, player: Node3D, camera_rig: Node, validate_position: Ca
 		_locked_actor = weakref(area)
 		_set_speaker_pose(area, true)
 	_face_pair(area, player)
-	# Preserve the spatially validated close-conversation step before pausing.
-	if player.global_position.distance_to(area.global_position) < 1.35:
-		var staged_position := area.global_position - area.global_basis.z.normalized() * 1.75
-		if validate_position.is_valid():
-			var validated_position: Vector3 = validate_position.call(staged_position)
-			if validated_position.distance_to(staged_position) > 0.65 or validated_position.distance_to(player.global_position) > 2.0:
-				staged_position = player.global_position
-			else:
-				staged_position = validated_position
-		if staged_position != player.global_position:
-			var supported: Variant = _supported_step(player, staged_position)
-			staged_position = supported if supported != null else player.global_position
-		if staged_position != player.global_position:
-			player.global_position = staged_position
-			player.set("velocity", Vector3.ZERO)
-			_face_pair(area, player)
+	# Preserve both people's positions. The camera owns close framing; starting
+	# a conversation must never teleport Kael away from an approaching walker.
+	player.set("velocity", Vector3.ZERO)
 	_frame_camera(camera_rig, area)
 
 func bind_topic_context(actor_id: String, zone_id: String) -> String:
@@ -84,7 +72,6 @@ func refresh_page(player: Node3D, camera_rig: Node, page: Dictionary = {}) -> vo
 	var actor := get_focus_actor()
 	if not is_instance_valid(player) or not is_instance_valid(actor):
 		return
-	_face_pair(actor, player)
 	if camera_rig != null and camera_rig.has_method("frame_dialogue_beat"):
 		camera_rig.call("frame_dialogue_beat", actor, str(page.get("speaker_id", "")), str(page.get("performance", {}).get("framing", "speaker")))
 	else:
@@ -99,6 +86,9 @@ func face_actor(actor: Node3D, player: Node3D) -> void:
 		actor.rotation.y = atan2(-to_player.x, -to_player.z)
 
 func release(player: Node3D) -> void:
+	for turn: Tween in _turns:
+		if turn != null and turn.is_valid(): turn.kill()
+	_turns.clear()
 	_invalidate_topic_context()
 	_focus_actor = null
 	_set_player_pose(player, false)
@@ -108,9 +98,24 @@ func release(player: Node3D) -> void:
 	_locked_actor = null
 
 func _face_pair(actor: Node3D, player: Node3D) -> void:
-	if player.has_method("face_target"):
-		player.face_target(actor.global_position)
-	face_actor(actor, player)
+	for turn: Tween in _turns:
+		if turn != null and turn.is_valid(): turn.kill()
+	_turns.clear()
+	_turn_toward(player, actor.global_position)
+	if actor.find_child("CharacterAnimationDriver", true, false) != null:
+		_turn_toward(actor, player.global_position)
+
+func _turn_toward(body: Node3D, point: Vector3) -> void:
+	var offset := point - body.global_position
+	offset.y = 0.0
+	if offset.length_squared() < 0.01: return
+	var yaw := atan2(-offset.x, -offset.z)
+	if bool(body.get_meta("source_forward_positive_z", false)): yaw += PI
+	var difference := wrapf(yaw - body.global_rotation.y, -PI, PI)
+	var turn := body.create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	turn.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	turn.tween_property(body, "global_rotation:y", body.global_rotation.y + difference, clampf(absf(difference) / 2.8, 0.18, 0.65))
+	_turns.append(turn)
 
 func _frame_camera(camera_rig: Node, actor: Node3D) -> void:
 	if is_instance_valid(camera_rig) and camera_rig.has_method("frame_dialogue_target"):
@@ -127,6 +132,10 @@ func _set_speaker_pose(actor: Node3D, active: bool) -> void:
 	actor.set_meta("dialogue_facing_lock", active)
 	var driver := actor.find_child("CharacterAnimationDriver", true, false)
 	if active and driver != null and driver.has_method("set_working"):
+		actor.set_meta("conversation_previous_work", str(driver.get("presentation_state")) == "work")
 		driver.set_working(false)
 	if driver != null and driver.has_method("set_dialogue_pose"):
 		driver.set_dialogue_pose(active)
+	if not active and driver != null and bool(actor.get_meta("conversation_previous_work", false)):
+		driver.set_working(true)
+	if not active: actor.remove_meta("conversation_previous_work")

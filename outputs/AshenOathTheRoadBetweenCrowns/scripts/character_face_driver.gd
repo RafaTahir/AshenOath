@@ -26,6 +26,17 @@ var focus_refresh_remaining := 0.0
 var expression := "neutral"
 var head_modifier: StoryHeadModifier
 var base_brow_rotations: Dictionary = {}
+var conversation_active := false
+var attention_elapsed := 0.0
+
+func set_conversation_active(value: bool) -> void:
+	conversation_active = value
+	if update_timer != null:
+		update_timer.wait_time = 1.0 / 30.0 if value else update_interval
+
+func set_speech_amount(value: float) -> void:
+	if head_modifier != null:
+		head_modifier.speech_amount = clampf(value, 0.0, 1.0)
 
 const NATIVE_MONSTER_ROLES := [
 	"ghoulkin",
@@ -116,23 +127,29 @@ func _on_update_timer_timeout() -> void:
 		return
 	if distance_suspended:
 		return
-	var step := update_interval
+	var step := update_timer.wait_time if update_timer != null else update_interval
+	attention_elapsed += step
 	if focus_target == null or not is_instance_valid(focus_target):
 		focus_refresh_remaining -= step
 		if focus_refresh_remaining <= 0.0:
 			focus_refresh_remaining = 0.75
 			var player_node := get_tree().get_first_node_in_group("player") as Node3D
 			focus_target = player_node
-	if focus_target != null:
+	var wanted_look := 0.0
+	if is_instance_valid(focus_target):
 		var to_target := focus_target.global_position + Vector3.UP * 1.18 - character_root.global_position - Vector3.UP * 1.35
 		to_target.y = 0.0
 		if to_target.length_squared() > 0.04 and to_target.length() < 10.0:
 			var local_target := character_root.global_transform.basis.inverse() * to_target.normalized()
-			look_offset = lerpf(look_offset, clampf(local_target.x, -1.0, 1.0), 1.0 - exp(-7.0 * step))
-			_apply_eye_look()
-	else:
-		look_offset = lerpf(look_offset, 0.0, 1.0 - exp(-4.0 * step))
-		_apply_eye_look()
+			var front := local_target.z if bool(character_root.get_meta("source_forward_positive_z", false)) else -local_target.z
+			if front > -0.15:
+				wanted_look = clampf(local_target.x, -0.85, 0.85)
+	# Brief, staggered breaks in eye contact rather than a permanent player stare.
+	var attention_phase := fmod(attention_elapsed + float(absi(role_id.hash()) % 37) * 0.1, 6.8)
+	if attention_phase > 5.6:
+		wanted_look = 0.16 * sin((attention_phase - 5.6) / 1.2 * PI)
+	look_offset = lerpf(look_offset, wanted_look, 1.0 - exp(-5.0 * step))
+	_apply_eye_look()
 	if blink_remaining > 0.0:
 		blink_remaining = maxf(blink_remaining - step, 0.0)
 		var blink_progress := 1.0 - blink_remaining / 0.14

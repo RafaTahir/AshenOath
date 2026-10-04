@@ -113,7 +113,7 @@ func routine_ids() -> Array:
 	return actors.map(func(entry): return str(entry.id))
 
 func _process(delta: float) -> void:
-	if host == null or player == null or get_tree().paused or not bool(host.get("game_started")): return
+	if host == null or player == null or get_parent() != host.zone_root or get_tree().paused or not bool(host.get("game_started")): return
 	simulation_tick_accumulator += delta
 	var decision_tick: bool = simulation_tick_accumulator >= 1.0 / _simulation_hz()
 	if decision_tick:
@@ -137,7 +137,8 @@ func _process(delta: float) -> void:
 			var distant: bool = distance_to_player > distance_limit
 			var driver: Node = entry.driver
 			if distant != was_distant:
-				actor_node.visible = not distant
+				# Keep distant people in the world; only their animation/simulation
+				# budget sleeps. Walking across a distance boundary must not erase them.
 				if driver != null and driver.has_method("set_distance_suspended"):
 					driver.set_distance_suspended(distant)
 				entry.distance_suspended = distant
@@ -216,6 +217,7 @@ func _enroll_named_npcs() -> void:
 func _update_actor(entry: Dictionary, delta: float) -> void:
 	var node: Node3D = entry.node
 	if not is_instance_valid(node): return
+	entry.bark_cooldown = maxf(float(entry.get("bark_cooldown", 0.0)) - delta, 0.0)
 	if bool(node.get_meta("dialogue_facing_lock", false)):
 		entry.motion_speed = 0.0
 		entry.travel_direction = Vector3.ZERO
@@ -230,14 +232,18 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 	if not bool(entry.get("activity_active", false)) and float(entry.get("motion_speed", 0.0)) < 0.05:
 		_apply_pending_routine(entry)
 	var distance_to_player := node.global_position.distance_to(player.global_position)
-	if distance_to_player < 2.1:
+	if distance_to_player > 3.4:
+		entry.greeted_on_approach = false
+	if distance_to_player < 1.65 or (distance_to_player < 2.4 and player.velocity.length() < 0.35):
 		entry.pause = max(float(entry.pause), 1.2)
 		_brake_actor(entry, delta)
 		if float(entry.motion_speed) < 0.05:
 			_face(node, player.global_position, delta)
-		if line_cooldown <= 0.0 and not bool(entry.named):
-			line_cooldown = 8.0
-			host.hud.toast(_line_for_actor(entry))
+		if line_cooldown <= 0.0 and not bool(entry.named) and not bool(entry.get("greeted_on_approach", false)) and float(entry.bark_cooldown) <= 0.0 and float(entry.motion_speed) < 0.05:
+			line_cooldown = 15.0
+			entry.bark_cooldown = 75.0
+			entry.greeted_on_approach = true
+			host.hud.toast("%s: %s" % [str(entry.profile.get("occupation", "Villager")).capitalize(), _line_for_actor(entry)], 5.5)
 		return
 	if bool(entry.get("activity_active", false)):
 		_update_activity(entry, delta)
@@ -252,9 +258,9 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 	entry.target = int(entry.target) % entry.path.size()
 	if entry.route.is_empty():
 		var final_target: Vector3 = host.validate_walkable_position(entry.path[int(entry.target)])
-		var route_key := int(entry.target)
-		var cached_routes: Dictionary = entry.get("routes", {})
-		entry.route = cached_routes.get(route_key, [final_target]).duplicate()
+		# Attention, crowd yielding and dialogue can stop someone away from the
+		# prior anchor. Start the next leg from their actual feet every time.
+		entry.route = spatial_service.build_route(node.global_position, final_target, 0.72) if spatial_service != null else [final_target]
 		entry.route_index = 1 if entry.route.size() > 1 else 0
 		_set_agent_target(entry)
 	if entry.route.is_empty():
@@ -264,6 +270,12 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 	var offset := target - node.global_position
 	offset.y = 0.0
 	var distance: float = offset.length()
+	if distance < 0.38 and int(entry.route_index) + 1 < entry.route.size():
+		var onward: Vector3 = entry.route[int(entry.route_index) + 1] - node.global_position
+		onward.y = 0.0
+		if onward.length_squared() > 0.01 and offset.normalized().dot(onward.normalized()) > 0.75:
+			entry.route_index = int(entry.route_index) + 1
+			return
 	if distance <= ARRIVAL_DISTANCE + 0.015 and float(entry.motion_speed) < 0.12:
 		entry.motion_speed = 0.0
 		_set_motion(entry, 0.0)
@@ -288,11 +300,44 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 	var turn_pace: float = clampf((deg_to_rad(65.0) - turn_error) / deg_to_rad(48.0), 0.0, 1.0)
 	var arrival_pace: float = sqrt(2.0 * WALK_BRAKING * maxf(distance - ARRIVAL_DISTANCE, 0.0))
 	var desired_speed: float = minf(float(entry.speed) * turn_pace, arrival_pace)
+	desired_speed *= _crowd_pace(entry, direction, delta)
 	var current_speed: float = float(entry.motion_speed)
 	var rate: float = WALK_ACCELERATION if desired_speed > current_speed else WALK_BRAKING
 	entry.motion_speed = move_toward(current_speed, desired_speed, rate * delta)
-	entry.travel_direction = direction
-	_move_actor(entry, direction, float(entry.motion_speed), delta, maxf(distance - ARRIVAL_DISTANCE, 0.0))
+	# Translation follows the chest. Turn first, then walk into the curve;
+	# don't slide diagonally toward a waypoint while the body is still turning.
+	var heading: Vector3 = -node.global_basis.z
+	heading.y = 0.0
+	heading = heading.normalized()
+	entry.travel_direction = heading
+	_move_actor(entry, heading, float(entry.motion_speed), delta, maxf(distance - ARRIVAL_DISTANCE, 0.0))
+
+func _crowd_pace(entry: Dictionary, direction: Vector3, delta: float) -> float:
+	var pace := 1.0
+	var obstruction: Node3D
+	for other: Dictionary in actors:
+		if other == entry or not is_instance_valid(other.node): continue
+		var offset: Vector3 = other.node.global_position - entry.node.global_position
+		offset.y = 0.0
+		var ahead := offset.dot(direction)
+		if ahead <= 0.0 or ahead > 1.5: continue
+		var lateral := (offset - direction * ahead).length()
+		if lateral < 0.60:
+			pace = minf(pace, smoothstep(0.60, 1.5, ahead))
+			if str(entry.id) > str(other.id) or bool(other.get("activity_active", false)) or float(other.get("pause", 0.0)) > 0.0:
+				obstruction = other.node
+	entry.yield_time = float(entry.get("yield_time", 0.0)) + delta if pace < 0.15 else 0.0
+	if float(entry.yield_time) > 1.2 and is_instance_valid(obstruction) and spatial_service != null:
+		entry.yield_time = -1.5
+		var side := direction.cross(Vector3.UP).normalized()
+		for sign_value: float in [1.0, -1.0]:
+			var step_aside: Vector3 = entry.node.global_position + side * sign_value * 0.95
+			var pass_point: Vector3 = obstruction.global_position + side * sign_value * 0.95 + direction * 0.85
+			if spatial_service.validate_runtime_segment(entry.node.global_position, step_aside, 0.58) and spatial_service.validate_runtime_segment(step_aside, pass_point, 0.58):
+				entry.route.insert(int(entry.route_index), pass_point)
+				entry.route.insert(int(entry.route_index), step_aside)
+				break
+	return pace
 
 func _brake_actor(entry: Dictionary, delta: float) -> void:
 	entry.motion_speed = move_toward(float(entry.get("motion_speed", 0.0)), 0.0, WALK_BRAKING * delta)

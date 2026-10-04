@@ -6355,7 +6355,7 @@ func _on_dialogue_page_changed(_speaker: String, _speaker_id: String, _page_inde
 	if audio != null:
 		audio.set_dialogue_active(true)
 		audio.play_dialogue_page(page)
-	preload("res://scripts/story_performance.gd").page(dialogue_runtime_coordinator.get_focus_actor(), page)
+	preload("res://scripts/story_performance.gd").page(dialogue_runtime_coordinator.get_focus_actor(), page, audio)
 
 func _on_dialogue_topic_requested(context_id: String, topic_id: String, revision_key: String) -> void:
 	# A reading request never re-enters interaction or action dispatch. Resolve
