@@ -6,9 +6,11 @@ const Routes = preload("res://scripts/story_route_catalog.gd")
 const PEOPLE_PATH := "res://data/journal_people.json"
 const WORK_PATH := "res://data/journal_work.json"
 const EVIDENCE_DETAILS_PATH := "res://data/journal_evidence_details.json"
+const ENEMIES_PATH := "res://data/enemies.json"
 static var _people_data: Dictionary = {}
 static var _work_data: Dictionary = {}
 static var _evidence_details_data: Dictionary = {}
+static var _enemy_data: Dictionary = {}
 
 static func _catalog(path: String) -> Dictionary:
 	if not FileAccess.file_exists(path):
@@ -431,18 +433,38 @@ static func _work_entries(quests, state, zone_id: String) -> Array[Dictionary]:
 
 static func _preparation_entries(quests, state) -> Array[Dictionary]:
 	var entries: Array[Dictionary] = []
+	var known_creatures: Dictionary = {}
 	var grave_count: int = 0
 	for id in ["grave_harl", "grave_child", "grave_soldier"]:
 		if _discovered({"id": id, "gate": {"quest": "main_bell_beneath_greyfen", "objective": id}}, quests, state):
 			grave_count += 1
 	if grave_count >= 2:
+		known_creatures["bell_eater"] = true
 		entries.append({"id": "preparation:bell", "title": "Read the bell", "body": "The cut ropes share a pull. Watch the raised clapper and step clear. Reading the graves gives extra time on its first tell in each phase; an avoided bell action leaves a short recovery opening."})
 	if _discovered({"id": "mill_accounts", "gate": {"quest": "main_ash_at_the_mill", "objective": "inspect_millstones"}}, quests, state):
+		known_creatures["ashwing"] = true
 		entries.append({"id": "preparation:ashwing", "title": "Cross Ashwing's plume", "body": "Dust reveals the breath's direction. Move across the plume. Avoiding its prepared attack gives a brief opening once per phase."})
 	if _flag_bool(state, "command_proof_recovered"):
+		known_creatures["halvern_boss"] = true
 		entries.append({"id": "preparation:halvern", "title": "Question the guarded account", "body": "The order establishes the witness's refusal, not his knowledge of the present. A clean parry gives a longer first opening in each phase for the question his bounded memory can answer."})
 	if _discovered({"id": "chapel_names", "gate": {"quest": "main_teeth_in_rain", "objective": "read_chapel_names"}}, quests, state) and _discovered({"id": "ritual_stones", "gate": {"quest": "main_teeth_in_rain", "objective": "name_the_dead"}}, quests, state):
+		known_creatures["bog_wretch"] = true
 		entries.append({"id": "preparation:bog", "title": "Read the restored name", "body": "The restored name gives time to read the Bog Wretch's first approach. Moon Oil and clean interruptions help expose its memory; neither is a required purchase."})
+	if _gate({"quest": "main_road_of_crows", "objective": "fight_ghoulkin"}, quests, state):
+		known_creatures["ghoulkin"] = true
+	if _enemy_data.is_empty():
+		_enemy_data = _catalog(ENEMIES_PATH)
+	for enemy_id: String in _enemy_data:
+		if not known_creatures.has(enemy_id) and not _has_evidence(state, "creature:" + enemy_id):
+			continue
+		var definition: Dictionary = _enemy_data[enemy_id]
+		var blade_id := EquipmentLoadout.preferred_blade_for_tag(str(definition.get("tag", "")))
+		if blade_id == "":
+			continue
+		var blade_name := "Steel" if blade_id == "steel" else "Oathblade"
+		var basis := "a physical body" if blade_id == "steel" else "an oathbound or spiritual body"
+		var percent := int(round((EquipmentLoadout.AFFINITY_MULTIPLIER - 1.0) * 100.0))
+		entries.append({"id": "preparation:blade:" + enemy_id, "title": str(definition.get("name", enemy_id)) + " - blade preparation", "body": "%s gains %d%% blade damage against this foe's nature: %s. The other blade still deals normal damage. Oils and existing openings remain useful; no blade is compulsory." % [blade_name, percent, basis]})
 	return entries
 
 static func _consent_text(value: String) -> String:

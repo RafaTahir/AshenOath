@@ -11,6 +11,8 @@ signal transition_started(action: String, duration: float)
 signal transition_finished
 
 const BLADE_IDS := ["steel", "oathblade"]
+const BLADE_AFFINITIES := {"steel": ["human", "beast"], "oathblade": ["spirit", "undead"]}
+const AFFINITY_MULTIPLIER := 1.15
 const DRAW_SECONDS := 0.64
 const SHEATH_SECONDS := 0.58
 const CONTACT_FRACTION := 0.48
@@ -134,6 +136,22 @@ func select_blade(value: String) -> void:
 
 static func normalized_blade_id(value: String) -> String:
 	return value.to_lower() if value.to_lower() in BLADE_IDS else "steel"
+
+static func preferred_blade_for_tag(tag: String) -> String:
+	for blade_id: String in BLADE_IDS:
+		if tag.to_lower() in BLADE_AFFINITIES[blade_id]:
+			return blade_id
+	return ""
+
+static func blade_damage_multiplier(blade_id: String, target_tag: String) -> float:
+	return AFFINITY_MULTIPLIER if normalized_blade_id(blade_id) == preferred_blade_for_tag(target_tag) else 1.0
+
+func stow_all() -> void:
+	cancel_transition()
+	sword_drawn = false
+	bow_drawn = false
+	bow_aiming = false
+	emit_changed()
 
 func selected_weapon_name() -> String:
 	if active_weapon == "bow":

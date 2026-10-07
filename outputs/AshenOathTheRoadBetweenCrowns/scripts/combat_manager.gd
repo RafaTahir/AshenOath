@@ -7,7 +7,27 @@ signal message(text: String)
 signal contact_resolved(result: Dictionary)
 signal contact_missed(result: Dictionary)
 
+var _blade_owner_id := 0
+var _blade_attack_id := -1
+var _blade_hit_ids: Dictionary = {}
+
 func resolve_player_blade_contact(player: Node3D, enemies: Array, contact: Dictionary, active_oil: String) -> Dictionary:
+	if not is_instance_valid(player) or not player.has_method("is_blade_ready") or not player.is_blade_ready():
+		return {"hit": false, "reason": "blade_not_ready"}
+	var attack_id := int(contact.get("attack_id", -1))
+	var owner_id := player.get_instance_id()
+	if owner_id != _blade_owner_id:
+		_blade_owner_id = owner_id
+		_blade_attack_id = -1
+		_blade_hit_ids.clear()
+	if attack_id < 0 or attack_id < _blade_attack_id or float(contact.get("damage", 0.0)) <= 0.0:
+		return {"hit": false, "reason": "expired_contact"}
+	if attack_id != _blade_attack_id:
+		_blade_attack_id = attack_id
+		_blade_hit_ids.clear()
+	var blade_id := EquipmentLoadout.normalized_blade_id(str(player.get_selected_blade_id()))
+	if str(contact.get("blade_id", blade_id)) != blade_id:
+		return {"hit": false, "reason": "stale_blade"}
 	var blade_base: Vector3 = contact.get("base", Vector3.ZERO)
 	var blade_tip: Vector3 = contact.get("tip", blade_base)
 	var previous_base: Vector3 = contact.get("previous_base", blade_base)
@@ -20,7 +40,7 @@ func resolve_player_blade_contact(player: Node3D, enemies: Array, contact: Dicti
 	var blade_direction := (blade_tip - blade_base).normalized() if blade_tip.distance_to(blade_base) > 0.001 else Vector3.ZERO
 	var candidates: Array = []
 	for enemy in enemies:
-		if enemy == null or enemy.dead or (enemy.has_method("is_encounter_active") and not enemy.is_encounter_active()):
+		if not is_instance_valid(enemy) or enemy.dead or _blade_hit_ids.has(enemy.get_instance_id()) or bool(enemy.get_meta("story_surrender_protected", false)) or (enemy.has_method("is_encounter_active") and not enemy.is_encounter_active()):
 			continue
 		var target: Vector3 = enemy.global_position + Vector3(0, 0.9, 0)
 		if target.distance_to(player.global_position + Vector3(0, 0.9, 0)) > reach + 0.85:
@@ -56,7 +76,7 @@ func resolve_player_blade_contact(player: Node3D, enemies: Array, contact: Dicti
 			"sweep_length": sweep_length,
 			"blade_direction": blade_direction,
 		}
-		if bool(contact.get("final_sample", true)):
+		if bool(contact.get("final_sample", true)) and _blade_hit_ids.is_empty():
 			contact_missed.emit(miss)
 		return miss
 	var resolved: Dictionary = candidates[0]
@@ -66,9 +86,12 @@ func resolve_player_blade_contact(player: Node3D, enemies: Array, contact: Dicti
 		source_tag = "spirit"
 	elif active_oil == "rot_oil":
 		source_tag = "undead"
+	var affinity := EquipmentLoadout.blade_damage_multiplier(blade_id, str(struck_enemy.get("tag")))
+	damage *= affinity
+	# Reserve before damage: death/phase signals can re-enter the resolver.
+	_blade_hit_ids[struck_enemy.get_instance_id()] = true
 	struck_enemy.apply_damage(damage, source_tag)
 	enemy_hit.emit(struck_enemy.display_name, damage)
-	impact.emit(resolved.point, heavy)
 	var hit_result := {
 		"hit": true,
 		"enemy": struck_enemy,
@@ -82,6 +105,8 @@ func resolve_player_blade_contact(player: Node3D, enemies: Array, contact: Dicti
 		"damage": damage,
 		"attack_id": str(contact.get("attack_id", "")),
 		"source_tag": source_tag,
+		"blade_id": blade_id,
+		"affinity_multiplier": affinity,
 		"contact_distance": float(resolved.get("contact_distance", INF)),
 		"blade_contact_distance": float(resolved.get("contact_distance", INF)),
 		"contact_phase": contact_phase,

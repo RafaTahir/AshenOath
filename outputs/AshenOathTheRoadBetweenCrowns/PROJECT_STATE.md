@@ -29,6 +29,10 @@ The complete Web directory is 91,921,171 bytes; Vercel deployment
 user-accepted. LR-004 blade affinity and Oathfire equipment restoration are next.
 No runtime validation is claimed; see its result for the user's manual checklist.
 
+LR-004 is implemented and packaging: explicit 1.15 blade affinity against existing
+tags, ready-blade/attack-target contact guards, single sword-impact audio path,
+known-creature preparation notes and Oathfire restoration of prior equipment.
+
 ## Current Local Assembly - 2026-10-07
 
 - The canonical `D:\Projects\AshenOath` worktree is on `codex/masterpiece-rebuild`

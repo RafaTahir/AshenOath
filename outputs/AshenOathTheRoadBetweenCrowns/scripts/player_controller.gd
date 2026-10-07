@@ -115,6 +115,7 @@ var beam_release_emitted := false
 var beam_cancel_reason := ""
 var beam_state_sequence := 0
 var beam_release_direction := Vector3.ZERO
+var beam_restore_equipment: Dictionary = {}
 var equipment_loadout: EquipmentLoadout = EquipmentLoadout.new()
 var sword_sheathed: bool:
 	get:
@@ -709,6 +710,9 @@ func _sample_foot_offset(side: float, delta: float, current: float) -> float:
 
 func _handle_combat_input() -> void:
 	_handle_equipment_input()
+	if beam_cast_state != BEAM_STATE_IDLE:
+		_handle_beam_input()
+		return
 	if beam_cast_state == BEAM_STATE_IDLE:
 		if _action_just_pressed("use_potion"):
 			potion_requested.emit()
@@ -716,10 +720,8 @@ func _handle_combat_input() -> void:
 			bomb_requested.emit()
 	if weapon_mode == "bow":
 		# LT is bow aim in this weapon context, not an Oathfire cast. A separately
-		# bound Oathfire press (for example keyboard C) still cancels into sword.
+		# bound Oathfire press stows the bow until the cast restores its prior intent.
 		if _action_just_pressed("oathfire_beam") and not _action_just_pressed("aim_bow"):
-			_cancel_equipment_action()
-			_set_weapon_mode("sword")
 			_handle_beam_input()
 		elif not equipment_loadout.is_transitioning():
 			_handle_bow_input()
@@ -860,7 +862,7 @@ func _begin_blade_attack(damage: float, radius: float, heavy: bool) -> void:
 	previous_blade_tip = segment.get("tip", previous_blade_base)
 
 func _update_blade_contact() -> void:
-	if not can_control:
+	if not is_blade_ready():
 		pending_attack_damage = 0.0
 		pending_attack_radius = 0.0
 		return
@@ -884,6 +886,7 @@ func _update_blade_contact() -> void:
 		attack_contact_emitted = true
 		blade_contact_requested.emit({
 			"attack_id": attack_sequence_id,
+			"blade_id": get_selected_blade_id(),
 			"base": previous_blade_base.lerp(blade_base, to_weight),
 			"tip": previous_blade_tip.lerp(blade_tip, to_weight),
 			"previous_base": previous_blade_base.lerp(blade_base, from_weight),
@@ -914,6 +917,9 @@ func get_parry_window_duration() -> float:
 
 func get_attack_buffer_duration() -> float:
 	return float(difficulty_profile.get("attack_buffer", 0.18))
+
+func is_blade_ready() -> bool:
+	return can_control and not transition_locked and weapon_mode == "sword" and not sword_sheathed and not equipment_loadout.is_transitioning() and beam_cast_state == BEAM_STATE_IDLE and dodge_time <= 0.0 and hurt_react_time <= 0.0 and is_instance_valid(blade_base_marker) and is_instance_valid(blade_tip_marker)
 
 func get_blade_world_segment() -> Dictionary:
 	if blade_base_marker != null and blade_tip_marker != null and is_instance_valid(blade_base_marker) and is_instance_valid(blade_tip_marker):
@@ -1001,7 +1007,11 @@ func _begin_oathfire_cast() -> bool:
 	var captured := _lock_beam_direction()
 	if captured.length_squared() < 0.5:
 		return false
+	beam_restore_equipment = equipment_loadout.save_state()
 	_cancel_equipment_action()
+	bow_aiming = false
+	bow_draw_time = 0.0
+	parry_window = 0.0
 	_set_beam_state(BEAM_STATE_SHEATHING, 0.24)
 	beam_charging = true
 	beam_charge_time = 0.0
@@ -1010,7 +1020,7 @@ func _begin_oathfire_cast() -> bool:
 	beam_release_emitted = false
 	beam_cancel_reason = ""
 	beam_release_direction = Vector3.ZERO
-	_set_sword_sheathed(true)
+	equipment_loadout.stow_all()
 	return true
 
 func _commit_oathfire_release(ratio: float) -> void:
@@ -1051,7 +1061,7 @@ func _update_beam_sequence(delta: float) -> void:
 			_hide_beam_charge_visuals()
 		if beam_state_time <= 0.0:
 			_begin_beam_redraw()
-	elif beam_cast_state == BEAM_STATE_REDRAWING and beam_state_time <= 0.0:
+	elif beam_cast_state == BEAM_STATE_REDRAWING and beam_state_time <= 0.0 and not equipment_loadout.is_transitioning():
 		_set_beam_state(BEAM_STATE_IDLE)
 		beam_charging = false
 		beam_charge_time = 0.0
@@ -1060,14 +1070,25 @@ func _update_beam_sequence(delta: float) -> void:
 		beam_release_elapsed = 0.0
 		beam_release_emitted = false
 		beam_release_direction = Vector3.ZERO
-		_set_sword_sheathed(false)
+		_restore_oathfire_equipment()
 
 func _begin_beam_redraw() -> void:
 	beam_charging = false
-	_set_beam_state(BEAM_STATE_REDRAWING, 0.24)
+	var restored_mode := str(beam_restore_equipment.get("active_weapon", weapon_mode))
+	var drawn := bool(beam_restore_equipment.get("bow_drawn" if restored_mode == "bow" else "sword_drawn", false))
+	_set_beam_state(BEAM_STATE_REDRAWING, EquipmentLoadout.DRAW_SECONDS if drawn else 0.14)
 	_hide_beam_charge_visuals()
 	if animation_driver != null and animation_driver.has_method("stop_action"):
 		animation_driver.stop_action("idle", 0.12)
+	equipment_loadout.request_loadout(restored_mode, str(beam_restore_equipment.get("selected_blade_id", get_selected_blade_id())), drawn)
+
+func _restore_oathfire_equipment() -> void:
+	if beam_restore_equipment.is_empty():
+		return
+	var saved := beam_restore_equipment.duplicate(true)
+	beam_restore_equipment.clear()
+	equipment_loadout.load_state(saved)
+	selected_arrow_id = equipment_loadout.selected_arrow_id
 
 func _draw_sword_for_combat() -> void:
 	if sword_sheathed:
@@ -1090,7 +1111,7 @@ func cancel_beam_charge(reason: String = "cancelled") -> void:
 	_hide_beam_charge_visuals()
 	if animation_driver != null and animation_driver.has_method("stop_action"):
 		animation_driver.stop_action("idle", 0.12)
-	_set_sword_sheathed(false)
+	_restore_oathfire_equipment()
 
 func _lock_beam_direction() -> Vector3:
 	beam_locked_direction = -global_transform.basis.z
@@ -1177,6 +1198,8 @@ func take_damage(amount: float) -> bool:
 		return true
 	var guarded := is_blocking()
 	_cancel_equipment_action()
+	if beam_cast_state != BEAM_STATE_IDLE:
+		cancel_beam_charge("hit")
 	if guarded and stamina_component.spend(12.0):
 		var reduced = amount * 0.25
 		health_component.damage(reduced)
@@ -1207,10 +1230,8 @@ func _apply_gravity(delta: float) -> void:
 
 func _on_died() -> void:
 	_cancel_equipment_action()
-	cancel_beam_charge()
-	_set_sword_sheathed(true)
-	equipment_loadout.bow_drawn = false
-	equipment_loadout.apply_visibility()
+	cancel_beam_charge("death")
+	equipment_loadout.stow_all()
 	can_control = false
 	if animation_driver != null:
 		animation_driver.set_dead()
@@ -1833,7 +1854,7 @@ func _update_sword_equipment_pose(windup: float, strike: float, recovery: float,
 		return
 	var skeleton := sword_attachment.get_parent() as Skeleton3D
 	var native_grip := skeleton != null and sword_attachment.bone_name == &"hand_r"
-	var grip_allowed := native_grip and can_control and not transition_locked and not sword_sheathed and beam_cast_state == "" and weapon_mode == "sword"
+	var grip_allowed := native_grip and can_control and not transition_locked and not sword_sheathed and beam_cast_state in [BEAM_STATE_IDLE, BEAM_STATE_REDRAWING] and weapon_mode == "sword"
 	_update_sword_hand_grip(skeleton, grip_allowed)
 	var equipment_pose := _equipment_reach_pose()
 	var sword_reach := not equipment_pose.is_empty() and weapon_mode == "sword"
@@ -2100,6 +2121,8 @@ func _ensure_equipment_loadout() -> void:
 	equipment_loadout.set_selected_arrow(selected_arrow_id)
 
 func save_equipment_state() -> Dictionary:
+	if not beam_restore_equipment.is_empty():
+		return beam_restore_equipment.duplicate(true)
 	return equipment_loadout.save_state()
 
 func load_equipment_state(data: Dictionary) -> void:
@@ -2333,7 +2356,7 @@ func _update_distance_footsteps(delta: float, running: bool) -> void:
 func _animate_slash_arc(strike: float, strike_arc: float, recovery: float, heavy: bool) -> void:
 	if slash_arc_root == null:
 		return
-	var visible = strike > 0.08 and strike < 0.94 and recovery < 0.86
+	var visible = is_blade_ready() and strike > 0.08 and strike < 0.94 and recovery < 0.86
 	slash_arc_root.visible = visible
 	if not visible:
 		visual_previous_blade_base = Vector3.ZERO

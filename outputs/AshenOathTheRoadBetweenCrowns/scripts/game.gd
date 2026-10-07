@@ -3281,8 +3281,8 @@ func _on_player_blade_contact(contact: Dictionary) -> void:
 	var result: Dictionary = combat.resolve_player_blade_contact(player, active_enemies, contact, inventory.active_oil)
 	player.confirm_blade_contact(int(contact.get("attack_id", -1)), bool(result.get("hit", false)))
 	if bool(result.get("hit", false)):
-		var contact_source := str(result.get("source_tag", "")).to_lower()
-		var contact_color := Color(0.98, 0.78, 0.34) if contact_source != "moon_oil" else Color(0.66, 0.88, 1.0)
+		_hitstop(0.055 if heavy else 0.032)
+		var contact_color := Color(0.66, 0.88, 1.0) if str(result.get("blade_id", "steel")) == "oathblade" or str(result.get("source_tag", "")) == "spirit" else Color(0.98, 0.78, 0.34)
 		CombatFeedback.weapon_contact(
 			zone_root,
 			result.get("blade_base", player.global_position),
@@ -3457,7 +3457,9 @@ func _on_player_blocked(_amount: float) -> void:
 	if camera_rig != null:
 		camera_rig.shake(0.08)
 	if zone_root != null and player != null:
-		CombatFeedback.block_flash(zone_root, player.global_position, false)
+		var blade: Dictionary = player.get_blade_world_segment()
+		var contact: Vector3 = (blade.base as Vector3).lerp(blade.tip, 0.55)
+		CombatFeedback.block_flash(zone_root, player.global_position, false, contact)
 		CombatFeedback.ground_ring(zone_root, player.global_position, Color(0.58, 0.36, 0.12), 0.45, 0.12)
 	hud.show_status_cue("Blocked", "block")
 	tutorial_flags["block_hint_done"] = true
@@ -3777,12 +3779,28 @@ func _try_complete_oren_thread_trace(publish_return := true) -> void:
 	hud.toast("The red thread from Oren's token matches his erased place in the chapel.")
 	_show_current_objective_guidance(5.0)
 
+func _record_encounter_knowledge(enemy) -> void:
+	if story_state == null or not is_instance_valid(enemy):
+		return
+	var enemy_id := str(enemy.enemy_id)
+	var evidence_id := "creature:" + enemy_id
+	if story_state.has_evidence(evidence_id):
+		return
+	story_state.record_evidence(evidence_id, {
+		"kind": "observed", "enemy_id": enemy_id,
+		"title": str(enemy.display_name), "zone": current_zone_id,
+		"source": "Encounter in " + current_zone_id.replace("_", " ").capitalize(),
+		"body": "Kael has faced this foe and seen how it moves."
+	})
+
 func _on_enemy_damaged(enemy, current: float, maximum: float) -> void:
+	_record_encounter_knowledge(enemy)
 	hud.show_enemy(enemy.display_name, current, maximum)
 	hud.show_status_cue("Enemy hit", "item")
 	audio.play_enemy_event(enemy.enemy_id, "hit", enemy.global_position, player.global_position)
 
 func _on_enemy_windup_started(enemy) -> void:
+	_record_encounter_knowledge(enemy)
 	if enemy != null and player != null:
 		audio.play_enemy_event(enemy.enemy_id, "windup", enemy.global_position, player.global_position)
 	if zone_root != null and enemy != null:
@@ -3797,6 +3815,8 @@ func _on_enemy_windup_started(enemy) -> void:
 
 func _on_enemy_attack_resolved(enemy, parried: bool, contact_position: Vector3) -> void:
 	if parried:
+		var blade: Dictionary = player.get_blade_world_segment()
+		contact_position = Geometry3D.get_closest_point_to_segment(contact_position, blade.base, blade.tip)
 		audio.play_event_limited("parry", 0.10, 0.03)
 		if input_router != null:
 			input_router.rumble(0.24, 0.52, 0.10)
