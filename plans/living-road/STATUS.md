@@ -1,12 +1,15 @@
 # Living Road Status
 
 Updated: 2026-10-08. Implementation and user acceptance are separate.
-User-accepted tickets: **0/28**. Current ticket: **LR-001**, implementation ready;
-publication in progress. Runtime checks belong to the user.
+User-accepted tickets: **0/28**. Published tickets: **1/28**. Current ticket:
+**LR-001**, published and awaiting user acceptance. Runtime checks belong to the user.
+Package commit: `a62ced0d2cb5bf0971fc0e20464a37266f0578e6`.
+Vercel deployment: `dpl_3RhLat5XkdzUPMjisBeXmVpRr2ve`, provider state READY.
+Live: https://ashenoath.vercel.app/?v=lr-001-a62ced0
 
 | Ticket | Work | State |
 | --- | --- | --- |
-| [LR-001](tickets/LR-001.md) | Baseline and Delivery | implementation_ready |
+| [LR-001](tickets/LR-001.md) | Baseline and Delivery | published_awaiting_user |
 | [LR-002](tickets/LR-002.md) | Two Blades, One Loadout | planned |
 | [LR-003](tickets/LR-003.md) | Draw, Sheathe and Interrupt | planned |
 | [LR-004](tickets/LR-004.md) | Steel and Oathblade Combat | planned |
@@ -35,7 +38,6 @@ publication in progress. Runtime checks belong to the user.
 | [LR-027](tickets/LR-027.md) | Regions That Remember | planned |
 | [LR-028](tickets/LR-028.md) | Lives After the Covenant | planned |
 
-Next: publish LR-001's preserved baseline and record its delivery receipt. Then
-await the user's manual verdict before LR-002. No Recovery-004 certification is
+Next: await the user's manual verdict on LR-001 before LR-002. The checklist is in
+`results/LR-001_RESULT.md`. No Recovery-004 certification is
 transferred to this package or to future Living Road changes.
-

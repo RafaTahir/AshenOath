@@ -9,6 +9,10 @@ reconciled baseline. Current delivery state: `../../plans/living-road/STATUS.md`
 No new gameplay, browser or audio-listening certification is claimed. The selected
 Web package keeps GitHub's original game content and source provenance, with
 lossless transport below 100 MiB. Existing recovery records below are historical.
+LR-001 package `a62ced0` is pushed to development/main and deployed as
+`dpl_3RhLat5XkdzUPMjisBeXmVpRr2ve` (Vercel READY). User acceptance remains pending;
+the program is 1/28 published, 0/28 user-accepted. See the LR-001 result for the
+manual checklist and source/transport identity.
 
 ## Current Local Assembly - 2026-10-07
 

@@ -1,7 +1,15 @@
 # LR-001 Implementation Result
 
 Date: 2026-10-08. Runtime acceptance: **UNVERIFIED - REQUIRES USER TESTING**.
-Publication receipt/commit will be recorded after the delivery command finishes.
+Status: **published_awaiting_user**.
+Package commit: `a62ced0d2cb5bf0971fc0e20464a37266f0578e6`.
+Both `origin/codex/masterpiece-rebuild` and `origin/main` received the package.
+The existing D: main worktree was fast-forwarded; the C: story branch was untouched.
+Vercel deployment: `dpl_3RhLat5XkdzUPMjisBeXmVpRr2ve`, provider state **READY**.
+Production: https://ashenoath.vercel.app/?v=lr-001-a62ced0
+Deployment: https://ashenoath-c3725a07a-rafaeitahir-5792s-projects.vercel.app
+Receipt: `.release-gate/living-road/LR-001-20261007T225417Z/publication.json`
+(repository-relative; not part of the Web payload).
 
 ## Implemented
 
@@ -30,7 +38,9 @@ Root decoded SHA-256: `a41202f10232d4cc36646194296652c51ba0a8c8b0f89c9d9f8007a0e
 
 No game export, gameplay, browser, automated test, listening review or screenshot
 approval was performed for this ticket. Original game bytes remain unchanged.
-Static source/diff and package metadata inspection are implementation checks only.
+Static source/diff, PowerShell syntax and package metadata inspection are
+implementation checks only. Manifest-listed stored and decoded hashes match;
+Vercel's completed deployment is delivery evidence, not browser/runtime acceptance.
 
 ## Files And Preservation
 
