@@ -1,6 +1,6 @@
 # LR-002 - Two Blades, One Loadout
 
-Status: implemented and packaged; publication pending. User acceptance pending.
+Status: **published_awaiting_user**. User acceptance pending.
 
 ## Implemented
 
@@ -39,7 +39,12 @@ Stored root PCK SHA-256:
 Decoded root PCK SHA-256:
 `a52e4d8534ae8ee45c8b1cabaf25db9435f0462ca662d12472e700bf9032d45f`.
 Build logs: `.release-gate/LR-002-20261008-build/logs/` at the repository root.
-Commit and deployment will be recorded after publication.
+Package commit: `49f3b0cf8f2fb4ccea5eefa4dab9ebd7b9d17c01`, pushed to
+`codex/masterpiece-rebuild` and `main` without force.
+Vercel deployment: `dpl_Gt4dDyAoZciGhGfoogiJvipxeDNG`, provider state READY.
+Live: https://ashenoath.vercel.app/?v=lr-002-49f3b0c
+Receipt: `.release-gate/living-road/LR-002-20261007T231626Z/publication.json`.
+Deployment success is not browser/gameplay approval; no post-deploy QA was run.
 
 ## Unverified
 

@@ -14,8 +14,11 @@ LR-001 package `a62ced0` is pushed to development/main and deployed as
 the program is 1/28 published, 0/28 user-accepted. See the LR-001 result for the
 manual checklist and source/transport identity.
 
-LR-002 is implemented and packaging: paired Steel/Oathblade loadout, separate
-back scabbards, 1/2/3 selection, controller cycling and additive saved blade ID.
+LR-002 is published at `49f3b0c`: paired Steel/Oathblade loadout, separate back
+scabbards, 1/2/3 selection, controller cycling and additive saved blade ID. Its
+complete Web directory is 91,914,525 bytes; Vercel deployment
+`dpl_Gt4dDyAoZciGhGfoogiJvipxeDNG` is READY. Progress: 2/28 published, 0/28
+user-accepted. LR-003 draw/sheath sequencing is next.
 The latest active goal authorizes continuous ticket implementation/publication;
 manual acceptance remains exclusively with the user and is not implied by export.
 

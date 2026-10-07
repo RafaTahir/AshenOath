@@ -1,18 +1,18 @@
 # Living Road Status
 
 Updated: 2026-10-08. Implementation and user acceptance are separate.
-User-accepted tickets: **0/28**. Published tickets: **1/28**. Current ticket:
-**LR-002**, packaged and ready to publish. Runtime checks belong to the user; the active goal now
+User-accepted tickets: **0/28**. Published tickets: **2/28**. Next ticket:
+**LR-003**. Runtime checks belong to the user; the active goal now
 authorizes sequential implementation/publication without waiting between tickets.
 LR-001 remains published and awaiting user acceptance.
-Package commit: `a62ced0d2cb5bf0971fc0e20464a37266f0578e6`.
-Vercel deployment: `dpl_3RhLat5XkdzUPMjisBeXmVpRr2ve`, provider state READY.
-Live: https://ashenoath.vercel.app/?v=lr-001-a62ced0
+Latest package commit: `49f3b0cf8f2fb4ccea5eefa4dab9ebd7b9d17c01`.
+Vercel deployment: `dpl_Gt4dDyAoZciGhGfoogiJvipxeDNG`, provider state READY.
+Live: https://ashenoath.vercel.app/?v=lr-002-49f3b0c
 
 | Ticket | Work | State |
 | --- | --- | --- |
 | [LR-001](tickets/LR-001.md) | Baseline and Delivery | published_awaiting_user |
-| [LR-002](tickets/LR-002.md) | Two Blades, One Loadout | packaged_awaiting_publication |
+| [LR-002](tickets/LR-002.md) | Two Blades, One Loadout | published_awaiting_user |
 | [LR-003](tickets/LR-003.md) | Draw, Sheathe and Interrupt | planned |
 | [LR-004](tickets/LR-004.md) | Steel and Oathblade Combat | planned |
 | [LR-005](tickets/LR-005.md) | Readable Inventory | planned |
@@ -40,6 +40,6 @@ Live: https://ashenoath.vercel.app/?v=lr-001-a62ced0
 | [LR-027](tickets/LR-027.md) | Regions That Remember | planned |
 | [LR-028](tickets/LR-028.md) | Lives After the Covenant | planned |
 
-Next: finish and publish LR-002, then continue LR-003. Pending user checklists
+Next: implement LR-003's draw/sheath timing and interruption handling. Pending user checklists
 remain attached to each result. No Recovery-004 certification is
 transferred to this package or to future Living Road changes.
