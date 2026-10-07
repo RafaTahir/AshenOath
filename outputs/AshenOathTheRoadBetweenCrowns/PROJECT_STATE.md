@@ -22,8 +22,11 @@ user-accepted. LR-003 draw/sheath sequencing is next.
 The latest active goal authorizes continuous ticket implementation/publication;
 manual acceptance remains exclusively with the user and is not implied by export.
 
-LR-003 is implemented and packaging: timed draw/sheath/switch, H and controller
+LR-003 is published at `597124a`: timed draw/sheath/switch, H and controller
 tap/hold, interruption settlement, back-mounted bow, and settled equipment saves.
+The complete Web directory is 91,921,171 bytes; Vercel deployment
+`dpl_5QQuWmUqX1EwewdCfZ2FH6tPFFq4` is READY. Progress: 3/28 published, 0/28
+user-accepted. LR-004 blade affinity and Oathfire equipment restoration are next.
 No runtime validation is claimed; see its result for the user's manual checklist.
 
 ## Current Local Assembly - 2026-10-07

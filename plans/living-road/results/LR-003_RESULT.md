@@ -1,6 +1,6 @@
 # LR-003 - Draw, Sheathe and Interrupt
 
-Status: implemented and packaged; publication pending. User acceptance pending.
+Status: **published_awaiting_user**. User acceptance pending.
 
 ## Implemented
 
@@ -41,7 +41,12 @@ Stored root PCK SHA-256:
 `d8328591165ae0325374f768b72a722d761d0ff8be8cb93f6895b56d6eca4dc5`.
 Decoded root PCK SHA-256:
 `0e96c63508b56005eefaf6ffc954a5e8a65664dfbbad92e16e4df5a85ba6088b`.
-Static source diff and packaging checks completed; deployment identity pending.
+Static source diff and packaging checks completed. Package commit:
+`597124a7432bff79cbce084850561c79d5547bec`, pushed to development and main.
+Vercel: `dpl_5QQuWmUqX1EwewdCfZ2FH6tPFFq4`, provider state READY.
+Live: https://ashenoath.vercel.app/?v=lr-003-597124a
+Receipt: `.release-gate/living-road/LR-003-20261007T233305Z/publication.json`.
+No post-deployment browser or gameplay check was performed.
 
 ## Unverified
 
