@@ -10,6 +10,12 @@
       ]
     },
     {
+      "source": "/index.pck",
+      "headers": [
+        { "key": "Content-Encoding", "value": "gzip" }
+      ]
+    },
+    {
       "source": "/(index.html|index.pck|index.js|index.wasm|index.audio.worklet.js|index.audio.position.worklet.js)",
       "headers": [
         {
@@ -30,6 +36,7 @@
     {
       "source": "/packs/(.*)",
       "headers": [
+        { "key": "Content-Encoding", "value": "gzip" },
         {
           "key": "Cache-Control",
           "value": "public, max-age=31536000, immutable"

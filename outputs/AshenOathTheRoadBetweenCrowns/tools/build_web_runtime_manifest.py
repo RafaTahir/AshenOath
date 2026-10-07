@@ -15,6 +15,7 @@ from pathlib import Path
 
 
 RELEASE_MANIFEST = "release_manifest.json"
+MAX_TOTAL_BYTES = 104_857_600
 
 
 def sha256(path: Path) -> str:
@@ -35,6 +36,34 @@ def compress_wasm(path: Path) -> None:
     if gzip.decompress(packed) != payload:
         raise ValueError("WebAssembly lossless transport round trip failed")
     path.write_bytes(packed)
+
+
+def compress_pck_transport(export_dir: Path) -> None:
+    pck_files = [export_dir / "index.pck"]
+    packs_dir = export_dir / "packs"
+    if packs_dir.is_dir():
+        pck_files.extend(sorted(packs_dir.glob("*.pck")))
+    for path in pck_files:
+        if not path.is_file():
+            raise ValueError(f"missing PCK transport artifact: {path.name}")
+        payload = path.read_bytes()
+        if payload.startswith(b"\x1f\x8b"):
+            decoded = gzip.decompress(payload)
+        else:
+            decoded = payload
+        if not decoded.startswith(b"GDPC"):
+            raise ValueError(f"{path.name} is not a valid Godot PCK payload")
+        if payload.startswith(b"\x1f\x8b"):
+            continue
+        packed = gzip.compress(decoded, compresslevel=9, mtime=0)
+        if gzip.decompress(packed) != decoded:
+            raise ValueError(f"{path.name} gzip transport failed its lossless round trip")
+        temporary = path.with_name(path.name + ".tmp")
+        try:
+            temporary.write_bytes(packed)
+            temporary.replace(path)
+        finally:
+            temporary.unlink(missing_ok=True)
 
 
 def git_value(repo: Path, *args: str) -> str:
@@ -92,14 +121,26 @@ def build_manifest(export_dir: Path, runtime_manifest_path: Path, source_commit:
         path for path in export_dir.rglob("*")
         if path.is_file() and path.name != RELEASE_MANIFEST
     )
-    records = [
-        {
+    records = []
+    for path in files:
+        record = {
             "path": path.relative_to(export_dir).as_posix(),
             "bytes": path.stat().st_size,
             "sha256": sha256(path),
         }
-        for path in files
-    ]
+        if path.suffix.lower() == ".pck":
+            payload = path.read_bytes()
+            if not payload.startswith(b"\x1f\x8b"):
+                raise ValueError(f"{path.name} is missing gzip transport encoding")
+            decoded = gzip.decompress(payload)
+            if not decoded.startswith(b"GDPC"):
+                raise ValueError(f"{path.name} gzip payload is not a Godot PCK")
+            record.update(
+                content_encoding="gzip",
+                decoded_bytes=len(decoded),
+                decoded_sha256=hashlib.sha256(decoded).hexdigest(),
+            )
+        records.append(record)
     wasm = export_dir / "index.wasm"
     if wasm.is_file() and wasm.read_bytes().startswith(b"\x1f\x8b"):
         decoded = gzip.decompress(wasm.read_bytes())
@@ -136,6 +177,11 @@ def build_manifest(export_dir: Path, runtime_manifest_path: Path, source_commit:
         "root_pck": by_path["index.pck"]["sha256"],
         "packs": [{"id": item["id"], "sha256": item["sha256"]} for item in pack_records],
     }, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    total_bytes = sum(int(item["bytes"]) for item in records)
+    if total_bytes >= MAX_TOTAL_BYTES:
+        raise ValueError(
+            f"Web payload {total_bytes} bytes reaches or exceeds the 100 MiB limit"
+        )
     return {
         "schema_version": 2,
         "project": "Ashen Oath",
@@ -148,7 +194,7 @@ def build_manifest(export_dir: Path, runtime_manifest_path: Path, source_commit:
         "compatibility_key": hashlib.sha256(compatibility_payload).hexdigest(),
         "runtime_pack_manifest": by_path["runtime_pack_manifest.json"],
         "root_pck": by_path["index.pck"],
-        "artifacts_total_bytes": sum(int(item["bytes"]) for item in records),
+        "artifacts_total_bytes": total_bytes,
         "artifacts": records,
         "packs": pack_records,
     }
@@ -176,6 +222,7 @@ def main() -> int:
     try:
         if args.compress_wasm:
             compress_wasm(export_dir / "index.wasm")
+        compress_pck_transport(export_dir)
         manifest = build_manifest(export_dir, runtime_manifest, source_commit)
     except (OSError, ValueError, TypeError, json.JSONDecodeError) as error:
         print(f"WEB RELEASE MANIFEST: FAIL - {error}", file=sys.stderr)

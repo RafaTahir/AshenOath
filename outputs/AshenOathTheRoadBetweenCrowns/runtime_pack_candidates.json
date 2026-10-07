@@ -1,85 +1,83 @@
 {
   "schema_version": 2,
-  "ticket": "PACK-003",
-  "generated_at_utc": "2026-10-02T20:31:28.681054Z",
-  "build_id": "dev-59ca38939769",
-  "generated_from_commit": "59ca3893976976069390bf79c4f7a02dbd41d198",
+  "generated_at_utc": "2026-10-07T02:45:50.108214Z",
+  "build_id": "web-sync-20261007-b4a4d426",
+  "generated_from_commit": "b4a4d4266bdf1a1ba67cfa7aba90c1af9ad2e5d0",
   "source_dirty": true,
-  "project": "Ashen Oath",
   "artifact_directory": "external_runtime_packs",
   "artifacts_are_external": true,
   "max_deployment_bytes": 104857600,
-  "total_bytes": 76375060,
+  "total_bytes": 96760872,
   "packs": [
     {
       "id": "base",
-      "version": "opening-presence-handoff-20261003",
+      "version": "web-sync-20261007-b4a4d426",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
-      "bytes": 9650052,
-      "sha256": "5a7e9ada994a76babd395ea607c4711fea95ce3ed647e89dcdc939ceb03c447f",
+      "bytes": 13120928,
+      "sha256": "464b2984c8d0f4a5f18e327ad847ef80c2590b20501a5f8356c68264f9494b73",
       "status": "candidate_external",
-      "log": "base.log"
+      "log": "logs/pack-base.stdout.log"
     },
     {
       "id": "opening",
-      "version": "opening-presence-handoff-20261003",
+      "version": "web-sync-20261007-b4a4d426",
       "preset": "Runtime Pack Opening",
       "artifact": "opening.pck",
-      "bytes": 14261020,
-      "sha256": "694c4fcc27effdf19fe150cf2264ec6767055c28b19eb3b37fc316390f378a04",
+      "bytes": 14321196,
+      "sha256": "a908523d529c4d6748221409ddf04b71f7487d651ede0f9ce462fc4c5f6b47aa",
       "status": "candidate_external",
-      "log": "opening.log"
+      "log": "logs/pack-opening.stdout.log"
     },
     {
       "id": "campaign",
-      "version": "opening-presence-handoff-20261003",
+      "version": "web-sync-20261007-b4a4d426",
       "preset": "Runtime Pack Campaign",
       "artifact": "campaign.pck",
-      "bytes": 939468,
-      "sha256": "80fed68023417d31c9afc524132e97dae33d635fb8cf9872611dc6889fbe462d",
+      "bytes": 999820,
+      "sha256": "88ccbc0ad4d7d6b0722eceea271591b960cf3c506f22924264894bc4d61e331e",
       "status": "candidate_external",
-      "log": "campaign.log"
+      "log": "logs/pack-campaign.stdout.log"
     },
     {
       "id": "characters",
-      "version": "opening-presence-handoff-20261003",
+      "version": "web-sync-20261007-b4a4d426",
       "preset": "Runtime Pack Characters",
       "artifact": "characters.pck",
-      "bytes": 33453464,
-      "sha256": "17e360febb4ef3b89fda5ac5cffae14fcaa85965b36a2c04f57d482ca4535532",
+      "bytes": 33513480,
+      "sha256": "530a6e4e72a889a8ceb9788e015c7d4b559094f6bdcce69ed2198b71fa9a51ab",
       "status": "candidate_external",
-      "log": "characters.log"
+      "log": "logs/pack-characters.stdout.log"
     },
     {
       "id": "monsters",
-      "version": "opening-presence-handoff-20261003",
+      "version": "web-sync-20261007-b4a4d426",
       "preset": "Runtime Pack Monsters",
       "artifact": "monsters.pck",
-      "bytes": 8015036,
-      "sha256": "ef84f7e509b475c9b717a363078dc086afa9b25e0a5b3b3dbf1d23eef7d27aa7",
+      "bytes": 8075052,
+      "sha256": "3fd07db680a97c52f65d1fd51946bae01d6b0b100db0cc331f78dd690548a6d5",
       "status": "candidate_external",
-      "log": "monsters.log"
+      "log": "logs/pack-monsters.stdout.log"
     },
     {
       "id": "audio",
-      "version": "opening-presence-handoff-20261003",
+      "version": "web-sync-20261007-b4a4d426",
       "preset": "Runtime Pack Audio",
       "artifact": "audio.pck",
-      "bytes": 2739400,
-      "sha256": "23143995056d4b4b2f3513869ada1c149ecc773978244c3e67737bc19b171735",
+      "bytes": 19353760,
+      "sha256": "fa2cb2707ba12be6137aa57c632e1b4d54cb2fad2e8d14e22e980cc05e5eb1cc",
       "status": "candidate_external",
-      "log": "audio.log"
+      "log": "logs/pack-audio.stdout.log"
     },
     {
       "id": "quality_materials",
-      "version": "opening-presence-handoff-20261003",
+      "version": "web-sync-20261007-b4a4d426",
       "preset": "Runtime Pack Quality Materials",
       "artifact": "quality_materials.pck",
-      "bytes": 7316620,
-      "sha256": "1e8c110517705e0af80f40d4625ce05b07ecdd78eb626a3801cde9cebd38b523",
+      "bytes": 7376636,
+      "sha256": "a0ae5d72a739ff0eebbf0fefd64ea70b449d906a6bd74c84b59030fa3e68305b",
       "status": "candidate_external",
-      "log": "quality_materials.log"
+      "log": "logs/pack-quality_materials.stdout.log"
     }
   ],
   "errors": []

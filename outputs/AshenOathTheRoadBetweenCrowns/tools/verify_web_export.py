@@ -35,6 +35,11 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def decoded_pck(path: Path) -> bytes:
+    payload = path.read_bytes()
+    return gzip.decompress(payload) if payload.startswith(b"\x1f\x8b") else payload
+
+
 def verify_pack_files(export_dir: Path, manifest: dict) -> list[str]:
     failures = []
     if not isinstance(manifest, dict):
@@ -74,9 +79,16 @@ def verify_pack_files(export_dir: Path, manifest: dict) -> list[str]:
         if not path.is_file():
             failures.append(f"{pack_id}: missing required pack {path.relative_to(root)}")
             continue
-        if path.stat().st_size != pack.get("bytes"):
+        try:
+            payload = decoded_pck(path)
+        except (OSError, EOFError):
+            failures.append(f"{pack_id}: compressed pack is corrupt")
+            continue
+        if not payload.startswith(b"GDPC"):
+            failures.append(f"{pack_id}: payload is not a Godot PCK")
+        if len(payload) != pack.get("bytes"):
             failures.append(f"{pack_id}: pack byte count differs from runtime manifest")
-        if sha256(path) != str(pack.get("sha256", "")).lower():
+        if hashlib.sha256(payload).hexdigest() != str(pack.get("sha256", "")).lower():
             failures.append(f"{pack_id}: pack SHA-256 differs from runtime manifest")
     visited, visiting = set(), set()
 
@@ -130,6 +142,17 @@ def verify_release_identity(export_dir: Path, runtime: dict, release: dict) -> l
             continue
         if int(item.get("bytes", -1)) != path.stat().st_size or str(item.get("sha256", "")).lower() != sha256(path):
             failures.append(f"release artifact identity differs: {relative}")
+        if relative.endswith(".pck"):
+            try:
+                decoded = decoded_pck(path)
+                if not path.read_bytes().startswith(b"\x1f\x8b") \
+                        or item.get("content_encoding") != "gzip" \
+                        or item.get("decoded_bytes") != len(decoded) \
+                        or item.get("decoded_sha256") != hashlib.sha256(decoded).hexdigest() \
+                        or not decoded.startswith(b"GDPC"):
+                    failures.append(f"compressed PCK identity is stale or invalid: {relative}")
+            except (OSError, EOFError):
+                failures.append(f"compressed PCK is corrupt: {relative}")
         if relative == "index.wasm" and path.read_bytes().startswith(b"\x1f\x8b"):
             try:
                 decoded = gzip.decompress(path.read_bytes())
@@ -253,7 +276,7 @@ def main() -> int:
                 if actual_path is None or declared is None:
                     failures.append(f"index.html fileSizes is missing {runtime_name}")
                 elif declared != (len(gzip.decompress(actual_path.read_bytes()))
-                                  if runtime_name == "index.wasm" and actual_path.read_bytes().startswith(b"\x1f\x8b")
+                                  if actual_path.read_bytes().startswith(b"\x1f\x8b")
                                   else actual_path.stat().st_size):
                     failures.append(
                         f"index.html fileSizes.{runtime_name}={declared} does not match "
@@ -274,9 +297,11 @@ def main() -> int:
         if Path(name).suffix.lower() in FORBIDDEN_SUFFIXES:
             failures.append(f"forbidden development file: {name}")
         if Path(name).suffix.lower() == ".pck":
-            with path.open("rb") as stream:
-                if stream.read(4) != b"GDPC":
+            try:
+                if not decoded_pck(path).startswith(b"GDPC"):
                     failures.append(f"invalid Godot PCK: {name}")
+            except (OSError, EOFError):
+                failures.append(f"corrupt compressed Godot PCK: {name}")
 
     file_report = {
         name: {
