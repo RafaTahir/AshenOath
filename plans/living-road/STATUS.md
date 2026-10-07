@@ -1,8 +1,8 @@
 # Living Road Status
 
 Updated: 2026-10-08. Implementation and user acceptance are separate.
-User-accepted tickets: **0/28**. Published tickets: **2/28**. Next ticket:
-**LR-003**. Runtime checks belong to the user; the active goal now
+User-accepted tickets: **0/28**. Published tickets: **2/28**. Current ticket:
+**LR-003**, packaged and ready to publish. Runtime checks belong to the user; the active goal now
 authorizes sequential implementation/publication without waiting between tickets.
 LR-001 remains published and awaiting user acceptance.
 Latest package commit: `49f3b0cf8f2fb4ccea5eefa4dab9ebd7b9d17c01`.
@@ -13,7 +13,7 @@ Live: https://ashenoath.vercel.app/?v=lr-002-49f3b0c
 | --- | --- | --- |
 | [LR-001](tickets/LR-001.md) | Baseline and Delivery | published_awaiting_user |
 | [LR-002](tickets/LR-002.md) | Two Blades, One Loadout | published_awaiting_user |
-| [LR-003](tickets/LR-003.md) | Draw, Sheathe and Interrupt | planned |
+| [LR-003](tickets/LR-003.md) | Draw, Sheathe and Interrupt | packaged_awaiting_publication |
 | [LR-004](tickets/LR-004.md) | Steel and Oathblade Combat | planned |
 | [LR-005](tickets/LR-005.md) | Readable Inventory | planned |
 | [LR-006](tickets/LR-006.md) | Knowledge and Preparation | planned |

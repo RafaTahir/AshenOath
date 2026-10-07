@@ -22,6 +22,10 @@ user-accepted. LR-003 draw/sheath sequencing is next.
 The latest active goal authorizes continuous ticket implementation/publication;
 manual acceptance remains exclusively with the user and is not implied by export.
 
+LR-003 is implemented and packaging: timed draw/sheath/switch, H and controller
+tap/hold, interruption settlement, back-mounted bow, and settled equipment saves.
+No runtime validation is claimed; see its result for the user's manual checklist.
+
 ## Current Local Assembly - 2026-10-07
 
 - The canonical `D:\Projects\AshenOath` worktree is on `codex/masterpiece-rebuild`

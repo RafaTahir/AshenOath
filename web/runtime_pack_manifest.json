@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "program": "SOUL-REBUILD",
-  "release_id": "lr-002-20261008-two-blades",
+  "release_id": "lr-003-20261008-draw-sheath",
   "artifact_policy": "external_runtime_packs",
   "candidate_manifest": "res://runtime_pack_candidates.json",
   "pack_presets": {
@@ -15,7 +15,7 @@
   "max_deployment_bytes": 104857600,
   "packs": {
     "base": {
-      "version": "lr-002-20261008-two-blades",
+      "version": "lr-003-20261008-draw-sheath",
       "url": "",
       "sha256": "",
       "bytes": 0,
@@ -24,8 +24,8 @@
       "preload_priority": 0,
       "status": "embedded_current_pck",
       "candidate_artifact": "base.pck",
-      "candidate_bytes": 13122944,
-      "candidate_sha256": "ae798cf907f456249811561f06e840a2d8ea6de27236fb84e30d583dbcbca237",
+      "candidate_bytes": 13126720,
+      "candidate_sha256": "8bc8a4d2243f939b62e54cf5f69aee0eec9583b11bac07f0263e35f2ae003572",
       "contents": [
         "menu",
         "managers",
@@ -34,15 +34,15 @@
       ],
       "embedded_artifact": "index.pck",
       "embedded_source_artifact": "base.pck",
-      "embedded_source_bytes": 13122944,
-      "embedded_source_sha256": "ae798cf907f456249811561f06e840a2d8ea6de27236fb84e30d583dbcbca237",
+      "embedded_source_bytes": 13126720,
+      "embedded_source_sha256": "8bc8a4d2243f939b62e54cf5f69aee0eec9583b11bac07f0263e35f2ae003572",
       "embedded_source_kind": "standalone_pack_candidate"
     },
     "opening": {
-      "version": "lr-002-20261008-two-blades",
-      "url": "packs/opening.pck?sha256=d7c7fc97f2226c7f8f363a1bb51ffbd1a49b98fd9eca4033eb88becd76427a71",
-      "sha256": "d7c7fc97f2226c7f8f363a1bb51ffbd1a49b98fd9eca4033eb88becd76427a71",
-      "bytes": 14321196,
+      "version": "lr-003-20261008-draw-sheath",
+      "url": "packs/opening.pck?sha256=bfbeaf68d4f5048080d55998aef1dfcbc90d6f6416a957e5743c7ec7eec7d292",
+      "sha256": "bfbeaf68d4f5048080d55998aef1dfcbc90d6f6416a957e5743c7ec7eec7d292",
+      "bytes": 14321116,
       "entry_scene": "res://scenes/zones/greyfen_gameplay.tscn",
       "dependencies": [
         "base"
@@ -50,18 +50,18 @@
       "preload_priority": 10,
       "status": "streamed_web_candidate",
       "candidate_artifact": "opening.pck",
-      "candidate_bytes": 14321196,
-      "candidate_sha256": "d7c7fc97f2226c7f8f363a1bb51ffbd1a49b98fd9eca4033eb88becd76427a71",
+      "candidate_bytes": 14321116,
+      "candidate_sha256": "bfbeaf68d4f5048080d55998aef1dfcbc90d6f6416a957e5743c7ec7eec7d292",
       "contents": [
         "greyfen",
         "wychwood",
         "cemetery",
         "opening_actors"
       ],
-      "cache_key": "d7c7fc97f2226c7f8f363a1bb51ffbd1a49b98fd9eca4033eb88becd76427a71"
+      "cache_key": "bfbeaf68d4f5048080d55998aef1dfcbc90d6f6416a957e5743c7ec7eec7d292"
     },
     "campaign": {
-      "version": "lr-002-20261008-two-blades",
+      "version": "lr-003-20261008-draw-sheath",
       "url": "packs/campaign.pck?sha256=88ccbc0ad4d7d6b0722eceea271591b960cf3c506f22924264894bc4d61e331e",
       "sha256": "88ccbc0ad4d7d6b0722eceea271591b960cf3c506f22924264894bc4d61e331e",
       "bytes": 999820,
@@ -84,7 +84,7 @@
       "cache_key": "88ccbc0ad4d7d6b0722eceea271591b960cf3c506f22924264894bc4d61e331e"
     },
     "characters": {
-      "version": "lr-002-20261008-two-blades",
+      "version": "lr-003-20261008-draw-sheath",
       "url": "packs/characters.pck?sha256=c41a6a0b4b75890e2e32f2bca1f02ed2b7cbc4ae666b6f546cc51923e31d94f2",
       "sha256": "c41a6a0b4b75890e2e32f2bca1f02ed2b7cbc4ae666b6f546cc51923e31d94f2",
       "bytes": 30469448,
@@ -105,7 +105,7 @@
       "cache_key": "c41a6a0b4b75890e2e32f2bca1f02ed2b7cbc4ae666b6f546cc51923e31d94f2"
     },
     "monsters": {
-      "version": "lr-002-20261008-two-blades",
+      "version": "lr-003-20261008-draw-sheath",
       "url": "packs/monsters.pck?sha256=d20b2a99636f93e00dccb77c9c4a36e7f19325f944b99de33b1cc3bf1ce4d92a",
       "sha256": "d20b2a99636f93e00dccb77c9c4a36e7f19325f944b99de33b1cc3bf1ce4d92a",
       "bytes": 7009916,
@@ -126,7 +126,7 @@
       "cache_key": "d20b2a99636f93e00dccb77c9c4a36e7f19325f944b99de33b1cc3bf1ce4d92a"
     },
     "audio": {
-      "version": "lr-002-20261008-two-blades",
+      "version": "lr-003-20261008-draw-sheath",
       "url": "packs/audio.pck?sha256=fa2cb2707ba12be6137aa57c632e1b4d54cb2fad2e8d14e22e980cc05e5eb1cc",
       "sha256": "fa2cb2707ba12be6137aa57c632e1b4d54cb2fad2e8d14e22e980cc05e5eb1cc",
       "bytes": 19353760,
@@ -147,7 +147,7 @@
       "cache_key": "fa2cb2707ba12be6137aa57c632e1b4d54cb2fad2e8d14e22e980cc05e5eb1cc"
     },
     "quality_materials": {
-      "version": "lr-002-20261008-two-blades",
+      "version": "lr-003-20261008-draw-sheath",
       "url": "packs/quality_materials.pck?sha256=a0ae5d72a739ff0eebbf0fefd64ea70b449d906a6bd74c84b59030fa3e68305b",
       "sha256": "a0ae5d72a739ff0eebbf0fefd64ea70b449d906a6bd74c84b59030fa3e68305b",
       "bytes": 7376636,
@@ -168,9 +168,9 @@
       "cache_key": "a0ae5d72a739ff0eebbf0fefd64ea70b449d906a6bd74c84b59030fa3e68305b"
     }
   },
-  "build_id": "lr-002-20261008-two-blades",
-  "generated_from_commit": "31b080ffbfb185f1d6c70f1a6263b85d91c7ea54",
-  "generated_at_utc": "2026-10-07T23:14:49.517548Z",
-  "total_bytes": 79530776,
+  "build_id": "lr-003-20261008-draw-sheath",
+  "generated_from_commit": "4e1fbf9871437dd596f661accf313e147c4cefb7",
+  "generated_at_utc": "2026-10-07T23:30:46.650558Z",
+  "total_bytes": 79530696,
   "source_dirty": true
 }

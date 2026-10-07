@@ -60,6 +60,7 @@ const KEYBOARD_BINDINGS := {
 	"weapon_sword": KEY_1,
 	"weapon_bow": KEY_2,
 	"weapon_oathblade": KEY_3,
+	"weapon_sheath": KEY_H,
 	"cycle_arrow": KEY_Z,
 }
 
@@ -127,6 +128,7 @@ const KEYBOARD_LABELS := {
 	"weapon_sword": "1",
 	"weapon_bow": "2",
 	"weapon_oathblade": "3",
+	"weapon_sheath": "H",
 	"cycle_arrow": "Z",
 }
 
@@ -152,6 +154,7 @@ const GAMEPAD_LABELS := {
 	"weapon_sword": "Unbound",
 	"weapon_bow": "Unbound",
 	"weapon_oathblade": "Unbound",
+	"weapon_sheath": "Unbound",
 	"cycle_arrow": "D-Pad Up",
 }
 
@@ -1040,10 +1043,11 @@ func _apply_saved_global_bindings(saved: Variant) -> void:
 				_erase_bindings_of_type(str(action), event_type)
 				restored_types[event_type] = true
 			# Existing remaps take precedence over this newly introduced default.
-			if str(action) != "weapon_oathblade" and not saved.has("weapon_oathblade"):
-				for added_event in InputMap.action_get_events("weapon_oathblade"):
-					if added_event.is_match(event):
-						InputMap.action_erase_event("weapon_oathblade", added_event)
+			for added_action in ["weapon_oathblade", "weapon_sheath"]:
+				if str(action) != added_action and not saved.has(added_action):
+					for added_event in InputMap.action_get_events(added_action):
+						if added_event.is_match(event):
+							InputMap.action_erase_event(added_action, added_event)
 			_add_event_once(str(action), event)
 
 func _migrate_legacy_weapon_defaults() -> bool:

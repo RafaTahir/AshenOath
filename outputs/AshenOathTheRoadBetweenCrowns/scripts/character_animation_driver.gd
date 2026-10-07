@@ -34,6 +34,8 @@ const STATE_ALIASES := {
 }
 
 const ACTION_PRIORITY := {
+	"draw": 1,
+	"sheath": 1,
 	"jump": 1,
 	"dialogue": 1,
 	"work": 1,

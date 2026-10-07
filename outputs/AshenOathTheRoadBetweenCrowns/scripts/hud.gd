@@ -707,16 +707,17 @@ func show_controls_menu(back_target: String = "main") -> void:
 	var box = _menu_box("Controls", "", "blade | breath | road")
 	if input_source != null and input_source.has_method("describe_action"):
 		var instructions: Array[String] = []
-		for action in ["interact", "run", "block", "dodge", "jump", "light_attack", "heavy_attack", "aim_bow", "oathfire_beam", "use_potion", "throw_bomb", "open_inventory", "pause"]:
+		for action in ["interact", "run", "block", "dodge", "jump", "light_attack", "heavy_attack", "aim_bow", "weapon_sheath", "oathfire_beam", "use_potion", "throw_bomb", "open_inventory", "pause"]:
 			var descriptor: Dictionary = input_source.describe_action(action)
 			instructions.append("%s: %s" % [str(action).replace("_", " ").capitalize(), str(descriptor.get("instruction", descriptor.get("binding", "Unbound")))])
+		instructions.append("%s: tap to cycle weapons; hold to draw or sheath" % input_source.action_label("weapon_cycle"))
 		_add_menu_text(box, "Move with the movement keys, left stick or touch pad; look with the mouse, right stick or touch look area.\n\n" + "\n".join(instructions))
 	elif input_device == "gamepad":
-		_add_menu_text(box, "Left Stick move | Right Stick look | D-Pad Up/Down zoom\nL3 run | B dodge | Y jump | X cycle Steel / Oathblade / Bow\nRB light attack | RT heavy attack / fire bow | LT aim bow\nSword: hold LT Oathfire | Tap/Hold LB parry or block | A interact\nBow: D-Pad Up cycle arrows | D-Pad Left potion | D-Pad Right bomb | View journal | Menu pause")
+		_add_menu_text(box, "Left Stick move | Right Stick look | D-Pad Up/Down zoom\nL3 run | B dodge | Y jump | Tap X cycle weapons | Hold X draw/sheath\nRB light attack | RT heavy attack / fire bow | LT aim bow\nSword: hold LT Oathfire | Tap/Hold LB parry or block | A interact\nBow: D-Pad Up cycle arrows | D-Pad Left potion | D-Pad Right bomb | View journal | Menu pause")
 	elif input_device == "touch":
 		_add_menu_text(box, "Left thumb move | Drag right side to look\nStrike / Heavy attack | Dodge | Jump\nHold Guard to block or parry | Hold Oath to charge Oathfire\nUse interacts | Potion heals | Pause opens the menu\nLandscape orientation is required during gameplay")
 	else:
-		_add_menu_text(box, "WASD move | Mouse look | Wheel zoom | Page Up/Down zoom\nShift run | Space dodge | X jump | 1 Steel | 2 Bow | 3 Oathblade\nLeft mouse light attack / fire bow | Right mouse heavy / aim bow\nHold C Oathfire Beam | Tap Q parry | Hold Q block | E interact\nZ cycle arrows | R potion | F bomb | Tab inventory | Esc pause")
+		_add_menu_text(box, "WASD move | Mouse look | Wheel zoom | Page Up/Down zoom\nShift run | Space dodge | X jump | 1 Steel | 2 Bow | 3 Oathblade | H draw/sheath\nLeft mouse light attack / fire bow | Right mouse heavy / aim bow\nHold C Oathfire Beam | Tap Q parry | Hold Q block | E interact\nZ cycle arrows | R potion | F bomb | Tab inventory | Esc pause")
 	_add_menu_button(box, "Customize Controls", func(): show_remap_menu(back_target))
 	_add_menu_button(box, "Back", _return_from_controls)
 
@@ -738,7 +739,7 @@ func show_remap_menu(back_target: String = "main", requested_page: int = -1) -> 
 	_add_menu_text(box, detected)
 	var actions := ["interact", "dodge", "jump", "run", "block", "light_attack", "heavy_attack", "oathfire_beam", "use_potion", "throw_bomb", "open_inventory", "pause",
 		"move_forward", "move_back", "move_left", "move_right", "camera_left", "camera_right", "camera_up", "camera_down", "camera_zoom_in", "camera_zoom_out",
-		"weapon_cycle", "weapon_sword", "weapon_bow", "weapon_oathblade", "aim_bow", "fire_bow", "cycle_arrow", "target_lock", "target_next", "target_previous"]
+		"weapon_cycle", "weapon_sword", "weapon_bow", "weapon_oathblade", "weapon_sheath", "aim_bow", "fire_bow", "cycle_arrow", "target_lock", "target_next", "target_previous"]
 	var page_count := maxi(1, ceili(float(actions.size()) / 6.0))
 	remap_page = clampi(remap_page, 0, page_count - 1)
 	_add_menu_text(box, "Page %d of %d" % [remap_page + 1, page_count])
@@ -749,6 +750,8 @@ func show_remap_menu(back_target: String = "main", requested_page: int = -1) -> 
 		var label := action.replace("_", " ").capitalize()
 		if action == "weapon_sword":
 			label = "Steel sword"
+		elif action == "weapon_sheath":
+			label = "Draw / sheath"
 		var binding := _binding_display(action)
 		_add_menu_button(box, "%s     %s" % [label, binding], func(selected = action): _begin_remap(selected), false, "binding:" + action)
 	if page_count > 1:

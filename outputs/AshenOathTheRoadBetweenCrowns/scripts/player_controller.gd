@@ -121,8 +121,12 @@ var sword_sheathed: bool:
 		return not equipment_loadout.sword_drawn
 	set(value):
 		equipment_loadout.set_sword_drawn(not value)
-var sword_combat_linger := 0.0
-const SWORD_COMBAT_LINGER := 3.2
+var weapon_cycle_armed := false
+var weapon_cycle_held := false
+var weapon_cycle_elapsed := 0.0
+var equipment_pending_attack := ""
+var bow_back_visual: Node3D
+var equipment_left_arm_ik: SkeletonIK3D
 var sword_grip_basis := Basis.IDENTITY
 var sword_grip_calibrated := false
 var inventory_ref
@@ -169,6 +173,8 @@ var progression
 func _init() -> void:
 	equipment_loadout.name = "EquipmentLoadout"
 	add_child(equipment_loadout)
+	equipment_loadout.transition_started.connect(_on_equipment_transition_started)
+	equipment_loadout.transition_finished.connect(_on_equipment_transition_finished)
 
 func _ready() -> void:
 	# Game remains active for menus and loading; gameplay and its children pause.
@@ -190,6 +196,8 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	if input_source != null and input_source.has_method("is_gameplay_context") and not input_source.is_gameplay_context():
+		if equipment_loadout.is_transitioning() or weapon_cycle_armed or equipment_pending_attack != "":
+			_cancel_equipment_action()
 		velocity.x = 0.0
 		velocity.z = 0.0
 		locomotion_velocity = Vector3.ZERO
@@ -206,7 +214,7 @@ func _physics_process(delta: float) -> void:
 	step_up_cooldown = max(step_up_cooldown - delta, 0.0)
 	bow_recovery = max(bow_recovery - delta, 0.0)
 	_update_beam_sequence(delta)
-	_update_sword_combat_state(delta)
+	equipment_loadout.advance_transition(delta)
 	if transition_locked:
 		velocity = Vector3.ZERO
 		locomotion_velocity = Vector3.ZERO
@@ -227,6 +235,8 @@ func _physics_process(delta: float) -> void:
 	_update_blade_contact()
 
 func set_transition_locked(locked: bool) -> void:
+	if locked:
+		_cancel_equipment_action()
 	if locked and beam_cast_state != BEAM_STATE_IDLE:
 		cancel_beam_charge("transition")
 	transition_locked = locked
@@ -238,6 +248,7 @@ func set_transition_locked(locked: bool) -> void:
 		can_control = true
 
 func cancel_buffered_input(reason: String = "context") -> void:
+	_cancel_equipment_action()
 	buffered_attack = ""
 	attack_buffer_time = 0.0
 	pending_attack_damage = 0.0
@@ -326,11 +337,18 @@ func _set_weapon_mode(next_mode: String) -> void:
 	_set_sword_sheathed(true)
 
 func _select_blade(blade_id: String) -> void:
-	var was_drawn := weapon_mode == "sword" and not sword_sheathed
+	_request_equipment("sword", blade_id, true)
+
+func _request_equipment(mode: String, blade_id: String, drawn: bool) -> void:
 	bow_aiming = false
 	bow_draw_time = 0.0
-	equipment_loadout.select_blade(blade_id)
-	_set_sword_sheathed(not was_drawn)
+	equipment_pending_attack = ""
+	buffered_attack = ""
+	attack_buffer_time = 0.0
+	parry_window = 0.0
+	pending_attack_damage = 0.0
+	pending_attack_radius = 0.0
+	equipment_loadout.request_loadout(mode, blade_id, drawn)
 	previous_blade_base = Vector3.ZERO
 	previous_blade_tip = Vector3.ZERO
 	visual_previous_blade_base = Vector3.ZERO
@@ -342,7 +360,60 @@ func _cycle_weapon() -> void:
 	elif get_selected_blade_id() == "steel":
 		_select_blade("oathblade")
 	else:
-		_set_weapon_mode("bow")
+		_request_equipment("bow", get_selected_blade_id(), true)
+
+func _toggle_weapon_draw() -> void:
+	_request_equipment(weapon_mode, get_selected_blade_id(), not equipment_loadout.is_drawn())
+
+func _handle_equipment_input() -> void:
+	var available: bool = beam_cast_state == BEAM_STATE_IDLE and attack_anim_time <= 0.0 and dodge_time <= 0.0 and hurt_react_time <= 0.0 and not equipment_loadout.is_transitioning()
+	if _action_just_pressed("weapon_cycle"):
+		weapon_cycle_armed = available
+		weapon_cycle_held = false
+		weapon_cycle_elapsed = 0.0
+	if weapon_cycle_armed and _action_pressed("weapon_cycle"):
+		weapon_cycle_elapsed += get_physics_process_delta_time()
+		if weapon_cycle_elapsed >= 0.45 and not weapon_cycle_held:
+			weapon_cycle_held = true
+			if available:
+				_toggle_weapon_draw()
+	if weapon_cycle_armed and _action_just_released("weapon_cycle"):
+		if not weapon_cycle_held and available:
+			_cycle_weapon()
+		weapon_cycle_armed = false
+	if not available or equipment_loadout.is_transitioning():
+		return
+	if _action_just_pressed("weapon_sheath"):
+		_toggle_weapon_draw()
+	elif _action_just_pressed("weapon_bow"):
+		_request_equipment("bow", get_selected_blade_id(), true)
+	elif _action_just_pressed("weapon_sword"):
+		_select_blade("steel")
+	elif _action_just_pressed("weapon_oathblade"):
+		_select_blade("oathblade")
+
+func _on_equipment_transition_started(action: String, duration: float) -> void:
+	# Keep locomotion clips running while moving; the existing arm IK supplies
+	# the reach. Stationary transfers can use the compatible retained clip.
+	if animation_driver != null and locomotion_velocity.length_squared() < 0.04:
+		animation_driver.trigger_action(action, 1.0, 0.08, false, duration)
+
+func _on_equipment_transition_finished() -> void:
+	if animation_driver != null and animation_driver.current_state in ["draw", "sheath"]:
+		animation_driver.stop_action("idle", 0.08)
+
+func _cancel_equipment_action() -> void:
+	var was_transitioning := equipment_loadout.is_transitioning()
+	equipment_loadout.cancel_transition()
+	equipment_pending_attack = ""
+	weapon_cycle_armed = false
+	weapon_cycle_held = false
+	weapon_cycle_elapsed = 0.0
+	if was_transitioning and guard_arm_ik != null:
+		guard_arm_ik.stop()
+		guard_arm_applied = false
+	if equipment_left_arm_ik != null:
+		equipment_left_arm_ik.stop()
 
 func _cycle_arrow_type() -> void:
 	var arrow_ids := ["standard_arrow", "bodkin_arrow", "ashfire_arrow"]
@@ -500,6 +571,7 @@ func _handle_movement(delta: float) -> void:
 			try_jump()
 		if _action_just_pressed("dodge") and not beam_charging:
 			if stamina_component.spend(get_dodge_stamina_cost()):
+				_cancel_equipment_action()
 				dodge_dir = move_dir if move_dir.length() > 0.1 else -global_transform.basis.z
 				dodge_time = 0.30
 			else:
@@ -636,37 +708,34 @@ func _sample_foot_offset(side: float, delta: float, current: float) -> float:
 	return lerp(current, target, 1.0 - exp(-12.0 * delta))
 
 func _handle_combat_input() -> void:
-	if beam_cast_state == BEAM_STATE_IDLE and attack_anim_time <= 0.0 and dodge_time <= 0.0 and hurt_react_time <= 0.0:
-		if _action_just_pressed("weapon_cycle"):
-			_cycle_weapon()
-		elif _action_just_pressed("weapon_bow"):
-			_set_weapon_mode("bow")
-		elif _action_just_pressed("weapon_sword"):
-			_select_blade("steel")
-		elif _action_just_pressed("weapon_oathblade"):
-			_select_blade("oathblade")
+	_handle_equipment_input()
 	if beam_cast_state == BEAM_STATE_IDLE:
 		if _action_just_pressed("use_potion"):
 			potion_requested.emit()
 		if _action_just_pressed("throw_bomb"):
 			bomb_requested.emit()
 	if weapon_mode == "bow":
-		_handle_bow_input()
 		# LT is bow aim in this weapon context, not an Oathfire cast. A separately
 		# bound Oathfire press (for example keyboard C) still cancels into sword.
 		if _action_just_pressed("oathfire_beam") and not _action_just_pressed("aim_bow"):
+			_cancel_equipment_action()
 			_set_weapon_mode("sword")
 			_handle_beam_input()
+		elif not equipment_loadout.is_transitioning():
+			_handle_bow_input()
 		return
 	_handle_beam_input()
-	if beam_cast_state != "":
+	if beam_cast_state != "" or equipment_loadout.is_transitioning():
 		return
-	var light_pressed := _action_just_pressed("light_attack")
-	var heavy_pressed := _action_just_pressed("heavy_attack")
+	var light_pressed := _action_just_pressed("light_attack") or equipment_pending_attack == "light"
+	var heavy_pressed := _action_just_pressed("heavy_attack") or equipment_pending_attack == "heavy"
+	equipment_pending_attack = ""
 	if light_pressed or heavy_pressed:
 		_face_attack_direction()
-	if light_pressed or heavy_pressed or _action_just_pressed("block"):
+	if sword_sheathed and (light_pressed or heavy_pressed or _action_pressed("block")):
+		equipment_pending_attack = "heavy" if heavy_pressed else ("light" if light_pressed else "")
 		_draw_sword_for_combat()
+		return
 	if attack_cooldown > 0.0:
 		if light_pressed or heavy_pressed:
 			buffered_attack = "heavy" if heavy_pressed else "light"
@@ -702,6 +771,10 @@ func _handle_combat_input() -> void:
 			animation_driver.trigger_action("parry")
 
 func _handle_bow_input() -> void:
+	if not equipment_loadout.bow_drawn:
+		if _action_pressed("aim_bow"):
+			equipment_loadout.request_loadout("bow", get_selected_blade_id(), true)
+		return
 	if _action_just_pressed("cycle_arrow"):
 		_cycle_arrow_type()
 	if bow_recovery > 0.0:
@@ -928,6 +1001,7 @@ func _begin_oathfire_cast() -> bool:
 	var captured := _lock_beam_direction()
 	if captured.length_squared() < 0.5:
 		return false
+	_cancel_equipment_action()
 	_set_beam_state(BEAM_STATE_SHEATHING, 0.24)
 	beam_charging = true
 	beam_charge_time = 0.0
@@ -996,23 +1070,8 @@ func _begin_beam_redraw() -> void:
 		animation_driver.stop_action("idle", 0.12)
 
 func _draw_sword_for_combat() -> void:
-	sword_combat_linger = SWORD_COMBAT_LINGER
 	if sword_sheathed:
-		_set_sword_sheathed(false)
-		if animation_driver != null:
-			animation_driver.trigger_action("draw", 1.0, 0.08)
-
-func _update_sword_combat_state(delta: float) -> void:
-	if sword_sheathed:
-		return
-	if beam_cast_state != BEAM_STATE_IDLE or attack_anim_time > 0.0 or parry_window > 0.0 or _action_pressed("block"):
-		sword_combat_linger = SWORD_COMBAT_LINGER
-		return
-	sword_combat_linger = maxf(sword_combat_linger - delta, 0.0)
-	if sword_combat_linger <= 0.0:
-		_set_sword_sheathed(true)
-		if animation_driver != null:
-			animation_driver.trigger_action("sheath", 1.0, 0.08)
+		equipment_loadout.request_loadout("sword", get_selected_blade_id(), true)
 
 func cancel_beam_charge(reason: String = "cancelled") -> void:
 	var was_active := beam_cast_state != BEAM_STATE_IDLE or beam_charging or beam_locked_direction.length_squared() > 0.5
@@ -1098,13 +1157,11 @@ func _hide_beam_charge_visuals() -> void:
 
 func _set_sword_sheathed(sheathed: bool) -> void:
 	sword_sheathed = sheathed
-	if not sheathed:
-		sword_combat_linger = SWORD_COMBAT_LINGER
 	if sheathed and slash_arc_root != null:
 		slash_arc_root.visible = false
 
 func is_blocking() -> bool:
-	return _action_pressed("block") and stamina_component.stamina > 8.0
+	return weapon_mode == "sword" and not sword_sheathed and not equipment_loadout.is_transitioning() and _action_pressed("block") and stamina_component.stamina > 8.0
 
 func take_damage(amount: float) -> bool:
 	amount *= float(difficulty_profile.get("incoming_damage_multiplier", 1.0))
@@ -1118,7 +1175,9 @@ func take_damage(amount: float) -> bool:
 			animation_driver.trigger_action("parry", 1.0, 0.04, true)
 		parried.emit()
 		return true
-	if is_blocking() and stamina_component.spend(12.0):
+	var guarded := is_blocking()
+	_cancel_equipment_action()
+	if guarded and stamina_component.spend(12.0):
 		var reduced = amount * 0.25
 		health_component.damage(reduced)
 		hurt_flash_time = 0.10
@@ -1147,7 +1206,11 @@ func _apply_gravity(delta: float) -> void:
 		velocity.y = -0.1
 
 func _on_died() -> void:
+	_cancel_equipment_action()
 	cancel_beam_charge()
+	_set_sword_sheathed(true)
+	equipment_loadout.bow_drawn = false
+	equipment_loadout.apply_visibility()
 	can_control = false
 	if animation_driver != null:
 		animation_driver.set_dead()
@@ -1313,6 +1376,21 @@ func _build_bow_visual() -> void:
 			bow_quiver_attachment.bone_name = skeleton.get_bone_name(back_index)
 			skeleton.add_child(bow_quiver_attachment)
 			quiver_parent = _create_equipment_space(bow_quiver_attachment, "KaelQuiverBackEquipmentSpace")
+	if quiver_parent != visual_root:
+		bow_back_visual = Node3D.new()
+		bow_back_visual.name = "KaelStowedBow"
+		bow_back_visual.position = Vector3(-0.25, 0.16, -0.36)
+		bow_back_visual.rotation_degrees = Vector3(0.0, 0.0, 24.0)
+		bow_back_visual.scale = Vector3.ONE * 0.82
+		quiver_parent.add_child(bow_back_visual)
+		var stowed_bow := _instantiate_modeled_prop(MODELED_BOW_PATH)
+		if stowed_bow != null:
+			stowed_bow.scale = Vector3.ONE * 0.30
+			stowed_bow.position = Vector3(0.04, -0.01, 0.04)
+			_prepare_modeled_prop(stowed_bow, Color(0.24, 0.12, 0.055))
+			bow_back_visual.add_child(stowed_bow)
+	if skeleton != null:
+		equipment_left_arm_ik = _make_arm_pose_ik(skeleton, "BowEquipmentReach", &"upperarm_l", &"hand_l")
 	bow_quiver_visual = Node3D.new()
 	bow_quiver_visual.name = "KaelQuiverBackEquipment"
 	bow_quiver_visual.position = Vector3(-0.22, -0.12, 0.16) if quiver_parent != visual_root else Vector3(-0.22, 1.05, 0.28)
@@ -1757,13 +1835,21 @@ func _update_sword_equipment_pose(windup: float, strike: float, recovery: float,
 	var native_grip := skeleton != null and sword_attachment.bone_name == &"hand_r"
 	var grip_allowed := native_grip and can_control and not transition_locked and not sword_sheathed and beam_cast_state == "" and weapon_mode == "sword"
 	_update_sword_hand_grip(skeleton, grip_allowed)
+	var equipment_pose := _equipment_reach_pose()
+	var sword_reach := not equipment_pose.is_empty() and weapon_mode == "sword"
+	_update_bow_equipment_reach(equipment_pose)
 	if guard_arm_ik != null:
 		var guard_allowed := can_control and not transition_locked and not attacking and not sword_sheathed and beam_cast_state == "" and weapon_mode == "sword"
 		var weight := clampf(block_pose_weight, 0.0, 1.0) if guard_allowed else 0.0
 		if parry_window > 0.0 and guard_allowed:
 			weight = 1.0
+		if sword_reach:
+			weight = float(equipment_pose.weight)
 		if weight > 0.01:
-			guard_arm_ik.target = Transform3D(Basis.IDENTITY, global_position + Vector3.UP * 1.12 + global_basis.x.normalized() * 0.28 - global_basis.z.normalized() * 0.34)
+			var target := global_position + Vector3.UP * 1.12 + global_basis.x.normalized() * 0.28 - global_basis.z.normalized() * 0.34
+			if sword_reach:
+				target = equipment_pose.position
+			guard_arm_ik.target = Transform3D(Basis.IDENTITY, target)
 			guard_arm_ik.influence = weight
 			guard_arm_ik.start(true)
 			guard_arm_applied = true
@@ -1818,6 +1904,8 @@ func _update_sword_equipment_pose(windup: float, strike: float, recovery: float,
 	var current_blade_direction := (hand_weapon_basis * Vector3.DOWN).normalized()
 	var direction_correction := Quaternion(current_blade_direction, blade_direction)
 	var blade_basis := (Basis(direction_correction) * hand_weapon_basis).orthonormalized()
+	if sword_reach:
+		blade_basis = blade_basis.slerp(equipment_pose.basis, float(equipment_pose.weight))
 	var hand_offset := hand_basis * Vector3(0.018, 0.012, 0.0)
 	var hand_position := hand_world.origin + hand_offset
 	if grip_allowed:
@@ -1836,6 +1924,52 @@ func _update_sword_equipment_pose(windup: float, strike: float, recovery: float,
 		sword_equipment_pivot.transform = expected_parent_world.affine_inverse() * desired_world
 	else:
 		sword_equipment_pivot.global_transform = desired_world
+
+func _equipment_anchor_world(node: Node3D) -> Transform3D:
+	var local := node.transform
+	var ancestor := node.get_parent()
+	while ancestor is Node3D:
+		if ancestor is BoneAttachment3D and ancestor.get_parent() is Skeleton3D:
+			var rig := ancestor.get_parent() as Skeleton3D
+			return rig.global_transform * rig.get_bone_global_pose((ancestor as BoneAttachment3D).bone_idx) * local
+		local = (ancestor as Node3D).transform * local
+		ancestor = ancestor.get_parent()
+	return node.global_transform
+
+func _equipment_reach_pose() -> Dictionary:
+	if not equipment_loadout.is_transitioning():
+		return {}
+	var anchor: Node3D = bow_back_visual if weapon_mode == "bow" else blade_scabbards.get(get_selected_blade_id()) as Node3D
+	if not is_instance_valid(anchor):
+		return {}
+	var frame := _equipment_anchor_world(anchor)
+	var phase := equipment_loadout.transition_progress()
+	var contact := EquipmentLoadout.CONTACT_FRACTION
+	var approach := smoothstep(0.0, contact - 0.04, phase)
+	var release := 1.0 - smoothstep(contact + 0.08, 1.0, phase)
+	var target := frame.origin
+	if equipment_loadout.transition == "draw" and phase > contact:
+		var withdrawal := sin(clampf((phase - contact) / (1.0 - contact), 0.0, 1.0) * PI)
+		target += frame.basis.y.normalized() * 0.24 * withdrawal
+	return {"position": target, "basis": frame.basis.orthonormalized(), "weight": approach * release}
+
+func _update_bow_equipment_reach(pose: Dictionary) -> void:
+	if equipment_left_arm_ik == null:
+		return
+	var reaching := weapon_mode == "bow" and not pose.is_empty()
+	if not reaching:
+		equipment_left_arm_ik.stop()
+		if bow_visual != null:
+			bow_visual.rotation_degrees = Vector3(0.0, 8.0, -12.0)
+		return
+	equipment_left_arm_ik.target = Transform3D(Basis.IDENTITY, pose.position)
+	equipment_left_arm_ik.influence = float(pose.weight)
+	equipment_left_arm_ik.start(true)
+	if bow_visual != null:
+		var parent_frame := _equipment_anchor_world(bow_visual.get_parent() as Node3D)
+		var resting := Basis.from_euler(Vector3(0.0, deg_to_rad(8.0), deg_to_rad(-12.0)))
+		var target_basis: Basis = parent_frame.basis.orthonormalized().inverse() * (pose.basis as Basis)
+		bow_visual.basis = resting.slerp(target_basis, float(pose.weight)).scaled(Vector3.ONE * 0.82)
 
 func _sword_grip_center_world(skeleton: Skeleton3D) -> Vector3:
 	var center := Vector3.ZERO
@@ -1959,6 +2093,7 @@ func _ensure_equipment_loadout() -> void:
 		equipment_loadout.bind_node(blade_id + "_back", blade_back_visuals.get(blade_id))
 		equipment_loadout.bind_node(blade_id + "_scabbard", blade_scabbards.get(blade_id))
 	equipment_loadout.bind_node("bow", bow_visual)
+	equipment_loadout.bind_node("bow_back", bow_back_visual)
 	equipment_loadout.bind_node("quiver", bow_quiver_visual)
 	equipment_loadout.set_active_weapon(weapon_mode)
 	equipment_loadout.set_sword_drawn(not sword_sheathed)
@@ -2074,6 +2209,8 @@ func _animate_visuals(delta: float) -> void:
 			animation_driver.set_locomotion_motion(locomotion_velocity, is_on_floor(), run_speed)
 		else:
 			animation_driver.set_locomotion(horizontal_speed / maxf(run_speed, 0.1), locomotion_velocity.normalized(), is_on_floor())
+		if moving and equipment_loadout.is_transitioning() and animation_driver.current_state in ["draw", "sheath"]:
+			animation_driver.stop_action("walk", 0.08)
 		animation_driver.advance_external(delta)
 		if movement_state == "dodge" and animation_driver.current_state != "dodge":
 			animation_driver.trigger_action("dodge")
