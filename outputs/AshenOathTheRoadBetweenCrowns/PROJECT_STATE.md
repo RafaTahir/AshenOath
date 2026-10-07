@@ -1,6 +1,92 @@
 # Ashen Oath Project State
 
-## Current Release Truth - 2026-10-02
+## Living Road - 2026-10-08
+
+The active program is `../../plans/living-road/README.md`: 28 sequential tickets,
+with implementation on D: and user-owned runtime acceptance. LR-001 records the
+research and tickets, pins shipped texture import settings and publishes the
+reconciled baseline. Current delivery state: `../../plans/living-road/STATUS.md`.
+No new gameplay, browser or audio-listening certification is claimed. The selected
+Web package keeps GitHub's original game content and source provenance, with
+lossless transport below 100 MiB. Existing recovery records below are historical.
+
+## Current Local Assembly - 2026-10-07
+
+- The canonical `D:\Projects\AshenOath` worktree is on `codex/masterpiece-rebuild`
+  at `f8874cc`, with the full `origin/main` source at `b4a4d42` already included.
+  The development branch is one commit ahead of GitHub `main` and 61 ahead of
+  `origin/codex/masterpiece-rebuild`; no remote update was performed.
+- GitHub `main` is the chosen game-content baseline. The selected local `web/`
+  contains those exact committed runtime bytes with lossless gzip PCK transport.
+  Its manifest totals 91,959,425 bytes, below the 104,857,600-byte ceiling.
+  Build ID remains `story-20261004T162459Z-d1aee68565ff`; the decoded root PCK
+  hash remains `a41202f10232d4cc36646194296652c51ba0a8c8b0f89c9d9f8007a0e3f70413`.
+- The earlier D: rebuild's larger character/monster packs came from ignored
+  local texture import settings: character S3TC/mipmap variants and additional
+  monster mipmaps. No new models or animations were added. All 516 packed audio
+  streams match GitHub exactly; the earlier claim of new voice content was
+  incorrect. The two compiled-script differences are line endings only.
+- The native rebuild and all earlier work remain preserved. Its candidate ledger
+  now identifies the selected Web release separately. Original dirty-source
+  provenance is retained rather than reclassified as a clean export.
+- Static artifact/hash inspection completed; browser delivery and user gameplay
+  acceptance remain **UNVERIFIED - REQUIRES USER TESTING**. No commit, push,
+  merge or deployment was performed for this local assembly.
+- Details: `../../migration/story_overhaul_20261007/GITHUB_D_RECONCILIATION.md`.
+  The four modified context documents, two untracked evidence/export directories,
+  original C: story worktree and rollback repository remain preserved.
+
+## Earlier Repository Inspection - 2026-10-07
+
+- Canonical working repository: `D:\Projects\AshenOath`, branch
+  `codex/masterpiece-rebuild`, HEAD `6b991c6d515756cf8c966fc47bf8e8b8c1b0a49d`.
+  `origin/codex/masterpiece-rebuild` matches this HEAD. Its pre-existing
+  untracked work is `outputs/AshenOathTheRoadBetweenCrowns/release_reports/opening_presence_20261003/`
+  and `outputs/AshenOath_Web_startup_fcf094c/`; preserve both.
+- The D: branch's latest source fix is `fcf094c` (quality-aware Greyfen
+  startup and recoverable resource preparation), followed by `6b991c6`, which
+  publishes that Web build. The tracked Web manifest identifies build
+  `startup-fcf094cf9b80`, source `fcf094cf9b80c8aa02e294bedd7eb3f1cfba9d2e`,
+  root PCK SHA-256
+  `4b81aacb9f57f778040fa64b40cb62a4aafcf23e3388f0de176ac5ebd2bfe5cc`, and
+  90,540,368 total bytes. Focused native checks are recorded before the
+  build-only boundary; browser acceptance and actual load-time improvement on
+  this artifact remain **UNVERIFIED — REQUIRES USER TESTING**.
+- `origin/main` is at `b4a4d4266bdf1a1ba67cfa7aba90c1af9ad2e5d0`, 60 commits
+  ahead of this development branch. It is the story-centered overhaul release,
+  not merged into the canonical D: branch. The local `main` worktree at
+  `D:\Projects\AshenOath_release_9df7e67` remains at `6b991c6` and is behind
+  `origin/main`.
+- The separate worktree
+  `C:\Users\User\Documents\Codex\AshenOath\build` is on
+  `codex/story-centered-overhaul` at `b4a4d42`. Its pre-existing modified file
+  is `outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_candidates.json`;
+  leave it untouched. That worktree contains the substantial story, dialogue,
+  voice, journal, world-staging, HUD, accessibility and seven refinement-cycle
+  changes. Do not assume those source changes are present on D:.
+- The story release commit is titled `Publish story build
+  story-20261004T162459Z-d1aee68565ff`. Its committed Web release manifest
+  identifies source `d1aee68565ffda8a5b1c39da10dcb5af55282b07` with
+  `dirty: true`, build ID `story-20261004T162459Z-d1aee68565ff`, root PCK
+  SHA-256 `a41202f10232d4cc36646194296652c51ba0a8c8b0f89c9d9f8007a0e3f70413`,
+  and total artifact bytes `108816414`. This is 3,958,814 bytes above the
+  recorded 104,857,600-byte deployment ceiling. The committed
+  `runtime_pack_candidates.json` still identifies the older `dev-59ca38939769`
+  candidate, while the separate story worktree has a modified story-build
+  candidate manifest. Reconcile these identities and the payload budget before
+  treating the story package as a clean release candidate.
+- The story release documents report a successful Vercel publication, but also
+  explicitly state that no post-deployment browser, gameplay, listening or
+  artifact verification was performed. The story package is therefore not a
+  QA-certified replacement for the V10 certificate. No live deployment check
+  was performed during this repository-context update.
+- Recovery-004's 37/37 result and CERT/RELEASE evidence apply to exact V10
+  only. The D: `6b991c6` startup-repair build and the later story build have not
+  inherited that certification.
+- No source changes, tests, exports, commits, pushes, merges or deployments
+  were made for this reconciliation.
+
+## Last Certified Release Truth - V10 / 2026-10-02
 
 Recovery-004 is **37/37 accepted** under the explicitly approved `functional_candidate / lean_functional_smoke` scope. CERT-001 and RELEASE-001 pass. Exact V10 is deployed: PCK `5ddd1873ae33a55354f046201a3c379b88466eb40f0bd1a9a0389280f3857067`, 15 files / 96,042,769 bytes. Every local/committed/live artifact hash matches. Production Chrome actual New Game, movement and durable Save/Continue pass. Source, assets, worlds, quests and existing features are retained.
 

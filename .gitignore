@@ -77,5 +77,23 @@ outputs/AshenOath_Web_Slim/
 !outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/*_orm.jpg.import
 !web/
 !web/**
+# LR-001: pin shipped texture imports; future editor detection must not change them.
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/T_Eye_Brown.png.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/T_Eye_Normal.png.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/T_Hair_1_BaseColor_1K.png.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/T_Hair_1_Normal_1K.png.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/T_Regular_Male_Dark_BaseColor_1K.png.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/T_Regular_Male_Normal_1K.png.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/T_Regular_Male_Roughness_1K.png.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/T_Superhero_Male_Dark_1K.png.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/T_Superhero_Male_Normal_1K.png.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/T_Superhero_Male_Roughness_1K.png.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/enemies/ultimate_monsters/BlueDemon_Atlas_Monsters.png.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/enemies/ultimate_monsters/Creep_Creep_BaseColor.png.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/enemies/ultimate_monsters/Creep_Creep_Metallic-Creep_Roughness.png.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/enemies/ultimate_monsters/Creep_Creep_Normal_OpenGL.png.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/enemies/ultimate_monsters/Demon_Atlas_Monsters.png.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/enemies/ultimate_monsters/Ghost_Atlas_Monsters.png.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/enemies/ultimate_monsters/Orc_Atlas_Monsters.png.import
 .vercel
 .env*

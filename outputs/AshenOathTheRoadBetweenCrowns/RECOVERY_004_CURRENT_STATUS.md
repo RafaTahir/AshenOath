@@ -1,5 +1,30 @@
 # Recovery-004 Current Closure Status
 
+## Current Local Assembly Scope - 2026-10-07
+
+The canonical D: branch now includes `origin/main` at `b4a4d42`; HEAD is `f8874cc`.
+The selected Web candidate retains GitHub's exact game resources, repackaged
+losslessly to 91,959,425 manifest bytes. The pack-size differences in the earlier
+D: rebuild are explained by local texture compression/mipmap settings and
+regenerated import IDs. All packed audio is unchanged from GitHub.
+This static assembly does not change the historical 37/37 V10 acceptance count
+or certify the later story build. No push or deployment occurred. Current
+artifact provenance and limitations are recorded in `PROJECT_STATE.md`.
+
+## Historical Repository Scope Note - 2026-10-07
+
+The recorded **37/37** closure is for exact V10 under the approved
+functional-candidate scope; it does not certify later builds. The canonical D:
+development branch is `codex/masterpiece-rebuild` at `6b991c6`. `origin/main`
+and the separate `codex/story-centered-overhaul` worktree are at `b4a4d42`, 60
+commits ahead, and contain a newer story-centered package that was not merged
+into D:. Its release notes explicitly say no post-deployment verification was
+performed. The committed Web manifest identifies dirty source and reports
+108,816,414 total bytes, above the 104,857,600-byte ceiling; its committed
+runtime-pack candidate ledger still identifies the older V10-era candidate.
+Do not count the newer story package as certified or merge it implicitly.
+`PROJECT_STATE.md` is the current repository/artifact reconciliation record.
+
 ## Post-Release Opening Pass - Locally Verified 2026-10-03
 
 - Recovery-004 remains **37/37 accepted under the previously approved functional-candidate scope**. Its V10 production certificate is historical evidence for V10, not certification of the current dirty source.

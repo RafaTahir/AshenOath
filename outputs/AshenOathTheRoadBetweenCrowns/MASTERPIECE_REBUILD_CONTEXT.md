@@ -1,12 +1,32 @@
 # Ashen Oath Masterpiece Rebuild Context
 
-This is the active implementation context for the 66-ticket Masterpiece Rebuild.
-The historical production baseline was the synchronized `main` checkpoint
-from `RELEASE-004`; the current production checkpoint is recorded below.
-The current branch is `codex/masterpiece-rebuild`, and Milestone C is promoted
-to production in source checkpoint `b132db4` (runtime artifact `85e8057`).
-`origin/main`, tracked `web/`, and Vercel share the current 94.039 MB, 12-file Web export with root PCK SHA-256
-`ea92c69fe8cc5be67b2969941a12ab687ca13c6d85a28bf0e970f5435c694b99`.
+## Current Local Assembly - 2026-10-07
+
+Use GitHub `main` at `b4a4d42` as the current game-content baseline. It is already
+included in canonical `D:\Projects\AshenOath` on `codex/masterpiece-rebuild`
+at `f8874cc`. The selected local Web package preserves GitHub's exact runtime
+bytes and uses lossless PCK transport, totaling 91,959,425 manifest bytes.
+The earlier D: texture-import variants are preserved as a separate candidate.
+No new gameplay, character, monster or voice content is introduced by this
+assembly. See `PROJECT_STATE.md` and the migration reconciliation record.
+Remote branches and production remain unchanged; browser testing is user-owned.
+
+## Historical Repo Handoff - 2026-10-07
+
+The canonical worktree is `D:\Projects\AshenOath` on
+`codex/masterpiece-rebuild`, HEAD `6b991c6d515756cf8c966fc47bf8e8b8c1b0a49d`.
+Its upstream branch matches. `origin/main` is at `b4a4d42`, 60 commits ahead,
+and contains the separate story-centered overhaul and Web package. That branch
+has not been merged into this canonical development branch. Its separate
+worktree has a pre-existing modified runtime-pack candidate manifest; preserve
+it. See `PROJECT_STATE.md` for exact hashes, artifact-size and certification
+boundaries.
+
+Everything below this handoff is an older Masterpiece/Milestone-C snapshot.
+Treat it as historical design and implementation context, not the current
+branch, release identity, milestone status, or next-action list.
+
+## Historical Milestone C Snapshot
 
 Milestone C is now the verified cumulative production checkpoint on this branch.
 It contains the direct selected human bodies, equipment loadout, bow/ammo

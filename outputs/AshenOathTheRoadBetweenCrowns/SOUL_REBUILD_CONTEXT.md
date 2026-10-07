@@ -1,10 +1,27 @@
 # Ashen Oath Soul-Rebuild Context
 
-## Current Recovery Release Basis - 2026-10-02
+## Current Local Assembly - 2026-10-07
+
+GitHub `main` (`b4a4d42`) is the game-content baseline now included in the D:
+development branch (`f8874cc`). The selected local Web candidate uses GitHub's
+exact runtime resources with lossless transport and a 91,959,425-byte manifest
+total. No new asset direction or voice replacement is introduced. The previous
+native rebuild and all existing work remain preserved. This is static local
+assembly, not a new release certification; remote branches and production are
+unchanged. See `PROJECT_STATE.md` for current provenance and user testing scope.
+
+## Last Certified Recovery Release Basis - V10 / 2026-10-02
 
 Recovery-004 is complete at **37/37**, with exact V10 promotion, every live file hash and real-input production Save/Continue verified. This is a **functionality-certified candidate**, not original numerical-performance certification or a new artistic upgrade. Existing A-set identities, Ranger, characters, monsters, worlds, story, equipment and audio are preserved. No new asset direction is authorized by release certification.
 
 The latest explicit browser scope is lean functional smoke: Chrome opening/combat/bridge and durable save/settings/input proof; Edge/Firefox startup/input/save. Exhaustive bot campaign/endings were omitted, not passed. Retained native evidence remains scoped. Performance misses, unreviewed listening and unavailable physical-controller tests remain disclosed. Use the registry's `latest_closure` and current report rather than historical next-action instructions below.
+
+The later story-centered Web package on `origin/main` (`b4a4d42`) is a separate,
+substantially changed build. Its release records state that tests and
+post-deployment verification were not run; its manifest also reports dirty
+source identity and a payload above the recorded size ceiling. It does not
+inherit V10's Recovery-004 certification. Current branch and artifact details
+are in `PROJECT_STATE.md`.
 
 ## Current Worktree Truth - 2026-09-11
 

@@ -12,6 +12,7 @@ import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import urlsplit
 
 
 RELEASE_MANIFEST = "release_manifest.json"
@@ -73,6 +74,72 @@ def git_value(repo: Path, *args: str) -> str:
         ).strip()
     except (OSError, subprocess.CalledProcessError):
         return ""
+
+
+def inspect_packaged_export(export_dir: Path) -> dict:
+    """Check stored transport bytes and decoded pack identities before publishing."""
+    manifest = json.loads((export_dir / RELEASE_MANIFEST).read_text(encoding="utf-8-sig"))
+    records = manifest["artifacts"]
+    by_path = {entry["path"]: entry for entry in records}
+    if len(by_path) != len(records):
+        raise ValueError("Duplicate artifact paths in release manifest")
+    actual_paths = {p.relative_to(export_dir).as_posix() for p in export_dir.rglob("*") if p.is_file()}
+    if actual_paths != set(by_path) | {RELEASE_MANIFEST}:
+        raise ValueError("Web directory has missing or unlisted transport files")
+    required = {"index.html", "index.js", "index.wasm", "index.pck", "runtime_pack_manifest.json"}
+    if not required.issubset(by_path):
+        raise ValueError("Required Web artifacts are missing")
+    total = 0
+    for relative, entry in by_path.items():
+        path = (export_dir / relative).resolve()
+        if not path.is_relative_to(export_dir) or path == export_dir:
+            raise ValueError(f"Artifact escapes export directory: {relative}")
+        total += path.stat().st_size
+        if path.stat().st_size != entry["bytes"] or sha256(path) != entry["sha256"]:
+            raise ValueError(f"Artifact size/hash mismatch: {relative}")
+        if path.suffix == ".pck" or relative == "index.wasm":
+            if entry.get("content_encoding") != "gzip":
+                raise ValueError(f"Hosting requires gzip transport: {relative}")
+            decoded = gzip.decompress(path.read_bytes())
+            magic = b"GDPC" if path.suffix == ".pck" else b"\x00asm"
+            if not decoded.startswith(magic):
+                raise ValueError(f"Invalid decoded artifact: {relative}")
+            if len(decoded) != entry.get("decoded_bytes") or hashlib.sha256(decoded).hexdigest() != entry.get("decoded_sha256"):
+                raise ValueError(f"Decoded artifact size/hash mismatch: {relative}")
+    if total != manifest["artifacts_total_bytes"]:
+        raise ValueError("Manifest aggregate size does not match its artifacts")
+    directory_bytes = total + (export_dir / RELEASE_MANIFEST).stat().st_size
+    if directory_bytes >= MAX_TOTAL_BYTES:
+        raise ValueError(f"Complete Web directory is {directory_bytes} bytes; must be below {MAX_TOTAL_BYTES}")
+    if manifest["root_pck"] != by_path["index.pck"] or manifest["runtime_pack_manifest"] != by_path["runtime_pack_manifest.json"]:
+        raise ValueError("Release identity references do not match artifact records")
+    runtime = json.loads((export_dir / "runtime_pack_manifest.json").read_text(encoding="utf-8-sig"))
+    if runtime["release_id"] != manifest["build_id"]:
+        raise ValueError("Runtime and release build identities differ")
+    runtime_packs = runtime["packs"]
+    declared_packs = {p["id"]: p for p in manifest["packs"]}
+    if len(declared_packs) != len(manifest["packs"]) or set(runtime_packs) != set(declared_packs):
+        raise ValueError("Runtime and release pack sets differ")
+    for pack_id, pack in runtime_packs.items():
+        declared = declared_packs[pack_id]
+        if pack["version"] != manifest["build_id"]:
+            raise ValueError(f"Pack version drift: {pack_id}")
+        for key in ("url", "bytes", "sha256", "dependencies"):
+            if pack.get(key) != declared.get(key):
+                raise ValueError(f"Pack metadata drift: {pack_id}/{key}")
+        if any(dep not in runtime_packs for dep in pack.get("dependencies", [])):
+            raise ValueError(f"Unknown pack dependency: {pack_id}")
+        if str(pack.get("status", "")).startswith("embedded"):
+            continue
+        url = urlsplit(pack["url"])
+        entry = by_path.get(url.path)
+        if url.scheme or url.netloc or entry is None:
+            raise ValueError(f"Missing local pack: {pack_id}")
+        if entry.get("decoded_bytes") != pack["bytes"] or entry.get("decoded_sha256") != pack["sha256"]:
+            raise ValueError(f"Runtime pack does not match decoded delivery bytes: {pack_id}")
+        if pack["sha256"] not in url.query:
+            raise ValueError(f"Pack URL lacks content identity: {pack_id}")
+    return {"build_id": manifest["build_id"], "artifacts": len(records), "directory_bytes": directory_bytes}
 
 
 def inject_shell_identity(html_path: Path, build_id: str) -> None:
@@ -207,11 +274,19 @@ def main() -> int:
     parser.add_argument("--source-commit", default="")
     parser.add_argument("--output", type=Path)
     parser.add_argument("--compress-wasm", action="store_true")
+    parser.add_argument("--check-existing", action="store_true", help="Read-only package identity/size inspection; no game execution")
     args = parser.parse_args()
     export_dir = args.export_dir.resolve()
     if not export_dir.is_dir():
         print(f"missing export directory: {export_dir}", file=sys.stderr)
         return 2
+    if args.check_existing:
+        try:
+            print(json.dumps(inspect_packaged_export(export_dir)))
+            return 0
+        except (OSError, ValueError, TypeError, KeyError) as error:
+            print(f"PACKAGE INTEGRITY: {error}", file=sys.stderr)
+            return 1
     runtime_manifest = (args.runtime_pack_manifest or (export_dir / "runtime_pack_manifest.json")).resolve()
     if not runtime_manifest.is_file():
         print(f"missing runtime pack manifest: {runtime_manifest}", file=sys.stderr)
@@ -229,6 +304,12 @@ def main() -> int:
         return 1
     output = (args.output or (export_dir / RELEASE_MANIFEST)).resolve()
     output.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    if output == export_dir / RELEASE_MANIFEST:
+        try:
+            inspect_packaged_export(export_dir)
+        except (OSError, ValueError, TypeError, KeyError) as error:
+            print(f"PACKAGE INTEGRITY: {error}", file=sys.stderr)
+            return 1
     print(
         f"WEB RELEASE MANIFEST: PASS ({len(manifest['artifacts'])} artifacts, "
         f"{manifest['artifacts_total_bytes'] / 1048576:.1f} MB, "
