@@ -1,20 +1,20 @@
 # Living Road Status
 
 Updated: 2026-10-08. Implementation and user acceptance are separate.
-User-accepted tickets: **0/28**. Published tickets: **3/28**. Current ticket:
-**LR-004**, implementing. Runtime checks belong to the user; the active goal now
+User-accepted tickets: **0/28**. Published tickets: **4/28**. Current ticket:
+**LR-005**, next. Runtime checks belong to the user; the active goal now
 authorizes sequential implementation/publication without waiting between tickets.
 LR-001 remains published and awaiting user acceptance.
-Latest package commit: `597124a7432bff79cbce084850561c79d5547bec`.
-Vercel deployment: `dpl_5QQuWmUqX1EwewdCfZ2FH6tPFFq4`, provider state READY.
-Live: https://ashenoath.vercel.app/?v=lr-003-597124a
+Latest package commit: `8381f83978694972bd9f0e60be9afd36cea81bbd`.
+Vercel deployment: `dpl_C7fSPpYAWUdNPReYMapGy7LWqZz7`, provider state READY.
+Live: https://ashenoath.vercel.app/?v=lr-004-8381f83
 
 | Ticket | Work | State |
 | --- | --- | --- |
 | [LR-001](tickets/LR-001.md) | Baseline and Delivery | published_awaiting_user |
 | [LR-002](tickets/LR-002.md) | Two Blades, One Loadout | published_awaiting_user |
 | [LR-003](tickets/LR-003.md) | Draw, Sheathe and Interrupt | published_awaiting_user |
-| [LR-004](tickets/LR-004.md) | Steel and Oathblade Combat | implementing |
+| [LR-004](tickets/LR-004.md) | Steel and Oathblade Combat | published_awaiting_user |
 | [LR-005](tickets/LR-005.md) | Readable Inventory | planned |
 | [LR-006](tickets/LR-006.md) | Knowledge and Preparation | planned |
 | [LR-007](tickets/LR-007.md) | Greyfen Services | planned |
@@ -40,8 +40,7 @@ Live: https://ashenoath.vercel.app/?v=lr-003-597124a
 | [LR-027](tickets/LR-027.md) | Regions That Remember | planned |
 | [LR-028](tickets/LR-028.md) | Lives After the Covenant | planned |
 
-Next: implement LR-004's explicit Steel/Oathblade affinity at the existing blade
-contact resolver and restore prior equipment intent after Oathfire. Reuse the
-existing contact/target ledger and creature taxonomy. Pending user checklists
+Next: implement LR-005's inventory categories, sorting and saved quick slots in
+the retained Preparation UI and InventoryManager. Pending user checklists
 remain attached to each result. No Recovery-004 certification is
 transferred to this package or to future Living Road changes.

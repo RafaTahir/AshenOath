@@ -29,9 +29,12 @@ The complete Web directory is 91,921,171 bytes; Vercel deployment
 user-accepted. LR-004 blade affinity and Oathfire equipment restoration are next.
 No runtime validation is claimed; see its result for the user's manual checklist.
 
-LR-004 is implemented and packaging: explicit 1.15 blade affinity against existing
+LR-004 is published at `8381f83`: explicit 1.15 blade affinity against existing
 tags, ready-blade/attack-target contact guards, single sword-impact audio path,
 known-creature preparation notes and Oathfire restoration of prior equipment.
+The complete Web directory is 91,925,605 bytes; Vercel deployment
+`dpl_C7fSPpYAWUdNPReYMapGy7LWqZz7` is READY. Progress: 4/28 published, 0/28
+user-accepted. LR-005 inventory readability is next; no runtime checks claimed.
 
 ## Current Local Assembly - 2026-10-07
 

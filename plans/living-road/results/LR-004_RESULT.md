@@ -1,6 +1,6 @@
 # LR-004 - Steel and Oathblade Combat
 
-Status: implemented; packaging/publication in progress. User acceptance pending.
+Status: published_awaiting_user. User acceptance pending.
 
 ## Implemented
 
@@ -43,7 +43,11 @@ strictly below 104,857,600 bytes. Stored root PCK SHA-256:
 `18d6d2f8c64140e8e8446f391c6b6ee8b465f2bd58d01010c43b3011fcce45ba`.
 Decoded root PCK SHA-256:
 `b3ffba3fd563a4231e2e5efcabee1ce9e0db14203b46a3671ed32be46d0d348e`.
-Publication receipt will be recorded after the provider responds.
+Published package commit: `8381f83978694972bd9f0e60be9afd36cea81bbd`, pushed to
+development and main. Vercel `dpl_C7fSPpYAWUdNPReYMapGy7LWqZz7` reported READY.
+URL: https://ashenoath.vercel.app/?v=lr-004-8381f83
+Receipt: `.release-gate/living-road/LR-004-20261007T235203Z/publication.json`.
+No post-deployment browser or gameplay check was performed.
 
 ## Unverified
 
