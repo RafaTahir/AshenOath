@@ -1,47 +1,37 @@
 {
   "schema_version": 2,
-  "generated_at_utc": "2026-10-07T02:45:50.108214Z",
-  "build_id": "web-sync-20261007-b4a4d426",
-  "generated_from_commit": "b4a4d4266bdf1a1ba67cfa7aba90c1af9ad2e5d0",
+  "generated_at_utc": "2026-10-07T23:14:49.1498473Z",
+  "build_id": "lr-002-20261008-two-blades",
+  "generated_from_commit": "31b080ffbfb185f1d6c70f1a6263b85d91c7ea54",
   "source_dirty": true,
-  "artifact_directory": "external_runtime_packs",
+  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\LR-002-20261008-build\\runtime-packs",
   "artifacts_are_external": true,
   "max_deployment_bytes": 104857600,
-  "selected_web_export": {
-    "artifact_directory": "../../web",
-    "release_manifest": "../../web/release_manifest.json",
-    "build_id": "story-20261004T162459Z-d1aee68565ff",
-    "artifact_origin_git_commit": "b4a4d4266bdf1a1ba67cfa7aba90c1af9ad2e5d0",
-    "artifacts_total_bytes": 91959425,
-    "transport_encoding": "gzip",
-    "runtime_content_changed": false
-  },
-  "selection_note": "The packs below describe the preserved native rebuild candidate, not the selected Web release. selected_web_export points to losslessly repackaged GitHub artifacts.",
-  "total_bytes": 96760872,
+  "total_bytes": 92653720,
   "packs": [
     {
       "id": "base",
-      "version": "web-sync-20261007-b4a4d426",
+      "version": "lr-002-20261008-two-blades",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
-      "bytes": 13120928,
-      "sha256": "464b2984c8d0f4a5f18e327ad847ef80c2590b20501a5f8356c68264f9494b73",
+      "bytes": 13122944,
+      "sha256": "ae798cf907f456249811561f06e840a2d8ea6de27236fb84e30d583dbcbca237",
       "status": "candidate_external",
       "log": "logs/pack-base.stdout.log"
     },
     {
       "id": "opening",
-      "version": "web-sync-20261007-b4a4d426",
+      "version": "lr-002-20261008-two-blades",
       "preset": "Runtime Pack Opening",
       "artifact": "opening.pck",
       "bytes": 14321196,
-      "sha256": "a908523d529c4d6748221409ddf04b71f7487d651ede0f9ce462fc4c5f6b47aa",
+      "sha256": "d7c7fc97f2226c7f8f363a1bb51ffbd1a49b98fd9eca4033eb88becd76427a71",
       "status": "candidate_external",
       "log": "logs/pack-opening.stdout.log"
     },
     {
       "id": "campaign",
-      "version": "web-sync-20261007-b4a4d426",
+      "version": "lr-002-20261008-two-blades",
       "preset": "Runtime Pack Campaign",
       "artifact": "campaign.pck",
       "bytes": 999820,
@@ -51,27 +41,27 @@
     },
     {
       "id": "characters",
-      "version": "web-sync-20261007-b4a4d426",
+      "version": "lr-002-20261008-two-blades",
       "preset": "Runtime Pack Characters",
       "artifact": "characters.pck",
-      "bytes": 33513480,
-      "sha256": "530a6e4e72a889a8ceb9788e015c7d4b559094f6bdcce69ed2198b71fa9a51ab",
+      "bytes": 30469448,
+      "sha256": "c41a6a0b4b75890e2e32f2bca1f02ed2b7cbc4ae666b6f546cc51923e31d94f2",
       "status": "candidate_external",
       "log": "logs/pack-characters.stdout.log"
     },
     {
       "id": "monsters",
-      "version": "web-sync-20261007-b4a4d426",
+      "version": "lr-002-20261008-two-blades",
       "preset": "Runtime Pack Monsters",
       "artifact": "monsters.pck",
-      "bytes": 8075052,
-      "sha256": "3fd07db680a97c52f65d1fd51946bae01d6b0b100db0cc331f78dd690548a6d5",
+      "bytes": 7009916,
+      "sha256": "d20b2a99636f93e00dccb77c9c4a36e7f19325f944b99de33b1cc3bf1ce4d92a",
       "status": "candidate_external",
       "log": "logs/pack-monsters.stdout.log"
     },
     {
       "id": "audio",
-      "version": "web-sync-20261007-b4a4d426",
+      "version": "lr-002-20261008-two-blades",
       "preset": "Runtime Pack Audio",
       "artifact": "audio.pck",
       "bytes": 19353760,
@@ -81,7 +71,7 @@
     },
     {
       "id": "quality_materials",
-      "version": "web-sync-20261007-b4a4d426",
+      "version": "lr-002-20261008-two-blades",
       "preset": "Runtime Pack Quality Materials",
       "artifact": "quality_materials.pck",
       "bytes": 7376636,
@@ -90,5 +80,13 @@
       "log": "logs/pack-quality_materials.stdout.log"
     }
   ],
-  "errors": []
+  "errors": [],
+  "selected_web_export": {
+    "build_id": "lr-002-20261008-two-blades",
+    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\LR-002-20261008-build\\export",
+    "generated_from_commit": "31b080ffbfb185f1d6c70f1a6263b85d91c7ea54",
+    "artifacts_total_bytes": 91907854,
+    "root_pck_sha256": "400b98e5cb867195d767606c69c2c15e24592713c0c7743abd25cef51b4df5b2",
+    "note": "Selected export uses gzip transport; native pack records describe decoded build artifacts."
+  }
 }

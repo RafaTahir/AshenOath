@@ -14,6 +14,11 @@ LR-001 package `a62ced0` is pushed to development/main and deployed as
 the program is 1/28 published, 0/28 user-accepted. See the LR-001 result for the
 manual checklist and source/transport identity.
 
+LR-002 is implemented and packaging: paired Steel/Oathblade loadout, separate
+back scabbards, 1/2/3 selection, controller cycling and additive saved blade ID.
+The latest active goal authorizes continuous ticket implementation/publication;
+manual acceptance remains exclusively with the user and is not implied by export.
+
 ## Current Local Assembly - 2026-10-07
 
 - The canonical `D:\Projects\AshenOath` worktree is on `codex/masterpiece-rebuild`

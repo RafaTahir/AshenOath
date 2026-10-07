@@ -712,11 +712,11 @@ func show_controls_menu(back_target: String = "main") -> void:
 			instructions.append("%s: %s" % [str(action).replace("_", " ").capitalize(), str(descriptor.get("instruction", descriptor.get("binding", "Unbound")))])
 		_add_menu_text(box, "Move with the movement keys, left stick or touch pad; look with the mouse, right stick or touch look area.\n\n" + "\n".join(instructions))
 	elif input_device == "gamepad":
-		_add_menu_text(box, "Left Stick move | Right Stick look | D-Pad Up/Down zoom\nL3 run | B dodge | Y jump | X switch sword/bow\nRB light attack | RT heavy attack / fire bow | LT aim bow\nSword: hold LT Oathfire | Tap/Hold LB parry or block | A interact\nBow: D-Pad Up cycle arrows | D-Pad Left potion | D-Pad Right bomb | View journal | Menu pause")
+		_add_menu_text(box, "Left Stick move | Right Stick look | D-Pad Up/Down zoom\nL3 run | B dodge | Y jump | X cycle Steel / Oathblade / Bow\nRB light attack | RT heavy attack / fire bow | LT aim bow\nSword: hold LT Oathfire | Tap/Hold LB parry or block | A interact\nBow: D-Pad Up cycle arrows | D-Pad Left potion | D-Pad Right bomb | View journal | Menu pause")
 	elif input_device == "touch":
 		_add_menu_text(box, "Left thumb move | Drag right side to look\nStrike / Heavy attack | Dodge | Jump\nHold Guard to block or parry | Hold Oath to charge Oathfire\nUse interacts | Potion heals | Pause opens the menu\nLandscape orientation is required during gameplay")
 	else:
-		_add_menu_text(box, "WASD move | Mouse look | Wheel zoom | Page Up/Down zoom\nShift run | Space dodge | X jump | 1 sword | 2 bow\nLeft mouse light attack / fire bow | Right mouse heavy / aim bow\nHold C Oathfire Beam | Tap Q parry | Hold Q block | E interact\nZ cycle arrows | R potion | F bomb | Tab inventory | Esc pause")
+		_add_menu_text(box, "WASD move | Mouse look | Wheel zoom | Page Up/Down zoom\nShift run | Space dodge | X jump | 1 Steel | 2 Bow | 3 Oathblade\nLeft mouse light attack / fire bow | Right mouse heavy / aim bow\nHold C Oathfire Beam | Tap Q parry | Hold Q block | E interact\nZ cycle arrows | R potion | F bomb | Tab inventory | Esc pause")
 	_add_menu_button(box, "Customize Controls", func(): show_remap_menu(back_target))
 	_add_menu_button(box, "Back", _return_from_controls)
 
@@ -738,7 +738,7 @@ func show_remap_menu(back_target: String = "main", requested_page: int = -1) -> 
 	_add_menu_text(box, detected)
 	var actions := ["interact", "dodge", "jump", "run", "block", "light_attack", "heavy_attack", "oathfire_beam", "use_potion", "throw_bomb", "open_inventory", "pause",
 		"move_forward", "move_back", "move_left", "move_right", "camera_left", "camera_right", "camera_up", "camera_down", "camera_zoom_in", "camera_zoom_out",
-		"weapon_cycle", "weapon_sword", "weapon_bow", "aim_bow", "fire_bow", "cycle_arrow", "target_lock", "target_next", "target_previous"]
+		"weapon_cycle", "weapon_sword", "weapon_bow", "weapon_oathblade", "aim_bow", "fire_bow", "cycle_arrow", "target_lock", "target_next", "target_previous"]
 	var page_count := maxi(1, ceili(float(actions.size()) / 6.0))
 	remap_page = clampi(remap_page, 0, page_count - 1)
 	_add_menu_text(box, "Page %d of %d" % [remap_page + 1, page_count])
@@ -747,6 +747,8 @@ func show_remap_menu(back_target: String = "main", requested_page: int = -1) -> 
 	for index in range(first_entry, last_entry):
 		var action := str(actions[index])
 		var label := action.replace("_", " ").capitalize()
+		if action == "weapon_sword":
+			label = "Steel sword"
 		var binding := _binding_display(action)
 		_add_menu_button(box, "%s     %s" % [label, binding], func(selected = action): _begin_remap(selected), false, "binding:" + action)
 	if page_count > 1:
@@ -1165,7 +1167,7 @@ func show_status_cue(text: String, kind: String = "neutral") -> void:
 		status_tween.kill()
 	_draw_resource_attention(3.0)
 
-func update_equipment(potions: int, bombs: int, oil_name: String, arrow_count: int = -1, arrow_type: String = "Standard") -> void:
+func update_equipment(potions: int, bombs: int, oil_name: String, arrow_count: int = -1, arrow_type: String = "Standard", weapon_name: String = "Steel") -> void:
 	var supplies_changed := potions != last_potions or bombs != last_bombs or arrow_count != last_arrow_count or oil_name != last_oil_name
 	last_potions = potions
 	last_bombs = bombs
@@ -1173,8 +1175,8 @@ func update_equipment(potions: int, bombs: int, oil_name: String, arrow_count: i
 	last_arrow_count = arrow_count
 	last_arrow_type = arrow_type
 	var oil_text = oil_name if oil_name != "" else "No oil"
-	equipment_label.text = "Oil: " + oil_text
-	equipment_label.tooltip_text = "Active blade oil: " + oil_text
+	equipment_label.text = weapon_name + " | " + oil_text
+	equipment_label.tooltip_text = "Selected weapon: %s. Active blade oil: %s" % [weapon_name, oil_text]
 	if supply_labels.has("potions"):
 		(supply_labels["potions"] as Label).text = "Redroot"
 		(supply_labels["bombs"] as Label).text = "Ash Bomb"

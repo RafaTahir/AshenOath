@@ -58,8 +58,10 @@ Every delivered ticket includes a result document, source plus aligned Web outpu
 a development-branch push, integration to `main` preserving history, and Vercel
 deployment. Do not update `codex/story-centered-overhaul`. Report deployment
 completion separately from user acceptance. Use `published_awaiting_user` until
-the user accepts; repair the same ticket if rejected. Start the next ticket after
-the user's verdict. No self-issued acceptance or inherited runtime certification.
+the user accepts; repair a reported defect before proceeding. The renewed active
+goal authorizes continuous sequential implementation and publication without
+waiting for verdicts between tickets. This changes execution cadence, not testing
+ownership: no self-issued acceptance or inherited runtime certification.
 
 The complete `web/`, including manifests, must be strictly less than 104,857,600
 bytes. The retained baseline is 91,966,392 bytes; reserve about 4 MiB of headroom.

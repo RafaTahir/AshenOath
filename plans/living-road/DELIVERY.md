@@ -18,8 +18,9 @@ Canonical root: `D:\Projects\AshenOath`. Game root:
    pushes development/main without force, and deploys only the committed static
    site. It does not update the historical story branch or execute the game.
 6. Record the returned commit/deployment receipt and report the live URL. Mark
-   `published_awaiting_user`; only a user verdict changes acceptance. Keep next
-   tickets planned until that verdict. Fix a reported defect in the same ticket.
+   `published_awaiting_user`; only a user verdict changes acceptance. Continue the
+   next sequential ticket under the renewed active-goal authorization, preserving
+   all pending manual checks. Fix a reported defect before proceeding.
 
 Build, when runtime changes require it:
 

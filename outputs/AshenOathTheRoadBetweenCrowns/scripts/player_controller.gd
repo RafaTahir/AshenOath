@@ -103,6 +103,9 @@ var beam_left_arm_ik: SkeletonIK3D
 var beam_right_arm_ik: SkeletonIK3D
 var beam_arm_pose_applied := false
 var sheathed_sword_visual: Node3D
+var blade_hand_visuals: Dictionary = {}
+var blade_back_visuals: Dictionary = {}
+var blade_scabbards: Dictionary = {}
 var beam_cast_state := ""
 var beam_state_time := 0.0
 var beam_locked_direction := Vector3.ZERO
@@ -112,14 +115,22 @@ var beam_release_emitted := false
 var beam_cancel_reason := ""
 var beam_state_sequence := 0
 var beam_release_direction := Vector3.ZERO
-var sword_sheathed := true
+var equipment_loadout: EquipmentLoadout = EquipmentLoadout.new()
+var sword_sheathed: bool:
+	get:
+		return not equipment_loadout.sword_drawn
+	set(value):
+		equipment_loadout.set_sword_drawn(not value)
 var sword_combat_linger := 0.0
 const SWORD_COMBAT_LINGER := 3.2
 var sword_grip_basis := Basis.IDENTITY
 var sword_grip_calibrated := false
-var equipment_loadout: EquipmentLoadout
 var inventory_ref
-var weapon_mode := "sword"
+var weapon_mode: String:
+	get:
+		return equipment_loadout.active_weapon
+	set(value):
+		equipment_loadout.set_active_weapon(value)
 var bow_aiming := false
 var bow_draw_time := 0.0
 var bow_recovery := 0.0
@@ -154,6 +165,10 @@ var contact_shadow: Node3D
 var was_on_floor = false
 var step_up_cooldown = 0.0
 var progression
+
+func _init() -> void:
+	equipment_loadout.name = "EquipmentLoadout"
+	add_child(equipment_loadout)
 
 func _ready() -> void:
 	# Game remains active for menus and loading; gameplay and its children pause.
@@ -251,6 +266,12 @@ func bind_inventory(value) -> void:
 func get_weapon_mode() -> String:
 	return weapon_mode
 
+func get_selected_blade_id() -> String:
+	return equipment_loadout.selected_blade_id
+
+func get_selected_weapon_name() -> String:
+	return equipment_loadout.selected_weapon_name()
+
 func get_camera_eye_height() -> float:
 	return CharacterRoleSpec.target_height("player_human", 1.78) * 0.91
 
@@ -298,22 +319,30 @@ func get_selected_arrow_count() -> int:
 func _set_weapon_mode(next_mode: String) -> void:
 	var normalized := "bow" if next_mode == "bow" else "sword"
 	if weapon_mode == normalized:
-		if equipment_loadout != null:
-			equipment_loadout.set_active_weapon(normalized)
 		return
 	bow_aiming = false
 	bow_draw_time = 0.0
 	weapon_mode = normalized
-	if equipment_loadout != null:
-		equipment_loadout.set_active_weapon(normalized)
-	if normalized == "bow":
-		_set_sword_sheathed(true)
+	_set_sword_sheathed(true)
+
+func _select_blade(blade_id: String) -> void:
+	var was_drawn := weapon_mode == "sword" and not sword_sheathed
+	bow_aiming = false
+	bow_draw_time = 0.0
+	equipment_loadout.select_blade(blade_id)
+	_set_sword_sheathed(not was_drawn)
+	previous_blade_base = Vector3.ZERO
+	previous_blade_tip = Vector3.ZERO
+	visual_previous_blade_base = Vector3.ZERO
+	visual_previous_blade_tip = Vector3.ZERO
+
+func _cycle_weapon() -> void:
+	if weapon_mode == "bow":
+		_select_blade("steel")
+	elif get_selected_blade_id() == "steel":
+		_select_blade("oathblade")
 	else:
-		_set_sword_sheathed(true)
-	if bow_visual != null:
-		bow_visual.visible = normalized == "bow"
-	if bow_quiver_visual != null:
-		bow_quiver_visual.visible = normalized == "bow"
+		_set_weapon_mode("bow")
 
 func _cycle_arrow_type() -> void:
 	var arrow_ids := ["standard_arrow", "bodkin_arrow", "ashfire_arrow"]
@@ -607,12 +636,15 @@ func _sample_foot_offset(side: float, delta: float, current: float) -> float:
 	return lerp(current, target, 1.0 - exp(-12.0 * delta))
 
 func _handle_combat_input() -> void:
-	if _action_just_pressed("weapon_cycle"):
-		_set_weapon_mode("bow" if weapon_mode == "sword" else "sword")
-	if _action_just_pressed("weapon_bow"):
-		_set_weapon_mode("bow")
-	if _action_just_pressed("weapon_sword"):
-		_set_weapon_mode("sword")
+	if beam_cast_state == BEAM_STATE_IDLE and attack_anim_time <= 0.0 and dodge_time <= 0.0 and hurt_react_time <= 0.0:
+		if _action_just_pressed("weapon_cycle"):
+			_cycle_weapon()
+		elif _action_just_pressed("weapon_bow"):
+			_set_weapon_mode("bow")
+		elif _action_just_pressed("weapon_sword"):
+			_select_blade("steel")
+		elif _action_just_pressed("weapon_oathblade"):
+			_select_blade("oathblade")
 	if beam_cast_state == BEAM_STATE_IDLE:
 		if _action_just_pressed("use_potion"):
 			potion_requested.emit()
@@ -1022,7 +1054,7 @@ func get_oathfire_state() -> Dictionary:
 		"cooldown": beam_cooldown,
 		"locked_direction": beam_locked_direction,
 		"release_direction": beam_release_direction,
-		"sword_sheathed": sheathed_sword_visual != null and sheathed_sword_visual.visible,
+		"sword_sheathed": sword_sheathed,
 		"charge_visible": beam_charge_visual != null and beam_charge_visual.visible,
 		"hands_visible": beam_left_hand_glow != null and beam_left_hand_glow.visible and beam_right_hand_glow != null and beam_right_hand_glow.visible,
 		"release_emitted": beam_release_emitted,
@@ -1068,16 +1100,8 @@ func _set_sword_sheathed(sheathed: bool) -> void:
 	sword_sheathed = sheathed
 	if not sheathed:
 		sword_combat_linger = SWORD_COMBAT_LINGER
-	if weapon_root != null:
-		weapon_root.visible = not sheathed
-	if rig_sword_visual != null:
-		rig_sword_visual.visible = not sheathed
-	if sheathed_sword_visual != null:
-		sheathed_sword_visual.visible = sheathed
 	if sheathed and slash_arc_root != null:
 		slash_arc_root.visible = false
-	if equipment_loadout != null:
-		equipment_loadout.set_sword_drawn(not sheathed)
 
 func is_blocking() -> bool:
 	return _action_pressed("block") and stamina_component.stamina > 8.0
@@ -1350,60 +1374,69 @@ func _prepare_modeled_prop(root: Node3D, fallback_color: Color) -> void:
 				mesh_instance.set_surface_override_material(surface_index, _mat(fallback_color))
 
 func _build_sheathed_sword() -> void:
-	# The back weapon is a real scabbard, not a second naked blade hidden behind
-	# the character. It follows the spine socket and keeps the drawn weapon free
-	# to follow the hand during combat.
-	var socket_parent: Node3D = visual_root
 	var skeleton := _find_skeleton(visual_root)
-	if skeleton != null:
-		var back_index := _find_bone_index(skeleton, ["spine_03", "spine_02", "Spine3", "Spine2", "Chest", "Torso", "Spine", "Body"])
-		if back_index >= 0:
-			var attachment := BoneAttachment3D.new()
-			attachment.name = "KaelBackSwordSocket"
-			attachment.bone_idx = back_index
-			attachment.bone_name = skeleton.get_bone_name(back_index)
-			skeleton.add_child(attachment)
-			socket_parent = _create_equipment_space(attachment, "KaelBackSwordEquipmentSpace")
+	if skeleton == null:
+		push_error("Kael's back equipment requires his character skeleton")
+		return
+	var back_index := _find_bone_index(skeleton, ["spine_03", "spine_02", "Spine3", "Spine2", "Chest", "Torso", "Spine", "Body"])
+	if back_index < 0:
+		push_error("Kael's back equipment requires a validated spine bone")
+		return
+	var attachment := BoneAttachment3D.new()
+	attachment.name = "KaelBackSwordSocket"
+	attachment.bone_idx = back_index
+	attachment.bone_name = skeleton.get_bone_name(back_index)
+	skeleton.add_child(attachment)
+	var socket_parent := _create_equipment_space(attachment, "KaelBackSwordEquipmentSpace")
 	sheathed_sword_visual = Node3D.new()
-	sheathed_sword_visual.name = "KaelBackScabbard"
+	sheathed_sword_visual.name = "KaelBackScabbards"
 	socket_parent.add_child(sheathed_sword_visual)
-	sheathed_sword_visual.position = Vector3(0.05, 0.27, -0.28) if socket_parent != visual_root else Vector3(0.10, 1.42, 0.30)
-	sheathed_sword_visual.rotation_degrees = Vector3(-10, 0, -32)
-	sheathed_sword_visual.scale = Vector3.ONE
-	# Reuse the drawn weapon's authored geometry and units. The sheath covers
-	# its blade, leaving the actual guard/grip visible above the shoulder.
-	if not _attach_modeled_sword(sheathed_sword_visual):
-		push_error("Back sword source could not be loaded: " + MODELED_SWORD_PATH)
-	var scabbard := MeshInstance3D.new()
-	scabbard.name = "OathbladeScabbardBody"
-	scabbard.mesh = _build_scabbard_mesh()
-	scabbard.material_override = _mat(Color(0.075, 0.065, 0.055))
-	sheathed_sword_visual.add_child(scabbard)
-	var throat := MeshInstance3D.new()
-	throat.name = "OathbladeScabbardThroat"
-	var throat_mesh := CylinderMesh.new()
-	throat_mesh.top_radius = 1.0
-	throat_mesh.bottom_radius = 1.0
-	throat_mesh.height = 0.035
-	throat_mesh.radial_segments = 8
-	throat.mesh = throat_mesh
-	throat.scale = Vector3(0.061, 1.0, 0.026)
-	throat.position = Vector3(0.0, -0.065, 0.0)
-	throat.material_override = _metal_mat(Color(0.42, 0.30, 0.16))
-	sheathed_sword_visual.add_child(throat)
-	var cap := MeshInstance3D.new()
-	cap.name = "OathbladeScabbardCap"
-	var cap_mesh := SphereMesh.new()
-	cap_mesh.radius = 0.025
-	cap_mesh.height = 0.05
-	cap_mesh.radial_segments = 8
-	cap_mesh.rings = 3
-	cap.mesh = cap_mesh
-	cap.scale.z = 0.65
-	cap.position = Vector3(0.0, -0.835, 0.0)
-	cap.material_override = _metal_mat(Color(0.34, 0.24, 0.14))
-	sheathed_sword_visual.add_child(cap)
-	sheathed_sword_visual.visible = false
+	var scabbard_mesh := _build_scabbard_mesh()
+	for blade_id: String in EquipmentLoadout.BLADE_IDS:
+		var oath := blade_id == "oathblade"
+		var assembly := Node3D.new()
+		assembly.name = "OathbladeBackScabbard" if oath else "SteelBackScabbard"
+		assembly.position = Vector3(0.12 if oath else -0.08, 0.27, -0.28)
+		assembly.rotation_degrees = Vector3(-10.0, 0.0, -32.0)
+		sheathed_sword_visual.add_child(assembly)
+		blade_scabbards[blade_id] = assembly
+		var housed_blade := Node3D.new()
+		housed_blade.name = "HousedOathblade" if oath else "HousedSteel"
+		assembly.add_child(housed_blade)
+		housed_blade.set_meta("blade_id", blade_id)
+		if not _attach_modeled_sword(housed_blade, blade_id):
+			push_error("Back sword source could not be loaded: " + MODELED_SWORD_PATH)
+		blade_back_visuals[blade_id] = housed_blade
+		var scabbard := MeshInstance3D.new()
+		scabbard.name = "ScabbardBody"
+		scabbard.mesh = scabbard_mesh
+		scabbard.material_override = _mat(Color(0.045, 0.075, 0.080) if oath else Color(0.075, 0.065, 0.055))
+		assembly.add_child(scabbard)
+		var trim := _metal_mat(Color(0.46, 0.53, 0.54) if oath else Color(0.42, 0.30, 0.16))
+		var throat := MeshInstance3D.new()
+		throat.name = "ScabbardThroat"
+		var throat_mesh := CylinderMesh.new()
+		throat_mesh.top_radius = 1.0
+		throat_mesh.bottom_radius = 1.0
+		throat_mesh.height = 0.035
+		throat_mesh.radial_segments = 8
+		throat.mesh = throat_mesh
+		throat.scale = Vector3(0.061, 1.0, 0.026)
+		throat.position = Vector3(0.0, -0.065, 0.0)
+		throat.material_override = trim
+		assembly.add_child(throat)
+		var cap := MeshInstance3D.new()
+		cap.name = "ScabbardCap"
+		var cap_mesh := SphereMesh.new()
+		cap_mesh.radius = 0.025
+		cap_mesh.height = 0.05
+		cap_mesh.radial_segments = 8
+		cap_mesh.rings = 3
+		cap.mesh = cap_mesh
+		cap.scale.z = 0.65
+		cap.position = Vector3(0.0, -0.835, 0.0)
+		cap.material_override = trim
+		assembly.add_child(cap)
 
 func _build_scabbard_mesh() -> ArrayMesh:
 	var surface := SurfaceTool.new()
@@ -1459,7 +1492,8 @@ func _try_build_mapped_body() -> bool:
 	mapped.add_child(animation_driver)
 	var animated: bool = bool(animation_driver.configure(mapped, _animation_map_for_visual(mapped)))
 	if not animated:
-		_add_mapped_weapon_visuals()
+		if rig_sword_visual == null:
+			_add_mapped_weapon_visuals()
 	else:
 		animation_driver.set_update_rate_hz(30.0)
 		animation_driver.set_external_tick(true)
@@ -1565,18 +1599,24 @@ func _attach_rig_sword(mapped: Node3D) -> Node3D:
 	sword_grip_calibrated = false
 	# The imported FBX had null Compatibility surfaces and was hidden
 	# immediately. Use the validated Web-safe weapon directly.
-	return _build_oathblade_visual(sword_equipment_pivot)
+	var held_blades := Node3D.new()
+	held_blades.name = "KaelHeldBlades"
+	sword_equipment_pivot.add_child(held_blades)
+	for blade_id: String in EquipmentLoadout.BLADE_IDS:
+		blade_hand_visuals[blade_id] = _build_oathblade_visual(held_blades, blade_id)
+	return held_blades
 
-func _build_oathblade_visual(parent: Node3D) -> Node3D:
+func _build_oathblade_visual(parent: Node3D, blade_id: String = "steel") -> Node3D:
 	var oathblade := Node3D.new()
-	oathblade.name = "KaelOathblade"
+	oathblade.name = "KaelOathblade" if blade_id == "oathblade" else "KaelSteelSword"
+	oathblade.set_meta("blade_id", blade_id)
 	# The hand, markers, slash ribbon, and collision all share this normalized
 	# weapon root. Prefer the authored Quaternius sword; its FBX importer keeps
 	# a 100x source-unit transform, so the child is normalized once here rather
 	# than allowing that source scale to leak into the hand socket.
 	oathblade.scale = Vector3.ONE
 	parent.add_child(oathblade)
-	if _attach_modeled_sword(oathblade):
+	if _attach_modeled_sword(oathblade, blade_id):
 		oathblade.set_meta("weapon_visual_source", MODELED_SWORD_PATH)
 		return oathblade
 	# Keep a local diagnostic fallback for a missing imported source. The runtime
@@ -1626,7 +1666,7 @@ func _build_oathblade_visual(parent: Node3D) -> Node3D:
 	oathblade.add_child(pommel)
 	return oathblade
 
-func _attach_modeled_sword(oathblade: Node3D) -> bool:
+func _attach_modeled_sword(oathblade: Node3D, blade_id: String = "steel") -> bool:
 	var modeled: Node3D = null
 	if asset_helper != null and asset_helper.has_method("load_runtime_resource") and asset_helper.has_method("instantiate_runtime_resource"):
 		var resource = asset_helper.load_runtime_resource(MODELED_SWORD_PATH)
@@ -1644,11 +1684,13 @@ func _attach_modeled_sword(oathblade: Node3D) -> bool:
 	# conversion. Flip it so the hilt stays at the hand and the blade extends
 	# down local -Y, matching the existing contact-marker contract.
 	modeled.rotation_degrees = Vector3(180.0, 0.0, 0.0)
-	modeled.scale = Vector3.ONE * 0.22
+	# Both blades retain the same physical reach; cross-section and finish differ.
+	modeled.scale = (Vector3(1.12, 1.0, 0.92) if blade_id == "oathblade" else Vector3.ONE) * 0.22
 	modeled.position = Vector3(0.0, 0.045, 0.0)
 	oathblade.add_child(modeled)
 	var mesh_count := 0
 	var canonical_blade: MeshInstance3D = null
+	var finish := _metal_mat(Color(0.65, 0.80, 0.82) if blade_id == "oathblade" else Color(0.78, 0.82, 0.88))
 	for raw_mesh in modeled.find_children("*", "MeshInstance3D", true, false):
 		var mesh_instance := raw_mesh as MeshInstance3D
 		if mesh_instance == null or mesh_instance.mesh == null:
@@ -1660,7 +1702,7 @@ func _attach_modeled_sword(oathblade: Node3D) -> bool:
 		# The imported FBX carries named materials, but their source values are
 		# too dark for the browser lighting profile. Keep the authored mesh and
 		# replace only the presentation material with a readable blade finish.
-		mesh_instance.material_override = _metal_mat(Color(0.78, 0.82, 0.88))
+		mesh_instance.material_override = finish
 		if mesh_instance.mesh.get_surface_count() == 0:
 			mesh_instance.material_override = _metal_mat(Color(0.72, 0.78, 0.82))
 		else:
@@ -1911,12 +1953,11 @@ func _find_bone_index(skeleton: Skeleton3D, aliases: Array[String]) -> int:
 	return -1
 
 func _ensure_equipment_loadout() -> void:
-	if equipment_loadout == null:
-		equipment_loadout = EquipmentLoadout.new()
-		equipment_loadout.name = "EquipmentLoadout"
-		add_child(equipment_loadout)
 	equipment_loadout.bind_node("sword_hand", rig_sword_visual if rig_sword_visual != null else weapon_root)
-	equipment_loadout.bind_node("sword_back", sheathed_sword_visual)
+	for blade_id: String in EquipmentLoadout.BLADE_IDS:
+		equipment_loadout.bind_node(blade_id + "_hand", blade_hand_visuals.get(blade_id))
+		equipment_loadout.bind_node(blade_id + "_back", blade_back_visuals.get(blade_id))
+		equipment_loadout.bind_node(blade_id + "_scabbard", blade_scabbards.get(blade_id))
 	equipment_loadout.bind_node("bow", bow_visual)
 	equipment_loadout.bind_node("quiver", bow_quiver_visual)
 	equipment_loadout.set_active_weapon(weapon_mode)
@@ -1924,25 +1965,14 @@ func _ensure_equipment_loadout() -> void:
 	equipment_loadout.set_selected_arrow(selected_arrow_id)
 
 func save_equipment_state() -> Dictionary:
-	if equipment_loadout != null:
-		return equipment_loadout.save_state()
-	return {
-		"active_weapon": weapon_mode,
-		"sword_drawn": not sword_sheathed,
-		"selected_arrow_id": selected_arrow_id,
-	}
+	return equipment_loadout.save_state()
 
 func load_equipment_state(data: Dictionary) -> void:
 	if typeof(data) != TYPE_DICTIONARY:
 		return
-	selected_arrow_id = str(data.get("selected_arrow_id", selected_arrow_id))
-	if selected_arrow_id == "":
-		selected_arrow_id = "standard_arrow"
-	weapon_mode = "bow" if str(data.get("active_weapon", "sword")).to_lower() == "bow" else "sword"
-	sword_sheathed = not bool(data.get("sword_drawn", false))
-	if equipment_loadout != null:
-		equipment_loadout.load_state(data)
-	_set_weapon_mode(weapon_mode)
+	cancel_buffered_input("equipment_restore")
+	equipment_loadout.load_state(data)
+	selected_arrow_id = equipment_loadout.selected_arrow_id
 	_set_sword_sheathed(sword_sheathed)
 
 func _find_first_mesh(root: Node) -> MeshInstance3D:

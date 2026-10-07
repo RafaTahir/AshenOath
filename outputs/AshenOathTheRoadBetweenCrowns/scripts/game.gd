@@ -1113,6 +1113,7 @@ func _spawn_player(pos: Vector3) -> void:
 	player.beam_phase_changed.connect(_on_player_beam_phase)
 	player.arrow_requested.connect(_on_player_arrow)
 	player.arrow_unavailable.connect(_on_player_arrow_unavailable)
+	player.equipment_loadout.changed.connect(_refresh_equipment_readout)
 	player.footstep.connect(_on_player_footstep)
 	player.parried.connect(_on_player_parried)
 	player.blocked.connect(_on_player_blocked)
@@ -4194,7 +4195,13 @@ func _refresh_equipment_readout() -> void:
 	var oil_name = ""
 	if inventory.active_oil != "":
 		oil_name = inventory.get_item_name(inventory.active_oil)
-	hud.update_equipment(int(inventory.items.get("redroot_potion", 0)), int(inventory.items.get("ash_bomb", 0)), oil_name, int(inventory.items.get("standard_arrow", 0)), "Standard")
+	var weapon_name := "Steel"
+	var arrow_id := "standard_arrow"
+	if is_instance_valid(player):
+		weapon_name = player.get_selected_weapon_name()
+		arrow_id = player.equipment_loadout.selected_arrow_id
+	var arrow_type := str({"standard_arrow": "Standard", "bodkin_arrow": "Bodkin", "ashfire_arrow": "Ashfire"}.get(arrow_id, "Standard"))
+	hud.update_equipment(int(inventory.items.get("redroot_potion", 0)), int(inventory.items.get("ash_bomb", 0)), oil_name, int(inventory.items.get(arrow_id, 0)), arrow_type, weapon_name)
 
 func _guard_tutorial_hint() -> String:
 	var guard: Dictionary = input_router.describe_action("block") if input_router != null else {}
