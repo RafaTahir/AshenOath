@@ -1,6 +1,6 @@
 # MOBILE-003 - Landscape Startup and Menu Repair
 
-Implementation and production packaging complete; publication pending. Runtime acceptance belongs
+Implemented, packaged and published. Runtime acceptance belongs
 to the user. No game, browser, automated gameplay, screenshots or benchmarks were
 run for this change. The single BOOT-005 browser session remains historical evidence,
 not acceptance of MOBILE-003 or of iPhone/WebKit.
@@ -75,5 +75,16 @@ working changes. The standard build regenerated Bracken's scene/byte ledger;
 its source, dimensions and animation definitions are unchanged.
 
 Build output/logs: `.release-gate/MOBILE-003-20261008-landscape-build/`.
-Prior Web files are preserved in its `previous-web/` directory. Combined
-publication pending; no runtime test is scheduled.
+Prior Web files are preserved in its `previous-web/` directory.
+
+Package commit `9ac593a7dd194c3eb1fb01d68832bfe306257a52` is pushed to
+`codex/masterpiece-rebuild` and `main`; the existing D: main worktree was
+fast-forwarded without changing unrelated work. GitHub's existing Vercel integration
+reports deployment complete. No separate CLI authorization retry was attempted.
+The live release manifest matches all 15 hashed artifact records; the directly
+downloaded live root PCK matches the local stored hash and size above.
+
+Live: https://ashenoath.vercel.app/?v=mobile-003-9ac593a
+Receipt: `.release-gate/living-road/MOBILE-003-20261008T090213Z/publication.json`.
+These are static publication identity checks, not game/browser acceptance.
+No runtime test was performed or is scheduled. Next action: user manual testing.

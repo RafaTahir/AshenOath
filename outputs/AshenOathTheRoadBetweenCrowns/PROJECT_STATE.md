@@ -2,7 +2,7 @@
 
 ## Landscape Startup and Menu Repair - 2026-10-08
 
-MOBILE-003 implemented and packaged; publication pending, user acceptance
+MOBILE-003 implemented, packaged and published; user acceptance
 pending. Fixes the fixed 560x300 fitted-touch requirement that can auto-pause a
 landscape phone and disable Resume. Adds a compact layout with 48px minimum
 action targets, bounded short-screen menus and shared message/prompt space.
@@ -15,6 +15,10 @@ below applies only to its own revision. See `MOBILE_003_RESULT.md` for manual ch
 The `mobile-003-20261008-landscape` production build compiled/exported successfully;
 tracked `web/` is aligned at 92,419,781 bytes (88.14 MiB; 16 files), below 100 MiB. No new
 runtime or mobile success is claimed.
+Package commit `9ac593a7dd194c3eb1fb01d68832bfe306257a52` is pushed to development
+and main. GitHub/Vercel deployment completed; the live manifest and directly
+downloaded root PCK match the packaged artifact. Live:
+https://ashenoath.vercel.app/?v=mobile-003-9ac593a . Next: user manual testing.
 
 ## Startup Package Repair - 2026-10-08
 
