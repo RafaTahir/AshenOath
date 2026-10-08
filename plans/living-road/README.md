@@ -54,14 +54,16 @@ required compilation/export, then perform static package/hash/size checks.
 The user is the sole runtime, gameplay, browser, visual, audio and performance
 tester. Do not launch the game, browsers, automated routes, tests or screenshots.
 
-Every delivered ticket includes a result document, source plus aligned Web output,
-a development-branch push, integration to `main` preserving history, and Vercel
-deployment. Do not update `codex/story-centered-overhaul`. Report deployment
-completion separately from user acceptance. Use `published_awaiting_user` until
-the user accepts; repair a reported defect before proceeding. The renewed active
-goal authorizes continuous sequential implementation and publication without
-waiting for verdicts between tickets. This changes execution cadence, not testing
-ownership: no self-issued acceptance or inherited runtime certification.
+Delivery amendment, 2026-10-08: LR-001 through LR-008 are already published.
+Keep LR-009 through LR-028 local on D: with individual result documents and manual
+checklists. Do not push, integrate to main or deploy after individual tickets.
+Publish the combined source and aligned Web artifact once, after LR-028, unless
+the user explicitly changes this instruction. This amendment overrides per-ticket
+publication wording in ticket templates. Do not update `codex/story-centered-overhaul`.
+Use `implemented_local_awaiting_user` for finished local implementation and
+`published_awaiting_user` only after publication. User acceptance remains separate;
+repair reported defects before proceeding. Continue sequential implementation
+without waiting between tickets; no self-issued runtime acceptance.
 
 The complete `web/`, including manifests, must be strictly less than 104,857,600
 bytes. The retained baseline is 91,966,392 bytes; reserve about 4 MiB of headroom.
@@ -69,8 +71,9 @@ Use reuse/deduplication/lossless transport before adding payload. Never delete
 content or silently lower quality to fit. Raw downloads, screenshots and builds
 stay outside the Web payload. All project files and scratch stay on D:.
 
-Runtime changes require a fresh production export; documentation/build-tool-only
-changes can publish the existing artifact with its original provenance retained.
+The final combined runtime changes require a fresh production export. Intermediate
+ticket exports are not required. Finish the LR-009 build already in flight locally;
+do not publish it. Documentation must retain each existing artifact's provenance.
 No candidate's source identity may be relabelled to a later commit without export.
 See [delivery](DELIVERY.md) for commands and staged-publication boundaries.
 

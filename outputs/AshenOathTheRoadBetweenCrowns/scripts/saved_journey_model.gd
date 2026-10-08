@@ -15,6 +15,7 @@ static func describe(data: Dictionary, recorded: Dictionary, quest_defs: Diction
 	story.load_state(data.get("story_state", {}))
 	var zone_id: String = str(data.get("world_sector", data.get("zone", "")))
 	var recap: Dictionary = Journal.recap_model(quests, story, zone_id)
+	var company: String = preload("res://scripts/epilogue_resolver.gd").journey_company(story)
 	quests.free()
 	story.free()
 	var known_story: bool = bool(recorded.get("story_known", false)) or bool(recorded.get("quests_known", false))
@@ -22,6 +23,8 @@ static func describe(data: Dictionary, recorded: Dictionary, quest_defs: Diction
 	var known_time: bool = bool(recorded.get("saved_at_known", false))
 	var place: String = str(Routes.zone_name(zone_id)) if bool(recorded.get("place_known", false)) else "Place not recorded"
 	var resources: Array[String] = _resources(recorded, item_defs)
+	if bool(recorded.get("story_known", false)):
+		resources.append(company)
 	return {
 		"title": str(data.get("slot_name", "Saved journey")),
 		"place": place,

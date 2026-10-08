@@ -3916,21 +3916,33 @@
       "speaker": "",
       "context": "dialogue.bracken_rescue"
     },
+    "dialogue.bracken_rescue.variants.0.actions.0.label": {
+      "source": "Offer your hand.",
+      "text": "Offer your hand.",
+      "speaker": "",
+      "context": "dialogue.bracken_rescue.variants.0.actions.0"
+    },
+    "dialogue.bracken_rescue.variants.0.actions.1.label": {
+      "source": "Share one travel bread.",
+      "text": "Share one travel bread.",
+      "speaker": "",
+      "context": "dialogue.bracken_rescue.variants.0.actions.1"
+    },
+    "dialogue.bracken_rescue.variants.0.actions.2.label": {
+      "source": "Rest beside him a moment.",
+      "text": "Rest beside him a moment.",
+      "speaker": "",
+      "context": "dialogue.bracken_rescue.variants.0.actions.2"
+    },
     "dialogue.bracken_rescue.variants.0.greeting": {
-      "source": "Bracken lifts his head when Kael returns. The discarded harness no longer holds him.",
-      "text": "Bracken lifts his head when Kael returns. The discarded harness no longer holds him.",
+      "source": "Bracken lifts his head at Kael's step.",
+      "text": "Bracken lifts his head at Kael's step.",
       "speaker": "",
       "context": "dialogue.bracken_rescue.variants.0"
     },
     "dialogue.bracken_rescue.variants.0.lines.0": {
-      "source": "Kael: There you are. A little rest won't hurt either of us.",
-      "text": "Kael: There you are. A little rest won't hurt either of us.",
-      "speaker": "",
-      "context": "dialogue.bracken_rescue.variants.0.lines"
-    },
-    "dialogue.bracken_rescue.variants.0.lines.1": {
-      "source": "He leans against Kael's hand, then settles within reach.",
-      "text": "He leans against Kael's hand, then settles within reach.",
+      "source": "Kael: There you are.",
+      "text": "Kael: There you are.",
       "speaker": "",
       "context": "dialogue.bracken_rescue.variants.0.lines"
     },
@@ -5615,36 +5627,48 @@
       "context": "dialogue.white_hart.lines"
     },
     "dialogue.white_hart.lines.2": {
+      "source": "Kael: You have carried what they tried to bury. You should not have to carry what we do next.",
+      "text": "Kael: You have carried what they tried to bury. You should not have to carry what we do next.",
+      "speaker": "",
+      "context": "dialogue.white_hart.lines"
+    },
+    "dialogue.white_hart.lines.3": {
+      "source": "The White Hart: Then let your next act belong to you. Not to fear of my antlers. Not to another hunger at the gate.",
+      "text": "The White Hart: Then let your next act belong to you. Not to fear of my antlers. Not to another hunger at the gate.",
+      "speaker": "",
+      "context": "dialogue.white_hart.lines"
+    },
+    "dialogue.white_hart.lines.4": {
       "source": "Kael: The copies survive. I will freely keep what we have recovered. I cannot swear for the people who refused.",
       "text": "Kael: The copies survive. I will freely keep what we have recovered. I cannot swear for the people who refused.",
       "speaker": "",
       "context": "dialogue.white_hart.lines"
     },
-    "dialogue.white_hart.lines.3": {
+    "dialogue.white_hart.lines.5": {
       "source": "The White Hart: One willing keeper of an account is enough to begin. Others may share that work. None may be given it by force.",
       "text": "The White Hart: One willing keeper of an account is enough to begin. Others may share that work. None may be given it by force.",
       "speaker": "",
       "context": "dialogue.white_hart.lines"
     },
-    "dialogue.white_hart.lines.4": {
+    "dialogue.white_hart.lines.6": {
       "source": "The White Hart: Make the account public and I will leave its judgment with you. Release me quietly and preserve the record without opening every private memory.",
       "text": "The White Hart: Make the account public and I will leave its judgment with you. Release me quietly and preserve the record without opening every private memory.",
       "speaker": "",
       "context": "dialogue.white_hart.lines"
     },
-    "dialogue.white_hart.lines.5": {
+    "dialogue.white_hart.lines.7": {
       "source": "The White Hart: Or carry the unresolved binding yourself. Or destroy me and lose what no copy holds.",
       "text": "The White Hart: Or carry the unresolved binding yourself. Or destroy me and lose what no copy holds.",
       "speaker": "",
       "context": "dialogue.white_hart.lines"
     },
-    "dialogue.white_hart.lines.6": {
+    "dialogue.white_hart.lines.8": {
       "source": "Kael: Releasing you does not erase the house's crime. Protecting a family does not protect Edric from the record.",
       "text": "Kael: Releasing you does not erase the house's crime. Protecting a family does not protect Edric from the record.",
       "speaker": "",
       "context": "dialogue.white_hart.lines"
     },
-    "dialogue.white_hart.lines.7": {
+    "dialogue.white_hart.lines.9": {
       "source": "The White Hart: Then choose whose work begins when mine ends.",
       "text": "The White Hart: Then choose whose work begins when mine ends.",
       "speaker": "",
@@ -6466,6 +6490,1398 @@
       "speaker": "",
       "context": "interaction_scenes.aftermath_work_witness"
     },
+    "interaction_scenes.lr_anwen_confidence.lines.0": {
+      "source": "Anwen: I am glad you have someone to return to. Their life is not a reward for what you survived.",
+      "text": "Anwen: I am glad you have someone to return to. Their life is not a reward for what you survived.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_anwen_confidence.lines"
+    },
+    "interaction_scenes.lr_anwen_confidence.lines.1": {
+      "source": "Kael: I know.",
+      "text": "Kael: I know.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_anwen_confidence.lines"
+    },
+    "interaction_scenes.lr_anwen_confidence.lines.2": {
+      "source": "Anwen: I thought you did. May the ordinary days be kind to you both. I won't make your news the village's.",
+      "text": "Anwen: I thought you did. May the ordinary days be kind to you both. I won't make your news the village's.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_anwen_confidence.lines"
+    },
+    "interaction_scenes.lr_anwen_confidence.name": {
+      "source": "Anwen",
+      "text": "Anwen",
+      "speaker": "",
+      "context": "interaction_scenes.lr_anwen_confidence"
+    },
+    "interaction_scenes.lr_anwen_shrine_done.actions.lr_anwen_shrine_disagree.label": {
+      "source": "Care doesn't make concealing those names right.",
+      "text": "Care doesn't make concealing those names right.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_anwen_shrine_done.actions.lr_anwen_shrine_disagree"
+    },
+    "interaction_scenes.lr_anwen_shrine_done.actions.lr_anwen_shrine_disagree.relationship_event.text": {
+      "source": "Kael helped with the shrine while explicitly challenging Anwen's concealment. Help did not mean absolution.",
+      "text": "Kael helped with the shrine while explicitly challenging Anwen's concealment. Help did not mean absolution.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_anwen_shrine_done.actions.lr_anwen_shrine_disagree.relationship_event"
+    },
+    "interaction_scenes.lr_anwen_shrine_done.actions.lr_anwen_shrine_kind.label": {
+      "source": "You can keep doing the work now.",
+      "text": "You can keep doing the work now.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_anwen_shrine_done.actions.lr_anwen_shrine_kind"
+    },
+    "interaction_scenes.lr_anwen_shrine_done.actions.lr_anwen_shrine_kind.relationship_event.text": {
+      "source": "Kael helped tidy the shrine and encouraged Anwen to keep doing the work, without erasing her responsibility.",
+      "text": "Kael helped tidy the shrine and encouraged Anwen to keep doing the work, without erasing her responsibility.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_anwen_shrine_done.actions.lr_anwen_shrine_kind.relationship_event"
+    },
+    "interaction_scenes.lr_anwen_shrine_done.actions.lr_anwen_shrine_silence.label": {
+      "source": "Stay beside her in silence.",
+      "text": "Stay beside her in silence.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_anwen_shrine_done.actions.lr_anwen_shrine_silence"
+    },
+    "interaction_scenes.lr_anwen_shrine_done.actions.lr_anwen_shrine_silence.relationship_event.text": {
+      "source": "Kael and Anwen shared silence after tidying the shrine. Neither made a promise of forgiveness.",
+      "text": "Kael and Anwen shared silence after tidying the shrine. Neither made a promise of forgiveness.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_anwen_shrine_done.actions.lr_anwen_shrine_silence.relationship_event"
+    },
+    "interaction_scenes.lr_anwen_shrine_done.greeting": {
+      "source": "It is easier to keep a table than an account. I used to pretend they were the same work.",
+      "text": "It is easier to keep a table than an account. I used to pretend they were the same work.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_anwen_shrine_done"
+    },
+    "interaction_scenes.lr_anwen_shrine_done.lines.0": {
+      "source": "Kael: The names are still here.",
+      "text": "Kael: The names are still here.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_anwen_shrine_done.lines"
+    },
+    "interaction_scenes.lr_anwen_shrine_done.lines.1": {
+      "source": "Anwen: Yes. Whatever you think of me, they stay.",
+      "text": "Anwen: Yes. Whatever you think of me, they stay.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_anwen_shrine_done.lines"
+    },
+    "interaction_scenes.lr_anwen_shrine_done.name": {
+      "source": "Anwen",
+      "text": "Anwen",
+      "speaker": "",
+      "context": "interaction_scenes.lr_anwen_shrine_done"
+    },
+    "interaction_scenes.lr_anwen_shrine_offer.actions.lr_anwen_shrine_accept.label": {
+      "source": "I'll put the cloths in order at the shrine.",
+      "text": "I'll put the cloths in order at the shrine.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_anwen_shrine_offer.actions.lr_anwen_shrine_accept"
+    },
+    "interaction_scenes.lr_anwen_shrine_offer.actions.lr_anwen_shrine_accept.result": {
+      "source": "The loose cloths wait by the shrine bench. The recorded names are not to be moved.",
+      "text": "The loose cloths wait by the shrine bench. The recorded names are not to be moved.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_anwen_shrine_offer.actions.lr_anwen_shrine_accept"
+    },
+    "interaction_scenes.lr_anwen_shrine_offer.actions.lr_anwen_shrine_refuse.label": {
+      "source": "I need some distance first.",
+      "text": "I need some distance first.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_anwen_shrine_offer.actions.lr_anwen_shrine_refuse"
+    },
+    "interaction_scenes.lr_anwen_shrine_offer.actions.lr_anwen_shrine_refuse.relationship_event.text": {
+      "source": "Kael asked for distance after the report. He did not offer reconciliation.",
+      "text": "Kael asked for distance after the report. He did not offer reconciliation.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_anwen_shrine_offer.actions.lr_anwen_shrine_refuse.relationship_event"
+    },
+    "interaction_scenes.lr_anwen_shrine_offer.greeting": {
+      "source": "The cloths need folding. Leave the names where they are. I have moved enough things out of sight.",
+      "text": "The cloths need folding. Leave the names where they are. I have moved enough things out of sight.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_anwen_shrine_offer"
+    },
+    "interaction_scenes.lr_anwen_shrine_offer.lines.0": {
+      "source": "Kael: You don't have to explain every fold.",
+      "text": "Kael: You don't have to explain every fold.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_anwen_shrine_offer.lines"
+    },
+    "interaction_scenes.lr_anwen_shrine_offer.lines.1": {
+      "source": "Anwen: No. But I am learning which things I do have to explain.",
+      "text": "Anwen: No. But I am learning which things I do have to explain.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_anwen_shrine_offer.lines"
+    },
+    "interaction_scenes.lr_anwen_shrine_offer.name": {
+      "source": "Anwen",
+      "text": "Anwen",
+      "speaker": "",
+      "context": "interaction_scenes.lr_anwen_shrine_offer"
+    },
+    "interaction_scenes.lr_mira_boundary.actions.lr_mira_boundary_friend.label": {
+      "source": "Then friendship, without asking you to wait for me.",
+      "text": "Then friendship, without asking you to wait for me.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_boundary.actions.lr_mira_boundary_friend"
+    },
+    "interaction_scenes.lr_mira_boundary.actions.lr_mira_boundary_friend.relationship_event.text": {
+      "source": "Kael respected Mira's boundary and chose friendship without asking her to wait.",
+      "text": "Kael respected Mira's boundary and chose friendship without asking her to wait.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_boundary.actions.lr_mira_boundary_friend.relationship_event"
+    },
+    "interaction_scenes.lr_mira_boundary.greeting": {
+      "source": "I heard the apology. I need to see who gets protected when the next hard choice comes. That isn't work I can do for you.",
+      "text": "I heard the apology. I need to see who gets protected when the next hard choice comes. That isn't work I can do for you.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_boundary"
+    },
+    "interaction_scenes.lr_mira_boundary.lines.0": {
+      "source": "Kael: And until then?",
+      "text": "Kael: And until then?",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_boundary.lines"
+    },
+    "interaction_scenes.lr_mira_boundary.lines.1": {
+      "source": "Mira: We can talk. We can be kind. We cannot pretend the question went away.",
+      "text": "Mira: We can talk. We can be kind. We cannot pretend the question went away.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_boundary.lines"
+    },
+    "interaction_scenes.lr_mira_boundary.name": {
+      "source": "Mira",
+      "text": "Mira",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_boundary"
+    },
+    "interaction_scenes.lr_mira_commitment.actions.lr_mira_commit.label": {
+      "source": "I choose you. No other commitment left unspoken.",
+      "text": "I choose you. No other commitment left unspoken.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_commitment.actions.lr_mira_commit"
+    },
+    "interaction_scenes.lr_mira_commitment.actions.lr_mira_commit.relationship_event.text": {
+      "source": "Mira and Kael explicitly chose a mutual, exclusive adult relationship.",
+      "text": "Mira and Kael explicitly chose a mutual, exclusive adult relationship.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_commitment.actions.lr_mira_commit.relationship_event"
+    },
+    "interaction_scenes.lr_mira_commitment.actions.lr_mira_commit_friend.label": {
+      "source": "I can offer friendship honestly, not that promise.",
+      "text": "I can offer friendship honestly, not that promise.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_commitment.actions.lr_mira_commit_friend"
+    },
+    "interaction_scenes.lr_mira_commitment.actions.lr_mira_commit_friend.relationship_event.text": {
+      "source": "Kael declined commitment to Mira and offered friendship plainly.",
+      "text": "Kael declined commitment to Mira and offered friendship plainly.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_commitment.actions.lr_mira_commit_friend.relationship_event"
+    },
+    "interaction_scenes.lr_mira_commitment.greeting": {
+      "source": "I want you in my life, Kael. Not as a debt for help, and not as a visitor who promises every door the same return.",
+      "text": "I want you in my life, Kael. Not as a debt for help, and not as a visitor who promises every door the same return.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_commitment"
+    },
+    "interaction_scenes.lr_mira_commitment.lines.0": {
+      "source": "Kael: And the work here?",
+      "text": "Kael: And the work here?",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_commitment.lines"
+    },
+    "interaction_scenes.lr_mira_commitment.lines.1": {
+      "source": "Mira: Mine to choose. I am not asking you to carry me away from it. I'm asking whether we choose each other.",
+      "text": "Mira: Mine to choose. I am not asking you to carry me away from it. I'm asking whether we choose each other.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_commitment.lines"
+    },
+    "interaction_scenes.lr_mira_commitment.name": {
+      "source": "Mira",
+      "text": "Mira",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_commitment"
+    },
+    "interaction_scenes.lr_mira_end.actions.lr_mira_end.label": {
+      "source": "I cannot keep our commitment. I'm ending it, not asking you to wait.",
+      "text": "I cannot keep our commitment. I'm ending it, not asking you to wait.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_end.actions.lr_mira_end"
+    },
+    "interaction_scenes.lr_mira_end.actions.lr_mira_end.relationship_event.text": {
+      "source": "Kael ended his commitment to Mira in a direct conversation. The past relationship is preserved in the record.",
+      "text": "Kael ended his commitment to Mira in a direct conversation. The past relationship is preserved in the record.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_end.actions.lr_mira_end.relationship_event"
+    },
+    "interaction_scenes.lr_mira_end.greeting": {
+      "source": "Then say it plainly. I would rather hear the truth here than find it in somebody else's kindness.",
+      "text": "Then say it plainly. I would rather hear the truth here than find it in somebody else's kindness.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_end"
+    },
+    "interaction_scenes.lr_mira_end.lines.0": {
+      "source": "Mira: Ending this doesn't undo what was good. It doesn't change who needs medicine either.",
+      "text": "Mira: Ending this doesn't undo what was good. It doesn't change who needs medicine either.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_end.lines"
+    },
+    "interaction_scenes.lr_mira_end.name": {
+      "source": "Mira",
+      "text": "Mira",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_end"
+    },
+    "interaction_scenes.lr_mira_existing_promise.actions.lr_mira_other_promise_friend.label": {
+      "source": "You're right. I can offer friendship here, nothing concealed.",
+      "text": "You're right. I can offer friendship here, nothing concealed.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_existing_promise.actions.lr_mira_other_promise_friend"
+    },
+    "interaction_scenes.lr_mira_existing_promise.actions.lr_mira_other_promise_friend.relationship_event.text": {
+      "source": "Kael disclosed his commitment to Vale and chose friendship with Mira rather than making a second promise.",
+      "text": "Kael disclosed his commitment to Vale and chose friendship with Mira rather than making a second promise.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_existing_promise.actions.lr_mira_other_promise_friend.relationship_event"
+    },
+    "interaction_scenes.lr_mira_existing_promise.lines.0": {
+      "source": "Kael: I have a commitment to Vale. You need to know that before I offer you anything.",
+      "text": "Kael: I have a commitment to Vale. You need to know that before I offer you anything.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_existing_promise.lines"
+    },
+    "interaction_scenes.lr_mira_existing_promise.lines.1": {
+      "source": "Mira: Then you have a conversation to have with her, not an answer to take from me. I won't be the quiet exception to your promise.",
+      "text": "Mira: Then you have a conversation to have with her, not an answer to take from me. I won't be the quiet exception to your promise.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_existing_promise.lines"
+    },
+    "interaction_scenes.lr_mira_existing_promise.name": {
+      "source": "Mira",
+      "text": "Mira",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_existing_promise"
+    },
+    "interaction_scenes.lr_mira_garden_done.actions.lr_mira_garden_finish.label": {
+      "source": "I'll leave you to it. Keep me a little company next time.",
+      "text": "I'll leave you to it. Keep me a little company next time.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_garden_done.actions.lr_mira_garden_finish"
+    },
+    "interaction_scenes.lr_mira_garden_done.actions.lr_mira_garden_finish.relationship_event.text": {
+      "source": "Kael and Mira shared ordinary garden work. Neither made a romantic promise.",
+      "text": "Kael and Mira shared ordinary garden work. Neither made a romantic promise.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_garden_done.actions.lr_mira_garden_finish.relationship_event"
+    },
+    "interaction_scenes.lr_mira_garden_done.greeting": {
+      "source": "Those will keep. Thank you. Most people offer to kill something when I ask for help.",
+      "text": "Those will keep. Thank you. Most people offer to kill something when I ask for help.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_garden_done"
+    },
+    "interaction_scenes.lr_mira_garden_done.lines.0": {
+      "source": "Kael: I know a useful knot as well.",
+      "text": "Kael: I know a useful knot as well.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_garden_done.lines"
+    },
+    "interaction_scenes.lr_mira_garden_done.lines.1": {
+      "source": "Mira: An alarming range of talents. Leave the bundles here. I'll take them round when the fever breaks.",
+      "text": "Mira: An alarming range of talents. Leave the bundles here. I'll take them round when the fever breaks.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_garden_done.lines"
+    },
+    "interaction_scenes.lr_mira_garden_done.name": {
+      "source": "Mira",
+      "text": "Mira",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_garden_done"
+    },
+    "interaction_scenes.lr_mira_garden_offer.actions.lr_mira_garden_accept.label": {
+      "source": "I'll sort them.",
+      "text": "I'll sort them.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_garden_offer.actions.lr_mira_garden_accept"
+    },
+    "interaction_scenes.lr_mira_garden_offer.actions.lr_mira_garden_accept.result": {
+      "source": "Sort the drying stems beside Mira's herb beds.",
+      "text": "Sort the drying stems beside Mira's herb beds.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_garden_offer.actions.lr_mira_garden_accept"
+    },
+    "interaction_scenes.lr_mira_garden_offer.actions.lr_mira_garden_decline.label": {
+      "source": "Not today. I won't promise time I don't have.",
+      "text": "Not today. I won't promise time I don't have.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_garden_offer.actions.lr_mira_garden_decline"
+    },
+    "interaction_scenes.lr_mira_garden_offer.actions.lr_mira_garden_decline.relationship_event.text": {
+      "source": "Kael declined garden work without promising to return.",
+      "text": "Kael declined garden work without promising to return.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_garden_offer.actions.lr_mira_garden_decline.relationship_event"
+    },
+    "interaction_scenes.lr_mira_garden_offer.greeting": {
+      "source": "The damp stems need separating before they spoil the rest. Ordinary work. No one gets a song for it.",
+      "text": "The damp stems need separating before they spoil the rest. Ordinary work. No one gets a song for it.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_garden_offer"
+    },
+    "interaction_scenes.lr_mira_garden_offer.lines.0": {
+      "source": "Kael: Perhaps a very short song.",
+      "text": "Kael: Perhaps a very short song.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_garden_offer.lines"
+    },
+    "interaction_scenes.lr_mira_garden_offer.lines.1": {
+      "source": "Mira: You can make it up by the beds. Keep the dry bundles apart. Those are for the houses, not the shop.",
+      "text": "Mira: You can make it up by the beds. Keep the dry bundles apart. Those are for the houses, not the shop.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_garden_offer.lines"
+    },
+    "interaction_scenes.lr_mira_garden_offer.name": {
+      "source": "Mira",
+      "text": "Mira",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_garden_offer"
+    },
+    "interaction_scenes.lr_mira_personal.actions.lr_mira_personal_decline.label": {
+      "source": "I'm not ready to ask either of us for more.",
+      "text": "I'm not ready to ask either of us for more.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_personal.actions.lr_mira_personal_decline"
+    },
+    "interaction_scenes.lr_mira_personal.actions.lr_mira_personal_decline.relationship_event.text": {
+      "source": "Kael declined a closer relationship without changing Mira's medical, evidence or testimony obligations.",
+      "text": "Kael declined a closer relationship without changing Mira's medical, evidence or testimony obligations.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_personal.actions.lr_mira_personal_decline.relationship_event"
+    },
+    "interaction_scenes.lr_mira_personal.actions.lr_mira_personal_friend.label": {
+      "source": "A friend. That's not a smaller thing.",
+      "text": "A friend. That's not a smaller thing.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_personal.actions.lr_mira_personal_friend"
+    },
+    "interaction_scenes.lr_mira_personal.actions.lr_mira_personal_friend.relationship_event.text": {
+      "source": "Kael and Mira chose friendship explicitly.",
+      "text": "Kael and Mira chose friendship explicitly.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_personal.actions.lr_mira_personal_friend.relationship_event"
+    },
+    "interaction_scenes.lr_mira_personal.actions.lr_mira_personal_interest.label": {
+      "source": "Something more, if you want that too. No promise owed.",
+      "text": "Something more, if you want that too. No promise owed.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_personal.actions.lr_mira_personal_interest"
+    },
+    "interaction_scenes.lr_mira_personal.actions.lr_mira_personal_interest.relationship_event.text": {
+      "source": "Kael offered adult romantic interest. Mira welcomed another conversation, not an automatic relationship.",
+      "text": "Kael offered adult romantic interest. Mira welcomed another conversation, not an automatic relationship.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_personal.actions.lr_mira_personal_interest.relationship_event"
+    },
+    "interaction_scenes.lr_mira_personal.actions.lr_mira_personal_interest.result": {
+      "source": "Mira wants time to know Kael outside an emergency. Interest is mutual; commitment is not yet offered.",
+      "text": "Mira wants time to know Kael outside an emergency. Interest is mutual; commitment is not yet offered.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_personal.actions.lr_mira_personal_interest"
+    },
+    "interaction_scenes.lr_mira_personal.greeting": {
+      "source": "You know what fed those roots now. I won't pretend being kind to me makes that knowledge easier.",
+      "text": "You know what fed those roots now. I won't pretend being kind to me makes that knowledge easier.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_personal"
+    },
+    "interaction_scenes.lr_mira_personal.lines.0": {
+      "source": "Kael: I didn't come to weigh you again.",
+      "text": "Kael: I didn't come to weigh you again.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_personal.lines"
+    },
+    "interaction_scenes.lr_mira_personal.lines.1": {
+      "source": "Mira: Then stay a moment. Tell me something small.",
+      "text": "Mira: Then stay a moment. Tell me something small.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_personal.lines"
+    },
+    "interaction_scenes.lr_mira_personal.lines.2": {
+      "source": "Kael: I used to think a quiet house meant everyone had left.",
+      "text": "Kael: I used to think a quiet house meant everyone had left.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_personal.lines"
+    },
+    "interaction_scenes.lr_mira_personal.lines.3": {
+      "source": "Mira: Mine is quiet for perhaps ten minutes a day. I've grown rather fond of it.",
+      "text": "Mira: Mine is quiet for perhaps ten minutes a day. I've grown rather fond of it.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_personal.lines"
+    },
+    "interaction_scenes.lr_mira_personal.lines.4": {
+      "source": "Kael: I'd like to know those minutes.",
+      "text": "Kael: I'd like to know those minutes.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_personal.lines"
+    },
+    "interaction_scenes.lr_mira_personal.lines.5": {
+      "source": "Mira: As a friend, or something you should ask plainly?",
+      "text": "Mira: As a friend, or something you should ask plainly?",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_personal.lines"
+    },
+    "interaction_scenes.lr_mira_personal.name": {
+      "source": "Mira",
+      "text": "Mira",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_personal"
+    },
+    "interaction_scenes.lr_mira_quiet.actions.lr_mira_quiet.label": {
+      "source": "Stay with her in the quiet.",
+      "text": "Stay with her in the quiet.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_quiet.actions.lr_mira_quiet"
+    },
+    "interaction_scenes.lr_mira_quiet.actions.lr_mira_quiet.relationship_event.text": {
+      "source": "Mira and Kael shared a private, non-explicit affectionate moment by mutual invitation.",
+      "text": "Mira and Kael shared a private, non-explicit affectionate moment by mutual invitation.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_quiet.actions.lr_mira_quiet.relationship_event"
+    },
+    "interaction_scenes.lr_mira_quiet.greeting": {
+      "source": "The last patient is resting. I can put this basket down now.",
+      "text": "The last patient is resting. I can put this basket down now.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_quiet"
+    },
+    "interaction_scenes.lr_mira_quiet.lines.0": {
+      "source": "Kael: Shall I stay?",
+      "text": "Kael: Shall I stay?",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_quiet.lines"
+    },
+    "interaction_scenes.lr_mira_quiet.lines.1": {
+      "source": "Mira: Yes. Because I want you here.",
+      "text": "Mira: Yes. Because I want you here.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_quiet.lines"
+    },
+    "interaction_scenes.lr_mira_quiet.lines.2.text": {
+      "source": "Come closer. No account to settle for a moment.",
+      "text": "Come closer. No account to settle for a moment.",
+      "speaker": "Mira",
+      "context": "interaction_scenes.lr_mira_quiet.lines.2"
+    },
+    "interaction_scenes.lr_mira_quiet.name": {
+      "source": "Mira",
+      "text": "Mira",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_quiet"
+    },
+    "interaction_scenes.lr_mira_reconcile.actions.lr_mira_reconcile_friend.label": {
+      "source": "I would rather keep the friendship we have.",
+      "text": "I would rather keep the friendship we have.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_reconcile.actions.lr_mira_reconcile_friend"
+    },
+    "interaction_scenes.lr_mira_reconcile.actions.lr_mira_reconcile_friend.relationship_event.text": {
+      "source": "Kael chose friendship after reconciliation.",
+      "text": "Kael chose friendship after reconciliation.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_reconcile.actions.lr_mira_reconcile_friend.relationship_event"
+    },
+    "interaction_scenes.lr_mira_reconcile.actions.lr_mira_reconcile_try.label": {
+      "source": "Slowly. And without pretending it never happened.",
+      "text": "Slowly. And without pretending it never happened.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_reconcile.actions.lr_mira_reconcile_try"
+    },
+    "interaction_scenes.lr_mira_reconcile.actions.lr_mira_reconcile_try.relationship_event.text": {
+      "source": "After consequential care and preserved truth, Mira and Kael reopened their personal conversation. The disagreement remains in their history.",
+      "text": "After consequential care and preserved truth, Mira and Kael reopened their personal conversation. The disagreement remains in their history.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_reconcile.actions.lr_mira_reconcile_try.relationship_event"
+    },
+    "interaction_scenes.lr_mira_reconcile.greeting": {
+      "source": "You have done more than say you were sorry. A dangerous account is no longer being kept at someone else's expense.",
+      "text": "You have done more than say you were sorry. A dangerous account is no longer being kept at someone else's expense.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_reconcile"
+    },
+    "interaction_scenes.lr_mira_reconcile.lines.0": {
+      "source": "Kael: It doesn't make the first answer right.",
+      "text": "Kael: It doesn't make the first answer right.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_reconcile.lines"
+    },
+    "interaction_scenes.lr_mira_reconcile.lines.1": {
+      "source": "Mira: No. It gives me something besides that answer to trust. I would like to try again, slowly.",
+      "text": "Mira: No. It gives me something besides that answer to trust. I would like to try again, slowly.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_reconcile.lines"
+    },
+    "interaction_scenes.lr_mira_reconcile.name": {
+      "source": "Mira",
+      "text": "Mira",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_reconcile"
+    },
+    "interaction_scenes.lr_mira_supplies.actions.lr_mira_supplies_leave.label": {
+      "source": "Then I'll give you room to work.",
+      "text": "Then I'll give you room to work.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_supplies.actions.lr_mira_supplies_leave"
+    },
+    "interaction_scenes.lr_mira_supplies.actions.lr_mira_supplies_leave.relationship_event.text": {
+      "source": "Kael gave Mira room to attend to her patients.",
+      "text": "Kael gave Mira room to attend to her patients.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_supplies.actions.lr_mira_supplies_leave.relationship_event"
+    },
+    "interaction_scenes.lr_mira_supplies.actions.lr_mira_supplies_listen.label": {
+      "source": "What do you need?",
+      "text": "What do you need?",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_supplies.actions.lr_mira_supplies_listen"
+    },
+    "interaction_scenes.lr_mira_supplies.actions.lr_mira_supplies_listen.relationship_event.text": {
+      "source": "Kael asked about Mira's patients and respected that her work was her own.",
+      "text": "Kael asked about Mira's patients and respected that her work was her own.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_supplies.actions.lr_mira_supplies_listen.relationship_event"
+    },
+    "interaction_scenes.lr_mira_supplies.actions.lr_mira_supplies_listen.result": {
+      "source": "Clean water, sound bundles and room to work. Kael listens without making a new delivery promise.",
+      "text": "Clean water, sound bundles and room to work. Kael listens without making a new delivery promise.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_supplies.actions.lr_mira_supplies_listen"
+    },
+    "interaction_scenes.lr_mira_supplies.greeting": {
+      "source": "One fever easing. One getting worse. Reports settle an account, not a bedside.",
+      "text": "One fever easing. One getting worse. Reports settle an account, not a bedside.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_supplies"
+    },
+    "interaction_scenes.lr_mira_supplies.lines.0": {
+      "source": "Kael: Do you ever leave the work?",
+      "text": "Kael: Do you ever leave the work?",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_supplies.lines"
+    },
+    "interaction_scenes.lr_mira_supplies.lines.1": {
+      "source": "Mira: Sometimes. Not because someone decides I have done enough for them.",
+      "text": "Mira: Sometimes. Not because someone decides I have done enough for them.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_supplies.lines"
+    },
+    "interaction_scenes.lr_mira_supplies.lines.2": {
+      "source": "Kael: I wasn't asking you to leave.",
+      "text": "Kael: I wasn't asking you to leave.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_supplies.lines"
+    },
+    "interaction_scenes.lr_mira_supplies.lines.3": {
+      "source": "Mira: Good. Then ask me what I need, not when I'll be finished.",
+      "text": "Mira: Good. Then ask me what I need, not when I'll be finished.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_supplies.lines"
+    },
+    "interaction_scenes.lr_mira_supplies.name": {
+      "source": "Mira",
+      "text": "Mira",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_supplies"
+    },
+    "interaction_scenes.lr_mira_truth_talk.actions.lr_mira_truth_agree.label": {
+      "source": "No comfort bought by making someone else carry the danger.",
+      "text": "No comfort bought by making someone else carry the danger.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_truth_talk.actions.lr_mira_truth_agree"
+    },
+    "interaction_scenes.lr_mira_truth_talk.actions.lr_mira_truth_agree.relationship_event.text": {
+      "source": "Kael agreed that a shared life cannot rest on passing a concealed danger to others.",
+      "text": "Kael agreed that a shared life cannot rest on passing a concealed danger to others.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_truth_talk.actions.lr_mira_truth_agree.relationship_event"
+    },
+    "interaction_scenes.lr_mira_truth_talk.actions.lr_mira_truth_disagree.label": {
+      "source": "Sometimes keeping a dangerous truth quiet is the only mercy left.",
+      "text": "Sometimes keeping a dangerous truth quiet is the only mercy left.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_truth_talk.actions.lr_mira_truth_disagree"
+    },
+    "interaction_scenes.lr_mira_truth_talk.actions.lr_mira_truth_disagree.relationship_event.text": {
+      "source": "Mira declined commitment while Kael defended concealing risks. An apology alone does not settle the disagreement.",
+      "text": "Mira declined commitment while Kael defended concealing risks. An apology alone does not settle the disagreement.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_truth_talk.actions.lr_mira_truth_disagree.relationship_event"
+    },
+    "interaction_scenes.lr_mira_truth_talk.actions.lr_mira_truth_friend.label": {
+      "source": "Let us keep the friendship, without a promise of more.",
+      "text": "Let us keep the friendship, without a promise of more.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_truth_talk.actions.lr_mira_truth_friend"
+    },
+    "interaction_scenes.lr_mira_truth_talk.actions.lr_mira_truth_friend.relationship_event.text": {
+      "source": "Kael and Mira kept their friendship without entering a romantic commitment.",
+      "text": "Kael and Mira kept their friendship without entering a romantic commitment.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_truth_talk.actions.lr_mira_truth_friend.relationship_event"
+    },
+    "interaction_scenes.lr_mira_truth_talk.greeting": {
+      "source": "I would like a life with you in it. But not one where we call a dangerous secret kindness because it keeps our supper quiet.",
+      "text": "I would like a life with you in it. But not one where we call a dangerous secret kindness because it keeps our supper quiet.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_truth_talk"
+    },
+    "interaction_scenes.lr_mira_truth_talk.lines.0": {
+      "source": "Kael: You kept a secret to keep people alive.",
+      "text": "Kael: You kept a secret to keep people alive.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_truth_talk.lines"
+    },
+    "interaction_scenes.lr_mira_truth_talk.lines.1": {
+      "source": "Mira: I did. And I have to answer for it. Privacy is not a licence to let the next household suffer.",
+      "text": "Mira: I did. And I have to answer for it. Privacy is not a licence to let the next household suffer.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_truth_talk.lines"
+    },
+    "interaction_scenes.lr_mira_truth_talk.lines.2": {
+      "source": "Kael: You want a promise.",
+      "text": "Kael: You want a promise.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_truth_talk.lines"
+    },
+    "interaction_scenes.lr_mira_truth_talk.lines.3": {
+      "source": "Mira: An answer. If we disagree, say so. The medicines are still here either way.",
+      "text": "Mira: An answer. If we disagree, say so. The medicines are still here either way.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_truth_talk.lines"
+    },
+    "interaction_scenes.lr_mira_truth_talk.name": {
+      "source": "Mira",
+      "text": "Mira",
+      "speaker": "",
+      "context": "interaction_scenes.lr_mira_truth_talk"
+    },
+    "interaction_scenes.lr_rook_confidence.lines.0": {
+      "source": "Rook: A private thing, then. I can manage that.",
+      "text": "Rook: A private thing, then. I can manage that.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_rook_confidence.lines"
+    },
+    "interaction_scenes.lr_rook_confidence.lines.1": {
+      "source": "Kael: No wager?",
+      "text": "Kael: No wager?",
+      "speaker": "",
+      "context": "interaction_scenes.lr_rook_confidence.lines"
+    },
+    "interaction_scenes.lr_rook_confidence.lines.2": {
+      "source": "Rook: Not everything valuable belongs on a table. Terrible discovery. Keep it quiet.",
+      "text": "Rook: Not everything valuable belongs on a table. Terrible discovery. Keep it quiet.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_rook_confidence.lines"
+    },
+    "interaction_scenes.lr_rook_confidence.name": {
+      "source": "Rook",
+      "text": "Rook",
+      "speaker": "",
+      "context": "interaction_scenes.lr_rook_confidence"
+    },
+    "interaction_scenes.lr_rook_stool_done.actions.lr_rook_stool_finish.label": {
+      "source": "Save me a place at the table.",
+      "text": "Save me a place at the table.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_rook_stool_done.actions.lr_rook_stool_finish"
+    },
+    "interaction_scenes.lr_rook_stool_done.actions.lr_rook_stool_finish.relationship_event.text": {
+      "source": "Kael and Rook repaired the stool and agreed to share the common table again.",
+      "text": "Kael and Rook repaired the stool and agreed to share the common table again.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_rook_stool_done.actions.lr_rook_stool_finish.relationship_event"
+    },
+    "interaction_scenes.lr_rook_stool_done.greeting": {
+      "source": "Solid. There goes my last excuse for losing.",
+      "text": "Solid. There goes my last excuse for losing.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_rook_stool_done"
+    },
+    "interaction_scenes.lr_rook_stool_done.lines.0": {
+      "source": "Kael: The cards were marked?",
+      "text": "Kael: The cards were marked?",
+      "speaker": "",
+      "context": "interaction_scenes.lr_rook_stool_done.lines"
+    },
+    "interaction_scenes.lr_rook_stool_done.lines.1": {
+      "source": "Rook: Stones. And no. I'm trying honesty. It leaves a man terribly exposed.",
+      "text": "Rook: Stones. And no. I'm trying honesty. It leaves a man terribly exposed.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_rook_stool_done.lines"
+    },
+    "interaction_scenes.lr_rook_stool_done.lines.2": {
+      "source": "Kael: At least he'll stay seated.",
+      "text": "Kael: At least he'll stay seated.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_rook_stool_done.lines"
+    },
+    "interaction_scenes.lr_rook_stool_done.name": {
+      "source": "Rook",
+      "text": "Rook",
+      "speaker": "",
+      "context": "interaction_scenes.lr_rook_stool_done"
+    },
+    "interaction_scenes.lr_rook_stool_offer.actions.lr_rook_stool_accept.label": {
+      "source": "I'll brace it.",
+      "text": "I'll brace it.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_rook_stool_offer.actions.lr_rook_stool_accept"
+    },
+    "interaction_scenes.lr_rook_stool_offer.actions.lr_rook_stool_accept.result": {
+      "source": "Rook leaves the loose stool beside the common table for Kael to brace.",
+      "text": "Rook leaves the loose stool beside the common table for Kael to brace.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_rook_stool_offer.actions.lr_rook_stool_accept"
+    },
+    "interaction_scenes.lr_rook_stool_offer.actions.lr_rook_stool_refuse.label": {
+      "source": "Not today. Keep the roof.",
+      "text": "Not today. Keep the roof.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_rook_stool_offer.actions.lr_rook_stool_refuse"
+    },
+    "interaction_scenes.lr_rook_stool_offer.actions.lr_rook_stool_refuse.relationship_event.text": {
+      "source": "Kael declined to help repair the common-table stool.",
+      "text": "Kael declined to help repair the common-table stool.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_rook_stool_offer.actions.lr_rook_stool_refuse.relationship_event"
+    },
+    "interaction_scenes.lr_rook_stool_offer.greeting": {
+      "source": "Lost that leg at Three Marks. Well, lost the money for the carpenter. The leg followed out of sympathy.",
+      "text": "Lost that leg at Three Marks. Well, lost the money for the carpenter. The leg followed out of sympathy.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_rook_stool_offer"
+    },
+    "interaction_scenes.lr_rook_stool_offer.lines.0": {
+      "source": "Kael: You could stop wagering the furniture.",
+      "text": "Kael: You could stop wagering the furniture.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_rook_stool_offer.lines"
+    },
+    "interaction_scenes.lr_rook_stool_offer.lines.1": {
+      "source": "Rook: And leave the roof undefended? Brace the stool by the common table. I've a peg that almost fits.",
+      "text": "Rook: And leave the roof undefended? Brace the stool by the common table. I've a peg that almost fits.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_rook_stool_offer.lines"
+    },
+    "interaction_scenes.lr_rook_stool_offer.name": {
+      "source": "Rook",
+      "text": "Rook",
+      "speaker": "",
+      "context": "interaction_scenes.lr_rook_stool_offer"
+    },
+    "interaction_scenes.lr_tor_hinge_done.actions.lr_tor_hinge_finish.label": {
+      "source": "Good work, then.",
+      "text": "Good work, then.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_tor_hinge_done.actions.lr_tor_hinge_finish"
+    },
+    "interaction_scenes.lr_tor_hinge_done.actions.lr_tor_hinge_finish.relationship_event.text": {
+      "source": "Kael helped Tor fit a household hinge and shared a quiet moment about useful work.",
+      "text": "Kael helped Tor fit a household hinge and shared a quiet moment about useful work.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_tor_hinge_done.actions.lr_tor_hinge_finish.relationship_event"
+    },
+    "interaction_scenes.lr_tor_hinge_done.greeting": {
+      "source": "There. Hear anything?",
+      "text": "There. Hear anything?",
+      "speaker": "",
+      "context": "interaction_scenes.lr_tor_hinge_done"
+    },
+    "interaction_scenes.lr_tor_hinge_done.lines.0": {
+      "source": "Kael: Nothing.",
+      "text": "Kael: Nothing.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_tor_hinge_done.lines"
+    },
+    "interaction_scenes.lr_tor_hinge_done.lines.1": {
+      "source": "Tor: Best thing a door can say.",
+      "text": "Tor: Best thing a door can say.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_tor_hinge_done.lines"
+    },
+    "interaction_scenes.lr_tor_hinge_done.lines.2": {
+      "source": "Kael: You won't see it again.",
+      "text": "Kael: You won't see it again.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_tor_hinge_done.lines"
+    },
+    "interaction_scenes.lr_tor_hinge_done.lines.3": {
+      "source": "Tor: I'll see her carrying the wash through it. That's enough.",
+      "text": "Tor: I'll see her carrying the wash through it. That's enough.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_tor_hinge_done.lines"
+    },
+    "interaction_scenes.lr_tor_hinge_done.name": {
+      "source": "Tor",
+      "text": "Tor",
+      "speaker": "",
+      "context": "interaction_scenes.lr_tor_hinge_done"
+    },
+    "interaction_scenes.lr_tor_hinge_offer.actions.lr_tor_hinge_accept.label": {
+      "source": "I'll hold it at the bench.",
+      "text": "I'll hold it at the bench.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_tor_hinge_offer.actions.lr_tor_hinge_accept"
+    },
+    "interaction_scenes.lr_tor_hinge_offer.actions.lr_tor_hinge_accept.result": {
+      "source": "The hinge waits at the forge bench, beside Tor's stock.",
+      "text": "The hinge waits at the forge bench, beside Tor's stock.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_tor_hinge_offer.actions.lr_tor_hinge_accept"
+    },
+    "interaction_scenes.lr_tor_hinge_offer.actions.lr_tor_hinge_refuse.label": {
+      "source": "I have to get back to the road.",
+      "text": "I have to get back to the road.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_tor_hinge_offer.actions.lr_tor_hinge_refuse"
+    },
+    "interaction_scenes.lr_tor_hinge_offer.actions.lr_tor_hinge_refuse.relationship_event.text": {
+      "source": "Kael declined the hinge repair. Tor's shop and ordinary help remain available.",
+      "text": "Kael declined the hinge repair. Tor's shop and ordinary help remain available.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_tor_hinge_offer.actions.lr_tor_hinge_refuse.relationship_event"
+    },
+    "interaction_scenes.lr_tor_hinge_offer.greeting": {
+      "source": "Hold this flat while I seat the pin. Elna's door has been announcing her business to the whole street.",
+      "text": "Hold this flat while I seat the pin. Elna's door has been announcing her business to the whole street.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_tor_hinge_offer"
+    },
+    "interaction_scenes.lr_tor_hinge_offer.lines.0": {
+      "source": "Kael: No mark on it?",
+      "text": "Kael: No mark on it?",
+      "speaker": "",
+      "context": "interaction_scenes.lr_tor_hinge_offer.lines"
+    },
+    "interaction_scenes.lr_tor_hinge_offer.lines.1": {
+      "source": "Tor: A hinge doesn't need my name. It needs to open when her hands are full.",
+      "text": "Tor: A hinge doesn't need my name. It needs to open when her hands are full.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_tor_hinge_offer.lines"
+    },
+    "interaction_scenes.lr_tor_hinge_offer.name": {
+      "source": "Tor",
+      "text": "Tor",
+      "speaker": "",
+      "context": "interaction_scenes.lr_tor_hinge_offer"
+    },
+    "interaction_scenes.lr_vale_archive.actions.lr_vale_archive_decline.label": {
+      "source": "This is between her and you. I won't handle it.",
+      "text": "This is between her and you. I won't handle it.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_archive.actions.lr_vale_archive_decline"
+    },
+    "interaction_scenes.lr_vale_archive.actions.lr_vale_archive_decline.relationship_event.text": {
+      "source": "Kael declined to handle the private leaf. Vale preserved it as instructed.",
+      "text": "Kael declined to handle the private leaf. Vale preserved it as instructed.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_archive.actions.lr_vale_archive_decline.relationship_event"
+    },
+    "interaction_scenes.lr_vale_archive.actions.lr_vale_archive_disagree.label": {
+      "source": "I still worry about who can demand an omission. Leave it with her instructions.",
+      "text": "I still worry about who can demand an omission. Leave it with her instructions.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_archive.actions.lr_vale_archive_disagree"
+    },
+    "interaction_scenes.lr_vale_archive.actions.lr_vale_archive_disagree.relationship_event.text": {
+      "source": "Kael questioned omissions while leaving the witness's own instructions intact.",
+      "text": "Kael questioned omissions while leaving the witness's own instructions intact.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_archive.actions.lr_vale_archive_disagree.relationship_event"
+    },
+    "interaction_scenes.lr_vale_archive.actions.lr_vale_archive_respect.label": {
+      "source": "Fold the private address inward; keep the statement open.",
+      "text": "Fold the private address inward; keep the statement open.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_archive.actions.lr_vale_archive_respect"
+    },
+    "interaction_scenes.lr_vale_archive.actions.lr_vale_archive_respect.relationship_event.text": {
+      "source": "Kael helped preserve a living witness's private address without hiding her account.",
+      "text": "Kael helped preserve a living witness's private address without hiding her account.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_archive.actions.lr_vale_archive_respect.relationship_event"
+    },
+    "interaction_scenes.lr_vale_archive.greeting": {
+      "source": "A woman asked me to keep her statement, but not her address. Fold that leaf inward. The account stays readable; her door stays her own.",
+      "text": "A woman asked me to keep her statement, but not her address. Fold that leaf inward. The account stays readable; her door stays her own.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_archive"
+    },
+    "interaction_scenes.lr_vale_archive.lines.0": {
+      "source": "Kael: An omission in a truthful record.",
+      "text": "Kael: An omission in a truthful record.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_archive.lines"
+    },
+    "interaction_scenes.lr_vale_archive.lines.1": {
+      "source": "Vale: A boundary supplied by its subject. I used to confuse those with omissions supplied by a lord.",
+      "text": "Vale: A boundary supplied by its subject. I used to confuse those with omissions supplied by a lord.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_archive.lines"
+    },
+    "interaction_scenes.lr_vale_archive.lines.2": {
+      "source": "Kael: Does she know the difference?",
+      "text": "Kael: Does she know the difference?",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_archive.lines"
+    },
+    "interaction_scenes.lr_vale_archive.lines.3": {
+      "source": "Vale: She made me read it back. Twice.",
+      "text": "Vale: She made me read it back. Twice.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_archive.lines"
+    },
+    "interaction_scenes.lr_vale_archive.name": {
+      "source": "Vale",
+      "text": "Vale",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_archive"
+    },
+    "interaction_scenes.lr_vale_archive.variants.0.greeting": {
+      "source": "You wrote that you would ask whose safety a page changes. Here is someone who answered: keep her account, not her address.",
+      "text": "You wrote that you would ask whose safety a page changes. Here is someone who answered: keep her account, not her address.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_archive.variants.0"
+    },
+    "interaction_scenes.lr_vale_archive.variants.1.greeting": {
+      "source": "Your letter asked who decides. In this case, the woman whose account it is. She asked me to keep her words, but not her address.",
+      "text": "Your letter asked who decides. In this case, the woman whose account it is. She asked me to keep her words, but not her address.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_archive.variants.1"
+    },
+    "interaction_scenes.lr_vale_boundary.actions.lr_vale_terms_distance.label": {
+      "source": "Then let us leave the romance there. I respect your choice.",
+      "text": "Then let us leave the romance there. I respect your choice.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_boundary.actions.lr_vale_terms_distance"
+    },
+    "interaction_scenes.lr_vale_boundary.actions.lr_vale_terms_distance.relationship_event.text": {
+      "source": "Kael respected Vale's decision and ended the romantic invitation, leaving friendship possible.",
+      "text": "Kael respected Vale's decision and ended the romantic invitation, leaving friendship possible.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_boundary.actions.lr_vale_terms_distance.relationship_event"
+    },
+    "interaction_scenes.lr_vale_boundary.actions.lr_vale_terms_reconsider.label": {
+      "source": "I won't decide for you. I can stay in the conversation without winning it.",
+      "text": "I won't decide for you. I can stay in the conversation without winning it.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_boundary.actions.lr_vale_terms_reconsider"
+    },
+    "interaction_scenes.lr_vale_boundary.actions.lr_vale_terms_reconsider.relationship_event.text": {
+      "source": "Kael accepted Vale's stated decision without changing it or demanding agreement. The disagreement remains recorded.",
+      "text": "Kael accepted Vale's stated decision without changing it or demanding agreement. The disagreement remains recorded.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_boundary.actions.lr_vale_terms_reconsider.relationship_event"
+    },
+    "interaction_scenes.lr_vale_boundary.greeting": {
+      "source": "I am staying until the copies are in their hands. We can disagree about the risk. We cannot build a life in which you decide what risks I am allowed.",
+      "text": "I am staying until the copies are in their hands. We can disagree about the risk. We cannot build a life in which you decide what risks I am allowed.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_boundary"
+    },
+    "interaction_scenes.lr_vale_boundary.name": {
+      "source": "Vale",
+      "text": "Vale",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_boundary"
+    },
+    "interaction_scenes.lr_vale_commitment.actions.lr_vale_commit.label": {
+      "source": "I choose you, freely and exclusively.",
+      "text": "I choose you, freely and exclusively.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_commitment.actions.lr_vale_commit"
+    },
+    "interaction_scenes.lr_vale_commitment.actions.lr_vale_commit.relationship_event.text": {
+      "source": "Vale and Kael explicitly chose a mutual, exclusive adult relationship. Her work remains her own.",
+      "text": "Vale and Kael explicitly chose a mutual, exclusive adult relationship. Her work remains her own.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_commitment.actions.lr_vale_commit.relationship_event"
+    },
+    "interaction_scenes.lr_vale_commitment.actions.lr_vale_commit_friend.label": {
+      "source": "I can promise honest friendship, but not a shared life.",
+      "text": "I can promise honest friendship, but not a shared life.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_commitment.actions.lr_vale_commit_friend"
+    },
+    "interaction_scenes.lr_vale_commitment.actions.lr_vale_commit_friend.relationship_event.text": {
+      "source": "Kael declined romantic commitment to Vale without withdrawing friendship.",
+      "text": "Kael declined romantic commitment to Vale without withdrawing friendship.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_commitment.actions.lr_vale_commit_friend.relationship_event"
+    },
+    "interaction_scenes.lr_vale_commitment.greeting": {
+      "source": "I want a future with you in it. Not written for me. Not promised somewhere else as well.",
+      "text": "I want a future with you in it. Not written for me. Not promised somewhere else as well.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_commitment"
+    },
+    "interaction_scenes.lr_vale_commitment.lines.0": {
+      "source": "Kael: No seal?",
+      "text": "Kael: No seal?",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_commitment.lines"
+    },
+    "interaction_scenes.lr_vale_commitment.lines.1": {
+      "source": "Vale: Our own words. And the right to speak again if the words stop being true.",
+      "text": "Vale: Our own words. And the right to speak again if the words stop being true.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_commitment.lines"
+    },
+    "interaction_scenes.lr_vale_commitment.name": {
+      "source": "Vale",
+      "text": "Vale",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_commitment"
+    },
+    "interaction_scenes.lr_vale_end.actions.lr_vale_end.label": {
+      "source": "I cannot keep our commitment. I'm ending it honestly.",
+      "text": "I cannot keep our commitment. I'm ending it honestly.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_end.actions.lr_vale_end"
+    },
+    "interaction_scenes.lr_vale_end.actions.lr_vale_end.relationship_event.text": {
+      "source": "Kael ended his commitment to Vale in direct conversation. Their past remains part of the record.",
+      "text": "Kael ended his commitment to Vale in direct conversation. Their past remains part of the record.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_end.actions.lr_vale_end.relationship_event"
+    },
+    "interaction_scenes.lr_vale_end.greeting": {
+      "source": "We said we would speak again if the words stopped being true. I'm listening.",
+      "text": "We said we would speak again if the words stopped being true. I'm listening.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_end"
+    },
+    "interaction_scenes.lr_vale_end.lines.0": {
+      "source": "Vale: Whatever this answer is, it won't rewrite the record, or what we were to each other.",
+      "text": "Vale: Whatever this answer is, it won't rewrite the record, or what we were to each other.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_end.lines"
+    },
+    "interaction_scenes.lr_vale_end.name": {
+      "source": "Vale",
+      "text": "Vale",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_end"
+    },
+    "interaction_scenes.lr_vale_existing_promise.actions.lr_vale_other_promise_friend.label": {
+      "source": "Then friendship, without a second promise.",
+      "text": "Then friendship, without a second promise.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_existing_promise.actions.lr_vale_other_promise_friend"
+    },
+    "interaction_scenes.lr_vale_existing_promise.actions.lr_vale_other_promise_friend.relationship_event.text": {
+      "source": "Kael disclosed his commitment to Mira and chose friendship with Vale rather than making a second promise.",
+      "text": "Kael disclosed his commitment to Mira and chose friendship with Vale rather than making a second promise.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_existing_promise.actions.lr_vale_other_promise_friend.relationship_event"
+    },
+    "interaction_scenes.lr_vale_existing_promise.lines.0": {
+      "source": "Kael: I have made a commitment to Mira. I cannot leave that outside this conversation.",
+      "text": "Kael: I have made a commitment to Mira. I cannot leave that outside this conversation.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_existing_promise.lines"
+    },
+    "interaction_scenes.lr_vale_existing_promise.lines.1": {
+      "source": "Vale: Then don't. If that promise changes, she should hear it from you. I won't write myself into the space you leave unspoken.",
+      "text": "Vale: Then don't. If that promise changes, she should hear it from you. I won't write myself into the space you leave unspoken.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_existing_promise.lines"
+    },
+    "interaction_scenes.lr_vale_existing_promise.name": {
+      "source": "Vale",
+      "text": "Vale",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_existing_promise"
+    },
+    "interaction_scenes.lr_vale_future.actions.lr_vale_future_shared.label": {
+      "source": "Stay close. Make room for a future neither of us has to dictate.",
+      "text": "Stay close. Make room for a future neither of us has to dictate.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_future.actions.lr_vale_future_shared"
+    },
+    "interaction_scenes.lr_vale_future.actions.lr_vale_future_shared.relationship_event.text": {
+      "source": "After testimony, Vale invited Kael into a quiet, non-explicit affectionate moment and a freely chosen future.",
+      "text": "After testimony, Vale invited Kael into a quiet, non-explicit affectionate moment and a freely chosen future.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_future.actions.lr_vale_future_shared.relationship_event"
+    },
+    "interaction_scenes.lr_vale_future.actions.lr_vale_future_visit.label": {
+      "source": "Find your room. I'll be glad to hear how it turns out.",
+      "text": "Find your room. I'll be glad to hear how it turns out.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_future.actions.lr_vale_future_visit"
+    },
+    "interaction_scenes.lr_vale_future.actions.lr_vale_future_visit.relationship_event.text": {
+      "source": "Kael supported Vale's freely chosen future without assigning her a home or political role.",
+      "text": "Kael supported Vale's freely chosen future without assigning her a home or political role.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_future.actions.lr_vale_future_visit.relationship_event"
+    },
+    "interaction_scenes.lr_vale_future.greeting": {
+      "source": "The assembly has given its answer. It isn't the end of the work. It means I can finally choose which part is mine.",
+      "text": "The assembly has given its answer. It isn't the end of the work. It means I can finally choose which part is mine.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_future"
+    },
+    "interaction_scenes.lr_vale_future.lines.0": {
+      "source": "Kael: And the room with the window?",
+      "text": "Kael: And the room with the window?",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_future.lines"
+    },
+    "interaction_scenes.lr_vale_future.lines.1": {
+      "source": "Vale: Still mine to find. I would like to open it before deciding what comes after.",
+      "text": "Vale: Still mine to find. I would like to open it before deciding what comes after.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_future.lines"
+    },
+    "interaction_scenes.lr_vale_future.name": {
+      "source": "Vale",
+      "text": "Vale",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_future"
+    },
+    "interaction_scenes.lr_vale_future.variants.0.lines.0": {
+      "source": "Kael: And the room with the window?",
+      "text": "Kael: And the room with the window?",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_future.variants.0.lines"
+    },
+    "interaction_scenes.lr_vale_future.variants.0.lines.1": {
+      "source": "Vale: I would like to show you when I find it. Today, I would like you to stay beside me.",
+      "text": "Vale: I would like to show you when I find it. Today, I would like you to stay beside me.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_future.variants.0.lines"
+    },
+    "interaction_scenes.lr_vale_future.variants.0.lines.2": {
+      "source": "Kael: Because you want me here?",
+      "text": "Kael: Because you want me here?",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_future.variants.0.lines"
+    },
+    "interaction_scenes.lr_vale_future.variants.0.lines.3": {
+      "source": "Vale: Because I want you here.",
+      "text": "Vale: Because I want you here.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_future.variants.0.lines"
+    },
+    "interaction_scenes.lr_vale_letter.actions.lr_vale_letter_decline.label": {
+      "source": "Keep the letter. Send no reply.",
+      "text": "Keep the letter. Send no reply.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_letter.actions.lr_vale_letter_decline"
+    },
+    "interaction_scenes.lr_vale_letter.actions.lr_vale_letter_decline.relationship_event.text": {
+      "source": "Kael kept Vale's letter without answering it.",
+      "text": "Kael kept Vale's letter without answering it.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_letter.actions.lr_vale_letter_decline.relationship_event"
+    },
+    "interaction_scenes.lr_vale_letter.actions.lr_vale_letter_disagree.label": {
+      "source": "Reply: Concealment can shelter the powerful too. Who decides?",
+      "text": "Reply: Concealment can shelter the powerful too. Who decides?",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_letter.actions.lr_vale_letter_disagree"
+    },
+    "interaction_scenes.lr_vale_letter.actions.lr_vale_letter_disagree.relationship_event.text": {
+      "source": "Kael questioned who gets to decide which names remain private.",
+      "text": "Kael questioned who gets to decide which names remain private.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_letter.actions.lr_vale_letter_disagree.relationship_event"
+    },
+    "interaction_scenes.lr_vale_letter.actions.lr_vale_letter_thoughtful.label": {
+      "source": "Reply: I'll ask whose safety the page changes.",
+      "text": "Reply: I'll ask whose safety the page changes.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_letter.actions.lr_vale_letter_thoughtful"
+    },
+    "interaction_scenes.lr_vale_letter.actions.lr_vale_letter_thoughtful.relationship_event.text": {
+      "source": "Kael replied that a record should consider the living person's safety. No identity or consent was supplied by the letter.",
+      "text": "Kael replied that a record should consider the living person's safety. No identity or consent was supplied by the letter.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_letter.actions.lr_vale_letter_thoughtful.relationship_event"
+    },
+    "interaction_scenes.lr_vale_letter.greeting": {
+      "source": "To whoever is asking after the erased names: before you restore a name to a public page, ask whether its living bearer can safely stand beside it. A truthful record is not an instruction to surrender someone to a guard. - Vale, record keeper",
+      "text": "To whoever is asking after the erased names: before you restore a name to a public page, ask whether its living bearer can safely stand beside it. A truthful record is not an instruction to surrender someone to a guard. - Vale, record keeper",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_letter"
+    },
+    "interaction_scenes.lr_vale_letter.lines.0.text": {
+      "source": "A space is left for a reply carried with Greyfen's ordinary correspondence. There is no key, seal of passage or evidence attached.",
+      "text": "A space is left for a reply carried with Greyfen's ordinary correspondence. There is no key, seal of passage or evidence attached.",
+      "speaker": "The letter",
+      "context": "interaction_scenes.lr_vale_letter.lines.0"
+    },
+    "interaction_scenes.lr_vale_letter.name": {
+      "source": "A letter from Vale",
+      "text": "A letter from Vale",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_letter"
+    },
+    "interaction_scenes.lr_vale_personal.actions.lr_vale_personal_decline.label": {
+      "source": "I can't offer that kind of company. I won't imply otherwise.",
+      "text": "I can't offer that kind of company. I won't imply otherwise.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_personal.actions.lr_vale_personal_decline"
+    },
+    "interaction_scenes.lr_vale_personal.actions.lr_vale_personal_decline.relationship_event.text": {
+      "source": "Kael respectfully declined a personal relationship with Vale.",
+      "text": "Kael respectfully declined a personal relationship with Vale.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_personal.actions.lr_vale_personal_decline.relationship_event"
+    },
+    "interaction_scenes.lr_vale_personal.actions.lr_vale_personal_friend.label": {
+      "source": "Then let me be someone you can call a friend.",
+      "text": "Then let me be someone you can call a friend.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_personal.actions.lr_vale_personal_friend"
+    },
+    "interaction_scenes.lr_vale_personal.actions.lr_vale_personal_friend.relationship_event.text": {
+      "source": "Kael and Vale explicitly chose friendship, independent of the archive.",
+      "text": "Kael and Vale explicitly chose friendship, independent of the archive.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_personal.actions.lr_vale_personal_friend.relationship_event"
+    },
+    "interaction_scenes.lr_vale_personal.actions.lr_vale_personal_interest.label": {
+      "source": "I want to know you, not what you can open for me.",
+      "text": "I want to know you, not what you can open for me.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_personal.actions.lr_vale_personal_interest"
+    },
+    "interaction_scenes.lr_vale_personal.actions.lr_vale_personal_interest.relationship_event.text": {
+      "source": "After direct acquaintance, Kael expressed adult romantic interest in Vale. She welcomed the question without making a commitment.",
+      "text": "After direct acquaintance, Kael expressed adult romantic interest in Vale. She welcomed the question without making a commitment.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_personal.actions.lr_vale_personal_interest.relationship_event"
+    },
+    "interaction_scenes.lr_vale_personal.greeting": {
+      "source": "A room with a window I can open myself. That sounds smaller aloud than it did in my head.",
+      "text": "A room with a window I can open myself. That sounds smaller aloud than it did in my head.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_personal"
+    },
+    "interaction_scenes.lr_vale_personal.lines.0": {
+      "source": "Kael: Not from this side of the wall.",
+      "text": "Kael: Not from this side of the wall.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_personal.lines"
+    },
+    "interaction_scenes.lr_vale_personal.lines.1": {
+      "source": "Vale: And work I chose, with people who can tell me no. I spent years being useful to the wrong silence.",
+      "text": "Vale: And work I chose, with people who can tell me no. I spent years being useful to the wrong silence.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_personal.lines"
+    },
+    "interaction_scenes.lr_vale_personal.lines.2": {
+      "source": "Kael: Is there room in that picture for company?",
+      "text": "Kael: Is there room in that picture for company?",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_personal.lines"
+    },
+    "interaction_scenes.lr_vale_personal.lines.3": {
+      "source": "Vale: There could be. But I won't mistake someone needing a ledger for someone wanting to know me.",
+      "text": "Vale: There could be. But I won't mistake someone needing a ledger for someone wanting to know me.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_personal.lines"
+    },
+    "interaction_scenes.lr_vale_personal.name": {
+      "source": "Vale",
+      "text": "Vale",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_personal"
+    },
+    "interaction_scenes.lr_vale_vulnerable.actions.lr_vale_terms_friend.label": {
+      "source": "I can be your friend without asking where this leads.",
+      "text": "I can be your friend without asking where this leads.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_vulnerable.actions.lr_vale_terms_friend"
+    },
+    "interaction_scenes.lr_vale_vulnerable.actions.lr_vale_terms_friend.relationship_event.text": {
+      "source": "Kael and Vale kept their friendship without a romantic promise.",
+      "text": "Kael and Vale kept their friendship without a romantic promise.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_vulnerable.actions.lr_vale_terms_friend.relationship_event"
+    },
+    "interaction_scenes.lr_vale_vulnerable.actions.lr_vale_terms_question.label": {
+      "source": "I still think staying here is a mistake.",
+      "text": "I still think staying here is a mistake.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_vulnerable.actions.lr_vale_terms_question"
+    },
+    "interaction_scenes.lr_vale_vulnerable.actions.lr_vale_terms_question.relationship_event.text": {
+      "source": "Vale held her boundary when Kael questioned her decision to remain for the witnesses.",
+      "text": "Vale held her boundary when Kael questioned her decision to remain for the witnesses.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_vulnerable.actions.lr_vale_terms_question.relationship_event"
+    },
+    "interaction_scenes.lr_vale_vulnerable.actions.lr_vale_terms_respect.label": {
+      "source": "Your work and your leaving are yours to choose.",
+      "text": "Your work and your leaving are yours to choose.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_vulnerable.actions.lr_vale_terms_respect"
+    },
+    "interaction_scenes.lr_vale_vulnerable.actions.lr_vale_terms_respect.relationship_event.text": {
+      "source": "Kael acknowledged that Vale chooses her own work and future, without requiring her to abandon the witnesses.",
+      "text": "Kael acknowledged that Vale chooses her own work and future, without requiring her to abandon the witnesses.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_vulnerable.actions.lr_vale_terms_respect.relationship_event"
+    },
+    "interaction_scenes.lr_vale_vulnerable.greeting": {
+      "source": "I keep listening for the steward to tell me which part of this I am allowed to remember. It is an unpleasant habit to discover in yourself.",
+      "text": "I keep listening for the steward to tell me which part of this I am allowed to remember. It is an unpleasant habit to discover in yourself.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_vulnerable"
+    },
+    "interaction_scenes.lr_vale_vulnerable.lines.0": {
+      "source": "Kael: You could leave.",
+      "text": "Kael: You could leave.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_vulnerable.lines"
+    },
+    "interaction_scenes.lr_vale_vulnerable.lines.1": {
+      "source": "Vale: I could. First I want to put copies where the witnesses can reach them. I don't want to exchange his permission for yours.",
+      "text": "Vale: I could. First I want to put copies where the witnesses can reach them. I don't want to exchange his permission for yours.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_vulnerable.lines"
+    },
+    "interaction_scenes.lr_vale_vulnerable.lines.2": {
+      "source": "Kael: I didn't mean it that way.",
+      "text": "Kael: I didn't mean it that way.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_vulnerable.lines"
+    },
+    "interaction_scenes.lr_vale_vulnerable.lines.3": {
+      "source": "Vale: I believe you. I still need to say it.",
+      "text": "Vale: I believe you. I still need to say it.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_vulnerable.lines"
+    },
+    "interaction_scenes.lr_vale_vulnerable.name": {
+      "source": "Vale",
+      "text": "Vale",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_vulnerable"
+    },
+    "interaction_scenes.lr_vale_vulnerable.variants.0.greeting": {
+      "source": "The copied facts survived. Hiding the original left me answering questions I didn't choose. I need you to understand both things.",
+      "text": "The copied facts survived. Hiding the original left me answering questions I didn't choose. I need you to understand both things.",
+      "speaker": "",
+      "context": "interaction_scenes.lr_vale_vulnerable.variants.0"
+    },
     "interaction_scenes.opening_care_coat.greeting": {
       "source": "That is Oren's. Leave the pockets turned in; he keeps things in them.",
       "text": "That is Oren's. Leave the pockets turned in; he keeps things in them.",
@@ -6946,6 +8362,18 @@
       "speaker": "",
       "context": "items.steel_tempering"
     },
+    "items.travel_bread.description": {
+      "source": "Plain oat bread from Greyfen. An optional share for Bracken; feeding earns no skill, coin or affection score.",
+      "text": "Plain oat bread from Greyfen. An optional share for Bracken; feeding earns no skill, coin or affection score.",
+      "speaker": "",
+      "context": "items.travel_bread"
+    },
+    "items.travel_bread.name": {
+      "source": "Travel Bread",
+      "text": "Travel Bread",
+      "speaker": "",
+      "context": "items.travel_bread"
+    },
     "journal_evidence_details.details.bram.sections.limits.body": {
       "source": "The tool, brake and ledger preserve parts of his last work. They do not show the whole attack or identify the hand that began it.",
       "text": "The tool, brake and ledger preserve parts of his last work. They do not show the whole attack or identify the hand that began it.",
@@ -7097,8 +8525,8 @@
       "context": "journal_evidence_details.details.grave_child.sections.limits"
     },
     "journal_evidence_details.details.grave_child.sections.reading.body": {
-      "source": "The thread connects the burial rites to the work of keeping memory disordered. The grave holds evidence of concealment as well as loss.",
-      "text": "The thread connects the burial rites to the work of keeping memory disordered. The grave holds evidence of concealment as well as loss.",
+      "source": "The thread connects the burial rites to the work of keeping memory disordered. The grave holds evidence of concealment as well as loss. The same tension lifts the Bell-Eater's clapper: the names were tied down, not laid to rest. Read another disturbed grave to recognize the shared pull before its first swing.",
+      "text": "The thread connects the burial rites to the work of keeping memory disordered. The grave holds evidence of concealment as well as loss. The same tension lifts the Bell-Eater's clapper: the names were tied down, not laid to rest. Read another disturbed grave to recognize the shared pull before its first swing.",
       "speaker": "",
       "context": "journal_evidence_details.details.grave_child.sections.reading"
     },
@@ -7235,8 +8663,8 @@
       "context": "journal_evidence_details.details.mill_accounts.sections.record"
     },
     "journal_evidence_details.details.mill_accounts.sections.relevance.body": {
-      "source": "The account can be preserved while the mill's future is decided. Evidence about its past and a way to feed the living both need attention; one cannot do the other's work.",
-      "text": "The account can be preserved while the mill's future is decided. Evidence about its past and a way to feed the living both need attention; one cannot do the other's work.",
+      "source": "The account can be preserved while the mill's future is decided. Evidence about its past and a way to feed the living both need attention; one cannot do the other's work. Ashwing follows the burned account rising from these channels, not the grain. Breaking its charged breath with Oathfire does not rescue the workers or save their wage pages; those remain separate acts.",
+      "text": "The account can be preserved while the mill's future is decided. Evidence about its past and a way to feed the living both need attention; one cannot do the other's work. Ashwing follows the burned account rising from these channels, not the grain. Breaking its charged breath with Oathfire does not rescue the workers or save their wage pages; those remain separate acts.",
       "speaker": "",
       "context": "journal_evidence_details.details.mill_accounts.sections.relevance"
     },

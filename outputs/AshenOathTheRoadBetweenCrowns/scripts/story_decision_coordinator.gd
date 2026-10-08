@@ -11,6 +11,8 @@ func begin(game) -> void:
 	game.quests.begin_change()
 
 func finish(game, action: Dictionary, applied: bool = true) -> void:
+	if applied:
+		game.story_state.record_relationship_choice(action)
 	if applied and StoryChoicePresenter.is_commitment(action):
 		game.story_state.record_decision(StoryChoicePresenter.decision_id(action), action)
 	# Completion handlers grant their chapter rewards while the transaction is

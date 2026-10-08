@@ -181,6 +181,9 @@ func backup_path(path: String) -> String:
 	return path + ".bak"
 
 func _build_save_data(game) -> Dictionary:
+	preload("res://scripts/bracken_field_trial.gd").stop_activity(game)
+	preload("res://scripts/greyfen_archery_range.gd").stop_activity(game)
+	preload("res://scripts/companion_controller.gd").capture(game)
 	if journey_id.is_empty():
 		journey_id = "%d-%d" % [int(Time.get_unix_time_from_system()), Time.get_ticks_msec()]
 	return {

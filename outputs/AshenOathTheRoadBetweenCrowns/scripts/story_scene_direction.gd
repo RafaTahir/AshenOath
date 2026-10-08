@@ -52,6 +52,16 @@ static func for_page(scene_id: String, page: Dictionary, index: int) -> Dictiona
 		profile = {"emotion":"resolute", "listener":"relieved", "gesture":"acknowledge"}
 	elif scene_id.begins_with("opening_care_"):
 		profile = {"emotion":"concerned", "listener":"concerned", "gesture":"remember"}
+	elif scene_id.begins_with("lr_rook_stool"):
+		profile = {"emotion":"wry", "listener":"relieved", "gesture":"acknowledge"}
+	elif scene_id.begins_with("lr_tor_hinge"):
+		profile = {"emotion":"neutral", "listener":"relieved", "gesture":"explain"}
+	elif scene_id.begins_with("lr_anwen_shrine"):
+		profile = {"emotion":"concerned", "listener":"guarded", "gesture":"remember"}
+	elif scene_id.begins_with("lr_mira_"):
+		profile = {"emotion":"concerned", "listener":"concerned", "gesture":"acknowledge"}
+	elif scene_id.begins_with("lr_vale_"):
+		profile = {"emotion":"guarded", "listener":"concerned", "gesture":"remember"}
 	var speaker := str(page.get("speaker_id", ""))
 	var words := str(page.get("text", "")).to_lower()
 	var admission: bool = speaker == "player" and (words.contains("i left") or words.contains("i abandoned") or words.contains("never went back"))

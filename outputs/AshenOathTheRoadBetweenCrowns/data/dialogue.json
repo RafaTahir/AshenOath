@@ -11,9 +11,13 @@
       {
         "priority": 40,
         "conditions": {"bracken_home": "adopted"},
-        "greeting": "Bracken lifts his head when Kael returns. The discarded harness no longer holds him.",
-        "lines": ["Kael: There you are. A little rest won't hurt either of us.", "He leans against Kael's hand, then settles within reach."],
-        "actions": []
+        "greeting": "Bracken lifts his head at Kael's step.",
+        "lines": ["Kael: There you are."],
+        "actions": [
+          {"label": "Offer your hand.", "type": "companion_choice", "companion_action": "pet"},
+          {"label": "Share one travel bread.", "type": "companion_choice", "companion_action": "feed"},
+          {"label": "Rest beside him a moment.", "type": "companion_choice", "companion_action": "rest"}
+        ]
       },
       {
         "priority": 30,
@@ -1561,6 +1565,8 @@
     "lines": [
       "Kael: The grain condition is broken. No one standing here has to promise you anything to eat.",
       "The White Hart: I remember the gate shut. I remember the road hidden. I remember the soldiers entering. I will not tell you those were one man's act.",
+      "Kael: You have carried what they tried to bury. You should not have to carry what we do next.",
+      "The White Hart: Then let your next act belong to you. Not to fear of my antlers. Not to another hunger at the gate.",
       "Kael: The copies survive. I will freely keep what we have recovered. I cannot swear for the people who refused.",
       "The White Hart: One willing keeper of an account is enough to begin. Others may share that work. None may be given it by force.",
       "The White Hart: Make the account public and I will leave its judgment with you. Release me quietly and preserve the record without opening every private memory.",

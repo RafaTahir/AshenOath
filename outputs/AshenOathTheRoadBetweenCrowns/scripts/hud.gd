@@ -610,10 +610,25 @@ func show_pause_menu() -> void:
 	_add_menu_button(box, "Quick Save", func(): save_requested.emit(), false, "quick_save")
 	_add_menu_button(box, "Saved Journeys", func(): show_save_library("pause"), false, "saved_journeys")
 	_add_menu_button(box, "Journal & Preparation", func(): journal_requested.emit())
+	if input_source != null and input_source.companion_available:
+		_add_menu_button(box, "Bracken", func(): action_selected.emit({"type":"companion_menu"}), false, "companion")
 	_add_menu_button(box, "Conversation History", func(): show_text_history("pause"))
 	_add_menu_button(box, "Settings", func(): show_settings_menu())
 	_add_menu_button(box, "Controls", func(): show_controls_menu("pause"))
 	_add_menu_button(box, "Main Menu", func(): show_main_menu())
+func show_companion_commands(travel: Dictionary) -> void:
+	active_menu = "companion"
+	_set_internal_canvas(Vector2i(MENU_SIZE))
+	_set_ui_pointer("pause")
+	_clear_menu()
+	menu_layer.visible = true
+	var place: String = str(travel.get("zone", "greyfen")).replace("_", " ").capitalize()
+	var box := _menu_box("Bracken", "Waiting in " + place if str(travel.get("command", "follow")) == "wait" else "Along the road with Kael")
+	for entry: Array in [["follow", "Walk with me"], ["wait", "Wait here" if bool(travel.get("present", false)) else "Keep waiting in " + place], ["recall", "Come, Bracken"]]:
+		var command: String = str(entry[0])
+		_add_menu_button(box, str(entry[1]), func(selected: String = command): action_selected.emit({"type":"companion_command", "command":selected}), false, "companion:" + command)
+	_add_menu_button(box, "Return", func(): resume_requested.emit(), false, "resume")
+
 func show_settings_menu(back_target: String = "pause", requested_page: int = -1) -> void:
 	active_menu = "settings"
 	_set_internal_canvas(Vector2i(MENU_SIZE))
@@ -743,7 +758,7 @@ func show_remap_menu(back_target: String = "main", requested_page: int = -1) -> 
 	_add_menu_text(box, detected)
 	var actions := ["interact", "dodge", "jump", "run", "block", "light_attack", "heavy_attack", "oathfire_beam", "use_potion", "throw_bomb", "open_inventory", "pause",
 		"move_forward", "move_back", "move_left", "move_right", "camera_left", "camera_right", "camera_up", "camera_down", "camera_zoom_in", "camera_zoom_out",
-		"weapon_cycle", "weapon_sword", "weapon_bow", "weapon_oathblade", "weapon_sheath", "aim_bow", "fire_bow", "cycle_arrow", "target_lock", "target_next", "target_previous"]
+		"weapon_cycle", "weapon_sword", "weapon_bow", "weapon_oathblade", "weapon_sheath", "aim_bow", "fire_bow", "cycle_arrow", "target_lock", "target_next", "target_previous", "companion_command"]
 	var page_count := maxi(1, ceili(float(actions.size()) / 6.0))
 	remap_page = clampi(remap_page, 0, page_count - 1)
 	_add_menu_text(box, "Page %d of %d" % [remap_page + 1, page_count])
@@ -1432,6 +1447,8 @@ func _reveal_subtitle() -> void:
 	_subtitle_tween.tween_property(dialogue_title, "modulate:a", 1.0, 0.15)
 
 func _render_dialogue_page(record_history: bool = true, announce_page: bool = true, focus_page: bool = true) -> void:
+	if announce_page:
+		dialogue_speech_interrupted.emit()
 	if focus_page:
 		_dialogue_body_scroll.scroll_vertical = 0
 		dialogue_text.scroll_to_line(0)
@@ -3986,7 +4003,7 @@ func _screen_parent() -> String:
 		"save_slot", "save_import", "chapter_replay": return "save_library:%d" % library_page
 		"text_history", "problem_report": return library_back_target
 		"credits", "quit": return "main"
-		"pause": return "gameplay"
+		"pause", "companion": return "gameplay"
 		_: return "main"
 
 func _capture_menu_state() -> void:

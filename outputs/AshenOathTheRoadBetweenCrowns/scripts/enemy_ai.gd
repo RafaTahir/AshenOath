@@ -1742,11 +1742,16 @@ func _animate_boss_identity(delta: float) -> void:
 		# The torso bone owns the harness frame. Only its hanging clapper sways.
 		var clapper := boss_visual_root.get_node_or_null("BellEaterClapper") as Node3D
 		if clapper != null:
-			clapper.position.x = sin(boss_visual_time * (11.0 if windup_time > 0.0 else 2.4)) * 0.025
+			var loosened := bool(get_meta("living_road_rope_loose", false))
+			clapper.position.x = sin(boss_visual_time * (11.0 if windup_time > 0.0 else 2.4)) * (0.009 if loosened else 0.025)
+			clapper.rotation.z = 0.28 if loosened else 0.0
 	elif enemy_id == "rootbound_colossus":
 		# Chest animation owns the wound position; pulse the effect, not its frame.
 		if boss_phase_sigil != null:
 			boss_phase_sigil.scale = Vector3(0.8, 1.0, 0.35) * pulse
+			var wound_material := boss_phase_sigil.material_override as StandardMaterial3D
+			if wound_material != null:
+				wound_material.emission_energy_multiplier = (0.65 if bool(get_meta("living_road_heart_open", false)) else 0.18 + boss_phase * 0.12) * pulse
 	elif enemy_id == "ashwing":
 		# The body bone owns equipment motion, including flight and attack lean.
 		if boss_phase_sigil != null:

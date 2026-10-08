@@ -506,6 +506,9 @@ func _process(delta: float) -> void:
 	if _journey_load_pending():
 		journey_loading.try_finish(self)
 		return
+	if input_router.consume_companion_menu_request():
+		_show_companion_commands()
+		return
 	if seamless_world != null and seamless_world.update_player(player, current_zone_id, delta):
 		return
 	_keep_player_in_world()
@@ -1472,8 +1475,12 @@ func _zone_state_signature() -> int:
 	# cached world geometry.
 	quest_world_state.erase("tracked_quest_id")
 	quest_world_state.erase("tracker_context_zone")
+	var story_world_state: Dictionary = story_state.save_state() if story_state != null else {}
+	if story_world_state.get("flags") is Dictionary:
+		# Companion position/command is reinstalled separately, not world geometry.
+		story_world_state.flags.erase("bracken_travel")
 	return hash([
-		story_state.save_state() if story_state != null else {},
+		story_world_state,
 		quest_world_state,
 		removed_interactions,
 	])
@@ -1790,7 +1797,7 @@ func _add_visual_100_layer(zone_id: String) -> void:
 	var motion = WorldMotionController.new()
 	motion.name = "WorldMotionController"
 	zone_root.add_child(motion)
-	motion.configure(zone_root, quality)
+	motion.configure(zone_root, quality, player)
 	var surface = SurfaceFeedbackManager.new()
 	surface.name = "SurfaceFeedbackManager"
 	zone_root.add_child(surface)
@@ -1869,7 +1876,6 @@ func _handle_interaction(area) -> void:
 		if area.interaction_id == "bracken":
 			for companion_action: Dictionary in dialogue_data.get("actions", []):
 				companion_action["companion_actor_instance"] = area.get_instance_id()
-		var played_report_voice = false
 		var report_chosen := false
 		if _road_ready_to_report() and area.interaction_id in ["sister_anwen", "notice_board", "retain_evidence"]:
 			report_chosen = true
@@ -1886,12 +1892,13 @@ func _handle_interaction(area) -> void:
 			_show_current_objective_guidance(6.0)
 		if report_chosen and area.interaction_id == "sister_anwen":
 			audio.play_event("return_report", 0.02)
-			audio.play_voice("voice_sister_anwen_report_01")
-			played_report_voice = true
 			audio.set_music_state("return_report")
 			hud.show_status_cue("Anwen knows the sign", "victory")
 			hud.toast("Anwen goes still at the feathers. 'Then it was called here,' she says, and will say no more.")
 		_set_interactable_label_visible(area, false)
+		if not report_chosen:
+			preload("res://scripts/story_activity_director.gd").add_friend_invitation(self, area, dialogue_data)
+			preload("res://scripts/story_activity_director.gd").add_personal_invitation(self, area, dialogue_data)
 		_stage_dialogue_moment(area)
 		var topic_context_id: String = dialogue_runtime_coordinator.bind_topic_context(str(area.interaction_id), current_zone_id)
 		if not topic_context_id.is_empty():
@@ -1902,15 +1909,8 @@ func _handle_interaction(area) -> void:
 		audio.set_game_paused(true)
 		get_tree().paused = true
 		hud.show_dialogue(dialogue_data)
-		if dialogue_data.has("voice") and not played_report_voice:
-			audio.play_voice_sequence(dialogue_data.get("voice", []))
-		elif not played_report_voice:
-			var campaign_voice: String = str({
-				"captain_senn":"voice_senn_confession", "halvern":"voice_halvern_witness",
-				"edric_campaign":"voice_edric_ledger", "assembly_choice":"voice_kael_names",
-				"white_hart":"voice_hart_choice"
-			}.get(area.interaction_id, ""))
-			if campaign_voice != "": audio.play_voice(campaign_voice)
+		# The displayed page owns its exact-text recording. A legacy scene-wide
+		# sequence here would cancel that page and could speak a different turn.
 	elif area.interaction_type == "clue":
 		if area.interaction_id == "chapel_door" and not _chapel_can_open():
 			if not quests.is_objective_done("main_bell_beneath_greyfen", "grave_truth"):
@@ -2070,7 +2070,10 @@ func _handle_village_place(id: String) -> void:
 			player.stamina_component.restore(5.0)
 			hud.toast("Cold iron in the water. Kael catches his breath.")
 		"forge_corner": hud.toast("Vargan iron, hammered into Greyfen hinges. Tor never mentions the crest marks.")
-		"shrine_prayer": hud.toast("The bench is worn smooth by people asking not to be noticed.")
+		"shrine_prayer":
+			var activities := zone_root.get_node_or_null("StoryActivities")
+			if activities != null:
+				activities.activate("shrine_prayer")
 		"river_water":
 			player.stamina_component.restore(18.0)
 			hud.toast("Cold river water. Clean enough above Greyfen, for now.")
@@ -2230,6 +2233,32 @@ func _relocate_anwen_to_cemetery() -> void:
 	_face_npc_toward_player(anwen)
 
 func _handle_dialogue_action(action: Dictionary) -> void:
+	if str(action.get("type", "")) == "gathering_choice":
+		preload("res://scripts/greyfen_gathering.gd").choose(self, action)
+		return
+	if str(action.get("type", "")) == "field_trial":
+		preload("res://scripts/bracken_field_trial.gd").choose(self, action)
+		return
+	if str(action.get("type", "")) == "range_choice":
+		preload("res://scripts/greyfen_archery_range.gd").choose(self, action)
+		return
+	if str(action.get("type", "")) == "living_road_scene":
+		preload("res://scripts/story_activity_director.gd").personal_scene(self, action)
+		return
+	if str(action.get("type", "")) == "friend_scene":
+		preload("res://scripts/story_activity_director.gd").friend_scene(self, action)
+		return
+	if str(action.get("type", "")) == "rest_place":
+		preload("res://scripts/story_activity_director.gd").rest_action(self, action)
+		return
+	if str(action.get("type", "")) == "companion_menu":
+		_show_companion_commands()
+		return
+	if str(action.get("type", "")) == "companion_command":
+		if not preload("res://scripts/companion_controller.gd").issue_command(self, str(action.get("command", ""))):
+			hud.toast("Bracken cannot take that command during this journey handoff.")
+		_resume_game()
+		return
 	if str(action.get("type", "")) == "story_travel":
 		preload("res://scripts/story_activity_director.gd").travel(self, action)
 		return
@@ -2345,6 +2374,9 @@ func _apply_dialogue_action(action: Dictionary) -> bool:
 		else:
 			return false
 	elif type == "story_choice":
+		if not story_state.commitment_allows(action):
+			hud.toast("That promise cannot be made while another commitment stands. Speak honestly with the person it concerns.")
+			return false
 		if action.get("sets_flags", {}).has("crow_shrine_state") and str(story_state.get_flag("crow_shrine_state", "")) != "":
 			hud.toast("The Crow Shrine has already answered Kael's choice.")
 			return false
@@ -2359,6 +2391,8 @@ func _apply_dialogue_action(action: Dictionary) -> bool:
 		var choice_objective_id := str(action.get("objective", ""))
 		if choice_quest_id != "" and choice_objective_id != "" and quests.is_objective_done(choice_quest_id, choice_objective_id) and not (choice_quest_id == "main_road_of_crows" and _legacy_report_choice_required()):
 			hud.toast("That decision has already been made.")
+			return false
+		if not story_state.apply_commitment(action):
 			return false
 		for id in action.get("sets_flags", {}):
 			story_state.set_flag(str(id), action["sets_flags"][id])
@@ -3324,6 +3358,12 @@ func _on_player_arrow_unavailable() -> void:
 func _on_player_arrow(request: Dictionary) -> void:
 	if player == null or zone_root == null:
 		return
+	if bool(request.get("training", false)):
+		var range_node := instance_from_id(int(request.get("training_owner", 0))) as Node
+		if is_instance_valid(range_node) and range_node == zone_root.get_node_or_null("GreyfenArcheryRange"):
+			range_node.fire(request)
+		# A retired or cancelled training request can never fall through to damage.
+		return
 	var origin: Vector3 = request.get("origin", player.global_position + Vector3.UP * 1.3)
 	var direction: Vector3 = request.get("direction", -player.global_transform.basis.z)
 	direction.y = 0.0
@@ -4111,6 +4151,19 @@ func _pause_game() -> void:
 	audio.play_event("ui")
 	_refresh_journey_models()
 	hud.show_pause_menu()
+
+func _show_companion_commands() -> void:
+	if not game_started or _journey_load_pending() or zone_transition_pending or zone_load_request_pending or str(story_state.get_flag("bracken_home", "")) != "adopted":
+		return
+	audio.set_game_paused(true)
+	get_tree().paused = true
+	paused_by_menu = true
+	input_router.set_context("pause")
+	preload("res://scripts/companion_controller.gd").capture(self)
+	var travel: Dictionary = preload("res://scripts/companion_controller.gd").saved_travel(self)
+	var companion := zone_root.get_node_or_null("Bracken") as Node3D
+	travel["present"] = companion != null and companion.is_visible_in_tree()
+	hud.show_companion_commands(travel)
 
 func _resume_game() -> void:
 	if _journey_load_pending():
@@ -5171,6 +5224,7 @@ func _make_crow_silhouettes() -> void:
 		root.position = item[0]
 		root.rotation_degrees.y = float(item[1])
 		root.set_meta("motion_type", "bird")
+		root.set_meta("wildlife_reactive", true)
 		root.set_meta("motion_phase", float(index) * 1.7)
 		root.set_meta("motion_amount", 4.0)
 		zone_root.add_child(root)

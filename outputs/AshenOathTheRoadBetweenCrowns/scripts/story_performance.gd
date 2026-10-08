@@ -154,6 +154,8 @@ func _process(delta: float) -> void:
 			driver.play_story_gesture(gesture, float(profile.get("pace", 0.9)))
 
 func stop() -> void:
+	if not active:
+		return
 	active = false
 	pending_gesture = ""
 	set_process(false)

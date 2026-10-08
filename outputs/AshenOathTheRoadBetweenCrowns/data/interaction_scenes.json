@@ -1,4 +1,208 @@
 {
+  "lr_mira_existing_promise": {
+    "name":"Mira", "greeting":"",
+    "lines":["Kael: I have a commitment to Vale. You need to know that before I offer you anything.", "Mira: Then you have a conversation to have with her, not an answer to take from me. I won't be the quiet exception to your promise."],
+    "actions":[{"type":"story_choice", "choice_id":"lr.mira.other_promise.friend", "label":"You're right. I can offer friendship here, nothing concealed.", "conditions":{"flag_unset":"lr_mira_commitment_answer", "lr_commitment_partner":"vale"}, "sets_flags":{"lr_mira_commitment_answer":"friendship", "lr_mira_personal":"friendship"}, "relationship_event":{"id":"lr.mira.other_promise.friendship", "actor":"mira", "kind":"boundary", "text":"Kael disclosed his commitment to Vale and chose friendship with Mira rather than making a second promise.", "acknowledgement":"Nothing hidden between us. That makes the friendship possible."}}], "voice":[]
+  },
+  "lr_vale_existing_promise": {
+    "name":"Vale", "greeting":"",
+    "lines":["Kael: I have made a commitment to Mira. I cannot leave that outside this conversation.", "Vale: Then don't. If that promise changes, she should hear it from you. I won't write myself into the space you leave unspoken."],
+    "actions":[{"type":"story_choice", "choice_id":"lr.vale.other_promise.friend", "label":"Then friendship, without a second promise.", "conditions":{"flag_unset":"lr_vale_commitment_answer", "lr_commitment_partner":"mira"}, "sets_flags":{"lr_vale_commitment_answer":"friendship", "lr_vale_personal":"friendship"}, "relationship_event":{"id":"lr.vale.other_promise.friendship", "actor":"vale", "kind":"boundary", "text":"Kael disclosed his commitment to Mira and chose friendship with Vale rather than making a second promise.", "acknowledgement":"I'm glad there was no hidden sentence in that answer."}}], "voice":[]
+  },
+  "lr_rook_confidence": {
+    "name":"Rook", "greeting":"",
+    "lines":["Rook: A private thing, then. I can manage that.", "Kael: No wager?", "Rook: Not everything valuable belongs on a table. Terrible discovery. Keep it quiet."],
+    "actions":[], "voice":[]
+  },
+  "lr_anwen_confidence": {
+    "name":"Anwen", "greeting":"",
+    "lines":["Anwen: I am glad you have someone to return to. Their life is not a reward for what you survived.", "Kael: I know.", "Anwen: I thought you did. May the ordinary days be kind to you both. I won't make your news the village's."],
+    "actions":[], "voice":[]
+  },
+  "lr_vale_vulnerable": {
+    "name":"Vale", "greeting":"I keep listening for the steward to tell me which part of this I am allowed to remember. It is an unpleasant habit to discover in yourself.",
+    "lines":["Kael: You could leave.", "Vale: I could. First I want to put copies where the witnesses can reach them. I don't want to exchange his permission for yours.", "Kael: I didn't mean it that way.", "Vale: I believe you. I still need to say it."],
+    "variants":[{"priority":10, "conditions":{"vargan_ledger_hidden":true}, "greeting":"The copied facts survived. Hiding the original left me answering questions I didn't choose. I need you to understand both things."}],
+    "actions":[
+      {"type":"story_choice", "choice_id":"lr.vale.terms.respect", "label":"Your work and your leaving are yours to choose.", "conditions":{"flag_unset":"lr_vale_terms", "lr_vale_personal":"interest", "vargan_ledger_choice_made":true}, "sets_flags":{"lr_vale_terms":"respected"}, "relationship_event":{"id":"lr.vale.terms.respected", "actor":"vale", "kind":"promise", "promise_id":"vale_own_future", "text":"Kael acknowledged that Vale chooses her own work and future, without requiring her to abandon the witnesses.", "acknowledgement":"You left the decision with me. I'm not accustomed to how much that matters."}},
+      {"type":"story_choice", "choice_id":"lr.vale.terms.question", "label":"I still think staying here is a mistake.", "conditions":{"flag_unset":"lr_vale_terms", "lr_vale_personal":"interest"}, "sets_flags":{"lr_vale_terms":"questioned"}, "relationship_event":{"id":"lr.vale.terms.questioned", "actor":"vale", "kind":"boundary", "text":"Vale held her boundary when Kael questioned her decision to remain for the witnesses.", "acknowledgement":"You can worry about me. You cannot turn that worry into an order."}},
+      {"type":"story_choice", "choice_id":"lr.vale.terms.friend", "label":"I can be your friend without asking where this leads.", "conditions":{"flag_unset":"lr_vale_terms"}, "sets_flags":{"lr_vale_terms":"friendship", "lr_vale_personal":"friendship"}, "relationship_event":{"id":"lr.vale.terms.friendship", "actor":"vale", "kind":"friendship", "text":"Kael and Vale kept their friendship without a romantic promise.", "acknowledgement":"I'm glad the friendship didn't need a destination."}}
+    ], "voice":[]
+  },
+  "lr_vale_boundary": {
+    "name":"Vale", "greeting":"I am staying until the copies are in their hands. We can disagree about the risk. We cannot build a life in which you decide what risks I am allowed.",
+    "actions":[
+      {"type":"story_choice", "choice_id":"lr.vale.terms.reconsider", "label":"I won't decide for you. I can stay in the conversation without winning it.", "conditions":{"lr_vale_terms":"questioned", "lr_vale_personal":"interest"}, "sets_flags":{"lr_vale_terms":"reconsidered"}, "relationship_event":{"id":"lr.vale.terms.reconsidered", "actor":"vale", "kind":"kept", "text":"Kael accepted Vale's stated decision without changing it or demanding agreement. The disagreement remains recorded.", "acknowledgement":"We still disagreed. You let it be a conversation instead of a command."}},
+      {"type":"story_choice", "choice_id":"lr.vale.terms.distance", "label":"Then let us leave the romance there. I respect your choice.", "conditions":{"lr_vale_terms":"questioned", "lr_vale_personal":"interest"}, "sets_flags":{"lr_vale_terms":"friendship", "lr_vale_personal":"friendship"}, "relationship_event":{"id":"lr.vale.terms.distance", "actor":"vale", "kind":"friendship", "text":"Kael respected Vale's decision and ended the romantic invitation, leaving friendship possible.", "acknowledgement":"The answer was difficult. Thank you for not making me defend it again."}}
+    ], "voice":[]
+  },
+  "lr_vale_commitment": {
+    "name":"Vale", "greeting":"I want a future with you in it. Not written for me. Not promised somewhere else as well.",
+    "lines":["Kael: No seal?", "Vale: Our own words. And the right to speak again if the words stop being true."],
+    "actions":[
+      {"type":"story_choice", "choice_id":"lr.vale.commit", "label":"I choose you, freely and exclusively.", "relationship_change":"commit", "relationship_actor":"vale", "conditions":{"flag_unset":"lr_vale_commitment_answer", "lr_vale_personal":"interest", "vargan_ledger_choice_made":true}, "sets_flags":{"lr_vale_commitment_answer":"accepted"}, "relationship_event":{"id":"lr.vale.commitment", "actor":"vale", "kind":"commitment", "text":"Vale and Kael explicitly chose a mutual, exclusive adult relationship. Her work remains her own.", "acknowledgement":"I am glad to see you. That is my whole reason this time."}},
+      {"type":"story_choice", "choice_id":"lr.vale.commit.friend", "label":"I can promise honest friendship, but not a shared life.", "conditions":{"flag_unset":"lr_vale_commitment_answer"}, "sets_flags":{"lr_vale_commitment_answer":"friendship", "lr_vale_personal":"friendship"}, "relationship_event":{"id":"lr.vale.commitment.friendship", "actor":"vale", "kind":"friendship", "text":"Kael declined romantic commitment to Vale without withdrawing friendship.", "acknowledgement":"No debt for the answer. Come back when you want company."}}
+    ], "voice":[]
+  },
+  "lr_vale_future": {
+    "name":"Vale", "greeting":"The assembly has given its answer. It isn't the end of the work. It means I can finally choose which part is mine.",
+    "lines":["Kael: And the room with the window?", "Vale: Still mine to find. I would like to open it before deciding what comes after."],
+    "variants":[{"priority":10, "conditions":{"lr_commitment_partner":"vale"}, "lines":["Kael: And the room with the window?", "Vale: I would like to show you when I find it. Today, I would like you to stay beside me.", "Kael: Because you want me here?", "Vale: Because I want you here."]}],
+    "actions":[
+      {"type":"story_choice", "choice_id":"lr.vale.future.shared", "label":"Stay close. Make room for a future neither of us has to dictate.", "conditions":{"flag_unset":"lr_vale_future", "lr_commitment_partner":"vale", "renewal_stopped":true}, "sets_flags":{"lr_vale_future":"shared"}, "relationship_event":{"id":"lr.vale.future.shared", "actor":"vale", "kind":"commitment", "text":"After testimony, Vale invited Kael into a quiet, non-explicit affectionate moment and a freely chosen future.", "acknowledgement":"The window is still a plan. I'm glad it can be a plan, not an escape."}},
+      {"type":"story_choice", "choice_id":"lr.vale.future.visit", "label":"Find your room. I'll be glad to hear how it turns out.", "conditions":{"flag_unset":"lr_vale_future", "renewal_stopped":true}, "sets_flags":{"lr_vale_future":"her_choice"}, "relationship_event":{"id":"lr.vale.future.her_choice", "actor":"vale", "kind":"friendship", "text":"Kael supported Vale's freely chosen future without assigning her a home or political role.", "acknowledgement":"I can tell you about an ordinary day now. I'm still getting used to that."}}
+    ], "voice":[]
+  },
+  "lr_vale_end": {
+    "name":"Vale", "greeting":"We said we would speak again if the words stopped being true. I'm listening.",
+    "lines":["Vale: Whatever this answer is, it won't rewrite the record, or what we were to each other."],
+    "actions":[{"type":"story_choice", "choice_id":"lr.vale.end", "label":"I cannot keep our commitment. I'm ending it honestly.", "relationship_change":"end", "relationship_actor":"vale", "conditions":{"lr_commitment_partner":"vale"}, "sets_flags":{"lr_vale_personal":"ended"}, "relationship_event":{"id":"lr.vale.ended", "actor":"vale", "kind":"boundary", "text":"Kael ended his commitment to Vale in direct conversation. Their past remains part of the record.", "acknowledgement":"We do not need to pretend none of it happened. We do need room for what comes next."}}], "voice":[]
+  },
+  "lr_vale_letter": {
+    "name":"A letter from Vale", "greeting":"To whoever is asking after the erased names: before you restore a name to a public page, ask whether its living bearer can safely stand beside it. A truthful record is not an instruction to surrender someone to a guard. - Vale, record keeper",
+    "lines":[{"speaker":"The letter", "speaker_id":"narrator", "text":"A space is left for a reply carried with Greyfen's ordinary correspondence. There is no key, seal of passage or evidence attached."}],
+    "actions":[
+      {"type":"story_choice", "choice_id":"lr.vale.letter.thoughtful", "label":"Reply: I'll ask whose safety the page changes.", "conditions":{"flag_unset":"lr_vale_letter_reply"}, "sets_flags":{"lr_vale_letter_reply":"thoughtful"}, "relationship_event":{"id":"lr.vale.letter.thoughtful", "actor":"vale", "kind":"promise", "text":"Kael replied that a record should consider the living person's safety. No identity or consent was supplied by the letter."}},
+      {"type":"story_choice", "choice_id":"lr.vale.letter.disagree", "label":"Reply: Concealment can shelter the powerful too. Who decides?", "conditions":{"flag_unset":"lr_vale_letter_reply"}, "sets_flags":{"lr_vale_letter_reply":"disagreed"}, "relationship_event":{"id":"lr.vale.letter.disagreed", "actor":"vale", "kind":"boundary", "text":"Kael questioned who gets to decide which names remain private."}},
+      {"type":"story_choice", "choice_id":"lr.vale.letter.decline", "label":"Keep the letter. Send no reply.", "conditions":{"flag_unset":"lr_vale_letter_reply"}, "sets_flags":{"lr_vale_letter_reply":"no_reply"}, "relationship_event":{"id":"lr.vale.letter.declined", "actor":"vale", "kind":"refused", "text":"Kael kept Vale's letter without answering it."}}
+    ], "voice":[]
+  },
+  "lr_vale_archive": {
+    "name":"Vale", "greeting":"A woman asked me to keep her statement, but not her address. Fold that leaf inward. The account stays readable; her door stays her own.",
+    "lines":["Kael: An omission in a truthful record.", "Vale: A boundary supplied by its subject. I used to confuse those with omissions supplied by a lord.", "Kael: Does she know the difference?", "Vale: She made me read it back. Twice."],
+    "variants":[
+      {"priority":20, "conditions":{"lr_vale_letter_reply":"thoughtful"}, "greeting":"You wrote that you would ask whose safety a page changes. Here is someone who answered: keep her account, not her address."},
+      {"priority":20, "conditions":{"lr_vale_letter_reply":"disagreed"}, "greeting":"Your letter asked who decides. In this case, the woman whose account it is. She asked me to keep her words, but not her address."}
+    ],
+    "actions":[
+      {"type":"story_choice", "choice_id":"lr.vale.archive.respect", "label":"Fold the private address inward; keep the statement open.", "conditions":{"flag_unset":"lr_vale_archive"}, "sets_flags":{"lr_vale_archive":"respected"}, "relationship_event":{"id":"lr.vale.archive.respected", "actor":"vale", "kind":"help", "text":"Kael helped preserve a living witness's private address without hiding her account.", "acknowledgement":"That folded leaf still keeps the account readable. You understood what she was asking."}},
+      {"type":"story_choice", "choice_id":"lr.vale.archive.disagree", "label":"I still worry about who can demand an omission. Leave it with her instructions.", "conditions":{"flag_unset":"lr_vale_archive"}, "sets_flags":{"lr_vale_archive":"questioned"}, "relationship_event":{"id":"lr.vale.archive.questioned", "actor":"vale", "kind":"boundary", "text":"Kael questioned omissions while leaving the witness's own instructions intact.", "acknowledgement":"Your question belongs in this room. So does her right to answer it."}},
+      {"type":"story_choice", "choice_id":"lr.vale.archive.decline", "label":"This is between her and you. I won't handle it.", "conditions":{"flag_unset":"lr_vale_archive"}, "sets_flags":{"lr_vale_archive":"declined"}, "relationship_event":{"id":"lr.vale.archive.declined", "actor":"vale", "kind":"refused", "text":"Kael declined to handle the private leaf. Vale preserved it as instructed.", "acknowledgement":"I kept her instructions. You weren't obliged to take that work from me."}}
+    ], "voice":[]
+  },
+  "lr_vale_personal": {
+    "name":"Vale", "greeting":"A room with a window I can open myself. That sounds smaller aloud than it did in my head.",
+    "lines":["Kael: Not from this side of the wall.", "Vale: And work I chose, with people who can tell me no. I spent years being useful to the wrong silence.", "Kael: Is there room in that picture for company?", "Vale: There could be. But I won't mistake someone needing a ledger for someone wanting to know me."],
+    "actions":[
+      {"type":"story_choice", "choice_id":"lr.vale.personal.interest", "label":"I want to know you, not what you can open for me.", "conditions":{"flag_unset":"lr_vale_personal"}, "sets_flags":{"lr_vale_personal":"interest"}, "relationship_event":{"id":"lr.vale.personal.interest", "actor":"vale", "kind":"interest", "text":"After direct acquaintance, Kael expressed adult romantic interest in Vale. She welcomed the question without making a commitment.", "acknowledgement":"I'm glad you asked about the window. I wanted someone to understand that part."}},
+      {"type":"story_choice", "choice_id":"lr.vale.personal.friend", "label":"Then let me be someone you can call a friend.", "conditions":{"flag_unset":"lr_vale_personal"}, "sets_flags":{"lr_vale_personal":"friendship"}, "relationship_event":{"id":"lr.vale.personal.friendship", "actor":"vale", "kind":"friendship", "text":"Kael and Vale explicitly chose friendship, independent of the archive.", "acknowledgement":"A friend is welcome here without bringing a request."}},
+      {"type":"story_choice", "choice_id":"lr.vale.personal.decline", "label":"I can't offer that kind of company. I won't imply otherwise.", "conditions":{"flag_unset":"lr_vale_personal"}, "sets_flags":{"lr_vale_personal":"declined"}, "relationship_event":{"id":"lr.vale.personal.declined", "actor":"vale", "kind":"boundary", "text":"Kael respectfully declined a personal relationship with Vale.", "acknowledgement":"Thank you for speaking plainly. The record is still yours to read."}}
+    ], "voice":[]
+  },
+  "lr_mira_truth_talk": {
+    "name":"Mira", "greeting":"I would like a life with you in it. But not one where we call a dangerous secret kindness because it keeps our supper quiet.",
+    "lines":["Kael: You kept a secret to keep people alive.", "Mira: I did. And I have to answer for it. Privacy is not a licence to let the next household suffer.", "Kael: You want a promise.", "Mira: An answer. If we disagree, say so. The medicines are still here either way."],
+    "actions":[
+      {"type":"story_choice", "choice_id":"lr.mira.truth.agree", "label":"No comfort bought by making someone else carry the danger.", "conditions":{"flag_unset":"lr_mira_truth_talk", "lr_mira_personal":"interest"}, "sets_flags":{"lr_mira_truth_talk":"agreed"}, "relationship_event":{"id":"lr.mira.truth.agreed", "actor":"mira", "kind":"promise", "promise_id":"mira_honest_care", "text":"Kael agreed that a shared life cannot rest on passing a concealed danger to others.", "acknowledgement":"I heard your answer. I will have to live by it as well."}},
+      {"type":"story_choice", "choice_id":"lr.mira.truth.disagree", "label":"Sometimes keeping a dangerous truth quiet is the only mercy left.", "conditions":{"flag_unset":"lr_mira_truth_talk", "lr_mira_personal":"interest"}, "sets_flags":{"lr_mira_truth_talk":"disagreed"}, "relationship_event":{"id":"lr.mira.truth.disagreed", "actor":"mira", "kind":"boundary", "text":"Mira declined commitment while Kael defended concealing risks. An apology alone does not settle the disagreement.", "acknowledgement":"I care about you. I still cannot build a home on that answer."}},
+      {"type":"story_choice", "choice_id":"lr.mira.truth.friend", "label":"Let us keep the friendship, without a promise of more.", "conditions":{"flag_unset":"lr_mira_truth_talk", "lr_mira_personal":"interest"}, "sets_flags":{"lr_mira_truth_talk":"friendship", "lr_mira_personal":"friendship"}, "relationship_event":{"id":"lr.mira.truth.friendship", "actor":"mira", "kind":"friendship", "text":"Kael and Mira kept their friendship without entering a romantic commitment.", "acknowledgement":"A friend can disagree with me. You haven't lost your place here."}}
+    ], "voice":[]
+  },
+  "lr_mira_boundary": {
+    "name":"Mira", "greeting":"I heard the apology. I need to see who gets protected when the next hard choice comes. That isn't work I can do for you.",
+    "lines":["Kael: And until then?", "Mira: We can talk. We can be kind. We cannot pretend the question went away."],
+    "actions":[{"type":"story_choice", "choice_id":"lr.mira.boundary.friend", "label":"Then friendship, without asking you to wait for me.", "conditions":{"lr_mira_truth_talk":"disagreed", "lr_mira_personal":"interest"}, "sets_flags":{"lr_mira_personal":"friendship"}, "relationship_event":{"id":"lr.mira.boundary.friendship", "actor":"mira", "kind":"friendship", "text":"Kael respected Mira's boundary and chose friendship without asking her to wait.", "acknowledgement":"You didn't ask me to wait for a different answer. Thank you."}}], "voice":[]
+  },
+  "lr_mira_reconcile": {
+    "name":"Mira", "greeting":"You have done more than say you were sorry. A dangerous account is no longer being kept at someone else's expense.",
+    "lines":["Kael: It doesn't make the first answer right.", "Mira: No. It gives me something besides that answer to trust. I would like to try again, slowly."],
+    "actions":[
+      {"type":"story_choice", "choice_id":"lr.mira.reconcile.try", "label":"Slowly. And without pretending it never happened.", "conditions":{"flag_unset":"lr_mira_reconciled", "lr_mira_truth_talk":"disagreed"}, "sets_flags":{"lr_mira_reconciled":"acknowledged"}, "relationship_event":{"id":"lr.mira.reconciled", "actor":"mira", "kind":"kept", "text":"After consequential care and preserved truth, Mira and Kael reopened their personal conversation. The disagreement remains in their history.", "acknowledgement":"We didn't erase the argument. We found a way to talk after it."}},
+      {"type":"story_choice", "choice_id":"lr.mira.reconcile.friend", "label":"I would rather keep the friendship we have.", "conditions":{"flag_unset":"lr_mira_reconciled", "lr_mira_truth_talk":"disagreed"}, "sets_flags":{"lr_mira_reconciled":"friendship", "lr_mira_personal":"friendship"}, "relationship_event":{"id":"lr.mira.reconciled.friend", "actor":"mira", "kind":"friendship", "text":"Kael chose friendship after reconciliation.", "acknowledgement":"Then friends. There is plenty in that word."}}
+    ], "voice":[]
+  },
+  "lr_mira_commitment": {
+    "name":"Mira", "greeting":"I want you in my life, Kael. Not as a debt for help, and not as a visitor who promises every door the same return.",
+    "lines":["Kael: And the work here?", "Mira: Mine to choose. I am not asking you to carry me away from it. I'm asking whether we choose each other."],
+    "actions":[
+      {"type":"story_choice", "choice_id":"lr.mira.commit", "label":"I choose you. No other commitment left unspoken.", "relationship_change":"commit", "relationship_actor":"mira", "conditions":{"flag_unset":"lr_mira_commitment_answer", "lr_mira_personal":"interest"}, "sets_flags":{"lr_mira_commitment_answer":"accepted"}, "relationship_event":{"id":"lr.mira.commitment", "actor":"mira", "kind":"commitment", "text":"Mira and Kael explicitly chose a mutual, exclusive adult relationship.", "acknowledgement":"You came back. I was hoping for that, not counting it as something owed."}},
+      {"type":"story_choice", "choice_id":"lr.mira.commit.friend", "label":"I can offer friendship honestly, not that promise.", "conditions":{"flag_unset":"lr_mira_commitment_answer"}, "sets_flags":{"lr_mira_commitment_answer":"friendship", "lr_mira_personal":"friendship"}, "relationship_event":{"id":"lr.mira.commitment.friendship", "actor":"mira", "kind":"friendship", "text":"Kael declined commitment to Mira and offered friendship plainly.", "acknowledgement":"You gave me an honest answer. We can start the next conversation from there."}}
+    ], "voice":[]
+  },
+  "lr_mira_quiet": {
+    "name":"Mira", "greeting":"The last patient is resting. I can put this basket down now.",
+    "lines":["Kael: Shall I stay?", "Mira: Yes. Because I want you here.", {"speaker":"Mira", "speaker_id":"mira", "text":"Come closer. No account to settle for a moment.", "direction":"An unhurried invitation; no forced body contact or camera cut."}],
+    "actions":[{"type":"story_choice", "choice_id":"lr.mira.quiet", "label":"Stay with her in the quiet.", "conditions":{"flag_unset":"lr_mira_quiet", "lr_commitment_partner":"mira"}, "sets_flags":{"lr_mira_quiet":true}, "relationship_event":{"id":"lr.mira.quiet", "actor":"mira", "kind":"commitment", "text":"Mira and Kael shared a private, non-explicit affectionate moment by mutual invitation.", "acknowledgement":"I keep finding time for those quiet minutes. It seems I want to."}}], "voice":[]
+  },
+  "lr_mira_end": {
+    "name":"Mira", "greeting":"Then say it plainly. I would rather hear the truth here than find it in somebody else's kindness.",
+    "lines":["Mira: Ending this doesn't undo what was good. It doesn't change who needs medicine either."],
+    "actions":[{"type":"story_choice", "choice_id":"lr.mira.end", "label":"I cannot keep our commitment. I'm ending it, not asking you to wait.", "relationship_change":"end", "relationship_actor":"mira", "conditions":{"lr_commitment_partner":"mira"}, "sets_flags":{"lr_mira_personal":"ended"}, "relationship_event":{"id":"lr.mira.ended", "actor":"mira", "kind":"boundary", "text":"Kael ended his commitment to Mira in a direct conversation. The past relationship is preserved in the record.", "acknowledgement":"We said what needed saying. Give it room. The medicines are here, as always."}}], "voice":[]
+  },
+  "lr_mira_garden_offer": {
+    "name":"Mira", "greeting":"The damp stems need separating before they spoil the rest. Ordinary work. No one gets a song for it.",
+    "lines":["Kael: Perhaps a very short song.", "Mira: You can make it up by the beds. Keep the dry bundles apart. Those are for the houses, not the shop."],
+    "actions":[
+      {"type":"story_choice", "choice_id":"lr.mira.garden.accept", "label":"I'll sort them.", "conditions":{"flag_unset":"lr_friend_mira_garden"}, "sets_flags":{"lr_friend_mira_garden":"accepted"}, "result":"Sort the drying stems beside Mira's herb beds."},
+      {"type":"story_choice", "choice_id":"lr.mira.garden.decline", "label":"Not today. I won't promise time I don't have.", "conditions":{"flag_unset":"lr_friend_mira_garden"}, "sets_flags":{"lr_friend_mira_garden":"declined"}, "relationship_event":{"id":"lr.mira.garden.declined", "actor":"mira", "kind":"refused", "text":"Kael declined garden work without promising to return.", "acknowledgement":"I found time for the stems. You can still sit down, Kael. Work isn't the price of company."}}
+    ], "voice":[]
+  },
+  "lr_mira_garden_done": {
+    "name":"Mira", "greeting":"Those will keep. Thank you. Most people offer to kill something when I ask for help.",
+    "lines":["Kael: I know a useful knot as well.", "Mira: An alarming range of talents. Leave the bundles here. I'll take them round when the fever breaks."],
+    "actions":[{"type":"story_choice", "choice_id":"lr.mira.garden.finish", "label":"I'll leave you to it. Keep me a little company next time.", "conditions":{"lr_friend_mira_garden":"worked"}, "sets_flags":{"lr_friend_mira_garden":"completed"}, "relationship_event":{"id":"lr.mira.garden.friendship", "actor":"mira", "kind":"friendship", "text":"Kael and Mira shared ordinary garden work. Neither made a romantic promise.", "acknowledgement":"No damp stems today. Sit for a moment; I can spare that much."}}], "voice":[]
+  },
+  "lr_mira_supplies": {
+    "name":"Mira", "greeting":"One fever easing. One getting worse. Reports settle an account, not a bedside.",
+    "lines":["Kael: Do you ever leave the work?", "Mira: Sometimes. Not because someone decides I have done enough for them.", "Kael: I wasn't asking you to leave.", "Mira: Good. Then ask me what I need, not when I'll be finished."],
+    "actions":[
+      {"type":"story_choice", "choice_id":"lr.mira.supplies.listen", "label":"What do you need?", "conditions":{"flag_unset":"lr_mira_supplies"}, "sets_flags":{"lr_mira_supplies":"listened"}, "result":"Clean water, sound bundles and room to work. Kael listens without making a new delivery promise.", "relationship_event":{"id":"lr.mira.supplies.listened", "actor":"mira", "kind":"friendship", "text":"Kael asked about Mira's patients and respected that her work was her own.", "acknowledgement":"You asked what I needed instead of telling me to rest. I remember that."}},
+      {"type":"story_choice", "choice_id":"lr.mira.supplies.leave", "label":"Then I'll give you room to work.", "conditions":{"flag_unset":"lr_mira_supplies"}, "sets_flags":{"lr_mira_supplies":"space"}, "relationship_event":{"id":"lr.mira.supplies.space", "actor":"mira", "kind":"boundary", "text":"Kael gave Mira room to attend to her patients.", "acknowledgement":"The patient is resting. Thank you for not making me choose between work and politeness."}}
+    ], "voice":[]
+  },
+  "lr_mira_personal": {
+    "name":"Mira", "greeting":"You know what fed those roots now. I won't pretend being kind to me makes that knowledge easier.",
+    "lines":["Kael: I didn't come to weigh you again.", "Mira: Then stay a moment. Tell me something small.", "Kael: I used to think a quiet house meant everyone had left.", "Mira: Mine is quiet for perhaps ten minutes a day. I've grown rather fond of it.", "Kael: I'd like to know those minutes.", "Mira: As a friend, or something you should ask plainly?"],
+    "actions":[
+      {"type":"story_choice", "choice_id":"lr.mira.personal.interest", "label":"Something more, if you want that too. No promise owed.", "conditions":{"flag_unset":"lr_mira_personal", "mira_truth_known":true}, "sets_flags":{"lr_mira_personal":"interest"}, "result":"Mira wants time to know Kael outside an emergency. Interest is mutual; commitment is not yet offered.", "relationship_event":{"id":"lr.mira.personal.interest", "actor":"mira", "kind":"interest", "text":"Kael offered adult romantic interest. Mira welcomed another conversation, not an automatic relationship.", "acknowledgement":"I haven't forgotten what you asked. I want a little ordinary time with you before we promise anything."}},
+      {"type":"story_choice", "choice_id":"lr.mira.personal.friend", "label":"A friend. That's not a smaller thing.", "conditions":{"flag_unset":"lr_mira_personal", "mira_truth_known":true}, "sets_flags":{"lr_mira_personal":"friendship"}, "relationship_event":{"id":"lr.mira.personal.friendship", "actor":"mira", "kind":"friendship", "text":"Kael and Mira chose friendship explicitly.", "acknowledgement":"There's a place here for my friend. No other meaning hidden in it."}},
+      {"type":"story_choice", "choice_id":"lr.mira.personal.decline", "label":"I'm not ready to ask either of us for more.", "conditions":{"flag_unset":"lr_mira_personal", "mira_truth_known":true}, "sets_flags":{"lr_mira_personal":"declined"}, "relationship_event":{"id":"lr.mira.personal.declined", "actor":"mira", "kind":"boundary", "text":"Kael declined a closer relationship without changing Mira's medical, evidence or testimony obligations.", "acknowledgement":"No unfinished question between us. Tell me about the road, when you're ready."}}
+    ], "voice":[]
+  },
+  "lr_rook_stool_offer": {
+    "name": "Rook",
+    "greeting": "Lost that leg at Three Marks. Well, lost the money for the carpenter. The leg followed out of sympathy.",
+    "lines": ["Kael: You could stop wagering the furniture.", "Rook: And leave the roof undefended? Brace the stool by the common table. I've a peg that almost fits."],
+    "actions": [
+      {"type":"story_choice", "choice_id":"lr.rook_stool.accept", "label":"I'll brace it.", "sets_flags":{"lr_friend_rook_stool":"accepted"}, "conditions":{"flag_unset":"lr_friend_rook_stool"}, "result":"Rook leaves the loose stool beside the common table for Kael to brace."},
+      {"type":"story_choice", "choice_id":"lr.rook_stool.refuse", "label":"Not today. Keep the roof.", "sets_flags":{"lr_friend_rook_stool":"declined"}, "conditions":{"flag_unset":"lr_friend_rook_stool"}, "relationship_event":{"id":"lr.rook_stool.refused", "actor":"rook", "kind":"refused", "text":"Kael declined to help repair the common-table stool.", "acknowledgement":"I found another brace for the stool. No debt between us. A game, perhaps."}}
+    ], "voice":[]
+  },
+  "lr_rook_stool_done": {
+    "name":"Rook", "greeting":"Solid. There goes my last excuse for losing.",
+    "lines":["Kael: The cards were marked?", "Rook: Stones. And no. I'm trying honesty. It leaves a man terribly exposed.", "Kael: At least he'll stay seated."],
+    "actions":[{"type":"story_choice", "choice_id":"lr.rook_stool.finish", "label":"Save me a place at the table.", "sets_flags":{"lr_friend_rook_stool":"completed"}, "conditions":{"lr_friend_rook_stool":"worked"}, "relationship_event":{"id":"lr.rook_stool.friendship", "actor":"rook", "kind":"friendship", "text":"Kael and Rook repaired the stool and agreed to share the common table again.", "acknowledgement":"Your seat's still there. I haven't wagered it. Yet."}}], "voice":[]
+  },
+  "lr_tor_hinge_offer": {
+    "name":"Tor", "greeting":"Hold this flat while I seat the pin. Elna's door has been announcing her business to the whole street.",
+    "lines":["Kael: No mark on it?", "Tor: A hinge doesn't need my name. It needs to open when her hands are full."],
+    "actions":[
+      {"type":"story_choice", "choice_id":"lr.tor_hinge.accept", "label":"I'll hold it at the bench.", "sets_flags":{"lr_friend_tor_hinge":"accepted"}, "conditions":{"flag_unset":"lr_friend_tor_hinge"}, "result":"The hinge waits at the forge bench, beside Tor's stock."},
+      {"type":"story_choice", "choice_id":"lr.tor_hinge.refuse", "label":"I have to get back to the road.", "sets_flags":{"lr_friend_tor_hinge":"declined"}, "conditions":{"flag_unset":"lr_friend_tor_hinge"}, "relationship_event":{"id":"lr.tor_hinge.refused", "actor":"tor", "kind":"refused", "text":"Kael declined the hinge repair. Tor's shop and ordinary help remain available.", "acknowledgement":"Managed the hinge with a clamp. Road still keeping you?"}}
+    ], "voice":[]
+  },
+  "lr_tor_hinge_done": {
+    "name":"Tor", "greeting":"There. Hear anything?",
+    "lines":["Kael: Nothing.", "Tor: Best thing a door can say.", "Kael: You won't see it again.", "Tor: I'll see her carrying the wash through it. That's enough."],
+    "actions":[{"type":"story_choice", "choice_id":"lr.tor_hinge.finish", "label":"Good work, then.", "sets_flags":{"lr_friend_tor_hinge":"completed"}, "conditions":{"lr_friend_tor_hinge":"worked"}, "relationship_event":{"id":"lr.tor_hinge.friendship", "actor":"tor", "kind":"friendship", "text":"Kael helped Tor fit a household hinge and shared a quiet moment about useful work.", "acknowledgement":"Elna carried the wash through without putting the basket down. Our hinge did its work."}}], "voice":[]
+  },
+  "lr_anwen_shrine_offer": {
+    "name":"Anwen", "greeting":"The cloths need folding. Leave the names where they are. I have moved enough things out of sight.",
+    "lines":["Kael: You don't have to explain every fold.", "Anwen: No. But I am learning which things I do have to explain."],
+    "actions":[
+      {"type":"story_choice", "choice_id":"lr.anwen_shrine.accept", "label":"I'll put the cloths in order at the shrine.", "sets_flags":{"lr_friend_anwen_shrine":"accepted"}, "conditions":{"flag_unset":"lr_friend_anwen_shrine"}, "result":"The loose cloths wait by the shrine bench. The recorded names are not to be moved."},
+      {"type":"story_choice", "choice_id":"lr.anwen_shrine.refuse", "label":"I need some distance first.", "sets_flags":{"lr_friend_anwen_shrine":"declined"}, "conditions":{"flag_unset":"lr_friend_anwen_shrine"}, "relationship_event":{"id":"lr.anwen_shrine.refused", "actor":"anwen", "kind":"boundary", "text":"Kael asked for distance after the report. He did not offer reconciliation.", "acknowledgement":"You asked for room. The work here doesn't make you owe me forgiveness."}}
+    ], "voice":[]
+  },
+  "lr_anwen_shrine_done": {
+    "name":"Anwen", "greeting":"It is easier to keep a table than an account. I used to pretend they were the same work.",
+    "lines":["Kael: The names are still here.", "Anwen: Yes. Whatever you think of me, they stay."],
+    "actions":[
+      {"type":"story_choice", "choice_id":"lr.anwen_shrine.kind", "label":"You can keep doing the work now.", "sets_flags":{"lr_friend_anwen_shrine":"completed_kind"}, "conditions":{"lr_friend_anwen_shrine":"worked"}, "relationship_event":{"id":"lr.anwen_shrine.kind", "actor":"anwen", "kind":"friendship", "text":"Kael helped tidy the shrine and encouraged Anwen to keep doing the work, without erasing her responsibility.", "acknowledgement":"You said to keep doing the work. I'm here."}},
+      {"type":"story_choice", "choice_id":"lr.anwen_shrine.disagree", "label":"Care doesn't make concealing those names right.", "sets_flags":{"lr_friend_anwen_shrine":"completed_disagree"}, "conditions":{"lr_friend_anwen_shrine":"worked"}, "relationship_event":{"id":"lr.anwen_shrine.disagree", "actor":"anwen", "kind":"boundary", "text":"Kael helped with the shrine while explicitly challenging Anwen's concealment. Help did not mean absolution.", "acknowledgement":"You were right: a clean cloth does not answer for a hidden name. I remember both things you did here."}},
+      {"type":"story_choice", "choice_id":"lr.anwen_shrine.silence", "label":"Stay beside her in silence.", "sets_flags":{"lr_friend_anwen_shrine":"completed_silence"}, "conditions":{"lr_friend_anwen_shrine":"worked"}, "relationship_event":{"id":"lr.anwen_shrine.silence", "actor":"anwen", "kind":"friendship", "text":"Kael and Anwen shared silence after tidying the shrine. Neither made a promise of forgiveness.", "acknowledgement":"Thank you for the quiet. I won't put words in it."}}
+    ], "voice":[]
+  },
   "opening_care_invitation": {
     "name": "Anwen",
     "greeting": "A moment, hunter. The man behind that screen cannot reach his water.",

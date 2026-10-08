@@ -24,6 +24,17 @@ func build() -> void:
 	if animation_player == null or skeletons.is_empty():
 		_fail(assembly, "Bracken source must retain its skeleton and animation player.")
 		return
+	var care_bones: Dictionary = {}
+	var care_skeleton := skeletons[0] as Skeleton3D
+	for index in care_skeleton.get_bone_count():
+		var original: String = str(care_skeleton.get_bone_name(index))
+		match original.replace("_", "."):
+			"Bone.002": care_bones["neck"] = original
+			"Bone.003": care_bones["head"] = original
+			"Bone.004": care_bones["tail"] = original
+	if care_bones.size() != 3:
+		_fail(assembly, "Bracken's retained native care bones must be present.")
+		return
 	var clips: Dictionary = {}
 	for clip: StringName in animation_player.get_animation_list():
 		var suffix: String = str(clip).get_slice("|", 1).to_lower()
@@ -87,6 +98,7 @@ func build() -> void:
 	visual.position -= Vector3(bounds.get_center().x, bounds.position.y, bounds.get_center().z) * factor
 	assembly.set_meta("companion_id", "bracken")
 	assembly.set_meta("animation_clips", clips)
+	assembly.set_meta("care_bones", care_bones)
 	assembly.set_meta("target_height_m", 0.78)
 	assembly.set_meta("source", SOURCE)
 	assembly.set_meta("license", "CC0-1.0")

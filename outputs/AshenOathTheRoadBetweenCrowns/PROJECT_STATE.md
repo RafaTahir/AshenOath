@@ -2,6 +2,84 @@
 
 ## Living Road - 2026-10-08
 
+Current: 28/28 source-implemented locally, 8/28 published, 0/28 user-accepted.
+LR-023 adds Bracken's optional same-bank field trial; LR-024 adds the post-report
+gathering, independent of games/rewards and main progression. LR-025/026 connect
+retained boss counterplay, visible preparation and bounded aftermath to known
+human causes. LR-027 projects regional consequences; LR-028 adds saved-fact personal
+epilogues and matching journal/save summaries. Models, phases, quests and reward IDs
+are retained. The combined `lr-028-20261008-living-road` production build completed:
+15 Web files, 92,124,361 bytes. Missing type inferences reported by compilation
+were corrected; no game/browser testing was run. Next: single combined publication
+and provider receipt. No new push/deployment yet. LR-028 is the single publication
+boundary; historical entries below describe their own slices.
+
+Latest: LR-022 adds three physical-target contests, posted character banter, rematches
+and once-only supply rewards. Progress: 22/28 implemented, 8/28 published, 0/28
+user-accepted. LR-023 is next. No build, tests, push or deployment in this slice.
+
+LR-021 adds free Greyfen bow practice, physical ring impacts, private training
+ammunition and equipment/camera restoration. Progress: 21/28 implemented, 8/28
+published, 0/28 user-accepted. LR-022 is next; runtime/compilation remain unverified.
+
+LR-020 unifies commitment checks, second-proposal disclosure, direct endings
+and private confidences to Rook/Anwen. The journal separates current partner from
+history. Progress: 20/28 implemented, 8/28 published, 0/28 user-accepted; LR-021 next.
+All LR-010 onward remains source-only pending final build and user testing.
+
+LR-019 adds Vale's post-ledger vulnerability, chosen commitment/refusal,
+held boundaries, breakup and post-assembly future. Evidence and access are unchanged.
+Progress: 19/28 implemented, 8/28 published, 0/28 user-accepted. LR-020 is next.
+Final compilation and runtime acceptance remain outstanding; no publication.
+
+LR-018 adds Vale's known-investigation letter, saved reply, archive privacy
+conversation and direct personal acquaintance. No Castle/evidence shortcut is added.
+Progress: 18/28 implemented, 8/28 published, 0/28 user-accepted. LR-019 is next.
+Static source work only; no runtime acceptance or publication claimed.
+
+LR-017 adds Mira's disagreement, action-supported reconciliation, explicit
+commitment/refusal, quiet invitation and breakup. One active partner is authoritative;
+historical events remain saved. Progress: 17/28 implemented, 8/28 published, 0/28
+user-accepted. LR-018 is next. No runtime testing or publication occurred.
+
+LR-016 adds Mira's optional garden help, patient conversation and explicit
+friendship/interest/refusal. No romance gate affects existing services or testimony.
+Progress: 16/28 implemented, 8/28 published, 0/28 user-accepted. LR-017 is next.
+Source-only; no runtime or build acceptance claimed.
+
+LR-015 adds optional practical friendship moments for Rook, Tor and Anwen,
+with saved work/completion/refusal, later acknowledgements and unchanged services.
+Progress: 15/28 implemented, 8/28 published, 0/28 user-accepted. LR-016 is next.
+Source/diff review only; final combined build and user testing remain outstanding.
+
+LR-014 source implementation adds once-only factual relationship events,
+Rook's optional privacy promise and specific kept/broken/refused acknowledgements,
+explicit witness boundaries and People & Promises notes. No affection currency,
+legacy romance inference or new trust authority. Progress: 14/28 implemented,
+8/28 published, 0/28 user-accepted. LR-015 is next; no runtime testing claimed.
+
+LR-013 source implementation retains the short authored exchanges and
+adds held camera compositions, restoration of prior orbit/zoom/first-person mode,
+paired actor cleanup and cancellable recorded-voice reaction pauses. No synthetic
+voice fallback or timed choice is introduced. Progress: 13/28 implemented, 8/28
+published, 0/28 user-accepted. LR-014 is next. Source-only; final compilation and
+user runtime acceptance are outstanding.
+
+LR-012 source implementation adds interruptible half-hour rests beside
+retained Greyfen/Wychwood/Long Road props, preparation access, authoritative clock
+advancement, completed-rest-only stamina recovery and additive rest memories.
+No supplies or quest objectives are granted. Source/diff reviewed; runtime and
+compilation are not claimed. Progress: 12/28 implemented, 8/28 published, 0/28
+user-accepted. LR-013 is next. The local LR-009 Web bytes exclude LR-010 onward.
+
+Current delivery amendment: keep LR-009 through LR-028 local on D:. No per-ticket
+push, main integration or Vercel deployment. Publish once after the final ticket,
+unless the user explicitly directs otherwise. LR-001 through LR-008 remain the
+published baseline; the historical per-ticket receipts below are unchanged.
+Implementation proceeds sequentially with individual records and user-owned
+manual acceptance. Finish the LR-009 build already in flight locally; defer the
+next combined Web build/publication until final delivery.
+
 The active program is `../../plans/living-road/README.md`: 28 sequential tickets,
 with implementation on D: and user-owned runtime acceptance. LR-001 records the
 research and tickets, pins shipped texture import settings and publishes the
@@ -19,7 +97,8 @@ scabbards, 1/2/3 selection, controller cycling and additive saved blade ID. Its
 complete Web directory is 91,914,525 bytes; Vercel deployment
 `dpl_Gt4dDyAoZciGhGfoogiJvipxeDNG` is READY. Progress: 2/28 published, 0/28
 user-accepted. LR-003 draw/sheath sequencing is next.
-The latest active goal authorizes continuous ticket implementation/publication;
+The active goal authorizes continuous ticket implementation; the current
+delivery amendment above supersedes the former per-ticket publication cadence.
 manual acceptance remains exclusively with the user and is not implied by export.
 
 LR-003 is published at `597124a`: timed draw/sheath/switch, H and controller
@@ -68,6 +147,31 @@ belong to LR-009; Bracken stays safely in Greyfen for this ticket. Published pac
 `d607266`, full Web 92,010,896 bytes; Vercel `dpl_CniSq1Fy5wfxUVP7CFgU8Es3Vrc5`
 READY. Progress: 8/28 published, 0/28 user-accepted. LR-009 travel is next.
 No runtime/visual checks claimed.
+
+LR-009 implementation adds follow/wait/recall, saved sector/resting position,
+existing bridge-route and live collision checks, velocity-driven walking, bounded
+avoidance and off-camera same-bank recovery. Zone retirement removes the old
+instance; loading another save cannot overwrite it with the outgoing actor.
+V opens commands; controller D-pad Down taps commands and holds existing zoom-out.
+Custom remaps and the pause-menu fallback are retained. No runtime checks claimed;
+local packaging completed as `lr-009-20261008-companion-travel`, full Web directory
+92,023,442 bytes. No push/deployment. Publication is deferred to the final combined
+release; next implementation is LR-010. Progress: 9/28 implemented, 8/28 published,
+0/28 user-accepted.
+
+LR-010 is implemented locally: optional pet/feed/rest, native skeletal care and
+hand reach, four once-only shared memories, optional Travel Bread in the existing
+inventory/shop, and physical retreat/rejoin during danger. Input is never locked;
+interrupted feeding consumes nothing. StoryState owns saved memories. No test or
+intermediate export was run. Final compilation and user runtime acceptance remain
+pending. Progress: 10/28 implemented, 8/28 published, 0/28 user-accepted. LR-011 next.
+
+LR-011 is implemented locally: three proximity/visibility-bound scent reactions
+at actual Wychwood clues, with no automatic evidence or objective advancement.
+Existing Greyfen crows react to nearby player noise and the hound and return when
+quiet. Routes, all clue interactions and encounters remain unchanged. No export,
+push, deployment or runtime testing. Progress: 11/28 implemented, 8/28 published,
+0/28 user-accepted. LR-012 resting places is next.
 
 ## Current Local Assembly - 2026-10-07
 

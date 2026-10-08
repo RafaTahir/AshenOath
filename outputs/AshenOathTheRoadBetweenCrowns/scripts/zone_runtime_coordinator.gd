@@ -83,6 +83,8 @@ func record_playable_transition(zone_id: String, elapsed_ms: float, support_read
 	last_activation["support_ready"] = support_ready
 
 func begin_transition(zone_id: String, previous_zone: String, spawn_position: Vector3) -> void:
+	preload("res://scripts/greyfen_archery_range.gd").stop_activity(host)
+	preload("res://scripts/bracken_field_trial.gd").stop_activity(host)
 	source_zone = previous_zone
 	if host != null and is_instance_valid(host.player):
 		source_position = host.player.global_position
@@ -238,6 +240,7 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	if host.zone_runtime_coordinator != null:
 		host.zone_runtime_coordinator.begin_transition(zone_id, previous_zone_id, spawn_pos)
 	var previous_spatial_service: Node = host.spatial_service
+	preload("res://scripts/companion_controller.gd").depart(host)
 	var reused_zone = false
 	var requested_signature = host._zone_state_signature()
 	if host.zone_root != null:
@@ -601,6 +604,8 @@ func recover_failed_transition(previous_zone_id: String) -> void:
 		host.player.velocity = Vector3.ZERO
 	if host.seamless_world != null and host.zone_root != null:
 		host.seamless_world.on_zone_activated(previous_zone_id, host.player.global_position if host.player != null else Vector3.ZERO)
+	if is_instance_valid(host.zone_root):
+		preload("res://scripts/companion_controller.gd").install(host, host.zone_root, previous_zone_id)
 	if host.performance_budget_monitor != null:
 		var quality_preset = str(host.settings.settings.get("quality_preset", "balanced")) if host.settings != null else "balanced"
 		host.performance_budget_monitor.set_active_zone(previous_zone_id, host.zone_root, host.player, quality_preset)

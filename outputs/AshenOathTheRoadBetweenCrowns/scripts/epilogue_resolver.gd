@@ -6,6 +6,74 @@ static func resolve(ending: String, state) -> Array[String]:
 		var card := _person_card(actor, state)
 		if card != "":
 			cards.append(card)
+	cards.append_array(living_road_cards(state))
+	return cards
+
+static func journey_company(state) -> String:
+	var partner: String = state.commitment_partner()
+	var people: Array[String] = []
+	if partner != "":
+		people.append("Commitment: " + partner.capitalize())
+	else:
+		people.append("No romantic commitment recorded")
+	var home := _flag(state, "bracken_home")
+	if home == "adopted":
+		people.append("Bracken has a home with Kael")
+	elif home == "safe":
+		people.append("Bracken is safe in Greyfen")
+	return "; ".join(people)
+
+static func living_road_cards(state) -> Array[String]:
+	var cards: Array[String] = []
+	var partner: String = state.commitment_partner()
+	var company := "Kael makes no unrecorded promise of romance. Friendship and the work he freely chose remain enough to return for."
+	if partner == "mira":
+		company = "Mira keeps her patients and her own judgement. Kael returns to the place they chose beside one another, not a healer won by service. Their promise does not erase a disagreement; they will have to keep answering honestly."
+	elif partner == "vale":
+		company = "Vale's life no longer fits entirely behind a ledger. She and Kael chose a shared future without making her its reward. The record remains her work by choice, not the price of being loved."
+	else:
+		for person: String in ["mira", "vale"]:
+			var relation := _flag(state, "lr_" + person + "_personal")
+			if relation == "friendship":
+				company += " " + person.capitalize() + " and Kael keep the friendship they named plainly."
+			elif relation == "ended":
+				company += " The commitment to " + person.capitalize() + " ended; no later triumph reverses that answer."
+	if _flag(state, "final_covenant") == "duty" and partner != "":
+		company += " Kael's burden takes time from that life. He has not pledged his partner to carry it."
+	cards.append("CHOSEN COMPANY\n" + company)
+	var friends: Array[String] = []
+	if _flag(state, "lr_friend_rook_stool") == "completed":
+		friends.append("Rook keeps a level stool and a place for another game.")
+	if _flag(state, "lr_friend_tor_hinge") == "completed":
+		friends.append("Tor's hinge turns in an ordinary door. He remembers the hands that held it steady.")
+	if _flag(state, "lr_friend_anwen_shrine").begins_with("completed"):
+		friends.append("Anwen remembers the folded cloths without calling them forgiveness.")
+	if _flag(state, "lr_friend_mira_garden") == "completed":
+		friends.append("Mira's carefully sorted herbs reach the people they were meant for.")
+	if bool(state.get_flag("lr_gathering_completed", false)):
+		friends.append("There was an evening when Greyfen made room for company without demanding a promise in return.")
+	if not friends.is_empty():
+		cards.append("ORDINARY FRIENDSHIP\n" + " ".join(friends))
+	var home := _flag(state, "bracken_home")
+	var bracken := "No travelling companion was promised to Kael. The road's account is complete without turning an animal's trust into an obligation."
+	if home == "adopted":
+		bracken = "Bracken belongs with Kael by an offered home, not by an oath. He still needs food, quiet and someone who comes back. Where he waits or follows is the last command Kael actually gave."
+		if bool(state.get_flag("lr_trial_acknowledged", false)):
+			bracken += " Some days their only trail ends at a cedar scrap and an open hand."
+	elif home == "safe":
+		bracken = "Bracken remains safe in Greyfen. Kael helped him without promising a life on the road, and that answer is allowed to stand."
+	elif bool(state.get_flag("bracken_rescued", false)):
+		bracken = "The travelling strap is gone. No choice of home was recorded, so the account does not pretend that rescue became adoption."
+	cards.append("BRACKEN\n" + bracken)
+	var land: Array[String] = []
+	if bool(state.get_flag("rootbound_colossus_defeated", false)):
+		land.append("Redirected roots shelter small living growth around the clearing." if bool(state.get_flag("root_landscape_released", false)) else "The guardian's clearing keeps the scars of how it was freed.")
+	if bool(state.get_flag("ashwing_defeated", false)):
+		land.append("The mill's saved channel keeps a strip of living bank." if _flag(state, "mill_damage_state") == "contained" else "Ashwing is gone; the mill's burned ground does not heal by decree.")
+	if not land.is_empty():
+		if _flag(state, "final_covenant") == "ash":
+			land.append("These local acts of care do not cancel the wider harm of the broken covenant.")
+		cards.append("LAND THAT KEEPS THE ACCOUNT\n" + " ".join(land))
 	return cards
 
 static func _flag(state, key: String, fallback: String = "") -> String:

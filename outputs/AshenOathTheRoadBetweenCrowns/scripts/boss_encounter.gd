@@ -107,6 +107,10 @@ func _emit_resolved() -> void:
 		return
 	resolution_emitted = true
 	resolved.emit(boss_id, outcome)
+	if is_instance_valid(enemy):
+		var presentation := enemy.get_node_or_null("StoryEncounterPreparation")
+		if presentation != null and presentation.has_method("acknowledge_resolution"):
+			presentation.acknowledge_resolution(outcome)
 
 func save_state() -> Dictionary:
 	var health_state: Dictionary = {}

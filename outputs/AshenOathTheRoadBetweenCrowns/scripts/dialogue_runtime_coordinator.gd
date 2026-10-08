@@ -6,15 +6,16 @@ var _locked_actor: WeakRef
 var _topic_generation: int = 0
 var _topic_context: Dictionary = {}
 var _turns: Array[Tween] = []
+var _camera: WeakRef
 
 func get_focus_actor() -> Node3D:
 	return _focus_actor.get_ref() as Node3D if _focus_actor != null else null
 
 func stage(area: Node3D, player: Node3D, camera_rig: Node, _validate_position: Callable) -> void:
-	_invalidate_topic_context()
-	_focus_actor = null
+	release(player)
 	if not is_instance_valid(player) or not is_instance_valid(area):
 		return
+	_camera = weakref(camera_rig) if is_instance_valid(camera_rig) else null
 	_focus_actor = weakref(area)
 	_set_player_pose(player, true)
 	if area.find_child("CharacterAnimationDriver", true, false) != null:
@@ -86,9 +87,16 @@ func face_actor(actor: Node3D, player: Node3D) -> void:
 		actor.rotation.y = atan2(-to_player.x, -to_player.z)
 
 func release(player: Node3D) -> void:
+	var camera: Node = _camera.get_ref() if _camera != null else null
+	if is_instance_valid(camera) and camera.has_method("release_dialogue_frame"):
+		camera.release_dialogue_frame()
+	_camera = null
 	for turn: Tween in _turns:
 		if turn != null and turn.is_valid(): turn.kill()
 	_turns.clear()
+	var performer := get_focus_actor()
+	if is_instance_valid(performer):
+		preload("res://scripts/story_performance.gd").finish(performer)
 	_invalidate_topic_context()
 	_focus_actor = null
 	_set_player_pose(player, false)

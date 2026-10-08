@@ -21,7 +21,8 @@ const WATCHED_FLAGS := [
 	"final_covenant", "final_choice_completed", "rootbound_colossus_defeated",
 	"ashwing_defeated", "halvern_fate", "senn_fate", "mill_ventilation_open",
 	"mill_workers_rescued", "mill_records_saved", "mill_smoke_exposure",
-	"mill_damage_state", "root_landscape_released", "root_testimony_protected", "root_testimony_damaged", "aftermath_names_returned", "aftermath_work_promised"
+	"mill_damage_state", "root_landscape_released", "root_testimony_protected", "root_testimony_damaged", "aftermath_names_returned", "aftermath_work_promised",
+	"bell_eater_defeated", "crow_shrine_state", "three_candles_lit", "oren_charm_returned"
 ]
 
 static var _unit_box: BoxMesh
@@ -33,7 +34,9 @@ static func decorate(game, root: Node3D, zone_id: String) -> void:
 	load("res://scripts/story_activity_director.gd").install(game, root, zone_id)
 	load("res://scripts/journey_flow_director.gd").install(game, root, zone_id)
 	CompanionController.install(game, root, zone_id)
-	if zone_id in ["assembly", "hart_glade"] and root == game.zone_root:
+	root.set_meta("living_road_reported", str(_flag(game, "evidence_report")) != "")
+	root.set_meta("living_road_shrine", str(_flag(game, "crow_shrine_state")))
+	if zone_id in ["assembly", "hart_glade", "vargan_approach"] and root == game.zone_root:
 		_sync_willing_witnesses(game, root, zone_id)
 	var layer := root.get_node_or_null(LAYER_NAME) as Node3D
 	if layer == null:
@@ -245,6 +248,17 @@ static func _greyfen(game, parent: Node3D) -> void:
 	var names := str(_flag(game, "names_policy"))
 	if names != "":
 		_notice(game, parent, Vector3(7.8, 0, -4.5), "NAMES RETURNED\nBram / Sella / Oren" if names == "published" else "NAMES IN SAFE KEEPING\nHousehold visits begin")
+	_cemetery_consequence(game, parent)
+
+static func _cemetery_consequence(game, parent: Node3D) -> void:
+	if not bool(_flag(game, "bell_eater_defeated", false)):
+		return
+	var shrine := str(_flag(game, "crow_shrine_state"))
+	# Ribbons lie beside the existing graves, never across the walkable route.
+	for point in [Vector3(12.6, 0.05, 7.2), Vector3(14.4, 0.05, 10.2), Vector3(16.0, 0.05, 7.2)]:
+		var loose := shrine in ["cleansed", "disturbed"]
+		_box(game, parent, "UnboundGraveRibbon" if loose else "FoldedGraveRibbon", point, Vector3(0.32, 0.012, 0.09), LINEN, 24.0 if loose else 0.0)
+	_label(parent, "CemeteryAfterTheBell", "THE BELL IS STILL / THE BINDINGS ARE OPEN" if shrine == "cleansed" else "THE BELL IS STILL / DISTURBED NAMES REMAIN" if shrine == "disturbed" else "THE BELL IS STILL / THE RITE STILL BINDS" if shrine == "bound" else "THE BELL IS STILL / THE SHRINE AWAITS AN ANSWER", Vector3(12.5, 1.3, 11.0), LINEN)
 
 static func _greyfen_daily_consequences(game, parent: Node3D) -> void:
 	var operation := str(_flag(game, "mill_operation"))
@@ -328,7 +342,10 @@ static func _deep_wood(game, parent: Node3D) -> void:
 		_notice(game, parent, Vector3(-5.5, 0, -8.0), "THE MEMORY IS STILL\nThe road can be walked")
 		for index in range(5):
 			var released := bool(_flag(game, "root_landscape_released", false))
-			_box(game, parent, "ReleasedRootGrowth", Vector3(-2.0 + float(index), 0.08, -8.0), Vector3(0.16, 0.20 if released else 0.07, 0.18), GREEN if released else TIMBER)
+			if released:
+				_recovery_growth(game, parent, Vector3(-2.0 + float(index), 0.0, -8.0), 0.25 + index * 0.02)
+			else:
+				_box(game, parent, "ScarredRootStump", Vector3(-2.0 + float(index), 0.08, -8.0), Vector3(0.16, 0.07, 0.18), TIMBER)
 		_label(parent, "NameBoardAftermath", "THE NAME-BOARD IS KEPT WHOLE" if bool(_flag(game, "root_testimony_protected", false)) else "FRAGMENTS REMAIN / THE COPIED REGISTER SURVIVES", Vector3(-2.6, 1.2, -6.7))
 
 static func _mill(game, parent: Node3D) -> void:
@@ -347,6 +364,8 @@ static func _mill(game, parent: Node3D) -> void:
 			_box(game, parent, "BurnedMillRoofFragment", Vector3(3.2 + float(index) * 0.55, 0.08, -3.0), Vector3(0.34, 0.12, 0.86), Color(0.12, 0.09, 0.075), float(index) * 18.0)
 	elif str(_flag(game, "mill_damage_state")) == "contained":
 		_notice(game, parent, Vector3(2.7, 0, 2.3), "CHANNEL KEPT CLEAR\nLower mill stores survived", GREEN)
+		for point in [Vector3(-2.8, 0, 6.2), Vector3(-2.6, 0, 5.5), Vector3(-2.8, 0, 4.8)]:
+			_recovery_growth(game, parent, point, 0.30)
 	_table(game, parent, Vector3(-2.0, 0, 2.5))
 	if operation in ["supervised", "restitution"]:
 		for index in range(4):
@@ -363,6 +382,20 @@ static func _farmstead(game, parent: Node3D) -> void:
 	_table(game, parent, Vector3(-4.0, 0, 6.7), 1.5)
 	for index in range(3):
 		_box(game, parent, "EmptyHouseholdBowl", Vector3(-4.45 + float(index) * 0.44, 0.85, 6.7), Vector3(0.25, 0.08, 0.25), STONE)
+
+static func _recovery_growth(game, parent: Node3D, point: Vector3, height: float) -> void:
+	var plant := game.asset_helper.spawn_environment("forest_bush") as Node3D
+	if plant == null:
+		return
+	if plant.name.ends_with("_placeholder"):
+		plant.free()
+		return
+	var bounds: AABB = game.asset_helper._calculate_node_bounds(plant)
+	var ratio := height / maxf(bounds.size.y, 0.01)
+	plant.scale *= ratio
+	plant.position = point - Vector3.UP * bounds.position.y * ratio
+	plant.name = "RetainedRecoveryGrowth"
+	parent.add_child(plant)
 
 static func _marsh(game, parent: Node3D) -> void:
 	_notice(game, parent, Vector3(4.9, 0, 7.0), "HEALER'S RETURN ROUTE\nNo patient carried alone", GREEN)

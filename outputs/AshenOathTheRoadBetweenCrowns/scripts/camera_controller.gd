@@ -50,6 +50,9 @@ var _last_large_subject: Node3D
 var _large_subject_linger := 0.0
 var _manual_orbit := false
 var _dialogue_tween: Tween
+var _dialogue_return: Dictionary = {}
+var _dialogue_frame_key := ""
+var _dialogue_last_cut := 0
 
 signal target_lock_changed(target: Node3D, locked: bool)
 
@@ -254,6 +257,10 @@ func _update_view(delta: float) -> void:
 func frame_dialogue_target(dialogue_target: Node3D) -> void:
 	if target == null or camera == null or dialogue_target == null or not is_instance_valid(dialogue_target):
 		return
+	if _dialogue_return.is_empty():
+		_dialogue_return = {"yaw": yaw, "pitch": pitch, "distance": distance, "manual_orbit": _manual_orbit}
+	_dialogue_frame_key = "two_shot"
+	_dialogue_last_cut = Time.get_ticks_msec()
 	if target.has_method("set_camera_close_view"):
 		target.set_camera_close_view(false)
 	var flat_to_target := dialogue_target.global_position - target.global_position
@@ -286,6 +293,14 @@ func frame_dialogue_beat(actor: Node3D, speaker_id: String, framing: String) -> 
 	if _reduced_story_motion:
 		# Keep the established two-person composition through page changes.
 		return
+	var frame_key := "two_shot" if framing == "two_shot" else ("player" if speaker_id == "player" else "speaker") + ":" + framing
+	var now := Time.get_ticks_msec()
+	# Hold an established composition across consecutive turns and rapid skips.
+	# Text/input never waits for a camera beat to complete.
+	if frame_key == _dialogue_frame_key or now - _dialogue_last_cut < 900:
+		return
+	_dialogue_frame_key = frame_key
+	_dialogue_last_cut = now
 	var axis := actor.global_position - target.global_position
 	axis.y = 0.0
 	if axis.length_squared() < 0.04: return
@@ -311,6 +326,22 @@ func frame_dialogue_beat(actor: Node3D, speaker_id: String, framing: String) -> 
 	_dialogue_tween.tween_property(camera, "fov", 51.0 if framing == "close" else 58.0, 0.32)
 	_smoothed_look = focus
 	_cached_collision_position = desired
+
+func release_dialogue_frame() -> void:
+	if _dialogue_tween != null:
+		_dialogue_tween.kill()
+		_dialogue_tween = null
+	if _dialogue_return.is_empty():
+		return
+	yaw = float(_dialogue_return.yaw)
+	pitch = float(_dialogue_return.pitch)
+	distance = float(_dialogue_return.distance)
+	_manual_orbit = bool(_dialogue_return.manual_orbit)
+	_dialogue_return.clear()
+	_dialogue_frame_key = ""
+	_collision_refresh = 0.0
+	if is_instance_valid(target) and target.has_method("set_camera_close_view"):
+		target.set_camera_close_view(is_first_person())
 
 func _look_at_dialogue_point(point: Vector3) -> void:
 	if camera.global_position.distance_squared_to(point) > 0.01:
@@ -381,6 +412,8 @@ func _apply_keyboard_camera(delta: float) -> void:
 			and input_source != null and str(input_source.get("active_device")) == "gamepad" \
 			and input_source.is_action_pressed("cycle_arrow"):
 		zoom_axis = 0.0
+	if zoom_axis > 0.0 and input_source != null and input_source.companion_zoom_reserved():
+		zoom_axis = 0.0
 	if absf(zoom_axis) > 0.01:
 		adjust_zoom(zoom_axis * 3.4 * delta)
 
@@ -409,6 +442,33 @@ func apply_settings(mouse_sensitivity: float, use_invert_y: bool, controller_sen
 	sensitivity = mouse_sensitivity
 	invert_y = use_invert_y
 	gamepad_look_sensitivity = controller_sensitivity
+
+func save_activity_view() -> Dictionary:
+	return {"yaw": yaw, "pitch": pitch, "distance": distance, "manual_orbit": _manual_orbit}
+
+func restore_activity_view(saved: Dictionary) -> void:
+	if saved.is_empty():
+		return
+	yaw = float(saved.yaw)
+	pitch = float(saved.pitch)
+	distance = float(saved.distance)
+	_manual_orbit = bool(saved.manual_orbit)
+	_collision_refresh = 0.0
+	if is_instance_valid(target) and target.has_method("set_camera_close_view"):
+		target.set_camera_close_view(is_first_person())
+
+func training_aim_direction(origin: Vector3) -> Vector3:
+	if not is_instance_valid(camera):
+		return get_flat_forward()
+	var screen := camera.get_viewport().get_visible_rect().size * 0.5
+	var ray_origin := camera.project_ray_origin(screen)
+	var endpoint := ray_origin + camera.project_ray_normal(screen) * 30.0
+	var query := PhysicsRayQueryParameters3D.create(ray_origin, endpoint, 1 | 128)
+	if target is CollisionObject3D:
+		query.exclude = [(target as CollisionObject3D).get_rid()]
+	query.collide_with_areas = false
+	var hit := get_world_3d().direct_space_state.intersect_ray(query)
+	return ((hit.position if not hit.is_empty() else endpoint) - origin).normalized()
 
 var _reduced_story_motion := false
 

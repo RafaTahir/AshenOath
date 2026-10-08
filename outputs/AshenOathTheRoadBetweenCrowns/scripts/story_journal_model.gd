@@ -87,6 +87,7 @@ static func _covenant_entry(campaign: Dictionary, state) -> Dictionary:
 		var body: String = "Chosen intention: " + str(ending.get("intention", ""))
 		if complete:
 			body += "\n\nWhat this leaves: " + str(ending.get("benefit", "")) + "\n\nWhat it costs: " + str(ending.get("cost", ""))
+			body += "\n\n" + "\n\n".join(preload("res://scripts/epilogue_resolver.gd").living_road_cards(state))
 		else:
 			body += "\n\nThis intention is recorded, but its resolution has not yet been completed. Follow the next known step in the glade."
 		return {"id": "covenant:" + ending_id, "title": str(ending.get("title", "Covenant")) + (" — carried out" if complete else " — intention chosen"), "body": body, "status": "completed" if complete else "pending"}
@@ -162,6 +163,9 @@ static func _finish_recap(recap: Dictionary) -> Dictionary:
 static func _people_entries(campaign: Dictionary, quests, state) -> Array[Dictionary]:
 	var entries: Array[Dictionary] = []
 	var covered_flags: Dictionary = {}
+	if _flag_bool(state, "lr_vale_letter_read"):
+		var letter_reply := _flag_text(state, "lr_vale_letter_reply")
+		entries.append({"id":"lr_vale_correspondence", "title":"A letter from Record Keeper Vale", "body":"Vale asks the investigator to distinguish a person's name from permission to publish it. The letter makes no claim about a missing record and grants no access to Vargan.\n\nReply: " + (letter_reply.replace("_", " ") if letter_reply != "" else "Not sent. The letter remains at Greyfen's noticeboard.")})
 	for person in people_catalog().get("people", []):
 		if typeof(person) != TYPE_DICTIONARY:
 			continue
@@ -173,6 +177,8 @@ static func _people_entries(campaign: Dictionary, quests, state) -> Array[Dictio
 		var title: String = str(person.get("title", id)) if identified else str(person.get("unidentified_title", "An unnamed witness"))
 		var lines: Array[String] = [str(person.get("body", "")) if identified else str(person.get("unidentified_body", "Kael has heard this figure. Their identity has not been established."))]
 		if identified:
+			if state != null and state.commitment_partner() == id:
+				lines.append("Current personal commitment: Kael and " + str(person.get("title", id)) + " explicitly chose each other. This does not supply testimony, evidence or consent to speak publicly.")
 			for fact in person.get("facts", []):
 				if typeof(fact) == TYPE_DICTIONARY and _gate(fact.get("gate", {}), quests, state):
 					lines.append(str(fact.get("body", "")))
@@ -183,6 +189,9 @@ static func _people_entries(campaign: Dictionary, quests, state) -> Array[Dictio
 			for promise in person.get("promises", []):
 				if typeof(promise) == TYPE_DICTIONARY and _gate(promise.get("gate", {}), quests, state):
 					lines.append(str(promise.get("body", "")))
+			if state != null and state.has_method("relationship_events"):
+				for event: Dictionary in state.relationship_events(id):
+					lines.append("Remembered " + str(event.kind).replace("_", " ") + ": " + str(event.text))
 			var consent_key: String = str(person.get("consent_flag", ""))
 			var consent: String = _flag_text(state, consent_key) if consent_key != "" else ""
 			var unavailable: String = str(person.get("unavailable_flag", ""))

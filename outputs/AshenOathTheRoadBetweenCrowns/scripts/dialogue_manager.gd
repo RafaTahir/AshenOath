@@ -204,6 +204,11 @@ func get_dialogue(id: String) -> Dictionary:
 					base[key] = variant[key]
 			break
 	base.erase("variants")
+	if story_state != null and id == "rook" and str(story_state.get_flag("rook_disclosure", "")) == "" and story_state.get_flag("lr_rook_privacy", null) == null:
+		for offer in [["promised", "I won't put your family's mark on a public board."], ["declined", "I cannot promise secrecy. You should know that."]]:
+			base["actions"].append({"type": "story_choice", "choice_id": "lr.rook.privacy." + str(offer[0]), "label": offer[1], "sets_flags": {"lr_rook_privacy": offer[0]}, "conditions": {"flag_unset": "lr_rook_privacy"}, "preview": "A personal promise about the family mark, not an agreement to conceal the road's history. No payment or testimony is owed."})
+	if id == "bracken_rescue" and story_state != null and str(story_state.get_flag("bracken_home", "")) == "adopted":
+		base["greeting"] = story_state.companion_response()
 	base["scene_id"] = id
 	# Subtitles remain authoritative when a voice clip is absent, muted, or
 	# blocked by browser audio policy. Keep the fallback in the resolved entry.
@@ -212,6 +217,8 @@ func get_dialogue(id: String) -> Dictionary:
 	base["presentation"] = _presentation_contract(base.get("presentation", {}))
 	var visible_actions: Array = []
 	for action in base.get("actions", []):
+		if story_state != null and not story_state.commitment_allows(action):
+			continue
 		if str(action.get("type", "")) == "start_quest" and quest_manager != null and quest_manager.has_method("is_runtime_content_ready"):
 			if not quest_manager.is_runtime_content_ready(str(action.get("quest", ""))):
 				continue
@@ -221,6 +228,11 @@ func get_dialogue(id: String) -> Dictionary:
 			visible_actions.append(action)
 	base["actions"] = visible_actions
 	base["pages"] = _build_pages(base)
+	var relationship_actor := str({"sister_anwen": "anwen", "blacksmith_tor": "tor", "rook": "rook", "mira": "mira", "widow_elna": "elna", "vargan_record_keeper": "vale"}.get(id, ""))
+	if story_state != null and relationship_actor != "":
+		var acknowledgement: String = story_state.relationship_acknowledgement(relationship_actor)
+		if acknowledgement != "":
+			base["pages"].append({"speaker": str(base.get("name", "")), "speaker_id": _speaker_id(str(base.get("name", ""))), "text": acknowledgement, "beat": "remembered_action"})
 	for page_index: int in range(base["pages"].size()):
 		var page: Dictionary = base["pages"][page_index]
 		page["scene_id"] = id

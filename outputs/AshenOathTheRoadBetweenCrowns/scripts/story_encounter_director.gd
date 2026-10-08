@@ -1,6 +1,14 @@
 extends Node
 class_name StoryEncounterDirector
 
+const LIVING_ROAD_BEATS := {
+	"bell_eater": {"arrival":"The clapper pulls toward three disturbed graves. A burial rite has become a harness.", "known":"The shrine thread from the graves runs into that harness. Someone bound the names down; the bell is pulling them back.", "aftermath":"The bell falls quiet. It has not returned Harl or named the child. The people who tied those bindings still owe an account."},
+	"rootbound_colossus": {"arrival":"The guardian braces itself around a name-board. Its roots are drawing ash into the place it was meant to shelter.", "known":"The recovered register promised sanctuary. Here that promise is feeding a guardian through burned names. Turn the root channels away from the board.", "aftermath":"The guardian stops. What happened to the names is still a human decision, not something the forest chose."},
+	"ashwing": {"arrival":"Ashwing follows the mill's rising ash, not its grain. The shoulder turns before the plume follows. People are still inside.", "known":"The mill account ties these weights to the missing wagons. Burned testimony draws the drake here; the workers did not choose what its channels carried.", "aftermath":"The drake falls. Killing what fed on the ash has not cleared the mill's account."},
+	"halvern_boss": {"arrival":"The knight repeats a guard at an empty gate. He is holding one moment, not an entire life. A parry can give that moment room to speak.", "known":"The recovered order and Halvern's guard do not agree. Present the command or parry his stroke, then hear what he actually remembers.", "aftermath":"The order remains a human document, whatever becomes of the memory that refused it."},
+	"white_hart_avatar": {"arrival":"The Hart strikes from a memory it was made to carry. This violence is the collapse of a binding, not the purpose of the witness.", "known":"Gate, hidden road, soldiers: the recovered record separates those acts. The Hart carries their burden; it cannot make the living consent.", "aftermath":"What remains of the account belongs to the living now. No victory can replace a missing memory."}
+}
+
 ## Evidence and small environmental actions alter a named encounter. EnemyAI
 ## remains authoritative for damage, collision and the actual telegraph clock.
 var host
@@ -16,6 +24,48 @@ var windup_length := 1.0
 var cue_tick := 0.0
 var last_beat := -1
 var blocked_this_attack := false
+var root_markers: Array[MeshInstance3D] = []
+var arrival_checked := false
+
+func _arrival_beat() -> void:
+	if arrival_checked or not LIVING_ROAD_BEATS.has(str(actor.enemy_id)) or not is_instance_valid(host.player) or not host.player.can_control or actor.dead or not actor.encounter_active or actor.global_position.distance_to(host.player.global_position) > 12.0:
+		return
+	arrival_checked = true
+	var key := "lr_encounter_" + str(actor.enemy_id) + "_arrival"
+	if bool(host.story_state.get_flag(key, false)):
+		return
+	var entry: Dictionary = LIVING_ROAD_BEATS[str(actor.enemy_id)]
+	var informed := false
+	match str(actor.enemy_id):
+		"bell_eater": informed = _known("grave_child", "main_bell_beneath_greyfen", "grave_child")
+		"rootbound_colossus": informed = _known("register", "main_names_they_burned", "reconstruct_register")
+		"ashwing": informed = _known("mill_accounts", "main_ash_at_the_mill", "inspect_millstones")
+		"halvern_boss", "white_hart_avatar": informed = bool(host.story_state.get_flag("command_proof_recovered", false))
+	_cue(str(entry.get("known", entry.arrival) if informed else entry.arrival))
+	host.story_state.set_flag(key, true)
+	_save()
+
+func acknowledge_resolution(outcome: String) -> void:
+	# Let the existing outcome handlers finish their facts before composing a line.
+	call_deferred("_resolution_beat", outcome)
+
+func _resolution_beat(outcome: String) -> void:
+	if not is_instance_valid(actor) or not is_instance_valid(host) or not LIVING_ROAD_BEATS.has(str(actor.enemy_id)):
+		return
+	var key := "lr_encounter_" + str(actor.enemy_id) + "_aftermath"
+	if bool(host.story_state.get_flag(key, false)):
+		return
+	var words := str(LIVING_ROAD_BEATS[str(actor.enemy_id)].aftermath)
+	if actor.enemy_id == "rootbound_colossus":
+		words += " " + ("The redirected channels leave living roots around the protected record." if _root_count() >= 2 and bool(host.story_state.get_flag("root_testimony_protected", false)) else "The broken ground will keep the scar. Preserve the record that remains.")
+	elif actor.enemy_id == "ashwing":
+		words += " " + ("The workers reached clean air." if bool(host.story_state.get_flag("mill_workers_rescued", false)) else "The workers still need a way out; the sluice remains usable.")
+		words += " " + ("The wage pages stayed above the water." if bool(host.story_state.get_flag("mill_records_saved", false)) else "The wage chest can still be saved.")
+	elif actor.enemy_id == "halvern_boss":
+		words = str({"witness":"Halvern keeps the moment of his refusal beside the order. He is not made to swear for the rest of the dead.", "testimony":"Halvern's refusal is heard. A bounded memory is evidence, not permission to put new words in his mouth.", "released":"Kael lets Halvern leave the repeating gate. The copied refusal remains; no further answer is demanded.", "release":"Kael lets Halvern leave the repeating gate. The copied refusal remains; no further answer is demanded.", "destroyed":"The memory breaks. The human orders survive, but no one may claim the lost knight agreed.", "defeated":"The guard breaks. That has not decided what to do with Halvern's remaining memory."}.get(outcome, words))
+	_cue(words)
+	host.story_state.set_flag(key, true)
+	_save()
 
 static func apply(game, enemy) -> void:
 	if game == null or enemy == null or enemy.get_node_or_null("StoryEncounterPreparation") != null:
@@ -33,6 +83,7 @@ func configure() -> void:
 	actor.windup_started.connect(_on_windup)
 	actor.special_attack_resolved.connect(_on_special_resolved)
 	actor.parry_window_opened.connect(_on_parry_window)
+	actor.special_attack_interrupted.connect(_on_interruption)
 	actor.died.connect(_on_death)
 	_refresh_preparation()
 	call_deferred("_build_arena")
@@ -56,6 +107,9 @@ func _refresh_preparation() -> void:
 				current_preparation = {"reading":0.12, "tell":"Oren's name makes the Wretch hesitate before its first approach. Moon Oil and a clean interruption can expose the memory it carries.", "moves":[]}
 		"rootbound_colossus":
 			current_preparation = {"reading":0.30, "recovery":0.9, "tell":"The roots feed the armored heart. Redirect two marked root channels; protect the name-board before it is swallowed.", "opening":"The broken root lane gives the heart time to open.", "moves":["root_lanes", "ground_rupture", "heart_stagger"]}
+			if _known("register", "main_names_they_burned", "reconstruct_register"):
+				current_preparation.reading = 0.48
+				current_preparation.tell = "The register identifies what the guardian is clutching: a promise of sanctuary. Read the inward root pull, then turn its channels away from the names."
 		"ashwing":
 			if _known("mill_accounts", "main_ash_at_the_mill", "inspect_millstones") or _known("mill_ventilation", "", "") or bool(host.story_state.get_flag("mill_ventilation_open", false)):
 				current_preparation = {"reading":0.14, "recovery":0.60, "tell":"The mill dust follows its breath. Read the shoulder turn and move across the plume, not back along it.", "opening":"The breath passed clear. Ashwing must gather itself before turning again.", "moves":["ash_breath", "wing_blast", "swoop"]}
@@ -67,6 +121,8 @@ func _refresh_preparation() -> void:
 				current_preparation = {"reading":0.12, "tell":"The human record gives the memory an order: gate, road, then soldiers. Watch where the echo finishes before the antlers follow.", "moves":[]}
 	if not current_preparation.is_empty():
 		actor.set_meta("story_preparation", str(current_preparation.get("tell", "")))
+	actor.set_meta("living_road_rope_loose", bool(host.story_state.get_flag("bell_rope_released", false)))
+	actor.set_meta("living_road_heart_open", _root_count() >= 2)
 
 func _known(id: String, quest_id: String, objective_id: String) -> bool:
 	if host.story_state.has_evidence(id):
@@ -133,7 +189,7 @@ func _on_parry_window(_enemy, duration: float) -> void:
 		host.story_state.set_flag("halvern_guard_broken", true)
 		host.story_state.set_flag("halvern_surrender_protected", true)
 		_protect_surrender()
-		_cue("Halvern lowers his blade. He will not strike or take damage while yielding. Speak to the memory behind him.")
+		_cue("Halvern lowers his blade. 'I kept the gate open. After that, rope. I cannot tell you what happened beyond it.' He will not strike while yielding. Speak to the memory.")
 		_save()
 	if not current_preparation.has("parry"):
 		return
@@ -145,6 +201,15 @@ func _on_parry_window(_enemy, duration: float) -> void:
 	actor.parry_exposed_time = maxf(float(actor.parry_exposed_time), opening)
 	actor.stagger(opening)
 	_cue(str(current_preparation.get("opening", "The recovered account gives this opening a purpose.")))
+
+func _on_interruption(_enemy, move: String, reason: String) -> void:
+	if actor.enemy_id != "ashwing" or move != "ash_breath" or reason != "oathfire":
+		return
+	var key := "lr_ashwing_breath_understood"
+	if not bool(host.story_state.get_flag(key, false)):
+		_cue("Oathfire breaks the drawn breath. Ash falls out of the plume in scraps: a destroyed account, not ordinary smoke.")
+		host.story_state.set_flag(key, true)
+		_save()
 
 func _cue(text: String) -> void:
 	if text == "" or host.hud == null:
@@ -172,7 +237,7 @@ func _build_arena() -> void:
 			for index in range(3):
 				var point: Vector3 = origin + [Vector3(-3.8, 0, 1.3), Vector3(3.8, 0, 1.8), Vector3(0, 0, 4.5)][index]
 				root_positions.append(point)
-				_disc(point, 1.30, Color(0.41, 0.53, 0.31), "ROOT CHANNEL %d" % (index + 1))
+				root_markers.append(_disc(point, 1.30, Color(0.41, 0.53, 0.31), "ROOT CHANNEL %d" % (index + 1)))
 				_point("redirect_root_%d" % index, "Redirect root channel %d away from the name-board" % (index + 1), point, "TURN THE ROOT / EXPOSE THE HEART")
 			rhythm_label = _label(origin + Vector3(0, 3.7, 0), "ROOT-BOUND HEART / REDIRECT TWO CHANNELS")
 		"ashwing":
@@ -184,8 +249,20 @@ func _build_arena() -> void:
 			rhythm_label = _label(origin + Vector3(0, 3.0, 0), "PARRY ONCE OR PRESENT THE COMMAND RECORD")
 	if rhythm_label != null:
 		rhythm_label.visibility_range_end = 22.0
+	_refresh_root_marks()
+
+func _refresh_root_marks() -> void:
+	for index in root_markers.size():
+		var cleared := bool(host.story_state.get_flag("root_redirected_%d" % index, false))
+		var material := StandardMaterial3D.new()
+		material.albedo_color = Color(0.50, 0.68, 0.55) if cleared else Color(0.41, 0.53, 0.31)
+		material.roughness = 1.0
+		root_markers[index].material_override = material
+		root_markers[index].scale = Vector3(0.8, 1.0, 0.8) if cleared else Vector3.ONE
 
 func _physics_process(delta: float) -> void:
+	if is_instance_valid(actor):
+		_arrival_beat()
 	if actor == null or not is_instance_valid(actor) or actor.dead or not actor.encounter_active or rhythm_label == null:
 		return
 	cue_tick += delta
@@ -275,6 +352,7 @@ func interact(id: String) -> void:
 			_cue("Two roots turn away. The heart's armor opens; the testimony no longer feeds it.")
 		else:
 			_cue("One root turns away from the names. Clear a second channel to expose the heart.")
+		_refresh_root_marks()
 	elif id == "halvern_present_order":
 		if not bool(host.story_state.get_flag("command_proof_recovered", false)) and not _known("command_proof", "main_blood_under_stone", "recover_ledger"):
 			_cue("Without the command record, Kael can only show restraint: meet one strike with a parry, then hear Halvern.")
@@ -284,6 +362,7 @@ func interact(id: String) -> void:
 		host.quests.complete_objective("main_last_witness", "break_halvern_guard")
 		_protect_surrender()
 		_cue("Kael reads the refused order aloud. Halvern lowers his blade. Speak to the memory; it no longer needs to be defeated.")
+	_refresh_preparation()
 	_save()
 
 func _protect_surrender() -> void:
@@ -329,7 +408,7 @@ func _point(id: String, prompt: String, position: Vector3, text: String) -> void
 	host._connect_interactable(area)
 	_label(position + Vector3(0, 1.5, 0), text)
 
-func _disc(position: Vector3, radius: float, color: Color, text: String) -> void:
+func _disc(position: Vector3, radius: float, color: Color, text: String) -> MeshInstance3D:
 	var mesh := MeshInstance3D.new()
 	var disc := CylinderMesh.new()
 	disc.top_radius = radius
@@ -342,6 +421,7 @@ func _disc(position: Vector3, radius: float, color: Color, text: String) -> void
 	mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	arena.add_child(mesh)
 	_label(position + Vector3(0, 0.85, 0), text)
+	return mesh
 
 func _label(position: Vector3, text: String) -> Label3D:
 	var label := Label3D.new()

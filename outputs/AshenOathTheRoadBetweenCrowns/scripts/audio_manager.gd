@@ -44,6 +44,8 @@ var current_ambient_zone = ""
 var ambient_accent_time = 0.0
 var music_state = ""
 var _voice_queue: Array = []
+var pending_dialogue_voice := ""
+var pending_dialogue_delay := 0.0
 var master_volume_linear = 0.85
 var transient_players: Array[AudioStreamPlayer] = []
 var spatial_players: Array[AudioStreamPlayer3D] = []
@@ -92,6 +94,12 @@ const STORY_SCORE_PATH := "res://assets_external/audio/story_score/"
 const STORY_SCORE_STATES := ["story_road", "story_names", "story_renewal", "ending_witness", "ending_mercy", "ending_duty", "ending_ash"]
 
 func _process(delta: float) -> void:
+	if pending_dialogue_voice != "" and dialogue_active and not dialogue_review_paused:
+		pending_dialogue_delay -= delta
+		if pending_dialogue_delay <= 0.0:
+			var voice_id := pending_dialogue_voice
+			pending_dialogue_voice = ""
+			_play_voice_now(voice_id)
 	_update_nearby_voice()
 	var duck_target := 1.0 if dialogue_active or (voice_player != null and voice_player.playing) else (0.45 if is_instance_valid(nearby_voice_player) else 0.0)
 	var previous_duck := dialogue_duck
@@ -299,7 +307,8 @@ func play_dialogue_page(page: Dictionary) -> void:
 	if str(entry.get("text", "")).strip_edges() != text or str(entry.get("speaker_id", "")).strip_edges() != speaker:
 		return
 	if _prepare_revised_voice(id):
-		_play_voice_now(id)
+		pending_dialogue_voice = id
+		pending_dialogue_delay = clampf(float(page.get("performance", {}).get("reaction_delay", 0.18)), 0.08, 0.45)
 
 func _prepare_revised_voice(id: String) -> bool:
 	if not revised_voice_entries.has(id) or not runtime_file_assets_available:
@@ -778,6 +787,8 @@ func _speech_amplitude(entry: Dictionary, position_seconds: float) -> float:
 	return amplitude
 
 func stop_voice() -> void:
+	pending_dialogue_voice = ""
+	pending_dialogue_delay = 0.0
 	_stop_nearby_voice()
 	dialogue_review_paused = false
 	_voice_queue.clear()

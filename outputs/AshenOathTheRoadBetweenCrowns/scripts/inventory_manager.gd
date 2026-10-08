@@ -5,6 +5,7 @@ signal message(text: String)
 
 var item_defs = {}
 const STARTING_ITEMS = {
+	"travel_bread": 2,
 	"redroot_potion": 3,
 	"bitterleaf_tonic": 1,
 	"ash_bomb": 1,
@@ -29,7 +30,7 @@ var items: Dictionary = STARTING_ITEMS.duplicate(true)
 var ingredients: Dictionary = STARTING_INGREDIENTS.duplicate(true)
 var active_oil = ""
 var coin = STARTING_COIN
-const ITEM_TYPE_ORDER := ["ammo", "potion", "bomb", "oil", "trap"]
+const ITEM_TYPE_ORDER := ["ammo", "potion", "food", "bomb", "oil", "trap"]
 const DEFAULT_QUICK_SLOTS := {"use_potion": "redroot_potion", "throw_bomb": "ash_bomb"}
 const QUICK_SLOT_TYPES := {"use_potion": ["potion"], "throw_bomb": ["bomb", "trap"]}
 const KIT_CATEGORIES := ["equipment", "supplies", "ingredients"]

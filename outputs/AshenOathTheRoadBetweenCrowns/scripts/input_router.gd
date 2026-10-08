@@ -61,6 +61,7 @@ const KEYBOARD_BINDINGS := {
 	"weapon_bow": KEY_2,
 	"weapon_oathblade": KEY_3,
 	"weapon_sheath": KEY_H,
+	"companion_command": KEY_V,
 	"cycle_arrow": KEY_Z,
 }
 
@@ -85,6 +86,7 @@ const GAMEPAD_BUTTON_BINDINGS := {
 	"target_lock": JOY_BUTTON_RIGHT_STICK,
 	"weapon_cycle": JOY_BUTTON_X,
 	"cycle_arrow": JOY_BUTTON_DPAD_UP,
+	"companion_command": JOY_BUTTON_DPAD_DOWN,
 }
 
 const GAMEPAD_AXIS_BINDINGS := {
@@ -129,6 +131,7 @@ const KEYBOARD_LABELS := {
 	"weapon_bow": "2",
 	"weapon_oathblade": "3",
 	"weapon_sheath": "H",
+	"companion_command": "V",
 	"cycle_arrow": "Z",
 }
 
@@ -155,6 +158,7 @@ const GAMEPAD_LABELS := {
 	"weapon_bow": "Unbound",
 	"weapon_oathblade": "Unbound",
 	"weapon_sheath": "Unbound",
+	"companion_command": "D-Pad Down",
 	"cycle_arrow": "D-Pad Up",
 }
 
@@ -210,6 +214,9 @@ var _awaiting_release: Dictionary = {}
 var _pending_pressed: Dictionary = {}
 var _pending_released: Dictionary = {}
 var _action_snapshot: Dictionary = {}
+var companion_available := false
+var _companion_press_msec := -1
+var _companion_menu_pending := false
 var _snapshot_frame := -1
 var _suppressed_frame := -1
 var _last_accepted_event := 0
@@ -332,6 +339,8 @@ func suspend_gameplay(reason: String) -> void:
 	begin_context(CONTEXT_TRANSITION)
 
 func reset_transient_input(reason: String) -> void:
+	_companion_press_msec = -1
+	_companion_menu_pending = false
 	# Remember held controls before clearing software queues. A handoff is not
 	# a synthetic release followed by another press of the same physical key.
 	for raw_action in InputMap.get_actions():
@@ -499,6 +508,30 @@ func _input(event: InputEvent) -> void:
 	elif event is InputEventMouseMotion and event.relative.length_squared() > 9.0:
 		_set_device(DEVICE_KEYBOARD_MOUSE)
 	_track_action_event(event)
+	_track_companion_command(event)
+
+func _track_companion_command(event: InputEvent) -> void:
+	if not companion_available or not is_gameplay_context() or get_tree().paused:
+		_companion_press_msec = -1
+		return
+	if not _event_matches_active_device(event) or event.is_echo():
+		return
+	if event.is_action_pressed("companion_command") and not _awaiting_release.has("companion_command"):
+		if event is InputEventJoypadButton and event.is_action_pressed("camera_zoom_out"):
+			_companion_press_msec = Time.get_ticks_msec()
+		else:
+			_companion_menu_pending = true
+	elif event.is_action_released("companion_command") and _companion_press_msec >= 0:
+		_companion_menu_pending = Time.get_ticks_msec() - _companion_press_msec < 450
+		_companion_press_msec = -1
+
+func companion_zoom_reserved() -> bool:
+	return companion_available and _companion_press_msec >= 0 and Time.get_ticks_msec() - _companion_press_msec < 450
+
+func consume_companion_menu_request() -> bool:
+	var pending := _companion_menu_pending
+	_companion_menu_pending = false
+	return pending and companion_available and is_gameplay_context()
 
 func _is_emulated_mouse(event: InputEvent) -> bool:
 	return (event is InputEventMouseButton or event is InputEventMouseMotion) and event.device == -1
@@ -1043,7 +1076,7 @@ func _apply_saved_global_bindings(saved: Variant) -> void:
 				_erase_bindings_of_type(str(action), event_type)
 				restored_types[event_type] = true
 			# Existing remaps take precedence over this newly introduced default.
-			for added_action in ["weapon_oathblade", "weapon_sheath"]:
+			for added_action in ["weapon_oathblade", "weapon_sheath", "companion_command"]:
 				if str(action) != added_action and not saved.has(added_action):
 					for added_event in InputMap.action_get_events(added_action):
 						if added_event.is_match(event):
@@ -1090,6 +1123,10 @@ func _apply_active_gamepad_profile() -> void:
 		for record in bindings[action]:
 			var event := _deserialize_event(record)
 			if event is InputEventJoypadButton or event is InputEventJoypadMotion:
+				if str(action) != "companion_command" and not str(action).begins_with("ui_") and not bindings.has("companion_command") and not _can_share_binding(str(action), "companion_command", _binding_type(event)):
+					for added_event in InputMap.action_get_events("companion_command"):
+						if added_event.is_match(event):
+							InputMap.action_erase_event("companion_command", added_event)
 				_add_event_once(str(action), event)
 
 func _restore_default_gamepad_bindings() -> void:
@@ -1191,7 +1228,7 @@ func _can_share_binding(first: String, second: String, event_type: String) -> bo
 	elif event_type == "joy_motion":
 		pairs = [["heavy_attack", "fire_bow"], ["oathfire_beam", "aim_bow"], ["camera_left", "target_previous"], ["camera_right", "target_next"]]
 	elif event_type == "joy_button":
-		pairs = [["cycle_arrow", "camera_zoom_in"]]
+		pairs = [["cycle_arrow", "camera_zoom_in"], ["companion_command", "camera_zoom_out"]]
 	for pair in pairs:
 		if first in pair and second in pair:
 			return true

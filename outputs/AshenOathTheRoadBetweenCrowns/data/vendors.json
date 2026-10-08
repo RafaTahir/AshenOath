@@ -16,6 +16,7 @@
     "name": "Mira's Apothecary",
     "subtitle": "Bitter medicine, clean bandages, and things that burn curses",
     "stock": [
+      {"item_id": "travel_bread", "price": 1, "cap": 6},
       {"item_id": "redroot_potion", "price": 6, "cap": 8},
       {"item_id": "bitterleaf_tonic", "price": 5, "cap": 8},
       {"item_id": "ash_bomb", "price": 10, "cap": 6},

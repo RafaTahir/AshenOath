@@ -1,4 +1,10 @@
 {
+  "travel_bread": {
+    "name": "Travel Bread",
+    "type": "food",
+    "description": "Plain oat bread from Greyfen. An optional share for Bracken; feeding earns no skill, coin or affection score.",
+    "effect": {}
+  },
   "redroot_potion": {
     "name": "Redroot Potion",
     "type": "potion",

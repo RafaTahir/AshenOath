@@ -6,18 +6,25 @@ Canonical root: `D:\Projects\AshenOath`. Game root:
 
 ## Ordinary Ticket
 
+Current user amendment (2026-10-08): keep LR-009 onward local, with one combined
+push/main integration/Vercel deployment after LR-028. This overrides the original
+per-ticket cadence. The LR-009 build already in flight may finish locally; no
+further intermediate export is required. The publication commands below are for
+the final combined release only, unless the user explicitly requests otherwise.
+
 1. Implement only the active ticket and directly required callers/data.
 2. Review the source diff, save compatibility, interruptions and actual ownership.
-3. If runtime inputs changed, build once with the pinned production exporter below.
+3. At the final combined delivery, build once with the pinned production exporter below.
    Compiler/dependency errors may be repaired and the build retried. Do not launch
    the game/browser or run QA after compilation. Voice generation is opt-in only.
 4. Write the result: changes, saved-state migration, exact limitations and the
    ticket's short manual checklist. Enumerate authored commit paths explicitly.
-5. Publish source and aligned Web output with the publisher below. It checks static
+5. After LR-028, publish source and aligned Web output with the publisher below. It checks static
    hashes/pack identity and the complete 100 MiB budget, commits explicit paths,
    pushes development/main without force, and deploys only the committed static
    site. It does not update the historical story branch or execute the game.
-6. Record the returned commit/deployment receipt and report the live URL. Mark
+6. Before final publication mark completed tickets `implemented_local_awaiting_user`.
+   At final publication, record the returned commit/deployment receipt and live URL. Mark
    `published_awaiting_user`; only a user verdict changes acceptance. Continue the
    next sequential ticket under the renewed active-goal authorization, preserving
    all pending manual checks. Fix a reported defect before proceeding.

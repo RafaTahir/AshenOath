@@ -56,6 +56,11 @@ var sword_attachment: BoneAttachment3D
 var sword_equipment_pivot: Node3D
 var guard_arm_ik: SkeletonIK3D
 var guard_arm_applied := false
+var companion_hand_ik: SkeletonIK3D
+var companion_gesture_target: WeakRef
+var companion_gesture_kind := ""
+var companion_gesture_time := 0.0
+var companion_gesture_duration := 0.0
 var sword_grip_bones: Dictionary = {}
 var sword_grip_base_rotations: Dictionary = {}
 var sword_grip_applied_rotations: Dictionary = {}
@@ -139,6 +144,7 @@ var weapon_mode: String:
 var bow_aiming := false
 var bow_draw_time := 0.0
 var bow_recovery := 0.0
+var training_range: WeakRef
 var selected_arrow_id := "standard_arrow"
 var bow_visual: Node3D
 var bow_quiver_visual: Node3D
@@ -249,6 +255,7 @@ func set_transition_locked(locked: bool) -> void:
 		can_control = true
 
 func cancel_buffered_input(reason: String = "context") -> void:
+	end_companion_gesture(true)
 	_cancel_equipment_action()
 	buffered_attack = ""
 	attack_buffer_time = 0.0
@@ -806,12 +813,16 @@ func _handle_bow_input() -> void:
 		return
 
 func _release_bow() -> void:
-	if inventory_ref == null:
+	var range_owner: Node = training_range.get_ref() if training_range != null else null
+	var training := is_instance_valid(range_owner)
+	if training and not range_owner.training_ready():
+		return
+	if not training and inventory_ref == null:
 		arrow_unavailable.emit()
 		return
-	if int(inventory_ref.items.get(selected_arrow_id, 0)) <= 0:
+	if not training and int(inventory_ref.items.get(selected_arrow_id, 0)) <= 0:
 		_cycle_arrow_type()
-	if int(inventory_ref.items.get(selected_arrow_id, 0)) <= 0:
+	if not training and int(inventory_ref.items.get(selected_arrow_id, 0)) <= 0:
 		arrow_unavailable.emit()
 		return
 	var direction := -global_transform.basis.z
@@ -828,8 +839,13 @@ func _release_bow() -> void:
 	direction = direction.normalized()
 	face_target(global_position + direction * 4.0)
 	var arrow_origin := get_arrow_origin()
-	inventory_ref.consume(selected_arrow_id)
+	if training and camera_controller != null:
+		direction = camera_controller.training_aim_direction(arrow_origin)
+	if not training:
+		inventory_ref.consume(selected_arrow_id)
 	arrow_requested.emit({
+		"training": training,
+		"training_owner": range_owner.get_instance_id() if training else 0,
 		"origin": arrow_origin,
 		"direction": direction,
 		"arrow_id": selected_arrow_id,
@@ -1291,6 +1307,55 @@ func _make_arm_pose_ik(skeleton: Skeleton3D, node_name: String, root_bone: Strin
 	solver.max_iterations = 12
 	skeleton.add_child(solver)
 	return solver
+
+func begin_companion_gesture(companion: Node3D, kind: String, duration: float) -> void:
+	end_companion_gesture()
+	if not is_instance_valid(companion) or animation_driver == null or equipment_loadout.is_drawn() or equipment_loadout.is_transitioning():
+		return
+	companion_gesture_target = weakref(companion)
+	companion_gesture_kind = kind
+	companion_gesture_time = 0.0
+	companion_gesture_duration = duration
+	var direction := companion.global_position - global_position
+	rotation.y = atan2(-direction.x, -direction.z)
+	if kind != "rest":
+		animation_driver.trigger_action("story_offer", 1.0, 0.14, false, duration)
+		if companion_hand_ik == null:
+			var rig: Skeleton3D = animation_driver.get_skeleton()
+			if rig != null:
+				companion_hand_ik = _make_arm_pose_ik(rig, "CompanionCareHand", &"upperarm_r", &"hand_r")
+
+func end_companion_gesture(cancel_activity: bool = false) -> void:
+	var companion: Node = companion_gesture_target.get_ref() if companion_gesture_target != null else null
+	companion_gesture_target = null
+	companion_gesture_kind = ""
+	if companion_hand_ik != null:
+		companion_hand_ik.stop()
+	if animation_driver != null and animation_driver.current_state == "story_offer":
+		animation_driver.stop_action("idle", 0.12)
+	if cancel_activity and is_instance_valid(companion) and not companion.is_queued_for_deletion():
+		companion.cancel_care()
+
+func _update_companion_gesture(delta: float) -> void:
+	if companion_gesture_kind == "":
+		return
+	var companion: Node3D = companion_gesture_target.get_ref() if companion_gesture_target != null else null
+	if not is_instance_valid(companion) or companion.is_queued_for_deletion() or not can_control or transition_locked or locomotion_velocity.length_squared() > 0.02 or attack_anim_time > 0.0 or hurt_react_time > 0.0 or beam_cast_state != BEAM_STATE_IDLE or equipment_loadout.is_drawn() or equipment_loadout.is_transitioning():
+		end_companion_gesture(true)
+		return
+	companion_gesture_time += delta
+	if companion_gesture_time >= companion_gesture_duration:
+		end_companion_gesture()
+		return
+	if companion_gesture_kind == "rest" or companion_hand_ik == null:
+		return
+	var blend := minf(clampf(companion_gesture_time / 0.3, 0.0, 1.0), clampf((companion_gesture_duration - companion_gesture_time) / 0.35, 0.0, 1.0))
+	var point: Vector3 = companion.care_contact_point(companion_gesture_kind)
+	if companion_gesture_kind == "pet":
+		point += companion.global_basis.z * sin(companion_gesture_time * 6.0) * 0.045
+	companion_hand_ik.target = Transform3D(Basis.IDENTITY, point)
+	companion_hand_ik.influence = blend
+	companion_hand_ik.start(true)
 
 func _update_oathfire_arm_pose() -> void:
 	var enabled := beam_cast_state in [BEAM_STATE_CHARGING, BEAM_STATE_RELEASING]
@@ -2322,6 +2387,7 @@ func _animate_visuals(delta: float) -> void:
 		if slash_arc_root != null:
 			slash_arc_root.visible = false
 	_update_oathfire_arm_pose()
+	_update_companion_gesture(delta)
 	# Arm IK changes the hand pose after the regular beam-state tick. Refresh the
 	# charge from the live bones now so the sphere, eventual beam origin, and
 	# rendered hands cannot diverge by one animation frame.

@@ -11,6 +11,19 @@ const WAYPOINTS := {
 	"bandit_road": ["The old checkpoint", Vector3(0, 1, 11)],
 	"vargan_approach": ["Vargan's outer road", Vector3(0, 1, 11)]
 }
+const REST_PLACES := {
+	"greyfen": {"id": "shrine_prayer", "name": "The shrine bench", "position": Vector3(8, 0, -6.2)},
+	"wychwood": {"id": "rest_wychwood", "name": "The southern deadfall", "position": Vector3(-4.9, 0, 11)},
+	"bandit_road": {"id": "rest_long_road", "name": "The old supply cart", "position": Vector3(-8, 0, 5.6)}
+}
+const REST_SECONDS := 4.0
+const REST_MINUTES := 30.0
+const FRIEND_TASKS := {
+	"mira_garden": {"actor": "mira", "person": "mira", "position": Vector3(-7.7, 0, -2.8), "prompt": "Sort the drying stems beside Mira's herb beds", "invitation": "Could you use a hand with the herbs?", "result": "The sound stems are separated from the damp ones. Mira's patients will not inherit a spoiled bundle.", "acknowledgement": "The stems you sorted dried cleanly. Two households needed them that evening."},
+	"rook_stool": {"actor": "rook", "person": "rook", "position": Vector3(-6.8, 0, 11.5), "prompt": "Brace the loose stool at the common table", "invitation": "That stool has a short leg.", "result": "The stool sits square. Rook can lose a wager without losing his seat.", "acknowledgement": "The stool hasn't moved an inch. My luck, unfortunately, remains as it was."},
+	"tor_hinge": {"actor": "blacksmith_tor", "person": "tor", "position": Vector3(10.4, 0, -2.2), "prompt": "Hold the hinge against Tor's bench", "invitation": "Need a hand with that hinge?", "result": "The hinge turns freely. Tor sets it aside for a household door.", "acknowledgement": "That hinge is working in Elna's door. No one notices a good hinge. That's the point."},
+	"anwen_shrine": {"actor": "sister_anwen", "person": "anwen", "position": Vector3(7, 0, -6.1), "prompt": "Fold the loose shrine cloths", "invitation": "Let me help put the shrine in order.", "result": "The cloths are folded. The names remain exactly where they were.", "acknowledgement": "You put the cloths in order without moving a single name. Thank you."}
+}
 var host
 var zone := ""
 var worker_group: Node3D
@@ -20,6 +33,127 @@ var worker_drivers: Array[Node] = []
 var worker_bodies: Array[Node3D] = []
 var escort_speed := 0.0
 var escort_waiting_for_player := false
+var rest_area: WeakRef
+var rest_elapsed := 0.0
+var rest_start := Vector3.ZERO
+var rest_started := false
+var friend_work := ""
+var friend_work_elapsed := 0.0
+var friend_work_start := Vector3.ZERO
+var friend_gesture_started := false
+
+static func personal_scenes(game, actor_id: String) -> Array[Dictionary]:
+	var scenes: Array[Dictionary] = []
+	var state = game.story_state
+	var partner: String = state.commitment_partner()
+	if preload("res://scripts/greyfen_gathering.gd").active(game) and preload("res://scripts/greyfen_gathering.gd").VOICES.has(actor_id):
+		scenes.append({"id":"lr_gather_" + actor_id, "label":"Share a quiet moment at the gathering."})
+	if str(game.current_zone_id) == "greyfen" and partner != "":
+		if actor_id == "rook" and str(state.get_flag("lr_friend_rook_stool", "")) == "completed" and str(state.get_flag("lr_confidence_rook", "")) != partner:
+			scenes.append({"id":"lr_rook_confidence", "label":"Tell Rook about your commitment, privately."})
+		if actor_id == "sister_anwen" and str(state.get_flag("lr_friend_anwen_shrine", "")).begins_with("completed") and str(state.get_flag("lr_confidence_anwen", "")) != partner:
+			scenes.append({"id":"lr_anwen_confidence", "label":"Tell Anwen about your commitment, privately."})
+	if actor_id == "notice_board" and str(game.current_zone_id) == "greyfen" and (bool(state.get_flag("chapel_names_read", false)) or str(state.get_flag("names_policy", "")) != "") and state.get_flag("lr_vale_letter_reply", null) == null:
+		scenes.append({"id":"lr_vale_letter", "label":"Read the record keeper's letter."})
+	if actor_id == "vargan_record_keeper" and str(game.current_zone_id) == "record_hall":
+		if state.get_flag("lr_vale_archive", null) == null:
+			scenes.append({"id":"lr_vale_archive", "label":"Who is this folded page for?"})
+		elif state.get_flag("lr_vale_personal", null) == null:
+			scenes.append({"id":"lr_vale_personal", "label":"What do you want beyond keeping the record?"})
+		if str(state.get_flag("lr_vale_personal", "")) == "interest" and bool(state.get_flag("vargan_ledger_choice_made", false)):
+			if state.get_flag("lr_vale_terms", null) == null:
+				scenes.append({"id":"lr_vale_vulnerable", "label":"The ledger is settled. What happens to you now?"})
+			elif str(state.get_flag("lr_vale_terms", "")) == "questioned":
+				scenes.append({"id":"lr_vale_boundary", "label":"I want to answer what you said about leaving."})
+			elif str(state.get_flag("lr_vale_terms", "")) in ["respected", "reconsidered"] and state.get_flag("lr_vale_commitment_answer", null) == null:
+				scenes.append({"id":"lr_vale_existing_promise" if partner != "" and partner != "vale" else "lr_vale_commitment", "label":"There is one promise I do want to make."})
+		if state.commitment_partner() == "vale":
+			scenes.append({"id":"lr_vale_end", "label":"We need to talk about our commitment."})
+		if bool(state.get_flag("renewal_stopped", false)) and str(state.get_flag("lr_vale_personal", "")) in ["interest", "friendship", "ended"] and state.get_flag("lr_vale_future", null) == null:
+			scenes.append({"id":"lr_vale_future", "label":"Have you thought about that open window?"})
+	if actor_id == "mira" and str(game.current_zone_id) == "greyfen":
+		if str(state.get_flag("evidence_report", "")) != "" and state.get_flag("lr_mira_supplies", null) == null:
+			scenes.append({"id":"lr_mira_supplies", "label":"How are your patients managing?"})
+		if bool(state.get_flag("mira_truth_known", false)) and state.get_flag("lr_mira_supplies", null) != null and state.get_flag("lr_mira_personal", null) == null:
+			scenes.append({"id":"lr_mira_personal", "label":"Can we talk about something besides the road?"})
+		if str(state.get_flag("lr_mira_personal", "")) == "interest":
+			if state.get_flag("lr_mira_truth_talk", null) == null:
+				scenes.append({"id":"lr_mira_truth_talk", "label":"What would an honest life together mean?"})
+			elif str(state.get_flag("lr_mira_truth_talk", "")) == "disagreed" and state.get_flag("lr_mira_reconciled", null) == null:
+				if str(state.get_flag("mira_truth", "")) in ["confessed", "destroyed"] or (bool(state.get_flag("mill_workers_rescued", false)) and bool(state.get_flag("mill_records_saved", false))):
+					scenes.append({"id":"lr_mira_reconcile", "label":"About the truth, and what happened afterward."})
+				else:
+					scenes.append({"id":"lr_mira_boundary", "label":"About what you asked of me."})
+			elif str(state.get_flag("lr_mira_truth_talk", "")) == "agreed" or str(state.get_flag("lr_mira_reconciled", "")) == "acknowledged":
+				if state.get_flag("lr_mira_commitment_answer", null) == null:
+					scenes.append({"id":"lr_mira_existing_promise" if partner != "" and partner != "mira" else "lr_mira_commitment", "label":"I want to answer you plainly."})
+		if state.commitment_partner() == "mira" and state.get_flag("lr_mira_quiet", null) == null:
+			scenes.append({"id":"lr_mira_quiet", "label":"Could we have those ten quiet minutes?"})
+		if state.commitment_partner() == "mira":
+			scenes.append({"id":"lr_mira_end", "label":"We need to talk about our commitment."})
+	return scenes
+
+static func add_personal_invitation(game, area: Node3D, content: Dictionary) -> void:
+	for entry: Dictionary in personal_scenes(game, str(area.get("interaction_id"))):
+		content["actions"].append({"type":"living_road_scene", "label":entry.label, "scene_id":entry.id, "actor_instance":area.get_instance_id()})
+
+static func personal_scene(game, action: Dictionary) -> void:
+	game._resume_game()
+	var actor := instance_from_id(int(action.get("actor_instance", 0))) as Node3D
+	if not is_instance_valid(actor) or not is_instance_valid(game.zone_root) or not game.zone_root.is_ancestor_of(actor) or not actor.is_visible_in_tree() or actor.global_position.distance_to(game.player.global_position) > 4.0 or _danger_near(game):
+		return
+	for entry: Dictionary in personal_scenes(game, str(actor.get("interaction_id"))):
+		if str(entry.id) != str(action.get("scene_id", "")):
+			continue
+		if str(entry.id) == "lr_vale_letter" and not bool(game.story_state.get_flag("lr_vale_letter_read", false)):
+			game.story_state.set_flag("lr_vale_letter_read", true)
+			game.story_save_pending = true
+			game.call_deferred("_persist_story_action")
+		var content: Dictionary = preload("res://scripts/greyfen_gathering.gd").conversation(game, str(entry.id).trim_prefix("lr_gather_")) if str(entry.id).begins_with("lr_gather_") else game.dialogue.get_dialogue(str(entry.id))
+		if str(entry.id) in ["lr_rook_confidence", "lr_anwen_confidence"]:
+			var person := "rook" if str(entry.id) == "lr_rook_confidence" else "anwen"
+			var partner: String = game.story_state.commitment_partner()
+			content["pages"].insert(0, {"speaker":"Kael", "speaker_id":"player", "text":partner.capitalize() + " and I have made a commitment. I wanted to tell a friend, not the village."})
+			game.story_state.begin_change()
+			game.story_state.set_flag("lr_confidence_" + person, partner)
+			game.story_state.record_relationship_event({"id":"lr." + person + ".confidence." + partner, "actor":person, "kind":"friendship", "text":"Kael chose to tell " + person.capitalize() + " about his commitment to " + partner.capitalize() + ", privately.", "acknowledgement":"What you told me stays between us. You can have company without being made into a story."})
+			game.story_state.end_change()
+			game.story_save_pending = true
+			game.call_deferred("_persist_story_action")
+		game._stage_dialogue_moment(actor)
+		if str(entry.id) != "lr_vale_letter":
+			preload("res://scripts/story_performance.gd").begin(actor, game.player, content, game.story_state)
+		game.get_tree().paused = true
+		game.audio.set_game_paused(true)
+		game.hud.show_dialogue(content)
+		return
+
+static func add_friend_invitation(game, area: Node3D, content: Dictionary) -> void:
+	if str(game.current_zone_id) != "greyfen":
+		return
+	for id: String in FRIEND_TASKS:
+		var task: Dictionary = FRIEND_TASKS[id]
+		if str(area.get("interaction_id")) != str(task.actor):
+			continue
+		if id == "anwen_shrine" and str(game.story_state.get_flag("evidence_report", "")) == "":
+			continue
+		var state := str(game.story_state.get_flag("lr_friend_" + id, ""))
+		if state in ["", "accepted", "worked"]:
+			var label := str(task.invitation) if state == "" else ("About the work we finished." if state == "worked" else "Where did you need a hand?")
+			content["actions"].append({"type": "friend_scene", "label": label, "friend_task": id, "actor_instance": area.get_instance_id()})
+
+static func friend_scene(game, action: Dictionary) -> void:
+	game._resume_game()
+	var director: Node = game.zone_root.get_node_or_null(LAYER) if is_instance_valid(game.zone_root) else null
+	var actor := instance_from_id(int(action.get("actor_instance", 0))) as Node3D
+	if director != null:
+		director._open_friend_scene(str(action.get("friend_task", "")), actor)
+
+static func rest_action(game, action: Dictionary) -> void:
+	var director: Node = game.zone_root.get_node_or_null(LAYER) if is_instance_valid(game.zone_root) else null
+	game._resume_game()
+	if director != null:
+		director._choose_rest(action)
 
 static func install(game, root: Node3D, zone_id: String) -> void:
 	if root == null or root != game.zone_root:
@@ -35,6 +169,9 @@ static func install(game, root: Node3D, zone_id: String) -> void:
 	director.refresh()
 	if zone_id == "greyfen":
 		preload("res://scripts/opening_care_scene.gd").install(game, root)
+		preload("res://scripts/greyfen_archery_range.gd").install(game)
+		preload("res://scripts/bracken_field_trial.gd").install(game)
+		preload("res://scripts/greyfen_gathering.gd").install(game)
 
 static func handle(game, area) -> void:
 	if str(area.interaction_id).begins_with("opening_"):
@@ -74,6 +211,9 @@ static func get_started_work(state, zone_id: String) -> Array[Dictionary]:
 	if state == null:
 		return result
 	if zone_id == "greyfen":
+		for id: String in FRIEND_TASKS:
+			if str(state.get_flag("lr_friend_" + id, "")) == "accepted":
+				result.append({"id":"lr_" + id, "title":str(FRIEND_TASKS[id].prompt), "action":str(FRIEND_TASKS[id].prompt), "target_ids":["lr_work_" + id], "destination_zone":"greyfen"})
 		if bool(state.get_flag("opening_cup_carried", false)) and not bool(state.get_flag("opening_cup_delivered", false)):
 			result.append({"id":"opening_water", "title":"Water for the injured traveler", "action":"Leave the cup on the linen-covered tray beside Anwen's privacy screen", "target_ids":["opening_cup_deliver"], "destination_zone":"greyfen"})
 		if bool(state.get_flag("cart_sack_carried", false)) and not bool(state.get_flag("cart_helped", false)):
@@ -142,6 +282,28 @@ static func _danger_near(game) -> bool:
 	return false
 
 func _build(root: Node3D) -> void:
+	if zone == "greyfen":
+		_point(root, "lr_gathering", "Room at the common table", Vector3(-5.4, 0, 10.5), "ROOM FOR COMPANY", Color(0.59, 0.65, 0.61))
+		for id: String in FRIEND_TASKS:
+			var task: Dictionary = FRIEND_TASKS[id]
+			var area = Interactable.new()
+			area.setup("lr_work_" + id, "story_activity", str(task.prompt))
+			area.position = task.position
+			area.build_collision(0.8)
+			root.add_child(area)
+			area.add_to_group("story_activity")
+			host._connect_interactable(area)
+	if REST_PLACES.has(zone) and zone != "greyfen":
+		# These interaction areas use the existing deadfall/cart; no duplicate prop
+		# or collision is placed across the road.
+		var place: Dictionary = REST_PLACES[zone]
+		var area = Interactable.new()
+		area.setup(str(place.id), "story_activity", "Rest by " + str(place.name).to_lower())
+		area.position = place.position
+		area.build_collision(1.1)
+		root.add_child(area)
+		area.add_to_group("story_activity")
+		host._connect_interactable(area)
 	if WAYPOINTS.has(zone):
 		_point(root, "story_waypost", "Read the waypost: discovered roads", WAYPOINTS[zone][1] + Vector3(-1.8, -1, 0), "ROADS ALREADY WALKED", Color(0.48, 0.40, 0.24))
 	match zone:
@@ -174,6 +336,8 @@ func refresh() -> void:
 			continue
 		var id := str(area.interaction_id)
 		var enabled := true
+		if id.begins_with("lr_work_"):
+			enabled = str(host.story_state.get_flag("lr_friend_" + id.trim_prefix("lr_work_"), "")) == "accepted"
 		match id:
 			"cart_kitchen_delivery": enabled = _flag("cart_sack_carried") and not _flag("cart_helped")
 			"road_drain_work": enabled = _flag("road_tools_taken") and not _flag("road_repaired")
@@ -197,6 +361,25 @@ func refresh() -> void:
 	host.interaction_focus_dirty = true
 
 func activate(id: String) -> void:
+	if id == "lr_gathering":
+		preload("res://scripts/greyfen_gathering.gd").open_invitation(host)
+		return
+	if id.begins_with("lr_trial"):
+		var trial: Node = host.zone_root.get_node_or_null("BrackenFieldTrial")
+		if trial != null:
+			trial.activate(id)
+		return
+	if id == "lr_archery":
+		var range_node: Node = host.zone_root.get_node_or_null("GreyfenArcheryRange")
+		if range_node != null:
+			range_node.open_menu()
+		return
+	if id.begins_with("lr_work_"):
+		_begin_friend_work(id.trim_prefix("lr_work_"))
+		return
+	if REST_PLACES.has(zone) and id == str(REST_PLACES[zone].id):
+		_open_rest(id)
+		return
 	match id:
 		"story_waypost":
 			if not _flag("waypost_" + zone):
@@ -339,9 +522,234 @@ func _commit(flags: Dictionary, cue: String) -> void:
 func _flag(id: String) -> bool:
 	return bool(host.story_state.get_flag(id, false))
 
+func _open_friend_scene(id: String, actor: Node3D) -> void:
+	if zone != "greyfen" or not FRIEND_TASKS.has(id) or not is_instance_valid(actor) or not host.zone_root.is_ancestor_of(actor) or not actor.is_visible_in_tree() or str(actor.get("interaction_id")) != str(FRIEND_TASKS[id].actor) or actor.global_position.distance_to(host.player.global_position) > 4.0 or _danger_near(host):
+		return
+	if id == "anwen_shrine" and str(host.story_state.get_flag("evidence_report", "")) == "":
+		return
+	var state := str(host.story_state.get_flag("lr_friend_" + id, ""))
+	if state not in ["", "accepted", "worked"]:
+		return
+	var scene := "lr_" + id + ("_done" if state == "worked" else "_offer")
+	var content: Dictionary = host.dialogue.get_dialogue(scene)
+	if state == "accepted":
+		content["pages"] = [{"speaker": str(content.name), "speaker_id": str(FRIEND_TASKS[id].actor), "text": str(FRIEND_TASKS[id].prompt) + ". There's no hurry."}]
+		content["actions"] = []
+	host._stage_dialogue_moment(actor)
+	preload("res://scripts/story_performance.gd").begin(actor, host.player, content, host.story_state)
+	host.get_tree().paused = true
+	host.audio.set_game_paused(true)
+	host.hud.show_dialogue(content)
+
+func _begin_friend_work(id: String) -> void:
+	if not FRIEND_TASKS.has(id) or zone != "greyfen" or str(host.story_state.get_flag("lr_friend_" + id, "")) != "accepted":
+		return
+	var area := host.zone_root.find_child("lr_work_" + id, true, false) as Node3D
+	var reason := _rest_unavailable(area)
+	if reason != "":
+		host.hud.toast(reason)
+		return
+	_cancel_friend_work()
+	_cancel_rest()
+	friend_work = id
+	friend_work_start = host.player.global_position
+	host.player._request_equipment(host.player.weapon_mode, host.player.get_selected_blade_id(), false)
+	host.hud.toast(str(FRIEND_TASKS[id].prompt) + ".")
+
+func _tick_friend_work(delta: float) -> void:
+	if friend_work == "":
+		return
+	var area := host.zone_root.find_child("lr_work_" + friend_work, true, false) as Node3D
+	if _rest_unavailable(area) != "" or host.player.global_position.distance_to(friend_work_start) > 0.3 or not host.player.can_control or host.player.transition_locked:
+		_cancel_friend_work()
+		return
+	if host.player.equipment_loadout.is_transitioning():
+		if friend_gesture_started:
+			_cancel_friend_work()
+		return
+	if host.player.equipment_loadout.is_drawn():
+		_cancel_friend_work()
+		return
+	if not friend_gesture_started:
+		friend_gesture_started = true
+		var offset: Vector3 = area.global_position - host.player.global_position
+		if Vector2(offset.x, offset.z).length_squared() > 0.01:
+			host.player.rotation.y = atan2(-offset.x, -offset.z)
+		if host.player.animation_driver != null:
+			host.player.animation_driver.trigger_action("story_offer", 1.0, 0.15, false, 3.0)
+	friend_work_elapsed += delta
+	if friend_work_elapsed < 3.0:
+		return
+	var id := friend_work
+	var task: Dictionary = FRIEND_TASKS[id]
+	_cancel_friend_work()
+	host.story_state.begin_change()
+	host.story_state.set_flag("lr_friend_" + id, "worked")
+	host.story_state.record_relationship_event({"id": "lr." + id + ".help", "actor": task.person, "kind": "help", "text": task.result, "acknowledgement": task.acknowledgement})
+	host.story_state.end_change()
+	host.audio.play_event("cloth_wind", 0.015)
+	host.hud.toast(str(task.result))
+	host.story_save_pending = true
+	host.call_deferred("_persist_story_action")
+	refresh()
+	var actor := host.zone_root.find_child(str(task.actor), true, false) as Node3D
+	if is_instance_valid(actor) and actor.is_visible_in_tree() and actor.global_position.distance_to(host.player.global_position) <= 4.0:
+		_open_friend_scene(id, actor)
+
+func _cancel_friend_work() -> void:
+	if friend_gesture_started and host != null and is_instance_valid(host.player) and host.player.animation_driver != null and host.player.animation_driver.current_state == "story_offer":
+		host.player.animation_driver.stop_action("idle", 0.12)
+	friend_work = ""
+	friend_work_elapsed = 0.0
+	friend_gesture_started = false
+
+func _rest_unavailable(area: Node3D) -> String:
+	if not is_instance_valid(area) or not is_instance_valid(host.player) or get_parent() != host.zone_root or zone != str(host.current_zone_id):
+		return "This resting place is no longer within reach."
+	if not host.zone_root.is_ancestor_of(area) or not area.is_visible_in_tree() or host.player.global_position.distance_to(area.global_position) > 2.8:
+		return "Stay beside the resting place."
+	if host._journey_load_pending() or host.zone_transition_pending or host.zone_load_request_pending or host.story_action_in_progress or not host.pending_player_restore.is_empty() or str(host.pending_ending) != "":
+		return "Finish the current journey or conversation first."
+	if host.day_night == null or host.day_night.time_locked:
+		return "There is no time to stop during this part of the story."
+	if _danger_near(host) or float(host.player.health_component.health) <= 0.0 or float(host.player.attack_anim_time) > 0.0 or float(host.player.hurt_react_time) > 0.0 or str(host.player.beam_cast_state) != "":
+		return "Find quiet before resting."
+	if not host.player.is_on_floor() or host.spatial_service == null or not host.spatial_service.is_walkable_position(host.player.global_position, 0.4, host.spatial_service.bank_for(host.player.global_position)):
+		return "Find firm ground beside the resting place."
+	return ""
+
+func _open_rest(id: String) -> void:
+	var area := host.zone_root.find_child(id, true, false) as Node3D
+	var reason := _rest_unavailable(area)
+	if reason != "":
+		host.hud.toast(reason)
+		return
+	_cancel_rest()
+	var place: Dictionary = REST_PLACES[zone]
+	var words := "The wood holds a little warmth. There is room here to set the road down for half an hour."
+	if zone == "wychwood":
+		words = "Beyond the fallen trunk, leaves turn in a wind too slight to feel. The path is quiet for now."
+	elif zone == "bandit_road":
+		words = "Someone has swept the broken grain from the cart. A dry wheel-rut offers shelter from the wind."
+	var actions: Array = []
+	for entry in [["rest", "Rest for half an hour"], ["prepare", "Lay out supplies"], ["leave", "Keep moving"]]:
+		actions.append({"type": "rest_place", "label": entry[1], "operation": entry[0], "rest_actor_instance": area.get_instance_id(), "rest_id": id})
+	host.get_tree().paused = true
+	host.audio.set_game_paused(true)
+	host.hud.show_dialogue({"name": str(place.name), "pages": [{"speaker": str(place.name), "speaker_id": "narrator", "text": words}], "actions": actions})
+
+func _choose_rest(action: Dictionary) -> void:
+	if not REST_PLACES.has(zone) or str(action.get("rest_id", "")) != str(REST_PLACES[zone].id):
+		return
+	var area := instance_from_id(int(action.get("rest_actor_instance", 0))) as Node3D
+	if str(action.get("operation", "")) == "leave":
+		return
+	var reason := _rest_unavailable(area)
+	if reason != "":
+		host.hud.toast(reason)
+		return
+	if str(action.get("operation", "")) == "prepare":
+		host.get_tree().paused = true
+		host.audio.set_game_paused(true)
+		host._update_preparation_context()
+		host.hud.show_inventory(host.inventory, host.quests, host.story_state, host.progression, "preparation")
+		return
+	if str(action.get("operation", "")) != "rest":
+		return
+	_cancel_friend_work()
+	rest_area = weakref(area)
+	rest_elapsed = 0.0
+	rest_started = false
+	rest_start = host.player.global_position
+	host.player._request_equipment(host.player.weapon_mode, host.player.get_selected_blade_id(), false)
+	host.hud.toast("Kael lets the road fall quiet.")
+
+func _tick_rest(delta: float) -> void:
+	if rest_area == null:
+		return
+	var area := rest_area.get_ref() as Node3D
+	if _rest_unavailable(area) != "" or host.player.global_position.distance_to(rest_start) > 0.3 or not host.player.can_control or host.player.transition_locked:
+		_cancel_rest()
+		return
+	if host.player.equipment_loadout.is_transitioning():
+		if rest_started:
+			_cancel_rest()
+		return
+	if host.player.equipment_loadout.is_drawn():
+		_cancel_rest()
+		return
+	rest_started = true
+	rest_elapsed += delta
+	if rest_elapsed < REST_SECONDS:
+		return
+	var id: String = str(REST_PLACES[zone].id)
+	_cancel_rest()
+	# Only a completed interval commits time/recovery. No supplies or story
+	# objectives are granted; existing clock signals own schedule/sky changes.
+	var clock = host.day_night
+	var minutes: float = clock.get_time() + REST_MINUTES
+	var days: int = int(clock.day_count) + int(floor(minutes / 1440.0))
+	clock.set_time(minutes, days)
+	host.player.stamina_component.restore(host.player.stamina_component.max_stamina)
+	var event := "quiet"
+	if host.story_state.has_heard_testimony():
+		event = "after_testimony"
+	elif str(host.story_state.get_flag("evidence_report", "")) != "":
+		event = "after_report"
+	var record := {"id": id, "zone": zone, "day": days, "minutes": clock.get_time(), "event": event}
+	host.story_state.begin_change()
+	host.story_state.set_flag("last_rest", record)
+	var reaction := _rest_reaction(event)
+	host.story_state.end_change()
+	host.hud.toast(reaction)
+	host.story_save_pending = true
+	host.call_deferred("_persist_story_action")
+
+func _rest_reaction(event: String) -> String:
+	var companion := host.zone_root.get_node_or_null("Bracken") as Node3D
+	if is_instance_valid(companion) and companion.is_visible_in_tree() and _flag("bracken_rescued") and companion.global_position.distance_to(host.player.global_position) < 4.0:
+		if event == "after_testimony":
+			host.story_state.remember_companion_event("rest_after_testimony", zone)
+		if zone == "greyfen" and _flag("bell_eater_defeated"):
+			return "Bracken rests his head on your boot. Beyond the bench, the bell is quiet; the shrine's unfinished work still belongs to people."
+		if zone == "wychwood" and _flag("rootbound_colossus_defeated"):
+			return "At the deadfall, Bracken noses the wind from the deeper wood. The shaking has stopped. You share the quiet without pretending the scars have gone."
+		if zone == "bandit_road" and str(host.story_state.get_flag("senn_fate", "")) != "":
+			return "Bracken settles beside the old supply cart. The captain's fate is settled; keeping this road safe is still living work."
+		return "Half an hour passes. Bracken keeps you company, his attention still on the road."
+	if zone == "greyfen":
+		for actor_id in ["sister_anwen", "mira", "rook", "blacksmith_tor"]:
+			var actor := host.zone_root.find_child(actor_id, true, false) as Node3D
+			if not is_instance_valid(actor) or not actor.is_visible_in_tree() or actor.global_position.distance_to(host.player.global_position) > 5.0:
+				continue
+			var key: String = "rest_reaction_%s_%s" % [actor_id, event]
+			if _flag(key):
+				continue
+			host.story_state.set_flag(key, true)
+			match actor_id:
+				"sister_anwen": return "Half an hour passes. Near Anwen, even the names feel less heavy for a moment." if event != "quiet" else "Half an hour passes. Anwen shares the quiet without asking anything of you."
+				"mira": return "Half an hour passes. Mira catches your eye and sets her work aside for a moment."
+				"rook": return "Half an hour passes. Rook rests his hands on the cart. For once, neither of you has to lift anything."
+				"blacksmith_tor": return "Half an hour passes. Tor turns a cooled hinge over in his hand, companionably silent."
+	return "Half an hour passes. Kael catches his breath. The road is still there."
+
+func _cancel_rest() -> void:
+	rest_area = null
+	rest_elapsed = 0.0
+	rest_started = false
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_PAUSED or what == NOTIFICATION_EXIT_TREE or what == NOTIFICATION_APPLICATION_FOCUS_OUT:
+		_cancel_rest()
+		_cancel_friend_work()
+
 func _physics_process(delta: float) -> void:
 	if host == null or host.current_zone_id != zone or host.player == null:
+		_cancel_rest()
+		_cancel_friend_work()
 		return
+	_tick_rest(delta)
+	_tick_friend_work(delta)
 	escort_tick += delta
 	if escort_tick >= 0.1:
 		escort_tick = 0.0
