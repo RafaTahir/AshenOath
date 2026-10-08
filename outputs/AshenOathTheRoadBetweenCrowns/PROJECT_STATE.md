@@ -2,7 +2,7 @@
 
 ## Living Road - 2026-10-08
 
-Current: 28/28 source-implemented locally, 8/28 published, 0/28 user-accepted.
+Current: 28/28 implemented and published, 0/28 user-accepted.
 LR-023 adds Bracken's optional same-bank field trial; LR-024 adds the post-report
 gathering, independent of games/rewards and main progression. LR-025/026 connect
 retained boss counterplay, visible preparation and bounded aftermath to known
@@ -10,9 +10,12 @@ human causes. LR-027 projects regional consequences; LR-028 adds saved-fact pers
 epilogues and matching journal/save summaries. Models, phases, quests and reward IDs
 are retained. The combined `lr-028-20261008-living-road` production build completed:
 15 Web files, 92,124,361 bytes. Missing type inferences reported by compilation
-were corrected; no game/browser testing was run. Next: single combined publication
-and provider receipt. No new push/deployment yet. LR-028 is the single publication
-boundary; historical entries below describe their own slices.
+were corrected; no game/browser testing was run. Combined package commit
+`28bb1511d0817923710a4fab979543eaddc41105` is pushed to development/main. Vercel
+reports `dpl_FFXV8YcpLSPTHtghvmGaY7bWqEd6` READY at
+https://ashenoath.vercel.app/?v=lr-028-28bb151 . LR-009 through LR-028 shared this
+single final publication. Next: user testing using the ticket result checklists.
+No runtime acceptance is claimed; historical entries below describe their own slices.
 
 Latest: LR-022 adds three physical-target contests, posted character banter, rematches
 and once-only supply rewards. Progress: 22/28 implemented, 8/28 published, 0/28

@@ -1,6 +1,6 @@
 # LR-028 - Lives After the Covenant
 
-Source implemented and combined build completed. Publication pending. UNVERIFIED - REQUIRES USER
+Source implemented, built and published. UNVERIFIED - REQUIRES USER
 TESTING; no tests, browser/game launch, screenshots, listening or benchmarks.
 
 The existing epilogue assembler now adds saved-fact cards for the current chosen
@@ -28,7 +28,15 @@ Decoded root: 19,559,488 bytes, SHA-256
 `b9d623e50c1410ff226389399d09faa4306a5b3adf56e1217b2ebaccd359a423`.
 The source provenance remains `9a279c44a4a2187740117a842b302eb75b02a5e2` plus
 the working changes packaged here, not a fabricated post-build source revision.
-Git and provider receipt will be added after the single combined publication.
+Combined package commit: `28bb1511d0817923710a4fab979543eaddc41105`, pushed to
+`codex/masterpiece-rebuild` and `main`. Vercel reports production READY:
+`dpl_FFXV8YcpLSPTHtghvmGaY7bWqEd6`. Live:
+https://ashenoath.vercel.app/?v=lr-028-28bb151
+Receipt: `.release-gate/living-road/LR-028-20261008T025717Z/publication.json`.
+The staged site was archived from the package commit. No post-deployment game,
+browser, screenshot, listening or performance checks were executed. All 28 Living
+Road tickets are implemented/published and all remain awaiting user acceptance.
+The two pre-existing unrelated untracked directories were excluded and preserved.
 Publication is not user acceptance.
 
 Manual checklist: view four earned covenant outcomes; inspect Mira/Vale/neither,
