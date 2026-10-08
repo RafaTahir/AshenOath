@@ -207,6 +207,7 @@ var _evidence_reference_entry := ""
 
 var _display_metrics: Dictionary = {}
 var _layout_policy: Dictionary = {}
+var _touch_shared_prompt := false
 var _layout_pending := false
 var _layout_applying := false
 var _layout_generation := 0
@@ -356,7 +357,7 @@ func _refresh_journey_card() -> void:
 func _set_journey_card_text(text: String) -> void:
 	if not is_instance_valid(_journey_card):
 		return
-	_journey_card.visible = true
+	_journey_card.visible = not (bool(_layout_policy.get("short_display", false)) and active_menu in ["main", "pause"])
 	if _journey_card.text == text:
 		return
 	var scroll: float = _journey_card.get_v_scroll_bar().value
@@ -1029,6 +1030,7 @@ func set_prompt(text: String) -> void:
 	prompt_label.visible = raw_prompt != "" and not _gameplay_surface_blocked()
 	if prompt_back != null:
 		prompt_back.visible = prompt_label.visible
+	_refresh_touch_message_visibility()
 
 func set_interaction_prompt(model: Dictionary) -> void:
 	_interaction_prompt_model = model.duplicate(true)
@@ -2740,11 +2742,13 @@ func _apply_responsive_menu(policy: Dictionary) -> void:
 		return
 	var model: Dictionary = policy.menu
 	var compact: bool = bool(model.compact)
+	var short_display: bool = bool(policy.get("short_display", false))
 	var frame: Rect2 = model.frame
 	var gap: float = float(policy.gap)
 	var padding: float = float(policy.padding)
 	_menu_frame.position = frame.position
 	_menu_frame.size = frame.size
+	(_menu_shell.get_parent() as VBoxContainer).add_theme_constant_override("separation", int(round(gap)))
 	_menu_shell.add_theme_constant_override("separation", int(round(gap)))
 	_menu_title_stack.add_theme_constant_override("separation", int(round(gap)))
 	_menu_content.add_theme_constant_override("separation", int(round(gap)))
@@ -2762,7 +2766,8 @@ func _apply_responsive_menu(policy: Dictionary) -> void:
 	_menu_title_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_menu_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL if compact else Control.SIZE_FILL
 	_menu_panel.custom_minimum_size = Vector2(0.0 if compact else float(model.panel_width), 0.0)
-	_menu_shell.custom_minimum_size.y = maxf(0.0, frame.size.y - (float(model.footer_height) + gap if _menu_footer.visible else 0.0))
+	# The scroll container, not the title/card's minimum height, owns overflow.
+	_menu_shell.custom_minimum_size = Vector2.ZERO
 	_set_responsive_panel_padding(_menu_panel, padding)
 	_menu_content.set_meta("menu_button_width", 0.0)
 	_menu_content.set_meta("menu_button_height", float(policy.button_min_height))
@@ -2772,7 +2777,11 @@ func _apply_responsive_menu(policy: Dictionary) -> void:
 	_menu_footer.add_theme_constant_override("separation", int(round(gap)))
 	_menu_notice.custom_minimum_size = Vector2.ZERO
 	_menu_notice.visible = _menu_notice.text != ""
+	for child: Node in _menu_title_stack.get_children():
+		if child is Control and bool(child.get_meta("menu_secondary_heading", false)):
+			(child as Control).visible = not (short_display and active_menu in ["main", "pause"])
 	if is_instance_valid(_journey_card):
+		_journey_card.visible = _journey_card_kind != "" and not (short_display and active_menu in ["main", "pause"])
 		_journey_card.custom_minimum_size = Vector2(0.0, minf(180.0 * float(policy.unit_scale), maxf(float(policy.button_min_height), frame.size.y * (0.3 if compact else 0.45))))
 	for child: Node in _menu_content.get_children():
 		if child is RichTextLabel:
@@ -2796,6 +2805,7 @@ func _apply_responsive_loading(policy: Dictionary) -> void:
 	_journey_cancel_button.custom_minimum_size.y = float(policy.button_min_height)
 
 func _apply_responsive_gameplay(policy: Dictionary) -> void:
+	_touch_shared_prompt = false
 	var safe: Rect2 = policy.safe_rect
 	var usable: Vector2 = policy.display_usable_size
 	var unit: float = float(policy.unit_scale)
@@ -2970,9 +2980,12 @@ func _apply_responsive_gameplay(policy: Dictionary) -> void:
 	toast_label.add_theme_font_size_override("font_size", int(fonts.body))
 	if touch and bool(touch_model.get("playable", false)):
 		_apply_touch_gameplay_regions(touch_model, unit)
+	else:
+		_refresh_touch_message_visibility()
 	_apply_hud_visual_colors()
 
 func _apply_touch_gameplay_regions(model: Dictionary, unit: float) -> void:
+	_touch_shared_prompt = bool(model.get("shared_message_prompt", false))
 	var corridor: Rect2 = model.center_rect
 	var prompt: Rect2 = model.prompt_rect
 	var messages: Rect2 = model.message_rect
@@ -3011,6 +3024,10 @@ func _refresh_touch_message_visibility() -> void:
 	var blocked := _gameplay_surface_blocked()
 	hint_label.visible = not blocked and (input_device != "touch" or not notice_visible) and _hint_remaining > 0.0 and raw_hint != ""
 	status_label.visible = not blocked and (input_device != "touch" or (not notice_visible and not hint_label.visible)) and _status_remaining > 0.0
+	var message_visible: bool = notice_visible or hint_label.visible or status_label.visible
+	prompt_label.visible = not blocked and raw_prompt != "" and not (input_device == "touch" and _touch_shared_prompt and message_visible)
+	if prompt_back != null:
+		prompt_back.visible = prompt_label.visible
 
 func _build_menu_layer() -> void:
 	menu_layer = Control.new()
@@ -3210,6 +3227,7 @@ func _menu_box(title: String, subtitle: String = "", omen_text: String = "", _he
 	_build_menu_background()
 	_menu_frame = Control.new()
 	_menu_frame.name = "ResponsiveMenuFrame"
+	_menu_frame.clip_contents = true
 	menu_layer.add_child(_menu_frame)
 	var frame_box: VBoxContainer = VBoxContainer.new()
 	frame_box.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -3235,6 +3253,7 @@ func _menu_box(title: String, subtitle: String = "", omen_text: String = "", _he
 	if subtitle != "":
 		var subtitle_label: Label = Label.new()
 		subtitle_label.text = subtitle
+		subtitle_label.set_meta("menu_secondary_heading", true)
 		subtitle_label.set_meta("layout_font_role", "caption")
 		subtitle_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		subtitle_label.add_theme_color_override("font_color", Color(0.78, 0.70, 0.56))
@@ -3242,6 +3261,7 @@ func _menu_box(title: String, subtitle: String = "", omen_text: String = "", _he
 	if omen_text != "":
 		var omen: Label = Label.new()
 		omen.text = omen_text.to_upper()
+		omen.set_meta("menu_secondary_heading", true)
 		omen.set_meta("layout_font_role", "caption")
 		omen.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		omen.add_theme_color_override("font_color", Color(0.56, 0.50, 0.40))
@@ -3273,6 +3293,7 @@ func _menu_box(title: String, subtitle: String = "", omen_text: String = "", _he
 	_present_notice()
 	var build: Label = Label.new()
 	build.text = MENU_BUILD_LABEL
+	build.set_meta("menu_secondary_heading", true)
 	build.set_meta("layout_font_role", "caption")
 	build.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	build.add_theme_color_override("font_color", Color(0.50, 0.46, 0.38))

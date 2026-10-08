@@ -35,19 +35,20 @@ static func resolve(canvas_size: Vector2, display: Dictionary, text_scale: float
 	var wide_inner_width: float = minf(1440.0, maxf(0.0, usable.x - 48.0)) - 48.0
 	var wide: bool = usable.x >= 1040.0 and usable.y >= 600.0 and wide_inner_width >= 480.0 * scale + 280.0 * scale + 16.0
 	var compact: bool = not wide
-	var margin_display: float = 12.0 if compact else 24.0
+	var short_display: bool = usable.y < 420.0
+	var margin_display: float = 8.0 if short_display else (12.0 if compact else 24.0)
 	margin_display = minf(margin_display, maxf(0.0, minf(usable.x, usable.y) * 0.05))
-	var padding_display: float = 16.0 if compact else 24.0
+	var padding_display: float = 8.0 if short_display else (16.0 if compact else 24.0)
 	padding_display = minf(padding_display, maxf(0.0, minf(usable.x, usable.y) * 0.1))
-	var gap_display: float = 12.0 if compact else 16.0
+	var gap_display: float = 6.0 if short_display else (12.0 if compact else 16.0)
 	var font_display: Dictionary = {
-		"body": maxf(18.0, roundf(20.0 * scale)),
-		"button": maxf(18.0, roundf(20.0 * scale)),
-		"caption": maxf(16.0, roundf(16.0 * scale)),
+		"body": maxf(18.0, roundf((18.0 if short_display else 20.0) * scale)),
+		"button": maxf(18.0, roundf((18.0 if short_display else 20.0) * scale)),
+		"caption": maxf(14.0 if short_display else 16.0, roundf((14.0 if short_display else 16.0) * scale)),
 		"subtitle": maxf(22.0, roundf(24.0 * scale)),
 		"subtitle_bold": maxf(24.0, roundf(26.0 * scale)),
 		"heading": maxf(22.0, roundf(26.0 * scale)),
-		"title": roundf((40.0 if compact else 64.0) * minf(scale, 1.25))
+		"title": roundf((26.0 if short_display else (40.0 if compact else 64.0)) * minf(scale, 1.25))
 	}
 	var fonts: Dictionary = {}
 	for key: String in font_display:
@@ -57,6 +58,7 @@ static func resolve(canvas_size: Vector2, display: Dictionary, text_scale: float
 		"valid": valid,
 		"mode": "compact" if compact else "wide",
 		"compact": compact,
+		"short_display": short_display,
 		"canvas_size": canvas,
 		"safe_rect": safe_rect,
 		"unit_scale": unit_scale,

@@ -38,7 +38,7 @@ static func dialogue_panel(high_contrast: bool, opacity: float = 0.55) -> StyleB
 		var key := snappedf(opacity, 0.01)
 		if not _dialogue_scrims.has(key):
 			var image := Image.new()
-			var svg := '<svg xmlns="http://www.w3.org/2000/svg" width="768" height="320" viewBox="0 0 768 320"><defs><radialGradient id="shade" cx="50%" cy="55%" r="66%"><stop offset="0" stop-color="#080a0c" stop-opacity="%s"/><stop offset=".55" stop-color="#080a0c" stop-opacity="%s"/><stop offset="1" stop-color="#080a0c" stop-opacity="0"/></radialGradient></defs><rect width="768" height="320" fill="url(#shade)"/></svg>' % [str(key), str(key * 0.75)]
+			var svg := '<svg xmlns="http://www.w3.org/2000/svg" width="768" height="320" viewBox="0 0 768 320"><defs><radialGradient id="shade" cx="50%%" cy="55%%" r="66%%"><stop offset="0" stop-color="#080a0c" stop-opacity="%s"/><stop offset=".55" stop-color="#080a0c" stop-opacity="%s"/><stop offset="1" stop-color="#080a0c" stop-opacity="0"/></radialGradient></defs><rect width="768" height="320" fill="url(#shade)"/></svg>' % [str(key), str(key * 0.75)]
 			image.load_svg_from_string(svg)
 			var scrim := StyleBoxTexture.new()
 			scrim.texture = ImageTexture.create_from_image(image)

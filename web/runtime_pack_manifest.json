@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "program": "SOUL-REBUILD",
-  "release_id": "boot-005-20261008-hud-assets",
+  "release_id": "mobile-003-20261008-landscape",
   "artifact_policy": "external_runtime_packs",
   "candidate_manifest": "res://runtime_pack_candidates.json",
   "pack_presets": {
@@ -15,7 +15,7 @@
   "max_deployment_bytes": 104857600,
   "packs": {
     "base": {
-      "version": "boot-005-20261008-hud-assets",
+      "version": "mobile-003-20261008-landscape",
       "url": "",
       "sha256": "",
       "bytes": 0,
@@ -24,8 +24,8 @@
       "preload_priority": 0,
       "status": "embedded_current_pck",
       "candidate_artifact": "base.pck",
-      "candidate_bytes": 13301944,
-      "candidate_sha256": "09b39c9b8c938148adb243d9ea144bfa9fc3084a8484dd95021d782ce1585db2",
+      "candidate_bytes": 13302712,
+      "candidate_sha256": "5cea592404edf0b5ca2243cf2eb532706ce6c58ffbd4a2d2574a5ce9d6e21345",
       "contents": [
         "menu",
         "managers",
@@ -34,14 +34,14 @@
       ],
       "embedded_artifact": "index.pck",
       "embedded_source_artifact": "base.pck",
-      "embedded_source_bytes": 13301944,
-      "embedded_source_sha256": "09b39c9b8c938148adb243d9ea144bfa9fc3084a8484dd95021d782ce1585db2",
+      "embedded_source_bytes": 13302712,
+      "embedded_source_sha256": "5cea592404edf0b5ca2243cf2eb532706ce6c58ffbd4a2d2574a5ce9d6e21345",
       "embedded_source_kind": "standalone_pack_candidate"
     },
     "opening": {
-      "version": "boot-005-20261008-hud-assets",
-      "url": "packs/opening.pck?sha256=63903870716ed61a1b09e85cc4d7836df9e525a987ab36047de00f25fc5e1dd2",
-      "sha256": "63903870716ed61a1b09e85cc4d7836df9e525a987ab36047de00f25fc5e1dd2",
+      "version": "mobile-003-20261008-landscape",
+      "url": "packs/opening.pck?sha256=e8009498dc8cbd3c88ee071ab59be846c57cfca0b2390698c9d5a497ee378c00",
+      "sha256": "e8009498dc8cbd3c88ee071ab59be846c57cfca0b2390698c9d5a497ee378c00",
       "bytes": 14322268,
       "entry_scene": "res://scenes/zones/greyfen_gameplay.tscn",
       "dependencies": [
@@ -51,17 +51,17 @@
       "status": "streamed_web_candidate",
       "candidate_artifact": "opening.pck",
       "candidate_bytes": 14322268,
-      "candidate_sha256": "63903870716ed61a1b09e85cc4d7836df9e525a987ab36047de00f25fc5e1dd2",
+      "candidate_sha256": "e8009498dc8cbd3c88ee071ab59be846c57cfca0b2390698c9d5a497ee378c00",
       "contents": [
         "greyfen",
         "wychwood",
         "cemetery",
         "opening_actors"
       ],
-      "cache_key": "63903870716ed61a1b09e85cc4d7836df9e525a987ab36047de00f25fc5e1dd2"
+      "cache_key": "e8009498dc8cbd3c88ee071ab59be846c57cfca0b2390698c9d5a497ee378c00"
     },
     "campaign": {
-      "version": "boot-005-20261008-hud-assets",
+      "version": "mobile-003-20261008-landscape",
       "url": "packs/campaign.pck?sha256=b89ec48702ad522694e674fc55690d2e06b015c333b09937275742c4b15f2e11",
       "sha256": "b89ec48702ad522694e674fc55690d2e06b015c333b09937275742c4b15f2e11",
       "bytes": 1000092,
@@ -84,7 +84,7 @@
       "cache_key": "b89ec48702ad522694e674fc55690d2e06b015c333b09937275742c4b15f2e11"
     },
     "characters": {
-      "version": "boot-005-20261008-hud-assets",
+      "version": "mobile-003-20261008-landscape",
       "url": "packs/characters.pck?sha256=f7e4fb8fc823c37a00b7192046e64ddb6dd70ee307f997fd46b83a3e88e98bd4",
       "sha256": "f7e4fb8fc823c37a00b7192046e64ddb6dd70ee307f997fd46b83a3e88e98bd4",
       "bytes": 30470584,
@@ -105,7 +105,7 @@
       "cache_key": "f7e4fb8fc823c37a00b7192046e64ddb6dd70ee307f997fd46b83a3e88e98bd4"
     },
     "monsters": {
-      "version": "boot-005-20261008-hud-assets",
+      "version": "mobile-003-20261008-landscape",
       "url": "packs/monsters.pck?sha256=b95a4a263ffb7437a039e1d1fb0c1f15352f42afb2911d1439721e5638aaf68a",
       "sha256": "b95a4a263ffb7437a039e1d1fb0c1f15352f42afb2911d1439721e5638aaf68a",
       "bytes": 7011052,
@@ -126,7 +126,7 @@
       "cache_key": "b95a4a263ffb7437a039e1d1fb0c1f15352f42afb2911d1439721e5638aaf68a"
     },
     "audio": {
-      "version": "boot-005-20261008-hud-assets",
+      "version": "mobile-003-20261008-landscape",
       "url": "packs/audio.pck?sha256=e17005c7891c5817346f739007a96fca66488c80cc7d96e22c6d221cc021d766",
       "sha256": "e17005c7891c5817346f739007a96fca66488c80cc7d96e22c6d221cc021d766",
       "bytes": 19354896,
@@ -147,7 +147,7 @@
       "cache_key": "e17005c7891c5817346f739007a96fca66488c80cc7d96e22c6d221cc021d766"
     },
     "quality_materials": {
-      "version": "boot-005-20261008-hud-assets",
+      "version": "mobile-003-20261008-landscape",
       "url": "packs/quality_materials.pck?sha256=6f36da3d6f87c0bfef1f34d2545d6e9a570f2910bf9e0aec9149b2d27a3f2ff8",
       "sha256": "6f36da3d6f87c0bfef1f34d2545d6e9a570f2910bf9e0aec9149b2d27a3f2ff8",
       "bytes": 7376908,
@@ -168,9 +168,9 @@
       "cache_key": "6f36da3d6f87c0bfef1f34d2545d6e9a570f2910bf9e0aec9149b2d27a3f2ff8"
     }
   },
-  "build_id": "boot-005-20261008-hud-assets",
-  "generated_from_commit": "c7adc06035ba5cd7d6dc39aa9bff0876df463b97",
-  "generated_at_utc": "2026-10-08T07:09:22.001301Z",
+  "build_id": "mobile-003-20261008-landscape",
+  "generated_from_commit": "967079b73cf79373c18c881ffeda21d2b9043bf3",
+  "generated_at_utc": "2026-10-08T08:46:05.880384Z",
   "total_bytes": 79535800,
   "source_dirty": true
 }

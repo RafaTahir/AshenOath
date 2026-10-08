@@ -1,5 +1,21 @@
 # Ashen Oath Project State
 
+## Landscape Startup and Menu Repair - 2026-10-08
+
+MOBILE-003 implemented and packaged; publication pending, user acceptance
+pending. Fixes the fixed 560x300 fitted-touch requirement that can auto-pause a
+landscape phone and disable Resume. Adds a compact layout with 48px minimum
+action targets, bounded short-screen menus and shared message/prompt space.
+New Game preparation starts even with an existing save; Continue still cancels
+the attempt safely. Required Greyfen stages assemble before the complete camera
+render instead of rendering intermediate worlds. Also repairs literal SVG format
+percentages. Content, saves, preferences and the camera changes remain.
+Build-only: no runtime/browser testing or new timing claims. BOOT-005 evidence
+below applies only to its own revision. See `MOBILE_003_RESULT.md` for manual checks.
+The `mobile-003-20261008-landscape` production build compiled/exported successfully;
+tracked `web/` is aligned at 92,419,781 bytes (88.14 MiB; 16 files), below 100 MiB. No new
+runtime or mobile success is claimed.
+
 ## Startup Package Repair - 2026-10-08
 
 BOOT-005 implemented, published and flow-verified. The authorized focused browser session identified a missing

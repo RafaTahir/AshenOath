@@ -1,37 +1,37 @@
 {
   "schema_version": 2,
-  "generated_at_utc": "2026-10-08T07:09:21.2203911Z",
-  "build_id": "boot-005-20261008-hud-assets",
-  "generated_from_commit": "c7adc06035ba5cd7d6dc39aa9bff0876df463b97",
+  "generated_at_utc": "2026-10-08T08:46:05.3814684Z",
+  "build_id": "mobile-003-20261008-landscape",
+  "generated_from_commit": "967079b73cf79373c18c881ffeda21d2b9043bf3",
   "source_dirty": true,
-  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\BOOT-005-20261008-hud-assets-build\\runtime-packs",
+  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\MOBILE-003-20261008-landscape-build\\runtime-packs",
   "artifacts_are_external": true,
   "max_deployment_bytes": 104857600,
-  "total_bytes": 92837744,
+  "total_bytes": 92838512,
   "packs": [
     {
       "id": "base",
-      "version": "boot-005-20261008-hud-assets",
+      "version": "mobile-003-20261008-landscape",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
-      "bytes": 13301944,
-      "sha256": "09b39c9b8c938148adb243d9ea144bfa9fc3084a8484dd95021d782ce1585db2",
+      "bytes": 13302712,
+      "sha256": "5cea592404edf0b5ca2243cf2eb532706ce6c58ffbd4a2d2574a5ce9d6e21345",
       "status": "candidate_external",
       "log": "logs/pack-base.stdout.log"
     },
     {
       "id": "opening",
-      "version": "boot-005-20261008-hud-assets",
+      "version": "mobile-003-20261008-landscape",
       "preset": "Runtime Pack Opening",
       "artifact": "opening.pck",
       "bytes": 14322268,
-      "sha256": "63903870716ed61a1b09e85cc4d7836df9e525a987ab36047de00f25fc5e1dd2",
+      "sha256": "e8009498dc8cbd3c88ee071ab59be846c57cfca0b2390698c9d5a497ee378c00",
       "status": "candidate_external",
       "log": "logs/pack-opening.stdout.log"
     },
     {
       "id": "campaign",
-      "version": "boot-005-20261008-hud-assets",
+      "version": "mobile-003-20261008-landscape",
       "preset": "Runtime Pack Campaign",
       "artifact": "campaign.pck",
       "bytes": 1000092,
@@ -41,7 +41,7 @@
     },
     {
       "id": "characters",
-      "version": "boot-005-20261008-hud-assets",
+      "version": "mobile-003-20261008-landscape",
       "preset": "Runtime Pack Characters",
       "artifact": "characters.pck",
       "bytes": 30470584,
@@ -51,7 +51,7 @@
     },
     {
       "id": "monsters",
-      "version": "boot-005-20261008-hud-assets",
+      "version": "mobile-003-20261008-landscape",
       "preset": "Runtime Pack Monsters",
       "artifact": "monsters.pck",
       "bytes": 7011052,
@@ -61,7 +61,7 @@
     },
     {
       "id": "audio",
-      "version": "boot-005-20261008-hud-assets",
+      "version": "mobile-003-20261008-landscape",
       "preset": "Runtime Pack Audio",
       "artifact": "audio.pck",
       "bytes": 19354896,
@@ -71,7 +71,7 @@
     },
     {
       "id": "quality_materials",
-      "version": "boot-005-20261008-hud-assets",
+      "version": "mobile-003-20261008-landscape",
       "preset": "Runtime Pack Quality Materials",
       "artifact": "quality_materials.pck",
       "bytes": 7376908,
@@ -82,11 +82,11 @@
   ],
   "errors": [],
   "selected_web_export": {
-    "build_id": "boot-005-20261008-hud-assets",
-    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\BOOT-005-20261008-hud-assets-build\\export",
-    "generated_from_commit": "c7adc06035ba5cd7d6dc39aa9bff0876df463b97",
-    "artifacts_total_bytes": 92411792,
-    "root_pck_sha256": "abfbdf8c773bc213319c469af8b7f7892b2737cd6282d923b20bac3db94cbd57",
+    "build_id": "mobile-003-20261008-landscape",
+    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\MOBILE-003-20261008-landscape-build\\export",
+    "generated_from_commit": "967079b73cf79373c18c881ffeda21d2b9043bf3",
+    "artifacts_total_bytes": 92412944,
+    "root_pck_sha256": "6a4058e4373464075c31fc07d0016474889ee8f1e97d4cb2a5fca8937f14a488",
     "note": "Selected export uses gzip transport; native pack records describe decoded build artifacts."
   }
 }

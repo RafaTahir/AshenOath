@@ -2641,12 +2641,8 @@ func _wait_for_startup_packs_then_prewarm(generation: int) -> void:
 func _begin_opening_prewarm() -> void:
 	if game_started or greyfen_prewarm_started or route_zone_cache.has("greyfen"):
 		return
-	# A returning player needs the saved world, not a disposable New Game world.
-	# Explicit New Game still takes the normal queued/prewarmed path.
-	if not new_game_start_pending and hud != null and hud._has_continue_save():
-		hud.set_new_game_status("Continue your saved journey, or begin a new one.")
-		_publish_web_opening_state("ready", "Continue your saved journey, or begin a new one.")
-		return
+	# Prepare New Game while the menu is open even when Continue is available.
+	# Loading a save cancels this attempt through _discard_menu_opening().
 	greyfen_prewarm_started = true
 	world_materials.begin_prewarm_attempt()
 	asset_helper.begin_resource_attempt()
@@ -2773,6 +2769,7 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 	spatial_service = prewarm_service
 	zone_root = Node3D.new()
 	zone_root.name = "greyfen"
+	zone_root.visible = false
 	zone_root.process_mode = Node.PROCESS_MODE_PAUSABLE
 	add_child(zone_root)
 	runtime_light_count = 0
@@ -2825,16 +2822,14 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 	_spawn_player(Vector3(0, 1, 9.8))
 	camera_rig.prepare_view()
 	var player_ms := Time.get_ticks_msec() - phase_started
-	# Keep the real gameplay view active behind the opaque menu so WebGL compiles
-	# the same skinned materials and camera path used after New Game.
-	player.visible = true
+	# Publish only the complete opening; intermediate builds need no GPU draw.
+	player.visible = false
 	player.set_transition_locked(true)
 	player.process_mode = Node.PROCESS_MODE_PAUSABLE
 	camera_rig.process_mode = Node.PROCESS_MODE_INHERIT
 	var gameplay_camera := camera_rig.find_child("Camera3D", true, false) as Camera3D
 	if gameplay_camera != null:
 		gameplay_camera.current = true
-	zone_root.visible = true
 	zone_root.process_mode = Node.PROCESS_MODE_PAUSABLE
 	zone_root.position = Vector3.ZERO
 	# `_load_zone()` applies this profile immediately before the first gameplay
@@ -2845,24 +2840,6 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 		visual_director.set_opening_boot_budget(false)
 		prewarm_root.set_meta("opening_visual_profile_prewarmed", true)
 	var was_paused := get_tree().paused
-	# A constructed scene is not render-ready: Compatibility compiles material
-	# programs synchronously on first use. Keep queued clicks pending until the
-	# real camera has rendered, rather than reporting that cost as warm travel.
-	if DisplayServer.get_name().to_lower() != "headless":
-		if hud != null and hud.has_method("set_new_game_status"):
-			hud.set_new_game_status("Preparing Greyfen's first view...")
-		# The menu pauses the tree, but the first gameplay frame evaluates Kael's
-		# skeleton, animation driver, camera, and physics together. Give that exact
-		# transition-locked state one covered frame so WebGL does not compile it
-		# after the player clicks New Game.
-		get_tree().paused = false
-		await get_tree().process_frame
-		if not _opening_attempt_current(generation):
-			return
-		await RenderingServer.frame_post_draw
-		if not _opening_attempt_current(generation) or not is_instance_valid(prewarm_root):
-			return
-		prewarm_root.set_meta("opening_unpaused_frame_prewarmed", true)
 	# Complete first-use mesh and texture decoding under the menu cover. Doing
 	# this after control is handed over causes visible 40-70 ms hydration frames.
 	get_tree().paused = false
@@ -2899,13 +2876,19 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 	if visual_director != null:
 		visual_director.refresh_zone_lighting(prewarm_root)
 	camera_rig.prepare_view()
+	prewarm_root.visible = true
+	player.visible = true
 	if DisplayServer.get_name().to_lower() != "headless":
+		if hud != null:
+			hud.set_new_game_status("Preparing Greyfen's first view...")
+		# Evaluate the complete, transition-locked rig before its first draw.
 		await get_tree().process_frame
 		if not _opening_attempt_current(generation):
 			return
 		await RenderingServer.frame_post_draw
 		if not _opening_attempt_current(generation):
 			return
+		prewarm_root.set_meta("opening_unpaused_frame_prewarmed", true)
 		prewarm_root.set_meta("opening_first_frame_rendered", true)
 	prewarm_root.set_meta("opening_presentation_ready", true)
 	get_tree().paused = was_paused
