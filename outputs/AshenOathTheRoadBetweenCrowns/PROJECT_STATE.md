@@ -2,12 +2,17 @@
 
 ## Startup Package Repair - 2026-10-08
 
-BOOT-005 in progress. The authorized focused browser session identified a missing
+BOOT-005 implemented, published and flow-verified. The authorized focused browser session identified a missing
 root-PCK `assets/icons/iron_trap.svg` preload, which prevents the HUD and game
 scripts from compiling. All six item icons are now explicit Web/base/QA resources.
 Other active literal preloads were checked against export declarations together.
-Next: build/publish the replacement, then finish the same browser session's
-New Game-to-gameplay flow. See `BOOT_005_RESULT.md`; no unrelated tests are authorized.
+The same session passed menu -> real New Game click -> rendered Greyfen -> ordinary
+movement after the replacement. The live PCK matches the repaired artifact exactly.
+Package commit `ace9604de541658048930107e14d66dbad2ec410` is on development/main;
+GitHub's automatic Vercel deployment succeeded despite separate CLI authorization
+failure. Live: https://ashenoath.vercel.app/?v=boot-005-ace9604 . Loading remains
+about 25 seconds after New Game, two non-blocking console problems remain recorded,
+and iPhone/WebKit is untested. See `BOOT_005_RESULT.md` and the retained D: evidence.
 
 ## Direct Main Menu Startup - 2026-10-08
 
