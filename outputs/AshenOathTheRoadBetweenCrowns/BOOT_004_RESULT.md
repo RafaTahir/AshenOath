@@ -1,6 +1,6 @@
 # BOOT-004 - Direct Main Menu Startup
 
-Implementation and production packaging complete; publication pending.
+Implementation, production packaging and publication complete; user acceptance pending.
 UNVERIFIED - REQUIRES USER TESTING. No game/browser launch, runtime tests,
 automated gameplay, screenshots or startup benchmarks were performed.
 
@@ -50,7 +50,13 @@ Decoded root: 19,568,400 bytes, SHA-256
 The menu background is 302,702 bytes, copied from the retained source image.
 Build provenance remains `4bc27e14b6729d9d71b64624a0f44ce646eb8bc1` plus the working
 changes packaged here. Generated pack ledgers, retained Bracken serialization and
-Web output are included with the authored source. Publication receipt is pending.
+Web output are included with the authored source. Package commit
+`50ec934ed9f907a5270a49fe07cb0971365ebb48` was pushed to development and main.
+Vercel deployment `dpl_Da1DgREXHfMsKVYRziPKoxtfJUNW` reports production READY.
+Live: https://ashenoath.vercel.app/?v=boot-004-50ec934
+Receipt: `.release-gate/living-road/BOOT-004-20261008T063532Z/publication.json`.
+Deployment used the archived committed site. No post-deployment browser/runtime
+checks were performed; publication is not user acceptance.
 
 ## Manual Test Checklist
 

@@ -2,14 +2,17 @@
 
 ## Direct Main Menu Startup - 2026-10-08
 
-BOOT-004 implementation/packaging complete; publication pending. Crow Flight
+BOOT-004 implemented, packaged and published; user acceptance pending. Crow Flight
 and the browser loading page are removed. Godot starts automatically into the
 visible main menu; background Greyfen preparation begins after its first draw.
 The existing menu artwork covers the initial page background. New Game's queued
 readiness/retry and Continue/save behavior remain. Browser engine errors have an
 error-only Reload panel. No runtime testing or startup timing was performed.
 The `boot-004-20261008-direct-menu` build compiled/exported successfully: 16 Web
-files, 92,408,136 bytes. Next: combined publication; see `BOOT_004_RESULT.md`.
+files, 92,408,136 bytes. Package commit `50ec934ed9f907a5270a49fe07cb0971365ebb48`
+is pushed to development/main; Vercel reports `dpl_Da1DgREXHfMsKVYRziPKoxtfJUNW`
+READY at https://ashenoath.vercel.app/?v=boot-004-50ec934 . Next: user testing
+using `BOOT_004_RESULT.md`. No post-deployment runtime checks were run.
 
 ## Mobile Controls Repair - 2026-10-08
 
