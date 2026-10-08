@@ -46,7 +46,9 @@ Vercel `dpl_5Zd4ASwPPDoRP9g6nd1xLXXjkaQB` is READY. Progress: 5/28 published,
 LR-006 implementation links Known Creatures to discovered evidence and recorded
 outcomes. Preparation reads owned supplies, actual objective and unlocked vendor
 quotes without changing progression. Unknown creatures/details remain concealed;
-peaceful resolutions remain distinct. Packaging/publication pending.
+peaceful resolutions remain distinct. Published package `91089bd`, full Web
+91,945,620 bytes; Vercel `dpl_4JVy4WodWyAxwuTy5kquAeX3G2AJ` READY. Progress:
+6/28 published, 0/28 user-accepted. LR-007 Greyfen services is next.
 
 ## Current Local Assembly - 2026-10-07
 

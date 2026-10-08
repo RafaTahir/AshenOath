@@ -1,13 +1,13 @@
 # Living Road Status
 
 Updated: 2026-10-08. Implementation and user acceptance are separate.
-User-accepted tickets: **0/28**. Published tickets: **5/28**. Current ticket:
-**LR-006**, implementing. Runtime checks belong to the user; the active goal now
+User-accepted tickets: **0/28**. Published tickets: **6/28**. Current ticket:
+**LR-007**, implementing. Runtime checks belong to the user; the active goal now
 authorizes sequential implementation/publication without waiting between tickets.
 LR-001 remains published and awaiting user acceptance.
-Latest package commit: `c13c67b57e8fe8b212823d67e15c58fef29f1c92`.
-Vercel deployment: `dpl_5Zd4ASwPPDoRP9g6nd1xLXXjkaQB`, provider state READY.
-Live: https://ashenoath.vercel.app/?v=lr-005-c13c67b
+Latest package commit: `91089bd7bae6a0cead04790e08114671b9918aef`.
+Vercel deployment: `dpl_4JVy4WodWyAxwuTy5kquAeX3G2AJ`, provider state READY.
+Live: https://ashenoath.vercel.app/?v=lr-006-91089bd
 
 | Ticket | Work | State |
 | --- | --- | --- |
@@ -16,8 +16,8 @@ Live: https://ashenoath.vercel.app/?v=lr-005-c13c67b
 | [LR-003](tickets/LR-003.md) | Draw, Sheathe and Interrupt | published_awaiting_user |
 | [LR-004](tickets/LR-004.md) | Steel and Oathblade Combat | published_awaiting_user |
 | [LR-005](tickets/LR-005.md) | Readable Inventory | published_awaiting_user |
-| [LR-006](tickets/LR-006.md) | Knowledge and Preparation | implementing |
-| [LR-007](tickets/LR-007.md) | Greyfen Services | planned |
+| [LR-006](tickets/LR-006.md) | Knowledge and Preparation | published_awaiting_user |
+| [LR-007](tickets/LR-007.md) | Greyfen Services | implementing |
 | [LR-008](tickets/LR-008.md) | Bracken's Rescue | planned |
 | [LR-009](tickets/LR-009.md) | A Companion Who Keeps Up | planned |
 | [LR-010](tickets/LR-010.md) | Earned Companion Bond | planned |
@@ -40,7 +40,7 @@ Live: https://ashenoath.vercel.app/?v=lr-005-c13c67b
 | [LR-027](tickets/LR-027.md) | Regions That Remember | planned |
 | [LR-028](tickets/LR-028.md) | Lives After the Covenant | planned |
 
-Next: implement LR-006's discovered-creature knowledge and preparation summary,
-using existing evidence, current objective and vendor availability. Pending user checklists
+Next: implement LR-007's bounded blade improvements and clear, saved Greyfen
+service transactions. Preserve the emergency reserve policy. Pending user checklists
 remain attached to each result. No Recovery-004 certification is
 transferred to this package or to future Living Road changes.

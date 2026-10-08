@@ -1,6 +1,6 @@
 # LR-006 - Knowledge and Preparation
 
-Status: implemented; packaging/publication pending. User acceptance pending.
+Status: published_awaiting_user. User acceptance pending.
 
 ## Implemented
 
@@ -37,7 +37,12 @@ Build: `lr-006-20261008-known-creatures`; source `19c573a` plus the recorded dir
 LR-006 implementation. Full Web directory: **91,945,620 bytes**, below 104,857,600.
 Stored root PCK: `5b794cfa00017b04cbacc1f2703cb10d8c1e9a6620f6ff25e1b67c957717cfaa`.
 Decoded root PCK: `2d12bf9a1cb787b65f03825b9bf21df9b3ee81b2f195800dc5b695262e4325b1`.
-Build output: `.release-gate/LR-006-20261008-build`. Publication receipt follows.
+Build output: `.release-gate/LR-006-20261008-build`.
+Package commit: `91089bd7bae6a0cead04790e08114671b9918aef`, pushed to development/main.
+Vercel: `dpl_4JVy4WodWyAxwuTy5kquAeX3G2AJ`, provider READY.
+Receipt: `.release-gate/living-road/LR-006-20261008T002145Z/publication.json`.
+Play: https://ashenoath.vercel.app/?v=lr-006-91089bd
+Provider readiness is not gameplay acceptance; no browser or live smoke was run.
 
 ## Unverified
 
