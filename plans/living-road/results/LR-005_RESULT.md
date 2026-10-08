@@ -1,6 +1,6 @@
 # LR-005 - Readable Inventory
 
-Status: implemented; packaging/publication pending. User acceptance pending.
+Status: published_awaiting_user. User acceptance pending.
 
 ## Implemented
 
@@ -41,7 +41,11 @@ manifests and strictly below 104,857,600 bytes. Stored root PCK SHA-256:
 `804f9cd0505eb8a8b3b2cae1687067fcccf8fd84cbe084d126725a4161d5e74e`.
 Decoded root PCK SHA-256:
 `fb5726dee9ed29d2ed325e309ea4e80b7ce418f80ab2616751b1ed359587eb24`.
-Publication receipt will be recorded after the provider responds.
+Package commit: `c13c67b57e8fe8b212823d67e15c58fef29f1c92`, pushed to development
+and main. Vercel `dpl_5Zd4ASwPPDoRP9g6nd1xLXXjkaQB` reported READY.
+URL: https://ashenoath.vercel.app/?v=lr-005-c13c67b
+Receipt: `.release-gate/living-road/LR-005-20261008T000603Z/publication.json`.
+No post-deployment browser or gameplay check was performed.
 
 ## Unverified
 

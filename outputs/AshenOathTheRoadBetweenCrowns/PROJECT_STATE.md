@@ -36,10 +36,12 @@ The complete Web directory is 91,925,605 bytes; Vercel deployment
 `dpl_C7fSPpYAWUdNPReYMapGy7LWqZz7` is READY. Progress: 4/28 published, 0/28
 user-accepted. LR-005 inventory readability is next; no runtime checks claimed.
 
-LR-005 implementation adds kit categories, name/type order, read-only equipment
+LR-005 is published at `c13c67b`: kit categories, name/type order, read-only equipment
 comparison, ingredient recipe uses and persistent remedy/tool quick slots. The
 existing Preparation UI, journal evidence, crafting, vendor transactions and
-inventory quantities remain authoritative. Packaging/publication are pending.
+inventory quantities remain authoritative. Full Web directory: 91,933,231 bytes.
+Vercel `dpl_5Zd4ASwPPDoRP9g6nd1xLXXjkaQB` is READY. Progress: 5/28 published,
+0/28 user-accepted. LR-006 knowledge/preparation is next; no runtime checks claimed.
 
 ## Current Local Assembly - 2026-10-07
 

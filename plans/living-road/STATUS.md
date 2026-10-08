@@ -1,13 +1,13 @@
 # Living Road Status
 
 Updated: 2026-10-08. Implementation and user acceptance are separate.
-User-accepted tickets: **0/28**. Published tickets: **4/28**. Current ticket:
-**LR-005**, implementing. Runtime checks belong to the user; the active goal now
+User-accepted tickets: **0/28**. Published tickets: **5/28**. Current ticket:
+**LR-006**, next. Runtime checks belong to the user; the active goal now
 authorizes sequential implementation/publication without waiting between tickets.
 LR-001 remains published and awaiting user acceptance.
-Latest package commit: `8381f83978694972bd9f0e60be9afd36cea81bbd`.
-Vercel deployment: `dpl_C7fSPpYAWUdNPReYMapGy7LWqZz7`, provider state READY.
-Live: https://ashenoath.vercel.app/?v=lr-004-8381f83
+Latest package commit: `c13c67b57e8fe8b212823d67e15c58fef29f1c92`.
+Vercel deployment: `dpl_5Zd4ASwPPDoRP9g6nd1xLXXjkaQB`, provider state READY.
+Live: https://ashenoath.vercel.app/?v=lr-005-c13c67b
 
 | Ticket | Work | State |
 | --- | --- | --- |
@@ -15,7 +15,7 @@ Live: https://ashenoath.vercel.app/?v=lr-004-8381f83
 | [LR-002](tickets/LR-002.md) | Two Blades, One Loadout | published_awaiting_user |
 | [LR-003](tickets/LR-003.md) | Draw, Sheathe and Interrupt | published_awaiting_user |
 | [LR-004](tickets/LR-004.md) | Steel and Oathblade Combat | published_awaiting_user |
-| [LR-005](tickets/LR-005.md) | Readable Inventory | implementing |
+| [LR-005](tickets/LR-005.md) | Readable Inventory | published_awaiting_user |
 | [LR-006](tickets/LR-006.md) | Knowledge and Preparation | planned |
 | [LR-007](tickets/LR-007.md) | Greyfen Services | planned |
 | [LR-008](tickets/LR-008.md) | Bracken's Rescue | planned |
@@ -40,7 +40,7 @@ Live: https://ashenoath.vercel.app/?v=lr-004-8381f83
 | [LR-027](tickets/LR-027.md) | Regions That Remember | planned |
 | [LR-028](tickets/LR-028.md) | Lives After the Covenant | planned |
 
-Next: implement LR-005's inventory categories, sorting and saved quick slots in
-the retained Preparation UI and InventoryManager. Pending user checklists
+Next: implement LR-006's discovered-creature knowledge and preparation summary,
+using existing evidence, current objective and vendor availability. Pending user checklists
 remain attached to each result. No Recovery-004 certification is
 transferred to this package or to future Living Road changes.
