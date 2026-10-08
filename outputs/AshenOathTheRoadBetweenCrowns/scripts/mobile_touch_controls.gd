@@ -7,7 +7,7 @@ const TouchLayout = preload("res://scripts/mobile_touch_layout.gd")
 const MODE_AUTO := "auto"
 const MODE_ON := "on"
 const MODE_OFF := "off"
-const RELEASE_ACTIONS := ["interact", "pause", "open_inventory"]
+const RELEASE_ACTIONS := ["interact", "pause", "open_inventory", "touch_more", "target_lock", "cycle_arrow"]
 
 var input_router: Node
 var hud: CanvasLayer
@@ -23,6 +23,9 @@ var look_previous := Vector2.ZERO
 var action_touches: Dictionary = {}
 var action_centers: Dictionary = {}
 var action_radii: Dictionary = {}
+var weapon_mode := "sword"
+var _interaction_prompt: Dictionary = {}
+var _action_targets: Dictionary = {}
 var rotate_required := false
 var _announced := false
 var _visibility_refresh_pending := false
@@ -55,6 +58,8 @@ func setup(router: Node, hud_node: CanvasLayer, settings: Dictionary) -> void:
 		input_router.transient_input_reset.connect(_on_transient_input_reset)
 	if not input_router.device_changed.is_connected(_on_device_changed):
 		input_router.device_changed.connect(_on_device_changed)
+	hud.interaction_prompt_changed.connect(_on_interaction_prompt_changed)
+	_on_interaction_prompt_changed(hud.get_interaction_prompt_model())
 	for layer in [hud.menu_layer, hud.dialogue_layer, hud.inventory_layer, hud.loading_layer]:
 		if layer != null and not layer.visibility_changed.is_connected(_on_surface_changed):
 			layer.visibility_changed.connect(_on_surface_changed)
@@ -63,6 +68,21 @@ func setup(router: Node, hud_node: CanvasLayer, settings: Dictionary) -> void:
 		input_router.activate_touch()
 		hud.set_input_device("touch")
 	_refresh_visibility()
+
+func set_weapon_mode(mode: String) -> void:
+	var next := "bow" if mode == "bow" else "sword"
+	if weapon_mode == next:
+		return
+	for index: Variant in action_touches.keys():
+		_cancel_touch(int(index))
+	for action: String in ["block", "aim_bow", "oathfire_beam"]:
+		input_router.cancel_virtual_action(StringName(action))
+	weapon_mode = next
+	_update_layout()
+
+func _on_interaction_prompt_changed(model: Dictionary) -> void:
+	_interaction_prompt = model.duplicate(true)
+	queue_redraw()
 
 func apply_settings(settings: Dictionary) -> void:
 	cancel_active_touches("touch_settings")
@@ -187,6 +207,7 @@ func _clear_touch_ownership() -> void:
 	look_touch = -1
 	move_value = Vector2.ZERO
 	action_touches.clear()
+	_action_targets.clear()
 	if input_router != null:
 		input_router.clear_virtual_input()
 	queue_redraw()
@@ -229,12 +250,24 @@ func _owns_touch(index: int) -> bool:
 	return index == move_touch or index == look_touch or action_touches.has(index)
 
 func _begin_touch(index: int, position: Vector2) -> void:
+	var nearest_action := ""
+	var nearest_distance := INF
+	var unit: float = maxf(float(_layout.get("unit_scale", 1.0)), 0.001)
 	for row: Dictionary in _actions:
 		var action: String = str(row.get("id", ""))
-		if position.distance_to(Vector2(row.get("center", Vector2.ZERO))) > float(row.get("radius", 0.0)):
-			continue
+		var distance: float = position.distance_to(Vector2(row.get("center", Vector2.ZERO)))
+		if distance <= float(row.get("radius", 0.0)) + 4.0 * unit and distance < nearest_distance:
+			nearest_action = action
+			nearest_distance = distance
+	if nearest_action != "":
+		var action := nearest_action
+		if not _action_enabled(action):
+			get_viewport().set_input_as_handled()
+			return
 		var already_held: bool = action_touches.values().has(action)
 		action_touches[index] = action
+		if action == "interact":
+			_action_targets[index] = int(_interaction_prompt.get("target_instance_id", 0))
 		if not already_held and action not in RELEASE_ACTIONS:
 			input_router.set_virtual_action(StringName(action), true)
 		queue_redraw()
@@ -262,8 +295,7 @@ func _drag_touch(index: int, position: Vector2) -> void:
 		var delta: Vector2 = position - look_previous
 		look_previous = position
 		var unit: float = maxf(float(_layout.get("unit_scale", 1.0)), 0.001)
-		var look: Vector2 = delta / (24.0 * unit) * look_sensitivity
-		input_router.set_virtual_axes(move_value, look.limit_length(1.0))
+		input_router.add_touch_look_delta(delta / unit * look_sensitivity)
 	elif action_touches.has(index):
 		var action: String = str(action_touches[index])
 		if not _inside_action(action, position):
@@ -272,7 +304,11 @@ func _drag_touch(index: int, position: Vector2) -> void:
 	get_viewport().set_input_as_handled()
 
 func _inside_action(action: String, position: Vector2) -> bool:
-	return action_centers.has(action) and position.distance_to(Vector2(action_centers[action])) <= float(action_radii.get(action, 0.0))
+	var tolerance: float = 12.0 * float(_layout.get("unit_scale", 1.0))
+	return action_centers.has(action) and position.distance_to(Vector2(action_centers[action])) <= float(action_radii.get(action, 0.0)) + tolerance
+
+func _action_enabled(action: String) -> bool:
+	return action != "interact" or (bool(_interaction_prompt.get("available", false)) and int(_interaction_prompt.get("target_instance_id", 0)) != 0)
 
 func _cancel_touch(index: int) -> void:
 	_cancelled_touches[index] = true
@@ -288,20 +324,30 @@ func _end_touch(index: int, position: Vector2, cancelled: bool = false) -> void:
 		input_router.clear_virtual_look()
 	elif action_touches.has(index):
 		var action: String = str(action_touches[index])
+		var target_id: int = int(_action_targets.get(index, 0))
 		action_touches.erase(index)
+		_action_targets.erase(index)
 		if not action_touches.values().has(action):
 			if action in RELEASE_ACTIONS:
 				if not cancelled and visible and is_gameplay_visible() and _inside_action(action, position):
-					input_router.set_virtual_action(StringName(action), true)
-					input_router.set_virtual_action(StringName(action), false)
+					if action in ["target_lock", "cycle_arrow"]:
+						input_router.set_virtual_action(StringName(action), true)
+						input_router.set_virtual_action(StringName(action), false)
+					else:
+						input_router.request_virtual_action(action, target_id)
 			else:
-				input_router.set_virtual_action(StringName(action), false)
+				if cancelled:
+					input_router.cancel_virtual_action(StringName(action))
+				else:
+					input_router.set_virtual_action(StringName(action), false)
 	queue_redraw()
 	get_viewport().set_input_as_handled()
 
 func _update_move(position: Vector2) -> void:
 	var travel: float = maxf(float(_layout.get("move_travel", 44.0)), 1.0)
 	move_value = ((position - move_origin) / travel).limit_length(1.0)
+	var magnitude := move_value.length()
+	move_value = move_value.normalized() * ((magnitude - 0.12) / 0.88) if magnitude > 0.12 else Vector2.ZERO
 	input_router.set_virtual_axes(move_value, Vector2.ZERO)
 	queue_redraw()
 
@@ -316,7 +362,7 @@ func _update_layout() -> void:
 	if display.is_empty():
 		var native_size: Vector2i = DisplayServer.window_get_size()
 		display = {"width": native_size.x if native_size.x > 0 else canvas_size.x, "height": native_size.y if native_size.y > 0 else canvas_size.y}
-	_layout = TouchLayout.build(canvas_size, display)
+	_layout = TouchLayout.build(canvas_size, display, weapon_mode)
 	rotate_required = not bool(_layout.get("landscape", true))
 	_actions.clear()
 	action_centers.clear()
@@ -353,18 +399,19 @@ func _draw() -> void:
 		var descriptor: Dictionary = input_router.describe_action(action) if input_router != null else {}
 		var toggle: bool = str(descriptor.get("mode", "hold")) == "toggle"
 		var pressed: bool = action_touches.values().has(action) or (toggle and bool(descriptor.get("active", false)))
+		var enabled := _action_enabled(action)
 		draw_circle(center, radius, Color(0.40, 0.12, 0.08, 0.84) if pressed else Color(0.04, 0.045, 0.05, 0.64))
-		draw_arc(center, radius, 0.0, TAU, 40, Color(0.86, 0.70, 0.44, 0.80), 2.0 * unit)
+		draw_arc(center, radius, 0.0, TAU, 40, Color(0.86, 0.70, 0.44, 0.90 if enabled else 0.28), 2.0 * unit)
 		var caption: String = str(row.get("label", action))
 		var toggled_on: bool = toggle and bool(descriptor.get("active", false))
-		_draw_centered_label(center - Vector2(0, 5.0 * unit) if toggled_on else center, caption, maxi(10, int((12.0 if action != "pause" else 19.0) * unit)))
+		_draw_centered_label(center - Vector2(0, 5.0 * unit) if toggled_on else center, caption, maxi(10, int((12.0 if action != "pause" else 19.0) * unit)), enabled)
 		if toggled_on:
 			_draw_centered_label(center + Vector2(0, 10.0 * unit), "ON", maxi(10, int(10.0 * unit)))
 
-func _draw_centered_label(center: Vector2, text: String, font_size: int) -> void:
+func _draw_centered_label(center: Vector2, text: String, font_size: int, enabled: bool = true) -> void:
 	var font: Font = ThemeDB.fallback_font
 	var width: float = font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
-	draw_string(font, center + Vector2(-width * 0.5, font_size * 0.34), text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color(0.96, 0.90, 0.78))
+	draw_string(font, center + Vector2(-width * 0.5, font_size * 0.34), text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color(0.96, 0.90, 0.78, 1.0 if enabled else 0.38))
 
 func _move_center() -> Vector2:
 	return _layout.get("move_center", Vector2.ZERO)

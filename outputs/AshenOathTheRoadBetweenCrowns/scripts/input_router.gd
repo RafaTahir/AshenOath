@@ -9,6 +9,7 @@ signal bindings_changed(bindings: Dictionary)
 signal input_context_changed(context: String)
 signal gamepad_disconnected(device_id: int)
 signal transient_input_reset(reason: String)
+signal gameplay_action_requested(request: Dictionary)
 
 const DEVICE_KEYBOARD_MOUSE := "keyboard_mouse"
 const DEVICE_GAMEPAD := "gamepad"
@@ -175,8 +176,19 @@ const TOUCH_LABELS := {
 	"throw_bomb": "Tool",
 	"open_inventory": "Journal",
 	"pause": "Pause",
-	"camera_zoom_in": "Pinch In",
-	"camera_zoom_out": "Pinch Out",
+	"camera_zoom_in": "Zoom In",
+	"camera_zoom_out": "Zoom Out",
+	"aim_bow": "Aim",
+	"fire_bow": "Fire",
+	"cycle_arrow": "Arrows",
+	"target_lock": "Lock",
+	"target_next": "Next Target",
+	"target_previous": "Previous Target",
+	"weapon_sword": "Steel",
+	"weapon_oathblade": "Oathblade",
+	"weapon_bow": "Bow",
+	"weapon_sheath": "Draw / Sheathe",
+	"companion_command": "Bracken",
 }
 
 var active_device := DEVICE_KEYBOARD_MOUSE
@@ -198,6 +210,10 @@ var gamepad_profiles: Dictionary = {}
 var virtual_move := Vector2.ZERO
 var virtual_look := Vector2.ZERO
 var _pending_virtual_look := Vector2.ZERO
+var _pending_touch_look_delta := Vector2.ZERO
+var _virtual_requests: Array[Dictionary] = []
+var _virtual_request_flush_pending := false
+var _transient_generation := 0
 var _virtual_actions: Dictionary = {}
 var _keyboard_pressed: Dictionary = {}
 var _mouse_pressed: Dictionary = {}
@@ -339,6 +355,8 @@ func suspend_gameplay(reason: String) -> void:
 	begin_context(CONTEXT_TRANSITION)
 
 func reset_transient_input(reason: String) -> void:
+	_transient_generation += 1
+	_virtual_requests.clear()
 	_companion_press_msec = -1
 	_companion_menu_pending = false
 	# Remember held controls before clearing software queues. A handoff is not
@@ -468,6 +486,8 @@ func _input(event: InputEvent) -> void:
 		return
 	if event is InputEventKey:
 		var key_event := event as InputEventKey
+		if key_event.pressed and not key_event.echo:
+			_set_device(DEVICE_KEYBOARD_MOUSE)
 		# Web pointer capture can clear Godot's action cache while a physical key
 		# is still held. Retain the raw key state so movement and held actions do
 		# not stop after the first captured frame.
@@ -476,7 +496,6 @@ func _input(event: InputEvent) -> void:
 		if key_event.physical_keycode > 0:
 			_keyboard_pressed[_normalize_browser_keycode(key_event.physical_keycode)] = key_event.pressed
 		if key_event.pressed and not key_event.echo:
-			_set_device(DEVICE_KEYBOARD_MOUSE)
 			if is_gameplay_context() and not get_tree().paused:
 				for action in ["move_forward", "move_back", "move_left", "move_right", "camera_left", "camera_right", "camera_up", "camera_down"]:
 					if key_event.is_action_pressed(action):
@@ -493,13 +512,13 @@ func _input(event: InputEvent) -> void:
 	elif event is InputEventMouseButton and event.pressed:
 		var mouse_event := event as InputEventMouseButton
 		var button := int(mouse_event.button_index)
+		_set_device(DEVICE_KEYBOARD_MOUSE)
 		# A Web pointer-lock or focus handoff can drop mouse-up while the next
 		# physical mouse-down still arrives. Treat every delivered mouse-down as
 		# a fresh edge; real mouse holds do not emit repeated mouse-down events,
 		# while this also re-arms the action after a lost release.
 		_mouse_just_pressed[button] = Time.get_ticks_msec()
 		_mouse_pressed[button] = true
-		_set_device(DEVICE_KEYBOARD_MOUSE)
 	elif event is InputEventMouseButton:
 		var mouse_event := event as InputEventMouseButton
 		var button := int(mouse_event.button_index)
@@ -563,7 +582,7 @@ func _track_action_event(event: InputEvent) -> void:
 			_event_down[action] = true
 			# After a focus loss, a new mouse/key down is proof of a fresh
 			# physical press even if the browser swallowed the old release.
-			if str(_awaiting_release.get(action, "")) == "focus_lost" and (event is InputEventKey or event is InputEventMouseButton):
+			if str(_awaiting_release.get(action, "")) in ["focus_lost", "device_changed"] and (event is InputEventKey or event is InputEventMouseButton):
 				_awaiting_release.erase(action)
 			if _awaiting_release.has(action):
 				if action.begins_with("ui_"):
@@ -717,7 +736,7 @@ func _ensure_action_snapshot() -> void:
 		var singleton_edges: bool = active_device != DEVICE_TOUCH
 		var pressed: bool = ((singleton_edges and Input.is_action_just_pressed(raw_action)) or now - int(_pending_pressed.get(action, -1000)) <= 500) and allowed and not guarded
 		var released: bool = ((singleton_edges and Input.is_action_just_released(raw_action)) or now - int(_pending_released.get(action, -1000)) <= 500) and allowed and not guarded
-		if str(_toggle_modes.get(action, "hold")) == "toggle" and is_gameplay_context():
+		if _action_mode(action) == "toggle" and is_gameplay_context():
 			var previous := bool(_toggle_actions.get(action, false))
 			if pressed:
 				_toggle_actions[action] = not previous
@@ -730,8 +749,11 @@ func _ensure_action_snapshot() -> void:
 		if active_device == DEVICE_TOUCH and action == "run" and is_gameplay_context() and virtual_move.length() > 0.82 and not guarded:
 			held = true
 		_action_snapshot[action] = {"held":held, "pressed":pressed, "released":released}
-	_pending_pressed.clear()
-	_pending_released.clear()
+		# A fresh tap after Resume may share its suppressed physics frame. Keep
+		# that edge for the next frame; old context/held-input edges still expire.
+		if _suppressed_frame != frame or _awaiting_release.has(action) or not allowed:
+			_pending_pressed.erase(action)
+			_pending_released.erase(action)
 	_mouse_just_pressed.clear()
 	_mouse_just_released.clear()
 
@@ -801,7 +823,7 @@ func action_axis(negative: StringName, positive: StringName) -> float:
 	return _action_strength(positive) - _action_strength(negative) if is_gameplay_context() else 0.0
 
 func describe_action(action: String) -> Dictionary:
-	var mode := str(_toggle_modes.get(action, "hold" if action in ["aim_bow", "oathfire_beam"] else "press"))
+	var mode := _action_mode(action)
 	var binding := action_label(action)
 	var name := str({"block":"guard", "run":"sprint", "aim_bow":"aim", "oathfire_beam":"charge Oathfire"}.get(action, action.replace("_", " ")))
 	var instruction := "Press %s to %s" % [binding, name]
@@ -811,6 +833,11 @@ func describe_action(action: String) -> Dictionary:
 		instruction = "Press %s to toggle %s" % [binding, name]
 	var active := bool(_toggle_actions.get(action, false)) if mode == "toggle" else (_physical_action_held(StringName(action)) and is_gameplay_context() and not _awaiting_release.has(action))
 	return {"action":action, "binding":binding, "mode":mode, "instruction":instruction, "active":active, "device":active_device}
+
+func _action_mode(action: String) -> String:
+	if action == "aim_bow" and active_device == DEVICE_TOUCH:
+		return str(settings_ref.get("touch_aim_mode", "toggle"))
+	return str(_toggle_modes.get(action, "hold" if action in ["aim_bow", "oathfire_beam"] else "press"))
 
 func action_label(action: String) -> String:
 	if active_device == DEVICE_GAMEPAD:
@@ -904,24 +931,51 @@ func set_virtual_axes(move_axis: Vector2, look_axis: Vector2) -> void:
 func clear_virtual_look() -> void:
 	virtual_look = Vector2.ZERO
 	_pending_virtual_look = Vector2.ZERO
+	_pending_touch_look_delta = Vector2.ZERO
+
+func add_touch_look_delta(display_delta: Vector2) -> void:
+	if is_gameplay_context() and not get_tree().paused and display_delta.is_finite():
+		_pending_touch_look_delta += display_delta
+
+func consume_touch_look_delta() -> Vector2:
+	var result := _pending_touch_look_delta
+	_pending_touch_look_delta = Vector2.ZERO
+	return result if is_gameplay_context() and active_device == DEVICE_TOUCH else Vector2.ZERO
+
+func request_virtual_action(action: String, target_instance_id: int = 0) -> void:
+	if action not in ["interact", "pause", "open_inventory", "touch_more", "companion_command"] or not is_gameplay_context() or get_tree().paused:
+		return
+	_set_device(DEVICE_TOUCH)
+	_virtual_requests.append({"action":action, "target_instance_id":target_instance_id, "context_generation":_context_generation, "transient_generation":_transient_generation})
+	if not _virtual_request_flush_pending:
+		_virtual_request_flush_pending = true
+		call_deferred("_flush_virtual_requests")
+
+func _flush_virtual_requests() -> void:
+	_virtual_request_flush_pending = false
+	var pending: Array[Dictionary] = _virtual_requests.duplicate()
+	_virtual_requests.clear()
+	for request: Dictionary in pending:
+		if int(request.context_generation) == _context_generation and int(request.transient_generation) == _transient_generation and is_gameplay_context() and not get_tree().paused:
+			gameplay_action_requested.emit(request)
 
 func set_virtual_action(action: StringName, pressed: bool) -> void:
-	if pressed and not is_gameplay_context():
+	if not InputMap.has_action(action) or (pressed and (not is_gameplay_context() or get_tree().paused)):
 		return
 	if pressed:
 		_set_device(DEVICE_TOUCH)
 		if bool(_virtual_actions.get(action, false)):
 			return
+		_awaiting_release.erase(str(action))
 		_virtual_actions[action] = true
-		var action_event := InputEventAction.new()
-		action_event.action = action
-		action_event.pressed = true
-		Input.parse_input_event(action_event)
+		_pending_pressed[str(action)] = Time.get_ticks_msec()
 	elif _virtual_actions.erase(action):
-		var action_event := InputEventAction.new()
-		action_event.action = action
-		action_event.pressed = false
-		Input.parse_input_event(action_event)
+		_pending_released[str(action)] = Time.get_ticks_msec()
+
+func cancel_virtual_action(action: StringName) -> void:
+	set_virtual_action(action, false)
+	_toggle_actions.erase(str(action))
+	_pending_pressed.erase(str(action))
 
 func clear_virtual_input() -> void:
 	virtual_move = Vector2.ZERO

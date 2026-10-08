@@ -25,6 +25,7 @@ const DEFAULT_SETTINGS := {
 	"custom_bindings": {},
 	"touch_controls": "auto",
 	"touch_look_sensitivity": 1.0,
+	"touch_aim_mode": "toggle",
 	"invert_y": false,
 	"master_volume": 0.85,
 	"music_volume": 0.8,
@@ -159,6 +160,8 @@ func restore_settings(stored: Dictionary) -> void:
 	for key in ["block_mode", "sprint_mode"]:
 		if str(settings.get(key, "hold")) not in ["hold", "toggle"]:
 			settings[key] = "hold"
+	if str(settings.get("touch_aim_mode", "toggle")) not in ["hold", "toggle"]:
+		settings["touch_aim_mode"] = "toggle"
 	settings["text_locale"] = "en"
 	settings["camera_shake"] = clampf(float(settings["camera_shake"]), 0.0, 1.0)
 	settings["shadow_quality"] = clampi(int(settings["shadow_quality"]), 0, 2)
@@ -343,7 +346,7 @@ func cycle_accessibility(action: String) -> bool:
 			settings[action] = _cycle_float(float(settings.get(action, 0.55)), [0.0, 0.25, 0.55, 0.75, 0.92, 1.0])
 		"subtitle_speaker_names", "flash_reduction", "targeting_assist":
 			settings[action] = not bool(settings.get(action, false))
-		"block_mode", "sprint_mode":
+		"block_mode", "sprint_mode", "touch_aim_mode":
 			settings[action] = "toggle" if str(settings.get(action, "hold")) == "hold" else "hold"
 		_:
 			return false

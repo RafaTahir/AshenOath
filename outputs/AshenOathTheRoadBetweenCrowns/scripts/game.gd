@@ -406,18 +406,37 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("pause") and not event.is_echo():
 		_request_pause_or_back(event)
 	elif not get_tree().paused and input_router.accept_event(event, &"interact", "gameplay"):
-		# Dispatch the same target whose prompt was visible for this fresh press.
-		var focused_target: Area3D = active_interactable as Area3D if is_instance_valid(active_interactable) else null
 		get_viewport().set_input_as_handled()
-		if is_instance_valid(focused_target) and _interaction_target_valid(focused_target):
-			_handle_interaction(focused_target)
-		else:
-			hud.set_guidance_hint("Face the object and move into clear view.", 2.0)
+		_dispatch_gameplay_action("interact")
 	elif not get_tree().paused and input_router.accept_event(event, &"open_inventory", "gameplay"):
 		get_viewport().set_input_as_handled()
-		audio.set_game_paused(true)
-		get_tree().paused = true
-		_show_preparation_menu()
+		_dispatch_gameplay_action("open_inventory")
+
+func _on_virtual_gameplay_action(request: Dictionary) -> void:
+	_dispatch_gameplay_action(str(request.get("action", "")), int(request.get("target_instance_id", 0)))
+
+func _dispatch_gameplay_action(action: String, target_instance_id: int = 0) -> void:
+	if not game_started or get_tree().paused or input_router == null or not input_router.is_gameplay_context() or _journey_load_pending() or zone_transition_pending or zone_load_request_pending or opening_pack_waiting or campaign_pack_waiting:
+		return
+	if minigames != null and minigames.is_open():
+		return
+	match action:
+		"interact":
+			var focused_target: Area3D = active_interactable as Area3D if is_instance_valid(active_interactable) else null
+			if is_instance_valid(focused_target) and (target_instance_id == 0 or focused_target.get_instance_id() == target_instance_id) and _interaction_target_valid(focused_target):
+				_handle_interaction(focused_target)
+			else:
+				hud.set_guidance_hint("Face the object and move into clear view.", 2.0)
+		"pause":
+			_pause_game()
+		"open_inventory":
+			audio.set_game_paused(true)
+			get_tree().paused = true
+			_show_preparation_menu()
+		"touch_more":
+			_show_touch_actions()
+		"companion_command":
+			_show_companion_commands()
 
 func _request_pause_or_back(event: InputEvent) -> void:
 	if _journey_load_pending():
@@ -435,7 +454,7 @@ func _request_pause_or_back(event: InputEvent) -> void:
 		# never reach generic Resume merely because the tree happens to be paused.
 		hud.request_back()
 		return
-	_pause_game()
+	_dispatch_gameplay_action("pause")
 
 func _invalidate_interaction_prompt() -> void:
 	interaction_focus_dirty = true
@@ -451,6 +470,7 @@ func _publish_interaction_prompt() -> void:
 		return
 	var prompt_model: Dictionary = active_interactable.get_prompt_model() if active_interactable.has_method("get_prompt_model") else {"text": active_interactable.get_context_prompt()}
 	prompt_model["target_id"] = str(active_interactable.interaction_id)
+	prompt_model["target_instance_id"] = active_interactable.get_instance_id()
 	prompt_model["binding"] = input_router.action_label("interact")
 	prompt_model["available"] = true
 	hud.set_interaction_prompt(prompt_model)
@@ -4165,6 +4185,30 @@ func _show_companion_commands() -> void:
 	travel["present"] = companion != null and companion.is_visible_in_tree()
 	hud.show_companion_commands(travel)
 
+func _show_touch_actions() -> void:
+	if not is_instance_valid(player):
+		return
+	audio.set_game_paused(true)
+	get_tree().paused = true
+	paused_by_menu = true
+	input_router.set_context("pause")
+	hud.show_touch_actions(player.get_selected_weapon_name(), not player.sword_sheathed if player.weapon_mode == "sword" else player.equipment_loadout.is_drawn())
+
+func _on_touch_quick_action(action: String) -> void:
+	if hud.active_menu != "touch_actions" or not get_tree().paused:
+		return
+	if action == "companion_command":
+		_show_companion_commands()
+		return
+	var allowed := ["weapon_sword", "weapon_oathblade", "weapon_bow", "weapon_sheath", "use_potion", "throw_bomb", "target_lock", "target_next", "target_previous", "cycle_arrow", "camera_zoom_in", "camera_zoom_out"]
+	if action not in allowed:
+		return
+	_resume_game()
+	if get_tree().paused or not input_router.is_gameplay_context() or _journey_load_pending() or zone_transition_pending or zone_load_request_pending:
+		return
+	input_router.set_virtual_action(StringName(action), true)
+	input_router.set_virtual_action(StringName(action), false)
+
 func _resume_game() -> void:
 	if _journey_load_pending():
 		return
@@ -4232,6 +4276,8 @@ func _handle_setting(action: String) -> void:
 		settings.cycle_difficulty()
 	elif action == "focus_pause":
 		settings.toggle_pause_on_focus_loss()
+	else:
+		settings.cycle_accessibility(action)
 	if action != "visual_preset":
 		hud.toast("Settings updated.")
 	hud.show_settings_menu(hud.controls_back_target)
@@ -4307,6 +4353,8 @@ func _refresh_equipment_readout() -> void:
 	var remedy_id: String = inventory.quick_item("use_potion")
 	var tool_id: String = inventory.quick_item("throw_bomb")
 	hud.update_equipment(int(inventory.items.get(remedy_id, 0)), int(inventory.items.get(tool_id, 0)), oil_name, int(inventory.items.get(arrow_id, 0)), arrow_type, weapon_name, remedy_id, tool_id)
+	if mobile_touch != null and is_instance_valid(player):
+		mobile_touch.set_weapon_mode(player.get_weapon_mode())
 
 func _guard_tutorial_hint() -> String:
 	var guard: Dictionary = input_router.describe_action("block") if input_router != null else {}

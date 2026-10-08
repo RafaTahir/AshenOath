@@ -1,5 +1,17 @@
 # Ashen Oath Project State
 
+## Mobile Controls Repair - 2026-10-08
+
+MOBILE-002 implementation/packaging complete; publication pending. Touch Use
+has a context-safe semantic request and displayed-target identity, while short
+combat taps use direct frame queues. The camera no longer consumes a genuine
+gameplay click solely for pointer capture. Touch has contextual sword/bow controls,
+larger targets, More, a saved Touch Aim Toggle/Hold choice, display-pixel camera
+dragging and shared HUD/control regions. Dialogue uses native GUI touch scrolling.
+The combined `mobile-002-20261008-controls` production build compiled/exported:
+15 Web files, 92,133,124 bytes. No runtime testing or user acceptance is claimed.
+Next: one combined publication; see `MOBILE_002_RESULT.md` for the manual checklist.
+
 ## Living Road - 2026-10-08
 
 Current: 28/28 implemented and published, 0/28 user-accepted.

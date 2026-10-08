@@ -118,6 +118,8 @@ func configure(owner: Node) -> void:
 	hud.set_input_source(input_router)
 	minigames.setup(input_router)
 	mobile_touch.setup(input_router, hud, settings.settings)
+	input_router.gameplay_action_requested.connect(Callable(owner, "_on_virtual_gameplay_action"))
+	hud.touch_quick_action_requested.connect(Callable(owner, "_on_touch_quick_action"))
 	mobile_touch.gameplay_layout_unavailable.connect(Callable(owner, "_on_touch_layout_unavailable"))
 	mobile_touch.gameplay_layout_reason_changed.connect(hud.set_touch_layout_reason)
 	zone_streaming.setup(owner)

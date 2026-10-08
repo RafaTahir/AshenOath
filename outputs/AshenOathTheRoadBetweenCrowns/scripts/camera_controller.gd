@@ -93,6 +93,8 @@ func set_enemy_candidates(candidates: Array) -> void:
 func _input(event: InputEvent) -> void:
 	if target == null or get_tree().paused or not _gameplay_camera_active():
 		return
+	if (event is InputEventMouseButton or event is InputEventMouseMotion) and event.device == -1:
+		return
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
 			adjust_zoom(-ZOOM_STEP)
@@ -103,10 +105,7 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			return
 		if Input.mouse_mode != Input.MOUSE_MODE_CAPTURED and event.button_index in [MOUSE_BUTTON_LEFT, MOUSE_BUTTON_RIGHT]:
-			if input_source != null and input_source.has_method("guard_event_until_release"):
-				input_source.guard_event_until_release(event, "pointer_capture")
 			_capture_pointer()
-			get_viewport().set_input_as_handled()
 			return
 		_capture_pointer()
 	elif event is InputEventMouseMotion:
@@ -393,6 +392,12 @@ func _apply_keyboard_camera(delta: float) -> void:
 		elif _action_just_pressed("target_previous"):
 			_cycle_combat_target(-1)
 	var look := _look_input()
+	if input_source != null and str(input_source.active_device) == "touch":
+		_apply_mouse_motion(input_source.consume_touch_look_delta() * 2.0)
+		if _action_just_pressed("camera_zoom_in"):
+			adjust_zoom(-ZOOM_STEP)
+		elif _action_just_pressed("camera_zoom_out"):
+			adjust_zoom(ZOOM_STEP)
 	var turn := look.x
 	var tilt := look.y
 	# A hard horizontal stick deflection is a target-cycle gesture while

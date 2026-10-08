@@ -28,6 +28,8 @@ signal journey_load_cancel_requested
 signal journal_section_requested(section_id: String)
 signal dialogue_topic_requested(context_id: String, topic_id: String, revision_key: String)
 signal dialogue_speech_interrupted
+signal interaction_prompt_changed(model: Dictionary)
+signal touch_quick_action_requested(action: String)
 
 const MENU_BUILD_LABEL = "ASHEN OATH · THE ROAD BETWEEN CROWNS"
 const MENU_SIZE = Vector2(1920.0, 1080.0)
@@ -285,6 +287,7 @@ func _process(delta: float) -> void:
 		_status_remaining = maxf(0.0, _status_remaining - delta)
 		if _status_remaining <= 0.0:
 			status_label.visible = false
+	_refresh_touch_message_visibility()
 	_update_process_policy()
 
 func _update_process_policy() -> void:
@@ -503,6 +506,7 @@ func clear_journey_transients(new_timeline: bool) -> void:
 	raw_prompt = ""
 	raw_hint = ""
 	_interaction_prompt_model.clear()
+	interaction_prompt_changed.emit({"available":false})
 	_hint_remaining = 0.0
 	_status_remaining = 0.0
 	prompt_label.visible = false
@@ -629,6 +633,33 @@ func show_companion_commands(travel: Dictionary) -> void:
 		_add_menu_button(box, str(entry[1]), func(selected: String = command): action_selected.emit({"type":"companion_command", "command":selected}), false, "companion:" + command)
 	_add_menu_button(box, "Return", func(): resume_requested.emit(), false, "resume")
 
+func show_touch_actions(weapon_name: String, drawn: bool) -> void:
+	active_menu = "touch_actions"
+	_set_internal_canvas(Vector2i(MENU_SIZE))
+	_set_ui_pointer("pause")
+	_clear_menu()
+	menu_layer.visible = true
+	var box := _menu_box("More", weapon_name + (" drawn" if drawn else " sheathed"))
+	var options := [
+		["weapon_sword", "Steel"], ["weapon_oathblade", "Oathblade"], ["weapon_bow", "Bow"],
+		["weapon_sheath", "Sheathe" if drawn else "Draw"],
+		["use_potion", "%s  (%d)" % [_item_short_name(last_remedy_id), last_potions]],
+		["throw_bomb", "%s  (%d)" % [_item_short_name(last_tool_id), last_bombs]],
+		["target_lock", "Lock / Release Target"], ["target_previous", "Previous Target"], ["target_next", "Next Target"],
+		["cycle_arrow", "Arrows: " + last_arrow_type],
+		["camera_zoom_in", "Zoom In"], ["camera_zoom_out", "Zoom Out"]
+	]
+	for option: Array in options:
+		var action: String = str(option[0])
+		var disabled := (action == "use_potion" and last_potions <= 0) or (action == "throw_bomb" and last_bombs <= 0)
+		_add_menu_button(box, str(option[1]), func(selected: String = action): touch_quick_action_requested.emit(selected), disabled, "touch:" + action)
+	if input_source != null and input_source.companion_available:
+		_add_menu_button(box, "Bracken", func(): touch_quick_action_requested.emit("companion_command"), false, "touch:companion")
+	_add_menu_button(box, "Resume", func(): resume_requested.emit(), false, "resume")
+
+func _item_short_name(id: String) -> String:
+	return str({"redroot_potion":"Redroot", "bitterleaf_tonic":"Bitterleaf", "ash_bomb":"Ash Bomb", "iron_trap":"Iron Trap"}.get(id, id.replace("_", " ").capitalize()))
+
 func show_settings_menu(back_target: String = "pause", requested_page: int = -1) -> void:
 	active_menu = "settings"
 	_set_internal_canvas(Vector2i(MENU_SIZE))
@@ -696,6 +727,7 @@ func _settings_entries(s: Dictionary) -> Array:
 		{"label": "Controller Rumble %s" % _on_off(bool(s.get("gamepad_vibration", true))), "action": "gamepad_vibration"},
 		{"label": "Touch Controls    %s" % str(s.get("touch_controls", "auto")).capitalize(), "action": "touch_controls"},
 		{"label": "Touch Look        %s" % _controller_sensitivity_label(float(s.get("touch_look_sensitivity", 1.0))), "action": "touch_sensitivity"},
+		{"label": "Touch Aim         %s" % str(s.get("touch_aim_mode", "toggle")).capitalize(), "action": "touch_aim_mode"},
 		{"label": "Invert Y Axis     %s" % _on_off(bool(s.get("invert_y", false))), "action": "invert_y"},
 		{"label": "Master Volume     %d%%" % int(round(float(s.get("master_volume", 0.85)) * 100.0)), "action": "volume"},
 		{"label": "Music Volume      %d%%" % int(round(float(s.get("music_volume", 0.8)) * 100.0)), "mix_channel": "music", "value": float(s.get("music_volume", 0.8))},
@@ -734,7 +766,7 @@ func show_controls_menu(back_target: String = "main") -> void:
 	elif input_device == "gamepad":
 		_add_menu_text(box, "Left Stick move | Right Stick look | D-Pad Up/Down zoom\nL3 run | B dodge | Y jump | Tap X cycle weapons | Hold X draw/sheath\nRB light attack | RT heavy attack / fire bow | LT aim bow\nSword: hold LT Oathfire | Tap/Hold LB parry or block | A interact\nBow: D-Pad Up cycle arrows | D-Pad Left potion | D-Pad Right bomb | View journal | Menu pause")
 	elif input_device == "touch":
-		_add_menu_text(box, "Left thumb move | Drag right side to look\nStrike / Heavy attack | Dodge | Jump\nHold Guard to block or parry | Hold Oath to charge Oathfire\nUse interacts | Potion heals | Pause opens the menu\nLandscape orientation is required during gameplay")
+		_add_menu_text(box, "Left thumb move | Drag right side to look\nSword: Strike, Heavy, Guard, Dodge, Jump, Oath\nBow: Aim, Fire, Lock, Arrows, Dodge, Jump\nUse the displayed object with Use\nMore: weapons, draw/sheath, supplies, targets, camera, Bracken\nPause and Book open their menus\nLandscape orientation is required during gameplay")
 	else:
 		_add_menu_text(box, "WASD move | Mouse look | Wheel zoom | Page Up/Down zoom\nShift run | Space dodge | X jump | 1 Steel | 2 Bow | 3 Oathblade | H draw/sheath\nLeft mouse light attack / fire bow | Right mouse heavy / aim bow\nHold C Oathfire Beam | Tap Q parry | Hold Q block | E interact\nZ cycle arrows | R potion | F bomb | Tab inventory | Esc pause")
 	_add_menu_button(box, "Customize Controls", func(): show_remap_menu(back_target))
@@ -1008,6 +1040,7 @@ func set_prompt(text: String) -> void:
 
 func set_interaction_prompt(model: Dictionary) -> void:
 	_interaction_prompt_model = model.duplicate(true)
+	interaction_prompt_changed.emit(_interaction_prompt_model.duplicate(true))
 	if model.is_empty():
 		set_prompt("")
 		return
@@ -1019,12 +1052,17 @@ func set_interaction_prompt(model: Dictionary) -> void:
 	if input_source != null and input_source.has_method("describe_action"):
 		var descriptor: Dictionary = input_source.describe_action("interact")
 		binding = str(descriptor.get("binding", binding))
+	if input_device == "touch":
+		binding = ""
 	var verb := str(model.get("verb", ""))
 	var subject := str(model.get("subject", ""))
 	if verb == "":
 		set_prompt(fallback)
 		return
 	set_prompt("%s%s%s" % ["[" + binding + "] " if binding != "" else "", verb, " " + subject if subject != "" else ""])
+
+func get_interaction_prompt_model() -> Dictionary:
+	return _interaction_prompt_model.duplicate(true)
 
 func set_tracker(text: String) -> void:
 	_tracker_source = text
@@ -1155,6 +1193,7 @@ func _present_notice() -> void:
 		_menu_notice.text = text
 		_menu_notice.visible = text != "" and not reading
 		_menu_notice.add_theme_color_override("font_color", Color(1.0, 0.78, 0.53) if str(_notice_active.get("category", "")) in ["error", "unavailable"] else Color(0.86, 0.83, 0.70))
+	_refresh_touch_message_visibility()
 
 func set_toasts_suppressed(suppressed: bool) -> void:
 	toasts_suppressed = suppressed
@@ -1169,6 +1208,7 @@ func set_guidance_hint(text: String, seconds: float = 4.5) -> void:
 	if hint_tween != null and hint_tween.is_running():
 		hint_tween.kill()
 	_hint_remaining = maxf(seconds, 2.2) if raw_hint != "" else 0.0
+	_refresh_touch_message_visibility()
 	_update_process_policy()
 
 func show_status_cue(text: String, kind: String = "neutral") -> void:
@@ -1188,6 +1228,7 @@ func show_status_cue(text: String, kind: String = "neutral") -> void:
 	if status_tween != null and status_tween.is_running():
 		status_tween.kill()
 	_draw_resource_attention(3.0)
+	_refresh_touch_message_visibility()
 
 func update_equipment(potions: int, bombs: int, oil_name: String, arrow_count: int = -1, arrow_type: String = "Standard", weapon_name: String = "Steel", remedy_id: String = "redroot_potion", tool_id: String = "ash_bomb") -> void:
 	var supplies_changed := potions != last_potions or bombs != last_bombs or arrow_count != last_arrow_count or oil_name != last_oil_name
@@ -2770,6 +2811,7 @@ func _apply_responsive_gameplay(policy: Dictionary) -> void:
 	var gap: float = float(policy.gap)
 	var fonts: Dictionary = policy.fonts
 	var touch: bool = input_device == "touch"
+	prompt_label.max_lines_visible = 3 if touch else 2
 	var touch_model: Dictionary = MobileTouchLayout.build(Vector2(GAMEPLAY_SIZE), _display_metrics) if touch else {}
 	var reserved_bottom: float = float(touch_model.get("bottom_reserved_display", 0.0)) * unit
 	var margin: float = (12.0 if compact else 24.0) * unit
@@ -2778,9 +2820,10 @@ func _apply_responsive_gameplay(policy: Dictionary) -> void:
 	var top: float = safe.position.y + margin
 	var bottom: float = safe.end.y - margin
 	var center: float = safe.get_center().x
-	var center_channel: float = maxf(0.0, safe.size.x - reserved_bottom * 2.0 - gap * 2.0) if touch and reserved_bottom > 0.0 else safe.size.x - margin * 2.0
+	var touch_center: Rect2 = touch_model.get("center_rect", Rect2())
+	var center_channel: float = touch_center.size.x if touch and bool(touch_model.get("playable", false)) else safe.size.x - margin * 2.0
 	var crest_size: float = (62.0 if compact else 84.0) * unit
-	var vitals_width: float = minf(470.0 * unit, safe.size.x * (0.48 if compact else 0.42))
+	var vitals_width: float = minf(228.0 * unit, safe.size.x * 0.27) if touch else minf(470.0 * unit, safe.size.x * (0.48 if compact else 0.42))
 	var bar_left: float = left + crest_size * 0.79
 	var bar_width: float = maxf(0.0, vitals_width - crest_size * 0.79)
 	_hart_emblem.position = Vector2(left, top + 4.0 * unit)
@@ -2933,7 +2976,50 @@ func _apply_responsive_gameplay(policy: Dictionary) -> void:
 	toast_label.position = Vector2(notice_x, notice_y + 28.0 * unit)
 	toast_label.size = Vector2(notice_width, 85.0 * unit)
 	toast_label.add_theme_font_size_override("font_size", int(fonts.body))
+	if touch and bool(touch_model.get("playable", false)):
+		_apply_touch_gameplay_regions(touch_model, unit)
 	_apply_hud_visual_colors()
+
+func _apply_touch_gameplay_regions(model: Dictionary, unit: float) -> void:
+	var corridor: Rect2 = model.center_rect
+	var prompt: Rect2 = model.prompt_rect
+	var messages: Rect2 = model.message_rect
+	prompt_label.position = prompt.position
+	prompt_label.size = prompt.size
+	prompt_label.max_lines_visible = 3
+	prompt_back.position = prompt.position - Vector2(4, 2) * unit
+	prompt_back.size = prompt.size + Vector2(8, 4) * unit
+	var width := minf(320.0 * unit, corridor.size.x)
+	var x := corridor.get_center().x - width * 0.5
+	var top := corridor.position.y + 12.0 * unit
+	enemy_label.position = Vector2(x, top)
+	enemy_label.size = Vector2(width, 24.0 * unit)
+	enemy_bar.position = Vector2(x, top + 28.0 * unit)
+	enemy_bar.size = Vector2(maxf(0.0, width - 60.0 * unit), 9.0 * unit)
+	enemy_value_label.position = Vector2(x + width - 56.0 * unit, top + 22.0 * unit)
+	enemy_value_label.size = Vector2(56.0 * unit, 24.0 * unit)
+	target_status_label.position = Vector2(x, top + 44.0 * unit)
+	target_status_label.size = Vector2(width, 24.0 * unit)
+	status_label.position = messages.position
+	status_label.size = messages.size
+	hint_label.position = messages.position
+	hint_label.size = messages.size
+	notice_category_label.position = messages.position
+	notice_category_label.size = Vector2(messages.size.x, 20.0 * unit)
+	toast_label.position = messages.position + Vector2(0, 22.0 * unit)
+	toast_label.size = Vector2(messages.size.x, maxf(0.0, messages.size.y - 22.0 * unit))
+	notice_back.position = messages.position - Vector2(4, 2) * unit
+	notice_back.size = messages.size + Vector2(8, 4) * unit
+	_refresh_touch_message_visibility()
+
+func _refresh_touch_message_visibility() -> void:
+	if hint_label == null or status_label == null:
+		return
+	var notice_visible := toast_label != null and toast_label.visible
+	var blocked := _gameplay_surface_blocked()
+	hint_label.visible = not blocked and (input_device != "touch" or not notice_visible) and _hint_remaining > 0.0 and raw_hint != ""
+	status_label.visible = not blocked and (input_device != "touch" or (not notice_visible and not hint_label.visible)) and _status_remaining > 0.0
+
 func _build_menu_layer() -> void:
 	menu_layer = Control.new()
 	menu_layer.process_mode = Node.PROCESS_MODE_ALWAYS
@@ -3549,6 +3635,11 @@ func _input(event: InputEvent) -> void:
 	if dialogue_layer == null or not dialogue_layer.visible:
 		_cancel_dialogue_press()
 		return
+	# Native Buttons and ScrollContainers own touch press/release and drag
+	# cancellation. Intercepting those contacts here prevented choice scrolling.
+	if event is InputEventScreenTouch or event is InputEventScreenDrag or ((event is InputEventMouseButton or event is InputEventMouseMotion) and event.device == -1):
+		_cancel_dialogue_press()
+		return
 	var focused_control: Control = get_viewport().gui_get_focus_owner()
 	var reader_focused: bool = focused_control == dialogue_text or focused_control == _decision_details
 	var navigation_direction: int = 0
@@ -3677,6 +3768,8 @@ func _dialogue_pointer_hits(button: Button, point: Vector2) -> bool:
 
 func _capture_remap_input(event: InputEvent) -> bool:
 	# Capture before GUI navigation consumes arrows, accept keys or clicks.
+	if (event is InputEventMouseButton or event is InputEventMouseMotion) and event.device == -1:
+		return false
 	if active_menu == "remap" and remap_waiting:
 		if event.is_action_pressed("ui_cancel"):
 			remap_waiting = false
@@ -3751,7 +3844,7 @@ func request_back() -> bool:
 			return true
 		_close_inventory()
 		return true
-	elif active_menu == "pause":
+	elif active_menu in ["pause", "touch_actions"]:
 		resume_requested.emit()
 		return true
 	elif active_menu == "main":
