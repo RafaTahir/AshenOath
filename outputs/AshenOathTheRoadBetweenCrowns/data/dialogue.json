@@ -1,4 +1,46 @@
 {
+  "bracken_rescue": {
+    "name": "Bracken",
+    "greeting": "A black hound braces against a strap caught in the roadside roots. Beside him lies a travelling harness with its owner's name worn away.",
+    "lines": ["Kael: Easy. Pulling only tightens it. I'll stay here a moment.", "He watches the open hand, then lets the strap slacken. This is an ordinary frightened animal, not the thing haunting Toma's fold."],
+    "voice": [],
+    "actions": [
+      {"label": "Kneel nearby and let him settle.", "type": "companion_choice", "companion_action": "calm", "conditions": {"flag_unset": "bracken_calmed"}}
+    ],
+    "variants": [
+      {
+        "priority": 40,
+        "conditions": {"bracken_home": "adopted"},
+        "greeting": "Bracken lifts his head when Kael returns. The discarded harness no longer holds him.",
+        "lines": ["Kael: There you are. A little rest won't hurt either of us.", "He leans against Kael's hand, then settles within reach."],
+        "actions": []
+      },
+      {
+        "priority": 30,
+        "conditions": {"bracken_home": "safe"},
+        "greeting": "The hound has stayed on Greyfen's quiet verge. There is water here, and no strap to pull him back.",
+        "lines": ["Kael: I wasn't ready to promise you a road. I haven't forgotten you.", "Bracken stands, waiting to see whether this visit will be different."],
+        "actions": [{"label": "There's room beside me, Bracken.", "type": "companion_choice", "companion_action": "adopt", "conditions": {"bracken_home": "safe"}}]
+      },
+      {
+        "priority": 20,
+        "conditions": {"bracken_rescued": true},
+        "greeting": "The loose strap drops into the grass. The hound could leave, but takes a careful step toward Kael instead.",
+        "lines": ["Kael: Bracken. A better name than whatever they scratched off that harness.", "Kael: The road isn't kind. Neither is being left on it. You needn't decide as quickly as I do."],
+        "actions": [
+          {"label": "You can make a home with me.", "type": "companion_choice", "companion_action": "adopt", "conditions": {"bracken_rescued": true}},
+          {"label": "Stay safe in Greyfen for now. I'll remember where you are.", "type": "companion_choice", "companion_action": "leave", "conditions": {"bracken_rescued": true}}
+        ]
+      },
+      {
+        "priority": 10,
+        "conditions": {"bracken_calmed": true},
+        "greeting": "His breathing slows. The harness strap, not his leg, is caught beneath a root.",
+        "lines": ["Kael: Just the buckle. Keep still. Then the choice is yours."],
+        "actions": [{"label": "Unfasten the snagged strap.", "type": "companion_choice", "companion_action": "release", "conditions": {"bracken_calmed": true}}]
+      }
+    ]
+  },
   "notice_board": {
     "name": "Greyfen Notice Board",
     "greeting": "Three missing on the north road. Bram Kett. Sella Vey. Her son Oren.",

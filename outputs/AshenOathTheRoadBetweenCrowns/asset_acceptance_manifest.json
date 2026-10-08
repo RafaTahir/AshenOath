@@ -42,6 +42,7 @@
     "mixed_human_source_family"
   ],
   "current_runtime_roles": {
+    "bracken_companion": {"status": "implemented_user_review_pending", "approved": false, "export_eligible": true, "model": "res://assets/companions/bracken.scn", "license_file": "res://assets_external/licenses/Quaternius_Animated_Animals_CC0.txt", "acceptance_owner": "user", "delivery_policy": "living-road-build-only"},
     "player_human": {"status": "blocked_temporary_fallback", "approved": false},
     "sister_anwen_human": {"status": "blocked_temporary_fallback", "approved": false},
     "villagers": {"status": "blocked_temporary_fallback", "approved": false},

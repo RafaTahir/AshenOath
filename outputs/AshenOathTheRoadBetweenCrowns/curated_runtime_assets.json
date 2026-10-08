@@ -3,6 +3,16 @@
   "ticket": "ASSET-001",
   "policy": "Only legal, loadable, currently referenced prototype assets or ART-001-selected modular components belong in the runtime library. Technical inclusion is not visual approval.",
   "roles": {
+    "companions": {
+      "bracken": {
+        "status": "implemented_user_review_pending",
+        "path": "res://assets/companions/bracken.scn",
+        "source_pack": "Quaternius Animated Animals Pack Vol.2",
+        "license": "CC0 1.0",
+        "license_file": "res://assets_external/licenses/Quaternius_Animated_Animals_CC0.txt",
+        "notes": "Complete retained Dog skeleton/body/Idle/Walking; visual acceptance belongs to the user."
+      }
+    },
     "characters": {
       "player_kael": {
         "status": "opening_single_material_a_set",

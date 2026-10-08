@@ -1,0 +1,20 @@
+{
+	"animations": {
+		"idle": "DogArmature|Idle",
+		"walk": "DogArmature|Walking"
+	},
+	"license": "CC0-1.0",
+	"materials": [
+		{
+			"name": "Dog",
+			"runtime_color": "242629ff",
+			"source_color": "e7e7e7ff"
+		}
+	],
+	"output": "res://assets/companions/bracken.scn",
+	"output_sha256": "c5314c83bcc1b7152e50f6d918acb1a31dc8c0f3b4a975d4cfc9942c7c039689",
+	"source": "res://assets_external/enemies/Dog.fbx",
+	"source_sha256": "a7250b3c68857120e6da0fd9ea2cdb4a4493823b6afed371b7aa9208407af039",
+	"target_height_m": 0.78,
+	"user_visual_acceptance": "pending"
+}

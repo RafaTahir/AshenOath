@@ -3886,6 +3886,126 @@
       "speaker": "",
       "context": "dialogue.blacksmith_tor.variants.2.lines"
     },
+    "dialogue.bracken_rescue.actions.0.label": {
+      "source": "Kneel nearby and let him settle.",
+      "text": "Kneel nearby and let him settle.",
+      "speaker": "",
+      "context": "dialogue.bracken_rescue.actions.0"
+    },
+    "dialogue.bracken_rescue.greeting": {
+      "source": "A black hound braces against a strap caught in the roadside roots. Beside him lies a travelling harness with its owner's name worn away.",
+      "text": "A black hound braces against a strap caught in the roadside roots. Beside him lies a travelling harness with its owner's name worn away.",
+      "speaker": "",
+      "context": "dialogue.bracken_rescue"
+    },
+    "dialogue.bracken_rescue.lines.0": {
+      "source": "Kael: Easy. Pulling only tightens it. I'll stay here a moment.",
+      "text": "Kael: Easy. Pulling only tightens it. I'll stay here a moment.",
+      "speaker": "",
+      "context": "dialogue.bracken_rescue.lines"
+    },
+    "dialogue.bracken_rescue.lines.1": {
+      "source": "He watches the open hand, then lets the strap slacken. This is an ordinary frightened animal, not the thing haunting Toma's fold.",
+      "text": "He watches the open hand, then lets the strap slacken. This is an ordinary frightened animal, not the thing haunting Toma's fold.",
+      "speaker": "",
+      "context": "dialogue.bracken_rescue.lines"
+    },
+    "dialogue.bracken_rescue.name": {
+      "source": "Bracken",
+      "text": "Bracken",
+      "speaker": "",
+      "context": "dialogue.bracken_rescue"
+    },
+    "dialogue.bracken_rescue.variants.0.greeting": {
+      "source": "Bracken lifts his head when Kael returns. The discarded harness no longer holds him.",
+      "text": "Bracken lifts his head when Kael returns. The discarded harness no longer holds him.",
+      "speaker": "",
+      "context": "dialogue.bracken_rescue.variants.0"
+    },
+    "dialogue.bracken_rescue.variants.0.lines.0": {
+      "source": "Kael: There you are. A little rest won't hurt either of us.",
+      "text": "Kael: There you are. A little rest won't hurt either of us.",
+      "speaker": "",
+      "context": "dialogue.bracken_rescue.variants.0.lines"
+    },
+    "dialogue.bracken_rescue.variants.0.lines.1": {
+      "source": "He leans against Kael's hand, then settles within reach.",
+      "text": "He leans against Kael's hand, then settles within reach.",
+      "speaker": "",
+      "context": "dialogue.bracken_rescue.variants.0.lines"
+    },
+    "dialogue.bracken_rescue.variants.1.actions.0.label": {
+      "source": "There's room beside me, Bracken.",
+      "text": "There's room beside me, Bracken.",
+      "speaker": "",
+      "context": "dialogue.bracken_rescue.variants.1.actions.0"
+    },
+    "dialogue.bracken_rescue.variants.1.greeting": {
+      "source": "The hound has stayed on Greyfen's quiet verge. There is water here, and no strap to pull him back.",
+      "text": "The hound has stayed on Greyfen's quiet verge. There is water here, and no strap to pull him back.",
+      "speaker": "",
+      "context": "dialogue.bracken_rescue.variants.1"
+    },
+    "dialogue.bracken_rescue.variants.1.lines.0": {
+      "source": "Kael: I wasn't ready to promise you a road. I haven't forgotten you.",
+      "text": "Kael: I wasn't ready to promise you a road. I haven't forgotten you.",
+      "speaker": "",
+      "context": "dialogue.bracken_rescue.variants.1.lines"
+    },
+    "dialogue.bracken_rescue.variants.1.lines.1": {
+      "source": "Bracken stands, waiting to see whether this visit will be different.",
+      "text": "Bracken stands, waiting to see whether this visit will be different.",
+      "speaker": "",
+      "context": "dialogue.bracken_rescue.variants.1.lines"
+    },
+    "dialogue.bracken_rescue.variants.2.actions.0.label": {
+      "source": "You can make a home with me.",
+      "text": "You can make a home with me.",
+      "speaker": "",
+      "context": "dialogue.bracken_rescue.variants.2.actions.0"
+    },
+    "dialogue.bracken_rescue.variants.2.actions.1.label": {
+      "source": "Stay safe in Greyfen for now. I'll remember where you are.",
+      "text": "Stay safe in Greyfen for now. I'll remember where you are.",
+      "speaker": "",
+      "context": "dialogue.bracken_rescue.variants.2.actions.1"
+    },
+    "dialogue.bracken_rescue.variants.2.greeting": {
+      "source": "The loose strap drops into the grass. The hound could leave, but takes a careful step toward Kael instead.",
+      "text": "The loose strap drops into the grass. The hound could leave, but takes a careful step toward Kael instead.",
+      "speaker": "",
+      "context": "dialogue.bracken_rescue.variants.2"
+    },
+    "dialogue.bracken_rescue.variants.2.lines.0": {
+      "source": "Kael: Bracken. A better name than whatever they scratched off that harness.",
+      "text": "Kael: Bracken. A better name than whatever they scratched off that harness.",
+      "speaker": "",
+      "context": "dialogue.bracken_rescue.variants.2.lines"
+    },
+    "dialogue.bracken_rescue.variants.2.lines.1": {
+      "source": "Kael: The road isn't kind. Neither is being left on it. You needn't decide as quickly as I do.",
+      "text": "Kael: The road isn't kind. Neither is being left on it. You needn't decide as quickly as I do.",
+      "speaker": "",
+      "context": "dialogue.bracken_rescue.variants.2.lines"
+    },
+    "dialogue.bracken_rescue.variants.3.actions.0.label": {
+      "source": "Unfasten the snagged strap.",
+      "text": "Unfasten the snagged strap.",
+      "speaker": "",
+      "context": "dialogue.bracken_rescue.variants.3.actions.0"
+    },
+    "dialogue.bracken_rescue.variants.3.greeting": {
+      "source": "His breathing slows. The harness strap, not his leg, is caught beneath a root.",
+      "text": "His breathing slows. The harness strap, not his leg, is caught beneath a root.",
+      "speaker": "",
+      "context": "dialogue.bracken_rescue.variants.3"
+    },
+    "dialogue.bracken_rescue.variants.3.lines.0": {
+      "source": "Kael: Just the buckle. Keep still. Then the choice is yours.",
+      "text": "Kael: Just the buckle. Keep still. Then the choice is yours.",
+      "speaker": "",
+      "context": "dialogue.bracken_rescue.variants.3.lines"
+    },
     "dialogue.edric.actions.0.label": {
       "source": "I will bring the road evidence to your record hall.",
       "text": "I will bring the road evidence to your record hall.",
@@ -8559,6 +8679,30 @@
       "text": "The Black Dog Contract",
       "speaker": "",
       "context": "quests.side_black_dog"
+    },
+    "quests.side_bracken_rescue.objectives.calm_hound.text": {
+      "source": "Let the caught hound settle beside Greyfen's north road.",
+      "text": "Let the caught hound settle beside Greyfen's north road.",
+      "speaker": "",
+      "context": "quests.side_bracken_rescue.objectives.calm_hound"
+    },
+    "quests.side_bracken_rescue.objectives.companion_choice.text": {
+      "source": "Offer Bracken a home or leave him safely at Greyfen.",
+      "text": "Offer Bracken a home or leave him safely at Greyfen.",
+      "speaker": "",
+      "context": "quests.side_bracken_rescue.objectives.companion_choice"
+    },
+    "quests.side_bracken_rescue.objectives.release_strap.text": {
+      "source": "Release the discarded harness strap without hurting him.",
+      "text": "Release the discarded harness strap without hurting him.",
+      "speaker": "",
+      "context": "quests.side_bracken_rescue.objectives.release_strap"
+    },
+    "quests.side_bracken_rescue.title": {
+      "source": "A Strap in the Bracken",
+      "text": "A Strap in the Bracken",
+      "speaker": "",
+      "context": "quests.side_bracken_rescue"
     },
     "quests.side_childs_charm.objectives.return_charm.text": {
       "source": "Place his charm where he can be named.",

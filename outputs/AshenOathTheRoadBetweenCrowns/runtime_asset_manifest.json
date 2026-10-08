@@ -96,6 +96,22 @@
     }
   ],
   "roles": {
+    "bracken_companion": {
+      "display_name": "Bracken",
+      "family": "living_companion",
+      "source_pack": "quaternius_animated_animals_lowpoly",
+      "source_url": "https://opengameart.org/sites/default/files/Animal%20Pack%20Vol.2%20by%20%40Quaternius.zip",
+      "license_file": "res://assets_external/licenses/Quaternius_Animated_Animals_CC0.txt",
+      "model": "res://assets/companions/bracken.scn",
+      "status": "implemented_user_review_pending",
+      "approved": false,
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "target_height_m": 0.78,
+      "required_clips": ["DogArmature|Idle", "DogArmature|Walking"],
+      "build_ledger": "res://assets/companions/bracken_build.json",
+      "notes": "BUILD-ONLY delivery; original complete skinned Dog, user owns visual/runtime acceptance. Not the Black Dog Contract."
+    },
     "bandit_deserter": {
       "display_name": "Road Deserter",
       "family": "human_enemy",

@@ -101,6 +101,11 @@ const ROUTES := {
 		"find_dog":["greyfen", [], "Begin at the sheepfold and follow the disturbed road.", "Compare the tracks with the attack on the fold."],
 		"dog_choice":["greyfen", ["farmer_toma"], "Return to Toma at the sheepfold.", "Choose how the fold will be protected."]
 	},
+	"side_bracken_rescue": {
+		"calm_hound":["greyfen", ["bracken"], "A black hound waits on the western verge of the north road.", "Give him room to stop pulling."],
+		"release_strap":["greyfen", ["bracken"], "The strap is caught beside the discarded harness.", "Free the strap; no supplies or payment are needed."],
+		"companion_choice":["greyfen", ["bracken"], "Bracken is safe on the north-road verge.", "Offer a home, or leave him safe and return later."]
+	},
 	"side_empty_grave": {
 		"follow_empty_grave":["greyfen", [], "Follow the prints beside the cemetery's empty grave.", "Learn who has returned to the watch."],
 		"walker_choice":["greyfen", ["returned_soldier"], "Speak with the soldier beside the graves.", "Settle the watch while preserving its name."]

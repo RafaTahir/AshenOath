@@ -448,6 +448,18 @@
     "unlocks": [],
     "story_depth": "deep"
   },
+  "side_bracken_rescue": {
+    "title": "A Strap in the Bracken",
+    "type": "side",
+    "objectives": [
+      {"id": "calm_hound", "text": "Let the caught hound settle beside Greyfen's north road."},
+      {"id": "release_strap", "text": "Release the discarded harness strap without hurting him."},
+      {"id": "companion_choice", "text": "Offer Bracken a home or leave him safely at Greyfen.", "kind": "choice"}
+    ],
+    "unlocks": [],
+    "reward": {},
+    "story_depth": "interlude"
+  },
   "side_black_dog": {
     "title": "The Black Dog Contract",
     "type": "side",

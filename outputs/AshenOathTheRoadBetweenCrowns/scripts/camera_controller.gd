@@ -266,7 +266,7 @@ func frame_dialogue_target(dialogue_target: Node3D) -> void:
 	yaw = atan2(-flat_to_target.x, -flat_to_target.z)
 	pitch = -0.12
 	var midpoint := (target.global_position + dialogue_target.global_position) * 0.5
-	midpoint.y += 1.05
+	midpoint.y += minf(1.05, float(dialogue_target.get_meta("dialogue_focus_height", 1.05)))
 	var anchor := midpoint + Vector3(0.0, 1.35, 0.0)
 	var orbit := Basis(Vector3.UP, yaw) * Basis(Vector3.RIGHT, pitch)
 	var desired := anchor + orbit * Vector3(-0.30, 0.0, 3.15)
@@ -292,11 +292,12 @@ func frame_dialogue_beat(actor: Node3D, speaker_id: String, framing: String) -> 
 	axis = axis.normalized()
 	var side := axis.cross(Vector3.UP).normalized()
 	var player_speaks := speaker_id == "player"
-	var focus := (target.global_position if player_speaks else actor.global_position) + Vector3.UP * 1.30
+	var actor_focus: float = float(actor.get_meta("dialogue_focus_height", 1.30))
+	var focus := (target.global_position if player_speaks else actor.global_position) + Vector3.UP * (1.30 if player_speaks else actor_focus)
 	var view_axis := axis if player_speaks else -axis
 	var distance_to_face := 2.65 if framing == "close" else 3.10
 	if framing == "two_shot":
-		focus = (target.global_position + actor.global_position) * 0.5 + Vector3.UP * 1.10
+		focus = (target.global_position + actor.global_position) * 0.5 + Vector3.UP * minf(1.10, (1.30 + actor_focus) * 0.5)
 		view_axis = -axis
 		distance_to_face = 3.6
 	# Both reverse angles stay on the same side of the line between actors.

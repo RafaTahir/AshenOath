@@ -13,6 +13,7 @@ var quest_defs = {}
 var active = {}
 var completed = {}
 const STARTING_UNLOCKS = {
+	"side_bracken_rescue": true,
 	"main_road_of_crows": true, "side_widows_bell": true, "side_iron_remembers": true,
 	"side_bitter_roots": true, "side_black_dog": true, "side_empty_grave": true,
 	"side_childs_charm": true, "side_soldiers_debt": true, "side_millers_measure": true,
@@ -24,6 +25,7 @@ var tracked_quest_id := ""
 var tracked_quest_is_manual := false
 var tracker_context_zone := ""
 const IMPLEMENTED_SIDE_QUESTS := {
+	"side_bracken_rescue": true,
 	"side_widows_bell": true,
 	"side_iron_remembers": true,
 	"side_bitter_roots": true,

@@ -59,6 +59,14 @@ Published package `261bd63`, full Web 91,950,300 bytes; Vercel
 `dpl_4pxcy2grztigj15E6ai2eD6HZLoe` READY. Progress: 7/28 published, 0/28
 user-accepted. LR-008 Bracken's rescue is next; runtime testing stays user-owned.
 
+LR-008 implementation adds Bracken's independent north-road rescue, optional
+adoption/refusal and later reconsideration, with additive story flags and its own
+side-event. The retained CC0 animated Dog source is packaged as a dark-coated,
+grounded runtime scene with native idle/walk clips. No enemy health or permanent
+death path is attached. The Black Dog Contract remains unchanged. Travel/commands
+belong to LR-009; Bracken stays safely in Greyfen for this ticket. Package and
+publication pending; no runtime/visual checks claimed.
+
 ## Current Local Assembly - 2026-10-07
 
 - The canonical `D:\Projects\AshenOath` worktree is on `codex/masterpiece-rebuild`

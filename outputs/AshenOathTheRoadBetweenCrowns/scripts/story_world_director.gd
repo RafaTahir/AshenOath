@@ -3,6 +3,7 @@ extends RefCounted
 ## Small, event-driven chapter compositions. These props are visual projections
 ## of committed decisions, never a second authority for quest or moral state.
 const InteractableScript = preload("res://scripts/interactable.gd")
+const CompanionController = preload("res://scripts/companion_controller.gd")
 const LAYER_NAME := "StoryWorldLayer"
 const TIMBER := Color(0.24, 0.15, 0.08)
 const IRON := Color(0.18, 0.20, 0.21)
@@ -31,6 +32,7 @@ static func decorate(game, root: Node3D, zone_id: String) -> void:
 		return
 	load("res://scripts/story_activity_director.gd").install(game, root, zone_id)
 	load("res://scripts/journey_flow_director.gd").install(game, root, zone_id)
+	CompanionController.install(game, root, zone_id)
 	if zone_id in ["assembly", "hart_glade"] and root == game.zone_root:
 		_sync_willing_witnesses(game, root, zone_id)
 	var layer := root.get_node_or_null(LAYER_NAME) as Node3D

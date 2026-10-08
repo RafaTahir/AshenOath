@@ -1866,6 +1866,9 @@ func _handle_interaction(area) -> void:
 			quests.complete_evidence("main_blood_under_stone", "evidence_ledger_fragment")
 			quests.complete_objective("main_blood_under_stone", "recover_ledger")
 		var dialogue_data = dialogue.get_dialogue(area.dialogue_id)
+		if area.interaction_id == "bracken":
+			for companion_action: Dictionary in dialogue_data.get("actions", []):
+				companion_action["companion_actor_instance"] = area.get_instance_id()
 		var played_report_voice = false
 		var report_chosen := false
 		if _road_ready_to_report() and area.interaction_id in ["sister_anwen", "notice_board", "retain_evidence"]:
@@ -2309,6 +2312,9 @@ func _apply_dialogue_action(action: Dictionary) -> bool:
 	elif type == "opening_care_resume":
 		var care_hint := "Oren's coat is on the bench. Anwen can tell you about the road whenever you are ready." if bool(story_state.get_flag("opening_cup_delivered", false)) else "The cup is on the low step. Anwen can tell you about the road whenever you are ready."
 		hud.set_guidance_hint(care_hint, 8.0)
+	elif type == "companion_choice":
+		if not preload("res://scripts/companion_controller.gd").apply_choice(self, action):
+			return false
 	elif type == "start_quest":
 		quests.start_quest(action.get("quest", ""))
 		if str(action.get("quest", "")) == "side_childs_charm":
@@ -2462,6 +2468,8 @@ func _dialogue_action_available(action: Dictionary) -> bool:
 	var type := str(action.get("type", ""))
 	var quest_id := str(action.get("quest", ""))
 	var objective_id := str(action.get("objective", ""))
+	if type == "companion_choice":
+		return preload("res://scripts/companion_controller.gd").choice_available(self, action)
 	if type == "start_quest":
 		return quest_id != "" and quests.is_unlocked(quest_id) and not quests.is_active(quest_id) and not quests.is_completed(quest_id)
 	if type == "complete_objective":
