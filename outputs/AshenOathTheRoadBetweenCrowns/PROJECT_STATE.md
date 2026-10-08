@@ -55,7 +55,9 @@ blade at Tor's Forge, explicit locked-offer requirements, accurate failed-exchan
 feedback and saved story-sensitive stock ledgers. No recurring repairs, forced
 purchases or romance/testimony gates. Existing one-time emergency reserves remain.
 Crafting returns now settle with ingredients/output before inventory notification.
-Packaging/publication pending; runtime testing remains user-owned.
+Published package `261bd63`, full Web 91,950,300 bytes; Vercel
+`dpl_4pxcy2grztigj15E6ai2eD6HZLoe` READY. Progress: 7/28 published, 0/28
+user-accepted. LR-008 Bracken's rescue is next; runtime testing stays user-owned.
 
 ## Current Local Assembly - 2026-10-07
 

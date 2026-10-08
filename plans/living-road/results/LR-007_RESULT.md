@@ -1,6 +1,6 @@
 # LR-007 - Greyfen Services
 
-Status: implemented; packaging/publication pending. User acceptance pending.
+Status: published_awaiting_user. User acceptance pending.
 
 ## Implemented
 
@@ -45,7 +45,12 @@ Minimum production packaging succeeded on the first build. Build:
 Full Web directory: **91,950,300 bytes**, below 104,857,600.
 Stored root PCK: `b920ba0cef2553b68d010dc87dac70d390288648e2e279dcadc9a5b505a3b876`.
 Decoded root PCK: `f3e85592bb64072f7885a53f8aed5a400727ab0b4940d872aa9efc20abb462d5`.
-Output: `.release-gate/LR-007-20261008-build`. Publication receipt follows.
+Output: `.release-gate/LR-007-20261008-build`.
+Package `261bd63080e7e53663d41866d5e6d0d0872d52a8`, pushed to development/main.
+Vercel `dpl_4pxcy2grztigj15E6ai2eD6HZLoe`, provider READY.
+Receipt: `.release-gate/living-road/LR-007-20261008T003339Z/publication.json`.
+Play: https://ashenoath.vercel.app/?v=lr-007-261bd63
+No browser, gameplay or live smoke acceptance was performed.
 
 ## Unverified
 
