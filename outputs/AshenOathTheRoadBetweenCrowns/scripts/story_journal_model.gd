@@ -7,10 +7,12 @@ const PEOPLE_PATH := "res://data/journal_people.json"
 const WORK_PATH := "res://data/journal_work.json"
 const EVIDENCE_DETAILS_PATH := "res://data/journal_evidence_details.json"
 const ENEMIES_PATH := "res://data/enemies.json"
+const PREPARATION_PATH := "res://data/preparation_notes.json"
 static var _people_data: Dictionary = {}
 static var _work_data: Dictionary = {}
 static var _evidence_details_data: Dictionary = {}
 static var _enemy_data: Dictionary = {}
+static var _preparation_data: Dictionary = {}
 
 static func _catalog(path: String) -> Dictionary:
 	if not FileAccess.file_exists(path):
@@ -63,11 +65,13 @@ static func sections(campaign: Dictionary, quests, state, zone_id: String) -> Ar
 	var evidence: Array[Dictionary] = _evidence_entries(campaign, quests, state, zone_id)
 	var work: Array[Dictionary] = _work_entries(quests, state, zone_id)
 	var preparation: Array[Dictionary] = _preparation_entries(quests, state)
+	var creatures: Array[Dictionary] = creature_entries(campaign, quests, state)
 	return [
 		{"id": "return", "title": "On Return", "body": str(recap.heading), "entries": returns},
 		{"id": "people", "title": "People & Promises", "body": "These are the people whose names or accounts Kael has encountered. A remembered account and a freely given promise are different things." if not people.is_empty() else "No named account has been recorded yet.", "entries": people},
 		{"id": "evidence", "title": "Evidence", "body": "Observation, testimony and inference are kept separate. Only recovered information appears here; there is no checklist of undiscovered secrets." if not evidence.is_empty() else "No evidence has been recorded. Inspect what the road leaves behind and hear the people who know it.", "entries": evidence},
 		{"id": "work", "title": "Unfinished Work", "body": "Known obligations and their recorded results. An unrecorded result remains unknown; it does not mean that Kael failed." if not work.is_empty() else "No practical obligation is currently recorded. The next known story step remains in On Return.", "entries": work},
+		{"id": "creatures", "title": "Known Creatures", "body": "Observed encounters and discovered accounts. Inference is not testimony; an unrecorded cause remains unknown." if not creatures.is_empty() else "No creature account is known yet. Undiscovered creatures and their details remain concealed.", "entries": creatures},
 		{"id": "preparation", "title": "Preparation", "body": "What recovered evidence teaches Kael about surviving the road. Equipment and supplies remain available alongside these notes." if not preparation.is_empty() else "Newly understood encounters will add practical preparation here. Equipment and supplies remain available alongside the journal.", "entries": preparation}
 	]
 
@@ -288,16 +292,23 @@ static func _evidence_entries(campaign: Dictionary, quests, state, zone_id: Stri
 				"known_relevance": _evidence_known_lead(authored, quests, state, zone_id),
 				"links": []
 			})
-	var visible: Dictionary = {"evidence": {}, "people": {}, "preparation": {}}
+	var creatures: Array[Dictionary] = creature_entries(campaign, quests, state)
+	var visible: Dictionary = {"evidence": {}, "people": {}, "preparation": {}, "creatures": {}}
 	for entry: Dictionary in entries:
 		visible["evidence"][str(entry.get("id", ""))] = str(entry.get("title", "Record"))
 	for entry: Dictionary in _people_entries(campaign, quests, state):
 		visible["people"][str(entry.get("id", ""))] = str(entry.get("title", "Person"))
 	for entry: Dictionary in _preparation_entries(quests, state):
 		visible["preparation"][str(entry.get("id", ""))] = str(entry.get("title", "Preparation"))
+	for creature: Dictionary in creatures:
+		visible["creatures"][str(creature.id)] = str(creature.title)
 	for entry: Dictionary in entries:
 		var id: String = str(entry.get("id", "")).trim_prefix("evidence:")
 		entry["links"] = _evidence_links(authored_by_id.get(id, {}), visible, str(entry.get("id", "")))
+		for creature: Dictionary in creatures:
+			for link: Dictionary in creature.get("links", []):
+				if str(link.get("entry_id", "")) == str(entry.id):
+					entry.links.append({"section_id":"creatures", "entry_id":str(creature.id), "label":str(creature.title)})
 	return entries
 
 static func _evidence_blocks(authored: Dictionary, quests, state) -> Array[Dictionary]:
@@ -351,7 +362,7 @@ static func _evidence_links(authored: Dictionary, visible: Dictionary, current_i
 	var raw_entries: Variant = authored.get("related_entries", [])
 	if raw_entries is Array:
 		for raw_entry: Variant in raw_entries:
-			if raw_entry is Dictionary and str(raw_entry.get("section_id", "")) in ["people", "preparation"]:
+			if raw_entry is Dictionary and str(raw_entry.get("section_id", "")) in ["people", "preparation", "creatures"]:
 				candidates.append(raw_entry)
 	var links: Array[Dictionary] = []
 	var added: Dictionary = {}
@@ -433,27 +444,19 @@ static func _work_entries(quests, state, zone_id: String) -> Array[Dictionary]:
 
 static func _preparation_entries(quests, state) -> Array[Dictionary]:
 	var entries: Array[Dictionary] = []
-	var known_creatures: Dictionary = {}
+	var known_creatures: Dictionary = _known_creatures(quests, state)
 	var grave_count: int = 0
 	for id in ["grave_harl", "grave_child", "grave_soldier"]:
 		if _discovered({"id": id, "gate": {"quest": "main_bell_beneath_greyfen", "objective": id}}, quests, state):
 			grave_count += 1
 	if grave_count >= 2:
-		known_creatures["bell_eater"] = true
 		entries.append({"id": "preparation:bell", "title": "Read the bell", "body": "The cut ropes share a pull. Watch the raised clapper and step clear. Reading the graves gives extra time on its first tell in each phase; an avoided bell action leaves a short recovery opening."})
 	if _discovered({"id": "mill_accounts", "gate": {"quest": "main_ash_at_the_mill", "objective": "inspect_millstones"}}, quests, state):
-		known_creatures["ashwing"] = true
 		entries.append({"id": "preparation:ashwing", "title": "Cross Ashwing's plume", "body": "Dust reveals the breath's direction. Move across the plume. Avoiding its prepared attack gives a brief opening once per phase."})
 	if _flag_bool(state, "command_proof_recovered"):
-		known_creatures["halvern_boss"] = true
 		entries.append({"id": "preparation:halvern", "title": "Question the guarded account", "body": "The order establishes the witness's refusal, not his knowledge of the present. A clean parry gives a longer first opening in each phase for the question his bounded memory can answer."})
 	if _discovered({"id": "chapel_names", "gate": {"quest": "main_teeth_in_rain", "objective": "read_chapel_names"}}, quests, state) and _discovered({"id": "ritual_stones", "gate": {"quest": "main_teeth_in_rain", "objective": "name_the_dead"}}, quests, state):
-		known_creatures["bog_wretch"] = true
 		entries.append({"id": "preparation:bog", "title": "Read the restored name", "body": "The restored name gives time to read the Bog Wretch's first approach. Moon Oil and clean interruptions help expose its memory; neither is a required purchase."})
-	if _gate({"quest": "main_road_of_crows", "objective": "fight_ghoulkin"}, quests, state):
-		known_creatures["ghoulkin"] = true
-	if _enemy_data.is_empty():
-		_enemy_data = _catalog(ENEMIES_PATH)
 	for enemy_id: String in _enemy_data:
 		if not known_creatures.has(enemy_id) and not _has_evidence(state, "creature:" + enemy_id):
 			continue
@@ -465,6 +468,74 @@ static func _preparation_entries(quests, state) -> Array[Dictionary]:
 		var basis := "a physical body" if blade_id == "steel" else "an oathbound or spiritual body"
 		var percent := int(round((EquipmentLoadout.AFFINITY_MULTIPLIER - 1.0) * 100.0))
 		entries.append({"id": "preparation:blade:" + enemy_id, "title": str(definition.get("name", enemy_id)) + " - blade preparation", "body": "%s gains %d%% blade damage against this foe's nature: %s. The other blade still deals normal damage. Oils and existing openings remain useful; no blade is compulsory." % [blade_name, percent, basis]})
+	return entries
+
+static func _known_creatures(quests, state) -> Dictionary:
+	if _enemy_data.is_empty():
+		_enemy_data = _catalog(ENEMIES_PATH)
+	if _preparation_data.is_empty():
+		_preparation_data = _catalog(PREPARATION_PATH)
+	var known: Dictionary = {}
+	for id: String in _enemy_data:
+		var note: Dictionary = _preparation_data.get("creatures", {}).get(id, {})
+		var outcome_flag: String = str(note.get("outcome_flag", ""))
+		if _has_evidence(state, "creature:" + id) or _gate(note.get("known_gate", {}), quests, state) or (outcome_flag != "" and _gate({"flag":outcome_flag}, quests, state)):
+			known[id] = true
+	var graves: int = 0
+	for id: String in ["grave_harl", "grave_child", "grave_soldier"]:
+		if _discovered({"id":id, "gate":{"quest":"main_bell_beneath_greyfen", "objective":id}}, quests, state):
+			graves += 1
+	if graves >= 2:
+		known["bell_eater"] = true
+	if _discovered({"id":"mill_accounts", "gate":{"quest":"main_ash_at_the_mill", "objective":"inspect_millstones"}}, quests, state):
+		known["ashwing"] = true
+	if _discovered({"id":"chapel_names", "gate":{"quest":"main_teeth_in_rain", "objective":"read_chapel_names"}}, quests, state) and _discovered({"id":"ritual_stones", "gate":{"quest":"main_teeth_in_rain", "objective":"name_the_dead"}}, quests, state):
+		known["bog_wretch"] = true
+	return known
+
+static func creature_entries(campaign: Dictionary, quests, state) -> Array[Dictionary]:
+	var known: Dictionary = _known_creatures(quests, state)
+	var entries: Array[Dictionary] = []
+	for id: String in _enemy_data:
+		if not known.has(id):
+			continue
+		var definition: Dictionary = _enemy_data[id]
+		var note: Dictionary = _preparation_data.get("creatures", {}).get(id, {})
+		var observed: bool = _has_evidence(state, "creature:" + id)
+		var body: String = "Observed: Kael has faced this creature." if observed else "Known from a recovered account or a recorded encounter outcome."
+		var blade: String = EquipmentLoadout.preferred_blade_for_tag(str(definition.get("tag", "")))
+		body += "\n\nPREPARATION\n"
+		if blade != "":
+			body += "%s has a %d%% affinity advantage; the other blade still works normally.\n" % ["Steel" if blade == "steel" else "Oathblade", int(round((EquipmentLoadout.AFFINITY_MULTIPLIER - 1.0) * 100.0))]
+		body += str(note.get("approach", "Leave room to retreat and watch a committed attack before answering."))
+		var links: Array[Dictionary] = []
+		for raw: Variant in campaign.get("evidence", []):
+			if not raw is Dictionary or str(raw.get("id", "")) not in note.get("evidence", []) or not _discovered(raw, quests, state):
+				continue
+			var label: String = "Inference" if str(raw.get("kind", "")) == "inference" else ("Testimony" if str(raw.get("kind", "")) == "testimony" else "Known observation")
+			body += "\n\n%s - %s\n%s" % [label, str(raw.get("title", "Recorded account")), str(raw.get("text", ""))]
+			links.append({"section_id":"evidence", "entry_id":"evidence:" + str(raw.id), "label":str(raw.get("title", "Recorded account"))})
+		body += "\n\nUnavailable: the human cause is not established by this record." if links.is_empty() else "\n\nLimits: these records establish only their own observations and accounts, not every creature's intent."
+		var resolved: bool = false
+		var outcome_flag: String = str(note.get("outcome_flag", ""))
+		if outcome_flag != "" and _gate({"flag":outcome_flag}, quests, state):
+			resolved = id != "white_hart_avatar" or _flag_bool(state, "final_choice_completed")
+			var outcome: Variant = state.get_flag(outcome_flag, "")
+			body += "\n\nRECORDED OUTCOME\n" + ("The encounter is resolved." if outcome is bool else str(outcome).replace("_", " ").capitalize())
+			for decision: Dictionary in campaign.get("decisions", []):
+				if str(decision.get("flag", "")) == outcome_flag:
+					for result: Dictionary in decision.get("outcomes", []):
+						if str(result.get("value", "")) == str(outcome):
+							body += "\n" + str(result.get("result", result.get("label", "")))
+			body += "\nNo further attack is needed for this recorded outcome." if resolved else "\nThis intention is not yet a completed resolution. Follow the current objective."
+		var suggested: Array[String] = []
+		var tag: String = str(definition.get("tag", ""))
+		if tag in ["spirit", "undead"]:
+			suggested.append("moon_oil" if tag == "spirit" else "rot_oil")
+		var weakness: String = str(definition.get("weakness", ""))
+		if weakness in ["iron_trap", "ash_bomb"]:
+			suggested.append(weakness)
+		entries.append({"id":"creature:" + id, "title":str(definition.get("name", id)), "body":body, "links":links, "suggested_items":suggested, "resolved":resolved})
 	return entries
 
 static func _consent_text(value: String) -> String:

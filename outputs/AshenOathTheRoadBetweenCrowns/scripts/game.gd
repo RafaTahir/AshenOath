@@ -3550,6 +3550,18 @@ func _preparation_item_result(item_id: String, ok: bool, message: String, operat
 
 func _update_preparation_context() -> void:
 	var snapshot: Dictionary = {"zone_id": current_zone_id}
+	if quest_presentation != null:
+		snapshot["objective"] = quest_presentation.get_objective_view_model()
+	var supply_sources: Dictionary = {}
+	if vendor_service != null and inventory != null:
+		for vendor_id: String in ["tor_forge", "mira_apothecary"]:
+			for stock: Dictionary in vendor_service.list_stock(vendor_id, inventory, story_state, quests):
+				var item_id: String = str(stock.get("item_id", ""))
+				var quote: Dictionary = vendor_service.quote(vendor_id, item_id, 1, inventory, story_state, quests)
+				if not supply_sources.has(item_id):
+					supply_sources[item_id] = []
+				supply_sources[item_id].append({"vendor_id":vendor_id, "name":str(vendor_service.get_vendor(vendor_id).get("name", vendor_id)), "price":int(stock.get("price", 0)), "reason":str(quote.get("reason", ""))})
+	snapshot["supply_sources"] = supply_sources
 	if player != null and is_instance_valid(player):
 		snapshot.merge({
 			"health": float(player.health_component.health), "max_health": float(player.health_component.max_health),

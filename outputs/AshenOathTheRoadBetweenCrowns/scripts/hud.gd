@@ -1653,6 +1653,9 @@ func show_inventory(inventory, quests, story_state = null, progression = null, r
 		inventory_text.text = str(current_section.get("title", "Journal")).to_upper() + "\n\n" + str(reference.get("title", "")) + "\n\n" + str(reference.get("body", ""))
 		_evidence_position_key = "reference:" + _evidence_reference_section + ":" + _evidence_reference_entry
 		_add_evidence_return_controls()
+		for link: Dictionary in reference.get("links", []):
+			var source: Button = _preparation_button(str(link.get("label", "Source account")), "reference:" + str(link.get("entry_id", "")), _preparation_actions)
+			source.pressed.connect(func(target: Dictionary = link): _open_evidence_reference(target))
 	elif preparing:
 		_build_preparation_content(inventory, progression, story_state, quests, reading)
 	elif not evidence:
@@ -1683,6 +1686,9 @@ func show_inventory(inventory, quests, story_state = null, progression = null, r
 			var entry: Dictionary = raw_entry
 			var entry_id: String = str(entry.get("id", ""))
 			var entry_button: Button = _preparation_button(str(entry.get("title", "Read entry")), "entry:" + entry_id, craft_buttons)
+			if _journal_section_id == "creatures":
+				entry_button.pressed.connect(func(id_value: String = entry_id): _open_evidence_reference({"section_id":"creatures", "entry_id":id_value}))
+				continue
 			entry_button.pressed.connect(func(paragraph: int = int(paragraph_by_entry.get(entry_id, 0))):
 				_set_inventory_pane("reader")
 				inventory_text.scroll_to_paragraph(paragraph)
@@ -1853,7 +1859,7 @@ func _refresh_evidence_journal(section_id: String) -> void:
 func _resolve_evidence_reference(link: Dictionary, sections: Array = []) -> Dictionary:
 	var section_id: String = str(link.get("section_id", ""))
 	var entry_id: String = str(link.get("entry_id", ""))
-	if section_id not in ["evidence", "people", "preparation"] or entry_id == "":
+	if section_id not in ["evidence", "people", "preparation", "creatures"] or entry_id == "":
 		return {}
 	if section_id == "evidence":
 		return StoryJournalPresenter.evidence_detail(entry_id, _journal_context.get("quests"), _journal_context.get("state"), _journal_zone_id())
@@ -1978,7 +1984,7 @@ func _build_preparation_content(inventory, progression, story_state, quests, not
 	if category == "equipment" and inventory.sort_mode == "name":
 		ids = ["bow", "oathblade", "steel"]
 	var selection: Dictionary = _preparation_selection.get(_inventory_screen, {})
-	if str(selection.get("kind", "")) not in [entry_kind, "notes", "upgrade"] or (str(selection.get("kind", "")) == entry_kind and str(selection.get("id", "")) not in ids):
+	if str(selection.get("kind", "")) not in [entry_kind, "notes", "upgrade", "service"] or (str(selection.get("kind", "")) == entry_kind and str(selection.get("id", "")) not in ids):
 		selection = {}
 	if selection.is_empty() and not ids.is_empty():
 		selection = {"kind":entry_kind, "id":str(ids[0])}
@@ -2016,6 +2022,8 @@ func _build_preparation_content(inventory, progression, story_state, quests, not
 		inventory_text.text = heading + PreparationViewModel.equipment_text(selected_id, inventory, _preparation_context)
 	elif kind == "ingredient":
 		inventory_text.text = heading + PreparationViewModel.ingredient_text(selected_id, inventory)
+	elif kind == "service":
+		inventory_text.text = PreparationViewModel.service_text(selected_id, inventory, _preparation_context)
 	elif kind == "item":
 		inventory_text.text = heading + selected_id.replace("_", " ").capitalize() + "\nCarrying %d\n\nThis retained item has no field-use recipe." % int(inventory.items.get(selected_id, 0))
 	elif kind == "upgrade" and progression != null:
@@ -2024,7 +2032,14 @@ func _build_preparation_content(inventory, progression, story_state, quests, not
 		var learn: Button = _preparation_button("Already learned" if bool(upgrade.get("learned", false)) else "Learn · %d Mark%s" % [int(upgrade.get("cost", 1)), "s" if int(upgrade.get("cost", 1)) != 1 else ""], "action:upgrade:" + selected_id, _preparation_actions, bool(upgrade.get("available", false)))
 		learn.pressed.connect(func(upgrade_id: String = selected_id): upgrade_requested.emit(upgrade_id))
 	else:
-		inventory_text.text = notes
+		inventory_text.text = PreparationViewModel.knowledge_summary(inventory, quests, story_state, _preparation_context) + "\n\n" + notes
+		var objective: Button = _preparation_button("Current objective", "preparation:objective", _preparation_actions)
+		objective.pressed.connect(func(): _open_journal_section("return"))
+		var knowledge: Button = _preparation_button("Known creatures", "preparation:creatures", _preparation_actions)
+		knowledge.pressed.connect(func(): _open_journal_section("creatures"))
+		for vendor_id: String in ["tor_forge", "mira_apothecary"]:
+			var service: Button = _preparation_button("Tor's Forge" if vendor_id == "tor_forge" else "Mira's Apothecary", "preparation:service:" + vendor_id, _preparation_actions)
+			service.pressed.connect(func(id_value: String = vendor_id): _select_preparation_entry("service", id_value))
 	_add_preparation_heading(category.to_upper())
 	var equipment: Dictionary = _preparation_context.get("equipment", {})
 	var active_weapon: String = "bow" if str(equipment.get("active_weapon", "sword")) == "bow" else str(equipment.get("selected_blade_id", "steel"))

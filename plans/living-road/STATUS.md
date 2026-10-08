@@ -2,7 +2,7 @@
 
 Updated: 2026-10-08. Implementation and user acceptance are separate.
 User-accepted tickets: **0/28**. Published tickets: **5/28**. Current ticket:
-**LR-006**, next. Runtime checks belong to the user; the active goal now
+**LR-006**, implementing. Runtime checks belong to the user; the active goal now
 authorizes sequential implementation/publication without waiting between tickets.
 LR-001 remains published and awaiting user acceptance.
 Latest package commit: `c13c67b57e8fe8b212823d67e15c58fef29f1c92`.
@@ -16,7 +16,7 @@ Live: https://ashenoath.vercel.app/?v=lr-005-c13c67b
 | [LR-003](tickets/LR-003.md) | Draw, Sheathe and Interrupt | published_awaiting_user |
 | [LR-004](tickets/LR-004.md) | Steel and Oathblade Combat | published_awaiting_user |
 | [LR-005](tickets/LR-005.md) | Readable Inventory | published_awaiting_user |
-| [LR-006](tickets/LR-006.md) | Knowledge and Preparation | planned |
+| [LR-006](tickets/LR-006.md) | Knowledge and Preparation | implementing |
 | [LR-007](tickets/LR-007.md) | Greyfen Services | planned |
 | [LR-008](tickets/LR-008.md) | Bracken's Rescue | planned |
 | [LR-009](tickets/LR-009.md) | A Companion Who Keeps Up | planned |

@@ -1,5 +1,19 @@
 {
   "schema": 1,
+  "creatures": {
+    "ghoulkin": {"evidence": ["drag_marks", "oren", "crisis_cause"], "known_gate": {"quest":"main_road_of_crows", "objective":"fight_ghoulkin"}, "approach":"Keep room to step away from a lunge. Their bodies remain vulnerable to ordinary steel; a terrible origin does not make them untouchable."},
+    "wychwood_stalker": {"evidence": ["drag_marks", "crisis_cause"], "approach":"Watch the flank, not only the creature in front. An Iron Trap can interrupt a nearby approach, but it is spent when set."},
+    "wychwood_raider": {"evidence": ["drag_marks", "crisis_cause"], "approach":"Do not spend every breath chasing a feint. Keep a clear retreat and strike after its committed attack."},
+    "wychwood_brute": {"evidence": ["drag_marks", "crisis_cause"], "approach":"Leave room around the heavy windup. A bomb can interrupt close pressure; it is not a substitute for escaping the blow."},
+    "bog_wretch": {"evidence": ["oren", "crisis_cause"], "known_gate":{"all":[{"quest":"main_teeth_in_rain", "objective":"read_chapel_names"},{"quest":"main_teeth_in_rain", "objective":"name_the_dead"}]}, "outcome_flag":"bog_core_fate", "approach":"Moon Oil and a clean interruption can expose the carried memory. Exposing it is not the same decision as destroying it; the fragment's fate is a separate choice."},
+    "gravebound_knight": {"evidence": ["grave_soldier", "command_proof"], "approach":"Respect the raised guard. A clear parry creates an opening; Rot Oil suits the undead body."},
+    "bell_eater": {"evidence": ["grave_harl", "grave_child", "grave_soldier", "crisis_cause"], "outcome_flag":"bell_eater_defeated", "approach":"Watch the clapper and leave the bell's ring. Reading two disturbed graves reveals a shared pull and gives time to read its first tell. A released rope and mourning stone also matter."},
+    "rootbound_colossus": {"evidence": ["command_proof", "crisis_cause"], "known_gate":{"quest":"main_names_they_burned", "objective":"reconstruct_register"}, "outcome_flag":"rootbound_colossus_defeated", "approach":"The marked roots feed the armoured heart. Redirect root channels and protect the name-board. A burning opening does not erase the human record trapped beneath it."},
+    "ashwing": {"evidence": ["mill_accounts", "crisis_cause"], "known_gate":{"quest":"main_ash_at_the_mill", "objective":"inspect_millstones"}, "outcome_flag":"ashwing_defeated", "approach":"Move across the ash plume rather than along it. An Oathfire hit can interrupt charged breath. The mill's ventilation and the workers' escape are part of surviving this encounter."},
+    "halvern_boss": {"evidence": ["command_proof", "grave_soldier"], "known_gate":{"flag":"command_proof_recovered", "value":true}, "outcome_flag":"halvern_fate", "approach":"A clean parry can make Halvern yield. When he lowers his blade, speak to the memory. His bounded testimony, release and defeat are different outcomes, not interchangeable victories."},
+    "white_hart_avatar": {"evidence": ["command_proof", "crisis_cause", "kael_confession"], "known_gate":{"flag":"confession_method"}, "outcome_flag":"final_covenant", "approach":"Watch where a memory echo ends before the antlers follow. The covenant is a choice about the living and the dead, not a compulsory hunt. Hear the account before choosing violence."},
+    "bandit": {"evidence": [], "approach":"A person with a weapon is still a physical opponent. Keep your footing, guard a committed strike and leave space to retreat. Equipment does not establish why this person chose the road."}
+  },
   "items": {
     "redroot_potion": {
       "body": "A remedy to recover after an injury. Drinking uses one potion; it restores health immediately, up to your current maximum.",

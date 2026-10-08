@@ -43,6 +43,11 @@ inventory quantities remain authoritative. Full Web directory: 91,933,231 bytes.
 Vercel `dpl_5Zd4ASwPPDoRP9g6nd1xLXXjkaQB` is READY. Progress: 5/28 published,
 0/28 user-accepted. LR-006 knowledge/preparation is next; no runtime checks claimed.
 
+LR-006 implementation links Known Creatures to discovered evidence and recorded
+outcomes. Preparation reads owned supplies, actual objective and unlocked vendor
+quotes without changing progression. Unknown creatures/details remain concealed;
+peaceful resolutions remain distinct. Packaging/publication pending.
+
 ## Current Local Assembly - 2026-10-07
 
 - The canonical `D:\Projects\AshenOath` worktree is on `codex/masterpiece-rebuild`

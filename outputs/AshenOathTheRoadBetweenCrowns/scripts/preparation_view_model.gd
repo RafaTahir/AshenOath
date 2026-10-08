@@ -5,6 +5,58 @@ extends RefCounted
 const CATALOG_PATH := "res://data/preparation_notes.json"
 static var _catalog: Dictionary = {}
 
+static func service_text(vendor_id: String, inventory, context: Dictionary) -> String:
+	var lines: Array[String] = [("Tor's Forge" if vendor_id == "tor_forge" else "Mira's Apothecary").to_upper(), "Greyfen", "\nKnown offers. Visit the counter for an exchange; your objective and coin remain unchanged."]
+	var sources: Dictionary = context.get("supply_sources", {})
+	var offers: int = 0
+	for id: String in inventory.ordered_item_ids():
+		for source: Dictionary in sources.get(id, []):
+			if str(source.get("vendor_id", "")) != vendor_id:
+				continue
+			offers += 1
+			lines.append("\n%s - %d coin each\nCarrying %d%s" % [inventory.get_item_name(id), int(source.price), int(inventory.items.get(id, 0)), "\n" + str(source.reason) if str(source.reason) != "" else ""])
+	if offers == 0:
+		lines.append("\nUnavailable: no unlocked offers are currently recorded.")
+	return "\n".join(lines)
+
+static func knowledge_summary(inventory, quests, state, context: Dictionary) -> String:
+	var objective: Dictionary = context.get("objective", {})
+	var lines: Array[String] = ["PREPARATION FOR THE ROAD", "\nCURRENT OBJECTIVE", str(objective.get("contextual_text", "The current lead is in On Return."))]
+	var destination: String = str(objective.get("destination_name", ""))
+	if destination != "":
+		lines.append("Where: " + destination)
+	lines.append("\nCARRIED SUPPLIES")
+	for action: String in ["use_potion", "throw_bomb"]:
+		var item_id: String = inventory.quick_item(action)
+		lines.append("%s: %s x%d" % ["Remedy" if action == "use_potion" else "Field tool", inventory.get_item_name(item_id), int(inventory.items.get(item_id, 0))])
+	var creatures: Array[Dictionary] = StoryJournal.creature_entries(quests, state)
+	if creatures.is_empty():
+		lines.append("\nUnavailable: no creature account has been discovered. Ordinary equipment is still usable; no purchase is required to investigate.")
+	var sources: Dictionary = context.get("supply_sources", {})
+	for creature: Dictionary in creatures:
+		if bool(creature.get("resolved", false)):
+			lines.append("\n%s: a resolution is recorded. No further combat preparation is required for that outcome." % str(creature.title))
+			continue
+		lines.append("\n" + str(creature.title).to_upper())
+		var suggested: Array = creature.get("suggested_items", [])
+		if suggested.is_empty():
+			lines.append("Known: your carried blades remain usable. Leave stamina for a retreat.")
+		for raw_id: Variant in suggested:
+			var item_id: String = str(raw_id)
+			var owned: int = int(inventory.items.get(item_id, 0))
+			var text: String = "%s: %d carried" % [inventory.get_item_name(item_id), owned]
+			if str(inventory.active_oil) == item_id:
+				text += "; already applied"
+			if owned == 0:
+				text += "; craftable now" if inventory.can_craft(item_id) else "; unavailable in your pack"
+			lines.append(text + ". Optional field preparation, not a required quest purchase.")
+			for source: Dictionary in sources.get(item_id, []):
+				lines.append("%s in Greyfen: %d coin%s." % [str(source.name), int(source.price), " - " + str(source.reason) if str(source.reason) != "" else " for one"])
+			if owned == 0 and sources.get(item_id, []).is_empty():
+				lines.append("Unavailable: no unlocked vendor offer is currently known.")
+	lines.append("\nSERVICES\nTor's Forge: arrows and field tools. Mira's Apothecary: remedies and prepared oils. Travel to the counter for a purchase; this journal does not reserve stock or change your objective.")
+	return "\n".join(lines)
+
 static func resolved_effect(item_id: String, inventory, progression = null) -> Dictionary:
 	var definition: Dictionary = inventory.item_defs.get(item_id, {})
 	var source: Dictionary = definition.get("effect", {})
