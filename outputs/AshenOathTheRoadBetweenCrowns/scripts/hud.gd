@@ -535,7 +535,7 @@ func show_main_menu() -> void:
 	_journey_primary_button = _add_journey_load_button(box, JourneyMenuPanel.load_label(model), model, "continue")
 	_journey_primary_button.set_meta("journey_model_kind", "continue")
 	_add_journey_recovery_options(box, model)
-	_add_menu_button(box, "New Journey", func(): new_game_requested.emit(), false, "new_journey")
+	_add_menu_button(box, "New Game", func(): new_game_requested.emit(), false, "new_journey")
 	new_game_status_label = _add_menu_text(box, new_game_status)
 	_add_menu_button(box, "Saved Journeys", func(): show_save_library("main"), false, "saved_journeys")
 	_add_menu_button(box, "Controls", func(): show_controls_menu("main"))
@@ -554,17 +554,9 @@ func set_new_game_status(text: String) -> void:
 	if active_menu == "main" and is_instance_valid(new_game_status_label):
 		new_game_status_label.text = new_game_status
 
-func set_boot_shell_cover_active(active: bool) -> void:
-	# The HTML Crow Flight shell can cover the canvas while Godot compiles the
-	# first real gameplay frame. Hide only the in-engine menu during that frame;
-	# the already-built menu is restored atomically when Greyfen is render-ready.
-	if menu_layer == null:
-		return
-	if active:
-		menu_layer.visible = false
-	elif active_menu == "main":
-		menu_layer.visible = true
-		call_deferred("_restore_menu_state", _rendered_screen, _screen_generation)
+func set_boot_shell_cover_active(_active: bool) -> void:
+	# Compatibility for historical callers; startup no longer has an external cover.
+	pass
 
 func show_launch_screen() -> void:
 	active_menu = "launch"

@@ -1,37 +1,37 @@
 {
   "schema_version": 2,
-  "generated_at_utc": "2026-10-08T05:49:30.2014492Z",
-  "build_id": "mobile-002-20261008-controls",
-  "generated_from_commit": "bf6737c64c7f7e5f3144745dcbcf9a3adb1fd873",
+  "generated_at_utc": "2026-10-08T06:31:41.9063384Z",
+  "build_id": "boot-004-20261008-direct-menu",
+  "generated_from_commit": "4bc27e14b6729d9d71b64624a0f44ce646eb8bc1",
   "source_dirty": true,
-  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\MOBILE-002-20261008-controls-build\\runtime-packs",
+  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\BOOT-004-20261008-direct-menu-build\\runtime-packs",
   "artifacts_are_external": true,
   "max_deployment_bytes": 104857600,
-  "total_bytes": 92824888,
+  "total_bytes": 92824296,
   "packs": [
     {
       "id": "base",
-      "version": "mobile-002-20261008-controls",
+      "version": "boot-004-20261008-direct-menu",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
-      "bytes": 13289104,
-      "sha256": "7b49ff61f4bf7ce9b1c1c057f825ebe031faa1a4ebaa599ccbc873b1158e409b",
+      "bytes": 13288496,
+      "sha256": "5012498711757428e987a2ce253e1c55258373971edc7b221397e076dd943c8f",
       "status": "candidate_external",
       "log": "logs/pack-base.stdout.log"
     },
     {
       "id": "opening",
-      "version": "mobile-002-20261008-controls",
+      "version": "boot-004-20261008-direct-menu",
       "preset": "Runtime Pack Opening",
       "artifact": "opening.pck",
-      "bytes": 14322252,
-      "sha256": "c2de90d0bbaaf077f340e350349db6235ca4c2946ccee87e970aea3764d8f2bf",
+      "bytes": 14322268,
+      "sha256": "3373d1d4eb1eae042cd1f8cb5d7c9418407bcb717f102c8902719d08955e63e4",
       "status": "candidate_external",
       "log": "logs/pack-opening.stdout.log"
     },
     {
       "id": "campaign",
-      "version": "mobile-002-20261008-controls",
+      "version": "boot-004-20261008-direct-menu",
       "preset": "Runtime Pack Campaign",
       "artifact": "campaign.pck",
       "bytes": 1000092,
@@ -41,7 +41,7 @@
     },
     {
       "id": "characters",
-      "version": "mobile-002-20261008-controls",
+      "version": "boot-004-20261008-direct-menu",
       "preset": "Runtime Pack Characters",
       "artifact": "characters.pck",
       "bytes": 30470584,
@@ -51,7 +51,7 @@
     },
     {
       "id": "monsters",
-      "version": "mobile-002-20261008-controls",
+      "version": "boot-004-20261008-direct-menu",
       "preset": "Runtime Pack Monsters",
       "artifact": "monsters.pck",
       "bytes": 7011052,
@@ -61,7 +61,7 @@
     },
     {
       "id": "audio",
-      "version": "mobile-002-20261008-controls",
+      "version": "boot-004-20261008-direct-menu",
       "preset": "Runtime Pack Audio",
       "artifact": "audio.pck",
       "bytes": 19354896,
@@ -71,7 +71,7 @@
     },
     {
       "id": "quality_materials",
-      "version": "mobile-002-20261008-controls",
+      "version": "boot-004-20261008-direct-menu",
       "preset": "Runtime Pack Quality Materials",
       "artifact": "quality_materials.pck",
       "bytes": 7376908,
@@ -82,11 +82,11 @@
   ],
   "errors": [],
   "selected_web_export": {
-    "build_id": "mobile-002-20261008-controls",
-    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\MOBILE-002-20261008-controls-build\\export",
-    "generated_from_commit": "bf6737c64c7f7e5f3144745dcbcf9a3adb1fd873",
-    "artifacts_total_bytes": 92126449,
-    "root_pck_sha256": "354dcea8924dc24cd860d065e4b4d4ea1861d339bcd2a5ea5fb4490c63cc49bb",
+    "build_id": "boot-004-20261008-direct-menu",
+    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\BOOT-004-20261008-direct-menu-build\\export",
+    "generated_from_commit": "4bc27e14b6729d9d71b64624a0f44ce646eb8bc1",
+    "artifacts_total_bytes": 92401299,
+    "root_pck_sha256": "520251062716abf3c42fbb6de9ccf98953ed626731e538664c62adc450c769ba",
     "note": "Selected export uses gzip transport; native pack records describe decoded build artifacts."
   }
 }

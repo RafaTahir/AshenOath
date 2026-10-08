@@ -4,96 +4,87 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>$GODOT_PROJECT_NAME</title>
+  <link rel="preload" href="menu-background.jpg" as="image">
   <style>
-    :root { color-scheme: dark; --paper: #e7e0d0; --muted: #b0b5ac; --brass: #c6a66d; --line: #48534d; }
+    :root { color-scheme: dark; --paper: #e7e0d0; --brass: #c6a66d; --line: #48534d; }
     * { box-sizing: border-box; }
-    html, body { width: 100%; height: 100%; height: 100dvh; margin: 0; overflow: hidden; overscroll-behavior: none; background: #0b1010; }
-    body { color: var(--paper); font-family: Georgia, 'Times New Roman', serif; }
-    #canvas { position: fixed; inset: 0; width: 100vw; height: 100vh; height: 100dvh; display: block; background: #0b1010; outline: none; touch-action: none; }
-    #boot { position: fixed; inset: 0; overflow: auto; display: grid; align-items: safe center; justify-items: center; padding: max(24px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left)); background: linear-gradient(145deg, #1b2523, #0b1010 72%); }
-    #boot-card { width: min(610px, 100%); padding: 20px 18px; }
-    #masthead { display: flex; gap: 20px; align-items: center; }
-    #crest { flex: 0 0 46px; width: 46px; height: 58px; color: var(--brass); }
-    h1 { margin: 0; letter-spacing: .105em; font-size: clamp(27px, 5vw, 46px); line-height: 1.15; font-weight: 500; }
-    #subtitle { margin-top: 9px; color: var(--brass); letter-spacing: .10em; font: 12px/1.5 system-ui, sans-serif; text-transform: uppercase; }
-    #tagline { margin: 27px 0 28px; max-width: 430px; color: var(--muted); font-size: 18px; line-height: 1.55; }
-    #loading-panel { border-top: 1px solid var(--line); padding-top: 20px; }
-    #stages { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 0 0 16px; padding: 0; list-style: none; color: #8c9890; font: 12px/1.5 system-ui, sans-serif; }
-    #stages li::before { display: inline-block; content: ''; width: 5px; height: 5px; margin: 0 7px 2px 0; border: 1px solid currentColor; border-radius: 50%; }
-    #stages li[aria-current="step"] { color: var(--paper); }
-    #stages li.complete { color: var(--brass); }
-    #stages li.complete::before { background: currentColor; }
-    #status { min-height: 24px; margin: 0 0 12px; color: var(--paper); font: 16px/1.5 system-ui, sans-serif; }
-    #progress { display: block; width: 100%; height: 5px; border: 0; border-radius: 0; accent-color: var(--brass); background: #323c35; }
-    #progress::-webkit-progress-bar { background: #323c35; }
-    #progress::-webkit-progress-value { background: var(--brass); }
-    #progress::-moz-progress-bar { background: var(--brass); }
-    #progress:not([value]) { opacity: .65; }
-    #progress-summary, #connection-note, #entry-hint { margin-top: 9px; min-height: 18px; color: var(--muted); font: 12px/1.5 system-ui, sans-serif; }
-    #connection-note { color: #e4c18b; }
-    #actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 17px; }
-    button { min-height: 44px; border: 1px solid var(--line); border-radius: 2px; padding: 10px 16px; background: transparent; color: var(--paper); font: 600 13px/1.35 system-ui, sans-serif; cursor: pointer; }
-    button:hover { background: #26352e; border-color: var(--brass); }
-    button:disabled { cursor: default; opacity: .55; }
-    button:focus-visible, summary:focus-visible, #road-canvas:focus-visible { outline: 2px solid #efd6a2; outline-offset: 4px; }
-    #start { border-color: var(--brass); background: #293a32; }
-    #road { margin-top: 26px; overflow: hidden; border: 1px solid #35413b; background: #09171b; }
-    #road-canvas { width: 100%; height: 132px; display: block; touch-action: manipulation; }
-    #crow-tools { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 15px; padding: 10px 12px; border-top: 1px solid #35413b; }
-    #crow-toggle { min-height: 34px; padding: 7px 10px; font-weight: 500; }
-    #crow-status { flex: 1 1 180px; color: #bbc3b9; font: 12px/1.45 system-ui, sans-serif; }
-    #hint { margin: 10px 0 0; color: #9fa99f; font: 12px/1.55 system-ui, sans-serif; }
-    #technical { margin-top: 22px; color: #9aa69c; font: 11px/1.5 system-ui, sans-serif; }
-    #technical summary { width: fit-content; padding: 5px 0; cursor: pointer; }
-    #technical pre { max-height: 150px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; padding: 10px; background: #101713; color: #bcc5ba; font: 11px/1.5 ui-monospace, monospace; }
-    #copy-details { min-height: 32px; padding: 6px 10px; font-size: 11px; }
-    #copy-result { margin-left: 8px; }
-    .hidden { display: none !important; }
-    @media (max-width: 440px) { #boot-card { padding: 12px 0; } #masthead { gap: 12px; } #crest { flex-basis: 34px; width: 34px; } #subtitle { font-size: 10px; } #stages { gap: 12px; font-size: 11px; } }
-    @media (max-height: 600px) { #boot { align-items: start; } #tagline { margin: 18px 0; } #road-canvas { height: 95px; } }
-    @media (any-pointer: coarse) { button, #crow-toggle, #copy-details { min-height: 48px; } #technical summary { min-height: 44px; padding: 12px 0; } }
-    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; } }
+    html, body { width: 100%; height: 100%; height: 100dvh; margin: 0; overflow: hidden; overscroll-behavior: none; }
+    body { background: #0b1010 url('menu-background.jpg') center / cover no-repeat; color: var(--paper); font-family: system-ui, sans-serif; }
+    #canvas { position: fixed; inset: 0; width: 100vw; height: 100vh; height: 100dvh; display: block; background: transparent; touch-action: none; }
+    #canvas:focus-visible { outline: 2px solid var(--brass); outline-offset: -2px; }
+    #startup-error { position: fixed; inset: 0; display: grid; place-items: center; overflow: auto; padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left)); background: #0b1010e8; }
+    #startup-error[hidden] { display: none; }
+    #error-content { width: min(460px, 100%); }
+    h1 { margin: 0 0 16px; font-size: 24px; line-height: 1.3; letter-spacing: 0; }
+    p { margin: 0 0 16px; font-size: 16px; line-height: 1.5; overflow-wrap: anywhere; }
+    button { min-height: 48px; padding: 12px 20px; border: 1px solid var(--brass); border-radius: 2px; background: #172320; color: var(--paper); font: 600 16px/1.4 system-ui, sans-serif; cursor: pointer; }
+    button:hover { background: #26352e; }
+    button:focus-visible { outline: 2px solid var(--paper); outline-offset: 4px; }
   </style>
   $GODOT_HEAD_INCLUDE
 </head>
 <body>
   <canvas id="canvas" tabindex="0" aria-label="Ashen Oath game"></canvas>
-  <section id="boot" aria-label="Ashen Oath loading screen">
-    <div id="boot-card">
-      <div id="masthead">
-        <svg id="crest" viewBox="0 0 46 58" fill="none" aria-hidden="true"><path d="M32 12a17 17 0 1 0 7 14M26 7l7 5-2 9M18 37l-4 17M25 39l3 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M14 26h17M22 18v18" stroke="currentColor" stroke-width="1" opacity=".65"/></svg>
-        <div><h1>ASHEN OATH</h1><div id="subtitle">The Road Between Crowns</div></div>
-      </div>
-      <p id="tagline">Three people are missing.<br>The road remembers their names.</p>
-      <div id="loading-panel">
-        <ol id="stages" aria-label="Loading stages"><li id="stage-files" aria-current="step">Game files</li><li id="stage-scene">Greyfen</li><li id="stage-ready">Ready</li></ol>
-        <div id="status" role="status" aria-live="polite" aria-atomic="true">Opening Ashen Oath…</div>
-        <progress id="progress" max="100" aria-label="Preparing game files"></progress>
-        <div id="progress-summary">The game will open when Greyfen is ready.</div>
-        <div id="connection-note" class="hidden" role="status" aria-live="polite"></div>
-        <div id="actions" class="hidden"><button id="start" type="button" class="hidden">Enter Ashen Oath</button><button id="reload" type="button" class="hidden">Reload page</button></div>
-        <div id="entry-hint" class="hidden"></div>
-      </div>
-      <div id="road">
-        <canvas id="road-canvas" width="650" height="180" tabindex="-1" aria-label="A crow beside the road" aria-describedby="hint"></canvas>
-        <div id="crow-tools"><button id="crow-toggle" type="button" aria-pressed="false">Play Crow Flight</button><span id="crow-status">An optional diversion while the road opens.</span></div>
-      </div>
-      <p id="hint">Loading continues while you play or rest.</p>
-      <details id="technical"><summary>Technical details</summary><pre id="build-meta" aria-label="Loading information"></pre><button id="copy-details" type="button">Copy details</button><span id="copy-result" role="status"></span></details>
+  <section id="startup-error" hidden role="alert" aria-labelledby="error-title">
+    <div id="error-content">
+      <h1 id="error-title">Ashen Oath could not start</h1>
+      <p id="error-message"></p>
+      <p>Your saved journeys are kept.</p>
+      <button id="reload" type="button">Reload</button>
     </div>
   </section>
-  <script src="$GODOT_URL"></script>
   <script>
     (() => {
-      const boot = document.getElementById('boot');
-      const start = document.getElementById('start');
-      const status = document.getElementById('status');
-      const progress = document.getElementById('progress');
-      const progressSummary = document.getElementById('progress-summary');
       const canvas = document.getElementById('canvas');
-      // Physical display bounds are separate from Godot's fixed render size.
-      // The same geometry feeds reading layouts and touch ownership; no input
-      // events are synthesized during a browser/keyboard/orientation resize.
+      const errorPanel = document.getElementById('startup-error');
+      const reload = document.getElementById('reload');
+      const SHELL_BUILD_ID = 'DIRECT-MENU-CANDIDATE';
+      const RUNTIME_PACK_CONTRACT = 'direct-menu-candidate';
+      const GODOT_CONFIG = $GODOT_CONFIG;
+      let engine = null, engineBooted = false, started = false, failed = false;
+      const bootMetrics = {
+        state: 'bootstrap_ready', first_paint_ms: performance.now(),
+        engine_start_ms: 0, engine_ready_ms: 0, menu_ready_ms: 0,
+        progress_samples: 0, build_id: SHELL_BUILD_ID,
+        runtime_pack_contract: RUNTIME_PACK_CONTRACT,
+      };
+      window.__ashenOathBoot = bootMetrics;
+      window.__ashenOathPreloadedPacks = {};
+      function setBootState(state, extra = {}) {
+        Object.assign(bootMetrics, extra, { state });
+        document.documentElement.dataset.bootState = state;
+        window.dispatchEvent(new CustomEvent('ashen-oath-boot', { detail: { ...bootMetrics } }));
+      }
+      performance.mark('ashen-oath-first-paint');
+      let startupDeadline = window.setTimeout(checkStartupDeadline, 120000);
+      function checkStartupDeadline() {
+        if (failed || bootMetrics.menu_ready_ms) return;
+        if (document.hidden) {
+          startupDeadline = window.setTimeout(checkStartupDeadline, 120000);
+          return;
+        }
+        showStartupError('The game could not finish starting. Check your connection and reload.');
+      }
+      function showStartupError(message, error = null) {
+        if (failed || bootMetrics.menu_ready_ms) return;
+        failed = true;
+        window.clearTimeout(startupDeadline);
+        document.getElementById('error-message').textContent = message;
+        errorPanel.hidden = false;
+        setBootState('failed', { error: String(error || message) });
+        try { engine?.requestQuit(); } catch (_) {}
+        if (!document.hidden) reload.focus({ preventScroll: true });
+        if (error) console.error(error);
+      }
+      window.__ashenOathBootstrapFailure = showStartupError;
+      reload.addEventListener('click', () => window.location.reload());
+      window.addEventListener('ashen-oath-menu-ready', () => {
+        if (failed || bootMetrics.menu_ready_ms) return;
+        window.clearTimeout(startupDeadline);
+        performance.mark('ashen-oath-menu-ready');
+        setBootState('menu_ready', { menu_ready_ms: performance.now() });
+      });
+
       const displayPointer = window.matchMedia('(any-pointer: coarse)');
       const safeAreaProbe = document.createElement('div');
       safeAreaProbe.setAttribute('aria-hidden', 'true');
@@ -144,127 +135,9 @@
       const displayObserver = typeof ResizeObserver === 'function' ? new ResizeObserver(queueDisplayMetrics) : null;
       displayObserver?.observe(canvas);
       publishDisplayMetrics();
-      const actions = document.getElementById('actions');
-      const reload = document.getElementById('reload');
-      const entryHint = document.getElementById('entry-hint');
-      const connectionNote = document.getElementById('connection-note');
-      const road = document.getElementById('road-canvas');
-      const crowToggle = document.getElementById('crow-toggle');
-      const crowStatus = document.getElementById('crow-status');
-      const hint = document.getElementById('hint');
-      const technical = document.getElementById('technical');
-      const buildMeta = document.getElementById('build-meta');
-      const ctx = road.getContext('2d');
-      const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
-      let reduce = motionPreference.matches;
-      const SHELL_BUILD_ID = 'RECOVERY-004-CANDIDATE';
-      const RUNTIME_PACK_CONTRACT = 'recovery-004-20260831';
-      const GODOT_CONFIG = $GODOT_CONFIG;
-      let engine = null, started = false, ready = false, engineBooted = false, last = 0, score = 0;
-      let gamepadPressed = false;
-      let crowPlaying = false, shellActive = true, handoffPending = false, manualEntry = false, recoveryMenu = false;
-      let attemptId = 0, openingPollTimer = null, animationFrame = null, handoffFrame = null;
-      const heldCrowKeys = new Set();
-      const heldCrowPointers = new Set();
-      const flapKeys = new Set(['Space', 'ArrowUp', 'KeyW']);
-      const bootMetrics = {
-        state: 'shell_ready',
-        first_paint_ms: performance.now(),
-        engine_start_ms: 0,
-        engine_ready_ms: 0,
-        progress_samples: 0,
-        input_events: 0,
-        last_input: '',
-        crow_score: 0,
-        build_id: SHELL_BUILD_ID,
-        runtime_pack_contract: RUNTIME_PACK_CONTRACT,
-      };
-      window.__ashenOathBoot = bootMetrics;
-      window.__ashenOathPreloadedPacks = {};
-      document.documentElement.dataset.bootState = bootMetrics.state;
-      buildMeta.textContent = JSON.stringify(bootMetrics, null, 2);
-      performance.mark('ashen-oath-first-paint');
-      function setBootState(state, extra = {}) {
-        bootMetrics.state = state;
-        Object.assign(bootMetrics, extra);
-        document.documentElement.dataset.bootState = state;
-        buildMeta.textContent = JSON.stringify(bootMetrics, null, 2);
-        window.dispatchEvent(new CustomEvent('ashen-oath-boot', { detail: { ...bootMetrics } }));
-      }
-      function setStatus(text) { if (status.textContent !== text) status.textContent = text; }
-      function setPhase(phase, message) {
-        const stages = ['files', 'scene', 'ready'];
-        const selected = stages.indexOf(phase);
-        stages.forEach((name, index) => {
-          const element = document.getElementById('stage-' + name);
-          element.classList.toggle('complete', index < selected);
-          if (index === selected) element.setAttribute('aria-current', 'step');
-          else element.removeAttribute('aria-current');
-        });
-        setStatus(message);
-        if (phase === 'ready') {
-          progress.value = 100;
-          progress.setAttribute('aria-label', 'Greyfen is ready');
-          progress.setAttribute('aria-valuetext', 'Ready');
-          progressSummary.textContent = 'The road is ready for you.';
-        } else {
-          progress.removeAttribute('value');
-          progress.removeAttribute('aria-valuetext');
-          progress.setAttribute('aria-label', phase === 'scene' ? 'Preparing Greyfen' : 'Preparing game files');
-          progressSummary.textContent = phase === 'scene' ? 'Building the opening scene. No action is needed.' : 'Connecting to the game files…';
-        }
-      }
-      function updateTransfer(current, total) {
-        const known = Number.isFinite(total) && total > 0 && Number.isFinite(current) && current >= 0;
-        if (!known) {
-          progress.removeAttribute('value');
-          progress.removeAttribute('aria-valuetext');
-          progressSummary.textContent = 'Downloading game files…';
-          return;
-        }
-        const percent = Math.min(100, Math.max(0, Math.round(current / total * 100)));
-        const megabytes = (bytes) => (bytes / 1048576).toFixed(1);
-        progress.value = percent;
-        progress.setAttribute('aria-label', 'Game file download');
-        progress.setAttribute('aria-valuetext', `${percent}% of game files downloaded`);
-        progressSummary.textContent = `${megabytes(current)} of ${megabytes(total)} MB · ${percent}% of game files`;
-        if (percent === 100) setStatus('Game files downloaded. Starting the game…');
-      }
-      function showPrimary(label) {
-        start.textContent = label;
-        start.setAttribute('aria-label', label);
-        start.classList.remove('hidden');
-        actions.classList.remove('hidden');
-      }
-      function showEntryHint(message) {
-        entryHint.textContent = message;
-        entryHint.classList.toggle('hidden', !message);
-      }
-      function updateConnection() {
-        const offline = navigator.onLine === false;
-        connectionNote.classList.toggle('hidden', !offline);
-        connectionNote.textContent = offline ? 'Connection interrupted. Loading can continue when you reconnect.' : '';
-      }
-      document.getElementById('copy-details').addEventListener('click', async () => {
-        const result = document.getElementById('copy-result');
-        try {
-          if (!navigator.clipboard?.writeText) throw new Error('Clipboard unavailable');
-          await navigator.clipboard.writeText(buildMeta.textContent);
-          result.textContent = 'Copied.';
-        } catch (_error) {
-          const range = document.createRange();
-          range.selectNodeContents(buildMeta);
-          const selection = window.getSelection();
-          selection.removeAllRanges();
-          selection.addRange(range);
-          result.textContent = 'Details selected. Use your copy command.';
-        }
-      });
-      reload.addEventListener('click', () => window.location.reload());
-      window.addEventListener('online', updateConnection);
-      window.addEventListener('offline', updateConnection);
+
       async function sha256Hex(payload) {
-        if (!crypto?.subtle) throw new Error('browser SHA-256 support unavailable');
+        if (!window.crypto?.subtle) throw new Error('browser SHA-256 support unavailable');
         return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', payload)))
           .map((value) => value.toString(16).padStart(2, '0')).join('');
       }
@@ -277,430 +150,103 @@
           const releaseResponse = await fetch('release_manifest.json', { cache: 'no-cache', signal: controller.signal });
           if (!releaseResponse.ok) throw new Error(`release manifest HTTP ${releaseResponse.status}`);
           const release = await releaseResponse.json();
-          if (String(release?.build_id || '') !== SHELL_BUILD_ID) {
-            throw new Error(`shell build ${SHELL_BUILD_ID} != release ${release?.build_id || 'missing'}`);
-          }
+          if (String(release?.build_id || '') !== SHELL_BUILD_ID) throw new Error('Page/release identity mismatch');
           const manifestResponse = await fetch('runtime_pack_manifest.json', { cache: 'no-cache', signal: controller.signal });
           if (!manifestResponse.ok) throw new Error(`runtime pack manifest HTTP ${manifestResponse.status}`);
           const manifestPayload = await manifestResponse.arrayBuffer();
           const manifestDigest = await sha256Hex(manifestPayload);
-          if (manifestDigest !== String(release?.runtime_pack_manifest?.sha256 || '').toLowerCase()) {
-            throw new Error(`runtime manifest SHA-256 ${manifestDigest} != ${release?.runtime_pack_manifest?.sha256 || 'missing'}`);
-          }
+          if (manifestDigest !== String(release?.runtime_pack_manifest?.sha256 || '').toLowerCase()) throw new Error('Runtime manifest hash mismatch');
           const manifest = JSON.parse(new TextDecoder().decode(manifestPayload));
-          if (String(manifest?.release_id || '') !== SHELL_BUILD_ID) {
-            throw new Error(`runtime pack release ${manifest?.release_id || 'missing'} != shell ${SHELL_BUILD_ID}`);
-          }
-          setBootState(bootMetrics.state, {
-            release_compatibility_key: String(release?.compatibility_key || ''),
-            runtime_manifest_sha256: manifestDigest,
-          });
+          if (String(manifest?.release_id || '') !== SHELL_BUILD_ID) throw new Error('Runtime manifest release mismatch');
           const opening = manifest?.packs?.opening;
-          if (!opening?.url) throw new Error('runtime pack manifest has no opening pack URL');
+          if (!opening?.url || !opening.sha256) throw new Error('Opening pack identity is missing');
           packUrl = new URL(opening.url, window.location.href).href;
-          setBootState(bootMetrics.state, { opening_prefetch_state: 'loading' });
-          let packResponse = null;
+          let response = null;
           if ('caches' in window) {
             const cacheKey = String(release?.compatibility_key || manifestDigest).slice(0, 24);
             packCache = await caches.open(`ashenoath-runtime-packs-${cacheKey}`);
-            packResponse = await packCache.match(packUrl);
-            if (!packResponse) {
-              const downloaded = await fetch(packUrl, { cache: 'no-cache', signal: controller.signal });
-              if (!downloaded.ok) throw new Error(`opening pack HTTP ${downloaded.status}`);
-              packResponse = downloaded;
-            }
-          } else {
-            packResponse = await fetch(packUrl, { cache: 'force-cache', signal: controller.signal });
+            response = await packCache.match(packUrl);
           }
-          if (!packResponse.ok) throw new Error(`opening pack HTTP ${packResponse.status}`);
-          const payload = await packResponse.arrayBuffer();
-          if (opening.bytes > 0 && payload.byteLength !== opening.bytes) {
-            throw new Error(`opening pack bytes ${payload.byteLength} != ${opening.bytes}`);
-          }
-          if (!opening.sha256) throw new Error('opening pack SHA-256 contract unavailable');
+          if (!response) response = await fetch(packUrl, { cache: 'no-cache', signal: controller.signal });
+          if (!response.ok) throw new Error(`opening pack HTTP ${response.status}`);
+          const payload = await response.arrayBuffer();
+          if (opening.bytes > 0 && payload.byteLength !== opening.bytes) throw new Error('Opening pack byte count mismatch');
           const digest = await sha256Hex(payload);
-          if (digest !== String(opening.sha256).toLowerCase()) {
-            throw new Error(`opening pack SHA-256 ${digest} != ${opening.sha256}`);
-          }
-          // Cache only verified bytes. Quota failures must not discard a valid pack.
+          if (digest !== String(opening.sha256).toLowerCase()) throw new Error('Opening pack hash mismatch');
           if (packCache) await packCache.put(packUrl, new Response(payload)).catch(() => {});
-          const preload = {
-            state: 'verified',
-            path: '/opening.pck',
-            url: packUrl,
-            version: String(opening.version || ''),
-            bytes: payload.byteLength,
-            sha256: digest,
-          };
-          window.__ashenOathPreloadedPacks.opening = preload;
-          setBootState(bootMetrics.state, {
-            opening_prefetch_state: 'ready',
-            opening_prefetch_bytes: payload.byteLength,
-          });
-          return { ...preload, payload };
+          const metadata = { state: 'verified', path: '/opening.pck', url: packUrl, version: String(opening.version || ''), bytes: payload.byteLength, sha256: digest };
+          window.__ashenOathPreloadedPacks.opening = metadata;
+          bootMetrics.opening_prefetch_state = 'verified';
+          return { ...metadata, payload };
         } catch (error) {
           if (packCache && packUrl) await packCache.delete(packUrl).catch(() => {});
-          // Godot retains authoritative retry, hash verification, and error UI.
-          // A shell prefetch failure must not prevent the engine from starting.
-          setBootState(bootMetrics.state, {
-            opening_prefetch_state: 'failed',
-            opening_prefetch_error: String(error),
-          });
           window.__ashenOathPreloadedPacks.opening = { state: 'failed', error: String(error) };
+          bootMetrics.opening_prefetch_state = 'failed';
+          bootMetrics.opening_prefetch_error = String(error);
           return null;
         } finally {
           window.clearTimeout(timeout);
         }
       }
-      let openingFetchPromise = null;
+      let openingFetchPromise = prefetchOpeningPack();
       let openingPreloadPromise = null;
       async function mountOpeningPackAfterReady() {
+        if (!engineBooted || failed) return null;
         if (openingPreloadPromise) return openingPreloadPromise;
         openingPreloadPromise = (async () => {
-          const openingPreload = await (openingFetchPromise || (openingFetchPromise = prefetchOpeningPack()));
-          if (!openingPreload) {
-            window.dispatchEvent(new CustomEvent('ashenoath-opening-pack', { detail: { state: 'failed' } }));
-            return null;
-          }
+          const preload = await openingFetchPromise;
+          if (!preload || failed) return null;
           try {
-            if (!engineBooted || !engine) throw new Error('engine is not ready for opening pack mount');
-            engine.copyToFS(openingPreload.path, openingPreload.payload);
-            const { payload, ...metadata } = openingPreload;
+            engine.copyToFS(preload.path, preload.payload);
+            const { payload, ...metadata } = preload;
             openingFetchPromise = null;
-            window.__ashenOathPreloadedPacks.opening = { ...metadata, state: 'preloaded' };
-            setBootState(bootMetrics.state, { opening_prefetch_state: 'preloaded' });
-            window.dispatchEvent(new CustomEvent('ashenoath-opening-pack', {
-              detail: { ...metadata, state: 'preloaded' },
-            }));
-            return metadata;
+            const detail = { ...metadata, state: 'preloaded' };
+            window.__ashenOathPreloadedPacks.opening = detail;
+            bootMetrics.opening_prefetch_state = 'preloaded';
+            window.dispatchEvent(new CustomEvent('ashenoath-opening-pack', { detail }));
+            return detail;
           } catch (error) {
             const detail = { state: 'failed', error: String(error) };
             window.__ashenOathPreloadedPacks.opening = detail;
-            setBootState(bootMetrics.state, {
-              opening_prefetch_state: 'failed',
-              opening_prefetch_error: String(error),
-            });
             window.dispatchEvent(new CustomEvent('ashenoath-opening-pack', { detail }));
-            console.error(error);
             return null;
           }
         })();
         return openingPreloadPromise;
       }
       window.__ashenOathBeginOpeningPackMount = mountOpeningPackAfterReady;
-      let crowY = 90, crowVelocity = 0, branchOffset = 0, nextBranch = 260;
-      const branches = [];
-      const ember = { x: 460, y: 72, active: true };
-      function flap(source = 'pointer') {
-        if (!shellActive || !crowPlaying || !started || ready || document.hidden) return;
-        crowVelocity = -4.8;
-        bootMetrics.input_events += 1;
-        bootMetrics.last_input = source;
-      }
-      function resetBranch() { const gap = 70 + Math.random() * 35; const top = 18 + Math.random() * 48; branches.push({ x: road.width + 30, top, bottom: top + gap }); }
-      function draw() {
-        if (!ctx) return;
-        const w = road.width, h = road.height;
-        ctx.clearRect(0, 0, w, h); ctx.fillStyle = '#09171b'; ctx.fillRect(0, 0, w, h);
-        ctx.fillStyle = 'rgba(112, 148, 135, .16)';
-        for (let i = 0; i < 10; i++) { const x = (i * 82 - branchOffset * (i % 2 ? .35 : .18)) % (w + 60) - 30; ctx.beginPath(); ctx.moveTo(x, h); ctx.lineTo(x + 34, 36 + (i % 3) * 12); ctx.lineTo(x + 62, h); ctx.fill(); }
-        ctx.strokeStyle = 'rgba(211, 177, 110, .24)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, h - 22); ctx.bezierCurveTo(w * .25, h * .62, w * .60, h * .92, w, h * .55); ctx.stroke();
-        ctx.fillStyle = '#d8b56d'; ctx.shadowColor = '#d8b56d'; ctx.shadowBlur = 14; if (ember.active) { ctx.beginPath(); ctx.arc(ember.x, ember.y, 5, 0, Math.PI * 2); ctx.fill(); } ctx.shadowBlur = 0;
-        ctx.fillStyle = '#070b0e'; ctx.strokeStyle = '#b7c2b9'; ctx.lineWidth = 2; ctx.beginPath(); ctx.ellipse(110, crowY, 15, 9, -.12, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); ctx.beginPath(); ctx.moveTo(122, crowY - 1); ctx.lineTo(136, crowY - 6); ctx.lineTo(124, crowY + 4); ctx.fill(); ctx.fillStyle = '#f1d796'; ctx.beginPath(); ctx.arc(120, crowY - 4, 1.5, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = 'rgba(22, 35, 36, .92)'; for (const branch of branches) { ctx.fillRect(branch.x, 0, 18, branch.top); ctx.fillRect(branch.x, branch.bottom, 18, h - branch.bottom); }
-        if (crowPlaying) { ctx.fillStyle = '#c8a767'; ctx.font = '12px system-ui'; ctx.fillText('embers ' + score, 14, 22); }
-      }
-      function tick(time) {
-        animationFrame = null;
-        if (!shellActive || !crowPlaying || ready || reduce || document.hidden || !document.hasFocus()) return;
-        const dt = Math.min(2.0, (time - last) / 16.67 || 1); last = time;
-        if (started) {
-          const pressed = gamepadIsPressed();
-          if (pressed && !gamepadPressed) flap('gamepad');
-          gamepadPressed = pressed;
-          crowVelocity += .22 * dt; crowY += crowVelocity * dt; branchOffset += 1.1 * dt; nextBranch -= 1.55 * dt; ember.x -= 1.7 * dt; if (ember.x < -12) { ember.x = road.width + 12; ember.y = 30 + Math.random() * 110; ember.active = true; }
-          for (const branch of branches) branch.x -= 1.55 * dt; while (nextBranch <= 0) { resetBranch(); nextBranch = 150 + Math.random() * 100; } while (branches.length && branches[0].x < -30) branches.shift();
-          if (Math.abs(crowY - ember.y) < 18 && Math.abs(110 - ember.x) < 24 && ember.active) { score++; ember.active = false; bootMetrics.crow_score = score; crowStatus.textContent = 'Embers gathered: ' + score + '.'; }
-          if (crowY < 8 || crowY > road.height - 8 || branches.some((b) => 110 > b.x - 15 && 110 < b.x + 28 && (crowY < b.top || crowY > b.bottom))) { crowY = 90; crowVelocity = 0; branches.length = 0; nextBranch = 260; crowStatus.textContent = 'The crow circles back. Embers gathered: ' + score + '.'; }
-        }
-        draw();
-        animationFrame = requestAnimationFrame(tick);
-      }
-      function stopDecorativeFrames() {
-        if (animationFrame !== null) cancelAnimationFrame(animationFrame);
-        animationFrame = null;
-        last = 0;
-      }
-      function resumeDecorativeFrames() {
-        if (shellActive && crowPlaying && !ready && !reduce && !document.hidden && document.hasFocus() && animationFrame === null) {
-          last = performance.now();
-          animationFrame = requestAnimationFrame(tick);
-        }
-      }
-      function stopCrow(message = '') {
-        crowPlaying = false;
-        stopDecorativeFrames();
-        crowToggle.textContent = 'Play Crow Flight';
-        crowToggle.setAttribute('aria-pressed', 'false');
-        road.tabIndex = -1;
-        road.setAttribute('aria-label', 'A crow beside the road');
-        crowStatus.textContent = message || 'Embers gathered: ' + score + '. Loading continues.';
-        hint.textContent = 'Loading continues while you play or rest.';
-        draw();
-      }
-      function applyMotionPreference() {
-        reduce = motionPreference.matches;
-        if (reduce) stopCrow('The road rests while reduced motion is enabled.');
-        crowToggle.disabled = reduce || ready || recoveryMenu || !ctx || (!started && bootMetrics.state === 'failed');
-        if (!ctx) crowStatus.textContent = 'The game continues loading. Crow Flight is unavailable.';
-      }
-      crowToggle.addEventListener('click', () => {
-        if (!shellActive || ready || !started || reduce || !ctx) return;
-        if (crowPlaying) { stopCrow(); return; }
-        crowPlaying = true;
-        crowToggle.textContent = 'Stop playing';
-        crowToggle.setAttribute('aria-pressed', 'true');
-        road.tabIndex = 0;
-        road.setAttribute('aria-label', 'Crow Flight. Press Space or Up to flap.');
-        crowStatus.textContent = 'Guide the crow between the branches.';
-        hint.textContent = 'Space, Up, W, click, tap, or controller A to flap. This is optional; loading continues.';
-        road.focus({ preventScroll: true });
-        resumeDecorativeFrames();
-      });
-      window.addEventListener('keydown', (event) => {
-        if (!shellActive || !flapKeys.has(event.code)) return;
-        const alreadyHeld = heldCrowKeys.has(event.code);
-        const onControl = event.target instanceof Element && event.target.closest('button, summary, a, input, textarea');
-        if (!alreadyHeld && (!crowPlaying || onControl)) return;
-        event.preventDefault();
-        event.stopImmediatePropagation();
-        heldCrowKeys.add(event.code);
-        if (!event.repeat && crowPlaying) flap('keyboard');
-      }, true);
-      window.addEventListener('keyup', (event) => {
-        if (!shellActive || !heldCrowKeys.has(event.code)) return;
-        heldCrowKeys.delete(event.code);
-        event.preventDefault();
-        event.stopImmediatePropagation();
-        if (handoffPending) scheduleHandoffControls();
-      }, true);
-      road.addEventListener('pointerdown', (event) => {
-        if (!shellActive || !crowPlaying || ready) return;
-        event.preventDefault();
-        heldCrowPointers.add(event.pointerId);
-        road.setPointerCapture?.(event.pointerId);
-        flap('pointer');
-      });
-      function releaseCrowPointer(event) {
-        if (!heldCrowPointers.has(event.pointerId)) return;
-        heldCrowPointers.delete(event.pointerId);
-        if (shellActive) { event.preventDefault(); event.stopImmediatePropagation(); }
-        if (handoffPending) scheduleHandoffControls();
-      }
-      window.addEventListener('pointerup', releaseCrowPointer, true);
-      window.addEventListener('pointercancel', releaseCrowPointer, true);
-      start.addEventListener('click', () => {
-        if (!shellActive) return;
-        if (ready || recoveryMenu) requestHandoff();
-        else if (!started) begin();
-      });
-      function gamepadIsPressed() {
-        try {
-          return Boolean(navigator.getGamepads && Array.from(navigator.getGamepads()).some((pad) => pad?.buttons?.[0]?.pressed));
-        } catch (_error) { return false; }
-      }
-      function scheduleHandoffControls() {
-        if (!shellActive || document.hidden || !document.hasFocus() || handoffFrame !== null) return;
-        handoffFrame = requestAnimationFrame(pollHandoffControls);
-      }
-      function pollHandoffControls() {
-        handoffFrame = null;
-        if (!shellActive || document.hidden || !document.hasFocus()) return;
-        const pressed = gamepadIsPressed();
-        if (!handoffPending && (ready || recoveryMenu) && pressed && !gamepadPressed) handoffPending = true;
-        gamepadPressed = pressed;
-        if (handoffPending && heldCrowKeys.size === 0 && heldCrowPointers.size === 0 && !pressed) {
-          handoffToGame();
-          return;
-        }
-        if (handoffPending) showEntryHint('Release the crow controls to enter the game.');
-        if (ready || recoveryMenu || handoffPending) scheduleHandoffControls();
-      }
-      function requestHandoff() {
-        if (!shellActive || (!ready && !recoveryMenu)) return;
-        if (document.hidden || !document.hasFocus()) { manualEntry = true; return; }
-        handoffPending = true;
-        stopDecorativeFrames();
-        scheduleHandoffControls();
-      }
-      function handoffToGame() {
-        if (!shellActive || document.hidden || !document.hasFocus()) return;
-        shellActive = false;
-        handoffPending = false;
-        stopDecorativeFrames();
-        if (handoffFrame !== null) cancelAnimationFrame(handoffFrame);
-        handoffFrame = null;
-        if (openingPollTimer !== null) window.clearTimeout(openingPollTimer);
-        openingPollTimer = null;
-        boot.classList.add('hidden');
-        boot.setAttribute('aria-hidden', 'true');
-        setBootState(bootMetrics.state, { control_handoff_ms: performance.now(), handoff_destination: recoveryMenu ? 'recovery_menu' : 'game' });
-        canvas.focus({ preventScroll: true });
-      }
-      function suspendShellInput() {
-        if (!shellActive) return;
-        manualEntry = true;
-        handoffPending = false;
-        heldCrowKeys.clear();
-        heldCrowPointers.clear();
-        stopDecorativeFrames();
-        if (handoffFrame !== null) cancelAnimationFrame(handoffFrame);
-        handoffFrame = null;
-      }
-      function resumeShellInput() {
-        if (!shellActive || document.hidden || !document.hasFocus()) return;
-        if (ready || recoveryMenu) {
-          showPrimary(recoveryMenu ? 'Open game menu' : 'Enter Ashen Oath');
-          showEntryHint('Enter when you are ready.');
-          start.focus({ preventScroll: true });
-          scheduleHandoffControls();
-        } else resumeDecorativeFrames();
-      }
-      document.addEventListener('visibilitychange', () => document.hidden ? suspendShellInput() : resumeShellInput());
-      window.addEventListener('blur', suspendShellInput);
-      window.addEventListener('focus', resumeShellInput);
-      motionPreference.addEventListener?.('change', applyMotionPreference);
-      async function begin() {
-        if (started) return;
-        const attempt = ++attemptId;
+      window.__ashenOathStart = async () => {
+        if (started || failed) return;
         started = true;
-        ready = false;
-        recoveryMenu = false;
-        handoffPending = false;
-        if (openingPollTimer !== null) window.clearTimeout(openingPollTimer);
-        openingPollTimer = null;
-        start.classList.add('hidden');
-        reload.classList.add('hidden');
-        actions.classList.add('hidden');
-        showEntryHint('');
-        setPhase('files', 'Opening Ashen Oath…');
-        applyMotionPreference();
-        updateConnection();
         bootMetrics.engine_start_ms = performance.now();
-        performance.mark('ashen-oath-engine-start');
         setBootState('engine_starting');
-        openingPreloadPromise = null;
-        openingFetchPromise = prefetchOpeningPack();
-        let engineLoadPromise = null;
         try {
+          if (typeof Engine !== 'function') throw new Error('Game engine script unavailable');
+          const missing = Engine.getMissingFeatures({ threads: false });
+          if (missing.length) {
+            showStartupError('This browser needs WebGL 2 and WebAssembly to open Ashen Oath.', missing.join(', '));
+            return;
+          }
           engine = new Engine(GODOT_CONFIG);
-          setStatus('Downloading game files…');
-          progressSummary.textContent = 'The download has started. Progress will appear when its size is known.';
-          engineLoadPromise = Engine.load(
-            GODOT_CONFIG.executable,
-            GODOT_CONFIG.fileSizes?.[`${GODOT_CONFIG.executable}.wasm`],
-          );
-          await engineLoadPromise;
-        } catch (error) {
-          if (attempt !== attemptId || !shellActive) return;
-          setRetryState('The game files could not be opened.', { error: String(error) });
-          console.error(error);
-          return;
-        }
-        if (attempt !== attemptId || !shellActive) return;
-        const missing = Engine.getMissingFeatures({ threads: false });
-        if (missing.length) {
-          setRetryState('This browser is missing a feature needed by the game.', { missing_features: missing });
-          progressSummary.textContent = 'WebGL 2.0 graphics support is required. Technical details are available below.';
-          console.error(missing);
-          return;
-        }
-        setBootState('loading');
-        setStatus('Downloading game files…');
-        engine.startGame({ onProgress: (current, total) => {
-          if (attempt !== attemptId || !shellActive || engineBooted) return;
-          bootMetrics.progress_samples += 1;
-          updateTransfer(current, total);
-        } }).then(() => {
-          if (attempt !== attemptId || !shellActive) return;
+          // startGame downloads/initializes WASM and the root PCK together.
+          await engine.startGame({ onProgress: (current, total) => {
+            bootMetrics.progress_samples += 1;
+            bootMetrics.downloaded_bytes = current;
+            bootMetrics.download_total_bytes = total;
+          } });
+          if (failed) return;
           engineBooted = true;
-          void mountOpeningPackAfterReady();
           bootMetrics.engine_ready_ms = performance.now();
           performance.mark('ashen-oath-engine-ready');
-          setBootState('opening_preparing', { engine_ready_elapsed_ms: Math.round(bootMetrics.engine_ready_ms - bootMetrics.engine_start_ms) });
-          setPhase('scene', 'Preparing Greyfen…');
-          waitForOpeningReady(attempt);
-        }, (error) => {
-          if (attempt !== attemptId || !shellActive) return;
-          setRetryState('The game could not finish starting.', { error: String(error) });
-          console.error(error);
-        });
-      }
-      function waitForOpeningReady(attempt) {
-        openingPollTimer = null;
-        if (attempt !== attemptId || !shellActive) return;
-        const opening = window.__ashenOathOpeningState;
-        if (opening?.state === 'ready') {
-          ready = true;
-          setBootState('ready', { opening_ready_ms: performance.now() });
-          setPhase('ready', 'Greyfen is ready.');
-          stopCrow('Your journey is ready. Embers gathered: ' + score + '.');
-          crowToggle.disabled = true;
-          showPrimary('Enter Ashen Oath');
-          console.log('LOADING: shell opening_ready');
-          if (document.hidden || !document.hasFocus() || technical.open) manualEntry = true;
-          if (!manualEntry) requestHandoff();
-          else {
-            showEntryHint('Enter when you are ready.');
-            if (!document.hidden && document.hasFocus() && !technical.open) start.focus({ preventScroll: true });
-            scheduleHandoffControls();
-          }
-          return;
+          if (!bootMetrics.menu_ready_ms) setBootState('engine_ready');
+          void mountOpeningPackAfterReady();
+        } catch (error) {
+          showStartupError('The game files could not be opened. Check your connection and reload.', error);
         }
-        if (opening?.state === 'failed') {
-          recoveryMenu = true;
-          setBootState('opening_failed', { opening_error: opening.message || 'Opening preparation failed' });
-          setStatus('Greyfen could not finish opening.');
-          progress.value = 0;
-          progress.removeAttribute('aria-valuetext');
-          progress.setAttribute('aria-label', 'Loading interrupted');
-          progressSummary.textContent = 'Open the game menu to retry preparing the scene.';
-          stopCrow('Crow Flight is resting while loading is interrupted.');
-          crowToggle.disabled = true;
-          showPrimary('Open game menu');
-          reload.classList.remove('hidden');
-          showEntryHint('Your existing saves are kept.');
-          scheduleHandoffControls();
-          return;
-        }
-        openingPollTimer = window.setTimeout(() => waitForOpeningReady(attempt), 50);
-      }
-      function setRetryState(message, extra = {}) {
-        started = false;
-        ready = false;
-        engineBooted = false;
-        engine = null;
-        recoveryMenu = false;
-        handoffPending = false;
-        if (openingPollTimer !== null) window.clearTimeout(openingPollTimer);
-        openingPollTimer = null;
-        setBootState('failed', extra);
-        setStatus(message);
-        progress.value = 0;
-        progress.removeAttribute('aria-valuetext');
-        progress.setAttribute('aria-label', 'Loading interrupted');
-        progressSummary.textContent = 'Retry loading, or reload the page if the interruption continues.';
-        stopCrow('Crow Flight is resting while loading is interrupted.');
-        crowToggle.disabled = true;
-        showPrimary('Retry loading');
-        reload.classList.remove('hidden');
-        showEntryHint('Retrying does not clear your saved journey.');
-      }
-      draw();
-      applyMotionPreference();
-      updateConnection();
-      window.setTimeout(begin, 0);
+      };
     })();
   </script>
+  <script src="$GODOT_URL" onerror="window.__ashenOathBootstrapFailure('The game engine could not be downloaded. Check your connection and reload.')"></script>
+  <script>window.__ashenOathStart();</script>
 </body>
 </html>

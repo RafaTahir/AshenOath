@@ -152,6 +152,7 @@ $candidateJson = ($candidate | ConvertTo-Json -Depth 8) + [System.Environment]::
 $runtimeManifest = Join-Path $ProjectRoot "runtime_pack_manifest.json"
 Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "sync_runtime_pack_manifest.py"), $runtimeManifest, $candidatePath, "--build-id", $BuildId, "--source-commit", $SourceCommit) "pack-manifest"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--export-release", "Web Browser", (Join-Path $ExportRoot "index.html")) "web-production"
+Copy-Item -LiteralPath (Join-Path $ProjectRoot "assets_external/ui/greyfen_menu_runtime.jpg") -Destination (Join-Path $ExportRoot "menu-background.jpg") -Force
 
 $externalRoot = Join-Path $ExportRoot "packs"
 New-Item -ItemType Directory -Force -Path $externalRoot | Out-Null

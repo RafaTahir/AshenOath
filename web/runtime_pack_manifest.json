@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "program": "SOUL-REBUILD",
-  "release_id": "mobile-002-20261008-controls",
+  "release_id": "boot-004-20261008-direct-menu",
   "artifact_policy": "external_runtime_packs",
   "candidate_manifest": "res://runtime_pack_candidates.json",
   "pack_presets": {
@@ -15,7 +15,7 @@
   "max_deployment_bytes": 104857600,
   "packs": {
     "base": {
-      "version": "mobile-002-20261008-controls",
+      "version": "boot-004-20261008-direct-menu",
       "url": "",
       "sha256": "",
       "bytes": 0,
@@ -24,8 +24,8 @@
       "preload_priority": 0,
       "status": "embedded_current_pck",
       "candidate_artifact": "base.pck",
-      "candidate_bytes": 13289104,
-      "candidate_sha256": "7b49ff61f4bf7ce9b1c1c057f825ebe031faa1a4ebaa599ccbc873b1158e409b",
+      "candidate_bytes": 13288496,
+      "candidate_sha256": "5012498711757428e987a2ce253e1c55258373971edc7b221397e076dd943c8f",
       "contents": [
         "menu",
         "managers",
@@ -34,15 +34,15 @@
       ],
       "embedded_artifact": "index.pck",
       "embedded_source_artifact": "base.pck",
-      "embedded_source_bytes": 13289104,
-      "embedded_source_sha256": "7b49ff61f4bf7ce9b1c1c057f825ebe031faa1a4ebaa599ccbc873b1158e409b",
+      "embedded_source_bytes": 13288496,
+      "embedded_source_sha256": "5012498711757428e987a2ce253e1c55258373971edc7b221397e076dd943c8f",
       "embedded_source_kind": "standalone_pack_candidate"
     },
     "opening": {
-      "version": "mobile-002-20261008-controls",
-      "url": "packs/opening.pck?sha256=c2de90d0bbaaf077f340e350349db6235ca4c2946ccee87e970aea3764d8f2bf",
-      "sha256": "c2de90d0bbaaf077f340e350349db6235ca4c2946ccee87e970aea3764d8f2bf",
-      "bytes": 14322252,
+      "version": "boot-004-20261008-direct-menu",
+      "url": "packs/opening.pck?sha256=3373d1d4eb1eae042cd1f8cb5d7c9418407bcb717f102c8902719d08955e63e4",
+      "sha256": "3373d1d4eb1eae042cd1f8cb5d7c9418407bcb717f102c8902719d08955e63e4",
+      "bytes": 14322268,
       "entry_scene": "res://scenes/zones/greyfen_gameplay.tscn",
       "dependencies": [
         "base"
@@ -50,18 +50,18 @@
       "preload_priority": 10,
       "status": "streamed_web_candidate",
       "candidate_artifact": "opening.pck",
-      "candidate_bytes": 14322252,
-      "candidate_sha256": "c2de90d0bbaaf077f340e350349db6235ca4c2946ccee87e970aea3764d8f2bf",
+      "candidate_bytes": 14322268,
+      "candidate_sha256": "3373d1d4eb1eae042cd1f8cb5d7c9418407bcb717f102c8902719d08955e63e4",
       "contents": [
         "greyfen",
         "wychwood",
         "cemetery",
         "opening_actors"
       ],
-      "cache_key": "c2de90d0bbaaf077f340e350349db6235ca4c2946ccee87e970aea3764d8f2bf"
+      "cache_key": "3373d1d4eb1eae042cd1f8cb5d7c9418407bcb717f102c8902719d08955e63e4"
     },
     "campaign": {
-      "version": "mobile-002-20261008-controls",
+      "version": "boot-004-20261008-direct-menu",
       "url": "packs/campaign.pck?sha256=b89ec48702ad522694e674fc55690d2e06b015c333b09937275742c4b15f2e11",
       "sha256": "b89ec48702ad522694e674fc55690d2e06b015c333b09937275742c4b15f2e11",
       "bytes": 1000092,
@@ -84,7 +84,7 @@
       "cache_key": "b89ec48702ad522694e674fc55690d2e06b015c333b09937275742c4b15f2e11"
     },
     "characters": {
-      "version": "mobile-002-20261008-controls",
+      "version": "boot-004-20261008-direct-menu",
       "url": "packs/characters.pck?sha256=f7e4fb8fc823c37a00b7192046e64ddb6dd70ee307f997fd46b83a3e88e98bd4",
       "sha256": "f7e4fb8fc823c37a00b7192046e64ddb6dd70ee307f997fd46b83a3e88e98bd4",
       "bytes": 30470584,
@@ -105,7 +105,7 @@
       "cache_key": "f7e4fb8fc823c37a00b7192046e64ddb6dd70ee307f997fd46b83a3e88e98bd4"
     },
     "monsters": {
-      "version": "mobile-002-20261008-controls",
+      "version": "boot-004-20261008-direct-menu",
       "url": "packs/monsters.pck?sha256=b95a4a263ffb7437a039e1d1fb0c1f15352f42afb2911d1439721e5638aaf68a",
       "sha256": "b95a4a263ffb7437a039e1d1fb0c1f15352f42afb2911d1439721e5638aaf68a",
       "bytes": 7011052,
@@ -126,7 +126,7 @@
       "cache_key": "b95a4a263ffb7437a039e1d1fb0c1f15352f42afb2911d1439721e5638aaf68a"
     },
     "audio": {
-      "version": "mobile-002-20261008-controls",
+      "version": "boot-004-20261008-direct-menu",
       "url": "packs/audio.pck?sha256=e17005c7891c5817346f739007a96fca66488c80cc7d96e22c6d221cc021d766",
       "sha256": "e17005c7891c5817346f739007a96fca66488c80cc7d96e22c6d221cc021d766",
       "bytes": 19354896,
@@ -147,7 +147,7 @@
       "cache_key": "e17005c7891c5817346f739007a96fca66488c80cc7d96e22c6d221cc021d766"
     },
     "quality_materials": {
-      "version": "mobile-002-20261008-controls",
+      "version": "boot-004-20261008-direct-menu",
       "url": "packs/quality_materials.pck?sha256=6f36da3d6f87c0bfef1f34d2545d6e9a570f2910bf9e0aec9149b2d27a3f2ff8",
       "sha256": "6f36da3d6f87c0bfef1f34d2545d6e9a570f2910bf9e0aec9149b2d27a3f2ff8",
       "bytes": 7376908,
@@ -168,9 +168,9 @@
       "cache_key": "6f36da3d6f87c0bfef1f34d2545d6e9a570f2910bf9e0aec9149b2d27a3f2ff8"
     }
   },
-  "build_id": "mobile-002-20261008-controls",
-  "generated_from_commit": "bf6737c64c7f7e5f3144745dcbcf9a3adb1fd873",
-  "generated_at_utc": "2026-10-08T05:49:30.587775Z",
-  "total_bytes": 79535784,
+  "build_id": "boot-004-20261008-direct-menu",
+  "generated_from_commit": "4bc27e14b6729d9d71b64624a0f44ce646eb8bc1",
+  "generated_at_utc": "2026-10-08T06:31:42.439793Z",
+  "total_bytes": 79535800,
   "source_dirty": true
 }

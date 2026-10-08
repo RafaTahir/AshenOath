@@ -9,7 +9,7 @@ $ErrorActionPreference = "Stop"
 $ProjectRoot = [IO.Path]::GetFullPath((Split-Path -Parent $PSScriptRoot))
 $RepositoryRoot = [IO.Path]::GetFullPath((Split-Path -Parent (Split-Path -Parent $ProjectRoot)))
 if ($RepositoryRoot -ne 'D:\Projects\AshenOath') { throw 'Publish from the canonical D: repository.' }
-if ($Ticket -notmatch '^(LR|MOBILE)-\d{3}$') { throw 'Expected a Living Road or mobile repair ticket ID.' }
+if ($Ticket -notmatch '^(LR|MOBILE|BOOT)-\d{3}$') { throw 'Expected a Living Road, mobile or boot ticket ID.' }
 if (-not $CommitPaths.Count) { throw 'Explicit authored and generated commit paths are required.' }
 $WebRoot = Join-Path $RepositoryRoot 'web'
 $LinkPath = Join-Path $RepositoryRoot '.vercel/project.json'

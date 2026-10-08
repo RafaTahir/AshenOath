@@ -369,27 +369,24 @@ func _ready() -> void:
 	add_child(production_observation_bridge)
 	production_observation_bridge.setup(self)
 	var services_ms := Time.get_ticks_msec() - phase_started
-	# The browser shell is already the audio/input consent surface. Showing a
-	# second in-engine launch screen made startup require two clicks and doubled
-	# the perceived wait. Both platforms enter the menu while Greyfen prewarms.
-	if OS.has_feature("web"):
-		hud.show_main_menu()
-		if hud.has_method("set_boot_shell_cover_active"):
-			hud.set_boot_shell_cover_active(true)
-		_publish_web_opening_state("preparing", "Preparing Greyfen's first view...")
-		# The HTML shell has already provided the consent/input surface. Start the
-		# opening prewarm behind the real menu so New Game is immediately visible
-		# and the player does not pay the Greyfen build cost after clicking it.
-		_on_launch_accepted()
-		print("LOADING: web_menu_ready opening_prewarm_hidden=true")
-	else:
-		hud.show_main_menu()
-		_on_launch_accepted()
+	hud.show_main_menu()
 	audio.set_music_state("main_menu")
 	get_tree().paused = true
+	call_deferred("_prepare_opening_after_menu_render")
 	print("LOADING: runtime ready total=%dms environment=%dms services=%dms" % [
 		Time.get_ticks_msec() - ready_started, environment_ms, services_ms,
 	])
+
+func _prepare_opening_after_menu_render() -> void:
+	if DisplayServer.get_name().to_lower() != "headless":
+		await RenderingServer.frame_post_draw
+	if not is_inside_tree():
+		return
+	if OS.has_feature("web"):
+		JavaScriptBridge.eval("window.dispatchEvent(new CustomEvent('ashen-oath-menu-ready'));", false)
+	print("LOADING: main_menu_rendered")
+	if not game_started and not _journey_load_pending():
+		_on_launch_accepted()
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
@@ -2573,9 +2570,7 @@ func _on_launch_accepted() -> void:
 	_publish_web_opening_state("preparing", "Preparing Greyfen...")
 	if hud != null and hud.has_method("set_new_game_status"):
 		hud.set_new_game_status("Greyfen is waking. New Game remains available while it prepares.")
-	# Keep the same menu-covered prewarm on Web and desktop. The HTML shell is
-	# already visible, so moving Greyfen construction before the New Game click
-	# removes the long post-click stall without introducing a black loading frame.
+	# Prepare Greyfen behind the visible main menu on both platforms.
 	# Keep New Game actionable while the menu-covered prewarm runs. _new_game()
 	# records the request and starts it as soon as the prepared Greyfen cache is
 	# published; disabling the button here made the queue path unreachable to a
@@ -2649,19 +2644,8 @@ func _begin_opening_prewarm() -> void:
 	# A returning player needs the saved world, not a disposable New Game world.
 	# Explicit New Game still takes the normal queued/prewarmed path.
 	if not new_game_start_pending and hud != null and hud._has_continue_save():
-		var generation := opening_prepare_generation
 		hud.set_new_game_status("Continue your saved journey, or begin a new one.")
-		hud.set_boot_shell_cover_active(false)
-		if OS.has_feature("web"):
-			# Saved journeys skip world prewarm, but still need the rendered menu
-			# handoff that releases the HTML loading cover.
-			await RenderingServer.frame_post_draw
-			if not _opening_attempt_current(generation):
-				return
-			await get_tree().process_frame
-			if not _opening_attempt_current(generation):
-				return
-			_publish_web_opening_state("ready", "Continue your saved journey, or begin a new one.")
+		_publish_web_opening_state("ready", "Continue your saved journey, or begin a new one.")
 		return
 	greyfen_prewarm_started = true
 	world_materials.begin_prewarm_attempt()
@@ -2732,8 +2716,6 @@ func _opening_prepare_failed(message: String) -> void:
 		hud.set_new_game_ready(true)
 	if hud != null and hud.has_method("set_new_game_status"):
 		hud.set_new_game_status(message)
-	if hud != null and hud.has_method("set_boot_shell_cover_active"):
-		hud.set_boot_shell_cover_active(false)
 	_publish_web_opening_state("failed", message)
 
 func _abort_opening_prewarm(prewarm_root: Node3D, prewarm_service: Node, message: String) -> void:
@@ -2856,7 +2838,7 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 	zone_root.process_mode = Node.PROCESS_MODE_PAUSABLE
 	zone_root.position = Vector3.ZERO
 	# `_load_zone()` applies this profile immediately before the first gameplay
-	# draw. Render the same environment here under the HTML shell so WebGL does
+	# draw. Render the same environment here under the visible menu so WebGL does
 	# not compile Greyfen's real sky and lighting only after New Game is clicked.
 	if visual_director != null:
 		visual_director.apply_zone("greyfen", prewarm_root)
@@ -2952,11 +2934,7 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 		hud.set_new_game_ready(true)
 	if hud != null and hud.has_method("set_new_game_status"):
 		hud.set_new_game_status("Greyfen is ready.")
-	if hud != null and hud.has_method("set_boot_shell_cover_active"):
-		hud.set_boot_shell_cover_active(false)
-	# Keep the HTML shell over the canvas until the prepared Godot menu has
-	# completed one real draw. Publishing readiness in the same tick as the
-	# reveal lets the shell disappear onto an uncompiled black frame in WebGL.
+	# Commit the completed cache after its final render, then satisfy queued starts.
 	await RenderingServer.frame_post_draw
 	if not _opening_attempt_current(generation):
 		return
