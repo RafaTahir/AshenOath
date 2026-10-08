@@ -42,6 +42,7 @@
       const RUNTIME_PACK_CONTRACT = 'direct-menu-candidate';
       const GODOT_CONFIG = $GODOT_CONFIG;
       let engine = null, engineBooted = false, started = false, failed = false;
+      let startupResourceError = '';
       const bootMetrics = {
         state: 'bootstrap_ready', first_paint_ms: performance.now(),
         engine_start_ms: 0, engine_ready_ms: 0, menu_ready_ms: 0,
@@ -229,11 +230,21 @@
           }
           engine = new Engine(GODOT_CONFIG);
           // startGame downloads/initializes WASM and the root PCK together.
-          await engine.startGame({ onProgress: (current, total) => {
-            bootMetrics.progress_samples += 1;
-            bootMetrics.downloaded_bytes = current;
-            bootMetrics.download_total_bytes = total;
-          } });
+          await engine.startGame({
+            onProgress: (current, total) => {
+              bootMetrics.progress_samples += 1;
+              bootMetrics.downloaded_bytes = current;
+              bootMetrics.download_total_bytes = total;
+            },
+            onPrintError: (...messages) => {
+              const message = messages.join(' ');
+              if (message.includes('Preload file') || message.includes('Failed to load script')) {
+                startupResourceError = message;
+                bootMetrics.resource_error = message;
+              }
+              console.error(...messages);
+            },
+          });
           if (failed) return;
           engineBooted = true;
           bootMetrics.engine_ready_ms = performance.now();
@@ -241,7 +252,7 @@
           if (!bootMetrics.menu_ready_ms) setBootState('engine_ready');
           void mountOpeningPackAfterReady();
         } catch (error) {
-          showStartupError('The game files could not be opened. Check your connection and reload.', error);
+          showStartupError(startupResourceError ? 'Required game files are missing or damaged. Reload to try again.' : 'The game files could not be opened. Check your connection and reload.', error);
         }
       };
     })();

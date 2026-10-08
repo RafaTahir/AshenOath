@@ -1,5 +1,14 @@
 # Ashen Oath Project State
 
+## Startup Package Repair - 2026-10-08
+
+BOOT-005 in progress. The authorized focused browser session identified a missing
+root-PCK `assets/icons/iron_trap.svg` preload, which prevents the HUD and game
+scripts from compiling. All six item icons are now explicit Web/base/QA resources.
+Other active literal preloads were checked against export declarations together.
+Next: build/publish the replacement, then finish the same browser session's
+New Game-to-gameplay flow. See `BOOT_005_RESULT.md`; no unrelated tests are authorized.
+
 ## Direct Main Menu Startup - 2026-10-08
 
 BOOT-004 implemented, packaged and published; user acceptance pending. Crow Flight

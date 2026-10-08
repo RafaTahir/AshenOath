@@ -1,37 +1,37 @@
 {
   "schema_version": 2,
-  "generated_at_utc": "2026-10-08T06:31:41.9063384Z",
-  "build_id": "boot-004-20261008-direct-menu",
-  "generated_from_commit": "4bc27e14b6729d9d71b64624a0f44ce646eb8bc1",
+  "generated_at_utc": "2026-10-08T07:09:21.2203911Z",
+  "build_id": "boot-005-20261008-hud-assets",
+  "generated_from_commit": "c7adc06035ba5cd7d6dc39aa9bff0876df463b97",
   "source_dirty": true,
-  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\BOOT-004-20261008-direct-menu-build\\runtime-packs",
+  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\BOOT-005-20261008-hud-assets-build\\runtime-packs",
   "artifacts_are_external": true,
   "max_deployment_bytes": 104857600,
-  "total_bytes": 92824296,
+  "total_bytes": 92837744,
   "packs": [
     {
       "id": "base",
-      "version": "boot-004-20261008-direct-menu",
+      "version": "boot-005-20261008-hud-assets",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
-      "bytes": 13288496,
-      "sha256": "5012498711757428e987a2ce253e1c55258373971edc7b221397e076dd943c8f",
+      "bytes": 13301944,
+      "sha256": "09b39c9b8c938148adb243d9ea144bfa9fc3084a8484dd95021d782ce1585db2",
       "status": "candidate_external",
       "log": "logs/pack-base.stdout.log"
     },
     {
       "id": "opening",
-      "version": "boot-004-20261008-direct-menu",
+      "version": "boot-005-20261008-hud-assets",
       "preset": "Runtime Pack Opening",
       "artifact": "opening.pck",
       "bytes": 14322268,
-      "sha256": "3373d1d4eb1eae042cd1f8cb5d7c9418407bcb717f102c8902719d08955e63e4",
+      "sha256": "63903870716ed61a1b09e85cc4d7836df9e525a987ab36047de00f25fc5e1dd2",
       "status": "candidate_external",
       "log": "logs/pack-opening.stdout.log"
     },
     {
       "id": "campaign",
-      "version": "boot-004-20261008-direct-menu",
+      "version": "boot-005-20261008-hud-assets",
       "preset": "Runtime Pack Campaign",
       "artifact": "campaign.pck",
       "bytes": 1000092,
@@ -41,7 +41,7 @@
     },
     {
       "id": "characters",
-      "version": "boot-004-20261008-direct-menu",
+      "version": "boot-005-20261008-hud-assets",
       "preset": "Runtime Pack Characters",
       "artifact": "characters.pck",
       "bytes": 30470584,
@@ -51,7 +51,7 @@
     },
     {
       "id": "monsters",
-      "version": "boot-004-20261008-direct-menu",
+      "version": "boot-005-20261008-hud-assets",
       "preset": "Runtime Pack Monsters",
       "artifact": "monsters.pck",
       "bytes": 7011052,
@@ -61,7 +61,7 @@
     },
     {
       "id": "audio",
-      "version": "boot-004-20261008-direct-menu",
+      "version": "boot-005-20261008-hud-assets",
       "preset": "Runtime Pack Audio",
       "artifact": "audio.pck",
       "bytes": 19354896,
@@ -71,7 +71,7 @@
     },
     {
       "id": "quality_materials",
-      "version": "boot-004-20261008-direct-menu",
+      "version": "boot-005-20261008-hud-assets",
       "preset": "Runtime Pack Quality Materials",
       "artifact": "quality_materials.pck",
       "bytes": 7376908,
@@ -82,11 +82,11 @@
   ],
   "errors": [],
   "selected_web_export": {
-    "build_id": "boot-004-20261008-direct-menu",
-    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\BOOT-004-20261008-direct-menu-build\\export",
-    "generated_from_commit": "4bc27e14b6729d9d71b64624a0f44ce646eb8bc1",
-    "artifacts_total_bytes": 92401299,
-    "root_pck_sha256": "520251062716abf3c42fbb6de9ccf98953ed626731e538664c62adc450c769ba",
+    "build_id": "boot-005-20261008-hud-assets",
+    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\BOOT-005-20261008-hud-assets-build\\export",
+    "generated_from_commit": "c7adc06035ba5cd7d6dc39aa9bff0876df463b97",
+    "artifacts_total_bytes": 92411792,
+    "root_pck_sha256": "abfbdf8c773bc213319c469af8b7f7892b2737cd6282d923b20bac3db94cbd57",
     "note": "Selected export uses gzip transport; native pack records describe decoded build artifacts."
   }
 }
