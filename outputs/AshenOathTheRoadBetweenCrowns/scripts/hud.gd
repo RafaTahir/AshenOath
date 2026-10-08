@@ -15,6 +15,7 @@ signal revisit_covenant_requested
 signal action_selected(action: Dictionary)
 signal craft_requested(item_id: String)
 signal item_use_requested(item_id: String)
+signal inventory_preference_requested(key: String, value: String)
 signal vendor_purchase_requested(vendor_id: String, item_id: String, quantity: int)
 signal upgrade_requested(upgrade_id: String)
 signal dialogue_closed
@@ -130,6 +131,9 @@ var raw_prompt := ""
 var raw_hint := ""
 var last_potions := 0
 var last_bombs := 0
+var last_weapon_name := "Steel"
+var last_remedy_id := "redroot_potion"
+var last_tool_id := "ash_bomb"
 var last_oil_name := ""
 var last_arrow_count := -1
 var last_arrow_type := "Standard"
@@ -1170,19 +1174,24 @@ func show_status_cue(text: String, kind: String = "neutral") -> void:
 		status_tween.kill()
 	_draw_resource_attention(3.0)
 
-func update_equipment(potions: int, bombs: int, oil_name: String, arrow_count: int = -1, arrow_type: String = "Standard", weapon_name: String = "Steel") -> void:
+func update_equipment(potions: int, bombs: int, oil_name: String, arrow_count: int = -1, arrow_type: String = "Standard", weapon_name: String = "Steel", remedy_id: String = "redroot_potion", tool_id: String = "ash_bomb") -> void:
 	var supplies_changed := potions != last_potions or bombs != last_bombs or arrow_count != last_arrow_count or oil_name != last_oil_name
 	last_potions = potions
 	last_bombs = bombs
 	last_oil_name = oil_name
 	last_arrow_count = arrow_count
 	last_arrow_type = arrow_type
+	last_weapon_name = weapon_name
+	last_remedy_id = remedy_id
+	last_tool_id = tool_id
 	var oil_text = oil_name if oil_name != "" else "No oil"
 	equipment_label.text = weapon_name + " | " + oil_text
 	equipment_label.tooltip_text = "Selected weapon: %s. Active blade oil: %s" % [weapon_name, oil_text]
 	if supply_labels.has("potions"):
-		(supply_labels["potions"] as Label).text = "Redroot"
-		(supply_labels["bombs"] as Label).text = "Ash Bomb"
+		(supply_labels["potions"] as Label).text = "Bitterleaf" if remedy_id == "bitterleaf_tonic" else "Redroot"
+		(supply_labels["bombs"] as Label).text = "Iron Trap" if tool_id == "iron_trap" else "Ash Bomb"
+		_set_quick_motif("potions", "tonic" if remedy_id == "bitterleaf_tonic" else "potions")
+		_set_quick_motif("bombs", "trap" if tool_id == "iron_trap" else "bombs")
 		(supply_labels["arrows"] as Label).text = arrow_type
 		(supply_labels["arrows"] as Label).tooltip_text = arrow_type + " arrows"
 		(_quick_bindings["potions"] as Label).text = _action_label("use_potion")
@@ -1194,6 +1203,12 @@ func update_equipment(potions: int, bombs: int, oil_name: String, arrow_count: i
 		(supply_counts["arrows"] as Label).text = str(arrow_count) if arrow_count >= 0 else "—"
 	if supplies_changed:
 		_draw_resource_attention(3.5)
+
+func _set_quick_motif(slot: String, motif: String) -> void:
+	var icon: Control = _quick_icons[slot]
+	if str(icon.get_meta("quick_motif", slot)) != motif:
+		icon.set_meta("quick_motif", motif)
+		icon.call("configure", motif, high_contrast)
 
 func mark_stamina_exhausted() -> void:
 	_flash_bar(stamina_bar, Color(1.0, 0.32, 0.16))
@@ -1957,14 +1972,21 @@ func _handle_compact_journal_direction(event: InputEvent) -> bool:
 	return false
 
 func _build_preparation_content(inventory, progression, story_state, quests, notes: String) -> void:
-	var ids: Array = inventory.ordered_item_ids()
+	var category: String = str(inventory.kit_category)
+	var entry_kind: String = {"equipment":"equipment", "supplies":"item", "ingredients":"ingredient"}.get(category, "item")
+	var ids: Array = ["steel", "oathblade", "bow"] if category == "equipment" else (inventory.ordered_ingredient_ids() if category == "ingredients" else inventory.ordered_item_ids())
+	if category == "equipment" and inventory.sort_mode == "name":
+		ids = ["bow", "oathblade", "steel"]
 	var selection: Dictionary = _preparation_selection.get(_inventory_screen, {})
+	if str(selection.get("kind", "")) not in [entry_kind, "notes", "upgrade"] or (str(selection.get("kind", "")) == entry_kind and str(selection.get("id", "")) not in ids):
+		selection = {}
 	if selection.is_empty() and not ids.is_empty():
-		selection = {"kind":"item", "id":str(ids[0])}
-		_preparation_selection[_inventory_screen] = selection
+		selection = {"kind":entry_kind, "id":str(ids[0])}
+	_preparation_selection[_inventory_screen] = selection
 	var kind: String = str(selection.get("kind", "notes"))
 	var selected_id: String = str(selection.get("id", ""))
-	var heading: String = "PREPARATION\nCoin: %d\n\n" % int(inventory.coin)
+	_build_kit_controls(inventory)
+	var heading: String = "%s\nCoin: %d\nRemedy: %s | Field tool: %s\n\n" % [category.to_upper(), int(inventory.coin), inventory.get_item_name(inventory.quick_item("use_potion")), inventory.get_item_name(inventory.quick_item("throw_bomb"))]
 	if kind == "item" and inventory.item_defs.has(selected_id):
 		var detail: Dictionary = PreparationViewModel.item_detail(selected_id, inventory, progression, _preparation_context, story_state, quests)
 		inventory_text.text = heading + PreparationPanel.item_text(detail)
@@ -1977,6 +1999,12 @@ func _build_preparation_content(inventory, progression, story_state, quests, not
 			var button: Button = _preparation_button(str(action.get("verb", "Use")), "action:" + operation + ":" + selected_id, _preparation_actions, bool(action.get("available", false)))
 			button.tooltip_text = str(action.get("reason", button.text))
 			button.pressed.connect(func(item_id: String = selected_id): item_use_requested.emit(item_id))
+		var quick_slot: String = str(detail.get("quick_slot", ""))
+		if quick_slot != "":
+			var assigned: bool = bool(detail.get("quick_assigned", false))
+			var assign: Button = _preparation_button("Assigned to quick slot" if assigned else "Assign " + ("remedy" if quick_slot == "use_potion" else "field tool"), "action:quick:" + selected_id, _preparation_actions, not assigned)
+			assign.tooltip_text = _action_label(quick_slot)
+			assign.pressed.connect(func(): inventory_preference_requested.emit("quick:" + quick_slot, selected_id))
 		var recipe: Dictionary = inventory.recipe_status(selected_id)
 		var requirements: Dictionary = recipe.get("required", {})
 		if not requirements.is_empty() and _preparation_services != null:
@@ -1984,6 +2012,12 @@ func _build_preparation_content(inventory, progression, story_state, quests, not
 			inventory_text.text += "\n" + PreparationPanel.craft_text(quote)
 			var craft_button: Button = _preparation_button("Craft %d" % int(quote.get("output_quantity", 1)), "action:craft:" + selected_id, _preparation_actions, bool(quote.get("ok", false)))
 			craft_button.pressed.connect(func(item_id: String = selected_id): craft_requested.emit(item_id))
+	elif kind == "equipment":
+		inventory_text.text = heading + PreparationViewModel.equipment_text(selected_id, inventory, _preparation_context)
+	elif kind == "ingredient":
+		inventory_text.text = heading + PreparationViewModel.ingredient_text(selected_id, inventory)
+	elif kind == "item":
+		inventory_text.text = heading + selected_id.replace("_", " ").capitalize() + "\nCarrying %d\n\nThis retained item has no field-use recipe." % int(inventory.items.get(selected_id, 0))
 	elif kind == "upgrade" and progression != null:
 		var upgrade: Dictionary = progression.upgrade_status(selected_id)
 		inventory_text.text = heading + PreparationPanel.practice_text(upgrade)
@@ -1991,13 +2025,31 @@ func _build_preparation_content(inventory, progression, story_state, quests, not
 		learn.pressed.connect(func(upgrade_id: String = selected_id): upgrade_requested.emit(upgrade_id))
 	else:
 		inventory_text.text = notes
-	_add_preparation_heading("YOUR KIT")
+	_add_preparation_heading(category.to_upper())
+	var equipment: Dictionary = _preparation_context.get("equipment", {})
+	var active_weapon: String = "bow" if str(equipment.get("active_weapon", "sword")) == "bow" else str(equipment.get("selected_blade_id", "steel"))
+	var carried: int = 0
 	for raw_id: Variant in ids:
 		var item_id: String = str(raw_id)
-		var item_button: Button = _preparation_button("%s · %d" % [inventory.get_item_name(item_id), int(inventory.items.get(item_id, 0))], "item:" + item_id, craft_buttons)
+		var label: String
+		if category == "equipment":
+			label = str({"steel":"Steel", "oathblade":"Oathblade", "bow":"Bow"}.get(item_id, item_id)) + (" - Equipped" if active_weapon == item_id else "")
+			carried += 1
+		else:
+			var quantity: int = int(inventory.ingredients.get(item_id, 0)) if category == "ingredients" else int(inventory.items.get(item_id, 0))
+			carried += quantity
+			label = "%s · %d" % [item_id.replace("_", " ").capitalize() if category == "ingredients" else inventory.get_item_name(item_id), quantity]
+		var item_button: Button = _preparation_button(label, entry_kind + ":" + item_id, craft_buttons)
 		item_button.toggle_mode = true
-		item_button.button_pressed = kind == "item" and selected_id == item_id
-		item_button.pressed.connect(func(id_value: String = item_id): _select_preparation_entry("item", id_value))
+		item_button.button_pressed = kind == entry_kind and selected_id == item_id
+		item_button.pressed.connect(func(id_value: String = item_id): _select_preparation_entry(entry_kind, id_value))
+	if carried == 0:
+		var empty: Label = Label.new()
+		empty.text = "No ingredients carried." if category == "ingredients" else "No supplies carried. Known recipes remain available."
+		empty.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		craft_buttons.add_child(empty)
+		if ids.is_empty():
+			inventory_text.text = heading + empty.text
 	if progression != null:
 		_add_preparation_heading("PRACTICE")
 		for raw_id: Variant in progression.ordered_upgrade_ids():
@@ -2009,6 +2061,37 @@ func _build_preparation_content(inventory, progression, story_state, quests, not
 			practice_button.pressed.connect(func(id_value: String = upgrade_id): _select_preparation_entry("upgrade", id_value))
 	var notes_button: Button = _preparation_button("Preparation notes", "notes", craft_buttons)
 	notes_button.pressed.connect(func(): _select_preparation_entry("notes", ""))
+
+func _build_kit_controls(inventory) -> void:
+	var categories: GridContainer = GridContainer.new()
+	categories.columns = 2
+	categories.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	craft_buttons.add_child(categories)
+	for id: String in ["equipment", "supplies", "ingredients", "evidence"]:
+		var button: Button = _preparation_button("Quest evidence" if id == "evidence" else id.capitalize(), "kit:" + id, categories)
+		button.toggle_mode = true
+		button.button_pressed = id == str(inventory.kit_category)
+		button.pressed.connect(func(category: String = id):
+			if category == "evidence":
+				_open_journal_section("evidence")
+			else:
+				_preparation_selection.erase(_inventory_screen)
+				inventory_preference_requested.emit("category", category)
+		)
+	var sort: OptionButton = OptionButton.new()
+	sort.add_item("Sort: type")
+	sort.add_item("Sort: name")
+	sort.selected = 1 if str(inventory.sort_mode) == "name" else 0
+	sort.fit_to_longest_item = false
+	sort.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	sort.set_meta("navigation_key", "kit_sort")
+	sort.tooltip_text = "Inventory order"
+	_style_button(sort)
+	for child: Node in sort.get_children():
+		if child is Label:
+			(child as Label).offset_right = -42
+	craft_buttons.add_child(sort)
+	sort.item_selected.connect(func(index: int): inventory_preference_requested.emit("sort", "name" if index == 1 else "type"))
 
 func _select_preparation_entry(kind: String, id: String) -> void:
 	_inventory_panes[_inventory_screen] = "reader"
@@ -3330,7 +3413,7 @@ func set_input_device(device: String) -> void:
 			set_prompt(raw_prompt)
 	if raw_hint != "":
 		hint_label.text = _format_input_text(raw_hint)
-	update_equipment(last_potions, last_bombs, last_oil_name, last_arrow_count, last_arrow_type)
+	update_equipment(last_potions, last_bombs, last_oil_name, last_arrow_count, last_arrow_type, last_weapon_name, last_remedy_id, last_tool_id)
 	_refresh_story_focus()
 
 func _action_label(action: String) -> String:
@@ -3712,7 +3795,7 @@ func _apply_hud_visual_identity() -> void:
 	if is_instance_valid(_navigation_dial):
 		_navigation_dial.call("set_high_contrast", high_contrast)
 	for id: String in _quick_icons:
-		(_quick_icons[id] as Control).call("configure", id, high_contrast)
+		(_quick_icons[id] as Control).call("configure", str((_quick_icons[id] as Control).get_meta("quick_motif", id)), high_contrast)
 	var settings: Dictionary = _current_settings()
 	var opacity: float = clampf(float(settings.get("subtitle_background_opacity", 0.55)), 0.0, 1.0)
 	dialogue_layer.add_theme_stylebox_override("panel", HudVisualStyle.dialogue_panel(high_contrast, opacity))

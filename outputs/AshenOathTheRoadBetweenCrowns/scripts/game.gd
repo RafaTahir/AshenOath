@@ -3480,10 +3480,10 @@ func _on_player_stamina_exhausted(_action: String) -> void:
 	hud.set_guidance_hint("Breath is spent. Back away, then strike.", 2.8)
 
 func _use_potion() -> void:
-	_use_quick_item("redroot_potion")
+	_use_quick_item(inventory.quick_item("use_potion"))
 
 func _throw_bomb() -> void:
-	_use_quick_item("ash_bomb")
+	_use_quick_item(inventory.quick_item("throw_bomb"))
 
 func _use_inventory_item(item_id: String) -> Dictionary:
 	if player == null or not is_instance_valid(player) or inventory == null:
@@ -3554,7 +3554,8 @@ func _update_preparation_context() -> void:
 		snapshot.merge({
 			"health": float(player.health_component.health), "max_health": float(player.health_component.max_health),
 			"stamina": float(player.stamina_component.stamina), "max_stamina": float(player.stamina_component.max_stamina),
-			"weapon_mode": str(player.get_weapon_mode()), "selected_arrow_id": str(player.get_selected_arrow_id())
+			"weapon_mode": str(player.get_weapon_mode()), "selected_arrow_id": str(player.get_selected_arrow_id()),
+			"equipment": player.save_equipment_state()
 		})
 	hud.set_preparation_context(snapshot)
 
@@ -3573,6 +3574,15 @@ func _use_preparation_item(item_id: String) -> void:
 	var result: Dictionary = _use_inventory_item(item_id)
 	preparation_action_in_progress = false
 	_finish_preparation_operation(result)
+
+func _set_inventory_preference(key: String, value: String) -> void:
+	var ok: bool = inventory.set_quick_item(key.trim_prefix("quick:"), value) if key.begins_with("quick:") else inventory.set_kit_preference(key, value)
+	var message: String = "Pack order saved."
+	if key == "category":
+		message = value.capitalize()
+	elif key.begins_with("quick:"):
+		message = inventory.get_item_name(value) + " assigned to the " + ("remedy" if key == "quick:use_potion" else "field tool") + " slot."
+	_finish_preparation_operation({"ok": ok, "operation": "inventory_preference", "message": message if ok else "That inventory choice is unavailable."})
 
 func _learn_preparation_practice(upgrade_id: String) -> void:
 	preparation_action_in_progress = true
@@ -4221,7 +4231,9 @@ func _refresh_equipment_readout() -> void:
 		weapon_name = player.get_selected_weapon_name()
 		arrow_id = player.equipment_loadout.selected_arrow_id
 	var arrow_type := str({"standard_arrow": "Standard", "bodkin_arrow": "Bodkin", "ashfire_arrow": "Ashfire"}.get(arrow_id, "Standard"))
-	hud.update_equipment(int(inventory.items.get("redroot_potion", 0)), int(inventory.items.get("ash_bomb", 0)), oil_name, int(inventory.items.get(arrow_id, 0)), arrow_type, weapon_name)
+	var remedy_id: String = inventory.quick_item("use_potion")
+	var tool_id: String = inventory.quick_item("throw_bomb")
+	hud.update_equipment(int(inventory.items.get(remedy_id, 0)), int(inventory.items.get(tool_id, 0)), oil_name, int(inventory.items.get(arrow_id, 0)), arrow_type, weapon_name, remedy_id, tool_id)
 
 func _guard_tutorial_hint() -> String:
 	var guard: Dictionary = input_router.describe_action("block") if input_router != null else {}

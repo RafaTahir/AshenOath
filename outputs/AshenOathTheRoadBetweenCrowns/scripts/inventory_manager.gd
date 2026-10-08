@@ -30,6 +30,12 @@ var ingredients: Dictionary = STARTING_INGREDIENTS.duplicate(true)
 var active_oil = ""
 var coin = STARTING_COIN
 const ITEM_TYPE_ORDER := ["ammo", "potion", "bomb", "oil", "trap"]
+const DEFAULT_QUICK_SLOTS := {"use_potion": "redroot_potion", "throw_bomb": "ash_bomb"}
+const QUICK_SLOT_TYPES := {"use_potion": ["potion"], "throw_bomb": ["bomb", "trap"]}
+const KIT_CATEGORIES := ["equipment", "supplies", "ingredients"]
+var quick_slots: Dictionary = DEFAULT_QUICK_SLOTS.duplicate()
+var sort_mode := "type"
+var kit_category := "supplies"
 
 func load_items(path: String) -> void:
 	var parsed = _read_json(path)
@@ -92,14 +98,56 @@ func get_item_type(id: String) -> String:
 
 func ordered_item_ids() -> Array[String]:
 	var result: Array[String] = []
-	for item_type in ITEM_TYPE_ORDER:
-		for id in item_defs.keys():
-			if get_item_type(str(id)) == item_type:
-				result.append(str(id))
 	for id in item_defs.keys():
+		result.append(str(id))
+	for id in items:
 		if str(id) not in result:
 			result.append(str(id))
+	result.sort_custom(func(a: String, b: String) -> bool:
+		if sort_mode == "type" and get_item_type(a) != get_item_type(b):
+			var a_order: int = ITEM_TYPE_ORDER.find(get_item_type(a))
+			var b_order: int = ITEM_TYPE_ORDER.find(get_item_type(b))
+			a_order = a_order if a_order >= 0 else ITEM_TYPE_ORDER.size()
+			b_order = b_order if b_order >= 0 else ITEM_TYPE_ORDER.size()
+			if a_order != b_order:
+				return a_order < b_order
+		var comparison: int = get_item_name(a).naturalnocasecmp_to(get_item_name(b))
+		return comparison < 0 if comparison != 0 else a < b
+	)
 	return result
+
+func ordered_ingredient_ids() -> Array[String]:
+	var result: Array[String] = []
+	for id in ingredients:
+		result.append(str(id))
+	result.sort_custom(func(a: String, b: String) -> bool: return a.naturalnocasecmp_to(b) < 0)
+	return result
+
+func quick_slot_for_item(id: String) -> String:
+	for slot: String in QUICK_SLOT_TYPES:
+		if get_item_type(id) in QUICK_SLOT_TYPES[slot]:
+			return slot
+	return ""
+
+func quick_item(slot: String) -> String:
+	return str(quick_slots.get(slot, DEFAULT_QUICK_SLOTS.get(slot, "")))
+
+func set_quick_item(slot: String, id: String) -> bool:
+	if not item_defs.has(id) or not QUICK_SLOT_TYPES.has(slot) or quick_slot_for_item(id) != slot:
+		return false
+	quick_slots[slot] = id
+	changed.emit()
+	return true
+
+func set_kit_preference(key: String, value: String) -> bool:
+	if key == "sort" and value in ["name", "type"]:
+		sort_mode = value
+	elif key == "category" and value in KIT_CATEGORIES:
+		kit_category = value
+	else:
+		return false
+	changed.emit()
+	return true
 
 func recipe_status(id: String) -> Dictionary:
 	var required: Dictionary = item_defs.get(id, {}).get("recipe", {})
@@ -175,7 +223,10 @@ func save_state() -> Dictionary:
 		"items": items.duplicate(true),
 		"ingredients": ingredients.duplicate(true),
 		"active_oil": active_oil,
-		"coin": coin
+		"coin": coin,
+		"quick_slots": quick_slots.duplicate(),
+		"sort_mode": sort_mode,
+		"kit_category": kit_category
 	}
 
 func load_state(state: Dictionary) -> void:
@@ -198,6 +249,16 @@ func load_state(state: Dictionary) -> void:
 	var saved_oil := str(state.get("active_oil", ""))
 	active_oil = saved_oil if get_item_type(saved_oil) == "oil" and int(items.get(saved_oil, 0)) > 0 else ""
 	coin = _restore_quantity(state.get("coin", STARTING_COIN))
+	quick_slots = DEFAULT_QUICK_SLOTS.duplicate()
+	var saved_slots: Variant = state.get("quick_slots", {})
+	if saved_slots is Dictionary:
+		for slot: String in DEFAULT_QUICK_SLOTS:
+			var item_id: String = str(saved_slots.get(slot, ""))
+			if item_defs.has(item_id) and quick_slot_for_item(item_id) == slot:
+				quick_slots[slot] = item_id
+	sort_mode = "name" if str(state.get("sort_mode", "type")) == "name" else "type"
+	var saved_category: String = str(state.get("kit_category", "supplies"))
+	kit_category = saved_category if saved_category in KIT_CATEGORIES else "supplies"
 	changed.emit()
 
 func _restore_quantity(value: Variant) -> int:
@@ -220,4 +281,7 @@ func reset_starting_loadout() -> void:
 	ingredients = STARTING_INGREDIENTS.duplicate(true)
 	active_oil = ""
 	coin = STARTING_COIN
+	quick_slots = DEFAULT_QUICK_SLOTS.duplicate()
+	sort_mode = "type"
+	kit_category = "supplies"
 	changed.emit()

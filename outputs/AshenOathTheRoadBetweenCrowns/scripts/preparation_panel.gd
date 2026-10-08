@@ -6,6 +6,9 @@ static func item_text(detail: Dictionary) -> String:
 	var cap: int = int(detail.get("cap", -1))
 	lines.append("Carrying %d%s%s" % [int(detail.get("owned", 0)), " / %d" % cap if cap > 0 else "", "  ·  Selected" if bool(detail.get("selected", false)) else ""])
 	_append(lines, "", str(detail.get("body", "")))
+	if str(detail.get("quick_slot", "")) != "":
+		var slot_name: String = "Remedy" if str(detail.quick_slot) == "use_potion" else "Field tool"
+		_append(lines, "Quick slot", slot_name + (" - assigned" if bool(detail.get("quick_assigned", false)) else " - not assigned"))
 	for raw: Variant in detail.get("effects", []):
 		if raw is Dictionary:
 			_append(lines, str(raw.get("label", "Effect")), str(raw.get("text", "")))

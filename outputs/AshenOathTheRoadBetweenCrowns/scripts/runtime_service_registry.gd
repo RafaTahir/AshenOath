@@ -220,6 +220,7 @@ func configure(owner: Node) -> void:
 	hud.item_use_requested.connect(func(item_id: String):
 		owner.call("_use_preparation_item", item_id)
 	)
+	hud.inventory_preference_requested.connect(Callable(owner, "_set_inventory_preference"))
 	hud.upgrade_requested.connect(func(upgrade_id: String):
 		owner.call("_learn_preparation_practice", upgrade_id)
 	)

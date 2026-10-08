@@ -3,6 +3,7 @@ extends Control
 ## Original Ashen Oath metalwork. All shapes are authored for this interface.
 var motif: String = "hart"
 var high_contrast: bool = false
+const TRAP_ICON = preload("res://assets/icons/iron_trap.svg")
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -57,11 +58,11 @@ func _draw() -> void:
 		return
 	draw_circle(_p(Vector2(50, 50)), radius * 0.43, Color(0.018, 0.022, 0.024, 0.68 if not high_contrast else 0.97))
 	draw_arc(_p(Vector2(50, 50)), radius * 0.43, 0, TAU, 48, silver.darkened(0.32), maxf(1, radius * 0.018), true)
-	if motif == "potions":
-		_poly([Vector2(40, 23), Vector2(60, 23), Vector2(60, 42), Vector2(70, 54), Vector2(66, 75), Vector2(34, 75), Vector2(30, 54), Vector2(40, 42)], Color("5a2924"))
+	if motif in ["potions", "tonic"]:
+		_poly([Vector2(40, 23), Vector2(60, 23), Vector2(60, 42), Vector2(70, 54), Vector2(66, 75), Vector2(34, 75), Vector2(30, 54), Vector2(40, 42)], Color("365044") if motif == "tonic" else Color("5a2924"))
 		_line([Vector2(39, 23), Vector2(61, 23), Vector2(59, 42), Vector2(70, 54), Vector2(66, 75), Vector2(34, 75), Vector2(30, 54), Vector2(41, 42), Vector2(39, 23)], silver, 2.3)
 		_line([Vector2(37, 18), Vector2(63, 18)], gold, 5)
-		_line([Vector2(37, 58), Vector2(63, 58)], Color("c86d50"), 3)
+		_line([Vector2(37, 58), Vector2(63, 58)], Color("8ca87c") if motif == "tonic" else Color("c86d50"), 3)
 		_line([Vector2(42, 47), Vector2(38, 58), Vector2(40, 69)], highlight, 1.5)
 	elif motif == "bombs":
 		draw_circle(_p(Vector2(48, 58)), radius * 0.23, Color("3d4142"))
@@ -69,6 +70,8 @@ func _draw() -> void:
 		_line([Vector2(48, 35), Vector2(48, 27), Vector2(62, 24), Vector2(66, 18)], gold, 3)
 		_line([Vector2(35, 49), Vector2(41, 43), Vector2(52, 42)], highlight, 2)
 		_line([Vector2(30, 67), Vector2(66, 49)], shade.darkened(0.5), 5)
+	elif motif == "trap":
+		draw_texture_rect(TRAP_ICON, Rect2(_p(Vector2(20, 20)), size * 0.6), false)
 	elif motif == "arrows":
 		for offset: float in [-11.0, 7.0]:
 			_line([Vector2(30 + offset, 76), Vector2(70 + offset, 24)], silver, 2.5)

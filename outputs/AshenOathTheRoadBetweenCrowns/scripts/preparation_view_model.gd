@@ -41,7 +41,38 @@ static func item_detail(item_id: String, inventory, progression = null, context:
 	var action: Dictionary = _item_action(item_id, kind, owned, selected, context)
 	if not action.is_empty():
 		actions.append(action)
-	return {"id": item_id, "title": str(inventory.get_item_name(item_id)), "body": str(notes.get("body", definition.get("description", ""))), "type": kind, "owned": owned, "cap": cap, "selected": selected, "effects": effects, "comparison": comparison, "actions": actions, "known_use": _known_uses(item_id, catalog, state, quests)}
+	var slot: String = inventory.quick_slot_for_item(item_id)
+	var assigned: bool = slot != "" and inventory.quick_item(slot) == item_id
+	return {"id": item_id, "title": str(inventory.get_item_name(item_id)), "body": str(notes.get("body", definition.get("description", ""))), "type": kind, "owned": owned, "cap": cap, "selected": selected, "effects": effects, "comparison": comparison, "actions": actions, "known_use": _known_uses(item_id, catalog, state, quests), "quick_slot": slot, "quick_assigned": assigned}
+
+static func equipment_text(id: String, inventory, context: Dictionary) -> String:
+	var equipment: Dictionary = context.get("equipment", {})
+	var active: String = "bow" if str(equipment.get("active_weapon", "sword")) == "bow" else str(equipment.get("selected_blade_id", "steel"))
+	var drawn: bool = bool(equipment.get("bow_drawn" if active == "bow" else "sword_drawn", false))
+	var names: Dictionary = {"steel": "Steel", "oathblade": "Oathblade", "bow": "Bow"}
+	var lines: Array[String] = [str(names.get(id, id)).to_upper(), "Carried: 1", "Equipped: %s (%s)" % [str(names.get(active, active)), "drawn" if drawn else "sheathed"]]
+	if id == "bow":
+		var arrow_id: String = str(equipment.get("selected_arrow_id", "standard_arrow"))
+		var arrow: Dictionary = inventory.item_defs.get(arrow_id, {})
+		lines.append("\nA hunting bow for aimed, drawn shots. Arrows determine the impact; drawing fully increases their reach and force.")
+		lines.append("Selected bundle: %s\nCarrying %d / %d\nBase impact: %d before draw strength and the target's response." % [inventory.get_item_name(arrow_id), inventory.get_ammo_count(arrow_id), inventory.get_ammo_cap(arrow_id), int(arrow.get("effect", {}).get("damage", 0))])
+		lines.append("\nThe bow uses ammunition instead of blade affinity. It is not a direct sword-damage upgrade.")
+	else:
+		lines.append("\nA grounded hunter's blade for living bodies and armour." if id == "steel" else "\nAn oath-marked blade for spirits and the restless dead.")
+		var current_blade: String = str(equipment.get("selected_blade_id", "steel"))
+		lines.append("\nCOMPARED WITH %s" % str(names.get(current_blade, "Steel")).to_upper())
+		for target: String in ["human", "spirit"]:
+			lines.append("%s: %.2fx -> %.2fx" % ["Physical bodies" if target == "human" else "Spiritual bodies", EquipmentLoadout.blade_damage_multiplier(current_blade, target), EquipmentLoadout.blade_damage_multiplier(id, target)])
+		lines.append("Same base strikes and stamina costs. The other blade still deals normal damage. Existing oils and learned openings remain effective.")
+	return "\n".join(lines)
+
+static func ingredient_text(id: String, inventory) -> String:
+	var uses: Array[String] = []
+	for item_id: String in inventory.ordered_item_ids():
+		var recipe: Dictionary = inventory.item_defs.get(item_id, {}).get("recipe", {})
+		if recipe.has(id):
+			uses.append("%s: %d required" % [inventory.get_item_name(item_id), int(recipe[id])])
+	return "%s\nCarrying %d\n\n%s" % [id.replace("_", " ").to_upper(), int(inventory.ingredients.get(id, 0)), "FIELD RECIPES\n" + "\n".join(uses) if not uses.is_empty() else "No known field recipe uses this material. It remains in your pack."]
 
 static func _effect_rows(item_id: String, inventory, progression, context: Dictionary) -> Array[Dictionary]:
 	var effect: Dictionary = resolved_effect(item_id, inventory, progression)
