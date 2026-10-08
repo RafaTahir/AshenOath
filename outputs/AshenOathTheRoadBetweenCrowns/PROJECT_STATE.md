@@ -64,8 +64,10 @@ adoption/refusal and later reconsideration, with additive story flags and its ow
 side-event. The retained CC0 animated Dog source is packaged as a dark-coated,
 grounded runtime scene with native idle/walk clips. No enemy health or permanent
 death path is attached. The Black Dog Contract remains unchanged. Travel/commands
-belong to LR-009; Bracken stays safely in Greyfen for this ticket. Package and
-publication pending; no runtime/visual checks claimed.
+belong to LR-009; Bracken stays safely in Greyfen for this ticket. Published package
+`d607266`, full Web 92,010,896 bytes; Vercel `dpl_CniSq1Fy5wfxUVP7CFgU8Es3Vrc5`
+READY. Progress: 8/28 published, 0/28 user-accepted. LR-009 travel is next.
+No runtime/visual checks claimed.
 
 ## Current Local Assembly - 2026-10-07
 

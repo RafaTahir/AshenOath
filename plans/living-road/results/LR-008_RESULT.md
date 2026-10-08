@@ -1,6 +1,6 @@
 # LR-008 - Bracken's Rescue
 
-Status: implemented; production package/publication pending. User acceptance pending.
+Status: published_awaiting_user. User acceptance pending.
 
 ## Implemented
 
@@ -52,7 +52,12 @@ Full Web directory: **92,010,896 bytes**, below 104,857,600.
 Stored root PCK: `b877ccb25b814a956a9b8a28c9e93b1f71fb12fcb94c653b2d05fc0ec4c25ecf`.
 Decoded root PCK: `5044c362ab510371e5740a5247329138c9ad99bd927b670832cd4eda0f5fbaed`.
 Bracken runtime scene: `c5314c83bcc1b7152e50f6d918acb1a31dc8c0f3b4a975d4cfc9942c7c039689`.
-Output: `.release-gate/LR-008-20261008-build-final`. Publication receipt pending.
+Output: `.release-gate/LR-008-20261008-build-final`.
+Package `d60726623ed20c752fc2cd8b72d292351913edb7`, pushed to development/main.
+Vercel `dpl_CniSq1Fy5wfxUVP7CFgU8Es3Vrc5`, provider READY.
+Receipt: `.release-gate/living-road/LR-008-20261008T005556Z/publication.json`.
+Play: https://ashenoath.vercel.app/?v=lr-008-d607266
+No browser/gameplay/live smoke acceptance was performed.
 
 ## Unverified
 

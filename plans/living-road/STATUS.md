@@ -1,13 +1,13 @@
 # Living Road Status
 
 Updated: 2026-10-08. Implementation and user acceptance are separate.
-User-accepted tickets: **0/28**. Published tickets: **7/28**. Current ticket:
-**LR-008**, implementing. Runtime checks belong to the user; the active goal now
+User-accepted tickets: **0/28**. Published tickets: **8/28**. Current ticket:
+**LR-009**, implementing. Runtime checks belong to the user; the active goal now
 authorizes sequential implementation/publication without waiting between tickets.
 LR-001 remains published and awaiting user acceptance.
-Latest package commit: `261bd63080e7e53663d41866d5e6d0d0872d52a8`.
-Vercel deployment: `dpl_4pxcy2grztigj15E6ai2eD6HZLoe`, provider state READY.
-Live: https://ashenoath.vercel.app/?v=lr-007-261bd63
+Latest package commit: `d60726623ed20c752fc2cd8b72d292351913edb7`.
+Vercel deployment: `dpl_CniSq1Fy5wfxUVP7CFgU8Es3Vrc5`, provider state READY.
+Live: https://ashenoath.vercel.app/?v=lr-008-d607266
 
 | Ticket | Work | State |
 | --- | --- | --- |
@@ -18,8 +18,8 @@ Live: https://ashenoath.vercel.app/?v=lr-007-261bd63
 | [LR-005](tickets/LR-005.md) | Readable Inventory | published_awaiting_user |
 | [LR-006](tickets/LR-006.md) | Knowledge and Preparation | published_awaiting_user |
 | [LR-007](tickets/LR-007.md) | Greyfen Services | published_awaiting_user |
-| [LR-008](tickets/LR-008.md) | Bracken's Rescue | implementing |
-| [LR-009](tickets/LR-009.md) | A Companion Who Keeps Up | planned |
+| [LR-008](tickets/LR-008.md) | Bracken's Rescue | published_awaiting_user |
+| [LR-009](tickets/LR-009.md) | A Companion Who Keeps Up | implementing |
 | [LR-010](tickets/LR-010.md) | Earned Companion Bond | planned |
 | [LR-011](tickets/LR-011.md) | Tracking and Wildlife | planned |
 | [LR-012](tickets/LR-012.md) | Resting Places | planned |
@@ -40,7 +40,7 @@ Live: https://ashenoath.vercel.app/?v=lr-007-261bd63
 | [LR-027](tickets/LR-027.md) | Regions That Remember | planned |
 | [LR-028](tickets/LR-028.md) | Lives After the Covenant | planned |
 
-Next: implement LR-008's optional living Bracken rescue, retained animated Dog
-asset, saved identity and refusal/recruitment. Preserve the Black Dog Contract. Pending user checklists
+Next: implement LR-009's follow/wait/recall, bridge-safe travel, saved command and
+single active-instance ownership. Preserve the Black Dog Contract. Pending user checklists
 remain attached to each result. No Recovery-004 certification is
 transferred to this package or to future Living Road changes.
