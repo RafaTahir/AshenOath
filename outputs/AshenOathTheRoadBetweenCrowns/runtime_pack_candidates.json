@@ -1,37 +1,37 @@
 {
   "schema_version": 2,
-  "generated_at_utc": "2026-10-08T00:18:52.7233674Z",
-  "build_id": "lr-006-20261008-known-creatures",
-  "generated_from_commit": "19c573ac4c97efc63c71c5d29ab86364d2043398",
+  "generated_at_utc": "2026-10-08T00:30:40.3837582Z",
+  "build_id": "lr-007-20261008-greyfen-services",
+  "generated_from_commit": "26f936fe8ff0afc2e9a2b90cc0006ebb7ae98e4d",
   "source_dirty": true,
-  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\LR-006-20261008-build\\runtime-packs",
+  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\LR-007-20261008-build\\runtime-packs",
   "artifacts_are_external": true,
   "max_deployment_bytes": 104857600,
-  "total_bytes": 92668840,
+  "total_bytes": 92671368,
   "packs": [
     {
       "id": "base",
-      "version": "lr-006-20261008-known-creatures",
+      "version": "lr-007-20261008-greyfen-services",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
-      "bytes": 13138080,
-      "sha256": "c8a4cdb5628efca3b3f9edfec24cfb39264d7856cf47f1fdd495ef3b20c686a2",
+      "bytes": 13140640,
+      "sha256": "e07f019e0d615838d261688fe0bdf3462e6f74700122b7425d007b1fcd359257",
       "status": "candidate_external",
       "log": "logs/pack-base.stdout.log"
     },
     {
       "id": "opening",
-      "version": "lr-006-20261008-known-creatures",
+      "version": "lr-007-20261008-greyfen-services",
       "preset": "Runtime Pack Opening",
       "artifact": "opening.pck",
-      "bytes": 14321180,
-      "sha256": "87ac4314b644f12c97d0dfafbc0e705639099e63c775454de2301d3a89079acb",
+      "bytes": 14321148,
+      "sha256": "00b2920dcdeaa6487b354ff7c3c89efaed6b6de1776d2c069b10606ca31cd142",
       "status": "candidate_external",
       "log": "logs/pack-opening.stdout.log"
     },
     {
       "id": "campaign",
-      "version": "lr-006-20261008-known-creatures",
+      "version": "lr-007-20261008-greyfen-services",
       "preset": "Runtime Pack Campaign",
       "artifact": "campaign.pck",
       "bytes": 999820,
@@ -41,7 +41,7 @@
     },
     {
       "id": "characters",
-      "version": "lr-006-20261008-known-creatures",
+      "version": "lr-007-20261008-greyfen-services",
       "preset": "Runtime Pack Characters",
       "artifact": "characters.pck",
       "bytes": 30469448,
@@ -51,7 +51,7 @@
     },
     {
       "id": "monsters",
-      "version": "lr-006-20261008-known-creatures",
+      "version": "lr-007-20261008-greyfen-services",
       "preset": "Runtime Pack Monsters",
       "artifact": "monsters.pck",
       "bytes": 7009916,
@@ -61,7 +61,7 @@
     },
     {
       "id": "audio",
-      "version": "lr-006-20261008-known-creatures",
+      "version": "lr-007-20261008-greyfen-services",
       "preset": "Runtime Pack Audio",
       "artifact": "audio.pck",
       "bytes": 19353760,
@@ -71,7 +71,7 @@
     },
     {
       "id": "quality_materials",
-      "version": "lr-006-20261008-known-creatures",
+      "version": "lr-007-20261008-greyfen-services",
       "preset": "Runtime Pack Quality Materials",
       "artifact": "quality_materials.pck",
       "bytes": 7376636,
@@ -82,11 +82,11 @@
   ],
   "errors": [],
   "selected_web_export": {
-    "build_id": "lr-006-20261008-known-creatures",
-    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\LR-006-20261008-build\\export",
-    "generated_from_commit": "19c573ac4c97efc63c71c5d29ab86364d2043398",
-    "artifacts_total_bytes": 91938944,
-    "root_pck_sha256": "5b794cfa00017b04cbacc1f2703cb10d8c1e9a6620f6ff25e1b67c957717cfaa",
+    "build_id": "lr-007-20261008-greyfen-services",
+    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\LR-007-20261008-build\\export",
+    "generated_from_commit": "26f936fe8ff0afc2e9a2b90cc0006ebb7ae98e4d",
+    "artifacts_total_bytes": 91943623,
+    "root_pck_sha256": "b920ba0cef2553b68d010dc87dac70d390288648e2e279dcadc9a5b505a3b876",
     "note": "Selected export uses gzip transport; native pack records describe decoded build artifacts."
   }
 }

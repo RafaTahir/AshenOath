@@ -4,7 +4,10 @@ extends RefCounted
 static func item_text(detail: Dictionary) -> String:
 	var lines: Array[String] = [str(detail.get("title", "Supplies")).to_upper()]
 	var cap: int = int(detail.get("cap", -1))
-	lines.append("Carrying %d%s%s" % [int(detail.get("owned", 0)), " / %d" % cap if cap > 0 else "", "  ·  Selected" if bool(detail.get("selected", false)) else ""])
+	if str(detail.get("type", "")) == "blade_upgrade":
+		lines.append("Fitted permanently" if int(detail.get("owned", 0)) > 0 else "Not yet fitted")
+	else:
+		lines.append("Carrying %d%s%s" % [int(detail.get("owned", 0)), " / %d" % cap if cap > 0 else "", "  ·  Selected" if bool(detail.get("selected", false)) else ""])
 	_append(lines, "", str(detail.get("body", "")))
 	if str(detail.get("quick_slot", "")) != "":
 		var slot_name: String = "Remedy" if str(detail.quick_slot) == "use_potion" else "Field tool"
@@ -45,8 +48,13 @@ static func purchase_text(quote: Dictionary) -> String:
 	var lines: Array[String] = ["\nTHIS EXCHANGE"]
 	var quantity: int = int(quote.get("quantity", 0))
 	var total: int = int(quote.get("total_price", 0))
-	lines.append("Receive %d · Cost %d coin" % [quantity, total])
-	lines.append("Afterward: %d / %d carried · %d coin remaining" % [int(quote.get("after", quote.get("owned", 0))), int(quote.get("cap", 0)), int(quote.get("coin_after", 0))])
+	lines.append("Price: %d coin each" % int(quote.get("unit_price", 0)))
+	if bool(quote.get("ok", false)):
+		lines.append("%s · Cost %d coin" % ["Fit once" if bool(quote.get("upgrade", false)) else "Receive %d" % quantity, total])
+		lines.append("Afterward: %d / %d %s · %d coin remaining" % [int(quote.get("after", quote.get("owned", 0))), int(quote.get("cap", 0)), "fitted" if bool(quote.get("upgrade", false)) else "carried", int(quote.get("coin_after", 0))])
+	else:
+		lines.append("No exchange. %d / %d %s; %d coin unchanged." % [int(quote.get("owned", 0)), int(quote.get("cap", 0)), "fitted" if bool(quote.get("upgrade", false)) else "carried", int(quote.get("coin_after", 0))])
+	_append(lines, "Requires", str(quote.get("requirement", "")))
 	_append(lines, "Supply", str(quote.get("supply_note", "")))
 	if not bool(quote.get("ok", false)):
 		_append(lines, "Unavailable now", str(quote.get("reason", quote.get("message", ""))))

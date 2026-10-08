@@ -50,6 +50,13 @@ peaceful resolutions remain distinct. Published package `91089bd`, full Web
 91,945,620 bytes; Vercel `dpl_4JVy4WodWyAxwuTy5kquAeX3G2AJ` READY. Progress:
 6/28 published, 0/28 user-accepted. LR-007 Greyfen services is next.
 
+LR-007 implementation adds one saved, permanent +3 flat strike improvement per
+blade at Tor's Forge, explicit locked-offer requirements, accurate failed-exchange
+feedback and saved story-sensitive stock ledgers. No recurring repairs, forced
+purchases or romance/testimony gates. Existing one-time emergency reserves remain.
+Crafting returns now settle with ingredients/output before inventory notification.
+Packaging/publication pending; runtime testing remains user-owned.
+
 ## Current Local Assembly - 2026-10-07
 
 - The canonical `D:\Projects\AshenOath` worktree is on `codex/masterpiece-rebuild`

@@ -61,6 +61,22 @@
     "description": "A narrow iron head made to find the gap in armor.",
     "effect": {"damage": 42, "armor_pierce": 0.35, "velocity": 30.0}
   },
+  "steel_tempering": {
+    "name": "Steel Tempering",
+    "type": "blade_upgrade",
+    "cap": 1,
+    "blade_id": "steel",
+    "description": "Tor reworks the hunter's steel edge. A permanent improvement, not a replacement weapon or a recurring repair.",
+    "effect": {"blade_damage_bonus": 3}
+  },
+  "oath_inlay": {
+    "name": "Oathblade Inlay",
+    "type": "blade_upgrade",
+    "cap": 1,
+    "blade_id": "oathblade",
+    "description": "A fitted iron inlay steadies the oath-marked edge. It changes neither your covenant nor a witness's willingness to speak.",
+    "effect": {"blade_damage_bonus": 3}
+  },
   "ashfire_arrow": {
     "name": "Ashfire Arrow",
     "type": "ammo",

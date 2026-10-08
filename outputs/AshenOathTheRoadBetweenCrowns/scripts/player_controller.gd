@@ -472,7 +472,8 @@ func get_blade_attack_damage(heavy: bool = false) -> float:
 	var multiplier := _progression_value("blade_damage_multiplier", 1.0)
 	if heavy:
 		multiplier *= _progression_value("heavy_damage_multiplier", 1.0)
-	return base_damage * multiplier
+	var forge_bonus: float = inventory_ref.blade_upgrade_bonus(get_selected_blade_id()) if inventory_ref != null else 0.0
+	return base_damage * multiplier + forge_bonus
 
 func _movement_input() -> Vector2:
 	if input_source != null and input_source.has_method("movement_vector"):

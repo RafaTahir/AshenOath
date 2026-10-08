@@ -40,19 +40,18 @@ func craft_result(item_id: String) -> Dictionary:
 	var current: Dictionary = quote(item_id)
 	if not bool(current.get("ok", false)):
 		return {"ok": false, "operation": "craft", "item_id": item_id, "quantity": 0, "spent": {}, "remaining": {}, "message": str(current.get("message", "")), "reason": str(current.get("reason", ""))}
-	# Inventory rederives its recipe at commit. A learned refund follows a
-	# successful craft; it never substitutes for ingredients required to begin.
-	var result: Dictionary = inventory.craft_result(item_id)
-	if not bool(result.get("ok", false)):
-		return result
 	var refund: Dictionary = {}
 	var spent: Dictionary = {}
 	for cost: Dictionary in current.get("costs", []):
 		spent[str(cost.id)] = int(cost.spent)
 		if int(cost.returned) > 0:
 			refund[str(cost.id)] = int(cost.returned)
+	# Commit the item and learned returns before the inventory emits changed.
+	# The full recipe is still required before any ingredients are spent.
+	var result: Dictionary = inventory.craft_result(item_id, refund)
+	if not bool(result.get("ok", false)):
+		return result
 	if not refund.is_empty():
-		inventory.add_ingredients(refund)
 		result["message"] = str(result.message) + " Mira's refined formula returns one mooncap."
 	result["spent"] = {"ingredients": spent}
 	result["remaining"] = {"items": inventory.items.duplicate(true), "ingredients": inventory.ingredients.duplicate(true)}

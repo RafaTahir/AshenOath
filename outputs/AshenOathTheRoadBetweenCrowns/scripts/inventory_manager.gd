@@ -36,6 +36,8 @@ const KIT_CATEGORIES := ["equipment", "supplies", "ingredients"]
 var quick_slots: Dictionary = DEFAULT_QUICK_SLOTS.duplicate()
 var sort_mode := "type"
 var kit_category := "supplies"
+var weapon_upgrades: Array[String] = []
+const MAX_BLADE_UPGRADE_BONUS := 3.0
 
 func load_items(path: String) -> void:
 	var parsed = _read_json(path)
@@ -95,6 +97,17 @@ func apply_oil(id: String) -> bool:
 
 func get_item_type(id: String) -> String:
 	return str(item_defs.get(id, {}).get("type", "misc"))
+
+func owned_count(id: String) -> int:
+	return int(id in weapon_upgrades) if get_item_type(id) == "blade_upgrade" else int(items.get(id, 0))
+
+func blade_upgrade_bonus(blade_id: String) -> float:
+	var bonus := 0.0
+	for id: String in weapon_upgrades:
+		var definition: Dictionary = item_defs.get(id, {})
+		if str(definition.get("blade_id", "")) == blade_id:
+			bonus += maxf(float(definition.get("effect", {}).get("blade_damage_bonus", 0)), 0.0)
+	return minf(bonus, MAX_BLADE_UPGRADE_BONUS)
 
 func ordered_item_ids() -> Array[String]:
 	var result: Array[String] = []
@@ -196,16 +209,18 @@ func craft(id: String) -> bool:
 	message.emit(str(result.get("message", "")))
 	return bool(result.get("ok", false))
 
-func craft_result(id: String) -> Dictionary:
+func craft_result(id: String, returns: Dictionary = {}) -> Dictionary:
 	var status: Dictionary = recipe_status(id)
 	if not bool(status.get("craftable", false)):
 		var reason: String = str(status.get("reason", "This item cannot be crafted."))
 		return {"ok": false, "operation": "craft", "item_id": id, "quantity": 0, "spent": {}, "remaining": {}, "reason": reason, "message": reason}
 	var recipe: Dictionary = status.get("required", {})
+	var spent: Dictionary = {}
 	for ingredient in recipe.keys():
-		ingredients[ingredient] = int(ingredients.get(ingredient, 0)) - int(recipe[ingredient])
+		spent[ingredient] = int(recipe[ingredient]) - clampi(int(returns.get(ingredient, 0)), 0, int(recipe[ingredient]))
+		ingredients[ingredient] = int(ingredients.get(ingredient, 0)) - int(spent[ingredient])
 	add_item(id, 1)
-	return {"ok": true, "operation": "craft", "item_id": id, "quantity": 1, "spent": {"ingredients": recipe.duplicate(true)}, "remaining": {"items": items.duplicate(true), "ingredients": ingredients.duplicate(true)}, "reason": "", "message": "Crafted %s. You now carry %d." % [get_item_name(id), int(items.get(id, 0))]}
+	return {"ok": true, "operation": "craft", "item_id": id, "quantity": 1, "spent": {"ingredients": spent}, "remaining": {"items": items.duplicate(true), "ingredients": ingredients.duplicate(true)}, "reason": "", "message": "Crafted %s. You now carry %d." % [get_item_name(id), int(items.get(id, 0))]}
 
 func consume(id: String) -> bool:
 	if not can_consume(id):
@@ -226,7 +241,8 @@ func save_state() -> Dictionary:
 		"coin": coin,
 		"quick_slots": quick_slots.duplicate(),
 		"sort_mode": sort_mode,
-		"kit_category": kit_category
+		"kit_category": kit_category,
+		"weapon_upgrades": weapon_upgrades.duplicate()
 	}
 
 func load_state(state: Dictionary) -> void:
@@ -259,6 +275,12 @@ func load_state(state: Dictionary) -> void:
 	sort_mode = "name" if str(state.get("sort_mode", "type")) == "name" else "type"
 	var saved_category: String = str(state.get("kit_category", "supplies"))
 	kit_category = saved_category if saved_category in KIT_CATEGORIES else "supplies"
+	weapon_upgrades.clear()
+	var saved_upgrades: Variant = state.get("weapon_upgrades", [])
+	if saved_upgrades is Array:
+		for id: Variant in saved_upgrades:
+			if id is String and get_item_type(id) == "blade_upgrade" and id not in weapon_upgrades:
+				weapon_upgrades.append(id)
 	changed.emit()
 
 func _restore_quantity(value: Variant) -> int:
@@ -284,4 +306,5 @@ func reset_starting_loadout() -> void:
 	quick_slots = DEFAULT_QUICK_SLOTS.duplicate()
 	sort_mode = "type"
 	kit_category = "supplies"
+	weapon_upgrades.clear()
 	changed.emit()

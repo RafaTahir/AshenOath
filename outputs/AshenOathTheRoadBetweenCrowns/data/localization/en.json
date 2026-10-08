@@ -6766,6 +6766,18 @@
       "speaker": "",
       "context": "items.moon_oil"
     },
+    "items.oath_inlay.description": {
+      "source": "A fitted iron inlay steadies the oath-marked edge. It changes neither your covenant nor a witness's willingness to speak.",
+      "text": "A fitted iron inlay steadies the oath-marked edge. It changes neither your covenant nor a witness's willingness to speak.",
+      "speaker": "",
+      "context": "items.oath_inlay"
+    },
+    "items.oath_inlay.name": {
+      "source": "Oathblade Inlay",
+      "text": "Oathblade Inlay",
+      "speaker": "",
+      "context": "items.oath_inlay"
+    },
     "items.redroot_potion.description": {
       "source": "A bitter draught that restores health immediately.",
       "text": "A bitter draught that restores health immediately.",
@@ -6801,6 +6813,18 @@
       "text": "Standard Arrow",
       "speaker": "",
       "context": "items.standard_arrow"
+    },
+    "items.steel_tempering.description": {
+      "source": "Tor reworks the hunter's steel edge. A permanent improvement, not a replacement weapon or a recurring repair.",
+      "text": "Tor reworks the hunter's steel edge. A permanent improvement, not a replacement weapon or a recurring repair.",
+      "speaker": "",
+      "context": "items.steel_tempering"
+    },
+    "items.steel_tempering.name": {
+      "source": "Steel Tempering",
+      "text": "Steel Tempering",
+      "speaker": "",
+      "context": "items.steel_tempering"
     },
     "journal_evidence_details.details.bram.sections.limits.body": {
       "source": "The tool, brake and ledger preserve parts of his last work. They do not show the whole attack or identify the hand that began it.",

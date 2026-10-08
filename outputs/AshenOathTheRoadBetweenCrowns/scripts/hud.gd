@@ -1981,6 +1981,8 @@ func _build_preparation_content(inventory, progression, story_state, quests, not
 	var category: String = str(inventory.kit_category)
 	var entry_kind: String = {"equipment":"equipment", "supplies":"item", "ingredients":"ingredient"}.get(category, "item")
 	var ids: Array = ["steel", "oathblade", "bow"] if category == "equipment" else (inventory.ordered_ingredient_ids() if category == "ingredients" else inventory.ordered_item_ids())
+	if category == "supplies":
+		ids = ids.filter(func(id: String) -> bool: return inventory.get_item_type(id) != "blade_upgrade")
 	if category == "equipment" and inventory.sort_mode == "name":
 		ids = ["bow", "oathblade", "steel"]
 	var selection: Dictionary = _preparation_selection.get(_inventory_screen, {})
@@ -2143,7 +2145,7 @@ func show_vendor(vendor_id: String, vendor_service, inventory, quests = null, st
 	_prepare_inventory_surface(true)
 	var vendor: Dictionary = vendor_service.get_vendor(vendor_id)
 	var heading: String = "%s\n%s\nCoin: %d\n\n" % [str(vendor.get("name", "Vendor")).to_upper(), str(vendor.get("subtitle", "")), int(inventory.coin)]
-	var stock: Array[Dictionary] = vendor_service.list_stock(vendor_id, inventory, story_state, quests)
+	var stock: Array[Dictionary] = vendor_service.list_stock(vendor_id, inventory, story_state, quests, true)
 	var request_ids: Array[String] = []
 	for entry: Dictionary in stock:
 		request_ids.append(str(entry.get("item_id", "")))
@@ -2156,7 +2158,7 @@ func show_vendor(vendor_id: String, vendor_service, inventory, quests = null, st
 	if not request_ids.has(selected_id) and not request_ids.is_empty():
 		selected_id = request_ids[0]
 		_preparation_selection[_inventory_screen] = {"kind":"item", "id":selected_id}
-	inventory_text.text = heading + "Choose a supply to see its purpose, cost and availability."
+	inventory_text.text = heading + "Supplies and fittings"
 	if selected_id != "":
 		var quote: Dictionary = vendor_service.quote(vendor_id, selected_id, 1, inventory, story_state, quests)
 		var received_id: String = str(quote.get("item_id", selected_id))
@@ -2167,9 +2169,12 @@ func show_vendor(vendor_id: String, vendor_service, inventory, quests = null, st
 		detail["actions"] = []
 		inventory_text.text = heading + PreparationPanel.item_text(detail) + "\n" + PreparationPanel.purchase_text(quote)
 		var emergency: bool = selected_id.begins_with("__emergency")
-		var buy: Button = _preparation_button("Claim emergency reserve" if emergency else "Buy %d · %d coin" % [int(quote.get("quantity", 1)), int(quote.get("total_price", 0))], "action:buy:" + selected_id, _preparation_actions, bool(quote.get("ok", false)))
+		var purchase_label: String = "Claim emergency reserve" if emergency else ("Fit · %d coin" % int(quote.get("total_price", 0)) if bool(quote.get("upgrade", false)) else "Buy %d · %d coin" % [int(quote.get("quantity", 1)), int(quote.get("total_price", 0))])
+		if not bool(quote.get("ok", false)):
+			purchase_label = "Already fitted" if bool(quote.get("upgrade", false)) and int(quote.get("owned", 0)) > 0 else "Unavailable"
+		var buy: Button = _preparation_button(purchase_label, "action:buy:" + selected_id, _preparation_actions, bool(quote.get("ok", false)))
 		buy.pressed.connect(func(id_value: String = selected_id): vendor_purchase_requested.emit(vendor_id, id_value, 1))
-	_add_preparation_heading("AVAILABLE SUPPLIES")
+	_add_preparation_heading("SUPPLIES AND SERVICES")
 	for request_id: String in request_ids:
 		var title: String = "Emergency arrows" if request_id == "__emergency_arrows__" else ("Emergency medicine" if request_id == "__emergency_healing__" else str(inventory.get_item_name(request_id)))
 		var entry_button: Button = _preparation_button(title, "item:" + request_id, craft_buttons)

@@ -14,7 +14,7 @@ static func service_text(vendor_id: String, inventory, context: Dictionary) -> S
 			if str(source.get("vendor_id", "")) != vendor_id:
 				continue
 			offers += 1
-			lines.append("\n%s - %d coin each\nCarrying %d%s" % [inventory.get_item_name(id), int(source.price), int(inventory.items.get(id, 0)), "\n" + str(source.reason) if str(source.reason) != "" else ""])
+			lines.append("\n%s - %d coin\n%s %d%s" % [inventory.get_item_name(id), int(source.price), "Fitted" if inventory.get_item_type(id) == "blade_upgrade" else "Carrying", inventory.owned_count(id), "\n" + str(source.reason) if str(source.reason) != "" else ""])
 	if offers == 0:
 		lines.append("\nUnavailable: no unlocked offers are currently recorded.")
 	return "\n".join(lines)
@@ -75,8 +75,8 @@ static func item_detail(item_id: String, inventory, progression = null, context:
 	var catalog: Dictionary = _load_catalog()
 	var notes: Dictionary = catalog.get("items", {}).get(item_id, {})
 	var kind: String = str(inventory.get_item_type(item_id))
-	var owned: int = int(inventory.items.get(item_id, 0))
-	var cap: int = int(inventory.get_ammo_cap(item_id)) if kind == "ammo" else 0
+	var owned: int = inventory.owned_count(item_id)
+	var cap: int = int(inventory.get_ammo_cap(item_id)) if kind in ["ammo", "blade_upgrade"] else 0
 	var active_arrow: String = str(context.get("selected_arrow_id", "standard_arrow"))
 	var active_oil: String = str(inventory.active_oil)
 	var selected: bool = (kind == "ammo" and active_arrow == item_id) or (kind == "oil" and active_oil == item_id)
@@ -115,7 +115,13 @@ static func equipment_text(id: String, inventory, context: Dictionary) -> String
 		lines.append("\nCOMPARED WITH %s" % str(names.get(current_blade, "Steel")).to_upper())
 		for target: String in ["human", "spirit"]:
 			lines.append("%s: %.2fx -> %.2fx" % ["Physical bodies" if target == "human" else "Spiritual bodies", EquipmentLoadout.blade_damage_multiplier(current_blade, target), EquipmentLoadout.blade_damage_multiplier(id, target)])
-		lines.append("Same base strikes and stamina costs. The other blade still deals normal damage. Existing oils and learned openings remain effective.")
+		lines.append("Forge improvement: +%.0f -> +%.0f strike damage." % [inventory.blade_upgrade_bonus(current_blade), inventory.blade_upgrade_bonus(id)])
+		var fittings: Array[String] = []
+		for upgrade_id: String in inventory.weapon_upgrades:
+			if str(inventory.item_defs.get(upgrade_id, {}).get("blade_id", "")) == id:
+				fittings.append(inventory.get_item_name(upgrade_id))
+		lines.append("Fitted: " + (", ".join(fittings) if not fittings.is_empty() else "No forge improvement"))
+		lines.append("Same unmodified strikes and stamina costs. Forge improvements add once after learned practice, before the target's response. The other blade still deals normal damage; oils and learned openings remain effective.")
 	return "\n".join(lines)
 
 static func ingredient_text(id: String, inventory) -> String:
@@ -143,6 +149,10 @@ static func _effect_rows(item_id: String, inventory, progression, context: Dicti
 		rows.append({"id": "stamina", "label": "Recovery", "text": text})
 	if effect.has("damage"):
 		rows.append({"id": "damage", "label": "Base damage", "text": "%d before the target's response." % int(effect.damage)})
+	if inventory.get_item_type(item_id) == "blade_upgrade":
+		var definition: Dictionary = inventory.item_defs.get(item_id, {})
+		var bonus: float = minf(float(definition.get("effect", {}).get("blade_damage_bonus", 0)), inventory.MAX_BLADE_UPGRADE_BONUS)
+		rows.append({"id": "forge", "label": "Permanent blade improvement", "text": "+%.0f %s strike damage, added once after learned practice and before target affinity. No effect on the other blade, arrows or Oathfire. One fitting; no upkeep." % [bonus, str(definition.get("blade_id", "steel")).capitalize()]})
 	return rows
 
 static func _item_action(item_id: String, kind: String, owned: int, selected: bool, context: Dictionary) -> Dictionary:
