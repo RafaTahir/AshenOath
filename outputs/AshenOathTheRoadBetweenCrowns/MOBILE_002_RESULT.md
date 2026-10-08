@@ -1,6 +1,6 @@
 # MOBILE-002 - Touch Controls and Mouse Capture Repair
 
-Implementation and production packaging complete; publication pending.
+Implementation, production packaging and publication complete. User acceptance pending.
 UNVERIFIED - REQUIRES USER TESTING. No game/browser launch, tests, screenshots,
 automated gameplay or performance measurements were run.
 
@@ -36,6 +36,8 @@ automated gameplay or performance measurements were run.
 `input_router.gd`, `mobile_touch_controls.gd`, `mobile_touch_layout.gd`,
 `camera_controller.gd`, `game.gd`, `hud.gd`, `runtime_service_registry.gd`,
 `settings_manager.gd`, `project.godot`, and the existing publisher's ticket filter.
+The build also refreshed runtime pack manifests/ledgers, retained Bracken resource
+serialization and `web/`. Those generated files are included in the package commit.
 No gameplay assets or save format were replaced. Existing settings gain only the
 new `touch_aim_mode` default; all older saved preferences and bindings remain.
 
@@ -52,7 +54,13 @@ Stored root PCK: 16,365,294 bytes, SHA-256
 Decoded root: 19,569,024 bytes, SHA-256
 `fbe39f36b3edd2c275b2d1fa6332ef2c09f697f1b0f5d9cf7c00f1cd4edad568`.
 Build provenance remains `bf6737c64c7f7e5f3144745dcbcf9a3adb1fd873` plus the working
-changes packaged here. Git/provider receipt will be added after publication.
+changes packaged here. Combined package commit:
+`6b8de0915c832dfb0954e1a609e4fd6ad940c4ed`, pushed to development and main.
+Vercel deployment `dpl_bW5VVx2wdNwwBydKJdVqKzgj8nD1` reports production READY.
+Live: https://ashenoath.vercel.app/?v=mobile-002-6b8de09
+Receipt: `.release-gate/living-road/MOBILE-002-20261008T055456Z/publication.json`.
+The staged site was archived from that commit. No post-deployment runtime or browser
+checks were performed; publication is not user acceptance.
 All source, artifacts and deployment scratch remain on D:; unrelated untracked
 evidence/startup-export directories remain excluded.
 
