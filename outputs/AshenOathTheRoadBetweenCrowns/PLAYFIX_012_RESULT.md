@@ -18,16 +18,19 @@ equipment, quests, saves and quality presets remain.
 
 ## Exact Package
 
-- Build: playfix-012-20261010-repair-b74a523.
-- Source: baseline b74a523 plus the committed PLAYFIX changes; the export retains
-  its truthful original dirty-build metadata rather than inventing a clean build.
-- 15 manifest artifacts; 96457121 artifact bytes.
-- Complete Web directory: 96463965 bytes including release_manifest.json,
+- Build: playfix-012-20261011-final-f4df729.
+- Source: f4df729 plus the focused traveler-startup correction; the export retains
+  its truthful dirty-build metadata rather than inventing a clean build.
+- 15 manifest artifacts.
+- Complete Web directory: 95908262 bytes including release_manifest.json,
   strictly below 104857600 bytes.
 - Root PCK SHA-256:
-  854636b8e5b70a79d9690663c7ec2046869c3e9ea8294d54933eb99b42a7b134.
+  985bd9afb5a78b5a3de76b9eed9947a5113604ce58ab3924a54aa06510f388ec.
 - Compilation succeeded. Static manifest sizes/hashes and package budget passed.
-- web/ is byte-aligned to the unchanged V2 candidate. Old Web bytes are retained
+- The root pack explicitly contains the injured-traveler scene and texture;
+  Characters no longer owns duplicate atlas entries. Base and production were
+  rebuilt, with the six unchanged optional packs reused. No content was removed.
+- web/ is byte-aligned to this final package. Previous Web bytes are retained
   under .release-gate/playfix-012-publication-20261011/previous-web.
 - Actual publication commit, Vercel outcome and every live artifact hash are
   recorded in .release-gate/playfix-012-publication-20261011/publication.json.
@@ -36,6 +39,9 @@ equipment, quests, saves and quality presets remain.
 
 See PLAYFIX_012_PLAYTHROUGH.md for scoped observations and V1 owner repairs.
 V2 startup/Continue, Pause/Resume, displayed Use and settings cycling were observed.
+Published V2 mouse New Game reached Greyfen but reported the missing injured-
+traveler model before Characters mounted. The final package corrects that export
+ownership. Post-correction runtime behavior was not retested at the user's request.
 The available earned save is earlier than the chapel observation; no unsupported
 lost-progress diagnosis is asserted. Sustained in-app browser input was inconsistent.
 Temporary read-only observation helpers stayed under D:/Temp/AshenOath and do not
@@ -57,7 +63,7 @@ remain explicitly unverified. Test-profile settings did not change release defau
 
 ## Running
 
-Production: https://ashenoath.vercel.app/?v=playfix-012-20261010-repair-b74a523.
+Production: https://ashenoath.vercel.app/?v=playfix-012-20261011-final-f4df729.
 Canonical source: D:/Projects/AshenOath, codex/masterpiece-rebuild.
 Godot project: D:/Projects/AshenOath/outputs/AshenOathTheRoadBetweenCrowns.
 This record is authored before publication; the receipt and live checks establish

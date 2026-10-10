@@ -1,5 +1,19 @@
 # PLAYFIX-012 - Earned Candidate Journey
 
+## Publication Follow-up - 2026-10-11
+
+The user authorized deployment with the complete Witness/homecoming journey
+unverified. V2 was published at f4df729; all 15 live artifacts and the release
+manifest matched. Live mouse New Game reached Greyfen, but emitted a required
+visual error for villager_human / Villager_Male_Atlas (the injured traveler).
+That body was in the optional Characters pack, unlike the Continue path.
+
+The final corrective package explicitly includes its approved imported scene
+and texture in base/production. Current build:
+playfix-012-20261011-final-f4df729. No further playthrough/runtime test was run;
+post-correction gameplay remains for user testing. Publication is not formal
+ticket acceptance. The observations below retain their original candidate scope.
+
 ## Continuation - 2026-10-11
 
 The user resumed and requested delivery. V2 bytes were reused unchanged.

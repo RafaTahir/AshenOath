@@ -3,6 +3,9 @@ extends Node3D
 ## An optional human moment. StoryState owns progress; these objects only
 ## present it, including after a cached Greyfen tree is reactivated.
 const Interactable = preload("res://scripts/interactable.gd")
+# This actor exists before the optional character pack is mounted. Its approved
+# atlas must therefore be an explicit dependency of the base script graph.
+const TRAVELER_VISUAL = preload("res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf")
 const LAYER := "OpeningCareScene"
 const TIMBER := Color(0.26, 0.18, 0.12)
 const CLOTH := Color(0.37, 0.31, 0.27)
@@ -53,7 +56,7 @@ static func introduce(game, actor: Node3D) -> bool:
 func build() -> void:
 	var anchor: Node3D = host.zone_root.find_child("AnwenAnchor", true, false) as Node3D
 	position = host.zone_root.to_local(anchor.global_position) if anchor != null else Vector3(2, 0, -5)
-	# Everything is resident procedural dressing: no new download before control.
+	# The body is base-owned; the small care props require no additional pack.
 	cup_area = point("opening_cup_pickup", "Take the waiting cup", Vector3(-0.85, 0, 1.4))
 	box(cup_area, "StoneStep", Vector3(0, 0.10, 0), Vector3(0.60, 0.20, 0.48), Color(0.40, 0.39, 0.34))
 	waiting_cup = make_cup(cup_area, Vector3(0, 0.205, 0))
@@ -63,7 +66,7 @@ func build() -> void:
 		box(tray_area, "ShelfLeg", Vector3(x, 0.33, 0), Vector3(0.065, 0.66, 0.065), TIMBER)
 	box(tray_area, "CleanLinen", Vector3(0, 0.711, 0), Vector3(0.58, 0.015, 0.30), LINEN)
 	delivered_cup = make_cup(tray_area, Vector3(-0.12, 0.72, 0))
-	# A privacy screen locates the injured traveler without loading another rig.
+	# The screen and supported bench give the seated traveler a clear location.
 	for x: float in [-0.60, 0.60]:
 		box(tray_area, "ScreenPost", Vector3(x, 0.91, -0.54), Vector3(0.055, 1.82, 0.055), TIMBER)
 	box(tray_area, "ScreenCrossbar", Vector3(0, 1.79, -0.54), Vector3(1.28, 0.055, 0.055), TIMBER)

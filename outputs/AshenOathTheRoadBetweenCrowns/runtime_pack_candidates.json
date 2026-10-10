@@ -1,37 +1,37 @@
 {
   "schema_version": 2,
-  "generated_at_utc": "2026-10-09T21:24:01.0517498Z",
-  "build_id": "playfix-012-20261010-repair-b74a523",
-  "generated_from_commit": "b74a52388691329c37652e50de22ae9d919e5008",
+  "generated_at_utc": "2026-10-10T21:02:10.4142462Z",
+  "build_id": "playfix-012-20261011-final-f4df729",
+  "generated_from_commit": "f4df7294ffa0c2e6789c9ea535976e67c9738da9",
   "source_dirty": true,
-  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\playfix-012-20261010-repair\\runtime-packs",
+  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\playfix-012-20261011-startup-final\\runtime-packs",
   "artifacts_are_external": true,
   "max_deployment_bytes": 104857600,
-  "total_bytes": 95349996,
+  "total_bytes": 94178800,
   "packs": [
     {
       "id": "base",
-      "version": "playfix-012-20261010-repair-b74a523",
+      "version": "playfix-012-20261011-final-f4df729",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
-      "bytes": 14443336,
-      "sha256": "35f38d7814a686377d42a75b441fcb3e6cef0c8523cf3f354fad13758400211f",
+      "bytes": 15848192,
+      "sha256": "fb6f0923e3c8171aab0da97800f8c84e9787d286638c5a5b38b2eb1371ea1b9a",
       "status": "candidate_external",
       "log": "logs/pack-base.stdout.log"
     },
     {
       "id": "opening",
-      "version": "playfix-012-20261010-repair-b74a523",
+      "version": "playfix-012-20261011-final-f4df729",
       "preset": "Runtime Pack Opening",
       "artifact": "opening.pck",
-      "bytes": 14323772,
-      "sha256": "4f987dae8bb75893a6f7c64c2e94296fbec8095b06bc11a527bc20a30a86ec6c",
+      "bytes": 14323836,
+      "sha256": "acdf74f8303ded74fc2ed30a204973b0735f1446371ce6612a09c6ea7fae9eca",
       "status": "candidate_external",
       "log": "logs/pack-opening.stdout.log"
     },
     {
       "id": "campaign",
-      "version": "playfix-012-20261010-repair-b74a523",
+      "version": "playfix-012-20261011-final-f4df729",
       "preset": "Runtime Pack Campaign",
       "artifact": "campaign.pck",
       "bytes": 1002316,
@@ -41,17 +41,17 @@
     },
     {
       "id": "characters",
-      "version": "playfix-012-20261010-repair-b74a523",
+      "version": "playfix-012-20261011-final-f4df729",
       "preset": "Runtime Pack Characters",
       "artifact": "characters.pck",
-      "bytes": 30472088,
-      "sha256": "4c110051ef762e7c0f684069202dc7b4fbd662d399002c69fa83385955763515",
+      "bytes": 27895972,
+      "sha256": "99527791f03c09b016ce650a034421da00ffc9038668f73dfada4bf1a26626e4",
       "status": "candidate_external",
       "log": "logs/pack-characters.stdout.log"
     },
     {
       "id": "monsters",
-      "version": "playfix-012-20261010-repair-b74a523",
+      "version": "playfix-012-20261011-final-f4df729",
       "preset": "Runtime Pack Monsters",
       "artifact": "monsters.pck",
       "bytes": 8374600,
@@ -61,7 +61,7 @@
     },
     {
       "id": "audio",
-      "version": "playfix-012-20261010-repair-b74a523",
+      "version": "playfix-012-20261011-final-f4df729",
       "preset": "Runtime Pack Audio",
       "artifact": "audio.pck",
       "bytes": 19356400,
@@ -71,7 +71,7 @@
     },
     {
       "id": "quality_materials",
-      "version": "playfix-012-20261010-repair-b74a523",
+      "version": "playfix-012-20261011-final-f4df729",
       "preset": "Runtime Pack Quality Materials",
       "artifact": "quality_materials.pck",
       "bytes": 7377484,
@@ -82,11 +82,11 @@
   ],
   "errors": [],
   "selected_web_export": {
-    "build_id": "playfix-012-20261010-repair-b74a523",
-    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\playfix-012-20261010-repair\\export",
-    "generated_from_commit": "b74a52388691329c37652e50de22ae9d919e5008",
-    "artifacts_total_bytes": 96457121,
-    "root_pck_sha256": "854636b8e5b70a79d9690663c7ec2046869c3e9ea8294d54933eb99b42a7b134",
-    "note": "Selected export uses gzip transport; native pack records describe decoded build artifacts."
+    "build_id": "playfix-012-20261011-final-f4df729",
+    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\playfix-012-20261011-startup-final\\export",
+    "generated_from_commit": "f4df7294ffa0c2e6789c9ea535976e67c9738da9",
+    "artifacts_total_bytes": 95901419,
+    "root_pck_sha256": "985bd9afb5a78b5a3de76b9eed9947a5113604ce58ab3924a54aa06510f388ec",
+    "note": "Final startup fix: base and production rebuilt; unchanged six optional packs reused."
   }
 }

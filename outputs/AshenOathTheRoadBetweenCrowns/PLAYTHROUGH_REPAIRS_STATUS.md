@@ -1,6 +1,26 @@
 # Playthrough Repairs - 2026-10-10
 
-## Latest Delivery Preparation - 2026-10-11
+## Current Delivery - 2026-10-11
+
+Current ticket: PLAYFIX-012. PLAYFIX-001 through PLAYFIX-011 are implemented;
+formal user acceptance remains 0/12, not inferred from code or deployment.
+The user approved delivery with full Witness/homecoming unverified.
+
+V2 was pushed/deployed at f4df729, and all live artifact hashes matched. Live
+mouse New Game reached Greyfen but exposed a missing injured-traveler model
+before the optional Characters pack mounted. The correction moves that approved
+atlas to explicit base/production export ownership without substituting its body.
+
+Final package: playfix-012-20261011-final-f4df729; 95908262 directory bytes;
+root PCK 985bd9afb5a78b5a3de76b9eed9947a5113604ce58ab3924a54aa06510f388ec.
+Base and production were rebuilt; the six unchanged optional packs were reused.
+The root contains the imported traveler scene/texture. No further gameplay QA.
+The owned temporary preview server was closed. Exact next/final action: publish
+these bytes, confirm Vercel artifact identity, report the remaining user checks.
+Publication outcomes are in .release-gate/playfix-012-publication-20261011/.
+Earlier pause/preparation instructions below are historical, not current orders.
+
+## Delivery Preparation - Historical 2026-10-11
 
 Execution resumed at the user's request. Game source and candidate V2 are unchanged
 from the compiled checkpoint. A local source/package checkpoint is prepared;

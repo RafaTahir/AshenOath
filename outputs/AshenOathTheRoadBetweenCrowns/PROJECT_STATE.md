@@ -1,6 +1,23 @@
 # Ashen Oath Project State
 
-## Delivery Preparation - 2026-10-11
+## Current Delivery - 2026-10-11
+
+PLAYFIX-001 through PLAYFIX-011 and V2 were published at f4df729. Live V2 New
+Game reached Greyfen but reported a missing injured-traveler body: its approved
+Villager_Male_Atlas was owned by the optional Characters pack. The focused
+correction explicitly exports that existing body and texture in base/production,
+removes duplicate optional-pack ownership, and retains all other repairs/content.
+
+Current package: playfix-012-20261011-final-f4df729; 95908262 directory bytes
+including the release manifest, below 104857600. Root PCK SHA-256:
+985bd9afb5a78b5a3de76b9eed9947a5113604ce58ab3924a54aa06510f388ec.
+Compilation and static root-pack ownership are complete. The exact bytes are
+being published; the publication receipt records the final Git and live outcome.
+No further gameplay tests were run. Full Witness/homecoming and formal user
+acceptance remain unverified; the user explicitly authorized this delivery.
+Earlier preparation and next-action statements below are historical.
+
+## Delivery Preparation - Historical 2026-10-11
 
 The user resumed PLAYFIX-012 and authorized final push/deployment. V2 remains
 playfix-012-20261010-repair-b74a523; no game-content changes or replacement export

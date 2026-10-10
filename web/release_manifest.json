@@ -1,27 +1,27 @@
 {
   "schema_version": 2,
   "project": "Ashen Oath",
-  "build_id": "playfix-012-20261010-repair-b74a523",
+  "build_id": "playfix-012-20261011-final-f4df729",
   "source": {
-    "git_commit": "b74a52388691329c37652e50de22ae9d919e5008",
+    "git_commit": "f4df7294ffa0c2e6789c9ea535976e67c9738da9",
     "dirty": true
   },
-  "generated_at_utc": "2026-10-09T21:26:56.296238Z",
-  "compatibility_key": "d20a8e32f32dd3f0fc8878070af8a192c569229a54fe30680afe7ea0a1d209b3",
+  "generated_at_utc": "2026-10-10T21:04:19.041427Z",
+  "compatibility_key": "d4819524ef76e416f3e3ab1ab73c1717db4e10d4b094210786967781bd0f2317",
   "runtime_pack_manifest": {
     "path": "runtime_pack_manifest.json",
-    "bytes": 6678,
-    "sha256": "bf081b179f5f665d8b58932c0eac13cce9652f51ed0a199a8365fe607e946f73"
+    "bytes": 6669,
+    "sha256": "e3272caba38c83ea5a7431f77657e945023e3144de484f1a2b03f72cd7dc1adf"
   },
   "root_pck": {
     "path": "index.pck",
-    "bytes": 17520526,
-    "sha256": "854636b8e5b70a79d9690663c7ec2046869c3e9ea8294d54933eb99b42a7b134",
+    "bytes": 18899782,
+    "sha256": "985bd9afb5a78b5a3de76b9eed9947a5113604ce58ab3924a54aa06510f388ec",
     "content_encoding": "gzip",
-    "decoded_bytes": 20734456,
-    "decoded_sha256": "7e866506591ae0d1c48f7d1135a650d330a2d56963ebada1198fb7aefe8f89f4"
+    "decoded_bytes": 22139328,
+    "decoded_sha256": "dabc33e8dc8d1279a45b37a9a91ae8e72d5270342fc39ace57b2f74bec1590fe"
   },
-  "artifacts_total_bytes": 96457121,
+  "artifacts_total_bytes": 95901419,
   "artifacts": [
     {
       "path": "index.audio.position.worklet.js",
@@ -35,8 +35,8 @@
     },
     {
       "path": "index.html",
-      "bytes": 15730,
-      "sha256": "3e249a3043fa4a7eb071b06ec0371c4228342c7661ae20ccb76cb09ed9b70962"
+      "bytes": 15728,
+      "sha256": "127110d92cedc8a67321e1f204fa927dab27d726bf0405d20e8a4ffa79f8b52c"
     },
     {
       "path": "index.js",
@@ -45,11 +45,11 @@
     },
     {
       "path": "index.pck",
-      "bytes": 17520526,
-      "sha256": "854636b8e5b70a79d9690663c7ec2046869c3e9ea8294d54933eb99b42a7b134",
+      "bytes": 18899782,
+      "sha256": "985bd9afb5a78b5a3de76b9eed9947a5113604ce58ab3924a54aa06510f388ec",
       "content_encoding": "gzip",
-      "decoded_bytes": 20734456,
-      "decoded_sha256": "7e866506591ae0d1c48f7d1135a650d330a2d56963ebada1198fb7aefe8f89f4"
+      "decoded_bytes": 22139328,
+      "decoded_sha256": "dabc33e8dc8d1279a45b37a9a91ae8e72d5270342fc39ace57b2f74bec1590fe"
     },
     {
       "path": "index.png",
@@ -87,11 +87,11 @@
     },
     {
       "path": "packs/characters.pck",
-      "bytes": 23193277,
-      "sha256": "7cee15e6bd3b395a0e92360e633ec4d22cfcd544f80ba1a5b796f4b6155e1e81",
+      "bytes": 21258313,
+      "sha256": "851d861784ef177f45424b204518f64fefd72ff950b1f7aa4da289923b2c92e9",
       "content_encoding": "gzip",
-      "decoded_bytes": 30472088,
-      "decoded_sha256": "4c110051ef762e7c0f684069202dc7b4fbd662d399002c69fa83385955763515"
+      "decoded_bytes": 27895972,
+      "decoded_sha256": "99527791f03c09b016ce650a034421da00ffc9038668f73dfada4bf1a26626e4"
     },
     {
       "path": "packs/monsters.pck",
@@ -103,11 +103,11 @@
     },
     {
       "path": "packs/opening.pck",
-      "bytes": 11884333,
-      "sha256": "dd3cb5bb2b98d675438efe1b9507a99fa8e00fd12b83c58fd08a0bbf4f1fd86e",
+      "bytes": 11884350,
+      "sha256": "0fac767256c934ba0f656219710bcd92507bce4ea13cebe7cca848ac01578a18",
       "content_encoding": "gzip",
-      "decoded_bytes": 14323772,
-      "decoded_sha256": "4f987dae8bb75893a6f7c64c2e94296fbec8095b06bc11a527bc20a30a86ec6c"
+      "decoded_bytes": 14323836,
+      "decoded_sha256": "acdf74f8303ded74fc2ed30a204973b0735f1446371ce6612a09c6ea7fae9eca"
     },
     {
       "path": "packs/quality_materials.pck",
@@ -119,8 +119,8 @@
     },
     {
       "path": "runtime_pack_manifest.json",
-      "bytes": 6678,
-      "sha256": "bf081b179f5f665d8b58932c0eac13cce9652f51ed0a199a8365fe607e946f73"
+      "bytes": 6669,
+      "sha256": "e3272caba38c83ea5a7431f77657e945023e3144de484f1a2b03f72cd7dc1adf"
     }
   ],
   "packs": [
@@ -134,9 +134,9 @@
     },
     {
       "id": "opening",
-      "url": "packs/opening.pck?sha256=4f987dae8bb75893a6f7c64c2e94296fbec8095b06bc11a527bc20a30a86ec6c",
-      "bytes": 14323772,
-      "sha256": "4f987dae8bb75893a6f7c64c2e94296fbec8095b06bc11a527bc20a30a86ec6c",
+      "url": "packs/opening.pck?sha256=acdf74f8303ded74fc2ed30a204973b0735f1446371ce6612a09c6ea7fae9eca",
+      "bytes": 14323836,
+      "sha256": "acdf74f8303ded74fc2ed30a204973b0735f1446371ce6612a09c6ea7fae9eca",
       "dependencies": [
         "base"
       ],
@@ -155,9 +155,9 @@
     },
     {
       "id": "characters",
-      "url": "packs/characters.pck?sha256=4c110051ef762e7c0f684069202dc7b4fbd662d399002c69fa83385955763515",
-      "bytes": 30472088,
-      "sha256": "4c110051ef762e7c0f684069202dc7b4fbd662d399002c69fa83385955763515",
+      "url": "packs/characters.pck?sha256=99527791f03c09b016ce650a034421da00ffc9038668f73dfada4bf1a26626e4",
+      "bytes": 27895972,
+      "sha256": "99527791f03c09b016ce650a034421da00ffc9038668f73dfada4bf1a26626e4",
       "dependencies": [
         "base",
         "opening"
