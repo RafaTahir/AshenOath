@@ -330,14 +330,14 @@
         "notes": "Connected gaunt anatomy and bone-skinned burial shroud, one surface/1K atlas, retained 65-bone rig and grounded UAL2 clips. Established day/night views and actual five-enemy combat reviewed. Full opening return remains failed at the existing transition lock; final performance/browser acceptance is not implied."
       },
       "bell_eater_boss": {
-        "status": "boss_003_reviewed_body_and_bone_harness_20260926",
-        "path": "res://assets_external/enemies/ultimate_monsters/BlueDemon.gltf",
-        "source": "Quaternius Ultimate Monsters",
-        "source_url": "https://quaternius.com/packs/ultimatemonsters.html",
+        "status": "playfix_010_reference_approved_runtime_pending",
+        "path": "res://assets_external/characters_universal/runtime/BellEater_Playfix.glb",
+        "source": "Project-authored Quaternius Universal cursed-human derivative",
+        "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
         "license": "CC0 1.0",
-        "license_file": "res://assets_external/licenses/Quaternius_Ultimate_Monsters_Mirror_CC0.txt",
+        "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
         "target_height": 3.8,
-        "notes": "Complete imported anatomy with a reviewed project-authored hollow bell and torso-bound chain harness. No proxy face or limbs. Runtime file hashes and role approval are owned by runtime_asset_manifest.json; full BOSS-001 acceptance remains separate."
+        "notes": "User-approved broad cursed-human source body; shared UAL2 rig, retained hollow bell and spine-bound chains. Reference approval is not gameplay acceptance."
       },
       "rootbound_colossus_boss": {
         "status": "reviewed_native_body_and_chest_wound_20260926",
@@ -365,27 +365,30 @@
         "notes": "Native antlered stag at 3.60 m full-silhouette height; encounter and visual acceptance pending."
       },
       "ashwing_creature": {
-        "status": "mon_002_interim_dragon_mesh",
-        "path": "res://assets_external/enemies/Dragon.fbx",
-        "source": "Quaternius Animated Monsters",
-        "license": "CC0 1.0",
-        "notes": "Interim dragon silhouette for Ashwing; flight presentation remains controller-driven until a bespoke drake source passes the visual gate."
-      },
-      "ashwing_boss": {
-        "status": "reviewed_native_dragon_bone_equipment_20260926",
-        "path": "res://assets_external/enemies/Dragon.fbx",
-        "source": "Quaternius Animated Monsters",
-        "license": "CC0 1.0",
-        "target_height": 4.8,
-        "notes": "Reviewed complete Dragon source with Body-bone harness/core, no proxy wing roots, and restrained phase materials. BOSS-005_*_20260926_144009 images and graphical encounter contracts pass; mill architecture and production certification remain separate."
-      },
-      "bog_wretch_creature": {
-        "status": "mon_002_distinct_slime_wretch",
-        "path": "res://assets_external/enemies/Slime.fbx",
-        "source": "Quaternius Animated Monsters",
+        "status": "playfix_010_reference_approved_runtime_pending",
+        "path": "res://assets_external/enemies/Ashwing_Playfix.glb",
+        "source": "Project-authored Quaternius Animated Monsters drake derivative",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
-        "notes": "Distinct animated Slime silhouette for the Bog Wretch; swamp material, low grounded profile, pooling motion, and memory-core dressing carry its story role."
+        "notes": "User-approved elongated head, reshaped wings and charred palette. Retains the native Dragon animations; runtime observation pending."
+      },
+      "ashwing_boss": {
+        "status": "playfix_010_reference_approved_runtime_pending",
+        "path": "res://assets_external/enemies/Ashwing_Playfix.glb",
+        "source": "Project-authored Quaternius Animated Monsters drake derivative",
+        "license": "CC0 1.0",
+        "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
+        "target_height": 4.8,
+        "notes": "User-approved darker reshaped drake, original Body socket and animations. Encounter IDs, phases, collisions, interruptions, rewards and save state remain unchanged. Runtime observation pending."
+      },
+      "bog_wretch_creature": {
+        "status": "playfix_010_reference_approved_runtime_pending",
+        "path": "res://assets_external/characters_universal/runtime/BogWretch_Playfix.glb",
+        "source": "Project-authored Quaternius Universal cursed-human derivative",
+        "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
+        "license": "CC0 1.0",
+        "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
+        "notes": "User-approved swamp-stained cursed-human assembly with retained anatomy, burial shroud and UAL2 animations. Runtime observation pending."
       },
       "gravebound_knight_creature": {
         "status": "mon_002_validated_skeletal_knight_family",

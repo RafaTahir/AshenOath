@@ -59,14 +59,20 @@ static func restore(game) -> void:
 		area.set_meta("covenant_step", index)
 		area.set_meta("covenant_ending", ending)
 		area.state_label = "Keep your promise"
+		if index == 0 or (ending == "free" and index == 1):
+			game._make_ledger_interaction_visual(area, Vector3.ONE * 0.75)
+		else:
+			game._make_token_interaction_visual(area, Vector3.ONE * 0.8)
 		var marker := Label3D.new()
 		marker.text = "%d · %s" % [index + 1, str(entries[index][0])]
-		marker.font_size = 34
-		marker.pixel_size = 0.006
-		marker.position.y = 1.15
+		marker.name = "InteractionWorldLabel"
+		marker.font_size = 24
+		marker.pixel_size = 0.003
+		marker.position.y = 0.65
 		marker.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 		marker.modulate = Color(0.91, 0.84, 0.65)
 		marker.no_depth_test = false
+		marker.visible = false
 		area.add_child(marker)
 	if completed < entries.size():
 		game.hud.set_guidance_hint(str(entries[completed][0]), 12.0)

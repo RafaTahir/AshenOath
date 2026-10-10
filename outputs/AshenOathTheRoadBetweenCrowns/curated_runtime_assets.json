@@ -232,12 +232,20 @@
         "notes": "Broad horned Blue Demon approved for the Brute after animation, grounding, tactical-route, and gameplay-distance visual checks."
       },
       "bog_wretch": {
-        "status": "mon_002_distinct_slime_wretch",
-        "path": "res://assets_external/enemies/Slime.fbx",
-        "source_pack": "Quaternius Animated Monsters",
+        "status": "playfix_010_reference_approved_runtime_pending",
+        "path": "res://assets_external/characters_universal/runtime/BogWretch_Playfix.glb",
+        "source_pack": "Project-authored Quaternius Universal derivative",
         "license": "CC0 1.0",
-        "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
-        "notes": "Slime source with swamp palette, pooling animation, and Bog Wretch behavior profile."
+        "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
+        "notes": "User-approved body reference; shared humanoid animation and swamp behavior retained."
+      },
+      "bell_eater": {
+        "status": "playfix_010_reference_approved_runtime_pending",
+        "path": "res://assets_external/characters_universal/runtime/BellEater_Playfix.glb",
+        "source_pack": "Project-authored Quaternius Universal derivative",
+        "license": "CC0 1.0",
+        "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
+        "notes": "User-approved broad cursed-human with shared animations and retained bone-attached bell/chain harness."
       },
       "gravebound_knight": {
         "status": "mon_002_validated_skeletal_knight_family",
@@ -269,12 +277,12 @@
         "license_file": "res://assets_external/licenses/Quaternius_Ultimate_Monsters_Mirror_CC0.txt"
       },
       "ashwing": {
-        "status": "mon_002_interim_dragon_mesh",
-        "path": "res://assets_external/enemies/Dragon.fbx",
-        "source_pack": "Quaternius Animated Monsters",
+        "status": "playfix_010_reference_approved_runtime_pending",
+        "path": "res://assets_external/enemies/Ashwing_Playfix.glb",
+        "source_pack": "Project-authored Quaternius Animated Monsters derivative",
         "license": "CC0 1.0",
         "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
-        "notes": "Large animated dragon fallback for Ashwing; not the final drake family."
+        "notes": "User-approved reshaped charred drake. Native animations and encounter contracts retained; no fallback substitution."
       },
       "white_hart_avatar": {
         "status": "mon_002_connected_animal_runtime",

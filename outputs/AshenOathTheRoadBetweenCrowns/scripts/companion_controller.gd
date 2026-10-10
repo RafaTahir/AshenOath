@@ -2,7 +2,7 @@ extends CharacterBody3D
 
 const ID := "bracken"
 const QUEST := "side_bracken_rescue"
-const RESCUE_POSITION := Vector3(-3.3, 0.02, -12.1)
+const RESCUE_POSITION := Vector3(-2.0, 0.02, -11.0)
 const BODY := preload("res://assets/companions/bracken.scn")
 const Interactable = preload("res://scripts/interactable.gd")
 const Surface = preload("res://scripts/spatial_surface_contract.gd")
@@ -264,6 +264,8 @@ func refresh_presence() -> void:
 	if command == "wait":
 		velocity = Vector3.ZERO
 	game.input_router.companion_available = adopted
+	interaction.set_meta("optional_companion_interaction", str(game.story_state.get_flag("bracken_home", "")) != "")
+	interaction.prompt = "Speak with Bracken" if adopted else "Approach Bracken"
 	interaction.state_label = ("Waiting" if command == "wait" else "Walking with Kael") if adopted else ("Safe beside the north road" if rescued else "Caught by a travelling strap")
 	route.clear()
 	route_refresh = 0.0

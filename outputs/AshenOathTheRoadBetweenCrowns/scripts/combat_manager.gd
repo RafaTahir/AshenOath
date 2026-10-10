@@ -197,13 +197,15 @@ func resolve_oathfire_cast(enemies: Array, cast: Dictionary) -> Array:
 	for enemy in enemies:
 		if enemy == null or enemy.dead or (enemy.has_method("is_encounter_active") and not enemy.is_encounter_active()):
 			continue
-		var target = enemy.global_position + Vector3(0, 0.9, 0)
+		var body := _body_segment(enemy)
+		var points := Geometry3D.get_closest_points_between_segments(origin, endpoint, body.start, body.end)
+		var target: Vector3 = points[1]
 		var offset: Vector3 = target - origin
 		var along = offset.dot(forward)
 		if along <= 0.0 or along > beam_length:
 			continue
 		var nearest = origin + forward * along
-		if target.distance_to(nearest) > width:
+		if target.distance_to(nearest) > width + float(body.radius):
 			continue
 		enemy.apply_damage(damage, "oathfire")
 		enemy_hit.emit(enemy.display_name, damage)
@@ -228,13 +230,15 @@ func resolve_arrow_shot(enemies: Array, cast: Dictionary) -> Dictionary:
 	for enemy in enemies:
 		if enemy == null or enemy.dead or (enemy.has_method("is_encounter_active") and not enemy.is_encounter_active()):
 			continue
-		var target: Vector3 = enemy.global_position + Vector3.UP * 0.92
+		var body := _body_segment(enemy)
+		var points := Geometry3D.get_closest_points_between_segments(origin, endpoint, body.start, body.end)
+		var target: Vector3 = points[1]
 		var offset := target - origin
 		var along := offset.dot(forward)
 		if along <= 0.0 or along > length or along >= best_along:
 			continue
 		var nearest := origin + forward * along
-		if target.distance_to(nearest) > width:
+		if target.distance_to(nearest) > width + float(body.radius):
 			continue
 		best_enemy = enemy
 		best_along = along
@@ -246,3 +250,13 @@ func resolve_arrow_shot(enemies: Array, cast: Dictionary) -> Dictionary:
 	enemy_hit.emit(best_enemy.display_name, damage)
 	impact.emit(best_point, false)
 	return {"hit": true, "endpoint": endpoint, "enemy": best_enemy, "point": best_point, "damage": damage}
+
+func _body_segment(enemy: Node3D) -> Dictionary:
+	for raw in enemy.get_children():
+		if raw is CollisionShape3D and raw.shape is CapsuleShape3D:
+			var capsule: CapsuleShape3D = raw.shape
+			var extent := maxf(0.0, capsule.height * 0.5 - capsule.radius)
+			var scale: Vector3 = raw.global_basis.get_scale()
+			return {"start": raw.global_transform * Vector3(0, -extent, 0), "end": raw.global_transform * Vector3(0, extent, 0), "radius": capsule.radius * maxf(absf(scale.x), absf(scale.z))}
+	var point := enemy.global_position + Vector3.UP * 0.92
+	return {"start": point, "end": point, "radius": 0.0}

@@ -113,6 +113,8 @@ func choose(candidates: Array, player: Node3D, camera: Camera3D, validator: Call
 		if distance > focus_range:
 			continue
 		var facing := forward.dot(view_origin.direction_to(candidate.global_position + Vector3.UP * 0.96))
+		var eye_origin := player.global_position + Vector3.UP * 1.30
+		var eye_facing := forward.dot(eye_origin.direction_to(candidate.global_position + Vector3.UP * 0.96))
 		# Dialogue has a target-specific eye-line validator in game.gd. Requiring
 		# this service's separate trigger-origin angle as well can reject a speaker
 		# who is visibly centered at conversation distance, especially with a
@@ -129,6 +131,12 @@ func choose(candidates: Array, player: Node3D, camera: Camera3D, validator: Call
 		if not valid_target or fallback_facing_invalid:
 			continue
 		var priority := 0.0
+		if bool(candidate.get_meta("optional_companion_interaction", false)):
+			# A following companion stays accessible when deliberately examined,
+			# but cannot win incidental focus over the object in front of Kael.
+			if facing < 0.92 or distance > 2.0:
+				continue
+			priority -= 0.75
 		var quest_id := str(candidate.get("quest_id"))
 		var objective_id := str(candidate.get("objective_id"))
 		if str(candidate.get("interaction_id")) in authored_targets:
@@ -146,7 +154,9 @@ func choose(candidates: Array, player: Node3D, camera: Camera3D, validator: Call
 			priority += 0.42
 		if authored_targets.is_empty() and tracked_id == "main_teeth_in_rain" and tracked_objective == "speak_mira" and str(candidate.get("interaction_id")) == "mira":
 			priority += 0.42
-		var score := facing * 2.4 - distance * 0.60 + priority
+		# A distant shoulder camera flattens nearby angles. Retain its screen
+		# alignment, but also distinguish the examined object from someone behind Kael.
+		var score := facing * 1.2 + eye_facing * 1.2 - distance * 0.60 + priority
 		scores[candidate] = score
 		if score > best_score:
 			best_score = score

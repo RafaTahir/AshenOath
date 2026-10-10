@@ -19,6 +19,7 @@ signal inventory_preference_requested(key: String, value: String)
 signal vendor_purchase_requested(vendor_id: String, item_id: String, quantity: int)
 signal upgrade_requested(upgrade_id: String)
 signal dialogue_closed
+signal pause_requested
 signal dialogue_review_changed(open: bool)
 signal dialogue_page_changed(speaker: String, speaker_id: String, page_index: int, total_pages: int)
 signal menu_hovered
@@ -249,6 +250,16 @@ var _quick_icons: Dictionary = {}
 var _gameplay_bindings: Label
 var _quest_rule: ColorRect
 var _quest_marker: Label
+var _pointer_pause_button: Button
+var _compact_menu_title: Label
+var _game_owner: Node
+var _save_manager: Node
+
+func set_runtime_services(owner: Node, saves: Node) -> void:
+	_game_owner = owner
+	_save_manager = saves
+	_save_service()
+
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_build_hud()
@@ -405,7 +416,8 @@ func _add_journey_recovery_options(box: VBoxContainer, model: Dictionary) -> voi
 		if not bool(option.get("available", false)):
 			continue
 		var summary: Dictionary = option.get("summary", {})
-		_add_journey_load_button(box, "Recovery: " + str(summary.get("title", "Recorded journey")), option, "recovery_option:%d" % index)
+		var label := "Recovery: %s\n%s | %s\n%s" % [str(option.get("source_label", summary.get("title", "Recorded journey"))), str(summary.get("place", "Location not recorded")), str(summary.get("chapter", "")), str(summary.get("time_label", "Time not recorded"))]
+		_add_journey_load_button(box, label, option, "recovery_option:%d" % index)
 
 func begin_journey_load(model: Dictionary) -> void:
 	if not _journey_load_active:
@@ -533,10 +545,10 @@ func show_main_menu() -> void:
 	var box: VBoxContainer = _menu_box("ASHEN OATH", "The Road Between Crowns", "contracts | curses | consequences", 680.0)
 	_show_journey_card("continue")
 	var model: Dictionary = _journey_models.get("continue", {})
+	_add_menu_button(box, "New Game", func(): new_game_requested.emit(), false, "new_journey")
 	_journey_primary_button = _add_journey_load_button(box, JourneyMenuPanel.load_label(model), model, "continue")
 	_journey_primary_button.set_meta("journey_model_kind", "continue")
 	_add_journey_recovery_options(box, model)
-	_add_menu_button(box, "New Game", func(): new_game_requested.emit(), false, "new_journey")
 	new_game_status_label = _add_menu_text(box, new_game_status)
 	_add_menu_button(box, "Saved Journeys", func(): show_save_library("main"), false, "saved_journeys")
 	_add_menu_button(box, "Controls", func(): show_controls_menu("main"))
@@ -1082,6 +1094,9 @@ func _refresh_story_focus() -> void:
 	tracker_caption_label.text = "Next step"
 	tracker_footer_label.text = "%s  JOURNAL" % _action_label("open_inventory")
 	var route := str(_navigation_model.get("route_hint", ""))
+	var destination := str(_navigation_model.get("destination", ""))
+	if destination != "":
+		route = "To " + destination + ("\n" + route if route != "" else "")
 	var distance := int(_navigation_model.get("distance_m", -1))
 	var scope := str(_navigation_model.get("scope", "exploration"))
 	if distance >= 0 and scope in ["local", "aftermath"]:
@@ -1246,7 +1261,7 @@ func update_equipment(potions: int, bombs: int, oil_name: String, arrow_count: i
 		(supply_labels["arrows"] as Label).tooltip_text = arrow_type + " arrows"
 		(_quick_bindings["potions"] as Label).text = _action_label("use_potion")
 		(_quick_bindings["bombs"] as Label).text = _action_label("throw_bomb")
-		(_quick_bindings["arrows"] as Label).text = _action_label("fire_bow")
+		(_quick_bindings["arrows"] as Label).text = _action_label("fire_bow").replace("Left Mouse", "LMB").replace("LeftMouse", "LMB").replace("Right Mouse", "RMB").replace("RightMouse", "RMB")
 		_gameplay_bindings.text = "%s  Strike\n%s  Guard\n%s  Dodge\n%s  Journal" % [_action_label("light_attack"), _action_label("block"), _action_label("dodge"), _action_label("open_inventory")]
 		(supply_counts["potions"] as Label).text = str(maxi(potions, 0))
 		(supply_counts["bombs"] as Label).text = str(maxi(bombs, 0))
@@ -1444,6 +1459,7 @@ func _add_topic_navigation_button(label: String, key: String, callback: Callable
 	dialogue_actions.add_child(button)
 	return button
 func show_dialogue(data: Dictionary) -> void:
+	get_tree().paused = true
 	_topic_navigation.reset()
 	if _dialogue_review_open:
 		_dialogue_review_open = false
@@ -1553,7 +1569,11 @@ func _render_dialogue_page(record_history: bool = true, announce_page: bool = tr
 		button.set_meta("dialogue_focus_key", "action:" + choice_key)
 		button.text = ("Commit: " if committing else "") + str(action.get("label", "Continue"))
 		button.tooltip_text = PreparationPanel.decision_text(model) if committing else button.text
-		button.disabled = not bool(model.get("available", true))
+		button.disabled = not bool(model.get("available", true)) or not bool(action.get("available", true))
+		if not bool(action.get("available", true)):
+			var reason := str(action.get("unavailable_reason", "Complete the current step first."))
+			button.text += "\n" + reason
+			button.tooltip_text = reason
 		button.process_mode = Node.PROCESS_MODE_ALWAYS
 		button.focus_mode = Control.FOCUS_ALL
 		button.action_mode = BaseButton.ACTION_MODE_BUTTON_RELEASE
@@ -1562,7 +1582,7 @@ func _render_dialogue_page(record_history: bool = true, announce_page: bool = tr
 			button.focus_entered.connect(func(detail: Dictionary = model): _show_decision_detail(detail))
 			button.mouse_entered.connect(func(detail: Dictionary = model): _show_decision_detail(detail))
 		button.pressed.connect(func(action_data: Dictionary = action, is_commitment: bool = committing):
-			if not _close_dialogue_surface():
+			if not _close_dialogue_surface(false):
 				return
 			if not is_commitment:
 				text_history.record("Kael", str(action_data.get("label", "Continue")), "question", str(action_data.get("choice_id", "")))
@@ -1578,7 +1598,7 @@ func _render_dialogue_page(record_history: bool = true, announce_page: bool = tr
 	if not first_decision.is_empty():
 		_show_decision_detail(first_decision)
 		if focus_page:
-			call_deferred("_focus_decision_reader", dialogue_page_index, _dialogue_view_generation)
+			_focus_after_rebuild(dialogue_actions)
 	elif focus_page:
 		_focus_after_rebuild(dialogue_actions)
 	call_deferred("_apply_hud_layout")
@@ -1756,8 +1776,8 @@ func show_inventory(inventory, quests, story_state = null, progression = null, r
 	call_deferred("_restore_inventory_state", _inventory_screen, _inventory_generation)
 func _journal_zone_id() -> String:
 	var zone_id: String = str(_preparation_context.get("zone_id", ""))
-	if get_parent() != null:
-		zone_id = str(get_parent().get("current_zone_id"))
+	if is_instance_valid(_game_owner):
+		zone_id = str(_game_owner.get("current_zone_id"))
 	return zone_id
 
 func _journal_entry_from_sections(sections: Array, section_id: String, entry_id: String) -> Dictionary:
@@ -2216,7 +2236,7 @@ func show_vendor(vendor_id: String, vendor_service, inventory, quests = null, st
 		var received_id: String = str(quote.get("item_id", selected_id))
 		var preparation_progression: Variant = _journal_context.get("progression")
 		if get_parent() != null:
-			preparation_progression = get_parent().get("progression")
+			preparation_progression = _game_owner.get("progression") if is_instance_valid(_game_owner) else null
 		var detail: Dictionary = PreparationViewModel.item_detail(received_id, inventory, preparation_progression, _preparation_context, story_state, quests)
 		detail["actions"] = []
 		inventory_text.text = heading + PreparationPanel.item_text(detail) + "\n" + PreparationPanel.purchase_text(quote)
@@ -2378,6 +2398,14 @@ func _build_hud() -> void:
 	_navigation_dial.name = "RoadNavigator"
 	_navigation_dial.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	hud_root.add_child(_navigation_dial)
+	_pointer_pause_button = Button.new()
+	_pointer_pause_button.name = "GameplayPause"
+	_pointer_pause_button.text = "II"
+	_pointer_pause_button.tooltip_text = "Pause"
+	_pointer_pause_button.action_mode = BaseButton.ACTION_MODE_BUTTON_RELEASE
+	_pointer_pause_button.pressed.connect(func(): pause_requested.emit())
+	_style_button(_pointer_pause_button)
+	hud_root.add_child(_pointer_pause_button)
 	_world_clock_label = _hud_label(hud_root, "WorldClock", 16)
 	_world_clock_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_world_clock_label.max_lines_visible = 1
@@ -2554,7 +2582,7 @@ func _restore_reflow_state(snapshot: Dictionary, generation: int, surface_key: S
 		else:
 			inventory_text.grab_focus()
 	elif dialogue_layer.visible:
-		_dialogue_history_button.grab_focus()
+		_focus_first_enabled(dialogue_actions)
 	elif menu_layer.visible and _rendered_screen != "":
 		navigation.restore(_rendered_screen, menu_layer)
 
@@ -2582,6 +2610,7 @@ func _apply_responsive_typography(node: Node, fonts: Dictionary, button_height: 
 			for child: Node in button.get_children():
 				if child is Label:
 					var label: Label = child as Label
+					label.text = button.text
 					label.set_meta("layout_font_role", role)
 					label.add_theme_color_override("font_color", Color(0.50, 0.48, 0.43) if button.disabled else (Color.WHITE if high_contrast else Color(0.94, 0.89, 0.77)))
 					label.offset_left = 12.0 * unit
@@ -2596,6 +2625,8 @@ func _apply_responsive_typography(node: Node, fonts: Dictionary, button_height: 
 			control.custom_minimum_size.x = 0.0
 			control.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			control.custom_minimum_size.y = maxf(32.0 * unit, button_height * 0.75)
+		if node is Button and bool(node.get_meta("wrapped_label", false)):
+			_hide_native_button_text(node as Button)
 	for child: Node in node.get_children():
 		if not child.is_queued_for_deletion():
 			_apply_responsive_typography(child, fonts, button_height, unit)
@@ -2743,6 +2774,7 @@ func _apply_responsive_menu(policy: Dictionary) -> void:
 	var model: Dictionary = policy.menu
 	var compact: bool = bool(model.compact)
 	var short_display: bool = bool(policy.get("short_display", false))
+	var primary_surface: bool = active_menu in ["main", "pause", "death", "ending"]
 	var frame: Rect2 = model.frame
 	var gap: float = float(policy.gap)
 	var padding: float = float(policy.padding)
@@ -2755,6 +2787,9 @@ func _apply_responsive_menu(policy: Dictionary) -> void:
 	_menu_content.custom_minimum_size = Vector2.ZERO
 	_menu_title_stack.custom_minimum_size = Vector2.ZERO
 	_menu_title_spacer.visible = not compact
+	_menu_title_stack.visible = not (compact and primary_surface)
+	_compact_menu_title.visible = compact and primary_surface
+	_compact_menu_title.add_theme_font_size_override("font_size", int(Dictionary(policy.fonts).get("heading", 26)))
 	_menu_title_spacer.custom_minimum_size.y = 24.0 * float(policy.unit_scale)
 	if compact and _menu_title_stack.get_parent() != _menu_content:
 		_menu_title_stack.reparent(_menu_content)
@@ -2781,7 +2816,7 @@ func _apply_responsive_menu(policy: Dictionary) -> void:
 		if child is Control and bool(child.get_meta("menu_secondary_heading", false)):
 			(child as Control).visible = not (short_display and active_menu in ["main", "pause"])
 	if is_instance_valid(_journey_card):
-		_journey_card.visible = _journey_card_kind != "" and not (short_display and active_menu in ["main", "pause"])
+		_journey_card.visible = _journey_card_kind != "" and not (compact and primary_surface)
 		_journey_card.custom_minimum_size = Vector2(0.0, minf(180.0 * float(policy.unit_scale), maxf(float(policy.button_min_height), frame.size.y * (0.3 if compact else 0.45))))
 	for child: Node in _menu_content.get_children():
 		if child is RichTextLabel:
@@ -2856,6 +2891,10 @@ func _apply_responsive_gameplay(policy: Dictionary) -> void:
 	var dial_visible: bool = usable.x >= 820.0 and usable.y >= 500.0
 	var dial_size: float = (146.0 if compact else 174.0) * unit
 	var dial_top: float = top + (66.0 if touch else 22.0) * unit
+	_pointer_pause_button.visible = not touch
+	_pointer_pause_button.position = Vector2(right - (dial_size + 58.0 * unit if dial_visible else 48.0 * unit), top)
+	_pointer_pause_button.size = Vector2.ONE * 48.0 * unit
+	_pointer_pause_button.custom_minimum_size = Vector2.ONE * 48.0 * unit
 	_navigation_dial.visible = dial_visible
 	_navigation_dial.position = Vector2(right - dial_size, dial_top)
 	_navigation_dial.size = Vector2.ONE * dial_size
@@ -2873,10 +2912,10 @@ func _apply_responsive_gameplay(policy: Dictionary) -> void:
 	compass_back.position = compass_label.position - Vector2(4, 2) * unit
 	compass_back.size = compass_label.size + Vector2(8, 4) * unit
 	compass_back.visible = high_contrast and dial_visible
-	var quest_y: float = location_y + 34.0 * unit if dial_visible else top + (66.0 if touch else 0.0) * unit
+	var quest_y: float = location_y + 34.0 * unit if dial_visible else top + (66.0 if touch else 56.0) * unit
 	var room_below: float = maxf(0.0, (safe.end.y - reserved_bottom - gap if touch else bottom - 136.0 * unit) - quest_y)
 	var title_height: float = (42.0 if not compact else 25.0) * unit
-	var show_title: bool = not (touch and compact and room_below < 95.0 * unit)
+	var show_title: bool = not compact or room_below >= 140.0 * unit
 	tracker_title_label.visible = show_title
 	tracker_title_label.position = Vector2(quest_x, quest_y)
 	tracker_title_label.size = Vector2(quest_width, title_height)
@@ -2936,13 +2975,13 @@ func _apply_responsive_gameplay(policy: Dictionary) -> void:
 	equipment_label.position = Vector2(left + 6.0 * unit, supplies_grid.position.y - 28.0 * unit)
 	equipment_label.size = Vector2(supplies_grid.size.x, 24.0 * unit)
 	equipment_label.add_theme_font_size_override("font_size", int(fonts.caption))
-	_gameplay_bindings.visible = not touch
+	_gameplay_bindings.visible = not touch and not compact
 	_gameplay_bindings.position = Vector2(right - 290.0 * unit, bottom - (90.0 if not compact else 48.0) * unit)
 	_gameplay_bindings.size = Vector2(290.0 * unit, (90.0 if not compact else 48.0) * unit)
 	_gameplay_bindings.max_lines_visible = 4 if not compact else 2
 	_gameplay_bindings.add_theme_font_size_override("font_size", int(fonts.caption))
 	var enemy_width: float = minf(320.0 * unit, center_channel if touch else safe.size.x * 0.37)
-	var target_y: float = top + (150.0 if touch and compact else (110.0 if compact else 8.0)) * unit
+	var target_y: float = top + (150.0 if touch and compact else (160.0 if compact else 8.0)) * unit
 	enemy_label.position = Vector2(center - enemy_width * 0.5, target_y)
 	enemy_label.size = Vector2(enemy_width, 25.0 * unit)
 	enemy_label.add_theme_font_size_override("font_size", int(fonts.body))
@@ -2978,6 +3017,18 @@ func _apply_responsive_gameplay(policy: Dictionary) -> void:
 	toast_label.position = Vector2(notice_x, notice_y + 28.0 * unit)
 	toast_label.size = Vector2(notice_width, 85.0 * unit)
 	toast_label.add_theme_font_size_override("font_size", int(fonts.body))
+	if compact and not touch:
+		_touch_shared_prompt = true
+		var message_x := center - notice_width * 0.5
+		var message_y := bottom - 110.0 * unit
+		notice_back.position = Vector2(message_x - 6.0 * unit, message_y - 4.0 * unit)
+		notice_category_label.position = Vector2(message_x, message_y)
+		toast_label.position = Vector2(message_x, message_y + 24.0 * unit)
+		toast_label.max_lines_visible = 3
+		hint_label.position = Vector2(message_x, message_y)
+		hint_label.size = Vector2(notice_width, 64.0 * unit)
+		status_label.position = hint_label.position
+		status_label.size = hint_label.size
 	if touch and bool(touch_model.get("playable", false)):
 		_apply_touch_gameplay_regions(touch_model, unit)
 	else:
@@ -3022,10 +3073,11 @@ func _refresh_touch_message_visibility() -> void:
 		return
 	var notice_visible := toast_label != null and toast_label.visible
 	var blocked := _gameplay_surface_blocked()
-	hint_label.visible = not blocked and (input_device != "touch" or not notice_visible) and _hint_remaining > 0.0 and raw_hint != ""
-	status_label.visible = not blocked and (input_device != "touch" or (not notice_visible and not hint_label.visible)) and _status_remaining > 0.0
+	var shared: bool = input_device == "touch" or _touch_shared_prompt
+	hint_label.visible = not blocked and (not shared or not notice_visible) and _hint_remaining > 0.0 and raw_hint != ""
+	status_label.visible = not blocked and (not shared or (not notice_visible and not hint_label.visible)) and _status_remaining > 0.0
 	var message_visible: bool = notice_visible or hint_label.visible or status_label.visible
-	prompt_label.visible = not blocked and raw_prompt != "" and not (input_device == "touch" and _touch_shared_prompt and message_visible)
+	prompt_label.visible = not blocked and raw_prompt != "" and not (_touch_shared_prompt and message_visible)
 	if prompt_back != null:
 		prompt_back.visible = prompt_label.visible
 
@@ -3232,6 +3284,13 @@ func _menu_box(title: String, subtitle: String = "", omen_text: String = "", _he
 	var frame_box: VBoxContainer = VBoxContainer.new()
 	frame_box.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_menu_frame.add_child(frame_box)
+	_compact_menu_title = Label.new()
+	_compact_menu_title.text = title
+	_compact_menu_title.set_meta("layout_font_role", "heading")
+	_compact_menu_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_compact_menu_title.add_theme_color_override("font_color", HudVisualStyle.GOLD)
+	_compact_menu_title.visible = false
+	frame_box.add_child(_compact_menu_title)
 	_menu_shell = HBoxContainer.new()
 	_menu_shell.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	frame_box.add_child(_menu_shell)
@@ -3339,7 +3398,7 @@ func _build_menu_background() -> void:
 	backdrop.set_anchors_preset(Control.PRESET_FULL_RECT)
 	backdrop.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	backdrop.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-	backdrop.texture = preload("res://assets_external/ui/greyfen_menu_runtime.jpg")
+	backdrop.texture = preload("res://assets_external/ui/greyfen_menu_stylized.png")
 	backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	menu_layer.add_child(backdrop)
 	var shade := ColorRect.new()
@@ -3815,6 +3874,9 @@ func _capture_remap_input(event: InputEvent) -> bool:
 func _unhandled_input(event: InputEvent) -> void:
 	if not event.is_action_pressed("ui_cancel"):
 		return
+	# Gameplay owns Escape when no actual GUI surface is open.
+	if not _journey_load_active and not menu_layer.visible and not inventory_layer.visible and not dialogue_layer.visible:
+		return
 	if _journey_load_active:
 		_cancel_journey_load()
 		get_viewport().set_input_as_handled()
@@ -3904,7 +3966,7 @@ func _add_dialogue_close() -> void:
 	)
 	dialogue_actions.add_child(close)
 
-func _close_dialogue_surface() -> bool:
+func _close_dialogue_surface(resume_world: bool = true) -> bool:
 	if _dialogue_review_open:
 		_dialogue_review_open = false
 		dialogue_review_changed.emit(false)
@@ -3914,7 +3976,7 @@ func _close_dialogue_surface() -> bool:
 		return false
 	dialogue_closing = true
 	hide_menus()
-	get_tree().paused = false
+	get_tree().paused = not resume_world
 	return true
 
 func _focused_dialogue_button() -> Button:
@@ -4174,7 +4236,7 @@ func load_text_history(raw: Variant) -> void:
 	text_history.load_state(raw)
 
 func _save_service():
-	var service = get_parent().get("save_manager")
+	var service = _save_manager if is_instance_valid(_save_manager) else null
 	if service != null:
 		if not service.library_changed.is_connected(_refresh_save_library):
 			service.library_changed.connect(_refresh_save_library)
@@ -4275,8 +4337,8 @@ func show_save_slot(slot_id: String) -> void:
 	_add_journey_load_button(box, "Load Previous Copy" if str(slot.get("status", "")) == "recoverable" else "Load This Journey", slot, "load_slot:" + slot_id)
 	_add_journey_recovery_options(box, slot)
 	if not bool(slot.get("protected", false)):
-		var can_save: bool = get_parent().get("game_started") == true and is_instance_valid(get_parent().get("player"))
-		_add_menu_button(box, "Replace With Current Journey" if bool(slot.get("exists", false)) else "Save Current Journey Here", func(): service.save_named(get_parent(), slot_id, title.text), not can_save, "save_current")
+		var can_save: bool = is_instance_valid(_game_owner) and _game_owner.get("game_started") == true and is_instance_valid(_game_owner.get("player"))
+		_add_menu_button(box, "Replace With Current Journey" if bool(slot.get("exists", false)) else "Save Current Journey Here", func(): service.save_named(_game_owner, slot_id, title.text), not can_save, "save_current")
 		_add_menu_button(box, "Rename", func(): service.rename_slot(slot_id, title.text), not bool(slot.get("valid", false)), "rename")
 		_add_menu_button(box, "Restore Previous Slot Copy", func(): service.restore_previous_slot(slot_id), not bool(slot.get("backup_available", false)), "restore_previous")
 		_add_menu_button(box, "Import File Into This Slot", func(): service.request_import_file(slot_id), false, "import_slot")
@@ -4393,24 +4455,14 @@ func _dialogue_focus_controls() -> Array[Control]:
 func _show_journal_art(quests, state) -> void:
 	if journal_art == null:
 		return
-	var path := "res://assets/ui/story_chapters_atlas.png"
+	var path := "res://assets_external/ui/greyfen_menu_stylized.png"
 	if not ResourceLoader.exists(path):
 		journal_art.visible = false
 		return
 	var image := load(path) as Texture2D
 	if image == null:
 		return
-	var cell := 0
-	if state != null and (bool(state.get_flag("final_choice_completed", false)) or quests.is_active("main_hart_remembers")):
-		cell = 3
-	elif quests.is_completed("main_names_they_burned"):
-		cell = 2
-	elif quests.is_completed("main_road_of_crows"):
-		cell = 1
-	var atlas := AtlasTexture.new()
-	atlas.atlas = image
-	atlas.region = Rect2(float(cell % 2) * image.get_width() / 2.0, floorf(float(cell) / 2.0) * image.get_height() / 2.0, image.get_width() / 2.0, image.get_height() / 2.0)
-	journal_art.texture = atlas
+	journal_art.texture = image
 	journal_art.visible = true
 
 func show_problem_report(back_target: String = "pause") -> void:
@@ -4547,5 +4599,5 @@ func _style_button(button: Button) -> void:
 func _hide_native_button_text(button: Button) -> void:
 	# Keep the actual Button text for accessible names and existing callers.
 	# Its wrapped child label owns only the visual presentation.
-	for color_key in ["font_color", "font_hover_color", "font_focus_color", "font_pressed_color", "font_disabled_color", "font_hover_pressed_color"]:
+	for color_key in ["font_color", "font_hover_color", "font_focus_color", "font_pressed_color", "font_disabled_color", "font_hover_pressed_color", "font_shadow_color", "font_outline_color"]:
 		button.add_theme_color_override(color_key, Color(0, 0, 0, 0))

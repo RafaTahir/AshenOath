@@ -421,6 +421,7 @@ func _register_zone_defaults() -> void:
 		# westward lane before any low berms, fences, trees, or props are dressed.
 		reserve_corridor("long_road_approach", Vector3(-10.0, 0, -10.0), Vector2(8.5, 3.6))
 		reserve_corridor("spawn", Vector3(0, 0, 13.0), Vector2(3.2, 2.4))
+		reserve_corridor("bracken_rescue_approach", Vector3(-2.0, 0, -11.0), Vector2(1.7, 1.8))
 		add_safe_spawn(Vector3(0, 0.9, 12.5))
 		# Keep recovery on authored road approaches rather than the dense river-side
 		# dressing. These anchors are also valid camera staging points.
@@ -458,9 +459,9 @@ func _register_zone_defaults() -> void:
 			# rubble are authored. A direct endpoint-only clearance check cannot
 			# protect this route from axis-aligned scenery colliders.
 			for approach in [
-				Vector3(4.0, 0.0, 8.4), Vector3(8.0, 0.0, 3.8),
-				Vector3(12.0, 0.0, -0.8), Vector3(16.0, 0.0, -5.4),
-				Vector3(20.0, 0.0, -10.0)
+				Vector3(4.0, 0.0, 8.4), Vector3(8.0, 0.0, 5.8),
+				Vector3(12.0, 0.0, 7.0), Vector3(16.0, 0.0, 7.0),
+				Vector3(20.0, 0.0, 7.0)
 			]:
 				reserve_corridor("vargan_boundary_approach", approach, Vector2(2.4, 2.4))
 		reserve_corridor("campaign_route", Vector3(0, 0, 0), Vector2(4.0, 15.0))

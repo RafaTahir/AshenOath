@@ -155,6 +155,16 @@ static func for_objective(quest_id: String, objective_id: String, state = null, 
 		result["next_action"] = "Break Halvern's guard or earn his peaceful hearing"
 		if state != null and bool(state.get_flag("command_proof_recovered", false)):
 			result["route_hint"] = "Present the recovered order at the marked place before Halvern."
+	if quest_id == "main_bell_beneath_greyfen" and objective_id == "crow_shrine_choice" and state != null and not bool(state.get_flag("bell_eater_defeated", false)):
+		result["next_action"] = "Defeat the Bell-Eater before settling the shrine"
+		result["route_hint"] = "The guardian holds the west cemetery approach. The shrine opens after its defeat."
+		result["target_ids"] = []
+		result["pinpoint"] = false
+	if quest_id == "main_ash_at_the_mill" and objective_id == "mill_choice" and state != null and not bool(state.get_flag("ashwing_defeated", false)):
+		result["next_action"] = "Defeat Ashwing and recover the mill's record"
+		result["route_hint"] = "The surviving record becomes accessible after the drake falls."
+		result["target_ids"] = []
+		result["pinpoint"] = false
 	if quest_id == "main_blood_under_stone" and objective_id == "last_witness_hook":
 		result["next_action"] = "Demand Edric's answer about the renewal"
 	elif quest_id == "main_blood_under_stone" and objective_id == "castle_evidence_ready":
@@ -212,6 +222,8 @@ static func ending_continuation(state, current_zone: String) -> Dictionary:
 	if current_zone == "hart_glade":
 		result["action"] = "Take the return to Greyfen"
 		result["route_hint"] = "The ending's return brings you back to the village."
+	elif current_zone == "assembly":
+		result["route_hint"] = "Follow the village return road, not the undercroft."
 	return result
 
 static func _continuation(id: String, title: String, action: String, destination: String, hint: String, purpose: String) -> Dictionary:

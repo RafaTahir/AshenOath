@@ -8,6 +8,7 @@ signal beam_phase_changed(phase: String)
 signal arrow_requested(request: Dictionary)
 signal arrow_unavailable
 signal footstep
+signal ability_hint(text: String)
 signal parried
 signal blocked(amount: float)
 signal hurt(amount: float)
@@ -816,6 +817,7 @@ func _release_bow() -> void:
 	var range_owner: Node = training_range.get_ref() if training_range != null else null
 	var training := is_instance_valid(range_owner)
 	if training and not range_owner.training_ready():
+		ability_hint.emit("Aim before loosing the arrow.")
 		return
 	if not training and inventory_ref == null:
 		arrow_unavailable.emit()
@@ -829,15 +831,14 @@ func _release_bow() -> void:
 	if camera_controller != null:
 		var locked_target: Node3D = camera_controller.get_locked_combat_target() if camera_controller.has_method("get_locked_combat_target") else null
 		if locked_target != null and is_instance_valid(locked_target):
-			direction = (locked_target.global_position + Vector3.UP * 0.92 - get_arrow_origin()).normalized()
+			var bounds: AABB = locked_target.get_meta("camera_subject_bounds", AABB(Vector3.ZERO, Vector3(0, 1.84, 0)))
+			direction = (locked_target.global_transform * bounds.get_center() - get_arrow_origin()).normalized()
 		else:
-			direction = camera_controller.get_flat_forward()
-	direction.y = 0.0
+			direction = camera_controller.training_aim_direction(get_arrow_origin())
 	if direction.length_squared() < 0.5:
 		direction = -global_transform.basis.z
-	direction.y = 0.0
 	direction = direction.normalized()
-	face_target(global_position + direction * 4.0)
+	face_target(global_position + Vector3(direction.x, 0, direction.z) * 4.0)
 	var arrow_origin := get_arrow_origin()
 	if training and camera_controller != null:
 		direction = camera_controller.training_aim_direction(arrow_origin)
@@ -1537,6 +1538,11 @@ func _prepare_modeled_prop(root: Node3D, fallback_color: Color) -> void:
 				material = mesh_instance.mesh.surface_get_material(surface_index)
 			if material == null:
 				mesh_instance.set_surface_override_material(surface_index, _mat(fallback_color))
+			elif material is StandardMaterial3D and material.albedo_texture == null and material.albedo_color.r > 0.85 and material.albedo_color.g > 0.85 and material.albedo_color.b > 0.85:
+				var fitted := material.duplicate() as StandardMaterial3D
+				fitted.albedo_color = fallback_color
+				fitted.roughness = 0.75
+				mesh_instance.set_surface_override_material(surface_index, fitted)
 
 func _build_sheathed_sword() -> void:
 	var skeleton := _find_skeleton(visual_root)
@@ -1561,8 +1567,8 @@ func _build_sheathed_sword() -> void:
 		var oath := blade_id == "oathblade"
 		var assembly := Node3D.new()
 		assembly.name = "OathbladeBackScabbard" if oath else "SteelBackScabbard"
-		assembly.position = Vector3(0.12 if oath else -0.08, 0.27, -0.28)
-		assembly.rotation_degrees = Vector3(-10.0, 0.0, -32.0)
+		assembly.position = Vector3(0.14 if oath else -0.12, 0.22, -0.20)
+		assembly.rotation_degrees = Vector3(-6.0, 0.0, 28.0 if oath else -28.0)
 		sheathed_sword_visual.add_child(assembly)
 		blade_scabbards[blade_id] = assembly
 		var housed_blade := Node3D.new()
@@ -1575,7 +1581,7 @@ func _build_sheathed_sword() -> void:
 		var scabbard := MeshInstance3D.new()
 		scabbard.name = "ScabbardBody"
 		scabbard.mesh = scabbard_mesh
-		scabbard.material_override = _mat(Color(0.045, 0.075, 0.080) if oath else Color(0.075, 0.065, 0.055))
+		scabbard.material_override = _mat(Color(0.15, 0.18, 0.18) if oath else Color(0.20, 0.14, 0.10))
 		assembly.add_child(scabbard)
 		var trim := _metal_mat(Color(0.46, 0.53, 0.54) if oath else Color(0.42, 0.30, 0.16))
 		var throat := MeshInstance3D.new()

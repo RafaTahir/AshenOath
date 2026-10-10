@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Ashen Oath: The Road Between Crowns</title>
-  <link rel="preload" href="menu-background.jpg" as="image">
+  <link rel="preload" href="menu-background.png" as="image">
   <style>
     :root { color-scheme: dark; --paper: #e7e0d0; --brass: #c6a66d; --line: #48534d; }
     * { box-sizing: border-box; }
     html, body { width: 100%; height: 100%; height: 100dvh; margin: 0; overflow: hidden; overscroll-behavior: none; }
-    body { background: #0b1010 url('menu-background.jpg') center / cover no-repeat; color: var(--paper); font-family: system-ui, sans-serif; }
+    body { background: #0b1010 url('menu-background.png') center / cover no-repeat; color: var(--paper); font-family: system-ui, sans-serif; }
     #canvas { position: fixed; inset: 0; width: 100vw; height: 100vh; height: 100dvh; display: block; background: transparent; touch-action: none; }
     #canvas:focus-visible { outline: 2px solid var(--brass); outline-offset: -2px; }
     #startup-error { position: fixed; inset: 0; display: grid; place-items: center; overflow: auto; padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left)); background: #0b1010e8; }
@@ -38,9 +38,9 @@
       const canvas = document.getElementById('canvas');
       const errorPanel = document.getElementById('startup-error');
       const reload = document.getElementById('reload');
-      const SHELL_BUILD_ID = "mobile-003-20261008-landscape";
-      const RUNTIME_PACK_CONTRACT = "mobile-003-20261008-landscape";
-      const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":19583448,"index.wasm":37700666},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+      const SHELL_BUILD_ID = "playfix-012-20261010-repair-b74a523";
+      const RUNTIME_PACK_CONTRACT = "playfix-012-20261010-repair-b74a523";
+      const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":20734456,"index.wasm":37700666},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
       let engine = null, engineBooted = false, started = false, failed = false;
       let startupResourceError = '';
       const bootMetrics = {

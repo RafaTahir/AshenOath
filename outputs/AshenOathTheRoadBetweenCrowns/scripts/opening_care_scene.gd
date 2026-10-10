@@ -19,6 +19,7 @@ var carrier: Node3D
 var hand_skeleton: Skeleton3D
 var hand_bone := -1
 var hinted := false
+var injured_actor: Node3D
 
 static func install(game, root: Node3D) -> void:
 	var scene: Node = root.get_node_or_null(LAYER)
@@ -67,6 +68,28 @@ func build() -> void:
 		box(tray_area, "ScreenPost", Vector3(x, 0.91, -0.54), Vector3(0.055, 1.82, 0.055), TIMBER)
 	box(tray_area, "ScreenCrossbar", Vector3(0, 1.79, -0.54), Vector3(1.28, 0.055, 0.055), TIMBER)
 	box(tray_area, "PrivacyLinen", Vector3(0, 1.02, -0.54), Vector3(1.17, 1.42, 0.018), LINEN)
+	var screen_clearance := StaticBody3D.new()
+	screen_clearance.collision_layer = 1 << 6
+	screen_clearance.collision_mask = 0
+	screen_clearance.position = Vector3(0, 1.02, -0.54)
+	var screen_shape := CollisionShape3D.new()
+	var screen_box := BoxShape3D.new()
+	screen_box.size = Vector3(1.17, 1.42, 0.06)
+	screen_shape.shape = screen_box
+	screen_clearance.add_child(screen_shape)
+	tray_area.add_child(screen_clearance)
+	injured_actor = Node3D.new()
+	injured_actor.name = "injured_traveler"
+	injured_actor.position = tray_area.position + Vector3(0.84, 0, -0.88)
+	add_child(injured_actor)
+	box(injured_actor, "SupportedCareBench", Vector3(0, 0.44, 0.12), Vector3(0.78, 0.10, 0.46), TIMBER)
+	for x: float in [-0.27, 0.27]:
+		box(injured_actor, "CareBenchLeg", Vector3(x, 0.21, 0.12), Vector3(0.075, 0.42, 0.40), TIMBER)
+	var traveler: Node3D = host.asset_helper.spawn_visual_role("villager_human", "characters", "injured_traveler")
+	if traveler != null:
+		injured_actor.add_child(traveler)
+		preload("res://scripts/character_identity_profile.gd").apply(traveler, "villager_human", "injured_traveler")
+		host._configure_npc_animation(traveler, "injured_traveler")
 	coat_area = point("opening_coat_shelter", "Fold Oren's coat out of the weather", Vector3(1.3, 0, 0.6))
 	box(coat_area, "CoatBench", Vector3(0, 0.54, 0), Vector3(1.26, 0.08, 0.55), TIMBER)
 	for x: float in [-0.49, 0.49]:
@@ -107,11 +130,24 @@ func activate(id: String) -> void:
 		"opening_cup_pickup":
 			if not cup_area.is_interaction_enabled(): return
 			commit({"opening_cup_carried": true})
+			if host.player.animation_driver != null:
+				host.player.animation_driver.play_story_gesture("offer", 0.85)
 			host.hud.set_guidance_hint("Leave the water on the linen-covered tray beside the privacy screen.", 9.0)
 		"opening_cup_deliver":
 			if not tray_area.is_interaction_enabled(): return
 			commit({"opening_cup_carried": false, "opening_cup_delivered": true})
 			show_scene("opening_care_water")
+			var traveler_driver: Node = injured_actor.find_child("CharacterAnimationDriver", true, false) if is_instance_valid(injured_actor) else null
+			if traveler_driver != null:
+				var previous_mode: int = traveler_driver.process_mode
+				var restore_pose := func(_action: String):
+					if is_instance_valid(traveler_driver):
+						traveler_driver.process_mode = previous_mode
+				traveler_driver.action_finished.connect(restore_pose, CONNECT_ONE_SHOT)
+				traveler_driver.process_mode = Node.PROCESS_MODE_ALWAYS
+				if not traveler_driver.trigger_action("story_offer", 0.75):
+					traveler_driver.process_mode = previous_mode
+					traveler_driver.action_finished.disconnect(restore_pose)
 		"opening_coat_shelter":
 			if not coat_area.is_interaction_enabled(): return
 			commit({"opening_coat_sheltered": true})
@@ -136,7 +172,7 @@ func show_scene(id: String, actor: Node3D = null) -> void:
 	host.audio.set_dialogue_active(true)
 	host.audio.set_game_paused(true)
 	host.get_tree().paused = true
-	host.hud.show_dialogue(content)
+	host.hud.show_dialogue(host._prepare_dialogue_presence(content))
 
 func _process(_delta: float) -> void:
 	if host == null or host.current_zone_id != "greyfen" or host.player == null:

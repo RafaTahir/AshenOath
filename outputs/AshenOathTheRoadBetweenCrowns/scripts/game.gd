@@ -95,6 +95,7 @@ var active_enemies: Array = []
 var active_enemy_attacker: Node
 var boss_saved_states: Dictionary = {}
 var wychwood_pack_kills = 0
+var wychwood_encounter_started := false
 var game_started = false
 var paused_by_menu = true
 var pending_ending = ""
@@ -419,8 +420,10 @@ func _dispatch_gameplay_action(action: String, target_instance_id: int = 0) -> v
 		return
 	match action:
 		"interact":
-			var focused_target: Area3D = active_interactable as Area3D if is_instance_valid(active_interactable) else null
-			if is_instance_valid(focused_target) and (target_instance_id == 0 or focused_target.get_instance_id() == target_instance_id) and _interaction_target_valid(focused_target):
+			var shown: Dictionary = hud.get_interaction_prompt_model()
+			var chosen_id: int = target_instance_id if target_instance_id > 0 else int(shown.get("target_instance_id", 0))
+			var focused_target: Area3D = instance_from_id(chosen_id) as Area3D if chosen_id > 0 else null
+			if is_instance_valid(focused_target) and zone_root != null and zone_root.is_ancestor_of(focused_target) and _interaction_target_valid(focused_target):
 				_handle_interaction(focused_target)
 			else:
 				hud.set_guidance_hint("Face the object and move into clear view.", 2.0)
@@ -877,6 +880,7 @@ func _start_new_game_world() -> void:
 	game_started = true
 	paused_by_menu = false
 	wychwood_pack_kills = 0
+	wychwood_encounter_started = false
 	pending_anwen_relocation = false
 	tutorial_flags.clear()
 	inventory.reset_starting_loadout()
@@ -1135,6 +1139,7 @@ func _spawn_player(pos: Vector3) -> void:
 	player.arrow_unavailable.connect(_on_player_arrow_unavailable)
 	player.equipment_loadout.changed.connect(_refresh_equipment_readout)
 	player.footstep.connect(_on_player_footstep)
+	player.ability_hint.connect(func(text: String): hud.post_notice(text, "info", 2.5, "ability_requirement"))
 	player.parried.connect(_on_player_parried)
 	player.blocked.connect(_on_player_blocked)
 	player.hurt.connect(_on_player_hurt)
@@ -1857,6 +1862,12 @@ func _install_opening_soundscape(zone_id: String) -> void:
 	soundscape.configure(zone_root, zone_id, player, audio, quality)
 
 func _handle_interaction(area) -> void:
+	if area != null and area.interaction_id == "bracken" and str(story_state.get_flag("bracken_home", "")) == "adopted":
+		_show_companion_commands()
+		return
+	if area != null and area.interaction_type == "encounter" and area.interaction_id == "rootbound_challenge":
+		_open_rootbound_encounter()
+		return
 	if area != null and area.interaction_type == "story_activity":
 		preload("res://scripts/story_activity_director.gd").handle(self, area)
 		return
@@ -1916,6 +1927,10 @@ func _handle_interaction(area) -> void:
 		if not report_chosen:
 			preload("res://scripts/story_activity_director.gd").add_friend_invitation(self, area, dialogue_data)
 			preload("res://scripts/story_activity_director.gd").add_personal_invitation(self, area, dialogue_data)
+		for option: Dictionary in dialogue_data.get("actions", []):
+			if not _dialogue_action_available(option):
+				option["available"] = false
+				option["unavailable_reason"] = _dialogue_action_unavailable_reason(option)
 		_stage_dialogue_moment(area)
 		var topic_context_id: String = dialogue_runtime_coordinator.bind_topic_context(str(area.interaction_id), current_zone_id)
 		if not topic_context_id.is_empty():
@@ -1925,7 +1940,7 @@ func _handle_interaction(area) -> void:
 		audio.set_dialogue_active(true)
 		audio.set_game_paused(true)
 		get_tree().paused = true
-		hud.show_dialogue(dialogue_data)
+		hud.show_dialogue(_prepare_dialogue_presence(dialogue_data))
 		# The displayed page owns its exact-text recording. A legacy scene-wide
 		# sequence here would cancel that page and could speak a different turn.
 	elif area.interaction_type == "clue":
@@ -1962,6 +1977,7 @@ func _handle_interaction(area) -> void:
 		else:
 			quests.complete_evidence(area.quest_id, area.objective_id)
 		story_state.record_evidence(str(area.interaction_id), {"zone": current_zone_id, "kind": "fact", "title": str(area.prompt)})
+		_present_castle_clue(str(area.interaction_id), str(area.prompt))
 		if area.interaction_id == "tracks":
 			if quests.is_objective_done("main_road_of_crows", "fight_ghoulkin"):
 				hud.toast("The tracks change after the Ghoulkin falls: boots beside claws, both leading back toward Greyfen.")
@@ -2190,6 +2206,7 @@ func _legacy_report_choice_required() -> bool:
 func _crow_shrine_choice_ready() -> bool:
 	return quests.is_active("main_bell_beneath_greyfen") \
 		and quests.is_objective_done("main_bell_beneath_greyfen", "open_chapel") \
+		and bool(story_state.get_flag("bell_eater_defeated", false)) \
 		and not quests.is_objective_done("main_bell_beneath_greyfen", "crow_shrine_choice")
 
 func _chapel_can_open() -> bool:
@@ -2222,14 +2239,14 @@ func _spawn_crow_shrine_choice() -> void:
 	_make_named_interactable("crow_shrine_choice", "dialogue", "Choose the Crow Shrine's fate", CemeterySection.CROW_SHRINE_INTERACTION_STAGE, Color(0.3,0.38,0.3), Vector3(0.45,0.45,0.45))
 
 func _restore_greyfen_cemetery_state() -> void:
+	if _boss_is_resolved("bell_eater"):
+		_retire_bell_eater()
 	if not quests.is_active("main_bell_beneath_greyfen"):
-		# Shrine choice completes the quest, not the undefeated encounter.
-		if bool(story_state.get_flag("crow_chapel_opened", false)):
-			_ensure_bell_eater()
 		return
 	_relocate_anwen_to_cemetery()
 	if _crow_shrine_choice_ready():
 		_spawn_crow_shrine_choice()
+	elif bool(story_state.get_flag("crow_chapel_opened", false)):
 		_ensure_bell_eater()
 	else:
 		_ensure_cemetery_ambush()
@@ -2293,6 +2310,9 @@ func _handle_dialogue_action(action: Dictionary) -> void:
 	transaction.begin(self)
 	var applied: bool = _apply_dialogue_action(action)
 	transaction.finish(self, action, applied)
+	var blocking: bool = hud._gameplay_surface_blocked() or _journey_load_pending()
+	get_tree().paused = blocking
+	audio.set_game_paused(blocking)
 
 func _finish_story_action(action: Dictionary) -> void:
 	if not game_started or resource_shutdown_prepared:
@@ -2329,27 +2349,22 @@ func _persist_story_action() -> void:
 
 func _story_has_active_combat() -> bool:
 	for enemy in active_enemies:
-		if is_instance_valid(enemy) and not enemy.dead and player != null:
+		if is_instance_valid(enemy) and not enemy.dead and player != null and enemy.is_encounter_active() and not bool(enemy.get_meta("dormant_arena", false)):
 			if enemy.global_position.distance_squared_to(player.global_position) < 100.0:
 				return true
 	return false
 
 func _apply_dialogue_action(action: Dictionary) -> bool:
-	# Dialogue action buttons emit their choice before the game receives it. The
-	# close button already restores these states, so action buttons must do the
-	# same before applying quest/story mutations or the world stays paused.
-	get_tree().paused = false
+	if not _dialogue_action_available(action):
+		hud.toast(_dialogue_action_unavailable_reason(action))
+		return false
+	# Keep combat frozen until the complete choice transaction has published.
+	get_tree().paused = true
 	if hud != null:
 		hud.hide_menus()
-	if audio != null:
-		audio.set_game_paused(false)
 	audio.stop_voice()
 	audio.play_event("ui")
 	var type = str(action.get("type", ""))
-	if not _dialogue_action_available(action):
-		hud.toast("That part of the story is not ready yet.")
-		_refresh_tracker()
-		return false
 	if type == "opening_care_account":
 		var opening_anwen := zone_root.find_child("sister_anwen", true, false) as Node3D
 		if current_zone_id == "greyfen" and opening_anwen != null:
@@ -2510,6 +2525,8 @@ func _dialogue_action_requires_zone_rebuild(action: Dictionary) -> bool:
 	return action_type == "start_quest"
 
 func _dialogue_action_available(action: Dictionary) -> bool:
+	if action.get("sets_flags", {}).has("crow_shrine_state") and not bool(story_state.get_flag("bell_eater_defeated", false)):
+		return false
 	if action.get("sets_flags", {}).has("halvern_fate"):
 		var yielding := bool(story_state.get_flag("halvern_guard_broken", false)) or bool(story_state.get_flag("command_proof_recovered", false)) or bool(story_state.get_flag("halvern_surrender_protected", false)) or str(story_state.get_flag("halvern_fate", "")) == "defeated"
 		if not yielding:
@@ -2534,6 +2551,15 @@ func _dialogue_action_available(action: Dictionary) -> bool:
 			return false
 		return _story_choice_prerequisites_done(quest_id, objective_id)
 	return true
+
+func _dialogue_action_unavailable_reason(action: Dictionary) -> String:
+	if action.get("sets_flags", {}).has("crow_shrine_state"):
+		return "Defeat the Bell-Eater before deciding the shrine's fate."
+	if str(action.get("quest", "")) == "main_soldier_without_banner" and str(action.get("objective", "")) == "senn_choice":
+		return "First settle the checkpoint guards, by combat or their earned surrender."
+	if str(action.get("quest", "")) == "main_ash_at_the_mill" and not bool(story_state.get_flag("ashwing_defeated", false)):
+		return "Defeat Ashwing before settling the mill's surviving records."
+	return "Complete the current step before making this choice."
 
 func _quest_required_objectives_done(quest_id: String) -> bool:
 	var definition: Dictionary = quests.quest_defs.get(quest_id, {})
@@ -3347,10 +3373,8 @@ func _on_player_arrow(request: Dictionary) -> void:
 		return
 	var origin: Vector3 = request.get("origin", player.global_position + Vector3.UP * 1.3)
 	var direction: Vector3 = request.get("direction", -player.global_transform.basis.z)
-	direction.y = 0.0
 	if direction.length_squared() < 0.5:
 		direction = -player.global_transform.basis.z
-		direction.y = 0.0
 	direction = direction.normalized()
 	var arrow_id := str(request.get("arrow_id", "standard_arrow"))
 	var arrow_def: Dictionary = inventory.item_defs.get(arrow_id, {})
@@ -3693,6 +3717,8 @@ func _on_enemy_died(enemy) -> void:
 			_restore_bell_eater_bystanders()
 			story_state.set_flag("bell_eater_defeated", true)
 			story_state.set_flag("cemetery_bell_silent", true)
+			_retire_bell_eater()
+			_spawn_crow_shrine_choice()
 			hud.show_status_cue("The Bell-Eater is silent", "victory")
 			hud.toast("The chapel bell stops. Beneath the silence, the Crow Shrine waits for your answer.")
 			_show_current_objective_guidance(6.0)
@@ -3703,7 +3729,7 @@ func _on_enemy_died(enemy) -> void:
 		elif enemy.enemy_id == "ashwing":
 			story_state.set_flag("ashwing_defeated", true)
 			if current_zone_id == "old_mill" and not quests.is_objective_done("main_ash_at_the_mill", "mill_choice"):
-				_make_named_interactable("miller_record", "dialogue", "Read the miller's record", Vector3(-7.0,0,-7), Color(0.5,0.4,0.25))
+				_make_named_interactable("miller_record", "dialogue", "Read the miller's record", Vector3(-5.2,0.48,-3.4), Color(0.5,0.4,0.25))
 			hud.show_status_cue("Ashwing falls", "victory")
 			hud.toast("The mill roof catches the last ember, then goes dark. Something useful survived in the ash.")
 		elif enemy.enemy_id == "halvern_boss":
@@ -4054,6 +4080,7 @@ func save_world_state() -> Dictionary:
 		"pending_ending": pending_ending,
 		"wychwood_pack_kills": wychwood_pack_kills,
 		"ghoulkin_kills": wychwood_pack_kills,
+		"wychwood_encounter": {"started": wychwood_encounter_started, "wave": wychwood_pack_kills},
 		"boss_states": boss_states,
 		"day_night": day_night.save_state() if day_night != null else {}
 	}
@@ -4062,6 +4089,8 @@ func load_world_state(state: Dictionary) -> void:
 	removed_interactions = state.get("removed_interactions", {}).duplicate(true) if typeof(state.get("removed_interactions", {})) == TYPE_DICTIONARY else {}
 	pending_ending = str(state.get("pending_ending", ""))
 	wychwood_pack_kills = int(state.get("wychwood_pack_kills", state.get("ghoulkin_kills", wychwood_pack_kills)))
+	var encounter: Variant = state.get("wychwood_encounter", {})
+	wychwood_encounter_started = bool(encounter.get("started", wychwood_pack_kills > 0)) if encounter is Dictionary else wychwood_pack_kills > 0
 	boss_saved_states = state.get("boss_states", {}).duplicate(true) if typeof(state.get("boss_states", {})) == TYPE_DICTIONARY else {}
 	if day_night != null:
 		day_night.load_state(state.get("day_night", {}))
@@ -4288,6 +4317,7 @@ func _apply_story_guidance_refresh() -> void:
 	_refresh_tracker()
 
 func _refresh_tracker() -> void:
+	_reconcile_preparation_objective()
 	# Quest changes can alter both the preferred interaction target and the
 	# compass summary without moving the player. Invalidate the small runtime
 	# caches instead of forcing per-frame scans.
@@ -4317,6 +4347,13 @@ func _refresh_equipment_readout() -> void:
 	if mobile_touch != null and is_instance_valid(player):
 		mobile_touch.set_weapon_mode(player.get_weapon_mode())
 
+func _reconcile_preparation_objective() -> void:
+	if not game_started or _journey_load_pending() or inventory == null or quests == null:
+		return
+	if quests.is_active("main_teeth_in_rain") and not quests.is_objective_done("main_teeth_in_rain", "craft_moon_oil"):
+		if int(inventory.items.get("moon_oil", 0)) > 0 or str(inventory.active_oil) == "moon_oil":
+			quests.complete_objective("main_teeth_in_rain", "craft_moon_oil")
+
 func _guard_tutorial_hint() -> String:
 	var guard: Dictionary = input_router.describe_action("block") if input_router != null else {}
 	return "Begin guarding as the lunge lands to parry. %s." % str(guard.get("instruction", "Use your guard control to block")).trim_suffix(".")
@@ -4343,8 +4380,8 @@ func _update_tutorial_prompts() -> void:
 		audio.set_music_state("wychwood_tension")
 		audio.play_event("wychwood_drop", 0.01)
 		audio.play_event("wychwood_tension", 0.02)
-		if wychwood_pack_kills == 0:
-			_activate_wychwood_wave(["ghoulkin"], "A Ghoulkin unfolds beside the old road.")
+	if current_zone_id == "wychwood" and (wychwood_encounter_started or player.global_position.z < 1.0):
+		_ensure_wychwood_wave()
 	if current_zone_id == "wychwood" and not bool(tutorial_flags.get("near_clearing_audio", false)) and player.global_position.z < -4.0:
 		tutorial_flags["near_clearing_audio"] = true
 		audio.play_event("ghoulkin_idle", 0.03)
@@ -6028,6 +6065,12 @@ func _make_named_interactable(id: String, type: String, prompt: String, pos: Vec
 	elif id == "white_hart":
 		# The finale builder owns the visible witness; this area owns interaction only.
 		area.set_meta("external_character_visual", "WhiteHartWitnessDisplay")
+	elif id.begins_with("covenant_"):
+		area.set_meta("external_story_visual", "covenant_record")
+	elif id in ["crow_shrine_choice", "rootbound_challenge"]:
+		area.set_meta("external_story_visual", "authored_shrine")
+	elif id in ["oren_token", "retain_evidence"]:
+		_make_token_interaction_visual(area, Vector3.ONE * 0.65)
 	elif type == "clue" and current_zone_id == "wychwood" and WychwoodEvidencePresentation.apply(area, id):
 		pass
 	elif type == "clue" and CemeteryEvidencePresentation.apply(area, id):
@@ -6085,6 +6128,8 @@ func _make_named_interactable(id: String, type: String, prompt: String, pos: Vec
 		label.modulate = Color(0.84, 0.78, 0.62)
 		label.outline_size = 3
 		label.outline_modulate = Color(0.02, 0.018, 0.015)
+		label.visibility_range_begin = 1.5
+		label.visibility_range_end = 6.0
 		label.visible = false
 		area.add_child(label)
 	if type == "dialogue" and id != "notice_board" and has_character_role:
@@ -6258,6 +6303,8 @@ func _make_village_place(id: String, type: String, prompt: String, pos: Vector3,
 	label.font_size = 14
 	label.pixel_size = 0.0048
 	label.modulate = Color(0.84,0.78,0.62)
+	label.visibility_range_begin = 1.5
+	label.visibility_range_end = 6.0
 	label.visible = false
 	area.add_child(label)
 	_connect_interactable(area)
@@ -6430,6 +6477,10 @@ func _configure_npc_animation(mapped: Node3D, id: String) -> void:
 		# instead of claiming an unavailable death animation in the contract.
 		clips["hit"] = "Hit_Chest"
 		clips.erase("death")
+	elif id == "injured_traveler":
+		clips["idle"] = "Sitting_Idle"
+		clips["dialogue"] = "Sitting_Talking"
+		clips["work"] = "Sitting_Idle"
 	elif id == "rook":
 		clips["idle"] = "Idle_Talking"
 		clips["hit"] = "Hit_Head"
@@ -6452,6 +6503,26 @@ func _configure_npc_animation(mapped: Node3D, id: String) -> void:
 	# Castle and Record Hall performance samples.
 	var npc_animation_rate := 8.0
 	driver.set_update_rate_hz(npc_animation_rate)
+
+func _prepare_dialogue_presence(content: Dictionary) -> Dictionary:
+	var result: Dictionary = content.duplicate(true)
+	var aliases := {"anwen":"sister_anwen", "senn":"captain_senn", "tor":"blacksmith_tor", "elna":"widow_elna", "edric":"edric_campaign", "record_keeper_vale":"vargan_record_keeper", "vale":"vargan_record_keeper", "guard":"vargan_gate_guard"}
+	for page: Dictionary in result.get("pages", []):
+		var id := str(page.get("speaker_id", "narrator"))
+		if id in ["player", "kael", "narrator", ""]:
+			continue
+		var actor: Node3D = zone_root.find_child(str(aliases.get(id, id)), true, false) as Node3D if zone_root != null else null
+		if actor == null and zone_root != null:
+			var witness: String = {"mira":"witness_-7", "rook":"witness_-3", "anwen":"witness_3"}.get(id, "")
+			if witness != "":
+				actor = zone_root.find_child(witness, true, false) as Node3D
+		if actor != null and actor.is_visible_in_tree() and (player == null or actor.global_position.distance_to(player.global_position) <= 12.0):
+			page["speaker_actor_id"] = actor.get_instance_id()
+		else:
+			page["speaker"] = str(page.get("speaker", id.capitalize())) + " - recorded account"
+			page["speaker_id"] = "narrator"
+			page["voice"] = ""
+	return result
 
 func _stage_dialogue_moment(area) -> void:
 	if not (area is Node3D):
@@ -6477,7 +6548,7 @@ func _on_dialogue_page_changed(_speaker: String, _speaker_id: String, _page_inde
 	if audio != null:
 		audio.set_dialogue_active(true)
 		audio.play_dialogue_page(page)
-	preload("res://scripts/story_performance.gd").page(dialogue_runtime_coordinator.get_focus_actor(), page, audio)
+	preload("res://scripts/story_performance.gd").page(dialogue_runtime_coordinator.get_page_actor(), page, audio)
 
 func _on_dialogue_topic_requested(context_id: String, topic_id: String, revision_key: String) -> void:
 	# A reading request never re-enters interaction or action dispatch. Resolve
@@ -6543,10 +6614,27 @@ func _make_clue(id: String, prompt: String, pos: Vector3, quest_id: String, obje
 	area.objective_id = objective_id
 	return area
 
+func _present_castle_clue(id: String, title: String) -> void:
+	var accounts := {
+		"vargan_mile_marker": "Vargan's crest is worn into the roadside marker. Compare the passage this road promised with the closure posted at the gate.",
+		"vargan_supply_cart": "A military supply cart stands abandoned on the approach. Keep this trace beside the dated command ledger before deciding whose order it supports.",
+		"vargan_gate_notice": "The gatehouse notice closes the road under Vargan's authority. The written command, rather than the decorative crest alone, belongs in the account.",
+		"vargan_iron_binding": "The blackened wire matches the binding recovered from the road tokens. It links the later containment to Vargan, not the original attack to a proven commander."
+	}
+	if not accounts.has(id):
+		return
+	audio.set_game_paused(true)
+	hud.show_dialogue({"name": title, "pages": [{"speaker": "The recovered account", "speaker_id": "narrator", "text": accounts[id]}], "actions": []})
+
 func _make_herb(id: String, pos: Vector3, color: Color):
 	return _make_named_interactable(id, "herb", "Gather %s" % id.capitalize(), pos, color, Vector3(0.35, 0.35, 0.35))
 
 func _make_zone_gate(prompt: String, pos: Vector3, zone_target: String, spawn_pos: Vector3):
+	var homeward: bool = bool(story_state.get_flag("final_choice_completed", false)) and ((current_zone_id == "hart_glade" and zone_target == "assembly") or (current_zone_id == "assembly" and zone_target == "undercroft"))
+	if homeward:
+		zone_target = "greyfen"
+		spawn_pos = Vector3(0, 1, 9.8)
+		prompt = "Walk the road home to Greyfen"
 	var area = _make_named_interactable("gate_%s" % zone_target, "zone", prompt, pos, Color(0.18, 0.22, 0.28), Vector3(1.0, 1.2, 1.0))
 	if area == null:
 		return null
@@ -6557,6 +6645,9 @@ func _make_zone_gate(prompt: String, pos: Vector3, zone_target: String, spawn_po
 	for child in area.get_children():
 		if child is MeshInstance3D:
 			child.visible = false
+	if homeward:
+		area.set_meta("homecoming_route", true)
+		return area
 	if seamless_world != null and seamless_world.should_suppress_exterior_gate(current_zone_id, zone_target):
 		# Exterior travel is now driven by the sector boundary, not an in-world
 		# portal. Keep the Area3D as a named migration marker for old saves, but
@@ -6803,6 +6894,8 @@ func _spawn_enemy(id: String, pos: Vector3, visual_role: String = "") -> Node:
 	return enemy
 
 func _boss_is_resolved(id: String) -> bool:
+	if id == "bell_eater" and bool(story_state.get_flag("bell_eater_legacy_retired", false)):
+		return true
 	if not bool(enemy_defs.get(id, {}).get("boss", false)):
 		return false
 	var story_resolved: String = str({
@@ -6821,7 +6914,7 @@ func _boss_is_resolved(id: String) -> bool:
 	return false
 
 func _ensure_bell_eater() -> void:
-	if current_zone_id != "greyfen" or bool(story_state.get_flag("bell_eater_defeated", false)):
+	if current_zone_id != "greyfen" or _boss_is_resolved("bell_eater"):
 		return
 	for enemy in active_enemies:
 		if is_instance_valid(enemy) and str(enemy.get_meta("boss_id", "")) == "bell_eater" and not enemy.dead:
@@ -6838,6 +6931,38 @@ func _ensure_bell_eater() -> void:
 		hud.toast("The bell rings once beneath the chapel. Something large pulls against the graves.")
 		_show_current_objective_guidance(6.0)
 		audio.play_event("boss", 0.02)
+
+func _retire_bell_eater() -> void:
+	for enemy in active_enemies.duplicate():
+		if not is_instance_valid(enemy):
+			continue
+		if str(enemy.enemy_id) != "bell_eater" and not bool(enemy.get_meta("bell_called_ghoulkin", false)):
+			continue
+		if enemy.dead:
+			continue
+		enemy.set_encounter_active(false)
+		active_enemies.erase(enemy)
+		if active_enemy_attacker == enemy:
+			active_enemy_attacker = null
+		enemy.queue_free()
+	_restore_bell_eater_bystanders()
+	if camera_rig != null:
+		camera_rig.clear_target_lock()
+	if hud != null:
+		hud.hide_enemy()
+	_sync_camera_enemy_cache()
+
+func _open_rootbound_encounter() -> void:
+	story_state.set_flag("rootbound_arena_entered", true)
+	for enemy in active_enemies:
+		if is_instance_valid(enemy) and str(enemy.enemy_id) == "rootbound_colossus":
+			enemy.set_meta("dormant_arena", false)
+			enemy.set_physics_process(true)
+	var invitation: Node = zone_root.find_child("rootbound_challenge", true, false) if zone_root != null else null
+	if invitation != null:
+		_remove_interaction_candidate(invitation)
+		invitation.queue_free()
+	hud.toast("The guardian braces around the name-board. Follow the root channels before its heart opens.")
 
 func _evacuate_bell_eater_bystanders() -> void:
 	if zone_root == null:
@@ -7009,6 +7134,7 @@ func _on_boss_special_attack(enemy: Node, attack_id: String, contact_position: V
 			hud.toast("A Ghoulkin claws up through the bell's shadow.")
 
 func _activate_wychwood_wave(ids: Array, cue: String) -> void:
+	wychwood_encounter_started = true
 	for enemy in active_enemies:
 		if enemy != null and not enemy.dead and not enemy.is_encounter_active() and enemy.enemy_id in ids:
 			enemy.set_encounter_active(true)
@@ -7017,6 +7143,42 @@ func _activate_wychwood_wave(ids: Array, cue: String) -> void:
 		hud.toast(cue)
 	if audio != null:
 		audio.play_event("reveal", 0.02)
+
+func _ensure_wychwood_wave() -> void:
+	if wychwood_pack_kills >= 5 or quests.is_objective_done("main_road_of_crows", "fight_ghoulkin"):
+		return
+	for enemy in active_enemies:
+		if not is_instance_valid(enemy) or enemy.dead or not enemy.has_meta("wychwood_wave"):
+			continue
+		if int(enemy.get_meta("wychwood_wave")) != wychwood_pack_kills:
+			continue
+		wychwood_encounter_started = true
+		if not enemy.is_encounter_active():
+			enemy.set_encounter_active(true)
+			if hud != null:
+				hud.toast("Movement answers from the clearing.")
+		return
+
+func checkpoint_return_position() -> Vector3:
+	var recorded: Vector3 = player.global_position
+	if spatial_service == null or not _story_has_active_combat():
+		return recorded
+	var bank: int = spatial_service.bank_for(recorded)
+	var best: Vector3 = recorded
+	var best_clearance := -1.0
+	var anchors: Array = spatial_service.safe_spawns.duplicate()
+	anchors.append_array(spatial_service.recovery_anchors)
+	for anchor: Vector3 in anchors:
+		if spatial_service.bank_for(anchor) != bank or not spatial_service.is_walkable_position(anchor, 0.55, bank):
+			continue
+		var clearance := INF
+		for enemy in active_enemies:
+			if is_instance_valid(enemy) and not enemy.dead and enemy.is_encounter_active():
+				clearance = minf(clearance, anchor.distance_to(enemy.global_position))
+		if clearance > best_clearance:
+			best_clearance = clearance
+			best = anchor
+	return best if best_clearance >= 5.0 else recorded
 
 func _has_active_encounter_enemy() -> bool:
 	for enemy in active_enemies:
@@ -7726,11 +7888,11 @@ func _make_prop_box(name: String, pos: Vector3, size: Vector3, color: Color, ren
 		body.add_child(shape)
 	if not render_geometry:
 		return
-	if current_zone_id == "wychwood" and separate_body and body != null:
+	if current_zone_id in ["greyfen", "wychwood", "deep_wood", "old_mill", "burned_farmstead", "marsh_crossing", "bandit_road", "assembly", "hart_glade"] and separate_body and body != null:
 		var bank := MeshInstance3D.new()
-		bank.name = "WychwoodForestBerm"
+		bank.name = "WeatheredLandscapeBoundary"
 		bank.mesh = world_materials.make_forest_berm(size, pos)
-		bank.material_override = world_materials.get_material("forest_ground", str(settings.settings.get("quality_preset", "balanced")), Color(0.40, 0.48, 0.34), 0.0, false)
+		bank.material_override = world_materials.get_material("forest_ground", str(settings.settings.get("quality_preset", "balanced")), color.lightened(0.22), 0.0, false)
 		body.add_child(bank)
 		return
 	if lower.contains("glow") or lower.contains("window") or lower.contains("coal") or lower.contains("candle"):
@@ -7942,7 +8104,7 @@ func _role_for_interactable(id: String) -> String:
 		"edric_castle": "edric_castle",
 		"edric_campaign": "edric_campaign",
 		"captain_senn": "road_ranger",
-		"halvern": "castle_guard",
+		"halvern": "halvern_boss",
 		"white_hart": "white_hart_avatar",
 		"witness_-7": "mira_herbalist",
 		"witness_-3": "rook_smuggler",
@@ -7965,10 +8127,10 @@ func _visual_role_for_interactable(id: String) -> String:
 		"vargan_steward": "villager_worker_human",
 		"vargan_servant": "villager_female_human",
 		"vargan_patrol": "road_ranger_human",
-		"edric_castle": "road_ranger_human",
-		"edric_campaign": "road_ranger_human",
+		"edric_castle": "castle_guard_human",
+		"edric_campaign": "castle_guard_human",
 		"captain_senn": "road_ranger_human",
-		"halvern": "castle_guard_human"
+		"halvern": "halvern_boss"
 	}
 	return str(roles.get(id, ""))
 
@@ -8056,8 +8218,9 @@ func _visual_role_for_legacy_character(role_name: String) -> String:
 		"vargan_steward": "villager_worker_human",
 		"vargan_servant": "villager_female_human",
 		"vargan_patrol": "road_ranger_human",
-		"edric_castle": "road_ranger_human",
-		"edric_campaign": "road_ranger_human",
+		"edric_castle": "castle_guard_human",
+		"edric_campaign": "castle_guard_human",
+		"halvern_boss": "halvern_boss",
 		"road_ranger": "road_ranger_human"
 	}
 	return str(roles.get(role_name, ""))

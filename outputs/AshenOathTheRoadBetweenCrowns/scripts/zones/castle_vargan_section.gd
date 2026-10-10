@@ -242,6 +242,10 @@ func _make_architecture(context: ZoneBuildContext, id: String, source: ArrayMesh
 		stone.vertex_color_use_as_albedo = true
 		context.zone_root.set_meta("vargan_masonry_material", stone)
 	node.set_surface_override_material(0, stone)
+	if source.get_surface_count() > 1:
+		var detail := context.make_world_material("timber", Color(0.62, 0.55, 0.44)).duplicate() as StandardMaterial3D
+		detail.vertex_color_use_as_albedo = true
+		node.set_surface_override_material(1, detail)
 	node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	context.add_node(node)
 	return node

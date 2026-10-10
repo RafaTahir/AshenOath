@@ -195,10 +195,10 @@ func _make_hart_aftermath(context: ZoneBuildContext, covenant: String) -> void:
 	inscription.name = "HartCovenantInscription"
 	inscription.text = {"witness": "THE NAMES ARE KEPT", "mercy": "THE OATH IS RELEASED", "duty": "THE OATH HOLDS", "ash": "NO OATH REMAINS"}.get(covenant, "")
 	inscription.position = Vector3(0, 2.65, -12.8)
-	inscription.font_size = 64
-	inscription.pixel_size = 0.0043
+	inscription.font_size = 32
+	inscription.pixel_size = 0.0034
 	inscription.modulate = tone.lightened(0.20)
-	inscription.outline_size = 8
+	inscription.outline_size = 2
 	context.add_node(inscription)
 	context.make_light("HartAftermathLight", Vector3(0, 4.5, -9), tone, 2.4)
 

@@ -150,7 +150,7 @@ func _process(delta: float) -> void:
 		pending_gesture = ""
 		if face != null:
 			face.play_story_gesture(gesture)
-		if delivery_active and driver != null and gesture in ["offer", "explain"]:
+		if driver != null and speaking and gesture in ["offer", "explain"]:
 			driver.play_story_gesture(gesture, float(profile.get("pace", 0.9)))
 
 func stop() -> void:

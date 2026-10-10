@@ -183,7 +183,7 @@ func build_navigation_model(player: Node3D, zone_id: String, candidates: Array) 
 	var destination: String = str(view.get("destination_zone", ""))
 	var scope: String = str(view.get("guidance_scope", "exploration"))
 	var distant: bool = destination != "" and destination != zone_id
-	var primary: String = str(view.get("destination_name", "")) if distant else str(view.get("zone_name", RouteCatalog.zone_name(zone_id)))
+	var primary: String = str(view.get("zone_name", RouteCatalog.zone_name(zone_id)))
 	var action: String = str(view.get("next_action", ""))
 	if action == "":
 		action = str(view.get("objective_text", "Explore the road and revisit known promises"))
@@ -191,7 +191,7 @@ func build_navigation_model(player: Node3D, zone_id: String, candidates: Array) 
 	if distant:
 		# The homecoming has a direct authored handoff from the ending screen.
 		# Do not turn it into a request to retrace the castle's interiors.
-		if not (scope == "aftermath" and zone_id == "hart_glade"):
+		if scope != "aftermath":
 			var exit_hint: String = _next_exit_hint(zone_id, destination, candidates)
 			if exit_hint != "":
 				route_hint = exit_hint
@@ -205,6 +205,7 @@ func build_navigation_model(player: Node3D, zone_id: String, candidates: Array) 
 				break
 	return {
 		"primary":primary, "action":action, "scope":scope,
+		"destination": str(view.get("destination_name", "")) if distant else "",
 		"distance_m":-1 if distant else objective_distance(view, player, candidates),
 		"route_hint":route_hint, "purpose":str(view.get("purpose", "")),
 		"nearby_work":nearby_work

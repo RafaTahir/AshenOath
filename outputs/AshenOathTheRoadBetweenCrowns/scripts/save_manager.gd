@@ -1,6 +1,6 @@
 extends Node
 
-const CURRENT_VERSION := 10
+const CURRENT_VERSION := 11
 const PRE_COVENANT_PATH := "user://ashen_oath_before_covenant.json"
 const SAVE_PATH := "user://ashen_oath_save.json"
 const AUTOSAVE_PATH := "user://ashen_oath_autosave.json"
@@ -43,7 +43,7 @@ func save_game(game, path: String = SAVE_PATH, label: String = "Game saved.") ->
 	if not _has_valid_player(game):
 		message.emit("Save failed. Your previous save was preserved.")
 		return false
-	var data := _build_save_data(game)
+	var data := _build_save_data(game, path == CHECKPOINT_PATH or path.ends_with("replay_checkpoint.json"))
 	if replay_session and path in [SAVE_PATH, AUTOSAVE_PATH, CHECKPOINT_PATH, PRE_DECISION_PATH, PRE_COVENANT_PATH]:
 		path = path.replace("user://ashen_oath_", "user://ashen_oath_replay_")
 	if not _write_atomic(path, data):
@@ -175,17 +175,25 @@ func migrate_save_data(raw_data: Dictionary) -> Dictionary:
 	data["migrated_from_version"] = int(raw_data.get("migrated_from_version", source_version))
 	if source_version < 10:
 		_migrate_story_campaign(data)
+	if source_version < 11:
+		var flags: Dictionary = data.story_state.get("flags", {})
+		# An earned old shrine choice must not be revoked or turned into kill credit.
+		if str(flags.get("crow_shrine_state", "")) != "" and not bool(flags.get("bell_eater_defeated", false)):
+			flags["bell_eater_legacy_retired"] = true
+		var started: bool = int(world.get("wychwood_pack_kills", 0)) > 0 or (data.zone == "wychwood" and float(data.player_position[2]) < 1.0)
+		world["wychwood_encounter"] = {"started": started, "wave": int(world.get("wychwood_pack_kills", 0))}
 	return data
 
 func backup_path(path: String) -> String:
 	return path + ".bak"
 
-func _build_save_data(game) -> Dictionary:
+func _build_save_data(game, for_checkpoint: bool = false) -> Dictionary:
 	preload("res://scripts/bracken_field_trial.gd").stop_activity(game)
 	preload("res://scripts/greyfen_archery_range.gd").stop_activity(game)
 	preload("res://scripts/companion_controller.gd").capture(game)
 	if journey_id.is_empty():
 		journey_id = "%d-%d" % [int(Time.get_unix_time_from_system()), Time.get_ticks_msec()]
+	var position: Vector3 = game.checkpoint_return_position() if for_checkpoint else game.player.global_position
 	return {
 		"version": CURRENT_VERSION,
 		"game_id": "ashen-oath",
@@ -196,11 +204,11 @@ func _build_save_data(game) -> Dictionary:
 		"zone": game.current_zone_id,
 		"world_sector": game.current_zone_id,
 		"player_position": [
-			game.player.global_position.x,
-			game.player.global_position.y,
-			game.player.global_position.z
+			position.x,
+			position.y,
+			position.z
 		],
-		"world_position": _game_world_position(game),
+		"world_position": _local_to_world([position.x, position.y, position.z], game.current_zone_id),
 		"seamless_world": game.seamless_world.save_state() if game.get("seamless_world") != null and game.seamless_world.has_method("save_state") else {},
 		"player_health": game.player.health_component.save_state(),
 		"player_stamina": game.player.stamina_component.save_state(),
@@ -586,6 +594,15 @@ func continue_model() -> Dictionary:
 		var same: bool = bool(model.get("available", false)) and same_state and _matches_journey(model.get("summary", {}), str(identity.get("journey_id", "")), bool(identity.get("replay", false)))
 		if same:
 			return model
+		# Automatic slots advance within one journey. Manual/backup selections
+		# remain exact, and a slot containing another journey is never substituted.
+		var follows_automatic: bool = str(identity.get("source", "")) == "primary" and str(identity.get("slot_id", "")) in ["quick", "auto", "checkpoint", "replay", "replay_quick", "replay_checkpoint"]
+		var same_journey: bool = bool(model.get("available", false)) and _matches_journey(model.get("summary", {}), str(identity.get("journey_id", "")), bool(identity.get("replay", false)))
+		var remembered_time: String = str(identity.get("summary", {}).get("saved_at", ""))
+		var recorded_time: String = str(model.get("summary", {}).get("saved_at", ""))
+		if follows_automatic and same_journey and remembered_time != "" and _timestamp_value(recorded_time) >= _timestamp_value(remembered_time):
+			model["reason"] = "Continue follows the updated %s of this same journey." % str(model.get("source_label", "record"))
+			return model
 		var reason: String = str(model.get("reason", ""))
 		if bool(model.get("available", false)):
 			reason = "The remembered slot now holds a different recorded state. Choose that copy or a recovery explicitly in Saved Journeys."
@@ -640,7 +657,9 @@ func _matches_journey(summary: Dictionary, identity: String, replay: bool) -> bo
 	return identity != "" and str(summary.get("journey_id", "")) == identity and bool(summary.get("replay", false)) == replay
 
 func _journey_payload_token(data: Dictionary) -> String:
-	var stable: Dictionary = migrate_save_data(data)
+	# Normalize JSON numbers before migration, as FileAccess does on reload.
+	var round_trip: Variant = JSON.parse_string(JSON.stringify(data))
+	var stable: Dictionary = migrate_save_data(round_trip if round_trip is Dictionary else data)
 	stable.erase("slot_name")
 	return JSON.stringify(stable).sha256_text()
 
@@ -853,7 +872,8 @@ func _remember_gameplay_save(path: String, data: Dictionary) -> void:
 	for slot_id: String in _all_slot_ids():
 		if path != slot_path(slot_id) or (slot_id not in CAMPAIGN_RESUME_SLOTS and slot_id not in REPLAY_RESUME_SLOTS):
 			continue
-		if not _write_resume_pointer(slot_id, "primary", data):
+		var recorded: Dictionary = _read_slot(path)
+		if not bool(recorded.get("ok", false)) or not _write_resume_pointer(slot_id, "primary", recorded.get("data", data)):
 			message.emit("The journey was saved, but Continue could not remember its source. It remains available in Saved Journeys.")
 		return
 

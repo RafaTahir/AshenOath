@@ -53,11 +53,15 @@ var _dialogue_tween: Tween
 var _dialogue_return: Dictionary = {}
 var _dialogue_frame_key := ""
 var _dialogue_last_cut := 0
+var _dialogue_actor: WeakRef
+var _dialogue_focus := Vector3.ZERO
+var _camera_probe := SphereShape3D.new()
 
 signal target_lock_changed(target: Node3D, locked: bool)
 
 func setup(follow_target: Node3D, source: Node = null) -> void:
 	target = follow_target
+	_camera_probe.radius = 0.22
 	input_source = source
 	camera = Camera3D.new()
 	camera.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
@@ -77,6 +81,10 @@ func setup(follow_target: Node3D, source: Node = null) -> void:
 
 func set_zone(zone_id: String) -> void:
 	current_zone_id = zone_id
+	if zone_id in ["record_hall", "undercroft"]:
+		height = 1.55
+		distance = minf(distance, 4.2)
+		pitch = _clamp_pitch(-0.08)
 	_initialized = false
 
 func set_enemy_candidates(candidates: Array) -> void:
@@ -95,6 +103,14 @@ func _input(event: InputEvent) -> void:
 		return
 	if (event is InputEventMouseButton or event is InputEventMouseMotion) and event.device == -1:
 		return
+	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+		_apply_mouse_motion(event.screen_relative)
+
+func _unhandled_input(event: InputEvent) -> void:
+	if target == null or get_tree().paused or not _gameplay_camera_active():
+		return
+	if event is InputEventMouseButton and event.device == -1:
+		return
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
 			adjust_zoom(-ZOOM_STEP)
@@ -108,12 +124,6 @@ func _input(event: InputEvent) -> void:
 			_capture_pointer()
 			return
 		_capture_pointer()
-	elif event is InputEventMouseMotion:
-		# A motion event is not a browser user gesture. Requesting pointer lock
-		# here produces a rejected Promise on Web after menus release the mouse.
-		# A real mouse-button event above remains the capture path.
-		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-			_apply_mouse_motion(event.screen_relative)
 
 func _gameplay_camera_active() -> bool:
 	return input_source == null or not input_source.has_method("is_gameplay_context") or input_source.is_gameplay_context()
@@ -237,7 +247,11 @@ func _update_view(delta: float) -> void:
 		camera.global_position = _publish_encounter_position(target_pos, smoothed_position, desired, framing_subject) if _combat_subject_height(framing_subject) > 2.6 else _collide_camera(target_pos, smoothed_position)
 	if target.has_method("set_camera_close_view"):
 		var eye_position: Vector3 = target.global_position + Vector3.UP * eye_height
-		target.set_camera_close_view(camera.global_position.distance_to(eye_position) < 0.85)
+		var collision_close := camera.global_position.distance_to(eye_position) < 0.85
+		target.set_camera_close_view(collision_close)
+		if collision_close and not is_first_person():
+			# A shortened boom must look out along the orbit, not into Kael's feet.
+			_smoothed_look = camera.global_position - orbit.z * 5.0
 	if _combat_subject_height(framing_subject) > 2.6:
 		# Collision and smoothing can shorten the orbit after the desired fit.
 		# Fit from the published position and widen immediately, shrinking smoothly.
@@ -259,6 +273,7 @@ func frame_dialogue_target(dialogue_target: Node3D) -> void:
 	if _dialogue_return.is_empty():
 		_dialogue_return = {"yaw": yaw, "pitch": pitch, "distance": distance, "manual_orbit": _manual_orbit}
 	_dialogue_frame_key = "two_shot"
+	_dialogue_actor = weakref(dialogue_target)
 	_dialogue_last_cut = Time.get_ticks_msec()
 	if target.has_method("set_camera_close_view"):
 		target.set_camera_close_view(false)
@@ -271,15 +286,18 @@ func frame_dialogue_target(dialogue_target: Node3D) -> void:
 	# shared chest/face line so the dialogue panel does not hide both actors.
 	yaw = atan2(-flat_to_target.x, -flat_to_target.z)
 	pitch = -0.12
-	var midpoint := (target.global_position + dialogue_target.global_position) * 0.5
-	midpoint.y += minf(1.05, float(dialogue_target.get_meta("dialogue_focus_height", 1.05)))
-	var anchor := midpoint + Vector3(0.0, 1.35, 0.0)
+	var actor_bounds := _dialogue_actor_bounds(dialogue_target)
+	var actor_focus := actor_bounds.position + actor_bounds.size * Vector3(0.5, 0.72, 0.5)
+	var midpoint := (target.global_position + Vector3.UP * 1.30 + actor_focus) * 0.5
+	var anchor := midpoint
 	var orbit := Basis(Vector3.UP, yaw) * Basis(Vector3.RIGHT, pitch)
-	var desired := anchor + orbit * Vector3(-0.30, 0.0, 3.15)
-	desired = _collide_camera(anchor, desired)
+	var framing_distance := maxf(3.15, actor_bounds.size.y * 1.65)
+	var desired := anchor + orbit * Vector3(-0.60, 0.30, framing_distance)
+	desired = _resolve_dialogue_camera(midpoint, desired, dialogue_target)
 	desired.y = maxf(desired.y, target.global_position.y + 0.55)
 	_smoothed_anchor = anchor
 	_smoothed_look = midpoint
+	_dialogue_focus = midpoint
 	_cached_collision_position = desired
 	global_position = anchor
 	camera.global_position = desired
@@ -292,11 +310,12 @@ func frame_dialogue_beat(actor: Node3D, speaker_id: String, framing: String) -> 
 	if _reduced_story_motion:
 		# Keep the established two-person composition through page changes.
 		return
-	var frame_key := "two_shot" if framing == "two_shot" else ("player" if speaker_id == "player" else "speaker") + ":" + framing
+	var frame_key := "%s:%s:%d" % [speaker_id, framing, actor.get_instance_id()]
+	var actor_changed: bool = _dialogue_actor == null or _dialogue_actor.get_ref() != actor
 	var now := Time.get_ticks_msec()
 	# Hold an established composition across consecutive turns and rapid skips.
 	# Text/input never waits for a camera beat to complete.
-	if frame_key == _dialogue_frame_key or now - _dialogue_last_cut < 900:
+	if not actor_changed and (frame_key == _dialogue_frame_key or now - _dialogue_last_cut < 900):
 		return
 	_dialogue_frame_key = frame_key
 	_dialogue_last_cut = now
@@ -306,27 +325,32 @@ func frame_dialogue_beat(actor: Node3D, speaker_id: String, framing: String) -> 
 	axis = axis.normalized()
 	var side := axis.cross(Vector3.UP).normalized()
 	var player_speaks := speaker_id == "player"
-	var actor_focus: float = float(actor.get_meta("dialogue_focus_height", 1.30))
-	var focus := (target.global_position if player_speaks else actor.global_position) + Vector3.UP * (1.30 if player_speaks else actor_focus)
+	var actor_bounds := _dialogue_actor_bounds(actor)
+	var actor_focus := actor_bounds.position + actor_bounds.size * Vector3(0.5, 0.72, 0.5)
+	var focus := target.global_position + Vector3.UP * 1.30 if player_speaks else actor_focus
 	var view_axis := axis if player_speaks else -axis
 	var distance_to_face := 2.65 if framing == "close" else 3.10
+	distance_to_face = maxf(distance_to_face, actor_bounds.size.y * 1.5)
 	if framing == "two_shot":
-		focus = (target.global_position + actor.global_position) * 0.5 + Vector3.UP * minf(1.10, (1.30 + actor_focus) * 0.5)
+		focus = (target.global_position + Vector3.UP * 1.30 + actor_focus) * 0.5
 		view_axis = -axis
-		distance_to_face = 3.6
+		distance_to_face = maxf(3.6, actor_bounds.size.y * 1.65)
 	# Both reverse angles stay on the same side of the line between actors.
-	var desired := _collide_camera(focus, focus + view_axis * distance_to_face + side * 0.90 + Vector3.UP * 0.40)
+	var desired := _resolve_dialogue_camera(focus, focus + view_axis * distance_to_face + side * 0.90 + Vector3.UP * 0.40, actor)
+	_dialogue_actor = weakref(actor)
+	_dialogue_focus = focus
 	desired.y = maxf(desired.y, target.global_position.y + 0.55)
 	if _dialogue_tween != null: _dialogue_tween.kill()
 	_dialogue_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_parallel(true)
 	_dialogue_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	_dialogue_tween.tween_property(camera, "global_position", desired, 0.32)
+	_dialogue_tween.tween_method(_place_dialogue_camera, camera.global_position, desired, 0.32)
 	_dialogue_tween.tween_method(_look_at_dialogue_point, _smoothed_look, focus, 0.32)
 	_dialogue_tween.tween_property(camera, "fov", 51.0 if framing == "close" else 58.0, 0.32)
 	_smoothed_look = focus
 	_cached_collision_position = desired
 
 func release_dialogue_frame() -> void:
+	_dialogue_actor = null
 	if _dialogue_tween != null:
 		_dialogue_tween.kill()
 		_dialogue_tween = null
@@ -349,24 +373,60 @@ func _look_at_dialogue_point(point: Vector3) -> void:
 func _collide_camera(from_pos: Vector3, desired: Vector3) -> Vector3:
 	if from_pos.distance_squared_to(desired) < 0.000001:
 		return desired
-	var space_state: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
-	var query := PhysicsRayQueryParameters3D.create(from_pos, desired)
-	query.exclude = [target]
-	var hit: Dictionary = space_state.intersect_ray(query)
-	if hit.is_empty():
-		return desired
-	var hit_pos: Vector3 = hit.get("position", desired)
-	var normal: Vector3 = hit.get("normal", Vector3.UP)
-	# The follow camera must not treat the walkable ground, road, bridge deck,
-	# or other upward-facing terrain as an occluder. On the bounded campaign
-	# sections the orbit ray can end slightly below the support plane; clamping
-	# to that hit puts the camera inside the road and fills the frame with blur.
-	# Vertical walls and props still shorten the orbit normally.
-	var collider := hit.get("collider") as CollisionObject3D
-	var camera_only := collider != null and (collider.collision_layer & (1 << 6)) != 0
-	if normal.y > 0.65 and not camera_only:
-		return desired
-	return hit_pos + normal * 0.25
+	if is_instance_valid(target):
+		desired.y = maxf(desired.y, target.global_position.y + 0.55)
+	var query := PhysicsShapeQueryParameters3D.new()
+	query.shape = _camera_probe
+	query.transform = Transform3D(Basis.IDENTITY, from_pos)
+	query.motion = desired - from_pos
+	query.collision_mask = 1 | (1 << 6)
+	query.exclude = [target.get_rid()] if target is CollisionObject3D else []
+	var fractions := get_world_3d().direct_space_state.cast_motion(query)
+	if fractions.size() >= 2 and fractions[0] < 1.0:
+		var margin := 0.04 / maxf(query.motion.length(), 0.04)
+		return from_pos + query.motion * maxf(0.0, fractions[0] - margin)
+	return desired
+
+func _dialogue_actor_bounds(actor: Node3D) -> AABB:
+	var combined := AABB()
+	var found := false
+	var visual_owner: Node = actor
+	var external_id: String = str(actor.get_meta("external_character_visual", ""))
+	if external_id != "" and actor.get_parent() != null:
+		var external: Node = actor.get_parent().find_child(external_id, true, false)
+		if external != null:
+			visual_owner = external
+	var meshes: Array[Node] = visual_owner.find_children("*", "MeshInstance3D", true, false)
+	if visual_owner is MeshInstance3D:
+		meshes.push_front(visual_owner)
+	for raw in meshes:
+		var mesh := raw as MeshInstance3D
+		if mesh.mesh == null or not mesh.is_visible_in_tree() or str(mesh.name).to_lower().contains("shadow"):
+			continue
+		var bounds: AABB = mesh.global_transform * mesh.mesh.get_aabb()
+		combined = combined.merge(bounds) if found else bounds
+		found = true
+	return combined if found else AABB(actor.global_position + Vector3(-0.35, 0, -0.35), Vector3(0.7, 1.7, 0.7))
+
+func _resolve_dialogue_camera(focus: Vector3, desired: Vector3, actor: Node3D) -> Vector3:
+	var bounds := _dialogue_actor_bounds(actor).grow(0.30)
+	var best := _collide_camera(focus, desired)
+	for angle in [0.0, 30.0, -30.0, 60.0, -60.0, 90.0, -90.0, 180.0]:
+		var candidate := _collide_camera(focus, focus + Basis(Vector3.UP, deg_to_rad(angle)) * (desired - focus))
+		if bounds.has_point(candidate) or candidate.distance_to(target.global_position + Vector3.UP * 1.3) < 0.65:
+			continue
+		var query := PhysicsRayQueryParameters3D.create(candidate, focus, 1 | (1 << 6))
+		query.exclude = [target.get_rid()] if target is CollisionObject3D else []
+		query.hit_from_inside = true
+		if get_world_3d().direct_space_state.intersect_ray(query).is_empty():
+			return candidate
+		if bounds.has_point(best):
+			best = candidate
+	return best
+
+func _place_dialogue_camera(position: Vector3) -> void:
+	var actor: Node3D = _dialogue_actor.get_ref() as Node3D if _dialogue_actor != null else null
+	camera.global_position = _resolve_dialogue_camera(_dialogue_focus, position, actor) if is_instance_valid(actor) else _collide_camera(_dialogue_focus, position)
 
 func shake(amount: float) -> void:
 	if reduce_flashes:

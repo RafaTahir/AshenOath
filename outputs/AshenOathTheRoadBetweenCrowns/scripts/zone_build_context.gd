@@ -74,6 +74,9 @@ func crow_shrine_choice_ready() -> bool:
 func road_ready_to_report() -> bool:
 	return _host._road_ready_to_report()
 
+func wychwood_wave_progress() -> int:
+	return clampi(int(_host.wychwood_pack_kills), 0, 5)
+
 func make_ground(pos: Vector3, size: Vector3, color: Color) -> void:
 	_host._make_ground(pos, size, color)
 	ground_count += 1

@@ -34,7 +34,7 @@ func build(context: ZoneBuildContext) -> void:
 	# Keep the east-side rubble on the outer shoulder. The former (10, 9)
 	# placement sat inside the diagonal approach from the marsh arrival to the
 	# Vargan boundary and blocked a player-sized capsule before the edge.
-	for position in [Vector3(-9, 0, -9), Vector3(16, 0, 10), Vector3(-10, 0, 11)]:
+	for position in [Vector3(-9, 0, -9), Vector3(16, 0, 12), Vector3(-10, 0, 11)]:
 		context.make_rubble(position)
 
 	if StoryActorPresence.remains("captain_senn", str(context.get_story_flag("senn_fate", ""))):
@@ -49,7 +49,9 @@ func build(context: ZoneBuildContext) -> void:
 				guard.leash_radius = 8.0
 
 	context.make_zone_gate("Return to the marsh crossing", Vector3(-7, 0, 16.5), "marsh_crossing", Vector3(0, 1, -12))
-	context.make_zone_gate("Follow the Vargan road", Vector3(7, 0, -16.5), "vargan_approach", Vector3(0, 1, 12))
+	for point in [Vector3(8, 0.02, 5.8), Vector3(12, 0.02, 7), Vector3(16, 0.02, 7), Vector3(19, 0.02, 7)]:
+		context.make_terrain_patch("VarganEastRoad", point, Vector3(4.5, 0.025, 3.5), ground.lightened(0.12))
+	context.make_zone_gate("Follow the Vargan road east", Vector3(20, 0, 7), "vargan_approach", Vector3(-16, 1, 16))
 
 func _make_checkpoint(context: ZoneBuildContext) -> void:
 	for x in [-7.5, 7.5]:

@@ -260,6 +260,7 @@ func get_active_objective_id(quest_id: String) -> String:
 	if not active.has(quest_id):
 		return ""
 	var grouped_candidates: Array[String] = []
+	var optional_candidates: Array[String] = []
 	for objective in active[quest_id].get("objectives", []):
 		if bool(objective.get("done", false)):
 			continue
@@ -272,9 +273,14 @@ func get_active_objective_id(quest_id: String) -> String:
 				grouped_candidates.append(str(objective.get("id", "")))
 				continue
 			return str(objective.get("id", ""))
+		if bool(objective.get("optional", false)):
+			optional_candidates.append(str(objective.get("id", "")))
+			continue
 		return str(objective.get("id", ""))
 	if not grouped_candidates.is_empty():
 		return grouped_candidates[0]
+	if not optional_candidates.is_empty():
+		return optional_candidates[0]
 	return ""
 
 func set_tracked_quest_for_zone(zone_id: String) -> void:

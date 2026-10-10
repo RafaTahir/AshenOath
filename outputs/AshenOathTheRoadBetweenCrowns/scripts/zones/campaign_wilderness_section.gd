@@ -104,6 +104,11 @@ func _build_deep_wood(context: ZoneBuildContext) -> void:
 		var rootbound = context.spawn_enemy("rootbound_colossus", Vector3(0, 0.8, -10.5))
 		if rootbound != null:
 			context.set_story_flag("rootbound_colossus_spawned", true)
+			rootbound.leash_radius = 7.0
+			if not bool(context.get_story_flag("rootbound_arena_entered", false)):
+				rootbound.set_meta("dormant_arena", true)
+				rootbound.set_physics_process(false)
+				context.make_named_interactable("rootbound_challenge", "encounter", "Enter the guardian's memory clearing", Vector3(-3.2, 0, -6.4), Color(0.28, 0.36, 0.22), Vector3(0.3, 0.4, 0.3))
 	publish_rooks_false_road(context)
 
 func publish_rooks_false_road(context: ZoneBuildContext) -> void:
@@ -122,6 +127,7 @@ func _build_old_mill(context: ZoneBuildContext) -> void:
 	context.add_node(marker)
 	_make_mill_path(context, "AshMillYard", Vector3(-5.2, 0.048, -5.5), 8.0, 3.0)
 	_make_mill_shell(context)
+	_make_entry_ramp(context, Vector3(-5.2, 0, -1.65), 0.48, 2.6)
 	_make_authored_mill_dressing(context)
 	context.make_light("AshMillFacadeFill", Vector3(-5.2, 3.4, -2.4), Color(0.58, 0.43, 0.30), 2.2)
 	context.make_visual_box("AshMillWindowWarmth", Vector3(-2.0, 1.25, -7.96), Vector3(0.90, 0.75, 0.035), Color(0.56, 0.24, 0.07))
@@ -159,7 +165,7 @@ func _build_old_mill(context: ZoneBuildContext) -> void:
 		if ashwing != null:
 			context.set_story_flag("ashwing_spawned", true)
 	elif context.is_objective_done("main_ash_at_the_mill", "mill_encounter") and not context.is_objective_done("main_ash_at_the_mill", "mill_choice"):
-		context.make_named_interactable("miller_record", "dialogue", "Read the miller's record", Vector3(-7.0,0,-7), Color(0.5,0.4,0.25))
+		context.make_named_interactable("miller_record", "dialogue", "Read the miller's record", Vector3(-5.2,0.48,-3.4), Color(0.5,0.4,0.25))
 	publish_hidden_ash_measure(context)
 
 func publish_hidden_ash_measure(context: ZoneBuildContext) -> void:
@@ -175,6 +181,7 @@ func _build_farmstead(context: ZoneBuildContext) -> void:
 	marker.name = "AuthoredBurnedFarmstead"
 	context.add_node(marker)
 	_make_burned_home(context, Vector3(-8, 0, -5), "West")
+	_make_entry_ramp(context, Vector3(-6.0, 0, -8.25), 0.40, 1.6, PI)
 	_make_burned_home(context, Vector3(7, 0, 2), "East")
 	for pos in [Vector3(-10,0,-8), Vector3(9,0,-4), Vector3(-8,0,7)]:
 		context.make_loose_role("cart", pos, Vector3.ONE * 0.62, 18.0)
@@ -187,7 +194,7 @@ func _build_farmstead(context: ZoneBuildContext) -> void:
 	for x in [-10.2, -7.8, 6.2, 9.8]:
 		context.make_visual_box("FarmsteadCharredPost", Vector3(x, 1.05, 9.9), Vector3(0.22, 2.1, 0.22), Color(0.06, 0.034, 0.020))
 	context.make_light("FarmsteadEmberGlow", Vector3(0, 0.55, 6.0), Color(0.82, 0.20, 0.06), 0.55)
-	context.make_clue("register_rook", "Recover charred names", Vector3(-7,0,-5), "main_names_they_burned", "fragment_rook", Color(0.45,0.25,0.12))
+	context.make_clue("register_rook", "Recover charred names", Vector3(-6.0,0.4,-5.8), "main_names_they_burned", "fragment_rook", Color(0.45,0.25,0.12))
 
 func _build_marsh(context: ZoneBuildContext) -> void:
 	_base(context, Color(0.045, 0.077, 0.068), Color(0.090, 0.092, 0.068))
@@ -307,7 +314,35 @@ func _make_burned_yard(context: ZoneBuildContext, origin: Vector3) -> void:
 	# Ash patches are part of the baked landscape, not floating black panels.
 	context.make_prop_box("BurnedYardFirepit", origin + Vector3(0, 0.22, -0.8), Vector3(1.1, 0.44, 0.72), Color(0.12, 0.075, 0.045))
 
+func _make_entry_ramp(context: ZoneBuildContext, origin: Vector3, height: float, width: float, yaw: float = 0.0) -> void:
+	var body := StaticBody3D.new()
+	body.name = "RecordApproachRamp"
+	body.position = origin
+	body.rotation.y = yaw
+	body.set_meta("walkable_support", true)
+	var w := width * 0.5
+	var points := PackedVector3Array([Vector3(-w, 0, 0.95), Vector3(w, 0, 0.95), Vector3(w, height, -0.95), Vector3(-w, height, -0.95), Vector3(-w, -0.06, 0.95), Vector3(w, -0.06, 0.95), Vector3(w, -0.06, -0.95), Vector3(-w, -0.06, -0.95)])
+	var collision := CollisionShape3D.new()
+	var shape := ConvexPolygonShape3D.new()
+	shape.points = points
+	collision.shape = shape
+	body.add_child(collision)
+	var surface := SurfaceTool.new()
+	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	for index in [0, 1, 2, 0, 2, 3, 4, 7, 6, 4, 6, 5, 0, 4, 5, 0, 5, 1, 3, 2, 6, 3, 6, 7, 0, 3, 7, 0, 7, 4, 1, 5, 6, 1, 6, 2]:
+		surface.set_uv(Vector2(points[index].x, points[index].z))
+		surface.add_vertex(points[index])
+	surface.generate_normals()
+	var visual := MeshInstance3D.new()
+	visual.mesh = surface.commit()
+	var material := context.make_world_material("medieval_brick").duplicate() as StandardMaterial3D
+	material.cull_mode = BaseMaterial3D.CULL_DISABLED
+	visual.material_override = material
+	body.add_child(visual)
+	context.add_node(body)
+
 func _add_route_gates(context: ZoneBuildContext) -> void:
 	var links: Array = LINKS[context.zone_id]
-	context.make_zone_gate("Return", Vector3(-7,0,13.5), str(links[0]), Vector3(0,1,-12))
-	context.make_zone_gate("Continue", Vector3(7,0,-13.5), str(links[1]), Vector3(0,1,12))
+	var lane := 0.0 if context.zone_id == "marsh_crossing" else 7.0
+	context.make_zone_gate("Return", Vector3(-lane,0,13.5), str(links[0]), Vector3(0,1,-12))
+	context.make_zone_gate("Continue", Vector3(lane,0,-13.5), str(links[1]), Vector3(0,1,12))

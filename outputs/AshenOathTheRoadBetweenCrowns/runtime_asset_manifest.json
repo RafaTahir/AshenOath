@@ -440,20 +440,33 @@
     "bell_eater": {
       "display_name": "The Bell-Eater",
       "family": "monster_boss",
-      "source_pack": "quaternius_ultimate_monsters",
-      "status": "reviewed_native_body_and_bone_harness_20260926",
+      "source_pack": "quaternius_universal_base_characters",
+      "status": "playfix_010_reference_approved_runtime_pending",
       "approved": true,
       "export_eligible": true,
       "fallback_mode": "none",
-      "model": "res://assets_external/enemies/ultimate_monsters/BlueDemon.gltf",
-      "source_url": "https://quaternius.com/packs/ultimatemonsters.html",
-      "license_file": "res://assets_external/licenses/Quaternius_Ultimate_Monsters_Mirror_CC0.txt",
+      "model": "res://assets_external/characters_universal/runtime/BellEater_Playfix.glb",
+      "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
+      "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
       "runtime_files": [
-        {"path": "res://assets_external/enemies/ultimate_monsters/BlueDemon.gltf", "bytes": 1190068, "sha256": "9eb899fc619dff9a973669e0962452990c8ec44d4501dd41fe4f4fe5afd631f4"},
-        {"path": "res://assets/bosses/bell_eater_bell.res", "bytes": 83249, "sha256": "5bf54340a822d8536b70bd2c292dc4ad2e069b39c52cef3bb9ccd5091ebb4e48"}
+        {
+          "path": "res://assets_external/characters_universal/runtime/BellEater_Playfix.glb",
+          "bytes": 928608,
+          "sha256": "8367ee17b8825065467412aee29448a5f33f52422b9e58635609200ab3d3334e"
+        },
+        {
+          "path": "res://assets_external/characters_universal/runtime/BellEater_Playfix_Ghoulkin_Authored_Atlas.png",
+          "bytes": 231461,
+          "sha256": "af093c7ca10dcecfbc5d9e60f11c882ea68989894a13642232a817c3222c88dc"
+        },
+        {
+          "path": "res://assets/bosses/bell_eater_bell.res",
+          "bytes": 83249,
+          "sha256": "5bf54340a822d8536b70bd2c292dc4ad2e069b39c52cef3bb9ccd5091ebb4e48"
+        }
       ],
-      "visual_evidence": "Development_Gallery/screenshots/BOSS-003_01_BellEater_Harnessed_20260926_134249.png",
-      "notes": "Original project-authored hollow bell is built by tools/build_bell_eater_bell.gd and follows Torso. Imported anatomy is unchanged; no proxy eyes, jaws, teeth or horns are added. Three-phase images reviewed; environment acceptance remains separate.",
+      "visual_evidence": "Development_Gallery/screenshots/PLAYFIX_010_approved_references/BellEater_Playfix.png",
+      "notes": "User-approved body reference on 2026-10-10; broad cursed-human derivative with shared UAL2 animation. Retained bell and chains follow spine_03. IDs, phases, dimensions, rewards and saves retained. Runtime observation pending.",
       "blocked_reason": ""
     },
     "rootbound_colossus": {
@@ -477,22 +490,29 @@
     "bog_wretch": {
       "display_name": "Bog Wretch",
       "family": "monster",
-      "source_pack": "quaternius_lowpoly_animated_monsters",
-      "status": "approved_runtime",
+      "source_pack": "quaternius_universal_base_characters",
+      "status": "playfix_010_reference_approved_runtime_pending",
       "approved": true,
       "export_eligible": true,
       "fallback_mode": "none",
-      "model": "res://assets_external/enemies/Slime.fbx",
-      "source_url": "https://opengameart.org/content/animated-monsters-pack",
-      "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
+      "model": "res://assets_external/characters_universal/runtime/BogWretch_Playfix.glb",
+      "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
+      "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
       "runtime_files": [
         {
-          "path": "res://assets_external/enemies/Slime.fbx",
-          "bytes": 338940,
-          "sha256": "7f5e9dd33fd800344984ada5a0db855f2eabd6f2ee1e501bdb35d81aa3791df8"
+          "path": "res://assets_external/characters_universal/runtime/BogWretch_Playfix.glb",
+          "bytes": 928612,
+          "sha256": "609030e399c459309ff458b9b49c59e6ff9d4a598335208edb1dad0afe88bc6a"
+        },
+        {
+          "path": "res://assets_external/characters_universal/runtime/BogWretch_Playfix_Ghoulkin_Authored_Atlas.png",
+          "bytes": 231461,
+          "sha256": "af093c7ca10dcecfbc5d9e60f11c882ea68989894a13642232a817c3222c88dc"
         }
       ],
-      "blocked_reason": ""
+      "blocked_reason": "",
+      "visual_evidence": "Development_Gallery/screenshots/PLAYFIX_010_approved_references/BogWretch_Playfix.png",
+      "notes": "User-approved body reference on 2026-10-10; swamp-stained cursed-human derivative with shared UAL2 animation. No Slime substitution. Runtime observation pending."
     },
     "gravebound_knight": {
       "display_name": "Gravebound Knight",
@@ -518,18 +538,22 @@
       "display_name": "Ashwing Carrion Drake",
       "family": "monster",
       "source_pack": "quaternius_lowpoly_animated_monsters",
-      "status": "reviewed_native_dragon_bone_equipment_20260926",
+      "status": "playfix_010_reference_approved_runtime_pending",
       "approved": true,
       "export_eligible": true,
       "fallback_mode": "none",
-      "model": "res://assets_external/enemies/Dragon.fbx",
-      "source_url": "https://opengameart.org/content/animated-monsters-pack",
+      "model": "res://assets_external/enemies/Ashwing_Playfix.glb",
+      "source_url": "https://quaternius.com/packs/animatedmonster.html",
       "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
       "runtime_files": [
-        {"path": "res://assets_external/enemies/Dragon.fbx", "bytes": 879004, "sha256": "31a334a1c5918b4f4480cd5f6c542b3aea9b8f00a70aeb7feefd7f70528780cc"}
+        {
+          "path": "res://assets_external/enemies/Ashwing_Playfix.glb",
+          "bytes": 391856,
+          "sha256": "b6bad819a4d5215d50d980614064cca975415d13714d30394b90a7c65285099e"
+        }
       ],
-      "visual_evidence": "Development_Gallery/screenshots/BOSS-005_03_Ashwing_BreakingPerch_20260926_144009.png",
-      "notes": "Retained complete stylized dragon with Body-bone equipment and restrained three-phase emission. Current phase images and graphical interruption/checkpoint/reward/aftermath/no-respawn contract pass. East-yard combat space is clear; surrounding mill world art remains separately unaccepted.",
+      "visual_evidence": "Development_Gallery/screenshots/PLAYFIX_010_approved_references/Ashwing_Playfix.png",
+      "notes": "User-approved body reference on 2026-10-10; darker reshaped retained drake with native five-clip animation and Body socket. Phases, interruptions, dimensions, rewards and saves retained; runtime observation pending.",
       "blocked_reason": ""
     },
     "white_hart": {

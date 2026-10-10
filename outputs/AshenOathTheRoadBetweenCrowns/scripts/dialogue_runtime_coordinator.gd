@@ -7,9 +7,14 @@ var _topic_generation: int = 0
 var _topic_context: Dictionary = {}
 var _turns: Array[Tween] = []
 var _camera: WeakRef
+var _page_actor: WeakRef
+var _supporting_actors: Array[WeakRef] = []
 
 func get_focus_actor() -> Node3D:
 	return _focus_actor.get_ref() as Node3D if _focus_actor != null else null
+
+func get_page_actor() -> Node3D:
+	return _page_actor.get_ref() as Node3D if _page_actor != null else get_focus_actor()
 
 func stage(area: Node3D, player: Node3D, camera_rig: Node, _validate_position: Callable) -> void:
 	release(player)
@@ -71,8 +76,18 @@ func _supported_step(player: Node3D, candidate: Vector3) -> Variant:
 
 func refresh_page(player: Node3D, camera_rig: Node, page: Dictionary = {}) -> void:
 	var actor := get_focus_actor()
+	var speaker_id: int = int(page.get("speaker_actor_id", 0))
+	var speaker: Node3D = instance_from_id(speaker_id) as Node3D if speaker_id > 0 else null
+	if is_instance_valid(speaker) and speaker.is_visible_in_tree():
+		actor = speaker
+		if actor != get_focus_actor() and not _supporting_actor_known(actor):
+			_supporting_actors.append(weakref(actor))
+			_set_speaker_pose(actor, true)
+			preload("res://scripts/story_performance.gd").begin(actor, player)
+	_page_actor = weakref(actor) if is_instance_valid(actor) else null
 	if not is_instance_valid(player) or not is_instance_valid(actor):
 		return
+	_face_pair(actor, player)
 	if camera_rig != null and camera_rig.has_method("frame_dialogue_beat"):
 		camera_rig.call("frame_dialogue_beat", actor, str(page.get("speaker_id", "")), str(page.get("performance", {}).get("framing", "speaker")))
 	else:
@@ -84,9 +99,16 @@ func face_actor(actor: Node3D, player: Node3D) -> void:
 	var to_player := player.global_position - actor.global_position
 	to_player.y = 0.0
 	if to_player.length_squared() > 0.01:
-		actor.rotation.y = atan2(-to_player.x, -to_player.z)
+		actor.global_rotation.y = atan2(-to_player.x, -to_player.z) + (PI if bool(actor.get_meta("source_forward_positive_z", false)) else 0.0)
 
 func release(player: Node3D) -> void:
+	for ref: WeakRef in _supporting_actors:
+		var supporting: Node3D = ref.get_ref() as Node3D
+		if is_instance_valid(supporting):
+			preload("res://scripts/story_performance.gd").finish(supporting)
+			_set_speaker_pose(supporting, false)
+	_supporting_actors.clear()
+	_page_actor = null
 	var camera: Node = _camera.get_ref() if _camera != null else null
 	if is_instance_valid(camera) and camera.has_method("release_dialogue_frame"):
 		camera.release_dialogue_frame()
@@ -105,6 +127,12 @@ func release(player: Node3D) -> void:
 		_set_speaker_pose(actor, false)
 	_locked_actor = null
 
+func _supporting_actor_known(actor: Node3D) -> bool:
+	for ref: WeakRef in _supporting_actors:
+		if ref.get_ref() == actor:
+			return true
+	return false
+
 func _face_pair(actor: Node3D, player: Node3D) -> void:
 	for turn: Tween in _turns:
 		if turn != null and turn.is_valid(): turn.kill()
@@ -118,7 +146,9 @@ func _turn_toward(body: Node3D, point: Vector3) -> void:
 	offset.y = 0.0
 	if offset.length_squared() < 0.01: return
 	var yaw := atan2(-offset.x, -offset.z)
-	if bool(body.get_meta("source_forward_positive_z", false)): yaw += PI
+	# Direct imported NPCs advertise their convention, as NpcAmbient does.
+	if bool(body.get_meta("source_forward_positive_z", false)):
+		yaw += PI
 	var difference := wrapf(yaw - body.global_rotation.y, -PI, PI)
 	var turn := body.create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	turn.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)

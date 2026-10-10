@@ -539,7 +539,7 @@ func _open_friend_scene(id: String, actor: Node3D) -> void:
 	preload("res://scripts/story_performance.gd").begin(actor, host.player, content, host.story_state)
 	host.get_tree().paused = true
 	host.audio.set_game_paused(true)
-	host.hud.show_dialogue(content)
+	host.hud.show_dialogue(host._prepare_dialogue_presence(content))
 
 func _begin_friend_work(id: String) -> void:
 	if not FRIEND_TASKS.has(id) or zone != "greyfen" or str(host.story_state.get_flag("lr_friend_" + id, "")) != "accepted":
@@ -809,22 +809,7 @@ func _build_workers(root: Node3D) -> void:
 				driver.set_update_rate_hz(30.0)
 				worker_drivers.append(driver)
 			continue
-		var torso := MeshInstance3D.new()
-		var shape := CapsuleMesh.new()
-		shape.radius = 0.21
-		shape.height = 1.10
-		torso.mesh = shape
-		torso.position = Vector3(float(index) * 0.7, 0.78, 0)
-		torso.material_override = host._mat(Color(0.46, 0.36, 0.23) if index == 0 else Color(0.31, 0.38, 0.34))
-		worker_group.add_child(torso)
-		var head := MeshInstance3D.new()
-		var head_mesh := SphereMesh.new()
-		head_mesh.radius = 0.15
-		head_mesh.height = 0.30
-		head.mesh = head_mesh
-		head.position = Vector3(float(index) * 0.7, 1.48, 0)
-		head.material_override = host._mat(Color(0.56, 0.43, 0.32))
-		worker_group.add_child(head)
+		push_error("Required mill worker body is unavailable; refusing proxy anatomy")
 	_label(worker_group, "MILL WORKERS\nStay nearby to lead them to clean air", Vector3(0.35, 2.05, 0))
 
 func _worker_motion(world_velocity: Vector3, delta: float = 0.016667) -> void:
@@ -869,25 +854,21 @@ func _point(root: Node3D, id: String, prompt: String, pos: Vector3, title: Strin
 	area.build_collision(1.1)
 	root.add_child(area)
 	area.add_to_group("story_activity")
-	var mesh := MeshInstance3D.new()
-	var box := BoxMesh.new()
-	box.size = Vector3(0.55, 0.40, 0.40)
-	mesh.mesh = box
-	mesh.position.y = 0.20
-	mesh.material_override = host._mat(color)
-	mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	area.add_child(mesh)
+	# The authored village/mill props own these actions; no duplicate marker cube.
+	area.set_meta("external_story_visual", id)
 	_label(area, title, Vector3(0, 1.25, 0))
 	host._connect_interactable(area)
 
 func _label(parent: Node3D, words: String, pos: Vector3) -> void:
 	var label := Label3D.new()
+	label.name = "InteractionWorldLabel"
 	label.text = words
 	label.position = pos
 	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	label.font_size = 22
-	label.pixel_size = 0.004
-	label.outline_size = 5
+	label.pixel_size = 0.003
+	label.outline_size = 2
 	label.modulate = Color(0.91, 0.85, 0.66)
-	label.visibility_range_end = 14.0
+	label.visibility_range_end = 6.0
+	label.visible = false
 	parent.add_child(label)

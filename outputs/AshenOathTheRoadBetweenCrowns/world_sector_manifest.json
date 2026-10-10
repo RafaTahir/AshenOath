@@ -54,8 +54,8 @@
       "exterior": true,
       "bounds": [20.0, 16.0],
       "edges": {
-        "south": {"target": "burned_farmstead", "lane": 0.0, "half_width": 3.2, "arrival": [7.0, 0.9, -11.0]},
-        "north": {"target": "bandit_road", "lane": 0.0, "half_width": 3.2, "arrival": [-7.0, 0.9, 13.0]}
+        "south": {"target": "burned_farmstead", "lane": 0.0, "half_width": 3.2, "trigger": [0.0, 0.0, 14.0], "arrival": [7.0, 0.9, -11.0]},
+        "north": {"target": "bandit_road", "lane": 0.0, "half_width": 3.2, "trigger": [0.0, 0.0, -14.0], "arrival": [-7.0, 0.9, 13.0]}
       }
     },
     "bandit_road": {
@@ -64,7 +64,7 @@
       "bounds": [22.0, 19.0],
       "edges": {
         "south": {"target": "marsh_crossing", "lane": -7.0, "half_width": 3.2, "trigger": [-7.0, 0.0, 16.5], "arrival": [0.0, 0.9, -13.0]},
-        "east": {"target": "vargan_approach", "lane": 7.0, "half_width": 3.2, "trigger": [7.0, 0.0, -16.5], "arrival": [-16.0, 0.9, 16.0]}
+        "east": {"target": "vargan_approach", "lane": 7.0, "half_width": 3.2, "trigger": [20.0, 0.0, 7.0], "arrival": [-16.0, 0.9, 16.0], "approach": [[8.0, 0.0, 5.8], [12.0, 0.0, 7.0], [16.0, 0.0, 7.0]]}
       }
     },
     "vargan_approach": {

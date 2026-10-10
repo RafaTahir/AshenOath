@@ -143,6 +143,7 @@ static func _copy_identity_contract(owner: Node3D, visual_target: Node3D, role: 
 	# visual owns the actual materials and face driver. Mirror the measurable
 	# contract so verifiers and save/debug tools inspect the same actor identity.
 	for key in [
+		"source_forward_positive_z",
 		"character_identity_profile",
 		"character_identity_surfaces",
 		"character_face_surfaces",

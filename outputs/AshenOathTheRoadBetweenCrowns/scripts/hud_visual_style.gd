@@ -80,6 +80,9 @@ static func dialogue_choice(button: Button, high_contrast: bool) -> void:
 	for child in button.get_children():
 		if child is Label:
 			label_color(child, MUTED if button.disabled else IVORY, high_contrast)
+	if bool(button.get_meta("wrapped_label", false)):
+		for key in ["font_color", "font_hover_color", "font_focus_color", "font_pressed_color", "font_disabled_color", "font_hover_pressed_color", "font_shadow_color", "font_outline_color"]:
+			button.add_theme_color_override(key, Color.TRANSPARENT)
 
 static func subtitle_lines(text: String, font: Font, font_size: int, width: float) -> int:
 	if font == null or width <= 0.0: return 3

@@ -22,7 +22,7 @@ static func card(model: Dictionary, current: bool = false) -> String:
 		lines.append(" · ".join(PackedStringArray([place, chapter])) if place != "" and chapter != "" else place + chapter)
 	if not current:
 		lines.append(str(summary.get("time_label", "Saved time unavailable")))
-		_append(lines, "World time", str(summary.get("world_clock_label", "")))
+		_append(lines, "", str(summary.get("world_clock_label", "")))
 	_append(lines, "Promise", str(summary.get("promise", "")))
 	_append(lines, "Last commitment", str(summary.get("last_commitment", "")))
 	_append(lines, "Next known step", str(summary.get("next_action", "")))

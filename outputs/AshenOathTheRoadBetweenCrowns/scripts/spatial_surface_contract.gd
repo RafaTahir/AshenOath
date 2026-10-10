@@ -2,6 +2,7 @@ extends RefCounted
 class_name SpatialSurfaceContract
 
 const BridgeSurfaceContract = preload("res://scripts/bridge_surface_contract.gd")
+const SectorManifest = preload("res://scripts/world_sector_manifest.gd")
 const NO_RIVER := 999.0
 const DEFAULT_BRIDGE_BANK_OFFSET := 3.2
 
@@ -27,6 +28,10 @@ static func support_hit(space: PhysicsDirectSpaceState3D, start: Vector3, end: V
 const ZONE_HALF_EXTENTS := {
 	"greyfen": Vector2(21.0, 17.0),
 	"wychwood": Vector2(22.0, 17.0),
+	"deep_wood": Vector2(20.0, 16.0),
+	"old_mill": Vector2(20.0, 16.0),
+	"burned_farmstead": Vector2(20.0, 16.0),
+	"marsh_crossing": Vector2(20.0, 16.0),
 	"bandit_road": Vector2(22.0, 19.0),
 	"vargan_approach": Vector2(23.0, 19.0),
 	"vargan_court": Vector2(23.0, 19.0),
@@ -46,6 +51,8 @@ static func river_center(zone_id: String) -> float:
 			return NO_RIVER
 
 static func zone_half_extents(zone_id: String) -> Vector2:
+	if not SectorManifest.sector(zone_id).is_empty():
+		return SectorManifest.bounds(zone_id)
 	return ZONE_HALF_EXTENTS.get(zone_id, Vector2(24.0, 21.0))
 
 static func bank_for(zone_id: String, position: Vector3) -> int:

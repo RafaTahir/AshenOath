@@ -188,10 +188,10 @@ static func _label(parent: Node3D, id: String, text: String, pos: Vector3, color
 	node.name = id
 	node.text = text
 	node.position = pos
-	node.font_size = 30
-	node.pixel_size = 0.0045
+	node.font_size = 24
+	node.pixel_size = 0.0034
 	node.modulate = color
-	node.outline_size = 5
+	node.outline_size = 2
 	node.outline_modulate = Color(0.035, 0.028, 0.02)
 	node.no_depth_test = false
 	node.visibility_range_end = 14.0
@@ -201,7 +201,7 @@ static func _notice(game, parent: Node3D, pos: Vector3, title: String, color := 
 	_box(game, parent, "NoticeSupport", pos + Vector3(0, 0.6, 0), Vector3(0.10, 1.2, 0.12), TIMBER)
 	_box(game, parent, "NoticeBacking", pos + Vector3(0, 1.20, 0), Vector3(1.45, 0.85, 0.09), TIMBER)
 	_box(game, parent, "WrittenNotice", pos + Vector3(0, 1.2, 0.052), Vector3(1.30, 0.72, 0.012), color)
-	_label(parent, "NoticeHeading", title, pos + Vector3(0, 1.75, 0.06), color)
+	_label(parent, "NoticeHeading", title, pos + Vector3(0, 1.22, 0.065), color)
 
 static func _table(game, parent: Node3D, pos: Vector3, width := 1.7) -> void:
 	_box(game, parent, "WorkTable", pos + Vector3(0, 0.76, 0), Vector3(width, 0.12, 0.78), TIMBER)
@@ -222,7 +222,8 @@ static func _greyfen(game, parent: Node3D) -> void:
 		_box(game, parent, "RoadDrainageBoard", Vector3(2.25 + float(index) * 0.18, 0.035, 7.1), Vector3(0.14, 0.055, 1.15), TIMBER if repaired else IRON, 0.0 if repaired else 18.0 * float(index - 2))
 	_box(game, parent, "RoadToolHandle", Vector3(3.0, 0.10, 7.8), Vector3(0.07, 0.07, 0.85), TIMBER, -20.0)
 	_box(game, parent, "RoadToolHead", Vector3(2.86, 0.10, 7.42), Vector3(0.33, 0.08, 0.1), IRON)
-	_notice(game, parent, Vector3(5.3, 0, 10.65), "VARGAN RENEWAL\nAt the next bell", RED)
+	var renewal_ended := bool(_flag(game, "renewal_stopped", false)) or bool(_flag(game, "final_choice_completed", false))
+	_notice(game, parent, Vector3(5.3, 0, 10.65), "NO RENEWAL\nGreyfen answers for the living" if renewal_ended else "VARGAN RENEWAL\nAt the next bell", GREEN if renewal_ended else RED)
 	_table(game, parent, Vector3(-4.4, 0, 0.9), 1.5)
 	var relief := bool(_flag(game, "cart_helped", false)) or bool(_flag(game, "assembly_relief_ready", false))
 	if relief:
@@ -238,7 +239,7 @@ static func _greyfen(game, parent: Node3D) -> void:
 	_guardian(game, parent)
 	var report := str(_flag(game, "evidence_report"))
 	if report == "public":
-		_notice(game, parent, Vector3(3.7, 0, 10.9), "THE ROAD WAS SET\nWitnesses needed")
+		_notice(game, parent, Vector3(3.7, 0, 10.9), "THE ACCOUNT IS KEPT\nTestimony remains voluntary" if bool(_flag(game, "final_choice_completed", false)) else "THE ROAD WAS SET\nWitnesses needed")
 	elif report == "private":
 		_box(game, parent, "AnwenSealedRoadEvidence", Vector3(5.5, 0.82, -6.2), Vector3(0.42, 0.09, 0.30), PAPER)
 	elif report == "retained":
@@ -251,7 +252,7 @@ static func _greyfen(game, parent: Node3D) -> void:
 	_cemetery_consequence(game, parent)
 
 static func _cemetery_consequence(game, parent: Node3D) -> void:
-	if not bool(_flag(game, "bell_eater_defeated", false)):
+	if not bool(_flag(game, "bell_eater_defeated", false)) and not bool(_flag(game, "bell_eater_legacy_retired", false)):
 		return
 	var shrine := str(_flag(game, "crow_shrine_state"))
 	# Ribbons lie beside the existing graves, never across the walkable route.

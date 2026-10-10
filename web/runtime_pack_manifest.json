@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "program": "SOUL-REBUILD",
-  "release_id": "mobile-003-20261008-landscape",
+  "release_id": "playfix-012-20261010-repair-b74a523",
   "artifact_policy": "external_runtime_packs",
   "candidate_manifest": "res://runtime_pack_candidates.json",
   "pack_presets": {
@@ -15,7 +15,7 @@
   "max_deployment_bytes": 104857600,
   "packs": {
     "base": {
-      "version": "mobile-003-20261008-landscape",
+      "version": "playfix-012-20261010-repair-b74a523",
       "url": "",
       "sha256": "",
       "bytes": 0,
@@ -24,8 +24,8 @@
       "preload_priority": 0,
       "status": "embedded_current_pck",
       "candidate_artifact": "base.pck",
-      "candidate_bytes": 13302712,
-      "candidate_sha256": "5cea592404edf0b5ca2243cf2eb532706ce6c58ffbd4a2d2574a5ce9d6e21345",
+      "candidate_bytes": 14443336,
+      "candidate_sha256": "35f38d7814a686377d42a75b441fcb3e6cef0c8523cf3f354fad13758400211f",
       "contents": [
         "menu",
         "managers",
@@ -34,15 +34,15 @@
       ],
       "embedded_artifact": "index.pck",
       "embedded_source_artifact": "base.pck",
-      "embedded_source_bytes": 13302712,
-      "embedded_source_sha256": "5cea592404edf0b5ca2243cf2eb532706ce6c58ffbd4a2d2574a5ce9d6e21345",
+      "embedded_source_bytes": 14443336,
+      "embedded_source_sha256": "35f38d7814a686377d42a75b441fcb3e6cef0c8523cf3f354fad13758400211f",
       "embedded_source_kind": "standalone_pack_candidate"
     },
     "opening": {
-      "version": "mobile-003-20261008-landscape",
-      "url": "packs/opening.pck?sha256=e8009498dc8cbd3c88ee071ab59be846c57cfca0b2390698c9d5a497ee378c00",
-      "sha256": "e8009498dc8cbd3c88ee071ab59be846c57cfca0b2390698c9d5a497ee378c00",
-      "bytes": 14322268,
+      "version": "playfix-012-20261010-repair-b74a523",
+      "url": "packs/opening.pck?sha256=4f987dae8bb75893a6f7c64c2e94296fbec8095b06bc11a527bc20a30a86ec6c",
+      "sha256": "4f987dae8bb75893a6f7c64c2e94296fbec8095b06bc11a527bc20a30a86ec6c",
+      "bytes": 14323772,
       "entry_scene": "res://scenes/zones/greyfen_gameplay.tscn",
       "dependencies": [
         "base"
@@ -50,21 +50,21 @@
       "preload_priority": 10,
       "status": "streamed_web_candidate",
       "candidate_artifact": "opening.pck",
-      "candidate_bytes": 14322268,
-      "candidate_sha256": "e8009498dc8cbd3c88ee071ab59be846c57cfca0b2390698c9d5a497ee378c00",
+      "candidate_bytes": 14323772,
+      "candidate_sha256": "4f987dae8bb75893a6f7c64c2e94296fbec8095b06bc11a527bc20a30a86ec6c",
       "contents": [
         "greyfen",
         "wychwood",
         "cemetery",
         "opening_actors"
       ],
-      "cache_key": "e8009498dc8cbd3c88ee071ab59be846c57cfca0b2390698c9d5a497ee378c00"
+      "cache_key": "4f987dae8bb75893a6f7c64c2e94296fbec8095b06bc11a527bc20a30a86ec6c"
     },
     "campaign": {
-      "version": "mobile-003-20261008-landscape",
-      "url": "packs/campaign.pck?sha256=b89ec48702ad522694e674fc55690d2e06b015c333b09937275742c4b15f2e11",
-      "sha256": "b89ec48702ad522694e674fc55690d2e06b015c333b09937275742c4b15f2e11",
-      "bytes": 1000092,
+      "version": "playfix-012-20261010-repair-b74a523",
+      "url": "packs/campaign.pck?sha256=ee949fde556289d8e7e8df7278b5879bf3a8c87f22c8e9089e9bff04d8b253f4",
+      "sha256": "ee949fde556289d8e7e8df7278b5879bf3a8c87f22c8e9089e9bff04d8b253f4",
+      "bytes": 1002316,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -73,21 +73,21 @@
       "preload_priority": 20,
       "status": "streamed_web_candidate",
       "candidate_artifact": "campaign.pck",
-      "candidate_bytes": 1000092,
-      "candidate_sha256": "b89ec48702ad522694e674fc55690d2e06b015c333b09937275742c4b15f2e11",
+      "candidate_bytes": 1002316,
+      "candidate_sha256": "ee949fde556289d8e7e8df7278b5879bf3a8c87f22c8e9089e9bff04d8b253f4",
       "contents": [
         "deep_woods",
         "long_road",
         "castle",
         "finale"
       ],
-      "cache_key": "b89ec48702ad522694e674fc55690d2e06b015c333b09937275742c4b15f2e11"
+      "cache_key": "ee949fde556289d8e7e8df7278b5879bf3a8c87f22c8e9089e9bff04d8b253f4"
     },
     "characters": {
-      "version": "mobile-003-20261008-landscape",
-      "url": "packs/characters.pck?sha256=f7e4fb8fc823c37a00b7192046e64ddb6dd70ee307f997fd46b83a3e88e98bd4",
-      "sha256": "f7e4fb8fc823c37a00b7192046e64ddb6dd70ee307f997fd46b83a3e88e98bd4",
-      "bytes": 30470584,
+      "version": "playfix-012-20261010-repair-b74a523",
+      "url": "packs/characters.pck?sha256=4c110051ef762e7c0f684069202dc7b4fbd662d399002c69fa83385955763515",
+      "sha256": "4c110051ef762e7c0f684069202dc7b4fbd662d399002c69fa83385955763515",
+      "bytes": 30472088,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -96,19 +96,19 @@
       "preload_priority": 30,
       "status": "streamed_web_candidate",
       "candidate_artifact": "characters.pck",
-      "candidate_bytes": 30470584,
-      "candidate_sha256": "f7e4fb8fc823c37a00b7192046e64ddb6dd70ee307f997fd46b83a3e88e98bd4",
+      "candidate_bytes": 30472088,
+      "candidate_sha256": "4c110051ef762e7c0f684069202dc7b4fbd662d399002c69fa83385955763515",
       "contents": [
         "ranger_runtime",
         "universal_crowd_runtime"
       ],
-      "cache_key": "f7e4fb8fc823c37a00b7192046e64ddb6dd70ee307f997fd46b83a3e88e98bd4"
+      "cache_key": "4c110051ef762e7c0f684069202dc7b4fbd662d399002c69fa83385955763515"
     },
     "monsters": {
-      "version": "mobile-003-20261008-landscape",
-      "url": "packs/monsters.pck?sha256=b95a4a263ffb7437a039e1d1fb0c1f15352f42afb2911d1439721e5638aaf68a",
-      "sha256": "b95a4a263ffb7437a039e1d1fb0c1f15352f42afb2911d1439721e5638aaf68a",
-      "bytes": 7011052,
+      "version": "playfix-012-20261010-repair-b74a523",
+      "url": "packs/monsters.pck?sha256=d8bb2e0b1f115a87201d07b43b47e58378f3b6740d2d00fbdb78fc7a8c7eaec7",
+      "sha256": "d8bb2e0b1f115a87201d07b43b47e58378f3b6740d2d00fbdb78fc7a8c7eaec7",
+      "bytes": 8374600,
       "entry_scene": "",
       "dependencies": [
         "base"
@@ -116,20 +116,20 @@
       "preload_priority": 40,
       "status": "streamed_web_candidate",
       "candidate_artifact": "monsters.pck",
-      "candidate_bytes": 7011052,
-      "candidate_sha256": "b95a4a263ffb7437a039e1d1fb0c1f15352f42afb2911d1439721e5638aaf68a",
+      "candidate_bytes": 8374600,
+      "candidate_sha256": "d8bb2e0b1f115a87201d07b43b47e58378f3b6740d2d00fbdb78fc7a8c7eaec7",
       "contents": [
         "monster_families",
         "bosses",
         "animals"
       ],
-      "cache_key": "b95a4a263ffb7437a039e1d1fb0c1f15352f42afb2911d1439721e5638aaf68a"
+      "cache_key": "d8bb2e0b1f115a87201d07b43b47e58378f3b6740d2d00fbdb78fc7a8c7eaec7"
     },
     "audio": {
-      "version": "mobile-003-20261008-landscape",
-      "url": "packs/audio.pck?sha256=e17005c7891c5817346f739007a96fca66488c80cc7d96e22c6d221cc021d766",
-      "sha256": "e17005c7891c5817346f739007a96fca66488c80cc7d96e22c6d221cc021d766",
-      "bytes": 19354896,
+      "version": "playfix-012-20261010-repair-b74a523",
+      "url": "packs/audio.pck?sha256=09de25285d744bbb1cd02bffe002da80f5c3abe55060adf9352738147534291f",
+      "sha256": "09de25285d744bbb1cd02bffe002da80f5c3abe55060adf9352738147534291f",
+      "bytes": 19356400,
       "entry_scene": "",
       "dependencies": [
         "base"
@@ -137,20 +137,20 @@
       "preload_priority": 50,
       "status": "streamed_web_candidate",
       "candidate_artifact": "audio.pck",
-      "candidate_bytes": 19354896,
-      "candidate_sha256": "e17005c7891c5817346f739007a96fca66488c80cc7d96e22c6d221cc021d766",
+      "candidate_bytes": 19356400,
+      "candidate_sha256": "09de25285d744bbb1cd02bffe002da80f5c3abe55060adf9352738147534291f",
       "contents": [
         "ambience",
         "combat_cues",
         "voice_fallbacks"
       ],
-      "cache_key": "e17005c7891c5817346f739007a96fca66488c80cc7d96e22c6d221cc021d766"
+      "cache_key": "09de25285d744bbb1cd02bffe002da80f5c3abe55060adf9352738147534291f"
     },
     "quality_materials": {
-      "version": "mobile-003-20261008-landscape",
-      "url": "packs/quality_materials.pck?sha256=6f36da3d6f87c0bfef1f34d2545d6e9a570f2910bf9e0aec9149b2d27a3f2ff8",
-      "sha256": "6f36da3d6f87c0bfef1f34d2545d6e9a570f2910bf9e0aec9149b2d27a3f2ff8",
-      "bytes": 7376908,
+      "version": "playfix-012-20261010-repair-b74a523",
+      "url": "packs/quality_materials.pck?sha256=649cd8d10d8093cebe36c88d906c6c94bde18af75c31f093b07fb687cdebcbae",
+      "sha256": "649cd8d10d8093cebe36c88d906c6c94bde18af75c31f093b07fb687cdebcbae",
+      "bytes": 7377484,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -159,18 +159,18 @@
       "preload_priority": 60,
       "status": "streamed_web_candidate",
       "candidate_artifact": "quality_materials.pck",
-      "candidate_bytes": 7376908,
-      "candidate_sha256": "6f36da3d6f87c0bfef1f34d2545d6e9a570f2910bf9e0aec9149b2d27a3f2ff8",
+      "candidate_bytes": 7377484,
+      "candidate_sha256": "649cd8d10d8093cebe36c88d906c6c94bde18af75c31f093b07fb687cdebcbae",
       "contents": [
         "opening_normal_maps",
         "opening_orm_maps"
       ],
-      "cache_key": "6f36da3d6f87c0bfef1f34d2545d6e9a570f2910bf9e0aec9149b2d27a3f2ff8"
+      "cache_key": "649cd8d10d8093cebe36c88d906c6c94bde18af75c31f093b07fb687cdebcbae"
     }
   },
-  "build_id": "mobile-003-20261008-landscape",
-  "generated_from_commit": "967079b73cf79373c18c881ffeda21d2b9043bf3",
-  "generated_at_utc": "2026-10-08T08:46:05.880384Z",
-  "total_bytes": 79535800,
+  "build_id": "playfix-012-20261010-repair-b74a523",
+  "generated_from_commit": "b74a52388691329c37652e50de22ae9d919e5008",
+  "generated_at_utc": "2026-10-09T21:24:01.710347Z",
+  "total_bytes": 80906660,
   "source_dirty": true
 }

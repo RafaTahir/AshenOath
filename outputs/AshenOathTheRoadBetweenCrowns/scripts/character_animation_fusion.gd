@@ -68,7 +68,7 @@ static func attach_shared_library(root: Node3D, source_resource: Resource = null
 
 static func is_shared_body(path: String) -> bool:
 	var normalized := path.replace("\\", "/").to_lower()
-	return (normalized.contains("assets_external/characters_universal/") or normalized.contains("assets_external/characters_ranger/")) and normalized.ends_with(".gltf")
+	return (normalized.contains("assets_external/characters_universal/") or normalized.contains("assets_external/characters_ranger/")) and (normalized.ends_with(".gltf") or normalized.ends_with(".glb"))
 
 static func _retarget_library(library: AnimationLibrary, target_root: Node3D, target_skeleton: Skeleton3D) -> void:
 	if library == null or target_root == null or target_skeleton == null:

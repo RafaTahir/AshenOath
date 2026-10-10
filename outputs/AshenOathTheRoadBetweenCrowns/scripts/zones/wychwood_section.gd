@@ -579,14 +579,13 @@ func _build_gameplay_content(context: ZoneBuildContext) -> void:
 	context.make_herb("redroot", Vector3(-10, 0, -2), Color(0.55, 0.12, 0.11))
 	context.make_herb("grave_moss", Vector3(5, 0, -13), Color(0.24, 0.42, 0.24))
 	if context.is_quest_active("main_road_of_crows") and not context.is_objective_done("main_road_of_crows", "fight_ghoulkin"):
-		context.spawn_enemy("ghoulkin", Vector3(-2.4, 0.8, -8.8))
-		var second_ghoul = context.spawn_enemy("ghoulkin", Vector3(2.7, 0.8, -9.6))
-		if second_ghoul != null:
-			second_ghoul.set_encounter_active(false)
-		context.spawn_enemy("wychwood_stalker", Vector3(-4.8, 0.8, -3.8))
-		context.spawn_enemy("wychwood_raider", Vector3(4.6, 0.8, -5.3))
 		var brute_z := -14.2 if context.is_objective_done("main_road_of_crows", "drag_marks") else -12.4
-		context.spawn_enemy("wychwood_brute", Vector3(0.2, 0.8, brute_z))
+		var ids := ["ghoulkin", "ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute"]
+		var positions := [Vector3(-2.4, 0.8, -8.8), Vector3(2.7, 0.8, -9.6), Vector3(-4.8, 0.8, -3.8), Vector3(4.6, 0.8, -5.3), Vector3(0.2, 0.8, brute_z)]
+		for wave in range(context.wychwood_wave_progress(), ids.size()):
+			var enemy = context.spawn_enemy(ids[wave], positions[wave])
+			if enemy != null:
+				enemy.set_meta("wychwood_wave", wave)
 	if context.is_quest_active("side_black_dog") and not context.is_objective_done("side_black_dog", "find_dog") and not bool(context.get_story_flag("black_dog_bandits_defeated", false)):
 		context.spawn_enemy("bandit", Vector3(-14, 0.8, -14))
 		context.spawn_enemy("bandit", Vector3(-12, 0.8, -15))

@@ -94,6 +94,7 @@ var encounter_peers: Array = []
 
 func setup(id: String, definition: Dictionary, target: Node3D) -> void:
 	enemy_id = id
+	process_mode = Node.PROCESS_MODE_PAUSABLE
 	display_name = definition.get("name", id)
 	damage = float(definition.get("damage", 10.0))
 	move_speed = float(definition.get("speed", 2.0))
@@ -198,7 +199,17 @@ func _physics_process(delta: float) -> void:
 	var pursuit_position: Vector3 = player.global_position if can_see_player else last_known_player_position
 	var pursuit_distance := global_position.distance_to(pursuit_position) if pursuit_position != Vector3.INF else INF
 	var home_distance: float = global_position.distance_to(home_position)
-	if pending_attack_time > 0.0:
+	var player_outside_arena: bool = is_boss and player.global_position.distance_to(home_position) > leash_radius
+	if player_outside_arena:
+		_release_attack_token()
+		pending_attack_time = 0.0
+		windup_time = 0.0
+		perception_memory_time = 0.0
+		_hide_windup_marker()
+		var home_dir := _navigation_direction(home_position) if home_distance > 0.35 else Vector3.ZERO
+		velocity.x = home_dir.x * move_speed
+		velocity.z = home_dir.z * move_speed
+	elif pending_attack_time > 0.0:
 		_tick_pending_attack(delta)
 		velocity.x = 0.0
 		velocity.z = 0.0
@@ -325,6 +336,10 @@ func _validated_step_direction(direction: Vector3, target: Vector3, step_distanc
 func apply_damage(amount: float, source_tag: String = "") -> void:
 	if dead or not encounter_active or bool(get_meta("story_surrender_protected", false)):
 		return
+	if bool(get_meta("dormant_arena", false)):
+		var controller: Node = get_node_or_null("BossEncounterController")
+		if controller != null and is_instance_valid(controller.host):
+			controller.host._open_rootbound_encounter()
 	var final_damage = amount
 	var story_encounter := get_node_or_null("StoryEncounterPreparation")
 	if story_encounter != null and story_encounter.has_method("incoming_damage_multiplier"):
@@ -869,13 +884,13 @@ func _try_build_mapped_body() -> bool:
 			"death": "SkeletonArmature|Skeleton_Death"
 		})
 	elif uses_real_body:
-		if visual_source == "ghoulkin_creature":
+		if visual_source in ["ghoulkin_creature", "bell_eater_boss", "bog_wretch_creature"]:
 			animation_driver.configure(mapped, {
 				"idle":"Idle", "walk":"Walk", "walk_back":"Walk",
 				"strafe":"Walk", "run":"Sprint", "windup":"Sword_Attack",
 				"attack":"Sword_Attack", "hit":"Hit_Chest", "death":"Death01"
 			})
-		elif visual_source in ["wychwood_stalker_creature", "wychwood_raider_creature", "wychwood_brute_creature", "bell_eater_boss"]:
+		elif visual_source in ["wychwood_stalker_creature", "wychwood_raider_creature", "wychwood_brute_creature"]:
 			animation_driver.configure(mapped, {
 				"idle":"Idle", "walk":"Walk", "walk_back":"Walk", "strafe":"Walk",
 				"run":"Run", "windup":"Weapon", "attack":"Punch",
@@ -900,14 +915,6 @@ func _try_build_mapped_body() -> bool:
 				"idle": "Idle", "walk": "Walk", "walk_back": "Walk", "strafe": "Walk",
 				"run": "Gallop", "windup": "Attack_Headbutt", "attack": "Attack_Headbutt",
 				"hit": "Idle_HitReact1", "death": "Death"
-			})
-		elif visual_source == "bog_wretch_creature":
-			animation_driver.configure(mapped, {
-				"idle": "Armature|Slime_Idle", "walk": "Armature|Slime_Walk",
-				"walk_back": "Armature|Slime_Walk", "strafe": "Armature|Slime_Walk",
-				"run": "Armature|Slime_Walk", "windup": "Armature|Slime_Attack",
-				"attack": "Armature|Slime_Attack", "hit": "Armature|Slime_Attack",
-				"death": "Armature|Slime_Death"
 			})
 		elif visual_source == "gravebound_knight_creature":
 			animation_driver.configure(mapped, {
@@ -1297,7 +1304,7 @@ func _make_bell_eater_identity() -> void:
 	boss_phase_sigil = clapper
 
 func _attach_bell_eater_harness(mapped: Node3D) -> void:
-	_attach_boss_identity_to_bone(mapped, "Torso", "BellEaterHarnessSocket", Vector3(0, 1.75, -1.15))
+	_attach_boss_identity_to_bone(mapped, "spine_03", "BellEaterHarnessSocket", Vector3(0, 1.75, -0.60))
 
 func _attach_boss_identity_to_bone(mapped: Node3D, bone_name: String, socket_name: String, anchor: Vector3, relative_to_bone := false) -> void:
 	var skeletons := mapped.find_children("*", "Skeleton3D", true, false)

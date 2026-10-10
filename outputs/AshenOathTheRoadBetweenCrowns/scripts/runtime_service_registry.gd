@@ -96,6 +96,8 @@ func configure(owner: Node) -> void:
 	var runtime_packs = services["runtime_packs"]
 
 	hud.process_mode = Node.PROCESS_MODE_ALWAYS
+	hud.set_runtime_services(owner, save_manager)
+	hud.pause_requested.connect(Callable(owner, "_pause_game"))
 	quests.load_quests("res://data/quests.json")
 	quest_presentation.setup(quests, quest_beats, story_state)
 	quest_beats.setup(quests, story_state)
@@ -115,6 +117,7 @@ func configure(owner: Node) -> void:
 	input_router.set_settings_manager(settings)
 	input_router.apply_settings(settings.settings)
 	interaction_focus.setup(quests, quest_presentation)
+	combat.contact_missed.connect(func(_contact: Dictionary): hud.show_status_cue("No blade contact", "neutral"))
 	hud.set_input_source(input_router)
 	minigames.setup(input_router)
 	mobile_touch.setup(input_router, hud, settings.settings)
@@ -235,6 +238,7 @@ func configure(owner: Node) -> void:
 			hud.post_notice(text, "inventory", 3.5, text)
 	)
 	inventory.changed.connect(Callable(owner, "_refresh_equipment_readout"))
+	inventory.changed.connect(Callable(owner, "_reconcile_preparation_objective"))
 	vendor_service.message.connect(func(text: String):
 		if not bool(owner.get("preparation_action_in_progress")):
 			hud.post_notice(text, "inventory", 3.5, text)

@@ -1,5 +1,62 @@
 # Ashen Oath Project State
 
+## Delivery Preparation - 2026-10-11
+
+The user resumed PLAYFIX-012 and authorized final push/deployment. V2 remains
+playfix-012-20261010-repair-b74a523; no game-content changes or replacement export
+were made during this continuation. Local web/ now contains those exact bytes,
+with its preceding contents retained under
+.release-gate/playfix-012-publication-20261011/previous-web. Static package checks
+passed: 15 artifacts, 96463965 directory bytes including the release manifest,
+strictly below 104857600. A local source/package checkpoint has been prepared;
+this is not full-playthrough acceptance. Production and remote
+branches have not yet changed. Both fetched remote branches still match b74a523.
+
+V2 normal Continue restored the recorded Greyfen autosave, including Bracken's
+earned calm stage, five recorded opening kills and settings. The available save
+is earlier in the story than the V1 chapel observation; no lost-progress root
+cause is claimed. Pause/Resume, displayed Use and settings cycling were observed.
+Full Witness/homecoming coverage remains incomplete because sustained controls
+through the in-app browser were inconsistent. This is a test-control limitation,
+not a demonstrated game defect or a passing campaign result. A temporary D:
+preview wrapper exposes the existing read-only observer through DOM text; it
+does not modify the candidate or inject gameplay actions/state.
+
+The user explicitly authorized deployment now, with the full Witness/homecoming
+playthrough marked unverified. Its coverage is not a release-blocking requirement
+for this delivery and is not represented as passed. The implementation/package
+are ready; final publication is in progress. Formal user ticket acceptance remains
+0/12. The exact-byte publication receipt records the resulting commit, deployment
+and live identity proof under .release-gate/playfix-012-publication-20261011/.
+The older continuation/publication permission statements below are historical.
+
+## Playthrough Repairs - 2026-10-10
+
+PLAYFIX-001 through PLAYFIX-011 are implemented locally on D: from b74a523.
+The first candidate compiled; its one authorized earned journey passed opening
+movement, bridges, save/reload/Continue and the five-enemy encounter, then exposed
+an omitted Bell-Eater texture companion at the chapel. It is rejected for release.
+The corrected package compiled successfully: playfix-012-20261010-repair-b74a523,
+96457121 bytes (91.99 MiB), with matching static artifact identities. Its changes
+are not runtime-accepted. Source/artifact/evidence remain local; web/ and
+production are untouched. Implementation is 11/12; PLAYFIX-012 and all user ticket
+acceptances remain pending.
+Changes cover save/encounter continuity,
+fresh defeat-before-shrine and legacy retirement, route joins, camera clearance,
+objective/aftermath presentation, target ownership, compact actions, character
+staging, bow/contact teaching, approved monster derivatives and visual consistency.
+The user's three monster body-reference approvals do not imply runtime acceptance.
+Preferred A-set humans, Ranger Senn, actual White Hart, content and saves remain.
+
+See PLAYTHROUGH_REPAIRS_STATUS.md for the current implementation/compilation/
+observation/acceptance record and PLAYFIX_012_PLAYTHROUGH.md for the incomplete
+journey. The user approved in-app Chromium because Chrome was not connected.
+Next: await explicit permission to continue the same
+earned save, or leave further testing to the user. No new journey, per-ticket
+commits, push or deployment. Final publication requires the user's approval and
+an exact-byte package strictly below 104857600 bytes. Older release notes below
+describe their own historical revisions, not acceptance of these new changes.
+
 ## Landscape Startup and Menu Repair - 2026-10-08
 
 MOBILE-003 implemented, packaged and published; user acceptance
