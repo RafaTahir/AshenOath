@@ -1,5 +1,99 @@
 extends RefCounted
 
+static func wychwood_floor_edge(side: float, bank: int) -> ArrayMesh:
+	var start_z := -13.8 if bank == 0 else 3.4
+	var end_z := -3.4 if bank == 0 else 14.2
+	var vertices := PackedVector3Array()
+	var uvs := PackedVector2Array()
+	var indices := PackedInt32Array()
+	for patch_index in range(7):
+		var z := lerpf(start_z, end_z, float(patch_index) / 6.0)
+		z += 0.22 * sin(float(patch_index) * 2.19 + side)
+		var x: float = side * (3.85 + 0.45 * sin(float(patch_index) * 1.43 + bank))
+		var radius_x := 0.92 + 0.18 * float(patch_index % 3)
+		var radius_z := 0.60 + 0.16 * float((patch_index + bank) % 3)
+		var center := vertices.size()
+		vertices.append(Vector3(x, 0.066, z))
+		uvs.append(Vector2(x * 0.28, z * 0.28))
+		for point_index in range(10):
+			var angle := TAU * float(point_index) / 10.0
+			var variation := 0.83 + 0.15 * sin(float(point_index) * 2.37 + float(patch_index))
+			var point := Vector3(x + cos(angle) * radius_x * variation, 0.066, z + sin(angle) * radius_z * variation)
+			vertices.append(point)
+			uvs.append(Vector2(point.x * 0.28, point.z * 0.28))
+		for point_index in range(10):
+			indices.append_array(PackedInt32Array([center, center + 1 + (point_index + 1) % 10, center + 1 + point_index]))
+	var arrays := []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = vertices
+	arrays[Mesh.ARRAY_TEX_UV] = uvs
+	arrays[Mesh.ARRAY_INDEX] = indices
+	var mesh := ArrayMesh.new()
+	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	return mesh
+
+static func wychwood_path_rocks() -> ArrayMesh:
+	var rock_mesh := load("res://assets_external/environment/forest/RockPath_Round_Small_1.obj") as ArrayMesh
+	var bounds := rock_mesh.get_aabb()
+	var source_size := bounds.size
+	var bottom_center := bounds.position + Vector3(source_size.x * 0.5, 0.0, source_size.z * 0.5)
+	var surface := SurfaceTool.new()
+	var positions := [12.0, 9.1, 6.2, 3.5, -3.5, -6.1, -9.0, -12.0]
+	for side in [-1.0, 1.0]:
+		for stone_index in range(positions.size()):
+			var z: float = positions[stone_index] + 0.24 * sin(float(stone_index) * 1.71 + side)
+			var x: float = side * (3.38 + 0.30 * sin(float(stone_index) * 1.29 + side))
+			var target_size := Vector3(0.32 + 0.07 * float(stone_index % 3), 0.10, 0.38 + 0.09 * float((stone_index + 1) % 3))
+			var scale_value := Vector3(target_size.x / maxf(source_size.x, 0.01), target_size.y / maxf(source_size.y, 0.01), target_size.z / maxf(source_size.z, 0.01))
+			var basis := Basis(Vector3.UP, float(stone_index) * 0.83 + side * 0.41).scaled(scale_value)
+			surface.append_from(rock_mesh, 0, Transform3D(basis, Vector3(x, 0.044, z) - basis * bottom_center))
+	return surface.commit()
+
+static func wychwood_canopy(height: float, count: int) -> Array[Transform3D]:
+	var transforms: Array[Transform3D] = []
+	for index in range(count):
+		var side := -1.0 if index % 2 == 0 else 1.0
+		var lane := float(index / 2)
+		var x := side * (7.0 + fmod(lane * 2.85, 8.8))
+		var z := 11.8 - fmod(lane * 4.35 + float(index % 3) * 0.55, 25.8)
+		var scale_factor := 0.95 + float(index % 3) * 0.16
+		var yaw := float(index % 5) * 0.22
+		var basis := Basis.from_euler(Vector3(0, yaw, 0)).scaled(Vector3(1.18 * scale_factor, 0.95 + float(index % 2) * 0.11, 1.08 * scale_factor))
+		transforms.append(Transform3D(basis, Vector3(x, height - 0.75, z)))
+	return transforms
+
+static func wychwood_understory(count: int) -> Array[Transform3D]:
+	var transforms: Array[Transform3D] = []
+	var source := load("res://assets_external/environment/forest/Bush_Common.obj") as ArrayMesh
+	var bounds := source.get_aabb()
+	var bottom_center := bounds.position + Vector3(bounds.size.x * 0.5, 0, bounds.size.z * 0.5)
+	for index in range(count):
+		var side := -1.0 if index % 2 == 0 else 1.0
+		var z := 11.0 - fmod(float(index) * 2.7, 23.0) if index < count / 2 else -8.8 + float(index % 5) * 1.45
+		var x := side * (3.9 + float(index % 4) * 0.82) if index < count / 2 else side * (5.9 + float(index % 3) * 0.73)
+		var scale_factor := 0.72 + float(index % 3) * 0.12
+		var target_size := Vector3(0.88 * scale_factor, 0.53 + float(index % 2) * 0.08, 0.82 * scale_factor)
+		var normalized_scale := target_size / bounds.size.max(Vector3.ONE * 0.01)
+		var basis := Basis.from_euler(Vector3(0, float(index) * 0.37, 0)).scaled(normalized_scale)
+		transforms.append(Transform3D(basis, Vector3(x, 0.045, z) - basis * bottom_center))
+	return transforms
+
+static func wychwood_floor(count: int) -> Array[Transform3D]:
+	var transforms: Array[Transform3D] = []
+	var source := load("res://assets_external/environment/forest/Bush_Common.obj") as ArrayMesh
+	var bounds := source.get_aabb()
+	var bottom_center := bounds.position + Vector3(bounds.size.x * 0.5, 0, bounds.size.z * 0.5)
+	for index in range(count):
+		var side := -1.0 if index % 2 == 0 else 1.0
+		var z := 10.4 - fmod(float(index) * 1.83, 22.0) if index < count / 2 else -9.7 + float(index % 7) * 1.13
+		var x := side * (3.15 + float(index % 5) * 0.52) if index < count / 2 else side * (4.8 + float(index % 3) * 0.66)
+		var yaw := -0.55 + float(index % 4) * 0.37
+		var target_size := Vector3(0.38 + float(index % 3) * 0.07, 0.12, 0.34 + float(index % 2) * 0.05)
+		var normalized_scale := target_size / bounds.size.max(Vector3.ONE * 0.01)
+		var basis := Basis.from_euler(Vector3(0, yaw, 0)).scaled(normalized_scale)
+		transforms.append(Transform3D(basis, Vector3(x, 0.045, z) - basis * bottom_center))
+	return transforms
+
 const GROUND_STEP := 0.58
 static func wychwood_ground(size: Vector3, origin: Vector3) -> ArrayMesh:
 	var surface := SurfaceTool.new()

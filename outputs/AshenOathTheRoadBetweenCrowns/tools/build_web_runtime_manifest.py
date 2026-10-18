@@ -26,6 +26,8 @@ def prepare_engine_transport(export_dir: Path) -> dict:
     if not all((export_dir / name).is_file() for name in names[:2]):
         raise ValueError("Engine export is incomplete")
     digest = hashlib.sha256()
+    # A transport change gets a new immutable URL, even for identical JS code.
+    digest.update(b"ashen-oath-engine:gzip-js-v1\0")
     for path in paths:
         digest.update(path.name.encode("utf-8"))
         digest.update(bytes.fromhex(sha256(path)))
@@ -52,7 +54,7 @@ def prepare_engine_transport(export_dir: Path) -> dict:
     if count != 1:
         raise ValueError("Export engine script entry is missing")
     html.write_text(text, encoding="utf-8")
-    return {"executable": stem, "script": stem + ".js", "wasm": stem + ".wasm"}
+    return {"executable": stem, "script": stem + ".js", "wasm": stem + ".wasm", "script_encoding": "gzip"}
 
 
 def sha256(path: Path) -> str:
@@ -72,6 +74,17 @@ def compress_wasm(path: Path) -> None:
     packed = gzip.compress(payload, compresslevel=9, mtime=0)
     if gzip.decompress(packed) != payload:
         raise ValueError("WebAssembly lossless transport round trip failed")
+    path.write_bytes(packed)
+
+
+def compress_engine_script(path: Path) -> None:
+    payload = path.read_bytes()
+    if payload.startswith(b"\x1f\x8b"):
+        payload = gzip.decompress(payload)
+    payload.decode("utf-8")
+    packed = gzip.compress(payload, compresslevel=9, mtime=0)
+    if gzip.decompress(packed) != payload:
+        raise ValueError("Engine JavaScript lossless transport round trip failed")
     path.write_bytes(packed)
 
 
@@ -134,12 +147,15 @@ def inspect_packaged_export(export_dir: Path) -> dict:
         total += path.stat().st_size
         if path.stat().st_size != entry["bytes"] or sha256(path) != entry["sha256"]:
             raise ValueError(f"Artifact size/hash mismatch: {relative}")
-        if path.suffix == ".pck" or relative == engine["wasm"]:
+        encoded_script = relative == engine["script"] and engine.get("script_encoding") == "gzip"
+        if path.suffix == ".pck" or relative == engine["wasm"] or encoded_script:
             if entry.get("content_encoding") != "gzip":
                 raise ValueError(f"Hosting requires gzip transport: {relative}")
             decoded = gzip.decompress(path.read_bytes())
             magic = b"GDPC" if path.suffix == ".pck" else b"\x00asm"
-            if not decoded.startswith(magic):
+            if encoded_script:
+                decoded.decode("utf-8")
+            elif not decoded.startswith(magic):
                 raise ValueError(f"Invalid decoded artifact: {relative}")
             if len(decoded) != entry.get("decoded_bytes") or hashlib.sha256(decoded).hexdigest() != entry.get("decoded_sha256"):
                 raise ValueError(f"Decoded artifact size/hash mismatch: {relative}")
@@ -255,6 +271,16 @@ def build_manifest(export_dir: Path, runtime_manifest_path: Path, source_commit:
         wasm_record.update(content_encoding="gzip", decoded_bytes=len(decoded),
                            decoded_sha256=hashlib.sha256(decoded).hexdigest())
     by_path = {item["path"]: item for item in records}
+    if engine.get("script_encoding") == "gzip":
+        script_payload = (export_dir / engine["script"]).read_bytes()
+        if not script_payload.startswith(b"\x1f\x8b"):
+            raise ValueError("Engine JavaScript is missing gzip transport encoding")
+        script_decoded = gzip.decompress(script_payload)
+        script_decoded.decode("utf-8")
+        by_path[engine["script"]].update(
+            content_encoding="gzip", decoded_bytes=len(script_decoded),
+            decoded_sha256=hashlib.sha256(script_decoded).hexdigest(),
+        )
     required = {"index.html", engine["script"], engine["wasm"], "index.pck", "runtime_pack_manifest.json"}
     missing = sorted(required - by_path.keys())
     if missing:
@@ -336,6 +362,7 @@ def main() -> int:
     try:
         if args.compress_wasm:
             compress_wasm(export_dir / "index.wasm")
+        compress_engine_script(export_dir / "index.js")
         compress_pck_transport(export_dir)
         engine = prepare_engine_transport(export_dir)
         manifest = build_manifest(export_dir, runtime_manifest, source_commit, engine)

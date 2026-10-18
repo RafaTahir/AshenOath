@@ -83,8 +83,7 @@ func _build() -> void:
 	mesh.material_override = _material(Color(0.22, 0.25, 0.19))
 	backstop.add_child(mesh)
 	var shape := CollisionShape3D.new()
-	var box := BoxShape3D.new()
-	box.size = board.size
+	var box := preload("res://scripts/immutable_collision_shapes.gd").box(board.size)
 	shape.shape = box
 	backstop.add_child(shape)
 	shots_root = Node3D.new()
@@ -130,9 +129,7 @@ func _target(point: Vector3, index: int) -> void:
 	body.set_meta("range_index", index)
 	targets.add_child(body)
 	var collision := CollisionShape3D.new()
-	var cylinder := CylinderShape3D.new()
-	cylinder.radius = 0.6
-	cylinder.height = 0.1
+	var cylinder := preload("res://scripts/immutable_collision_shapes.gd").cylinder(0.6, 0.1)
 	collision.shape = cylinder
 	collision.rotation.z = PI * 0.5
 	body.add_child(collision)

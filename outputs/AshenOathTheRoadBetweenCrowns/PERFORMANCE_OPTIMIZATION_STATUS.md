@@ -25,18 +25,20 @@
   is recorded independently in `OPT_MILESTONE_7_RESULT.md` and its receipt.
 - Milestone 8: OPT-052 through OPT-054 implemented and compiled.
   See `OPT_MILESTONE_8_RESULT.md`; user acceptance remains pending.
-- Milestone 9: OPT-055 through OPT-056 authorized, not yet built.
+- Milestone 9: OPT-055 through OPT-056 implemented and compiled; publication
+  is recorded separately by OPT-056. See `OPT_MILESTONE_9_RESULT.md` for ownership
+  and final fixed terrain/buffer compilation coverage.
 - Formal user acceptance: 0/56. Default enablement is approved, not measured gain.
 - Runtime tests, browser QA, benchmarks and screenshots: not run; user-owned.
 
 ## Packaging Boundary
 
-Current build: `opt-m8-20261019-r2-dcdd024`, output
-`D:\Projects\AshenOath\.release-gate\opt-m8-20261019-r2\export`.
-Manifested Web artifacts: 104345777 bytes. Complete `web/`: 104353612 bytes,
+Current build: `opt-m9-20261019-a85b82e`, output
+`D:\Projects\AshenOath\.release-gate\opt-m9-20261019-transport\export`.
+Manifested Web artifacts: 104679928 bytes. Complete `web/`: 104687954 bytes,
 strictly below 104857600 bytes.
-Root PCK: 6313381 bytes; SHA-256
-`51fc3d6a3dca2903779f79c487c40db534b8c5a7363f791d2a18b56264501166`.
+Root PCK: 6316592 bytes; SHA-256
+`f41b0128896fd4acfff1ea29db647889f1122616648463825f4a54a65e05c45d`.
 Compilation and the existing package builder's static identity checks succeeded.
 No game execution or performance measurement was performed.
 
@@ -52,6 +54,11 @@ its exact outcome. No over-budget milestone may be published. No runtime
 performance claims are made.
 Milestone 7 published as `dcdd024`; Vercel reported READY and assigned the
 production alias. Receipt: `OPT-051-20261018T205236Z/publication.json`.
+Milestone 8 published as `a85b82e`; Vercel reported READY and assigned the alias.
+Receipt: `OPT-054-20261018T210624Z/publication.json`.
+OPT-056 owns final milestone publication. All 56 implementations are present
+and compiled, not performance-certified or user-accepted. Engine JS now uses
+lossless gzip transport with matching hosting headers and decoded hashes.
 Enabled rendering options remain subject to the user's runtime comparison.
 User checks startup, traversal, retained visuals and Retry; there is no agent
 runtime-acceptance claim. All remaining 40 ticket implementations are present

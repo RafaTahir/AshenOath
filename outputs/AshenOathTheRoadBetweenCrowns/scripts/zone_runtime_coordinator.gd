@@ -220,6 +220,8 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	host.loading_started_usec = host.loading_started_usec if host.loading_started_usec > 0 else Time.get_ticks_usec()
 	if host.player != null and host.player.has_method("set_transition_locked"):
 		host.player.set_transition_locked(true)
+	if host.audio != null:
+		host.audio.prepare_destination(zone_id, host.story_state)
 	if host.camera_rig != null and host.camera_rig.has_method("clear_target_lock"):
 		host.camera_rig.clear_target_lock()
 	if host.hud != null and host.hud.has_method("clear_target_lock_status"):
@@ -571,6 +573,8 @@ func advance_transition() -> void:
 	host._schedule_deferred_zone_audio(host.current_zone_id, host.zone_root)
 
 func recover_failed_transition(previous_zone_id: String) -> void:
+	if host.audio != null:
+		host.audio.prepare_destination(previous_zone_id, host.story_state)
 	host.pending_player_restore.clear()
 	host.campaign_pack_waiting = false
 	if host.seamless_world != null:

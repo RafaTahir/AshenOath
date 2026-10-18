@@ -399,8 +399,7 @@ func _make_recovery_volumes(root: Node3D, context: ZoneBuildContext, center_z: f
 		volume.position = Vector3(x,-0.70,center_z)
 		root.add_child(volume)
 		var shape := CollisionShape3D.new()
-		var box := BoxShape3D.new()
-		box.size = Vector3(side_length,3.0,span+0.5)
+		var box := preload("res://scripts/immutable_collision_shapes.gd").box(Vector3(side_length,3.0,span+0.5))
 		shape.shape = box
 		volume.add_child(shape)
 		volume.body_entered.connect(recovery_handler.bind(center_z, span))
@@ -411,8 +410,7 @@ func _make_invisible_barrier(root: Node3D, node_name: String, pos: Vector3, size
 	body.position = pos
 	root.add_child(body)
 	var shape := CollisionShape3D.new()
-	var box := BoxShape3D.new()
-	box.size = size
+	var box := preload("res://scripts/immutable_collision_shapes.gd").box(size)
 	shape.shape = box
 	body.add_child(shape)
 
@@ -448,8 +446,7 @@ func _make_box(root: Node3D, node_name: String, pos: Vector3, size: Vector3, col
 		body.position = pos
 		root.add_child(body)
 		var shape := CollisionShape3D.new()
-		var solid := BoxShape3D.new()
-		solid.size = size
+		var solid := preload("res://scripts/immutable_collision_shapes.gd").box(size)
 		shape.shape = solid
 		body.add_child(shape)
 

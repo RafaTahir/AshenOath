@@ -75,8 +75,7 @@ func build() -> void:
 	screen_clearance.collision_mask = 0
 	screen_clearance.position = Vector3(0, 1.02, -0.54)
 	var screen_shape := CollisionShape3D.new()
-	var screen_box := BoxShape3D.new()
-	screen_box.size = Vector3(1.17, 1.42, 0.06)
+	var screen_box := preload("res://scripts/immutable_collision_shapes.gd").box(Vector3(1.17, 1.42, 0.06))
 	screen_shape.shape = screen_box
 	screen_clearance.add_child(screen_shape)
 	tray_area.add_child(screen_clearance)

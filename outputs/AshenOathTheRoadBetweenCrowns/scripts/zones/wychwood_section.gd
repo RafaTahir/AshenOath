@@ -117,15 +117,10 @@ func _make_canopy_layer(parent: Node3D, context: ZoneBuildContext, node_name: St
 	batch.multimesh = multimesh
 	batch.visibility_range_end = 54.0
 	parent.add_child(batch)
-	for index in range(count):
-		var side := -1.0 if index % 2 == 0 else 1.0
-		var lane := float(index / 2)
-		var x := side * (7.0 + fmod(lane * 2.85, 8.8))
-		var z := 11.8 - fmod(lane * 4.35 + float(index % 3) * 0.55, 25.8)
-		var scale_factor := 0.95 + float(index % 3) * 0.16
-		var yaw := float(index % 5) * 0.22
-		var basis := Basis.from_euler(Vector3(0, yaw, 0)).scaled(Vector3(1.18 * scale_factor, 0.95 + float(index % 2) * 0.11, 1.08 * scale_factor))
-		multimesh.set_instance_transform(index, Transform3D(basis, Vector3(x, height - 0.75, z)))
+	var prepared := preload("res://scripts/prepared_zone_geometry.gd").resource("wychwood_canopy_" + str(height) + "_" + str(count))
+	multimesh.buffer = prepared.get_meta("buffer")
+	if preload("res://scripts/performance_comparison_options.gd").enabled("static_bounds"):
+		multimesh.custom_aabb = prepared.get_meta("bounds")
 
 func _make_understory_layer(parent: Node3D, context: ZoneBuildContext) -> void:
 	var count := 10 if context.quality_preset() == "potato" else 16 if context.quality_preset() == "balanced" else 22
@@ -133,8 +128,6 @@ func _make_understory_layer(parent: Node3D, context: ZoneBuildContext) -> void:
 	if source == null:
 		push_error("Wychwood understory foliage resource is missing")
 		return
-	var bounds := source.get_aabb()
-	var bottom_center := bounds.position + Vector3(bounds.size.x * 0.5, 0, bounds.size.z * 0.5)
 	var mesh := source.duplicate() as ArrayMesh
 	var foliage := context.make_material(Color(0.16, 0.25, 0.12))
 	foliage.roughness = 0.98
@@ -149,15 +142,10 @@ func _make_understory_layer(parent: Node3D, context: ZoneBuildContext) -> void:
 	batch.multimesh = multimesh
 	batch.visibility_range_end = 32.0
 	parent.add_child(batch)
-	for index in range(count):
-		var side := -1.0 if index % 2 == 0 else 1.0
-		var z := 11.0 - fmod(float(index) * 2.7, 23.0) if index < count / 2 else -8.8 + float(index % 5) * 1.45
-		var x := side * (3.9 + float(index % 4) * 0.82) if index < count / 2 else side * (5.9 + float(index % 3) * 0.73)
-		var scale_factor := 0.72 + float(index % 3) * 0.12
-		var target_size := Vector3(0.88 * scale_factor, 0.53 + float(index % 2) * 0.08, 0.82 * scale_factor)
-		var normalized_scale := target_size / bounds.size.max(Vector3.ONE * 0.01)
-		var basis := Basis.from_euler(Vector3(0, float(index) * 0.37, 0)).scaled(normalized_scale)
-		multimesh.set_instance_transform(index, Transform3D(basis, Vector3(x, 0.045, z) - basis * bottom_center))
+	var prepared := preload("res://scripts/prepared_zone_geometry.gd").resource("wychwood_understory_" + str(count))
+	multimesh.buffer = prepared.get_meta("buffer")
+	if preload("res://scripts/performance_comparison_options.gd").enabled("static_bounds"):
+		multimesh.custom_aabb = prepared.get_meta("bounds")
 
 func _make_forest_floor_layer(parent: Node3D, context: ZoneBuildContext) -> void:
 	var count := 12 if context.quality_preset() == "potato" else 20 if context.quality_preset() == "balanced" else 28
@@ -165,8 +153,6 @@ func _make_forest_floor_layer(parent: Node3D, context: ZoneBuildContext) -> void
 	if source == null:
 		push_error("Wychwood forest-floor foliage resource is missing")
 		return
-	var bounds := source.get_aabb()
-	var bottom_center := bounds.position + Vector3(bounds.size.x * 0.5, 0, bounds.size.z * 0.5)
 	var mesh := source.duplicate() as ArrayMesh
 	var fallen_leaves := context.make_material(Color(0.18, 0.19, 0.10))
 	fallen_leaves.roughness = 1.0
@@ -181,49 +167,16 @@ func _make_forest_floor_layer(parent: Node3D, context: ZoneBuildContext) -> void
 	batch.multimesh = multimesh
 	batch.visibility_range_end = 28.0
 	parent.add_child(batch)
-	for index in range(count):
-		var side := -1.0 if index % 2 == 0 else 1.0
-		var z := 10.4 - fmod(float(index) * 1.83, 22.0) if index < count / 2 else -9.7 + float(index % 7) * 1.13
-		var x := side * (3.15 + float(index % 5) * 0.52) if index < count / 2 else side * (4.8 + float(index % 3) * 0.66)
-		var yaw := -0.55 + float(index % 4) * 0.37
-		var target_size := Vector3(0.38 + float(index % 3) * 0.07, 0.12, 0.34 + float(index % 2) * 0.05)
-		var normalized_scale := target_size / bounds.size.max(Vector3.ONE * 0.01)
-		var basis := Basis.from_euler(Vector3(0, yaw, 0)).scaled(normalized_scale)
-		multimesh.set_instance_transform(index, Transform3D(basis, Vector3(x, 0.045, z) - basis * bottom_center))
+	var prepared := preload("res://scripts/prepared_zone_geometry.gd").resource("wychwood_floor_" + str(count))
+	multimesh.buffer = prepared.get_meta("buffer")
+	if preload("res://scripts/performance_comparison_options.gd").enabled("static_bounds"):
+		multimesh.custom_aabb = prepared.get_meta("bounds")
 
 func _make_path_floor_edges(parent: Node3D, context: ZoneBuildContext) -> void:
 	var material := context.make_world_material("forest_ground", Color(0.48, 0.53, 0.40))
 	for side in [-1.0, 1.0]:
 		for bank in [0, 1]:
-			var start_z := -13.8 if bank == 0 else 3.4
-			var end_z := -3.4 if bank == 0 else 14.2
-			var vertices := PackedVector3Array()
-			var uvs := PackedVector2Array()
-			var indices := PackedInt32Array()
-			for patch_index in range(7):
-				var z := lerpf(start_z, end_z, float(patch_index) / 6.0)
-				z += 0.22 * sin(float(patch_index) * 2.19 + side)
-				var x: float = side * (3.85 + 0.45 * sin(float(patch_index) * 1.43 + bank))
-				var radius_x := 0.92 + 0.18 * float(patch_index % 3)
-				var radius_z := 0.60 + 0.16 * float((patch_index + bank) % 3)
-				var center := vertices.size()
-				vertices.append(Vector3(x, 0.066, z))
-				uvs.append(Vector2(x * 0.28, z * 0.28))
-				for point_index in range(10):
-					var angle := TAU * float(point_index) / 10.0
-					var variation := 0.83 + 0.15 * sin(float(point_index) * 2.37 + float(patch_index))
-					var point := Vector3(x + cos(angle) * radius_x * variation, 0.066, z + sin(angle) * radius_z * variation)
-					vertices.append(point)
-					uvs.append(Vector2(point.x * 0.28, point.z * 0.28))
-				for point_index in range(10):
-					indices.append_array(PackedInt32Array([center, center + 1 + (point_index + 1) % 10, center + 1 + point_index]))
-			var arrays := []
-			arrays.resize(Mesh.ARRAY_MAX)
-			arrays[Mesh.ARRAY_VERTEX] = vertices
-			arrays[Mesh.ARRAY_TEX_UV] = uvs
-			arrays[Mesh.ARRAY_INDEX] = indices
-			var mesh := ArrayMesh.new()
-			mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+			var mesh := preload("res://scripts/prepared_zone_geometry.gd").mesh("wychwood_floor_edge_%s_%s" % [side, bank])
 			var edge := MeshInstance3D.new()
 			edge.name = "WychwoodPathFloorEdge_%s_%s" % ["West" if side < 0.0 else "East", "North" if bank == 0 else "South"]
 			edge.mesh = mesh
@@ -232,33 +185,17 @@ func _make_path_floor_edges(parent: Node3D, context: ZoneBuildContext) -> void:
 			parent.add_child(edge)
 
 func _make_path_rock_edges(parent: Node3D) -> void:
-	var rock_path := "res://assets_external/environment/forest/RockPath_Round_Small_1.obj"
-	var texture_path := "res://assets_external/environment/forest/PathRocks_Diffuse.png"
-	var rock_mesh := load(rock_path) as ArrayMesh
-	var rock_texture := load(texture_path) as Texture2D
-	if rock_mesh == null or rock_texture == null:
-		push_error("Wychwood path rocks are missing an approved mesh or material")
+	var rock_texture := load("res://assets_external/environment/forest/PathRocks_Diffuse.png") as Texture2D
+	if rock_texture == null:
+		push_error("Wychwood path rocks are missing their approved material")
 		return
-	var bounds := rock_mesh.get_aabb()
-	var source_size := bounds.size
-	var bottom_center := bounds.position + Vector3(source_size.x * 0.5, 0.0, source_size.z * 0.5)
 	var material := StandardMaterial3D.new()
 	material.albedo_texture = rock_texture
 	material.albedo_color = Color(0.68, 0.72, 0.66)
 	material.roughness = 0.98
-	var surface := SurfaceTool.new()
-	var positions := [12.0, 9.1, 6.2, 3.5, -3.5, -6.1, -9.0, -12.0]
-	for side in [-1.0, 1.0]:
-		for stone_index in range(positions.size()):
-			var z: float = positions[stone_index] + 0.24 * sin(float(stone_index) * 1.71 + side)
-			var x: float = side * (3.38 + 0.30 * sin(float(stone_index) * 1.29 + side))
-			var target_size := Vector3(0.32 + 0.07 * float(stone_index % 3), 0.10, 0.38 + 0.09 * float((stone_index + 1) % 3))
-			var scale_value := Vector3(target_size.x / maxf(source_size.x, 0.01), target_size.y / maxf(source_size.y, 0.01), target_size.z / maxf(source_size.z, 0.01))
-			var basis := Basis(Vector3.UP, float(stone_index) * 0.83 + side * 0.41).scaled(scale_value)
-			surface.append_from(rock_mesh, 0, Transform3D(basis, Vector3(x, 0.044, z) - basis * bottom_center))
 	var batch := MeshInstance3D.new()
 	batch.name = "WychwoodPathRockBatch"
-	batch.mesh = surface.commit()
+	batch.mesh = preload("res://scripts/prepared_zone_geometry.gd").mesh("wychwood_path_rocks")
 	batch.material_override = material
 	batch.visibility_range_end = 28.0
 	batch.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF

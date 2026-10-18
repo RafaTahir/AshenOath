@@ -98,7 +98,6 @@ func _extract_display_name(prompt_text: String, fallback_id: String) -> String:
 
 func build_collision(radius: float = 1.4) -> void:
 	var shape = CollisionShape3D.new()
-	var sphere = SphereShape3D.new()
-	sphere.radius = radius
+	var sphere = preload("res://scripts/immutable_collision_shapes.gd").sphere(radius)
 	shape.shape = sphere
 	add_child(shape)

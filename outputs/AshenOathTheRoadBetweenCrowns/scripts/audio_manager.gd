@@ -11,6 +11,10 @@ var voices = {}
 var voice_texts = {}
 var music = {}
 var ambient_streams = {}
+const SHARED_MUSIC := ["main_menu", "greyfen_explore", "shrine_anwen", "wychwood_tension", "ghoulkin_combat", "return_report"]
+var prepared_audio_zone := ""
+var prepared_music_states: Dictionary = {}
+var prepared_encounter_state := ""
 const AUTHORED_AMBIENCE := {
 	"greyfen": "greyfen_air.ogg",
 	"wychwood": "wychwood_air.ogg",
@@ -197,9 +201,48 @@ func prewarm_music_state(state_id: String) -> void:
 	# first combat frame without pulling the complete campaign music table into
 	# startup memory.
 	var normalized := state_id.strip_edges().to_lower()
-	if normalized.is_empty() or music.has(normalized):
+	prepared_encounter_state = normalized
+	if normalized.is_empty():
 		return
-	_build_music_state(normalized)
+	if not music.has(normalized):
+		_build_music_state(normalized)
+	_prune_inactive_region_streams()
+
+func prepare_destination(zone_id: String, state: Node = null) -> void:
+	if prepared_audio_zone != zone_id:
+		prepared_encounter_state = ""
+	prepared_audio_zone = zone_id
+	prepared_music_states.clear()
+	for id in [music_state_for_zone(zone_id), _story_music_state(state, zone_id)]:
+		if id == "":
+			continue
+		prepared_music_states[id] = true
+		if not music.has(id):
+			_build_music_state(id)
+	_ambient_stream(zone_id)
+	_prune_inactive_region_streams()
+
+func _prune_inactive_region_streams() -> void:
+	# Players retain both sides of a crossfade. Retirement never stops playback,
+	# evicts voices or clears shared event cues.
+	var retained: Dictionary = {}
+	if is_inside_tree():
+		for player in get_tree().get_nodes_in_group(MUSIC_GROUP):
+			if is_instance_valid(player) and player.get_parent() == self and player.stream != null:
+				retained[player.stream.get_instance_id()] = true
+	for player in ambient_players:
+		if is_instance_valid(player) and player.stream != null:
+			retained[player.stream.get_instance_id()] = true
+	for id in music.keys():
+		var stream: AudioStream = music[id]
+		if id not in SHARED_MUSIC and not prepared_music_states.has(id) and id != prepared_encounter_state \
+				and (stream == null or not retained.has(stream.get_instance_id())):
+			music.erase(id)
+	for zone_id in ambient_streams.keys():
+		var stream: AudioStream = ambient_streams[zone_id]
+		if zone_id not in ["greyfen", "wychwood", prepared_audio_zone] \
+				and (stream == null or not retained.has(stream.get_instance_id())):
+			ambient_streams.erase(zone_id)
 
 func _build_menu_library() -> void:
 	if use_prepared_audio:
@@ -402,19 +445,24 @@ func set_narrative_revision(revision: String) -> void:
 func set_story_context(state, zone_id: String) -> void:
 	if state == null:
 		return
-	story_music_override = ""
+	story_music_override = _story_music_state(state, zone_id)
+	if not story_music_override.is_empty():
+		set_music_state(story_music_override)
+
+func _story_music_state(state: Node, zone_id: String) -> String:
+	if state == null:
+		return ""
 	var ending := str(state.get_flag("final_covenant", ""))
 	ending = str({"expose":"witness", "free":"mercy", "bind":"duty", "kill":"ash"}.get(ending, ending))
 	if bool(state.get_flag("final_choice_completed", false)) and ending in ["witness", "mercy", "duty", "ash"]:
-		story_music_override = "ending_" + ending
+		return "ending_" + ending
 	elif zone_id == "greyfen" and bool(state.get_flag("renewal_announced", false)):
-		story_music_override = "story_road" if bool(state.get_flag("renewal_stopped", false)) else "story_renewal"
+		return "story_road" if bool(state.get_flag("renewal_stopped", false)) else "story_renewal"
 	elif zone_id in ["record_hall", "assembly", "cemetery", "chapel"]:
-		story_music_override = "story_names"
+		return "story_names"
 	elif zone_id == "greyfen" and bool(state.get_flag("cart_helped", false)):
-		story_music_override = "story_road"
-	if not story_music_override.is_empty():
-		set_music_state(story_music_override)
+		return "story_road"
+	return ""
 
 func _create_owned_timer(seconds: float, ignore_time_scale: bool = false) -> Timer:
 	var timer := Timer.new()
@@ -917,6 +965,8 @@ func set_music_state(state_id: String) -> void:
 				_release_player(previous)
 				previous.queue_free()
 		)
+	music_transition_tween.finished.connect(_prune_inactive_region_streams)
+	_prune_inactive_region_streams()
 
 func _cleanup_stale_music_players(keep: AudioStreamPlayer) -> void:
 	for node in get_tree().get_nodes_in_group(MUSIC_GROUP):
@@ -1012,6 +1062,8 @@ func _crossfade_ambient(zone_id: String, stream: AudioStream) -> void:
 				ambient_players.erase(previous)
 				previous.queue_free()
 		)
+	ambient_transition_tween.finished.connect(_prune_inactive_region_streams)
+	_prune_inactive_region_streams()
 
 func stop_zone_audio() -> void:
 	_stop_transient_cues()
@@ -1019,6 +1071,15 @@ func stop_zone_audio() -> void:
 		ambient_transition_tween.kill()
 	for player in ambient_players:
 		_release_player(player)
+		if is_instance_valid(player):
+			player.queue_free()
+	ambient_players.clear()
+	ambient_player = null
+	current_ambient_zone = ""
+	prepared_audio_zone = ""
+	prepared_music_states.clear()
+	prepared_encounter_state = ""
+	_prune_inactive_region_streams()
 	event_cooldowns.clear()
 
 func _play_next_voice() -> void:

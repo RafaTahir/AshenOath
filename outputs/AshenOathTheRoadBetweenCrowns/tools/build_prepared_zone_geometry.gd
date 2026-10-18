@@ -26,6 +26,19 @@ func _compile() -> void:
 	_save("wychwood_clearing", Factory.wychwood_clearing())
 	_save("wychwood_winding_path", Factory.wychwood_winding_path())
 	_save("wychwood_layby", Factory.wychwood_layby())
+	_save("wychwood_path_rocks", Factory.wychwood_path_rocks())
+	for side in [-1.0, 1.0]:
+		for bank in [0, 1]:
+			_save("wychwood_floor_edge_%s_%s" % [side, bank], Factory.wychwood_floor_edge(side, bank))
+	for count in [6, 9, 12]:
+		_save_batch("wychwood_canopy_2.8_%d" % count, Factory.wychwood_canopy(2.8, count))
+	for count in [4, 7, 9]:
+		_save_batch("wychwood_canopy_4.4_%d" % count, Factory.wychwood_canopy(4.4, count))
+	for count in [10, 16, 22]:
+		_save_batch("wychwood_understory_%d" % count, Factory.wychwood_understory(count))
+	for count in [12, 20, 28]:
+		_save_batch("wychwood_floor_%d" % count, Factory.wychwood_floor(count))
+	_compile_roads()
 	_compile_wychwood_ground()
 	for z in [12, 9, 6, 3, 0, -3, -6, -9]:
 		for x in [-4.25, 4.25]:
@@ -68,6 +81,37 @@ func _compile_wychwood_ground() -> void:
 	]
 	for spec in specs:
 		_save("wychwood_ground_" + preload("res://scripts/prepared_zone_geometry.gd").geometry_key(spec[1], spec[0]), Factory.wychwood_ground(spec[1], spec[0]))
+
+func _save_batch(id: String, transforms: Array[Transform3D]) -> void:
+	var source := load("res://assets_external/environment/forest/Bush_Common.obj") as ArrayMesh
+	var source_bounds := source.get_aabb()
+	var data := PackedFloat32Array()
+	var bounds := AABB()
+	for index in transforms.size():
+		data.append_array(preload("res://scripts/static_multimesh_upload.gd").prepare_record(transforms[index]).buffer)
+		var instance_bounds: AABB = transforms[index] * source_bounds
+		bounds = instance_bounds if index == 0 else bounds.merge(instance_bounds)
+	var result := Resource.new()
+	result.set_meta("buffer", data)
+	result.set_meta("bounds", bounds.grow(0.02))
+	_save(id, result)
+
+func _compile_roads() -> void:
+	var materials = load("res://scripts/world_material_library.gd")
+	var specs := [
+		["greyfen", Vector3(0,0.018,0), Vector3(4.2,0.04,30)],
+		["greyfen", Vector3(-5,0.02,9), Vector3(14,0.04,3)],
+		["greyfen", Vector3(15.2,0.022,0), Vector3(8.8,0.045,3.4)],
+		["wychwood", Vector3(-5,0.018,3), Vector3(24,0.04,4)],
+		["campaign", Vector3(0,0.02,0), Vector3(4,0.04,28)],
+		["campaign", Vector3(0,0.02,1), Vector3(5.2,0.05,34)],
+		["campaign", Vector3(0,0.02,0), Vector3(8,0.05,32)],
+	]
+	for origin in [Vector3.ZERO, Vector3(14,0,8.6)]:
+		specs.append(["greyfen", origin + Vector3(-4,0.024,-0.6), Vector3(8,0.045,2.6)])
+		specs.append(["greyfen", origin + Vector3(-0.3,0.025,-0.6), Vector3(6.8,0.045,7.4)])
+	for spec in specs:
+		_save("%s_road_%s" % [spec[0], preload("res://scripts/prepared_zone_geometry.gd").geometry_key(spec[2], spec[1])], materials.make_tiled_ground_patch(spec[2], spec[1]))
 
 func _save(id: String, resource: Resource) -> void:
 	var error := ResourceSaver.save(resource, ROOT + id + ".res", ResourceSaver.FLAG_COMPRESS)

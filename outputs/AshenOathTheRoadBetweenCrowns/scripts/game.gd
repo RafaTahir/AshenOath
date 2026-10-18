@@ -1225,6 +1225,7 @@ func _advance_zone_transition() -> void:
 func _apply_zone_audio(zone_id: String) -> void:
 	if audio == null or zone_id == "":
 		return
+	audio.prepare_destination(zone_id, story_state)
 	audio.play_ambient(zone_id)
 	audio.set_music_state(audio.music_state_for_zone(zone_id))
 	audio.set_story_context(story_state, zone_id)
@@ -4765,8 +4766,7 @@ func _make_invisible_wall(pos: Vector3, size: Vector3) -> void:
 	body.position = pos
 	zone_root.add_child(body)
 	var shape = CollisionShape3D.new()
-	var box = BoxShape3D.new()
-	box.size = size
+	var box = preload("res://scripts/immutable_collision_shapes.gd").box(size)
 	shape.shape = box
 	body.add_child(shape)
 
@@ -4921,8 +4921,7 @@ func _make_low_berm(pos: Vector3, size: Vector3, color: Color) -> void:
 	body.position = pos + Vector3(0, size.y * 0.5, 0)
 	zone_root.add_child(body)
 	var shape = CollisionShape3D.new()
-	var box = BoxShape3D.new()
-	box.size = size
+	var box = preload("res://scripts/immutable_collision_shapes.gd").box(size)
 	shape.shape = box
 	body.add_child(shape)
 	var mesh = MeshInstance3D.new()
@@ -5667,8 +5666,7 @@ func _make_house_collision(parent: Node3D) -> void:
 	body.name = "HouseCollision"
 	parent.add_child(body)
 	var shape = CollisionShape3D.new()
-	var box = BoxShape3D.new()
-	box.size = Vector3(4.2, 2.4, 3.4)
+	var box = preload("res://scripts/immutable_collision_shapes.gd").box(Vector3(4.2, 2.4, 3.4))
 	shape.shape = box
 	shape.position.y = 1.2
 	body.add_child(shape)
@@ -5680,16 +5678,14 @@ func _make_house_collision(parent: Node3D) -> void:
 	camera_roof.collision_mask = 0
 	parent.add_child(camera_roof)
 	var roof_shape := CollisionShape3D.new()
-	var roof_box := BoxShape3D.new()
-	roof_box.size = Vector3(5.0, 1.6, 4.2)
+	var roof_box := preload("res://scripts/immutable_collision_shapes.gd").box(Vector3(5.0, 1.6, 4.2))
 	roof_shape.shape = roof_box
 	roof_shape.position.y = 3.2
 	camera_roof.add_child(roof_shape)
 	if int(parent.get_meta("house_variant", 0)) == 1:
 		for x in [-0.98, 0.98]:
 			var post := CollisionShape3D.new()
-			var post_box := BoxShape3D.new()
-			post_box.size = Vector3(0.12, 1.60, 0.12)
+			var post_box := preload("res://scripts/immutable_collision_shapes.gd").box(Vector3(0.12, 1.60, 0.12))
 			post.shape = post_box
 			post.position = Vector3(x, 0.95, -2.36)
 			body.add_child(post)
@@ -5829,8 +5825,7 @@ func _make_loose_role(role_name: String, pos: Vector3, scale_value: Vector3, yaw
 					clearance.collision_layer = 1 << 6
 					clearance.collision_mask = 0
 					var collision := CollisionShape3D.new()
-					var shape := BoxShape3D.new()
-					shape.size = bounds.size
+					var shape := preload("res://scripts/immutable_collision_shapes.gd").box(bounds.size)
 					collision.shape = shape
 					collision.position = bounds.get_center()
 					clearance.add_child(collision)
@@ -6311,9 +6306,7 @@ func _apply_greyfen_well_visual(visual: MeshInstance3D, pos: Vector3) -> void:
 	zone_root.add_child(body)
 	var collision := CollisionShape3D.new()
 	collision.name = "GreyfenWellCollision"
-	var cylinder := CylinderShape3D.new()
-	cylinder.radius = 0.87
-	cylinder.height = 0.84
+	var cylinder := preload("res://scripts/immutable_collision_shapes.gd").cylinder(0.87, 0.84)
 	collision.shape = cylinder
 	body.add_child(collision)
 
@@ -7172,8 +7165,7 @@ func _make_ground(pos: Vector3, size: Vector3, color: Color, collision_enabled: 
 		body.position = pos
 		zone_root.add_child(body)
 		var shape := CollisionShape3D.new()
-		var box := BoxShape3D.new()
-		box.size = size
+		var box := preload("res://scripts/immutable_collision_shapes.gd").box(size)
 		shape.shape = box
 		body.add_child(shape)
 		parent = body
@@ -7226,9 +7218,8 @@ func _make_bridge_corridor_collision(bridge_width: float, river_z: float, bridge
 	body.position = Vector3(0.0, 0.0, 0.0)
 	zone_root.add_child(body)
 	var collision := CollisionShape3D.new()
-	var shape := BoxShape3D.new()
 	var support_length := maxf(zone_depth, bridge_length + approach_length * 2.0)
-	shape.size = Vector3(bridge_width, 0.20, support_length)
+	var shape := preload("res://scripts/immutable_collision_shapes.gd").box(Vector3(bridge_width, 0.20, support_length))
 	collision.position = Vector3(0.0, -0.10, 0.0)
 	collision.shape = shape
 	body.add_child(collision)
@@ -7290,8 +7281,7 @@ func _make_tree(pos: Vector3) -> void:
 		tree_collision_body.name = "BatchedTreeCollisions"
 		zone_root.add_child(tree_collision_body)
 	var shape := CollisionShape3D.new()
-	var box := BoxShape3D.new()
-	box.size = Vector3(0.58, 3.6, 0.58)
+	var box := preload("res://scripts/immutable_collision_shapes.gd").box(Vector3(0.58, 3.6, 0.58))
 	shape.shape = box
 	shape.position = pos + Vector3(0, 2.1, 0)
 	tree_collision_body.add_child(shape)
@@ -7522,8 +7512,7 @@ func _flush_authored_tree_assets() -> bool:
 			# The orbit must stop before the rendered crown, not only its narrow
 			# walking collider. This layer is shared with authored camera roofs.
 			var clearance_shape := CollisionShape3D.new()
-			var clearance_box := BoxShape3D.new()
-			clearance_box.size = source_bounds.size * tree_scale * source_scale
+			var clearance_box := preload("res://scripts/immutable_collision_shapes.gd").box(source_bounds.size * tree_scale * source_scale)
 			clearance_shape.shape = clearance_box
 			clearance_shape.transform = Transform3D(Basis(Vector3.UP, tree_yaw), tree_transform * source_bounds.get_center())
 			camera_clearance.add_child(clearance_shape)
@@ -7624,7 +7613,8 @@ func _validate_zone_render_resources(root: Node) -> Dictionary:
 func _make_road(pos: Vector3, size: Vector3, color: Color) -> void:
 	var mesh = MeshInstance3D.new()
 	mesh.name = "PavedRoad" if current_zone_id == "greyfen" else "MudRoad"
-	mesh.mesh = world_materials.make_tiled_ground_patch(size, pos)
+	var geometry_owner := "greyfen" if current_zone_id in ["greyfen", "cemetery"] else "wychwood" if current_zone_id in ["wychwood", "ruins"] else "campaign"
+	mesh.mesh = preload("res://scripts/prepared_zone_geometry.gd").mesh("%s_road_%s" % [geometry_owner, preload("res://scripts/prepared_zone_geometry.gd").geometry_key(size, pos)])
 	mesh.position = pos
 	mesh.material_override = _road_material(current_zone_id == "greyfen", color)
 	zone_root.add_child(mesh)
@@ -7851,8 +7841,7 @@ func _make_prop_box(name: String, pos: Vector3, size: Vector3, color: Color, ren
 	if not decorative_only:
 		var shape := CollisionShape3D.new()
 		shape.name = "%sCollision" % name
-		var box := BoxShape3D.new()
-		box.size = size
+		var box := preload("res://scripts/immutable_collision_shapes.gd").box(size)
 		shape.shape = box
 		if not separate_body:
 			shape.position = pos
@@ -7908,8 +7897,7 @@ func _make_collision_box(name: String, pos: Vector3, size: Vector3) -> void:
 		zone_root.add_child(prop_collision_body)
 	var shape := CollisionShape3D.new()
 	shape.name = "%sCollision" % name
-	var box := BoxShape3D.new()
-	box.size = size
+	var box := preload("res://scripts/immutable_collision_shapes.gd").box(size)
 	shape.shape = box
 	shape.position = pos
 	prop_collision_body.add_child(shape)
