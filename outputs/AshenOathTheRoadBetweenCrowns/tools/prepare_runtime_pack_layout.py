@@ -60,6 +60,7 @@ def compile_layout():
     for name in ROOT_NAMES:
         includes[name].update({"data/runtime_dialogue_index.json", "data/runtime_dialogue/*.json"})
     includes["Runtime Pack Opening"].add("assets_external/environment/prepared/greyfen_*.res")
+    includes[adjacent].add("assets_external/environment/prepared/wychwood_*.res")
     includes["Runtime Pack Campaign"].add("assets_external/environment/prepared/*.res")
     for owner, name in (("opening", "Runtime Pack Opening"), ("characters", "Runtime Pack Characters"), ("monsters", "Runtime Pack Monsters")):
         includes[name].add(f"assets_external/characters_prepared/{owner}/*.scn")
@@ -144,6 +145,7 @@ def compile_layout():
             exclusions.add("assets_external/characters_prepared/*")
         if name == "Runtime Pack Campaign":
             exclusions.add("assets_external/environment/prepared/greyfen_*")
+            exclusions.add("assets_external/environment/prepared/wychwood_*")
         if name in {"Runtime Pack Characters", "Runtime Pack Monsters"}:
             exclusions.add("assets_external/characters_prepared/animations/*")
         config[section]["include_filter"] = json.dumps(",".join(sorted(includes[name])))

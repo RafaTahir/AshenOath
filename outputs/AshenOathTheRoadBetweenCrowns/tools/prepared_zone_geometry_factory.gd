@@ -1,5 +1,176 @@
 extends RefCounted
 
+const GROUND_STEP := 0.58
+static func wychwood_ground(size: Vector3, origin: Vector3) -> ArrayMesh:
+	var surface := SurfaceTool.new()
+	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var columns := maxi(2, ceili(size.x / GROUND_STEP))
+	var rows := maxi(2, ceili(size.z / GROUND_STEP))
+	for row in rows:
+		var z0 := lerpf(-size.z * 0.5, size.z * 0.5, float(row) / float(rows))
+		var z1 := lerpf(-size.z * 0.5, size.z * 0.5, float(row + 1) / float(rows))
+		for column in columns:
+			var x0 := lerpf(-size.x * 0.5, size.x * 0.5, float(column) / float(columns))
+			var x1 := lerpf(-size.x * 0.5, size.x * 0.5, float(column + 1) / float(columns))
+			for point in [
+				Vector3(x0, size.y * 0.5, z0), Vector3(x1, size.y * 0.5, z0), Vector3(x0, size.y * 0.5, z1),
+				Vector3(x1, size.y * 0.5, z0), Vector3(x1, size.y * 0.5, z1), Vector3(x0, size.y * 0.5, z1),
+			]:
+				var world: Vector3 = point + origin
+				surface.set_normal(Vector3.UP)
+				surface.set_uv(Vector2(world.x, world.z) * 0.55)
+				surface.set_color(_ground_tint(world.x, world.z))
+				surface.add_vertex(point)
+	# Preserve the short river-bank faces of the original split-ground boxes.
+	var half := size * 0.5
+	for edge in [
+		[Vector3(-half.x, -half.y, -half.z), Vector3(half.x, -half.y, -half.z), Vector3(half.x, half.y, -half.z), Vector3(-half.x, half.y, -half.z), Vector3(0, 0, -1)],
+		[Vector3(half.x, -half.y, half.z), Vector3(-half.x, -half.y, half.z), Vector3(-half.x, half.y, half.z), Vector3(half.x, half.y, half.z), Vector3(0, 0, 1)],
+		[Vector3(-half.x, -half.y, half.z), Vector3(-half.x, -half.y, -half.z), Vector3(-half.x, half.y, -half.z), Vector3(-half.x, half.y, half.z), Vector3(-1, 0, 0)],
+		[Vector3(half.x, -half.y, -half.z), Vector3(half.x, -half.y, half.z), Vector3(half.x, half.y, half.z), Vector3(half.x, half.y, -half.z), Vector3(1, 0, 0)],
+	]:
+		for vertex_index in [0, 1, 2, 0, 2, 3]:
+			var point: Vector3 = edge[vertex_index]
+			surface.set_normal(edge[4])
+			surface.set_uv(Vector2(point.x + origin.x, point.y + origin.y))
+			surface.set_color(Color(0.86, 0.89, 0.82))
+			surface.add_vertex(point)
+	return surface.commit()
+
+static func _ground_tint(x: float, z: float) -> Color:
+	var base := Color(0.87, 0.94, 0.88)
+	var center := sin(z * 0.28) * 0.62 * smoothstep(2.3, 7.0, absf(z))
+	var edge_noise := 0.16 * sin(z * 1.37) + 0.08 * sin(z * 2.59)
+	var path := 0.0
+	if z >= -10.5 and z <= 16.5:
+		path = 1.0 - smoothstep(1.05 + edge_noise, 2.75 + edge_noise, absf(x - center))
+	var clearing_distance := Vector2(x / 5.4, (z + 6.5) / 3.9).length()
+	var clearing := 1.0 - smoothstep(0.58, 1.20, clearing_distance + 0.04 * sin(x * 1.9 + z * 1.4))
+	var layby_z := -8.0 + sin(x * 0.48) * 0.33
+	var layby := 0.0
+	if x >= 0.7 and x <= 11.4:
+		layby = (1.0 - smoothstep(0.75, 2.05, absf(z - layby_z))) * smoothstep(0.7, 2.2, x)
+	var wear := maxf(path * 0.72, maxf(clearing * 0.78, layby * 0.64))
+	# Pale worn earth separates the occupied clearing and clue route from the
+	# cooler forest floor without new geometry, lights or collision changes.
+	var earth := Color(0.86, 0.71, 0.51)
+	return base.lerp(earth, wear)
+
+static func wychwood_layby() -> ArrayMesh:
+	var surface := SurfaceTool.new()
+	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	for index in range(12):
+		var x0 := 0.7 + float(index) * 0.89
+		var x1 := 0.7 + float(index + 1) * 0.89
+		var z0 := -8.0 + sin(x0 * 0.48) * 0.33
+		var z1 := -8.0 + sin(x1 * 0.48) * 0.33
+		var width0 := 1.26 + 0.18 * sin(x0 * 1.13)
+		var width1 := 1.26 + 0.18 * sin(x1 * 1.13)
+		for side in [-1.0, 1.0]:
+			var a := Vector3(x0, 0.061, z0)
+			var b := Vector3(x1, 0.061, z1)
+			var c := Vector3(x0, 0.061, z0 + side * width0)
+			var d := Vector3(x1, 0.061, z1 + side * width1)
+			var points := [a, b, c, c, b, d] if side < 0.0 else [a, c, b, c, d, b]
+			for point in points:
+				surface.set_normal(Vector3.UP)
+				surface.set_color(Color(0.81, 0.84, 0.76) if point == c or point == d else Color.WHITE)
+				surface.set_uv(Vector2(point.x, point.z) * 0.55)
+				surface.add_vertex(point)
+	return surface.commit()
+
+static func low_berm(pos: Vector3, size: Vector3) -> ArrayMesh:
+	var surface := SurfaceTool.new()
+	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var columns := 8
+	var rows := 10
+	var points: Array[Vector3] = []
+	for row in range(rows + 1):
+		for column in range(columns + 1):
+			var u := float(column) / columns * 2.0 - 1.0
+			var v := float(row) / rows * 2.0 - 1.0
+			var shoulder := pow(pow(absf(u), 4.0) + pow(absf(v), 4.0), 0.25)
+			var rise := 1.0 - smoothstep(0.40, 1.0, shoulder)
+			var irregularity := sin(u * 4.1 + pos.z) * sin(v * 3.2 + pos.x) * 0.07 * rise
+			var edge_x := 1.0 + 0.10 * sin(v * 3.1 + pos.z)
+			var edge_z := 1.0 + 0.09 * sin(u * 4.0 + pos.x)
+			points.append(Vector3(u * (size.x * 0.5 + 0.28) * edge_x, -size.y * 0.5 - 0.015 + size.y * (rise + irregularity), v * (size.z * 0.5 + 0.28) * edge_z))
+	for row in range(rows):
+		for column in range(columns):
+			var a := row * (columns + 1) + column
+			var b := a + 1
+			var c := a + columns + 1
+			var d := c + 1
+			for index in [a, b, c, b, d, c]:
+				var point := points[index]
+				surface.set_uv(Vector2(point.x + pos.x, point.z + pos.z))
+				surface.add_vertex(point)
+	surface.generate_normals()
+	return surface.commit()
+
+static func wychwood_clearing() -> ArrayMesh:
+	var surface := SurfaceTool.new()
+	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var center := Vector3(0, 0.059, -6.5)
+	var segments := 20
+	for index in segments:
+		var angle := TAU * float(index) / float(segments)
+		var next_angle := TAU * float(index + 1) / float(segments)
+		var radius := 0.88 + 0.12 * sin(float(index) * 2.17)
+		var next_radius := 0.88 + 0.12 * sin(float(index + 1) * 2.17)
+		var inner := center + Vector3(cos(angle) * 3.25 * radius, 0, sin(angle) * 2.35 * radius)
+		var inner_next := center + Vector3(cos(next_angle) * 3.25 * next_radius, 0, sin(next_angle) * 2.35 * next_radius)
+		var outer := center + Vector3(cos(angle) * 5.25 * radius, 0, sin(angle) * 3.75 * radius)
+		var outer_next := center + Vector3(cos(next_angle) * 5.25 * next_radius, 0, sin(next_angle) * 3.75 * next_radius)
+		for point in [[center, Color(0.52, 0.53, 0.47)], [inner_next, Color(0.68, 0.68, 0.57)], [inner, Color(0.68, 0.68, 0.57)], [inner, Color(0.68, 0.68, 0.57)], [inner_next, Color(0.68, 0.68, 0.57)], [outer_next, Color(0.91, 0.93, 0.83)], [inner, Color(0.68, 0.68, 0.57)], [outer_next, Color(0.91, 0.93, 0.83)], [outer, Color(0.91, 0.93, 0.83)]]:
+			surface.set_normal(Vector3.UP)
+			surface.set_color(point[1])
+			surface.set_uv(Vector2(point[0].x, point[0].z) * 0.55)
+			surface.add_vertex(point[0])
+	return surface.commit()
+
+static func wychwood_winding_path() -> ArrayMesh:
+	var mud_surface := SurfaceTool.new()
+	mud_surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var shoulder_surface := SurfaceTool.new()
+	shoulder_surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var river_edge := BridgeSurfaceContract.RIVER_HALF_SPAN
+	for span in [Vector2(-10.5, -river_edge), Vector2(river_edge, 16.5)]:
+		var rows := ceili((span.y - span.x) / 0.9)
+		for row in range(rows):
+			var z0 := lerpf(span.x, span.y, float(row) / float(rows))
+			var z1 := lerpf(span.x, span.y, float(row + 1) / float(rows))
+			var bridge_blend0 := 1.0 - smoothstep(river_edge, river_edge + 3.0, absf(z0))
+			var bridge_blend1 := 1.0 - smoothstep(river_edge, river_edge + 3.0, absf(z1))
+			var core0 := lerpf(1.26 + 0.16 * sin(z0 * 1.37) + 0.07 * sin(z0 * 2.59), 2.28, bridge_blend0)
+			var core1 := lerpf(1.26 + 0.16 * sin(z1 * 1.37) + 0.07 * sin(z1 * 2.59), 2.28, bridge_blend1)
+			var outer0 := maxf(3.48, core0 + 0.80) + 0.24 * sin(z0 * 1.41)
+			var outer1 := maxf(3.48, core1 + 0.80) + 0.24 * sin(z1 * 1.41)
+			var lateral0 := [-outer0, -core0, 0.0, core0, outer0]
+			var lateral1 := [-outer1, -core1, 0.0, core1, outer1]
+			for band in range(4):
+				var x00: float = _wychwood_path_center(z0) + float(lateral0[band])
+				var x01: float = _wychwood_path_center(z1) + float(lateral1[band])
+				var x10: float = _wychwood_path_center(z0) + float(lateral0[band + 1])
+				var x11: float = _wychwood_path_center(z1) + float(lateral1[band + 1])
+				var surface := mud_surface if band in [1, 2] else shoulder_surface
+				var left_color := Color(0.70, 0.73, 0.66) if band == 0 else Color(0.82, 0.84, 0.78) if band == 1 else Color(0.97, 0.98, 0.94) if band == 2 else Color(0.58, 0.62, 0.55)
+				var right_color := Color(0.58, 0.62, 0.55) if band == 0 else Color(0.97, 0.98, 0.94) if band == 1 else Color(0.82, 0.84, 0.78) if band == 2 else Color(0.70, 0.73, 0.66)
+				for vertex in [
+					[Vector3(x00, 0.057, z0), left_color], [Vector3(x10, 0.057, z0), right_color], [Vector3(x01, 0.057, z1), left_color],
+					[Vector3(x10, 0.057, z0), right_color], [Vector3(x11, 0.057, z1), right_color], [Vector3(x01, 0.057, z1), left_color],
+				]:
+					surface.set_normal(Vector3.UP)
+					surface.set_color(vertex[1])
+					surface.set_uv(Vector2(vertex[0].x, vertex[0].z) * 0.55)
+					surface.add_vertex(vertex[0])
+	var mesh := mud_surface.commit()
+	shoulder_surface.commit(mesh)
+	return mesh
+
+static func _wychwood_path_center(z: float) -> float:
+	return sin(z * 0.28) * 0.62 * smoothstep(2.3, 7.0, absf(z))
+
 ## Pure asset-compilation routines shared with the retained source geometry.
 const BridgeSurfaceContract = preload("res://scripts/bridge_surface_contract.gd")
 

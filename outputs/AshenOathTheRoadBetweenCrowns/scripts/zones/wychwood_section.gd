@@ -49,29 +49,9 @@ func _build_authored_presentation(context: ZoneBuildContext) -> void:
 	_make_clearing_frame(presentation, context)
 
 func _make_east_layby(context: ZoneBuildContext) -> void:
-	var surface := SurfaceTool.new()
-	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
-	for index in range(12):
-		var x0 := 0.7 + float(index) * 0.89
-		var x1 := 0.7 + float(index + 1) * 0.89
-		var z0 := -8.0 + sin(x0 * 0.48) * 0.33
-		var z1 := -8.0 + sin(x1 * 0.48) * 0.33
-		var width0 := 1.26 + 0.18 * sin(x0 * 1.13)
-		var width1 := 1.26 + 0.18 * sin(x1 * 1.13)
-		for side in [-1.0, 1.0]:
-			var a := Vector3(x0, 0.061, z0)
-			var b := Vector3(x1, 0.061, z1)
-			var c := Vector3(x0, 0.061, z0 + side * width0)
-			var d := Vector3(x1, 0.061, z1 + side * width1)
-			var points := [a, b, c, c, b, d] if side < 0.0 else [a, c, b, c, d, b]
-			for point in points:
-				surface.set_normal(Vector3.UP)
-				surface.set_color(Color(0.81, 0.84, 0.76) if point == c or point == d else Color.WHITE)
-				surface.set_uv(Vector2(point.x, point.z) * 0.55)
-				surface.add_vertex(point)
 	var road := MeshInstance3D.new()
 	road.name = "MudRoad"
-	road.mesh = surface.commit()
+	road.mesh = preload("res://scripts/prepared_zone_geometry.gd").mesh("wychwood_layby")
 	var material := context.make_world_material("wet_mud", Color(0.43, 0.41, 0.34)).duplicate() as StandardMaterial3D
 	material.vertex_color_use_as_albedo = true
 	road.material_override = material

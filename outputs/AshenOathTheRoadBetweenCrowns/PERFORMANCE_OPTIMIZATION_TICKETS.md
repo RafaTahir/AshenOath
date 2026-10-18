@@ -318,3 +318,52 @@ Owner: progression reward collection. Depends: OPT-041.
 Change: process affected reward categories and coalesce notifications without
 inventing/removing XP, replaying claims or losing region/return/skill progression.
 User check: discovery, quests, kills, meaningful returns and reload remain correct.
+
+## Milestone 7 - Enablement and Startup
+
+### OPT-049 - Honest comparison controls
+Enable alpha splitting and static bounds by default; request native interior
+occlusion while reporting stock Web occlusion unsupported. Explicit 0/1 query
+and native arguments override defaults. Optional perf display includes slow
+gameplay frames, worst frame, >50ms hitches, effective options and known timings.
+User check: compare defaults and individual overrides without changing saves.
+
+### OPT-050 - Lazy script dependencies
+Demand-load gameplay service scripts and campaign-only coordinators before use;
+retain service IDs, order, required-component errors and menu readiness.
+User check: New Game, Continue, encounters and campaign interactions remain intact.
+
+### OPT-051 - Offline terrain construction
+Move fixed authored Wychwood ground, path, clearing, layby and berm mesh building
+to the existing asset compiler. Preserve vertices, UVs, normals, transforms and
+runtime material ownership. Random/state-dependent overlays keep their owner.
+User check: identical terrain, bridge joins, collision and quality presets.
+
+## Milestone 8 - Construction and Gameplay CPU Work
+
+### OPT-052 - Prepared static batch data
+Compile immutable house/module/prop/detail buffers, preserving material grouping,
+night states, transforms and dynamic consequences. No broad scene/prewarm rewrite.
+User check: every building, prop and consequence remains visible and functional.
+
+### OPT-053 - Cached objective/navigation presentation
+Invalidate objective models only on actual inputs; reuse navigation terrain/frame
+work independently from moving markers, including spatial revision and layout.
+User check: objectives, dial, accessibility, movement and saves remain current.
+
+### OPT-054 - Nearby interaction indexing
+Use registered local candidates; preserve scoring, dwell, visibility and relevant
+looked-at priority. Revalidate the displayed target on Use.
+User check: keyboard, mouse and touch interact with the displayed object.
+
+## Milestone 9 - Resource Efficiency
+
+### OPT-055 - Shared immutable collision shapes
+Share exact-property primitive resources, never mutable shapes. Retain every
+body, transform, collision layer/mask and interaction identity.
+User check: routes, bridge, actors, projectiles and collisions remain unchanged.
+
+### OPT-056 - Bounded decoded-audio ownership
+Retire inactive campaign music/ambience cache references after crossfades;
+preserve active/transition streams, voices, shared cues and destination readiness.
+User check: transitions, dialogue, pause and audio preferences persist correctly.

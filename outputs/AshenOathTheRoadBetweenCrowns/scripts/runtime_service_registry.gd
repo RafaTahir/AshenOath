@@ -1,29 +1,18 @@
 extends Node
 
-const QuestManager = preload("res://scripts/quest_manager.gd")
-const QuestPresentationState = preload("res://scripts/quest_presentation_state.gd")
-const QuestBeatDirector = preload("res://scripts/quest_beat_director.gd")
-const DialogueManager = preload("res://scripts/dialogue_manager.gd")
-const StoryState = preload("res://scripts/story_state.gd")
-const InventoryManager = preload("res://scripts/inventory_manager.gd")
-const VendorService = preload("res://scripts/vendor_service.gd")
-const CraftingManager = preload("res://scripts/crafting_manager.gd")
-const CombatManager = preload("res://scripts/combat_manager.gd")
-const SaveManager = preload("res://scripts/save_manager.gd")
-const SettingsManager = preload("res://scripts/settings_manager.gd")
-const WorldMaterialLibrary = preload("res://scripts/world_material_library.gd")
-const DayNightController = preload("res://scripts/day_night_controller.gd")
-const AudioManager = preload("res://scripts/audio_manager.gd")
-const AssetSpawnHelper = preload("res://scripts/asset_spawn_helper.gd")
-const HUD = preload("res://scripts/hud.gd")
-const MinigameManager = preload("res://scripts/minigame_manager.gd")
-const ProgressionManager = preload("res://scripts/progression_manager.gd")
-const InputRouter = preload("res://scripts/input_router.gd")
-const InteractionFocusService = preload("res://scripts/interaction_focus_service.gd")
-const MobileTouchControls = preload("res://scripts/mobile_touch_controls.gd")
-const ZoneStreamingService = preload("res://scripts/zone_streaming_service.gd")
-const RuntimePackManager = preload("res://scripts/runtime_pack_manager.gd")
-const DisplayMetricsBridge = preload("res://scripts/display_metrics_bridge.gd")
+const SERVICE_PATHS := {
+	"story_state": "story_state", "quests": "quest_manager",
+	"quest_presentation": "quest_presentation_state", "quest_beats": "quest_beat_director",
+	"dialogue": "dialogue_manager", "inventory": "inventory_manager",
+	"vendor_service": "vendor_service", "crafting": "crafting_manager", "combat": "combat_manager",
+	"save_manager": "save_manager", "settings": "settings_manager",
+	"world_materials": "world_material_library", "day_night": "day_night_controller",
+	"audio": "audio_manager", "asset_helper": "asset_spawn_helper", "hud": "hud",
+	"minigames": "minigame_manager", "progression": "progression_manager",
+	"input_router": "input_router", "interaction_focus": "interaction_focus_service",
+	"mobile_touch": "mobile_touch_controls", "zone_streaming": "zone_streaming_service",
+	"runtime_packs": "runtime_pack_manager", "display_metrics": "display_metrics_bridge",
+}
 
 const REQUIRED_SERVICES := [
 	"story_state", "quests", "quest_presentation", "quest_beats", "dialogue", "inventory", "vendor_service", "crafting", "combat",
@@ -45,23 +34,16 @@ func create_gameplay_services() -> Dictionary:
 	return _create_missing_services(REQUIRED_SERVICES)
 
 func _create_missing_services(ids: Array) -> Dictionary:
-	var types := {
-		"story_state": StoryState, "quests": QuestManager,
-		"quest_presentation": QuestPresentationState, "quest_beats": QuestBeatDirector,
-		"dialogue": DialogueManager, "inventory": InventoryManager,
-		"vendor_service": VendorService, "crafting": CraftingManager, "combat": CombatManager,
-		"save_manager": SaveManager, "settings": SettingsManager,
-		"world_materials": WorldMaterialLibrary, "day_night": DayNightController,
-		"audio": AudioManager, "asset_helper": AssetSpawnHelper, "hud": HUD,
-		"minigames": MinigameManager, "progression": ProgressionManager,
-		"input_router": InputRouter, "interaction_focus": InteractionFocusService,
-		"mobile_touch": MobileTouchControls, "zone_streaming": ZoneStreamingService,
-		"runtime_packs": RuntimePackManager, "display_metrics": DisplayMetricsBridge,
-	}
 	for id in ids:
 		if services.has(id):
 			continue
-		var service: Node = types[id].new()
+		var path := "res://scripts/%s.gd" % SERVICE_PATHS[id]
+		var script := load(path) as Script
+		assert(script != null and script.can_instantiate(), "Required service unavailable: %s (%s)" % [id, path])
+		if script == null or not script.can_instantiate():
+			push_error("Required service unavailable: %s (%s)" % [id, path])
+			return services
+		var service: Node = script.new()
 		services[id] = service
 		service.name = _service_node_name(id)
 		add_child(service)

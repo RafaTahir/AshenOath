@@ -16,21 +16,25 @@
 - Milestone 4: OPT-025 through OPT-032 implemented and compiled. See
   `OPT_MILESTONE_4_RESULT.md`; user acceptance remains pending.
 - Milestone 5: OPT-033 through OPT-040 implemented and compiled.
-  OPT-035/037/038 are comparison-only and OFF by default, pending
-  user retention approval. See `OPT_MILESTONE_5_RESULT.md`.
+  Historical OFF defaults are superseded by the user's OPT-049 enablement:
+  OPT-035/037 default ON; OPT-038 requested ON on native, unsupported on stock Web.
+  Query/native 0/1 overrides remain available. See `OPT_MILESTONE_5_RESULT.md`.
 - Milestone 6: OPT-041 through OPT-048 implemented and compiled. See
   `OPT_MILESTONE_6_RESULT.md`. User acceptance remains pending.
-- Formal user acceptance: 0/48. No performance improvement is claimed measured.
+- Milestone 7: OPT-049 through OPT-051 implemented and compiled. Publication
+  is recorded independently in `OPT_MILESTONE_7_RESULT.md` and its receipt.
+- Milestones 8/9: OPT-052 through OPT-056 authorized, not yet built.
+- Formal user acceptance: 0/56. Default enablement is approved, not measured gain.
 - Runtime tests, browser QA, benchmarks and screenshots: not run; user-owned.
 
 ## Packaging Boundary
 
-Current build: `opt-m6-20261018-600d7c5`, output
-`D:\Projects\AshenOath\.release-gate\opt-m6-20261018\export`.
-Manifested Web artifacts: 104220981 bytes. Complete `web/`: 104228813 bytes,
+Current build: `opt-m7-20261019-efd9132`, output
+`D:\Projects\AshenOath\.release-gate\opt-m7-20261019\export`.
+Manifested Web artifacts: 104329973 bytes. Complete `web/`: 104337805 bytes,
 strictly below 104857600 bytes.
-Root PCK: 6302792 bytes; SHA-256
-`49c2c2ea0895734cadab039700e02aa701714da2329e320d4f4335dbd39187ce`.
+Root PCK: 6298483 bytes; SHA-256
+`7238f721bd235f85f4b3231c088ce72ca7fa399dbd852b7276b32b14b1e8d23b`.
 Compilation and the existing package builder's static identity checks succeeded.
 No game execution or performance measurement was performed.
 
@@ -44,8 +48,8 @@ and assigned the production alias. OPT-048 owns final commit/push/deployment;
 the existing `.release-gate/living-road/OPT-048-*/publication.json` receipt records
 its exact outcome. No over-budget milestone may be published. No runtime
 performance claims are made.
-Conditional rendering tickets remain gated on the user's comparison.
+Enabled rendering options remain subject to the user's runtime comparison.
 User checks startup, traversal, retained visuals and Retry; there is no agent
 runtime-acceptance claim. All remaining 40 ticket implementations are present
 and compiled. Conditional retention and user testing remain pending and are not
-equated with ticket acceptance. There is no further implementation milestone.
+equated with ticket acceptance. Milestones 7-9 extend the original 48-ticket scope.

@@ -6,27 +6,27 @@
     "wasm": "engine/ab2c53ed650ba2680cdff4a1/index.wasm"
   },
   "project": "Ashen Oath",
-  "build_id": "opt-m6-20261018-600d7c5",
+  "build_id": "opt-m7-20261019-efd9132",
   "source": {
-    "git_commit": "600d7c502a6457a9a8d6f0bdb48d6128932555eb",
+    "git_commit": "efd9132c651479fc213479406176fa4fbd39a116",
     "dirty": true
   },
-  "generated_at_utc": "2026-10-18T13:50:40.784011Z",
-  "compatibility_key": "9fa4e14e15c945a62908e864426f8c5151aaad62f457e40191a8b1f8999c941c",
+  "generated_at_utc": "2026-10-18T20:51:52.798400Z",
+  "compatibility_key": "5e8ef281f6f603cdafd499fac5380576dbb9edb7e0c437fec3c8329cd6b35050",
   "runtime_pack_manifest": {
     "path": "runtime_pack_manifest.json",
     "bytes": 7423,
-    "sha256": "3e50565cc642a9b405504bdcaf1c4e52b204641625873a2b2b6d2c8cf34c0d0e"
+    "sha256": "96f654a24311b5e1212687474bd88877813994c213fadbf61731ff32ef1f4563"
   },
   "root_pck": {
     "path": "index.pck",
-    "bytes": 6302792,
-    "sha256": "49c2c2ea0895734cadab039700e02aa701714da2329e320d4f4335dbd39187ce",
+    "bytes": 6298483,
+    "sha256": "7238f721bd235f85f4b3231c088ce72ca7fa399dbd852b7276b32b14b1e8d23b",
     "content_encoding": "gzip",
-    "decoded_bytes": 8837120,
-    "decoded_sha256": "863a1f68830437ab9a03ac6defef695eaf7819dafbfc319c073b483e92b69f41"
+    "decoded_bytes": 8833632,
+    "decoded_sha256": "3c09b1cb0b9f3c1864603fc9e146b5d98239d06a7708c4181fb142bf0c60be70"
   },
-  "artifacts_total_bytes": 104220981,
+  "artifacts_total_bytes": 104329973,
   "artifacts": [
     {
       "path": "engine/ab2c53ed650ba2680cdff4a1/index.audio.position.worklet.js",
@@ -54,15 +54,15 @@
     {
       "path": "index.html",
       "bytes": 18691,
-      "sha256": "393ced85a437798ce8826d1a3c8a2f879f50d8d2c7e543a2674590ca23993d55"
+      "sha256": "68c9b1d570fb9d0d8ae6c23fe1981eacb7f8b7d7c2e1caf2a995c481dc409f0e"
     },
     {
       "path": "index.pck",
-      "bytes": 6302792,
-      "sha256": "49c2c2ea0895734cadab039700e02aa701714da2329e320d4f4335dbd39187ce",
+      "bytes": 6298483,
+      "sha256": "7238f721bd235f85f4b3231c088ce72ca7fa399dbd852b7276b32b14b1e8d23b",
       "content_encoding": "gzip",
-      "decoded_bytes": 8837120,
-      "decoded_sha256": "863a1f68830437ab9a03ac6defef695eaf7819dafbfc319c073b483e92b69f41"
+      "decoded_bytes": 8833632,
+      "decoded_sha256": "3c09b1cb0b9f3c1864603fc9e146b5d98239d06a7708c4181fb142bf0c60be70"
     },
     {
       "path": "index.png",
@@ -76,11 +76,11 @@
     },
     {
       "path": "packs/adjacent.pck",
-      "bytes": 486468,
-      "sha256": "c1b84a4fb8731146f756d9af0387b346410f6f79f4dd2cac07ba361bfcf61379",
+      "bytes": 600136,
+      "sha256": "f8635c423d17a8b13137a43334add94c02ada893a99a0b0de6525cf8e8afd336",
       "content_encoding": "gzip",
-      "decoded_bytes": 647492,
-      "decoded_sha256": "eed77dc5f9a2a12ae57a66fe8274e21b0c71af56a98e543e939ca62fbebfb138"
+      "decoded_bytes": 821960,
+      "decoded_sha256": "e5ea62ec801d7fe41375452cc47610130244db2de502ad0f01428d1f582575fb"
     },
     {
       "path": "packs/audio.pck",
@@ -92,35 +92,35 @@
     },
     {
       "path": "packs/campaign.pck",
-      "bytes": 5870881,
-      "sha256": "70ccd5d4ed58d7489a39185bf84a17c1932b55881c903321f276ec024017ff1a",
+      "bytes": 5870512,
+      "sha256": "cb3eb2583dcc87d4b38814a4c6d5822e9f760830256652fb1fef07b57f3aeb1d",
       "content_encoding": "gzip",
       "decoded_bytes": 6367244,
-      "decoded_sha256": "0f8aa94ef0f051215c9951d8fba89d26b268665c2b8fc257ac5ac56b16e00a49"
+      "decoded_sha256": "a10b566619080b64aeba2800a00a152de2bf16c51ad490cf985155c72d7cd9dd"
     },
     {
       "path": "packs/characters.pck",
       "bytes": 11392139,
-      "sha256": "2d437827b14da5620ebeb6b2958ba471adc45d79fc8c9b1a40c1f27d88a25dd1",
+      "sha256": "4c629f1891b14afcb978b558996a723fee504fcdb0fff5cac10355161c0ccccd",
       "content_encoding": "gzip",
       "decoded_bytes": 15324868,
-      "decoded_sha256": "c120184704a09df0b605cb1948a869a6e25ece7d1147b51446ac0b5a2cf0eb44"
+      "decoded_sha256": "328d03c6b3bf55eb107a6b3579dd3a2138c843021ea1f48498b70a23a33f33e6"
     },
     {
       "path": "packs/monsters.pck",
-      "bytes": 14739403,
-      "sha256": "4e031d023774e2391934042e45e982ac7785071e8b1a1859b4f49ab8e6ccdcb0",
+      "bytes": 14739399,
+      "sha256": "e50a7a6aa68fd41aea16178cc25c28914be86c9a72c860543277f71198683696",
       "content_encoding": "gzip",
       "decoded_bytes": 15324792,
-      "decoded_sha256": "118ced9f7e6a66f8ee4c81c67893fa50d3a66e9fb8b2afde13b452e51ccc0ec6"
+      "decoded_sha256": "3fe8e2a88e8d1e8bc824c5e91de488c19cc1c200c743227116dc55179023b7c9"
     },
     {
       "path": "packs/opening.pck",
-      "bytes": 30207783,
-      "sha256": "35c1f2f287435958d3088962add37bcdf7fac3be5f99d023547cc9b86e80c11f",
+      "bytes": 30207789,
+      "sha256": "223c0c5bd336e82ec42396806199c0d7f23848890a57e6181ee4e6548be92d1c",
       "content_encoding": "gzip",
       "decoded_bytes": 33557360,
-      "decoded_sha256": "fbad1d098d5c9433caf1e97c968c6d322fd4a2fafdd78e8840ef5091fbb365b9"
+      "decoded_sha256": "e8fa07921ca21c186f388e947290c3d6902db8b0ca9fb85164adfb36dbcd332f"
     },
     {
       "path": "packs/quality_materials.pck",
@@ -133,7 +133,7 @@
     {
       "path": "runtime_pack_manifest.json",
       "bytes": 7423,
-      "sha256": "3e50565cc642a9b405504bdcaf1c4e52b204641625873a2b2b6d2c8cf34c0d0e"
+      "sha256": "96f654a24311b5e1212687474bd88877813994c213fadbf61731ff32ef1f4563"
     }
   ],
   "packs": [
@@ -147,9 +147,9 @@
     },
     {
       "id": "opening",
-      "url": "packs/opening.pck?sha256=fbad1d098d5c9433caf1e97c968c6d322fd4a2fafdd78e8840ef5091fbb365b9",
+      "url": "packs/opening.pck?sha256=e8fa07921ca21c186f388e947290c3d6902db8b0ca9fb85164adfb36dbcd332f",
       "bytes": 33557360,
-      "sha256": "fbad1d098d5c9433caf1e97c968c6d322fd4a2fafdd78e8840ef5091fbb365b9",
+      "sha256": "e8fa07921ca21c186f388e947290c3d6902db8b0ca9fb85164adfb36dbcd332f",
       "dependencies": [
         "base"
       ],
@@ -157,9 +157,9 @@
     },
     {
       "id": "campaign",
-      "url": "packs/campaign.pck?sha256=0f8aa94ef0f051215c9951d8fba89d26b268665c2b8fc257ac5ac56b16e00a49",
+      "url": "packs/campaign.pck?sha256=a10b566619080b64aeba2800a00a152de2bf16c51ad490cf985155c72d7cd9dd",
       "bytes": 6367244,
-      "sha256": "0f8aa94ef0f051215c9951d8fba89d26b268665c2b8fc257ac5ac56b16e00a49",
+      "sha256": "a10b566619080b64aeba2800a00a152de2bf16c51ad490cf985155c72d7cd9dd",
       "dependencies": [
         "base",
         "opening"
@@ -168,9 +168,9 @@
     },
     {
       "id": "characters",
-      "url": "packs/characters.pck?sha256=c120184704a09df0b605cb1948a869a6e25ece7d1147b51446ac0b5a2cf0eb44",
+      "url": "packs/characters.pck?sha256=328d03c6b3bf55eb107a6b3579dd3a2138c843021ea1f48498b70a23a33f33e6",
       "bytes": 15324868,
-      "sha256": "c120184704a09df0b605cb1948a869a6e25ece7d1147b51446ac0b5a2cf0eb44",
+      "sha256": "328d03c6b3bf55eb107a6b3579dd3a2138c843021ea1f48498b70a23a33f33e6",
       "dependencies": [
         "base",
         "opening"
@@ -179,9 +179,9 @@
     },
     {
       "id": "monsters",
-      "url": "packs/monsters.pck?sha256=118ced9f7e6a66f8ee4c81c67893fa50d3a66e9fb8b2afde13b452e51ccc0ec6",
+      "url": "packs/monsters.pck?sha256=3fe8e2a88e8d1e8bc824c5e91de488c19cc1c200c743227116dc55179023b7c9",
       "bytes": 15324792,
-      "sha256": "118ced9f7e6a66f8ee4c81c67893fa50d3a66e9fb8b2afde13b452e51ccc0ec6",
+      "sha256": "3fe8e2a88e8d1e8bc824c5e91de488c19cc1c200c743227116dc55179023b7c9",
       "dependencies": [
         "base"
       ],
@@ -210,9 +210,9 @@
     },
     {
       "id": "adjacent",
-      "url": "packs/adjacent.pck?sha256=eed77dc5f9a2a12ae57a66fe8274e21b0c71af56a98e543e939ca62fbebfb138",
-      "bytes": 647492,
-      "sha256": "eed77dc5f9a2a12ae57a66fe8274e21b0c71af56a98e543e939ca62fbebfb138",
+      "url": "packs/adjacent.pck?sha256=e5ea62ec801d7fe41375452cc47610130244db2de502ad0f01428d1f582575fb",
+      "bytes": 821960,
+      "sha256": "e5ea62ec801d7fe41375452cc47610130244db2de502ad0f01428d1f582575fb",
       "dependencies": [
         "base",
         "opening"

@@ -2,6 +2,7 @@ extends Node
 class_name PerformanceBudgetMonitor
 
 const ZoneBudget = preload("res://scripts/zone_budget.gd")
+const Options = preload("res://scripts/performance_comparison_options.gd")
 
 signal snapshot_updated(snapshot: Dictionary)
 
@@ -25,18 +26,37 @@ var transition_ms := -1.0
 var zone_started_usec := 0
 var zone_budget_snapshot: Dictionary = {}
 var budget_violations: Array[String] = []
+var worst_frame_ms := 0.0
+var hitch_count := 0
+var display: Label
+var display_accumulator := 0.0
 
 func configure(runtime_host: Node) -> void:
 	host = runtime_host
 	# Budget telemetry is valuable for QA and release evidence, but its rolling
 	# 1% calculation sorts a frame buffer and must not tax normal player frames.
 	# Production can opt in explicitly without changing the shipped scene.
-	sampling_enabled = OS.has_feature("ashenoath_qa") or OS.get_environment("ASHEN_PERF_MONITOR") == "1"
+	sampling_enabled = Options.display_enabled() or OS.has_feature("ashenoath_qa") or OS.get_environment("ASHEN_PERF_MONITOR") == "1"
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	clear()
+	if Options.display_enabled():
+		var layer := CanvasLayer.new()
+		layer.layer = 110
+		add_child(layer)
+		display = Label.new()
+		display.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		display.position = Vector2(12, 12)
+		display.add_theme_font_size_override("font_size", 14)
+		display.add_theme_color_override("font_shadow_color", Color.BLACK)
+		display.add_theme_constant_override("shadow_offset_x", 1)
+		display.add_theme_constant_override("shadow_offset_y", 1)
+		layer.add_child(display)
+		_update_display()
+	set_process(sampling_enabled)
 
 func set_sampling_enabled(enabled: bool) -> void:
 	sampling_enabled = enabled
+	set_process(enabled)
 	if not enabled:
 		frame_times_ms.clear()
 		frame_time_cursor = 0
@@ -50,6 +70,8 @@ func set_active_zone(zone_id: String, root: Node, target: Node3D, quality_preset
 	suspended = active_root == null or not is_instance_valid(active_root)
 	frame_times_ms.clear()
 	frame_time_cursor = 0
+	worst_frame_ms = 0.0
+	hitch_count = 0
 	sample_accumulator = 0.0
 	snapshot_accumulator = 0.0
 	transition_ms = -1.0
@@ -74,6 +96,8 @@ func clear() -> void:
 	suspended = true
 	frame_times_ms.clear()
 	frame_time_cursor = 0
+	worst_frame_ms = 0.0
+	hitch_count = 0
 	sample_accumulator = 0.0
 	snapshot_accumulator = 0.0
 	transition_ms = -1.0
@@ -108,11 +132,19 @@ func record_transition(elapsed_ms: float) -> void:
 	_update_snapshot(true)
 
 func _process(delta: float) -> void:
+	if display != null:
+		display_accumulator += delta
+		if display_accumulator >= SNAPSHOT_INTERVAL:
+			display_accumulator = 0.0
+			_update_display()
 	if not sampling_enabled or suspended or get_tree().paused or active_root == null or not is_instance_valid(active_root):
 		return
-	if delta <= 0.0 or delta >= 0.25:
+	if delta <= 0.0 or not is_finite(delta):
 		return
 	var frame_ms := delta * 1000.0
+	worst_frame_ms = maxf(worst_frame_ms, frame_ms)
+	if frame_ms > 50.0:
+		hitch_count += 1
 	if frame_times_ms.size() < FRAME_SAMPLE_CAPACITY:
 		frame_times_ms.append(frame_ms)
 	else:
@@ -155,6 +187,10 @@ func _update_snapshot(force: bool) -> void:
 		"minimum_fps": frame_stats.minimum_fps,
 		"one_percent_low_fps": frame_stats.one_percent_low_fps,
 		"frame_time_ms": frame_stats.average_frame_ms,
+		"worst_frame_ms": worst_frame_ms,
+		"hitch_count": hitch_count,
+		"hitch_threshold_ms": 50.0,
+		"options": Options.states(),
 		"transition_ms": transition_ms,
 		"static_memory_bytes": memory_bytes,
 		"draw_calls": int(Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME)),
@@ -165,6 +201,28 @@ func _update_snapshot(force: bool) -> void:
 	}
 	if force or frame_times_ms.size() >= WARMUP_SAMPLE_COUNT:
 		snapshot_updated.emit(snapshot.duplicate(true))
+
+func _update_display() -> void:
+	var lines: Array[String] = []
+	for feature in Options.states():
+		var state: Dictionary = Options.states()[feature]
+		lines.append("%s: %s" % [feature, ("on" if state.effective else "off") if state.supported else "unsupported (requested %s)" % state.requested])
+	lines.append("FPS %.1f | worst %.1f ms | hitches >50ms %d" % [float(snapshot.get("average_fps", 0.0)), worst_frame_ms, hitch_count])
+	if suspended or get_tree().paused:
+		lines.append("Gameplay sampling paused")
+	if OS.has_feature("web"):
+		var timings = JavaScriptBridge.eval("JSON.stringify(window.__ashenOathBoot || {})")
+		var boot = JSON.parse_string(str(timings))
+		if boot is Dictionary:
+			for key in ["menu_ready_ms", "engine_ready_ms"]:
+				if float(boot.get(key, 0.0)) > 0:
+					lines.append("%s: %.0f ms" % [key, float(boot[key])])
+	if transition_ms >= 0:
+		lines.append("Last transition: %.0f ms" % transition_ms)
+	display.text = "\n".join(lines)
+	# Keep the read-only overlay inside short/resized viewports without taking input.
+	var viewport_size := get_viewport().get_visible_rect().size
+	display.scale = Vector2.ONE * minf(1.0, minf((viewport_size.x - 24.0) / maxf(display.size.x, 1.0), (viewport_size.y - 24.0) / maxf(display.size.y, 1.0)))
 
 func _frame_stats() -> Dictionary:
 	if frame_times_ms.is_empty():

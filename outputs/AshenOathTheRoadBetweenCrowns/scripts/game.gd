@@ -3,23 +3,28 @@ extends Node3D
 const GreyfenSocialPresentation = preload("res://scripts/greyfen_social_presentation.gd")
 const CemeteryEvidencePresentation = preload("res://scripts/cemetery_evidence_presentation.gd")
 const WychwoodEvidencePresentation = preload("res://scripts/wychwood_evidence_presentation.gd")
-const CampaignRecordPresentation = preload("res://scripts/campaign_record_presentation.gd")
+var CampaignRecordPresentation: Script:
+	get: return _gameplay_script("campaign_record_presentation")
 const WychwoodTerrainPresentation = preload("res://scripts/wychwood_terrain_presentation.gd")
 const StoryActorPresence = preload("res://scripts/story_actor_presence.gd")
-const StoryDecisionCoordinator = preload("res://scripts/story_decision_coordinator.gd")
+var StoryDecisionCoordinator: Script:
+	get: return _gameplay_script("story_decision_coordinator")
 const StoryWorldDirector = preload("res://scripts/story_world_director.gd")
-const CovenantResolution = preload("res://scripts/covenant_resolution.gd")
+var CovenantResolution: Script:
+	get: return _gameplay_script("covenant_resolution")
 
 const BridgeSurfaceContract = preload("res://scripts/bridge_surface_contract.gd")
 const SpatialSurfaceContract = preload("res://scripts/spatial_surface_contract.gd")
-const EnemyAI = preload("res://scripts/enemy_ai.gd")
+var EnemyAI: Script:
+	get: return _gameplay_script("enemy_ai")
 const Interactable = preload("res://scripts/interactable.gd")
 const VisualDirector = preload("res://scripts/visual_director.gd")
 const NpcAmbient = preload("res://scripts/npc_ambient.gd")
 const CharacterPresentation = preload("res://scripts/character_presentation.gd")
 const CombatFeedback = preload("res://scripts/combat_feedback.gd")
 const CharacterAnimationDriver = preload("res://scripts/character_animation_driver.gd")
-const BoardGameOpponent = preload("res://scripts/board_game_opponent.gd")
+var BoardGameOpponent: Script:
+	get: return _gameplay_script("board_game_opponent")
 const WorldVisualUpgrade = preload("res://scripts/world_visual_upgrade.gd")
 const WorldMotionController = preload("res://scripts/world_motion_controller.gd")
 const WorldPropController = preload("res://scripts/world_prop_controller.gd")
@@ -27,7 +32,8 @@ const InteractiveWorldProp = preload("res://scripts/interactive_world_prop.gd")
 const OpeningSoundscape = preload("res://scripts/opening_soundscape.gd")
 const SurfaceFeedbackManager = preload("res://scripts/surface_feedback_manager.gd")
 const WorldVFXController = preload("res://scripts/world_vfx_controller.gd")
-const EpilogueResolver = preload("res://scripts/epilogue_resolver.gd")
+var EpilogueResolver: Script:
+	get: return _gameplay_script("epilogue_resolver")
 const ZoneSpatialService = preload("res://scripts/zone_spatial_service.gd")
 const RuntimeServiceRegistry = preload("res://scripts/runtime_service_registry.gd")
 const RuntimeActorFactory = preload("res://scripts/runtime_actor_factory.gd")
@@ -40,13 +46,25 @@ const QuestHudCoordinator = preload("res://scripts/quest_hud_coordinator.gd")
 const ZoneSceneCatalog = preload("res://scripts/zone_scene_catalog.gd")
 const CemeterySection = preload("res://scripts/cemetery_staging.gd")
 const OathGatePortal = preload("res://scripts/oath_gate_portal.gd")
-const BossEncounterScript = preload("res://scripts/boss_encounter.gd")
+var BossEncounterScript: Script:
+	get: return _gameplay_script("boss_encounter")
 const PerformanceBudgetMonitor = preload("res://scripts/performance_budget_monitor.gd")
 const SeamlessWorldService = preload("res://scripts/seamless_world_service.gd")
 const CharacterRoleSpec = preload("res://scripts/character_role_spec.gd")
 const ProductionObservationBridgeScript = preload("res://scripts/production_observation_bridge.gd")
 
 var player
+var gameplay_scripts: Dictionary = {}
+
+func _gameplay_script(id: String) -> Script:
+	if not gameplay_scripts.has(id):
+		var script := load("res://scripts/%s.gd" % id) as Script
+		if script == null or not script.can_instantiate():
+			push_error("Required gameplay script unavailable: " + id)
+			return null
+		gameplay_scripts[id] = script
+	return gameplay_scripts[id]
+
 var production_observation_bridge
 var camera_rig
 var hud
@@ -2340,7 +2358,7 @@ func _handle_dialogue_action(action: Dictionary) -> void:
 			effect_keys.sort()
 			choice_id = "promise:" + ",".join(effect_keys)
 		save_manager.predecision(self, choice_id)
-	var transaction := StoryDecisionCoordinator.new()
+	var transaction = StoryDecisionCoordinator.new()
 	transaction.begin(self)
 	var applied: bool = _apply_dialogue_action(action)
 	transaction.finish(self, action, applied)
@@ -4820,27 +4838,9 @@ func _make_wychwood_terrain_layers() -> void:
 	], Color(0.045, 0.115, 0.065))
 
 func _make_wychwood_clearing_floor() -> void:
-	var surface := SurfaceTool.new()
-	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
-	var center := Vector3(0, 0.059, -6.5)
-	var segments := 20
-	for index in segments:
-		var angle := TAU * float(index) / float(segments)
-		var next_angle := TAU * float(index + 1) / float(segments)
-		var radius := 0.88 + 0.12 * sin(float(index) * 2.17)
-		var next_radius := 0.88 + 0.12 * sin(float(index + 1) * 2.17)
-		var inner := center + Vector3(cos(angle) * 3.25 * radius, 0, sin(angle) * 2.35 * radius)
-		var inner_next := center + Vector3(cos(next_angle) * 3.25 * next_radius, 0, sin(next_angle) * 2.35 * next_radius)
-		var outer := center + Vector3(cos(angle) * 5.25 * radius, 0, sin(angle) * 3.75 * radius)
-		var outer_next := center + Vector3(cos(next_angle) * 5.25 * next_radius, 0, sin(next_angle) * 3.75 * next_radius)
-		for point in [[center, Color(0.52, 0.53, 0.47)], [inner_next, Color(0.68, 0.68, 0.57)], [inner, Color(0.68, 0.68, 0.57)], [inner, Color(0.68, 0.68, 0.57)], [inner_next, Color(0.68, 0.68, 0.57)], [outer_next, Color(0.91, 0.93, 0.83)], [inner, Color(0.68, 0.68, 0.57)], [outer_next, Color(0.91, 0.93, 0.83)], [outer, Color(0.91, 0.93, 0.83)]]:
-			surface.set_normal(Vector3.UP)
-			surface.set_color(point[1])
-			surface.set_uv(Vector2(point[0].x, point[0].z) * 0.55)
-			surface.add_vertex(point[0])
 	var floor := MeshInstance3D.new()
 	floor.name = "WychwoodClearingMud"
-	floor.mesh = surface.commit()
+	floor.mesh = preload("res://scripts/prepared_zone_geometry.gd").mesh("wychwood_clearing")
 	var material := world_materials.get_material("wet_mud", str(settings.settings.get("quality_preset", "balanced")), Color(0.30, 0.36, 0.29), 0.0, true).duplicate() as StandardMaterial3D
 	material.vertex_color_use_as_albedo = true
 	floor.material_override = material
@@ -4850,44 +4850,9 @@ func _make_wychwood_clearing_floor() -> void:
 func _make_wychwood_winding_path() -> void:
 	if zone_root.find_child("WychwoodWindingPath", true, false) != null:
 		return
-	var mud_surface := SurfaceTool.new()
-	mud_surface.begin(Mesh.PRIMITIVE_TRIANGLES)
-	var shoulder_surface := SurfaceTool.new()
-	shoulder_surface.begin(Mesh.PRIMITIVE_TRIANGLES)
-	var river_edge := BridgeSurfaceContract.RIVER_HALF_SPAN
-	for span in [Vector2(-10.5, -river_edge), Vector2(river_edge, 16.5)]:
-		var rows := ceili((span.y - span.x) / 0.9)
-		for row in range(rows):
-			var z0 := lerpf(span.x, span.y, float(row) / float(rows))
-			var z1 := lerpf(span.x, span.y, float(row + 1) / float(rows))
-			var bridge_blend0 := 1.0 - smoothstep(river_edge, river_edge + 3.0, absf(z0))
-			var bridge_blend1 := 1.0 - smoothstep(river_edge, river_edge + 3.0, absf(z1))
-			var core0 := lerpf(1.26 + 0.16 * sin(z0 * 1.37) + 0.07 * sin(z0 * 2.59), 2.28, bridge_blend0)
-			var core1 := lerpf(1.26 + 0.16 * sin(z1 * 1.37) + 0.07 * sin(z1 * 2.59), 2.28, bridge_blend1)
-			var outer0 := maxf(3.48, core0 + 0.80) + 0.24 * sin(z0 * 1.41)
-			var outer1 := maxf(3.48, core1 + 0.80) + 0.24 * sin(z1 * 1.41)
-			var lateral0 := [-outer0, -core0, 0.0, core0, outer0]
-			var lateral1 := [-outer1, -core1, 0.0, core1, outer1]
-			for band in range(4):
-				var x00: float = _wychwood_path_center(z0) + float(lateral0[band])
-				var x01: float = _wychwood_path_center(z1) + float(lateral1[band])
-				var x10: float = _wychwood_path_center(z0) + float(lateral0[band + 1])
-				var x11: float = _wychwood_path_center(z1) + float(lateral1[band + 1])
-				var surface := mud_surface if band in [1, 2] else shoulder_surface
-				var left_color := Color(0.70, 0.73, 0.66) if band == 0 else Color(0.82, 0.84, 0.78) if band == 1 else Color(0.97, 0.98, 0.94) if band == 2 else Color(0.58, 0.62, 0.55)
-				var right_color := Color(0.58, 0.62, 0.55) if band == 0 else Color(0.97, 0.98, 0.94) if band == 1 else Color(0.82, 0.84, 0.78) if band == 2 else Color(0.70, 0.73, 0.66)
-				for vertex in [
-					[Vector3(x00, 0.057, z0), left_color], [Vector3(x10, 0.057, z0), right_color], [Vector3(x01, 0.057, z1), left_color],
-					[Vector3(x10, 0.057, z0), right_color], [Vector3(x11, 0.057, z1), right_color], [Vector3(x01, 0.057, z1), left_color],
-				]:
-					surface.set_normal(Vector3.UP)
-					surface.set_color(vertex[1])
-					surface.set_uv(Vector2(vertex[0].x, vertex[0].z) * 0.55)
-					surface.add_vertex(vertex[0])
 	var path := MeshInstance3D.new()
 	path.name = "WychwoodWindingPath"
-	var mesh := mud_surface.commit()
-	shoulder_surface.commit(mesh)
+	var mesh := preload("res://scripts/prepared_zone_geometry.gd").mesh("wychwood_winding_path").duplicate() as ArrayMesh
 	var mud_material := world_materials.get_material("wet_mud", str(settings.settings.get("quality_preset", "balanced")), Color(0.56, 0.50, 0.42), 0.20, true).duplicate() as StandardMaterial3D
 	mud_material.resource_name = "WychwoodWindingPathMud"
 	mud_material.roughness = 0.88
@@ -4962,33 +4927,7 @@ func _make_low_berm(pos: Vector3, size: Vector3, color: Color) -> void:
 	body.add_child(shape)
 	var mesh = MeshInstance3D.new()
 	mesh.name = "RoundedEarthBerm"
-	var surface := SurfaceTool.new()
-	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
-	var columns := 8
-	var rows := 10
-	var points: Array[Vector3] = []
-	for row in range(rows + 1):
-		for column in range(columns + 1):
-			var u := float(column) / columns * 2.0 - 1.0
-			var v := float(row) / rows * 2.0 - 1.0
-			var shoulder := pow(pow(absf(u), 4.0) + pow(absf(v), 4.0), 0.25)
-			var rise := 1.0 - smoothstep(0.40, 1.0, shoulder)
-			var irregularity := sin(u * 4.1 + pos.z) * sin(v * 3.2 + pos.x) * 0.07 * rise
-			var edge_x := 1.0 + 0.10 * sin(v * 3.1 + pos.z)
-			var edge_z := 1.0 + 0.09 * sin(u * 4.0 + pos.x)
-			points.append(Vector3(u * (size.x * 0.5 + 0.28) * edge_x, -size.y * 0.5 - 0.015 + size.y * (rise + irregularity), v * (size.z * 0.5 + 0.28) * edge_z))
-	for row in range(rows):
-		for column in range(columns):
-			var a := row * (columns + 1) + column
-			var b := a + 1
-			var c := a + columns + 1
-			var d := c + 1
-			for index in [a, b, c, b, d, c]:
-				var point := points[index]
-				surface.set_uv(Vector2(point.x + pos.x, point.z + pos.z))
-				surface.add_vertex(point)
-	surface.generate_normals()
-	mesh.mesh = surface.commit()
+	mesh.mesh = preload("res://scripts/prepared_zone_geometry.gd").mesh("wychwood_berm_" + preload("res://scripts/prepared_zone_geometry.gd").geometry_key(size, pos))
 	mesh.material_override = _terrain_material("WychwoodEarthBerm", color)
 	body.add_child(mesh)
 
@@ -6421,7 +6360,7 @@ func _make_board_game_staging(area: Node3D, id: String, size: Vector3) -> void:
 		marker.set_meta("deferred_visual_actor_id", opponent_id)
 		marker.set_meta("deferred_visual_scale", Vector3.ONE)
 		deferred_opponent.add_child(marker)
-		var deferred_gesture := BoardGameOpponent.new()
+		var deferred_gesture = BoardGameOpponent.new()
 		deferred_gesture.name = "BoardGameOpponentController"
 		deferred_opponent.add_child(deferred_gesture)
 		deferred_gesture.configure(player, null)
@@ -6438,7 +6377,7 @@ func _make_board_game_staging(area: Node3D, id: String, size: Vector3) -> void:
 	area.add_child(opponent)
 	CharacterPresentation.apply_npc(opponent, opponent_id)
 	_configure_npc_animation(opponent, "board_rook" if id == "common_table" else "board_tor")
-	var gesture_controller := BoardGameOpponent.new()
+	var gesture_controller = BoardGameOpponent.new()
 	gesture_controller.name = "BoardGameOpponentController"
 	opponent.add_child(gesture_controller)
 	gesture_controller.configure(player, opponent.find_child("CharacterAnimationDriver", true, false))
