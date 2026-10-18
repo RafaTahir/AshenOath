@@ -176,14 +176,18 @@ func _apply_eye_look() -> void:
 		if not is_instance_valid(mesh):
 			continue
 		var base: Vector3 = base_eye_positions.get(mesh, mesh.position)
-		mesh.position = base + Vector3.RIGHT * look_offset * 0.006
+		var position := base + Vector3.RIGHT * look_offset * 0.006
+		if mesh.position != position:
+			mesh.position = position
 
 func _apply_blink(closure: float) -> void:
 	for mesh in eye_meshes:
 		if not is_instance_valid(mesh):
 			continue
 		var base: Vector3 = base_eye_scales.get(mesh, mesh.scale)
-		mesh.scale = Vector3(base.x, lerpf(base.y, maxf(base.y * 0.12, 0.001), closure), base.z)
+		var scale_value := Vector3(base.x, lerpf(base.y, maxf(base.y * 0.12, 0.001), closure), base.z)
+		if mesh.scale != scale_value:
+			mesh.scale = scale_value
 
 func get_contract_report() -> Dictionary:
 	return {
@@ -213,7 +217,9 @@ func set_expression(value: String) -> void:
 		var brow := brow_meshes[index]
 		if is_instance_valid(brow):
 			var base: Vector3 = base_brow_rotations.get(brow, Vector3.ZERO)
-			brow.rotation = base + Vector3(0, 0, brow_tilt * (-1.0 if index % 2 == 0 else 1.0))
+			var rotation_value := base + Vector3(0, 0, brow_tilt * (-1.0 if index % 2 == 0 else 1.0))
+			if brow.rotation != rotation_value:
+				brow.rotation = rotation_value
 
 func play_story_gesture(kind: String) -> void:
 	if head_modifier != null:

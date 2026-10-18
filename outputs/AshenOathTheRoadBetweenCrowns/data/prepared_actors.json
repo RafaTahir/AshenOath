@@ -1,0 +1,352 @@
+{
+	"ashwing_boss|res://assets_external/enemies/Ashwing_Playfix.glb": {
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/d46346998ec7f44a74d383e1.scn",
+		"role": "ashwing_boss",
+		"source": "res://assets_external/enemies/Ashwing_Playfix.glb",
+		"variant_safe": false
+	},
+	"ashwing_creature|res://assets_external/enemies/Ashwing_Playfix.glb": {
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/d46346998ec7f44a74d383e1.scn",
+		"role": "ashwing_creature",
+		"source": "res://assets_external/enemies/Ashwing_Playfix.glb",
+		"variant_safe": false
+	},
+	"ashwing|res://assets_external/enemies/Ashwing_Playfix.glb": {
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/d46346998ec7f44a74d383e1.scn",
+		"role": "ashwing",
+		"source": "res://assets_external/enemies/Ashwing_Playfix.glb",
+		"variant_safe": false
+	},
+	"bandit_deserter|res://assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.gltf": {
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/87acc6e5f0410dcadfeb5574.scn",
+		"role": "bandit_deserter",
+		"source": "res://assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.gltf",
+		"variant_safe": true
+	},
+	"bandit_tracker|res://assets_external/characters_universal/runtime/Bandit_Tracker_Atlas.gltf": {
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/350ee96c81c6ab862c360b37.scn",
+		"role": "bandit_tracker",
+		"source": "res://assets_external/characters_universal/runtime/Bandit_Tracker_Atlas.gltf",
+		"variant_safe": true
+	},
+	"bandit|res://assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.gltf": {
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/87acc6e5f0410dcadfeb5574.scn",
+		"role": "bandit",
+		"source": "res://assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.gltf",
+		"variant_safe": true
+	},
+	"bell_eater_boss|res://assets_external/characters_universal/runtime/BellEater_Playfix.glb": {
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/0027cb6b1bda068f6e9ddc12.scn",
+		"role": "bell_eater_boss",
+		"source": "res://assets_external/characters_universal/runtime/BellEater_Playfix.glb",
+		"variant_safe": false
+	},
+	"bell_eater|res://assets_external/characters_universal/runtime/BellEater_Playfix.glb": {
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/0027cb6b1bda068f6e9ddc12.scn",
+		"role": "bell_eater",
+		"source": "res://assets_external/characters_universal/runtime/BellEater_Playfix.glb",
+		"variant_safe": false
+	},
+	"blacksmith_tor|res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf": {
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/3213391611858c6dfe5d5c95.scn",
+		"role": "blacksmith_tor",
+		"source": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf",
+		"variant_safe": true
+	},
+	"bog_wretch_creature|res://assets_external/characters_universal/runtime/BogWretch_Playfix.glb": {
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/852bc7b3136cc26ff54b5227.scn",
+		"role": "bog_wretch_creature",
+		"source": "res://assets_external/characters_universal/runtime/BogWretch_Playfix.glb",
+		"variant_safe": false
+	},
+	"bog_wretch|res://assets_external/characters_universal/runtime/BogWretch_Playfix.glb": {
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/852bc7b3136cc26ff54b5227.scn",
+		"role": "bog_wretch",
+		"source": "res://assets_external/characters_universal/runtime/BogWretch_Playfix.glb",
+		"variant_safe": false
+	},
+	"castle_guard_human|res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf": {
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/3213391611858c6dfe5d5c95.scn",
+		"role": "castle_guard_human",
+		"source": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf",
+		"variant_safe": true
+	},
+	"castle_guard|res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf": {
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/3213391611858c6dfe5d5c95.scn",
+		"role": "castle_guard",
+		"source": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf",
+		"variant_safe": true
+	},
+	"generic_villager_01|res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf": {
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/3970a445a6ff8bffd64a23eb.scn",
+		"role": "generic_villager_01",
+		"source": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf",
+		"variant_safe": true
+	},
+	"generic_villager_02|res://assets_external/characters_universal/runtime/Villager_Female_Atlas.gltf": {
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/15e119b62b11b0f979de166a.scn",
+		"role": "generic_villager_02",
+		"source": "res://assets_external/characters_universal/runtime/Villager_Female_Atlas.gltf",
+		"variant_safe": true
+	},
+	"ghoul_brute_real|res://assets_external/enemies/Skeleton.fbx": {
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/12c638d6ec77174991000180.scn",
+		"role": "ghoul_brute_real",
+		"source": "res://assets_external/enemies/Skeleton.fbx",
+		"variant_safe": false
+	},
+	"ghoul_gaunt_real|res://assets_external/enemies/Skeleton.fbx": {
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/12c638d6ec77174991000180.scn",
+		"role": "ghoul_gaunt_real",
+		"source": "res://assets_external/enemies/Skeleton.fbx",
+		"variant_safe": false
+	},
+	"ghoul_stalker_real|res://assets_external/enemies/Skeleton.fbx": {
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/12c638d6ec77174991000180.scn",
+		"role": "ghoul_stalker_real",
+		"source": "res://assets_external/enemies/Skeleton.fbx",
+		"variant_safe": false
+	},
+	"ghoulkin_creature|res://assets_external/characters_universal/runtime/Ghoulkin_Authored_Atlas.gltf": {
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/8e26d61e03a43bbf9eb7b42e.scn",
+		"role": "ghoulkin_creature",
+		"source": "res://assets_external/characters_universal/runtime/Ghoulkin_Authored_Atlas.gltf",
+		"variant_safe": true
+	},
+	"ghoulkin_skeleton|res://assets_external/enemies/Skeleton.fbx": {
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/12c638d6ec77174991000180.scn",
+		"role": "ghoulkin_skeleton",
+		"source": "res://assets_external/enemies/Skeleton.fbx",
+		"variant_safe": false
+	},
+	"ghoulkin|res://assets_external/enemies/ultimate_monsters/Ghost.glb": {
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/798e75b35ac525d6462741b6.scn",
+		"role": "ghoulkin",
+		"source": "res://assets_external/enemies/ultimate_monsters/Ghost.glb",
+		"variant_safe": false
+	},
+	"gravebound_knight_creature|res://assets_external/enemies/Skeleton.fbx": {
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/12c638d6ec77174991000180.scn",
+		"role": "gravebound_knight_creature",
+		"source": "res://assets_external/enemies/Skeleton.fbx",
+		"variant_safe": false
+	},
+	"gravebound_knight|res://assets_external/enemies/Skeleton.fbx": {
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/12c638d6ec77174991000180.scn",
+		"role": "gravebound_knight",
+		"source": "res://assets_external/enemies/Skeleton.fbx",
+		"variant_safe": false
+	},
+	"halvern_boss|res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf": {
+		"owner": "characters",
+		"path": "res://assets_external/characters_prepared/characters/2fd5f546eaa091e7c7a70355.scn",
+		"role": "halvern_boss",
+		"source": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf",
+		"variant_safe": true
+	},
+	"lord_edric|res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf": {
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/3970a445a6ff8bffd64a23eb.scn",
+		"role": "lord_edric",
+		"source": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf",
+		"variant_safe": true
+	},
+	"mira_herbalist|res://assets_external/characters_universal/runtime/Villager_Female_Atlas.gltf": {
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/15e119b62b11b0f979de166a.scn",
+		"role": "mira_herbalist",
+		"source": "res://assets_external/characters_universal/runtime/Villager_Female_Atlas.gltf",
+		"variant_safe": true
+	},
+	"mira_human|res://assets_external/characters_universal/runtime/Villager_Female_Atlas.gltf": {
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/15e119b62b11b0f979de166a.scn",
+		"role": "mira_human",
+		"source": "res://assets_external/characters_universal/runtime/Villager_Female_Atlas.gltf",
+		"variant_safe": true
+	},
+	"orc_skull_real|res://assets_external/enemies/Skeleton.fbx": {
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/12c638d6ec77174991000180.scn",
+		"role": "orc_skull_real",
+		"source": "res://assets_external/enemies/Skeleton.fbx",
+		"variant_safe": false
+	},
+	"player_human|res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.gltf": {
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/a79a76f0274d841ea6a6bc6f.scn",
+		"role": "player_human",
+		"source": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.gltf",
+		"variant_safe": true
+	},
+	"player_kael|res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.gltf": {
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/a79a76f0274d841ea6a6bc6f.scn",
+		"role": "player_kael",
+		"source": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.gltf",
+		"variant_safe": true
+	},
+	"road_ranger_human|res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf": {
+		"owner": "characters",
+		"path": "res://assets_external/characters_prepared/characters/2fd5f546eaa091e7c7a70355.scn",
+		"role": "road_ranger_human",
+		"source": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf",
+		"variant_safe": true
+	},
+	"road_ranger|res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf": {
+		"owner": "characters",
+		"path": "res://assets_external/characters_prepared/characters/2fd5f546eaa091e7c7a70355.scn",
+		"role": "road_ranger",
+		"source": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf",
+		"variant_safe": true
+	},
+	"rook_human|res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.gltf": {
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/720b6f6a6ed5ac38e4945f37.scn",
+		"role": "rook_human",
+		"source": "res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.gltf",
+		"variant_safe": true
+	},
+	"rook_smuggler|res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.gltf": {
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/720b6f6a6ed5ac38e4945f37.scn",
+		"role": "rook_smuggler",
+		"source": "res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.gltf",
+		"variant_safe": true
+	},
+	"rootbound_colossus_boss|res://assets_external/enemies/ultimate_monsters/Creep.glb": {
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/07afa1014ad9bc1971c8df11.scn",
+		"role": "rootbound_colossus_boss",
+		"source": "res://assets_external/enemies/ultimate_monsters/Creep.glb",
+		"variant_safe": false
+	},
+	"sister_anwen_human|res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.gltf": {
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/81ada4e6403bb686318c8743.scn",
+		"role": "sister_anwen_human",
+		"source": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.gltf",
+		"variant_safe": true
+	},
+	"sister_anwen|res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.gltf": {
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/81ada4e6403bb686318c8743.scn",
+		"role": "sister_anwen",
+		"source": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.gltf",
+		"variant_safe": true
+	},
+	"villager_female_human|res://assets_external/characters_universal/runtime/Villager_Female_Atlas.gltf": {
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/15e119b62b11b0f979de166a.scn",
+		"role": "villager_female_human",
+		"source": "res://assets_external/characters_universal/runtime/Villager_Female_Atlas.gltf",
+		"variant_safe": true
+	},
+	"villager_hooded_human|res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.gltf": {
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/720b6f6a6ed5ac38e4945f37.scn",
+		"role": "villager_hooded_human",
+		"source": "res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.gltf",
+		"variant_safe": true
+	},
+	"villager_human|res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf": {
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/3970a445a6ff8bffd64a23eb.scn",
+		"role": "villager_human",
+		"source": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf",
+		"variant_safe": true
+	},
+	"villager_worker_human|res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf": {
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/3213391611858c6dfe5d5c95.scn",
+		"role": "villager_worker_human",
+		"source": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf",
+		"variant_safe": true
+	},
+	"white_hart_avatar|res://assets_external/enemies/WhiteHart_Stag.glb": {
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/b6b3efc1f81d0ac77af948c2.scn",
+		"role": "white_hart_avatar",
+		"source": "res://assets_external/enemies/WhiteHart_Stag.glb",
+		"variant_safe": false
+	},
+	"white_hart_boss|res://assets_external/enemies/WhiteHart_Stag.glb": {
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/b6b3efc1f81d0ac77af948c2.scn",
+		"role": "white_hart_boss",
+		"source": "res://assets_external/enemies/WhiteHart_Stag.glb",
+		"variant_safe": false
+	},
+	"widow_elna|res://assets_external/characters_universal/runtime/Villager_Female_Atlas.gltf": {
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/15e119b62b11b0f979de166a.scn",
+		"role": "widow_elna",
+		"source": "res://assets_external/characters_universal/runtime/Villager_Female_Atlas.gltf",
+		"variant_safe": true
+	},
+	"wychwood_brute_creature|res://assets_external/enemies/ultimate_monsters/BlueDemon.gltf": {
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/09837878792b90acb6a7ab43.scn",
+		"role": "wychwood_brute_creature",
+		"source": "res://assets_external/enemies/ultimate_monsters/BlueDemon.gltf",
+		"variant_safe": false
+	},
+	"wychwood_brute|res://assets_external/enemies/ultimate_monsters/BlueDemon.gltf": {
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/09837878792b90acb6a7ab43.scn",
+		"role": "wychwood_brute",
+		"source": "res://assets_external/enemies/ultimate_monsters/BlueDemon.gltf",
+		"variant_safe": false
+	},
+	"wychwood_raider_creature|res://assets_external/enemies/ultimate_monsters/Orc.gltf": {
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/32b208264e604034a14e1a79.scn",
+		"role": "wychwood_raider_creature",
+		"source": "res://assets_external/enemies/ultimate_monsters/Orc.gltf",
+		"variant_safe": false
+	},
+	"wychwood_raider|res://assets_external/enemies/ultimate_monsters/Orc.gltf": {
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/32b208264e604034a14e1a79.scn",
+		"role": "wychwood_raider",
+		"source": "res://assets_external/enemies/ultimate_monsters/Orc.gltf",
+		"variant_safe": false
+	},
+	"wychwood_stalker_creature|res://assets_external/enemies/ultimate_monsters/Demon.gltf": {
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/b09bf8d32ece558626d99470.scn",
+		"role": "wychwood_stalker_creature",
+		"source": "res://assets_external/enemies/ultimate_monsters/Demon.gltf",
+		"variant_safe": false
+	},
+	"wychwood_stalker|res://assets_external/enemies/ultimate_monsters/Demon.gltf": {
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/b09bf8d32ece558626d99470.scn",
+		"role": "wychwood_stalker",
+		"source": "res://assets_external/enemies/ultimate_monsters/Demon.gltf",
+		"variant_safe": false
+	}
+}

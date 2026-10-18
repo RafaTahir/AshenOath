@@ -295,7 +295,18 @@ static func _color_for(token: String, role: String, profile: Dictionary) -> Colo
 		return profile.secondary
 	return profile.primary
 
+static var _palette_materials: Dictionary = {}
+
+static func clear_material_cache() -> void:
+	_palette_materials.clear()
+
 static func _identity_material(source, color: Color, monster := false, wash_override: float = -1.0) -> StandardMaterial3D:
+	var source_key: Variant = source if source is Material else "untextured"
+	var variants: Dictionary = _palette_materials.get(source_key, {})
+	var recipe := var_to_str([color, monster, wash_override])
+	# Boss phase/flash materials stay private. Human identity washes are immutable.
+	if not monster and variants.has(recipe):
+		return variants[recipe]
 	var material: StandardMaterial3D
 	if source is StandardMaterial3D:
 		material = source.duplicate() as StandardMaterial3D
@@ -317,6 +328,9 @@ static func _identity_material(source, color: Color, monster := false, wash_over
 	material.metallic = 0.04 if color.get_luminance() > 0.42 else 0.0
 	material.shading_mode = BaseMaterial3D.SHADING_MODE_PER_PIXEL
 	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+	if not monster:
+		variants[recipe] = material
+		_palette_materials[source_key] = variants
 	return material
 
 static func role_is_monster_role(role: String) -> bool:

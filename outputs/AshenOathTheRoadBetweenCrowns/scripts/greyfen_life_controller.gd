@@ -112,6 +112,8 @@ func actor_count() -> int:
 func routine_ids() -> Array:
 	return actors.map(func(entry): return str(entry.id))
 
+var _crowd_index = preload("res://scripts/actor_spatial_index.gd").new()
+
 func _process(delta: float) -> void:
 	if host == null or player == null or get_parent() != host.zone_root or get_tree().paused or not bool(host.get("game_started")): return
 	simulation_tick_accumulator += delta
@@ -121,6 +123,10 @@ func _process(delta: float) -> void:
 	line_cooldown = max(line_cooldown - delta, 0.0)
 	if decision_tick and story_dirty:
 		_sync_story_state(false)
+	# One registration pass observes routine relocations before local queries.
+	for entry in actors:
+		if is_instance_valid(entry.node):
+			_crowd_index.update(entry.node, entry)
 	for entry in actors:
 		var actor_node: Node3D = entry.node
 		if not is_instance_valid(actor_node):
@@ -151,6 +157,7 @@ func _process(delta: float) -> void:
 		if not bool(entry.get("distance_suspended", false)):
 			# A stalled render frame must not launch a villager across an anchor.
 			_update_actor(entry, minf(delta, 0.05))
+			_crowd_index.update(actor_node, entry)
 
 func build_population_member(index: int) -> void:
 	_build_population(index, 1)
@@ -320,7 +327,7 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 func _crowd_pace(entry: Dictionary, direction: Vector3, delta: float) -> float:
 	var pace := 1.0
 	var obstruction: Node3D
-	for other: Dictionary in actors:
+	for other: Dictionary in _crowd_index.nearby(entry.node.global_position, 1.62):
 		if other == entry or not is_instance_valid(other.node): continue
 		var offset: Vector3 = other.node.global_position - entry.node.global_position
 		offset.y = 0.0

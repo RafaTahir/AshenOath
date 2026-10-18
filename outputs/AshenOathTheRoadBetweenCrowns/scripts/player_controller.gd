@@ -1612,7 +1612,12 @@ func _build_sheathed_sword() -> void:
 		cap.material_override = trim
 		assembly.add_child(cap)
 
+static var _scabbard_mesh: WeakRef
+
 func _build_scabbard_mesh() -> ArrayMesh:
+	var cached := _scabbard_mesh.get_ref() as ArrayMesh if _scabbard_mesh != null else null
+	if cached != null:
+		return cached
 	var surface := SurfaceTool.new()
 	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
 	var section := [Vector2(-0.75, -1), Vector2(0.75, -1), Vector2(1, -0.65), Vector2(1, 0.65), Vector2(0.75, 1), Vector2(-0.75, 1), Vector2(-1, 0.65), Vector2(-1, -0.65)]
@@ -1626,7 +1631,9 @@ func _build_scabbard_mesh() -> ArrayMesh:
 			for index in [0, 2, 1, 0, 3, 2]:
 				surface.add_vertex(vertices[index])
 	surface.generate_normals()
-	return surface.commit()
+	var mesh := surface.commit()
+	_scabbard_mesh = weakref(mesh)
+	return mesh
 
 func _try_build_mapped_body() -> bool:
 	asset_helper = AssetSpawnHelper.new()

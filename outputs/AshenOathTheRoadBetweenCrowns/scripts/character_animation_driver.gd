@@ -97,6 +97,7 @@ var locomotion_phase_distance := 0.0
 var locomotion_step_index := 0
 var story_gesture_remaining := 0.0
 var story_dialogue_active := false
+static var _resolved_bindings: Dictionary = {}
 
 func _ready() -> void:
 	# Imported actors are configured before their visual root is parented. Defer
@@ -138,10 +139,16 @@ func configure(root: Node3D, clips: Dictionary) -> bool:
 		contract_errors.append("missing AnimationPlayer or Skeleton3D")
 		contract_failed.emit(contract_errors[0])
 		return false
-	for state in clip_map:
-		var resolved := _resolve_clip(str(state), str(clip_map[state]))
-		if resolved != StringName():
-			resolved_clip_map[state] = resolved
+	var binding_key := var_to_str([clip_map, animation_player.get_animation_list()]).sha256_text()
+	if _resolved_bindings.has(binding_key):
+		resolved_clip_map = _resolved_bindings[binding_key].resolved.duplicate()
+		authored_directional_clips = _resolved_bindings[binding_key].directional.duplicate()
+	else:
+		for state in clip_map:
+			var resolved := _resolve_clip(str(state), str(clip_map[state]))
+			if resolved != StringName():
+				resolved_clip_map[state] = resolved
+		_resolved_bindings[binding_key] = {"resolved": resolved_clip_map.duplicate(), "directional": authored_directional_clips.duplicate()}
 	if not resolved_clip_map.has("idle"):
 		contract_errors.append("required idle clip is missing")
 		contract_failed.emit(contract_errors[0])
@@ -703,6 +710,12 @@ func _find_type(root: Node, type_name: String) -> Node:
 	return null
 
 func _collect_animation_players(root: Node) -> void:
+	if root == character_root and root.has_meta("prepared_player_paths"):
+		for path in root.get_meta("prepared_player_paths"):
+			var candidate := root.get_node_or_null(NodePath(path)) as AnimationPlayer
+			if candidate != null:
+				animation_players.append(candidate)
+		return
 	if root is AnimationPlayer:
 		animation_players.append(root as AnimationPlayer)
 	for child in root.get_children():

@@ -214,14 +214,14 @@ func apply_visibility() -> void:
 	var bow = nodes.get("bow")
 	var quiver = nodes.get("quiver")
 	if sword_hand != null and is_instance_valid(sword_hand):
-		sword_hand.visible = active_weapon == "sword" and sword_drawn
+		_set_slot_visible("sword_hand", active_weapon == "sword" and sword_drawn)
 	if sword_back != null and is_instance_valid(sword_back):
-		sword_back.visible = active_weapon == "bow" or not sword_drawn
+		_set_slot_visible("sword_back", active_weapon == "bow" or not sword_drawn)
 	if bow != null and is_instance_valid(bow):
-		bow.visible = active_weapon == "bow" and bow_drawn
+		_set_slot_visible("bow", active_weapon == "bow" and bow_drawn)
 	_set_slot_visible("bow_back", active_weapon != "bow" or not bow_drawn)
 	if quiver != null and is_instance_valid(quiver):
-		quiver.visible = true
+		_set_slot_visible("quiver", true)
 
 func emit_changed() -> void:
 	apply_visibility()
@@ -229,5 +229,5 @@ func emit_changed() -> void:
 
 func _set_slot_visible(slot: String, value: bool) -> void:
 	var node: Node3D = nodes.get(slot) as Node3D
-	if is_instance_valid(node):
+	if is_instance_valid(node) and node.visible != value:
 		node.visible = value

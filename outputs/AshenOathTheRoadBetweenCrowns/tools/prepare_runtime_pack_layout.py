@@ -61,6 +61,11 @@ def compile_layout():
         includes[name].update({"data/runtime_dialogue_index.json", "data/runtime_dialogue/*.json"})
     includes["Runtime Pack Opening"].add("assets_external/environment/prepared/greyfen_*.res")
     includes["Runtime Pack Campaign"].add("assets_external/environment/prepared/*.res")
+    for owner, name in (("opening", "Runtime Pack Opening"), ("characters", "Runtime Pack Characters"), ("monsters", "Runtime Pack Monsters")):
+        includes[name].add(f"assets_external/characters_prepared/{owner}/*.scn")
+    includes["Runtime Pack Opening"].add("assets_external/characters_prepared/animations/*.res")
+    for name in ROOT_NAMES:
+        includes[name].add("data/prepared_actors.json")
 
     # Expand only the broad zone-script/scene selectors; their ownership differs.
     for name in sections:
@@ -125,8 +130,11 @@ def compile_layout():
             exclusions.update(transfers)
             exclusions.update({"data/dialogue.json", "data/campaign_dialogue.json", "data/interaction_scenes.json"})
             exclusions.add("assets_external/environment/prepared/*")
+            exclusions.add("assets_external/characters_prepared/*")
         if name == "Runtime Pack Campaign":
             exclusions.add("assets_external/environment/prepared/greyfen_*")
+        if name in {"Runtime Pack Characters", "Runtime Pack Monsters"}:
+            exclusions.add("assets_external/characters_prepared/animations/*")
         config[section]["include_filter"] = json.dumps(",".join(sorted(includes[name])))
         config[section]["export_files"] = "PackedStringArray(" + ", ".join(json.dumps(p) for p in sorted(files[name])) + ")"
         config[section]["exclude_filter"] = json.dumps(",".join(sorted(exclusions)))

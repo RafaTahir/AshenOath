@@ -60,7 +60,11 @@ func _process_modification() -> void:
 	current_pitch = lerpf(current_pitch, emotion_pitch + nod + current_speech * 0.012, weight)
 	current_roll = lerpf(current_roll, emotion_roll, weight)
 	var base := skeleton.get_bone_pose_rotation(head_index)
-	skeleton.set_bone_pose_rotation(head_index, base * Quaternion.from_euler(Vector3(current_pitch, current_yaw, current_roll)))
+	var target_rotation := base * Quaternion.from_euler(Vector3(current_pitch, current_yaw, current_roll))
+	if base != target_rotation:
+		skeleton.set_bone_pose_rotation(head_index, target_rotation)
 	if jaw_index >= 0:
 		var jaw_base := skeleton.get_bone_pose_rotation(jaw_index)
-		skeleton.set_bone_pose_rotation(jaw_index, jaw_base * Quaternion(Vector3.RIGHT, current_speech * 0.10))
+		var jaw_rotation := jaw_base * Quaternion(Vector3.RIGHT, current_speech * 0.10)
+		if jaw_base != jaw_rotation:
+			skeleton.set_bone_pose_rotation(jaw_index, jaw_rotation)

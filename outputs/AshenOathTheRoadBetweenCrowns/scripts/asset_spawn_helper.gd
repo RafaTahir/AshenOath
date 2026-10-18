@@ -6,7 +6,10 @@ const CharacterRoleSpec = preload("res://scripts/character_role_spec.gd")
 const CharacterRoleContract = preload("res://scripts/character_role_contract.gd")
 const CharacterAnimationFusion = preload("res://scripts/character_animation_fusion.gd")
 const SharedResourceRequests = preload("res://scripts/shared_resource_requests.gd")
+const PreparedActorCatalog = preload("res://scripts/prepared_actor_catalog.gd")
+const CharacterNodeManifest = preload("res://scripts/character_node_manifest.gd")
 var resource_requests = SharedResourceRequests.acquire()
+var building_prepared_assets := false
 
 var database
 var mesh_cache: Dictionary = {}
@@ -39,6 +42,8 @@ func request_role_resources(role_names: Array) -> Error:
 	for role in role_names:
 		var entry: Dictionary = database.get_asset_for_role(str(role))
 		var path := str(entry.get("path", ""))
+		var prepared := PreparedActorCatalog.entry(str(role), path) if not building_prepared_assets else {}
+		path = str(prepared.get("path", path))
 		paths.append(path)
 	return request_resource_paths(paths)
 
@@ -94,6 +99,7 @@ func clear_runtime_caches() -> void:
 	resource_cache.clear()
 	repaired_mesh_cache.clear()
 	prepared_animation_libraries.clear()
+	preload("res://scripts/character_identity_profile.gd").clear_material_cache()
 
 func clear_runtime_diagnostics() -> void:
 	runtime_role_diagnostics.clear()
@@ -138,12 +144,18 @@ func _spawn_from_entry(entry: Dictionary, role_name: String, fallback_category: 
 		_record_runtime_role_use(role_name, fallback_category, path, runtime_policy)
 	if path != "" and (ResourceLoader.exists(path) or FileAccess.file_exists(path)):
 		var profile_started := Time.get_ticks_usec()
-		var resource = _load_cached_resource(path)
+		var prepared := PreparedActorCatalog.entry(role_name, path, variant_seed) if not building_prepared_assets else {}
+		var selected_path := str(prepared.get("path", path))
+		var resource = _load_cached_resource(selected_path)
+		if not prepared.is_empty() and resource == null:
+			push_error("Required prepared actor is missing: %s (%s)" % [role_name, selected_path])
+			return null
 		var loaded_usec := Time.get_ticks_usec()
 		var spawned: Node3D = _instantiate_obj(path) if _is_forest_tree(path) else _instantiate_resource(resource)
 		if spawned != null:
 			var instantiated_usec := Time.get_ticks_usec()
-			spawned = _compose_player_body(spawned, path, role_name, variant_seed)
+			if prepared.is_empty():
+				spawned = _compose_player_body(spawned, path, role_name, variant_seed)
 			var composed_usec := Time.get_ticks_usec()
 			spawned.name = role_name
 			_apply_runtime_policy_metadata(spawned, role_name, runtime_policy, path)
@@ -841,12 +853,21 @@ func _finalize_asset_root(root: Node3D, role_name: String = "") -> void:
 	])
 
 func _prepare_spawned_asset(root: Node3D, path: String, role_name: String = "", category: String = "") -> void:
-	if path.get_extension().to_lower() != "obj":
+	var prepared := str(root.get_meta("prepared_actor_source", "")) == path
+	if prepared:
+		# Assemblies share immutable geometry, never role proportions or transforms.
+		root.transform = root.get_meta("prepared_source_transform", Transform3D.IDENTITY)
+		root.set_meta("character_normalized", false)
 		_normalize_scene_bounds(root, _target_height_for_role(role_name, path))
-	_apply_safe_materials(root, path)
-	_apply_universal_character_material_budget(root, path)
+		if bool(root.get_meta("character_composite", false)):
+			root.set_meta("character_identity", "kael" if role_name in ["player_kael", "player_human"] else ("anwen" if role_name in ["sister_anwen", "sister_anwen_human"] else role_name.to_lower()))
+	else:
+		if path.get_extension().to_lower() != "obj":
+			_normalize_scene_bounds(root, _target_height_for_role(role_name, path))
+		_apply_safe_materials(root, path)
+		_apply_universal_character_material_budget(root, path)
 	_finalize_asset_root(root, role_name)
-	if CharacterAnimationFusion.is_shared_body(path):
+	if not prepared and CharacterAnimationFusion.is_shared_body(path):
 		# Retain both the imported source and immutable retargeted variants with
 		# this helper; actor AnimationPlayers own independent playback state.
 		var library_source: Resource = _load_cached_resource(CharacterAnimationFusion.ANIMATION_LIBRARY_PATH)
@@ -894,6 +915,11 @@ func _apply_universal_character_material_budget(root: Node3D, path: String) -> v
 			mesh_instance.set_meta("universal_material_budget", "normal_maps_collapsed")
 
 func _has_skeleton(root: Node) -> bool:
+	if root.has_meta("prepared_skeleton_paths"):
+		for path in root.get_meta("prepared_skeleton_paths"):
+			if root.get_node_or_null(NodePath(path)) is Skeleton3D:
+				return true
+		return false
 	if root is Skeleton3D:
 		return true
 	for child in root.get_children():
@@ -1097,6 +1123,8 @@ func apply_normalized_scale(root: Node3D, multiplier: float) -> void:
 	root.set_meta("character_role_scale_applied", true)
 
 func _calculate_node_bounds(root: Node3D) -> AABB:
+	if root.has_meta("prepared_source_bounds"):
+		return root.get_meta("prepared_source_bounds") as AABB
 	var state: Dictionary = {"has_bounds": false, "bounds": AABB()}
 	_accumulate_node_bounds(root, Transform3D.IDENTITY, state)
 	if bool(state.get("has_bounds", false)):
@@ -1132,6 +1160,8 @@ func _mat_with_roughness(color: Color, roughness: float) -> StandardMaterial3D:
 	return material
 
 func _collect_meshes(root: Node) -> Array[MeshInstance3D]:
+	if root is Node3D and root.has_meta("prepared_mesh_paths"):
+		return CharacterNodeManifest.meshes(root as Node3D)
 	var results: Array[MeshInstance3D] = []
 	if root is MeshInstance3D:
 		results.append(root)

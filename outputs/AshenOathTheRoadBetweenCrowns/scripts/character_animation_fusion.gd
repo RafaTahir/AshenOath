@@ -52,12 +52,17 @@ static func attach_shared_library(root: Node3D, source_resource: Resource = null
 			# its independent clock, blend state and track bindings. No actor or
 			# skeleton reference is retained by this helper-owned resource cache.
 			var skeleton_path := _relative_path(rig_root, target_skeleton) if target_skeleton != null else ""
+			var bone_signature: Array = []
+			if target_skeleton != null:
+				for index in target_skeleton.get_bone_count():
+					bone_signature.append([target_skeleton.get_bone_name(index), target_skeleton.get_bone_parent(index)])
+			var binding_key := skeleton_path + "|" + var_to_str(bone_signature)
 			var source_variants: Dictionary = prepared_libraries.get(source_library, {})
-			var retargeted_library: AnimationLibrary = source_variants.get(skeleton_path)
+			var retargeted_library: AnimationLibrary = source_variants.get(binding_key)
 			if retargeted_library == null:
 				retargeted_library = source_library.duplicate(true) as AnimationLibrary
 				_retarget_library(retargeted_library, rig_root, target_skeleton)
-				source_variants[skeleton_path] = retargeted_library
+				source_variants[binding_key] = retargeted_library
 				prepared_libraries[source_library] = source_variants
 			target.add_animation_library("", retargeted_library)
 		if first_target == null:
