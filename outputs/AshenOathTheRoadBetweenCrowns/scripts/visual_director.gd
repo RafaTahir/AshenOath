@@ -538,14 +538,8 @@ func _lighting_profile(zone_id: String) -> Dictionary:
 func _build_sky_layer() -> void:
 	sky_dome = MeshInstance3D.new()
 	sky_dome.name = "SkyGradientDome"
-	var dome_mesh = SphereMesh.new()
-	dome_mesh.radius = 1.0
-	dome_mesh.height = 2.0
-	dome_mesh.radial_segments = 32
-	dome_mesh.rings = 16
-	sky_dome.mesh = dome_mesh
+	# The Environment owns the gradient; retain only the legacy transform anchor.
 	sky_dome.scale = Vector3(420, 210, 420)
-	sky_dome.material_override = _sky_material(Color(0.040, 0.044, 0.052))
 	sky_dome.visible = false
 	add_child(sky_dome)
 
@@ -608,6 +602,11 @@ func _build_sky_backdrop() -> void:
 	authored_sky_material.energy_multiplier = 0.82
 	authored_sky = Sky.new()
 	authored_sky.sky_material = authored_sky_material
+
+func _build_legacy_sky_overlay() -> void:
+	# Retained for explicit authoring use, never constructed by production setup.
+	if sky_canvas != null:
+		return
 	sky_canvas = CanvasLayer.new()
 	sky_canvas.name = "SkyBackdropLayer"
 	# CanvasLayer is retained for diagnostics only. The Compatibility renderer
@@ -702,7 +701,7 @@ func _reduced_motion() -> bool:
 	return reduced_motion
 
 func _set_sky_colors(dome_color: Color, sun_color: Color, cloud_color: Color) -> void:
-	if sky_dome != null:
+	if sky_dome != null and sky_dome.mesh != null:
 		sky_dome.material_override = _sky_material(dome_color)
 	if sun_disc != null:
 		sun_disc.material_override = _emissive_billboard_material(sun_color, 1.45, 0.90)

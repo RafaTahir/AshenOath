@@ -1528,6 +1528,8 @@ func _zone_state_signature(zone_id: String = current_zone_id) -> int:
 	])
 
 func _begin_zone_world_reads(zone_id: String, reset: bool = true) -> void:
+	if asset_helper != null:
+		asset_helper.set_zone_scope(zone_id)
 	story_state.world_reads.begin(zone_id, reset)
 	quests.world_reads.begin(zone_id, reset)
 
@@ -1634,6 +1636,8 @@ func _remove_root_from_route_cache(root: Node) -> void:
 
 func _trim_route_zone_cache(preferred_ids: Array) -> void:
 	zone_residency._trim_route_zone_cache(preferred_ids)
+	if asset_helper != null:
+		asset_helper.retain_zone_scopes([current_zone_id] + route_zone_cache.keys())
 
 func _set_zone_collision_enabled(node: Node, enabled: bool) -> void:
 	zone_residency._set_zone_collision_enabled(node, enabled)
@@ -1739,6 +1743,8 @@ func finalize_resource_shutdown() -> void:
 	if runtime_packs != null and runtime_packs.has_method("clear_requests"):
 		runtime_packs.clear_requests()
 	CombatFeedback.clear_runtime_caches()
+	preload("res://scripts/prepared_zone_geometry.gd").clear()
+	preload("res://scripts/interior_occlusion.gd").clear()
 	# These arrays are build-time ownership, not runtime state. They retain
 	# queued marker MeshInstance3D nodes and shared materials after their zone
 	# has retired, which keeps renderer instances alive outside the scene tree.
@@ -7361,6 +7367,9 @@ func _clear_environment_batch_buffers() -> void:
 	house_batch_data.clear()
 	house_module_batch_data.clear()
 
+func _upload_static_batch(instance: MultiMeshInstance3D, transforms: Array, colors: Array = []) -> void:
+	preload("res://scripts/static_multimesh_upload.gd").upload(instance.multimesh, transforms, colors, preload("res://scripts/performance_comparison_options.gd").enabled("static_bounds"))
+
 func _flush_environment_batches() -> void:
 	var terrain_groups: Dictionary = {}
 	for item in terrain_patch_batch_data:
@@ -7388,10 +7397,14 @@ func _flush_environment_batches() -> void:
 		terrain_batch.material_override = terrain_group.material
 		zone_root.add_child(terrain_batch)
 	var visual_groups: Dictionary = {}
+	var separate_alpha := preload("res://scripts/performance_comparison_options.gd").enabled("alpha_batches")
 	for item in visual_box_batch_data:
 		var color: Color = item.color
 		var use_instance_colors: bool = current_zone_id != "record_hall"
 		var visual_key := "instance_colors" if use_instance_colors else color.to_html(true)
+		var transparent := separate_alpha and color.a < 0.999
+		if transparent:
+			visual_key = "alpha_" + visual_key
 		var night_only: bool = item.node.get_meta("night_only_geometry", false)
 		if night_only:
 			visual_key = "night_" + visual_key
@@ -7406,6 +7419,9 @@ func _flush_environment_batches() -> void:
 				material = material_cache["detail_instance_colors"]
 			else:
 				material = _mat(color)
+			if transparent:
+				material = material.duplicate() as StandardMaterial3D
+				material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 			visual_groups[visual_key] = {"material": material, "colors": use_instance_colors, "night_only": night_only, "items": []}
 		visual_groups[visual_key].items.append(item)
 	for visual_key in visual_groups:
@@ -7414,16 +7430,19 @@ func _flush_environment_batches() -> void:
 		var detail_batch := _make_multimesh_batch("AuthoredDetailBatch_%s" % visual_key, shared_box_mesh, items.size(), group.material, group.colors)
 		if group.night_only:
 			detail_batch.set_meta("night_only_geometry", true)
+		var detail_transforms: Array = []
+		var detail_colors: Array = []
 		for i in range(items.size()):
 			var marker: Node3D = items[i].node
 			var detail_size: Vector3 = items[i].size
-			detail_batch.multimesh.set_instance_transform(i, Transform3D(marker.basis.scaled(detail_size), marker.position))
+			detail_transforms.append(Transform3D(marker.basis.scaled(detail_size), marker.position))
 			if group.colors:
-				detail_batch.multimesh.set_instance_color(i, items[i].color)
+				detail_colors.append(items[i].color)
 			# Like terrain markers, these nodes have no runtime purpose after the
 			# batched transform has been copied. Defer removal for the same
 			# scene-tree/renderer ownership reason as terrain markers.
 			marker.queue_free()
+		_upload_static_batch(detail_batch, detail_transforms, detail_colors)
 	for house_key in house_batch_data:
 		var house_group: Dictionary = house_batch_data[house_key]
 		var house_transforms: Array = house_group.transforms
@@ -7439,9 +7458,7 @@ func _flush_environment_batches() -> void:
 		if str(house_key).begins_with("emissive_window:"):
 			house_batch.set_meta("night_window_material", house_group.material)
 			house_batch.set_meta("night_window_color", house_group.material.albedo_color)
-		for transform_index in range(house_transforms.size()):
-			house_batch.multimesh.set_instance_transform(transform_index, house_transforms[transform_index])
-			house_batch.multimesh.set_instance_color(transform_index, house_group.colors[transform_index])
+		_upload_static_batch(house_batch, house_transforms, house_group.colors)
 	for batch_key in house_module_batch_data:
 		var module_group: Dictionary = house_module_batch_data[batch_key]
 		var module_transforms: Array = module_group.transforms
@@ -7456,16 +7473,14 @@ func _flush_environment_batches() -> void:
 		# Preserve each imported material group rather than replacing the
 		# entire module with the generic static-batch material.
 		module_batch.material_override = null
-		for index in range(module_transforms.size()):
-			module_batch.multimesh.set_instance_transform(index, module_transforms[index])
+		_upload_static_batch(module_batch, module_transforms)
 	for batch_key in prop_batch_data:
 		var entry: Dictionary = prop_batch_data[batch_key]
 		var transforms: Array = entry.get("transforms", [])
 		if transforms.is_empty():
 			continue
 		var batch := _make_multimesh_batch("WorldPropBatch_%s" % str(batch_key), shared_box_mesh, transforms.size(), entry.get("material"))
-		for i in range(transforms.size()):
-			batch.multimesh.set_instance_transform(i, transforms[i])
+		_upload_static_batch(batch, transforms)
 	if not tree_batch_data.is_empty() and not _flush_authored_tree_assets():
 		var trunk_mesh := BoxMesh.new()
 		trunk_mesh.size = Vector3(0.42, 1.8, 0.42)
@@ -7478,12 +7493,17 @@ func _flush_environment_batches() -> void:
 		var crown_material := _mat(Color.WHITE)
 		crown_material.vertex_color_use_as_albedo = true
 		var crowns := _make_multimesh_batch("TreeCrownBatch", crown_mesh, tree_batch_data.size(), crown_material, true)
+		var trunk_transforms: Array = []
+		var crown_transforms: Array = []
+		var crown_colors: Array = []
 		for i in range(tree_batch_data.size()):
-			trunks.multimesh.set_instance_transform(i, tree_batch_data[i].trunk)
+			trunk_transforms.append(tree_batch_data[i].trunk)
 			var crown_transform: Transform3D = tree_batch_data[i].crown
 			crown_transform.basis = crown_transform.basis.scaled(Vector3(1.10, 0.72, 1.10))
-			crowns.multimesh.set_instance_transform(i, crown_transform)
-			crowns.multimesh.set_instance_color(i, tree_batch_data[i].color)
+			crown_transforms.append(crown_transform)
+			crown_colors.append(tree_batch_data[i].color)
+		_upload_static_batch(trunks, trunk_transforms)
+		_upload_static_batch(crowns, crown_transforms, crown_colors)
 	if not deadfall_batch_data.is_empty():
 		var deadfall_mesh := CylinderMesh.new()
 		deadfall_mesh.top_radius = 0.16
@@ -7491,8 +7511,7 @@ func _flush_environment_batches() -> void:
 		deadfall_mesh.height = 3.4
 		deadfall_mesh.radial_segments = 7
 		var deadfalls := _make_multimesh_batch("DeadfallBatch", deadfall_mesh, deadfall_batch_data.size(), world_materials.get_material("timber", str(settings.settings.get("quality_preset", "balanced")), Color(0.34, 0.25, 0.17), 0.0, false))
-		for i in range(deadfall_batch_data.size()):
-			deadfalls.multimesh.set_instance_transform(i, deadfall_batch_data[i])
+		_upload_static_batch(deadfalls, deadfall_batch_data)
 	environment_batches_flushed = true
 
 func _flush_authored_tree_assets() -> bool:
@@ -7516,32 +7535,14 @@ func _flush_authored_tree_assets() -> bool:
 		var role_items: Array = grouped_items[role]
 		if role_items.is_empty():
 			continue
-		var preview := _make_role_visual(str(role), "environment", Vector3.ONE)
-		if preview == null:
+		var source: Dictionary = asset_helper.forest_tree_source(str(role))
+		if source.is_empty():
 			return false
-		var mesh_nodes := preview.find_children("*", "MeshInstance3D", true, false)
-		if preview is MeshInstance3D:
-			mesh_nodes.push_front(preview)
-		var source_mesh: Mesh = null
-		var source_material: Material = null
-		for raw_node in mesh_nodes:
-			var source := raw_node as MeshInstance3D
-			if source == null or source.mesh == null:
-				continue
-			source_mesh = source.mesh
-			source_material = source.material_override
-			if source_material == null and source_mesh.get_surface_count() == 1:
-				source_material = source_mesh.surface_get_material(0)
-			break
-		preview.free()
-		if source_mesh == null:
-			return false
-		var source_bounds := source_mesh.get_aabb()
-		if source_bounds.size.y <= 0.001:
-			return false
-		var source_scale := 6.0 / source_bounds.size.y
-		var source_normalization := Transform3D(Basis.IDENTITY.scaled(Vector3.ONE * source_scale),
-			Vector3(0, -source_bounds.position.y * source_scale, 0))
+		var source_mesh: Mesh = source.mesh
+		var source_material: Material = source.material
+		var source_bounds: AABB = source.bounds
+		var source_scale: float = source.scale
+		var source_normalization: Transform3D = source.normalization
 		if source_material == null and source_mesh.get_surface_count() == 1:
 			source_material = world_materials.get_material("forest_ground", str(settings.settings.get("quality_preset", "balanced")), Color(0.08, 0.18, 0.09), 0.0, false)
 		var trees := _make_multimesh_batch("AuthoredTreeBatch_%s" % str(role).replace(":", "_"), source_mesh, role_items.size(), source_material)
@@ -7550,6 +7551,7 @@ func _flush_authored_tree_assets() -> bool:
 		camera_clearance.collision_layer = 1 << 6
 		camera_clearance.collision_mask = 0
 		zone_root.add_child(camera_clearance)
+		var tree_transforms: Array = []
 		for index in range(role_items.size()):
 			var item: Dictionary = role_items[index]
 			var tree_position: Vector3 = item.get("asset_position", Vector3.ZERO)
@@ -7557,7 +7559,7 @@ func _flush_authored_tree_assets() -> bool:
 			var tree_yaw: float = float(item.get("asset_yaw", 0.0))
 			var basis := Basis.from_euler(Vector3(0.0, tree_yaw, 0.0)).scaled(tree_scale)
 			var tree_transform := Transform3D(basis, tree_position) * source_normalization
-			trees.multimesh.set_instance_transform(index, tree_transform)
+			tree_transforms.append(tree_transform)
 			# The orbit must stop before the rendered crown, not only its narrow
 			# walking collider. This layer is shared with authored camera roofs.
 			var clearance_shape := CollisionShape3D.new()
@@ -7566,6 +7568,7 @@ func _flush_authored_tree_assets() -> bool:
 			clearance_shape.shape = clearance_box
 			clearance_shape.transform = Transform3D(Basis(Vector3.UP, tree_yaw), tree_transform * source_bounds.get_center())
 			camera_clearance.add_child(clearance_shape)
+		_upload_static_batch(trees, tree_transforms)
 		created_batch = true
 	return created_batch
 

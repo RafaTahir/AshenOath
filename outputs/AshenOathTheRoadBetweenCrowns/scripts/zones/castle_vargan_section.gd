@@ -351,6 +351,7 @@ func _make_record_hall_vault(context: ZoneBuildContext) -> void:
 	vault_ceiling.material_override = ceiling_material
 	vault_ceiling.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	context.add_node(vault_ceiling)
+	preload("res://scripts/interior_occlusion.gd").attach(vault_ceiling)
 	var vault_walls := MeshInstance3D.new()
 	vault_walls.name = "RecordHallVaultWalls"
 	vault_walls.mesh = preload("res://scripts/prepared_zone_geometry.gd").mesh("record_walls")
@@ -359,6 +360,7 @@ func _make_record_hall_vault(context: ZoneBuildContext) -> void:
 	vault_walls.material_override = wall_material
 	vault_walls.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	context.add_node(vault_walls)
+	preload("res://scripts/interior_occlusion.gd").attach(vault_walls)
 	_make_record_hall_ribs(context)
 	var floor_node := MeshInstance3D.new()
 	floor_node.name = "RecordHallStoneFloor"

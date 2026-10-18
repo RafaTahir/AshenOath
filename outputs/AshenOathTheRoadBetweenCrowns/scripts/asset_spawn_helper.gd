@@ -10,6 +10,43 @@ const PreparedActorCatalog = preload("res://scripts/prepared_actor_catalog.gd")
 const CharacterNodeManifest = preload("res://scripts/character_node_manifest.gd")
 var resource_requests = SharedResourceRequests.acquire()
 var building_prepared_assets := false
+var tree_source_cache: Dictionary = {}
+var _zone_scope := "shared"
+var _path_owners: Dictionary = {}
+
+func set_zone_scope(zone_id: String) -> void:
+	_zone_scope = zone_id if not zone_id.is_empty() else "shared"
+
+func _record_asset_use(path: String) -> void:
+	if not _path_owners.has(path):
+		_path_owners[path] = {}
+	_path_owners[path][_zone_scope] = true
+
+func retain_zone_scopes(zone_ids: Array) -> void:
+	var keep := {"shared": true}
+	for id in zone_ids:
+		keep[str(id)] = true
+	for path in _path_owners.keys():
+		var owners: Dictionary = _path_owners[path]
+		for id in owners.keys():
+			if not keep.has(id):
+				owners.erase(id)
+		if not owners.is_empty() or pending_role_resources.has(path):
+			continue
+		# Only cache references retire. Live/cached scenes keep their own meshes,
+		# textures and animation libraries; no renderer binding is detached here.
+		resource_cache.erase(path)
+		mesh_cache.erase(path)
+		mesh_cache.erase(path + ":runtime_tree")
+		tree_source_cache.erase(path)
+		material_cache.erase(path)
+		material_cache.erase("fallback:" + path)
+		for source in repaired_mesh_cache.keys():
+			var variants: Dictionary = repaired_mesh_cache[source]
+			variants.erase(path)
+			if variants.is_empty():
+				repaired_mesh_cache.erase(source)
+		_path_owners.erase(path)
 
 var database
 var mesh_cache: Dictionary = {}
@@ -50,6 +87,7 @@ func request_role_resources(role_names: Array) -> Error:
 func request_resource_paths(paths: Array) -> Error:
 	for raw_path in paths:
 		var path := str(raw_path)
+		_record_asset_use(path)
 		if path.is_empty() or not ResourceLoader.exists(path):
 			resource_prewarm_error = path + ": resource not found"
 			return ERR_FILE_NOT_FOUND
@@ -98,6 +136,8 @@ func clear_runtime_caches() -> void:
 	material_cache.clear()
 	resource_cache.clear()
 	repaired_mesh_cache.clear()
+	tree_source_cache.clear()
+	_path_owners.clear()
 	prepared_animation_libraries.clear()
 	preload("res://scripts/character_identity_profile.gd").clear_material_cache()
 
@@ -489,6 +529,7 @@ func _instantiate_source_file(path: String) -> Node3D:
 	return null
 
 func _load_cached_resource(path: String):
+	_record_asset_use(path)
 	if resource_cache.has(path):
 		return resource_cache[path]
 	if not ResourceLoader.exists(path):
@@ -554,7 +595,32 @@ func get_forest_tree_mesh(path: String) -> ArrayMesh:
 		return null
 	return _load_forest_tree_mesh(path)
 
+func forest_tree_source(role: String) -> Dictionary:
+	_ensure_database()
+	var entry: Dictionary = database.get_visual_asset_for_role(role)
+	var path := str(entry.get("path", ""))
+	if path.is_empty():
+		entry = database.get_asset_for_role(role)
+		path = str(entry.get("path", ""))
+	if not _is_forest_tree(path):
+		return {}
+	_record_asset_use(path)
+	if tree_source_cache.has(path):
+		return tree_source_cache[path]
+	var mesh := _load_forest_tree_mesh(path)
+	if mesh == null:
+		return {}
+	var bounds := mesh.get_aabb()
+	if bounds.size.y <= 0.001:
+		return {}
+	var scale_value := 6.0 / bounds.size.y
+	var material: Material = mesh.surface_get_material(0) if mesh.get_surface_count() == 1 else null
+	var result := {"mesh": mesh, "material": material, "bounds": bounds, "scale": scale_value, "normalization": Transform3D(Basis.IDENTITY.scaled(Vector3.ONE * scale_value), Vector3(0, -bounds.position.y * scale_value, 0))}
+	tree_source_cache[path] = result
+	return result
+
 func _load_forest_tree_mesh(path: String) -> ArrayMesh:
+	_record_asset_use(path)
 	var key := path + ":runtime_tree"
 	if mesh_cache.has(key):
 		return mesh_cache[key]
@@ -568,6 +634,7 @@ func _load_forest_tree_mesh(path: String) -> ArrayMesh:
 	return mesh
 
 func _load_obj_mesh(path: String) -> ArrayMesh:
+	_record_asset_use(path)
 	if mesh_cache.has(path):
 		return mesh_cache[path]
 	var imported := _load_cached_resource(path) as ArrayMesh

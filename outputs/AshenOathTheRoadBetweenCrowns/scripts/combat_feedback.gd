@@ -4,9 +4,16 @@ static var _mesh_cache: Dictionary = {}
 static var _material_cache: Dictionary = {}
 static var _impact_pools: Dictionary = {}
 static var _ground_ring_pool: Array = []
+static var _transient_pools: Dictionary = {}
+const IDLE_EFFECT_LIMIT := 8
 static var reduce_flashes := false
 
 static func clear_runtime_caches() -> void:
+	for pool in _transient_pools.values():
+		for node in pool:
+			if is_instance_valid(node):
+				_free_feedback_node(node)
+	_transient_pools.clear()
 	# Feedback pools are static because combat effects are reused between hits,
 	# but static ownership outlives a retired zone. Release pooled nodes before
 	# the host clears imported materials and exits its scene tree.
@@ -25,6 +32,7 @@ static func clear_runtime_caches() -> void:
 static func _free_feedback_node(node: Node) -> void:
 	if node == null or not is_instance_valid(node):
 		return
+	_kill_feedback_tween(node)
 	for child in node.get_children().duplicate():
 		_free_feedback_node(child)
 	if node is MeshInstance3D:
@@ -39,6 +47,66 @@ static func _free_feedback_node(node: Node) -> void:
 		batch.material_override = null
 		batch.multimesh = null
 	node.free()
+
+static func _acquire_transient(parent: Node3D, key: String, mesh_root: bool = false) -> Node3D:
+	var pool: Array = _transient_pools.get(key, [])
+	var root: Node3D
+	while not pool.is_empty() and root == null:
+		var candidate = pool.pop_back()
+		if is_instance_valid(candidate) and not candidate.is_queued_for_deletion():
+			root = candidate
+	_transient_pools[key] = pool
+	if root == null:
+		root = MeshInstance3D.new() if mesh_root else Node3D.new()
+	_kill_feedback_tween(root)
+	root.set_meta("feedback_generation", int(root.get_meta("feedback_generation", 0)) + 1)
+	if root.get_parent() != parent:
+		if root.get_parent() != null:
+			root.get_parent().remove_child(root)
+		parent.add_child(root)
+	root.transform = Transform3D.IDENTITY
+	root.visible = true
+	root.process_mode = Node.PROCESS_MODE_INHERIT
+	return root
+
+static func _effect_mesh(root: Node3D, id: String) -> MeshInstance3D:
+	var mesh := root.get_node_or_null(NodePath(id)) as MeshInstance3D
+	if mesh == null:
+		mesh = MeshInstance3D.new()
+		mesh.name = id
+		root.add_child(mesh)
+	mesh.transform = Transform3D.IDENTITY
+	mesh.visible = true
+	mesh.process_mode = Node.PROCESS_MODE_INHERIT
+	return mesh
+
+static func _release_transient(root: Node3D, key: String, generation: int) -> void:
+	if not is_instance_valid(root) or root.is_queued_for_deletion() or int(root.get_meta("feedback_generation", -1)) != generation:
+		return
+	root.visible = false
+	root.set_meta("feedback_tween", null)
+	var pool: Array = _transient_pools.get(key, [])
+	if root in pool:
+		return
+	if pool.size() >= IDLE_EFFECT_LIMIT:
+		root.queue_free()
+	else:
+		pool.append(root)
+	_transient_pools[key] = pool
+
+static func _kill_feedback_tween(node: Node) -> void:
+	if not node.has_meta("feedback_tween"):
+		return
+	var tween := node.get_meta("feedback_tween") as Tween
+	if tween != null and tween.is_valid():
+		tween.kill()
+	node.set_meta("feedback_tween", null)
+
+static func _owned_feedback_tween(node: Node) -> Tween:
+	_kill_feedback_tween(node)
+	var tween := node.create_tween()
+	node.set_meta("feedback_tween", tween)
+	return tween
 
 static func impact_burst(parent: Node3D, pos: Vector3, heavy: bool, color: Color = Color(1.0, 0.66, 0.24)) -> void:
 	if parent == null or reduce_flashes:
@@ -59,7 +127,7 @@ static func impact_burst(parent: Node3D, pos: Vector3, heavy: bool, color: Color
 		shard.position = Vector3(randf_range(-0.08, 0.08), randf_range(-0.04, 0.08), randf_range(-0.08, 0.08))
 		shard.rotation_degrees = Vector3(randf_range(-35, 35), float(i) * (360.0 / float(count)), randf_range(-45, 45))
 		shard.material_override = _emissive(color, 1.15 if heavy else 0.9)
-	var tween = root.create_tween()
+	var tween := _owned_feedback_tween(root)
 	tween.tween_property(root, "scale", Vector3.ONE * (1.7 if heavy else 1.25), 0.14)
 	tween.parallel().tween_property(root, "position:y", root.position.y + 0.12, 0.14)
 	tween.tween_callback(func(): _release_impact_root(root, key))
@@ -72,7 +140,7 @@ static func ground_ring(parent: Node3D, pos: Vector3, color: Color, radius: floa
 	ring.scale = Vector3(radius, 0.014, radius)
 	ring.material_override = _mat(color, 0.84)
 	ring.visible = true
-	var tween = ring.create_tween()
+	var tween := _owned_feedback_tween(ring)
 	if reduce_flashes:
 		ring.material_override = _steady_material(color)
 		tween.tween_interval(maxf(life, 0.30))
@@ -84,36 +152,37 @@ static func ground_ring(parent: Node3D, pos: Vector3, color: Color, radius: floa
 static func beam_endpoint(parent: Node3D, pos: Vector3, direction: Vector3, rich: bool = true) -> void:
 	if parent == null:
 		return
-	var root := Node3D.new()
+	var key := "beam:" + var_to_str([rich, reduce_flashes])
+	var root := _acquire_transient(parent, key)
+	var generation := int(root.get_meta("feedback_generation"))
 	root.name = "OathfireImpactEndpoint"
 	root.set_meta("visual_name", "OathfireImpactEndpoint")
 	root.position = parent.to_local(pos)
-	parent.add_child(root)
 	if not reduce_flashes:
-		var flare := MeshInstance3D.new()
+		var flare := _effect_mesh(root, "OathfireEndpointFlare")
 		flare.name = "OathfireEndpointFlare"
 		flare.mesh = _cached_sphere_mesh("beam_flare_rich" if rich else "beam_flare_potato", 0.16 if rich else 0.10)
 		flare.material_override = _emissive(Color(0.70, 0.96, 1.0), 2.2)
-		root.add_child(flare)
-	var ring := MeshInstance3D.new()
+	var ring := _effect_mesh(root, "OathfireEndpointRing")
 	ring.name = "OathfireEndpointRing"
 	ring.mesh = _cached_torus_mesh("beam_ring_rich" if rich else "beam_ring_potato", 0.15 if rich else 0.10, 0.23 if rich else 0.16, 8, 18)
 	ring.rotation = Vector3(PI * 0.5, 0.0, 0.0)
 	ring.material_override = _emissive(Color(0.24, 0.74, 1.0), 1.4)
-	root.add_child(ring)
 	if direction.length_squared() > 0.01:
 		root.look_at(root.global_position + direction.normalized(), Vector3.UP)
-	var tween := root.create_tween()
+	var tween := _owned_feedback_tween(root)
 	if reduce_flashes:
 		tween.tween_interval(0.36)
 	else:
 		tween.tween_property(root, "scale", Vector3.ONE * (1.65 if rich else 1.30), 0.16)
-	tween.tween_callback(root.queue_free)
+	tween.tween_callback(func(): _release_transient(root, key, generation))
 
 static func block_flash(parent: Node3D, pos: Vector3, parry: bool, contact_override: Vector3 = Vector3.ZERO) -> void:
 	if parent == null:
 		return
-	var flash = MeshInstance3D.new()
+	var key := "block:" + var_to_str([parry, reduce_flashes])
+	var flash := _acquire_transient(parent, key, true) as MeshInstance3D
+	var generation := int(flash.get_meta("feedback_generation"))
 	flash.name = "ParryFlash" if parry else "BlockFlash"
 	flash.set_meta("visual_name", flash.name)
 	flash.mesh = _cached_box_mesh("parry_flash" if parry else "block_flash", Vector3(0.70 if parry else 0.52, 0.06, 0.08))
@@ -121,38 +190,41 @@ static func block_flash(parent: Node3D, pos: Vector3, parry: bool, contact_overr
 	flash.position = parent.to_local(flash_world_position)
 	flash.rotation_degrees = Vector3(0, 0, 12 if parry else -8)
 	flash.material_override = _emissive(Color(0.75, 0.88, 1.0) if parry else Color(0.95, 0.68, 0.24), 1.35 if parry else 0.85)
-	parent.add_child(flash)
-	var tween = flash.create_tween()
+	var tween = _owned_feedback_tween(flash)
 	if reduce_flashes:
 		flash.name = "ParryContactCue" if parry else "BlockContactCue"
 		tween.tween_interval(0.30)
 	else:
 		tween.tween_property(flash, "scale", Vector3.ONE * (1.45 if parry else 1.18), 0.11)
-	tween.tween_callback(flash.queue_free)
+	tween.tween_callback(func(): _release_transient(flash, key, generation))
 
 static func weapon_contact(parent: Node3D, base: Vector3, tip: Vector3, point: Vector3, heavy: bool, color: Color = Color(0.96, 0.78, 0.36), previous_base: Vector3 = Vector3.ZERO, previous_tip: Vector3 = Vector3.ZERO) -> void:
 	if parent == null:
 		return
-	var root := Node3D.new()
+	var has_sweep := previous_tip.length_squared() > 0.0001 and previous_tip.distance_to(tip) > 0.015
+	var key := "blade:" + var_to_str([heavy, has_sweep, reduce_flashes])
+	var root := _acquire_transient(parent, key)
+	var generation := int(root.get_meta("feedback_generation"))
 	root.name = "BladeContactFlash"
 	root.set_meta("visual_name", "BladeContactFlash")
 	root.position = parent.to_local(point)
-	parent.add_child(root)
 	var direction := tip - base
 	if direction.length_squared() < 0.0001:
 		direction = Vector3.FORWARD
 	direction = direction.normalized()
-	var flash := MeshInstance3D.new()
+	var flash := _effect_mesh(root, "BladeContactArc")
 	flash.name = "BladeContactArc"
 	flash.mesh = _cached_box_mesh("blade_contact_heavy" if heavy else "blade_contact_normal", Vector3(0.07 if heavy else 0.045, 0.07 if heavy else 0.045, 0.64 if heavy else 0.42))
 	flash.material_override = _emissive(color, 1.65 if heavy else 1.15)
-	root.add_child(flash)
 	flash.look_at(root.global_position + direction, Vector3.UP)
-	var has_sweep := previous_tip.length_squared() > 0.0001 and previous_tip.distance_to(tip) > 0.015
 	if has_sweep and not reduce_flashes:
-		var sweep := MeshInstance3D.new()
+		var sweep := _effect_mesh(root, "BladeSweepRibbon")
 		sweep.name = "BladeSweepRibbon"
-		var sweep_mesh := ImmediateMesh.new()
+		var sweep_mesh := sweep.mesh as ImmediateMesh
+		if sweep_mesh == null:
+			sweep_mesh = ImmediateMesh.new()
+		else:
+			sweep_mesh.clear_surfaces()
 		var camera := parent.get_viewport().get_camera_3d()
 		var width_axis := Vector3.UP
 		if camera != null:
@@ -174,19 +246,17 @@ static func weapon_contact(parent: Node3D, base: Vector3, tip: Vector3, point: V
 		sweep_mesh.surface_end()
 		sweep.mesh = sweep_mesh
 		sweep.material_override = _emissive(color.lightened(0.12), 0.72 if heavy else 0.48)
-		root.add_child(sweep)
-	var ring := MeshInstance3D.new()
+	var ring := _effect_mesh(root, "ContactRing")
 	ring.name = "ContactRing"
 	ring.mesh = _cached_contact_ring_mesh(heavy)
 	ring.material_override = _emissive(color.lightened(0.18), 1.2)
-	root.add_child(ring)
-	var tween := root.create_tween()
+	var tween := _owned_feedback_tween(root)
 	if reduce_flashes:
 		flash.visible = false
 		tween.tween_interval(0.30)
 	else:
 		tween.tween_property(root, "scale", Vector3.ONE * (1.42 if heavy else 1.18), 0.12)
-	tween.tween_callback(root.queue_free)
+	tween.tween_callback(func(): _release_transient(root, key, generation))
 
 static func warning_marker(parent: Node3D, target: Node3D) -> MeshInstance3D:
 	if parent == null or target == null:
@@ -218,7 +288,7 @@ static func _acquire_impact_root(parent: Node3D, key: String) -> Node3D:
 	var root: Node3D = null
 	while not pool.is_empty() and root == null:
 		var candidate = pool.pop_back()
-		if is_instance_valid(candidate):
+		if is_instance_valid(candidate) and not candidate.is_queued_for_deletion():
 			root = candidate as Node3D
 	_impact_pools[key] = pool
 	if root == null:
@@ -243,8 +313,11 @@ static func _release_impact_root(root: Node3D, key: String) -> void:
 		return
 	root.visible = false
 	root.scale = Vector3.ONE
+	root.set_meta("feedback_tween", null)
 	var pool: Array = _impact_pools.get(key, [])
-	if root not in pool:
+	if pool.size() >= IDLE_EFFECT_LIMIT:
+		root.queue_free()
+	elif root not in pool:
 		pool.append(root)
 	_impact_pools[key] = pool
 
@@ -252,7 +325,7 @@ static func _acquire_ground_ring(parent: Node3D) -> MeshInstance3D:
 	var ring: MeshInstance3D = null
 	while not _ground_ring_pool.is_empty() and ring == null:
 		var candidate = _ground_ring_pool.pop_back()
-		if is_instance_valid(candidate):
+		if is_instance_valid(candidate) and not candidate.is_queued_for_deletion():
 			ring = candidate as MeshInstance3D
 	if ring == null:
 		ring = MeshInstance3D.new()
@@ -271,7 +344,10 @@ static func _release_ground_ring(ring: MeshInstance3D) -> void:
 		return
 	ring.visible = false
 	ring.scale = Vector3.ONE
-	if ring not in _ground_ring_pool:
+	ring.set_meta("feedback_tween", null)
+	if _ground_ring_pool.size() >= IDLE_EFFECT_LIMIT:
+		ring.queue_free()
+	elif ring not in _ground_ring_pool:
 		_ground_ring_pool.append(ring)
 
 static func boss_telegraph(parent: Node3D, pos: Vector3, boss_id: String) -> void:

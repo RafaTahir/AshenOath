@@ -15,17 +15,20 @@
   remains pending. See `OPT_MILESTONE_3_RESULT.md` for retained ownership.
 - Milestone 4: OPT-025 through OPT-032 implemented and compiled. See
   `OPT_MILESTONE_4_RESULT.md`; user acceptance remains pending.
-- OPT-033 through OPT-048: planned, not implemented or accepted.
+- Milestone 5: OPT-033 through OPT-040 implemented and compiled.
+  OPT-035/037/038 are comparison-only and OFF by default, pending
+  user retention approval. See `OPT_MILESTONE_5_RESULT.md`.
+- OPT-041 through OPT-048: planned, not implemented or accepted.
 - Formal user acceptance: 0/48. No performance improvement is claimed measured.
 - Runtime tests, browser QA, benchmarks and screenshots: not run; user-owned.
 
 ## Packaging Boundary
 
-Current build: `opt-m4-20261018-2b1a54a`, output
-`D:\Projects\AshenOath\.release-gate\opt-m4-20261018\export`.
-Manifested Web artifacts: 104180777 bytes, below 104857600 bytes.
-Root PCK: 9023521 bytes; SHA-256
-`a363742d831bf77edfb40a8f74a0f5283abf6b3b37ed2cd34c53213c1914195e`.
+Current build: `opt-m5-20261018-43e3e8c`, output
+`D:\Projects\AshenOath\.release-gate\opt-m5-20261018\export`.
+Manifested Web artifacts: 104191462 bytes, below 104857600 bytes.
+Root PCK: 9033576 bytes; SHA-256
+`2f1c3e806b3c74315268f5981d9c88f9ed568c0b1cea0fd5bb8145aecf2c7206`.
 Compilation and the existing package builder's static identity checks succeeded.
 No game execution or performance measurement was performed.
 
@@ -33,8 +36,9 @@ Publication uses the existing explicit-path OPT-016 release operation. Its local
 receipt records commit/deployment outcome. Milestone 2 published as `4bd9df5`;
 Vercel reported READY and the production alias was assigned. No runtime smoke
 was performed. Milestone 3 published as `2b1a54a`; Vercel reported READY and alias
-assignment. Milestone 4 publishes through OPT-032. Package headroom is small; no
+assignment. Milestone 4 published as `43e3e8c`; Vercel reported READY and assigned
+the production alias. Milestone 5 is publishing through OPT-040. Package headroom is small; no
 over-budget milestone may be published. No runtime performance claims are made.
 Conditional rendering tickets remain gated on the user's comparison.
 User checks startup, traversal, retained visuals and Retry; there is no agent
-runtime-acceptance claim and the remaining 40 tickets are not marked completed.
+runtime-acceptance claim. Milestone 6 remains to implement.

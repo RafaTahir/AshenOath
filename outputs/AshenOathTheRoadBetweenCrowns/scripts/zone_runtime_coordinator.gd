@@ -210,6 +210,8 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	if host.new_game_start_pending and not host.game_started:
 		host.new_game_start_pending = false
 	zone_id = zone_id.strip_edges().to_lower()
+	if host.asset_helper != null:
+		host.asset_helper.set_zone_scope(zone_id)
 	# Synchronous visual imports must never overlap a zone swap. The prewarm
 	# coroutine is resumed after the player is playable again.
 	host.campaign_visual_prewarm_suspended = true
