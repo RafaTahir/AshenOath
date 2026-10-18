@@ -11584,6 +11584,18 @@
       "speaker": "",
       "context": "upgrades.fell_weight"
     },
+    "upgrades.fletchers_care.description": {
+      "source": "Recover the finishing Standard or Bodkin arrow after a bow kill. It returns directly to your quiver if there is room. Ashfire arrows burn away; training shots grant no ammunition.",
+      "text": "Recover the finishing Standard or Bodkin arrow after a bow kill. It returns directly to your quiver if there is room. Ashfire arrows burn away; training shots grant no ammunition.",
+      "speaker": "",
+      "context": "upgrades.fletchers_care"
+    },
+    "upgrades.fletchers_care.name": {
+      "source": "Fletcher's Care",
+      "text": "Fletcher's Care",
+      "speaker": "",
+      "context": "upgrades.fletchers_care"
+    },
     "upgrades.hardened_vow.description": {
       "source": "Learn to stay on your feet: maximum health increases by 20. This grants room to recover from a mistake, not immunity.",
       "text": "Learn to stay on your feet: maximum health increases by 20. This grants room to recover from a mistake, not immunity.",
@@ -11632,6 +11644,18 @@
       "speaker": "",
       "context": "upgrades.measured_riposte"
     },
+    "upgrades.quick_nock.description": {
+      "source": "Recover 25% faster between bow shots. Aiming and ammunition are still required; arrow damage and target selection are unchanged.",
+      "text": "Recover 25% faster between bow shots. Aiming and ammunition are still required; arrow damage and target selection are unchanged.",
+      "speaker": "",
+      "context": "upgrades.quick_nock"
+    },
+    "upgrades.quick_nock.name": {
+      "source": "Quick Nock",
+      "text": "Quick Nock",
+      "speaker": "",
+      "context": "upgrades.quick_nock"
+    },
     "upgrades.redroot_lore.description": {
       "source": "Make each remedy count: Redroot Potions restore 15 additional health. This applies to purchased and crafted potions alike.",
       "text": "Make each remedy count: Redroot Potions restore 15 additional health. This applies to purchased and crafted potions alike.",
@@ -11643,6 +11667,18 @@
       "text": "Redroot Lore",
       "speaker": "",
       "context": "upgrades.redroot_lore"
+    },
+    "upgrades.steady_hands.description": {
+      "source": "While aiming the bow, reduce look-input sensitivity by 20% for finer placement. Your sensitivity, inversion and aim-assist preferences still apply. No automatic target acquisition.",
+      "text": "While aiming the bow, reduce look-input sensitivity by 20% for finer placement. Your sensitivity, inversion and aim-assist preferences still apply. No automatic target acquisition.",
+      "speaker": "",
+      "context": "upgrades.steady_hands"
+    },
+    "upgrades.steady_hands.name": {
+      "source": "Steady Hands",
+      "text": "Steady Hands",
+      "speaker": "",
+      "context": "upgrades.steady_hands"
     },
     "upgrades.sure_step.description": {
       "source": "Keep a reserve for the next attack: dodging costs 5 less stamina. Step clear of a telegraph instead of trading blows.",

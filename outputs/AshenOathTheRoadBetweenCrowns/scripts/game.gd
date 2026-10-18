@@ -91,6 +91,9 @@ var interaction_area_cache_ready := false
 var current_zone_id = "greyfen"
 var enemy_defs = {}
 var boss_defs = {}
+var gameplay_runtime_ready := false
+var browser_restore_revision := 0
+var browser_restore_check := 0.0
 var active_enemies: Array = []
 var active_enemy_attacker: Node
 var boss_saved_states: Dictionary = {}
@@ -102,6 +105,7 @@ var pending_ending = ""
 var story_action_in_progress := false
 var story_save_pending := false
 var preparation_action_in_progress := false
+var progression_refresh_pending := false
 var story_guidance_refresh_pending := false
 var journey_continuity := preload("res://scripts/journey_continuity_coordinator.gd").new()
 var journey_loading := preload("res://scripts/journey_load_runtime.gd").new()
@@ -287,11 +291,7 @@ const OPENING_DETAIL_STAGES: Array[String] = [
 const OPENING_NAMED_ACTOR_IDS := ["mira", "rook", "widow_elna", "blacksmith_tor", "farmer_toma"]
 
 func _opening_stage_required_before_control(stage: String) -> bool:
-	return stage.begins_with("opening_") or stage.begins_with("village_house_") \
-		or stage.begins_with("village_architectural_details_") or stage.begins_with("boundary_") \
-		or stage.begins_with("landmark_") or stage.begins_with("gameplay_place_") \
-		or stage in ["gameplay_gate_links", "gameplay_gate_visual", "gameplay_route_markers",
-			"gameplay_population", "gameplay_crowd_0", "gameplay_crowd_1"]
+	return stage in OPENING_DETAIL_STAGES
 
 func _record_opening_stage(root: Node3D, stage: String) -> void:
 	var completed: Dictionary = root.get_meta("opening_completed_stages", {})
@@ -357,7 +357,7 @@ func _ready() -> void:
 	shared_box_mesh = BoxMesh.new()
 	shared_box_mesh.size = Vector3.ONE
 	var phase_started := Time.get_ticks_msec()
-	_build_global_environment()
+	get_viewport().disable_3d = true
 	var environment_ms := Time.get_ticks_msec() - phase_started
 	phase_started = Time.get_ticks_msec()
 	_setup_runtime()
@@ -388,6 +388,21 @@ func _prepare_opening_after_menu_render() -> void:
 	print("LOADING: main_menu_rendered")
 	if not game_started and not _journey_load_pending():
 		_on_launch_accepted()
+
+func _restore_browser_session(delta: float) -> void:
+	if not OS.has_feature("web"):
+		return
+	browser_restore_check -= delta
+	if browser_restore_check > 0.0:
+		return
+	browser_restore_check = 0.25
+	var revision := int(JavaScriptBridge.eval("window.__ashenOathSessionRestores || 0", true))
+	if revision == browser_restore_revision:
+		return
+	browser_restore_revision = revision
+	input_router.reset_transient_input("browser_session_restored")
+	if game_started and not get_tree().paused and not _journey_load_pending():
+		_pause_game()
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
@@ -518,6 +533,7 @@ func _finish_gameplay_handoff() -> void:
 	_publish_journey_arrival()
 
 func _process(delta: float) -> void:
+	_restore_browser_session(delta)
 	if not game_started or player == null or get_tree().paused:
 		return
 	if zone_transition_pending:
@@ -571,33 +587,22 @@ func _setup_runtime() -> void:
 	runtime_services = RuntimeServiceRegistry.new()
 	runtime_services.name = "RuntimeServices"
 	add_child(runtime_services)
-	var services: Dictionary = runtime_services.create_services()
-	story_state = services["story_state"]
-	quests = services["quests"]
-	quest_presentation = services["quest_presentation"]
-	quest_beats = services["quest_beats"]
-	dialogue = services["dialogue"]
-	inventory = services["inventory"]
-	vendor_service = services["vendor_service"]
-	crafting = services["crafting"]
-	combat = services["combat"]
-	save_manager = services["save_manager"]
-	settings = services["settings"]
-	world_materials = services["world_materials"]
-	day_night = services["day_night"]
-	audio = services["audio"]
-	asset_helper = services["asset_helper"]
-	hud = services["hud"]
-	minigames = services["minigames"]
-	progression = services["progression"]
-	input_router = services["input_router"]
-	interaction_focus = services["interaction_focus"]
-	mobile_touch = services["mobile_touch"]
-	zone_streaming = services["zone_streaming"]
-	runtime_packs = services["runtime_packs"]
+	_bind_runtime_services(runtime_services.create_services(true))
+	runtime_services.configure_menu(self)
+
+func _bind_runtime_services(services: Dictionary) -> void:
+	for id in services:
+		if id != "display_metrics":
+			set(id, services[id])
+
+func _ensure_gameplay_runtime() -> void:
+	if gameplay_runtime_ready:
+		return
+	_bind_runtime_services(runtime_services.create_gameplay_services())
+	gameplay_runtime_ready = true
 	quest_hud_coordinator.configure(quest_presentation, quests)
+	_build_global_environment()
 	runtime_services.configure(self)
-	hud.audio_mix_requested.connect(settings.set_mix_level)
 	hud.revisit_covenant_requested.connect(func(): save_manager.load_pre_covenant(self))
 	zone_runtime_coordinator = ZoneRuntimeCoordinator.new(self)
 	zone_runtime_coordinator.configure(quest_presentation, quest_beats, interaction_focus, quests)
@@ -617,6 +622,7 @@ func _setup_runtime() -> void:
 func _new_game() -> void:
 	if game_started or zone_transition_pending or zone_load_request_pending or _journey_load_pending():
 		return
+	_ensure_gameplay_runtime()
 	zone_pack_request_serial += 1
 	opening_pack_waiting = false
 	campaign_pack_waiting = false
@@ -732,6 +738,9 @@ func _perform_requested_zone_load() -> void:
 	_load_zone_after_runtime_pack(destination, arrival)
 
 func _load_zone_after_runtime_pack(zone_id: String, spawn_pos: Vector3) -> void:
+	_ensure_gameplay_runtime()
+	if _zone_requires_campaign_pack(zone_id):
+		runtime_services.configure_campaign()
 	journey_loading.begin_arrival(self, "travel", zone_id)
 	_begin_gameplay_handoff("zone_travel")
 	if runtime_packs != null:
@@ -878,6 +887,7 @@ func _start_new_game_world() -> void:
 	if prewarmed_greyfen != null and is_instance_valid(prewarmed_greyfen):
 		_cache_route_zone("greyfen", prewarmed_greyfen, prewarmed_enemies, _zone_state_signature(), true, false, false)
 	game_started = true
+	get_viewport().disable_3d = false
 	paused_by_menu = false
 	wychwood_pack_kills = 0
 	wychwood_encounter_started = false
@@ -997,6 +1007,8 @@ func _schedule_opening_save(generation: int) -> void:
 	opening_checkpoint_pending = false
 
 func load_save_state(data: Dictionary) -> void:
+	_ensure_gameplay_runtime()
+	runtime_services.configure_campaign()
 	# Direct payload callers retain the same preparation boundary as file-backed
 	# selections. SaveManager owns identity/history for ordinary UI loads.
 	var migrated_data: Dictionary = data
@@ -1012,6 +1024,9 @@ func load_save_state(data: Dictionary) -> void:
 	})
 
 func _apply_loaded_journey(data: Dictionary) -> void:
+	_ensure_gameplay_runtime()
+	if _zone_requires_campaign_pack(str(data.get("zone", "greyfen"))):
+		runtime_services.configure_campaign()
 	_begin_gameplay_handoff("load_journey")
 	if not game_started:
 		_discard_menu_opening()
@@ -1021,6 +1036,7 @@ func _apply_loaded_journey(data: Dictionary) -> void:
 	story_save_pending = false
 	_clear_route_zone_cache()
 	game_started = true
+	get_viewport().disable_3d = false
 	paused_by_menu = false
 	if audio != null:
 		audio.set_game_paused(false)
@@ -1041,7 +1057,9 @@ func _apply_loaded_journey(data: Dictionary) -> void:
 	progression.load_state(data.get("progression", {}))
 	if seamless_world != null and seamless_world.has_method("load_state"):
 		seamless_world.load_state(data.get("seamless_world", {}))
-	progression.reconcile_completed_quests(quests.quest_defs, quests.completed)
+	var saved_sector := str(data.get("world_sector", data.get("zone", "greyfen")))
+	var discovered: Dictionary = seamless_world.discovered_sectors if seamless_world != null else {}
+	progression.restore_journey(quests, story_state, saved_sector, discovered)
 	if int(data.get("version", 0)) < 3 and quests.is_completed("main_road_of_crows"):
 		story_state.set_flag("legacy_report_choice_required", true)
 	load_world_state(data.get("world_state", {}))
@@ -1093,6 +1111,7 @@ func _refresh_journey_models() -> void:
 	hud.set_journey_models({"continue": save_manager.continue_model(), "recovery": save_manager.checkpoint_model(), "current": current})
 
 func _request_journey_load(selection: Dictionary) -> void:
+	_ensure_gameplay_runtime()
 	audio.play_event("ui")
 	save_manager.request_load(selection)
 
@@ -1272,10 +1291,8 @@ func should_defer_character_role(role: String, actor_id: String) -> bool:
 		return false
 	var preparing_greyfen := zone_root != null and zone_root.name == "greyfen"
 	if OS.has_feature("web") and (current_zone_id == "greyfen" or preparing_greyfen) and role != "sister_anwen_human":
-		# Always publish a marker first. Pack readiness can change between stage
-		# construction and imported-scene parsing, including menu-covered prewarm.
-		# Direct spawning here requests Character-pack GLBs before they mount.
-		return true
+		# Opening bodies are owned by base/opening, which mount before construction.
+		return false
 	if not game_started:
 		return false
 	return current_zone_id in ["vargan_court", "record_hall"]
@@ -2343,6 +2360,7 @@ func _persist_story_action() -> void:
 		return
 	if zone_transition_pending or zone_load_request_pending or not pending_player_restore.is_empty():
 		return
+	_collect_progression_rewards()
 	story_save_pending = false
 	save_manager.checkpoint(self)
 	save_manager.autosave(self)
@@ -2587,6 +2605,7 @@ func _story_choice_prerequisites_done(quest_id: String, choice_id: String) -> bo
 func _on_launch_accepted() -> void:
 	if startup_packs_waiting or greyfen_prewarm_started or game_started:
 		return
+	_ensure_gameplay_runtime()
 	opening_prepare_generation += 1
 	if runtime_packs != null:
 		runtime_packs.quality_preset = str(settings.settings.get("quality_preset", "balanced"))
@@ -2679,13 +2698,21 @@ func _begin_opening_prewarm() -> void:
 		if props_status != OK:
 			_opening_prepare_failed("Greyfen's opening props could not be prepared. Select New Game to retry.")
 			return
-	if not OS.has_feature("web") and DisplayServer.get_name().to_lower() != "headless":
+	if DisplayServer.get_name().to_lower() != "headless":
 		var named_roles: Array[String] = []
 		for actor_id in OPENING_NAMED_ACTOR_IDS:
 			named_roles.append(_role_for_interactable(actor_id))
 		var actors_status: Error = asset_helper.request_role_resources(named_roles)
 		if actors_status != OK:
 			_opening_prepare_failed("Greyfen's opening characters could not be prepared. Select New Game to retry.")
+			return
+		var bodies_status: Error = asset_helper.request_resource_paths([
+			"res://assets_external/characters_universal/runtime/Villager_Female_Atlas.gltf",
+			"res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf",
+			"res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.gltf",
+		])
+		if bodies_status != OK:
+			_opening_prepare_failed("Greyfen's village bodies could not be prepared. Select New Game to retry.")
 			return
 	# Opening resources have mounted before this point on Web. Later character,
 	# monster and campaign packs remain independent of menu readiness.
@@ -2730,6 +2757,9 @@ func _restart_menu_opening() -> void:
 		_on_launch_accepted()
 
 func _opening_prepare_failed(message: String) -> void:
+	if not game_started:
+		get_viewport().disable_3d = true
+		get_tree().paused = true
 	opening_prepare_generation += 1
 	startup_packs_waiting = false
 	greyfen_prewarm_started = false
@@ -2831,6 +2861,7 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 	phase_started = Time.get_ticks_msec()
 	for visual_bucket in range(OPENING_GAMEPLAY_VISUAL_BUCKETS):
 		ZoneCompositionRouter.build_core_detail_stage(self, "greyfen", "gameplay_visual_%d" % visual_bucket)
+		_record_opening_stage(zone_root, "gameplay_visual_%d" % visual_bucket)
 	_flush_environment_batches()
 	_add_visual_100_layer("greyfen")
 	_apply_first_route_materials(zone_root)
@@ -2868,7 +2899,6 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 	var was_paused := get_tree().paused
 	# Complete first-use mesh and texture decoding under the menu cover. Doing
 	# this after control is handed over causes visible 40-70 ms hydration frames.
-	get_tree().paused = false
 	opening_well_mesh = load("res://assets_external/environment/village/GreyfenWell_Authored.res") as ArrayMesh
 	if opening_well_mesh == null or opening_well_mesh.get_surface_count() != 6:
 		get_tree().paused = was_paused
@@ -2876,6 +2906,8 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 		return
 	var slice_started := Time.get_ticks_usec()
 	for covered_stage in OPENING_DETAIL_STAGES:
+		if bool(prewarm_root.get_meta("opening_completed_stages", {}).get(covered_stage, false)):
+			continue
 		if not _opening_stage_required_before_control(covered_stage):
 			continue
 		if not _opening_attempt_current(generation) or not is_instance_valid(prewarm_root):
@@ -2904,6 +2936,7 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 	camera_rig.prepare_view()
 	prewarm_root.visible = true
 	player.visible = true
+	get_viewport().disable_3d = false
 	if DisplayServer.get_name().to_lower() != "headless":
 		if hud != null:
 			hud.set_new_game_status("Preparing Greyfen's first view...")
@@ -2918,6 +2951,7 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 		prewarm_root.set_meta("opening_first_frame_rendered", true)
 	prewarm_root.set_meta("opening_presentation_ready", true)
 	get_tree().paused = was_paused
+	get_viewport().disable_3d = true
 	# New Game can activate Greyfen while this menu-covered prewarm is still
 	# finishing. Never let the background task overwrite the active zone or its
 	# spatial service after that handoff.
@@ -2932,8 +2966,7 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 		if hud != null and hud.has_method("set_new_game_ready"):
 			hud.set_new_game_ready(true)
 		return
-	# Keep the prewarmed route processing behind the menu so activation does not
-	# pay the first-frame animation and physics setup cost again.
+	# Retain the prepared resources while the menu owns the screen.
 	_cache_route_zone("greyfen", zone_root, [], _zone_state_signature(), true, false, false)
 	zone_root = null
 	spatial_service = null
@@ -3407,6 +3440,10 @@ func _on_player_arrow(request: Dictionary) -> void:
 		var target = result.get("enemy")
 		if target != null and is_instance_valid(target):
 			hud.show_enemy(target.display_name, target.health_component.health, target.health_component.max_health)
+			if target.dead and arrow_id in ["standard_arrow", "bodkin_arrow"] and progression.effect_value("arrow_recovery_on_kill", 0.0) > 0.0:
+				inventory.add_item(arrow_id, 1)
+				story_save_pending = true
+				call_deferred("_persist_story_action")
 	else:
 		audio.play_event("swing", 0.02)
 
@@ -3603,6 +3640,7 @@ func _preparation_item_result(item_id: String, ok: bool, message: String, operat
 
 func _update_preparation_context() -> void:
 	var snapshot: Dictionary = {"zone_id": current_zone_id}
+	snapshot["respec_reason"] = _respec_unavailable_reason()
 	if quest_presentation != null:
 		snapshot["objective"] = quest_presentation.get_objective_view_model()
 	var supply_sources: Dictionary = {}
@@ -3657,6 +3695,28 @@ func _learn_preparation_practice(upgrade_id: String) -> void:
 		_apply_progression_to_player()
 	_finish_preparation_operation(result)
 
+func _respec_unavailable_reason() -> String:
+	if not game_started or current_zone_id != "greyfen" or not is_instance_valid(player) or not is_instance_valid(zone_root):
+		return "Visit the shrine bench in Greyfen."
+	if _journey_load_pending() or zone_transition_pending or zone_load_request_pending:
+		return "Wait until the journey handoff has finished."
+	if _story_has_active_combat():
+		return "Finish the encounter before redistributing practices."
+	var bench := zone_root.find_child("shrine_prayer", true, false) as Node3D
+	if bench == null or player.global_position.distance_to(bench.global_position) > 3.5:
+		return "Stand beside Greyfen's shrine bench, then open Growth."
+	return ""
+
+func _redistribute_practices() -> void:
+	var reason := _respec_unavailable_reason()
+	if reason != "":
+		_finish_preparation_operation({"ok": false, "operation": "respec", "message": reason})
+		return
+	preparation_action_in_progress = true
+	var result: Dictionary = progression.respec_result()
+	preparation_action_in_progress = false
+	_finish_preparation_operation(result)
+
 func _use_quick_item(item_id: String) -> void:
 	preparation_action_in_progress = true
 	var result: Dictionary = _use_inventory_item(item_id)
@@ -3707,6 +3767,12 @@ func _purchase_from_vendor(vendor_id: String, item_id: String, quantity: int = 1
 	_finish_preparation_operation(result, vendor_id)
 
 func _on_enemy_died(enemy) -> void:
+	if progression != null and not bool(enemy.get("is_boss")) and not bool(enemy.get_meta("bell_called_ghoulkin", false)):
+		var reward_id := str(enemy.get_meta("progression_reward_id", ""))
+		if bool(enemy.get_meta("progression_opening_wave", false)):
+			reward_id = "opening_wave:%d" % mini(wychwood_pack_kills, 4)
+		if reward_id != "":
+			progression.award_encounter(reward_id, str(enemy.get_meta("progression_zone", current_zone_id)), enemy.display_name)
 	audio.play_enemy_event(enemy.enemy_id, "death", enemy.global_position, player.global_position)
 	if camera_rig != null:
 		camera_rig.shake(0.09)
@@ -3827,6 +3893,7 @@ func _on_enemy_died(enemy) -> void:
 		hud.toast("%s slain. %s" % [enemy.display_name, memory_rule])
 	else:
 		hud.toast("%s slain." % enemy.display_name)
+	_collect_progression_rewards()
 	save_manager.autosave(self)
 
 func _try_complete_black_dog_investigation() -> void:
@@ -3946,6 +4013,37 @@ func _on_quest_completed(id: String) -> void:
 func _apply_progression_to_player() -> void:
 	if player != null and progression != null:
 		player.set_progression(progression)
+
+func _on_progression_changed() -> void:
+	if hud != null and progression != null:
+		hud.update_progression(progression.progress_model())
+
+func _queue_progression_rewards() -> void:
+	if progression_refresh_pending or not game_started or resource_shutdown_prepared:
+		return
+	progression_refresh_pending = true
+	call_deferred("_flush_progression_rewards")
+
+func _flush_progression_rewards() -> void:
+	progression_refresh_pending = false
+	if not game_started or resource_shutdown_prepared or _journey_load_pending() or zone_transition_pending or zone_load_request_pending:
+		return
+	if _collect_progression_rewards():
+		story_save_pending = true
+		call_deferred("_persist_story_action")
+
+func _collect_progression_rewards() -> bool:
+	if progression == null or quests == null or story_state == null or not game_started:
+		return false
+	var before: int = progression.claimed_rewards.size()
+	progression.sync_story(quests, story_state, current_zone_id)
+	return progression.claimed_rewards.size() != before
+
+func _on_progression_arrival(zone_id: String) -> void:
+	if not game_started or progression == null or resource_shutdown_prepared:
+		return
+	progression.record_arrival(zone_id, quests, story_state, _journey_load_pending())
+	_queue_progression_rewards()
 
 func _record_bog_stagger(enemy, source: String) -> void:
 	var count := int(story_state.get_flag("bog_stagger_hits", 0)) + 1
@@ -4147,7 +4245,7 @@ func _on_touch_layout_unavailable(reason: String) -> void:
 		_pause_game()
 
 func _pause_game() -> void:
-	if _journey_load_pending():
+	if not game_started or not is_instance_valid(player) or _journey_load_pending():
 		return
 	if camera_rig != null and camera_rig.has_method("clear_target_lock"):
 		camera_rig.clear_target_lock()
@@ -4200,7 +4298,7 @@ func _on_touch_quick_action(action: String) -> void:
 	input_router.set_virtual_action(StringName(action), false)
 
 func _resume_game() -> void:
-	if _journey_load_pending():
+	if not game_started or not is_instance_valid(player) or _journey_load_pending() or hud.active_menu == "main":
 		return
 	var touch_reason: String = mobile_touch.gameplay_layout_reason() if mobile_touch != null else ""
 	hud.set_touch_layout_reason(touch_reason)
@@ -4451,6 +4549,9 @@ func _keep_player_in_world() -> void:
 			var preferred_bank: int = spatial_service.bank_for(last_safe_player_position)
 			recovery = spatial_service.nearest_safe(player.global_position, preferred_bank)
 		player.global_position = recovery + Vector3(0, 1.2, 0)
+		player.reset_physics_interpolation()
+		if camera_rig != null:
+			camera_rig.reset_follow()
 		player.velocity = Vector3.ZERO
 		last_safe_player_position = player.global_position
 		hud.toast("Kael catches himself before the dark takes him.")
@@ -6843,6 +6944,8 @@ func _spawn_enemy(id: String, pos: Vector3, visual_role: String = "") -> Node:
 	if not CharacterRoleSpec.is_airborne(id):
 		pos.y = 0.0
 	var enemy = EnemyAI.new()
+	enemy.set_meta("progression_reward_id", "%s:%.2f:%.2f" % [id, pos.x, pos.z])
+	enemy.set_meta("progression_zone", current_zone_id)
 	enemy.visual_role_override = visual_role
 	# Keep the actor hidden while imported surfaces are normalized and receive
 	# their validated overrides. Grounding still needs an in-tree transform.
@@ -6854,6 +6957,7 @@ func _spawn_enemy(id: String, pos: Vector3, visual_role: String = "") -> Node:
 	enemy.encounter_slot = active_enemies.size()
 	enemy.setup_navigation(spatial_service)
 	if current_zone_id == "wychwood" and id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute"]:
+		enemy.set_meta("progression_opening_wave", not quests.is_objective_done("main_road_of_crows", "fight_ghoulkin"))
 		enemy.set_encounter_active(false)
 	enemy.attack_gate = _enemy_attack_token
 	if id == "ghoulkin":
@@ -7024,6 +7128,7 @@ func _on_boss_checkpoint(controller: Node) -> void:
 func _on_boss_resolved(boss_id: String, outcome: String) -> void:
 	story_state.set_flag("boss_%s_outcome" % boss_id, outcome)
 	_apply_boss_resolution_contract(boss_id)
+	_collect_progression_rewards()
 	for candidate in active_enemies:
 		if not is_instance_valid(candidate) or str(candidate.enemy_id) != boss_id:
 			continue

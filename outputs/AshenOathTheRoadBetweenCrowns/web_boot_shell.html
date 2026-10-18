@@ -127,7 +127,10 @@
         if (displayFrame === null) displayFrame = requestAnimationFrame(publishDisplayMetrics);
       }
       window.addEventListener('resize', queueDisplayMetrics, { passive: true });
-      window.addEventListener('pageshow', queueDisplayMetrics, { passive: true });
+      window.addEventListener('pageshow', event => {
+        if (event.persisted) window.__ashenOathSessionRestores = (window.__ashenOathSessionRestores || 0) + 1;
+        queueDisplayMetrics();
+      }, { passive: true });
       document.addEventListener('fullscreenchange', queueDisplayMetrics);
       document.addEventListener('visibilitychange', queueDisplayMetrics);
       window.visualViewport?.addEventListener('resize', queueDisplayMetrics, { passive: true });

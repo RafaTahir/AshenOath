@@ -18,6 +18,7 @@ signal item_use_requested(item_id: String)
 signal inventory_preference_requested(key: String, value: String)
 signal vendor_purchase_requested(vendor_id: String, item_id: String, quantity: int)
 signal upgrade_requested(upgrade_id: String)
+signal respec_requested
 signal dialogue_closed
 signal pause_requested
 signal dialogue_review_changed(open: bool)
@@ -80,6 +81,8 @@ var journal_art: TextureRect
 
 var health_bar: ProgressBar
 var stamina_bar: ProgressBar
+var xp_bar: ProgressBar
+var xp_label: Label
 var health_value_label: Label
 var stamina_value_label: Label
 var enemy_bar: ProgressBar
@@ -872,6 +875,8 @@ func show_exit_notice() -> void:
 	_add_menu_button(box, "Back to Menu", func(): show_main_menu())
 
 func hide_menus() -> void:
+	if _game_owner != null and not bool(_game_owner.get("game_started")):
+		return
 	_topic_navigation.reset()
 	_dialogue_view_generation += 1
 	_cancel_dialogue_press()
@@ -999,6 +1004,15 @@ func update_stamina(current: float, maximum: float) -> void:
 		_flash_bar(stamina_bar, Color(1.0, 0.75, 0.22))
 		_draw_resource_attention(3.0)
 	_refresh_resource_attention()
+
+func update_progression(model: Dictionary) -> void:
+	if xp_label == null or xp_bar == null:
+		return
+	var capped: bool = int(model.get("level", 1)) >= int(model.get("cap", 20))
+	xp_label.text = "Lv %d | %d Marks\n%s" % [int(model.get("level", 1)), int(model.get("marks", 0)), "Level cap reached" if capped else "%d / %d XP" % [int(model.get("current", 0)), int(model.get("needed", 200))]]
+	xp_label.tooltip_text = "%d total XP. Growth and practices are in the journal." % int(model.get("xp", 0))
+	xp_bar.max_value = maxf(1.0, float(model.get("needed", 200)))
+	xp_bar.value = xp_bar.max_value if capped else float(model.get("current", 0))
 
 func show_enemy(name: String, current: float, maximum: float) -> void:
 	enemy_label.text = "Target: %s" % name
@@ -1690,6 +1704,8 @@ func show_inventory(inventory, quests, story_state = null, progression = null, r
 	_show_journal_art(quests, story_state)
 	var zone_id: String = _journal_zone_id()
 	var sections: Array[Dictionary] = StoryJournalPresenter.sections(quests, story_state, zone_id)
+	if progression != null:
+		sections.append({"id":"growth", "title":"Growth", "body":progression.get_summary_text(), "entries":[]})
 	sections.append({"id":"quest_record", "title":"Quest Record", "body":str(quests.get_journal_text()), "entries":[]})
 	var current_section: Dictionary = {}
 	for section: Dictionary in sections:
@@ -1700,6 +1716,7 @@ func show_inventory(inventory, quests, story_state = null, progression = null, r
 		_journal_section_id = str(current_section.get("id", "return"))
 		_inventory_screen = "journal:" + _journal_section_id
 	var preparing: bool = _journal_section_id == "preparation"
+	var growing: bool = _journal_section_id == "growth" and progression != null
 	var evidence: bool = _journal_section_id == "evidence"
 	var reference: Dictionary = {}
 	if _evidence_reference_section == _journal_section_id and _evidence_reference_entry != "":
@@ -1709,7 +1726,7 @@ func show_inventory(inventory, quests, story_state = null, progression = null, r
 			_evidence_reference_entry = ""
 			_evidence_navigation.clear_returns()
 	var linked: bool = not reference.is_empty()
-	_prepare_inventory_surface(preparing or evidence or linked)
+	_prepare_inventory_surface(preparing or growing or evidence or linked)
 	var section_entries: Array = current_section.get("entries", [])
 	var reading: String = str(current_section.get("title", "Journal")).to_upper() + "\n\n" + str(current_section.get("body", ""))
 	var paragraph_by_entry: Dictionary = {}
@@ -1730,6 +1747,8 @@ func show_inventory(inventory, quests, story_state = null, progression = null, r
 			source.pressed.connect(func(target: Dictionary = link): _open_evidence_reference(target))
 	elif preparing:
 		_build_preparation_content(inventory, progression, story_state, quests, reading)
+	elif growing:
+		_build_growth_content(progression)
 	elif not evidence:
 		inventory_text.text = reading
 	_add_preparation_heading("JOURNAL")
@@ -2049,6 +2068,35 @@ func _handle_compact_journal_direction(event: InputEvent) -> bool:
 		return true
 	return false
 
+func _build_growth_content(progression) -> void:
+	var selected: Dictionary = _preparation_selection.get(_inventory_screen, {})
+	var selected_id := str(selected.get("id", ""))
+	inventory_text.text = progression.get_summary_text()
+	if progression.definitions.has(selected_id):
+		var practice: Dictionary = progression.upgrade_status(selected_id)
+		inventory_text.text = "LEVEL %d | %d OATH MARKS\n\n" % [progression.get_level(), int(progression.marks)] + PreparationPanel.practice_text(practice)
+		var learn := _preparation_button("Already learned" if bool(practice.learned) else "Learn - 1 Oath Mark", "action:upgrade:" + selected_id, _preparation_actions, bool(practice.available))
+		learn.pressed.connect(func(): upgrade_requested.emit(selected_id))
+	var record := _preparation_button("Regional record", "growth:record", craft_buttons)
+	record.pressed.connect(func(): _select_preparation_entry("growth", ""))
+	for branch: String in progression.BRANCH_ORDER:
+		_add_preparation_heading(branch.to_upper())
+		for id: String in progression.ordered_upgrade_ids():
+			var practice: Dictionary = progression.upgrade_status(id)
+			if str(practice.branch) != branch:
+				continue
+			var suffix := " - Learned" if bool(practice.learned) else (" - 1 Mark" if bool(practice.available) else " - Locked")
+			var button := _preparation_button(str(practice.title) + suffix, "upgrade:" + id, craft_buttons)
+			button.toggle_mode = true
+			button.button_pressed = selected_id == id
+			button.pressed.connect(func(practice_id: String = id): _select_preparation_entry("upgrade", practice_id))
+	var reason := str(_preparation_context.get("respec_reason", "Visit Greyfen's shrine bench."))
+	var respec := _preparation_button("Redistribute all practices - free", "growth:respec", _preparation_actions, reason == "" and int(progression.progress_model().learned) > 0)
+	respec.tooltip_text = reason if reason != "" else "Refund every learned practice. Keep your XP and equipment."
+	respec.pressed.connect(func(): respec_requested.emit())
+	if reason != "":
+		inventory_text.text += "\n\nREDISTRIBUTION\n" + reason
+
 func _build_preparation_content(inventory, progression, story_state, quests, notes: String) -> void:
 	var category: String = str(inventory.kit_category)
 	var entry_kind: String = {"equipment":"equipment", "supplies":"item", "ingredients":"ingredient"}.get(category, "item")
@@ -2140,7 +2188,9 @@ func _build_preparation_content(inventory, progression, story_state, quests, not
 		if ids.is_empty():
 			inventory_text.text = heading + empty.text
 	if progression != null:
-		_add_preparation_heading("PRACTICE")
+		_add_preparation_heading("PRACTICE - %d OATH MARKS" % int(progression.marks))
+		var growth := _preparation_button("Growth and regional record", "preparation:growth", craft_buttons)
+		growth.pressed.connect(func(): _open_journal_section("growth"))
 		for raw_id: Variant in progression.ordered_upgrade_ids():
 			var upgrade_id: String = str(raw_id)
 			var upgrade: Dictionary = progression.upgrade_status(upgrade_id)
@@ -2353,6 +2403,21 @@ func _build_hud() -> void:
 	stamina_bar.value = 100
 	stamina_bar.show_percentage = false
 	hud_root.add_child(stamina_bar)
+	xp_bar = ProgressBar.new()
+	xp_bar.name = "ExperienceRibbon"
+	xp_bar.max_value = 200
+	xp_bar.show_percentage = false
+	xp_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var xp_back := StyleBoxFlat.new()
+	xp_back.bg_color = Color(0.04, 0.06, 0.07, 0.85)
+	var xp_fill := StyleBoxFlat.new()
+	xp_fill.bg_color = Color(0.58, 0.78, 0.72)
+	xp_bar.add_theme_stylebox_override("background", xp_back)
+	xp_bar.add_theme_stylebox_override("fill", xp_fill)
+	hud_root.add_child(xp_bar)
+	xp_label = _hud_label(hud_root, "ExperienceLevel", 16)
+	xp_label.max_lines_visible = 2
+	xp_label.text = "Lv 1 | 0 Marks\n0 / 200 XP"
 	health_value_label = _hud_label(hud_root, "BloodValue", 16)
 	health_value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	stamina_value_label = _hud_label(hud_root, "StaminaValue", 16)
@@ -2888,6 +2953,11 @@ func _apply_responsive_gameplay(policy: Dictionary) -> void:
 	vitals_warning_label.custom_minimum_size = Vector2.ZERO
 	vitals_back.position = Vector2(left - 5.0 * unit, top - 3.0 * unit)
 	vitals_back.size = Vector2(vitals_width + 10.0 * unit, (102.0 if compact else 122.0) * unit)
+	xp_label.position = Vector2(left + 4.0 * unit, top + (104.0 if compact else 126.0) * unit)
+	xp_label.size = Vector2(vitals_width, 52.0 * unit)
+	xp_label.add_theme_font_size_override("font_size", int(fonts.caption))
+	xp_bar.position = Vector2(left + 4.0 * unit, top + (158.0 if compact else 180.0) * unit)
+	xp_bar.size = Vector2(vitals_width, 4.0 * unit)
 	var dial_visible: bool = usable.x >= 820.0 and usable.y >= 500.0
 	var dial_size: float = (146.0 if compact else 174.0) * unit
 	var dial_top: float = top + (66.0 if touch else 22.0) * unit
@@ -3408,6 +3478,7 @@ func _build_menu_background() -> void:
 	menu_layer.add_child(shade)
 
 func _add_menu_button(box: VBoxContainer, text: String, callback: Callable, disabled: bool = false, focus_key: String = "") -> Button:
+	var screen_generation := _screen_generation
 	var is_first_button := true
 	for child in box.get_children():
 		if child is Button:
@@ -3458,12 +3529,21 @@ func _add_menu_button(box: VBoxContainer, text: String, callback: Callable, disa
 			menu_hovered.emit()
 	)
 	button.pressed.connect(func():
+		if screen_generation != _screen_generation or not button.is_visible_in_tree() or button.disabled:
+			return
 		_capture_menu_state()
 		menu_clicked.emit()
-		callback.call()
+		call_deferred("_activate_menu_action", callback, screen_generation)
 	)
 	box.add_child(button)
 	return button
+
+func _activate_menu_action(callback: Callable, screen_generation: int) -> void:
+	if screen_generation != _screen_generation:
+		return
+	if input_source != null:
+		input_source.reset_transient_input("menu_action")
+	callback.call()
 
 func _add_menu_text(box: VBoxContainer, text: String) -> Label:
 	var label = Label.new()
@@ -4033,7 +4113,7 @@ func _apply_hud_visual_colors() -> void:
 func _hud_text_labels() -> Array[Label]:
 	var labels: Array[Label] = [enemy_label, enemy_value_label, target_status_label, prompt_label, tracker_label, compass_label, toast_label, hint_label, status_label, equipment_label, health_value_label, stamina_value_label, tracker_title_label, tracker_caption_label, tracker_route_label, tracker_work_label, tracker_footer_label, vitals_warning_label, notice_category_label, inventory_notice_label]
 	labels.append_array(_bar_name_labels)
-	labels.append_array([_world_clock_label, _gameplay_bindings, _quest_marker])
+	labels.append_array([_world_clock_label, _gameplay_bindings, _quest_marker, xp_label])
 	for raw: Variant in supply_labels.values():
 		labels.append(raw as Label)
 	for raw: Variant in supply_counts.values():

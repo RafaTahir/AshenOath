@@ -33,45 +33,103 @@ const REQUIRED_SERVICES := [
 
 var services: Dictionary = {}
 var configured := false
+var menu_configured := false
+var campaign_configured := false
+const MENU_SERVICES := ["save_manager", "settings", "audio", "hud", "input_router", "mobile_touch", "runtime_packs", "display_metrics"]
 
-func create_services() -> Dictionary:
+func create_services(menu_only := false) -> Dictionary:
 	assert(services.is_empty(), "Runtime services may only be created once")
-	services = {
-		"story_state": StoryState.new(),
-		"quests": QuestManager.new(),
-		"quest_presentation": QuestPresentationState.new(),
-		"quest_beats": QuestBeatDirector.new(),
-		"dialogue": DialogueManager.new(),
-		"inventory": InventoryManager.new(),
-		"vendor_service": VendorService.new(),
-		"crafting": CraftingManager.new(),
-		"combat": CombatManager.new(),
-		"save_manager": SaveManager.new(),
-		"settings": SettingsManager.new(),
-		"world_materials": WorldMaterialLibrary.new(),
-		"day_night": DayNightController.new(),
-		"audio": AudioManager.new(),
-		"asset_helper": AssetSpawnHelper.new(),
-		"hud": HUD.new(),
-		"minigames": MinigameManager.new(),
-		"progression": ProgressionManager.new(),
-		"input_router": InputRouter.new(),
-		"interaction_focus": InteractionFocusService.new(),
-		"mobile_touch": MobileTouchControls.new(),
-		"zone_streaming": ZoneStreamingService.new(),
-		"runtime_packs": RuntimePackManager.new(),
-		"display_metrics": DisplayMetricsBridge.new(),
+	return _create_missing_services(MENU_SERVICES if menu_only else REQUIRED_SERVICES)
+
+func create_gameplay_services() -> Dictionary:
+	return _create_missing_services(REQUIRED_SERVICES)
+
+func _create_missing_services(ids: Array) -> Dictionary:
+	var types := {
+		"story_state": StoryState, "quests": QuestManager,
+		"quest_presentation": QuestPresentationState, "quest_beats": QuestBeatDirector,
+		"dialogue": DialogueManager, "inventory": InventoryManager,
+		"vendor_service": VendorService, "crafting": CraftingManager, "combat": CombatManager,
+		"save_manager": SaveManager, "settings": SettingsManager,
+		"world_materials": WorldMaterialLibrary, "day_night": DayNightController,
+		"audio": AudioManager, "asset_helper": AssetSpawnHelper, "hud": HUD,
+		"minigames": MinigameManager, "progression": ProgressionManager,
+		"input_router": InputRouter, "interaction_focus": InteractionFocusService,
+		"mobile_touch": MobileTouchControls, "zone_streaming": ZoneStreamingService,
+		"runtime_packs": RuntimePackManager, "display_metrics": DisplayMetricsBridge,
 	}
-	for id in REQUIRED_SERVICES:
-		var service: Node = services[id]
+	for id in ids:
+		if services.has(id):
+			continue
+		var service: Node = types[id].new()
+		services[id] = service
 		service.name = _service_node_name(id)
 		add_child(service)
-	assert(is_complete(), "Runtime service registry is incomplete")
 	return services
+
+func configure_menu(owner: Node) -> void:
+	if menu_configured:
+		return
+	menu_configured = true
+	var hud = services["hud"]
+	var save_manager = services["save_manager"]
+	var settings = services["settings"]
+	var input_router = services["input_router"]
+	var mobile_touch = services["mobile_touch"]
+	var audio = services["audio"]
+	hud.process_mode = Node.PROCESS_MODE_ALWAYS
+	hud.set_runtime_services(owner, save_manager)
+	save_manager.set_summary_definitions(owner.call("_read_json", "res://data/quests.json"), owner.call("_read_json", "res://data/items.json"))
+	save_manager.load_prepared_requested.connect(Callable(owner, "_on_prepared_journey_load"))
+	save_manager.library_changed.connect(Callable(owner, "_queue_journey_models_refresh"))
+	input_router.install_default_actions()
+	input_router.set_settings_manager(settings)
+	input_router.apply_settings(settings.settings)
+	hud.set_input_source(input_router)
+	mobile_touch.setup(input_router, hud, settings.settings)
+	settings.apply_platform_defaults(mobile_touch.touch_capable)
+	settings.changed.connect(func(current: Dictionary):
+		input_router.apply_settings(current)
+		mobile_touch.apply_settings(current)
+		owner.call("_apply_runtime_settings", current)
+	)
+	input_router.input_context_changed.connect(Callable(owner, "_on_input_context_changed"))
+	input_router.transient_input_reset.connect(Callable(owner, "_on_transient_input_reset"))
+	mobile_touch.gameplay_layout_unavailable.connect(Callable(owner, "_on_touch_layout_unavailable"))
+	mobile_touch.gameplay_layout_reason_changed.connect(hud.set_touch_layout_reason)
+	hud.pause_requested.connect(Callable(owner, "_pause_game"))
+	hud.resume_requested.connect(Callable(owner, "_resume_game"))
+	hud.new_game_requested.connect(Callable(owner, "_new_game"))
+	hud.quit_requested.connect(Callable(owner, "_handle_quit_request"))
+	hud.settings_requested.connect(Callable(owner, "_handle_setting"))
+	hud.launch_accepted.connect(Callable(owner, "_on_launch_accepted"))
+	hud.journey_load_requested.connect(Callable(owner, "_request_journey_load"))
+	hud.journey_load_cancel_requested.connect(Callable(owner, "_cancel_journey_load"))
+	hud.continue_requested.connect(func():
+		var model: Dictionary = save_manager.continue_model()
+		if bool(model.get("available", false)):
+			owner.call("_request_journey_load", model.get("selection", {}))
+	)
+	hud.menu_hovered.connect(func(): audio.play_event("menu_hover", 0.025))
+	hud.menu_clicked.connect(func(): audio.play_event("menu_click", 0.015))
+	hud.audio_mix_requested.connect(settings.set_mix_level)
+	settings.apply()
+	owner.call("_apply_runtime_settings", settings.settings)
+	services["display_metrics"].setup(hud, mobile_touch)
+	hud.set_touch_layout_reason(mobile_touch.gameplay_layout_reason())
+	owner.call_deferred("_refresh_journey_models")
+
+func configure_campaign() -> void:
+	if campaign_configured:
+		return
+	assert(configured, "Opening services must be configured before campaign data")
+	campaign_configured = true
+	services["dialogue"].load_dialogue("res://data/campaign_dialogue.json")
 
 func configure(owner: Node) -> void:
 	assert(not configured, "Runtime services may only be configured once")
 	assert(is_complete(), "Runtime services must exist before configuration")
+	configure_menu(owner)
 	configured = true
 	var story_state = services["story_state"]
 	var quests = services["quests"]
@@ -95,36 +153,25 @@ func configure(owner: Node) -> void:
 	var zone_streaming = services["zone_streaming"]
 	var runtime_packs = services["runtime_packs"]
 
-	hud.process_mode = Node.PROCESS_MODE_ALWAYS
-	hud.set_runtime_services(owner, save_manager)
-	hud.pause_requested.connect(Callable(owner, "_pause_game"))
 	quests.load_quests("res://data/quests.json")
 	quest_presentation.setup(quests, quest_beats, story_state)
 	quest_beats.setup(quests, story_state)
 	dialogue.load_dialogue("res://data/dialogue.json")
-	dialogue.load_dialogue("res://data/campaign_dialogue.json")
+	# This shared file also owns the opening report and Crow Shrine choice.
+	configure_campaign()
 	dialogue.load_dialogue("res://data/interaction_scenes.json")
 	dialogue.load_conversation_topics("res://data/conversation_topics.json")
 	dialogue.setup(story_state, quests)
 	inventory.load_items("res://data/items.json")
 	save_manager.set_summary_definitions(quests.quest_defs, inventory.item_defs)
-	save_manager.load_prepared_requested.connect(Callable(owner, "_on_prepared_journey_load"))
-	save_manager.library_changed.connect(Callable(owner, "_queue_journey_models_refresh"))
 	vendor_service.load_vendors("res://data/vendors.json")
 	crafting.setup(inventory, quests, story_state)
 	hud.set_preparation_services(crafting)
-	input_router.install_default_actions()
-	input_router.set_settings_manager(settings)
-	input_router.apply_settings(settings.settings)
 	interaction_focus.setup(quests, quest_presentation)
 	combat.contact_missed.connect(func(_contact: Dictionary): hud.show_status_cue("No blade contact", "neutral"))
-	hud.set_input_source(input_router)
 	minigames.setup(input_router)
-	mobile_touch.setup(input_router, hud, settings.settings)
 	input_router.gameplay_action_requested.connect(Callable(owner, "_on_virtual_gameplay_action"))
 	hud.touch_quick_action_requested.connect(Callable(owner, "_on_touch_quick_action"))
-	mobile_touch.gameplay_layout_unavailable.connect(Callable(owner, "_on_touch_layout_unavailable"))
-	mobile_touch.gameplay_layout_reason_changed.connect(hud.set_touch_layout_reason)
 	zone_streaming.setup(owner)
 	# The base manager is embedded in the main PCK. On Web, begin the verified
 	# opening downloads immediately so the menu and Crow Flight can cover the
@@ -140,15 +187,12 @@ func configure(owner: Node) -> void:
 		# base-pack progress path owned by Game._on_launch_accepted().
 		if not OS.has_feature("web"):
 			runtime_packs.request_pack("base")
-	settings.apply_platform_defaults(mobile_touch.touch_capable)
 	input_router.device_changed.connect(func(_device: String):
 		hud.set_input_device(input_router.active_device)
 		owner.call("_refresh_equipment_readout")
 		owner.call("_invalidate_interaction_prompt")
 	)
 	input_router.bindings_changed.connect(func(_bindings: Dictionary): owner.call("_invalidate_interaction_prompt"))
-	input_router.input_context_changed.connect(Callable(owner, "_on_input_context_changed"))
-	input_router.transient_input_reset.connect(Callable(owner, "_on_transient_input_reset"))
 	story_state.changed.connect(Callable(owner, "_invalidate_interaction_prompt"))
 	story_state.changed.connect(Callable(owner, "_queue_story_guidance_refresh"))
 	input_router.gamepad_profile_changed.connect(func(profile: Dictionary):
@@ -171,25 +215,6 @@ func configure(owner: Node) -> void:
 			director.set_time(minutes, phase, count)
 	)
 	hud.set_world_clock(day_night.get_time(), day_night.current_phase, day_night.day_count)
-	settings.changed.connect(func(current: Dictionary):
-		input_router.apply_settings(current)
-		mobile_touch.apply_settings(current)
-		owner.call("_apply_runtime_settings", current)
-	)
-	hud.launch_accepted.connect(Callable(owner, "_on_launch_accepted"))
-	hud.menu_hovered.connect(func(): audio.play_event("menu_hover", 0.025))
-	hud.menu_clicked.connect(func(): audio.play_event("menu_click", 0.015))
-	hud.new_game_requested.connect(Callable(owner, "_new_game"))
-	hud.quit_requested.connect(Callable(owner, "_handle_quit_request"))
-	hud.continue_requested.connect(func():
-		audio.play_event("ui")
-		# Compatibility signal; current cards emit their exact stored selection.
-		var model: Dictionary = save_manager.continue_model()
-		if bool(model.get("available", false)):
-			save_manager.request_load(model.get("selection", {}))
-	)
-	hud.journey_load_requested.connect(Callable(owner, "_request_journey_load"))
-	hud.journey_load_cancel_requested.connect(Callable(owner, "_cancel_journey_load"))
 	hud.journal_section_requested.connect(Callable(owner, "_open_journal_section"))
 	hud.save_requested.connect(func():
 		audio.play_event("ui")
@@ -210,8 +235,6 @@ func configure(owner: Node) -> void:
 	hud.vendor_purchase_requested.connect(func(vendor_id: String, item_id: String, quantity: int):
 		owner.call("_purchase_from_vendor", vendor_id, item_id, quantity)
 	)
-	hud.resume_requested.connect(Callable(owner, "_resume_game"))
-	hud.settings_requested.connect(Callable(owner, "_handle_setting"))
 	hud.action_selected.connect(Callable(owner, "_handle_dialogue_action"))
 	hud.dialogue_closed.connect(Callable(owner, "_release_dialogue_facing"))
 	hud.dialogue_closed.connect(Callable(owner, "_on_dialogue_closed_audio"))
@@ -229,6 +252,11 @@ func configure(owner: Node) -> void:
 	hud.upgrade_requested.connect(func(upgrade_id: String):
 		owner.call("_learn_preparation_practice", upgrade_id)
 	)
+	hud.respec_requested.connect(Callable(owner, "_redistribute_practices"))
+	progression.changed.connect(Callable(owner, "_on_progression_changed"))
+	owner.call("_on_progression_changed")
+	quests.changed.connect(Callable(owner, "_queue_progression_rewards"))
+	story_state.changed.connect(Callable(owner, "_queue_progression_rewards"))
 	quests.changed.connect(Callable(owner, "_refresh_tracker"))
 	quests.message.connect(func(text: String): hud.post_notice(text, "story", 5.5, text))
 	quests.message.connect(func(_text: String): audio.play_event("quest"))
@@ -262,9 +290,6 @@ func configure(owner: Node) -> void:
 	minigames.closed.connect(func(): hud.toast("The village carries on."))
 	settings.apply()
 	owner.call("_apply_runtime_settings", settings.settings)
-	services["display_metrics"].setup(hud, mobile_touch)
-	hud.set_touch_layout_reason(mobile_touch.gameplay_layout_reason())
-	owner.call_deferred("_refresh_journey_models")
 
 func get_service(id: String):
 	return services.get(id)

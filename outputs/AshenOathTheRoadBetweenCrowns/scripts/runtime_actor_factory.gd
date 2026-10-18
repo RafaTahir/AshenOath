@@ -8,6 +8,7 @@ static func create_player_camera(owner: Node, position: Vector3, zone_id: String
 	player.name = "Player"
 	owner.add_child(player)
 	player.global_position = position
+	player.reset_physics_interpolation()
 	player.input_source = input_source
 	var camera = CameraController.new()
 	camera.name = "PlayerCameraRig"

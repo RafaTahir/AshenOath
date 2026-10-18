@@ -46,6 +46,8 @@ var _target_switch_axis_latched := false
 var _target_obscured_time := 0.0
 var _collision_refresh := 0.0
 var _cached_collision_position := Vector3.ZERO
+var _collision_from := Vector3.INF
+var _collision_to := Vector3.INF
 var _last_large_subject: Node3D
 var _large_subject_linger := 0.0
 var _manual_orbit := false
@@ -69,6 +71,8 @@ func setup(follow_target: Node3D, source: Node = null) -> void:
 	camera.fov = 63.0
 	camera.near = 0.05
 	add_child(camera)
+	camera.top_level = true
+	physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 	_initialized = false
 	# Do not request Web pointer lock during camera construction. The browser
 	# has no user gesture yet, and touch emulation must remain pointer-lock free.
@@ -85,7 +89,7 @@ func set_zone(zone_id: String) -> void:
 		height = 1.55
 		distance = minf(distance, 4.2)
 		pitch = _clamp_pitch(-0.08)
-	_initialized = false
+	reset_follow()
 
 func set_enemy_candidates(candidates: Array) -> void:
 	# game.gd owns the active encounter list. Binding it here avoids repeatedly
@@ -140,9 +144,15 @@ func _apply_mouse_motion(relative: Vector2) -> void:
 	if relative.length_squared() <= 0.0:
 		return
 	_begin_manual_orbit()
-	yaw = wrapf(yaw - relative.x * sensitivity, -PI, PI)
+	var steady := _bow_aim_sensitivity()
+	yaw = wrapf(yaw - relative.x * sensitivity * steady, -PI, PI)
 	var y_direction = 1.0 if invert_y else -1.0
-	pitch = _clamp_pitch(pitch + relative.y * sensitivity * y_direction)
+	pitch = _clamp_pitch(pitch + relative.y * sensitivity * steady * y_direction)
+
+func _bow_aim_sensitivity() -> float:
+	if is_instance_valid(target) and target.get("bow_aiming") == true and target.has_method("get_bow_aim_sensitivity"):
+		return float(target.call("get_bow_aim_sensitivity"))
+	return 1.0
 
 func _process(delta: float) -> void:
 	if target == null or get_tree().paused or not _gameplay_camera_active():
@@ -159,11 +169,22 @@ func prepare_view() -> void:
 	# Position the real camera under the menu without enabling gameplay input.
 	if target == null or camera == null:
 		return
-	_initialized = false
-	_collision_refresh = 0.0
+	reset_follow()
 	_update_view(0.0)
 
+func reset_follow() -> void:
+	_initialized = false
+	_collision_refresh = 0.0
+	_collision_from = Vector3.INF
+	_collision_to = Vector3.INF
+	if is_instance_valid(target) and target.is_inside_tree():
+		target.reset_physics_interpolation()
+	reset_physics_interpolation()
+
 func _update_view(delta: float) -> void:
+	var followed_position: Vector3 = target.get_global_transform_interpolated().origin
+	if delta <= 0.0:
+		followed_position = target.global_position
 	if not _enemy_cache_authoritative:
 		_enemy_cache_refresh -= delta
 		if _enemy_cache_refresh <= 0.0:
@@ -194,7 +215,7 @@ func _update_view(delta: float) -> void:
 	if _manual_orbit or close_weight > 0.0:
 		framing_subject = null
 	if current_zone_id == "wychwood":
-		if target.global_position.z > 4.5:
+		if followed_position.z > 4.5:
 			target_distance = minf(target_distance, 6.4)
 		elif combat_focus != null:
 			target_distance = minf(target_distance, 5.4)
@@ -204,18 +225,22 @@ func _update_view(delta: float) -> void:
 	var eye_height := float(target.get_camera_eye_height()) if target.has_method("get_camera_eye_height") else 1.62
 	target_height = lerpf(target_height, eye_height, close_weight)
 	shoulder *= 1.0 - close_weight
-	var target_pos = target.global_position + Vector3(0, target_height, 0)
+	var target_pos = followed_position + Vector3(0, target_height, 0)
 	var orbit = Basis(Vector3.UP, yaw) * Basis(Vector3.RIGHT, pitch)
 	var desired = target_pos + orbit * Vector3(shoulder + _dodge_response * 0.12 * (1.0 - close_weight), _landing_response * 0.08 * (1.0 - close_weight), target_distance)
+	var orbit_offset: Vector3 = desired - target_pos
 	_collision_refresh -= delta
-	if _collision_refresh <= 0.0:
+	if _collision_refresh <= 0.0 or not orbit_offset.is_equal_approx(_collision_to) or target_pos.distance_squared_to(_collision_from) > 0.04:
 		_collision_refresh = 1.0 / 30.0
-		_cached_collision_position = _resolve_encounter_orbit(target_pos, desired, framing_subject) if _combat_subject_height(framing_subject) > 2.6 else _collide_camera(target_pos, desired)
-	desired = target_pos if is_first_person() else _cached_collision_position
+		var clipped: Vector3 = _resolve_encounter_orbit(target_pos, desired, framing_subject) if _combat_subject_height(framing_subject) > 2.6 else _collide_camera(target_pos, desired)
+		_cached_collision_position = clipped - target_pos
+		_collision_from = target_pos
+		_collision_to = orbit_offset
+	desired = target_pos if is_first_person() else target_pos + _cached_collision_position
 	# A browser pointer warp can deliver one large vertical mouse delta and push
 	# pitch to its lower view limit. Keep the follow camera above Kael's grounded
 	# root so the renderer cannot place it beneath a bridge/terrain support plane.
-	desired.y = maxf(desired.y, target.global_position.y + 0.55)
+	desired.y = maxf(desired.y, followed_position.y + 0.55)
 	var natural_look = target_pos + Basis(Vector3.UP, yaw) * Vector3(0.55, -0.08, -look_ahead)
 	var focus = _environment_focus(combat_focus)
 	if focus.weight > 0.0 and not _manual_orbit and close_weight <= 0.0:
@@ -246,7 +271,7 @@ func _update_view(delta: float) -> void:
 	else:
 		camera.global_position = _publish_encounter_position(target_pos, smoothed_position, desired, framing_subject) if _combat_subject_height(framing_subject) > 2.6 else _collide_camera(target_pos, smoothed_position)
 	if target.has_method("set_camera_close_view"):
-		var eye_position: Vector3 = target.global_position + Vector3.UP * eye_height
+		var eye_position: Vector3 = followed_position + Vector3.UP * eye_height
 		var collision_close := camera.global_position.distance_to(eye_position) < 0.85
 		target.set_camera_close_view(collision_close)
 		if collision_close and not is_first_person():
@@ -458,6 +483,7 @@ func _apply_keyboard_camera(delta: float) -> void:
 			adjust_zoom(-ZOOM_STEP)
 		elif _action_just_pressed("camera_zoom_out"):
 			adjust_zoom(ZOOM_STEP)
+	var steady := _bow_aim_sensitivity()
 	var turn := look.x
 	var tilt := look.y
 	# A hard horizontal stick deflection is a target-cycle gesture while
@@ -465,11 +491,11 @@ func _apply_keyboard_camera(delta: float) -> void:
 	var cycling_target := _locked_combat_target != null and absf(turn) >= 0.78 and not is_first_person()
 	if abs(turn) > 0.01 and not cycling_target:
 		_begin_manual_orbit()
-		yaw = wrapf(yaw - turn * keyboard_turn_speed * delta, -PI, PI)
+		yaw = wrapf(yaw - turn * keyboard_turn_speed * steady * delta, -PI, PI)
 	if abs(tilt) > 0.01:
 		_begin_manual_orbit()
 		var y_direction = -1.0 if invert_y else 1.0
-		pitch = _clamp_pitch(pitch - tilt * keyboard_turn_speed * 0.55 * delta * y_direction)
+		pitch = _clamp_pitch(pitch - tilt * keyboard_turn_speed * steady * 0.55 * delta * y_direction)
 	var zoom_axis: float = input_source.action_axis("camera_zoom_in", "camera_zoom_out") \
 		if input_source != null and input_source.has_method("action_axis") \
 		else Input.get_axis("camera_zoom_in", "camera_zoom_out")

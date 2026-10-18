@@ -127,7 +127,7 @@ const ROUTE_BINDING = "__ASHEN_OATH_READ_ONLY_ROUTE__";
 const OBSERVATION_WAIT_MS = 900;
 const POST_INTERACTION_SETTLE_MS = 1200;
 const INTERACTION_CATALOG_GRACE_MS = 5000;
-const viewport = { width: 1280, height: 720 };
+const viewport = { width: Number(args.width || 1280), height: Number(args.height || 720) };
 let commandSequence = 0;
 function registeredFirefoxPath() {
   for (const hive of ["HKCU", "HKLM"]) {
@@ -1888,6 +1888,13 @@ async function waitForLoadingLine(cdp, text, timeout = 45000) {
 async function activateNewGame(cdp, point) {
   // Mouse startup acceptance must never be rescued by a keyboard activation.
   // Preserve the original readiness/transport error for root-cause analysis.
+  if (productionObserver) {
+    const state = await freshTelemetry(cdp);
+    const button = state?.ui?.buttons?.find(value => value.text === "New Game" && value.enabled);
+    if (!button) throw new Error("Visible New Game button is unavailable");
+    point = { x: (button.position.x + button.size.x / 2) * viewport.width / state.ui.viewport.x,
+      y: (button.position.y + button.size.y / 2) * viewport.height / state.ui.viewport.y };
+  }
   await clickPoint(cdp, point);
   return waitForNewGameReady(cdp);
 }
@@ -1921,7 +1928,7 @@ async function startNewGame(cdp, expectedUrl, onStartupReady = async () => {}) {
     const canvas = document.querySelector("canvas");
     if (!canvas) return false;
     const gl = canvas.getContext("webgl2") || canvas.getContext("webgl");
-    return Boolean(gl) && canvas.width >= 1280 && canvas.height >= 720;
+    return Boolean(gl) && canvas.width > 0 && canvas.height > 0;
   })()`), "QA WebGL canvas");
   await cdp.send("Page.bringToFront");
     // Focus emulation is optional in headless Chromium; pointer and keyboard
@@ -1940,14 +1947,16 @@ async function startNewGame(cdp, expectedUrl, onStartupReady = async () => {}) {
   // renderer while the prewarm signal is already progressing. Keep this a
   // bounded readiness gate, but do not turn normal first-run compilation into
   // a false browser failure.
-	await waitForLoadingLine(cdp, "LOADING: shell opening_ready", 45000);
+	await waitFor(async () => cdp.evaluate(`window.__ashenOathOpeningState?.state === 'ready'`), "opening readiness", timeoutMs);
 	// The periodic observation binding is intentionally coalesced and may still
 	// contain the final pre-ready sample. Read the current state directly after
 	// the shell marker so readiness ordering is tested without queue latency.
 	await waitFor(async () => {
 		const preparedState = await freshTelemetry(cdp);
-		return Boolean(preparedState?.new_game_ready);
+		if (preparedState?.ready) throw new Error("Journey started before an explicit menu action");
+		return Boolean(preparedState?.new_game_ready && preparedState?.ui?.active_menu === "main");
 	}, "New Game state after shell readiness", 5000);
+  cdp.startupTimings.navigation_to_menu_ms = await cdp.evaluate("window.__ashenOathBoot?.menu_ready_ms || null");
   await sleep(420);
   cdp.startupTimings.click_started_ms = Date.now();
   await activateNewGame(cdp, newGamePoint);
@@ -3520,7 +3529,7 @@ async function saveThroughPauseMenu(cdp, checkpoints, allowExisting = false) {
     const current = await freshTelemetry(cdp).catch(() => null);
     return current?.ui?.active_menu === "pause" ? current : null;
   }, "real pause menu", 5000);
-  const savedAfterMs = await chooseMenuButton(cdp, "Save");
+  const savedAfterMs = await chooseMenuButton(cdp, "Quick Save");
   const saved = await waitFor(async () => {
     const current = await freshTelemetry(cdp).catch(() => null);
     return current?.saves?.manual ? current : null;
@@ -3542,12 +3551,12 @@ async function continueSavedOpening(cdp, url, checkpoints, expectedStage = "repo
   const navigationStartedMs = Date.now();
   await cdp.send("Page.navigate", { url: resumeUrl });
   await waitFor(async () => cdp.evaluate(
-    `location.href.startsWith(${JSON.stringify(resumeUrl)}) && Boolean(document.getElementById("start") && document.querySelector("canvas"))`
+    `location.href.startsWith(${JSON.stringify(resumeUrl)}) && document.readyState === "complete" && Boolean(document.querySelector("canvas"))`
   ), "saved page reload", 10000);
   await activateBootShell(cdp);
   await waitFor(async () => cdp.evaluate(`(() => {
     const canvas = document.querySelector("canvas");
-    return Boolean(canvas && canvas.width >= 1280 && canvas.height >= 720 && canvas.getContext("webgl2"));
+    return Boolean(canvas && canvas.width > 0 && canvas.height > 0 && canvas.getContext("webgl2"));
   })()`), "saved WebGL canvas", 20000);
   await waitFor(async () => {
     const current = await freshTelemetry(cdp).catch(() => null);
@@ -3560,7 +3569,7 @@ async function continueSavedOpening(cdp, url, checkpoints, expectedStage = "repo
     const current = await freshTelemetry(cdp).catch(() => null);
     return current?.zone === "greyfen" && current?.player?.can_control && !current?.transition_pending
       ? current : null;
-  }, "real Continue gameplay control", 15000);
+  }, "real Continue gameplay control", timeoutMs);
   const controlObservedMs = Date.now();
   cdp.startupRuns ||= [];
   cdp.startupRuns.push({
@@ -4032,6 +4041,35 @@ async function runBrowserSmoke(cdp, url, checkpoints, onStartupReady) {
     moved.player.position.z - initial.player.position.z);
   if (distance < 0.10) throw new Error("Ordinary keyboard movement did not move Kael");
   checkpoints.push({ event: "browser_keyboard_movement", distance });
+  // The short opening sample includes moving frames and retained slow frames.
+  for (let step = 0; step < 8; step += 1) {
+    await tapGameplayKey(cdp, step % 2 ? "KeyS" : "KeyW", step % 2 ? "s" : "w", 500);
+    await sleep(500);
+    await freshTelemetry(cdp);
+  }
+  checkpoints.push({ event: "greyfen_movement_sample", performance: (await freshTelemetry(cdp)).performance });
+  if (args["camera-smoke"]) {
+    let previousYaw = Number((await freshTelemetry(cdp)).camera.yaw);
+    let rotation = 0;
+    await cdp.send("Input.dispatchKeyEvent", { type: "keyDown", code: "ArrowRight", key: "ArrowRight", windowsVirtualKeyCode: 39 });
+    try {
+      for (let step = 0; step < 12; step += 1) {
+        await sleep(300);
+        const yaw = Number((await freshTelemetry(cdp)).camera.yaw);
+        rotation += Math.abs(Math.atan2(Math.sin(yaw - previousYaw), Math.cos(yaw - previousYaw)));
+        previousYaw = yaw;
+      }
+    } finally {
+      await cdp.send("Input.dispatchKeyEvent", { type: "keyUp", code: "ArrowRight", key: "ArrowRight", windowsVirtualKeyCode: 39 });
+    }
+    if (rotation < Math.PI * 2) throw new Error(`Camera orbit covered only ${rotation} radians`);
+    await tapGameplayKey(cdp, "PageUp", "PageUp", 4000);
+    const capture = await cdp.send("Page.captureScreenshot", { format: "png" });
+    const path = reportPath.replace(/\.json$/i, "_first_person.png");
+    writeFileSync(path, Buffer.from(capture.data, "base64"));
+    checkpoints.push({ event: "camera_orbit_and_zoom", radians: rotation, zoom_input: "PageUp held 4 seconds", screenshot: path });
+    await tapGameplayKey(cdp, "PageDown", "PageDown", 2200);
+  }
   await saveThroughPauseMenu(cdp, checkpoints);
   const earned = await freshTelemetry(cdp);
   const resumed = await continueSavedOpening(cdp, url, checkpoints, "startup");

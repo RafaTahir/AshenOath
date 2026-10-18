@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "level_cap": 20,
+  "first_level_xp": 200,
+  "level_step_xp": 50,
+  "mark_levels": [2, 4, 5, 6, 8, 10, 12, 14, 15, 16, 18, 20],
+  "arrival_xp": 100,
+  "discovery_xp": 50,
+  "encounter_xp": 75,
+  "regions": {
+    "greyfen": {"name": "Greyfen", "sectors": ["greyfen", "assembly"]},
+    "wychwood": {"name": "Wychwood", "sectors": ["wychwood", "cemetery"]},
+    "deep_wood": {"name": "Deep Woods and the Mill", "sectors": ["deep_wood", "old_mill", "burned_farmstead"]},
+    "long_road": {"name": "The Long Road", "sectors": ["marsh_crossing", "bandit_road"]},
+    "vargan": {"name": "Castle Vargan", "sectors": ["vargan_approach", "vargan_court", "record_hall", "undercroft"]},
+    "hartlands": {"name": "The Hartlands", "sectors": ["ruins", "hart_glade"]}
+  },
+  "quests": {
+    "main_road_of_crows": {"xp": 400, "region": "greyfen"},
+    "main_bell_beneath_greyfen": {"xp": 600, "region": "greyfen"},
+    "main_teeth_in_rain": {"xp": 650, "region": "wychwood"},
+    "main_names_they_burned": {"xp": 650, "region": "deep_wood"},
+    "main_ash_at_the_mill": {"xp": 700, "region": "deep_wood"},
+    "main_soldier_without_banner": {"xp": 650, "region": "long_road"},
+    "main_blood_under_stone": {"xp": 800, "region": "vargan"},
+    "main_last_witness": {"xp": 700, "region": "vargan"},
+    "main_crowns_without_mercy": {"xp": 700, "region": "greyfen"},
+    "main_hart_remembers": {"xp": 800, "region": "hartlands"},
+    "side_widows_bell": {"xp": 250, "region": "greyfen"},
+    "side_iron_remembers": {"xp": 300, "region": "greyfen"},
+    "side_bitter_roots": {"xp": 250, "region": "wychwood"},
+    "side_bracken_rescue": {"xp": 250, "region": "greyfen"},
+    "side_black_dog": {"xp": 350, "region": "wychwood"},
+    "side_empty_grave": {"xp": 300, "region": "greyfen"},
+    "side_childs_charm": {"xp": 300, "region": "greyfen"},
+    "side_soldiers_debt": {"xp": 300, "region": "long_road"},
+    "side_millers_measure": {"xp": 300, "region": "deep_wood"},
+    "side_rooks_map": {"xp": 300, "region": "deep_wood"},
+    "side_three_candles": {"xp": 350, "region": "greyfen"}
+  },
+  "bosses": {
+    "bell_eater": {"xp": 400, "region": "greyfen", "name": "Bell-Eater", "flags": ["bell_eater_defeated", "boss_bell_eater_outcome"]},
+    "rootbound_colossus": {"xp": 450, "region": "deep_wood", "name": "Rootbound Colossus", "flags": ["rootbound_colossus_defeated", "boss_rootbound_colossus_outcome"]},
+    "ashwing": {"xp": 500, "region": "deep_wood", "name": "Ashwing", "flags": ["ashwing_defeated", "boss_ashwing_outcome"]},
+    "halvern_boss": {"xp": 450, "region": "vargan", "name": "Halvern", "flags": ["halvern_fate", "boss_halvern_boss_outcome"]},
+    "white_hart_avatar": {"xp": 500, "region": "hartlands", "name": "The White Hart", "flags": ["final_choice_completed", "boss_white_hart_avatar_outcome"]}
+  },
+  "returns": [
+    {"id": "greyfen_road_report", "name": "The road's evidence brought home", "zone": "greyfen", "quest": "main_road_of_crows", "xp": 100},
+    {"id": "greyfen_names", "name": "The burned names brought home", "zone": "greyfen", "quest": "main_names_they_burned", "xp": 150},
+    {"id": "greyfen_mill", "name": "The mill's account brought home", "zone": "greyfen", "quest": "main_ash_at_the_mill", "xp": 175},
+    {"id": "greyfen_witness", "name": "Testimony brought back to Greyfen", "zone": "greyfen", "quest": "main_last_witness", "xp": 175},
+    {"id": "greyfen_homecoming", "name": "A place at tomorrow's workbench", "zone": "greyfen", "flag": "aftermath_work_promised", "xp": 200},
+    {"id": "wychwood_aftermath", "name": "Return to the quiet forest", "zone": "wychwood", "quest": "main_teeth_in_rain", "xp": 150},
+    {"id": "vargan_aftermath", "name": "Return to the records after testimony", "zone": "record_hall", "quest": "main_last_witness", "xp": 150}
+  ]
+}

@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "program": "SOUL-REBUILD",
-  "release_id": "playfix-012-20261011-final-f4df729",
+  "release_id": "xp-progression-20261018-10371b9",
   "artifact_policy": "external_runtime_packs",
   "candidate_manifest": "res://runtime_pack_candidates.json",
   "pack_presets": {
@@ -15,7 +15,7 @@
   "max_deployment_bytes": 104857600,
   "packs": {
     "base": {
-      "version": "playfix-012-20261011-final-f4df729",
+      "version": "xp-progression-20261018-10371b9",
       "url": "",
       "sha256": "",
       "bytes": 0,
@@ -24,8 +24,8 @@
       "preload_priority": 0,
       "status": "embedded_current_pck",
       "candidate_artifact": "base.pck",
-      "candidate_bytes": 15848192,
-      "candidate_sha256": "fb6f0923e3c8171aab0da97800f8c84e9787d286638c5a5b38b2eb1371ea1b9a",
+      "candidate_bytes": 15863200,
+      "candidate_sha256": "1881176c997fefc3fc2829ed4eaa8f600e3a8f73f6058a46423d057e41ceef9a",
       "contents": [
         "menu",
         "managers",
@@ -34,15 +34,15 @@
       ],
       "embedded_artifact": "index.pck",
       "embedded_source_artifact": "base.pck",
-      "embedded_source_bytes": 15848192,
-      "embedded_source_sha256": "fb6f0923e3c8171aab0da97800f8c84e9787d286638c5a5b38b2eb1371ea1b9a",
+      "embedded_source_bytes": 15863200,
+      "embedded_source_sha256": "1881176c997fefc3fc2829ed4eaa8f600e3a8f73f6058a46423d057e41ceef9a",
       "embedded_source_kind": "standalone_pack_candidate"
     },
     "opening": {
-      "version": "playfix-012-20261011-final-f4df729",
-      "url": "packs/opening.pck?sha256=acdf74f8303ded74fc2ed30a204973b0735f1446371ce6612a09c6ea7fae9eca",
-      "sha256": "acdf74f8303ded74fc2ed30a204973b0735f1446371ce6612a09c6ea7fae9eca",
-      "bytes": 14323836,
+      "version": "xp-progression-20261018-10371b9",
+      "url": "packs/opening.pck?sha256=52b536853eed4a2fe4b7e41a21834fbfd93db2fd1931777e8e25221e0da40916",
+      "sha256": "52b536853eed4a2fe4b7e41a21834fbfd93db2fd1931777e8e25221e0da40916",
+      "bytes": 18619836,
       "entry_scene": "res://scenes/zones/greyfen_gameplay.tscn",
       "dependencies": [
         "base"
@@ -50,18 +50,18 @@
       "preload_priority": 10,
       "status": "streamed_web_candidate",
       "candidate_artifact": "opening.pck",
-      "candidate_bytes": 14323836,
-      "candidate_sha256": "acdf74f8303ded74fc2ed30a204973b0735f1446371ce6612a09c6ea7fae9eca",
+      "candidate_bytes": 18619836,
+      "candidate_sha256": "52b536853eed4a2fe4b7e41a21834fbfd93db2fd1931777e8e25221e0da40916",
       "contents": [
         "greyfen",
         "wychwood",
         "cemetery",
         "opening_actors"
       ],
-      "cache_key": "acdf74f8303ded74fc2ed30a204973b0735f1446371ce6612a09c6ea7fae9eca"
+      "cache_key": "52b536853eed4a2fe4b7e41a21834fbfd93db2fd1931777e8e25221e0da40916"
     },
     "campaign": {
-      "version": "playfix-012-20261011-final-f4df729",
+      "version": "xp-progression-20261018-10371b9",
       "url": "packs/campaign.pck?sha256=ee949fde556289d8e7e8df7278b5879bf3a8c87f22c8e9089e9bff04d8b253f4",
       "sha256": "ee949fde556289d8e7e8df7278b5879bf3a8c87f22c8e9089e9bff04d8b253f4",
       "bytes": 1002316,
@@ -84,10 +84,10 @@
       "cache_key": "ee949fde556289d8e7e8df7278b5879bf3a8c87f22c8e9089e9bff04d8b253f4"
     },
     "characters": {
-      "version": "playfix-012-20261011-final-f4df729",
-      "url": "packs/characters.pck?sha256=99527791f03c09b016ce650a034421da00ffc9038668f73dfada4bf1a26626e4",
-      "sha256": "99527791f03c09b016ce650a034421da00ffc9038668f73dfada4bf1a26626e4",
-      "bytes": 27895972,
+      "version": "xp-progression-20261018-10371b9",
+      "url": "packs/characters.pck?sha256=14737d61faad9a8dc0e62ad0fbd6ed7c4c96daa5ec95d86462556de1714be4d1",
+      "sha256": "14737d61faad9a8dc0e62ad0fbd6ed7c4c96daa5ec95d86462556de1714be4d1",
+      "bytes": 19858036,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -96,16 +96,16 @@
       "preload_priority": 30,
       "status": "streamed_web_candidate",
       "candidate_artifact": "characters.pck",
-      "candidate_bytes": 27895972,
-      "candidate_sha256": "99527791f03c09b016ce650a034421da00ffc9038668f73dfada4bf1a26626e4",
+      "candidate_bytes": 19858036,
+      "candidate_sha256": "14737d61faad9a8dc0e62ad0fbd6ed7c4c96daa5ec95d86462556de1714be4d1",
       "contents": [
         "ranger_runtime",
         "universal_crowd_runtime"
       ],
-      "cache_key": "99527791f03c09b016ce650a034421da00ffc9038668f73dfada4bf1a26626e4"
+      "cache_key": "14737d61faad9a8dc0e62ad0fbd6ed7c4c96daa5ec95d86462556de1714be4d1"
     },
     "monsters": {
-      "version": "playfix-012-20261011-final-f4df729",
+      "version": "xp-progression-20261018-10371b9",
       "url": "packs/monsters.pck?sha256=d8bb2e0b1f115a87201d07b43b47e58378f3b6740d2d00fbdb78fc7a8c7eaec7",
       "sha256": "d8bb2e0b1f115a87201d07b43b47e58378f3b6740d2d00fbdb78fc7a8c7eaec7",
       "bytes": 8374600,
@@ -126,7 +126,7 @@
       "cache_key": "d8bb2e0b1f115a87201d07b43b47e58378f3b6740d2d00fbdb78fc7a8c7eaec7"
     },
     "audio": {
-      "version": "playfix-012-20261011-final-f4df729",
+      "version": "xp-progression-20261018-10371b9",
       "url": "packs/audio.pck?sha256=09de25285d744bbb1cd02bffe002da80f5c3abe55060adf9352738147534291f",
       "sha256": "09de25285d744bbb1cd02bffe002da80f5c3abe55060adf9352738147534291f",
       "bytes": 19356400,
@@ -147,7 +147,7 @@
       "cache_key": "09de25285d744bbb1cd02bffe002da80f5c3abe55060adf9352738147534291f"
     },
     "quality_materials": {
-      "version": "playfix-012-20261011-final-f4df729",
+      "version": "xp-progression-20261018-10371b9",
       "url": "packs/quality_materials.pck?sha256=649cd8d10d8093cebe36c88d906c6c94bde18af75c31f093b07fb687cdebcbae",
       "sha256": "649cd8d10d8093cebe36c88d906c6c94bde18af75c31f093b07fb687cdebcbae",
       "bytes": 7377484,
@@ -168,9 +168,9 @@
       "cache_key": "649cd8d10d8093cebe36c88d906c6c94bde18af75c31f093b07fb687cdebcbae"
     }
   },
-  "build_id": "playfix-012-20261011-final-f4df729",
-  "generated_from_commit": "f4df7294ffa0c2e6789c9ea535976e67c9738da9",
-  "generated_at_utc": "2026-10-10T21:02:14.014347Z",
-  "total_bytes": 78330608,
+  "build_id": "xp-progression-20261018-10371b9",
+  "generated_from_commit": "10371b936bb4f93a7887772129bb9e7a3e60a04f",
+  "generated_at_utc": "2026-10-18T08:01:13.082717Z",
+  "total_bytes": 74588672,
   "source_dirty": true
 }

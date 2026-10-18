@@ -1,6 +1,6 @@
 extends Node
 
-const CURRENT_VERSION := 11
+const CURRENT_VERSION := 12
 const PRE_COVENANT_PATH := "user://ashen_oath_before_covenant.json"
 const SAVE_PATH := "user://ashen_oath_save.json"
 const AUTOSAVE_PATH := "user://ashen_oath_autosave.json"
@@ -128,7 +128,7 @@ func migrate_save_data(raw_data: Dictionary) -> Dictionary:
 	data.vendors["emergency_healing_claimed"] = typeof(medicine) == TYPE_BOOL and medicine
 	_sanitize_dictionary_fields(data.quests, ["active", "completed", "unlocked", "world_flags", "evidence_history"])
 	_sanitize_dictionary_fields(data.story_state, ["flags", "values", "evidence"])
-	_sanitize_dictionary_fields(data.progression, ["unlocked", "rewarded_quests"])
+	_sanitize_dictionary_fields(data.progression, ["unlocked", "rewarded_quests", "claimed_rewards", "visited_sectors"])
 	_sanitize_dictionary_fields(data.world_state, ["removed_interactions", "day_night"])
 	if not data.has("quest_presentation") or typeof(data.get("quest_presentation")) != TYPE_DICTIONARY:
 		data["quest_presentation"] = {}

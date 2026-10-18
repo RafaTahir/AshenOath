@@ -450,13 +450,16 @@ func _apply_progression_stats() -> void:
 	if health_component == null:
 		return
 	var target_max := 125.0 + _progression_value("max_health_bonus", 0.0)
-	var gained := maxf(target_max - health_component.max_health, 0.0)
 	health_component.max_health = target_max
-	health_component.health = clampf(health_component.health + gained, 1.0, target_max)
+	# Learning, refunding or receiving XP must not heal Kael or revive a dead body.
+	health_component.health = clampf(health_component.health, 0.0, target_max)
 	health_component.changed.emit(health_component.health, health_component.max_health)
 
 func _progression_value(effect_id: String, fallback: float) -> float:
 	return progression.effect_value(effect_id, fallback) if progression != null else fallback
+
+func get_bow_aim_sensitivity() -> float:
+	return _progression_value("bow_aim_sensitivity_multiplier", 1.0)
 
 func get_dodge_stamina_cost() -> float:
 	return maxf(1.0, 28.0 + float(difficulty_profile.get("dodge_cost_modifier", 0.0)) - _progression_value("dodge_cost_reduction", 0.0))
@@ -858,7 +861,7 @@ func _release_bow() -> void:
 	if equipment_loadout != null:
 		equipment_loadout.set_bow_aiming(false)
 	bow_draw_time = 0.0
-	bow_recovery = 0.24
+	bow_recovery = 0.24 * _progression_value("bow_recovery_multiplier", 1.0)
 	if animation_driver != null:
 		animation_driver.trigger_action("attack_light", 1.0, 0.08)
 

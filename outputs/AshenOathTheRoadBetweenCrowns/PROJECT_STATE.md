@@ -1,5 +1,45 @@
 # Ashen Oath Project State
 
+## XP and Regional Progression - 2026-10-18
+
+XP-001 through XP-005 are implemented cumulatively on D:, on
+`codex/masterpiece-rebuild`. This is implementation status, not user acceptance.
+One global level (1-20), twelve milestone Oath Marks, six regional records,
+one-time arrivals/discoveries/encounters and meaningful returns extend the existing
+progression service. The nine original practices remain, with three new Hunter
+practices and free, non-healing redistribution beside Greyfen's shrine bench.
+Save schema 12 preserves legacy skills/Marks and quietly reconciles recorded
+history without inventing kills, choices or visits. See
+`XP_PROGRESSION_001_RESULT.md` for exact rules and manual checks.
+
+The user requested push/deploy on completion and for future implementation work.
+Build-only mode remains active: no gameplay, browser QA, benchmarks or new tests.
+Production package `xp-progression-20261018-10371b9` compiled and is synchronized
+into `web/`: 94,239,048 directory bytes, below 100 MiB. Publication is authorized
+through the existing XP-001 publisher; its receipt records the final commit and
+Vercel outcome. User runtime acceptance remains pending. Existing startup/camera
+changes below remain retained in this cumulative candidate.
+
+## Local Startup and Camera Repair - 2026-10-13
+
+The Faster Startup and Smoother Play implementation is local on D:, branch
+codex/masterpiece-rebuild. Menu/journey guards, phased services, complete Greyfen
+preparation and interpolated camera follow are implemented. The experimental
+16-metre tree groups were removed because their gain was not established.
+All existing opening stages and retained village bodies are ready before control.
+Compilation and source-aligned packaging passed; no commit/push/deployment occurred.
+
+Current local candidate: startup-smooth-20261013-final-10371b9, compiled and packaged
+at 94,226,680 directory bytes, below 100 MiB. Source/artifact identity is aligned.
+V1 was rejected after screenshot review found disabled 3D on Continue;
+V2 corrected activation after cancellation, passed save/reload/Continue and rendered
+Greyfen visibly. The final build retains that fix. Desktop comparison was partial:
+the experimental complete scene reached readiness at 45.9 vs 56.7 seconds, but initial
+control was not faster. The later touch sample took 64.1 seconds to New Game control
+and measured 15.0 FPS average. Variation prevents a reliable loading/FPS improvement
+claim. Historical targets remain missed; camera/focus and actual phone are unverified.
+See STARTUP_SMOOTH_001_RESULT.md. The delivery below remains the production build.
+
 ## Current Delivery - 2026-10-11
 
 PLAYFIX-001 through PLAYFIX-011 and V2 were published at f4df729. Live V2 New

@@ -1,92 +1,94 @@
 {
-  "schema_version": 2,
-  "generated_at_utc": "2026-10-10T21:02:10.4142462Z",
-  "build_id": "playfix-012-20261011-final-f4df729",
-  "generated_from_commit": "f4df7294ffa0c2e6789c9ea535976e67c9738da9",
-  "source_dirty": true,
-  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\playfix-012-20261011-startup-final\\runtime-packs",
-  "artifacts_are_external": true,
-  "max_deployment_bytes": 104857600,
-  "total_bytes": 94178800,
-  "packs": [
-    {
-      "id": "base",
-      "version": "playfix-012-20261011-final-f4df729",
-      "preset": "Runtime Pack Base",
-      "artifact": "base.pck",
-      "bytes": 15848192,
-      "sha256": "fb6f0923e3c8171aab0da97800f8c84e9787d286638c5a5b38b2eb1371ea1b9a",
-      "status": "candidate_external",
-      "log": "logs/pack-base.stdout.log"
-    },
-    {
-      "id": "opening",
-      "version": "playfix-012-20261011-final-f4df729",
-      "preset": "Runtime Pack Opening",
-      "artifact": "opening.pck",
-      "bytes": 14323836,
-      "sha256": "acdf74f8303ded74fc2ed30a204973b0735f1446371ce6612a09c6ea7fae9eca",
-      "status": "candidate_external",
-      "log": "logs/pack-opening.stdout.log"
-    },
-    {
-      "id": "campaign",
-      "version": "playfix-012-20261011-final-f4df729",
-      "preset": "Runtime Pack Campaign",
-      "artifact": "campaign.pck",
-      "bytes": 1002316,
-      "sha256": "ee949fde556289d8e7e8df7278b5879bf3a8c87f22c8e9089e9bff04d8b253f4",
-      "status": "candidate_external",
-      "log": "logs/pack-campaign.stdout.log"
-    },
-    {
-      "id": "characters",
-      "version": "playfix-012-20261011-final-f4df729",
-      "preset": "Runtime Pack Characters",
-      "artifact": "characters.pck",
-      "bytes": 27895972,
-      "sha256": "99527791f03c09b016ce650a034421da00ffc9038668f73dfada4bf1a26626e4",
-      "status": "candidate_external",
-      "log": "logs/pack-characters.stdout.log"
-    },
-    {
-      "id": "monsters",
-      "version": "playfix-012-20261011-final-f4df729",
-      "preset": "Runtime Pack Monsters",
-      "artifact": "monsters.pck",
-      "bytes": 8374600,
-      "sha256": "d8bb2e0b1f115a87201d07b43b47e58378f3b6740d2d00fbdb78fc7a8c7eaec7",
-      "status": "candidate_external",
-      "log": "logs/pack-monsters.stdout.log"
-    },
-    {
-      "id": "audio",
-      "version": "playfix-012-20261011-final-f4df729",
-      "preset": "Runtime Pack Audio",
-      "artifact": "audio.pck",
-      "bytes": 19356400,
-      "sha256": "09de25285d744bbb1cd02bffe002da80f5c3abe55060adf9352738147534291f",
-      "status": "candidate_external",
-      "log": "logs/pack-audio.stdout.log"
-    },
-    {
-      "id": "quality_materials",
-      "version": "playfix-012-20261011-final-f4df729",
-      "preset": "Runtime Pack Quality Materials",
-      "artifact": "quality_materials.pck",
-      "bytes": 7377484,
-      "sha256": "649cd8d10d8093cebe36c88d906c6c94bde18af75c31f093b07fb687cdebcbae",
-      "status": "candidate_external",
-      "log": "logs/pack-quality_materials.stdout.log"
-    }
-  ],
-  "errors": [],
-  "selected_web_export": {
-    "build_id": "playfix-012-20261011-final-f4df729",
-    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\playfix-012-20261011-startup-final\\export",
-    "generated_from_commit": "f4df7294ffa0c2e6789c9ea535976e67c9738da9",
-    "artifacts_total_bytes": 95901419,
-    "root_pck_sha256": "985bd9afb5a78b5a3de76b9eed9947a5113604ce58ab3924a54aa06510f388ec",
-    "note": "Final startup fix: base and production rebuilt; unchanged six optional packs reused."
-  }
+    "schema_version":  2,
+    "generated_at_utc":  "2026-10-18T08:01:12.0624220Z",
+    "build_id":  "xp-progression-20261018-10371b9",
+    "generated_from_commit":  "10371b936bb4f93a7887772129bb9e7a3e60a04f",
+    "source_dirty":  true,
+    "artifact_directory":  "D:\\Projects\\AshenOath\\.release-gate\\xp-progression-20261018\\runtime-packs",
+    "artifacts_are_external":  true,
+    "max_deployment_bytes":  104857600,
+    "total_bytes":  90451872,
+    "packs":  [
+                  {
+                      "id":  "base",
+                      "version":  "xp-progression-20261018-10371b9",
+                      "preset":  "Runtime Pack Base",
+                      "artifact":  "base.pck",
+                      "bytes":  15863200,
+                      "sha256":  "1881176c997fefc3fc2829ed4eaa8f600e3a8f73f6058a46423d057e41ceef9a",
+                      "status":  "candidate_external",
+                      "log":  "logs/pack-base.stdout.log"
+                  },
+                  {
+                      "id":  "opening",
+                      "version":  "xp-progression-20261018-10371b9",
+                      "preset":  "Runtime Pack Opening",
+                      "artifact":  "opening.pck",
+                      "bytes":  18619836,
+                      "sha256":  "52b536853eed4a2fe4b7e41a21834fbfd93db2fd1931777e8e25221e0da40916",
+                      "status":  "candidate_external",
+                      "log":  "logs/pack-opening.stdout.log"
+                  },
+                  {
+                      "id":  "campaign",
+                      "version":  "xp-progression-20261018-10371b9",
+                      "preset":  "Runtime Pack Campaign",
+                      "artifact":  "campaign.pck",
+                      "bytes":  1002316,
+                      "sha256":  "ee949fde556289d8e7e8df7278b5879bf3a8c87f22c8e9089e9bff04d8b253f4",
+                      "status":  "candidate_external",
+                      "log":  "logs/pack-campaign.stdout.log"
+                  },
+                  {
+                      "id":  "characters",
+                      "version":  "xp-progression-20261018-10371b9",
+                      "preset":  "Runtime Pack Characters",
+                      "artifact":  "characters.pck",
+                      "bytes":  19858036,
+                      "sha256":  "14737d61faad9a8dc0e62ad0fbd6ed7c4c96daa5ec95d86462556de1714be4d1",
+                      "status":  "candidate_external",
+                      "log":  "logs/pack-characters.stdout.log"
+                  },
+                  {
+                      "id":  "monsters",
+                      "version":  "xp-progression-20261018-10371b9",
+                      "preset":  "Runtime Pack Monsters",
+                      "artifact":  "monsters.pck",
+                      "bytes":  8374600,
+                      "sha256":  "d8bb2e0b1f115a87201d07b43b47e58378f3b6740d2d00fbdb78fc7a8c7eaec7",
+                      "status":  "candidate_external",
+                      "log":  "logs/pack-monsters.stdout.log"
+                  },
+                  {
+                      "id":  "audio",
+                      "version":  "xp-progression-20261018-10371b9",
+                      "preset":  "Runtime Pack Audio",
+                      "artifact":  "audio.pck",
+                      "bytes":  19356400,
+                      "sha256":  "09de25285d744bbb1cd02bffe002da80f5c3abe55060adf9352738147534291f",
+                      "status":  "candidate_external",
+                      "log":  "logs/pack-audio.stdout.log"
+                  },
+                  {
+                      "id":  "quality_materials",
+                      "version":  "xp-progression-20261018-10371b9",
+                      "preset":  "Runtime Pack Quality Materials",
+                      "artifact":  "quality_materials.pck",
+                      "bytes":  7377484,
+                      "sha256":  "649cd8d10d8093cebe36c88d906c6c94bde18af75c31f093b07fb687cdebcbae",
+                      "status":  "candidate_external",
+                      "log":  "logs/pack-quality_materials.stdout.log"
+                  }
+              ],
+    "errors":  [
+
+               ],
+    "selected_web_export":  {
+                                "build_id":  "xp-progression-20261018-10371b9",
+                                "artifact_directory":  "D:\\Projects\\AshenOath\\.release-gate\\xp-progression-20261018\\export",
+                                "generated_from_commit":  "10371b936bb4f93a7887772129bb9e7a3e60a04f",
+                                "artifacts_total_bytes":  94232208,
+                                "root_pck_sha256":  "80a34fa18a465953d5eae083da016b4210db11764545a12d1ed459ce4573f6b5",
+                                "note":  "Selected export uses gzip transport; native pack records describe decoded build artifacts."
+                            }
 }

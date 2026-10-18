@@ -81,6 +81,8 @@ func record_playable_transition(zone_id: String, elapsed_ms: float, support_read
 	last_activation["state"] = "playable"
 	last_activation["playable_ms"] = elapsed_ms
 	last_activation["support_ready"] = support_ready
+	if support_ready:
+		host._on_progression_arrival(zone_id)
 
 func begin_transition(zone_id: String, previous_zone: String, spawn_position: Vector3) -> void:
 	preload("res://scripts/greyfen_archery_range.gd").stop_activity(host)
@@ -464,10 +466,14 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		host.pending_spawn_position = safe_spawn
 		host.player.global_position = safe_spawn + Vector3.UP * 0.9
 		host.player.velocity = Vector3.ZERO
+		host.player.reset_physics_interpolation()
+		if host.camera_rig != null:
+			host.camera_rig.reset_follow()
 		if using_prewarmed_spatial:
 			# This scene has already completed collision and navigation setup
 			# behind the menu. Do not wait for another rendered WebGL frame.
 			host.player.global_position = Vector3(safe_spawn.x, maxf(safe_spawn.y, 0.95), safe_spawn.z)
+			host.player.reset_physics_interpolation()
 			print("LOADING: handoff_phase=unlock_begin")
 			host.player.set_transition_locked(false)
 			print("LOADING: handoff_phase=unlock_end")
@@ -530,6 +536,9 @@ func advance_transition() -> void:
 		else:
 			return
 	host.player.global_position = grounded
+	host.player.reset_physics_interpolation()
+	if host.camera_rig != null:
+		host.camera_rig.reset_follow()
 	host.player.rotation.y = host.pending_spawn_facing
 	host.player.velocity = Vector3.ZERO
 	if host.zone_transition_frames < 2:

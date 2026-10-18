@@ -67,5 +67,28 @@
     "requires": "far_reach",
     "description": "Recover the flame sooner: Oathfire cooldown is reduced by 1 second. Its range and stamina rules remain in force.",
     "effects": {"beam_cooldown_reduction": 1.0}
+  },
+  "steady_hands": {
+    "name": "Steady Hands",
+    "branch": "hunter",
+    "tier": 1,
+    "description": "While aiming the bow, reduce look-input sensitivity by 20% for finer placement. Your sensitivity, inversion and aim-assist preferences still apply. No automatic target acquisition.",
+    "effects": {"bow_aim_sensitivity_multiplier": 0.8}
+  },
+  "quick_nock": {
+    "name": "Quick Nock",
+    "branch": "hunter",
+    "tier": 2,
+    "requires": "steady_hands",
+    "description": "Recover 25% faster between bow shots. Aiming and ammunition are still required; arrow damage and target selection are unchanged.",
+    "effects": {"bow_recovery_multiplier": 0.75}
+  },
+  "fletchers_care": {
+    "name": "Fletcher's Care",
+    "branch": "hunter",
+    "tier": 3,
+    "requires": "quick_nock",
+    "description": "Recover the finishing Standard or Bodkin arrow after a bow kill. It returns directly to your quiver if there is room. Ashfire arrows burn away; training shots grant no ammunition.",
+    "effects": {"arrow_recovery_on_kill": 1.0}
   }
 }

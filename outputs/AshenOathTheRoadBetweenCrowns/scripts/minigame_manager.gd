@@ -21,12 +21,13 @@ var rng := RandomNumberGenerator.new()
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	rng.seed = 73191
-	_build_ui()
 
 func setup(router: Node) -> void:
 	input_source = router
 
 func open_game(game_id: String) -> void:
+	if overlay == null:
+		_build_ui()
 	active_game = game_id
 	finished = false
 	draughts_selected = -1
@@ -40,6 +41,8 @@ func open_game(game_id: String) -> void:
 	opened.emit(game_id)
 
 func close_game() -> void:
+	if overlay == null:
+		return
 	active_game = ""
 	overlay.visible = false
 	world_control_locked = false
