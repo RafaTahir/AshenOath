@@ -38,9 +38,9 @@
       const canvas = document.getElementById('canvas');
       const errorPanel = document.getElementById('startup-error');
       const reload = document.getElementById('reload');
-      const SHELL_BUILD_ID = "xp-progression-20261018-10371b9";
-      const RUNTIME_PACK_CONTRACT = "xp-progression-20261018-10371b9";
-      const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":22161952,"index.wasm":37700666},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+      const SHELL_BUILD_ID = "opt-m1-20261018-cc97239";
+      const RUNTIME_PACK_CONTRACT = "opt-m1-20261018-cc97239";
+      const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"engine/ab2c53ed650ba2680cdff4a1/index","experimentalVK":false,"fileSizes":{"index.pck":11534196,"engine/ab2c53ed650ba2680cdff4a1/index.wasm":37700666},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4,"mainPack":"index.pck"};
       let engine = null, engineBooted = false, started = false, failed = false;
       let startupResourceError = '';
       const bootMetrics = {
@@ -145,79 +145,121 @@
         return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', payload)))
           .map((value) => value.toString(16).padStart(2, '0')).join('');
       }
-      async function prefetchOpeningPack() {
-        const controller = new AbortController();
-        const timeout = window.setTimeout(() => controller.abort(), 90000);
-        window.__ashenOathPreloadedPacks.opening = { state: 'loading' };
-        let packCache = null, packUrl = '';
-        try {
-          const releaseResponse = await fetch('release_manifest.json', { cache: 'no-cache', signal: controller.signal });
+      const packOperations = new Map();
+      let filesystemReadyResolve;
+      const filesystemReady = new Promise(resolve => { filesystemReadyResolve = resolve; });
+      let manifestPromise = null;
+      async function readPackManifest() {
+          const releaseResponse = await fetch('release_manifest.json', { cache: 'no-cache' });
           if (!releaseResponse.ok) throw new Error(`release manifest HTTP ${releaseResponse.status}`);
           const release = await releaseResponse.json();
           if (String(release?.build_id || '') !== SHELL_BUILD_ID) throw new Error('Page/release identity mismatch');
-          const manifestResponse = await fetch('runtime_pack_manifest.json', { cache: 'no-cache', signal: controller.signal });
+          const manifestResponse = await fetch('runtime_pack_manifest.json', { cache: 'no-cache' });
           if (!manifestResponse.ok) throw new Error(`runtime pack manifest HTTP ${manifestResponse.status}`);
           const manifestPayload = await manifestResponse.arrayBuffer();
           const manifestDigest = await sha256Hex(manifestPayload);
           if (manifestDigest !== String(release?.runtime_pack_manifest?.sha256 || '').toLowerCase()) throw new Error('Runtime manifest hash mismatch');
           const manifest = JSON.parse(new TextDecoder().decode(manifestPayload));
           if (String(manifest?.release_id || '') !== SHELL_BUILD_ID) throw new Error('Runtime manifest release mismatch');
-          const opening = manifest?.packs?.opening;
-          if (!opening?.url || !opening.sha256) throw new Error('Opening pack identity is missing');
-          packUrl = new URL(opening.url, window.location.href).href;
+          return manifest;
+      }
+      function getPackManifest() {
+        if (!manifestPromise) manifestPromise = readPackManifest().catch(error => { manifestPromise = null; throw error; });
+        return manifestPromise;
+      }
+      // Fetch operations share only metadata/promises, never retained PCK bodies.
+      async function fetchPack(id, operation, expected) {
+        const { controller } = operation;
+        const timeout = window.setTimeout(() => controller.abort(), 90000);
+        let packCache = null, packUrl = '';
+        try {
+          const manifest = await getPackManifest();
+          const pack = manifest?.packs?.[id];
+          if (!pack?.url || !/^[a-f0-9]{64}$/.test(pack.sha256)) throw new Error(`Missing pack identity: ${id}`);
+          if (expected && (expected.sha256 !== pack.sha256 || expected.bytes !== pack.bytes || expected.version !== pack.version)) throw new Error(`Pack contract mismatch: ${id}`);
+          const url = new URL(pack.url, window.location.href);
+          if (url.origin !== window.location.origin) throw new Error('External pack origin rejected');
+          packUrl = url.href;
           let response = null;
           if ('caches' in window) {
-            const cacheKey = String(release?.compatibility_key || manifestDigest).slice(0, 24);
-            packCache = await caches.open(`ashenoath-runtime-packs-${cacheKey}`);
-            response = await packCache.match(packUrl);
+            try {
+              packCache = await caches.open('ashenoath-runtime-packs-content-v2');
+              response = await packCache.match(packUrl);
+            } catch (_) { packCache = null; }
           }
-          if (!response) response = await fetch(packUrl, { cache: 'no-cache', signal: controller.signal });
-          if (!response.ok) throw new Error(`opening pack HTTP ${response.status}`);
+          const fromCache = Boolean(response);
+          if (!response) response = await fetch(packUrl, { cache: operation.reload ? 'reload' : 'force-cache', signal: controller.signal });
+          if (!response.ok) throw new Error(`${id} pack HTTP ${response.status}`);
           const payload = await response.arrayBuffer();
-          if (opening.bytes > 0 && payload.byteLength !== opening.bytes) throw new Error('Opening pack byte count mismatch');
+          if (payload.byteLength !== pack.bytes) throw new Error(`${id} pack byte count mismatch`);
           const digest = await sha256Hex(payload);
-          if (digest !== String(opening.sha256).toLowerCase()) throw new Error('Opening pack hash mismatch');
-          if (packCache) await packCache.put(packUrl, new Response(payload)).catch(() => {});
-          const metadata = { state: 'verified', path: '/opening.pck', url: packUrl, version: String(opening.version || ''), bytes: payload.byteLength, sha256: digest };
-          window.__ashenOathPreloadedPacks.opening = metadata;
-          bootMetrics.opening_prefetch_state = 'verified';
-          return { ...metadata, payload };
+          if (digest !== pack.sha256) throw new Error(`${id} pack hash mismatch`);
+          const metadata = { state: 'verified', path: `/${id}-${digest.slice(0, 20)}.pck`, url: packUrl, version: pack.version, bytes: payload.byteLength, sha256: digest };
+          if (controller.signal.aborted || packOperations.get(id) !== operation) return null;
+          window.__ashenOathPreloadedPacks[id] = metadata;
+          if (id === 'opening') bootMetrics.opening_prefetch_state = 'verified';
+          const aborted = new Promise((_, reject) => {
+            controller.signal.addEventListener('abort', () => reject(new Error('Pack operation cancelled')), { once: true });
+          });
+          await Promise.race([filesystemReady, aborted]);
+          if (controller.signal.aborted || failed || packOperations.get(id) !== operation) return null;
+          engine.copyToFS(metadata.path, payload);
+          const detail = { ...metadata, state: 'preloaded' };
+          window.__ashenOathPreloadedPacks[id] = detail;
+          if (id === 'opening') {
+            bootMetrics.opening_prefetch_state = 'preloaded';
+            window.dispatchEvent(new CustomEvent('ashenoath-opening-pack', { detail }));
+          }
+          // Persist only verified bytes. Optional cache I/O is not a readiness gate.
+          if (packCache && !fromCache) {
+            void packCache.put(packUrl, new Response(payload)).then(async () => {
+              const live = new Set(Object.values(manifest.packs).filter(p => p.url).map(p => new URL(p.url, location.href).href));
+              const keys = await packCache.keys();
+              let surplus = keys.length - Math.max(16, live.size);
+              for (const key of keys) {
+                if (surplus <= 0) break;
+                if (!live.has(key.url)) { await packCache.delete(key); surplus -= 1; }
+              }
+            }).catch(() => {});
+          }
+          return detail;
         } catch (error) {
           if (packCache && packUrl) await packCache.delete(packUrl).catch(() => {});
-          window.__ashenOathPreloadedPacks.opening = { state: 'failed', error: String(error) };
-          bootMetrics.opening_prefetch_state = 'failed';
-          bootMetrics.opening_prefetch_error = String(error);
+          if (packOperations.get(id) === operation) {
+            window.__ashenOathPreloadedPacks[id] = { state: controller.signal.aborted ? 'cancelled' : 'failed', error: String(error) };
+            if (id === 'opening') {
+              bootMetrics.opening_prefetch_state = 'failed';
+              bootMetrics.opening_prefetch_error = String(error);
+            }
+          }
           return null;
         } finally {
           window.clearTimeout(timeout);
         }
       }
-      let openingFetchPromise = prefetchOpeningPack();
-      let openingPreloadPromise = null;
-      async function mountOpeningPackAfterReady() {
-        if (!engineBooted || failed) return null;
-        if (openingPreloadPromise) return openingPreloadPromise;
-        openingPreloadPromise = (async () => {
-          const preload = await openingFetchPromise;
-          if (!preload || failed) return null;
-          try {
-            engine.copyToFS(preload.path, preload.payload);
-            const { payload, ...metadata } = preload;
-            openingFetchPromise = null;
-            const detail = { ...metadata, state: 'preloaded' };
-            window.__ashenOathPreloadedPacks.opening = detail;
-            bootMetrics.opening_prefetch_state = 'preloaded';
-            window.dispatchEvent(new CustomEvent('ashenoath-opening-pack', { detail }));
-            return detail;
-          } catch (error) {
-            const detail = { state: 'failed', error: String(error) };
-            window.__ashenOathPreloadedPacks.opening = detail;
-            window.dispatchEvent(new CustomEvent('ashenoath-opening-pack', { detail }));
-            return null;
-          }
-        })();
-        return openingPreloadPromise;
+      window.__ashenOathRequestPack = (id, sha256, bytes, version) => {
+        if (!/^[a-z0-9_]+$/.test(id) || failed) return false;
+        const current = window.__ashenOathPreloadedPacks[id];
+        if (current && ['loading', 'verified', 'preloaded'].includes(current.state)) return true;
+        const operation = { controller: new AbortController(), promise: null, reload: current?.state === 'failed' };
+        packOperations.set(id, operation);
+        window.__ashenOathPreloadedPacks[id] = { state: 'loading' };
+        const expected = sha256 ? { sha256, bytes, version } : null;
+        operation.promise = fetchPack(id, operation, expected);
+        return true;
+      };
+      window.__ashenOathCancelPack = id => {
+        const operation = packOperations.get(id);
+        if (operation && window.__ashenOathPreloadedPacks[id]?.state !== 'preloaded') {
+          operation.controller.abort();
+          packOperations.delete(id);
+          window.__ashenOathPreloadedPacks[id] = { state: 'cancelled' };
+        }
+      };
+      function mountOpeningPackAfterReady() {
+        return packOperations.get('opening')?.promise || null;
       }
+      window.__ashenOathRequestPack('opening');
       window.__ashenOathBeginOpeningPackMount = mountOpeningPackAfterReady;
       window.__ashenOathStart = async () => {
         if (started || failed) return;
@@ -250,17 +292,19 @@
           });
           if (failed) return;
           engineBooted = true;
+          filesystemReadyResolve(true);
           bootMetrics.engine_ready_ms = performance.now();
           performance.mark('ashen-oath-engine-ready');
           if (!bootMetrics.menu_ready_ms) setBootState('engine_ready');
           void mountOpeningPackAfterReady();
         } catch (error) {
+          filesystemReadyResolve(false);
           showStartupError(startupResourceError ? 'Required game files are missing or damaged. Reload to try again.' : 'The game files could not be opened. Check your connection and reload.', error);
         }
       };
     })();
   </script>
-  <script src="index.js" onerror="window.__ashenOathBootstrapFailure('The game engine could not be downloaded. Check your connection and reload.')"></script>
+  <script src="engine/ab2c53ed650ba2680cdff4a1/index.js" onerror="window.__ashenOathBootstrapFailure('The game engine could not be downloaded. Check your connection and reload.')"></script>
   <script>window.__ashenOathStart();</script>
 </body>
 </html>

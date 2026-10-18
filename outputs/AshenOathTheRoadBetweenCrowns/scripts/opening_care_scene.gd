@@ -3,9 +3,8 @@ extends Node3D
 ## An optional human moment. StoryState owns progress; these objects only
 ## present it, including after a cached Greyfen tree is reactivated.
 const Interactable = preload("res://scripts/interactable.gd")
-# This actor exists before the optional character pack is mounted. Its approved
-# atlas must therefore be an explicit dependency of the base script graph.
-const TRAVELER_VISUAL = preload("res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf")
+# The retained traveler atlas is opening-pack owned. AssetSpawnHelper resolves
+# it after opening readiness; parsing this coordinator must not load the body.
 const LAYER := "OpeningCareScene"
 const TIMBER := Color(0.26, 0.18, 0.12)
 const CLOTH := Color(0.37, 0.31, 0.27)
@@ -56,7 +55,7 @@ static func introduce(game, actor: Node3D) -> bool:
 func build() -> void:
 	var anchor: Node3D = host.zone_root.find_child("AnwenAnchor", true, false) as Node3D
 	position = host.zone_root.to_local(anchor.global_position) if anchor != null else Vector3(2, 0, -5)
-	# The body is base-owned; the small care props require no additional pack.
+	# The body is opening-owned; the small care props require no additional pack.
 	cup_area = point("opening_cup_pickup", "Take the waiting cup", Vector3(-0.85, 0, 1.4))
 	box(cup_area, "StoneStep", Vector3(0, 0.10, 0), Vector3(0.60, 0.20, 0.48), Color(0.40, 0.39, 0.34))
 	waiting_cup = make_cup(cup_area, Vector3(0, 0.205, 0))

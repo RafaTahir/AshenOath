@@ -1,8 +1,9 @@
 extends RefCounted
 
-const ANWEN_CEMETERY_STAGE := Vector3(9.4, 0.0, 7.6)
-const CROW_SHRINE_VISUAL_STAGE := Vector3(17.1, 0.0, 7.2)
-const CROW_SHRINE_INTERACTION_STAGE := Vector3(16.35, 0.24, 7.7)
+const Staging = preload("res://scripts/cemetery_staging.gd")
+const ANWEN_CEMETERY_STAGE := Staging.ANWEN_CEMETERY_STAGE
+const CROW_SHRINE_VISUAL_STAGE := Staging.CROW_SHRINE_VISUAL_STAGE
+const CROW_SHRINE_INTERACTION_STAGE := Staging.CROW_SHRINE_INTERACTION_STAGE
 const BUILD_STAGES := ["approach", "boundary", "graves", "chapel", "bell", "edges", "presentation"]
 const PRESENTATION_STAGES := ["bell", "chapel", "graves", "roost", "states"]
 const CHAPEL_MESH := preload("res://assets_external/environment/village/Cemetery_chapel_Authored.res")

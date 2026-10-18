@@ -65,6 +65,7 @@ New-Item -ItemType Directory -Force -Path $OutputDirectory | Out-Null
 $packs = @(
     @{ id = "base"; preset = "Runtime Pack Base"; file = "base.pck" },
     @{ id = "opening"; preset = "Runtime Pack Opening"; file = "opening.pck" },
+    @{ id = "adjacent"; preset = "Runtime Pack Adjacent"; file = "adjacent.pck" },
     @{ id = "campaign"; preset = "Runtime Pack Campaign"; file = "campaign.pck" },
     @{ id = "characters"; preset = "Runtime Pack Characters"; file = "characters.pck" },
     @{ id = "monsters"; preset = "Runtime Pack Monsters"; file = "monsters.pck" },

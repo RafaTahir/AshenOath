@@ -19,6 +19,40 @@ RELEASE_MANIFEST = "release_manifest.json"
 MAX_TOTAL_BYTES = 104_857_600
 
 
+def prepare_engine_transport(export_dir: Path) -> dict:
+    """Give unchanged engine bytes an immutable URL independent of game releases."""
+    names = ("index.js", "index.wasm", "index.audio.worklet.js", "index.audio.position.worklet.js")
+    paths = [export_dir / name for name in names if (export_dir / name).is_file()]
+    if not all((export_dir / name).is_file() for name in names[:2]):
+        raise ValueError("Engine export is incomplete")
+    digest = hashlib.sha256()
+    for path in paths:
+        digest.update(path.name.encode("utf-8"))
+        digest.update(bytes.fromhex(sha256(path)))
+    stem = f"engine/{digest.hexdigest()[:24]}/index"
+    target_dir = (export_dir / stem).parent
+    target_dir.mkdir(parents=True, exist_ok=True)
+    for path in paths:
+        path.rename(target_dir / path.name)
+    html = export_dir / "index.html"
+    text = html.read_text(encoding="utf-8")
+    match = re.search(r"const GODOT_CONFIG\s*=\s*(\{[^\n]+\});", text)
+    if not match:
+        raise ValueError("Export has no Godot engine configuration")
+    config = json.loads(match.group(1))
+    config["executable"] = stem
+    config["mainPack"] = "index.pck"
+    sizes = config.get("fileSizes", {})
+    if "index.wasm" in sizes:
+        sizes[stem + ".wasm"] = sizes.pop("index.wasm")
+    text = text[:match.start(1)] + json.dumps(config, separators=(",", ":")) + text[match.end(1):]
+    text, count = re.subn(r'<script src="index\.js"', '<script src="' + stem + '.js"', text, count=1)
+    if count != 1:
+        raise ValueError("Export engine script entry is missing")
+    html.write_text(text, encoding="utf-8")
+    return {"executable": stem, "script": stem + ".js", "wasm": stem + ".wasm"}
+
+
 def sha256(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as stream:
@@ -86,7 +120,8 @@ def inspect_packaged_export(export_dir: Path) -> dict:
     actual_paths = {p.relative_to(export_dir).as_posix() for p in export_dir.rglob("*") if p.is_file()}
     if actual_paths != set(by_path) | {RELEASE_MANIFEST}:
         raise ValueError("Web directory has missing or unlisted transport files")
-    required = {"index.html", "index.js", "index.wasm", "index.pck", "runtime_pack_manifest.json"}
+    engine = manifest.get("engine", {"script": "index.js", "wasm": "index.wasm"})
+    required = {"index.html", engine["script"], engine["wasm"], "index.pck", "runtime_pack_manifest.json"}
     if not required.issubset(by_path):
         raise ValueError("Required Web artifacts are missing")
     total = 0
@@ -97,7 +132,7 @@ def inspect_packaged_export(export_dir: Path) -> dict:
         total += path.stat().st_size
         if path.stat().st_size != entry["bytes"] or sha256(path) != entry["sha256"]:
             raise ValueError(f"Artifact size/hash mismatch: {relative}")
-        if path.suffix == ".pck" or relative == "index.wasm":
+        if path.suffix == ".pck" or relative == engine["wasm"]:
             if entry.get("content_encoding") != "gzip":
                 raise ValueError(f"Hosting requires gzip transport: {relative}")
             decoded = gzip.decompress(path.read_bytes())
@@ -162,7 +197,7 @@ def inject_shell_identity(html_path: Path, build_id: str) -> None:
     html_path.write_text(text, encoding="utf-8")
 
 
-def build_manifest(export_dir: Path, runtime_manifest_path: Path, source_commit: str = "") -> dict:
+def build_manifest(export_dir: Path, runtime_manifest_path: Path, source_commit: str = "", engine: dict | None = None) -> dict:
     runtime = json.loads(runtime_manifest_path.read_text(encoding="utf-8-sig"))
     build_id = str(runtime.get("release_id") or runtime.get("build_id") or "").strip()
     if not build_id:
@@ -208,16 +243,17 @@ def build_manifest(export_dir: Path, runtime_manifest_path: Path, source_commit:
                 decoded_sha256=hashlib.sha256(decoded).hexdigest(),
             )
         records.append(record)
-    wasm = export_dir / "index.wasm"
+    engine = engine or {"executable": "index", "script": "index.js", "wasm": "index.wasm"}
+    wasm = export_dir / engine["wasm"]
     if wasm.is_file() and wasm.read_bytes().startswith(b"\x1f\x8b"):
         decoded = gzip.decompress(wasm.read_bytes())
         if not decoded.startswith(b"\x00asm"):
             raise ValueError("Compressed engine is not WebAssembly")
-        wasm_record = next(item for item in records if item["path"] == "index.wasm")
+        wasm_record = next(item for item in records if item["path"] == engine["wasm"])
         wasm_record.update(content_encoding="gzip", decoded_bytes=len(decoded),
                            decoded_sha256=hashlib.sha256(decoded).hexdigest())
     by_path = {item["path"]: item for item in records}
-    required = {"index.html", "index.js", "index.wasm", "index.pck", "runtime_pack_manifest.json"}
+    required = {"index.html", engine["script"], engine["wasm"], "index.pck", "runtime_pack_manifest.json"}
     missing = sorted(required - by_path.keys())
     if missing:
         raise ValueError("missing required Web artifacts: " + ", ".join(missing))
@@ -251,6 +287,7 @@ def build_manifest(export_dir: Path, runtime_manifest_path: Path, source_commit:
         )
     return {
         "schema_version": 2,
+        "engine": engine,
         "project": "Ashen Oath",
         "build_id": build_id,
         "source": {
@@ -298,7 +335,8 @@ def main() -> int:
         if args.compress_wasm:
             compress_wasm(export_dir / "index.wasm")
         compress_pck_transport(export_dir)
-        manifest = build_manifest(export_dir, runtime_manifest, source_commit)
+        engine = prepare_engine_transport(export_dir)
+        manifest = build_manifest(export_dir, runtime_manifest, source_commit, engine)
     except (OSError, ValueError, TypeError, json.JSONDecodeError) as error:
         print(f"WEB RELEASE MANIFEST: FAIL - {error}", file=sys.stderr)
         return 1

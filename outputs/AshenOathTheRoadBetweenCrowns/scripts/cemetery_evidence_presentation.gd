@@ -1,14 +1,14 @@
 extends RefCounted
 
-const HARL := preload("res://assets_external/environment/village/Cemetery_grave_harl_Authored.res")
-const CHILD := preload("res://assets_external/environment/village/Cemetery_grave_child_Authored.res")
-const SOLDIER := preload("res://assets_external/environment/village/Cemetery_grave_soldier_Authored.res")
-const DISTURBED_SOIL := preload("res://assets_external/environment/village/Cemetery_disturbed_soil_Authored.res")
+const HARL := "res://assets_external/environment/village/Cemetery_grave_harl_Authored.res"
+const CHILD := "res://assets_external/environment/village/Cemetery_grave_child_Authored.res"
+const SOLDIER := "res://assets_external/environment/village/Cemetery_grave_soldier_Authored.res"
+const DISTURBED_SOIL := "res://assets_external/environment/village/Cemetery_disturbed_soil_Authored.res"
 
 static func add_disturbed_soil(parent: Node3D, position: Vector3, material: Material) -> void:
 	var soil := MeshInstance3D.new()
 	soil.name = "RoadCrowsGraveyardDisturbedSoil"
-	soil.mesh = DISTURBED_SOIL
+	soil.mesh = load(DISTURBED_SOIL) as Mesh
 	soil.material_override = material
 	soil.position = position
 	parent.add_child(soil)
@@ -19,9 +19,9 @@ static func apply(area: Node3D, id: String) -> bool:
 		return true
 	var mesh: ArrayMesh = null
 	match id:
-		"grave_harl", "grave_bell": mesh = HARL
-		"grave_child": mesh = CHILD
-		"grave_soldier": mesh = SOLDIER
+		"grave_harl", "grave_bell": mesh = load(HARL) as ArrayMesh
+		"grave_child": mesh = load(CHILD) as ArrayMesh
+		"grave_soldier": mesh = load(SOLDIER) as ArrayMesh
 	if mesh == null:
 		return false
 	var memorial := MeshInstance3D.new()

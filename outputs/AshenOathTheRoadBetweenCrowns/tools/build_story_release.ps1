@@ -22,7 +22,7 @@ $RepositoryRoot = [System.IO.Path]::GetFullPath((Split-Path -Parent (Split-Path 
 $GeneratedRoot = Join-Path $RepositoryRoot ".release-gate"
 $WebRoot = Join-Path $RepositoryRoot "web"
 if ($Publish -and $SkipWebCopy) { throw "-Publish requires the generated web transport to be copied." }
-if ($Publish -and (-not $PublishPaths.Count -or $Ticket -notmatch '^LR-\d{3}$')) { throw "-Publish requires -Ticket LR-NNN and explicit -PublishPaths for authored source." }
+if ($Publish -and (-not $PublishPaths.Count -or $Ticket -notmatch '^(LR|OPT)-\d{3}$')) { throw "-Publish requires a supported ticket ID and explicit -PublishPaths for authored source." }
 
 function Assert-Within([string]$Path, [string]$Root) {
     $resolved = [System.IO.Path]::GetFullPath($Path)
@@ -88,6 +88,7 @@ public static class AshenOathBuildPower {
 [AshenOathBuildPower]::SetThreadExecutionState([uint32]2147483649) | Out-Null
 try {
 Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "build_source_catalog.py")) "source-catalog"
+Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "prepare_runtime_pack_layout.py")) "pack-layout"
 Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "build_story_score.py")) "story-score"
 if ($BuildVoices) {
     $VoiceArguments = @((Join-Path $PSScriptRoot "build_story_voices.py"), "--all-scenes")
@@ -106,6 +107,7 @@ Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script
 $packs = @(
     @{ id = "base"; preset = "Runtime Pack Base" },
     @{ id = "opening"; preset = "Runtime Pack Opening" },
+    @{ id = "adjacent"; preset = "Runtime Pack Adjacent" },
     @{ id = "campaign"; preset = "Runtime Pack Campaign" },
     @{ id = "characters"; preset = "Runtime Pack Characters" },
     @{ id = "monsters"; preset = "Runtime Pack Monsters" },
@@ -189,7 +191,7 @@ if (-not $SkipWebCopy) {
     foreach ($relative in $previousFiles) {
         # Only known generated transport files are eligible for cleanup. Hosting
         # configuration and any other user-owned web files are retained.
-        if ($relative -notmatch '^(index\.[^/\\]+|runtime_pack_manifest\.json|release_manifest\.json|packs/[^/\\]+\.pck)$') { continue }
+        if ($relative -notmatch '^(index\.[^/\\]+|runtime_pack_manifest\.json|release_manifest\.json|packs/[^/\\]+\.pck|engine/[a-f0-9]{24}/index\.[^/\\]+)$') { continue }
         $oldFile = Assert-Within (Join-Path $WebRoot $relative) $WebRoot
         if (-not (Test-Path -LiteralPath $oldFile -PathType Leaf)) { continue }
         $backup = Assert-Within (Join-Path $backupRoot $relative) $backupRoot

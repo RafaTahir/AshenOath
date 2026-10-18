@@ -38,10 +38,7 @@ const DialogueRuntimeCoordinator = preload("res://scripts/dialogue_runtime_coord
 const CombatVfxCoordinator = preload("res://scripts/combat_vfx_coordinator.gd")
 const QuestHudCoordinator = preload("res://scripts/quest_hud_coordinator.gd")
 const ZoneSceneCatalog = preload("res://scripts/zone_scene_catalog.gd")
-const CemeterySection = preload("res://scripts/zones/cemetery_section.gd")
-const GreyfenSection = preload("res://scripts/zones/greyfen_section.gd")
-const RiverSection = preload("res://scripts/zones/river_section.gd")
-const CampaignWildernessSection = preload("res://scripts/zones/campaign_wilderness_section.gd")
+const CemeterySection = preload("res://scripts/cemetery_staging.gd")
 const OathGatePortal = preload("res://scripts/oath_gate_portal.gd")
 const BossEncounterScript = preload("res://scripts/boss_encounter.gd")
 const PerformanceBudgetMonitor = preload("res://scripts/performance_budget_monitor.gd")
@@ -2049,7 +2046,7 @@ func _handle_interaction(area) -> void:
 		elif area.interaction_id == "empty_grave_tracks":
 			quests.complete_objective("side_empty_grave", "follow_empty_grave")
 			if current_zone_id == "greyfen":
-				GreyfenSection.new().publish_returned_soldier(ZoneBuildContext.new(self, "greyfen"))
+				load("res://scripts/zones/greyfen_section.gd").new().publish_returned_soldier(ZoneBuildContext.new(self, "greyfen"))
 			hud.toast("Bare footprints leave the grave and stop beside the old road.")
 			_show_current_objective_guidance(5.0)
 		elif area.interaction_id == "oren_charm_shrine":
@@ -3919,7 +3916,7 @@ func _try_complete_oren_thread_trace(publish_return := true) -> void:
 		return
 	quests.complete_objective("side_childs_charm", "trace_thread")
 	if publish_return and current_zone_id == "greyfen" and zone_root != null:
-		GreyfenSection.new().publish_oren_charm_return(ZoneBuildContext.new(self, "greyfen"))
+		load("res://scripts/zones/greyfen_section.gd").new().publish_oren_charm_return(ZoneBuildContext.new(self, "greyfen"))
 	hud.toast("The red thread from Oren's token matches his erased place in the chapel.")
 	_show_current_objective_guidance(5.0)
 
@@ -4801,7 +4798,7 @@ func _finish_greyfen_ground_surfaces() -> void:
 
 func _append_greyfen_river_banks(surface: SurfaceTool) -> void:
 	var bridge_half := BridgeSurfaceContract.HALF_WIDTH
-	var river := RiverSection.new()
+	var river: Node3D = load("res://scripts/zones/river_section.gd").new()
 	for bank_side in [-1.0, 1.0]:
 		var land_z: float = 4.5 + bank_side * 2.02
 		for section in [[-21.0, -bridge_half + 0.08], [bridge_half - 0.08, 21.0]]:
@@ -4811,8 +4808,8 @@ func _append_greyfen_river_banks(surface: SurfaceTool) -> void:
 				var x1 := lerpf(float(section[0]), float(section[1]), float(index + 1) / float(segments))
 				var a := Vector3(x0, 0.006, land_z)
 				var b := Vector3(x1, 0.006, land_z)
-				var edge0 := river._water_channel_vertex(x0 / 42.0 + 0.5, 0.0 if bank_side < 0 else 1.0, 42.0, 3.4).z + 4.5
-				var edge1 := river._water_channel_vertex(x1 / 42.0 + 0.5, 0.0 if bank_side < 0 else 1.0, 42.0, 3.4).z + 4.5
+				var edge0: float = river._water_channel_vertex(x0 / 42.0 + 0.5, 0.0 if bank_side < 0 else 1.0, 42.0, 3.4).z + 4.5
+				var edge1: float = river._water_channel_vertex(x1 / 42.0 + 0.5, 0.0 if bank_side < 0 else 1.0, 42.0, 3.4).z + 4.5
 				# The lower edge stays under the lowest animated wave, not above it.
 				var c := Vector3(x0, -0.30, edge0 - bank_side * 0.06)
 				var d := Vector3(x1, -0.30, edge1 - bank_side * 0.06)
@@ -4824,6 +4821,7 @@ func _append_greyfen_river_banks(surface: SurfaceTool) -> void:
 					surface.set_uv(Vector2(point.x, point.z))
 					surface.set_color(tint)
 					surface.add_vertex(point)
+	river.free()
 
 func _greyfen_ground_tint(point: Vector3) -> Color:
 	var tint := Color(0.42, 0.62, 0.40)
