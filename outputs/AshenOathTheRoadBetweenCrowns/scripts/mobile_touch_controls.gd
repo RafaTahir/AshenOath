@@ -84,7 +84,12 @@ func _on_interaction_prompt_changed(model: Dictionary) -> void:
 	_interaction_prompt = model.duplicate(true)
 	queue_redraw()
 
+var _applied_setting_groups: Dictionary = {}
+const SettingsDelta = preload("res://scripts/settings_delta.gd")
+
 func apply_settings(settings: Dictionary) -> void:
+	if not SettingsDelta.changed(_applied_setting_groups, "touch", self, settings, ["touch_controls", "touch_look_sensitivity"]):
+		return
 	cancel_active_touches("touch_settings")
 	touch_mode = str(settings.get("touch_controls", MODE_AUTO)).to_lower()
 	if touch_mode not in [MODE_AUTO, MODE_ON, MODE_OFF]:

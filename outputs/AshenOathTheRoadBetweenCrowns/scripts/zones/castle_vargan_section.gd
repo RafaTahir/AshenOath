@@ -343,42 +343,9 @@ func _make_record_hall_dressing(context: ZoneBuildContext) -> void:
 		context.make_prop_box("RecordHallReadingBench", Vector3(0.0, 0.42, z + 1.25), Vector3(2.5, 0.84, 0.42), Color(0.16, 0.095, 0.045))
 
 func _make_record_hall_vault(context: ZoneBuildContext) -> void:
-	var ceiling_surface := SurfaceTool.new()
-	ceiling_surface.begin(Mesh.PRIMITIVE_TRIANGLES)
-	var wall_surface := SurfaceTool.new()
-	wall_surface.begin(Mesh.PRIMITIVE_TRIANGLES)
-	var half_width: float = 16.0
-	var south: float = 18.0
-	var north: float = -18.0
-	for index in range(16):
-		var x0 := lerpf(-half_width, half_width, float(index) / 16.0)
-		var x1 := lerpf(-half_width, half_width, float(index + 1) / 16.0)
-		var y0 := 5.55 + 1.65 * (1.0 - pow(x0 / half_width, 2.0))
-		var y1 := 5.55 + 1.65 * (1.0 - pow(x1 / half_width, 2.0))
-		_add_record_hall_triangle(ceiling_surface, Vector3(x0, y0, north), Vector3(x1, y1, north), Vector3(x0, y0, south))
-		_add_record_hall_triangle(ceiling_surface, Vector3(x1, y1, north), Vector3(x1, y1, south), Vector3(x0, y0, south))
-	for side in [-1.0, 1.0]:
-		var x: float = float(side) * half_width
-		var a := Vector3(x, 0.0, north)
-		var b := Vector3(x, 5.55, north)
-		var c := Vector3(x, 0.0, south)
-		var d := Vector3(x, 5.55, south)
-		if side < 0.0:
-			_add_record_hall_triangle(wall_surface, a, b, c)
-			_add_record_hall_triangle(wall_surface, b, d, c)
-		else:
-			_add_record_hall_triangle(wall_surface, a, c, b)
-			_add_record_hall_triangle(wall_surface, b, c, d)
-	for index in range(16):
-		var x0 := lerpf(-half_width, half_width, float(index) / 16.0)
-		var x1 := lerpf(-half_width, half_width, float(index + 1) / 16.0)
-		var y0 := 5.55 + 1.65 * (1.0 - pow(x0 / half_width, 2.0))
-		var y1 := 5.55 + 1.65 * (1.0 - pow(x1 / half_width, 2.0))
-		_add_record_hall_triangle(wall_surface, Vector3(x0, 0.0, north), Vector3(x1, 0.0, north), Vector3(x0, y0, north))
-		_add_record_hall_triangle(wall_surface, Vector3(x1, 0.0, north), Vector3(x1, y1, north), Vector3(x0, y0, north))
 	var vault_ceiling := MeshInstance3D.new()
 	vault_ceiling.name = "RecordHallVaultCeiling"
-	vault_ceiling.mesh = ceiling_surface.commit()
+	vault_ceiling.mesh = preload("res://scripts/prepared_zone_geometry.gd").mesh("record_ceiling")
 	var ceiling_material := context.make_world_material("medieval_brick", Color(0.53, 0.49, 0.43)).duplicate() as StandardMaterial3D
 	ceiling_material.cull_mode = BaseMaterial3D.CULL_DISABLED
 	vault_ceiling.material_override = ceiling_material
@@ -386,20 +353,16 @@ func _make_record_hall_vault(context: ZoneBuildContext) -> void:
 	context.add_node(vault_ceiling)
 	var vault_walls := MeshInstance3D.new()
 	vault_walls.name = "RecordHallVaultWalls"
-	vault_walls.mesh = wall_surface.commit()
+	vault_walls.mesh = preload("res://scripts/prepared_zone_geometry.gd").mesh("record_walls")
 	var wall_material := context.make_world_material("medieval_brick", Color(0.82, 0.75, 0.67)).duplicate() as StandardMaterial3D
 	wall_material.cull_mode = BaseMaterial3D.CULL_DISABLED
 	vault_walls.material_override = wall_material
 	vault_walls.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	context.add_node(vault_walls)
 	_make_record_hall_ribs(context)
-	var floor_surface := SurfaceTool.new()
-	floor_surface.begin(Mesh.PRIMITIVE_TRIANGLES)
-	_add_record_hall_triangle(floor_surface, Vector3(-16.0, 0.014, -18.0), Vector3(-16.0, 0.014, 18.0), Vector3(16.0, 0.014, -18.0))
-	_add_record_hall_triangle(floor_surface, Vector3(16.0, 0.014, -18.0), Vector3(-16.0, 0.014, 18.0), Vector3(16.0, 0.014, 18.0))
 	var floor_node := MeshInstance3D.new()
 	floor_node.name = "RecordHallStoneFloor"
-	floor_node.mesh = floor_surface.commit()
+	floor_node.mesh = preload("res://scripts/prepared_zone_geometry.gd").mesh("record_floor")
 	var floor_material := context.make_world_material("medieval_brick", Color(0.54, 0.54, 0.51)).duplicate() as StandardMaterial3D
 	floor_material.cull_mode = BaseMaterial3D.CULL_DISABLED
 	floor_node.material_override = floor_material
@@ -407,47 +370,15 @@ func _make_record_hall_vault(context: ZoneBuildContext) -> void:
 	context.add_node(floor_node)
 
 func _make_record_hall_ribs(context: ZoneBuildContext) -> void:
-	var rib_surface := SurfaceTool.new()
-	rib_surface.begin(Mesh.PRIMITIVE_TRIANGLES)
-	var half_width := 16.0
-	for z in [-15.0, -9.0, -3.0, 3.0, 9.0]:
-		for index in range(16):
-			var x0 := lerpf(-half_width, half_width, float(index) / 16.0)
-			var x1 := lerpf(-half_width, half_width, float(index + 1) / 16.0)
-			var y0 := 5.55 + 1.65 * (1.0 - pow(x0 / half_width, 2.0))
-			var y1 := 5.55 + 1.65 * (1.0 - pow(x1 / half_width, 2.0))
-			var a := Vector3(x0, y0 - 0.20, z - 0.18)
-			var b := Vector3(x1, y1 - 0.20, z - 0.18)
-			var c := Vector3(x0, y0 - 0.20, z + 0.18)
-			var d := Vector3(x1, y1 - 0.20, z + 0.18)
-			_add_record_hall_triangle(rib_surface, a, b, c)
-			_add_record_hall_triangle(rib_surface, b, d, c)
-			_add_record_hall_triangle(rib_surface, a, Vector3(x0, y0 + 0.03, z - 0.18), b)
-			_add_record_hall_triangle(rib_surface, b, Vector3(x0, y0 + 0.03, z - 0.18), Vector3(x1, y1 + 0.03, z - 0.18))
-		for side in [-1.0, 1.0]:
-			var x: float = float(side) * 15.82
-			_add_record_hall_triangle(rib_surface, Vector3(x, 0.0, z - 0.18), Vector3(x, 5.50, z - 0.18), Vector3(x, 0.0, z + 0.18))
-			_add_record_hall_triangle(rib_surface, Vector3(x, 5.50, z - 0.18), Vector3(x, 5.50, z + 0.18), Vector3(x, 0.0, z + 0.18))
 	var ribs := MeshInstance3D.new()
 	ribs.name = "RecordHallVaultRibs"
-	ribs.mesh = rib_surface.commit()
+	ribs.mesh = preload("res://scripts/prepared_zone_geometry.gd").mesh("record_ribs")
 	var rib_material := context.make_world_material("medieval_brick", Color(0.70, 0.66, 0.60)).duplicate() as StandardMaterial3D
 	rib_material.cull_mode = BaseMaterial3D.CULL_DISABLED
 	ribs.material_override = rib_material
 	ribs.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	context.add_node(ribs)
 
-func _add_record_hall_triangle(surface: SurfaceTool, a: Vector3, b: Vector3, c: Vector3) -> void:
-	var normal := (b - a).cross(c - a).normalized()
-	for point in [a, b, c]:
-		surface.set_normal(normal)
-		if absf(normal.x) > 0.5:
-			surface.set_uv(Vector2(point.z, point.y))
-		elif absf(normal.y) > 0.5:
-			surface.set_uv(Vector2(point.x, point.z))
-		else:
-			surface.set_uv(Vector2(point.x, point.y))
-		surface.add_vertex(point)
 
 func _make_authored_approach_dressing(context: ZoneBuildContext) -> void:
 	# Use the actual medieval kit as architectural punctuation while keeping the

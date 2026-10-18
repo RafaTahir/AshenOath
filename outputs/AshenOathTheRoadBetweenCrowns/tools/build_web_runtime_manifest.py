@@ -33,7 +33,9 @@ def prepare_engine_transport(export_dir: Path) -> dict:
     target_dir = (export_dir / stem).parent
     target_dir.mkdir(parents=True, exist_ok=True)
     for path in paths:
-        path.rename(target_dir / path.name)
+        # Repackaging the root can reuse an already-addressed identical engine.
+        # Windows rename cannot replace an existing destination; replace is atomic.
+        path.replace(target_dir / path.name)
     html = export_dir / "index.html"
     text = html.read_text(encoding="utf-8")
     match = re.search(r"const GODOT_CONFIG\s*=\s*(\{[^\n]+\});", text)

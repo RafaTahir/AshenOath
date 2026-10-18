@@ -57,6 +57,10 @@ def compile_layout():
                 for n, s in sections.items()}
     files = {n: set(selected_files(config[s].get("export_files", "PackedStringArray()")))
              for n, s in sections.items()}
+    for name in ROOT_NAMES:
+        includes[name].update({"data/runtime_dialogue_index.json", "data/runtime_dialogue/*.json"})
+    includes["Runtime Pack Opening"].add("assets_external/environment/prepared/greyfen_*.res")
+    includes["Runtime Pack Campaign"].add("assets_external/environment/prepared/*.res")
 
     # Expand only the broad zone-script/scene selectors; their ownership differs.
     for name in sections:
@@ -119,6 +123,10 @@ def compile_layout():
         exclusions = set(json.loads(config[section].get("exclude_filter", '""')).split(",")) - {""}
         if name in ROOT_NAMES:
             exclusions.update(transfers)
+            exclusions.update({"data/dialogue.json", "data/campaign_dialogue.json", "data/interaction_scenes.json"})
+            exclusions.add("assets_external/environment/prepared/*")
+        if name == "Runtime Pack Campaign":
+            exclusions.add("assets_external/environment/prepared/greyfen_*")
         config[section]["include_filter"] = json.dumps(",".join(sorted(includes[name])))
         config[section]["export_files"] = "PackedStringArray(" + ", ".join(json.dumps(p) for p in sorted(files[name])) + ")"
         config[section]["exclude_filter"] = json.dumps(",".join(sorted(exclusions)))

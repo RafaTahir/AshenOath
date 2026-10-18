@@ -244,7 +244,7 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	var previous_spatial_service: Node = host.spatial_service
 	preload("res://scripts/companion_controller.gd").depart(host)
 	var reused_zone = false
-	var requested_signature = host._zone_state_signature()
+	var requested_signature = host._zone_state_signature(zone_id)
 	if host.zone_root != null:
 		if previous_zone_id == zone_id and host.active_zone_signature == requested_signature:
 			reused_zone = true
@@ -335,6 +335,7 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		host.zone_root.name = zone_id
 		host.zone_root.process_mode = Node.PROCESS_MODE_PAUSABLE
 		host.add_child(host.zone_root)
+		host._begin_zone_world_reads(zone_id)
 		var authored_layers = host.ZoneSceneCatalog.attach(zone_id, host.zone_root)
 		if not bool(authored_layers.get("ok", true)):
 			push_error("Authored zone layers failed for %s: %s" % [
@@ -352,6 +353,7 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 			build_result = host.zone_runtime_coordinator.finish_build(build_result, host.zone_root)
 		var build_validation = host.zone_runtime_coordinator.validate_build(zone_id, build_result, host.zone_root) if host.zone_runtime_coordinator != null else build_result
 		if not bool(build_validation.get("ok", false)):
+			host._end_zone_world_reads()
 			push_error("Zone composition failed for %s: %s" % [
 				zone_id, ", ".join(build_validation.get("errors", []))
 			])
@@ -371,7 +373,8 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		# encounter roots are attached below. Walking a large campaign zone here as
 		# well doubled castle activation work without protecting an additional
 		# visible frame.
-		host.active_zone_signature = host._zone_state_signature()
+		host._end_zone_world_reads()
+		host.active_zone_signature = host._zone_state_signature(zone_id)
 	host._sync_camera_enemy_cache()
 	if host.zone_root != null:
 		host.zone_root.set_meta("zone_resource_owner", "active")

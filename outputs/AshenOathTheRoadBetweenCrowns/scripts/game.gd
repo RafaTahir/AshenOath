@@ -882,7 +882,7 @@ func _start_new_game_world() -> void:
 	_clear_route_zone_cache()
 	print("LOADING: new_game_stage=cache_clear elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
 	if prewarmed_greyfen != null and is_instance_valid(prewarmed_greyfen):
-		_cache_route_zone("greyfen", prewarmed_greyfen, prewarmed_enemies, _zone_state_signature(), true, false, false)
+		_cache_route_zone("greyfen", prewarmed_greyfen, prewarmed_enemies, _zone_state_signature("greyfen"), true, false, false)
 	game_started = true
 	get_viewport().disable_3d = false
 	paused_by_menu = false
@@ -917,7 +917,7 @@ func _start_new_game_world() -> void:
 		call_deferred("_schedule_background_runtime_packs")
 	print("LOADING: new_game_stage=state_ready elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
 	if route_zone_cache.has("greyfen"):
-		route_zone_signatures["greyfen"] = _zone_state_signature()
+		route_zone_signatures["greyfen"] = _zone_state_signature("greyfen")
 	print("LOADING: new_game_stage=zone_dispatch elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
 	print("LOADING: handoff_phase=load_zone_begin")
 	journey_loading.begin_arrival(self, "new_journey", "greyfen")
@@ -1505,13 +1505,13 @@ func _zone_display_name(zone_id: String) -> String:
 func _valid_cached_enemies(entries: Array) -> Array:
 	return zone_residency._valid_cached_enemies(entries)
 
-func _zone_state_signature() -> int:
-	var quest_world_state: Dictionary = quests.save_state().duplicate(true) if quests != null else {}
+func _zone_state_signature(zone_id: String = current_zone_id) -> int:
+	var quest_world_state: Dictionary = quests.world_signature_state(zone_id).duplicate(true) if quests != null else {}
 	# HUD tracking changes by zone and must not invalidate otherwise identical
 	# cached world geometry.
 	quest_world_state.erase("tracked_quest_id")
 	quest_world_state.erase("tracker_context_zone")
-	var story_world_state: Dictionary = story_state.save_state() if story_state != null else {}
+	var story_world_state: Dictionary = story_state.world_signature_state(zone_id).duplicate(true) if story_state != null else {}
 	if story_world_state.get("flags") is Dictionary:
 		# Companion position/command is reinstalled separately, not world geometry.
 		story_world_state.flags.erase("bracken_travel")
@@ -1520,6 +1520,14 @@ func _zone_state_signature() -> int:
 		quest_world_state,
 		removed_interactions,
 	])
+
+func _begin_zone_world_reads(zone_id: String, reset: bool = true) -> void:
+	story_state.world_reads.begin(zone_id, reset)
+	quests.world_reads.begin(zone_id, reset)
+
+func _end_zone_world_reads() -> void:
+	story_state.world_reads.end()
+	quests.world_reads.end()
 
 func _deferred_free_zone(retired_root: Node) -> void:
 	zone_residency._deferred_free_zone(retired_root)
@@ -2964,7 +2972,7 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 			hud.set_new_game_ready(true)
 		return
 	# Retain the prepared resources while the menu owns the screen.
-	_cache_route_zone("greyfen", zone_root, [], _zone_state_signature(), true, false, false)
+	_cache_route_zone("greyfen", zone_root, [], _zone_state_signature("greyfen"), true, false, false)
 	zone_root = null
 	spatial_service = null
 	if audio != null and audio.has_method("prewarm_opening_audio"):
@@ -4367,6 +4375,9 @@ func _handle_setting(action: String) -> void:
 		hud.toast("Settings updated.")
 	hud.show_settings_menu(hud.controls_back_target)
 
+var _applied_setting_groups: Dictionary = {}
+const SettingsDelta = preload("res://scripts/settings_delta.gd")
+
 func _apply_runtime_settings(current_settings: Dictionary) -> void:
 	CombatFeedback.reduce_flashes = bool(current_settings.get("flash_reduction", false))
 	if runtime_packs != null:
@@ -4377,15 +4388,15 @@ func _apply_runtime_settings(current_settings: Dictionary) -> void:
 			_restart_menu_opening()
 	if performance_budget_monitor != null:
 		performance_budget_monitor.quality = str(current_settings.get("quality_preset", "balanced"))
-	if audio != null:
+	if SettingsDelta.changed(_applied_setting_groups, "audio", audio, current_settings, ["master_volume", "music_volume", "sfx_volume", "voice_volume", "quality_preset"]):
 		audio.set_master_volume(float(current_settings.get("master_volume", 0.85)))
 		audio.apply_mix_settings(current_settings)
 		audio.set_ambient_accents_enabled(str(current_settings.get("quality_preset", "balanced")) == "quality")
-	if hud != null:
+	if SettingsDelta.changed(_applied_setting_groups, "hud", hud, current_settings, ["reduced_motion", "flash_reduction", "subtitle_speaker_names", "high_contrast", "subtitle_scale", "subtitle_background_opacity"]):
 		hud.apply_accessibility(current_settings)
-	if player != null and is_instance_valid(player):
+	if SettingsDelta.changed(_applied_setting_groups, "player", player, current_settings, ["difficulty"]):
 		player.apply_difficulty_profile(settings.get_difficulty_profile())
-	if camera_rig != null:
+	if SettingsDelta.changed(_applied_setting_groups, "camera", camera_rig, current_settings, ["mouse_sensitivity", "invert_y", "gamepad_look_sensitivity", "camera_shake", "reduced_motion", "flash_reduction", "targeting_assist"]):
 		camera_rig.apply_settings(
 			float(current_settings.get("mouse_sensitivity", 0.003)),
 			bool(current_settings.get("invert_y", false)),
@@ -4393,7 +4404,7 @@ func _apply_runtime_settings(current_settings: Dictionary) -> void:
 		)
 		camera_rig.apply_accessibility(current_settings)
 		camera_rig.shake_decay = 1000.0 if float(current_settings.get("camera_shake", 1.0)) <= 0.0 else 6.0 / maxf(float(current_settings.get("camera_shake", 1.0)), 0.5)
-	if visual_director != null and visual_director.sun != null:
+	if visual_director != null and visual_director.sun != null and SettingsDelta.changed(_applied_setting_groups, "visuals", visual_director.sun, current_settings, ["quality_preset", "reduced_motion", "shadow_quality"]):
 		visual_director.apply_settings(current_settings)
 		visual_director.sun.shadow_enabled = int(current_settings.get("shadow_quality", 1)) > 0
 		visual_director.sun.directional_shadow_max_distance = 42.0
@@ -4745,47 +4756,23 @@ func _make_greyfen_terrain_layers() -> void:
 func _finish_greyfen_ground_surfaces() -> void:
 	if zone_root.find_child("GreyfenGroundMerged", true, false) != null:
 		return
-	var combined := SurfaceTool.new()
-	combined.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var prepared := preload("res://scripts/prepared_zone_geometry.gd").mesh("greyfen_ground")
+	if prepared == null:
+		return
 	var source_surfaces: Array[MeshInstance3D] = []
 	for ground_name in ["GroundNorthWest", "GroundNorthEast", "GroundSouthWest", "GroundSouthEast", "GroundCenterNorthVisual", "GroundCenterSouthVisual"]:
 		var ground := zone_root.find_child(ground_name, true, false)
 		if ground == null:
 			continue
 		var surface := ground as MeshInstance3D if ground is MeshInstance3D else ground.get_node_or_null("Surface") as MeshInstance3D
-		if surface == null:
-			continue
-		var origin: Vector3 = zone_root.to_local(surface.global_position)
-		var half_size: Vector3 = surface.scale * 0.5
-		var top: float = origin.y + half_size.y
-		var columns := maxi(2, ceili(half_size.x * 2.0 / 1.5))
-		var rows := maxi(2, ceili(half_size.z * 2.0 / 1.5))
-		for row in range(rows):
-			var z0 := lerpf(origin.z - half_size.z, origin.z + half_size.z, float(row) / float(rows))
-			var z1 := lerpf(origin.z - half_size.z, origin.z + half_size.z, float(row + 1) / float(rows))
-			# Crop only the visual ground. Its unchanged collision still owns the bank.
-			if ground_name in ["GroundNorthWest", "GroundNorthEast"]:
-				z1 = minf(z1, 4.5 - 2.02)
-			elif ground_name in ["GroundSouthWest", "GroundSouthEast"]:
-				z0 = maxf(z0, 4.5 + 2.02)
-			if z1 <= z0:
-				continue
-			for column in range(columns):
-				var x0 := lerpf(origin.x - half_size.x, origin.x + half_size.x, float(column) / float(columns))
-				var x1 := lerpf(origin.x - half_size.x, origin.x + half_size.x, float(column + 1) / float(columns))
-				for point in [Vector3(x0, top, z0), Vector3(x1, top, z0), Vector3(x0, top, z1), Vector3(x1, top, z0), Vector3(x1, top, z1), Vector3(x0, top, z1)]:
-					combined.set_normal(Vector3.UP)
-					combined.set_uv(Vector2(point.x, point.z))
-					combined.set_color(_greyfen_ground_tint(point))
-					combined.add_vertex(point)
-		source_surfaces.append(surface)
+		if surface != null:
+			source_surfaces.append(surface)
 	if source_surfaces.size() != 6:
 		push_error("Greyfen authored ground is incomplete: %d/6 surfaces" % source_surfaces.size())
 		return
-	_append_greyfen_river_banks(combined)
 	var ground_visual := MeshInstance3D.new()
 	ground_visual.name = "GreyfenGroundMerged"
-	ground_visual.mesh = combined.commit()
+	ground_visual.mesh = prepared
 	var ground_material := world_materials.get_material("forest_ground", str(settings.settings.get("quality_preset", "balanced")), Color.WHITE, 0.0, false).duplicate() as StandardMaterial3D
 	ground_material.resource_name = "GreyfenGroundBlended"
 	ground_material.vertex_color_use_as_albedo = true
@@ -4796,103 +4783,19 @@ func _finish_greyfen_ground_surfaces() -> void:
 		surface.visible = false
 		surface.queue_free()
 
-func _append_greyfen_river_banks(surface: SurfaceTool) -> void:
-	var bridge_half := BridgeSurfaceContract.HALF_WIDTH
-	var river: Node3D = load("res://scripts/zones/river_section.gd").new()
-	for bank_side in [-1.0, 1.0]:
-		var land_z: float = 4.5 + bank_side * 2.02
-		for section in [[-21.0, -bridge_half + 0.08], [bridge_half - 0.08, 21.0]]:
-			var segments := maxi(12, ceili((float(section[1]) - float(section[0])) / 0.85))
-			for index in range(segments):
-				var x0 := lerpf(float(section[0]), float(section[1]), float(index) / float(segments))
-				var x1 := lerpf(float(section[0]), float(section[1]), float(index + 1) / float(segments))
-				var a := Vector3(x0, 0.006, land_z)
-				var b := Vector3(x1, 0.006, land_z)
-				var edge0: float = river._water_channel_vertex(x0 / 42.0 + 0.5, 0.0 if bank_side < 0 else 1.0, 42.0, 3.4).z + 4.5
-				var edge1: float = river._water_channel_vertex(x1 / 42.0 + 0.5, 0.0 if bank_side < 0 else 1.0, 42.0, 3.4).z + 4.5
-				# The lower edge stays under the lowest animated wave, not above it.
-				var c := Vector3(x0, -0.30, edge0 - bank_side * 0.06)
-				var d := Vector3(x1, -0.30, edge1 - bank_side * 0.06)
-				var triangles := [a, b, c, b, d, c] if bank_side < 0.0 else [a, c, b, b, c, d]
-				for point in triangles:
-					var shore_weight := clampf((0.006 - point.y) / 0.306, 0.0, 1.0)
-					var tint := _greyfen_ground_tint(point).lerp(Color(0.29, 0.41, 0.35), shore_weight)
-					surface.set_normal(Vector3.UP)
-					surface.set_uv(Vector2(point.x, point.z))
-					surface.set_color(tint)
-					surface.add_vertex(point)
-	river.free()
 
-func _greyfen_ground_tint(point: Vector3) -> Color:
-	var tint := Color(0.42, 0.62, 0.40)
-	for region in [
-		[Vector2(-9.5, -4.0), Vector2(6.5, 5.0), Color(0.51, 0.48, 0.35)],
-		[Vector2(6.0, -7.0), Vector2(4.6, 3.5), Color(0.40, 0.57, 0.39)],
-		[Vector2(9.5, 4.5), Vector2(4.5, 3.7), Color(0.49, 0.44, 0.34)],
-		[Vector2(-5.4, 11.5), Vector2(3.4, 2.5), Color(0.52, 0.47, 0.35)],
-		[Vector2(7.0, 10.3), Vector2(2.8, 2.4), Color(0.49, 0.46, 0.35)],
-	]:
-		var offset := Vector2((point.x - region[0].x) / region[1].x, (point.z - region[0].y) / region[1].y)
-		tint = tint.lerp(region[2], 1.0 - smoothstep(0.60, 1.0, offset.length()))
-	var roadside := 1.0 - smoothstep(0.25, 1.55, absf(absf(point.x) - 3.25))
-	var span_weight := 0.0
-	for span in [Vector2(-13.5, -2.0), Vector2(2.0, 6.7), Vector2(11.0, 14.0)]:
-		span_weight = maxf(span_weight, smoothstep(0.0, 1.2, point.z - span.x) * smoothstep(0.0, 1.2, span.y - point.z))
-	return tint.lerp(Color(0.45, 0.58, 0.36), roadside * span_weight * 0.75)
 
 func _finish_greyfen_paved_roads() -> void:
 	for road_name in ["PavedRoadMain", "PavedRoadVillage", "PavedRoadCastle"]:
 		var road := zone_root.find_child(road_name, true, false) as MeshInstance3D
 		if road == null:
 			continue
-		var road_size := road.scale
-		road.mesh = _make_greyfen_road_surface(road_size, road.position)
+		road.mesh = preload("res://scripts/prepared_zone_geometry.gd").mesh("greyfen_" + road_name)
 		road.scale = Vector3.ONE
 		var road_material := _road_material(true, Color(0.16, 0.13, 0.09)).duplicate() as StandardMaterial3D
 		road_material.vertex_color_use_as_albedo = true
 		road.material_override = road_material
 
-func _make_greyfen_road_surface(size: Vector3, origin: Vector3) -> ArrayMesh:
-	var along_z := size.z >= size.x
-	var length := size.z if along_z else size.x
-	var half_width := (size.x if along_z else size.z) * 0.5
-	var rows := maxi(4, ceili(length / 0.9))
-	var lateral := [-1.0, -0.65, 0.0, 0.65, 1.0]
-	var vertices := PackedVector3Array()
-	var normals := PackedVector3Array()
-	var colors := PackedColorArray()
-	var uvs := PackedVector2Array()
-	var indices := PackedInt32Array()
-	for row in range(rows + 1):
-		var forward := length * (float(row) / float(rows) - 0.5)
-		var bend := sin(forward * 0.51 + origin.x * 0.17) * 0.08
-		var shoulder := half_width - 0.13 + sin(forward * 1.37 + origin.z * 0.29) * 0.12
-		for column in range(lateral.size()):
-			var side := float(lateral[column])
-			var across := bend + side * (shoulder if absf(side) > 0.9 else half_width)
-			var point := Vector3(across, size.y * 0.5, forward) if along_z else Vector3(forward, size.y * 0.5, across)
-			vertices.append(point)
-			normals.append(Vector3.UP)
-			uvs.append(Vector2(origin.x + point.x, origin.z + point.z))
-			var edge_mix := 1.0 - smoothstep(0.62, 1.0, absf(side))
-			colors.append(Color(0.54, 0.58, 0.49).lerp(Color.WHITE, edge_mix))
-	for row in range(rows):
-		for column in range(lateral.size() - 1):
-			var a := row * lateral.size() + column
-			var b := a + 1
-			var c := a + lateral.size()
-			var d := c + 1
-			indices.append_array(PackedInt32Array([a, b, c, b, d, c]))
-	var arrays: Array = []
-	arrays.resize(Mesh.ARRAY_MAX)
-	arrays[Mesh.ARRAY_VERTEX] = vertices
-	arrays[Mesh.ARRAY_NORMAL] = normals
-	arrays[Mesh.ARRAY_COLOR] = colors
-	arrays[Mesh.ARRAY_TEX_UV] = uvs
-	arrays[Mesh.ARRAY_INDEX] = indices
-	var mesh := ArrayMesh.new()
-	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
-	return mesh
 
 func _make_wychwood_terrain_layers() -> void:
 	if not WychwoodTerrainPresentation.integrate(zone_root):
@@ -6699,8 +6602,8 @@ func _make_gate_marker(parent: Node3D, color: Color, scale_override: Vector3) ->
 	parent.add_child(lintel)
 
 func _label_for_interactable(id: String, prompt: String) -> String:
-	if dialogue != null and dialogue.dialogues.has(id):
-		return dialogue.dialogues[id].get("name", prompt)
+	if dialogue != null and dialogue.has_dialogue(id):
+		return dialogue.display_name(id, prompt)
 	if id.begins_with("gate_"):
 		return prompt
 	return prompt.replace("Inspect ", "").replace("Gather ", "").replace("Take ", "")

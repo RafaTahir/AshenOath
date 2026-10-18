@@ -249,28 +249,9 @@ func _make_authored_mill_dressing(context: ZoneBuildContext) -> void:
 	context.make_loose_role("crate", Vector3(-7.75, 0.0, -3.35), Vector3.ONE * 0.48, 8.0)
 
 func _make_mill_path(context: ZoneBuildContext, id: String, origin: Vector3, width: float, length: float) -> void:
-	var surface := SurfaceTool.new()
-	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
-	for row in range(8):
-		var z0 := -length / 2 + length * row / 8
-		var z1 := -length / 2 + length * (row + 1) / 8
-		var x0 := width / 2 + sin(z0 * 1.1) * 0.15
-		var x1 := width / 2 + sin(z1 * 1.1) * 0.15
-		for side in [-1.0, 1.0]:
-			var a := Vector3(0, 0, z0)
-			var b := Vector3(side * x0, 0, z0)
-			var c := Vector3(side * x1, 0, z1)
-			var d := Vector3(0, 0, z1)
-			var faces := [a, b, c, a, c, d] if side > 0 else [a, c, b, a, d, c]
-			for point in faces:
-				surface.set_normal(Vector3.UP)
-				surface.set_uv(Vector2(point.x + origin.x, point.z + origin.z))
-				surface.set_color(Color(0.80, 0.78, 0.72) if is_zero_approx(point.x) else Color(0.53, 0.50, 0.42))
-				surface.add_vertex(point)
-	surface.index()
 	var path := MeshInstance3D.new()
 	path.name = id
-	path.mesh = surface.commit()
+	path.mesh = preload("res://scripts/prepared_zone_geometry.gd").mesh(id)
 	path.position = origin
 	var material := context.make_world_material("wet_mud", Color(0.72, 0.68, 0.57)).duplicate() as StandardMaterial3D
 	material.vertex_color_use_as_albedo = true
@@ -281,21 +262,9 @@ func _make_mill_path(context: ZoneBuildContext, id: String, origin: Vector3, wid
 func _make_mill_landscape(context: ZoneBuildContext) -> void:
 	_make_mill_path(context, "AshMillCartTrack", Vector3(0, 0.039, 0), 3.35, 28)
 	# Distant terrain closes the exposed horizon beyond the unchanged zone bounds.
-	var surface := SurfaceTool.new()
-	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
-	for segment in range(12):
-		var x0 := -25.0 + segment * 50.0 / 12
-		var x1 := -25.0 + (segment + 1) * 50.0 / 12
-		var h0 := 2.2 + sin(x0 * 0.31) * 0.8 + cos(x0 * 0.53) * 0.4
-		var h1 := 2.2 + sin(x1 * 0.31) * 0.8 + cos(x1 * 0.53) * 0.4
-		for point in [Vector3(x0, -0.08, -16.5), Vector3(x1, h1, -21), Vector3(x1, -0.08, -16.5), Vector3(x0, -0.08, -16.5), Vector3(x0, h0, -21), Vector3(x1, h1, -21)]:
-			surface.set_uv(Vector2(point.x, point.z))
-			surface.add_vertex(point)
-	surface.generate_normals()
-	surface.index()
 	var ridge := MeshInstance3D.new()
 	ridge.name = "AshMillDistantBank"
-	ridge.mesh = surface.commit()
+	ridge.mesh = preload("res://scripts/prepared_zone_geometry.gd").mesh("mill_ridge")
 	ridge.material_override = context.make_world_material("forest_ground", Color(0.53, 0.57, 0.39))
 	ridge.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	context.add_node(ridge)
@@ -327,14 +296,8 @@ func _make_entry_ramp(context: ZoneBuildContext, origin: Vector3, height: float,
 	shape.points = points
 	collision.shape = shape
 	body.add_child(collision)
-	var surface := SurfaceTool.new()
-	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
-	for index in [0, 1, 2, 0, 2, 3, 4, 7, 6, 4, 6, 5, 0, 4, 5, 0, 5, 1, 3, 2, 6, 3, 6, 7, 0, 3, 7, 0, 7, 4, 1, 5, 6, 1, 6, 2]:
-		surface.set_uv(Vector2(points[index].x, points[index].z))
-		surface.add_vertex(points[index])
-	surface.generate_normals()
 	var visual := MeshInstance3D.new()
-	visual.mesh = surface.commit()
+	visual.mesh = preload("res://scripts/prepared_zone_geometry.gd").mesh("mill_ramp" if height > 0.45 else "farm_ramp")
 	var material := context.make_world_material("medieval_brick").duplicate() as StandardMaterial3D
 	material.cull_mode = BaseMaterial3D.CULL_DISABLED
 	visual.material_override = material

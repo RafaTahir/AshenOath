@@ -10,8 +10,21 @@ var _completed_pending: Array[String] = []
 var _choice_depth := 0
 var evidence_history: Dictionary = {}
 var quest_defs = {}
-var active = {}
-var completed = {}
+var world_reads = preload("res://scripts/world_read_scope.gd").new()
+var _active: Dictionary = {}
+var active: Dictionary:
+	get:
+		world_reads.read("active")
+		return _active
+	set(value):
+		_active = value
+var _completed: Dictionary = {}
+var completed: Dictionary:
+	get:
+		world_reads.read("completed")
+		return _completed
+	set(value):
+		_completed = value
 const STARTING_UNLOCKS = {
 	"side_bracken_rescue": true,
 	"main_road_of_crows": true, "side_widows_bell": true, "side_iron_remembers": true,
@@ -152,23 +165,34 @@ func _update_evidence_groups(quest_id: String) -> void:
 			objective["done"] = true
 
 func is_objective_done(quest_id: String, objective_id: String) -> bool:
+	world_reads.read("active", quest_id)
+	world_reads.read("completed", quest_id)
 	# Completed quests no longer have an active objective array. Preserve the
 	# completed truth so story-choice guards, HUD fallbacks, and save reloads do
 	# not treat a finished objective as available again.
-	if completed.has(quest_id):
+	if _completed.has(quest_id):
 		return true
-	if not active.has(quest_id):
+	if not _active.has(quest_id):
 		return false
-	for objective in active[quest_id]["objectives"]:
+	for objective in _active[quest_id]["objectives"]:
 		if objective["id"] == objective_id:
 			return bool(objective.get("done", false))
-	return completed.has(quest_id)
+	return _completed.has(quest_id)
 
 func is_active(id: String) -> bool:
-	return active.has(id)
+	world_reads.read("active", id)
+	return _active.has(id)
 
 func is_completed(id: String) -> bool:
-	return completed.has(id)
+	world_reads.read("completed", id)
+	return _completed.has(id)
+
+func world_signature_state(zone_id: String) -> Dictionary:
+	var state: Dictionary = world_reads.snapshot(zone_id, {"active": _active, "completed": _completed})
+	state["unlocked"] = unlocked
+	state["world_flags"] = world_flags
+	state["evidence_history"] = evidence_history
+	return state
 
 func is_unlocked(id: String) -> bool:
 	return bool(unlocked.get(id, false))

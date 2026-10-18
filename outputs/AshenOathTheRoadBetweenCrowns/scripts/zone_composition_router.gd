@@ -23,6 +23,14 @@ static func composition_kind(zone_id: String) -> String:
 		return ""
 	return canonical_id if canonical_id in CORE_ZONES else "campaign"
 
+static func resource_paths(zone_id: String) -> Array[String]:
+	var id := _canonical(zone_id)
+	if CORE_BUILDER_PATHS.has(id):
+		return [str(CORE_BUILDER_PATHS[id])]
+	if id in CAMPAIGN_ZONES:
+		return [CAMPAIGN_BUILDER_PATH]
+	return []
+
 static func build_core(host: Node, zone_id: String, build_profile: String = "full") -> Dictionary:
 	var canonical_id := _canonical(zone_id)
 	if canonical_id not in CORE_ZONES:
@@ -38,7 +46,12 @@ static func build_core(host: Node, zone_id: String, build_profile: String = "ful
 	var builder = builder_script.new()
 	if builder == null or not builder.has_method("build"):
 		return _failure(canonical_id, "core builder is invalid")
+	var owns_reads: bool = host.story_state.world_reads.capturing.is_empty()
+	if owns_reads:
+		host._begin_zone_world_reads(canonical_id)
 	builder.build(context)
+	if owns_reads:
+		host._end_zone_world_reads()
 	return context.validate()
 
 static func build_campaign(host: Node, zone_id: String, build_profile: String = "full") -> Dictionary:
@@ -69,7 +82,12 @@ static func build_core_detail_stage(host: Node, zone_id: String, stage: String) 
 	var builder = builder_script.new()
 	if builder == null or not builder.has_method("build_detail_stage"):
 		return _failure(canonical_id, "core builder has no detail-stage contract")
+	var owns_reads: bool = host.story_state.world_reads.capturing.is_empty()
+	if owns_reads:
+		host._begin_zone_world_reads(canonical_id, false)
 	builder.build_detail_stage(context, stage)
+	if owns_reads:
+		host._end_zone_world_reads()
 	return {"ok": true, "zone": canonical_id, "stage": stage}
 
 static func registered_zones() -> Array[String]:

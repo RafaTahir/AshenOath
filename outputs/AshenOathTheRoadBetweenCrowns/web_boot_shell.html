@@ -198,10 +198,17 @@
           if (controller.signal.aborted || packOperations.get(id) !== operation) return null;
           window.__ashenOathPreloadedPacks[id] = metadata;
           if (id === 'opening') bootMetrics.opening_prefetch_state = 'verified';
+          let abortWait;
           const aborted = new Promise((_, reject) => {
-            controller.signal.addEventListener('abort', () => reject(new Error('Pack operation cancelled')), { once: true });
+            abortWait = () => reject(new Error('Pack operation cancelled'));
+            controller.signal.addEventListener('abort', abortWait, { once: true });
+            if (controller.signal.aborted) abortWait();
           });
-          await Promise.race([filesystemReady, aborted]);
+          try {
+            await Promise.race([filesystemReady, aborted]);
+          } finally {
+            controller.signal.removeEventListener('abort', abortWait);
+          }
           if (controller.signal.aborted || failed || packOperations.get(id) !== operation) return null;
           engine.copyToFS(metadata.path, payload);
           const detail = { ...metadata, state: 'preloaded' };

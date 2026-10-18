@@ -38,9 +38,9 @@
       const canvas = document.getElementById('canvas');
       const errorPanel = document.getElementById('startup-error');
       const reload = document.getElementById('reload');
-      const SHELL_BUILD_ID = "opt-m1-20261018-cc97239";
-      const RUNTIME_PACK_CONTRACT = "opt-m1-20261018-cc97239";
-      const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"engine/ab2c53ed650ba2680cdff4a1/index","experimentalVK":false,"fileSizes":{"index.pck":11534196,"engine/ab2c53ed650ba2680cdff4a1/index.wasm":37700666},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4,"mainPack":"index.pck"};
+      const SHELL_BUILD_ID = "opt-m2-20261018-ec924ab";
+      const RUNTIME_PACK_CONTRACT = "opt-m2-20261018-ec924ab";
+      const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"engine/ab2c53ed650ba2680cdff4a1/index","experimentalVK":false,"fileSizes":{"index.pck":11524676,"engine/ab2c53ed650ba2680cdff4a1/index.wasm":37700666},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4,"mainPack":"index.pck"};
       let engine = null, engineBooted = false, started = false, failed = false;
       let startupResourceError = '';
       const bootMetrics = {
@@ -198,10 +198,17 @@
           if (controller.signal.aborted || packOperations.get(id) !== operation) return null;
           window.__ashenOathPreloadedPacks[id] = metadata;
           if (id === 'opening') bootMetrics.opening_prefetch_state = 'verified';
+          let abortWait;
           const aborted = new Promise((_, reject) => {
-            controller.signal.addEventListener('abort', () => reject(new Error('Pack operation cancelled')), { once: true });
+            abortWait = () => reject(new Error('Pack operation cancelled'));
+            controller.signal.addEventListener('abort', abortWait, { once: true });
+            if (controller.signal.aborted) abortWait();
           });
-          await Promise.race([filesystemReady, aborted]);
+          try {
+            await Promise.race([filesystemReady, aborted]);
+          } finally {
+            controller.signal.removeEventListener('abort', abortWait);
+          }
           if (controller.signal.aborted || failed || packOperations.get(id) !== operation) return null;
           engine.copyToFS(metadata.path, payload);
           const detail = { ...metadata, state: 'preloaded' };

@@ -291,9 +291,14 @@ func install_default_actions() -> void:
 	if default_bindings.is_empty():
 		_capture_default_bindings()
 
+var _applied_setting_groups: Dictionary = {}
+const SettingsDelta = preload("res://scripts/settings_delta.gd")
+
 func apply_settings(current: Dictionary) -> void:
-	reset_transient_input("settings_changed")
 	settings_ref = current
+	if not SettingsDelta.changed(_applied_setting_groups, "input", self, current, ["block_mode", "sprint_mode", "gamepad_profiles", "gamepad_look_sensitivity", "gamepad_deadzone", "gamepad_invert_x", "gamepad_invert_y", "invert_y", "gamepad_vibration", "gamepad_rumble_strength", "control_preset", "custom_bindings"]):
+		return
+	reset_transient_input("settings_changed")
 	_toggle_modes = {"block": str(current.get("block_mode", "hold")), "run": str(current.get("sprint_mode", "hold"))}
 	reset_toggle_actions()
 	gamepad_profiles = current.get("gamepad_profiles", {}).duplicate(true) if typeof(current.get("gamepad_profiles", {})) == TYPE_DICTIONARY else {}

@@ -5,6 +5,8 @@ const CharacterVisualContract = preload("res://scripts/character_visual_contract
 const CharacterRoleSpec = preload("res://scripts/character_role_spec.gd")
 const CharacterRoleContract = preload("res://scripts/character_role_contract.gd")
 const CharacterAnimationFusion = preload("res://scripts/character_animation_fusion.gd")
+const SharedResourceRequests = preload("res://scripts/shared_resource_requests.gd")
+var resource_requests = SharedResourceRequests.acquire()
 
 var database
 var mesh_cache: Dictionary = {}
@@ -20,14 +22,15 @@ var resource_prewarm_error := ""
 func begin_resource_attempt() -> void:
 	resource_prewarm_error = ""
 	for path in pending_role_resources.keys():
-		var status := ResourceLoader.load_threaded_get_status(path)
+		var status: int = resource_requests.status(path)
 		if status == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
 			pending_role_resources[path] = Time.get_ticks_msec()
 		else:
 			if status == ResourceLoader.THREAD_LOAD_LOADED:
-				var resource := ResourceLoader.load_threaded_get(path)
+				var resource: Resource = resource_requests.take(path, self)
 				if resource != null:
 					resource_cache[path] = resource
+			resource_requests.release(path, self)
 			pending_role_resources.erase(path)
 
 func request_role_resources(role_names: Array) -> Error:
@@ -47,7 +50,7 @@ func request_resource_paths(paths: Array) -> Error:
 			return ERR_FILE_NOT_FOUND
 		if resource_cache.has(path) or pending_role_resources.has(path):
 			continue
-		var error := ResourceLoader.load_threaded_request(path)
+		var error: Error = resource_requests.request(path, self)
 		if error != OK:
 			resource_prewarm_error = "%s: %s" % [path, error_string(error)]
 			return error
@@ -59,15 +62,16 @@ func is_resource_cached(path: String) -> bool:
 
 func poll_role_resources(timeout_msec: int = 20000) -> Error:
 	for path in pending_role_resources.keys():
-		var status := ResourceLoader.load_threaded_get_status(path)
+		var status: int = resource_requests.status(path)
 		if status == ResourceLoader.THREAD_LOAD_LOADED:
-			var resource := ResourceLoader.load_threaded_get(path)
+			var resource: Resource = resource_requests.take(path, self)
 			pending_role_resources.erase(path)
 			if resource == null:
 				resource_prewarm_error = path + ": decoded resource is null"
 				return ERR_CANT_OPEN
 			resource_cache[path] = resource
 		elif status != ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+			resource_requests.release(path, self)
 			pending_role_resources.erase(path)
 			resource_prewarm_error = "%s: threaded load status %d" % [path, status]
 			return ERR_CANT_OPEN
@@ -83,7 +87,7 @@ func clear_runtime_caches() -> void:
 	# ResourceLoader has no cancellation API. Shutdown must consume outstanding
 	# requests; normal construction only polls completed requests without waiting.
 	for path in pending_role_resources:
-		ResourceLoader.load_threaded_get(path)
+		resource_requests.release(path, self, "", true)
 	pending_role_resources.clear()
 	mesh_cache.clear()
 	material_cache.clear()
@@ -479,10 +483,10 @@ func _load_cached_resource(path: String):
 		return null
 	var resource: Resource
 	if pending_role_resources.has(path):
-		resource = ResourceLoader.load_threaded_get(path)
+		resource = resource_requests.take(path, self, "", true)
 		pending_role_resources.erase(path)
 	else:
-		resource = ResourceLoader.load(path)
+		resource = resource_requests.load_now(path, self)
 	if resource != null:
 		resource_cache[path] = resource
 	return resource

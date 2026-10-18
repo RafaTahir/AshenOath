@@ -11,7 +11,23 @@ func setup(state, quests = null) -> void:
 	story_state = state
 	quest_manager = quests
 
+var _lazy_scenes: Dictionary = {}
+var _scene_catalog: Dictionary = {}
+var _scene_catalog_loaded := false
+
 func load_dialogue(path: String) -> void:
+	if not _scene_catalog_loaded:
+		_scene_catalog_loaded = true
+		var catalog_path := "res://data/runtime_dialogue_index.json"
+		if FileAccess.file_exists(catalog_path):
+			var parsed_catalog = JSON.parse_string(FileAccess.get_file_as_string(catalog_path))
+			if parsed_catalog is Dictionary:
+				_scene_catalog = parsed_catalog
+	if _scene_catalog.has(path):
+		for id in _scene_catalog[path]:
+			_lazy_scenes[id] = _scene_catalog[path][id]
+			dialogues.erase(id) # Preserve source load order, including overrides.
+		return
 	if not FileAccess.file_exists(path):
 		push_warning("Missing JSON: %s" % path)
 		return
@@ -19,6 +35,26 @@ func load_dialogue(path: String) -> void:
 	var parsed = JSON.parse_string(file.get_as_text())
 	if typeof(parsed) == TYPE_DICTIONARY:
 		dialogues.merge(parsed, true)
+		for id in parsed:
+			_lazy_scenes.erase(id)
+
+func has_dialogue(id: String) -> bool:
+	return dialogues.has(id) or _lazy_scenes.has(id)
+
+func display_name(id: String, fallback: String) -> String:
+	if dialogues.has(id):
+		return str(dialogues[id].get("name", fallback))
+	return str(_lazy_scenes.get(id, {}).get("name", fallback))
+
+func _materialize_scene(id: String) -> void:
+	if dialogues.has(id) or not _lazy_scenes.has(id):
+		return
+	var path := str(_lazy_scenes[id].path)
+	var parsed = JSON.parse_string(FileAccess.get_file_as_string(path))
+	if parsed is Dictionary:
+		dialogues[id] = parsed
+	else:
+		push_error("Required dialogue scene could not be decoded: %s (%s)" % [id, path])
 
 func load_conversation_topics(path: String) -> void:
 	conversation_topics.clear()
@@ -189,6 +225,7 @@ func _conversation_topic_scene(resolved: Dictionary) -> Dictionary:
 	}
 
 func get_dialogue(id: String) -> Dictionary:
+	_materialize_scene(id)
 	var base: Dictionary = dialogues.get(id, {
 		"name": "Unknown",
 		"greeting": "...",

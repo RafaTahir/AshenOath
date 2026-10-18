@@ -372,14 +372,11 @@ func _make_undercroft_vault(context: ZoneBuildContext) -> void:
 	context.add_node(vault)
 	# Ceiling collision comes from the same intrados surface, never the doors or
 	# the tomb decoration. Existing tomb/wall ownership remains unchanged.
-	var roof_mesh := ArrayMesh.new()
-	roof_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, UndercroftVault.surface_get_arrays(0))
-	roof_mesh.surface_set_material(0, material)
 	var body := StaticBody3D.new()
 	body.name = "UndercroftVaultCollision"
 	body.set_meta("walkable_support", false)
 	var shape := CollisionShape3D.new()
-	shape.shape = roof_mesh.create_trimesh_shape()
+	shape.shape = preload("res://scripts/prepared_zone_geometry.gd").resource("undercroft_roof_collision") as Shape3D
 	body.add_child(shape)
 	context.add_node(body)
 

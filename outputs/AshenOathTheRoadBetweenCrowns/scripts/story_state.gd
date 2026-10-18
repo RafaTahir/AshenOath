@@ -15,7 +15,14 @@ const HELP_MEMORIES := {
 	"opening_cup_delivered": {"id": "lr.anwen.water", "actor": "anwen", "kind": "help", "text": "Kael brought water to Anwen's injured traveler.", "acknowledgement": "You brought the water before asking what anyone owed you. I noticed."}
 }
 
-var flags: Dictionary = {}
+var world_reads = preload("res://scripts/world_read_scope.gd").new()
+var _flags: Dictionary = {}
+var flags: Dictionary:
+	get:
+		world_reads.read("flags")
+		return _flags
+	set(value):
+		_flags = value
 var values: Dictionary = {"anwen_trust": 0, "greyfen_fear": 0, "hart_debt": 0}
 var evidence: Dictionary = {}
 var decisions: Array = []
@@ -47,7 +54,15 @@ func set_flag(id: String, value: Variant) -> void:
 	end_change()
 
 func get_flag(id: String, fallback: Variant = null) -> Variant:
-	return flags.get(id, fallback)
+	world_reads.read("flags", id)
+	return _flags.get(id, fallback)
+
+func world_signature_state(zone_id: String) -> Dictionary:
+	var state: Dictionary = world_reads.snapshot(zone_id, {"flags": _flags})
+	state["values"] = values
+	state["evidence"] = evidence
+	state["decisions"] = decisions
+	return state
 
 func adjust_value(id: String, amount: int) -> int:
 	var limit: Vector2i = VALUE_LIMITS.get(id, Vector2i(-999, 999))

@@ -1,6 +1,8 @@
 extends Node
 
 const ROOT := "res://assets_external/textures/runtime/"
+const SharedResourceRequests = preload("res://scripts/shared_resource_requests.gd")
+var resource_requests = SharedResourceRequests.acquire()
 
 const SURFACES := {
 	"forest_ground": {"stem": "forest_ground", "scale": 0.28, "roughness": 0.88},
@@ -50,7 +52,7 @@ func prewarm_surfaces(surface_ids: Array, quality: String) -> void:
 			var file_name := "%s_%s.jpg" % [stem, channel]
 			if texture_cache.has(file_name) or pending_textures.has(file_name):
 				continue
-			var error := ResourceLoader.load_threaded_request(ROOT + file_name)
+			var error: Error = resource_requests.request(ROOT + file_name, self)
 			if error != OK:
 				prewarm_failed = true
 				prewarm_error = "%s: %s" % [ROOT + file_name, error_string(error)]
@@ -60,9 +62,9 @@ func prewarm_surfaces(surface_ids: Array, quality: String) -> void:
 func poll_prewarm() -> Error:
 	for file_name in pending_textures.keys():
 		var path: String = ROOT + file_name
-		var status := ResourceLoader.load_threaded_get_status(path)
+		var status: int = resource_requests.status(path)
 		if status == ResourceLoader.THREAD_LOAD_LOADED:
-			var texture := ResourceLoader.load_threaded_get(path) as Texture2D
+			var texture := resource_requests.take(path, self) as Texture2D
 			if texture != null:
 				texture_cache[file_name] = texture
 			else:
@@ -70,6 +72,7 @@ func poll_prewarm() -> Error:
 			prewarm_failed = prewarm_failed or texture == null
 			pending_textures.erase(file_name)
 		elif status != ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+			resource_requests.release(path, self)
 			prewarm_failed = true
 			prewarm_error = "%s: threaded load status %d" % [path, status]
 			pending_textures.erase(file_name)
@@ -342,7 +345,7 @@ func clear_cache() -> void:
 	# Threaded requests retain loader state until consumed, even when already
 	# complete. Cache retirement must also cover shutdown before the first poll.
 	for file_name in pending_textures:
-		ResourceLoader.load_threaded_get(ROOT + file_name)
+		resource_requests.release(ROOT + file_name, self, "", true)
 	pending_textures.clear()
 	prewarm_failed = false
 	prewarm_error = ""
@@ -361,7 +364,8 @@ func _texture_file(file_name: String) -> Texture2D:
 	if texture_cache.has(file_name):
 		return texture_cache[file_name]
 	var path := ROOT + file_name
-	var texture := load(path) as Texture2D if ResourceLoader.exists(path) else null
+	var texture := resource_requests.load_now(path, self) as Texture2D if ResourceLoader.exists(path) else null
+	pending_textures.erase(file_name)
 	if texture != null:
 		texture_cache[file_name] = texture
 	return texture

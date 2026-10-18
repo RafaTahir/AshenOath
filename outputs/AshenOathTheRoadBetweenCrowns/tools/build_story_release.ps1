@@ -88,6 +88,7 @@ public static class AshenOathBuildPower {
 [AshenOathBuildPower]::SetThreadExecutionState([uint32]2147483649) | Out-Null
 try {
 Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "build_source_catalog.py")) "source-catalog"
+Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "prepare_runtime_dialogue.py")) "runtime-dialogue"
 Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "prepare_runtime_pack_layout.py")) "pack-layout"
 Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "build_story_score.py")) "story-score"
 if ($BuildVoices) {
@@ -97,6 +98,7 @@ if ($BuildVoices) {
     Invoke-BuildProcess $PythonPath $VoiceArguments "story-voices"
 }
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--editor", "--import") "import"
+Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_prepared_zone_geometry.gd")) "prepared-zone-geometry"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_directional_gaits.gd")) "directional-gaits"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_bracken_asset.gd")) "bracken-asset"
 

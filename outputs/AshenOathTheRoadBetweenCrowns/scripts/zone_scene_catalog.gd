@@ -6,6 +6,9 @@ class_name ZoneSceneCatalog
 ## runtime pack; noncritical decoration remains in the opening pack.
 
 const MANIFEST_PATH := "res://zone_scene_manifest.json"
+const SharedResourceRequests = preload("res://scripts/shared_resource_requests.gd")
+static var _manifest: Dictionary = {}
+static var _manifest_loaded := false
 const FALLBACK_PATHS := {
 	"greyfen": {
 		"gameplay": "res://scenes/runtime/greyfen_gameplay_core.tscn",
@@ -42,7 +45,8 @@ static func attach(zone_id: String, parent: Node3D, requested_layers: Array[Stri
 		# out of the initial menu PCK while preserving the authored layer API.
 		var packed: PackedScene
 		if ResourceLoader.exists(path):
-			packed = ResourceLoader.load(path) as PackedScene
+			var shared = SharedResourceRequests.acquire()
+			packed = shared.load_now(path, parent) as PackedScene
 		if packed == null:
 			result.ok = false
 			result.errors.append("missing or invalid %s layer: %s" % [layer, path])
@@ -63,10 +67,20 @@ static func _find_attached_source(parent: Node, path: String) -> Node:
 
 static func _zone_record(zone_id: String) -> Dictionary:
 	var fallback: Dictionary = FALLBACK_PATHS.get(zone_id.strip_edges().to_lower(), {})
-	if not FileAccess.file_exists(MANIFEST_PATH):
-		return fallback
-	var parsed = JSON.parse_string(FileAccess.get_file_as_string(MANIFEST_PATH))
-	if typeof(parsed) != TYPE_DICTIONARY:
-		return fallback
-	var record: Dictionary = parsed.get("zones", {}).get(zone_id.strip_edges().to_lower(), {})
+	if not _manifest_loaded:
+		_manifest_loaded = true
+		if FileAccess.file_exists(MANIFEST_PATH):
+			var parsed = JSON.parse_string(FileAccess.get_file_as_string(MANIFEST_PATH))
+			if typeof(parsed) == TYPE_DICTIONARY:
+				_manifest = parsed.get("zones", {})
+	var record: Dictionary = _manifest.get(zone_id.strip_edges().to_lower(), {})
 	return record if not record.is_empty() else fallback
+
+static func resource_paths(zone_id: String) -> Array[String]:
+	var paths: Array[String] = []
+	var record := _zone_record(zone_id)
+	for layer in ["gameplay", "decoration"]:
+		var path := str(record.get(layer, ""))
+		if not path.is_empty():
+			paths.append(path)
+	return paths
