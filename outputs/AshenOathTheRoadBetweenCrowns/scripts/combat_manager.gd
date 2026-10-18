@@ -1,5 +1,7 @@
 extends Node
 
+var _query_scratch = preload("res://scripts/physics_query_scratch.gd").new()
+
 signal enemy_hit(name: String, amount: float)
 signal impact(position: Vector3, heavy: bool)
 signal enemy_killed(name: String)
@@ -141,7 +143,7 @@ func _closest_point_on_segment(point: Vector3, start: Vector3, finish: Vector3) 
 
 func _has_contact_line(player: Node3D, enemy: Node3D, contact_point: Vector3) -> bool:
 	var origin := player.global_position + Vector3(0, 1.0, 0)
-	var query := PhysicsRayQueryParameters3D.create(origin, contact_point, 1)
+	var query: PhysicsRayQueryParameters3D = _query_scratch.ray(origin, contact_point, 1)
 	query.exclude = [player.get_rid()]
 	query.collide_with_areas = false
 	var hit: Dictionary = player.get_world_3d().direct_space_state.intersect_ray(query)

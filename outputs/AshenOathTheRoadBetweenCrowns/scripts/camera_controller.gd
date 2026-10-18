@@ -1,5 +1,9 @@
 extends Node3D
 
+var _query_scratch = preload("res://scripts/physics_query_scratch.gd").new()
+var _visibility_batch := false
+var _visibility_results: Dictionary = {}
+
 var target: Node3D
 var input_source: Node
 var yaw = 0.0
@@ -182,6 +186,8 @@ func reset_follow() -> void:
 	reset_physics_interpolation()
 
 func _update_view(delta: float) -> void:
+	_visibility_results.clear()
+	_visibility_batch = true
 	var followed_position: Vector3 = target.get_global_transform_interpolated().origin
 	if delta <= 0.0:
 		followed_position = target.global_position
@@ -291,6 +297,8 @@ func _update_view(delta: float) -> void:
 	camera.look_at(_smoothed_look + idle_breath, Vector3.UP)
 	camera.fov = lerp(camera.fov, target_fov + _fov_kick, _smooth_weight(delta, 5.0))
 	_fov_kick = max(_fov_kick - delta * 5.0, 0.0)
+	_visibility_batch = false
+	_visibility_results.clear()
 
 func frame_dialogue_target(dialogue_target: Node3D) -> void:
 	if target == null or camera == null or dialogue_target == null or not is_instance_valid(dialogue_target):
@@ -400,8 +408,7 @@ func _collide_camera(from_pos: Vector3, desired: Vector3) -> Vector3:
 		return desired
 	if is_instance_valid(target):
 		desired.y = maxf(desired.y, target.global_position.y + 0.55)
-	var query := PhysicsShapeQueryParameters3D.new()
-	query.shape = _camera_probe
+	var query: PhysicsShapeQueryParameters3D = _query_scratch.shape_query(_camera_probe)
 	query.transform = Transform3D(Basis.IDENTITY, from_pos)
 	query.motion = desired - from_pos
 	query.collision_mask = 1 | (1 << 6)
@@ -440,7 +447,7 @@ func _resolve_dialogue_camera(focus: Vector3, desired: Vector3, actor: Node3D) -
 		var candidate := _collide_camera(focus, focus + Basis(Vector3.UP, deg_to_rad(angle)) * (desired - focus))
 		if bounds.has_point(candidate) or candidate.distance_to(target.global_position + Vector3.UP * 1.3) < 0.65:
 			continue
-		var query := PhysicsRayQueryParameters3D.create(candidate, focus, 1 | (1 << 6))
+		var query: PhysicsRayQueryParameters3D = _query_scratch.ray(candidate, focus, 1 | (1 << 6))
 		query.exclude = [target.get_rid()] if target is CollisionObject3D else []
 		query.hit_from_inside = true
 		if get_world_3d().direct_space_state.intersect_ray(query).is_empty():
@@ -554,7 +561,7 @@ func training_aim_direction(origin: Vector3) -> Vector3:
 	var screen := camera.get_viewport().get_visible_rect().size * 0.5
 	var ray_origin := camera.project_ray_origin(screen)
 	var endpoint := ray_origin + camera.project_ray_normal(screen) * 30.0
-	var query := PhysicsRayQueryParameters3D.create(ray_origin, endpoint, 1 | 128)
+	var query: PhysicsRayQueryParameters3D = _query_scratch.ray(ray_origin, endpoint, 1 | 128)
 	if target is CollisionObject3D:
 		query.exclude = [(target as CollisionObject3D).get_rid()]
 	query.collide_with_areas = false
@@ -655,13 +662,24 @@ func _is_target_alive_in_range(candidate: Node3D) -> bool:
 	return true
 
 func _target_is_visible(candidate: Node3D) -> bool:
+	if not _visibility_batch:
+		return _target_is_visible_uncached(candidate)
+	if candidate == null:
+		return false
+	var key := [candidate.get_instance_id(), candidate.global_position, target.global_position]
+	if not _visibility_results.has(key):
+		_visibility_results[key] = _target_is_visible_uncached(candidate)
+	return bool(_visibility_results[key])
+
+func _target_is_visible_uncached(candidate: Node3D) -> bool:
 	if candidate == null or get_world_3d() == null:
 		return false
 	var origins := [target.global_position + Vector3.UP * 1.05, target.global_position + Vector3.UP * 1.48]
 	var endpoints := [candidate.global_position + Vector3.UP * 0.88, candidate.global_position + Vector3.UP * 1.42]
+	var exclusions := _target_query_exclusions(candidate)
 	for index in range(origins.size()):
-		var query := PhysicsRayQueryParameters3D.create(origins[index], endpoints[index], 1)
-		query.exclude = _target_query_exclusions(candidate)
+		var query: PhysicsRayQueryParameters3D = _query_scratch.ray(origins[index], endpoints[index], 1)
+		query.exclude = exclusions
 		query.collide_with_areas = false
 		if get_world_3d().direct_space_state.intersect_ray(query).is_empty():
 			return true
@@ -677,23 +695,23 @@ func _target_query_exclusions(candidate: Node3D) -> Array[RID]:
 
 func _available_combat_targets() -> Array[Node3D]:
 	var result: Array[Node3D] = []
+	var scored: Array[Dictionary] = []
+	var forward := get_flat_forward()
+	var right := get_flat_right()
+	var origin := target.global_position
 	for node in _enemy_cache:
-		if not is_instance_valid(node):
+		if not is_instance_valid(node) or not _is_valid_combat_target(node):
 			continue
-		if _is_valid_combat_target(node):
-			result.append(node)
-	result.sort_custom(func(a: Node3D, b: Node3D):
-			var forward := get_flat_forward()
-			var right := get_flat_right()
-			var a_offset := a.global_position - target.global_position
-			var b_offset := b.global_position - target.global_position
-			a_offset.y = 0.0
-			b_offset.y = 0.0
-			var a_angle := atan2(right.dot(a_offset.normalized()), forward.dot(a_offset.normalized()))
-			var b_angle := atan2(right.dot(b_offset.normalized()), forward.dot(b_offset.normalized()))
-			if not is_equal_approx(a_angle, b_angle):
-				return a_angle < b_angle
-			return target.global_position.distance_squared_to(a.global_position) < target.global_position.distance_squared_to(b.global_position))
+		var offset: Vector3 = node.global_position - origin
+		offset.y = 0.0
+		var direction := offset.normalized()
+		scored.append({"node": node, "angle": atan2(right.dot(direction), forward.dot(direction)), "distance": origin.distance_squared_to(node.global_position)})
+	scored.sort_custom(func(a: Dictionary, b: Dictionary):
+		if not is_equal_approx(float(a.angle), float(b.angle)):
+			return float(a.angle) < float(b.angle)
+		return float(a.distance) < float(b.distance))
+	for entry in scored:
+		result.append(entry.node)
 	return result
 
 func _cycle_combat_target(direction: int) -> void:
@@ -922,8 +940,8 @@ func _player_view_obstructed(camera_position: Vector3) -> bool:
 	var body := AABB(Vector3(-0.32, 0.2, -0.32), Vector3(0.64, 1.5, 0.64))
 	for index in range(8):
 		var point := target.global_position + body.get_endpoint(index)
-		var query := PhysicsRayQueryParameters3D.create(camera_position, point, 1 | (1 << 6))
-		query.exclude = [target]
+		var query: PhysicsRayQueryParameters3D = _query_scratch.ray(camera_position, point, 1 | (1 << 6))
+		query.exclude = [target.get_rid()] if target is CollisionObject3D else []
 		query.hit_from_inside = true
 		if not space.intersect_ray(query).is_empty():
 			return true

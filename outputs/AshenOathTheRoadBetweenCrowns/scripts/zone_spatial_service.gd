@@ -18,6 +18,14 @@ var player_body: CollisionObject3D
 var navigation_region: NavigationRegion3D
 var navigation_map: RID
 var probe_shapes: Dictionary = {}
+var _exclusion_index = preload("res://scripts/spatial_bounds_index.gd").new()
+var _corridor_index = preload("res://scripts/spatial_bounds_index.gd").new()
+var _bridge_index = preload("res://scripts/spatial_bounds_index.gd").new()
+var _query_scratch = preload("res://scripts/physics_query_scratch.gd").new()
+var _route_cache: Dictionary = {}
+var _segment_cache: Dictionary = {}
+var _segment_cache_step := -1
+var data_revision := 0
 
 func _exit_tree() -> void:
 	if navigation_map.is_valid():
@@ -37,6 +45,10 @@ func configure(id: String, river_z: float, extents: Vector2) -> void:
 	bridges.clear()
 	gates.clear()
 	probe_shapes.clear()
+	_exclusion_index.clear()
+	_corridor_index.clear()
+	_bridge_index.clear()
+	_invalidate_routes()
 	_register_zone_defaults()
 
 func set_player_body(body: CollisionObject3D) -> void:
@@ -55,6 +67,8 @@ func register_bridge(id: String, bank_a: Vector3, bank_b: Vector3, half_width: f
 		"half_length": half_length,
 		"half_width": half_width,
 	}
+	_bridge_index.add(id, Vector3(0, 0, centre_z), Vector2(BridgeSurfaceContract.HALF_WIDTH, half_length), bridges[id])
+	_invalidate_routes()
 
 func register_gate(id: String, center: Vector3, arrival: Vector3, half_size: Vector2) -> void:
 	gates[id] = {"center": center, "arrival": arrival, "half_size": half_size}
@@ -62,10 +76,16 @@ func register_gate(id: String, center: Vector3, arrival: Vector3, half_size: Vec
 	add_safe_spawn(arrival)
 
 func reserve_exclusion(id: String, center: Vector3, half_size: Vector2) -> void:
-	exclusions.append({"id": id, "center": center, "half_size": half_size})
+	var entry := {"id": id, "center": center, "half_size": half_size}
+	exclusions.append(entry)
+	_exclusion_index.add(str(exclusions.size()), center, half_size, entry)
+	_invalidate_routes()
 
 func reserve_corridor(id: String, center: Vector3, half_size: Vector2) -> void:
-	reserved_corridors.append({"id": id, "center": center, "half_size": half_size})
+	var entry := {"id": id, "center": center, "half_size": half_size}
+	reserved_corridors.append(entry)
+	_corridor_index.add(str(reserved_corridors.size()), center, half_size, entry)
+	_invalidate_routes()
 
 func add_safe_spawn(position: Vector3) -> void:
 	var safe := _clamp_to_bounds(position, 0.8)
@@ -121,12 +141,12 @@ func get_navigation_map() -> RID:
 	return navigation_map
 
 func is_reserved(position: Vector3, margin: float = 0.0) -> bool:
-	return _inside_entries(position, reserved_corridors, margin)
+	return _corridor_index.contains(position, margin)
 
 func is_on_bridge(position: Vector3, clearance: float = 0.0) -> bool:
 	if river_center >= 900.0:
 		return false
-	for bridge in bridges.values():
+	for bridge in _bridge_index.candidates(position, clearance):
 		if BridgeSurfaceContract.contains(position, float(bridge.center_z), float(bridge.half_length), clearance):
 			return true
 	return false
@@ -160,6 +180,20 @@ func validate_position(position: Vector3, clearance: float = 0.8, preferred_bank
 	return result
 
 func validate_segment(start: Vector3, destination: Vector3, clearance: float = 0.9) -> bool:
+	var step := Engine.get_physics_frames()
+	if _segment_cache_step != step:
+		_segment_cache.clear()
+		_segment_cache_step = step
+	var key := [start, destination, clearance]
+	if _segment_cache.has(key):
+		return bool(_segment_cache[key])
+	var valid := _validate_segment_uncached(start, destination, clearance)
+	if _segment_cache.size() >= 256:
+		_segment_cache.clear()
+	_segment_cache[key] = valid
+	return valid
+
+func _validate_segment_uncached(start: Vector3, destination: Vector3, clearance: float) -> bool:
 	var distance := start.distance_to(destination)
 	var samples := maxi(2, ceili(distance / 0.45))
 	for index in range(samples + 1):
@@ -191,6 +225,16 @@ func validate_runtime_segment(start: Vector3, destination: Vector3, clearance: f
 func build_route(start: Vector3, destination: Vector3, clearance: float = 0.9) -> Array[Vector3]:
 	var source := validate_position(start, clearance, bank_for(start))
 	var target := validate_position(destination, clearance, bank_for(destination))
+	var key := [source, target, clearance, data_revision]
+	if _route_cache.has(key):
+		return _route_cache[key].duplicate()
+	var route := _build_route_uncached(source, target, clearance)
+	if _route_cache.size() >= 128:
+		_route_cache.clear()
+	_route_cache[key] = route.duplicate()
+	return route
+
+func _build_route_uncached(source: Vector3, target: Vector3, clearance: float) -> Array[Vector3]:
 	var result: Array[Vector3] = [source]
 	if bank_for(source) != 0 and bank_for(target) != 0 and bank_for(source) != bank_for(target):
 		var bridge := _nearest_bridge(source, target)
@@ -291,8 +335,7 @@ func _is_position_occupied_with_ignore(position: Vector3, radius: float, height:
 	if not is_inside_tree() or get_world_3d() == null:
 		return false
 	var shape := _get_probe_shape(radius, height)
-	var query := PhysicsShapeQueryParameters3D.new()
-	query.shape = shape
+	var query: PhysicsShapeQueryParameters3D = _query_scratch.shape_query(shape)
 	# `position` is an actor/root ground point, while CapsuleShape3D's transform
 	# is its center. Keep the probe a small, explicit distance above the floor;
 	# placing its lower hemisphere on the ground slab makes the physics server
@@ -363,12 +406,21 @@ func _nearest_bridge(start: Vector3, destination: Vector3) -> Dictionary:
 	return best
 
 func _inside_entries(position: Vector3, entries: Array[Dictionary], margin: float) -> bool:
+	if is_same(entries, exclusions):
+		return _exclusion_index.contains(position, margin)
+	if is_same(entries, reserved_corridors):
+		return _corridor_index.contains(position, margin)
 	for entry in entries:
 		var center: Vector3 = entry.center
 		var half_size: Vector2 = entry.half_size
 		if absf(position.x - center.x) <= half_size.x + margin and absf(position.z - center.z) <= half_size.y + margin:
 			return true
 	return false
+
+func _invalidate_routes() -> void:
+	data_revision += 1
+	_route_cache.clear()
+	_segment_cache.clear()
 
 func _clamp_to_bounds(position: Vector3, clearance: float) -> Vector3:
 	var result := position

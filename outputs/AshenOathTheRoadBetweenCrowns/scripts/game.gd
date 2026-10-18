@@ -1168,14 +1168,20 @@ func _spawn_player(pos: Vector3) -> void:
 	hud.update_health(player.health_component.health, player.health_component.max_health)
 	hud.update_stamina(player.stamina_component.stamina, player.stamina_component.max_stamina)
 
+var encounter_spatial_index = preload("res://scripts/actor_spatial_index.gd").new()
+
 func _sync_camera_enemy_cache() -> void:
 	# Keep restored encounter actors on the same owned peer list as the camera.
 	# Cached-zone activation replaces active_enemies with a fresh filtered Array;
 	# rebinding here keeps spacing and attack-lane checks on the restored list;
 	# enemy controllers never discover peers in unrelated scene-tree groups.
+	encounter_spatial_index.clear()
+	for enemy in active_enemies:
+		if is_instance_valid(enemy):
+			encounter_spatial_index.update(enemy)
 	for enemy in active_enemies:
 		if is_instance_valid(enemy) and enemy.has_method("set_encounter_peers"):
-			enemy.set_encounter_peers(active_enemies)
+			enemy.set_encounter_peers(active_enemies, encounter_spatial_index)
 	if camera_rig != null and is_instance_valid(camera_rig) and camera_rig.has_method("set_enemy_candidates"):
 		camera_rig.set_enemy_candidates(active_enemies)
 
@@ -6892,9 +6898,6 @@ func _spawn_enemy(id: String, pos: Vector3, visual_role: String = "") -> Node:
 			boss_controller.connect("resolved", Callable(self, "_on_boss_resolved"))
 	active_enemies.append(enemy)
 	preload("res://scripts/story_encounter_director.gd").apply(self, enemy)
-	for peer in active_enemies:
-		if is_instance_valid(peer) and peer.has_method("set_encounter_peers"):
-			peer.set_encounter_peers(active_enemies)
 	_sync_camera_enemy_cache()
 	return enemy
 

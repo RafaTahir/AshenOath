@@ -154,10 +154,24 @@ func setup_navigation(service) -> void:
 	navigation_refresh_time = 0.0
 	navigation_target = Vector3.INF
 
-func set_encounter_peers(peers: Array) -> void:
+var encounter_spatial_index
+var _query_scratch = preload("res://scripts/physics_query_scratch.gd").new()
+var _perception_query_key: Array = []
+var _perception_query_result := false
+var _decision_phase_applied := false
+
+func set_encounter_peers(peers: Array, spatial_index = null) -> void:
 	encounter_peers = peers
+	encounter_spatial_index = spatial_index
+	if not _decision_phase_applied:
+		_decision_phase_applied = true
+		var phase := float(absi((enemy_id + str(encounter_slot)).hash()) % 1000) / 1000.0
+		perception_refresh_time = phase * 0.18
+		navigation_refresh_time = phase * 0.35
 
 func _physics_process(delta: float) -> void:
+	if encounter_spatial_index != null:
+		encounter_spatial_index.update(self)
 	if dead or player == null:
 		return
 	if bool(get_meta("story_surrender_protected", false)):
@@ -290,6 +304,8 @@ func _physics_process(delta: float) -> void:
 	if facing_velocity.length_squared() > 0.01:
 		look_at(global_position + facing_velocity, Vector3.UP)
 	move_and_slide()
+	if encounter_spatial_index != null:
+		encounter_spatial_index.update(self)
 	if animation_driver != null:
 		animation_driver.set_locomotion(Vector2(velocity.x, velocity.z).length() / max(move_speed, 0.1), velocity, is_on_floor())
 	_animate_visuals(delta)
@@ -555,14 +571,15 @@ func player_contact_distance() -> float:
 func _has_attack_line() -> bool:
 	var origin := global_position+Vector3(0,0.9,0)
 	var target: Vector3 = player.global_position+Vector3(0,0.9,0)
-	var query := PhysicsRayQueryParameters3D.create(origin,target, 1)
+	var query: PhysicsRayQueryParameters3D = _query_scratch.ray(origin, target, 1)
 	query.exclude = [get_rid(),player.get_rid()]
 	query.collide_with_areas = false
 	return get_world_3d().direct_space_state.intersect_ray(query).is_empty()
 
 func _crowd_separation() -> Vector3:
 	var separation := Vector3.ZERO
-	for other in encounter_peers:
+	var neighbors: Array = encounter_spatial_index.nearby(global_position, 1.55) if encounter_spatial_index != null else encounter_peers
+	for other in neighbors:
 		if other == self or not is_instance_valid(other) or bool(other.get("dead")) or not bool(other.get("encounter_active")):
 			continue
 		var offset: Vector3 = global_position-other.global_position
@@ -630,16 +647,22 @@ func _has_perception_line() -> bool:
 		return false
 	var origin := global_position + Vector3(0, 1.20, 0)
 	var target: Vector3 = player.global_position + Vector3(0, 1.05, 0)
-	var query := PhysicsRayQueryParameters3D.create(origin, target, 1)
+	var key := [Engine.get_physics_frames(), origin, target, player.get_instance_id()]
+	if key == _perception_query_key:
+		return _perception_query_result
+	var query: PhysicsRayQueryParameters3D = _query_scratch.ray(origin, target, 1)
 	query.exclude = [get_rid()]
 	query.collide_with_areas = false
 	var hit := get_world_3d().direct_space_state.intersect_ray(query)
-	return hit.is_empty() or hit.get("collider") == player
+	_perception_query_key = key
+	_perception_query_result = hit.is_empty() or hit.get("collider") == player
+	return _perception_query_result
 
 func _attack_lane_clear() -> bool:
 	var start := global_position
 	var finish: Vector3 = player.global_position
-	for other in encounter_peers:
+	var neighbors: Array = encounter_spatial_index.nearby((start + finish) * 0.5, start.distance_to(finish) * 0.5 + 0.72) if encounter_spatial_index != null else encounter_peers
+	for other in neighbors:
 		if other == self or not is_instance_valid(other) or bool(other.get("dead")) or not bool(other.get("encounter_active")):
 			continue
 		var other_pos: Vector3 = other.global_position

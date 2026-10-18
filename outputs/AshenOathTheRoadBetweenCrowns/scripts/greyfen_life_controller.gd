@@ -123,6 +123,8 @@ func _process(delta: float) -> void:
 	line_cooldown = max(line_cooldown - delta, 0.0)
 	if decision_tick and story_dirty:
 		_sync_story_state(false)
+	var now := Time.get_ticks_msec()
+	var decision_period := maxi(1, ceili(1000.0 / _simulation_hz()))
 	# One registration pass observes routine relocations before local queries.
 	for entry in actors:
 		if is_instance_valid(entry.node):
@@ -131,7 +133,9 @@ func _process(delta: float) -> void:
 		var actor_node: Node3D = entry.node
 		if not is_instance_valid(actor_node):
 			continue
-		if decision_tick:
+		var due := int(entry.get("decision_due_msec", now))
+		if now >= due:
+			entry.decision_due_msec = due + (floori(float(now - due) / decision_period) + 1) * decision_period
 			if entry.driver == null:
 				var hydrated_driver: Node = actor_node.find_child("CharacterAnimationDriver", true, false)
 				if hydrated_driver != null:
@@ -387,6 +391,8 @@ func _make_entry(id: String, node: Node3D, path: Array, speed: float, driver: No
 		"activity_elapsed": 0.0, "activity_cycles": 0, "life_state": "walking",
 		"story_reaction": "baseline", "motion_speed": 0.0, "travel_direction": Vector3.ZERO
 	}
+	var period := maxi(1, ceili(1000.0 / _simulation_hz()))
+	entry["decision_due_msec"] = Time.get_ticks_msec() + absi(id.hash()) % period
 	node.set_meta("locomotion_owner", "greyfen_life")
 	node.set_meta("life_ticket", "LIFE-001")
 	node.set_meta("life_routine", id)
