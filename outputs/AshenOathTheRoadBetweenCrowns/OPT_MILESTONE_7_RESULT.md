@@ -33,6 +33,11 @@ No runtime tests,
 gameplay, browser QA, screenshots or benchmarks are authorized or performed.
 User acceptance: pending. No measured performance gain is claimed.
 
+Subsequent M8 asset compilation exposed an existing river-bank helper type
+error which the earlier packager did not reject. M8 corrects that helper and
+supersedes its generated ground; the old M7 package is historical, not runtime
+or complete-geometry acceptance evidence.
+
 ## User Checks
 
 Compare defaults with each explicit 0/1 override and optional perf display.

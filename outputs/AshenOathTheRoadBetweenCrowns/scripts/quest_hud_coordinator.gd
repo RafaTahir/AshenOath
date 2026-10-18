@@ -49,7 +49,7 @@ func _navigation_dial_geometry(zone_id: String, spatial_source: Node, zone_root:
 	var exclusions: Array = spatial_source.get("exclusions")
 	var corridors: Array = spatial_source.get("reserved_corridors")
 	var root_id: int = zone_root.get_instance_id() if is_instance_valid(zone_root) else 0
-	var key: String = "%s:%d:%d:%s:%s:%d:%d:%d" % [zone_id, spatial_source.get_instance_id(), root_id, str(half_extents), str(river_center), bridges.size(), exclusions.size(), corridors.size()]
+	var key: String = "%s:%d:%d:%s:%s:%d" % [zone_id, spatial_source.get_instance_id(), root_id, str(half_extents), str(river_center), int(spatial_source.get("data_revision"))]
 	if key == _dial_geometry_key:
 		return _dial_geometry
 	var bounds: Rect2 = Rect2(-half_extents, half_extents * 2.0)
@@ -84,7 +84,7 @@ func _navigation_dial_geometry(zone_id: String, spatial_source: Node, zone_root:
 		var half_size: Vector2 = raw_exclusion.get("half_size", Vector2.ZERO)
 		terrain.append({"kind": "obstacle", "points": _dial_rect_points(Rect2(Vector2(center.x, center.z) - half_size, half_size * 2.0))})
 	_dial_geometry_key = key
-	_dial_geometry = {"bounds": bounds, "terrain": terrain}
+	_dial_geometry = {"bounds": bounds, "terrain": terrain, "spatial_revision": key}
 	return _dial_geometry
 
 func _dial_rect_points(rect: Rect2) -> PackedVector2Array:

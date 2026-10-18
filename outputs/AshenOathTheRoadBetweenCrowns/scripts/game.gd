@@ -5048,8 +5048,8 @@ func _make_lantern_rhythm() -> void:
 		_make_fake_light_pool("RoadLanternPool", item[0] + Vector3(0, 0.035, 0.25), Vector3(1.55, 0.022, 1.05), Color(0.32, 0.135, 0.045))
 
 func _make_shrine_approach() -> void:
-	_make_visual_box("ShrinePathWarmEdge", Vector3(3.05, 0.047, -5.55), Vector3(2.9, 0.018, 0.22), Color(0.24, 0.16, 0.075))
-	_make_visual_box("ShrinePathWarmEdge", Vector3(4.65, 0.047, -6.55), Vector3(2.3, 0.018, 0.22), Color(0.24, 0.16, 0.075))
+	_append_prepared_detail("ShrinePathWarmEdge_30f036e1cc")
+	_append_prepared_detail("ShrinePathWarmEdge_fb53d619f3")
 	_make_lantern_post(Vector3(3.4, 0, -4.25), true, true)
 	_make_lantern_post(Vector3(7.65, 0, -6.1), true, false)
 	for offset in [Vector3(-1.25, 0, 0.75), Vector3(1.18, 0, 0.82), Vector3(-1.55, 0, -0.25), Vector3(1.5, 0, -0.3)]:
@@ -5277,6 +5277,26 @@ func _make_visual_box(name: String, pos: Vector3, size: Vector3, color: Color) -
 		visual_box_batch_data.append({"node":mesh_instance,"size":size,"color":color})
 	return mesh_instance
 
+func _append_prepared_detail(id: String) -> void:
+	var entry := preload("res://scripts/prepared_static_batches.gd").entry(id)
+	if entry.is_empty():
+		return
+	if environment_batches_flushed:
+		_make_visual_box(entry.name, entry.position, entry.size, entry.color)
+		return
+	var pos: Vector3 = entry.position
+	if current_zone_id not in ["record_hall", "undercroft"]:
+		pos = river_safe_position(pos, entry.size.z * 0.5 + 0.18)
+	var record: Dictionary = entry
+	if pos != entry.position:
+		record = preload("res://scripts/static_multimesh_upload.gd").prepare_record(Transform3D(entry.transform.basis, pos), entry.color)
+	visual_box_batch_data.append({"prepared": record, "color": entry.color})
+
+func _make_prepared_prop(id: String) -> void:
+	var entry := preload("res://scripts/prepared_static_batches.gd").entry(id)
+	if not entry.is_empty():
+		_make_prop_box(entry.name, entry.position, entry.size, entry.color, true, entry)
+
 func _add_visual_box_child(parent: Node3D, name: String, local_pos: Vector3, size: Vector3, color: Color) -> MeshInstance3D:
 	var mesh_instance = MeshInstance3D.new()
 	mesh_instance.name = name
@@ -5297,12 +5317,12 @@ func _make_greyfen_road_of_crows_story_beats() -> void:
 	_make_broken_charm("RoadCrowsNoticePrayerCharm", Vector3(-1.35, 0.10, 8.95), 0.0)
 	_make_black_feather_scatter("RoadCrowsShrineBlackFeathers", Vector3(5.25, 0.10, -6.25), 5, 0.65)
 	_make_broken_charm("RoadCrowsShrineSnappedToken", Vector3(5.65, 0.12, -6.75), -22.0)
-	_make_visual_box("RoadCrowsExtinguishedCandle", Vector3(6.55, 0.16, -6.35), Vector3(0.11, 0.28, 0.11), Color(0.075, 0.065, 0.055))
+	_append_prepared_detail("RoadCrowsExtinguishedCandle_17d04e45b8")
 	CemeteryEvidencePresentation.add_disturbed_soil(zone_root, Vector3(13.65, 0.057, 9.45), world_materials.get_material("wet_mud", str(settings.settings.get("quality_preset", "balanced")), Color(0.43, 0.38, 0.31), 0.0, false))
 	_make_broken_charm("RoadCrowsGraveyardHalfBuriedCharm", Vector3(13.18, 0.13, 9.15), 14.0)
 	_make_black_feather_scatter("RoadCrowsGateThresholdFeathers", Vector3(-1.25, 0.10, -13.65), 5, 0.9)
 	_make_dark_track("RoadCrowsGateMudTrail", Vector3(0.0, 0.071, -13.15), Vector3(0.42, 0.022, 2.15), Color(0.040, 0.027, 0.020))
-	_make_visual_box("RoadCrowsGateBrokenSign", Vector3(-2.95, 0.86, -13.85), Vector3(1.05, 0.14, 0.38), Color(0.135, 0.075, 0.038))
+	_append_prepared_detail("RoadCrowsGateBrokenSign_70d5d38f95")
 	_make_claw_marks("RoadCrowsGateClawedPost", Vector3(2.35, 0.95, -13.85), true)
 
 func _make_wychwood_road_of_crows_story_beats() -> void:
@@ -5310,15 +5330,15 @@ func _make_wychwood_road_of_crows_story_beats() -> void:
 	marker.name = "RoadOfCrowsWychwoodStoryBeats"
 	zone_root.add_child(marker)
 	_make_cart(Vector3(-5.35, 0, 6.6))
-	_make_visual_box("RoadCrowsBrokenCartSupplySack", Vector3(-4.65, 0.18, 6.0), Vector3(0.58, 0.24, 0.42), Color(0.17, 0.115, 0.075))
+	_append_prepared_detail("RoadCrowsBrokenCartSupplySack_978fae0e15")
 	_make_dark_track("RoadCrowsDraggedTrackA", Vector3(-1.05, 0.073, 6.4), Vector3(0.32, 0.018, 2.6), Color(0.050, 0.027, 0.020))
 	_make_dark_track("RoadCrowsDraggedTrackB", Vector3(0.75, 0.074, 5.1), Vector3(0.26, 0.018, 2.0), Color(0.055, 0.030, 0.022))
 	_make_claw_marks("RoadCrowsCartClawMarks", Vector3(2.7, 0.22, 4.65), false)
-	_make_visual_box("RoadCrowsTornRedCloth", Vector3(-3.65, 0.105, 2.15), Vector3(0.58, 0.035, 0.24), Color(0.28, 0.055, 0.042))
+	_append_prepared_detail("RoadCrowsTornRedCloth_696592259f")
 	_make_broken_charm("RoadCrowsBrokenPrayerToken", Vector3(-3.18, 0.13, 2.25), -12.0)
 	_make_black_feather_scatter("RoadCrowsOldRoadBlackFeathers", Vector3(-3.95, 0.10, 1.75), 6, 0.75)
 	_make_dark_track("RoadCrowsClearingDraggedMarks", Vector3(0.0, 0.074, -5.65), Vector3(0.46, 0.020, 3.1), Color(0.060, 0.022, 0.016))
-	_make_visual_box("RoadCrowsClearingOldBloodMud", Vector3(-0.8, 0.076, -6.95), Vector3(1.35, 0.020, 0.62), Color(0.080, 0.018, 0.013))
+	_append_prepared_detail("RoadCrowsClearingOldBloodMud_3184405d5b")
 	_make_broken_charm("RoadCrowsClearingSnappedCharm", Vector3(1.35, 0.13, -6.9), 24.0)
 	_make_black_feather_scatter("RoadCrowsClearingFeathers", Vector3(1.55, 0.10, -7.25), 5, 0.72)
 
@@ -5327,7 +5347,7 @@ func _make_post_ghoulkin_story_clue() -> void:
 		return
 	_make_dark_track("RoadCrowsPostVictoryBootTracks", Vector3(0.95, 0.087, -4.25), Vector3(0.30, 0.026, 1.9), Color(0.020, 0.018, 0.015))
 	_make_dark_track("RoadCrowsPostVictoryClawTracks", Vector3(1.45, 0.088, -4.75), Vector3(0.34, 0.025, 1.55), Color(0.060, 0.022, 0.016))
-	_make_visual_box("RoadCrowsPostVictoryCutThread", Vector3(0.55, 0.13, -3.72), Vector3(0.70, 0.030, 0.06), Color(0.36, 0.035, 0.030))
+	_append_prepared_detail("RoadCrowsPostVictoryCutThread_632cbbbd56")
 	_make_black_feather_scatter("RoadCrowsPostVictoryFeathers", Vector3(0.35, 0.11, -3.95), 4, 0.55)
 	_make_named_interactable("post_victory_token", "clue", "Examine the token in the dead creature's hand", Vector3(1.35, 0.0, -4.55), Color(0.46, 0.28, 0.12), Vector3(0.55, 0.55, 0.55))
 
@@ -5337,8 +5357,8 @@ func _make_narrative_aftermath(zone_id: String) -> void:
 	if zone_id == "wychwood":
 		if quests.is_objective_done("main_road_of_crows", "fight_ghoulkin") or bool(story_state.get_flag("wychwood_pack_cleared", false)):
 			_make_post_ghoulkin_story_clue()
-			_make_visual_box("WychwoodPackAshResidue", Vector3(0.0, 0.078, -7.0), Vector3(1.7, 0.018, 1.25), Color(0.045, 0.035, 0.032))
-			_make_visual_box("WychwoodPackBrokenBinding", Vector3(1.2, 0.115, -6.4), Vector3(0.55, 0.025, 0.08), Color(0.22, 0.16, 0.10))
+			_append_prepared_detail("WychwoodPackAshResidue_b4fd8b7b91")
+			_append_prepared_detail("WychwoodPackBrokenBinding_c070cc1a73")
 		if bool(story_state.get_flag("all_road_evidence", false)) and not quests.is_objective_done("main_road_of_crows", "fight_ghoulkin"):
 			_make_all_evidence_safe_edge()
 		for evidence in [
@@ -5360,10 +5380,10 @@ func _make_narrative_aftermath(zone_id: String) -> void:
 				"retained": Color(0.25, 0.22, 0.18)
 			}
 			_make_visual_box("GreyfenReportedNotice", Vector3(-1.98, 1.18, 9.34), Vector3(0.46, 0.58, 0.025), report_colors.get(report_method, Color(0.5, 0.45, 0.34)))
-			_make_visual_box("GreyfenWitnessCandle", Vector3(5.65, 0.18, -6.72), Vector3(0.08, 0.22, 0.08), Color(0.65, 0.46, 0.22))
+			_append_prepared_detail("GreyfenWitnessCandle_2eae43d10b")
 		if bool(story_state.get_flag("cemetery_ambush_cleared", false)):
-			_make_visual_box("CemeterySettledEarth", Vector3(14.0, 0.072, 8.8), Vector3(2.1, 0.025, 1.25), Color(0.085, 0.070, 0.052))
-			_make_visual_box("CemeteryAftermathLantern", Vector3(15.7, 0.42, 8.1), Vector3(0.16, 0.40, 0.16), Color(0.52, 0.40, 0.21))
+			_append_prepared_detail("CemeterySettledEarth_8df2d0e6f7")
+			_append_prepared_detail("CemeteryAftermathLantern_4116c2053a")
 
 func _make_black_feather_scatter(base_name: String, center: Vector3, count: int, spread: float) -> void:
 	for i in range(count):
@@ -6665,6 +6685,8 @@ func _make_blocked_gate(prompt: String, pos: Vector3, message: String):
 func _connect_interactable(area) -> void:
 	if area is Area3D and area not in interaction_area_cache:
 		interaction_area_cache.append(area as Area3D)
+		if interaction_focus != null:
+			interaction_focus.register(area)
 	area.body_entered.connect(func(body: Node):
 		if body == player and is_instance_valid(area) and not area.is_queued_for_deletion() and not bool(area.get_meta("seamless_exterior_gate", false)) and area not in interaction_candidates:
 			interaction_candidates.append(area)
@@ -6729,20 +6751,13 @@ func _refresh_interaction_candidates() -> void:
 			var discovered := raw_candidate as Area3D
 			if discovered != null and discovered.has_method("get_context_prompt") and discovered not in interaction_area_cache:
 				interaction_area_cache.append(discovered)
+				interaction_focus.register(discovered)
 		interaction_area_cache_ready = true
 	_prune_invalid_interaction_candidates()
-	# Area signals are authoritative during ordinary movement, but can be missed
-	# when a save, spawn, or zone arrival places Kael inside a trigger between
-	# physics ticks. A small bounded scan keeps prompts deterministic without
-	# walking the entire world or inventing a second focus system.
-	for index in range(interaction_area_cache.size() - 1, -1, -1):
-		var candidate = interaction_area_cache[index]
-		if candidate == null or not is_instance_valid(candidate):
-			# Do not pass a freed object back to a typed Array[Area3D].
-			# remove_at(index) remains valid even after Godot has invalidated the
-			# object reference during deferred clue/zone teardown.
-			interaction_area_cache.remove_at(index)
-			continue
+	# The registered grid also covers save/spawn placement between Area signals.
+	# Rebuild only the local set, not every interactable in the zone.
+	interaction_candidates.clear()
+	for candidate in interaction_focus.nearby(player.global_position, zone_root):
 		if candidate.is_queued_for_deletion() or not candidate.has_method("get_context_prompt"):
 			continue
 		if not candidate.is_visible_in_tree() or (candidate.has_method("is_interaction_enabled") and not candidate.is_interaction_enabled()):
@@ -7344,7 +7359,7 @@ func _flush_environment_batches() -> void:
 		var transparent := separate_alpha and color.a < 0.999
 		if transparent:
 			visual_key = "alpha_" + visual_key
-		var night_only: bool = item.node.get_meta("night_only_geometry", false)
+		var night_only: bool = item.node.get_meta("night_only_geometry", false) if item.has("node") else false
 		if night_only:
 			visual_key = "night_" + visual_key
 		if not visual_groups.has(visual_key):
@@ -7372,6 +7387,11 @@ func _flush_environment_batches() -> void:
 		var detail_transforms: Array = []
 		var detail_colors: Array = []
 		for i in range(items.size()):
+			if items[i].has("prepared"):
+				detail_transforms.append(items[i].prepared)
+				if group.colors:
+					detail_colors.append(items[i].color)
+				continue
 			var marker: Node3D = items[i].node
 			var detail_size: Vector3 = items[i].size
 			detail_transforms.append(Transform3D(marker.basis.scaled(detail_size), marker.position))
@@ -7788,7 +7808,7 @@ func _make_fog_sheet(pos: Vector3, scale_value: Vector3, color: Color) -> void:
 	fog.material_override = material
 	zone_root.add_child(fog)
 
-func _make_prop_box(name: String, pos: Vector3, size: Vector3, color: Color, render_geometry: bool = true) -> void:
+func _make_prop_box(name: String, pos: Vector3, size: Vector3, color: Color, render_geometry: bool = true, prepared: Dictionary = {}) -> void:
 	var authored_prop_ids: Array = zone_root.get_meta("authored_prop_ids", [])
 	if name not in authored_prop_ids:
 		authored_prop_ids.append(name)
@@ -7878,7 +7898,7 @@ func _make_prop_box(name: String, pos: Vector3, size: Vector3, color: Color, ren
 		var material = world_materials.get_material(surface, str(settings.settings.get("quality_preset", "balanced")), surface_tint, 0.15 if surface == "wet_mud" else 0.0, true)
 		if not prop_batch_data.has(batch_key):
 			prop_batch_data[batch_key] = {"material": material, "transforms": []}
-		prop_batch_data[batch_key].transforms.append(Transform3D(Basis.IDENTITY.scaled(size), pos))
+		prop_batch_data[batch_key].transforms.append(prepared if not prepared.is_empty() and pos == prepared.position else Transform3D(Basis.IDENTITY.scaled(size), pos))
 
 func _make_collision_box(name: String, pos: Vector3, size: Vector3) -> void:
 	# Fitted modular art and collision must not both render as overlapping shells.

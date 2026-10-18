@@ -130,7 +130,7 @@ func _build_old_mill(context: ZoneBuildContext) -> void:
 	_make_entry_ramp(context, Vector3(-5.2, 0, -1.65), 0.48, 2.6)
 	_make_authored_mill_dressing(context)
 	context.make_light("AshMillFacadeFill", Vector3(-5.2, 3.4, -2.4), Color(0.58, 0.43, 0.30), 2.2)
-	context.make_visual_box("AshMillWindowWarmth", Vector3(-2.0, 1.25, -7.96), Vector3(0.90, 0.75, 0.035), Color(0.56, 0.24, 0.07))
+	context.append_prepared_detail("AshMillWindowWarmth_4e218b9fd6")
 	context.make_loose_role("barrel", Vector3(-0.4, 0, -4.2), Vector3.ONE * 0.72, 0.0)
 	context.make_loose_role("crate", Vector3(-0.3, 0, -3.3), Vector3.ONE * 0.62, -8.0)
 	context.make_loose_role("cart", Vector3(6.6, 0, 2.8), Vector3.ONE * 0.72, -22.0)

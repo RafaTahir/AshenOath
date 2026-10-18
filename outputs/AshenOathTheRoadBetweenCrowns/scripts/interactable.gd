@@ -1,6 +1,14 @@
 extends Area3D
 
 signal interaction_availability_changed(enabled: bool)
+signal interaction_position_changed
+
+func _enter_tree() -> void:
+	set_notify_transform(true)
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_TRANSFORM_CHANGED:
+		interaction_position_changed.emit()
 
 const PROMPT_VERBS := {
 	"Talk to ": "Speak", "Speak to ": "Speak", "Speak with ": "Speak",

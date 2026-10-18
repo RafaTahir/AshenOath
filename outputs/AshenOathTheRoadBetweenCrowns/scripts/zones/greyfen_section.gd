@@ -408,7 +408,7 @@ func _build_authored_greyfen_details(context: ZoneBuildContext, segment: int = -
 			var bush: Node3D = context.make_loose_role("forest_bush", planting[1], Vector3.ONE * float(planting[2]), float(planting[3]))
 			if bush != null:
 				bush.name = str(planting[0])
-		context.make_prop_box("GreyfenForgeRack", Vector3(8.7, 0.78, -1.35), Vector3(0.16, 1.40, 1.45), Color(0.29, 0.29, 0.26))
+		context.make_prepared_prop("GreyfenForgeRack_7e684d6236")
 		_mark_detail(layer, "GreyfenForgeRack")
 
 	# River stones frame the water while leaving the bridge centre and both
@@ -446,8 +446,8 @@ func _build_castle_road(context: ZoneBuildContext) -> void:
 	for z in [-2.25, 2.25]:
 		context.make_prop_box("CastleRoadWaystone", Vector3(17.9, 0.72, z), Vector3(0.62, 1.44, 0.62), Color(0.22, 0.22, 0.205))
 		context.make_visual_box("VarganWaymark", Vector3(17.55, 0.88, z), Vector3(0.035, 0.34, 0.22), Color(0.42, 0.32, 0.16))
-	context.make_visual_box("CastleRoadRuts", Vector3(15.0, 0.052, -0.72), Vector3(5.8, 0.025, 0.18), Color(0.065, 0.045, 0.030))
-	context.make_visual_box("CastleRoadRuts", Vector3(15.0, 0.052, 0.72), Vector3(5.8, 0.025, 0.18), Color(0.065, 0.045, 0.030))
+	context.append_prepared_detail("CastleRoadRuts_f52ff1a61a")
+	context.append_prepared_detail("CastleRoadRuts_a0bdff01c9")
 
 func _build_boot_gameplay_content(context: ZoneBuildContext) -> void:
 	# The boot profile is deliberately small: it is the scene shown while the
@@ -553,9 +553,9 @@ func _build_gameplay_base(context: ZoneBuildContext) -> void:
 		context.make_named_interactable("names_decision", "dialogue", "Decide the fate of the names", Vector3(4.4,0,-5.0), Color(0.36,0.32,0.25), Vector3(0.45,0.45,0.45))
 	var names_policy := str(context.get_story_flag("names_policy", ""))
 	if names_policy == "published":
-		context.make_visual_box("PublishedRefugeeNames", Vector3(4.4, 1.28, -5.18), Vector3(1.8, 1.05, 0.06), Color(0.48, 0.38, 0.22))
+		context.append_prepared_detail("PublishedRefugeeNames_740a2341cd")
 	elif names_policy == "withheld":
-		context.make_visual_box("WithheldRefugeeRegister", Vector3(4.4, 1.10, -5.18), Vector3(0.72, 0.18, 0.34), Color(0.18, 0.12, 0.08))
+		context.append_prepared_detail("WithheldRefugeeRegister_f17d012273")
 	if context.crow_shrine_choice_ready() and context.zone_root.find_child("crow_shrine_choice", true, false) == null:
 		context.make_named_interactable("crow_shrine_choice", "dialogue", "Choose the Crow Shrine's fate", CemeterySection.CROW_SHRINE_INTERACTION_STAGE, Color(0.3,0.38,0.3), Vector3(0.45,0.45,0.45))
 	if road_ready:
@@ -593,13 +593,13 @@ func _build_gameplay_side_clues(context: ZoneBuildContext) -> void:
 	publish_oren_charm_return(context)
 	publish_memorial_candles(context)
 	if str(context.get_story_flag("widow_truth", "")) == "told":
-		context.make_visual_box("HarlBellCutCord", Vector3(15.8, 0.8, 9.5), Vector3(0.05, 0.7, 0.05), Color(0.18, 0.12, 0.07))
+		context.append_prepared_detail("HarlBellCutCord_1b7a47762a")
 	if str(context.get_story_flag("iron_fate", "")) == "memorial":
-		context.make_visual_box("ForgeNameMemorial", Vector3(10.4, 1.0, -1.2), Vector3(1.6, 1.7, 0.14), Color(0.30, 0.25, 0.18))
+		context.append_prepared_detail("ForgeNameMemorial_546a8930be")
 	if str(context.get_story_flag("mira_truth", "")) == "confessed":
-		context.make_visual_box("MiraTruthLabels", Vector3(-6.3, 0.8, -2.0), Vector3(1.4, 0.08, 0.6), Color(0.42, 0.38, 0.25))
+		context.append_prepared_detail("MiraTruthLabels_626161f371")
 	if str(context.get_story_flag("returned_soldier_fate", "")) == "named":
-		context.make_visual_box("ReturnedSoldierNamedStone", Vector3(16.0, 0.65, 6.7), Vector3(0.55, 1.3, 0.20), Color(0.25, 0.25, 0.24))
+		context.append_prepared_detail("ReturnedSoldierNamedStone_c1b7844142")
 
 func publish_returned_soldier(context: ZoneBuildContext) -> void:
 	if not context.is_quest_active("side_empty_grave") or not context.is_objective_done("side_empty_grave", "follow_empty_grave") or context.is_objective_done("side_empty_grave", "walker_choice"):

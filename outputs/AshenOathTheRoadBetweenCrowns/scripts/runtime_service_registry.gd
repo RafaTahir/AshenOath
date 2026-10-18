@@ -150,6 +150,7 @@ func configure(owner: Node) -> void:
 	crafting.setup(inventory, quests, story_state)
 	hud.set_preparation_services(crafting)
 	interaction_focus.setup(quests, quest_presentation)
+	interaction_focus.candidates_changed.connect(func(): owner.set("interaction_focus_dirty", true))
 	combat.contact_missed.connect(func(_contact: Dictionary): hud.show_status_cue("No blade contact", "neutral"))
 	minigames.setup(input_router)
 	input_router.gameplay_action_requested.connect(Callable(owner, "_on_virtual_gameplay_action"))

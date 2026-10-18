@@ -410,7 +410,7 @@ func _build_gate_threshold(context: ZoneBuildContext) -> void:
 	for x in [-3.7, 3.7]:
 		context.make_torch(Vector3(x, 0, 13.4))
 		context.make_tree(Vector3(x * 2.15, 0, 13.8))
-	context.make_visual_box("WychwoodThresholdBrokenSign", Vector3(-4.2, 0.82, 12.8), Vector3(1.05, 0.12, 0.42), Color(0.10, 0.055, 0.028))
+	context.append_prepared_detail("WychwoodThresholdBrokenSign_6dbf88a82b")
 
 func _build_forest_frame(context: ZoneBuildContext) -> void:
 	_build_distant_forest(context)

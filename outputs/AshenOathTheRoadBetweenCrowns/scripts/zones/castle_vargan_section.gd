@@ -54,7 +54,7 @@ func _build_approach(context: ZoneBuildContext) -> void:
 	_make_tower(context, Vector3(8.5, 0, -13.5), 7.5)
 	_make_distant_keep(context, Vector3(0, 0, -25))
 	context.make_loose_role("cart", Vector3(7, 0, 1), Vector3.ONE * 0.72, -18.0)
-	context.make_prop_box("BattlefieldRemnant", Vector3(-7, 0.4, 3), Vector3(3.5, 0.8, 1.2), Color(0.16, 0.11, 0.075))
+	context.make_prepared_prop("BattlefieldRemnant_74e6628588")
 	_make_banner(context, Vector3(-5.5, 3.2, -13.0), Color(0.30, 0.055, 0.045))
 	_make_banner(context, Vector3(5.5, 3.2, -13.0), Color(0.30, 0.055, 0.045))
 	for p in [Vector3(-4,0,-10.5), Vector3(4,0,-10.5), Vector3(-3.5,0,6), Vector3(3.5,0,6)]:
@@ -82,7 +82,7 @@ func _build_courtyard(context: ZoneBuildContext) -> void:
 		context.make_prop_box("StableStall", Vector3(-10, 1, z), Vector3(0.25, 2, 2), Color(0.19, 0.13, 0.08))
 	context.make_reserved_collision_box("Cistern", Vector3(8, 0.55, 3), Vector3(4, 1.1, 4))
 	_make_architecture(context, "VarganAuthoredCistern", VarganCistern, Vector3(8, 0, 3))
-	context.make_visual_box("CisternWater", Vector3(8, 1.13, 3), Vector3(3.25, 0.035, 3.25), Color(0.08, 0.18, 0.20))
+	context.append_prepared_detail("CisternWater_b129d80134")
 	for i in range(4):
 		context.make_prop_box("ServantStair", Vector3(-15 + i * 0.8, 0.18 + i * 0.35, -7), Vector3(1.2, 0.35, 4), Color(0.17, 0.17, 0.16))
 	for p in [Vector3(-5,0,10), Vector3(5,0,10), Vector3(-6,0,-10), Vector3(6,0,-10)]:
@@ -136,7 +136,7 @@ func _build_record_hall(context: ZoneBuildContext) -> void:
 	# pieces projected as dark slabs across the aisle from the raised entry view.
 	# The imported bookcases below own the visible archive stacks. The former
 	# solid box shelves hid them and made the hall read as a row of brown blocks.
-	context.make_prop_box("SealedLedgerTable", Vector3(0, 0.8, -8), Vector3(4.2, 1.6, 2.2), Color(0.22, 0.14, 0.075))
+	context.make_prepared_prop("SealedLedgerTable_a01fff4145")
 	for x in [-1.25, -0.82, -0.38, 0.42, 0.86, 1.24]:
 		context.make_visual_box("LedgerVisiblePage", Vector3(x, 0.86, -8.02), Vector3(0.22, 0.07, 0.48), Color(0.68, 0.59, 0.39))
 	var ledger_state := ""
@@ -147,11 +147,11 @@ func _build_record_hall(context: ZoneBuildContext) -> void:
 	elif bool(context.get_story_flag("vargan_ledger_left_copied", false)):
 		ledger_state = "copied"
 	if ledger_state == "open":
-		context.make_visual_box("LedgerBrokenVarganSeal", Vector3(0, 0.89, -8.0), Vector3(0.82, 0.10, 0.42), Color(0.42, 0.16, 0.09))
+		context.append_prepared_detail("LedgerBrokenVarganSeal_0c74e6a418")
 	elif ledger_state == "hidden":
-		context.make_visual_box("LedgerDustGap", Vector3(0, 0.86, -8.0), Vector3(0.62, 0.06, 0.28), Color(0.12, 0.08, 0.05))
+		context.append_prepared_detail("LedgerDustGap_c6c54d7452")
 	elif ledger_state == "copied":
-		context.make_visual_box("LedgerCopiedSeal", Vector3(0, 0.88, -8.0), Vector3(0.70, 0.08, 0.34), Color(0.32, 0.24, 0.14))
+		context.append_prepared_detail("LedgerCopiedSeal_5da808e33e")
 	_make_banner(context, Vector3(-4.8, 3.0, -13.3), Color(0.27, 0.045, 0.04))
 	_make_banner(context, Vector3(4.8, 3.0, -13.3), Color(0.27, 0.045, 0.04))
 	# Reserve the small Compatibility light budget for the archive itself before
@@ -302,7 +302,7 @@ func _make_courtyard_dressing(context: ZoneBuildContext) -> void:
 	for x in [-6.8, -3.4, 3.4, 6.8]:
 		context.make_path_stone(Vector3(x, 0.05, -8.2), 0.70)
 		context.make_path_stone(Vector3(x, 0.05, 8.2), 0.64)
-	context.make_visual_box("CourtyardTrainingLine", Vector3(7.7, 0.08, -4.8), Vector3(7.4, 0.08, 0.14), Color(0.25, 0.18, 0.10))
+	context.append_prepared_detail("CourtyardTrainingLine_e3e19430e0")
 	# Give the service court a working rhythm instead of isolated boxes.
 	context.make_reserved_collision_box("ForgeBayWall", Vector3(13.0, 1.45, -1.5), Vector3(5.8, 2.9, 0.40))
 	context.make_collision_box("ForgeWorktable", Vector3(13.0, 0.415, -1.0), Vector3(2.7, 0.83, 0.72))
@@ -325,7 +325,7 @@ func _make_courtyard_dressing(context: ZoneBuildContext) -> void:
 		service.set_surface_override_material(0, paving)
 		service.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		context.add_node(service)
-	context.make_visual_box("CourtyardDrainageChannel", Vector3(2.2, 0.065, 5.8), Vector3(0.32, 0.03, 12.0), Color(0.055, 0.070, 0.068))
+	context.append_prepared_detail("CourtyardDrainageChannel_aa5703c5cd")
 	for side in [-1.0, 1.0]:
 		context.make_visual_box("DrainStoneLip", Vector3(2.2 + side * 0.24, 0.071, 5.8), Vector3(0.14, 0.018, 12.0), Color(0.32, 0.33, 0.31))
 	for index in range(48):
@@ -337,7 +337,7 @@ func _make_record_hall_dressing(context: ZoneBuildContext) -> void:
 		context.make_visual_box("RecordHallFloorInset", Vector3(0, 0.041, z), Vector3(5.8, 0.008, 0.10), Color(0.22, 0.25, 0.27))
 	for x in [-8.8, 8.8]:
 		context.make_visual_box("RecordHallLanternGlow", Vector3(x, 3.6, 9.6), Vector3(0.28, 0.52, 0.18), Color(0.70, 0.40, 0.16))
-	context.make_visual_box("RecordHallLedgerRunner", Vector3(0, 0.09, -7.0), Vector3(4.8, 0.05, 0.22), Color(0.28, 0.17, 0.08))
+	context.append_prepared_detail("RecordHallLedgerRunner_3bb4d77406")
 	for z in [-5.5, 1.0, 7.5]:
 		context.make_prop_box("RecordHallReadingDesk", Vector3(0.0, 0.65, z), Vector3(3.4, 1.3, 0.86), Color(0.22, 0.13, 0.065))
 		context.make_prop_box("RecordHallReadingBench", Vector3(0.0, 0.42, z + 1.25), Vector3(2.5, 0.84, 0.42), Color(0.16, 0.095, 0.045))

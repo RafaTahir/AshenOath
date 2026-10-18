@@ -207,7 +207,7 @@ static func greyfen_ground(specs: Array) -> ArrayMesh:
 
 static func _append_greyfen_river_banks(surface: SurfaceTool) -> void:
 	var bridge_half := BridgeSurfaceContract.HALF_WIDTH
-	var river: Node3D = load("res://scripts/zones/river_section.gd").new()
+	var river: RefCounted = load("res://scripts/zones/river_section.gd").new()
 	for bank_side in [-1.0, 1.0]:
 		var land_z: float = 4.5 + bank_side * 2.02
 		for section in [[-21.0, -bridge_half + 0.08], [bridge_half - 0.08, 21.0]]:
@@ -230,7 +230,7 @@ static func _append_greyfen_river_banks(surface: SurfaceTool) -> void:
 					surface.set_uv(Vector2(point.x, point.z))
 					surface.set_color(tint)
 					surface.add_vertex(point)
-	river.free()
+	river = null
 
 static func _greyfen_ground_tint(point: Vector3) -> Color:
 	var tint := Color(0.42, 0.62, 0.40)

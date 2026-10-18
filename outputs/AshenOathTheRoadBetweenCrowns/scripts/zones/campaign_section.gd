@@ -56,9 +56,9 @@ func build(context: ZoneBuildContext) -> void:
 	if zone_id in ["vargan_approach","vargan_court","record_hall","undercroft","assembly"]:
 		for pos in [Vector3(-10,0,-10),Vector3(10,0,-10),Vector3(-10,0,2),Vector3(10,0,2)]:
 			context.make_pillar(pos)
-		context.make_prop_box("VarganNorthWall",Vector3(0,1.5,-12),Vector3(24,3,1),Color(0.18,0.18,0.19))
-		context.make_prop_box("VarganWestWall",Vector3(-11,1.2,-4),Vector3(1,2.4,16),Color(0.16,0.16,0.17))
-		context.make_prop_box("VarganEastWall",Vector3(11,1.2,-4),Vector3(1,2.4,16),Color(0.16,0.16,0.17))
+		context.make_prepared_prop("VarganNorthWall_7e673d4a15")
+		context.make_prepared_prop("VarganWestWall_2f4caad9fb")
+		context.make_prepared_prop("VarganEastWall_9320dfc0ff")
 	var marker := Node3D.new()
 	marker.name = "CampaignSection_%s" % zone_id
 	context.add_node(marker)

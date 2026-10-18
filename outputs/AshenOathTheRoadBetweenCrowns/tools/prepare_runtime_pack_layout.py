@@ -67,6 +67,7 @@ def compile_layout():
     includes["Runtime Pack Opening"].add("assets_external/characters_prepared/animations/*.res")
     for name in ROOT_NAMES:
         includes[name].add("data/prepared_actors.json")
+        includes[name].add("data/prepared_static_batches.res")
         includes[name].update({"data/prepared_audio.json", "assets/audio/prepared/menu/*.res"})
     includes["Runtime Pack Opening"].add("assets/audio/prepared/opening/*.res")
     includes["Runtime Pack Campaign"].add("assets/audio/prepared/campaign/*.res")

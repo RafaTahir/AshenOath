@@ -23,18 +23,20 @@
   `OPT_MILESTONE_6_RESULT.md`. User acceptance remains pending.
 - Milestone 7: OPT-049 through OPT-051 implemented and compiled. Publication
   is recorded independently in `OPT_MILESTONE_7_RESULT.md` and its receipt.
-- Milestones 8/9: OPT-052 through OPT-056 authorized, not yet built.
+- Milestone 8: OPT-052 through OPT-054 implemented and compiled.
+  See `OPT_MILESTONE_8_RESULT.md`; user acceptance remains pending.
+- Milestone 9: OPT-055 through OPT-056 authorized, not yet built.
 - Formal user acceptance: 0/56. Default enablement is approved, not measured gain.
 - Runtime tests, browser QA, benchmarks and screenshots: not run; user-owned.
 
 ## Packaging Boundary
 
-Current build: `opt-m7-20261019-efd9132`, output
-`D:\Projects\AshenOath\.release-gate\opt-m7-20261019\export`.
-Manifested Web artifacts: 104329973 bytes. Complete `web/`: 104337805 bytes,
+Current build: `opt-m8-20261019-r2-dcdd024`, output
+`D:\Projects\AshenOath\.release-gate\opt-m8-20261019-r2\export`.
+Manifested Web artifacts: 104345777 bytes. Complete `web/`: 104353612 bytes,
 strictly below 104857600 bytes.
-Root PCK: 6298483 bytes; SHA-256
-`7238f721bd235f85f4b3231c088ce72ca7fa399dbd852b7276b32b14b1e8d23b`.
+Root PCK: 6313381 bytes; SHA-256
+`51fc3d6a3dca2903779f79c487c40db534b8c5a7363f791d2a18b56264501166`.
 Compilation and the existing package builder's static identity checks succeeded.
 No game execution or performance measurement was performed.
 
@@ -48,6 +50,8 @@ and assigned the production alias. OPT-048 owns final commit/push/deployment;
 the existing `.release-gate/living-road/OPT-048-*/publication.json` receipt records
 its exact outcome. No over-budget milestone may be published. No runtime
 performance claims are made.
+Milestone 7 published as `dcdd024`; Vercel reported READY and assigned the
+production alias. Receipt: `OPT-051-20261018T205236Z/publication.json`.
 Enabled rendering options remain subject to the user's runtime comparison.
 User checks startup, traversal, retained visuals and Retry; there is no agent
 runtime-acceptance claim. All remaining 40 ticket implementations are present

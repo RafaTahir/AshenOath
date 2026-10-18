@@ -1,0 +1,762 @@
+{
+  "ShrinePathWarmEdge_30f036e1cc": {
+    "name": "ShrinePathWarmEdge",
+    "position": [
+      3.05,
+      0.047,
+      -5.55
+    ],
+    "size": [
+      2.9,
+      0.018,
+      0.22
+    ],
+    "color": [
+      0.24,
+      0.16,
+      0.075,
+      1.0
+    ],
+    "kind": "visual_box"
+  },
+  "ShrinePathWarmEdge_fb53d619f3": {
+    "name": "ShrinePathWarmEdge",
+    "position": [
+      4.65,
+      0.047,
+      -6.55
+    ],
+    "size": [
+      2.3,
+      0.018,
+      0.22
+    ],
+    "color": [
+      0.24,
+      0.16,
+      0.075,
+      1.0
+    ],
+    "kind": "visual_box"
+  },
+  "RoadCrowsExtinguishedCandle_17d04e45b8": {
+    "name": "RoadCrowsExtinguishedCandle",
+    "position": [
+      6.55,
+      0.16,
+      -6.35
+    ],
+    "size": [
+      0.11,
+      0.28,
+      0.11
+    ],
+    "color": [
+      0.075,
+      0.065,
+      0.055,
+      1.0
+    ],
+    "kind": "visual_box"
+  },
+  "RoadCrowsGateBrokenSign_70d5d38f95": {
+    "name": "RoadCrowsGateBrokenSign",
+    "position": [
+      -2.95,
+      0.86,
+      -13.85
+    ],
+    "size": [
+      1.05,
+      0.14,
+      0.38
+    ],
+    "color": [
+      0.135,
+      0.075,
+      0.038,
+      1.0
+    ],
+    "kind": "visual_box"
+  },
+  "RoadCrowsBrokenCartSupplySack_978fae0e15": {
+    "name": "RoadCrowsBrokenCartSupplySack",
+    "position": [
+      -4.65,
+      0.18,
+      6.0
+    ],
+    "size": [
+      0.58,
+      0.24,
+      0.42
+    ],
+    "color": [
+      0.17,
+      0.115,
+      0.075,
+      1.0
+    ],
+    "kind": "visual_box"
+  },
+  "RoadCrowsTornRedCloth_696592259f": {
+    "name": "RoadCrowsTornRedCloth",
+    "position": [
+      -3.65,
+      0.105,
+      2.15
+    ],
+    "size": [
+      0.58,
+      0.035,
+      0.24
+    ],
+    "color": [
+      0.28,
+      0.055,
+      0.042,
+      1.0
+    ],
+    "kind": "visual_box"
+  },
+  "RoadCrowsClearingOldBloodMud_3184405d5b": {
+    "name": "RoadCrowsClearingOldBloodMud",
+    "position": [
+      -0.8,
+      0.076,
+      -6.95
+    ],
+    "size": [
+      1.35,
+      0.02,
+      0.62
+    ],
+    "color": [
+      0.08,
+      0.018,
+      0.013,
+      1.0
+    ],
+    "kind": "visual_box"
+  },
+  "RoadCrowsPostVictoryCutThread_632cbbbd56": {
+    "name": "RoadCrowsPostVictoryCutThread",
+    "position": [
+      0.55,
+      0.13,
+      -3.72
+    ],
+    "size": [
+      0.7,
+      0.03,
+      0.06
+    ],
+    "color": [
+      0.36,
+      0.035,
+      0.03,
+      1.0
+    ],
+    "kind": "visual_box"
+  },
+  "WychwoodPackAshResidue_b4fd8b7b91": {
+    "name": "WychwoodPackAshResidue",
+    "position": [
+      0.0,
+      0.078,
+      -7.0
+    ],
+    "size": [
+      1.7,
+      0.018,
+      1.25
+    ],
+    "color": [
+      0.045,
+      0.035,
+      0.032,
+      1.0
+    ],
+    "kind": "visual_box"
+  },
+  "WychwoodPackBrokenBinding_c070cc1a73": {
+    "name": "WychwoodPackBrokenBinding",
+    "position": [
+      1.2,
+      0.115,
+      -6.4
+    ],
+    "size": [
+      0.55,
+      0.025,
+      0.08
+    ],
+    "color": [
+      0.22,
+      0.16,
+      0.1,
+      1.0
+    ],
+    "kind": "visual_box"
+  },
+  "GreyfenWitnessCandle_2eae43d10b": {
+    "name": "GreyfenWitnessCandle",
+    "position": [
+      5.65,
+      0.18,
+      -6.72
+    ],
+    "size": [
+      0.08,
+      0.22,
+      0.08
+    ],
+    "color": [
+      0.65,
+      0.46,
+      0.22,
+      1.0
+    ],
+    "kind": "visual_box"
+  },
+  "CemeterySettledEarth_8df2d0e6f7": {
+    "name": "CemeterySettledEarth",
+    "position": [
+      14.0,
+      0.072,
+      8.8
+    ],
+    "size": [
+      2.1,
+      0.025,
+      1.25
+    ],
+    "color": [
+      0.085,
+      0.07,
+      0.052,
+      1.0
+    ],
+    "kind": "visual_box"
+  },
+  "CemeteryAftermathLantern_4116c2053a": {
+    "name": "CemeteryAftermathLantern",
+    "position": [
+      15.7,
+      0.42,
+      8.1
+    ],
+    "size": [
+      0.16,
+      0.4,
+      0.16
+    ],
+    "color": [
+      0.52,
+      0.4,
+      0.21,
+      1.0
+    ],
+    "kind": "visual_box"
+  },
+  "UndercroftWitnessThreshold_2bf9c0630a": {
+    "name": "UndercroftWitnessThreshold",
+    "position": [
+      0.0,
+      0.1,
+      -10.4
+    ],
+    "size": [
+      7.2,
+      0.08,
+      0.18
+    ],
+    "color": [
+      0.28,
+      0.22,
+      0.14,
+      1.0
+    ],
+    "kind": "visual_box"
+  },
+  "HartGladeWitnessThreshold_d20cf605b3": {
+    "name": "HartGladeWitnessThreshold",
+    "position": [
+      0.0,
+      0.1,
+      -5.8
+    ],
+    "size": [
+      4.0,
+      0.08,
+      0.18
+    ],
+    "color": [
+      0.18,
+      0.34,
+      0.22,
+      1.0
+    ],
+    "kind": "visual_box"
+  },
+  "VarganNorthWall_7e673d4a15": {
+    "name": "VarganNorthWall",
+    "position": [
+      0.0,
+      1.5,
+      -12.0
+    ],
+    "size": [
+      24.0,
+      3.0,
+      1.0
+    ],
+    "color": [
+      0.18,
+      0.18,
+      0.19,
+      1.0
+    ],
+    "kind": "prop_box"
+  },
+  "VarganWestWall_2f4caad9fb": {
+    "name": "VarganWestWall",
+    "position": [
+      -11.0,
+      1.2,
+      -4.0
+    ],
+    "size": [
+      1.0,
+      2.4,
+      16.0
+    ],
+    "color": [
+      0.16,
+      0.16,
+      0.17,
+      1.0
+    ],
+    "kind": "prop_box"
+  },
+  "VarganEastWall_9320dfc0ff": {
+    "name": "VarganEastWall",
+    "position": [
+      11.0,
+      1.2,
+      -4.0
+    ],
+    "size": [
+      1.0,
+      2.4,
+      16.0
+    ],
+    "color": [
+      0.16,
+      0.16,
+      0.17,
+      1.0
+    ],
+    "kind": "prop_box"
+  },
+  "AshMillWindowWarmth_4e218b9fd6": {
+    "name": "AshMillWindowWarmth",
+    "position": [
+      -2.0,
+      1.25,
+      -7.96
+    ],
+    "size": [
+      0.9,
+      0.75,
+      0.035
+    ],
+    "color": [
+      0.56,
+      0.24,
+      0.07,
+      1.0
+    ],
+    "kind": "visual_box"
+  },
+  "BattlefieldRemnant_74e6628588": {
+    "name": "BattlefieldRemnant",
+    "position": [
+      -7.0,
+      0.4,
+      3.0
+    ],
+    "size": [
+      3.5,
+      0.8,
+      1.2
+    ],
+    "color": [
+      0.16,
+      0.11,
+      0.075,
+      1.0
+    ],
+    "kind": "prop_box"
+  },
+  "CisternWater_b129d80134": {
+    "name": "CisternWater",
+    "position": [
+      8.0,
+      1.13,
+      3.0
+    ],
+    "size": [
+      3.25,
+      0.035,
+      3.25
+    ],
+    "color": [
+      0.08,
+      0.18,
+      0.2,
+      1.0
+    ],
+    "kind": "visual_box"
+  },
+  "SealedLedgerTable_a01fff4145": {
+    "name": "SealedLedgerTable",
+    "position": [
+      0.0,
+      0.8,
+      -8.0
+    ],
+    "size": [
+      4.2,
+      1.6,
+      2.2
+    ],
+    "color": [
+      0.22,
+      0.14,
+      0.075,
+      1.0
+    ],
+    "kind": "prop_box"
+  },
+  "LedgerBrokenVarganSeal_0c74e6a418": {
+    "name": "LedgerBrokenVarganSeal",
+    "position": [
+      0.0,
+      0.89,
+      -8.0
+    ],
+    "size": [
+      0.82,
+      0.1,
+      0.42
+    ],
+    "color": [
+      0.42,
+      0.16,
+      0.09,
+      1.0
+    ],
+    "kind": "visual_box"
+  },
+  "LedgerDustGap_c6c54d7452": {
+    "name": "LedgerDustGap",
+    "position": [
+      0.0,
+      0.86,
+      -8.0
+    ],
+    "size": [
+      0.62,
+      0.06,
+      0.28
+    ],
+    "color": [
+      0.12,
+      0.08,
+      0.05,
+      1.0
+    ],
+    "kind": "visual_box"
+  },
+  "LedgerCopiedSeal_5da808e33e": {
+    "name": "LedgerCopiedSeal",
+    "position": [
+      0.0,
+      0.88,
+      -8.0
+    ],
+    "size": [
+      0.7,
+      0.08,
+      0.34
+    ],
+    "color": [
+      0.32,
+      0.24,
+      0.14,
+      1.0
+    ],
+    "kind": "visual_box"
+  },
+  "CourtyardTrainingLine_e3e19430e0": {
+    "name": "CourtyardTrainingLine",
+    "position": [
+      7.7,
+      0.08,
+      -4.8
+    ],
+    "size": [
+      7.4,
+      0.08,
+      0.14
+    ],
+    "color": [
+      0.25,
+      0.18,
+      0.1,
+      1.0
+    ],
+    "kind": "visual_box"
+  },
+  "CourtyardDrainageChannel_aa5703c5cd": {
+    "name": "CourtyardDrainageChannel",
+    "position": [
+      2.2,
+      0.065,
+      5.8
+    ],
+    "size": [
+      0.32,
+      0.03,
+      12.0
+    ],
+    "color": [
+      0.055,
+      0.07,
+      0.068,
+      1.0
+    ],
+    "kind": "visual_box"
+  },
+  "RecordHallLedgerRunner_3bb4d77406": {
+    "name": "RecordHallLedgerRunner",
+    "position": [
+      0.0,
+      0.09,
+      -7.0
+    ],
+    "size": [
+      4.8,
+      0.05,
+      0.22
+    ],
+    "color": [
+      0.28,
+      0.17,
+      0.08,
+      1.0
+    ],
+    "kind": "visual_box"
+  },
+  "GreyfenForgeRack_7e684d6236": {
+    "name": "GreyfenForgeRack",
+    "position": [
+      8.7,
+      0.78,
+      -1.35
+    ],
+    "size": [
+      0.16,
+      1.4,
+      1.45
+    ],
+    "color": [
+      0.29,
+      0.29,
+      0.26,
+      1.0
+    ],
+    "kind": "prop_box"
+  },
+  "CastleRoadRuts_f52ff1a61a": {
+    "name": "CastleRoadRuts",
+    "position": [
+      15.0,
+      0.052,
+      -0.72
+    ],
+    "size": [
+      5.8,
+      0.025,
+      0.18
+    ],
+    "color": [
+      0.065,
+      0.045,
+      0.03,
+      1.0
+    ],
+    "kind": "visual_box"
+  },
+  "CastleRoadRuts_a0bdff01c9": {
+    "name": "CastleRoadRuts",
+    "position": [
+      15.0,
+      0.052,
+      0.72
+    ],
+    "size": [
+      5.8,
+      0.025,
+      0.18
+    ],
+    "color": [
+      0.065,
+      0.045,
+      0.03,
+      1.0
+    ],
+    "kind": "visual_box"
+  },
+  "PublishedRefugeeNames_740a2341cd": {
+    "name": "PublishedRefugeeNames",
+    "position": [
+      4.4,
+      1.28,
+      -5.18
+    ],
+    "size": [
+      1.8,
+      1.05,
+      0.06
+    ],
+    "color": [
+      0.48,
+      0.38,
+      0.22,
+      1.0
+    ],
+    "kind": "visual_box"
+  },
+  "WithheldRefugeeRegister_f17d012273": {
+    "name": "WithheldRefugeeRegister",
+    "position": [
+      4.4,
+      1.1,
+      -5.18
+    ],
+    "size": [
+      0.72,
+      0.18,
+      0.34
+    ],
+    "color": [
+      0.18,
+      0.12,
+      0.08,
+      1.0
+    ],
+    "kind": "visual_box"
+  },
+  "HarlBellCutCord_1b7a47762a": {
+    "name": "HarlBellCutCord",
+    "position": [
+      15.8,
+      0.8,
+      9.5
+    ],
+    "size": [
+      0.05,
+      0.7,
+      0.05
+    ],
+    "color": [
+      0.18,
+      0.12,
+      0.07,
+      1.0
+    ],
+    "kind": "visual_box"
+  },
+  "ForgeNameMemorial_546a8930be": {
+    "name": "ForgeNameMemorial",
+    "position": [
+      10.4,
+      1.0,
+      -1.2
+    ],
+    "size": [
+      1.6,
+      1.7,
+      0.14
+    ],
+    "color": [
+      0.3,
+      0.25,
+      0.18,
+      1.0
+    ],
+    "kind": "visual_box"
+  },
+  "MiraTruthLabels_626161f371": {
+    "name": "MiraTruthLabels",
+    "position": [
+      -6.3,
+      0.8,
+      -2.0
+    ],
+    "size": [
+      1.4,
+      0.08,
+      0.6
+    ],
+    "color": [
+      0.42,
+      0.38,
+      0.25,
+      1.0
+    ],
+    "kind": "visual_box"
+  },
+  "ReturnedSoldierNamedStone_c1b7844142": {
+    "name": "ReturnedSoldierNamedStone",
+    "position": [
+      16.0,
+      0.65,
+      6.7
+    ],
+    "size": [
+      0.55,
+      1.3,
+      0.2
+    ],
+    "color": [
+      0.25,
+      0.25,
+      0.24,
+      1.0
+    ],
+    "kind": "visual_box"
+  },
+  "WychwoodThresholdBrokenSign_6dbf88a82b": {
+    "name": "WychwoodThresholdBrokenSign",
+    "position": [
+      -4.2,
+      0.82,
+      12.8
+    ],
+    "size": [
+      1.05,
+      0.12,
+      0.42
+    ],
+    "color": [
+      0.1,
+      0.055,
+      0.028,
+      1.0
+    ],
+    "kind": "visual_box"
+  }
+}

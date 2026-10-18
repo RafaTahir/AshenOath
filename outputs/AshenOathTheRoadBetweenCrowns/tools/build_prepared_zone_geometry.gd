@@ -9,6 +9,7 @@ func _initialize() -> void:
 
 func _compile() -> void:
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(ROOT))
+	_compile_static_batches()
 	var packed := load("res://scenes/runtime/greyfen_gameplay_core.tscn") as PackedScene
 	var source := packed.instantiate() as Node3D
 	root.add_child(source)
@@ -73,3 +74,27 @@ func _save(id: String, resource: Resource) -> void:
 	if error != OK:
 		failed = true
 		push_error("Geometry compilation failed: %s (%s)" % [id, error_string(error)])
+
+func _compile_static_batches() -> void:
+	var recipes: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/static_batch_recipes.json"))
+	if not recipes is Dictionary:
+		failed = true
+		push_error("Static batch source recipes are missing or invalid")
+		return
+	var entries: Dictionary = {}
+	for id in recipes:
+		var recipe: Dictionary = recipes[id]
+		var pos := Vector3(recipe.position[0], recipe.position[1], recipe.position[2])
+		var size := Vector3(recipe.size[0], recipe.size[1], recipe.size[2])
+		var color := Color(recipe.color[0], recipe.color[1], recipe.color[2], recipe.color[3])
+		var record := preload("res://scripts/static_multimesh_upload.gd").prepare_record(Transform3D(Basis.IDENTITY.scaled(size), pos), color)
+		record["name"] = recipe.name
+		record["position"] = pos
+		record["size"] = size
+		entries[id] = record
+	var catalog := Resource.new()
+	catalog.set_meta("entries", entries)
+	var error := ResourceSaver.save(catalog, "res://data/prepared_static_batches.res", ResourceSaver.FLAG_COMPRESS)
+	if error != OK:
+		failed = true
+		push_error("Static batch compilation failed: " + error_string(error))

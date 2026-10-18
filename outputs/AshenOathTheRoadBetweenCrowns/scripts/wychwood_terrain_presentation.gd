@@ -27,4 +27,3 @@ static func integrate(root: Node3D) -> bool:
 		visual.name = "WychwoodIntegratedGround_%d" % index
 		visual.set_meta("wychwood_integrated_ground", true)
 	return true
-

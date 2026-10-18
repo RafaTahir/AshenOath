@@ -1,5 +1,11 @@
 # Milestone 5 - Rendering and Resource Lifetime
 
+Historical build record. OPT-049 supersedes the defaults below with explicit
+user approval: alpha batches/static bounds ON; native occlusion requested ON.
+Stock Web occlusion is unsupported and never effective, including with
+`opt_occlusion=1`. Earlier wording describing a Web occlusion comparison did
+not establish support or a measured gain. Use 0/1 overrides for current builds.
+
 OPT-033 through OPT-040 implementations are present and compiled. This is not
 measured performance or visual acceptance.
 

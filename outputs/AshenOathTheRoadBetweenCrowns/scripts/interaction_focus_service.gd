@@ -10,6 +10,44 @@ var pending_focus: Node
 var pending_since_msec := 0
 const FOCUS_DWELL_MSEC := 150
 const SWITCH_ADVANTAGE := 0.32
+signal candidates_changed
+var _index = preload("res://scripts/actor_spatial_index.gd").new()
+
+func register(area: Area3D) -> void:
+	var id := area.get_instance_id()
+	if not area.tree_exiting.is_connected(_unregister.bind(id)):
+		var reference := weakref(area)
+		area.tree_exiting.connect(_unregister.bind(id))
+		area.tree_entered.connect(_update_registration.bind(reference))
+		area.visibility_changed.connect(_registration_changed)
+		if area.has_signal("interaction_position_changed"):
+			area.connect("interaction_position_changed", _update_registration.bind(reference))
+		if area.has_signal("interaction_availability_changed"):
+			area.connect("interaction_availability_changed", _availability_changed)
+	_update_registration(weakref(area))
+
+func _unregister(id: int) -> void:
+	_index.remove(id)
+	candidates_changed.emit()
+
+func _update_registration(reference: WeakRef) -> void:
+	var area := reference.get_ref() as Area3D
+	if is_instance_valid(area) and area.is_inside_tree():
+		_index.update(area)
+	candidates_changed.emit()
+
+func _availability_changed(_enabled: bool) -> void:
+	candidates_changed.emit()
+
+func _registration_changed() -> void:
+	candidates_changed.emit()
+
+func nearby(position: Vector3, active_root: Node3D) -> Array:
+	var result: Array = []
+	for area in _index.nearby(position, 3.6):
+		if _available(area) and is_instance_valid(active_root) and active_root.is_ancestor_of(area):
+			result.append(area)
+	return result
 
 func reset() -> void:
 	last_focus = null
@@ -100,7 +138,7 @@ func choose(candidates: Array, player: Node3D, camera: Camera3D, validator: Call
 	var tracked_objective := str(objective_view.get("objective_id", "")) if not objective_view.is_empty() else _tracked_objective_id(tracked_id)
 	var grouped_targets := _unfinished_group_members(tracked_id, tracked_objective)
 	var authored_targets: Array = objective_view.get("target_ids", [])
-	for candidate in candidates.duplicate():
+	for candidate in candidates:
 		if not _available(candidate):
 			continue
 		var interaction_type := str(candidate.get("interaction_type"))

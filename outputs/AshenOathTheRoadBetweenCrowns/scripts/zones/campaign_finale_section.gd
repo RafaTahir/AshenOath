@@ -352,7 +352,7 @@ func _add_hart_part(parent: Node3D, node_name: String, mesh: Mesh, position: Vec
 	parent.add_child(node)
 
 func _make_undercroft_dressing(context: ZoneBuildContext) -> void:
-	context.make_visual_box("UndercroftWitnessThreshold", Vector3(0, 0.10, -10.4), Vector3(7.2, 0.08, 0.18), Color(0.28, 0.22, 0.14))
+	context.append_prepared_detail("UndercroftWitnessThreshold_2bf9c0630a")
 
 func _make_authored_undercroft_dressing(context: ZoneBuildContext) -> void:
 	for pos in [Vector3(-9.8, 0.0, -7.0), Vector3(9.8, 0.0, -7.0), Vector3(-9.8, 0.0, 5.0), Vector3(9.8, 0.0, 5.0)]:
@@ -405,7 +405,7 @@ func _make_hart_glade_dressing(context: ZoneBuildContext) -> void:
 	# an open witness space around the Hart rather than an empty field.
 	for position in [Vector3(-4.8, 0.04, -11.5), Vector3(4.8, 0.04, -11.5), Vector3(-5.1, 0.04, 11.5), Vector3(5.1, 0.04, 11.5)]:
 		context.make_path_stone(position, 0.68)
-	context.make_visual_box("HartGladeWitnessThreshold", Vector3(0, 0.10, -5.8), Vector3(4.0, 0.08, 0.18), Color(0.18, 0.34, 0.22))
+	context.append_prepared_detail("HartGladeWitnessThreshold_d20cf605b3")
 	for position in [Vector3(-10.5, 0, -9.0), Vector3(10.5, 0, -9.0), Vector3(-11.0, 0, 4.5), Vector3(11.0, 0, 5.5)]:
 		context.make_loose_role("forest_tree_variant", position, Vector3(1.12, 1.06, 1.12), position.x * 2.0)
 	for position in [Vector3(-6.2, 0, -10.8), Vector3(6.5, 0, -10.4), Vector3(-8.2, 0, -4.5), Vector3(8.0, 0, -3.8)]:

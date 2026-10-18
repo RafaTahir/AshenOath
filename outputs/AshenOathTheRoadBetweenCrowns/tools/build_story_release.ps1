@@ -42,7 +42,7 @@ function Invoke-BuildProcess([string]$Executable, [string[]]$Arguments, [string]
     if ($Executable -eq $GodotPath) {
         # Godot may return zero after reporting an unsuccessful script import.
         # These are compiler diagnostics from this build process, not a QA run.
-        $compilerDiagnostics = @(Select-String -LiteralPath @($stdout, $stderr) -Pattern '(?i)SCRIPT ERROR:\s*(?:Parse|Compile) Error|Failed to load script|Error parsing script')
+        $compilerDiagnostics = @(Select-String -LiteralPath @($stdout, $stderr) -Pattern '(?i)SCRIPT ERROR:|Failed to load script|Error parsing script')
         if ($compilerDiagnostics.Count -gt 0) {
             foreach ($diagnostic in $compilerDiagnostics) { Write-Host $diagnostic.Line -ForegroundColor Red }
             throw "$LogName compilation failed. Build logs: $stdout ; $stderr"

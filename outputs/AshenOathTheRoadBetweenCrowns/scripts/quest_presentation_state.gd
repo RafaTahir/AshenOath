@@ -30,14 +30,31 @@ var quest_manager: Node
 var quest_beats: Node
 var story_state: Node
 var zone_id := "greyfen"
+var _objective_cache: Dictionary = {}
+var _navigation_cache: Dictionary = {}
+var _subscriptions: Array[Dictionary] = []
 
 func setup(manager: Node, beats: Node = null, state: Node = null) -> void:
+	for subscription in _subscriptions:
+		if is_instance_valid(subscription.source) and subscription.source.is_connected(subscription.event, _invalidate):
+			subscription.source.disconnect(subscription.event, _invalidate)
+	_subscriptions.clear()
 	quest_manager = manager
 	quest_beats = beats
 	story_state = state
+	for subscription in [{"source": manager, "event": "changed"}, {"source": beats, "event": "beat_changed"}, {"source": state, "event": "changed"}]:
+		if is_instance_valid(subscription.source) and subscription.source.has_signal(subscription.event):
+			subscription.source.connect(subscription.event, _invalidate)
+			_subscriptions.append(subscription)
+	_invalidate()
+
+func _invalidate(_value: Variant = null) -> void:
+	_objective_cache.clear()
+	_navigation_cache.clear()
 
 func set_zone(id: String) -> void:
 	zone_id = id.strip_edges().to_lower()
+	_invalidate()
 	if quest_manager != null and quest_manager.has_method("set_tracked_quest_for_zone"):
 		quest_manager.set_tracked_quest_for_zone(zone_id)
 
@@ -79,6 +96,11 @@ func get_contextual_objective() -> String:
 	return str(get_objective_view_model().get("contextual_text", ""))
 
 func get_objective_view_model() -> Dictionary:
+	if _objective_cache.is_empty():
+		_objective_cache = _build_objective_view_model()
+	return _objective_cache.duplicate(true)
+
+func _build_objective_view_model() -> Dictionary:
 	var view := ObjectiveViewModelContract.new()
 	view.zone_id = zone_id
 	view.zone_name = get_zone_display_name()
@@ -117,9 +139,10 @@ func get_objective_view_model() -> Dictionary:
 	return view.to_dictionary()
 
 func get_navigation_view_model() -> Dictionary:
-	var result := get_objective_view_model()
-	result["nearby_work"] = StoryActivities.get_started_work(story_state, zone_id)
-	return result
+	if _navigation_cache.is_empty():
+		_navigation_cache = get_objective_view_model()
+		_navigation_cache["nearby_work"] = StoryActivities.get_started_work(story_state, zone_id)
+	return _navigation_cache.duplicate(true)
 
 func _presentation_quest_id() -> String:
 	var tracked: String = get_tracked_quest()
@@ -195,3 +218,4 @@ func save_state() -> Dictionary:
 func load_state(state: Dictionary) -> void:
 	var requested := str(state.get("zone_id", zone_id)).strip_edges().to_lower()
 	zone_id = requested if ZONE_LABELS.has(requested) else "greyfen"
+	_invalidate()

@@ -164,6 +164,12 @@ func make_collision_box(id: String, pos: Vector3, size: Vector3) -> void:
 func make_visual_box(id: String, pos: Vector3, size: Vector3, color: Color):
 	return _host._make_visual_box(id, pos, size, color)
 
+func append_prepared_detail(id: String) -> void:
+	_host._append_prepared_detail(id)
+
+func make_prepared_prop(id: String) -> void:
+	_host._make_prepared_prop(id)
+
 func make_loose_role(role: String, pos: Vector3, scale_value: Vector3, rotation_y: float):
 	return _host._make_loose_role(role, pos, scale_value, rotation_y)
 

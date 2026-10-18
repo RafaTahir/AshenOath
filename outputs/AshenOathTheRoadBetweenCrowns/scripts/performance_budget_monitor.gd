@@ -30,6 +30,7 @@ var worst_frame_ms := 0.0
 var hitch_count := 0
 var display: Label
 var display_accumulator := 0.0
+var last_gameplay_frame_usec := 0
 
 func configure(runtime_host: Node) -> void:
 	host = runtime_host
@@ -68,6 +69,7 @@ func set_active_zone(zone_id: String, root: Node, target: Node3D, quality_preset
 	player = target
 	quality = quality_preset if quality_preset in ["potato", "balanced", "quality"] else "balanced"
 	suspended = active_root == null or not is_instance_valid(active_root)
+	last_gameplay_frame_usec = 0
 	frame_times_ms.clear()
 	frame_time_cursor = 0
 	worst_frame_ms = 0.0
@@ -85,11 +87,13 @@ func set_active_zone(zone_id: String, root: Node, target: Node3D, quality_preset
 
 func suspend() -> void:
 	suspended = true
+	last_gameplay_frame_usec = 0
 	active_root = null
 	player = null
 	snapshot["suspended"] = true
 
 func clear() -> void:
+	last_gameplay_frame_usec = 0
 	active_zone = ""
 	active_root = null
 	player = null
@@ -138,10 +142,14 @@ func _process(delta: float) -> void:
 			display_accumulator = 0.0
 			_update_display()
 	if not sampling_enabled or suspended or get_tree().paused or active_root == null or not is_instance_valid(active_root):
+		last_gameplay_frame_usec = 0
 		return
 	if delta <= 0.0 or not is_finite(delta):
 		return
-	var frame_ms := delta * 1000.0
+	# Engine delta can be clamped during a stall; count actual rendered-frame time.
+	var now := Time.get_ticks_usec()
+	var frame_ms := float(now - last_gameplay_frame_usec) / 1000.0 if last_gameplay_frame_usec > 0 else delta * 1000.0
+	last_gameplay_frame_usec = now
 	worst_frame_ms = maxf(worst_frame_ms, frame_ms)
 	if frame_ms > 50.0:
 		hitch_count += 1
@@ -151,7 +159,7 @@ func _process(delta: float) -> void:
 		frame_times_ms[frame_time_cursor] = frame_ms
 	frame_time_cursor = (frame_time_cursor + 1) % FRAME_SAMPLE_CAPACITY
 	sample_accumulator += delta
-	snapshot_accumulator += delta
+	snapshot_accumulator += frame_ms / 1000.0
 	if snapshot_accumulator >= SNAPSHOT_INTERVAL:
 		snapshot_accumulator = 0.0
 		_update_snapshot(false)
@@ -204,8 +212,9 @@ func _update_snapshot(force: bool) -> void:
 
 func _update_display() -> void:
 	var lines: Array[String] = []
-	for feature in Options.states():
-		var state: Dictionary = Options.states()[feature]
+	var option_states := Options.states()
+	for feature in option_states:
+		var state: Dictionary = option_states[feature]
 		lines.append("%s: %s" % [feature, ("on" if state.effective else "off") if state.supported else "unsupported (requested %s)" % state.requested])
 	lines.append("FPS %.1f | worst %.1f ms | hitches >50ms %d" % [float(snapshot.get("average_fps", 0.0)), worst_frame_ms, hitch_count])
 	if suspended or get_tree().paused:
