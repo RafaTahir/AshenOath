@@ -1,6 +1,7 @@
 extends Node
 
-const PREPARED_AUDIO = preload("res://assets/audio/prepared_bank.res")
+const PreparedAudioCatalog = preload("res://scripts/prepared_audio_catalog.gd")
+var prepared_audio = PreparedAudioCatalog.new()
 # Disabled only by the deterministic offline bank builder and equivalence test.
 var use_prepared_audio := true
 
@@ -34,6 +35,9 @@ var mix_levels: Dictionary = {"music": 0.8, "sfx": 1.0, "voice": 1.0}
 var ambient_player: AudioStreamPlayer
 var music_player: AudioStreamPlayer
 var voice_player: AudioStreamPlayer
+var idle_voice_players: Array[AudioStreamPlayer] = []
+var retiring_voice_players: Dictionary = {}
+var idle_nearby_voice_player: AudioStreamPlayer3D
 var nearby_voice_player: AudioStreamPlayer3D
 var nearby_voice_actor: WeakRef
 var nearby_voice_face: Node
@@ -78,6 +82,7 @@ var opening_soundscape_anchors: Dictionary = {}
 var opening_soundscape_quality := "balanced"
 var generated_library_ready := false
 var recorded_library_ready := false
+var recorded_requests: Dictionary = {}
 var voice_library_ready := false
 var audio_bootstrap_started := false
 var runtime_file_assets_available := true
@@ -199,7 +204,7 @@ func prewarm_music_state(state_id: String) -> void:
 func _build_menu_library() -> void:
 	if use_prepared_audio:
 		for id in ["ui", "menu_hover", "menu_click"]:
-			sounds[id] = PREPARED_AUDIO.cues[id]
+			_prepare_event(id)
 		return
 	sounds["ui"] = _tone(660.0, 0.055, 0.20)
 	sounds["menu_hover"] = _tone_mix([392.0, 588.0], 0.060, 0.085, 32.0, 0.006)
@@ -225,6 +230,17 @@ func _exit_tree() -> void:
 	_release_player(ambient_player)
 	_release_player(music_player)
 	_release_player(voice_player)
+	for player in idle_voice_players:
+		_release_player(player)
+	for player in retiring_voice_players:
+		var release: Tween = retiring_voice_players[player]
+		if release != null and release.is_valid():
+			release.kill()
+		_release_player(player)
+	idle_voice_players.clear()
+	retiring_voice_players.clear()
+	_release_player(nearby_voice_player)
+	_release_player(idle_nearby_voice_player)
 	transient_players.clear()
 	spatial_players.clear()
 	active_cue_order.clear()
@@ -336,15 +352,21 @@ func play_nearby_speech(speaker: String, text: String, actor: Node3D) -> float:
 	nearby_voice_entry = revised_voice_entries[id]
 	nearby_voice_actor = weakref(actor)
 	nearby_voice_face = actor.find_child("CharacterFaceDriver", true, false)
-	nearby_voice_player = AudioStreamPlayer3D.new()
+	nearby_voice_player = idle_nearby_voice_player
+	idle_nearby_voice_player = null
+	if nearby_voice_player == null:
+		nearby_voice_player = AudioStreamPlayer3D.new()
+		add_child(nearby_voice_player)
+		nearby_voice_player.finished.connect(_stop_nearby_voice)
+	nearby_voice_player.stop()
+	nearby_voice_player.stream_paused = false
+	nearby_voice_player.pitch_scale = 1.0
 	nearby_voice_player.bus = voice_bus_name if voice_bus_name != "" else bus_name
 	nearby_voice_player.stream = voices[id]
 	nearby_voice_player.volume_db = _volume_for("voice") - 3.0
 	nearby_voice_player.unit_size = 3.0
 	nearby_voice_player.max_distance = 11.0
-	add_child(nearby_voice_player)
 	nearby_voice_player.global_position = actor.global_position + Vector3.UP * 1.5
-	nearby_voice_player.finished.connect(_stop_nearby_voice)
 	nearby_voice_player.play()
 	return float(nearby_voice_entry.get("duration_seconds", 0.0))
 
@@ -366,7 +388,9 @@ func _stop_nearby_voice() -> void:
 	nearby_voice_entry = {}
 	if is_instance_valid(nearby_voice_player):
 		nearby_voice_player.stop()
-		nearby_voice_player.queue_free()
+		nearby_voice_player.stream = null
+		nearby_voice_player.stream_paused = false
+		idle_nearby_voice_player = nearby_voice_player
 	nearby_voice_player = null
 
 func set_narrative_revision(revision: String) -> void:
@@ -467,6 +491,11 @@ func set_game_paused(paused: bool) -> void:
 
 func prewarm_opening_audio() -> void:
 	refresh_runtime_assets()
+	# Opening/shared cues are prepared at the existing locked arrival boundary.
+	# Campaign music and regional recordings remain demand-owned.
+	for id: String in prepared_audio.entries.get("cues", {}):
+		if id != "record_page":
+			_prepare_event(id)
 	for state_id in ["greyfen_explore", "wychwood_tension"]:
 		if not music.has(state_id):
 			_build_music_state(state_id)
@@ -482,9 +511,13 @@ func refresh_runtime_assets() -> void:
 		recorded_library_ready = true
 		voice_library_ready = true
 		return
+	var previously_requested: Array = recorded_requests.keys()
+	recorded_requests.clear()
 	recorded_library_ready = false
 	voice_library_ready = false
 	_build_recorded_library()
+	for event_name: String in previously_requested:
+		_prepare_recorded_event(event_name)
 	_build_voice_library()
 	for state_id in STORY_SCORE_STATES:
 		if music.has(state_id):
@@ -506,9 +539,10 @@ func play_event(event_name: String, pitch_variation: float = 0.06) -> void:
 	_play_event_internal(event_name, pitch_variation, 1.0)
 
 func _play_event_internal(event_name: String, pitch_variation: float, volume_scale: float) -> void:
-	if not sounds.has(event_name) and not recorded_variants.has(event_name):
-		return
 	if game_paused and event_name in WORLD_AUDIO_EVENTS:
+		return
+	_prepare_event(event_name)
+	if not sounds.has(event_name) and not recorded_variants.has(event_name):
 		return
 	var player := _available_transient_player()
 	player.stream = _event_stream(event_name)
@@ -691,9 +725,18 @@ func _available_transient_player() -> AudioStreamPlayer:
 	return player
 
 func has_recorded_event(event_name: String) -> bool:
+	_prepare_recorded_event(event_name)
 	return recorded_variants.has(event_name) and not recorded_variants[event_name].is_empty()
 
+func _prepare_event(event_name: String) -> void:
+	if use_prepared_audio and not sounds.has(event_name):
+		var stream: AudioStream = prepared_audio.stream("cues", event_name)
+		if stream != null:
+			sounds[event_name] = stream
+	_prepare_recorded_event(event_name)
+
 func _event_stream(event_name: String) -> AudioStream:
+	_prepare_event(event_name)
 	if has_recorded_event(event_name):
 		var variants: Array = recorded_variants[event_name]
 		return variants[randi() % variants.size()] as AudioStream
@@ -716,22 +759,48 @@ func play_voice(voice_id: String) -> void:
 func _play_voice_now(voice_id: String) -> void:
 	if not _has_production_voice(voice_id):
 		return
-	voice_player = AudioStreamPlayer.new()
+	voice_player = _acquire_voice_player()
 	voice_player.bus = voice_bus_name if voice_bus_name != "" else bus_name
 	voice_player.stream = voices[voice_id]
 	voice_player.set_meta("voice_id", voice_id)
 	voice_player.volume_db = _volume_for("voice")
-	add_child(voice_player)
-	var started_player := voice_player
-	started_player.finished.connect(func():
-		# A retiring recording must never free the next speaker's player.
-		if voice_player != started_player: return
-		started_player.queue_free()
-		voice_player = null
-		if not _voice_queue.is_empty():
-			_play_next_voice()
-	)
 	voice_player.play()
+
+func _acquire_voice_player() -> AudioStreamPlayer:
+	var player: AudioStreamPlayer
+	if not idle_voice_players.is_empty():
+		player = idle_voice_players.pop_back()
+	else:
+		player = AudioStreamPlayer.new()
+		add_child(player)
+		player.finished.connect(_voice_finished.bind(player))
+	player.stop()
+	player.stream_paused = false
+	player.pitch_scale = 1.0
+	return player
+
+func _voice_finished(player: AudioStreamPlayer) -> void:
+	if voice_player != player:
+		return
+	voice_player = null
+	_retire_voice_player(player)
+	if not _voice_queue.is_empty():
+		_play_next_voice()
+
+func _retire_voice_player(player: AudioStreamPlayer) -> void:
+	if not is_instance_valid(player):
+		return
+	if retiring_voice_players.has(player):
+		retiring_voice_players.erase(player)
+	player.stop()
+	player.stream_paused = false
+	player.stream = null
+	player.pitch_scale = 1.0
+	player.set_meta("voice_id", "")
+	if idle_voice_players.size() < 2:
+		idle_voice_players.append(player)
+	else:
+		player.queue_free()
 
 func play_voice_sequence(voice_ids: Array) -> void:
 	stop_voice()
@@ -798,13 +867,18 @@ func stop_voice() -> void:
 		voice_player = null
 		if retiring.playing and not retiring.stream_paused:
 			var release := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+			retiring_voice_players[retiring] = release
 			release.tween_property(retiring, "volume_db", -60.0, 0.035)
-			release.tween_callback(retiring.queue_free)
+			release.tween_callback(func():
+				if retiring_voice_players.has(retiring):
+					_retire_voice_player(retiring)
+			)
 		else:
-			retiring.stop()
-			retiring.queue_free()
+			_retire_voice_player(retiring)
 
 func set_music_state(state_id: String) -> void:
+	if state_id == "record_hall":
+		_prepare_event("record_page")
 	if story_music_override != "" and state_id in ["greyfen_explore", "shrine_anwen", "return_report", "castle_silence", "record_hall", "assembly", "hart_glade"]:
 		state_id = story_music_override
 	if state_id == music_state and music_player != null and is_instance_valid(music_player):
@@ -879,6 +953,7 @@ func music_state_for_zone(zone_id: String) -> String:
 
 func play_music_cue(cue_id: String, next_state: String = "") -> void:
 	print("AUDIO: music_cue_%s" % cue_id)
+	_prepare_event(cue_id)
 	if sounds.has(cue_id):
 		play_event(cue_id, 0.015)
 	if next_state != "":
@@ -951,8 +1026,7 @@ func _play_next_voice() -> void:
 		return
 	var next_id = str(_voice_queue.pop_front())
 	if voice_player != null:
-		voice_player.stop()
-		voice_player.queue_free()
+		_retire_voice_player(voice_player)
 		voice_player = null
 	_play_voice_now(next_id)
 
@@ -961,7 +1035,6 @@ func _build_library() -> void:
 		return
 	generated_library_ready = true
 	if use_prepared_audio:
-		sounds.merge(PREPARED_AUDIO.cues, true)
 		return
 	sounds["ui"] = _tone(660.0, 0.055, 0.20)
 	sounds["menu_hover"] = _tone_mix([392.0, 588.0], 0.060, 0.085, 32.0, 0.006)
@@ -1014,62 +1087,49 @@ func _build_library() -> void:
 	sounds["portal_travel"] = _tone_mix([92.0, 184.0, 368.0], 0.38, 0.16, 96.0, 0.014)
 	sounds["portal_error"] = _tone_mix([72.0, 54.0], 0.24, 0.10, -28.0, 0.012)
 
+const RECORDED_RPG := {
+	"step_road": ["footstep00.ogg", "footstep01.ogg", "footstep02.ogg", "footstep03.ogg"],
+	"step_forest": ["footstep04.ogg", "footstep05.ogg", "footstep06.ogg"],
+	"step_mud": ["footstep07.ogg", "footstep08.ogg", "footstep09.ogg"],
+	"step_stone": ["footstep00.ogg", "footstep01.ogg", "footstep02.ogg", "footstep03.ogg"],
+	"swing": ["knifeSlice.ogg", "knifeSlice2.ogg"], "heavy": ["drawKnife2.ogg", "drawKnife3.ogg"],
+	"light_hit": ["metalClick.ogg", "metalPot2.ogg"], "heavy_hit": ["metalPot1.ogg", "metalPot3.ogg"],
+	"block": ["metalClick.ogg", "metalLatch.ogg"], "parry": ["metalLatch.ogg", "metalPot2.ogg"],
+	"oathfire_sheathe": ["drawKnife1.ogg"], "cloth_wind": ["cloth1.ogg", "cloth2.ogg", "cloth3.ogg"],
+	"village_life": ["creak1.ogg", "creak2.ogg"],
+}
+const RECORDED_AUTHORED := {
+	"step_wood": "wood_step.ogg", "light_hit": "sword_clash_light.ogg", "heavy_hit": "sword_clash_heavy.ogg",
+	"parry": "sword_clash_light.ogg", "oathfire_sheathe": "sword_sheathe.ogg",
+	"forge_hammer": "forge_hammer.ogg", "river_current": "river_current.ogg", "record_page": "record_page.ogg",
+	"village_crow": "village_crow.ogg", "ghoulkin_idle": "ghoul_breath.ogg", "enemy_windup": "ghoul_breath.ogg",
+	"ghoulkin_lunge": "ghoul_attack.ogg", "stagger": "ghoul_hit.ogg", "death": "ghoul_death.ogg",
+	"oathfire_charge": "oathfire_charge.ogg", "oathfire_release": "oathfire_release.ogg",
+	"shrine_candle": "candle_light.ogg", "potion": "potion_uncork.ogg", "wychwood_drop": "forest_twigs.ogg",
+}
+
 func _build_recorded_library() -> void:
-	if recorded_library_ready:
-		return
+	# Registration is cheap; decoding belongs to menu/opening/region preparation.
 	recorded_library_ready = true
-	if not runtime_file_assets_available:
+
+func _prepare_recorded_event(event_name: String) -> void:
+	if not runtime_file_assets_available or recorded_requests.has(event_name):
 		return
-	var root_path := "res://assets_external/audio/rpg/"
-	recorded_variants["step_road"] = _load_streams(root_path, ["footstep00.ogg","footstep01.ogg","footstep02.ogg","footstep03.ogg"])
-	recorded_variants["step_forest"] = _load_streams(root_path, ["footstep04.ogg","footstep05.ogg","footstep06.ogg"])
-	recorded_variants["step_mud"] = _load_streams(root_path, ["footstep07.ogg","footstep08.ogg","footstep09.ogg"])
-	recorded_variants["step_stone"] = _load_streams(root_path, ["footstep00.ogg","footstep01.ogg","footstep02.ogg","footstep03.ogg"])
-	recorded_variants["swing"] = _load_streams(root_path, ["knifeSlice.ogg","knifeSlice2.ogg"])
-	recorded_variants["heavy"] = _load_streams(root_path, ["drawKnife2.ogg","drawKnife3.ogg"])
-	recorded_variants["light_hit"] = _load_streams(root_path, ["metalClick.ogg","metalPot2.ogg"])
-	recorded_variants["heavy_hit"] = _load_streams(root_path, ["metalPot1.ogg","metalPot3.ogg"])
-	recorded_variants["block"] = _load_streams(root_path, ["metalClick.ogg","metalLatch.ogg"])
-	recorded_variants["parry"] = _load_streams(root_path, ["metalLatch.ogg","metalPot2.ogg"])
-	recorded_variants["oathfire_sheathe"] = _load_streams(root_path, ["drawKnife1.ogg"])
-	recorded_variants["cloth_wind"] = _load_streams(root_path, ["cloth1.ogg","cloth2.ogg","cloth3.ogg"])
-	recorded_variants["village_life"] = _load_streams(root_path, ["creak1.ogg","creak2.ogg"])
-	var authored := "res://assets_external/audio/authored/"
-	var wood_step := _load_audio_stream(authored + "wood_step.ogg")
-	if wood_step != null:
-		recorded_variants["step_wood"] = [wood_step]
-	for mapping in [
-		["light_hit", "sword_clash_light.ogg"],
-		["heavy_hit", "sword_clash_heavy.ogg"],
-		["parry", "sword_clash_light.ogg"],
-		["oathfire_sheathe", "sword_sheathe.ogg"],
-		["forge_hammer", "forge_hammer.ogg"],
-		["river_current", "river_current.ogg"],
-		["record_page", "record_page.ogg"],
-		["village_crow", "village_crow.ogg"],
-		["ghoulkin_idle", "ghoul_breath.ogg"],
-		["enemy_windup", "ghoul_breath.ogg"],
-		["ghoulkin_lunge", "ghoul_attack.ogg"],
-		["stagger", "ghoul_hit.ogg"],
-		["death", "ghoul_death.ogg"],
-		["oathfire_charge", "oathfire_charge.ogg"],
-		["oathfire_release", "oathfire_release.ogg"],
-		["shrine_candle", "candle_light.ogg"],
-		["potion", "potion_uncork.ogg"],
-		["wychwood_drop", "forest_twigs.ogg"],
-	]:
-		var recorded := _load_audio_stream(authored + str(mapping[1]))
-		if recorded != null:
-			recorded_variants[str(mapping[0])] = [recorded]
-	var ui_hover := _load_audio_stream("res://assets_external/audio/ui/rollover2.wav")
-	var ui_click := _load_audio_stream("res://assets_external/audio/ui/click3.wav")
-	if ui_hover != null:
-		recorded_variants["menu_hover"] = [ui_hover]
-	if ui_click != null:
-		recorded_variants["menu_click"] = [ui_click]
-	for event_name in recorded_variants.keys():
-		if recorded_variants[event_name].is_empty():
-			recorded_variants.erase(event_name)
+	recorded_requests[event_name] = true
+	var variants: Array = []
+	if RECORDED_RPG.has(event_name):
+		variants = _load_streams("res://assets_external/audio/rpg/", RECORDED_RPG[event_name])
+	if RECORDED_AUTHORED.has(event_name):
+		var authored := _load_audio_stream("res://assets_external/audio/authored/" + str(RECORDED_AUTHORED[event_name]))
+		if authored != null:
+			variants = [authored]
+	var ui_path := str({"menu_hover": "rollover2.wav", "menu_click": "click3.wav"}.get(event_name, ""))
+	if ui_path != "":
+		var ui := _load_audio_stream("res://assets_external/audio/ui/" + ui_path)
+		if ui != null:
+			variants = [ui]
+	if not variants.is_empty():
+		recorded_variants[event_name] = variants
 
 func _load_streams(root_path: String, file_names: Array) -> Array:
 	var streams: Array = []
@@ -1209,12 +1269,14 @@ func _build_music_state(state_id: String) -> void:
 			music[state_id] = stream
 		else:
 			var fallback := str({"story_road":"greyfen_explore", "story_names":"record_hall", "story_renewal":"undercroft", "ending_witness":"assembly", "ending_mercy":"hart_glade", "ending_duty":"shrine_anwen", "ending_ash":"castle_silence"}.get(state_id, "greyfen_explore"))
-			if PREPARED_AUDIO.music.has(fallback):
-				music[state_id] = PREPARED_AUDIO.music[fallback]
+			var fallback_stream: AudioStream = prepared_audio.stream("music", fallback)
+			if fallback_stream != null:
+				music[state_id] = fallback_stream
 		return
 	if use_prepared_audio:
-		if PREPARED_AUDIO.music.has(state_id):
-			music[state_id] = PREPARED_AUDIO.music[state_id]
+		var stream: AudioStream = prepared_audio.stream("music", state_id)
+		if stream != null:
+			music[state_id] = stream
 		return
 	match state_id:
 		"main_menu": music[state_id] = _music_loop([55.0, 82.0, 110.0, 165.0], 6.4, 0.050, 0.016)
@@ -1250,7 +1312,8 @@ func _ambient_stream(zone_id: String) -> AudioStream:
 
 func _build_ambient_stream(zone_id: String) -> AudioStreamWAV:
 	if use_prepared_audio:
-		return PREPARED_AUDIO.ambience.get(zone_id, PREPARED_AUDIO.ambience["default"])
+		var stream: AudioStream = prepared_audio.stream("ambience", zone_id)
+		return stream as AudioStreamWAV if stream != null else prepared_audio.stream("ambience", "default") as AudioStreamWAV
 	if zone_id == "greyfen":
 		return _ambient_mix([86.0, 146.0, 213.0], 2.6, 0.026, 0.0)
 	if zone_id == "wychwood":

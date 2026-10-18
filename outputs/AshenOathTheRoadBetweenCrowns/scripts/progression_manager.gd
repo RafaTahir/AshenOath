@@ -18,6 +18,11 @@ var total_xp := 0
 var issued_marks := 0
 var claimed_rewards: Dictionary = {}
 var visited_sectors: Dictionary = {}
+var _pending_boss_rewards: Dictionary = {}
+var _return_rewards_by_zone: Dictionary = {}
+var _reward_batch_depth := 0
+var _reward_change_pending := false
+var _xp_notice: Dictionary = {}
 
 func _ready() -> void:
 	load_definitions()
@@ -27,6 +32,31 @@ func load_definitions() -> void:
 	definitions = parsed if parsed is Dictionary else {}
 	parsed = JSON.parse_string(FileAccess.get_file_as_string(RULES_PATH))
 	rules = parsed if parsed is Dictionary else {}
+	_index_remaining_rewards()
+
+func _index_remaining_rewards() -> void:
+	_pending_boss_rewards = rules.get("bosses", {}).duplicate(true)
+	for id: String in _pending_boss_rewards.keys():
+		if claimed_rewards.has("boss:" + id):
+			_pending_boss_rewards.erase(id)
+	_return_rewards_by_zone.clear()
+	for reward: Dictionary in rules.get("returns", []):
+		var zone := str(reward.zone)
+		if not _return_rewards_by_zone.has(zone):
+			_return_rewards_by_zone[zone] = []
+		_return_rewards_by_zone[zone].append(reward)
+
+func _reward_changed() -> void:
+	if _reward_batch_depth > 0:
+		_reward_change_pending = true
+	else:
+		changed.emit()
+
+func _end_reward_batch() -> void:
+	_reward_batch_depth = maxi(0, _reward_batch_depth - 1)
+	if _reward_batch_depth == 0 and _reward_change_pending:
+		_reward_change_pending = false
+		changed.emit()
 
 func level_cap() -> int:
 	return int(rules.get("level_cap", 20))
@@ -69,17 +99,34 @@ func _claim(id: String, amount: int, region: String, kind: String, label: String
 	return true
 
 func _announce(previous_xp: int, previous_level: int, previous_marks: int, label: String, quiet: bool) -> void:
-	changed.emit()
+	_reward_changed()
 	if quiet or total_xp == previous_xp:
 		return
-	var text := "+%d XP - %s" % [total_xp - previous_xp, label]
-	if get_level() > previous_level:
-		text += ". Level %d reached" % get_level()
-	if marks > previous_marks:
-		text += ". %d Oath Mark%s earned" % [marks - previous_marks, "" if marks - previous_marks == 1 else "s"]
+	if _xp_notice.is_empty():
+		_xp_notice = {"xp": 0, "level": previous_level, "reached": get_level(), "marks_earned": 0, "labels": []}
+		call_deferred("_flush_xp_notice")
+	_xp_notice.xp += total_xp - previous_xp
+	_xp_notice.reached = maxi(int(_xp_notice.reached), get_level())
+	_xp_notice.marks_earned += maxi(0, marks - previous_marks)
+	if label not in _xp_notice.labels:
+		_xp_notice.labels.append(label)
+
+func _flush_xp_notice() -> void:
+	if _xp_notice.is_empty():
+		return
+	var notice := _xp_notice
+	_xp_notice = {}
+	var labels: Array = notice.labels
+	var text := "+%d XP - %s" % [int(notice.xp), "; ".join(labels)]
+	if int(notice.reached) > int(notice.level):
+		text += ". Level %d reached" % int(notice.reached)
+	if int(notice.marks_earned) > 0:
+		text += ". %d Oath Mark%s earned" % [int(notice.marks_earned), "" if int(notice.marks_earned) == 1 else "s"]
 	message.emit(text + ".")
 
 func award_for_quest(quest_id: String, _quest_type: String = "", quiet := false) -> bool:
+	if claimed_rewards.has("quest:" + quest_id):
+		return false
 	var reward: Dictionary = rules.get("quests", {}).get(quest_id, {})
 	if reward.is_empty():
 		return false
@@ -93,10 +140,12 @@ func award_for_quest(quest_id: String, _quest_type: String = "", quiet := false)
 	return true
 
 func reconcile_completed_quests(_quest_definitions: Dictionary, completed_quests: Dictionary) -> int:
+	_reward_batch_depth += 1
 	var count := 0
 	for id: String in completed_quests:
 		if _saved_true(completed_quests[id]) and award_for_quest(id, "", true):
 			count += 1
+	_end_reward_batch()
 	return count
 
 func record_arrival(zone_id: String, quests, state, quiet := false) -> void:
@@ -117,14 +166,20 @@ func sync_story(quests, state, zone_id: String, quiet := false) -> void:
 	var level := get_level()
 	var available := marks
 	var updated := false
-	for id: String in rules.get("bosses", {}):
-		var boss: Dictionary = rules.bosses[id]
+	for id: String in _pending_boss_rewards.keys():
+		if claimed_rewards.has("boss:" + id):
+			_pending_boss_rewards.erase(id)
+			continue
+		var boss: Dictionary = _pending_boss_rewards[id]
 		for flag: String in boss.get("flags", []):
 			var value: Variant = state.get_flag(flag)
 			if _saved_true(value) or (value is String and not value.is_empty() and value not in ["unresolved", "none", "active", "legacy_retired"]):
 				updated = _claim("boss:" + id, int(boss.xp), str(boss.region), "encounter", str(boss.name)) or updated
+				_pending_boss_rewards.erase(id)
 				break
 	for id: String in state.evidence:
+		if claimed_rewards.has("discovery:" + id):
+			continue
 		var entry: Variant = state.evidence[id]
 		if not entry is Dictionary:
 			continue
@@ -132,6 +187,8 @@ func sync_story(quests, state, zone_id: String, quiet := false) -> void:
 		if not region.is_empty():
 			updated = _claim("discovery:" + id, int(rules.get("discovery_xp", 50)), region, "discovery", str(entry.get("title", id))) or updated
 	for key: String in quests.evidence_history:
+		if claimed_rewards.has("evidence:" + key):
+			continue
 		if not _saved_true(quests.evidence_history[key]):
 			continue
 		var quest_id := key.get_slice(":", 0)
@@ -144,8 +201,8 @@ func sync_story(quests, state, zone_id: String, quiet := false) -> void:
 
 func _claim_returns(zone_id: String, quests, state) -> bool:
 	var updated := false
-	for reward: Dictionary in rules.get("returns", []):
-		if str(reward.zone) != zone_id or not visited_sectors.has(zone_id):
+	for reward: Dictionary in _return_rewards_by_zone.get(zone_id, []):
+		if claimed_rewards.has("return:" + str(reward.id)) or not visited_sectors.has(zone_id):
 			continue
 		var quest_id := str(reward.get("quest", ""))
 		var flag := str(reward.get("flag", ""))
@@ -168,6 +225,7 @@ func award_encounter(reward_id: String, zone_id: String, label: String) -> bool:
 
 func restore_journey(quests, state, zone_id: String, discovered: Dictionary) -> void:
 	# Migrate recorded history only, without inventing kills or replaying notices.
+	_reward_batch_depth += 1
 	reconcile_completed_quests(quests.quest_defs, quests.completed)
 	for sector: String in discovered:
 		if _saved_true(discovered[sector]) and not region_for(sector).is_empty():
@@ -182,7 +240,8 @@ func restore_journey(quests, state, zone_id: String, discovered: Dictionary) -> 
 			# Do not assign older unlocated accounts to the current load location.
 			claimed_rewards["discovery:" + id] = {"xp": 0, "region": "", "kind": "discovery", "label": str(entry.get("title", id))}
 	sync_story(quests, state, zone_id, true)
-	changed.emit()
+	_reward_changed()
+	_end_reward_batch()
 
 func can_unlock(id: String) -> bool:
 	return bool(upgrade_status(id).get("available", false))
@@ -289,6 +348,9 @@ func save_state() -> Dictionary:
 	return {"progression_version": STATE_VERSION, "xp": total_xp, "issued_marks": issued_marks, "marks": marks, "unlocked": unlocked.duplicate(true), "rewarded_quests": rewarded_quests.duplicate(true), "claimed_rewards": claimed_rewards.duplicate(true), "visited_sectors": visited_sectors.duplicate(true)}
 
 func load_state(state: Dictionary) -> void:
+	_xp_notice.clear()
+	_reward_batch_depth = 0
+	_reward_change_pending = false
 	if definitions.is_empty() or rules.is_empty():
 		load_definitions()
 	total_xp = _saved_int(state.get("xp", 0), xp_for_level(level_cap()))
@@ -320,6 +382,7 @@ func load_state(state: Dictionary) -> void:
 		for sector: Variant in visits:
 			if sector is String and not region_for(sector).is_empty() and _saved_true(visits[sector]):
 				visited_sectors[sector] = true
+	_index_remaining_rewards()
 	changed.emit()
 
 func _learned_count() -> int:

@@ -98,6 +98,7 @@ if ($BuildVoices) {
     Invoke-BuildProcess $PythonPath $VoiceArguments "story-voices"
 }
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--editor", "--import") "import"
+Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "split_prepared_audio.gd")) "prepared-audio-split"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_prepared_zone_geometry.gd")) "prepared-zone-geometry"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_directional_gaits.gd")) "directional-gaits"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_bracken_asset.gd")) "bracken-asset"

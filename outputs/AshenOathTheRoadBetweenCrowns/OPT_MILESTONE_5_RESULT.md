@@ -54,5 +54,6 @@ Root PCK: 9033576 bytes; SHA-256
 `2f1c3e806b3c74315268f5981d9c88f9ed568c0b1cea0fd5bb8145aecf2c7206`.
 The existing production compiler/export and static package identity checks
 completed. Publication uses OPT-040; the local publication receipt records the
-resulting commit and deployment. No runtime test, browser, benchmark, automated
+resulting commit and deployment: `600d7c5`, Vercel READY with production alias
+assigned. No runtime test, browser, benchmark, automated
 gameplay or screenshot capture was performed by the agent.

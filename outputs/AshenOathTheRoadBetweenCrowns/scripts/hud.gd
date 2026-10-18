@@ -73,6 +73,12 @@ var _inventory_screen := "journal"
 var _inventory_generation := 0
 var text_history = DialogueHistory.new()
 var library_page := 0
+var _journal_models: Dictionary = {}
+var _journal_source_revisions: Dictionary = {}
+var _journal_buttons: Dictionary = {}
+var _journal_pool_host: Control
+var _last_progression_model: Dictionary = {}
+var _equipment_view_key: Array = []
 var library_back_target := "pause"
 var selected_slot := ""
 var subtitle_speaker_names := true
@@ -978,6 +984,8 @@ func _set_internal_canvas(_requested_size: Vector2i) -> void:
 		menu_layer.scale = Vector2.ONE
 	_queue_responsive_layout()
 func update_health(current: float, maximum: float) -> void:
+	if current == last_health and maximum == last_health_max and health_bar.value == current and health_bar.max_value == maximum and health_value_label.text == "%d / %d" % [int(round(current)), int(round(maximum))]:
+		return
 	var previous = last_health
 	last_health = current
 	last_health_max = maximum
@@ -994,6 +1002,8 @@ func update_health(current: float, maximum: float) -> void:
 	_update_process_policy()
 
 func update_stamina(current: float, maximum: float) -> void:
+	if current == last_stamina and maximum == last_stamina_max and stamina_bar.value == current and stamina_bar.max_value == maximum and stamina_value_label.text == "%d / %d" % [int(round(current)), int(round(maximum))]:
+		return
 	var previous = last_stamina
 	last_stamina = current
 	last_stamina_max = maximum
@@ -1008,6 +1018,9 @@ func update_stamina(current: float, maximum: float) -> void:
 func update_progression(model: Dictionary) -> void:
 	if xp_label == null or xp_bar == null:
 		return
+	if model == _last_progression_model:
+		return
+	_last_progression_model = model.duplicate(true)
 	var capped: bool = int(model.get("level", 1)) >= int(model.get("cap", 20))
 	xp_label.text = "Lv %d | %d Marks\n%s" % [int(model.get("level", 1)), int(model.get("marks", 0)), "Level cap reached" if capped else "%d / %d XP" % [int(model.get("current", 0)), int(model.get("needed", 200))]]
 	xp_label.tooltip_text = "%d total XP. Growth and practices are in the journal." % int(model.get("xp", 0))
@@ -1038,7 +1051,9 @@ func hide_enemy() -> void:
 func set_target_lock_status(enemy_name: String, distance: float) -> void:
 	if target_status_label == null:
 		return
-	target_status_label.text = "Locked · %s · %d m" % [enemy_name, int(round(distance))]
+	var text := "Locked · %s · %d m" % [enemy_name, int(round(distance))]
+	if target_status_label.text != text:
+		target_status_label.text = text
 	target_status_label.visible = true
 
 func clear_target_lock_status() -> void:
@@ -1052,15 +1067,18 @@ func set_prompt(text: String) -> void:
 		clean = "[E]  " + clean.trim_prefix("E  ")
 	elif clean.begins_with("E - "):
 		clean = "[E]  " + clean.trim_prefix("E - ")
-	prompt_label.text = clean
+	if prompt_label.text != clean:
+		prompt_label.text = clean
 	prompt_label.visible = raw_prompt != "" and not _gameplay_surface_blocked()
 	if prompt_back != null:
 		prompt_back.visible = prompt_label.visible
 	_refresh_touch_message_visibility()
 
 func set_interaction_prompt(model: Dictionary) -> void:
+	var changed_model := model != _interaction_prompt_model
 	_interaction_prompt_model = model.duplicate(true)
-	interaction_prompt_changed.emit(_interaction_prompt_model.duplicate(true))
+	if changed_model:
+		interaction_prompt_changed.emit(_interaction_prompt_model.duplicate(true))
 	if model.is_empty():
 		set_prompt("")
 		return
@@ -1085,6 +1103,8 @@ func get_interaction_prompt_model() -> Dictionary:
 	return _interaction_prompt_model.duplicate(true)
 
 func set_tracker(text: String) -> void:
+	if _tracker_source == text:
+		return
 	_tracker_source = text
 	_refresh_story_focus()
 
@@ -1254,6 +1274,10 @@ func show_status_cue(text: String, kind: String = "neutral") -> void:
 	_refresh_touch_message_visibility()
 
 func update_equipment(potions: int, bombs: int, oil_name: String, arrow_count: int = -1, arrow_type: String = "Standard", weapon_name: String = "Steel", remedy_id: String = "redroot_potion", tool_id: String = "ash_bomb") -> void:
+	var view_key: Array = [potions, bombs, oil_name, arrow_count, arrow_type, weapon_name, remedy_id, tool_id, input_device, _action_label("use_potion"), _action_label("throw_bomb"), _action_label("fire_bow"), _action_label("light_attack"), _action_label("block"), _action_label("dodge"), _action_label("open_inventory")]
+	if view_key == _equipment_view_key:
+		return
+	_equipment_view_key = view_key
 	var supplies_changed := potions != last_potions or bombs != last_bombs or arrow_count != last_arrow_count or oil_name != last_oil_name
 	last_potions = potions
 	last_bombs = bombs
@@ -1675,6 +1699,8 @@ func _present_preparation_notice() -> void:
 	inventory_notice_label.add_theme_color_override("font_color", Color(0.98, 0.96, 0.88) if high_contrast else Color(0.91, 0.84, 0.68))
 
 func _prepare_inventory_surface(preparation: bool) -> void:
+	_recycle_journal_buttons(_preparation_actions)
+	_recycle_journal_buttons(craft_buttons)
 	for child in _preparation_actions.get_children():
 		_preparation_actions.remove_child(child)
 		child.queue_free()
@@ -1687,6 +1713,52 @@ func _prepare_inventory_surface(preparation: bool) -> void:
 	for child in craft_buttons.get_children():
 		craft_buttons.remove_child(child)
 		child.queue_free()
+
+func _journal_source_key(source) -> String:
+	if not is_instance_valid(source):
+		return "none"
+	var id: int = source.get_instance_id()
+	if not _journal_source_revisions.has(id):
+		_journal_source_revisions[id] = 0
+		if source.has_signal("changed"):
+			source.connect("changed", _journal_source_changed.bind(id))
+	return "%d:%d" % [id, int(_journal_source_revisions[id])]
+
+func _journal_source_changed(id: int) -> void:
+	_journal_source_revisions[id] = int(_journal_source_revisions.get(id, 0)) + 1
+
+func _journal_model(key: String, sources: Array, build: Callable) -> Variant:
+	for source in sources:
+		key += "|" + _journal_source_key(source)
+	if not _journal_models.has(key):
+		if _journal_models.size() >= 32:
+			_journal_models.erase(_journal_models.keys()[0])
+		_journal_models[key] = build.call()
+	var model: Variant = _journal_models[key]
+	return model.duplicate(true) if model is Array or model is Dictionary else model
+
+func _recycle_journal_buttons(parent: Node) -> void:
+	if _journal_pool_host == null:
+		_journal_pool_host = Control.new()
+		_journal_pool_host.hide()
+		add_child(_journal_pool_host)
+	for child in parent.get_children():
+		if child is Button and child.has_meta("journal_pool_key"):
+			var key := str(child.get_meta("journal_pool_key"))
+			for connection: Dictionary in child.get_signal_connection_list("pressed"):
+				child.disconnect("pressed", connection.callable)
+			child.release_focus()
+			parent.remove_child(child)
+			_journal_pool_host.add_child(child)
+			if _journal_buttons.has(key):
+				_journal_buttons[key].queue_free()
+			_journal_buttons[key] = child
+		elif child is Container:
+			_recycle_journal_buttons(child)
+	while _journal_buttons.size() > 96:
+		var key: String = _journal_buttons.keys()[0]
+		_journal_buttons[key].queue_free()
+		_journal_buttons.erase(key)
 
 func show_inventory(inventory, quests, story_state = null, progression = null, requested_section: String = "") -> void:
 	_capture_inventory_state()
@@ -1703,10 +1775,10 @@ func show_inventory(inventory, quests, story_state = null, progression = null, r
 	inventory_layer.visible = true
 	_show_journal_art(quests, story_state)
 	var zone_id: String = _journal_zone_id()
-	var sections: Array[Dictionary] = StoryJournalPresenter.sections(quests, story_state, zone_id)
+	var sections: Array[Dictionary] = _journal_model("sections:" + zone_id, [quests, story_state], func(): return StoryJournalPresenter.sections(quests, story_state, zone_id))
 	if progression != null:
-		sections.append({"id":"growth", "title":"Growth", "body":progression.get_summary_text(), "entries":[]})
-	sections.append({"id":"quest_record", "title":"Quest Record", "body":str(quests.get_journal_text()), "entries":[]})
+		sections.append({"id":"growth", "title":"Growth", "body":_journal_model("growth", [progression], func(): return progression.get_summary_text()), "entries":[]})
+	sections.append({"id":"quest_record", "title":"Quest Record", "body":_journal_model("quest_record", [quests], func(): return str(quests.get_journal_text())), "entries":[]})
 	var current_section: Dictionary = {}
 	for section: Dictionary in sections:
 		if str(section.get("id", "")) == _journal_section_id:
@@ -1809,7 +1881,7 @@ func _journal_entry_from_sections(sections: Array, section_id: String, entry_id:
 	return {}
 
 func _build_evidence_content(quests, state, zone_id: String, sections: Array) -> void:
-	var model: Dictionary = StoryJournalPresenter.evidence_model(quests, state, zone_id)
+	var model: Dictionary = _journal_model("evidence:" + zone_id, [quests, state], func(): return StoryJournalPresenter.evidence_model(quests, state, zone_id))
 	var entries: Array = model.get("entries", [])
 	var filters: Array = model.get("filters", [])
 	var filter_found: bool = false
@@ -1820,7 +1892,7 @@ func _build_evidence_content(quests, state, zone_id: String, sections: Array) ->
 		_evidence_navigation.filter_id = "all"
 	var detail: Dictionary = {}
 	if str(_evidence_navigation.selected_id) != "":
-		detail = StoryJournalPresenter.evidence_detail(str(_evidence_navigation.selected_id), quests, state, zone_id)
+		detail = _journal_model("evidence_detail:" + str(_evidence_navigation.selected_id) + ":" + zone_id, [quests, state], func(): return StoryJournalPresenter.evidence_detail(str(_evidence_navigation.selected_id), quests, state, zone_id))
 		if detail.is_empty():
 			_evidence_navigation.selected_id = ""
 	var filtered: Array[Dictionary] = []
@@ -2071,7 +2143,7 @@ func _handle_compact_journal_direction(event: InputEvent) -> bool:
 func _build_growth_content(progression) -> void:
 	var selected: Dictionary = _preparation_selection.get(_inventory_screen, {})
 	var selected_id := str(selected.get("id", ""))
-	inventory_text.text = progression.get_summary_text()
+	inventory_text.text = _journal_model("growth", [progression], func(): return progression.get_summary_text())
 	if progression.definitions.has(selected_id):
 		var practice: Dictionary = progression.upgrade_status(selected_id)
 		inventory_text.text = "LEVEL %d | %d OATH MARKS\n\n" % [progression.get_level(), int(progression.marks)] + PreparationPanel.practice_text(practice)
@@ -2116,7 +2188,7 @@ func _build_preparation_content(inventory, progression, story_state, quests, not
 	_build_kit_controls(inventory)
 	var heading: String = "%s\nCoin: %d\nRemedy: %s | Field tool: %s\n\n" % [category.to_upper(), int(inventory.coin), inventory.get_item_name(inventory.quick_item("use_potion")), inventory.get_item_name(inventory.quick_item("throw_bomb"))]
 	if kind == "item" and inventory.item_defs.has(selected_id):
-		var detail: Dictionary = PreparationViewModel.item_detail(selected_id, inventory, progression, _preparation_context, story_state, quests)
+		var detail: Dictionary = _journal_model("item:" + selected_id + ":" + JSON.stringify(_preparation_context), [inventory, progression, story_state, quests], func(): return PreparationViewModel.item_detail(selected_id, inventory, progression, _preparation_context, story_state, quests))
 		inventory_text.text = heading + PreparationPanel.item_text(detail)
 		var actions: Array = detail.get("actions", [])
 		for raw: Variant in actions:
@@ -2267,7 +2339,7 @@ func show_vendor(vendor_id: String, vendor_service, inventory, quests = null, st
 	_prepare_inventory_surface(true)
 	var vendor: Dictionary = vendor_service.get_vendor(vendor_id)
 	var heading: String = "%s\n%s\nCoin: %d\n\n" % [str(vendor.get("name", "Vendor")).to_upper(), str(vendor.get("subtitle", "")), int(inventory.coin)]
-	var stock: Array[Dictionary] = vendor_service.list_stock(vendor_id, inventory, story_state, quests, true)
+	var stock: Array[Dictionary] = _journal_model("vendor:" + vendor_id, [vendor_service, inventory, story_state, quests], func(): return vendor_service.list_stock(vendor_id, inventory, story_state, quests, true))
 	var request_ids: Array[String] = []
 	for entry: Dictionary in stock:
 		request_ids.append(str(entry.get("item_id", "")))
@@ -2315,13 +2387,33 @@ func _add_preparation_heading(text: String) -> void:
 	craft_buttons.add_child(heading)
 
 func _preparation_button(text: String, key: String, parent: Container, available: bool = true) -> Button:
-	var button: Button = Button.new()
+	var pool_key := _inventory_screen + ":" + key
+	var button: Button = _journal_buttons.get(pool_key)
+	if button != null:
+		_journal_buttons.erase(pool_key)
+		button.get_parent().remove_child(button)
+	else:
+		button = Button.new()
+	button.set_meta("journal_pool_key", pool_key)
 	button.text = text
+	button.tooltip_text = text
 	button.disabled = not available
+	button.toggle_mode = false
+	button.set_pressed_no_signal(false)
+	button.modulate = Color.WHITE
+	for side: String in ["left", "right", "top", "bottom", "next", "previous"]:
+		button.set("focus_neighbor_" + side if side in ["left", "right", "top", "bottom"] else "focus_" + side, NodePath())
+	for child in button.get_children():
+		if child is Label:
+			child.text = text
+			child.add_theme_color_override("font_color", Color(0.50, 0.48, 0.43) if button.disabled else Color(0.94, 0.89, 0.77))
 	button.action_mode = BaseButton.ACTION_MODE_BUTTON_RELEASE
 	button.set_meta("navigation_key", key)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_style_button(button)
+	var style_key: Array = [high_contrast, story_text_scale]
+	if button.get_meta("journal_style_key", []) != style_key:
+		_style_button(button)
+		button.set_meta("journal_style_key", style_key)
 	parent.add_child(button)
 	return button
 
@@ -2573,6 +2665,8 @@ func _hud_label(parent: Node, node_name: String, font_size: int) -> Label:
 	return label
 
 func set_display_metrics(metrics: Dictionary) -> void:
+	if metrics == _display_metrics:
+		return
 	_display_metrics = metrics.duplicate()
 	_queue_responsive_layout()
 
@@ -2660,12 +2754,12 @@ func _apply_responsive_typography(node: Node, fonts: Dictionary, button_height: 
 		var font_size: int = int(fonts.get(role, fonts.get("body", 20)))
 		if node is RichTextLabel:
 			var reader: RichTextLabel = node as RichTextLabel
-			reader.add_theme_font_size_override("normal_font_size", font_size)
-			reader.add_theme_font_size_override("bold_font_size", int(fonts.get("subtitle_bold", font_size)) if role == "subtitle" else font_size)
+			_set_responsive_font(reader, "normal_font_size", font_size)
+			_set_responsive_font(reader, "bold_font_size", int(fonts.get("subtitle_bold", font_size)) if role == "subtitle" else font_size)
 			reader.add_theme_constant_override("line_separation", int(round(4.0 * unit)))
 			reader.custom_minimum_size.x = 0.0
 		elif node is Label or node is LineEdit or node is TextEdit or node is Button:
-			control.add_theme_font_size_override("font_size", font_size)
+			_set_responsive_font(control, "font_size", font_size)
 			control.custom_minimum_size.x = 0.0
 		if node is Button:
 			var button: Button = node as Button
@@ -2696,9 +2790,15 @@ func _apply_responsive_typography(node: Node, fonts: Dictionary, button_height: 
 		if not child.is_queued_for_deletion():
 			_apply_responsive_typography(child, fonts, button_height, unit)
 
+func _set_responsive_font(control: Control, name: StringName, value: int) -> void:
+	if not control.has_theme_font_size_override(name) or control.get_theme_font_size(name) != value:
+		control.add_theme_font_size_override(name, value)
+
 func _set_responsive_panel_padding(panel: PanelContainer, padding: float) -> void:
 	var source: StyleBox = panel.get_theme_stylebox("panel")
 	if source == null:
+		return
+	if source.content_margin_left == padding and source.content_margin_right == padding and source.content_margin_top == padding and source.content_margin_bottom == padding:
 		return
 	var style: StyleBox = source.duplicate() as StyleBox
 	style.content_margin_left = padding

@@ -34,6 +34,9 @@ var _pending_load: Dictionary = {}
 var _load_serial: int = 0
 var _summary_quests: Dictionary = {}
 var _summary_items: Dictionary = {}
+var _decoded_slots: Dictionary = {}
+var _summary_cache: Dictionary = {}
+var _payload_tokens: Dictionary = {}
 
 func save_game(game, path: String = SAVE_PATH, label: String = "Game saved.") -> bool:
 	# Deferred autosaves can outlive a zone teardown. Never serialize a partially
@@ -258,8 +261,16 @@ func _read_slot(path: String) -> Dictionary:
 	var file := FileAccess.open(path, FileAccess.READ)
 	if file == null:
 		return {"ok": false, "path": path, "reason": "unreadable"}
-	var parser := JSON.new()
 	var content: String = file.get_as_text()
+	file.close()
+	# Always read the real storage boundary, including after atomic rename/import.
+	# Only parse/migration work is reused, keyed by exact bytes, never mtime.
+	var token := content.sha256_text()
+	if _decoded_slots.has(token):
+		var cached: Dictionary = _decoded_slots[token].duplicate(true)
+		cached["path"] = path
+		return cached
+	var parser := JSON.new()
 	if parser.parse(content) != OK:
 		return {"ok": false, "path": path, "reason": "invalid_json"}
 	var parsed = parser.data
@@ -275,7 +286,11 @@ func _read_slot(path: String) -> Dictionary:
 	var migrated := migrate_save_data(parsed)
 	if migrated.is_empty():
 		return {"ok": false, "path": path, "reason": "future_version"}
-	return {"ok": true, "path": path, "data": migrated, "recorded": _recorded_metadata(parsed), "token": content.sha256_text()}
+	var result := {"ok": true, "path": path, "data": migrated, "recorded": _recorded_metadata(parsed), "token": token}
+	if _decoded_slots.size() >= 8:
+		_decoded_slots.erase(_decoded_slots.keys()[0])
+	_decoded_slots[token] = result.duplicate(true)
+	return result
 
 func _supported_saved_zone(value: String) -> bool:
 	var zone: String = value.strip_edges().to_lower()
@@ -511,6 +526,7 @@ func _migrate_story_campaign(data: Dictionary) -> void:
 func set_summary_definitions(quest_definitions: Dictionary, item_definitions: Dictionary) -> void:
 	_summary_quests = quest_definitions.duplicate(true)
 	_summary_items = item_definitions.duplicate(true)
+	_summary_cache.clear()
 
 func _slot_label(slot_id: String) -> String:
 	if slot_id.begins_with("manual_"):
@@ -524,10 +540,29 @@ func _reason_text(reason: String) -> String:
 	return str({"missing": "This save copy is missing. Choose a recorded recovery copy or another journey.", "unreadable": "This save copy could not be opened. Your current journey remains in place.", "invalid_json": "This save copy is damaged or incomplete. A readable backup may still be available.", "invalid_save": "This file does not contain a readable Ashen Oath journey.", "invalid_location": "This save names a destination that this release cannot restore. Your current journey remains in place.", "invalid_version": "This save has an unreadable version record. Its files have been preserved.", "future_version": "This save needs a newer game version. Its files have been preserved.", "changed": "This save changed after it was displayed. Read the refreshed journey card before loading it.", "invalid_selection": "This saved journey is no longer available. Choose it again from Saved Journeys."}.get(reason, "The saved journey could not be prepared. Your current session remains in place."))
 
 func _summary_for_result(result: Dictionary, fallback_title: String) -> Dictionary:
+	var key := str(result.get("token", "")) + ":" + fallback_title
+	var cacheable := not str(result.get("token", "")).is_empty()
+	if cacheable and _summary_cache.has(key):
+		return _summary_cache[key].duplicate(true)
 	var data: Dictionary = result.get("data", {}).duplicate(true)
 	if str(data.get("slot_name", "")).is_empty():
 		data["slot_name"] = fallback_title
-	return JourneySummary.describe(data, result.get("recorded", {}), _summary_quests, _summary_items)
+	var summary: Dictionary = JourneySummary.describe(data, result.get("recorded", {}), _summary_quests, _summary_items)
+	if _summary_cache.size() >= 32:
+		_summary_cache.erase(_summary_cache.keys()[0])
+	if cacheable:
+		_summary_cache[key] = summary.duplicate(true)
+	return summary
+
+func _payload_token_for_result(result: Dictionary) -> String:
+	var key := str(result.get("token", ""))
+	if key.is_empty():
+		return _journey_payload_token(result.get("data", {}))
+	if not _payload_tokens.has(key):
+		if _payload_tokens.size() >= 32:
+			_payload_tokens.erase(_payload_tokens.keys()[0])
+		_payload_tokens[key] = _journey_payload_token(result.get("data", {}))
+	return str(_payload_tokens[key])
 
 func _card_for_result(slot_id: String, source: String, result: Dictionary) -> Dictionary:
 	var backup: bool = source == "backup"
@@ -535,7 +570,7 @@ func _card_for_result(slot_id: String, source: String, result: Dictionary) -> Di
 	var source_label: String = ("Previous copy of " if backup else "") + _slot_label(slot_id)
 	if bool(summary.get("replay", false)) and not source_label.to_lower().contains("replay"):
 		source_label += " (replay)"
-	return {"available": true, "selection": {"slot_id": slot_id, "source": source, "token": str(result.get("token", ""))}, "state_token": _journey_payload_token(result.get("data", {})), "summary": summary, "source_label": source_label, "status": "recoverable" if backup else "ready", "reason": "Loads the previous recorded copy, including its story state." if backup else "", "recovery": []}
+	return {"available": true, "selection": {"slot_id": slot_id, "source": source, "token": str(result.get("token", ""))}, "state_token": _payload_token_for_result(result), "summary": summary, "source_label": source_label, "status": "recoverable" if backup else "ready", "reason": "Loads the previous recorded copy, including its story state." if backup else "", "recovery": []}
 
 func _slot_model(slot_id: String) -> Dictionary:
 	var path: String = slot_path(slot_id)

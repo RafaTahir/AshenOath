@@ -5,6 +5,10 @@ const SILVER := Color("babebd")
 const GOLD := Color("cbb778")
 const MUTED := Color("a5a69f")
 const INK := Color("101214")
+static var _bar_styles: Dictionary = {}
+static var _choice_styles: Dictionary = {}
+static var _subtitle_lines: Dictionary = {}
+static var _contrast_panel: StyleBoxFlat
 
 static func apply_bar(bar: ProgressBar, kind: String, high_contrast: bool = false) -> void:
 	var red: bool = kind != "stamina"
@@ -21,6 +25,8 @@ static func apply_bar(bar: ProgressBar, kind: String, high_contrast: bool = fals
 	bar.add_theme_stylebox_override("fill", _svg_style(fill_svg))
 
 static func _svg_style(source: String) -> StyleBoxTexture:
+	if _bar_styles.has(source):
+		return _bar_styles[source]
 	var image: Image = Image.new()
 	image.load_svg_from_string(source)
 	var style: StyleBoxTexture = StyleBoxTexture.new()
@@ -29,6 +35,7 @@ static func _svg_style(source: String) -> StyleBoxTexture:
 	style.texture_margin_right = 24.0
 	style.texture_margin_top = 2.0
 	style.texture_margin_bottom = 2.0
+	_bar_styles[source] = style
 	return style
 
 static var _dialogue_scrims: Dictionary = {}
@@ -48,6 +55,8 @@ static func dialogue_panel(high_contrast: bool, opacity: float = 0.55) -> StyleB
 			scrim.content_margin_bottom = 8
 			_dialogue_scrims[key] = scrim
 		return _dialogue_scrims[key]
+	if _contrast_panel != null:
+		return _contrast_panel
 	var panel: StyleBoxFlat = StyleBoxFlat.new()
 	panel.bg_color = Color(0.025, 0.029, 0.032, 0.98 if high_contrast else opacity)
 	panel.border_color = Color.WHITE if high_contrast else Color(0.67, 0.64, 0.51, 0.65)
@@ -60,18 +69,22 @@ static func dialogue_panel(high_contrast: bool, opacity: float = 0.55) -> StyleB
 	panel.content_margin_right = 24
 	panel.content_margin_top = 16
 	panel.content_margin_bottom = 16
+	_contrast_panel = panel
 	return panel
 
 static func dialogue_choice(button: Button, high_contrast: bool) -> void:
 	for state: String in ["normal", "hover", "pressed", "disabled", "focus"]:
-		var style := StyleBoxFlat.new()
-		var selected := state in ["hover", "pressed", "focus"]
-		style.bg_color = Color(0.02, 0.025, 0.03, (0.96 if high_contrast else 0.20) if selected else (0.78 if high_contrast else 0.0))
-		style.border_color = Color.WHITE if high_contrast else GOLD
-		style.border_width_left = 3 if selected else 0
-		style.content_margin_left = 14
-		style.content_margin_right = 14
-		button.add_theme_stylebox_override(state, style)
+		var key := state + str(high_contrast)
+		if not _choice_styles.has(key):
+			var style := StyleBoxFlat.new()
+			var selected := state in ["hover", "pressed", "focus"]
+			style.bg_color = Color(0.02, 0.025, 0.03, (0.96 if high_contrast else 0.20) if selected else (0.78 if high_contrast else 0.0))
+			style.border_color = Color.WHITE if high_contrast else GOLD
+			style.border_width_left = 3 if selected else 0
+			style.content_margin_left = 14
+			style.content_margin_right = 14
+			_choice_styles[key] = style
+		button.add_theme_stylebox_override(state, _choice_styles[key])
 	button.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.95))
 	button.add_theme_constant_override("shadow_offset_y", 2)
 	button.add_theme_color_override("font_color", IVORY)
@@ -86,6 +99,9 @@ static func dialogue_choice(button: Button, high_contrast: bool) -> void:
 
 static func subtitle_lines(text: String, font: Font, font_size: int, width: float) -> int:
 	if font == null or width <= 0.0: return 3
+	var key := "%d:%d:%s:%s" % [font.get_instance_id(), font_size, str(width), text]
+	if _subtitle_lines.has(key):
+		return int(_subtitle_lines[key])
 	var count := 0
 	for paragraph: String in text.split("\n"):
 		var row_width := 0.0
@@ -96,7 +112,10 @@ static func subtitle_lines(text: String, font: Font, font_size: int, width: floa
 				count += 1
 				row_width = 0.0
 			row_width += word_width
-	return clampi(count, 2, 4)
+	if _subtitle_lines.size() >= 256:
+		_subtitle_lines.erase(_subtitle_lines.keys()[0])
+	_subtitle_lines[key] = clampi(count, 2, 4)
+	return int(_subtitle_lines[key])
 
 static func label_color(label: Label, color: Color, high_contrast: bool = false) -> void:
 	label.add_theme_color_override("font_color", Color.WHITE if high_contrast else color)

@@ -66,6 +66,12 @@ def compile_layout():
     includes["Runtime Pack Opening"].add("assets_external/characters_prepared/animations/*.res")
     for name in ROOT_NAMES:
         includes[name].add("data/prepared_actors.json")
+        includes[name].update({"data/prepared_audio.json", "assets/audio/prepared/menu/*.res"})
+    includes["Runtime Pack Opening"].add("assets/audio/prepared/opening/*.res")
+    includes["Runtime Pack Campaign"].add("assets/audio/prepared/campaign/*.res")
+    for name in sections:
+        includes[name].discard("assets/audio/prepared_bank.res")
+        files[name].discard("res://assets/audio/prepared_bank.res")
 
     # Expand only the broad zone-script/scene selectors; their ownership differs.
     for name in sections:
@@ -126,6 +132,11 @@ def compile_layout():
     # dependency expansion as well as from explicit selections.
     for name, section in sections.items():
         exclusions = set(json.loads(config[section].get("exclude_filter", '""')).split(",")) - {""}
+        exclusions.add("assets/audio/prepared_bank.res")
+        for audio_owner in ("menu", "opening", "campaign"):
+            expected = ROOT_NAMES if audio_owner == "menu" else {"Runtime Pack " + audio_owner.capitalize()}
+            if name not in expected:
+                exclusions.add(f"assets/audio/prepared/{audio_owner}/*")
         if name in ROOT_NAMES:
             exclusions.update(transfers)
             exclusions.update({"data/dialogue.json", "data/campaign_dialogue.json", "data/interaction_scenes.json"})
