@@ -12,6 +12,7 @@ from pathlib import Path
 
 PROJECT = Path(__file__).resolve().parent.parent
 ROOT_NAMES = {"Web Browser", "Web QA Browser", "Runtime Pack Base"}
+SAGA_OPENING_RECORD = "assets_external/environment/props/CampaignRecord_register_mira_Authored.res"
 CAMPAIGN_PREFIXES = (
     "assets_external/environment/forest/Campaign_",
     "assets_external/environment/forest/Hart",
@@ -61,6 +62,14 @@ def compile_layout():
         includes[name].update({"data/runtime_dialogue_index.json", "data/runtime_dialogue/*.json"})
         includes[name].update({"assets/ui/fonts/*.ttf", "assets/ui/fonts/OFL.txt"})
     includes["Runtime Pack Opening"].add("assets_external/environment/prepared/greyfen_*.res")
+    # Regional written requests begin in Greyfen, before campaign packs mount.
+    # Transfer the retained mesh instead of duplicating it or loading a late
+    # resource opportunistically during opening preparation.
+    includes["Runtime Pack Opening"].add(SAGA_OPENING_RECORD)
+    for name in sections:
+        if name != "Runtime Pack Opening":
+            includes[name].discard(SAGA_OPENING_RECORD)
+            files[name].discard("res://" + SAGA_OPENING_RECORD)
     includes[adjacent].add("assets_external/environment/prepared/wychwood_*.res")
     includes["Runtime Pack Campaign"].add("assets_external/environment/prepared/*.res")
     for owner, name in (("opening", "Runtime Pack Opening"), ("characters", "Runtime Pack Characters"), ("monsters", "Runtime Pack Monsters")):
@@ -97,6 +106,8 @@ def compile_layout():
                 includes[name].update(p.relative_to(PROJECT).as_posix() for p in PROJECT.glob(pattern))
 
     def owner(relative):
+        if relative == SAGA_OPENING_RECORD:
+            return "Runtime Pack Opening"
         if relative.startswith(CAMPAIGN_PREFIXES):
             return "Runtime Pack Campaign"
         if relative.startswith(("scripts/zones/wychwood_", "scripts/zones/ruins_",
@@ -163,6 +174,10 @@ def compile_layout():
     # dependency expansion as well as from explicit selections.
     for name, section in sections.items():
         exclusions = set(json.loads(config[section].get("exclude_filter", '""')).split(",")) - {""}
+        if name == "Runtime Pack Opening":
+            exclusions.discard(SAGA_OPENING_RECORD)
+        else:
+            exclusions.add(SAGA_OPENING_RECORD)
         # Imported GLTF scenes already contain these vertex/skin buffers. Godot
         # loads the imported scene at runtime, never the source GLTF .bin files.
         # Keep originals in the repository, not duplicated in delivery packs.

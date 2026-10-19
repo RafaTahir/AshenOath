@@ -365,7 +365,13 @@ func apply_damage(amount: float, source_tag: String = "") -> void:
 		parry_exposed_time = 0.0
 	if source_tag == weakness or source_tag == tag:
 		final_damage += 15.0
+	if enemy_id == "captain_senn":
+		final_damage = minf(final_damage, maxf(0.0, health_component.health - 1.0))
 	health_component.damage(final_damage)
+	if enemy_id == "captain_senn" and health_component.health <= maxf(1.0, health_component.max_health * 0.25):
+		var controller := get_node_or_null("BossEncounterController")
+		if controller != null:
+			preload("res://scripts/saga_encounters.gd").senn_yields(controller.host, self)
 	hit_flash_time = 0.12
 	stagger_time = max(stagger_time, 0.16)
 	if animation_driver != null:
@@ -834,6 +840,10 @@ func _try_build_mapped_body() -> bool:
 	var uses_real_body := false
 	var visual_source: String = visual_role_override if enemy_id == "bandit" and not visual_role_override.is_empty() else enemy_id
 	var skeleton_family_source := false
+	if enemy_id == "captain_senn":
+		visual_source = "road_ranger_human"
+		mapped = asset_helper.spawn_visual_role(visual_source, "characters", "captain_senn")
+		uses_real_body = mapped != null
 	if enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute", "bog_wretch", "gravebound_knight", "bell_eater", "rootbound_colossus", "ashwing", "halvern_boss", "white_hart_avatar"]:
 		visual_source = {
 			"ghoulkin": "ghoulkin_creature",
@@ -880,7 +890,7 @@ func _try_build_mapped_body() -> bool:
 			"wychwood_raider": Color(0.60, 0.58, 0.48),
 			"wychwood_brute": Color(0.46, 0.52, 0.62),
 		}.get(enemy_id, Color.WHITE))
-	if is_boss and enemy_id != "white_hart_avatar":
+	if is_boss and enemy_id not in ["white_hart_avatar", "captain_senn"]:
 		_apply_boss_material(mapped)
 	visual_root.add_child(mapped)
 	if _is_wychwood_pack():
@@ -888,7 +898,7 @@ func _try_build_mapped_body() -> bool:
 		# scale, locomotion profile, and attack spacing. Do not add detached
 		# root-mounted anatomy on top of a valid animated body.
 		mapped.set_meta("monster_variant_profile", enemy_id)
-	if is_boss and enemy_id != "white_hart_avatar":
+	if is_boss and enemy_id not in ["white_hart_avatar", "captain_senn"]:
 		_add_boss_silhouette()
 	body_visual = _find_first_mesh(mapped)
 	base_body_scale = mapped.scale
@@ -907,7 +917,9 @@ func _try_build_mapped_body() -> bool:
 			"death": "SkeletonArmature|Skeleton_Death"
 		})
 	elif uses_real_body:
-		if visual_source in ["ghoulkin_creature", "bell_eater_boss", "bog_wretch_creature"]:
+		if enemy_id == "captain_senn":
+			animation_driver.configure(mapped, {"idle":"Idle", "walk":"Walk", "run":"Sprint", "windup":"Sword_Attack", "attack":"Sword_Attack", "hit":"Hit_Chest", "death":"Death01"})
+		elif visual_source in ["ghoulkin_creature", "bell_eater_boss", "bog_wretch_creature"]:
 			animation_driver.configure(mapped, {
 				"idle":"Idle", "walk":"Walk", "walk_back":"Walk",
 				"strafe":"Walk", "run":"Sprint", "windup":"Sword_Attack",
@@ -977,7 +989,7 @@ func _try_build_mapped_body() -> bool:
 	animation_driver.set_update_rate_hz(12.0)
 	_ground_mapped_visual(mapped)
 	mapped.position.y += CharacterRoleSpec.ground_offset(visual_source)
-	if enemy_id in ["halvern_boss", "bandit"]:
+	if enemy_id in ["halvern_boss", "bandit", "captain_senn"]:
 		_attach_humanoid_sword("Halvern" if enemy_id == "halvern_boss" else "Bandit")
 		if enemy_id == "bandit" and visual_source == "bandit_tracker":
 			_attach_bandit_shield()

@@ -460,17 +460,30 @@ func set_progression(manager) -> void:
 func _apply_progression_stats() -> void:
 	if health_component == null:
 		return
-	var target_max := 125.0 + _progression_value("max_health_bonus", 0.0)
+	var target_max := 125.0 + _progression_value("max_health_bonus", 0.0) + _progression_value("saga_max_health_bonus", 0.0)
 	health_component.max_health = target_max
 	# Learning, refunding or receiving XP must not heal Kael or revive a dead body.
 	health_component.health = clampf(health_component.health, 0.0, target_max)
 	health_component.changed.emit(health_component.health, health_component.max_health)
+	if stamina_component != null:
+		stamina_component.max_stamina = 100.0 + _progression_value("saga_max_stamina_bonus", 0.0)
+		stamina_component.stamina = minf(stamina_component.stamina, stamina_component.max_stamina)
+		stamina_component.changed.emit(stamina_component.stamina, stamina_component.max_stamina)
 
 func _progression_value(effect_id: String, fallback: float) -> float:
 	return progression.effect_value(effect_id, fallback) if progression != null else fallback
 
 func get_bow_aim_sensitivity() -> float:
 	return _progression_value("bow_aim_sensitivity_multiplier", 1.0)
+
+func _entitlement_value(id: String, fallback: float) -> float:
+	return progression.entitlement_effect(id, fallback) if progression != null else fallback
+
+func get_bow_draw_duration() -> float:
+	return BOW_MAX_DRAW * _entitlement_value("saga_draw_multiplier", 1.0)
+
+func get_oathfire_charge_multiplier() -> float:
+	return _progression_value("saga_charge_multiplier", 1.0)
 
 func get_dodge_stamina_cost() -> float:
 	return maxf(1.0, 28.0 + float(difficulty_profile.get("dodge_cost_modifier", 0.0)) - _progression_value("dodge_cost_reduction", 0.0))
@@ -484,10 +497,10 @@ func apply_difficulty_profile(profile: Dictionary) -> void:
 	}
 
 func get_oathfire_stamina_cost() -> float:
-	return maxf(1.0, 40.0 - _progression_value("beam_cost_reduction", 0.0))
+	return maxf(1.0, 40.0 - _progression_value("beam_cost_reduction", 0.0) - _progression_value("saga_beam_cost_reduction", 0.0))
 
 func get_oathfire_cooldown_duration() -> float:
-	return maxf(0.5, 4.0 - _progression_value("beam_cooldown_reduction", 0.0))
+	return maxf(0.5, 4.0 - _progression_value("beam_cooldown_reduction", 0.0) - _entitlement_value("saga_cooldown_reduction", 0.0))
 
 func get_blade_attack_damage(heavy: bool = false) -> float:
 	var base_damage := 42.0 if heavy else 24.0
@@ -541,7 +554,7 @@ func _handle_movement(delta: float) -> void:
 		movement_state = "dodge"
 	else:
 		var wants_run: bool = _action_pressed("run") and input_vec.length() > 0.1
-		var is_running: bool = wants_run and stamina_component.spend(10.0 * delta)
+		var is_running: bool = wants_run and stamina_component.spend(10.0 * _entitlement_value("saga_sprint_multiplier", 1.0) * delta)
 		var action_locked: bool = beam_cast_state != "" or attack_anim_time > 0.0
 		var speed: float = run_speed if is_running else walk_speed
 		if bow_aiming:
@@ -776,7 +789,7 @@ func _handle_combat_input() -> void:
 		attack_buffer_time = 0.0
 	if light_pressed:
 		_face_attack_direction()
-		attack_cooldown = 0.38
+		attack_cooldown = maxf(0.34, 0.38 * _progression_value("saga_light_recovery_multiplier", 1.0))
 		attack_anim_time = 0.34
 		attack_anim_heavy = false
 		if animation_driver != null:
@@ -784,7 +797,7 @@ func _handle_combat_input() -> void:
 		_begin_blade_attack(get_blade_attack_damage(false), 2.0, false)
 	elif heavy_pressed:
 		_face_attack_direction()
-		if stamina_component.spend(22.0):
+		if stamina_component.spend(maxf(1.0, 22.0 - _progression_value("saga_heavy_cost_reduction", 0.0))):
 			attack_cooldown = 0.7
 			attack_anim_time = 0.52
 			attack_anim_heavy = true
@@ -812,7 +825,7 @@ func _handle_bow_input() -> void:
 		bow_aiming = true
 		if equipment_loadout != null:
 			equipment_loadout.set_bow_aiming(true)
-		bow_draw_time = minf(bow_draw_time + get_physics_process_delta_time(), BOW_MAX_DRAW)
+		bow_draw_time = minf(bow_draw_time + get_physics_process_delta_time(), get_bow_draw_duration())
 		if animation_driver != null and bow_draw_time <= get_physics_process_delta_time() * 1.5:
 			animation_driver.trigger_action("bow_aim", 1.0, 0.10)
 		if _action_just_pressed("fire_bow"):
@@ -867,7 +880,7 @@ func _release_bow() -> void:
 		"origin": arrow_origin,
 		"direction": direction,
 		"arrow_id": selected_arrow_id,
-		"draw_ratio": clampf(bow_draw_time / BOW_MAX_DRAW, 0.0, 1.0),
+		"draw_ratio": clampf(bow_draw_time / get_bow_draw_duration(), 0.0, 1.0),
 		"range": BOW_RANGE,
 		"width": 0.34,
 	})
@@ -875,7 +888,7 @@ func _release_bow() -> void:
 	if equipment_loadout != null:
 		equipment_loadout.set_bow_aiming(false)
 	bow_draw_time = 0.0
-	bow_recovery = 0.24 * _progression_value("bow_recovery_multiplier", 1.0)
+	bow_recovery = maxf(0.10, 0.24 * _progression_value("bow_recovery_multiplier", 1.0) - _progression_value("saga_bow_recovery_reduction", 0.0))
 	if animation_driver != null:
 		animation_driver.trigger_action("attack_light", 1.0, 0.08)
 
@@ -1010,7 +1023,7 @@ func _handle_beam_input() -> void:
 	if _action_just_pressed("oathfire_beam") and beam_cooldown <= 0.0 and beam_cast_state == BEAM_STATE_IDLE and dodge_time <= 0.0:
 		_begin_oathfire_cast()
 	if beam_cast_state == BEAM_STATE_CHARGING and _action_pressed("oathfire_beam"):
-		beam_charge_time = min(beam_charge_time + get_physics_process_delta_time(), 1.25)
+		beam_charge_time = min(beam_charge_time + get_physics_process_delta_time() / get_oathfire_charge_multiplier(), 1.25)
 		_update_beam_charge_visual()
 	if beam_cast_state == BEAM_STATE_CHARGING and _action_just_released("oathfire_beam"):
 		var ratio: float = clampf((beam_charge_time - 0.35) / 0.90, 0.0, 1.0)
@@ -1235,7 +1248,7 @@ func take_damage(amount: float) -> bool:
 	_cancel_equipment_action()
 	if beam_cast_state != BEAM_STATE_IDLE:
 		cancel_beam_charge("hit")
-	if guarded and stamina_component.spend(12.0):
+	if guarded and stamina_component.spend(12.0 * _entitlement_value("saga_guard_multiplier", 1.0)):
 		var reduced = amount * 0.25
 		health_component.damage(reduced)
 		hurt_flash_time = 0.10

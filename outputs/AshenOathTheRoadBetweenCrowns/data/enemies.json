@@ -18,6 +18,8 @@
     "motivation": "A denied name is the only thing holding its borrowed body together."
   },
   "bog_wretch": {
+    "boss": true,
+    "peaceful_resolution": false,
     "name": "Bog Wretch",
     "health": 95,
     "damage": 18,
@@ -193,6 +195,14 @@
     "color": "#4c505a",
     "memory_rule": "Its guard can be broken by a clean parry, opening a testimony window.",
     "motivation": "It stayed loyal until obedience became murder, then chose the grave as punishment."
+  },
+  "captain_senn": {
+    "name":"Captain Senn", "health":160, "damage":18, "speed":2.0,
+    "attack_range":1.6, "sense_range":10.0, "tag":"human", "weakness":"iron_trap",
+    "behavior_profile":"duelist", "preferred_distance":1.9, "contact_radius":0.64,
+    "perception_memory":4.0, "boss":true, "peaceful_resolution":true, "color":"#5a5947",
+    "memory_rule":"A clean parry or a broken guard ends the duel without deciding the captain's fate.",
+    "motivation":"He calls control protection, even when the road's travelers pay for it."
   },
   "bandit": {
     "name": "Road Bandit",

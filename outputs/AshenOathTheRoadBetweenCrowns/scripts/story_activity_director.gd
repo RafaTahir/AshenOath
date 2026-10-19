@@ -167,6 +167,7 @@ static func install(game, root: Node3D, zone_id: String) -> void:
 		root.add_child(director)
 		director._build(root)
 	director.refresh()
+	preload("res://scripts/saga_activities.gd").install(game, director, zone_id)
 	if zone_id == "greyfen":
 		preload("res://scripts/opening_care_scene.gd").install(game, root)
 		preload("res://scripts/greyfen_archery_range.gd").install(game)
@@ -359,8 +360,16 @@ func refresh() -> void:
 	if worker_group != null:
 		worker_group.visible = not _flag("mill_workers_rescued")
 	host.interaction_focus_dirty = true
+	var saga := get_node_or_null("SixWorldStories")
+	if saga != null:
+		saga.refresh()
 
 func activate(id: String) -> void:
+	if id.begins_with("saga_"):
+		var saga := get_node_or_null("SixWorldStories")
+		if saga != null:
+			saga.activate(id)
+		return
 	if id == "lr_gathering":
 		preload("res://scripts/greyfen_gathering.gd").open_invitation(host)
 		return

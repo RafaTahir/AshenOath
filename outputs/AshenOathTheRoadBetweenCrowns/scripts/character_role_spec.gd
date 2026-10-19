@@ -23,6 +23,7 @@ const DEFAULT_SPEC := {
 }
 
 const SPECS := {
+	"captain_senn": {"height":1.75, "collision_height":1.64, "collision_radius":0.31, "lod":32.0, "visual_forward_degrees":180.0},
 	"player_human": {"height": 1.78, "collision_height": 1.65, "collision_radius": 0.32, "lod": 22.0, "visual_forward_degrees": 180.0},
 	"player_kael": {"height": 1.78, "collision_height": 1.65, "collision_radius": 0.32, "lod": 22.0, "visual_forward_degrees": 180.0},
 	"sister_anwen": {"height": 1.68, "collision_height": 1.58, "collision_radius": 0.30, "lod": 22.0, "visual_forward_degrees": 180.0},

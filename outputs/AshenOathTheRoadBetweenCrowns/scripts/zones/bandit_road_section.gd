@@ -42,6 +42,7 @@ func build(context: ZoneBuildContext) -> void:
 	if context.is_quest_active("side_soldiers_debt") and not context.is_objective_done("side_soldiers_debt", "find_deserters"):
 		context.make_clue("deserters_muster", "Read the deserters' hidden muster roll", Vector3(1.6, 0, 3.8), "side_soldiers_debt", "find_deserters", Color(0.38, 0.29, 0.19))
 	if context.is_quest_active("main_soldier_without_banner") and not context.is_objective_done("main_soldier_without_banner", "senn_confrontation") and not bool(context.get_story_flag("senn_guards_stood_down", false)):
+		context.set_story_flag("saga_senn_requires_duel", true)
 		for guard_spec in [[Vector3(4.5, 0.8, -3.8), "bandit_deserter"], [Vector3(11.0, 0.8, 1.5), "bandit_tracker"]]:
 			var guard = context.spawn_enemy("bandit", guard_spec[0], guard_spec[1])
 			if guard != null:

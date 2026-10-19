@@ -1,4 +1,12 @@
 {
+  "saga_economical_heavy": {"name":"Economical Heavy", "branch":"blade", "tier":4, "requires":"fell_weight", "description":"Heavy attacks cost 2 less stamina, to a minimum of 1.", "effects":{"saga_heavy_cost_reduction":2.0}},
+  "saga_follow_through": {"name":"Follow Through", "branch":"blade", "tier":5, "requires":"saga_economical_heavy", "description":"Light attack recovery is 8% shorter. Blade contact remains synchronized.", "effects":{"saga_light_recovery_multiplier":0.92}},
+  "saga_deep_reserve": {"name":"Deep Reserve", "branch":"survival", "tier":4, "requires":"redroot_lore", "description":"Maximum stamina increases by 10. Learning does not refill stamina.", "effects":{"saga_max_stamina_bonus":10.0}},
+  "saga_staying_power": {"name":"Staying Power", "branch":"survival", "tier":5, "requires":"saga_deep_reserve", "description":"Maximum health increases by another 10. Learning does not heal.", "effects":{"saga_max_health_bonus":10.0}},
+  "saga_clean_release": {"name":"Clean Release", "branch":"hunter", "tier":4, "requires":"fletchers_care", "description":"Fully drawn arrows deal 5% more damage to hostile targets. Training shots are unchanged.", "effects":{"saga_full_draw_damage_multiplier":1.05}},
+  "saga_ready_string": {"name":"Ready String", "branch":"hunter", "tier":5, "requires":"saga_clean_release", "description":"Bow recovery is 0.03 seconds shorter after Quick Nock, to a minimum of 0.10 seconds.", "effects":{"saga_bow_recovery_reduction":0.03}},
+  "saga_banked_embers": {"name":"Banked Embers", "branch":"oathfire", "tier":4, "requires":"ashen_flow", "description":"Oathfire costs another 5 less stamina, to a minimum of 1.", "effects":{"saga_beam_cost_reduction":5.0}},
+  "saga_steady_channel": {"name":"Steady Channel", "branch":"oathfire", "tier":5, "requires":"saga_banked_embers", "description":"Oathfire charges 5% faster. Initial facing and damage timing remain locked to the cast.", "effects":{"saga_charge_multiplier":0.95}},
   "keen_edge": {
     "name": "Keen Edge",
     "branch": "blade",

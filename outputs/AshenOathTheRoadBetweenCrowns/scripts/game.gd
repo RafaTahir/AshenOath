@@ -1090,6 +1090,10 @@ func _apply_loaded_journey(data: Dictionary) -> void:
 	var world_array: Array = data.get("world_position", [])
 	if seamless_world != null and world_array.size() >= 3:
 		pos = seamless_world.local_position_for(zone, Vector3(float(world_array[0]), float(world_array[1]), float(world_array[2])))
+	if zone == "deep_wood" and quests.is_active("main_teeth_in_rain") and quests.is_objective_done("main_teeth_in_rain", "name_the_dead") and not quests.is_objective_done("main_teeth_in_rain", "bog_core_choice") and str(story_state.get_flag("saga_bog_arena_owner", "")) == "":
+		pos = Vector3(-7,1,11)
+		story_state.set_flag("saga_bog_arena_owner", "wychwood")
+		story_state.record_evidence("saga_bog_migration", {"zone":"deep_wood", "title":"The memory's northern clearing", "text":"The Bog Wretch and its pending memory core now have one owner in northern Wychwood. Return south along the existing path. Your recorded fight, choices, health and supplies are unchanged."})
 	pos = _safe_loaded_position(zone, pos)
 	# Campaign saves must follow the same streamed-pack handoff as a gate
 	# transition. Otherwise a legacy save opened directly in a later sector
@@ -2172,6 +2176,8 @@ func _handle_village_place(id: String) -> void:
 		_: hud.toast("Greyfen has made use of everything it could keep.")
 
 func _on_minigame_result(game_id: String, outcome: String) -> void:
+	if game_id == "tic_tac_toe" and quests.is_active("saga_gre_q04") and str(story_state.get_flag("saga_gre_q04_outcome", "")) == "replayed":
+		story_state.set_flag("saga_gre_q04:round_played", true)
 	var played_id := "%s_played" % game_id
 	story_state.set_flag(played_id, int(story_state.get_flag(played_id,0)) + 1)
 	if outcome == "win":
@@ -2326,6 +2332,11 @@ func _relocate_anwen_to_cemetery() -> void:
 	_face_npc_toward_player(anwen)
 
 func _handle_dialogue_action(action: Dictionary) -> void:
+	if str(action.get("type", "")) == "saga_action":
+		var owner: Node = zone_root.get_node_or_null("StoryActivities/SixWorldStories") if is_instance_valid(zone_root) else null
+		if owner != null:
+			owner.choose(action)
+		return
 	if str(action.get("type", "")) == "gathering_choice":
 		preload("res://scripts/greyfen_gathering.gd").choose(self, action)
 		return
@@ -3479,6 +3490,8 @@ func _on_player_arrow(request: Dictionary) -> void:
 	var arrow_def: Dictionary = inventory.item_defs.get(arrow_id, {})
 	var effect: Dictionary = arrow_def.get("effect", {})
 	var damage := float(effect.get("damage", 28.0))
+	if float(request.get("draw_ratio", 0.0)) >= 0.99:
+		damage *= progression.effect_value("saga_full_draw_damage_multiplier", 1.0)
 	var endpoint: Vector3 = origin + direction * float(request.get("range", 24.0))
 	var query := PhysicsRayQueryParameters3D.create(origin, endpoint, 1)
 	var arrow_exclusions: Array[RID] = [player.get_rid()]
@@ -3602,7 +3615,7 @@ func _on_player_footstep() -> void:
 
 func _on_player_parried() -> void:
 	if progression != null and player != null:
-		player.stamina_component.restore(progression.effect_value("parry_stamina_restore", 0.0))
+		player.stamina_component.restore(progression.effect_value("parry_stamina_restore", 0.0) + progression.entitlement_effect("saga_parry_restore", 0.0))
 	tutorial_flags["block_hint_done"] = true
 	hud.set_guidance_hint("")
 
@@ -3864,6 +3877,12 @@ func _on_enemy_died(enemy) -> void:
 				_make_named_interactable("miller_record", "dialogue", "Read the miller's record", Vector3(-5.2,0.48,-3.4), Color(0.5,0.4,0.25))
 			hud.show_status_cue("Ashwing falls", "victory")
 			hud.toast("The mill roof catches the last ember, then goes dark. Something useful survived in the ash.")
+		elif enemy.enemy_id == "bog_wretch":
+			quests.complete_objective("main_teeth_in_rain", "fight_bog_wretch")
+			story_state.set_flag("bog_memory_core_revealed", true)
+			if not bool(story_state.get_flag("bog_core_exposed", false)):
+				story_state.set_flag("bog_core_forced_open", true)
+			_make_named_interactable("bog_core_choice", "dialogue", "Choose the memory core's fate", enemy.global_position, Color(0.35,0.58,0.52), Vector3.ONE * 0.4)
 		elif enemy.enemy_id == "halvern_boss":
 			story_state.set_flag("halvern_fate", "defeated")
 			_publish_halvern_exit()
@@ -3925,8 +3944,9 @@ func _on_enemy_died(enemy) -> void:
 			_make_named_interactable("white_hart", "dialogue", "Speak to the White Hart", Vector3(12, 0, 10), Color(0.86, 0.83, 0.70), Vector3(0.36, 0.64,0.36))
 	elif enemy.enemy_id == "bandit":
 		if current_zone_id == "bandit_road" and bool(enemy.get_meta("senn_guard", false)) and not _has_living_enemy("bandit"):
-			quests.complete_objective("main_soldier_without_banner", "senn_confrontation")
-			story_state.set_flag("senn_ready_to_testify", true)
+			if not bool(story_state.get_flag("saga_senn_requires_duel", false)):
+				quests.complete_objective("main_soldier_without_banner", "senn_confrontation")
+				story_state.set_flag("senn_ready_to_testify", true)
 			hud.show_status_cue("Senn's guard breaks", "victory")
 			_show_current_objective_guidance(5.5)
 		elif current_zone_id == "wychwood" and quests.is_active("side_black_dog") and not _has_living_enemy("bandit"):
@@ -4051,7 +4071,9 @@ func _on_enemy_attack_resolved(enemy, parried: bool, contact_position: Vector3) 
 func _on_enemy_parry_window_opened(enemy: Node, duration: float) -> void:
 	if enemy == null or not is_instance_valid(enemy) or not bool(enemy.get("is_boss")):
 		return
-	if enemy.enemy_id == "halvern_boss":
+	if enemy.enemy_id == "captain_senn":
+		preload("res://scripts/saga_encounters.gd").senn_yields(self, enemy)
+	elif enemy.enemy_id == "halvern_boss":
 		story_state.set_flag("halvern_guard_broken", true)
 		if quests.is_active("main_last_witness"):
 			quests.complete_objective("main_last_witness", "break_halvern_guard")
@@ -6826,7 +6848,7 @@ func _set_interactable_label_visible(area: Node, visible: bool) -> void:
 func _spawn_enemy(id: String, pos: Vector3, visual_role: String = "") -> Node:
 	if _boss_is_resolved(id):
 		return null
-	if active_enemies.size() >= 5:
+	if active_enemies.filter(func(actor): return is_instance_valid(actor) and not actor.dead).size() >= 5:
 		return null
 	pos = river_safe_position(pos,1.2)
 	# Enemy roots use the same floor-origin contract as the player. Only
@@ -6886,6 +6908,10 @@ func _spawn_enemy(id: String, pos: Vector3, visual_role: String = "") -> Node:
 
 func _boss_is_resolved(id: String) -> bool:
 	if id == "bell_eater" and bool(story_state.get_flag("bell_eater_legacy_retired", false)):
+		return true
+	if id == "bog_wretch" and quests.is_objective_done("main_teeth_in_rain", "fight_bog_wretch"):
+		return true
+	if id == "captain_senn" and (quests.is_objective_done("main_soldier_without_banner", "senn_confrontation") or str(story_state.get_flag("senn_fate", "")) not in ["", "unresolved"]):
 		return true
 	if not bool(enemy_defs.get(id, {}).get("boss", false)):
 		return false

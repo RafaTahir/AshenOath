@@ -11668,6 +11668,102 @@
       "speaker": "",
       "context": "upgrades.redroot_lore"
     },
+    "upgrades.saga_banked_embers.description": {
+      "source": "Oathfire costs another 5 less stamina, to a minimum of 1.",
+      "text": "Oathfire costs another 5 less stamina, to a minimum of 1.",
+      "speaker": "",
+      "context": "upgrades.saga_banked_embers"
+    },
+    "upgrades.saga_banked_embers.name": {
+      "source": "Banked Embers",
+      "text": "Banked Embers",
+      "speaker": "",
+      "context": "upgrades.saga_banked_embers"
+    },
+    "upgrades.saga_clean_release.description": {
+      "source": "Fully drawn arrows deal 5% more damage to hostile targets. Training shots are unchanged.",
+      "text": "Fully drawn arrows deal 5% more damage to hostile targets. Training shots are unchanged.",
+      "speaker": "",
+      "context": "upgrades.saga_clean_release"
+    },
+    "upgrades.saga_clean_release.name": {
+      "source": "Clean Release",
+      "text": "Clean Release",
+      "speaker": "",
+      "context": "upgrades.saga_clean_release"
+    },
+    "upgrades.saga_deep_reserve.description": {
+      "source": "Maximum stamina increases by 10. Learning does not refill stamina.",
+      "text": "Maximum stamina increases by 10. Learning does not refill stamina.",
+      "speaker": "",
+      "context": "upgrades.saga_deep_reserve"
+    },
+    "upgrades.saga_deep_reserve.name": {
+      "source": "Deep Reserve",
+      "text": "Deep Reserve",
+      "speaker": "",
+      "context": "upgrades.saga_deep_reserve"
+    },
+    "upgrades.saga_economical_heavy.description": {
+      "source": "Heavy attacks cost 2 less stamina, to a minimum of 1.",
+      "text": "Heavy attacks cost 2 less stamina, to a minimum of 1.",
+      "speaker": "",
+      "context": "upgrades.saga_economical_heavy"
+    },
+    "upgrades.saga_economical_heavy.name": {
+      "source": "Economical Heavy",
+      "text": "Economical Heavy",
+      "speaker": "",
+      "context": "upgrades.saga_economical_heavy"
+    },
+    "upgrades.saga_follow_through.description": {
+      "source": "Light attack recovery is 8% shorter. Blade contact remains synchronized.",
+      "text": "Light attack recovery is 8% shorter. Blade contact remains synchronized.",
+      "speaker": "",
+      "context": "upgrades.saga_follow_through"
+    },
+    "upgrades.saga_follow_through.name": {
+      "source": "Follow Through",
+      "text": "Follow Through",
+      "speaker": "",
+      "context": "upgrades.saga_follow_through"
+    },
+    "upgrades.saga_ready_string.description": {
+      "source": "Bow recovery is 0.03 seconds shorter after Quick Nock, to a minimum of 0.10 seconds.",
+      "text": "Bow recovery is 0.03 seconds shorter after Quick Nock, to a minimum of 0.10 seconds.",
+      "speaker": "",
+      "context": "upgrades.saga_ready_string"
+    },
+    "upgrades.saga_ready_string.name": {
+      "source": "Ready String",
+      "text": "Ready String",
+      "speaker": "",
+      "context": "upgrades.saga_ready_string"
+    },
+    "upgrades.saga_staying_power.description": {
+      "source": "Maximum health increases by another 10. Learning does not heal.",
+      "text": "Maximum health increases by another 10. Learning does not heal.",
+      "speaker": "",
+      "context": "upgrades.saga_staying_power"
+    },
+    "upgrades.saga_staying_power.name": {
+      "source": "Staying Power",
+      "text": "Staying Power",
+      "speaker": "",
+      "context": "upgrades.saga_staying_power"
+    },
+    "upgrades.saga_steady_channel.description": {
+      "source": "Oathfire charges 5% faster. Initial facing and damage timing remain locked to the cast.",
+      "text": "Oathfire charges 5% faster. Initial facing and damage timing remain locked to the cast.",
+      "speaker": "",
+      "context": "upgrades.saga_steady_channel"
+    },
+    "upgrades.saga_steady_channel.name": {
+      "source": "Steady Channel",
+      "text": "Steady Channel",
+      "speaker": "",
+      "context": "upgrades.saga_steady_channel"
+    },
     "upgrades.steady_hands.description": {
       "source": "While aiming the bow, reduce look-input sensitivity by 20% for finer placement. Your sensitivity, inversion and aim-assist preferences still apply. No automatic target acquisition.",
       "text": "While aiming the bow, reduce look-input sensitivity by 20% for finer placement. Your sensitivity, inversion and aim-assist preferences still apply. No automatic target acquisition.",

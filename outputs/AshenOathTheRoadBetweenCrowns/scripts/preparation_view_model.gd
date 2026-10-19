@@ -98,6 +98,8 @@ static func item_detail(item_id: String, inventory, progression = null, context:
 	return {"id": item_id, "title": str(inventory.get_item_name(item_id)), "body": str(notes.get("body", definition.get("description", ""))), "type": kind, "owned": owned, "cap": cap, "selected": selected, "effects": effects, "comparison": comparison, "actions": actions, "known_use": _known_uses(item_id, catalog, state, quests), "quick_slot": slot, "quick_assigned": assigned}
 
 static func equipment_text(id: String, inventory, context: Dictionary) -> String:
+	if inventory.get_item_type(id) == "keepsake":
+		return inventory.get_item_name(id) + "\nEarned permanent fitting\n\n" + str(inventory.item_defs[id].get("description", "")) + "\n\nNot consumed, sold or refunded when redistributing Oath Marks."
 	var equipment: Dictionary = context.get("equipment", {})
 	var active: String = "bow" if str(equipment.get("active_weapon", "sword")) == "bow" else str(equipment.get("selected_blade_id", "steel"))
 	var drawn: bool = bool(equipment.get("bow_drawn" if active == "bow" else "sword_drawn", false))

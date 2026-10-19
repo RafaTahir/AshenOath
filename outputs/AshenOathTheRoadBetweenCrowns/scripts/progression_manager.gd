@@ -6,8 +6,9 @@ signal message(text: String)
 const DEFINITIONS_PATH := "res://data/upgrades.json"
 const RULES_PATH := "res://data/progression.json"
 const BRANCH_ORDER := ["blade", "survival", "oathfire", "hunter"]
-const MASTERY_MARK_LIMIT := 12
-const STATE_VERSION := 1
+const MASTERY_MARK_LIMIT := 17
+const STATE_VERSION := 2
+const Saga = preload("res://scripts/saga_catalog.gd")
 
 var definitions: Dictionary = {}
 var rules: Dictionary = {}
@@ -18,6 +19,8 @@ var total_xp := 0
 var issued_marks := 0
 var claimed_rewards: Dictionary = {}
 var visited_sectors: Dictionary = {}
+var entitlements: Dictionary = {}
+var saga_return_departures: Dictionary = {}
 var _pending_boss_rewards: Dictionary = {}
 var _return_rewards_by_zone: Dictionary = {}
 var _reward_batch_depth := 0
@@ -32,6 +35,10 @@ func load_definitions() -> void:
 	definitions = parsed if parsed is Dictionary else {}
 	parsed = JSON.parse_string(FileAccess.get_file_as_string(RULES_PATH))
 	rules = parsed if parsed is Dictionary else {}
+	for id: String in Saga.QUESTS:
+		rules.get("quests", {})[id] = {"xp": Saga.quest_xp(id), "region": Saga.region_for_prefix(id.get_slice("_", 1))}
+	rules.get("bosses", {})["bog_wretch"] = {"xp":400, "region":"wychwood", "name":"Bog Wretch", "flags":["bog_memory_core_revealed", "saga_bog_resolved"]}
+	rules.get("bosses", {})["captain_senn"] = {"xp":450, "region":"long_road", "name":"Captain Senn", "flags":["senn_fate"]}
 	_index_remaining_rewards()
 
 func _index_remaining_rewards() -> void:
@@ -173,11 +180,19 @@ func sync_story(quests, state, zone_id: String, quiet := false) -> void:
 		var boss: Dictionary = _pending_boss_rewards[id]
 		for flag: String in boss.get("flags", []):
 			var value: Variant = state.get_flag(flag)
-			if _saved_true(value) or (value is String and not value.is_empty() and value not in ["unresolved", "none", "active", "legacy_retired"]):
-				updated = _claim("boss:" + id, int(boss.xp), str(boss.region), "encounter", str(boss.name)) or updated
+			if _saved_true(value) or (value is String and not value.is_empty() and value not in ["unresolved", "none", "active", "legacy_retired"]) or (id == "bog_wretch" and quests.is_objective_done("main_teeth_in_rain", "fight_bog_wretch")):
+				var amount := int(boss.xp)
+				if id == "bog_wretch" and claimed_rewards.has("encounter:deep_wood:bog_wretch:0.00:-8.00"):
+					# The legacy generic deed owns its face value even if the old
+					# cap discarded it. Do not reconstruct historical overflow.
+					claimed_rewards["encounter:deep_wood:bog_wretch:0.00:-8.00"].region = "wychwood"
+					amount -= 75
+				updated = _claim("boss:" + id, amount, str(boss.region), "encounter", str(boss.name)) or updated
 				_pending_boss_rewards.erase(id)
 				break
 	for id: String in state.evidence:
+		if id.begins_with("saga_"):
+			continue
 		if claimed_rewards.has("discovery:" + id):
 			continue
 		var entry: Variant = state.evidence[id]
@@ -187,6 +202,8 @@ func sync_story(quests, state, zone_id: String, quiet := false) -> void:
 		if not region.is_empty():
 			updated = _claim("discovery:" + id, int(rules.get("discovery_xp", 50)), region, "discovery", str(entry.get("title", id))) or updated
 	for key: String in quests.evidence_history:
+		if key.begins_with("saga_"):
+			continue
 		if claimed_rewards.has("evidence:" + key):
 			continue
 		if not _saved_true(quests.evidence_history[key]):
@@ -236,6 +253,8 @@ func restore_journey(quests, state, zone_id: String, discovered: Dictionary) -> 
 		_claim("arrival:" + sector, int(rules.get("arrival_xp", 100)), region_for(sector), "arrival", sector.replace("_", " ").capitalize())
 	for id: String in state.evidence:
 		var entry: Variant = state.evidence[id]
+		if entry is Dictionary and str(entry.get("zone", "")) == "cemetery" and claimed_rewards.has("discovery:" + id):
+			claimed_rewards["discovery:" + id].region = "greyfen"
 		if entry is Dictionary and not entry.has("zone") and not claimed_rewards.has("discovery:" + id):
 			# Do not assign older unlocated accounts to the current load location.
 			claimed_rewards["discovery:" + id] = {"xp": 0, "region": "", "kind": "discovery", "label": str(entry.get("title", id))}
@@ -299,7 +318,7 @@ func effect_value(effect_id: String, fallback: float = 0.0) -> float:
 func ordered_upgrade_ids() -> Array[String]:
 	var result: Array[String] = []
 	for branch: String in BRANCH_ORDER:
-		for tier in range(1, 4):
+		for tier in range(1, 6):
 			for id: String in definitions:
 				var definition: Dictionary = definitions[id]
 				if str(definition.get("branch", "")) == branch and int(definition.get("tier", 0)) == tier:
@@ -321,7 +340,7 @@ func get_summary_text() -> String:
 	var model := progress_model()
 	var text := "LEVEL %d / %d | %d XP\n" % [int(model.level), int(model.cap), total_xp]
 	text += "%d / %d XP to the next level.\n" % [int(model.current), int(model.needed)] if int(model.needed) > 0 else "Campaign level cap reached.\n"
-	text += "OATH MARKS: %d | PRACTICES: %d / %d\n" % [marks, _learned_count(), MASTERY_MARK_LIMIT]
+	text += "OATH MARKS: %d | PRACTICES: %d / %d\n" % [marks, _learned_count(), definitions.size()]
 	if int(model.next_mark_level) > 0:
 		text += "Next Oath Mark: level %d.\n" % int(model.next_mark_level)
 	text += "\nREGIONAL RECORD\n"
@@ -345,9 +364,18 @@ func get_summary_text() -> String:
 	return text
 
 func save_state() -> Dictionary:
-	return {"progression_version": STATE_VERSION, "xp": total_xp, "issued_marks": issued_marks, "marks": marks, "unlocked": unlocked.duplicate(true), "rewarded_quests": rewarded_quests.duplicate(true), "claimed_rewards": claimed_rewards.duplicate(true), "visited_sectors": visited_sectors.duplicate(true)}
+	return {"progression_version": STATE_VERSION, "xp": total_xp, "issued_marks": issued_marks, "marks": marks, "unlocked": unlocked.duplicate(true), "rewarded_quests": rewarded_quests.duplicate(true), "claimed_rewards": claimed_rewards.duplicate(true), "visited_sectors": visited_sectors.duplicate(true), "saga_entitlements": entitlements.duplicate(), "saga_return_departures": saga_return_departures.duplicate()}
 
 func load_state(state: Dictionary) -> void:
+	entitlements.clear()
+	saga_return_departures.clear()
+	for field: String in ["saga_entitlements", "saga_return_departures"]:
+		var saved: Variant = state.get(field, {})
+		if saved is Dictionary:
+			for id: Variant in saved:
+				if id is String and _saved_true(saved[id]) and ((Saga.REWARDS.has(id)) if field == "saga_entitlements" else Saga.WORLDS.has(id)):
+					var destination: Dictionary = entitlements if field == "saga_entitlements" else saga_return_departures
+					destination[id] = true
 	_xp_notice.clear()
 	_reward_batch_depth = 0
 	_reward_change_pending = false
@@ -358,7 +386,7 @@ func load_state(state: Dictionary) -> void:
 	var loaded: Dictionary = state.get("unlocked", {}) if state.get("unlocked", {}) is Dictionary else {}
 	for id: String in ordered_upgrade_ids():
 		var required := str(definitions[id].get("requires", ""))
-		if _saved_true(loaded.get(id, false)) and (required == "" or has_upgrade(required)):
+		if unlocked.size() < MASTERY_MARK_LIMIT and _saved_true(loaded.get(id, false)) and (required == "" or has_upgrade(required)):
 			unlocked[id] = true
 	issued_marks = maxi(_saved_int(state.get("issued_marks", 0), MASTERY_MARK_LIMIT), _learned_count() + _saved_int(state.get("marks", 0), MASTERY_MARK_LIMIT - _learned_count()))
 	_reconcile_marks()
@@ -383,7 +411,50 @@ func load_state(state: Dictionary) -> void:
 			if sector is String and not region_for(sector).is_empty() and _saved_true(visits[sector]):
 				visited_sectors[sector] = true
 	_index_remaining_rewards()
+	for claim: String in claimed_rewards:
+		if claim == "arrival:cemetery":
+			claimed_rewards[claim].region = "greyfen"
 	changed.emit()
+
+func entitlement_effect(id: String, fallback: float = 0.0) -> float:
+	for reward_id: String in entitlements:
+		var effects: Dictionary = Saga.REWARDS.get(reward_id, {}).get("effects", {})
+		if effects.has(id):
+			return float(effects[id])
+	return fallback
+
+func grant_saga_entitlement(id: String) -> bool:
+	if not Saga.REWARDS.has(id) or entitlements.has(id):
+		return false
+	entitlements[id] = true
+	for prefix: String in Saga.WORLDS:
+		if str(Saga.WORLDS[prefix].reward) == id:
+			claimed_rewards["reward:saga_" + prefix + "_capstone"] = {"xp":0, "region":Saga.region_for_prefix(prefix), "kind":"fitting", "label":str(Saga.REWARDS[id].name)}
+	_reward_changed()
+	return true
+
+func award_saga_secret(id: String, region: String, label: String) -> void:
+	var before := total_xp
+	var level := get_level()
+	var available := marks
+	if _claim("secret:" + id, 100, region, "secret", label):
+		_announce(before, level, available, label, false)
+
+func record_saga_departure(zone_id: String, quests) -> void:
+	for prefix: String in Saga.WORLDS:
+		if zone_id == str(Saga.WORLDS[prefix].home) and quests.is_completed("saga_" + prefix + "_q05"):
+			saga_return_departures[prefix] = true
+
+func claim_saga_return(prefix: String, quests) -> bool:
+	if not saga_return_departures.has(prefix) or not quests.is_completed("saga_" + prefix + "_q05"):
+		return false
+	var before := total_xp
+	var level := get_level()
+	var available := marks
+	if not _claim("return:saga_" + prefix + "_settled", 100, Saga.region_for_prefix(prefix), "return", "Return to changed work"):
+		return false
+	_announce(before, level, available, "Return to changed work", false)
+	return true
 
 func _learned_count() -> int:
 	return unlocked.size()

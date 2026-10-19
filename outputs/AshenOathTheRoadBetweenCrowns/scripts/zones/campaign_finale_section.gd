@@ -22,6 +22,8 @@ func build(context: ZoneBuildContext) -> void:
 			_build_assembly(context)
 		"hart_glade":
 			_build_hart_glade(context)
+			context.make_road(Vector3(15,0.025,9), Vector3(12,0.035,3), Color(0.13,0.17,0.11))
+			context.make_zone_gate("Follow the optional path to the Old Ruins", Vector3(20,0,9), "ruins", Vector3(-18,1,5))
 
 func _marker(context: ZoneBuildContext, zone_id: String, authored_name: String) -> void:
 	var compatibility := Node3D.new()

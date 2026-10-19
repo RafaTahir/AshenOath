@@ -31,8 +31,8 @@ const ROUTES := {
 		"speak_mira":["greyfen", ["mira"], "Mira works beside the village well.", "Ask how the ash touches the living."],
 		"read_chapel_names":["greyfen", ["chapel_names"], "Read the wall inside the ruined Crow Chapel.", "Recover a name before speaking for the dead."],
 		"name_the_dead":["wychwood", ["ritual_stones"], "The ritual stones stand beyond the roadside clearing.", "Speak Oren's recovered name."],
-		"fight_bog_wretch":["deep_wood", [], "Follow the path into the deeper clearing.", "Find the memory held in the wood."],
-		"bog_core_choice":["deep_wood", ["bog_core_choice"], "Return to the memory core in the clearing.", "Decide how this memory reaches the living."]
+		"fight_bog_wretch":["wychwood", ["saga_bog_challenge"], "Enter the northern Wychwood clearing after naming Oren.", "Find the memory held in the wood."],
+		"bog_core_choice":["wychwood", ["bog_core_choice"], "Return to the memory core in northern Wychwood.", "Decide how this memory reaches the living."]
 	},
 	"main_names_they_burned": {
 		"reconstruct_register":["greyfen", [], "Compare surviving pages in Greyfen and along the old mill road.", "Three fragments can restore the missing names."],
@@ -137,6 +137,8 @@ static func zone_name(zone_id: String) -> String:
 	return str(ZONE_NAMES.get(zone_id, zone_id.replace("_", " ").capitalize()))
 
 static func for_objective(quest_id: String, objective_id: String, state = null, quests = null, current_zone: String = "") -> Dictionary:
+	if quest_id.begins_with("saga_"):
+		return preload("res://scripts/saga_catalog.gd").route(quest_id, objective_id, state)
 	var entry: Array = ROUTES.get(quest_id, {}).get(objective_id, [])
 	if entry.is_empty():
 		return {}

@@ -13,6 +13,13 @@ func build(context: ZoneBuildContext) -> void:
 		context.make_pillar(pos)
 	for pos in [Vector3(-1,0,-6.5), Vector3(1,0,-6.2), Vector3(3,0,-6.8)]:
 		context.make_rubble(pos)
+	var late_road: bool = context.is_quest_unlocked("main_hart_remembers") or context.is_quest_active("main_hart_remembers") or bool(context.get_story_flag("final_choice_completed", false))
+	if late_road:
+		context.make_road(Vector3(-15,0.018,5), Vector3(16,0.04,3.2), Color(0.12,0.14,0.10))
+		context.make_zone_gate("Return along the Hart Glade path", Vector3(-21,0,5), "hart_glade", Vector3(18,1,9))
+		return
+	# Retain the legacy district's historical behavior only outside the new
+	# late optional visit; no second Edric or Hart can skip the current campaign.
 	context.make_zone_gate("Back to Greyfen", Vector3(-20, 0, 5), "greyfen", Vector3(17, 1, -2))
 	context.make_named_interactable("edric", "dialogue", "Talk to Lord Edric", Vector3(-14, 0, 3), Color(0.44, 0.35, 0.24))
 	context.make_clue("old_hall", "Search old hall", Vector3(-2, 0, -4), "main_blood_under_stone", "locate_record_hall", Color(0.28, 0.24, 0.21))

@@ -2201,9 +2201,13 @@ func _build_preparation_content(inventory, progression, story_state, quests, not
 	var entry_kind: String = {"equipment":"equipment", "supplies":"item", "ingredients":"ingredient"}.get(category, "item")
 	var ids: Array = ["steel", "oathblade", "bow"] if category == "equipment" else (inventory.ordered_ingredient_ids() if category == "ingredients" else inventory.ordered_item_ids())
 	if category == "supplies":
-		ids = ids.filter(func(id: String) -> bool: return inventory.get_item_type(id) != "blade_upgrade")
+		ids = ids.filter(func(id: String) -> bool: return inventory.get_item_type(id) not in ["blade_upgrade", "keepsake"])
 	if category == "equipment" and inventory.sort_mode == "name":
 		ids = ["bow", "oathblade", "steel"]
+	if category == "equipment":
+		for id: String in inventory.ordered_item_ids():
+			if inventory.get_item_type(id) == "keepsake" and inventory.owned_count(id) > 0:
+				ids.append(id)
 	var selection: Dictionary = _preparation_selection.get(_inventory_screen, {})
 	if str(selection.get("kind", "")) not in [entry_kind, "notes", "upgrade", "service"] or (str(selection.get("kind", "")) == entry_kind and str(selection.get("id", "")) not in ids):
 		selection = {}
@@ -2269,7 +2273,7 @@ func _build_preparation_content(inventory, progression, story_state, quests, not
 		var item_id: String = str(raw_id)
 		var label: String
 		if category == "equipment":
-			label = str({"steel":"Steel", "oathblade":"Oathblade", "bow":"Bow"}.get(item_id, item_id)) + (" - Equipped" if active_weapon == item_id else "")
+			label = str({"steel":"Steel", "oathblade":"Oathblade", "bow":"Bow"}.get(item_id, inventory.get_item_name(item_id))) + (" - Equipped" if active_weapon == item_id else "")
 			carried += 1
 		else:
 			var quantity: int = int(inventory.ingredients.get(item_id, 0)) if category == "ingredients" else int(inventory.items.get(item_id, 0))

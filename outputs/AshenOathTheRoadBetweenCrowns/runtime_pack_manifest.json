@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "program": "SOUL-REBUILD",
-  "release_id": "kael-visible-20261019-40df567",
+  "release_id": "world-saga-20261019-final",
   "artifact_policy": "external_runtime_packs",
   "candidate_manifest": "res://runtime_pack_candidates.json",
   "pack_presets": {
@@ -16,7 +16,7 @@
   "max_deployment_bytes": 104857600,
   "packs": {
     "base": {
-      "version": "kael-visible-20261019-40df567",
+      "version": "world-saga-20261019-final",
       "url": "",
       "sha256": "",
       "bytes": 0,
@@ -25,8 +25,8 @@
       "preload_priority": 0,
       "status": "embedded_current_pck",
       "candidate_artifact": "base.pck",
-      "candidate_bytes": 6382208,
-      "candidate_sha256": "ba5e0e3ad58c795b9874728e204f74525bc9e80579cdce04630f3af59c75fb43",
+      "candidate_bytes": 6392896,
+      "candidate_sha256": "2401576d235e25f492af53a5c15fa482454624bba7a4be28df8ff2f769196d1c",
       "contents": [
         "menu",
         "managers",
@@ -35,15 +35,15 @@
       ],
       "embedded_artifact": "index.pck",
       "embedded_source_artifact": "base.pck",
-      "embedded_source_bytes": 6382208,
-      "embedded_source_sha256": "ba5e0e3ad58c795b9874728e204f74525bc9e80579cdce04630f3af59c75fb43",
+      "embedded_source_bytes": 6392896,
+      "embedded_source_sha256": "2401576d235e25f492af53a5c15fa482454624bba7a4be28df8ff2f769196d1c",
       "embedded_source_kind": "standalone_pack_candidate"
     },
     "opening": {
-      "version": "kael-visible-20261019-40df567",
-      "url": "packs/opening.pck?sha256=2dcab59aa1499dcc678978c253adcd6b97a6e99212575c22fb107f4dcd68c954",
-      "sha256": "2dcab59aa1499dcc678978c253adcd6b97a6e99212575c22fb107f4dcd68c954",
-      "bytes": 35423104,
+      "version": "world-saga-20261019-final",
+      "url": "packs/opening.pck?sha256=92d964de2e18d5a1fc50317b01093092ea10e433ab22eeea9e0c90271788fd54",
+      "sha256": "92d964de2e18d5a1fc50317b01093092ea10e433ab22eeea9e0c90271788fd54",
+      "bytes": 35474164,
       "entry_scene": "res://scenes/zones/greyfen_gameplay.tscn",
       "dependencies": [
         "base"
@@ -51,20 +51,20 @@
       "preload_priority": 10,
       "status": "streamed_web_candidate",
       "candidate_artifact": "opening.pck",
-      "candidate_bytes": 35423104,
-      "candidate_sha256": "2dcab59aa1499dcc678978c253adcd6b97a6e99212575c22fb107f4dcd68c954",
+      "candidate_bytes": 35474164,
+      "candidate_sha256": "92d964de2e18d5a1fc50317b01093092ea10e433ab22eeea9e0c90271788fd54",
       "contents": [
         "greyfen",
         "opening_actors",
         "shared_opening_scenery"
       ],
-      "cache_key": "2dcab59aa1499dcc678978c253adcd6b97a6e99212575c22fb107f4dcd68c954"
+      "cache_key": "92d964de2e18d5a1fc50317b01093092ea10e433ab22eeea9e0c90271788fd54"
     },
     "campaign": {
-      "version": "kael-visible-20261019-40df567",
-      "url": "packs/campaign.pck?sha256=e1f131d53aeade68cafd87984e2e51003fa792573423c47e6cd4ed9610c81706",
-      "sha256": "e1f131d53aeade68cafd87984e2e51003fa792573423c47e6cd4ed9610c81706",
-      "bytes": 6372436,
+      "version": "world-saga-20261019-final",
+      "url": "packs/campaign.pck?sha256=5b1351f0c0b253e4d49a35118fa3cd7f03d46e7ca6a7f32ae0e5f2b7e8844c85",
+      "sha256": "5b1351f0c0b253e4d49a35118fa3cd7f03d46e7ca6a7f32ae0e5f2b7e8844c85",
+      "bytes": 6321984,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -73,21 +73,21 @@
       "preload_priority": 20,
       "status": "streamed_web_candidate",
       "candidate_artifact": "campaign.pck",
-      "candidate_bytes": 6372436,
-      "candidate_sha256": "e1f131d53aeade68cafd87984e2e51003fa792573423c47e6cd4ed9610c81706",
+      "candidate_bytes": 6321984,
+      "candidate_sha256": "5b1351f0c0b253e4d49a35118fa3cd7f03d46e7ca6a7f32ae0e5f2b7e8844c85",
       "contents": [
         "deep_woods",
         "long_road",
         "castle",
         "finale"
       ],
-      "cache_key": "e1f131d53aeade68cafd87984e2e51003fa792573423c47e6cd4ed9610c81706"
+      "cache_key": "5b1351f0c0b253e4d49a35118fa3cd7f03d46e7ca6a7f32ae0e5f2b7e8844c85"
     },
     "characters": {
-      "version": "kael-visible-20261019-40df567",
-      "url": "packs/characters.pck?sha256=da92042a54c0aba5fae75250a9212fa40c193411be4bb13175e11882a8cd902e",
-      "sha256": "da92042a54c0aba5fae75250a9212fa40c193411be4bb13175e11882a8cd902e",
-      "bytes": 9656944,
+      "version": "world-saga-20261019-final",
+      "url": "packs/characters.pck?sha256=d91e949a1da24d91ee625433371178f48dc420cb66aac5d1e09afbf70aaefad7",
+      "sha256": "d91e949a1da24d91ee625433371178f48dc420cb66aac5d1e09afbf70aaefad7",
+      "bytes": 9657120,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -96,19 +96,19 @@
       "preload_priority": 30,
       "status": "streamed_web_candidate",
       "candidate_artifact": "characters.pck",
-      "candidate_bytes": 9656944,
-      "candidate_sha256": "da92042a54c0aba5fae75250a9212fa40c193411be4bb13175e11882a8cd902e",
+      "candidate_bytes": 9657120,
+      "candidate_sha256": "d91e949a1da24d91ee625433371178f48dc420cb66aac5d1e09afbf70aaefad7",
       "contents": [
         "ranger_runtime",
         "universal_crowd_runtime"
       ],
-      "cache_key": "da92042a54c0aba5fae75250a9212fa40c193411be4bb13175e11882a8cd902e"
+      "cache_key": "d91e949a1da24d91ee625433371178f48dc420cb66aac5d1e09afbf70aaefad7"
     },
     "monsters": {
-      "version": "kael-visible-20261019-40df567",
-      "url": "packs/monsters.pck?sha256=684f246d69cbb931eabe9642b0cb875a60067e6bf77ef019c0470c343a7b98f3",
-      "sha256": "684f246d69cbb931eabe9642b0cb875a60067e6bf77ef019c0470c343a7b98f3",
-      "bytes": 14697256,
+      "version": "world-saga-20261019-final",
+      "url": "packs/monsters.pck?sha256=dcc096f1bd4476954b25adeae8c51414ee05d6206dbab48f824bd8ca5d6b6159",
+      "sha256": "dcc096f1bd4476954b25adeae8c51414ee05d6206dbab48f824bd8ca5d6b6159",
+      "bytes": 14697432,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -117,20 +117,20 @@
       "preload_priority": 40,
       "status": "streamed_web_candidate",
       "candidate_artifact": "monsters.pck",
-      "candidate_bytes": 14697256,
-      "candidate_sha256": "684f246d69cbb931eabe9642b0cb875a60067e6bf77ef019c0470c343a7b98f3",
+      "candidate_bytes": 14697432,
+      "candidate_sha256": "dcc096f1bd4476954b25adeae8c51414ee05d6206dbab48f824bd8ca5d6b6159",
       "contents": [
         "monster_families",
         "bosses",
         "animals"
       ],
-      "cache_key": "684f246d69cbb931eabe9642b0cb875a60067e6bf77ef019c0470c343a7b98f3"
+      "cache_key": "dcc096f1bd4476954b25adeae8c51414ee05d6206dbab48f824bd8ca5d6b6159"
     },
     "audio": {
-      "version": "kael-visible-20261019-40df567",
-      "url": "packs/audio.pck?sha256=2749f70584f12c5707fd61a107641630a0eb1bf8bd38558518dfee55fd86b783",
-      "sha256": "2749f70584f12c5707fd61a107641630a0eb1bf8bd38558518dfee55fd86b783",
-      "bytes": 19291084,
+      "version": "world-saga-20261019-final",
+      "url": "packs/audio.pck?sha256=3ade091beb5c917fb8a067793b059cb84a1d4057113b86f90c8439a2fa08a07d",
+      "sha256": "3ade091beb5c917fb8a067793b059cb84a1d4057113b86f90c8439a2fa08a07d",
+      "bytes": 19291260,
       "entry_scene": "",
       "dependencies": [
         "base"
@@ -138,20 +138,20 @@
       "preload_priority": 50,
       "status": "streamed_web_candidate",
       "candidate_artifact": "audio.pck",
-      "candidate_bytes": 19291084,
-      "candidate_sha256": "2749f70584f12c5707fd61a107641630a0eb1bf8bd38558518dfee55fd86b783",
+      "candidate_bytes": 19291260,
+      "candidate_sha256": "3ade091beb5c917fb8a067793b059cb84a1d4057113b86f90c8439a2fa08a07d",
       "contents": [
         "ambience",
         "combat_cues",
         "voice_fallbacks"
       ],
-      "cache_key": "2749f70584f12c5707fd61a107641630a0eb1bf8bd38558518dfee55fd86b783"
+      "cache_key": "3ade091beb5c917fb8a067793b059cb84a1d4057113b86f90c8439a2fa08a07d"
     },
     "quality_materials": {
-      "version": "kael-visible-20261019-40df567",
-      "url": "packs/quality_materials.pck?sha256=07f08d99d90362cb8c93dc8d64c34940868c25fc3b52bbe1565549652c85bfda",
-      "sha256": "07f08d99d90362cb8c93dc8d64c34940868c25fc3b52bbe1565549652c85bfda",
-      "bytes": 7378652,
+      "version": "world-saga-20261019-final",
+      "url": "packs/quality_materials.pck?sha256=f2222d9048b239f892e1d5f002a826d0890867785b6f8512e3981338dcd28619",
+      "sha256": "f2222d9048b239f892e1d5f002a826d0890867785b6f8512e3981338dcd28619",
+      "bytes": 7378828,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -160,19 +160,19 @@
       "preload_priority": 60,
       "status": "streamed_web_candidate",
       "candidate_artifact": "quality_materials.pck",
-      "candidate_bytes": 7378652,
-      "candidate_sha256": "07f08d99d90362cb8c93dc8d64c34940868c25fc3b52bbe1565549652c85bfda",
+      "candidate_bytes": 7378828,
+      "candidate_sha256": "f2222d9048b239f892e1d5f002a826d0890867785b6f8512e3981338dcd28619",
       "contents": [
         "opening_normal_maps",
         "opening_orm_maps"
       ],
-      "cache_key": "07f08d99d90362cb8c93dc8d64c34940868c25fc3b52bbe1565549652c85bfda"
+      "cache_key": "f2222d9048b239f892e1d5f002a826d0890867785b6f8512e3981338dcd28619"
     },
     "adjacent": {
-      "version": "kael-visible-20261019-40df567",
-      "url": "packs/adjacent.pck?sha256=39bed7400d2cc4b3591bffbc51e0fc9e4985a700cb887d13a3fd8e106120314e",
-      "sha256": "39bed7400d2cc4b3591bffbc51e0fc9e4985a700cb887d13a3fd8e106120314e",
-      "bytes": 1403320,
+      "version": "world-saga-20261019-final",
+      "url": "packs/adjacent.pck?sha256=c2ae2e1d453e1ab64983728d7401847c3dac86af6d5f2ac7e0c76e47e5ea7e59",
+      "sha256": "c2ae2e1d453e1ab64983728d7401847c3dac86af6d5f2ac7e0c76e47e5ea7e59",
+      "bytes": 1403800,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -186,14 +186,14 @@
         "ruins"
       ],
       "candidate_artifact": "adjacent.pck",
-      "candidate_bytes": 1403320,
-      "candidate_sha256": "39bed7400d2cc4b3591bffbc51e0fc9e4985a700cb887d13a3fd8e106120314e",
-      "cache_key": "39bed7400d2cc4b3591bffbc51e0fc9e4985a700cb887d13a3fd8e106120314e"
+      "candidate_bytes": 1403800,
+      "candidate_sha256": "c2ae2e1d453e1ab64983728d7401847c3dac86af6d5f2ac7e0c76e47e5ea7e59",
+      "cache_key": "c2ae2e1d453e1ab64983728d7401847c3dac86af6d5f2ac7e0c76e47e5ea7e59"
     }
   },
-  "build_id": "kael-visible-20261019-40df567",
-  "generated_from_commit": "40df5676dcdf4c04ecccf2215e47a0cdffc81916",
-  "generated_at_utc": "2026-10-19T09:17:16.507120Z",
-  "total_bytes": 94222796,
+  "build_id": "world-saga-20261019-final",
+  "generated_from_commit": "d0a735f9a38b640823ce2402282477d3c72a126e",
+  "generated_at_utc": "2026-10-19T12:05:15.390254Z",
+  "total_bytes": 94224588,
   "source_dirty": true
 }

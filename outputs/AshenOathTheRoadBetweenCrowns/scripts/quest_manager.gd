@@ -55,6 +55,7 @@ func load_quests(path: String) -> void:
 	var parsed = _read_json(path)
 	if typeof(parsed) == TYPE_DICTIONARY:
 		quest_defs = parsed
+		quest_defs.merge(preload("res://scripts/saga_catalog.gd").quest_definitions(), true)
 
 func start_quest(id: String) -> bool:
 	if not quest_defs.has(id):

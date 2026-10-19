@@ -95,11 +95,7 @@ func _build_deep_wood(context: ZoneBuildContext) -> void:
 	for x in [-3.6, -1.8, 1.8, 3.6]:
 		context.make_visual_box("RootboundOathScar", Vector3(x, 0.045, -10.5), Vector3(0.09, 0.018, 3.4), Color(0.20, 0.46, 0.23))
 	context.make_light("Deep Wood Memory Glow", Vector3(0, 4.5, -8.5), Color(0.34, 0.56, 0.48), 2.0)
-	if context.is_quest_active("main_teeth_in_rain") and context.is_objective_done("main_teeth_in_rain", "name_the_dead"):
-		if not context.is_objective_done("main_teeth_in_rain", "fight_bog_wretch"):
-			context.spawn_enemy("bog_wretch", Vector3(0, 0.8, -8))
-		elif not context.is_objective_done("main_teeth_in_rain", "bog_core_choice"):
-			context.make_named_interactable("bog_core_choice", "dialogue", "Choose the memory core's fate", Vector3(0,0,-8), Color(0.35,0.58,0.52), Vector3(0.4,0.4,0.4))
+	# The same saved Bog Wretch now has one owner in northern Wychwood.
 	if context.is_quest_active("main_names_they_burned") and context.is_objective_done("main_names_they_burned", "reconstruct_register") and not bool(context.get_story_flag("rootbound_colossus_defeated", false)):
 		var rootbound = context.spawn_enemy("rootbound_colossus", Vector3(0, 0.8, -10.5))
 		if rootbound != null:

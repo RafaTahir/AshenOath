@@ -162,6 +162,16 @@ static func _finish_recap(recap: Dictionary) -> Dictionary:
 
 static func _people_entries(campaign: Dictionary, quests, state) -> Array[Dictionary]:
 	var entries: Array[Dictionary] = []
+	for id: String in preload("res://scripts/saga_catalog.gd").PEOPLE:
+		if not _flag_bool(state, id + "_met"):
+			continue
+		var person: Dictionary = preload("res://scripts/saga_catalog.gd").PEOPLE[id]
+		var account := str(person.line)
+		for quest_id: String in preload("res://scripts/saga_catalog.gd").QUESTS:
+			var quest: Dictionary = preload("res://scripts/saga_catalog.gd").QUESTS[quest_id]
+			if str(quest.get("actor", "")) == id and quests != null and quests.is_completed(quest_id):
+				account += "\n\n" + str(quest.title) + ": " + _flag_text(state, quest_id + "_outcome").replace("_", " ") + ".\n" + str(quest.steps.back()[5])
+		entries.append({"id":"person:" + id, "title":person.name, "body":account, "identified":true})
 	var covered_flags: Dictionary = {}
 	if _flag_bool(state, "lr_vale_letter_read"):
 		var letter_reply := _flag_text(state, "lr_vale_letter_reply")
@@ -301,6 +311,14 @@ static func _evidence_entries(campaign: Dictionary, quests, state, zone_id: Stri
 				"known_relevance": _evidence_known_lead(authored, quests, state, zone_id),
 				"links": []
 			})
+	if state != null:
+		for id: String in state.evidence:
+			if not id.begins_with("saga_") or not state.evidence[id] is Dictionary:
+				continue
+			var record: Dictionary = state.evidence[id]
+			var words := str(record.get("text", ""))
+			var place := Routes.zone_name(str(record.get("zone", "")))
+			entries.append({"id":"evidence:" + id, "detail_id":"evidence:" + id, "title":str(record.get("title", id)), "body":words + "\n\nRecorded at: " + place, "kind":"observed", "kind_label":"Regional record", "source":"This journey's recorded regional work", "place":place, "place_label":"Recorded at", "zone":str(record.get("zone", "")), "recorded_text":words, "text_label":"Recorded account", "blocks":[], "known_relevance":[], "links":[]})
 	var creatures: Array[Dictionary] = creature_entries(campaign, quests, state)
 	var visible: Dictionary = {"evidence": {}, "people": {}, "preparation": {}, "creatures": {}}
 	for entry: Dictionary in entries:

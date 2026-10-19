@@ -1,104 +1,102 @@
 {
-    "schema_version":  2,
-    "generated_at_utc":  "2026-10-19T09:03:53.6201502Z",
-    "build_id":  "kael-visible-20261019-40df567",
-    "generated_from_commit":  "40df5676dcdf4c04ecccf2215e47a0cdffc81916",
-    "source_dirty":  true,
-    "artifact_directory":  "D:\\Projects\\AshenOath\\.release-gate\\kael-visible-20261019\\runtime-packs",
-    "artifacts_are_external":  true,
-    "max_deployment_bytes":  104857600,
-    "total_bytes":  100605004,
-    "packs":  [
-                  {
-                      "id":  "base",
-                      "version":  "kael-visible-20261019-40df567",
-                      "preset":  "Runtime Pack Base",
-                      "artifact":  "base.pck",
-                      "bytes":  6382208,
-                      "sha256":  "ba5e0e3ad58c795b9874728e204f74525bc9e80579cdce04630f3af59c75fb43",
-                      "status":  "candidate_external",
-                      "log":  "logs/pack-base.stdout.log"
-                  },
-                  {
-                      "id":  "opening",
-                      "version":  "kael-visible-20261019-40df567",
-                      "preset":  "Runtime Pack Opening",
-                      "artifact":  "opening.pck",
-                      "bytes":  35423104,
-                      "sha256":  "2dcab59aa1499dcc678978c253adcd6b97a6e99212575c22fb107f4dcd68c954",
-                      "status":  "candidate_external",
-                      "log":  "logs/pack-opening.stdout.log"
-                  },
-                  {
-                      "id":  "adjacent",
-                      "version":  "kael-visible-20261019-40df567",
-                      "preset":  "Runtime Pack Adjacent",
-                      "artifact":  "adjacent.pck",
-                      "bytes":  1403320,
-                      "sha256":  "39bed7400d2cc4b3591bffbc51e0fc9e4985a700cb887d13a3fd8e106120314e",
-                      "status":  "candidate_external",
-                      "log":  "logs/pack-adjacent.stdout.log"
-                  },
-                  {
-                      "id":  "campaign",
-                      "version":  "kael-visible-20261019-40df567",
-                      "preset":  "Runtime Pack Campaign",
-                      "artifact":  "campaign.pck",
-                      "bytes":  6372436,
-                      "sha256":  "e1f131d53aeade68cafd87984e2e51003fa792573423c47e6cd4ed9610c81706",
-                      "status":  "candidate_external",
-                      "log":  "logs/pack-campaign.stdout.log"
-                  },
-                  {
-                      "id":  "characters",
-                      "version":  "kael-visible-20261019-40df567",
-                      "preset":  "Runtime Pack Characters",
-                      "artifact":  "characters.pck",
-                      "bytes":  9656944,
-                      "sha256":  "da92042a54c0aba5fae75250a9212fa40c193411be4bb13175e11882a8cd902e",
-                      "status":  "candidate_external",
-                      "log":  "logs/retry-pack-characters.stdout.log"
-                  },
-                  {
-                      "id":  "monsters",
-                      "version":  "kael-visible-20261019-40df567",
-                      "preset":  "Runtime Pack Monsters",
-                      "artifact":  "monsters.pck",
-                      "bytes":  14697256,
-                      "sha256":  "684f246d69cbb931eabe9642b0cb875a60067e6bf77ef019c0470c343a7b98f3",
-                      "status":  "candidate_external",
-                      "log":  "logs/retry-pack-monsters.stdout.log"
-                  },
-                  {
-                      "id":  "audio",
-                      "version":  "kael-visible-20261019-40df567",
-                      "preset":  "Runtime Pack Audio",
-                      "artifact":  "audio.pck",
-                      "bytes":  19291084,
-                      "sha256":  "2749f70584f12c5707fd61a107641630a0eb1bf8bd38558518dfee55fd86b783",
-                      "status":  "candidate_external",
-                      "log":  "logs/pack-audio.stdout.log"
-                  },
-                  {
-                      "id":  "quality_materials",
-                      "version":  "kael-visible-20261019-40df567",
-                      "preset":  "Runtime Pack Quality Materials",
-                      "artifact":  "quality_materials.pck",
-                      "bytes":  7378652,
-                      "sha256":  "07f08d99d90362cb8c93dc8d64c34940868c25fc3b52bbe1565549652c85bfda",
-                      "status":  "candidate_external",
-                      "log":  "logs/pack-quality_materials.stdout.log"
-                  }
-              ],
-    "errors":  [
-
-               ],
-    "selected_web_export":  {
-                                "build_id":  "kael-visible-20261019-40df567",
-                                "artifact_directory":  "D:\\Projects\\AshenOath\\.release-gate\\kael-visible-20261019\\export",
-                                "generated_from_commit":  "40df5676dcdf4c04ecccf2215e47a0cdffc81916",
-                                "artifacts_total_bytes":  104585250,
-                                "root_pck_sha256":  "dcb8c2b25587b52b46737512b7211f9850662f1335d170d3ff64fd871e0e379a",
-                                "note":  "Packaging-budget correction reuses unchanged compiled packs; changed character/monster packs and root were rebuilt."
-                            }
+  "schema_version": 2,
+  "generated_at_utc": "2026-10-19T12:05:15.1111206Z",
+  "build_id": "world-saga-20261019-final",
+  "generated_from_commit": "d0a735f9a38b640823ce2402282477d3c72a126e",
+  "source_dirty": true,
+  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\world-saga-20261019-final\\runtime-packs",
+  "artifacts_are_external": true,
+  "max_deployment_bytes": 104857600,
+  "total_bytes": 100617484,
+  "packs": [
+    {
+      "id": "base",
+      "version": "world-saga-20261019-final",
+      "preset": "Runtime Pack Base",
+      "artifact": "base.pck",
+      "bytes": 6392896,
+      "sha256": "2401576d235e25f492af53a5c15fa482454624bba7a4be28df8ff2f769196d1c",
+      "status": "candidate_external",
+      "log": "logs/pack-base.stdout.log"
+    },
+    {
+      "id": "opening",
+      "version": "world-saga-20261019-final",
+      "preset": "Runtime Pack Opening",
+      "artifact": "opening.pck",
+      "bytes": 35474164,
+      "sha256": "92d964de2e18d5a1fc50317b01093092ea10e433ab22eeea9e0c90271788fd54",
+      "status": "candidate_external",
+      "log": "logs/pack-opening.stdout.log"
+    },
+    {
+      "id": "adjacent",
+      "version": "world-saga-20261019-final",
+      "preset": "Runtime Pack Adjacent",
+      "artifact": "adjacent.pck",
+      "bytes": 1403800,
+      "sha256": "c2ae2e1d453e1ab64983728d7401847c3dac86af6d5f2ac7e0c76e47e5ea7e59",
+      "status": "candidate_external",
+      "log": "logs/pack-adjacent.stdout.log"
+    },
+    {
+      "id": "campaign",
+      "version": "world-saga-20261019-final",
+      "preset": "Runtime Pack Campaign",
+      "artifact": "campaign.pck",
+      "bytes": 6321984,
+      "sha256": "5b1351f0c0b253e4d49a35118fa3cd7f03d46e7ca6a7f32ae0e5f2b7e8844c85",
+      "status": "candidate_external",
+      "log": "logs/pack-campaign.stdout.log"
+    },
+    {
+      "id": "characters",
+      "version": "world-saga-20261019-final",
+      "preset": "Runtime Pack Characters",
+      "artifact": "characters.pck",
+      "bytes": 9657120,
+      "sha256": "d91e949a1da24d91ee625433371178f48dc420cb66aac5d1e09afbf70aaefad7",
+      "status": "candidate_external",
+      "log": "logs/pack-characters.stdout.log"
+    },
+    {
+      "id": "monsters",
+      "version": "world-saga-20261019-final",
+      "preset": "Runtime Pack Monsters",
+      "artifact": "monsters.pck",
+      "bytes": 14697432,
+      "sha256": "dcc096f1bd4476954b25adeae8c51414ee05d6206dbab48f824bd8ca5d6b6159",
+      "status": "candidate_external",
+      "log": "logs/pack-monsters.stdout.log"
+    },
+    {
+      "id": "audio",
+      "version": "world-saga-20261019-final",
+      "preset": "Runtime Pack Audio",
+      "artifact": "audio.pck",
+      "bytes": 19291260,
+      "sha256": "3ade091beb5c917fb8a067793b059cb84a1d4057113b86f90c8439a2fa08a07d",
+      "status": "candidate_external",
+      "log": "logs/pack-audio.stdout.log"
+    },
+    {
+      "id": "quality_materials",
+      "version": "world-saga-20261019-final",
+      "preset": "Runtime Pack Quality Materials",
+      "artifact": "quality_materials.pck",
+      "bytes": 7378828,
+      "sha256": "f2222d9048b239f892e1d5f002a826d0890867785b6f8512e3981338dcd28619",
+      "status": "candidate_external",
+      "log": "logs/pack-quality_materials.stdout.log"
+    }
+  ],
+  "errors": [],
+  "selected_web_export": {
+    "build_id": "world-saga-20261019-final",
+    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\world-saga-20261019-final\\export",
+    "generated_from_commit": "d0a735f9a38b640823ce2402282477d3c72a126e",
+    "artifacts_total_bytes": 104665612,
+    "root_pck_sha256": "2ee5e7e496f0d8601b26a00d3f46684bad0b7a8273c970e34e7a4bd92895a195",
+    "note": "Build-only final candidate; no gameplay/browser validation or publication."
+  }
 }

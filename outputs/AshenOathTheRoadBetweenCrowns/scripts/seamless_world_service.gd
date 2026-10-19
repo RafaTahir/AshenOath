@@ -90,6 +90,8 @@ func update_player(actor: Node3D, zone_id: String, delta: float) -> bool:
 
 func on_zone_activated(zone_id: String, local_position: Vector3 = Vector3.ZERO) -> void:
 	var normalized := WorldSectorManifest.canonical(zone_id)
+	if current_sector != "" and current_sector != normalized and host != null and bool(host.get("game_started")) and host.get("progression") != null:
+		host.progression.record_saga_departure(current_sector, host.quests)
 	previous_sector = current_sector if current_sector != normalized else previous_sector
 	current_sector = normalized
 	last_world_position = WorldSectorManifest.local_to_world(normalized, local_position)

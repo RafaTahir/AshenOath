@@ -1,5 +1,44 @@
 # Ashen Oath Project State
 
+## Six-World Runtime Implementation - 2026-10-19
+
+WORLD-SAGA-000/101-106 now have build-only runtime implementation: 30 additive
+regional quests alongside the original 21, 18 secrets, level 30, eight additional
+practices, saved one-time rewards and physical aftermath. The Bog Wretch has one
+Wychwood owner; Senn's Ranger gains a nonlethal duel without forcing old completed
+confrontations to replay. The Glade/Ruins optional branch preserves the legacy IDs
+without duplicate late Edric/Hart shortcuts. Existing main endings/homecoming remain.
+
+The final production package compiled locally under
+`.release-gate/world-saga-20261019-final/export/`: 104,673,660 bytes including
+all export files, strictly below 104,857,600 bytes. Transport root PCK SHA-256:
+`2ee5e7e496f0d8601b26a00d3f46684bad0b7a8273c970e34e7a4bd92895a195`.
+Publication is now authorized; `web/` is synchronized from this final candidate
+for the existing Git/Vercel workflow. The WORLD-SAGA-000 publication receipt
+under `.release-gate/living-road/` records the package commit/deployment outcome.
+Runtime acceptance remains user-owned and unverified. No gameplay/browser tests,
+benchmarks or screenshot review are performed for this pass. The oil-duration
+effect remains blocked by the user's explicit decision, with only the fitting's
+ownership recorded. Current coverage/build status and user checklist:
+[implementation record](../../plans/six-worlds/IMPLEMENTATION.md).
+
+## Six-World Story And Ticket Package - 2026-10-19
+
+Documentation only: `plans/six-worlds/` at the repository root now contains
+WORLD-SAGA-000, six world tickets, 30 additional quest subtickets and a sourced
+research appendix. These 37 authored tickets specify 18 secrets, six regional
+capstones/rewards, level-30 progression and eight new skill choices. They are
+planned work, not implemented or user-accepted gameplay. The runtime still has
+21 quests and level cap 20; the proposed additive total is 51 quests.
+
+The user explicitly deferred Ash-Tempered Blade Fitting's oil-duration perk:
+current oils have no expiry. Its future mechanical implementation remains
+blocked pending a separate oil-system decision; no timer or substitute effect
+was added. Existing quests, choices, character identities, assets and Web bytes
+remain unchanged. No game/browser tests, build, commit, push or deployment were
+performed for this documentation setup. See
+[the ticket index](../../plans/six-worlds/README.md) and its shared delivery rules.
+
 ## Missing Kael / Atlas Delivery Repair - 2026-10-19
 
 BOOT-009 fixes a confirmed delivery gap: the shipped prepared Kael, Anwen and

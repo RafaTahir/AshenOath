@@ -38,12 +38,16 @@ var quick_slots: Dictionary = DEFAULT_QUICK_SLOTS.duplicate()
 var sort_mode := "type"
 var kit_category := "supplies"
 var weapon_upgrades: Array[String] = []
+var reward_deliveries: Dictionary = {}
 const MAX_BLADE_UPGRADE_BONUS := 3.0
 
 func load_items(path: String) -> void:
 	var parsed = _read_json(path)
 	if typeof(parsed) == TYPE_DICTIONARY:
 		item_defs = parsed
+		for id: String in preload("res://scripts/saga_catalog.gd").REWARDS:
+			var reward: Dictionary = preload("res://scripts/saga_catalog.gd").REWARDS[id]
+			item_defs[id] = {"name":reward.name, "description":reward.description, "type":"keepsake", "effect":reward.effects}
 
 func add_item(id: String, amount: int = 1) -> void:
 	var target := int(items.get(id, 0)) + amount
@@ -70,7 +74,32 @@ func can_craft(id: String) -> bool:
 	return bool(recipe_status(id).get("craftable", false))
 
 func can_consume(id: String) -> bool:
-	return item_defs.has(id) and int(items.get(id, 0)) > 0
+	return item_defs.has(id) and get_item_type(id) != "keepsake" and int(items.get(id, 0)) > 0
+
+func deliver_once(claim_id: String, reward: Dictionary) -> Dictionary:
+	# A claimed delivery retains overflow, so collecting later cannot repeat XP
+	# or the portion already received. These records belong to ordinary saves.
+	if not reward_deliveries.has(claim_id):
+		reward_deliveries[claim_id] = {"items": reward.get("items", {}).duplicate(true), "ingredients": reward.get("ingredients", {}).duplicate(true)}
+	var delivery: Dictionary = reward_deliveries[claim_id]
+	for id: String in delivery.get("items", {}).keys():
+		var remaining := int(delivery.items[id])
+		var count := remaining
+		if get_item_type(id) == "ammo":
+			count = mini(count, maxi(0, get_ammo_cap(id) - get_ammo_count(id)))
+		items[id] = int(items.get(id, 0)) + count
+		delivery.items[id] = remaining - count
+	for id: String in delivery.get("ingredients", {}):
+		ingredients[id] = int(ingredients.get(id, 0)) + int(delivery.ingredients[id])
+		delivery.ingredients[id] = 0
+	changed.emit()
+	return delivery.duplicate(true)
+
+func has_pending_delivery(claim_id: String) -> bool:
+	for amount: Variant in reward_deliveries.get(claim_id, {}).get("items", {}).values():
+		if int(amount) > 0:
+			return true
+	return false
 
 func get_ammo_count(id: String) -> int:
 	return int(items.get(id, 0)) if get_item_type(id) == "ammo" else 0
@@ -243,7 +272,8 @@ func save_state() -> Dictionary:
 		"quick_slots": quick_slots.duplicate(),
 		"sort_mode": sort_mode,
 		"kit_category": kit_category,
-		"weapon_upgrades": weapon_upgrades.duplicate()
+		"weapon_upgrades": weapon_upgrades.duplicate(),
+		"reward_deliveries": reward_deliveries.duplicate(true)
 	}
 
 func load_state(state: Dictionary) -> void:
@@ -277,6 +307,20 @@ func load_state(state: Dictionary) -> void:
 	var saved_category: String = str(state.get("kit_category", "supplies"))
 	kit_category = saved_category if saved_category in KIT_CATEGORIES else "supplies"
 	weapon_upgrades.clear()
+	reward_deliveries.clear()
+	var saved_deliveries: Variant = state.get("reward_deliveries", {})
+	if saved_deliveries is Dictionary:
+		for claim: Variant in saved_deliveries:
+			if not claim is String or not claim.begins_with("saga:") or not saved_deliveries[claim] is Dictionary:
+				continue
+			var delivery := {"items": {}, "ingredients": {}}
+			for category: String in delivery:
+				var quantities: Variant = saved_deliveries[claim].get(category, {})
+				if quantities is Dictionary:
+					for id: Variant in quantities:
+						if id is String and (item_defs.has(id) if category == "items" else STARTING_INGREDIENTS.has(id)):
+							delivery[category][id] = _restore_quantity(quantities[id])
+			reward_deliveries[claim] = delivery
 	var saved_upgrades: Variant = state.get("weapon_upgrades", [])
 	if saved_upgrades is Array:
 		for id: Variant in saved_upgrades:
@@ -300,6 +344,7 @@ func _read_json(path: String):
 	var parsed = JSON.parse_string(file.get_as_text())
 	return parsed if parsed != null else {}
 func reset_starting_loadout() -> void:
+	reward_deliveries.clear()
 	items = STARTING_ITEMS.duplicate(true)
 	ingredients = STARTING_INGREDIENTS.duplicate(true)
 	active_oil = ""

@@ -61,7 +61,9 @@ func configure_menu(owner: Node) -> void:
 	var audio = services["audio"]
 	hud.process_mode = Node.PROCESS_MODE_ALWAYS
 	hud.set_runtime_services(owner, save_manager)
-	save_manager.set_summary_definitions(owner.call("_read_json", "res://data/quests.json"), owner.call("_read_json", "res://data/items.json"))
+	var summary_quests: Dictionary = owner.call("_read_json", "res://data/quests.json")
+	summary_quests.merge(preload("res://scripts/saga_catalog.gd").quest_definitions(), true)
+	save_manager.set_summary_definitions(summary_quests, owner.call("_read_json", "res://data/items.json"))
 	save_manager.load_prepared_requested.connect(Callable(owner, "_on_prepared_journey_load"))
 	save_manager.library_changed.connect(Callable(owner, "_queue_journey_models_refresh"))
 	input_router.install_default_actions()
