@@ -7,6 +7,7 @@ var _visibility_results: Dictionary = {}
 var target: Node3D
 var input_source: Node
 var yaw = 0.0
+var _manual_look_yaw := 0.0
 var pitch = -0.19
 var sensitivity = 0.003
 var distance = 6.8
@@ -149,7 +150,9 @@ func _apply_mouse_motion(relative: Vector2) -> void:
 		return
 	_begin_manual_orbit()
 	var steady := _bow_aim_sensitivity()
-	yaw = wrapf(yaw - relative.x * sensitivity * steady, -PI, PI)
+	var turn: float = -relative.x * sensitivity * steady
+	_manual_look_yaw += turn
+	yaw = wrapf(yaw + turn, -PI, PI)
 	var y_direction = 1.0 if invert_y else -1.0
 	pitch = _clamp_pitch(pitch + relative.y * sensitivity * steady * y_direction)
 
@@ -498,7 +501,9 @@ func _apply_keyboard_camera(delta: float) -> void:
 	var cycling_target := _locked_combat_target != null and absf(turn) >= 0.78 and not is_first_person()
 	if abs(turn) > 0.01 and not cycling_target:
 		_begin_manual_orbit()
-		yaw = wrapf(yaw - turn * keyboard_turn_speed * steady * delta, -PI, PI)
+		var look_turn: float = -turn * keyboard_turn_speed * steady * delta
+		_manual_look_yaw += look_turn
+		yaw = wrapf(yaw + look_turn, -PI, PI)
 	if abs(tilt) > 0.01:
 		_begin_manual_orbit()
 		var y_direction = -1.0 if invert_y else 1.0
@@ -531,6 +536,17 @@ func _exit_tree() -> void:
 
 func get_zoom_distance() -> float:
 	return distance
+
+func get_manual_look_yaw() -> float:
+	return _manual_look_yaw
+
+func follow_movement_heading(heading: float) -> void:
+	if absf(angle_difference(yaw, heading)) < 0.0001:
+		return
+	_manual_orbit = true
+	_clear_locked_combat_target()
+	yaw = wrapf(heading, -PI, PI)
+	_collision_refresh = 0.0
 
 func _capture_pointer() -> void:
 	if input_source != null and input_source.has_method("capture_pointer"):

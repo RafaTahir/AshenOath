@@ -1,5 +1,29 @@
 # Ashen Oath Project State
 
+## 360-Degree Movement and Character Colours - 2026-10-19
+
+BOOT-007 implements turn-to-travel movement and forward-only player locomotion,
+including the approved body/view turn in bow aim and first person. A held-input
+camera reference excludes automatic follow turns, with separate manual look input.
+Sharp reversals brake before turning; existing cast/attack facing stays committed.
+
+Character preparation now retains authored per-surface material references and
+expected texture descriptors. White hair/clothing remain valid, stale whole-body
+overrides no longer win over authored bindings, and Kael's hurt effect is private.
+Existing character families, textures, equipment, save data and quality remain.
+Lossless menu-PNG packaging preserves exact pixels and original colour metadata.
+
+Implementation and static review are separate from compilation and user acceptance.
+The one authorized local-browser session reached Greyfen through mouse New Game
+and exercised forward/reverse input. It exposed a villager binding-restoration
+failure; authored-atlas path recovery and precise failure reporting were added.
+No second runtime test is authorized or claimed. Appearance, aiming and
+first-person motion still require user checks. No benchmarks were run.
+See CHARACTER_MOTION_COLOUR_RESULT.md for build, coverage and delivery details.
+Final candidate `movement-colour-final-20261019-4863e01` compiled and packaged at
+104,719,502 complete Web bytes, below 100 MiB. The existing BOOT-007 publication
+receipt records the source/artifact checkpoint and deployment, not user acceptance.
+
 ## Ready Menu and Artwork Loading - 2026-10-19
 
 BOOT-006 implements a readiness-gated main menu: the startup artwork/progress

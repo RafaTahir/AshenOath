@@ -3,11 +3,13 @@ extends SceneTree
 ## Asset compilation only. No game world, animation playback, camera or QA run.
 const Helper = preload("res://scripts/asset_spawn_helper.gd")
 const NodeManifest = preload("res://scripts/character_node_manifest.gd")
+const MaterialBindings = preload("res://scripts/character_material_bindings.gd")
 const OUTPUT := "res://assets_external/characters_prepared/"
 var helper: Node
 var presets := ConfigFile.new()
 var entries: Dictionary = {}
 var templates: Dictionary = {}
+var template_materials: Dictionary = {}
 var failed := false
 
 func _initialize() -> void:
@@ -41,7 +43,7 @@ func _compile() -> void:
 		var assembly_key := source + "|" + owner + "|" + str(hair)
 		var variant_safe := normalized.contains("_atlas.gltf") or normalized.ends_with("male_ranger_runtime.gltf")
 		if templates.has(assembly_key):
-			entries[key] = {"path": templates[assembly_key], "source": source, "role": role, "owner": owner, "variant_safe": variant_safe}
+			entries[key] = {"path": templates[assembly_key], "source": source, "role": role, "owner": owner, "variant_safe": variant_safe, "material_bindings": template_materials[assembly_key]}
 			continue
 		var source_resource := load(source) as PackedScene
 		if source_resource == null:
@@ -53,6 +55,10 @@ func _compile() -> void:
 		var source_transform := visual.transform
 		var source_bounds: AABB = helper._calculate_node_bounds(visual)
 		helper._prepare_spawned_asset(visual, source, role, entry.category)
+		if not bool(visual.get_meta("character_material_bindings_valid", false)):
+			_failed("Required actor material/texture failed: %s: %s" % [key, str(visual.get_meta("character_material_errors", []))])
+			visual.free()
+			continue
 		_save_libraries()
 		visual.set_meta("prepared_actor_source", source)
 		visual.set_meta("prepared_actor_role", role)
@@ -71,7 +77,8 @@ func _compile() -> void:
 		if ResourceSaver.save(packed, path, ResourceSaver.FLAG_COMPRESS) != OK:
 			_failed("Cannot save actor: %s" % key)
 		templates[assembly_key] = path
-		entries[key] = {"path": path, "source": source, "role": role, "owner": owner, "variant_safe": variant_safe}
+		template_materials[assembly_key] = MaterialBindings.descriptors(visual)
+		entries[key] = {"path": path, "source": source, "role": role, "owner": owner, "variant_safe": variant_safe, "material_bindings": template_materials[assembly_key]}
 		visual.free()
 	var file := FileAccess.open("res://data/prepared_actors.json", FileAccess.WRITE)
 	if file == null:

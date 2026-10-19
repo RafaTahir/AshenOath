@@ -2,6 +2,7 @@ extends RefCounted
 
 const CharacterFaceDriver = preload("res://scripts/character_face_driver.gd")
 const StoryCastProfile = preload("res://scripts/story_cast_profile.gd")
+const CharacterMaterialBindings = preload("res://scripts/character_material_bindings.gd")
 
 const KAEL := {
 	"skin": Color("a9785f"), "hair": Color("77756f"), "eyes": Color("171412"),
@@ -39,13 +40,16 @@ static func apply(root: Node, role_id: String, variant_seed: String = "") -> Dic
 	var surfaces := 0
 	var face_surfaces := 0
 	var prebaked_identity := _contains_prebaked_identity(root)
+	if prebaked_identity and not CharacterMaterialBindings.has_textured_identity(root):
+		CharacterMaterialBindings.restore(root as Node3D)
+		if not CharacterMaterialBindings.has_textured_identity(root):
+			push_error("Required character atlas is not bound: %s" % role)
+			return {"role": role, "surfaces": 0, "valid": false}
 	for mesh in root.find_children("*", "MeshInstance3D", true, false):
 		if mesh.mesh == null or (mesh.skin == null and mesh.skeleton == NodePath("")) or str(mesh.name).to_lower().contains("shadow"):
 			continue
 		for index in range(mesh.mesh.get_surface_count()):
-			var source = mesh.get_surface_override_material(index)
-			if source == null:
-				source = mesh.mesh.surface_get_material(index)
+			var source = mesh.get_active_material(index)
 			var surface_name := str(mesh.mesh.surface_get_name(index)).to_lower() if mesh.mesh is ArrayMesh else ""
 			var material_name := str(source.resource_name).to_lower() if source != null else ""
 			var token := "%s %s %s" % [str(mesh.name).to_lower(), surface_name, material_name]

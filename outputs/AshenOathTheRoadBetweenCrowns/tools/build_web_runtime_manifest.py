@@ -6,10 +6,13 @@ from __future__ import annotations
 import argparse
 import gzip
 import hashlib
+import io
 import json
 import re
 import subprocess
+import struct
 import sys
+import zlib
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -17,6 +20,54 @@ from urllib.parse import urlsplit
 
 RELEASE_MANIFEST = "release_manifest.json"
 MAX_TOTAL_BYTES = 104_857_600
+
+
+def optimize_menu_png(export_dir: Path) -> None:
+    """Recompress image data without changing pixels, colour metadata or format."""
+    from PIL import Image
+
+    path = export_dir / "menu-background.png"
+    if not path.is_file():
+        return
+    original = path.read_bytes()
+
+    def chunks(payload):
+        position = 8
+        while position < len(payload):
+            length = struct.unpack_from(">I", payload, position)[0]
+            kind = payload[position + 4:position + 8]
+            data = payload[position + 8:position + 8 + length]
+            yield kind, data
+            position += length + 12
+
+    with Image.open(io.BytesIO(original)) as source:
+        if source.format != "PNG" or getattr(source, "is_animated", False):
+            return
+        source.load()
+        buffer = io.BytesIO()
+        source.save(buffer, format="PNG", optimize=True, compress_level=9)
+        old_chunks = list(chunks(original))
+        new_chunks = list(chunks(buffer.getvalue()))
+        if old_chunks[0] != new_chunks[0]:
+            return
+        idat = b"".join(data for kind, data in new_chunks if kind == b"IDAT")
+        packed = bytearray(original[:8])
+        replaced = False
+        for kind, data in old_chunks:
+            if kind == b"IDAT":
+                if replaced:
+                    continue
+                data = idat
+                replaced = True
+            packed.extend(struct.pack(">I", len(data)) + kind + data)
+            packed.extend(struct.pack(">I", zlib.crc32(kind + data) & 0xffffffff))
+        if len(packed) >= len(original):
+            return
+        with Image.open(io.BytesIO(packed)) as decoded:
+            if decoded.mode != source.mode or decoded.size != source.size or decoded.tobytes() != source.tobytes():
+                raise ValueError("Lossless menu PNG packaging changed image pixels")
+        path.write_bytes(packed)
+        print(f"Lossless menu PNG: {len(original)} -> {len(packed)} bytes")
 
 
 def prepare_engine_transport(export_dir: Path) -> dict:
@@ -360,6 +411,7 @@ def main() -> int:
     if not source_commit:
         source_commit = git_value(Path(__file__).resolve().parents[3], "rev-parse", "HEAD")
     try:
+        optimize_menu_png(export_dir)
         if args.compress_wasm:
             compress_wasm(export_dir / "index.wasm")
         compress_engine_script(export_dir / "index.js")

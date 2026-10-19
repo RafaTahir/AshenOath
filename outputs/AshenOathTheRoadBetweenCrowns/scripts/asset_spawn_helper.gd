@@ -8,6 +8,7 @@ const CharacterAnimationFusion = preload("res://scripts/character_animation_fusi
 const SharedResourceRequests = preload("res://scripts/shared_resource_requests.gd")
 const PreparedActorCatalog = preload("res://scripts/prepared_actor_catalog.gd")
 const CharacterNodeManifest = preload("res://scripts/character_node_manifest.gd")
+const CharacterMaterialBindings = preload("res://scripts/character_material_bindings.gd")
 var resource_requests = SharedResourceRequests.acquire()
 var building_prepared_assets := false
 var tree_source_cache: Dictionary = {}
@@ -200,6 +201,10 @@ func _spawn_from_entry(entry: Dictionary, role_name: String, fallback_category: 
 			spawned.name = role_name
 			_apply_runtime_policy_metadata(spawned, role_name, runtime_policy, path)
 			_prepare_spawned_asset(spawned,path,role_name,fallback_category)
+			if spawned.get_meta("character_material_bindings_valid", true) == false:
+				push_error("Required actor material bindings failed: %s (%s)" % [role_name, selected_path])
+				spawned.free()
+				return null
 			if OS.get_environment("ASHEN_PROFILE_GREYFEN_ACTORS") == "1" and fallback_category == "characters":
 				print("CHARACTER_ASSET_PROFILE role=%s load_ms=%.2f instantiate_ms=%.2f compose_ms=%.2f prepare_ms=%.2f" % [
 					role_name,
@@ -920,6 +925,12 @@ func _finalize_asset_root(root: Node3D, role_name: String = "") -> void:
 	])
 
 func _prepare_spawned_asset(root: Node3D, path: String, role_name: String = "", category: String = "") -> void:
+	var character := category in ["characters", "enemies"] and _has_skeleton(root)
+	if character:
+		var valid := CharacterMaterialBindings.restore(root) if root.has_meta(CharacterMaterialBindings.BINDINGS) else CharacterMaterialBindings.capture(root, path)
+		if not valid:
+			push_error("Required character material: %s (%s): %s" % [role_name, path, str(root.get_meta("character_material_errors", []))])
+			return
 	var prepared := str(root.get_meta("prepared_actor_source", "")) == path
 	if prepared:
 		# Assemblies share immutable geometry, never role proportions or transforms.
@@ -931,8 +942,12 @@ func _prepare_spawned_asset(root: Node3D, path: String, role_name: String = "", 
 	else:
 		if path.get_extension().to_lower() != "obj":
 			_normalize_scene_bounds(root, _target_height_for_role(role_name, path))
-		_apply_safe_materials(root, path)
+		if not character:
+			_apply_safe_materials(root, path)
 		_apply_universal_character_material_budget(root, path)
+		if character and not CharacterMaterialBindings.capture(root, path):
+			push_error("Required prepared actor material is incomplete: %s (%s)" % [role_name, path])
+			return
 	_finalize_asset_root(root, role_name)
 	if not prepared and CharacterAnimationFusion.is_shared_body(path):
 		# Retain both the imported source and immutable retargeted variants with

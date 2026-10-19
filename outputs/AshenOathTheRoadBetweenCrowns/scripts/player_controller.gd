@@ -21,8 +21,8 @@ const AssetSpawnHelper = preload("res://scripts/asset_spawn_helper.gd")
 const CharacterPresentation = preload("res://scripts/character_presentation.gd")
 const CharacterRoleSpec = preload("res://scripts/character_role_spec.gd")
 const CharacterAnimationDriver = preload("res://scripts/character_animation_driver.gd")
+const CharacterMaterialBindings = preload("res://scripts/character_material_bindings.gd")
 const EquipmentLoadout = preload("res://scripts/equipment_loadout.gd")
-const BACKPEDAL_MAX_SPEED := 1.45
 
 var walk_speed = 3.4
 var run_speed = 5.3
@@ -75,6 +75,13 @@ var animation_driver
 var move_phase = 0.0
 var footstep_distance = 0.0
 var locomotion_velocity := Vector3.ZERO
+var _movement_frame_active := false
+var _movement_frame_camera: Node
+var _movement_reference_yaw := 0.0
+var _movement_manual_yaw := 0.0
+var _mapped_body: Node3D
+var _hurt_overlay: StandardMaterial3D
+var _hurt_overlay_bindings: Array[Dictionary] = []
 var animation_step_signal_bound := false
 var attack_anim_time = 0.0
 var attack_anim_heavy = false
@@ -204,6 +211,7 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	if input_source != null and input_source.has_method("is_gameplay_context") and not input_source.is_gameplay_context():
+		_movement_frame_active = false
 		if equipment_loadout.is_transitioning() or weapon_cycle_armed or equipment_pending_attack != "":
 			_cancel_equipment_action()
 		velocity.x = 0.0
@@ -224,12 +232,14 @@ func _physics_process(delta: float) -> void:
 	_update_beam_sequence(delta)
 	equipment_loadout.advance_transition(delta)
 	if transition_locked:
+		_movement_frame_active = false
 		velocity = Vector3.ZERO
 		locomotion_velocity = Vector3.ZERO
 		_animate_visuals(delta)
 		_update_blade_contact()
 		return
 	if not can_control:
+		_movement_frame_active = false
 		velocity.x = move_toward(velocity.x, 0.0, 20.0 * delta)
 		velocity.z = move_toward(velocity.z, 0.0, 20.0 * delta)
 		_apply_gravity(delta)
@@ -256,6 +266,7 @@ func set_transition_locked(locked: bool) -> void:
 		can_control = true
 
 func cancel_buffered_input(reason: String = "context") -> void:
+	_movement_frame_active = false
 	end_companion_gesture(true)
 	_cancel_equipment_action()
 	buffered_attack = ""
@@ -520,12 +531,7 @@ func _action_just_released(action: StringName) -> bool:
 
 func _handle_movement(delta: float) -> void:
 	var input_vec: Vector2 = _movement_input()
-	var forward: Vector3 = Vector3.FORWARD
-	var right: Vector3 = Vector3.RIGHT
-	if camera_controller != null:
-		forward = camera_controller.get_flat_forward()
-		right = camera_controller.get_flat_right()
-	var move_dir: Vector3 = (right * input_vec.x + forward * -input_vec.y).normalized()
+	var move_dir := _movement_direction(input_vec)
 	if dodge_time > 0.0:
 		dodge_time -= delta
 		var dodge_ratio: float = clampf(dodge_time / 0.30, 0.0, 1.0)
@@ -536,48 +542,37 @@ func _handle_movement(delta: float) -> void:
 	else:
 		var wants_run: bool = _action_pressed("run") and input_vec.length() > 0.1
 		var is_running: bool = wants_run and stamina_component.spend(10.0 * delta)
-		var aim_facing: bool = (bow_aiming or _uses_first_person_camera()) and camera_controller != null
-		var backward_input: bool = input_vec.y > 0.15
-		# Walking away remains a deliberate, short backward stride. Sprinting
-		# away in the free camera turns into a forward run; a held aim or cast
-		# retains its facing and can never accelerate the reverse gait.
-		var intentional_backpedal: bool = backward_input and (not is_running or aim_facing or beam_cast_state != "")
+		var action_locked: bool = beam_cast_state != "" or attack_anim_time > 0.0
 		var speed: float = run_speed if is_running else walk_speed
 		if bow_aiming:
 			speed *= 0.42
 		if beam_cast_state != "":
 			speed *= 0.4
-		if intentional_backpedal:
-			speed = minf(speed, BACKPEDAL_MAX_SPEED)
-		if aim_facing and beam_cast_state == "":
+		var body_forward := -global_basis.z.normalized()
+		if action_locked:
+			# A committed blade/cast keeps its direction; do not play a reverse
+			# stride or change the attack endpoint to satisfy conflicting movement.
+			move_dir = body_forward * maxf(0.0, body_forward.dot(move_dir))
+		var planar_velocity := Vector3(velocity.x, 0.0, velocity.z)
+		var braking_turn: bool = not action_locked and move_dir.length_squared() > 0.01 and planar_velocity.length_squared() > 0.0225 and planar_velocity.normalized().dot(move_dir) < -0.35
+		if not braking_turn and move_dir.length_squared() > 0.01 and not action_locked:
+			var target_yaw := atan2(-move_dir.x, -move_dir.z)
+			_set_movement_facing(lerp_angle(rotation.y, target_yaw, 1.0 - exp(-turn_speed * delta)))
+		elif (bow_aiming or _uses_first_person_camera()) and camera_controller != null and not action_locked:
 			var aim_forward: Vector3 = camera_controller.get_flat_forward()
 			if aim_forward.length_squared() > 0.5:
 				var aim_yaw: float = atan2(-aim_forward.x, -aim_forward.z)
 				rotation.y = lerp_angle(rotation.y, aim_yaw, 1.0 - exp(-turn_speed * delta))
-		elif move_dir.length_squared() > 0.01 and beam_cast_state == "":
-			# Facing follows intent; the feet below follow achieved movement. Using
-			# old forward inertia here would spin Kael around on the first W-to-S
-			# frame. Keeping the old yaw instead made orbiting backpedals sideways.
-			var facing_direction: Vector3 = -move_dir if intentional_backpedal else move_dir
-			var target_yaw: float = atan2(-facing_direction.x, -facing_direction.z)
-			rotation.y = lerp_angle(rotation.y, target_yaw, 1.0 - exp(-turn_speed * delta))
+		if not action_locked and is_on_floor():
+			var alignment := maxf(0.0, (-global_basis.z.normalized()).dot(move_dir))
+			speed *= smoothstep(0.0, 0.90, alignment)
 		var target_velocity: Vector3 = move_dir * speed
 		var response: float = run_acceleration if is_running else acceleration
-		if move_dir.length_squared() <= 0.01:
+		if braking_turn:
+			target_velocity = Vector3.ZERO
 			response = deceleration
-		elif not aim_facing and not intentional_backpedal and beam_cast_state == "" and is_on_floor():
-			# Brake the old stride through a sharp free turn, then build the new
-			# stride as the body catches up. The desired speed and input direction
-			# remain unchanged, including all stamina and combat speed modifiers.
-			var body_forward: Vector3 = -global_basis.z
-			body_forward.y = 0.0
-			var alignment: float = clampf(body_forward.normalized().dot(move_dir), 0.0, 1.0)
-			var planar_velocity: Vector3 = Vector3(velocity.x, 0.0, velocity.z)
-			if planar_velocity.length_squared() > 0.04 and planar_velocity.normalized().dot(move_dir) < 0.35:
-				planar_velocity = planar_velocity.move_toward(Vector3.ZERO, deceleration * delta)
-				velocity.x = planar_velocity.x
-				velocity.z = planar_velocity.z
-			response *= lerpf(0.18, 1.0, smoothstep(0.0, 0.90, alignment))
+		elif move_dir.length_squared() <= 0.01:
+			response = deceleration
 		velocity.x = move_toward(velocity.x, target_velocity.x, response * delta)
 		velocity.z = move_toward(velocity.z, target_velocity.z, response * delta)
 		if _action_just_pressed("jump"):
@@ -596,6 +591,38 @@ func _handle_movement(delta: float) -> void:
 	_update_ground_adaptation(delta)
 	_animate_visuals(delta)
 
+func _movement_direction(input_vec: Vector2) -> Vector3:
+	if input_vec.length_squared() < 0.0001:
+		_movement_frame_active = false
+		return Vector3.ZERO
+	if camera_controller == null:
+		return Vector3(input_vec.x, 0.0, input_vec.y).normalized()
+	if not bow_aiming and not _uses_first_person_camera() and not _movement_frame_active:
+		return (camera_controller.get_flat_right() * input_vec.x - camera_controller.get_flat_forward() * input_vec.y).normalized()
+	var manual_yaw: float = camera_controller.get_manual_look_yaw()
+	if not _movement_frame_active or _movement_frame_camera != camera_controller:
+		_movement_reference_yaw = float(camera_controller.yaw)
+		_movement_manual_yaw = manual_yaw
+		_movement_frame_camera = camera_controller
+		_movement_frame_active = true
+		if beam_cast_state == "" and attack_anim_time <= 0.0:
+			rotation.y = _movement_reference_yaw
+	else:
+		# Only deliberate look input changes the held-input reference. Camera
+		# follow rotations must never feed back and repeatedly reverse it.
+		var manual_delta := manual_yaw - _movement_manual_yaw
+		_movement_reference_yaw = wrapf(_movement_reference_yaw + manual_delta, -PI, PI)
+		if (bow_aiming or _uses_first_person_camera()) and beam_cast_state == "" and attack_anim_time <= 0.0:
+			rotation.y = wrapf(rotation.y + manual_delta, -PI, PI)
+		_movement_manual_yaw = manual_yaw
+	var frame := Basis(Vector3.UP, _movement_reference_yaw)
+	return (frame.x * input_vec.x + frame.z * input_vec.y).normalized()
+
+func _set_movement_facing(heading: float) -> void:
+	rotation.y = wrapf(heading, -PI, PI)
+	if camera_controller != null and (bow_aiming or _uses_first_person_camera()):
+		camera_controller.follow_movement_heading(rotation.y)
+
 func _capture_locomotion_motion() -> void:
 	# Collision sliding, acceleration, dodges and the final coasting step all
 	# have one movement sample. Desired input is never used as a gait direction.
@@ -613,31 +640,18 @@ func _update_locomotion_state() -> void:
 	if horizontal_speed < 0.15:
 		movement_state = "idle"
 		return
-	var local_velocity: Vector3 = global_basis.orthonormalized().inverse() * locomotion_velocity
-	var backwards: bool = local_velocity.z > horizontal_speed * 0.30
 	if horizontal_speed > walk_speed * 1.04:
-		movement_state = "run_back" if backwards else "run"
-	elif absf(local_velocity.x) > absf(local_velocity.z) * 1.15:
-		movement_state = "strafe"
+		movement_state = "run"
 	else:
-		movement_state = "backward" if backwards else "walk"
+		movement_state = "walk"
 
 func _face_attack_direction() -> void:
-	if _uses_first_person_camera():
+	var input_vec := _movement_input()
+	if _uses_first_person_camera() and input_vec.length_squared() < 0.0001:
 		var view_forward: Vector3 = camera_controller.get_flat_forward()
 		rotation.y = atan2(-view_forward.x, -view_forward.z)
 		return
-	var input_vec := _movement_input()
-	# Backward input preserves established facing at the attack edge. The
-	# movement controller owns any free-camera sprint turn on this frame.
-	if input_vec.y > 0.15:
-		return
-	var forward := Vector3.FORWARD
-	var right := Vector3.RIGHT
-	if camera_controller != null:
-		forward = camera_controller.get_flat_forward()
-		right = camera_controller.get_flat_right()
-	var move_dir := (right * input_vec.x + forward * -input_vec.y).normalized()
+	var move_dir := _movement_direction(input_vec)
 	if move_dir.length_squared() <= 0.01:
 		if camera_controller != null and camera_controller.has_method("assist_attack_direction"):
 			var assisted: Vector3 = camera_controller.assist_attack_direction(global_position, -global_basis.z, 4.0)
@@ -657,7 +671,7 @@ func _face_attack_direction() -> void:
 	# Combat input is evaluated before movement in the physics tick. Apply the
 	# same target yaw immediately at the attack edge so the blade starts from
 	# the direction the player is visibly moving toward.
-	rotation.y = atan2(-move_dir.x, -move_dir.z)
+	_set_movement_facing(atan2(-move_dir.x, -move_dir.z))
 
 func try_jump() -> bool:
 	if not can_control or not is_on_floor() or beam_charging or attack_anim_time > 0.0 or dodge_time > 0.0:
@@ -1334,6 +1348,7 @@ func end_companion_gesture(cancel_activity: bool = false) -> void:
 	companion_gesture_target = null
 	companion_gesture_kind = ""
 	if companion_hand_ik != null:
+		companion_hand_ik.influence = 0.0
 		companion_hand_ik.stop()
 	if animation_driver != null and animation_driver.current_state == "story_offer":
 		animation_driver.stop_action("idle", 0.12)
@@ -1376,8 +1391,10 @@ func _update_oathfire_arm_pose() -> void:
 		beam_arm_pose_applied = true
 	elif beam_arm_pose_applied:
 		if beam_left_arm_ik != null:
+			beam_left_arm_ik.influence = 0.0
 			beam_left_arm_ik.stop()
 		if beam_right_arm_ik != null:
+			beam_right_arm_ik.influence = 0.0
 			beam_right_arm_ik.stop()
 		beam_arm_pose_applied = false
 
@@ -1651,6 +1668,7 @@ func _try_build_mapped_body() -> bool:
 		return false
 	mapped.name = "player_kael_visual"
 	visual_root.add_child(mapped)
+	_mapped_body = mapped
 	var imported_sword := mapped.find_child("Warrior_Sword", true, false) as Node3D
 	if imported_sword != null:
 		imported_sword.visible = false
@@ -1665,10 +1683,12 @@ func _try_build_mapped_body() -> bool:
 		# leaving the imported hand axis untouched makes the sword read as a pole.
 		_update_sword_equipment_pose(0.0, 0.0, 0.0, false, false)
 	body_visual = _find_first_mesh(mapped)
-	_apply_visible_material_fallbacks(mapped, _mat(Color(0.18, 0.20, 0.18)))
+	CharacterMaterialBindings.restore(mapped)
+	_apply_visible_material_fallbacks(mapped, _mat(Color(0.18, 0.20, 0.18)), true)
 	if body_visual != null and body_visual.material_override is StandardMaterial3D:
 		body_base_color = (body_visual.material_override as StandardMaterial3D).albedo_color
 	animation_driver = CharacterAnimationDriver.new()
+	animation_driver.forward_only_locomotion = true
 	animation_driver.name = "CharacterAnimationDriver"
 	mapped.add_child(animation_driver)
 	var animated: bool = bool(animation_driver.configure(mapped, _animation_map_for_visual(mapped)))
@@ -1957,6 +1977,7 @@ func _update_sword_equipment_pose(windup: float, strike: float, recovery: float,
 			guard_arm_ik.start(true)
 			guard_arm_applied = true
 		elif guard_arm_applied:
+			guard_arm_ik.influence = 0.0
 			guard_arm_ik.stop()
 			guard_arm_applied = false
 	var forward := -global_transform.basis.z.normalized()
@@ -2061,6 +2082,7 @@ func _update_bow_equipment_reach(pose: Dictionary) -> void:
 		return
 	var reaching := weapon_mode == "bow" and not pose.is_empty()
 	if not reaching:
+		equipment_left_arm_ik.influence = 0.0
 		equipment_left_arm_ik.stop()
 		if bow_visual != null:
 			bow_visual.rotation_degrees = Vector3(0.0, 8.0, -12.0)
@@ -2311,7 +2333,7 @@ func _animate_visuals(delta: float) -> void:
 	var rigged_motion: bool = animation_driver != null and animation_driver.is_valid()
 	if rigged_motion:
 		if animation_driver.has_method("set_locomotion_motion"):
-			animation_driver.set_locomotion_motion(locomotion_velocity, is_on_floor(), run_speed)
+			animation_driver.set_locomotion_motion(locomotion_velocity, is_on_floor(), run_speed, movement_state == "run")
 		else:
 			animation_driver.set_locomotion(horizontal_speed / maxf(run_speed, 0.1), locomotion_velocity.normalized(), is_on_floor())
 		if moving and equipment_loadout.is_transitioning() and animation_driver.current_state in ["draw", "sheath"]:
@@ -2409,10 +2431,26 @@ func _animate_visuals(delta: float) -> void:
 	# rendered hands cannot diverge by one animation frame.
 	if beam_cast_state in [BEAM_STATE_CHARGING, BEAM_STATE_RELEASING]:
 		_update_beam_charge_visual()
-	if body_visual != null:
-		var mat = body_visual.material_override as StandardMaterial3D
-		if mat != null:
-			mat.albedo_color = body_base_color.lerp(Color(0.72, 0.22, 0.12), 0.72) if hurt_flash_time > 0.0 else body_base_color
+	_update_hurt_overlay()
+
+func _update_hurt_overlay() -> void:
+	if hurt_flash_time > 0.0 and _hurt_overlay_bindings.is_empty() and is_instance_valid(_mapped_body):
+		if _hurt_overlay == null:
+			_hurt_overlay = StandardMaterial3D.new()
+			_hurt_overlay.albedo_color = Color(0.72, 0.12, 0.06, 0.28)
+			_hurt_overlay.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+			_hurt_overlay.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		for mesh in _mapped_body.find_children("*", "MeshInstance3D", true, false):
+			if mesh.skin == null or mesh.mesh == null:
+				continue
+			_hurt_overlay_bindings.append({"mesh": weakref(mesh), "overlay": mesh.material_overlay})
+			mesh.material_overlay = _hurt_overlay
+	elif hurt_flash_time <= 0.0 and not _hurt_overlay_bindings.is_empty():
+		for binding in _hurt_overlay_bindings:
+			var mesh: MeshInstance3D = binding.mesh.get_ref()
+			if is_instance_valid(mesh) and mesh.material_overlay == _hurt_overlay:
+				mesh.material_overlay = binding.overlay
+		_hurt_overlay_bindings.clear()
 
 func _on_animation_locomotion_step(_side: StringName) -> void:
 	# Animation contact is authoritative for rigged bodies. Gate it against
@@ -2522,13 +2560,18 @@ func _beam_material(color: Color) -> StandardMaterial3D:
 	material.emission_energy_multiplier = 2.2
 	return material
 
-func _apply_visible_material_fallbacks(root: Node, fallback: Material) -> void:
+func _apply_visible_material_fallbacks(root: Node, fallback: Material, required: bool = false) -> void:
 	if root is MeshInstance3D:
 		var mesh_instance = root as MeshInstance3D
-		if _mesh_needs_visible_material(mesh_instance):
-			mesh_instance.material_override = fallback
+		if mesh_instance.mesh != null:
+			for surface in range(mesh_instance.mesh.get_surface_count()):
+				if mesh_instance.get_active_material(surface) == null:
+					if required:
+						push_error("Required Kael material is missing: %s[%d]" % [str(mesh_instance.name), surface])
+					else:
+						mesh_instance.set_surface_override_material(surface, fallback)
 	for child in root.get_children():
-		_apply_visible_material_fallbacks(child, fallback)
+		_apply_visible_material_fallbacks(child, fallback, required)
 
 func _mesh_needs_visible_material(mesh_instance: MeshInstance3D) -> bool:
 	if mesh_instance.material_override != null:
@@ -2537,12 +2580,10 @@ func _mesh_needs_visible_material(mesh_instance: MeshInstance3D) -> bool:
 		return true
 	var saw_material = false
 	for surface_index in range(mesh_instance.mesh.get_surface_count()):
-		var material = mesh_instance.mesh.surface_get_material(surface_index)
+		var material = mesh_instance.get_active_material(surface_index)
 		if material == null:
 			continue
 		saw_material = true
-		if _is_bad_white_material(material):
-			return true
 	return not saw_material
 
 func _is_bad_white_material(material: Material) -> bool:

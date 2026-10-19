@@ -85,6 +85,8 @@ var physical_motion_available := false
 var locomotion_height_scale := 1.0
 var grounded := true
 var locomotion_state := "idle"
+var forward_only_locomotion := false
+var _forward_run := false
 var presentation_state := ""
 var action_elapsed := 0.0
 var action_looping := false
@@ -299,12 +301,13 @@ func set_locomotion(speed_ratio: float, _direction: Vector3, grounded: bool) -> 
 	current_speed_mps = 0.0
 	_update_locomotion(speed_ratio, _direction, grounded)
 
-func set_locomotion_motion(world_velocity: Vector3, grounded: bool, reference_speed: float = 5.3) -> void:
+func set_locomotion_motion(world_velocity: Vector3, grounded: bool, reference_speed: float = 5.3, running: bool = false) -> void:
 	# The owner supplies achieved travel after collision/path movement. Animation
 	# never moves the actor and does not keep stepping into a blocked wall.
 	var horizontal_velocity := Vector3(world_velocity.x, 0.0, world_velocity.z)
 	physical_motion_available = true
 	current_speed_mps = horizontal_velocity.length()
+	_forward_run = running
 	_update_locomotion(current_speed_mps / maxf(reference_speed, 0.1), horizontal_velocity, grounded)
 
 func _update_locomotion(speed_ratio: float, world_direction: Vector3, on_ground: bool) -> void:
@@ -336,7 +339,9 @@ func _update_locomotion(speed_ratio: float, world_direction: Vector3, on_ground:
 	if not on_ground:
 		state = "jump"
 	elif is_moving:
-		if moving_laterally:
+		if forward_only_locomotion:
+			state = "run" if _forward_run and _clip_for("run") != StringName() else "walk"
+		elif moving_laterally:
 			var lateral_state: String = "strafe_left" if current_local_direction.x < 0.0 else "strafe_right"
 			state = lateral_state if _authored_directional_clip(lateral_state) != StringName() else "strafe"
 		elif moving_backwards:
