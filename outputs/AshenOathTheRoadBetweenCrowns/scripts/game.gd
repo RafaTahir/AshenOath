@@ -312,6 +312,12 @@ func _record_opening_stage(root: Node3D, stage: String) -> void:
 	var completed: Dictionary = root.get_meta("opening_completed_stages", {})
 	completed[stage] = true
 	root.set_meta("opening_completed_stages", completed)
+	if not game_started and hud != null:
+		var done := 0
+		for required in OPENING_DETAIL_STAGES:
+			if completed.has(required):
+				done += 1
+		_publish_web_opening_state("building", "Preparing Greyfen: %d / %d stages" % [done, OPENING_DETAIL_STAGES.size()], float(done) / float(OPENING_DETAIL_STAGES.size()))
 
 func _opening_presentation_present(root: Node3D) -> bool:
 	var completed: Dictionary = root.get_meta("opening_completed_stages", {})
@@ -385,7 +391,7 @@ func _ready() -> void:
 	add_child(production_observation_bridge)
 	production_observation_bridge.setup(self)
 	var services_ms := Time.get_ticks_msec() - phase_started
-	hud.show_main_menu()
+	hud.show_startup_loading()
 	audio.set_music_state("main_menu")
 	get_tree().paused = true
 	call_deferred("_prepare_opening_after_menu_render")
@@ -399,8 +405,8 @@ func _prepare_opening_after_menu_render() -> void:
 	if not is_inside_tree():
 		return
 	if OS.has_feature("web"):
-		JavaScriptBridge.eval("window.dispatchEvent(new CustomEvent('ashen-oath-menu-ready'));", false)
-	print("LOADING: main_menu_rendered")
+		JavaScriptBridge.eval("window.dispatchEvent(new CustomEvent('ashen-oath-ui-ready'));", false)
+	print("LOADING: startup_presentation_rendered")
 	if not game_started and not _journey_load_pending():
 		_on_launch_accepted()
 
@@ -2648,16 +2654,9 @@ func _on_launch_accepted() -> void:
 	audio.play_event("ui", 0.0)
 	var retry_failed := startup_prepare_failed
 	startup_prepare_failed = false
-	_publish_web_opening_state("preparing", "Preparing Greyfen...")
-	if hud != null and hud.has_method("set_new_game_status"):
-		hud.set_new_game_status("Greyfen is waking. New Game remains available while it prepares.")
-	# Prepare Greyfen behind the visible main menu on both platforms.
-	# Keep New Game actionable while the menu-covered prewarm runs. _new_game()
-	# records the request and starts it as soon as the prepared Greyfen cache is
-	# published; disabling the button here made the queue path unreachable to a
-	# real mouse or controller click.
+	_publish_web_opening_state("preparing", "Loading opening content...")
 	if hud != null and hud.has_method("set_new_game_ready") and not route_zone_cache.has("greyfen"):
-		hud.set_new_game_ready(true)
+		hud.set_new_game_ready(false)
 	if OS.has_feature("web") and runtime_packs != null and runtime_packs.has_method("request_startup_packs"):
 		if runtime_packs.startup_packs_ready():
 			print("LOADING: startup_pack_ready source=launch")
@@ -2666,6 +2665,8 @@ func _on_launch_accepted() -> void:
 		if startup_packs_waiting:
 			return
 		startup_packs_waiting = true
+		if not runtime_packs.pack_progress.is_connected(_on_opening_pack_progress):
+			runtime_packs.pack_progress.connect(_on_opening_pack_progress)
 		if runtime_packs.has_signal("pack_ready") and not runtime_packs.pack_ready.is_connected(_on_startup_pack_ready):
 			runtime_packs.pack_ready.connect(_on_startup_pack_ready)
 		runtime_packs.request_startup_packs(retry_failed)
@@ -2679,6 +2680,10 @@ func _on_launch_accepted() -> void:
 		return
 	if not greyfen_prewarm_started and not game_started:
 		_begin_opening_prewarm()
+
+func _on_opening_pack_progress(_pack_id: String, _progress: float) -> void:
+	if startup_packs_waiting and not startup_prepare_failed and not game_started:
+		_publish_web_opening_state("downloading", "Loading opening content...", runtime_packs.startup_pack_progress())
 
 func _on_startup_pack_ready(_pack_id: String) -> void:
 	if game_started or startup_prepare_failed or not startup_packs_waiting or runtime_packs == null:
@@ -2709,9 +2714,7 @@ func _wait_for_startup_packs_then_prewarm(generation: int) -> void:
 		var failures: Array[String] = runtime_packs.startup_pack_failures() if runtime_packs != null and runtime_packs.has_method("startup_pack_failures") else []
 		if not failures.is_empty():
 			startup_packs_waiting = false
-			if hud != null:
-				hud.toast("Opening content could not be prepared. Select New Game to retry.")
-			_opening_prepare_failed("Opening content could not be prepared. Select New Game to retry.")
+			_opening_prepare_failed("Opening content could not be prepared: %s. Select Retry to try again." % "; ".join(failures))
 			return
 		await get_tree().process_frame
 	startup_packs_waiting = false
@@ -2725,6 +2728,7 @@ func _begin_opening_prewarm() -> void:
 	# Prepare New Game while the menu is open even when Continue is available.
 	# Loading a save cancels this attempt through _discard_menu_opening().
 	greyfen_prewarm_started = true
+	_publish_web_opening_state("resources", "Preparing characters and materials...")
 	world_materials.begin_prewarm_attempt()
 	asset_helper.begin_resource_attempt()
 	# Both platforms now own the opening pack before requesting its resources.
@@ -2781,12 +2785,18 @@ func _prepare_opening_resources(generation: int) -> void:
 func _discard_menu_opening() -> void:
 	opening_prepare_generation += 1
 	_clear_route_zone_cache()
-	_abort_opening_prewarm(zone_root, greyfen_prewarm_spatial_service, "Preparing Greyfen...")
+	_abort_opening_prewarm(zone_root, greyfen_prewarm_spatial_service, "", false)
+	startup_packs_waiting = false
+	greyfen_prewarm_started = false
+	startup_prepare_failed = false
 
 func _restart_menu_opening() -> void:
 	if game_started:
 		return
 	_discard_menu_opening()
+	if hud != null:
+		hud.set_new_game_ready(false)
+		hud.show_startup_loading("Preparing the selected visual quality...")
 	var generation := opening_prepare_generation
 	await get_tree().process_frame
 	if _opening_attempt_current(generation):
@@ -2800,13 +2810,14 @@ func _opening_prepare_failed(message: String) -> void:
 	startup_packs_waiting = false
 	greyfen_prewarm_started = false
 	startup_prepare_failed = true
+	message = message.replace("Select New Game to retry.", "Select Retry to try again.")
 	if hud != null and hud.has_method("set_new_game_ready"):
-		hud.set_new_game_ready(true)
+		hud.set_new_game_ready(false)
 	if hud != null and hud.has_method("set_new_game_status"):
 		hud.set_new_game_status(message)
 	_publish_web_opening_state("failed", message)
 
-func _abort_opening_prewarm(prewarm_root: Node3D, prewarm_service: Node, message: String) -> void:
+func _abort_opening_prewarm(prewarm_root: Node3D, prewarm_service: Node, message: String, notify_failure: bool = true) -> void:
 	opening_boot_material_restore_generation += 1
 	opening_boot_material_restore_queue.clear()
 	opening_well_mesh = null
@@ -2825,17 +2836,21 @@ func _abort_opening_prewarm(prewarm_root: Node3D, prewarm_service: Node, message
 	if camera_rig != null and is_instance_valid(camera_rig):
 		camera_rig.queue_free()
 	camera_rig = null
-	_opening_prepare_failed(message)
+	if notify_failure:
+		_opening_prepare_failed(message)
 
-func _publish_web_opening_state(state: String, message: String = "") -> void:
+func _publish_web_opening_state(state: String, message: String = "", progress: float = -1.0) -> void:
+	if hud != null and state != "ready" and not game_started:
+		hud.show_startup_loading(message, progress, state == "failed")
 	if not OS.has_feature("web"):
 		return
 	var payload := JSON.stringify({
 		"state": state,
 		"message": message,
 		"timestamp_ms": Time.get_ticks_msec(),
+		"progress": progress,
 	})
-	JavaScriptBridge.eval("window.__ashenOathOpeningState = %s;" % payload, false)
+	JavaScriptBridge.eval("window.__ashenOathOpeningState = %s; window.dispatchEvent(new CustomEvent('ashen-oath-opening-progress', {detail:window.__ashenOathOpeningState}));" % payload, false)
 
 func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 	if generation < 0:
@@ -2852,6 +2867,7 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 	# Prepare required scenery under the cover on both platforms. Only small
 	# dressing and additional population stages remain after the handoff.
 	var prewarm_started := Time.get_ticks_msec()
+	_publish_web_opening_state("building", "Building Greyfen's roads and scenery...")
 	print("LOADING: Greyfen prewarm build_begin")
 	var phase_started := prewarm_started
 	var prewarm_service := ZoneSpatialService.new()
@@ -2974,8 +2990,7 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 	player.visible = true
 	get_viewport().disable_3d = false
 	if DisplayServer.get_name().to_lower() != "headless":
-		if hud != null:
-			hud.set_new_game_status("Preparing Greyfen's first view...")
+		_publish_web_opening_state("first_view", "Preparing Greyfen's first view...")
 		# Evaluate the complete, transition-locked rig before its first draw.
 		await get_tree().process_frame
 		if not _opening_attempt_current(generation):
@@ -3008,8 +3023,6 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 	spatial_service = null
 	if audio != null and audio.has_method("prewarm_opening_audio"):
 		audio.prewarm_opening_audio()
-	if hud != null and hud.has_method("set_new_game_ready"):
-		hud.set_new_game_ready(true)
 	if hud != null and hud.has_method("set_new_game_status"):
 		hud.set_new_game_status("Greyfen is ready.")
 	# Commit the completed cache after its final render, then satisfy queued starts.
@@ -3021,6 +3034,13 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 		return
 	greyfen_prewarm_started = false
 	_publish_web_opening_state("ready", "Greyfen is ready.")
+	_refresh_journey_models()
+	if input_router != null:
+		input_router.reset_transient_input("menu_ready")
+	if hud != null:
+		hud.set_new_game_ready(true)
+		hud.show_main_menu()
+	call_deferred("_publish_ready_menu", generation)
 	print("LOADING: opening_menu_render_ready")
 	print("LOADING: Greyfen prewarmed total=%dms build=%dms world=%dms player=%dms" % [
 		Time.get_ticks_msec() - prewarm_started, build_ms, world_finalize_ms, player_ms,
@@ -3028,6 +3048,13 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 	if new_game_start_pending:
 		get_tree().paused = false
 		_start_new_game_world()
+
+func _publish_ready_menu(generation: int) -> void:
+	await get_tree().process_frame
+	if DisplayServer.get_name().to_lower() != "headless":
+		await RenderingServer.frame_post_draw
+	if _opening_attempt_current(generation) and OS.has_feature("web"):
+		JavaScriptBridge.eval("window.dispatchEvent(new CustomEvent('ashen-oath-menu-ready'));", false)
 
 func _apply_web_opening_boot_material_budget(world_root: Node, player_root: Node, force_for_test := false) -> void:
 	opening_boot_material_restore_generation += 1

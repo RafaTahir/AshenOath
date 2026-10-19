@@ -59,6 +59,7 @@ def compile_layout():
              for n, s in sections.items()}
     for name in ROOT_NAMES:
         includes[name].update({"data/runtime_dialogue_index.json", "data/runtime_dialogue/*.json"})
+        includes[name].update({"assets/ui/fonts/*.ttf", "assets/ui/fonts/OFL.txt"})
     includes["Runtime Pack Opening"].add("assets_external/environment/prepared/greyfen_*.res")
     includes[adjacent].add("assets_external/environment/prepared/wychwood_*.res")
     includes["Runtime Pack Campaign"].add("assets_external/environment/prepared/*.res")

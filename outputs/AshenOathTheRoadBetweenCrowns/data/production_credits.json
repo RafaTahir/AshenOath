@@ -2,6 +2,11 @@
   "schema": 1,
   "sections": [
     {
+      "title": "Menu typography",
+      "body": "Spectral by Production Type. Copyright 2017 The Spectral Project Authors. Distributed under the SIL Open Font License 1.1; the license is included with the bundled font.",
+      "links": [{"label": "Spectral source and license", "url": "https://github.com/productiontype/Spectral"}]
+    },
+    {
       "title": "Generated dialogue performances",
       "body": "Upgraded character speech is generated with the full-precision Kokoro-82M v1.0 model. Story dialogue uses the completed Kokoro cast; village remarks remain caption-led. These are synthetic performances, not recordings by a human cast or cloned actor voices. No human listening or performance review has been performed.\n\nKokoro model weights by hexgrad are licensed under Apache 2.0. The kokoro-onnx inference runtime by thewh1teagle is MIT licensed. The previous Piper production used the VCTK corpus by CSTR, University of Edinburgh: Junichi Yamagishi, Christophe Veaux and Kirsten MacDonald, under CC BY 4.0. Their model card remains in the production documentation.\n\nSpeech generation and its dependencies are build-time tools; the game distributes compressed recordings and provenance, not the model or inference runtime.",
       "links": [

@@ -1,5 +1,22 @@
 # Ashen Oath Project State
 
+## Ready Menu and Artwork Loading - 2026-10-19
+
+BOOT-006 implements a readiness-gated main menu: the startup artwork/progress
+presentation remains until opening resources, complete Greyfen and its first
+gameplay-camera render are prepared. Preparation never starts a journey itself.
+Retry preserves saves/settings; Continue retains its existing destination loader.
+Menu actions now use bundled, licensed Spectral Medium with transparent hit areas
+and text/focus feedback instead of boxed buttons. Existing journal illustrations
+rotate during preparation without new artwork exports or extra downloads.
+
+This is build-only implementation, not runtime acceptance. Candidate
+`ready-menu-20261019-3472773` compiled and packaged at 104,850,917 complete Web bytes,
+below 100 MiB. Publication uses the existing BOOT-006 workflow; its receipt records
+the commit and Vercel result. See BOOT_006_RESULT.md for delivery state and user
+checks. Existing OPT-049-056 implementations remain retained. User acceptance
+and actual startup, desktop/phone interaction and visual results are unverified.
+
 ## XP and Regional Progression - 2026-10-18
 
 XP-001 through XP-005 are implemented cumulatively on D:, on

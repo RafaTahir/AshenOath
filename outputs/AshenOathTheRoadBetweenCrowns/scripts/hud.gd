@@ -55,6 +55,10 @@ const MobileTouchLayout = preload("res://scripts/mobile_touch_layout.gd")
 const HudVisualStyle = preload("res://scripts/hud_visual_style.gd")
 const HudEmblem = preload("res://scripts/hud_emblem.gd")
 const HudNavigationDial = preload("res://scripts/hud_navigation_dial.gd")
+const StartupLoadingView = preload("res://scripts/startup_loading_view.gd")
+const MENU_FONT = preload("res://assets/ui/fonts/Spectral-Medium.ttf")
+var _startup_view: StartupLoadingView
+var _menu_reveal_tween: Tween
 var navigation = NavigationState.new()
 var notices = NoticeQueue.new()
 var _rendered_screen := ""
@@ -153,7 +157,7 @@ var toasts_suppressed := false
 var reduced_motion := false
 var high_contrast := false
 var story_text_scale := 1.0
-var new_game_ready := true
+var new_game_ready := false
 var new_game_status := "Greyfen is ready."
 var new_game_status_label: Label
 var hud_root: Control
@@ -546,6 +550,9 @@ func clear_journey_transients(new_timeline: bool) -> void:
 	_present_notice()
 	_update_process_policy()
 func show_main_menu() -> void:
+	if not new_game_ready:
+		show_startup_loading()
+		return
 	active_menu = "main"
 	_set_internal_canvas(Vector2i(MENU_SIZE))
 	_set_ui_pointer("menu")
@@ -558,12 +565,30 @@ func show_main_menu() -> void:
 	_journey_primary_button = _add_journey_load_button(box, JourneyMenuPanel.load_label(model), model, "continue")
 	_journey_primary_button.set_meta("journey_model_kind", "continue")
 	_add_journey_recovery_options(box, model)
-	new_game_status_label = _add_menu_text(box, new_game_status)
 	_add_menu_button(box, "Saved Journeys", func(): show_save_library("main"), false, "saved_journeys")
 	_add_menu_button(box, "Controls", func(): show_controls_menu("main"))
 	_add_menu_button(box, "Settings", func(): show_settings_menu("main"))
 	_add_menu_button(box, "Credits", func(): show_credits_menu())
 	_add_menu_button(box, "Quit", func(): quit_requested.emit())
+	if not reduced_motion:
+		_menu_frame.modulate.a = 0.0
+		_menu_reveal_tween = create_tween()
+		_menu_reveal_tween.tween_property(_menu_frame, "modulate:a", 1.0, 0.18)
+
+func show_startup_loading(message: String = "Preparing the road...", fraction: float = -1.0, failed: bool = false) -> void:
+	if active_menu != "startup" or not is_instance_valid(_startup_view):
+		active_menu = "startup"
+		_set_ui_pointer("menu")
+		_clear_menu()
+		_screen_generation += 1
+		_rendered_screen = ""
+		menu_layer.visible = true
+		_startup_view = StartupLoadingView.new()
+		menu_layer.add_child(_startup_view)
+		_startup_view.retry_requested.connect(func(): launch_accepted.emit())
+		_queue_responsive_layout()
+	_startup_view.apply_accessibility(reduced_motion, high_contrast)
+	_startup_view.update_progress(message, fraction, failed)
 func set_new_game_ready(value: bool) -> void:
 	if new_game_ready == value:
 		return
@@ -675,6 +700,8 @@ func _item_short_name(id: String) -> String:
 	return str({"redroot_potion":"Redroot", "bitterleaf_tonic":"Bitterleaf", "ash_bomb":"Ash Bomb", "iron_trap":"Iron Trap"}.get(id, id.replace("_", " ").capitalize()))
 
 func show_settings_menu(back_target: String = "pause", requested_page: int = -1) -> void:
+	if active_menu == "startup" and not new_game_ready:
+		return
 	active_menu = "settings"
 	_set_internal_canvas(Vector2i(MENU_SIZE))
 	controls_back_target = back_target
@@ -2722,6 +2749,8 @@ func _apply_responsive_layout() -> void:
 	_apply_responsive_journal(policy)
 	_apply_responsive_dialogue(policy)
 	_apply_responsive_menu(policy)
+	if is_instance_valid(_startup_view):
+		_startup_view.apply_layout(policy)
 	_apply_responsive_loading(policy)
 	_apply_responsive_gameplay(policy)
 	_wire_responsive_inventory_focus()
@@ -2776,6 +2805,8 @@ func _apply_responsive_typography(node: Node, fonts: Dictionary, button_height: 
 					label.offset_right = -12.0 * unit
 					label.offset_top = 10.0 * unit
 					label.offset_bottom = -10.0 * unit
+			if button.has_meta("menu_text_action"):
+				_refresh_menu_action(button)
 		elif node is LineEdit:
 			control.custom_minimum_size.y = button_height
 		elif node is TextEdit:
@@ -2934,6 +2965,8 @@ func _apply_responsive_dialogue(policy: Dictionary) -> void:
 		if child is Button: HudVisualStyle.dialogue_choice(child, high_contrast)
 
 func _apply_responsive_menu(policy: Dictionary) -> void:
+	if active_menu == "startup":
+		return
 	if not is_instance_valid(_menu_frame) or not is_instance_valid(_menu_content):
 		return
 	var model: Dictionary = policy.menu
@@ -3430,6 +3463,9 @@ func _labeled_bar(label_text: String, bar: ProgressBar, value_label: Label) -> H
 
 func _clear_menu() -> void:
 	_capture_menu_state()
+	if _menu_reveal_tween != null and _menu_reveal_tween.is_valid():
+		_menu_reveal_tween.kill()
+	_startup_view = null
 	_touch_reason_label = null
 	_menu_notice = null
 	_journey_card = null
@@ -3456,6 +3492,7 @@ func _menu_box(title: String, subtitle: String = "", omen_text: String = "", _he
 	_menu_frame.add_child(frame_box)
 	_compact_menu_title = Label.new()
 	_compact_menu_title.text = title
+	_compact_menu_title.add_theme_font_override("font", MENU_FONT)
 	_compact_menu_title.set_meta("layout_font_role", "heading")
 	_compact_menu_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_compact_menu_title.add_theme_color_override("font_color", HudVisualStyle.GOLD)
@@ -3472,6 +3509,7 @@ func _menu_box(title: String, subtitle: String = "", omen_text: String = "", _he
 	_menu_title_stack.add_child(_menu_title_spacer)
 	_menu_title_label = Label.new()
 	_menu_title_label.text = title
+	_menu_title_label.add_theme_font_override("font", MENU_FONT)
 	_menu_title_label.set_meta("layout_font_role", "title")
 	_menu_title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_menu_title_label.add_theme_color_override("font_color", Color(0.93, 0.78, 0.47))
@@ -3531,6 +3569,8 @@ func _menu_box(title: String, subtitle: String = "", omen_text: String = "", _he
 	_menu_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_menu_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_style_panel(_menu_panel, Color(0.030, 0.026, 0.022, 0.88), Color(0.58, 0.42, 0.20, 0.86))
+	if active_menu == "main":
+		_menu_panel.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 	_menu_shell.add_child(_menu_panel)
 	_menu_scroll = ScrollContainer.new()
 	_menu_scroll.name = "MenuScroll"
@@ -3557,6 +3597,7 @@ func _menu_box(title: String, subtitle: String = "", omen_text: String = "", _he
 	_menu_back_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_menu_back_button.action_mode = BaseButton.ACTION_MODE_BUTTON_RELEASE
 	_style_button(_menu_back_button)
+	_style_menu_action(_menu_back_button)
 	_menu_back_button.pressed.connect(request_back)
 	_menu_footer.add_child(_menu_back_button)
 	_menu_footer.visible = active_menu not in ["main", "launch", "death", "ending", ""]
@@ -3573,7 +3614,7 @@ func _build_menu_background() -> void:
 	menu_layer.add_child(backdrop)
 	var shade := ColorRect.new()
 	shade.set_anchors_preset(Control.PRESET_FULL_RECT)
-	shade.color = Color(0.01, 0.015, 0.018, 0.28)
+	shade.color = Color(0.01, 0.015, 0.018, 0.66 if high_contrast else 0.42)
 	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	menu_layer.add_child(shade)
 
@@ -3615,6 +3656,7 @@ func _add_menu_button(box: VBoxContainer, text: String, callback: Callable, disa
 	button.text = text
 	button.clip_text = true
 	button.set_meta("wrapped_label", true)
+	_style_menu_action(button)
 	_hide_native_button_text(button)
 	button.resized.connect(func():
 		var row_height: float = float(maxi(1, row_label.get_line_count()) * row_label.get_line_height()) + float(button.get_meta("layout_button_padding", 24.0))
@@ -4068,6 +4110,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 func request_back() -> bool:
+	if active_menu == "startup":
+		return true
 	if _journey_load_active:
 		_cancel_journey_load()
 		return true
@@ -4775,6 +4819,35 @@ func _style_button(button: Button) -> void:
 	button.focus_mode = Control.FOCUS_ALL
 	if button.has_meta("wrapped_label"):
 		_hide_native_button_text(button)
+	if button.has_meta("menu_text_action"):
+		_style_menu_action(button)
+
+func _style_menu_action(button: Button) -> void:
+	if not button.has_meta("menu_text_action"):
+		button.set_meta("menu_text_action", true)
+		for interaction_signal in [button.mouse_entered, button.mouse_exited, button.focus_entered, button.focus_exited, button.button_down, button.button_up]:
+			interaction_signal.connect(func(): _refresh_menu_action(button))
+	for key in ["normal", "hover", "pressed", "disabled"]:
+		button.add_theme_stylebox_override(key, StyleBoxEmpty.new())
+	var focus := StyleBoxFlat.new()
+	focus.bg_color = Color.TRANSPARENT
+	focus.border_color = Color.WHITE if high_contrast else HudVisualStyle.GOLD
+	focus.border_width_bottom = 2
+	button.add_theme_stylebox_override("focus", focus)
+	button.add_theme_font_override("font", MENU_FONT)
+	_refresh_menu_action(button)
+
+func _refresh_menu_action(button: Button) -> void:
+	var selected := button.has_focus() or button.is_hovered() or button.is_pressed()
+	var color := (Color.WHITE if high_contrast else HudVisualStyle.GOLD) if selected else HudVisualStyle.IVORY
+	if button.disabled:
+		color = Color("88877f")
+	for child in button.get_children():
+		if child is Label:
+			child.add_theme_font_override("font", MENU_FONT)
+			child.add_theme_color_override("font_color", color)
+			child.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.9))
+			child.add_theme_constant_override("shadow_offset_y", 1)
 
 func _hide_native_button_text(button: Button) -> void:
 	# Keep the actual Button text for accessible names and existing callers.
