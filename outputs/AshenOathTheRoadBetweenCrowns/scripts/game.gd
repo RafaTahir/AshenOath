@@ -2929,6 +2929,9 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 	# them while the launch/menu presentation is already covering the viewport.
 	phase_started = Time.get_ticks_msec()
 	_spawn_player(Vector3(0, 1, 9.8))
+	if player == null or not player.has_required_body():
+		_abort_opening_prewarm(prewarm_root, prewarm_service, "Kael's authored body or colours could not be loaded. Select Retry to try again.")
+		return
 	camera_rig.prepare_view()
 	var player_ms := Time.get_ticks_msec() - phase_started
 	# Publish only the complete opening; intermediate builds need no GPU draw.

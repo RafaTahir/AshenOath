@@ -134,6 +134,35 @@ func route_for_id(game: Node, target_id: String) -> Dictionary:
 	result.ok = not result.points.is_empty()
 	return result
 
+func _character_visual_state(player: Node3D, camera_rig: Node) -> Dictionary:
+	var model := player.get("_mapped_body") as Node3D
+	var camera := camera_rig.get("camera") as Camera3D if camera_rig != null else null
+	var result := {"ready": player.has_required_body(), "visible": player.is_visible_in_tree(), "meshes": []}
+	if model == null:
+		return result
+	result["source"] = str(model.get_meta("prepared_actor_source", model.get_meta("character_base_path", "")))
+	result["bindings_valid"] = bool(model.get_meta("character_material_bindings_valid", false))
+	for mesh in model.find_children("*", "MeshInstance3D", true, false):
+		if mesh.mesh == null or mesh.skin == null:
+			continue
+		var surfaces: Array = []
+		for surface in range(mesh.mesh.get_surface_count()):
+			var material := mesh.get_active_material(surface) as BaseMaterial3D
+			surfaces.append({
+				"material": material.resource_name if material != null else "",
+				"texture": material.albedo_texture.resource_path if material != null and material.albedo_texture != null else "",
+				"albedo": str(material.albedo_color) if material != null else "",
+			})
+		var bounds: AABB = mesh.global_transform * mesh.get_aabb()
+		result.meshes.append({
+			"path": str(model.get_path_to(mesh)), "visible": mesh.is_visible_in_tree(),
+			"shadow_mode": mesh.cast_shadow, "transparency": mesh.transparency,
+			"layers": mesh.layers, "surfaces": surfaces,
+			"bounds_position": _vector(bounds.position), "bounds_size": _vector(bounds.size),
+			"in_view": camera.is_position_in_frustum(bounds.get_center()) if camera != null else false,
+		})
+	return result
+
 func snapshot_for_game(game: Node) -> Dictionary:
 	if game == null or not is_instance_valid(game):
 		return {"schema_version": 2, "read_only": true, "ready": false}
@@ -160,6 +189,7 @@ func snapshot_for_game(game: Node) -> Dictionary:
 			"weapon_mode": str(player.get("weapon_mode")),
 			"bow_aiming": bool(player.get("bow_aiming")),
 			"selected_arrow": str(player.get("selected_arrow_id")),
+			"visual": _character_visual_state(player, camera_rig),
 		}
 	var camera_state := {}
 	if camera_rig != null and is_instance_valid(camera_rig):
@@ -167,6 +197,8 @@ func snapshot_for_game(game: Node) -> Dictionary:
 		camera_state = {
 			"yaw": float(camera_rig.get("yaw")),
 			"pitch": float(camera_rig.get("pitch")),
+			"distance": float(camera_rig.get("distance")),
+			"first_person": camera_rig.is_first_person(),
 			"locked_target_id": str(target.get("enemy_id")) if target != null else "",
 			"locked_target_position": _vector(target.global_position) if target != null else {},
 		}

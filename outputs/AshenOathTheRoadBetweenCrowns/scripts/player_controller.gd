@@ -1652,6 +1652,10 @@ func _build_scabbard_mesh() -> ArrayMesh:
 	_scabbard_mesh = weakref(mesh)
 	return mesh
 
+func has_required_body() -> bool:
+	return is_instance_valid(_mapped_body) and is_instance_valid(body_visual) \
+		and body_visual.mesh != null and CharacterMaterialBindings.has_textured_identity(_mapped_body)
+
 func _try_build_mapped_body() -> bool:
 	asset_helper = AssetSpawnHelper.new()
 	add_child(asset_helper)

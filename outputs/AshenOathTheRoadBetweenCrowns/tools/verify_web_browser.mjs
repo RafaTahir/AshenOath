@@ -20,7 +20,8 @@ const persistenceSmoke = Boolean(args["persistence-smoke"]);
 const manualSave = Boolean(args["manual-save"]);
 const checkpointWaitMs = Number(args["checkpoint-wait-ms"] || 45000);
 const uiAcceptance = Boolean(args["ui-acceptance"]);
-const openingPresence = Boolean(args["opening-presence"]);
+const characterVisibility = Boolean(args["character-visibility"]);
+const openingPresence = Boolean(args["opening-presence"]) || characterVisibility;
 const qualityStartup = Boolean(args["quality-startup"]);
 const QA_TEMP_ROOT = "D:\\Temp\\AshenOath";
 mkdirSync(QA_TEMP_ROOT, { recursive: true });
@@ -124,13 +125,13 @@ for (const relative of [
   const path = resolve(exportDir, relative);
   if (!existsSync(path)) continue;
   const payload = readFileSync(path);
-  const encodedWasm = relative === "index.wasm" && payload[0] === 0x1f && payload[1] === 0x8b;
-  serverFileCache.set(relative, encodedWasm ? gunzipSync(payload) : payload);
+  const encodedTransport = payload[0] === 0x1f && payload[1] === 0x8b;
+  serverFileCache.set(relative, encodedTransport ? gunzipSync(payload) : payload);
   // Godot PCKs are already packed binary containers. Serving them through an
   // additional HTTP gzip stream makes an interrupted navigation surface a
   // StreamPeerGZIP decode error, unlike production's octet-stream delivery.
-  if (relative !== "index.png" && extname(relative) !== ".pck") {
-    serverGzipCache.set(relative, encodedWasm ? payload : gzipSync(payload, { level: 6 }));
+  if (encodedTransport || (relative !== "index.png" && extname(relative) !== ".pck")) {
+    serverGzipCache.set(relative, encodedTransport ? payload : gzipSync(payload, { level: 6 }));
   }
 }
 const server = createServer((request, response) => {
@@ -142,6 +143,14 @@ const server = createServer((request, response) => {
     response.writeHead(relative === "favicon.ico" ? 204 : 404);
     response.end();
     return;
+  }
+  // Content-addressed engines are not at the legacy root paths primed above.
+  // Mirror Vercel's gzip headers for those exact transport bytes as well.
+  if (!serverFileCache.has(relative)) {
+    const payload = readFileSync(path);
+    const encodedTransport = payload[0] === 0x1f && payload[1] === 0x8b;
+    serverFileCache.set(relative, encodedTransport ? gunzipSync(payload) : payload);
+    if (encodedTransport) serverGzipCache.set(relative, payload);
   }
   const acceptsGzip = /\bgzip\b/i.test(String(request.headers["accept-encoding"] || ""));
   const cached = serverFileCache.get(relative);
@@ -330,7 +339,7 @@ async function testBrowser(name, executable) {
   const profile = join(QA_TEMP_ROOT, `ashen-oath-web001-${mobileMode ? "mobile-" : ""}${name.toLowerCase()}-${Date.now()}`);
   mkdirSync(profile, { recursive: true });
   const baseUrl = targetUrl || `http://127.0.0.1:${port}/index.html?v=${mobileMode ? "mobile001" : "web001"}-${name.toLowerCase()}${mobileMode ? "&touch=1" : ""}`;
-  const url = bridgeCrossing || interactionSmoke || persistenceSmoke || qualityStartup
+  const url = bridgeCrossing || interactionSmoke || persistenceSmoke || qualityStartup || characterVisibility
     ? `${baseUrl}${baseUrl.includes("?") ? "&" : "?"}observe=1`
     : baseUrl;
   const browserArgs = [
@@ -411,7 +420,7 @@ async function testBrowser(name, executable) {
     // meaningful navigation boundary; later waits verify engine readiness.
     const expectedOrigin = new URL(url).origin;
     await waitFor(async () => cdp.evaluate(
-      `location.origin === ${JSON.stringify(expectedOrigin)} && Boolean(document.querySelector("#boot"))`
+      `location.origin === ${JSON.stringify(expectedOrigin)} && Boolean(document.querySelector("#canvas, #boot"))`
     ), `${name} page navigation`).catch(async (error) => {
       let diagnostic = null;
       try {
@@ -435,7 +444,8 @@ async function testBrowser(name, executable) {
     // Godot canvas intentionally remains 300x150 until the player activates
     // the visible "Enter the Road" control. Activate that control through
     // browser input before asserting engine-canvas dimensions.
-    const bootButton = await waitFor(async () => cdp.evaluate(`(() => {
+    const legacyStart = !characterVisibility && await cdp.evaluate(`Boolean(document.querySelector("#start"))`);
+    const bootButton = !legacyStart ? null : await waitFor(async () => cdp.evaluate(`(() => {
       const button = document.querySelector("#start");
       if (!button || button.disabled) return null;
       const rect = button.getBoundingClientRect();
@@ -527,8 +537,20 @@ async function testBrowser(name, executable) {
       await waitFor(async () => cdp.evaluate(`(() => {
         const opening = window.__ashenOathOpeningState;
         if (opening?.state === "failed") throw new Error(opening.message || "Greyfen preparation failed");
-        return opening?.state === "ready" && document.querySelector("#boot")?.classList.contains("hidden");
+        const loading = document.querySelector("#startup-loading, #boot");
+        return opening?.state === "ready" && (!loading || loading.hidden || loading.classList.contains("hidden"));
       })()`), `${name} visible New Game menu`);
+    }
+    if (characterVisibility) {
+      const point = await waitFor(async () => cdp.evaluate(`(() => {
+        const ui = window.__ashenOathReadOnlyObservation?.ui;
+        const button = ui?.buttons?.find(b => b.enabled && b.text === "New Game");
+        return button ? {
+          x: (button.position.x + button.size.x / 2) * ${viewportWidth} / ui.viewport.x,
+          y: (button.position.y + button.size.y / 2) * ${viewportHeight} / ui.viewport.y,
+        } : null;
+      })()`), `${name} rendered New Game button`);
+      Object.assign(menuInputPoint, point);
     }
     // Keep a diagnostic of the actual compact menu geometry. This is useful
     // when a browser delivers a healthy canvas but misses a player click;
@@ -633,7 +655,7 @@ async function testBrowser(name, executable) {
       throw new Error(`${error.message}; console=${JSON.stringify(consoleLines().slice(-30))}; network=${JSON.stringify(networkLines())}; canvas=${JSON.stringify(canvasDiagnostic)}`);
     });
     const queuedNewGame = consoleLines().some((line) => line.includes("LOADING: new_game_stage="));
-    if (!queuedNewGame) {
+    if (!queuedNewGame && !characterVisibility) {
       if (uiAcceptance || openingPresence) throw new Error(`${name} New Game mouse click did not queue the start`);
       if (!mobileMode) {
         await cdp.send("Input.dispatchMouseEvent", { type: "mouseMoved", x: menuInputPoint.x, y: menuInputPoint.y, button: "none" });
@@ -925,6 +947,60 @@ async function testBrowser(name, executable) {
       };
       if (qualityStartup && continued.settings.quality_preset !== "quality") throw new Error(`${name} Continue lost Quality settings`);
     }
+    let characterEvidence = null;
+    if (characterVisibility) {
+      characterEvidence = [];
+      const recordCharacter = async (phase, expectBody = true) => {
+        const state = await waitFor(async () => cdp.evaluate(`(() => {
+          const state = window.__ashenOathReadOnlyObservation;
+          return state?.ready && state.player?.can_control ? state : null;
+        })()`), `${name} character ${phase}`);
+        const image = await captureViewportScreenshot(cdp, `${name} ${phase}`);
+        const path = reportPath.replace(/\.json$/i, `_${phase}.png`);
+        writeFileSync(path, Buffer.from(image.data, "base64"));
+        characterEvidence.push({phase, player: state.player, camera: state.camera, screenshot: path});
+        writeFileSync(reportPath.replace(/\.json$/i, "_character.json"), JSON.stringify(characterEvidence, null, 2));
+        const visual = state.player.visual;
+        if (!visual?.ready || !visual.bindings_valid || !visual.meshes?.length) {
+          throw new Error(`${name} ${phase}: required authored Kael body/atlas missing: ${JSON.stringify(visual)}`);
+        }
+        if (!visual.source.endsWith("/Kael_A_Set_Atlas.gltf")) {
+          throw new Error(`${name} ${phase}: unexpected Kael source: ${visual.source}`);
+        }
+        if (expectBody && !visual.meshes.some(mesh => mesh.visible && mesh.in_view
+          && mesh.shadow_mode !== 3 && mesh.transparency < 1
+          && mesh.surfaces.every(surface => surface.texture))) {
+          throw new Error(`${name} ${phase}: Kael is not drawable in the gameplay camera: ${JSON.stringify(visual)}`);
+        }
+        return state;
+      };
+      await sleep(500);
+      await recordCharacter("kael_idle");
+      for (const [key, code] of [["ArrowUp", 38], ["ArrowDown", 40]]) {
+        await cdp.send("Input.dispatchKeyEvent", {type: "keyDown", key, code: key, windowsVirtualKeyCode: code});
+        await sleep(650);
+        await cdp.send("Input.dispatchKeyEvent", {type: "keyUp", key, code: key, windowsVirtualKeyCode: code});
+        await sleep(500);
+        await recordCharacter(key === "ArrowUp" ? "kael_forward" : "kael_reverse");
+      }
+      for (let index = 0; index < 12; index++) {
+        await cdp.send("Input.dispatchMouseEvent", {type: "mouseWheel", x: 640, y: 360, deltaX: 0, deltaY: -120});
+        await sleep(80);
+      }
+      await sleep(650);
+      const close = await recordCharacter("kael_first_person", false);
+      if (!close.camera.first_person) throw new Error(`${name} zoom did not reach first person`);
+      for (let index = 0; index < 12; index++) {
+        await cdp.send("Input.dispatchMouseEvent", {type: "mouseWheel", x: 640, y: 360, deltaX: 0, deltaY: 120});
+        await sleep(80);
+        if (index === 3) {
+          await sleep(650);
+          await recordCharacter("kael_close");
+        }
+      }
+      await sleep(650);
+      await recordCharacter("kael_third_person_restored");
+    }
     const errorEvents = cdp.events.filter((event) =>
       event.method === "Runtime.exceptionThrown"
       || (event.method === "Log.entryAdded" && event.params.entry.level === "error")
@@ -981,13 +1057,19 @@ async function testBrowser(name, executable) {
       persistence_smoke: persistenceResult,
       ui_acceptance: uiEvidence,
       quality_startup: qualityEvidence,
+      character_visibility: characterEvidence,
       screenshot: screenshotPath,
       opening_first_control_screenshot: openingScreenshotPath,
       screenshot_capture_mode: screenshot.capture_mode,
       profile_dir: profile,
     };
   } finally {
-    if (cdp) cdp.close();
+    if (cdp) {
+      if (characterVisibility) {
+        writeFileSync(reportPath.replace(/\.json$/i, "_events.json"), JSON.stringify(cdp.events, null, 2));
+      }
+      cdp.close();
+    }
     terminateIsolatedBrowser(browser, profile);
     await Promise.race([
       new Promise((resolveExit) => browser.once("exit", resolveExit)),

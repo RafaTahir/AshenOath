@@ -65,6 +65,19 @@ def compile_layout():
     includes["Runtime Pack Campaign"].add("assets_external/environment/prepared/*.res")
     for owner, name in (("opening", "Runtime Pack Opening"), ("characters", "Runtime Pack Characters"), ("monsters", "Runtime Pack Monsters")):
         includes[name].add(f"assets_external/characters_prepared/{owner}/*.scn")
+    # Include filters copy generated scenes, but do not reliably expand their
+    # imported texture dependencies. Select the recorded atlases as resources.
+    actor_catalog = PROJECT / "data/prepared_actors.json"
+    if actor_catalog.is_file():
+        for actor in json.loads(actor_catalog.read_text(encoding="utf-8-sig")).values():
+            pack = "Runtime Pack " + str(actor["owner"]).capitalize()
+            for binding in actor.get("material_bindings", []):
+                texture = str(binding.get("texture", ""))
+                if not texture.startswith("res://") or "::" in texture:
+                    continue
+                if not (PROJECT / texture.removeprefix("res://")).is_file():
+                    raise ValueError(f"Required actor atlas missing: {actor['role']}: {texture}")
+                files[pack].add(texture)
     includes["Runtime Pack Opening"].add("assets_external/characters_prepared/animations/*.res")
     for name in ROOT_NAMES:
         includes[name].add("data/prepared_actors.json")
@@ -131,10 +144,31 @@ def compile_layout():
             includes["Runtime Pack Characters"].remove(item)
             includes["Runtime Pack Opening"].add(item)
             transfers[item] = "Runtime Pack Opening"
+    shared_opening_textures = set()
+    for item in list(files["Runtime Pack Characters"]):
+        relative = item.removeprefix("res://")
+        if relative.startswith(character_layers):
+            files["Runtime Pack Characters"].remove(item)
+            files["Runtime Pack Opening"].add(item)
+            shared_opening_textures.add(relative)
+    # Hostile human assemblies use the same approved Bandit atlases as their
+    # character sources. Keep those bytes in characters, not in both packs.
+    shared_character_textures = set()
+    for item in list(files["Runtime Pack Monsters"]):
+        relative = item.removeprefix("res://")
+        if relative.endswith(".png") and item in files["Runtime Pack Characters"]:
+            files["Runtime Pack Monsters"].remove(item)
+            shared_character_textures.add(relative)
     # Root scripts use dynamic zone loading. Exclude transferred resources from
     # dependency expansion as well as from explicit selections.
     for name, section in sections.items():
         exclusions = set(json.loads(config[section].get("exclude_filter", '""')).split(",")) - {""}
+        # Imported GLTF scenes already contain these vertex/skin buffers. Godot
+        # loads the imported scene at runtime, never the source GLTF .bin files.
+        # Keep originals in the repository, not duplicated in delivery packs.
+        for directory in ("characters_universal", "characters_ranger"):
+            exclusions.add(f"assets_external/{directory}/*.bin")
+            exclusions.add(f"assets_external/{directory}/runtime/*.bin")
         exclusions.add("assets/audio/prepared_bank.res")
         for audio_owner in ("menu", "opening", "campaign"):
             expected = ROOT_NAMES if audio_owner == "menu" else {"Runtime Pack " + audio_owner.capitalize()}
@@ -150,6 +184,10 @@ def compile_layout():
             exclusions.add("assets_external/environment/prepared/wychwood_*")
         if name in {"Runtime Pack Characters", "Runtime Pack Monsters"}:
             exclusions.add("assets_external/characters_prepared/animations/*")
+        if name == "Runtime Pack Characters":
+            exclusions.update(shared_opening_textures)
+        if name == "Runtime Pack Monsters":
+            exclusions.update(shared_character_textures)
         config[section]["include_filter"] = json.dumps(",".join(sorted(includes[name])))
         config[section]["export_files"] = "PackedStringArray(" + ", ".join(json.dumps(p) for p in sorted(files[name])) + ")"
         config[section]["exclude_filter"] = json.dumps(",".join(sorted(exclusions)))
@@ -165,6 +203,10 @@ def compile_layout():
         "contents": ["wychwood", "cemetery_layers", "ruins"],
     })
     manifest["packs"]["opening"]["contents"] = ["greyfen", "opening_actors", "shared_opening_scenery"]
+    if shared_character_textures:
+        dependencies = manifest["packs"]["monsters"].setdefault("dependencies", [])
+        if "characters" not in dependencies:
+            dependencies.append("characters")
     manifest.setdefault("pack_presets", {})["adjacent"] = adjacent
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     print(f"Prepared {len(sections)} export presets with an adjacent-world pack")

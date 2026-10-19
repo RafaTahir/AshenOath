@@ -1,47 +1,47 @@
 {
     "schema_version":  2,
-    "generated_at_utc":  "2026-10-19T08:08:15.4512649Z",
-    "build_id":  "kael-restore-20261019-400e061",
-    "generated_from_commit":  "400e0618e39d6cdb8f26339816ff735a4972c34c",
+    "generated_at_utc":  "2026-10-19T09:03:53.6201502Z",
+    "build_id":  "kael-visible-20261019-40df567",
+    "generated_from_commit":  "40df5676dcdf4c04ecccf2215e47a0cdffc81916",
     "source_dirty":  true,
-    "artifact_directory":  "D:\\Projects\\AshenOath\\.release-gate\\kael-restore-20261019\\runtime-packs",
+    "artifact_directory":  "D:\\Projects\\AshenOath\\.release-gate\\kael-visible-20261019\\runtime-packs",
     "artifacts_are_external":  true,
     "max_deployment_bytes":  104857600,
-    "total_bytes":  105046984,
+    "total_bytes":  100605004,
     "packs":  [
                   {
                       "id":  "base",
-                      "version":  "kael-restore-20261019-400e061",
+                      "version":  "kael-visible-20261019-40df567",
                       "preset":  "Runtime Pack Base",
                       "artifact":  "base.pck",
-                      "bytes":  6380608,
-                      "sha256":  "dcfe38dbb377793435d70d020015ffcb303f97d5583f21ddede40892835192c7",
+                      "bytes":  6382208,
+                      "sha256":  "ba5e0e3ad58c795b9874728e204f74525bc9e80579cdce04630f3af59c75fb43",
                       "status":  "candidate_external",
                       "log":  "logs/pack-base.stdout.log"
                   },
                   {
                       "id":  "opening",
-                      "version":  "kael-restore-20261019-400e061",
+                      "version":  "kael-visible-20261019-40df567",
                       "preset":  "Runtime Pack Opening",
                       "artifact":  "opening.pck",
-                      "bytes":  33567784,
-                      "sha256":  "447dfbcb95e1cac4dfb95a686337a47d7dea4efb01ce353fc8d9fb1201529da1",
+                      "bytes":  35423104,
+                      "sha256":  "2dcab59aa1499dcc678978c253adcd6b97a6e99212575c22fb107f4dcd68c954",
                       "status":  "candidate_external",
                       "log":  "logs/pack-opening.stdout.log"
                   },
                   {
                       "id":  "adjacent",
-                      "version":  "kael-restore-20261019-400e061",
+                      "version":  "kael-visible-20261019-40df567",
                       "preset":  "Runtime Pack Adjacent",
                       "artifact":  "adjacent.pck",
                       "bytes":  1403320,
-                      "sha256":  "8f5f77a9ac3242e8d6665a13e0558c3d21112078b3536c5e67ee1f253124281e",
+                      "sha256":  "39bed7400d2cc4b3591bffbc51e0fc9e4985a700cb887d13a3fd8e106120314e",
                       "status":  "candidate_external",
                       "log":  "logs/pack-adjacent.stdout.log"
                   },
                   {
                       "id":  "campaign",
-                      "version":  "kael-restore-20261019-400e061",
+                      "version":  "kael-visible-20261019-40df567",
                       "preset":  "Runtime Pack Campaign",
                       "artifact":  "campaign.pck",
                       "bytes":  6372436,
@@ -51,27 +51,27 @@
                   },
                   {
                       "id":  "characters",
-                      "version":  "kael-restore-20261019-400e061",
+                      "version":  "kael-visible-20261019-40df567",
                       "preset":  "Runtime Pack Characters",
                       "artifact":  "characters.pck",
-                      "bytes":  15326452,
-                      "sha256":  "b9c19707c07194075431c9efbab2734c2d06cb05da5707d782c3d33af5d8e48e",
+                      "bytes":  9656944,
+                      "sha256":  "da92042a54c0aba5fae75250a9212fa40c193411be4bb13175e11882a8cd902e",
                       "status":  "candidate_external",
-                      "log":  "logs/pack-characters.stdout.log"
+                      "log":  "logs/retry-pack-characters.stdout.log"
                   },
                   {
                       "id":  "monsters",
-                      "version":  "kael-restore-20261019-400e061",
+                      "version":  "kael-visible-20261019-40df567",
                       "preset":  "Runtime Pack Monsters",
                       "artifact":  "monsters.pck",
-                      "bytes":  15326648,
-                      "sha256":  "498a74ca7ddf5fd5bc633506046b430a842cc9119b4fa24abff43f502529eb1c",
+                      "bytes":  14697256,
+                      "sha256":  "684f246d69cbb931eabe9642b0cb875a60067e6bf77ef019c0470c343a7b98f3",
                       "status":  "candidate_external",
-                      "log":  "logs/pack-monsters.stdout.log"
+                      "log":  "logs/retry-pack-monsters.stdout.log"
                   },
                   {
                       "id":  "audio",
-                      "version":  "kael-restore-20261019-400e061",
+                      "version":  "kael-visible-20261019-40df567",
                       "preset":  "Runtime Pack Audio",
                       "artifact":  "audio.pck",
                       "bytes":  19291084,
@@ -81,7 +81,7 @@
                   },
                   {
                       "id":  "quality_materials",
-                      "version":  "kael-restore-20261019-400e061",
+                      "version":  "kael-visible-20261019-40df567",
                       "preset":  "Runtime Pack Quality Materials",
                       "artifact":  "quality_materials.pck",
                       "bytes":  7378652,
@@ -94,11 +94,11 @@
 
                ],
     "selected_web_export":  {
-                                "build_id":  "kael-restore-20261019-400e061",
-                                "artifact_directory":  "D:\\Projects\\AshenOath\\.release-gate\\kael-restore-20261019\\export",
-                                "generated_from_commit":  "400e0618e39d6cdb8f26339816ff735a4972c34c",
-                                "artifacts_total_bytes":  104712028,
-                                "root_pck_sha256":  "b3fd42b472e934cdd5faf00d0d613d4b9ea6688164c6f733edaa5d95bf9a2dd0",
-                                "note":  "Selected export uses gzip transport; native pack records describe decoded build artifacts."
+                                "build_id":  "kael-visible-20261019-40df567",
+                                "artifact_directory":  "D:\\Projects\\AshenOath\\.release-gate\\kael-visible-20261019\\export",
+                                "generated_from_commit":  "40df5676dcdf4c04ecccf2215e47a0cdffc81916",
+                                "artifacts_total_bytes":  104585250,
+                                "root_pck_sha256":  "dcb8c2b25587b52b46737512b7211f9850662f1335d170d3ff64fd871e0e379a",
+                                "note":  "Packaging-budget correction reuses unchanged compiled packs; changed character/monster packs and root were rebuilt."
                             }
 }

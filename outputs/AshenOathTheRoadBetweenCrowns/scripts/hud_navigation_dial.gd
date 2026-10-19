@@ -38,7 +38,7 @@ func _invalidate_layout() -> void:
 func set_snapshot(snapshot: Dictionary) -> void:
 	if snapshot == _snapshot:
 		return
-	var background_changed := snapshot.get("player_xz") != _snapshot.get("player_xz") \
+	var background_changed: bool = snapshot.get("player_xz") != _snapshot.get("player_xz") \
 		or snapshot.get("radius_m") != _snapshot.get("radius_m") \
 		or snapshot.get("spatial_revision") != _snapshot.get("spatial_revision") \
 		or snapshot.get("terrain") != _snapshot.get("terrain")

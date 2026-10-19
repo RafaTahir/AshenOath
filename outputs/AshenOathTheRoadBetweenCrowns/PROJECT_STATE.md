@@ -1,5 +1,21 @@
 # Ashen Oath Project State
 
+## Missing Kael / Atlas Delivery Repair - 2026-10-19
+
+BOOT-009 fixes a confirmed delivery gap: the shipped prepared Kael, Anwen and
+male-villager scenes referenced atlases absent from all mounted startup packs.
+Export selections now explicitly include prepared actors' recorded textures;
+source-only GLTF buffers are excluded from delivery without removing source or
+runtime geometry. Greyfen cannot announce readiness without Kael's textured body.
+The user's first of two authorized runs found lazy-script compilation failures
+in navigation/interaction; those are corrected. Test 2 reached complete Greyfen
+readiness with Kael's required textured body loaded and zero runtime/network
+errors, but its obsolete loading-shell selector prevented mouse New Game. The
+driver is statically corrected, not rerun: both allocations are consumed.
+Gameplay visibility, movement, zoom restoration and NPC colours remain user
+checks, not accepted evidence. Candidate `kael-visible-20261019-40df567` compiled
+and packaged at 104,593,302 complete Web bytes. See BOOT_009_RESULT.md.
+
 ## Kael Loading Regression Repair - 2026-10-19
 
 BOOT-008 addresses BOOT-007's prepared-material rejection path which freed the

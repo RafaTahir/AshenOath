@@ -16,7 +16,7 @@ var _index = preload("res://scripts/actor_spatial_index.gd").new()
 func register(area: Area3D) -> void:
 	var id := area.get_instance_id()
 	if not area.tree_exiting.is_connected(_unregister.bind(id)):
-		var reference := weakref(area)
+		var reference: WeakRef = weakref(area)
 		area.tree_exiting.connect(_unregister.bind(id))
 		area.tree_entered.connect(_update_registration.bind(reference))
 		area.visibility_changed.connect(_registration_changed)
