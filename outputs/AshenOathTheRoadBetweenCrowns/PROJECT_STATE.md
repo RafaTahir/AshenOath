@@ -1,5 +1,18 @@
 # Ashen Oath Project State
 
+## Kael Loading Regression Repair - 2026-10-19
+
+BOOT-008 addresses BOOT-007's prepared-material rejection path which freed the
+entire character on metadata failure. Valid current materials now take priority;
+stale descriptors may be rebuilt from fully textured current surfaces. Invalid
+prepared actors recover from their exact approved source through existing
+composition/animation preparation, not another character or primitive fallback.
+Build-time required-material checks remain fatal. Movement, camera, arm-pose,
+save and settings changes remain retained. No new runtime test is authorized or
+claimed; see BOOT_008_RESULT.md for build/delivery and user checks.
+Candidate `kael-restore-20261019-400e061` compiled and packaged at 104,720,060
+complete Web bytes, below 100 MiB. Publication is separate from user acceptance.
+
 ## 360-Degree Movement and Character Colours - 2026-10-19
 
 BOOT-007 implements turn-to-travel movement and forward-only player locomotion,

@@ -46,6 +46,11 @@ static func restore(root: Node3D) -> bool:
 			errors.append("%s[%d]: authored mesh surface is missing" % [str(binding.mesh), surface])
 			continue
 		var atlas_required := bool(root.get_meta("character_atlas_required", false))
+		# Prepared-scene metadata is recovery information, not authority to
+		# overwrite a working imported surface with a stale serialized resource.
+		var active := mesh.get_active_material(surface)
+		if active != null and (not atlas_required or _textured(active)):
+			continue
 		if material == null or (atlas_required and not _textured(material)):
 			var effective := mesh.get_active_material(surface)
 			if effective != null and (not atlas_required or _textured(effective)):
@@ -68,6 +73,16 @@ static func restore(root: Node3D) -> bool:
 			mesh.set_surface_override_material(surface, material)
 	if root.get_meta(BINDINGS).is_empty():
 		errors.append("No authored character material bindings")
+	if not errors.is_empty():
+		# Node-path metadata can outlive a prepared hierarchy. If every current
+		# surface still has its authored material/atlas, refresh the descriptors
+		# instead of rejecting the complete model solely on stale paths.
+		var source := str(root.get_meta("prepared_actor_source", ""))
+		if not source.is_empty():
+			var previous_bindings = root.get_meta(BINDINGS)
+			if capture(root, source):
+				return true
+			root.set_meta(BINDINGS, previous_bindings)
 	root.set_meta("character_material_errors", errors)
 	root.set_meta("character_material_bindings_valid", errors.is_empty())
 	return errors.is_empty()

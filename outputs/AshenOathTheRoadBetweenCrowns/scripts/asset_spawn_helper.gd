@@ -202,9 +202,30 @@ func _spawn_from_entry(entry: Dictionary, role_name: String, fallback_category: 
 			_apply_runtime_policy_metadata(spawned, role_name, runtime_policy, path)
 			_prepare_spawned_asset(spawned,path,role_name,fallback_category)
 			if spawned.get_meta("character_material_bindings_valid", true) == false:
-				push_error("Required actor material bindings failed: %s (%s)" % [role_name, selected_path])
+				var material_errors := str(spawned.get_meta("character_material_errors", []))
 				spawned.free()
-				return null
+				spawned = null
+				if not prepared.is_empty():
+					# The optimization may be stale; the approved source is not a
+					# substitute character. Rebuild that exact role with its normal
+					# composition, proportions, materials and animation preparation.
+					spawned = _instantiate_resource(_load_cached_resource(path))
+					if spawned != null:
+						spawned = _compose_player_body(spawned, path, role_name, variant_seed)
+						spawned.name = role_name
+						_apply_runtime_policy_metadata(spawned, role_name, runtime_policy, path)
+						_prepare_spawned_asset(spawned, path, role_name, fallback_category)
+					if spawned != null and bool(spawned.get_meta("character_material_bindings_valid", false)):
+						push_warning("Recovered approved actor source: %s (%s); prepared binding: %s" % [role_name, path, material_errors])
+					else:
+						if spawned != null:
+							material_errors += "; authored source: " + str(spawned.get_meta("character_material_errors", []))
+							spawned.free()
+						push_error("Required actor materials failed: %s (%s): %s" % [role_name, path, material_errors])
+						return null
+				else:
+					push_error("Required actor material bindings failed: %s (%s): %s" % [role_name, selected_path, material_errors])
+					return null
 			if OS.get_environment("ASHEN_PROFILE_GREYFEN_ACTORS") == "1" and fallback_category == "characters":
 				print("CHARACTER_ASSET_PROFILE role=%s load_ms=%.2f instantiate_ms=%.2f compose_ms=%.2f prepare_ms=%.2f" % [
 					role_name,
@@ -929,7 +950,8 @@ func _prepare_spawned_asset(root: Node3D, path: String, role_name: String = "", 
 	if character:
 		var valid := CharacterMaterialBindings.restore(root) if root.has_meta(CharacterMaterialBindings.BINDINGS) else CharacterMaterialBindings.capture(root, path)
 		if not valid:
-			push_error("Required character material: %s (%s): %s" % [role_name, path, str(root.get_meta("character_material_errors", []))])
+			if building_prepared_assets:
+				push_error("Required character material: %s (%s): %s" % [role_name, path, str(root.get_meta("character_material_errors", []))])
 			return
 	var prepared := str(root.get_meta("prepared_actor_source", "")) == path
 	if prepared:
